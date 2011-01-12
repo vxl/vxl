@@ -1,4 +1,5 @@
- #pragma OPENCL EXTENSION cl_khr_global_int32_base_atomics : enable
+//: CAST RAY USED FOR UPDATE - no heuristic cutoffs
+#pragma OPENCL EXTENSION cl_khr_global_int32_base_atomics : enable
 
 #define BLOCK_EPSILON .006125f
 #define TREE_EPSILON  .005f
@@ -12,17 +13,17 @@ cast_ray(
            
           //---- SCENE ARGUMENTS------------------------------------------------
           __constant  RenderSceneInfo    * linfo,           //scene info (origin, block size, etc)
-          __global    ushort2            * block_ptrs,      //3d array of blk pointers
-          __global    int4               * tree_array,      //tree buffers (loaded as int4, but read as uchar16
+          __global    int4               * tree_array,      //3d array of octrees (loaded as int4, but read as uchar16)
           __global    float              * alpha_array,     //voxel density buffer
           __global    uchar8             * mixture_array,   //appearance model buffer
-          //__global    uchar              * last_weight_array,//third weight for mixture model
           __global    ushort4            * num_obs_array,   // num obs for each block
           
+          // Aux data turned into one array
           __global    int                * seg_len_array,    //four aux data arrays
           __global    int                * mean_obs_array,
           __global    int                * vis_array,
           __global    int                * beta_array,
+          
           //---- UTILITY ARGUMENTS----------------------------------------------
           __local     uchar16            * local_tree,      //local tree for traversing
           __constant  uchar              * bit_lookup,      //0-255 num bits lookup table
@@ -30,23 +31,17 @@ cast_ray(
                       int                  factor,          //factor
 
           //---- SEPARATE ARGS FOR EACH STEP CELL FUNCTOR... -------------------
-#if defined(CHANGE) || defined(RENDER)
-          __local     int                * imIndex,         //image index
-#endif
 #ifdef SEGLEN
-          __global    float16            * mat_cam, 
-          __local     short2             * ray_bundle_array,//gives information for which ray takes over in the workgroup
-          __local     int                * cell_ptrs,       //local list of cell_ptrs (cells that are hit by this workgroup
-                      float                inImgObs,         //input image observation (no need for image_vect... )
+          __local     short2             * ray_bundle_array,  //gives information for which ray takes over in the workgroup
+          __local     int                * cell_ptrs,         //local list of cell_ptrs (cells that are hit by this workgroup
+                      float                inImgObs,          //input image observation (no need for image_vect... )
                       float                ray_vis, 
-          __local     float4             * cached_aux_data,  //local data per ray in workgroup
+          __local     float4             * cached_aux_data,   //local data per ray in workgroup
 #endif
 #ifdef PREINF  
-          __global    float16            * mat_cam, 
                       float4               image_vect,      //input image and store vis_inf and pre_inf
 #endif
 #ifdef BAYES
-          __global    float16            * mat_cam, 
           __local     short2             * ray_bundle_array,//gives information for which ray takes over in the workgroup
           __local     int                * cell_ptrs,       //local list of cell_ptrs (cells that are hit by this workgroup
           __local     float              * cached_vis,
@@ -54,10 +49,8 @@ cast_ray(
                       float                ray_vis,
                       float                ray_pre,
 #endif 
-
           //---- OUTPUT ARGUMENTS-----------------------------------------------
           __global    float4             * in_image,        //input image and store vis_inf and pre_inf
-          __global    uint               * gl_image,        //gl_image automatically rendered to the screen
           __global    float              * output)          //debug output buffer
 {
   
@@ -66,11 +59,6 @@ cast_ray(
   // pixel values/depth map to be returned
   float vis = 1.0f;
   float expected_int = 0.0f;
-#ifdef CHANGE
-  float intensity=in_image[imIndex[llid]].x;
-  float e_intensity=in_image[imIndex[llid]].y;
-  float e_expected_int=0.0f;
-#endif
 
   //determine the minimum face:
   //get parameters tnear and tfar for the scene
@@ -84,11 +72,6 @@ cast_ray(
   float tblock = max(max( (min_facex-ray_ox)*(1.0f/ray_dx), (min_facey-ray_oy)*(1.0f/ray_dy)), (min_facez-ray_oz)*(1.0f/ray_dz));
 
   if (tfar <= tblock) {
-#ifdef RENDER
-    gl_image[imIndex[llid]] = rgbaFloatToInt((float4)(0.0f,0.0f,0.0f,0.0f));
-    in_image[imIndex[llid]] = (float)0.0f;
-#endif
-    in_image[j*get_global_size(0)+i].x = 0.0f; 
     return; 
   }
   //make sure tnear is at least 0...
@@ -122,14 +105,13 @@ cast_ray(
 
     //load current block/tree 
     int blkIndex = convert_int(cell_minz + (cell_miny + cell_minx*linfo->dims.y)*linfo->dims.z); 
-    ushort2 block = block_ptrs[blkIndex];                       
-    int root_ptr = block.x * linfo->tree_len + block.y;         
-    local_tree[llid] = as_uchar16(tree_array[root_ptr]);        
+    local_tree[llid] = as_uchar16(tree_array[blkIndex]); 
+    ushort buff_index = as_ushort((uchar2) (local_tree[llid].sd, local_tree[llid].sc));
     
     //initialize cumsum buffer and cumIndex
     cumsum[llid*10] = local_tree[llid].s0;                     
     int cumIndex = 1;                                         
-    barrier(CLK_LOCAL_MEM_FENCE);                               
+    barrier(CLK_LOCAL_MEM_FENCE);                                       
 
     //local ray origin is entry point (point should be in [0,1]) 
     //(note that cell_min is the current block index at this point)
@@ -163,7 +145,7 @@ cast_ray(
                                     posx,posy,posz, 
                                     &cell_minx, &cell_miny, &cell_minz, &cell_len); 
       data_ptr = data_index_cached(&local_tree[llid], data_ptr, bit_lookup, &cumsum[llid*10], &cumIndex, linfo->data_len);
-      data_ptr = (block.x*linfo->data_len) + data_ptr;  
+      data_ptr = (buff_index*linfo->data_len) + data_ptr;  
       
       // check to see how close tnear and tfar are
       cell_minx = (ray_dx > 0.0f) ? cell_minx+cell_len : cell_minx; 
@@ -182,14 +164,7 @@ cast_ray(
 ////////////////////////////////////////////////////////////////////////////////
 // Step Cell Functor
 ////////////////////////////////////////////////////////////////////////////////
-#ifdef RENDER
-      step_cell_render(mixture_array, alpha_array, data_ptr, d, &vis, &expected_int);
-#endif
-#ifdef CHANGE
-      step_cell_change_detection_uchar8_w_expected(mixture_array,alpha_array,data_ptr,d,&vis,&expected_int,&e_expected_int,intensity,e_intensity);
-#endif
 #ifdef SEGLEN
-
 
       //SLOW and accurate method
       //int seg_int = convert_int_rte(d * SEGLEN_FACTOR);
@@ -336,42 +311,5 @@ cast_ray(
     texit = texit + tblock + BLOCK_EPSILON;
     tblock = texit;
   }
-
-  
-#if defined(CHANGE) 
-#if defined(CHANGE_OLD)
-  expected_int/=(1-vis);
-  float fgbelief=1.0/(1.0+expected_int);
-  uchar4 out;
-  out.x=convert_uchar(fgbelief*255.0);
-  float alpha=(1/(1+(3*fgbelief)));
-  out.y=convert_uchar(intensity*alpha*255.0);
-  out.z=0;
-  out.w=convert_uchar(255);
-  in_image[imIndex[llid]].w=fgbelief;
-  gl_image[imIndex[llid]] = as_uint(out);
-#else
-  expected_int/=(1-vis);
-  e_expected_int/=(1-vis);
-  float pm=e_expected_int/(e_expected_int+1)-0.5*min(e_expected_int,1/e_expected_int);
-  float fgbelief=1/(1+expected_int)-0.5*min(expected_int,1/expected_int);
-  //// Bayesian
-  uchar4 out;
-  out.x=convert_uchar(pm*fgbelief*255.0);
-  float alpha=(1/(1+(3*pm*fgbelief)));
-  out.y=convert_uchar(alpha*intensity*255.0);
-  out.z=0;
-  out.w=convert_uchar(255);
-  in_image[imIndex[llid]].w=fgbelief;
-  gl_image[imIndex[llid]] = as_uint(out);
-#endif
-#endif
-#ifdef RENDER
-  expected_int += vis*0.5f;
-
-  gl_image[imIndex[llid]] = rgbaFloatToInt((float4) expected_int);
-  in_image[imIndex[llid]] = (float4) expected_int;
-#endif
-  
 
 }

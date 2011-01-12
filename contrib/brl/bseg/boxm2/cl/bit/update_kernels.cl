@@ -6,35 +6,24 @@
  #pragma OPENCL EXTENSION cl_khr_gl_sharing : enable
 #endif
 
-
 #ifdef SEGLEN
 __kernel
 void
 seg_len_main(__constant  RenderSceneInfo    * linfo,
-             __global    ushort2            * block_ptrs,
              __global    int4               * tree_array,       // tree structure for each block
              __global    float              * alpha_array,      // alpha for each block
              __global    ushort4            * num_obs_array,    // num obs for each block
-             
-             __global    int                * seg_len_array,    //four aux data arrays
-             __global    int                * mean_obs_array,
-             __global    int                * vis_array,
-             __global    int                * beta_array,
-             
+             __global    int                * aux_array,        // aux data array (four aux arrays strung together)
              __constant  uchar              * bit_lookup,       // used to get data_index
-             __local     uchar16            * local_tree,       // cache current tree into local memory
              __global    float16            * camera,           // camera orign and SVD of inverse of camera matrix
-             __global    float16            * cammat,           // translated camera matrix
              __global    uint4              * imgdims,          // dimensions of the input image
              __global    float4             * in_image,         // the input image
-             __global    int                * offsetfactor,     //
-             __global    int                * offset_x,         // offset to the left and
-             __global    int                * offset_y,         // right (which one of the four blocks)
+             __global    float              * output,
+             __local     uchar16            * local_tree,       // cache current tree into local memory
              __local     short2             * ray_bundle_array, // gives information for which ray takes over in the workgroup
              __local     int                * cell_ptrs,        // local list of cell_ptrs (cells that are hit by this workgroup
              __local     float4             * cached_aux_data,  // seg len cached aux data is only a float2
-             __local     uchar              * cumsum,           // cumulative sum for calculating data pointer
-             __global    float              * output)
+             __local     uchar              * cumsum )          // cumulative sum for calculating data pointer
 {
   //get local id (0-63 for an 8x8) of this patch
   uchar llid = (uchar)(get_local_id(0) + get_local_size(0)*get_local_id(1));
@@ -48,8 +37,6 @@ seg_len_main(__constant  RenderSceneInfo    * linfo,
   // check for validity before proceeding
   //----------------------------------------------------------------------------
   int i=0,j=0;
-  //map_work_space_2d_offset(&i,&j,(*offset_x),(*offset_y));
-  //int factor=(*offsetfactor);
   map_work_space_2d(&i,&j);
   int factor=1;
   i=get_global_id(0);
@@ -60,12 +47,8 @@ seg_len_main(__constant  RenderSceneInfo    * linfo,
   if (i>=(*imgdims).z || j>=(*imgdims).w) {
     return;
   }
-#if 0
-  if (i<320 || i>=328 || j<240 || j>=248)
-    return;
-#endif
 
-  float4 inImage = in_image[j*get_global_size(0)*factor+i];
+  float4 inImage = in_image[j*get_global_size(0) + i];
   float obs = inImage.x;
   float vis = inImage.z;
   barrier(CLK_LOCAL_MEM_FENCE);
@@ -103,25 +86,24 @@ seg_len_main(__constant  RenderSceneInfo    * linfo,
 
             //scene info                              
             linfo, 
-            block_ptrs, 
             tree_array, 
             alpha_array, 
-            0,              //mixture_array
-            num_obs_array,  //num_obs_arrya
-            seg_len_array,  //seg_len_array
-            mean_obs_array, //mean_obs_array,
-            0,              //vis_array
-            0,              //beta_array
+            0,                                                //mixture_array
+            num_obs_array,                                    //num_obs_arrya
+            aux_array,                                        //seg_len_array, 
+            &aux_array[linfo->num_buffer * linfo->data_len],   //mean_obs_array,
+            0,                //vis_array
+            0,                //beta_array
 
             //utility info
-            local_tree, bit_lookup, cumsum, factor,
+            local_tree, bit_lookup, cumsum, 0,
 
             //SEGLEN SPECIFIC ARGS
             //factor,raybund,ptrs,cache,cache,image_vect (all NULL)
-            cammat, ray_bundle_array, cell_ptrs, obs, vis, cached_aux_data,
+            ray_bundle_array, cell_ptrs, obs, vis, cached_aux_data,
 
             //io info
-            in_image, 0, output);
+            in_image, output);
 }
 #endif
 
@@ -129,26 +111,18 @@ seg_len_main(__constant  RenderSceneInfo    * linfo,
 __kernel
 void
 pre_inf_main(__constant  RenderSceneInfo    * linfo,
-             __global    ushort2            * block_ptrs,
              __global    int4               * tree_array,       // tree structure for each block
              __global    float              * alpha_array,      // alpha for each block
              __global    uchar8             * mixture_array,    // mixture for each block
              __global    ushort4            * num_obs_array,    // num obs for each block
-             __global    int                * seg_len_array,    //four aux data arrays
-             __global    int                * mean_obs_array,   // -
-             __global    int                * vis_array,        // -
-             __global    int                * beta_array,       // -
+             __global    int                * aux_array,        // four aux arrays strung together
              __constant  uchar              * bit_lookup,       // used to get data_index
-             __local     uchar16            * local_tree,       // cache current tree into local memory
              __global    float16            * camera,           // camera orign and SVD of inverse of camera matrix
-             __global    float16            * cammat,           // translated camera matrix
              __global    uint4              * imgdims,          // dimensions of the input image
              __global    float4             * in_image,         // the input image
-             __global    int                * offsetfactor,     //
-             __global    int                * offset_x,         // offset to the left and
-             __global    int                * offset_y,         // right (which one of the four blocks)
-             __local     uchar              * cumsum,           // cumulative sum for calculating data pointer
-             __global    float              * output)
+             __global    float              * output,
+             __local     uchar16            * local_tree,       // cache current tree into local memory
+             __local     uchar              * cumsum )           // cumulative sum for calculating data pointer
 {
   //get local id (0-63 for an 8x8) of this patch
   uchar llid = (uchar)(get_local_id(0) + get_local_size(0)*get_local_id(1));
@@ -157,8 +131,8 @@ pre_inf_main(__constant  RenderSceneInfo    * linfo,
   // get image coordinates and camera,
   // check for validity before proceeding
   //----------------------------------------------------------------------------
-  int i=0,j=0; map_work_space_2d(&i,&j);
-  int factor=1;
+  int i=0,j=0; 
+  map_work_space_2d(&i,&j);
   i=get_global_id(0);
   j=get_global_id(1);
 
@@ -167,7 +141,7 @@ pre_inf_main(__constant  RenderSceneInfo    * linfo,
   if (i>=(*imgdims).z || j>=(*imgdims).w) {
     return;
   }
-  float4 inImage = in_image[j*get_global_size(0)*factor+i];
+  float4 inImage = in_image[j*get_global_size(0) + i];
   barrier(CLK_LOCAL_MEM_FENCE);
 
   //----------------------------------------------------------------------------
@@ -202,24 +176,24 @@ pre_inf_main(__constant  RenderSceneInfo    * linfo,
 
             //scene info                               
             linfo, 
-            block_ptrs, 
             tree_array, 
             alpha_array, 
             mixture_array,  //mixture_array
             num_obs_array,  //num_obs_arrya
-            seg_len_array,  //seg_len_array
-            mean_obs_array, //mean_obs_array,
-            vis_array,      //vis_array
-            beta_array,     //beta_array
             
+            aux_array,                                        //seg_len_array, 
+            &aux_array[linfo->num_buffer * linfo->data_len],   //mean_obs_array,
+            &aux_array[2 * linfo->num_buffer * linfo->data_len],   //vis_array,
+            &aux_array[3 * linfo->num_buffer * linfo->data_len],   //beta_array,
+
             //utility info
-            local_tree, bit_lookup, cumsum, factor,
+            local_tree, bit_lookup, cumsum, 0,
 
             //PREINF SPECIFIC ARGS
-            cammat, inImage,
+            inImage,
 
             //io info
-            in_image, 0, output);
+            in_image, output);
 }
 #endif
 
@@ -228,31 +202,21 @@ pre_inf_main(__constant  RenderSceneInfo    * linfo,
 __kernel
 void
 bayes_main(__constant  RenderSceneInfo    * linfo,
-           __global    ushort2            * block_ptrs,
            __global    int4               * tree_array,       // tree structure for each block
            __global    float              * alpha_array,      // alpha for each block
            __global    uchar8             * mixture_array,    // mixture for each block
            __global    ushort4            * num_obs_array,    // num obs for each block
-           
-           __global    int                * seg_len_array,    //four aux data arrays
-           __global    int                * mean_obs_array,
-           __global    int                * vis_array,
-           __global    int                * beta_array,
-           
+           __global    int                * aux_array,        // four aux arrays strung together
            __constant  uchar              * bit_lookup,       // used to get data_index
-           __local     uchar16            * local_tree,       // cache current tree into local memory
            __global    float16            * camera,           // camera orign and SVD of inverse of camera matrix
-           __global    float16            * cammat,           // translated camera matrix
            __global    uint4              * imgdims,          // dimensions of the input image
            __global    float4             * in_image,         // the input image
-           __global    int                * offsetfactor,     //
-           __global    int                * offset_x,         // offset to the left and
-           __global    int                * offset_y,         // right (which one of the four blocks)
+           __global    float              * output,
+           __local     uchar16            * local_tree,       // cache current tree into local memory
            __local     short2             * ray_bundle_array, // gives information for which ray takes over in the workgroup
            __local     int                * cell_ptrs,        // local list of cell_ptrs (cells that are hit by this workgroup
            __local     float              * cached_vis,       // cached vis used to sum up vis contribution locally
-           __local     uchar              * cumsum,           // cumulative sum for calculating data pointer
-           __global    float              * output)
+           __local     uchar              * cumsum)          // cumulative sum for calculating data pointer
 {
   //get local id (0-63 for an 8x8) of this patch
   uchar llid = (uchar)(get_local_id(0) + get_local_size(0)*get_local_id(1));
@@ -266,10 +230,7 @@ bayes_main(__constant  RenderSceneInfo    * linfo,
   // check for validity before proceeding
   //----------------------------------------------------------------------------
   int i=0,j=0;
-  //map_work_space_2d_offset(&i,&j,(*offset_x),(*offset_y));
-  //int factor=(*offsetfactor);
   map_work_space_2d(&i,&j);
-  int factor=1;
   i=get_global_id(0);
   j=get_global_id(1);
 
@@ -280,8 +241,7 @@ bayes_main(__constant  RenderSceneInfo    * linfo,
     isActive = false;
     return;
   }
-  //image_vect[llid] = in_image[j*get_global_size(0)*factor+i];
-  float4 inImage = in_image[j*get_global_size(0)*factor+i];
+  float4 inImage = in_image[j*get_global_size(0) + i];
   float norm = inImage.x;
   float vis  = inImage.z;
   float pre  = inImage.w;
@@ -319,25 +279,25 @@ bayes_main(__constant  RenderSceneInfo    * linfo,
 
             //scene info       
             linfo, 
-            block_ptrs, 
             tree_array, 
             alpha_array, 
             mixture_array,  //mixture_array
             num_obs_array,  //num_obs_arrya
-            seg_len_array,  //seg_len_array
-            mean_obs_array, //mean_obs_array,
-            vis_array,      //vis_array
-            beta_array,     //beta_array 
-
+            
+            aux_array,                                        //seg_len_array, 
+            &aux_array[linfo->num_buffer * linfo->data_len],   //mean_obs_array,
+            &aux_array[2 * linfo->num_buffer * linfo->data_len],   //vis_array,
+            &aux_array[3 * linfo->num_buffer * linfo->data_len],   //beta_array,
+            
             //utility info
-            local_tree, bit_lookup, cumsum, factor,
+            local_tree, bit_lookup, cumsum, 0,
 
             //BAYES SPECIFIC ARGUMENTS
             //factor,raybund,ptrs,cache,cache,image_vect (all NULL)
-            cammat, ray_bundle_array, cell_ptrs, cached_vis, norm, vis, pre,
+            ray_bundle_array, cell_ptrs, cached_vis, norm, vis, pre,
 
             //io info
-            in_image, 0, output);
+            in_image, output);
 }
 #endif
 
@@ -470,12 +430,14 @@ update_bit_scene_main(__global RenderSceneInfo  * info,
                       __global float            * alpha_array,
                       __global uchar8           * mixture_array,
                       __global ushort4          * nobs_array,
+                      __global int              * aux_array,
+                      
+/*
                       __global int                * seg_len_array,    //four aux data arrays
                       __global int                * mean_obs_array,
                       __global int                * vis_array,
                       __global int                * beta_array,
-                      //__global float2           * cum_len_beta,    // cumulative ray length and beta aux vars
-                      //__global uchar2           * mean_obs_cum_vis, // mean_obs per cell and cumulative visibility
+*/
                       __global float            * output)
 {
   int gid=get_global_id(0);
@@ -491,19 +453,19 @@ update_bit_scene_main(__global RenderSceneInfo  * info,
 
     if (alpha > 0.0)
     {
-      //load global data into registers
-      //load aux data into local mem
-      //float2 cl_beta  = cum_len_beta[gid];
-      //float2 mean_vis = convert_float2(mean_obs_cum_vis[gid])/255.0f;
-      //float4 aux_data = (float4) (cl_beta.x,            //cell length
-      //                            mean_vis.x,           //mean observation
-      //                            cl_beta.y,            //beta (bayes update ratio)
-      //                            mean_vis.y);          //cell visability
+/*
       float cum_len = convert_float(seg_len_array[gid])/SEGLEN_FACTOR; 
       float mean_obs = convert_float(mean_obs_array[gid])/SEGLEN_FACTOR;
       mean_obs = mean_obs / cum_len;  
       float cell_beta = convert_float(beta_array[gid])/SEGLEN_FACTOR;
       float cell_vis = convert_float(vis_array[gid])/SEGLEN_FACTOR;
+      float4 aux_data = (float4) (cum_len, mean_obs, cell_beta, cell_vis/cum_len);
+*/
+      float cum_len  = convert_float(aux_array[gid])/SEGLEN_FACTOR; 
+      float mean_obs = convert_float(aux_array[1*datasize + gid])/SEGLEN_FACTOR;
+      mean_obs = mean_obs / cum_len;  
+      float cell_beta = convert_float(aux_array[2*datasize + gid])/SEGLEN_FACTOR;
+      float cell_vis  = convert_float(aux_array[3*datasize + gid])/SEGLEN_FACTOR;
       float4 aux_data = (float4) (cum_len, mean_obs, cell_beta, cell_vis/cum_len);
 
       float4 nobs     = convert_float4(nobs_array[gid]);
@@ -534,8 +496,3 @@ update_bit_scene_main(__global RenderSceneInfo  * info,
   }
 }
 #endif
-
-
-__kernel
-void
-divide_alpha(){}

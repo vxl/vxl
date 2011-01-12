@@ -104,7 +104,6 @@ int main(int argc,  char** argv)
   //initialize GPU update process
   boxm2_opencl_update_process gpu_update;
   gpu_update.init_kernel(&gpu_pro->context(), &gpu_pro->devices()[0]); 
-  return 0;
   gpu_pro->run(&gpu_update, input, output); 
   gpu_pro->finish(); 
 
@@ -119,17 +118,17 @@ int main(int argc,  char** argv)
 
   //set inputs
   vcl_vector<brdb_value_sptr> r_input;
-  input.push_back(brdb_scene);
-  input.push_back(brdb_cam);
-  input.push_back(brdb_expimg);
-  input.push_back(brdb_vis);
+  r_input.push_back(brdb_scene);
+  r_input.push_back(brdb_cam);
+  r_input.push_back(brdb_expimg);
+  r_input.push_back(brdb_vis);
 
   //initialize the GPU render process
   boxm2_opencl_render_process gpu_render;
   gpu_render.init_kernel(&gpu_pro->context(), &gpu_pro->devices()[0]);
   expimg->fill(0);
   vis_img->fill(1.0f);
-  gpu_pro->run(&gpu_render, input, output);
+  gpu_pro->run(&gpu_render, r_input, output);
   gpu_pro->finish();
   
   //clean up
@@ -148,7 +147,7 @@ int main(int argc,  char** argv)
   for (unsigned int i=0; i<ni(); ++i)
     for (unsigned int j=0; j<nj(); ++j)
       byte_img(i,j) =  static_cast<vxl_byte>( (*expimg_view)(i,j) );   //just grab the first byte (all foura r the same)
-  vil_save( byte_img, img().c_str());
+  vil_save( byte_img, "exp_img.png");
 
   vil_image_view<vxl_byte> vis_byte(ni(), nj());
   for (unsigned int i=0; i<ni(); ++i)

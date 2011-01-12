@@ -17,6 +17,15 @@
 #include <bocl/bocl_kernel.h>
 #include <bocl/bocl_mem.h>
 
+//PASS ENUM
+enum {
+  UPDATE_SEGLEN = 0,
+  UPDATE_PREINF = 1,
+  UPDATE_PROC   = 2,
+  UPDATE_BAYES  = 3, 
+  UPDATE_CELL   = 4, 
+}; 
+
 class boxm2_opencl_update_process : public boxm2_opencl_process_base
 {
   public:
@@ -43,12 +52,54 @@ class boxm2_opencl_update_process : public boxm2_opencl_process_base
     //: render kernel (other processes may have many kernels
     vcl_vector<bocl_kernel*> update_kernels_;
 
+    //: workspace 
+    vcl_size_t lThreads_[2]; 
+    vcl_size_t gThreads_[2]; 
+    vcl_size_t img_size_[2]; 
+
     //: INPUT IMAGE: 
     bocl_mem* image_;
     
     //: visibility image
     bocl_mem* vis_img_; 
+    
+    //: block stuff
+    bocl_mem* blk_info_;
+    bocl_mem* blk_;
+    bocl_mem* alpha_;
+    bocl_mem* mog_; 
+    bocl_mem* num_obs_; 
+    bocl_mem* aux_;
+    
+/*
+    bocl_mem* aux_seg_len_;
+    bocl_mem* aux_mean_obs_;
+    bocl_mem* aux_vis_;
+    bocl_mem* aux_beta_;
+     
+*/
+    
+    //: cam
+    bocl_mem* persp_cam_; 
+    bocl_mem* img_dim_;
+    bocl_mem* cl_output_;
+    bocl_mem* lookup_; 
+    
+    //: app density used for proc_norm_image
+    bocl_mem* app_density_; 
+    
+    //----- Update Helper Methods ----------------------------------------------
+    //: set args
+    bool set_args(unsigned pass); 
+    
+    //: Set workspace helper method
+    bool set_workspace(unsigned pass);
+    
+    //: write input image to buffer
+    bool write_input_image(vil_image_view<float>* input_image); 
 
 };
+
+
 
 #endif
