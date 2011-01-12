@@ -306,7 +306,7 @@ bayes_main(__constant  RenderSceneInfo    * linfo,
 //
 __kernel
 void
-proc_norm_image(__global float4* image, __global float4* p_inf, __global uint4   * imgdims)
+proc_norm_image(__global float4* image, __global float4* p_inf, __global uint4 * imgdims)
 {
   // linear global id of the normalization image
   int lgid = get_global_id(0) + get_global_size(0)*get_global_id(1);
@@ -352,13 +352,6 @@ update_bit_scene_main(__global RenderSceneInfo  * info,
                       __global uchar8           * mixture_array,
                       __global ushort4          * nobs_array,
                       __global int              * aux_array,
-                      
-/*
-                      __global int                * seg_len_array,    //four aux data arrays
-                      __global int                * mean_obs_array,
-                      __global int                * vis_array,
-                      __global int                * beta_array,
-*/
                       __global float            * output)
 {
   int gid=get_global_id(0);
@@ -374,13 +367,27 @@ update_bit_scene_main(__global RenderSceneInfo  * info,
 
     if (alpha > 0.0)
     {
-      float cum_len  = convert_float(aux_array[gid])/SEGLEN_FACTOR; 
-      float mean_obs = convert_float(aux_array[1*datasize + gid])/SEGLEN_FACTOR;
+      int len_int = aux_array[gid]; 
+      int obs_int = aux_array[gid]; 
+      int vis_int = aux_array[gid]; 
+      int beta_int= aux_array[gid];
+      
+      if(gid == 0) {
+        output[0] = (float) len_int;
+        output[1] = (float) obs_int; 
+        output[2] = (float) vis_int; 
+        output[3] = (float) beta_int;
+      }
+/*
+      float cum_len  = convert_float(len_int)/SEGLEN_FACTOR; 
+      float mean_obs = convert_float(obs_int)/SEGLEN_FACTOR;
       mean_obs = mean_obs / cum_len;  
-      float cell_beta = convert_float(aux_array[2*datasize + gid])/SEGLEN_FACTOR;
-      float cell_vis  = convert_float(aux_array[3*datasize + gid])/SEGLEN_FACTOR;
+      float cell_vis  = convert_float(vis_int)/SEGLEN_FACTOR;
+      float cell_beta = convert_float(aux_array[gid])/SEGLEN_FACTOR;
       float4 aux_data = (float4) (cum_len, mean_obs, cell_beta, cell_vis/cum_len);
-
+*/
+      float4 aux_data = (float4) (1.0f, 1.0f, 1.0f, 1.0f); 
+/*
       float4 nobs     = convert_float4(nobs_array[gid]);
       float8 mixture  = convert_float8(mixture_array[gid]);
       float16 data = (float16) (alpha,
@@ -393,14 +400,22 @@ update_bit_scene_main(__global RenderSceneInfo  * info,
       if (aux_data.x>1e-10f)
         update_cell(&data, aux_data, 2.5f, 0.09f, 0.03f);
 
+*/
+
+/*
       //reset the cells in memory
       alpha_array[gid]      = max(alphamin,data.s0);
       float8 post_mix       = (float8) (data.s1, data.s2, data.s3,
                                         data.s5, data.s6, data.s7,
                                         data.s9, data.sa)*255.0;
       float4 post_nobs      = (float4) (data.s4, data.s8, data.sb, data.sc*100.0);
+*/
+
+      float8 post_mix       = (float8) (220.0f);
+      float4 post_nobs      = aux_data;
       mixture_array[gid]    = convert_uchar8_sat_rte(post_mix);
       nobs_array[gid]       = convert_ushort4_sat_rte(post_nobs);
+
     }
   }
 }

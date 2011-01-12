@@ -55,7 +55,10 @@ bocl_mem* boxm2_opencl_cache::get_block(boxm2_block_id id)
   cached_block_->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR );
 
   //store the metadata
-  if(block_info_) delete block_info_;
+  if(block_info_) {
+     if( block_info_->cpu_buffer() ) delete block_info_->cpu_buffer(); 
+     delete block_info_;
+  }
   boxm2_scene_info* info_buffer = scene_->get_blk_metadata(loaded_);
   info_buffer->num_buffer = loaded->num_buffers();
   info_buffer->tree_buffer_length = loaded->tree_buff_length();

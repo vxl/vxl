@@ -101,6 +101,11 @@ bocl_mem* boxm2_opencl_cache::get_data(boxm2_block_id id)
   bocl_mem* data = new bocl_mem(*context_, data_base->data_buffer(), data_base->buffer_length(), boxm2_data_traits<T>::prefix());
   data->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
   cached_data_[boxm2_data_traits<T>::prefix()] = data;
+  
+  vcl_cout<<"Data mem "<<boxm2_data_traits<T>::prefix()<<" length: "
+                       <<data_base->buffer_length()<<", cellsize: "
+                       <<boxm2_data_traits<T>::datasize()<<vcl_endl;
+  
   return data;
 }
 

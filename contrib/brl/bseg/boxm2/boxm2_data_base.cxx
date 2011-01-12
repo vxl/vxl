@@ -13,6 +13,8 @@ boxm2_data_base::boxm2_data_base(boxm2_block_metadata data, const vcl_string dat
   vcl_size_t cell_size = boxm2_data_info::datasize(data_type); 
   buffer_length_ = num_cells * cell_size;
   
+  vcl_cout<<"Data size: "<<num_cells<<", bytes:"<<buffer_length_<<vcl_endl;
+  
   //now construct a byte stream, and read in with b_read
   data_buffer_ = new char[buffer_length_]; 
   

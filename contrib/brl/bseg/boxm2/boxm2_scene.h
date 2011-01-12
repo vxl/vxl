@@ -80,7 +80,7 @@ class boxm2_scene : public vbl_ref_count
     } 
 
     //: a list of block metadata...
-    vcl_map<boxm2_block_id, boxm2_block_metadata> blocks() { return blocks_; }
+    vcl_map<boxm2_block_id, boxm2_block_metadata>& blocks() { return blocks_; }
     unsigned num_blocks() { return (unsigned) blocks_.size(); }
     boxm2_block_metadata get_block_metadata(boxm2_block_id id) { return blocks_[id]; }
 

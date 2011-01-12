@@ -103,7 +103,7 @@ bool boxm2_opencl_update_process::execute(vcl_vector<brdb_value_sptr>& input, vc
   img_dim_buff[1] = img_view->nj();
   img_dim_buff[2] = img_view->ni();
   img_dim_buff[3] = img_view->nj();
-  img_dim_ = new bocl_mem((*context_), img_dim_buff, sizeof(int)*4, "image dims");
+  img_dim_ = new bocl_mem((*context_), img_dim_buff, sizeof(cl_int4), "image dims");
   img_dim_->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
   
   //output buffer
@@ -125,14 +125,14 @@ bool boxm2_opencl_update_process::execute(vcl_vector<brdb_value_sptr>& input, vc
   app_buffer[2] = 0.0f;
   app_buffer[3] = 0.0f;
   app_density_ = new bocl_mem((*context_), app_buffer, sizeof(cl_float4), "app density buffer");
-  app_density_->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
+  app_density_->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
   //For each ID in the visibility order, grab that block
   vcl_vector<boxm2_block_id> vis_order = scene->get_vis_blocks( (vpgl_perspective_camera<double>*) cam.ptr()); 
   vcl_vector<boxm2_block_id>::iterator id; 
  
   //Go through each kernel, execute on each block
-  for(int i=0; i< /*update_kernels_.size()*/ 4; i++)
+  for(int i=0; i< /*update_kernels_.size()*/ 5; i++)
   {
     vcl_cout<<"UPDATE KERNEL : "<<i<<vcl_endl;
     if(i==UPDATE_PROC) continue;
@@ -158,8 +158,9 @@ bool boxm2_opencl_update_process::execute(vcl_vector<brdb_value_sptr>& input, vc
         
       //execute kernel
       update_kernels_[i]->execute( (*command_queue_), lThreads_, gThreads_);
-      clFinish(*command_queue_); 
-      gpu_time_ += update_kernels_[i]->exec_time(); 
+      int status = clFinish(*command_queue_); 
+      check_val(status, MEM_FAILURE, "UPDATE EXECUTE FAILED: " + error_to_string(status));
+      //gpu_time_ += update_kernels_[i]->exec_time(); 
     
       //clear render kernel args so it can reset em on next execution
       update_kernels_[i]->clear_args();
@@ -173,9 +174,17 @@ bool boxm2_opencl_update_process::execute(vcl_vector<brdb_value_sptr>& input, vc
       
       //read image out to buffer (from gpu)
       image_->read_to_buffer(*command_queue_);
+      cl_output_->read_to_buffer(*command_queue_); 
+      
       clFinish(*command_queue_);
     }
   }
+
+  vcl_cout<<"OUTPUT FOR UPDATE"<<vcl_endl;
+  float* obuff = (float*) cl_output_->cpu_buffer(); 
+  for(int i=0; i<30; i++) 
+    vcl_cout<<obuff[i]<<"   ";
+  vcl_cout<<vcl_endl;
 
 
   //clean up camera, lookup_arr, img_dim_buff
@@ -211,6 +220,7 @@ bool boxm2_opencl_update_process::set_workspace(unsigned pass)
     case UPDATE_PREINF:
     case UPDATE_PROC:
     case UPDATE_BAYES:
+          //vcl_cout<<"IMAGE SIZE AND WORKSPACE: "<<img_size_[0]<<","<<img_size_[1]<<vcl_endl;
           gThreads_[0] = img_size_[0];
           gThreads_[1] = img_size_[1];
           lThreads_[0]  = 8;
@@ -312,7 +322,7 @@ bool boxm2_opencl_update_process::write_input_image(vil_image_view<float>* input
   int i=0;  
   for(iter = input_image->begin(); iter != input_image->end(); ++iter, ++i) {
     buff[4*i] = (*iter); 
-    buff[4*i + 1] = 0.0f; 
+    buff[4*i + 1] = (*iter);  
     buff[4*i + 2] = 1.0f; 
     buff[4*i + 3] = 0.0f; 
   }

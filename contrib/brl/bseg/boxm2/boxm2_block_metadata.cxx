@@ -32,6 +32,8 @@ long boxm2_block_metadata::num_data_cells()
             <<"**************************************************\n";
     return 0;
   }
+  
+  vcl_cout<<"Data, num buffers: "<<num_buffers<<vcl_endl;
   return num_buffers * BUFF_LENGTH;
 }
 
