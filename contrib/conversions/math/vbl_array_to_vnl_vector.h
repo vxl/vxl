@@ -9,7 +9,9 @@
 template <class T>
 inline vnl_vector<T> vbl_array_to_vnl_vector(vbl_array_1d<T> a)
 {
-  assert(a.end() < a.begin() + vcl_numeric_limits<typename vnl_vector<T>::size_type>::max());
+  assert(a.end() > a.begin()); // no size-zero array please!
+  assert(static_cast<typename vnl_vector<T>::size_type>(a.end() - a.begin())
+         < vcl_numeric_limits<typename vnl_vector<T>::size_type>::max());
   return vnl_vector<T>(a.begin(), static_cast<typename vnl_vector<T>::size_type>(a.end()-a.begin()));
 }
 
