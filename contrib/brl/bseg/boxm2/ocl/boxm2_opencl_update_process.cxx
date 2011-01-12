@@ -132,8 +132,11 @@ bool boxm2_opencl_update_process::execute(vcl_vector<brdb_value_sptr>& input, vc
   vcl_vector<boxm2_block_id>::iterator id; 
  
   //Go through each kernel, execute on each block
-  for(int i=0; i<update_kernels_.size(); i++)
+  for(int i=0; i< /*update_kernels_.size()*/ 4; i++)
   {
+    vcl_cout<<"UPDATE KERNEL : "<<i<<vcl_endl;
+    if(i==UPDATE_PROC) continue;
+    
     //zip through visible blocks, and execute this pass's kernel
     for(id = vis_order.begin(); id != vis_order.end(); ++id) 
     {
@@ -196,8 +199,8 @@ bool boxm2_opencl_update_process::execute(vcl_vector<brdb_value_sptr>& input, vc
 
 bool boxm2_opencl_update_process::clean()
 {
-  if (image_) delete image_;
-  image_ = 0;
+  //if (image_) delete image_;
+  //image_ = 0;
   return true;
 }
 
@@ -247,7 +250,6 @@ bool boxm2_opencl_update_process::set_args(unsigned pass)
       update_kernels_[pass]->set_local_arg( lThreads_[0]*lThreads_[1]*sizeof(cl_int) );    //cell pointers, 
       update_kernels_[pass]->set_local_arg( lThreads_[0]*lThreads_[1]*sizeof(cl_float4) ); //cached aux, 
       update_kernels_[pass]->set_local_arg( lThreads_[0]*lThreads_[1]*10*sizeof(cl_uchar) ); //cumsum buffer, imindex buffer
-      //update_kernels_[pass]->set_local_arg( lThreads_[0]*lThreads_[1]*sizeof(cl_int) );     //imIndex 
       break;
     case UPDATE_PREINF : 
       update_kernels_[pass]->set_arg( blk_info_ );
@@ -282,7 +284,7 @@ bool boxm2_opencl_update_process::set_args(unsigned pass)
       update_kernels_[pass]->set_arg( image_ );
       update_kernels_[pass]->set_arg( cl_output_ );
       update_kernels_[pass]->set_local_arg( lThreads_[0]*lThreads_[1]*sizeof(cl_uchar16) );//local tree, 
-      update_kernels_[pass]->set_local_arg( lThreads_[0]*lThreads_[1]*sizeof(cl_uchar4) ); //ray bundle, 
+      update_kernels_[pass]->set_local_arg( lThreads_[0]*lThreads_[1]*sizeof(cl_short2) ); //ray bundle, 
       update_kernels_[pass]->set_local_arg( lThreads_[0]*lThreads_[1]*sizeof(cl_int) );    //cell pointers, 
       update_kernels_[pass]->set_local_arg( lThreads_[0]*lThreads_[1]*sizeof(cl_float) ); //cached aux, 
       update_kernels_[pass]->set_local_arg( lThreads_[0]*lThreads_[1]*10*sizeof(cl_uchar) ); //cumsum buffer, imindex buffer
@@ -334,47 +336,6 @@ bool boxm_update_bit_scene_manager::set_update_args(unsigned pass)
   int i=0;
 
 
-  if (pass==2) //divide alpha which is not done
-  {
-    //scene info
-    status = clSetKernelArg(update_kernels_[pass],i++,sizeof(cl_mem),(void *)&scene_info_buf_);
-    if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (render scene info)"))
-      return false;
-    // alpha buffer
-    status = clSetKernelArg(update_kernels_[pass],i++,sizeof(cl_mem),(void *)&cell_alpha_buf_);
-    if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (cell_data_buf_)"))
-      return false;
-    //aux data
-    //aux data arrays
-    status = clSetKernelArg(update_kernels_[pass],i++,sizeof(cl_mem),(void *)&cell_seg_len_buf_);
-    if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (cell_seg lens_)"))
-      return false;
-    status = clSetKernelArg(update_kernels_[pass],i++,sizeof(cl_mem),(void *)&cell_mean_obs_buf_);
-    if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (cell_mean_obs_)"))
-      return false;
-    status = clSetKernelArg(update_kernels_[pass],i++,sizeof(cl_mem),(void *)&cell_vis_buf_);
-    if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (cell_vis_)"))
-      return false;
-    status = clSetKernelArg(update_kernels_[pass],i++,sizeof(cl_mem),(void *)&cell_beta_buf_);
-    if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (cell_Beta)"))
-      return false;
-    ////cum beta and mean vis buffers
-    //status = clSetKernelArg(update_kernels_[pass],i++,sizeof(cl_mem),(void *)&cell_cum_beta_buf_);
-    //if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (cell_mean_vis_)"))
-      //return false;
-    //status = clSetKernelArg(update_kernels_[pass],i++,sizeof(cl_mem),(void *)&cell_mean_vis_buf_);
-    //if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (cell_mean_vis_)"))
-      //return false;
-    //cell aux data buffer
-    //status = clSetKernelArg(update_kernels_[pass],i++,sizeof(cl_mem),(void *)&cell_aux_data_buf_);
-    //if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (cell_data_buf_)"))
-      //return false;
-    //output float buffer (one float for each buffer)
-    status = clSetKernelArg(update_kernels_[pass],i++,sizeof(cl_mem),(void *)&output_debug_buf_);
-    if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (output debugger)"))
-      return false;
-  }
-  if (pass==4)
   {
     status = clSetKernelArg(update_kernels_[pass],i++,sizeof(cl_mem),(void *)&scene_info_buf_);
     if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (render scene info)"))

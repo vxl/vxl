@@ -86,7 +86,7 @@ int main(int argc,  char** argv)
   gpu_pro->set_cpu_cache(&cache);
   gpu_pro->init();
 
-  //set inputs
+  ////set inputs
   vcl_vector<brdb_value_sptr> input;
   input.push_back(brdb_scene);
   input.push_back(brdb_cam);
@@ -95,19 +95,19 @@ int main(int argc,  char** argv)
   //initoutput vector
   vcl_vector<brdb_value_sptr> output;
 
-  //initialize GPU update process
+  ////initialize GPU update process
   boxm2_opencl_update_process gpu_update;
   gpu_update.init_kernel(&gpu_pro->context(), &gpu_pro->devices()[0]); 
   gpu_pro->run(&gpu_update, input, output); 
-  gpu_pro->finish(); 
-  gpu_update.clean();
+  //gpu_pro->finish(); 
+  //gpu_update.clean();
 
   //////////////////////////////////////////////////////////////////////////////
   // RENDER SCENE FOR DEBUGGING
   //////////////////////////////////////////////////////////////////////////////
   vil_image_view<unsigned int>* expimg = new vil_image_view<unsigned int>(ni(), nj());
   expimg->fill(0);
-  vil_image_view_base_sptr expimg_sptr(expimg);// = new vil_image_view<unsigned int>(ni(), nj());
+  vil_image_view_base_sptr expimg_sptr(expimg);
   brdb_value_sptr brdb_expimg = new brdb_value_t<vil_image_view_base_sptr>(expimg_sptr);
  
   //create vis image buffer
@@ -115,7 +115,7 @@ int main(int argc,  char** argv)
   vis_img->fill(1.0f);
   brdb_value_sptr brdb_vis = new brdb_value_t<vil_image_view_base_sptr>(vis_img);
 
-  //set inputs
+  ////set inputs
   vcl_vector<brdb_value_sptr> r_input;
   r_input.push_back(brdb_scene);
   r_input.push_back(brdb_cam);
@@ -125,8 +125,6 @@ int main(int argc,  char** argv)
   //initialize the GPU render process
   boxm2_opencl_render_process gpu_render;
   gpu_render.init_kernel(&gpu_pro->context(), &gpu_pro->devices()[0]);
-  expimg->fill(0);
-  vis_img->fill(1.0f);
   gpu_pro->run(&gpu_render, r_input, output);
   gpu_pro->finish();
   
@@ -139,8 +137,6 @@ int main(int argc,  char** argv)
   //----------------------------------------------------------------------------
   //save to disk
   vil_image_view<unsigned int>* expimg_view = static_cast<vil_image_view<unsigned int>* >(expimg_sptr.ptr());
-  //unsigned int min_val, max_val;
-  //vil_math_value_range( *expimg_view, min_val, max_val);
 
   vil_image_view<vxl_byte> byte_img(ni(), nj());
   for (unsigned int i=0; i<ni(); ++i)

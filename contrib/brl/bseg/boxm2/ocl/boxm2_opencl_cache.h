@@ -88,9 +88,11 @@ bocl_mem* boxm2_opencl_cache::get_data(boxm2_block_id id)
   //otherwise get the data block from cpu cache
   if ( cached_data_.find(boxm2_data_traits<T>::prefix()) != cached_data_.end())
   {
+    //vcl_cout<<"ocl_cache release memory for :"<<boxm2_data_traits<T>::prefix()<<vcl_endl;
     //release existing memory
     bocl_mem* toDelete = cached_data_[boxm2_data_traits<T>::prefix()];
     delete toDelete;
+    cached_data_[boxm2_data_traits<T>::prefix()] = 0;
   }
 
   //create new memory
