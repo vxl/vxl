@@ -27,7 +27,7 @@ boxm2_data_base::boxm2_data_base(boxm2_block_metadata data, const vcl_string dat
     vcl_memset(data_buffer_, 0, buffer_length_); 
   }
   else {
-    vcl_memset(data_buffer_, 0, buffer_length_); 
+    vcl_memset(data_buffer_, 100, buffer_length_); 
   }
 }
 

@@ -95,20 +95,6 @@ bool boxm2_opencl_update_process::execute(vcl_vector<brdb_value_sptr>& input, vc
   vil_image_view<float>* img_view = static_cast<vil_image_view<float>* >(img.ptr());
   this->write_input_image(img_view); 
 
-  //vis image buffer
-  brdb_value_t<vil_image_view_base_sptr>* brdb_vis = static_cast<brdb_value_t<vil_image_view_base_sptr>* >( input[i++].ptr() );
-  vil_image_view_base_sptr visimg = brdb_vis->value();
-  vil_image_view<float>* vis_img_view = static_cast<vil_image_view<float>* >(visimg.ptr());
-  if (!vis_img_) {
-    float* vis_buff = vis_img_view->begin();
-    vis_img_ = new bocl_mem((*context_), vis_buff, vis_img_view->size() * sizeof(float), "visibility image buffer");
-    vis_img_->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
-  } 
-  else {
-    vis_img_->set_cpu_buffer(vis_img_view->begin()); 
-    vis_img_->write_to_buffer(*command_queue_);
-  }
-      
   //exp image dimensions
   img_size_[0] = img_view->ni(); 
   img_size_[1] = img_view->nj(); 
@@ -184,18 +170,23 @@ bool boxm2_opencl_update_process::execute(vcl_vector<brdb_value_sptr>& input, vc
       
       //read image out to buffer (from gpu)
       image_->read_to_buffer(*command_queue_);
+      clFinish(*command_queue_);
     }
   }
-  
-  //read image out to buffer (from gpu)
-  image_->read_to_buffer(*command_queue_);
-  vis_img_->read_to_buffer(*command_queue_);
+
 
   //clean up camera, lookup_arr, img_dim_buff
   delete[] output_arr;
   delete[] img_dim_buff;
   delete[] lookup_arr;
   delete[] cam_buffer;
+  delete[] app_buffer;
+  
+  delete cl_output_; 
+  delete persp_cam_; 
+  delete img_dim_;
+  delete lookup_;
+  delete app_density_;
   
   //record total time
   total_time_ = (float) total.all(); 
@@ -206,9 +197,7 @@ bool boxm2_opencl_update_process::execute(vcl_vector<brdb_value_sptr>& input, vc
 bool boxm2_opencl_update_process::clean()
 {
   if (image_) delete image_;
-  if (vis_img_) delete vis_img_;
   image_ = 0;
-  vis_img_ = 0;
   return true;
 }
 
@@ -252,7 +241,6 @@ bool boxm2_opencl_update_process::set_args(unsigned pass)
       update_kernels_[pass]->set_arg( persp_cam_ );
       update_kernels_[pass]->set_arg( img_dim_ );
       update_kernels_[pass]->set_arg( image_ );
-      //update_kernels_[pass]->set_arg( vis_img_ );
       update_kernels_[pass]->set_arg( cl_output_ );
       update_kernels_[pass]->set_local_arg( lThreads_[0]*lThreads_[1]*sizeof(cl_uchar16) );//local tree, 
       update_kernels_[pass]->set_local_arg( lThreads_[0]*lThreads_[1]*sizeof(cl_uchar4) ); //ray bundle, 
@@ -310,6 +298,7 @@ bool boxm2_opencl_update_process::set_args(unsigned pass)
   }
   return true;
 }
+
 
 bool boxm2_opencl_update_process::write_input_image(vil_image_view<float>* input_image)
 {

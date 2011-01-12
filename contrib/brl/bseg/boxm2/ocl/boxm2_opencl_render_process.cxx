@@ -177,11 +177,9 @@ bool boxm2_opencl_render_process::execute(vcl_vector<brdb_value_sptr>& input, vc
     render_kernel_.clear_args();
   }
   
-  
   //read image out to buffer (from gpu)
   image_->read_to_buffer(*command_queue_);
   vis_img_->read_to_buffer(*command_queue_);
-  //cl_output.read_to_buffer(*command_queue_);
 
   //clean up camera, lookup_arr, img_dim_buff
   delete[] output_arr;

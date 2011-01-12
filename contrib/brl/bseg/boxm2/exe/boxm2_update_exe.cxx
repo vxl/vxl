@@ -70,11 +70,6 @@ int main(int argc,  char** argv)
   vil_image_view_base_sptr floatimg_sptr(floatimg);// = new vil_image_view<unsigned int>(ni(), nj());
   brdb_value_sptr brdb_inimg = new brdb_value_t<vil_image_view_base_sptr>(floatimg_sptr);
 
-  //create vis image buffer
-  vil_image_view<float>* vis_img = new vil_image_view<float>(ni(), nj());
-  vis_img->fill(1.0f);
-  brdb_value_sptr brdb_vis = new brdb_value_t<vil_image_view_base_sptr>(vis_img);
-
   //----------------------------------------------------------------------------
   //--- BEGIN BOXM2 API EXAMPLE ------------------------------------------------
   //----------------------------------------------------------------------------
@@ -96,7 +91,6 @@ int main(int argc,  char** argv)
   input.push_back(brdb_scene);
   input.push_back(brdb_cam);
   input.push_back(brdb_inimg);
-  input.push_back(brdb_vis);
 
   //initoutput vector
   vcl_vector<brdb_value_sptr> output;
@@ -106,7 +100,7 @@ int main(int argc,  char** argv)
   gpu_update.init_kernel(&gpu_pro->context(), &gpu_pro->devices()[0]); 
   gpu_pro->run(&gpu_update, input, output); 
   gpu_pro->finish(); 
-
+  gpu_update.clean();
 
   //////////////////////////////////////////////////////////////////////////////
   // RENDER SCENE FOR DEBUGGING
@@ -115,6 +109,11 @@ int main(int argc,  char** argv)
   expimg->fill(0);
   vil_image_view_base_sptr expimg_sptr(expimg);// = new vil_image_view<unsigned int>(ni(), nj());
   brdb_value_sptr brdb_expimg = new brdb_value_t<vil_image_view_base_sptr>(expimg_sptr);
+ 
+  //create vis image buffer
+  vil_image_view<float>* vis_img = new vil_image_view<float>(ni(), nj());
+  vis_img->fill(1.0f);
+  brdb_value_sptr brdb_vis = new brdb_value_t<vil_image_view_base_sptr>(vis_img);
 
   //set inputs
   vcl_vector<brdb_value_sptr> r_input;

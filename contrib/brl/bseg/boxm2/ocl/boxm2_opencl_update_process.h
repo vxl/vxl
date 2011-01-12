@@ -29,7 +29,7 @@ enum {
 class boxm2_opencl_update_process : public boxm2_opencl_process_base
 {
   public:
-    boxm2_opencl_update_process() : image_(0), vis_img_(0) {}
+    boxm2_opencl_update_process() : image_(0) {}
     
     //: process init and execute
     bool init() { return true; }
@@ -60,9 +60,6 @@ class boxm2_opencl_update_process : public boxm2_opencl_process_base
     //: INPUT IMAGE: 
     bocl_mem* image_;
     
-    //: visibility image
-    bocl_mem* vis_img_; 
-    
     //: block stuff
     bocl_mem* blk_info_;
     bocl_mem* blk_;
@@ -70,14 +67,6 @@ class boxm2_opencl_update_process : public boxm2_opencl_process_base
     bocl_mem* mog_; 
     bocl_mem* num_obs_; 
     bocl_mem* aux_;
-    
-/*
-    bocl_mem* aux_seg_len_;
-    bocl_mem* aux_mean_obs_;
-    bocl_mem* aux_vis_;
-    bocl_mem* aux_beta_;
-     
-*/
     
     //: cam
     bocl_mem* persp_cam_; 

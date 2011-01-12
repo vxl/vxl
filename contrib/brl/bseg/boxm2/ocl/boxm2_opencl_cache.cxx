@@ -41,7 +41,9 @@ bocl_mem* boxm2_opencl_cache::get_block(boxm2_block_id id)
     return cached_block_;
 
   //clean up...
-  if(cached_block_) delete cached_block_; 
+  if(cached_block_) {
+    delete cached_block_; 
+  }
 
   //otherwise load it from disk with blocking
   loaded_ = id; 
