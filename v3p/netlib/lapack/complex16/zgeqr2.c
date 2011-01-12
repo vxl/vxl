@@ -1,13 +1,13 @@
 /* lapack/complex16/zgeqr2.f -- translated by f2c (version 20090411).
    You must link the resulting object file with libf2c:
-	on Microsoft Windows system, link with libf2c.lib;
-	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
-	or, if you install libf2c.a in a standard place, with -lf2c -lm
-	-- in that order, at the end of the command line, as in
-		cc *.o -lf2c -lm
-	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+        on Microsoft Windows system, link with libf2c.lib;
+        on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+        or, if you install libf2c.a in a standard place, with -lf2c -lm
+        -- in that order, at the end of the command line, as in
+                cc *.o -lf2c -lm
+        Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
 
-		http://www.netlib.org/f2c/libf2c.zip
+                http://www.netlib.org/f2c/libf2c.zip
 */
 
 #ifdef __cplusplus
@@ -20,8 +20,8 @@ extern "C" {
 static integer c__1 = 1;
 
 /*<       SUBROUTINE ZGEQR2( M, N, A, LDA, TAU, WORK, INFO ) >*/
-/* Subroutine */ int zgeqr2_(integer *m, integer *n, doublecomplex *a, 
-	integer *lda, doublecomplex *tau, doublecomplex *work, integer *info)
+/* Subroutine */ int zgeqr2_(integer *m, integer *n, doublecomplex *a,
+        integer *lda, doublecomplex *tau, doublecomplex *work, integer *info)
 {
     /* System generated locals */
     integer a_dim1, a_offset, i__1, i__2, i__3;
@@ -33,11 +33,11 @@ static integer c__1 = 1;
     /* Local variables */
     integer i__, k;
     doublecomplex alpha;
-    extern /* Subroutine */ int zlarf_(char *, integer *, integer *, 
-	    doublecomplex *, integer *, doublecomplex *, doublecomplex *, 
-	    integer *, doublecomplex *, ftnlen), xerbla_(char *, integer *, 
-	    ftnlen), zlarfg_(integer *, doublecomplex *, doublecomplex *, 
-	    integer *, doublecomplex *);
+    extern /* Subroutine */ int zlarf_(char *, integer *, integer *,
+            doublecomplex *, integer *, doublecomplex *, doublecomplex *,
+            integer *, doublecomplex *, ftnlen), xerbla_(char *, integer *,
+            ftnlen), zlarfg_(integer *, doublecomplex *, doublecomplex *,
+            integer *, doublecomplex *);
 
 
 /*  -- LAPACK routine (version 3.2.2) -- */
@@ -136,24 +136,24 @@ static integer c__1 = 1;
 /*<       IF( M.LT.0 ) THEN >*/
     if (*m < 0) {
 /*<          INFO = -1 >*/
-	*info = -1;
+        *info = -1;
 /*<       ELSE IF( N.LT.0 ) THEN >*/
     } else if (*n < 0) {
 /*<          INFO = -2 >*/
-	*info = -2;
+        *info = -2;
 /*<       ELSE IF( LDA.LT.MAX( 1, M ) ) THEN >*/
     } else if (*lda < max(1,*m)) {
 /*<          INFO = -4 >*/
-	*info = -4;
+        *info = -4;
 /*<       END IF >*/
     }
 /*<       IF( INFO.NE.0 ) THEN >*/
     if (*info != 0) {
 /*<          CALL XERBLA( 'ZGEQR2', -INFO ) >*/
-	i__1 = -(*info);
-	xerbla_("ZGEQR2", &i__1, (ftnlen)6);
+        i__1 = -(*info);
+        xerbla_("ZGEQR2", &i__1, (ftnlen)6);
 /*<          RETURN >*/
-	return 0;
+        return 0;
 /*<       END IF >*/
     }
 
@@ -167,33 +167,33 @@ static integer c__1 = 1;
 /*        Generate elementary reflector H(i) to annihilate A(i+1:m,i) */
 
 /*<    >*/
-	i__2 = *m - i__ + 1;
+        i__2 = *m - i__ + 1;
 /* Computing MIN */
-	i__3 = i__ + 1;
-	zlarfg_(&i__2, &a[i__ + i__ * a_dim1], &a[min(i__3,*m) + i__ * a_dim1]
-		, &c__1, &tau[i__]);
+        i__3 = i__ + 1;
+        zlarfg_(&i__2, &a[i__ + i__ * a_dim1], &a[min(i__3,*m) + i__ * a_dim1]
+                , &c__1, &tau[i__]);
 /*<          IF( I.LT.N ) THEN >*/
-	if (i__ < *n) {
+        if (i__ < *n) {
 
 /*           Apply H(i)' to A(i:m,i+1:n) from the left */
 
 /*<             ALPHA = A( I, I ) >*/
-	    i__2 = i__ + i__ * a_dim1;
-	    alpha.r = a[i__2].r, alpha.i = a[i__2].i;
+            i__2 = i__ + i__ * a_dim1;
+            alpha.r = a[i__2].r, alpha.i = a[i__2].i;
 /*<             A( I, I ) = ONE >*/
-	    i__2 = i__ + i__ * a_dim1;
-	    a[i__2].r = 1., a[i__2].i = 0.;
+            i__2 = i__ + i__ * a_dim1;
+            a[i__2].r = 1., a[i__2].i = 0.;
 /*<    >*/
-	    i__2 = *m - i__ + 1;
-	    i__3 = *n - i__;
-	    d_cnjg(&z__1, &tau[i__]);
-	    zlarf_("Left", &i__2, &i__3, &a[i__ + i__ * a_dim1], &c__1, &z__1,
-		     &a[i__ + (i__ + 1) * a_dim1], lda, &work[1], (ftnlen)4);
+            i__2 = *m - i__ + 1;
+            i__3 = *n - i__;
+            d_cnjg(&z__1, &tau[i__]);
+            zlarf_("Left", &i__2, &i__3, &a[i__ + i__ * a_dim1], &c__1, &z__1,
+                     &a[i__ + (i__ + 1) * a_dim1], lda, &work[1], (ftnlen)4);
 /*<             A( I, I ) = ALPHA >*/
-	    i__2 = i__ + i__ * a_dim1;
-	    a[i__2].r = alpha.r, a[i__2].i = alpha.i;
+            i__2 = i__ + i__ * a_dim1;
+            a[i__2].r = alpha.r, a[i__2].i = alpha.i;
 /*<          END IF >*/
-	}
+        }
 /*<    10 CONTINUE >*/
 /* L10: */
     }
@@ -206,5 +206,5 @@ static integer c__1 = 1;
 } /* zgeqr2_ */
 
 #ifdef __cplusplus
-	}
+        }
 #endif

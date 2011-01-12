@@ -1,13 +1,13 @@
 /* lapack/complex16/ztgexc.f -- translated by f2c (version 20090411).
    You must link the resulting object file with libf2c:
-	on Microsoft Windows system, link with libf2c.lib;
-	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
-	or, if you install libf2c.a in a standard place, with -lf2c -lm
-	-- in that order, at the end of the command line, as in
-		cc *.o -lf2c -lm
-	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+        on Microsoft Windows system, link with libf2c.lib;
+        on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+        or, if you install libf2c.a in a standard place, with -lf2c -lm
+        -- in that order, at the end of the command line, as in
+                cc *.o -lf2c -lm
+        Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
 
-		http://www.netlib.org/f2c/libf2c.zip
+                http://www.netlib.org/f2c/libf2c.zip
 */
 
 #ifdef __cplusplus
@@ -16,21 +16,21 @@ extern "C" {
 #include "v3p_netlib.h"
 
 /*<    >*/
-/* Subroutine */ int ztgexc_(logical *wantq, logical *wantz, integer *n, 
-	doublecomplex *a, integer *lda, doublecomplex *b, integer *ldb, 
-	doublecomplex *q, integer *ldq, doublecomplex *z__, integer *ldz, 
-	integer *ifst, integer *ilst, integer *info)
+/* Subroutine */ int ztgexc_(logical *wantq, logical *wantz, integer *n,
+        doublecomplex *a, integer *lda, doublecomplex *b, integer *ldb,
+        doublecomplex *q, integer *ldq, doublecomplex *z__, integer *ldz,
+        integer *ifst, integer *ilst, integer *info)
 {
     /* System generated locals */
-    integer a_dim1, a_offset, b_dim1, b_offset, q_dim1, q_offset, z_dim1, 
-	    z_offset, i__1;
+    integer a_dim1, a_offset, b_dim1, b_offset, q_dim1, q_offset, z_dim1,
+            z_offset, i__1;
 
     /* Local variables */
     integer here;
-    extern /* Subroutine */ int ztgex2_(logical *, logical *, integer *, 
-	    doublecomplex *, integer *, doublecomplex *, integer *, 
-	    doublecomplex *, integer *, doublecomplex *, integer *, integer *,
-	     integer *), xerbla_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int ztgex2_(logical *, logical *, integer *,
+            doublecomplex *, integer *, doublecomplex *, integer *,
+            doublecomplex *, integer *, doublecomplex *, integer *, integer *,
+             integer *), xerbla_(char *, integer *, ftnlen);
 
 
 /*  -- LAPACK routine (version 3.2) -- */
@@ -186,40 +186,40 @@ extern "C" {
 /*<       IF( N.LT.0 ) THEN >*/
     if (*n < 0) {
 /*<          INFO = -3 >*/
-	*info = -3;
+        *info = -3;
 /*<       ELSE IF( LDA.LT.MAX( 1, N ) ) THEN >*/
     } else if (*lda < max(1,*n)) {
 /*<          INFO = -5 >*/
-	*info = -5;
+        *info = -5;
 /*<       ELSE IF( LDB.LT.MAX( 1, N ) ) THEN >*/
     } else if (*ldb < max(1,*n)) {
 /*<          INFO = -7 >*/
-	*info = -7;
+        *info = -7;
 /*<       ELSE IF( LDQ.LT.1 .OR. WANTQ .AND. ( LDQ.LT.MAX( 1, N ) ) ) THEN >*/
     } else if (*ldq < 1 || *wantq && *ldq < max(1,*n)) {
 /*<          INFO = -9 >*/
-	*info = -9;
+        *info = -9;
 /*<       ELSE IF( LDZ.LT.1 .OR. WANTZ .AND. ( LDZ.LT.MAX( 1, N ) ) ) THEN >*/
     } else if (*ldz < 1 || *wantz && *ldz < max(1,*n)) {
 /*<          INFO = -11 >*/
-	*info = -11;
+        *info = -11;
 /*<       ELSE IF( IFST.LT.1 .OR. IFST.GT.N ) THEN >*/
     } else if (*ifst < 1 || *ifst > *n) {
 /*<          INFO = -12 >*/
-	*info = -12;
+        *info = -12;
 /*<       ELSE IF( ILST.LT.1 .OR. ILST.GT.N ) THEN >*/
     } else if (*ilst < 1 || *ilst > *n) {
 /*<          INFO = -13 >*/
-	*info = -13;
+        *info = -13;
 /*<       END IF >*/
     }
 /*<       IF( INFO.NE.0 ) THEN >*/
     if (*info != 0) {
 /*<          CALL XERBLA( 'ZTGEXC', -INFO ) >*/
-	i__1 = -(*info);
-	xerbla_("ZTGEXC", &i__1, (ftnlen)6);
+        i__1 = -(*info);
+        xerbla_("ZTGEXC", &i__1, (ftnlen)6);
 /*<          RETURN >*/
-	return 0;
+        return 0;
 /*<       END IF >*/
     }
 
@@ -227,18 +227,18 @@ extern "C" {
 
 /*<    >*/
     if (*n <= 1) {
-	return 0;
+        return 0;
     }
 /*<    >*/
     if (*ifst == *ilst) {
-	return 0;
+        return 0;
     }
 
 /*<       IF( IFST.LT.ILST ) THEN >*/
     if (*ifst < *ilst) {
 
 /*<          HERE = IFST >*/
-	here = *ifst;
+        here = *ifst;
 
 /*<    10    CONTINUE >*/
 L10:
@@ -246,28 +246,28 @@ L10:
 /*        Swap with next one below */
 
 /*<    >*/
-	ztgex2_(wantq, wantz, n, &a[a_offset], lda, &b[b_offset], ldb, &q[
-		q_offset], ldq, &z__[z_offset], ldz, &here, info);
+        ztgex2_(wantq, wantz, n, &a[a_offset], lda, &b[b_offset], ldb, &q[
+                q_offset], ldq, &z__[z_offset], ldz, &here, info);
 /*<          IF( INFO.NE.0 ) THEN >*/
-	if (*info != 0) {
+        if (*info != 0) {
 /*<             ILST = HERE >*/
-	    *ilst = here;
+            *ilst = here;
 /*<             RETURN >*/
-	    return 0;
+            return 0;
 /*<          END IF >*/
-	}
+        }
 /*<          HERE = HERE + 1 >*/
-	++here;
+        ++here;
 /*<    >*/
-	if (here < *ilst) {
-	    goto L10;
-	}
+        if (here < *ilst) {
+            goto L10;
+        }
 /*<          HERE = HERE - 1 >*/
-	--here;
+        --here;
 /*<       ELSE >*/
     } else {
 /*<          HERE = IFST - 1 >*/
-	here = *ifst - 1;
+        here = *ifst - 1;
 
 /*<    20    CONTINUE >*/
 L20:
@@ -275,24 +275,24 @@ L20:
 /*        Swap with next one above */
 
 /*<    >*/
-	ztgex2_(wantq, wantz, n, &a[a_offset], lda, &b[b_offset], ldb, &q[
-		q_offset], ldq, &z__[z_offset], ldz, &here, info);
+        ztgex2_(wantq, wantz, n, &a[a_offset], lda, &b[b_offset], ldb, &q[
+                q_offset], ldq, &z__[z_offset], ldz, &here, info);
 /*<          IF( INFO.NE.0 ) THEN >*/
-	if (*info != 0) {
+        if (*info != 0) {
 /*<             ILST = HERE >*/
-	    *ilst = here;
+            *ilst = here;
 /*<             RETURN >*/
-	    return 0;
+            return 0;
 /*<          END IF >*/
-	}
+        }
 /*<          HERE = HERE - 1 >*/
-	--here;
+        --here;
 /*<    >*/
-	if (here >= *ilst) {
-	    goto L20;
-	}
+        if (here >= *ilst) {
+            goto L20;
+        }
 /*<          HERE = HERE + 1 >*/
-	++here;
+        ++here;
 /*<       END IF >*/
     }
 /*<       ILST = HERE >*/
@@ -306,5 +306,5 @@ L20:
 } /* ztgexc_ */
 
 #ifdef __cplusplus
-	}
+        }
 #endif

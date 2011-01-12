@@ -1,13 +1,13 @@
 /* lapack/complex16/ztgex2.f -- translated by f2c (version 20090411).
    You must link the resulting object file with libf2c:
-	on Microsoft Windows system, link with libf2c.lib;
-	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
-	or, if you install libf2c.a in a standard place, with -lf2c -lm
-	-- in that order, at the end of the command line, as in
-		cc *.o -lf2c -lm
-	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+        on Microsoft Windows system, link with libf2c.lib;
+        on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+        or, if you install libf2c.a in a standard place, with -lf2c -lm
+        -- in that order, at the end of the command line, as in
+                cc *.o -lf2c -lm
+        Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
 
-		http://www.netlib.org/f2c/libf2c.zip
+                http://www.netlib.org/f2c/libf2c.zip
 */
 
 #ifdef __cplusplus
@@ -21,14 +21,14 @@ static integer c__2 = 2;
 static integer c__1 = 1;
 
 /*<    >*/
-/* Subroutine */ int ztgex2_(logical *wantq, logical *wantz, integer *n, 
-	doublecomplex *a, integer *lda, doublecomplex *b, integer *ldb, 
-	doublecomplex *q, integer *ldq, doublecomplex *z__, integer *ldz, 
-	integer *j1, integer *info)
+/* Subroutine */ int ztgex2_(logical *wantq, logical *wantz, integer *n,
+        doublecomplex *a, integer *lda, doublecomplex *b, integer *ldb,
+        doublecomplex *q, integer *ldq, doublecomplex *z__, integer *ldz,
+        integer *j1, integer *info)
 {
     /* System generated locals */
-    integer a_dim1, a_offset, b_dim1, b_offset, q_dim1, q_offset, z_dim1, 
-	    z_offset, i__1, i__2, i__3;
+    integer a_dim1, a_offset, b_dim1, b_offset, q_dim1, q_offset, z_dim1,
+            z_offset, i__1, i__2, i__3;
     doublereal d__1;
     doublecomplex z__1, z__2, z__3;
 
@@ -39,7 +39,7 @@ static integer c__1 = 1;
     /* Local variables */
     doublecomplex f, g;
     integer i__, m;
-    doublecomplex s[4]	/* was [2][2] */, t[4]	/* was [2][2] */;
+    doublecomplex s[4]        /* was [2][2] */, t[4]        /* was [2][2] */;
     doublereal cq, sa, sb, cz;
     doublecomplex sq;
     doublereal ss, ws;
@@ -47,19 +47,19 @@ static integer c__1 = 1;
     doublereal eps, sum;
     logical weak;
     doublecomplex cdum, work[8];
-    extern /* Subroutine */ int zrot_(integer *, doublecomplex *, integer *, 
-	    doublecomplex *, integer *, doublereal *, doublecomplex *);
+    extern /* Subroutine */ int zrot_(integer *, doublecomplex *, integer *,
+            doublecomplex *, integer *, doublereal *, doublecomplex *);
     doublereal scale;
     extern doublereal dlamch_(char *, ftnlen);
     logical dtrong;
     doublereal thresh;
-    extern /* Subroutine */ int zlacpy_(char *, integer *, integer *, 
-	    doublecomplex *, integer *, doublecomplex *, integer *, ftnlen), 
-	    zlartg_(doublecomplex *, doublecomplex *, doublereal *, 
-	    doublecomplex *, doublecomplex *);
+    extern /* Subroutine */ int zlacpy_(char *, integer *, integer *,
+            doublecomplex *, integer *, doublecomplex *, integer *, ftnlen),
+            zlartg_(doublecomplex *, doublecomplex *, doublereal *,
+            doublecomplex *, doublecomplex *);
     doublereal smlnum;
     extern /* Subroutine */ int zlassq_(integer *, doublecomplex *, integer *,
-	     doublereal *, doublereal *);
+             doublereal *, doublereal *);
 
 
 /*  -- LAPACK auxiliary routine (version 3.2.2) -- */
@@ -227,7 +227,7 @@ static integer c__1 = 1;
 
 /*<    >*/
     if (*n <= 1) {
-	return 0;
+        return 0;
     }
 
 /*<       M = LDST >*/
@@ -282,16 +282,16 @@ static integer c__1 = 1;
 
 /*<       F = S( 2, 2 )*T( 1, 1 ) - T( 2, 2 )*S( 1, 1 ) >*/
     z__2.r = s[3].r * t[0].r - s[3].i * t[0].i, z__2.i = s[3].r * t[0].i + s[
-	    3].i * t[0].r;
+            3].i * t[0].r;
     z__3.r = t[3].r * s[0].r - t[3].i * s[0].i, z__3.i = t[3].r * s[0].i + t[
-	    3].i * s[0].r;
+            3].i * s[0].r;
     z__1.r = z__2.r - z__3.r, z__1.i = z__2.i - z__3.i;
     f.r = z__1.r, f.i = z__1.i;
 /*<       G = S( 2, 2 )*T( 1, 2 ) - T( 2, 2 )*S( 1, 2 ) >*/
     z__2.r = s[3].r * t[2].r - s[3].i * t[2].i, z__2.i = s[3].r * t[2].i + s[
-	    3].i * t[2].r;
+            3].i * t[2].r;
     z__3.r = t[3].r * s[2].r - t[3].i * s[2].i, z__3.i = t[3].r * s[2].i + t[
-	    3].i * s[2].r;
+            3].i * s[2].r;
     z__1.r = z__2.r - z__3.r, z__1.i = z__2.i - z__3.i;
     g.r = z__1.r, g.i = z__1.i;
 /*<       SA = ABS( S( 2, 2 ) ) >*/
@@ -312,11 +312,11 @@ static integer c__1 = 1;
 /*<       IF( SA.GE.SB ) THEN >*/
     if (sa >= sb) {
 /*<          CALL ZLARTG( S( 1, 1 ), S( 2, 1 ), CQ, SQ, CDUM ) >*/
-	zlartg_(s, &s[1], &cq, &sq, &cdum);
+        zlartg_(s, &s[1], &cq, &sq, &cdum);
 /*<       ELSE >*/
     } else {
 /*<          CALL ZLARTG( T( 1, 1 ), T( 2, 1 ), CQ, SQ, CDUM ) >*/
-	zlartg_(t, &t[1], &cq, &sq, &cdum);
+        zlartg_(t, &t[1], &cq, &sq, &cdum);
 /*<       END IF >*/
     }
 /*<       CALL ZROT( 2, S( 1, 1 ), LDST, S( 2, 1 ), LDST, CQ, SQ ) >*/
@@ -332,7 +332,7 @@ static integer c__1 = 1;
     weak = ws <= thresh;
 /*<    >*/
     if (! weak) {
-	goto L20;
+        goto L20;
     }
 
 /*<       IF( WANDS ) THEN >*/
@@ -342,71 +342,71 @@ static integer c__1 = 1;
 /*           F-norm((A-QL'*S*QR, B-QL'*T*QR)) <= O(EPS*F-norm((A, B))) */
 
 /*<          CALL ZLACPY( 'Full', M, M, S, LDST, WORK, M ) >*/
-	zlacpy_("Full", &m, &m, s, &c__2, work, &m, (ftnlen)4);
+        zlacpy_("Full", &m, &m, s, &c__2, work, &m, (ftnlen)4);
 /*<          CALL ZLACPY( 'Full', M, M, T, LDST, WORK( M*M+1 ), M ) >*/
-	zlacpy_("Full", &m, &m, t, &c__2, &work[m * m], &m, (ftnlen)4);
+        zlacpy_("Full", &m, &m, t, &c__2, &work[m * m], &m, (ftnlen)4);
 /*<          CALL ZROT( 2, WORK, 1, WORK( 3 ), 1, CZ, -DCONJG( SZ ) ) >*/
-	d_cnjg(&z__2, &sz);
-	z__1.r = -z__2.r, z__1.i = -z__2.i;
-	zrot_(&c__2, work, &c__1, &work[2], &c__1, &cz, &z__1);
+        d_cnjg(&z__2, &sz);
+        z__1.r = -z__2.r, z__1.i = -z__2.i;
+        zrot_(&c__2, work, &c__1, &work[2], &c__1, &cz, &z__1);
 /*<          CALL ZROT( 2, WORK( 5 ), 1, WORK( 7 ), 1, CZ, -DCONJG( SZ ) ) >*/
-	d_cnjg(&z__2, &sz);
-	z__1.r = -z__2.r, z__1.i = -z__2.i;
-	zrot_(&c__2, &work[4], &c__1, &work[6], &c__1, &cz, &z__1);
+        d_cnjg(&z__2, &sz);
+        z__1.r = -z__2.r, z__1.i = -z__2.i;
+        zrot_(&c__2, &work[4], &c__1, &work[6], &c__1, &cz, &z__1);
 /*<          CALL ZROT( 2, WORK, 2, WORK( 2 ), 2, CQ, -SQ ) >*/
-	z__1.r = -sq.r, z__1.i = -sq.i;
-	zrot_(&c__2, work, &c__2, &work[1], &c__2, &cq, &z__1);
+        z__1.r = -sq.r, z__1.i = -sq.i;
+        zrot_(&c__2, work, &c__2, &work[1], &c__2, &cq, &z__1);
 /*<          CALL ZROT( 2, WORK( 5 ), 2, WORK( 6 ), 2, CQ, -SQ ) >*/
-	z__1.r = -sq.r, z__1.i = -sq.i;
-	zrot_(&c__2, &work[4], &c__2, &work[5], &c__2, &cq, &z__1);
+        z__1.r = -sq.r, z__1.i = -sq.i;
+        zrot_(&c__2, &work[4], &c__2, &work[5], &c__2, &cq, &z__1);
 /*<          DO 10 I = 1, 2 >*/
-	for (i__ = 1; i__ <= 2; ++i__) {
+        for (i__ = 1; i__ <= 2; ++i__) {
 /*<             WORK( I ) = WORK( I ) - A( J1+I-1, J1 ) >*/
-	    i__1 = i__ - 1;
-	    i__2 = i__ - 1;
-	    i__3 = *j1 + i__ - 1 + *j1 * a_dim1;
-	    z__1.r = work[i__2].r - a[i__3].r, z__1.i = work[i__2].i - a[i__3]
-		    .i;
-	    work[i__1].r = z__1.r, work[i__1].i = z__1.i;
+            i__1 = i__ - 1;
+            i__2 = i__ - 1;
+            i__3 = *j1 + i__ - 1 + *j1 * a_dim1;
+            z__1.r = work[i__2].r - a[i__3].r, z__1.i = work[i__2].i - a[i__3]
+                    .i;
+            work[i__1].r = z__1.r, work[i__1].i = z__1.i;
 /*<             WORK( I+2 ) = WORK( I+2 ) - A( J1+I-1, J1+1 ) >*/
-	    i__1 = i__ + 1;
-	    i__2 = i__ + 1;
-	    i__3 = *j1 + i__ - 1 + (*j1 + 1) * a_dim1;
-	    z__1.r = work[i__2].r - a[i__3].r, z__1.i = work[i__2].i - a[i__3]
-		    .i;
-	    work[i__1].r = z__1.r, work[i__1].i = z__1.i;
+            i__1 = i__ + 1;
+            i__2 = i__ + 1;
+            i__3 = *j1 + i__ - 1 + (*j1 + 1) * a_dim1;
+            z__1.r = work[i__2].r - a[i__3].r, z__1.i = work[i__2].i - a[i__3]
+                    .i;
+            work[i__1].r = z__1.r, work[i__1].i = z__1.i;
 /*<             WORK( I+4 ) = WORK( I+4 ) - B( J1+I-1, J1 ) >*/
-	    i__1 = i__ + 3;
-	    i__2 = i__ + 3;
-	    i__3 = *j1 + i__ - 1 + *j1 * b_dim1;
-	    z__1.r = work[i__2].r - b[i__3].r, z__1.i = work[i__2].i - b[i__3]
-		    .i;
-	    work[i__1].r = z__1.r, work[i__1].i = z__1.i;
+            i__1 = i__ + 3;
+            i__2 = i__ + 3;
+            i__3 = *j1 + i__ - 1 + *j1 * b_dim1;
+            z__1.r = work[i__2].r - b[i__3].r, z__1.i = work[i__2].i - b[i__3]
+                    .i;
+            work[i__1].r = z__1.r, work[i__1].i = z__1.i;
 /*<             WORK( I+6 ) = WORK( I+6 ) - B( J1+I-1, J1+1 ) >*/
-	    i__1 = i__ + 5;
-	    i__2 = i__ + 5;
-	    i__3 = *j1 + i__ - 1 + (*j1 + 1) * b_dim1;
-	    z__1.r = work[i__2].r - b[i__3].r, z__1.i = work[i__2].i - b[i__3]
-		    .i;
-	    work[i__1].r = z__1.r, work[i__1].i = z__1.i;
+            i__1 = i__ + 5;
+            i__2 = i__ + 5;
+            i__3 = *j1 + i__ - 1 + (*j1 + 1) * b_dim1;
+            z__1.r = work[i__2].r - b[i__3].r, z__1.i = work[i__2].i - b[i__3]
+                    .i;
+            work[i__1].r = z__1.r, work[i__1].i = z__1.i;
 /*<    10    CONTINUE >*/
 /* L10: */
-	}
+        }
 /*<          SCALE = DBLE( CZERO ) >*/
-	scale = 0.;
+        scale = 0.;
 /*<          SUM = DBLE( CONE ) >*/
-	sum = 1.;
+        sum = 1.;
 /*<          CALL ZLASSQ( 2*M*M, WORK, 1, SCALE, SUM ) >*/
-	i__1 = (m << 1) * m;
-	zlassq_(&i__1, work, &c__1, &scale, &sum);
+        i__1 = (m << 1) * m;
+        zlassq_(&i__1, work, &c__1, &scale, &sum);
 /*<          SS = SCALE*SQRT( SUM ) >*/
-	ss = scale * sqrt(sum);
+        ss = scale * sqrt(sum);
 /*<          DTRONG = SS.LE.THRESH >*/
-	dtrong = ss <= thresh;
+        dtrong = ss <= thresh;
 /*<    >*/
-	if (! dtrong) {
-	    goto L20;
-	}
+        if (! dtrong) {
+            goto L20;
+        }
 /*<       END IF >*/
     }
 
@@ -417,20 +417,20 @@ static integer c__1 = 1;
     i__1 = *j1 + 1;
     d_cnjg(&z__1, &sz);
     zrot_(&i__1, &a[*j1 * a_dim1 + 1], &c__1, &a[(*j1 + 1) * a_dim1 + 1], &
-	    c__1, &cz, &z__1);
+            c__1, &cz, &z__1);
 /*<    >*/
     i__1 = *j1 + 1;
     d_cnjg(&z__1, &sz);
     zrot_(&i__1, &b[*j1 * b_dim1 + 1], &c__1, &b[(*j1 + 1) * b_dim1 + 1], &
-	    c__1, &cz, &z__1);
+            c__1, &cz, &z__1);
 /*<       CALL ZROT( N-J1+1, A( J1, J1 ), LDA, A( J1+1, J1 ), LDA, CQ, SQ ) >*/
     i__1 = *n - *j1 + 1;
     zrot_(&i__1, &a[*j1 + *j1 * a_dim1], lda, &a[*j1 + 1 + *j1 * a_dim1], lda,
-	     &cq, &sq);
+             &cq, &sq);
 /*<       CALL ZROT( N-J1+1, B( J1, J1 ), LDB, B( J1+1, J1 ), LDB, CQ, SQ ) >*/
     i__1 = *n - *j1 + 1;
     zrot_(&i__1, &b[*j1 + *j1 * b_dim1], ldb, &b[*j1 + 1 + *j1 * b_dim1], ldb,
-	     &cq, &sq);
+             &cq, &sq);
 
 /*     Set  N1 by N2 (2,1) blocks to 0 */
 
@@ -445,15 +445,15 @@ static integer c__1 = 1;
 
 /*<    >*/
     if (*wantz) {
-	d_cnjg(&z__1, &sz);
-	zrot_(n, &z__[*j1 * z_dim1 + 1], &c__1, &z__[(*j1 + 1) * z_dim1 + 1], 
-		&c__1, &cz, &z__1);
+        d_cnjg(&z__1, &sz);
+        zrot_(n, &z__[*j1 * z_dim1 + 1], &c__1, &z__[(*j1 + 1) * z_dim1 + 1],
+                &c__1, &cz, &z__1);
     }
 /*<    >*/
     if (*wantq) {
-	d_cnjg(&z__1, &sq);
-	zrot_(n, &q[*j1 * q_dim1 + 1], &c__1, &q[(*j1 + 1) * q_dim1 + 1], &
-		c__1, &cq, &z__1);
+        d_cnjg(&z__1, &sq);
+        zrot_(n, &q[*j1 * q_dim1 + 1], &c__1, &q[(*j1 + 1) * q_dim1 + 1], &
+                c__1, &cq, &z__1);
     }
 
 /*     Exit with INFO = 0 if swap was successfully performed. */
@@ -476,5 +476,5 @@ L20:
 } /* ztgex2_ */
 
 #ifdef __cplusplus
-	}
+        }
 #endif

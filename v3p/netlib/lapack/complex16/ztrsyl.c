@@ -1,13 +1,13 @@
 /* lapack/complex16/ztrsyl.f -- translated by f2c (version 20090411).
    You must link the resulting object file with libf2c:
-	on Microsoft Windows system, link with libf2c.lib;
-	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
-	or, if you install libf2c.a in a standard place, with -lf2c -lm
-	-- in that order, at the end of the command line, as in
-		cc *.o -lf2c -lm
-	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+        on Microsoft Windows system, link with libf2c.lib;
+        on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+        or, if you install libf2c.a in a standard place, with -lf2c -lm
+        -- in that order, at the end of the command line, as in
+                cc *.o -lf2c -lm
+        Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
 
-		http://www.netlib.org/f2c/libf2c.zip
+                http://www.netlib.org/f2c/libf2c.zip
 */
 
 #ifdef __cplusplus
@@ -20,14 +20,14 @@ extern "C" {
 static integer c__1 = 1;
 
 /*<    >*/
-/* Subroutine */ int ztrsyl_(char *trana, char *tranb, integer *isgn, integer 
-	*m, integer *n, doublecomplex *a, integer *lda, doublecomplex *b, 
-	integer *ldb, doublecomplex *c__, integer *ldc, doublereal *scale, 
-	integer *info, ftnlen trana_len, ftnlen tranb_len)
+/* Subroutine */ int ztrsyl_(char *trana, char *tranb, integer *isgn, integer
+        *m, integer *n, doublecomplex *a, integer *lda, doublecomplex *b,
+        integer *ldb, doublecomplex *c__, integer *ldc, doublereal *scale,
+        integer *info, ftnlen trana_len, ftnlen tranb_len)
 {
     /* System generated locals */
-    integer a_dim1, a_offset, b_dim1, b_offset, c_dim1, c_offset, i__1, i__2, 
-	    i__3, i__4;
+    integer a_dim1, a_offset, b_dim1, b_offset, c_dim1, c_offset, i__1, i__2,
+            i__3, i__4;
     doublereal d__1, d__2;
     doublecomplex z__1, z__2, z__3, z__4;
 
@@ -45,21 +45,21 @@ static integer c__1 = 1;
     doublereal dum[1], eps, sgn, smin;
     doublecomplex suml, sumr;
     extern logical lsame_(const char *, const char *, ftnlen, ftnlen);
-    extern /* Double Complex */ VOID zdotc_(doublecomplex *, integer *, 
-	    doublecomplex *, integer *, doublecomplex *, integer *), zdotu_(
-	    doublecomplex *, integer *, doublecomplex *, integer *, 
-	    doublecomplex *, integer *);
+    extern /* Double Complex */ VOID zdotc_(doublecomplex *, integer *,
+            doublecomplex *, integer *, doublecomplex *, integer *), zdotu_(
+            doublecomplex *, integer *, doublecomplex *, integer *,
+            doublecomplex *, integer *);
     extern /* Subroutine */ int dlabad_(doublereal *, doublereal *);
     extern doublereal dlamch_(char *, ftnlen);
     doublereal scaloc;
     extern /* Subroutine */ int xerbla_(char *, integer *, ftnlen);
-    extern doublereal zlange_(char *, integer *, integer *, doublecomplex *, 
-	    integer *, doublereal *, ftnlen);
+    extern doublereal zlange_(char *, integer *, integer *, doublecomplex *,
+            integer *, doublereal *, ftnlen);
     doublereal bignum;
-    extern /* Subroutine */ int zdscal_(integer *, doublereal *, 
-	    doublecomplex *, integer *);
+    extern /* Subroutine */ int zdscal_(integer *, doublereal *,
+            doublecomplex *, integer *);
     extern /* Double Complex */ VOID zladiv_(doublecomplex *, doublecomplex *,
-	     doublecomplex *);
+             doublecomplex *);
     logical notrna, notrnb;
     doublereal smlnum;
 
@@ -199,44 +199,44 @@ static integer c__1 = 1;
 /*<       IF( .NOT.NOTRNA .AND. .NOT.LSAME( TRANA, 'C' ) ) THEN >*/
     if (! notrna && ! lsame_(trana, "C", (ftnlen)1, (ftnlen)1)) {
 /*<          INFO = -1 >*/
-	*info = -1;
+        *info = -1;
 /*<       ELSE IF( .NOT.NOTRNB .AND. .NOT.LSAME( TRANB, 'C' ) ) THEN >*/
     } else if (! notrnb && ! lsame_(tranb, "C", (ftnlen)1, (ftnlen)1)) {
 /*<          INFO = -2 >*/
-	*info = -2;
+        *info = -2;
 /*<       ELSE IF( ISGN.NE.1 .AND. ISGN.NE.-1 ) THEN >*/
     } else if (*isgn != 1 && *isgn != -1) {
 /*<          INFO = -3 >*/
-	*info = -3;
+        *info = -3;
 /*<       ELSE IF( M.LT.0 ) THEN >*/
     } else if (*m < 0) {
 /*<          INFO = -4 >*/
-	*info = -4;
+        *info = -4;
 /*<       ELSE IF( N.LT.0 ) THEN >*/
     } else if (*n < 0) {
 /*<          INFO = -5 >*/
-	*info = -5;
+        *info = -5;
 /*<       ELSE IF( LDA.LT.MAX( 1, M ) ) THEN >*/
     } else if (*lda < max(1,*m)) {
 /*<          INFO = -7 >*/
-	*info = -7;
+        *info = -7;
 /*<       ELSE IF( LDB.LT.MAX( 1, N ) ) THEN >*/
     } else if (*ldb < max(1,*n)) {
 /*<          INFO = -9 >*/
-	*info = -9;
+        *info = -9;
 /*<       ELSE IF( LDC.LT.MAX( 1, M ) ) THEN >*/
     } else if (*ldc < max(1,*m)) {
 /*<          INFO = -11 >*/
-	*info = -11;
+        *info = -11;
 /*<       END IF >*/
     }
 /*<       IF( INFO.NE.0 ) THEN >*/
     if (*info != 0) {
 /*<          CALL XERBLA( 'ZTRSYL', -INFO ) >*/
-	i__1 = -(*info);
-	xerbla_("ZTRSYL", &i__1, (ftnlen)6);
+        i__1 = -(*info);
+        xerbla_("ZTRSYL", &i__1, (ftnlen)6);
 /*<          RETURN >*/
-	return 0;
+        return 0;
 /*<       END IF >*/
     }
 
@@ -246,7 +246,7 @@ static integer c__1 = 1;
     *scale = 1.;
 /*<    >*/
     if (*m == 0 || *n == 0) {
-	return 0;
+        return 0;
     }
 
 /*     Set constants to control overflow */
@@ -266,8 +266,8 @@ static integer c__1 = 1;
 /*<    >*/
 /* Computing MAX */
     d__1 = smlnum, d__2 = eps * zlange_("M", m, m, &a[a_offset], lda, dum, (
-	    ftnlen)1), d__1 = max(d__1,d__2), d__2 = eps * zlange_("M", n, n, 
-	    &b[b_offset], ldb, dum, (ftnlen)1);
+            ftnlen)1), d__1 = max(d__1,d__2), d__2 = eps * zlange_("M", n, n,
+            &b[b_offset], ldb, dum, (ftnlen)1);
     smin = max(d__1,d__2);
 /*<       SGN = ISGN >*/
     sgn = (doublereal) (*isgn);
@@ -288,95 +288,95 @@ static integer c__1 = 1;
 /*                  I=K+1                      J=1 */
 
 /*<          DO 30 L = 1, N >*/
-	i__1 = *n;
-	for (l = 1; l <= i__1; ++l) {
+        i__1 = *n;
+        for (l = 1; l <= i__1; ++l) {
 /*<             DO 20 K = M, 1, -1 >*/
-	    for (k = *m; k >= 1; --k) {
+            for (k = *m; k >= 1; --k) {
 
 /*<    >*/
-		i__2 = *m - k;
+                i__2 = *m - k;
 /* Computing MIN */
-		i__3 = k + 1;
+                i__3 = k + 1;
 /* Computing MIN */
-		i__4 = k + 1;
-		zdotu_(&z__1, &i__2, &a[k + min(i__3,*m) * a_dim1], lda, &c__[
-			min(i__4,*m) + l * c_dim1], &c__1);
-		suml.r = z__1.r, suml.i = z__1.i;
+                i__4 = k + 1;
+                zdotu_(&z__1, &i__2, &a[k + min(i__3,*m) * a_dim1], lda, &c__[
+                        min(i__4,*m) + l * c_dim1], &c__1);
+                suml.r = z__1.r, suml.i = z__1.i;
 /*<                SUMR = ZDOTU( L-1, C( K, 1 ), LDC, B( 1, L ), 1 ) >*/
-		i__2 = l - 1;
-		zdotu_(&z__1, &i__2, &c__[k + c_dim1], ldc, &b[l * b_dim1 + 1]
-			, &c__1);
-		sumr.r = z__1.r, sumr.i = z__1.i;
+                i__2 = l - 1;
+                zdotu_(&z__1, &i__2, &c__[k + c_dim1], ldc, &b[l * b_dim1 + 1]
+                        , &c__1);
+                sumr.r = z__1.r, sumr.i = z__1.i;
 /*<                VEC = C( K, L ) - ( SUML+SGN*SUMR ) >*/
-		i__2 = k + l * c_dim1;
-		z__3.r = sgn * sumr.r, z__3.i = sgn * sumr.i;
-		z__2.r = suml.r + z__3.r, z__2.i = suml.i + z__3.i;
-		z__1.r = c__[i__2].r - z__2.r, z__1.i = c__[i__2].i - z__2.i;
-		vec.r = z__1.r, vec.i = z__1.i;
+                i__2 = k + l * c_dim1;
+                z__3.r = sgn * sumr.r, z__3.i = sgn * sumr.i;
+                z__2.r = suml.r + z__3.r, z__2.i = suml.i + z__3.i;
+                z__1.r = c__[i__2].r - z__2.r, z__1.i = c__[i__2].i - z__2.i;
+                vec.r = z__1.r, vec.i = z__1.i;
 
 /*<                SCALOC = ONE >*/
-		scaloc = 1.;
+                scaloc = 1.;
 /*<                A11 = A( K, K ) + SGN*B( L, L ) >*/
-		i__2 = k + k * a_dim1;
-		i__3 = l + l * b_dim1;
-		z__2.r = sgn * b[i__3].r, z__2.i = sgn * b[i__3].i;
-		z__1.r = a[i__2].r + z__2.r, z__1.i = a[i__2].i + z__2.i;
-		a11.r = z__1.r, a11.i = z__1.i;
+                i__2 = k + k * a_dim1;
+                i__3 = l + l * b_dim1;
+                z__2.r = sgn * b[i__3].r, z__2.i = sgn * b[i__3].i;
+                z__1.r = a[i__2].r + z__2.r, z__1.i = a[i__2].i + z__2.i;
+                a11.r = z__1.r, a11.i = z__1.i;
 /*<                DA11 = ABS( DBLE( A11 ) ) + ABS( DIMAG( A11 ) ) >*/
-		da11 = (d__1 = a11.r, abs(d__1)) + (d__2 = d_imag(&a11), abs(
-			d__2));
+                da11 = (d__1 = a11.r, abs(d__1)) + (d__2 = d_imag(&a11), abs(
+                        d__2));
 /*<                IF( DA11.LE.SMIN ) THEN >*/
-		if (da11 <= smin) {
+                if (da11 <= smin) {
 /*<                   A11 = SMIN >*/
-		    a11.r = smin, a11.i = 0.;
+                    a11.r = smin, a11.i = 0.;
 /*<                   DA11 = SMIN >*/
-		    da11 = smin;
+                    da11 = smin;
 /*<                   INFO = 1 >*/
-		    *info = 1;
+                    *info = 1;
 /*<                END IF >*/
-		}
+                }
 /*<                DB = ABS( DBLE( VEC ) ) + ABS( DIMAG( VEC ) ) >*/
-		db = (d__1 = vec.r, abs(d__1)) + (d__2 = d_imag(&vec), abs(
-			d__2));
+                db = (d__1 = vec.r, abs(d__1)) + (d__2 = d_imag(&vec), abs(
+                        d__2));
 /*<                IF( DA11.LT.ONE .AND. DB.GT.ONE ) THEN >*/
-		if (da11 < 1. && db > 1.) {
+                if (da11 < 1. && db > 1.) {
 /*<    >*/
-		    if (db > bignum * da11) {
-			scaloc = 1. / db;
-		    }
+                    if (db > bignum * da11) {
+                        scaloc = 1. / db;
+                    }
 /*<                END IF >*/
-		}
+                }
 /*<                X11 = ZLADIV( VEC*DCMPLX( SCALOC ), A11 ) >*/
-		z__3.r = scaloc, z__3.i = 0.;
-		z__2.r = vec.r * z__3.r - vec.i * z__3.i, z__2.i = vec.r * 
-			z__3.i + vec.i * z__3.r;
-		zladiv_(&z__1, &z__2, &a11);
-		x11.r = z__1.r, x11.i = z__1.i;
+                z__3.r = scaloc, z__3.i = 0.;
+                z__2.r = vec.r * z__3.r - vec.i * z__3.i, z__2.i = vec.r *
+                        z__3.i + vec.i * z__3.r;
+                zladiv_(&z__1, &z__2, &a11);
+                x11.r = z__1.r, x11.i = z__1.i;
 
 /*<                IF( SCALOC.NE.ONE ) THEN >*/
-		if (scaloc != 1.) {
+                if (scaloc != 1.) {
 /*<                   DO 10 J = 1, N >*/
-		    i__2 = *n;
-		    for (j = 1; j <= i__2; ++j) {
+                    i__2 = *n;
+                    for (j = 1; j <= i__2; ++j) {
 /*<                      CALL ZDSCAL( M, SCALOC, C( 1, J ), 1 ) >*/
-			zdscal_(m, &scaloc, &c__[j * c_dim1 + 1], &c__1);
+                        zdscal_(m, &scaloc, &c__[j * c_dim1 + 1], &c__1);
 /*<    10             CONTINUE >*/
 /* L10: */
-		    }
+                    }
 /*<                   SCALE = SCALE*SCALOC >*/
-		    *scale *= scaloc;
+                    *scale *= scaloc;
 /*<                END IF >*/
-		}
+                }
 /*<                C( K, L ) = X11 >*/
-		i__2 = k + l * c_dim1;
-		c__[i__2].r = x11.r, c__[i__2].i = x11.i;
+                i__2 = k + l * c_dim1;
+                c__[i__2].r = x11.r, c__[i__2].i = x11.i;
 
 /*<    20       CONTINUE >*/
 /* L20: */
-	    }
+            }
 /*<    30    CONTINUE >*/
 /* L30: */
-	}
+        }
 
 /*<       ELSE IF( .NOT.NOTRNA .AND. NOTRNB ) THEN >*/
     } else if (! notrna && notrnb) {
@@ -394,93 +394,93 @@ static integer c__1 = 1;
 /*                   I=1                         J=1 */
 
 /*<          DO 60 L = 1, N >*/
-	i__1 = *n;
-	for (l = 1; l <= i__1; ++l) {
+        i__1 = *n;
+        for (l = 1; l <= i__1; ++l) {
 /*<             DO 50 K = 1, M >*/
-	    i__2 = *m;
-	    for (k = 1; k <= i__2; ++k) {
+            i__2 = *m;
+            for (k = 1; k <= i__2; ++k) {
 
 /*<                SUML = ZDOTC( K-1, A( 1, K ), 1, C( 1, L ), 1 ) >*/
-		i__3 = k - 1;
-		zdotc_(&z__1, &i__3, &a[k * a_dim1 + 1], &c__1, &c__[l * 
-			c_dim1 + 1], &c__1);
-		suml.r = z__1.r, suml.i = z__1.i;
+                i__3 = k - 1;
+                zdotc_(&z__1, &i__3, &a[k * a_dim1 + 1], &c__1, &c__[l *
+                        c_dim1 + 1], &c__1);
+                suml.r = z__1.r, suml.i = z__1.i;
 /*<                SUMR = ZDOTU( L-1, C( K, 1 ), LDC, B( 1, L ), 1 ) >*/
-		i__3 = l - 1;
-		zdotu_(&z__1, &i__3, &c__[k + c_dim1], ldc, &b[l * b_dim1 + 1]
-			, &c__1);
-		sumr.r = z__1.r, sumr.i = z__1.i;
+                i__3 = l - 1;
+                zdotu_(&z__1, &i__3, &c__[k + c_dim1], ldc, &b[l * b_dim1 + 1]
+                        , &c__1);
+                sumr.r = z__1.r, sumr.i = z__1.i;
 /*<                VEC = C( K, L ) - ( SUML+SGN*SUMR ) >*/
-		i__3 = k + l * c_dim1;
-		z__3.r = sgn * sumr.r, z__3.i = sgn * sumr.i;
-		z__2.r = suml.r + z__3.r, z__2.i = suml.i + z__3.i;
-		z__1.r = c__[i__3].r - z__2.r, z__1.i = c__[i__3].i - z__2.i;
-		vec.r = z__1.r, vec.i = z__1.i;
+                i__3 = k + l * c_dim1;
+                z__3.r = sgn * sumr.r, z__3.i = sgn * sumr.i;
+                z__2.r = suml.r + z__3.r, z__2.i = suml.i + z__3.i;
+                z__1.r = c__[i__3].r - z__2.r, z__1.i = c__[i__3].i - z__2.i;
+                vec.r = z__1.r, vec.i = z__1.i;
 
 /*<                SCALOC = ONE >*/
-		scaloc = 1.;
+                scaloc = 1.;
 /*<                A11 = DCONJG( A( K, K ) ) + SGN*B( L, L ) >*/
-		d_cnjg(&z__2, &a[k + k * a_dim1]);
-		i__3 = l + l * b_dim1;
-		z__3.r = sgn * b[i__3].r, z__3.i = sgn * b[i__3].i;
-		z__1.r = z__2.r + z__3.r, z__1.i = z__2.i + z__3.i;
-		a11.r = z__1.r, a11.i = z__1.i;
+                d_cnjg(&z__2, &a[k + k * a_dim1]);
+                i__3 = l + l * b_dim1;
+                z__3.r = sgn * b[i__3].r, z__3.i = sgn * b[i__3].i;
+                z__1.r = z__2.r + z__3.r, z__1.i = z__2.i + z__3.i;
+                a11.r = z__1.r, a11.i = z__1.i;
 /*<                DA11 = ABS( DBLE( A11 ) ) + ABS( DIMAG( A11 ) ) >*/
-		da11 = (d__1 = a11.r, abs(d__1)) + (d__2 = d_imag(&a11), abs(
-			d__2));
+                da11 = (d__1 = a11.r, abs(d__1)) + (d__2 = d_imag(&a11), abs(
+                        d__2));
 /*<                IF( DA11.LE.SMIN ) THEN >*/
-		if (da11 <= smin) {
+                if (da11 <= smin) {
 /*<                   A11 = SMIN >*/
-		    a11.r = smin, a11.i = 0.;
+                    a11.r = smin, a11.i = 0.;
 /*<                   DA11 = SMIN >*/
-		    da11 = smin;
+                    da11 = smin;
 /*<                   INFO = 1 >*/
-		    *info = 1;
+                    *info = 1;
 /*<                END IF >*/
-		}
+                }
 /*<                DB = ABS( DBLE( VEC ) ) + ABS( DIMAG( VEC ) ) >*/
-		db = (d__1 = vec.r, abs(d__1)) + (d__2 = d_imag(&vec), abs(
-			d__2));
+                db = (d__1 = vec.r, abs(d__1)) + (d__2 = d_imag(&vec), abs(
+                        d__2));
 /*<                IF( DA11.LT.ONE .AND. DB.GT.ONE ) THEN >*/
-		if (da11 < 1. && db > 1.) {
+                if (da11 < 1. && db > 1.) {
 /*<    >*/
-		    if (db > bignum * da11) {
-			scaloc = 1. / db;
-		    }
+                    if (db > bignum * da11) {
+                        scaloc = 1. / db;
+                    }
 /*<                END IF >*/
-		}
+                }
 
 /*<                X11 = ZLADIV( VEC*DCMPLX( SCALOC ), A11 ) >*/
-		z__3.r = scaloc, z__3.i = 0.;
-		z__2.r = vec.r * z__3.r - vec.i * z__3.i, z__2.i = vec.r * 
-			z__3.i + vec.i * z__3.r;
-		zladiv_(&z__1, &z__2, &a11);
-		x11.r = z__1.r, x11.i = z__1.i;
+                z__3.r = scaloc, z__3.i = 0.;
+                z__2.r = vec.r * z__3.r - vec.i * z__3.i, z__2.i = vec.r *
+                        z__3.i + vec.i * z__3.r;
+                zladiv_(&z__1, &z__2, &a11);
+                x11.r = z__1.r, x11.i = z__1.i;
 
 /*<                IF( SCALOC.NE.ONE ) THEN >*/
-		if (scaloc != 1.) {
+                if (scaloc != 1.) {
 /*<                   DO 40 J = 1, N >*/
-		    i__3 = *n;
-		    for (j = 1; j <= i__3; ++j) {
+                    i__3 = *n;
+                    for (j = 1; j <= i__3; ++j) {
 /*<                      CALL ZDSCAL( M, SCALOC, C( 1, J ), 1 ) >*/
-			zdscal_(m, &scaloc, &c__[j * c_dim1 + 1], &c__1);
+                        zdscal_(m, &scaloc, &c__[j * c_dim1 + 1], &c__1);
 /*<    40             CONTINUE >*/
 /* L40: */
-		    }
+                    }
 /*<                   SCALE = SCALE*SCALOC >*/
-		    *scale *= scaloc;
+                    *scale *= scaloc;
 /*<                END IF >*/
-		}
+                }
 /*<                C( K, L ) = X11 >*/
-		i__3 = k + l * c_dim1;
-		c__[i__3].r = x11.r, c__[i__3].i = x11.i;
+                i__3 = k + l * c_dim1;
+                c__[i__3].r = x11.r, c__[i__3].i = x11.i;
 
 /*<    50       CONTINUE >*/
 /* L50: */
-	    }
+            }
 /*<    60    CONTINUE >*/
 /* L60: */
-	}
+        }
 
 /*<       ELSE IF( .NOT.NOTRNA .AND. .NOT.NOTRNB ) THEN >*/
     } else if (! notrna && ! notrnb) {
@@ -501,98 +501,98 @@ static integer c__1 = 1;
 /*                          J=L+1 */
 
 /*<          DO 90 L = N, 1, -1 >*/
-	for (l = *n; l >= 1; --l) {
+        for (l = *n; l >= 1; --l) {
 /*<             DO 80 K = 1, M >*/
-	    i__1 = *m;
-	    for (k = 1; k <= i__1; ++k) {
+            i__1 = *m;
+            for (k = 1; k <= i__1; ++k) {
 
 /*<                SUML = ZDOTC( K-1, A( 1, K ), 1, C( 1, L ), 1 ) >*/
-		i__2 = k - 1;
-		zdotc_(&z__1, &i__2, &a[k * a_dim1 + 1], &c__1, &c__[l * 
-			c_dim1 + 1], &c__1);
-		suml.r = z__1.r, suml.i = z__1.i;
+                i__2 = k - 1;
+                zdotc_(&z__1, &i__2, &a[k * a_dim1 + 1], &c__1, &c__[l *
+                        c_dim1 + 1], &c__1);
+                suml.r = z__1.r, suml.i = z__1.i;
 /*<    >*/
-		i__2 = *n - l;
+                i__2 = *n - l;
 /* Computing MIN */
-		i__3 = l + 1;
+                i__3 = l + 1;
 /* Computing MIN */
-		i__4 = l + 1;
-		zdotc_(&z__1, &i__2, &c__[k + min(i__3,*n) * c_dim1], ldc, &b[
-			l + min(i__4,*n) * b_dim1], ldb);
-		sumr.r = z__1.r, sumr.i = z__1.i;
+                i__4 = l + 1;
+                zdotc_(&z__1, &i__2, &c__[k + min(i__3,*n) * c_dim1], ldc, &b[
+                        l + min(i__4,*n) * b_dim1], ldb);
+                sumr.r = z__1.r, sumr.i = z__1.i;
 /*<                VEC = C( K, L ) - ( SUML+SGN*DCONJG( SUMR ) ) >*/
-		i__2 = k + l * c_dim1;
-		d_cnjg(&z__4, &sumr);
-		z__3.r = sgn * z__4.r, z__3.i = sgn * z__4.i;
-		z__2.r = suml.r + z__3.r, z__2.i = suml.i + z__3.i;
-		z__1.r = c__[i__2].r - z__2.r, z__1.i = c__[i__2].i - z__2.i;
-		vec.r = z__1.r, vec.i = z__1.i;
+                i__2 = k + l * c_dim1;
+                d_cnjg(&z__4, &sumr);
+                z__3.r = sgn * z__4.r, z__3.i = sgn * z__4.i;
+                z__2.r = suml.r + z__3.r, z__2.i = suml.i + z__3.i;
+                z__1.r = c__[i__2].r - z__2.r, z__1.i = c__[i__2].i - z__2.i;
+                vec.r = z__1.r, vec.i = z__1.i;
 
 /*<                SCALOC = ONE >*/
-		scaloc = 1.;
+                scaloc = 1.;
 /*<                A11 = DCONJG( A( K, K )+SGN*B( L, L ) ) >*/
-		i__2 = k + k * a_dim1;
-		i__3 = l + l * b_dim1;
-		z__3.r = sgn * b[i__3].r, z__3.i = sgn * b[i__3].i;
-		z__2.r = a[i__2].r + z__3.r, z__2.i = a[i__2].i + z__3.i;
-		d_cnjg(&z__1, &z__2);
-		a11.r = z__1.r, a11.i = z__1.i;
+                i__2 = k + k * a_dim1;
+                i__3 = l + l * b_dim1;
+                z__3.r = sgn * b[i__3].r, z__3.i = sgn * b[i__3].i;
+                z__2.r = a[i__2].r + z__3.r, z__2.i = a[i__2].i + z__3.i;
+                d_cnjg(&z__1, &z__2);
+                a11.r = z__1.r, a11.i = z__1.i;
 /*<                DA11 = ABS( DBLE( A11 ) ) + ABS( DIMAG( A11 ) ) >*/
-		da11 = (d__1 = a11.r, abs(d__1)) + (d__2 = d_imag(&a11), abs(
-			d__2));
+                da11 = (d__1 = a11.r, abs(d__1)) + (d__2 = d_imag(&a11), abs(
+                        d__2));
 /*<                IF( DA11.LE.SMIN ) THEN >*/
-		if (da11 <= smin) {
+                if (da11 <= smin) {
 /*<                   A11 = SMIN >*/
-		    a11.r = smin, a11.i = 0.;
+                    a11.r = smin, a11.i = 0.;
 /*<                   DA11 = SMIN >*/
-		    da11 = smin;
+                    da11 = smin;
 /*<                   INFO = 1 >*/
-		    *info = 1;
+                    *info = 1;
 /*<                END IF >*/
-		}
+                }
 /*<                DB = ABS( DBLE( VEC ) ) + ABS( DIMAG( VEC ) ) >*/
-		db = (d__1 = vec.r, abs(d__1)) + (d__2 = d_imag(&vec), abs(
-			d__2));
+                db = (d__1 = vec.r, abs(d__1)) + (d__2 = d_imag(&vec), abs(
+                        d__2));
 /*<                IF( DA11.LT.ONE .AND. DB.GT.ONE ) THEN >*/
-		if (da11 < 1. && db > 1.) {
+                if (da11 < 1. && db > 1.) {
 /*<    >*/
-		    if (db > bignum * da11) {
-			scaloc = 1. / db;
-		    }
+                    if (db > bignum * da11) {
+                        scaloc = 1. / db;
+                    }
 /*<                END IF >*/
-		}
+                }
 
 /*<                X11 = ZLADIV( VEC*DCMPLX( SCALOC ), A11 ) >*/
-		z__3.r = scaloc, z__3.i = 0.;
-		z__2.r = vec.r * z__3.r - vec.i * z__3.i, z__2.i = vec.r * 
-			z__3.i + vec.i * z__3.r;
-		zladiv_(&z__1, &z__2, &a11);
-		x11.r = z__1.r, x11.i = z__1.i;
+                z__3.r = scaloc, z__3.i = 0.;
+                z__2.r = vec.r * z__3.r - vec.i * z__3.i, z__2.i = vec.r *
+                        z__3.i + vec.i * z__3.r;
+                zladiv_(&z__1, &z__2, &a11);
+                x11.r = z__1.r, x11.i = z__1.i;
 
 /*<                IF( SCALOC.NE.ONE ) THEN >*/
-		if (scaloc != 1.) {
+                if (scaloc != 1.) {
 /*<                   DO 70 J = 1, N >*/
-		    i__2 = *n;
-		    for (j = 1; j <= i__2; ++j) {
+                    i__2 = *n;
+                    for (j = 1; j <= i__2; ++j) {
 /*<                      CALL ZDSCAL( M, SCALOC, C( 1, J ), 1 ) >*/
-			zdscal_(m, &scaloc, &c__[j * c_dim1 + 1], &c__1);
+                        zdscal_(m, &scaloc, &c__[j * c_dim1 + 1], &c__1);
 /*<    70             CONTINUE >*/
 /* L70: */
-		    }
+                    }
 /*<                   SCALE = SCALE*SCALOC >*/
-		    *scale *= scaloc;
+                    *scale *= scaloc;
 /*<                END IF >*/
-		}
+                }
 /*<                C( K, L ) = X11 >*/
-		i__2 = k + l * c_dim1;
-		c__[i__2].r = x11.r, c__[i__2].i = x11.i;
+                i__2 = k + l * c_dim1;
+                c__[i__2].r = x11.r, c__[i__2].i = x11.i;
 
 /*<    80       CONTINUE >*/
 /* L80: */
-	    }
+            }
 /*<    90    CONTINUE >*/
 /* L90: */
-	}
+        }
 
 /*<       ELSE IF( NOTRNA .AND. .NOT.NOTRNB ) THEN >*/
     } else if (notrna && ! notrnb) {
@@ -610,100 +610,100 @@ static integer c__1 = 1;
 /*                  I=K+1                      J=L+1 */
 
 /*<          DO 120 L = N, 1, -1 >*/
-	for (l = *n; l >= 1; --l) {
+        for (l = *n; l >= 1; --l) {
 /*<             DO 110 K = M, 1, -1 >*/
-	    for (k = *m; k >= 1; --k) {
+            for (k = *m; k >= 1; --k) {
 
 /*<    >*/
-		i__1 = *m - k;
+                i__1 = *m - k;
 /* Computing MIN */
-		i__2 = k + 1;
+                i__2 = k + 1;
 /* Computing MIN */
-		i__3 = k + 1;
-		zdotu_(&z__1, &i__1, &a[k + min(i__2,*m) * a_dim1], lda, &c__[
-			min(i__3,*m) + l * c_dim1], &c__1);
-		suml.r = z__1.r, suml.i = z__1.i;
+                i__3 = k + 1;
+                zdotu_(&z__1, &i__1, &a[k + min(i__2,*m) * a_dim1], lda, &c__[
+                        min(i__3,*m) + l * c_dim1], &c__1);
+                suml.r = z__1.r, suml.i = z__1.i;
 /*<    >*/
-		i__1 = *n - l;
+                i__1 = *n - l;
 /* Computing MIN */
-		i__2 = l + 1;
+                i__2 = l + 1;
 /* Computing MIN */
-		i__3 = l + 1;
-		zdotc_(&z__1, &i__1, &c__[k + min(i__2,*n) * c_dim1], ldc, &b[
-			l + min(i__3,*n) * b_dim1], ldb);
-		sumr.r = z__1.r, sumr.i = z__1.i;
+                i__3 = l + 1;
+                zdotc_(&z__1, &i__1, &c__[k + min(i__2,*n) * c_dim1], ldc, &b[
+                        l + min(i__3,*n) * b_dim1], ldb);
+                sumr.r = z__1.r, sumr.i = z__1.i;
 /*<                VEC = C( K, L ) - ( SUML+SGN*DCONJG( SUMR ) ) >*/
-		i__1 = k + l * c_dim1;
-		d_cnjg(&z__4, &sumr);
-		z__3.r = sgn * z__4.r, z__3.i = sgn * z__4.i;
-		z__2.r = suml.r + z__3.r, z__2.i = suml.i + z__3.i;
-		z__1.r = c__[i__1].r - z__2.r, z__1.i = c__[i__1].i - z__2.i;
-		vec.r = z__1.r, vec.i = z__1.i;
+                i__1 = k + l * c_dim1;
+                d_cnjg(&z__4, &sumr);
+                z__3.r = sgn * z__4.r, z__3.i = sgn * z__4.i;
+                z__2.r = suml.r + z__3.r, z__2.i = suml.i + z__3.i;
+                z__1.r = c__[i__1].r - z__2.r, z__1.i = c__[i__1].i - z__2.i;
+                vec.r = z__1.r, vec.i = z__1.i;
 
 /*<                SCALOC = ONE >*/
-		scaloc = 1.;
+                scaloc = 1.;
 /*<                A11 = A( K, K ) + SGN*DCONJG( B( L, L ) ) >*/
-		i__1 = k + k * a_dim1;
-		d_cnjg(&z__3, &b[l + l * b_dim1]);
-		z__2.r = sgn * z__3.r, z__2.i = sgn * z__3.i;
-		z__1.r = a[i__1].r + z__2.r, z__1.i = a[i__1].i + z__2.i;
-		a11.r = z__1.r, a11.i = z__1.i;
+                i__1 = k + k * a_dim1;
+                d_cnjg(&z__3, &b[l + l * b_dim1]);
+                z__2.r = sgn * z__3.r, z__2.i = sgn * z__3.i;
+                z__1.r = a[i__1].r + z__2.r, z__1.i = a[i__1].i + z__2.i;
+                a11.r = z__1.r, a11.i = z__1.i;
 /*<                DA11 = ABS( DBLE( A11 ) ) + ABS( DIMAG( A11 ) ) >*/
-		da11 = (d__1 = a11.r, abs(d__1)) + (d__2 = d_imag(&a11), abs(
-			d__2));
+                da11 = (d__1 = a11.r, abs(d__1)) + (d__2 = d_imag(&a11), abs(
+                        d__2));
 /*<                IF( DA11.LE.SMIN ) THEN >*/
-		if (da11 <= smin) {
+                if (da11 <= smin) {
 /*<                   A11 = SMIN >*/
-		    a11.r = smin, a11.i = 0.;
+                    a11.r = smin, a11.i = 0.;
 /*<                   DA11 = SMIN >*/
-		    da11 = smin;
+                    da11 = smin;
 /*<                   INFO = 1 >*/
-		    *info = 1;
+                    *info = 1;
 /*<                END IF >*/
-		}
+                }
 /*<                DB = ABS( DBLE( VEC ) ) + ABS( DIMAG( VEC ) ) >*/
-		db = (d__1 = vec.r, abs(d__1)) + (d__2 = d_imag(&vec), abs(
-			d__2));
+                db = (d__1 = vec.r, abs(d__1)) + (d__2 = d_imag(&vec), abs(
+                        d__2));
 /*<                IF( DA11.LT.ONE .AND. DB.GT.ONE ) THEN >*/
-		if (da11 < 1. && db > 1.) {
+                if (da11 < 1. && db > 1.) {
 /*<    >*/
-		    if (db > bignum * da11) {
-			scaloc = 1. / db;
-		    }
+                    if (db > bignum * da11) {
+                        scaloc = 1. / db;
+                    }
 /*<                END IF >*/
-		}
+                }
 
 /*<                X11 = ZLADIV( VEC*DCMPLX( SCALOC ), A11 ) >*/
-		z__3.r = scaloc, z__3.i = 0.;
-		z__2.r = vec.r * z__3.r - vec.i * z__3.i, z__2.i = vec.r * 
-			z__3.i + vec.i * z__3.r;
-		zladiv_(&z__1, &z__2, &a11);
-		x11.r = z__1.r, x11.i = z__1.i;
+                z__3.r = scaloc, z__3.i = 0.;
+                z__2.r = vec.r * z__3.r - vec.i * z__3.i, z__2.i = vec.r *
+                        z__3.i + vec.i * z__3.r;
+                zladiv_(&z__1, &z__2, &a11);
+                x11.r = z__1.r, x11.i = z__1.i;
 
 /*<                IF( SCALOC.NE.ONE ) THEN >*/
-		if (scaloc != 1.) {
+                if (scaloc != 1.) {
 /*<                   DO 100 J = 1, N >*/
-		    i__1 = *n;
-		    for (j = 1; j <= i__1; ++j) {
+                    i__1 = *n;
+                    for (j = 1; j <= i__1; ++j) {
 /*<                      CALL ZDSCAL( M, SCALOC, C( 1, J ), 1 ) >*/
-			zdscal_(m, &scaloc, &c__[j * c_dim1 + 1], &c__1);
+                        zdscal_(m, &scaloc, &c__[j * c_dim1 + 1], &c__1);
 /*<   100             CONTINUE >*/
 /* L100: */
-		    }
+                    }
 /*<                   SCALE = SCALE*SCALOC >*/
-		    *scale *= scaloc;
+                    *scale *= scaloc;
 /*<                END IF >*/
-		}
+                }
 /*<                C( K, L ) = X11 >*/
-		i__1 = k + l * c_dim1;
-		c__[i__1].r = x11.r, c__[i__1].i = x11.i;
+                i__1 = k + l * c_dim1;
+                c__[i__1].r = x11.r, c__[i__1].i = x11.i;
 
 /*<   110       CONTINUE >*/
 /* L110: */
-	    }
+            }
 /*<   120    CONTINUE >*/
 /* L120: */
-	}
+        }
 
 /*<       END IF >*/
     }
@@ -717,5 +717,5 @@ static integer c__1 = 1;
 } /* ztrsyl_ */
 
 #ifdef __cplusplus
-	}
+        }
 #endif

@@ -1,13 +1,13 @@
 /* lapack/complex16/ztgsen.f -- translated by f2c (version 20090411).
    You must link the resulting object file with libf2c:
-	on Microsoft Windows system, link with libf2c.lib;
-	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
-	or, if you install libf2c.a in a standard place, with -lf2c -lm
-	-- in that order, at the end of the command line, as in
-		cc *.o -lf2c -lm
-	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+        on Microsoft Windows system, link with libf2c.lib;
+        on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+        or, if you install libf2c.a in a standard place, with -lf2c -lm
+        -- in that order, at the end of the command line, as in
+                cc *.o -lf2c -lm
+        Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
 
-		http://www.netlib.org/f2c/libf2c.zip
+                http://www.netlib.org/f2c/libf2c.zip
 */
 
 #ifdef __cplusplus
@@ -20,17 +20,17 @@ extern "C" {
 static integer c__1 = 1;
 
 /*<    >*/
-/* Subroutine */ int ztgsen_(integer *ijob, logical *wantq, logical *wantz, 
-	logical *select, integer *n, doublecomplex *a, integer *lda, 
-	doublecomplex *b, integer *ldb, doublecomplex *alpha, doublecomplex *
-	beta, doublecomplex *q, integer *ldq, doublecomplex *z__, integer *
-	ldz, integer *m, doublereal *pl, doublereal *pr, doublereal *dif, 
-	doublecomplex *work, integer *lwork, integer *iwork, integer *liwork, 
-	integer *info)
+/* Subroutine */ int ztgsen_(integer *ijob, logical *wantq, logical *wantz,
+        logical *select, integer *n, doublecomplex *a, integer *lda,
+        doublecomplex *b, integer *ldb, doublecomplex *alpha, doublecomplex *
+        beta, doublecomplex *q, integer *ldq, doublecomplex *z__, integer *
+        ldz, integer *m, doublereal *pl, doublereal *pr, doublereal *dif,
+        doublecomplex *work, integer *lwork, integer *iwork, integer *liwork,
+        integer *info)
 {
     /* System generated locals */
-    integer a_dim1, a_offset, b_dim1, b_offset, q_dim1, q_offset, z_dim1, 
-	    z_offset, i__1, i__2, i__3;
+    integer a_dim1, a_offset, b_dim1, b_offset, q_dim1, q_offset, z_dim1,
+            z_offset, i__1, i__2, i__3;
     doublecomplex z__1, z__2;
 
     /* Builtin functions */
@@ -43,32 +43,32 @@ static integer c__1 = 1;
     logical swap;
     doublecomplex temp1, temp2;
     integer isave[3];
-    extern /* Subroutine */ int zscal_(integer *, doublecomplex *, 
-	    doublecomplex *, integer *);
+    extern /* Subroutine */ int zscal_(integer *, doublecomplex *,
+            doublecomplex *, integer *);
     logical wantd;
     integer lwmin;
     logical wantp;
-    extern /* Subroutine */ int zlacn2_(integer *, doublecomplex *, 
-	    doublecomplex *, doublereal *, integer *, integer *);
+    extern /* Subroutine */ int zlacn2_(integer *, doublecomplex *,
+            doublecomplex *, doublereal *, integer *, integer *);
     logical wantd1, wantd2;
     extern doublereal dlamch_(char *, ftnlen);
     doublereal dscale, rdscal, safmin;
     extern /* Subroutine */ int xerbla_(char *, integer *, ftnlen);
     integer liwmin;
-    extern /* Subroutine */ int zlacpy_(char *, integer *, integer *, 
-	    doublecomplex *, integer *, doublecomplex *, integer *, ftnlen), 
-	    ztgexc_(logical *, logical *, integer *, doublecomplex *, integer 
-	    *, doublecomplex *, integer *, doublecomplex *, integer *, 
-	    doublecomplex *, integer *, integer *, integer *, integer *), 
-	    zlassq_(integer *, doublecomplex *, integer *, doublereal *, 
-	    doublereal *);
+    extern /* Subroutine */ int zlacpy_(char *, integer *, integer *,
+            doublecomplex *, integer *, doublecomplex *, integer *, ftnlen),
+            ztgexc_(logical *, logical *, integer *, doublecomplex *, integer
+            *, doublecomplex *, integer *, doublecomplex *, integer *,
+            doublecomplex *, integer *, integer *, integer *, integer *),
+            zlassq_(integer *, doublecomplex *, integer *, doublereal *,
+            doublereal *);
     logical lquery;
-    extern /* Subroutine */ int ztgsyl_(char *, integer *, integer *, integer 
-	    *, doublecomplex *, integer *, doublecomplex *, integer *, 
-	    doublecomplex *, integer *, doublecomplex *, integer *, 
-	    doublecomplex *, integer *, doublecomplex *, integer *, 
-	    doublereal *, doublereal *, doublecomplex *, integer *, integer *,
-	     integer *, ftnlen);
+    extern /* Subroutine */ int ztgsyl_(char *, integer *, integer *, integer
+            *, doublecomplex *, integer *, doublecomplex *, integer *,
+            doublecomplex *, integer *, doublecomplex *, integer *,
+            doublecomplex *, integer *, doublecomplex *, integer *,
+            doublereal *, doublereal *, doublecomplex *, integer *, integer *,
+             integer *, ftnlen);
 
 
 /*  -- LAPACK routine (version 3.2.2) -- */
@@ -446,37 +446,37 @@ static integer c__1 = 1;
 /*<       IF( IJOB.LT.0 .OR. IJOB.GT.5 ) THEN >*/
     if (*ijob < 0 || *ijob > 5) {
 /*<          INFO = -1 >*/
-	*info = -1;
+        *info = -1;
 /*<       ELSE IF( N.LT.0 ) THEN >*/
     } else if (*n < 0) {
 /*<          INFO = -5 >*/
-	*info = -5;
+        *info = -5;
 /*<       ELSE IF( LDA.LT.MAX( 1, N ) ) THEN >*/
     } else if (*lda < max(1,*n)) {
 /*<          INFO = -7 >*/
-	*info = -7;
+        *info = -7;
 /*<       ELSE IF( LDB.LT.MAX( 1, N ) ) THEN >*/
     } else if (*ldb < max(1,*n)) {
 /*<          INFO = -9 >*/
-	*info = -9;
+        *info = -9;
 /*<       ELSE IF( LDQ.LT.1 .OR. ( WANTQ .AND. LDQ.LT.N ) ) THEN >*/
     } else if (*ldq < 1 || *wantq && *ldq < *n) {
 /*<          INFO = -13 >*/
-	*info = -13;
+        *info = -13;
 /*<       ELSE IF( LDZ.LT.1 .OR. ( WANTZ .AND. LDZ.LT.N ) ) THEN >*/
     } else if (*ldz < 1 || *wantz && *ldz < *n) {
 /*<          INFO = -15 >*/
-	*info = -15;
+        *info = -15;
 /*<       END IF >*/
     }
 
 /*<       IF( INFO.NE.0 ) THEN >*/
     if (*info != 0) {
 /*<          CALL XERBLA( 'ZTGSEN', -INFO ) >*/
-	i__1 = -(*info);
-	xerbla_("ZTGSEN", &i__1, (ftnlen)6);
+        i__1 = -(*info);
+        xerbla_("ZTGSEN", &i__1, (ftnlen)6);
 /*<          RETURN >*/
-	return 0;
+        return 0;
 /*<       END IF >*/
     }
 
@@ -501,27 +501,27 @@ static integer c__1 = 1;
     i__1 = *n;
     for (k = 1; k <= i__1; ++k) {
 /*<          ALPHA( K ) = A( K, K ) >*/
-	i__2 = k;
-	i__3 = k + k * a_dim1;
-	alpha[i__2].r = a[i__3].r, alpha[i__2].i = a[i__3].i;
+        i__2 = k;
+        i__3 = k + k * a_dim1;
+        alpha[i__2].r = a[i__3].r, alpha[i__2].i = a[i__3].i;
 /*<          BETA( K ) = B( K, K ) >*/
-	i__2 = k;
-	i__3 = k + k * b_dim1;
-	beta[i__2].r = b[i__3].r, beta[i__2].i = b[i__3].i;
+        i__2 = k;
+        i__3 = k + k * b_dim1;
+        beta[i__2].r = b[i__3].r, beta[i__2].i = b[i__3].i;
 /*<          IF( K.LT.N ) THEN >*/
-	if (k < *n) {
+        if (k < *n) {
 /*<    >*/
-	    if (select[k]) {
-		++(*m);
-	    }
+            if (select[k]) {
+                ++(*m);
+            }
 /*<          ELSE >*/
-	} else {
+        } else {
 /*<    >*/
-	    if (select[*n]) {
-		++(*m);
-	    }
+            if (select[*n]) {
+                ++(*m);
+            }
 /*<          END IF >*/
-	}
+        }
 /*<    10 CONTINUE >*/
 /* L10: */
     }
@@ -530,29 +530,29 @@ static integer c__1 = 1;
     if (*ijob == 1 || *ijob == 2 || *ijob == 4) {
 /*<          LWMIN = MAX( 1, 2*M*( N-M ) ) >*/
 /* Computing MAX */
-	i__1 = 1, i__2 = (*m << 1) * (*n - *m);
-	lwmin = max(i__1,i__2);
+        i__1 = 1, i__2 = (*m << 1) * (*n - *m);
+        lwmin = max(i__1,i__2);
 /*<          LIWMIN = MAX( 1, N+2 ) >*/
 /* Computing MAX */
-	i__1 = 1, i__2 = *n + 2;
-	liwmin = max(i__1,i__2);
+        i__1 = 1, i__2 = *n + 2;
+        liwmin = max(i__1,i__2);
 /*<       ELSE IF( IJOB.EQ.3 .OR. IJOB.EQ.5 ) THEN >*/
     } else if (*ijob == 3 || *ijob == 5) {
 /*<          LWMIN = MAX( 1, 4*M*( N-M ) ) >*/
 /* Computing MAX */
-	i__1 = 1, i__2 = (*m << 2) * (*n - *m);
-	lwmin = max(i__1,i__2);
+        i__1 = 1, i__2 = (*m << 2) * (*n - *m);
+        lwmin = max(i__1,i__2);
 /*<          LIWMIN = MAX( 1, 2*M*( N-M ), N+2 ) >*/
 /* Computing MAX */
-	i__1 = 1, i__2 = (*m << 1) * (*n - *m), i__1 = max(i__1,i__2), i__2 = 
-		*n + 2;
-	liwmin = max(i__1,i__2);
+        i__1 = 1, i__2 = (*m << 1) * (*n - *m), i__1 = max(i__1,i__2), i__2 =
+                *n + 2;
+        liwmin = max(i__1,i__2);
 /*<       ELSE >*/
     } else {
 /*<          LWMIN = 1 >*/
-	lwmin = 1;
+        lwmin = 1;
 /*<          LIWMIN = 1 >*/
-	liwmin = 1;
+        liwmin = 1;
 /*<       END IF >*/
     }
 
@@ -564,25 +564,25 @@ static integer c__1 = 1;
 /*<       IF( LWORK.LT.LWMIN .AND. .NOT.LQUERY ) THEN >*/
     if (*lwork < lwmin && ! lquery) {
 /*<          INFO = -21 >*/
-	*info = -21;
+        *info = -21;
 /*<       ELSE IF( LIWORK.LT.LIWMIN .AND. .NOT.LQUERY ) THEN >*/
     } else if (*liwork < liwmin && ! lquery) {
 /*<          INFO = -23 >*/
-	*info = -23;
+        *info = -23;
 /*<       END IF >*/
     }
 
 /*<       IF( INFO.NE.0 ) THEN >*/
     if (*info != 0) {
 /*<          CALL XERBLA( 'ZTGSEN', -INFO ) >*/
-	i__1 = -(*info);
-	xerbla_("ZTGSEN", &i__1, (ftnlen)6);
+        i__1 = -(*info);
+        xerbla_("ZTGSEN", &i__1, (ftnlen)6);
 /*<          RETURN >*/
-	return 0;
+        return 0;
 /*<       ELSE IF( LQUERY ) THEN >*/
     } else if (lquery) {
 /*<          RETURN >*/
-	return 0;
+        return 0;
 /*<       END IF >*/
     }
 
@@ -591,37 +591,37 @@ static integer c__1 = 1;
 /*<       IF( M.EQ.N .OR. M.EQ.0 ) THEN >*/
     if (*m == *n || *m == 0) {
 /*<          IF( WANTP ) THEN >*/
-	if (wantp) {
+        if (wantp) {
 /*<             PL = ONE >*/
-	    *pl = 1.;
+            *pl = 1.;
 /*<             PR = ONE >*/
-	    *pr = 1.;
+            *pr = 1.;
 /*<          END IF >*/
-	}
+        }
 /*<          IF( WANTD ) THEN >*/
-	if (wantd) {
+        if (wantd) {
 /*<             DSCALE = ZERO >*/
-	    dscale = 0.;
+            dscale = 0.;
 /*<             DSUM = ONE >*/
-	    dsum = 1.;
+            dsum = 1.;
 /*<             DO 20 I = 1, N >*/
-	    i__1 = *n;
-	    for (i__ = 1; i__ <= i__1; ++i__) {
+            i__1 = *n;
+            for (i__ = 1; i__ <= i__1; ++i__) {
 /*<                CALL ZLASSQ( N, A( 1, I ), 1, DSCALE, DSUM ) >*/
-		zlassq_(n, &a[i__ * a_dim1 + 1], &c__1, &dscale, &dsum);
+                zlassq_(n, &a[i__ * a_dim1 + 1], &c__1, &dscale, &dsum);
 /*<                CALL ZLASSQ( N, B( 1, I ), 1, DSCALE, DSUM ) >*/
-		zlassq_(n, &b[i__ * b_dim1 + 1], &c__1, &dscale, &dsum);
+                zlassq_(n, &b[i__ * b_dim1 + 1], &c__1, &dscale, &dsum);
 /*<    20       CONTINUE >*/
 /* L20: */
-	    }
+            }
 /*<             DIF( 1 ) = DSCALE*SQRT( DSUM ) >*/
-	    dif[1] = dscale * sqrt(dsum);
+            dif[1] = dscale * sqrt(dsum);
 /*<             DIF( 2 ) = DIF( 1 ) >*/
-	    dif[2] = dif[1];
+            dif[2] = dif[1];
 /*<          END IF >*/
-	}
+        }
 /*<          GO TO 70 >*/
-	goto L70;
+        goto L70;
 /*<       END IF >*/
     }
 
@@ -638,51 +638,51 @@ static integer c__1 = 1;
     i__1 = *n;
     for (k = 1; k <= i__1; ++k) {
 /*<          SWAP = SELECT( K ) >*/
-	swap = select[k];
+        swap = select[k];
 /*<          IF( SWAP ) THEN >*/
-	if (swap) {
+        if (swap) {
 /*<             KS = KS + 1 >*/
-	    ++ks;
+            ++ks;
 
 /*           Swap the K-th block to position KS. Compute unitary Q */
 /*           and Z that will swap adjacent diagonal blocks in (A, B). */
 
 /*<    >*/
-	    if (k != ks) {
-		ztgexc_(wantq, wantz, n, &a[a_offset], lda, &b[b_offset], ldb,
-			 &q[q_offset], ldq, &z__[z_offset], ldz, &k, &ks, &
-			ierr);
-	    }
+            if (k != ks) {
+                ztgexc_(wantq, wantz, n, &a[a_offset], lda, &b[b_offset], ldb,
+                         &q[q_offset], ldq, &z__[z_offset], ldz, &k, &ks, &
+                        ierr);
+            }
 
 /*<             IF( IERR.GT.0 ) THEN >*/
-	    if (ierr > 0) {
+            if (ierr > 0) {
 
 /*              Swap is rejected: exit. */
 
 /*<                INFO = 1 >*/
-		*info = 1;
+                *info = 1;
 /*<                IF( WANTP ) THEN >*/
-		if (wantp) {
+                if (wantp) {
 /*<                   PL = ZERO >*/
-		    *pl = 0.;
+                    *pl = 0.;
 /*<                   PR = ZERO >*/
-		    *pr = 0.;
+                    *pr = 0.;
 /*<                END IF >*/
-		}
+                }
 /*<                IF( WANTD ) THEN >*/
-		if (wantd) {
+                if (wantd) {
 /*<                   DIF( 1 ) = ZERO >*/
-		    dif[1] = 0.;
+                    dif[1] = 0.;
 /*<                   DIF( 2 ) = ZERO >*/
-		    dif[2] = 0.;
+                    dif[2] = 0.;
 /*<                END IF >*/
-		}
+                }
 /*<                GO TO 70 >*/
-		goto L70;
+                goto L70;
 /*<             END IF >*/
-	    }
+            }
 /*<          END IF >*/
-	}
+        }
 /*<    30 CONTINUE >*/
 /* L30: */
     }
@@ -694,67 +694,67 @@ static integer c__1 = 1;
 /*                   B11 * R - L * B22 = B12 */
 
 /*<          N1 = M >*/
-	n1 = *m;
+        n1 = *m;
 /*<          N2 = N - M >*/
-	n2 = *n - *m;
+        n2 = *n - *m;
 /*<          I = N1 + 1 >*/
-	i__ = n1 + 1;
+        i__ = n1 + 1;
 /*<          CALL ZLACPY( 'Full', N1, N2, A( 1, I ), LDA, WORK, N1 ) >*/
-	zlacpy_("Full", &n1, &n2, &a[i__ * a_dim1 + 1], lda, &work[1], &n1, (
-		ftnlen)4);
+        zlacpy_("Full", &n1, &n2, &a[i__ * a_dim1 + 1], lda, &work[1], &n1, (
+                ftnlen)4);
 /*<    >*/
-	zlacpy_("Full", &n1, &n2, &b[i__ * b_dim1 + 1], ldb, &work[n1 * n2 + 
-		1], &n1, (ftnlen)4);
+        zlacpy_("Full", &n1, &n2, &b[i__ * b_dim1 + 1], ldb, &work[n1 * n2 +
+                1], &n1, (ftnlen)4);
 /*<          IJB = 0 >*/
-	ijb = 0;
+        ijb = 0;
 /*<    >*/
-	i__1 = *lwork - (n1 << 1) * n2;
-	ztgsyl_("N", &ijb, &n1, &n2, &a[a_offset], lda, &a[i__ + i__ * a_dim1]
-		, lda, &work[1], &n1, &b[b_offset], ldb, &b[i__ + i__ * 
-		b_dim1], ldb, &work[n1 * n2 + 1], &n1, &dscale, &dif[1], &
-		work[(n1 * n2 << 1) + 1], &i__1, &iwork[1], &ierr, (ftnlen)1);
+        i__1 = *lwork - (n1 << 1) * n2;
+        ztgsyl_("N", &ijb, &n1, &n2, &a[a_offset], lda, &a[i__ + i__ * a_dim1]
+                , lda, &work[1], &n1, &b[b_offset], ldb, &b[i__ + i__ *
+                b_dim1], ldb, &work[n1 * n2 + 1], &n1, &dscale, &dif[1], &
+                work[(n1 * n2 << 1) + 1], &i__1, &iwork[1], &ierr, (ftnlen)1);
 
 /*        Estimate the reciprocal of norms of "projections" onto */
 /*        left and right eigenspaces */
 
 /*<          RDSCAL = ZERO >*/
-	rdscal = 0.;
+        rdscal = 0.;
 /*<          DSUM = ONE >*/
-	dsum = 1.;
+        dsum = 1.;
 /*<          CALL ZLASSQ( N1*N2, WORK, 1, RDSCAL, DSUM ) >*/
-	i__1 = n1 * n2;
-	zlassq_(&i__1, &work[1], &c__1, &rdscal, &dsum);
+        i__1 = n1 * n2;
+        zlassq_(&i__1, &work[1], &c__1, &rdscal, &dsum);
 /*<          PL = RDSCAL*SQRT( DSUM ) >*/
-	*pl = rdscal * sqrt(dsum);
+        *pl = rdscal * sqrt(dsum);
 /*<          IF( PL.EQ.ZERO ) THEN >*/
-	if (*pl == 0.) {
+        if (*pl == 0.) {
 /*<             PL = ONE >*/
-	    *pl = 1.;
+            *pl = 1.;
 /*<          ELSE >*/
-	} else {
+        } else {
 /*<             PL = DSCALE / ( SQRT( DSCALE*DSCALE / PL+PL )*SQRT( PL ) ) >*/
-	    *pl = dscale / (sqrt(dscale * dscale / *pl + *pl) * sqrt(*pl));
+            *pl = dscale / (sqrt(dscale * dscale / *pl + *pl) * sqrt(*pl));
 /*<          END IF >*/
-	}
+        }
 /*<          RDSCAL = ZERO >*/
-	rdscal = 0.;
+        rdscal = 0.;
 /*<          DSUM = ONE >*/
-	dsum = 1.;
+        dsum = 1.;
 /*<          CALL ZLASSQ( N1*N2, WORK( N1*N2+1 ), 1, RDSCAL, DSUM ) >*/
-	i__1 = n1 * n2;
-	zlassq_(&i__1, &work[n1 * n2 + 1], &c__1, &rdscal, &dsum);
+        i__1 = n1 * n2;
+        zlassq_(&i__1, &work[n1 * n2 + 1], &c__1, &rdscal, &dsum);
 /*<          PR = RDSCAL*SQRT( DSUM ) >*/
-	*pr = rdscal * sqrt(dsum);
+        *pr = rdscal * sqrt(dsum);
 /*<          IF( PR.EQ.ZERO ) THEN >*/
-	if (*pr == 0.) {
+        if (*pr == 0.) {
 /*<             PR = ONE >*/
-	    *pr = 1.;
+            *pr = 1.;
 /*<          ELSE >*/
-	} else {
+        } else {
 /*<             PR = DSCALE / ( SQRT( DSCALE*DSCALE / PR+PR )*SQRT( PR ) ) >*/
-	    *pr = dscale / (sqrt(dscale * dscale / *pr + *pr) * sqrt(*pr));
+            *pr = dscale / (sqrt(dscale * dscale / *pr + *pr) * sqrt(*pr));
 /*<          END IF >*/
-	}
+        }
 /*<       END IF >*/
     }
 /*<       IF( WANTD ) THEN >*/
@@ -763,37 +763,37 @@ static integer c__1 = 1;
 /*        Compute estimates Difu and Difl. */
 
 /*<          IF( WANTD1 ) THEN >*/
-	if (wantd1) {
+        if (wantd1) {
 /*<             N1 = M >*/
-	    n1 = *m;
+            n1 = *m;
 /*<             N2 = N - M >*/
-	    n2 = *n - *m;
+            n2 = *n - *m;
 /*<             I = N1 + 1 >*/
-	    i__ = n1 + 1;
+            i__ = n1 + 1;
 /*<             IJB = IDIFJB >*/
-	    ijb = 3;
+            ijb = 3;
 
 /*           Frobenius norm-based Difu estimate. */
 
 /*<    >*/
-	    i__1 = *lwork - (n1 << 1) * n2;
-	    ztgsyl_("N", &ijb, &n1, &n2, &a[a_offset], lda, &a[i__ + i__ * 
-		    a_dim1], lda, &work[1], &n1, &b[b_offset], ldb, &b[i__ + 
-		    i__ * b_dim1], ldb, &work[n1 * n2 + 1], &n1, &dscale, &
-		    dif[1], &work[(n1 * n2 << 1) + 1], &i__1, &iwork[1], &
-		    ierr, (ftnlen)1);
+            i__1 = *lwork - (n1 << 1) * n2;
+            ztgsyl_("N", &ijb, &n1, &n2, &a[a_offset], lda, &a[i__ + i__ *
+                    a_dim1], lda, &work[1], &n1, &b[b_offset], ldb, &b[i__ +
+                    i__ * b_dim1], ldb, &work[n1 * n2 + 1], &n1, &dscale, &
+                    dif[1], &work[(n1 * n2 << 1) + 1], &i__1, &iwork[1], &
+                    ierr, (ftnlen)1);
 
 /*           Frobenius norm-based Difl estimate. */
 
 /*<    >*/
-	    i__1 = *lwork - (n1 << 1) * n2;
-	    ztgsyl_("N", &ijb, &n2, &n1, &a[i__ + i__ * a_dim1], lda, &a[
-		    a_offset], lda, &work[1], &n2, &b[i__ + i__ * b_dim1], 
-		    ldb, &b[b_offset], ldb, &work[n1 * n2 + 1], &n2, &dscale, 
-		    &dif[2], &work[(n1 * n2 << 1) + 1], &i__1, &iwork[1], &
-		    ierr, (ftnlen)1);
+            i__1 = *lwork - (n1 << 1) * n2;
+            ztgsyl_("N", &ijb, &n2, &n1, &a[i__ + i__ * a_dim1], lda, &a[
+                    a_offset], lda, &work[1], &n2, &b[i__ + i__ * b_dim1],
+                    ldb, &b[b_offset], ldb, &work[n1 * n2 + 1], &n2, &dscale,
+                    &dif[2], &work[(n1 * n2 << 1) + 1], &i__1, &iwork[1], &
+                    ierr, (ftnlen)1);
 /*<          ELSE >*/
-	} else {
+        } else {
 
 /*           Compute 1-norm-based estimates of Difu and Difl using */
 /*           reversed communication with ZLACN2. In each step a */
@@ -801,101 +801,101 @@ static integer c__1 = 1;
 /*           is solved. */
 
 /*<             KASE = 0 >*/
-	    kase = 0;
+            kase = 0;
 /*<             N1 = M >*/
-	    n1 = *m;
+            n1 = *m;
 /*<             N2 = N - M >*/
-	    n2 = *n - *m;
+            n2 = *n - *m;
 /*<             I = N1 + 1 >*/
-	    i__ = n1 + 1;
+            i__ = n1 + 1;
 /*<             IJB = 0 >*/
-	    ijb = 0;
+            ijb = 0;
 /*<             MN2 = 2*N1*N2 >*/
-	    mn2 = (n1 << 1) * n2;
+            mn2 = (n1 << 1) * n2;
 
 /*           1-norm-based estimate of Difu. */
 
 /*<    40       CONTINUE >*/
 L40:
 /*<    >*/
-	    zlacn2_(&mn2, &work[mn2 + 1], &work[1], &dif[1], &kase, isave);
+            zlacn2_(&mn2, &work[mn2 + 1], &work[1], &dif[1], &kase, isave);
 /*<             IF( KASE.NE.0 ) THEN >*/
-	    if (kase != 0) {
+            if (kase != 0) {
 /*<                IF( KASE.EQ.1 ) THEN >*/
-		if (kase == 1) {
+                if (kase == 1) {
 
 /*                 Solve generalized Sylvester equation */
 
 /*<    >*/
-		    i__1 = *lwork - (n1 << 1) * n2;
-		    ztgsyl_("N", &ijb, &n1, &n2, &a[a_offset], lda, &a[i__ + 
-			    i__ * a_dim1], lda, &work[1], &n1, &b[b_offset], 
-			    ldb, &b[i__ + i__ * b_dim1], ldb, &work[n1 * n2 + 
-			    1], &n1, &dscale, &dif[1], &work[(n1 * n2 << 1) + 
-			    1], &i__1, &iwork[1], &ierr, (ftnlen)1);
+                    i__1 = *lwork - (n1 << 1) * n2;
+                    ztgsyl_("N", &ijb, &n1, &n2, &a[a_offset], lda, &a[i__ +
+                            i__ * a_dim1], lda, &work[1], &n1, &b[b_offset],
+                            ldb, &b[i__ + i__ * b_dim1], ldb, &work[n1 * n2 +
+                            1], &n1, &dscale, &dif[1], &work[(n1 * n2 << 1) +
+                            1], &i__1, &iwork[1], &ierr, (ftnlen)1);
 /*<                ELSE >*/
-		} else {
+                } else {
 
 /*                 Solve the transposed variant. */
 
 /*<    >*/
-		    i__1 = *lwork - (n1 << 1) * n2;
-		    ztgsyl_("C", &ijb, &n1, &n2, &a[a_offset], lda, &a[i__ + 
-			    i__ * a_dim1], lda, &work[1], &n1, &b[b_offset], 
-			    ldb, &b[i__ + i__ * b_dim1], ldb, &work[n1 * n2 + 
-			    1], &n1, &dscale, &dif[1], &work[(n1 * n2 << 1) + 
-			    1], &i__1, &iwork[1], &ierr, (ftnlen)1);
+                    i__1 = *lwork - (n1 << 1) * n2;
+                    ztgsyl_("C", &ijb, &n1, &n2, &a[a_offset], lda, &a[i__ +
+                            i__ * a_dim1], lda, &work[1], &n1, &b[b_offset],
+                            ldb, &b[i__ + i__ * b_dim1], ldb, &work[n1 * n2 +
+                            1], &n1, &dscale, &dif[1], &work[(n1 * n2 << 1) +
+                            1], &i__1, &iwork[1], &ierr, (ftnlen)1);
 /*<                END IF >*/
-		}
+                }
 /*<                GO TO 40 >*/
-		goto L40;
+                goto L40;
 /*<             END IF >*/
-	    }
+            }
 /*<             DIF( 1 ) = DSCALE / DIF( 1 ) >*/
-	    dif[1] = dscale / dif[1];
+            dif[1] = dscale / dif[1];
 
 /*           1-norm-based estimate of Difl. */
 
 /*<    50       CONTINUE >*/
 L50:
 /*<    >*/
-	    zlacn2_(&mn2, &work[mn2 + 1], &work[1], &dif[2], &kase, isave);
+            zlacn2_(&mn2, &work[mn2 + 1], &work[1], &dif[2], &kase, isave);
 /*<             IF( KASE.NE.0 ) THEN >*/
-	    if (kase != 0) {
+            if (kase != 0) {
 /*<                IF( KASE.EQ.1 ) THEN >*/
-		if (kase == 1) {
+                if (kase == 1) {
 
 /*                 Solve generalized Sylvester equation */
 
 /*<    >*/
-		    i__1 = *lwork - (n1 << 1) * n2;
-		    ztgsyl_("N", &ijb, &n2, &n1, &a[i__ + i__ * a_dim1], lda, 
-			    &a[a_offset], lda, &work[1], &n2, &b[i__ + i__ * 
-			    b_dim1], ldb, &b[b_offset], ldb, &work[n1 * n2 + 
-			    1], &n2, &dscale, &dif[2], &work[(n1 * n2 << 1) + 
-			    1], &i__1, &iwork[1], &ierr, (ftnlen)1);
+                    i__1 = *lwork - (n1 << 1) * n2;
+                    ztgsyl_("N", &ijb, &n2, &n1, &a[i__ + i__ * a_dim1], lda,
+                            &a[a_offset], lda, &work[1], &n2, &b[i__ + i__ *
+                            b_dim1], ldb, &b[b_offset], ldb, &work[n1 * n2 +
+                            1], &n2, &dscale, &dif[2], &work[(n1 * n2 << 1) +
+                            1], &i__1, &iwork[1], &ierr, (ftnlen)1);
 /*<                ELSE >*/
-		} else {
+                } else {
 
 /*                 Solve the transposed variant. */
 
 /*<    >*/
-		    i__1 = *lwork - (n1 << 1) * n2;
-		    ztgsyl_("C", &ijb, &n2, &n1, &a[i__ + i__ * a_dim1], lda, 
-			    &a[a_offset], lda, &work[1], &n2, &b[b_offset], 
-			    ldb, &b[i__ + i__ * b_dim1], ldb, &work[n1 * n2 + 
-			    1], &n2, &dscale, &dif[2], &work[(n1 * n2 << 1) + 
-			    1], &i__1, &iwork[1], &ierr, (ftnlen)1);
+                    i__1 = *lwork - (n1 << 1) * n2;
+                    ztgsyl_("C", &ijb, &n2, &n1, &a[i__ + i__ * a_dim1], lda,
+                            &a[a_offset], lda, &work[1], &n2, &b[b_offset],
+                            ldb, &b[i__ + i__ * b_dim1], ldb, &work[n1 * n2 +
+                            1], &n2, &dscale, &dif[2], &work[(n1 * n2 << 1) +
+                            1], &i__1, &iwork[1], &ierr, (ftnlen)1);
 /*<                END IF >*/
-		}
+                }
 /*<                GO TO 50 >*/
-		goto L50;
+                goto L50;
 /*<             END IF >*/
-	    }
+            }
 /*<             DIF( 2 ) = DSCALE / DIF( 2 ) >*/
-	    dif[2] = dscale / dif[2];
+            dif[2] = dscale / dif[2];
 /*<          END IF >*/
-	}
+        }
 /*<       END IF >*/
     }
 
@@ -907,47 +907,47 @@ L50:
     i__1 = *n;
     for (k = 1; k <= i__1; ++k) {
 /*<          DSCALE = ABS( B( K, K ) ) >*/
-	dscale = z_abs(&b[k + k * b_dim1]);
+        dscale = z_abs(&b[k + k * b_dim1]);
 /*<          IF( DSCALE.GT.SAFMIN ) THEN >*/
-	if (dscale > safmin) {
+        if (dscale > safmin) {
 /*<             TEMP1 = DCONJG( B( K, K ) / DSCALE ) >*/
-	    i__2 = k + k * b_dim1;
-	    z__2.r = b[i__2].r / dscale, z__2.i = b[i__2].i / dscale;
-	    d_cnjg(&z__1, &z__2);
-	    temp1.r = z__1.r, temp1.i = z__1.i;
+            i__2 = k + k * b_dim1;
+            z__2.r = b[i__2].r / dscale, z__2.i = b[i__2].i / dscale;
+            d_cnjg(&z__1, &z__2);
+            temp1.r = z__1.r, temp1.i = z__1.i;
 /*<             TEMP2 = B( K, K ) / DSCALE >*/
-	    i__2 = k + k * b_dim1;
-	    z__1.r = b[i__2].r / dscale, z__1.i = b[i__2].i / dscale;
-	    temp2.r = z__1.r, temp2.i = z__1.i;
+            i__2 = k + k * b_dim1;
+            z__1.r = b[i__2].r / dscale, z__1.i = b[i__2].i / dscale;
+            temp2.r = z__1.r, temp2.i = z__1.i;
 /*<             B( K, K ) = DSCALE >*/
-	    i__2 = k + k * b_dim1;
-	    b[i__2].r = dscale, b[i__2].i = 0.;
+            i__2 = k + k * b_dim1;
+            b[i__2].r = dscale, b[i__2].i = 0.;
 /*<             CALL ZSCAL( N-K, TEMP1, B( K, K+1 ), LDB ) >*/
-	    i__2 = *n - k;
-	    zscal_(&i__2, &temp1, &b[k + (k + 1) * b_dim1], ldb);
+            i__2 = *n - k;
+            zscal_(&i__2, &temp1, &b[k + (k + 1) * b_dim1], ldb);
 /*<             CALL ZSCAL( N-K+1, TEMP1, A( K, K ), LDA ) >*/
-	    i__2 = *n - k + 1;
-	    zscal_(&i__2, &temp1, &a[k + k * a_dim1], lda);
+            i__2 = *n - k + 1;
+            zscal_(&i__2, &temp1, &a[k + k * a_dim1], lda);
 /*<    >*/
-	    if (*wantq) {
-		zscal_(n, &temp2, &q[k * q_dim1 + 1], &c__1);
-	    }
+            if (*wantq) {
+                zscal_(n, &temp2, &q[k * q_dim1 + 1], &c__1);
+            }
 /*<          ELSE >*/
-	} else {
+        } else {
 /*<             B( K, K ) = DCMPLX( ZERO, ZERO ) >*/
-	    i__2 = k + k * b_dim1;
-	    b[i__2].r = 0., b[i__2].i = 0.;
+            i__2 = k + k * b_dim1;
+            b[i__2].r = 0., b[i__2].i = 0.;
 /*<          END IF >*/
-	}
+        }
 
 /*<          ALPHA( K ) = A( K, K ) >*/
-	i__2 = k;
-	i__3 = k + k * a_dim1;
-	alpha[i__2].r = a[i__3].r, alpha[i__2].i = a[i__3].i;
+        i__2 = k;
+        i__3 = k + k * a_dim1;
+        alpha[i__2].r = a[i__3].r, alpha[i__2].i = a[i__3].i;
 /*<          BETA( K ) = B( K, K ) >*/
-	i__2 = k;
-	i__3 = k + k * b_dim1;
-	beta[i__2].r = b[i__3].r, beta[i__2].i = b[i__3].i;
+        i__2 = k;
+        i__3 = k + k * b_dim1;
+        beta[i__2].r = b[i__3].r, beta[i__2].i = b[i__3].i;
 
 /*<    60 CONTINUE >*/
 /* L60: */
@@ -970,5 +970,5 @@ L70:
 } /* ztgsen_ */
 
 #ifdef __cplusplus
-	}
+        }
 #endif

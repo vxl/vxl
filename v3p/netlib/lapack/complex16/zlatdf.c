@@ -1,13 +1,13 @@
 /* lapack/complex16/zlatdf.f -- translated by f2c (version 20090411).
    You must link the resulting object file with libf2c:
-	on Microsoft Windows system, link with libf2c.lib;
-	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
-	or, if you install libf2c.a in a standard place, with -lf2c -lm
-	-- in that order, at the end of the command line, as in
-		cc *.o -lf2c -lm
-	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+        on Microsoft Windows system, link with libf2c.lib;
+        on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+        or, if you install libf2c.a in a standard place, with -lf2c -lm
+        -- in that order, at the end of the command line, as in
+                cc *.o -lf2c -lm
+        Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
 
-		http://www.netlib.org/f2c/libf2c.zip
+                http://www.netlib.org/f2c/libf2c.zip
 */
 
 #ifdef __cplusplus
@@ -23,9 +23,9 @@ static integer c_n1 = -1;
 static doublereal c_b24 = 1.;
 
 /*<    >*/
-/* Subroutine */ int zlatdf_(integer *ijob, integer *n, doublecomplex *z__, 
-	integer *ldz, doublecomplex *rhs, doublereal *rdsum, doublereal *
-	rdscal, integer *ipiv, integer *jpiv)
+/* Subroutine */ int zlatdf_(integer *ijob, integer *n, doublecomplex *z__,
+        integer *ldz, doublecomplex *rhs, doublereal *rdsum, doublereal *
+        rdscal, integer *ipiv, integer *jpiv)
 {
     /* System generated locals */
     integer z_dim1, z_offset, i__1, i__2, i__3, i__4, i__5;
@@ -42,25 +42,25 @@ static doublereal c_b24 = 1.;
     integer info;
     doublecomplex temp, work[8];
     doublereal scale;
-    extern /* Subroutine */ int zscal_(integer *, doublecomplex *, 
-	    doublecomplex *, integer *);
+    extern /* Subroutine */ int zscal_(integer *, doublecomplex *,
+            doublecomplex *, integer *);
     doublecomplex pmone;
-    extern /* Double Complex */ VOID zdotc_(doublecomplex *, integer *, 
-	    doublecomplex *, integer *, doublecomplex *, integer *);
+    extern /* Double Complex */ VOID zdotc_(doublecomplex *, integer *,
+            doublecomplex *, integer *, doublecomplex *, integer *);
     doublereal rtemp, sminu, rwork[2];
-    extern /* Subroutine */ int zcopy_(integer *, doublecomplex *, integer *, 
-	    doublecomplex *, integer *);
+    extern /* Subroutine */ int zcopy_(integer *, doublecomplex *, integer *,
+            doublecomplex *, integer *);
     doublereal splus;
-    extern /* Subroutine */ int zaxpy_(integer *, doublecomplex *, 
-	    doublecomplex *, integer *, doublecomplex *, integer *), zgesc2_(
-	    integer *, doublecomplex *, integer *, doublecomplex *, integer *,
-	     integer *, doublereal *), zgecon_(char *, integer *, 
-	    doublecomplex *, integer *, doublereal *, doublereal *, 
-	    doublecomplex *, doublereal *, integer *, ftnlen);
+    extern /* Subroutine */ int zaxpy_(integer *, doublecomplex *,
+            doublecomplex *, integer *, doublecomplex *, integer *), zgesc2_(
+            integer *, doublecomplex *, integer *, doublecomplex *, integer *,
+             integer *, doublereal *), zgecon_(char *, integer *,
+            doublecomplex *, integer *, doublereal *, doublereal *,
+            doublecomplex *, doublereal *, integer *, ftnlen);
     extern doublereal dzasum_(integer *, doublecomplex *, integer *);
     extern /* Subroutine */ int zlassq_(integer *, doublecomplex *, integer *,
-	     doublereal *, doublereal *), zlaswp_(integer *, doublecomplex *, 
-	    integer *, integer *, integer *, integer *, integer *);
+             doublereal *, doublereal *), zlaswp_(integer *, doublecomplex *,
+            integer *, integer *, integer *, integer *, integer *);
 
 
 /*  -- LAPACK auxiliary routine (version 3.2) -- */
@@ -211,56 +211,56 @@ static doublereal c_b24 = 1.;
 /*        Apply permutations IPIV to RHS */
 
 /*<          CALL ZLASWP( 1, RHS, LDZ, 1, N-1, IPIV, 1 ) >*/
-	i__1 = *n - 1;
-	zlaswp_(&c__1, &rhs[1], ldz, &c__1, &i__1, &ipiv[1], &c__1);
+        i__1 = *n - 1;
+        zlaswp_(&c__1, &rhs[1], ldz, &c__1, &i__1, &ipiv[1], &c__1);
 
 /*        Solve for L-part choosing RHS either to +1 or -1. */
 
 /*<          PMONE = -CONE >*/
-	z__1.r = -1., z__1.i = -0.;
-	pmone.r = z__1.r, pmone.i = z__1.i;
+        z__1.r = -1., z__1.i = -0.;
+        pmone.r = z__1.r, pmone.i = z__1.i;
 /*<          DO 10 J = 1, N - 1 >*/
-	i__1 = *n - 1;
-	for (j = 1; j <= i__1; ++j) {
+        i__1 = *n - 1;
+        for (j = 1; j <= i__1; ++j) {
 /*<             BP = RHS( J ) + CONE >*/
-	    i__2 = j;
-	    z__1.r = rhs[i__2].r + 1., z__1.i = rhs[i__2].i + 0.;
-	    bp.r = z__1.r, bp.i = z__1.i;
+            i__2 = j;
+            z__1.r = rhs[i__2].r + 1., z__1.i = rhs[i__2].i + 0.;
+            bp.r = z__1.r, bp.i = z__1.i;
 /*<             BM = RHS( J ) - CONE >*/
-	    i__2 = j;
-	    z__1.r = rhs[i__2].r - 1., z__1.i = rhs[i__2].i - 0.;
-	    bm.r = z__1.r, bm.i = z__1.i;
+            i__2 = j;
+            z__1.r = rhs[i__2].r - 1., z__1.i = rhs[i__2].i - 0.;
+            bm.r = z__1.r, bm.i = z__1.i;
 /*<             SPLUS = ONE >*/
-	    splus = 1.;
+            splus = 1.;
 
 /*           Lockahead for L- part RHS(1:N-1) = +-1 */
 /*           SPLUS and SMIN computed more efficiently than in BSOLVE[1]. */
 
 /*<    >*/
-	    i__2 = *n - j;
-	    zdotc_(&z__1, &i__2, &z__[j + 1 + j * z_dim1], &c__1, &z__[j + 1 
-		    + j * z_dim1], &c__1);
-	    splus += z__1.r;
+            i__2 = *n - j;
+            zdotc_(&z__1, &i__2, &z__[j + 1 + j * z_dim1], &c__1, &z__[j + 1
+                    + j * z_dim1], &c__1);
+            splus += z__1.r;
 /*<             SMINU = DBLE( ZDOTC( N-J, Z( J+1, J ), 1, RHS( J+1 ), 1 ) ) >*/
-	    i__2 = *n - j;
-	    zdotc_(&z__1, &i__2, &z__[j + 1 + j * z_dim1], &c__1, &rhs[j + 1],
-		     &c__1);
-	    sminu = z__1.r;
+            i__2 = *n - j;
+            zdotc_(&z__1, &i__2, &z__[j + 1 + j * z_dim1], &c__1, &rhs[j + 1],
+                     &c__1);
+            sminu = z__1.r;
 /*<             SPLUS = SPLUS*DBLE( RHS( J ) ) >*/
-	    i__2 = j;
-	    splus *= rhs[i__2].r;
+            i__2 = j;
+            splus *= rhs[i__2].r;
 /*<             IF( SPLUS.GT.SMINU ) THEN >*/
-	    if (splus > sminu) {
+            if (splus > sminu) {
 /*<                RHS( J ) = BP >*/
-		i__2 = j;
-		rhs[i__2].r = bp.r, rhs[i__2].i = bp.i;
+                i__2 = j;
+                rhs[i__2].r = bp.r, rhs[i__2].i = bp.i;
 /*<             ELSE IF( SMINU.GT.SPLUS ) THEN >*/
-	    } else if (sminu > splus) {
+            } else if (sminu > splus) {
 /*<                RHS( J ) = BM >*/
-		i__2 = j;
-		rhs[i__2].r = bm.r, rhs[i__2].i = bm.i;
+                i__2 = j;
+                rhs[i__2].r = bm.r, rhs[i__2].i = bm.i;
 /*<             ELSE >*/
-	    } else {
+            } else {
 
 /*              In this case the updating sums are equal and we can */
 /*              choose RHS(J) +1 or -1. The first time this happens we */
@@ -269,29 +269,29 @@ static doublereal c_b24 = 1.;
 /*              (see [1]). (Not done in BSOLVE.) */
 
 /*<                RHS( J ) = RHS( J ) + PMONE >*/
-		i__2 = j;
-		i__3 = j;
-		z__1.r = rhs[i__3].r + pmone.r, z__1.i = rhs[i__3].i + 
-			pmone.i;
-		rhs[i__2].r = z__1.r, rhs[i__2].i = z__1.i;
+                i__2 = j;
+                i__3 = j;
+                z__1.r = rhs[i__3].r + pmone.r, z__1.i = rhs[i__3].i +
+                        pmone.i;
+                rhs[i__2].r = z__1.r, rhs[i__2].i = z__1.i;
 /*<                PMONE = CONE >*/
-		pmone.r = 1., pmone.i = 0.;
+                pmone.r = 1., pmone.i = 0.;
 /*<             END IF >*/
-	    }
+            }
 
 /*           Compute the remaining r.h.s. */
 
 /*<             TEMP = -RHS( J ) >*/
-	    i__2 = j;
-	    z__1.r = -rhs[i__2].r, z__1.i = -rhs[i__2].i;
-	    temp.r = z__1.r, temp.i = z__1.i;
+            i__2 = j;
+            z__1.r = -rhs[i__2].r, z__1.i = -rhs[i__2].i;
+            temp.r = z__1.r, temp.i = z__1.i;
 /*<             CALL ZAXPY( N-J, TEMP, Z( J+1, J ), 1, RHS( J+1 ), 1 ) >*/
-	    i__2 = *n - j;
-	    zaxpy_(&i__2, &temp, &z__[j + 1 + j * z_dim1], &c__1, &rhs[j + 1],
-		     &c__1);
+            i__2 = *n - j;
+            zaxpy_(&i__2, &temp, &z__[j + 1 + j * z_dim1], &c__1, &rhs[j + 1],
+                     &c__1);
 /*<    10    CONTINUE >*/
 /* L10: */
-	}
+        }
 
 /*        Solve for U- part, lockahead for RHS(N) = +-1. This is not done */
 /*        In BSOLVE and will hopefully give us a better estimate because */
@@ -299,93 +299,93 @@ static doublereal c_b24 = 1.;
 /*        and not to L. U(N, N) is an approximation to sigma_min(LU). */
 
 /*<          CALL ZCOPY( N-1, RHS, 1, WORK, 1 ) >*/
-	i__1 = *n - 1;
-	zcopy_(&i__1, &rhs[1], &c__1, work, &c__1);
+        i__1 = *n - 1;
+        zcopy_(&i__1, &rhs[1], &c__1, work, &c__1);
 /*<          WORK( N ) = RHS( N ) + CONE >*/
-	i__1 = *n - 1;
-	i__2 = *n;
-	z__1.r = rhs[i__2].r + 1., z__1.i = rhs[i__2].i + 0.;
-	work[i__1].r = z__1.r, work[i__1].i = z__1.i;
+        i__1 = *n - 1;
+        i__2 = *n;
+        z__1.r = rhs[i__2].r + 1., z__1.i = rhs[i__2].i + 0.;
+        work[i__1].r = z__1.r, work[i__1].i = z__1.i;
 /*<          RHS( N ) = RHS( N ) - CONE >*/
-	i__1 = *n;
-	i__2 = *n;
-	z__1.r = rhs[i__2].r - 1., z__1.i = rhs[i__2].i - 0.;
-	rhs[i__1].r = z__1.r, rhs[i__1].i = z__1.i;
+        i__1 = *n;
+        i__2 = *n;
+        z__1.r = rhs[i__2].r - 1., z__1.i = rhs[i__2].i - 0.;
+        rhs[i__1].r = z__1.r, rhs[i__1].i = z__1.i;
 /*<          SPLUS = ZERO >*/
-	splus = 0.;
+        splus = 0.;
 /*<          SMINU = ZERO >*/
-	sminu = 0.;
+        sminu = 0.;
 /*<          DO 30 I = N, 1, -1 >*/
-	for (i__ = *n; i__ >= 1; --i__) {
+        for (i__ = *n; i__ >= 1; --i__) {
 /*<             TEMP = CONE / Z( I, I ) >*/
-	    z_div(&z__1, &c_b1, &z__[i__ + i__ * z_dim1]);
-	    temp.r = z__1.r, temp.i = z__1.i;
+            z_div(&z__1, &c_b1, &z__[i__ + i__ * z_dim1]);
+            temp.r = z__1.r, temp.i = z__1.i;
 /*<             WORK( I ) = WORK( I )*TEMP >*/
-	    i__1 = i__ - 1;
-	    i__2 = i__ - 1;
-	    z__1.r = work[i__2].r * temp.r - work[i__2].i * temp.i, z__1.i = 
-		    work[i__2].r * temp.i + work[i__2].i * temp.r;
-	    work[i__1].r = z__1.r, work[i__1].i = z__1.i;
+            i__1 = i__ - 1;
+            i__2 = i__ - 1;
+            z__1.r = work[i__2].r * temp.r - work[i__2].i * temp.i, z__1.i =
+                    work[i__2].r * temp.i + work[i__2].i * temp.r;
+            work[i__1].r = z__1.r, work[i__1].i = z__1.i;
 /*<             RHS( I ) = RHS( I )*TEMP >*/
-	    i__1 = i__;
-	    i__2 = i__;
-	    z__1.r = rhs[i__2].r * temp.r - rhs[i__2].i * temp.i, z__1.i = 
-		    rhs[i__2].r * temp.i + rhs[i__2].i * temp.r;
-	    rhs[i__1].r = z__1.r, rhs[i__1].i = z__1.i;
+            i__1 = i__;
+            i__2 = i__;
+            z__1.r = rhs[i__2].r * temp.r - rhs[i__2].i * temp.i, z__1.i =
+                    rhs[i__2].r * temp.i + rhs[i__2].i * temp.r;
+            rhs[i__1].r = z__1.r, rhs[i__1].i = z__1.i;
 /*<             DO 20 K = I + 1, N >*/
-	    i__1 = *n;
-	    for (k = i__ + 1; k <= i__1; ++k) {
+            i__1 = *n;
+            for (k = i__ + 1; k <= i__1; ++k) {
 /*<                WORK( I ) = WORK( I ) - WORK( K )*( Z( I, K )*TEMP ) >*/
-		i__2 = i__ - 1;
-		i__3 = i__ - 1;
-		i__4 = k - 1;
-		i__5 = i__ + k * z_dim1;
-		z__3.r = z__[i__5].r * temp.r - z__[i__5].i * temp.i, z__3.i =
-			 z__[i__5].r * temp.i + z__[i__5].i * temp.r;
-		z__2.r = work[i__4].r * z__3.r - work[i__4].i * z__3.i, 
-			z__2.i = work[i__4].r * z__3.i + work[i__4].i * 
-			z__3.r;
-		z__1.r = work[i__3].r - z__2.r, z__1.i = work[i__3].i - 
-			z__2.i;
-		work[i__2].r = z__1.r, work[i__2].i = z__1.i;
+                i__2 = i__ - 1;
+                i__3 = i__ - 1;
+                i__4 = k - 1;
+                i__5 = i__ + k * z_dim1;
+                z__3.r = z__[i__5].r * temp.r - z__[i__5].i * temp.i, z__3.i =
+                         z__[i__5].r * temp.i + z__[i__5].i * temp.r;
+                z__2.r = work[i__4].r * z__3.r - work[i__4].i * z__3.i,
+                        z__2.i = work[i__4].r * z__3.i + work[i__4].i *
+                        z__3.r;
+                z__1.r = work[i__3].r - z__2.r, z__1.i = work[i__3].i -
+                        z__2.i;
+                work[i__2].r = z__1.r, work[i__2].i = z__1.i;
 /*<                RHS( I ) = RHS( I ) - RHS( K )*( Z( I, K )*TEMP ) >*/
-		i__2 = i__;
-		i__3 = i__;
-		i__4 = k;
-		i__5 = i__ + k * z_dim1;
-		z__3.r = z__[i__5].r * temp.r - z__[i__5].i * temp.i, z__3.i =
-			 z__[i__5].r * temp.i + z__[i__5].i * temp.r;
-		z__2.r = rhs[i__4].r * z__3.r - rhs[i__4].i * z__3.i, z__2.i =
-			 rhs[i__4].r * z__3.i + rhs[i__4].i * z__3.r;
-		z__1.r = rhs[i__3].r - z__2.r, z__1.i = rhs[i__3].i - z__2.i;
-		rhs[i__2].r = z__1.r, rhs[i__2].i = z__1.i;
+                i__2 = i__;
+                i__3 = i__;
+                i__4 = k;
+                i__5 = i__ + k * z_dim1;
+                z__3.r = z__[i__5].r * temp.r - z__[i__5].i * temp.i, z__3.i =
+                         z__[i__5].r * temp.i + z__[i__5].i * temp.r;
+                z__2.r = rhs[i__4].r * z__3.r - rhs[i__4].i * z__3.i, z__2.i =
+                         rhs[i__4].r * z__3.i + rhs[i__4].i * z__3.r;
+                z__1.r = rhs[i__3].r - z__2.r, z__1.i = rhs[i__3].i - z__2.i;
+                rhs[i__2].r = z__1.r, rhs[i__2].i = z__1.i;
 /*<    20       CONTINUE >*/
 /* L20: */
-	    }
+            }
 /*<             SPLUS = SPLUS + ABS( WORK( I ) ) >*/
-	    splus += z_abs(&work[i__ - 1]);
+            splus += z_abs(&work[i__ - 1]);
 /*<             SMINU = SMINU + ABS( RHS( I ) ) >*/
-	    sminu += z_abs(&rhs[i__]);
+            sminu += z_abs(&rhs[i__]);
 /*<    30    CONTINUE >*/
 /* L30: */
-	}
+        }
 /*<    >*/
-	if (splus > sminu) {
-	    zcopy_(n, work, &c__1, &rhs[1], &c__1);
-	}
+        if (splus > sminu) {
+            zcopy_(n, work, &c__1, &rhs[1], &c__1);
+        }
 
 /*        Apply the permutations JPIV to the computed solution (RHS) */
 
 /*<          CALL ZLASWP( 1, RHS, LDZ, 1, N-1, JPIV, -1 ) >*/
-	i__1 = *n - 1;
-	zlaswp_(&c__1, &rhs[1], ldz, &c__1, &i__1, &jpiv[1], &c_n1);
+        i__1 = *n - 1;
+        zlaswp_(&c__1, &rhs[1], ldz, &c__1, &i__1, &jpiv[1], &c_n1);
 
 /*        Compute the sum of squares */
 
 /*<          CALL ZLASSQ( N, RHS, 1, RDSCAL, RDSUM ) >*/
-	zlassq_(n, &rhs[1], &c__1, rdscal, rdsum);
+        zlassq_(n, &rhs[1], &c__1, rdscal, rdsum);
 /*<          RETURN >*/
-	return 0;
+        return 0;
 /*<       END IF >*/
     }
 
@@ -395,7 +395,7 @@ static doublereal c_b24 = 1.;
 
 /*<       CALL ZGECON( 'I', N, Z, LDZ, ONE, RTEMP, WORK, RWORK, INFO ) >*/
     zgecon_("I", n, &z__[z_offset], ldz, &c_b24, &rtemp, work, rwork, &info, (
-	    ftnlen)1);
+            ftnlen)1);
 /*<       CALL ZCOPY( N, WORK( N+1 ), 1, XM, 1 ) >*/
     zcopy_(n, &work[*n], &c__1, xm, &c__1);
 
@@ -424,7 +424,7 @@ static doublereal c_b24 = 1.;
     zgesc2_(n, &z__[z_offset], ldz, xp, &ipiv[1], &jpiv[1], &scale);
 /*<    >*/
     if (dzasum_(n, xp, &c__1) > dzasum_(n, &rhs[1], &c__1)) {
-	zcopy_(n, xp, &c__1, &rhs[1], &c__1);
+        zcopy_(n, xp, &c__1, &rhs[1], &c__1);
     }
 
 /*     Compute the sum of squares */
@@ -440,5 +440,5 @@ static doublereal c_b24 = 1.;
 } /* zlatdf_ */
 
 #ifdef __cplusplus
-	}
+        }
 #endif

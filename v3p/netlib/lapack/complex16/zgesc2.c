@@ -1,13 +1,13 @@
 /* lapack/complex16/zgesc2.f -- translated by f2c (version 20090411).
    You must link the resulting object file with libf2c:
-	on Microsoft Windows system, link with libf2c.lib;
-	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
-	or, if you install libf2c.a in a standard place, with -lf2c -lm
-	-- in that order, at the end of the command line, as in
-		cc *.o -lf2c -lm
-	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+        on Microsoft Windows system, link with libf2c.lib;
+        on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+        or, if you install libf2c.a in a standard place, with -lf2c -lm
+        -- in that order, at the end of the command line, as in
+                cc *.o -lf2c -lm
+        Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
 
-		http://www.netlib.org/f2c/libf2c.zip
+                http://www.netlib.org/f2c/libf2c.zip
 */
 
 #ifdef __cplusplus
@@ -22,8 +22,8 @@ static doublecomplex c_b13 = {1.,0.};
 static integer c_n1 = -1;
 
 /*<       SUBROUTINE ZGESC2( N, A, LDA, RHS, IPIV, JPIV, SCALE ) >*/
-/* Subroutine */ int zgesc2_(integer *n, doublecomplex *a, integer *lda, 
-	doublecomplex *rhs, integer *ipiv, integer *jpiv, doublereal *scale)
+/* Subroutine */ int zgesc2_(integer *n, doublecomplex *a, integer *lda,
+        doublecomplex *rhs, integer *ipiv, integer *jpiv, doublereal *scale)
 {
     /* System generated locals */
     integer a_dim1, a_offset, i__1, i__2, i__3, i__4, i__5, i__6;
@@ -38,14 +38,14 @@ static integer c_n1 = -1;
     integer i__, j;
     doublereal eps;
     doublecomplex temp;
-    extern /* Subroutine */ int zscal_(integer *, doublecomplex *, 
-	    doublecomplex *, integer *), dlabad_(doublereal *, doublereal *);
+    extern /* Subroutine */ int zscal_(integer *, doublecomplex *,
+            doublecomplex *, integer *), dlabad_(doublereal *, doublereal *);
     extern doublereal dlamch_(char *, ftnlen);
     doublereal bignum;
     extern integer izamax_(integer *, doublecomplex *, integer *);
     doublereal smlnum;
     extern /* Subroutine */ int zlaswp_(integer *, doublecomplex *, integer *,
-	     integer *, integer *, integer *, integer *);
+             integer *, integer *, integer *, integer *);
 
 
 /*  -- LAPACK auxiliary routine (version 3.2) -- */
@@ -165,21 +165,21 @@ static integer c_n1 = -1;
     i__1 = *n - 1;
     for (i__ = 1; i__ <= i__1; ++i__) {
 /*<          DO 10 J = I + 1, N >*/
-	i__2 = *n;
-	for (j = i__ + 1; j <= i__2; ++j) {
+        i__2 = *n;
+        for (j = i__ + 1; j <= i__2; ++j) {
 /*<             RHS( J ) = RHS( J ) - A( J, I )*RHS( I ) >*/
-	    i__3 = j;
-	    i__4 = j;
-	    i__5 = j + i__ * a_dim1;
-	    i__6 = i__;
-	    z__2.r = a[i__5].r * rhs[i__6].r - a[i__5].i * rhs[i__6].i, 
-		    z__2.i = a[i__5].r * rhs[i__6].i + a[i__5].i * rhs[i__6]
-		    .r;
-	    z__1.r = rhs[i__4].r - z__2.r, z__1.i = rhs[i__4].i - z__2.i;
-	    rhs[i__3].r = z__1.r, rhs[i__3].i = z__1.i;
+            i__3 = j;
+            i__4 = j;
+            i__5 = j + i__ * a_dim1;
+            i__6 = i__;
+            z__2.r = a[i__5].r * rhs[i__6].r - a[i__5].i * rhs[i__6].i,
+                    z__2.i = a[i__5].r * rhs[i__6].i + a[i__5].i * rhs[i__6]
+                    .r;
+            z__1.r = rhs[i__4].r - z__2.r, z__1.i = rhs[i__4].i - z__2.i;
+            rhs[i__3].r = z__1.r, rhs[i__3].i = z__1.i;
 /*<    10    CONTINUE >*/
 /* L10: */
-	}
+        }
 /*<    20 CONTINUE >*/
 /* L20: */
     }
@@ -196,43 +196,43 @@ static integer c_n1 = -1;
 /*<       IF( TWO*SMLNUM*ABS( RHS( I ) ).GT.ABS( A( N, N ) ) ) THEN >*/
     if (smlnum * 2. * z_abs(&rhs[i__]) > z_abs(&a[*n + *n * a_dim1])) {
 /*<          TEMP = DCMPLX( ONE / TWO, ZERO ) / ABS( RHS( I ) ) >*/
-	d__1 = z_abs(&rhs[i__]);
-	z__1.r = .5 / d__1, z__1.i = 0. / d__1;
-	temp.r = z__1.r, temp.i = z__1.i;
+        d__1 = z_abs(&rhs[i__]);
+        z__1.r = .5 / d__1, z__1.i = 0. / d__1;
+        temp.r = z__1.r, temp.i = z__1.i;
 /*<          CALL ZSCAL( N, TEMP, RHS( 1 ), 1 ) >*/
-	zscal_(n, &temp, &rhs[1], &c__1);
+        zscal_(n, &temp, &rhs[1], &c__1);
 /*<          SCALE = SCALE*DBLE( TEMP ) >*/
-	*scale *= temp.r;
+        *scale *= temp.r;
 /*<       END IF >*/
     }
 /*<       DO 40 I = N, 1, -1 >*/
     for (i__ = *n; i__ >= 1; --i__) {
 /*<          TEMP = DCMPLX( ONE, ZERO ) / A( I, I ) >*/
-	z_div(&z__1, &c_b13, &a[i__ + i__ * a_dim1]);
-	temp.r = z__1.r, temp.i = z__1.i;
+        z_div(&z__1, &c_b13, &a[i__ + i__ * a_dim1]);
+        temp.r = z__1.r, temp.i = z__1.i;
 /*<          RHS( I ) = RHS( I )*TEMP >*/
-	i__1 = i__;
-	i__2 = i__;
-	z__1.r = rhs[i__2].r * temp.r - rhs[i__2].i * temp.i, z__1.i = rhs[
-		i__2].r * temp.i + rhs[i__2].i * temp.r;
-	rhs[i__1].r = z__1.r, rhs[i__1].i = z__1.i;
+        i__1 = i__;
+        i__2 = i__;
+        z__1.r = rhs[i__2].r * temp.r - rhs[i__2].i * temp.i, z__1.i = rhs[
+                i__2].r * temp.i + rhs[i__2].i * temp.r;
+        rhs[i__1].r = z__1.r, rhs[i__1].i = z__1.i;
 /*<          DO 30 J = I + 1, N >*/
-	i__1 = *n;
-	for (j = i__ + 1; j <= i__1; ++j) {
+        i__1 = *n;
+        for (j = i__ + 1; j <= i__1; ++j) {
 /*<             RHS( I ) = RHS( I ) - RHS( J )*( A( I, J )*TEMP ) >*/
-	    i__2 = i__;
-	    i__3 = i__;
-	    i__4 = j;
-	    i__5 = i__ + j * a_dim1;
-	    z__3.r = a[i__5].r * temp.r - a[i__5].i * temp.i, z__3.i = a[i__5]
-		    .r * temp.i + a[i__5].i * temp.r;
-	    z__2.r = rhs[i__4].r * z__3.r - rhs[i__4].i * z__3.i, z__2.i = 
-		    rhs[i__4].r * z__3.i + rhs[i__4].i * z__3.r;
-	    z__1.r = rhs[i__3].r - z__2.r, z__1.i = rhs[i__3].i - z__2.i;
-	    rhs[i__2].r = z__1.r, rhs[i__2].i = z__1.i;
+            i__2 = i__;
+            i__3 = i__;
+            i__4 = j;
+            i__5 = i__ + j * a_dim1;
+            z__3.r = a[i__5].r * temp.r - a[i__5].i * temp.i, z__3.i = a[i__5]
+                    .r * temp.i + a[i__5].i * temp.r;
+            z__2.r = rhs[i__4].r * z__3.r - rhs[i__4].i * z__3.i, z__2.i =
+                    rhs[i__4].r * z__3.i + rhs[i__4].i * z__3.r;
+            z__1.r = rhs[i__3].r - z__2.r, z__1.i = rhs[i__3].i - z__2.i;
+            rhs[i__2].r = z__1.r, rhs[i__2].i = z__1.i;
 /*<    30    CONTINUE >*/
 /* L30: */
-	}
+        }
 /*<    40 CONTINUE >*/
 /* L40: */
     }
@@ -251,5 +251,5 @@ static integer c_n1 = -1;
 } /* zgesc2_ */
 
 #ifdef __cplusplus
-	}
+        }
 #endif

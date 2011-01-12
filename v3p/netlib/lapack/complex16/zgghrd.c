@@ -1,13 +1,13 @@
 /* lapack/complex16/zgghrd.f -- translated by f2c (version 20090411).
    You must link the resulting object file with libf2c:
-	on Microsoft Windows system, link with libf2c.lib;
-	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
-	or, if you install libf2c.a in a standard place, with -lf2c -lm
-	-- in that order, at the end of the command line, as in
-		cc *.o -lf2c -lm
-	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+        on Microsoft Windows system, link with libf2c.lib;
+        on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+        or, if you install libf2c.a in a standard place, with -lf2c -lm
+        -- in that order, at the end of the command line, as in
+                cc *.o -lf2c -lm
+        Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
 
-		http://www.netlib.org/f2c/libf2c.zip
+                http://www.netlib.org/f2c/libf2c.zip
 */
 
 #ifdef __cplusplus
@@ -23,13 +23,13 @@ static integer c__1 = 1;
 
 /*<    >*/
 /* Subroutine */ int zgghrd_(char *compq, char *compz, integer *n, integer *
-	ilo, integer *ihi, doublecomplex *a, integer *lda, doublecomplex *b, 
-	integer *ldb, doublecomplex *q, integer *ldq, doublecomplex *z__, 
-	integer *ldz, integer *info, ftnlen compq_len, ftnlen compz_len)
+        ilo, integer *ihi, doublecomplex *a, integer *lda, doublecomplex *b,
+        integer *ldb, doublecomplex *q, integer *ldq, doublecomplex *z__,
+        integer *ldz, integer *info, ftnlen compq_len, ftnlen compz_len)
 {
     /* System generated locals */
-    integer a_dim1, a_offset, b_dim1, b_offset, q_dim1, q_offset, z_dim1, 
-	    z_offset, i__1, i__2, i__3;
+    integer a_dim1, a_offset, b_dim1, b_offset, q_dim1, q_offset, z_dim1,
+            z_offset, i__1, i__2, i__3;
     doublecomplex z__1;
 
     /* Builtin functions */
@@ -40,16 +40,16 @@ static integer c__1 = 1;
     doublecomplex s;
     logical ilq, ilz;
     integer jcol, jrow;
-    extern /* Subroutine */ int zrot_(integer *, doublecomplex *, integer *, 
-	    doublecomplex *, integer *, doublereal *, doublecomplex *);
+    extern /* Subroutine */ int zrot_(integer *, doublecomplex *, integer *,
+            doublecomplex *, integer *, doublereal *, doublecomplex *);
     extern logical lsame_(const char *, const char *, ftnlen, ftnlen);
     doublecomplex ctemp;
     extern /* Subroutine */ int xerbla_(char *, integer *, ftnlen);
     integer icompq, icompz;
-    extern /* Subroutine */ int zlaset_(char *, integer *, integer *, 
-	    doublecomplex *, doublecomplex *, doublecomplex *, integer *, 
-	    ftnlen), zlartg_(doublecomplex *, doublecomplex *, doublereal *, 
-	    doublecomplex *, doublecomplex *);
+    extern /* Subroutine */ int zlaset_(char *, integer *, integer *,
+            doublecomplex *, doublecomplex *, doublecomplex *, integer *,
+            ftnlen), zlartg_(doublecomplex *, doublecomplex *, doublereal *,
+            doublecomplex *, doublecomplex *);
 
 
 /*  -- LAPACK routine (version 3.2) -- */
@@ -216,25 +216,25 @@ static integer c__1 = 1;
     /* Function Body */
     if (lsame_(compq, "N", (ftnlen)1, (ftnlen)1)) {
 /*<          ILQ = .FALSE. >*/
-	ilq = FALSE_;
+        ilq = FALSE_;
 /*<          ICOMPQ = 1 >*/
-	icompq = 1;
+        icompq = 1;
 /*<       ELSE IF( LSAME( COMPQ, 'V' ) ) THEN >*/
     } else if (lsame_(compq, "V", (ftnlen)1, (ftnlen)1)) {
 /*<          ILQ = .TRUE. >*/
-	ilq = TRUE_;
+        ilq = TRUE_;
 /*<          ICOMPQ = 2 >*/
-	icompq = 2;
+        icompq = 2;
 /*<       ELSE IF( LSAME( COMPQ, 'I' ) ) THEN >*/
     } else if (lsame_(compq, "I", (ftnlen)1, (ftnlen)1)) {
 /*<          ILQ = .TRUE. >*/
-	ilq = TRUE_;
+        ilq = TRUE_;
 /*<          ICOMPQ = 3 >*/
-	icompq = 3;
+        icompq = 3;
 /*<       ELSE >*/
     } else {
 /*<          ICOMPQ = 0 >*/
-	icompq = 0;
+        icompq = 0;
 /*<       END IF >*/
     }
 
@@ -243,25 +243,25 @@ static integer c__1 = 1;
 /*<       IF( LSAME( COMPZ, 'N' ) ) THEN >*/
     if (lsame_(compz, "N", (ftnlen)1, (ftnlen)1)) {
 /*<          ILZ = .FALSE. >*/
-	ilz = FALSE_;
+        ilz = FALSE_;
 /*<          ICOMPZ = 1 >*/
-	icompz = 1;
+        icompz = 1;
 /*<       ELSE IF( LSAME( COMPZ, 'V' ) ) THEN >*/
     } else if (lsame_(compz, "V", (ftnlen)1, (ftnlen)1)) {
 /*<          ILZ = .TRUE. >*/
-	ilz = TRUE_;
+        ilz = TRUE_;
 /*<          ICOMPZ = 2 >*/
-	icompz = 2;
+        icompz = 2;
 /*<       ELSE IF( LSAME( COMPZ, 'I' ) ) THEN >*/
     } else if (lsame_(compz, "I", (ftnlen)1, (ftnlen)1)) {
 /*<          ILZ = .TRUE. >*/
-	ilz = TRUE_;
+        ilz = TRUE_;
 /*<          ICOMPZ = 3 >*/
-	icompz = 3;
+        icompz = 3;
 /*<       ELSE >*/
     } else {
 /*<          ICOMPZ = 0 >*/
-	icompz = 0;
+        icompz = 0;
 /*<       END IF >*/
     }
 
@@ -272,48 +272,48 @@ static integer c__1 = 1;
 /*<       IF( ICOMPQ.LE.0 ) THEN >*/
     if (icompq <= 0) {
 /*<          INFO = -1 >*/
-	*info = -1;
+        *info = -1;
 /*<       ELSE IF( ICOMPZ.LE.0 ) THEN >*/
     } else if (icompz <= 0) {
 /*<          INFO = -2 >*/
-	*info = -2;
+        *info = -2;
 /*<       ELSE IF( N.LT.0 ) THEN >*/
     } else if (*n < 0) {
 /*<          INFO = -3 >*/
-	*info = -3;
+        *info = -3;
 /*<       ELSE IF( ILO.LT.1 ) THEN >*/
     } else if (*ilo < 1) {
 /*<          INFO = -4 >*/
-	*info = -4;
+        *info = -4;
 /*<       ELSE IF( IHI.GT.N .OR. IHI.LT.ILO-1 ) THEN >*/
     } else if (*ihi > *n || *ihi < *ilo - 1) {
 /*<          INFO = -5 >*/
-	*info = -5;
+        *info = -5;
 /*<       ELSE IF( LDA.LT.MAX( 1, N ) ) THEN >*/
     } else if (*lda < max(1,*n)) {
 /*<          INFO = -7 >*/
-	*info = -7;
+        *info = -7;
 /*<       ELSE IF( LDB.LT.MAX( 1, N ) ) THEN >*/
     } else if (*ldb < max(1,*n)) {
 /*<          INFO = -9 >*/
-	*info = -9;
+        *info = -9;
 /*<       ELSE IF( ( ILQ .AND. LDQ.LT.N ) .OR. LDQ.LT.1 ) THEN >*/
     } else if (ilq && *ldq < *n || *ldq < 1) {
 /*<          INFO = -11 >*/
-	*info = -11;
+        *info = -11;
 /*<       ELSE IF( ( ILZ .AND. LDZ.LT.N ) .OR. LDZ.LT.1 ) THEN >*/
     } else if (ilz && *ldz < *n || *ldz < 1) {
 /*<          INFO = -13 >*/
-	*info = -13;
+        *info = -13;
 /*<       END IF >*/
     }
 /*<       IF( INFO.NE.0 ) THEN >*/
     if (*info != 0) {
 /*<          CALL XERBLA( 'ZGGHRD', -INFO ) >*/
-	i__1 = -(*info);
-	xerbla_("ZGGHRD", &i__1, (ftnlen)6);
+        i__1 = -(*info);
+        xerbla_("ZGGHRD", &i__1, (ftnlen)6);
 /*<          RETURN >*/
-	return 0;
+        return 0;
 /*<       END IF >*/
     }
 
@@ -321,18 +321,18 @@ static integer c__1 = 1;
 
 /*<    >*/
     if (icompq == 3) {
-	zlaset_("Full", n, n, &c_b2, &c_b1, &q[q_offset], ldq, (ftnlen)4);
+        zlaset_("Full", n, n, &c_b2, &c_b1, &q[q_offset], ldq, (ftnlen)4);
     }
 /*<    >*/
     if (icompz == 3) {
-	zlaset_("Full", n, n, &c_b2, &c_b1, &z__[z_offset], ldz, (ftnlen)4);
+        zlaset_("Full", n, n, &c_b2, &c_b1, &z__[z_offset], ldz, (ftnlen)4);
     }
 
 /*     Quick return if possible */
 
 /*<    >*/
     if (*n <= 1) {
-	return 0;
+        return 0;
     }
 
 /*     Zero out lower triangle of B */
@@ -341,14 +341,14 @@ static integer c__1 = 1;
     i__1 = *n - 1;
     for (jcol = 1; jcol <= i__1; ++jcol) {
 /*<          DO 10 JROW = JCOL + 1, N >*/
-	i__2 = *n;
-	for (jrow = jcol + 1; jrow <= i__2; ++jrow) {
+        i__2 = *n;
+        for (jrow = jcol + 1; jrow <= i__2; ++jrow) {
 /*<             B( JROW, JCOL ) = CZERO >*/
-	    i__3 = jrow + jcol * b_dim1;
-	    b[i__3].r = 0., b[i__3].i = 0.;
+            i__3 = jrow + jcol * b_dim1;
+            b[i__3].r = 0., b[i__3].i = 0.;
 /*<    10    CONTINUE >*/
 /* L10: */
-	}
+        }
 /*<    20 CONTINUE >*/
 /* L20: */
     }
@@ -360,61 +360,61 @@ static integer c__1 = 1;
     for (jcol = *ilo; jcol <= i__1; ++jcol) {
 
 /*<          DO 30 JROW = IHI, JCOL + 2, -1 >*/
-	i__2 = jcol + 2;
-	for (jrow = *ihi; jrow >= i__2; --jrow) {
+        i__2 = jcol + 2;
+        for (jrow = *ihi; jrow >= i__2; --jrow) {
 
 /*           Step 1: rotate rows JROW-1, JROW to kill A(JROW,JCOL) */
 
 /*<             CTEMP = A( JROW-1, JCOL ) >*/
-	    i__3 = jrow - 1 + jcol * a_dim1;
-	    ctemp.r = a[i__3].r, ctemp.i = a[i__3].i;
+            i__3 = jrow - 1 + jcol * a_dim1;
+            ctemp.r = a[i__3].r, ctemp.i = a[i__3].i;
 /*<    >*/
-	    zlartg_(&ctemp, &a[jrow + jcol * a_dim1], &c__, &s, &a[jrow - 1 + 
-		    jcol * a_dim1]);
+            zlartg_(&ctemp, &a[jrow + jcol * a_dim1], &c__, &s, &a[jrow - 1 +
+                    jcol * a_dim1]);
 /*<             A( JROW, JCOL ) = CZERO >*/
-	    i__3 = jrow + jcol * a_dim1;
-	    a[i__3].r = 0., a[i__3].i = 0.;
+            i__3 = jrow + jcol * a_dim1;
+            a[i__3].r = 0., a[i__3].i = 0.;
 /*<    >*/
-	    i__3 = *n - jcol;
-	    zrot_(&i__3, &a[jrow - 1 + (jcol + 1) * a_dim1], lda, &a[jrow + (
-		    jcol + 1) * a_dim1], lda, &c__, &s);
+            i__3 = *n - jcol;
+            zrot_(&i__3, &a[jrow - 1 + (jcol + 1) * a_dim1], lda, &a[jrow + (
+                    jcol + 1) * a_dim1], lda, &c__, &s);
 /*<    >*/
-	    i__3 = *n + 2 - jrow;
-	    zrot_(&i__3, &b[jrow - 1 + (jrow - 1) * b_dim1], ldb, &b[jrow + (
-		    jrow - 1) * b_dim1], ldb, &c__, &s);
+            i__3 = *n + 2 - jrow;
+            zrot_(&i__3, &b[jrow - 1 + (jrow - 1) * b_dim1], ldb, &b[jrow + (
+                    jrow - 1) * b_dim1], ldb, &c__, &s);
 /*<    >*/
-	    if (ilq) {
-		d_cnjg(&z__1, &s);
-		zrot_(n, &q[(jrow - 1) * q_dim1 + 1], &c__1, &q[jrow * q_dim1 
-			+ 1], &c__1, &c__, &z__1);
-	    }
+            if (ilq) {
+                d_cnjg(&z__1, &s);
+                zrot_(n, &q[(jrow - 1) * q_dim1 + 1], &c__1, &q[jrow * q_dim1
+                        + 1], &c__1, &c__, &z__1);
+            }
 
 /*           Step 2: rotate columns JROW, JROW-1 to kill B(JROW,JROW-1) */
 
 /*<             CTEMP = B( JROW, JROW ) >*/
-	    i__3 = jrow + jrow * b_dim1;
-	    ctemp.r = b[i__3].r, ctemp.i = b[i__3].i;
+            i__3 = jrow + jrow * b_dim1;
+            ctemp.r = b[i__3].r, ctemp.i = b[i__3].i;
 /*<    >*/
-	    zlartg_(&ctemp, &b[jrow + (jrow - 1) * b_dim1], &c__, &s, &b[jrow 
-		    + jrow * b_dim1]);
+            zlartg_(&ctemp, &b[jrow + (jrow - 1) * b_dim1], &c__, &s, &b[jrow
+                    + jrow * b_dim1]);
 /*<             B( JROW, JROW-1 ) = CZERO >*/
-	    i__3 = jrow + (jrow - 1) * b_dim1;
-	    b[i__3].r = 0., b[i__3].i = 0.;
+            i__3 = jrow + (jrow - 1) * b_dim1;
+            b[i__3].r = 0., b[i__3].i = 0.;
 /*<             CALL ZROT( IHI, A( 1, JROW ), 1, A( 1, JROW-1 ), 1, C, S ) >*/
-	    zrot_(ihi, &a[jrow * a_dim1 + 1], &c__1, &a[(jrow - 1) * a_dim1 + 
-		    1], &c__1, &c__, &s);
+            zrot_(ihi, &a[jrow * a_dim1 + 1], &c__1, &a[(jrow - 1) * a_dim1 +
+                    1], &c__1, &c__, &s);
 /*<    >*/
-	    i__3 = jrow - 1;
-	    zrot_(&i__3, &b[jrow * b_dim1 + 1], &c__1, &b[(jrow - 1) * b_dim1 
-		    + 1], &c__1, &c__, &s);
+            i__3 = jrow - 1;
+            zrot_(&i__3, &b[jrow * b_dim1 + 1], &c__1, &b[(jrow - 1) * b_dim1
+                    + 1], &c__1, &c__, &s);
 /*<    >*/
-	    if (ilz) {
-		zrot_(n, &z__[jrow * z_dim1 + 1], &c__1, &z__[(jrow - 1) * 
-			z_dim1 + 1], &c__1, &c__, &s);
-	    }
+            if (ilz) {
+                zrot_(n, &z__[jrow * z_dim1 + 1], &c__1, &z__[(jrow - 1) *
+                        z_dim1 + 1], &c__1, &c__, &s);
+            }
 /*<    30    CONTINUE >*/
 /* L30: */
-	}
+        }
 /*<    40 CONTINUE >*/
 /* L40: */
     }
@@ -428,5 +428,5 @@ static integer c__1 = 1;
 } /* zgghrd_ */
 
 #ifdef __cplusplus
-	}
+        }
 #endif

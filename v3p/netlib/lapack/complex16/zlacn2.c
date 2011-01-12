@@ -1,13 +1,13 @@
 /* lapack/complex16/zlacn2.f -- translated by f2c (version 20090411).
    You must link the resulting object file with libf2c:
-	on Microsoft Windows system, link with libf2c.lib;
-	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
-	or, if you install libf2c.a in a standard place, with -lf2c -lm
-	-- in that order, at the end of the command line, as in
-		cc *.o -lf2c -lm
-	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+        on Microsoft Windows system, link with libf2c.lib;
+        on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+        or, if you install libf2c.a in a standard place, with -lf2c -lm
+        -- in that order, at the end of the command line, as in
+                cc *.o -lf2c -lm
+        Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
 
-		http://www.netlib.org/f2c/libf2c.zip
+                http://www.netlib.org/f2c/libf2c.zip
 */
 
 #ifdef __cplusplus
@@ -20,8 +20,8 @@ extern "C" {
 static integer c__1 = 1;
 
 /*<       SUBROUTINE ZLACN2( N, V, X, EST, KASE, ISAVE ) >*/
-/* Subroutine */ int zlacn2_(integer *n, doublecomplex *v, doublecomplex *x, 
-	doublereal *est, integer *kase, integer *isave)
+/* Subroutine */ int zlacn2_(integer *n, doublecomplex *v, doublecomplex *x,
+        doublereal *est, integer *kase, integer *isave)
 {
     /* System generated locals */
     integer i__1, i__2, i__3;
@@ -35,11 +35,11 @@ static integer c__1 = 1;
     integer i__;
     doublereal temp, absxi;
     integer jlast;
-    extern /* Subroutine */ int zcopy_(integer *, doublecomplex *, integer *, 
-	    doublecomplex *, integer *);
+    extern /* Subroutine */ int zcopy_(integer *, doublecomplex *, integer *,
+            doublecomplex *, integer *);
     extern integer izmax1_(integer *, doublecomplex *, integer *);
     extern doublereal dzsum1_(integer *, doublecomplex *, integer *), dlamch_(
-	    char *, ftnlen);
+            char *, ftnlen);
     doublereal safmin, altsgn, estold;
 
 
@@ -152,32 +152,32 @@ static integer c__1 = 1;
 /*<       IF( KASE.EQ.0 ) THEN >*/
     if (*kase == 0) {
 /*<          DO 10 I = 1, N >*/
-	i__1 = *n;
-	for (i__ = 1; i__ <= i__1; ++i__) {
+        i__1 = *n;
+        for (i__ = 1; i__ <= i__1; ++i__) {
 /*<             X( I ) = DCMPLX( ONE / DBLE( N ) ) >*/
-	    i__2 = i__;
-	    d__1 = 1. / (doublereal) (*n);
-	    z__1.r = d__1, z__1.i = 0.;
-	    x[i__2].r = z__1.r, x[i__2].i = z__1.i;
+            i__2 = i__;
+            d__1 = 1. / (doublereal) (*n);
+            z__1.r = d__1, z__1.i = 0.;
+            x[i__2].r = z__1.r, x[i__2].i = z__1.i;
 /*<    10    CONTINUE >*/
 /* L10: */
-	}
+        }
 /*<          KASE = 1 >*/
-	*kase = 1;
+        *kase = 1;
 /*<          ISAVE( 1 ) = 1 >*/
-	isave[1] = 1;
+        isave[1] = 1;
 /*<          RETURN >*/
-	return 0;
+        return 0;
 /*<       END IF >*/
     }
 
 /*<       GO TO ( 20, 40, 70, 90, 120 )ISAVE( 1 ) >*/
     switch (isave[1]) {
-	case 1:  goto L20;
-	case 2:  goto L40;
-	case 3:  goto L70;
-	case 4:  goto L90;
-	case 5:  goto L120;
+        case 1:  goto L20;
+        case 2:  goto L40;
+        case 3:  goto L70;
+        case 4:  goto L90;
+        case 5:  goto L120;
     }
 
 /*     ................ ENTRY   (ISAVE( 1 ) = 1) */
@@ -188,12 +188,12 @@ L20:
 /*<       IF( N.EQ.1 ) THEN >*/
     if (*n == 1) {
 /*<          V( 1 ) = X( 1 ) >*/
-	v[1].r = x[1].r, v[1].i = x[1].i;
+        v[1].r = x[1].r, v[1].i = x[1].i;
 /*<          EST = ABS( V( 1 ) ) >*/
-	*est = z_abs(&v[1]);
+        *est = z_abs(&v[1]);
 /*        ... QUIT */
 /*<          GO TO 130 >*/
-	goto L130;
+        goto L130;
 /*<       END IF >*/
     }
 /*<       EST = DZSUM1( N, X, 1 ) >*/
@@ -203,23 +203,23 @@ L20:
     i__1 = *n;
     for (i__ = 1; i__ <= i__1; ++i__) {
 /*<          ABSXI = ABS( X( I ) ) >*/
-	absxi = z_abs(&x[i__]);
+        absxi = z_abs(&x[i__]);
 /*<          IF( ABSXI.GT.SAFMIN ) THEN >*/
-	if (absxi > safmin) {
+        if (absxi > safmin) {
 /*<    >*/
-	    i__2 = i__;
-	    i__3 = i__;
-	    d__1 = x[i__3].r / absxi;
-	    d__2 = d_imag(&x[i__]) / absxi;
-	    z__1.r = d__1, z__1.i = d__2;
-	    x[i__2].r = z__1.r, x[i__2].i = z__1.i;
+            i__2 = i__;
+            i__3 = i__;
+            d__1 = x[i__3].r / absxi;
+            d__2 = d_imag(&x[i__]) / absxi;
+            z__1.r = d__1, z__1.i = d__2;
+            x[i__2].r = z__1.r, x[i__2].i = z__1.i;
 /*<          ELSE >*/
-	} else {
+        } else {
 /*<             X( I ) = CONE >*/
-	    i__2 = i__;
-	    x[i__2].r = 1., x[i__2].i = 0.;
+            i__2 = i__;
+            x[i__2].r = 1., x[i__2].i = 0.;
 /*<          END IF >*/
-	}
+        }
 /*<    30 CONTINUE >*/
 /* L30: */
     }
@@ -248,8 +248,8 @@ L50:
     i__1 = *n;
     for (i__ = 1; i__ <= i__1; ++i__) {
 /*<          X( I ) = CZERO >*/
-	i__2 = i__;
-	x[i__2].r = 0., x[i__2].i = 0.;
+        i__2 = i__;
+        x[i__2].r = 0., x[i__2].i = 0.;
 /*<    60 CONTINUE >*/
 /* L60: */
     }
@@ -278,30 +278,30 @@ L70:
 /*     TEST FOR CYCLING. */
 /*<    >*/
     if (*est <= estold) {
-	goto L100;
+        goto L100;
     }
 
 /*<       DO 80 I = 1, N >*/
     i__1 = *n;
     for (i__ = 1; i__ <= i__1; ++i__) {
 /*<          ABSXI = ABS( X( I ) ) >*/
-	absxi = z_abs(&x[i__]);
+        absxi = z_abs(&x[i__]);
 /*<          IF( ABSXI.GT.SAFMIN ) THEN >*/
-	if (absxi > safmin) {
+        if (absxi > safmin) {
 /*<    >*/
-	    i__2 = i__;
-	    i__3 = i__;
-	    d__1 = x[i__3].r / absxi;
-	    d__2 = d_imag(&x[i__]) / absxi;
-	    z__1.r = d__1, z__1.i = d__2;
-	    x[i__2].r = z__1.r, x[i__2].i = z__1.i;
+            i__2 = i__;
+            i__3 = i__;
+            d__1 = x[i__3].r / absxi;
+            d__2 = d_imag(&x[i__]) / absxi;
+            z__1.r = d__1, z__1.i = d__2;
+            x[i__2].r = z__1.r, x[i__2].i = z__1.i;
 /*<          ELSE >*/
-	} else {
+        } else {
 /*<             X( I ) = CONE >*/
-	    i__2 = i__;
-	    x[i__2].r = 1., x[i__2].i = 0.;
+            i__2 = i__;
+            x[i__2].r = 1., x[i__2].i = 0.;
 /*<          END IF >*/
-	}
+        }
 /*<    80 CONTINUE >*/
 /* L80: */
     }
@@ -324,9 +324,9 @@ L90:
 /*<    >*/
     if (z_abs(&x[jlast]) != z_abs(&x[isave[2]]) && isave[3] < 5) {
 /*<          ISAVE( 3 ) = ISAVE( 3 ) + 1 >*/
-	++isave[3];
+        ++isave[3];
 /*<          GO TO 50 >*/
-	goto L50;
+        goto L50;
 /*<       END IF >*/
     }
 
@@ -340,12 +340,12 @@ L100:
     i__1 = *n;
     for (i__ = 1; i__ <= i__1; ++i__) {
 /*<          X( I ) = DCMPLX( ALTSGN*( ONE+DBLE( I-1 ) / DBLE( N-1 ) ) ) >*/
-	i__2 = i__;
-	d__1 = altsgn * ((doublereal) (i__ - 1) / (doublereal) (*n - 1) + 1.);
-	z__1.r = d__1, z__1.i = 0.;
-	x[i__2].r = z__1.r, x[i__2].i = z__1.i;
+        i__2 = i__;
+        d__1 = altsgn * ((doublereal) (i__ - 1) / (doublereal) (*n - 1) + 1.);
+        z__1.r = d__1, z__1.i = 0.;
+        x[i__2].r = z__1.r, x[i__2].i = z__1.i;
 /*<          ALTSGN = -ALTSGN >*/
-	altsgn = -altsgn;
+        altsgn = -altsgn;
 /*<   110 CONTINUE >*/
 /* L110: */
     }
@@ -366,9 +366,9 @@ L120:
 /*<       IF( TEMP.GT.EST ) THEN >*/
     if (temp > *est) {
 /*<          CALL ZCOPY( N, X, 1, V, 1 ) >*/
-	zcopy_(n, &x[1], &c__1, &v[1], &c__1);
+        zcopy_(n, &x[1], &c__1, &v[1], &c__1);
 /*<          EST = TEMP >*/
-	*est = temp;
+        *est = temp;
 /*<       END IF >*/
     }
 
@@ -385,5 +385,5 @@ L130:
 } /* zlacn2_ */
 
 #ifdef __cplusplus
-	}
+        }
 #endif

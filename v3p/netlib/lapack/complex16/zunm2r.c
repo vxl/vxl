@@ -1,13 +1,13 @@
 /* lapack/complex16/zunm2r.f -- translated by f2c (version 20090411).
    You must link the resulting object file with libf2c:
-	on Microsoft Windows system, link with libf2c.lib;
-	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
-	or, if you install libf2c.a in a standard place, with -lf2c -lm
-	-- in that order, at the end of the command line, as in
-		cc *.o -lf2c -lm
-	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+        on Microsoft Windows system, link with libf2c.lib;
+        on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+        or, if you install libf2c.a in a standard place, with -lf2c -lm
+        -- in that order, at the end of the command line, as in
+                cc *.o -lf2c -lm
+        Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
 
-		http://www.netlib.org/f2c/libf2c.zip
+                http://www.netlib.org/f2c/libf2c.zip
 */
 
 #ifdef __cplusplus
@@ -20,10 +20,10 @@ extern "C" {
 static integer c__1 = 1;
 
 /*<    >*/
-/* Subroutine */ int zunm2r_(char *side, char *trans, integer *m, integer *n, 
-	integer *k, doublecomplex *a, integer *lda, doublecomplex *tau, 
-	doublecomplex *c__, integer *ldc, doublecomplex *work, integer *info, 
-	ftnlen side_len, ftnlen trans_len)
+/* Subroutine */ int zunm2r_(char *side, char *trans, integer *m, integer *n,
+        integer *k, doublecomplex *a, integer *lda, doublecomplex *tau,
+        doublecomplex *c__, integer *ldc, doublecomplex *work, integer *info,
+        ftnlen side_len, ftnlen trans_len)
 {
     /* System generated locals */
     integer a_dim1, a_offset, c_dim1, c_offset, i__1, i__2, i__3;
@@ -38,10 +38,10 @@ static integer c__1 = 1;
     logical left;
     doublecomplex taui;
     extern logical lsame_(const char *, const char *, ftnlen, ftnlen);
-    extern /* Subroutine */ int zlarf_(char *, integer *, integer *, 
-	    doublecomplex *, integer *, doublecomplex *, doublecomplex *, 
-	    integer *, doublecomplex *, ftnlen), xerbla_(char *, integer *, 
-	    ftnlen);
+    extern /* Subroutine */ int zlarf_(char *, integer *, integer *,
+            doublecomplex *, integer *, doublecomplex *, doublecomplex *,
+            integer *, doublecomplex *, ftnlen), xerbla_(char *, integer *,
+            ftnlen);
     logical notran;
 
 
@@ -180,50 +180,50 @@ static integer c__1 = 1;
 /*<       IF( LEFT ) THEN >*/
     if (left) {
 /*<          NQ = M >*/
-	nq = *m;
+        nq = *m;
 /*<       ELSE >*/
     } else {
 /*<          NQ = N >*/
-	nq = *n;
+        nq = *n;
 /*<       END IF >*/
     }
 /*<       IF( .NOT.LEFT .AND. .NOT.LSAME( SIDE, 'R' ) ) THEN >*/
     if (! left && ! lsame_(side, "R", (ftnlen)1, (ftnlen)1)) {
 /*<          INFO = -1 >*/
-	*info = -1;
+        *info = -1;
 /*<       ELSE IF( .NOT.NOTRAN .AND. .NOT.LSAME( TRANS, 'C' ) ) THEN >*/
     } else if (! notran && ! lsame_(trans, "C", (ftnlen)1, (ftnlen)1)) {
 /*<          INFO = -2 >*/
-	*info = -2;
+        *info = -2;
 /*<       ELSE IF( M.LT.0 ) THEN >*/
     } else if (*m < 0) {
 /*<          INFO = -3 >*/
-	*info = -3;
+        *info = -3;
 /*<       ELSE IF( N.LT.0 ) THEN >*/
     } else if (*n < 0) {
 /*<          INFO = -4 >*/
-	*info = -4;
+        *info = -4;
 /*<       ELSE IF( K.LT.0 .OR. K.GT.NQ ) THEN >*/
     } else if (*k < 0 || *k > nq) {
 /*<          INFO = -5 >*/
-	*info = -5;
+        *info = -5;
 /*<       ELSE IF( LDA.LT.MAX( 1, NQ ) ) THEN >*/
     } else if (*lda < max(1,nq)) {
 /*<          INFO = -7 >*/
-	*info = -7;
+        *info = -7;
 /*<       ELSE IF( LDC.LT.MAX( 1, M ) ) THEN >*/
     } else if (*ldc < max(1,*m)) {
 /*<          INFO = -10 >*/
-	*info = -10;
+        *info = -10;
 /*<       END IF >*/
     }
 /*<       IF( INFO.NE.0 ) THEN >*/
     if (*info != 0) {
 /*<          CALL XERBLA( 'ZUNM2R', -INFO ) >*/
-	i__1 = -(*info);
-	xerbla_("ZUNM2R", &i__1, (ftnlen)6);
+        i__1 = -(*info);
+        xerbla_("ZUNM2R", &i__1, (ftnlen)6);
 /*<          RETURN >*/
-	return 0;
+        return 0;
 /*<       END IF >*/
     }
 
@@ -231,40 +231,40 @@ static integer c__1 = 1;
 
 /*<    >*/
     if (*m == 0 || *n == 0 || *k == 0) {
-	return 0;
+        return 0;
     }
 
 /*<       IF( ( LEFT .AND. .NOT.NOTRAN .OR. .NOT.LEFT .AND. NOTRAN ) ) THEN >*/
     if (left && ! notran || ! left && notran) {
 /*<          I1 = 1 >*/
-	i1 = 1;
+        i1 = 1;
 /*<          I2 = K >*/
-	i2 = *k;
+        i2 = *k;
 /*<          I3 = 1 >*/
-	i3 = 1;
+        i3 = 1;
 /*<       ELSE >*/
     } else {
 /*<          I1 = K >*/
-	i1 = *k;
+        i1 = *k;
 /*<          I2 = 1 >*/
-	i2 = 1;
+        i2 = 1;
 /*<          I3 = -1 >*/
-	i3 = -1;
+        i3 = -1;
 /*<       END IF >*/
     }
 
 /*<       IF( LEFT ) THEN >*/
     if (left) {
 /*<          NI = N >*/
-	ni = *n;
+        ni = *n;
 /*<          JC = 1 >*/
-	jc = 1;
+        jc = 1;
 /*<       ELSE >*/
     } else {
 /*<          MI = M >*/
-	mi = *m;
+        mi = *m;
 /*<          IC = 1 >*/
-	ic = 1;
+        ic = 1;
 /*<       END IF >*/
     }
 
@@ -273,52 +273,52 @@ static integer c__1 = 1;
     i__2 = i3;
     for (i__ = i1; i__2 < 0 ? i__ >= i__1 : i__ <= i__1; i__ += i__2) {
 /*<          IF( LEFT ) THEN >*/
-	if (left) {
+        if (left) {
 
 /*           H(i) or H(i)' is applied to C(i:m,1:n) */
 
 /*<             MI = M - I + 1 >*/
-	    mi = *m - i__ + 1;
+            mi = *m - i__ + 1;
 /*<             IC = I >*/
-	    ic = i__;
+            ic = i__;
 /*<          ELSE >*/
-	} else {
+        } else {
 
 /*           H(i) or H(i)' is applied to C(1:m,i:n) */
 
 /*<             NI = N - I + 1 >*/
-	    ni = *n - i__ + 1;
+            ni = *n - i__ + 1;
 /*<             JC = I >*/
-	    jc = i__;
+            jc = i__;
 /*<          END IF >*/
-	}
+        }
 
 /*        Apply H(i) or H(i)' */
 
 /*<          IF( NOTRAN ) THEN >*/
-	if (notran) {
+        if (notran) {
 /*<             TAUI = TAU( I ) >*/
-	    i__3 = i__;
-	    taui.r = tau[i__3].r, taui.i = tau[i__3].i;
+            i__3 = i__;
+            taui.r = tau[i__3].r, taui.i = tau[i__3].i;
 /*<          ELSE >*/
-	} else {
+        } else {
 /*<             TAUI = DCONJG( TAU( I ) ) >*/
-	    d_cnjg(&z__1, &tau[i__]);
-	    taui.r = z__1.r, taui.i = z__1.i;
+            d_cnjg(&z__1, &tau[i__]);
+            taui.r = z__1.r, taui.i = z__1.i;
 /*<          END IF >*/
-	}
+        }
 /*<          AII = A( I, I ) >*/
-	i__3 = i__ + i__ * a_dim1;
-	aii.r = a[i__3].r, aii.i = a[i__3].i;
+        i__3 = i__ + i__ * a_dim1;
+        aii.r = a[i__3].r, aii.i = a[i__3].i;
 /*<          A( I, I ) = ONE >*/
-	i__3 = i__ + i__ * a_dim1;
-	a[i__3].r = 1., a[i__3].i = 0.;
+        i__3 = i__ + i__ * a_dim1;
+        a[i__3].r = 1., a[i__3].i = 0.;
 /*<    >*/
-	zlarf_(side, &mi, &ni, &a[i__ + i__ * a_dim1], &c__1, &taui, &c__[ic 
-		+ jc * c_dim1], ldc, &work[1], (ftnlen)1);
+        zlarf_(side, &mi, &ni, &a[i__ + i__ * a_dim1], &c__1, &taui, &c__[ic
+                + jc * c_dim1], ldc, &work[1], (ftnlen)1);
 /*<          A( I, I ) = AII >*/
-	i__3 = i__ + i__ * a_dim1;
-	a[i__3].r = aii.r, a[i__3].i = aii.i;
+        i__3 = i__ + i__ * a_dim1;
+        a[i__3].r = aii.r, a[i__3].i = aii.i;
 /*<    10 CONTINUE >*/
 /* L10: */
     }
@@ -331,5 +331,5 @@ static integer c__1 = 1;
 } /* zunm2r_ */
 
 #ifdef __cplusplus
-	}
+        }
 #endif

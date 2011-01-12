@@ -1,13 +1,13 @@
 /* lapack/complex16/zhgeqz.f -- translated by f2c (version 20090411).
    You must link the resulting object file with libf2c:
-	on Microsoft Windows system, link with libf2c.lib;
-	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
-	or, if you install libf2c.a in a standard place, with -lf2c -lm
-	-- in that order, at the end of the command line, as in
-		cc *.o -lf2c -lm
-	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+        on Microsoft Windows system, link with libf2c.lib;
+        on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+        or, if you install libf2c.a in a standard place, with -lf2c -lm
+        -- in that order, at the end of the command line, as in
+                cc *.o -lf2c -lm
+        Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
 
-		http://www.netlib.org/f2c/libf2c.zip
+                http://www.netlib.org/f2c/libf2c.zip
 */
 
 #ifdef __cplusplus
@@ -23,16 +23,16 @@ static integer c__1 = 1;
 static integer c__2 = 2;
 
 /*<    >*/
-/* Subroutine */ int zhgeqz_(char *job, char *compq, char *compz, integer *n, 
-	integer *ilo, integer *ihi, doublecomplex *h__, integer *ldh, 
-	doublecomplex *t, integer *ldt, doublecomplex *alpha, doublecomplex *
-	beta, doublecomplex *q, integer *ldq, doublecomplex *z__, integer *
-	ldz, doublecomplex *work, integer *lwork, doublereal *rwork, integer *
-	info, ftnlen job_len, ftnlen compq_len, ftnlen compz_len)
+/* Subroutine */ int zhgeqz_(char *job, char *compq, char *compz, integer *n,
+        integer *ilo, integer *ihi, doublecomplex *h__, integer *ldh,
+        doublecomplex *t, integer *ldt, doublecomplex *alpha, doublecomplex *
+        beta, doublecomplex *q, integer *ldq, doublecomplex *z__, integer *
+        ldz, doublecomplex *work, integer *lwork, doublereal *rwork, integer *
+        info, ftnlen job_len, ftnlen compq_len, ftnlen compz_len)
 {
     /* System generated locals */
-    integer h_dim1, h_offset, q_dim1, q_offset, t_dim1, t_offset, z_dim1, 
-	    z_offset, i__1, i__2, i__3, i__4, i__5, i__6;
+    integer h_dim1, h_offset, q_dim1, q_offset, t_dim1, t_offset, z_dim1,
+            z_offset, i__1, i__2, i__3, i__4, i__5, i__6;
     doublereal d__1, d__2, d__3, d__4, d__5, d__6;
     doublecomplex z__1, z__2, z__3, z__4, z__5, z__6;
 
@@ -41,8 +41,8 @@ static integer c__2 = 2;
     void d_cnjg(doublecomplex *, doublecomplex *);
     double d_imag(doublecomplex *);
     void z_div(doublecomplex *, doublecomplex *, doublecomplex *), pow_zi(
-	    doublecomplex *, doublecomplex *, integer *), z_sqrt(
-	    doublecomplex *, doublecomplex *);
+            doublecomplex *, doublecomplex *, integer *), z_sqrt(
+            doublecomplex *, doublecomplex *);
 
     /* Local variables */
     doublereal c__;
@@ -57,8 +57,8 @@ static integer c__2 = 2;
     doublereal ulp;
     doublecomplex abi22;
     doublereal absb, atol, btol, temp;
-    extern /* Subroutine */ int zrot_(integer *, doublecomplex *, integer *, 
-	    doublecomplex *, integer *, doublereal *, doublecomplex *);
+    extern /* Subroutine */ int zrot_(integer *, doublecomplex *, integer *,
+            doublecomplex *, integer *, doublereal *, doublecomplex *);
     doublereal temp2;
     extern logical lsame_(const char *, const char *, ftnlen, ftnlen);
     doublecomplex ctemp;
@@ -66,8 +66,8 @@ static integer c__2 = 2;
     doublereal anorm, bnorm;
     integer maxit;
     doublecomplex shift;
-    extern /* Subroutine */ int zscal_(integer *, doublecomplex *, 
-	    doublecomplex *, integer *);
+    extern /* Subroutine */ int zscal_(integer *, doublecomplex *,
+            doublecomplex *, integer *);
     doublereal tempr;
     doublecomplex ctemp2, ctemp3;
     logical ilazr2;
@@ -81,16 +81,16 @@ static integer c__2 = 2;
     integer icompq, ilastm;
     doublecomplex rtdisc;
     integer ischur;
-    extern doublereal zlanhs_(char *, integer *, doublecomplex *, integer *, 
-	    doublereal *, ftnlen);
+    extern doublereal zlanhs_(char *, integer *, doublecomplex *, integer *,
+            doublereal *, ftnlen);
     logical ilazro;
     integer icompz, ifirst;
-    extern /* Subroutine */ int zlartg_(doublecomplex *, doublecomplex *, 
-	    doublereal *, doublecomplex *, doublecomplex *);
+    extern /* Subroutine */ int zlartg_(doublecomplex *, doublecomplex *,
+            doublereal *, doublecomplex *, doublecomplex *);
     integer ifrstm;
-    extern /* Subroutine */ int zlaset_(char *, integer *, integer *, 
-	    doublecomplex *, doublecomplex *, doublecomplex *, integer *, 
-	    ftnlen);
+    extern /* Subroutine */ int zlaset_(char *, integer *, integer *,
+            doublecomplex *, doublecomplex *, doublecomplex *, integer *,
+            ftnlen);
     integer istart;
     logical lquery;
 
@@ -334,69 +334,69 @@ static integer c__2 = 2;
     /* Function Body */
     if (lsame_(job, "E", (ftnlen)1, (ftnlen)1)) {
 /*<          ILSCHR = .FALSE. >*/
-	ilschr = FALSE_;
+        ilschr = FALSE_;
 /*<          ISCHUR = 1 >*/
-	ischur = 1;
+        ischur = 1;
 /*<       ELSE IF( LSAME( JOB, 'S' ) ) THEN >*/
     } else if (lsame_(job, "S", (ftnlen)1, (ftnlen)1)) {
 /*<          ILSCHR = .TRUE. >*/
-	ilschr = TRUE_;
+        ilschr = TRUE_;
 /*<          ISCHUR = 2 >*/
-	ischur = 2;
+        ischur = 2;
 /*<       ELSE >*/
     } else {
 /*<          ISCHUR = 0 >*/
-	ischur = 0;
+        ischur = 0;
 /*<       END IF >*/
     }
 
 /*<       IF( LSAME( COMPQ, 'N' ) ) THEN >*/
     if (lsame_(compq, "N", (ftnlen)1, (ftnlen)1)) {
 /*<          ILQ = .FALSE. >*/
-	ilq = FALSE_;
+        ilq = FALSE_;
 /*<          ICOMPQ = 1 >*/
-	icompq = 1;
+        icompq = 1;
 /*<       ELSE IF( LSAME( COMPQ, 'V' ) ) THEN >*/
     } else if (lsame_(compq, "V", (ftnlen)1, (ftnlen)1)) {
 /*<          ILQ = .TRUE. >*/
-	ilq = TRUE_;
+        ilq = TRUE_;
 /*<          ICOMPQ = 2 >*/
-	icompq = 2;
+        icompq = 2;
 /*<       ELSE IF( LSAME( COMPQ, 'I' ) ) THEN >*/
     } else if (lsame_(compq, "I", (ftnlen)1, (ftnlen)1)) {
 /*<          ILQ = .TRUE. >*/
-	ilq = TRUE_;
+        ilq = TRUE_;
 /*<          ICOMPQ = 3 >*/
-	icompq = 3;
+        icompq = 3;
 /*<       ELSE >*/
     } else {
 /*<          ICOMPQ = 0 >*/
-	icompq = 0;
+        icompq = 0;
 /*<       END IF >*/
     }
 
 /*<       IF( LSAME( COMPZ, 'N' ) ) THEN >*/
     if (lsame_(compz, "N", (ftnlen)1, (ftnlen)1)) {
 /*<          ILZ = .FALSE. >*/
-	ilz = FALSE_;
+        ilz = FALSE_;
 /*<          ICOMPZ = 1 >*/
-	icompz = 1;
+        icompz = 1;
 /*<       ELSE IF( LSAME( COMPZ, 'V' ) ) THEN >*/
     } else if (lsame_(compz, "V", (ftnlen)1, (ftnlen)1)) {
 /*<          ILZ = .TRUE. >*/
-	ilz = TRUE_;
+        ilz = TRUE_;
 /*<          ICOMPZ = 2 >*/
-	icompz = 2;
+        icompz = 2;
 /*<       ELSE IF( LSAME( COMPZ, 'I' ) ) THEN >*/
     } else if (lsame_(compz, "I", (ftnlen)1, (ftnlen)1)) {
 /*<          ILZ = .TRUE. >*/
-	ilz = TRUE_;
+        ilz = TRUE_;
 /*<          ICOMPZ = 3 >*/
-	icompz = 3;
+        icompz = 3;
 /*<       ELSE >*/
     } else {
 /*<          ICOMPZ = 0 >*/
-	icompz = 0;
+        icompz = 0;
 /*<       END IF >*/
     }
 
@@ -412,60 +412,60 @@ static integer c__2 = 2;
 /*<       IF( ISCHUR.EQ.0 ) THEN >*/
     if (ischur == 0) {
 /*<          INFO = -1 >*/
-	*info = -1;
+        *info = -1;
 /*<       ELSE IF( ICOMPQ.EQ.0 ) THEN >*/
     } else if (icompq == 0) {
 /*<          INFO = -2 >*/
-	*info = -2;
+        *info = -2;
 /*<       ELSE IF( ICOMPZ.EQ.0 ) THEN >*/
     } else if (icompz == 0) {
 /*<          INFO = -3 >*/
-	*info = -3;
+        *info = -3;
 /*<       ELSE IF( N.LT.0 ) THEN >*/
     } else if (*n < 0) {
 /*<          INFO = -4 >*/
-	*info = -4;
+        *info = -4;
 /*<       ELSE IF( ILO.LT.1 ) THEN >*/
     } else if (*ilo < 1) {
 /*<          INFO = -5 >*/
-	*info = -5;
+        *info = -5;
 /*<       ELSE IF( IHI.GT.N .OR. IHI.LT.ILO-1 ) THEN >*/
     } else if (*ihi > *n || *ihi < *ilo - 1) {
 /*<          INFO = -6 >*/
-	*info = -6;
+        *info = -6;
 /*<       ELSE IF( LDH.LT.N ) THEN >*/
     } else if (*ldh < *n) {
 /*<          INFO = -8 >*/
-	*info = -8;
+        *info = -8;
 /*<       ELSE IF( LDT.LT.N ) THEN >*/
     } else if (*ldt < *n) {
 /*<          INFO = -10 >*/
-	*info = -10;
+        *info = -10;
 /*<       ELSE IF( LDQ.LT.1 .OR. ( ILQ .AND. LDQ.LT.N ) ) THEN >*/
     } else if (*ldq < 1 || ilq && *ldq < *n) {
 /*<          INFO = -14 >*/
-	*info = -14;
+        *info = -14;
 /*<       ELSE IF( LDZ.LT.1 .OR. ( ILZ .AND. LDZ.LT.N ) ) THEN >*/
     } else if (*ldz < 1 || ilz && *ldz < *n) {
 /*<          INFO = -16 >*/
-	*info = -16;
+        *info = -16;
 /*<       ELSE IF( LWORK.LT.MAX( 1, N ) .AND. .NOT.LQUERY ) THEN >*/
     } else if (*lwork < max(1,*n) && ! lquery) {
 /*<          INFO = -18 >*/
-	*info = -18;
+        *info = -18;
 /*<       END IF >*/
     }
 /*<       IF( INFO.NE.0 ) THEN >*/
     if (*info != 0) {
 /*<          CALL XERBLA( 'ZHGEQZ', -INFO ) >*/
-	i__1 = -(*info);
-	xerbla_("ZHGEQZ", &i__1, (ftnlen)6);
+        i__1 = -(*info);
+        xerbla_("ZHGEQZ", &i__1, (ftnlen)6);
 /*<          RETURN >*/
-	return 0;
+        return 0;
 /*<       ELSE IF( LQUERY ) THEN >*/
     } else if (lquery) {
 /*<          RETURN >*/
-	return 0;
+        return 0;
 /*<       END IF >*/
     }
 
@@ -475,9 +475,9 @@ static integer c__2 = 2;
 /*<       IF( N.LE.0 ) THEN >*/
     if (*n <= 0) {
 /*<          WORK( 1 ) = DCMPLX( 1 ) >*/
-	work[1].r = 1., work[1].i = 0.;
+        work[1].r = 1., work[1].i = 0.;
 /*<          RETURN >*/
-	return 0;
+        return 0;
 /*<       END IF >*/
     }
 
@@ -485,11 +485,11 @@ static integer c__2 = 2;
 
 /*<    >*/
     if (icompq == 3) {
-	zlaset_("Full", n, n, &c_b1, &c_b2, &q[q_offset], ldq, (ftnlen)4);
+        zlaset_("Full", n, n, &c_b1, &c_b2, &q[q_offset], ldq, (ftnlen)4);
     }
 /*<    >*/
     if (icompz == 3) {
-	zlaset_("Full", n, n, &c_b1, &c_b2, &z__[z_offset], ldz, (ftnlen)4);
+        zlaset_("Full", n, n, &c_b1, &c_b2, &z__[z_offset], ldz, (ftnlen)4);
     }
 
 /*     Machine Constants */
@@ -502,10 +502,10 @@ static integer c__2 = 2;
     ulp = dlamch_("E", (ftnlen)1) * dlamch_("B", (ftnlen)1);
 /*<       ANORM = ZLANHS( 'F', IN, H( ILO, ILO ), LDH, RWORK ) >*/
     anorm = zlanhs_("F", &in, &h__[*ilo + *ilo * h_dim1], ldh, &rwork[1], (
-	    ftnlen)1);
+            ftnlen)1);
 /*<       BNORM = ZLANHS( 'F', IN, T( ILO, ILO ), LDT, RWORK ) >*/
     bnorm = zlanhs_("F", &in, &t[*ilo + *ilo * t_dim1], ldt, &rwork[1], (
-	    ftnlen)1);
+            ftnlen)1);
 /*<       ATOL = MAX( SAFMIN, ULP*ANORM ) >*/
 /* Computing MAX */
     d__1 = safmin, d__2 = ulp * anorm;
@@ -526,54 +526,54 @@ static integer c__2 = 2;
     i__1 = *n;
     for (j = *ihi + 1; j <= i__1; ++j) {
 /*<          ABSB = ABS( T( J, J ) ) >*/
-	absb = z_abs(&t[j + j * t_dim1]);
+        absb = z_abs(&t[j + j * t_dim1]);
 /*<          IF( ABSB.GT.SAFMIN ) THEN >*/
-	if (absb > safmin) {
+        if (absb > safmin) {
 /*<             SIGNBC = DCONJG( T( J, J ) / ABSB ) >*/
-	    i__2 = j + j * t_dim1;
-	    z__2.r = t[i__2].r / absb, z__2.i = t[i__2].i / absb;
-	    d_cnjg(&z__1, &z__2);
-	    signbc.r = z__1.r, signbc.i = z__1.i;
+            i__2 = j + j * t_dim1;
+            z__2.r = t[i__2].r / absb, z__2.i = t[i__2].i / absb;
+            d_cnjg(&z__1, &z__2);
+            signbc.r = z__1.r, signbc.i = z__1.i;
 /*<             T( J, J ) = ABSB >*/
-	    i__2 = j + j * t_dim1;
-	    t[i__2].r = absb, t[i__2].i = 0.;
+            i__2 = j + j * t_dim1;
+            t[i__2].r = absb, t[i__2].i = 0.;
 /*<             IF( ILSCHR ) THEN >*/
-	    if (ilschr) {
+            if (ilschr) {
 /*<                CALL ZSCAL( J-1, SIGNBC, T( 1, J ), 1 ) >*/
-		i__2 = j - 1;
-		zscal_(&i__2, &signbc, &t[j * t_dim1 + 1], &c__1);
+                i__2 = j - 1;
+                zscal_(&i__2, &signbc, &t[j * t_dim1 + 1], &c__1);
 /*<                CALL ZSCAL( J, SIGNBC, H( 1, J ), 1 ) >*/
-		zscal_(&j, &signbc, &h__[j * h_dim1 + 1], &c__1);
+                zscal_(&j, &signbc, &h__[j * h_dim1 + 1], &c__1);
 /*<             ELSE >*/
-	    } else {
+            } else {
 /*<                H( J, J ) = H( J, J )*SIGNBC >*/
-		i__2 = j + j * h_dim1;
-		i__3 = j + j * h_dim1;
-		z__1.r = h__[i__3].r * signbc.r - h__[i__3].i * signbc.i, 
-			z__1.i = h__[i__3].r * signbc.i + h__[i__3].i * 
-			signbc.r;
-		h__[i__2].r = z__1.r, h__[i__2].i = z__1.i;
+                i__2 = j + j * h_dim1;
+                i__3 = j + j * h_dim1;
+                z__1.r = h__[i__3].r * signbc.r - h__[i__3].i * signbc.i,
+                        z__1.i = h__[i__3].r * signbc.i + h__[i__3].i *
+                        signbc.r;
+                h__[i__2].r = z__1.r, h__[i__2].i = z__1.i;
 /*<             END IF >*/
-	    }
+            }
 /*<    >*/
-	    if (ilz) {
-		zscal_(n, &signbc, &z__[j * z_dim1 + 1], &c__1);
-	    }
+            if (ilz) {
+                zscal_(n, &signbc, &z__[j * z_dim1 + 1], &c__1);
+            }
 /*<          ELSE >*/
-	} else {
+        } else {
 /*<             T( J, J ) = CZERO >*/
-	    i__2 = j + j * t_dim1;
-	    t[i__2].r = 0., t[i__2].i = 0.;
+            i__2 = j + j * t_dim1;
+            t[i__2].r = 0., t[i__2].i = 0.;
 /*<          END IF >*/
-	}
+        }
 /*<          ALPHA( J ) = H( J, J ) >*/
-	i__2 = j;
-	i__3 = j + j * h_dim1;
-	alpha[i__2].r = h__[i__3].r, alpha[i__2].i = h__[i__3].i;
+        i__2 = j;
+        i__3 = j + j * h_dim1;
+        alpha[i__2].r = h__[i__3].r, alpha[i__2].i = h__[i__3].i;
 /*<          BETA( J ) = T( J, J ) >*/
-	i__2 = j;
-	i__3 = j + j * t_dim1;
-	beta[i__2].r = t[i__3].r, beta[i__2].i = t[i__3].i;
+        i__2 = j;
+        i__3 = j + j * t_dim1;
+        beta[i__2].r = t[i__3].r, beta[i__2].i = t[i__3].i;
 /*<    10 CONTINUE >*/
 /* L10: */
     }
@@ -582,7 +582,7 @@ static integer c__2 = 2;
 
 /*<    >*/
     if (*ihi < *ilo) {
-	goto L190;
+        goto L190;
     }
 
 /*     MAIN QZ ITERATION LOOP */
@@ -605,15 +605,15 @@ static integer c__2 = 2;
 /*<       IF( ILSCHR ) THEN >*/
     if (ilschr) {
 /*<          IFRSTM = 1 >*/
-	ifrstm = 1;
+        ifrstm = 1;
 /*<          ILASTM = N >*/
-	ilastm = *n;
+        ilastm = *n;
 /*<       ELSE >*/
     } else {
 /*<          IFRSTM = ILO >*/
-	ifrstm = *ilo;
+        ifrstm = *ilo;
 /*<          ILASTM = IHI >*/
-	ilastm = *ihi;
+        ilastm = *ihi;
 /*<       END IF >*/
     }
 /*<       IITER = 0 >*/
@@ -630,9 +630,9 @@ static integer c__2 = 2;
 /*        Check for too many iterations. */
 
 /*<    >*/
-	if (jiter > maxit) {
-	    goto L180;
-	}
+        if (jiter > maxit) {
+            goto L180;
+        }
 
 /*        Split the matrix if possible. */
 
@@ -643,96 +643,96 @@ static integer c__2 = 2;
 /*        Special case: j=ILAST */
 
 /*<          IF( ILAST.EQ.ILO ) THEN >*/
-	if (ilast == *ilo) {
+        if (ilast == *ilo) {
 /*<             GO TO 60 >*/
-	    goto L60;
+            goto L60;
 /*<          ELSE >*/
-	} else {
+        } else {
 /*<             IF( ABS1( H( ILAST, ILAST-1 ) ).LE.ATOL ) THEN >*/
-	    i__2 = ilast + (ilast - 1) * h_dim1;
-	    if ((d__1 = h__[i__2].r, abs(d__1)) + (d__2 = d_imag(&h__[ilast + 
-		    (ilast - 1) * h_dim1]), abs(d__2)) <= atol) {
+            i__2 = ilast + (ilast - 1) * h_dim1;
+            if ((d__1 = h__[i__2].r, abs(d__1)) + (d__2 = d_imag(&h__[ilast +
+                    (ilast - 1) * h_dim1]), abs(d__2)) <= atol) {
 /*<                H( ILAST, ILAST-1 ) = CZERO >*/
-		i__2 = ilast + (ilast - 1) * h_dim1;
-		h__[i__2].r = 0., h__[i__2].i = 0.;
+                i__2 = ilast + (ilast - 1) * h_dim1;
+                h__[i__2].r = 0., h__[i__2].i = 0.;
 /*<                GO TO 60 >*/
-		goto L60;
+                goto L60;
 /*<             END IF >*/
-	    }
+            }
 /*<          END IF >*/
-	}
+        }
 
 /*<          IF( ABS( T( ILAST, ILAST ) ).LE.BTOL ) THEN >*/
-	if (z_abs(&t[ilast + ilast * t_dim1]) <= btol) {
+        if (z_abs(&t[ilast + ilast * t_dim1]) <= btol) {
 /*<             T( ILAST, ILAST ) = CZERO >*/
-	    i__2 = ilast + ilast * t_dim1;
-	    t[i__2].r = 0., t[i__2].i = 0.;
+            i__2 = ilast + ilast * t_dim1;
+            t[i__2].r = 0., t[i__2].i = 0.;
 /*<             GO TO 50 >*/
-	    goto L50;
+            goto L50;
 /*<          END IF >*/
-	}
+        }
 
 /*        General case: j<ILAST */
 
 /*<          DO 40 J = ILAST - 1, ILO, -1 >*/
-	i__2 = *ilo;
-	for (j = ilast - 1; j >= i__2; --j) {
+        i__2 = *ilo;
+        for (j = ilast - 1; j >= i__2; --j) {
 
 /*           Test 1: for H(j,j-1)=0 or j=ILO */
 
 /*<             IF( J.EQ.ILO ) THEN >*/
-	    if (j == *ilo) {
+            if (j == *ilo) {
 /*<                ILAZRO = .TRUE. >*/
-		ilazro = TRUE_;
+                ilazro = TRUE_;
 /*<             ELSE >*/
-	    } else {
+            } else {
 /*<                IF( ABS1( H( J, J-1 ) ).LE.ATOL ) THEN >*/
-		i__3 = j + (j - 1) * h_dim1;
-		if ((d__1 = h__[i__3].r, abs(d__1)) + (d__2 = d_imag(&h__[j + 
-			(j - 1) * h_dim1]), abs(d__2)) <= atol) {
+                i__3 = j + (j - 1) * h_dim1;
+                if ((d__1 = h__[i__3].r, abs(d__1)) + (d__2 = d_imag(&h__[j +
+                        (j - 1) * h_dim1]), abs(d__2)) <= atol) {
 /*<                   H( J, J-1 ) = CZERO >*/
-		    i__3 = j + (j - 1) * h_dim1;
-		    h__[i__3].r = 0., h__[i__3].i = 0.;
+                    i__3 = j + (j - 1) * h_dim1;
+                    h__[i__3].r = 0., h__[i__3].i = 0.;
 /*<                   ILAZRO = .TRUE. >*/
-		    ilazro = TRUE_;
+                    ilazro = TRUE_;
 /*<                ELSE >*/
-		} else {
+                } else {
 /*<                   ILAZRO = .FALSE. >*/
-		    ilazro = FALSE_;
+                    ilazro = FALSE_;
 /*<                END IF >*/
-		}
+                }
 /*<             END IF >*/
-	    }
+            }
 
 /*           Test 2: for T(j,j)=0 */
 
 /*<             IF( ABS( T( J, J ) ).LT.BTOL ) THEN >*/
-	    if (z_abs(&t[j + j * t_dim1]) < btol) {
+            if (z_abs(&t[j + j * t_dim1]) < btol) {
 /*<                T( J, J ) = CZERO >*/
-		i__3 = j + j * t_dim1;
-		t[i__3].r = 0., t[i__3].i = 0.;
+                i__3 = j + j * t_dim1;
+                t[i__3].r = 0., t[i__3].i = 0.;
 
 /*              Test 1a: Check for 2 consecutive small subdiagonals in A */
 
 /*<                ILAZR2 = .FALSE. >*/
-		ilazr2 = FALSE_;
+                ilazr2 = FALSE_;
 /*<                IF( .NOT.ILAZRO ) THEN >*/
-		if (! ilazro) {
+                if (! ilazro) {
 /*<    >*/
-		    i__3 = j + (j - 1) * h_dim1;
-		    i__4 = j + 1 + j * h_dim1;
-		    i__5 = j + j * h_dim1;
-		    if (((d__1 = h__[i__3].r, abs(d__1)) + (d__2 = d_imag(&
-			    h__[j + (j - 1) * h_dim1]), abs(d__2))) * (ascale 
-			    * ((d__3 = h__[i__4].r, abs(d__3)) + (d__4 = 
-			    d_imag(&h__[j + 1 + j * h_dim1]), abs(d__4)))) <= 
-			    ((d__5 = h__[i__5].r, abs(d__5)) + (d__6 = d_imag(
-			    &h__[j + j * h_dim1]), abs(d__6))) * (ascale * 
-			    atol)) {
-			ilazr2 = TRUE_;
-		    }
+                    i__3 = j + (j - 1) * h_dim1;
+                    i__4 = j + 1 + j * h_dim1;
+                    i__5 = j + j * h_dim1;
+                    if (((d__1 = h__[i__3].r, abs(d__1)) + (d__2 = d_imag(&
+                            h__[j + (j - 1) * h_dim1]), abs(d__2))) * (ascale
+                            * ((d__3 = h__[i__4].r, abs(d__3)) + (d__4 =
+                            d_imag(&h__[j + 1 + j * h_dim1]), abs(d__4)))) <=
+                            ((d__5 = h__[i__5].r, abs(d__5)) + (d__6 = d_imag(
+                            &h__[j + j * h_dim1]), abs(d__6))) * (ascale *
+                            atol)) {
+                        ilazr2 = TRUE_;
+                    }
 /*<                END IF >*/
-		}
+                }
 
 /*              If both tests pass (1 & 2), i.e., the leading diagonal */
 /*              element of B in the block is zero, split a 1x1 block off */
@@ -741,162 +741,162 @@ static integer c__2 = 2;
 /*              this may have to be done repeatedly. */
 
 /*<                IF( ILAZRO .OR. ILAZR2 ) THEN >*/
-		if (ilazro || ilazr2) {
+                if (ilazro || ilazr2) {
 /*<                   DO 20 JCH = J, ILAST - 1 >*/
-		    i__3 = ilast - 1;
-		    for (jch = j; jch <= i__3; ++jch) {
+                    i__3 = ilast - 1;
+                    for (jch = j; jch <= i__3; ++jch) {
 /*<                      CTEMP = H( JCH, JCH ) >*/
-			i__4 = jch + jch * h_dim1;
-			ctemp.r = h__[i__4].r, ctemp.i = h__[i__4].i;
+                        i__4 = jch + jch * h_dim1;
+                        ctemp.r = h__[i__4].r, ctemp.i = h__[i__4].i;
 /*<    >*/
-			zlartg_(&ctemp, &h__[jch + 1 + jch * h_dim1], &c__, &
-				s, &h__[jch + jch * h_dim1]);
+                        zlartg_(&ctemp, &h__[jch + 1 + jch * h_dim1], &c__, &
+                                s, &h__[jch + jch * h_dim1]);
 /*<                      H( JCH+1, JCH ) = CZERO >*/
-			i__4 = jch + 1 + jch * h_dim1;
-			h__[i__4].r = 0., h__[i__4].i = 0.;
+                        i__4 = jch + 1 + jch * h_dim1;
+                        h__[i__4].r = 0., h__[i__4].i = 0.;
 /*<    >*/
-			i__4 = ilastm - jch;
-			zrot_(&i__4, &h__[jch + (jch + 1) * h_dim1], ldh, &
-				h__[jch + 1 + (jch + 1) * h_dim1], ldh, &c__, 
-				&s);
+                        i__4 = ilastm - jch;
+                        zrot_(&i__4, &h__[jch + (jch + 1) * h_dim1], ldh, &
+                                h__[jch + 1 + (jch + 1) * h_dim1], ldh, &c__,
+                                &s);
 /*<    >*/
-			i__4 = ilastm - jch;
-			zrot_(&i__4, &t[jch + (jch + 1) * t_dim1], ldt, &t[
-				jch + 1 + (jch + 1) * t_dim1], ldt, &c__, &s);
+                        i__4 = ilastm - jch;
+                        zrot_(&i__4, &t[jch + (jch + 1) * t_dim1], ldt, &t[
+                                jch + 1 + (jch + 1) * t_dim1], ldt, &c__, &s);
 /*<    >*/
-			if (ilq) {
-			    d_cnjg(&z__1, &s);
-			    zrot_(n, &q[jch * q_dim1 + 1], &c__1, &q[(jch + 1)
-				     * q_dim1 + 1], &c__1, &c__, &z__1);
-			}
+                        if (ilq) {
+                            d_cnjg(&z__1, &s);
+                            zrot_(n, &q[jch * q_dim1 + 1], &c__1, &q[(jch + 1)
+                                     * q_dim1 + 1], &c__1, &c__, &z__1);
+                        }
 /*<    >*/
-			if (ilazr2) {
-			    i__4 = jch + (jch - 1) * h_dim1;
-			    i__5 = jch + (jch - 1) * h_dim1;
-			    z__1.r = c__ * h__[i__5].r, z__1.i = c__ * h__[
-				    i__5].i;
-			    h__[i__4].r = z__1.r, h__[i__4].i = z__1.i;
-			}
+                        if (ilazr2) {
+                            i__4 = jch + (jch - 1) * h_dim1;
+                            i__5 = jch + (jch - 1) * h_dim1;
+                            z__1.r = c__ * h__[i__5].r, z__1.i = c__ * h__[
+                                    i__5].i;
+                            h__[i__4].r = z__1.r, h__[i__4].i = z__1.i;
+                        }
 /*<                      ILAZR2 = .FALSE. >*/
-			ilazr2 = FALSE_;
+                        ilazr2 = FALSE_;
 /*<                      IF( ABS1( T( JCH+1, JCH+1 ) ).GE.BTOL ) THEN >*/
-			i__4 = jch + 1 + (jch + 1) * t_dim1;
-			if ((d__1 = t[i__4].r, abs(d__1)) + (d__2 = d_imag(&t[
-				jch + 1 + (jch + 1) * t_dim1]), abs(d__2)) >= 
-				btol) {
+                        i__4 = jch + 1 + (jch + 1) * t_dim1;
+                        if ((d__1 = t[i__4].r, abs(d__1)) + (d__2 = d_imag(&t[
+                                jch + 1 + (jch + 1) * t_dim1]), abs(d__2)) >=
+                                btol) {
 /*<                         IF( JCH+1.GE.ILAST ) THEN >*/
-			    if (jch + 1 >= ilast) {
+                            if (jch + 1 >= ilast) {
 /*<                            GO TO 60 >*/
-				goto L60;
+                                goto L60;
 /*<                         ELSE >*/
-			    } else {
+                            } else {
 /*<                            IFIRST = JCH + 1 >*/
-				ifirst = jch + 1;
+                                ifirst = jch + 1;
 /*<                            GO TO 70 >*/
-				goto L70;
+                                goto L70;
 /*<                         END IF >*/
-			    }
+                            }
 /*<                      END IF >*/
-			}
+                        }
 /*<                      T( JCH+1, JCH+1 ) = CZERO >*/
-			i__4 = jch + 1 + (jch + 1) * t_dim1;
-			t[i__4].r = 0., t[i__4].i = 0.;
+                        i__4 = jch + 1 + (jch + 1) * t_dim1;
+                        t[i__4].r = 0., t[i__4].i = 0.;
 /*<    20             CONTINUE >*/
 /* L20: */
-		    }
+                    }
 /*<                   GO TO 50 >*/
-		    goto L50;
+                    goto L50;
 /*<                ELSE >*/
-		} else {
+                } else {
 
 /*                 Only test 2 passed -- chase the zero to T(ILAST,ILAST) */
 /*                 Then process as in the case T(ILAST,ILAST)=0 */
 
 /*<                   DO 30 JCH = J, ILAST - 1 >*/
-		    i__3 = ilast - 1;
-		    for (jch = j; jch <= i__3; ++jch) {
+                    i__3 = ilast - 1;
+                    for (jch = j; jch <= i__3; ++jch) {
 /*<                      CTEMP = T( JCH, JCH+1 ) >*/
-			i__4 = jch + (jch + 1) * t_dim1;
-			ctemp.r = t[i__4].r, ctemp.i = t[i__4].i;
+                        i__4 = jch + (jch + 1) * t_dim1;
+                        ctemp.r = t[i__4].r, ctemp.i = t[i__4].i;
 /*<    >*/
-			zlartg_(&ctemp, &t[jch + 1 + (jch + 1) * t_dim1], &
-				c__, &s, &t[jch + (jch + 1) * t_dim1]);
+                        zlartg_(&ctemp, &t[jch + 1 + (jch + 1) * t_dim1], &
+                                c__, &s, &t[jch + (jch + 1) * t_dim1]);
 /*<                      T( JCH+1, JCH+1 ) = CZERO >*/
-			i__4 = jch + 1 + (jch + 1) * t_dim1;
-			t[i__4].r = 0., t[i__4].i = 0.;
+                        i__4 = jch + 1 + (jch + 1) * t_dim1;
+                        t[i__4].r = 0., t[i__4].i = 0.;
 /*<    >*/
-			if (jch < ilastm - 1) {
-			    i__4 = ilastm - jch - 1;
-			    zrot_(&i__4, &t[jch + (jch + 2) * t_dim1], ldt, &
-				    t[jch + 1 + (jch + 2) * t_dim1], ldt, &
-				    c__, &s);
-			}
+                        if (jch < ilastm - 1) {
+                            i__4 = ilastm - jch - 1;
+                            zrot_(&i__4, &t[jch + (jch + 2) * t_dim1], ldt, &
+                                    t[jch + 1 + (jch + 2) * t_dim1], ldt, &
+                                    c__, &s);
+                        }
 /*<    >*/
-			i__4 = ilastm - jch + 2;
-			zrot_(&i__4, &h__[jch + (jch - 1) * h_dim1], ldh, &
-				h__[jch + 1 + (jch - 1) * h_dim1], ldh, &c__, 
-				&s);
+                        i__4 = ilastm - jch + 2;
+                        zrot_(&i__4, &h__[jch + (jch - 1) * h_dim1], ldh, &
+                                h__[jch + 1 + (jch - 1) * h_dim1], ldh, &c__,
+                                &s);
 /*<    >*/
-			if (ilq) {
-			    d_cnjg(&z__1, &s);
-			    zrot_(n, &q[jch * q_dim1 + 1], &c__1, &q[(jch + 1)
-				     * q_dim1 + 1], &c__1, &c__, &z__1);
-			}
+                        if (ilq) {
+                            d_cnjg(&z__1, &s);
+                            zrot_(n, &q[jch * q_dim1 + 1], &c__1, &q[(jch + 1)
+                                     * q_dim1 + 1], &c__1, &c__, &z__1);
+                        }
 /*<                      CTEMP = H( JCH+1, JCH ) >*/
-			i__4 = jch + 1 + jch * h_dim1;
-			ctemp.r = h__[i__4].r, ctemp.i = h__[i__4].i;
+                        i__4 = jch + 1 + jch * h_dim1;
+                        ctemp.r = h__[i__4].r, ctemp.i = h__[i__4].i;
 /*<    >*/
-			zlartg_(&ctemp, &h__[jch + 1 + (jch - 1) * h_dim1], &
-				c__, &s, &h__[jch + 1 + jch * h_dim1]);
+                        zlartg_(&ctemp, &h__[jch + 1 + (jch - 1) * h_dim1], &
+                                c__, &s, &h__[jch + 1 + jch * h_dim1]);
 /*<                      H( JCH+1, JCH-1 ) = CZERO >*/
-			i__4 = jch + 1 + (jch - 1) * h_dim1;
-			h__[i__4].r = 0., h__[i__4].i = 0.;
+                        i__4 = jch + 1 + (jch - 1) * h_dim1;
+                        h__[i__4].r = 0., h__[i__4].i = 0.;
 /*<    >*/
-			i__4 = jch + 1 - ifrstm;
-			zrot_(&i__4, &h__[ifrstm + jch * h_dim1], &c__1, &h__[
-				ifrstm + (jch - 1) * h_dim1], &c__1, &c__, &s)
-				;
+                        i__4 = jch + 1 - ifrstm;
+                        zrot_(&i__4, &h__[ifrstm + jch * h_dim1], &c__1, &h__[
+                                ifrstm + (jch - 1) * h_dim1], &c__1, &c__, &s)
+                                ;
 /*<    >*/
-			i__4 = jch - ifrstm;
-			zrot_(&i__4, &t[ifrstm + jch * t_dim1], &c__1, &t[
-				ifrstm + (jch - 1) * t_dim1], &c__1, &c__, &s)
-				;
+                        i__4 = jch - ifrstm;
+                        zrot_(&i__4, &t[ifrstm + jch * t_dim1], &c__1, &t[
+                                ifrstm + (jch - 1) * t_dim1], &c__1, &c__, &s)
+                                ;
 /*<    >*/
-			if (ilz) {
-			    zrot_(n, &z__[jch * z_dim1 + 1], &c__1, &z__[(jch 
-				    - 1) * z_dim1 + 1], &c__1, &c__, &s);
-			}
+                        if (ilz) {
+                            zrot_(n, &z__[jch * z_dim1 + 1], &c__1, &z__[(jch
+                                    - 1) * z_dim1 + 1], &c__1, &c__, &s);
+                        }
 /*<    30             CONTINUE >*/
 /* L30: */
-		    }
+                    }
 /*<                   GO TO 50 >*/
-		    goto L50;
+                    goto L50;
 /*<                END IF >*/
-		}
+                }
 /*<             ELSE IF( ILAZRO ) THEN >*/
-	    } else if (ilazro) {
+            } else if (ilazro) {
 
 /*              Only test 1 passed -- work on J:ILAST */
 
 /*<                IFIRST = J >*/
-		ifirst = j;
+                ifirst = j;
 /*<                GO TO 70 >*/
-		goto L70;
+                goto L70;
 /*<             END IF >*/
-	    }
+            }
 
 /*           Neither test passed -- try next J */
 
 /*<    40    CONTINUE >*/
 /* L40: */
-	}
+        }
 
 /*        (Drop-through is "impossible") */
 
 /*<          INFO = 2*N + 1 >*/
-	*info = (*n << 1) + 1;
+        *info = (*n << 1) + 1;
 /*<          GO TO 210 >*/
-	goto L210;
+        goto L210;
 
 /*        T(ILAST,ILAST)=0 -- clear H(ILAST,ILAST-1) to split off a */
 /*        1x1 block. */
@@ -904,110 +904,110 @@ static integer c__2 = 2;
 /*<    50    CONTINUE >*/
 L50:
 /*<          CTEMP = H( ILAST, ILAST ) >*/
-	i__2 = ilast + ilast * h_dim1;
-	ctemp.r = h__[i__2].r, ctemp.i = h__[i__2].i;
+        i__2 = ilast + ilast * h_dim1;
+        ctemp.r = h__[i__2].r, ctemp.i = h__[i__2].i;
 /*<    >*/
-	zlartg_(&ctemp, &h__[ilast + (ilast - 1) * h_dim1], &c__, &s, &h__[
-		ilast + ilast * h_dim1]);
+        zlartg_(&ctemp, &h__[ilast + (ilast - 1) * h_dim1], &c__, &s, &h__[
+                ilast + ilast * h_dim1]);
 /*<          H( ILAST, ILAST-1 ) = CZERO >*/
-	i__2 = ilast + (ilast - 1) * h_dim1;
-	h__[i__2].r = 0., h__[i__2].i = 0.;
+        i__2 = ilast + (ilast - 1) * h_dim1;
+        h__[i__2].r = 0., h__[i__2].i = 0.;
 /*<    >*/
-	i__2 = ilast - ifrstm;
-	zrot_(&i__2, &h__[ifrstm + ilast * h_dim1], &c__1, &h__[ifrstm + (
-		ilast - 1) * h_dim1], &c__1, &c__, &s);
+        i__2 = ilast - ifrstm;
+        zrot_(&i__2, &h__[ifrstm + ilast * h_dim1], &c__1, &h__[ifrstm + (
+                ilast - 1) * h_dim1], &c__1, &c__, &s);
 /*<    >*/
-	i__2 = ilast - ifrstm;
-	zrot_(&i__2, &t[ifrstm + ilast * t_dim1], &c__1, &t[ifrstm + (ilast - 
-		1) * t_dim1], &c__1, &c__, &s);
+        i__2 = ilast - ifrstm;
+        zrot_(&i__2, &t[ifrstm + ilast * t_dim1], &c__1, &t[ifrstm + (ilast -
+                1) * t_dim1], &c__1, &c__, &s);
 /*<    >*/
-	if (ilz) {
-	    zrot_(n, &z__[ilast * z_dim1 + 1], &c__1, &z__[(ilast - 1) * 
-		    z_dim1 + 1], &c__1, &c__, &s);
-	}
+        if (ilz) {
+            zrot_(n, &z__[ilast * z_dim1 + 1], &c__1, &z__[(ilast - 1) *
+                    z_dim1 + 1], &c__1, &c__, &s);
+        }
 
 /*        H(ILAST,ILAST-1)=0 -- Standardize B, set ALPHA and BETA */
 
 /*<    60    CONTINUE >*/
 L60:
 /*<          ABSB = ABS( T( ILAST, ILAST ) ) >*/
-	absb = z_abs(&t[ilast + ilast * t_dim1]);
+        absb = z_abs(&t[ilast + ilast * t_dim1]);
 /*<          IF( ABSB.GT.SAFMIN ) THEN >*/
-	if (absb > safmin) {
+        if (absb > safmin) {
 /*<             SIGNBC = DCONJG( T( ILAST, ILAST ) / ABSB ) >*/
-	    i__2 = ilast + ilast * t_dim1;
-	    z__2.r = t[i__2].r / absb, z__2.i = t[i__2].i / absb;
-	    d_cnjg(&z__1, &z__2);
-	    signbc.r = z__1.r, signbc.i = z__1.i;
+            i__2 = ilast + ilast * t_dim1;
+            z__2.r = t[i__2].r / absb, z__2.i = t[i__2].i / absb;
+            d_cnjg(&z__1, &z__2);
+            signbc.r = z__1.r, signbc.i = z__1.i;
 /*<             T( ILAST, ILAST ) = ABSB >*/
-	    i__2 = ilast + ilast * t_dim1;
-	    t[i__2].r = absb, t[i__2].i = 0.;
+            i__2 = ilast + ilast * t_dim1;
+            t[i__2].r = absb, t[i__2].i = 0.;
 /*<             IF( ILSCHR ) THEN >*/
-	    if (ilschr) {
+            if (ilschr) {
 /*<                CALL ZSCAL( ILAST-IFRSTM, SIGNBC, T( IFRSTM, ILAST ), 1 ) >*/
-		i__2 = ilast - ifrstm;
-		zscal_(&i__2, &signbc, &t[ifrstm + ilast * t_dim1], &c__1);
+                i__2 = ilast - ifrstm;
+                zscal_(&i__2, &signbc, &t[ifrstm + ilast * t_dim1], &c__1);
 /*<    >*/
-		i__2 = ilast + 1 - ifrstm;
-		zscal_(&i__2, &signbc, &h__[ifrstm + ilast * h_dim1], &c__1);
+                i__2 = ilast + 1 - ifrstm;
+                zscal_(&i__2, &signbc, &h__[ifrstm + ilast * h_dim1], &c__1);
 /*<             ELSE >*/
-	    } else {
+            } else {
 /*<                H( ILAST, ILAST ) = H( ILAST, ILAST )*SIGNBC >*/
-		i__2 = ilast + ilast * h_dim1;
-		i__3 = ilast + ilast * h_dim1;
-		z__1.r = h__[i__3].r * signbc.r - h__[i__3].i * signbc.i, 
-			z__1.i = h__[i__3].r * signbc.i + h__[i__3].i * 
-			signbc.r;
-		h__[i__2].r = z__1.r, h__[i__2].i = z__1.i;
+                i__2 = ilast + ilast * h_dim1;
+                i__3 = ilast + ilast * h_dim1;
+                z__1.r = h__[i__3].r * signbc.r - h__[i__3].i * signbc.i,
+                        z__1.i = h__[i__3].r * signbc.i + h__[i__3].i *
+                        signbc.r;
+                h__[i__2].r = z__1.r, h__[i__2].i = z__1.i;
 /*<             END IF >*/
-	    }
+            }
 /*<    >*/
-	    if (ilz) {
-		zscal_(n, &signbc, &z__[ilast * z_dim1 + 1], &c__1);
-	    }
+            if (ilz) {
+                zscal_(n, &signbc, &z__[ilast * z_dim1 + 1], &c__1);
+            }
 /*<          ELSE >*/
-	} else {
+        } else {
 /*<             T( ILAST, ILAST ) = CZERO >*/
-	    i__2 = ilast + ilast * t_dim1;
-	    t[i__2].r = 0., t[i__2].i = 0.;
+            i__2 = ilast + ilast * t_dim1;
+            t[i__2].r = 0., t[i__2].i = 0.;
 /*<          END IF >*/
-	}
+        }
 /*<          ALPHA( ILAST ) = H( ILAST, ILAST ) >*/
-	i__2 = ilast;
-	i__3 = ilast + ilast * h_dim1;
-	alpha[i__2].r = h__[i__3].r, alpha[i__2].i = h__[i__3].i;
+        i__2 = ilast;
+        i__3 = ilast + ilast * h_dim1;
+        alpha[i__2].r = h__[i__3].r, alpha[i__2].i = h__[i__3].i;
 /*<          BETA( ILAST ) = T( ILAST, ILAST ) >*/
-	i__2 = ilast;
-	i__3 = ilast + ilast * t_dim1;
-	beta[i__2].r = t[i__3].r, beta[i__2].i = t[i__3].i;
+        i__2 = ilast;
+        i__3 = ilast + ilast * t_dim1;
+        beta[i__2].r = t[i__3].r, beta[i__2].i = t[i__3].i;
 
 /*        Go to next block -- exit if finished. */
 
 /*<          ILAST = ILAST - 1 >*/
-	--ilast;
+        --ilast;
 /*<    >*/
-	if (ilast < *ilo) {
-	    goto L190;
-	}
+        if (ilast < *ilo) {
+            goto L190;
+        }
 
 /*        Reset counters */
 
 /*<          IITER = 0 >*/
-	iiter = 0;
+        iiter = 0;
 /*<          ESHIFT = CZERO >*/
-	eshift.r = 0., eshift.i = 0.;
+        eshift.r = 0., eshift.i = 0.;
 /*<          IF( .NOT.ILSCHR ) THEN >*/
-	if (! ilschr) {
+        if (! ilschr) {
 /*<             ILASTM = ILAST >*/
-	    ilastm = ilast;
+            ilastm = ilast;
 /*<    >*/
-	    if (ifrstm > ilast) {
-		ifrstm = *ilo;
-	    }
+            if (ifrstm > ilast) {
+                ifrstm = *ilo;
+            }
 /*<          END IF >*/
-	}
+        }
 /*<          GO TO 160 >*/
-	goto L160;
+        goto L160;
 
 /*        QZ step */
 
@@ -1017,13 +1017,13 @@ L60:
 /*<    70    CONTINUE >*/
 L70:
 /*<          IITER = IITER + 1 >*/
-	++iiter;
+        ++iiter;
 /*<          IF( .NOT.ILSCHR ) THEN >*/
-	if (! ilschr) {
+        if (! ilschr) {
 /*<             IFRSTM = IFIRST >*/
-	    ifrstm = ifirst;
+            ifrstm = ifirst;
 /*<          END IF >*/
-	}
+        }
 
 /*        Compute the Shift. */
 
@@ -1032,7 +1032,7 @@ L70:
 /*        magnitude) */
 
 /*<          IF( ( IITER / 10 )*10.NE.IITER ) THEN >*/
-	if (iiter / 10 * 10 != iiter) {
+        if (iiter / 10 * 10 != iiter) {
 
 /*           The Wilkinson shift (AEP p.512), i.e., the eigenvalue of */
 /*           the bottom-right 2x2 block of A inv(B) which is nearest to */
@@ -1042,149 +1042,149 @@ L70:
 /*           compute (A*inv(D))*inv(U). */
 
 /*<    >*/
-	    i__2 = ilast - 1 + ilast * t_dim1;
-	    z__2.r = bscale * t[i__2].r, z__2.i = bscale * t[i__2].i;
-	    i__3 = ilast + ilast * t_dim1;
-	    z__3.r = bscale * t[i__3].r, z__3.i = bscale * t[i__3].i;
-	    z_div(&z__1, &z__2, &z__3);
-	    u12.r = z__1.r, u12.i = z__1.i;
+            i__2 = ilast - 1 + ilast * t_dim1;
+            z__2.r = bscale * t[i__2].r, z__2.i = bscale * t[i__2].i;
+            i__3 = ilast + ilast * t_dim1;
+            z__3.r = bscale * t[i__3].r, z__3.i = bscale * t[i__3].i;
+            z_div(&z__1, &z__2, &z__3);
+            u12.r = z__1.r, u12.i = z__1.i;
 /*<    >*/
-	    i__2 = ilast - 1 + (ilast - 1) * h_dim1;
-	    z__2.r = ascale * h__[i__2].r, z__2.i = ascale * h__[i__2].i;
-	    i__3 = ilast - 1 + (ilast - 1) * t_dim1;
-	    z__3.r = bscale * t[i__3].r, z__3.i = bscale * t[i__3].i;
-	    z_div(&z__1, &z__2, &z__3);
-	    ad11.r = z__1.r, ad11.i = z__1.i;
+            i__2 = ilast - 1 + (ilast - 1) * h_dim1;
+            z__2.r = ascale * h__[i__2].r, z__2.i = ascale * h__[i__2].i;
+            i__3 = ilast - 1 + (ilast - 1) * t_dim1;
+            z__3.r = bscale * t[i__3].r, z__3.i = bscale * t[i__3].i;
+            z_div(&z__1, &z__2, &z__3);
+            ad11.r = z__1.r, ad11.i = z__1.i;
 /*<    >*/
-	    i__2 = ilast + (ilast - 1) * h_dim1;
-	    z__2.r = ascale * h__[i__2].r, z__2.i = ascale * h__[i__2].i;
-	    i__3 = ilast - 1 + (ilast - 1) * t_dim1;
-	    z__3.r = bscale * t[i__3].r, z__3.i = bscale * t[i__3].i;
-	    z_div(&z__1, &z__2, &z__3);
-	    ad21.r = z__1.r, ad21.i = z__1.i;
+            i__2 = ilast + (ilast - 1) * h_dim1;
+            z__2.r = ascale * h__[i__2].r, z__2.i = ascale * h__[i__2].i;
+            i__3 = ilast - 1 + (ilast - 1) * t_dim1;
+            z__3.r = bscale * t[i__3].r, z__3.i = bscale * t[i__3].i;
+            z_div(&z__1, &z__2, &z__3);
+            ad21.r = z__1.r, ad21.i = z__1.i;
 /*<    >*/
-	    i__2 = ilast - 1 + ilast * h_dim1;
-	    z__2.r = ascale * h__[i__2].r, z__2.i = ascale * h__[i__2].i;
-	    i__3 = ilast + ilast * t_dim1;
-	    z__3.r = bscale * t[i__3].r, z__3.i = bscale * t[i__3].i;
-	    z_div(&z__1, &z__2, &z__3);
-	    ad12.r = z__1.r, ad12.i = z__1.i;
+            i__2 = ilast - 1 + ilast * h_dim1;
+            z__2.r = ascale * h__[i__2].r, z__2.i = ascale * h__[i__2].i;
+            i__3 = ilast + ilast * t_dim1;
+            z__3.r = bscale * t[i__3].r, z__3.i = bscale * t[i__3].i;
+            z_div(&z__1, &z__2, &z__3);
+            ad12.r = z__1.r, ad12.i = z__1.i;
 /*<    >*/
-	    i__2 = ilast + ilast * h_dim1;
-	    z__2.r = ascale * h__[i__2].r, z__2.i = ascale * h__[i__2].i;
-	    i__3 = ilast + ilast * t_dim1;
-	    z__3.r = bscale * t[i__3].r, z__3.i = bscale * t[i__3].i;
-	    z_div(&z__1, &z__2, &z__3);
-	    ad22.r = z__1.r, ad22.i = z__1.i;
+            i__2 = ilast + ilast * h_dim1;
+            z__2.r = ascale * h__[i__2].r, z__2.i = ascale * h__[i__2].i;
+            i__3 = ilast + ilast * t_dim1;
+            z__3.r = bscale * t[i__3].r, z__3.i = bscale * t[i__3].i;
+            z_div(&z__1, &z__2, &z__3);
+            ad22.r = z__1.r, ad22.i = z__1.i;
 /*<             ABI22 = AD22 - U12*AD21 >*/
-	    z__2.r = u12.r * ad21.r - u12.i * ad21.i, z__2.i = u12.r * ad21.i 
-		    + u12.i * ad21.r;
-	    z__1.r = ad22.r - z__2.r, z__1.i = ad22.i - z__2.i;
-	    abi22.r = z__1.r, abi22.i = z__1.i;
+            z__2.r = u12.r * ad21.r - u12.i * ad21.i, z__2.i = u12.r * ad21.i
+                    + u12.i * ad21.r;
+            z__1.r = ad22.r - z__2.r, z__1.i = ad22.i - z__2.i;
+            abi22.r = z__1.r, abi22.i = z__1.i;
 
 /*<             T1 = HALF*( AD11+ABI22 ) >*/
-	    z__2.r = ad11.r + abi22.r, z__2.i = ad11.i + abi22.i;
-	    z__1.r = z__2.r * .5, z__1.i = z__2.i * .5;
-	    t1.r = z__1.r, t1.i = z__1.i;
+            z__2.r = ad11.r + abi22.r, z__2.i = ad11.i + abi22.i;
+            z__1.r = z__2.r * .5, z__1.i = z__2.i * .5;
+            t1.r = z__1.r, t1.i = z__1.i;
 /*<             RTDISC = SQRT( T1**2+AD12*AD21-AD11*AD22 ) >*/
-	    pow_zi(&z__4, &t1, &c__2);
-	    z__5.r = ad12.r * ad21.r - ad12.i * ad21.i, z__5.i = ad12.r * 
-		    ad21.i + ad12.i * ad21.r;
-	    z__3.r = z__4.r + z__5.r, z__3.i = z__4.i + z__5.i;
-	    z__6.r = ad11.r * ad22.r - ad11.i * ad22.i, z__6.i = ad11.r * 
-		    ad22.i + ad11.i * ad22.r;
-	    z__2.r = z__3.r - z__6.r, z__2.i = z__3.i - z__6.i;
-	    z_sqrt(&z__1, &z__2);
-	    rtdisc.r = z__1.r, rtdisc.i = z__1.i;
+            pow_zi(&z__4, &t1, &c__2);
+            z__5.r = ad12.r * ad21.r - ad12.i * ad21.i, z__5.i = ad12.r *
+                    ad21.i + ad12.i * ad21.r;
+            z__3.r = z__4.r + z__5.r, z__3.i = z__4.i + z__5.i;
+            z__6.r = ad11.r * ad22.r - ad11.i * ad22.i, z__6.i = ad11.r *
+                    ad22.i + ad11.i * ad22.r;
+            z__2.r = z__3.r - z__6.r, z__2.i = z__3.i - z__6.i;
+            z_sqrt(&z__1, &z__2);
+            rtdisc.r = z__1.r, rtdisc.i = z__1.i;
 /*<    >*/
-	    z__1.r = t1.r - abi22.r, z__1.i = t1.i - abi22.i;
-	    z__2.r = t1.r - abi22.r, z__2.i = t1.i - abi22.i;
-	    temp = z__1.r * rtdisc.r + d_imag(&z__2) * d_imag(&rtdisc);
+            z__1.r = t1.r - abi22.r, z__1.i = t1.i - abi22.i;
+            z__2.r = t1.r - abi22.r, z__2.i = t1.i - abi22.i;
+            temp = z__1.r * rtdisc.r + d_imag(&z__2) * d_imag(&rtdisc);
 /*<             IF( TEMP.LE.ZERO ) THEN >*/
-	    if (temp <= 0.) {
+            if (temp <= 0.) {
 /*<                SHIFT = T1 + RTDISC >*/
-		z__1.r = t1.r + rtdisc.r, z__1.i = t1.i + rtdisc.i;
-		shift.r = z__1.r, shift.i = z__1.i;
+                z__1.r = t1.r + rtdisc.r, z__1.i = t1.i + rtdisc.i;
+                shift.r = z__1.r, shift.i = z__1.i;
 /*<             ELSE >*/
-	    } else {
+            } else {
 /*<                SHIFT = T1 - RTDISC >*/
-		z__1.r = t1.r - rtdisc.r, z__1.i = t1.i - rtdisc.i;
-		shift.r = z__1.r, shift.i = z__1.i;
+                z__1.r = t1.r - rtdisc.r, z__1.i = t1.i - rtdisc.i;
+                shift.r = z__1.r, shift.i = z__1.i;
 /*<             END IF >*/
-	    }
+            }
 /*<          ELSE >*/
-	} else {
+        } else {
 
 /*           Exceptional shift.  Chosen for no particularly good reason. */
 
 /*<    >*/
-	    i__2 = ilast - 1 + ilast * h_dim1;
-	    z__4.r = ascale * h__[i__2].r, z__4.i = ascale * h__[i__2].i;
-	    i__3 = ilast - 1 + (ilast - 1) * t_dim1;
-	    z__5.r = bscale * t[i__3].r, z__5.i = bscale * t[i__3].i;
-	    z_div(&z__3, &z__4, &z__5);
-	    d_cnjg(&z__2, &z__3);
-	    z__1.r = eshift.r + z__2.r, z__1.i = eshift.i + z__2.i;
-	    eshift.r = z__1.r, eshift.i = z__1.i;
+            i__2 = ilast - 1 + ilast * h_dim1;
+            z__4.r = ascale * h__[i__2].r, z__4.i = ascale * h__[i__2].i;
+            i__3 = ilast - 1 + (ilast - 1) * t_dim1;
+            z__5.r = bscale * t[i__3].r, z__5.i = bscale * t[i__3].i;
+            z_div(&z__3, &z__4, &z__5);
+            d_cnjg(&z__2, &z__3);
+            z__1.r = eshift.r + z__2.r, z__1.i = eshift.i + z__2.i;
+            eshift.r = z__1.r, eshift.i = z__1.i;
 /*<             SHIFT = ESHIFT >*/
-	    shift.r = eshift.r, shift.i = eshift.i;
+            shift.r = eshift.r, shift.i = eshift.i;
 /*<          END IF >*/
-	}
+        }
 
 /*        Now check for two consecutive small subdiagonals. */
 
 /*<          DO 80 J = ILAST - 1, IFIRST + 1, -1 >*/
-	i__2 = ifirst + 1;
-	for (j = ilast - 1; j >= i__2; --j) {
+        i__2 = ifirst + 1;
+        for (j = ilast - 1; j >= i__2; --j) {
 /*<             ISTART = J >*/
-	    istart = j;
+            istart = j;
 /*<             CTEMP = ASCALE*H( J, J ) - SHIFT*( BSCALE*T( J, J ) ) >*/
-	    i__3 = j + j * h_dim1;
-	    z__2.r = ascale * h__[i__3].r, z__2.i = ascale * h__[i__3].i;
-	    i__4 = j + j * t_dim1;
-	    z__4.r = bscale * t[i__4].r, z__4.i = bscale * t[i__4].i;
-	    z__3.r = shift.r * z__4.r - shift.i * z__4.i, z__3.i = shift.r * 
-		    z__4.i + shift.i * z__4.r;
-	    z__1.r = z__2.r - z__3.r, z__1.i = z__2.i - z__3.i;
-	    ctemp.r = z__1.r, ctemp.i = z__1.i;
+            i__3 = j + j * h_dim1;
+            z__2.r = ascale * h__[i__3].r, z__2.i = ascale * h__[i__3].i;
+            i__4 = j + j * t_dim1;
+            z__4.r = bscale * t[i__4].r, z__4.i = bscale * t[i__4].i;
+            z__3.r = shift.r * z__4.r - shift.i * z__4.i, z__3.i = shift.r *
+                    z__4.i + shift.i * z__4.r;
+            z__1.r = z__2.r - z__3.r, z__1.i = z__2.i - z__3.i;
+            ctemp.r = z__1.r, ctemp.i = z__1.i;
 /*<             TEMP = ABS1( CTEMP ) >*/
-	    temp = (d__1 = ctemp.r, abs(d__1)) + (d__2 = d_imag(&ctemp), abs(
-		    d__2));
+            temp = (d__1 = ctemp.r, abs(d__1)) + (d__2 = d_imag(&ctemp), abs(
+                    d__2));
 /*<             TEMP2 = ASCALE*ABS1( H( J+1, J ) ) >*/
-	    i__3 = j + 1 + j * h_dim1;
-	    temp2 = ascale * ((d__1 = h__[i__3].r, abs(d__1)) + (d__2 = 
-		    d_imag(&h__[j + 1 + j * h_dim1]), abs(d__2)));
+            i__3 = j + 1 + j * h_dim1;
+            temp2 = ascale * ((d__1 = h__[i__3].r, abs(d__1)) + (d__2 =
+                    d_imag(&h__[j + 1 + j * h_dim1]), abs(d__2)));
 /*<             TEMPR = MAX( TEMP, TEMP2 ) >*/
-	    tempr = max(temp,temp2);
+            tempr = max(temp,temp2);
 /*<             IF( TEMPR.LT.ONE .AND. TEMPR.NE.ZERO ) THEN >*/
-	    if (tempr < 1. && tempr != 0.) {
+            if (tempr < 1. && tempr != 0.) {
 /*<                TEMP = TEMP / TEMPR >*/
-		temp /= tempr;
+                temp /= tempr;
 /*<                TEMP2 = TEMP2 / TEMPR >*/
-		temp2 /= tempr;
+                temp2 /= tempr;
 /*<             END IF >*/
-	    }
+            }
 /*<    >*/
-	    i__3 = j + (j - 1) * h_dim1;
-	    if (((d__1 = h__[i__3].r, abs(d__1)) + (d__2 = d_imag(&h__[j + (j 
-		    - 1) * h_dim1]), abs(d__2))) * temp2 <= temp * atol) {
-		goto L90;
-	    }
+            i__3 = j + (j - 1) * h_dim1;
+            if (((d__1 = h__[i__3].r, abs(d__1)) + (d__2 = d_imag(&h__[j + (j
+                    - 1) * h_dim1]), abs(d__2))) * temp2 <= temp * atol) {
+                goto L90;
+            }
 /*<    80    CONTINUE >*/
 /* L80: */
-	}
+        }
 
 /*<          ISTART = IFIRST >*/
-	istart = ifirst;
+        istart = ifirst;
 /*<    >*/
-	i__2 = ifirst + ifirst * h_dim1;
-	z__2.r = ascale * h__[i__2].r, z__2.i = ascale * h__[i__2].i;
-	i__3 = ifirst + ifirst * t_dim1;
-	z__4.r = bscale * t[i__3].r, z__4.i = bscale * t[i__3].i;
-	z__3.r = shift.r * z__4.r - shift.i * z__4.i, z__3.i = shift.r * 
-		z__4.i + shift.i * z__4.r;
-	z__1.r = z__2.r - z__3.r, z__1.i = z__2.i - z__3.i;
-	ctemp.r = z__1.r, ctemp.i = z__1.i;
+        i__2 = ifirst + ifirst * h_dim1;
+        z__2.r = ascale * h__[i__2].r, z__2.i = ascale * h__[i__2].i;
+        i__3 = ifirst + ifirst * t_dim1;
+        z__4.r = bscale * t[i__3].r, z__4.i = bscale * t[i__3].i;
+        z__3.r = shift.r * z__4.r - shift.i * z__4.i, z__3.i = shift.r *
+                z__4.i + shift.i * z__4.r;
+        z__1.r = z__2.r - z__3.r, z__1.i = z__2.i - z__3.i;
+        ctemp.r = z__1.r, ctemp.i = z__1.i;
 /*<    90    CONTINUE >*/
 L90:
 
@@ -1193,225 +1193,225 @@ L90:
 /*        Initial Q */
 
 /*<          CTEMP2 = ASCALE*H( ISTART+1, ISTART ) >*/
-	i__2 = istart + 1 + istart * h_dim1;
-	z__1.r = ascale * h__[i__2].r, z__1.i = ascale * h__[i__2].i;
-	ctemp2.r = z__1.r, ctemp2.i = z__1.i;
+        i__2 = istart + 1 + istart * h_dim1;
+        z__1.r = ascale * h__[i__2].r, z__1.i = ascale * h__[i__2].i;
+        ctemp2.r = z__1.r, ctemp2.i = z__1.i;
 /*<          CALL ZLARTG( CTEMP, CTEMP2, C, S, CTEMP3 ) >*/
-	zlartg_(&ctemp, &ctemp2, &c__, &s, &ctemp3);
+        zlartg_(&ctemp, &ctemp2, &c__, &s, &ctemp3);
 
 /*        Sweep */
 
 /*<          DO 150 J = ISTART, ILAST - 1 >*/
-	i__2 = ilast - 1;
-	for (j = istart; j <= i__2; ++j) {
+        i__2 = ilast - 1;
+        for (j = istart; j <= i__2; ++j) {
 /*<             IF( J.GT.ISTART ) THEN >*/
-	    if (j > istart) {
+            if (j > istart) {
 /*<                CTEMP = H( J, J-1 ) >*/
-		i__3 = j + (j - 1) * h_dim1;
-		ctemp.r = h__[i__3].r, ctemp.i = h__[i__3].i;
+                i__3 = j + (j - 1) * h_dim1;
+                ctemp.r = h__[i__3].r, ctemp.i = h__[i__3].i;
 /*<                CALL ZLARTG( CTEMP, H( J+1, J-1 ), C, S, H( J, J-1 ) ) >*/
-		zlartg_(&ctemp, &h__[j + 1 + (j - 1) * h_dim1], &c__, &s, &
-			h__[j + (j - 1) * h_dim1]);
+                zlartg_(&ctemp, &h__[j + 1 + (j - 1) * h_dim1], &c__, &s, &
+                        h__[j + (j - 1) * h_dim1]);
 /*<                H( J+1, J-1 ) = CZERO >*/
-		i__3 = j + 1 + (j - 1) * h_dim1;
-		h__[i__3].r = 0., h__[i__3].i = 0.;
+                i__3 = j + 1 + (j - 1) * h_dim1;
+                h__[i__3].r = 0., h__[i__3].i = 0.;
 /*<             END IF >*/
-	    }
+            }
 
 /*<             DO 100 JC = J, ILASTM >*/
-	    i__3 = ilastm;
-	    for (jc = j; jc <= i__3; ++jc) {
+            i__3 = ilastm;
+            for (jc = j; jc <= i__3; ++jc) {
 /*<                CTEMP = C*H( J, JC ) + S*H( J+1, JC ) >*/
-		i__4 = j + jc * h_dim1;
-		z__2.r = c__ * h__[i__4].r, z__2.i = c__ * h__[i__4].i;
-		i__5 = j + 1 + jc * h_dim1;
-		z__3.r = s.r * h__[i__5].r - s.i * h__[i__5].i, z__3.i = s.r *
-			 h__[i__5].i + s.i * h__[i__5].r;
-		z__1.r = z__2.r + z__3.r, z__1.i = z__2.i + z__3.i;
-		ctemp.r = z__1.r, ctemp.i = z__1.i;
+                i__4 = j + jc * h_dim1;
+                z__2.r = c__ * h__[i__4].r, z__2.i = c__ * h__[i__4].i;
+                i__5 = j + 1 + jc * h_dim1;
+                z__3.r = s.r * h__[i__5].r - s.i * h__[i__5].i, z__3.i = s.r *
+                         h__[i__5].i + s.i * h__[i__5].r;
+                z__1.r = z__2.r + z__3.r, z__1.i = z__2.i + z__3.i;
+                ctemp.r = z__1.r, ctemp.i = z__1.i;
 /*<                H( J+1, JC ) = -DCONJG( S )*H( J, JC ) + C*H( J+1, JC ) >*/
-		i__4 = j + 1 + jc * h_dim1;
-		d_cnjg(&z__4, &s);
-		z__3.r = -z__4.r, z__3.i = -z__4.i;
-		i__5 = j + jc * h_dim1;
-		z__2.r = z__3.r * h__[i__5].r - z__3.i * h__[i__5].i, z__2.i =
-			 z__3.r * h__[i__5].i + z__3.i * h__[i__5].r;
-		i__6 = j + 1 + jc * h_dim1;
-		z__5.r = c__ * h__[i__6].r, z__5.i = c__ * h__[i__6].i;
-		z__1.r = z__2.r + z__5.r, z__1.i = z__2.i + z__5.i;
-		h__[i__4].r = z__1.r, h__[i__4].i = z__1.i;
+                i__4 = j + 1 + jc * h_dim1;
+                d_cnjg(&z__4, &s);
+                z__3.r = -z__4.r, z__3.i = -z__4.i;
+                i__5 = j + jc * h_dim1;
+                z__2.r = z__3.r * h__[i__5].r - z__3.i * h__[i__5].i, z__2.i =
+                         z__3.r * h__[i__5].i + z__3.i * h__[i__5].r;
+                i__6 = j + 1 + jc * h_dim1;
+                z__5.r = c__ * h__[i__6].r, z__5.i = c__ * h__[i__6].i;
+                z__1.r = z__2.r + z__5.r, z__1.i = z__2.i + z__5.i;
+                h__[i__4].r = z__1.r, h__[i__4].i = z__1.i;
 /*<                H( J, JC ) = CTEMP >*/
-		i__4 = j + jc * h_dim1;
-		h__[i__4].r = ctemp.r, h__[i__4].i = ctemp.i;
+                i__4 = j + jc * h_dim1;
+                h__[i__4].r = ctemp.r, h__[i__4].i = ctemp.i;
 /*<                CTEMP2 = C*T( J, JC ) + S*T( J+1, JC ) >*/
-		i__4 = j + jc * t_dim1;
-		z__2.r = c__ * t[i__4].r, z__2.i = c__ * t[i__4].i;
-		i__5 = j + 1 + jc * t_dim1;
-		z__3.r = s.r * t[i__5].r - s.i * t[i__5].i, z__3.i = s.r * t[
-			i__5].i + s.i * t[i__5].r;
-		z__1.r = z__2.r + z__3.r, z__1.i = z__2.i + z__3.i;
-		ctemp2.r = z__1.r, ctemp2.i = z__1.i;
+                i__4 = j + jc * t_dim1;
+                z__2.r = c__ * t[i__4].r, z__2.i = c__ * t[i__4].i;
+                i__5 = j + 1 + jc * t_dim1;
+                z__3.r = s.r * t[i__5].r - s.i * t[i__5].i, z__3.i = s.r * t[
+                        i__5].i + s.i * t[i__5].r;
+                z__1.r = z__2.r + z__3.r, z__1.i = z__2.i + z__3.i;
+                ctemp2.r = z__1.r, ctemp2.i = z__1.i;
 /*<                T( J+1, JC ) = -DCONJG( S )*T( J, JC ) + C*T( J+1, JC ) >*/
-		i__4 = j + 1 + jc * t_dim1;
-		d_cnjg(&z__4, &s);
-		z__3.r = -z__4.r, z__3.i = -z__4.i;
-		i__5 = j + jc * t_dim1;
-		z__2.r = z__3.r * t[i__5].r - z__3.i * t[i__5].i, z__2.i = 
-			z__3.r * t[i__5].i + z__3.i * t[i__5].r;
-		i__6 = j + 1 + jc * t_dim1;
-		z__5.r = c__ * t[i__6].r, z__5.i = c__ * t[i__6].i;
-		z__1.r = z__2.r + z__5.r, z__1.i = z__2.i + z__5.i;
-		t[i__4].r = z__1.r, t[i__4].i = z__1.i;
+                i__4 = j + 1 + jc * t_dim1;
+                d_cnjg(&z__4, &s);
+                z__3.r = -z__4.r, z__3.i = -z__4.i;
+                i__5 = j + jc * t_dim1;
+                z__2.r = z__3.r * t[i__5].r - z__3.i * t[i__5].i, z__2.i =
+                        z__3.r * t[i__5].i + z__3.i * t[i__5].r;
+                i__6 = j + 1 + jc * t_dim1;
+                z__5.r = c__ * t[i__6].r, z__5.i = c__ * t[i__6].i;
+                z__1.r = z__2.r + z__5.r, z__1.i = z__2.i + z__5.i;
+                t[i__4].r = z__1.r, t[i__4].i = z__1.i;
 /*<                T( J, JC ) = CTEMP2 >*/
-		i__4 = j + jc * t_dim1;
-		t[i__4].r = ctemp2.r, t[i__4].i = ctemp2.i;
+                i__4 = j + jc * t_dim1;
+                t[i__4].r = ctemp2.r, t[i__4].i = ctemp2.i;
 /*<   100       CONTINUE >*/
 /* L100: */
-	    }
+            }
 /*<             IF( ILQ ) THEN >*/
-	    if (ilq) {
+            if (ilq) {
 /*<                DO 110 JR = 1, N >*/
-		i__3 = *n;
-		for (jr = 1; jr <= i__3; ++jr) {
+                i__3 = *n;
+                for (jr = 1; jr <= i__3; ++jr) {
 /*<                   CTEMP = C*Q( JR, J ) + DCONJG( S )*Q( JR, J+1 ) >*/
-		    i__4 = jr + j * q_dim1;
-		    z__2.r = c__ * q[i__4].r, z__2.i = c__ * q[i__4].i;
-		    d_cnjg(&z__4, &s);
-		    i__5 = jr + (j + 1) * q_dim1;
-		    z__3.r = z__4.r * q[i__5].r - z__4.i * q[i__5].i, z__3.i =
-			     z__4.r * q[i__5].i + z__4.i * q[i__5].r;
-		    z__1.r = z__2.r + z__3.r, z__1.i = z__2.i + z__3.i;
-		    ctemp.r = z__1.r, ctemp.i = z__1.i;
+                    i__4 = jr + j * q_dim1;
+                    z__2.r = c__ * q[i__4].r, z__2.i = c__ * q[i__4].i;
+                    d_cnjg(&z__4, &s);
+                    i__5 = jr + (j + 1) * q_dim1;
+                    z__3.r = z__4.r * q[i__5].r - z__4.i * q[i__5].i, z__3.i =
+                             z__4.r * q[i__5].i + z__4.i * q[i__5].r;
+                    z__1.r = z__2.r + z__3.r, z__1.i = z__2.i + z__3.i;
+                    ctemp.r = z__1.r, ctemp.i = z__1.i;
 /*<                   Q( JR, J+1 ) = -S*Q( JR, J ) + C*Q( JR, J+1 ) >*/
-		    i__4 = jr + (j + 1) * q_dim1;
-		    z__3.r = -s.r, z__3.i = -s.i;
-		    i__5 = jr + j * q_dim1;
-		    z__2.r = z__3.r * q[i__5].r - z__3.i * q[i__5].i, z__2.i =
-			     z__3.r * q[i__5].i + z__3.i * q[i__5].r;
-		    i__6 = jr + (j + 1) * q_dim1;
-		    z__4.r = c__ * q[i__6].r, z__4.i = c__ * q[i__6].i;
-		    z__1.r = z__2.r + z__4.r, z__1.i = z__2.i + z__4.i;
-		    q[i__4].r = z__1.r, q[i__4].i = z__1.i;
+                    i__4 = jr + (j + 1) * q_dim1;
+                    z__3.r = -s.r, z__3.i = -s.i;
+                    i__5 = jr + j * q_dim1;
+                    z__2.r = z__3.r * q[i__5].r - z__3.i * q[i__5].i, z__2.i =
+                             z__3.r * q[i__5].i + z__3.i * q[i__5].r;
+                    i__6 = jr + (j + 1) * q_dim1;
+                    z__4.r = c__ * q[i__6].r, z__4.i = c__ * q[i__6].i;
+                    z__1.r = z__2.r + z__4.r, z__1.i = z__2.i + z__4.i;
+                    q[i__4].r = z__1.r, q[i__4].i = z__1.i;
 /*<                   Q( JR, J ) = CTEMP >*/
-		    i__4 = jr + j * q_dim1;
-		    q[i__4].r = ctemp.r, q[i__4].i = ctemp.i;
+                    i__4 = jr + j * q_dim1;
+                    q[i__4].r = ctemp.r, q[i__4].i = ctemp.i;
 /*<   110          CONTINUE >*/
 /* L110: */
-		}
+                }
 /*<             END IF >*/
-	    }
+            }
 
 /*<             CTEMP = T( J+1, J+1 ) >*/
-	    i__3 = j + 1 + (j + 1) * t_dim1;
-	    ctemp.r = t[i__3].r, ctemp.i = t[i__3].i;
+            i__3 = j + 1 + (j + 1) * t_dim1;
+            ctemp.r = t[i__3].r, ctemp.i = t[i__3].i;
 /*<             CALL ZLARTG( CTEMP, T( J+1, J ), C, S, T( J+1, J+1 ) ) >*/
-	    zlartg_(&ctemp, &t[j + 1 + j * t_dim1], &c__, &s, &t[j + 1 + (j + 
-		    1) * t_dim1]);
+            zlartg_(&ctemp, &t[j + 1 + j * t_dim1], &c__, &s, &t[j + 1 + (j +
+                    1) * t_dim1]);
 /*<             T( J+1, J ) = CZERO >*/
-	    i__3 = j + 1 + j * t_dim1;
-	    t[i__3].r = 0., t[i__3].i = 0.;
+            i__3 = j + 1 + j * t_dim1;
+            t[i__3].r = 0., t[i__3].i = 0.;
 
 /*<             DO 120 JR = IFRSTM, MIN( J+2, ILAST ) >*/
 /* Computing MIN */
-	    i__4 = j + 2;
-	    i__3 = min(i__4,ilast);
-	    for (jr = ifrstm; jr <= i__3; ++jr) {
+            i__4 = j + 2;
+            i__3 = min(i__4,ilast);
+            for (jr = ifrstm; jr <= i__3; ++jr) {
 /*<                CTEMP = C*H( JR, J+1 ) + S*H( JR, J ) >*/
-		i__4 = jr + (j + 1) * h_dim1;
-		z__2.r = c__ * h__[i__4].r, z__2.i = c__ * h__[i__4].i;
-		i__5 = jr + j * h_dim1;
-		z__3.r = s.r * h__[i__5].r - s.i * h__[i__5].i, z__3.i = s.r *
-			 h__[i__5].i + s.i * h__[i__5].r;
-		z__1.r = z__2.r + z__3.r, z__1.i = z__2.i + z__3.i;
-		ctemp.r = z__1.r, ctemp.i = z__1.i;
+                i__4 = jr + (j + 1) * h_dim1;
+                z__2.r = c__ * h__[i__4].r, z__2.i = c__ * h__[i__4].i;
+                i__5 = jr + j * h_dim1;
+                z__3.r = s.r * h__[i__5].r - s.i * h__[i__5].i, z__3.i = s.r *
+                         h__[i__5].i + s.i * h__[i__5].r;
+                z__1.r = z__2.r + z__3.r, z__1.i = z__2.i + z__3.i;
+                ctemp.r = z__1.r, ctemp.i = z__1.i;
 /*<                H( JR, J ) = -DCONJG( S )*H( JR, J+1 ) + C*H( JR, J ) >*/
-		i__4 = jr + j * h_dim1;
-		d_cnjg(&z__4, &s);
-		z__3.r = -z__4.r, z__3.i = -z__4.i;
-		i__5 = jr + (j + 1) * h_dim1;
-		z__2.r = z__3.r * h__[i__5].r - z__3.i * h__[i__5].i, z__2.i =
-			 z__3.r * h__[i__5].i + z__3.i * h__[i__5].r;
-		i__6 = jr + j * h_dim1;
-		z__5.r = c__ * h__[i__6].r, z__5.i = c__ * h__[i__6].i;
-		z__1.r = z__2.r + z__5.r, z__1.i = z__2.i + z__5.i;
-		h__[i__4].r = z__1.r, h__[i__4].i = z__1.i;
+                i__4 = jr + j * h_dim1;
+                d_cnjg(&z__4, &s);
+                z__3.r = -z__4.r, z__3.i = -z__4.i;
+                i__5 = jr + (j + 1) * h_dim1;
+                z__2.r = z__3.r * h__[i__5].r - z__3.i * h__[i__5].i, z__2.i =
+                         z__3.r * h__[i__5].i + z__3.i * h__[i__5].r;
+                i__6 = jr + j * h_dim1;
+                z__5.r = c__ * h__[i__6].r, z__5.i = c__ * h__[i__6].i;
+                z__1.r = z__2.r + z__5.r, z__1.i = z__2.i + z__5.i;
+                h__[i__4].r = z__1.r, h__[i__4].i = z__1.i;
 /*<                H( JR, J+1 ) = CTEMP >*/
-		i__4 = jr + (j + 1) * h_dim1;
-		h__[i__4].r = ctemp.r, h__[i__4].i = ctemp.i;
+                i__4 = jr + (j + 1) * h_dim1;
+                h__[i__4].r = ctemp.r, h__[i__4].i = ctemp.i;
 /*<   120       CONTINUE >*/
 /* L120: */
-	    }
+            }
 /*<             DO 130 JR = IFRSTM, J >*/
-	    i__3 = j;
-	    for (jr = ifrstm; jr <= i__3; ++jr) {
+            i__3 = j;
+            for (jr = ifrstm; jr <= i__3; ++jr) {
 /*<                CTEMP = C*T( JR, J+1 ) + S*T( JR, J ) >*/
-		i__4 = jr + (j + 1) * t_dim1;
-		z__2.r = c__ * t[i__4].r, z__2.i = c__ * t[i__4].i;
-		i__5 = jr + j * t_dim1;
-		z__3.r = s.r * t[i__5].r - s.i * t[i__5].i, z__3.i = s.r * t[
-			i__5].i + s.i * t[i__5].r;
-		z__1.r = z__2.r + z__3.r, z__1.i = z__2.i + z__3.i;
-		ctemp.r = z__1.r, ctemp.i = z__1.i;
+                i__4 = jr + (j + 1) * t_dim1;
+                z__2.r = c__ * t[i__4].r, z__2.i = c__ * t[i__4].i;
+                i__5 = jr + j * t_dim1;
+                z__3.r = s.r * t[i__5].r - s.i * t[i__5].i, z__3.i = s.r * t[
+                        i__5].i + s.i * t[i__5].r;
+                z__1.r = z__2.r + z__3.r, z__1.i = z__2.i + z__3.i;
+                ctemp.r = z__1.r, ctemp.i = z__1.i;
 /*<                T( JR, J ) = -DCONJG( S )*T( JR, J+1 ) + C*T( JR, J ) >*/
-		i__4 = jr + j * t_dim1;
-		d_cnjg(&z__4, &s);
-		z__3.r = -z__4.r, z__3.i = -z__4.i;
-		i__5 = jr + (j + 1) * t_dim1;
-		z__2.r = z__3.r * t[i__5].r - z__3.i * t[i__5].i, z__2.i = 
-			z__3.r * t[i__5].i + z__3.i * t[i__5].r;
-		i__6 = jr + j * t_dim1;
-		z__5.r = c__ * t[i__6].r, z__5.i = c__ * t[i__6].i;
-		z__1.r = z__2.r + z__5.r, z__1.i = z__2.i + z__5.i;
-		t[i__4].r = z__1.r, t[i__4].i = z__1.i;
+                i__4 = jr + j * t_dim1;
+                d_cnjg(&z__4, &s);
+                z__3.r = -z__4.r, z__3.i = -z__4.i;
+                i__5 = jr + (j + 1) * t_dim1;
+                z__2.r = z__3.r * t[i__5].r - z__3.i * t[i__5].i, z__2.i =
+                        z__3.r * t[i__5].i + z__3.i * t[i__5].r;
+                i__6 = jr + j * t_dim1;
+                z__5.r = c__ * t[i__6].r, z__5.i = c__ * t[i__6].i;
+                z__1.r = z__2.r + z__5.r, z__1.i = z__2.i + z__5.i;
+                t[i__4].r = z__1.r, t[i__4].i = z__1.i;
 /*<                T( JR, J+1 ) = CTEMP >*/
-		i__4 = jr + (j + 1) * t_dim1;
-		t[i__4].r = ctemp.r, t[i__4].i = ctemp.i;
+                i__4 = jr + (j + 1) * t_dim1;
+                t[i__4].r = ctemp.r, t[i__4].i = ctemp.i;
 /*<   130       CONTINUE >*/
 /* L130: */
-	    }
+            }
 /*<             IF( ILZ ) THEN >*/
-	    if (ilz) {
+            if (ilz) {
 /*<                DO 140 JR = 1, N >*/
-		i__3 = *n;
-		for (jr = 1; jr <= i__3; ++jr) {
+                i__3 = *n;
+                for (jr = 1; jr <= i__3; ++jr) {
 /*<                   CTEMP = C*Z( JR, J+1 ) + S*Z( JR, J ) >*/
-		    i__4 = jr + (j + 1) * z_dim1;
-		    z__2.r = c__ * z__[i__4].r, z__2.i = c__ * z__[i__4].i;
-		    i__5 = jr + j * z_dim1;
-		    z__3.r = s.r * z__[i__5].r - s.i * z__[i__5].i, z__3.i = 
-			    s.r * z__[i__5].i + s.i * z__[i__5].r;
-		    z__1.r = z__2.r + z__3.r, z__1.i = z__2.i + z__3.i;
-		    ctemp.r = z__1.r, ctemp.i = z__1.i;
+                    i__4 = jr + (j + 1) * z_dim1;
+                    z__2.r = c__ * z__[i__4].r, z__2.i = c__ * z__[i__4].i;
+                    i__5 = jr + j * z_dim1;
+                    z__3.r = s.r * z__[i__5].r - s.i * z__[i__5].i, z__3.i =
+                            s.r * z__[i__5].i + s.i * z__[i__5].r;
+                    z__1.r = z__2.r + z__3.r, z__1.i = z__2.i + z__3.i;
+                    ctemp.r = z__1.r, ctemp.i = z__1.i;
 /*<                   Z( JR, J ) = -DCONJG( S )*Z( JR, J+1 ) + C*Z( JR, J ) >*/
-		    i__4 = jr + j * z_dim1;
-		    d_cnjg(&z__4, &s);
-		    z__3.r = -z__4.r, z__3.i = -z__4.i;
-		    i__5 = jr + (j + 1) * z_dim1;
-		    z__2.r = z__3.r * z__[i__5].r - z__3.i * z__[i__5].i, 
-			    z__2.i = z__3.r * z__[i__5].i + z__3.i * z__[i__5]
-			    .r;
-		    i__6 = jr + j * z_dim1;
-		    z__5.r = c__ * z__[i__6].r, z__5.i = c__ * z__[i__6].i;
-		    z__1.r = z__2.r + z__5.r, z__1.i = z__2.i + z__5.i;
-		    z__[i__4].r = z__1.r, z__[i__4].i = z__1.i;
+                    i__4 = jr + j * z_dim1;
+                    d_cnjg(&z__4, &s);
+                    z__3.r = -z__4.r, z__3.i = -z__4.i;
+                    i__5 = jr + (j + 1) * z_dim1;
+                    z__2.r = z__3.r * z__[i__5].r - z__3.i * z__[i__5].i,
+                            z__2.i = z__3.r * z__[i__5].i + z__3.i * z__[i__5]
+                            .r;
+                    i__6 = jr + j * z_dim1;
+                    z__5.r = c__ * z__[i__6].r, z__5.i = c__ * z__[i__6].i;
+                    z__1.r = z__2.r + z__5.r, z__1.i = z__2.i + z__5.i;
+                    z__[i__4].r = z__1.r, z__[i__4].i = z__1.i;
 /*<                   Z( JR, J+1 ) = CTEMP >*/
-		    i__4 = jr + (j + 1) * z_dim1;
-		    z__[i__4].r = ctemp.r, z__[i__4].i = ctemp.i;
+                    i__4 = jr + (j + 1) * z_dim1;
+                    z__[i__4].r = ctemp.r, z__[i__4].i = ctemp.i;
 /*<   140          CONTINUE >*/
 /* L140: */
-		}
+                }
 /*<             END IF >*/
-	    }
+            }
 /*<   150    CONTINUE >*/
 /* L150: */
-	}
+        }
 
 /*<   160    CONTINUE >*/
 L160:
 
 /*<   170 CONTINUE >*/
 /* L170: */
-	;
+        ;
     }
 
 /*     Drop-through = non-convergence */
@@ -1434,54 +1434,54 @@ L190:
     i__1 = *ilo - 1;
     for (j = 1; j <= i__1; ++j) {
 /*<          ABSB = ABS( T( J, J ) ) >*/
-	absb = z_abs(&t[j + j * t_dim1]);
+        absb = z_abs(&t[j + j * t_dim1]);
 /*<          IF( ABSB.GT.SAFMIN ) THEN >*/
-	if (absb > safmin) {
+        if (absb > safmin) {
 /*<             SIGNBC = DCONJG( T( J, J ) / ABSB ) >*/
-	    i__2 = j + j * t_dim1;
-	    z__2.r = t[i__2].r / absb, z__2.i = t[i__2].i / absb;
-	    d_cnjg(&z__1, &z__2);
-	    signbc.r = z__1.r, signbc.i = z__1.i;
+            i__2 = j + j * t_dim1;
+            z__2.r = t[i__2].r / absb, z__2.i = t[i__2].i / absb;
+            d_cnjg(&z__1, &z__2);
+            signbc.r = z__1.r, signbc.i = z__1.i;
 /*<             T( J, J ) = ABSB >*/
-	    i__2 = j + j * t_dim1;
-	    t[i__2].r = absb, t[i__2].i = 0.;
+            i__2 = j + j * t_dim1;
+            t[i__2].r = absb, t[i__2].i = 0.;
 /*<             IF( ILSCHR ) THEN >*/
-	    if (ilschr) {
+            if (ilschr) {
 /*<                CALL ZSCAL( J-1, SIGNBC, T( 1, J ), 1 ) >*/
-		i__2 = j - 1;
-		zscal_(&i__2, &signbc, &t[j * t_dim1 + 1], &c__1);
+                i__2 = j - 1;
+                zscal_(&i__2, &signbc, &t[j * t_dim1 + 1], &c__1);
 /*<                CALL ZSCAL( J, SIGNBC, H( 1, J ), 1 ) >*/
-		zscal_(&j, &signbc, &h__[j * h_dim1 + 1], &c__1);
+                zscal_(&j, &signbc, &h__[j * h_dim1 + 1], &c__1);
 /*<             ELSE >*/
-	    } else {
+            } else {
 /*<                H( J, J ) = H( J, J )*SIGNBC >*/
-		i__2 = j + j * h_dim1;
-		i__3 = j + j * h_dim1;
-		z__1.r = h__[i__3].r * signbc.r - h__[i__3].i * signbc.i, 
-			z__1.i = h__[i__3].r * signbc.i + h__[i__3].i * 
-			signbc.r;
-		h__[i__2].r = z__1.r, h__[i__2].i = z__1.i;
+                i__2 = j + j * h_dim1;
+                i__3 = j + j * h_dim1;
+                z__1.r = h__[i__3].r * signbc.r - h__[i__3].i * signbc.i,
+                        z__1.i = h__[i__3].r * signbc.i + h__[i__3].i *
+                        signbc.r;
+                h__[i__2].r = z__1.r, h__[i__2].i = z__1.i;
 /*<             END IF >*/
-	    }
+            }
 /*<    >*/
-	    if (ilz) {
-		zscal_(n, &signbc, &z__[j * z_dim1 + 1], &c__1);
-	    }
+            if (ilz) {
+                zscal_(n, &signbc, &z__[j * z_dim1 + 1], &c__1);
+            }
 /*<          ELSE >*/
-	} else {
+        } else {
 /*<             T( J, J ) = CZERO >*/
-	    i__2 = j + j * t_dim1;
-	    t[i__2].r = 0., t[i__2].i = 0.;
+            i__2 = j + j * t_dim1;
+            t[i__2].r = 0., t[i__2].i = 0.;
 /*<          END IF >*/
-	}
+        }
 /*<          ALPHA( J ) = H( J, J ) >*/
-	i__2 = j;
-	i__3 = j + j * h_dim1;
-	alpha[i__2].r = h__[i__3].r, alpha[i__2].i = h__[i__3].i;
+        i__2 = j;
+        i__3 = j + j * h_dim1;
+        alpha[i__2].r = h__[i__3].r, alpha[i__2].i = h__[i__3].i;
 /*<          BETA( J ) = T( J, J ) >*/
-	i__2 = j;
-	i__3 = j + j * t_dim1;
-	beta[i__2].r = t[i__3].r, beta[i__2].i = t[i__3].i;
+        i__2 = j;
+        i__3 = j + j * t_dim1;
+        beta[i__2].r = t[i__3].r, beta[i__2].i = t[i__3].i;
 /*<   200 CONTINUE >*/
 /* L200: */
     }
@@ -1507,5 +1507,5 @@ L210:
 } /* zhgeqz_ */
 
 #ifdef __cplusplus
-	}
+        }
 #endif

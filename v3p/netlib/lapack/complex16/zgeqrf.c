@@ -1,13 +1,13 @@
 /* lapack/complex16/zgeqrf.f -- translated by f2c (version 20090411).
    You must link the resulting object file with libf2c:
-	on Microsoft Windows system, link with libf2c.lib;
-	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
-	or, if you install libf2c.a in a standard place, with -lf2c -lm
-	-- in that order, at the end of the command line, as in
-		cc *.o -lf2c -lm
-	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+        on Microsoft Windows system, link with libf2c.lib;
+        on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+        or, if you install libf2c.a in a standard place, with -lf2c -lm
+        -- in that order, at the end of the command line, as in
+                cc *.o -lf2c -lm
+        Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
 
-		http://www.netlib.org/f2c/libf2c.zip
+                http://www.netlib.org/f2c/libf2c.zip
 */
 
 #ifdef __cplusplus
@@ -23,9 +23,9 @@ static integer c__3 = 3;
 static integer c__2 = 2;
 
 /*<       SUBROUTINE ZGEQRF( M, N, A, LDA, TAU, WORK, LWORK, INFO ) >*/
-/* Subroutine */ int zgeqrf_(integer *m, integer *n, doublecomplex *a, 
-	integer *lda, doublecomplex *tau, doublecomplex *work, integer *lwork,
-	 integer *info)
+/* Subroutine */ int zgeqrf_(integer *m, integer *n, doublecomplex *a,
+        integer *lda, doublecomplex *tau, doublecomplex *work, integer *lwork,
+         integer *info)
 {
     /* System generated locals */
     integer a_dim1, a_offset, i__1, i__2, i__3, i__4;
@@ -33,18 +33,18 @@ static integer c__2 = 2;
     /* Local variables */
     integer i__, k, ib, nb, nx, iws, nbmin, iinfo;
     extern /* Subroutine */ int zgeqr2_(integer *, integer *, doublecomplex *,
-	     integer *, doublecomplex *, doublecomplex *, integer *), xerbla_(
-	    char *, integer *, ftnlen);
-    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, 
-	    integer *, integer *, ftnlen, ftnlen);
-    extern /* Subroutine */ int zlarfb_(char *, char *, char *, char *, 
-	    integer *, integer *, integer *, doublecomplex *, integer *, 
-	    doublecomplex *, integer *, doublecomplex *, integer *, 
-	    doublecomplex *, integer *, ftnlen, ftnlen, ftnlen, ftnlen);
+             integer *, doublecomplex *, doublecomplex *, integer *), xerbla_(
+            char *, integer *, ftnlen);
+    extern integer ilaenv_(integer *, char *, char *, integer *, integer *,
+            integer *, integer *, ftnlen, ftnlen);
+    extern /* Subroutine */ int zlarfb_(char *, char *, char *, char *,
+            integer *, integer *, integer *, doublecomplex *, integer *,
+            doublecomplex *, integer *, doublecomplex *, integer *,
+            doublecomplex *, integer *, ftnlen, ftnlen, ftnlen, ftnlen);
     integer ldwork;
-    extern /* Subroutine */ int zlarft_(char *, char *, integer *, integer *, 
-	    doublecomplex *, integer *, doublecomplex *, doublecomplex *, 
-	    integer *, ftnlen, ftnlen);
+    extern /* Subroutine */ int zlarft_(char *, char *, integer *, integer *,
+            doublecomplex *, integer *, doublecomplex *, doublecomplex *,
+            integer *, ftnlen, ftnlen);
     integer lwkopt;
     logical lquery;
 
@@ -156,7 +156,7 @@ static integer c__2 = 2;
     *info = 0;
 /*<       NB = ILAENV( 1, 'ZGEQRF', ' ', M, N, -1, -1 ) >*/
     nb = ilaenv_(&c__1, "ZGEQRF", " ", m, n, &c_n1, &c_n1, (ftnlen)6, (ftnlen)
-	    1);
+            1);
 /*<       LWKOPT = N*NB >*/
     lwkopt = *n * nb;
 /*<       WORK( 1 ) = LWKOPT >*/
@@ -166,32 +166,32 @@ static integer c__2 = 2;
 /*<       IF( M.LT.0 ) THEN >*/
     if (*m < 0) {
 /*<          INFO = -1 >*/
-	*info = -1;
+        *info = -1;
 /*<       ELSE IF( N.LT.0 ) THEN >*/
     } else if (*n < 0) {
 /*<          INFO = -2 >*/
-	*info = -2;
+        *info = -2;
 /*<       ELSE IF( LDA.LT.MAX( 1, M ) ) THEN >*/
     } else if (*lda < max(1,*m)) {
 /*<          INFO = -4 >*/
-	*info = -4;
+        *info = -4;
 /*<       ELSE IF( LWORK.LT.MAX( 1, N ) .AND. .NOT.LQUERY ) THEN >*/
     } else if (*lwork < max(1,*n) && ! lquery) {
 /*<          INFO = -7 >*/
-	*info = -7;
+        *info = -7;
 /*<       END IF >*/
     }
 /*<       IF( INFO.NE.0 ) THEN >*/
     if (*info != 0) {
 /*<          CALL XERBLA( 'ZGEQRF', -INFO ) >*/
-	i__1 = -(*info);
-	xerbla_("ZGEQRF", &i__1, (ftnlen)6);
+        i__1 = -(*info);
+        xerbla_("ZGEQRF", &i__1, (ftnlen)6);
 /*<          RETURN >*/
-	return 0;
+        return 0;
 /*<       ELSE IF( LQUERY ) THEN >*/
     } else if (lquery) {
 /*<          RETURN >*/
-	return 0;
+        return 0;
 /*<       END IF >*/
     }
 
@@ -202,9 +202,9 @@ static integer c__2 = 2;
 /*<       IF( K.EQ.0 ) THEN >*/
     if (k == 0) {
 /*<          WORK( 1 ) = 1 >*/
-	work[1].r = 1., work[1].i = 0.;
+        work[1].r = 1., work[1].i = 0.;
 /*<          RETURN >*/
-	return 0;
+        return 0;
 /*<       END IF >*/
     }
 
@@ -221,35 +221,35 @@ static integer c__2 = 2;
 
 /*<          NX = MAX( 0, ILAENV( 3, 'ZGEQRF', ' ', M, N, -1, -1 ) ) >*/
 /* Computing MAX */
-	i__1 = 0, i__2 = ilaenv_(&c__3, "ZGEQRF", " ", m, n, &c_n1, &c_n1, (
-		ftnlen)6, (ftnlen)1);
-	nx = max(i__1,i__2);
+        i__1 = 0, i__2 = ilaenv_(&c__3, "ZGEQRF", " ", m, n, &c_n1, &c_n1, (
+                ftnlen)6, (ftnlen)1);
+        nx = max(i__1,i__2);
 /*<          IF( NX.LT.K ) THEN >*/
-	if (nx < k) {
+        if (nx < k) {
 
 /*           Determine if workspace is large enough for blocked code. */
 
 /*<             LDWORK = N >*/
-	    ldwork = *n;
+            ldwork = *n;
 /*<             IWS = LDWORK*NB >*/
-	    iws = ldwork * nb;
+            iws = ldwork * nb;
 /*<             IF( LWORK.LT.IWS ) THEN >*/
-	    if (*lwork < iws) {
+            if (*lwork < iws) {
 
 /*              Not enough workspace to use optimal NB:  reduce NB and */
 /*              determine the minimum value of NB. */
 
 /*<                NB = LWORK / LDWORK >*/
-		nb = *lwork / ldwork;
+                nb = *lwork / ldwork;
 /*<    >*/
 /* Computing MAX */
-		i__1 = 2, i__2 = ilaenv_(&c__2, "ZGEQRF", " ", m, n, &c_n1, &
-			c_n1, (ftnlen)6, (ftnlen)1);
-		nbmin = max(i__1,i__2);
+                i__1 = 2, i__2 = ilaenv_(&c__2, "ZGEQRF", " ", m, n, &c_n1, &
+                        c_n1, (ftnlen)6, (ftnlen)1);
+                nbmin = max(i__1,i__2);
 /*<             END IF >*/
-	    }
+            }
 /*<          END IF >*/
-	}
+        }
 /*<       END IF >*/
     }
 
@@ -259,52 +259,52 @@ static integer c__2 = 2;
 /*        Use blocked code initially */
 
 /*<          DO 10 I = 1, K - NX, NB >*/
-	i__1 = k - nx;
-	i__2 = nb;
-	for (i__ = 1; i__2 < 0 ? i__ >= i__1 : i__ <= i__1; i__ += i__2) {
+        i__1 = k - nx;
+        i__2 = nb;
+        for (i__ = 1; i__2 < 0 ? i__ >= i__1 : i__ <= i__1; i__ += i__2) {
 /*<             IB = MIN( K-I+1, NB ) >*/
 /* Computing MIN */
-	    i__3 = k - i__ + 1;
-	    ib = min(i__3,nb);
+            i__3 = k - i__ + 1;
+            ib = min(i__3,nb);
 
 /*           Compute the QR factorization of the current block */
 /*           A(i:m,i:i+ib-1) */
 
 /*<    >*/
-	    i__3 = *m - i__ + 1;
-	    zgeqr2_(&i__3, &ib, &a[i__ + i__ * a_dim1], lda, &tau[i__], &work[
-		    1], &iinfo);
+            i__3 = *m - i__ + 1;
+            zgeqr2_(&i__3, &ib, &a[i__ + i__ * a_dim1], lda, &tau[i__], &work[
+                    1], &iinfo);
 /*<             IF( I+IB.LE.N ) THEN >*/
-	    if (i__ + ib <= *n) {
+            if (i__ + ib <= *n) {
 
 /*              Form the triangular factor of the block reflector */
 /*              H = H(i) H(i+1) . . . H(i+ib-1) */
 
 /*<    >*/
-		i__3 = *m - i__ + 1;
-		zlarft_("Forward", "Columnwise", &i__3, &ib, &a[i__ + i__ * 
-			a_dim1], lda, &tau[i__], &work[1], &ldwork, (ftnlen)7,
-			 (ftnlen)10);
+                i__3 = *m - i__ + 1;
+                zlarft_("Forward", "Columnwise", &i__3, &ib, &a[i__ + i__ *
+                        a_dim1], lda, &tau[i__], &work[1], &ldwork, (ftnlen)7,
+                         (ftnlen)10);
 
 /*              Apply H' to A(i:m,i+ib:n) from the left */
 
 /*<    >*/
-		i__3 = *m - i__ + 1;
-		i__4 = *n - i__ - ib + 1;
-		zlarfb_("Left", "Conjugate transpose", "Forward", "Columnwise"
-			, &i__3, &i__4, &ib, &a[i__ + i__ * a_dim1], lda, &
-			work[1], &ldwork, &a[i__ + (i__ + ib) * a_dim1], lda, 
-			&work[ib + 1], &ldwork, (ftnlen)4, (ftnlen)19, (
-			ftnlen)7, (ftnlen)10);
+                i__3 = *m - i__ + 1;
+                i__4 = *n - i__ - ib + 1;
+                zlarfb_("Left", "Conjugate transpose", "Forward", "Columnwise"
+                        , &i__3, &i__4, &ib, &a[i__ + i__ * a_dim1], lda, &
+                        work[1], &ldwork, &a[i__ + (i__ + ib) * a_dim1], lda,
+                        &work[ib + 1], &ldwork, (ftnlen)4, (ftnlen)19, (
+                        ftnlen)7, (ftnlen)10);
 /*<             END IF >*/
-	    }
+            }
 /*<    10    CONTINUE >*/
 /* L10: */
-	}
+        }
 /*<       ELSE >*/
     } else {
 /*<          I = 1 >*/
-	i__ = 1;
+        i__ = 1;
 /*<       END IF >*/
     }
 
@@ -312,10 +312,10 @@ static integer c__2 = 2;
 
 /*<    >*/
     if (i__ <= k) {
-	i__2 = *m - i__ + 1;
-	i__1 = *n - i__ + 1;
-	zgeqr2_(&i__2, &i__1, &a[i__ + i__ * a_dim1], lda, &tau[i__], &work[1]
-		, &iinfo);
+        i__2 = *m - i__ + 1;
+        i__1 = *n - i__ + 1;
+        zgeqr2_(&i__2, &i__1, &a[i__ + i__ * a_dim1], lda, &tau[i__], &work[1]
+                , &iinfo);
     }
 
 /*<       WORK( 1 ) = IWS >*/
@@ -329,5 +329,5 @@ static integer c__2 = 2;
 } /* zgeqrf_ */
 
 #ifdef __cplusplus
-	}
+        }
 #endif

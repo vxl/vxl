@@ -1,13 +1,13 @@
 /* lapack/complex16/zgecon.f -- translated by f2c (version 20090411).
    You must link the resulting object file with libf2c:
-	on Microsoft Windows system, link with libf2c.lib;
-	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
-	or, if you install libf2c.a in a standard place, with -lf2c -lm
-	-- in that order, at the end of the command line, as in
-		cc *.o -lf2c -lm
-	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+        on Microsoft Windows system, link with libf2c.lib;
+        on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+        or, if you install libf2c.a in a standard place, with -lf2c -lm
+        -- in that order, at the end of the command line, as in
+                cc *.o -lf2c -lm
+        Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
 
-		http://www.netlib.org/f2c/libf2c.zip
+                http://www.netlib.org/f2c/libf2c.zip
 */
 
 #ifdef __cplusplus
@@ -20,9 +20,9 @@ extern "C" {
 static integer c__1 = 1;
 
 /*<    >*/
-/* Subroutine */ int zgecon_(char *norm, integer *n, doublecomplex *a, 
-	integer *lda, doublereal *anorm, doublereal *rcond, doublecomplex *
-	work, doublereal *rwork, integer *info, ftnlen norm_len)
+/* Subroutine */ int zgecon_(char *norm, integer *n, doublecomplex *a,
+        integer *lda, doublereal *anorm, doublereal *rcond, doublecomplex *
+        work, doublereal *rwork, integer *info, ftnlen norm_len)
 {
     /* System generated locals */
     integer a_dim1, a_offset, i__1;
@@ -39,21 +39,21 @@ static integer c__1 = 1;
     doublereal scale;
     extern logical lsame_(const char *, const char *, ftnlen, ftnlen);
     integer isave[3];
-    extern /* Subroutine */ int zlacn2_(integer *, doublecomplex *, 
-	    doublecomplex *, doublereal *, integer *, integer *);
+    extern /* Subroutine */ int zlacn2_(integer *, doublecomplex *,
+            doublecomplex *, doublereal *, integer *, integer *);
     extern doublereal dlamch_(char *, ftnlen);
     extern /* Subroutine */ int xerbla_(char *, integer *, ftnlen);
     doublereal ainvnm;
     extern integer izamax_(integer *, doublecomplex *, integer *);
     logical onenrm;
-    extern /* Subroutine */ int zdrscl_(integer *, doublereal *, 
-	    doublecomplex *, integer *);
+    extern /* Subroutine */ int zdrscl_(integer *, doublereal *,
+            doublecomplex *, integer *);
     char normin[1];
     doublereal smlnum;
-    extern /* Subroutine */ int zlatrs_(char *, char *, char *, char *, 
-	    integer *, doublecomplex *, integer *, doublecomplex *, 
-	    doublereal *, doublereal *, integer *, ftnlen, ftnlen, ftnlen, 
-	    ftnlen);
+    extern /* Subroutine */ int zlatrs_(char *, char *, char *, char *,
+            integer *, doublecomplex *, integer *, doublecomplex *,
+            doublereal *, doublereal *, integer *, ftnlen, ftnlen, ftnlen,
+            ftnlen);
 
 
 /*  -- LAPACK routine (version 3.2) -- */
@@ -169,32 +169,32 @@ static integer c__1 = 1;
     *info = 0;
 /*<       ONENRM = NORM.EQ.'1' .OR. LSAME( NORM, 'O' ) >*/
     onenrm = *(unsigned char *)norm == '1' || lsame_(norm, "O", (ftnlen)1, (
-	    ftnlen)1);
+            ftnlen)1);
 /*<       IF( .NOT.ONENRM .AND. .NOT.LSAME( NORM, 'I' ) ) THEN >*/
     if (! onenrm && ! lsame_(norm, "I", (ftnlen)1, (ftnlen)1)) {
 /*<          INFO = -1 >*/
-	*info = -1;
+        *info = -1;
 /*<       ELSE IF( N.LT.0 ) THEN >*/
     } else if (*n < 0) {
 /*<          INFO = -2 >*/
-	*info = -2;
+        *info = -2;
 /*<       ELSE IF( LDA.LT.MAX( 1, N ) ) THEN >*/
     } else if (*lda < max(1,*n)) {
 /*<          INFO = -4 >*/
-	*info = -4;
+        *info = -4;
 /*<       ELSE IF( ANORM.LT.ZERO ) THEN >*/
     } else if (*anorm < 0.) {
 /*<          INFO = -5 >*/
-	*info = -5;
+        *info = -5;
 /*<       END IF >*/
     }
 /*<       IF( INFO.NE.0 ) THEN >*/
     if (*info != 0) {
 /*<          CALL XERBLA( 'ZGECON', -INFO ) >*/
-	i__1 = -(*info);
-	xerbla_("ZGECON", &i__1, (ftnlen)6);
+        i__1 = -(*info);
+        xerbla_("ZGECON", &i__1, (ftnlen)6);
 /*<          RETURN >*/
-	return 0;
+        return 0;
 /*<       END IF >*/
     }
 
@@ -205,13 +205,13 @@ static integer c__1 = 1;
 /*<       IF( N.EQ.0 ) THEN >*/
     if (*n == 0) {
 /*<          RCOND = ONE >*/
-	*rcond = 1.;
+        *rcond = 1.;
 /*<          RETURN >*/
-	return 0;
+        return 0;
 /*<       ELSE IF( ANORM.EQ.ZERO ) THEN >*/
     } else if (*anorm == 0.) {
 /*<          RETURN >*/
-	return 0;
+        return 0;
 /*<       END IF >*/
     }
 
@@ -227,11 +227,11 @@ static integer c__1 = 1;
 /*<       IF( ONENRM ) THEN >*/
     if (onenrm) {
 /*<          KASE1 = 1 >*/
-	kase1 = 1;
+        kase1 = 1;
 /*<       ELSE >*/
     } else {
 /*<          KASE1 = 2 >*/
-	kase1 = 2;
+        kase1 = 2;
 /*<       END IF >*/
     }
 /*<       KASE = 0 >*/
@@ -243,62 +243,62 @@ L10:
 /*<       IF( KASE.NE.0 ) THEN >*/
     if (kase != 0) {
 /*<          IF( KASE.EQ.KASE1 ) THEN >*/
-	if (kase == kase1) {
+        if (kase == kase1) {
 
 /*           Multiply by inv(L). */
 
 /*<    >*/
-	    zlatrs_("Lower", "No transpose", "Unit", normin, n, &a[a_offset], 
-		    lda, &work[1], &sl, &rwork[1], info, (ftnlen)5, (ftnlen)
-		    12, (ftnlen)4, (ftnlen)1);
+            zlatrs_("Lower", "No transpose", "Unit", normin, n, &a[a_offset],
+                    lda, &work[1], &sl, &rwork[1], info, (ftnlen)5, (ftnlen)
+                    12, (ftnlen)4, (ftnlen)1);
 
 /*           Multiply by inv(U). */
 
 /*<    >*/
-	    zlatrs_("Upper", "No transpose", "Non-unit", normin, n, &a[
-		    a_offset], lda, &work[1], &su, &rwork[*n + 1], info, (
-		    ftnlen)5, (ftnlen)12, (ftnlen)8, (ftnlen)1);
+            zlatrs_("Upper", "No transpose", "Non-unit", normin, n, &a[
+                    a_offset], lda, &work[1], &su, &rwork[*n + 1], info, (
+                    ftnlen)5, (ftnlen)12, (ftnlen)8, (ftnlen)1);
 /*<          ELSE >*/
-	} else {
+        } else {
 
 /*           Multiply by inv(U'). */
 
 /*<    >*/
-	    zlatrs_("Upper", "Conjugate transpose", "Non-unit", normin, n, &a[
-		    a_offset], lda, &work[1], &su, &rwork[*n + 1], info, (
-		    ftnlen)5, (ftnlen)19, (ftnlen)8, (ftnlen)1);
+            zlatrs_("Upper", "Conjugate transpose", "Non-unit", normin, n, &a[
+                    a_offset], lda, &work[1], &su, &rwork[*n + 1], info, (
+                    ftnlen)5, (ftnlen)19, (ftnlen)8, (ftnlen)1);
 
 /*           Multiply by inv(L'). */
 
 /*<    >*/
-	    zlatrs_("Lower", "Conjugate transpose", "Unit", normin, n, &a[
-		    a_offset], lda, &work[1], &sl, &rwork[1], info, (ftnlen)5,
-		     (ftnlen)19, (ftnlen)4, (ftnlen)1);
+            zlatrs_("Lower", "Conjugate transpose", "Unit", normin, n, &a[
+                    a_offset], lda, &work[1], &sl, &rwork[1], info, (ftnlen)5,
+                     (ftnlen)19, (ftnlen)4, (ftnlen)1);
 /*<          END IF >*/
-	}
+        }
 
 /*        Divide X by 1/(SL*SU) if doing so will not cause overflow. */
 
 /*<          SCALE = SL*SU >*/
-	scale = sl * su;
+        scale = sl * su;
 /*<          NORMIN = 'Y' >*/
-	*(unsigned char *)normin = 'Y';
+        *(unsigned char *)normin = 'Y';
 /*<          IF( SCALE.NE.ONE ) THEN >*/
-	if (scale != 1.) {
+        if (scale != 1.) {
 /*<             IX = IZAMAX( N, WORK, 1 ) >*/
-	    ix = izamax_(n, &work[1], &c__1);
+            ix = izamax_(n, &work[1], &c__1);
 /*<    >*/
-	    i__1 = ix;
-	    if (scale < ((d__1 = work[i__1].r, abs(d__1)) + (d__2 = d_imag(&
-		    work[ix]), abs(d__2))) * smlnum || scale == 0.) {
-		goto L20;
-	    }
+            i__1 = ix;
+            if (scale < ((d__1 = work[i__1].r, abs(d__1)) + (d__2 = d_imag(&
+                    work[ix]), abs(d__2))) * smlnum || scale == 0.) {
+                goto L20;
+            }
 /*<             CALL ZDRSCL( N, SCALE, WORK, 1 ) >*/
-	    zdrscl_(n, &scale, &work[1], &c__1);
+            zdrscl_(n, &scale, &work[1], &c__1);
 /*<          END IF >*/
-	}
+        }
 /*<          GO TO 10 >*/
-	goto L10;
+        goto L10;
 /*<       END IF >*/
     }
 
@@ -306,7 +306,7 @@ L10:
 
 /*<    >*/
     if (ainvnm != 0.) {
-	*rcond = 1. / ainvnm / *anorm;
+        *rcond = 1. / ainvnm / *anorm;
     }
 
 /*<    20 CONTINUE >*/
@@ -320,5 +320,5 @@ L20:
 } /* zgecon_ */
 
 #ifdef __cplusplus
-	}
+        }
 #endif

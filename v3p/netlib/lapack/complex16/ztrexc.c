@@ -1,13 +1,13 @@
 /* lapack/complex16/ztrexc.f -- translated by f2c (version 20090411).
    You must link the resulting object file with libf2c:
-	on Microsoft Windows system, link with libf2c.lib;
-	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
-	or, if you install libf2c.a in a standard place, with -lf2c -lm
-	-- in that order, at the end of the command line, as in
-		cc *.o -lf2c -lm
-	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+        on Microsoft Windows system, link with libf2c.lib;
+        on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+        or, if you install libf2c.a in a standard place, with -lf2c -lm
+        -- in that order, at the end of the command line, as in
+                cc *.o -lf2c -lm
+        Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
 
-		http://www.netlib.org/f2c/libf2c.zip
+                http://www.netlib.org/f2c/libf2c.zip
 */
 
 #ifdef __cplusplus
@@ -20,9 +20,9 @@ extern "C" {
 static integer c__1 = 1;
 
 /*<       SUBROUTINE ZTREXC( COMPQ, N, T, LDT, Q, LDQ, IFST, ILST, INFO ) >*/
-/* Subroutine */ int ztrexc_(char *compq, integer *n, doublecomplex *t, 
-	integer *ldt, doublecomplex *q, integer *ldq, integer *ifst, integer *
-	ilst, integer *info, ftnlen compq_len)
+/* Subroutine */ int ztrexc_(char *compq, integer *n, doublecomplex *t,
+        integer *ldt, doublecomplex *q, integer *ldq, integer *ifst, integer *
+        ilst, integer *info, ftnlen compq_len)
 {
     /* System generated locals */
     integer q_dim1, q_offset, t_dim1, t_offset, i__1, i__2, i__3;
@@ -35,13 +35,13 @@ static integer c__1 = 1;
     integer k, m1, m2, m3;
     doublereal cs;
     doublecomplex t11, t22, sn, temp;
-    extern /* Subroutine */ int zrot_(integer *, doublecomplex *, integer *, 
-	    doublecomplex *, integer *, doublereal *, doublecomplex *);
+    extern /* Subroutine */ int zrot_(integer *, doublecomplex *, integer *,
+            doublecomplex *, integer *, doublereal *, doublecomplex *);
     extern logical lsame_(const char *, const char *, ftnlen, ftnlen);
     logical wantq;
     extern /* Subroutine */ int xerbla_(char *, integer *, ftnlen), zlartg_(
-	    doublecomplex *, doublecomplex *, doublereal *, doublecomplex *, 
-	    doublecomplex *);
+            doublecomplex *, doublecomplex *, doublereal *, doublecomplex *,
+            doublecomplex *);
 
 
 /*  -- LAPACK routine (version 3.2) -- */
@@ -143,36 +143,36 @@ static integer c__1 = 1;
 /*<       IF( .NOT.LSAME( COMPQ, 'N' ) .AND. .NOT.WANTQ ) THEN >*/
     if (! lsame_(compq, "N", (ftnlen)1, (ftnlen)1) && ! wantq) {
 /*<          INFO = -1 >*/
-	*info = -1;
+        *info = -1;
 /*<       ELSE IF( N.LT.0 ) THEN >*/
     } else if (*n < 0) {
 /*<          INFO = -2 >*/
-	*info = -2;
+        *info = -2;
 /*<       ELSE IF( LDT.LT.MAX( 1, N ) ) THEN >*/
     } else if (*ldt < max(1,*n)) {
 /*<          INFO = -4 >*/
-	*info = -4;
+        *info = -4;
 /*<       ELSE IF( LDQ.LT.1 .OR. ( WANTQ .AND. LDQ.LT.MAX( 1, N ) ) ) THEN >*/
     } else if (*ldq < 1 || wantq && *ldq < max(1,*n)) {
 /*<          INFO = -6 >*/
-	*info = -6;
+        *info = -6;
 /*<       ELSE IF( IFST.LT.1 .OR. IFST.GT.N ) THEN >*/
     } else if (*ifst < 1 || *ifst > *n) {
 /*<          INFO = -7 >*/
-	*info = -7;
+        *info = -7;
 /*<       ELSE IF( ILST.LT.1 .OR. ILST.GT.N ) THEN >*/
     } else if (*ilst < 1 || *ilst > *n) {
 /*<          INFO = -8 >*/
-	*info = -8;
+        *info = -8;
 /*<       END IF >*/
     }
 /*<       IF( INFO.NE.0 ) THEN >*/
     if (*info != 0) {
 /*<          CALL XERBLA( 'ZTREXC', -INFO ) >*/
-	i__1 = -(*info);
-	xerbla_("ZTREXC", &i__1, (ftnlen)6);
+        i__1 = -(*info);
+        xerbla_("ZTREXC", &i__1, (ftnlen)6);
 /*<          RETURN >*/
-	return 0;
+        return 0;
 /*<       END IF >*/
     }
 
@@ -180,7 +180,7 @@ static integer c__1 = 1;
 
 /*<    >*/
     if (*n == 1 || *ifst == *ilst) {
-	return 0;
+        return 0;
     }
 
 /*<       IF( IFST.LT.ILST ) THEN >*/
@@ -189,22 +189,22 @@ static integer c__1 = 1;
 /*        Move the IFST-th diagonal element forward down the diagonal. */
 
 /*<          M1 = 0 >*/
-	m1 = 0;
+        m1 = 0;
 /*<          M2 = -1 >*/
-	m2 = -1;
+        m2 = -1;
 /*<          M3 = 1 >*/
-	m3 = 1;
+        m3 = 1;
 /*<       ELSE >*/
     } else {
 
 /*        Move the IFST-th diagonal element backward up the diagonal. */
 
 /*<          M1 = -1 >*/
-	m1 = -1;
+        m1 = -1;
 /*<          M2 = 0 >*/
-	m2 = 0;
+        m2 = 0;
 /*<          M3 = -1 >*/
-	m3 = -1;
+        m3 = -1;
 /*<       END IF >*/
     }
 
@@ -216,50 +216,50 @@ static integer c__1 = 1;
 /*        Interchange the k-th and (k+1)-th diagonal elements. */
 
 /*<          T11 = T( K, K ) >*/
-	i__3 = k + k * t_dim1;
-	t11.r = t[i__3].r, t11.i = t[i__3].i;
+        i__3 = k + k * t_dim1;
+        t11.r = t[i__3].r, t11.i = t[i__3].i;
 /*<          T22 = T( K+1, K+1 ) >*/
-	i__3 = k + 1 + (k + 1) * t_dim1;
-	t22.r = t[i__3].r, t22.i = t[i__3].i;
+        i__3 = k + 1 + (k + 1) * t_dim1;
+        t22.r = t[i__3].r, t22.i = t[i__3].i;
 
 /*        Determine the transformation to perform the interchange. */
 
 /*<          CALL ZLARTG( T( K, K+1 ), T22-T11, CS, SN, TEMP ) >*/
-	z__1.r = t22.r - t11.r, z__1.i = t22.i - t11.i;
-	zlartg_(&t[k + (k + 1) * t_dim1], &z__1, &cs, &sn, &temp);
+        z__1.r = t22.r - t11.r, z__1.i = t22.i - t11.i;
+        zlartg_(&t[k + (k + 1) * t_dim1], &z__1, &cs, &sn, &temp);
 
 /*        Apply transformation to the matrix T. */
 
 /*<    >*/
-	if (k + 2 <= *n) {
-	    i__3 = *n - k - 1;
-	    zrot_(&i__3, &t[k + (k + 2) * t_dim1], ldt, &t[k + 1 + (k + 2) * 
-		    t_dim1], ldt, &cs, &sn);
-	}
+        if (k + 2 <= *n) {
+            i__3 = *n - k - 1;
+            zrot_(&i__3, &t[k + (k + 2) * t_dim1], ldt, &t[k + 1 + (k + 2) *
+                    t_dim1], ldt, &cs, &sn);
+        }
 /*<    >*/
-	i__3 = k - 1;
-	d_cnjg(&z__1, &sn);
-	zrot_(&i__3, &t[k * t_dim1 + 1], &c__1, &t[(k + 1) * t_dim1 + 1], &
-		c__1, &cs, &z__1);
+        i__3 = k - 1;
+        d_cnjg(&z__1, &sn);
+        zrot_(&i__3, &t[k * t_dim1 + 1], &c__1, &t[(k + 1) * t_dim1 + 1], &
+                c__1, &cs, &z__1);
 
 /*<          T( K, K ) = T22 >*/
-	i__3 = k + k * t_dim1;
-	t[i__3].r = t22.r, t[i__3].i = t22.i;
+        i__3 = k + k * t_dim1;
+        t[i__3].r = t22.r, t[i__3].i = t22.i;
 /*<          T( K+1, K+1 ) = T11 >*/
-	i__3 = k + 1 + (k + 1) * t_dim1;
-	t[i__3].r = t11.r, t[i__3].i = t11.i;
+        i__3 = k + 1 + (k + 1) * t_dim1;
+        t[i__3].r = t11.r, t[i__3].i = t11.i;
 
 /*<          IF( WANTQ ) THEN >*/
-	if (wantq) {
+        if (wantq) {
 
 /*           Accumulate transformation in the matrix Q. */
 
 /*<    >*/
-	    d_cnjg(&z__1, &sn);
-	    zrot_(n, &q[k * q_dim1 + 1], &c__1, &q[(k + 1) * q_dim1 + 1], &
-		    c__1, &cs, &z__1);
+            d_cnjg(&z__1, &sn);
+            zrot_(n, &q[k * q_dim1 + 1], &c__1, &q[(k + 1) * q_dim1 + 1], &
+                    c__1, &cs, &z__1);
 /*<          END IF >*/
-	}
+        }
 
 /*<    10 CONTINUE >*/
 /* L10: */
@@ -274,5 +274,5 @@ static integer c__1 = 1;
 } /* ztrexc_ */
 
 #ifdef __cplusplus
-	}
+        }
 #endif

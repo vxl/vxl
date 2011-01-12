@@ -1,13 +1,13 @@
 /* lapack/complex16/ztrsen.f -- translated by f2c (version 20090411).
    You must link the resulting object file with libf2c:
-	on Microsoft Windows system, link with libf2c.lib;
-	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
-	or, if you install libf2c.a in a standard place, with -lf2c -lm
-	-- in that order, at the end of the command line, as in
-		cc *.o -lf2c -lm
-	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+        on Microsoft Windows system, link with libf2c.lib;
+        on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+        or, if you install libf2c.a in a standard place, with -lf2c -lm
+        -- in that order, at the end of the command line, as in
+                cc *.o -lf2c -lm
+        Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
 
-		http://www.netlib.org/f2c/libf2c.zip
+                http://www.netlib.org/f2c/libf2c.zip
 */
 
 #ifdef __cplusplus
@@ -20,11 +20,11 @@ extern "C" {
 static integer c_n1 = -1;
 
 /*<    >*/
-/* Subroutine */ int ztrsen_(char *job, char *compq, logical *select, integer 
-	*n, doublecomplex *t, integer *ldt, doublecomplex *q, integer *ldq, 
-	doublecomplex *w, integer *m, doublereal *s, doublereal *sep, 
-	doublecomplex *work, integer *lwork, integer *info, ftnlen job_len, 
-	ftnlen compq_len)
+/* Subroutine */ int ztrsen_(char *job, char *compq, logical *select, integer
+        *n, doublecomplex *t, integer *ldt, doublecomplex *q, integer *ldq,
+        doublecomplex *w, integer *m, doublereal *s, doublereal *sep,
+        doublecomplex *work, integer *lwork, integer *info, ftnlen job_len,
+        ftnlen compq_len)
 {
     /* System generated locals */
     integer q_dim1, q_offset, t_dim1, t_offset, i__1, i__2, i__3;
@@ -41,23 +41,23 @@ static integer c_n1 = -1;
     integer isave[3], lwmin;
     logical wantq, wants;
     doublereal rnorm, rwork[1];
-    extern /* Subroutine */ int zlacn2_(integer *, doublecomplex *, 
-	    doublecomplex *, doublereal *, integer *, integer *), xerbla_(
-	    char *, integer *, ftnlen);
-    extern doublereal zlange_(char *, integer *, integer *, doublecomplex *, 
-	    integer *, doublereal *, ftnlen);
+    extern /* Subroutine */ int zlacn2_(integer *, doublecomplex *,
+            doublecomplex *, doublereal *, integer *, integer *), xerbla_(
+            char *, integer *, ftnlen);
+    extern doublereal zlange_(char *, integer *, integer *, doublecomplex *,
+            integer *, doublereal *, ftnlen);
     logical wantbh;
-    extern /* Subroutine */ int zlacpy_(char *, integer *, integer *, 
-	    doublecomplex *, integer *, doublecomplex *, integer *, ftnlen);
+    extern /* Subroutine */ int zlacpy_(char *, integer *, integer *,
+            doublecomplex *, integer *, doublecomplex *, integer *, ftnlen);
     logical wantsp;
-    extern /* Subroutine */ int ztrexc_(char *, integer *, doublecomplex *, 
-	    integer *, doublecomplex *, integer *, integer *, integer *, 
-	    integer *, ftnlen);
+    extern /* Subroutine */ int ztrexc_(char *, integer *, doublecomplex *,
+            integer *, doublecomplex *, integer *, integer *, integer *,
+            integer *, ftnlen);
     logical lquery;
-    extern /* Subroutine */ int ztrsyl_(char *, char *, integer *, integer *, 
-	    integer *, doublecomplex *, integer *, doublecomplex *, integer *,
-	     doublecomplex *, integer *, doublereal *, integer *, ftnlen, 
-	    ftnlen);
+    extern /* Subroutine */ int ztrsyl_(char *, char *, integer *, integer *,
+            integer *, doublecomplex *, integer *, doublecomplex *, integer *,
+             doublecomplex *, integer *, doublereal *, integer *, ftnlen,
+            ftnlen);
 
 
 /*  -- LAPACK routine (version 3.2) -- */
@@ -301,9 +301,9 @@ static integer c_n1 = -1;
     i__1 = *n;
     for (k = 1; k <= i__1; ++k) {
 /*<    >*/
-	if (select[k]) {
-	    ++(*m);
-	}
+        if (select[k]) {
+            ++(*m);
+        }
 /*<    10 CONTINUE >*/
 /* L10: */
     }
@@ -324,64 +324,64 @@ static integer c_n1 = -1;
     if (wantsp) {
 /*<          LWMIN = MAX( 1, 2*NN ) >*/
 /* Computing MAX */
-	i__1 = 1, i__2 = nn << 1;
-	lwmin = max(i__1,i__2);
+        i__1 = 1, i__2 = nn << 1;
+        lwmin = max(i__1,i__2);
 /*<       ELSE IF( LSAME( JOB, 'N' ) ) THEN >*/
     } else if (lsame_(job, "N", (ftnlen)1, (ftnlen)1)) {
 /*<          LWMIN = 1 >*/
-	lwmin = 1;
+        lwmin = 1;
 /*<       ELSE IF( LSAME( JOB, 'E' ) ) THEN >*/
     } else if (lsame_(job, "E", (ftnlen)1, (ftnlen)1)) {
 /*<          LWMIN = MAX( 1, NN ) >*/
-	lwmin = max(1,nn);
+        lwmin = max(1,nn);
 /*<       END IF >*/
     }
 
 /*<    >*/
     if (! lsame_(job, "N", (ftnlen)1, (ftnlen)1) && ! wants && ! wantsp) {
 /*<          INFO = -1 >*/
-	*info = -1;
+        *info = -1;
 /*<       ELSE IF( .NOT.LSAME( COMPQ, 'N' ) .AND. .NOT.WANTQ ) THEN >*/
     } else if (! lsame_(compq, "N", (ftnlen)1, (ftnlen)1) && ! wantq) {
 /*<          INFO = -2 >*/
-	*info = -2;
+        *info = -2;
 /*<       ELSE IF( N.LT.0 ) THEN >*/
     } else if (*n < 0) {
 /*<          INFO = -4 >*/
-	*info = -4;
+        *info = -4;
 /*<       ELSE IF( LDT.LT.MAX( 1, N ) ) THEN >*/
     } else if (*ldt < max(1,*n)) {
 /*<          INFO = -6 >*/
-	*info = -6;
+        *info = -6;
 /*<       ELSE IF( LDQ.LT.1 .OR. ( WANTQ .AND. LDQ.LT.N ) ) THEN >*/
     } else if (*ldq < 1 || wantq && *ldq < *n) {
 /*<          INFO = -8 >*/
-	*info = -8;
+        *info = -8;
 /*<       ELSE IF( LWORK.LT.LWMIN .AND. .NOT.LQUERY ) THEN >*/
     } else if (*lwork < lwmin && ! lquery) {
 /*<          INFO = -14 >*/
-	*info = -14;
+        *info = -14;
 /*<       END IF >*/
     }
 
 /*<       IF( INFO.EQ.0 ) THEN >*/
     if (*info == 0) {
 /*<          WORK( 1 ) = LWMIN >*/
-	work[1].r = (doublereal) lwmin, work[1].i = 0.;
+        work[1].r = (doublereal) lwmin, work[1].i = 0.;
 /*<       END IF >*/
     }
 
 /*<       IF( INFO.NE.0 ) THEN >*/
     if (*info != 0) {
 /*<          CALL XERBLA( 'ZTRSEN', -INFO ) >*/
-	i__1 = -(*info);
-	xerbla_("ZTRSEN", &i__1, (ftnlen)6);
+        i__1 = -(*info);
+        xerbla_("ZTRSEN", &i__1, (ftnlen)6);
 /*<          RETURN >*/
-	return 0;
+        return 0;
 /*<       ELSE IF( LQUERY ) THEN >*/
     } else if (lquery) {
 /*<          RETURN >*/
-	return 0;
+        return 0;
 /*<       END IF >*/
     }
 
@@ -390,15 +390,15 @@ static integer c_n1 = -1;
 /*<       IF( M.EQ.N .OR. M.EQ.0 ) THEN >*/
     if (*m == *n || *m == 0) {
 /*<    >*/
-	if (wants) {
-	    *s = 1.;
-	}
+        if (wants) {
+            *s = 1.;
+        }
 /*<    >*/
-	if (wantsp) {
-	    *sep = zlange_("1", n, n, &t[t_offset], ldt, rwork, (ftnlen)1);
-	}
+        if (wantsp) {
+            *sep = zlange_("1", n, n, &t[t_offset], ldt, rwork, (ftnlen)1);
+        }
 /*<          GO TO 40 >*/
-	goto L40;
+        goto L40;
 /*<       END IF >*/
     }
 
@@ -410,19 +410,19 @@ static integer c_n1 = -1;
     i__1 = *n;
     for (k = 1; k <= i__1; ++k) {
 /*<          IF( SELECT( K ) ) THEN >*/
-	if (select[k]) {
+        if (select[k]) {
 /*<             KS = KS + 1 >*/
-	    ++ks;
+            ++ks;
 
 /*           Swap the K-th eigenvalue to position KS. */
 
 /*<    >*/
-	    if (k != ks) {
-		ztrexc_(compq, n, &t[t_offset], ldt, &q[q_offset], ldq, &k, &
-			ks, &ierr, (ftnlen)1);
-	    }
+            if (k != ks) {
+                ztrexc_(compq, n, &t[t_offset], ldt, &q[q_offset], ldq, &k, &
+                        ks, &ierr, (ftnlen)1);
+            }
 /*<          END IF >*/
-	}
+        }
 /*<    20 CONTINUE >*/
 /* L20: */
     }
@@ -435,28 +435,28 @@ static integer c_n1 = -1;
 /*           T11*R - R*T22 = scale*T12 */
 
 /*<          CALL ZLACPY( 'F', N1, N2, T( 1, N1+1 ), LDT, WORK, N1 ) >*/
-	zlacpy_("F", &n1, &n2, &t[(n1 + 1) * t_dim1 + 1], ldt, &work[1], &n1, 
-		(ftnlen)1);
+        zlacpy_("F", &n1, &n2, &t[(n1 + 1) * t_dim1 + 1], ldt, &work[1], &n1,
+                (ftnlen)1);
 /*<    >*/
-	ztrsyl_("N", "N", &c_n1, &n1, &n2, &t[t_offset], ldt, &t[n1 + 1 + (n1 
-		+ 1) * t_dim1], ldt, &work[1], &n1, &scale, &ierr, (ftnlen)1, 
-		(ftnlen)1);
+        ztrsyl_("N", "N", &c_n1, &n1, &n2, &t[t_offset], ldt, &t[n1 + 1 + (n1
+                + 1) * t_dim1], ldt, &work[1], &n1, &scale, &ierr, (ftnlen)1,
+                (ftnlen)1);
 
 /*        Estimate the reciprocal of the condition number of the cluster */
 /*        of eigenvalues. */
 
 /*<          RNORM = ZLANGE( 'F', N1, N2, WORK, N1, RWORK ) >*/
-	rnorm = zlange_("F", &n1, &n2, &work[1], &n1, rwork, (ftnlen)1);
+        rnorm = zlange_("F", &n1, &n2, &work[1], &n1, rwork, (ftnlen)1);
 /*<          IF( RNORM.EQ.ZERO ) THEN >*/
-	if (rnorm == 0.) {
+        if (rnorm == 0.) {
 /*<             S = ONE >*/
-	    *s = 1.;
+            *s = 1.;
 /*<          ELSE >*/
-	} else {
+        } else {
 /*<    >*/
-	    *s = scale / (sqrt(scale * scale / rnorm + rnorm) * sqrt(rnorm));
+            *s = scale / (sqrt(scale * scale / rnorm + rnorm) * sqrt(rnorm));
 /*<          END IF >*/
-	}
+        }
 /*<       END IF >*/
     }
 
@@ -466,42 +466,42 @@ static integer c_n1 = -1;
 /*        Estimate sep(T11,T22). */
 
 /*<          EST = ZERO >*/
-	est = 0.;
+        est = 0.;
 /*<          KASE = 0 >*/
-	kase = 0;
+        kase = 0;
 /*<    30    CONTINUE >*/
 L30:
 /*<          CALL ZLACN2( NN, WORK( NN+1 ), WORK, EST, KASE, ISAVE ) >*/
-	zlacn2_(&nn, &work[nn + 1], &work[1], &est, &kase, isave);
+        zlacn2_(&nn, &work[nn + 1], &work[1], &est, &kase, isave);
 /*<          IF( KASE.NE.0 ) THEN >*/
-	if (kase != 0) {
+        if (kase != 0) {
 /*<             IF( KASE.EQ.1 ) THEN >*/
-	    if (kase == 1) {
+            if (kase == 1) {
 
 /*              Solve T11*R - R*T22 = scale*X. */
 
 /*<    >*/
-		ztrsyl_("N", "N", &c_n1, &n1, &n2, &t[t_offset], ldt, &t[n1 + 
-			1 + (n1 + 1) * t_dim1], ldt, &work[1], &n1, &scale, &
-			ierr, (ftnlen)1, (ftnlen)1);
+                ztrsyl_("N", "N", &c_n1, &n1, &n2, &t[t_offset], ldt, &t[n1 +
+                        1 + (n1 + 1) * t_dim1], ldt, &work[1], &n1, &scale, &
+                        ierr, (ftnlen)1, (ftnlen)1);
 /*<             ELSE >*/
-	    } else {
+            } else {
 
 /*              Solve T11'*R - R*T22' = scale*X. */
 
 /*<    >*/
-		ztrsyl_("C", "C", &c_n1, &n1, &n2, &t[t_offset], ldt, &t[n1 + 
-			1 + (n1 + 1) * t_dim1], ldt, &work[1], &n1, &scale, &
-			ierr, (ftnlen)1, (ftnlen)1);
+                ztrsyl_("C", "C", &c_n1, &n1, &n2, &t[t_offset], ldt, &t[n1 +
+                        1 + (n1 + 1) * t_dim1], ldt, &work[1], &n1, &scale, &
+                        ierr, (ftnlen)1, (ftnlen)1);
 /*<             END IF >*/
-	    }
+            }
 /*<             GO TO 30 >*/
-	    goto L30;
+            goto L30;
 /*<          END IF >*/
-	}
+        }
 
 /*<          SEP = SCALE / EST >*/
-	*sep = scale / est;
+        *sep = scale / est;
 /*<       END IF >*/
     }
 
@@ -514,9 +514,9 @@ L40:
     i__1 = *n;
     for (k = 1; k <= i__1; ++k) {
 /*<          W( K ) = T( K, K ) >*/
-	i__2 = k;
-	i__3 = k + k * t_dim1;
-	w[i__2].r = t[i__3].r, w[i__2].i = t[i__3].i;
+        i__2 = k;
+        i__3 = k + k * t_dim1;
+        w[i__2].r = t[i__3].r, w[i__2].i = t[i__3].i;
 /*<    50 CONTINUE >*/
 /* L50: */
     }
@@ -533,5 +533,5 @@ L40:
 } /* ztrsen_ */
 
 #ifdef __cplusplus
-	}
+        }
 #endif

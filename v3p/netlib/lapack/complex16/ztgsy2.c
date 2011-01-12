@@ -1,13 +1,13 @@
 /* lapack/complex16/ztgsy2.f -- translated by f2c (version 20090411).
    You must link the resulting object file with libf2c:
-	on Microsoft Windows system, link with libf2c.lib;
-	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
-	or, if you install libf2c.a in a standard place, with -lf2c -lm
-	-- in that order, at the end of the command line, as in
-		cc *.o -lf2c -lm
-	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+        on Microsoft Windows system, link with libf2c.lib;
+        on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+        or, if you install libf2c.a in a standard place, with -lf2c -lm
+        -- in that order, at the end of the command line, as in
+                cc *.o -lf2c -lm
+        Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
 
-		http://www.netlib.org/f2c/libf2c.zip
+                http://www.netlib.org/f2c/libf2c.zip
 */
 
 #ifdef __cplusplus
@@ -22,16 +22,16 @@ static integer c__1 = 1;
 
 /*<    >*/
 /* Subroutine */ int ztgsy2_(char *trans, integer *ijob, integer *m, integer *
-	n, doublecomplex *a, integer *lda, doublecomplex *b, integer *ldb, 
-	doublecomplex *c__, integer *ldc, doublecomplex *d__, integer *ldd, 
-	doublecomplex *e, integer *lde, doublecomplex *f, integer *ldf, 
-	doublereal *scale, doublereal *rdsum, doublereal *rdscal, integer *
-	info, ftnlen trans_len)
+        n, doublecomplex *a, integer *lda, doublecomplex *b, integer *ldb,
+        doublecomplex *c__, integer *ldc, doublecomplex *d__, integer *ldd,
+        doublecomplex *e, integer *lde, doublecomplex *f, integer *ldf,
+        doublereal *scale, doublereal *rdsum, doublereal *rdscal, integer *
+        info, ftnlen trans_len)
 {
     /* System generated locals */
-    integer a_dim1, a_offset, b_dim1, b_offset, c_dim1, c_offset, d_dim1, 
-	    d_offset, e_dim1, e_offset, f_dim1, f_offset, i__1, i__2, i__3, 
-	    i__4;
+    integer a_dim1, a_offset, b_dim1, b_offset, c_dim1, c_offset, d_dim1,
+            d_offset, e_dim1, e_offset, f_dim1, f_offset, i__1, i__2, i__3,
+            i__4;
     doublecomplex z__1, z__2, z__3, z__4, z__5, z__6;
 
     /* Builtin functions */
@@ -39,20 +39,20 @@ static integer c__1 = 1;
 
     /* Local variables */
     integer i__, j, k;
-    doublecomplex z__[4]	/* was [2][2] */, rhs[2];
+    doublecomplex z__[4]        /* was [2][2] */, rhs[2];
     integer ierr, ipiv[2], jpiv[2];
     doublecomplex alpha;
     extern logical lsame_(const char *, const char *, ftnlen, ftnlen);
-    extern /* Subroutine */ int zscal_(integer *, doublecomplex *, 
-	    doublecomplex *, integer *), zaxpy_(integer *, doublecomplex *, 
-	    doublecomplex *, integer *, doublecomplex *, integer *), zgesc2_(
-	    integer *, doublecomplex *, integer *, doublecomplex *, integer *,
-	     integer *, doublereal *), zgetc2_(integer *, doublecomplex *, 
-	    integer *, integer *, integer *, integer *);
+    extern /* Subroutine */ int zscal_(integer *, doublecomplex *,
+            doublecomplex *, integer *), zaxpy_(integer *, doublecomplex *,
+            doublecomplex *, integer *, doublecomplex *, integer *), zgesc2_(
+            integer *, doublecomplex *, integer *, doublecomplex *, integer *,
+             integer *, doublereal *), zgetc2_(integer *, doublecomplex *,
+            integer *, integer *, integer *, integer *);
     doublereal scaloc;
     extern /* Subroutine */ int xerbla_(char *, integer *, ftnlen), zlatdf_(
-	    integer *, integer *, doublecomplex *, integer *, doublecomplex *,
-	     doublereal *, doublereal *, integer *, integer *);
+            integer *, integer *, doublecomplex *, integer *, doublecomplex *,
+             doublereal *, doublereal *, integer *, integer *);
     logical notran;
 
 
@@ -278,62 +278,62 @@ static integer c__1 = 1;
 /*<       IF( .NOT.NOTRAN .AND. .NOT.LSAME( TRANS, 'C' ) ) THEN >*/
     if (! notran && ! lsame_(trans, "C", (ftnlen)1, (ftnlen)1)) {
 /*<          INFO = -1 >*/
-	*info = -1;
+        *info = -1;
 /*<       ELSE IF( NOTRAN ) THEN >*/
     } else if (notran) {
 /*<          IF( ( IJOB.LT.0 ) .OR. ( IJOB.GT.2 ) ) THEN >*/
-	if (*ijob < 0 || *ijob > 2) {
+        if (*ijob < 0 || *ijob > 2) {
 /*<             INFO = -2 >*/
-	    *info = -2;
+            *info = -2;
 /*<          END IF >*/
-	}
+        }
 /*<       END IF >*/
     }
 /*<       IF( INFO.EQ.0 ) THEN >*/
     if (*info == 0) {
 /*<          IF( M.LE.0 ) THEN >*/
-	if (*m <= 0) {
+        if (*m <= 0) {
 /*<             INFO = -3 >*/
-	    *info = -3;
+            *info = -3;
 /*<          ELSE IF( N.LE.0 ) THEN >*/
-	} else if (*n <= 0) {
+        } else if (*n <= 0) {
 /*<             INFO = -4 >*/
-	    *info = -4;
+            *info = -4;
 /*<          ELSE IF( LDA.LT.MAX( 1, M ) ) THEN >*/
-	} else if (*lda < max(1,*m)) {
+        } else if (*lda < max(1,*m)) {
 /*<             INFO = -5 >*/
-	    *info = -5;
+            *info = -5;
 /*<          ELSE IF( LDB.LT.MAX( 1, N ) ) THEN >*/
-	} else if (*ldb < max(1,*n)) {
+        } else if (*ldb < max(1,*n)) {
 /*<             INFO = -8 >*/
-	    *info = -8;
+            *info = -8;
 /*<          ELSE IF( LDC.LT.MAX( 1, M ) ) THEN >*/
-	} else if (*ldc < max(1,*m)) {
+        } else if (*ldc < max(1,*m)) {
 /*<             INFO = -10 >*/
-	    *info = -10;
+            *info = -10;
 /*<          ELSE IF( LDD.LT.MAX( 1, M ) ) THEN >*/
-	} else if (*ldd < max(1,*m)) {
+        } else if (*ldd < max(1,*m)) {
 /*<             INFO = -12 >*/
-	    *info = -12;
+            *info = -12;
 /*<          ELSE IF( LDE.LT.MAX( 1, N ) ) THEN >*/
-	} else if (*lde < max(1,*n)) {
+        } else if (*lde < max(1,*n)) {
 /*<             INFO = -14 >*/
-	    *info = -14;
+            *info = -14;
 /*<          ELSE IF( LDF.LT.MAX( 1, M ) ) THEN >*/
-	} else if (*ldf < max(1,*m)) {
+        } else if (*ldf < max(1,*m)) {
 /*<             INFO = -16 >*/
-	    *info = -16;
+            *info = -16;
 /*<          END IF >*/
-	}
+        }
 /*<       END IF >*/
     }
 /*<       IF( INFO.NE.0 ) THEN >*/
     if (*info != 0) {
 /*<          CALL XERBLA( 'ZTGSY2', -INFO ) >*/
-	i__1 = -(*info);
-	xerbla_("ZTGSY2", &i__1, (ftnlen)6);
+        i__1 = -(*info);
+        xerbla_("ZTGSY2", &i__1, (ftnlen)6);
 /*<          RETURN >*/
-	return 0;
+        return 0;
 /*<       END IF >*/
     }
 
@@ -346,124 +346,124 @@ static integer c__1 = 1;
 /*        for I = M, M - 1, ..., 1; J = 1, 2, ..., N */
 
 /*<          SCALE = ONE >*/
-	*scale = 1.;
+        *scale = 1.;
 /*<          SCALOC = ONE >*/
-	scaloc = 1.;
+        scaloc = 1.;
 /*<          DO 30 J = 1, N >*/
-	i__1 = *n;
-	for (j = 1; j <= i__1; ++j) {
+        i__1 = *n;
+        for (j = 1; j <= i__1; ++j) {
 /*<             DO 20 I = M, 1, -1 >*/
-	    for (i__ = *m; i__ >= 1; --i__) {
+            for (i__ = *m; i__ >= 1; --i__) {
 
 /*              Build 2 by 2 system */
 
 /*<                Z( 1, 1 ) = A( I, I ) >*/
-		i__2 = i__ + i__ * a_dim1;
-		z__[0].r = a[i__2].r, z__[0].i = a[i__2].i;
+                i__2 = i__ + i__ * a_dim1;
+                z__[0].r = a[i__2].r, z__[0].i = a[i__2].i;
 /*<                Z( 2, 1 ) = D( I, I ) >*/
-		i__2 = i__ + i__ * d_dim1;
-		z__[1].r = d__[i__2].r, z__[1].i = d__[i__2].i;
+                i__2 = i__ + i__ * d_dim1;
+                z__[1].r = d__[i__2].r, z__[1].i = d__[i__2].i;
 /*<                Z( 1, 2 ) = -B( J, J ) >*/
-		i__2 = j + j * b_dim1;
-		z__1.r = -b[i__2].r, z__1.i = -b[i__2].i;
-		z__[2].r = z__1.r, z__[2].i = z__1.i;
+                i__2 = j + j * b_dim1;
+                z__1.r = -b[i__2].r, z__1.i = -b[i__2].i;
+                z__[2].r = z__1.r, z__[2].i = z__1.i;
 /*<                Z( 2, 2 ) = -E( J, J ) >*/
-		i__2 = j + j * e_dim1;
-		z__1.r = -e[i__2].r, z__1.i = -e[i__2].i;
-		z__[3].r = z__1.r, z__[3].i = z__1.i;
+                i__2 = j + j * e_dim1;
+                z__1.r = -e[i__2].r, z__1.i = -e[i__2].i;
+                z__[3].r = z__1.r, z__[3].i = z__1.i;
 
 /*              Set up right hand side(s) */
 
 /*<                RHS( 1 ) = C( I, J ) >*/
-		i__2 = i__ + j * c_dim1;
-		rhs[0].r = c__[i__2].r, rhs[0].i = c__[i__2].i;
+                i__2 = i__ + j * c_dim1;
+                rhs[0].r = c__[i__2].r, rhs[0].i = c__[i__2].i;
 /*<                RHS( 2 ) = F( I, J ) >*/
-		i__2 = i__ + j * f_dim1;
-		rhs[1].r = f[i__2].r, rhs[1].i = f[i__2].i;
+                i__2 = i__ + j * f_dim1;
+                rhs[1].r = f[i__2].r, rhs[1].i = f[i__2].i;
 
 /*              Solve Z * x = RHS */
 
 /*<                CALL ZGETC2( LDZ, Z, LDZ, IPIV, JPIV, IERR ) >*/
-		zgetc2_(&c__2, z__, &c__2, ipiv, jpiv, &ierr);
+                zgetc2_(&c__2, z__, &c__2, ipiv, jpiv, &ierr);
 /*<    >*/
-		if (ierr > 0) {
-		    *info = ierr;
-		}
+                if (ierr > 0) {
+                    *info = ierr;
+                }
 /*<                IF( IJOB.EQ.0 ) THEN >*/
-		if (*ijob == 0) {
+                if (*ijob == 0) {
 /*<                   CALL ZGESC2( LDZ, Z, LDZ, RHS, IPIV, JPIV, SCALOC ) >*/
-		    zgesc2_(&c__2, z__, &c__2, rhs, ipiv, jpiv, &scaloc);
+                    zgesc2_(&c__2, z__, &c__2, rhs, ipiv, jpiv, &scaloc);
 /*<                   IF( SCALOC.NE.ONE ) THEN >*/
-		    if (scaloc != 1.) {
+                    if (scaloc != 1.) {
 /*<                      DO 10 K = 1, N >*/
-			i__2 = *n;
-			for (k = 1; k <= i__2; ++k) {
+                        i__2 = *n;
+                        for (k = 1; k <= i__2; ++k) {
 /*<    >*/
-			    z__1.r = scaloc, z__1.i = 0.;
-			    zscal_(m, &z__1, &c__[k * c_dim1 + 1], &c__1);
+                            z__1.r = scaloc, z__1.i = 0.;
+                            zscal_(m, &z__1, &c__[k * c_dim1 + 1], &c__1);
 /*<    >*/
-			    z__1.r = scaloc, z__1.i = 0.;
-			    zscal_(m, &z__1, &f[k * f_dim1 + 1], &c__1);
+                            z__1.r = scaloc, z__1.i = 0.;
+                            zscal_(m, &z__1, &f[k * f_dim1 + 1], &c__1);
 /*<    10                CONTINUE >*/
 /* L10: */
-			}
+                        }
 /*<                      SCALE = SCALE*SCALOC >*/
-			*scale *= scaloc;
+                        *scale *= scaloc;
 /*<                   END IF >*/
-		    }
+                    }
 /*<                ELSE >*/
-		} else {
+                } else {
 /*<    >*/
-		    zlatdf_(ijob, &c__2, z__, &c__2, rhs, rdsum, rdscal, ipiv,
-			     jpiv);
+                    zlatdf_(ijob, &c__2, z__, &c__2, rhs, rdsum, rdscal, ipiv,
+                             jpiv);
 /*<                END IF >*/
-		}
+                }
 
 /*              Unpack solution vector(s) */
 
 /*<                C( I, J ) = RHS( 1 ) >*/
-		i__2 = i__ + j * c_dim1;
-		c__[i__2].r = rhs[0].r, c__[i__2].i = rhs[0].i;
+                i__2 = i__ + j * c_dim1;
+                c__[i__2].r = rhs[0].r, c__[i__2].i = rhs[0].i;
 /*<                F( I, J ) = RHS( 2 ) >*/
-		i__2 = i__ + j * f_dim1;
-		f[i__2].r = rhs[1].r, f[i__2].i = rhs[1].i;
+                i__2 = i__ + j * f_dim1;
+                f[i__2].r = rhs[1].r, f[i__2].i = rhs[1].i;
 
 /*              Substitute R(I, J) and L(I, J) into remaining equation. */
 
 /*<                IF( I.GT.1 ) THEN >*/
-		if (i__ > 1) {
+                if (i__ > 1) {
 /*<                   ALPHA = -RHS( 1 ) >*/
-		    z__1.r = -rhs[0].r, z__1.i = -rhs[0].i;
-		    alpha.r = z__1.r, alpha.i = z__1.i;
+                    z__1.r = -rhs[0].r, z__1.i = -rhs[0].i;
+                    alpha.r = z__1.r, alpha.i = z__1.i;
 /*<                   CALL ZAXPY( I-1, ALPHA, A( 1, I ), 1, C( 1, J ), 1 ) >*/
-		    i__2 = i__ - 1;
-		    zaxpy_(&i__2, &alpha, &a[i__ * a_dim1 + 1], &c__1, &c__[j 
-			    * c_dim1 + 1], &c__1);
+                    i__2 = i__ - 1;
+                    zaxpy_(&i__2, &alpha, &a[i__ * a_dim1 + 1], &c__1, &c__[j
+                            * c_dim1 + 1], &c__1);
 /*<                   CALL ZAXPY( I-1, ALPHA, D( 1, I ), 1, F( 1, J ), 1 ) >*/
-		    i__2 = i__ - 1;
-		    zaxpy_(&i__2, &alpha, &d__[i__ * d_dim1 + 1], &c__1, &f[j 
-			    * f_dim1 + 1], &c__1);
+                    i__2 = i__ - 1;
+                    zaxpy_(&i__2, &alpha, &d__[i__ * d_dim1 + 1], &c__1, &f[j
+                            * f_dim1 + 1], &c__1);
 /*<                END IF >*/
-		}
+                }
 /*<                IF( J.LT.N ) THEN >*/
-		if (j < *n) {
+                if (j < *n) {
 /*<    >*/
-		    i__2 = *n - j;
-		    zaxpy_(&i__2, &rhs[1], &b[j + (j + 1) * b_dim1], ldb, &
-			    c__[i__ + (j + 1) * c_dim1], ldc);
+                    i__2 = *n - j;
+                    zaxpy_(&i__2, &rhs[1], &b[j + (j + 1) * b_dim1], ldb, &
+                            c__[i__ + (j + 1) * c_dim1], ldc);
 /*<    >*/
-		    i__2 = *n - j;
-		    zaxpy_(&i__2, &rhs[1], &e[j + (j + 1) * e_dim1], lde, &f[
-			    i__ + (j + 1) * f_dim1], ldf);
+                    i__2 = *n - j;
+                    zaxpy_(&i__2, &rhs[1], &e[j + (j + 1) * e_dim1], lde, &f[
+                            i__ + (j + 1) * f_dim1], ldf);
 /*<                END IF >*/
-		}
+                }
 
 /*<    20       CONTINUE >*/
 /* L20: */
-	    }
+            }
 /*<    30    CONTINUE >*/
 /* L30: */
-	}
+        }
 /*<       ELSE >*/
     } else {
 
@@ -473,126 +473,126 @@ static integer c__1 = 1;
 /*        for I = 1, 2, ..., M, J = N, N - 1, ..., 1 */
 
 /*<          SCALE = ONE >*/
-	*scale = 1.;
+        *scale = 1.;
 /*<          SCALOC = ONE >*/
-	scaloc = 1.;
+        scaloc = 1.;
 /*<          DO 80 I = 1, M >*/
-	i__1 = *m;
-	for (i__ = 1; i__ <= i__1; ++i__) {
+        i__1 = *m;
+        for (i__ = 1; i__ <= i__1; ++i__) {
 /*<             DO 70 J = N, 1, -1 >*/
-	    for (j = *n; j >= 1; --j) {
+            for (j = *n; j >= 1; --j) {
 
 /*              Build 2 by 2 system Z' */
 
 /*<                Z( 1, 1 ) = DCONJG( A( I, I ) ) >*/
-		d_cnjg(&z__1, &a[i__ + i__ * a_dim1]);
-		z__[0].r = z__1.r, z__[0].i = z__1.i;
+                d_cnjg(&z__1, &a[i__ + i__ * a_dim1]);
+                z__[0].r = z__1.r, z__[0].i = z__1.i;
 /*<                Z( 2, 1 ) = -DCONJG( B( J, J ) ) >*/
-		d_cnjg(&z__2, &b[j + j * b_dim1]);
-		z__1.r = -z__2.r, z__1.i = -z__2.i;
-		z__[1].r = z__1.r, z__[1].i = z__1.i;
+                d_cnjg(&z__2, &b[j + j * b_dim1]);
+                z__1.r = -z__2.r, z__1.i = -z__2.i;
+                z__[1].r = z__1.r, z__[1].i = z__1.i;
 /*<                Z( 1, 2 ) = DCONJG( D( I, I ) ) >*/
-		d_cnjg(&z__1, &d__[i__ + i__ * d_dim1]);
-		z__[2].r = z__1.r, z__[2].i = z__1.i;
+                d_cnjg(&z__1, &d__[i__ + i__ * d_dim1]);
+                z__[2].r = z__1.r, z__[2].i = z__1.i;
 /*<                Z( 2, 2 ) = -DCONJG( E( J, J ) ) >*/
-		d_cnjg(&z__2, &e[j + j * e_dim1]);
-		z__1.r = -z__2.r, z__1.i = -z__2.i;
-		z__[3].r = z__1.r, z__[3].i = z__1.i;
+                d_cnjg(&z__2, &e[j + j * e_dim1]);
+                z__1.r = -z__2.r, z__1.i = -z__2.i;
+                z__[3].r = z__1.r, z__[3].i = z__1.i;
 
 
 /*              Set up right hand side(s) */
 
 /*<                RHS( 1 ) = C( I, J ) >*/
-		i__2 = i__ + j * c_dim1;
-		rhs[0].r = c__[i__2].r, rhs[0].i = c__[i__2].i;
+                i__2 = i__ + j * c_dim1;
+                rhs[0].r = c__[i__2].r, rhs[0].i = c__[i__2].i;
 /*<                RHS( 2 ) = F( I, J ) >*/
-		i__2 = i__ + j * f_dim1;
-		rhs[1].r = f[i__2].r, rhs[1].i = f[i__2].i;
+                i__2 = i__ + j * f_dim1;
+                rhs[1].r = f[i__2].r, rhs[1].i = f[i__2].i;
 
 /*              Solve Z' * x = RHS */
 
 /*<                CALL ZGETC2( LDZ, Z, LDZ, IPIV, JPIV, IERR ) >*/
-		zgetc2_(&c__2, z__, &c__2, ipiv, jpiv, &ierr);
+                zgetc2_(&c__2, z__, &c__2, ipiv, jpiv, &ierr);
 /*<    >*/
-		if (ierr > 0) {
-		    *info = ierr;
-		}
+                if (ierr > 0) {
+                    *info = ierr;
+                }
 /*<                CALL ZGESC2( LDZ, Z, LDZ, RHS, IPIV, JPIV, SCALOC ) >*/
-		zgesc2_(&c__2, z__, &c__2, rhs, ipiv, jpiv, &scaloc);
+                zgesc2_(&c__2, z__, &c__2, rhs, ipiv, jpiv, &scaloc);
 /*<                IF( SCALOC.NE.ONE ) THEN >*/
-		if (scaloc != 1.) {
+                if (scaloc != 1.) {
 /*<                   DO 40 K = 1, N >*/
-		    i__2 = *n;
-		    for (k = 1; k <= i__2; ++k) {
+                    i__2 = *n;
+                    for (k = 1; k <= i__2; ++k) {
 /*<    >*/
-			z__1.r = scaloc, z__1.i = 0.;
-			zscal_(m, &z__1, &c__[k * c_dim1 + 1], &c__1);
+                        z__1.r = scaloc, z__1.i = 0.;
+                        zscal_(m, &z__1, &c__[k * c_dim1 + 1], &c__1);
 /*<    >*/
-			z__1.r = scaloc, z__1.i = 0.;
-			zscal_(m, &z__1, &f[k * f_dim1 + 1], &c__1);
+                        z__1.r = scaloc, z__1.i = 0.;
+                        zscal_(m, &z__1, &f[k * f_dim1 + 1], &c__1);
 /*<    40             CONTINUE >*/
 /* L40: */
-		    }
+                    }
 /*<                   SCALE = SCALE*SCALOC >*/
-		    *scale *= scaloc;
+                    *scale *= scaloc;
 /*<                END IF >*/
-		}
+                }
 
 /*              Unpack solution vector(s) */
 
 /*<                C( I, J ) = RHS( 1 ) >*/
-		i__2 = i__ + j * c_dim1;
-		c__[i__2].r = rhs[0].r, c__[i__2].i = rhs[0].i;
+                i__2 = i__ + j * c_dim1;
+                c__[i__2].r = rhs[0].r, c__[i__2].i = rhs[0].i;
 /*<                F( I, J ) = RHS( 2 ) >*/
-		i__2 = i__ + j * f_dim1;
-		f[i__2].r = rhs[1].r, f[i__2].i = rhs[1].i;
+                i__2 = i__ + j * f_dim1;
+                f[i__2].r = rhs[1].r, f[i__2].i = rhs[1].i;
 
 /*              Substitute R(I, J) and L(I, J) into remaining equation. */
 
 /*<                DO 50 K = 1, J - 1 >*/
-		i__2 = j - 1;
-		for (k = 1; k <= i__2; ++k) {
+                i__2 = j - 1;
+                for (k = 1; k <= i__2; ++k) {
 /*<    >*/
-		    i__3 = i__ + k * f_dim1;
-		    i__4 = i__ + k * f_dim1;
-		    d_cnjg(&z__4, &b[k + j * b_dim1]);
-		    z__3.r = rhs[0].r * z__4.r - rhs[0].i * z__4.i, z__3.i = 
-			    rhs[0].r * z__4.i + rhs[0].i * z__4.r;
-		    z__2.r = f[i__4].r + z__3.r, z__2.i = f[i__4].i + z__3.i;
-		    d_cnjg(&z__6, &e[k + j * e_dim1]);
-		    z__5.r = rhs[1].r * z__6.r - rhs[1].i * z__6.i, z__5.i = 
-			    rhs[1].r * z__6.i + rhs[1].i * z__6.r;
-		    z__1.r = z__2.r + z__5.r, z__1.i = z__2.i + z__5.i;
-		    f[i__3].r = z__1.r, f[i__3].i = z__1.i;
+                    i__3 = i__ + k * f_dim1;
+                    i__4 = i__ + k * f_dim1;
+                    d_cnjg(&z__4, &b[k + j * b_dim1]);
+                    z__3.r = rhs[0].r * z__4.r - rhs[0].i * z__4.i, z__3.i =
+                            rhs[0].r * z__4.i + rhs[0].i * z__4.r;
+                    z__2.r = f[i__4].r + z__3.r, z__2.i = f[i__4].i + z__3.i;
+                    d_cnjg(&z__6, &e[k + j * e_dim1]);
+                    z__5.r = rhs[1].r * z__6.r - rhs[1].i * z__6.i, z__5.i =
+                            rhs[1].r * z__6.i + rhs[1].i * z__6.r;
+                    z__1.r = z__2.r + z__5.r, z__1.i = z__2.i + z__5.i;
+                    f[i__3].r = z__1.r, f[i__3].i = z__1.i;
 /*<    50          CONTINUE >*/
 /* L50: */
-		}
+                }
 /*<                DO 60 K = I + 1, M >*/
-		i__2 = *m;
-		for (k = i__ + 1; k <= i__2; ++k) {
+                i__2 = *m;
+                for (k = i__ + 1; k <= i__2; ++k) {
 /*<    >*/
-		    i__3 = k + j * c_dim1;
-		    i__4 = k + j * c_dim1;
-		    d_cnjg(&z__4, &a[i__ + k * a_dim1]);
-		    z__3.r = z__4.r * rhs[0].r - z__4.i * rhs[0].i, z__3.i = 
-			    z__4.r * rhs[0].i + z__4.i * rhs[0].r;
-		    z__2.r = c__[i__4].r - z__3.r, z__2.i = c__[i__4].i - 
-			    z__3.i;
-		    d_cnjg(&z__6, &d__[i__ + k * d_dim1]);
-		    z__5.r = z__6.r * rhs[1].r - z__6.i * rhs[1].i, z__5.i = 
-			    z__6.r * rhs[1].i + z__6.i * rhs[1].r;
-		    z__1.r = z__2.r - z__5.r, z__1.i = z__2.i - z__5.i;
-		    c__[i__3].r = z__1.r, c__[i__3].i = z__1.i;
+                    i__3 = k + j * c_dim1;
+                    i__4 = k + j * c_dim1;
+                    d_cnjg(&z__4, &a[i__ + k * a_dim1]);
+                    z__3.r = z__4.r * rhs[0].r - z__4.i * rhs[0].i, z__3.i =
+                            z__4.r * rhs[0].i + z__4.i * rhs[0].r;
+                    z__2.r = c__[i__4].r - z__3.r, z__2.i = c__[i__4].i -
+                            z__3.i;
+                    d_cnjg(&z__6, &d__[i__ + k * d_dim1]);
+                    z__5.r = z__6.r * rhs[1].r - z__6.i * rhs[1].i, z__5.i =
+                            z__6.r * rhs[1].i + z__6.i * rhs[1].r;
+                    z__1.r = z__2.r - z__5.r, z__1.i = z__2.i - z__5.i;
+                    c__[i__3].r = z__1.r, c__[i__3].i = z__1.i;
 /*<    60          CONTINUE >*/
 /* L60: */
-		}
+                }
 
 /*<    70       CONTINUE >*/
 /* L70: */
-	    }
+            }
 /*<    80    CONTINUE >*/
 /* L80: */
-	}
+        }
 /*<       END IF >*/
     }
 /*<       RETURN >*/
@@ -604,5 +604,5 @@ static integer c__1 = 1;
 } /* ztgsy2_ */
 
 #ifdef __cplusplus
-	}
+        }
 #endif

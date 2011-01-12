@@ -1,13 +1,13 @@
 /* lapack/complex16/zlartg.f -- translated by f2c (version 20090411).
    You must link the resulting object file with libf2c:
-	on Microsoft Windows system, link with libf2c.lib;
-	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
-	or, if you install libf2c.a in a standard place, with -lf2c -lm
-	-- in that order, at the end of the command line, as in
-		cc *.o -lf2c -lm
-	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+        on Microsoft Windows system, link with libf2c.lib;
+        on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+        or, if you install libf2c.a in a standard place, with -lf2c -lm
+        -- in that order, at the end of the command line, as in
+                cc *.o -lf2c -lm
+        Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
 
-		http://www.netlib.org/f2c/libf2c.zip
+                http://www.netlib.org/f2c/libf2c.zip
 */
 
 #ifdef __cplusplus
@@ -17,7 +17,7 @@ extern "C" {
 
 /*<       SUBROUTINE ZLARTG( F, G, CS, SN, R ) >*/
 /* Subroutine */ int zlartg_(doublecomplex *f, doublecomplex *g, doublereal *
-	cs, doublecomplex *sn, doublecomplex *r__)
+        cs, doublecomplex *sn, doublecomplex *r__)
 {
     /* System generated locals */
     integer i__1;
@@ -26,7 +26,7 @@ extern "C" {
 
     /* Builtin functions */
     double log(doublereal), pow_di(doublereal *, integer *), d_imag(
-	    doublecomplex *), sqrt(doublereal);
+            doublecomplex *), sqrt(doublereal);
     void d_cnjg(doublecomplex *, doublecomplex *);
 
     /* Local variables */
@@ -164,49 +164,49 @@ extern "C" {
 /*<    10    CONTINUE >*/
 L10:
 /*<          COUNT = COUNT + 1 >*/
-	++count;
+        ++count;
 /*<          FS = FS*SAFMN2 >*/
-	z__1.r = safmn2 * fs.r, z__1.i = safmn2 * fs.i;
-	fs.r = z__1.r, fs.i = z__1.i;
+        z__1.r = safmn2 * fs.r, z__1.i = safmn2 * fs.i;
+        fs.r = z__1.r, fs.i = z__1.i;
 /*<          GS = GS*SAFMN2 >*/
-	z__1.r = safmn2 * gs.r, z__1.i = safmn2 * gs.i;
-	gs.r = z__1.r, gs.i = z__1.i;
+        z__1.r = safmn2 * gs.r, z__1.i = safmn2 * gs.i;
+        gs.r = z__1.r, gs.i = z__1.i;
 /*<          SCALE = SCALE*SAFMN2 >*/
-	scale *= safmn2;
+        scale *= safmn2;
 /*<    >*/
-	if (scale >= safmx2) {
-	    goto L10;
-	}
+        if (scale >= safmx2) {
+            goto L10;
+        }
 /*<       ELSE IF( SCALE.LE.SAFMN2 ) THEN >*/
     } else if (scale <= safmn2) {
 /*<          IF( G.EQ.CZERO ) THEN >*/
-	if (g->r == 0. && g->i == 0.) {
+        if (g->r == 0. && g->i == 0.) {
 /*<             CS = ONE >*/
-	    *cs = 1.;
+            *cs = 1.;
 /*<             SN = CZERO >*/
-	    sn->r = 0., sn->i = 0.;
+            sn->r = 0., sn->i = 0.;
 /*<             R = F >*/
-	    r__->r = f->r, r__->i = f->i;
+            r__->r = f->r, r__->i = f->i;
 /*<             RETURN >*/
-	    return 0;
+            return 0;
 /*<          END IF >*/
-	}
+        }
 /*<    20    CONTINUE >*/
 L20:
 /*<          COUNT = COUNT - 1 >*/
-	--count;
+        --count;
 /*<          FS = FS*SAFMX2 >*/
-	z__1.r = safmx2 * fs.r, z__1.i = safmx2 * fs.i;
-	fs.r = z__1.r, fs.i = z__1.i;
+        z__1.r = safmx2 * fs.r, z__1.i = safmx2 * fs.i;
+        fs.r = z__1.r, fs.i = z__1.i;
 /*<          GS = GS*SAFMX2 >*/
-	z__1.r = safmx2 * gs.r, z__1.i = safmx2 * gs.i;
-	gs.r = z__1.r, gs.i = z__1.i;
+        z__1.r = safmx2 * gs.r, z__1.i = safmx2 * gs.i;
+        gs.r = z__1.r, gs.i = z__1.i;
 /*<          SCALE = SCALE*SAFMX2 >*/
-	scale *= safmx2;
+        scale *= safmx2;
 /*<    >*/
-	if (scale <= safmn2) {
-	    goto L20;
-	}
+        if (scale <= safmn2) {
+            goto L20;
+        }
 /*<       END IF >*/
     }
 /*<       F2 = ABSSQ( FS ) >*/
@@ -227,36 +227,36 @@ L20:
 /*        This is a rare case: F is very small. */
 
 /*<          IF( F.EQ.CZERO ) THEN >*/
-	if (f->r == 0. && f->i == 0.) {
+        if (f->r == 0. && f->i == 0.) {
 /*<             CS = ZERO >*/
-	    *cs = 0.;
+            *cs = 0.;
 /*<             R = DLAPY2( DBLE( G ), DIMAG( G ) ) >*/
-	    d__2 = g->r;
-	    d__3 = d_imag(g);
-	    d__1 = dlapy2_(&d__2, &d__3);
-	    r__->r = d__1, r__->i = 0.;
+            d__2 = g->r;
+            d__3 = d_imag(g);
+            d__1 = dlapy2_(&d__2, &d__3);
+            r__->r = d__1, r__->i = 0.;
 /*           Do complex/real division explicitly with two real divisions */
 /*<             D = DLAPY2( DBLE( GS ), DIMAG( GS ) ) >*/
-	    d__1 = gs.r;
-	    d__2 = d_imag(&gs);
-	    d__ = dlapy2_(&d__1, &d__2);
+            d__1 = gs.r;
+            d__2 = d_imag(&gs);
+            d__ = dlapy2_(&d__1, &d__2);
 /*<             SN = DCMPLX( DBLE( GS ) / D, -DIMAG( GS ) / D ) >*/
-	    d__1 = gs.r / d__;
-	    d__2 = -d_imag(&gs) / d__;
-	    z__1.r = d__1, z__1.i = d__2;
-	    sn->r = z__1.r, sn->i = z__1.i;
+            d__1 = gs.r / d__;
+            d__2 = -d_imag(&gs) / d__;
+            z__1.r = d__1, z__1.i = d__2;
+            sn->r = z__1.r, sn->i = z__1.i;
 /*<             RETURN >*/
-	    return 0;
+            return 0;
 /*<          END IF >*/
-	}
+        }
 /*<          F2S = DLAPY2( DBLE( FS ), DIMAG( FS ) ) >*/
-	d__1 = fs.r;
-	d__2 = d_imag(&fs);
-	f2s = dlapy2_(&d__1, &d__2);
+        d__1 = fs.r;
+        d__2 = d_imag(&fs);
+        f2s = dlapy2_(&d__1, &d__2);
 /*        G2 and G2S are accurate */
 /*        G2 is at least SAFMIN, and G2S is at least SAFMN2 */
 /*<          G2S = SQRT( G2 ) >*/
-	g2s = sqrt(g2);
+        g2s = sqrt(g2);
 /*        Error in CS from underflow in F2S is at most */
 /*        UNFL / SAFMN2 .lt. sqrt(UNFL*EPS) .lt. EPS */
 /*        If MAX(G2,ONE)=G2, then F2 .lt. G2*SAFMIN, */
@@ -265,50 +265,50 @@ L20:
 /*        and so CS .lt. sqrt(SAFMIN)/SAFMN2 = sqrt(EPS) */
 /*        Therefore, CS = F2S/G2S / sqrt( 1 + (F2S/G2S)**2 ) = F2S/G2S */
 /*<          CS = F2S / G2S >*/
-	*cs = f2s / g2s;
+        *cs = f2s / g2s;
 /*        Make sure abs(FF) = 1 */
 /*        Do complex/real division explicitly with 2 real divisions */
 /*<          IF( ABS1( F ).GT.ONE ) THEN >*/
 /* Computing MAX */
-	d__3 = (d__1 = f->r, abs(d__1)), d__4 = (d__2 = d_imag(f), abs(d__2));
-	if (max(d__3,d__4) > 1.) {
+        d__3 = (d__1 = f->r, abs(d__1)), d__4 = (d__2 = d_imag(f), abs(d__2));
+        if (max(d__3,d__4) > 1.) {
 /*<             D = DLAPY2( DBLE( F ), DIMAG( F ) ) >*/
-	    d__1 = f->r;
-	    d__2 = d_imag(f);
-	    d__ = dlapy2_(&d__1, &d__2);
+            d__1 = f->r;
+            d__2 = d_imag(f);
+            d__ = dlapy2_(&d__1, &d__2);
 /*<             FF = DCMPLX( DBLE( F ) / D, DIMAG( F ) / D ) >*/
-	    d__1 = f->r / d__;
-	    d__2 = d_imag(f) / d__;
-	    z__1.r = d__1, z__1.i = d__2;
-	    ff.r = z__1.r, ff.i = z__1.i;
+            d__1 = f->r / d__;
+            d__2 = d_imag(f) / d__;
+            z__1.r = d__1, z__1.i = d__2;
+            ff.r = z__1.r, ff.i = z__1.i;
 /*<          ELSE >*/
-	} else {
+        } else {
 /*<             DR = SAFMX2*DBLE( F ) >*/
-	    dr = safmx2 * f->r;
+            dr = safmx2 * f->r;
 /*<             DI = SAFMX2*DIMAG( F ) >*/
-	    di = safmx2 * d_imag(f);
+            di = safmx2 * d_imag(f);
 /*<             D = DLAPY2( DR, DI ) >*/
-	    d__ = dlapy2_(&dr, &di);
+            d__ = dlapy2_(&dr, &di);
 /*<             FF = DCMPLX( DR / D, DI / D ) >*/
-	    d__1 = dr / d__;
-	    d__2 = di / d__;
-	    z__1.r = d__1, z__1.i = d__2;
-	    ff.r = z__1.r, ff.i = z__1.i;
+            d__1 = dr / d__;
+            d__2 = di / d__;
+            z__1.r = d__1, z__1.i = d__2;
+            ff.r = z__1.r, ff.i = z__1.i;
 /*<          END IF >*/
-	}
+        }
 /*<          SN = FF*DCMPLX( DBLE( GS ) / G2S, -DIMAG( GS ) / G2S ) >*/
-	d__1 = gs.r / g2s;
-	d__2 = -d_imag(&gs) / g2s;
-	z__2.r = d__1, z__2.i = d__2;
-	z__1.r = ff.r * z__2.r - ff.i * z__2.i, z__1.i = ff.r * z__2.i + ff.i 
-		* z__2.r;
-	sn->r = z__1.r, sn->i = z__1.i;
+        d__1 = gs.r / g2s;
+        d__2 = -d_imag(&gs) / g2s;
+        z__2.r = d__1, z__2.i = d__2;
+        z__1.r = ff.r * z__2.r - ff.i * z__2.i, z__1.i = ff.r * z__2.i + ff.i
+                * z__2.r;
+        sn->r = z__1.r, sn->i = z__1.i;
 /*<          R = CS*F + SN*G >*/
-	z__2.r = *cs * f->r, z__2.i = *cs * f->i;
-	z__3.r = sn->r * g->r - sn->i * g->i, z__3.i = sn->r * g->i + sn->i * 
-		g->r;
-	z__1.r = z__2.r + z__3.r, z__1.i = z__2.i + z__3.i;
-	r__->r = z__1.r, r__->i = z__1.i;
+        z__2.r = *cs * f->r, z__2.i = *cs * f->i;
+        z__3.r = sn->r * g->r - sn->i * g->i, z__3.i = sn->r * g->i + sn->i *
+                g->r;
+        z__1.r = z__2.r + z__3.r, z__1.i = z__2.i + z__3.i;
+        r__->r = z__1.r, r__->i = z__1.i;
 /*<       ELSE >*/
     } else {
 
@@ -317,56 +317,56 @@ L20:
 /*        F2S cannot overflow, and it is accurate */
 
 /*<          F2S = SQRT( ONE+G2 / F2 ) >*/
-	f2s = sqrt(g2 / f2 + 1.);
+        f2s = sqrt(g2 / f2 + 1.);
 /*        Do the F2S(real)*FS(complex) multiply with two real multiplies */
 /*<          R = DCMPLX( F2S*DBLE( FS ), F2S*DIMAG( FS ) ) >*/
-	d__1 = f2s * fs.r;
-	d__2 = f2s * d_imag(&fs);
-	z__1.r = d__1, z__1.i = d__2;
-	r__->r = z__1.r, r__->i = z__1.i;
+        d__1 = f2s * fs.r;
+        d__2 = f2s * d_imag(&fs);
+        z__1.r = d__1, z__1.i = d__2;
+        r__->r = z__1.r, r__->i = z__1.i;
 /*<          CS = ONE / F2S >*/
-	*cs = 1. / f2s;
+        *cs = 1. / f2s;
 /*<          D = F2 + G2 >*/
-	d__ = f2 + g2;
+        d__ = f2 + g2;
 /*        Do complex/real division explicitly with two real divisions */
 /*<          SN = DCMPLX( DBLE( R ) / D, DIMAG( R ) / D ) >*/
-	d__1 = r__->r / d__;
-	d__2 = d_imag(r__) / d__;
-	z__1.r = d__1, z__1.i = d__2;
-	sn->r = z__1.r, sn->i = z__1.i;
+        d__1 = r__->r / d__;
+        d__2 = d_imag(r__) / d__;
+        z__1.r = d__1, z__1.i = d__2;
+        sn->r = z__1.r, sn->i = z__1.i;
 /*<          SN = SN*DCONJG( GS ) >*/
-	d_cnjg(&z__2, &gs);
-	z__1.r = sn->r * z__2.r - sn->i * z__2.i, z__1.i = sn->r * z__2.i + 
-		sn->i * z__2.r;
-	sn->r = z__1.r, sn->i = z__1.i;
+        d_cnjg(&z__2, &gs);
+        z__1.r = sn->r * z__2.r - sn->i * z__2.i, z__1.i = sn->r * z__2.i +
+                sn->i * z__2.r;
+        sn->r = z__1.r, sn->i = z__1.i;
 /*<          IF( COUNT.NE.0 ) THEN >*/
-	if (count != 0) {
+        if (count != 0) {
 /*<             IF( COUNT.GT.0 ) THEN >*/
-	    if (count > 0) {
+            if (count > 0) {
 /*<                DO 30 I = 1, COUNT >*/
-		i__1 = count;
-		for (i__ = 1; i__ <= i__1; ++i__) {
+                i__1 = count;
+                for (i__ = 1; i__ <= i__1; ++i__) {
 /*<                   R = R*SAFMX2 >*/
-		    z__1.r = safmx2 * r__->r, z__1.i = safmx2 * r__->i;
-		    r__->r = z__1.r, r__->i = z__1.i;
+                    z__1.r = safmx2 * r__->r, z__1.i = safmx2 * r__->i;
+                    r__->r = z__1.r, r__->i = z__1.i;
 /*<    30          CONTINUE >*/
 /* L30: */
-		}
+                }
 /*<             ELSE >*/
-	    } else {
+            } else {
 /*<                DO 40 I = 1, -COUNT >*/
-		i__1 = -count;
-		for (i__ = 1; i__ <= i__1; ++i__) {
+                i__1 = -count;
+                for (i__ = 1; i__ <= i__1; ++i__) {
 /*<                   R = R*SAFMN2 >*/
-		    z__1.r = safmn2 * r__->r, z__1.i = safmn2 * r__->i;
-		    r__->r = z__1.r, r__->i = z__1.i;
+                    z__1.r = safmn2 * r__->r, z__1.i = safmn2 * r__->i;
+                    r__->r = z__1.r, r__->i = z__1.i;
 /*<    40          CONTINUE >*/
 /* L40: */
-		}
+                }
 /*<             END IF >*/
-	    }
+            }
 /*<          END IF >*/
-	}
+        }
 /*<       END IF >*/
     }
 /*<       RETURN >*/
@@ -378,5 +378,5 @@ L20:
 } /* zlartg_ */
 
 #ifdef __cplusplus
-	}
+        }
 #endif
