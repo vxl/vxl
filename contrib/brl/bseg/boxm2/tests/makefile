@@ -12,6 +12,7 @@ TESTS += test_io.cxx
 TESTS += test_block.cxx
 TESTS += test_data.cxx
 TESTS += test_cpp_render_process.cxx
+TESTS += test_cpp_update_process.cxx
 
 MINI_PROG_SOURCES += test_include.cxx
 
