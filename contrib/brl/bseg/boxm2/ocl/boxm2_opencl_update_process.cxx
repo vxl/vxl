@@ -135,21 +135,22 @@ bool boxm2_opencl_update_process::execute(vcl_vector<brdb_value_sptr>& input, vc
 
   //Go through each kernel, execute on each block
 
-  for (int i=0; i<update_kernels_.size(); i++)
-
+  for (unsigned int i=0; i<update_kernels_.size(); ++i)
   {
+#ifdef DEBUG
     vcl_cout<<"UPDATE KERNEL : "<<i<<vcl_endl;
-    if( i == UPDATE_PROC ) {
+#endif
+    if ( i == UPDATE_PROC ) {
       this->set_workspace(i);
       this->set_args(i);
-      
+
       //execute kernel
       update_kernels_[i]->execute( (*command_queue_), lThreads_, gThreads_);
       int status = clFinish(*command_queue_);
       check_val(status, MEM_FAILURE, "UPDATE EXECUTE FAILED: " + error_to_string(status));
       update_kernels_[i]->clear_args();
       image_->read_to_buffer(*command_queue_);
-      continue; 
+      continue;
     }
 
     //zip through visible blocks, and execute this pass's kernel
@@ -192,7 +193,6 @@ bool boxm2_opencl_update_process::execute(vcl_vector<brdb_value_sptr>& input, vc
       cl_output_->read_to_buffer(*command_queue_);
       clFinish(*command_queue_);
     }
-    
   }
 
   //clean up camera, lookup_arr, img_dim_buff
