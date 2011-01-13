@@ -13,6 +13,9 @@
 #include <boxm2/io/boxm2_cache.h>
 #include <brdb/brdb_value_sptr.h>
 #include <vcl_vector.h>
+#ifdef DEBUG
+#include <vcl_iostream.h>
+#endif
 
 //open cl includes
 #include <bocl/bocl_cl.h>
@@ -88,7 +91,9 @@ bocl_mem* boxm2_opencl_cache::get_data(boxm2_block_id id)
   //otherwise get the data block from cpu cache
   if ( cached_data_.find(boxm2_data_traits<T>::prefix()) != cached_data_.end())
   {
-    //vcl_cout<<"ocl_cache release memory for :"<<boxm2_data_traits<T>::prefix()<<vcl_endl;
+#ifdef DEBUG
+    vcl_cout<<"ocl_cache release memory for :"<<boxm2_data_traits<T>::prefix()<<vcl_endl;
+#endif
     //release existing memory
     bocl_mem* toDelete = cached_data_[boxm2_data_traits<T>::prefix()];
     delete toDelete;
@@ -101,13 +106,13 @@ bocl_mem* boxm2_opencl_cache::get_data(boxm2_block_id id)
   bocl_mem* data = new bocl_mem(*context_, data_base->data_buffer(), data_base->buffer_length(), boxm2_data_traits<T>::prefix());
   data->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
   cached_data_[boxm2_data_traits<T>::prefix()] = data;
-  
-#if 0
-  vcl_cout<<"Data mem "<<boxm2_data_traits<T>::prefix()<<" length: "
-                       <<data_base->buffer_length()<<", cellsize: "
-                       <<boxm2_data_traits<T>::datasize()<<vcl_endl;
+
+#ifdef DEBUG
+  vcl_cout<<"Data mem "<<boxm2_data_traits<T>::prefix()
+          <<" length: "<<data_base->buffer_length()
+          <<", cellsize: "<<boxm2_data_traits<T>::datasize()<<vcl_endl;
 #endif
-  
+
   return data;
 }
 
