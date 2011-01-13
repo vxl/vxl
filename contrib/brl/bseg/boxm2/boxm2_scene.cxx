@@ -92,7 +92,7 @@ vcl_vector<boxm2_block_id> boxm2_scene::get_vis_blocks(vpgl_perspective_camera<d
   vcl_vector<boxm2_dist_id_pair>::iterator di; 
   for(di = distances.begin(); di != distances.end(); ++di) {
     vis_order.push_back(di->id_); 
-    vcl_cout<<di->id_<<"    ";
+    vcl_cout<<di->id_<<"("<<di->dist_<<")    ";
   }
   vcl_cout<<vcl_endl<<"-----------------------------------------------"<<vcl_endl;
   return vis_order;

@@ -37,8 +37,6 @@ seg_len_main(__constant  RenderSceneInfo    * linfo,
   // check for validity before proceeding
   //----------------------------------------------------------------------------
   int i=0,j=0;
-  map_work_space_2d(&i,&j);
-  int factor=1;
   i=get_global_id(0);
   j=get_global_id(1);
   // check to see if the thread corresponds to an actual pixel as in some 
@@ -132,7 +130,6 @@ pre_inf_main(__constant  RenderSceneInfo    * linfo,
   // check for validity before proceeding
   //----------------------------------------------------------------------------
   int i=0,j=0; 
-  map_work_space_2d(&i,&j);
   i=get_global_id(0);
   j=get_global_id(1);
 
@@ -230,15 +227,12 @@ bayes_main(__constant  RenderSceneInfo    * linfo,
   // check for validity before proceeding
   //----------------------------------------------------------------------------
   int i=0,j=0;
-  map_work_space_2d(&i,&j);
   i=get_global_id(0);
   j=get_global_id(1);
 
   // check to see if the thread corresponds to an actual pixel as in some
   // cases #of threads will be more than the pixels.
-  bool isActive = true;
   if (i>=(*imgdims).z || j>=(*imgdims).w) {
-    isActive = false;
     return;
   }
   float4 inImage = in_image[j*get_global_size(0) + i];

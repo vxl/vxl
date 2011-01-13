@@ -132,7 +132,7 @@ class boxm2_dist_id_pair
     boxm2_block_id id_;
   
     inline bool operator < (boxm2_dist_id_pair const& v) const {
-      return dist_ > v.dist_; 
+      return dist_ < v.dist_; 
     } 
 };
 

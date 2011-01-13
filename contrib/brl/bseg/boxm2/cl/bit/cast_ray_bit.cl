@@ -56,10 +56,6 @@ cast_ray(
   
   uchar llid = (uchar)(get_local_id(0) + get_local_size(0)*get_local_id(1));
 
-  // pixel values/depth map to be returned
-  float vis = 1.0f;
-  float expected_int = 0.0f;
-
   //determine the minimum face:
   //get parameters tnear and tfar for the scene
   float max_facex = (ray_dx > 0.0f) ? (linfo->dims.x) : 0.0f;
@@ -165,14 +161,8 @@ cast_ray(
 // Step Cell Functor
 ////////////////////////////////////////////////////////////////////////////////
 #ifdef SEGLEN
-
-      //SLOW and accurate method
-      int seg_int = convert_int_rte(d * SEGLEN_FACTOR);
-      atom_add(&seg_len_array[data_ptr], seg_int);  
-      int cum_obs = convert_int_rte(d * inImgObs * SEGLEN_FACTOR); 
-      atom_add(&mean_obs_array[data_ptr], cum_obs);
-
-      /* // --------- faster and less accurate method... --------------------------
+  #ifdef ATOMIC_OPT
+      // --------- faster and less accurate method... --------------------------
       //keep track of cells being hit
       cell_ptrs[llid] = data_ptr;
       cached_aux_data[llid] = (float4)0.0f;  //leaders retain the mean obs and the cell length
@@ -196,8 +186,15 @@ cast_ray(
         atom_add(&seg_len_array[data_ptr], seg_int); 
         atom_add(&mean_obs_array[data_ptr], cum_obs);
       }
-      //------------------------------------------------------------------------ */
-
+      //------------------------------------------------------------------------ 
+  #else
+      //SLOW and accurate method
+      int seg_int = convert_int_rte(d * SEGLEN_FACTOR);
+      atom_add(&seg_len_array[data_ptr], seg_int);  
+      int cum_obs = convert_int_rte(d * inImgObs * SEGLEN_FACTOR); 
+      atom_add(&mean_obs_array[data_ptr], cum_obs);
+  #endif
+  
       //reset cell_ptrs to negative one every time (prevents invisible layer bug)
       cell_ptrs[llid] = -1;
 #endif
@@ -220,8 +217,8 @@ cast_ray(
       in_image[j*get_global_size(0)+i] = image_vect;
 #endif
 #ifdef BAYES
-
-      /* //keep track of cells being hit
+  #ifdef ATOMIC_OPT
+      //keep track of cells being hit
       cell_ptrs[llid] = data_ptr;
       barrier(CLK_LOCAL_MEM_FENCE);
       load_data_mutable_opt(ray_bundle_array, cell_ptrs);
@@ -262,9 +259,8 @@ cast_ray(
       atom_add(&beta_array[data_ptr], beta_int);  
       int vis_int  = convert_int_rte(cell_vis * SEGLEN_FACTOR); 
       atom_add(&vis_array[data_ptr], vis_int);
-    } */
-
-    
+    } 
+  #else
     //slow beta calculation ----------------------------------------------------
     float  alpha    = alpha_array[data_ptr];
     float8 mixture  = convert_float8(mixture_array[data_ptr])/255.0f;
@@ -294,7 +290,8 @@ cast_ray(
     int vis_int  = convert_int_rte(vis_cont * SEGLEN_FACTOR); 
     atom_add(&vis_array[data_ptr], vis_int);         
     //-------------------------------------------------------------------------- */          
-    
+  #endif
+
     //reset cell_ptrs to -1 every time
     cell_ptrs[llid] = -1;
 #endif 
