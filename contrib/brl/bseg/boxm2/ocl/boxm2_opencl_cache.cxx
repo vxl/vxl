@@ -54,9 +54,8 @@ bocl_mem* boxm2_opencl_cache::get_block(boxm2_block_id id)
 
   //store the metadata
   if (block_info_) {
-#if 0 // cannot delete a void* !!!
-     if ( block_info_->cpu_buffer() ) delete block_info_->cpu_buffer();
-#endif
+     boxm2_scene_info* buff = (boxm2_scene_info*) block_info_->cpu_buffer();
+     if ( buff ) delete buff;
      delete block_info_;
   }
   boxm2_scene_info* info_buffer = scene_->get_blk_metadata(loaded_);

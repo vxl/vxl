@@ -145,6 +145,7 @@ int main(int argc,  char** argv)
     boxm2_sio_mgr::save_block(scene->data_path(), cache.get_block(id)); 
     boxm2_sio_mgr::save_block_data(scene->data_path(), id, cache.get_data<BOXM2_ALPHA>(id) );
     boxm2_sio_mgr::save_block_data(scene->data_path(), id, cache.get_data<BOXM2_MOG3_GREY>(id) );
+    boxm2_sio_mgr::save_block_data(scene->data_path(), id, cache.get_data<BOXM2_NUM_OBS>(id) );
   }
 
   ////----------------------------------------------------------------------------
