@@ -110,6 +110,9 @@ SOURCE=.\boxm2_opencl_render_process.cxx
 SOURCE=.\boxm2_opencl_update_process.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\boxm2_opencl_refine_process.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/bocl_manager+boxm2_opencl_processor-.cxx
 # End Source File
 # End Group
@@ -132,6 +135,9 @@ SOURCE=.\boxm2_opencl_processor.h
 # End Source File
 # Begin Source File
 SOURCE=.\boxm2_opencl_update_process.h
+# End Source File
+# Begin Source File
+SOURCE=.\boxm2_opencl_refine_process.h
 # End Source File
 # End Group
 # End Target

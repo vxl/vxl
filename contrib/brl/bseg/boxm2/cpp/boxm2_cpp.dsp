@@ -104,6 +104,9 @@ SOURCE=.\boxm2_cpp_processor.cxx
 SOURCE=.\boxm2_mog3_grey_processor.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\boxm2_cpp_update_process.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/brdb_value_t+vil_image_view_base_sptr-.cxx
 # End Source File
 # End Group
@@ -126,6 +129,12 @@ SOURCE=.\boxm2_cpp_process_base.h
 # End Source File
 # Begin Source File
 SOURCE=.\boxm2_cast_ray_function.h
+# End Source File
+# Begin Source File
+SOURCE=.\boxm2_cpp_update_process.h
+# End Source File
+# Begin Source File
+SOURCE=.\boxm2_update_image_functor.h
 # End Source File
 # End Group
 # End Target

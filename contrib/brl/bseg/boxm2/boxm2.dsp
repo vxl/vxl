@@ -136,6 +136,12 @@ SOURCE=.\Templates/brdb_value_t+boxm2_data_base_sptr-.cxx
 # Begin Source File
 SOURCE=.\Templates/vbl_smart_ptr+boxm2_block-.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\Templates/boxm2_data+BOXM2_NUM_OBS-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/boxm2_data+BOXM2_AUX-.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
