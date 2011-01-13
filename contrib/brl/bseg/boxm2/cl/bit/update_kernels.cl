@@ -94,14 +94,14 @@ seg_len_main(__constant  RenderSceneInfo    * linfo,
             0,                //beta_array
 
             //utility info
-            local_tree, bit_lookup, cumsum, 0,
+            local_tree, bit_lookup, cumsum,
 
             //SEGLEN SPECIFIC ARGS
             //factor,raybund,ptrs,cache,cache,image_vect (all NULL)
             ray_bundle_array, cell_ptrs, obs, vis, cached_aux_data,
 
             //io info
-            in_image, output);
+            output);
 }
 #endif
 
@@ -184,13 +184,16 @@ pre_inf_main(__constant  RenderSceneInfo    * linfo,
             &aux_array[3 * linfo->num_buffer * linfo->data_len],   //beta_array,
 
             //utility info
-            local_tree, bit_lookup, cumsum, 0,
+            local_tree, bit_lookup, cumsum,
 
             //PREINF SPECIFIC ARGS
-            inImage,
+            &inImage,
 
             //io info
-            in_image, output);
+            output);
+  
+  //store the vis_inf/pre_inf in the image          
+  in_image[j*get_global_size(0)+i] = inImage;
 }
 #endif
 
@@ -284,14 +287,17 @@ bayes_main(__constant  RenderSceneInfo    * linfo,
             &aux_array[3 * linfo->num_buffer * linfo->data_len],   //beta_array,
             
             //utility info
-            local_tree, bit_lookup, cumsum, 0,
+            local_tree, bit_lookup, cumsum,
 
             //BAYES SPECIFIC ARGUMENTS
             //factor,raybund,ptrs,cache,cache,image_vect (all NULL)
-            ray_bundle_array, cell_ptrs, cached_vis, norm, vis, pre,
+            ray_bundle_array, cell_ptrs, cached_vis, norm, &vis, &pre,
 
             //io info
-            in_image, output);
+            output);
+            
+  //write out vis and pre
+  in_image[j*get_global_size(0)+i].zw = (float2) (vis, pre); 
 }
 #endif
 

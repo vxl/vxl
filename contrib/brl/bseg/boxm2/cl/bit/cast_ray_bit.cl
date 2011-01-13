@@ -28,7 +28,6 @@ cast_ray(
           __local     uchar16            * local_tree,      //local tree for traversing
           __constant  uchar              * bit_lookup,      //0-255 num bits lookup table
           __local     uchar              * cumsum,          //cumulative sum helper for data pointer
-                      int                  factor,          //factor
 
           //---- SEPARATE ARGS FOR EACH STEP CELL FUNCTOR... -------------------
 #ifdef SEGLEN
@@ -39,18 +38,17 @@ cast_ray(
           __local     float4             * cached_aux_data,   //local data per ray in workgroup
 #endif
 #ifdef PREINF  
-                      float4               image_vect,      //input image and store vis_inf and pre_inf
+                      float4             * image_vect,      //input image and store vis_inf and pre_inf
 #endif
 #ifdef BAYES
           __local     short2             * ray_bundle_array,//gives information for which ray takes over in the workgroup
           __local     int                * cell_ptrs,       //local list of cell_ptrs (cells that are hit by this workgroup
           __local     float              * cached_vis,
                       float                norm,
-                      float                ray_vis,
-                      float                ray_pre,
+                      float              * ray_vis,
+                      float              * ray_pre,
 #endif 
           //---- OUTPUT ARGUMENTS-----------------------------------------------
-          __global    float4             * in_image,        //input image and store vis_inf and pre_inf
           __global    float              * output)          //debug output buffer
 {
   
@@ -211,7 +209,7 @@ cast_ray(
       mean_obs = mean_obs/cum_len;
      
       //calculate pre_infinity denomanator (shape of image)
-      pre_infinity_opt(d, cum_len, mean_obs, &image_vect, alpha, mixture, weight3);
+      pre_infinity_opt(d, cum_len, mean_obs, image_vect, alpha, mixture, weight3);
       
 #endif
 #ifdef BAYES
@@ -238,8 +236,8 @@ cast_ray(
       //calculate bayes ratio
       bayes_ratio_functor( d, 
                           mean_obs,
-                          &ray_pre,
-                          &ray_vis,
+                          ray_pre,
+                          ray_vis,
                           norm, 
                           &cell_beta,
                           &cell_vis,
@@ -277,8 +275,8 @@ cast_ray(
                      cum_len, 
                      mean_obs, 
                      norm,
-                     &ray_pre, 
-                     &ray_vis, 
+                     ray_pre, 
+                     ray_vis, 
                      &ray_beta, 
                      &vis_cont); 
   
@@ -307,13 +305,4 @@ cast_ray(
     tblock = texit;
   }
   
-// Write out to input image (obs/norm, --, vis, pre)
-#ifdef PREINF  
-  //aux data doesn't need to be set, just in_image
-  in_image[j*get_global_size(0)+i] = image_vect;
-#endif
-#ifdef BAYES
-    //write out vis and pre
-    in_image[j*get_global_size(0)+i].zw = (float2) (ray_vis, ray_pre); 
-#endif
 }
