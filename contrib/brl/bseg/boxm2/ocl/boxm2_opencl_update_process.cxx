@@ -242,6 +242,7 @@ bool boxm2_opencl_update_process::set_workspace(unsigned pass)
       break;
     }
   }
+  return true;
 }
 
 
@@ -340,6 +341,7 @@ bool boxm2_opencl_update_process::write_input_image(vil_image_view<float>* input
   else {
     image_->write_to_buffer(*command_queue_);
   }
+  return true;
 }
 
 #if 0
