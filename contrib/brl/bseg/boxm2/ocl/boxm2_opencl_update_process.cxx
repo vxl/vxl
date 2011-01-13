@@ -101,8 +101,8 @@ bool boxm2_opencl_update_process::execute(vcl_vector<brdb_value_sptr>& input, vc
   img_size_[0] = img_view->ni();
   img_size_[1] = img_view->nj();
   int* img_dim_buff = new int[4];
-  img_dim_buff[0] = img_view->ni();
-  img_dim_buff[1] = img_view->nj();
+  img_dim_buff[0] = 0;
+  img_dim_buff[1] = 0;
   img_dim_buff[2] = img_view->ni();
   img_dim_buff[3] = img_view->nj();
   img_dim_ = new bocl_mem((*context_), img_dim_buff, sizeof(cl_int4), "image dims");
@@ -134,7 +134,9 @@ bool boxm2_opencl_update_process::execute(vcl_vector<brdb_value_sptr>& input, vc
   vcl_vector<boxm2_block_id>::iterator id;
 
   //Go through each kernel, execute on each block
+
   for (int i=0; i<update_kernels_.size(); i++)
+
   {
     vcl_cout<<"UPDATE KERNEL : "<<i<<vcl_endl;
     if( i == UPDATE_PROC ) {
@@ -249,10 +251,10 @@ bool boxm2_opencl_update_process::set_workspace(unsigned pass)
     case UPDATE_PREINF:
     case UPDATE_PROC:
     case UPDATE_BAYES:
-      gThreads_[0] = img_size_[0];
-      gThreads_[1] = img_size_[1];
       lThreads_[0]  = 8;
       lThreads_[1]  = 8;
+      gThreads_[0] = RoundUp(img_size_[0],lThreads_[0]);
+      gThreads_[1] = RoundUp(img_size_[1],lThreads_[1]);
       break;
     case UPDATE_CELL:
     {
