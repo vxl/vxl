@@ -15,6 +15,9 @@ boxm2_opencl_cache::boxm2_opencl_cache(boxm2_cache* cpu_cache,
   loaded_ = boxm2_block_id(-1, -1, -1);
   cached_block_ = 0;
   block_info_ = 0;
+  tree_ptrs_ = 0;
+  trees_per_buffer_ = 0;
+  mem_ptrs_ = 0; 
   scene_ = scene;
 }
 
@@ -64,6 +67,43 @@ bocl_mem* boxm2_opencl_cache::get_block(boxm2_block_id id)
   info_buffer->data_buffer_length = 65536;
   block_info_ = new bocl_mem(*context_, info_buffer, sizeof(boxm2_scene_info), "scene info buffer");
   block_info_->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR );
-
   return cached_block_;
 }
+
+//: get tree_ptrs returns the tree pointers for the block currently in the cache
+bocl_mem* boxm2_opencl_cache::get_loaded_tree_ptrs()
+{  
+  if( tree_ptrs_ ) delete tree_ptrs_; 
+  tree_ptrs_ = 0;
+ 
+  boxm2_block* loaded = cpu_cache_->get_block(loaded_); 
+  boxm2_array_2d<int>& tree_ptrs = loaded->tree_ptrs(); 
+  tree_ptrs_ = new bocl_mem(*context_, tree_ptrs.begin(), tree_ptrs.size()*sizeof(int), "2d tree_ptrs buffer");
+  tree_ptrs_->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR );
+  return tree_ptrs_; 
+}
+
+bocl_mem* boxm2_opencl_cache::get_loaded_trees_per_buffer()
+{
+  if( trees_per_buffer_ ) delete trees_per_buffer_; 
+  trees_per_buffer_ = 0;
+ 
+  boxm2_block* loaded = cpu_cache_->get_block(loaded_); 
+  boxm2_array_1d<ushort>& trees_per_buffer = loaded->trees_in_buffers(); 
+  trees_per_buffer_ = new bocl_mem(*context_, trees_per_buffer.begin(), trees_per_buffer.size()*sizeof(int), "1d trees_per_buffer buffer");
+  trees_per_buffer_->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR );
+  return trees_per_buffer_; 
+}
+bocl_mem* boxm2_opencl_cache::get_loaded_mem_ptrs()
+{
+  if( mem_ptrs_ ) delete mem_ptrs_; 
+  mem_ptrs_ = 0;
+  boxm2_block* loaded = cpu_cache_->get_block(loaded_); 
+  
+  typedef vnl_vector_fixed<unsigned short, 2> ushort2; 
+  boxm2_array_1d<ushort2>& mem_ptrs = loaded->mem_ptrs(); 
+  mem_ptrs_ = new bocl_mem(*context_, mem_ptrs.begin(), mem_ptrs.size()*sizeof(int), "1d mem_ptrs buffer");
+  mem_ptrs_->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR );
+  return mem_ptrs_; 
+}
+

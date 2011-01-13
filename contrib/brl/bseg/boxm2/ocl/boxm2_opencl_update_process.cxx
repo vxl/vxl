@@ -190,36 +190,10 @@ bool boxm2_opencl_update_process::execute(vcl_vector<brdb_value_sptr>& input, vc
       //read image out to buffer (from gpu)
       image_->read_to_buffer(*command_queue_);
       cl_output_->read_to_buffer(*command_queue_);
-
       clFinish(*command_queue_);
     }
     
-    //if( i == UPDATE_PROC ) 
-    //{
-        //float* upimg = (float*) image_->cpu_buffer(); 
-        //vil_image_view<float> float_img(img_size_[0], img_size_[1]);
-        //vil_image_view<float>::iterator iter;
-        //int i=0;
-        //for(iter = float_img.begin(); iter != float_img.end(); ++iter, ++i)
-          //(*iter) = upimg[4*i]; 
-        
-        ////output proc norm
-        //float min_val, max_val; 
-        //vil_math_value_range( float_img, min_val, max_val);
-        //vil_image_view<vxl_byte> byte_img(img_size_[0], img_size_[1]);
-        //for (unsigned int i=0; i<byte_img.ni(); ++i)
-          //for (unsigned int j=0; j<byte_img.nj(); ++j)
-            //byte_img(i,j) =  static_cast<vxl_byte>( (float_img(i,j)-min_val)/(max_val-min_val) );   //just grab the first byte (all foura r the same)
-        //vil_save( byte_img, "proc_norm_img.png");
-    //}
   }
-
-  //vcl_cout<<"OUTPUT FOR UPDATE"<<vcl_endl;
-  //float* obuff = (float*) cl_output_->cpu_buffer();
-  //for (int i=0; i<30; i++)
-    //vcl_cout<<obuff[i]<<"   ";
-  //vcl_cout<<vcl_endl;
-
 
   //clean up camera, lookup_arr, img_dim_buff
   delete[] output_arr;

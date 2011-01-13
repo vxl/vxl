@@ -10,6 +10,7 @@ SET(boxm2_ocl_sources
     boxm2_opencl_render_depth_process.h   boxm2_opencl_render_depth_process.cxx
     boxm2_opencl_cache.h                  boxm2_opencl_cache.cxx
     boxm2_opencl_update_process.h         boxm2_opencl_update_process.cxx
+    boxm2_opencl_refine_process.h         boxm2_opencl_refine_process.cxx
    )
 
 AUX_SOURCE_DIRECTORY(Templates boxm2_ocl_sources)

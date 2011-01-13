@@ -39,14 +39,6 @@ class boxm2_opencl_update_process : public boxm2_opencl_process_base
     //: opencl specific init - compiles kernels associated with this process
     virtual bool init_kernel(cl_context* context, cl_device_id* device, vcl_string opts="");
 
-    ////////////////////////////////////////////////////////////////////////////
-    //: render specific methods
-    bool set_image( bocl_mem* img ) { image_ = img; return true; }
-    
-    //: get image
-    bocl_mem* image() { return image_; }
-    ////////////////////////////////////////////////////////////////////////////
-
   private:
 
     //: render kernel (other processes may have many kernels
