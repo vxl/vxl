@@ -86,7 +86,7 @@ cast_ray(
   // Begin traversing the blocks, break when any curr_block_index value is
   // illegal (not between 0 and scenedims)
   //----------------------------------------------------------------------------
-  while(tblock < tfar && vis > .01f) 
+  while(tblock < tfar) 
   {
     //-------------------------------------------------------------------------
     // get small block and necessary information
@@ -167,12 +167,12 @@ cast_ray(
 #ifdef SEGLEN
 
       //SLOW and accurate method
-      //int seg_int = convert_int_rte(d * SEGLEN_FACTOR);
-      //atom_add(&seg_len_array[data_ptr], seg_int);  
-      //int cum_obs = convert_int_rte(d * inImgObs * SEGLEN_FACTOR); 
-      //atom_add(&mean_obs_array[data_ptr], cum_obs);
+      int seg_int = convert_int_rte(d * SEGLEN_FACTOR);
+      atom_add(&seg_len_array[data_ptr], seg_int);  
+      int cum_obs = convert_int_rte(d * inImgObs * SEGLEN_FACTOR); 
+      atom_add(&mean_obs_array[data_ptr], cum_obs);
 
-      // --------- faster and less accurate method... --------------------------
+      /* // --------- faster and less accurate method... --------------------------
       //keep track of cells being hit
       cell_ptrs[llid] = data_ptr;
       cached_aux_data[llid] = (float4)0.0f;  //leaders retain the mean obs and the cell length
@@ -196,7 +196,7 @@ cast_ray(
         atom_add(&seg_len_array[data_ptr], seg_int); 
         atom_add(&mean_obs_array[data_ptr], cum_obs);
       }
-      //------------------------------------------------------------------------
+      //------------------------------------------------------------------------ */
 
       //reset cell_ptrs to negative one every time (prevents invisible layer bug)
       cell_ptrs[llid] = -1;
@@ -221,7 +221,7 @@ cast_ray(
 #endif
 #ifdef BAYES
 
-      //keep track of cells being hit
+      /* //keep track of cells being hit
       cell_ptrs[llid] = data_ptr;
       barrier(CLK_LOCAL_MEM_FENCE);
       load_data_mutable_opt(ray_bundle_array, cell_ptrs);
@@ -262,9 +262,9 @@ cast_ray(
       atom_add(&beta_array[data_ptr], beta_int);  
       int vis_int  = convert_int_rte(cell_vis * SEGLEN_FACTOR); 
       atom_add(&vis_array[data_ptr], vis_int);
-    }
+    } */
 
-    /*
+    
     //slow beta calculation ----------------------------------------------------
     float  alpha    = alpha_array[data_ptr];
     float8 mixture  = convert_float8(mixture_array[data_ptr])/255.0f;

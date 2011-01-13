@@ -50,13 +50,6 @@ class boxm2_render_tableau : public boxm2_cam_tableau
 
  protected:
 
-  //: create cl_gl_context
-  cl_context create_clgl_context();
-  bool init_clgl();
-
-  //func to render frame on GPU (returns gpu time)
-  float render_frame();
-
   //shared GL_CL image buffer
   GLuint pbuffer_;
   cl_mem clgl_buffer_;
@@ -69,9 +62,18 @@ class boxm2_render_tableau : public boxm2_cam_tableau
   boxm2_scene_sptr scene_;
   unsigned ni_;
   unsigned nj_;
-
   vgui_statusbar* status_;
 
+  //func to render frame on GPU (returns gpu time)
+  float render_frame();
+
+  //updates a single (random) frame
+  float update_frame(); 
+
+  //-- HELPER INIT Methods and vars---------------------------------------------
+  //: create cl_gl_context
+  cl_context create_clgl_context();
+  bool init_clgl();
   bool do_init_ocl;
 };
 

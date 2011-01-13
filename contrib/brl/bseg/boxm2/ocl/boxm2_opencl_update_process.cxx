@@ -135,7 +135,6 @@ bool boxm2_opencl_update_process::execute(vcl_vector<brdb_value_sptr>& input, vc
   for (int i=0; i< /*update_kernels_.size()*/ 5; i++)
   {
     vcl_cout<<"UPDATE KERNEL : "<<i<<vcl_endl;
-    if (i==UPDATE_PROC) continue;
 
     //zip through visible blocks, and execute this pass's kernel
     for (id = vis_order.begin(); id != vis_order.end(); ++id)
