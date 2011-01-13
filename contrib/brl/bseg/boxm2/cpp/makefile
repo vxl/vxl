@@ -8,6 +8,8 @@ SOURCES += boxm2_mog3_grey_processor.cxx
 MANPAGE_SOURCES += boxm2_render_exp_image_functor.h
 MANPAGE_SOURCES += boxm2_cpp_process_base.h
 MANPAGE_SOURCES += boxm2_cast_ray_function.h
+SOURCES += boxm2_cpp_update_process.cxx
+MANPAGE_SOURCES += boxm2_update_image_functor.h
 
 ################################
 include ${VXLROOT}/config/top.mk
