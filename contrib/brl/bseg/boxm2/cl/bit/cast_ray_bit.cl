@@ -213,8 +213,6 @@ cast_ray(
       //calculate pre_infinity denomanator (shape of image)
       pre_infinity_opt(d, cum_len, mean_obs, &image_vect, alpha, mixture, weight3);
       
-      //aux data doesn't need to be set, just in_image
-      in_image[j*get_global_size(0)+i] = image_vect;
 #endif
 #ifdef BAYES
   #ifdef ATOMIC_OPT
@@ -308,5 +306,14 @@ cast_ray(
     texit = texit + tblock + BLOCK_EPSILON;
     tblock = texit;
   }
-
+  
+// Write out to input image (obs/norm, --, vis, pre)
+#ifdef PREINF  
+  //aux data doesn't need to be set, just in_image
+  in_image[j*get_global_size(0)+i] = image_vect;
+#endif
+#ifdef BAYES
+    //write out vis and pre
+    in_image[j*get_global_size(0)+i].zw = (float2) (ray_vis, ray_pre); 
+#endif
 }
