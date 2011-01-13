@@ -21,7 +21,7 @@ boxm2_render_tableau::boxm2_render_tableau()
 
 //: initialize tableau properties
 bool boxm2_render_tableau::init(vcl_string scene_file,
-                                unsigned ni, 
+                                unsigned ni,
                                 unsigned nj,
                                 vpgl_perspective_camera<double> * cam,
                                 vcl_vector<vcl_string> cam_files,
@@ -36,13 +36,12 @@ bool boxm2_render_tableau::init(vcl_string scene_file,
   update_count_ = 0;
   cam_files_ = cam_files;
   img_files_ = img_files;
-  
+
   //create the scene
-  scene_ = new boxm2_scene(scene_file); 
-  
+  scene_ = new boxm2_scene(scene_file);
+
   return true;
 }
-
 
 
 //: Handles tableau events (drawing and keys)
@@ -51,7 +50,7 @@ bool boxm2_render_tableau::handle(vgui_event const &e)
   //draw handler - called on post_draw()
   if (e.type == vgui_DRAW)
   {
-    if (do_init_ocl){
+    if (do_init_ocl) {
       this->init_clgl();
       do_init_ocl = false;
     }
@@ -67,8 +66,8 @@ bool boxm2_render_tableau::handle(vgui_event const &e)
 
     //calculate and write fps to status
     vcl_stringstream str;
-    str<<"num updates: "<<update_count_;
-    str<<", rendering at ~ "<< (1000.0f / gpu_time) <<" fps ";
+    str<<"num updates: "<<update_count_
+       <<", rendering at ~ "<< (1000.0f / gpu_time) <<" fps ";
     status_->write(str.str().c_str());
 
     return true;
@@ -80,48 +79,52 @@ bool boxm2_render_tableau::handle(vgui_event const &e)
     do_update_ = true;
     this->post_idle_request();
   }
-  //else if (e.type == vgui_KEY_PRESS && e.key == vgui_key('d')) {
-    //vcl_cout<<"refining"<<vcl_endl;
-    //this->refine_model();
-    //return true;
-  ////}
-  //else if (e.type == vgui_KEY_PRESS && e.key == vgui_key('m')) {
-    //vcl_cout<<"merging"<<vcl_endl;
-    //this->merge_model();
-    //return true;
-  //}
   else if (e.type == vgui_KEY_PRESS && e.key == vgui_key('s')) {
     vcl_cout<<"saving"<<vcl_endl;
     this->save_model();
     return true;
   }
-  //else if (e.type == vgui_KEY_PRESS && e.key == vgui_key('f'))
-  //{
-    //vcl_string imgfile;
-    //vcl_string camfile;
-    //vcl_string regexpallfiles="*.*";
-    //vcl_string regexptxtfiles="*.*";
-    //vgui_dialog dlg("Save Expected Image and camera");
-    //dlg.file("Image  Filename",regexpallfiles,imgfile);
-    //dlg.file("Camera Filename",regexptxtfiles,camfile);
-    //if(dlg.ask())
-    //{
-        //this->save_image(imgfile);
-        //this->save_camera(camfile);
-    //}
-
-  //}
+#if 0 // keys "d" (refining), "m" (merging) and "f" (saving) commented out
+  else if (e.type == vgui_KEY_PRESS && e.key == vgui_key('d')) {
+    vcl_cout<<"refining"<<vcl_endl;
+    this->refine_model();
+    return true;
+  }
+  else if (e.type == vgui_KEY_PRESS && e.key == vgui_key('m')) {
+    vcl_cout<<"merging"<<vcl_endl;
+    this->merge_model();
+    return true;
+  }
+  else if (e.type == vgui_KEY_PRESS && e.key == vgui_key('f')) {
+    vcl_string imgfile;
+    vcl_string camfile;
+    vcl_string regexpallfiles="*.*";
+    vcl_string regexptxtfiles="*.*";
+    vgui_dialog dlg("Save Expected Image and camera");
+    dlg.file("Image  Filename",regexpallfiles,imgfile);
+    dlg.file("Camera Filename",regexptxtfiles,camfile);
+    if (dlg.ask())
+    {
+      this->save_image(imgfile);
+      this->save_camera(camfile);
+    }
+  }
+#endif // 0
   //HANDLE idle events - do model updating
   else if (e.type == vgui_IDLE)
   {
     if (do_update_) {
-      //vcl_cout<<"Idling - i will be updating scene"<<vcl_endl;
+#ifdef DEBUG
+      vcl_cout<<"Idling - i will be updating scene"<<vcl_endl;
+#endif
       this->update_frame();
       this->post_redraw();
       return true;
     }
     else {
+#ifdef DEBUG
       vcl_cout<<"done idling"<<vcl_endl;
+#endif
       return false;
     }
   }
@@ -139,7 +142,9 @@ bool boxm2_render_tableau::handle(vgui_event const &e)
 
 bool boxm2_render_tableau::save_model()
 {
+#ifdef DEBUG
   vcl_cout<<"SAVING MODEL!!!"<<vcl_endl;
+#endif
   return true;
 }
 
@@ -155,33 +160,33 @@ float boxm2_render_tableau::render_frame()
 
   //set inputs
   vcl_cout<<cam_<<vcl_endl;
-  vpgl_camera_double_sptr cam = new vpgl_perspective_camera<double>(cam_); 
-  brdb_value_sptr brdb_cam = new brdb_value_t<vpgl_camera_double_sptr>(cam); 
-  
+  vpgl_camera_double_sptr cam = new vpgl_perspective_camera<double>(cam_);
+  brdb_value_sptr brdb_cam = new brdb_value_t<vpgl_camera_double_sptr>(cam);
+
   //create output image buffer
-  vil_image_view_base_sptr expimg = new vil_image_view<float>(ni_, nj_); 
-  brdb_value_sptr brdb_expimg = new brdb_value_t<vil_image_view_base_sptr>(expimg); 
-  
+  vil_image_view_base_sptr expimg = new vil_image_view<float>(ni_, nj_);
+  brdb_value_sptr brdb_expimg = new brdb_value_t<vil_image_view_base_sptr>(expimg);
+
   //create vis image buffer
-  vil_image_view<float>* visimg = new vil_image_view<float>(ni_, nj_); 
-  visimg->fill(1.0f); 
-  brdb_value_sptr brdb_visimg = new brdb_value_t<vil_image_view_base_sptr>(visimg); 
-  
+  vil_image_view<float>* visimg = new vil_image_view<float>(ni_, nj_);
+  visimg->fill(1.0f);
+  brdb_value_sptr brdb_visimg = new brdb_value_t<vil_image_view_base_sptr>(visimg);
+
   //create scene brdbvalue pointer
   brdb_value_sptr brdb_scene = new brdb_value_t<boxm2_scene_sptr>(scene_);
-  
-  vcl_vector<brdb_value_sptr> input; 
+
+  vcl_vector<brdb_value_sptr> input;
   input.push_back(brdb_scene);
   input.push_back(brdb_cam);
-  input.push_back(brdb_expimg); 
+  input.push_back(brdb_expimg);
   input.push_back(brdb_visimg);
-  
+
   //initoutput vector
-  vcl_vector<brdb_value_sptr> output; 
+  vcl_vector<brdb_value_sptr> output;
 
   //initialize the GPU render process
   gpu_pro_->run(&render_, input, output);
-  gpu_pro_->finish(); 
+  gpu_pro_->finish();
 
   status = clEnqueueReleaseGLObjects( *gpu_pro_->get_queue(), 1, &render_.image()->buffer(), 0, 0, 0);
   clFinish( *render_.command_queue() );
@@ -191,7 +196,9 @@ float boxm2_render_tableau::render_frame()
 //: updates given a random frame
 float boxm2_render_tableau::update_frame()
 {
-  //vcl_cout<<"UPDATING MODEL!!!"<<vcl_endl;
+#ifdef DEBUG
+  vcl_cout<<"UPDATING MODEL!!!"<<vcl_endl;
+#endif
   update_count_++;
 
   //pickup a random frame
@@ -203,12 +210,12 @@ float boxm2_render_tableau::update_frame()
   vcl_ifstream ifs(cam_files_[curr_frame].c_str());
   vpgl_perspective_camera<double>* pcam = new vpgl_perspective_camera<double>;
   if (!ifs.is_open()) {
-      vcl_cerr << "Failed to open file " << cam_files_[curr_frame] << vcl_endl;
+      vcl_cerr << "Failed to open file " << cam_files_[curr_frame] << '\n';
       return -1;
   }
   ifs >> *pcam;
-  vpgl_camera_double_sptr cam_sptr(pcam);  
-  brdb_value_sptr brdb_cam = new brdb_value_t<vpgl_camera_double_sptr>(cam_sptr); 
+  vpgl_camera_double_sptr cam_sptr(pcam);
+  brdb_value_sptr brdb_cam = new brdb_value_t<vpgl_camera_double_sptr>(cam_sptr);
 
   //load image from file
   vil_image_view_base_sptr loaded_image = vil_load(img_files_[curr_frame].c_str());
@@ -216,16 +223,16 @@ float boxm2_render_tableau::update_frame()
   if (vil_image_view<vxl_byte> *img_byte = dynamic_cast<vil_image_view<vxl_byte>*>(loaded_image.ptr()))
     vil_convert_stretch_range_limited(*img_byte, *floatimg, vxl_byte(0), vxl_byte(255), 0.0f, 1.0f);
   else {
-    vcl_cerr << "Failed to load image " << img_files_[curr_frame] << vcl_endl;
+    vcl_cerr << "Failed to load image " << img_files_[curr_frame] << '\n';
     return -1;
   }
   //create input image buffer
   vil_image_view_base_sptr floatimg_sptr(floatimg);
   brdb_value_sptr brdb_inimg = new brdb_value_t<vil_image_view_base_sptr>(floatimg_sptr);
-  
+
   //create generic scene
   brdb_value_sptr brdb_scene = new brdb_value_t<boxm2_scene_sptr>(scene_);
-  
+
   //set inputs
   vcl_vector<brdb_value_sptr> input;
   input.push_back(brdb_scene);
@@ -236,7 +243,7 @@ float boxm2_render_tableau::update_frame()
   vcl_vector<brdb_value_sptr> output;
 
   //execute gpu_update
-  gpu_pro_->run(&update_, input, output); 
+  gpu_pro_->run(&update_, input, output);
   return gpu_pro_->exec_time();
 }
 
@@ -244,16 +251,16 @@ float boxm2_render_tableau::update_frame()
 bool boxm2_render_tableau::init_clgl()
 {
   //get relevant blocks
-  vcl_cout<<"Data Path: "<<scene_->data_path()<<vcl_endl; 
+  vcl_cout<<"Data Path: "<<scene_->data_path()<<vcl_endl;
   boxm2_nn_cache* dcache = new boxm2_nn_cache(scene_.ptr());
 
   //initialize gpu pro / manager
   gpu_pro_ = boxm2_opencl_processor::instance();
-  gpu_pro_->context_ = create_clgl_context(); 
-  gpu_pro_->set_scene(scene_.ptr()); 
-  gpu_pro_->set_cpu_cache(dcache); 
+  gpu_pro_->context_ = create_clgl_context();
+  gpu_pro_->set_scene(scene_.ptr());
+  gpu_pro_->set_cpu_cache(dcache);
   gpu_pro_->init();
- 
+
   // delete old buffer
   if (pbuffer_) {
       clReleaseMemObject(clgl_buffer_);
@@ -273,15 +280,17 @@ bool boxm2_render_tableau::init_clgl()
                                       pbuffer_,
                                       &status);
   exp_img_ = new bocl_mem(gpu_pro_->context(), /*(void*) pbuffer_*/ NULL, ni_*nj_*sizeof(GLubyte)*4, "exp image (gl) buffer");
-  exp_img_->set_gl_buffer(clgl_buffer_);  
-                                      
+  exp_img_->set_gl_buffer(clgl_buffer_);
+
   //initialize the GPU render process
-  render_.init_kernel(&gpu_pro_->context(), &gpu_pro_->devices()[0]); 
-  render_.set_image(exp_img_); 
+  render_.init_kernel(&gpu_pro_->context(), &gpu_pro_->devices()[0]);
+  render_.set_image(exp_img_);
+#ifdef DEBUG
   vcl_cout<<"RENDER IMAGE SET"<<vcl_endl;
-                                    
+#endif
+
   //initlaize gpu update process
-  update_.init_kernel(&gpu_pro_->context(), &gpu_pro_->devices()[0]); 
+  update_.init_kernel(&gpu_pro_->context(), &gpu_pro_->devices()[0]);
   return true;
 }
 
@@ -293,7 +302,7 @@ cl_context boxm2_render_tableau::create_clgl_context()
   GLenum err = glewInit();
   if (GLEW_OK != err)
     vcl_cout<< "GlewInit Error: "<<glewGetErrorString(err)<<vcl_endl;    // Problem: glewInit failed, something is seriously wrong.
-  
+
   //initialize the render manager
   int status=0;
   cl_platform_id platform_id[1];
@@ -302,8 +311,8 @@ cl_context boxm2_render_tableau::create_clgl_context()
     vcl_cout<<error_to_string(status);
     return 0;
   }
-  cl_device_id device = gpu_pro_->devices()[0]; 
-  
+  cl_device_id device = gpu_pro_->devices()[0];
+
   ////create OpenCL context
   cl_context ComputeContext;
 #ifdef WIN32
