@@ -209,9 +209,9 @@ void boxm2_test_utils::test_block_equivalence(boxm2_block& a, boxm2_block& b)
 
     boxm2_array_3d<uchar16>&  treesa = a.trees();
     boxm2_array_3d<uchar16>&  treesb = b.trees();
-    for (int i=0; i<a.sub_block_num().x(); i++) {
-      for (int j=0; j<a.sub_block_num().y(); j++) {
-        for (int k=0; k<a.sub_block_num().z(); k++) {
+    for (unsigned int i=0; i<a.sub_block_num().x(); ++i) {
+      for (unsigned int j=0; j<a.sub_block_num().y(); ++j) {
+        for (unsigned int k=0; k<a.sub_block_num().z(); ++k) {
           if (treesa[i][j][k] != treesb[i][j][k]) {
             TEST("boxm2_block: trees not initialized properly", true, false);
             return;
@@ -253,6 +253,7 @@ void boxm2_test_utils::test_block_equivalence(boxm2_block& a, boxm2_block& b)
     }
     TEST("boxm2_block: mem_ptrs initialized properly", true, true);
 }
+
 vcl_string boxm2_test_utils::save_test_empty_scene()
 {
     vcl_string test_dir  = testlib_root_dir()+ "/contrib/brl/bseg/boxm2/tests/";
@@ -385,7 +386,6 @@ vcl_string boxm2_test_utils::save_test_simple_scene()
 
   return test_file;
 }
-
 
 
 vpgl_camera_double_sptr boxm2_test_utils::test_camera()
