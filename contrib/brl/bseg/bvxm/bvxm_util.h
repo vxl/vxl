@@ -126,7 +126,7 @@ class bvxm_util
   static bool generate_test_boxes(T box_min_x, T box_min_y, T box_min_z,
                                   T box_dim_x, T box_dim_y, T box_dim_z,
                                   T world_dim_x, T world_dim_y, T world_dim_z,
-                                  vcl_vector<vgl_box_3d<T> >& boxes, bool gen_2box);
+                                  vcl_vector<vgl_box_3d<T> >& boxes, bool gen_2box = true);
 
   template <class T>
   static vcl_vector<vgl_point_3d<T> > corners_of_box_3d(vgl_box_3d<T> box);
@@ -926,7 +926,7 @@ template <class T>
 bool bvxm_util::generate_test_boxes(T box_min_x, T box_min_y, T box_min_z,
                                     T box_dim_x, T box_dim_y, T box_dim_z,
                                     T world_dim_x, T world_dim_y, T world_dim_z,
-                                    vcl_vector<vgl_box_3d<T> >& boxes, bool gen_2box = true)
+                                    vcl_vector<vgl_box_3d<T> >& boxes, bool gen_2box)
 {
   // create the big box at the bottom
   T max_x = box_min_x + box_dim_x;
