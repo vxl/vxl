@@ -30,7 +30,7 @@ class boxm2_data: public boxm2_data_base
     virtual ~boxm2_data();
 
     //: data array accessor
-    boxm2_array_1d<datatype> data() {return data_array_;}
+    boxm2_array_1d<datatype>& data() {return data_array_;}
 
  protected:
     boxm2_array_1d<datatype> data_array_;

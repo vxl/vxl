@@ -83,3 +83,7 @@ void boxm2_util::random_permutation(int* buffer, int size)
   }
 
 }
+float boxm2_util::clamp(float x, float a, float b)
+{
+    return x < a ? a : (x > b ? b : x);
+}

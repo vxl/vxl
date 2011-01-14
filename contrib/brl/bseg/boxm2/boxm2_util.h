@@ -18,6 +18,8 @@ class boxm2_util
     //: given a buffer and a length, randomly permutes the members of buffer
     static void random_permutation(int* buffer, int size); 
 
+    static float clamp(float x, float a, float b);
+
 };
 
 #endif // boxm2_util_h
