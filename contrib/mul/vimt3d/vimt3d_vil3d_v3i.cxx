@@ -8,8 +8,10 @@
 // \author Ian Scott - Manchester
 
 #include "vimt3d_vil3d_v3i.h"
+//
 #include <vcl_cstdlib.h> // for vcl_abort()
 #include <vcl_cstring.h> // for vcl_strcmp()
+#include <vcl_sstream.h>
 #include <vcl_cassert.h>
 #include <vcl_ios.h>
 #include <vcl_algorithm.h>
@@ -101,7 +103,7 @@ bool vimt3d_vil3d_v3i_image::skip_b_read_vil_memory_chunk(vsl_b_istream& is, uns
   {
    case 1:
     if (vil_pixel_format_component_format(header_.pixel_format) == VIL_PIXEL_FORMAT_DOUBLE ||
-      vil_pixel_format_component_format(header_.pixel_format) == VIL_PIXEL_FORMAT_FLOAT)
+        vil_pixel_format_component_format(header_.pixel_format) == VIL_PIXEL_FORMAT_FLOAT)
       is.is().seekg(n*sizeof_T, vcl_ios_cur); // skip image pixel data.
     else
       // Give up trying to load header - it can't be done efficiently.
@@ -115,9 +117,9 @@ bool vimt3d_vil3d_v3i_image::skip_b_read_vil_memory_chunk(vsl_b_istream& is, uns
       vsl_block_binary_read_confirm_specialisation(is, true);
     if (!is) return false;
     if (vil_pixel_format_component_format(header_.pixel_format) == VIL_PIXEL_FORMAT_DOUBLE ||
-      vil_pixel_format_component_format(header_.pixel_format) == VIL_PIXEL_FORMAT_FLOAT ||
-      vil_pixel_format_component_format(header_.pixel_format) == VIL_PIXEL_FORMAT_SBYTE ||
-      vil_pixel_format_component_format(header_.pixel_format) == VIL_PIXEL_FORMAT_BYTE )
+        vil_pixel_format_component_format(header_.pixel_format) == VIL_PIXEL_FORMAT_FLOAT ||
+        vil_pixel_format_component_format(header_.pixel_format) == VIL_PIXEL_FORMAT_SBYTE ||
+        vil_pixel_format_component_format(header_.pixel_format) == VIL_PIXEL_FORMAT_BYTE )
       is.is().seekg(n*sizeof_T, vcl_ios_cur); // skip image pixel data.
     else
     {
@@ -130,9 +132,9 @@ bool vimt3d_vil3d_v3i_image::skip_b_read_vil_memory_chunk(vsl_b_istream& is, uns
     vsl_block_binary_read_confirm_specialisation(is, true);
     if (!is) return false;
     if (vil_pixel_format_component_format(header_.pixel_format) == VIL_PIXEL_FORMAT_DOUBLE ||
-      vil_pixel_format_component_format(header_.pixel_format) == VIL_PIXEL_FORMAT_FLOAT ||
-      vil_pixel_format_component_format(header_.pixel_format) == VIL_PIXEL_FORMAT_SBYTE ||
-      vil_pixel_format_component_format(header_.pixel_format) == VIL_PIXEL_FORMAT_BYTE )
+        vil_pixel_format_component_format(header_.pixel_format) == VIL_PIXEL_FORMAT_FLOAT ||
+        vil_pixel_format_component_format(header_.pixel_format) == VIL_PIXEL_FORMAT_SBYTE ||
+        vil_pixel_format_component_format(header_.pixel_format) == VIL_PIXEL_FORMAT_BYTE )
       is.is().seekg(n*sizeof_T, vcl_ios_cur); // skip image pixel data.
     else
     {
@@ -193,7 +195,7 @@ void vimt3d_vil3d_v3i_image::load_full_image() const
     is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
     vcl_ostringstream oss;
     oss << "I/O ERROR: vimt3d_vil3d_v3i_image::load_full_image()\n"
-             << "           Unknown version number "<< version << '\n';
+        << "           Unknown version number "<< version << '\n';
     vil_exception_warning(vil_exception_invalid_version(
       "vimt3d_vil3d_v3i_image::load_full_image", "vimt3d_vil3d_v3i_image", "", oss.str()));
     return;
@@ -212,7 +214,7 @@ void vimt3d_vil3d_v3i_image::load_full_image() const
     is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
     vcl_ostringstream oss;
     oss << "I/O ERROR: vimt3d_vil3d_v3i_image::load_full_image\n"
-             << "           Header is not consistent with previously calculated version.";
+        << "           Header is not consistent with previously calculated version.";
     vil_exception_warning(vil_exception_corrupt_image_file(
       "vimt3d_vil3d_v3i_image::load_full_image", "vimt3d_vil3d_v3i_image", "", oss.str()));
     return;
@@ -266,7 +268,7 @@ vimt3d_vil3d_v3i_image::vimt3d_vil3d_v3i_image(vcl_auto_ptr<vcl_fstream> file):
         is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
         vcl_ostringstream oss;
         oss << "I/O ERROR: vimt3d_vil3d_v3i_image::vimt3d_vil3d_v3i_image()\n"
-                 << "           vimt_image ptr load failure\n";
+            << "           vimt_image ptr load failure\n";
         vil_exception_warning(vil_exception_corrupt_image_file(
           "vimt3d_vil3d_v3i_image constructor", "vimt3d_vil3d_v3i_image", "", oss.str()));
         return;
@@ -279,8 +281,8 @@ vimt3d_vil3d_v3i_image::vimt3d_vil3d_v3i_image(vcl_auto_ptr<vcl_fstream> file):
       {
         vcl_ostringstream oss;
         oss << "\n I/O ERROR: vimt3d_vil3d_v3i_image::vimt3d_vil3d_v3i_image()\n"
-                 << "class name <" << name << "> not in list of loaders\n"
-                 << instance.object().size()<<" valid loaders:\n";
+            << "class name <" << name << "> not in list of loaders\n"
+            << instance.object().size()<<" valid loaders:\n";
         for (unsigned int j=0; j<instance.object().size(); ++j)
           vcl_cerr << instance.object()[j]->is_a() << vcl_endl;
         is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
@@ -292,7 +294,7 @@ vimt3d_vil3d_v3i_image::vimt3d_vil3d_v3i_image(vcl_auto_ptr<vcl_fstream> file):
       header_.pixel_format = dynamic_cast<vimt3d_image_3d&>(*instance.object()[i]).image_base().pixel_format();
 
       unsigned sizeof_T = vil_pixel_format_sizeof_components(header_.pixel_format);
-      
+
       { // Copy vimt3d_image_3d loader
         short vimt3d_image_3d_of_version;
         vsl_b_read(is, vimt3d_image_3d_of_version);
@@ -305,9 +307,9 @@ vimt3d_vil3d_v3i_image::vimt3d_vil3d_v3i_image(vcl_auto_ptr<vcl_fstream> file):
 
             short vil3d_image_view_version;
             vsl_b_read(is, vil3d_image_view_version);
-            switch(vil3d_image_view_version)
+            switch (vil3d_image_view_version)
             {
-              case 1:
+             case 1:
 
               vsl_b_read(is, header_.ni);
               vsl_b_read(is, header_.nj);
@@ -323,8 +325,8 @@ vimt3d_vil3d_v3i_image::vimt3d_vil3d_v3i_image(vcl_auto_ptr<vcl_fstream> file):
                 vsl_b_read(is, vil_smart_ptr_version);
                 switch (vil_smart_ptr_version)
                 {
-                  case 1:
-                  case 2:
+                 case 1:
+                 case 2:
                   {
                     bool first_time; // true if the object is about to be loaded
                     vsl_b_read(is, first_time);
@@ -335,7 +337,7 @@ vimt3d_vil3d_v3i_image::vimt3d_vil3d_v3i_image(vcl_auto_ptr<vcl_fstream> file):
                       // We are in a v3i file there should only be one image, and it should not be a null ptr
                       vcl_ostringstream oss;
                       oss << "I/O ERROR: vimt3d_vil3d_v3i_image::vimt3d_vil3d_v3i_image()\n"
-                               << "           Smart ptr De-serialisation failure\n";
+                          << "           Smart ptr De-serialisation failure\n";
                       is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
                       vil_exception_warning(vil_exception_corrupt_image_file(
                         "vimt3d_vil3d_v3i_image constructor", "vimt3d_vil3d_v3i_image", "", oss.str()));
@@ -349,7 +351,7 @@ vimt3d_vil3d_v3i_image::vimt3d_vil3d_v3i_image(vcl_auto_ptr<vcl_fstream> file):
                         // We are in a v3i file there should not be a null ptr
                         vcl_ostringstream oss;
                         oss << "I/O ERROR: vimt3d_vil3d_v3i_image::vimt3d_vil3d_v3i_image()\n"
-                                 << "           Ptr read failure\n";
+                            << "           Ptr read failure\n";
                         is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
                         vil_exception_warning(vil_exception_corrupt_image_file(
                           "vimt3d_vil3d_v3i_image constructor", "vimt3d_vil3d_v3i_image", "", oss.str()));
@@ -371,10 +373,10 @@ vimt3d_vil3d_v3i_image::vimt3d_vil3d_v3i_image(vcl_auto_ptr<vcl_fstream> file):
                     }
                     break;
                   }
-                  default:
+                 default:
                   vcl_ostringstream oss;
                   oss << "I/O ERROR: vimt3d_vil3d_v3i_image::vimt3d_vil3d_v3i_image()\n"
-                           << "           Unknown vil_smart_ptr version number "<< vil_smart_ptr_version << '\n';
+                      << "           Unknown vil_smart_ptr version number "<< vil_smart_ptr_version << '\n';
                   is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
                   vil_exception_warning(vil_exception_invalid_version(
                     "vimt3d_vil3d_v3i_image constructor", "vimt3d_vil3d_v3i_image", "", oss.str()));
@@ -384,10 +386,10 @@ vimt3d_vil3d_v3i_image::vimt3d_vil3d_v3i_image(vcl_auto_ptr<vcl_fstream> file):
               }
               break;
 
-              default:
+             default:
               vcl_ostringstream oss;
               oss << "I/O ERROR: vimt3d_vil3d_v3i_image::vimt3d_vil3d_v3i_image()\n"
-                       << "           Unknown vil3d_image_view version number "<< vil3d_image_view_version << "\n";
+                  << "           Unknown vil3d_image_view version number "<< vil3d_image_view_version << '\n';
               is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
               vil_exception_warning(vil_exception_invalid_version(
                 "vimt3d_vil3d_v3i_image constructor", "vimt3d_vil3d_v3i_image", "", oss.str()));
@@ -400,7 +402,7 @@ vimt3d_vil3d_v3i_image::vimt3d_vil3d_v3i_image(vcl_auto_ptr<vcl_fstream> file):
           default:
           vcl_ostringstream oss;
           oss << "I/O ERROR: vimt3d_vil3d_v3i_image::vimt3d_vil3d_v3i_image()\n"
-                   << "           Unknown vimt3d_image_3d_of version number "<< vimt3d_image_3d_of_version << '\n';
+              << "           Unknown vimt3d_image_3d_of version number "<< vimt3d_image_3d_of_version << '\n';
           is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
           vil_exception_warning(vil_exception_invalid_version("vimt3d_vil3d_v3i_image constructor", "vimt3d_vil3d_v3i_image", "", oss.str()));
           return;
@@ -414,7 +416,7 @@ vimt3d_vil3d_v3i_image::vimt3d_vil3d_v3i_image(vcl_auto_ptr<vcl_fstream> file):
     default:
     vcl_ostringstream oss;
     oss << "I/O ERROR: vimt3d_vil3d_v3i_image::vimt3d_vil3d_v3i_image()\n"
-             << "           Unknown version number "<< version << '\n';
+        << "           Unknown version number "<< version << '\n';
     vil_exception_warning(vil_exception_invalid_version("vimt3d_vil3d_v3i_image constructor", "vimt3d_vil3d_v3i_image", "", oss.str()));
     return;
   }
@@ -639,9 +641,9 @@ vil3d_image_view_base_sptr vimt3d_vil3d_v3i_image::get_view(unsigned i0, unsigne
     const vil3d_image_view< T > &v = \
       static_cast<const vil3d_image_view< T > &>(view); \
       return new vil3d_image_view< T >(v.memory_chunk(), v.size() ? &v(i0,j0,k0) : 0, \
-                                     ni, nj, nk, v.nplanes(), \
-                                     v.istep(), v.jstep(), v.kstep(), \
-                                     v.planestep()); }
+                                       ni, nj, nk, v.nplanes(), \
+                                       v.istep(), v.jstep(), v.kstep(), \
+                                       v.planestep()); }
 macro(VIL_PIXEL_FORMAT_BYTE , vxl_byte )
 //macro(VIL_PIXEL_FORMAT_SBYTE , vxl_sbyte )
 //macro(VIL_PIXEL_FORMAT_UINT_32 , vxl_uint_32 )

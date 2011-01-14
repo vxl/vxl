@@ -7,15 +7,15 @@
 #include <vnl/vnl_vector.h>
 #include <vnl/algo/vnl_svd.h>
 #include <vcl_fstream.h>
+#include <vcl_sstream.h>
 #include <vcl_cassert.h>
-
 
 imesh_pca_mesh::imesh_pca_mesh(const vcl_vector<imesh_mesh>& meshes)
   : imesh_mesh(meshes[0]), mean_verts_(this->vertices().clone())
 {
   vnl_matrix<double> M = compute_mean(meshes);
   vnl_svd<double> A(M,-1e-8);
-  
+
   // remove zero singular values
 
   std_devs_ = vnl_vector<double>(A.W().diagonal().data_block(), A.rank());
@@ -92,11 +92,11 @@ imesh_pca_mesh::imesh_pca_mesh(const imesh_pca_mesh& other)
 //: Assignment operator
 imesh_pca_mesh& imesh_pca_mesh::operator=(const imesh_pca_mesh& other)
 {
-  if(this != &other){
+  if (this != &other) {
     this->imesh_mesh::operator=(other);
     std_devs_ = other.std_devs_;
     pc_ = other.pc_;
-    mean_verts_ = vcl_auto_ptr<imesh_vertex_array_base>((other.mean_verts_.get()) ? 
+    mean_verts_ = vcl_auto_ptr<imesh_vertex_array_base>((other.mean_verts_.get()) ?
                                                         other.mean_verts_->clone() : 0);
     params_ = other.params_;
   }
@@ -216,7 +216,7 @@ imesh_pca_mesh::project(const imesh_vertex_array_base& vertices) const
   }
 
   vnl_vector<double> p = pc_*vals;
-  for(unsigned int i=0; i<p.size(); ++i)
+  for (unsigned int i=0; i<p.size(); ++i)
     p[i] /= std_devs_[i];
   return p;
 }
@@ -246,13 +246,13 @@ imesh_pca_image_jacobians(const vpgl_proj_camera<double>& camera,
   // map the image Jacobians into PCA Jacobians
   const vnl_matrix<double>& pc = mesh.principal_comps();
   const vnl_vector<double>& std = mesh.std_devs();
-  
+
   vcl_vector<vnl_matrix<double> > img_jac(num_verts);
   for (unsigned int i=0; i<num_verts; ++i)
   {
     vnl_matrix<double> dir_3d(pc.rows(),3);
     pc.extract(dir_3d,0,3*i);
-    for(unsigned int j=0; j<std.size(); ++j){
+    for (unsigned int j=0; j<std.size(); ++j) {
       dir_3d(j,0) /= std[j];
       dir_3d(j,1) /= std[j];
       dir_3d(j,2) /= std[j];

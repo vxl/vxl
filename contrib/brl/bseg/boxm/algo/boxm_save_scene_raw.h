@@ -28,6 +28,7 @@
 #include <vcl_vector.h>
 #include <vcl_new.h>
 #include <vcl_iostream.h>
+#include <vcl_sstream.h>
 #include <vcl_cassert.h>
 
 #include <bsta/bsta_histogram.h>

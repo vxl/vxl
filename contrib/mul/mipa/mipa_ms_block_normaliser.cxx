@@ -1,10 +1,11 @@
+#include "mipa_ms_block_normaliser.h"
 //:
 // \file
 // \brief Class to independently normalise sub-blocks with a region at several (SIFT-like) scales
 // \author Martin Roberts
 
-#include "mipa_ms_block_normaliser.h"
 #include <vcl_iostream.h>
+#include <vcl_sstream.h>
 #include <vsl/vsl_binary_loader.h>
 #include <vsl/vsl_vector_io.h>
 #include <vnl/vnl_vector_ref.h>

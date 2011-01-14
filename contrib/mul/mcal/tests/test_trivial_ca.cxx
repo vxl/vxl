@@ -11,7 +11,7 @@
 // \brief test mcal_trivial_ca
 
 #include <vcl_iostream.h>
-// not used? #include <vcl_string.h>
+#include <vcl_sstream.h>
 #include <vsl/vsl_binary_loader.h>
 #include <vcl_cmath.h>
 #include <vnl/vnl_math.h>

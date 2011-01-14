@@ -7,6 +7,8 @@
 #include <vpl/vpl.h>
 #include <vnl/vnl_vector_fixed.h>
 
+#include <vcl_sstream.h>
+
 template<class T>
 T test_value();
 

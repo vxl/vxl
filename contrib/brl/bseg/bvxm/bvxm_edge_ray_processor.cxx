@@ -16,6 +16,7 @@
 #include <vnl/vnl_double_3.h>
 #include <vnl/vnl_quaternion.h>
 #include <vcl_fstream.h>
+#include <vcl_sstream.h>
 
 static const bool edge_debug = false;
 static const bool print_arrays = false;

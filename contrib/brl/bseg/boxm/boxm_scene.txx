@@ -3,6 +3,7 @@
 //:
 // \file
 #include "boxm_scene.h"
+//
 #include "boxm_apm_traits.h"
 #include "boxm_scene_parser.h"
 
@@ -16,6 +17,7 @@
 #include <vpl/vpl.h>
 #include <vcl_cmath.h>
 #include <vcl_cstdio.h>
+#include <vcl_sstream.h>
 #include <vcl_algorithm.h>
 #include <vcl_iterator.h>
 #include <vcl_cassert.h>

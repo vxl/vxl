@@ -7,6 +7,7 @@
 #include <bapl/bapl_keypoint_set.h>
 
 #include <vul/vul_awk.h>
+#include <vcl_sstream.h>
 
 static void test_compute_tracks(int argc, char* argv[])
 {

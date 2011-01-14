@@ -1,5 +1,6 @@
 #include <testlib/testlib_test.h>
 #include <bxml/bxml_find.h>
+#include <vcl_sstream.h>
 
 namespace {
 

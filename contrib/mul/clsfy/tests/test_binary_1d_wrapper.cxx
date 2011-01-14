@@ -7,6 +7,7 @@
 // Test construction, IO etc
 
 #include <vcl_iostream.h>
+#include <vcl_sstream.h>
 #include <vcl_string.h>
 #include <vpl/vpl.h> // vpl_unlink()
 #include <vsl/vsl_binary_loader.h>
@@ -173,9 +174,9 @@ void test_binary_1d_wrapper()
           << *builder_configged << vcl_endl;
 
   TEST("saved classifier = loaded classifier",
-    mbl_test_summaries_are_equal(
-       static_cast<clsfy_builder_base*>(&b_thresh_builder),
-       builder_configged.get()), true );
+       mbl_test_summaries_are_equal(
+          static_cast<clsfy_builder_base*>(&b_thresh_builder),
+          builder_configged.get()), true );
 
   delete classifier_in;
   vsl_delete_all_loaders();

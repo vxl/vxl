@@ -13,6 +13,7 @@
 #include <vgl/algo/vgl_h_matrix_3d.h>
 #include <vcl_cmath.h>
 #include <vcl_iostream.h>
+#include <vcl_sstream.h>
 #include <vgl/vgl_homg_point_3d.h>
 #include <vgl/vgl_point_3d.h>
 #include <vnl/vnl_double_3.h>
@@ -146,8 +147,7 @@ static void test_rotation_about_axis()
 
 static void test_compute_linear_points()
 {
-  vcl_cout << "\n=== Test the recovery of a general homography using the "
-           << "linear algorithm ===\n";
+  vcl_cout << "\n=== Test the recovery of a general homography using the linear algorithm ===\n";
   vcl_vector<vgl_homg_point_3d<double> > points1, points2;
 
   //setup the first set of points,  no 4 of them should be co-planar

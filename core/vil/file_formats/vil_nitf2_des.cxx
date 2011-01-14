@@ -5,7 +5,7 @@
 #include "vil_nitf2_des.h"
 #include "vil_nitf2_field_definition.h"
 #include "vil_nitf2_typed_field_formatter.h"
-
+#include <vcl_sstream.h>
 
 vil_nitf2_des::field_definition_map&
   vil_nitf2_des::all_definitions()
@@ -53,7 +53,8 @@ bool vil_nitf2_des::read(vil_stream* stream)
     m_field_sequence1->get_value( "DESID", desId );
     if ( desId == "TRE_OVERFLOW" ){
       return true;
-    } else {
+    }
+    else {
       field_definition_map::iterator it = all_definitions().find( desId );
       if ( it != all_definitions().end() ) {
         if ( m_field_sequence2 ) delete m_field_sequence2;

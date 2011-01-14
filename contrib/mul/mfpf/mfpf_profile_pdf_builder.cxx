@@ -11,6 +11,7 @@
 #include <vgl/vgl_vector_2d.h>
 #include <vcl_cassert.h>
 #include <vcl_algorithm.h>
+#include <vcl_sstream.h>
 
 #include <mbl/mbl_parse_block.h>
 #include <mbl/mbl_read_props.h>

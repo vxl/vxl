@@ -14,8 +14,9 @@
 // \endverbatim
 
 #include "vpdfl_pc_gaussian_builder.h"
-
+//
 #include <vcl_string.h>
+#include <vcl_sstream.h>
 #include <vcl_cassert.h>
 #include <vcl_cstdlib.h> // for vcl_abort()
 #include <mbl/mbl_data_wrapper.h>

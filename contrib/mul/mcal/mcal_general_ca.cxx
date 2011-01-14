@@ -6,6 +6,7 @@
 
 #include <vcl_cstdlib.h>
 #include <vcl_string.h>
+#include <vcl_sstream.h>
 
 #include <vsl/vsl_indent.h>
 #include <mbl/mbl_matxvec.h>
@@ -29,7 +30,7 @@ mcal_general_ca::mcal_general_ca()
 
 //: Initialise, taking clones of supplied objects
 void mcal_general_ca::set(const mcal_component_analyzer& initial_ca,
-           const mcal_single_basis_cost& basis_cost)
+                          const mcal_single_basis_cost& basis_cost)
 {
   initial_ca_ = initial_ca;
   basis_cost_ = basis_cost;
@@ -117,10 +118,10 @@ class mcal_pair_cost2 : public vnl_cost_function
 };
 
 mcal_pair_cost2::mcal_pair_cost2(const vnl_vector<double>& proj1,
-                  const vnl_vector<double>& proj2,
-                  const vnl_vector<double>& mode1,
-                  const vnl_vector<double>& mode2,
-                  mcal_single_basis_cost& cost)
+                                 const vnl_vector<double>& proj2,
+                                 const vnl_vector<double>& mode1,
+                                 const vnl_vector<double>& mode2,
+                                 mcal_single_basis_cost& cost)
   : vnl_cost_function(1),mode1_(mode1),mode2_(mode2),cost_(cost)
 {
   covar(proj1,proj2,S_);
@@ -149,8 +150,8 @@ double mcal_pair_cost2::f(const vnl_vector<double>& x)
 }
 
 void mcal_pair_cost2::covar(const vnl_vector<double>& p1,
-             const vnl_vector<double>& p2,
-             vnl_matrix<double>& S)
+                            const vnl_vector<double>& p2,
+                            vnl_matrix<double>& S)
 {
   S.set_size(2,2);
   S(0,0) = dot_product(p1,p1)/p1.size();
@@ -162,9 +163,9 @@ void mcal_pair_cost2::covar(const vnl_vector<double>& p1,
 
 //: Optimise the mode vectors so as to minimise the cost function
 double mcal_general_ca::optimise_mode_pair(vnl_vector<double>& proj1,
-                                vnl_vector<double>& proj2,
-                                vnl_vector<double>& mode1,
-                                vnl_vector<double>& mode2)
+                                           vnl_vector<double>& proj2,
+                                           vnl_vector<double>& mode1,
+                                           vnl_vector<double>& mode2)
 {
   vnl_cost_function *cost_fn;
   if (basis_cost().can_use_variance())
@@ -211,7 +212,7 @@ double mcal_general_ca::optimise_mode_pair(vnl_vector<double>& proj1,
 
 //: Optimise the mode vectors so as to minimise the cost function
 double mcal_general_ca::optimise_one_pass(vcl_vector<vnl_vector<double> >& proj,
-                                vnl_matrix<double>& modes)
+                                          vnl_matrix<double>& modes)
 {
   unsigned n_modes = modes.cols();
   double move_sum=0.0;
@@ -232,9 +233,9 @@ double mcal_general_ca::optimise_one_pass(vcl_vector<vnl_vector<double> >& proj,
 //: Compute projections onto each mode
 //  proj[j][i] is the projection of the i-th data sample onto the j-th mode
 void mcal_general_ca::compute_projections(mbl_data_wrapper<vnl_vector<double> >& data,
-                           const vnl_vector<double>& mean,
-                           vnl_matrix<double>& modes,
-                           vcl_vector<vnl_vector<double> >& proj)
+                                          const vnl_vector<double>& mean,
+                                          vnl_matrix<double>& modes,
+                                          vcl_vector<vnl_vector<double> >& proj)
 {
   // Compute projection of data onto each mode
   unsigned n_modes = modes.cols();
@@ -254,9 +255,9 @@ void mcal_general_ca::compute_projections(mbl_data_wrapper<vnl_vector<double> >&
 
 //: Optimise the mode vectors so as to minimise the cost function
 void mcal_general_ca::optimise_about_mean(mbl_data_wrapper<vnl_vector<double> >& data,
-                                const vnl_vector<double>& mean,
-                                vnl_matrix<double>& modes,
-                                vnl_vector<double>& mode_var)
+                                          const vnl_vector<double>& mean,
+                                          vnl_matrix<double>& modes,
+                                          vnl_vector<double>& mode_var)
 {
   // Compute projection of data onto each mode
   unsigned n_modes = mode_var.size();
@@ -281,9 +282,9 @@ void mcal_general_ca::optimise_about_mean(mbl_data_wrapper<vnl_vector<double> >&
 //  Model is x = mean + modes*b,  where b is a vector of weights on each mode.
 //  mode_var[i] gives the variance of the data projected onto that mode.
 void mcal_general_ca::build_about_mean(mbl_data_wrapper<vnl_vector<double> >& data,
-                                const vnl_vector<double>& mean,
-                                vnl_matrix<double>& modes,
-                                vnl_vector<double>& mode_var)
+                                       const vnl_vector<double>& mean,
+                                       vnl_matrix<double>& modes,
+                                       vnl_vector<double>& mode_var)
 {
   if (data.size()==0)
   {

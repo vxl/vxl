@@ -15,6 +15,7 @@
 #include <vnl/vnl_cost_function.h>
 
 #include <vcl_iostream.h>
+#include <vcl_sstream.h>
 #include <vil/vil_save.h>
 
 template <class func_>

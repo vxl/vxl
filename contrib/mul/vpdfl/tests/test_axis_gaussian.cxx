@@ -6,6 +6,7 @@
 // \brief test vpdfl_axis_gaussian, building, sampling, saving, etc.
 
 #include <vcl_iostream.h>
+#include <vcl_sstream.h>
 #include <vpdfl/vpdfl_axis_gaussian.h>
 #include <vpdfl/vpdfl_axis_gaussian_builder.h>
 #include <vpdfl/vpdfl_axis_gaussian_sampler.h>
@@ -135,8 +136,8 @@ void test_axis_gaussian()
 #endif
 
   vcl_cout<<"Loaded:\n";
-  vcl_cout<<"Model: "; vsl_print_summary(vcl_cout, gauss0_in); vcl_cout<<vcl_endl;
-  vcl_cout<<"Builder: "; vsl_print_summary(vcl_cout, builder0_in); vcl_cout<<vcl_endl;
+  vcl_cout<<"Model: ";                 vsl_print_summary(vcl_cout, gauss0_in); vcl_cout<<vcl_endl;
+  vcl_cout<<"Builder: ";               vsl_print_summary(vcl_cout, builder0_in); vcl_cout<<vcl_endl;
   vcl_cout<<"Model   (by base ptr): "; vsl_print_summary(vcl_cout, base_pdf_ptr_in); vcl_cout<<vcl_endl;
   vcl_cout<<"Builder (by base ptr): "; vsl_print_summary(vcl_cout, base_builder_ptr_in); vcl_cout<<vcl_endl;
 
@@ -202,8 +203,7 @@ void test_axis_gaussian()
     {
       vpdfl_axis_gaussian_builder &a_builder = static_cast<vpdfl_axis_gaussian_builder&>(*builder);
       vcl_cout<<a_builder<<vcl_endl;
-      TEST_NEAR("Min var configured",
-              a_builder.min_var(),0.1234e-5,1e-8);
+      TEST_NEAR("Min var configured", a_builder.min_var(), 0.1234e-5, 1e-8);
     }
     vsl_delete_all_loaders();
   }

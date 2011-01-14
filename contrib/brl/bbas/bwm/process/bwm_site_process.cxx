@@ -3,6 +3,7 @@
 #endif
 
 #include "bwm_site_process.h"
+//
 #include <bwm/algo/bwm_algo.h>
 #include <bwm/io/bwm_site.h>
 #include <bwm/io/bwm_io_structs.h>
@@ -11,6 +12,7 @@
 #include <vil/vil_image_list.h>
 #include <vpgl/vpgl_rational_camera.h>
 #include <vgui/vgui_error_dialog.h>
+#include <vcl_sstream.h>
 
 double bwm_site_process::version_num = 0;
 
@@ -81,7 +83,8 @@ void bwm_site_process::RunBackgroundTask()
       if (tab_type.compare(CAMERA_TABLEAU_TAG) == 0) {
         bwm_io_tab_config_cam* tab = (bwm_io_tab_config_cam*) site_->tableaus_[idx];
         img_path = tab->img_path;
-      } else if (tab_type == IMAGE_TABLEAU_TAG) {
+      }
+      else if (tab_type == IMAGE_TABLEAU_TAG) {
         bwm_io_tab_config_img* tab = (bwm_io_tab_config_img*) site_->tableaus_[idx];
         img_path = tab->img_path;
       }

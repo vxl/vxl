@@ -8,6 +8,7 @@
 #include <mmn/mmn_graph_rep1.h>
 #include <vcl_cassert.h>
 #include <vcl_cstdlib.h>
+#include <vcl_sstream.h>
 
 #include <mbl/mbl_parse_block.h>
 #include <mbl/mbl_read_props.h>
@@ -176,7 +177,7 @@ void mmn_dp_solver::process_dep2(const mmn_dependancy& dep)
 
 
 //: Compute optimal choice for dep.v0 given v1 and v2
-//  Includes cost depending on (v0,v1,v2) as well as pairwise and 
+//  Includes cost depending on (v0,v1,v2) as well as pairwise and
 //  node costs.
 // tri_cost(i,j,k) is cost of associating smallest node index
 // with i, next with j and largest node index with k.

@@ -9,6 +9,7 @@
 #include <vul/vul_string.h>
 #include <vcl_cassert.h>
 #include <vcl_algorithm.h>
+#include <vcl_sstream.h>
 
 #include <mbl/mbl_parse_block.h>
 #include <mbl/mbl_read_props.h>
@@ -67,8 +68,8 @@ void mfpf_norm_corr1d_builder::set_region_size(double wi, double)
 
 //: Number of dimensions in the model
 unsigned mfpf_norm_corr1d_builder::model_dim()
-{ 
-  return sum_.size(); 
+{
+  return sum_.size();
 }
 
 

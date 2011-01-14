@@ -1,9 +1,9 @@
+#include "brec_part_gaussian.h"
 //:
 // \file
 // \author Ozge C Ozcanli (ozge@lems.brown.edu)
 // \date Oct 16, 2008
 
-#include "brec_part_gaussian.h"
 #include "brec_part_gaussian_sptr.h"
 
 #include <vil/vil_convert.h>
@@ -18,6 +18,7 @@
 #include <vnl/vnl_gamma.h>
 #include <vcl_iostream.h>
 #include <vcl_fstream.h>
+#include <vcl_sstream.h>
 
 #include <bsta/algo/bsta_fit_weibull.h>
 #include <bsta/bsta_histogram.h>

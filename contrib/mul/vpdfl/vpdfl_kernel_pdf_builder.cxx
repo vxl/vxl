@@ -8,9 +8,10 @@
 // \brief Initialises kernel pdfs
 
 #include "vpdfl_kernel_pdf_builder.h"
-
+//
 #include <vcl_cassert.h>
 #include <vcl_string.h>
+#include <vcl_sstream.h>
 #include <vcl_cstdlib.h> // vcl_abort()
 #include <vcl_cmath.h>
 #include <vcl_vector.h>
@@ -172,8 +173,8 @@ void vpdfl_kernel_pdf_builder::build(vpdfl_pdf_base& model, mbl_data_wrapper<vnl
 }
 
 void vpdfl_kernel_pdf_builder::weighted_build(vpdfl_pdf_base& model,
-                                            mbl_data_wrapper<vnl_vector<double> >& data,
-                                            const vcl_vector<double>& /*wts*/) const
+                                              mbl_data_wrapper<vnl_vector<double> >& data,
+                                              const vcl_vector<double>& /*wts*/) const
 {
   vcl_cerr<<"vpdfl_kernel_pdf_builder::weighted_build() Ignoring weights.\n";
   build(model,data);
@@ -181,7 +182,8 @@ void vpdfl_kernel_pdf_builder::weighted_build(vpdfl_pdf_base& model,
 
 //: Build from n elements in data[i]
 void vpdfl_kernel_pdf_builder::build_fixed_width(vpdfl_kernel_pdf& kpdf,
-                             const vnl_vector<double>* data, int n, double width) const
+                                                 const vnl_vector<double>* data,
+                                                 int n, double width) const
 {
   kpdf.set_centres(data,n,width);
 }
@@ -191,7 +193,7 @@ void vpdfl_kernel_pdf_builder::build_fixed_width(vpdfl_kernel_pdf& kpdf,
 //  $w=(4/(2n+d.n)^{1/(d+4)}\sigma$, as suggested by Silverman
 //  Note: This value only suitable for gaussian kernels!
 void vpdfl_kernel_pdf_builder::build_select_equal_width(vpdfl_kernel_pdf& kpdf,
-                              const vnl_vector<double>* data, int n) const
+                                                        const vnl_vector<double>* data, int n) const
 {
   vnl_vector<double> m,var;
   vpdfl_calc_mean_var(m,var,data,n);
@@ -210,7 +212,7 @@ void vpdfl_kernel_pdf_builder::build_select_equal_width(vpdfl_kernel_pdf& kpdf,
 
 //: Kernel width proportional to distance to nearby samples.
 void vpdfl_kernel_pdf_builder::build_width_from_separation(vpdfl_kernel_pdf& kpdf,
-                               const vnl_vector<double>* data, int n) const
+                                                           const vnl_vector<double>* data, int n) const
 {
   vnl_vector<double> width(n);
   double* w=width.data_block();
@@ -260,7 +262,7 @@ void vpdfl_kernel_pdf_builder::build_width_from_separation(vpdfl_kernel_pdf& kpd
 //  Use equal widths to create a pilot estimate, then use the prob at each
 //  data point to modify the widths
 void vpdfl_kernel_pdf_builder::build_adaptive(vpdfl_kernel_pdf& kpdf,
-                               const vnl_vector<double>* data, int n) const
+                                              const vnl_vector<double>* data, int n) const
 {
   // First build the pilot estimate
   build_select_equal_width(kpdf,data,n);
@@ -418,6 +420,5 @@ void vpdfl_kernel_pdf_builder::config_from_stream(vcl_istream & is)
   {
     throw mbl_exception_parse_error(e.what());
   }
-
 }
 

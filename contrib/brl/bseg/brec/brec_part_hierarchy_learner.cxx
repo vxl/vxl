@@ -1,9 +1,9 @@
+#include "brec_part_hierarchy_learner.h"
 //:
 // \file
 // \author Ozge C Ozcanli (ozge@lems.brown.edu)
 // \date Jan 19, 2009
 
-#include "brec_part_hierarchy_learner.h"
 #include "brec_part_hierarchy_learner_sptr.h"
 
 #include <bsta/bsta_histogram.h>
@@ -15,6 +15,7 @@
 #include <vcl_algorithm.h> // for std::sort()
 #include <vcl_limits.h>
 #include <vcl_cmath.h> // for std::cos() and std::sin()
+#include <vcl_sstream.h>
 
 //: check the "true" part of the mask
 bool check_equal(vbl_array_2d<bool>& left_array, vbl_array_2d<bool>& right_array)

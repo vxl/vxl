@@ -12,6 +12,8 @@
 // \endverbatim
 
 #include "bprb_parameters.h"
+//
+#include <vcl_cassert.h>
 
 //: Set the current value to \p val
 template<class T>

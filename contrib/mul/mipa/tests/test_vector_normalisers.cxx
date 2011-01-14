@@ -1,6 +1,7 @@
 // Testing mipa_multiple_normalisers
 
 #include <vcl_iostream.h>
+#include <vcl_sstream.h>
 #include <vcl_string.h>
 #include <vcl_algorithm.h>
 #include <vcl_iterator.h>

@@ -8,11 +8,12 @@
 // \brief Convenience function a tuple of PODs from a config file.
 
 #include <vcl_istream.h>
+#include <vcl_sstream.h>
 #include <mbl/mbl_exception.h>
 
 //: Read a 2-tuple of PODs from a config file.
 // This function will read through a stream, and store the text found to a string.
-// The function reads 2 elements. If there was an openning brace it will also consume the closing brace.
+// The function reads 2 elements. If there was an opening brace it will also consume the closing brace.
 // Other conditions will cause an exception to be thrown, and the stream's fail bit to be set
 //
 // \throws mbl_exception_parse_error if unrecoverable parse error.
@@ -57,7 +58,7 @@ inline void mbl_parse_tuple(vcl_istream &afs, T& a, U& b)
 
 //: Read a 3-tuple of PODs from a config file.
 // This function will read through a stream, and store the text found to a string.
-// The function reads 3 elements. If there was an openning brace it will also consume the closing brace.
+// The function reads 3 elements. If there was an opening brace it will also consume the closing brace.
 // Other conditions will cause an exception to be thrown, and the stream's fail bit to be set
 //
 // \throws mbl_exception_parse_error if unrecoverable parse error.
@@ -103,7 +104,7 @@ inline void mbl_parse_tuple(vcl_istream &afs, T& a, U& b, V& c)
 
 //: Read a 4-tuple of PODs from a config file.
 // This function will read through a stream, and store the text found to a string.
-// The function reads 4 elements. If there was an openning brace it will also consume the closing brace.
+// The function reads 4 elements. If there was an opening brace it will also consume the closing brace.
 // Other conditions will cause an exception to be thrown, and the stream's fail bit to be set
 //
 // \throws mbl_exception_parse_error if unrecoverable parse error.
@@ -150,7 +151,7 @@ inline void mbl_parse_tuple(vcl_istream &afs, T& a, U& b, V& c, W& d)
 
 //: Read a 5-tuple of PODs from a config file.
 // This function will read through a stream, and store the text found to a string.
-// The function reads 5 elements. If there was an openning brace it will also consume the closing brace.
+// The function reads 5 elements. If there was an opening brace it will also consume the closing brace.
 // Other conditions will cause an exception to be thrown, and the stream's fail bit to be set
 //
 // \throws mbl_exception_parse_error if unrecoverable parse error.
@@ -195,10 +196,9 @@ inline void mbl_parse_tuple(vcl_istream &afs, T& a, U& b, V& c, W& d, X& e)
 }
 
 
-
 //: Read a 6-tuple of PODs from a config file.
 // This function will read through a stream, and store the text found to a string.
-// The function reads 6 elements. If there was an openning brace it will also consume the closing brace.
+// The function reads 6 elements. If there was an opening brace it will also consume the closing brace.
 // Other conditions will cause an exception to be thrown, and the stream's fail bit to be set
 //
 // \throws mbl_exception_parse_error if unrecoverable parse error.

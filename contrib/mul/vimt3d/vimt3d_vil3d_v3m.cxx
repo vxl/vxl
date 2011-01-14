@@ -8,8 +8,10 @@
 // \author Ian Scott - Manchester
 
 #include "vimt3d_vil3d_v3m.h"
+//
 #include <vcl_cstdlib.h> // for vcl_abort()
 #include <vcl_cstring.h> // for vcl_strcmp()
+#include <vcl_sstream.h>
 #include <vcl_cassert.h>
 #include <vcl_ios.h>
 #include <vcl_algorithm.h>

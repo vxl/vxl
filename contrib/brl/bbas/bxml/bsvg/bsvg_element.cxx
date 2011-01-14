@@ -1,10 +1,11 @@
+#include "bsvg_element.h"
 //:
 // \file
 // \author Ozge C. Ozcanli (Brown)
 // \date   April 21, 2009
 
-#include "bsvg_element.h"
 #include <vcl_cmath.h>
+#include <vcl_sstream.h>
 
 void bsvg_element::set_transformation(float trans_x, float trans_y, float rot)
 {
@@ -116,14 +117,14 @@ void bsvg_text::set_font_size(int s)
   this->set_attribute("font-size", fs.str());
 }
 
-bsvg_ellipse::bsvg_ellipse(float rx, float ry) : bsvg_element("ellipse") 
+bsvg_ellipse::bsvg_ellipse(float rx, float ry) : bsvg_element("ellipse")
 {
   vcl_stringstream rxs; rxs << rx; vcl_stringstream rys; rys << ry;
   this->set_attribute("rx", rxs.str());
   this->set_attribute("ry", rys.str());
 }
 
-bsvg_rectangle::bsvg_rectangle(float x, float y, float width, float height) : bsvg_element("rect") 
+bsvg_rectangle::bsvg_rectangle(float x, float y, float width, float height) : bsvg_element("rect")
 {
   vcl_stringstream xs; xs << x; vcl_stringstream ys; ys << y;
   vcl_stringstream ws; ws << width; vcl_stringstream hs; hs << height;
@@ -158,7 +159,7 @@ bsvg_arrow_head::bsvg_arrow_head(float x, float y, float l) : bsvg_group()
   this->add_element(l2);
 }
 
-bsvg_polyline::bsvg_polyline(const vcl_vector<float>& xs, const vcl_vector<float>& ys) : bsvg_element("polyline") 
+bsvg_polyline::bsvg_polyline(const vcl_vector<float>& xs, const vcl_vector<float>& ys) : bsvg_element("polyline")
 {
   if (xs.size() == ys.size()) {
     vcl_stringstream ss;
@@ -177,7 +178,7 @@ bsvg_splice::bsvg_splice(float center_x, float center_y, float radius, float sta
 {
   // compute the first and second points on the arc using the start_angle and end_angle
   float first_point_x = radius*vcl_cos(start_angle)+center_x;
-  float first_point_y = radius*-vcl_sin(start_angle)+center_y; // invert the y value 
+  float first_point_y = radius*-vcl_sin(start_angle)+center_y; // invert the y value
   float second_point_x = radius*vcl_cos(end_angle)+center_x;
   float second_point_y = radius*-vcl_sin(end_angle)+center_y;
 
@@ -186,7 +187,7 @@ bsvg_splice::bsvg_splice(float center_x, float center_y, float radius, float sta
   attr << 'M' << center_x << ',' << center_y << ' ' << first_point_x << ',' << first_point_y << " A" << radius << ',' << radius << " 0 ";
   if (long_arc)
     attr << "1,0 ";
-  else 
+  else
     attr << "0,0 ";
   attr << second_point_x << ',' << second_point_y << " z";
   el->set_attribute("d", attr.str());

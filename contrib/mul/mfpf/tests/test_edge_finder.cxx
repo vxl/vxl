@@ -11,6 +11,7 @@
 // \brief test mfpf_edge_finder
 
 #include <vcl_iostream.h>
+#include <vcl_sstream.h>
 #include <vsl/vsl_binary_loader.h>
 #include <mbl/mbl_cloneables_factory.h>
 #include <mfpf/mfpf_add_all_loaders.h>

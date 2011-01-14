@@ -6,6 +6,7 @@
 
 #include <mfpf/mfpf_edge_finder.h>
 #include <vsl/vsl_binary_loader.h>
+#include <vcl_sstream.h>
 #include <vcl_cassert.h>
 
 #include <mbl/mbl_parse_block.h>

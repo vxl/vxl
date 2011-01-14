@@ -7,6 +7,7 @@
 #include <vcl_cstdlib.h>
 #include <vcl_string.h>
 #include <vcl_cmath.h>
+#include <vcl_sstream.h>
 
 #include <vsl/vsl_indent.h>
 #include <vsl/vsl_binary_io.h>
@@ -48,7 +49,7 @@ bool mcal_sparse_basis_cost::can_use_variance() const
   // \param: unit_basis - Unit vector defining basis direction
   // \param: projections - Projections of the dataset onto this basis vector
 double mcal_sparse_basis_cost::cost(const vnl_vector<double>& unit_basis,
-                      const vnl_vector<double>& projections)
+                                    const vnl_vector<double>& projections)
 {
   double var = projections.squared_magnitude()/projections.size();
   return cost_from_variance(unit_basis,var);
@@ -59,7 +60,7 @@ double mcal_sparse_basis_cost::cost(const vnl_vector<double>& unit_basis,
   // \param: unit_basis - Unit vector defining basis direction
   // \param: variance - Variance of projections of the dataset onto this basis vector
 double mcal_sparse_basis_cost::cost_from_variance(const vnl_vector<double>& unit_basis,
-                                    double variance)
+                                                  double variance)
 {
   return vcl_log(1e-8+variance) + alpha_ * unit_basis.one_norm();
 }

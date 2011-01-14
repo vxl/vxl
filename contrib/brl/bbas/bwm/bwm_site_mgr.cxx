@@ -23,6 +23,7 @@
 #include <vnl/vnl_double_3.h>
 #include <vnl/vnl_quaternion.h>
 #include <vcl_cstdio.h>
+#include <vcl_sstream.h>
 
 #include <vul/vul_file.h>
 #include <vul/vul_string.h>
@@ -164,7 +165,7 @@ void bwm_site_mgr::create_site()
   }
   else
   {
-    // collect the paramaters
+    // collect the parameters
     vcl_cout << "name:" << site_name << vcl_endl
              << "dir:" << site_dir << vcl_endl;
 
@@ -1106,7 +1107,7 @@ static void save_video_world_points_vrml_impl(vcl_ofstream& os, vgl_box_3d<doubl
   for (vcl_vector<bwm_video_corr_sptr>::iterator cit = corrs.begin();
        cit!= corrs.end(); ++cit)
   {
-    if((++cnt)%10==0)
+    if ((++cnt)%10==0)
     {
     bwm_video_corr_sptr corr = *cit;
     if (!corr || !corr->world_pt_valid()) continue;
@@ -1208,7 +1209,7 @@ static void save_video_cameras_vrml_impl(vcl_ofstream& os, vgl_box_3d<double> bo
   while (true) {
     vpgl_perspective_camera<double>* cam = cam_istr->current_camera();
     vcl_cout<<cam->get_camera_center();
-    if(cnt++>170 )
+    if (cnt++>170 )
         if (box.contains(cam->get_camera_center()))
             cams.push_back(*cam);
 

@@ -4,12 +4,12 @@
 // \brief Builder for mfpf_ssd_vec_cost objects.
 // \author Tim Cootes
 
-
 #include <mfpf/mfpf_ssd_vec_cost.h>
 #include <vsl/vsl_binary_loader.h>
 #include <vul/vul_string.h>
 #include <vcl_cassert.h>
 #include <vcl_algorithm.h>
+#include <vcl_sstream.h>
 
 #include <mbl/mbl_parse_block.h>
 #include <mbl/mbl_read_props.h>

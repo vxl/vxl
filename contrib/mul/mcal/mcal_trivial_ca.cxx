@@ -6,6 +6,7 @@
 
 #include <vcl_cstdlib.h>
 #include <vcl_string.h>
+#include <vcl_sstream.h>
 
 #include <vsl/vsl_binary_io.h>
 #include <vnl/vnl_vector.h>

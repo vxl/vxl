@@ -9,6 +9,7 @@
 
 #include <vcl_vector.h>
 #include <vcl_iostream.h>
+#include <vcl_sstream.h>
 #include <vcl_iomanip.h>
 #include <vcl_ios.h>
 #include <vcl_algorithm.h>
@@ -49,7 +50,6 @@ void test_k_nearest_neighbour()
            << "***************************************************************\n";
 
   vcl_cout<<"\n======== TESTING CONSTRUCTION ===========\n";
-
 
   clsfy_add_all_loaders();
 

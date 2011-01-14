@@ -13,7 +13,6 @@
 //   <none yet>
 // \endverbatim
 
-#include <vcl_string.h>
 #include <bprb/bprb_parameters.h>
 
 #include <boxm/boxm_apm_traits.h>
@@ -30,6 +29,9 @@
 
 #include <imesh/imesh_mesh.h>
 #include <imesh/imesh_fileio.h>
+
+#include <vcl_string.h>
+#include <vcl_sstream.h>
 
 namespace boxm_upload_mesh_process_globals
 {

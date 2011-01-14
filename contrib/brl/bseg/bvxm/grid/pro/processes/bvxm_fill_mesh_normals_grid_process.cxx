@@ -12,7 +12,6 @@
 //   <none yet>
 // \endverbatim
 
-#include <vcl_string.h>
 #include <bprb/bprb_func_process.h>
 #include <bprb/bprb_parameters.h>
 #include <bvxm/grid/bvxm_voxel_grid_base.h>
@@ -24,6 +23,9 @@
 
 #include <imesh/imesh_mesh.h>
 #include <imesh/imesh_fileio.h>
+
+#include <vcl_string.h>
+#include <vcl_sstream.h>
 
 namespace bvxm_fill_mesh_normals_grid_process_globals
 {

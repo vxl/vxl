@@ -1,13 +1,13 @@
 #include "bwm_observer_rat_cam.h"
 //:
 // \file
-#include "bwm_observable_textured_mesh.h"
-#include "bwm_observable_textured_mesh_sptr.h"
-#include "bwm_texture_map_generator.h"
-#include "bwm_world.h"
-#include "reg/bwm_reg_utils.h"
-#include "reg/bwm_reg_processor.h"
-#include "algo/bwm_utils.h"
+#include <bwm/bwm_observable_textured_mesh.h>
+#include <bwm/bwm_observable_textured_mesh_sptr.h>
+#include <bwm/bwm_texture_map_generator.h>
+#include <bwm/bwm_world.h>
+#include <bwm/reg/bwm_reg_utils.h>
+#include <bwm/reg/bwm_reg_processor.h>
+#include <bwm/algo/bwm_utils.h>
 
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_point_3d.h>
@@ -35,6 +35,7 @@
 #include <vpgl/algo/vpgl_backproject.h>
 
 #include <vul/vul_file.h>
+#include <vcl_sstream.h>
 
 #include <bmsh3d/bmsh3d_textured_mesh_mc.h>
 #include <vpgl/vpgl_local_rational_camera.h>

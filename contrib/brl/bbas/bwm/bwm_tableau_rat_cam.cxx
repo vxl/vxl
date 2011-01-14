@@ -1,10 +1,12 @@
 #include "bwm_tableau_rat_cam.h"
-#include "bwm_popup_menu.h"
-#include "bwm_observer_mgr.h"
 
-#include "algo/bwm_utils.h"
+#include <bwm/bwm_popup_menu.h>
+#include <bwm/bwm_observer_mgr.h>
+#include <bwm/algo/bwm_utils.h>
+
 #include <vsol/vsol_point_2d.h>
 #include <vul/vul_file.h>
+#include <vcl_sstream.h>
 
 bool bwm_tableau_rat_cam::handle(const vgui_event &e)
 {
@@ -79,12 +81,13 @@ vcl_string bwm_tableau_rat_cam::save_camera()
     new_cam_path += "_v" + str + vul_file::extension(cam_path);
     my_observer_->camera().save(new_cam_path);
 
-    // camera is saved and no need to save the next time 
+    // camera is saved and no need to save the next time
     my_observer_->set_camera_path(new_cam_path);
     my_observer_->set_camera_adjusted(false);
 
     return new_cam_path;
-  } else {
+  }
+  else {
     vcl_cout << "bwm_tableau_rat_cam::save_camera -- Camera has not changed, not saving!" << vcl_endl;
     return cam_path;
   }

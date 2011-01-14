@@ -1,5 +1,6 @@
 #include <testlib/testlib_test.h>
 #include <vcl_iostream.h>
+#include <vcl_sstream.h>
 #include <vcl_vector.h>
 
 #include <brec/brec_part_base.h>

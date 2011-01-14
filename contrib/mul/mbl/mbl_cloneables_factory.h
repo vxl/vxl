@@ -7,7 +7,6 @@
 // \author Ian Scott.
 
 #include <vcl_map.h>
-// not used? #include <vcl_utility.h>
 #include <vcl_memory.h>
 #include <vcl_string.h>
 #include <vcl_sstream.h>
@@ -46,7 +45,7 @@
 template <class BASE>
 class mbl_cloneables_factory
 {
- private: 
+ private:
   typedef vcl_map<vcl_string, mbl_cloneable_ptr<BASE> > MAP;
 
   //: Singleton array of names, and association concrete instantiations of BASE.
@@ -59,7 +58,7 @@ class mbl_cloneables_factory
   {
     if (objects_.get() == 0)
       objects_.reset(new MAP);
- 
+
     return *objects_;
   }
 

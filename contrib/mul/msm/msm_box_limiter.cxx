@@ -1,15 +1,16 @@
+#include "msm_box_limiter.h"
 //:
 // \file
 // \author Tim Cootes
 // \brief Apply limits to each parameter independently
 
-#include "msm_box_limiter.h"
 #include <vnl/io/vnl_io_vector.h>
 #include <vsl/vsl_binary_loader.h>
 #include <mbl/mbl_parse_block.h>
 #include <mbl/mbl_read_props.h>
 #include <mbl/mbl_exception.h>
 #include <vul/vul_string.h>
+#include <vcl_sstream.h>
 #include <vcl_cassert.h>
 
 //=======================================================================

@@ -1,11 +1,11 @@
+#include "mipa_block_normaliser.h"
 //:
 // \file
 // \brief Class to independently normalise sub-blocks with a region
 // \author Martin Roberts
 
-
-#include "mipa_block_normaliser.h"
 #include <vcl_iostream.h>
+#include <vcl_sstream.h>
 #include <vcl_algorithm.h>
 #include <vsl/vsl_binary_loader.h>
 #include <vsl/vsl_vector_io.h>

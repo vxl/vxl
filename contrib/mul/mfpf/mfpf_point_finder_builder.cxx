@@ -11,6 +11,7 @@
 #include <mbl/mbl_read_props.h>
 #include <mbl/mbl_cloneables_factory.h>
 #include <vcl_cmath.h>
+#include <vcl_sstream.h>
 
 #include <mfpf/mfpf_point_finder.h>
 #include <vul/vul_string.h>

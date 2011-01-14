@@ -1,11 +1,13 @@
 #include "boxm2_block_id.h"
 //:
 // \file
+#include <vcl_sstream.h>
 
-vcl_string boxm2_block_id::to_string(){
+vcl_string boxm2_block_id::to_string()
+{
   vcl_ostringstream s1;
-  s1 << (*this); 
-  return s1.str(); 
+  s1 << (*this);
+  return s1.str();
 }
 
 

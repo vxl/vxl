@@ -1,7 +1,6 @@
-#include <boxm/ocl/view/boxm_change_detection_bit_tableau.h>
+#include "boxm_change_detection_bit_tableau.h"
 //:
 // \file
-
 
 #include <boxm/ocl/boxm_update_bit_scene_manager.h>
 #include <boxm/ocl/boxm_ocl_utils.h>
@@ -16,6 +15,9 @@
 #include <vil/vil_load.h>
 #include <vgui/vgui_dialog.h>
 #include <vil/vil_save.h>
+
+#include <vcl_sstream.h>
+
 //: Constructor
 boxm_change_detection_bit_tableau::boxm_change_detection_bit_tableau()
 : pbuffer_(0), ni_(640), nj_(480), curr_frame_(68), do_update_(true)

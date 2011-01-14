@@ -1,7 +1,6 @@
-#include <boxm/ocl/view/boxm_update_bit_tableau.h>
+#include "boxm_update_bit_tableau.h"
 //:
 // \file
-
 
 #include <boxm/ocl/boxm_update_bit_scene_manager.h>
 #include <boxm/ocl/boxm_ocl_utils.h>
@@ -16,6 +15,9 @@
 #include <vil/vil_load.h>
 #include <vgui/vgui_dialog.h>
 #include <vil/vil_save.h>
+
+#include <vcl_sstream.h>
+
 //: Constructor
 boxm_update_bit_tableau::boxm_update_bit_tableau()
 {
@@ -96,15 +98,15 @@ bool boxm_update_bit_tableau::init_ocl()
   //create OpenCL context with display properties determined above
   compute_context = clCreateContext(props, 1, &updt_mgr->devices()[0], NULL, NULL, &status);
 #elif defined(__APPLE__) || defined(MACOSX)
-  CGLContextObj kCGLContext = CGLGetCurrentContext();              
+  CGLContextObj kCGLContext = CGLGetCurrentContext();
   CGLShareGroupObj kCGLShareGroup = CGLGetShareGroup(kCGLContext);
-  
-  cl_context_properties props[] = { 
-    CL_CONTEXT_PROPERTY_USE_CGL_SHAREGROUP_APPLE, (cl_context_properties)kCGLShareGroup, 
+
+  cl_context_properties props[] = {
+    CL_CONTEXT_PROPERTY_USE_CGL_SHAREGROUP_APPLE, (cl_context_properties)kCGLShareGroup,
     CL_CONTEXT_PLATFORM, (cl_context_properties) platform_id[0],
-    0 
+    0
   };
-  //create a CL context from a CGL share group - no GPU devices must be passed, 
+  //create a CL context from a CGL share group - no GPU devices must be passed,
   //all CL compliant devices in the CGL share group will be used to create the context. more info in cl_gl_ext.h
   compute_context = clCreateContext(props, 0, 0, NULL, NULL, &status);
 #else
@@ -117,16 +119,16 @@ bool boxm_update_bit_tableau::init_ocl()
   };
   compute_context = clCreateContext(props, 1, &updt_mgr->devices()[0], NULL, NULL, &status);
 #endif
-  
+
   if (status!=CL_SUCCESS) {
     vcl_cout<<"Error: Failed to create a compute CL/GL context!" << error_to_string(status) <<vcl_endl;
     return 0;
   }
-  
+
   //set OpenCL context with display properties determined above
   updt_mgr->context_ = compute_context;
-  
- 
+
+
   // Set 2d workspace, scene, norm data and then all buffers
   vil_image_view<float> expected(ni_,nj_);
   int bundle_dim = 8;
@@ -135,7 +137,7 @@ bool boxm_update_bit_tableau::init_ocl()
   updt_mgr->init_scene(scene_, &cam_, expected, prob_thresh_);  //THIS SETS WNI AND WNJ used below
   if (!updt_mgr->setup_norm_data(true, 0.5f, 0.25f))
     return -1;
- 
+
   ///initialize update
   //need to set ray trace
   //delete old buffer
@@ -156,7 +158,7 @@ bool boxm_update_bit_tableau::init_ocl()
                                                  pbuffer_,
                                                  &status);
 
-  //Finally create input image and persp cam buffers, set args and 
+  //Finally create input image and persp cam buffers, set args and
   updt_mgr->setup_online_processing();
 
 
@@ -171,6 +173,7 @@ bool boxm_update_bit_tableau::save_model()
   boxm_update_bit_scene_manager* updt_mgr = boxm_update_bit_scene_manager::instance();
   return updt_mgr->save_scene();
 }
+
 bool boxm_update_bit_tableau::refine_model()
 {
   vcl_cout<<"REFINING MODEL!!!"<<vcl_endl;
@@ -179,12 +182,14 @@ bool boxm_update_bit_tableau::refine_model()
   return updt_mgr->refine();
   return false;
 }
+
 bool boxm_update_bit_tableau::merge_model()
 {
   vcl_cout<<"MERGING MODEL!!!"<<vcl_endl;
   boxm_update_bit_scene_manager* updt_mgr = boxm_update_bit_scene_manager::instance();
   return updt_mgr->merge();
 }
+
 //: calls on update manager to update model
 bool boxm_update_bit_tableau::update_model()
 {
@@ -192,7 +197,7 @@ bool boxm_update_bit_tableau::update_model()
   count_++; curr_count_++;
 
   //make sure you get a valid frame...
-  if(curr_frame_ >= (int)cam_files_.size())
+  if (curr_frame_ >= (int)cam_files_.size())
     curr_frame_ = 0;
   curr_frame_=rand.lrand32(0,cam_files_.size()-1);
 
@@ -224,9 +229,9 @@ bool boxm_update_bit_tableau::update_model()
   }
 
   curr_frame_++ ;
-  
-  //refine every SIX 
-  if(curr_count_ > 6) {
+
+  //refine every SIX
+  if (curr_count_ > 6) {
     vcl_cout<<"refining"<<vcl_endl;
     this->refine_model();
   }
@@ -267,7 +272,7 @@ bool boxm_update_bit_tableau::save_image(vcl_string filename)
     ocl_mgr->read_output_image();
     vil_image_view_base_sptr img=ocl_mgr->get_output_image();
     vil_image_view<unsigned char> byteimg(img->ni(),img->nj());
-    if(vil_image_view<float> * fimg=dynamic_cast<vil_image_view<float> *> (img.ptr()))
+    if (vil_image_view<float> * fimg=dynamic_cast<vil_image_view<float> *> (img.ptr()))
     {
         vil_convert_stretch_range_limited<float>(*fimg,byteimg,0.0f,1.0f,0,255);
         vil_save(byteimg,filename.c_str());
@@ -276,11 +281,12 @@ bool boxm_update_bit_tableau::save_image(vcl_string filename)
 
     return false;
 }
+
 bool boxm_update_bit_tableau::save_camera(vcl_string filename)
 {
     boxm_update_bit_scene_manager* ocl_mgr = boxm_update_bit_scene_manager::instance();
     vpgl_camera_double_sptr cam=ocl_mgr->get_camera();
-    if(vpgl_perspective_camera<double> * pcam
+    if (vpgl_perspective_camera<double> * pcam
         =dynamic_cast<vpgl_perspective_camera<double> *> (cam.ptr()))
     {
         vcl_ofstream ofile(filename.c_str());
@@ -290,6 +296,7 @@ bool boxm_update_bit_tableau::save_camera(vcl_string filename)
     }
     return false;
 }
+
 //--------------------- Event Handlers -------------------------------//
 
 //: Handles tableau events (drawing and keys)
@@ -314,12 +321,12 @@ bool boxm_update_bit_tableau::handle(vgui_event const &e)
     glBindBuffer(GL_PIXEL_UNPACK_BUFFER_ARB, pbuffer_);
     glDrawPixels(ni_, nj_, GL_RGBA, GL_UNSIGNED_BYTE, 0);
     glBindBuffer(GL_PIXEL_UNPACK_BUFFER_ARB, 0);
-    
+
     //update status
     vcl_stringstream str;
     str<<"Num Updates: "<<count_
        <<"  Num Refines: "<<refine_count_
-       <<"  (updates since last refine: "<<curr_count_<<")";
+       <<"  (updates since last refine: "<<curr_count_<<')';
     status_->write(str.str().c_str());
     return true;
   }
@@ -353,12 +360,11 @@ bool boxm_update_bit_tableau::handle(vgui_event const &e)
     vgui_dialog dlg("Save Expected Image and camera");
     dlg.file("Image  Filename",regexpallfiles,imgfile);
     dlg.file("Camera Filename",regexptxtfiles,camfile);
-    if(dlg.ask())
+    if (dlg.ask())
     {
-        this->save_image(imgfile);
-        this->save_camera(camfile);
+      this->save_image(imgfile);
+      this->save_camera(camfile);
     }
-
   }
   //HANDLE idle events - do model updating
   else if (e.type == vgui_IDLE)

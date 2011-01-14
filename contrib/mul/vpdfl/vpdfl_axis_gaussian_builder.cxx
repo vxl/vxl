@@ -6,9 +6,10 @@
 //  \file
 
 #include "vpdfl_axis_gaussian_builder.h"
-
+//
 #include <vcl_cassert.h>
 #include <vcl_string.h>
+#include <vcl_sstream.h>
 #include <vcl_cstdlib.h> // vcl_abort()
 
 #include <mbl/mbl_data_wrapper.h>
@@ -313,6 +314,5 @@ void vpdfl_axis_gaussian_builder::config_from_stream(vcl_istream & is)
   {
     throw mbl_exception_parse_error(e.what());
   }
-
 }
 

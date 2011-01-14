@@ -11,6 +11,7 @@
 
 #include <vcl_string.h>
 #include <vcl_vector.h>
+#include <vcl_sstream.h>
 #include <vcl_algorithm.h>
 #include <vcl_cassert.h>
 #include <vul/vul_string.h>

@@ -15,6 +15,7 @@
 // \endverbatim
 
 #include <vcl_fstream.h>
+#include <vcl_sstream.h>
 #include <boxm/boxm_scene_base.h>
 #include <boxm/boxm_scene.h>
 #include <boxm/algo/boxm_save_block_raw.h>

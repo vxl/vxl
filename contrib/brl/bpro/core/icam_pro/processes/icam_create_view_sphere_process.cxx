@@ -20,6 +20,7 @@
 #include <vpgl/vpgl_perspective_camera.h>
 #include <vcl_string.h>
 #include <vcl_iostream.h>
+#include <vcl_sstream.h>
 
 #include <icam/icam_view_sphere.h>
 #include <icam/icam_view_metadata.h>

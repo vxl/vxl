@@ -1,4 +1,9 @@
 #include "bvxm_grid_to_image_stack.h"
+//
+#include <vil/vil_save.h>
+#include <vul/vul_file.h>
+#include <vcl_sstream.h>
+#include <vcl_iomanip.h>
 
 template<>
 bool bvxm_grid_to_image_stack::write_grid_to_image_stack(bvxm_voxel_grid<vnl_float_3> *grid, vcl_string directory)

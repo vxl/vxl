@@ -8,6 +8,7 @@
 #include <vsl/vsl_binary_loader.h>
 #include <vul/vul_string.h>
 #include <vcl_cmath.h>
+#include <vcl_sstream.h>
 #include <vcl_cassert.h>
 
 #include <mbl/mbl_parse_block.h>

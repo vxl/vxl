@@ -2,6 +2,7 @@
 #define boxm_render_image_h_
 
 #include <vcl_vector.h>
+#include <vcl_sstream.h>
 
 #include <boct/boct_tree.h>
 #include <boxm/boxm_scene.h>

@@ -8,7 +8,7 @@
 #include <brdb/brdb_database_manager.h>
 #include <brdb/brdb_query.h>
 #include <vcl_iostream.h>
-
+#include <vcl_sstream.h>
 
 static void test_database_manager()
 {

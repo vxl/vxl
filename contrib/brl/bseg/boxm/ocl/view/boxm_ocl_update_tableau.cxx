@@ -15,21 +15,21 @@
 #include <vil/vil_image_view.h>
 #include <vil/vil_load.h>
 
+#include <vcl_sstream.h>
 
 //: Constructor
 boxm_ocl_update_tableau::boxm_ocl_update_tableau()
 {
-    pbuffer_=0;
-    ni_=640;
-    nj_=480;
-    curr_frame_ = 0;
-    do_update_ = true;
+  pbuffer_=0;
+  ni_=640;
+  nj_=480;
+  curr_frame_ = 0;
+  do_update_ = true;
 }
 
 //: Destructor
 boxm_ocl_update_tableau::~boxm_ocl_update_tableau()
 {
-
 }
 
 //: initialize tableau properties
@@ -96,15 +96,15 @@ bool boxm_ocl_update_tableau::init_ocl()
   //create OpenCL context with display properties determined above
   compute_context = clCreateContext(props, 1, &updt_mgr->devices()[0], NULL, NULL, &status);
 #elif defined(__APPLE__) || defined(MACOSX)
-  CGLContextObj kCGLContext = CGLGetCurrentContext();              
+  CGLContextObj kCGLContext = CGLGetCurrentContext();
   CGLShareGroupObj kCGLShareGroup = CGLGetShareGroup(kCGLContext);
-  
-  cl_context_properties props[] = { 
-    CL_CONTEXT_PROPERTY_USE_CGL_SHAREGROUP_APPLE, (cl_context_properties)kCGLShareGroup, 
+
+  cl_context_properties props[] = {
+    CL_CONTEXT_PROPERTY_USE_CGL_SHAREGROUP_APPLE, (cl_context_properties)kCGLShareGroup,
     CL_CONTEXT_PLATFORM, (cl_context_properties) platform_id[0],
-    0 
+    0
   };
-  //create a CL context from a CGL share group - no GPU devices must be passed, 
+  //create a CL context from a CGL share group - no GPU devices must be passed,
   //all CL compliant devices in the CGL share group will be used to create the context. more info in cl_gl_ext.h
   compute_context = clCreateContext(props, 0, 0, NULL, NULL, &status);
 #else
@@ -117,12 +117,12 @@ bool boxm_ocl_update_tableau::init_ocl()
   };
   compute_context = clCreateContext(props, 1, &updt_mgr->devices()[0], NULL, NULL, &status);
 #endif
-  
+
   if (status!=CL_SUCCESS) {
     vcl_cout<<"Error: Failed to create a compute CL/GL context!" << error_to_string(status) <<vcl_endl;
     return 0;
   }
-  
+
   //set OpenCL context with display properties determined above
   updt_mgr->context_ = compute_context;
 
@@ -167,6 +167,7 @@ bool boxm_ocl_update_tableau::save_model()
   boxm_update_ocl_scene_manager* updt_mgr = boxm_update_ocl_scene_manager::instance();
   return updt_mgr->save_scene();
 }
+
 bool boxm_ocl_update_tableau::refine_model()
 {
   vcl_cout<<"REFINING MODEL!!!"<<vcl_endl;
@@ -174,6 +175,7 @@ bool boxm_ocl_update_tableau::refine_model()
   boxm_update_ocl_scene_manager* updt_mgr = boxm_update_ocl_scene_manager::instance();
   return updt_mgr->refine();
 }
+
 //: calls on update manager to update model
 bool boxm_ocl_update_tableau::update_model()
 {
@@ -265,7 +267,7 @@ bool boxm_ocl_update_tableau::handle(vgui_event const &e)
     glBindBuffer(GL_PIXEL_UNPACK_BUFFER_ARB, pbuffer_);
     glDrawPixels(ni_, nj_, GL_RGBA, GL_UNSIGNED_BYTE, 0);
     glBindBuffer(GL_PIXEL_UNPACK_BUFFER_ARB, 0);
-    
+
     //update status
     vcl_stringstream str;
     str<<"Num Updates: "<<count_

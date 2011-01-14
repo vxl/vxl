@@ -11,6 +11,7 @@
 // \brief test mfpf_patch_data
 
 #include <vcl_iostream.h>
+#include <vcl_sstream.h>
 #include <mfpf/mfpf_patch_data.h>
 #include <mfpf/mfpf_add_all_loaders.h>
 

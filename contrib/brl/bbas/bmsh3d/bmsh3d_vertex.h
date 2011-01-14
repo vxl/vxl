@@ -18,6 +18,7 @@
 
 #include <vcl_set.h>
 #include <vcl_string.h>
+#include <vcl_sstream.h>
 #include <vcl_cassert.h>
 #include <vgl/vgl_point_3d.h>
 

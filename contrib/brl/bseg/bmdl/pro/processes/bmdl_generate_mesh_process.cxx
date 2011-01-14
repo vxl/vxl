@@ -3,6 +3,7 @@
 #include <bprb/bprb_func_process.h>
 
 #include <vcl_iostream.h>
+#include <vcl_sstream.h>
 #include <vcl_vector.h>
 #include <vcl_string.h>
 #include <vcl_ctime.h>
@@ -203,7 +204,8 @@ int zip_kmz(zipFile& zf, const char* filenameinzip)
   if (err != ZIP_OK) {
     vcl_printf("error in opening %s in zipfile\n",filenameinzip);
     return 0;
-  } else {
+  }
+  else {
     fin = vcl_fopen(filenameinzip,"rb");
     if (fin==NULL) {
         err=ZIP_ERRNO;
@@ -360,9 +362,11 @@ bool generate_mesh(vcl_string fpath_poly,
   vil_image_view<double> heights;
   if (height_img->pixel_format() == VIL_PIXEL_FORMAT_FLOAT) {
     vil_convert_cast(vil_image_view<float>(*height_img), heights);
-  } else if (height_img->pixel_format() == VIL_PIXEL_FORMAT_DOUBLE) {
+  }
+  else if (height_img->pixel_format() == VIL_PIXEL_FORMAT_DOUBLE) {
     heights = static_cast<vil_image_view<double> >(height_img.ptr());
-  } else {
+  }
+  else {
     vcl_cout << "bmdl_generate_mesh_process::the Height Image pixel format" << height_img->pixel_format() << " undefined" << vcl_endl;
     return false;
   }
@@ -370,9 +374,11 @@ bool generate_mesh(vcl_string fpath_poly,
   vil_image_view<double> ground;
   if (ground_img->pixel_format() == VIL_PIXEL_FORMAT_FLOAT) {
     vil_convert_cast(vil_image_view<float>(*ground_img), ground);
-  } else if (ground_img->pixel_format() == VIL_PIXEL_FORMAT_DOUBLE) {
+  }
+  else if (ground_img->pixel_format() == VIL_PIXEL_FORMAT_DOUBLE) {
     ground = static_cast<vil_image_view<double> >(ground_img.ptr());
-  } else {
+  }
+  else {
     vcl_cout << "bmdl_generate_mesh_process::the Ground Image pixel format" << ground_img->pixel_format() << " undefined" << vcl_endl;
     return false;
   }

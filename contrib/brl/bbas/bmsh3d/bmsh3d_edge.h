@@ -20,6 +20,7 @@
 #include "bmsh3d_utils.h"
 
 #include <vcl_vector.h>
+#include <vcl_sstream.h>
 #include <vgl/vgl_fwd.h>
 
 //#######################################################

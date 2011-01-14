@@ -1,16 +1,15 @@
 #include "bwm_tableau_cam.h"
-#include "algo/bwm_utils.h"
-#include "algo/bwm_algo.h"
 //:
 // \file
-#include "bwm_tableau_mgr.h"
-#include "bwm_observer_mgr.h"
-#include "bwm_observable_mesh.h"
-#include "bwm_observable_mesh_circular.h"
-#include "bwm_tableau_text.h"
-#include "bwm_popup_menu.h"
-#include "bwm_world.h"
-#include "algo/bwm_utils.h"
+#include <bwm/bwm_tableau_mgr.h>
+#include <bwm/bwm_observer_mgr.h>
+#include <bwm/bwm_observable_mesh.h>
+#include <bwm/bwm_observable_mesh_circular.h>
+#include <bwm/bwm_tableau_text.h>
+#include <bwm/bwm_popup_menu.h>
+#include <bwm/bwm_world.h>
+#include <bwm/algo/bwm_utils.h>
+#include <bwm/algo/bwm_algo.h>
 
 #include <vgl/vgl_homg_plane_3d.h>
 #include <vsol/vsol_point_2d.h>
@@ -22,6 +21,7 @@
 #include <vgui/vgui_viewer2D_tableau.h>
 #include <vgui/vgui_shell_tableau.h>
 
+#include <vcl_sstream.h>
 
 #define NUM_CIRCL_SEC 12
 
@@ -110,7 +110,8 @@ void bwm_tableau_cam::move_obj_by_vertex()
   if (mt == 0) {
     vcl_cerr << "Master Tableau is not selected, please select one different than the current one!\n";
     return;
-  } else if (mt == this->my_observer_) {
+  }
+  else if (mt == this->my_observer_) {
     vcl_cerr << "Please select a tableau different than the current one!\n";
     return;
   }
@@ -327,7 +328,7 @@ void bwm_tableau_cam::scroll_to_point(double lx, double ly, double lz)
 void bwm_tableau_cam::create_terrain()
 {
 #if 0 // commented out
-  (this->lock();
+  this->lock();
   //1. pick a boundary for the terrain as a polygon
   bwm_observer_mgr::instance()->stop_corr();
   vsol_polygon_2d_sptr poly2d;
@@ -335,7 +336,9 @@ void bwm_tableau_cam::create_terrain()
   pick_polygon(poly2d);
 #endif // 0
   my_observer_->create_terrain();
-  //this->unlock();
+#if 0 // commented out
+  this->unlock();
+#endif // 0
 }
 
 void bwm_tableau_cam::help_pop()
@@ -357,25 +360,32 @@ bool bwm_tableau_cam::handle(const vgui_event& e)
   if (e.key == 'p' && e.modifier == vgui_SHIFT) {
     create_polygon_mesh();
     return true;
-  } else if (e.key == 't' && e.modifier == vgui_SHIFT) {
+  }
+  else if (e.key == 't' && e.modifier == vgui_SHIFT) {
     this->triangulate_mesh();
     return true;
-  } else if ( e.key == 'm' && e.modifier == vgui_SHIFT) {
+  }
+  else if ( e.key == 'm' && e.modifier == vgui_SHIFT) {
     this->move_obj_by_vertex();
     return true;
-  } else if ( e.key == 'e' && e.modifier == vgui_SHIFT) {
+  }
+  else if ( e.key == 'e' && e.modifier == vgui_SHIFT) {
     this->extrude_face();
     return true;
-  } else if ( e.key == 's' && e.modifier == vgui_SHIFT) {
+  }
+  else if ( e.key == 's' && e.modifier == vgui_SHIFT) {
     this->save();
     return true;
-  } else if ( e.key == '-' && e.modifier == vgui_SHIFT) {
+  }
+  else if ( e.key == '-' && e.modifier == vgui_SHIFT) {
     this->deselect_all();
     return true;
-  } else if ( e.key == 'a' && e.modifier == vgui_SHIFT) {
+  }
+  else if ( e.key == 'a' && e.modifier == vgui_SHIFT) {
     this->clear_all();
     return true;
-  } else if ( e.key == 'h' && e.modifier == vgui_SHIFT) {
+  }
+  else if ( e.key == 'h' && e.modifier == vgui_SHIFT) {
     this->help_pop();
     return true;
   }

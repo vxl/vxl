@@ -11,6 +11,7 @@
 // \brief test vpdfl_gaussian, building, sampling, saving etc.
 
 #include <vcl_iostream.h>
+#include <vcl_sstream.h>
 #include <vcl_string.h>
 #include <vpl/vpl.h> // vpl_unlink()
 #include <vpdfl/vpdfl_mixture.h>
@@ -105,7 +106,7 @@ void test_mixture()
           <<"New PDF: "<<p_pdf_MI<<vcl_endl
           <<"Mean: " << p_pdf_MI->mean()<<vcl_endl
           <<"Var:  " << p_pdf_MI->variance()<<vcl_endl;
- 
+
   vpdfl_mixture & gmm =  static_cast<vpdfl_mixture &>(*p_pdf);
 
   vcl_vector<double> test_wts(n_comp, 1.0/n_comp);
@@ -255,19 +256,18 @@ void test_mixture()
       vpdfl_mixture_builder &a_builder = static_cast<vpdfl_mixture_builder&>(*builder);
       vcl_cout<<a_builder<<vcl_endl;
       TEST_NEAR("Min var configured",
-              a_builder.min_var(),0.1234e-5,1e-8);
+                a_builder.min_var(),0.1234e-5,1e-8);
       TEST("Max its configured",
-              a_builder.max_iterations(),7);
+           a_builder.max_iterations(),7);
       TEST("weights_fixed configured",
-              a_builder.weights_fixed(),true);
+           a_builder.weights_fixed(),true);
       TEST("N.builders configured",
-              a_builder.n_builders(),3);
+           a_builder.n_builders(),3);
       TEST("Builder type configured",
-              a_builder.builder(0).is_a(),"vpdfl_axis_gaussian_builder");
+           a_builder.builder(0).is_a(),"vpdfl_axis_gaussian_builder");
     }
     vsl_delete_all_loaders();
   }
-
 }
 
 TESTMAIN(test_mixture);

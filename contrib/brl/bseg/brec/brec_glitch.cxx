@@ -5,6 +5,7 @@
 // \date October 16, 2008
 
 #include <vcl_cmath.h>
+#include <vcl_sstream.h>
 #include <vil/vil_save.h>
 
 vil_image_view<vxl_byte>

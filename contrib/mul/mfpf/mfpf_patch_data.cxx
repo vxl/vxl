@@ -11,6 +11,7 @@
 #include <mbl/mbl_read_props.h>
 #include <mbl/mbl_exception.h>
 #include <vul/vul_string.h>
+#include <vcl_sstream.h>
 
 //=======================================================================
 // Dflt ctor
@@ -125,8 +126,8 @@ void mfpf_patch_data::b_read(vsl_b_istream& bfs)
       vsl_b_read(bfs,builder_);
       break;
     default:
-      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&)\n";
-      vcl_cerr << "           Unknown version number "<< version << vcl_endl;
+      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&)\n"
+               << "           Unknown version number "<< version << '\n';
       bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
       return;
   }

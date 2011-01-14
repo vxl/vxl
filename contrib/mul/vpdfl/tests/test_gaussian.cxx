@@ -6,6 +6,7 @@
 // \brief test vpdfl_gaussian, building, sampling, saving etc.
 
 #include <vcl_iostream.h>
+#include <vcl_sstream.h>
 #include <vpl/vpl.h> // vpl_unlink()
 
 #include <vsl/vsl_binary_loader.h>
@@ -173,9 +174,9 @@ void test_gaussian()
   vcl_cout<<"\n\n";
 
   TEST("Original Model == Loaded model",
-    mbl_test_summaries_are_equal(pdf, pdf_in), true);
+       mbl_test_summaries_are_equal(pdf, pdf_in), true);
   TEST("Original Model == model loaded by base ptr",
-    mbl_test_summaries_are_equal(p_pdf, p_base_pdf_in), true);
+       mbl_test_summaries_are_equal(p_pdf, p_base_pdf_in), true);
   TEST("Original Builder == Loaded builder",
        mbl_test_summaries_are_equal(builder, builder_in), true);
   TEST("Original Builder == Builder loaded by base ptr",
@@ -235,7 +236,7 @@ void test_gaussian()
   TEST_NEAR("v3 is on Int(Prob)=0.9 boundary", pdf.log_p(v3), pd, 1e-5);
 
   TEST_NEAR("v3 and v2 have identical directions from mean",
-    angle(v3-mean2,v2-mean2), 0, 1e-5);
+            angle(v3-mean2,v2-mean2), 0, 1e-5);
 
   delete p_pdf_built;
   delete p_sampler;
@@ -262,8 +263,7 @@ void test_gaussian()
     {
       vpdfl_gaussian_builder &a_builder = static_cast<vpdfl_gaussian_builder&>(*builder);
       vcl_cout<<a_builder<<vcl_endl;
-      TEST_NEAR("Min var configured",
-              a_builder.min_var(),0.1234e-5,1e-8);
+      TEST_NEAR("Min var configured", a_builder.min_var(), 0.1234e-5, 1e-8);
     }
     vsl_delete_all_loaders();
   }

@@ -1,17 +1,18 @@
 #include "bwm_observer_cam.h"
 //:
 // \file
-#include "bwm_observer_mgr.h"
-#include "bwm_observable_mesh.h"
-#include "bwm_observable_mesh_circular.h"
-#include "algo/bwm_algo.h"
-#include "algo/bwm_plane_fitting_lsf.h"
-#include "algo/bwm_image_processor.h"
-#include "algo/bwm_delaunay_tri.h"
-#include "bwm_tableau_mgr.h"
-#include "bwm_world.h"
+#include <bwm/bwm_observer_mgr.h>
+#include <bwm/bwm_observable_mesh.h>
+#include <bwm/bwm_observable_mesh_circular.h>
+#include <bwm/algo/bwm_algo.h>
+#include <bwm/algo/bwm_plane_fitting_lsf.h>
+#include <bwm/algo/bwm_image_processor.h>
+#include <bwm/algo/bwm_delaunay_tri.h>
+#include <bwm/bwm_tableau_mgr.h>
+#include <bwm/bwm_world.h>
 
 #include <vcl_iostream.h>
+#include <vcl_sstream.h>
 #include <vcl_iomanip.h>
 #include <vcl_cassert.h>
 #include <vgui/vgui.h>

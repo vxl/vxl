@@ -6,6 +6,7 @@
 #include <vcl_vector.h>
 
 #include <vcl_iostream.h>
+#include <vcl_sstream.h>
 #include <vcl_fstream.h>
 #include <vcl_string.h>
 #include <vul/vul_arg.h>

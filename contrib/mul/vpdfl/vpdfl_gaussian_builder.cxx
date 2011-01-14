@@ -14,9 +14,10 @@
 // \endverbatim
 
 #include "vpdfl_gaussian_builder.h"
-
-#include <vcl_cstdlib.h>
+//
 #include <vcl_string.h>
+#include <vcl_sstream.h>
+#include <vcl_cstdlib.h>
 #include <vcl_cassert.h>
 #include <mbl/mbl_data_wrapper.h>
 #include <vpdfl/vpdfl_gaussian.h>

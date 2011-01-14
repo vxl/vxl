@@ -11,6 +11,7 @@
 #include "clsfy_null_builder.h"
 
 #include <vcl_iostream.h>
+#include <vcl_sstream.h>
 #include <vcl_string.h>
 #include <vcl_algorithm.h>
 #include <vsl/vsl_binary_loader.h>
@@ -18,8 +19,6 @@
 #include <mbl/mbl_parse_block.h>
 #include <mbl/mbl_read_props.h>
 #include <clsfy/clsfy_null_classifier.h>
-
-
 
 
 //=======================================================================
@@ -86,9 +85,9 @@ void clsfy_null_builder::b_read(vsl_b_istream& bfs)
 // For many classifiers, you may use nClasses==1 to
 // indicate a binary classifier
 double clsfy_null_builder::build(clsfy_classifier_base& model,
-                                mbl_data_wrapper<vnl_vector<double> >& inputs,
-                                unsigned /* nClasses */,
-                                const vcl_vector<unsigned> &outputs) const
+                                 mbl_data_wrapper<vnl_vector<double> >& inputs,
+                                 unsigned /* nClasses */,
+                                 const vcl_vector<unsigned> &outputs) const
 {
   clsfy_null_classifier &classifier = dynamic_cast<clsfy_null_classifier&>(model);
 

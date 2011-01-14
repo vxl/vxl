@@ -16,6 +16,7 @@
 //    IMS   Converted to VXL 14 May 2000, with redesign
 // \endverbatim
 
+#include <vcl_sstream.h>
 #include <vcl_cassert.h>
 #include <vcl_cmath.h>
 #include <vcl_cstdlib.h> // for vcl_abort()
@@ -77,7 +78,7 @@ vpdfl_mixture_builder& vpdfl_mixture_builder::operator=(const vpdfl_mixture_buil
   max_its_ = b.max_its_;
   weights_fixed_ = b.weights_fixed_;
   initial_means_ = b.initial_means_;
-  
+
   return *this;
 }
 
@@ -341,11 +342,11 @@ void vpdfl_mixture_builder::initialise_to_regular_samples(vpdfl_mixture& model,
 }
 
 void vpdfl_mixture_builder::initialise(vpdfl_mixture& model,
-          const vnl_vector<double>* data,
-          const vcl_vector<double>& wts) const
+                                       const vnl_vector<double>* data,
+                                       const vcl_vector<double>& wts) const
 {
   // Later add a switch to decide on how to initialise
-  if(!initial_means_.empty() )
+  if (!initial_means_.empty() )
   {
     initialise_given_means(model,data,initial_means_,wts);
   }
@@ -504,7 +505,7 @@ static inline void incXbyYv(vnl_vector<double> *X, const vnl_vector<double> &Y, 
 
 //: Add (Y + Z.*Z)*v to X
 static inline void incXbyYplusXXv(vnl_vector<double> *X, const vnl_vector<double> &Y,
-                               const vnl_vector<double> &Z, double v)
+                                  const vnl_vector<double> &Z, double v)
 {
   assert(X->size() == Y.size());
   int i = ((int)X->size()) - 1;
@@ -528,7 +529,7 @@ void vpdfl_mixture_builder::calc_mean_and_variance(vpdfl_mixture& model)
   {
     incXbyYv(&mean, model.component(i).mean(), model.weight(i));
     incXbyYplusXXv(&var, model.component(i).variance(),
-    model.component(i).mean(), model.weight(i));
+                   model.component(i).mean(), model.weight(i));
   }
 
   for (unsigned int i=0; i<n; ++i)
@@ -691,7 +692,6 @@ void vpdfl_mixture_builder::config_from_stream(vcl_istream & is)
   {
     throw mbl_exception_parse_error(e.what());
   }
-
 }
 
 //==================< end of file: vpdfl_mixture_builder.cxx >====================

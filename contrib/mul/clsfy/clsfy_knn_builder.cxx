@@ -12,6 +12,7 @@
 #include "clsfy_knn_builder.h"
 
 #include <vcl_iostream.h>
+#include <vcl_sstream.h>
 #include <vcl_string.h>
 #include <vcl_cassert.h>
 #include <vsl/vsl_binary_loader.h>

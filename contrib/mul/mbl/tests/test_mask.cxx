@@ -1,8 +1,9 @@
 // This is mul/mbl/tests/test_mask.cxx
 #include <testlib/testlib_test.h>
-#include <vcl_vector.h>
 #include <mbl/mbl_mask.h>
+#include <vcl_vector.h>
 #include <vcl_fstream.h>
+#include <vcl_sstream.h>
 
 unsigned mask4_to_number(const mbl_mask & r)
 {
@@ -104,7 +105,7 @@ void test_mask()
   v_tgt.push_back(3);
   v_tgt.push_back(4);
 
-  // Test application of mask to a values vector using src,dst version  
+  // Test application of mask to a values vector using src,dst version
   mbl_apply_mask(m1, v1, v2);
   TEST("Application of mask to vector of values", (v2 == v_tgt), true);
 
@@ -258,7 +259,7 @@ void test_mask()
   mbl_mask mask_true(n, false);
   mask_true[1]=true; mask_true[3]=true; mask_true[6]=true; mask_true[8]=true;
   vcl_vector<unsigned> inds, inds_true;
-  inds_true.push_back(1); inds_true.push_back(3); inds_true.push_back(6); inds_true.push_back(8); 
+  inds_true.push_back(1); inds_true.push_back(3); inds_true.push_back(6); inds_true.push_back(8);
   mbl_mask_to_indices(mask_true, inds);
   TEST("mbl_mask_to_indices()", inds==inds_true, true);
   mbl_mask mask;

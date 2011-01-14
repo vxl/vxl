@@ -1,12 +1,13 @@
+#include "bsvg_plot.h"
 //:
 // \file
 // \author Ozge C. Ozcanli (Brown)
 // \date   April 21, 2009
 
-#include "bsvg_plot.h"
-#include "bsvg_element.h"
-#include <vcl_iostream.h>
 #include <bxml/bxml_find.h>
+#include <bxml/bsvg/bsvg_element.h>
+#include <vcl_iostream.h>
+#include <vcl_sstream.h>
 
 void bsvg_plot::add_axes(float x_min, float x_max, float y_min, float y_max, float stroke_width)
 {
@@ -295,7 +296,7 @@ int bsvg_plot::add_bar(const float height, const float x_label, bool vertical_la
   return add_bar(height, ss.str(), vertical_label, color);
 }
 
-//: add splices for a pie chart 
+//: add splices for a pie chart
 void bsvg_plot::add_splice(float center_x, float center_y, float radius, float start_angle, float end_angle, const vcl_string& color)
 {
   bsvg_splice* splice_g = new bsvg_splice(center_x, center_y, radius, start_angle, end_angle);
@@ -303,6 +304,7 @@ void bsvg_plot::add_splice(float center_x, float center_y, float radius, float s
   splice_g->set_stroke_color("black");
   this->add_element(splice_g);
 }
+
 void bsvg_plot::add_splice(float center_x, float center_y, float radius, float start_angle, float end_angle, unsigned red, unsigned green, unsigned blue)
 {
   bsvg_splice* splice_g = new bsvg_splice(center_x, center_y, radius, start_angle, end_angle);

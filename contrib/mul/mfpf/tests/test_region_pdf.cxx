@@ -11,6 +11,7 @@
 //=======================================================================
 
 #include <vcl_iostream.h>
+#include <vcl_sstream.h>
 #include <vsl/vsl_binary_loader.h>
 #include <mfpf/mfpf_add_all_loaders.h>
 #include <mfpf/mfpf_region_pdf.h>

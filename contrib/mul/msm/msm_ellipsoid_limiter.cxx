@@ -1,15 +1,16 @@
+#include "msm_ellipsoid_limiter.h"
 //:
 // \file
 // \author Tim Cootes
 // \brief Force param.s to lie in ellipsoid defined by variances.
 
-#include "msm_ellipsoid_limiter.h"
 #include <vnl/io/vnl_io_vector.h>
 #include <vsl/vsl_binary_loader.h>
 #include <mbl/mbl_parse_block.h>
 #include <mbl/mbl_read_props.h>
 #include <mbl/mbl_exception.h>
 #include <vul/vul_string.h>
+#include <vcl_sstream.h>
 #include <vcl_cassert.h>
 
 //=======================================================================
@@ -33,7 +34,7 @@ void msm_ellipsoid_limiter::set_param_var(const vnl_vector<double>& v)
 
 //: Set the limits so that a given proportion pass
 //  Where the parameters are described by a pdf, choose
-//  limits so that on averate a proportion prop (in [0,1])
+//  limits so that on average a proportion prop (in [0,1])
 //  are acceptable when using n_modes modes. If n_modes==0,
 //  then assume all available modes to be used.
 void msm_ellipsoid_limiter::set_acceptance(double prop,

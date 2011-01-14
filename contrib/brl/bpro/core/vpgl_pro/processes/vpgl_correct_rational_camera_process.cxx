@@ -4,6 +4,7 @@
 // \file
 #include <bprb/bprb_parameters.h>
 #include <vcl_iostream.h>
+#include <vcl_sstream.h>
 #include <vcl_fstream.h>
 #include <vpgl/vpgl_camera.h>
 #include <vpgl/vpgl_rational_camera.h>

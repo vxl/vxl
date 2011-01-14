@@ -8,6 +8,7 @@
 // \date April 22, 2009
 
 #include <vcl_iostream.h>
+#include <vcl_sstream.h>
 #include <bsta/bsta_histogram.h>
 #include <bsta/bsta_joint_histogram.h>
 #include <bxml/bsvg/bsvg_plot.h>

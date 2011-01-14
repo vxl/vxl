@@ -1,6 +1,8 @@
 #include "bvpl_create_directions.h"
+//
 #include <vnl/vnl_math.h>
 #include <vcl_iostream.h>
+#include <vcl_sstream.h>
 #include <vcl_iomanip.h>
 #include <bxml/bsvg/bsvg_document.h>
 #include <bxml/bsvg/bsvg_element.h>
@@ -10,7 +12,7 @@ bvpl_create_directions_xyz::bvpl_create_directions_xyz()
 {
   axes_.clear();
   angles_.clear();
-  
+
   vnl_float_3 axis_x (1.0f, 0.0f, 0.0f);
   axes_.push_back(axis_x);
   angles_.push_back(0.0f);
@@ -20,7 +22,6 @@ bvpl_create_directions_xyz::bvpl_create_directions_xyz()
   vnl_float_3 axis_z (0.0f, 0.0f, 1.0f);
   axes_.push_back(axis_z);
   angles_.push_back(0.0f);
-
 }
 
 bvpl_create_directions_a::bvpl_create_directions_a()

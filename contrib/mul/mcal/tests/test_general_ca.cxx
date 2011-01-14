@@ -11,6 +11,7 @@
 // \brief test mcal_general_ca
 
 #include <vcl_iostream.h>
+#include <vcl_sstream.h>
 #include <vsl/vsl_binary_loader.h>
 #include <vcl_cmath.h>
 #include <vnl/vnl_matrix.h>

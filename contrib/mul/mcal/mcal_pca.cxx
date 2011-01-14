@@ -5,6 +5,7 @@
 #include <vcl_string.h>
 #include <vcl_vector.h>
 #include <vcl_cmath.h>
+#include <vcl_sstream.h>
 
 #include <vsl/vsl_indent.h>
 #include <vsl/vsl_binary_io.h>
@@ -83,9 +84,9 @@ unsigned mcal_pca::choose_n_modes(const vnl_vector<double>& evals)
 
 //: Compute eigenvectors assuming fewer dimensions than samples
 void mcal_pca::build_evecs_nd_smaller(mbl_data_wrapper<vnl_vector<double> >& data,
-                                const vnl_vector<double>& mean,
-                                vnl_matrix<double>& evecs,
-                                vnl_vector<double>& evals)
+                                      const vnl_vector<double>& mean,
+                                      vnl_matrix<double>& evecs,
+                                      vnl_vector<double>& evals)
 {
   data.reset();
   unsigned int n_samples = data.size();
@@ -349,7 +350,7 @@ void mcal_pca::fillDDt(vnl_matrix<double>& DDt, const vnl_matrix<double>& A,
 }
 
 void mcal_pca::set_mode_choice(unsigned min, unsigned max,
-                    double var_proportion)
+                               double var_proportion)
 {
   min_modes_ = min;
   max_modes_ = max;

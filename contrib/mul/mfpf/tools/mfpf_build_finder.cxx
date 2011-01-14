@@ -42,6 +42,7 @@
 #include <msm/msm_points.h>
 #include <vcl_cmath.h>
 #include <vcl_cassert.h>
+#include <vcl_sstream.h>
 
 //: Structure to hold parameters
 struct tool_params
