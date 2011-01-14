@@ -153,7 +153,7 @@ int main2(int argc, char *argv[])
   if (ofs && ofs->good()) *ofs << in_file() << sep();
   for (vcl_map<vcl_string,double>::const_iterator it=stats.begin(); it!=stats.end(); ++it)
   {
-    MBL_LOG(NOTICE, logger(), it->first << ": " << it->second);
+    vcl_cout << t->first << " " << it->second << vcl_endl;
     if (ofs && ofs->good()) *ofs << it->second << sep();
   }
   if (ofs && ofs->good()) *ofs << vcl_endl;
