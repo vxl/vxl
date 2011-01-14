@@ -20,10 +20,7 @@
 #define BLOCK_EPSILON .006125f
 #define TREE_EPSILON  .005f
 
-inline float clamp(float x, float a, float b)
-{
-    return x < a ? a : (x > b ? b : x);
-}
+
 
 
 template<class F>
@@ -80,9 +77,9 @@ void boxm2_cast_ray_function(vgl_ray_3d<float> & ray,
     float posz = (ray_oz + (tblock + TREE_EPSILON)*ray_dz);
 
     //curr block index (var later used as cell_min), check to make sure block index isn't 192 or -1
-    float cell_minx = clamp(vcl_floor(posx), 0.0f, linfo->scene_dims[0]-1.0f);
-    float cell_miny = clamp(vcl_floor(posy), 0.0f, linfo->scene_dims[1]-1.0f);
-    float cell_minz = clamp(vcl_floor(posz), 0.0f, linfo->scene_dims[2]-1.0f);
+    float cell_minx = boxm2_util::clamp(vcl_floor(posx), 0.0f, linfo->scene_dims[0]-1.0f);
+    float cell_miny = boxm2_util::clamp(vcl_floor(posy), 0.0f, linfo->scene_dims[1]-1.0f);
+    float cell_minz = boxm2_util::clamp(vcl_floor(posz), 0.0f, linfo->scene_dims[2]-1.0f);
 
     //load current block/tree
     uchar16 tree=blk_sptr->trees()(cell_minx,cell_miny,cell_minz);

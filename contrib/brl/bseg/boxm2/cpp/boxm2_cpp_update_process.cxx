@@ -13,7 +13,7 @@
 #include <vil/vil_math.h>
 //directory utility
 #include <vcl_where_root_dir.h>
-
+#include <boxm2/cpp/boxm2_data_serial_iterator.h>
 
 bool boxm2_cpp_update_process::execute(vcl_vector<brdb_value_sptr>& input, vcl_vector<brdb_value_sptr>& output)
 {
@@ -45,6 +45,8 @@ bool boxm2_cpp_update_process::execute(vcl_vector<brdb_value_sptr>& input, vcl_v
   boxm2_update_pass0_functor pass0;
   boxm2_update_pass1_functor pass1;
   boxm2_update_pass2_functor pass2;
+
+  boxm2_update_data_functor update_data;
   vil_image_view<float> pre_img(input_image->ni(),input_image->nj());
   vil_image_view<float> vis_img(input_image->ni(),input_image->nj());
   vil_image_view<float> proc_norm_img(input_image->ni(),input_image->nj());
@@ -57,67 +59,81 @@ bool boxm2_cpp_update_process::execute(vcl_vector<brdb_value_sptr>& input, vcl_v
     pre_img.fill(0.0f);
     vis_img.fill(1.0f);
 
-    for (id = vis_order.begin(); id != vis_order.end(); ++id)
-    {
-      boxm2_block *     blk   = this->cache_->get_block(*id);
-      boxm2_data_base *  alph = this->cache_->get_data_base(*id,boxm2_data_traits<BOXM2_ALPHA>::prefix());
-      boxm2_data_base *  mog  = this->cache_->get_data_base(*id,boxm2_data_traits<BOXM2_MOG3_GREY>::prefix());
-      boxm2_data_base *  aux  = this->cache_->get_data_base(*id,boxm2_data_traits<BOXM2_AUX>::prefix());
-      vcl_vector<boxm2_data_base*> datas;
-      datas.push_back(aux);
-      datas.push_back(alph);
-      datas.push_back(mog);
-      boxm2_scene_info_wrapper *scene_info_wrapper=new boxm2_scene_info_wrapper();
-      scene_info_wrapper->info=scene->get_blk_metadata(*id);
-      scene_info_wrapper->info->tree_buffer_length = blk->tree_buff_length();
-      scene_info_wrapper->info->data_buffer_length = 65536;
-      scene_info_wrapper->info->num_buffer = blk->num_buffers();
-      //pass 0
-      if (i==0)
-      {
-        pass0.init_data(datas,input_image);
-        success=success && cast_ray_per_block<boxm2_update_pass0_functor>(pass0,
-                                                                          scene_info_wrapper->info,
-                                                                          blk,
-                                                                          cam,
-                                                                          input_image->ni(),
-                                                                          input_image->nj());
-      }
-      //pass 1
-      else if (i==1)
-      {
-        pass1.init_data(datas,&pre_img,&vis_img);
-        success=success && cast_ray_per_block<boxm2_update_pass1_functor>(pass1,
-                                                                          scene_info_wrapper->info,
-                                                                          blk,
-                                                                          cam,
-                                                                          input_image->ni(),
-                                                                          input_image->nj());
-      }
-      else if (i==2)
-      {
-        pass2.init_data(datas,&pre_img,&vis_img, & proc_norm_img);
-        success=success && cast_ray_per_block<boxm2_update_pass2_functor>(pass2,
-                                                                          scene_info_wrapper->info,
-                                                                          blk,
-                                                                          cam,
-                                                                          input_image->ni(),
-                                                                          input_image->nj());
-      }
-    }
-    if (i==1)
-    {
-      vil_math_image_sum<float,float,float>(pre_img,vis_img,proc_norm_img);
-      for (unsigned it=0;it<proc_norm_img.ni();it++)
-      {
-        for (unsigned jt=0;jt<proc_norm_img.nj();jt++)
-        {
-          vcl_cout<<vis_img(it,jt)<<' ';
-        }
-        vcl_cout<<vcl_endl;
-      }
-    }
-  }
+     vcl_cout<<"Pass "<<i<<" ";
+     for(id = vis_order.begin(); id != vis_order.end(); ++id) 
+     {
+         vcl_cout<<"Block id "<<(*id)<<" ";
+         boxm2_block *     blk   = this->cache_->get_block(*id);
+         boxm2_data_base *  alph = this->cache_->get_data_base(*id,boxm2_data_traits<BOXM2_ALPHA>::prefix());
+         boxm2_data_base *  mog  = this->cache_->get_data_base(*id,boxm2_data_traits<BOXM2_MOG3_GREY>::prefix());
+         boxm2_data_base *  aux  = this->cache_->get_data_base(*id,boxm2_data_traits<BOXM2_AUX>::prefix());
+         vcl_vector<boxm2_data_base*> datas;
+         datas.push_back(aux);
+         datas.push_back(alph);
+         datas.push_back(mog);
+         boxm2_scene_info_wrapper *scene_info_wrapper=new boxm2_scene_info_wrapper();
+         scene_info_wrapper->info=scene->get_blk_metadata(*id);
+         scene_info_wrapper->info->tree_buffer_length = blk->tree_buff_length();
+         scene_info_wrapper->info->data_buffer_length = 65536;
+         scene_info_wrapper->info->num_buffer = blk->num_buffers();
+         //pass 0
+         if(i==0)
+         {
+             pass0.init_data(datas,input_image);
+             success=success && cast_ray_per_block<boxm2_update_pass0_functor>(pass0,
+                                                                               scene_info_wrapper->info,
+                                                                               blk,
+                                                                               cam,
+                                                                               input_image->ni(),
+                                                                               input_image->nj());
+         }
+         //: pass 1
+         else if(i==1)
+         {
+             pass1.init_data(datas,&pre_img,&vis_img);
+             success=success && cast_ray_per_block<boxm2_update_pass1_functor>(pass1,
+                                                                               scene_info_wrapper->info,
+                                                                               blk,
+                                                                               cam,
+                                                                               input_image->ni(),
+                                                                               input_image->nj());
+         }
+         else if(i==2)
+         {
+             pass2.init_data(datas,&pre_img,&vis_img, & proc_norm_img);
+             success=success && cast_ray_per_block<boxm2_update_pass2_functor>(pass2,
+                                                                               scene_info_wrapper->info,
+                                                                               blk,
+                                                                               cam,
+                                                                               input_image->ni(),
+                                                                               input_image->nj());
+         }
+     }
+     if(i==1)
+        vil_math_image_sum<float,float,float>(pre_img,vis_img,proc_norm_img);
+     vcl_cout<<vcl_endl;
+
+ }
+ vcl_vector<boxm2_block_id>::iterator id; 
+ for(id = vis_order.begin(); id != vis_order.end(); ++id) 
+ {
+     boxm2_block     *  blk   = this->cache_->get_block(*id);
+     boxm2_data_base *  alph  = this->cache_->get_data_base(*id,boxm2_data_traits<BOXM2_ALPHA>::prefix());
+     boxm2_data_base *  mog   = this->cache_->get_data_base(*id,boxm2_data_traits<BOXM2_MOG3_GREY>::prefix());
+     boxm2_data_base *  nobs  = this->cache_->get_data_base(*id,boxm2_data_traits<BOXM2_NUM_OBS>::prefix());
+     boxm2_data_base *  aux   = this->cache_->get_data_base(*id,boxm2_data_traits<BOXM2_AUX>::prefix());
+     vcl_vector<boxm2_data_base*> datas;
+     datas.push_back(aux);
+     datas.push_back(alph);
+     datas.push_back(mog);
+     datas.push_back(nobs);
+     boxm2_update_data_functor data_functor;
+     data_functor.init_data(datas, blk->sub_block_dim().x(), blk->max_level());
+
+     boxm2_data_serial_iterator<boxm2_update_data_functor>(blk,data_functor);
+
+ }
+ vcl_cout<<"Execution time: "<<" ms"<<vcl_endl;
 
   return true;
 }

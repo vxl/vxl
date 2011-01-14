@@ -6,6 +6,8 @@
 #include <boxm2/boxm2_block_metadata.h>
 #include <boxm2/boxm2_data_base.h>
 #include <vil/vil_save.h>
+#include <vil/vil_math.h>
+
 #include <boxm2/boxm2_util.h>
 #include <boxm2/cpp/boxm2_render_exp_image_functor.h>
 //brdb stuff
@@ -31,21 +33,12 @@ bool boxm2_cpp_render_process::execute(vcl_vector<brdb_value_sptr>& input, vcl_v
   brdb_value_t<vil_image_view_base_sptr>* brdb_expimg = static_cast<brdb_value_t<vil_image_view_base_sptr>* >( input[i++].ptr() );
   vil_image_view_base_sptr expimg = brdb_expimg->value();
   vil_image_view<float>* image_ = static_cast<vil_image_view<float>* >(expimg.ptr());
-
-  //vis image buffer
-  brdb_value_t<vil_image_view_base_sptr>* brdb_vis = static_cast<brdb_value_t<vil_image_view_base_sptr>* >( input[i++].ptr() );
-  vil_image_view_base_sptr visimg = brdb_vis->value();
-  vil_image_view<float>* vis_img_ = static_cast<vil_image_view<float>* >(visimg.ptr());
+  image_->fill(0.0f);
+  vis_img_ = new vil_image_view<float>(image_->ni(),image_->nj());
+  vis_img_->fill(1.0f);
 
 
   vcl_vector<boxm2_block_id> vis_order=scene->get_vis_blocks(reinterpret_cast<vpgl_perspective_camera<double>*>(cam.ptr()));
-
-  for(unsigned i=0;i<image_->ni();i++)
-      for(unsigned j=0;j<image_->nj();j++)
-          (*image_)(i,j)=0.0f;
-  for(unsigned i=0;i<vis_img_->ni();i++)
-      for(unsigned j=0;j<vis_img_->nj();j++)
-          (*vis_img_)(i,j)=1.0f;
 
   vcl_vector<boxm2_block_id>::iterator id; 
   for(id = vis_order.begin(); id != vis_order.end(); ++id) 
@@ -67,7 +60,8 @@ bool boxm2_cpp_render_process::execute(vcl_vector<brdb_value_sptr>& input, vcl_v
       boxm2_render_exp_image(scene_info_wrapper->info,blk,datas,cam,image_,vis_img_,image_->ni(),image_->nj());
   }
 
-  output.push_back(new brdb_value_t<vil_image_view_base_sptr>(expimg));
+  vil_math_scale_values<float>(*vis_img_,1.0f);
+  vil_math_image_sum<float,float,float>(*image_,*vis_img_,*image_);
 
   vcl_cout<<"Execution time: "<<" ms"<<vcl_endl;
 
