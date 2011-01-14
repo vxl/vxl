@@ -64,6 +64,7 @@ int main2(int argc, char *argv[])
   vul_arg<bool> mean_of_absolutes("-moa", "Specify this to record the mean_of_absolutes", false);
   vul_arg<bool> skewness("-skew", "Specify this to record the skewness", false);
   vul_arg<bool> kurtosis("-kurt", "Specify this to record the kurtosis", false);
+  vul_arg<vcl_string> label("-label","Adds this label to each line outputting a statistic - useful for later grep");
   vul_arg_parse(argc, argv);
 
   // Try to open the input file if specified or use stdin
@@ -153,7 +154,7 @@ int main2(int argc, char *argv[])
   if (ofs && ofs->good()) *ofs << in_file() << sep();
   for (vcl_map<vcl_string,double>::const_iterator it=stats.begin(); it!=stats.end(); ++it)
   {
-    vcl_cout << it->first << ": " << it->second << vcl_endl;
+    vcl_cout <<  label() << " " << it->first << ": " << it->second << vcl_endl;
     if (ofs && ofs->good()) *ofs << it->second << sep();
   }
   if (ofs && ofs->good()) *ofs << vcl_endl;
