@@ -329,7 +329,7 @@ proc_norm_image(__global float4* image, __global float4* p_inf, __global uint4 *
                (p_inf[0].x>0.0f) ? 1.0f :
                gauss_prob_density(vect.x, p_inf[0].y, p_inf[0].z);
 #else
-               0.5f;
+               1.0f;
 #endif
   // compute the norm image
   vect.x = vect.w + mult * vect.z;
