@@ -89,7 +89,7 @@ bocl_mem* boxm2_opencl_cache::get_loaded_trees_per_buffer()
   trees_per_buffer_ = 0;
  
   boxm2_block* loaded = cpu_cache_->get_block(loaded_); 
-  boxm2_array_1d<ushort>& trees_per_buffer = loaded->trees_in_buffers(); 
+  boxm2_array_1d<unsigned short>& trees_per_buffer = loaded->trees_in_buffers(); 
   trees_per_buffer_ = new bocl_mem(*context_, trees_per_buffer.begin(), trees_per_buffer.size()*sizeof(int), "1d trees_per_buffer buffer");
   trees_per_buffer_->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR );
   return trees_per_buffer_; 
