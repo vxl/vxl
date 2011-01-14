@@ -29,9 +29,11 @@
 
 //boxm2 includes
 #include <boxm2/boxm2_scene.h>
+#include <boxm2/boxm2_data.h>
 #include <boxm2/ocl/boxm2_opencl_processor.h>
 #include <boxm2/ocl/boxm2_opencl_render_process.h>
 #include <boxm2/ocl/boxm2_opencl_update_process.h>
+#include <boxm2/ocl/boxm2_opencl_refine_process.h>
 #include <boxm2/io/boxm2_dumb_cache.h>
 #include <boxm2/io/boxm2_nn_cache.h>
 
@@ -69,9 +71,11 @@ class boxm2_render_tableau : public boxm2_cam_tableau
   boxm2_opencl_processor* gpu_pro_;
   boxm2_opencl_render_process render_;
   boxm2_opencl_update_process update_; 
+  boxm2_opencl_refine_process refine_;
 
   //: Boxm2 Scene
   boxm2_scene_sptr scene_;
+  boxm2_cache*     cache_; 
   unsigned ni_;
   unsigned nj_;
   vgui_statusbar* status_;
@@ -89,10 +93,8 @@ class boxm2_render_tableau : public boxm2_cam_tableau
   //--Render, update, refine, save helper methods ------------------------------
   //func to render frame on GPU (returns gpu time)
   float render_frame();
-
-  //updates a single (random) frame
   float update_frame(); 
-  
+  float refine_model();
   bool save_model(); 
 
   //-- HELPER INIT Methods and vars---------------------------------------------

@@ -107,7 +107,7 @@ refine_bit_scene(__constant  RenderSceneInfo    * linfo,
                  __local     uchar16            * local_tree,      // cache current tree into local memory
                  __local     uchar16            * refined_tree)    // refined tree (need old tree to move data over))  
 {
-  
+
   //global id will be the tree buffer
   unsigned gid = get_group_id(0);
   unsigned lid = get_local_id(0);
@@ -146,7 +146,6 @@ refine_bit_scene(__constant  RenderSceneInfo    * linfo,
       output[gid] = -665;       
       return;
     }
-
     //------------------------------------------------------------------------
 
     //Iterate over each tree in buffer=gid      
@@ -172,6 +171,7 @@ refine_bit_scene(__constant  RenderSceneInfo    * linfo,
                                 prob_thresh, 
                                 cumsum,
                                 bit_lookup,
+                                MAX_INNER_CELLS,
                                 output);
       //!!! assert that the refined tree matches the newsize !!!
       if(newSize != num_cells(refined_tree)) {
@@ -189,7 +189,7 @@ refine_bit_scene(__constant  RenderSceneInfo    * linfo,
       if(newSize > currTreeSize && newSize <= freeSpace) {
 
         //6a. update local tree's data pointer (store it back tree buffer)
-        ushort buffOffset = convert_ushort((endPtr-1 + linfo->data_len)%linfo->data_len);
+        ushort buffOffset = convert_ushort( (endPtr-1 + linfo->data_len)%linfo->data_len );
         uchar hi = (uchar)(buffOffset >> 8);
         uchar lo = (uchar)(buffOffset & 255);
         (*refined_tree).sa = hi; 
@@ -223,7 +223,6 @@ refine_bit_scene(__constant  RenderSceneInfo    * linfo,
             //move root data to new location
             alpha_array[offset + newDataPtr]   = alpha_array[offset + oldDataPtr];
             mixture_array[offset + newDataPtr] = mixture_array[offset + oldDataPtr];
-            //last_weight_array[offset + newDataPtr] = last_weight_array[offset + oldDataPtr];
             num_obs_array[offset + newDataPtr] = num_obs_array[offset + oldDataPtr];
 
             //increment 
@@ -242,7 +241,6 @@ refine_bit_scene(__constant  RenderSceneInfo    * linfo,
 
             //store parent's data in child cells
             mixture_array[offset+newDataPtr] = (uchar8) 0;
-            //last_weight_array[offset+newDataPtr] = (uchar) 0;
             num_obs_array[offset+newDataPtr] = (ushort4) 0;
 
             //update new data pointer
@@ -287,17 +285,14 @@ refine_bit_scene(__constant  RenderSceneInfo    * linfo,
         int newDataPtr = buffOffset;   
         int offset = gid*linfo->data_len;                   //absolute buffer offset
         for(int j=0; j<currTreeSize; j++) {
-
             alpha_array[offset + newDataPtr]   = alpha_array[offset + oldDataPtr];
             mixture_array[offset + newDataPtr] = mixture_array[offset + oldDataPtr];
-            //last_weight_array[offset + newDataPtr] = last_weight_array[offset + oldDataPtr];
             num_obs_array[offset + newDataPtr] = num_obs_array[offset + oldDataPtr];
 
             //increment 
             oldDataPtr = (oldDataPtr+1)%linfo->data_len;
             newDataPtr = (newDataPtr+1)%linfo->data_len;
         }
-      
 
         //6c. update endPtr
         endPtr = (endPtr+currTreeSize)%linfo->data_len;

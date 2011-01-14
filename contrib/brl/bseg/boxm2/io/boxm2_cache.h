@@ -41,4 +41,13 @@ class boxm2_cache
     boxm2_asio_mgr io_mgr_;
 };
 
+//: returns a boxm2_data<T>* from the cache
+//  This is a work around for the lack of support of virtual templated functions
+template <boxm2_data_type T>
+boxm2_data<T>* boxm2_cache::get_data(boxm2_block_id id)
+{
+  boxm2_data_base* base = this->get_data_base(id, boxm2_data_traits<T>::prefix()); 
+  return static_cast<boxm2_data<T>* >(base); 
+}
+
 #endif //boxm2_cache_h_

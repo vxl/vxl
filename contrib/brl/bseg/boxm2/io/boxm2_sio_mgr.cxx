@@ -36,7 +36,7 @@ void boxm2_sio_mgr::save_block(vcl_string dir, boxm2_block* block)
   myFile.close();
 }
 
-
+//: loads a generic boxm2_data_base* from disk (given data_type string prefix)
 boxm2_data_base* boxm2_sio_mgr::load_block_data_generic(vcl_string dir, boxm2_block_id id, vcl_string data_type)
 {
   // file name
@@ -56,4 +56,16 @@ boxm2_data_base* boxm2_sio_mgr::load_block_data_generic(vcl_string dir, boxm2_bl
 
   //instantiate new block
   return new boxm2_data_base(bytes,numBytes,id); 
+}
+
+//: generically saves data_base * to disk (given prefix)
+void boxm2_sio_mgr::save_block_data_base(vcl_string dir, boxm2_block_id block_id, boxm2_data_base* data, vcl_string prefix)
+{
+  vcl_string filename = dir + prefix + "_" + block_id.to_string() + ".bin";
+
+  char * bytes = data->data_buffer();
+  vcl_ofstream myFile (filename.c_str(), vcl_ios::out | vcl_ios::binary);
+  myFile.write(bytes, data->buffer_length());
+  myFile.close();
+  return;
 }

@@ -19,7 +19,7 @@ IF(VGUI_FOUND)
 
   ADD_LIBRARY(boxm2_view ${boxm2_view_sources} )
 
-  TARGET_LINK_LIBRARIES(boxm2_view bocl boxm2 boxm2_io boxm2_ocl bprb bgeo vnl vnl_algo vbl_io vpgl vgl vil vbl vul ${GLEW_LIBRARY} ${OPENCL_LIBRARIES} )
+  TARGET_LINK_LIBRARIES(boxm2_view bocl boxm2 boxm2_io boxm2_ocl boxm2_basic bprb bgeo vnl vnl_algo vbl_io vpgl vgl vil vbl vul ${GLEW_LIBRARY} ${OPENCL_LIBRARIES} )
 
 ENDIF(VGUI_FOUND)
 ENDIF(GLEW_FOUND)

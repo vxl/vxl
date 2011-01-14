@@ -67,9 +67,8 @@ bool boxm2_render_tableau::handle(vgui_event const &e)
     //calculate and write fps to status
     vcl_stringstream str;
     str<<"num updates: "<<update_count_
-       <<", rendering at ~ "<< (1000.0f / gpu_time) <<" fps ";
+       <<".  rendering at ~ "<< (1000.0f / gpu_time) <<" fps ";
     status_->write(str.str().c_str());
-
     return true;
   }
 
@@ -84,12 +83,12 @@ bool boxm2_render_tableau::handle(vgui_event const &e)
     this->save_model();
     return true;
   }
-#if 0 // keys "d" (refining), "m" (merging) and "f" (saving) commented out
   else if (e.type == vgui_KEY_PRESS && e.key == vgui_key('d')) {
     vcl_cout<<"refining"<<vcl_endl;
     this->refine_model();
     return true;
   }
+#if 0 // keys "d" (refining), "m" (merging) and "f" (saving) commented out
   else if (e.type == vgui_KEY_PRESS && e.key == vgui_key('m')) {
     vcl_cout<<"merging"<<vcl_endl;
     this->merge_model();
@@ -114,17 +113,11 @@ bool boxm2_render_tableau::handle(vgui_event const &e)
   else if (e.type == vgui_IDLE)
   {
     if (do_update_) {
-#ifdef DEBUG
-      vcl_cout<<"Idling - i will be updating scene"<<vcl_endl;
-#endif
       this->update_frame();
       this->post_redraw();
       return true;
     }
     else {
-#ifdef DEBUG
-      vcl_cout<<"done idling"<<vcl_endl;
-#endif
       return false;
     }
   }
@@ -142,12 +135,39 @@ bool boxm2_render_tableau::handle(vgui_event const &e)
 
 bool boxm2_render_tableau::save_model()
 {
-#ifdef DEBUG
   vcl_cout<<"SAVING MODEL!!!"<<vcl_endl;
-#endif
+  
+  //save blocks and data to disk for debugging
+  vcl_map<boxm2_block_id, boxm2_block_metadata> blocks = scene_->blocks();
+  vcl_map<boxm2_block_id, boxm2_block_metadata>::iterator iter;
+  for(iter = blocks.begin(); iter != blocks.end(); ++iter)
+  { 
+    boxm2_block_id id = iter->first; 
+    boxm2_sio_mgr::save_block(scene_->data_path(), cache_->get_block(id)); 
+    boxm2_sio_mgr::save_block_data(scene_->data_path(), id, cache_->get_data<BOXM2_ALPHA>(id) );
+    boxm2_sio_mgr::save_block_data(scene_->data_path(), id, cache_->get_data<BOXM2_MOG3_GREY>(id) );
+    boxm2_sio_mgr::save_block_data(scene_->data_path(), id, cache_->get_data<BOXM2_NUM_OBS>(id) );
+  }
   return true;
 }
 
+//: refines model
+float boxm2_render_tableau::refine_model()
+{
+  //create generic scene
+  brdb_value_sptr brdb_scene = new brdb_value_t<boxm2_scene_sptr>(scene_);
+
+  //set inputs
+  vcl_vector<brdb_value_sptr> input;
+  input.push_back(brdb_scene);
+
+  //initoutput vector
+  vcl_vector<brdb_value_sptr> output;
+
+  //execute gpu_update
+  gpu_pro_->run(&refine_, input, output);
+  return gpu_pro_->exec_time();
+}
 
 //: calls on ray manager to render frame into the pbuffer_
 float boxm2_render_tableau::render_frame()
@@ -196,9 +216,6 @@ float boxm2_render_tableau::render_frame()
 //: updates given a random frame
 float boxm2_render_tableau::update_frame()
 {
-#ifdef DEBUG
-  vcl_cout<<"UPDATING MODEL!!!"<<vcl_endl;
-#endif
   update_count_++;
 
   //pickup a random frame
@@ -252,13 +269,13 @@ bool boxm2_render_tableau::init_clgl()
 {
   //get relevant blocks
   vcl_cout<<"Data Path: "<<scene_->data_path()<<vcl_endl;
-  boxm2_nn_cache* dcache = new boxm2_nn_cache(scene_.ptr());
+  cache_ = new boxm2_nn_cache(scene_.ptr());
 
   //initialize gpu pro / manager
   gpu_pro_ = boxm2_opencl_processor::instance();
   gpu_pro_->context_ = create_clgl_context();
   gpu_pro_->set_scene(scene_.ptr());
-  gpu_pro_->set_cpu_cache(dcache);
+  gpu_pro_->set_cpu_cache(cache_);
   gpu_pro_->init();
 
   // delete old buffer
@@ -285,12 +302,13 @@ bool boxm2_render_tableau::init_clgl()
   //initialize the GPU render process
   render_.init_kernel(&gpu_pro_->context(), &gpu_pro_->devices()[0]);
   render_.set_image(exp_img_);
-#ifdef DEBUG
-  vcl_cout<<"RENDER IMAGE SET"<<vcl_endl;
-#endif
 
   //initlaize gpu update process
   update_.init_kernel(&gpu_pro_->context(), &gpu_pro_->devices()[0]);
+  
+  //initialize refine process
+  refine_.init_kernel(&gpu_pro_->context(), &gpu_pro_->devices()[0]);
+  
   return true;
 }
 

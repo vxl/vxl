@@ -32,6 +32,9 @@ class boxm2_sio_mgr
     //: saves data to disk
     template <boxm2_data_type data_type>
     static void save_block_data(vcl_string dir, boxm2_block_id block_id, boxm2_data<data_type> * block_data );
+
+    //: saves data generically
+    static void save_block_data_base(vcl_string dir, boxm2_block_id block_id, boxm2_data_base* data, vcl_string prefix); 
 };
 
 template <boxm2_data_type data_type>
