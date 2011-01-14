@@ -58,7 +58,8 @@ static integer c_n1 = -1;
             integer *, doublecomplex *, integer *, doublecomplex *, integer *,
              doublecomplex *, integer *, doublereal *, integer *, ftnlen,
             ftnlen);
-
+    (void)job_len;
+    (void)compq_len;
 
 /*  -- LAPACK routine (version 3.2) -- */
 /*  -- LAPACK is a software package provided by Univ. of Tennessee,    -- */
@@ -354,7 +355,7 @@ static integer c_n1 = -1;
 /*<          INFO = -6 >*/
         *info = -6;
 /*<       ELSE IF( LDQ.LT.1 .OR. ( WANTQ .AND. LDQ.LT.N ) ) THEN >*/
-    } else if (*ldq < 1 || wantq && *ldq < *n) {
+    } else if (*ldq < 1 || (wantq && *ldq) < *n) {
 /*<          INFO = -8 >*/
         *info = -8;
 /*<       ELSE IF( LWORK.LT.LWMIN .AND. .NOT.LQUERY ) THEN >*/

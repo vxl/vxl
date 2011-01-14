@@ -54,7 +54,7 @@ static integer c__1 = 1;
             integer *, doublecomplex *, integer *, doublecomplex *,
             doublereal *, doublereal *, integer *, ftnlen, ftnlen, ftnlen,
             ftnlen);
-
+    (void)norm_len;
 
 /*  -- LAPACK routine (version 3.2) -- */
 /*  -- LAPACK is a software package provided by Univ. of Tennessee,    -- */

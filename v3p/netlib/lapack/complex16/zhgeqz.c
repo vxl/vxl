@@ -93,7 +93,9 @@ static integer c__2 = 2;
             ftnlen);
     integer istart;
     logical lquery;
-
+    (void)job_len;
+    (void)compq_len;
+    (void)compz_len;
 
 /*  -- LAPACK routine (version 3.2) -- */
 /*  -- LAPACK is a software package provided by Univ. of Tennessee,    -- */
@@ -442,11 +444,11 @@ static integer c__2 = 2;
 /*<          INFO = -10 >*/
         *info = -10;
 /*<       ELSE IF( LDQ.LT.1 .OR. ( ILQ .AND. LDQ.LT.N ) ) THEN >*/
-    } else if (*ldq < 1 || ilq && *ldq < *n) {
+    } else if (*ldq < 1 || (ilq && *ldq < *n)) {
 /*<          INFO = -14 >*/
         *info = -14;
 /*<       ELSE IF( LDZ.LT.1 .OR. ( ILZ .AND. LDZ.LT.N ) ) THEN >*/
-    } else if (*ldz < 1 || ilz && *ldz < *n) {
+    } else if (*ldz < 1 || (ilz && *ldz < *n)) {
 /*<          INFO = -16 >*/
         *info = -16;
 /*<       ELSE IF( LWORK.LT.MAX( 1, N ) .AND. .NOT.LQUERY ) THEN >*/

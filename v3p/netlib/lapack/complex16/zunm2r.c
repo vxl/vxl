@@ -43,7 +43,8 @@ static integer c__1 = 1;
             integer *, doublecomplex *, ftnlen), xerbla_(char *, integer *,
             ftnlen);
     logical notran;
-
+    (void)side_len;
+    (void)trans_len;
 
 /*  -- LAPACK routine (version 3.2) -- */
 /*  -- LAPACK is a software package provided by Univ. of Tennessee,    -- */
@@ -235,7 +236,7 @@ static integer c__1 = 1;
     }
 
 /*<       IF( ( LEFT .AND. .NOT.NOTRAN .OR. .NOT.LEFT .AND. NOTRAN ) ) THEN >*/
-    if (left && ! notran || ! left && notran) {
+    if ((left && ! notran) || (! left && notran)) {
 /*<          I1 = 1 >*/
         i1 = 1;
 /*<          I2 = K >*/

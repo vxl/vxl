@@ -26,7 +26,7 @@ static integer c_n1 = -1;
         logical (*select)(doublecomplex*), integer *n,
         doublecomplex *a, integer *lda, integer *sdim, doublecomplex *w,
         doublecomplex *vs, integer *ldvs, doublecomplex *work, integer *lwork,
-         doublereal *rwork, logical *bwork, integer *info, ftnlen jobvs_len,
+        doublereal *rwork, logical *bwork, integer *info, ftnlen jobvs_len,
         ftnlen sort_len)
 {
     /* System generated locals */
@@ -81,7 +81,8 @@ static integer c_n1 = -1;
             doublecomplex *, integer *, doublecomplex *, integer *,
             doublecomplex *, integer *, doublereal *, doublereal *,
             doublecomplex *, integer *, integer *, ftnlen, ftnlen);
-
+    (void)jobvs_len;
+    (void)sort_len;
 
 /*  -- LAPACK driver routine (version 3.2) -- */
 /*  -- LAPACK is a software package provided by Univ. of Tennessee,    -- */
@@ -267,7 +268,7 @@ static integer c_n1 = -1;
 /*<          INFO = -6 >*/
         *info = -6;
 /*<       ELSE IF( LDVS.LT.1 .OR. ( WANTVS .AND. LDVS.LT.N ) ) THEN >*/
-    } else if (*ldvs < 1 || wantvs && *ldvs < *n) {
+    } else if (*ldvs < 1 || (wantvs && *ldvs < *n)) {
 /*<          INFO = -10 >*/
         *info = -10;
 /*<       END IF >*/

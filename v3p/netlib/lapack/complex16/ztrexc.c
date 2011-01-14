@@ -42,7 +42,7 @@ static integer c__1 = 1;
     extern /* Subroutine */ int xerbla_(char *, integer *, ftnlen), zlartg_(
             doublecomplex *, doublecomplex *, doublereal *, doublecomplex *,
             doublecomplex *);
-
+     (void)compq_len;
 
 /*  -- LAPACK routine (version 3.2) -- */
 /*  -- LAPACK is a software package provided by Univ. of Tennessee,    -- */
@@ -153,7 +153,7 @@ static integer c__1 = 1;
 /*<          INFO = -4 >*/
         *info = -4;
 /*<       ELSE IF( LDQ.LT.1 .OR. ( WANTQ .AND. LDQ.LT.MAX( 1, N ) ) ) THEN >*/
-    } else if (*ldq < 1 || wantq && *ldq < max(1,*n)) {
+    } else if (*ldq < 1 || (wantq && *ldq < max(1,*n))) {
 /*<          INFO = -6 >*/
         *info = -6;
 /*<       ELSE IF( IFST.LT.1 .OR. IFST.GT.N ) THEN >*/

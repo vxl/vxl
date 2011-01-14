@@ -71,7 +71,7 @@ static doublecomplex c_b45 = {1.,0.};
             zlaset_(char *, integer *, integer *, doublecomplex *,
             doublecomplex *, doublecomplex *, integer *, ftnlen);
     logical lquery;
-
+    (void)trans_len;
 
 /*  -- LAPACK routine (version 3.2) -- */
 /*  -- LAPACK is a software package provided by Univ. of Tennessee,    -- */
@@ -474,7 +474,7 @@ static doublecomplex c_b45 = {1.,0.};
     }
 
 /*<    >*/
-    if (mb <= 1 && nb <= 1 || mb >= *m && nb >= *n) {
+    if ((mb <= 1 && nb <= 1) || (mb >= *m && nb >= *n)) {
 
 /*        Use unblocked Level 2 solver */
 

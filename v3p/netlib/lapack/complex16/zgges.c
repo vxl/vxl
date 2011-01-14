@@ -104,7 +104,9 @@ static integer c_n1 = -1;
             *, integer *, doublecomplex *, integer *, doublecomplex *,
             doublecomplex *, integer *, doublecomplex *, integer *, integer *,
              ftnlen, ftnlen);
-
+    (void)jobvsl_len;
+    (void)jobvsr_len;
+    (void)sort_len;
 
 /*  -- LAPACK driver routine (version 3.2) -- */
 /*  -- LAPACK is a software package provided by Univ. of Tennessee,    -- */
@@ -401,11 +403,11 @@ static integer c_n1 = -1;
 /*<          INFO = -9 >*/
         *info = -9;
 /*<       ELSE IF( LDVSL.LT.1 .OR. ( ILVSL .AND. LDVSL.LT.N ) ) THEN >*/
-    } else if (*ldvsl < 1 || ilvsl && *ldvsl < *n) {
+    } else if (*ldvsl < 1 || (ilvsl && *ldvsl) < *n) {
 /*<          INFO = -14 >*/
         *info = -14;
 /*<       ELSE IF( LDVSR.LT.1 .OR. ( ILVSR .AND. LDVSR.LT.N ) ) THEN >*/
-    } else if (*ldvsr < 1 || ilvsr && *ldvsr < *n) {
+    } else if (*ldvsr < 1 || (ilvsr && *ldvsr < *n)) {
 /*<          INFO = -16 >*/
         *info = -16;
 /*<       END IF >*/

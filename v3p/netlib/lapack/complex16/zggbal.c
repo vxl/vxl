@@ -69,7 +69,7 @@ static doublereal c_b72 = .5;
     integer lsfmin;
     extern integer izamax_(integer *, doublecomplex *, integer *);
     integer lsfmax;
-
+    (void)job_len;
 
 /*  -- LAPACK routine (version 3.2) -- */
 /*  -- LAPACK is a software package provided by Univ. of Tennessee,    -- */

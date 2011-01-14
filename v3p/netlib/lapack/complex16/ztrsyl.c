@@ -62,7 +62,8 @@ static integer c__1 = 1;
              doublecomplex *);
     logical notrna, notrnb;
     doublereal smlnum;
-
+    (void)trana_len;
+    (void)tranb_len;
 
 /*  -- LAPACK routine (version 3.2) -- */
 /*  -- LAPACK is a software package provided by Univ. of Tennessee,    -- */

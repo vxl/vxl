@@ -168,7 +168,7 @@ extern "C" {
 /*     Quick return if possible. */
 
 /*<       IF ((M.EQ.0) .OR. (N.EQ.0) .OR. (ALPHA.EQ.ZERO)) RETURN >*/
-    if (*m == 0 || *n == 0 || alpha->r == 0. && alpha->i == 0.) {
+    if (*m == 0 || *n == 0 || (alpha->r == 0. && alpha->i == 0.)) {
 	return 0;
     }
 

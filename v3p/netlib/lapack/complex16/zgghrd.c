@@ -50,7 +50,8 @@ static integer c__1 = 1;
             doublecomplex *, doublecomplex *, doublecomplex *, integer *,
             ftnlen), zlartg_(doublecomplex *, doublecomplex *, doublereal *,
             doublecomplex *, doublecomplex *);
-
+    (void)compq_len;
+    (void)compz_len;
 
 /*  -- LAPACK routine (version 3.2) -- */
 /*  -- LAPACK is a software package provided by Univ. of Tennessee,    -- */
@@ -298,11 +299,11 @@ static integer c__1 = 1;
 /*<          INFO = -9 >*/
         *info = -9;
 /*<       ELSE IF( ( ILQ .AND. LDQ.LT.N ) .OR. LDQ.LT.1 ) THEN >*/
-    } else if (ilq && *ldq < *n || *ldq < 1) {
+    } else if ((ilq && *ldq < *n) || *ldq < 1) {
 /*<          INFO = -11 >*/
         *info = -11;
 /*<       ELSE IF( ( ILZ .AND. LDZ.LT.N ) .OR. LDZ.LT.1 ) THEN >*/
-    } else if (ilz && *ldz < *n || *ldz < 1) {
+    } else if ((ilz && *ldz < *n) || *ldz < 1) {
 /*<          INFO = -13 >*/
         *info = -13;
 /*<       END IF >*/

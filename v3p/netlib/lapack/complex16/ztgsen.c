@@ -460,11 +460,11 @@ static integer c__1 = 1;
 /*<          INFO = -9 >*/
         *info = -9;
 /*<       ELSE IF( LDQ.LT.1 .OR. ( WANTQ .AND. LDQ.LT.N ) ) THEN >*/
-    } else if (*ldq < 1 || *wantq && *ldq < *n) {
+    } else if (*ldq < 1 || (*wantq && *ldq < *n)) {
 /*<          INFO = -13 >*/
         *info = -13;
 /*<       ELSE IF( LDZ.LT.1 .OR. ( WANTZ .AND. LDZ.LT.N ) ) THEN >*/
-    } else if (*ldz < 1 || *wantz && *ldz < *n) {
+    } else if (*ldz < 1 || (*wantz && *ldz < *n)) {
 /*<          INFO = -15 >*/
         *info = -15;
 /*<       END IF >*/

@@ -61,7 +61,8 @@ static integer c__65 = 65;
             integer *, ftnlen, ftnlen);
     integer lwkopt;
     logical lquery;
-
+    (void)side_len;
+    (void)trans_len;
 
 /*  -- LAPACK routine (version 3.2) -- */
 /*  -- LAPACK is a software package provided by Univ. of Tennessee,    -- */
@@ -348,7 +349,7 @@ static integer c__65 = 65;
 /*        Use blocked code */
 
 /*<    >*/
-        if (left && ! notran || ! left && notran) {
+        if ((left && ! notran) || (! left && notran)) {
 /*<             I1 = 1 >*/
             i1 = 1;
 /*<             I2 = K >*/
