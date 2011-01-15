@@ -39,7 +39,7 @@ else {
   {
     die "VXLROOT is not defined, no command line arguments were given, and current directory has no vcl, core, contrib";
   }
-  @DIRS = grep { ! m!(/\.|/CVS|awfmfc|vgui_example_mfc|v3p/netlib|b3p/minizip|\.old)$ !x } @DIRS;
+  @DIRS = grep { ! m!(/\.|/CVS|/\.svn|awfmfc|vgui_example_mfc|b3p/minizip|\.old)$! } @DIRS;
 }
 
 foreach my $dir (@DIRS)
@@ -54,23 +54,26 @@ foreach my $dir (@DIRS)
   # Possibly, makefile is located in  the parallel source tree, viz. in "makefiles/$dir", instead of directly in $dir
   # and similarly for *.dsp, in "dsps/$dir"; moreover, this is the first place to look.
   next unless opendir BASEDIR,$dir;
-  my @file_list = grep {! m/^(\..*|CVS)$/} readdir(BASEDIR);
+  my @file_list = grep {! m/^(\..*|CVS|\.svn)$/} readdir(BASEDIR);
   closedir(BASEDIR);
   my @sd = ();
-  if    ($dir =~ m/\bvcl$/)   { @sd = qw(vcl_sys iso generic gcc egcs gcc-295 gcc-libstdcxx-v3 sgi sunpro win32-vc60 win32-vc70 win32-vc8 emulation borland55 borland56 mwerks stlport internal); }
-  elsif ($dir =~ m/\bvil1?$/) { @sd = qw(file_formats); }
-  elsif ($dir =~ m/\bvgl$/)   { @sd = qw(internals); }
-  elsif ($dir =~ m/\bvpdl$/)  { @sd = qw(vpdt); }
-  elsif ($dir =~ m/\bvipl$/)  { @sd = qw(filter section accessors vipl_with_section vipl_with_vbl_array_2d vipl_with_vnl_matrix vipl_with_section/accessors vipl_with_vbl_array_2d/accessors vipl_with_vnl_matrix/accessors); }
-  elsif ($dir =~ m/\bvepl2$/) { @sd = qw(accessors section); }
-  elsif ($dir =~ m/\bvgui$/)  { @sd = qw(internals vrml impl/qt impl/qt4 impl/wx impl/gtk impl/gtk2 impl/mfc impl/glut); }
-  elsif ($dir =~ m/\bvil3d$/) { @sd = qw(file_formats); }
-  elsif ($dir =~ m/\bosl$/)   { @sd = qw(internals); }
-  elsif ($dir =~ m/\bbwm$/)   { @sd = qw(process); }
-  elsif ($dir =~ m/\b(brip_pro|vidl_pro|vil_pro|vpgl_pro|bbgm\/pro|bmdl\/pro|brec\/pro|bvxm\/pro)$/) { @sd = qw(processes); }
+  if    ($dir =~ m!\bvcl$!)   { @sd = qw(vcl_sys iso generic gcc egcs gcc-295 gcc-libstdcxx-v3 sgi sunpro win32-vc60 win32-vc70 win32-vc8 emulation borland55 borland56 mwerks stlport internal); }
+  elsif ($dir =~ m!\bvil(|1|3d)$!) { @sd = qw(file_formats); }
+  elsif ($dir =~ m!\bvgl$!)   { @sd = qw(internals); }
+  elsif ($dir =~ m!\bvpl$!)   { @sd = qw(os_unix os_win32); }
+  elsif ($dir =~ m!\bvpdl$!)  { @sd = qw(vpdt); }
+  elsif ($dir =~ m!\bvipl$!)  { @sd = qw(filter section accessors vipl_with_section vipl_with_vbl_array_2d vipl_with_vnl_matrix vipl_with_section/accessors vipl_with_vbl_array_2d/accessors vipl_with_vnl_matrix/accessors); }
+  elsif ($dir =~ m!\bvepl$!)  { @sd = qw(accessors section); }
+  elsif ($dir =~ m!\bvgui$!)  { @sd = qw(internals vrml impl/qt impl/qt4 impl/wx impl/gtk impl/gtk2 impl/mfc impl/glut impl/win32); }
+  elsif ($dir =~ m!\bosl$!)   { @sd = qw(internals); }
+  elsif ($dir =~ m!\bbwm$!)   { @sd = qw(process); }
+  elsif ($dir =~ m!\bboxm2/ocl$!)   { @sd = qw(cl cl/bit); }
+  elsif ($dir =~ m!\b(bbas/bxml/bsvg/pro|bpro/core/(brip|bvgl|icam|sdet|vidl|vpgl|vil)_pro|bseg/(bapl|bbgm|bmdl|boxm|brec|bvpl|bvxm)/pro|bseg/(boxm/algo(|/rt|/sp)|boxm/ocl|bvpl/bvpl_octree|bvxm/algo|bvxm/grid)/pro)$!) { @sd = qw(processes); }
+  if    ($dir =~ m!\bbvpl/pro$!)  { push @sd, 'processes/util'; }
+
   foreach my $sd (@sd) {
     opendir SUBDIR,"$dir/$sd";
-    push @file_list, map { "$sd/$_" } grep {! m/^(\..*|CVS)$/} readdir(SUBDIR);
+    push @file_list, map { "$sd/$_" } grep {! m/^(\..*|CVS|\.svn)$/} readdir(SUBDIR);
     closedir(SUBDIR);
   }
 
@@ -137,6 +140,10 @@ foreach my $dir (@DIRS)
     ++ $hfiles{$fx};
   }
   my %source = ();
+# foreach my $fx (grep {m/\.(c|cxx|cc|cpp|C)$/} @file_list)
+# {
+#   ++ $source{$fx};
+# }
   my %hsource = ();
   my $f = '';
   my $prefix = (-d "dsps/$dir" ? "dsps/$dir" : $dir);
@@ -240,7 +247,7 @@ foreach my $dir (@DIRS)
     # add Templates to sources, if asked
     foreach my $subd (@aux_sources) {
       if (opendir TMPL,"$dir/$subd") {
-        foreach (map { "$subd/$_" } grep {! m/^(\..*|CVS)$/} readdir(TMPL)) { ++ $sources{$_}; }
+        foreach (map { "$subd/$_" } grep {! m/^(\..*|CVS|\.svn)$/} readdir(TMPL)) { ++ $sources{$_}; }
         closedir(TMPL);
       }
     }
