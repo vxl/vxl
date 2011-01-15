@@ -1,37 +1,34 @@
 // This is core/vil/vil_copy.cxx
-
+#include "vil_copy.h"
 //:
 // \file
 // \author Ian Scott, ISBE, Manchester
 // \date   21 Aug 2003
 
-#include "vil_copy.h"
 #include <vcl_algorithm.h>
 #include <vil/vil_property.h>
 #include <vil/vil_image_resource.h>
 #include <vil/vil_blocked_image_resource.h>
 
 //: Copy images in blocks of roughly this size
-static const unsigned long large_image_limit = 1024ul * 1024ul * 8ul; //8M Pixels
+static const unsigned long large_image_limit_ = 1024ul * 1024ul * 8ul; //8M Pixels
 
 //If image resource is blocked then it makes sense to use the
 //blocks to copy image data. src and det are known to be blocked with
 //equal blocking parameters
 static bool copy_resource_by_blocks(const vil_image_resource_sptr& src,
                                     vil_image_resource_sptr& det)
-
-                                  
 {
   //cast to blocked image resource
   vil_blocked_image_resource_sptr bsrc = blocked_image_resource(src);
   vil_blocked_image_resource_sptr bdet = blocked_image_resource(det);
-  for(unsigned bi = 0; bi<bsrc->n_block_i(); ++bi)
-    for(unsigned bj = 0; bj<bsrc->n_block_j(); ++bj)
-      {
-        vil_image_view_base_sptr blk = bsrc->get_block(bi, bj);
-        if(!blk) return false;
-        if(!bdet->put_block(bi, bj, *blk)) return false;
-      }  
+  for (unsigned bi = 0; bi<bsrc->n_block_i(); ++bi)
+    for (unsigned bj = 0; bj<bsrc->n_block_j(); ++bj)
+    {
+      vil_image_view_base_sptr blk = bsrc->get_block(bi, bj);
+      if (!blk) return false;
+      if (!bdet->put_block(bi, bj, *blk)) return false;
+    }
   return true;
 }
 
@@ -59,10 +56,10 @@ bool vil_copy_deep(const vil_image_resource_sptr &src, vil_image_resource_sptr &
   dest->get_property(vil_property_size_block_j, &dest_sbj);
   //If the source or destination is blocked then use that structure
   //to copy images
-  if(src_sbi>0&&src_sbj>0&&src_sbi==dest_sbi&&src_sbj==dest_sbj)
+  if (src_sbi>0&&src_sbj>0&&src_sbi==dest_sbi&&src_sbj==dest_sbj)
     return copy_resource_by_blocks(src, dest);
 
-  if (src->ni() * src->nj() * src->nplanes() < large_image_limit)
+  if (src->ni() * src->nj() * src->nplanes() < large_image_limit_)
   {
     vil_image_view_base_sptr view_ref = src->get_view();
     if (!view_ref) return false;
@@ -71,7 +68,7 @@ bool vil_copy_deep(const vil_image_resource_sptr &src, vil_image_resource_sptr &
   else
   {
     unsigned got_to_line =0;
-    unsigned block_size = vcl_max(static_cast<unsigned>(large_image_limit / src->ni()),1u);
+    unsigned block_size = vcl_max(static_cast<unsigned>(large_image_limit_ / src->ni()),1u);
 
     while (got_to_line < src->nj())
     {
