@@ -165,8 +165,9 @@ float boxm2_render_tableau::refine_model()
   vcl_vector<brdb_value_sptr> output;
 
   //execute gpu_update
-  gpu_pro_->run(&refine_, input, output);
-  return gpu_pro_->exec_time();
+  //gpu_pro_->run(&refine_, input, output);
+  //return gpu_pro_->exec_time();
+  cpp_pro_.run(&refine_, input, output); 
 }
 
 //: calls on ray manager to render frame into the pbuffer_
@@ -307,7 +308,8 @@ bool boxm2_render_tableau::init_clgl()
   update_.init_kernel(&gpu_pro_->context(), &gpu_pro_->devices()[0]);
   
   //initialize refine process
-  refine_.init_kernel(&gpu_pro_->context(), &gpu_pro_->devices()[0]);
+  //refine_.init_kernel(&gpu_pro_->context(), &gpu_pro_->devices()[0]);
+  refine_.set_cache(cache_);
   
   return true;
 }

@@ -30,6 +30,7 @@ bool boxm2_cpp_refine_process::execute(vcl_vector<brdb_value_sptr>& input, vcl_v
   for(blk = blocks.begin(); blk != blocks.end(); ++blk) 
   {
     boxm2_block_id id = blk->first;
+    vcl_cout<<"Refining Block: "<<id<<vcl_endl;
 
     boxm2_block *     blk     = this->cache_->get_block(id);
     boxm2_data_base * alph    = this->cache_->get_data_base(id,boxm2_data_traits<BOXM2_ALPHA>::prefix());
