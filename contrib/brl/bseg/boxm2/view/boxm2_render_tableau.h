@@ -75,12 +75,9 @@ class boxm2_render_tableau : public boxm2_cam_tableau
   boxm2_opencl_processor* gpu_pro_;
   boxm2_opencl_render_process render_;
   boxm2_opencl_update_process update_; 
-  
-  //: cpp processor for testing refine
-  boxm2_cpp_processor      cpp_pro_;
-  boxm2_cpp_refine_process refine_;
+  boxm2_opencl_refine_process refine_;
   boxm2_opencl_change_detection_process change_;
-
+  
   //: Boxm2 Scene
   boxm2_scene_sptr scene_;
   boxm2_cache*     cache_; 

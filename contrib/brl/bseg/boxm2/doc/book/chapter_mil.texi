@@ -1,0 +1,208 @@
+@chapsummary
+Set of image classes which use pointers to act as views of other images.
+@endchapsummary
+
+@section CAVEAT user
+mil will never enter core VXL in its current form. We hope to port some
+of the mil functionality into vil1, and then use mil just to provide
+registration information, and interface similarity between 2, 3 and 4D images.
+
+@section Introduction
+mil and mil3d contains a set of image classes, derived from @code{mil_image}, which can be
+used as `views' on actual image data.
+
+The images use pointer arithmetic to get at the pixel values, so store
+pointers to the start of each plane, and integers indicating how to get
+to neighbours in the x, y (and z) directions.
+
+Thus, if we have
+
+@smallexample
+T* data_;  // Pointer to element (0,0)
+int xstep_;  // Step to x-neighbour
+int ystep_;  // Step to y-neighbour,
+@end smallexample
+
+then the pixel at (x,y) is accessed using
+@smallexample
+const T& operator(int x, int y) const
+  { return data_[x*xstep_+y*ystep_]; }
+@end smallexample
+
+In a block of nx x ny values of type T (a typical single plane image in
+the current libary), xstep_ would be 1 and ystep_ would be nx.
+
+The advantages of this approach are
+
+@itemize
+@item It is actually faster than pointer indirection on most architectures
+@item It allows one to access non-contiguous data as if it is a single plane,
+   For instance if a colour image is stored as RGBRGB...., by setting
+   x_step_=3, y_step_=3*nx, we can access the R, G and B planes of the
+   image separately.
+@item One can use it to wrap up other image classes transparently.  Thus
+   one can create an image which points to the data in a third-party image
+   class and apply algorithms without having to explicitly copy the data.
+   A particularly interesting case is when you use a live
+   video camera input, which puts image data in a particular block of
+   memory. One can create a wrapper around it and treat it as an ordinary image,
+   without having to copy it.
+@item It is simple to extend to 3D images, and avoids huge arrays of pointers
+@item It allows 2D views of 3D images easily.
+@end itemize
+
+@section Images
+
+The image hierarchy is (or will be) as follows:
+@smallexample
+ mil_image
+    - mil_image_2d
+       - mil_image_2d_of<T>
+    - mil_image_3d
+       - mil_image_3d_of<T>
+@end smallexample
+
+mil_image_2d classes contain a transformation object, @code{mil_transform_2d}, which gives
+the transformation from a notional `world' co-ordinate frame to the image pixel
+frame.  Though in certain cases this can be used when the images are calibrated,
+the most useful application is in image pyramids.  In these the levels above
+the base are often sub-sampled.  The transformation can be used to ensure
+equivalent positions are accessed at all levels of the pyramid.
+
+@subsection mil_image_2d_of<T>
+
+This represents a 2D image of type T, allowing access through pointers to the data.
+
+As an example of usage (a single plane grey-scale image)
+@example
+  mil_image_2d_of<vxl_byte> image0;
+  // Default is a single plane image
+  image0.resize(10,8);
+
+  // Fill values of the image
+  for (int y=0;y<image0.nx();++y)
+     for (int x=0;x<image0.nx();++x)
+     {
+       image0(x,y) = x+y;
+     }
+
+  image0.printAll(vcl_cout);
+@end example
+
+Multiple plane images can be easily created
+@example
+  mil_image_2d_of<vxl_byte> image0;
+  image0.setNPlanes(3);
+  image0.resize(10,8);
+
+  // Fill values of the image
+  for (int i=0;i<image0.nPlanes();++i)
+    for (int y=0;y<image0.nx();++y)
+       for (int x=0;x<image0.nx();++x)
+       {
+         image0(x,y,i) = x+y;
+       }
+
+  image0.printAll(vcl_cout);
+@end example
+
+@subsubsection Efficient image access
+
+The following gives a fast way of iterating through all the pixels in a multi-plane image.
+It can probably be tweaked to go even faster, but at the expense of readability.
+@example
+  double sum = 0.0;
+
+  int n_planes = image.nPlanes();
+  int nx       = image.nx();
+  int ny       = image.ny();
+  int xstep    = image.xstep();
+  int ystep    = image.ystep();
+
+  for (int i=0;i<n_planes;++i)
+  {
+    T* row = image0.plane(i);
+    for (int y=0;y<ny;++y)
+    {
+      T* px = row;
+      for (int x=0;x<nx;++x)
+      {
+        sum += *px;
+        px += xstep;
+      }
+      row += ystep;
+    }
+  }
+@end example
+
+@subsubsection Copying images
+
+The default copy operator takes a SHALLOW copy of an image.
+However, as long as the image isn't a view of some external data (see below)
+the actual data is stored in a @code{mil_image_data<T>} object, to which a
+@code{vbl_smart_ptr} is retained.  Thus the data will hang around as long as
+something is looking at it.
+
+Thus the following will work efficiently
+@example
+mil_image_2d_of<vxl_byte> CreateImage()
+{
+  mil_image_2d_of<vxl_byte> image(100,100);
+  image.fill(17);
+  return image;
+}
+
+void my_function()
+{
+  mil_image_2d_of<vxl_byte> image = CreateImage();
+
+  // ...
+}
+@end example
+
+To perform a deep copy of an image use the deepCopy() function:
+
+@example
+  mil_image_2d_of<vxl_byte> new_image;
+  new_image.deepCopy(old_image);
+@end example
+
+This creates a new data block on the heap and copies the appropriate bits
+of old_image into it.
+
+
+The following will create a sub-image which is a view of a region of the original
+image.
+@smallexample
+  mil_image_2d_of<vxl_byte> full_image(100,100);
+
+  mil_image_2d_of<vxl_byte> window;
+  window.setToWindow(full_image,5,10,  8,32);
+@end smallexample
+
+Note that if we save the two images to the same file with @code{vsl_b_write()}, then load them
+with @code{vsl_b_read()}, this relationship will be retained.  That's due to
+the use of @code{vbl_smart_ptr}, and the awesome power of the serialisation in the binary IO code
+(thanks to Ian Scott for that.)
+
+@subsecton mil3d: 3D Images
+3D images can be found in the mil3d library.
+Their design and use is exactly equivalent to the 2D images described above.
+
+@section Algorithms
+
+@subsection Sampling along profiles
+
+To sample along a profile (points p+i.u, where i=[0..n-1]) use
+
+@smallexample
+  mil_image_2d_of<vxl_byte> image(100,100);
+  vnl_vector<double> vec;
+  vgl_point_2d<double> p;
+  vgl_vector_2d<double> u;
+
+  mil_sample_profile_2d(vec,image,p,u,n);
+@end smallexample
+
+Here p and u are in world co-ordinates.  The @code{image.world2im()}
+deals with the transformation into the image frame.

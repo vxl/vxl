@@ -1,0 +1,84 @@
+@chapsummary
+ mul is VXL compatible model-based computer vision.
+@endchapsummary
+
+@section Manchester
+@cindex model-based
+@cindex ISBE
+@cindex Manchester
+@cindex modelling
+@cindex computer vision
+
+Manchester, despite being better known for its football teams, is the location
+of the Dept. of Imaging Science and Biomedical Engineering, at the University
+of Manchester. The mul library was written by members of the department.
+
+The department specialises (amongst other things) in model based computer
+vision. This roughly means the designing of statistical models which
+represent features in those images, means of training these models from
+real images, and the extracting of information from test images using
+these models.
+
+@section VXL
+
+The mul libraries are build on VXL.
+
+@section Documentation
+@cindex book
+@cindex documentation, monolithic
+The mul documentation comes in two main forms: this book, and structured
+comments in the source code, which are automatically extracted.  The book
+is intended to be a single reference, where all the high-level
+documentation resides.
+
+@subsection The mul Book
+
+The book (in subdirectory @code{mul/doc/book}) is a human-written collection of VXL
+documentation, suitable for printing.  It is intended to be readable as an
+introduction to the various facilities provided by the mul libraries,
+and to be browsable as a first source of examples and tips.
+
+@subsection Automatically generated documentation
+@cindex documentation, automatically generated
+@cindex doxygen
+
+Although the human-written mul book is the first source, the definitive
+authority on what a class or function does must be the source code
+comments.  The book will give a high-level description of the most
+important and commonly-used features of a class, but the source code
+contains the details.  In order to make these details easier to scan, the
+mul source files contain specially structured comments, which can be
+scanned by the @emph{Doxygen} program and converted into an attractive
+hyperlinked reference.
+
+An example of what the syntax for documentation looks like can be found
+in @code{vxl/doc/vxl_doc_rules.[h,cxx]}, but briefly a comment line which
+begins with @code{//:} is documentation for the type, function, or
+variable which follows it.  For example
+
+@smallexample
+//: Brief description of my_class
+class my_class @{
+  //: \brief Brief description, the long one is in the .cxx file
+  my_class();
+@};
+@end smallexample
+
+You can find the doxygen output at
+@uref{http://paine.wiau.man.ac.uk/pub/doc_vxl/index.html, The VXL Documentation site}.
+
+@section The Design and Evolution of mul
+
+Design goals:
+
+@itemize @bullet
+@item Cross platform
+
+@item Flexible --- allow heavy use of strategy patterns
+
+@item uniform naming -- of course.
+@end itemize
+
+Large parts of MUL came from RADIAL a C++ Computer Vision Library developed at
+Manchester. Tim Cootes and Ian Scott were principally responsible for this
+conversion and the design of the rest.

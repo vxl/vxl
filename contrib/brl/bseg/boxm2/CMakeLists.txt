@@ -1,4 +1,7 @@
-# contrib/brl/bseg/boxm/CMakeLists.txt
+# contrib/brl/bseg/boxm2/CMakeLists.txt
+doxygen_add_book(contrib/brl/bseg/boxm2 "BOXM2 overview documentation")
+doxygen_add_package(contrib/brl/bseg/boxm2 "BOXM2 Library")
+
 INCLUDE( ${BRL_MODULE_PATH}/FindEXPAT.cmake )
 IF(EXPAT_FOUND)
 
