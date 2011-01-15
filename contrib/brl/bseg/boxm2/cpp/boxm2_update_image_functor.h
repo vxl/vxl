@@ -5,6 +5,7 @@
 #include <boxm2/cpp/boxm2_cast_ray_function.h>
 #include <boxm2/cpp/boxm2_mog3_grey_processor.h>
 #include <vcl_limits.h>
+#include <vcl_cmath.h>
 
 #ifdef DEBUG
 #include <vcl_iostream.h>
@@ -105,12 +106,12 @@ class boxm2_update_pass2_functor
       float mean_obs=aux[1]/aux[0];
       float PI=boxm2_data_traits<BOXM2_MOG3_GREY>::processor::prob_density(mog3_data_->data()[index], mean_obs);
 
-      //if(PI==vcl_numeric_limits<float>::infinity())
+      //if (PI==vcl_numeric_limits<float>::infinity())
       float vis=(*vis_img_)(i,j);
       float pre=(*pre_img_)(i,j);
       boxm2_data<BOXM2_ALPHA>::datatype alpha=alpha_data_->data()[index];
       float omega=(1-vcl_exp(-seg_len*alpha));
-      if((*norm_img_)(i,j)>1e-10f)
+      if ((*norm_img_)(i,j)>1e-10f)
       {
           aux[2]+=((pre+vis*PI)/((*norm_img_)(i,j))*seg_len);
           aux[3]+=vis*seg_len;
@@ -120,7 +121,6 @@ class boxm2_update_pass2_functor
       (*vis_img_)(i,j)=vis;
       (*pre_img_)(i,j)=pre;
       return true;
-
   }
  private:
   boxm2_data<BOXM2_AUX> * aux_data_;
@@ -143,7 +143,7 @@ class boxm2_update_data_functor
       alpha_data_=new boxm2_data<BOXM2_ALPHA>(datas[1]->data_buffer(),datas[1]->buffer_length(),datas[1]->block_id());
       mog3_data_=new boxm2_data<BOXM2_MOG3_GREY>(datas[2]->data_buffer(),datas[2]->buffer_length(),datas[2]->block_id());
       nobs_data_=new boxm2_data<BOXM2_NUM_OBS>(datas[3]->data_buffer(),datas[3]->buffer_length(),datas[3]->block_id());
-      alpha_min_ = -log(1.0-0.0001)/(block_len/max_levels);
+      alpha_min_ = -vcl_log(1.0-0.0001)/(block_len/max_levels);
 
       return true;
   }
@@ -151,10 +151,10 @@ class boxm2_update_data_functor
   {
       boxm2_data<BOXM2_AUX>::datatype & aux=aux_data_->data()[index];
 
-      if(aux[0]>1e-8f)
+      if (aux[0]>1e-8f)
       {
         float beta=aux[2]/aux[0];
-       // vcl_cout<<beta<<" ";
+       // vcl_cout<<beta<<' ';
         float vis =aux[3]/aux[0];
         float mean_obs=aux[1]/aux[0];
 
@@ -178,11 +178,10 @@ class boxm2_update_data_functor
         aux[1]=0.0;
         aux[2]=0.0;
         aux[3]=0.0;
-
       }
       return true;
   }
-private:
+ private:
     boxm2_data<BOXM2_AUX>       * aux_data_;
     boxm2_data<BOXM2_ALPHA>     * alpha_data_;
     boxm2_data<BOXM2_MOG3_GREY> * mog3_data_;
