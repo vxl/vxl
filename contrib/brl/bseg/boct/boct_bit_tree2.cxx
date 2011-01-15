@@ -196,6 +196,25 @@ int boct_bit_tree2::depth_at(int index) const
 }
 
 
+//: gets and sets buffer pointers (located at bytes 11 and 12
+int boct_bit_tree2::get_buffer_ptr() 
+{
+  unsigned char hi = this->bits_[10]; 
+  unsigned char lo = this->bits_[11]; 
+  unsigned short value = (unsigned short) ((hi << 8) | lo);
+  return (int) value; 
+}
+int boct_bit_tree2::set_buffer_ptr(int ptr)
+{
+  unsigned char hi = (unsigned char)(ptr >> 8);
+  unsigned char lo = (unsigned char)(ptr & 255);
+  this->bits_[10] = hi; 
+  this->bits_[11] = lo; 
+}
+//int boct_bit_tree2::get_data_ptr(); 
+//int boct_bit_tree2::set_data_ptr(int ptr); 
+
+
 //------ I/O ----------------------------------------------------------
 vcl_ostream& operator <<(vcl_ostream &s, boct_bit_tree2 &t)
 {

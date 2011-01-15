@@ -53,11 +53,18 @@ class boct_bit_tree2
 
   //: returns value (0 or 1) of bit at given index (0,73);
   unsigned char bit_at(int index);
+  
   //: sets bit at given index with bool value
   void set_bit_at(int index, bool val);
 
   //get bits and data
   unsigned char* get_bits() {return bits_; }
+
+  //: sets and gets pointers stored in bits 10, 11, 12, 13
+  int get_buffer_ptr(); 
+  int set_buffer_ptr(int ptr); 
+  int get_data_ptr(); 
+  int set_data_ptr(int ptr); 
 
  private:
 
