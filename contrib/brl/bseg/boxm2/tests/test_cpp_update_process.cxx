@@ -22,7 +22,6 @@
 #include <boxm2/cpp/boxm2_cpp_processor.h>
 #include <boxm2/cpp/boxm2_cpp_update_process.h>
 #include <boxm2/cpp/boxm2_cpp_render_process.h>
-#include <boxm2/basic/boxm2_block_id.h>
 #include <boxm2/ocl/boxm2_opencl_processor.h>
 #include <boxm2/ocl/boxm2_opencl_render_process.h>
 #include <boxm2/ocl/boxm2_opencl_update_process.h>
@@ -37,8 +36,8 @@ void test_cpp_update_process()
     vil_image_view<float> * inimg=new  vil_image_view<float>(8,8);
     brdb_value_sptr brdb_inimg = new brdb_value_t<vil_image_view_base_sptr>(inimg);
 
-    for(unsigned i=0;i<inimg->ni();i++)
-        for(unsigned j=0;j<inimg->nj();j++)
+    for (unsigned i=0;i<inimg->ni();i++)
+        for (unsigned j=0;j<inimg->nj();j++)
             (*inimg)(i,j)=(float)i/(float)inimg->ni();
 
     boxm2_scene_sptr scene = new boxm2_scene(scene_file);
@@ -71,9 +70,8 @@ void test_cpp_update_process()
     cpp_pro.finish();
 
     vcl_cout<<"Time taken is :" <<t.all()<<vcl_endl;
-  }
-  vpl_unlink(scene_file.c_str());
-  vcl_string test_dir  = testlib_root_dir()+ "/contrib/brl/bseg/boxm2/tests/";
+
+    vpl_unlink(scene_file.c_str());
 }
 
 
