@@ -109,7 +109,9 @@ bool bvxm_create_synth_lidar_data_process(bprb_func_process& pro)
   vil_image_view_base_sptr lidar_img;
   vpgl_camera_double_sptr lidar_cam;
   vcl_vector<vgl_box_3d<double> > boxes;
-  bvxm_util::generate_test_boxes<double>(minx, miny, minz, dimx, dimy, dimz, v_dimx, v_dimy, v_dimz, boxes);
+  bvxm_util::generate_test_boxes((double)minx, (double)miny, (double)minz,
+                                 (double)dimx, (double)dimy, (double)dimz,
+                                 (double)v_dimx, (double)v_dimy, (double)v_dimz, boxes);
   gen_lidar_view(v_dimx, v_dimy, v_dimz, boxes, lidar_img, lidar_cam, lvcs);
 
   pro.set_output_val<vil_image_view_base_sptr>(0, lidar_img);
