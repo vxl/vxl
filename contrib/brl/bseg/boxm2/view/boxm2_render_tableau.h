@@ -34,6 +34,8 @@
 #include <boxm2/ocl/boxm2_opencl_render_process.h>
 #include <boxm2/ocl/boxm2_opencl_update_process.h>
 #include <boxm2/ocl/boxm2_opencl_refine_process.h>
+
+#include <boxm2/ocl/boxm2_opencl_change_detection_process.h>
 #include <boxm2/cpp/boxm2_cpp_processor.h>
 #include <boxm2/cpp/boxm2_cpp_refine_process.h>
 #include <boxm2/io/boxm2_dumb_cache.h>
@@ -77,6 +79,7 @@ class boxm2_render_tableau : public boxm2_cam_tableau
   //: cpp processor for testing refine
   boxm2_cpp_processor      cpp_pro_;
   boxm2_cpp_refine_process refine_;
+  boxm2_opencl_change_detection_process change_;
 
   //: Boxm2 Scene
   boxm2_scene_sptr scene_;
@@ -92,7 +95,8 @@ class boxm2_render_tableau : public boxm2_cam_tableau
 
   //: update count, 
   bool do_update_;
-  int update_count_;     
+  int update_count_; 
+  int change_count_; 
   vnl_random rand;
 
   //--Render, update, refine, save helper methods ------------------------------
@@ -100,6 +104,7 @@ class boxm2_render_tableau : public boxm2_cam_tableau
   float render_frame();
   float update_frame(); 
   float refine_model();
+  float change_frame();
   bool save_model(); 
 
   //-- HELPER INIT Methods and vars---------------------------------------------
@@ -107,6 +112,7 @@ class boxm2_render_tableau : public boxm2_cam_tableau
   cl_context create_clgl_context();
   bool init_clgl();
   bool do_init_ocl;
+  bool do_change_;
 };
 
 //: declare smart pointer
