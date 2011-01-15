@@ -881,6 +881,168 @@ SOURCE=.\sparse/spSolve.c
 # Begin Source File
 SOURCE=.\sparse/spUtils.c
 # End Source File
+# Begin Source File
+SOURCE=.\lapack/complex16/zlaswp.c
+# End Source File
+# Begin Source File
+SOURCE=.\arpack/dsaupd.c
+# End Source File
+# Begin Source File
+SOURCE=.\arpack/dsaitr.c
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/complex16/zgges.c
+# End Source File
+# Begin Source File
+SOURCE=.\arpack/dsconv.c
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/complex16/zgeqr2.c
+# End Source File
+# Begin Source File
+SOURCE=.\arpack/debug_com.c
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/complex16/zgeqrf.c
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/double/dlanst.c
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/complex16/zggbak.c
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/complex16/ztgsen.c
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/double/dlaruv.c
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/complex16/ztgex2.c
+# End Source File
+# Begin Source File
+SOURCE=.\arpack/timing_com.c
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/util/izmax1.c
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/complex16/zgesc2.c
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/complex16/ztrsyl.c
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/complex16/zlatdf.c
+# End Source File
+# Begin Source File
+SOURCE=.\blas/zgeru.c
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/complex16/zgghrd.c
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/complex16/zlartg.c
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/double/dsteqr.c
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/double/dlarnv.c
+# End Source File
+# Begin Source File
+SOURCE=.\arpack/dsortr.c
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/complex16/ztgexc.c
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/double/dlasrt.c
+# End Source File
+# Begin Source File
+SOURCE=.\arpack/dsaup2.c
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/complex16/zgetc2.c
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/complex16/zhgeqz.c
+# End Source File
+# Begin Source File
+SOURCE=.\arpack/dstqrb.c
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/complex16/zunmqr.c
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/complex16/ztrsen.c
+# End Source File
+# Begin Source File
+SOURCE=.\arpack/dseigt.c
+# End Source File
+# Begin Source File
+SOURCE=.\arpack/dsesrt.c
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/complex16/zggbal.c
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/complex16/ztgsyl.c
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/complex16/zdrscl.c
+# End Source File
+# Begin Source File
+SOURCE=.\arpack/dstats.c
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/double/dlasr.c
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/complex16/zgecon.c
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/complex16/zgees.c
+# End Source File
+# Begin Source File
+SOURCE=.\arpack/dsapps.c
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/complex16/zrot.c
+# End Source File
+# Begin Source File
+SOURCE=.\libf2c/pow_zi.c
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/double/dzsum1.c
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/complex16/ztrexc.c
+# End Source File
+# Begin Source File
+SOURCE=.\arpack/dsgets.c
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/complex16/ztgsy2.c
+# End Source File
+# Begin Source File
+SOURCE=.\arpack/dseupd.c
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/double/dlae2.c
+# End Source File
+# Begin Source File
+SOURCE=.\arpack/dgetv0.c
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/complex16/zunm2r.c
+# End Source File
+# Begin Source File
+SOURCE=.\arpack/second.c
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/complex16/zlacn2.c
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h"
@@ -889,9 +1051,6 @@ SOURCE=.\v3p_f2c.h
 # End Source File
 # Begin Source File
 SOURCE=.\triangle.h
-# End Source File
-# Begin Source File
-SOURCE=.\f2c.h
 # End Source File
 # Begin Source File
 SOURCE=.\v3p_f2c_mangle.h
@@ -1390,6 +1549,387 @@ SOURCE=.\blas/slamch.h
 # End Source File
 # Begin Source File
 SOURCE=.\datapac/camsun.h
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/double/dlarnv.h
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/complex16/zgetc2.h
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/double/dgesc2.h
+# End Source File
+# Begin Source File
+SOURCE=.\sparse/spDefs.h
+# End Source File
+# Begin Source File
+SOURCE=.\arpack/dsaitr.h
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/complex16/ztgsyl.h
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/double/dorg2r.h
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/double/dlacpy.h
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/double/dgecon.h
+# End Source File
+# Begin Source File
+SOURCE=.\arpack/dsaupd.h
+# End Source File
+# Begin Source File
+SOURCE=.\arpack/stat.h
+# End Source File
+# Begin Source File
+SOURCE=.\sparse/spMatrix.h
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/double/dlanhs.h
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/double/dorgr2.h
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/double/dlacon.h
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/complex16/zgges.h
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/double/dlassq.h
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/double/dlarfg.h
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/complex16/zhgeqz.h
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/double/dlasrt.h
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/double/dtgsyl.h
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/double/dgges.h
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/single/sorg2r.h
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/complex16/zgghrd.h
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/complex16/zggbal.h
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/single/slaset.h
+# End Source File
+# Begin Source File
+SOURCE=.\toms/rpoly.h
+# End Source File
+# Begin Source File
+SOURCE=.\arpack/dsaup2.h
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/single/slarf.h
+# End Source File
+# Begin Source File
+SOURCE=.\arpack/dsesrt.h
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/double/dhgeqz.h
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/double/dlae2.h
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/double/dorgqr.h
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/double/dsptrs.h
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/complex16/zgesc2.h
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/single/slartg.h
+# End Source File
+# Begin Source File
+SOURCE=.\arpack/dseupd.h
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/double/dlag2.h
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/double/dgetc2.h
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/double/dzsum1.h
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/single/slags2.h
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/single/sggsvd.h
+# End Source File
+# Begin Source File
+SOURCE=.\arpack/dseigt.h
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/single/slapy2.h
+# End Source File
+# Begin Source File
+SOURCE=.\sparse/spConfig.h
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/single/sormr2.h
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/complex16/ztrsen.h
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/double/dggbal.h
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/complex16/ztrsyl.h
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/util/izmax1.h
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/double/dsteqr.h
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/single/slas2.h
+# End Source File
+# Begin Source File
+SOURCE=.\arpack/debug.h
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/double/dlaset.h
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/double/dormr2.h
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/double/dlascl.h
+# End Source File
+# Begin Source File
+SOURCE=.\arpack/dsapps.h
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/double/dlasr.h
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/complex16/zlatdf.h
+# End Source File
+# Begin Source File
+SOURCE=.\arpack/dsconv.h
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/complex16/ztgex2.h
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/complex16/zgecon.h
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/double/dormqr.h
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/complex16/ztgsen.h
+# End Source File
+# Begin Source File
+SOURCE=.\arpack/dstats.h
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/complex16/zdrscl.h
+# End Source File
+# Begin Source File
+SOURCE=.\mathews/simpson.h
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/complex16/zunm2r.h
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/single/sgeqr2.h
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/double/dlaruv.h
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/double/dgeqrf.h
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/double/dorm2r.h
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/double/dlasv2.h
+# End Source File
+# Begin Source File
+SOURCE=.\blas/zgeru.h
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/complex16/zlartg.h
+# End Source File
+# Begin Source File
+SOURCE=.\arpack/second.h
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/complex16/zggbak.h
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/complex16/zrot.h
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/single/slasv2.h
+# End Source File
+# Begin Source File
+SOURCE=.\arpack/dgetv0.h
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/complex16/ztgexc.h
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/double/dgghrd.h
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/double/dsptrf.h
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/double/drscl.h
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/single/slacpy.h
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/single/slapll.h
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/double/dlarft.h
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/double/dtgexc.h
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/single/sorm2r.h
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/double/dtgsy2.h
+# End Source File
+# Begin Source File
+SOURCE=.\arpack/dstqrb.h
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/complex16/zgeqr2.h
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/complex16/zlacn2.h
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/double/dlatdf.h
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/single/sgerq2.h
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/double/dgerq2.h
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/complex16/ztgsy2.h
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/single/slange.h
+# End Source File
+# Begin Source File
+SOURCE=.\arpack/dsgets.h
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/single/slarfg.h
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/complex16/zgeqrf.h
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/single/sgeqpf.h
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/single/sggsvp.h
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/complex16/ztrexc.h
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/double/dlanst.h
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/double/dlange.h
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/single/stgsja.h
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/double/dlaswp.h
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/double/dtgsen.h
+# End Source File
+# Begin Source File
+SOURCE=.\mathews/adaquad.h
+# End Source File
+# Begin Source File
+SOURCE=.\arpack/dsortr.h
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/double/dlartg.h
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/double/dlarfb.h
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/complex16/zunmqr.h
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/double/dlarf.h
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/complex16/zlaswp.h
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/single/slapmt.h
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/double/dgeqr2.h
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/double/dspr.h
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/single/slassq.h
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/double/dlaev2.h
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/double/dggbak.h
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/complex16/zgees.h
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/double/dlagv2.h
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/double/dlatrs.h
+# End Source File
+# Begin Source File
+SOURCE=.\mathews/trapezod.h
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/double/dtgex2.h
 # End Source File
 # End Group
 # End Target
