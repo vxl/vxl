@@ -25,7 +25,7 @@ bool boxm2_opencl_update_process::init_kernel(cl_context* context,
   context_ = context;
 
   vcl_vector<vcl_string> src_paths;
-  vcl_string source_dir = vcl_string(VCL_SOURCE_ROOT_DIR) + "/contrib/brl/bseg/boxm2/cl/";
+  vcl_string source_dir = vcl_string(VCL_SOURCE_ROOT_DIR) + "/contrib/brl/bseg/boxm2/ocl/cl/";
   src_paths.push_back(source_dir + "scene_info.cl");
   src_paths.push_back(source_dir + "cell_utils.cl");
   src_paths.push_back(source_dir + "bit/bit_tree_library_functions.cl");
