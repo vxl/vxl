@@ -74,3 +74,6 @@ book.info: $(SOURCEFILES)
 echo-%:
 	echo '$(@:echo-%=%)=$($(@:echo-%=%))'
 
+#removes html and dvi files
+clean: 
+	rm -f *.html *.aux *.cp *.dvi *.fn *.ky *.log *.pg *.tmp *.toc *.tp *.vr
