@@ -6,6 +6,8 @@ MINI_PROG_SOURCES += boxm2_convert_bit_scene.cxx
 MINI_PROG_SOURCES += boxm2_render_view.cxx
 MINI_PROG_SOURCES += boxm2_rep_scene.cxx
 MINI_PROG_SOURCES += boxm2_update_exe.cxx
+MINI_PROG_SOURCES += boxm2_cpp_update_main.cxx
+MINI_PROG_SOURCES += boxm2_cpp_render_main.cxx
 
 ################################
 include ${VXLROOT}/config/top.mk
