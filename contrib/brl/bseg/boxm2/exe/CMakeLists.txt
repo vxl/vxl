@@ -3,7 +3,11 @@ ADD_EXECUTABLE( boxm2_render_expected_exe
   boxm2_render_expected_exe.cxx
 )
 TARGET_LINK_LIBRARIES( boxm2_render_expected_exe boxm2 boxm2_basic boxm2_io sdet boxm2_ocl bocl vil_pro vpgl_pro vul )
-
+#executable to run a cpp change detection
+ADD_EXECUTABLE( boxm2_cpp_change_detection_exe
+  boxm2_cpp_change_detection_main.cxx
+)
+TARGET_LINK_LIBRARIES( boxm2_cpp_change_detection_exe boxm2 boxm2_basic boxm2_io sdet boxm2_cpp  vil_pro vpgl_pro vul )
 #executable to run a cpp update
 ADD_EXECUTABLE( boxm2_cpp_update_exe
   boxm2_cpp_update_main.cxx

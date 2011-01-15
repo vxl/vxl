@@ -5,6 +5,7 @@ SET(boxm2_cpp_sources
     boxm2_cpp_render_process.h    boxm2_cpp_render_process.cxx
     boxm2_cpp_update_process.h    boxm2_cpp_update_process.cxx
     boxm2_cpp_refine_process.h    boxm2_cpp_refine_process.cxx
+    boxm2_cpp_change_detection_process.h    boxm2_cpp_change_detection_process.cxx
     boxm2_cast_ray_function.h
     boxm2_render_exp_image_functor.h
     boxm2_update_image_functor.h
