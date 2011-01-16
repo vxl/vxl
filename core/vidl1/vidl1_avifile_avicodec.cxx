@@ -1,7 +1,6 @@
+#include "vidl1_avifile_avicodec.h"
 //:
 // \file
-
-#include "vidl1_avifile_avicodec.h"
 
 #include <avifile.h>
 #include <videodecoder.h>
@@ -192,7 +191,7 @@ vidl1_avicodec::seek(int frame_number) const
   moviestream_->SeekToPrevKeyFrame();
   int key_frame = moviestream_->GetPos();
   vcl_cout << "[vidl1_avicodec::seek] key frame " << key_frame
-           << "  -> uncompress " << frame_number-key_frame << " frames" << vcl_endl;
+           << "  -> decompress " << frame_number-key_frame << " frames" << vcl_endl;
   for (int i=key_frame; i<frame_number; ++i)
   {
     moviestream_->ReadFrame();

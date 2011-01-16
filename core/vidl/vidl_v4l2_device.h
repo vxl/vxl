@@ -141,7 +141,7 @@ class vidl_v4l2_device
   unsigned int  get_v4l2_format() const {
                return (fmt.fmt.pix.width!=0)?
                       fmt.fmt.pix.pixelformat:0;
-     }
+  }
 
   //: Return Image width in pixels.
   // \note You can use this function to know the width selected by driver after calling set_v4l2_format
@@ -165,13 +165,13 @@ class vidl_v4l2_device
   // \return the number of detected controls (control not disabled and not inactive).
   int n_controls() const { return controls_.size(); }
   //: Get control
-  // The user must downcast the pointer -depending on type- to use all funcionality.
+  // The user must downcast the pointer -depending on type- to use all functionality.
   // \param i indicates the control to be extracted, from 0 to n_controls-1
   // \return pointer to control
   // \see n_controls
   vidl_v4l2_control * get_control(int i) const { return controls_[i]; }
   //: Get control from driver id
-  // The user must downcast the pointer -depending on type- to use all funcionality.
+  // The user must downcast the pointer -depending on type- to use all functionality.
   // \param id is control ID from v4l2 specification. For example, V4L2_CID_BRIGHTNESS
   // \return pointer to control or 0 if does not exist
   vidl_v4l2_control * get_control_id(int id) const

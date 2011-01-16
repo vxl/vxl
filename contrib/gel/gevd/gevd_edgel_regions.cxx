@@ -231,15 +231,15 @@ gevd_edgel_regions::~gevd_edgel_regions()
     region_edges_.value()->UnProtect();
   }
 
-   if (edge_boundary_array_)
-     for (y = yo_; y<=yend_; y++)
-     {
-       for (x = xo_; x<=xend_; x++)
-         if (edge_boundary_array_[Y(y)][X(x)])
-           edge_boundary_array_[Y(y)][X(x)]->UnProtect();
-       delete [] edge_boundary_array_[Y(y)];
-     }
-   delete [] edge_boundary_array_;
+  if (edge_boundary_array_)
+    for (y = yo_; y<=yend_; y++)
+    {
+      for (x = xo_; x<=xend_; x++)
+        if (edge_boundary_array_[Y(y)][X(x)])
+          edge_boundary_array_[Y(y)][X(x)]->UnProtect();
+      delete [] edge_boundary_array_[Y(y)];
+    }
+  delete [] edge_boundary_array_;
 
   for (region_edge_adjacency_.reset(); region_edge_adjacency_.next();)
     delete region_edge_adjacency_.value();
@@ -780,8 +780,8 @@ bool gevd_edgel_regions::InitRegionArray(vcl_vector< vtol_edge_2d_sptr>& sg)
     ubuf_ = new unsigned char[sizex];
     break;
    case 2:     // Grey scale image with an unsigned short per pixel
-     sbuf_ = new unsigned short[sizex];
-     break;
+    sbuf_ = new unsigned short[sizex];
+    break;
    default:
     vcl_cout<<"In vtol_intensity_face::get_intensity(): bytes/pixel not 1 or 2\n";
   }
@@ -1243,8 +1243,8 @@ static bool reg_edges_neq(gevd_region_edge* r1, gevd_region_edge* r2)
 // A collision is defined by the condition where a region is bounded
 // by two different edges at adjacent pixels without crossing a vertex.
 // This can happen since boundary positions are sub-pixel and region
-// definition is at pixel granularity.  The edge collison causes a needed
-// edge to be superseeded.
+// definition is at pixel granularity.  The edge collision causes a needed
+// edge to be superseded.
 void gevd_edgel_regions::print_edge_colis(unsigned int x, unsigned int y,
                                           gevd_region_edge* r1, gevd_region_edge* r2)
 {

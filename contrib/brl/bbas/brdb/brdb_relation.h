@@ -9,6 +9,7 @@
 //
 // \verbatim
 //  Modifications
+//   <none yet>
 // \endverbatim
 //
 // updated by Yong Zhao
@@ -37,14 +38,14 @@ class brdb_relation : public vbl_ref_count
 
   //: Constructor - create an empty relation but define the columns
   brdb_relation( const vcl_vector<vcl_string>& names,
-                     const vcl_vector<vcl_string>& types );
+                 const vcl_vector<vcl_string>& types );
 
   //: Constructor - create a relation populated with tuples
-  //  If types are not provided they will be infered from the tuples.
+  //  If types are not provided they will be inferred from the tuples.
   //  All tuples must have the same types and arity.
   brdb_relation( const vcl_vector<vcl_string>& names,
-                     const vcl_vector<brdb_tuple_sptr>& tuples,
-                     const vcl_vector<vcl_string>& types = vcl_vector<vcl_string>() );
+                 const vcl_vector<brdb_tuple_sptr>& tuples,
+                 const vcl_vector<vcl_string>& types = vcl_vector<vcl_string>() );
 
   // Destructor
   virtual ~brdb_relation();

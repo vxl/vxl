@@ -20,10 +20,9 @@ class rgrl_feature_trace_pt
  public:
   typedef vcl_vector<rgrl_feature_sptr >  feature_vector;
 
- public:
   //: Constructor
   //  should not be used by anything other than the reader.
-  //  use the other constructors insead.
+  //  use the other constructors instead.
   // rgrl_feature_trace_pt();
 
   //:  Constructor to initialize feature_trace_pt location.

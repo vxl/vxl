@@ -57,7 +57,7 @@ vil_gauss_filter_5tap_params::vil_gauss_filter_5tap_params(double val_sigma)
 // If you want just a normal gaussian, set diff to 0.
 // \param sd The width of the gaussian.
 //
-// The taps will be calculated using the itegeral of the above equation over
+// The taps will be calculated using the integral of the above equation over
 // the pixel width. However, aliasing will reduce the meaningfulness of
 // your filter when sd << (diff+1). In most applications you will
 // want filter.size() ~= sd*7, which will avoid significant truncation,

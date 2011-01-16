@@ -1,10 +1,9 @@
 // This is bocl_utils.h
 #ifndef bocl_utils_h
 #define bocl_utils_h
-
 //:
 // \file
-// \brief  Util fucntions
+// \brief  Util functions
 // \author Vishal Jain vj@lems.brown.edu
 // \date  May 30, 2010
 //

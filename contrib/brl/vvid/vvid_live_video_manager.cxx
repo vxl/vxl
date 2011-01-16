@@ -108,7 +108,7 @@ void vvid_live_video_manager::init()
   grid->add_at(viewer, cam, 1);
   }
 
-  // get the camera paramaters from the last camera (assume are are the same)
+  // get the camera parameters from the last camera (assume are are the same)
   cp_ = vtab->get_camera_params();
 
   // put the grid in a shell

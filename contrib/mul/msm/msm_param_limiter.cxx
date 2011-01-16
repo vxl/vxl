@@ -1,9 +1,9 @@
+#include "msm_param_limiter.h"
 //:
 // \file
 // \author Tim Cootes
 // \brief Base for objects with apply limits to parameters
 
-#include "msm_param_limiter.h"
 #include <vsl/vsl_indent.h>
 #include <vsl/vsl_binary_loader.h>
 #include <mbl/mbl_cloneables_factory.h>
@@ -44,7 +44,7 @@ void msm_param_limiter::config_from_stream(vcl_istream &is)
 
 
 //=======================================================================
-//: Create a conrete msm_param_limiter-derived object, from a text specification.
+//: Create a concrete msm_param_limiter-derived object, from a text specification.
 vcl_auto_ptr<msm_param_limiter> msm_param_limiter::create_from_stream(vcl_istream &is)
 {
   vcl_string name;

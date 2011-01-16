@@ -8,13 +8,13 @@
 // Algorithms to compute projective transformations require that
 // the data be conditioned by insuring that the center of gravity
 // of the point (line) set is at the origin and the standard deviation
-// is isotropic and unity. 
+// is isotropic and unity.
 //
-// The isotropic flag determines if a principal axis computation is 
-// done to ansiotropically scale the points along the principal axes.
-// If isotropic == true then points are scaled so that the average 
-// point radius with respect to the center of mass is unity.  
-// If isotropic = false then the points are rotated and radii scaled 
+// The isotropic flag determines if a principal axis computation is
+// done to anisotropically scale the points along the principal axes.
+// If isotropic == true then points are scaled so that the average
+// point radius with respect to the center of mass is unity.
+// If isotropic = false then the points are rotated and radii scaled
 // according to the standard deviations along the principal axes.
 //
 // \verbatim
@@ -25,7 +25,7 @@
 //                  with the perpendicular line from the origin.
 //   Jun 23, 2003 - Peter Vanroose - added compute_from_points_and_lines()
 //   Jun 17, 2005 - J.L. Mundy - added anisotropic scaling
-//   Sep 27, 2007 - Ricardo Fabbri - isotropic scaling set to sqrt(2) factor 
+//   Sep 27, 2007 - Ricardo Fabbri - isotropic scaling set to sqrt(2) factor
 // \endverbatim
 
 #include <vnl/vnl_matrix_fixed.h>
@@ -56,7 +56,7 @@ class vgl_norm_trans_2d: public vgl_h_matrix_2d<T>
                            bool isotropic = true);
   bool compute_from_lines(vcl_vector<vgl_homg_line_2d<T>  > const& lines,
                           bool isotropic = true);
-  bool 
+  bool
     compute_from_points_and_lines(vcl_vector<vgl_homg_point_2d<T> > const& pts,
                                   vcl_vector<vgl_homg_line_2d<T> > const& lines
                                   , bool isotropic = true);

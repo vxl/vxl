@@ -6,13 +6,13 @@
 // \file
 // \brief Rectangle in 2D space
 //
-//  The "width/abcissa" (long axis) of the rectangle is along p0-p1, p2-p3,
+//  The "width/abscissa" (long axis) of the rectangle is along p0-p1, p2-p3,
 //  the "height/ordinate" (short axis)  of the rectangle is along p1-p2, p3-p0.
 //
 // Note, a constructor from 3 vertices is also defined
 // The 3 vertices are to be defined in counterclockwise order,
 // with a 90 degree corner between p_c-p_abs and p_c-p_ord.
-//
+// \verbatim
 //              p3            p_ord        p2
 //               o ------------o------------o
 //               |             |            |
@@ -22,6 +22,7 @@
 //               |                          |
 //               o -------------------------o
 //               p0                         p1
+// \endverbatim
 //
 // \author François BERTEL
 // \date   2000-05-08

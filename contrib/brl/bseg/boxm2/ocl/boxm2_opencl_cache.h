@@ -31,11 +31,11 @@ class boxm2_opencl_cache
                        boxm2_scene* scene);
     ~boxm2_opencl_cache();
 
-    //: returns block poitner to block specified by ID
+    //: returns block pointer to block specified by ID
     bocl_mem* get_block(boxm2_block_id id);
     bocl_mem* get_loaded_tree_ptrs();
     bocl_mem* get_loaded_trees_per_buffer();
-    bocl_mem* get_loaded_mem_ptrs(); 
+    bocl_mem* get_loaded_mem_ptrs();
 
     //: get scene info in bocl_mem*
     bocl_mem* loaded_block_info() { return block_info_; }
@@ -68,7 +68,7 @@ class boxm2_opencl_cache
     bocl_mem* block_info_;
     bocl_mem* tree_ptrs_;
     bocl_mem* trees_per_buffer_;
-    bocl_mem* mem_ptrs_; 
+    bocl_mem* mem_ptrs_;
 
     //: dumb cache keeps one cached block, the last one used.
     bocl_mem* cached_block_;

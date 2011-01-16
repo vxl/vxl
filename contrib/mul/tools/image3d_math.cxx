@@ -136,7 +136,6 @@ class operand
   vimt3d_image_3d_of<int> image_3d_of_int_;
   double double_;
 
-
  public:
   enum operand_type_t {
     e_string,
@@ -320,34 +319,35 @@ class operand
   {
     switch (operand_type_)
     {
-     // Simple cases with types that deep copy by default.
-     case e_string:
-     case e_double:
-       return *this;
-     // Explicit deep copy.
-     case e_image_3d_of_double:
-     {
-       vimt3d_image_3d_of<double> im;
-       im.deep_copy(this->image_3d_of_double_);
-       return operand(im);
-     }
-     case e_image_3d_of_float:
-     {
-       vimt3d_image_3d_of<float> im;
-       im.deep_copy(this->image_3d_of_float_);
-       return operand(im);
-     }
-     case e_image_3d_of_int:
-     {
-       vimt3d_image_3d_of<int> im;
-       im.deep_copy(this->image_3d_of_int_);
-       return operand(im);
-     }
-     default:
-     {
-       vcl_ostringstream ss;
-       ss << "Unknown operand_type: " << operand_type_;
-       throw mbl_exception_abort(ss.str()); }
+      // Simple cases with types that deep copy by default.
+      case e_string:
+      case e_double:
+        return *this;
+      // Explicit deep copy.
+      case e_image_3d_of_double:
+      {
+        vimt3d_image_3d_of<double> im;
+        im.deep_copy(this->image_3d_of_double_);
+        return operand(im);
+      }
+      case e_image_3d_of_float:
+      {
+        vimt3d_image_3d_of<float> im;
+        im.deep_copy(this->image_3d_of_float_);
+        return operand(im);
+      }
+      case e_image_3d_of_int:
+      {
+        vimt3d_image_3d_of<int> im;
+        im.deep_copy(this->image_3d_of_int_);
+        return operand(im);
+      }
+      default:
+      {
+        vcl_ostringstream ss;
+        ss << "Unknown operand_type: " << operand_type_;
+        throw mbl_exception_abort(ss.str());
+      }
     }
     return operand();
   }
@@ -450,7 +450,7 @@ void help(opstack_t& )
   vcl_cout << "{ and }:  Braces - for debugging, have no side effects.\n"
            << "usage: eg. { { v1 v2 --op1 } v3 --op2 }\n"
            << "       The braces can be used to delineate all the operands used by the\n"
-           << "       operation preceeding the closing brace.\n\n"
+           << "       operation preceding the closing brace.\n\n"
            << "+name: identical to \"name --recall\"\n";
   vcl_exit(3);
 }
@@ -476,7 +476,7 @@ void close_brace__brace(opstack_t& s)
                   "      removing the closing brace following --del-stack, and its opening pair.\n";
     else if (brace_brace_re.find(args_so_far))
       vcl_cerr << "      You cannot have two closing braces next to each other, since closing\n"
-                  "      braces check the behaviour of the immediately preceeding operation.\n";
+                  "      braces check the behaviour of the immediately preceding operation.\n";
     vcl_cerr << "At \"" << args_so_far << "\"<-- HERE\n"
              << "Stack is:\n" << vsl_stream_summary(s);
     vcl_exit(1);

@@ -36,7 +36,7 @@ class boxm2_opencl_render_depth_process : public boxm2_opencl_process_base
 
     //0----- HACK STUFF TO GO SOMEWHERE ELSE ----------------------------------
 
-    //: command queue for thsi process.
+    //: command queue for this process.
     cl_command_queue command_queue_;
 
     //: cam method should go somewhere else, here for now

@@ -170,7 +170,7 @@ class bwm_video_corr_processor
                                vcl_vector<bool> const& mask_a,
                                vcl_vector<bool> const& mask_b);
 
-  //: find correpondences on frame_index_x, between two frames,a and b
+  //: find correspondences on frame_index_x, between two frames,a and b
   // It must be true that index_a < index_x < index_b
   // If use_lmq = true levenberg_marquardt is used to refine the correspondence
   // position otherwise the amoeba algorithm is used
@@ -214,7 +214,7 @@ void exhaustive_init(vnl_vector<double>& unknowns,
   //: video_path name
   vcl_string video_path_;
 
-   //: video_path name
+  //: video_path name
   vcl_string camera_path_;
 
   //: the list of corrs

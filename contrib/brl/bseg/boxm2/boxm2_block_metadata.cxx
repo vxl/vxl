@@ -3,7 +3,7 @@
 // \file
 #include <boxm2/boxm2_data_traits.h>
 
-//: Calculates the number of data cells alloctaed given max_mb
+//: Calculates the number of data cells allocated given max_mb
 long boxm2_block_metadata::num_data_cells()
 {
   const int MAX_BYTES    = this->max_mb_*1024*1024;
@@ -32,7 +32,7 @@ long boxm2_block_metadata::num_data_cells()
             <<"**************************************************\n";
     return 0;
   }
-  
+
   vcl_cout<<"Data, num buffers: "<<num_buffers<<vcl_endl;
   return num_buffers * BUFF_LENGTH;
 }

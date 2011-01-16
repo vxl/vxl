@@ -970,7 +970,7 @@ smooth_chain( vdgl_edgel_chain_sptr chain,
   }
 
   // We have num_pts-1 points in the regression object. We do a
-  // constrainted fit to make sure we interpolate the end vertex, and
+  // constrained fit to make sure we interpolate the end vertex, and
   // use this line for the final few edgel points.
   //
   if ( !reg.fit_constrained( chain->edgel(fit_end).x(),

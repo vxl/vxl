@@ -27,7 +27,7 @@ namespace bvpl_non_max_suppression_process_globals
 }
 
 //: process takes 4 inputs and has 1 outputs.
-// input[0]: The respose grid
+// input[0]: The response grid
 // input[1]: The id grid
 // input[2]: The vector of kernels
 // input[3]: Output grid path to hold suppressed response

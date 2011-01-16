@@ -41,7 +41,7 @@ bapl_lowe_keypoint::~bapl_lowe_keypoint()
   // This destructor does absolutely nothing
 }
 
-//: Accessor for the discriptor vector
+//: Accessor for the descriptor vector
 const vnl_vector_fixed<double,128>&
 bapl_lowe_keypoint::descriptor() const
 {
@@ -49,7 +49,7 @@ bapl_lowe_keypoint::descriptor() const
 }
 
 
-//: Mutator for the discriptor vector
+//: Mutator for the descriptor vector
 void
 bapl_lowe_keypoint::set_descriptor(const vnl_vector_fixed<double,128>& descriptor)
 {

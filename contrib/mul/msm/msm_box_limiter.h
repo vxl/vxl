@@ -36,7 +36,7 @@ class msm_box_limiter : public msm_param_limiter
 
   //: Set the limits so that a given proportion pass
   //  Where the parameters are described by a pdf, choose
-  //  limits so that on averate a proportion prop (in [0,1])
+  //  limits so that on average a proportion prop (in [0,1])
   //  are acceptable when using n_modes modes. If n_modes==0,
   //  then assume all available modes to be used.
   virtual void set_acceptance(double prop, unsigned n_modes=0);

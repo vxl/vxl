@@ -52,7 +52,7 @@ bool boxm_ray_statistics_process_cons(bprb_func_process& pro)
 //  * The distribution of "Omega" values where Omega = 1-e^( alpha x length )
 //  The following three outputs are no longer present:
 //  * The distribution of "Sigma" values where Sigma is the std_dev of
-//    the appearance model. (currenly implemented only for simple grey)
+//    the appearance model. (currently implemented only for simple grey)
 //  * The histogram of levels for leaves in the octree
 //  * The number of leaves in the tree
 //

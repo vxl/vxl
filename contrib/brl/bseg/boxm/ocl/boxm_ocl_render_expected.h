@@ -42,13 +42,13 @@ void boxm_opencl_ocl_scene_expected(boxm_ocl_scene &scene,
                                     vil_image_view<float> & mask,
                                     bool /*use_black_background*/ = false);
 
-//: fuinction to rerender views on adjacent frames
+//: function to rerender views on adjacent frames
 void boxm_ocl_scene_rerender(boxm_ocl_scene &scene,
                              vcl_vector<vcl_string> camfiles,
                              vcl_vector<vcl_string> imgfiles,
                              vcl_string out_dir);
-                             
-//: function to render bit scene 
+
+//: function to render bit scene
 void boxm_opencl_bit_scene_expected(boxm_ocl_bit_scene &scene,
                                     vpgl_camera_double_sptr cam,
                                     vil_image_view<float> &expected,

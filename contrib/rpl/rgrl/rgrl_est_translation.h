@@ -1,6 +1,5 @@
 #ifndef rgrl_est_translation_h_
 #define rgrl_est_translation_h_
-
 //:
 // \file
 // \author Charlene Tsai
@@ -17,7 +16,7 @@ class rgrl_est_translation
   //: Default constructor
   //
   // Does nothing. This constructor is adequate for algorithms that
-  // call \a estimate(.) fucntion only. An example of the algorithm is
+  // call \a estimate(.) function only. An example of the algorithm is
   // the rgrl_feature_based_registration.
   rgrl_est_translation(){}
 

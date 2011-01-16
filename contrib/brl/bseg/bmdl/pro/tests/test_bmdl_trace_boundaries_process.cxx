@@ -59,7 +59,7 @@ static void test_bmdl_trace_boundaries_process(int argc, char* argv[])
   }
 
   good = (boundaries.size()>0);
-  TEST("polygons are read successfuly", good ,true);
+  TEST("polygons are read successfully", good ,true);
 }
 
 TESTMAIN_ARGS(test_bmdl_trace_boundaries_process);

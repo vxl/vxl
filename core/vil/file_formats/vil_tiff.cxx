@@ -552,7 +552,7 @@ unsigned vil_tiff_image::size_block_i() const
 // For strips, the number of rows per strip can be larger
 // than the image length but data is only valid for the number of actual
 // image rows. For images with multiple strips, the last strip may be
-// cropped by the acutal number of image rows.
+// cropped by the actual number of image rows.
 unsigned vil_tiff_image::size_block_j() const
 {
   if (h_->tile_length.valid)

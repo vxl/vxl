@@ -10,7 +10,7 @@
 // \author J.L. Mundy
 //  October 5, 2010
 // \verbatim
-//  Modificationss
+//  Modifications
 //   Oct 7, 2010 - Peter Vanroose - Added the median
 // \endverbatim
 

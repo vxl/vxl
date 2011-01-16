@@ -20,7 +20,7 @@ class rgrl_trans_spline
  public:
   //: Constructor
   //  should not be used by anything other than reader
-  //  use the following two constructors insead.
+  //  use the following two constructors instead.
   rgrl_trans_spline(unsigned int dim = 0);
 
   //: Constructor

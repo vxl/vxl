@@ -70,7 +70,7 @@ class vil_j2k_nitf2_pyramid_image_resource : public vil_pyramid_image_resource
 
   //: Number of pyramid levels.
   // In principle, the number of levels is
-  // undefined since the j2k decoder can uncompress to any window size.
+  // undefined since the j2k decoder can decompress to any window size.
   // A reasonable strategy is to define the number of levels so that
   // the lowest scale produces a smallest image dimension of 1K pixels
   virtual unsigned nlevels() const;

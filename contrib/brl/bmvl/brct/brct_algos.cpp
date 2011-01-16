@@ -425,7 +425,7 @@ brct_algos::camera_translation(vnl_double_3x3 const & K,
     vgl_point_2d<double> P0(points_0[i][0],points_0[i][1]);
     //construct an image epipolar line through the epipole and p0
     vgl_line_segment_2d<double> seg(E, P0);
-    //get the appropiate distances
+    //get the appropriate distances
     double p0 = line_distance(seg, P0);
     vgl_point_2d<double> P1(points_1[i][0],points_1[i][1]);
     double p1 = line_distance(seg, P1);
@@ -455,7 +455,7 @@ double brct_algos::motion_constant(vnl_double_2 const& image_epipole,
   vgl_point_2d<double> Pi(p_i[0],p_i[1]);
   //construct an image epipolar line through the epipole and p_i
   vgl_line_segment_2d<double> seg(E, Pi);
-  //get the appropiate distances
+  //get the appropriate distances
   double k_i = line_distance(seg, Pi);
   vgl_point_2d<double> Pi1(p_i1[0],p_i1[1]);
   double k_i1 = line_distance(seg, Pi1);

@@ -81,7 +81,7 @@ class bwm_observer_mgr
   vcl_vector<bwm_corr_sptr> correspondences()
     {return corr_list_;}
 
-  //: Given a set of image-to-image correpondences, solve for the 3-d world point and adjust the cameras
+  //: Given a set of image-to-image correspondences, solve for the 3-d world point and adjust the cameras
   void adjust_camera_offsets();
 
   void find_terrain_points(vcl_vector<vgl_point_3d<double> >& points);

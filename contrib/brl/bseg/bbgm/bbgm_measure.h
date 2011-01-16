@@ -192,7 +192,7 @@ void measure(bbgm_image_of<dist_>& dimg,
 }
 
 //: measure a property (typically probability) requiring a tolerance.
-// The tolerance is defined by a minumum and maximum values
+// The tolerance is defined by a minimum and maximum values
 // For probability, min and max defines a square n-dimensional box over which
 // the probability density is integrated. This functor assumes that the same
 // box applies to the entire distribution image. An example is probability of

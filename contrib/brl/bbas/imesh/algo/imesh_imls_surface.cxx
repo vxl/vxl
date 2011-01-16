@@ -508,7 +508,7 @@ imesh_imls_surface::line_integrals(double k1, double k2, double& I1, double& Ix)
 
 
 //: integrals of f(x)dx and x*f(x)dx over [0,1] where f(x)= 1/((x+k1)^2 + k2)^2
-//  Also compute the integrals when f(x)=1/((x+k1)^2 + k2)^3 (for use in deriviatives)
+//  Also compute the integrals when f(x)=1/((x+k1)^2 + k2)^3 (for use in derivatives)
 //
 // Beta = atan( k1/sqrt(k2) ) - atan( (k1+1)/sqrt(k2) )
 // I1 = -Beta * 1/(2*k2^(3/2))  + (k2 - k1*(k1+1)) / (2*k2*(k1^2+k2)*((k1+1)^2+k2))

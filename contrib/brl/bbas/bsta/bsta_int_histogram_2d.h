@@ -14,7 +14,7 @@
 //  Note that the 2D version is lacking some of the 1D methods because it isn't obvious
 //    that they would be of any use for a 2D histogram
 //
-//  The 2D histogram is a special case useful for isolating simularly colored regions
+//  The 2D histogram is a special case useful for isolating similarly colored regions
 //    of an image.  Probably not very generally useful to the vxl community.  But here
 //    it is anyway
 //
@@ -27,7 +27,6 @@
 // \verbatim
 //  Modifications
 //   2007/04/23 Initial Version
-//
 // \endverbatim
 //-----------------------------------------------------------------------------
 

@@ -30,7 +30,7 @@
 //  as the maximum of the 3 widths.
 //
 //  The transformation model is similarity
-//  (translation+scaling+rotaion), estimated using the landmark center
+//  (translation+scaling+rotation), estimated using the landmark center
 //  location and 6 boundary points.
 //
 class rgrl_invariant_single_landmark

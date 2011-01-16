@@ -265,8 +265,8 @@ inline void vil_convert_cast(const vil_image_view_base_sptr&src, vil_image_view<
 {
 #define docase(T) \
    case T: \
-     vil_convert_cast( vil_image_view< typename vil_pixel_format_type_of<T >::component_type >(src), dest );\
-     break
+    vil_convert_cast( vil_image_view< typename vil_pixel_format_type_of<T >::component_type >(src), dest );\
+    break
 
   switch ( src->pixel_format() )
   {
@@ -301,8 +301,8 @@ inline void vil_convert_cast(const vil_image_view_base_sptr&src, vil_image_view<
     docase( VIL_PIXEL_FORMAT_COMPLEX_FLOAT );
     docase( VIL_PIXEL_FORMAT_COMPLEX_DOUBLE );
 
-    default:
-     ;
+   default:
+    ;
   }
 #undef docase
 }
@@ -484,7 +484,7 @@ inline void vil_convert_rgb_to_grey(const vil_image_view<rgbP >&src,
 // Pixel types can be different. Rounding will take place if appropriate.
 //
 // Default weights convert from linear RGB to CIE luminance assuming a
-// modern monitor.  See Charles Pontyon's Colour FAQ
+// modern monitor.  See Charles Poynton's Colour FAQ
 // http://www.poynton.com/ColorFAQ.html
 template <class inP, class outP>
 inline void vil_convert_planes_to_grey(const vil_image_view<inP>&src,
@@ -517,7 +517,7 @@ inline void vil_convert_stretch_range(const vil_image_view<T>& src,
   for (unsigned p = 0; p < src.nplanes(); ++p)
     for (unsigned j = 0; j < src.nj(); ++j)
       for (unsigned i = 0; i < src.ni(); ++i)
-         dest(i,j,p) = static_cast<vxl_byte>( b*( src(i,j,p)+ a ) );
+        dest(i,j,p) = static_cast<vxl_byte>( b*( src(i,j,p)+ a ) );
 }
 
 

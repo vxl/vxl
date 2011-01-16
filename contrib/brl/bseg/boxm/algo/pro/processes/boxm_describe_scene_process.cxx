@@ -47,7 +47,7 @@ bool boxm_describe_scene_process_cons(bprb_func_process& pro)
 // This process produces four outputs
 //  1) The distribution of "Omega" values where Omega = 1-e^( alpha x length )
 //  2) The distribution of "Sigma" values where Sigma is the std_dev of
-//     the appearance model. (currenly implemented only for simple grey)
+//     the appearance model. (currently implemented only for simple grey)
 //  3) The histogram of levels for leaves in the octree
 //  4) The number of leaves in the tree
 //

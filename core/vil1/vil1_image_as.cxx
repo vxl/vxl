@@ -80,7 +80,7 @@ bool convert_rgb_to_grey( const vil1_image& image, void* buf, int x0, int y0, in
       Inp g(scan[3*i+1]);
       Inp b(scan[3*i+2]);
       // Weights convert from linear RGB to CIE luminance assuming a
-      // modern monitor.  See Charles Pontyon's Colour FAQ
+      // modern monitor.  See Charles Poynton's Colour FAQ
       // http://www.inforamp.net/~poynton/notes/colour_and_gamma/ColorFAQ.html
       static_cast<Out*>(buf)[i + width*j] = Out(0.2125*r+0.7154*g+0.072*b);
       // This are the old NTSC weights.
@@ -153,7 +153,7 @@ bool convert_rgba_to_grey( const vil1_image& image, void* buf, int x0, int y0, i
       Inp g(scan[4*i+1]);
       Inp b(scan[4*i+2]);
       // Weights convert from linear RGB to CIE luminance assuming a
-      // modern monitor.  See Charles Pontyon's Colour FAQ
+      // modern monitor.  See Charles Poynton's Colour FAQ
       // http://www.inforamp.net/~poynton/notes/colour_and_gamma/ColorFAQ.html
       static_cast<Out*>(buf)[i + width*j] = Out(0.2125*r+0.7154*g+0.072*b);
       // This are the old NTSC weights.

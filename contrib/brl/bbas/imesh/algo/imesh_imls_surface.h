@@ -101,7 +101,7 @@ class imesh_imls_surface
   static void line_integrals(double k1, double k2, double& I1, double& Ix);
 
   //: integrals of f(x)dx and x*f(x)dx over [0,1] where f(x)= 1/((x+k1)^2 + k2)^2
-  //  Also compute the integrals when f(x)=1/((x+k1)^2 + k2)^3 (for use in deriviatives)
+  //  Also compute the integrals when f(x)=1/((x+k1)^2 + k2)^3 (for use in derivatives)
   static void line_integrals(double k1, double k2,
                              double& I1, double& Ix,
                              double& dI1, double& dIx, double& dIx2);

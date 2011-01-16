@@ -15,7 +15,7 @@
 //: Read a sequence of PODs from a stream.
 // This function will read through a stream, and store the text found to a string.
 // The function terminates correctly when it finds a matched closing brace,
-// Alternatively, if there was no openning brace, it will terminate at the end of a stream.
+// Alternatively, if there was no opening brace, it will terminate at the end of a stream.
 // Other conditions will cause an exception to be thrown, and the stream's fail bit to be set
 //
 // \throws mbl_exception_parse_error if unrecoverable parse error.

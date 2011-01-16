@@ -31,7 +31,7 @@ bmrf_epi_transform( double s0,
 
 
 //: Calculates a transformed epi_point
-// \param ep is the epipoint to trasform
+// \param ep is the epipoint to transform
 // \param t is the time step
 // \param update_all is a flag indicating whether or not to update all
 //        members of the bmrf_epi_point.  By default, only the \i s value is updated
@@ -43,7 +43,7 @@ bmrf_epi_transform( const bmrf_epi_point_sptr& ep,
 
 
 //: Calculates a transformed epi_seg
-// \param ep is the epipoint to trasform
+// \param ep is the epipoint to transform
 // \param t is the time step
 // \param update_all is a flag indicating whether or not to update all
 //        members of the bmrf_epi_seg.  By default, only the \i s values

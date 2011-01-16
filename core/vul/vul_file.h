@@ -11,9 +11,9 @@
 // \date   02 Nov 98
 //
 // \verbatim
-// Modifications
-// 981102 AWF Initial version.
-// PDA (Manchester) 21/03/2001: Tidied up the documentation
+//  Modifications
+//   981102 AWF Initial version.
+//   PDA (Manchester) 21/03/2001: Tidied up the documentation
 //   Feb.2002 - Peter Vanroose - brief doxygen comment placed on single line
 //   Jun.2003 - Ian Scott      - added support for '\' file separator to dos version
 // \endverbatim
@@ -43,7 +43,7 @@ struct vul_file
   }
 
   //: Make a writable directory, including any necessary parents.
-  // Returns true if successful, or if the directory alredy exists.
+  // Returns true if successful, or if the directory already exists.
   static bool make_directory_path(char const* filename);
   static bool make_directory_path(vcl_string const& filename) {
     return make_directory_path(filename.c_str());
@@ -120,7 +120,7 @@ struct vul_file
 #if defined(VCL_WIN32) && VXL_USE_WIN_WCHAR_T
 
   //: Return current working directory
-  //  This function is provided as an overloading 
+  //  This function is provided as an overloading
   static vcl_string get_cwd(char* /*dummy*/)
   { return get_cwd(); }
 
@@ -142,7 +142,7 @@ struct vul_file
   }
 
   //: Make a writable directory, including any necessary parents.
-  // Returns true if successful, or if the directory alredy exists.
+  // Returns true if successful, or if the directory already exists.
   static bool make_directory_path(wchar_t const* filename);
   static bool make_directory_path(std::wstring const& filename) {
     return make_directory_path(filename.c_str());
@@ -209,7 +209,6 @@ struct vul_file
   { return strip_extension(filename.c_str()); }
 
 #endif
-
 };
 
 inline bool vul_file_exists(char const *f) { return vul_file::exists(f); }

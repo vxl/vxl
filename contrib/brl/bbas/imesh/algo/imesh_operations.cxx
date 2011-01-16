@@ -88,54 +88,54 @@ void imesh_triangulate_face(const vcl_vector<vgl_point_2d<double> >& face_v,
   vcl_vector<bool> concave_vert(numv,false);
   vcl_list<unsigned int> remain;
   // determine the concavity of each polygon vertex
-  for(unsigned int i1=numv-2, i2=numv-1, i3=0; i3<numv; i1=i2, i2=i3++)
+  for (unsigned int i1=numv-2, i2=numv-1, i3=0; i3<numv; i1=i2, i2=i3++)
   {
-    concave_vert[i2] = ccw != (signed_angle(face_v[i2]-face_v[i1], 
+    concave_vert[i2] = ccw != (signed_angle(face_v[i2]-face_v[i1],
                                             face_v[i3]-face_v[i2]) > 0);
     remain.push_back(i3);
   }
-  
+
   typedef vcl_list<unsigned int>::iterator ritr;
   unsigned int remain_size = 0;
-  while(remain.size() > 2 && remain_size != remain.size()){
+  while (remain.size() > 2 && remain_size != remain.size()) {
     remain_size = remain.size();
     ritr curr = remain.end(), prev = --curr;
     --prev;
-    for(ritr next=remain.begin(); next!=remain.end(); prev=curr, curr=next++)
+    for (ritr next=remain.begin(); next!=remain.end(); prev=curr, curr=next++)
     {
-      if(concave_vert[*curr])
+      if (concave_vert[*curr])
         continue;
-        
+
       // test for an ear (a triangle completely contained in the polygon)
       bool inside = false;
-      for(ritr itr=remain.begin(); itr!=remain.end(); ++itr)
+      for (ritr itr=remain.begin(); itr!=remain.end(); ++itr)
       {
-        if(!concave_vert[*itr] || itr==curr || itr==prev || itr==next)
+        if (!concave_vert[*itr] || itr==curr || itr==prev || itr==next)
           continue;
         inside = vgl_triangle_test_inside(face_v[*prev].x(),face_v[*prev].y(),
                                           face_v[*curr].x(),face_v[*curr].y(),
                                           face_v[*next].x(),face_v[*next].y(),
                                           face_v[*itr ].x(),face_v[*itr ].y());
-        if(inside)
+        if (inside)
           break;
       }
-      if(inside)
+      if (inside)
         continue;
-      
+
       //found an ear, remove it
       tris.push_back(imesh_tri(face_i[*prev],face_i[*curr],face_i[*next]));
       remain.erase(curr);
-      if(remain.size() < 3)
+      if (remain.size() < 3)
         break;
-      
+
       // get the indices before previous and after next
       ritr pprev = prev;
-      if(pprev == remain.begin())
+      if (pprev == remain.begin())
         pprev = remain.end();
       --pprev;
       ritr nnext = next;
       ++nnext;
-      if(nnext == remain.end())
+      if (nnext == remain.end())
         nnext = remain.begin();
       // update the concavities
       vgl_vector_2d<double> v1 = face_v[*prev]-face_v[*pprev];
@@ -145,42 +145,40 @@ void imesh_triangulate_face(const vcl_vector<vgl_point_2d<double> >& face_v,
       concave_vert[*next] = ccw != (signed_angle(v2,v3) > 0);
       curr = prev;
       prev = pprev;
-      
     }
   }
-  
+
   // This case should never happen
-  if(remain_size == remain.size())
+  if (remain_size == remain.size())
     vcl_cout << "error: "<<remain.size()<<" vertices remaining and no more ears"<<vcl_endl;
 }
 
 
-//: Triangulate the faces of the mesh (in place) 
-//  Uses mesh geometry to handle noncovex faces 
+//: Triangulate the faces of the mesh (in place)
+//  Uses mesh geometry to handle nonconvex faces
 void
 imesh_triangulate_nonconvex(imesh_mesh& mesh)
 {
   const imesh_face_array_base& faces = mesh.faces();
   assert(mesh.vertices().dim() == 3);
   const imesh_vertex_array<3>& verts = mesh.vertices<3>();
-  
-  
+
   vcl_auto_ptr<imesh_face_array_base> tris_base(new imesh_regular_face_array<3>);
-  imesh_regular_face_array<3>* tris = 
+  imesh_regular_face_array<3>* tris =
       static_cast<imesh_regular_face_array<3>*> (tris_base.get());
   int group = -1;
   if (faces.has_groups())
     group = 0;
   for (unsigned int f=0; f<faces.size(); ++f) {
     const unsigned int numv = faces.num_verts(f);
-    if(numv == 3)
+    if (numv == 3)
     {
       tris->push_back(imesh_tri(faces(f,0),faces(f,1),faces(f,2)));
       continue;
     }
-    
+
     // find the best planar projection of the face
-    // to apply 2-d noncovex polygon triangulation
+    // to apply 2-d nonconvex polygon triangulation
     vnl_matrix<double> M(3,numv);
     vnl_vector<double> mean(3,0.0);
     for (unsigned i=0; i<numv; ++i)
@@ -199,7 +197,7 @@ imesh_triangulate_nonconvex(imesh_mesh& mesh)
     }
     vnl_svd<double> svd_M(M);
     vnl_matrix<double> P = svd_M.U().extract(3,2).transpose();
-    
+
     vcl_vector<vgl_point_2d<double> > face_v;
     vcl_vector<unsigned int> face_i;
     for (unsigned i=0; i<numv; ++i)
@@ -215,6 +213,6 @@ imesh_triangulate_nonconvex(imesh_mesh& mesh)
       tris->make_group(faces.groups()[group++].first);
     }
   }
-  
+
   mesh.set_faces(tris_base);
 }

@@ -60,7 +60,7 @@ class vpdfl_axis_gaussian : public vpdfl_pdf_base
   //  Computes gradient df/dx of f(x)=log(p(x)) at x.
   //  Result is vector of same dimensionality as x.
   virtual void gradient_logp(vnl_vector<double>& g,
-                        const vnl_vector<double>& x) const;
+                             const vnl_vector<double>& x) const;
 
   //: Create a sampler object on the heap
   // Caller is responsible for deletion.
@@ -72,7 +72,7 @@ class vpdfl_axis_gaussian : public vpdfl_pdf_base
   //: Compute nearest point to x which has a density above a threshold
   //  If log_p(x)>log_p_min then x unchanged.  Otherwise x is moved
   //  directly towards the mean (i.e. to the nearest plausible point using a
-  //  Mahalobis distance) until log_p(x)=log_p_min.
+  //  Mahalanobis distance) until log_p(x)=log_p_min.
   // \param x This may be modified to the nearest plausible position.
   // \param log_p_min lower threshold for log_p(x)
   virtual void nearest_plausible(vnl_vector<double>& x, double log_p_min) const;

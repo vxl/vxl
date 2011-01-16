@@ -22,22 +22,21 @@
 class msm_curve
 {
  private:
-   //: Name of this curve or boundary
-   vcl_string name_;
+  //: Name of this curve or boundary
+  vcl_string name_;
 
-   //: True if this is an open curve (else closed curve)
-   bool open_;
+  //: True if this is an open curve (else closed curve)
+  bool open_;
 
-   //: List of point indicies representing curve
-   vcl_vector<unsigned> index_;
+  //: List of point indices representing curve
+  vcl_vector<unsigned> index_;
  public:
   // Default Constructor
   msm_curve();
 
   //: Define as range of indices [lo,hi]
   msm_curve(unsigned lo, unsigned hi,
-           bool open=true, vcl_string name="");
-
+            bool open=true, vcl_string name="");
 
   // Destructor
   ~msm_curve() {}
@@ -61,10 +60,10 @@ class msm_curve
   //: Indicate if this is an open curve
   void set_open(bool b) { open_=b; }
 
-  //: List of point indicies representing curve
+  //: List of point indices representing curve
   vcl_vector<unsigned>& index() { return index_; }
 
-  //: List of point indicies representing curve
+  //: List of point indices representing curve
   const vcl_vector<unsigned>& index() const { return index_; }
 
   unsigned operator[](unsigned i) const
@@ -113,7 +112,7 @@ void vsl_print_summary(vcl_ostream& os,const msm_curve& c);
 //: Container for a set of curves
 class msm_curves : public vcl_vector<msm_curve>
 {
-public:
+ public:
   //: Default constructor
   msm_curves();
 
@@ -124,7 +123,7 @@ public:
   //: Parse parameters in stream
   //  Expects
   // \verbatim
-  // { 
+  // {
   //   curve: { name: Chin open: true indices: { 0 1 2 3 4 5 6 } }
   //   curve: { name: Nose open: false indices: { 11 : 15 } }
   // }
@@ -143,7 +142,6 @@ public:
 
   //: Read from text file
   bool read_text_file(const vcl_string& path);
-
 };
 
 //: Stream output operator

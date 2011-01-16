@@ -1,10 +1,9 @@
-// This is icam_ocl_utils.h
+// This is gel/mrc/vpgl/icam/icam_ocl/icam_ocl_utils.h
 #ifndef icam_ocl_utils_h
 #define icam_ocl_utils_h
-
 //:
 // \file
-// \brief  Util fucntions
+// \brief  Util functions
 // \author Vishal Jain vj@lems.brown.edu
 // \date  May 30, 2010
 //

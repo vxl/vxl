@@ -93,7 +93,7 @@ static void test_tangent_update()
 
   bvxm_world_params_sptr params = new bvxm_world_params;
 
-  // needs an lvcs, TO DO, intantiate lvcs with right paramaters
+  // needs an lvcs, TO DO, instantiate lvcs with right parameters
   bgeo_lvcs_sptr lvcs = new bgeo_lvcs();
   params->set_params(model_dir,grid_corner,grid_size,vox_len,lvcs);
 
@@ -357,8 +357,8 @@ static void test_tangent_update()
     cnt++;
     vgl_vector_3d<double> normal = (*pit).normal();
       //the vector in the tangent plane closest to mu
-   vgl_vector_3d<double> dirv = normalized(dir -dot_product(normal, dir)*normal);
-   vsum += dirv;
+    vgl_vector_3d<double> dirv = normalized(dir -dot_product(normal, dir)*normal);
+    vsum += dirv;
     double dp = dot_product(dir, dirv);
     vgl_point_3d<double> cp = vgl_closest_point((*pit), pline);
     vgl_vector_3d<double> dv = cp-pline;

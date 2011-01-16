@@ -1,9 +1,9 @@
+#include "msm_aligner.h"
 //:
 // \file
 // \author Tim Cootes
 // \brief Base for functions which calculate and apply 2D transformations
 
-#include "msm_aligner.h"
 #include <vsl/vsl_indent.h>
 #include <vsl/vsl_binary_loader.h>
 #include <mbl/mbl_cloneables_factory.h>
@@ -81,7 +81,7 @@ void msm_aligner::config_from_stream(vcl_istream &is)
 
 
 //=======================================================================
-//: Create a conrete msm_aligner-derived object, from a text specification.
+//: Create a concrete msm_aligner-derived object, from a text specification.
 vcl_auto_ptr<msm_aligner> msm_aligner::create_from_stream(vcl_istream &is)
 {
   vcl_string name;

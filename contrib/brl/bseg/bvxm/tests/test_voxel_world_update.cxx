@@ -16,7 +16,7 @@ static void test_voxel_world_update()
 {
   vcl_string model_dir("test_world_dir");
   if (vul_file::is_directory(model_dir))
-   vpl_rmdir(model_dir.c_str());  //use this instead of vul since some MS versions hang on on Y/N?
+    vpl_rmdir(model_dir.c_str());  //use this instead of vul since some MS versions hang on on Y/N?
   else if (vul_file::exists(model_dir))
     vpl_unlink(model_dir.c_str());
   vul_file::make_directory(model_dir);
@@ -34,7 +34,7 @@ static void test_voxel_world_update()
 
   bvxm_world_params_sptr params = new bvxm_world_params;
 
-  // needs an lvcs, TO DO, intantiate lvcs with right paramaters
+  // needs an lvcs, TO DO, instantiate lvcs with right parameters
   bgeo_lvcs_sptr lvcs = new bgeo_lvcs();
   params->set_params(model_dir,grid_corner,grid_size,vox_len,lvcs);
 

@@ -32,15 +32,15 @@ class boxm_split_sample
   typedef boct_tree<short, alpha_datatype> alpha_tree_type;
   typedef boct_tree_cell<short, alpha_datatype> alpha_cell_type;
 
-  //: A function to split an boxm_sample scene, into an appereance and an ocuppancy scenes
+  //: A function to split an boxm_sample scene, into an appearance and an occupancy scene
   void split_scene(boxm_scene<sample_tree_type> &scene_in, boxm_scene<apm_tree_type> &apm_scene, boxm_scene<alpha_tree_type > &alpha_scene);
 
-  //: A function to split an boxm_sample tree, into an appereance and an ocuppancy trees
+  //: A function to split an boxm_sample tree, into an appearance and an occupancy tree
   void split_tree(sample_tree_type *tree_in, apm_tree_type *apm_tree, alpha_tree_type *alpha_tree);
 };
 
 
-//: A function to split an boxm_sample scene, into an appereance and an ocuppancy scenes
+//: A function to split an boxm_sample scene, into an appearance and an occupancy scene
 template<boxm_apm_type APM_MODEL>
 void boxm_split_sample<APM_MODEL>::split_scene(boxm_scene<sample_tree_type> &scene_in,
                                                boxm_scene<apm_tree_type> &apm_scene,
@@ -76,21 +76,21 @@ void boxm_split_sample<APM_MODEL>::split_scene(boxm_scene<sample_tree_type> &sce
 }
 
 
-//: A function to split an boxm_sample tree, into an appereance and an ocuppancy trees
+//: A function to split an boxm_sample tree, into an appearance and an occupancy tree
 template<boxm_apm_type APM_MODEL>
 void boxm_split_sample<APM_MODEL>::split_tree(sample_tree_type *tree_in, apm_tree_type *apm_tree, alpha_tree_type *alpha_tree)
 {
-  //iterate trhough the trees
+  //iterate through the trees
   vcl_vector<sample_cell_type*> sample_cells = tree_in->all_cells();
   vcl_vector<apm_cell_type*> apm_cells = apm_tree->all_cells();
   vcl_vector<alpha_cell_type*> alpha_cells = alpha_tree->all_cells();
 
   if (sample_cells.size()!=apm_cells.size() || apm_cells.size()!=alpha_cells.size()){
-    vcl_cerr << "Different size vectors in split_sample_scene::split_tree" << vcl_endl;
+    vcl_cerr << "Different size vectors in split_sample_scene::split_tree\n";
     return;
   }
 
-  for(unsigned i = 0; i < sample_cells.size(); i++)
+  for (unsigned i = 0; i < sample_cells.size(); i++)
   {
     boxm_sample<APM_MODEL> sample = sample_cells[i]->data();
     apm_cells[i]->set_data(sample.appearance_);

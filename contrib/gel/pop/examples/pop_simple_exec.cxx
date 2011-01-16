@@ -24,7 +24,7 @@ int main(int argc, char** argv)
   pop_edge e;
   e.set_vertex(&cs1,&cs2);
 
-  // get six paramaters for a rigid transform
+  // get six parameters for a rigid transform
   pop_manager pm;
 
   vcl_vector<pop_parameter*> params = pm.new_parameters(6);
@@ -37,7 +37,7 @@ int main(int argc, char** argv)
     params[i]->is_changeable_ = false;
   }
 
- // put them a little off of their true values
+  // put them a little off of their true values
 
   for (int i=3;i<6;i++) {
     params[i]->value_=0.05;

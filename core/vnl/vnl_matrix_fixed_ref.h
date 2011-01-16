@@ -29,7 +29,7 @@
 // Additional comments on the vnl_matrix_fixed_ref and vnl_vector_fixed_ref
 // classes, extracted from an email conversation between Paul P. Smyth,
 // Vicon Motion Systems Ltd., from May 02, 2001, and Amitha Perera
-// (who anwers the following on Monday, October 07, 2002):
+// (who answers the following on Monday, October 07, 2002):
 //
 // I'm working on separating vnl_vector and vnl_vector_fixed in the VXL
 // tree, as I mailed a while ago to the vxl-maintainers list. I noticed

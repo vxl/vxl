@@ -10,7 +10,7 @@
 // \author J.L. Mundy
 //  October 2, 2010
 // \verbatim
-//  Modificationss
+//  Modifications
 //   <None>
 // \endverbatim
 
@@ -20,7 +20,7 @@
 
 //: Find the local minima in arrays
 //  The result is an array with non-zero elements where local minima
-//  exist. A local minimum must be smaller than *all* neigboring elements
+//  exist. A local minimum must be smaller than *all* neighboring elements
 //  by a threshold. The neighborhoods in 2-d and 3-d are 8-connected.
 //  The result is an array with non-zero elements at minima.
 //  The value of non-zero element indicates the smallest difference

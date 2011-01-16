@@ -46,7 +46,7 @@ class kalman_filter
   //: read all the data including time stamps, trackers.
   void read_data(const char* fname);
 
-  //: read vishual tracker result out of a file
+  //: read visual tracker result out of a file
   vcl_vector<vdgl_digital_curve_sptr> read_tracker_file(char* fname);
 
   //: initialize the kalman filter states
@@ -90,7 +90,7 @@ class kalman_filter
   void init_transit_matrix();
 
  private:
-   //: position and confidence of feature samples
+  //: position and confidence of feature samples
   bugl_curve_3d curve_3d_;
 
   vcl_vector<double> prob_;

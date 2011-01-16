@@ -13,7 +13,7 @@
 //  The parameters are:
 //  -  min_length - the smallest number of points to fit with a conic
 //  -  tol - the threshold on mean square distance from points to the conic
-//  -  line_thresh - threshold for prefering a line over a conic
+//  -  line_thresh - threshold for preferring a line over a conic
 //
 //  A conic segment is incrementally fit to the curve until the tolerance
 //  is exceeded. When the tolerance is exceeded, the conic segment is

@@ -90,7 +90,7 @@ static vcl_string level_filename(vcl_string& directory, vcl_string& filename,
 }
 
 //: Construct pyramid image files in the directory
-//  Each level has the same scale ratio (0.5) to the preceeding level.
+//  Each level has the same scale ratio (0.5) to the preceding level.
 //  Level 0 is the original base image.
 vil_pyramid_image_resource_sptr vil_pyramid_image_list_format::
     make_pyramid_image_from_base(char const* directory,

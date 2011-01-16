@@ -107,7 +107,7 @@ class vpdl_gaussian_sphere : public vpdl_gaussian_base<T,n>
 
   //: The probability of being in an axis-aligned box
   // The box is defined by two points, the minimum and maximum.
-  // Reimplemented for effeciency since the axis are independent
+  // Reimplemented for efficiency since the axis are independent
   T box_prob(const vector& min_pt, const vector& max_pt) const
   {
     const unsigned int dim = this->dimension();

@@ -7,9 +7,9 @@
 // \author Matthew Leotta, (mleotta@lems.brown.edu)
 // \date Sat Nov 8 2003
 //
-//
 // \verbatim
-//   none
+//  Modifications
+//   <none>
 // \endverbatim
 
 #include <vbl/vbl_ref_count.h>
@@ -25,7 +25,7 @@ class bapl_keypoint : public vbl_ref_count
   //: Destructor
   ~bapl_keypoint(){}
 
-  //: Accessor for the discriptor vector
+  //: Accessor for the descriptor vector
   virtual const vnl_vector_fixed<double,128>& descriptor() const = 0;
 
   //: Print a summary of the keypoint data to a stream

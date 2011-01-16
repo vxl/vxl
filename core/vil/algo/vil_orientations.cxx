@@ -1,9 +1,9 @@
+#include "vil_orientations.h"
 //:
 // \file
 // \brief Functions to compute orientations and gradient magnitude
 // \author Tim Cootes
 
-#include "vil_orientations.h"
 #include <vcl_cassert.h>
 #include <vcl_cmath.h>
 
@@ -95,7 +95,7 @@ void vil_orientations(const vil_image_view<float>& grad_i,
 }
 
 //: Compute discrete orientation and gradient magnitude at edge pixels
-//  Comutes orientation at each pixel and scales to range [0,n_orientations].
+//  Computes orientation at each pixel and scales to range [0,n_orientations].
 //  If gradient magnitude is less than grad_threshold, then orientation
 //  of zero is set, meaning undefined orientation.
 //

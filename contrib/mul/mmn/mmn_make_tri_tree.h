@@ -5,7 +5,6 @@
 // \brief Compute arcs defining a graph s.t. triangles form a tree.
 // \author Tim Cootes
 
-
 #include <vnl/vnl_matrix.h>
 #include <mmn/mmn_arc.h>
 #include <mmn/mmn_triplet.h>
@@ -14,7 +13,7 @@
 
 //: Compute arcs defining a graph s.t. triangles form a tree.
 //  Compute arc of graph such that point belongs to at least one triangle,
-//  and the graph of triangles is a tree (acylcic).
+//  and the graph of triangles is a tree (acyclic).
 //  Two triangles are neighbours if they share an edge (arc).
 //
 //  The approach is to select nodes one at a time, at each step
@@ -32,7 +31,7 @@ void mmn_make_tri_tree(const vnl_matrix<double>& D,
 
 //: Compute arcs defining a graph s.t. triangles form a tree.
 //  Compute arc of graph such that point belongs to at least one triangle,
-//  and the graph of triangles is a tree (acylcic).
+//  and the graph of triangles is a tree (acyclic).
 //  Two triangles are neighbours if they share an edge (arc).
 //
 //  The approach is to select nodes one at a time, at each step

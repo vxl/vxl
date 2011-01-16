@@ -21,7 +21,7 @@
 //: A parameters struct for vidl_ffmpeg_ostream
 //
 // The setter functions are provided for convenience, so that the
-// parameters can be set through an anonynous object.
+// parameters can be set through an anonymous object.
 // \code
 //   ostream.open( filename,
 //                 vidl_ffmpeg_ostream_params()

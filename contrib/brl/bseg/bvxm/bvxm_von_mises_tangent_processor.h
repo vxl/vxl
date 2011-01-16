@@ -9,7 +9,7 @@
 // \date Aug. 8, 2009
 // \verbatim
 //  Modifications
-// none
+//   <none>
 // \endverbatim
 
 #include <vgl/vgl_plane_3d.h>
@@ -26,7 +26,7 @@
 // uses the VonMises distribution on the sphere of unit vectors
 // and a 3-d spherical gaussian distribution for sub-voxel vector origin
 // within the voxel
-// The update process can be accellerated by a factor k, where
+// The update process can be accelerated by a factor k, where
 // mu^N+1 = 1-(k/N+1)mu^N + s*k/(N+1), and mu is the current
 // distribution mean (direction or position) and N+1 is the current
 // number of observations. If k==1 the update corresponds to simple

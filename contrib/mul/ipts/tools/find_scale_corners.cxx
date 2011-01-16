@@ -22,7 +22,7 @@ int main( int argc, char* argv[] )
   vul_arg<vcl_string> in_path("-i","Input image path");
   vul_arg<vcl_string> out_path("-o","Output image file (peaks)","output.pnm");
   vul_arg<vcl_string> corner_path("-c","Output image file (corners)");
-  vul_arg<float> threshold("-t","Threshold on corner respose",100.0f);
+  vul_arg<float> threshold("-t","Threshold on corner response",100.0f);
   vul_arg<double> scale("-s","Scale step",1.41);
 
 //  vul_arg<vcl_string> smooth_path("-s","Output image file (Smooth )","smooth.pnm");

@@ -144,8 +144,7 @@ class vgui_wx_adaptor
   void on_idle(wxIdleEvent& event);
 
   //: Called when the user tries to close a frame or dialog box.
-  //
-  // The event can be generated programatically or when the user tries to
+  // The event can be generated programmatically or when the user tries to
   // close using the window manager (X) or system menu (Windows).
   void on_close(wxCloseEvent& event);
 

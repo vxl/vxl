@@ -201,8 +201,8 @@ print_tracking_bounds(vcl_vector<strk_tracking_face_2d_sptr> const& faces)
   strk_tracking_face_2d_sptr f = faces[0];
   float search_area = (xmax-xmin)*(ymax-ymin);
   float R = f->Npix()/search_area;
-   vcl_cout << "S[(" << xmin << ' ' << xmax << ")(" << ymin << ' ' << ymax
-            << ")]= " << search_area << ", area ratio = " << R << '\n';
+  vcl_cout << "S[(" << xmin << ' ' << xmax << ")(" << ymin << ' ' << ymax
+           << ")]= " << search_area << ", area ratio = " << R << '\n';
 #endif
 }
 
@@ -326,7 +326,7 @@ void strk_info_tracker::cull_samples()
   //print background characteristics
   if (use_background_)
   {
-   vcl_cout << "\n====Background Information Diffs====\n";
+    vcl_cout << "\n====Background Information Diffs====\n";
     float MIdiff =
       tf->intensity_info_diff();
     vcl_cout << "Intensity Inf Diff = " << MIdiff << vcl_endl;
@@ -525,7 +525,7 @@ strk_info_tracker::get_background_faces(vcl_vector<vtol_face_2d_sptr>& faces)
 
 //: Assemble the intensity, gradient and color histograms into a single vector
 //  |intensity|gradient|color|
-vcl_vector<float> 
+vcl_vector<float>
 strk_info_tracker::extract_histograms(strk_tracking_face_2d_sptr const& tf,
                                       bool first_frame)
 {
@@ -535,7 +535,7 @@ strk_info_tracker::extract_histograms(strk_tracking_face_2d_sptr const& tf,
   unsigned int cbins = color_hist_bins_;
   unsigned int nbins = ibins + gbins + cbins;
   vcl_vector<float> out(nbins, 0.0);
-  bsta_histogram<float> int_hist(0, 0); 
+  bsta_histogram<float> int_hist(0, 0);
   if (first_frame)
     int_hist= tf->intensity_histogram(image_0_);
   else
@@ -544,12 +544,12 @@ strk_info_tracker::extract_histograms(strk_tracking_face_2d_sptr const& tf,
     out[i]=int_hist.p(i);
 
   if (gradient_info_)
-  { 
+  {
     bsta_histogram<float> grad_hist(0, 0);
     if (first_frame)
       grad_hist = tf->gradient_histogram(Ix_0_, Iy_0_);
     else
-     grad_hist = tf->gradient_histogram(Ix_i_, Iy_i_);
+      grad_hist = tf->gradient_histogram(Ix_i_, Iy_i_);
     for (unsigned int i = 0; i<gbins; ++i)
       out[i+ibins]=grad_hist.p(i);
   }
@@ -557,9 +557,9 @@ strk_info_tracker::extract_histograms(strk_tracking_face_2d_sptr const& tf,
   {
     bsta_histogram<float> color_hist(0,0);
     if (first_frame)
-     color_hist = tf->color_histogram(hue_0_, sat_0_);
+      color_hist = tf->color_histogram(hue_0_, sat_0_);
     else
-     color_hist = tf->color_histogram(hue_i_, sat_i_);
+      color_hist = tf->color_histogram(hue_i_, sat_i_);
     for (unsigned int i = 0; i<cbins; ++i)
       out[i+ibins+gbins]=color_hist.p(i);
   }
@@ -567,15 +567,15 @@ strk_info_tracker::extract_histograms(strk_tracking_face_2d_sptr const& tf,
 }
 
 //: external call to extract histograms during tracking
-vcl_vector<float> 
+vcl_vector<float>
 strk_info_tracker::histograms()
 {
   strk_tracking_face_2d_sptr tf = current_samples_[0];
   return this->extract_histograms(tf);
 }
 
-//: external call to extract histograms during featue capture
-vcl_vector<float> 
+//: external call to extract histograms during feature capture
+vcl_vector<float>
 strk_info_tracker::capture_histograms(bool first_frame)
 {
   if (first_frame)

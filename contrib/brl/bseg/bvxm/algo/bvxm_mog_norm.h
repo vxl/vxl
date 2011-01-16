@@ -4,14 +4,14 @@
 //:
 // \file
 // \brief class to compute distances between mixtures of gaussians and gaussians
-//        Methods support univariate distributions and mixture with 3 componets
+//        Methods support univariate distributions and mixture with 3 components
 //        The reason for these limitations is because that is what bvxm uses up to date.
 // \author Isabel Restrepo
 // \date March 25, 2009
 //
-//
 // \verbatim
 //  Modifications
+//   <none yet>
 // \endverbatim
 
 #include <bsta/bsta_distribution.h>

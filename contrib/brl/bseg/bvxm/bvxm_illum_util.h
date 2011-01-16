@@ -31,7 +31,7 @@ class bvxm_illum_util
   //:
   // Given a set of illumination directions and image intensities,
   // find the surface normal and ambient illumination factor, where
-  // both are weighted by the surface albedo. A minium of 4 directions
+  // both are weighted by the surface albedo. A minimum of 4 directions
   // are required.
   static bool solve_lambertian_model(vcl_vector<vnl_double_3> const& ill_dirs,
                                      vcl_vector<double> const& intensities,

@@ -59,7 +59,7 @@
 //  typeid(class_instance).
 //
 //  is_type(.) checks if the instance is a type of \a classname or \a
-//  supperclass.
+//  superclass.
 #define rgrl_type_macro( classname, superclassname) \
      typedef classname       self; \
      typedef superclassname  superclass; \

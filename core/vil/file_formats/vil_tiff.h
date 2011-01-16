@@ -53,7 +53,7 @@ class vil_tiff_file_format : public vil_file_format
 
   //: Construct a pyramid image resource from a base image.
   //  All levels are stored in the same resource file. Each level has the same
-  //  scale ratio (0.5) to the preceeding level. Level 0 is the original
+  //  scale ratio (0.5) to the preceding level. Level 0 is the original
   //  base image. The resource is returned open for reading.
   //  The temporary directory is for storing intermediate image
   //  resources during the construction of the pyramid. Files are

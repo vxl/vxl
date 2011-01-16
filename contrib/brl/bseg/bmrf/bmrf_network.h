@@ -71,7 +71,7 @@ class bmrf_network : public vbl_ref_count
 
   //: Look up the node corresponding to an epi-segment
   // \return a null smart pointer if no node exists
-  // \note if the optional paramater \p frame is positive the search is restricted to that frame
+  // \note if the optional parameter \p frame is positive the search is restricted to that frame
   bmrf_node_sptr seg_to_node(const bmrf_epi_seg_sptr& seg, int frame = -1) const;
 
   //: Returns the number of frames in the network

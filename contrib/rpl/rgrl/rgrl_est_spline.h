@@ -70,7 +70,7 @@ class rgrl_est_spline
   int optimize_method_;
 
   //: A global transformation.
-  //  If it's null, then the spline is used without other prior transforation.
+  //  If it's null, then the spline is used without other prior transformation.
   rgrl_transformation_sptr global_xform_;
 };
 

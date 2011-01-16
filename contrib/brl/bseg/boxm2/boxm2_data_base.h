@@ -26,10 +26,10 @@ class boxm2_data_base : public vbl_ref_count
  public:
     //: Constructor - beware that the data_buffer becomes OWNED (and will be deleted) by this class!
     boxm2_data_base(char * data_buffer, vcl_size_t length, boxm2_block_id id)
-     : id_(id), data_buffer_(data_buffer),  buffer_length_(length) {}
-     
-    //: intiializes empty data buffer
-    boxm2_data_base(boxm2_block_metadata data, vcl_string type); 
+    : id_(id), data_buffer_(data_buffer),  buffer_length_(length) {}
+
+    //: initializes empty data buffer
+    boxm2_data_base(boxm2_block_metadata data, vcl_string type);
 
     //: This destructor is correct - by our design the original data_buffer becomes OWNED by the data_base class
     virtual ~boxm2_data_base() { if (data_buffer_) delete [] data_buffer_; }
@@ -53,7 +53,7 @@ typedef vbl_smart_ptr<boxm2_data_base> boxm2_data_base_sptr;
 
 //: Binary write boxm_update_bit_scene_manager scene to stream
 void vsl_b_write(vsl_b_ostream& os, boxm2_data_base const& scene);
-void vsl_b_write(vsl_b_ostream& os, const boxm2_data_base* &p); 
+void vsl_b_write(vsl_b_ostream& os, const boxm2_data_base* &p);
 void vsl_b_write(vsl_b_ostream& os, boxm2_data_base_sptr& sptr);
 void vsl_b_write(vsl_b_ostream& os, boxm2_data_base_sptr const& sptr);
 
@@ -61,7 +61,7 @@ void vsl_b_write(vsl_b_ostream& os, boxm2_data_base_sptr const& sptr);
 //: Binary load boxm_update_bit_scene_manager scene from stream.
 void vsl_b_read(vsl_b_istream& is, boxm2_data_base &scene);
 void vsl_b_read(vsl_b_istream& is, boxm2_data_base* p);
-void vsl_b_read(vsl_b_istream& is, boxm2_data_base_sptr& sptr); 
+void vsl_b_read(vsl_b_istream& is, boxm2_data_base_sptr& sptr);
 void vsl_b_read(vsl_b_istream& is, boxm2_data_base_sptr const& sptr);
 
 

@@ -3,7 +3,7 @@
 #define vgl_io_box_3d_h
 //:
 // \file
-// \author Louise Bucther
+// \author Louise Butcher
 // \date 20-Mar-2001
 
 #include <vgl/vgl_box_3d.h>

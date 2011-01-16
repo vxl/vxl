@@ -30,7 +30,7 @@ static void  update_best_arcs(const vnl_matrix<double>& D,
 
 //: Compute arcs defining a graph s.t. triangles form a tree.
 //  Compute arc of graph such that point belongs to at least one triangle,
-//  and the graph of triangles is a tree (acylcic).
+//  and the graph of triangles is a tree (acyclic).
 //  Two triangles are neighbours if they share an edge (arc).
 //
 //  The approach is to select nodes one at a time, at each step
@@ -70,8 +70,8 @@ void mmn_make_tri_tree(const vnl_matrix<double>& D,
     for (unsigned i=0;i<n;++i)
       if (i!=v0)
       {
-         if (best_i>n || D(v0,i)<min_d)
-         { best_i=i; min_d=D(v0,i); }
+        if (best_i>n || D(v0,i)<min_d)
+        { best_i=i; min_d=D(v0,i); }
       }
     arc = mmn_arc(v0,best_i);
   }
@@ -125,7 +125,7 @@ void mmn_make_tri_tree(const vnl_matrix<double>& D,
 
 //: Compute arcs defining a graph s.t. triangles form a tree.
 //  Compute arc of graph such that point belongs to at least one triangle,
-//  and the graph of triangles is a tree (acylcic).
+//  and the graph of triangles is a tree (acyclic).
 //  Two triangles are neighbours if they share an edge (arc).
 //
 //  The approach is to select nodes one at a time, at each step
@@ -170,8 +170,8 @@ void mmn_make_tri_tree(const vnl_matrix<double>& D,
     for (unsigned i=0;i<n;++i)
       if (i!=v0)
       {
-         if (best_i>n || D(v0,i)<min_d)
-         { best_i=i; min_d=D(v0,i); }
+        if (best_i>n || D(v0,i)<min_d)
+        { best_i=i; min_d=D(v0,i); }
       }
     arc = mmn_arc(v0,best_i);
   }
@@ -226,7 +226,7 @@ void mmn_make_tri_tree(const vnl_matrix<double>& D,
     triplets.push_back(mmn_triplet(best_i,arc.v1,arc.v2));
 
     // best_i depends on arc.v1 and arc.v2 through 3 arcs and a triplet
-    deps0.push_back(mmn_dependancy(best_i,arc.v1,arc.v2, 
+    deps0.push_back(mmn_dependancy(best_i,arc.v1,arc.v2,
                                   ai,ai+1, best_arc[best_i], ti));
 
     // Re-evaluate distances to each free point
@@ -237,7 +237,7 @@ void mmn_make_tri_tree(const vnl_matrix<double>& D,
   // Reverse the order of the dependancies, so last is processed first
   unsigned n_deps=deps0.size();
   deps.resize(n_deps);
-  for (unsigned i=0;i<n_deps;++i) 
+  for (unsigned i=0;i<n_deps;++i)
     deps[i]=deps0[n_deps-1-i];
 }
 

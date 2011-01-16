@@ -9,7 +9,7 @@
 //
 // \verbatim
 //  Modifications
-//   None
+//   <none>
 // \endverbatim
 
 #include <vcl_iosfwd.h>
@@ -44,11 +44,11 @@ class bapl_mi_matcher_params
 
   //: Maximum horizontal scale
   double max_sx_;
-  //: Maximum verical scale
+  //: Maximum vertical scale
   double max_sy_;
   //: Maximum horizontal translation
   double max_tx_;
-  //: Maximum verical translation
+  //: Maximum vertical translation
   double max_ty_;
   //: Maximum rotation angle in degrees (0 to 180)
   double max_rotation_ang_;

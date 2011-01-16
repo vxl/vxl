@@ -112,8 +112,8 @@ rerender_ocl_scene_opt(__global float   * depth_image_view1,
 
   while (!(any(curr_block_index<(int4)0) || any(curr_block_index>=(scenedims))))
   {
-     // Ray tracing with in each block
-     // 3-d index to 1-d index
+    // Ray tracing with in each block
+    // 3-d index to 1-d index
     int4 block = block_ptrs[curr_block_index.z
                            +curr_block_index.y*scenedims.z
                            +curr_block_index.x*scenedims.y*scenedims.z];
@@ -147,7 +147,7 @@ rerender_ocl_scene_opt(__global float   * depth_image_view1,
         block_entry_pt=block_entry_pt+ray_d*(float4)(cellsize/2);;
         block_entry_pt.w=0.5;
         if (any(block_entry_pt>=(float4)1.0f)|| any(block_entry_pt<=(float4)0.0f))
-            break;
+          break;
 
         entry_loc_code = loc_code(block_entry_pt, rootlevel);
         //// traverse to leaf cell that contains the entry point
@@ -157,11 +157,11 @@ rerender_ocl_scene_opt(__global float   * depth_image_view1,
         if (hit)
         {
           block_entry_pt=local_ray_o + tnear*ray_d;
-           tnear=tnear>0?tnear:0;
+          tnear=tnear>0?tnear:0;
         }
       }
       if (!hit)
-          break;
+        break;
       tnear=tnear>0?tnear:0;
 
       //int data_ptr =  block.x*lenbuffer+tree_array[curr_cell_ptr].z;
@@ -193,111 +193,113 @@ rerender_ocl_scene_opt(__global float   * depth_image_view1,
     cell_max=cell_min+blockdims;
     if (!intersect_cell(ray_o, ray_d, cell_min, cell_max,&tnear, &tfar))
     {
-        // this means the ray has hit a special case
-        // two special cases
-        // (1) grazing the corner/edge and (2) grazing the side.
+      // this means the ray has hit a special case
+      // two special cases
+      // (1) grazing the corner/edge and (2) grazing the side.
 
-        // this is the first case
-        if (tfar-tnear<blockdims.x/100)
-        {
-            entry_pt=entry_pt + blockdims.x/2 *ray_d;
-            curr_block_index=convert_int4((entry_pt-origin)/blockdims);
-            curr_block_index.w=0;
-        }
+      // this is the first case
+      if (tfar-tnear<blockdims.x/100)
+      {
+        entry_pt=entry_pt + blockdims.x/2 *ray_d;
+        curr_block_index=convert_int4((entry_pt-origin)/blockdims);
+        curr_block_index.w=0;
+      }
     }
     else
     {
-        entry_pt=ray_o + tfar *ray_d;
-        ray_d.w=1;
-        if (any(-1*(isless(fabs(entry_pt-cell_min),(float4)blockdims.x/100.0f)*isless(fabs(ray_d),(float4)1e-3))))
-            break;
-        if (any(-1*(isless(fabs(entry_pt-cell_max),(float4)blockdims.x/100.0f)*isless(fabs(ray_d),(float4)1e-3))))
-            break;
-        curr_block_index=convert_int4(floor((entry_pt+(blockdims.x/20.0f)*ray_d-origin)/blockdims));
-        curr_block_index.w=0;
+      entry_pt=ray_o + tfar *ray_d;
+      ray_d.w=1;
+      if (any(-1*(isless(fabs(entry_pt-cell_min),(float4)blockdims.x/100.0f)*isless(fabs(ray_d),(float4)1e-3))))
+        break;
+      if (any(-1*(isless(fabs(entry_pt-cell_max),(float4)blockdims.x/100.0f)*isless(fabs(ray_d),(float4)1e-3))))
+        break;
+      curr_block_index=convert_int4(floor((entry_pt+(blockdims.x/20.0f)*ray_d-origin)/blockdims));
+      curr_block_index.w=0;
     }
   }
   float2 point2d=(float2)0.0f;
   float16 project_cam=(*camera_view2);
   if (!project(project_cam,point3d,&point2d))
   {
-      gl_rerender_image[j*get_global_size(0)+i]=rgbaFloatToInt((float4)0.0f);
-      in_image[j*get_global_size(0)+i]=(float)0;
-      return;
+    gl_rerender_image[j*get_global_size(0)+i]=rgbaFloatToInt((float4)0.0f);
+    in_image[j*get_global_size(0)+i]=(float)0;
+    return;
   }
   if (point2d.x<0 || point2d.y<0 || point2d.x>=(*local_copy_imgdims).z || point2d.y>=(*local_copy_imgdims).w)
   {
-      gl_rerender_image[j*get_global_size(0)+i]=rgbaFloatToInt((float4)0.0f);
-      in_image[j*get_global_size(0)+i]=(float)0.0;
-      return;
+    gl_rerender_image[j*get_global_size(0)+i]=rgbaFloatToInt((float4)0.0f);
+    in_image[j*get_global_size(0)+i]=(float)0.0;
+    return;
   }
 #if 0
- float4 weighted_intensity=read_imagef(intensity_image_view2,RowSampler,point2d);
- weighted_intensity*=exp(-data_return);
- gl_rerender_image[j*get_global_size(0)+i]=rgbaFloatToInt((float4)weighted_intensity);
- in_image[j*get_global_size(0)+i]=(float)weighted_intensity.x;
+  float4 weighted_intensity=read_imagef(intensity_image_view2,RowSampler,point2d);
+  weighted_intensity*=exp(-data_return);
+  gl_rerender_image[j*get_global_size(0)+i]=rgbaFloatToInt((float4)weighted_intensity);
+  in_image[j*get_global_size(0)+i]=(float)weighted_intensity.x;
 #endif
 
 #if 1
- if(exp(-data_return)>0.5)
+  if (exp(-data_return)>0.5)
     in_image[j*get_global_size(0)+i]=(float)point2d.x;
- else
-     in_image[j*get_global_size(0)+i]=(float)-1.0f;
+  else
+    in_image[j*get_global_size(0)+i]=-1.0f;
 #endif
 }
 
-//__kernel
-//void rerender_view(__read_only image2d_t in_image,     // input image which will be rendered on another view
-//                   __global float16* in_cam,       // has to be acutal camera + camera center;
-//                   __global float16* novel_cam,    // novel inv  camera
-//                   __global float* depth_image,
-//                   __global uint4* imgdims,
-//                   __global uint * gl_rerender_image,
-//                   __local  float16 * local_copy_cam)
-//{
-//    uchar llid = (uchar)(get_local_id(0) + get_local_size(0)*get_local_id(1));
-//    // get image coordinates
-//    int i=0,j=0;
-//    map_work_space_2d(&i,&j);
-//    if (llid == 0 )
-//    {
-//        local_copy_cam[0]=novel_cam[0];  // conjugate transpose of U
-//        local_copy_cam[1]=novel_cam[1];  // V
-//        local_copy_cam[2]=novel_cam[2];  // Winv(first4) and ray_origin(last four)
-//    }
-//    barrier(CLK_LOCAL_MEM_FENCE);
-//
-//    if (i>=(*imgdims).z || j>=(*imgdims).w)
-//        return;
-//
-//    float4 ray_o=(float4)local_copy_cam[2].s4567;
-//    ray_o.w=1.0f;
-//
-//    float4 ray_d = backproject(i,j,local_copy_cam[0],
-//                               local_copy_cam[1],
-//                               local_copy_cam[2],ray_o);
-//    if (depth_image[j*get_global_size(0)+i]<0.0f)
-//    {
-//        gl_rerender_image[j*get_global_size(0)+i]=rgbaFloatToInt((float4)0.0f);
-//        return;
-//    }
-//
-//    float4 point3d=ray_o+depth_image[j*get_global_size(0)+i]*ray_d;
-//
-//
-//    point3d.w=1;
-//    float2 point2d=0.0f;
-//    float16 project_cam=(*in_cam);
-//    if (!project(project_cam,point3d,&point2d))
-//    {
-//        gl_rerender_image[j*get_global_size(0)+i]=rgbaFloatToInt((float4)0.0f);
-//        return;
-//    }
-//    if (point2d.x<0 || point2d.y<0 || point2d.x>=(*imgdims).z || point2d.y>=(*imgdims).w)
-//    {
-//        gl_rerender_image[j*get_global_size(0)+i]=rgbaFloatToInt((float4)point2d.x/1280);
-//        return;
-//    }
-//    gl_rerender_image[j*get_global_size(0)+i]=rgbaFloatToInt((float4)read_imagef(in_image,RowSampler,point2d));
-//    return;
-//}
+#if 0
+__kernel
+void rerender_view(__read_only image2d_t in_image,     // input image which will be rendered on another view
+                   __global float16* in_cam,       // has to be actual camera + camera center;
+                   __global float16* novel_cam,    // novel inv  camera
+                   __global float* depth_image,
+                   __global uint4* imgdims,
+                   __global uint * gl_rerender_image,
+                   __local  float16 * local_copy_cam)
+{
+    uchar llid = (uchar)(get_local_id(0) + get_local_size(0)*get_local_id(1));
+    // get image coordinates
+    int i=0,j=0;
+    map_work_space_2d(&i,&j);
+    if (llid == 0 )
+    {
+        local_copy_cam[0]=novel_cam[0];  // conjugate transpose of U
+        local_copy_cam[1]=novel_cam[1];  // V
+        local_copy_cam[2]=novel_cam[2];  // Winv(first4) and ray_origin(last four)
+    }
+    barrier(CLK_LOCAL_MEM_FENCE);
+
+    if (i>=(*imgdims).z || j>=(*imgdims).w)
+        return;
+
+    float4 ray_o=(float4)local_copy_cam[2].s4567;
+    ray_o.w=1.0f;
+
+    float4 ray_d = backproject(i,j,local_copy_cam[0],
+                               local_copy_cam[1],
+                               local_copy_cam[2],ray_o);
+    if (depth_image[j*get_global_size(0)+i]<0.0f)
+    {
+        gl_rerender_image[j*get_global_size(0)+i]=rgbaFloatToInt((float4)0.0f);
+        return;
+    }
+
+    float4 point3d=ray_o+depth_image[j*get_global_size(0)+i]*ray_d;
+
+
+    point3d.w=1;
+    float2 point2d=0.0f;
+    float16 project_cam=(*in_cam);
+    if (!project(project_cam,point3d,&point2d))
+    {
+        gl_rerender_image[j*get_global_size(0)+i]=rgbaFloatToInt((float4)0.0f);
+        return;
+    }
+    if (point2d.x<0 || point2d.y<0 || point2d.x>=(*imgdims).z || point2d.y>=(*imgdims).w)
+    {
+        gl_rerender_image[j*get_global_size(0)+i]=rgbaFloatToInt((float4)point2d.x/1280);
+        return;
+    }
+    gl_rerender_image[j*get_global_size(0)+i]=rgbaFloatToInt((float4)read_imagef(in_image,RowSampler,point2d));
+    return;
+}
+#endif // 0

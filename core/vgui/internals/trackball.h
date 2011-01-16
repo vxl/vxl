@@ -51,7 +51,7 @@ extern "C" {
  * the mouse, scaled so they are from (-1.0 ... 1.0).
  *
  * The resulting rotation is returned as a quaternion rotation in the
- * first paramater.
+ * first parameter.
  */
 void
 trackball(float q[4], float p1x, float p1y, float p2x, float p2y);

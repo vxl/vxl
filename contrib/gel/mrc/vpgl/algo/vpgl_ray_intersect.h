@@ -33,7 +33,7 @@
 //:
 // The image offsets of rational cameras typically must be adjusted to
 // compensate for errors in geographic alignment. This algorithm finds
-// a set of minium translations that registers the input set of images.
+// a set of minimum translations that registers the input set of images.
 // After registration, the images have geographically corresponding rational
 // cameras. That is, a visible 3-d point will project into its corresponding
 // image location in all the images.

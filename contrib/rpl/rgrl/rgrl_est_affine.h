@@ -1,6 +1,5 @@
 #ifndef rgrl_est_affine_h_
 #define rgrl_est_affine_h_
-
 //:
 // \file
 // \author Amitha Perera
@@ -13,11 +12,11 @@
 class rgrl_est_affine
   : public rgrl_linear_estimator
 {
-public:
+ public:
   //: Default constructor
   //
   // Does nothing. This constructor is adequate for algorithms that
-  // call \a estimate(.) fucntion only. An example of the algorithm is
+  // call \a estimate(.) function only. An example of the algorithm is
   // the rgrl_feature_based_registration.
   rgrl_est_affine(){}
 
@@ -52,7 +51,6 @@ public:
 
   // Defines type-related functions
   rgrl_type_macro( rgrl_est_affine, rgrl_linear_estimator )
-
 };
 
 #endif // rgrl_est_affine_h_

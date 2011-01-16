@@ -9,8 +9,7 @@
 //
 // \verbatim
 //  Modifications
-//  removed depencency on vimt
-//  G. Tunali 8/2010
+//   G. Tunali - Aug 2010 - removed dependency on vimt
 // \endverbatim
 
 #include <vnl/vnl_vector.h>

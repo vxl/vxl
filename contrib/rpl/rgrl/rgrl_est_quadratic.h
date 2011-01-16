@@ -1,6 +1,5 @@
 #ifndef rgrl_est_quadratic_h_
 #define rgrl_est_quadratic_h_
-
 //:
 // \file
 // \author Amitha Perera
@@ -17,7 +16,7 @@ class rgrl_est_quadratic
   //: Default constructor
   //
   // Does nothing. This constructor is adequate for algorithms that
-  // call \a estimate(.) fucntion only. An example of the algorithm is
+  // call \a estimate(.) function only. An example of the algorithm is
   // the rgrl_feature_based_registration.
   rgrl_est_quadratic();
 
@@ -59,7 +58,6 @@ class rgrl_est_quadratic
   double max_of_9_elements(double elt1, double elt2, double elt3,
                            double elt4, double elt5, double elt6,
                            double elt7, double elt8, double elt9 ) const;
- private:
   double condition_num_thrd_;
 };
 

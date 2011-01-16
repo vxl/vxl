@@ -73,7 +73,7 @@ class brct_epi_reconstructor
   //: read all the data including time stamps and  tracks.
   void read_data(const char* fname);
 
-  //: read vishual tracker result out of a file
+  //: read visual tracker result out of a file
   vcl_vector<vdgl_digital_curve_sptr> read_track_file(char* fname);
 
 
@@ -135,7 +135,7 @@ class brct_epi_reconstructor
   vcl_vector<bugl_gaussian_point_2d<double> >
     get_cur_joe_observes(int frame);
  private:
-   //: position and confidence of feature samples
+  //: position and confidence of feature samples
   bugl_curve_3d curve_3d_;
 
   vcl_vector<double> prob_;

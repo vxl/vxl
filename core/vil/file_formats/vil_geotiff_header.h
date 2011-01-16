@@ -12,7 +12,7 @@
 //
 // This class is responsible for extracting (putting) information
 // from (into) the geotiff header that is required to specify a vil_image_resource
-// There are bool flags that indicate that the item has been successfuly
+// There are bool flags that indicate that the item has been successfully
 // read (written) to the open geotiff file.
 //
 // \verbatim

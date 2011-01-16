@@ -1197,8 +1197,8 @@ static bool reg_edges_neq(sdet_region_edge_sptr const& r1,
 // A collision is defined by the condition where a region is bounded
 // by two different edges at adjacent pixels without crossing a vertex.
 // This can happen since boundary positions are sub-pixel and region
-// definition is at pixel granularity.  The edge collison causes a needed
-// edge to be superseeded.
+// definition is at pixel granularity.  The edge collision causes a needed
+// edge to be superseded.
 void sdet_edgel_regions::print_edge_colis(unsigned int x, unsigned int y,
                                           sdet_region_edge_sptr const& r1,
                                           sdet_region_edge_sptr const& r2)

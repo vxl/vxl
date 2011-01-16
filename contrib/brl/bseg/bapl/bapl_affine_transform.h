@@ -9,7 +9,7 @@
 //
 // \verbatim
 //  Modifications
-//   None
+//   <none>
 // \endverbatim
 
 #include <vnl/vnl_double_2x2.h>
@@ -18,7 +18,7 @@
 //:A class to represent 2D affine transformations.
 // This class represents a 2D affine transformation for use with
 // affine patches.  This class is used to map affine image patches
-// into a common (retangular) representation for comparison.
+// into a common (rectangular) representation for comparison.
 
 class bapl_affine_transform
 {

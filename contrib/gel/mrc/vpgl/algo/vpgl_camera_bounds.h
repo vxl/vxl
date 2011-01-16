@@ -85,13 +85,13 @@ class vpgl_camera_bounds
   static double rot_about_ray(vgl_rotation_3d<double> const& r0, vgl_rotation_3d<double> const& r1);
 
   //: The relative rotation and translation between camera \p c0 and \p c1
-  //  In more detail, the relative tranformation aligns c1 with the
+  //  In more detail, the relative transformation aligns c1 with the
   //  identity camera
   static void relative_transf(vpgl_perspective_camera<double> const& c0,
                               vpgl_perspective_camera<double> const& c1,
                               vgl_rotation_3d<double>& rel_rot,
                               vgl_vector_3d<double>& rel_trans);
-                              
+
  private:
   //: constructor private - class contains static methods only
   vpgl_camera_bounds();

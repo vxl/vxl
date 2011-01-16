@@ -8,7 +8,8 @@
 // \date Sat Nov 8 2003
 //
 // \verbatim
-//    Ozge C. Ozcanli -- Sep 15, 2010 -- added constructor with a descriptor vector
+//  Modifications
+//   Ozge C. Ozcanli -- Sep 15, 2010 -- added constructor with a descriptor vector
 // \endverbatim
 
 #include <bapl/bapl_keypoint.h>
@@ -33,7 +34,7 @@ class bapl_lowe_keypoint : public bapl_keypoint
   //: Destructor
   ~bapl_lowe_keypoint();
 
-  //: Accessor for the discriptor vector
+  //: Accessor for the descriptor vector
   virtual const vnl_vector_fixed<double,128>& descriptor() const;
 
   //: Accessor for the i location
@@ -54,7 +55,7 @@ class bapl_lowe_keypoint : public bapl_keypoint
   //: Mutator for the orientation
   void set_orientation(double o) { orientation_ = o; }
 
-  //: Mutator for the discriptor vector
+  //: Mutator for the descriptor vector
   void set_descriptor(const vnl_vector_fixed<double,128>& descriptor);
 
   //: Print a summary of the keypoint data to a stream
@@ -90,7 +91,7 @@ struct bapl_lowe_keypoint_new : public bapl_lowe_keypoint_sptr
   //: Constructor - creates a bapl_lowe_keypoint_sptr with some params.
   bapl_lowe_keypoint_new( bapl_lowe_pyramid_set_sptr p, double i, double j,
                           double s=1, double o=0)
-   : base(new bapl_lowe_keypoint(p,i,j,s,o)) { }
+  : base(new bapl_lowe_keypoint(p,i,j,s,o)) { }
 };
 
 //:

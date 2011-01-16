@@ -13,7 +13,7 @@
 #include <vnl/vnl_vector.h>
 
 //: Samples irregular region described by chords
-//  Region described by chords in an integet grid frame.
+//  Region described by chords in an integer grid frame.
 //  If pi is the i-th (integer) point in this, then
 //  on exit sample[i]=trilin_interp(image,i2i(pi)).
 //  Assumes that sample has already been resized correctly.
@@ -50,7 +50,7 @@ inline void vimt3d_sample_transformed_blob(
 }
 
 //: Samples irregular region described by chords
-//  Region described by chords in an integet grid frame.
+//  Region described by chords in an integer grid frame.
 //  If pi is the i-th (integer) point in this, then
 //  on exit sample[i]=trilin_interp(image,i2i(pi)).
 //  Assumes that sample has already been resized correctly.

@@ -128,7 +128,7 @@ vil_new_pyramid_image_resource(char const* file_or_directory,
 
 //: Construct a pyramid image resource from a base image.
 //  All levels are stored in the same resource file. Each level has the same
-//  scale ratio (0.5) to the preceeding level. Level 0 is the original
+//  scale ratio (0.5) to the preceding level. Level 0 is the original
 //  base image. The resource is returned open for reading.
 //  The temporary directory is for storing intermediate image
 //  resources during the construction of the pyramid. Files are
@@ -144,7 +144,7 @@ vil_new_pyramid_image_from_base(char const* filename,
 //: Construct a new pyramid image resource from a base image
 //  The result is a directory containing separate images for each
 //  pyramid level. Each level has the same scale ratio (0.5) to the
-//  preceeding level and is created using level_file_format.
+//  preceding level and is created using level_file_format.
 //  Level 0 is the original base image. If copy_base is false, then Level 0
 //  is already present in the directory and is used without modification.
 //  Each pyramid file in the directory is

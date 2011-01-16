@@ -11,11 +11,10 @@
 //  Modifications
 //   Initial version Oct 25, 2010
 // \endverbatim
-//
 //-----------------------------------------------------------------------------
 
 //------------------------------------------------------------------------------
-//: brown asynchronous IO: 
+//: brown asynchronous IO:
 //  Asynch IO wrapper class that handles aio in an object oriented, platform
 //  independent way.  Usage example:
 //
@@ -23,13 +22,12 @@
 //    baio aio; aio.read("file.bin", BUFSIZE);
 //    /* other processing not blocked by I/O */
 //    //check to make sure aio is done
-//    while(aio.status() == BAIO_IN_PROGRESS) {}
+//    while (aio.status() == BAIO_IN_PROGRESS) {}
 //    char* data = aio.buffer();
 //------------------------------------------------------------------------------
 
-
 //: forward declare baio_info struct, keeping a pointer to it in this class
-//  This is forward declared because the AIO mechnaism is platform dependent, 
+//  This is forward declared because the AIO mechanism is platform dependent,
 //  thus baio_info must be defined in the specific baio_<platform>.cxx files.
 //  the baio_info struct keeps track of two things:
 //    - status (whether or not IO has returned)
@@ -37,7 +35,8 @@
 struct baio_info;
 
 // BAIO status for returning
-enum baio_status {
+enum baio_status
+{
   BAIO_IN_PROGRESS = 0, // baio object is either reading or writing
   BAIO_FINISHED    = 1, // baio object is done and idle
   BAIO_ERROR       = 2, // baio object has hit an error
@@ -46,7 +45,7 @@ enum baio_status {
 class baio
 {
   public:
-    baio();  
+    baio();
     ~baio();
 
     //: read bytes from file
@@ -56,19 +55,18 @@ class baio
 
     void close_file();
 
-    //: get object's status 
+    //: get object's status
     baio_status status();
-    
+
     //: get data (assumes aio object is done)
     char* buffer();
-    
-    //: get bufer size (assumes aio object is done)
+
+    //: get buffer size (assumes aio object is done)
     long buffer_size();
-    
-  private: 
+
+  private:
     //: member variable needs to persist between read and status calls
     baio_info * info_;
-
 };
 
 

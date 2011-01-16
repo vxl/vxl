@@ -56,12 +56,12 @@ class mbl_sample_stats_1d
   double mean_of_absolutes() const ;
 
   //: Median of current samples
-  // Take care. if there are no samples, this method returns maxmimum double (a very large number)
+  // Take care. if there are no samples, this method returns maximum double (a very large number)
   // Always check number of samples first
   double median() const;
 
   //: The last value within the n_th percentile of the distribution.
-  // \note If there are no samples, this method returns maxmimum double (a very large number).
+  // \note If there are no samples, this method returns maximum double (a very large number).
   // \sa quantile().
   double nth_percentile(int n) const;
 
@@ -86,7 +86,7 @@ class mbl_sample_stats_1d
   double kurtosis() const;
 
   //: Min of current samples
-  // Take care. if there are no samples, this method returns maxmimum double
+  // Take care. if there are no samples, this method returns maximum double
   // Always check number of samples first
   double min() const;
 

@@ -4,7 +4,6 @@
 #endif
 //:
 // \file
-//
 // \author Andrew W. Fitzgibbon, Oxford RRG
 // \date   02 Nov 1998
 //
@@ -145,17 +144,17 @@ vcl_string vul_file::extension(char const* fn)
 
 vcl_string vul_file::strip_directory(char const* fn)
 {
-   vcl_string self(fn);
+  vcl_string self(fn);
 
 #if defined(VCL_WIN32) && !defined(__CYGWIN__)
-   vcl_string::size_type slash_index = self.find_last_of("\\/");
+  vcl_string::size_type slash_index = self.find_last_of("\\/");
 #else
-   vcl_string::size_type slash_index = self.rfind('/');
+  vcl_string::size_type slash_index = self.rfind('/');
 #endif
-   if (slash_index != vcl_string::npos)
-     self.erase(0, slash_index+1);
+  if (slash_index != vcl_string::npos)
+    self.erase(0, slash_index+1);
 
-   return self;
+  return self;
 }
 
 vcl_string vul_file::strip_extension(char const* fn)
@@ -318,7 +317,7 @@ bool vul_file::is_drive(wchar_t const* fn)
 }
 
 //: Make a writable directory, including any necessary parents.
-// Returns true if successful, or if the directory alredy exists.
+// Returns true if successful, or if the directory already exists.
 bool vul_file::make_directory_path(wchar_t const* filename)
 {
   if (is_directory(filename) || is_drive(filename)) return true;
@@ -357,13 +356,13 @@ std::wstring vul_file::extension(wchar_t const* fn)
 
 std::wstring vul_file::strip_directory(wchar_t const* fn)
 {
-   std::wstring self(fn);
+  std::wstring self(fn);
 
-   std::wstring::size_type slash_index = self.find_last_of(L"\\/");
-   if (slash_index != std::wstring::npos)
-     self.erase(0, slash_index+1);
+  std::wstring::size_type slash_index = self.find_last_of(L"\\/");
+  if (slash_index != std::wstring::npos)
+    self.erase(0, slash_index+1);
 
-   return self;
+  return self;
 }
 
 std::wstring vul_file::strip_extension(wchar_t const* fn)

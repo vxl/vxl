@@ -30,7 +30,7 @@ namespace bvpl_visualize_response_process_globals
 }
 
 //: process takes 6 inputs and has 2 outputs.
-// input[0]: The respose grid
+// input[0]: The response grid
 // input[1]: The id grid
 // input[2]: The target id
 // input[3]: Raw filename
@@ -81,8 +81,8 @@ bool bvpl_visualize_response_process(bprb_func_process& pro)
   bvxm_voxel_grid<float> *temp_grid=new bvxm_voxel_grid<float>("filter_temp.vox", id_grid->grid_size());
 
   if (bvxm_voxel_grid<float> *grid = dynamic_cast<bvxm_voxel_grid<float>* > (grid_base.ptr())) {
-     bvpl_vector_operator vector_oper;
-     vector_oper.filter_response(grid, id_grid, target_id, temp_grid);
+    bvpl_vector_operator vector_oper;
+    vector_oper.filter_response(grid, id_grid, target_id, temp_grid);
   }
   else if (bvxm_voxel_grid<gauss_type>* grid=dynamic_cast<bvxm_voxel_grid<gauss_type> *>(grid_base.ptr())) {
     bvpl_vector_operator vector_oper;

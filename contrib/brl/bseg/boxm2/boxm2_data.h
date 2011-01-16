@@ -23,7 +23,7 @@ class boxm2_data: public boxm2_data_base
     //: type of data (float for alpha, bytes for mixture model, etc)
     typedef typename boxm2_data_traits<T>::datatype datatype;
 
-    //: creats boxm2_data object from byte buffer and id
+    //: creates boxm2_data object from byte buffer and id
     boxm2_data(char * data_buffer, vcl_size_t length, boxm2_block_id id);
 
     //: destructor

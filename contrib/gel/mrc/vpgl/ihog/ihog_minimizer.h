@@ -3,18 +3,19 @@
 #define ihog_minimizer_h_
 //:
 // \file
-// \brief Find image homography by minimizing squared intensity diff 
+// \brief Find image homography by minimizing squared intensity diff
 // \author Matt Leotta
-// \date 4/14/04
-//
-// \verbatim
-//  Modifications
-//   None
-// \endverbatim
-// The homgraphic transform between images is determined by minimizing the
+// \date April 14, 2004
+// The homographic transform between images is determined by minimizing the
 // sum of squared differences. The ihog transform represents a range of
 // transform generality, from pure translation to projective. The solution
 // is found by refining across a pyramid of image scales.
+//
+// \verbatim
+//  Modifications
+//   <none>
+// \endverbatim
+
 #include <vnl/vnl_vector.h>
 #include <vil/vil_image_view.h>
 #include <ihog/ihog_world_roi.h>
@@ -22,32 +23,32 @@
 #include <ihog/ihog_image.h>
 #include <vil/vil_pyramid_image_view.h>
 
-//: Minimize registration error at mulitiple scales 
-class ihog_minimizer 
+//: Minimize registration error at multiple scales
+class ihog_minimizer
 {
-public:
+ public:
   //: Constructor
   ihog_minimizer( const ihog_image<float>& image1,
-                   const ihog_image<float>& image2,
-                   const ihog_world_roi& roi );
+                  const ihog_image<float>& image2,
+                  const ihog_world_roi& roi );
 
-  //: Constructor intialized with a mask which would not include the values in registration. 
+  //: Constructor initialized with a mask which would not include the values in registration.
   ihog_minimizer( const ihog_image<float>& image1,
-                   const ihog_image<float>& image2,
-                   const ihog_image<float>& image_mask,
-                   const ihog_world_roi& roi, bool image1_mask = false );
+                  const ihog_image<float>& image2,
+                  const ihog_image<float>& image_mask,
+                  const ihog_world_roi& roi, bool image1_mask = false );
 
-    //: Constructor intialized with masks on both images. 
+    //: Constructor initialized with masks on both images.
   ihog_minimizer( const ihog_image<float>& image1,
-                   const ihog_image<float>& image2,
-                   const ihog_image<float>& image1_mask,
-                   const ihog_image<float>& image2_mask,
-                   const ihog_world_roi& roi);
+                  const ihog_image<float>& image2,
+                  const ihog_image<float>& image1_mask,
+                  const ihog_image<float>& image2_mask,
+                  const ihog_world_roi& roi);
 
   //: custom set functions
   void set_image1_mask(ihog_image<float>& mask);
   void set_image2_mask(ihog_image<float>& mask);
-    
+
   //: Run the minimization
   void minimize(ihog_transform_2d& xform);
 
@@ -55,8 +56,8 @@ public:
   //:debug purposes
   vil_pyramid_image_view<float>& from_pyr(){return from_pyramid_;}
   vil_pyramid_image_view<float>& to_pyr(){return to_pyramid_;}
-  
-protected:
+
+ protected:
   vil_pyramid_image_view<float> from_pyramid_;
   vil_pyramid_image_view<float> to_pyramid_;
   vil_pyramid_image_view<float> from_mask_pyramid_;
@@ -71,10 +72,9 @@ protected:
 
   //  static const unsigned min_level_size_ = 256;
   static const unsigned min_level_size_ = 128;
-  double end_error_; 
+  double end_error_;
   bool from_mask_; // true if mask is associated with from_pyramid_
   bool to_mask_; // true if mask is associated with to_pyramid_
-
 };
 
 #endif // ihog_minimizer_h_

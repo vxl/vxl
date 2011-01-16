@@ -10,10 +10,11 @@
 // which would be much simpler in ordinary C++. Stroustrup assures us that
 // this approach is faster in general - which I don't really believe.
 //
-// Added quite a few little functors mainly to do with iterating through maps
-// for example a version of the non-standard select1st and select2nd
-// 30 April 2004
-// Martin Roberts
+// \verbatim
+//  Modifications
+//   30 April 2004 - Martin Roberts -
+//    Added quite a few little functors mainly to do with iterating through maps
+//    for example a version of the non-standard select1st and select2nd
 
 #include <vcl_functional.h>
 #include <vcl_vector.h>
@@ -71,16 +72,16 @@ inline T mbl_stl_sequence_n(Out first, Size n, UnOp op, T init)
 template<class iterType>
 inline void mbl_stl_clean(iterType first, iterType last)
 {
-   for (; first != last; ++first)
-   {
-       delete *first;
-       *first=0;
-   }
+  for (; first != last; ++first)
+  {
+    delete *first;
+    *first=0;
+  }
 }
 
 //: Copy elements in input range for which the supplied predicate is true
 //Note bizarely although the STL provides remove_copy if etc etc
-//the simple copy_if was dropped fromn the C++ standard
+//the simple copy_if was dropped from the C++ standard
 template<typename InputIterator,
          typename OutputIterator,
          typename Predicate>
@@ -92,7 +93,7 @@ template<typename InputIterator,
   {
     if (pred(*begin))
     {
-      *destBegin++ = *begin; 
+      *destBegin++ = *begin;
     }
     ++begin;
   }
@@ -177,7 +178,7 @@ class mbl_stl_output_t1
 };
 
 //: implementation function for use with mbl_stl_output
-template <class Cont> inline 
+template <class Cont> inline
 vcl_ostream& operator<<(vcl_ostream& s, const mbl_stl_output_t1<Cont>& t)
 {
   if (t.c.empty()) return s;

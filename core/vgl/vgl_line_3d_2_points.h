@@ -130,7 +130,7 @@ inline bool coplanar(l const& l1, l const& l2, l const& l3)
 //: Return the intersection point of two concurrent lines
 // \relatesalso vgl_line_3d_2_points
 // \deprecated in favour of vgl_intersection.
-// Can be removed after the relase of VXL 1.8
+// Can be removed after the release of VXL 1.8
 template <class Type>
 vgl_point_3d<Type> intersection(l const& l1, l const& l2)
 { return vgl_intersection(l1, l2); }
@@ -138,7 +138,7 @@ vgl_point_3d<Type> intersection(l const& l1, l const& l2)
 //: Return the intersection point of a line and a plane.
 // \relatesalso vgl_line_3d_2_points
 // \deprecated in favour of vgl_intersection.
-// Can be removed after the relase of VXL 1.8
+// Can be removed after the release of VXL 1.8
 template <class Type>
 vgl_point_3d<Type> intersection(l const& line, vgl_plane_3d<Type> const& plane)
 { return vgl_intersection(line, plane); }

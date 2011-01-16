@@ -72,7 +72,7 @@ template<class T> void print_values(const vil3d_image_view<T> &img)
 
 //: Compute 3d signed distance transform from true elements in mask.
 //  On exit, values are 26 connected distance from the 'true' boundary.
-//  There are no zero values because the true boundary is the infinitismally
+//  There are no zero values because the true boundary is the infinitesimally
 //  thin edge of the true and false regions of the mask. The values inside
 //  the mask are negative and those outside are positive
 void vil3d_signed_distance_transform(const vil3d_image_view<bool>& mask,
@@ -175,7 +175,7 @@ void vil3d_distance_transform_with_dir(vil3d_image_view<float>& image,
                                                 orient.nplanes());
 
 
- vil3d_distance_transform_one_way_with_dir(flip_image,flip_orient,distance_link_i,distance_link_j,distance_link_k);
+  vil3d_distance_transform_one_way_with_dir(flip_image,flip_orient,distance_link_i,distance_link_j,distance_link_k);
 }
 
 //: Compute directed 3D distance function from zeros in original image.

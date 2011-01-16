@@ -1,13 +1,13 @@
-# Sources  for appereance and mixed grid algoritms
+# Sources  for appearance and mixed grid algorithms
 INCLUDE_DIRECTORIES( ${VXLCORE_INCLUDE_DIR} )
 INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bbas)
 INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bseg/bvxm )
 
 SET(bvxm_algo_sources
-   bvxm_merge_mog.h     bvxm_merge_mog.cxx
-   bvxm_mog_norm.h      bvxm_mog_norm.txx
-   bvxm_boxm_convert.h
-)
+    bvxm_merge_mog.h     bvxm_merge_mog.cxx
+    bvxm_mog_norm.h      bvxm_mog_norm.txx
+    bvxm_boxm_convert.h
+   )
 
 AUX_SOURCE_DIRECTORY(Templates bvxm_algo_sources)
 

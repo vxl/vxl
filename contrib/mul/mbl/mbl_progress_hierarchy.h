@@ -17,7 +17,7 @@
 // and that calls to set_estimated_iterations and end_progress are correctly nested.
 //
 // In order to use this abstract you need to derive this class
-// and provide a defintion of on_changed_progress().
+// and provide a definition of on_changed_progress().
 class mbl_progress_hierarchy: public mbl_progress
 {
  protected:

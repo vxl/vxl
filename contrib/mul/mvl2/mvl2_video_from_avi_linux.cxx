@@ -147,12 +147,12 @@ double mvl2_video_from_avi::get_frame_rate() const
 
 int mvl2_video_from_avi::get_width() const
 {
-   return width_;
+  return width_;
 }
 
 int mvl2_video_from_avi::get_height() const
 {
-   return height_;
+  return height_;
 }
 
 void mvl2_video_from_avi::set_capture_size(int width,int height)
@@ -184,7 +184,7 @@ int mvl2_video_from_avi::seek(unsigned int frame_number)
   moviestream_->SeekToPrevKeyFrame();
   unsigned int key_frame=moviestream_->GetPos();
   vcl_cout << "[mvl2_video_from_avi::seek] key frame " << key_frame
-           << "  -> uncompress " << frame_number-key_frame << " frames\n";
+           << "  -> decompress " << frame_number-key_frame << " frames\n";
   for (unsigned int i=key_frame; i<frame_number; ++i)
   {
     moviestream_->ReadFrame();

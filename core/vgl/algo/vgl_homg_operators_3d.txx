@@ -5,7 +5,7 @@
 // \file
 
 #include "vgl_homg_operators_3d.h"
-
+//
 #include <vcl_iostream.h>
 #include <vcl_vector.h>
 #include <vcl_cmath.h> // for vcl_sqrt(), vcl_acos()
@@ -59,7 +59,7 @@ Type vgl_homg_operators_3d<Type>::distance_squared(const vgl_homg_point_3d<Type>
 
 //-----------------------------------------------------------------------------
 
-//: Return the Eucidean distance between the points
+//: Return the Euclidean distance between the points
 //
 template <class Type>
 Type vgl_homg_operators_3d<Type>::distance(const vgl_homg_point_3d<Type>&point1,

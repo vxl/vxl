@@ -410,7 +410,7 @@ void draw_filled_polygon_geom_ (SoGroup* root, const vcl_vector<bmsh3d_vertex*>&
 //  Option 1: make the emissiveColor the same as diffuseColor
 //            The sheet will look continuously.
 //  Option 2: make the emissiveColor half value of diffuseColor (color/2)
-//            to show indivial sheet elements.
+//            to show individual sheet elements.
 // draws a polygon with the specified color, drawstyle and transparency
 
 SoSeparator* draw_filled_polygon (SbVec3f* vertices, const unsigned int nVertices,
@@ -571,8 +571,8 @@ SoSeparator* draw_line (const float x1, const float y1, const float z1,
 SoSeparator* draw_line (const vgl_point_3d<double>& pt1, const vgl_point_3d<double>& pt2,
                         const SbColor& color, const SoDrawStyle* drawStyle)
 {
-   return draw_line ((float)pt1.x(), (float)pt1.y(), (float)pt1.z(),
-                     (float)pt2.x(), (float)pt2.y(), (float)pt2.z(), color, drawStyle);
+  return draw_line ((float)pt1.x(), (float)pt1.y(), (float)pt1.z(),
+                    (float)pt2.x(), (float)pt2.y(), (float)pt2.z(), color, drawStyle);
 }
 
 // draws a single line with no special properties
@@ -802,7 +802,7 @@ void draw_polygon_test (SoSeparator* root)
 
   int N = 3;
 #if 0
-   for (int i=0; i<N; i++)
+  for (int i=0; i<N; i++)
     vertexList->vertex.set1Value (i, 1.2*i, 1.3*i*i, 1.4*i);
 #endif // 0
   vertexList->vertex.set1Value (0, 0, 0, 0);

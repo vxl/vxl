@@ -144,7 +144,7 @@ void mfpf_points_from_definers(
 
 //: Change indices in definers to refer to points generated
 //  Suppose definer is used to generate a set of n=definer.size()
-//  regions/pts (say pts1), by refering to some other set of m points.
+//  regions/pts (say pts1), by referring to some other set of m points.
 //  This sets up self_definer to generate an identical set of
 //  regions/pts by using the originally generated points (pts1).
 //  This can only be done if there is a region centred on each

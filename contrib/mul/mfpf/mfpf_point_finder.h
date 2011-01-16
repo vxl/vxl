@@ -138,7 +138,7 @@ class mfpf_point_finder
   //  the best nearby match.  Returns a quality of fit measure at that
   //  point (the smaller the better).
   //
-  //  Default impementation calls search_one_pose(...) at multiple
+  //  Default implementation calls search_one_pose(...) at multiple
   //  angles and scales. Result will be at a grid position
   //  and one of the given angle/scales.  True optima can then
   //  be found by further optimisation of the point.
@@ -154,7 +154,7 @@ class mfpf_point_finder
   //  point (the smaller the better).
   //  Parabolic fit used to estimate optimal position.
   //
-  //  Default impementation calls search_one_pose(...) at multiple
+  //  Default implementation calls search_one_pose(...) at multiple
   //  angles and scales. Result will be at a grid position
   //  and one of the given angle/scales.  True optima can then
   //  be found by further optimisation of the point.

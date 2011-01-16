@@ -6,15 +6,16 @@
 // \brief A Weibull distribution
 // \author Joseph L. Mundy
 // \date November 8, 2008
-//  The three-parameter, shifted,  Weibull distribution has the
-// form
-//                                           _    _ k
-//                                          | x-mu |
-//                             _    _ k-1  -|------|
-//                       k    | x-mu |      |lambda|
-//  p(x;lamba, k, mu)= ------ |------|    e  -     -
-//                     lambda |lambda|
-//                             -     -
+//  The three-parameter, shifted,  Weibull distribution has the form
+//  \verbatim
+//                                            _    _ k
+//                                           | x-mu |
+//                              _    _ k-1  -|------|
+//                        k    | x-mu |      |lambda|
+//  p(x;lambda, k, mu)= ------ |------|    e -      -
+//                      lambda |lambda|
+//                             -      -
+//  \endverbatim
 // where lambda is called the scale parameter, k is the shape parameter and
 // mu is the location parameter.
 // \verbatim

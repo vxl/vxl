@@ -92,17 +92,17 @@ class boxm_scene :public boxm_scene_base
 
   //: Loads a block and all its neighboring(adjacent) blocks
   bool load_block_and_neighbors(vgl_point_3d<int> i){ return load_block_and_neighbors(i.x(), i.y(), i.z()); }
-  
+
   //: Write the active block to disk
   void write_active_block();
 
   //: Returns the active block(in memory)
   boxm_block<T>* get_active_block();
 
-  //: Resturns the index of active block
+  //: Returns the index of active block
   vgl_point_3d<int> active_block() { return active_block_; }
 
-  //: Returns the indeces of active neighbors;
+  //: Returns the indices of active neighbors;
   vcl_set<vgl_point_3d<int>, bvgl_point_3d_cmp<int> >& active_blocks(){ return active_blocks_;}
 
   bgeo_lvcs lvcs() const { return lvcs_; }
@@ -179,11 +179,11 @@ class boxm_scene :public boxm_scene_base
   boxm_cell_iterator<T> cell_iterator(bool (boxm_scene<T>::*block_loading_func)(unsigned,unsigned, unsigned) , bool read_only = false)
   {
     boxm_cell_iterator<T> cell_iter(this->iterator(), block_loading_func, read_only);
-    return cell_iter; 
+    return cell_iter;
   }
 
   virtual vgl_box_3d<double> get_world_bbox();
-  
+
   //: Return the dimensions of the scene along each axis - this are equivalent to bbox width, length and depth
   void axes_length(double &x_length,double &y_length, double &z_length);
 
@@ -239,9 +239,9 @@ class boxm_scene :public boxm_scene_base
 
   //: Return the length of finest-level cell in the scene
   double finest_cell_length();
-  
+
   //: Return the number of leaf nodes in the scene
-  unsigned long size(); 
+  unsigned long size();
 
   vgl_point_3d<double> rpc_origin() const { return rpc_origin_; }
 
@@ -268,7 +268,7 @@ class boxm_scene :public boxm_scene_base
   //: index of the blocks (3D array) that is active; only one active block at a time
   vgl_point_3d<int> active_block_;
 
-  //: if neighbors of the active block are loaded into memory, their indeces are stored in this set
+  //: if neighbors of the active block are loaded into memory, their indices are stored in this set
   vcl_set<vgl_point_3d<int>, bvgl_point_3d_cmp<int> >  active_blocks_;
 
   float pinit_;
@@ -290,14 +290,14 @@ class boxm_scene :public boxm_scene_base
 
   bool parse_xml_string(vcl_string xml, boxm_scene_parser& parser);
 
-  //: Load all blocks in bewteen min-max indeces. This method is private and the user needs to take care of unloading the blocks
+  //: Load all blocks in between min-max indices. This method is private and the user needs to take care of unloading the blocks
   bool load_blocks(vgl_point_3d<int> min_idx, vgl_point_3d<int> max_idx);
 
-  //: Unload all blocks in bewteen min-max indeces.
+  //: Unload all blocks in between min-max indices.
   bool unload_blocks(vgl_point_3d<int> min_idx, vgl_point_3d<int> max_idx);
 
 
-  //: A helper function to generate the indeces of neighboring blocks
+  //: A helper function to generate the indices of neighboring blocks
   vcl_set<vgl_point_3d<int>, bvgl_point_3d_cmp<int> >  neighboring_blocks(vgl_point_3d<int> idx)
   {
     vcl_set<vgl_point_3d<int>, bvgl_point_3d_cmp<int> > neighbors;
@@ -375,7 +375,7 @@ class boxm_cell_iterator
   typedef typename T::datatype datatype;
 
   //: Copy constructor
-  boxm_cell_iterator(const boxm_cell_iterator<T>& other): block_iterator_(other.block_iterator_), cells_(other.cells_), 
+  boxm_cell_iterator(const boxm_cell_iterator<T>& other): block_iterator_(other.block_iterator_), cells_(other.cells_),
   block_loading_func_(other.block_loading_func_), read_only_(other.read_only_){}
 
   //: Constructor from a block iterator and function pointer to loading mechanism i.e load_block() or load_block_and_neighbors()
@@ -400,7 +400,7 @@ class boxm_cell_iterator
 
   //: Prefix increment. When the end of the block is reached, it writes the block to disk and loads the next one
   boxm_cell_iterator<T>& operator++();
-  
+
   //: Increment. When the end of the block is reached, it writes the block to disk and loads the next one
   boxm_cell_iterator<T> operator+=(unsigned const &rhs);
 
@@ -414,10 +414,10 @@ class boxm_cell_iterator
 
   //: Return the global centroid of the current cell - use only if cells are cubical
   vgl_point_3d<double> global_centroid();
-  
+
   //: Return the global length of this cell
   double length();
-  
+
  private:
 
   boxm_block_iterator<T> block_iterator_;
@@ -427,7 +427,7 @@ class boxm_cell_iterator
   typename vcl_vector< boct_tree_cell<loc_type , datatype >* >::const_iterator cells_iterator_;
 
   ptr2func block_loading_func_;
-  
+
   bool read_only_;
 };
 

@@ -1,6 +1,5 @@
 #ifndef rgrl_matcher_pseudo_3d_h_
 #define rgrl_matcher_pseudo_3d_h_
-
 //:
 // \file
 // \author Chuck Stewart
@@ -25,7 +24,7 @@
 #endif
 
 //  EvaluatorType, which perhaps should be a base class, takes two
-//  voxel lists and calculates a similarity measure beween them.  This
+//  voxel lists and calculates a similarity measure between them.  This
 //  says how well two subregions match. (F in notes)
 
 template < class PixelType >

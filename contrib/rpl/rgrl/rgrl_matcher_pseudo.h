@@ -26,7 +26,7 @@
 // intensity-region match to construct the "to" feature.
 //
 // EvaluatorType, which perhaps should be a base class, takes two
-// voxel lists and calculates a similarity measure beween them.  This
+// voxel lists and calculates a similarity measure between them.  This
 // says how well two subregions match. (F in notes)
 
 template < class PixelType >

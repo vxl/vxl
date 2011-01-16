@@ -24,19 +24,19 @@ class vpgl_bundle_rolling_shutter_adj_lsqr : public vnl_sparse_lst_sqr_function
   //: Constructor
   // \note image points are not homogeneous because they require finite points to measure projection error
   vpgl_bundle_rolling_shutter_adj_lsqr(const vcl_vector<vpgl_calibration_matrix<double> >& K,
-                       const vcl_vector<vgl_point_2d<double> >& image_points,
-                       const vcl_vector<vcl_vector<bool> >& mask,
-                       double rolling_rate,
-                       bool use_confidence_weights = true);
+                                       const vcl_vector<vgl_point_2d<double> >& image_points,
+                                       const vcl_vector<vcl_vector<bool> >& mask,
+                                       double rolling_rate,
+                                       bool use_confidence_weights = true);
 
   //: Constructor
   //  Each image point is assigned an inverse covariance (error projector) matrix
   // \note image points are not homogeneous because they require finite points to measure projection error
   vpgl_bundle_rolling_shutter_adj_lsqr(const vcl_vector<vpgl_calibration_matrix<double> >& K,
-                       const vcl_vector<vgl_point_2d<double> >& image_points,
-                       const vcl_vector<vnl_matrix<double> >& inv_covars,
-                       const vcl_vector<vcl_vector<bool> >& mask,
-                       bool use_confidence_weights = true);
+                                       const vcl_vector<vgl_point_2d<double> >& image_points,
+                                       const vcl_vector<vnl_matrix<double> >& inv_covars,
+                                       const vcl_vector<vcl_vector<bool> >& mask,
+                                       bool use_confidence_weights = true);
 
   // Destructor
   virtual ~vpgl_bundle_rolling_shutter_adj_lsqr() {}
@@ -69,12 +69,11 @@ class vpgl_bundle_rolling_shutter_adj_lsqr : public vnl_sparse_lst_sqr_function
                vnl_matrix<double>& Aij);
 
   //: compute the Jacobian Bij
-  void jac_Bij(vnl_double_3x4  Pi,                     
-                                              vnl_vector<double> const& ai,
-                                              vnl_vector<double> const& bj, 
-                                              double v_k,
-                                              vnl_matrix<double>& Bij);
-
+  void jac_Bij(vnl_double_3x4  Pi,
+               vnl_vector<double> const& ai,
+               vnl_vector<double> const& bj,
+               double v_k,
+               vnl_matrix<double>& Bij);
 
   //: construct the jth 3D point from parameter vector b
   vgl_homg_point_3d<double> param_to_point(int j, const vnl_vector<double>& b) const
@@ -88,6 +87,7 @@ class vpgl_bundle_rolling_shutter_adj_lsqr : public vnl_sparse_lst_sqr_function
   {
     return param_to_cam(i, a.data_block()+index_a(i));
   }
+
   vpgl_perspective_camera<double> param_to_cam(int i, const double* d) const
   {
     vnl_vector<double> w(d,3);
@@ -126,13 +126,14 @@ class vpgl_bundle_rolling_shutter_adj_lsqr : public vnl_sparse_lst_sqr_function
     P.set_column(3,-(M*c));
     return P;
   }
+
   //: convert params into first order motion
   vnl_double_4x4 param_to_motion_matrix(int i, const double* data, double r, double v) const;
 
   //: Fast conversion of rotation from Rodrigues vector to matrix
   vnl_matrix_fixed<double,3,3> rod_to_matrix(const double* r) const;
 
-  //: conversion of vector intos kew symmteric vetcor
+  //: conversion of vector into skew symmetric vector
   vnl_matrix_fixed<double,3,3> vector_to_skewmatrix(const double* r) const;
 
   //: Create the parameter vector \p a from a vector of cameras

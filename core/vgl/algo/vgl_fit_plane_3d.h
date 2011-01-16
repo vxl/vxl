@@ -10,9 +10,8 @@
 // \author Gamze D. Tunali
 // \date December 18, 2006
 //
-//
 //  By using the plane formula ax+by+cz+d=0, linear equations are derived
-//  and solved for the paramaters (a, b, c, d)
+//  and solved for the parameters (a, b, c, d)
 //
 // \verbatim
 //  Modifications

@@ -12,7 +12,7 @@
 //
 // This class is responsible for extracting (putting) information
 // from (into) the tiff header that is required to specify a vil_image_resource
-// There are bool flags that indicate that the item has been successfuly
+// There are bool flags that indicate that the item has been successfully
 // read (written) to the open tiff file.
 //
 // Notes:
@@ -149,11 +149,11 @@ class vil_tiff_header
       static_cast<vxl_uint_32>(vcl_floor(1.0+(image_length.val-1)/rows_per_strip.val)) : 1L;
   }
 
-  //the acutal size of the strip in the file
+  //the actual size of the strip in the file
   vxl_uint_32 actual_bytes_per_strip(const vxl_uint_32 strip_index) const;
 
   //the theoretical size based on rows_per_strip and bytes_per_line
- vxl_uint_32 bytes_per_strip() const;
+  vxl_uint_32 bytes_per_strip() const;
 
   ushort_tag sample_format;
   ushort_tag samples_per_pixel;

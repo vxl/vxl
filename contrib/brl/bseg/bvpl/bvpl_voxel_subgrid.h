@@ -6,13 +6,6 @@
 // \author Gamze Tunali
 // \date  June 24, 2009
 //
-// \verbatim
-//  Modifications
-//   9/30/09 Isabel Restrepo: Changed coordinate system to match that of kernels.
-//           Within a subgrid the centroid is placed at the origin. The maximum
-//           and minimum position are as shown below. The methods in this class must take care
-//           of retrieving the appropiate index of the big grid (where z is inverted).
-// \endverbatim
 //  \verbatim
 //                                 MaxPosition
 //                       |<--width-->|
@@ -28,6 +21,14 @@
 //     |  /           O-----------O  ---
 //     | /         MinPosition
 //     O-----X
+// \endverbatim
+//
+// \verbatim
+//  Modifications
+//   9/30/09 Isabel Restrepo: Changed coordinate system to match that of kernels.
+//           Within a subgrid the centroid is placed at the origin. The maximum
+//           and minimum position are as shown below. The methods in this class must take care
+//           of retrieving the appropriate index of the big grid (where z is inverted).
 // \endverbatim
 
 #include <bvxm/grid/bvxm_voxel_slab.h>

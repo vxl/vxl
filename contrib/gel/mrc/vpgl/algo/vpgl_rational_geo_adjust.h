@@ -3,10 +3,9 @@
 #define vpgl_rational_geo_adjust_h_
 //:
 // \file
-// \brief Adust 3-d offset and scale to align rational cameras to geolocations
+// \brief Adjust 3-d offset and scale to align rational cameras to geolocations
 // \author J. L. Mundy
 // \date August 06, 2007
-//
 
 #include <vcl_vector.h>
 #include <vnl/vnl_vector.h>
@@ -57,12 +56,12 @@ class vpgl_rational_geo_adjust
  public:
   ~vpgl_rational_geo_adjust(){}
 
- static bool adjust(vpgl_rational_camera<double> const& initial_rcam,
-                    vcl_vector<vgl_point_2d<double> > img_pts,
-                    vcl_vector<vgl_point_3d<double> > geo_pts,
-                    vpgl_rational_camera<double> & adj_rcam);
+  static bool adjust(vpgl_rational_camera<double> const& initial_rcam,
+                     vcl_vector<vgl_point_2d<double> > img_pts,
+                     vcl_vector<vgl_point_3d<double> > geo_pts,
+                     vpgl_rational_camera<double> & adj_rcam);
  protected:
- vpgl_rational_geo_adjust();
+  vpgl_rational_geo_adjust();
 };
 
 

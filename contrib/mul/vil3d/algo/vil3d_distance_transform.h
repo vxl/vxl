@@ -67,7 +67,7 @@ void vil3d_distance_transform_with_dir(vil3d_image_view<float>& image,
 
 //: Compute 3d signed distance transform from true elements in mask.
 //  On exit, values are 26 connected distance from the 'true' boundary.
-//  There are no zero values because the true boundary is the infinitismally
+//  There are no zero values because the true boundary is the infinitesimally
 //  thin edge of the true and false regions of the mask. The values inside
 //  the mask are negative and those outside are positive
 // \param distance_link_i use when calculating connected distance between i and i+1

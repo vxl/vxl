@@ -9,7 +9,7 @@
 // \date March 11, 2009
 // \verbatim
 //  Modifications
-//   03/10/2009  Isabel Restrepo. Creation. This processor is intended for appeareance model
+//   03/10/2009  Isabel Restrepo. Creation. This processor is intended for appearance model
 //               grids that contain only one floating point value. The only method implemented
 //               at creation time is expected_value() which returns itself
 //               The intention here is to be able to get expected images of grids that contain

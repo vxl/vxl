@@ -290,7 +290,7 @@ void test_gaussian_kernels()
 
 void test_gauss_convolve()
 {
- //create a some gaussians
+  //create some gaussians
   bsta_gauss_f1 f1(0,1);
   bsta_gauss_f1 f2(4,1);
   bsta_gauss_f1 f3(12,3);
@@ -321,7 +321,7 @@ MAIN(test_bvpl_kernel_functors)
            << "Testing gaussian functors\n";
   test_gauss_convolve();
 
-  //test that kernels detect max response at appropiate plane direction
+  //test that kernels detect max response at appropriate plane direction
   test_gaussian_kernels();
   return 0;
 }
