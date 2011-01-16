@@ -110,6 +110,9 @@ SOURCE=.\boxm2_cpp_update_process.cxx
 SOURCE=.\boxm2_cpp_refine_process.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\boxm2_cpp_change_detection_process.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/brdb_value_t+vil_image_view_base_sptr-.cxx
 # End Source File
 # End Group
@@ -147,6 +150,12 @@ SOURCE=.\boxm2_data_serial_iterator.h
 # End Source File
 # Begin Source File
 SOURCE=.\boxm2_cpp_refine_process.h
+# End Source File
+# Begin Source File
+SOURCE=.\boxm2_cpp_change_detection_process.h
+# End Source File
+# Begin Source File
+SOURCE=.\boxm2_change_detection_functor.h
 # End Source File
 # End Group
 # End Target

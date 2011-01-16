@@ -115,6 +115,9 @@ SOURCE=.\boxm2_cpp_update_main.cxx
 # Begin Source File
 SOURCE=.\boxm2_cpp_render_main.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\boxm2_cpp_change_detection_main.cxx
+# End Source File
 # End Group
 # End Target
 # End Project
