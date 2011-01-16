@@ -164,7 +164,7 @@ Copyright @copyright{} 2011 Computer Vision Group, Inc.
 @comment ------------------------------------------------------------------
 @node    data, io, Introduction, Top
 @comment node-name, next, previous,     up
-@chapter data: Boxm2 Data Structures.
+@chapter Boxm2 Data Structures
 @cindex data
 
 
@@ -173,7 +173,7 @@ Copyright @copyright{} 2011 Computer Vision Group, Inc.
 @comment ------------------------------------------------------------------
 @node    io, cpp, data, Top
 @comment node-name, next, previous,     up
-@chapter io: Boxm2 IO Package.
+@chapter Boxm2 IO Package
 @cindex io
 
 @include chapter_io.texi
@@ -193,7 +193,7 @@ Copyright @copyright{} 2011 Computer Vision Group, Inc.
 @comment ------------------------------------------------------------------
 @node    ocl, Index, cpp, Top
 @comment node-name, next, previous,     up
-@chapter ocl: Boxm2 OpenCL Accelerated Package
+@chapter Boxm2 OpenCL Accelerated Package
 @cindex probability
 @cindex statistical classifier
 @cindex classifier
