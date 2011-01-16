@@ -13,6 +13,8 @@ MANPAGE_SOURCES += boxm2_update_image_functor.h
 SOURCES += boxm2_cpp_refine_process.cxx
 MANPAGE_SOURCES += boxm2_refine_block_function.h
 MANPAGE_SOURCES += boxm2_data_serial_iterator.h
+SOURCES += boxm2_cpp_change_detection_process.cxx
+MANPAGE_SOURCES += boxm2_change_detection_functor.h
 
 ################################
 include ${VXLROOT}/config/top.mk
