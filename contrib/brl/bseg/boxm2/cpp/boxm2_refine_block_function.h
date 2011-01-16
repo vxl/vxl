@@ -123,10 +123,6 @@ bool boxm2_refine_block_function::refine()
     int startPtr  = blk_->mem_ptrs()[buffIndex][0];       //points to first element in data buffer
     int endPtr    = blk_->mem_ptrs()[buffIndex][1];       //points to TWO after the last element in data buffer
 
-    //get the (absolute) index of the start and end pointers
-    int preRefineStart = startPtr;
-    int preRefineEnd   = endPtr;
-
     //---- special case that may not be necessary ----------------------------
     //0. if there aren't 585 cells in this buffer, quit refining
     int preFreeSpace = free_space(startPtr, endPtr);
