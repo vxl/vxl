@@ -1,84 +1,41 @@
 @chapsummary
- mul is VXL compatible model-based computer vision.
+BOXM2 is a VXL accelerated probabilistic volumetric modeling library. BOXM2 is developed in c++ with parallel implementation in OpenCL for accelerated performance. While the C++ implementation is crucial for debugging and devlopment of new algorithms, the OpenCL implementation is required for efficient runnning of such algorithms in real-application systems or demonstrations. The idead under this implementation has evolved over past few years and assimilated from existing library BOXM and its predecesssors. BOXM2 is designed mainly to  overcome limitations of previous libraries and also facilitate parallel development of accelerated library in OpenCL. 
+
+The major advantages of BOXM2 libraries over its predecessors are listed below:
+@itemize
+@item A common set of data structures are used for both C++ and OpenCL implementation which provides for easy mingling of C++ code for memory intensive jobs and OpenCL code for computation intensive jobs. 
+@item  The structure of the scene which is a grid of shallow octrees encoded by bit streams is separated from the data each cell contains. This provides flexibility of using the structure of the scene with multiple data streams without loading all of the data.
+@item This library also aims to handle huge amount of data using streaming concept. The latency of data I/O from hard drive is hidden by using a) cache with LRU or nearest neighbor implementaions and b) asynchronous I/O (brl/bbas/baio). The latency of data I/O from main memory to GPU memory is hidden by using double buffering concept.
+@item This library also facilitates representation of multi-resolution data.  
+@end itemize
 @endchapsummary
 
-@section Manchester
-@cindex model-based
-@cindex ISBE
-@cindex Manchester
-@cindex modelling
-@cindex computer vision
-
-Manchester, despite being better known for its football teams, is the location
-of the Dept. of Imaging Science and Biomedical Engineering, at the University
-of Manchester. The mul library was written by members of the department.
-
-The department specialises (amongst other things) in model based computer
-vision. This roughly means the designing of statistical models which
-represent features in those images, means of training these models from
-real images, and the extracting of information from test images using
-these models.
-
-@section VXL
-
-The mul libraries are build on VXL.
-
-@section Documentation
-@cindex book
-@cindex documentation, monolithic
-The mul documentation comes in two main forms: this book, and structured
-comments in the source code, which are automatically extracted.  The book
-is intended to be a single reference, where all the high-level
-documentation resides.
-
-@subsection The mul Book
-
-The book (in subdirectory @code{mul/doc/book}) is a human-written collection of VXL
-documentation, suitable for printing.  It is intended to be readable as an
-introduction to the various facilities provided by the mul libraries,
-and to be browsable as a first source of examples and tips.
-
-@subsection Automatically generated documentation
-@cindex documentation, automatically generated
-@cindex doxygen
-
-Although the human-written mul book is the first source, the definitive
-authority on what a class or function does must be the source code
-comments.  The book will give a high-level description of the most
-important and commonly-used features of a class, but the source code
-contains the details.  In order to make these details easier to scan, the
-mul source files contain specially structured comments, which can be
-scanned by the @emph{Doxygen} program and converted into an attractive
-hyperlinked reference.
-
-An example of what the syntax for documentation looks like can be found
-in @code{vxl/doc/vxl_doc_rules.[h,cxx]}, but briefly a comment line which
-begins with @code{//:} is documentation for the type, function, or
-variable which follows it.  For example
-
-@smallexample
-//: Brief description of my_class
-class my_class @{
-  //: \brief Brief description, the long one is in the .cxx file
-  my_class();
-@};
-@end smallexample
-
-You can find the doxygen output at
-@uref{http://paine.wiau.man.ac.uk/pub/doc_vxl/index.html, The VXL Documentation site}.
-
-@section The Design and Evolution of mul
+@section The Design and Evolution of BOXM2
+The predecssors of BOXM2 are BVXM and BOXM. BVXM was developed at Brown unviersity for modeling volumes with fixed grid for multiple modalities. This library was developed using a fixed grid and therefore required hue amount of storage which was mitigated by using octrees in  BOXM. BOXM implemented octrees for modeling volumetric data but had few limitations such as data and structure beign highly dependent as well as inefficient implementations. 
 
 Design goals:
 
 @itemize @bullet
-@item Cross platform
+@item Accelerated Implementation: The modeling and other algorithms developed using 3-d volumetric representation are computationally intensive but highly parallel. In light of this age of GPU rush, such parallel implementations tend to achive great efficiency and was the main reason to include OpenCL implementation. The choice of OpenCL over CUDA was mainly governed by the ability of OpenCL to run on GPUs, CPUs and more hardware resources. BOXM2  provides a parallel implementation in OpenCL to the algorithms in C++. A single set of data and code structure cater to both C++ and OpenCL implemenations.
 
-@item Flexible --- allow heavy use of strategy patterns
+@item Separation of data and octrees: One of the major drawbacks of BOXM was mixed data structure of data and octree. This would lead to limited use of octrees. The octree would have to be instantiated with know data types and would rule out a possiblity of removing or adding another data type after the instantiation. BOXM2 has separated out the octrees from data by maintaining two different streams: (i) block streams and (ii) data streams. The block streams contain information about the scene structure and octrees with an index of the data stream stored at each cell of the octree. The data streams are just arrays of data and index of the respective data elements are stored in the block streams. This provides flexibility of adding or removing as well as selective processing of data streams at any given time.
 
-@item uniform naming -- of course.
+@item Streaming capabilites: One of the foremost capability of this library is to deal with huge amount of data (order of hundred of GBs). This requires huge amount of data to be read from the hard drives which would impact the efficiency of the algorithm. BOXM2 hides such latecny by allowing for asynchronous I/O accompanied with smart caching algorithms. The sysnchronous I/O has been implemented for windows, Posix and Mac Os platforms. The caching algorithms can be implemented specifically or generically depending on the application.
+
 @end itemize
 
-Large parts of MUL came from RADIAL a C++ Computer Vision Library developed at
-Manchester. Tim Cootes and Ian Scott were principally responsible for this
-conversion and the design of the rest.
+@section OpenCL implementation
+OpenCL (Open Computing Language) is a programming framework for hetrogeenous platform consisting of CPUs, GPUs, and other hardware resources. OpenCL is based based on C99 for writing functions. OpenCL provides parallel computing using task-based and data-based parallelism based on SIMD architecture. It has been adopted by several vendors such AMD, Nvdia (only GPU), Intel, IBM and many more. OpenCL biggest competitor CUDA has beeen developed by Nvidia but is only limited to GPUs as well is closed design.
+
+BOXM2 mirror c++ implementation in OpenCL for efficiency purposes. A distinct library brl/bbas/bocl handles most of the OpenCL API calls so as to allow users to program platform independent. The OpenCL implementation also comprises of a cache and use a parallel scheduler system to hide the latency of data transfer form CPU memory to GPU memory in case of GPU implementation.  
+
+@section Scene Data structure
+The scene ( or volume ) to be modeled is broken down into numerous blocks. These blocks can be laid out in sparse or dense 3-d matrix. This kind of setup allows users to model chunks of the volume over a wide area. These blocks further consists of a 3-d grid of shallow octrees. This representation could be more efficient by have a 3-d octree of shallow octrees instead of 3-d grid which will be implemented in the future. The shallow octrees are encoded unconventionally as bit-streams for efficient storage and computation.
+
+The root of each octree  stores an absolute index of the data in its respective array. Note that all different data elemenets can be accessed by the same index. This separation of data and octrees leads to flexibility in using multi-modalities.
+ 
+@section Asynchronous I/O
+One of the major advantages of BOXM2 is to hide the latency of disk I/O by using single threaded asynchronous I/O. The asynchrounous I/O has been implemented for Windows, Posix and Mac OS platforms and platform implementations are hidden using the library "baio". The cache loads the nearest blocks asychronously without blocking execution of the program and assists in hiding disk I/O latency.
+
+@section Demos
+This library also provides GUI for real-time rendering and near real-time volume updating of the model using large images. 
