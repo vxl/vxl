@@ -25,8 +25,8 @@
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/basic/boxm2_block_id.h>
 #include <boxm2/ocl/boxm2_opencl_processor.h>
-#include <boxm2/ocl/boxm2_opencl_render_process.h>
-#include <boxm2/ocl/boxm2_opencl_render_depth_process.h>
+#include <boxm2/ocl/pro/boxm2_opencl_render_process.h>
+#include <boxm2/ocl/pro/boxm2_opencl_render_depth_process.h>
 
 //brdb stuff
 #include <brdb/brdb_value.h>
