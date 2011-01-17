@@ -28,8 +28,7 @@
 #include <vbl/vbl_ref_count.h>
 #include <vbl/vbl_smart_ptr.h>
 
-//ocl include
-#include <bocl/bocl_cl.h>
+
 
 class boxm2_block : public vbl_ref_count
 {

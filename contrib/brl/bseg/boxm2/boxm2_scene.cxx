@@ -118,18 +118,18 @@ boxm2_scene_info* boxm2_scene::get_blk_metadata(boxm2_block_id id)
   boxm2_block_metadata data = blocks_[id]; 
   boxm2_scene_info* info = new boxm2_scene_info(); 
   
-  info->scene_origin[0] = (cl_float) data.local_origin_.x();
-  info->scene_origin[1] = (cl_float) data.local_origin_.y();
-  info->scene_origin[2] = (cl_float) data.local_origin_.z();
-  info->scene_origin[3] = (cl_float) 0.0f;
+  info->scene_origin[0] = (float) data.local_origin_.x();
+  info->scene_origin[1] = (float) data.local_origin_.y();
+  info->scene_origin[2] = (float) data.local_origin_.z();
+  info->scene_origin[3] = (float) 0.0f;
 
-  info->scene_dims[0] = (cl_int) data.sub_block_num_.x();  // number of blocks in each dimension
-  info->scene_dims[1] = (cl_int) data.sub_block_num_.y();  
-  info->scene_dims[2] = (cl_int) data.sub_block_num_.z();  
-  info->scene_dims[3] = (cl_int) 0; 
+  info->scene_dims[0] = (int) data.sub_block_num_.x();  // number of blocks in each dimension
+  info->scene_dims[1] = (int) data.sub_block_num_.y();  
+  info->scene_dims[2] = (int) data.sub_block_num_.z();  
+  info->scene_dims[3] = (int) 0; 
 
-  info->block_len = (cl_float) data.sub_block_dim_.x(); 
-  info->epsilon   = (cl_float) (info->block_len / 100.0f); 
+  info->block_len = (float) data.sub_block_dim_.x(); 
+  info->epsilon   = (float) (info->block_len / 100.0f); 
   
   info->root_level = data.max_level_-1; 
   info->num_buffer = 0; 

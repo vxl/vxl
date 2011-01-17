@@ -21,23 +21,21 @@
 //vpgl camera
 #include <vpgl/vpgl_perspective_camera.h>
 
-//cl include for boxm2_scene_info
-#include <bocl/bocl_cl.h>
 
 //: block info that can be easily made into a buffer and sent to gpu
 struct boxm2_scene_info
 {
   //world information
-  cl_float    scene_origin[4];          // scene origin (point)
-  cl_int      scene_dims[4];            // number of blocks in each dimension
-  cl_float    block_len;                // size of each block (can only be 1 number now that we've established blocks are cubes)
-  cl_float    epsilon;                  // block_len/100.0 (placed here to avoid using a register)
+  float    scene_origin[4];          // scene origin (point)
+  int      scene_dims[4];            // number of blocks in each dimension
+  float    block_len;                // size of each block (can only be 1 number now that we've established blocks are cubes)
+  float    epsilon;                  // block_len/100.0 (placed here to avoid using a register)
 
-  //tree meta information
-  cl_int      root_level;               // root_level of trees
-  cl_int      num_buffer;               // number of buffers (both data and tree)
-  cl_int      tree_buffer_length;       // length of tree buffer (number of cells/trees)
-  cl_int      data_buffer_length;       // length of data buffer (number of cells)
+  // tree meta information
+  int      root_level;               // root_level of trees
+  int      num_buffer;               // number of buffers (both data and tree)
+  int      tree_buffer_length;       // length of tree buffer (number of cells/trees)
+  int      data_buffer_length;       // length of data buffer (number of cells)
 };
 
 class boxm2_scene_info_wrapper:public vbl_ref_count

@@ -5,7 +5,7 @@
 #include <boxm2/boxm2_block.h>
 #include <boxm2/boxm2_data_base.h>
 #include <vil/vil_save.h>
-#include <boxm2/boxm2_util.h>
+#include <boxm2/ocl/boxm2_ocl_util.h>
 
 //brdb stuff
 #include <brdb/brdb_value.h>
@@ -64,7 +64,7 @@ bool boxm2_opencl_refine_process::execute(vcl_vector<brdb_value_sptr>& input, vc
 
   //bit lookup buffer
   cl_uchar* lookup_arr = new cl_uchar[256];
-  boxm2_util::set_bit_lookup(lookup_arr);
+  boxm2_ocl_util::set_bit_lookup(lookup_arr);
   bocl_mem lookup((*context_), lookup_arr, sizeof(cl_uchar)*256, "bit lookup buffer");
   lookup.create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
    

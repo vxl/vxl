@@ -7,7 +7,7 @@
 #include <vil/vil_save.h>
 #include <vil/vil_math.h>
 #include <vil/vil_load.h>
-#include <boxm2/boxm2_util.h>
+#include <boxm2/ocl/boxm2_ocl_util.h>
 
 //brdb stuff
 #include <brdb/brdb_value.h>
@@ -87,7 +87,7 @@ bool boxm2_opencl_update_process::execute(vcl_vector<brdb_value_sptr>& input, vc
   brdb_value_t<vpgl_camera_double_sptr>* brdb_cam = static_cast<brdb_value_t<vpgl_camera_double_sptr>* >( input[i++].ptr() );
   vpgl_camera_double_sptr cam = brdb_cam->value();
   cl_float* cam_buffer = new cl_float[16*3];
-  boxm2_util::set_persp_camera(cam, cam_buffer);
+  boxm2_ocl_util::set_persp_camera(cam, cam_buffer);
   persp_cam_ = new bocl_mem((*context_), cam_buffer, 3*sizeof(cl_float16), "persp cam buffer");
   persp_cam_->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
@@ -116,7 +116,7 @@ bool boxm2_opencl_update_process::execute(vcl_vector<brdb_value_sptr>& input, vc
 
   //bit lookup buffer
   cl_uchar* lookup_arr = new cl_uchar[256];
-  boxm2_util::set_bit_lookup(lookup_arr);
+  boxm2_ocl_util::set_bit_lookup(lookup_arr);
   lookup_ = new bocl_mem((*context_), lookup_arr, sizeof(cl_uchar)*256, "bit lookup buffer");
   lookup_->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
 

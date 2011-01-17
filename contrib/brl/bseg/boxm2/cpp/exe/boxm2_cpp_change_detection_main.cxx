@@ -1,4 +1,3 @@
-#include <bocl/bocl_cl.h>
 
 #include <vpgl/vpgl_perspective_camera.h>
 #include <vil/vil_convert.h>

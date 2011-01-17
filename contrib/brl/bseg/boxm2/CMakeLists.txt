@@ -9,9 +9,6 @@ IF(EXPAT_FOUND)
   INCLUDE_DIRECTORIES( ${GEL_INCLUDE_DIR} )
   INCLUDE_DIRECTORIES( ${GEL_INCLUDE_DIR}/mrc )
   INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/b3p/expatpp )
-
-    ADD_DEFINITIONS(-DHAS_OPENCL=1)
-    INCLUDE_DIRECTORIES( ${OPENCL_INCLUDE_PATH} )
     INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bbas )
 
     SET(boxm2_sources
@@ -29,7 +26,7 @@ IF(EXPAT_FOUND)
     AUX_SOURCE_DIRECTORY(Templates boxm2_sources)
 
     ADD_LIBRARY(boxm2  ${boxm2_sources})
-    TARGET_LINK_LIBRARIES(boxm2 boxm2_basic boxm2_io bocl boct brdb vbl_io expatpp vpgl vgl vgl_xio vbl vsl vcl)
+    TARGET_LINK_LIBRARIES(boxm2 boxm2_basic boxm2_io  boct brdb vbl_io expatpp vpgl vgl vgl_xio vbl vsl vcl)
 
     #basic
     subdirs(basic)
