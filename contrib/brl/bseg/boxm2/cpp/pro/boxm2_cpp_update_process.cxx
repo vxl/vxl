@@ -1,4 +1,4 @@
-#include <boxm2/cpp/boxm2_cpp_update_process.h>
+#include <boxm2/cpp/pro/boxm2_cpp_update_process.h>
 
 //boxm2 data structures
 #include <boxm2/boxm2_scene.h>
