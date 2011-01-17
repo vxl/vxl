@@ -15,13 +15,13 @@ Few processes are discussed below:
 
 @item @code{boxm2_cpp_update_process}:This process updates the model using an EO image and the given sensor model. The inputs to such process include scene, camera, image and the output of such a process is updated scene. This process uses multiple passes of ray-tracing to update the volume.
 
-@item @code{boxm2_cpp_refine_process}:This process refines/merge the scene. This refining.merging results in the scene getting finer or coarser at places where the evidence of surface increases or decreases respectively. The inputs to such process include scene and threshold and the output of such a process is updated scene. This process requires serial iterating over blocks.
+@item @code{boxm2_cpp_refine_process}:This process refines/merge the scene. This refining/merging results in the scene getting finer or coarser at places where the evidence of surface increases or decreases respectively. The inputs to such process include scene and threshold and the output of such a process is updated scene. This process requires serial iterating over blocks.
 @end itemize
-Each process uses inputs as processing inputs and return output if any through output vector. The process is light-weight as it only process whats given to it. Multiple  processes might be called in a given system which leads to discussion of @code{boxm2_cpp_processor}.
+Each process uses inputs as processing inputs and return output if any through output vector. The process is light-weight as it only process the data provided to it. Multiple  processes might be called in a given system which leads to discussion of @code{boxm2_cpp_processor}.
 
 @section cpp Processor
 
-A processor @code{boxm2_cpp_processor} is subclassed from @code{boxm2_processor}. The cpp processor is responsible for calling cpp processes and passing them inputs. The processor is a high level manager which interacts with the user and translates the user actions into different process calls. Example of usage of such a processor is shown below:
+A processor @code{boxm2_cpp_processor} is subclass from @code{boxm2_processor}. The cpp processor is responsible for calling cpp processes and passing them inputs. The processor is a high level manager which interacts with the user and translates the user actions into different process calls. Example of usage of such a processor is shown below:
 
 An example of C++ rendering algorithm is shown below.
 @example
