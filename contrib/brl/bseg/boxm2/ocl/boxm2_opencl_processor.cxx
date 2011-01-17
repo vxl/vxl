@@ -1,5 +1,5 @@
 #include "boxm2_opencl_processor.h"
-#include "boxm2_opencl_process_base.h"
+
 
 //boxm2 data structures
 

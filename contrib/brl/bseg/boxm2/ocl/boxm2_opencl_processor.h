@@ -24,6 +24,7 @@
 #include <vcl_vector.h>
 
 #include "boxm2_opencl_cache.h"
+#include <boxm2/ocl/pro/boxm2_opencl_process_base.h>
 
 //open cl includes
 #include <bocl/bocl_cl.h>

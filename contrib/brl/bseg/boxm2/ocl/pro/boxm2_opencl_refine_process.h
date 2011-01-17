@@ -2,8 +2,8 @@
 #define boxm2_opencl_refine_process_h
 //:
 // \file
-#include "boxm2_opencl_process_base.h"
-#include "boxm2_opencl_cache.h"
+#include <boxm2/ocl/pro/boxm2_opencl_process_base.h>
+#include <boxm2/ocl/boxm2_opencl_cache.h>
 #include <vcl_vector.h>
 #include <boxm2/boxm2_data_traits.h>
 
