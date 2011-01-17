@@ -20,8 +20,8 @@
 #include <boxm2/io/boxm2_nn_cache.h>
 #include <boxm2/basic/boxm2_block_id.h>
 #include <boxm2/cpp/boxm2_cpp_processor.h>
-#include <boxm2/cpp/boxm2_cpp_update_process.h>
-#include <boxm2/cpp/boxm2_cpp_render_process.h>
+#include <boxm2/cpp/pro/boxm2_cpp_update_process.h>
+#include <boxm2/cpp/pro/boxm2_cpp_render_process.h>
 #include <boxm2/ocl/boxm2_opencl_processor.h>
 #include <boxm2/ocl/boxm2_opencl_render_process.h>
 #include <boxm2/ocl/boxm2_opencl_update_process.h>
