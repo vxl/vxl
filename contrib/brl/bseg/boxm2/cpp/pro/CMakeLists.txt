@@ -7,4 +7,4 @@ SET(boxm2_cpp_pro_sources
    )
 ADD_LIBRARY(boxm2_cpp_pro  ${boxm2_cpp_pro_sources})
 
-TARGET_LINK_LIBRARIES(boxm2_cpp_pro boxm2_cpp brdb vbl_io expatpp vpgl vil vgl vgl_xio vbl vsl vcl)
+TARGET_LINK_LIBRARIES(boxm2_cpp_pro boxm2_cpp_algo brdb vbl_io expatpp vpgl vil vgl vgl_xio vbl vsl vcl)

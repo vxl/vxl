@@ -7,7 +7,7 @@
 #include <boxm2/boxm2_data_base.h>
 #include <vil/vil_save.h>
 #include <boxm2/boxm2_util.h>
-#include <boxm2/cpp/boxm2_change_detection_functor.h>
+#include <boxm2/cpp/algo/boxm2_change_detection_functor.h>
 //brdb stuff
 #include <brdb/brdb_value.h>
 #include <vil/vil_math.h>

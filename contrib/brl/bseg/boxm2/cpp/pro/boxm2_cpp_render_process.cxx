@@ -9,7 +9,7 @@
 #include <vil/vil_math.h>
 
 #include <boxm2/boxm2_util.h>
-#include <boxm2/cpp/boxm2_render_exp_image_functor.h>
+#include <boxm2/cpp/algo/boxm2_render_exp_image_functor.h>
 //brdb stuff
 #include <brdb/brdb_value.h>
 

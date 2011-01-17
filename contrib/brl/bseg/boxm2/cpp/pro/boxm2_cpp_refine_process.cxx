@@ -7,7 +7,7 @@
 #include <boxm2/boxm2_data_base.h>
 #include <vil/vil_save.h>
 #include <boxm2/boxm2_util.h>
-#include <boxm2/cpp/boxm2_refine_block_function.h>
+#include <boxm2/cpp/algo/boxm2_refine_block_function.h>
 
 //brdb stuff
 #include <brdb/brdb_value.h>

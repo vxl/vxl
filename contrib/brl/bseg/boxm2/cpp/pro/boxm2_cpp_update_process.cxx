@@ -7,13 +7,13 @@
 #include <boxm2/boxm2_data_base.h>
 #include <vil/vil_save.h>
 #include <boxm2/boxm2_util.h>
-#include <boxm2/cpp/boxm2_update_image_functor.h>
+#include <boxm2/cpp/algo/boxm2_update_image_functor.h>
 //brdb stuff
 #include <brdb/brdb_value.h>
 #include <vil/vil_math.h>
 //directory utility
 #include <vcl_where_root_dir.h>
-#include <boxm2/cpp/boxm2_data_serial_iterator.h>
+#include <boxm2/cpp/algo/boxm2_data_serial_iterator.h>
 
 bool boxm2_cpp_update_process::execute(vcl_vector<brdb_value_sptr>& input, vcl_vector<brdb_value_sptr>& output)
 {
