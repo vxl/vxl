@@ -118,10 +118,8 @@ inputclass \name\
 @ifinfo
 This documents the Boxm2 Library (Accelerated Octree Modeling in C++ and OpenCL).
 
-Copyright 2011 Computer Vision Group, Inc.
+Code developed by Computer Vision Group, Inc.
 
-Permission is granted to copy and distribute, retaining this
-original copyright notice.
 @end ifinfo
 
 @c  This title page illustrates only one of the

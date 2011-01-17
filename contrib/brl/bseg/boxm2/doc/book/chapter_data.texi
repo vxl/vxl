@@ -10,14 +10,11 @@ Each @code{block} is a fixed grid of octrees, also referred to as @code{sub_bloc
 the code.  The dimension of a @code{sub_block} and the number of @code{sub_blocks} in 
 each block are specified in the @code{scene.xml} file.  
 
-Discuss:
-
-    - Block ID
-    
-    - How each are stored on disk (uniquely identified by their id).  
-
 The voxel structure of each block is encoded in its own file which is located in the
-directory specified by the @code{scene.xml} file.  
+directory specified by the @code{scene.xml} file.  Each block has a unique 
+@code{boxm2_block_id}, which consists of three integers.  This block id 
+is how blocks and their corresponding data are identified on disk.  
+
 
 @subsection Boxm2 Block: octree based voxel structure
 
@@ -37,8 +34,6 @@ Discuss:
     with the same voxel (leaf cell).  
 
 @section Boxm2 Basic
-@cindex vnl_random
-@cindex mz_random
 
 Discuss: 
 
@@ -53,58 +48,3 @@ Discuss:
     - Each boxm2_array_Nd<T> type provides dimensional indexing, i.e.
     boxm2_array_3d array(i,j,k) will be valid.  
     
-
-@section Miscellaneous
-Uses random examples - Delete this section upon publication. 
-
-@table @code
-@item mbl_cloneable_ptr
-Almost the opposite of a vbl_smart_ptr, this class acts like a pointer,
-but performs a deep copy of the referenced object when the pointer itself is copied.
-Supports IO via @code{vsl}.
-
-@item mbl_chord
-Describes a horizontal line on a image.
-
-@item mbl_priority_bounded_queue
-This acts like a vcl_priority_queue, but only stores the n least values, where n
-is the configurable bound.
-
-@item mbl_stats_1d, mbl_sum_1d
-Calculate, store, and manipulate running statistics and sums.
-
-@item mbl_lda
-Calculate, manipulate and use a Linear Discriminant Analysis of data.
-
-@item mbl_gamma.h
-Complete and incomplete gamma functions
-
-@item mbl_k_means.h
-Perform k means clustering.
-
-@item mbl_matrix_products.h, mbl_matxvec.h
-Perform various linear algebra operations.
-
-@item mbl_print.h
-Commands that debuggers can run easily on demand. Include this file
-in your application, and you call these functions from a debugger to
-display common containers.
-@end table
-
-@example
-    vnl_vector<double> my_sum(mbl_data_wrapper<vnl_vector<double> >& data)
-    @{
-      data.reset();
-      vnl_vector<double> sum = data.current();
-      while (data.next())
-        sum += data.current();
-    @}
-@end example
-
-@itemize
-@item It should provide the same pseudo-random sequence whatever platform you are running
-on.
-@item It is based on an algorithm which is known to have less correlation between
-adjacent samples, than some standard pseudo random number generators.
-@item It has been thoroughly tested (See below for some examples.)
-@end itemize.
