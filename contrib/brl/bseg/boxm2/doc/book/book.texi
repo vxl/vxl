@@ -132,12 +132,12 @@ Code developed by Computer Vision Group, Inc.
 @author CVG
 
 @c  The following two commands start the copyright page.
-@page
-@vskip 0pt plus 1filll
-Copyright @copyright{} 2011 Computer Vision Group, Inc.
-@end titlepage
-@shortcontents
-@contents
+@c @page
+@c @vskip 0pt plus 1filll
+@c Copyright @copyright{} 2011 Computer Vision Group, Inc.
+@c @end titlepage
+@c @shortcontents
+@c @contents
 @end iftex
 
 @menu
@@ -201,35 +201,11 @@ Copyright @copyright{} 2011 Computer Vision Group, Inc.
 
 @include chapter_demo.texi
 
-
 @comment ------------------------------------------------------------------
-@appendix  Filenames and structure
-The directory structure of mul is below
-@example
-  $VXLROOT/vcl
-          /vxl
-          /mul
-              /mbl
-              /vil3d
-              /vpdfl
-              /clsfy
-@end example
-
-@comment ------------------------------------------------------------------
-@appendix  On The Use of Templates
-@cindex templates
-
-The @code{boxm2} libraries try to avoid the use of templates wherever possible.
-The main reason for this is that you can end up have large numbers of template
-variables and template instantiations.  The only template usage is in the 
-@code{boxm2_data} and @code{boxm2_data_traits} classes, which are used to 
-specify data types, sizes, and string identifiers.  
-
-@comment ------------------------------------------------------------------
-@node    Index,  , clsfy, Top
+@c @node    Index,  , clsfy, Top
 @c        node-name,    next, previous,        up
-@unnumbered Index
+@c @unnumbered Index
 
-@printindex cp
+@c @printindex cp
 
 @bye

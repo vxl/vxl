@@ -25,7 +25,8 @@ SOURCEFILES=book.texi \
             chapter_data.texi \
             chapter_io.texi \
             chapter_cpp.texi \
-            chapter_ocl.texi
+            chapter_ocl.texi \
+            chapter_demo.texi 
 
 all: book.html book.dvi
 

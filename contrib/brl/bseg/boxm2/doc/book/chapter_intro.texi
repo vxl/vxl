@@ -24,6 +24,8 @@ Design goals:
 
 @end itemize
 
+@image{liboverview,6in,,,}
+
 @section OpenCL implementation
 OpenCL (Open Computing Language) is a programming framework for hetrogeenous platform consisting of CPUs, GPUs, and other hardware resources. OpenCL is based based on C99 for writing functions. OpenCL provides parallel computing using task-based and data-based parallelism based on SIMD architecture. It has been adopted by several vendors such AMD, Nvdia (only GPU), Intel, IBM and many more. OpenCL biggest competitor CUDA has beeen developed by Nvidia but is only limited to GPUs as well is closed design.
 
@@ -36,6 +38,8 @@ The root of each octree  stores an absolute index of the data in its respective 
  
 @section Asynchronous I/O
 One of the major advantages of BOXM2 is to hide the latency of disk I/O by using single threaded asynchronous I/O. The asynchrounous I/O has been implemented for Windows, Posix and Mac OS platforms and platform implementations are hidden using the library "baio". The cache loads the nearest blocks asychronously without blocking execution of the program and assists in hiding disk I/O latency.
+
+@image{streamingoverview,6in,,,}
 
 @section Demos
 This library also provides GUI for real-time rendering and near real-time volume updating of the model using large images. 

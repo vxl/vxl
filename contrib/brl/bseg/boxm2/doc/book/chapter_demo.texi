@@ -44,6 +44,9 @@ The handle method is currently equipped to handle the following commands:
 @item Keystroke 'S': will write the model to disk
 @item Keystroke 'R': will return the camera to its initial position
 @item Keystroke 'X', 'Y', or 'Z': will move the camera to look straight down the 'X', 'Y', or 'Z' axis respectively  
+@item Keystroke 'C': will toggle to change detect mode on the images in the 
+      specified image directory.  While in change detect mode, keystroke 'N' will 
+      change the frame to the next image.  
 @end itemize
 
 
