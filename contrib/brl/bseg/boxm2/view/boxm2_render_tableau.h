@@ -31,13 +31,13 @@
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/boxm2_data.h>
 #include <boxm2/ocl/boxm2_opencl_processor.h>
-#include <boxm2/ocl/boxm2_opencl_render_process.h>
-#include <boxm2/ocl/boxm2_opencl_update_process.h>
-#include <boxm2/ocl/boxm2_opencl_refine_process.h>
+#include <boxm2/ocl/pro/boxm2_opencl_render_process.h>
+#include <boxm2/ocl/pro/boxm2_opencl_update_process.h>
+#include <boxm2/ocl/pro/boxm2_opencl_refine_process.h>
 
-#include <boxm2/ocl/boxm2_opencl_change_detection_process.h>
-#include <boxm2/cpp/boxm2_cpp_processor.h>
-#include <boxm2/cpp/boxm2_cpp_refine_process.h>
+#include <boxm2/ocl/pro/boxm2_opencl_change_detection_process.h>
+
+
 #include <boxm2/io/boxm2_dumb_cache.h>
 #include <boxm2/io/boxm2_nn_cache.h>
 
