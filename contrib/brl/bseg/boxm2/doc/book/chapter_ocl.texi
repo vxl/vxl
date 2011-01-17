@@ -12,7 +12,7 @@ or detecting change are implemented in OpenCL.  Each process is a subclass of
 @item @code{init_kernel(cl_context* context, cl_device_id* device)} : to initialize data members and compile OpenCL source.
 @item @code{run(vcl_vector<brdb_value_sptr> & input, vcl_vector<brdb_value_sptr> & output)}:  runs the algorithm. The input and output vectors are used for interfacing with the process.
 @item @code{finish()}: to destroy any intermediate data created.
-@end itemize.
+@end itemize
 
 The following processes have been implemented: 
 @itemize
@@ -26,16 +26,15 @@ given sensor model. The inputs to such process include scene, camera, image and 
 such a process is updated scene. This process uses multiple passes of ray-tracing to update the 
 volume.
 
-@item @code{boxm2_opencl_refine_process}: This process refines/merge the scene. This 
-refining/merging results in the scene getting finer or coarser at places where the evidence 
-of surface increases or decreases respectively. The inputs to such process include scene 
+@item @code{boxm2_opencl_refine_process}: This process refines the scene. This 
+refining results in the scene getting finer at places where the evidence 
+of surface increases. The inputs to such process include scene 
 and threshold and the output of such a process is updated scene. This process requires 
 serial iterating over blocks.
 @end itemize
 
 Each process uses inputs as processing inputs and return output if any through output vector. 
-The process is light-weight as it only process whats given to it. Multiple  processes might be 
-called in a given system which leads to discussion of @code{boxm2_opencl_processor}.
+The process is light-weight as it only process whats given to it.
 
 @section Boxm2 OpenCL Processor
 

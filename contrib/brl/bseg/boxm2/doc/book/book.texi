@@ -146,6 +146,7 @@ Copyright @copyright{} 2011 Computer Vision Group, Inc.
 * io::
 * cpp::
 * ocl::
+* demo::
 * Index::
 @end menu
 
@@ -154,8 +155,6 @@ Copyright @copyright{} 2011 Computer Vision Group, Inc.
 @comment node-name, next,           previous, up
 @chapter Introduction
 @cindex Introduction
-@cindex IUE
-@cindex TargetJr
 
 @include chapter_intro.texi
 
@@ -189,14 +188,18 @@ Copyright @copyright{} 2011 Computer Vision Group, Inc.
 @include chapter_cpp.texi
 
 @comment ------------------------------------------------------------------
-@node    ocl, Index, cpp, Top
+@node    ocl, demo, cpp, Top
 @comment node-name, next, previous,     up
 @chapter Boxm2 OpenCL Accelerated Package
-@cindex probability
-@cindex statistical classifier
-@cindex classifier
 
 @include chapter_ocl.texi
+
+@comment ------------------------------------------------------------------
+@node    demo, Index, ocl, Top
+@comment node-name, next, previous,     up
+@chapter Boxm2 GUI demo
+
+@include chapter_demo.texi
 
 
 @comment ------------------------------------------------------------------
@@ -216,12 +219,11 @@ The directory structure of mul is below
 @appendix  On The Use of Templates
 @cindex templates
 
-Most of the mul libraries try to avoid the use of templates wherever possible.
+The @code{boxm2} libraries try to avoid the use of templates wherever possible.
 The main reason for this is that you can end up have large numbers of template
-variables - basic type, iterator type, return value type, model 1 type,
-model 2 type, builder type, etc. and this is ugly and often painful. Other reasons
-include avoiding being forced to use member functions with additional
-template parameters, confusion for users.
+variables and template instantiations.  The only template usage is in the 
+@code{boxm2_data} and @code{boxm2_data_traits} classes, which are used to 
+specify data types, sizes, and string identifiers.  
 
 @comment ------------------------------------------------------------------
 @node    Index,  , clsfy, Top

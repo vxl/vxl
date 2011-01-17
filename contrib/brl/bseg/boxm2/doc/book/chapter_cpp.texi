@@ -8,7 +8,7 @@ The algorithms such as rendering, updating the volume or change detection  in c+
 @item @code{init()} : to initialize data members or parameters.
 @item @code{run(vcl_vector<brdb_value_sptr> & input, vcl_vector<brdb_value_sptr> & output)}:  runs the algorithm. The input and output vectors are used for interfacing with the process.
 @item @code{finish()}: to destroy any intermediate data created.
-@end itemize.
+@end itemize
 
 Few processes are discussed below:
 @itemize
@@ -22,7 +22,7 @@ Each process uses inputs as processing inputs and return output if any through o
 
 @section cpp Processor
 
-A processor @code{boxm2_cpp_processor} is subclassed from @code{boxm2_processor). The cpp processor is responsible for calling cpp processes and passing them inputs. The processor is a high level manager which interacts with the user and translates the user actions into different process calls. Example of usage of such a processor is shown below:
+A processor @code{boxm2_cpp_processor} is subclassed from @code{boxm2_processor}. The cpp processor is responsible for calling cpp processes and passing them inputs. The processor is a high level manager which interacts with the user and translates the user actions into different process calls. Example of usage of such a processor is shown below:
 
 An example of C++ rendering algorithm is shown below. 
 @example
