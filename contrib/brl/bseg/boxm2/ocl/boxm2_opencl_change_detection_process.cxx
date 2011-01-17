@@ -41,12 +41,23 @@ bool boxm2_opencl_change_detection_process::init_kernel(cl_context* context,
   options += opts;
 
   //have kernel construct itself using the context and device
-  bool created =  render_kernel_.create_kernel( context_,
+  bool created =  change_kernel_.create_kernel( context_,
                                                 device,
                                                 src_paths,
                                                 "change_detection_bit_scene",   //kernel name
                                                 options,              //options
-                                                "boxm2 opencl render"); //kernel identifier (for error checking)
+                                                "boxm2 opencl change"); //kernel identifier (for error checking)
+  vcl_vector<vcl_string> norm_src_paths;
+  norm_src_paths.push_back(source_dir + "cell_utils.cl");
+  norm_src_paths.push_back(source_dir + "bit/normalize_kernels.cl");
+
+  //have kernel construct itself using the context and device
+  created = created &&  normalize_change_kernel_.create_kernel( context_,
+                                                device,
+                                                norm_src_paths,
+                                                "normalize_change_kernel",   //kernel name
+                                                options,              //options
+                                                "boxm2 opencl norm change"); //kernel identifier (for error checking)
 
   return created;
 }
@@ -158,32 +169,44 @@ bool boxm2_opencl_change_detection_process::execute(vcl_vector<brdb_value_sptr>&
     transfer_time_ += (float) transfer.all(); 
 
     ////3. SET args
-    render_kernel_.set_arg( blk_info );
-    render_kernel_.set_arg( blk );
-    render_kernel_.set_arg( alpha );
-    render_kernel_.set_arg( mog );
-    render_kernel_.set_arg( &persp_cam );
-    render_kernel_.set_arg( in_image_ );
-    render_kernel_.set_arg( image_ );
-    render_kernel_.set_arg( &exp_img_dim);
-    render_kernel_.set_arg( &cl_output );
-    render_kernel_.set_arg( &lookup );
-    render_kernel_.set_arg( vis_img_ );
+    change_kernel_.set_arg( blk_info );
+    change_kernel_.set_arg( blk );
+    change_kernel_.set_arg( alpha );
+    change_kernel_.set_arg( mog );
+    change_kernel_.set_arg( &persp_cam );
+    change_kernel_.set_arg( in_image_ );
+    change_kernel_.set_arg( image_ );
+    change_kernel_.set_arg( &exp_img_dim);
+    change_kernel_.set_arg( &cl_output );
+    change_kernel_.set_arg( &lookup );
+    change_kernel_.set_arg( vis_img_ );
 
     //local tree , cumsum buffer, imindex buffer
-    render_kernel_.set_local_arg( lThreads[0]*lThreads[1]*sizeof(cl_uchar16) );
-    render_kernel_.set_local_arg( lThreads[0]*lThreads[1]*10*sizeof(cl_uchar) );
-    render_kernel_.set_local_arg( lThreads[0]*lThreads[1]*sizeof(cl_int) );
+    change_kernel_.set_local_arg( lThreads[0]*lThreads[1]*sizeof(cl_uchar16) );
+    change_kernel_.set_local_arg( lThreads[0]*lThreads[1]*10*sizeof(cl_uchar) );
+    change_kernel_.set_local_arg( lThreads[0]*lThreads[1]*sizeof(cl_int) );
 
     //execute kernel
-    render_kernel_.execute( (*command_queue_), lThreads, gThreads);
+    change_kernel_.execute( (*command_queue_), lThreads, gThreads);
     clFinish(*command_queue_); 
-    gpu_time_ += render_kernel_.exec_time(); 
+    gpu_time_ += change_kernel_.exec_time(); 
     
     //clear render kernel args so it can reset em on next execution
-    render_kernel_.clear_args();
+    change_kernel_.clear_args();
   }
-  
+    //: normalize
+  {
+      normalize_change_kernel_.set_arg( image_ );
+      normalize_change_kernel_.set_arg( vis_img_ );
+      normalize_change_kernel_.set_arg( &exp_img_dim);
+      normalize_change_kernel_.execute( (*command_queue_), lThreads, gThreads);
+      clFinish(*command_queue_); 
+      gpu_time_ += normalize_change_kernel_.exec_time(); 
+
+      //clear render kernel args so it can reset em on next execution
+      normalize_change_kernel_.clear_args();
+  }
+
   //read image out to buffer (from gpu)
   image_->read_to_buffer(*command_queue_);
   vis_img_->read_to_buffer(*command_queue_);

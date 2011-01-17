@@ -42,7 +42,9 @@ class boxm2_opencl_change_detection_process : public boxm2_opencl_process_base
     bool write_input_image(vil_image_view<float>* input_image);
 
     //: render kernel (other processes may have many kernels
-    bocl_kernel render_kernel_;
+    bocl_kernel change_kernel_;
+    //: kernel to normalize images
+    bocl_kernel normalize_change_kernel_;
     //: image (so it isn't created over and over)
     bocl_mem* in_image_;
 

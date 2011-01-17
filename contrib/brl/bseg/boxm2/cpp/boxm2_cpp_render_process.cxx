@@ -60,8 +60,9 @@ bool boxm2_cpp_render_process::execute(vcl_vector<brdb_value_sptr>& input, vcl_v
       boxm2_render_exp_image(scene_info_wrapper->info,blk,datas,cam,image_,vis_img_,image_->ni(),image_->nj());
   }
 
-  vil_math_scale_values<float>(*vis_img_,1.0f);
-  vil_math_image_sum<float,float,float>(*image_,*vis_img_,*image_);
+  normalize_intensity f;
+  vil_transform2<float,float, normalize_intensity>(*vis_img_,*image_,f);
+
 
   vcl_cout<<"Execution time: "<<" ms"<<vcl_endl;
 

@@ -40,24 +40,20 @@ class boxm2_render_exp_image_functor
   vil_image_view<float> *expected_img_;
   vil_image_view<float> *vis_img_;
 };
-
-#if 0
 //: Functor class to normalize expected image
-template<class T_data>
-class normalize_expected_functor_rt
+class normalize_intensity
 {
  public:
-  normalize_expected_functor_rt(bool use_black_background) : use_black_background_(use_black_background) {}
+  normalize_intensity() {}
 
-  void operator()(float mask, typename T_data::obs_datatype &pix) const
+  void operator()(float mask, float &pix) const
   {
-    if (!use_black_background_) {
-      pix += mask*1.0f;
-    }
+    pix+=mask*0.5;
   }
-  bool use_black_background_;
+
+
 };
-#endif // 0
+
 
 void boxm2_render_exp_image(boxm2_scene_info * linfo,
                             boxm2_block * blk_sptr,

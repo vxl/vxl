@@ -47,6 +47,17 @@ bool boxm2_opencl_render_process::init_kernel(cl_context* context,
                                                 "render_bit_scene",   //kernel name
                                                 options,              //options
                                                 "boxm2 opencl render"); //kernel identifier (for error checking)
+  vcl_vector<vcl_string> norm_src_paths;
+  norm_src_paths.push_back(source_dir + "cell_utils.cl");
+  norm_src_paths.push_back(source_dir + "bit/normalize_kernels.cl");
+
+
+  created = created && normalize_render_kernel_.create_kernel( context_,
+                                                device,
+                                                norm_src_paths,
+                                                "normalize_render_kernel",   //kernel name
+                                                options,              //options
+                                                "boxm2 opencl render"); //kernel identifier (for error checking)
 
   return created;
 }
@@ -134,7 +145,7 @@ bool boxm2_opencl_render_process::execute(vcl_vector<brdb_value_sptr>& input, vc
 
   //2. set workgroup size
   vcl_size_t lThreads[] = {8, 8};
-  vcl_size_t gThreads[] = {exp_img_view->ni(), exp_img_view->nj()};
+  vcl_size_t gThreads[] = {RoundUp(exp_img_view->ni(),lThreads[0]), RoundUp(exp_img_view->nj(),lThreads[1])};
   
   //For each ID in the visibility order, grab that block
   vcl_vector<boxm2_block_id> vis_order = scene->get_vis_blocks( (vpgl_perspective_camera<double>*) cam.ptr()); 
@@ -177,6 +188,18 @@ bool boxm2_opencl_render_process::execute(vcl_vector<brdb_value_sptr>& input, vc
     render_kernel_.clear_args();
   }
   
+  //: normalize
+  {
+      normalize_render_kernel_.set_arg( image_ );
+      normalize_render_kernel_.set_arg( vis_img_ );
+      normalize_render_kernel_.set_arg( &exp_img_dim);
+      normalize_render_kernel_.execute( (*command_queue_), lThreads, gThreads);
+      clFinish(*command_queue_); 
+      gpu_time_ += normalize_render_kernel_.exec_time(); 
+
+      //clear render kernel args so it can reset em on next execution
+      normalize_render_kernel_.clear_args();
+  }
   //read image out to buffer (from gpu)
   image_->read_to_buffer(*command_queue_);
   vis_img_->read_to_buffer(*command_queue_);
