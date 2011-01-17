@@ -1,4 +1,7 @@
 #depends on OPENCL being found...
+  INCLUDE( ${VXL_CMAKE_DIR}/NewCMake/FindOpenCL.cmake )
+  IF(OPENCL_FOUND)
+
 INCLUDE_DIRECTORIES( ${OPENCL_INCLUDE_PATH} )
 INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bbas )
 
@@ -14,3 +17,8 @@ TARGET_LINK_LIBRARIES(boxm2_ocl boxm2 boxm2_basic boxm2_io bocl boct brdb vbl_io
 
 #pro
 SUBDIRS(pro)
+
+
+#exe
+SUBDIRS(exe)
+ENDIF(OPENCL_FOUND)

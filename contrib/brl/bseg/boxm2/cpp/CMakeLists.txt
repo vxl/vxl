@@ -13,3 +13,6 @@ SUBDIRS(pro)
 
 # cpp process APIs.
 SUBDIRS(algo)
+
+# cpp process APIs.
+SUBDIRS(exe)
