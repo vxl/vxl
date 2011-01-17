@@ -30,8 +30,8 @@ A @code{boxm2_block} contains the following buffers:
 The voxel structure of a block is encoded in the 3d array @code{trees_}, which contains bit-encoded
 octrees of maximum depth 4.  A bit is reserved for each potential inner node (73 on 
 a depth 4 octree), which indicates whether or not that node has children.  This tree is full, 
-meaning all nodes either have zero children or 8 children.  The first 10 bits (index 0-9) 
-are reserved to encode the voxel structure.  Bits [10,11] and [12,13] encode two 
+meaning all nodes either have zero children or 8 children.  The first 10 bytes (index 0-9) 
+are reserved to encode the voxel structure.  Bytes (10,11) and (12,13) encode two 
 @code{unsigned shorts} that index into any data buffer with the same ID as the block.  
 This index points to the data that corresponds with the root node of the tree.  From there, 
 a simple counting bits algorithm is performed to find the data of a particular cell, 
@@ -68,8 +68,8 @@ For any empty scene, the data corresponding to each tree (for the root node) is 
 distributed among the buffers.  This is to ensure that trees located at surfaces are 
 uniformly distributed, allowing for efficient usage of space and maximum growth.   
 
-The @code{unsigned short} encoded in bits [12,13] of a tree indicate which buffer
-its data is in.  The @code{unsigned short} encoded in bits [10,11] indicate the 
+The @code{unsigned short} encoded in bytes (12,13) of a tree indicate which buffer
+its data is in.  The @code{unsigned short} encoded in bytes (10,11) indicate the 
 offset within the buffer that points to the root node's data.  The tree's data is 
 then stored in breadth first search order within the data buffer.  Given the location 
 of the tree cell (bit index in [0,585] for a depth 4 tree), and the location of 
