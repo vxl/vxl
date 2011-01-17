@@ -17,8 +17,8 @@
 //TODO IN THIS INIT METHOD: Need to pass in a ref to the OPENCL_CACHE so this
 //class can easily access BOCL_MEMs
 bool boxm2_opencl_change_detection_process::init_kernel(cl_context* context,
-                                              cl_device_id* device,
-                                              vcl_string opts)
+                                                        cl_device_id* device,
+                                                        vcl_string opts)
 {
   context_ = context;
 
@@ -53,11 +53,11 @@ bool boxm2_opencl_change_detection_process::init_kernel(cl_context* context,
 
   //have kernel construct itself using the context and device
   created = created &&  normalize_change_kernel_.create_kernel( context_,
-                                                device,
-                                                norm_src_paths,
-                                                "normalize_change_kernel",   //kernel name
-                                                options,              //options
-                                                "boxm2 opencl norm change"); //kernel identifier (for error checking)
+                                                                device,
+                                                                norm_src_paths,
+                                                                "normalize_change_kernel",   //kernel name
+                                                                options,              //options
+                                                                "boxm2 opencl norm change"); //kernel identifier (for error checking)
 
   return created;
 }
@@ -81,12 +81,12 @@ bool boxm2_opencl_change_detection_process::init_kernel(cl_context* context,
 bool boxm2_opencl_change_detection_process::execute(vcl_vector<brdb_value_sptr>& input, vcl_vector<brdb_value_sptr>& output)
 {
   transfer_time_ = 0.0f; gpu_time_ = 0.0f; total_time_ = 0.0f;
-  vul_timer total; 
+  vul_timer total;
   int i = 0;
 
   //scene argument
   brdb_value_t<boxm2_scene_sptr>* scene_brdb = static_cast<brdb_value_t<boxm2_scene_sptr>* >( input[i++].ptr() );
-  boxm2_scene_sptr scene = scene_brdb->value(); 
+  boxm2_scene_sptr scene = scene_brdb->value();
 
   //camera
   brdb_value_t<vpgl_camera_double_sptr>* brdb_cam = static_cast<brdb_value_t<vpgl_camera_double_sptr>* >( input[i++].ptr() );
@@ -122,12 +122,12 @@ bool boxm2_opencl_change_detection_process::execute(vcl_vector<brdb_value_sptr>&
     float* vis_buff = vis_img_view->begin();
     vis_img_ = new bocl_mem((*context_), vis_buff, vis_img_view->size() * sizeof(float), "visibility image buffer");
     vis_img_->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
-  } 
+  }
   else {
-    vis_img_->set_cpu_buffer(vis_img_view->begin()); 
+    vis_img_->set_cpu_buffer(vis_img_view->begin());
     vis_img_->write_to_buffer(*command_queue_);
   }
-      
+
   //exp image dimensions
   int* img_dim_buff = new int[4];
   img_dim_buff[0] = exp_img_view->ni();
@@ -136,7 +136,7 @@ bool boxm2_opencl_change_detection_process::execute(vcl_vector<brdb_value_sptr>&
   img_dim_buff[3] = exp_img_view->nj();
   bocl_mem exp_img_dim((*context_), img_dim_buff, sizeof(int)*4, "image dims");
   exp_img_dim.create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
-  
+
   //output buffer
   float* output_arr = new float[100];
   for (int i=0; i<100; ++i) output_arr[i] = 0.0f;
@@ -152,21 +152,20 @@ bool boxm2_opencl_change_detection_process::execute(vcl_vector<brdb_value_sptr>&
   //2. set workgroup size
   vcl_size_t lThreads[] = {8, 8};
   vcl_size_t gThreads[] = {exp_img_view->ni(), exp_img_view->nj()};
-  
+
   //For each ID in the visibility order, grab that block
-  vcl_vector<boxm2_block_id> vis_order = scene->get_vis_blocks( (vpgl_perspective_camera<double>*) cam.ptr()); 
-  
-  vcl_vector<boxm2_block_id>::iterator id; 
-  for(id = vis_order.begin(); id != vis_order.end(); ++id) 
+  vcl_vector<boxm2_block_id> vis_order = scene->get_vis_blocks( (vpgl_perspective_camera<double>*) cam.ptr());
+
+  vcl_vector<boxm2_block_id>::iterator id;
+  for (id = vis_order.begin(); id != vis_order.end(); ++id)
   {
-    
     //write the image values to the buffer
-    vul_timer transfer; 
+    vul_timer transfer;
     bocl_mem* blk       = cache_->get_block(*id);
     bocl_mem* alpha     = cache_->get_data<BOXM2_ALPHA>(*id);
     bocl_mem* mog       = cache_->get_data<BOXM2_MOG3_GREY>(*id);
-    bocl_mem* blk_info  = cache_->loaded_block_info(); 
-    transfer_time_ += (float) transfer.all(); 
+    bocl_mem* blk_info  = cache_->loaded_block_info();
+    transfer_time_ += (float) transfer.all();
 
     ////3. SET args
     change_kernel_.set_arg( blk_info );
@@ -188,20 +187,20 @@ bool boxm2_opencl_change_detection_process::execute(vcl_vector<brdb_value_sptr>&
 
     //execute kernel
     change_kernel_.execute( (*command_queue_), lThreads, gThreads);
-    clFinish(*command_queue_); 
-    gpu_time_ += change_kernel_.exec_time(); 
-    
+    clFinish(*command_queue_);
+    gpu_time_ += change_kernel_.exec_time();
+
     //clear render kernel args so it can reset em on next execution
     change_kernel_.clear_args();
   }
-    //: normalize
+  // normalize
   {
       normalize_change_kernel_.set_arg( image_ );
       normalize_change_kernel_.set_arg( vis_img_ );
       normalize_change_kernel_.set_arg( &exp_img_dim);
       normalize_change_kernel_.execute( (*command_queue_), lThreads, gThreads);
-      clFinish(*command_queue_); 
-      gpu_time_ += normalize_change_kernel_.exec_time(); 
+      clFinish(*command_queue_);
+      gpu_time_ += normalize_change_kernel_.exec_time();
 
       //clear render kernel args so it can reset em on next execution
       normalize_change_kernel_.clear_args();
@@ -216,10 +215,10 @@ bool boxm2_opencl_change_detection_process::execute(vcl_vector<brdb_value_sptr>&
   delete[] img_dim_buff;
   delete[] lookup_arr;
   delete[] cam_buffer;
-  
+
   //record total time
-  total_time_ = (float) total.all(); 
-  
+  total_time_ = (float) total.all();
+
   return true;
 }
 
