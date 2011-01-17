@@ -1,4 +1,3 @@
-
 @chapsummary
 C++ implementation of the library.
 @endchapsummary
@@ -24,19 +23,19 @@ Each process uses inputs as processing inputs and return output if any through o
 
 A processor @code{boxm2_cpp_processor} is subclassed from @code{boxm2_processor}. The cpp processor is responsible for calling cpp processes and passing them inputs. The processor is a high level manager which interacts with the user and translates the user actions into different process calls. Example of usage of such a processor is shown below:
 
-An example of C++ rendering algorithm is shown below. 
+An example of C++ rendering algorithm is shown below.
 @example
-  //: load the scene 
+  //: load the scene
   boxm2_scene_sptr scene = new boxm2_scene(scene_file());
   // initialize the cache
   boxm2_nn_cache cache( scene.ptr() );
-  
-  //: intialize the cpp processor
+
+  //: initialize the cpp processor
   boxm2_cpp_processor cpp_pro;
   cpp_pro.init();
   cpp_pro.set_scene(scene.ptr());
 
-  //: intialize process
+  //: initialize process
   boxm2_cpp_render_process cpp_render;
   cpp_render.init();
   cpp_render.set_cache(&cache);
@@ -58,8 +57,7 @@ An example of C++ rendering algorithm is shown below.
   cpp_pro.run(&cpp_render, input, output);
   vcl_cout<<"Time taken is :" <<t.all()<<vcl_endl;
   cpp_pro.finish();
-  
+
 @end example
 In this example, processor is initialized and then it is used to call rendering process. Similarly multiple processes can be called using this processor.
-
 
