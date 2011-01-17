@@ -210,6 +210,7 @@ int boct_bit_tree2::set_buffer_ptr(int ptr)
   unsigned char lo = (unsigned char)(ptr & 255);
   this->bits_[12] = hi; 
   this->bits_[13] = lo; 
+  return  0;
 }
 
 int boct_bit_tree2::get_data_ptr()
@@ -226,6 +227,7 @@ int boct_bit_tree2::set_data_ptr(int ptr)
   unsigned char lo = (unsigned char)(ptr & 255);
   this->bits_[10] = hi; 
   this->bits_[11] = lo; 
+  return 0;
 }
 
 
