@@ -7,17 +7,17 @@ TARGET_LINK_LIBRARIES( boxm2_render_expected_exe boxm2 boxm2_basic boxm2_io sdet
 ADD_EXECUTABLE( boxm2_cpp_change_detection_exe
   boxm2_cpp_change_detection_main.cxx
 )
-TARGET_LINK_LIBRARIES( boxm2_cpp_change_detection_exe boxm2 boxm2_basic boxm2_io sdet boxm2_cpp  vil_pro vpgl_pro vul )
+TARGET_LINK_LIBRARIES( boxm2_cpp_change_detection_exe boxm2_cpp_pro sdet  vil_pro vpgl_pro vul )
 #executable to run a cpp update
 ADD_EXECUTABLE( boxm2_cpp_update_exe
   boxm2_cpp_update_main.cxx
 )
-TARGET_LINK_LIBRARIES( boxm2_cpp_update_exe boxm2 boxm2_basic boxm2_io sdet boxm2_cpp  vil_pro vpgl_pro vul )
+TARGET_LINK_LIBRARIES( boxm2_cpp_update_exe boxm2_cpp_pro sdet vil_pro vpgl_pro vul )
 #executable to run a cpp render
 ADD_EXECUTABLE( boxm2_cpp_render_exe
   boxm2_cpp_render_main.cxx
 )
-TARGET_LINK_LIBRARIES( boxm2_cpp_render_exe boxm2 boxm2_basic boxm2_io sdet boxm2_cpp  vil_pro vpgl_pro vul )
+TARGET_LINK_LIBRARIES( boxm2_cpp_render_exe boxm2_cpp_pro  vil_pro vpgl_pro vul )
 ADD_EXECUTABLE( boxm2_update_exe
   boxm2_update_exe.cxx
 )

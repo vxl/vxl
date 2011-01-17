@@ -22,7 +22,7 @@
 #include <boxm2/ocl/boxm2_opencl_render_process.h>
 #include <boxm2/ocl/boxm2_opencl_render_depth_process.h>
 #include <boxm2/cpp/boxm2_cpp_processor.h>
-#include <boxm2/cpp/boxm2_cpp_render_process.h>
+#include <boxm2/cpp/pro/boxm2_cpp_render_process.h>
 
 
 //brdb stuff
