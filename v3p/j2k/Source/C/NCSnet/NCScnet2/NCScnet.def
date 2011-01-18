@@ -1,0 +1,17 @@
+EXPORTS
+NCScnetVerifyURL
+NCScnetSetIISDLLName
+NCScnetCreate
+NCScnetCreateEx
+NCScnetSetSendBlocking
+NCScnetSetRecvCB
+NCScnetSetSentCB
+NCScnetSendPacket
+NCScnetDestroy
+NCScnetInit
+NCScnetShutdown
+DllMain
+NCScnetPostURL
+NCScnetSetProxy
+NCSUseWinHTTP
+NCScnetCreateProxy

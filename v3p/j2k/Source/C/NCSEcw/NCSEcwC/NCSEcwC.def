@@ -1,0 +1,11 @@
+; ncsecwc.def : Declares the module parameters for the DLL.
+
+EXPORTS
+NCSEcwCompressAllocClient
+NCSEcwCompressOpen
+NCSEcwCompress
+NCSEcwCompressClose
+NCSEcwCompressFreeClient
+NCSEcwEditReadInfo
+NCSEcwEditWriteInfo
+NCSEcwEditFreeInfo

@@ -1,0 +1,130 @@
+ECW JPEG 2000 SDK Source Distribution
+Version 3.3
+Date : 29-08-2006
+Build.txt
+----------------------
+
+
+ABOUT
+
+Welcome to the ECW JPEG 2000 SDK source code distribution.  This package enables you to port the SDK to alternate platforms if desired, and/or make custom modifications.  We encourage (but not require) you to submit changes back to ER Mapper to be included in the main distribution.
+
+WHAT'S NEW IN VERSION 3.3
+
+Numerous bug fixes and enhancements, including:
+
+FIXES
+*	functional ECWP on platforms other than Windows
+*	a fix to lossless JPEG 2000 compression
+*	change to headers to allow overloading new and delete on Windows
+*	correct calculation of compression throughput
+*	large file support issues fixed
+*	fix to UNICODE support making it orthogonal to the use of UNICODE #define in client code
+*	fixes to the platform-dependent code for MacOS X
+*	fix to a bug where scanline reading was not reset between views in some situations
+*	fix to a bug where RGB reads were corrupt when reading bands one by one
+*	fix to ensure EOC (end of codestream) markers always written to JPEG 2000 output
+*	fix to ensure consistency of view information when reading in tiled mode
+*	fix to a bug where progressive (refresh callback) read mode was broken for tiled views
+*       fix for decoding tiled images with out of order tiles
+*       fix to race conditions in POSIX threading code
+*       fix to allow Unicode filenames to be used on Windows
+*	missing documentation items restored
+
+ENHANCEMENTS
+*	no more restrictions on the distribution of "Server Software" under the GPL-style Public Use License Agreement
+*	optional and runtime configurable auto-scaling of low bitdepth JPEG 2000 data to fit the output buffer data range
+*	unrestricted view sizes for views obtained via ECWP in blocking read mode
+*	runtime configurable maximum size for views set in progressive read mode
+*	automated support for single bit opacity bands providing a null cell mechanism
+*	functional static library builds for NCSEcw, NCSUtil, and NCScnet and for all SDK code as a single linkable object
+*	a new build structure called "libecwj2" providing single-library shared and static builds
+*	libecwj2 makefiles for gcc/g++ on Solaris, Linux and Mac OS X
+*	inclusion of the sample code that formerly shipped with the binary distribution, together with makefiles for the libecwj2 shared and static libraries
+
+LICENSE
+
+This distribution is covered by the ECW SDK license agreement.  See license.txt for details of the 3 alternate licenses available to use this distribution under.  NEW: the restriction on distribution of "Server Software" has been entirely removed from the GPL-style Public Use License Agreement as of this beta release.
+
+REQUIREMENTS
+
+The default configuration of the ECW JPEG 2000 SDK requires the following 3rd party libraries:
+
+Little CMS - A small integrated ICC profile engine.  This should be placed in Source/C/NCSEcw/lcms.  You can remove this dependency by removing NCSJPC_USE_LCMS from the project settings and lcms112.lib from the link line, however this will disable all ICC profile handling (including restricted ICC profiles).  LittleCMS is available from www.littlecms.com.
+
+TinyXML - A small XML parser.  This should be placed in Source/C/tinyxml.  You can remove this dependency by removing NCSJPC_USE_TINYXML from the project settings, however this will disable the GML Geolocation XML box support.  TinyXML is available from www.sourceforge.net/projects/tinyxml.
+
+IJG libjpeg - The Independent JPEG Group's JPEG library.  This should be pleace in Source/C/libjpeg.  This is required to build the NCSRenderer object, which supports writing out JPEG files.  The IJG libjpeg is available from www.ijg.org.
+
+All 3 libraries are (currently) redistributable in commercial applications at no charge, providing their respective distribution requirements are met.  For your convenience versions of these are included in this distribution, subject to their respective licensing conditions, to enable you to quickly build the SDK with minimal effort.
+
+PROJECTS
+
+The ECW JPEG 2000 SDK is split into 3 basic parts:
+
+- NCSUtil: NCS portability utility library, including routines for memory allocation, threading, mutex etc.
+- NCSCnet: NCS client networking library.  Use NCScnet2 under win32 which utilises wininet or winhttp, NCScnet3 on MacOS/Unix uses raw sockets.
+- NCSEcw: NCS Wavelet C/C++ compression/decompression library.
+
+The small NCSEcwC library now contains the C API compression routines which in this version wrap calls to the C++ API.
+
+BUILD FILES
+
+The ECW JPEG 2000 SDK is supplied with two build structures.  The first, newer system is the "libecwj2" project that allows you to build a single static or shared library object.  The intent of the new build system is to simplify building and linking for user applications that will rarely, if ever, wish to use the library functionality separately.
+
+The older system that previous users of the ECW JPEG 2000 SDK will already be familiar with is the three part NCSEcw, NCScnet, and NCSUtil build.  Build files for these projects are still supplied with the SDK and you are welcome to continue using them - in this beta version you may find that in some cases they are more stable than the libraries built under the new system.
+
+There are also some circumstances where (for example) the network services library functionality may not be required and you may want to keep your binary sizes to a minimum.  If you have existing projects that link against NCSEcw, NCScnet and NCSUtil we encourage you to try out the libecwj2 build.
+
+The following notes about compilation are divided into three sections - notes that are common to both build structures, notes for libecwj2, and notes for the old system.
+
+
+COMPILING: GENERAL NOTES
+
+You should have an up to date compiler and development environment installed on your build machine.  In the case of Windows builds either Visual Studio 6.0 (with Service Packs 1-5) or Visual Studio .NET 2003 are supported, and it is suggested you obtain the latest version of the Microsoft Platform SDK which will ensure you are able to build the hardware optimised SDK code.
+
+In the case of Linux/Solaris/Mac OS X, we suggest a standard installation of gcc/g++ 3.4 or higher, and GNU Make be used to compile.  You may also have success with earlier versions of gcc or other compilers, although minor modifications to the source may be required.
+
+NB: The Qmake build files have been deprecated and although they should function correctly for the time being, it is recommended that you use the GNU autotools build files where possible.  Qmake build files for Mac OS X are not shipped in this distribution, however, they can be generated from the supplied file libecwj2.pro.
+
+For detailed instructions on compilation and linking, please see the distributed PDF chapter 4, 'Building From Source'.
+
+OTHER PLATFORMS
+
+WindowCE/PocketPC EVC3 workspace and project files are included in this distribution, however they are currently unsupported.  The makefiles can be used to build the libraries on Linux using GCC, however this is currently unsupported.
+
+The SDK has been successfully used on Solaris x86, HP-UX and IRIX with only minor modifications, however, these platforms are not currently supported.  Platform specific patches are most welcome.
+
+
+DOCUMENTATION
+
+High-level documetation is available in the SDK.pdf file, which is also included in the binary distributions.  This PDF document contains tips and tricks, example code with discussion, and a reasonably complete API reference.  If you have not worked with the ECW JPEG 2000 SDK before, this is a good entry point to use to gain an understanding of the API and its associated development paradigms.
+
+HTML doxygen generated documentation is available for the main objects and routines in the NCSEcw library, accessed via Source/C/NCSEcw/NCSEcw/html/index.htm.  Note that a considerable amount of low-level and design documentation is currently missing from the distribution.  This will be made available over upcoming releases as it is converted to doxygen format.
+
+
+SUPPORT
+
+The source code distribution is not officially supported.  However, we will endeavour to provide support when and where possible.  You can post queries in the SDK section of the public ER Mapper forums at forums.ermapper.com where you may receive a reply.  Commercial SDK licensees will receive support via the existing SDK support channel.
+
+
+JPEG 2000 CONFORMANCE
+
+ER Mapper makes no guarantee that libraries built from the source distribution will be compliant with the JPEG 2000 Part 1 specification.  Users are encouraged to validate the SDK against the Part 4 compliance test to ensure full compliance.  ER Mapper does provide fully compliant binary distributions for certain platforms at no charge, see the www.ermapper.com website for details.
+
+KNOWN PROBLEMS AND LIMITATIONS
+
+This source code distribution is (still) not in final release and has some known problems.
+
+These include:
+	-	Carbon dependency in the Mac OS X build
+	-	problems with network service shutdown in the NCScnet build on non-win32 platforms
+	-	occasional ECW decompression problems on big-endian platforms
+	-	lack of large file support on Mac OS X (Darwin has no 'stat64')
+	-	lack of a convenient, unified method for building debug versions of the libraries
+	-	improvements needed to documentation across the board
+
+The ECW JPEG 2000 SDK is an open source project and ER Mapper welcomes and encourages feedback from developers using the source code.  If you have found a problem in the SDK, or fixed a problem, or ported the code to another operating system, we would value your feedback highly.  Contact ER Mapper Development Support with any new information or questions: email devsupport@ermapper.com, or use the beta feedback form available online at www.ermapper.com.
+
+
+

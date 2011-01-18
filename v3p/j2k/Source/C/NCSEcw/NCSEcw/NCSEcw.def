@@ -1,0 +1,68 @@
+; NCSEcw.def : Declares the module parameters.
+EXPORTS
+	NCSecwInit
+	NCSecwShutdown
+	NCSecwOpenFile
+	NCSecwCloseFile
+	NCSecwGetStatistics
+	NCSecwConfig
+	NCSecwNetBreakdownUrl
+	NCSecwSetIOCallbacks
+
+	NCScbmOpenFileView
+	NCScbmCloseFileView
+	NCScbmCloseFileViewEx
+	NCScbmSetFileView
+	NCScbmSetFileViewEx
+	NCScbmGetViewFileInfo
+	NCScbmGetViewFileInfoEx
+	NCScbmGetViewInfo
+
+	NCScbmReadViewLineBIL
+	NCScbmReadViewLineBILEx
+	NCScbmReadViewLineRGB
+	NCScbmReadViewLineBGR
+	NCScbmReadViewLineRGBA
+	NCScbmReadViewLineBGRA
+	NCScbmReadViewFake
+
+	get_qmf_tree_nr_blocks
+	erw_decompress_open
+	erw_decompress_close
+	EcwFileClose
+	unpack_data
+
+	NCSGetLibVersion
+
+;	DllCanUnloadNow		PRIVATE
+;	DllGetClassObject	PRIVATE
+;	DllRegisterServer	PRIVATE
+;	DllUnregisterServer	PRIVATE	
+	DllMain
+
+	NCScbmReadFileBlockLocal
+	NCScbmGetFileBlockSizeLocal
+	NCSecwSetConfig
+	NCSecwGetConfig
+
+	NCSInitFileInfoEx
+	NCSFreeFileInfoEx
+	NCSCopyFileInfoEx
+	NCSIsFileInfoExGeoreferenced
+	NCSStandardizeFileInfoEx
+	NCSSetGDTPath
+	NCSGetGDTPath
+	NCSDetectGDTPath
+	NCSSetJP2GeodataUsage
+	NCSGetEPSGCode
+	NCSGetProjectionAndDatum
+
+	NCSecwGlobalLock
+	NCSecwGlobalTryLock
+	NCSecwGlobalUnLock
+
+	NCScbmGetFileType
+	NCScbmGetFileMimeType
+
+	NCSecwInitInternal
+	NCSecwShutdownInternal

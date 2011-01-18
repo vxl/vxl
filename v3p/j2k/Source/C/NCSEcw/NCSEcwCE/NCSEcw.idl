@@ -1,0 +1,162 @@
+// NCSEcw.idl : IDL source for NCSEcw.dll
+//
+
+// This file will be processed by the MIDL tool to
+// produce the type library (NCSEcw.tlb) and marshalling code.
+
+import "oaidl.idl";
+import "ocidl.idl";
+#include "olectl.h"
+
+#include "NCSHelpContextID.h"
+	
+
+[
+	uuid(1BA90D24-DF6F-11D3-A6C3-005004055C6C),
+	version(1.0),
+	helpstring("NCSEcw 1.6 Type Library"),
+	helpfile("ECW_ACTIVEX.HLP")
+]
+library NCSECWLib
+{
+	importlib("stdole32.tlb");
+	importlib("stdole2.tlb");
+
+	[
+		object,
+		uuid(D63891F0-E026-11D3-A6C3-005004055C6C),
+		oleautomation, dual,
+		helpstring("Earth Resource Mapping - INCSRenderer"),
+		helpcontext(IDH_NCS_ACTIVEX_HOME),
+		version(1.0),
+		pointer_default(unique)  
+	]
+	interface INCSRenderer : IDispatch
+	{
+		[id(1), helpcontext(IDH_NCSREND_OPEN), helpstring("Open an ECW image from a URL or local file.")] 
+					HRESULT Open([in] BSTR Filename, [in] VARIANT_BOOL bProgressive);
+		[propget, id(2), helpcontext(IDH_NCSREND_TRANSPARENT), helpstring("Get/Set the transparent property.")] 
+					HRESULT Transparent([out, retval] BOOL *pVal);
+		[propput, id(2), helpcontext(IDH_NCSREND_TRANSPARENT), helpstring("Get/Set the transparent property.")] 
+					HRESULT Transparent([in] BOOL newVal);
+		[id(3), helpcontext(IDH_NCSREND_BACKCLR), helpstring("Set the background color when not transparent.")] 
+					HRESULT SetBackgroundColor([in] short Red, [in] short Green, [in] short Blue);
+		[id(4), helpcontext(IDH_NCSREND_CLOSE), helpstring("Close the currently open ECW file.")] 
+					HRESULT Close([in] VARIANT_BOOL bFreeCache);
+		[propget, id(5), helpcontext(IDH_NCSREND_FILENAME), helpstring("Get the currently open Filename")] 
+					HRESULT Filename([out, retval] BSTR *pVal);
+		[propget, id(6), helpcontext(IDH_NCSREND_WIDTH), helpstring("Get the file Width")] 
+					HRESULT Width([out, retval] long *pVal);
+		[propget, id(7), helpcontext(IDH_NCSREND_HEIGHT), helpstring("Get the file Height")] 
+					HRESULT Height([out, retval] long *pVal);
+		[propget, id(8), helpcontext(IDH_NCSREND_NRBANDS), helpstring("Get the file NumberOfBands")] 
+					HRESULT NumberOfBands([out, retval] long *pVal);
+		[propget, id(9), helpcontext(IDH_NCSREND_CMPRATIO), helpstring("Get the file CompressionRatio")] 
+					HRESULT CompressionRatio([out, retval] double *pVal);
+		[propget, id(10), helpcontext(IDH_NCSREND_CELLX), helpstring("Get the file CellIncrementX")] 
+					HRESULT CellIncrementX([out, retval] double *pVal);
+		[propget, id(11), helpcontext(IDH_NCSREND_CELLY), helpstring("Get the file CellIncrementY")] 
+					HRESULT CellIncrementY([out, retval] double *pVal);
+		[propget, id(12), helpcontext(IDH_NCSREND_ORIGINX), helpstring("Get the file OriginX")] 
+					HRESULT OriginX([out, retval] double *pVal);
+		[propget, id(13), helpcontext(IDH_NCSREND_ORIGINY), helpstring("Get the file OriginY")] 
+					HRESULT OriginY([out, retval] double *pVal);
+		[propget, id(14), helpcontext(IDH_NCSREND_PROJECTION), helpstring("Get the file Projection")] 
+					HRESULT Projection([out, retval] BSTR *pVal);
+		[propget, id(15), helpcontext(IDH_NCSREND_DATUM), helpstring("Get the file Datum")] 
+					HRESULT Datum([out, retval] BSTR *pVal);		
+		[id(16), helpcontext(IDH_NCSREND_SETVIEW), helpstring("Set the view extents in world coordinates")] 
+					HRESULT SetView([in] long NumberOfBands, 
+									[in] VARIANT *pBandList , [in] long Width, [in] long Height, 
+									[in] double WorldTLX, [in] double WorldTLY, [in] double WorldBRX, [in] double WorldBRY);
+		[id(17), helpcontext(IDH_NCSREND_READIMAGE), helpstring("Read the image from the network/file into a buffer.")] 
+					HRESULT ReadImage([in] double dWorldTLX, [in] double dWorldTLY, [in] double dWorldBRX, [in] double dWorldBRY, 
+									  [in] long nWidth, [in] long nHeight);
+		[id(18), helpcontext(IDH_NCSREND_DRAWIMAGE), helpstring("Draw the image to a device context.")] 
+					HRESULT DrawImage( [in] OLE_HANDLE hOutputDC, 
+									   [in] long nRectTLX, [in] long nRectTLY ,[in] long nRectBRX, [in] long nRectBRY, 
+									   [in] double dWorldTLX, [in] double dWorldTLY, [in] double dWorldBRX, [in] double dWorldBRY );
+		[id(19), helpcontext(IDH_NCSREND_FIREREFRESH), helpstring("Send a RefreshUpdate event to the client.")]
+					HRESULT FireRefresh([in] double dWorldTLX, [in] double dWorldTLY, [in] double dWorldBRX, [in] double dWorldBRY, 
+										[in] long nWidth, [in] long nHeight);
+		[id(20), helpcontext(IDH_NCSREND_READLINERGB), helpstring("Read a line of RGB triplet data from the file.")] 
+					HRESULT ReadLineRGB([in, out] VARIANTARG *pRGBTriplets);
+		[id(21), helpcontext(IDH_NCSREND_READLINEBGR), helpstring("Read a line of BGR triplet data from the file.")] 
+					HRESULT ReadLineBGR([in, out] VARIANTARG *pRGBTriplets);
+		[id(22), helpcontext(IDH_NCSREND_READLINEBIL), hidden, helpstring("Read a line of BIL (Band Interleaved by Line) format data from the file.")] 
+					HRESULT ReadLineBIL([in, out] VARIANTARG *pRGBLineArray);
+		[propget, id(23), helpcontext(IDH_NCSREND_PROGRESSIVE), helpstring("Get the Progressive file property")] 
+					HRESULT Progressive([out, retval] VARIANT_BOOL *pVal);
+		[id(24), helpcontext(IDH_NCSREND_CELLUNITS), helpstring("Get the cell measurements unit of the file. The return value is one of: CU_INVALID=0, CU_METERS=1, CU_DEGREES=2,CU_FEET=3")] 
+					HRESULT GetCellUnits([out, retval] short *pVal);
+		[id(25), helpcontext(IDH_NCSREND_WRITEJPG), helpstring("Write out a JPEG file, with an optional associated JPEG world file.")] 
+					HRESULT WriteJPG([in] BSTR OutputFile, [in] long Quality, [in] VARIANT_BOOL bWriteWorldFile);
+		[id(26), helpcontext(IDH_NCSREND_GETPERCENTCOMPLETE), helpstring("method GetPercentComplete")]
+					HRESULT GetPercentComplete([out, retval] long *pVal);
+		[id(27), helpcontext(IDH_NCSREND_CONVERTWORLDTODATASET), helpstring("method ConvertWorldToDataset")]
+					HRESULT ConvertWorldToDataset([in] double dWorldX, [in] double dWorldY, [out] long *pDatasetX, [out] long *pDatasetY);
+		[id(28), helpcontext(IDH_NCSREND_CONVERTDATASETTOWORLD), helpstring("method ConvertDatasetToWorld")]
+					HRESULT ConvertDatasetToWorld([in] long nDatasetX, [in] long nDatasetY, [out] double *pWorldX, [out] double *pWorldY);
+		[id(29), helpcontext(IDH_NCSREND_FORMATERRORTEXT), helpstring("method FormatErrorText")] HRESULT
+					FormatErrorText([in] long nErrorNumber, [out] BSTR *pVal);
+		[propget, id(30), helpcontext(IDH_NCSREND_BANDS), helpstring("property ViewSetInfoBands")]
+					HRESULT ViewSetInfoBands([out, retval] long *pVal);
+		[propget, id(31), helpcontext(IDH_NCSREND_INFOTOPX), helpstring("property ViewSetInfoTopLeftX")]
+					HRESULT ViewSetInfoTopX([out, retval] long *pVal);
+		[propget, id(32), helpcontext(IDH_NCSREND_INFOLEFTY), helpstring("property ViewSetInfoLeftY")]
+					HRESULT ViewSetInfoLeftY([out, retval] long *pVal);
+		[propget, id(33), helpcontext(IDH_NCSREND_BOTTOMX), helpstring("property ViewSetInfoBottomX")]
+					HRESULT ViewSetInfoBottomX([out, retval] long *pVal);
+		[propget, id(34), helpcontext(IDH_NCSREND_RIGHTY), helpstring("property ViewSetInfoRightY")]
+					HRESULT ViewSetInfoRightY([out, retval] long *pVal);
+		[propget, id(35), helpcontext(IDH_NCSREND_WINDOWSIZEX), helpstring("property ViewSetInfoWindowSizeX")]
+					HRESULT ViewSetInfoWindowSizeX([out, retval] long *pVal);
+		[propget, id(36), helpcontext(IDH_NCSREND_WINDOWSIZEY), helpstring("property ViewSetInfoWindowSizeY")]
+					HRESULT ViewSetInfoWindowSizeY([out, retval] long *pVal);
+		[propget, id(37), helpcontext(IDH_NCSREND_BLOCKSINVIEW), helpstring("property ViewSetInfoBlocksInView")]
+					HRESULT ViewSetInfoBlocksInView([out, retval] long *pVal);
+		[propget, id(38), helpcontext(IDH_NCSREND_BLOCKSAVAILABLE), helpstring("property ViewSetInfoBlocksAvailable")]
+					HRESULT ViewSetInfoBlocksAvailable([out, retval] long *pVal);
+		[propget, id(39), helpcontext(IDH_NCSREND_BLAOCKSAVAILATSETVIEW), helpstring("property ViewSetInfoBlocksAvailableAtSetView")]
+					HRESULT ViewSetInfoBlocksAvailableAtSetView([out, retval] long *pVal);
+		[propget, id(40), helpcontext(IDH_NCSREND_MISSEDBLOCKS), helpstring("property ViewSetInfoMissedBlocksDuringRead")]
+					HRESULT ViewSetInfoMissedBlocksDuringRead([out, retval] long *pVal);
+		[propget, id(41), helpcontext(IDH_NCSREND_WORLDTOPX), helpstring("property ViewSetInfoWorldTopX")]
+					HRESULT ViewSetInfoWorldTopX([out, retval] double *pVal);
+		[propget, id(42), helpcontext(IDH_NCSREND_WORLDLEFTY), helpstring("property ViewSetInfoWorldLeftY")]
+					HRESULT ViewSetInfoWorldLeftY([out, retval] double *pVal);
+		[propget, id(43), helpcontext(IDH_NCSREND_WORLDBOTTOMX), helpstring("property ViewSetInfoWorldBottomX")]
+					HRESULT ViewSetInfoWorldBottomX([out, retval] double *pVal);
+		[propget, id(44), helpcontext(IDH_NCSREND_WORLDBOTTOMY), helpstring("property ViewSetInfoWorldRightY")]
+					HRESULT ViewSetInfoWorldRightY([out, retval] double *pVal);
+		[propget, id(45), helpcontext(IDH_NCSREND_BANDLIST), helpstring("property ViewSetInfoBandList")]
+					HRESULT ViewSetInfoBandList([out, retval] VARIANT *pVal);
+		[id(46), helpstring("method ConvertDatasetToWorldVB")] HRESULT ConvertDatasetToWorldVB([in] long nDatasetX, [in] long nDatasetY, [out, retval] VARIANT *pVal);
+		[id(47), helpstring("method ConvertWorldToDatasetVB")] HRESULT ConvertWorldToDatasetVB([in] double dWorldX, [in] double dWorldY, [out, retval] VARIANT *pVal);
+		[propget, id(48), helpcontext(IDH_NCSREND_IMAGEHEIGHT), helpstring("property ImageHeight")] HRESULT ImageHeight([out, retval] long *pVal);
+		[propget, id(49), helpcontext(IDH_NCSREND_IMAGEWIDTH), helpstring("property ImageWidth")] HRESULT ImageWidth([out, retval] long *pVal);
+	};
+
+	[
+		uuid(D63891F2-E026-11D3-A6C3-005004055C6C),
+		helpstring("INCSRenderer Events Interface")
+	]
+	dispinterface _INCSRendererEvents
+	{
+		properties:
+		methods:
+		[id(1), helpcontext(IDH_NCSREND_REFRESHUPDATE), helpstring("A refresh update event, only in progressive mode, occurs when data arrives from the network that needs to be drawn.")] 
+			void RefreshUpdate([in] double dWorldTLX, [in] double dWorldTLY, [in] double dWorldBRX, [in] double dWorldBRY, [in] long nWidth, [in] long nHeight);
+	};
+
+	[
+		uuid(D63891F1-E026-11D3-A6C3-005004055C6C),
+		helpstring("NCSRenderer Class"),
+		helpcontext(IDH_NCSREND_HOME),
+	]
+	coclass NCSRenderer
+	{
+		[default] interface INCSRenderer;
+		[default, source] dispinterface _INCSRendererEvents;
+	};
+};

@@ -1,0 +1,6 @@
+EARTH RESOURCE MAPPING
+ER MAPPER IMAGE COMPRESSION SDK USAGE AGREEMENTS
+
+You are granted the rights to use the ER Mapper Image Compression SDK for evaluation purposes only. You may not redistribute this software without permission. For licensing terms and conditions, please send a query with details of your name, organization, and intended use to eula@ermapper.com. Please specify a description of the target application, whether it is open source or commercial, and whether it is client or server software.
+
+Revised 1st May 2007

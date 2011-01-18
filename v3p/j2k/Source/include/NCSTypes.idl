@@ -1,0 +1,66 @@
+/********************************************************
+** Copyright 2000 Earth Resource Mapping Pty Ltd.
+** This document contains unpublished source code of
+** Earth Resource Mapping Pty Ltd. This notice does
+** not indicate any intention to publish the source
+** code contained herein.
+**
+** FILE:    NCSTypes.idl
+** CREATED: 
+** AUTHOR:  Mark Sheridan
+** PURPOSE: Shared types for NCS com objects
+** NOTE : These must be kept in sync with NCSDisplayEngine.h 
+**        in the viewmanager directory.
+** EDITS:
+*******************************************************/
+
+typedef 
+[uuid(70c70130-35af-11d3-a660-005004055c6d)]	
+enum tagNCSCellSizeUnits
+{
+	[helpstring("Cell Type Invalid")]	CU_INVALID	=	0,
+	[helpstring("Cell Type Meters")]	CU_METERS	=	1,
+	[helpstring("Cell Type Degrees")]	CU_DEGREES	=	2,
+	[helpstring("Cell Type Feet")]		CU_FEET		=	3,
+	[helpstring("Cell Type Unknown")]	CU_UNKNOWN	=	4
+} NCSCellSizeUnits;
+
+typedef
+[uuid(70c70130-35af-11d3-a660-005004055c6c)]	
+enum tagNCSGeolinkMode
+{
+	[helpstring("Geolink None")]	GM_NONE		= 0,
+	[helpstring("Geolink Windows")]	GM_WINDOW	= 1,
+	[helpstring("Geolink Screen")]	GM_SCREEN	= 2
+} NCSGeolinkMode;
+
+typedef
+[uuid(BD195D00-D248-11d2-88C8-006008A717FD)]
+enum tagNCSPointerMode
+{
+	[helpstring("Roam Mode")]		PM_ROAM		= 0,
+	[helpstring("Zoom Mode")]		PM_ZOOM		= 1,
+	[helpstring("Point Mode")]		PM_POINT	= 2,
+	[helpstring("ZoomBox Mode")]	PM_ZOOMBOX	= 3,
+	[helpstring("No Mode is Set")]	PM_NONE		= 4
+} NCSPointerMode;
+
+typedef
+[uuid(0ff4f399-bf8f-4270-a5a3-4527832b3b14)]
+enum tagNCSOverlayMode
+{
+	[helpstring("World Mode")]				OM_WORLD		= 0,
+	[helpstring("Window Relative Mode")]	OM_WINRELATIVE	= 1,
+	[helpstring("Window Absolute Mode")]	OM_WINABSOLUTE	= 2
+} NCSOverlayMode;
+
+typedef
+[uuid(466B4405-90FD-4e77-9406-1F3C2ABCA606)]
+enum tagNCSMouseVirtualKeys
+{
+	[helpstring("Control key")]			MVK_CONTROL	= 8,
+	[helpstring("Left button")]			MVK_LBUTTON	= 1,
+	[helpstring("Middle button")]		MVK_MBUTTON	= 16,
+	[helpstring("Right button")]		MVK_RBUTTON	= 2,
+	[helpstring("Shift key")]			MVK_SHIFT	= 4,
+} NCSMouseVirtualKeys;

@@ -1,0 +1,49 @@
+#!/bin/sh
+#
+# Bootstrap script to create make files from scratch (only Makefile.ams and configure.ins)
+# for the whole libecwj2 distribution (excepting some of the third party code).
+#
+# Author:       Tom Lynch
+# Created:	2005-09-09
+# Updated:      2005-09-28
+#
+# Edits:
+# 2005-09-28	Changed to only process in top directory (same for examples bootstrap)
+
+
+# (old code)
+# The distribution subdirectories that are part of the GNU autotools build for libecwj2.
+#
+# DIRECTORIES=". ./Source ./Source/NCSBuildGnu"
+# DIRECTORIES="${DIRECTORIES} ./examples/decompression/example1"
+# DIRECTORIES="${DIRECTORIES} ./examples/decompression/example2"
+# DIRECTORIES="${DIRECTORIES} ./examples/decompression/example4"
+# DIRECTORIES="${DIRECTORIES} ./examples/compression/example1"
+# DIRECTORIES="${DIRECTORIES} ./examples/compression/example2"
+# DIRECTORIES="${DIRECTORIES} ./examples/compression/example3"
+# DIRECTORIES="${DIRECTORIES} ./examples/compression/example5"
+# autoheader
+#
+# Process each directory
+#
+#
+#for item in $DIRECTORIES ; do
+#        echo "bootstrap processing $item ..." ;
+#        DIR=$PWD ;
+#        cd $item ;
+#        libtoolize --force --copy ;
+#        aclocal ;
+#        automake --foreign --add-missing ;
+#        autoconf ;
+#        ./configure ;
+#        cd $DIR ;
+#done
+
+autoheader
+libtoolize --force --copy
+aclocal
+automake --foreign --add-missing
+autoconf
+
+exit
+

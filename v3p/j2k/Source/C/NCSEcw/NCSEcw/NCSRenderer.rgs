@@ -1,0 +1,34 @@
+HKCR
+{
+	NCSEcw.NCSRenderer.1 = s 'NCSRenderer Class'
+	{
+		CLSID = s '{D63891F1-E026-11D3-A6C3-005004055C6C}'
+	}
+	NCSEcw.NCSRenderer = s 'NCSRenderer Class'
+	{
+		CLSID = s '{D63891F1-E026-11D3-A6C3-005004055C6C}'
+		CurVer = s 'NCSEcw.NCSRenderer.1'
+	}
+	NoRemove CLSID
+	{
+		ForceRemove {D63891F1-E026-11D3-A6C3-005004055C6C} = s 'NCSRenderer Class'
+		{
+			ProgID = s 'NCSEcw.NCSRenderer.1'
+			VersionIndependentProgID = s 'NCSEcw.NCSRenderer'
+			ForceRemove 'Programmable'
+			InprocServer32 = s '%MODULE%'
+			{
+				val ThreadingModel = s 'Apartment'
+			}
+			ForceRemove 'Control'
+			ForceRemove 'Insertable'
+			ForceRemove 'ToolboxBitmap32' = s '%MODULE%, 101'
+			'MiscStatus' = s '0'
+			{
+			    '1' = s '132497'
+			}
+			'TypeLib' = s '{1BA90D24-DF6F-11D3-A6C3-005004055C6C}'
+			'Version' = s '1.0'
+		}
+	}
+}

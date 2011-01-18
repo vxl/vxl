@@ -1,0 +1,32 @@
+project( NCScnet2 )
+
+SUBDIRS (../../NCSUtil)
+
+set(SOURCES 
+  cnet2util.c
+  connect.c
+  NCScnet.c
+  NCSWinHttp.c
+  packet.c
+  ncscnet.rc
+  cnet.h
+  ../../../include/NCScnet.h
+  ../../../include/NCSnet.h
+  NCSWinHttp.h
+  NCScnet.def
+)
+
+include_directories( 
+  ../../../include
+)
+
+add_definitions( 
+  -DNDEBUG
+  -DWIN32
+  -D_WINDOWS
+)
+
+add_library( NCScnet2 SHARED ${SOURCES} )
+SET_TARGET_PROPERTIES(NCScnet2 PROPERTIES OUTPUT_NAME NCScnet2 DEBUG_POSTFIX d)
+target_link_libraries( NCScnet2 Crypt32 odbc32 odbccp32 wininet wsock32 winmm NCSUtil )
+INSTALL_TARGETS( /lib NCScnet2 )
