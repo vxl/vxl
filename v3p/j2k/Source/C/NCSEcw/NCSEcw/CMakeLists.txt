@@ -97,7 +97,7 @@ set(NCSECW_SOURCES
   ../NCSJP2/NCSJPCMQCoder.cpp
   ../NCSJP2/NCSJPCNode.cpp
   ../NCSJP2/NCSJPCNodeTiler.cpp
-  ../NCSJP2/NCSJPCPACKET.cpp
+  ../NCSJP2/NCSJPCPacket.cpp
   ../NCSJP2/NCSJPCPacketLengthType.cpp
   ../NCSJP2/NCSJPCPaletteNode.cpp
   ../NCSJP2/NCSJPCPLMMarker.cpp
