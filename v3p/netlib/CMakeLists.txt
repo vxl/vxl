@@ -196,7 +196,6 @@ SET(V3P_NETLIB_laso_SOURCES
      laso/urand.c laso/urand.h
    )
 SET(V3P_NETLIB_arpack_SOURCES
-     arpack/debug_com.c arpack/debug.h
      arpack/dgetv0.c arpack/dgetv0.h
      arpack/dsaitr.c arpack/dsaitr.h
      arpack/dsapps.c arpack/dsapps.h
@@ -211,6 +210,7 @@ SET(V3P_NETLIB_arpack_SOURCES
      arpack/dstats.c arpack/dstats.h
      arpack/dstqrb.c arpack/dstqrb.h
      arpack/second.c arpack/second.h
+     arpack/debug_com.c
      arpack/timing_com.c
      arpack/stat.h
    )
