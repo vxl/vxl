@@ -28,4 +28,22 @@
 void mbl_parse_keyword_list(vcl_istream& is, const vcl_string& keyword,
                 vcl_vector<vcl_string>& items);
 
+
+//: Read in keyword separated blocks of text from stream.
+// Assumes list of blocks separated by a keyword.
+//  keyword is always the same word, defined in the input variable.
+// Expects format of data:
+// \verbatim
+// {
+//   object: thing0 { data: fruit0 }
+//   object: thing1 { data: fruit1 }
+//   object: thing2 { data: fruit2 }
+// }
+// To parse this, require keyword="object:". 
+// For this example, on exit, items[1]=="thing1 { data: fruit1 }".
+// \endverbatim
+// Throws a mbl_exception_parse_error if it fails.
+void mbl_parse_keyword_list2(vcl_istream& is, const vcl_string& keyword,
+                vcl_vector<vcl_string>& items);
+
 #endif // mbl_parse_keyword_list_h_
