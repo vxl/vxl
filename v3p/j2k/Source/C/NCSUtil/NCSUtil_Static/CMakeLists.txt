@@ -1,6 +1,6 @@
 project( NCSUtil_Static )
 
-set(SOURCES 
+set(SOURCES
   ../CNCSBase64Coder.cpp
   ../CNCSMetabaseEdit.cpp
   ../CNCSMultiSZ.cpp
@@ -40,143 +40,51 @@ set(SOURCES
   ../thread.c
   ../timer.c
   ../util.c
-  
-	../CNCSBase64Coder.h
-
-	../../../include/CNCSMetabaseEdit.h
-
-	../../../include/CNCSMultiSZ.h
-	../../../include/NCSArray.h
-
-	../../../include/NCSBase64.h
-
-	../../../include/NCSCoordinateConverter.h
-
-	../../../include/NCSCoordinateSystem.h
-
-	../../../include/NCSCoordinateTransform.h
-
-	../../../include/NCSCrypto.h
-
-	../../../include/NCSDefs.h
-
-	../../../include/NCSDynamicLib.h
-	
-
-
-	../../../include/NCSError.h
-	
-
-
-	../../../include/NCSErrors.h
-	
-
-
-	../../../include/NCSEvent.h
-	
-
-
-	../../../include/NCSExtent.h
-	
-
-
-	../../../include/NCSExtents.h
-	
-
-
-	../../../include/NCSFile.h
-	
-
-
-	../../../include/NCSFileIO.h
-	
-
-
-	../../../include/NCSLog.h
-	
-
-
-	../../../include/NCSMalloc.h
-	
-
-
-	../../../include/NCSMemPool.h
-	
-
-
-	../../../include/NCSMisc.h
-	
-
-
-	../../../include/NCSMutex.h
-	
-
-
-	../../../include/NCSObject.h
-	
-
-
-	../../../include/NCSObjectList.h
-	
-
-
-	../../../include/NCSPackets.h
-	
-
-
-	../../../include/NCSPoint.h
-	
-
-
-	../../../include/NCSPrefs.h
-	
-
-
-	../../../include/NCSQuadTree.h
-	
-
-
-	../../../include/NCSQueue.h
-	
-
-
-	../../../include/NCSScreenPoint.h
-	
-
-
-	../../../include/NCSServerState.h
-	
-
-
-	../../../include/NCSThread.h
-	
-
-
-	../../../include/NCSTimeStamp.h
-	
-
-
-	../../../include/NCSTypes.h
-	
-
-
-	../../../include/NCSUtil.h
-	
-
-
-	../../../include/NCSWorldPoint.h
-	
-
-
-	../resource.h
-  
+  ../CNCSBase64Coder.h
+  ../../../include/CNCSMetabaseEdit.h
+  ../../../include/CNCSMultiSZ.h
+  ../../../include/NCSArray.h
+  ../../../include/NCSBase64.h
+  ../../../include/NCSCoordinateConverter.h
+  ../../../include/NCSCoordinateSystem.h
+  ../../../include/NCSCoordinateTransform.h
+  ../../../include/NCSCrypto.h
+  ../../../include/NCSDefs.h
+  ../../../include/NCSDynamicLib.h
+  ../../../include/NCSError.h
+  ../../../include/NCSErrors.h
+  ../../../include/NCSEvent.h
+  ../../../include/NCSExtent.h
+  ../../../include/NCSExtents.h
+  ../../../include/NCSFile.h
+  ../../../include/NCSFileIO.h
+  ../../../include/NCSLog.h
+  ../../../include/NCSMalloc.h
+  ../../../include/NCSMemPool.h
+  ../../../include/NCSMisc.h
+  ../../../include/NCSMutex.h
+  ../../../include/NCSObject.h
+  ../../../include/NCSObjectList.h
+  ../../../include/NCSPackets.h
+  ../../../include/NCSPoint.h
+  ../../../include/NCSPrefs.h
+  ../../../include/NCSQuadTree.h
+  ../../../include/NCSQueue.h
+  ../../../include/NCSScreenPoint.h
+  ../../../include/NCSServerState.h
+  ../../../include/NCSThread.h
+  ../../../include/NCSTimeStamp.h
+  ../../../include/NCSTypes.h
+  ../../../include/NCSUtil.h
+  ../../../include/NCSWorldPoint.h
+  ../resource.h
 )
 
-include_directories( 
+include_directories(
   ../../../include
 )
 
-add_definitions( 
+add_definitions(
   -DNCSECW_STATIC_LIBS
   -DNDEBUG
   -D_LIB

@@ -4,8 +4,7 @@ SUBDIRS(../../NCSUtil/NCSUtil_Static)
 SUBDIRS(../../NCSnet/NCScnet2/NCScnet2_Static)
 
 
-
-set(NCSECW_SOURCES 
+set(NCSECW_SOURCES
   ../shared_src/build_pyr.c
   ../lcms/src/cmscnvrt.c
   ../lcms/src/cmserr.c
@@ -141,14 +140,13 @@ set(NCSECW_SOURCES
 
 set(CMAKE_MFC_FLAG 2)
 
-include_directories( 
+include_directories(
   ../../../include
   ../lcms/include
-  M:/Development/ERM/Source/INCLUDE
- M:/Development/ERM/Source/LIB/ERMAPPER/GEOtiff
+  ../../../../../geotiff
 )
 
-add_definitions( 
+add_definitions(
   -DNCS_BUILD_WITH_COM
   -D_ATL_STATIC_REGISTRY
   -D_USRDLL

@@ -1,8 +1,7 @@
 project( NCSUtil )
 
 
-
-set(SOURCES 
+set(SOURCES
   CNCSBase64Coder.cpp
   CNCSMetabaseEdit.cpp
   CNCSMultiSZ.cpp
@@ -45,7 +44,7 @@ set(SOURCES
   util.c
   NCSUtil.def
   #headers
-  
+
 CNCSBase64Coder.h
 ../../include/CNCSMetabaseEdit.h
 ../../include/CNCSMultiSZ.h
@@ -74,7 +73,7 @@ CNCSBase64Coder.h
 ../../include/NCSPackets.h
 ../../include/NCSPoint.h
 ../../include/NCSPrefs.h
-./NCSPrefsWin.h		
+./NCSPrefsWin.h
 ./NCSPrefsXML.h
 ../../include/NCSQuadTree.h
 ../../include/NCSQueue.h
@@ -88,11 +87,11 @@ CNCSBase64Coder.h
 resource.h
 )
 
-include_directories( 
+include_directories(
   ../../include
 )
 
-add_definitions( 
+add_definitions(
   -DNCSMALLOCLOG
   -DNCSUTIL_EXPORTS
   -DNDEBUG

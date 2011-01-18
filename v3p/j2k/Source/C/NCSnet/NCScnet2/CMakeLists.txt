@@ -2,7 +2,7 @@ project( NCScnet2 )
 
 SUBDIRS (../../NCSUtil)
 
-set(SOURCES 
+set(SOURCES
   cnet2util.c
   connect.c
   NCScnet.c
@@ -16,11 +16,11 @@ set(SOURCES
   NCScnet.def
 )
 
-include_directories( 
+include_directories(
   ../../../include
 )
 
-add_definitions( 
+add_definitions(
   -DNDEBUG
   )
 
