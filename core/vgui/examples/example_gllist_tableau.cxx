@@ -1,4 +1,4 @@
-// \brief  Test if OpenGL lists can be generated during vgui tableau tree 
+// \brief  Test if OpenGL lists can be generated during vgui tableau tree
 //         initialization.
 //         A red triangle should be displayed at the center of the window.
 // \author Lianqing Yu
@@ -13,17 +13,14 @@
 #include <vgui/vgui_adaptor.h>
 #include <vgui/vgui_window.h>
 
-#ifdef WIN32
-#include <windows.h>
-#endif
-#include <GL/gl.h>
+#include <vgui/vgui_gl.h>
 
 class basic_manager : public vgui_wrapper_tableau
 {
-public:
+ public:
   ~basic_manager() {}
 
-  static basic_manager *instance() 
+  static basic_manager *instance()
   {
     static basic_manager *instance_ = 0;
     if (!instance_) {
@@ -33,7 +30,7 @@ public:
     return instance_;
   }
 
-  void init() 
+  void init()
   {
     vgui_image_tableau_sptr img = vgui_image_tableau_new();
     vgui_viewer2D_tableau_sptr viewer = vgui_viewer2D_tableau_new(img);
@@ -56,7 +53,7 @@ public:
   void gen_gl_list()
   {
     // This does not in gtk2 impl. of vgui, up to version 1.14.0
-    listName = glGenLists(1); 
+    listName = glGenLists(1);
     if ( listName == 0 )
        vcl_cerr << "Fail to generate opengl list.\n";
     else {
@@ -83,7 +80,7 @@ public:
     return false;
   }
 
-private:
+ private:
   basic_manager() : vgui_wrapper_tableau() {}
 
   GLuint listName;
@@ -92,15 +89,15 @@ private:
 // Provide a menu to give app the second chance to generate GL list.
 class basic_menu
 {
-public:
+ public:
    static void gen_list() { basic_manager::instance()->gen_list(); }
-   static vgui_menu get_menu() 
-   { 
+   static vgui_menu get_menu()
+   {
       vgui_menu menubar;
       menubar.add("Generate List", gen_list);
       return menubar;
    }
-private:
+ private:
    basic_menu() {}
 };
 
