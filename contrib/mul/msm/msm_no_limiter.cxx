@@ -37,7 +37,7 @@ void msm_no_limiter::apply_limit(vnl_vector<double>& b) const
 //: Print class to os
 void msm_no_limiter::print_summary(vcl_ostream& os) const
 {
-  os<<is_a();
+  os << "{ }";
 }
 
 const static short version_no = 1;

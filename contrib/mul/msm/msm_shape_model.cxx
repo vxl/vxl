@@ -36,16 +36,11 @@ void msm_shape_model::set(const msm_points& mean,
                           const msm_aligner& aligner,
                           const msm_param_limiter& param_limiter)
 {
-  assert(mean.size()%2==0);
-  assert(mean.size()*2==modes.rows());
-  assert(mode_var.size()==modes.columns());
+  msm_ref_shape_model::set(mean,modes,mode_var,param_limiter);
+
   assert(default_pose.size()==aligner.size());
-  mean_ = mean;
-  modes_ = modes;
-  mode_var_ = mode_var;
   default_pose_ = default_pose;
   aligner_ = aligner;
-  param_limiter_ = param_limiter;
 }
 
 //: Equality test

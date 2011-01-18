@@ -36,9 +36,13 @@ void msm_ref_shape_model::set(const msm_points& mean,
                               const vnl_vector<double>& mode_var,
                               const msm_param_limiter& param_limiter)
 {
-  assert(mean.size()%2==0);
-  assert(mean.size()*2==modes.rows());
+  assert(mean.vector().size()%2==0);
   assert(mode_var.size()==modes.columns());
+  if (mode_var.size()!=0)
+  {
+    assert(mean.size()*2==modes.rows());
+  }
+
   mean_ = mean;
   mean_points_scale_ = mean.scale();
   modes_ = modes;
@@ -47,7 +51,7 @@ void msm_ref_shape_model::set(const msm_points& mean,
 }
 
 //: Equality test
-bool msm_ref_shape_model::operator==(const msm_ref_shape_model& model)
+bool msm_ref_shape_model::operator==(const msm_ref_shape_model& model) const
 {
   if (model.mean_.size()!=mean_.size()) return false;
   if (model.mode_var_.size()!=mode_var_.size()) return false;

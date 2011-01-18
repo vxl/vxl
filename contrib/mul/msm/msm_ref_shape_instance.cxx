@@ -109,6 +109,8 @@ void msm_ref_shape_instance::fit_to_points(const msm_points& pts,
   // Catch case when fitting to self
   if (&pts == &points_) return;
 
+  if (b_.size()==0) return;
+
   // Estimate shape parameters
   tmp_points_=pts;
   tmp_points_.vector()-=model().mean();
@@ -260,6 +262,7 @@ void msm_ref_shape_instance::fit_to_points_wt(const msm_points& pts,
 {
   // Catch case when fitting to self
   if (&pts == &points_) return;
+  if (b_.size()==0) return;
 
   tmp_points_.vector()=pts.vector();
   tmp_points_.vector()-=model().mean();
@@ -293,6 +296,7 @@ void msm_ref_shape_instance::fit_to_points_wt_mat(const msm_points& pts,
 {
   // Catch case when fitting to self
   if (&pts == &points_) return;
+  if (b_.size()==0) return;
 
   unsigned n=model().size();
   assert(wt_mat.size()==n);
