@@ -179,7 +179,6 @@ include_directories(
 add_definitions( 
   -DNCSECW_STATIC_LIBS
   -DNDEBUG
-  -DWIN32
   -D_LIB
 )
 

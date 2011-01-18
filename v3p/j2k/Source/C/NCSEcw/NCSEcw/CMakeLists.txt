@@ -150,10 +150,8 @@ include_directories(
 
 add_definitions( 
   -DNCS_BUILD_WITH_COM
-   -DWIN32
   -D_ATL_STATIC_REGISTRY
   -D_USRDLL
-  -D_WINDOWS
   -D_AFXEXT
   -D_AFXDLL
   -D_CRT_SECURE_NO_WARNINGS

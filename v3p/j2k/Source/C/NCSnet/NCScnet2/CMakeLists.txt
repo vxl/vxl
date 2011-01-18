@@ -22,9 +22,7 @@ include_directories(
 
 add_definitions( 
   -DNDEBUG
-  -DWIN32
-  -D_WINDOWS
-)
+  )
 
 add_library( NCScnet2 SHARED ${SOURCES} )
 SET_TARGET_PROPERTIES(NCScnet2 PROPERTIES OUTPUT_NAME NCScnet2 DEBUG_POSTFIX d)
