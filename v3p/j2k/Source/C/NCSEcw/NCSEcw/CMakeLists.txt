@@ -97,7 +97,7 @@ set(NCSECW_SOURCES
   ../NCSJP2/NCSJPCMQCoder.cpp
   ../NCSJP2/NCSJPCNode.cpp
   ../NCSJP2/NCSJPCNodeTiler.cpp
-  ../NCSJP2/NCSJPCPACKET.CPP
+  ../NCSJP2/NCSJPCPACKET.cpp
   ../NCSJP2/NCSJPCPacketLengthType.cpp
   ../NCSJP2/NCSJPCPaletteNode.cpp
   ../NCSJP2/NCSJPCPLMMarker.cpp
@@ -114,14 +114,14 @@ set(NCSECW_SOURCES
   ../NCSJP2/NCSJPCResample.cpp
   ../NCSJP2/NCSJPCResolution.cpp
   ../NCSJP2/NCSJPCRGNMarker.cpp
-  ../NCSJP2/NCSJPCSEGMENT.CPP
+  ../NCSJP2/NCSJPCSEGMENT.cpp
   ../NCSJP2/NCSJPCSIZMarker.cpp
   ../NCSJP2/NCSJPCSOCMarker.cpp
   ../NCSJP2/NCSJPCSODMarker.cpp
   ../NCSJP2/NCSJPCSOPMarker.cpp
   ../NCSJP2/NCSJPCSOTMarker.cpp
   ../NCSJP2/NCSJPCSubBand.cpp
-  ../NCSJP2/NCSJPCT1CODER.CPP
+  ../NCSJP2/NCSJPCT1CODER.cpp
   ../NCSJP2/NCSJPCTagTree.cpp
   ../NCSJP2/NCSJPCTilePartHeader.cpp
   ../NCSJP2/NCSJPCTLMMarker.cpp
@@ -136,7 +136,7 @@ set(NCSECW_SOURCES
   StdAfx.cpp
   ../shared_src/unpack.c
   ComNCSRenderer.rgs
-  NCSECW.def
+  NCSEcw.def
  )
 
 set(CMAKE_MFC_FLAG 2)

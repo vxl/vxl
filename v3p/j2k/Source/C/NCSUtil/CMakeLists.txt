@@ -35,7 +35,7 @@ set(SOURCES
   NCSServerState.cpp
   NCSString.cpp
   NCSThread.cpp
-  ncsutil.rc
+  NCSUtil.rc
   NCSWorldPoint.cpp
   pool.c
   quadtree.cpp

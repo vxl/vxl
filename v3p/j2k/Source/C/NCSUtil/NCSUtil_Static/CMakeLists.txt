@@ -31,7 +31,7 @@ set(SOURCES
   ../NCSServerState.cpp
   ../NCSThread.cpp
   ../NCSUtil.def
-  ../ncsutil.rc
+  ../NCSUtil.rc
   ../NCSWorldPoint.cpp
   ../pool.c
   ../prefs.c

@@ -8,7 +8,7 @@ set(SOURCES
   NCScnet.c
   NCSWinHttp.c
   packet.c
-  ncscnet.rc
+  NCScnet.rc
   cnet.h
   ../../../include/NCScnet.h
   ../../../include/NCSnet.h
