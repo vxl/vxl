@@ -114,14 +114,14 @@ set(NCSECW_SOURCES
   ../NCSJP2/NCSJPCResample.cpp
   ../NCSJP2/NCSJPCResolution.cpp
   ../NCSJP2/NCSJPCRGNMarker.cpp
-  ../NCSJP2/NCSJPCSEGMENT.cpp
+  ../NCSJP2/NCSJPCSegment.cpp
   ../NCSJP2/NCSJPCSIZMarker.cpp
   ../NCSJP2/NCSJPCSOCMarker.cpp
   ../NCSJP2/NCSJPCSODMarker.cpp
   ../NCSJP2/NCSJPCSOPMarker.cpp
   ../NCSJP2/NCSJPCSOTMarker.cpp
   ../NCSJP2/NCSJPCSubBand.cpp
-  ../NCSJP2/NCSJPCT1CODER.cpp
+  ../NCSJP2/NCSJPCT1Coder.cpp
   ../NCSJP2/NCSJPCTagTree.cpp
   ../NCSJP2/NCSJPCTilePartHeader.cpp
   ../NCSJP2/NCSJPCTLMMarker.cpp
