@@ -7,7 +7,7 @@ DECLARE( test_bil_cedt);
 DECLARE( test_bil_finite_differences);
 DECLARE( test_bil_finite_second_differences);
 DECLARE( test_bil_detect_ridges);
-
+DECLARE( test_bil_detect_blur_scale);
 
 void
 register_tests()
@@ -19,6 +19,7 @@ register_tests()
   REGISTER( test_bil_finite_differences);
   REGISTER( test_bil_finite_second_differences);
   REGISTER( test_bil_detect_ridges);
+  REGISTER( test_bil_detect_blur_scale);
 }
 
 DEFINE_MAIN;
