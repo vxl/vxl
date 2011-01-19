@@ -155,8 +155,11 @@ add_definitions(
   -D_CRT_SECURE_NO_WARNINGS
   -D_UNICODE
   -DUNICODE
+  -DNOASSEMBLER
 )
-
+if (UNIX)
+add_definitions( -DLINUX)
+ENDIF(UNIX)
 add_library( NCSEcw SHARED ${NCSECW_SOURCES} )
 SET_TARGET_PROPERTIES(NCSEcw PROPERTIES OUTPUT_NAME NCSEcw DEBUG_POSTFIX d)
 target_link_libraries( NCSEcw NCScnet2 NCSUtil )
