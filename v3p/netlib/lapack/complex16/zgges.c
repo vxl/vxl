@@ -403,7 +403,7 @@ static integer c_n1 = -1;
 /*<          INFO = -9 >*/
         *info = -9;
 /*<       ELSE IF( LDVSL.LT.1 .OR. ( ILVSL .AND. LDVSL.LT.N ) ) THEN >*/
-    } else if (*ldvsl < 1 || (ilvsl && *ldvsl) < *n) {
+    } else if (*ldvsl < 1 || (ilvsl && *ldvsl < *n)) {
 /*<          INFO = -14 >*/
         *info = -14;
 /*<       ELSE IF( LDVSR.LT.1 .OR. ( ILVSR .AND. LDVSR.LT.N ) ) THEN >*/
