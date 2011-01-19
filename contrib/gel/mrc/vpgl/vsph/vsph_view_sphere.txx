@@ -208,8 +208,8 @@ void vsph_view_sphere<T>::add_uniform_views(double cap_angle, double point_angle
     for (int j=0; j<3; j++) {
       vsph_sph_point_3d sv;
       coord_sys_->spherical_coord(verts[triangles[i][j]], sv);
-      if ((sv.theta_ < cap_angle) && (sv.theta_ > 3.0*cap_angle/4.0)) {
-      //if (sv.theta_ < cap_angle) {
+      //if ((sv.theta_ < cap_angle) && (sv.theta_ > 3.0*cap_angle/4.0)) {
+      if (sv.theta_ < cap_angle) {
         int uid;
         double dist;
         T neighb = find_closest(verts[triangles[i][j]],uid,dist);
@@ -423,6 +423,7 @@ void vsph_view_sphere<T>::b_read(vsl_b_istream& is)
   switch (version) {
    case 1:
     {
+      if(!coord_sys_) coord_sys_ = new vsph_spherical_coord();
       coord_sys_->b_read(is);
       unsigned size, uid;
       T view;
@@ -433,6 +434,7 @@ void vsph_view_sphere<T>::b_read(vsl_b_istream& is)
         views_[uid] = view;
       }
       vsl_b_read(is, uid_);
+      break;
     }
    default:
     vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vsph_view_sphere<T>&)\n"
@@ -457,6 +459,7 @@ void vsph_view_sphere<T>::b_write(vsl_b_ostream& os) const
     T vp=it->second;
     vsl_b_write(os, uid);
     vp.b_write(os);
+    ++it;
   }
   vsl_b_write(os, uid_);
 }

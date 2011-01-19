@@ -73,8 +73,9 @@ void vsph_spherical_coord::b_read(vsl_b_istream& is)
     case 1:
       vsl_b_read(is, radius_);
       vsl_b_read(is, origin_);
+      break;
     default:
-      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vsph_view_sphere<T>&)\n"
+      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vsph_spherical_coord&)\n"
                << "           Unknown version number "<< version << '\n';
       is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
       break;
