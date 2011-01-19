@@ -417,17 +417,18 @@ vnl_vector<T> vnl_matrix_fixed_ref_const<T,nrows,ncols>::get_column(unsigned col
   return v;
 }
 
+#endif // 0
+
 //: Return a vector with the content of the (main) diagonal
 template<class T, unsigned nrows, unsigned ncols>
 vnl_vector<T> vnl_matrix_fixed_ref_const<T,nrows,ncols>::get_diagonal() const
+vnl_matrix_fixed_ref_const<T,num_rows,num_cols>::get_diagonal(void) const
 {
   vnl_vector<T> v(nrows < ncols ? nrows : ncols);
   for (unsigned int j = 0; j < nrows && j < ncols; ++j)
     v[j] = (*this)(j,j);
   return v;
 }
-
-#endif // 0
 
 //--------------------------------------------------------------------------------
 
