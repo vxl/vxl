@@ -93,6 +93,8 @@ add_definitions(
 if (UNIX)
 add_definitions( -DLINUX)
 ENDIF(UNIX)
-
+if (APPLE)
+add_definitions( -DMACINTOSH)
+ENDIF(APPLE)
 add_library( NCSUtilS STATIC ${SOURCES} )
 
