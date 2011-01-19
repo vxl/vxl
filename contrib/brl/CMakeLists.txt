@@ -62,3 +62,6 @@ SUBDIRS(bpro)
 #3rd party libraries
 SUBDIRS(b3p)
 
+# cvg library 
+SUBDIRS(cvg)
+
