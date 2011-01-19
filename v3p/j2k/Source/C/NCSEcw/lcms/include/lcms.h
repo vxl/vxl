@@ -36,10 +36,11 @@
 // virtually any machine.
 
 // #define USE_FLOAT        1
+
 #if defined MACOSX || defined SOLARIS || defined WIN64 || defined NOASSEMBLER 
 #define USE_C            1
-#else
-#define USE_ASSEMBLER    1
+//#else
+//#define USE_ASSEMBLER    0
 #endif // MACOSX /**[01]*/
 
 // Define this if you are using this package as a DLL (windows only)

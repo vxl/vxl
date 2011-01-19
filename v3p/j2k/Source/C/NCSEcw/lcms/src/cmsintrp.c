@@ -416,7 +416,6 @@ WORD cmsLinearInterpLUT16(WORD Value1, WORD LutTable[], LPL16PARAMS p)
 // Linear interpolation (asm by hand optimized)
 
 #ifdef USE_ASSEMBLER
-
 #ifdef _MSC_VER
 #pragma warning(disable : 4033)
 #endif
