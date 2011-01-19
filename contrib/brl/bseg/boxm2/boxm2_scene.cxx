@@ -138,6 +138,45 @@ boxm2_scene_info* boxm2_scene::get_blk_metadata(boxm2_block_id id)
   return info; 
 }
 
+
+vgl_box_3d<double> boxm2_scene::bounding_box()
+{
+  double xmin=10e10, xmax=-10e10; 
+  double ymin=10e10, ymax=-10e10; 
+  double zmin=10e10, zmax=-10e10; 
+  
+  //iterate through each block
+  vcl_map<boxm2_block_id, boxm2_block_metadata>::iterator iter; 
+  for(iter = blocks_.begin(); iter != blocks_.end(); ++iter) {
+    
+    //determine xmin, ymin, zmin using block_o
+    vgl_point_3d<double>  blk_o = (iter->second).local_origin_; 
+    if(blk_o.x() < xmin) xmin = blk_o.x(); 
+    if(blk_o.y() < ymin) ymin = blk_o.y(); 
+    if(blk_o.z() < zmin) zmin = blk_o.z(); 
+
+
+    //get block max point
+    vgl_vector_3d<double>   blk_dim = (iter->second).sub_block_dim_; 
+    vgl_vector_3d<unsigned> blk_num = (iter->second).sub_block_num_;
+    vgl_vector_3d<double>   length(blk_dim.x()*blk_num.x(), 
+                                   blk_dim.y()*blk_num.y(),
+                                   blk_dim.z()*blk_num.z()); 
+    vgl_point_3d<double> blk_max = blk_o + length; 
+    if(blk_max.x() > xmax) xmax = blk_max.x(); 
+    if(blk_max.y() > ymax) ymax = blk_max.y(); 
+    if(blk_max.z() > zmax) zmax = blk_max.z(); 
+  }
+  
+  //: Construct from ranges in \a x,y,z (take care with order of inputs).
+  //  The \a x range is given by the 1st and 4th coordinates,
+  //  the \a y range is given by the 2nd and 5th coordinates,
+  //  the \a z range is given by the 3rd and 6th coordinates.
+  return vgl_box_3d<double>(xmin, ymin, zmin,
+                            xmax, ymax, zmax);
+}
+
+
 //---------------------------------------------------------------------
 // NON CLASS FUNCTIONS
 //---------------------------------------------------------------------

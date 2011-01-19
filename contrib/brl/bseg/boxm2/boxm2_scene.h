@@ -11,6 +11,7 @@
 #include <vpgl/bgeo/bgeo_lvcs.h>
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_vector_3d.h>
+#include <vgl/vgl_box_3d.h>
 #include <vcl_iosfwd.h>
 #include <vul/vul_file.h>
 
@@ -81,6 +82,9 @@ class boxm2_scene : public vbl_ref_count
     vcl_map<boxm2_block_id, boxm2_block_metadata>& blocks() { return blocks_; }
     unsigned num_blocks() { return (unsigned) blocks_.size(); }
     boxm2_block_metadata get_block_metadata(boxm2_block_id id) { return blocks_[id]; }
+
+    //: gets a tight bounding box for the scene
+    vgl_box_3d<double>      bounding_box(); 
 
     //: scene dimensions accessors
     vgl_point_3d<double>    local_origin()const { return local_origin_; }

@@ -9,6 +9,11 @@ ADD_EXECUTABLE( boxm2_update_exe
 )
 TARGET_LINK_LIBRARIES( boxm2_update_exe boxm2_ocl_pro sdet vil_pro vpgl_pro vul )
 
+ADD_EXECUTABLE( boxm2_render_hemisphere
+  boxm2_render_hemisphere.cxx
+)
+TARGET_LINK_LIBRARIES( boxm2_render_hemisphere boxm2 boxm2_basic boxm2_io sdet boxm2_ocl bocl vil_pro vpgl_pro vsph vul )
+
 
 INCLUDE( ${BRL_MODULE_PATH}/FindGLEW.cmake )
 
