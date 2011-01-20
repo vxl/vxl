@@ -19,6 +19,7 @@
 #include <vil/vil_convert.h>
 #include <vil/vil_image_view_base.h>
 #include <vil/vil_image_view.h>
+#include <vil/vil_pyramid_image_view.h>
 #include <vil/vil_math.h>
 #include <vil/vil_load.h>
 #include <vil/vil_save.h>
@@ -32,6 +33,7 @@
 #include <vpgl/vsph/vsph_view_point.h>
 #include <vpgl/vsph/vsph_sph_point_3d.h>
 
+#define PYRAMID_MAX_LEVEL 2
 
 class cvg_hemisphere_tableau : public vgui_image_tableau
 {
@@ -39,7 +41,6 @@ class cvg_hemisphere_tableau : public vgui_image_tableau
   cvg_hemisphere_tableau() {}
   cvg_hemisphere_tableau(vil_image_view_base const& img);
   cvg_hemisphere_tableau(vil_image_resource_sptr const& img);
-  cvg_hemisphere_tableau(vil_image_resource_sptr const& img, vbl_array_2d<vcl_string> images);
   cvg_hemisphere_tableau(vil_image_resource_sptr const& img,  
                          vsph_view_sphere<vsph_view_point<vcl_string> > sphere); 
   
@@ -61,14 +62,12 @@ class cvg_hemisphere_tableau : public vgui_image_tableau
   //: current location
   vsph_sph_point_3d curr_point_; 
   
-  //: image fielname list
-  vbl_array_2d<vcl_string> images_; 
+  //: current image pyramid
+  vil_pyramid_image_view<vxl_byte>* curr_pyramid_; 
+  int curr_level_; 
   
-  //: current index
-  int curr_row_, curr_col_; 
-
   //: load, set and post redraw helper method
-  void set_expected_image(int row, int col);
+  void set_expected_pyramid();
   void set_expected_image();
   double compress_range(double rad); 
 
@@ -91,11 +90,6 @@ struct cvg_hemisphere_tableau_new : public cvg_hemisphere_tableau_sptr
   //: Constructor - create with resource
   cvg_hemisphere_tableau_new( vil_image_resource_sptr const& t ) 
     : base( new cvg_hemisphere_tableau(t) ) { }
-    
-  //: Constructor - create with resource and array of image file names
-  cvg_hemisphere_tableau_new( vil_image_resource_sptr const& t, 
-                              vbl_array_2d<vcl_string> images) 
-    : base( new cvg_hemisphere_tableau(t, images) ) { }
     
   //: constructor with view sphere
   cvg_hemisphere_tableau_new( vil_image_resource_sptr const& t, 

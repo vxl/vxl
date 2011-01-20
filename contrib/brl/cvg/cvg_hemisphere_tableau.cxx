@@ -9,6 +9,8 @@
 #include <vgl/vgl_point_3d.h>
 #include <vcl_sstream.h>
 
+#include <vil/vil_crop.h>
+
 
 //: Constructor
 cvg_hemisphere_tableau::cvg_hemisphere_tableau(vil_image_view_base const& img)
@@ -18,20 +20,13 @@ cvg_hemisphere_tableau::cvg_hemisphere_tableau(vil_image_resource_sptr const& im
  : vgui_image_tableau(img, 0) 
 {}
 cvg_hemisphere_tableau::cvg_hemisphere_tableau(vil_image_resource_sptr const& img, 
-                                               vbl_array_2d<vcl_string> images)
- : vgui_image_tableau(img, 0)
-{
-  curr_row_ = 0;
-  curr_col_ = 0;
-  images_ = images;
-}
-cvg_hemisphere_tableau::cvg_hemisphere_tableau(vil_image_resource_sptr const& img, 
                                                 vsph_view_sphere<vsph_view_point<vcl_string> > sphere)
- : vgui_image_tableau(img, 0)
+ : vgui_image_tableau(img, 0), curr_pyramid_(0)
 {
   img_sphere_ = sphere;
   vsph_view_point<vcl_string> first_view = img_sphere_.begin()->second;
   curr_point_ = first_view.view_point();
+  curr_level_ = PYRAMID_MAX_LEVEL-1;
 }
 
 
@@ -49,23 +44,35 @@ bool cvg_hemisphere_tableau::handle(vgui_event const &e)
   if (e.key == vgui_CURSOR_LEFT || e.key == vgui_key('a')) {
       vcl_cout<<"Going Left "<<vcl_endl;
       curr_point_.phi_ -= (vnl_math::pi/18.0);
-      this->set_expected_image();
+      this->set_expected_pyramid();
   }
   else if (e.key == vgui_CURSOR_RIGHT || e.key == vgui_key('d')) {
       vcl_cout<<"Moving Right "<<vcl_endl;
       curr_point_.phi_ += (vnl_math::pi/18.0);
-      this->set_expected_image();
+      this->set_expected_pyramid();
   }  
   else if (e.key == vgui_CURSOR_UP || e.key == vgui_key('w')) {
       vcl_cout<<"Rotating Up "<<vcl_endl;
       curr_point_.theta_ -= (vnl_math::pi/36.0);
-      this->set_expected_image();
+      this->set_expected_pyramid();
   }  
   else if (e.key == vgui_CURSOR_DOWN || e.key == vgui_key('s')) {
       vcl_cout<<"Rotating Down "<<vcl_endl;
       curr_point_.theta_ += (vnl_math::pi/36.0);
-      this->set_expected_image();
+      this->set_expected_pyramid();
   } 
+  else if (e.key == vgui_key('i')) {
+      vcl_cout<<"Zooming In "<<vcl_endl;
+      curr_level_--; 
+      if(curr_level_ < 0) curr_level_ = 0; 
+      this->set_expected_image();
+  }
+  else if (e.key == vgui_key('o')) {
+      vcl_cout<<"Zooming out "<<vcl_endl;
+      curr_level_++;
+      if(curr_level_ >= PYRAMID_MAX_LEVEL) curr_level_ = PYRAMID_MAX_LEVEL-1;
+      this->set_expected_image();
+  }
 
   //Otherwise let the VGUI_IMAGE_TABLEAU handle the draw
   if (vgui_image_tableau::handle(e))
@@ -74,19 +81,7 @@ bool cvg_hemisphere_tableau::handle(vgui_event const &e)
   return false;
 }
 
-void cvg_hemisphere_tableau::set_expected_image(int row, int col)
-{
-  //make sure the right image is displayed
-  vil_image_resource_sptr im = vil_load_image_resource( images_(row, col).c_str() );
-  if ( !im ) {
-    vcl_cerr << "Could not load " << images_(row, col) << '\n';
-    return;
-  }
-  this->set_image_resource(im); 
-  this->post_redraw();  
-}
-
-void cvg_hemisphere_tableau::set_expected_image()
+void cvg_hemisphere_tableau::set_expected_pyramid()
 {
   //convert to cartesian (as method is only in cartesian for some reason)
   vgl_point_3d<double> cart_point = img_sphere_.cart_coord(curr_point_);
@@ -101,12 +96,39 @@ void cvg_hemisphere_tableau::set_expected_image()
   
   //get string path
   vcl_string* img_path = curr_view.metadata();
-  vil_image_resource_sptr im = vil_load_image_resource(img_path->c_str());
+  vil_image_resource_sptr im = vil_load_image_resource(img_path->c_str());  
   if ( !im ) {
     vcl_cerr << "Could not load " << img_path->c_str() << '\n';
     return;
   }
-  this->set_image_resource(im); 
+  if(curr_pyramid_) delete curr_pyramid_; 
+  
+  //create the current pyramid
+  curr_pyramid_ = new vil_pyramid_image_view<vxl_byte>(im->get_view(), PYRAMID_MAX_LEVEL);
+
+  //set the image
+  this->set_expected_image();
+}
+
+void cvg_hemisphere_tableau::set_expected_image()
+{
+  double scale; 
+  vil_image_view_base_sptr scaled = curr_pyramid_->get_view(curr_level_, scale); 
+
+  //if curr level is a bit bigger, crop the image...
+  if(curr_level_ == 0) {
+    int ni = scaled->ni()/2;
+    int nj = scaled->nj()/2;
+    int i0 = ni/2;
+    int j0 = nj/2;
+    vil_image_view<vxl_byte> cropped = vil_crop<vxl_byte>(*scaled, i0, ni, j0, nj);  
+    this->set_image_view(cropped);
+    this->post_redraw();
+    return;
+  }
+  vcl_cout<<"Tableau width/height"<<this->width()<<","<<this->height()<<vcl_endl;
+
+  this->set_image_view(*scaled);
   this->post_redraw();  
 }
 
