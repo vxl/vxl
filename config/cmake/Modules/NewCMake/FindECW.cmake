@@ -32,12 +32,12 @@ IF( ECW_INCLUDE_DIR )
     /usr/lib64
     /usr/local/lib64
   )
-  
+
   IF( ECW_ncsutil_LIBRARY )
   IF( ECW_ncsecw_LIBRARY )
 
     SET( ECW_FOUND "YES" )
-	SET( ECW_LIBRARIES ${ECW_ncsutil_LIBRARY} ${ECW_ncsecw_LIBRARY} )
+    SET( ECW_LIBRARIES ${ECW_ncsutil_LIBRARY} ${ECW_ncsecw_LIBRARY} )
 
   ENDIF( ECW_ncsecw_LIBRARY )
   ENDIF( ECW_ncsutil_LIBRARY )
@@ -46,15 +46,15 @@ IF( ECW_INCLUDE_DIR )
 ENDIF( ECW_INCLUDE_DIR )
 ENDIF( VXL_FORCE_V3P_J2K )
 
-IF (ECW_FOUND)
-	SET(VXL_USING_NATIVE_J2K "YES")
-ELSE (ECW_FOUND)
- IF((EXISTS ${vxl_SOURCE_DIR}/v3p/j2k/Source/include/NCSEcw.h)AND NOT(APPLE) AND NOT(UNIX))
+IF( ECW_FOUND )
+    SET(VXL_USING_NATIVE_J2K "YES")
+ELSE( ECW_FOUND )
+ IF( WIN32 AND (EXISTS ${vxl_SOURCE_DIR}/v3p/j2k/Source/include/NCSEcw.h) )
 
     SET( ECW_FOUND "YES" )
-    SET( ECW_INCLUDE_DIR ${vxl_SOURCE_DIR}/v3p/j2k/Source/include)  
+    SET( ECW_INCLUDE_DIR ${vxl_SOURCE_DIR}/v3p/j2k/Source/include)
     SET( ECW_INSTALL_INCLUDE_DIR ${CMAKE_INSTALL_DIR}/include/vxl/v3p/j2k)
     SET( ECW_LIBRARIES NCSEcw NCSUtil )
-  
-  ENDIF((EXISTS ${vxl_SOURCE_DIR}/v3p/j2k/Source/include/NCSEcw.h)AND NOT(APPLE) AND NOT(UNIX))
- ENDIF(ECW_FOUND)
+
+  ENDIF( WIN32 AND (EXISTS ${vxl_SOURCE_DIR}/v3p/j2k/Source/include/NCSEcw.h) )
+ ENDIF( ECW_FOUND )
