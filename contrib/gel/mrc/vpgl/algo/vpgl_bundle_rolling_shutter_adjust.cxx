@@ -21,13 +21,11 @@ vpgl_bundle_rolling_shutter_adj_lsqr::param_to_motion_matrix(int i, const double
 {
   double t=v/r;
 
-  double omegas[6]={0};
+  double omegas[6]={0,0,0,0,0,0};
   omegas[0]=data[6];omegas[1]=data[7];omegas[2]=data[8];
   double omegasnorm=vcl_sqrt(omegas[0]*omegas[0]+omegas[1]*omegas[1]+omegas[2]*omegas[2]);
 
-  vnl_double_3x3 I;
-  I.set_identity();
-  I(0,0)=I(1,1)=I(2,2)=1.0;
+  vnl_double_3x3 I; I.set_identity();
 
   vnl_double_3x3 wx=vector_to_skewmatrix(omegas);
   vnl_double_3 d;
@@ -38,27 +36,26 @@ vpgl_bundle_rolling_shutter_adj_lsqr::param_to_motion_matrix(int i, const double
   vnl_double_3x3 Mtopleft;
   vnl_double_3   Mtopright;
 
-  if (omegasnorm==0.0)
+  Mtopleft =I;
+  Mtopright=d*t;
+  if (omegasnorm!=0.0)
   {
-    Mtopleft =I;
-    Mtopright=d*t;
-  }
-  else
-  {
-    Mtopleft =I+wx*vcl_sin(omegasnorm*t)/omegasnorm + wx*wx*(1-vcl_cos(omegasnorm*t))/(omegasnorm*omegasnorm);
-    Mtopright=wx*wx*d*(vcl_sin(omegasnorm*t)+omegasnorm*t)/(omegasnorm*omegasnorm*omegasnorm)
-             -wx*d*(1.0-vcl_cos(omegasnorm*t))/(omegasnorm*omegasnorm) + d*t;
+    double s = vcl_sin(omegasnorm*t)/omegasnorm;
+    double osqrinv=1.0/(omegasnorm*omegasnorm);
+    double c = (1.0-vcl_cos(omegasnorm*t))*osqrinv;
+    Mtopleft += wx*(I*s+wx*c);
+    Mtopright+= wx*(wx*d*(s+t)*osqrinv -d*c);
   }
 
-  vnl_double_4x4 M;
-  M.set_identity();
-  M(0,0)=Mtopleft(0,0);M(0,1)=Mtopleft(0,1);M(0,2)=Mtopleft(0,2);M(0,3)=Mtopright(0);
-  M(1,0)=Mtopleft(1,0);M(1,1)=Mtopleft(1,1);M(1,2)=Mtopleft(1,2);M(1,3)=Mtopright(1);
-  M(2,0)=Mtopleft(2,0);M(2,1)=Mtopleft(2,1);M(2,2)=Mtopleft(2,2);M(2,3)=Mtopright(2);
-  M(3,0)=0;            M(3,1)=0;            M(3,2)=0;            M(3,3)=1;
-
-  return M;
+  return vnl_double_4x4().set_identity().set_columns(0,Mtopleft).set_column(3,Mtopright);
+  // was:
+  //M(0,0)=Mtopleft(0,0);M(0,1)=Mtopleft(0,1);M(0,2)=Mtopleft(0,2);M(0,3)=Mtopright(0);
+  //M(1,0)=Mtopleft(1,0);M(1,1)=Mtopleft(1,1);M(1,2)=Mtopleft(1,2);M(1,3)=Mtopright(1);
+  //M(2,0)=Mtopleft(2,0);M(2,1)=Mtopleft(2,1);M(2,2)=Mtopleft(2,2);M(2,3)=Mtopright(2);
+  //M(3,0)=0;            M(3,1)=0;            M(3,2)=0;            M(3,3)=1;
+  //return M;
 }
+
 //: Constructor
 vpgl_bundle_rolling_shutter_adj_lsqr::
   vpgl_bundle_rolling_shutter_adj_lsqr(const vcl_vector<vpgl_calibration_matrix<double> >& K,
@@ -423,7 +420,6 @@ vpgl_bundle_rolling_shutter_adj_lsqr::jac_Aij(vnl_double_3x4 const& Pi,
   //Aij.fill(0.0);
   {
     // The angular velocity part.
-    double ox=ai[6],oy=ai[7],oz=ai[8];
     double dx=ai[9],dy=ai[10],dz=ai[11];
 
     vnl_double_3 d;
@@ -467,6 +463,7 @@ vpgl_bundle_rolling_shutter_adj_lsqr::jac_Aij(vnl_double_3x4 const& Pi,
     double duddz=(p[2]*dupddz-p[0]*dwpddz)/(p[2]*p[2]);
 
 #if 0
+    double ox=ai[6],oy=ai[7],oz=ai[8];
     double om=vcl_sqrt(ox*ox+oy*oy+oz*oz);
     vnl_double_3x3 drdox(0.0),drdoy(0.0),drdoz(0.0);
     vnl_double_3x1 dddox(0.0),dddoy(0.0),dddoz(0.0);
@@ -569,26 +566,17 @@ vpgl_bundle_rolling_shutter_adj_lsqr::jac_Aij(vnl_double_3x4 const& Pi,
     vnl_double_4x4 dmddy(0.0);dmddy.update(dtddy,0,3);
     vnl_double_4x4 dmddz(0.0);dmddz.update(dtddz,0,3);
 
-    double u=p[0];
-    double v=p[1];
-    double w=p[2];
-
-    double dudi,dvdi,dvwdi;
-    vnl_double_3 dpdi;
-    // 6 motion parameters.
+    vnl_double_3 dpdi=Pi*dmdox*P; // , Pi*dmdoy*P, Pi*dmdoz*P, Pi*dmddx*P
 #endif // 0
 
-    //dpdi=Pi*dmdox*P;
+    // 6 motion parameters.
     Aij(0,6)=0.0;
     Aij(1,6)=0;
-    //dpdi=Pi*dmdoy*P;
     Aij(0,7)=0;
     Aij(1,7)=0;
-    //dpdi=Pi*dmdoz*P;
     Aij(0,8)=0;
     Aij(1,8)=0;
 
-    ////dpdi=Pi*dmddx*P;
     Aij(0,9)= duddx;
     Aij(1,9)= dvddx;
     Aij(0,10)=duddy;
