@@ -128,65 +128,6 @@ int main(int argc,  char** argv)
   vsl_b_write(sphere_os, sphere); 
   sphere_os.close();
 
-
-  ////rendered the hemisphere
-  //vbl_array_2d<vil_image_view<vxl_byte>* > imgs(num_in(), num_az()); 
-  //double az_incr = 360.0/(num_az()-1); 
-  //double el_incr = 60.0/(num_in()-1);
-  //for(int az_i = 0; az_i < num_az(); ++az_i)
-  //{
-    //vcl_cout<<"Running azimuth "<<az_i<<" of "<<num_az()<<vcl_endl;
-    //double az = az_i * az_incr; 
-    //for(int el_i = 0; el_i < num_in(); ++el_i)
-    //{
-      //double el = 60.0 - el_i * el_incr; 
-      
-      ////construct camera
-      //vpgl_perspective_camera<double>* cam 
-          //= boxm2_util::construct_camera(el, az, radius(), ni(), nj(), scene->bounding_box()); 
-      //vpgl_camera_double_sptr cam_sptr = cam;
-      //brdb_value_sptr brdb_cam = new brdb_value_t<vpgl_camera_double_sptr>(cam_sptr);
-          
-      ////render scene
-      //vcl_vector<brdb_value_sptr> input;
-      //input.push_back(brdb_scene);
-      //input.push_back(brdb_cam);
-      //input.push_back(brdb_expimg);
-      //input.push_back(brdb_vis);
-      //vcl_vector<brdb_value_sptr> output;
-      //expimg->fill(0);
-      //vis_img->fill(1.0f);
-      //gpu_pro->run(&gpu_render, input, output);
-      //gpu_pro->finish();
-      
-      //vil_image_view<unsigned int>* expimg_view = static_cast<vil_image_view<unsigned int>* >(expimg_sptr.ptr());
-      //vil_image_view<vxl_byte>* byte_img = new vil_image_view<vxl_byte>(ni(), nj());
-      //for (unsigned int i=0; i<ni(); ++i)
-        //for (unsigned int j=0; j<nj(); ++j)
-          //(*byte_img)(i,j) =  static_cast<vxl_byte>( (*expimg_view)(i,j) );   //just grab the first byte (all foura r the same)
-      ////vil_save( *byte_img, img().c_str());
-      //imgs(el_i, az_i) = byte_img; 
-    //}
-  //} 
-  
-  //create directory for each row
-  //for(int row = 0; row < imgs.rows(); row++) 
-  //{
-    //vcl_stringstream stream;
-    //stream<<img()<<"/row_"<<row<<"/"; 
-    //vcl_string row_dir = stream.str(); 
-    //if(!vul_file::is_directory( row_dir ) ) 
-      //vul_file::make_directory( row_dir );
-    
-    ////save each image
-    //for(int col = 0; col < imgs.cols(); col++)
-    //{
-      //vcl_stringstream imgstr; 
-      //imgstr<<row_dir<<"expimg_"<<col<<".png";
-      //vil_save( *(imgs(row, col)), imgstr.str().c_str());
-    //}
-  //}
-
   return 0;
 }
 
