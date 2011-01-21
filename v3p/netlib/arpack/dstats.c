@@ -17,15 +17,15 @@ extern "C" {
 
 /* Common Block Declarations */
 
-Extern struct {
-    integer nopx, nbx, nrorth, nitref, nrstrt;
-    real tsaupd, tsaup2, tsaitr, tseigt, tsgets, tsapps, tsconv, tnaupd,
-            tnaup2, tnaitr, tneigh, tngets, tnapps, tnconv, tcaupd, tcaup2,
-            tcaitr, tceigh, tcgets, tcapps, tcconv, tmvopx, tmvbx, tgetv0,
-            titref, trvec;
-} timing_;
+/*Extern struct { */
+/*  integer nopx, nbx, nrorth, nitref, nrstrt; */
+/*  real tsaupd, tsaup2, tsaitr, tseigt, tsgets, tsapps, tsconv, tnaupd, */
+/*          tnaup2, tnaitr, tneigh, tngets, tnapps, tnconv, tcaupd, tcaup2, */
+/*          tcaitr, tceigh, tcgets, tcapps, tcconv, tmvopx, tmvbx, tgetv0, */
+/*          titref, trvec; */
+/*} timing_; */
 
-#define timing_1 timing_
+/*#define timing_1 timing_ */
 
 
 /* \SCCS Information: @(#) */
@@ -40,7 +40,7 @@ Extern struct {
 /*     %--------------------------------% */
 /*     | See stat.doc for documentation | */
 /*     %--------------------------------% */
-/*<       include   'stat.h' >*/
+/*<       include   'stat.f' >*/
 /*<       nopx   = 0 >*/
 /*     %-----------------------% */
 /*     | Executable Statements | */
@@ -57,42 +57,42 @@ Extern struct {
 /*<       integer    nopx, nbx, nrorth, nitref, nrstrt >*/
 /*<        >*/
 /*<        >*/
-    timing_1.nopx = 0;
+/*  timing_1.nopx = 0; */
 /*<       nbx    = 0 >*/
-    timing_1.nbx = 0;
+/*  timing_1.nbx = 0; */
 /*<       nrorth = 0 >*/
-    timing_1.nrorth = 0;
+/*  timing_1.nrorth = 0; */
 /*<       nitref = 0 >*/
-    timing_1.nitref = 0;
+/*  timing_1.nitref = 0; */
 /*<       nrstrt = 0 >*/
-    timing_1.nrstrt = 0;
+/*  timing_1.nrstrt = 0; */
 /*<       tsaupd = 0.0D+0 >*/
-    timing_1.tsaupd = (float)0.;
+/*  timing_1.tsaupd = (float)0.; */
 /*<       tsaup2 = 0.0D+0 >*/
-    timing_1.tsaup2 = (float)0.;
+/*  timing_1.tsaup2 = (float)0.; */
 /*<       tsaitr = 0.0D+0 >*/
-    timing_1.tsaitr = (float)0.;
+/*  timing_1.tsaitr = (float)0.; */
 /*<       tseigt = 0.0D+0 >*/
-    timing_1.tseigt = (float)0.;
+/*  timing_1.tseigt = (float)0.; */
 /*<       tsgets = 0.0D+0 >*/
-    timing_1.tsgets = (float)0.;
+/*  timing_1.tsgets = (float)0.; */
 /*<       tsapps = 0.0D+0 >*/
-    timing_1.tsapps = (float)0.;
+/*  timing_1.tsapps = (float)0.; */
 /*<       tsconv = 0.0D+0 >*/
-    timing_1.tsconv = (float)0.;
+/*  timing_1.tsconv = (float)0.; */
 /*<       titref = 0.0D+0 >*/
-    timing_1.titref = (float)0.;
+/*  timing_1.titref = (float)0.; */
 /*<       tgetv0 = 0.0D+0 >*/
-    timing_1.tgetv0 = (float)0.;
+/*  timing_1.tgetv0 = (float)0.; */
 /*<       trvec  = 0.0D+0 >*/
-    timing_1.trvec = (float)0.;
+/*  timing_1.trvec = (float)0.; */
 /*     %----------------------------------------------------% */
 /*     | User time including reverse communication overhead | */
 /*     %----------------------------------------------------% */
 /*<       tmvopx = 0.0D+0 >*/
-    timing_1.tmvopx = (float)0.;
+/*  timing_1.tmvopx = (float)0.; */
 /*<       tmvbx  = 0.0D+0 >*/
-    timing_1.tmvbx = (float)0.;
+/*  timing_1.tmvbx = (float)0.; */
 /*<       return >*/
     return 0;
 

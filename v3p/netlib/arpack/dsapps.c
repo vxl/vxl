@@ -25,15 +25,15 @@ extern "C" {
 
 /*#define debug_1 debug_ */
 
-Extern struct {
-    integer nopx, nbx, nrorth, nitref, nrstrt;
-    real tsaupd, tsaup2, tsaitr, tseigt, tsgets, tsapps, tsconv, tnaupd,
-            tnaup2, tnaitr, tneigh, tngets, tnapps, tnconv, tcaupd, tcaup2,
-            tcaitr, tceigh, tcgets, tcapps, tcconv, tmvopx, tmvbx, tgetv0,
-            titref, trvec;
-} timing_;
+/*Extern struct { */
+/*  integer nopx, nbx, nrorth, nitref, nrstrt; */
+/*  real tsaupd, tsaup2, tsaitr, tseigt, tsgets, tsapps, tsconv, tnaupd, */
+/*          tnaup2, tnaitr, tneigh, tngets, tnapps, tnconv, tcaupd, tcaup2, */
+/*          tcaitr, tceigh, tcgets, tcapps, tcconv, tmvopx, tmvbx, tgetv0, */
+/*          titref, trvec; */
+/*} timing_; */
 
-#define timing_1 timing_
+/*#define timing_1 timing_ */
 
 /* Table of constant values */
 
@@ -189,7 +189,7 @@ static integer c__1 = 1;
     doublereal c__, f, g;
     integer i__, j;
     doublereal r__, s, a1, a2, a3, a4;
-    static real t0, t1;
+/*  static real t0, t1; */
     integer jj;
     doublereal big;
     integer iend, itop;
@@ -327,7 +327,7 @@ static integer c__1 = 1;
 /*     %-------------------------------% */
 
 /*<       call second (t0) >*/
-    second_(&t0);
+/*  second_(&t0); */
 /*<       msglvl = msapps >*/
 /*  msglvl = debug_1.msapps; */
 
@@ -751,9 +751,9 @@ L90:
 /*      end if */
 
 /*<       call second (t1) >*/
-    second_(&t1);
+/*  second_(&t1); */
 /*<       tsapps = tsapps + (t1 - t0) >*/
-    timing_1.tsapps += t1 - t0;
+/*  timing_1.tsapps += t1 - t0; */
 
 /*<  9000 continue  >*/
 L9000:

@@ -207,10 +207,7 @@ SET(V3P_NETLIB_arpack_SOURCES
      arpack/dseupd.c arpack/dseupd.h
      arpack/dsgets.c arpack/dsgets.h
      arpack/dsortr.c arpack/dsortr.h
-     arpack/dstats.c arpack/dstats.h
      arpack/dstqrb.c arpack/dstqrb.h
-     arpack/second.c arpack/second.h
-     arpack/timing_com.c
    )
 SET(V3P_NETLIB_lapack_SOURCES
      lapack/complex16/zgebak.c lapack/complex16/zgebak.h

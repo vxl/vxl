@@ -25,15 +25,15 @@ extern "C" {
 
 /*#define debug_1 debug_ */
 
-Extern struct {
-    integer nopx, nbx, nrorth, nitref, nrstrt;
-    real tsaupd, tsaup2, tsaitr, tseigt, tsgets, tsapps, tsconv, tnaupd,
-            tnaup2, tnaitr, tneigh, tngets, tnapps, tnconv, tcaupd, tcaup2,
-            tcaitr, tceigh, tcgets, tcapps, tcconv, tmvopx, tmvbx, tgetv0,
-            titref, trvec;
-} timing_;
+/*Extern struct { */
+/*  integer nopx, nbx, nrorth, nitref, nrstrt; */
+/*  real tsaupd, tsaup2, tsaitr, tseigt, tsgets, tsapps, tsconv, tnaupd, */
+/*          tnaup2, tnaitr, tneigh, tngets, tnapps, tnconv, tcaupd, tcaup2, */
+/*          tcaitr, tceigh, tcgets, tcapps, tcconv, tmvopx, tmvbx, tgetv0, */
+/*          titref, trvec; */
+/*} timing_; */
 
-#define timing_1 timing_
+/*#define timing_1 timing_ */
 
 /* Table of constant values */
 
@@ -176,7 +176,7 @@ static doublereal c_b29 = -1.;
     double sqrt(doublereal);
 
     /* Local variables */
-    static real t0, t1, t2, t3;
+/*  static real t0, t1, t2, t3; */
     integer jj;
     extern doublereal ddot_(integer *, doublereal *, integer *, doublereal *,
             integer *);
@@ -192,7 +192,6 @@ static doublereal c_b29 = -1.;
             doublereal *, integer *);
     static logical first;
     static doublereal rnorm0;
-    extern /* Subroutine */ int second_(real *);
 /*  static integer msglvl; */
     extern /* Subroutine */ int dlarnv_(integer *, integer *, integer *,
             doublereal *);
@@ -325,7 +324,7 @@ static doublereal c_b29 = -1.;
 /*        %-------------------------------% */
 
 /*<          call second (t0) >*/
-        second_(&t0);
+/*      second_(&t0); */
 /*<          msglvl = mgetv0 >*/
 /*      msglvl = debug_1.mgetv0; */
 
@@ -362,11 +361,11 @@ static doublereal c_b29 = -1.;
 /*        %----------------------------------------------------------% */
 
 /*<          call second (t2) >*/
-        second_(&t2);
+/*      second_(&t2); */
 /*<          if (bmat .eq. 'G') then >*/
         if (*(unsigned char *)bmat == 'G') {
 /*<             nopx = nopx + 1 >*/
-            ++timing_1.nopx;
+/*          ++timing_1.nopx; */
 /*<             ipntr(1) = 1 >*/
             ipntr[1] = 1;
 /*<             ipntr(2) = n + 1 >*/
@@ -403,9 +402,9 @@ static doublereal c_b29 = -1.;
 /*<       if (bmat .eq. 'G') then >*/
     if (*(unsigned char *)bmat == 'G') {
 /*<          call second (t3) >*/
-        second_(&t3);
+/*      second_(&t3); */
 /*<          tmvopx = tmvopx + (t3 - t2) >*/
-        timing_1.tmvopx += t3 - t2;
+/*      timing_1.tmvopx += t3 - t2; */
 /*<       end if >*/
     }
 
@@ -415,13 +414,13 @@ static doublereal c_b29 = -1.;
 /*     %------------------------------------------------------% */
 
 /*<       call second (t2) >*/
-    second_(&t2);
+/*  second_(&t2); */
 /*<       first = .TRUE. >*/
     first = TRUE_;
 /*<       if (bmat .eq. 'G') then >*/
     if (*(unsigned char *)bmat == 'G') {
 /*<          nbx = nbx + 1 >*/
-        ++timing_1.nbx;
+/*      ++timing_1.nbx; */
 /*<          call dcopy (n, workd(n+1), 1, resid, 1) >*/
         dcopy_(n, &workd[*n + 1], &c__1, &resid[1], &c__1);
 /*<          ipntr(1) = n + 1 >*/
@@ -445,9 +444,9 @@ L20:
 /*<       if (bmat .eq. 'G') then >*/
     if (*(unsigned char *)bmat == 'G') {
 /*<          call second (t3) >*/
-        second_(&t3);
+/*      second_(&t3); */
 /*<          tmvbx = tmvbx + (t3 - t2) >*/
-        timing_1.tmvbx += t3 - t2;
+/*      timing_1.tmvbx += t3 - t2; */
 /*<       end if >*/
     }
 
@@ -508,11 +507,11 @@ L30:
 /*     %----------------------------------------------------------% */
 
 /*<       call second (t2) >*/
-    second_(&t2);
+/*  second_(&t2); */
 /*<       if (bmat .eq. 'G') then >*/
     if (*(unsigned char *)bmat == 'G') {
 /*<          nbx = nbx + 1 >*/
-        ++timing_1.nbx;
+/*      ++timing_1.nbx; */
 /*<          call dcopy (n, resid, 1, workd(n+1), 1) >*/
         dcopy_(n, &resid[1], &c__1, &workd[*n + 1], &c__1);
 /*<          ipntr(1) = n + 1 >*/
@@ -536,9 +535,9 @@ L40:
 /*<       if (bmat .eq. 'G') then >*/
     if (*(unsigned char *)bmat == 'G') {
 /*<          call second (t3) >*/
-        second_(&t3);
+/*      second_(&t3); */
 /*<          tmvbx = tmvbx + (t3 - t2) >*/
-        timing_1.tmvbx += t3 - t2;
+/*      timing_1.tmvbx += t3 - t2; */
 /*<       end if >*/
     }
 
@@ -621,9 +620,9 @@ L50:
     *ido = 99;
 
 /*<       call second (t1) >*/
-    second_(&t1);
+/*  second_(&t1); */
 /*<       tgetv0 = tgetv0 + (t1 - t0) >*/
-    timing_1.tgetv0 += t1 - t0;
+/*  timing_1.tgetv0 += t1 - t0; */
 
 /*<  9000 continue >*/
 L9000:

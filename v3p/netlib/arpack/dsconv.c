@@ -17,15 +17,15 @@ extern "C" {
 
 /* Common Block Declarations */
 
-Extern struct {
-    integer nopx, nbx, nrorth, nitref, nrstrt;
-    real tsaupd, tsaup2, tsaitr, tseigt, tsgets, tsapps, tsconv, tnaupd,
-            tnaup2, tnaitr, tneigh, tngets, tnapps, tnconv, tcaupd, tcaup2,
-            tcaitr, tceigh, tcgets, tcapps, tcconv, tmvopx, tmvbx, tgetv0,
-            titref, trvec;
-} timing_;
+/*Extern struct { */
+/*  integer nopx, nbx, nrorth, nitref, nrstrt; */
+/*  real tsaupd, tsaup2, tsaitr, tseigt, tsgets, tsapps, tsconv, tnaupd, */
+/*          tnaup2, tnaitr, tneigh, tngets, tnapps, tnconv, tcaupd, tcaup2, */
+/*          tcaitr, tceigh, tcgets, tcapps, tcconv, tmvopx, tmvbx, tgetv0, */
+/*          titref, trvec; */
+/*} timing_; */
 
-#define timing_1 timing_
+/*#define timing_1 timing_ */
 
 /* Table of constant values */
 
@@ -102,7 +102,7 @@ static doublereal c_b3 = .66666666666666663;
 
     /* Local variables */
     integer i__;
-    static real t0, t1;
+/*  static real t0, t1; */
     doublereal eps23, temp;
     extern doublereal dlamch_(char *, ftnlen);
     extern /* Subroutine */ int second_(real *);
@@ -177,7 +177,7 @@ static doublereal c_b3 = .66666666666666663;
     --ritz;
 
     /* Function Body */
-    second_(&t0);
+/*  second_(&t0); */
 
 /*<       eps23 = dlamch('Epsilon-Machine')  >*/
     eps23 = dlamch_("Epsilon-Machine", (ftnlen)15);
@@ -211,9 +211,9 @@ static doublereal c_b3 = .66666666666666663;
     }
 
 /*<       call second (t1) >*/
-    second_(&t1);
+/*  second_(&t1); */
 /*<       tsconv = tsconv + (t1 - t0) >*/
-    timing_1.tsconv += t1 - t0;
+/*  timing_1.tsconv += t1 - t0; */
 
 /*<       return >*/
     return 0;

@@ -25,15 +25,15 @@ extern "C" {
 
 /*#define debug_1 debug_ */
 
-Extern struct {
-    integer nopx, nbx, nrorth, nitref, nrstrt;
-    real tsaupd, tsaup2, tsaitr, tseigt, tsgets, tsapps, tsconv, tnaupd,
-            tnaup2, tnaitr, tneigh, tngets, tnapps, tnconv, tcaupd, tcaup2,
-            tcaitr, tceigh, tcgets, tcapps, tcconv, tmvopx, tmvbx, tgetv0,
-            titref, trvec;
-} timing_;
+/*Extern struct { */
+/*  integer nopx, nbx, nrorth, nitref, nrstrt; */
+/*  real tsaupd, tsaup2, tsaitr, tseigt, tsgets, tsapps, tsconv, tnaupd, */
+/*          tnaup2, tnaitr, tneigh, tngets, tnapps, tnconv, tcaupd, tcaup2, */
+/*          tcaitr, tceigh, tcgets, tcapps, tcconv, tmvopx, tmvbx, tgetv0, */
+/*          titref, trvec; */
+/*} timing_; */
 
-#define timing_1 timing_
+/*#define timing_1 timing_ */
 
 /* Table of constant values */
 
@@ -135,7 +135,7 @@ static integer c__1 = 1;
 
     /* Local variables */
     integer k;
-    static real t0, t1;
+/*  static real t0, t1; */
     extern /* Subroutine */ int dcopy_(integer *, doublereal *, integer *,
             doublereal *, integer *), second_(real *);
 /*  integer msglvl; */
@@ -221,7 +221,7 @@ static integer c__1 = 1;
     h__ -= h_offset;
 
     /* Function Body */
-    second_(&t0);
+/*  second_(&t0); */
 /*<       msglvl = mseigt >*/
 /*  msglvl = debug_1.mseigt; */
 
@@ -265,9 +265,9 @@ static integer c__1 = 1;
     }
 
 /*<       call second (t1) >*/
-    second_(&t1);
+/*  second_(&t1); */
 /*<       tseigt = tseigt + (t1 - t0) >*/
-    timing_1.tseigt += t1 - t0;
+/*  timing_1.tseigt += t1 - t0; */
 
 /*<  9000 continue >*/
 L9000:

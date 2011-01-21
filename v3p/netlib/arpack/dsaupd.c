@@ -25,15 +25,15 @@ extern "C" {
 
 /*#define debug_1 debug_ */
 
-Extern struct {
-    integer nopx, nbx, nrorth, nitref, nrstrt;
-    real tsaupd, tsaup2, tsaitr, tseigt, tsgets, tsapps, tsconv, tnaupd,
-            tnaup2, tnaitr, tneigh, tngets, tnapps, tnconv, tcaupd, tcaup2,
-            tcaitr, tceigh, tcgets, tcapps, tcconv, tmvopx, tmvbx, tgetv0,
-            titref, trvec;
-} timing_;
+/*Extern struct { */
+/*  integer nopx, nbx, nrorth, nitref, nrstrt; */
+/*  real tsaupd, tsaup2, tsaitr, tseigt, tsgets, tsapps, tsconv, tnaupd, */
+/*          tnaup2, tnaitr, tneigh, tngets, tnapps, tnconv, tcaupd, tcaup2, */
+/*          tcaitr, tceigh, tcgets, tcapps, tcconv, tmvopx, tmvbx, tgetv0, */
+/*          titref, trvec; */
+/*} timing_; */
 
-#define timing_1 timing_
+/*#define timing_1 timing_ */
 
 /* ----------------------------------------------------------------------- */
 /* \BeginDoc */
@@ -455,7 +455,7 @@ Extern struct {
 
     /* Local variables */
     integer j;
-    static real t0, t1;
+/*  static real t0, t1; */
     static integer nb, ih, iq, np, iw, ldh, ldq, nev0, mode, ierr, iupd, next,
              ritz;
     extern /* Subroutine */ int dsaup2_(integer *, char *, integer *, char *,
@@ -563,9 +563,9 @@ Extern struct {
 /*        %-------------------------------% */
 
 /*<          call dstats >*/
-        dstats_();
+/*      dstats_(); */
 /*<          call second (t0) >*/
-        second_(&t0);
+/*      second_(&t0); */
 /*<          msglvl = msaupd >*/
 /*      msglvl = debug_1.msaupd; */
 
@@ -785,11 +785,11 @@ Extern struct {
 /*<       iparam(5) = np >*/
     iparam[5] = np;
 /*<       iparam(9) = nopx >*/
-    iparam[9] = timing_1.nopx;
+/*  iparam[9] = timing_1.nopx; */
 /*<       iparam(10) = nbx >*/
-    iparam[10] = timing_1.nbx;
+/*  iparam[10] = timing_1.nbx; */
 /*<       iparam(11) = nrorth >*/
-    iparam[11] = timing_1.nrorth;
+/*  iparam[11] = timing_1.nrorth; */
 
 /*     %------------------------------------% */
 /*     | Exit if there was an informational | */
@@ -817,9 +817,9 @@ Extern struct {
 /*      end if */
 
 /*<       call second (t1) >*/
-    second_(&t1);
+/*  second_(&t1); */
 /*<       tsaupd = t1 - t0 >*/
-    timing_1.tsaupd = t1 - t0;
+/*  timing_1.tsaupd = t1 - t0; */
 
 /*      if (msglvl .gt. 0) then */
 

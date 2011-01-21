@@ -25,15 +25,15 @@ extern "C" {
 
 /*#define debug_1 debug_ */
 
-Extern struct {
-    integer nopx, nbx, nrorth, nitref, nrstrt;
-    real tsaupd, tsaup2, tsaitr, tseigt, tsgets, tsapps, tsconv, tnaupd,
-            tnaup2, tnaitr, tneigh, tngets, tnapps, tnconv, tcaupd, tcaup2,
-            tcaitr, tceigh, tcgets, tcapps, tcconv, tmvopx, tmvbx, tgetv0,
-            titref, trvec;
-} timing_;
+/*Extern struct { */
+/*  integer nopx, nbx, nrorth, nitref, nrstrt; */
+/*  real tsaupd, tsaup2, tsaitr, tseigt, tsgets, tsapps, tsconv, tnaupd, */
+/*          tnaup2, tnaitr, tneigh, tngets, tnapps, tnconv, tcaupd, tcaup2, */
+/*          tcaitr, tceigh, tcgets, tcapps, tcconv, tmvopx, tmvbx, tgetv0, */
+/*          titref, trvec; */
+/*} timing_; */
 
-#define timing_1 timing_
+/*#define timing_1 timing_ */
 
 /* Table of constant values */
 
@@ -240,7 +240,7 @@ static logical c_true = TRUE_;
 
     /* Local variables */
     integer j;
-    static real t0, t1, t2, t3;
+/*  static real t0, t1, t2, t3; */
 /*  integer kp[3]; */
     static integer np0, nev0;
     extern doublereal ddot_(integer *, doublereal *, integer *, doublereal *,
@@ -394,7 +394,7 @@ static logical c_true = TRUE_;
 /*        %-------------------------------% */
 
 /*<          call second (t0) >*/
-        second_(&t0);
+/*      second_(&t0); */
 /*<          msglvl = msaup2 >*/
 /*      msglvl = debug_1.msaup2; */
 
@@ -1092,11 +1092,11 @@ L50:
 /*<          cnorm = .true. >*/
     cnorm = TRUE_;
 /*<          call second (t2) >*/
-    second_(&t2);
+/*  second_(&t2); */
 /*<          if (bmat .eq. 'G') then >*/
     if (*(unsigned char *)bmat == 'G') {
 /*<             nbx = nbx + 1 >*/
-        ++timing_1.nbx;
+/*      ++timing_1.nbx; */
 /*<             call dcopy (n, resid, 1, workd(n+1), 1) >*/
         dcopy_(n, &resid[1], &c__1, &workd[*n + 1], &c__1);
 /*<             ipntr(1) = n + 1 >*/
@@ -1130,9 +1130,9 @@ L100:
 /*<          if (bmat .eq. 'G') then >*/
     if (*(unsigned char *)bmat == 'G') {
 /*<             call second (t3) >*/
-        second_(&t3);
+/*      second_(&t3); */
 /*<             tmvbx = tmvbx + (t3 - t2) >*/
-        timing_1.tmvbx += t3 - t2;
+/*      timing_1.tmvbx += t3 - t2; */
 /*<          end if >*/
     }
 
@@ -1189,9 +1189,9 @@ L1200:
 /*     %------------% */
 
 /*<       call second (t1) >*/
-    second_(&t1);
+/*  second_(&t1); */
 /*<       tsaup2 = t1 - t0 >*/
-    timing_1.tsaup2 = t1 - t0;
+/*  timing_1.tsaup2 = t1 - t0; */
 
 /*<  9000 continue >*/
 L9000:
