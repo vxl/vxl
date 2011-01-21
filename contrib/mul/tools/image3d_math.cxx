@@ -25,6 +25,7 @@
 #include <vsl/vsl_map_io.txx>
 #include <vsl/vsl_stream.h>
 #include <vnl/vnl_math.h>
+#include <vnl/vnl_random.h>
 #include <vul/vul_string.h>
 #include <mbl/mbl_log.h>
 #include <mbl/mbl_exception.h>
@@ -1401,6 +1402,40 @@ void copy_coordinate_frame__image_3d_of_int__image_3d_of_int(opstack_t& s)
   s.push_front(operand(result));
 }
 
+static vnl_random rng(9667566);
+
+void gaussian_noise_image__image_3d_of_float(opstack_t& s)
+{
+  assert(s.size() >= 1);
+
+  const vimt3d_image_3d_of<float> o1(s[0].as_image_3d_of_float());
+
+  vimt3d_image_3d_of<float> result(o1.image().ni(), o1.image().nj(), o1.image().nk(),
+    o1.image().nplanes(), o1.world2im() );
+
+  for (float* p=result.image().begin(), *end=result.image().end(); p!=end; ++p)
+    *p=static_cast<float>(rng.normal());
+
+  s.pop(1);
+  s.push_front(operand(result));
+}
+
+void gaussian_noise_image__image_3d_of_double(opstack_t& s)
+{
+  assert(s.size() >= 1);
+
+  const vimt3d_image_3d_of<double> o1(s[0].as_image_3d_of_double());
+
+  vimt3d_image_3d_of<double> result(o1.image().ni(), o1.image().nj(), o1.image().nk(),
+    o1.image().nplanes(), o1.world2im() );
+
+  for (double* p=result.image().begin(), *end=result.image().end(); p!=end; ++p)
+    *p=rng.normal64();
+
+  s.pop(1);
+  s.push_front(operand(result));
+}
+
 void decimate__image_3d_of_float__double__double__double(opstack_t& s)
 {
   assert(s.size() >= 4);
@@ -1932,6 +1967,12 @@ class operations
     add_operation("--fill", &fill__image_3d_of_int__double,
                   function_type_t() << operand::e_image_3d_of_int << operand::e_double,
                   "image v", "image", "Fill all voxels with value v");
+    add_operation("--gaussian-noise-image", &gaussian_noise_image__image_3d_of_float,
+                  function_type_t() << operand::e_image_3d_of_float,
+                  "image", "image", "Replace image voxels with normal gaussian noise");
+    add_operation("--gaussian-noise-image", &gaussian_noise_image__image_3d_of_double,
+                  function_type_t() << operand::e_image_3d_of_double,
+                  "image", "image", "Replace image voxels with normal gaussian noise");
     add_operation("--help", &help,
                   no_operands,
                   "", "", "Display help");
