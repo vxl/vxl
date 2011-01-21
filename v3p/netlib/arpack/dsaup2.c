@@ -17,13 +17,13 @@ extern "C" {
 
 /* Common Block Declarations */
 
-Extern struct {
-    integer logfil, ndigit, mgetv0, msaupd, msaup2, msaitr, mseigt, msapps,
-            msgets, mseupd, mnaupd, mnaup2, mnaitr, mneigh, mnapps, mngets,
-            mneupd, mcaupd, mcaup2, mcaitr, mceigh, mcapps, mcgets, mceupd;
-} debug_;
+/*Extern struct { */
+/*  integer logfil, ndigit, mgetv0, msaupd, msaup2, msaitr, mseigt, msapps, */
+/*          msgets, mseupd, mnaupd, mnaup2, mnaitr, mneigh, mnapps, mngets, */
+/*          mneupd, mcaupd, mcaup2, mcaitr, mceigh, mcapps, mcgets, mceupd; */
+/*} debug_; */
 
-#define debug_1 debug_
+/*#define debug_1 debug_ */
 
 Extern struct {
     integer nopx, nbx, nrorth, nitref, nrstrt;
@@ -241,7 +241,7 @@ static logical c_true = TRUE_;
     /* Local variables */
     integer j;
     static real t0, t1, t2, t3;
-    integer kp[3];
+/*  integer kp[3]; */
     static integer np0, nev0;
     extern doublereal ddot_(integer *, doublereal *, integer *, doublereal *,
             integer *);
@@ -269,7 +269,7 @@ static logical c_true = TRUE_;
     static logical update;
     char wprime[2];
     static logical ushift;
-    static integer kplusp, msglvl;
+    static integer kplusp /*, msglvl */;
     integer nptemp;
     extern /* Subroutine */ int dsaitr_(integer *, char *, integer *, integer
             *, integer *, integer *, doublereal *, doublereal *, doublereal *,
@@ -396,7 +396,7 @@ static logical c_true = TRUE_;
 /*<          call second (t0) >*/
         second_(&t0);
 /*<          msglvl = msaup2 >*/
-        msglvl = debug_1.msaup2;
+/*      msglvl = debug_1.msaup2; */
 
 /*        %---------------------------------% */
 /*        | Set machine dependent constant. | */
@@ -705,13 +705,13 @@ L20:
     dsconv_(nev, &ritz[*np + 1], &workl[*np + 1], tol, &nconv);
 
 /*<          if (msglvl .gt. 2) then >*/
-    if (msglvl > 2) {
+/*  if (msglvl > 2) { */
 /*<             kp(1) = nev >*/
-        kp[0] = *nev;
+/*      kp[0] = *nev; */
 /*<             kp(2) = np >*/
-        kp[1] = *np;
+/*      kp[1] = *np; */
 /*<             kp(3) = nconv >*/
-        kp[2] = nconv;
+/*      kp[2] = nconv; */
 /*            call ivout (logfil, 3, kp, ndigit, */
 /*     &                  '_saup2: NEV, NP, NCONV are') */
 /*            call dvout (logfil, kplusp, ritz, ndigit, */
@@ -719,7 +719,7 @@ L20:
 /*            call dvout (logfil, kplusp, bounds, ndigit, */
 /*     &          '_saup2: Ritz estimates of the current NCV Ritz values') */
 /*<          end if >*/
-    }
+/*  } */
 
 /*        %---------------------------------------------------------% */
 /*        | Count the number of unwanted Ritz values that have zero | */
@@ -998,15 +998,15 @@ L20:
     }
 
 /*<          if (msglvl .gt. 0) then >*/
-    if (msglvl > 0) {
+/*  if (msglvl > 0) { */
 /*            call ivout (logfil, 1, nconv, ndigit, */
 /*     &           '_saup2: no. of "converged" Ritz values at this iter.') */
 /*<             if (msglvl .gt. 1) then >*/
-        if (msglvl > 1) {
+/*      if (msglvl > 1) { */
 /*<                kp(1) = nev >*/
-            kp[0] = *nev;
+/*          kp[0] = *nev; */
 /*<                kp(2) = np >*/
-            kp[1] = *np;
+/*          kp[1] = *np; */
 /*               call ivout (logfil, 2, kp, ndigit, */
 /*     &              '_saup2: NEV and NP are') */
 /*               call dvout (logfil, nev, ritz(np+1), ndigit, */
@@ -1014,9 +1014,9 @@ L20:
 /*               call dvout (logfil, nev, bounds(np+1), ndigit, */
 /*     &              '_saup2: Ritz estimates of the "wanted" values ') */
 /*<             end if >*/
-        }
+/*      } */
 /*<          end if >*/
-    }
+/*  } */
 
 /*<          if (ishift .eq. 0) then >*/
     if (*ishift == 0) {

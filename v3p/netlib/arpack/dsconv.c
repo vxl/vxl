@@ -18,14 +18,6 @@ extern "C" {
 /* Common Block Declarations */
 
 Extern struct {
-    integer logfil, ndigit, mgetv0, msaupd, msaup2, msaitr, mseigt, msapps,
-            msgets, mseupd, mnaupd, mnaup2, mnaitr, mneigh, mnapps, mngets,
-            mneupd, mcaupd, mcaup2, mcaitr, mceigh, mcapps, mcgets, mceupd;
-} debug_;
-
-#define debug_1 debug_
-
-Extern struct {
     integer nopx, nbx, nrorth, nitref, nrstrt;
     real tsaupd, tsaup2, tsaitr, tseigt, tsgets, tsapps, tsconv, tnaupd,
             tnaup2, tnaitr, tneigh, tngets, tnapps, tnconv, tcaupd, tcaup2,

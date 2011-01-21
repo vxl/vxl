@@ -17,23 +17,13 @@ extern "C" {
 
 /* Common Block Declarations */
 
-Extern struct {
-    integer logfil, ndigit, mgetv0, msaupd, msaup2, msaitr, mseigt, msapps,
-            msgets, mseupd, mnaupd, mnaup2, mnaitr, mneigh, mnapps, mngets,
-            mneupd, mcaupd, mcaup2, mcaitr, mceigh, mcapps, mcgets, mceupd;
-} debug_;
+/*Extern struct { */
+/*  integer logfil, ndigit, mgetv0, msaupd, msaup2, msaitr, mseigt, msapps, */
+/*          msgets, mseupd, mnaupd, mnaup2, mnaitr, mneigh, mnapps, mngets, */
+/*          mneupd, mcaupd, mcaup2, mcaitr, mceigh, mcapps, mcgets, mceupd; */
+/*} debug_; */
 
-#define debug_1 debug_
-
-Extern struct {
-    integer nopx, nbx, nrorth, nitref, nrstrt;
-    real tsaupd, tsaup2, tsaitr, tseigt, tsgets, tsapps, tsconv, tnaupd,
-            tnaup2, tnaitr, tneigh, tngets, tnapps, tnconv, tcaupd, tcaup2,
-            tcaitr, tceigh, tcgets, tcapps, tcconv, tmvopx, tmvbx, tgetv0,
-            titref, trvec;
-} timing_;
-
-#define timing_1 timing_
+/*#define debug_1 debug_ */
 
 /* Table of constant values */
 
@@ -270,7 +260,7 @@ static doublereal c_b103 = 1.;
 
     /* Local variables */
     integer j, k, ih, iq, iw;
-    doublereal kv[2];
+/*  doublereal kv[2]; */
     integer ibd, ihb, ihd, ldh, ilg, ldq, ism, irz;
     extern /* Subroutine */ int dger_(integer *, integer *, doublereal *,
             doublereal *, integer *, doublereal *, integer *, doublereal *,
@@ -298,7 +288,7 @@ static doublereal c_b103 = 1.;
             integer *, doublereal *, integer *, ftnlen, ftnlen);
     doublereal thres1, thres2;
     extern doublereal dlamch_(char *, ftnlen);
-    integer bounds, msglvl, ktrord;
+    integer bounds, /* msglvl, */ ktrord;
     extern /* Subroutine */ int dlacpy_(char *, integer *, integer *,
             doublereal *, integer *, doublereal *, integer *, ftnlen),
             dsesrt_(char *, logical *, integer *, doublereal *, integer *,
@@ -419,7 +409,7 @@ static doublereal c_b103 = 1.;
     --workl;
 
     /* Function Body */
-    msglvl = debug_1.mseupd;
+/*  msglvl = debug_1.mseupd; */
 /*<       mode = iparam(7) >*/
     mode = iparam[7];
 /*<       nconv = iparam(5) >*/
@@ -704,15 +694,15 @@ static doublereal c_b103 = 1.;
             thres2 = workl[ilg];
 
 /*<              if (msglvl .gt. 2) then >*/
-            if (msglvl > 2) {
+/*          if (msglvl > 2) { */
 /*<                 kv(1) = thres1 >*/
-                kv[0] = thres1;
+/*              kv[0] = thres1; */
 /*<                 kv(2) = thres2 >*/
-                kv[1] = thres2;
+/*              kv[1] = thres2; */
 /*                call dvout(logfil, 2, kv, ndigit, */
 /*     &          '_seupd: Threshold eigenvalues used for re-ordering') */
 /*<              end if >*/
-            }
+/*          } */
 
 /*<          end if >*/
         }
@@ -876,15 +866,15 @@ static doublereal c_b103 = 1.;
         }
 
 /*<          if (msglvl .gt. 1) then >*/
-        if (msglvl > 1) {
+/*      if (msglvl > 1) { */
 /*<             call dcopy (ncv, workl(iq+ncv-1), ldq, workl(iw), 1) >*/
-            dcopy_(ncv, &workl[iq + *ncv - 1], &ldq, &workl[iw], &c__1);
+/*          dcopy_(ncv, &workl[iq + *ncv - 1], &ldq, &workl[iw], &c__1); */
 /*            call dvout (logfil, ncv, workl(ihd), ndigit, */
 /*     &          '_seupd: NCV Ritz values of the final H matrix') */
 /*            call dvout (logfil, ncv, workl(iw), ndigit, */
 /*     &           '_seupd: last row of the eigenvector matrix for H') */
 /*<          end if >*/
-        }
+/*      } */
 
 /*<          if (reord) then >*/
         if (reord) {

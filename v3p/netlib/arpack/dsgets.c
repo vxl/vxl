@@ -17,13 +17,13 @@ extern "C" {
 
 /* Common Block Declarations */
 
-Extern struct {
-    integer logfil, ndigit, mgetv0, msaupd, msaup2, msaitr, mseigt, msapps,
-            msgets, mseupd, mnaupd, mnaup2, mnaitr, mneigh, mnapps, mngets,
-            mneupd, mcaupd, mcaup2, mcaitr, mceigh, mcapps, mcgets, mceupd;
-} debug_;
+/*Extern struct { */
+/*  integer logfil, ndigit, mgetv0, msaupd, msaup2, msaitr, mseigt, msapps, */
+/*          msgets, mseupd, mnaupd, mnaup2, mnaitr, mneigh, mnapps, mngets, */
+/*          mneupd, mcaupd, mcaup2, mcaitr, mceigh, mcapps, mcgets, mceupd; */
+/*} debug_; */
 
-#define debug_1 debug_
+/*#define debug_1 debug_ */
 
 Extern struct {
     integer nopx, nbx, nrorth, nitref, nrstrt;
@@ -147,7 +147,7 @@ static integer c__1 = 1;
     extern /* Subroutine */ int dswap_(integer *, doublereal *, integer *,
             doublereal *, integer *), dcopy_(integer *, doublereal *, integer
             *, doublereal *, integer *), second_(real *);
-    integer msglvl;
+/*  integer msglvl; */
     extern /* Subroutine */ int dsortr_(char *, logical *, integer *,
             doublereal *, doublereal *, ftnlen);
 
@@ -235,7 +235,7 @@ static integer c__1 = 1;
     /* Function Body */
     second_(&t0);
 /*<       msglvl = msgets >*/
-    msglvl = debug_1.msgets;
+/*  msglvl = debug_1.msgets; */
 
 /*<       if (which .eq. 'BE') then >*/
     if (s_cmp(which, "BE", (ftnlen)2, (ftnlen)2) == 0) {

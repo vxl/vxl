@@ -17,13 +17,13 @@ extern "C" {
 
 /* Common Block Declarations */
 
-Extern struct {
-    integer logfil, ndigit, mgetv0, msaupd, msaup2, msaitr, mseigt, msapps,
-            msgets, mseupd, mnaupd, mnaup2, mnaitr, mneigh, mnapps, mngets,
-            mneupd, mcaupd, mcaup2, mcaitr, mceigh, mcapps, mcgets, mceupd;
-} debug_;
+/*Extern struct { */
+/*  integer logfil, ndigit, mgetv0, msaupd, msaup2, msaitr, mseigt, msapps, */
+/*          msgets, mseupd, mnaupd, mnaup2, mnaitr, mneigh, mnapps, mngets, */
+/*          mneupd, mcaupd, mcaup2, mcaitr, mceigh, mcapps, mcgets, mceupd; */
+/*} debug_; */
 
-#define debug_1 debug_
+/*#define debug_1 debug_ */
 
 Extern struct {
     integer nopx, nbx, nrorth, nitref, nrstrt;
@@ -193,7 +193,7 @@ static doublereal c_b29 = -1.;
     static logical first;
     static doublereal rnorm0;
     extern /* Subroutine */ int second_(real *);
-    static integer msglvl;
+/*  static integer msglvl; */
     extern /* Subroutine */ int dlarnv_(integer *, integer *, integer *,
             doublereal *);
 
@@ -327,7 +327,7 @@ static doublereal c_b29 = -1.;
 /*<          call second (t0) >*/
         second_(&t0);
 /*<          msglvl = mgetv0 >*/
-        msglvl = debug_1.mgetv0;
+/*      msglvl = debug_1.mgetv0; */
 
 /*<          ierr   = 0 >*/
         *ierr = 0;

@@ -17,13 +17,13 @@ extern "C" {
 
 /* Common Block Declarations */
 
-Extern struct {
-    integer logfil, ndigit, mgetv0, msaupd, msaup2, msaitr, mseigt, msapps,
-            msgets, mseupd, mnaupd, mnaup2, mnaitr, mneigh, mnapps, mngets,
-            mneupd, mcaupd, mcaup2, mcaitr, mceigh, mcapps, mcgets, mceupd;
-} debug_;
+/*Extern struct { */
+/*  integer logfil, ndigit, mgetv0, msaupd, msaup2, msaitr, mseigt, msapps, */
+/*          msgets, mseupd, mnaupd, mnaup2, mnaitr, mneigh, mnapps, mngets, */
+/*          mneupd, mcaupd, mcaup2, mcaitr, mceigh, mcapps, mcgets, mceupd; */
+/*} debug_; */
 
-#define debug_1 debug_
+/*#define debug_1 debug_ */
 
 Extern struct {
     integer nopx, nbx, nrorth, nitref, nrstrt;
@@ -280,7 +280,7 @@ static doublereal c_b51 = -1.;
     integer infol;
     extern /* Subroutine */ int dcopy_(integer *, doublereal *, integer *,
             doublereal *, integer *);
-    doublereal xtemp[2];
+/*  doublereal xtemp[2]; */
     static doublereal wnorm;
     extern /* Subroutine */ int dgetv0_(integer *, char *, integer *, logical
             *, integer *, integer *, doublereal *, integer *, doublereal *,
@@ -292,7 +292,7 @@ static doublereal c_b51 = -1.;
             integer *, integer *, ftnlen), second_(real *);
     static doublereal safmin;
     static logical rstart;
-    static integer msglvl;
+/*  static integer msglvl; */
 
 
 /*     %----------------------------------------------------% */
@@ -420,7 +420,7 @@ static doublereal c_b51 = -1.;
 /*<          call second (t0) >*/
         second_(&t0);
 /*<          msglvl = msaitr >*/
-        msglvl = debug_1.msaitr;
+/*      msglvl = debug_1.msaitr; */
 
 /*        %------------------------------% */
 /*        | Initial call to this routine | */
@@ -933,15 +933,15 @@ L70:
 L80:
 
 /*<          if (msglvl .gt. 2) then >*/
-    if (msglvl > 2) {
+/*  if (msglvl > 2) { */
 /*<             xtemp(1) = wnorm >*/
-        xtemp[0] = wnorm;
+/*      xtemp[0] = wnorm; */
 /*<             xtemp(2) = rnorm >*/
-        xtemp[1] = *rnorm;
+/*      xtemp[1] = *rnorm; */
 /*            call dvout (logfil, 2, xtemp, ndigit, */
 /*     &           '_saitr: re-orthonalization ; wnorm and rnorm are') */
 /*<          end if >*/
-    }
+/*  } */
 
 /*        %----------------------------------------------------% */
 /*        | Compute V_{j}^T * B * r_{j}.                       | */

@@ -17,13 +17,13 @@ extern "C" {
 
 /* Common Block Declarations */
 
-Extern struct {
-    integer logfil, ndigit, mgetv0, msaupd, msaup2, msaitr, mseigt, msapps,
-            msgets, mseupd, mnaupd, mnaup2, mnaitr, mneigh, mnapps, mngets,
-            mneupd, mcaupd, mcaup2, mcaitr, mceigh, mcapps, mcgets, mceupd;
-} debug_;
+/*Extern struct { */
+/*  integer logfil, ndigit, mgetv0, msaupd, msaup2, msaitr, mseigt, msapps, */
+/*          msgets, mseupd, mnaupd, mnaup2, mnaitr, mneigh, mnapps, mngets, */
+/*          mneupd, mcaupd, mcaup2, mcaitr, mceigh, mcapps, mcgets, mceupd; */
+/*} debug_; */
 
-#define debug_1 debug_
+/*#define debug_1 debug_ */
 
 Extern struct {
     integer nopx, nbx, nrorth, nitref, nrstrt;
@@ -202,7 +202,7 @@ static integer c__1 = 1;
     extern doublereal dlamch_(char *, ftnlen);
     extern /* Subroutine */ int second_(real *);
     static doublereal epsmch;
-    integer istart, kplusp, msglvl;
+    integer istart, kplusp /*, msglvl */;
     extern /* Subroutine */ int dlacpy_(char *, integer *, integer *,
             doublereal *, integer *, doublereal *, integer *, ftnlen),
             dlartg_(doublereal *, doublereal *, doublereal *, doublereal *,
@@ -329,7 +329,7 @@ static integer c__1 = 1;
 /*<       call second (t0) >*/
     second_(&t0);
 /*<       msglvl = msapps >*/
-    msglvl = debug_1.msapps;
+/*  msglvl = debug_1.msapps; */
 
 /*<       kplusp = kev + np  >*/
     kplusp = *kev + *np;

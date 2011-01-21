@@ -17,13 +17,13 @@ extern "C" {
 
 /* Common Block Declarations */
 
-Extern struct {
-    integer logfil, ndigit, mgetv0, msaupd, msaup2, msaitr, mseigt, msapps,
-            msgets, mseupd, mnaupd, mnaup2, mnaitr, mneigh, mnapps, mngets,
-            mneupd, mcaupd, mcaup2, mcaitr, mceigh, mcapps, mcgets, mceupd;
-} debug_;
+/*Extern struct { */
+/*  integer logfil, ndigit, mgetv0, msaupd, msaup2, msaitr, mseigt, msapps, */
+/*          msgets, mseupd, mnaupd, mnaup2, mnaitr, mneigh, mnapps, mngets, */
+/*          mneupd, mcaupd, mcaup2, mcaitr, mceigh, mcapps, mcgets, mceupd; */
+/*} debug_; */
 
-#define debug_1 debug_
+/*#define debug_1 debug_ */
 
 Extern struct {
     integer nopx, nbx, nrorth, nitref, nrstrt;
@@ -466,7 +466,7 @@ Extern struct {
             ftnlen, ftnlen);
     extern doublereal dlamch_(char *, ftnlen);
     extern /* Subroutine */ int second_(real *);
-    static integer bounds, ishift, msglvl, mxiter;
+    static integer bounds, ishift, /* msglvl, */ mxiter;
     extern /* Subroutine */ int dstats_();
 
 
@@ -567,7 +567,7 @@ Extern struct {
 /*<          call second (t0) >*/
         second_(&t0);
 /*<          msglvl = msaupd >*/
-        msglvl = debug_1.msaupd;
+/*      msglvl = debug_1.msaupd; */
 
 /*<          ierr   = 0 >*/
         ierr = 0;
