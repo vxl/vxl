@@ -14,13 +14,13 @@
 
 //: Constructor
 cvg_hemisphere_tableau::cvg_hemisphere_tableau(vil_image_view_base const& img)
- : vgui_image_tableau(img, 0) 
+ : vgui_image_tableau(img, 0)
 {}
 cvg_hemisphere_tableau::cvg_hemisphere_tableau(vil_image_resource_sptr const& img)
- : vgui_image_tableau(img, 0) 
+ : vgui_image_tableau(img, 0)
 {}
-cvg_hemisphere_tableau::cvg_hemisphere_tableau(vil_image_resource_sptr const& img, 
-                                                vsph_view_sphere<vsph_view_point<vcl_string> > sphere)
+cvg_hemisphere_tableau::cvg_hemisphere_tableau(vil_image_resource_sptr const& img,
+                                               vsph_view_sphere<vsph_view_point<vcl_string> > sphere)
  : vgui_image_tableau(img, 0), curr_pyramid_(0)
 {
   img_sphere_ = sphere;
@@ -50,27 +50,27 @@ bool cvg_hemisphere_tableau::handle(vgui_event const &e)
       vcl_cout<<"Moving Right "<<vcl_endl;
       curr_point_.phi_ += (vnl_math::pi/18.0);
       this->set_expected_pyramid();
-  }  
+  }
   else if (e.key == vgui_CURSOR_UP || e.key == vgui_key('w')) {
       vcl_cout<<"Rotating Up "<<vcl_endl;
       curr_point_.theta_ -= (vnl_math::pi/36.0);
       this->set_expected_pyramid();
-  }  
+  }
   else if (e.key == vgui_CURSOR_DOWN || e.key == vgui_key('s')) {
       vcl_cout<<"Rotating Down "<<vcl_endl;
       curr_point_.theta_ += (vnl_math::pi/36.0);
       this->set_expected_pyramid();
-  } 
+  }
   else if (e.key == vgui_key('i')) {
       vcl_cout<<"Zooming In "<<vcl_endl;
-      curr_level_--; 
-      if(curr_level_ < 0) curr_level_ = 0; 
+      curr_level_--;
+      if (curr_level_ < 0) curr_level_ = 0;
       this->set_expected_image();
   }
   else if (e.key == vgui_key('o')) {
       vcl_cout<<"Zooming out "<<vcl_endl;
       curr_level_++;
-      if(curr_level_ >= PYRAMID_MAX_LEVEL) curr_level_ = PYRAMID_MAX_LEVEL-1;
+      if (curr_level_ >= PYRAMID_MAX_LEVEL) curr_level_ = PYRAMID_MAX_LEVEL-1;
       this->set_expected_image();
   }
 
@@ -88,21 +88,21 @@ void cvg_hemisphere_tableau::set_expected_pyramid()
 
   //get closest view
   int uid; double dist;
-  vsph_view_point<vcl_string> curr_view = img_sphere_.find_closest(cart_point, uid, dist); 
-  if(uid == -1) {
+  vsph_view_point<vcl_string> curr_view = img_sphere_.find_closest(cart_point, uid, dist);
+  if (uid == -1) {
     vcl_cout<<"View could not find a nearest point, something is wrong "<<vcl_endl;
     return;
   }
-  
+
   //get string path
   vcl_string* img_path = curr_view.metadata();
-  vil_image_resource_sptr im = vil_load_image_resource(img_path->c_str());  
+  vil_image_resource_sptr im = vil_load_image_resource(img_path->c_str());
   if ( !im ) {
     vcl_cerr << "Could not load " << img_path->c_str() << '\n';
     return;
   }
-  if(curr_pyramid_) delete curr_pyramid_; 
-  
+  if (curr_pyramid_) delete curr_pyramid_;
+
   //create the current pyramid
   curr_pyramid_ = new vil_pyramid_image_view<vxl_byte>(im->get_view(), PYRAMID_MAX_LEVEL);
 
@@ -112,29 +112,30 @@ void cvg_hemisphere_tableau::set_expected_pyramid()
 
 void cvg_hemisphere_tableau::set_expected_image()
 {
-  double scale; 
-  vil_image_view_base_sptr scaled = curr_pyramid_->get_view(curr_level_, scale); 
+  double scale;
+  vil_image_view_base_sptr scaled = curr_pyramid_->get_view(curr_level_, scale);
 
   //if curr level is a bit bigger, crop the image...
-  if(curr_level_ == 0) {
+  if (curr_level_ == 0) {
     int ni = scaled->ni()/2;
     int nj = scaled->nj()/2;
     int i0 = ni/2;
     int j0 = nj/2;
-    vil_image_view<vxl_byte> cropped = vil_crop<vxl_byte>(*scaled, i0, ni, j0, nj);  
+    vil_image_view<vxl_byte> cropped = vil_crop<vxl_byte>(*scaled, i0, ni, j0, nj);
     this->set_image_view(cropped);
     this->post_redraw();
     return;
   }
-  vcl_cout<<"Tableau width/height"<<this->width()<<","<<this->height()<<vcl_endl;
+  vcl_cout<<"Tableau width/height"<<this->width()<<','<<this->height()<<vcl_endl;
 
   this->set_image_view(*scaled);
-  this->post_redraw();  
+  this->post_redraw();
 }
 
-double cvg_hemisphere_tableau::compress_range(double rad) 
+double cvg_hemisphere_tableau::compress_range(double rad)
 {
-  if(rad >  vnl_math::pi) return rad - 2*vnl_math::pi; 
-  if(rad < -vnl_math::pi) return rad + 2*vnl_math::pi; 
+  while (rad >  vnl_math::pi) rad -= 2*vnl_math::pi;
+  while (rad < -vnl_math::pi) rad += 2*vnl_math::pi;
+  return rad;
 }
 
