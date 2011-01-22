@@ -142,7 +142,7 @@ class vil1_image_impl
   virtual vcl_string is_a() const { return "vil1_image_impl"; }
 
   //: Return true if the name of the class matches the argument
-  virtual bool is_class(vcl_string const& s) const { return s==is_a(); }
+  virtual bool is_class(vcl_string const& s) const { return s==this->is_a(); }
 
  private:
   friend class vil1_image;
