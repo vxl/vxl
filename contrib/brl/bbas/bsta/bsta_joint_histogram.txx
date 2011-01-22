@@ -374,13 +374,35 @@ void bsta_joint_histogram<T>::print_to_vrml(vcl_ostream& os) const
      << "  }\n"
      << "}\n";
 
-  // draw a red thin box to designate an axis
+  // draw a green box to designate the origin of the histogram
   os << "Transform {\n"
-     << "  translation " << (nbins_a_-1)/2.0f << ' ' << (nbins_b_-1)/2.0f << " 0\n"
+     << "  translation " << 0.0f << ' ' << 0.0f << '\n'
      << "  children Shape {\n"
-     << "    geometry Box { size " << nbins_a_-1 << " 0.1 0.3 }\n"
+     << "    geometry Box { size " << "1.0 1.0 1.0 }\n"
+     << "    appearance Appearance {\n"
+     << "      material Material { diffuseColor 0.0 1.0 0.0 }\n"
+     << "    }\n"
+     << "  }\n"
+     << "}\n";
+
+  // draw a red box to designate the "a" axis  of the histogram
+  os << "Transform {\n"
+     << "  translation " << (nbins_a_-1)/2.0f << ' ' << 0.0f << '\n'
+     << "  children Shape {\n"
+     << "    geometry Box { size " << (nbins_a_-1) << " 0.5 0.5 }\n"
      << "    appearance Appearance {\n"
      << "      material Material { diffuseColor 1.0 0.0 0.0 }\n"
+     << "    }\n"
+     << "  }\n"
+     << "}\n";
+
+  // draw a cyan box to designate the "b" axis  of the histogram
+  os << "Transform {\n"
+     << "  translation " << 0.0 << ' ' << (nbins_b_-1)/2.0f << '\n'
+     << "  children Shape {\n"
+     << "    geometry Box { size " << 0.5 << ' ' << (nbins_b_-1) << " 0.5 }\n"
+     << "    appearance Appearance {\n"
+     << "      material Material { diffuseColor 0.0 0.8 0.8 }\n"
      << "    }\n"
      << "  }\n"
      << "}\n"
