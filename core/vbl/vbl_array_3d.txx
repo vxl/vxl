@@ -20,10 +20,6 @@
 template <class T>
 void vbl_array_3d<T>::construct(size_type n1, size_type n2, size_type n3)
 {
-  assert(n1 >= 0);
-  assert(n2 >= 0);
-  assert(n3 >= 0);
-
   row1_count_ = n1;
   row2_count_ = n2;
   row3_count_ = n3;
