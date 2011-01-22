@@ -2,6 +2,9 @@
 #define vdtop_set_structure_from_digital_graph_txx_
 
 #include <vdtop/vdtop_8_neighborhood_mask.h>
+#include <vmap/vmap_types.h> // for vmap_2_map_tag
+#include <vil/vil_image_view.h>
+#include <vcl_cstddef.h> // for std::ptrdiff_t
 
 template <class TMap>
 void vdtop_set_structure_from_digital_graph(TMap & res,

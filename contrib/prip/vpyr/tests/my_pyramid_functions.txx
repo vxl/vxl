@@ -2,6 +2,8 @@
 #define my_pyramid_functions_txx_
 
 #include <vmap/tests/my_map_functions.txx>
+#include <vmap/vmap_types.h> // for vmap_vertex_index & vmap_face_index
+#include <vcl_vector.h>
 
 template <class P>
 void display_tpyramid(const P & pyramid)

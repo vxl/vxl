@@ -6,6 +6,7 @@
 #include <boxm2/boxm2_data_traits.h>
 #include <boxm2/cpp/algo/boxm2_cast_ray_function.h>
 #include <boxm2/cpp/algo/boxm2_mog3_grey_processor.h>
+#include <vil/vil_image_view.h>
 
 class boxm2_change_detection_functor
 {

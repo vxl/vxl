@@ -6,6 +6,9 @@
 
 #include <vdtop/vdtop_veinerization_builder.h>
 #include <vdtop/vdtop_8_neighborhood_mask.h>
+#include <vil/vil_image_view.h>
+#include <vcl_cstddef.h> // for std::ptrdiff_t
+#include <vcl_iostream.h>
 
 //: The 3 in 1 function.
 // It computes upper masks, removes non maximal directions, and compute the down-left version of the symmetric
