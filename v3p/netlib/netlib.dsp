@@ -900,9 +900,6 @@ SOURCE=.\arpack/dsconv.c
 SOURCE=.\lapack/complex16/zgeqr2.c
 # End Source File
 # Begin Source File
-SOURCE=.\arpack/debug_com.c
-# End Source File
-# Begin Source File
 SOURCE=.\lapack/complex16/zgeqrf.c
 # End Source File
 # Begin Source File
@@ -919,9 +916,6 @@ SOURCE=.\lapack/double/dlaruv.c
 # End Source File
 # Begin Source File
 SOURCE=.\lapack/complex16/ztgex2.c
-# End Source File
-# Begin Source File
-SOURCE=.\arpack/timing_com.c
 # End Source File
 # Begin Source File
 SOURCE=.\lapack/util/izmax1.c
@@ -993,9 +987,6 @@ SOURCE=.\lapack/complex16/ztgsyl.c
 SOURCE=.\lapack/complex16/zdrscl.c
 # End Source File
 # Begin Source File
-SOURCE=.\arpack/dstats.c
-# End Source File
-# Begin Source File
 SOURCE=.\lapack/double/dlasr.c
 # End Source File
 # Begin Source File
@@ -1036,9 +1027,6 @@ SOURCE=.\arpack/dgetv0.c
 # End Source File
 # Begin Source File
 SOURCE=.\lapack/complex16/zunm2r.c
-# End Source File
-# Begin Source File
-SOURCE=.\arpack/second.c
 # End Source File
 # Begin Source File
 SOURCE=.\lapack/complex16/zlacn2.c
@@ -1581,9 +1569,6 @@ SOURCE=.\lapack/double/dgecon.h
 SOURCE=.\arpack/dsaupd.h
 # End Source File
 # Begin Source File
-SOURCE=.\arpack/stat.h
-# End Source File
-# Begin Source File
 SOURCE=.\sparse/spMatrix.h
 # End Source File
 # Begin Source File
@@ -1707,9 +1692,6 @@ SOURCE=.\lapack/double/dsteqr.h
 SOURCE=.\lapack/single/slas2.h
 # End Source File
 # Begin Source File
-SOURCE=.\arpack/debug.h
-# End Source File
-# Begin Source File
 SOURCE=.\lapack/double/dlaset.h
 # End Source File
 # Begin Source File
@@ -1743,9 +1725,6 @@ SOURCE=.\lapack/double/dormqr.h
 SOURCE=.\lapack/complex16/ztgsen.h
 # End Source File
 # Begin Source File
-SOURCE=.\arpack/dstats.h
-# End Source File
-# Begin Source File
 SOURCE=.\lapack/complex16/zdrscl.h
 # End Source File
 # Begin Source File
@@ -1774,9 +1753,6 @@ SOURCE=.\blas/zgeru.h
 # End Source File
 # Begin Source File
 SOURCE=.\lapack/complex16/zlartg.h
-# End Source File
-# Begin Source File
-SOURCE=.\arpack/second.h
 # End Source File
 # Begin Source File
 SOURCE=.\lapack/complex16/zggbak.h

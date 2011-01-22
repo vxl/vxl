@@ -117,6 +117,9 @@ SOURCE=.\test_bil_wshed2d.cxx
 SOURCE=.\test_bil_scale_image.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\test_bil_detect_blur_scale.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\test_include.cxx
 # End Source File
 # End Group
