@@ -646,6 +646,7 @@ foreach $f (@FILES)
     if ($printed && $file =~ m!\b(
       aapl[iy]\w*
     | accom[^mp]\w*
+    | abcis\w*
     | abounds
     | abstrace
     | accp\w+
@@ -659,12 +660,14 @@ foreach $f (@FILES)
     | adaptati[^no]\S*
     | addion\w*
     | adress\w*
+    | adust\w*
     | \w*(sss|ettt)\w*
     | agress\w*
     | alement
     | aligm\w+
     | alife
     | alll\w*
+    | allocta\w*
     | alow\w*
     | alredy
     | alterd
@@ -675,9 +678,11 @@ foreach $f (@FILES)
     | anj\b
     | anonyn\w+
     | ansiot\w+
+    | anwer\w*
     | appart\w*
     | appearea\w+
     | appere?a\w*
+    | aapply
     | appling
     | appropriatly
     | appropi\w*
@@ -736,6 +741,7 @@ foreach $f (@FILES)
     | brighness
     | Bucther
     | buiding
+    | bufer
     | calclua\w+
     | calculal\w+
     | callled
@@ -805,6 +811,7 @@ foreach $f (@FILES)
     | contrain\S+
     | contor
     | continguous
+    | constrainted
     | \w*continut\w*
     | contol
     | controled
@@ -822,6 +829,7 @@ foreach $f (@FILES)
     | correpond\w*
     | correspo[^n]\S+
     | corrosp\S+
+    | creats
     | croped
     | currenly
     | currop\w+
@@ -868,6 +876,7 @@ foreach $f (@FILES)
     | \w*drect\S*
     | direciton
     | directely
+    | discri[bp]\w+
     | disting[ui]sh
     | distribt\w*
     | documentat[^i]\w*
@@ -989,6 +998,7 @@ foreach $f (@FILES)
     | indentic\S*
     | independant
     | indeces
+    | indexs
     | indicies
     | indivi[^d]\S*
     | individ[^u]\S*
@@ -998,7 +1008,7 @@ foreach $f (@FILES)
     | inheranc\S*
     | inhert\S*
     | inifo\w*
-    | inita\w*
+    | (un)?inita\w*
     | initi[^a]\w*
     | initialli\S+
     | \w+iztio\S*
@@ -1007,12 +1017,16 @@ foreach $f (@FILES)
     | innac\S*
     | \w+alll\S*
     | inplem\S*
+    | insead
     | instanc[^e]\S*
     | instanta\S*
     | instantian\w*
     | intanc\w*
+    | intanti\w*
     | integrant\w*
     | itege?ra\w*
+    | integet
+    | integrant
     | intell\w*
     | intensit[^iy]\S*
     | intera[tl]\S*
@@ -1030,6 +1044,8 @@ foreach $f (@FILES)
     | intrinsi[^c]\S*
     | invalide\S*
     | inti[^m]\w*
+    | intos
+    | itegeral
     | iter\B[^_a\d]\S*
     | jocob\S*
     | judicous
@@ -1045,6 +1061,7 @@ foreach $f (@FILES)
     | lenth
     | likely\w\S*
     | lik[^aei]\S*
+    | lookat
     | magin\S*
     | magnit[^u]\S*
     | Mahalobis
@@ -1095,6 +1112,7 @@ foreach $f (@FILES)
     | neigb\S*
     | neigh\B[^b_]\S*
     | neighbo\B[^ur]\S*
+    | neihb\w+
     | neumer\S*
     | \w+ifiy\S*
     | \w*[^n]\Bnnn+\B[^n]
@@ -1115,6 +1133,7 @@ foreach $f (@FILES)
     | ocuppa\w*
     | octo[^b]\s*
     | ommit\S*
+    | onthe
     | oor
     | openned
     | openning
@@ -1129,12 +1148,13 @@ foreach $f (@FILES)
     | outputing
     | paincip\S*
     | parabal\S*
+    | paralle\b
     | parallelo\S*
     | parallal
     | paralle\b
+    | parama?t\S*
     | parameteric
     | paramete[^r]\S*
-    | parama?t\S*
     | parem\S*
     | parap[^h]\S*
     | parbol
@@ -1149,7 +1169,9 @@ foreach $f (@FILES)
     | plataf\S*
     | planary
     | poin\b
+    | poitner
     | polyon
+    | Pontyon
     | poyl\w+
     | \w+ntin\b
     | pois[^os]\S*
@@ -1199,6 +1221,7 @@ foreach $f (@FILES)
     | recursivv\S*
     | (re)?determing
     | redunden\S*
+    | refering
     | referan\S*
     | refern\S*
     | \w+straions?
@@ -1218,6 +1241,7 @@ foreach $f (@FILES)
     | resore\S*
     | respose\w*
     | resturn\w*
+    | retang\w+
     | rotaion\w*
     | rotot\S*
     | retr(ei|iv)\S*
@@ -1244,6 +1268,7 @@ foreach $f (@FILES)
     | singlet[^oh]\S*
     | smalles\b
     | smoothes
+    | somwhere
     | somethings
     | souc\S*
     | specifin\S*
@@ -1268,10 +1293,12 @@ foreach $f (@FILES)
     | suffies
     | superseeded
     | supp\B[^elor]\S*
+    | supper\w+
     | supres\S*
     | superce\w*
     | syme\S*
     | symmet[^r]\S*
+    | symmt\w+
     | syste[^m]\S*
     | syte\S*
     | \w*tablea[^nu]\S*
@@ -1286,6 +1313,7 @@ foreach $f (@FILES)
     | thickenes\S*
     | thoru\S*
     | ths\s
+    | thsi\b
     | threhol\S*
     | threshol[^d]
     | throun\S*
@@ -1299,8 +1327,10 @@ foreach $f (@FILES)
     | traac\S*
     | tragen\S*
     | trainig\S*
+    | tranform\w*
     | tran[a-prt-z]\S*
     | trasform\w*
+    | transfor[^m]\w*
     | transor\S*
     | transf[a-df-hj-np-z]\S*
     | transfor[^m]\w*
@@ -1310,6 +1340,7 @@ foreach $f (@FILES)
     | unec\S+
     | (un)?certainit\w*
     | unhomogen\w*
+    | unsymmetr\w+
     | updatet
     | (un)?useab\S*
     | useful[a-km-z]\S*
@@ -1320,16 +1351,18 @@ foreach $f (@FILES)
     | vaule\S*
     | valu[^ae]\S*
     | vecor\S*
-    | vetor\S*
+    | vetc?or\S*
     | vecotor\S*
     | verifys
     | verf\S*
+    | verical\w*
     | verion\S*
     | verson\S*
     | vertics
     | verticies
     | vertexes
     | virutal
+    | vishual
     | visibli\S*
     | vitural
     | vlo\S*
@@ -1337,6 +1370,7 @@ foreach $f (@FILES)
     | whan
     | weigth\S*
     | wether
+    | \S*wehre
     | wheather
     | whises
     | whou\S*
