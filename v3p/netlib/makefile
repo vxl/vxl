@@ -184,7 +184,6 @@ SOURCES += laso/dortqr.c
 SOURCES += laso/dvsort.c
 SOURCES += laso/urand.c
 # V3P_NETLIB_arpack_SOURCES
-SOURCES += arpack/debug_com.c
 SOURCES += arpack/dgetv0.c
 SOURCES += arpack/dsaitr.c
 SOURCES += arpack/dsapps.c
@@ -196,12 +195,7 @@ SOURCES += arpack/dsesrt.c
 SOURCES += arpack/dseupd.c
 SOURCES += arpack/dsgets.c
 SOURCES += arpack/dsortr.c
-SOURCES += arpack/dstats.c
 SOURCES += arpack/dstqrb.c
-SOURCES += arpack/second.c
-SOURCES += arpack/timing_com.c
-MANPAGE_SOURCES += arpack/debug.h
-MANPAGE_SOURCES += arpack/stat.h
 # V3P_NETLIB_lapack_SOURCES
 SOURCES += lapack/complex16/zgebak.c
 SOURCES += lapack/complex16/zgebal.c

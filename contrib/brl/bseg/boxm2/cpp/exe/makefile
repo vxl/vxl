@@ -1,12 +1,8 @@
 USES += contrib/brl contrib/brl/bbas contrib/brl/bseg core
 
-LIBRARY := boxm2_ocl
-
-SOURCES += boxm2_opencl_cache.cxx
-SOURCES += boxm2_opencl_processor.cxx
-SOURCES += boxm2_ocl_util.cxx
-
-SUBDIRS += pro exe
+MINI_PROG_SOURCES += boxm2_cpp_update_main.cxx
+MINI_PROG_SOURCES += boxm2_cpp_render_main.cxx
+MINI_PROG_SOURCES += boxm2_cpp_change_detection_main.cxx
 
 ################################
 include ${VXLROOT}/config/top.mk
