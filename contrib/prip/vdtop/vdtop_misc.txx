@@ -4,8 +4,8 @@
 //:
 // \file
 
-#include <vdtop/vdtop_veinerization_builder.h>
 #include <vdtop/vdtop_8_neighborhood_mask.h>
+#include <vmap/vmap_types.h> // for vmap_2_map_tag
 #include <vil/vil_image_view.h>
 #include <vcl_cstddef.h> // for std::ptrdiff_t
 #include <vcl_iostream.h>
@@ -119,14 +119,14 @@ void vdtop_compute_first_veinerization_pass_(vil_image_view<T> & img, const T& m
         // pseudo symmetric
         vdtop_8_neighborhood_mask ur_mask=max_mask ;
         ur_mask&=up_right_neighbors ;
-        int n = ur_mask.nb_8_neighbors() ;
+        n = ur_mask.nb_8_neighbors() ;
         if (n!=0)
         {
           int k = 0 ;
           vdtop_freeman_code dir= ur_mask.direction_8_neighbor(k) ;
           for (; k<n; dir= ur_mask.direction_8_neighbor(++k) )
           {
-            vdtop_8_neighborhood_mask* to_modif=current_mask+moves[dir.code()] ;
+            vdtop_8_neighborhood_mask* to_modif=current_mask+movesI[dir.code()] ;
             to_modif->add_direction(-dir) ;
           }
         }
@@ -197,7 +197,7 @@ void vdtop_compute_first_veinerization_pass_(vil_image_view<T> & img, const T& m
 
         // Computes the direction to the max neighbor
         vdtop_freeman_code m=cc.direction_8_neighbor(0) ;
-        const T * m_val=current+moves[m.code()] ;
+        const T * m_val=current+movesI[m.code()] ;
 
         for (int l=1; l<nb_neigh; l++)
         {
@@ -213,14 +213,14 @@ void vdtop_compute_first_veinerization_pass_(vil_image_view<T> & img, const T& m
       // pseudo symmetric
       vdtop_8_neighborhood_mask ur_mask=max_mask ;
       ur_mask&=up_right_neighbors ;
-      int n = ur_mask.nb_8_neighbors() ;
+      n = ur_mask.nb_8_neighbors() ;
       if (n!=0)
       {
         int k = 0 ;
         vdtop_freeman_code dir= ur_mask.direction_8_neighbor(k) ;
         for (; k<n; dir= ur_mask.direction_8_neighbor(++k) )
         {
-          vdtop_8_neighborhood_mask* to_modif=current_mask+moves[dir.code()] ;
+          vdtop_8_neighborhood_mask* to_modif=current_mask+movesI[dir.code()] ;
           to_modif->add_direction(-dir) ;
         }
       }
@@ -358,7 +358,7 @@ void vdtop_compute_8_upper_masks(vil_image_view<T> & img, const T& max_value, vi
 }
 
 template <class T>
-void vdtop_remove_non_maximal_direction(const vil_image_view<T> & img, vil_image_view<vdtop_8_neighborhood_mask> & mask)
+void vdtop_remove_non_maximal_direction(const vil_image_view<T> & img, vil_image_view<vdtop_8_neighborhood_mask> & masks)
 {
   unsigned ni = img.ni(),nj = img.nj(),np = img.nplanes();
   const vxl_byte dir_order[8]={4,2,1,3,5,6,7};
@@ -400,7 +400,7 @@ void vdtop_remove_non_maximal_direction(const vil_image_view<T> & img, vil_image
 
           // Computes the direction to the max neighbor
           vdtop_freeman_code m=cc.direction_8_neighbor(0) ;
-          const T * m_val=current+moves[m.code()] ;
+          const T * m_val=current+movesI[m.code()] ;
 
           for (int l=1; l<nb_neigh; l++)
           {
@@ -437,13 +437,19 @@ void vdtop_set_veinerization_structure(TMap & res, const vil_image_view<T> & arg
   moves[6]=mask.jstep() ;
   moves[7]=mask.jstep()+mask.istep() ;
 
+#if 0 // there is no function "down_masks()" !!! - FIXME
   // symmetrize
   down_masks(mask) ;
+#endif
 
+#if 0 // there is no function "count_non_empty_masks()" !!! - FIXME
   // build res
   int nb_vertices , nb_darts ;
   count_non_empty_masks(mask, nb_vertices, nb_darts);
   nb_darts*=2 ;
+#else
+  int nb_darts = 1 , nb_vertices = 0 ;
+#endif
   res.initialise_darts(nb_darts) ;
   int dart[mask.ni()][4] ;
   for (int j=0; j<mask.ni(); j++)
@@ -506,7 +512,7 @@ void vdtop_set_structure_from_masks(TMap & res, const vil_image_view<vdtop_8_nei
 {
   unsigned ni = mask.ni(),nj = mask.nj(),np = mask.nplanes(), nil=ni-1, njl=nj-1;
   // Precompute steps
-  vcl_ptrdiff_t istepM=masks.istep(),jstepM=masks.jstep(),pstepM = masks.planestep();
+  vcl_ptrdiff_t istepM=mask.istep(),jstepM=mask.jstep(),pstepM = mask.planestep();
   vcl_ptrdiff_t movesM[8] ;
   movesM[0]=istepM ;
   movesM[1]=-jstepM+istepM ;
@@ -517,10 +523,14 @@ void vdtop_set_structure_from_masks(TMap & res, const vil_image_view<vdtop_8_nei
   movesM[6]=jstepM ;
   movesM[7]=jstepM+istepM ;
 
+#if 0 // there is no function "count_non_empty_masks()" !!! - FIXME
   // build res
   int nb_vertices , nb_darts ;
   count_non_empty_masks(mask, nb_vertices, nb_darts);
   nb_darts*=2 ;
+#else
+  int nb_darts = 1 , nb_vertices = 0 ;
+#endif
   res.initialise_darts(nb_darts) ;
   int dart[mask.ni()][4] ;
   for (int j=0; j<mask.ni(); j++)
@@ -530,7 +540,7 @@ void vdtop_set_structure_from_masks(TMap & res, const vil_image_view<vdtop_8_nei
   nb_darts=nb_vertices=0 ;
 
   // Sets the links
-  vdtop_8_neighborhood_mask* planeM=masks.top_left_ptr() ;
+  vdtop_8_neighborhood_mask* planeM=mask.top_left_ptr() ;
   planeM += plane*pstepM ;
   {
     vdtop_8_neighborhood_mask* rowM   = planeM, *current_mask;
@@ -538,7 +548,7 @@ void vdtop_set_structure_from_masks(TMap & res, const vil_image_view<vdtop_8_nei
     for (unsigned j=0;j<nj;j++,rowM+=jstepM)
     {
       // starts from the end
-      current_mask=rowM+(ni-1)*istep;
+      current_mask=rowM+(ni-1)*istepM;
       for (int i=ni-1; i>=0; --i, current_mask-=istepM)
       {
         int k=0 ;
@@ -612,13 +622,19 @@ void vdtop_set_veinerization_structure(TMap & res, vil_image_view<T> & img, cons
   moves[6]=mask.jstep() ;
   moves[7]=mask.jstep()+mask.istep() ;
 
+#if 0 // there is no function "down_masks()" !!! - FIXME
   // symmetrize
   down_masks(mask) ;
+#endif
 
+#if 0 // there is no function "count_non_empty_masks()" !!! - FIXME
   // build res
   int nb_vertices , nb_darts ;
   count_non_empty_masks(mask, nb_vertices, nb_darts);
   nb_darts*=2 ;
+#else
+  int nb_darts = 1 , nb_vertices = 0 ;
+#endif
   res.initialise_darts(nb_darts) ;
   int dart[mask.ni()][4] ;
   int vertex_first_dart[mask.ni()] ;
@@ -683,7 +699,7 @@ void vdtop_set_veinerization_structure(TMap & res, vil_image_view<T> & img, cons
       }
     }
   }
-  vcl_cout<<"V:"<<arg.ni()*arg.nj()<<'/'<<nb_vertices<<vcl_endl ;
+  vcl_cout<<"V:"<<img.ni()*img.nj()<<'/'<<nb_vertices<<vcl_endl ;
 }
 
 #endif // vdtop_misc_txx_
