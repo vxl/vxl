@@ -13,14 +13,13 @@
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/boxm2_block.h>
 #include <boxm2/boxm2_data.h>
+#include <boxm2/boxm2_util.h>
 
 #include <boct/boct_bit_tree2.h>
 
 #include <vcl_algorithm.h>
 #define BLOCK_EPSILON .006125f
 #define TREE_EPSILON  .005f
-
-
 
 
 template<class F>
