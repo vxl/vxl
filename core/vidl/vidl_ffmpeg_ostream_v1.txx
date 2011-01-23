@@ -102,7 +102,8 @@ open()
       close();
       return false;
     }
-  } else {
+  }
+  else {
     close();
     return false;
   }
@@ -465,7 +466,7 @@ close()
 
     if ( os_->file_opened_ ) {
       av_write_trailer( os_->fmt_cxt_ );
-      url_fclose( &os_->fmt_cxt_->pb );
+      url_fclose( os_->fmt_cxt_->pb );
       os_->file_opened_ = false;
     }
 
@@ -588,7 +589,8 @@ write_frame(const vidl_frame_sptr& frame)
       pkt.flags |= PKT_FLAG_KEY;
     }
     av_interleaved_write_frame( os_->fmt_cxt_, &pkt );
-  } else {
+  }
+  else {
     return false;
   }
 
