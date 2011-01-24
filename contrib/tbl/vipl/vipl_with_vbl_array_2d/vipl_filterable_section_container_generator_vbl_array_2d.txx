@@ -3,8 +3,11 @@
 
 #include <vbl/vbl_array_2d.h>
 
+#undef FILTER_IMPTR_DEC_REFCOUNT
 #define FILTER_IMPTR_DEC_REFCOUNT(v) {delete (v); (v)=0;}
+#undef FILTER_IMPTR_INC_REFCOUNT
 #define FILTER_IMPTR_INC_REFCOUNT(v)
+#undef FILTER_KERNPTR_DEC_REFCOUNT
 #define FILTER_KERNPTR_DEC_REFCOUNT(v)
 
 #include <vipl/section/vipl_section_container.txx>

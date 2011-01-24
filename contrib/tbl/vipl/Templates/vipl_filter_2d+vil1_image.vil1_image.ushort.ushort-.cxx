@@ -1,10 +1,6 @@
 #ifndef INSTANTIATE_TEMPLATES
 #include <vil1/vil1_image.h>
 
-#define FILTER_IMPTR_DEC_REFCOUNT(v) {delete (v); (v)=0;}
-#define FILTER_IMPTR_INC_REFCOUNT(v)
-#define FILTER_KERNPTR_DEC_REFCOUNT(v)
-
 // this must be here for filter-2d to work
 #include <vipl/section/vipl_filterable_section_container_generator_vil1_image.txx>
 

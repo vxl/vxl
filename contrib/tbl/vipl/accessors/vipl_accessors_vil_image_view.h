@@ -13,6 +13,7 @@ template <class DataType> DataType fgetpixel(vil_image_view<DataType> const& i, 
 template <class DataType> void fsetpixel(vil_image_view<DataType>& i, int x, int y, DataType e);
 template <class DataType> DataType getpixel(vil_image_view<DataType> const& i, int x, int y, DataType);
 template <class DataType> void setpixel(vil_image_view<DataType>& i, int x, int y, DataType e);
+#undef VIPL_DECLARE_ACCESSORS
 #define VIPL_DECLARE_ACCESSORS(T) \
 T fgetpixel(vil_image_view<T> const& i, int x, int y, T); \
 void fsetpixel(vil_image_view<T>& i, int x, int y, T e); \

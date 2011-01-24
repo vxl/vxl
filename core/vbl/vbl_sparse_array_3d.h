@@ -90,8 +90,10 @@ inline vcl_ostream& operator <<
 }
 
 
+#ifndef VBL_SPARSE_ARRAY_BASE_INSTANTIATE
 #define VBL_SPARSE_ARRAY_BASE_INSTANTIATE(T) \
-extern "please include vbl/vbl_sparse_array_3d.txx instead"
+extern "please include vbl/vbl_sparse_array_base.txx instead"
+#endif // VBL_SPARSE_ARRAY_BASE_INSTANTIATE
 #define VBL_SPARSE_ARRAY_3D_INSTANTIATE(T) \
 extern "please include vbl/vbl_sparse_array_3d.txx instead"
 
