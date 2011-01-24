@@ -74,7 +74,7 @@ void mil_scale_pyramid_builder_2d<T>::scale_reduce(
   vsl_indent_dec(vcl_cout);
 #endif
 
-    // Sort out world to image transformation for destination image
+  // Sort out world to image transformation for destination image
   mil_transform_2d scaling;
   scaling.set_zoom_only(1/scale_step(),-init_x,-init_y);
   dest_im.setWorld2im(scaling * src_im.world2im());
@@ -82,34 +82,34 @@ void mil_scale_pyramid_builder_2d<T>::scale_reduce(
 
 
 //: An optimisable rounding function
-inline unsigned char l_round(double x, unsigned char )
+inline unsigned char pl_round(double x, unsigned char )
 {  return (unsigned char) (x+0.5);}
 
-inline signed char l_round(double x, signed char )
+inline signed char pl_round(double x, signed char )
 {  return (signed char) (x+0.5);}
 
-inline unsigned short l_round(double x, unsigned short )
+inline unsigned short pl_round(double x, unsigned short )
 {  return (unsigned short) (x+0.5);}
 
-inline signed short l_round(double x, signed short )
+inline signed short pl_round(double x, signed short )
 {  return (signed short) (x+0.5);}
 
-inline unsigned int l_round(double x, unsigned int )
+inline unsigned int pl_round(double x, unsigned int )
 {  return (unsigned int) (x+0.5);}
 
-inline signed int l_round(double x, signed int )
+inline signed int pl_round(double x, signed int )
 {  return (signed int) (x+0.5);}
 
-inline unsigned long l_round(double x, unsigned long )
+inline unsigned long pl_round(double x, unsigned long )
 {  return (unsigned long) (x+0.5);}
 
-inline signed long l_round(double x, signed long )
+inline signed long pl_round(double x, signed long )
 {  return (signed long) (x+0.5);}
 
-inline double l_round (double x, double )
+inline double pl_round (double x, double )
 {  return x; }
 
-inline float l_round (double x, float )
+inline float pl_round (double x, float )
 {  return (float) x; }
 
 //=======================================================================
@@ -133,7 +133,7 @@ void mil_scale_pyramid_builder_2d<T>::scale_reduce(
     double x=init_x;
     for (int xi=0; xi<dest_nx; xi++)
     {
-      dest_row[xi] = l_round (mil_safe_extend_bilin_interp_2d(x, y,
+      dest_row[xi] = pl_round (mil_safe_extend_bilin_interp_2d(x, y,
           src_im,  src_nx, src_ny, src_ystep), (T)0);
       x += scale_step_;
     }

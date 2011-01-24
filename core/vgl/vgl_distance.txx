@@ -25,7 +25,7 @@
 #include <vcl_utility.h> // for vcl_pair<T,U>
 
 template <class T>
-static inline T square(T x) { return x*x; }
+static inline T square_of(T x) { return x*x; }
 
 template <class T>
 double vgl_distance_to_linesegment(T x1, T y1,
@@ -41,11 +41,11 @@ double vgl_distance2_to_linesegment(T x1, T y1,
                                     T x, T y)
 {
   // squared distance between endpoints :
-  T ddh = square(x2-x1) + square(y2-y1);
+  T ddh = square_of(x2-x1) + square_of(y2-y1);
 
   // squared distance to endpoints :
-  T dd1 = square(x-x1) + square(y-y1);
-  T dd2 = square(x-x2) + square(y-y2);
+  T dd1 = square_of(x-x1) + square_of(y-y1);
+  T dd2 = square_of(x-x2) + square_of(y-y2);
 
   // if closest to the start point :
   if (dd2 >= ddh + dd1)
@@ -59,7 +59,7 @@ double vgl_distance2_to_linesegment(T x1, T y1,
   T a = y1-y2;
   T b = x2-x1;
   T c = x1*y2-x2*y1;
-  return square(a*x + b*y + c)/double(a*a + b*b);
+  return square_of(a*x + b*y + c)/double(a*a + b*b);
 }
 
 template <class T>
@@ -76,11 +76,11 @@ double vgl_distance2_to_linesegment(T x1, T y1, T z1,
                                     T x, T y, T z)
 {
   // squared distance between endpoints :
-  T ddh = square(x2-x1) + square(y2-y1) + square(z2-z1);
+  T ddh = square_of(x2-x1) + square_of(y2-y1) + square_of(z2-z1);
 
   // squared distance to endpoints :
-  T dd1 = square(x-x1) + square(y-y1) + square(z-z1);
-  T dd2 = square(x-x2) + square(y-y2) + square(z-z2);
+  T dd1 = square_of(x-x1) + square_of(y-y1) + square_of(z-z1);
+  T dd2 = square_of(x-x2) + square_of(y-y2) + square_of(z-z2);
 
   // if closest to the start point :
   if (dd2 >= ddh + dd1)
@@ -98,7 +98,7 @@ double vgl_distance2_to_linesegment(T x1, T y1, T z1,
   // This point equals (x1,y1,z1) + lambda * (a,b,c), with this lambda:
   double lambda = (a*(x-x1)+b*(y-y1)+c*(z-z1))/double(a*a+b*b+c*c);
   // return squared distance:
-  return square(x-x1-lambda*a) + square(y-y1-lambda*b) + square(z-z1-lambda*c);
+  return square_of(x-x1-lambda*a) + square_of(y-y1-lambda*b) + square_of(z-z1-lambda*c);
 }
 
 template <class T>
@@ -199,14 +199,14 @@ template <class T>
 double vgl_distance_origin(vgl_homg_line_3d_2_points<T> const& l)
 {
   vgl_homg_point_3d<T> q = vgl_closest_point_origin(l);
-  return vcl_sqrt(static_cast<double>(square(q.x())+square(q.y())+square(q.z())))/q.w();
+  return vcl_sqrt(static_cast<double>(square_of(q.x())+square_of(q.y())+square_of(q.z())))/q.w();
 }
 
 template <class T>
 double vgl_distance_origin(vgl_line_3d_2_points<T> const& l)
 {
   vgl_point_3d<T> q = vgl_closest_point_origin(l);
-  return vcl_sqrt(static_cast<double>(square(q.x())+square(q.y())+square(q.z())));
+  return vcl_sqrt(static_cast<double>(square_of(q.x())+square_of(q.y())+square_of(q.z())));
 }
 
 template <class T>
@@ -310,7 +310,7 @@ template <class T>
 double vgl_distance(vgl_line_segment_2d<T> const& l,
                     vgl_point_2d<T> const& p)
 {
-  return vgl_distance_to_linesegment(l.point1().x(), l.point1().y(), 
+  return vgl_distance_to_linesegment(l.point1().x(), l.point1().y(),
                                      l.point2().x(), l.point2().y(),
                                      p.x(), p.y());
 }
@@ -319,7 +319,7 @@ template <class T>
 double vgl_distance(vgl_line_segment_3d<T> const& l,
                     vgl_point_3d<T> const& p)
 {
-  return vgl_distance_to_linesegment(l.point1().x(), l.point1().y(), l.point1().z(), 
+  return vgl_distance_to_linesegment(l.point1().x(), l.point1().y(), l.point1().z(),
                                      l.point2().x(), l.point2().y(), l.point2().z(),
                                      p.x(), p.y(), p.z());
 }

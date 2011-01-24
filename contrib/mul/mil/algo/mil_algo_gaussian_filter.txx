@@ -56,7 +56,7 @@ void mil_algo_gaussian_filter<srcT, destT>::filter(
 
   for (int i=0;i<n_planes;++i)
     filter(dest_im.plane(i),dest_im.ystep(),
-                 src_im.plane(i),nx,ny,ystep);
+           src_im.plane(i),nx,ny,ystep);
 #if 0
   vsl_indent_inc(vcl_cout);
   vcl_cout << vsl_indent() << "Work image B\n";
@@ -67,34 +67,34 @@ void mil_algo_gaussian_filter<srcT, destT>::filter(
 
 
 //: An optimisable rounding function
-inline unsigned char l_round(double x, unsigned char )
+inline unsigned char al_round(double x, unsigned char )
 {  return (unsigned char) (x+0.5);}
 
-inline signed char l_round(double x, signed char )
+inline signed char al_round(double x, signed char )
 {  return (signed char) (x+0.5);}
 
-inline unsigned short l_round(double x, unsigned short )
+inline unsigned short al_round(double x, unsigned short )
 {  return (unsigned short) (x+0.5);}
 
-inline signed short l_round(double x, signed short )
+inline signed short al_round(double x, signed short )
 {  return (signed short) (x+0.5);}
 
-inline unsigned int l_round(double x, unsigned int )
+inline unsigned int al_round(double x, unsigned int )
 {  return (unsigned int) (x+0.5);}
 
-inline signed int l_round(double x, signed int )
+inline signed int al_round(double x, signed int )
 {  return (signed int) (x+0.5);}
 
-inline unsigned long l_round(double x, unsigned long )
+inline unsigned long al_round(double x, unsigned long )
 {  return (unsigned long) (x+0.5);}
 
-inline signed long l_round(double x, signed long )
+inline signed long al_round(double x, signed long )
 {  return (signed long) (x+0.5);}
 
-inline double l_round (double x, double )
+inline double al_round (double x, double )
 {  return x; }
 
-inline float l_round (double x, float )
+inline float al_round (double x, float )
 {  return (float) x; }
 
 //=======================================================================
@@ -129,31 +129,31 @@ void mil_algo_gaussian_filter<srcT, destT>::filter(
     int x;
     int nx2 = nx-2;
     for (x=2;x<nx2;x++)
-      worka_row[x] = l_round(  filt2_ * src_col1[x]
+      worka_row[x] = al_round( filt2_ * src_col1[x]
                              + filt1_ * src_col2[x]
                              + filt0_ * src_col3[x]
                              + filt1_ * src_col4[x]
                              + filt2_ * src_col5[x], (destT)0);
 
     // Now deal with edge effects :
-    worka_row[0] = l_round( filt_edge0_ * src_col3[0]
-                          + filt_edge1_ * src_col4[0]
-                          + filt_edge2_ * src_col5[0], (destT)0);
+    worka_row[0] = al_round( filt_edge0_ * src_col3[0]
+                           + filt_edge1_ * src_col4[0]
+                           + filt_edge2_ * src_col5[0], (destT)0);
 
-    worka_row[1] = l_round( filt_pen_edge_n1_ * src_col2[1]
-                          + filt_pen_edge0_ * src_col3[1]
-                          + filt_pen_edge1_ * src_col4[1]
-                          + filt_pen_edge2_ * src_col5[1], (destT)0);
+    worka_row[1] = al_round( filt_pen_edge_n1_ * src_col2[1]
+                           + filt_pen_edge0_ * src_col3[1]
+                           + filt_pen_edge1_ * src_col4[1]
+                           + filt_pen_edge2_ * src_col5[1], (destT)0);
 
-    worka_row[nx-2] = l_round( filt_pen_edge2_ * src_col1[x]
-                             + filt_pen_edge1_ * src_col2[x]
-                             + filt_pen_edge0_ * src_col3[x]
-                             + filt_pen_edge_n1_ * src_col4[x], (destT)0);
+    worka_row[nx-2] = al_round( filt_pen_edge2_ * src_col1[x]
+                              + filt_pen_edge1_ * src_col2[x]
+                              + filt_pen_edge0_ * src_col3[x]
+                              + filt_pen_edge_n1_ * src_col4[x], (destT)0);
 
     x++;
-    worka_row[nx-1] = l_round( filt_edge2_ * src_col1[x]
-                             + filt_edge1_ * src_col2[x]
-                             + filt_edge0_ * src_col3[x], (destT)0);
+    worka_row[nx-1] = al_round( filt_edge2_ * src_col1[x]
+                              + filt_edge1_ * src_col2[x]
+                              + filt_edge0_ * src_col3[x], (destT)0);
   }
 
 //  worka_.print_all(vcl_cout);
@@ -169,7 +169,7 @@ void mil_algo_gaussian_filter<srcT, destT>::filter(
     const destT* worka_row5  = worka_row3 + 2 * work_ystep;
 
     for (unsigned int x=0; x<nx; x++)
-      dest_row[x] = l_round(  filt2_ * worka_row1[x]
+      dest_row[x] = al_round( filt2_ * worka_row1[x]
                             + filt1_ * worka_row2[x]
                             + filt0_ * worka_row3[x]
                             + filt1_ * worka_row4[x]
@@ -195,23 +195,23 @@ void mil_algo_gaussian_filter<srcT, destT>::filter(
 
   for (unsigned int x=0;x<nx;x++)
   {
-    dest_row_top[x] = l_round(  filt_edge0_ * worka_row_top_5[x]
+    dest_row_top[x] = al_round( filt_edge0_ * worka_row_top_5[x]
                               + filt_edge1_ * worka_row_top_4[x]
                               + filt_edge2_ * worka_row_top_3[x], (destT)0);
 
-    dest_row_next_top[x] = l_round( filt_pen_edge2_ * worka_row_top_2[x]
-                                  + filt_pen_edge1_ * worka_row_top_3[x]
-                                  + filt_pen_edge0_ * worka_row_top_4[x]
-                                  + filt_pen_edge_n1_ * worka_row_top_5[x], (destT)0);
+    dest_row_next_top[x] = al_round( filt_pen_edge2_ * worka_row_top_2[x]
+                                   + filt_pen_edge1_ * worka_row_top_3[x]
+                                   + filt_pen_edge0_ * worka_row_top_4[x]
+                                   + filt_pen_edge_n1_ * worka_row_top_5[x], (destT)0);
 
-    dest_row_next_bottom[x] = l_round(  filt_pen_edge2_ * worka_row_bottom_4[x]
+    dest_row_next_bottom[x] = al_round( filt_pen_edge2_ * worka_row_bottom_4[x]
                                       + filt_pen_edge1_ * worka_row_bottom_3[x]
                                       + filt_pen_edge0_ * worka_row_bottom_2[x]
-                                      + filt_pen_edge_n1_ * worka_row_bottom_1[x], (destT)0); 
+                                      + filt_pen_edge_n1_ * worka_row_bottom_1[x], (destT)0);
 
-    dest_row_bottom[x] = l_round(   filt_edge2_ * worka_row_bottom_3[x]
-                                  + filt_edge1_ * worka_row_bottom_2[x]
-                                  + filt_edge0_ * worka_row_bottom_1[x], (destT)0);
+    dest_row_bottom[x] = al_round( filt_edge2_ * worka_row_bottom_3[x]
+                                 + filt_edge1_ * worka_row_bottom_2[x]
+                                 + filt_edge0_ * worka_row_bottom_1[x], (destT)0);
   }
 
 //  dest_im.print_all(vcl_cout);

@@ -15,12 +15,11 @@
 #include <vcl_cassert.h>
 
 static const unsigned int verbose_ = 2;
-static const double max_response_value = 1.0e30;
+static const double rgrl_matcher_pseudo_max_response_value = 1.0e30;
 
 
 template <class PixelType>
-inline
-bool
+inline bool
 in_range( vil_image_view< PixelType > const& image,
           rgrl_mask_sptr const& mask,
           vnl_double_2 const& location )
@@ -36,8 +35,7 @@ in_range( vil_image_view< PixelType > const& image,
 }
 
 template <class PixelType>
-inline
-bool
+inline bool
 in_range( vil_image_view< PixelType > const& image, // FIXME: unused
           rgrl_mask_sptr const& mask,
           vnl_vector< double > const& location )
@@ -277,74 +275,75 @@ map_region_intensities( vcl_vector< vnl_vector<int> > const& pixel_locations,
   }
 }
 
-//  inline
-//  double
-//  est_sub_offset( vnl_matrix< double > const& A, vnl_matrix< double > const& S )
-//  {
-//    // A S = X, where X = [ a b c ]
-//    vnl_matrix< double > inv = vnl_inverse(A);
-//    vnl_matrix< double > X = inv * S;
-//    assert( X.columns() == 1 );
+#if 0
+inline double
+est_sub_offset( vnl_matrix< double > const& A, vnl_matrix< double > const& S )
+{
+  // A S = X, where X = [ a b c ]
+  vnl_matrix< double > inv = vnl_inverse(A);
+  vnl_matrix< double > X = inv * S;
+  assert( X.columns() == 1 );
 
-//    // if it fit a line, instead of a parabola
-//    // then return the original best index
-//    if ( X[ 0 ][ 0 ] == 0 )
-//      return 0.0;
+  // if it fit a line, instead of a parabola
+  // then return the original best index
+  if ( X[ 0 ][ 0 ] == 0 )
+    return 0.0;
 
-//    // find r that minimizes s
-//    // ds = 2ar + b = 0
-//    // r = -b / 2a
-//    return - X[ 1 ][ 0 ] / ( 2 * X[ 0 ][ 0 ] ) ;
-//  }
+  // find r that minimizes s
+  // ds = 2ar + b = 0
+  // r = -b / 2a
+  return - X[ 1 ][ 0 ] / ( 2 * X[ 0 ][ 0 ] ) ;
+}
+#endif // 0
 
-//  inline
-//  vnl_vector< double >
-//  sub_pixel_2d( vcl_vector< vcl_vector< double > > const& responses,
-//                int idx1, int idx2 )
-//  {
-//    assert( responses.size() >= 3 );
-//    assert( responses[ 0 ].size() >= 3 );
-//    for ( unsigned i = 1; i < responses.size(); ++i ) {
-//      assert( responses[ i ].size() == responses[ 0 ].size() );
-//    }
+#if 0
+inline vnl_vector< double >
+sub_pixel_2d( vcl_vector< vcl_vector< double > > const& responses,
+              int idx1, int idx2 )
+{
+  assert( responses.size() >= 3 );
+  assert( responses[ 0 ].size() >= 3 );
+  for ( unsigned i = 1; i < responses.size(); ++i ) {
+    assert( responses[ i ].size() == responses[ 0 ].size() );
+  }
 
-//    if ( idx1 == 0 ) idx1 = 1;
-//    if ( idx2 == 0 ) idx2 = 1;
+  if ( idx1 == 0 ) idx1 = 1;
+  if ( idx2 == 0 ) idx2 = 1;
 
-//    if ( idx1 == (int)responses.size() - 1 )
-//      idx1 = responses.size() - 2;
-//    if ( idx2 == (int)responses.size() - 1 )
-//      idx2 = responses.size() - 2;
+  if ( idx1 == (int)responses.size() - 1 )
+    idx1 = responses.size() - 2;
+  if ( idx2 == (int)responses.size() - 1 )
+    idx2 = responses.size() - 2;
 
-//    // In 2D, I treat it as fitting a parabola in each direction ( d1
-//    // and d2 ), since we use the curvature along both direction to
-//    // approximate the principal curvature anyway.
+  // In 2D, I treat it as fitting a parabola in each direction ( d1
+  // and d2 ), since we use the curvature along both direction to
+  // approximate the principal curvature anyway.
 
-//    // let s be the similarity error, s = a r^2 + b r + c.
-//    // Use points index-1, index, index+1 to model the
-//    // parameters X = [a, b, c].
-//    vnl_matrix < double > A ( 3, 3 );
-//    vnl_matrix< double > S1 ( 3, 1 ) ;
-//    vnl_matrix< double > S2 ( 3, 1 ) ;
+  // let s be the similarity error, s = a r^2 + b r + c.
+  // Use points index-1, index, index+1 to model the
+  // parameters X = [a, b, c].
+  vnl_matrix < double > A ( 3, 3 );
+  vnl_matrix< double > S1 ( 3, 1 ) ;
+  vnl_matrix< double > S2 ( 3, 1 ) ;
 
-//    for ( int r = -1; r <= 1; ++r ) {
-//      A( r+1, 0 ) = r * r;
-//      A( r+1, 1 ) = r;
-//      A( r+1, 2 ) = 1;
-//      S1( r+1, 0 ) = responses[ idx1 + r][ idx2 ];
-//      S2( r+1, 0 ) = responses[ idx1 ][ idx2 + r ];
-//    }
+  for ( int r = -1; r <= 1; ++r ) {
+    A( r+1, 0 ) = r * r;
+    A( r+1, 1 ) = r;
+    A( r+1, 2 ) = 1;
+    S1( r+1, 0 ) = responses[ idx1 + r][ idx2 ];
+    S2( r+1, 0 ) = responses[ idx1 ][ idx2 + r ];
+  }
 
-//    vnl_vector< double > best_index( 2 );
-//    best_index[ 0 ] = est_sub_offset( A, S1 ) + idx1;
-//    best_index[ 1 ] = est_sub_offset( A, S2 ) + idx2;
+  vnl_vector< double > best_index( 2 );
+  best_index[ 0 ] = est_sub_offset( A, S1 ) + idx1;
+  best_index[ 1 ] = est_sub_offset( A, S2 ) + idx2;
 
-//    return best_index;
-//  }
+  return best_index;
+}
+#endif // 0
 
-inline
-double
-sub_pixel( vcl_vector< double > const& responses )
+inline double
+rgrl_matcher_pseudo_sub_pixel( vcl_vector< double > const& responses )
 {
   assert( responses.size() == 3 );
 
@@ -457,7 +456,7 @@ match_mapped_region( rgrl_feature_sptr                     mapped_feature,
         // We don't want to use the responses of the offsets that shift
         // the box across the boundary.
         if ( (!is_best_initialized || responses[i] < min_response ) &&
-             responses[ i ] != max_response_value )
+             responses[ i ] != rgrl_matcher_pseudo_max_response_value )
           {
             is_best_initialized = true;
             min_response = responses[i];
@@ -491,9 +490,9 @@ match_mapped_region( rgrl_feature_sptr                     mapped_feature,
       {
         // If one neighbor's response is not valid, calculate the second
         // derivative value of the other neighbor and sub_pixel is not necessary.
-        if ( responses[ index - 1 ] == max_response_value )
+        if ( responses[ index - 1 ] == rgrl_matcher_pseudo_max_response_value )
           index ++;
-        else if ( responses[ index + 1 ] == max_response_value )
+        else if ( responses[ index + 1 ] == rgrl_matcher_pseudo_max_response_value )
           index--;
         else
         {
@@ -501,7 +500,7 @@ match_mapped_region( rgrl_feature_sptr                     mapped_feature,
           responses_for_sub_pixel[ 0 ] = responses[ index - 1 ];
           responses_for_sub_pixel[ 1 ] = responses[ index ];
           responses_for_sub_pixel[ 2 ] = responses[ index + 1 ];
-          sub_offset = sub_pixel( responses_for_sub_pixel );
+          sub_offset = rgrl_matcher_pseudo_sub_pixel( responses_for_sub_pixel );
           assert( sub_offset + best_offset >= -max_offset );
           assert( sub_offset + best_offset <= max_offset );
 //        if ( sub_offset + best_offset < -max_offset ) best_offset = -max_offset;
@@ -518,11 +517,11 @@ match_mapped_region( rgrl_feature_sptr                     mapped_feature,
     // We need at least three valid values for calculating second derivatives.
     //
     if ( index >0 && index+1 < (int)responses.size() &&
-         responses[ index ] != max_response_value &&
+         responses[ index ] != rgrl_matcher_pseudo_max_response_value &&
          index + 1 <= 2*max_offset &&
          index - 1 >= -2*max_offset &&
-         responses[ index + 1 ] != max_response_value &&
-         responses[ index - 1 ] != max_response_value )
+         responses[ index + 1 ] != rgrl_matcher_pseudo_max_response_value &&
+         responses[ index - 1 ] != rgrl_matcher_pseudo_max_response_value )
          second_derivative = vnl_math_abs( responses[ index-1 ] + responses[ index+1 ]
                                            - 2 * responses[ index ] ); // should be positive
     // If one neighbor's response is not valid, calculate the second
@@ -556,7 +555,7 @@ match_mapped_region( rgrl_feature_sptr                     mapped_feature,
                                                     basis1 * off1 + basis2 * off2 );
 
         if ( ( !is_best_initialized || responses[i][j] < min_response )
-             && responses[i][j] != max_response_value )
+             && responses[i][j] != rgrl_matcher_pseudo_max_response_value )
           {
             is_best_initialized = true;
             min_response = responses[i][j];
@@ -587,8 +586,8 @@ match_mapped_region( rgrl_feature_sptr                     mapped_feature,
 
     if ( best_off1 == max_offset || best_off1 == -max_offset )
       sub_offset1 = best_off1;
-    else if ( responses[ idx1 - 1 ][ idx2 ] == max_response_value ||
-              responses[ idx1 + 1 ][ idx2 ] == max_response_value )
+    else if ( responses[ idx1 - 1 ][ idx2 ] == rgrl_matcher_pseudo_max_response_value ||
+              responses[ idx1 + 1 ][ idx2 ] == rgrl_matcher_pseudo_max_response_value )
     {
       sub_offset1 = idx1 - max_offset;
     }
@@ -598,7 +597,7 @@ match_mapped_region( rgrl_feature_sptr                     mapped_feature,
       responses_for_sub_pixel[ 0 ] = responses[ idx1 - 1 ][ idx2 ];
       responses_for_sub_pixel[ 1 ] = responses[ idx1 ][ idx2 ];
       responses_for_sub_pixel[ 2 ] = responses[ idx1 + 1 ][ idx2 ];
-      sub_offset1 = sub_pixel( responses_for_sub_pixel ) + idx1 - max_offset;
+      sub_offset1 = rgrl_matcher_pseudo_sub_pixel( responses_for_sub_pixel ) + idx1 - max_offset;
       // the sub_pixel here is used only for interpolation
       // if it's outside
       if ( sub_offset1 < -max_offset ) sub_offset1 = -max_offset;
@@ -618,8 +617,8 @@ match_mapped_region( rgrl_feature_sptr                     mapped_feature,
     double sub_offset2;
     if ( best_off2 == max_offset || best_off2 == -max_offset )
       sub_offset2 = best_off2;
-    else if ( responses[ idx1 ][ idx2 - 1 ] == max_response_value ||
-              responses[ idx1 ][ idx2 + 1 ] == max_response_value )
+    else if ( responses[ idx1 ][ idx2 - 1 ] == rgrl_matcher_pseudo_max_response_value ||
+              responses[ idx1 ][ idx2 + 1 ] == rgrl_matcher_pseudo_max_response_value )
     {
       sub_offset2 = idx2 - max_offset;
     }
@@ -629,7 +628,7 @@ match_mapped_region( rgrl_feature_sptr                     mapped_feature,
       responses_for_sub_pixel[ 0 ] = responses[ idx1 ][ idx2 - 1 ];
       responses_for_sub_pixel[ 1 ] = responses[ idx1 ][ idx2 ];
       responses_for_sub_pixel[ 2 ] = responses[ idx1 ][ idx2 + 1 ];
-      sub_offset2 = sub_pixel( responses_for_sub_pixel ) + idx2 - max_offset;
+      sub_offset2 = rgrl_matcher_pseudo_sub_pixel( responses_for_sub_pixel ) + idx2 - max_offset;
       if ( sub_offset2 < -max_offset ) sub_offset2 = -max_offset;
       if ( sub_offset2 > max_offset ) sub_offset2 = max_offset;
 
@@ -707,7 +706,7 @@ compute_response( vnl_double_2                  const& mapped_location, // FIXME
     //vcl_cout << " position : " << mapped_pixels[ i ].location << "  shift " << shift << vcl_endl;
     // Check if the location is inside the valid region
     if ( !in_range( to_image_, to_mask_, location ) )
-      return max_response_value;
+      return rgrl_matcher_pseudo_max_response_value;
 
     intensity = vil_bilin_interp(to_image_,  location[0], location[1] );
     a.push_back( (double)(mapped_pixels[i].intensity) );

@@ -15,16 +15,16 @@
 //=======================================================================
 
 // An optimisable rounding function
-inline unsigned char  l_round(double x, unsigned char  ) { return (unsigned char )(x<0?x-0.5:x+0.5);}
-inline   signed char  l_round(double x,   signed char  ) { return (  signed char )(x<0?x-0.5:x+0.5);}
-inline unsigned short l_round(double x, unsigned short ) { return (unsigned short)(x<0?x-0.5:x+0.5);}
-inline   signed short l_round(double x,   signed short ) { return (  signed short)(x<0?x-0.5:x+0.5);}
-inline unsigned int   l_round(double x, unsigned int   ) { return (unsigned int  )(x<0?x-0.5:x+0.5);}
-inline   signed int   l_round(double x,   signed int   ) { return (  signed int  )(x<0?x-0.5:x+0.5);}
-inline unsigned long  l_round(double x, unsigned long  ) { return (unsigned long )(x<0?x-0.5:x+0.5);}
-inline   signed long  l_round(double x,   signed long  ) { return (  signed long )(x<0?x-0.5:x+0.5);}
-inline   double       l_round(double x,   double       ) { return x; }
-inline    float       l_round(double x,    float       ) { return (float)x; }
+inline unsigned char  vl_round(double x, unsigned char  ) { return (unsigned char )(x<0?x-0.5:x+0.5);}
+inline   signed char  vl_round(double x,   signed char  ) { return (  signed char )(x<0?x-0.5:x+0.5);}
+inline unsigned short vl_round(double x, unsigned short ) { return (unsigned short)(x<0?x-0.5:x+0.5);}
+inline   signed short vl_round(double x,   signed short ) { return (  signed short)(x<0?x-0.5:x+0.5);}
+inline unsigned int   vl_round(double x, unsigned int   ) { return (unsigned int  )(x<0?x-0.5:x+0.5);}
+inline   signed int   vl_round(double x,   signed int   ) { return (  signed int  )(x<0?x-0.5:x+0.5);}
+inline unsigned long  vl_round(double x, unsigned long  ) { return (unsigned long )(x<0?x-0.5:x+0.5);}
+inline   signed long  vl_round(double x,   signed long  ) { return (  signed long )(x<0?x-0.5:x+0.5);}
+inline   double       vl_round(double x,   double       ) { return x; }
+inline    float       vl_round(double x,    float       ) { return (float)x; }
 
 //=======================================================================
 //: Smooth and subsample src_im to produce dest_im
@@ -54,28 +54,28 @@ void vil_gauss_filter_5tap(const srcT* src_im, vcl_ptrdiff_t src_istep, vcl_ptrd
     int x;
     int nx2 = nx-2;
     for (x=2;x<nx2;x++)
-      work_row[x] = l_round(  params.filt2() * src_col1[x*src_istep]
+      work_row[x] = vl_round( params.filt2() * src_col1[x*src_istep]
                             + params.filt1() * src_col2[x*src_istep]
                             + params.filt0() * src_col3[x*src_istep]
                             + params.filt1() * src_col4[x*src_istep]
                             + params.filt2() * src_col5[x*src_istep], (destT)0);
 
     // Now deal with edge effects :
-    work_row[0] = l_round(  params.filt_edge0() * src_col3[0]
+    work_row[0] = vl_round( params.filt_edge0() * src_col3[0]
                           + params.filt_edge1() * src_col4[0]
                           + params.filt_edge2() * src_col5[0], (destT)0);
 
-    work_row[1] = l_round(  params.filt_pen_edge_n1() * src_col2[src_istep]
+    work_row[1] = vl_round( params.filt_pen_edge_n1() * src_col2[src_istep]
                           + params.filt_pen_edge0() * src_col3[src_istep]
                           + params.filt_pen_edge1() * src_col4[src_istep]
                           + params.filt_pen_edge2() * src_col5[src_istep], (destT)0);
 
-    work_row[nx-2] = l_round(  params.filt_pen_edge2() * src_col1[(nx-2)*src_istep]
+    work_row[nx-2] = vl_round( params.filt_pen_edge2() * src_col1[(nx-2)*src_istep]
                              + params.filt_pen_edge1() * src_col2[(nx-2)*src_istep]
                              + params.filt_pen_edge0() * src_col3[(nx-2)*src_istep]
                              + params.filt_pen_edge_n1() * src_col4[(nx-2)*src_istep], (destT)0);
 
-    work_row[nx-1] = l_round(  params.filt_edge2() * src_col1[(nx-1)*src_istep]
+    work_row[nx-1] = vl_round( params.filt_edge2() * src_col1[(nx-1)*src_istep]
                              + params.filt_edge1() * src_col2[(nx-1)*src_istep]
                              + params.filt_edge0() * src_col3[(nx-1)*src_istep], (destT)0);
   }
@@ -93,7 +93,7 @@ void vil_gauss_filter_5tap(const srcT* src_im, vcl_ptrdiff_t src_istep, vcl_ptrd
     const destT* work_row5  = work_row3 + 2 * work_jstep;
 
     for (unsigned int x=0; x<nx; x++)
-      dest_row[x*dest_istep] = l_round(  params.filt2() * work_row1[x]
+      dest_row[x*dest_istep] = vl_round( params.filt2() * work_row1[x]
                                        + params.filt1() * work_row2[x]
                                        + params.filt0() * work_row3[x]
                                        + params.filt1() * work_row4[x]
@@ -119,21 +119,21 @@ void vil_gauss_filter_5tap(const srcT* src_im, vcl_ptrdiff_t src_istep, vcl_ptrd
 
   for (unsigned int x=0;x<nx;x++)
   {
-    dest_row_top[x*dest_istep] = l_round(  params.filt_edge0() * work_row_top_5[x]
+    dest_row_top[x*dest_istep] = vl_round( params.filt_edge0() * work_row_top_5[x]
                                          + params.filt_edge1() * work_row_top_4[x]
                                          + params.filt_edge2() * work_row_top_3[x], (destT)0);
 
-    dest_row_next_top[x*dest_istep] = l_round(  params.filt_pen_edge2() * work_row_top_2[x]
+    dest_row_next_top[x*dest_istep] = vl_round( params.filt_pen_edge2() * work_row_top_2[x]
                                               + params.filt_pen_edge1() * work_row_top_3[x]
                                               + params.filt_pen_edge0() * work_row_top_4[x]
                                               + params.filt_pen_edge_n1()*work_row_top_5[x], (destT)0);
 
-    dest_row_next_bottom[x*dest_istep] = l_round(  params.filt_pen_edge2() * work_row_bottom_4[x]
+    dest_row_next_bottom[x*dest_istep] = vl_round( params.filt_pen_edge2() * work_row_bottom_4[x]
                                                  + params.filt_pen_edge1() * work_row_bottom_3[x]
                                                  + params.filt_pen_edge0() * work_row_bottom_2[x]
                                                  + params.filt_pen_edge_n1()*work_row_bottom_1[x], (destT)0);
 
-    dest_row_bottom[x*dest_istep] = l_round(  params.filt_edge2() * work_row_bottom_3[x]
+    dest_row_bottom[x*dest_istep] = vl_round( params.filt_edge2() * work_row_bottom_3[x]
                                             + params.filt_edge1() * work_row_bottom_2[x]
                                             + params.filt_edge0() * work_row_bottom_1[x], (destT)0);
   }
@@ -166,7 +166,7 @@ void vil_gauss_filter_5tap(const vil_image_view<srcT>& src_im,
     {
       for (unsigned p=0;p<n_planes;++p)
         for (unsigned j=0;j<nj;++j)
-          work(0,j,p) = l_round(src_im(0,j,p), destT());
+          work(0,j,p) = vl_round(src_im(0,j,p), destT());
     }
     else if (ni==2)
     {
@@ -175,8 +175,8 @@ void vil_gauss_filter_5tap(const vil_image_view<srcT>& src_im,
       for (unsigned p=0;p<n_planes;++p)
         for (unsigned j=0;j<nj;++j)
         {
-          work(0,j,p) = l_round(k0*src_im(0,j,p) + k1*src_im(1,j,p), destT());
-          work(1,j,p) = l_round(k1*src_im(0,j,p) + k0*src_im(1,j,p), destT());
+          work(0,j,p) = vl_round(k0*src_im(0,j,p) + k1*src_im(1,j,p), destT());
+          work(1,j,p) = vl_round(k1*src_im(0,j,p) + k0*src_im(1,j,p), destT());
         }
     }
     else if (ni==3)
@@ -188,9 +188,9 @@ void vil_gauss_filter_5tap(const vil_image_view<srcT>& src_im,
       for (unsigned p=0;p<n_planes;++p)
         for (unsigned j=0;j<nj;++j)
         {
-          work(0,j,p) = l_round(ke0*src_im(0,j,p) + ke1*src_im(1,j,p)                    , destT());
-          work(1,j,p) = l_round(k1 *src_im(0,j,p) + k0 *src_im(1,j,p) + k1 *src_im(2,j,p), destT());
-          work(2,j,p) = l_round(                    ke1*src_im(1,j,p) + ke0*src_im(2,j,p), destT());
+          work(0,j,p) = vl_round(ke0*src_im(0,j,p) + ke1*src_im(1,j,p)                    , destT());
+          work(1,j,p) = vl_round(k1 *src_im(0,j,p) + k0 *src_im(1,j,p) + k1 *src_im(2,j,p), destT());
+          work(2,j,p) = vl_round(                    ke1*src_im(1,j,p) + ke0*src_im(2,j,p), destT());
         }
     }
     else if (ni==4)
@@ -205,10 +205,10 @@ void vil_gauss_filter_5tap(const vil_image_view<srcT>& src_im,
       for (unsigned p=0;p<n_planes;++p)
         for (unsigned j=0;j<nj;++j)
         {
-          work(0,j,p) = l_round(ke0 *src_im(0,j,p) + ke1*src_im(1,j,p) + ke2*src_im(2,j,p)                     , destT());
-          work(1,j,p) = l_round(kpn1*src_im(0,j,p) + kp0*src_im(1,j,p) + kp1*src_im(2,j,p) + kp2 *src_im(3,j,p), destT());
-          work(2,j,p) = l_round(kp2 *src_im(0,j,p) + kp1*src_im(1,j,p) + kp0*src_im(2,j,p) + kpn1*src_im(3,j,p), destT());
-          work(3,j,p) = l_round(                     ke2*src_im(1,j,p) + ke1*src_im(2,j,p) + ke0 *src_im(3,j,p), destT());
+          work(0,j,p) = vl_round(ke0 *src_im(0,j,p) + ke1*src_im(1,j,p) + ke2*src_im(2,j,p)                     , destT());
+          work(1,j,p) = vl_round(kpn1*src_im(0,j,p) + kp0*src_im(1,j,p) + kp1*src_im(2,j,p) + kp2 *src_im(3,j,p), destT());
+          work(2,j,p) = vl_round(kp2 *src_im(0,j,p) + kp1*src_im(1,j,p) + kp0*src_im(2,j,p) + kpn1*src_im(3,j,p), destT());
+          work(3,j,p) = vl_round(                     ke2*src_im(1,j,p) + ke1*src_im(2,j,p) + ke0 *src_im(3,j,p), destT());
         }
     }
     else if (ni>4)
@@ -229,8 +229,8 @@ void vil_gauss_filter_5tap(const vil_image_view<srcT>& src_im,
       for (unsigned p=0;p<n_planes;++p)
         for (unsigned i=0;i<ni;++i)
         {
-          dest_im(i,0,p) = l_round(k0 * work(i,0,p) + k1 * work(i,1,p), destT());
-          dest_im(i,1,p) = l_round(k1 * work(i,0,p) + k0 * work(i,1,p), destT());
+          dest_im(i,0,p) = vl_round(k0 * work(i,0,p) + k1 * work(i,1,p), destT());
+          dest_im(i,1,p) = vl_round(k1 * work(i,0,p) + k0 * work(i,1,p), destT());
         }
     }
     else if (nj==3)
@@ -242,9 +242,9 @@ void vil_gauss_filter_5tap(const vil_image_view<srcT>& src_im,
       for (unsigned p=0;p<n_planes;++p)
         for (unsigned i=0;i<ni;++i)
         {
-          dest_im(i,0,p) = l_round(ke0*work(i,0,p) + ke1*work(i,1,p)                  , destT());
-          dest_im(i,1,p) = l_round(k1 *work(i,0,p) + k0 *work(i,1,p) + k1 *work(i,2,p), destT());
-          dest_im(i,2,p) = l_round(                  ke1*work(i,1,p) + ke0*work(i,2,p), destT());
+          dest_im(i,0,p) = vl_round(ke0*work(i,0,p) + ke1*work(i,1,p)                  , destT());
+          dest_im(i,1,p) = vl_round(k1 *work(i,0,p) + k0 *work(i,1,p) + k1 *work(i,2,p), destT());
+          dest_im(i,2,p) = vl_round(                  ke1*work(i,1,p) + ke0*work(i,2,p), destT());
         }
     }
     else if (nj==4)
@@ -259,10 +259,10 @@ void vil_gauss_filter_5tap(const vil_image_view<srcT>& src_im,
       for (unsigned p=0;p<n_planes;++p)
         for (unsigned i=0;i<ni;++i)
         {
-          dest_im(i,0,p) = l_round(ke0 *work(i,0,p) + ke1*work(i,1,p) + ke2*work(i,2,p)                   , destT());
-          dest_im(i,1,p) = l_round(kpn1*work(i,0,p) + kp0*work(i,1,p) + kp1*work(i,2,p) + kp2 *work(i,3,p), destT());
-          dest_im(i,2,p) = l_round(kp2 *work(i,0,p) + kp1*work(i,1,p) + kp0*work(i,2,p) + kpn1*work(i,3,p), destT());
-          dest_im(i,3,p) = l_round(                   ke2*work(i,1,p) + ke1*work(i,2,p) + ke0 *work(i,3,p), destT());
+          dest_im(i,0,p) = vl_round(ke0 *work(i,0,p) + ke1*work(i,1,p) + ke2*work(i,2,p)                   , destT());
+          dest_im(i,1,p) = vl_round(kpn1*work(i,0,p) + kp0*work(i,1,p) + kp1*work(i,2,p) + kp2 *work(i,3,p), destT());
+          dest_im(i,2,p) = vl_round(kp2 *work(i,0,p) + kp1*work(i,1,p) + kp0*work(i,2,p) + kpn1*work(i,3,p), destT());
+          dest_im(i,3,p) = vl_round(                   ke2*work(i,1,p) + ke1*work(i,2,p) + ke0 *work(i,3,p), destT());
         }
     }
     else if (nj>4)

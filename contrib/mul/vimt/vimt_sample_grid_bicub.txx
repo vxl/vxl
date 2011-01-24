@@ -13,8 +13,8 @@
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_vector_2d.h>
 
-inline bool vimt_grid_corner_in_image(const vgl_point_2d<double>& p,
-                                      const vil_image_view_base& image)
+inline bool vimt_grid_bicub_corner_in_image(const vgl_point_2d<double>& p,
+                                            const vil_image_view_base& image)
 {
   if (p.x()<1) return false;
   if (p.x()<1) return false;
@@ -63,10 +63,10 @@ void vimt_sample_grid_bicub(vnl_vector<vecType>& vec,
   // Check that all the grid points are within the image.
   const vimt_transform_2d& w2i = image.world2im();
   bool all_in_image =
-      vimt_grid_corner_in_image(im_p0,image.image()) &&
-      vimt_grid_corner_in_image(im_p1,image.image()) &&
-      vimt_grid_corner_in_image(im_p2,image.image()) &&
-      vimt_grid_corner_in_image(w2i(p0+(n1-1)*u+(n2-1)*v),image.image());
+      vimt_grid_bicub_corner_in_image(im_p0,image.image()) &&
+      vimt_grid_bicub_corner_in_image(im_p1,image.image()) &&
+      vimt_grid_bicub_corner_in_image(im_p2,image.image()) &&
+      vimt_grid_bicub_corner_in_image(w2i(p0+(n1-1)*u+(n2-1)*v),image.image());
 
   vgl_point_2d<double> p1=p0;
 

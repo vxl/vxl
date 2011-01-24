@@ -21,9 +21,9 @@
 #pragma warning( disable : 4800 )
 #endif
 
-//: This function should not be the same in bicub and bilin
-inline bool vil_grid_corner_in_image(double x0, double y0,
-                                     const vil_image_view_base& image)
+//: This function should not be the same in nearest, bicub and bilin
+inline bool vil_resample_nearest_corner_in_image(double x0, double y0,
+                                                 const vil_image_view_base& image)
 {
   return x0 >= 0.0
       && y0 >= 0.0
@@ -43,11 +43,11 @@ void vil_resample_nearest(const vil_image_view<sType>& src_image,
                           double x0, double y0, double dx1, double dy1,
                           double dx2, double dy2, int n1, int n2)
 {
-  bool all_in_image =    vil_grid_corner_in_image(x0,y0,src_image)
-                      && vil_grid_corner_in_image(x0+(n1-1)*dx1,y0+(n1-1)*dy1,src_image)
-                      && vil_grid_corner_in_image(x0+(n2-1)*dx2,y0+(n2-1)*dy2,src_image)
-                      && vil_grid_corner_in_image(x0+(n1-1)*dx1+(n2-1)*dx2,
-                                                  y0+(n1-1)*dy1+(n2-1)*dy2,src_image);
+  bool all_in_image =    vil_resample_nearest_corner_in_image(x0,y0,src_image)
+                      && vil_resample_nearest_corner_in_image(x0+(n1-1)*dx1,y0+(n1-1)*dy1,src_image)
+                      && vil_resample_nearest_corner_in_image(x0+(n2-1)*dx2,y0+(n2-1)*dy2,src_image)
+                      && vil_resample_nearest_corner_in_image(x0+(n1-1)*dx1+(n2-1)*dx2,
+                                                              y0+(n1-1)*dy1+(n2-1)*dy2,src_image);
 #ifdef DEBUG
   // corners
   vcl_cout<<"src_image= "<<src_image<<vcl_endl
@@ -166,11 +166,11 @@ void vil_resample_nearest_edge_extend(
   double x0, double y0, double dx1, double dy1,
   double dx2, double dy2, int n1, int n2)
 {
-  bool all_in_image =    vil_grid_corner_in_image(x0,y0,src_image)
-                      && vil_grid_corner_in_image(x0+(n1-1)*dx1,y0+(n1-1)*dy1,src_image)
-                      && vil_grid_corner_in_image(x0+(n2-1)*dx2,y0+(n2-1)*dy2,src_image)
-                      && vil_grid_corner_in_image(x0+(n1-1)*dx1+(n2-1)*dx2,
-                                                  y0+(n1-1)*dy1+(n2-1)*dy2,src_image);
+  bool all_in_image =    vil_resample_nearest_corner_in_image(x0,y0,src_image)
+                      && vil_resample_nearest_corner_in_image(x0+(n1-1)*dx1,y0+(n1-1)*dy1,src_image)
+                      && vil_resample_nearest_corner_in_image(x0+(n2-1)*dx2,y0+(n2-1)*dy2,src_image)
+                      && vil_resample_nearest_corner_in_image(x0+(n1-1)*dx1+(n2-1)*dx2,
+                                                              y0+(n1-1)*dy1+(n2-1)*dy2,src_image);
 #ifdef DEBUG
   // corners
   vcl_cout<<"src_image= "<<src_image<<vcl_endl

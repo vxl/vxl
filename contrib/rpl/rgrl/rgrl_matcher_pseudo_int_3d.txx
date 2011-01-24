@@ -18,46 +18,41 @@
 #include <vbl/vbl_array_3d.h>
 #include <vcl_cassert.h>
 
-static const double max_response_value = 1.0e30;
+static const double rgrl_matcher_pseudo_int_3d_max_response_value = 1.0e30;
 
 //#define MY_DEBUG
 #if defined ( MY_DEBUG )
 #  include <vcl_iostream.h>
-// not used? #  include <vcl_fstream.h>
-// not used? #  include <vcl_sstream.h>
-#  define DBG(x) x
+#  define DBGi(x) x
 #else
-#  define DBG(x)
+#  define DBGi(x)
 #endif
 
 // convert pixel points to physical points
-inline
-void
-pixel_to_physical( vnl_int_3    const& pixel_loc,
-                   vnl_double_3      & point,
-                   vnl_double_3 const& spacing_ratio )
+inline void
+rgrl_matcher_pseudo_int_3d_pixel_to_physical( vnl_int_3    const& pixel_loc,
+                                              vnl_double_3      & point,
+                                              vnl_double_3 const& spacing_ratio )
 {
   for ( unsigned i = 0; i < 3; ++i )
     point[ i ] = spacing_ratio[ i ] * double(pixel_loc[ i ]);
 }
 
 // convert physical points to pixel points
-inline
-void
-physical_to_pixel( vnl_double_3 const& point,
-                   vnl_int_3         & pixel_loc,
-                   vnl_double_3 const& spacing_ratio )
+inline void
+rgrl_matcher_pseudo_int_3d_physical_to_pixel( vnl_double_3 const& point,
+                                              vnl_int_3         & pixel_loc,
+                                              vnl_double_3 const& spacing_ratio )
 {
   for ( unsigned i = 0; i < 3; ++i )
     pixel_loc[ i ] = (int) vnl_math_rnd( point[ i ] / spacing_ratio[ i ] );
 }
 
 // convert physical points to pixel points
-inline
-void
-physical_to_pixel( vnl_double_3 const& point,
-                   vnl_double_3      & pixel_loc,
-                   vnl_double_3 const& spacing_ratio )
+inline void
+rgrl_matcher_pseudo_int_3d_physical_to_pixel( vnl_double_3 const& point,
+                                              vnl_double_3      & pixel_loc,
+                                              vnl_double_3 const& spacing_ratio )
 {
   for ( unsigned i = 0; i < 3; ++i )
     pixel_loc[ i ] = point[ i ] / spacing_ratio[ i ] ;
@@ -65,16 +60,16 @@ physical_to_pixel( vnl_double_3 const& point,
 
 // check if the location is inside the mask and the image.
 template <class PixelType>
-inline
-bool
-pixel_in_range( vil3d_image_view< PixelType > const& image,
-                rgrl_mask_sptr const& mask,
-                vnl_int_3 const& location )
+inline bool
+rgrl_matcher_pseudo_int_3d_pixel_in_range( vil3d_image_view< PixelType > const& image,
+                                           rgrl_mask_sptr const& mask,
+                                           vnl_int_3 const& location )
 {
-//    vnl_vector< double > loc_dbl( location.size() );
-//    for ( unsigned i = 0; i < location.size(); ++i )
-//      loc_dbl[ i ] = location[ i ];
-
+#if 0
+  vnl_vector< double > loc_dbl( location.size() );
+  for ( unsigned i = 0; i < location.size(); ++i )
+    loc_dbl[ i ] = location[ i ];
+#endif
   // mask is only 2D,
   // to be sure, check all dim
   if ( location[ 0 ] < 0 || location[ 0 ] > (int)image.ni()-1 ||
@@ -96,16 +91,15 @@ pixel_in_range( vil3d_image_view< PixelType > const& image,
 }
 
 template <class PixelType>
-inline
-bool
-physical_in_range( vil3d_image_view< PixelType > const& image,
-                   rgrl_mask_sptr const& mask,
-                   vnl_double_3 const& location,
-                   vnl_double_3 const& spacing_ratio )
+inline bool
+rgrl_matcher_pseudo_int_3d_physical_in_range( vil3d_image_view< PixelType > const& image,
+                                              rgrl_mask_sptr const& mask,
+                                              vnl_double_3 const& location,
+                                              vnl_double_3 const& spacing_ratio )
 {
   vnl_double_3 pixel_loc;
-  physical_to_pixel( location, pixel_loc, spacing_ratio );
-  // cannot just call pixel_in_range, because the coordinate here is double type
+  rgrl_matcher_pseudo_int_3d_physical_to_pixel( location, pixel_loc, spacing_ratio );
+  // cannot just call rgrl_matcher_pseudo_int_3d_pixel_in_range, because the coordinate here is double type
 
   // mask is only 2D,
   // to be sure, check all dim
@@ -192,7 +186,7 @@ compute_matches( rgrl_feature_set const&    from_set,
 
      // if the location is not inside the valid region
      // set the weight = 0
-     if ( !physical_in_range( to_image_, mask_, mapped_feature->location(), to_spacing_ratio_ ) ) {
+     if ( !rgrl_matcher_pseudo_int_3d_physical_in_range( to_image_, mask_, mapped_feature->location(), to_spacing_ratio_ ) ) {
        //  Make a dummy vector of intensity weights.
        // vcl_vector< double > dummy_intensity_weights( 0 ); //CT: not needed now
        // vcl_vector< double > match_weights( 0 );
@@ -211,7 +205,7 @@ compute_matches( rgrl_feature_set const&    from_set,
      // associated intensity.
      mapped_pixels.clear();
 
-     DBG(
+     DBGi(
        if ( (*fitr)->is_type( rgrl_feature_trace_region::type_id() ) ) {
          vcl_cout << "\nfrom :\n" << (*fitr)->location()
                   << " normal: "
@@ -319,23 +313,23 @@ map_region_intensities( vcl_vector< vnl_vector<int> > const& pixel_locations,
   {
     current_pixel_loc = pixel_locations[i];
     // Check if the location is inside the valid region
-    if ( !pixel_in_range( from_image_, mask_, current_pixel_loc ) )
+    if ( !rgrl_matcher_pseudo_int_3d_pixel_in_range( from_image_, mask_, current_pixel_loc ) )
       continue;
 
     //  Copy the int pixel locations to doubles.  Yuck.
-    pixel_to_physical( current_pixel_loc, physical_loc, from_spacing_ratio_ );
+    rgrl_matcher_pseudo_int_3d_pixel_to_physical( current_pixel_loc, physical_loc, from_spacing_ratio_ );
 
     // map the pixel, in the physical coordinates, and then convert
     // it to the pixel cooridinates.
     vnl_double_3 mapped_physical_pt;
     trans.map_location( physical_loc.as_ref(), mapped_physical_pt.as_ref().non_const() );
     // Check if the mapped location is inside the valid region
-    if ( !physical_in_range( to_image_, mask_, mapped_physical_pt, to_spacing_ratio_ ) )
+    if ( !rgrl_matcher_pseudo_int_3d_physical_in_range( to_image_, mask_, mapped_physical_pt, to_spacing_ratio_ ) )
       continue;
 
     // store
     mapped_pt.physical_ = mapped_physical_pt;
-    physical_to_pixel( mapped_physical_pt, mapped_pt.pixel_, to_spacing_ratio_ );
+    rgrl_matcher_pseudo_int_3d_physical_to_pixel( mapped_physical_pt, mapped_pt.pixel_, to_spacing_ratio_ );
     // only use the first plane/channel
     mapped_pt.in_ = from_image_( current_pixel_loc[0], current_pixel_loc[1], current_pixel_loc[2], 0 );
     direct_mapped_pts.push_back( mapped_pt );
@@ -414,9 +408,8 @@ map_region_intensities( vcl_vector< vnl_vector<int> > const& pixel_locations,
   DebugMacro(1, "Total mapped pixels at integer locations: " << mapped_pixels.size() << vcl_endl );
 }
 
-inline
-double
-sub_pixel( vcl_vector< double > const& responses )
+inline double
+rgrl_matcher_pseudo_int_3d_sub_pixel( vcl_vector< double > const& responses )
 {
   assert( 0 ); // no need to use SVD
   assert( responses.size() == 3 );
@@ -450,7 +443,7 @@ sub_pixel( vcl_vector< double > const& responses )
   // r = -b / 2a
   double best_index =  -X[ 1 ][ 0 ] / ( 2 * X[ 0 ][ 0 ] );
 
-  DBG( vcl_cout << " best_index = " << best_index << '\n' ) ;
+  DBGi( vcl_cout << " best_index = " << best_index << '\n' ) ;
 
   assert( best_index <= 1 && best_index >= -1 );
 
@@ -505,7 +498,7 @@ slide_window(rgrl_feature_sptr         mapped_feature,
   {
     vnl_double_3 physical_basis = normal_space.get_column(0);
     vnl_double_3 pixel_basis;
-    physical_to_pixel( physical_basis, pixel_basis, to_spacing_ratio_ );
+    rgrl_matcher_pseudo_int_3d_physical_to_pixel( physical_basis, pixel_basis, to_spacing_ratio_ );
 
     // sample pixel(integer) locations
     vcl_vector< discrete_shift_node > discrete_offsets;
@@ -539,7 +532,7 @@ slide_window(rgrl_feature_sptr         mapped_feature,
         // We don't want to use the responses of the offsets that shift
         // the box across the boundary.
         if ( (!is_best_initialized || responses[i] < min_response ) &&
-             responses[ i ] != max_response_value )
+             responses[ i ] != rgrl_matcher_pseudo_int_3d_max_response_value )
         {
           is_best_initialized = true;
           min_response = responses[i];
@@ -584,19 +577,19 @@ slide_window(rgrl_feature_sptr         mapped_feature,
     // a3 = 2/(d2*(d1+d2))
     // If one neighbor's response is not valid, calculate the second
     // derivative value of the other neighbor
-    if ( responses[ index - 1 ] == max_response_value )
+    if ( responses[ index - 1 ] == rgrl_matcher_pseudo_int_3d_max_response_value )
       index ++;
-    else if ( responses[ index + 1 ] == max_response_value )
+    else if ( responses[ index + 1 ] == rgrl_matcher_pseudo_int_3d_max_response_value )
       index--;
 
     double a1, a2, a3, d1, d2, sumd;
-    //assert( responses[ index ] != max_response_value );
+    //assert( responses[ index ] != rgrl_matcher_pseudo_int_3d_max_response_value );
     if ( index > 0 && index+1 < (int)responses.size() &&
-         responses[ index ] != max_response_value &&
+         responses[ index ] != rgrl_matcher_pseudo_int_3d_max_response_value &&
          index + 1 <= 2*max_offset &&
          index - 1 >= -2*max_offset &&
-         responses[ index + 1 ] != max_response_value &&
-         responses[ index - 1 ] != max_response_value )
+         responses[ index + 1 ] != rgrl_matcher_pseudo_int_3d_max_response_value &&
+         responses[ index - 1 ] != rgrl_matcher_pseudo_int_3d_max_response_value )
     {
       d2 = discrete_offsets[ index+1 ].step_ - discrete_offsets[ index ].step_;
       d1 = discrete_offsets[ index ].step_ - discrete_offsets[ index-1 ].step_;
@@ -659,7 +652,7 @@ slide_window(rgrl_feature_sptr         mapped_feature,
         responses(i,j) = this -> compute_response( mapped_pixels, offset1[i].shift_ + offset2[j].shift_ );
 
         if ( ( !is_best_initialized || responses(i,j) < min_response )
-             && responses(i,j) != max_response_value )
+             && responses(i,j) != rgrl_matcher_pseudo_int_3d_max_response_value )
         {
                 is_best_initialized = true;
                 min_response = responses(i,j);
@@ -706,8 +699,8 @@ slide_window(rgrl_feature_sptr         mapped_feature,
 
     if ( best_off1 == max_offset || best_off1 == -max_offset )
   sub_offset1 = best_off1;
-    else if ( responses[ idx1 - 1 ][ idx2 ] == max_response_value ||
-              responses[ idx1 + 1 ][ idx2 ] == max_response_value )
+    else if ( responses[ idx1 - 1 ][ idx2 ] == rgrl_matcher_pseudo_int_3d_max_response_value ||
+              responses[ idx1 + 1 ][ idx2 ] == rgrl_matcher_pseudo_int_3d_max_response_value )
     {
       sub_offset1 = idx1 - max_offset;
     }
@@ -717,13 +710,13 @@ slide_window(rgrl_feature_sptr         mapped_feature,
       responses_for_sub_pixel[ 0 ] = responses[ idx1 - 1 ][ idx2 ];
       responses_for_sub_pixel[ 1 ] = responses[ idx1 ][ idx2 ];
       responses_for_sub_pixel[ 2 ] = responses[ idx1 + 1 ][ idx2 ];
-      sub_offset1 = sub_pixel( responses_for_sub_pixel ) + idx1 - max_offset;
+      sub_offset1 = rgrl_matcher_pseudo_int_3d_sub_pixel( responses_for_sub_pixel ) + idx1 - max_offset;
       // the sub_pixel here is used only for interpolation
       // if it's outside
       if ( sub_offset1 < -max_offset ) sub_offset1 = -max_offset;
       if ( sub_offset1 > max_offset ) sub_offset1 = max_offset;
-      DBG( vcl_cout << " sub_offset1 = " << sub_offset1 << " in [ "
-                    << -max_offset << " , " << max_offset << " ] " << vcl_endl );
+      DBGi( vcl_cout << " sub_offset1 = " << sub_offset1 << " in [ "
+                     << -max_offset << " , " << max_offset << " ] " << vcl_endl );
     }
 
     double second_d1 = vnl_math_abs( responses[ idx1-1 ][ idx2 ] + responses[ idx1+1 ][ idx2 ]
@@ -737,8 +730,8 @@ slide_window(rgrl_feature_sptr         mapped_feature,
     double sub_offset2;
     if ( best_off2 == max_offset || best_off2 == -max_offset )
   sub_offset2 = best_off2;
-    else if ( responses[ idx1 ][ idx2 - 1 ] == max_response_value ||
-              responses[ idx1 ][ idx2 + 1 ] == max_response_value )
+    else if ( responses[ idx1 ][ idx2 - 1 ] == rgrl_matcher_pseudo_int_3d_max_response_value ||
+              responses[ idx1 ][ idx2 + 1 ] == rgrl_matcher_pseudo_int_3d_max_response_value )
     {
       sub_offset2 = idx2 - max_offset;
     }
@@ -748,11 +741,11 @@ slide_window(rgrl_feature_sptr         mapped_feature,
       responses_for_sub_pixel[ 0 ] = responses[ idx1 ][ idx2 - 1 ];
       responses_for_sub_pixel[ 1 ] = responses[ idx1 ][ idx2 ];
       responses_for_sub_pixel[ 2 ] = responses[ idx1 ][ idx2 + 1 ];
-      sub_offset2 = sub_pixel( responses_for_sub_pixel ) + idx2 - max_offset;
+      sub_offset2 = rgrl_matcher_pseudo_int_3d_sub_pixel( responses_for_sub_pixel ) + idx2 - max_offset;
       if ( sub_offset2 < -max_offset ) sub_offset2 = -max_offset;
       if ( sub_offset2 > max_offset ) sub_offset2 = max_offset;
-      DBG( vcl_cout << " sub_offset2 = " << sub_offset2 << " in [ "
-                    << -max_offset << " , " << max_offset << " ] " << vcl_endl; );
+      DBGi( vcl_cout << " sub_offset2 = " << sub_offset2 << " in [ "
+                     << -max_offset << " , " << max_offset << " ] " << vcl_endl; );
     }
 
     double second_d2 = vnl_math_abs( responses[ idx1 ][ idx2-1 ] + responses[ idx1 ][ idx2+1 ]
@@ -760,7 +753,7 @@ slide_window(rgrl_feature_sptr         mapped_feature,
 
     second_derivative = vnl_math_min( second_d1, second_d2 );
     match_location = mapped_location + basis1 * sub_offset1 + basis2 * sub_offset2;
-    DBG( vcl_cout << "best match :\n" << match_location << vcl_endl );
+    DBGi( vcl_cout << "best match :\n" << match_location << vcl_endl );
 #endif // 0
   }
   else {
@@ -820,9 +813,9 @@ compute_response( rgrl_mapped_pixel_vector_type const& mapped_pixels,
     loc = mapped_pixels[i].location + shift;
     // Check if the location is inside the valid region,
     // if not, we don't use the response of this shift
-    if ( !pixel_in_range( to_image_, mask_, loc ) ) {
+    if ( !rgrl_matcher_pseudo_int_3d_pixel_in_range( to_image_, mask_, loc ) ) {
       DebugMacro(2, "out of range: " << loc << " ( shift: " << shift << " )\n" );
-      return max_response_value;
+      return rgrl_matcher_pseudo_int_3d_max_response_value;
     }
 
     // from mapped_pixels

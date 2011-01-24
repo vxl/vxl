@@ -14,8 +14,9 @@
 #include "vil_resample_bicub.h"
 #include <vil/vil_bicub_interp.h>
 
-inline bool vil_grid_corner_plus1_in_image(double x0, double y0,
-                                           const vil_image_view_base& image)
+//: This function should not be the same in bicub and bilin
+inline bool vil_resample_bicub_corner_in_image(double x0, double y0,
+                                               const vil_image_view_base& image)
 {
   return x0 >= 1
       && y0 >= 1
@@ -35,11 +36,11 @@ void vil_resample_bicub(const vil_image_view<sType>& src_image,
                         double x0, double y0, double dx1, double dy1,
                         double dx2, double dy2, int n1, int n2)
 {
-  bool all_in_image =    vil_grid_corner_plus1_in_image(x0,y0,src_image)
-                      && vil_grid_corner_plus1_in_image(x0+(n1-1)*dx1,y0+(n1-1)*dy1,src_image)
-                      && vil_grid_corner_plus1_in_image(x0+(n2-1)*dx2,y0+(n2-1)*dy2,src_image)
-                      && vil_grid_corner_plus1_in_image(x0+(n1-1)*dx1+(n2-1)*dx2,
-                                                        y0+(n1-1)*dy1+(n2-1)*dy2,src_image);
+  bool all_in_image =    vil_resample_bicub_corner_in_image(x0,y0,src_image)
+                      && vil_resample_bicub_corner_in_image(x0+(n1-1)*dx1,y0+(n1-1)*dy1,src_image)
+                      && vil_resample_bicub_corner_in_image(x0+(n2-1)*dx2,y0+(n2-1)*dy2,src_image)
+                      && vil_resample_bicub_corner_in_image(x0+(n1-1)*dx1+(n2-1)*dx2,
+                                                            y0+(n1-1)*dy1+(n2-1)*dy2,src_image);
 
   const unsigned ni = src_image.ni();
   const unsigned nj = src_image.nj();
@@ -120,7 +121,6 @@ void vil_resample_bicub(const vil_image_view<sType>& src_image,
 }
 
 
-
 //: Sample grid of points in one image and place in another, using bicubic interpolation.
 //  dest_image(i,j,p) is sampled from the src_image at
 //  (x0+i.dx1+j.dx2,y0+i.dy1+j.dy2), where i=[0..n1-1], j=[0..n2-1]
@@ -133,11 +133,11 @@ void vil_resample_bicub_edge_extend(const vil_image_view<sType>& src_image,
                                     double x0, double y0, double dx1, double dy1,
                                     double dx2, double dy2, int n1, int n2)
 {
-  bool all_in_image =    vil_grid_corner_plus1_in_image(x0,y0,src_image)
-                      && vil_grid_corner_plus1_in_image(x0+(n1-1)*dx1,y0+(n1-1)*dy1,src_image)
-                      && vil_grid_corner_plus1_in_image(x0+(n2-1)*dx2,y0+(n2-1)*dy2,src_image)
-                      && vil_grid_corner_plus1_in_image(x0+(n1-1)*dx1+(n2-1)*dx2,
-                                                        y0+(n1-1)*dy1+(n2-1)*dy2,src_image);
+  bool all_in_image =    vil_resample_bicub_corner_in_image(x0,y0,src_image)
+                      && vil_resample_bicub_corner_in_image(x0+(n1-1)*dx1,y0+(n1-1)*dy1,src_image)
+                      && vil_resample_bicub_corner_in_image(x0+(n2-1)*dx2,y0+(n2-1)*dy2,src_image)
+                      && vil_resample_bicub_corner_in_image(x0+(n1-1)*dx1+(n2-1)*dx2,
+                                                            y0+(n1-1)*dy1+(n2-1)*dy2,src_image);
 
   const unsigned ni = src_image.ni();
   const unsigned nj = src_image.nj();
@@ -216,7 +216,6 @@ void vil_resample_bicub_edge_extend(const vil_image_view<sType>& src_image,
     }
   }
 }
-
 
 
 //: Resample image to a specified width (n1) and height (n2)

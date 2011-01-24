@@ -14,8 +14,8 @@
 #include <vcl_cassert.h>
 
 
-inline bool vil3d_grid_corner_in_image(double x0, double y0, double z0,
-                                       const vil3d_image_view_base& image)
+inline bool vil3dresample_trilin_corner_in_image(double x0, double y0, double z0,
+                                                 const vil3d_image_view_base& image)
 {
   if (x0<0.0) return false;
   if (x0>image.ni()-1.0) return false;
@@ -43,38 +43,38 @@ void vil3d_resample_trilinear_edge_extend(const vil3d_image_view<S>& src_image,
                                           int n1, int n2, int n3)
 {
   bool all_in_image =
-    vil3d_grid_corner_in_image(x0,
-                               y0,
-                               z0,
-                               src_image) &&
-    vil3d_grid_corner_in_image(x0 + (n1-1)*dx1,
-                               y0 + (n1-1)*dy1,
-                               z0 + (n1-1)*dz1,
-                               src_image) &&
-    vil3d_grid_corner_in_image(x0 + (n2-1)*dx2,
-                               y0 + (n2-1)*dy2,
-                               z0 + (n2-1)*dz2,
-                               src_image) &&
-    vil3d_grid_corner_in_image(x0 + (n1-1)*dx1 + (n2-1)*dx2,
-                               y0 + (n1-1)*dy1 + (n2-1)*dy2,
-                               z0 + (n1-1)*dz1 + (n2-1)*dz2,
-                               src_image) &&
-    vil3d_grid_corner_in_image(x0 + (n3-1)*dx3,
-                               y0 + (n3-1)*dy3,
-                               z0 + (n3-1)*dz3,
-                               src_image) &&
-    vil3d_grid_corner_in_image(x0 + (n1-1)*dx1 + (n3-1)*dx3,
-                               y0 + (n1-1)*dy1 + (n3-1)*dy3,
-                               z0 + (n1-1)*dz1 + (n3-1)*dz3,
-                               src_image) &&
-    vil3d_grid_corner_in_image(x0 + (n2-1)*dx2 + (n3-1)*dx3,
-                               y0 + (n2-1)*dy2 + (n3-1)*dy3,
-                               z0 + (n2-1)*dz2 + (n3-1)*dz3,
-                               src_image) &&
-    vil3d_grid_corner_in_image(x0 + (n1-1)*dx1 + (n2-1)*dx2 + (n3-1)*dx3,
-                               y0 + (n1-1)*dy1 + (n2-1)*dy2 + (n3-1)*dy3,
-                               z0 + (n1-1)*dz1 + (n2-1)*dz2 + (n3-1)*dz3,
-                               src_image);
+    vil3dresample_trilin_corner_in_image(x0,
+                                         y0,
+                                         z0,
+                                         src_image) &&
+    vil3dresample_trilin_corner_in_image(x0 + (n1-1)*dx1,
+                                         y0 + (n1-1)*dy1,
+                                         z0 + (n1-1)*dz1,
+                                         src_image) &&
+    vil3dresample_trilin_corner_in_image(x0 + (n2-1)*dx2,
+                                         y0 + (n2-1)*dy2,
+                                         z0 + (n2-1)*dz2,
+                                         src_image) &&
+    vil3dresample_trilin_corner_in_image(x0 + (n1-1)*dx1 + (n2-1)*dx2,
+                                         y0 + (n1-1)*dy1 + (n2-1)*dy2,
+                                         z0 + (n1-1)*dz1 + (n2-1)*dz2,
+                                         src_image) &&
+    vil3dresample_trilin_corner_in_image(x0 + (n3-1)*dx3,
+                                         y0 + (n3-1)*dy3,
+                                         z0 + (n3-1)*dz3,
+                                         src_image) &&
+    vil3dresample_trilin_corner_in_image(x0 + (n1-1)*dx1 + (n3-1)*dx3,
+                                         y0 + (n1-1)*dy1 + (n3-1)*dy3,
+                                         z0 + (n1-1)*dz1 + (n3-1)*dz3,
+                                         src_image) &&
+    vil3dresample_trilin_corner_in_image(x0 + (n2-1)*dx2 + (n3-1)*dx3,
+                                         y0 + (n2-1)*dy2 + (n3-1)*dy3,
+                                         z0 + (n2-1)*dz2 + (n3-1)*dz3,
+                                         src_image) &&
+    vil3dresample_trilin_corner_in_image(x0 + (n1-1)*dx1 + (n2-1)*dx2 + (n3-1)*dx3,
+                                         y0 + (n1-1)*dy1 + (n2-1)*dy2 + (n3-1)*dy3,
+                                         z0 + (n1-1)*dz1 + (n2-1)*dz2 + (n3-1)*dz3,
+                                         src_image);
 
   vil_convert_round_pixel<double, T> cast_and_possibly_round;
   // Rounds only if T is int, unsigned or kind of. Doesn't round if T
@@ -195,7 +195,6 @@ void vil3d_resample_trilinear_edge_extend(const vil3d_image_view<S>& src_image,
 }
 
 
-
 //  Sample grid of points in one image and place in another, using trilinear interpolation.
 //  dest_image(i,j,k,p) is sampled from the src_image at
 //  (x0+i.dx1+j.dx2+k.dx3, y0+i.dy1+j.dy2+k.dy3, z0+i.dz1+j.dz2+k.dz3),
@@ -213,38 +212,38 @@ void vil3d_resample_trilinear(const vil3d_image_view<S>& src_image,
                               T outval/*=0*/, double edge_tol/*=0*/)
 {
   bool all_in_image =
-    vil3d_grid_corner_in_image(x0,
-                               y0,
-                               z0,
-                               src_image) &&
-    vil3d_grid_corner_in_image(x0 + (n1-1+edge_tol)*dx1,
-                               y0 + (n1-1+edge_tol)*dy1,
-                               z0 + (n1-1+edge_tol)*dz1,
-                               src_image) &&
-    vil3d_grid_corner_in_image(x0 + (n2-1+edge_tol)*dx2,
-                               y0 + (n2-1+edge_tol)*dy2,
-                               z0 + (n2-1+edge_tol)*dz2,
-                               src_image) &&
-    vil3d_grid_corner_in_image(x0 + (n1-1+edge_tol)*dx1 + (n2-1+edge_tol)*dx2,
-                               y0 + (n1-1+edge_tol)*dy1 + (n2-1+edge_tol)*dy2,
-                               z0 + (n1-1+edge_tol)*dz1 + (n2-1+edge_tol)*dz2,
-                               src_image) &&
-    vil3d_grid_corner_in_image(x0 + (n3-1+edge_tol)*dx3,
-                               y0 + (n3-1+edge_tol)*dy3,
-                               z0 + (n3-1+edge_tol)*dz3,
-                               src_image) &&
-    vil3d_grid_corner_in_image(x0 + (n1-1+edge_tol)*dx1 + (n3-1+edge_tol)*dx3,
-                               y0 + (n1-1+edge_tol)*dy1 + (n3-1+edge_tol)*dy3,
-                               z0 + (n1-1+edge_tol)*dz1 + (n3-1+edge_tol)*dz3,
-                               src_image) &&
-    vil3d_grid_corner_in_image(x0 + (n2-1+edge_tol)*dx2 + (n3-1+edge_tol)*dx3,
-                               y0 + (n2-1+edge_tol)*dy2 + (n3-1+edge_tol)*dy3,
-                               z0 + (n2-1+edge_tol)*dz2 + (n3-1+edge_tol)*dz3,
-                               src_image) &&
-    vil3d_grid_corner_in_image(x0 + (n1-1+edge_tol)*dx1 + (n2-1+edge_tol)*dx2 + (n3-1+edge_tol)*dx3,
-                               y0 + (n1-1+edge_tol)*dy1 + (n2-1+edge_tol)*dy2 + (n3-1+edge_tol)*dy3,
-                               z0 + (n1-1+edge_tol)*dz1 + (n2-1+edge_tol)*dz2 + (n3-1+edge_tol)*dz3,
-                               src_image);
+    vil3dresample_trilin_corner_in_image(x0,
+                                         y0,
+                                         z0,
+                                         src_image) &&
+    vil3dresample_trilin_corner_in_image(x0 + (n1-1+edge_tol)*dx1,
+                                         y0 + (n1-1+edge_tol)*dy1,
+                                         z0 + (n1-1+edge_tol)*dz1,
+                                         src_image) &&
+    vil3dresample_trilin_corner_in_image(x0 + (n2-1+edge_tol)*dx2,
+                                         y0 + (n2-1+edge_tol)*dy2,
+                                         z0 + (n2-1+edge_tol)*dz2,
+                                         src_image) &&
+    vil3dresample_trilin_corner_in_image(x0 + (n1-1+edge_tol)*dx1 + (n2-1+edge_tol)*dx2,
+                                         y0 + (n1-1+edge_tol)*dy1 + (n2-1+edge_tol)*dy2,
+                                         z0 + (n1-1+edge_tol)*dz1 + (n2-1+edge_tol)*dz2,
+                                         src_image) &&
+    vil3dresample_trilin_corner_in_image(x0 + (n3-1+edge_tol)*dx3,
+                                         y0 + (n3-1+edge_tol)*dy3,
+                                         z0 + (n3-1+edge_tol)*dz3,
+                                         src_image) &&
+    vil3dresample_trilin_corner_in_image(x0 + (n1-1+edge_tol)*dx1 + (n3-1+edge_tol)*dx3,
+                                         y0 + (n1-1+edge_tol)*dy1 + (n3-1+edge_tol)*dy3,
+                                         z0 + (n1-1+edge_tol)*dz1 + (n3-1+edge_tol)*dz3,
+                                         src_image) &&
+    vil3dresample_trilin_corner_in_image(x0 + (n2-1+edge_tol)*dx2 + (n3-1+edge_tol)*dx3,
+                                         y0 + (n2-1+edge_tol)*dy2 + (n3-1+edge_tol)*dy3,
+                                         z0 + (n2-1+edge_tol)*dz2 + (n3-1+edge_tol)*dz3,
+                                         src_image) &&
+    vil3dresample_trilin_corner_in_image(x0 + (n1-1+edge_tol)*dx1 + (n2-1+edge_tol)*dx2 + (n3-1+edge_tol)*dx3,
+                                         y0 + (n1-1+edge_tol)*dy1 + (n2-1+edge_tol)*dy2 + (n3-1+edge_tol)*dy3,
+                                         z0 + (n1-1+edge_tol)*dz1 + (n2-1+edge_tol)*dz2 + (n3-1+edge_tol)*dz3,
+                                         src_image);
 
   vil_convert_round_pixel<double, T> cast_and_possibly_round;
 

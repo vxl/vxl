@@ -41,21 +41,21 @@ struct compute_sqr_mahalanobis_helper<T,n,i,0>
 
 //: Unroll the mahalanobis distance calculation
 template <class T, unsigned n, unsigned i>
-struct compute_sqr_mahalanobis
+struct bsta_gaussian_full_compute_sqr_mahalanobis
 {
 static inline T value(const vnl_vector_fixed<T,n>& d,
                       const vnl_matrix_fixed<T,n,n>& inv_covar)
   {
     return d[i-1]*d[i-1]*inv_covar(i-1,i-1)
         + compute_sqr_mahalanobis_helper<T,n,i,i-1>::value(d,inv_covar)
-        + compute_sqr_mahalanobis<T,n,i-1>::value(d,inv_covar);
+        + bsta_gaussian_full_compute_sqr_mahalanobis<T,n,i-1>::value(d,inv_covar);
   }
 };
 
 //: base case
 // this is partial specialization: expect MSVC6 to complain
 template <class T, unsigned n>
-struct compute_sqr_mahalanobis<T,n,0>
+struct bsta_gaussian_full_compute_sqr_mahalanobis<T,n,0>
 {
   static inline T value(const vnl_vector_fixed<T,n>& /*d*/,
                         const vnl_matrix_fixed<T,n,n>& /*inv_covar*/)
@@ -98,7 +98,7 @@ bsta_gaussian_full<T,n>::sqr_mahalanobis_dist(const vnl_vector_fixed<T,n>& pt) c
 #if 0
   assert((sqr_mahalanobis_dist<T,n,n>::value(d,diag_covar_)) > 0);
 #endif
-  return compute_sqr_mahalanobis<T,n,n>::value(d,inv_covar());
+  return bsta_gaussian_full_compute_sqr_mahalanobis<T,n,n>::value(d,inv_covar());
 }
 
 

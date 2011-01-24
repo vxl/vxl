@@ -14,7 +14,8 @@
 
 //: True if p clearly inside the image
 template<class T>
-inline bool vimt3d_point_in_image(const vgl_point_3d<double>& p, const vil3d_image_view<T>& image)
+inline bool
+vimt3d_trilin_point_in_image(const vgl_point_3d<double>& p, const vil3d_image_view<T>& image)
 {
   if (p.x()<1) return false;
   if (p.y()<1) return false;
@@ -38,14 +39,14 @@ inline bool vimt3d_grid_in_image_ic(const vgl_point_3d<double>& im_p,
   vgl_vector_3d<double> u1=(nu-1)*im_u;
   vgl_vector_3d<double> v1=(nv-1)*im_v;
   vgl_vector_3d<double> w1=(nw-1)*im_w;
-  if (!vimt3d_point_in_image(im_p,image)) return false;
-  if (!vimt3d_point_in_image(im_p+u1,image)) return false;
-  if (!vimt3d_point_in_image(im_p+v1,image)) return false;
-  if (!vimt3d_point_in_image(im_p+w1,image)) return false;
-  if (!vimt3d_point_in_image(im_p+u1+v1,image)) return false;
-  if (!vimt3d_point_in_image(im_p+u1+w1,image)) return false;
-  if (!vimt3d_point_in_image(im_p+v1+w1,image)) return false;
-  if (!vimt3d_point_in_image(im_p+u1+v1+w1,image)) return false;
+  if (!vimt3d_trilin_point_in_image(im_p,image)) return false;
+  if (!vimt3d_trilin_point_in_image(im_p+u1,image)) return false;
+  if (!vimt3d_trilin_point_in_image(im_p+v1,image)) return false;
+  if (!vimt3d_trilin_point_in_image(im_p+w1,image)) return false;
+  if (!vimt3d_trilin_point_in_image(im_p+u1+v1,image)) return false;
+  if (!vimt3d_trilin_point_in_image(im_p+u1+w1,image)) return false;
+  if (!vimt3d_trilin_point_in_image(im_p+v1+w1,image)) return false;
+  if (!vimt3d_trilin_point_in_image(im_p+u1+v1+w1,image)) return false;
 
   return true;
 }

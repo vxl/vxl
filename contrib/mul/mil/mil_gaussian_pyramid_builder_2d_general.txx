@@ -89,34 +89,34 @@ void mil_gaussian_pyramid_builder_2d_general<T>::gauss_reduce(
 
 
 //: An optimisable rounding function
-inline unsigned char l_round(double x, unsigned char )
+inline unsigned char gl_round(double x, unsigned char )
 {  return (unsigned char) (x+0.5);}
 
-inline signed char l_round(double x, signed char )
+inline signed char gl_round(double x, signed char )
 {  return (signed char) (x+0.5);}
 
-inline unsigned short l_round(double x, unsigned short )
+inline unsigned short gl_round(double x, unsigned short )
 {  return (unsigned short) (x+0.5);}
 
-inline signed short l_round(double x, signed short )
+inline signed short gl_round(double x, signed short )
 {  return (signed short) (x+0.5);}
 
-inline unsigned int l_round(double x, unsigned int )
+inline unsigned int gl_round(double x, unsigned int )
 {  return (unsigned int) (x+0.5);}
 
-inline signed int l_round(double x, signed int )
+inline signed int gl_round(double x, signed int )
 {  return (signed int) (x+0.5);}
 
-inline unsigned long l_round(double x, unsigned long )
+inline unsigned long gl_round(double x, unsigned long )
 {  return (unsigned long) (x+0.5);}
 
-inline signed long l_round(double x, signed long )
+inline signed long gl_round(double x, signed long )
 {  return (signed long) (x+0.5);}
 
-inline double l_round (double x, double )
+inline double gl_round (double x, double )
 {  return x; }
 
-inline float l_round (double x, float )
+inline float gl_round (double x, float )
 {  return (float) x; }
 
 //=======================================================================
@@ -150,31 +150,31 @@ void mil_gaussian_pyramid_builder_2d_general<T>::gauss_reduce(
     int x;
     int nx2 = src_nx-2;
     for (x=2;x<nx2;x++)
-      worka_row[x] = l_round( that->filt2_ * src_col1[x]
-                            + that->filt1_ * src_col2[x]
-                            + that->filt0_ * src_col3[x]
-                            + that->filt1_ * src_col4[x]
-                            + that->filt2_ * src_col5[x], (T)0);
+      worka_row[x] = gl_round( that->filt2_ * src_col1[x]
+                             + that->filt1_ * src_col2[x]
+                             + that->filt0_ * src_col3[x]
+                             + that->filt1_ * src_col4[x]
+                             + that->filt2_ * src_col5[x], (T)0);
 
     // Now deal with edge effects :
-    worka_row[0] = l_round( that->filt_edge0_ * src_col3[0]
-                          + that->filt_edge1_ * src_col4[0]
-                          + that->filt_edge2_ * src_col5[0], (T)0);
+    worka_row[0] = gl_round( that->filt_edge0_ * src_col3[0]
+                           + that->filt_edge1_ * src_col4[0]
+                           + that->filt_edge2_ * src_col5[0], (T)0);
 
-    worka_row[1] = l_round( that->filt_pen_edge_n1_ * src_col2[1]
-                          + that->filt_pen_edge0_ * src_col3[1]
-                          + that->filt_pen_edge1_ * src_col4[1]
-                          + that->filt_pen_edge2_ * src_col5[1], (T)0);
+    worka_row[1] = gl_round( that->filt_pen_edge_n1_ * src_col2[1]
+                           + that->filt_pen_edge0_ * src_col3[1]
+                           + that->filt_pen_edge1_ * src_col4[1]
+                           + that->filt_pen_edge2_ * src_col5[1], (T)0);
 
-    worka_row[src_nx-2] = l_round( that->filt_pen_edge2_ * src_col1[x]
-                                 + that->filt_pen_edge1_ * src_col2[x]
-                                 + that->filt_pen_edge0_ * src_col3[x]
-                                 + that->filt_pen_edge_n1_ * src_col4[x], (T)0);
+    worka_row[src_nx-2] = gl_round( that->filt_pen_edge2_ * src_col1[x]
+                                  + that->filt_pen_edge1_ * src_col2[x]
+                                  + that->filt_pen_edge0_ * src_col3[x]
+                                  + that->filt_pen_edge_n1_ * src_col4[x], (T)0);
 
     x++;
-    worka_row[src_nx-1] = l_round( that->filt_edge2_ * src_col1[x]
-                                 + that->filt_edge1_ * src_col2[x]
-                                 + that->filt_edge0_ * src_col3[x], (T)0);
+    worka_row[src_nx-1] = gl_round( that->filt_edge2_ * src_col1[x]
+                                  + that->filt_edge1_ * src_col2[x]
+                                  + that->filt_edge0_ * src_col3[x], (T)0);
   }
 
 //  worka_.print_all(vcl_cout);
@@ -190,11 +190,11 @@ void mil_gaussian_pyramid_builder_2d_general<T>::gauss_reduce(
     const T* worka_row5  = worka_row3 + 2 * work_ystep;
 
     for (int x=0; x<src_nx; x++)
-      workb_row[x] = l_round( that->filt2_ * worka_row1[x]
-                            + that->filt1_ * worka_row2[x]
-                            + that->filt0_ * worka_row3[x]
-                            + that->filt1_ * worka_row4[x]
-                            + that->filt2_ * worka_row5[x], (T)0);
+      workb_row[x] = gl_round( that->filt2_ * worka_row1[x]
+                             + that->filt1_ * worka_row2[x]
+                             + that->filt0_ * worka_row3[x]
+                             + that->filt1_ * worka_row4[x]
+                             + that->filt2_ * worka_row5[x], (T)0);
   }
 
   // Now deal with edge effects :
@@ -216,23 +216,23 @@ void mil_gaussian_pyramid_builder_2d_general<T>::gauss_reduce(
 
   for (int x=0;x<src_nx;x++)
   {
-    workb_row_top[x] = l_round( that->filt_edge0_ * worka_row_top_5[x]
-                              + that->filt_edge1_ * worka_row_top_4[x]
-                              + that->filt_edge2_ * worka_row_top_3[x], (T)0);
+    workb_row_top[x] = gl_round( that->filt_edge0_ * worka_row_top_5[x]
+                               + that->filt_edge1_ * worka_row_top_4[x]
+                               + that->filt_edge2_ * worka_row_top_3[x], (T)0);
 
-    workb_row_next_top[x] = l_round( that->filt_pen_edge2_ * worka_row_top_2[x]
-                                   + that->filt_pen_edge1_ * worka_row_top_3[x]
-                                   + that->filt_pen_edge0_ * worka_row_top_4[x]
-                                   + that->filt_pen_edge_n1_ * worka_row_top_5[x], (T)0);
+    workb_row_next_top[x] = gl_round( that->filt_pen_edge2_ * worka_row_top_2[x]
+                                    + that->filt_pen_edge1_ * worka_row_top_3[x]
+                                    + that->filt_pen_edge0_ * worka_row_top_4[x]
+                                    + that->filt_pen_edge_n1_ * worka_row_top_5[x], (T)0);
 
-    workb_row_next_bottom[x] = l_round( that->filt_pen_edge2_ * worka_row_bottom_4[x]
-                                      + that->filt_pen_edge1_ * worka_row_bottom_3[x]
-                                      + that->filt_pen_edge0_ * worka_row_bottom_2[x]
-                                      + that->filt_pen_edge_n1_ * worka_row_bottom_1[x], (T)0);
+    workb_row_next_bottom[x] = gl_round( that->filt_pen_edge2_ * worka_row_bottom_4[x]
+                                       + that->filt_pen_edge1_ * worka_row_bottom_3[x]
+                                       + that->filt_pen_edge0_ * worka_row_bottom_2[x]
+                                       + that->filt_pen_edge_n1_ * worka_row_bottom_1[x], (T)0);
 
-    workb_row_bottom[x] = l_round( that->filt_edge2_ * worka_row_bottom_3[x]
-                                 + that->filt_edge1_ * worka_row_bottom_2[x]
-                                 + that->filt_edge0_ * worka_row_bottom_1[x], (T)0);
+    workb_row_bottom[x] = gl_round( that->filt_edge2_ * worka_row_bottom_3[x]
+                                  + that->filt_edge1_ * worka_row_bottom_2[x]
+                                  + that->filt_edge0_ * worka_row_bottom_1[x], (T)0);
   }
 
 //  workb_.print_all(vcl_cout);
@@ -248,8 +248,8 @@ void mil_gaussian_pyramid_builder_2d_general<T>::gauss_reduce(
     double dx=init_x;
     for (int xi=0; xi<dest_nx; xi++)
     {
-      dest_row[xi] = l_round (mil_safe_extend_bilin_interp_2d(dx, dy,
-                              workb_im,  src_nx, src_ny, work_ystep), (T)0);
+      dest_row[xi] = gl_round (mil_safe_extend_bilin_interp_2d(dx, dy,
+                               workb_im,  src_nx, src_ny, work_ystep), (T)0);
       dx += that->scale_step_;
     }
     dy+= that->scale_step_;

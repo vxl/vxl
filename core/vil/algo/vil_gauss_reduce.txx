@@ -117,34 +117,34 @@ void vil_gauss_reduce_121(const vil_image_view<T>& src_im,
 
 
 //: An optimisable rounding function
-inline unsigned char l_round(double x, unsigned char )
+inline unsigned char rl_round(double x, unsigned char )
 {  return (unsigned char) (x+0.5);}
 
-inline signed char l_round(double x, signed char )
+inline signed char rl_round(double x, signed char )
 {  return (signed char) (x+0.5);}
 
-inline unsigned short l_round(double x, unsigned short )
+inline unsigned short rl_round(double x, unsigned short )
 {  return (unsigned short) (x+0.5);}
 
-inline signed short l_round(double x, signed short )
+inline signed short rl_round(double x, signed short )
 {  return (signed short) (x+0.5);}
 
-inline unsigned int l_round(double x, unsigned int )
+inline unsigned int rl_round(double x, unsigned int )
 {  return (unsigned int) (x+0.5);}
 
-inline signed int l_round(double x, signed int )
+inline signed int rl_round(double x, signed int )
 {  return (signed int) (x+0.5);}
 
-inline unsigned long l_round(double x, unsigned long )
+inline unsigned long rl_round(double x, unsigned long )
 {  return (unsigned long) (x+0.5);}
 
-inline signed long l_round(double x, signed long )
+inline signed long rl_round(double x, signed long )
 {  return (signed long) (x+0.5);}
 
-inline double l_round (double x, double )
+inline double rl_round (double x, double )
 {  return x; }
 
-inline float l_round (double x, float )
+inline float rl_round (double x, float )
 {  return (float) x; }
 
 //=======================================================================
@@ -169,29 +169,29 @@ void vil_gauss_reduce_general_plane(const vil_image_view<T>& src,
   {
     unsigned ni2 = src.ni()-2;
     for (unsigned x=2;x<ni2;++x)
-      worka(x,y) = l_round(  params.filt2() * (src(x-2,y) + src(x+2,y))
-                           + params.filt1() * (src(x-1,y) + src(x+1,y))
-                           + params.filt0() *  src(x  ,y),
-                           T(0));
+      worka(x,y) = rl_round(  params.filt2() * (src(x-2,y) + src(x+2,y))
+                            + params.filt1() * (src(x-1,y) + src(x+1,y))
+                            + params.filt0() *  src(x  ,y),
+                            T(0));
 
     // Now deal with edge effects :
-    worka(0,y) = l_round( params.filt_edge0() * src(0,y)
-                        + params.filt_edge1() * src(1,y)
-                        + params.filt_edge2() * src(2,y), (T)0);
+    worka(0,y) = rl_round( params.filt_edge0() * src(0,y)
+                         + params.filt_edge1() * src(1,y)
+                         + params.filt_edge2() * src(2,y), (T)0);
 
-    worka(1,y) = l_round( params.filt_pen_edge_n1() * src(0,y)
-                        + params.filt_pen_edge0() * src(1,y)
-                        + params.filt_pen_edge1() * src(2,y)
-                        + params.filt_pen_edge2() * src(3,y), (T)0);
+    worka(1,y) = rl_round( params.filt_pen_edge_n1() * src(0,y)
+                         + params.filt_pen_edge0() * src(1,y)
+                         + params.filt_pen_edge1() * src(2,y)
+                         + params.filt_pen_edge2() * src(3,y), (T)0);
 
-    worka(src.ni()-2,y) = l_round( params.filt_pen_edge2() * src(src.ni()-4,y)
-                                 + params.filt_pen_edge1() * src(src.ni()-3,y)
-                                 + params.filt_pen_edge0() * src(src.ni()-2,y)
-                                 + params.filt_pen_edge_n1() * src(src.ni()-1,y), (T)0);
+    worka(src.ni()-2,y) = rl_round( params.filt_pen_edge2() * src(src.ni()-4,y)
+                                  + params.filt_pen_edge1() * src(src.ni()-3,y)
+                                  + params.filt_pen_edge0() * src(src.ni()-2,y)
+                                  + params.filt_pen_edge_n1() * src(src.ni()-1,y), (T)0);
 
-    worka(src.ni()-1,y) = l_round( params.filt_edge2() * src(src.ni()-3,y)
-                                 + params.filt_edge1() * src(src.ni()-2,y)
-                                 + params.filt_edge0() * src(src.ni()-1,y), (T)0);
+    worka(src.ni()-1,y) = rl_round( params.filt_edge2() * src(src.ni()-3,y)
+                                  + params.filt_edge1() * src(src.ni()-2,y)
+                                  + params.filt_edge0() * src(src.ni()-1,y), (T)0);
   }
 
 //  worka_.print_all(vcl_cout);
@@ -199,33 +199,33 @@ void vil_gauss_reduce_general_plane(const vil_image_view<T>& src,
   for (unsigned int y=2;y+2<src.nj();++y)
   {
     for (unsigned int x=0; x<src.ni(); x++)
-      workb(x,y) = l_round(  params.filt2() *(worka(x,y-2) + worka(x,y+2))
-                           + params.filt1() *(worka(x,y-1) + worka(x,y+1))
-                           + params.filt0() * worka(x,  y),
-                           (T)0);
+      workb(x,y) = rl_round(  params.filt2() *(worka(x,y-2) + worka(x,y+2))
+                            + params.filt1() *(worka(x,y-1) + worka(x,y+1))
+                            + params.filt0() * worka(x,  y),
+                            (T)0);
   }
 
   // Now deal with edge effects :
   //
   for (unsigned x=0;x<src.ni();x++)
   {
-    workb(x,src.nj()-1) = l_round( params.filt_edge0() * worka(x,src.nj()-1)
-                                 + params.filt_edge1() * worka(x,src.nj()-2)
-                                 + params.filt_edge2() * worka(x,src.nj()-3), (T)0);
+    workb(x,src.nj()-1) = rl_round( params.filt_edge0() * worka(x,src.nj()-1)
+                                  + params.filt_edge1() * worka(x,src.nj()-2)
+                                  + params.filt_edge2() * worka(x,src.nj()-3), (T)0);
 
-    workb(x,src.nj()-2) = l_round( params.filt_pen_edge2() * worka(x,src.nj()-4)
-                                 + params.filt_pen_edge1() * worka(x,src.nj()-3)
-                                 + params.filt_pen_edge0() * worka(x,src.nj()-2)
-                                 + params.filt_pen_edge_n1() * worka(x,src.nj()-1), (T)0);
+    workb(x,src.nj()-2) = rl_round( params.filt_pen_edge2() * worka(x,src.nj()-4)
+                                  + params.filt_pen_edge1() * worka(x,src.nj()-3)
+                                  + params.filt_pen_edge0() * worka(x,src.nj()-2)
+                                  + params.filt_pen_edge_n1() * worka(x,src.nj()-1), (T)0);
 
-    workb(x,1) = l_round( params.filt_pen_edge2() * worka(x,3)
-                        + params.filt_pen_edge1() * worka(x,2)
-                        + params.filt_pen_edge0() * worka(x,1)
-                        + params.filt_pen_edge_n1() * worka(x,0), (T)0);
+    workb(x,1) = rl_round( params.filt_pen_edge2() * worka(x,3)
+                         + params.filt_pen_edge1() * worka(x,2)
+                         + params.filt_pen_edge0() * worka(x,1)
+                         + params.filt_pen_edge_n1() * worka(x,0), (T)0);
 
-    workb(x,0) = l_round( params.filt_edge2() * worka(x,2)
-                        + params.filt_edge1() * worka(x,1)
-                        + params.filt_edge0() * worka(x,0), (T)0);
+    workb(x,0) = rl_round( params.filt_edge2() * worka(x,2)
+                         + params.filt_edge1() * worka(x,1)
+                         + params.filt_edge0() * worka(x,0), (T)0);
   }
 
 //  workb_.print_all(vcl_cout);
@@ -240,7 +240,7 @@ void vil_gauss_reduce_general_plane(const vil_image_view<T>& src,
     double xd=init_x;
     for (unsigned int xi=0; xi<dest.ni(); xi++)
     {
-      dest(xi,yi) = l_round (vil_bilin_interp_safe_extend(workb, xd, yd), T(0));
+      dest(xi,yi) = rl_round (vil_bilin_interp_safe_extend(workb, xd, yd), T(0));
       xd += params.scale_step();
     }
     yd+= params.scale_step();

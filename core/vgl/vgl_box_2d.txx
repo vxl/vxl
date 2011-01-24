@@ -173,11 +173,11 @@ void vgl_box_2d<Type>::set_centroid_y(Type cent_y)
 }
 
 template <class T>
-inline void set_dim(T & minv, T& maxv, T spread);
+inline void set_dim_2d(T & minv, T& maxv, T spread);
 
 // All this code is to avoid drift in the centroid.
 VCL_DEFINE_SPECIALIZATION
-inline void set_dim(int & minv, int& maxv, int spread)
+inline void set_dim_2d(int & minv, int& maxv, int spread)
 {
   int sum = minv + maxv;
   sum = sum | (spread&1); // if width is odd, then make sum odd
@@ -186,7 +186,7 @@ inline void set_dim(int & minv, int& maxv, int spread)
 }
 
 template <class T>
-inline void set_dim(T & minv, T& maxv, T spread)
+inline void set_dim_2d(T & minv, T& maxv, T spread)
 {
   T x = minv + maxv;
   minv = T( (x-spread)*0.5 );
@@ -200,7 +200,7 @@ template <class Type>
 void vgl_box_2d<Type>::set_width(Type w)
 {
   assert(!is_empty());
-  set_dim(min_pos_[0], max_pos_[0], w);
+  set_dim_2d(min_pos_[0], max_pos_[0], w);
 }
 
 //: Modify height, retaining centroid at current position
@@ -210,7 +210,7 @@ template <class Type>
 void vgl_box_2d<Type>::set_height(Type h)
 {
   assert(!is_empty());
-  set_dim(min_pos_[1], max_pos_[1], h);
+  set_dim_2d(min_pos_[1], max_pos_[1], h);
 }
 
 
@@ -220,8 +220,8 @@ template <class Type>
 void vgl_box_2d<Type>::expand_about_centroid(Type expand)
 {
   assert(!is_empty());
-  set_dim(min_pos_[0], max_pos_[0], width() + expand );
-  set_dim(min_pos_[1], max_pos_[1], height() + expand );
+  set_dim_2d(min_pos_[0], max_pos_[0], width() + expand );
+  set_dim_2d(min_pos_[1], max_pos_[1], height() + expand );
 }
 
 //: Scale width and height, centroid unchanged.
@@ -229,8 +229,8 @@ template <class Type>
 void vgl_box_2d<Type>::scale_about_centroid(double s)
 {
   assert(!is_empty());
-  set_dim(min_pos_[0], max_pos_[0], static_cast<Type>(width()*s));
-  set_dim(min_pos_[1], max_pos_[1], static_cast<Type>(height()*s));
+  set_dim_2d(min_pos_[0], max_pos_[0], static_cast<Type>(width()*s));
+  set_dim_2d(min_pos_[1], max_pos_[1], static_cast<Type>(height()*s));
 }
 
 

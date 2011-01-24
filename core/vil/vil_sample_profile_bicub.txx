@@ -14,9 +14,10 @@
 #include "vil_sample_profile_bicub.h"
 #include <vil/vil_bicub_interp.h>
 
-inline bool vil_profile_in_image(double x0, double y0,
-                                 double x1, double y1,
-                                 const vil_image_view_base& image)
+//: This function should not be the same in bicub and bilin
+inline bool vil_profile_bicub_in_image(double x0, double y0,
+                                       double x1, double y1,
+                                       const vil_image_view_base& image)
 {
   return x0 >= 2
       && y0 >= 2
@@ -39,7 +40,7 @@ void vil_sample_profile_bicub(vecType* v,
                               double x0, double y0, double dx, double dy,
                               int n)
 {
-  bool all_in_image = vil_profile_in_image(x0,y0,x0+(n-1)*dx,y0+(n-1)*dy,image);
+  bool all_in_image = vil_profile_bicub_in_image(x0,y0,x0+(n-1)*dx,y0+(n-1)*dy,image);
 
   const unsigned ni = image.ni();
   const unsigned nj = image.nj();
