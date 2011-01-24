@@ -40,7 +40,7 @@ int main(int argc,  char** argv)
   vul_arg<unsigned> nj("-nj", "Height of image", 720);
   vul_arg<unsigned> num_az("-num_az", "Number of views along azimuth", 36); 
   vul_arg<unsigned> num_in("-num_in", "Number of views along 90 degree incline", 5); 
-  vul_arg<double> radius("-radius", "Distance from center of bounding box", 5.0); 
+  vul_arg<double> radius("-radius", "Distance from center of bounding box", 3.0); 
   vul_arg_parse(argc, argv);
 
   //create scene
@@ -88,8 +88,12 @@ int main(int argc,  char** argv)
     
     vsph_view_point<vcl_string>& view = iter->second; 
     vpgl_camera_double_sptr cam_sptr = view.camera(); 
+    vpgl_perspective_camera<double>* cam = static_cast<vpgl_perspective_camera<double>* >(cam_sptr.ptr()); 
     brdb_value_sptr brdb_cam = new brdb_value_t<vpgl_camera_double_sptr>(cam_sptr);
-          
+    vpgl_calibration_matrix<double> mat = cam->get_calibration();
+    mat.set_focal_length(mat.focal_length()*2.0); 
+    cam->set_calibration(mat); 
+    
     //render scene
     vcl_vector<brdb_value_sptr> input;
     input.push_back(brdb_scene);

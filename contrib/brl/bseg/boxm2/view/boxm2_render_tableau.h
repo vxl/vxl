@@ -34,12 +34,10 @@
 #include <boxm2/ocl/pro/boxm2_opencl_render_process.h>
 #include <boxm2/ocl/pro/boxm2_opencl_update_process.h>
 #include <boxm2/ocl/pro/boxm2_opencl_refine_process.h>
-
 #include <boxm2/ocl/pro/boxm2_opencl_change_detection_process.h>
-
-
 #include <boxm2/io/boxm2_dumb_cache.h>
 #include <boxm2/io/boxm2_nn_cache.h>
+#include <boxm2/io/boxm2_lru_cache.h>
 
 //brdb stuff
 #include <brdb/brdb_value.h>
