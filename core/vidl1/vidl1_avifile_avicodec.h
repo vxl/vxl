@@ -10,6 +10,7 @@
 //  Modifications
 // \endverbatim
 
+#include <vcl_cstddef.h> // for size_t, used in some of the avifile #includes
 #include <avifile.h>
 #include <vidl1/vidl1_codec.h>
 
@@ -35,7 +36,7 @@ class vidl1_avicodec : public vidl1_codec
   //-----------------------------------------------------
   virtual bool probe(vcl_string const& fname);
   virtual vidl1_codec_sptr load(vcl_string const& fname, char mode = 'r' );
-  virtual bool save(vidl1_movie* movie, vcl_string const& fname) { return false; }
+  virtual bool save(vidl1_movie* /*movie*/, vcl_string const& /*fname*/) { return false; }
   virtual vcl_string type() const { return "AVI"; }
   virtual vidl1_avicodec* castto_vidl1_avicodec() { return this; }
 
