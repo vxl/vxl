@@ -121,7 +121,7 @@ namespace
 
     //: Constructor.
     vgui_wx_text_validator(const vgui_wx_text_validator& validator)
-      : field_(validator.field_)
+      : wxValidator(), field_(validator.field_)
     {
       wxValidator::Copy(validator);
     }
