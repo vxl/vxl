@@ -1,6 +1,5 @@
 // This is core/vidl/vidl_ffmpeg_ostream.cxx
 #include "vidl_ffmpeg_ostream.h"
-#include "vidl_ffmpeg_convert.h"
 
 #include <vidl/vidl_config.h>
 
@@ -19,6 +18,7 @@ extern "C" {
 #include <ffmpeg/avcodec.h>
 #endif
 }
+#include "vidl_ffmpeg_convert.h"
 
 #if LIBAVCODEC_BUILD < ((51<<16)+(49<<8)+0)  // ver 51.49.0
 # include "vidl_ffmpeg_ostream_v1.txx"
