@@ -89,6 +89,10 @@ inline vcl_ostream& operator<< (vcl_ostream& s, const vbl_sparse_array_2d<T>& a)
   return a.print(s);
 }
 
+#ifndef VBL_SPARSE_ARRAY_BASE_INSTANTIATE
+#define VBL_SPARSE_ARRAY_BASE_INSTANTIATE(T) \
+extern "please include vbl/vbl_sparse_array_base.txx instead"
+#endif // VBL_SPARSE_ARRAY_BASE_INSTANTIATE
 #define VBL_SPARSE_ARRAY_2D_INSTANTIATE(T) \
 extern "please include vbl/vbl_sparse_array_2d.txx instead"
 
