@@ -312,7 +312,7 @@ bin_indices( point_type const& pt ) const
   point_to_bin( pt-dist_tol_, bin_lo );
   point_to_bin( pt+dist_tol_, bin_hi );
 
-  if ( bin_lo == bin_hi ) {
+  if ( bin_lo == bin_hi ) { // FIXME - this is impossible!!
     indices.push_back( bin_index( bin_lo ) );
   }
   else {
