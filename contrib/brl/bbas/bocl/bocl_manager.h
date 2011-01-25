@@ -83,10 +83,13 @@ class bocl_manager
   bool write_program(vcl_string const& path);
   vcl_string program_source() const {return prog_;}
 
-  //build kernel program: 
+  //build kernel program:
   int build_kernel_program(cl_program & program, vcl_string options);
-  
+
   cl_bool image_support(){return image_support_;}
+
+  vcl_size_t image2d_max_width() const { return image2d_max_width_; }
+  vcl_size_t image2d_max_height() const { return image2d_max_height_; }
 
  protected:
 
