@@ -24,9 +24,9 @@ do
   test "$absdir" = '/' || dir="$oldpwd$dir" # relative build directory, as seen from $sourcetree
   dir=`echo $dir|sed -e 's!/\./!\/!g' -e 's!^\./!!' -e 's!/\.$!!'`
   test -d "$dir" || dir=`echo $dir | sed -e 's/\/[^\/][^\/]*\.[a-z][a-z]*$//'` # "dirname"
-  test -d "$dir/CMakeFiles" && echo "Making in $dir ..." >&2
+  test -d "$dir/CMakeFiles" && echo "Making in $dir ..."
   for build in `echo "$dir"/CMakeFiles/*.dir`
   do
-    test -d "$build" && make -f "$build"/build.make "$build"/build
+    test -d "$build" && make -k -f "$build"/build.make "$build"/build
   done
 done
