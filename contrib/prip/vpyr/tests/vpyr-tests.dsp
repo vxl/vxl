@@ -94,13 +94,16 @@ SOURCE=.\my_pyramid.cxx
 SOURCE=.\my_top_level.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\test_include.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\vpyr_test.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\vpyr_test2.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_include.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_template_include.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"

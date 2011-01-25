@@ -90,9 +90,6 @@ LINK32=link.exe
 SOURCE=.\test_driver.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\test_include.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\golden_test_vgl_io.cxx
 # End Source File
 # Begin Source File
@@ -151,6 +148,12 @@ SOURCE=.\test_vector_3d_io.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\test_plane_3d_io.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_include.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_template_include.cxx
 # End Source File
 # End Group
 # End Target

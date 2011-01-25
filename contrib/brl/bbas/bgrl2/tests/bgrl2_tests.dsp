@@ -198,6 +198,9 @@ SOURCE=.\Templates/vbl_smart_ptr+test_node-.cxx
 # Begin Source File
 SOURCE=.\test_include.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\test_template_include.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"

@@ -88,10 +88,13 @@ LINK32=link.exe
 # Begin Group "Source Files"
 # PROP Default_Filter "cxx"
 # Begin Source File
+SOURCE=.\vmap_test.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\test_include.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\vmap_test.cxx
+SOURCE=.\test_template_include.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"

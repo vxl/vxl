@@ -146,9 +146,6 @@ SOURCE=.\test_camera.cxx
 SOURCE=.\test_bit_tree.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\test_include.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\Templates/ray_bundle_test_driver+float-.cxx
 # End Source File
 # Begin Source File
@@ -183,6 +180,12 @@ SOURCE=.\Templates/bocl_manager+bit_tree_test_manager-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/bocl_manager+ocl_scene_test_manager-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_include.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_template_include.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"

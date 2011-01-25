@@ -127,9 +127,6 @@ LINK32=link.exe
 SOURCE=.\test_driver.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\test_include.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\test_block.cxx
 # End Source File
 # Begin Source File
@@ -161,6 +158,12 @@ SOURCE=.\vtol_test_timing.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\test_extract_topology.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_include.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_template_include.cxx
 # End Source File
 # End Group
 # End Target

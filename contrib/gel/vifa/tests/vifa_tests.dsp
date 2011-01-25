@@ -136,9 +136,6 @@ SOURCE=.\test_ifa_factory.cxx
 SOURCE=.\test_image_histogram.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\test_include.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\test_int_face_attr.cxx
 # End Source File
 # Begin Source File
@@ -158,6 +155,12 @@ SOURCE=.\test_parallel_params.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\test_region_proc.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_include.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_template_include.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"

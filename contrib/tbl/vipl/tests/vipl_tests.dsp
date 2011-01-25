@@ -119,9 +119,6 @@ LINK32=link.exe
 SOURCE=.\test_driver.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\test_include.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\vipl_test_erode_disk.cxx
 # End Source File
 # Begin Source File
@@ -132,6 +129,12 @@ SOURCE=.\vipl_test_histogram.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\vipl_test_threshold.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_include.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_template_include.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"

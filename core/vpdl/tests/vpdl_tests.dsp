@@ -112,10 +112,13 @@ SOURCE=.\test_kernel_gaussian_sfbw.cxx
 SOURCE=.\test_mixture.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\test_update_mog.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\test_include.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\test_update_mog.cxx
+SOURCE=.\test_template_include.cxx
 # End Source File
 # End Group
 # End Target

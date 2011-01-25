@@ -84,7 +84,7 @@ LINK32=link.exe
 # Begin Group "Source Files"
 # PROP Default_Filter "cxx"
 # Begin Source File
-SOURCE=.\test_include.cxx
+SOURCE=.\test_driver.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\golden_test_vbl_io.cxx
@@ -102,9 +102,6 @@ SOURCE=.\test_array_3d_io.cxx
 SOURCE=.\test_bounding_box_io.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\test_driver.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\test_smart_ptr_io.cxx
 # End Source File
 # Begin Source File
@@ -115,6 +112,12 @@ SOURCE=.\vbl_io_test_classes.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\test_triple_io.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_include.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_template_include.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"

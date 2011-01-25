@@ -298,6 +298,9 @@ SOURCE=.\test_reflect.cxx
 # Begin Source File
 SOURCE=.\test_include.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\test_template_include.cxx
+# End Source File
 # End Group
 # End Target
 # End Project

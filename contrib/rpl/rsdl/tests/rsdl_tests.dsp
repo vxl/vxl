@@ -231,9 +231,6 @@ LINK32=link.exe
 SOURCE=.\test_driver.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\test_include.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\test_bins_2d.cxx
 # End Source File
 # Begin Source File
@@ -253,6 +250,12 @@ SOURCE=.\test_point.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\test_bins.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_include.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_template_include.cxx
 # End Source File
 # End Group
 # End Target

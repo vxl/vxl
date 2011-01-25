@@ -95,10 +95,10 @@ LIB32=link.exe -lib
 # Begin Group "Source Files"
 # PROP Default_Filter "cxx"
 # Begin Source File
-SOURCE=.\test_quad_interpolate.cxx
+SOURCE=.\test_driver.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\test_driver.cxx
+SOURCE=.\test_quad_interpolate.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\test_boxm_plane_ransac.cxx
@@ -111,6 +111,9 @@ SOURCE=.\test_sigma_normalizer.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\test_include.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_template_include.cxx
 # End Source File
 # End Group
 # End Target

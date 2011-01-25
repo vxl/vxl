@@ -212,13 +212,10 @@ LINK32=link.exe
 # Begin Group "Source Files"
 # PROP Default_Filter "cxx"
 # Begin Source File
-SOURCE=.\test_include.cxx
+SOURCE=.\test_driver.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\test_util.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\test_driver.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\test_convergence.cxx
@@ -264,6 +261,12 @@ SOURCE=.\test_trans_reader.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\test_transformation.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_include.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_template_include.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"

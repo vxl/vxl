@@ -105,9 +105,6 @@ SOURCE=.\test_file_format_read.cxx
 SOURCE=.\test_flipud.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\test_include.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\test_interpolate.cxx
 # End Source File
 # Begin Source File
@@ -130,6 +127,12 @@ SOURCE=.\test_load_gen.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\test_vil.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_include.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_template_include.cxx
 # End Source File
 # End Group
 # End Target

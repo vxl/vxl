@@ -96,9 +96,6 @@ SOURCE=.\test_bignum_io.cxx
 SOURCE=.\test_diag_matrix_io.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\test_include.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\test_matrix_fixed_io.cxx
 # End Source File
 # Begin Source File
@@ -127,6 +124,12 @@ SOURCE=.\test_vector_fixed_io.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\test_vector_io.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_include.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_template_include.cxx
 # End Source File
 # End Group
 # End Target

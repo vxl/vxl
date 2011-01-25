@@ -211,9 +211,6 @@ LINK32=link.exe
 SOURCE=.\test_driver.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\test_include.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\test_memory_image_format_io.cxx
 # End Source File
 # Begin Source File
@@ -230,6 +227,12 @@ SOURCE=.\test_rgb_io.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\test_rgba_io.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_include.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_template_include.cxx
 # End Source File
 # End Group
 # End Target

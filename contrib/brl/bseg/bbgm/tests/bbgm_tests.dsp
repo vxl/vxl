@@ -91,16 +91,19 @@ LIB32=link.exe -lib
 # Begin Group "Source Files"
 # PROP Default_Filter "cxx"
 # Begin Source File
+SOURCE=.\test_driver.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\test_bg_model_speed.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\test_measure.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\test_driver.cxx
+SOURCE=.\test_include.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\test_include.cxx
+SOURCE=.\test_template_include.cxx
 # End Source File
 # End Group
 # End Target

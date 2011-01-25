@@ -121,9 +121,6 @@ LINK32=link.exe
 SOURCE=.\test_driver.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\test_include.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\vepl2_test_dilate_disk.cxx
 # End Source File
 # Begin Source File
@@ -161,6 +158,12 @@ SOURCE=.\vepl2_test_x_gradient.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\vepl2_test_y_gradient.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_include.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_template_include.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"

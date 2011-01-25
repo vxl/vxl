@@ -91,16 +91,13 @@ LIB32=link.exe -lib
 # Begin Group "Source Files"
 # PROP Default_Filter "cxx"
 # Begin Source File
+SOURCE=.\test_driver.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\sample_database.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\test_database.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\test_driver.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\test_include.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\test_query.cxx
@@ -113,6 +110,12 @@ SOURCE=.\test_tuple.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\test_value.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_include.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_template_include.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"

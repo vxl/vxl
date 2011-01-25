@@ -178,13 +178,16 @@ SOURCE=.\test_driver.cxx
 SOURCE=.\test_mog_norm.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\test_include.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\test_merge_mog.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\test_boxm_scene_to_bvxm_grid.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_include.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_template_include.cxx
 # End Source File
 # End Group
 # End Target

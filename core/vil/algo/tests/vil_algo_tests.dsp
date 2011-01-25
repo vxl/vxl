@@ -7,9 +7,6 @@
 SOURCE=.\test_driver.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\test_include.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\test_algo_gauss_reduce.cxx
 # End Source File
 # Begin Source File
@@ -122,6 +119,12 @@ SOURCE=.\test_algo_suppress_non_plateau.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\test_algo_flood_fill.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_include.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_template_include.cxx
 # End Source File
 # End Group
 # End Target

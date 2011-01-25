@@ -172,10 +172,10 @@ LINK32=link.exe
 # Begin Group "Source Files"
 # PROP Default_Filter "cxx"
 # Begin Source File
-SOURCE=.\test_voxel_storage_disk.cxx
+SOURCE=.\test_driver.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\test_driver.cxx
+SOURCE=.\test_voxel_storage_disk.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\test_voxel_storage_disk_cached.cxx
@@ -197,6 +197,9 @@ SOURCE=.\test_bvxm_vrml.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\test_include.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_template_include.cxx
 # End Source File
 # End Group
 # End Target

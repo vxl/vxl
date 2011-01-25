@@ -93,6 +93,9 @@ LIB32=link.exe -lib
 # Begin Group "Source Files"
 # PROP Default_Filter "cxx"
 # Begin Source File
+SOURCE=.\test_driver.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\test_affine_camera.cxx
 # End Source File
 # Begin Source File
@@ -102,13 +105,7 @@ SOURCE=.\test_calibration_matrix.cxx
 SOURCE=.\test_camera_io.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\test_driver.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\test_fundamental_matrix.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\test_include.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\test_perspective_camera.cxx
@@ -127,6 +124,12 @@ SOURCE=.\test_essential_matrix.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\test_local_rational_camera.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_include.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_template_include.cxx
 # End Source File
 # End Group
 # End Target

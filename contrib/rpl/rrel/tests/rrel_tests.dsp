@@ -212,16 +212,13 @@ LINK32=link.exe
 # Begin Group "Source Files"
 # PROP Default_Filter "cxx"
 # Begin Source File
-SOURCE=.\similarity_from_matches.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\test_driver.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\test_homography2d_est.cxx
+SOURCE=.\similarity_from_matches.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\test_include.cxx
+SOURCE=.\test_homography2d_est.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\test_irls.cxx
@@ -255,6 +252,12 @@ SOURCE=.\test_similarity_from_matches.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\test_shift2d_est.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_include.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_template_include.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"

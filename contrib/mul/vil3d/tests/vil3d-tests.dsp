@@ -232,7 +232,7 @@ LINK32=link.exe
 # Begin Group "Source Files"
 # PROP Default_Filter "cxx"
 # Begin Source File
-SOURCE=.\test_include.cxx
+SOURCE=.\test_driver.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\test_algo_binary_dilate.cxx
@@ -251,9 +251,6 @@ SOURCE=.\test_algo_structuring_element.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\test_algo_threshold.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\test_driver.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\test_gauss_reduce.cxx
@@ -344,6 +341,12 @@ SOURCE=.\test_algo_find_blobs.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\test_algo_erode.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_include.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_template_include.cxx
 # End Source File
 # End Group
 # End Target
