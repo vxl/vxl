@@ -22,7 +22,6 @@
 #include <vnl/algo/vnl_svd.h>
 
 #include <vcl_cassert.h>
-#include <vcl_iostream.h>
 
 template <class T>
 vgl_point_3d<T> vgl_intersection(vcl_vector<vgl_plane_3d<T> > const& p)
@@ -92,6 +91,7 @@ vgl_intersection(const vcl_list<vgl_plane_3d<T> >& planes)
       break;
     }
     case 'z':
+    default:
     {
       double det = Q[0][0]*Q[1][1] - Q[0][1]*Q[1][0];
       double neux = vd[0]*Q[1][1]  - Q[0][1]*vd[1];
@@ -99,8 +99,6 @@ vgl_intersection(const vcl_list<vgl_plane_3d<T> >& planes)
       p0d.set(neux/det, neuy/det, 0.0);
       break;
     }
-    default: // this cannot happen
-      break;
   }
   vgl_point_3d<T> pt(static_cast<T>(p0d.x()),
                      static_cast<T>(p0d.y()),
@@ -155,8 +153,6 @@ vgl_intersection(const vcl_list<vgl_plane_3d<T> >& planes, vcl_vector<T> ws,
     case 'x':
     {
       double det = Q[1][1]*Q[2][2] - Q[1][2]*Q[2][1];
-      if (det == 0)
-        vcl_cout << "1................" << vcl_endl;
       double neuy = vd[1]*Q[2][2]  - Q[1][2]*vd[2];
       double neuz = Q[1][1]*vd[2]  - vd[1]*Q[2][1];
       p0d.set(0.0, neuy/det, neuz/det);
@@ -165,25 +161,20 @@ vgl_intersection(const vcl_list<vgl_plane_3d<T> >& planes, vcl_vector<T> ws,
     case 'y':
     {
       double det = Q[0][0]*Q[2][2] - Q[0][2]*Q[2][0];
-      if (det == 0)
-        vcl_cout << "2................" << vcl_endl;
       double neux = vd[0]*Q[2][2]  - Q[0][2]*vd[2];
       double neuz = Q[0][0]*vd[2]  - vd[0]*Q[2][0];
       p0d.set(neux/det, 0.0, neuz/det);
       break;
     }
     case 'z':
+    default:
     {
       double det = Q[0][0]*Q[1][1] - Q[0][1]*Q[1][0];
-      if (det == 0)
-        vcl_cout << "3................" << vcl_endl;
       double neux = vd[0]*Q[1][1]  - Q[0][1]*vd[1];
       double neuy = Q[0][0]*vd[1]  - vd[0]*Q[1][0];
       p0d.set(neux/det, neuy/det, 0.0);
       break;
     }
-    default: // this cannot happen
-      break;
   }
   vgl_point_3d<T> pt(static_cast<T>(p0d.x()),
                      static_cast<T>(p0d.y()),
@@ -204,9 +195,11 @@ vgl_intersection(const vcl_list<vgl_plane_3d<T> >& planes, vcl_vector<T> ws,
     cnt++;
   }
 
-if(cnt>0)
-  residual/=sum_ws;
-  residual=vcl_sqrt(residual);
+  if (cnt>0)
+  {
+    residual/=sum_ws;
+    residual=vcl_sqrt(residual);
+  }
   line=vgl_infinite_line_3d<T>(pt, tv);
   return true;
 }

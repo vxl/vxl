@@ -738,6 +738,7 @@ bool vgl_intersection(vgl_plane_3d<T> const& plane0,
       break;
     }
     case 'z':
+    default:
     {
       double det = n0x*n1y-n1x*n0y;
       if (vgl_near_zero(det))
@@ -747,8 +748,6 @@ bool vgl_intersection(vgl_plane_3d<T> const& plane0,
       p0d.set(neux/det, neuy/det, 0.0);
       break;
     }
-    default: // this cannot happen
-      break;
   }
   vgl_point_3d<T> p0(static_cast<T>(p0d.x()),
                      static_cast<T>(p0d.y()),
