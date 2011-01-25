@@ -7,7 +7,7 @@
 #include <avifile.h>
 #include <videodecoder.h>
 #include <infotypes.h>
-#include <except.h>
+#include <avm_except.h>
 #include <version.h>
 #include <avm_default.h>
 #include <avm_fourcc.h>
@@ -136,7 +136,7 @@ void mvl2_video_from_avi::reset_frame()
   moviestream_->Seek(current_frame_);
 }
 
-void mvl2_video_from_avi::set_frame_rate(double frame_rate)
+void mvl2_video_from_avi::set_frame_rate(double /*frame_rate*/)
 {
 }
 
@@ -155,7 +155,7 @@ int mvl2_video_from_avi::get_height() const
   return height_;
 }
 
-void mvl2_video_from_avi::set_capture_size(int width,int height)
+void mvl2_video_from_avi::set_capture_size(int /*width*/,int /*height*/)
 {
 }
 
