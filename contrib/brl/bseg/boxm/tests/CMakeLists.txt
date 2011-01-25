@@ -24,3 +24,5 @@ ADD_TEST( boxm_test_load_neighboring_blocks ${EXECUTABLE_OUTPUT_PATH}/boxm_test_
 
 ADD_EXECUTABLE( boxm_test_include test_include.cxx )
 TARGET_LINK_LIBRARIES( boxm_test_include boxm)
+ADD_EXECUTABLE( boxm_test_template_include test_template_include.cxx )
+TARGET_LINK_LIBRARIES( boxm_test_template_include boxm)

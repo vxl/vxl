@@ -21,3 +21,5 @@ ADD_TEST( bvpl_octree_test_pca             ${EXECUTABLE_OUTPUT_PATH}/bvpl_octree
 
 ADD_EXECUTABLE( bvpl_octree_test_include test_include.cxx )
 TARGET_LINK_LIBRARIES( bvpl_octree_test_include bvpl_octree)
+ADD_EXECUTABLE( bvpl_octree_test_template_include test_template_include.cxx )
+TARGET_LINK_LIBRARIES( bvpl_octree_test_template_include bvpl_octree)

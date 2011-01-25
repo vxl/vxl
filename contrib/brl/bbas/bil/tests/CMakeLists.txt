@@ -11,3 +11,5 @@ ADD_TEST( bil_test_bounded_image_view ${EXECUTABLE_OUTPUT_PATH}/bil_test_all tes
 
 ADD_EXECUTABLE(bil_test_include test_include.cxx )
 TARGET_LINK_LIBRARIES( bil_test_include bil )
+ADD_EXECUTABLE(bil_test_template_include test_template_include.cxx )
+TARGET_LINK_LIBRARIES( bil_test_template_include bil )

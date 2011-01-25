@@ -15,3 +15,5 @@ ADD_TEST( bprb_test_process_params ${EXECUTABLE_OUTPUT_PATH}/bprb_test_all test_
 
 ADD_EXECUTABLE(bprb_test_include test_include.cxx)
 TARGET_LINK_LIBRARIES(bprb_test_include bprb)
+ADD_EXECUTABLE(bprb_test_template_include test_template_include.cxx)
+TARGET_LINK_LIBRARIES(bprb_test_template_include bprb)

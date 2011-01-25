@@ -75,3 +75,5 @@ ADD_TEST( vgl_test_ray_3d                         ${EXECUTABLE_OUTPUT_PATH}/vgl_
 
 ADD_EXECUTABLE( vgl_test_include test_include.cxx )
 TARGET_LINK_LIBRARIES( vgl_test_include vgl_algo vgl )
+ADD_EXECUTABLE( vgl_test_template_include test_template_include.cxx )
+TARGET_LINK_LIBRARIES( vgl_test_template_include vgl_algo vgl )

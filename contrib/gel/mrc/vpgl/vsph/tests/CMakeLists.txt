@@ -15,3 +15,5 @@ ADD_TEST( vsph_test_spherical_coord  ${EXECUTABLE_OUTPUT_PATH}/vsph_test_all tes
 
 ADD_EXECUTABLE( vsph_test_include test_include.cxx )
 TARGET_LINK_LIBRARIES( vsph_test_include vsph)
+ADD_EXECUTABLE( vsph_test_template_include test_template_include.cxx )
+TARGET_LINK_LIBRARIES( vsph_test_template_include vsph)

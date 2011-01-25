@@ -45,3 +45,5 @@ ADD_TEST( vil1_test_vil               ${EXECUTABLE_OUTPUT_PATH}/vil1_test_all te
 
 ADD_EXECUTABLE( vil1_test_include test_include.cxx )
 TARGET_LINK_LIBRARIES( vil1_test_include vil1 vil )
+ADD_EXECUTABLE( vil1_test_template_include test_template_include.cxx )
+TARGET_LINK_LIBRARIES( vil1_test_template_include vil1 vil )

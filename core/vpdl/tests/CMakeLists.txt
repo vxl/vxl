@@ -28,3 +28,5 @@ ADD_TEST( vpdl_test_kernel_gaussian_sfbw  ${EXECUTABLE_OUTPUT_PATH}/vpdl_test_al
 
 ADD_EXECUTABLE( vpdl_test_include test_include.cxx )
 TARGET_LINK_LIBRARIES( vpdl_test_include vpdl )
+ADD_EXECUTABLE( vpdl_test_template_include test_template_include.cxx )
+TARGET_LINK_LIBRARIES( vpdl_test_template_include vpdl )

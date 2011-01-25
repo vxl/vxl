@@ -112,3 +112,5 @@ ENDIF ( CMAKE_COMPILER_IS_GNUCXX )
 
 ADD_EXECUTABLE( vnl_algo_test_include test_include.cxx )
 TARGET_LINK_LIBRARIES( vnl_algo_test_include vnl_algo )
+ADD_EXECUTABLE( vnl_algo_test_template_include test_template_include.cxx )
+TARGET_LINK_LIBRARIES( vnl_algo_test_template_include vnl_algo )

@@ -23,3 +23,5 @@ ADD_TEST( rsdl_test_bins          ${EXECUTABLE_OUTPUT_PATH}/rsdl_test_all test_b
 
 ADD_EXECUTABLE( rsdl_test_include test_include.cxx )
 TARGET_LINK_LIBRARIES( rsdl_test_include rsdl )
+ADD_EXECUTABLE( rsdl_test_template_include test_template_include.cxx )
+TARGET_LINK_LIBRARIES( rsdl_test_template_include rsdl )

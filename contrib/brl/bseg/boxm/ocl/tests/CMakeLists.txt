@@ -45,3 +45,5 @@ ADD_TEST( boxm_ocl_test_bit_tree        ${EXECUTABLE_OUTPUT_PATH}/boxm_ocl_test_
 
 ADD_EXECUTABLE( boxm_ocl_test_include test_include.cxx )
 TARGET_LINK_LIBRARIES( boxm_ocl_test_include boxm_ocl boxm)
+ADD_EXECUTABLE( boxm_ocl_test_template_include test_template_include.cxx )
+TARGET_LINK_LIBRARIES( boxm_ocl_test_template_include boxm_ocl boxm)

@@ -34,3 +34,5 @@ ENDIF(SEGFAULT_FIXED)
 
 ADD_EXECUTABLE( brip_test_include test_include.cxx )
 TARGET_LINK_LIBRARIES( brip_test_include brip )
+ADD_EXECUTABLE( brip_test_template_include test_template_include.cxx )
+TARGET_LINK_LIBRARIES( brip_test_template_include brip )

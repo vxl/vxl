@@ -26,3 +26,5 @@ ADD_TEST(vbl_io_golden_test_vbl_io   ${EXECUTABLE_OUTPUT_PATH}/vbl_io_test_all g
 
 ADD_EXECUTABLE( vbl_io_test_include test_include.cxx )
 TARGET_LINK_LIBRARIES( vbl_io_test_include vbl_io )
+ADD_EXECUTABLE( vbl_io_test_template_include test_template_include.cxx )
+TARGET_LINK_LIBRARIES( vbl_io_test_template_include vbl_io )

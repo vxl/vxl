@@ -96,3 +96,5 @@ ADD_TEST( vil_algo_test_flood_fill          ${EXECUTABLE_OUTPUT_PATH}/vil_algo_t
 
 ADD_EXECUTABLE( vil_algo_test_include test_include.cxx )
 TARGET_LINK_LIBRARIES( vil_algo_test_include vil_algo )
+ADD_EXECUTABLE( vil_algo_test_template_include test_template_include.cxx )
+TARGET_LINK_LIBRARIES( vil_algo_test_template_include vil_algo )

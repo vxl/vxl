@@ -1,7 +1,5 @@
 # brl/bbas/brdb/tests/CMakeLists.txt
 
-
-
 ADD_EXECUTABLE( brdb_test_all
   test_driver.cxx
   sample_database.cxx    sample_database.h
@@ -26,3 +24,5 @@ AUX_SOURCE_DIRECTORY(Templates brdb_test_value)
 
 ADD_EXECUTABLE( brdb_test_include test_include.cxx )
 TARGET_LINK_LIBRARIES( brdb_test_include brdb )
+ADD_EXECUTABLE( brdb_test_template_include test_template_include.cxx )
+TARGET_LINK_LIBRARIES( brdb_test_template_include brdb )

@@ -1,6 +1,5 @@
 # mul/mbl/tests/CMakeLists.txt
 
-
 ADD_EXECUTABLE( mbl_test_all
   test_driver.cxx
   test_jarque_bera.cxx
@@ -55,11 +54,9 @@ ADD_EXECUTABLE( mbl_test_all
   test_progress.cxx
   test_text_file.cxx
   test_mask.cxx
-
 )
 
 TARGET_LINK_LIBRARIES(mbl_test_all mbl vgl vnl_io vnl vbl vsl vul vpl testlib )
-
 
 ADD_TEST( mbl_test_jarque_bera ${EXECUTABLE_OUTPUT_PATH}/mbl_test_all test_jarque_bera )
 ADD_TEST( mbl_test_parse_block ${EXECUTABLE_OUTPUT_PATH}/mbl_test_all test_parse_block )
@@ -114,6 +111,7 @@ ADD_TEST (mbl_test_progress ${EXECUTABLE_OUTPUT_PATH}/mbl_test_all test_progress
 ADD_TEST (mbl_test_text_file ${EXECUTABLE_OUTPUT_PATH}/mbl_test_all test_text_file)
 ADD_TEST (mbl_test_mask ${EXECUTABLE_OUTPUT_PATH}/mbl_test_all test_mask)
 
-
 ADD_EXECUTABLE( mbl_test_include test_include.cxx )
 TARGET_LINK_LIBRARIES( mbl_test_include mbl )
+ADD_EXECUTABLE( mbl_test_template_include test_template_include.cxx )
+TARGET_LINK_LIBRARIES( mbl_test_template_include mbl )

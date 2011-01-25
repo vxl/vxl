@@ -25,3 +25,5 @@ ADD_TEST( boct_test_bit_tree2      ${EXECUTABLE_OUTPUT_PATH}/boct_test_all test_
 
 ADD_EXECUTABLE( boct_test_include test_include.cxx )
 TARGET_LINK_LIBRARIES( boct_test_include boct vnl)
+ADD_EXECUTABLE( boct_test_template_include test_template_include.cxx )
+TARGET_LINK_LIBRARIES( boct_test_template_include boct vnl)

@@ -10,3 +10,4 @@ ADD_EXECUTABLE(vpyr_test2 vpyr_test2.cxx my_pyramid.cxx my_pyramid.h my_pyramid_
 #ADD_TEST(vpyr_test2 ${EXECUTABLE_OUTPUT_PATH}/vpyr_test2)
 
 ADD_EXECUTABLE(vpyr_test_include test_include.cxx)
+ADD_EXECUTABLE(vpyr_test_template_include test_template_include.cxx)

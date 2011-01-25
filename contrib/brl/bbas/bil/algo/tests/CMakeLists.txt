@@ -26,3 +26,5 @@ ADD_TEST( bil_algo_test_detect_blur_scale     ${EXECUTABLE_OUTPUT_PATH}/bil_algo
 
 ADD_EXECUTABLE( bil_algo_test_include test_include.cxx )
 TARGET_LINK_LIBRARIES( bil_algo_test_include bil_algo sdet )
+ADD_EXECUTABLE( bil_algo_test_template_include test_template_include.cxx )
+TARGET_LINK_LIBRARIES( bil_algo_test_template_include bil_algo sdet )

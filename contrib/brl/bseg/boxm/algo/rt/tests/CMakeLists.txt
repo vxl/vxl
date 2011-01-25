@@ -11,3 +11,5 @@ ADD_TEST( boxm_algo_rt_test_edges              ${EXECUTABLE_OUTPUT_PATH}/boxm_al
 
 ADD_EXECUTABLE( boxm_algo_rt_test_include test_include.cxx )
 TARGET_LINK_LIBRARIES( boxm_algo_rt_test_include boxm_algo_rt)
+ADD_EXECUTABLE( boxm_algo_rt_test_template_include test_template_include.cxx )
+TARGET_LINK_LIBRARIES( boxm_algo_rt_test_template_include boxm_algo_rt)

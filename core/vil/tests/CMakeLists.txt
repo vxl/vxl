@@ -117,3 +117,5 @@ ADD_TEST( vil_test_pyramid_image_resource   ${EXECUTABLE_OUTPUT_PATH}/vil_test_a
 
 ADD_EXECUTABLE( vil_test_include test_include.cxx )
 TARGET_LINK_LIBRARIES( vil_test_include vil )
+ADD_EXECUTABLE( vil_test_template_include test_template_include.cxx )
+TARGET_LINK_LIBRARIES( vil_test_template_include vil )

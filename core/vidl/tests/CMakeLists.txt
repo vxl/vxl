@@ -17,3 +17,5 @@ ADD_TEST( vidl_test_convert                  ${EXECUTABLE_OUTPUT_PATH}/vidl_test
 
 ADD_EXECUTABLE( vidl_test_include test_include.cxx )
 TARGET_LINK_LIBRARIES( vidl_test_include vidl )
+ADD_EXECUTABLE( vidl_test_template_include test_template_include.cxx )
+TARGET_LINK_LIBRARIES( vidl_test_template_include vidl )

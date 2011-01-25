@@ -38,3 +38,5 @@ ADD_TEST( bsta_test_kent                    ${EXECUTABLE_OUTPUT_PATH}/bsta_test_
 
 ADD_EXECUTABLE( bsta_test_include test_include.cxx )
 TARGET_LINK_LIBRARIES( bsta_test_include bsta vsl)
+ADD_EXECUTABLE( bsta_test_template_include test_template_include.cxx )
+TARGET_LINK_LIBRARIES( bsta_test_template_include bsta vsl)

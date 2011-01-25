@@ -14,3 +14,5 @@ ADD_TEST( bbgm_test_measure ${EXECUTABLE_OUTPUT_PATH}/bbgm_test_all test_measure
 
 ADD_EXECUTABLE( bbgm_test_include test_include.cxx )
 TARGET_LINK_LIBRARIES( bbgm_test_include bbgm)
+ADD_EXECUTABLE( bbgm_test_template_include test_template_include.cxx )
+TARGET_LINK_LIBRARIES( bbgm_test_template_include bbgm)

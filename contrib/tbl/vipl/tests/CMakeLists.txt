@@ -19,3 +19,5 @@ ADD_TEST(vipl_test_gaussian_convolution ${EXECUTABLE_OUTPUT_PATH}/vipl_test_all 
 
 ADD_EXECUTABLE( vipl_test_include test_include.cxx )
 TARGET_LINK_LIBRARIES( vipl_test_include vipl )
+ADD_EXECUTABLE( vipl_test_template_include test_template_include.cxx )
+TARGET_LINK_LIBRARIES( vipl_test_template_include vipl )

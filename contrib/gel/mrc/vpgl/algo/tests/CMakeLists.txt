@@ -47,5 +47,6 @@ ADD_TEST( vpgl_algo_test_camera_from_box         ${EXECUTABLE_OUTPUT_PATH}/vpgl_
 ADD_TEST( vpgl_algo_test_camera_bounds         ${EXECUTABLE_OUTPUT_PATH}/vpgl_algo_test_all test_camera_bounds )
 
 ADD_EXECUTABLE( vpgl_algo_test_include test_include.cxx )
-
 TARGET_LINK_LIBRARIES( vpgl_algo_test_include vpgl_algo )
+ADD_EXECUTABLE( vpgl_algo_test_template_include test_template_include.cxx )
+TARGET_LINK_LIBRARIES( vpgl_algo_test_template_include vpgl_algo )

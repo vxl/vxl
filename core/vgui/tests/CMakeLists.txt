@@ -41,11 +41,13 @@ IF( HAS_VGUI )
   ADD_TEST( vgui_test_pixels              ${EXECUTABLE_OUTPUT_PATH}/vgui_test_all test_pixels )
   ADD_TEST( vgui_test_image_tableau       ${EXECUTABLE_OUTPUT_PATH}/vgui_test_all test_image_tableau ${CMAKE_CURRENT_SOURCE_DIR}/test_image.ppm )
   ADD_TEST( vgui_test_range_map ${EXECUTABLE_OUTPUT_PATH}/vgui_test_all test_range_map)
+
   ADD_EXECUTABLE( vgui_test_include test_include.cxx )
   TARGET_LINK_LIBRARIES( vgui_test_include vgui )
+  ADD_EXECUTABLE( vgui_test_template_include test_template_include.cxx )
+  TARGET_LINK_LIBRARIES( vgui_test_template_include vgui )
 
   ADD_EXECUTABLE( vgui_test_drawpix_speed2 test_drawpix_speed2.cxx )
-
   ADD_EXECUTABLE( vgui_test_rubberband_dialog test_rubberband_dialog.cxx )
 
 ENDIF( HAS_VGUI )

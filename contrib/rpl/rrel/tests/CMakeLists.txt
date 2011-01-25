@@ -37,3 +37,5 @@ ADD_TEST( rrel_test_similarity_from_matches  ${EXECUTABLE_OUTPUT_PATH}/rrel_test
 
 ADD_EXECUTABLE( rrel_test_include test_include.cxx )
 TARGET_LINK_LIBRARIES( rrel_test_include rrel )
+ADD_EXECUTABLE( rrel_test_template_include test_template_include.cxx )
+TARGET_LINK_LIBRARIES( rrel_test_template_include rrel )

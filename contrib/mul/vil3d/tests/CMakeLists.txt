@@ -84,3 +84,5 @@ ADD_TEST( vil3d_test_algo_find_blobs                  ${EXECUTABLE_OUTPUT_PATH}/
 
 ADD_EXECUTABLE( vil3d_test_include test_include.cxx )
 TARGET_LINK_LIBRARIES( vil3d_test_include vil3d_algo vil3d vgl )
+ADD_EXECUTABLE( vil3d_test_template_include test_template_include.cxx )
+TARGET_LINK_LIBRARIES( vil3d_test_template_include vil3d_algo vil3d vgl )

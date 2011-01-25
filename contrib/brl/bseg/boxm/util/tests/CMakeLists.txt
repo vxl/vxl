@@ -16,3 +16,5 @@ ADD_TEST( boxm_util_test_sigma_normalizer      ${EXECUTABLE_OUTPUT_PATH}/boxm_ut
 
 ADD_EXECUTABLE( boxm_util_test_include test_include.cxx )
 TARGET_LINK_LIBRARIES( boxm_util_test_include boxm_util)
+ADD_EXECUTABLE( boxm_util_test_template_include test_template_include.cxx )
+TARGET_LINK_LIBRARIES( boxm_util_test_template_include boxm_util)

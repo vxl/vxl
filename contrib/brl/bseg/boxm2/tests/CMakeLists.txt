@@ -24,3 +24,5 @@ ADD_TEST( boxm2_test_cpp_update_process  ${EXECUTABLE_OUTPUT_PATH}/boxm2_test_al
 
 ADD_EXECUTABLE( boxm2_test_include test_include.cxx )
 TARGET_LINK_LIBRARIES( boxm2_test_include boxm2 boxm2_io boxm2_cpp )
+ADD_EXECUTABLE( boxm2_test_template_include test_template_include.cxx )
+TARGET_LINK_LIBRARIES( boxm2_test_template_include boxm2 boxm2_io boxm2_cpp )

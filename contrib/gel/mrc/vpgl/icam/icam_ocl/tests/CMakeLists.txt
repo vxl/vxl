@@ -18,5 +18,7 @@ IF(OPENCL_FOUND)
 
  ADD_EXECUTABLE( icam_ocl_test_include test_include.cxx )
  TARGET_LINK_LIBRARIES( icam_ocl_test_include icam_ocl)
+ ADD_EXECUTABLE( icam_ocl_test_template_include test_template_include.cxx )
+ TARGET_LINK_LIBRARIES( icam_ocl_test_template_include icam_ocl)
 
 ENDIF(OPENCL_FOUND)

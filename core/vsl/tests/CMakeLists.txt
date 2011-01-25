@@ -59,3 +59,5 @@ ADD_TEST(vsl_test_block_rle_io          ${EXECUTABLE_OUTPUT_PATH}/vsl_test_all t
 
 ADD_EXECUTABLE( vsl_test_include test_include.cxx )
 TARGET_LINK_LIBRARIES( vsl_test_include vsl )
+ADD_EXECUTABLE( vsl_test_template_include test_template_include.cxx )
+TARGET_LINK_LIBRARIES( vsl_test_template_include vsl )

@@ -40,3 +40,5 @@ ADD_TEST( rgrl_matcher                ${EXECUTABLE_OUTPUT_PATH}/rgrl_test_all te
 
 ADD_EXECUTABLE( rgrl_test_include test_include.cxx )
 TARGET_LINK_LIBRARIES( rgrl_test_include rgrl )
+ADD_EXECUTABLE( rgrl_test_template_include test_template_include.cxx )
+TARGET_LINK_LIBRARIES( rgrl_test_template_include rgrl )

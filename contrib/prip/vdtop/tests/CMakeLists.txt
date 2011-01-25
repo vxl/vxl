@@ -14,3 +14,4 @@ ADD_TEST(vdtop_well_composed_kernel_test ${EXECUTABLE_OUTPUT_PATH}/vdtop_well_co
 #ADD_TEST(vdtop_veinerization_test        ${EXECUTABLE_OUTPUT_PATH}/vdtop_veinerization_test        ${CMAKE_CURRENT_SOURCE_DIR}/lena.org.pgm)
 
 ADD_EXECUTABLE(vdtop_test_include test_include.cxx)
+ADD_EXECUTABLE(vdtop_test_template_include test_template_include.cxx)

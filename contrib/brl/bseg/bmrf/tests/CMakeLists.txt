@@ -18,6 +18,5 @@ ADD_TEST( bmrf_test_node            ${EXECUTABLE_OUTPUT_PATH}/bmrf_test_all test
 ADD_TEST( bmrf_test_network         ${EXECUTABLE_OUTPUT_PATH}/bmrf_test_all test_network)
 ADD_TEST( bmrf_test_network_builder ${EXECUTABLE_OUTPUT_PATH}/bmrf_test_all test_network_builder)
 
-#this is for test_includes
 ADD_EXECUTABLE( bmrf_test_include test_include.cxx)
 TARGET_LINK_LIBRARIES( bmrf_test_include bmrf)

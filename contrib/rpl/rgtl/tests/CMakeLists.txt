@@ -29,3 +29,5 @@ ENDFOREACH(name)
 
 ADD_EXECUTABLE( rgtl_test_include test_include.cxx )
 TARGET_LINK_LIBRARIES( rgtl_test_include rgtl )
+ADD_EXECUTABLE( rgtl_test_template_include test_template_include.cxx )
+TARGET_LINK_LIBRARIES( rgtl_test_template_include rgtl )

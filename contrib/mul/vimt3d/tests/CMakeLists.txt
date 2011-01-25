@@ -36,3 +36,5 @@ ADD_TEST( vimt3d_test_crop                        ${EXECUTABLE_OUTPUT_PATH}/vimt
 
 ADD_EXECUTABLE( vimt3d_test_include test_include.cxx )
 TARGET_LINK_LIBRARIES( vimt3d_test_include vimt3d )
+ADD_EXECUTABLE( vimt3d_test_template_include test_template_include.cxx )
+TARGET_LINK_LIBRARIES( vimt3d_test_template_include vimt3d )

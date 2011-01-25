@@ -14,3 +14,5 @@ ADD_TEST( bugl_test_random_transform_2d ${EXECUTABLE_OUTPUT_PATH}/bugl_test_all 
 
 ADD_EXECUTABLE( bugl_test_include test_include.cxx)
 TARGET_LINK_LIBRARIES( bugl_test_include bugl)
+ADD_EXECUTABLE( bugl_test_template_include test_template_include.cxx)
+TARGET_LINK_LIBRARIES( bugl_test_template_include bugl)

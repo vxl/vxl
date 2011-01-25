@@ -11,3 +11,5 @@ ADD_TEST( boxm_basic_test_cell_vis_graph   ${EXECUTABLE_OUTPUT_PATH}/boxm_basic_
 
 ADD_EXECUTABLE( boxm_basic_test_include test_include.cxx )
 TARGET_LINK_LIBRARIES( boxm_basic_test_include boxm_basic)
+ADD_EXECUTABLE( boxm_basic_test_template_include test_template_include.cxx )
+TARGET_LINK_LIBRARIES( boxm_basic_test_template_include boxm_basic)

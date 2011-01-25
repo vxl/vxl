@@ -7,7 +7,5 @@ ADD_EXECUTABLE( bnl_test_all
 
 TARGET_LINK_LIBRARIES( bnl_test_all bnl testlib )
 
-
 ADD_EXECUTABLE( bnl_test_include test_include.cxx )
-
 TARGET_LINK_LIBRARIES( bnl_test_include bnl )

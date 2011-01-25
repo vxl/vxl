@@ -39,3 +39,5 @@ ADD_TEST( vimt_test_reflect                      ${EXECUTABLE_OUTPUT_PATH}/vimt_
 
 ADD_EXECUTABLE( vimt_test_include test_include.cxx )
 TARGET_LINK_LIBRARIES( vimt_test_include vimt_algo vimt )
+ADD_EXECUTABLE( vimt_test_template_include test_template_include.cxx )
+TARGET_LINK_LIBRARIES( vimt_test_template_include vimt_algo vimt )

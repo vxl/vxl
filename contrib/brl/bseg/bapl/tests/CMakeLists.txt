@@ -1,6 +1,5 @@
 # bapl/tests/CMakeLists.txt
 
-
 ADD_EXECUTABLE( bapl_test_all
   test_driver.cxx
   test_transform.cxx
@@ -24,3 +23,5 @@ ADD_TEST( bapl_test_dense_sift        bapl_test_all test_dense_sift ${CMAKE_CURR
 
 ADD_EXECUTABLE( bapl_test_include test_include.cxx )
 TARGET_LINK_LIBRARIES( bapl_test_include bapl )
+ADD_EXECUTABLE( bapl_test_template_include test_template_include.cxx )
+TARGET_LINK_LIBRARIES( bapl_test_template_include bapl )

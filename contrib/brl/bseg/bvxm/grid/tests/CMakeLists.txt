@@ -20,5 +20,6 @@ ADD_TEST( bvxm_grid_test_grid_to_image_stack       ${EXECUTABLE_OUTPUT_PATH}/bvx
 ADD_TEST( bvxm_grid_test_vrml                      ${EXECUTABLE_OUTPUT_PATH}/bvxm_grid_test_all   test_bvxm_vrml )
 
 ADD_EXECUTABLE( bvxm_grid_test_include test_include.cxx )
-
 TARGET_LINK_LIBRARIES( bvxm_grid_test_include bvxm )
+ADD_EXECUTABLE( bvxm_grid_test_template_include test_template_include.cxx )
+TARGET_LINK_LIBRARIES( bvxm_grid_test_template_include bvxm )

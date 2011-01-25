@@ -14,3 +14,5 @@ ADD_TEST( mipa_test_vector_normalisers ${EXECUTABLE_OUTPUT_PATH}/mipa_test_all t
 
 ADD_EXECUTABLE( mipa_test_include test_include.cxx )
 TARGET_LINK_LIBRARIES( mipa_test_include mipa )
+ADD_EXECUTABLE( mipa_test_template_include test_template_include.cxx )
+TARGET_LINK_LIBRARIES( mipa_test_template_include mipa )

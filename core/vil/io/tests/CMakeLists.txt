@@ -12,3 +12,5 @@ ADD_TEST( vil_io_test_image_view_io    ${EXECUTABLE_OUTPUT_PATH}/vil_io_test_all
 
 ADD_EXECUTABLE( vil_io_test_include test_include.cxx )
 TARGET_LINK_LIBRARIES( vil_io_test_include vil_io )
+ADD_EXECUTABLE( vil_io_test_template_include test_template_include.cxx )
+TARGET_LINK_LIBRARIES( vil_io_test_template_include vil_io )

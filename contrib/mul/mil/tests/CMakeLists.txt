@@ -11,3 +11,5 @@ ENDIF(CMAKE_COMPILER_IS_GNUCXX)
 
 ADD_EXECUTABLE(mil_test_include test_include.cxx)
 TARGET_LINK_LIBRARIES(mil_test_include mil_algo)
+ADD_EXECUTABLE(mil_test_template_include test_template_include.cxx)
+TARGET_LINK_LIBRARIES(mil_test_template_include mil_algo)

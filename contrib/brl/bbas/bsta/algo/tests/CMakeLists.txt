@@ -26,3 +26,5 @@ ADD_TEST( bsta_algo_test_beta_updater  ${EXECUTABLE_OUTPUT_PATH}/bsta_algo_test_
 
 ADD_EXECUTABLE( bsta_algo_test_include test_include.cxx )
 TARGET_LINK_LIBRARIES( bsta_algo_test_include bsta_algo )
+ADD_EXECUTABLE( bsta_algo_test_template_include test_template_include.cxx )
+TARGET_LINK_LIBRARIES( bsta_algo_test_template_include bsta_algo )

@@ -20,6 +20,8 @@ ADD_TEST( bvxm_test_voxel_world_mog_image     ${EXECUTABLE_OUTPUT_PATH}/bvxm_tes
 ADD_TEST( bvxm_test_platform_computations     ${EXECUTABLE_OUTPUT_PATH}/bvxm_test_all   test_platform_computations )
 ADD_TEST( bvxm_test_tangent_update     ${EXECUTABLE_OUTPUT_PATH}/bvxm_test_all   test_tangent_update )
 ADD_TEST( bvxm_test_illum     ${EXECUTABLE_OUTPUT_PATH}/bvxm_test_all   test_illum )
-ADD_EXECUTABLE( bvxm_test_include test_include.cxx )
 
+ADD_EXECUTABLE( bvxm_test_include test_include.cxx )
 TARGET_LINK_LIBRARIES( bvxm_test_include bvxm bvxm_io bvxm_grid )
+ADD_EXECUTABLE( bvxm_test_template_include test_template_include.cxx )
+TARGET_LINK_LIBRARIES( bvxm_test_template_include bvxm bvxm_io bvxm_grid )

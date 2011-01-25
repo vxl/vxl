@@ -37,3 +37,5 @@ ADD_TEST(vepl_test_y_gradient           ${EXECUTABLE_OUTPUT_PATH}/vepl_test_all 
 
 ADD_EXECUTABLE( vepl_test_include test_include.cxx )
 TARGET_LINK_LIBRARIES( vepl_test_include vepl )
+ADD_EXECUTABLE( vepl_test_template_include test_template_include.cxx )
+TARGET_LINK_LIBRARIES( vepl_test_template_include vepl )

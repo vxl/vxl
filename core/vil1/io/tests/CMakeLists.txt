@@ -21,3 +21,5 @@ ADD_TEST( vil1_io_test_golden                  ${EXECUTABLE_OUTPUT_PATH}/vil1_io
 
 ADD_EXECUTABLE( vil1_io_test_include test_include.cxx )
 TARGET_LINK_LIBRARIES( vil1_io_test_include vil1_io )
+ADD_EXECUTABLE( vil1_io_test_template_include test_template_include.cxx )
+TARGET_LINK_LIBRARIES( vil1_io_test_template_include vil1_io )

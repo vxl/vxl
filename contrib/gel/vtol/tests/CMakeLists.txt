@@ -35,3 +35,5 @@ ADD_TEST(vtol_test_extract_topology ${EXECUTABLE_OUTPUT_PATH}/vtol_test_all test
 
 ADD_EXECUTABLE( vtol_test_include test_include.cxx )
 TARGET_LINK_LIBRARIES( vtol_test_include vtol_algo vtol )
+ADD_EXECUTABLE( vtol_test_template_include test_template_include.cxx )
+TARGET_LINK_LIBRARIES( vtol_test_template_include vtol_algo vtol )

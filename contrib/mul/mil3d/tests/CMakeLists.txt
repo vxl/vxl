@@ -6,3 +6,5 @@ ADD_TEST(mil3d_test_all ${EXECUTABLE_OUTPUT_PATH}/mil3d_test_all)
 
 ADD_EXECUTABLE(mil3d_test_include test_include.cxx)
 TARGET_LINK_LIBRARIES(mil3d_test_include mil3d)
+ADD_EXECUTABLE(mil3d_test_template_include test_template_include.cxx)
+TARGET_LINK_LIBRARIES(mil3d_test_template_include mil3d)

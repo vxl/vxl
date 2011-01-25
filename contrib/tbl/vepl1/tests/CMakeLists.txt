@@ -15,3 +15,5 @@ ADD_TEST(vepl1_test_erode_disk ${EXECUTABLE_OUTPUT_PATH}/vepl1_test_all vepl1_te
 
 ADD_EXECUTABLE( vepl1_test_include test_include.cxx )
 TARGET_LINK_LIBRARIES( vepl1_test_include vepl1 )
+ADD_EXECUTABLE( vepl1_test_template_include test_template_include.cxx )
+TARGET_LINK_LIBRARIES( vepl1_test_template_include vepl1 )

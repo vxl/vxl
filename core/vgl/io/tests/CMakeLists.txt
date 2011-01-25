@@ -49,3 +49,5 @@ ADD_TEST( vgl_io_golden_test             ${EXECUTABLE_OUTPUT_PATH}/vgl_io_test_a
 
 ADD_EXECUTABLE( vgl_io_test_include test_include.cxx )
 TARGET_LINK_LIBRARIES( vgl_io_test_include vgl_io )
+ADD_EXECUTABLE( vgl_io_test_template_include test_template_include.cxx )
+TARGET_LINK_LIBRARIES( vgl_io_test_template_include vgl_io )

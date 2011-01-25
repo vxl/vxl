@@ -33,3 +33,5 @@ ADD_TEST(vifa_test_int_faces_adj_attr ${EXECUTABLE_OUTPUT_PATH}/vifa_test_all te
 
 ADD_EXECUTABLE( vifa_test_include test_include.cxx )
 TARGET_LINK_LIBRARIES( vifa_test_include vifa )
+ADD_EXECUTABLE( vifa_test_template_include test_template_include.cxx )
+TARGET_LINK_LIBRARIES( vifa_test_template_include vifa )
