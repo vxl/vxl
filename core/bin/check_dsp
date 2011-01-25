@@ -12,6 +12,11 @@ exec perl -l012 -w -x $0 ${1+"$@"}
 # (and of all subdirectories of that parent dir which have no test_include.cxx
 # for themselves).
 #
+# Third purpose: if the current directory contains a file named
+# test_template_include.cxx, verify that it contains all .txx files from the
+# parent dir (and of all subdirectories of that parent dir which have no
+# test_template_include.cxx for themselves).
+#
 # Command line argument(s): list of directories to check (default: all)
 # Command line switch: -s: generate output in the form of a shell script
 
@@ -127,6 +132,52 @@ foreach my $dir (@DIRS)
     foreach my $s (keys %updir_files) # should already be empty by now!
     {
       &missing_message("#include <$s>", "$dir/test_include.cxx");
+      delete $updir_files{$s};
+    }
+  }
+
+  # verify #includes in test_template_include.cxx
+  if (-f "$dir/test_template_include.cxx" && $dir !~ m/^v3p/)
+  {
+    my %updir_files = ();
+    my %inc_files = ();
+    my $prefix=$dir; $prefix =~ s![^/]*$ !!x; $prefix =~ s!^.*\b(vcl|core|contrib/brl/(bbas|bseg)|contrib/gel/mrc|contrib/[^/]*)/!!;
+    if (opendir UPDIR,"$dir/..") {
+      foreach (grep {m/\.txx$/} readdir(UPDIR))
+      {
+        ++ $updir_files{$prefix.$_};
+      }
+      closedir(UPDIR);
+    }
+    foreach my $subdir (qw(algo io file_formats gui pro xio vpdt filter section accessors vipl_with_section/accessors vipl_with_vbl_array_2d/accessors vipl_with_vnl_matrix/accessors))
+    {
+      if (! -d "$dir/../$subdir/tests" && opendir UPDIR,"$dir/../$subdir") {
+        foreach (grep {m/\.txx$/} readdir(UPDIR))
+        {
+          ++ $updir_files{"$prefix$subdir/$_"};
+        }
+        closedir(UPDIR);
+      }
+    }
+    open(FILE, "$dir/test_template_include.cxx");
+    while (<FILE>) {
+      ++ $inc_files{$1} if (m/^\s*\#\s*include\s*\<(\S+)\>\s*$/);
+    }
+    close(FILE);
+    foreach my $s (keys %inc_files)
+    {
+      &duplicate_message("#include <$s>", "$dir/test_template_include.cxx\n", '// !!')
+        if ($inc_files{$s} > 1);
+      delete $inc_files{$s};
+      unless (exists $updir_files{$s})
+      {
+        &removing_message("#include <$s>", "$dir/test_template_include.cxx\n", '// !!');
+      }
+      delete $updir_files{$s};
+    }
+    foreach my $s (keys %updir_files) # should already be empty by now!
+    {
+      &missing_message("#include <$s>", "$dir/test_template_include.cxx");
       delete $updir_files{$s};
     }
   }
