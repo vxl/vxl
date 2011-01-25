@@ -20,6 +20,7 @@ TESTS += test_vector_fixed_io.cxx
 TESTS += test_vector_io.cxx
 
 MINI_PROG_SOURCES += test_include.cxx
+MINI_PROG_SOURCES += test_template_include.cxx
 
 #########################################
 include ${VXLROOT}/config/static-tests.mk

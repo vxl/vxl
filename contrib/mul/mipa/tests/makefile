@@ -7,6 +7,7 @@ TESTS += test_sample_histo_boxes.cxx
 TESTS += test_vector_normalisers.cxx
 
 MINI_PROG_SOURCES += test_include.cxx
+MINI_PROG_SOURCES += test_template_include.cxx
 
 #########################################
 include ${VXLROOT}/config/static-tests.mk

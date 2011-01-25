@@ -18,6 +18,7 @@ TESTS += test_triple_io.cxx
 TESTS += golden_test_vbl_io.cxx
 
 MINI_PROG_SOURCES += test_include.cxx
+MINI_PROG_SOURCES += test_template_include.cxx
 
 #########################################
 include ${VXLROOT}/config/static-tests.mk

@@ -52,6 +52,7 @@ TESTS += test_algo_find_blobs.cxx
 TESTS += test_algo_erode.cxx
 
 MINI_PROG_SOURCES += test_include.cxx
+MINI_PROG_SOURCES += test_template_include.cxx
 
 #########################################
 include ${VXLROOT}/config/static-tests.mk

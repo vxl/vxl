@@ -27,6 +27,7 @@ TESTS += test_plane_3d_io.cxx
 TESTS += golden_test_vgl_io.cxx
 
 MINI_PROG_SOURCES += test_include.cxx
+MINI_PROG_SOURCES += test_template_include.cxx
 
 #########################################
 include ${VXLROOT}/config/static-tests.mk

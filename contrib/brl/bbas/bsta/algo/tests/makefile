@@ -11,6 +11,7 @@ TESTS += test_von_mises_update.cxx
 TESTS += test_fit_gaussian.cxx
 
 MINI_PROG_SOURCES += test_include.cxx
+MINI_PROG_SOURCES += test_template_include.cxx
 
 #########################################
 include ${VXLROOT}/config/static-tests.mk

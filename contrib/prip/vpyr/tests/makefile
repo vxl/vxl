@@ -11,6 +11,7 @@ MINI_PROG_SOURCES += vpyr_test2.cxx
 IULIBS += -lvpyr_tests
 
 MINI_PROG_SOURCES += test_include.cxx
+MINI_PROG_SOURCES += test_template_include.cxx
 
 #########################################
 include ${VXLROOT}/config/static-tests.mk

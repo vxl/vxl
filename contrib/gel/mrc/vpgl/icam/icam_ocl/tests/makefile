@@ -8,6 +8,7 @@ TESTS += test_depth_trans.cxx
 TESTS += test_minimizer.cxx
 
 MINI_PROG_SOURCES += test_include.cxx
+MINI_PROG_SOURCES += test_template_include.cxx
 
 #########################################
 include ${VXLROOT}/config/static-tests.mk

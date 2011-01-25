@@ -13,6 +13,7 @@ TESTS += test_rgba_io.cxx
 TESTS += golden_test_vil1_io.cxx
 
 MINI_PROG_SOURCES += test_include.cxx
+MINI_PROG_SOURCES += test_template_include.cxx
 
 #########################################
 include ${VXLROOT}/config/static-tests.mk

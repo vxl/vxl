@@ -65,6 +65,7 @@ TESTS += test_parse_colon_pairs_list.cxx
 TESTS += test_mask.cxx
 
 MINI_PROG_SOURCES += test_include.cxx
+MINI_PROG_SOURCES += test_template_include.cxx
 
 #########################################
 include ${VXLROOT}/config/static-tests.mk

@@ -46,6 +46,7 @@ TESTS += test_algo_flood_fill.cxx
 #MINI_PROG_SOURCES += vil_mil_gauss_general_timings.cxx
 
 MINI_PROG_SOURCES += test_include.cxx
+MINI_PROG_SOURCES += test_template_include.cxx
 
 #########################################
 include ${VXLROOT}/config/static-tests.mk

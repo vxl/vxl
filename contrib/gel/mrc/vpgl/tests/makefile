@@ -18,6 +18,7 @@ TESTS += test_essential_matrix.cxx
 TESTS += test_local_rational_camera.cxx
 
 MINI_PROG_SOURCES += test_include.cxx
+MINI_PROG_SOURCES += test_template_include.cxx
 
 #########################################
 include ${VXLROOT}/config/static-tests.mk

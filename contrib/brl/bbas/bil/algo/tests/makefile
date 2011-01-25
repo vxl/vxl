@@ -13,6 +13,7 @@ TESTS += test_bil_scale_image.cxx
 TESTS += test_bil_detect_blur_scale.cxx
 
 MINI_PROG_SOURCES += test_include.cxx
+MINI_PROG_SOURCES += test_template_include.cxx
 
 #########################################
 include ${VXLROOT}/config/static-tests.mk

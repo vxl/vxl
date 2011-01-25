@@ -12,6 +12,7 @@ TESTS += test_tuple.cxx
 TESTS += test_value.cxx
 
 MINI_PROG_SOURCES += test_include.cxx
+MINI_PROG_SOURCES += test_template_include.cxx
 
 #########################################
 include ${VXLROOT}/config/static-tests.mk

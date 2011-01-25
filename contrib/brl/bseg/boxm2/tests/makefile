@@ -15,6 +15,7 @@ TESTS += test_cpp_render_process.cxx
 TESTS += test_cpp_update_process.cxx
 
 MINI_PROG_SOURCES += test_include.cxx
+MINI_PROG_SOURCES += test_template_include.cxx
 
 #########################################
 include ${VXLROOT}/config/static-tests.mk

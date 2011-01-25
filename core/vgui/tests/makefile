@@ -24,6 +24,7 @@ MINI_PROG_SOURCES += test_drawpix_speed2.cxx#TESTS += test_drawpix_speed2.cxx
 MINI_PROG_SOURCES += test_rubberband_dialog.cxx
 
 MINI_PROG_SOURCES += test_include.cxx
+MINI_PROG_SOURCES += test_template_include.cxx
 
 #########################################
 include ${VXLROOT}/config/static-tests.mk

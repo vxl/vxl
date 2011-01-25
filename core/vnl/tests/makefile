@@ -50,6 +50,7 @@ MANPAGE_SOURCES += test_arithmetic_body.h
 MINI_PROG_SOURCES += basic_operation_timings.cxx
 
 MINI_PROG_SOURCES += test_include.cxx
+MINI_PROG_SOURCES += test_template_include.cxx
 
 #########################################
 include ${VXLROOT}/config/static-tests.mk

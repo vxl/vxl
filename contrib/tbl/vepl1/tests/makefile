@@ -11,6 +11,7 @@ TESTS += vepl1_test_threshold.cxx
 TESTS += vepl1_test_erode_disk.cxx
 
 MINI_PROG_SOURCES += test_include.cxx
+MINI_PROG_SOURCES += test_template_include.cxx
 
 #########################################
 include ${VXLROOT}/config/static-tests.mk

@@ -10,6 +10,7 @@ TESTS += test_octree_neighbors.cxx
 TESTS += test_pca_kernels.cxx
 
 MINI_PROG_SOURCES += test_include.cxx
+MINI_PROG_SOURCES += test_template_include.cxx
 
 #########################################
 include ${VXLROOT}/config/static-tests.mk

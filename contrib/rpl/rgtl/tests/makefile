@@ -11,6 +11,7 @@ TESTS += test_octree_objects.cxx
 TESTS += test_sqt_base.cxx
 
 MINI_PROG_SOURCES += test_include.cxx
+MINI_PROG_SOURCES += test_template_include.cxx
 
 #########################################
 include ${VXLROOT}/config/static-tests.mk

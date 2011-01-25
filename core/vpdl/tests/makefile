@@ -16,6 +16,7 @@ TESTS += test_mixture.cxx
 TESTS += test_update_mog.cxx
 
 MINI_PROG_SOURCES += test_include.cxx
+MINI_PROG_SOURCES += test_template_include.cxx
 
 #########################################
 include ${VXLROOT}/config/static-tests.mk

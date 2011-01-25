@@ -39,6 +39,7 @@ PARAMS_test_resample := square.pgm
 #MINI_PROG_SOURCES += vil_vil1_compare_function_timings.cxx
 
 MINI_PROG_SOURCES += test_include.cxx
+MINI_PROG_SOURCES += test_template_include.cxx
 
 #########################################
 include ${VXLROOT}/config/static-tests.mk

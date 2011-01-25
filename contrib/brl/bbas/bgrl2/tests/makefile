@@ -13,6 +13,7 @@ MANPAGE_SOURCES += test_node_sptr.h
 TESTS += graph_test.cxx
 
 MINI_PROG_SOURCES += test_include.cxx
+MINI_PROG_SOURCES += test_template_include.cxx
 
 #########################################
 include ${VXLROOT}/config/static-tests.mk
