@@ -112,6 +112,9 @@ SOURCE=.\boxm2_nn_cache.cxx
 # Begin Source File
 SOURCE=.\boxm2_scene_parser.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\boxm2_lru_cache.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
@@ -132,6 +135,9 @@ SOURCE=.\boxm2_dumb_cache.h
 # End Source File
 # Begin Source File
 SOURCE=.\boxm2_scene_parser.h
+# End Source File
+# Begin Source File
+SOURCE=.\boxm2_lru_cache.h
 # End Source File
 # End Group
 # End Target
