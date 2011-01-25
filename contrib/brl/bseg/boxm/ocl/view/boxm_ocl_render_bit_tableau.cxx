@@ -49,13 +49,11 @@ bool boxm_ocl_render_bit_tableau::init_ocl()
   //initialize the render manager
   boxm_render_bit_scene_manager* ray_mgr
       = boxm_render_bit_scene_manager::instance();
-  int status=0;
-  cl_platform_id platform_id[1];
-  status = clGetPlatformIDs (1, platform_id, NULL);
-  if (status!=CL_SUCCESS) {
-    vcl_cout<<error_to_string(status);
+  cl_device_id device = ray_mgr->devices()[0];
+  cl_platform_id platform_id[1]; 
+  int status = clGetDeviceInfo(device,CL_DEVICE_PLATFORM,sizeof(platform_id),(void*) platform_id,NULL);
+  if (!check_val(status, CL_SUCCESS, "boxm2_render Tableau::create_cl_gl_context CL_DEVICE_PLATFORM failed."))
     return 0;
-  }
 
   //create OpenCL context
   cl_context ComputeContext;
@@ -68,7 +66,7 @@ bool boxm_ocl_render_bit_tableau::init_ocl()
     0
   };
   //create OpenCL context with display properties determined above
-  ComputeContext = clCreateContext(props, 1, &ray_mgr->devices()[0], NULL, NULL, &status);
+  ComputeContext = clCreateContext(props, 1, &device, NULL, NULL, &status);
 #elif defined(__APPLE__) || defined(MACOSX)
   CGLContextObj kCGLContext = CGLGetCurrentContext();
   CGLShareGroupObj kCGLShareGroup = CGLGetShareGroup(kCGLContext);
@@ -89,7 +87,7 @@ bool boxm_ocl_render_bit_tableau::init_ocl()
       CL_CONTEXT_PLATFORM, (cl_context_properties) platform_id[0],
       0
   };
-  ComputeContext = clCreateContext(props, 1, &ray_mgr->devices()[0], NULL, NULL, &status);
+  ComputeContext = clCreateContext(props, 1, &device, NULL, NULL, &status);
 #endif
 
   if (status!=CL_SUCCESS) {
@@ -189,7 +187,7 @@ bool boxm_ocl_render_bit_tableau::handle(vgui_event const &e)
 
     //vcl_cout<<"Cam center: "<<cam_.get_camera_center()<<'\n'
     //        <<"stare point: "<<stare_point_<<vcl_endl;
-    //vcl_cout<<cam_<<vcl_endl;
+    vcl_cout<<cam_<<vcl_endl;
     float gpu_time = this->render_frame();
     this->setup_gl_matrices();
     glClear(GL_COLOR_BUFFER_BIT);
@@ -233,7 +231,7 @@ float boxm_ocl_render_bit_tableau::render_frame()
   boxm_render_bit_scene_manager* ray_mgr = boxm_render_bit_scene_manager::instance();
   cl_int status = clEnqueueAcquireGLObjects(ray_mgr->command_queue_, 1,
                                             &ray_mgr->image_gl_buf_ , 0, 0, 0);
-  if (!ray_mgr->check_val(status,CL_SUCCESS,"clEnqueueAcquireGLObjects failed. (gl_image)"+error_to_string(status)))
+  if (!check_val(status,CL_SUCCESS,"clEnqueueAcquireGLObjects failed. (gl_image)"+error_to_string(status)))
     return false;
 
   ray_mgr->set_persp_camera(&cam_);

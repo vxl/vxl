@@ -367,7 +367,7 @@ cast_ray(
 #endif
 #endif
 #ifdef RENDER
-  expected_int += vis*0.5f;
+  //expected_int += vis*0.5f;
 
   gl_image[imIndex[llid]] = rgbaFloatToInt((float4) expected_int);
   in_image[imIndex[llid]] = (float4) expected_int;

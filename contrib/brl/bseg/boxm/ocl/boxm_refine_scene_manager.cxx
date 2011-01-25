@@ -131,7 +131,7 @@ bool boxm_refine_scene_manager::setup_scene_data_buffers()
                                    numblocks * sizeof(cl_int4),
                                    block_ptrs_,
                                    &status);
-  if (!this->check_val(status, CL_SUCCESS, "clCreateBuffer (block_ptrs_) failed."))
+  if (!check_val(status, CL_SUCCESS, "clCreateBuffer (block_ptrs_) failed."))
     return false;
 
   //number of blocks in each dimension
@@ -140,7 +140,7 @@ bool boxm_refine_scene_manager::setup_scene_data_buffers()
                                    sizeof(cl_int4),
                                    block_nums_,
                                    &status);
-  if (!this->check_val(status, CL_SUCCESS, "clCreateBuffer (block_nums_) failed."))
+  if (!check_val(status, CL_SUCCESS, "clCreateBuffer (block_nums_) failed."))
     return false;
 
   //tree cells
@@ -149,7 +149,7 @@ bool boxm_refine_scene_manager::setup_scene_data_buffers()
                                    numbuffer_*lenbuffer_*sizeof(cl_int4),
                                    tree_cells_,
                                    &status);
-  if (!this->check_val(status, CL_SUCCESS, "clCreateBuffer (tree_cells_) failed."))
+  if (!check_val(status, CL_SUCCESS, "clCreateBuffer (tree_cells_) failed."))
     return false;
 
   //data cells buffer
@@ -158,7 +158,7 @@ bool boxm_refine_scene_manager::setup_scene_data_buffers()
                                    numbuffer_*lenbuffer_*sizeof(cl_float16),
                                    data_cells_,
                                    &status);
-  if (!this->check_val(status, CL_SUCCESS, "clCreateBuffer (data_cells_) failed."))
+  if (!check_val(status, CL_SUCCESS, "clCreateBuffer (data_cells_) failed."))
     return false;
 
   //memory pointers for each tree buffer
@@ -167,7 +167,7 @@ bool boxm_refine_scene_manager::setup_scene_data_buffers()
                                  numbuffer_*sizeof(cl_int2),
                                  mem_ptrs_,
                                  &status);
-  if (!this->check_val(status, CL_SUCCESS, "clCreateBuffer (mem_ptrs_) failed."))
+  if (!check_val(status, CL_SUCCESS, "clCreateBuffer (mem_ptrs_) failed."))
     return false;
 
   //OUTPUT
@@ -177,7 +177,7 @@ bool boxm_refine_scene_manager::setup_scene_data_buffers()
                                output_,
                                &status);
 
-  return this->check_val(status, CL_SUCCESS, "clCreateBuffer (cell_data) failed.");
+  return check_val(status, CL_SUCCESS, "clCreateBuffer (cell_data) failed.");
 }
 
 
@@ -200,28 +200,28 @@ bool boxm_refine_scene_manager::clean_scene_data_buffers()
   // Releases OpenCL resources (Context, Memory etc.)
   cl_int status;
   status = clReleaseMemObject(block_ptrs_buf_);
-  if (!this->check_val(status, CL_SUCCESS, "clReleaseMemObject failed (block_ptrs_buf_)."))
+  if (!check_val(status, CL_SUCCESS, "clReleaseMemObject failed (block_ptrs_buf_)."))
     return SDK_FAILURE;
 
   status = clReleaseMemObject(block_nums_buf_);
-  if (!this->check_val(status, CL_SUCCESS, "clReleaseMemObject failed (block_nums_buf_)."))
+  if (!check_val(status, CL_SUCCESS, "clReleaseMemObject failed (block_nums_buf_)."))
     return SDK_FAILURE;
 
   status = clReleaseMemObject(tree_cells_buf_);
-  if (!this->check_val(status, CL_SUCCESS, "clReleaseMemObject failed (tree_cells_buf_)."))
+  if (!check_val(status, CL_SUCCESS, "clReleaseMemObject failed (tree_cells_buf_)."))
     return SDK_FAILURE;
 
   status = clReleaseMemObject(data_cells_buf_);
-  if (!this->check_val(status, CL_SUCCESS, "clReleaseMemObject failed (data_cells_buf_)."))
+  if (!check_val(status, CL_SUCCESS, "clReleaseMemObject failed (data_cells_buf_)."))
     return SDK_FAILURE;
 
   status = clReleaseMemObject(mem_ptrs_buf_);
-  if (!this->check_val(status, CL_SUCCESS, "clReleaseMemObject failed (mem_ptrs_buf_)."))
+  if (!check_val(status, CL_SUCCESS, "clReleaseMemObject failed (mem_ptrs_buf_)."))
     return SDK_FAILURE;
 
   //output
   status = clReleaseMemObject(output_buf_);
-  if (!this->check_val(status, CL_SUCCESS, "clReleaseMemObject failed (output_buf_)."))
+  if (!check_val(status, CL_SUCCESS, "clReleaseMemObject failed (output_buf_)."))
     return SDK_FAILURE;
 
   return SDK_SUCCESS;
@@ -241,7 +241,7 @@ bool boxm_refine_scene_manager::run_refine()
   cl_ulong used_local_memory;
   status = clGetKernelWorkGroupInfo(this->kernel_,this->devices()[0],CL_KERNEL_LOCAL_MEM_SIZE,
                                     sizeof(cl_ulong),&used_local_memory,NULL);
-  if (!this->check_val(status,CL_SUCCESS,"clGetKernelWorkGroupInfo CL_KERNEL_LOCAL_MEM_SIZE failed."))
+  if (!check_val(status,CL_SUCCESS,"clGetKernelWorkGroupInfo CL_KERNEL_LOCAL_MEM_SIZE failed."))
     return SDK_FAILURE;
   vcl_cout<<"---used local mem space: "<<used_local_memory<<" bytes"<<vcl_endl;
   if (used_local_memory > this->total_local_memory()) {
@@ -253,7 +253,7 @@ bool boxm_refine_scene_manager::run_refine()
   cl_ulong kernel_work_group_size;
   status = clGetKernelWorkGroupInfo(this->kernel_,this->devices()[0],CL_KERNEL_WORK_GROUP_SIZE,
                                     sizeof(cl_ulong),&kernel_work_group_size,NULL);
-  if (!this->check_val(status,CL_SUCCESS,"clGetKernelWorkGroupInfo CL_KERNEL_WORK_GROUP_SIZE, failed."))
+  if (!check_val(status,CL_SUCCESS,"clGetKernelWorkGroupInfo CL_KERNEL_WORK_GROUP_SIZE, failed."))
     return SDK_FAILURE;
   vcl_cout<<"KERNEL work group size..."<<kernel_work_group_size<<vcl_endl;
 
@@ -268,7 +268,7 @@ bool boxm_refine_scene_manager::run_refine()
                                         this->devices()[0],
                                         CL_QUEUE_PROFILING_ENABLE,
                                         &status);
-  if (!this->check_val(status,CL_SUCCESS,"Failed in command queue creation" + error_to_string(status)))
+  if (!check_val(status,CL_SUCCESS,"Failed in command queue creation" + error_to_string(status)))
     return false;
 
   // pop the kernel onto the queue to execute
@@ -276,12 +276,12 @@ bool boxm_refine_scene_manager::run_refine()
   status = clEnqueueNDRangeKernel(command_queue_, this->kernel_,
                                   1, NULL, globalThreads, localThreads,
                                   0, NULL, &ceEvent);
-  if (!this->check_val(status,CL_SUCCESS,"clEnqueueNDRangeKernel failed. "+error_to_string(status)))
+  if (!check_val(status,CL_SUCCESS,"clEnqueueNDRangeKernel failed. "+error_to_string(status)))
     return SDK_FAILURE;
 
   //clFinish makes sure the command_queue_ is flushed before probing memory..?
   status = clFinish(command_queue_);
-  if (!this->check_val(status,CL_SUCCESS,"clFinish failed."+error_to_string(status)))
+  if (!check_val(status,CL_SUCCESS,"clFinish failed."+error_to_string(status)))
     return SDK_FAILURE;
 
 
@@ -333,7 +333,7 @@ bool boxm_refine_scene_manager::read_buffers()
                                0, numblocks * sizeof(cl_int4),
                                block_ptrs_,
                                0, NULL, &events[eventI++]);
-  if (!this->check_val(status,CL_SUCCESS,"clEnqueueBuffer (block_ptrs)failed."))
+  if (!check_val(status,CL_SUCCESS,"clEnqueueBuffer (block_ptrs)failed."))
     return false;
 
   //Read tree_cells
@@ -341,7 +341,7 @@ bool boxm_refine_scene_manager::read_buffers()
                                0,  numbuffer_*lenbuffer_*sizeof(cl_int4),
                                tree_cells_,
                                0, NULL, &events[eventI++]);
-  if (!this->check_val(status,CL_SUCCESS,"clEnqueueBuffer (tree_results_)failed."))
+  if (!check_val(status,CL_SUCCESS,"clEnqueueBuffer (tree_results_)failed."))
     return false;
 
   //read data_cells
@@ -349,7 +349,7 @@ bool boxm_refine_scene_manager::read_buffers()
                                0, numbuffer_*lenbuffer_*sizeof(cl_float16),
                                data_cells_,
                                0, NULL, &events[eventI++]);
-  if (!this->check_val(status,CL_SUCCESS,"clEnqueueBuffer (block_ptrs_results_)failed."))
+  if (!check_val(status,CL_SUCCESS,"clEnqueueBuffer (block_ptrs_results_)failed."))
     return false;
 
   //read mem_ptrs_
@@ -363,25 +363,25 @@ bool boxm_refine_scene_manager::read_buffers()
                                0, sizeof(cl_float)*10,
                                output_,
                                0,NULL,&events[eventI++]);
-  if (!this->check_val(status,CL_SUCCESS,"clEnqueueBuffer (output_results_)failed."))
+  if (!check_val(status,CL_SUCCESS,"clEnqueueBuffer (output_results_)failed."))
     return false;
 
 
   // Wait for the read buffer to finish execution
   status = clWaitForEvents(numEvents, events);
-  if (!this->check_val(status,CL_SUCCESS,"clWaitForEvents failed."))
+  if (!check_val(status,CL_SUCCESS,"clWaitForEvents failed."))
     return false;
 
   //release events? all of em or just 0?
   for (int i=0; i<numEvents; i++) {
     status = clReleaseEvent(events[i]);
-    if (!this->check_val(status,CL_SUCCESS,"clReleaseEvent failed."))
+    if (!check_val(status,CL_SUCCESS,"clReleaseEvent failed."))
       return false;
   }
 
   // release the command Queue
   status = clReleaseCommandQueue(command_queue_);
-  if (!this->check_val(status,CL_SUCCESS,"clReleaseCommandQueue failed."))
+  if (!check_val(status,CL_SUCCESS,"clReleaseCommandQueue failed."))
     return false;
 
   return true;
@@ -399,7 +399,7 @@ bool boxm_refine_scene_manager::clean_refine()
   // release kernel
   cl_int status = CL_SUCCESS;
   status = clReleaseKernel(kernel_);
-  good = static_cast<bool>(this->check_val(status,CL_SUCCESS,"clReleaseKernel failed."));
+  good = static_cast<bool>(check_val(status,CL_SUCCESS,"clReleaseKernel failed."));
   return good;
 }
 
@@ -427,57 +427,57 @@ int boxm_refine_scene_manager::set_kernel_args()
   // ----- Set appropriate arguments to the kernel ----
   //block pointers and block nums in each dimension
   status = clSetKernelArg(kernel_, i++, sizeof(cl_mem), (void*) &block_ptrs_buf_);
-  if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (block_ptrs buffer)"))
+  if (!check_val(status,CL_SUCCESS,"clSetKernelArg failed. (block_ptrs buffer)"))
     return SDK_FAILURE;
   status = clSetKernelArg(kernel_, i++, sizeof(cl_mem), (void*) &block_nums_buf_);
-  if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (block_nums buffer)"))
+  if (!check_val(status,CL_SUCCESS,"clSetKernelArg failed. (block_nums buffer)"))
     return SDK_FAILURE;
 
   //num buffers, length of buffers
   status = clSetKernelArg(kernel_, i++, sizeof(cl_int), &numbuffer_);
-  if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (numbuffer_ buffer)"))
+  if (!check_val(status,CL_SUCCESS,"clSetKernelArg failed. (numbuffer_ buffer)"))
     return SDK_FAILURE;
   status = clSetKernelArg(kernel_, i++, sizeof(cl_int), &lenbuffer_);
-  if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (lenbuffer_ buffer)"))
+  if (!check_val(status,CL_SUCCESS,"clSetKernelArg failed. (lenbuffer_ buffer)"))
     return SDK_FAILURE;
 
   //tree cells, data cells cells
   status = clSetKernelArg(kernel_, i++, sizeof(cl_mem), (void*) &tree_cells_buf_);
-  if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (tree_cells_buf_ buffer)"))
+  if (!check_val(status,CL_SUCCESS,"clSetKernelArg failed. (tree_cells_buf_ buffer)"))
     return SDK_FAILURE;
   status = clSetKernelArg(kernel_, i++, sizeof(cl_mem), (void*) &data_cells_buf_);
-  if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (data_cells_buf_ buffer)"))
+  if (!check_val(status,CL_SUCCESS,"clSetKernelArg failed. (data_cells_buf_ buffer)"))
     return SDK_FAILURE;
 
   //mem pointers for the tree cells
   status = clSetKernelArg(kernel_, i++, sizeof(cl_mem), (void*) &mem_ptrs_buf_);
-  if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (data buffer)"))
+  if (!check_val(status,CL_SUCCESS,"clSetKernelArg failed. (data buffer)"))
     return SDK_FAILURE;
 
   //probability threshold
   status = clSetKernelArg(kernel_, i++, sizeof(cl_float),  &prob_thresh_);
-  if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (prob_thresh buffer)"))
+  if (!check_val(status,CL_SUCCESS,"clSetKernelArg failed. (prob_thresh buffer)"))
     return SDK_FAILURE;
   //max level
   status = clSetKernelArg(kernel_, i++, sizeof(cl_uint), (void*) &max_level_);
-  if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (max_level_) buffer)"))
+  if (!check_val(status,CL_SUCCESS,"clSetKernelArg failed. (max_level_) buffer)"))
     return SDK_FAILURE;
   //bbox length
   status = clSetKernelArg(kernel_, i++, sizeof(cl_float), (void*) &bbox_len_);
-  if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (bbox_len_) buffer)"))
+  if (!check_val(status,CL_SUCCESS,"clSetKernelArg failed. (bbox_len_) buffer)"))
     return SDK_FAILURE;
   // ----- end kernel arguments ---
 
   // ---- create local memory arguments for caching whole blocks ----
   //local tree copy
   status = clSetKernelArg(kernel_, i++, sizeof(cl_int4)*585, 0);
-  if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (local tree buffer)"))
+  if (!check_val(status,CL_SUCCESS,"clSetKernelArg failed. (local tree buffer)"))
     return false;
   //---- end local memory arguments
 
   //IO ARGUMENT
   status = clSetKernelArg(kernel_, i++, sizeof(cl_mem), (void*) &output_buf_);
-  if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (output_Buff buffer)"))
+  if (!check_val(status,CL_SUCCESS,"clSetKernelArg failed. (output_Buff buffer)"))
     return SDK_FAILURE;
   else
     return SDK_SUCCESS;
@@ -497,7 +497,7 @@ bool boxm_refine_scene_manager::init_kernel()
   //create the kernel
   cl_int status = CL_SUCCESS;
   kernel_ = clCreateKernel(program_, "refine_main", &status);
-  if (!this->check_val(status, CL_SUCCESS, error_to_string(status))) {
+  if (!check_val(status, CL_SUCCESS, error_to_string(status))) {
     return false;
   }
   return true;
@@ -512,7 +512,7 @@ int boxm_refine_scene_manager::build_kernel_program()
   if (program_) {
     status = clReleaseProgram(program_);
     program_ = 0;
-    if (!this->check_val(status,
+    if (!check_val(status,
       CL_SUCCESS,
       "clReleaseProgram failed."))
       return SDK_FAILURE;
@@ -524,7 +524,7 @@ int boxm_refine_scene_manager::build_kernel_program()
                                        &source,
                                        sourceSize,
                                        &status);
-  if (!this->check_val(status, CL_SUCCESS, "clCreateProgramWithSource failed."))
+  if (!check_val(status, CL_SUCCESS, "clCreateProgramWithSource failed."))
     return SDK_FAILURE;
 
   // create a cl program executable for all the devices specified
@@ -534,7 +534,7 @@ int boxm_refine_scene_manager::build_kernel_program()
                           NULL,
                           NULL,
                           NULL);
-  if (!this->check_val(status, CL_SUCCESS, error_to_string(status)))
+  if (!check_val(status, CL_SUCCESS, error_to_string(status)))
   {
     vcl_size_t len;
     char buffer[2048];

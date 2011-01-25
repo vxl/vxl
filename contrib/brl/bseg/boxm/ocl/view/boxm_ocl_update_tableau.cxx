@@ -231,7 +231,7 @@ bool boxm_ocl_update_tableau::render_frame()
     boxm_update_ocl_scene_manager* ocl_mgr = boxm_update_ocl_scene_manager::instance();
     cl_int status = clEnqueueAcquireGLObjects(ocl_mgr->command_queue_, 1,
                                               &ocl_mgr->image_gl_buf_ , 0, 0, 0);
-    if (!ocl_mgr->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (input_image)"+error_to_string(status)))
+    if (!check_val(status,CL_SUCCESS,"clSetKernelArg failed. (input_image)"+error_to_string(status)))
         return false;
 
     ocl_mgr->set_persp_camera(&cam_);

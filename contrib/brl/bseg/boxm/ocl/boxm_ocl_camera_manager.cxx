@@ -17,7 +17,7 @@ bool boxm_ocl_camera_manager::run()
 {
     cl_int status = CL_SUCCESS;
     command_queue_ = clCreateCommandQueue(this->context(),this->devices()[0],CL_QUEUE_PROFILING_ENABLE,&status);
-    if (!this->check_val(status,CL_SUCCESS,"Falied in command queue creation" + error_to_string(status)))
+    if (!check_val(status,CL_SUCCESS,"Falied in command queue creation" + error_to_string(status)))
         return false;
     vcl_size_t globalThreads[1];vcl_size_t localThreads[1];
 
@@ -25,31 +25,31 @@ bool boxm_ocl_camera_manager::run()
     localThreads[0]=1;
     status = clEnqueueNDRangeKernel(command_queue_,this->kernel_, 1,NULL,globalThreads,localThreads,0,NULL,NULL);
 
-    if (!this->check_val(status,CL_SUCCESS,"clEnqueueNDRangeKernel failed. "+error_to_string(status)))
+    if (!check_val(status,CL_SUCCESS,"clEnqueueNDRangeKernel failed. "+error_to_string(status)))
         return SDK_FAILURE;
 
     status = clFinish(command_queue_);
-    if (!this->check_val(status,CL_SUCCESS,"clFinish failed."+error_to_string(status)))
+    if (!check_val(status,CL_SUCCESS,"clFinish failed."+error_to_string(status)))
         return SDK_FAILURE;
   // Enqueue readBuffers
     status = clEnqueueReadBuffer(command_queue_,point_2d_buf_,CL_TRUE,
                                  0,sizeof(cl_float2),point_2d_,0,NULL,NULL);
-    if (!this->check_val(status,CL_SUCCESS,"clEnqueueBuffer (point 2d)failed."))
+    if (!check_val(status,CL_SUCCESS,"clEnqueueBuffer (point 2d)failed."))
         return false;
     status = clFinish(command_queue_);
-    if (!this->check_val(status,CL_SUCCESS,"clFinish failed."+error_to_string(status)))
+    if (!check_val(status,CL_SUCCESS,"clFinish failed."+error_to_string(status)))
         return SDK_FAILURE;
 
     status = clEnqueueReadBuffer(command_queue_,point_3d_buf_,CL_TRUE,
                                  0,4*sizeof(cl_float),point_3d_,0,NULL,NULL);
-    if (!this->check_val(status,CL_SUCCESS,"clEnqueueBuffer (point 3d)failed."))
+    if (!check_val(status,CL_SUCCESS,"clEnqueueBuffer (point 3d)failed."))
         return false;
     status = clFinish(command_queue_);
-    if (!this->check_val(status,CL_SUCCESS,"clFinish failed."+error_to_string(status)))
+    if (!check_val(status,CL_SUCCESS,"clFinish failed."+error_to_string(status)))
         return SDK_FAILURE;
 
     status = clReleaseCommandQueue(command_queue_);
-    if (!this->check_val(status,CL_SUCCESS,"clReleaseCommandQueue failed."))
+    if (!check_val(status,CL_SUCCESS,"clReleaseCommandQueue failed."))
         return false;
     return true;
 }
@@ -88,10 +88,10 @@ int boxm_ocl_camera_manager::set_point_buffers()
 {
   cl_int status = CL_SUCCESS;
   point_2d_buf_ = clCreateBuffer(this->context_,CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR, sizeof(cl_float2),point_2d_,&status);
-  if (!this->check_val(status,CL_SUCCESS,"clCreateBuffer (stat input) failed."))
+  if (!check_val(status,CL_SUCCESS,"clCreateBuffer (stat input) failed."))
     return SDK_FAILURE;
   point_3d_buf_ = clCreateBuffer(this->context_,CL_MEM_READ_WRITE| CL_MEM_COPY_HOST_PTR, sizeof(cl_float4),point_3d_,&status);
-  if (!this->check_val(status,CL_SUCCESS,"clCreateBuffer (stat input) failed."))
+  if (!check_val(status,CL_SUCCESS,"clCreateBuffer (stat input) failed."))
     return SDK_FAILURE;
   else
     return SDK_SUCCESS;
@@ -100,10 +100,10 @@ int boxm_ocl_camera_manager::set_point_buffers()
 int boxm_ocl_camera_manager::release_point_buffers()
 {
   cl_int status = clReleaseMemObject(point_2d_buf_);
-  if (!this->check_val(status,CL_SUCCESS,"clReleaseMemObject (point_2d_buf_) failed."))
+  if (!check_val(status,CL_SUCCESS,"clReleaseMemObject (point_2d_buf_) failed."))
     return SDK_FAILURE;
   status = clReleaseMemObject(point_3d_buf_);
-  if (!this->check_val(status,CL_SUCCESS,"clReleaseMemObject (point_3d_buf_) failed."))
+  if (!check_val(status,CL_SUCCESS,"clReleaseMemObject (point_3d_buf_) failed."))
     return SDK_FAILURE;
 
   return SDK_SUCCESS;
@@ -113,7 +113,7 @@ int boxm_ocl_camera_manager::setup_cam_buffer()
 {
   cl_int status = CL_SUCCESS;
   cam_buf_ = clCreateBuffer(this->context_,CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR, sizeof(cl_float16),cam_,&status);
-  if (!this->check_val(status,CL_SUCCESS,"clCreateBuffer (stat input) failed."))
+  if (!check_val(status,CL_SUCCESS,"clCreateBuffer (stat input) failed."))
     return SDK_FAILURE;
   else
     return SDK_SUCCESS;
@@ -123,7 +123,7 @@ int boxm_ocl_camera_manager::setup_cam_buffer()
 int boxm_ocl_camera_manager::release_cam_buffer()
 {
   cl_int status = clReleaseMemObject(cam_buf_);
-  if (!this->check_val(status,CL_SUCCESS,"clReleaseMemObject (input_cam_buf_) failed."))
+  if (!check_val(status,CL_SUCCESS,"clReleaseMemObject (input_cam_buf_) failed."))
     return SDK_FAILURE;
   else {
     cam_buf_=0;
@@ -135,7 +135,7 @@ int boxm_ocl_camera_manager::setup_cam_inv_buffer()
 {
   cl_int status = CL_SUCCESS;
   cam_inv_buf_ = clCreateBuffer(this->context_,CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR, sizeof(cl_mem),cam_inv_,&status);
-  if (!this->check_val(status,CL_SUCCESS,"clCreateBuffer (cam inverse) failed."))
+  if (!check_val(status,CL_SUCCESS,"clCreateBuffer (cam inverse) failed."))
     return SDK_FAILURE;
   else
     return SDK_SUCCESS;
@@ -144,7 +144,7 @@ int boxm_ocl_camera_manager::setup_cam_inv_buffer()
 int boxm_ocl_camera_manager::release_cam_inv_buffer()
 {
   cl_int status = clReleaseMemObject(cam_inv_buf_);
-  if (!this->check_val(status,CL_SUCCESS,"clReleaseMemObject (cam_inv_buf_) failed."))
+  if (!check_val(status,CL_SUCCESS,"clReleaseMemObject (cam_inv_buf_) failed."))
     return SDK_FAILURE;
   else {
     cam_inv_buf_=0;
@@ -204,13 +204,13 @@ bool boxm_ocl_camera_manager::set_project_args()
   cl_int status = CL_SUCCESS;
   int i=0;
   status = clSetKernelArg(kernel_,i++,sizeof(cl_mem),(void *)&cam_buf_);
-  if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (cam_buf_)"))
+  if (!check_val(status,CL_SUCCESS,"clSetKernelArg failed. (cam_buf_)"))
     return SDK_FAILURE;
   status = clSetKernelArg(kernel_,i++,sizeof(cl_mem),(void *)&point_3d_buf_);
-  if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (point_3d_buf_)"))
+  if (!check_val(status,CL_SUCCESS,"clSetKernelArg failed. (point_3d_buf_)"))
       return SDK_FAILURE;
   status = clSetKernelArg(kernel_,i++,sizeof(cl_mem),(void *)&point_2d_buf_);
-  if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (point_2d_buf_)"))
+  if (!check_val(status,CL_SUCCESS,"clSetKernelArg failed. (point_2d_buf_)"))
     return SDK_FAILURE;
   return SDK_SUCCESS;
 }
@@ -222,13 +222,13 @@ bool boxm_ocl_camera_manager::set_backproject_args()
   cl_int status = CL_SUCCESS;
   int i=0;
   status = clSetKernelArg(kernel_,i++,sizeof(cl_mem),(void *)&cam_inv_buf_);
-  if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (cam_inv_buf_)"))
+  if (!check_val(status,CL_SUCCESS,"clSetKernelArg failed. (cam_inv_buf_)"))
     return SDK_FAILURE;
   status = clSetKernelArg(kernel_,i++,sizeof(cl_mem),(void *)&point_3d_buf_);
-  if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (point_3d_buf_)"))
+  if (!check_val(status,CL_SUCCESS,"clSetKernelArg failed. (point_3d_buf_)"))
       return SDK_FAILURE;
   status = clSetKernelArg(kernel_,i++,sizeof(cl_mem),(void *)&point_2d_buf_);
-  if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (point_2d_buf_)"))
+  if (!check_val(status,CL_SUCCESS,"clSetKernelArg failed. (point_2d_buf_)"))
     return SDK_FAILURE;
   return SDK_SUCCESS;
 }
@@ -252,7 +252,7 @@ int boxm_ocl_camera_manager::build_kernel_program()
   if (program_) {
     status = clReleaseProgram(program_);
     program_ = 0;
-    if (!this->check_val(status,
+    if (!check_val(status,
                          CL_SUCCESS,
                          "clReleaseProgram failed."))
       return SDK_FAILURE;
@@ -264,7 +264,7 @@ int boxm_ocl_camera_manager::build_kernel_program()
                                        &source,
                                        sourceSize,
                                        &status);
-  if (!this->check_val(status,
+  if (!check_val(status,
                        CL_SUCCESS,
                        "clCreateProgramWithSource failed."))
     return SDK_FAILURE;
@@ -277,7 +277,7 @@ int boxm_ocl_camera_manager::build_kernel_program()
                           NULL,
                           NULL,
                           NULL);
-  if (!this->check_val(status,
+  if (!check_val(status,
                        CL_SUCCESS,
                        error_to_string(status)))
   {
@@ -298,7 +298,7 @@ int boxm_ocl_camera_manager::create_kernel(vcl_string const& kernel_name)
   cl_int status = CL_SUCCESS;
   // get a kernel object handle for a kernel with the given name
   kernel_ = clCreateKernel(program_,kernel_name.c_str(),&status);
-  if (!this->check_val(status,CL_SUCCESS,error_to_string(status)))
+  if (!check_val(status,CL_SUCCESS,error_to_string(status)))
     return SDK_FAILURE;
   else
     return SDK_SUCCESS;
@@ -312,7 +312,7 @@ int boxm_ocl_camera_manager::release_kernel()
     status = clReleaseKernel(kernel_);
   }
   kernel_ = NULL;
-  if (!this->check_val(status,
+  if (!check_val(status,
                        CL_SUCCESS,
                        "clReleaseKernel failed."))
     return SDK_FAILURE;

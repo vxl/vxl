@@ -58,9 +58,9 @@ bool boxm_render_bit_scene_manager::init_ray_trace(boxm_ocl_bit_scene *scene,
     options+="-D DEPTH ";
   else
     options+="-D INTENSITY ";
-  if (vcl_strstr(this->platform_name,"ATI"))
+  if (vcl_strstr(this->platform_name().c_str(),"ATI"))
     options+="-D ATI ";
-  if (vcl_strstr(this->platform_name,"NVIDIA"))
+  if (vcl_strstr(this->platform_name().c_str(),"NVIDIA"))
     options+="-D NVIDIA ";
   options += " -cl-fast-relaxed-math ";
   options += " -D RENDER";
@@ -84,7 +84,7 @@ bool boxm_render_bit_scene_manager::set_kernel()
   cl_int status = CL_SUCCESS;  kernels_.clear();
   vcl_cout<<"create: kernel0"<<vcl_endl;
   cl_kernel kernel0 = clCreateKernel(program_,"ray_trace_bit_scene_opt",&status);
-  if (!this->check_val(status,CL_SUCCESS,error_to_string(status))) {
+  if (!check_val(status,CL_SUCCESS,error_to_string(status))) {
     return false;
   }
   kernels_.push_back(kernel0);
@@ -92,7 +92,7 @@ bool boxm_render_bit_scene_manager::set_kernel()
 #if 0
   vcl_cout<<"create: kernel1"<<vcl_endl;
   cl_kernel kernel1 = clCreateKernel(program_,"rerender_ocl_scene_opt",&status);
-  if (!this->check_val(status,CL_SUCCESS,error_to_string(status))) {
+  if (!check_val(status,CL_SUCCESS,error_to_string(status))) {
     return false;
   }
   kernels_.push_back(kernel1);
@@ -109,7 +109,7 @@ bool boxm_render_bit_scene_manager::release_kernel()
     {
       vcl_cout<<"release kernel"<<i<<vcl_endl;
       cl_int status = clReleaseKernel(kernels_[i]);
-      if (!this->check_val(status,CL_SUCCESS,error_to_string(status)))
+      if (!check_val(status,CL_SUCCESS,error_to_string(status)))
         return false;
     }
   }
@@ -153,67 +153,67 @@ bool boxm_render_bit_scene_manager::set_args(unsigned kernel_index=0)
                                      CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR,
                                      sizeof(RenderSceneInfo),
                                      info,&status);
-    if (!this->check_val(status,CL_SUCCESS,"scene info buff failed."))
+    if (!check_val(status,CL_SUCCESS,"scene info buff failed."))
       return 0;
 
     int i=0;
     status = clSetKernelArg(kernels_[0],i++,sizeof(cl_mem), (void *)&scene_info_buf_);
-    if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (render scene info)"))
+    if (!check_val(status,CL_SUCCESS,"clSetKernelArg failed. (render scene info)"))
       return 0;
 
     //block pointers
     status = clSetKernelArg(kernels_[0],i++,sizeof(cl_mem),(void *)&block_ptrs_buf_);
-    if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (block_ptrs_buf_)"))
+    if (!check_val(status,CL_SUCCESS,"clSetKernelArg failed. (block_ptrs_buf_)"))
       return 0;
 
     // the tree buffer
     status = clSetKernelArg(kernels_[0],i++,sizeof(cl_mem),(void *)&trees_buf_);
-    if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (cells_buf_)"))
+    if (!check_val(status,CL_SUCCESS,"clSetKernelArg failed. (cells_buf_)"))
       return 0;
 
     // alpha buffer
     status = clSetKernelArg(kernels_[0],i++,sizeof(cl_mem),(void *)&data_alpha_buf_);
-    if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (cell_data_buf_)"))
+    if (!check_val(status,CL_SUCCESS,"clSetKernelArg failed. (cell_data_buf_)"))
       return 0;
     //mixture buffer
     status = clSetKernelArg(kernels_[0], i++, sizeof(cl_mem), (void *)&data_mixture_buf_);
-    if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (cell_mixture_buf)"))
+    if (!check_val(status,CL_SUCCESS,"clSetKernelArg failed. (cell_mixture_buf)"))
       return 0;
 
     // camera buffer
     status = clSetKernelArg(kernels_[0],i++,sizeof(cl_mem),(void *)&persp_cam_buf_);
-    if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (data)"))
+    if (!check_val(status,CL_SUCCESS,"clSetKernelArg failed. (data)"))
       return 0;
     // roi dimensions
     status = clSetKernelArg(kernels_[0],i++,sizeof(cl_mem),(void *)&img_dims_buf_);
-    if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (Img dimensions)"))
+    if (!check_val(status,CL_SUCCESS,"clSetKernelArg failed. (Img dimensions)"))
       return 0;
     //local copy of the tree (one for each thread/ray)
     status = clSetKernelArg(kernels_[0],i++,this->bni_*this->bnj_*sizeof(cl_uchar16),0);
-    if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (local tree)"))
+    if (!check_val(status,CL_SUCCESS,"clSetKernelArg failed. (local tree)"))
       return 0;
 
     status = clSetKernelArg(kernels_[0],i++,sizeof(cl_mem),(void *)&image_buf_);
-    if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (input_image)"))
+    if (!check_val(status,CL_SUCCESS,"clSetKernelArg failed. (input_image)"))
       return 0;
     status = clSetKernelArg(kernels_[0],i++,sizeof(cl_mem),(void *)&image_gl_buf_);
-    if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (gl_image)"))
+    if (!check_val(status,CL_SUCCESS,"clSetKernelArg failed. (gl_image)"))
       return 0;
     //bit lookup buffer
     status = clSetKernelArg(kernels_[0],i++,sizeof(cl_mem),(void *)&bit_lookup_buf_);
-    if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (output)"))
+    if (!check_val(status,CL_SUCCESS,"clSetKernelArg failed. (output)"))
       return 0;
     //cum sum lookup buffer
     status = clSetKernelArg(kernels_[0],i++,this->bni_*this->bnj_*10*sizeof(cl_uchar), 0);
-    if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (cumsum buff)"))
+    if (!check_val(status,CL_SUCCESS,"clSetKernelArg failed. (cumsum buff)"))
       return 0;
     //imIndex buffer
     status = clSetKernelArg(kernels_[0],i++,this->bni_*this->bnj_*sizeof(cl_int), 0);
-    if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (imIndex buff)"))
+    if (!check_val(status,CL_SUCCESS,"clSetKernelArg failed. (imIndex buff)"))
       return 0;
     //output buffer
     status = clSetKernelArg(kernels_[0],i++,sizeof(cl_mem),(void *)&output_buf_);
-    if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (output)"))
+    if (!check_val(status,CL_SUCCESS,"clSetKernelArg failed. (output)"))
       return 0;
   }
   else if (kernel_index==1)
@@ -222,85 +222,85 @@ bool boxm_render_bit_scene_manager::set_args(unsigned kernel_index=0)
     int i=0;
     // depth image buffer
     status = clSetKernelArg(kernels_[1],i++,sizeof(cl_mem),(void *)&image_buf_);
-    if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (block_ptrs_buf_)"))
+    if (!check_val(status,CL_SUCCESS,"clSetKernelArg failed. (block_ptrs_buf_)"))
       return 0;
     //status = clSetKernelArg(kernels_[1],i++,sizeof(cl_mem),(void *)&ext_image_buf_);
-    //if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (orig_image_buf_)"))
+    //if (!check_val(status,CL_SUCCESS,"clSetKernelArg failed. (orig_image_buf_)"))
       //return 0;
     //status = clSetKernelArg(kernels_[1],i++,sizeof(cl_mem),(void *)&ext_cam_buf_);
-    //if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (orig_cam_buf_)"))
+    //if (!check_val(status,CL_SUCCESS,"clSetKernelArg failed. (orig_cam_buf_)"))
       //return 0;
     status = clSetKernelArg(kernels_[1],i++,sizeof(cl_mem),(void *)&scene_dims_buf_);
-    if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (scene_dims_buf_)"))
+    if (!check_val(status,CL_SUCCESS,"clSetKernelArg failed. (scene_dims_buf_)"))
       return 0;
     status = clSetKernelArg(kernels_[1],i++,sizeof(cl_mem),(void *)&scene_origin_buf_);
-    if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (scene_orign_buf_)"))
+    if (!check_val(status,CL_SUCCESS,"clSetKernelArg failed. (scene_orign_buf_)"))
       return 0;
     status = clSetKernelArg(kernels_[1],i++,sizeof(cl_mem),(void *)&block_dims_buf_);
-    if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (block_dims_buf_)"))
+    if (!check_val(status,CL_SUCCESS,"clSetKernelArg failed. (block_dims_buf_)"))
       return 0;
     status = clSetKernelArg(kernels_[1],i++,sizeof(cl_mem),(void *)&block_ptrs_buf_);
-    if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (block_ptrs_buf_)"))
+    if (!check_val(status,CL_SUCCESS,"clSetKernelArg failed. (block_ptrs_buf_)"))
       return 0;
     // root level buffer
     status = clSetKernelArg(kernels_[1],i++,sizeof(cl_uint), &root_level_);
-    if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (root_level_buf_)"))
+    if (!check_val(status,CL_SUCCESS,"clSetKernelArg failed. (root_level_buf_)"))
       return 0;
     // the number of buffers
     status = clSetKernelArg(kernels_[1],i++,sizeof(cl_int), &numbuffer_);
-    if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (lenbuffer_buf_)"))
+    if (!check_val(status,CL_SUCCESS,"clSetKernelArg failed. (lenbuffer_buf_)"))
       return 0;
     // the length of the tree buffer
     status = clSetKernelArg(kernels_[1],i++,sizeof(cl_int), &tree_buffer_length_);
-    if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (lenbuffer_buf_)"))
+    if (!check_val(status,CL_SUCCESS,"clSetKernelArg failed. (lenbuffer_buf_)"))
       return 0;
     // the tree buffer
     status = clSetKernelArg(kernels_[1],i++,sizeof(cl_mem),(void *)&trees_buf_);
-    if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (cells_buf_)"))
+    if (!check_val(status,CL_SUCCESS,"clSetKernelArg failed. (cells_buf_)"))
       return 0;
     // the length of the tree buffer
     status = clSetKernelArg(kernels_[1],i++,sizeof(cl_int), &data_buffer_length_);
-    if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (lenbuffer_buf_)"))
+    if (!check_val(status,CL_SUCCESS,"clSetKernelArg failed. (lenbuffer_buf_)"))
       return 0;
     // alpha buffer
     status = clSetKernelArg(kernels_[1],i++,sizeof(cl_mem),(void *)&data_alpha_buf_);
-    if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (cell_data_buf_)"))
+    if (!check_val(status,CL_SUCCESS,"clSetKernelArg failed. (cell_data_buf_)"))
       return 0;
     //mixture buffer !!IS THIS NEEDED HERE?!!
 
     // camera buffer
     status = clSetKernelArg(kernels_[1],i++,sizeof(cl_mem),(void *)&persp_cam_buf_);
-    if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (data)"))
+    if (!check_val(status,CL_SUCCESS,"clSetKernelArg failed. (data)"))
       return 0;
     // roi dimensions
     status = clSetKernelArg(kernels_[1],i++,sizeof(cl_mem),(void *)&img_dims_buf_);
-    if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (Img dimensions)"))
+    if (!check_val(status,CL_SUCCESS,"clSetKernelArg failed. (Img dimensions)"))
       return 0;
     //// output image buffer
     status = clSetKernelArg(kernels_[1],i++,3*sizeof(cl_float16),0);
-    if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (local cam)"))
+    if (!check_val(status,CL_SUCCESS,"clSetKernelArg failed. (local cam)"))
       return 0;
     status = clSetKernelArg(kernels_[1],i++,sizeof(cl_uint4),0);
-    if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (local image dimensions)"))
+    if (!check_val(status,CL_SUCCESS,"clSetKernelArg failed. (local image dimensions)"))
       return 0;
     status = clSetKernelArg(kernels_[1],i++,sizeof(cl_float4),0);
-    if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (local image dimensions)"))
+    if (!check_val(status,CL_SUCCESS,"clSetKernelArg failed. (local image dimensions)"))
       return 0;
 
     //status = clSetKernelArg(kernels_[1],i++,sizeof(cl_mem),(void *)&rerender_image_buf_);
-    //if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (input_image)"))
+    //if (!check_val(status,CL_SUCCESS,"clSetKernelArg failed. (input_image)"))
       //return 0;
 #if 0
     image_gl_buf_ = clCreateBuffer(this->context_,
                                    CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR,
                                    wni_*wnj_*sizeof(cl_uint),
                                    image_gl_,&status);
-    if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (gl_image)"))
+    if (!check_val(status,CL_SUCCESS,"clSetKernelArg failed. (gl_image)"))
       return 0;
 #endif
 
     status = clSetKernelArg(kernels_[1],i++,sizeof(cl_mem),(void *)&image_gl_buf_);
-    if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (gl_image)"))
+    if (!check_val(status,CL_SUCCESS,"clSetKernelArg failed. (gl_image)"))
       return 0;
   }
   return 1;
@@ -312,7 +312,7 @@ bool boxm_render_bit_scene_manager::set_commandqueue()
   cl_int status = CL_SUCCESS;
   vcl_cout<<"create: command_queue"<<vcl_endl;
   command_queue_ = clCreateCommandQueue(this->context(),this->devices()[0],CL_QUEUE_PROFILING_ENABLE,&status);
-  if (!this->check_val(status,CL_SUCCESS,"Failed in command queue creation" + error_to_string(status)))
+  if (!check_val(status,CL_SUCCESS,"Failed in command queue creation" + error_to_string(status)))
     return false;
   else
     return true;
@@ -325,7 +325,7 @@ bool boxm_render_bit_scene_manager::release_commandqueue()
   {
     vcl_cout<<"release: commandqueue"<<vcl_endl;
     cl_int status = clReleaseCommandQueue(command_queue_);
-    if (!this->check_val(status,CL_SUCCESS,"clReleaseCommandQueue failed."))
+    if (!check_val(status,CL_SUCCESS,"clReleaseCommandQueue failed."))
       return false;
   }
   return true;
@@ -378,11 +378,11 @@ bool boxm_render_bit_scene_manager::run(bool rerender)
   cl_event ceEvent;
   status = clEnqueueNDRangeKernel(command_queue_,this->kernels_[0], 2,NULL,globalThreads,localThreads,0,NULL,&ceEvent);
 
-  if (!this->check_val(status,CL_SUCCESS,"clEnqueueNDRangeKernel failed. "+error_to_string(status)))
+  if (!check_val(status,CL_SUCCESS,"clEnqueueNDRangeKernel failed. "+error_to_string(status)))
     return SDK_FAILURE;
 
   status = clFinish(command_queue_);
-  if (!this->check_val(status,CL_SUCCESS,"clFinish in run failed."+error_to_string(status)))
+  if (!check_val(status,CL_SUCCESS,"clFinish in run failed."+error_to_string(status)))
     return SDK_FAILURE;
   cl_ulong tstart,tend;
   status = clGetEventProfilingInfo(ceEvent,CL_PROFILING_COMMAND_END,sizeof(cl_ulong),&tend,0);
@@ -401,13 +401,13 @@ bool boxm_render_bit_scene_manager::run(bool rerender)
 
     //set final arg (layer cutoff)
     status = clSetKernelArg(kernels_[0], 14, sizeof(cl_int), &layer);
-    if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (layer number)"))
+    if (!check_val(status,CL_SUCCESS,"clSetKernelArg failed. (layer number)"))
       return 0;
     status = clEnqueueNDRangeKernel(command_queue_,this->kernels_[0], 2,NULL,globalThreads,localThreads,0,NULL,&ceEvent);
-    if (!this->check_val(status,CL_SUCCESS,"clEnqueueNDRangeKernel failed. "+error_to_string(status)))
+    if (!check_val(status,CL_SUCCESS,"clEnqueueNDRangeKernel failed. "+error_to_string(status)))
       return SDK_FAILURE;
     status = clFinish(command_queue_);
-    if (!this->check_val(status,CL_SUCCESS,"clFinish failed."+error_to_string(status)))
+    if (!check_val(status,CL_SUCCESS,"clFinish failed."+error_to_string(status)))
       return SDK_FAILURE;
     cl_ulong tstart,tend;
     status = clGetEventProfilingInfo(ceEvent,CL_PROFILING_COMMAND_END,sizeof(cl_ulong),&tend,0);
@@ -467,7 +467,7 @@ bool boxm_render_bit_scene_manager::run(bool rerender)
 
   // Wait for the read buffer to finish execution
   status = clWaitForEvents(1, &events[0]);
-  if (!this->check_val(status,CL_SUCCESS,"clWaitForEvents failed."))
+  if (!check_val(status,CL_SUCCESS,"clWaitForEvents failed."))
     return false;
   status = clReleaseEvent(events[0]);
   float sumCells = 0;
@@ -484,11 +484,11 @@ bool boxm_render_bit_scene_manager::run(bool rerender)
   if (rerender)
   {
     status = clEnqueueNDRangeKernel(command_queue_,this->kernels_[1], 2,NULL,globalThreads,localThreads,0,NULL,&ceEvent);
-    if (!this->check_val(status,CL_SUCCESS,"clEnqueueNDRangeKernel failed. "+error_to_string(status)))
+    if (!check_val(status,CL_SUCCESS,"clEnqueueNDRangeKernel failed. "+error_to_string(status)))
       return SDK_FAILURE;
 
     status = clFinish(command_queue_);
-    if (!this->check_val(status,CL_SUCCESS,"clFinish failed."+error_to_string(status)))
+    if (!check_val(status,CL_SUCCESS,"clFinish failed."+error_to_string(status)))
       return SDK_FAILURE;
   }
   return SDK_SUCCESS;
@@ -514,7 +514,7 @@ bool boxm_render_bit_scene_manager::set_gl_buffer()
                                    CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR,
                                    wni_*wnj_*sizeof(cl_uint),
                                    image_gl_,&status);
-    if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (gl_image)"))
+    if (!check_val(status,CL_SUCCESS,"clSetKernelArg failed. (gl_image)"))
         return false;
     return true;
 }
@@ -524,7 +524,7 @@ bool boxm_render_bit_scene_manager::release_gl_buffer()
   vcl_cout<<"release gl_buffer called"<<vcl_endl;
   cl_int status;
   status = clReleaseMemObject(image_gl_buf_);
-  return this->check_val(status,CL_SUCCESS,"clReleaseMemObject failed (gl_buffer).")==1;
+  return check_val(status,CL_SUCCESS,"clReleaseMemObject failed (gl_buffer).")==1;
 }
 
 bool boxm_render_bit_scene_manager::run_scene()
@@ -589,16 +589,16 @@ bool boxm_render_bit_scene_manager::read_output_image()
                                    image_,
                                    0,NULL,&events[0]);
 
-  if (!this->check_val(status,CL_SUCCESS,"clEnqueueBuffer (image_)failed."))
+  if (!check_val(status,CL_SUCCESS,"clEnqueueBuffer (image_)failed."))
     return false;
 
   // Wait for the read buffer to finish execution
   status = clWaitForEvents(1, &events[0]);
-  if (!this->check_val(status,CL_SUCCESS,"clWaitForEvents failed."))
+  if (!check_val(status,CL_SUCCESS,"clWaitForEvents failed."))
     return false;
 
   status = clReleaseEvent(events[0]);
-  return this->check_val(status,CL_SUCCESS,"clReleaseEvent failed.")==1;
+  return check_val(status,CL_SUCCESS,"clReleaseEvent failed.")==1;
 }
 
 void boxm_render_bit_scene_manager::save_image(vcl_string img_filename)
@@ -621,11 +621,11 @@ bool boxm_render_bit_scene_manager::read_trees()
                                    trees_,
                                    0,NULL,&events[0]);
 
-  if (!this->check_val(status,CL_SUCCESS,"clEnqueueBuffer (cells )failed."))
+  if (!check_val(status,CL_SUCCESS,"clEnqueueBuffer (cells )failed."))
     return false;
 
   status = clWaitForEvents(1, &events[0]);
-  if (!this->check_val(status,CL_SUCCESS,"clWaitForEvents failed."))
+  if (!check_val(status,CL_SUCCESS,"clWaitForEvents failed."))
     return false;
 
   status = clEnqueueReadBuffer(command_queue_,data_alpha_buf_,CL_TRUE,
@@ -633,19 +633,19 @@ bool boxm_render_bit_scene_manager::read_trees()
                                data_alpha_,
                                0,NULL,&events[0]);
 
-  if (!this->check_val(status,CL_SUCCESS,"clEnqueueBuffer (cell alpha )failed."))
+  if (!check_val(status,CL_SUCCESS,"clEnqueueBuffer (cell alpha )failed."))
     return false;
   status = clWaitForEvents(1, &events[0]);
-  if (!this->check_val(status,CL_SUCCESS,"clWaitForEvents failed."))
+  if (!check_val(status,CL_SUCCESS,"clWaitForEvents failed."))
     return false;
 
   status = clWaitForEvents(1, &events[0]);
-  if (!this->check_val(status,CL_SUCCESS,"clWaitForEvents failed."))
+  if (!check_val(status,CL_SUCCESS,"clWaitForEvents failed."))
     return false;
   // Wait for the read buffer to finish execution
 
   status = clReleaseEvent(events[0]);
-  return this->check_val(status,CL_SUCCESS,"clReleaseEvent failed.")==1;
+  return check_val(status,CL_SUCCESS,"clReleaseEvent failed.")==1;
 }
 
 
@@ -814,7 +814,7 @@ bool boxm_render_bit_scene_manager::set_scene_origin_buffers()
                                      CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR,
                                      4*sizeof(cl_float),
                                      scene_origin_,&status);
-  return this->check_val(status,CL_SUCCESS,"clCreateBuffer (scene_origin_) failed.")==1;
+  return check_val(status,CL_SUCCESS,"clCreateBuffer (scene_origin_) failed.")==1;
 }
 
 
@@ -823,7 +823,7 @@ bool boxm_render_bit_scene_manager::release_scene_origin_buffers()
   vcl_cout<<"release scene_origin called"<<vcl_endl;
   cl_int status;
   status = clReleaseMemObject(scene_origin_buf_);
-  return this->check_val(status,CL_SUCCESS,"clReleaseMemObject failed (scene_origin_buf_).")==1;
+  return check_val(status,CL_SUCCESS,"clReleaseMemObject failed (scene_origin_buf_).")==1;
 }
 
 
@@ -862,7 +862,7 @@ bool boxm_render_bit_scene_manager::set_scene_dims_buffers()
                                    CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR,
                                    sizeof(cl_int4),
                                    scene_dims_,&status);
-  return this->check_val(status,CL_SUCCESS,"clCreateBuffer (scene_dims_) failed.")==1;
+  return check_val(status,CL_SUCCESS,"clCreateBuffer (scene_dims_) failed.")==1;
 }
 
 
@@ -871,7 +871,7 @@ bool boxm_render_bit_scene_manager::release_scene_dims_buffers()
   vcl_cout<<"release scene_dims called"<<vcl_endl;
   cl_int status;
   status = clReleaseMemObject(scene_dims_buf_);
-  return this->check_val(status,CL_SUCCESS,"clReleaseMemObject failed (scene_dims_buf_).")==1;
+  return check_val(status,CL_SUCCESS,"clReleaseMemObject failed (scene_dims_buf_).")==1;
 }
 
 
@@ -912,7 +912,7 @@ bool boxm_render_bit_scene_manager::set_block_dims_buffers()
                                    CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR,
                                    4*sizeof(cl_float),
                                    block_dims_,&status);
-  return this->check_val(status,CL_SUCCESS,"clCreateBuffer (block_dims_) failed.")==1;
+  return check_val(status,CL_SUCCESS,"clCreateBuffer (block_dims_) failed.")==1;
 }
 
 
@@ -921,7 +921,7 @@ bool boxm_render_bit_scene_manager::release_block_dims_buffers()
   vcl_cout<<"release block_dims called"<<vcl_endl;
   cl_int status;
   status = clReleaseMemObject(block_dims_buf_);
-  return this->check_val(status,CL_SUCCESS,"clReleaseMemObject failed (block_dims_buf_).")==1;
+  return check_val(status,CL_SUCCESS,"clReleaseMemObject failed (block_dims_buf_).")==1;
 }
 
 
@@ -958,7 +958,7 @@ bool boxm_render_bit_scene_manager::set_block_ptrs_buffers()
                                    CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR,
                                    scene_x_*scene_y_*scene_z_*sizeof(cl_ushort2),
                                    block_ptrs_,&status);
-  return this->check_val(status,CL_SUCCESS,"clCreateBuffer (block_ptrs_) failed.")==1;
+  return check_val(status,CL_SUCCESS,"clCreateBuffer (block_ptrs_) failed.")==1;
 }
 
 
@@ -967,7 +967,7 @@ bool boxm_render_bit_scene_manager::release_block_ptrs_buffers()
   vcl_cout<<"release block_ptrs called"<<vcl_endl;
   cl_int status;
   status = clReleaseMemObject(block_ptrs_buf_);
-  return this->check_val(status,CL_SUCCESS,"clReleaseMemObject failed (block_ptrs_buf_).")==1;
+  return check_val(status,CL_SUCCESS,"clReleaseMemObject failed (block_ptrs_buf_).")==1;
 }
 
 
@@ -1096,28 +1096,28 @@ bool boxm_render_bit_scene_manager::set_tree_buffers()
                               CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR,
                               trees_size_*sizeof(cl_uchar16),
                               trees_,&status);
-  if (!this->check_val(status,CL_SUCCESS,"clCreateBuffer (tree) failed."))
+  if (!check_val(status,CL_SUCCESS,"clCreateBuffer (tree) failed."))
     return false;
 
   data_alpha_buf_ = clCreateBuffer(this->context_,
                                    CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR,
                                    data_size_*sizeof(cl_float),
                                    data_alpha_,&status);
-  if (!this->check_val(status,CL_SUCCESS,"clCreateBuffer (cell data) failed."))
+  if (!check_val(status,CL_SUCCESS,"clCreateBuffer (cell data) failed."))
     return false;
 
   data_mixture_buf_ = clCreateBuffer(this->context_,
                                      CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR,
                                      data_size_*sizeof(cl_uchar8),
                                      data_mixture_,&status);
-  if (!this->check_val(status,CL_SUCCESS,"clCreateBuffer (cell mixture) failed."))
+  if (!check_val(status,CL_SUCCESS,"clCreateBuffer (cell mixture) failed."))
     return false;
 
   bit_lookup_buf_ = clCreateBuffer(this->context_,
                                    CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR,
                                    256*sizeof(cl_uchar),
                                    bit_lookup_,&status);
-  if (!this->check_val(status,CL_SUCCESS,"clCreateBuffer (bit_lookup) failed."))
+  if (!check_val(status,CL_SUCCESS,"clCreateBuffer (bit_lookup) failed."))
     return false;
 
   /******* debug print ***************/
@@ -1143,19 +1143,19 @@ bool boxm_render_bit_scene_manager::release_tree_buffers()
   vcl_cout<<"release output, bit_lookup, trees, data_mixture, data_alpha called"<<vcl_endl;
   cl_int status;
   status = clReleaseMemObject(output_buf_);
-  if (!this->check_val(status,CL_SUCCESS,"clReleaseMemObject failed (output_buf_)."))
+  if (!check_val(status,CL_SUCCESS,"clReleaseMemObject failed (output_buf_)."))
     return false;
   status = clReleaseMemObject(bit_lookup_buf_);
-  if (!this->check_val(status,CL_SUCCESS,"clReleaseMemObject failed (bit_lookup_buf_)."))
+  if (!check_val(status,CL_SUCCESS,"clReleaseMemObject failed (bit_lookup_buf_)."))
     return false;
   status = clReleaseMemObject(trees_buf_);
-  if (!this->check_val(status,CL_SUCCESS,"clReleaseMemObject failed (cells_buf_)."))
+  if (!check_val(status,CL_SUCCESS,"clReleaseMemObject failed (cells_buf_)."))
     return false;
   status = clReleaseMemObject(data_mixture_buf_);
-  if (!this->check_val(status,CL_SUCCESS,"clReleaseMemObject failed (cell_mixture_buf_)."))
+  if (!check_val(status,CL_SUCCESS,"clReleaseMemObject failed (cell_mixture_buf_)."))
     return false;
   status = clReleaseMemObject(data_alpha_buf_);
-  return this->check_val(status,CL_SUCCESS,"clReleaseMemObject failed (cell_alpha_buf_).");
+  return check_val(status,CL_SUCCESS,"clReleaseMemObject failed (cell_alpha_buf_).");
 }
 
 
@@ -1256,7 +1256,7 @@ bool boxm_render_bit_scene_manager::set_persp_camera_buffers()
                                   CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR,
                                   3*sizeof(cl_float16),
                                   persp_cam_,&status);
-  return this->check_val(status,CL_SUCCESS,"clCreateBuffer (persp_cam_buf_) failed.")==1;
+  return check_val(status,CL_SUCCESS,"clCreateBuffer (persp_cam_buf_) failed.")==1;
 }
 
 
@@ -1264,7 +1264,7 @@ bool boxm_render_bit_scene_manager::write_persp_camera_buffers()
 {
   cl_int status;
   status=clEnqueueWriteBuffer(command_queue_,persp_cam_buf_,CL_FALSE, 0,3*sizeof(cl_float16), persp_cam_, 0, 0, 0);
-  if (!this->check_val(status,CL_SUCCESS,"clEnqueueWriteBuffer (persp_cam_buf_) failed."))
+  if (!check_val(status,CL_SUCCESS,"clEnqueueWriteBuffer (persp_cam_buf_) failed."))
     return false;
   clFinish(command_queue_);
 
@@ -1277,7 +1277,7 @@ bool boxm_render_bit_scene_manager::release_persp_camera_buffers()
   vcl_cout<<"release persp cam buffers called"<<vcl_endl;
   cl_int status;
   status = clReleaseMemObject(persp_cam_buf_);
-  return this->check_val(status,CL_SUCCESS,"clReleaseMemObject failed (persp_cam_buf_).")==1;
+  return check_val(status,CL_SUCCESS,"clReleaseMemObject failed (persp_cam_buf_).")==1;
 }
 
 
@@ -1344,10 +1344,10 @@ bool boxm_render_bit_scene_manager::set_input_image_buffers()
                                CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR,
                                wni_*wnj_*sizeof(cl_float),
                                output_,&status);
-  if (!this->check_val(status,CL_SUCCESS,"clCreateBuffer (tree) failed."))
+  if (!check_val(status,CL_SUCCESS,"clCreateBuffer (tree) failed."))
     return false;
 
-  return this->check_val(status,CL_SUCCESS,"clCreateBuffer (image_buf_) failed.")==1;
+  return check_val(status,CL_SUCCESS,"clCreateBuffer (image_buf_) failed.")==1;
 }
 
 
@@ -1359,7 +1359,7 @@ bool boxm_render_bit_scene_manager::set_image_dims_buffers()
                                  CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR,
                                  sizeof(cl_uint4),
                                  img_dims_,&status);
-  return this->check_val(status,CL_SUCCESS,"clCreateBuffer (imd_dims_buf_) failed.")==1;
+  return check_val(status,CL_SUCCESS,"clCreateBuffer (imd_dims_buf_) failed.")==1;
 }
 
 
@@ -1368,10 +1368,10 @@ bool boxm_render_bit_scene_manager::release_input_image_buffers()
   vcl_cout<<"release image_buf, image_dims called"<<vcl_endl;
   cl_int status;
   status = clReleaseMemObject(image_buf_);
-  if (!this->check_val(status,CL_SUCCESS,"clReleaseMemObject failed (image_buf_)."))
+  if (!check_val(status,CL_SUCCESS,"clReleaseMemObject failed (image_buf_)."))
     return false;
 
   status = clReleaseMemObject(img_dims_buf_);
-  return this->check_val(status,CL_SUCCESS,"clReleaseMemObject failed (img_dims_buf_).")==1;
+  return check_val(status,CL_SUCCESS,"clReleaseMemObject failed (img_dims_buf_).")==1;
 }
 

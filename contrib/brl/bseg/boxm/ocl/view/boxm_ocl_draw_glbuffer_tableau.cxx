@@ -189,7 +189,7 @@ float boxm_ocl_draw_glbuffer_tableau::render_frame()
     boxm_render_ocl_scene_manager* ray_mgr = boxm_render_ocl_scene_manager::instance();
     cl_int status = clEnqueueAcquireGLObjects(ray_mgr->command_queue_, 1,
                                               &ray_mgr->image_gl_buf_ , 0, 0, 0);
-    if (!ray_mgr->check_val(status,CL_SUCCESS,"clEnqueueAcquireGLObjects failed. (gl_image)"+error_to_string(status)))
+    if (!check_val(status,CL_SUCCESS,"clEnqueueAcquireGLObjects failed. (gl_image)"+error_to_string(status)))
         return false;
 
     ray_mgr->set_persp_camera(&cam_);

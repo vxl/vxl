@@ -93,13 +93,11 @@ bool boxm_ocl_change_detection_tableau::init_ocl()
   //initialize the render manager
   boxm_ocl_change_detection_manager* cd_mgr
       = boxm_ocl_change_detection_manager::instance();
-  int status=0;
-  cl_platform_id platform_id[1];
-  status = clGetPlatformIDs (1, platform_id, NULL);
-  if (status!=CL_SUCCESS) {
-      vcl_cout<<error_to_string(status)<<vcl_endl;
-      return 0;
-  }
+  cl_device_id device = cd_mgr->devices()[0];
+  cl_platform_id platform_id[1]; 
+  int status = clGetDeviceInfo(device,CL_DEVICE_PLATFORM,sizeof(platform_id),(void*) platform_id,NULL);
+  if (!check_val(status, CL_SUCCESS, "boxm2_render Tableau::create_cl_gl_context CL_DEVICE_PLATFORM failed."))
+    return 0;
 
   //get context properties
   //create OpenCL context 
@@ -113,7 +111,7 @@ bool boxm_ocl_change_detection_tableau::init_ocl()
     0
   };
   //create OpenCL context with display properties determined above
-  compute_context = clCreateContext(props, 1, &cd_mgr->devices()[0], NULL, NULL, &status);
+  compute_context = clCreateContext(props, 1, &device, NULL, NULL, &status);
 #elif defined(__APPLE__) || defined(MACOSX)
   CGLContextObj kCGLContext = CGLGetCurrentContext();              
   CGLShareGroupObj kCGLShareGroup = CGLGetShareGroup(kCGLContext);
@@ -134,7 +132,7 @@ bool boxm_ocl_change_detection_tableau::init_ocl()
     CL_CONTEXT_PLATFORM, (cl_context_properties) platform_id[0],
     0
   };
-  compute_context = clCreateContext(props, 1, &cd_mgr->devices()[0], NULL, NULL, &status);
+  compute_context = clCreateContext(props, 1, &device, NULL, NULL, &status);
 #endif
   
   if (status!=CL_SUCCESS) {
@@ -206,7 +204,7 @@ bool boxm_ocl_change_detection_tableau::change_detection()
     boxm_ocl_change_detection_manager* cd_mgr = boxm_ocl_change_detection_manager::instance();
     cl_int status = clEnqueueAcquireGLObjects(cd_mgr->command_queue_, 1,
         &cd_mgr->image_gl_buf_ , 0, 0, 0);
-    if (!cd_mgr->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (input_image)"+error_to_string(status)))
+    if (!check_val(status,CL_SUCCESS,"clSetKernelArg failed. (input_image)"+error_to_string(status)))
         return false;
 
     //build the camera from file

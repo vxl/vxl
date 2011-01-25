@@ -141,7 +141,7 @@ bool boxm_ocl_change_detection_manager::set_kernel()
 {
   cl_int status = CL_SUCCESS;
   kernel_ = clCreateKernel(program_,"change_detection_ocl_scene",&status);
-  if (!this->check_val(status,CL_SUCCESS,error_to_string(status))) {
+  if (!check_val(status,CL_SUCCESS,error_to_string(status))) {
     return false;
   }
   return true;
@@ -153,7 +153,7 @@ bool boxm_ocl_change_detection_manager::release_kernel()
   if (kernel_)
   {
     cl_int status = clReleaseKernel(kernel_);
-    if (!this->check_val(status,CL_SUCCESS,error_to_string(status)))
+    if (!check_val(status,CL_SUCCESS,error_to_string(status)))
       return false;
   }
   return true;
@@ -167,77 +167,77 @@ bool boxm_ocl_change_detection_manager::set_args()
   cl_int status = CL_SUCCESS;
   int i=0;
   status = clSetKernelArg(kernel_,i++,sizeof(cl_mem),(void *)&scene_dims_buf_);
-  if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (scene_dims_buf_)"))
+  if (!check_val(status,CL_SUCCESS,"clSetKernelArg failed. (scene_dims_buf_)"))
     return SDK_FAILURE;
   status = clSetKernelArg(kernel_,i++,sizeof(cl_mem),(void *)&scene_origin_buf_);
-  if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (scene_orign_buf_)"))
+  if (!check_val(status,CL_SUCCESS,"clSetKernelArg failed. (scene_orign_buf_)"))
       return SDK_FAILURE;
   status = clSetKernelArg(kernel_,i++,sizeof(cl_mem),(void *)&block_dims_buf_);
-  if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (block_dims_buf_)"))
+  if (!check_val(status,CL_SUCCESS,"clSetKernelArg failed. (block_dims_buf_)"))
     return SDK_FAILURE;
   status = clSetKernelArg(kernel_,i++,sizeof(cl_mem),(void *)&block_ptrs_buf_);
-  if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (block_ptrs_buf_)"))
+  if (!check_val(status,CL_SUCCESS,"clSetKernelArg failed. (block_ptrs_buf_)"))
     return SDK_FAILURE;
   // root level buffer
   status = clSetKernelArg(kernel_,i++,sizeof(cl_mem),(void *)&root_level_buf_);
-  if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (root_level_buf_)"))
+  if (!check_val(status,CL_SUCCESS,"clSetKernelArg failed. (root_level_buf_)"))
     return SDK_FAILURE;
   // the length of buffer
   status = clSetKernelArg(kernel_,i++,sizeof(cl_mem),(void *)&numbuffer_buf_);
-  if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (lenbuffer_buf_)"))
+  if (!check_val(status,CL_SUCCESS,"clSetKernelArg failed. (lenbuffer_buf_)"))
     return SDK_FAILURE;
   // the length of buffer
   status = clSetKernelArg(kernel_,i++,sizeof(cl_mem),(void *)&lenbuffer_buf_);
-  if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (lenbuffer_buf_)"))
+  if (!check_val(status,CL_SUCCESS,"clSetKernelArg failed. (lenbuffer_buf_)"))
     return SDK_FAILURE;
   // the tree buffer
   status = clSetKernelArg(kernel_,i++,sizeof(cl_mem),(void *)&cells_buf_);
-  if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (cells_buf_)"))
+  if (!check_val(status,CL_SUCCESS,"clSetKernelArg failed. (cells_buf_)"))
     return SDK_FAILURE;
   // data buffer
   status = clSetKernelArg(kernel_,i++,sizeof(cl_mem),(void *)&cell_data_buf_);
-  if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (cell_data_buf_)"))
+  if (!check_val(status,CL_SUCCESS,"clSetKernelArg failed. (cell_data_buf_)"))
     return SDK_FAILURE;
   status = clSetKernelArg(kernel_,i++,sizeof(cl_mem),(void *)&cell_alpha_buf_);
-  if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (cell_data_buf_)"))
+  if (!check_val(status,CL_SUCCESS,"clSetKernelArg failed. (cell_data_buf_)"))
       return SDK_FAILURE;
 
   // camera buffer
   status = clSetKernelArg(kernel_,i++,sizeof(cl_mem),(void *)&persp_cam_buf_);
-  if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (data)"))
+  if (!check_val(status,CL_SUCCESS,"clSetKernelArg failed. (data)"))
     return SDK_FAILURE;
   // roi dimensions
   status = clSetKernelArg(kernel_,i++,sizeof(cl_mem),(void *)&img_dims_buf_);
-  if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (Img dimensions)"))
+  if (!check_val(status,CL_SUCCESS,"clSetKernelArg failed. (Img dimensions)"))
     return SDK_FAILURE;
   //// output image buffer
   status = clSetKernelArg(kernel_,i++,3*sizeof(cl_float16),0);
-  if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (local cam)"))
+  if (!check_val(status,CL_SUCCESS,"clSetKernelArg failed. (local cam)"))
     return SDK_FAILURE;
   status = clSetKernelArg(kernel_,i++,sizeof(cl_uint4),0);
-  if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (local image dimensions)"))
+  if (!check_val(status,CL_SUCCESS,"clSetKernelArg failed. (local image dimensions)"))
     return SDK_FAILURE;
   status = clSetKernelArg(kernel_,i++,sizeof(cl_mem),(void *)&int_image_buf_);
-  if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (int_image_buf_)"))
+  if (!check_val(status,CL_SUCCESS,"clSetKernelArg failed. (int_image_buf_)"))
     return SDK_FAILURE;
 
   status = clSetKernelArg(kernel_,i++,sizeof(cl_mem),(void *)&image_buf_);
-  if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (input_image)"))
+  if (!check_val(status,CL_SUCCESS,"clSetKernelArg failed. (input_image)"))
     return SDK_FAILURE;
 
   image_gl_buf_ = clCreateBuffer(this->context_,
                                  CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR,
                                  wni_*wnj_*sizeof(cl_uint),
                                  image_gl_,&status);
-  if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (gl_image)"))
+  if (!check_val(status,CL_SUCCESS,"clSetKernelArg failed. (gl_image)"))
       return SDK_FAILURE;
 
 
   status = clSetKernelArg(kernel_,i++,sizeof(cl_mem),(void *)&image_gl_buf_);
-  if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (gl_image)"))
+  if (!check_val(status,CL_SUCCESS,"clSetKernelArg failed. (gl_image)"))
     return SDK_FAILURE;
   //status = clSetKernelArg(kernel_,i++,sizeof(cl_mem),(void *)&foreground_pdf_buf_);
-  //if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (foreground_pdf)"))
+  //if (!check_val(status,CL_SUCCESS,"clSetKernelArg failed. (foreground_pdf)"))
   //  return SDK_FAILURE;
 
   return SDK_SUCCESS;
@@ -248,7 +248,7 @@ bool boxm_ocl_change_detection_manager::set_commandqueue()
 {
   cl_int status = CL_SUCCESS;
   command_queue_ = clCreateCommandQueue(this->context(),this->devices()[0],CL_QUEUE_PROFILING_ENABLE,&status);
-  if (!this->check_val(status,CL_SUCCESS,"Falied in command queue creation" + error_to_string(status)))
+  if (!check_val(status,CL_SUCCESS,"Falied in command queue creation" + error_to_string(status)))
     return false;
 
   return true;
@@ -260,7 +260,7 @@ bool boxm_ocl_change_detection_manager::release_commandqueue()
   if (command_queue_)
   {
     cl_int status = clReleaseCommandQueue(command_queue_);
-    if (!this->check_val(status,CL_SUCCESS,"clReleaseCommandQueue failed."))
+    if (!check_val(status,CL_SUCCESS,"clReleaseCommandQueue failed."))
       return false;
   }
   return true;
@@ -276,14 +276,14 @@ bool boxm_ocl_change_detection_manager::set_workspace()
   status = clGetKernelWorkGroupInfo(this->kernel(),this->devices()[0],
                                     CL_KERNEL_LOCAL_MEM_SIZE,
                                     sizeof(cl_ulong),&used_local_memory,NULL);
-  if (!this->check_val(status,CL_SUCCESS,"clGetKernelWorkGroupInfo CL_KERNEL_LOCAL_MEM_SIZE failed."))
+  if (!check_val(status,CL_SUCCESS,"clGetKernelWorkGroupInfo CL_KERNEL_LOCAL_MEM_SIZE failed."))
     return 0;
 
   // determine the work group size
   cl_ulong kernel_work_group_size;
   status = clGetKernelWorkGroupInfo(this->kernel(),this->devices()[0],CL_KERNEL_WORK_GROUP_SIZE,
                                     sizeof(cl_ulong),&kernel_work_group_size,NULL);
-  if (!this->check_val(status,CL_SUCCESS,"clGetKernelWorkGroupInfo CL_KERNEL_WORK_GROUP_SIZE, failed."))
+  if (!check_val(status,CL_SUCCESS,"clGetKernelWorkGroupInfo CL_KERNEL_WORK_GROUP_SIZE, failed."))
     return 0;
 
   globalThreads[0]=this->wni_;
@@ -311,11 +311,11 @@ bool boxm_ocl_change_detection_manager::run()
   cl_event ceEvent;
   status = clEnqueueNDRangeKernel(command_queue_,this->kernel_, 2,NULL,globalThreads,localThreads,0,NULL,&ceEvent);
 
-  if (!this->check_val(status,CL_SUCCESS,"clEnqueueNDRangeKernel failed. "+error_to_string(status)))
+  if (!check_val(status,CL_SUCCESS,"clEnqueueNDRangeKernel failed. "+error_to_string(status)))
     return SDK_FAILURE;
 
   status = clFinish(command_queue_);
-  if (!this->check_val(status,CL_SUCCESS,"clFinish failed."+error_to_string(status)))
+  if (!check_val(status,CL_SUCCESS,"clFinish failed."+error_to_string(status)))
     return SDK_FAILURE;
   cl_ulong tstart,tend;
   status = clGetEventProfilingInfo(ceEvent,CL_PROFILING_COMMAND_END,sizeof(cl_ulong),&tend,0);
@@ -379,16 +379,16 @@ bool boxm_ocl_change_detection_manager:: read_output_image()
                                    image_,
                                    0,NULL,&events[0]);
 
-  if (!this->check_val(status,CL_SUCCESS,"clEnqueueBuffer (image_)failed."))
+  if (!check_val(status,CL_SUCCESS,"clEnqueueBuffer (image_)failed."))
     return false;
 
   // Wait for the read buffer to finish execution
   status = clWaitForEvents(1, &events[0]);
-  if (!this->check_val(status,CL_SUCCESS,"clWaitForEvents failed."))
+  if (!check_val(status,CL_SUCCESS,"clWaitForEvents failed."))
     return false;
 
   status = clReleaseEvent(events[0]);
-  return this->check_val(status,CL_SUCCESS,"clReleaseEvent failed.")==1;
+  return check_val(status,CL_SUCCESS,"clReleaseEvent failed.")==1;
 }
 
 void boxm_ocl_change_detection_manager::save_image(vcl_string img_filename)
@@ -423,10 +423,10 @@ bool boxm_ocl_change_detection_manager:: read_trees()
                                    cells_,
                                    0,NULL,&events[0]);
 
-  if (!this->check_val(status,CL_SUCCESS,"clEnqueueBuffer (cells )failed."))
+  if (!check_val(status,CL_SUCCESS,"clEnqueueBuffer (cells )failed."))
     return false;
   status = clWaitForEvents(1, &events[0]);
-  if (!this->check_val(status,CL_SUCCESS,"clWaitForEvents failed."))
+  if (!check_val(status,CL_SUCCESS,"clWaitForEvents failed."))
     return false;
 
   status = clEnqueueReadBuffer(command_queue_,cell_data_buf_,CL_TRUE,
@@ -434,26 +434,26 @@ bool boxm_ocl_change_detection_manager:: read_trees()
                                cell_mixture_,
                                0,NULL,&events[0]);
 
-  if (!this->check_val(status,CL_SUCCESS,"clEnqueueBuffer (cell data )failed."))
+  if (!check_val(status,CL_SUCCESS,"clEnqueueBuffer (cell data )failed."))
     return false;
   status = clEnqueueReadBuffer(command_queue_,cell_alpha_buf_,CL_TRUE,
                                0,cell_data_size_*sizeof(cl_float),
                                cell_alpha_,
                                0,NULL,&events[0]);
 
-  if (!this->check_val(status,CL_SUCCESS,"clEnqueueBuffer (cell data )failed."))
+  if (!check_val(status,CL_SUCCESS,"clEnqueueBuffer (cell data )failed."))
     return false;
   status = clWaitForEvents(1, &events[0]);
-  if (!this->check_val(status,CL_SUCCESS,"clWaitForEvents failed."))
+  if (!check_val(status,CL_SUCCESS,"clWaitForEvents failed."))
     return false;
 
   status = clWaitForEvents(1, &events[0]);
-  if (!this->check_val(status,CL_SUCCESS,"clWaitForEvents failed."))
+  if (!check_val(status,CL_SUCCESS,"clWaitForEvents failed."))
     return false;
   // Wait for the read buffer to finish execution
 
   status = clReleaseEvent(events[0]);
-  return this->check_val(status,CL_SUCCESS,"clReleaseEvent failed.")==1;
+  return check_val(status,CL_SUCCESS,"clReleaseEvent failed.")==1;
 }
 
 
@@ -534,7 +534,7 @@ int boxm_ocl_change_detection_manager::build_kernel_program(cl_program & program
   if (program) {
     status = clReleaseProgram(program);
     program = 0;
-    if (!this->check_val(status,
+    if (!check_val(status,
       CL_SUCCESS,
       "clReleaseProgram failed."))
       return SDK_FAILURE;
@@ -546,7 +546,7 @@ int boxm_ocl_change_detection_manager::build_kernel_program(cl_program & program
                                       &source,
                                       sourceSize,
                                       &status);
-  if (!this->check_val(status,
+  if (!check_val(status,
                        CL_SUCCESS,
                        "clCreateProgramWithSource failed."))
     return SDK_FAILURE;
@@ -558,7 +558,7 @@ int boxm_ocl_change_detection_manager::build_kernel_program(cl_program & program
                           "",
                           NULL,
                           NULL);
-  if (!this->check_val(status,
+  if (!check_val(status,
                        CL_SUCCESS,
                        error_to_string(status)))
   {
@@ -660,7 +660,7 @@ bool boxm_ocl_change_detection_manager::set_scene_origin_buffers()
                                      CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR,
                                      4*sizeof(cl_float),
                                      scene_origin_,&status);
-  return this->check_val(status,CL_SUCCESS,"clCreateBuffer (scene_origin_) failed.")==1;
+  return check_val(status,CL_SUCCESS,"clCreateBuffer (scene_origin_) failed.")==1;
 }
 
 
@@ -668,7 +668,7 @@ bool boxm_ocl_change_detection_manager::release_scene_origin_buffers()
 {
   cl_int status;
   status = clReleaseMemObject(scene_origin_buf_);
-  return this->check_val(status,CL_SUCCESS,"clReleaseMemObject failed (scene_origin_buf_).")==1;
+  return check_val(status,CL_SUCCESS,"clReleaseMemObject failed (scene_origin_buf_).")==1;
 }
 
 
@@ -706,7 +706,7 @@ bool boxm_ocl_change_detection_manager::set_scene_dims_buffers()
                                    CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR,
                                    sizeof(cl_int4),
                                    scene_dims_,&status);
-  return this->check_val(status,CL_SUCCESS,"clCreateBuffer (scene_dims_) failed.")==1;
+  return check_val(status,CL_SUCCESS,"clCreateBuffer (scene_dims_) failed.")==1;
 }
 
 
@@ -714,7 +714,7 @@ bool boxm_ocl_change_detection_manager::release_scene_dims_buffers()
 {
   cl_int status;
   status = clReleaseMemObject(scene_dims_buf_);
-  return this->check_val(status,CL_SUCCESS,"clReleaseMemObject failed (scene_dims_buf_).")==1;
+  return check_val(status,CL_SUCCESS,"clReleaseMemObject failed (scene_dims_buf_).")==1;
 }
 
 
@@ -754,7 +754,7 @@ bool boxm_ocl_change_detection_manager::set_block_dims_buffers()
                                    CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR,
                                    4*sizeof(cl_float),
                                    block_dims_,&status);
-  return this->check_val(status,CL_SUCCESS,"clCreateBuffer (block_dims_) failed.")==1;
+  return check_val(status,CL_SUCCESS,"clCreateBuffer (block_dims_) failed.")==1;
 }
 
 
@@ -762,7 +762,7 @@ bool boxm_ocl_change_detection_manager::release_block_dims_buffers()
 {
   cl_int status;
   status = clReleaseMemObject(block_dims_buf_);
-  return this->check_val(status,CL_SUCCESS,"clReleaseMemObject failed (block_dims_buf_).")==1;
+  return check_val(status,CL_SUCCESS,"clReleaseMemObject failed (block_dims_buf_).")==1;
 }
 
 
@@ -798,7 +798,7 @@ bool boxm_ocl_change_detection_manager::set_block_ptrs_buffers()
                                    CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR,
                                    scene_x_*scene_y_*scene_z_*sizeof(cl_int4),
                                    block_ptrs_,&status);
-  return this->check_val(status,CL_SUCCESS,"clCreateBuffer (block_ptrs_) failed.")==1;
+  return check_val(status,CL_SUCCESS,"clCreateBuffer (block_ptrs_) failed.")==1;
 }
 
 
@@ -806,7 +806,7 @@ bool boxm_ocl_change_detection_manager::release_block_ptrs_buffers()
 {
   cl_int status;
   status = clReleaseMemObject(block_ptrs_buf_);
-  return this->check_val(status,CL_SUCCESS,"clReleaseMemObject failed (block_ptrs_buf_).")==1;
+  return check_val(status,CL_SUCCESS,"clReleaseMemObject failed (block_ptrs_buf_).")==1;
 }
 
 
@@ -825,7 +825,7 @@ bool boxm_ocl_change_detection_manager::set_root_level_buffers()
                                    CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR,
                                    sizeof(cl_uint),
                                    &root_level_,&status);
-  return this->check_val(status,CL_SUCCESS,"clCreateBuffer (root level) failed.")==1;
+  return check_val(status,CL_SUCCESS,"clCreateBuffer (root level) failed.")==1;
 }
 
 
@@ -833,7 +833,7 @@ bool boxm_ocl_change_detection_manager::release_root_level_buffers()
 {
   cl_int status;
   status = clReleaseMemObject(root_level_buf_);
-  if (!this->check_val(status,CL_SUCCESS,"clReleaseMemObject failed (root_level_buf_)."))
+  if (!check_val(status,CL_SUCCESS,"clReleaseMemObject failed (root_level_buf_)."))
     return false;
   return true;
 }
@@ -930,35 +930,35 @@ bool boxm_ocl_change_detection_manager::set_tree_buffers()
                               CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR,
                               cells_size_*sizeof(cl_int2),
                               cells_,&status);
-  if (!this->check_val(status,CL_SUCCESS,"clCreateBuffer (tree) failed."))
+  if (!check_val(status,CL_SUCCESS,"clCreateBuffer (tree) failed."))
     return false;
 
   cell_data_buf_ = clCreateBuffer(this->context_,
                                   CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR,
                                   cell_data_size_*sizeof(cl_uchar8),
                                   cell_mixture_,&status);
- if (!this->check_val(status,CL_SUCCESS,"clCreateBuffer (cell data) failed."))
+ if (!check_val(status,CL_SUCCESS,"clCreateBuffer (cell data) failed."))
     return false;
 
   cell_alpha_buf_ = clCreateBuffer(this->context_,
                                    CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR,
                                    cell_data_size_*sizeof(cl_float),
                                    cell_alpha_,&status);
-  if (!this->check_val(status,CL_SUCCESS,"clCreateBuffer (cell data) failed."))
+  if (!check_val(status,CL_SUCCESS,"clCreateBuffer (cell data) failed."))
     return false;
 
   numbuffer_buf_=clCreateBuffer(this->context_,
                                 CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR,
                                 sizeof(cl_uint),
                                 &numbuffer_,&status);
-  if (!this->check_val(status,CL_SUCCESS,"clCreateBuffer (numbuffer_) failed."))
+  if (!check_val(status,CL_SUCCESS,"clCreateBuffer (numbuffer_) failed."))
     return false;
 
   lenbuffer_buf_=clCreateBuffer(this->context_,
                                 CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR,
                                 sizeof(cl_uint),
                                 &lenbuffer_,&status);
-  if (!this->check_val(status,CL_SUCCESS,"clCreateBuffer (lenbuffer_) failed."))
+  if (!check_val(status,CL_SUCCESS,"clCreateBuffer (lenbuffer_) failed."))
     return false;
   /******* debug print ***************/
   int cellBytes = cells_size_*sizeof(cl_int2);
@@ -981,19 +981,19 @@ bool boxm_ocl_change_detection_manager::release_tree_buffers()
 {
   cl_int status;
   status = clReleaseMemObject(lenbuffer_buf_);
-  if (!this->check_val(status,CL_SUCCESS,"clReleaseMemObject failed (lenbuffer_buf_)."))
+  if (!check_val(status,CL_SUCCESS,"clReleaseMemObject failed (lenbuffer_buf_)."))
     return false;
   status = clReleaseMemObject(numbuffer_buf_);
-  if (!this->check_val(status,CL_SUCCESS,"clReleaseMemObject failed (numbuffer_buf_)."))
+  if (!check_val(status,CL_SUCCESS,"clReleaseMemObject failed (numbuffer_buf_)."))
     return false;
   status = clReleaseMemObject(cells_buf_);
-  if (!this->check_val(status,CL_SUCCESS,"clReleaseMemObject failed (cells_buf_)."))
+  if (!check_val(status,CL_SUCCESS,"clReleaseMemObject failed (cells_buf_)."))
     return false;
   status = clReleaseMemObject(cell_data_buf_);
-  if (!this->check_val(status,CL_SUCCESS,"clReleaseMemObject failed (cell_data_buf_)."))
+  if (!check_val(status,CL_SUCCESS,"clReleaseMemObject failed (cell_data_buf_)."))
     return false;
   status = clReleaseMemObject(cell_alpha_buf_);
-  return this->check_val(status,CL_SUCCESS,"clReleaseMemObject failed (cell_alpha_buf_).");
+  return check_val(status,CL_SUCCESS,"clReleaseMemObject failed (cell_alpha_buf_).");
 }
 
 
@@ -1093,7 +1093,7 @@ bool boxm_ocl_change_detection_manager::set_persp_camera_buffers()
                                   CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR,
                                   3*sizeof(cl_float16),
                                   persp_cam_,&status);
-  return this->check_val(status,CL_SUCCESS,"clCreateBuffer (persp_cam_buf_) failed.")==1;
+  return check_val(status,CL_SUCCESS,"clCreateBuffer (persp_cam_buf_) failed.")==1;
 }
 
 
@@ -1101,7 +1101,7 @@ bool boxm_ocl_change_detection_manager::write_persp_camera_buffers()
 {
   cl_int status;
   status=clEnqueueWriteBuffer(command_queue_,persp_cam_buf_,CL_FALSE, 0,3*sizeof(cl_float16), persp_cam_, 0, 0, 0);
-  if (!this->check_val(status,CL_SUCCESS,"clEnqueueWriteBuffer (persp_cam_buf_) failed."))
+  if (!check_val(status,CL_SUCCESS,"clEnqueueWriteBuffer (persp_cam_buf_) failed."))
     return false;
   clFinish(command_queue_);
 
@@ -1113,7 +1113,7 @@ bool boxm_ocl_change_detection_manager::release_persp_camera_buffers()
 {
   cl_int status;
   status = clReleaseMemObject(persp_cam_buf_);
-  return this->check_val(status,CL_SUCCESS,"clReleaseMemObject failed (persp_cam_buf_).")==1;
+  return check_val(status,CL_SUCCESS,"clReleaseMemObject failed (persp_cam_buf_).")==1;
 }
 
 bool boxm_ocl_change_detection_manager::set_input_image(vil_image_view<float>  obs)
@@ -1142,24 +1142,24 @@ bool boxm_ocl_change_detection_manager::write_image_buffer()
 {
   cl_int status;
   status=clEnqueueWriteBuffer(command_queue_,int_image_buf_,CL_TRUE, 0,wni_*wnj_*sizeof(cl_float), int_image_, 0, 0, 0);
-  if (!this->check_val(status,CL_SUCCESS,"clEnqueueWriteBuffer (image_buf_) failed."))
+  if (!check_val(status,CL_SUCCESS,"clEnqueueWriteBuffer (image_buf_) failed."))
     return false;
   status=clFinish(command_queue_);
-  if (!this->check_val(status,CL_SUCCESS,"clFinish (writing) failed."))
+  if (!check_val(status,CL_SUCCESS,"clFinish (writing) failed."))
     return false;
   status=clEnqueueWriteBuffer(command_queue_,image_buf_,CL_TRUE, 0,wni_*wnj_*sizeof(cl_float4),image_, 0, 0, 0);
-  if (!this->check_val(status,CL_SUCCESS,"clEnqueueWriteBuffer (image_buf_) failed."))
+  if (!check_val(status,CL_SUCCESS,"clEnqueueWriteBuffer (image_buf_) failed."))
     return false;
   status=clFinish(command_queue_);
-  if (!this->check_val(status,CL_SUCCESS,"clFinish (writing) failed."))
+  if (!check_val(status,CL_SUCCESS,"clFinish (writing) failed."))
     return false;
 
   status=clEnqueueWriteBuffer(command_queue_,img_dims_buf_,CL_TRUE, 0,sizeof(cl_uint4), img_dims_, 0, 0, 0);
-  if (!this->check_val(status,CL_SUCCESS,"clEnqueueWriteBuffer (imd_dims_buf_) failed."))
+  if (!check_val(status,CL_SUCCESS,"clEnqueueWriteBuffer (imd_dims_buf_) failed."))
     return false;
   status=clFinish(command_queue_);
 
-  return this->check_val(status,CL_SUCCESS,"clFinish (writing) failed.")==1;
+  return check_val(status,CL_SUCCESS,"clFinish (writing) failed.")==1;
 }
 
 
@@ -1220,13 +1220,13 @@ bool boxm_ocl_change_detection_manager::set_input_image_buffers()
                               CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR,
                               wni_*wnj_*sizeof(cl_float4),
                               image_,&status);
-  if (!this->check_val(status,CL_SUCCESS,"clCreateBuffer (image_buf_) failed."))
+  if (!check_val(status,CL_SUCCESS,"clCreateBuffer (image_buf_) failed."))
     return false;
   int_image_buf_ = clCreateBuffer(this->context_,
                                   CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR,
                                   wni_*wnj_*sizeof(cl_float),
                                   int_image_,&status);
-  return this->check_val(status,CL_SUCCESS,"clCreateBuffer (int_image_buf_) failed.")==1;
+  return check_val(status,CL_SUCCESS,"clCreateBuffer (int_image_buf_) failed.")==1;
 }
 
 
@@ -1238,7 +1238,7 @@ bool boxm_ocl_change_detection_manager::set_image_dims_buffers()
                                  CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR,
                                  sizeof(cl_uint4),
                                  img_dims_,&status);
-  return this->check_val(status,CL_SUCCESS,"clCreateBuffer (imd_dims_buf_) failed.")==1;
+  return check_val(status,CL_SUCCESS,"clCreateBuffer (imd_dims_buf_) failed.")==1;
 }
 
 
@@ -1246,11 +1246,11 @@ bool boxm_ocl_change_detection_manager::release_input_image_buffers()
 {
   cl_int status;
   status = clReleaseMemObject(image_buf_);
-  if (!this->check_val(status,CL_SUCCESS,"clReleaseMemObject failed (image_buf_)."))
+  if (!check_val(status,CL_SUCCESS,"clReleaseMemObject failed (image_buf_)."))
     return false;
 
   status = clReleaseMemObject(img_dims_buf_);
-  return this->check_val(status,CL_SUCCESS,"clReleaseMemObject failed (img_dims_buf_).")==1;
+  return check_val(status,CL_SUCCESS,"clReleaseMemObject failed (img_dims_buf_).")==1;
 }
 
 
@@ -1272,14 +1272,14 @@ bool boxm_ocl_change_detection_manager::set_foreground_pdf_buffers()
                                        CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR,
                                        20*sizeof(cl_float),
                                        foreground_pdf_,&status);
-  return this->check_val(status,CL_SUCCESS,"clCreateBuffer (foreground_pdf_) failed.")==1;
+  return check_val(status,CL_SUCCESS,"clCreateBuffer (foreground_pdf_) failed.")==1;
 }
 
 bool boxm_ocl_change_detection_manager::release_foreground_pdf_buffers()
 {
   cl_int status;
   status = clReleaseMemObject(foreground_pdf_buf_);
-  return this->check_val(status,CL_SUCCESS,"clReleaseMemObject failed (foreground_pdf_buf_).")==1;
+  return check_val(status,CL_SUCCESS,"clReleaseMemObject failed (foreground_pdf_buf_).")==1;
 }
 
 bool boxm_ocl_change_detection_manager::clean_foreground_pdf()

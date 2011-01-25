@@ -67,7 +67,7 @@ bool boxm_ray_trace_manager<T>::init_raytrace(boxm_scene<boct_tree<short,T > > *
 
   cl_int status = CL_SUCCESS;
   kernel_ = clCreateKernel(program_,"ray_trace_main",&status);
-  if (!this->check_val(status,CL_SUCCESS,error_to_string(status))) {
+  if (!check_val(status,CL_SUCCESS,error_to_string(status))) {
     return false;
   }
   return this->setup_image_cam_arrays()
@@ -104,7 +104,7 @@ bool boxm_ray_trace_manager<T>::clean_raytrace()
   cl_int status = CL_SUCCESS;
   // release kernel
   status = clReleaseKernel(kernel_);
-  good = good && this->check_val(status,CL_SUCCESS,"clReleaseKernel failed.");
+  good = good && check_val(status,CL_SUCCESS,"clReleaseKernel failed.");
   return good;
 }
 
@@ -168,8 +168,8 @@ bool boxm_ray_trace_manager<T>::setup_tree()
   vcl_cout<<"Size of tree "<<(float)cells_size*4*4/(1024*1024)          << "MBytes\n"
           <<"Size of data "<<(float)data_input_.size()*16*4/(1024*1024) << "MBytes"<<vcl_endl;
 
-  if (cells_size>this->image2d_max_width_)
-    cells_size=(unsigned)RoundUp(cells_size,this->image2d_max_width_);
+  if (cells_size>this->image2d_max_width())
+    cells_size=(unsigned)RoundUp(cells_size,this->image2d_max_width());
   cells_ = NULL;
   cell_data_ = NULL;
 #if defined (_WIN32)
@@ -584,7 +584,7 @@ int boxm_ray_trace_manager<T>::setup_app_density_buffer()
   cl_int status = CL_SUCCESS;
   app_density_buf_ = clCreateBuffer(this->context_,CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR,
                                     sizeof(cl_uint4),app_density_,&status);
-  if (!this->check_val(status,CL_SUCCESS,"clCreateBuffer (app density) failed."))
+  if (!check_val(status,CL_SUCCESS,"clCreateBuffer (app density) failed."))
     return SDK_FAILURE;
   else
     return SDK_SUCCESS;
@@ -594,7 +594,7 @@ template<class T>
 int boxm_ray_trace_manager<T>::clean_app_density_buffer()
 {
   cl_int status = clReleaseMemObject(app_density_buf_);
-  if (!this->check_val(status,CL_SUCCESS,"clReleaseMemObject (app_density_buf_) failed."))
+  if (!check_val(status,CL_SUCCESS,"clReleaseMemObject (app_density_buf_) failed."))
     return SDK_FAILURE;
   else
     return SDK_SUCCESS;
@@ -612,16 +612,16 @@ int boxm_ray_trace_manager<T>::setup_tree_input_buffers(bool useimage)
     inputformat.image_channel_data_type=CL_SIGNED_INT32;
     inputformat.image_channel_order=CL_RGBA;
 
-    if (cell_input_.size()>this->image2d_max_width_*this->image2d_max_height_)
+    if (cell_input_.size()>this->image2d_max_width()*this->image2d_max_height())
       return SDK_FAILURE;
 
-    vcl_size_t width=vcl_min(cell_input_.size(),this->image2d_max_width_);
+    vcl_size_t width=vcl_min(cell_input_.size(),this->image2d_max_width());
     vcl_size_t height=(vcl_size_t)vcl_ceil((float)cell_input_.size()/(float)width);
     input_cell_buf_=clCreateImage2D(this->context_,
                                     CL_MEM_READ_ONLY | CL_MEM_USE_HOST_PTR,
                                     &inputformat,width,height,width*sizeof(cl_int4),
                                     cells_,&status);
-    if (!this->check_val(status,
+    if (!check_val(status,
                          CL_SUCCESS,
                          "clCreateBuffer (cell_array) failed."))
       return SDK_FAILURE;
@@ -633,7 +633,7 @@ int boxm_ray_trace_manager<T>::setup_tree_input_buffers(bool useimage)
                                      cell_input_.size() * sizeof(cl_int4),
                                      cells_,
                                      &status);
-    if (!this->check_val(status,
+    if (!check_val(status,
                          CL_SUCCESS,
                          "clCreateBuffer (cell_array) failed."))
       return SDK_FAILURE;
@@ -643,7 +643,7 @@ int boxm_ray_trace_manager<T>::setup_tree_input_buffers(bool useimage)
                                    data_input_.size() * sizeof(cl_float16),
                                    cell_data_,
                                    &status);
-  if (!this->check_val(status,
+  if (!check_val(status,
                        CL_SUCCESS,
                        "clCreateBuffer (cell_data) failed."))
     return SDK_FAILURE;
@@ -652,7 +652,7 @@ int boxm_ray_trace_manager<T>::setup_tree_input_buffers(bool useimage)
                                 sizeof(cl_int),
                                 numlevels_,
                                 &status);
-  if (!this->check_val(status,CL_SUCCESS,
+  if (!check_val(status,CL_SUCCESS,
                        "clCreateBuffer (nlevels) failed."))
     return SDK_FAILURE;
   else
@@ -667,18 +667,18 @@ int boxm_ray_trace_manager<T>::clean_tree_input_buffers()
 
 
   status = clReleaseMemObject(input_cell_buf_);
-  if (!this->check_val(status,
+  if (!check_val(status,
                        CL_SUCCESS,
                        "clReleaseMemObject failed (input_cell_buf_)."))
     return SDK_FAILURE;
 
   status = clReleaseMemObject(input_data_buf_);
-  if (!this->check_val(status,
+  if (!check_val(status,
                        CL_SUCCESS,
                        "clReleaseMemObject failed (input_data_buf_)."))
     return SDK_FAILURE;
   status = clReleaseMemObject(nlevels_buf_);
-  if (!this->check_val(status,
+  if (!check_val(status,
     CL_SUCCESS,
     "clReleaseMemObject failed (nlevels_buf_)."))
     return SDK_FAILURE;
@@ -692,7 +692,7 @@ int boxm_ray_trace_manager<T>::setup_camera_input_buffer()
   cl_int status = CL_SUCCESS;
   // Create and initialize memory objects
   camera_buf_ = clCreateBuffer(this->context_,CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR,sizeof(cl_float16)*3,svd_UtWV_,&status);
-  if (!this->check_val(status,CL_SUCCESS,"clCreateBuffer (camera_buf_) failed."))
+  if (!check_val(status,CL_SUCCESS,"clCreateBuffer (camera_buf_) failed."))
     return SDK_FAILURE;
   else
     return SDK_SUCCESS;
@@ -702,7 +702,7 @@ template<class T>
 int boxm_ray_trace_manager<T>::clean_camera_input_buffer()
 {
   cl_int status = clReleaseMemObject(camera_buf_);
-  if (!this->check_val(status,CL_SUCCESS,"clReleaseMemObject (camera_buf_) failed."))
+  if (!check_val(status,CL_SUCCESS,"clReleaseMemObject (camera_buf_) failed."))
     return SDK_FAILURE;
   else
     return SDK_SUCCESS;
@@ -714,7 +714,7 @@ int boxm_ray_trace_manager<T>::setup_roidims_input_buffer()
   cl_int status = CL_SUCCESS;
   roidims_buf_ = clCreateBuffer(this->context_,CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR,
                                 sizeof(cl_uint4),roidims_,&status);
-  if (!this->check_val(status,CL_SUCCESS,"clCreateBuffer (roi) failed."))
+  if (!check_val(status,CL_SUCCESS,"clCreateBuffer (roi) failed."))
     return SDK_FAILURE;
   else
     return SDK_SUCCESS;
@@ -724,7 +724,7 @@ template<class T>
 int boxm_ray_trace_manager<T>::clean_roidims_input_buffer()
 {
   cl_int status = clReleaseMemObject(roidims_buf_);
-  if (!this->check_val(status,CL_SUCCESS,"clReleaseMemObject (roidims_buf_) failed."))
+  if (!check_val(status,CL_SUCCESS,"clReleaseMemObject (roidims_buf_) failed."))
     return SDK_FAILURE;
   else
     return SDK_SUCCESS;
@@ -736,7 +736,7 @@ int boxm_ray_trace_manager<T>::setup_ray_origin_buffer()
   cl_int status = CL_SUCCESS;
   // Create and initialize memory objects
   ray_origin_buf_ = clCreateBuffer(this->context_,CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR,sizeof(cl_float4),ray_origin_,&status);
-  if (!this->check_val(status,CL_SUCCESS,"clCreateBuffer (ray origin) failed."))
+  if (!check_val(status,CL_SUCCESS,"clCreateBuffer (ray origin) failed."))
     return SDK_FAILURE;
   else
     return SDK_SUCCESS;
@@ -746,7 +746,7 @@ template<class T>
 int boxm_ray_trace_manager<T>::clean_ray_origin_buffer()
 {
   cl_int status = clReleaseMemObject(ray_origin_buf_);
-  if (!this->check_val(status,CL_SUCCESS,"clReleaseMemObject (ray_origin_buf_) failed."))
+  if (!check_val(status,CL_SUCCESS,"clReleaseMemObject (ray_origin_buf_) failed."))
     return SDK_FAILURE;
   else
     return SDK_SUCCESS;
@@ -759,7 +759,7 @@ int boxm_ray_trace_manager<T>::setup_work_img_buffer()
   cl_int status = CL_SUCCESS;
   work_image_buf_ = clCreateBuffer(this->context_,CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR,
                                    ni_*nj_* sizeof(cl_float4),ray_results_,&status);
-  if (!this->check_val(status,CL_SUCCESS,"clCreateBuffer (work image) failed."))
+  if (!check_val(status,CL_SUCCESS,"clCreateBuffer (work image) failed."))
     return SDK_FAILURE;
   return SDK_SUCCESS;
 }
@@ -768,7 +768,7 @@ template<class T>
 int boxm_ray_trace_manager<T>::clean_work_img_buffer()
 {
   cl_int status = clReleaseMemObject(work_image_buf_);
-  if (!this->check_val(status,CL_SUCCESS,"clReleaseMemObject (work_image_buf_) failed."))
+  if (!check_val(status,CL_SUCCESS,"clReleaseMemObject (work_image_buf_) failed."))
     return SDK_FAILURE;
 
   return SDK_SUCCESS;
@@ -781,7 +781,7 @@ int boxm_ray_trace_manager<T>::setup_imgdims_buffer()
   cl_int status = CL_SUCCESS;
   imgdims_buf_ = clCreateBuffer(this->context_,CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR,
                                 sizeof(cl_uint4),imgdims_,&status);
-  if (!this->check_val(status,CL_SUCCESS,"clCreateBuffer (image size) failed."))
+  if (!check_val(status,CL_SUCCESS,"clCreateBuffer (image size) failed."))
     return SDK_FAILURE;
   else
     return SDK_SUCCESS;
@@ -791,7 +791,7 @@ template<class T>
 int boxm_ray_trace_manager<T>::clean_imgdims_buffer()
 {
   cl_int status = clReleaseMemObject(imgdims_buf_);
-  if (!this->check_val(status,CL_SUCCESS,"clReleaseMemObject (imgdims_buf_) failed."))
+  if (!check_val(status,CL_SUCCESS,"clReleaseMemObject (imgdims_buf_) failed."))
     return SDK_FAILURE;
   else
     return SDK_SUCCESS;
@@ -803,7 +803,7 @@ int boxm_ray_trace_manager<T>::setup_tree_global_bbox_buffer()
   cl_int status = CL_SUCCESS;
   // Create and initialize memory objects
   global_bbox_buf_ = clCreateBuffer(this->context_,CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR,sizeof(cl_float4),global_bbox_,&status);
-  if (!this->check_val(status,CL_SUCCESS,"clCreateBuffer (ray origin) failed."))
+  if (!check_val(status,CL_SUCCESS,"clCreateBuffer (ray origin) failed."))
     return SDK_FAILURE;
   else
     return SDK_SUCCESS;
@@ -813,7 +813,7 @@ template<class T>
 int boxm_ray_trace_manager<T>::clean_tree_global_bbox_buffer()
 {
   cl_int status = clReleaseMemObject(global_bbox_buf_);
-  if (!this->check_val(status,CL_SUCCESS,"clReleaseMemObject (global_bbox_buf_) failed."))
+  if (!check_val(status,CL_SUCCESS,"clReleaseMemObject (global_bbox_buf_) failed."))
     return SDK_FAILURE;
   else
     return SDK_SUCCESS;
@@ -860,7 +860,7 @@ int boxm_ray_trace_manager<T>::build_kernel_program(bool useimage)
   if (program_) {
     status = clReleaseProgram(program_);
     program_ = 0;
-    if (!this->check_val(status,
+    if (!check_val(status,
       CL_SUCCESS,
       "clReleaseProgram failed."))
       return SDK_FAILURE;
@@ -872,7 +872,7 @@ int boxm_ray_trace_manager<T>::build_kernel_program(bool useimage)
                                        &source,
                                        sourceSize,
                                        &status);
-  if (!this->check_val(status,
+  if (!check_val(status,
                        CL_SUCCESS,
                        "clCreateProgramWithSource failed."))
     return SDK_FAILURE;
@@ -889,7 +889,7 @@ int boxm_ray_trace_manager<T>::build_kernel_program(bool useimage)
                           options.c_str(),
                           NULL,
                           NULL);
-  if (!this->check_val(status,
+  if (!check_val(status,
                        CL_SUCCESS,
                        error_to_string(status)))
   {
@@ -910,7 +910,7 @@ int boxm_ray_trace_manager<T>::create_kernel(vcl_string const& kernel_name)
   cl_int status = CL_SUCCESS;
   // get a kernel object handle for a kernel with the given name
   kernel_ = clCreateKernel(program_,kernel_name.c_str(),&status);
-  if (!this->check_val(status,CL_SUCCESS,error_to_string(status)))
+  if (!check_val(status,CL_SUCCESS,error_to_string(status)))
     return SDK_FAILURE;
   else
     return SDK_SUCCESS;
@@ -924,7 +924,7 @@ int boxm_ray_trace_manager<T>::release_kernel()
     status = clReleaseKernel(kernel_);
   }
   kernel_ = NULL;
-  if (!this->check_val(status,
+  if (!check_val(status,
     CL_SUCCESS,
     "clReleaseKernel failed."))
     return SDK_FAILURE;
@@ -1142,64 +1142,64 @@ bool boxm_ray_trace_manager<T>::run_block()
   // -- Set appropriate arguments to the kernel --
   cl_int status = CL_SUCCESS;
   status = clSetKernelArg(kernel_,0,sizeof(cl_mem),(void *)&nlevels_buf_);
-  if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (nlevels_buf_)"))
+  if (!check_val(status,CL_SUCCESS,"clSetKernelArg failed. (nlevels_buf_)"))
     return SDK_FAILURE;
 
   // the ray origin buffer
   status = CL_SUCCESS;
   status = clSetKernelArg(kernel_,1,sizeof(cl_mem),(void *)&ray_origin_buf_);
-  if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (ray_origin_array)"))
+  if (!check_val(status,CL_SUCCESS,"clSetKernelArg failed. (ray_origin_array)"))
     return SDK_FAILURE;
 
   // camera buffer
   status = clSetKernelArg(kernel_,2,sizeof(cl_mem),(void *)&camera_buf_);
-  if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (ray_dir_array)"))
+  if (!check_val(status,CL_SUCCESS,"clSetKernelArg failed. (ray_dir_array)"))
     return SDK_FAILURE;
 
   // tree buffer
   status = clSetKernelArg(kernel_,3,sizeof(cl_mem),(void *)&input_cell_buf_);
-  if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (octree)"))
+  if (!check_val(status,CL_SUCCESS,"clSetKernelArg failed. (octree)"))
     return SDK_FAILURE;
   // tree buffer
   status = clSetKernelArg(kernel_,4,sizeof(cl_mem),(void *)&input_data_buf_);
-  if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (data)"))
+  if (!check_val(status,CL_SUCCESS,"clSetKernelArg failed. (data)"))
     return SDK_FAILURE;
 
   // roi dimensions
   status = clSetKernelArg(kernel_,5,sizeof(cl_mem),(void *)&imgdims_buf_);
-  if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (Img dimensions)"))
+  if (!check_val(status,CL_SUCCESS,"clSetKernelArg failed. (Img dimensions)"))
     return SDK_FAILURE;
   status = clSetKernelArg(kernel_,6,sizeof(cl_mem),(void *)&roidims_buf_);
-  if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (ROI dimensions)"))
+  if (!check_val(status,CL_SUCCESS,"clSetKernelArg failed. (ROI dimensions)"))
     return SDK_FAILURE;
   status = clSetKernelArg(kernel_,7,sizeof(cl_mem),(void *)&global_bbox_buf_);
-  if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (global bbox)"))
+  if (!check_val(status,CL_SUCCESS,"clSetKernelArg failed. (global bbox)"))
     return SDK_FAILURE;
   // output image buffer
   status = clSetKernelArg(kernel_,8,sizeof(cl_mem),(void *)&work_image_buf_);
-  if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (input_work_image)"))
+  if (!check_val(status,CL_SUCCESS,"clSetKernelArg failed. (input_work_image)"))
     return SDK_FAILURE;
 
   //  set local variable
   status = clSetKernelArg(kernel_,9,sizeof(cl_float16)*3,0);
-  if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (local cam)"))
+  if (!check_val(status,CL_SUCCESS,"clSetKernelArg failed. (local cam)"))
     return SDK_FAILURE;
   status = clSetKernelArg(kernel_,10,sizeof(cl_float4),0);
-  if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (local origin)"))
+  if (!check_val(status,CL_SUCCESS,"clSetKernelArg failed. (local origin)"))
     return SDK_FAILURE;
 
   status = clSetKernelArg(kernel_,11,sizeof(cl_float4),0);
-  if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (local box)"))
+  if (!check_val(status,CL_SUCCESS,"clSetKernelArg failed. (local box)"))
     return SDK_FAILURE;
   status = clSetKernelArg(kernel_,12,sizeof(cl_uint4),0);
-  if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (local roi)"))
+  if (!check_val(status,CL_SUCCESS,"clSetKernelArg failed. (local roi)"))
     return SDK_FAILURE;
 #if 0
   status = clSetKernelArg(kernel_,13,sizeof(cl_float4)*this->group_size(),0);
-  if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (local roi)"))
+  if (!check_val(status,CL_SUCCESS,"clSetKernelArg failed. (local roi)"))
     return SDK_FAILURE;
   status = clSetKernelArg(kernel_,13,sizeof(cl_int)*this->group_size()*(this->num_levels()),0);
-  if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (local stack)"))
+  if (!check_val(status,CL_SUCCESS,"clSetKernelArg failed. (local stack)"))
     return SDK_FAILURE;
 #endif
 
@@ -1207,14 +1207,14 @@ bool boxm_ray_trace_manager<T>::run_block()
   cl_ulong used_local_memory;
   status = clGetKernelWorkGroupInfo(this->kernel(),this->devices()[0],CL_KERNEL_LOCAL_MEM_SIZE,
                                     sizeof(cl_ulong),&used_local_memory,NULL);
-  if (!this->check_val(status,CL_SUCCESS,"clGetKernelWorkGroupInfo CL_KERNEL_LOCAL_MEM_SIZE failed."))
+  if (!check_val(status,CL_SUCCESS,"clGetKernelWorkGroupInfo CL_KERNEL_LOCAL_MEM_SIZE failed."))
     return SDK_FAILURE;
 
   // determine the work group size
   cl_ulong kernel_work_group_size;
   status = clGetKernelWorkGroupInfo(this->kernel(),this->devices()[0],CL_KERNEL_WORK_GROUP_SIZE,
                                     sizeof(cl_ulong),&kernel_work_group_size,NULL);
-  if (!this->check_val(status,CL_SUCCESS,"clGetKernelWorkGroupInfo CL_KERNEL_WORK_GROUP_SIZE, failed."))
+  if (!check_val(status,CL_SUCCESS,"clGetKernelWorkGroupInfo CL_KERNEL_WORK_GROUP_SIZE, failed."))
     return SDK_FAILURE;
 
   vcl_size_t globalThreads[]= {RoundUp((imgdims_[0])*(imgdims_[1]),this->group_size())};
@@ -1228,17 +1228,17 @@ bool boxm_ray_trace_manager<T>::run_block()
 
   // set up a command queue
   command_queue_ = clCreateCommandQueue(this->context(),this->devices()[0],CL_QUEUE_PROFILING_ENABLE ,&status);
-  if (!this->check_val(status,CL_SUCCESS,"Falied in command queue creation" + error_to_string(status)))
+  if (!check_val(status,CL_SUCCESS,"Falied in command queue creation" + error_to_string(status)))
     return false;
 
   cl_event ceEvent;
   status = clEnqueueNDRangeKernel(command_queue_,this->kernel_, 1,NULL,globalThreads,localThreads,0,NULL,&ceEvent);
 
-  if (!this->check_val(status,CL_SUCCESS,"clEnqueueNDRangeKernel failed. "+error_to_string(status)))
+  if (!check_val(status,CL_SUCCESS,"clEnqueueNDRangeKernel failed. "+error_to_string(status)))
     return SDK_FAILURE;
 
   status = clFinish(command_queue_);
-  if (!this->check_val(status,CL_SUCCESS,"clFinish failed."+error_to_string(status)))
+  if (!check_val(status,CL_SUCCESS,"clFinish failed."+error_to_string(status)))
     return SDK_FAILURE;
   cl_ulong tstart,tend;
   status = clGetEventProfilingInfo(ceEvent,CL_PROFILING_COMMAND_END,sizeof(cl_ulong),&tend,0);
@@ -1259,21 +1259,21 @@ bool boxm_ray_trace_manager<T>:: read_output_image()
                                    this->ray_results(),
                                    0,NULL,&events[0]);
 
-  if (!this->check_val(status,CL_SUCCESS,"clEnqueueBuffer (ray_results)failed."))
+  if (!check_val(status,CL_SUCCESS,"clEnqueueBuffer (ray_results)failed."))
     return false;
 
   // Wait for the read buffer to finish execution
   status = clWaitForEvents(1, &events[0]);
-  if (!this->check_val(status,CL_SUCCESS,"clWaitForEvents failed."))
+  if (!check_val(status,CL_SUCCESS,"clWaitForEvents failed."))
     return false;
 
   status = clReleaseEvent(events[0]);
-  if (!this->check_val(status,CL_SUCCESS,"clReleaseEvent failed."))
+  if (!check_val(status,CL_SUCCESS,"clReleaseEvent failed."))
     return false;
 
   // release the command Queue
   status = clReleaseCommandQueue(command_queue_);
-  if (!this->check_val(status,CL_SUCCESS,"clReleaseCommandQueue failed."))
+  if (!check_val(status,CL_SUCCESS,"clReleaseCommandQueue failed."))
     return false;
 return true;
 }

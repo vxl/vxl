@@ -78,13 +78,11 @@ bool boxm_update_bit_tableau::init_ocl()
   //initialize the render manager
   boxm_update_bit_scene_manager* updt_mgr
       = boxm_update_bit_scene_manager::instance();
-  int status=0;
-  cl_platform_id platform_id[1];
-  status = clGetPlatformIDs (1, platform_id, NULL);
-  if (status!=CL_SUCCESS) {
-      vcl_cout<<error_to_string(status)<<vcl_endl;
-      return 0;
-  }
+  cl_device_id device = updt_mgr->devices()[0];
+  cl_platform_id platform_id[1]; 
+  int status = clGetDeviceInfo(device,CL_DEVICE_PLATFORM,sizeof(platform_id),(void*) platform_id,NULL);
+  if (!check_val(status, CL_SUCCESS, "boxm2_render Tableau::create_cl_gl_context CL_DEVICE_PLATFORM failed."))
+    return 0;
 
   cl_context compute_context;
 #ifdef WIN32
@@ -96,7 +94,7 @@ bool boxm_update_bit_tableau::init_ocl()
     0
   };
   //create OpenCL context with display properties determined above
-  compute_context = clCreateContext(props, 1, &updt_mgr->devices()[0], NULL, NULL, &status);
+  compute_context = clCreateContext(props, 1, &device, NULL, NULL, &status);
 #elif defined(__APPLE__) || defined(MACOSX)
   CGLContextObj kCGLContext = CGLGetCurrentContext();
   CGLShareGroupObj kCGLShareGroup = CGLGetShareGroup(kCGLContext);
@@ -117,7 +115,7 @@ bool boxm_update_bit_tableau::init_ocl()
     CL_CONTEXT_PLATFORM, (cl_context_properties) platform_id[0],
     0
   };
-  compute_context = clCreateContext(props, 1, &updt_mgr->devices()[0], NULL, NULL, &status);
+  compute_context = clCreateContext(props, 1, &device, NULL, NULL, &status);
 #endif
 
   if (status!=CL_SUCCESS) {
@@ -233,7 +231,7 @@ bool boxm_update_bit_tableau::update_model()
   //refine every SIX
   if (curr_count_ > 6) {
     vcl_cout<<"refining"<<vcl_endl;
-    this->refine_model();
+    //this->refine_model();
   }
 
   //run the opencl update business (MAKE THIS JUST ONE METHOD, NOT FIVE CALLS)
@@ -253,7 +251,7 @@ bool boxm_update_bit_tableau::render_frame()
     boxm_update_bit_scene_manager* ocl_mgr = boxm_update_bit_scene_manager::instance();
     cl_int status = clEnqueueAcquireGLObjects(ocl_mgr->command_queue_, 1,
                                               &ocl_mgr->image_gl_buf_ , 0, 0, 0);
-    if (!ocl_mgr->check_val(status,CL_SUCCESS,"tableau::clEnqueueAcquiredGLObjects failed (render_frame)"+error_to_string(status)))
+    if (!check_val(status,CL_SUCCESS,"tableau::clEnqueueAcquiredGLObjects failed (render_frame)"+error_to_string(status)))
         return false;
     vcl_cout<<cam_;
     //MAKE THIS JUST ONE METHOD< NOT THREE CALLS
