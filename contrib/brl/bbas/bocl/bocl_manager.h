@@ -46,7 +46,7 @@ class bocl_manager
   vcl_size_t image2d_max_width_;       //!< Ideal float vector size
   vcl_size_t image2d_max_height_;       //!< Ideal float vector size
   cl_char extensions_supported_[1000];
-  char platform_name[100];
+  char platform_name_[100];
  public:
   cl_context context_;               //!< CL context
 
@@ -90,6 +90,8 @@ class bocl_manager
 
   vcl_size_t image2d_max_width() const { return image2d_max_width_; }
   vcl_size_t image2d_max_height() const { return image2d_max_height_; }
+
+  char const* platform_name() const { return platform_name_; }
 
  protected:
 

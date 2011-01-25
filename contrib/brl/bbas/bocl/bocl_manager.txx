@@ -88,7 +88,7 @@ bool bocl_manager<T>::initialize_cl()
   {
     if ( clGetDeviceIDs(platform_id[i], CL_DEVICE_TYPE_GPU, 2, gpus, &numGPUs)== CL_SUCCESS)
     {
-      clGetPlatformInfo(platform_id[i],CL_PLATFORM_NAME,sizeof(platform_name),platform_name,&ret_size);
+      clGetPlatformInfo(platform_id[i],CL_PLATFORM_NAME,sizeof(platform_name_),platform_name_,&ret_size);
 
       gpu_found=true;
       vcl_cout<<"Found "<<numGPUs<<" GPUs"<<vcl_endl;
@@ -319,7 +319,7 @@ bool bocl_manager<T>::initialize_cl()
 
   unsigned size = sizeof(vcl_size_t);
   vcl_cout << " Context Description\n"
-           << " Platform Name: "<<platform_name <<'\n'
+           << " Platform Name: "<<platform_name_ <<'\n'
            << " Device vendor: " << vendor << '\n'
            << " Device extensions: " << extensions << 'n'
            << " Number of devices: " << number_devices_ << '\n'
