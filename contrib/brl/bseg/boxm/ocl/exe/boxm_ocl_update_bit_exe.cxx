@@ -7,6 +7,7 @@
 #include <vil/vil_image_view_base.h>
 #include <vil/vil_image_view.h>
 #include <vil/vil_load.h>
+#include <vil/vil_save.h>
 
 #include <vul/vul_arg.h>
 #include <vul/vul_file.h>
@@ -22,10 +23,12 @@ int main(int argc,  char** argv)
   vul_arg<vcl_string> img("-img", "image filename", "");
   vul_arg<unsigned> ni("-ni", "Width of image", 640);
   vul_arg<unsigned> nj("-nj", "Height of image", 480);
+  vul_arg<bool> use_cpu("-cpu", "Specifies to use CPU", false); 
+  vul_arg<bool> use_atomic("-atom", "Specifies to use all atomics, no opt", false); 
 
   //// need this on some toolkit implementations to get the window up.
   vul_arg_parse(argc, argv);
-
+  
   //1.  create ocl_scene from xml file 
   boxm_ocl_bit_scene ocl_scene(scene_file());
   vcl_cout<<"Scene Initialized... "<<vcl_endl
@@ -55,12 +58,17 @@ int main(int argc,  char** argv)
   //4.  initialize update manager
   boxm_update_bit_scene_manager* updt_mgr 
     = boxm_update_bit_scene_manager::instance();
+  updt_mgr->set_use_gl(false); 
+  if( use_cpu() ) {
+    vcl_cout<<"USING CPU For Update"<<vcl_endl;
+    updt_mgr->initialize_context(&updt_mgr->cpus()[0]); 
+  }
 
   vil_image_view<float> expected(ni(),nj());
   int bundle_dim = 8;
   updt_mgr->set_bundle_ni(bundle_dim);
   updt_mgr->set_bundle_nj(bundle_dim);
-  updt_mgr->init_scene(&ocl_scene, pcam, expected, 0.3f);
+  updt_mgr->init_scene(&ocl_scene, pcam, expected, 0.3f, false, use_atomic());
   if (!updt_mgr->setup_norm_data(true, 0.5f, 0.25f))
     return -1;
   updt_mgr->setup_online_processing();
@@ -72,10 +80,28 @@ int main(int argc,  char** argv)
   updt_mgr->write_persp_camera_buffers();
   updt_mgr->update();
 
-  //6. save post updated model
-  vcl_cout<<"SAVING MODEL!!!"<<vcl_endl;
-  updt_mgr->save_scene();
+  //6. render for proof
+  updt_mgr->rendering();
+  updt_mgr->read_output_image();
+  cl_float* results = updt_mgr->output_image();
+  if (!results) {
+    vcl_cerr << "Error : boxm_opencl_render_expected : ray_mgr->ray_results() returned NULL\n";
+    return 0;
+  }
   
+  //convert to VXL_BYTE for PNG IMG
+  //results is a float 4 image, so skip 4
+  vil_image_view<vxl_byte> outimg(ni(),nj());
+  cl_float *results_p = results;
+  for (unsigned j = 0; j<nj(); ++j) {
+    for (unsigned i = 0; i<ni(); ++i) {
+      float pixel = *results_p; 
+      outimg(i,j) = (vxl_byte) (pixel * 255 ); // expected intensity
+      results_p += 4; 
+    }
+  }
+  vil_save(outimg, "update.png");
+
   //7.  cleanup
   updt_mgr->uninit_scene();
   

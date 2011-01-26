@@ -132,7 +132,7 @@ bool boxm_update_bit_tableau::init_ocl()
   int bundle_dim = 8;
   updt_mgr->set_bundle_ni(bundle_dim);
   updt_mgr->set_bundle_nj(bundle_dim);
-  updt_mgr->init_scene(scene_, &cam_, expected, prob_thresh_);  //THIS SETS WNI AND WNJ used below
+  updt_mgr->init_scene(scene_, &cam_, expected, prob_thresh_, true);  //THIS SETS WNI AND WNJ used below
   if (!updt_mgr->setup_norm_data(true, 0.5f, 0.25f))
     return -1;
 

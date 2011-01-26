@@ -25,7 +25,6 @@ bool boxm_render_bit_scene_manager::init_ray_trace(boxm_ocl_bit_scene *scene,
   // Code for Pass_0
   vcl_string source_dir = vcl_string(VCL_SOURCE_ROOT_DIR) + "/contrib/brl/bseg/boxm/ocl/cl/";
   if (!this->load_kernel_source(source_dir+"scene_info.cl") ||
-      //!this->append_process_kernels(source_dir+"float3.cl") ||
       !this->append_process_kernels(source_dir+"cell_utils.cl") ||
       !this->append_process_kernels(source_dir+"bit/bit_tree_library_functions.cl") ||
       !this->append_process_kernels(source_dir+"backproject.cl")||
@@ -52,6 +51,7 @@ bool boxm_render_bit_scene_manager::init_ray_trace(boxm_ocl_bit_scene *scene,
     // was: functor="step_cell_render(sample_array,alpha_array,data_ptr,d,&data_return);";
   }
 
+  vcl_cout<<"Using platform: "<<this->platform_name()<<vcl_endl;
   //compilation options
   vcl_string options="";
   if (render_depth)
@@ -62,8 +62,12 @@ bool boxm_render_bit_scene_manager::init_ray_trace(boxm_ocl_bit_scene *scene,
     options+="-D ATI ";
   if (vcl_strstr(this->platform_name().c_str(),"NVIDIA"))
     options+="-D NVIDIA ";
-  options += " -cl-fast-relaxed-math ";
+  //options += " -cl-fast-relaxed-math ";
   options += " -D RENDER";
+  
+  //tell the program it's on a cpu (i.e. comment out barriers
+  if(this->device_type() == CL_DEVICE_TYPE_CPU)
+    options += " -D CPU";
 
   // assign the functor calling signature
   vcl_string::size_type pos_start = this->prog_.find(patt);
@@ -585,7 +589,7 @@ bool boxm_render_bit_scene_manager::read_output_image()
 
   // Enqueue readBuffers
   int status = clEnqueueReadBuffer(command_queue_,image_buf_,CL_TRUE,
-                                   0,this->wni_*this->wnj_*sizeof(cl_float),
+                                   0,this->wni_*this->wnj_*sizeof(cl_float4),
                                    image_,
                                    0,NULL,&events[0]);
 

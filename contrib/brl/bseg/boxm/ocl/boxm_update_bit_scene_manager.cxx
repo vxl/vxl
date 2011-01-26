@@ -15,7 +15,9 @@
 bool boxm_update_bit_scene_manager::init_scene(boxm_ocl_bit_scene *scene,
                                                vpgl_camera_double_sptr cam,
                                                vil_image_view<float> &obs,
-                                               float prob_thresh=0.3)
+                                               float prob_thresh, 
+                                               bool use_gl, 
+                                               bool use_atomic)
 {
   //initialize cam, input image and prob_thresh
   cam_ = cam;
@@ -24,7 +26,8 @@ bool boxm_update_bit_scene_manager::init_scene(boxm_ocl_bit_scene *scene,
   wnj_=(cl_uint)RoundUp(input_img_.nj(),bnj_);
   prob_thresh_=prob_thresh;
   merge_thresh_ = .15f;
-  use_gl_=true;
+  use_gl_= use_gl;
+  use_atomic_ = use_atomic;
   return this->init_scene_buffers(scene);
 }
 
@@ -645,6 +648,9 @@ bool boxm_update_bit_scene_manager::build_rendering_program()
     options+="-D NVIDIA ";
   options += "-D RENDER ";
   //options += " -cl-fast-relaxed-math ";
+  //tell the program it's on a cpu (i.e. comment out barriers
+  if(this->device_type() == CL_DEVICE_TYPE_CPU)
+    options += " -D CPU";
 
   // assign the functor calling signature
   vcl_string::size_type pos_start = this->prog_.find(patt);
@@ -897,6 +903,14 @@ bool boxm_update_bit_scene_manager::build_update_program(vcl_string const& funct
   else if (vcl_strstr(functor.c_str(), "BAYES"))
     options += "-D BAYES";
 
+  //tell the program it's on a cpu (i.e. comment out barriers
+  if(this->device_type() == CL_DEVICE_TYPE_CPU)
+    options += " -D CPU -D ATOMIC_OPT";
+    
+  //use all atomic. 
+  if(use_atomic_)
+    options += " -D ATOMIC_OPT";
+
 #if 0
   vcl_string patt = "$$step_cell$$", empty = "", zero = "0", one = "1";
   // transfer cell data from global to local memory if use_cell_data_ == true
@@ -1022,10 +1036,11 @@ bool boxm_update_bit_scene_manager::set_render_args()
     return false;
   if (!use_gl_)
   {
+    vcl_cout<<"Not using GL Image"<<vcl_endl;
     image_gl_buf_ = clCreateBuffer(this->context_,
                                    CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR,
                                    wni_*wnj_*sizeof(cl_uint),image_gl_,&status);
-    if (!check_val(status,CL_SUCCESS,"clSetKernelArg failed. (gl_image)"))
+    if (!check_val(status,CL_SUCCESS,"clCreateBuffer failed. (gl_image)"))
       return false;
   }
   status = clSetKernelArg(render_kernel_,i++,sizeof(cl_mem),(void *)&image_gl_buf_);

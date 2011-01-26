@@ -50,7 +50,8 @@ class boxm_update_bit_scene_manager : public bocl_manager<boxm_update_bit_scene_
     ray_probe_kernel_(0),
     clean_aux_data_kernel_(0),
     raydepth_(1000),
-    use_gl_(true) {}
+    use_gl_(true),
+    use_atomic_(true) {}
   ~boxm_update_bit_scene_manager() {
     if (program_)
       clReleaseProgram(program_);
@@ -64,7 +65,9 @@ class boxm_update_bit_scene_manager : public bocl_manager<boxm_update_bit_scene_
   bool init_scene(boxm_ocl_bit_scene * scene,
                   vpgl_camera_double_sptr cam,
                   vil_image_view<float> &obs,
-                  float prob_thresh);
+                  float prob_thresh=0.3, 
+                  bool use_gl=true, 
+                  bool use_atomic=true);
   bool init_scene(boxm_ocl_bit_scene *scene,
                   unsigned ni,
                   unsigned nj,
@@ -100,6 +103,9 @@ class boxm_update_bit_scene_manager : public bocl_manager<boxm_update_bit_scene_
                        vil_image_view<float>  obs2);
 
   bool write_image_buffer();
+
+  //: set use gl (defaults to true)
+  void set_use_gl(bool use) { use_gl_ = use; }
 
   //: set 2d workgroup size
   void set_bundle_ni(unsigned bundle_x) {bni_=bundle_x;}
@@ -341,6 +347,7 @@ class boxm_update_bit_scene_manager : public bocl_manager<boxm_update_bit_scene_
   vcl_size_t globalThreads[2];
   vcl_size_t localThreads[2];
   bool use_gl_;
+  bool use_atomic_; 
 };
 
 //: Binary write boxm_update_bit_scene_manager scene to stream

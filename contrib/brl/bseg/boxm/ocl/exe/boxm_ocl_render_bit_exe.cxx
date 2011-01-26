@@ -20,9 +20,10 @@ int main(int argc,  char** argv)
   vcl_cout<<"RENDER BIT SCENE"<<vcl_endl;
   vul_arg<vcl_string> camfile("-cam", "camera filename", "");
   vul_arg<vcl_string> scene_file("-scene", "scene filename", "");
-  vul_arg<unsigned> ni("-ni", "Width of image", 640);
-  vul_arg<unsigned> nj("-nj", "Height of image", 480);
-  vul_arg<vcl_string> img("-img", "image filename", "");
+  vul_arg<unsigned> ni("-ni", "Width of output image", 640);
+  vul_arg<unsigned> nj("-nj", "Height of output image", 480);
+  vul_arg<vcl_string> img("-img", "image filename", "out.png");
+  vul_arg<bool> use_cpu("-cpu", "Specifies to use CPU", false); 
 
   //// need this on some toolkit implementations to get the window up.
   vul_arg_parse(argc, argv);
@@ -43,12 +44,40 @@ int main(int argc,  char** argv)
       ifs >> *pcam;
   }
   
-
+  //image to write out
   vil_image_view<float> expimg(ni(),nj(),1);
-  vil_image_view<float> maskimg(ni(),nj(),1);
- 
-  boxm_opencl_bit_scene_expected(ocl_scene,pcam,expimg,maskimg);
+  
+  // render the image using the opencl raytrace manager
+  boxm_render_bit_scene_manager* ray_mgr = boxm_render_bit_scene_manager::instance();
+  if(use_cpu()) {
+    vcl_cout<<"USING CPU"<<vcl_endl;
+    ray_mgr->initialize_context(&ray_mgr->cpus()[0]); 
+  }
+  
+  int bundle_dim=8;
+  ray_mgr->set_bundle_ni(bundle_dim);
+  ray_mgr->set_bundle_nj(bundle_dim);
+  ray_mgr->init_ray_trace(&ocl_scene, pcam, expimg, false);
+  ray_mgr->run_scene();
 
-  vil_save(expimg,img().c_str());
+  // extract expected image and mask from OpenCL output data
+  cl_float* results = ray_mgr->output_image();
+  if (!results) {
+    vcl_cerr << "Error : boxm_opencl_render_expected : ray_mgr->ray_results() returned NULL\n";
+    return 0;
+  }
+  
+  //convert to VXL_BYTE for PNG IMG
+  //results is a float 4 image, so skip 4
+  vil_image_view<vxl_byte> outimg(ni(),nj());
+  cl_float *results_p = results;
+  for (unsigned j = 0; j<nj(); ++j) {
+    for (unsigned i = 0; i<ni(); ++i) {
+      float pixel = *results_p; 
+      outimg(i,j) = (vxl_byte) (pixel * 255 ); // expected intensity
+      results_p += 4; 
+    }
+  }
+  vil_save(outimg, img().c_str());
   return 0;
 }

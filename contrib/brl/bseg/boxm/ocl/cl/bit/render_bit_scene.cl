@@ -23,6 +23,7 @@ ray_trace_bit_scene_opt(__constant  RenderSceneInfo    * linfo,
                         __global    float              * output)    
 {
 
+
   //----------------------------------------------------------------------------
   //get local id (0-63 for an 8x8) of this patch + image coordinates and camera
   // check for validity before proceeding
@@ -61,7 +62,7 @@ ray_trace_bit_scene_opt(__constant  RenderSceneInfo    * linfo,
   //store float 3's
   float ray_ox = ray_o.x;     float ray_oy = ray_o.y;     float ray_oz = ray_o.z;
   float ray_dx = ray_d.x;     float ray_dy = ray_d.y;     float ray_dz = ray_d.z;          
-  
+
   //----------------------------------------------------------------------------
   // we know i,j map to a point on the image, have calculated ray
   // BEGIN RAY TRACE

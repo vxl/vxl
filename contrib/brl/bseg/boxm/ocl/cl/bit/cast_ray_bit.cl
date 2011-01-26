@@ -1,4 +1,4 @@
- #pragma OPENCL EXTENSION cl_khr_global_int32_base_atomics : enable
+#pragma OPENCL EXTENSION cl_khr_global_int32_base_atomics : enable
 
 #define BLOCK_EPSILON .006125f
 #define TREE_EPSILON  .005f
@@ -128,8 +128,10 @@ cast_ray(
     
     //initialize cumsum buffer and cumIndex
     cumsum[llid*10] = local_tree[llid].s0;                     
-    int cumIndex = 1;                                         
+    int cumIndex = 1;                                             
+#ifndef CPU
     barrier(CLK_LOCAL_MEM_FENCE);                               
+#endif
 
     //local ray origin is entry point (point should be in [0,1]) 
     //(note that cell_min is the current block index at this point)
@@ -178,7 +180,6 @@ cast_ray(
       float d = (t1-ttree) * linfo->block_len;
       ttree = t1;
 
-
 ////////////////////////////////////////////////////////////////////////////////
 // Step Cell Functor
 ////////////////////////////////////////////////////////////////////////////////
@@ -190,13 +191,13 @@ cast_ray(
 #endif
 #ifdef SEGLEN
 
-
+  #ifdef ATOMIC_OPT
       //SLOW and accurate method
-      //int seg_int = convert_int_rte(d * SEGLEN_FACTOR);
-      //atom_add(&seg_len_array[data_ptr], seg_int);  
-      //int cum_obs = convert_int_rte(d * inImgObs * SEGLEN_FACTOR); 
-      //atom_add(&mean_obs_array[data_ptr], cum_obs);
-
+      int seg_int = convert_int_rte(d * SEGLEN_FACTOR);
+      atom_add(&seg_len_array[data_ptr], seg_int);  
+      int cum_obs = convert_int_rte(d * inImgObs * SEGLEN_FACTOR); 
+      atom_add(&mean_obs_array[data_ptr], cum_obs);
+  #else
       // --------- faster and less accurate method... --------------------------
       //keep track of cells being hit
       cell_ptrs[llid] = data_ptr;
@@ -221,8 +222,8 @@ cast_ray(
         atom_add(&seg_len_array[data_ptr], seg_int); 
         atom_add(&mean_obs_array[data_ptr], cum_obs);
       }
-      //------------------------------------------------------------------------
-
+      //------------------------------------------------------------------------*/
+  #endif
       //reset cell_ptrs to negative one every time (prevents invisible layer bug)
       cell_ptrs[llid] = -1;
 #endif
@@ -246,6 +247,37 @@ cast_ray(
 #endif
 #ifdef BAYES
 
+  #ifdef ATOMIC_OPT
+      //slow beta calculation ----------------------------------------------------
+      float  alpha    = alpha_array[data_ptr];
+      float8 mixture  = convert_float8(mixture_array[data_ptr])/255.0f;
+      float weight3   = (1.0f-mixture.s2-mixture.s5);
+      
+      //load aux data
+      float cum_len  = convert_float(seg_len_array[data_ptr])/SEGLEN_FACTOR; 
+      float mean_obs = convert_float(mean_obs_array[data_ptr])/SEGLEN_FACTOR;
+      mean_obs = mean_obs/cum_len;
+      
+      float ray_beta, vis_cont; 
+      bayes_ratio_ind( d, 
+                       alpha,
+                       mixture, 
+                       weight3, 
+                       cum_len, 
+                       mean_obs, 
+                       norm,
+                       &ray_pre, 
+                       &ray_vis, 
+                       &ray_beta, 
+                       &vis_cont); 
+    
+      //discretize and store beta and vis contribution
+      int beta_int = convert_int_rte(ray_beta * SEGLEN_FACTOR);
+      atom_add(&beta_array[data_ptr], beta_int);  
+      int vis_int  = convert_int_rte(vis_cont * SEGLEN_FACTOR); 
+      atom_add(&vis_array[data_ptr], vis_int);         
+      //--------------------------------------------------------------------------          
+  #else
       //keep track of cells being hit
       cell_ptrs[llid] = data_ptr;
       barrier(CLK_LOCAL_MEM_FENCE);
@@ -287,48 +319,17 @@ cast_ray(
       atom_add(&beta_array[data_ptr], beta_int);  
       int vis_int  = convert_int_rte(cell_vis * SEGLEN_FACTOR); 
       atom_add(&vis_array[data_ptr], vis_int);
-    }
+    } 
+  #endif
 
-    /*
-    //slow beta calculation ----------------------------------------------------
-    float  alpha    = alpha_array[data_ptr];
-    float8 mixture  = convert_float8(mixture_array[data_ptr])/255.0f;
-    float weight3   = (1.0f-mixture.s2-mixture.s5);
-    
-    //load aux data
-    float cum_len  = convert_float(seg_len_array[data_ptr])/SEGLEN_FACTOR; 
-    float mean_obs = convert_float(mean_obs_array[data_ptr])/SEGLEN_FACTOR;
-    mean_obs = mean_obs/cum_len;
-    
-    float ray_beta, vis_cont; 
-    bayes_ratio_ind( d, 
-                     alpha,
-                     mixture, 
-                     weight3, 
-                     cum_len, 
-                     mean_obs, 
-                     norm,
-                     &ray_pre, 
-                     &ray_vis, 
-                     &ray_beta, 
-                     &vis_cont); 
-  
-    //discretize and store beta and vis contribution
-    int beta_int = convert_int_rte(ray_beta * SEGLEN_FACTOR);
-    atom_add(&beta_array[data_ptr], beta_int);  
-    int vis_int  = convert_int_rte(vis_cont * SEGLEN_FACTOR); 
-    atom_add(&vis_array[data_ptr], vis_int);         
-    //-------------------------------------------------------------------------- */          
-    
     //reset cell_ptrs to -1 every time
     cell_ptrs[llid] = -1;
 #endif 
 ////////////////////////////////////////////////////////////////////////////////
 // END Step Cell Functor
 ////////////////////////////////////////////////////////////////////////////////
-      
+    
     }
-
     //--------------------------------------------------------------------------
     // finding the next block (using exit point already found before tree loop)
     //--------------------------------------------------------------------------

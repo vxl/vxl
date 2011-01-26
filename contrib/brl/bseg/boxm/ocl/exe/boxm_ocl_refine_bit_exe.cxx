@@ -21,6 +21,7 @@ int main(int argc,  char** argv)
   vul_arg<vcl_string> camfile("-cam", "camera filename", "");
   vul_arg<unsigned> ni("-ni", "Width of image", 640);
   vul_arg<unsigned> nj("-nj", "Height of image", 480);
+  vul_arg<bool> use_cpu("-cpu", "Specifies to use CPU", false); 
 
   //// need this on some toolkit implementations to get the window up.
   vul_arg_parse(argc, argv);
@@ -38,22 +39,27 @@ int main(int argc,  char** argv)
     return -1;
   }
   ifs >> *pcam;
-
   vil_image_view<float> expimg(ni(),nj(),1);
   vil_image_view<float> maskimg(ni(),nj(),1);
 
   //4.  initialize update manager
-  boxm_update_bit_scene_manager* updt_mgr
+  boxm_update_bit_scene_manager* updt_mgr 
     = boxm_update_bit_scene_manager::instance();
+  updt_mgr->set_use_gl(false); 
+  if( use_cpu() ) {
+    vcl_cout<<"USING CPU For Update"<<vcl_endl;
+    updt_mgr->initialize_context(&updt_mgr->cpus()[0]); 
+  }
 
   vil_image_view<float> expected(ni(),nj());
   int bundle_dim = 8;
   updt_mgr->set_bundle_ni(bundle_dim);
   updt_mgr->set_bundle_nj(bundle_dim);
-  updt_mgr->init_scene(&ocl_scene, pcam, expimg, 0.3f);
+  updt_mgr->init_scene(&ocl_scene, pcam, expected, 0.3f, false, false);
   if (!updt_mgr->setup_norm_data(true, 0.5f, 0.25f))
     return -1;
   updt_mgr->setup_online_processing();
+
 
   //5.  write cam, in_image and call update
   updt_mgr->set_input_image(expimg);
