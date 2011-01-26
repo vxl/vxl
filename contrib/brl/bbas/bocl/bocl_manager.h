@@ -18,6 +18,7 @@
 #include <vcl_iostream.h>
 #include <vcl_string.h>
 #include "bocl_cl.h"
+#include "bocl_device_info.h"
 #include <vcl_cstddef.h>
 #if !defined(__APPLE__)
 #include <malloc.h>
@@ -30,25 +31,9 @@
 template <class T>
 class bocl_manager
 {
- protected:
-  vcl_size_t number_devices_;
-  vcl_size_t max_work_group_size_;   //!< Max allowed work-items in a group
-  cl_uint max_dimensions_;           //!< Max group dimensions allowed
-  vcl_size_t * max_work_item_sizes_; //!< Max work-items sizes in each dimension
-  cl_ulong total_local_memory_;      //!< Max local memory allowed
-  cl_ulong total_global_memory_;     //!< Max global memory allowed
-  cl_uint max_compute_units_;        //!< Max compute units
-  cl_uint vector_width_short_;       //!< Ideal short vector size
-  cl_uint vector_width_float_;       //!< Ideal float vector size
-  cl_uint max_clock_freq_;           //!< Maximum clock frequency
-  cl_bool image_support_;            //!< image support
-  cl_device_id *devices_;            //!< CL device list
-  vcl_size_t image2d_max_width_;       //!< Ideal float vector size
-  vcl_size_t image2d_max_height_;       //!< Ideal float vector size
-  cl_char extensions_supported_[1000];
-  char platform_name_[100];
+  
  public:
-  cl_context context_;               //!< CL context
+  cl_context context_;                        //!< CL context
 
   //: Destructor
   virtual ~bocl_manager();
@@ -56,55 +41,74 @@ class bocl_manager
   //: Use this instead of constructor
   static T* instance();
 
+  //: Queries found platforms, creates a list of CPU and GPU devices
+  bool initialize_cl();
+  
+  //: initialize context from a device
+  bool initialize_context(cl_device_id* device); 
+  
   //: Initialise the opencl environment
   void clear_cl();
+  
+  //: available devices
+  cl_device_id* devices() {return devices_;}
+  cl_device_id* cpus() {return cpus_;}
+  cl_device_id* gpus() {return gpus_;}
 
-  //: Initialise the opencl environment
-  bool initialize_cl();
-
-  //: Check for error returns
-  int check_val(cl_int status, cl_int result, std::string message) {
-    if (status != result) {
-      vcl_cout << message << '\n';
-      return 0;
-    }
-    return 1;
-  }
-
-  vcl_size_t group_size() const {return max_work_group_size_;}
-  cl_ulong total_local_memory() const {return total_local_memory_;}
+  //get for current manager information..
   cl_context& context() {return context_;}
-  cl_device_id * devices() {return devices_;}
+  vcl_size_t group_size() const {return curr_info_.max_work_group_size_;}
+  cl_ulong total_local_memory() const {return  curr_info_.total_local_memory_;}
+  cl_bool image_support(){return curr_info_.image_support_;}
+  vcl_size_t image2d_max_width(){ return curr_info_.image2d_max_width_; }         
+  vcl_size_t image2d_max_height(){ return curr_info_.image2d_max_height_; }        
+  vcl_string platform_name(){ return curr_info_.platform_name_; }
+ 
+ protected:
 
-  //: Allocate host memory for use with clCreateBuffer (aligned if necessary)
+  //: Constructor
+  bocl_manager() : 
+    context_(0),
+    devices_(0),
+    gpus_(0),
+    cpus_(0)  {}
+
+  //Singleton instance of the manager
+  static T* instance_;
+
+  //: OpenCL Current Device Info, number of devices and list of devices 
+  // associated with the current context
+  bocl_device_info curr_info_; 
+  vcl_size_t number_devices_;
+  cl_device_id* devices_;
+  
+  //store gpus and cpus
+  cl_device_id* gpus_;              //!< CL GPU device list
+  unsigned    numGPUs_;
+  cl_device_id* cpus_;              //!< CL CPU device list
+  unsigned    numCPUs_;
+
+
+  //////////////////////////////////////////////////////////////////////////////
+  // OLD helper methods
+  //////////////////////////////////////////////////////////////////////////////
+  //Malloc and Free Helper methods
+  bool free_buffer(void* buffer);
+  bool create_buffer(void** buffer,vcl_string type,int elm_size,int length);
+    //: program source
+  vcl_string prog_;
+  
+ public: 
+   //: Allocate host memory for use with clCreateBuffer (aligned if necessary)
   void* allocate_host_mem(vcl_size_t size);
   bool load_kernel_source(vcl_string const& path);
   bool append_process_kernels(vcl_string const& path);
   bool write_program(vcl_string const& path);
   vcl_string program_source() const {return prog_;}
-
-  //build kernel program:
+  
+  //build kernel program: 
   int build_kernel_program(cl_program & program, vcl_string options);
 
-  cl_bool image_support(){return image_support_;}
-
-  vcl_size_t image2d_max_width() const { return image2d_max_width_; }
-  vcl_size_t image2d_max_height() const { return image2d_max_height_; }
-
-  vcl_string platform_name() const { return platform_name_; }
-
- protected:
-
-  //: Constructor
-  bocl_manager() : max_work_item_sizes_(0), devices_(0) {}
-
-  bool free_buffer(void* buffer);
-
-  bool create_buffer(void** buffer,vcl_string type,int elm_size,int length);
-
-  static T* instance_;
-
-  vcl_string prog_;
 };
 
 #endif // bocl_manager_h_

@@ -33,12 +33,6 @@ void bocl_manager<T>::clear_cl()
     free(devices_);
     devices_ = NULL;
   }
-
-  if (max_work_item_sizes_)
-  {
-    free(max_work_item_sizes_);
-    max_work_item_sizes_ = NULL;
-  }
 }
 
 //: Destructor
@@ -48,14 +42,16 @@ bocl_manager<T>::~bocl_manager()
   this->clear_cl();
 }
 
-
 template <class T>
 bool bocl_manager<T>::initialize_cl()
 {
   cl_int status = CL_SUCCESS;
-  cl_uint num_platforms = 0;
+  
+  //////////////////////////////////////////////////////////////////////////////
   // Check the number of  available platforms
-  status = clGetPlatformIDs(0,NULL,&num_platforms);
+  //////////////////////////////////////////////////////////////////////////////
+  cl_uint num_platforms = 0;
+  status = clGetPlatformIDs(0, NULL, &num_platforms);
   if (status != CL_SUCCESS) {
     vcl_cerr << "bocl_manager: clGetPlatformIDs (call 1) returned " << status << '\n';
     return false;
@@ -75,273 +71,110 @@ bool bocl_manager<T>::initialize_cl()
     return false;
   }
 
+  //////////////////////////////////////////////////////////////////////////////
+  // Get devices from platforms
+  //////////////////////////////////////////////////////////////////////////////
+  char platform_name[256]; 
   vcl_size_t ret_size;
-
-  bool gpu_found=false;
-  bool cpu_found=false;
-
-  cl_device_id device;
   cl_device_id gpus[2];
-  cl_uint numGPUs;
+  cl_device_id cpus[2]; 
+  
   //: First checking for GPU
+  bool gpu_found=false;
   for (unsigned i=0;i<num_platforms;i++)
   {
-    if ( clGetDeviceIDs(platform_id[i], CL_DEVICE_TYPE_GPU, 2, gpus, &numGPUs)== CL_SUCCESS)
+    if ( clGetDeviceIDs(platform_id[i], CL_DEVICE_TYPE_GPU, 2, gpus, &numGPUs_)== CL_SUCCESS)
     {
-      clGetPlatformInfo(platform_id[i],CL_PLATFORM_NAME,sizeof(platform_name_),platform_name_,&ret_size);
-
+      clGetPlatformInfo(platform_id[i],CL_PLATFORM_NAME,sizeof(platform_name),platform_name,&ret_size);
       gpu_found=true;
-      vcl_cout<<"Found "<<numGPUs<<" GPUs"<<vcl_endl;
-      //use the second GPU if it's there...
-      device = (numGPUs > 1)? gpus[1] : gpus[0];
-      //device = gpus[0];
+      vcl_cout<<"Found "<<numGPUs_<<" GPUs"<<vcl_endl;
+      
+      //store the GPU Devices on the heap
+      gpus_ = new cl_device_id[numGPUs_]; 
+      for(int i=0; i<numGPUs_; ++i) gpus_[i] = gpus[i]; 
       break;
     }
   }
-  //: If GPU not found then look for CPU
-  if (!gpu_found)
+  //: now check for CPUs
+  bool cpu_found=false;
+  for (unsigned i=0;i<num_platforms;i++)
   {
-    for (unsigned i=0;i<num_platforms;i++)
+    if ( clGetDeviceIDs(platform_id[i], CL_DEVICE_TYPE_CPU, 2, cpus, &numCPUs_)== CL_SUCCESS)
     {
-      if ( clGetDeviceIDs(platform_id[i], CL_DEVICE_TYPE_CPU, 1, &device, NULL)== CL_SUCCESS)
-      {
-        cpu_found=true;
-        break;
-      }
+      vcl_cout<<"FOUND "<<numCPUs_<<" CPUs"<<vcl_endl;
+      cpu_found=true;
+      
+      //store CPUs on the heap
+      cpus_ = new cl_device_id[numCPUs_]; 
+      for(int i=0; i<numCPUs_; ++i) gpus_[i] = gpus[i]; 
+      break;
     }
   }
-  // get an available GPU device from the platform
-  // should we be using all if more than one available?
-
-  if (!gpu_found && !cpu_found)
+  if (!gpu_found && !cpu_found) {
+    vcl_cout<<"No GPU or CPU found, manager is invalid"<<vcl_endl;  
     return false;
+  }
+  
+  //intialize context by default - last GPU
+  this->initialize_context( &gpus_[numGPUs_-1] );
+  
+  for (unsigned id = 0; id<number_devices_; ++id)
+    vcl_cout << " Device id [" << id << "]: " << devices_[id] << '\n';
+  return true;
+}
 
+template <class T>
+bool bocl_manager<T>::initialize_context(cl_device_id* device)
+{
+  //create device info for this device
+  curr_info_ = bocl_device_info(device); 
+  vcl_cout<<curr_info_<<vcl_endl;
+  
+  //remove old context, if it exists
+  if(context_) clReleaseContext(context_); 
+  
   //Create a context from the device ID
-  context_ = clCreateContext(0, 1, &device, NULL, NULL, &status);
-  if (!this->check_val(status,CL_SUCCESS,"clCreateContextFromType failed.")) {
+  int status = 1;
+  context_ = clCreateContext(0, 1, device, NULL, NULL, &status);
+  if (!check_val(status,CL_SUCCESS,"clCreateContextFromType failed.")) {
     return false;
   }
 
   vcl_size_t device_list_size = 0;
+  
   // First, get the size of device list data
   status = clGetContextInfo(context_,
                             CL_CONTEXT_DEVICES,
                             0,
                             NULL,
                             &device_list_size);
-  if (!this->check_val(status,
-                       CL_SUCCESS,
-                       "clGetContextInfo failed."))
+  if (!check_val(status,CL_SUCCESS,"clGetContextInfo failed."))
     return false;
-
   number_devices_ = device_list_size/sizeof(cl_device_id);
-
+  
   // Now allocate memory for device list based on the size we got earlier
   devices_ = (cl_device_id *)malloc(device_list_size);
   if (devices_==NULL) {
     vcl_cout << "Failed to allocate memory (devices).\n";
     return false;
   }
-
   // Now, get the device list data
   status = clGetContextInfo(context_,
                             CL_CONTEXT_DEVICES,
                             device_list_size,
                             devices_,
                             NULL);
-  if (!this->check_val(status,
-                       CL_SUCCESS,
-                       "clGetGetContextInfo failed."))
+  if (!check_val(status, CL_SUCCESS, "clGetGetContextInfo failed."))
     return false;
 
-  vcl_size_t max_work_group_size = 0;
-
-  // Get device specific information
-  char vendor[512];
-  status = clGetDeviceInfo(devices_[0],
-                           CL_DEVICE_VENDOR,
-                           sizeof(vendor),
-                           (void*) vendor,
-                           NULL);
-
-  if (!this->check_val(status,
-                       CL_SUCCESS,
-                       "clGetDeviceInfo CL_DEVICE_VENDOR failed."))
-    return false;
-
-
-  status = clGetDeviceInfo(devices_[0],
-                           CL_DEVICE_MAX_WORK_GROUP_SIZE,
-                           sizeof(vcl_size_t),
-                           (void*)&max_work_group_size,
-                           NULL);
-
-  if (!this->check_val(status,
-                       CL_SUCCESS,
-                       "clGetDeviceInfo CL_DEVICE_MAX_WORK_GROUP_SIZE failed."))
-    return false;
-
-  max_work_group_size_ =max_work_group_size/sizeof(vcl_size_t);
-
-  status = clGetDeviceInfo(devices_[0],
-                           CL_DEVICE_MAX_WORK_ITEM_DIMENSIONS,
-                           sizeof(cl_uint),
-                           (void*)&max_dimensions_,
-                           NULL);
-
-  if (!this->check_val(status,
-                       CL_SUCCESS,
-                       "clGetDeviceInfo CL_DEVICE_MAX_WORK_ITEM_DIMENSIONS failed."))
-    return false;
-
-
-  max_work_item_sizes_ = (vcl_size_t*)malloc(max_dimensions_ * sizeof(vcl_size_t));
-
-  status = clGetDeviceInfo(devices_[0],
-                           CL_DEVICE_MAX_WORK_ITEM_SIZES,
-                           sizeof(vcl_size_t) * max_dimensions_,
-                           (void*)max_work_item_sizes_,
-                           NULL);
-
-  if (!this->check_val(status,
-                       CL_SUCCESS,
-                       "clGetDeviceInfo CL_DEVICE_MAX_WORK_ITEM_SIZES failed."))
-    return false;
-
-  status = clGetDeviceInfo(devices_[0],
-                           CL_DEVICE_LOCAL_MEM_SIZE,
-                           sizeof(cl_ulong),
-                           (void *)&total_local_memory_,
-                           NULL);
-
-  if (!this->check_val(status,
-                       CL_SUCCESS,
-                       "clGetDeviceInfo CL_DEVICE_LOCAL_MEM_SIZE failed."))
-    return false;
-
-  status = clGetDeviceInfo(devices_[0],
-                           CL_DEVICE_GLOBAL_MEM_SIZE,
-                           sizeof(cl_ulong),
-                           (void *)&total_global_memory_,
-                           NULL);
-
-  if (!this->check_val(status,
-                       CL_SUCCESS,
-                       "clGetDeviceInfo CL_DEVICE_GLOBAL_MEM_SIZE failed."))
-    return false;
-
-  status = clGetDeviceInfo(devices_[0],
-                           CL_DEVICE_MAX_COMPUTE_UNITS,
-                           sizeof(cl_uint),
-                           (void *)&max_compute_units_,
-                           NULL);
-
-  if (!this->check_val(status,
-                       CL_SUCCESS,
-                       "clGetDeviceInfo CL_DEVICE_MAX_COMPUTE_UNITS failed."))
-    return false;
-
-  status = clGetDeviceInfo(devices_[0],
-                           CL_DEVICE_PREFERRED_VECTOR_WIDTH_SHORT,
-                           sizeof(cl_uint),
-                           (void *)&vector_width_short_,
-                           NULL);
-
-  if (!this->check_val(status,
-                       CL_SUCCESS,
-                       "clGetDeviceInfo CL_DEVICE_PREFERRED_VECTOR_WIDTH_SHORT failed."))
-    return false;
-
-  status = clGetDeviceInfo(devices_[0],
-                           CL_DEVICE_PREFERRED_VECTOR_WIDTH_FLOAT,
-                           sizeof(cl_uint),
-                           (void *)&vector_width_float_,
-                           NULL);
-
-  if (!this->check_val(status,
-                       CL_SUCCESS,
-                       "clGetDeviceInfo CL_DEVICE_PREFERRED_VECTOR_WIDTH_FLOAT failed."))
-    return false;
-
-  status = clGetDeviceInfo(devices_[0],
-                           CL_DEVICE_MAX_CLOCK_FREQUENCY,
-                           sizeof(cl_uint),
-                           (void *)&max_clock_freq_,
-                           NULL);
-
-  if (!this->check_val(status,
-                       CL_SUCCESS,
-                       "clGetDeviceInfo CL_DEVICE_MAX_CLOCK_FREQUENCY failed."))
-    return false;
-
-  status = clGetDeviceInfo(devices_[0],
-                           CL_DEVICE_IMAGE_SUPPORT,
-                           sizeof(cl_bool),
-                           (void *)&image_support_,
-                           NULL);
-
-  if (!this->check_val(status,
-                       CL_SUCCESS,
-                       "clGetDeviceInfo CL_DEVICE_IMAGE_SUPPORT failed."))
-    return false;
-  status = clGetDeviceInfo(devices_[0],
-                           CL_DEVICE_IMAGE2D_MAX_WIDTH,
-                           sizeof(vcl_size_t),
-                           (void *)&image2d_max_width_,
-                           NULL);
-
-  if (!this->check_val(status,
-                       CL_SUCCESS,
-                       "clGetDeviceInfo CL_DEVICE_IMAGE_SUPPORT failed."))
-    return false;
-  status = clGetDeviceInfo(devices_[0],
-                           CL_DEVICE_IMAGE2D_MAX_HEIGHT,
-                           sizeof(vcl_size_t),
-                           (void *)&image2d_max_height_,
-                           NULL);
-
-  if (!this->check_val(status,
-                       CL_SUCCESS,
-                       "clGetDeviceInfo CL_DEVICE_IMAGE_SUPPORT failed."))
-            return false;
-
-  char extensions[512];
-  status = clGetDeviceInfo(devices_[0],
-                           CL_DEVICE_EXTENSIONS,
-                           sizeof(extensions),
-                           (void*) extensions,
-                           NULL);
-
-  if (!this->check_val(status,
-                       CL_SUCCESS,
-                       "clGetDeviceInfo CL_DEVICE_IMAGE_SUPPORT failed."))
-    return false;
-
-  unsigned size = sizeof(vcl_size_t);
-  vcl_cout << " Context Description\n"
-           << " Platform Name: "<<platform_name_ <<'\n'
-           << " Device vendor: " << vendor << '\n'
-           << " Device extensions: " << extensions << 'n'
-           << " Number of devices: " << number_devices_ << '\n'
-           << " Number of compute units: " << max_compute_units_ << '\n'
-           << " Maximum clock frequency: " << max_clock_freq_/1000.0 << " GHz\n"
-           << " Total global memory: "<<total_global_memory_/ 1073741824.0 /* 2^30 */ << " GBytes\n"
-           << " Total local memory: "<< total_local_memory_/1024.0 << " KBytes\n"
-           << " Maximum work group size: " << max_work_group_size_ << '\n'
-           << " Maximum work item sizes: (" << (cl_uint)max_work_item_sizes_[0]/size << ','
-           << (cl_uint)max_work_item_sizes_[1]/size << ','
-           << (cl_uint)max_work_item_sizes_[2]/size << ")\n"
-           << " Preferred short vector length: " << vector_width_short_ << '\n'
-           << " Preferred float vector length: " << vector_width_float_ << '\n'
-           << " image support " << image_support_ << '\n'
-           << " Max 2D image width  " << image2d_max_width_ << '\n'
-           << " Max 2D image height  " << image2d_max_height_ << '\n'
-  ;
-  for (unsigned id = 0; id<number_devices_; ++id)
-    vcl_cout << " Device id [" << id << "]: " << devices_[id] << '\n';
   return true;
 }
 
+
+////////////////////////////////////////////////////////////////////////////////
+// Old kernel/program/alloc methods that have been 
+// replaced by bocl_mem, bocl_kernel
+////////////////////////////////////////////////////////////////////////////////
 template<class T>
 bool bocl_manager<T>::load_kernel_source(vcl_string const& path)
 {
@@ -408,7 +241,7 @@ int bocl_manager<T>::build_kernel_program(cl_program & program, vcl_string optio
   if (program) {
     status = clReleaseProgram(program);
     program = 0;
-    if (!this->check_val(status, CL_SUCCESS, "clReleaseProgram failed."))
+    if (!check_val(status, CL_SUCCESS, "clReleaseProgram failed."))
       return SDK_FAILURE;
   }
   const char * source = this->prog_.c_str();
@@ -418,7 +251,7 @@ int bocl_manager<T>::build_kernel_program(cl_program & program, vcl_string optio
                                       &source,
                                       sourceSize,
                                       &status);
-  if (!this->check_val(status,CL_SUCCESS,"clCreateProgramWithSource failed."))
+  if (!check_val(status,CL_SUCCESS,"clCreateProgramWithSource failed."))
     return SDK_FAILURE;
 
   // create a cl program executable for all the devices specified
@@ -428,7 +261,7 @@ int bocl_manager<T>::build_kernel_program(cl_program & program, vcl_string optio
                           options.c_str(),
                           NULL,
                           NULL);
-  if (!this->check_val(status, CL_SUCCESS, error_to_string(status)))
+  if (!check_val(status, CL_SUCCESS, error_to_string(status)))
   {
     vcl_size_t len;
     char buffer[2048];
