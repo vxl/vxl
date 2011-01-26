@@ -106,7 +106,7 @@ bool bocl_manager<T>::initialize_cl()
       
       //store CPUs on the heap
       cpus_ = new cl_device_id[numCPUs_]; 
-      for(int i=0; i<numCPUs_; ++i) gpus_[i] = gpus[i]; 
+      for(int i=0; i<numCPUs_; ++i) cpus_[i] = cpus[i]; 
       break;
     }
   }

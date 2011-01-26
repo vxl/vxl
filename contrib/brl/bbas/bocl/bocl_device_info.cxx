@@ -19,7 +19,7 @@ bocl_device_info::bocl_device_info(cl_device_id* device)
                            sizeof(platform),
                            (void*) &platform,
                            NULL);
-  if (!check_val(status, CL_SUCCESS, "clGetDeviceInfo CL_DEVICE_VENDOR failed."))
+  if (!check_val(status, CL_SUCCESS, "clGetDeviceInfo CL_DEVICE_PLATFORM failed."))
     return;
   char platform_name[512];
   status = clGetPlatformInfo(platform,CL_PLATFORM_NAME,sizeof(platform_name),platform_name,NULL);
@@ -38,6 +38,14 @@ bocl_device_info::bocl_device_info(cl_device_id* device)
     return;
   device_vendor_ = vcl_string(vendor); 
 
+  //get Device Type
+  status = clGetDeviceInfo(*device_,
+                           CL_DEVICE_TYPE,
+                           sizeof(device_type_),
+                           (void*) &device_type_,
+                           NULL);
+  if (!check_val(status, CL_SUCCESS, "clGetDeviceInfo CL_DEVICE_TYPE failed."))
+    return;
 
   //Get device max work gropu size
   status = clGetDeviceInfo(*device_,

@@ -63,6 +63,7 @@ class bocl_manager
   vcl_size_t image2d_max_width(){ return curr_info_.image2d_max_width_; }         
   vcl_size_t image2d_max_height(){ return curr_info_.image2d_max_height_; }        
   vcl_string platform_name(){ return curr_info_.platform_name_; }
+  cl_device_type device_type() { return curr_info_.device_type_; }
  
  protected:
 

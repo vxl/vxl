@@ -41,6 +41,7 @@ class bocl_device_info
     vcl_string device_vendor_; 
     vcl_string extensions_supported_; 
     vcl_string platform_name_; 
+    cl_device_type device_type_; 
 };
 
 //:  output stream
