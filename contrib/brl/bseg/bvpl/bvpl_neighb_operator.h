@@ -15,8 +15,8 @@
 // \endverbatim
 
 #include "bvpl_subgrid_iterator.h"
-#include "bvpl_kernel_iterator.h"
-#include "bvpl_kernel.h"
+#include <bvpl/kernels/bvpl_kernel_iterator.h>
+#include <bvpl/kernels/bvpl_kernel.h>
 #include "bvpl_voxel_subgrid.h"
 
 #include <vgl/vgl_point_3d.h>
