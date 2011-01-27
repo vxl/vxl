@@ -13,8 +13,8 @@
 // \endverbatim
 
 #include "bvpl_octree_sample.h"
-#include <bvpl/bvpl_kernel.h>
-#include <bvpl/bvpl_local_max_functor.h>
+#include <bvpl/kernels/bvpl_kernel.h>
+#include <bvpl/functors/bvpl_local_max_functor.h>
 
 #include <boxm/boxm_scene.h>
 
