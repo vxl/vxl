@@ -13,7 +13,7 @@
 // \endverbatim
 
 #include "bvpl_octree_sample.h"
-#include <bvpl/bvpl_kernel.h>
+#include <bvpl/kernels/bvpl_kernel.h>
 #include <bvpl/bvpl_octree/bvpl_cell_data_traits.h>
 
 #include <boxm/boxm_scene.h>
