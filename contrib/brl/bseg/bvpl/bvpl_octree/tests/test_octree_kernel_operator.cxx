@@ -9,9 +9,9 @@
 #include "../bvpl_scene_kernel_operator.h"
 #include "../bvpl_octree_vector_operator_impl.h"
 #include "../bvpl_scene_vector_operator.h"
-#include <bvpl/bvpl_edge_geometric_mean_functor.h>
-#include <bvpl/bvpl_edge3d_kernel_factory.h>
-#include <bvpl/bvpl_create_directions.h>
+#include <bvpl/functors/bvpl_edge_geometric_mean_functor.h>
+#include <bvpl/kernels/bvpl_edge3d_kernel_factory.h>
+#include <bvpl/kernels/bvpl_create_directions.h>
 
 #include <boct/boct_loc_code.h>
 #include <vul/vul_file.h>
