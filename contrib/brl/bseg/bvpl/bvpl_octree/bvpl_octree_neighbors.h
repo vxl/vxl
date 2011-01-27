@@ -12,7 +12,7 @@
 //   <none yet>
 // \endverbatim
 
-#include <bvpl/bvpl_kernel.h>
+#include <bvpl/kernels/bvpl_kernel.h>
 #include <boct/boct_tree.h>
 #include <boxm/boxm_scene.h>
 #include <vcl_iostream.h>
