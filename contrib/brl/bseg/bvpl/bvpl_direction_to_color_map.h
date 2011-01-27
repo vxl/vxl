@@ -4,7 +4,7 @@
 //:
 // \file
 #include <bvxm/grid/bvxm_voxel_grid.h>
-#include <bvpl/bvpl_kernel_factory.h>
+#include <bvpl/kernels/bvpl_kernel_factory.h>
 #include <bdgl/bdgl_peano_curve.h>
 
 #include <bsta/bsta_attributes.h>

@@ -14,8 +14,8 @@
 
 #include "bvpl_neighb_operator.h"
 #include "bvpl_combined_neighb_operator.h"
-#include "bvpl_kernel_factory.h"
-#include <bvpl/bvpl_local_max_functor.h>
+#include <bvpl/kernels/bvpl_kernel_factory.h>
+#include <bvpl/functors/bvpl_local_max_functor.h>
 #include <vcl_iostream.h>
 #include <vcl_limits.h>
 #include <vpl/vpl.h>
