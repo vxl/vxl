@@ -3,8 +3,8 @@
 #include <testlib/testlib_test.h>
 #include <bvpl/bvpl_subgrid_iterator.h>
 #include <bvpl/bvpl_voxel_subgrid.h>
-#include <bvpl/bvpl_edge2d_kernel_factory.h>
-#include <bvpl/bvpl_edge2d_functor.h>
+#include <bvpl/kernels/bvpl_edge2d_kernel_factory.h>
+#include <bvpl/functors/bvpl_edge2d_functor.h>
 #include <bvpl/bvpl_neighb_operator.h>
 
 #include <vul/vul_file.h>

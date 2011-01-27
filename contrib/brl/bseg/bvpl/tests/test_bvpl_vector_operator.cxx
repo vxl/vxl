@@ -1,14 +1,14 @@
 #include <testlib/testlib_test.h>
 
-#include <bvpl/bvpl_edge2d_kernel_factory.h>
-#include <bvpl/bvpl_edge3d_kernel_factory.h>
-#include <bvpl/bvpl_edge_algebraic_mean_functor.h>
-#include <bvpl/bvpl_edge_geometric_mean_functor.h>
-#include <bvpl/bvpl_opinion_functor.h>
+#include <bvpl/kernels/bvpl_edge2d_kernel_factory.h>
+#include <bvpl/kernels/bvpl_edge3d_kernel_factory.h>
+#include <bvpl/functors/bvpl_edge_algebraic_mean_functor.h>
+#include <bvpl/functors/bvpl_edge_geometric_mean_functor.h>
+#include <bvpl/functors/bvpl_opinion_functor.h>
 #include <bvpl/bvpl_neighb_operator.h>
 #include <bvpl/bvpl_vector_operator.h>
 #include <bvpl/bvpl_discriminative_non_max_suppression.h>
-#include <bvpl/bvpl_create_directions.h>
+#include <bvpl/kernels/bvpl_create_directions.h>
 
 #include <bvxm/grid/bvxm_opinion.h>
 #include <bvxm/grid/bvxm_voxel_grid_basic_ops.h>

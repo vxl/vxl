@@ -4,8 +4,8 @@
 //
 //
 #include <testlib/testlib_test.h>
-#include <bvpl/bvpl_create_directions.h>
-#include <bvpl/bvpl_edge3d_kernel_factory.h>
+#include <bvpl/kernels/bvpl_create_directions.h>
+#include <bvpl/kernels/bvpl_edge3d_kernel_factory.h>
 
 template <class FUNC>
 bool test_directions(FUNC dir)
