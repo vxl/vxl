@@ -24,6 +24,10 @@ void cast_ray(
 
           //---- OUTPUT ARGUMENTS-----------------------------------------------
           __global    float              * in_image,       //input image
+#ifdef CHANGE
+          __global    uint              * in_exp_image,       //input image (Read only)
+          __global    uint              * prob_exp_image,       //input image
+#endif
           __global    uint               * exp_image,       //input image and store vis_inf and pre_inf
           __global    float              * vis_image,       //gl_image automatically rendered to the screen
           __global    float              * output)          //debug output buffer
@@ -34,8 +38,18 @@ void cast_ray(
   uint  eint  = as_uint(exp_image[imIndex[llid]]);
   uchar echar = convert_uchar(eint);
   float expected_int = convert_float(echar)/255.0f;
+
 #ifdef CHANGE
+  uint  in_eint  = as_uint(in_exp_image[imIndex[llid]]);
+  uchar in_echar = convert_uchar(in_eint);
+  float exp_intensity= convert_float(in_echar)/255.0f;
+
   float intensity=in_image[imIndex[llid]];
+
+  uint  in_prob_eint  = as_uint(prob_exp_image[imIndex[llid]]);
+  uchar in_prob_echar = convert_uchar(in_prob_eint);
+  float expected_prob_int= convert_float(in_prob_echar)/255.0f;
+
 #endif
   //determine the minimum face:
   //get parameters tnear and tfar for the scene
@@ -150,7 +164,9 @@ void cast_ray(
       step_cell_render_depth2((tblock+t1)*linfo->block_len, alpha_array, data_ptr, d, &vis, &expected_int);
 #endif
 #ifdef CHANGE
-      step_cell_change_detection_uchar8(mixture_array,alpha_array,data_ptr,d,&vis,&expected_int,intensity);
+
+      step_cell_change_detection_uchar8_w_expected(mixture_array,alpha_array,data_ptr,d,&vis,&expected_int,&expected_prob_int,intensity,exp_intensity);
+      //step_cell_change_detection_uchar8(mixture_array,alpha_array,data_ptr,d,&vis,&expected_int,intensity);
 #endif
 ////////////////////////////////////////////////////////////////////////////////
 // END Step Cell Functor
@@ -165,7 +181,6 @@ void cast_ray(
   }
 
 #ifdef RENDER
-  //expected_int += vis;
   exp_image[imIndex[llid]] =  rgbaFloatToInt((float4) expected_int); //expected_int;
 #endif
 #ifdef DEPTH
@@ -173,13 +188,13 @@ void cast_ray(
   exp_image[imIndex[llid]] =  rgbaFloatToInt((float4) expected_int);
 #endif
 #ifdef CHANGE
-      expected_int/=(1-vis);
-      float fgbelief=1.0/(1.0+expected_int);
-      exp_image[imIndex[llid]] =  rgbaFloatToInt((float4) fgbelief); //expected_int;
+      exp_image[imIndex[llid]] =  rgbaFloatToInt((float4) 1.0f/(1.0f+expected_int)); //expected_int;
+      prob_exp_image[imIndex[llid]] =  rgbaFloatToInt((float4) 1.0f/(1.0f+expected_prob_int)); //expected_int;
 #endif
 
   //store visibility at the end of this block
   vis_image[imIndex[llid]] = vis;
+
 }
 #ifdef RENDER
 __kernel
@@ -210,7 +225,7 @@ render_bit_scene( __constant  RenderSceneInfo    * linfo,
 
   // check to see if the thread corresponds to an actual pixel as in some
   // cases #of threads will be more than the pixels.
-  if (i>=(*exp_image_dims).x || j>=(*exp_image_dims).y) {
+  if (i>=(*exp_image_dims).z || j>=(*exp_image_dims).w) {
     //exp_image[imIndex[llid]] = 0.0f;
     return;
   }
@@ -270,6 +285,8 @@ change_detection_bit_scene( __constant  RenderSceneInfo    * linfo,
                             __global    uchar8             * mixture_array,
                             __global    float16            * camera,        // camera orign and SVD of inverse of camera matrix
                             __global    float              * in_image,      // input image and store vis_inf and pre_inf
+                            __global    uint              * exp_image,      // input image and store vis_inf and pre_inf
+                            __global    uint              * prob_exp_image,       //input image
                             __global    uint               * change_image,      // input image and store vis_inf and pre_inf
                             __global    uint4              * exp_image_dims,
                             __global    float              * output,
@@ -291,7 +308,7 @@ change_detection_bit_scene( __constant  RenderSceneInfo    * linfo,
 
   // check to see if the thread corresponds to an actual pixel as in some
   // cases #of threads will be more than the pixels.
-  if (i>=(*exp_image_dims).x || j>=(*exp_image_dims).y) {
+  if (i>=(*exp_image_dims).z || j>=(*exp_image_dims).w) {
     //exp_image[imIndex[llid]] = 0.0f;
     return;
   }
@@ -333,7 +350,9 @@ change_detection_bit_scene( __constant  RenderSceneInfo    * linfo,
 
             //RENDER SPECIFIC ARGS
             imIndex,
-            in_image, //input image
+            in_image,
+            exp_image,
+            prob_exp_image,//input image
             //io info
             change_image,
             vis_image,

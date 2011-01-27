@@ -27,7 +27,10 @@ __kernel void normalize_render_kernel(__global uint * exp_img , __global float* 
 #endif
 
 #ifdef CHANGE
-__kernel void normalize_change_kernel(__global uint * exp_img , __global float* vis_img, __global    uint4    * imgdims)
+__kernel void normalize_change_kernel(__global uint * exp_img /* background probability density*/ , 
+                                      __global uint * prob_exp_img ,
+                                      __global float* vis_img, 
+                                      __global uint4* imgdims)
 {
     int i=0,j=0;
     i=get_global_id(0);
@@ -41,11 +44,23 @@ __kernel void normalize_change_kernel(__global uint * exp_img , __global float* 
         return;
     }
     float vis   = vis_img[imindex];
+
     uint  eint  = as_uint(exp_img[imindex]);
     uchar echar = convert_uchar(eint);
-    float expected_int = convert_float(echar)/255.0f;
+    float prob_int = convert_float(echar)/255.0f;
 
-    expected_int+=vis*1.0; //probability density of uniform distribution is 0.5
-    exp_img[imindex]=rgbaFloatToInt(expected_int);
+    prob_int=1/prob_int -1;
+    prob_int+=vis;
+
+    uint  prob_eint  = as_uint(prob_exp_img[imindex]);
+    uchar prob_echar = convert_uchar(prob_eint);
+    float prob_exp_int = convert_float(prob_echar)/255.0f;
+ 
+    prob_exp_int=1/prob_exp_int -1;
+    prob_exp_int+=vis;
+
+    float fgbelief=1.0f/(1.0f+prob_int)-0.5f*min(prob_int,1/prob_int);
+    float raybelief=prob_exp_int/(1.0f+prob_exp_int)-0.5*min(prob_exp_int,1/prob_exp_int);
+    exp_img[imindex]=rgbaFloatToInt(raybelief*fgbelief);
 }
 #endif

@@ -62,12 +62,6 @@ void step_cell_change_detection_uchar8_w_expected(__global uchar8* cell_data, __
   (*vis)=(*vis)*(1-prob);
   (*change_density) += prob_den*omega;
 
-  //float expected_int_cell = data.s0*data.s2+data.s3*data.s5+data.s6*(1-data.s2-data.s5);
-
-  //float var=(e_img_intensity-data.s0)*(e_img_intensity-data.s0)*data.s2+
-  //          (e_img_intensity-data.s3)*(e_img_intensity-data.s3)*data.s5+
-  //          (e_img_intensity-data.s6)*(e_img_intensity-data.s6)*(1-data.s2-data.s5);
-
   float e_prob_den=gauss_3_mixture_prob_density(e_img_intensity,
                                               data.s0,data.s1,data.s2,
                                               data.s3,data.s4,data.s5,
@@ -77,6 +71,7 @@ void step_cell_change_detection_uchar8_w_expected(__global uchar8* cell_data, __
   (*e_change_density) += e_prob_den*omega;
 
 }
+
 
 void step_cell_change_detection(__global uchar8* cell_data, __global float* alpha_data,int data_ptr,
                                 float d, float4 * data_return, float img_intensity)
