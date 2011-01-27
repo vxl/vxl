@@ -2,7 +2,6 @@ INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bseg )
 SET(boxm2_cpp_algo_sources
     boxm2_cast_ray_function.h
     boxm2_render_exp_image_functor.h
-    boxm2_render_exp_distribution_functor.h
     boxm2_update_image_functor.h
     boxm2_refine_block_function.h
     boxm2_change_detection_functor.h
