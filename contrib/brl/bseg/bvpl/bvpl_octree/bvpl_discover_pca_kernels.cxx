@@ -9,6 +9,8 @@
 #include <bxml/bxml_read.h>
 #include <bxml/bxml_find.h>
 #include <boxm/boxm_scene_parser.h>
+#include <vcl_cassert.h>
+
 
 bvpl_discover_pca_kernels::bvpl_discover_pca_kernels(const vcl_string &path)
 {
