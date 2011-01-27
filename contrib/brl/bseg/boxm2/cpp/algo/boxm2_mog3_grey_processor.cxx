@@ -305,46 +305,8 @@ void  boxm2_mog3_grey_processor::merge_mixtures(vnl_vector_fixed<unsigned char, 
         mog3_3=mog3_1;return;
     }
     vcl_vector<vnl_vector_fixed<float,3> > merged;
-#if 0 //: merge components  
 
-    vnl_vector_fixed<float,3> new_component(0.0f);
-    for(unsigned i=0;i<3;i++)
-    {
-       if(mog3_float_1[i*3+2]>0.0f && mog3_float_1[i*3+1]>0.0f)
-       {
-           new_component[0]=mog3_float_1[i*3+0];
-           new_component[1]=mog3_float_1[i*3+1];
-           new_component[2]=mog3_float_1[i*3+2]*w1;
-           merged.push_back(new_component);
-       }
-       if(mog3_float_2[i*3+2]>0.0f && mog3_float_2[i*3+1]>0.0f)
-       {
-           new_component[0]=mog3_float_2[i*3+0];
-           new_component[1]=mog3_float_2[i*3+1];
-           new_component[2]=mog3_float_2[i*3+2]*w2;
-           merged.push_back(new_component);
-       }
-    }
-   while(merged.size()>3)
-    {
-        vcl_sort(merged.begin(),merged.end(),sort_components);
-
-        int compindex=merged.size()-1;
-        vnl_vector_fixed<float,3> new_component(0.0f);
-
-        if(merge_gauss(merged[compindex][0],merged[compindex][1],merged[compindex][2],
-                       merged[compindex-1][0],merged[compindex-1][1],merged[compindex-1][2],
-                       new_component))
-        {
-            merged.erase(merged.begin()+compindex);
-            merged.erase(merged.begin()+compindex-1);
-            merged.push_back(new_component);
-        }
-
-    }
-#endif
-
-#if 1
+    //: Merge all the compoentns.
    for(unsigned i=0;i<3;i++)
    {
        float w1c=w1*mog3_float_1[i*3+2];
@@ -358,6 +320,7 @@ void  boxm2_mog3_grey_processor::merge_mixtures(vnl_vector_fixed<unsigned char, 
                merged.push_back(new_component);
        }
    }
+   //: reduce the components to nine by merging the components with smallest weight/variance ratios.
    while(merged.size()>3)
     {
         vcl_sort(merged.begin(),merged.end(),sort_components);
@@ -372,8 +335,8 @@ void  boxm2_mog3_grey_processor::merge_mixtures(vnl_vector_fixed<unsigned char, 
             merged.push_back(new_component);
         }
     }
-   //vcl_sort(merged.begin(),merged.end(),sort_components);
-#endif
+
+   //: renormalize the weights so that they sum to 1.
    float sum=0.0f;
    for(unsigned i=0;i<3 && i<merged.size();i++)
        sum+=merged[i][2];
