@@ -72,6 +72,7 @@ class boxm2_render_tableau : public boxm2_cam_tableau
   //: gpu processor and render_process, update_process
   boxm2_opencl_processor* gpu_pro_;
   boxm2_opencl_render_process render_;
+  boxm2_opencl_render_process change_render_;
   boxm2_opencl_update_process update_; 
   boxm2_opencl_refine_process refine_;
   boxm2_opencl_change_detection_process change_;

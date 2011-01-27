@@ -316,6 +316,8 @@ float boxm2_render_tableau::change_frame()
   vpgl_camera_double_sptr cam_sptr(pcam);
   brdb_value_sptr brdb_cam = new brdb_value_t<vpgl_camera_double_sptr>(cam_sptr);
 
+
+
   //load image from file
   vil_image_view_base_sptr loaded_image = vil_load(img_files_[curr_frame].c_str());
   vil_image_view<float>* floatimg = new vil_image_view<float>(loaded_image->ni(), loaded_image->nj(), 1);
@@ -329,9 +331,16 @@ float boxm2_render_tableau::change_frame()
   vil_image_view_base_sptr floatimg_sptr(floatimg);
   brdb_value_sptr brdb_inimg = new brdb_value_t<vil_image_view_base_sptr>(floatimg_sptr);
 
-  //create output image buffer
-  vil_image_view_base_sptr expimg = new vil_image_view<float>(ni_, nj_);
+  //create out exp image buffer
+  vil_image_view<float>* expimg = new vil_image_view<float>(ni_, nj_);
+  expimg->fill(0.0f);
   brdb_value_sptr brdb_expimg = new brdb_value_t<vil_image_view_base_sptr>(expimg);
+
+
+  //create out cd image buffer
+  vil_image_view_base_sptr cdimg = new vil_image_view<float>(ni_, nj_);
+  brdb_value_sptr brdb_cdimg = new brdb_value_t<vil_image_view_base_sptr>(cdimg);
+  
 
   //create vis image buffer
   vil_image_view<float>* visimg = new vil_image_view<float>(ni_, nj_);
@@ -341,20 +350,33 @@ float boxm2_render_tableau::change_frame()
 
   //create generic scene
   brdb_value_sptr brdb_scene = new brdb_value_t<boxm2_scene_sptr>(scene_);
-
-  //set inputs
   vcl_vector<brdb_value_sptr> input;
   input.push_back(brdb_scene);
   input.push_back(brdb_cam);
-  input.push_back(brdb_inimg);
   input.push_back(brdb_expimg);
   input.push_back(brdb_visimg);
 
   //initoutput vector
   vcl_vector<brdb_value_sptr> output;
 
+  //initialize the GPU render process
+  gpu_pro_->run(&change_render_, input, output);
+  gpu_pro_->finish();
+
+
+  //set inputs
+  vcl_vector<brdb_value_sptr> input1;
+  input1.push_back(brdb_scene);
+  input1.push_back(brdb_cam);
+  input1.push_back(brdb_inimg);
+  input1.push_back(brdb_expimg);
+  input1.push_back(brdb_cdimg);
+  input1.push_back(brdb_visimg);
+
+
   //execute gpu_update
-  gpu_pro_->run(&change_, input, output);
+  gpu_pro_->run(&change_, input1, output);
+
   status = clEnqueueReleaseGLObjects( *gpu_pro_->get_queue(), 1, &change_.image()->buffer(), 0, 0, 0);
   clFinish( *change_.command_queue() );
   return gpu_pro_->exec_time();
@@ -403,6 +425,8 @@ bool boxm2_render_tableau::init_clgl()
   //initialize the GPU change detection process
   change_.init_kernel(&gpu_pro_->context(), &gpu_pro_->devices()[0]);
   change_.set_image(exp_img_);
+  
+  change_render_.init_kernel(&gpu_pro_->context(), &gpu_pro_->devices()[0]);
 
   //initlaize gpu update process
   update_.init_kernel(&gpu_pro_->context(), &gpu_pro_->devices()[0]);
