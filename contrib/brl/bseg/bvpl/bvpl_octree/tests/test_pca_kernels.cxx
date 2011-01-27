@@ -8,7 +8,7 @@
 #include <vpl/vpl.h>
 
 #include <bvpl/bvpl_octree/bvpl_discover_pca_kernels.h>
-
+  
 #include "test_utils.h"
 
 void test_kernel_set_up()
@@ -20,6 +20,7 @@ void test_kernel_set_up()
    vgl_box_3d<int> neighborhood(vgl_point_3d<int>(-1,-1,-1), vgl_point_3d<int>(1,1,1));
   //number of samples - 10% of total number of leaf-cells
   unsigned long nsamples = (unsigned long)((double)scene->size() * 0.1);
+
   clean_up("./evd", "*.txt");
   vpl_mkdir("./evd",0777);
   clean_up("./svd", "*.txt");
@@ -28,18 +29,27 @@ void test_kernel_set_up()
   bvpl_discover_pca_kernels pca_extractor(neighborhood, nsamples, scene, "./evd");
   bvpl_discover_pca_kernels pca_extractor_svd(neighborhood, nsamples, scene, "./svd", false);
 
-  vnl_vector<double> verror;
-  pca_extractor.compute_training_error(verror);
-  result = verror[verror.size()-1] < 1.0e-7;
-  TEST("Test training error:", result, true);
-  
   //XML write
   pca_extractor.xml_write();
   pca_extractor_svd.xml_write();
+  
+  //training errorr
+  vnl_vector<double> verror;
+  vnl_vector<double> t_verror;
+  vnl_vector<double> testing_error;
+  pca_extractor.compute_training_error(verror);
+  pca_extractor.theoretical_training_error(t_verror);
+  pca_extractor.compute_testing_error(testing_error);
+  
+
+  result = verror[verror.size()-1] < 1.0e-7;
+  TEST("Test training error:", result, true);  
    
   bvpl_discover_pca_kernels pca_extractor2("./evd");
   vnl_vector<double> verror2;
   pca_extractor2.compute_training_error(verror2);
+  vnl_vector<double> test_error2;
+  pca_extractor2.compute_testing_error(test_error2);
   
   //Load from XML file - and check that clases are the same
   result = pca_extractor.principal_comps().is_equal(pca_extractor2.principal_comps(), 1.0e-9);
@@ -57,13 +67,23 @@ void test_kernel_set_up()
   result = pca_extractor.nsamples()== pca_extractor2.nsamples();
   TEST("Test xml_write nsamples :", result, true);
   
-  result = verror.is_equal(verror2, 1.0e-9);
-  TEST("Test training errors are equal:", result, true);
+  result = verror.is_equal(t_verror, 1.0e-9);
+  TEST("Test training errors agrees with theoretical value:", result, true);
   
-  result = pca_extractor.scene_path() == pca_extractor2.scene_path();
-  TEST("Test scene path is equal:", result, true);
+  result = testing_error.squared_magnitude() > t_verror.squared_magnitude();
+  TEST("Test testing error > training error:", result, true);
+  
+  result = testing_error.is_equal(test_error2, 1.0e-9);
+  TEST("Testing errors are equal:", result, true);
 
+  
+  
 #if 0
+  
+  vcl_cout<< "error : " << verror << vcl_endl;
+  vcl_cout<< "t_error : " << t_verror << vcl_endl;
+  vcl_cout<< "weights : " << pca_extractor.weights() << vcl_endl;
+  
   vcl_cout<< "error 1: " << verror << vcl_endl;
   vcl_cout<< "error 2: " << verror2 << vcl_endl;
 

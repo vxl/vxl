@@ -27,6 +27,8 @@ boxm_scene<boct_tree<short, float> >* create_scene(unsigned world_dimx,unsigned 
   boxm_scene<boct_tree<short, float> > *scene = new boxm_scene<boct_tree<short, float> >(lvcs, origin, block_dim, world_dim, max_tree_level, init_level );
   vcl_string scene_path(".");
   scene->set_paths(scene_path, "test_scene");
+  scene->set_appearance_model(BOXM_FLOAT);
+  scene->write_scene("test_scene.xml");
 
   unsigned cell_index = 7;
   boxm_block_iterator<boct_tree<short, float> > iter=scene->iterator();
@@ -46,8 +48,10 @@ boxm_scene<boct_tree<short, float> >* create_scene(unsigned world_dimx,unsigned 
     cell_index--;
     ++iter;
   }
+
   return scene;
 }
+
 
 void clean_up()
 {
