@@ -17,11 +17,11 @@
 
 #include <bvxm/grid/bvxm_voxel_grid.h>
 #include <bvxm/grid/bvxm_opinion.h>
-#include <bvpl/bvpl_kernel_factory.h>
-#include <bvpl/bvpl_edge2d_functor.h>
-#include <bvpl/bvpl_edge_geometric_mean_functor.h>
-#include <bvpl/bvpl_edge_algebraic_mean_functor.h>
-#include <bvpl/bvpl_opinion_functor.h>
+#include <bvpl/kernels/bvpl_kernel_factory.h>
+#include <bvpl/functors/bvpl_edge2d_functor.h>
+#include <bvpl/functors/bvpl_edge_geometric_mean_functor.h>
+#include <bvpl/functors/bvpl_edge_algebraic_mean_functor.h>
+#include <bvpl/functors/bvpl_opinion_functor.h>
 #include <bvpl/bvpl_susan_opinion_operator.h>
 
 namespace bvpl_susan_opinion_operator_process_globals

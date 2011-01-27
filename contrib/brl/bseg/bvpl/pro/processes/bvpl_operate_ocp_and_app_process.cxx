@@ -17,12 +17,12 @@
 
 #include <bvxm/grid/bvxm_voxel_grid.h>
 #include <bvxm/grid/bvxm_voxel_grid_base.h>
-#include <bvpl/bvpl_kernel.h>
-#include <bvpl/bvpl_find_surface_functor.h>
-#include <bvpl/bvpl_gauss_convolution_functor.h>
-#include <bvpl/bvpl_positive_gauss_conv_functor.h>
-#include <bvpl/bvpl_negative_gauss_conv_functor.h>
-#include <bvpl/bvpl_edge_geometric_mean_functor.h>
+#include <bvpl/kernels/bvpl_kernel.h>
+#include <bvpl/functors/bvpl_find_surface_functor.h>
+#include <bvpl/functors/bvpl_gauss_convolution_functor.h>
+#include <bvpl/functors/bvpl_positive_gauss_conv_functor.h>
+#include <bvpl/functors/bvpl_negative_gauss_conv_functor.h>
+#include <bvpl/functors/bvpl_edge_geometric_mean_functor.h>
 #include <bvpl/bvpl_combined_neighb_operator.h>
 #include <bvpl/bvpl_discriminative_non_max_suppression.h>
 

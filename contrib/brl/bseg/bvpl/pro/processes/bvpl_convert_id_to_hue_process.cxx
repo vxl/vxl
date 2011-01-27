@@ -15,7 +15,7 @@
 #include <bprb/bprb_parameters.h>
 #include <bvxm/grid/bvxm_voxel_grid_base.h>
 #include <bvxm/grid/bvxm_voxel_grid.h>
-#include <bvpl/bvpl_kernel_factory.h>
+#include <bvpl/kernels/bvpl_kernel_factory.h>
 #include <bvpl/bvpl_direction_to_color_map.h>
 #include <vnl/vnl_float_4.h>
 

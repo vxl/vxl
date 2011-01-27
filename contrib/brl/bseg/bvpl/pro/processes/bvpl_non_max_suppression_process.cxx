@@ -14,7 +14,7 @@
 #include <bvxm/grid/bvxm_voxel_grid.h>
 #include <bvxm/grid/bvxm_voxel_grid_basic_ops.h>
 #include <bvxm/grid/bvxm_opinion.h>
-#include <bvpl/bvpl_kernel.h>
+#include <bvpl/kernels/bvpl_kernel.h>
 #include <bvpl/bvpl_vector_operator.h>
 
 #include <bsta/bsta_attributes.h>

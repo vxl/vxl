@@ -20,13 +20,13 @@
 
 #include <bsta/bsta_gauss_f1.h>
 
-#include <bvpl/bvpl_kernel_factory.h>
-#include <bvpl/bvpl_edge2d_functor.h>
-#include <bvpl/bvpl_edge_geometric_mean_functor.h>
-#include <bvpl/bvpl_edge_algebraic_mean_functor.h>
-#include <bvpl/bvpl_gauss_convolution_functor.h>
-#include <bvpl/bvpl_positive_gauss_conv_functor.h>
-#include <bvpl/bvpl_opinion_functor.h>
+#include <bvpl/kernels/bvpl_kernel_factory.h>
+#include <bvpl/functors/bvpl_edge2d_functor.h>
+#include <bvpl/functors/bvpl_edge_geometric_mean_functor.h>
+#include <bvpl/functors/bvpl_edge_algebraic_mean_functor.h>
+#include <bvpl/functors/bvpl_gauss_convolution_functor.h>
+#include <bvpl/functors/bvpl_positive_gauss_conv_functor.h>
+#include <bvpl/functors/bvpl_opinion_functor.h>
 #include <bvpl/bvpl_neighb_operator.h>
 
 namespace bvpl_neighborhood_operator_process_globals

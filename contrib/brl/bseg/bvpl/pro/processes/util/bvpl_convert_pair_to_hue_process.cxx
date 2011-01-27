@@ -14,7 +14,7 @@
 #include <vcl_string.h>
 #include <bprb/bprb_parameters.h>
 #include <bvxm/grid/bvxm_voxel_grid.h>
-#include <bvpl/bvpl_kernel.h>
+#include <bvpl/kernels/bvpl_kernel.h>
 #include <bvpl/util/bvpl_corner_pair_finder.h>
 #include <vnl/vnl_float_4.h>
 
