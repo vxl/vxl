@@ -25,8 +25,8 @@
 #include <boxm/sample/boxm_inf_line_sample.h>
 
 #include <bvpl/bvpl_neighb_operator.h>
-#include <bvpl/bvpl_kernel_iterator.h>
-#include <bvpl/bvpl_kernel.h>
+#include <bvpl/kernels/bvpl_kernel_iterator.h>
+#include <bvpl/kernels/bvpl_kernel.h>
 #include <bvpl/bvpl_octree/bvpl_octree_neighbors.h>
 
 namespace bvpl_nonmax_supp_process_globals

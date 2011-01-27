@@ -13,9 +13,9 @@
 #include <bvpl/bvpl_octree/bvpl_scene_vector_operator.h>
 #include <bvpl/bvpl_octree/bvpl_octree_vector_operator_impl.h>
 #include <bvpl/bvpl_octree/bvpl_octree_sample.h>
-#include <bvpl/bvpl_kernel_factory.h>
-#include <bvpl/bvpl_edge_geometric_mean_functor.h>
-#include <bvpl/bvpl_gauss_convolution_functor.h>
+#include <bvpl/kernels/bvpl_kernel_factory.h>
+#include <bvpl/functors/bvpl_edge_geometric_mean_functor.h>
+#include <bvpl/functors/bvpl_gauss_convolution_functor.h>
 #include <bprb/bprb_parameters.h>
 #include <brdb/brdb_value.h>
 

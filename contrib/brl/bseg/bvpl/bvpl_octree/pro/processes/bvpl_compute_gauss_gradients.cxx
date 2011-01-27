@@ -9,9 +9,9 @@
 
 #include <brdb/brdb_value.h>
 
-#include <bvpl/bvpl_gauss3d_x_kernel_factory.h>
-#include <bvpl/bvpl_create_directions.h>
-#include <bvpl/bvpl_algebraic_functor.h>
+#include <bvpl/kernels/bvpl_gauss3d_x_kernel_factory.h>
+#include <bvpl/kernels/bvpl_create_directions.h>
+#include <bvpl/functors/bvpl_algebraic_functor.h>
 #include <bvpl/bvpl_octree/bvpl_scene_vector_operator.h>
 #include <bvpl/bvpl_octree/bvpl_scene_statistics.h>
 

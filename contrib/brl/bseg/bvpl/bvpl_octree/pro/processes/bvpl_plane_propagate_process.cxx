@@ -25,8 +25,8 @@
 #include <boxm/sample/boxm_edge_tangent_sample.h>
 
 #include <bvpl/bvpl_neighb_operator.h>
-#include <bvpl/bvpl_kernel_iterator.h>
-#include <bvpl/bvpl_kernel.h>
+#include <bvpl/kernels/bvpl_kernel_iterator.h>
+#include <bvpl/kernels/bvpl_kernel.h>
 #include <bvpl/bvpl_octree/bvpl_octree_neighbors.h>
 #include <vcl_set.h>
 
