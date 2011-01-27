@@ -2,7 +2,7 @@
 //:
 // \file
 
-#include <bvpl/bvpl_corner2d_kernel_factory.h>
+#include <bvpl/kernels/bvpl_corner2d_kernel_factory.h>
 #include <vnl/vnl_math.h>
 #include <vcl_algorithm.h>
 

@@ -13,7 +13,7 @@
 // \endverbatim
 
 #include <vbl/vbl_ref_count.h>
-#include <bvpl/bvpl_kernel.h>
+#include <bvpl/kernels/bvpl_kernel.h>
 #include <bvxm/grid/bvxm_voxel_grid.h>
 #include <vgl/vgl_line_segment_3d.h>
 #include <vgl/vgl_box_3d.h>

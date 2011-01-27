@@ -6,7 +6,7 @@
 
 #include <testlib/testlib_test.h>
 #include <bvpl/util/bvpl_corner_pair_finder.h>
-#include <bvpl/bvpl_weighted_cube_kernel_factory.h>
+#include <bvpl/kernels/bvpl_weighted_cube_kernel_factory.h>
 #include <bvxm/grid/bvxm_voxel_grid.h>
 #include <bvxm/grid/io/bvxm_vrml_voxel_grid.h>
 #include <vgl/vgl_vector_3d.h>
