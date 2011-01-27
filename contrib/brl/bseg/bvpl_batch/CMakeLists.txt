@@ -30,7 +30,7 @@ IF( PYTHON_FOUND )
       SET_TARGET_PROPERTIES(bbgm_batch PROPERTIES COMPILE_FLAGS "-fPIC")
     ENDIF(NOT WIN32)
 
-    TARGET_LINK_LIBRARIES(bvpl_batch bprb brdb bpro_batch vbl bvpl bvpl_pro bvpl_io bvxm_grid_pro bvxm_grid_io bvxm_algo_pro)
+    TARGET_LINK_LIBRARIES(bvpl_batch bprb brdb bpro_batch vbl bvpl bvpl_pro bvpl_kernels_pro bvxm_grid_pro bvxm_grid_io bvxm_algo_pro)
 
     IF (PYTHON_DEBUG_LIBRARIES)
       TARGET_LINK_LIBRARIES( bvpl_batch debug ${PYTHON_DEBUG_LIBRARY})
