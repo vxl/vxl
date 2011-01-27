@@ -19,6 +19,8 @@ IF(VGUI_FOUND)
       boxm2_cam_tableau.cxx
       boxm2_render_tableau.h
       boxm2_render_tableau.cxx
+      boxm2_change_detection_tableau.h
+      boxm2_change_detection_tableau.cxx
       boxm2_include_glew.h
      )
 

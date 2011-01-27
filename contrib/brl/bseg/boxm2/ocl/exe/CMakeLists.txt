@@ -25,6 +25,8 @@ IF(GLEW_FOUND)
   ADD_EXECUTABLE( boxm2_render_view boxm2_render_view.cxx)
   TARGET_LINK_LIBRARIES( boxm2_render_view boxm2 boxm2_view vul vgui vil_pro vpgl_pro ${GLEW_LIBRARY} )
 
+  ADD_EXECUTABLE( boxm2_change_detection_view boxm2_change_detection_view.cxx)
+  TARGET_LINK_LIBRARIES( boxm2_change_detection_view boxm2 boxm2_view vul vgui vil_pro vpgl_pro ${GLEW_LIBRARY} )
 
  ENDIF(VGUI_FOUND)
 ENDIF(GLEW_FOUND)
