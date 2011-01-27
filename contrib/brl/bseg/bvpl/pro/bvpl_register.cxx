@@ -4,7 +4,7 @@
 #include <bprb/bprb_batch_process_manager.h>
 #include <bprb/bprb_func_process.h>
 #include "bvpl_processes.h"
-#include <bvpl/bvpl_kernel.h>
+#include <bvpl/kernels/bvpl_kernel.h>
 #include <bvpl/util/bvpl_corner_pair_finder.h>
 
 void bvpl_register::register_datatype()
