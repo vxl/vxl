@@ -167,6 +167,8 @@ bool cast_ray_per_block(fucntor_type functor,
     {
         for (unsigned i=roi_ni0;i<roi_ni;++i)
         {
+            if(i%10==0)
+                vcl_cout<<".";
             for (unsigned j=roi_nj0;j<roi_nj;++j)
             {
                 vgl_ray_3d<double> ray_ij=pcam->backproject_ray(i,j);

@@ -1,4 +1,4 @@
-#include <boxm2/cpp/pro/boxm2_cpp_change_detection_process.h>
+#include <boxm2/cpp/pro/boxm2_cpp_change_detection_uncertainity_process.h>
 
 //boxm2 data structures
 #include <boxm2/boxm2_scene.h>
@@ -15,7 +15,7 @@
 #include <vcl_where_root_dir.h>
 
 
-bool boxm2_cpp_change_detection_process::execute(vcl_vector<brdb_value_sptr>& input, vcl_vector<brdb_value_sptr>& output)
+bool boxm2_cpp_change_detection_uncertainity_process::execute(vcl_vector<brdb_value_sptr>& input, vcl_vector<brdb_value_sptr>& output)
 {
   vcl_cout<<"CPP update argcounts:"<<input.size()<<vcl_endl;
 
@@ -37,7 +37,7 @@ bool boxm2_cpp_change_detection_process::execute(vcl_vector<brdb_value_sptr>& in
   vil_image_view<float>* image_ = static_cast<vil_image_view<float>* >(expimg.ptr());
   image_->fill(0.0f);
 
-  vis_img_ = new vil_image_view<float>(image_->ni(),image_->nj());
+  vil_image_view<float>* vis_img_ = new vil_image_view<float>(image_->ni(),image_->nj());
   vis_img_->fill(1.0f);
 
   vcl_vector<boxm2_block_id> vis_order=scene->get_vis_blocks(reinterpret_cast<vpgl_perspective_camera<double>*>(cam.ptr()));
@@ -46,7 +46,8 @@ bool boxm2_cpp_change_detection_process::execute(vcl_vector<brdb_value_sptr>& in
     vcl_cout<<" None of the blocks are visible from this viewpoint"<<vcl_endl;
     return true;
   }
-  boxm2_change_detection_functor cd_functor;
+
+  boxm2_change_detection_with_uncertainity_functor cd_wu_functor(input_image->ni(),input_image->nj());
 
   vcl_vector<boxm2_block_id>::iterator id; 
   for(id = vis_order.begin(); id != vis_order.end(); ++id) 
@@ -65,13 +66,12 @@ bool boxm2_cpp_change_detection_process::execute(vcl_vector<brdb_value_sptr>& in
       scene_info_wrapper->info->data_buffer_length = 65536;
       scene_info_wrapper->info->num_buffer = blk->num_buffers();
 
-      cd_functor.init_data(datas,input_image,image_,vis_img_);
-      cast_ray_per_block<boxm2_change_detection_functor>(cd_functor,scene_info_wrapper->info,blk,cam,image_->ni(),image_->nj());
+      cd_wu_functor.set_data(datas,input_image,image_);
+      cast_ray_per_block<boxm2_change_detection_with_uncertainity_functor>(cd_wu_functor,scene_info_wrapper->info,blk,cam,image_->ni(),image_->nj());
 
   }
   
-  normalize_foreground_probability_density f;
-  vil_transform<float,normalize_foreground_probability_density>(*image_,f);
+  cd_wu_functor.finish();
 
   vcl_cout<<"Execution time: "<<" ms"<<vcl_endl;
 
@@ -79,12 +79,10 @@ bool boxm2_cpp_change_detection_process::execute(vcl_vector<brdb_value_sptr>& in
 }
 
 
-bool boxm2_cpp_change_detection_process::clean()
+bool boxm2_cpp_change_detection_uncertainity_process::clean()
 {
   if (image_) delete image_;
-  if (vis_img_) delete vis_img_;
   image_ = 0;
-  vis_img_ = 0;
   return true;
 }
 

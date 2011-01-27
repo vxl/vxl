@@ -19,18 +19,19 @@
 #include <boxm2/basic/boxm2_block_id.h>
 #include <boxm2/cpp/boxm2_cpp_processor.h>
 #include <boxm2/cpp/pro/boxm2_cpp_change_detection_process.h>
-
+#include <boxm2/cpp/pro/boxm2_cpp_change_detection_uncertainity_process.h>
 
 //brdb stuff
 #include <brdb/brdb_value.h>
 
 int main(int argc,  char** argv)
 {
-  vcl_cout<<"Boxm2 CPP UPDATE(and render) "<<vcl_endl;
-  vul_arg<vcl_string> camdir("-camdir", "camera filename", "");
+  vcl_cout<<"Boxm2 CPP Change Detection "<<vcl_endl;
+  vul_arg<vcl_string> cam("-cam", "camera filename", "");
   vul_arg<vcl_string> scene_file("-scene", "scene filename", "");
-  vul_arg<vcl_string> imgdir("-imgdir", "input image", "");
-  vul_arg<vcl_string> outdir("-outdir", "output dir", "");
+  vul_arg<vcl_string> img("-img", "input image", "");
+  vul_arg<vcl_string> outimg("-outimg", "change image", "");
+  vul_arg<bool> use_uncertainity("-uncertain", "Use Uncertainity", true);
 
   // need this on some toolkit implementations to get the window up.
   vul_arg_parse(argc, argv);
@@ -43,39 +44,22 @@ int main(int argc,  char** argv)
   cpp_pro.init();
   cpp_pro.set_scene(scene.ptr());
 
-  boxm2_cpp_change_detection_process cpp_change;
-  cpp_change.init();
-  cpp_change.set_cache(&cache);
+  vcl_cout<<"Using uncertainity "<<use_uncertainity()<<vcl_endl;
+  boxm2_cpp_process_base * cpp_change;
+  if(use_uncertainity())
+    cpp_change=new boxm2_cpp_change_detection_uncertainity_process();
+  else
+    cpp_change=new boxm2_cpp_change_detection_process();
 
-  vcl_string camglob=camdir()+"/*.txt";
-  vcl_string imgglob=imgdir()+"/*.*g";
+  cpp_change->init();
+  cpp_change->set_cache(&cache);
 
-  vul_file_iterator file_it(camglob.c_str());
-  vul_file_iterator img_file_it(imgglob.c_str());
-  vcl_vector<vcl_string> cam_files;
-  vcl_vector<vcl_string> img_files;
-  while (file_it && img_file_it) {
-    vcl_string camName(file_it());
-    vcl_string imgName(img_file_it());
-    cam_files.push_back(camName);
-    img_files.push_back(imgName);
-    ++file_it; ++img_file_it;
-  }
-  vcl_sort(cam_files.begin(), cam_files.end());
-  vcl_sort(img_files.begin(), img_files.end());
-
-  if (cam_files.size() != img_files.size()) {
-    vcl_cerr<<"Image files and cam files not one to one\n";
-    return -1;
-  }
-
-  for(unsigned i=0;i<cam_files.size();i++)
   {
       //load camera from file
-      vcl_ifstream ifs(cam_files[i].c_str());
+      vcl_ifstream ifs(cam().c_str());
       vpgl_perspective_camera<double>* pcam =new vpgl_perspective_camera<double>;
       if (!ifs.is_open()) {
-          vcl_cerr << "Failed to open file " << cam_files[i] << '\n';
+          vcl_cerr << "Failed to open file " <<cam() << '\n';
           return -1;
       }
       else  {
@@ -85,14 +69,14 @@ int main(int argc,  char** argv)
       brdb_value_sptr brdb_cam = new brdb_value_t<vpgl_camera_double_sptr>(cam);
 
       //load image from file
-      vil_image_view_base_sptr loaded_image = vil_load(img_files[i].c_str());
+      vil_image_view_base_sptr loaded_image = vil_load(img().c_str());
       vil_image_view<float>* floatimg = new vil_image_view<float>(loaded_image->ni(), loaded_image->nj(), 1);
       if (vil_image_view<vxl_byte> *img_byte = dynamic_cast<vil_image_view<vxl_byte>*>(loaded_image.ptr()))
       {
           vil_convert_stretch_range_limited(*img_byte, *floatimg, vxl_byte(0), vxl_byte(255), 0.0f, 1.0f);
       }
       else {
-          vcl_cerr << "Failed to load image " << img_files[i]<< vcl_endl;
+          vcl_cerr << "Failed to load image " << img()<< vcl_endl;
           return -1;
       }
 
@@ -112,8 +96,8 @@ int main(int argc,  char** argv)
 
       vul_timer t;
       t.mark();
-      cpp_pro.run(&cpp_change, input, output);
-      vil_save(*expimg,"f:/test.tiff");
+      cpp_pro.run(cpp_change, input, output);
+      vil_save(*expimg,outimg().c_str());
       vcl_cout<<"Time taken is :" <<t.all()<<vcl_endl;
   }  
   cpp_pro.finish();
