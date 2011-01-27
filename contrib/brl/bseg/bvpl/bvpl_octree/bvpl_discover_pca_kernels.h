@@ -31,7 +31,7 @@ class bvpl_discover_pca_kernels
   bvpl_discover_pca_kernels(vgl_box_3d<int> nbbox, unsigned long nsamples, boxm_scene<boct_tree<short,float> > *scene, const vcl_string& path_out=".", bool use_evd = true):
   nbbox_(nbbox), nsamples_(nsamples), path_out_(path_out)
   {
-    scene_path_ = scene->path() + scene->filename();
+    scene_path_ = scene->filename();
     feature_dim_ = (nbbox_.width()+1)*(nbbox_.height()+1)* (nbbox_.depth()+1);
     mean_feature_.set_size(feature_dim_);
     if (use_evd)
@@ -65,6 +65,15 @@ class bvpl_discover_pca_kernels
   //: Project training samples onto pca space and return error as a function of number of components used
   void compute_training_error(vnl_vector<double> &proj_error);
 
+  //: Reconstrcution error on training samples. Same as above but it is not computed from samples. 
+  void theoretical_training_error(vnl_vector<double> &proj_error);
+  
+  //: Reconstructions error on testing samples. All training samples are excuded!
+  void compute_testing_error(vnl_vector<double> &proj_error);
+  
+  //: Compute the mean feature of all "leaf" samples in a scene
+  void compute_mean_feature(boxm_scene<boct_tree<short, float> > *scene, vnl_vector<double>& mean);
+  
   //: Return the number of samples used
   unsigned long nsamples() { return nsamples_; }
 
@@ -91,8 +100,8 @@ class bvpl_discover_pca_kernels
   //: Compute deviations i.e. zero-mean feature matrix
   vnl_matrix<double> compute_deviation_matrix(boxm_scene<boct_tree<short,float> > *scene);
 
-  //: Compute the covariance matrix.
-  vnl_matrix<double> compute_covariance_matrix(boxm_scene<boct_tree<short,float> > *scene);
+  //: Compute the scatter matrix.
+  vnl_matrix<double> compute_scatter_matrix(boxm_scene<boct_tree<short,float> > *scene);
 
   //: Write a PCA file
   bool write_pca_matrices();
