@@ -10,6 +10,14 @@ MANPAGE_SOURCES += boxm2_data_serial_iterator.h
 MANPAGE_SOURCES += boxm2_update_image_functor.h
 MANPAGE_SOURCES += boxm2_change_detection_functor.h
 
-################################
-include ${VXLROOT}/config/top.mk
-################################
+#######################################
+include ${VXLROOT}/config/top-params.mk
+#######################################
+
+ifndef NOTEST
+ SUBDIRS += tests
+endif
+
+######################################
+include ${VXLROOT}/config/top-rules.mk
+######################################
