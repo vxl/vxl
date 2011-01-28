@@ -157,6 +157,9 @@ SOURCE=.\test_include.cxx
 # Begin Source File
 SOURCE=.\test_template_include.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\test_kernel.cxx
+# End Source File
 # End Group
 # End Target
 # End Project

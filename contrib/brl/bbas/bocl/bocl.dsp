@@ -108,6 +108,9 @@ SOURCE=.\bocl_mem.cxx
 SOURCE=.\bocl_command_queue_mgr.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\bocl_device_info.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/bocl_manager+bocl_global_memory_bandwidth_manager-.cxx
 # End Source File
 # Begin Source File
@@ -154,6 +157,9 @@ SOURCE=.\bocl_buffer_mgr.h
 # End Source File
 # Begin Source File
 SOURCE=.\bocl_command_queue_mgr.h
+# End Source File
+# Begin Source File
+SOURCE=.\bocl_device_info.h
 # End Source File
 # End Group
 # End Target
