@@ -1,5 +1,5 @@
-#ifndef test_utils_h_
-#define test_utils_h_
+#ifndef bvpl_octree_test_utils_h_
+#define bvpl_octree_test_utils_h_
 //:
 // \file
 // \brief  A file containing utility functions for other tests
@@ -18,4 +18,5 @@ boxm_scene<boct_tree<short, float> >* create_scene(unsigned world_dimx = 2,unsig
 void clean_up();
 
 void clean_up(vcl_string dir, vcl_string ext);
+
 #endif

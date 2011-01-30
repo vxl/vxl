@@ -1,6 +1,6 @@
-// This is brl/bseg/boxm2/view/boxm2_render_tableau.h
-#ifndef boxm2_render_tableau_h
-#define boxm2_render_tableau_h
+// This is brl/bseg/boxm2/view/boxm2_change_detection_tableau.h
+#ifndef boxm2_change_detection_tableau_h
+#define boxm2_change_detection_tableau_h
 //:
 // \file
 // \brief A tableau to view octree models in real time
@@ -45,15 +45,15 @@ class boxm2_change_detection_tableau : public vgui_tableau
  public:
   boxm2_change_detection_tableau();
   virtual ~boxm2_change_detection_tableau() {}
-  
-  //: initialize tableau with scene_file, viewport size, initial cam,  
+
+  //: initialize tableau with scene_file, viewport size, initial cam,
   bool init(vcl_string scene_file,
             unsigned ni,
             unsigned nj,
             vpgl_perspective_camera<double>* cam,
             vcl_vector<vcl_string> cam_files,
             vcl_vector<vcl_string> img_files);
-  
+
   //: virtual function handles mouse and keyboard actions
   virtual bool handle( vgui_event const& e );
 
@@ -64,7 +64,7 @@ class boxm2_change_detection_tableau : public vgui_tableau
 
  protected:
 
-  //vector of image files, vector of 
+  //vector of image files, vector of
   vcl_vector<vcl_string> cam_files_;
   vcl_vector<vcl_string> img_files_;
 
@@ -72,21 +72,20 @@ class boxm2_change_detection_tableau : public vgui_tableau
   boxm2_opencl_processor* gpu_pro_;
   boxm2_opencl_render_process change_render_;
   boxm2_opencl_change_detection_process change_;
-  
+
   //: Boxm2 Scene
   boxm2_scene_sptr scene_;
-  boxm2_cache*     cache_; 
+  boxm2_cache*     cache_;
   unsigned ni_;
   unsigned nj_;
   vgui_statusbar* status_;
-  
+
   //: shared GL_CL image buffer
   GLuint pbuffer_;
   cl_mem clgl_buffer_;
   bocl_mem* cd_img_;
 
-
-  int change_count_; 
+  int change_count_;
   vnl_random rand;
 
   //--Render, update, refine, save helper methods ------------------------------
@@ -113,4 +112,4 @@ struct boxm2_change_detection_tableau_new : public boxm2_change_detection_tablea
   boxm2_change_detection_tableau_new() : base( new boxm2_change_detection_tableau ) { }
 };
 
-#endif // boxm2_render_tableau_h
+#endif // boxm2_change_detection_tableau_h

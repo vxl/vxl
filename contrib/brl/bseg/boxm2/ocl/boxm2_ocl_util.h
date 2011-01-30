@@ -1,5 +1,5 @@
-#ifndef boxm2_util_h
-#define boxm2_util_h
+#ifndef boxm2_ocl_util_h
+#define boxm2_ocl_util_h
 //:
 // \file
 #include <vcl_iostream.h>
@@ -15,4 +15,4 @@ class boxm2_ocl_util
     static void set_bit_lookup(cl_uchar* lookup);
  };
 
-#endif // boxm2_util_h
+#endif // boxm2_ocl_util_h
