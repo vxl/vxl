@@ -6,27 +6,27 @@
 #include <boxm2/boxm2_util.h>
 #include <vcl_cmath.h> // for std::exp() && std::sqrt()
 #include <vcl_algorithm.h>
-bool sort_components (vnl_vector_fixed<float,3> i,vnl_vector_fixed<float,3> j) 
-{ 
 
-    float ratio1=i[2]/i[1];
-    float ratio2=j[2]/j[1];
-    return ratio1>ratio2;
+bool sort_components (vnl_vector_fixed<float,3> i,vnl_vector_fixed<float,3> j)
+{
+  float ratio1=i[2]/i[1];
+  float ratio2=j[2]/j[1];
+  return ratio1>ratio2;
 }
 
 float  boxm2_mog3_grey_processor::expected_color( vnl_vector_fixed<unsigned char, 8> mog3)
 {
-    float w2=0.0f;
-    if (mog3[2]>0 && mog3[5]>0)
-        w2=(float)(255-mog3[2]-mog3[5]);
+  float w2=0.0f;
+  if (mog3[2]>0 && mog3[5]>0)
+    w2=(float)(255-mog3[2]-mog3[5]);
 
-    float exp_intensity=(float)mog3[0]*(float)mog3[2]+
-        (float)mog3[3]*(float)mog3[5]+
-        (float)mog3[6]*w2;
+  float exp_intensity=(float)mog3[0]*(float)mog3[2]+
+                      (float)mog3[3]*(float)mog3[5]+
+                      (float)mog3[6]*w2;
 
-    exp_intensity/=(255.0f*255.0f);
+  exp_intensity/=(255.0f*255.0f);
 
-    return exp_intensity;
+  return exp_intensity;
 }
 
 float  boxm2_mog3_grey_processor::gauss_prob_density(float x, float mu, float sigma)
@@ -44,7 +44,7 @@ float  boxm2_mog3_grey_processor::prob_density(const vnl_vector_fixed<unsigned c
 
 
   if (w0>0.0f && w1>0.0f)
-      w2=1-w0-w1;
+    w2=1-w0-w1;
 
   if (w0>0.0f && sigma0 >0.0f)
   {
@@ -63,7 +63,6 @@ float  boxm2_mog3_grey_processor::prob_density(const vnl_vector_fixed<unsigned c
   }
   else
     sum=1.0f;
-
 
   return sum;
 }
@@ -262,92 +261,90 @@ boxm2_mog3_grey_processor::update_gauss_mixture_3(vnl_vector_fixed<unsigned char
   mog3[6]=(unsigned char)vcl_floor(boxm2_mog3_grey_processor::clamp(mu2,0,1)*255.0f);
   mog3[7]=(unsigned char)vcl_floor(boxm2_mog3_grey_processor::clamp(sigma2,0,1)*255.0f);
 }
+
 bool boxm2_mog3_grey_processor::merge_gauss(float mu1,float var1, float w1,
                                             float mu2,float var2, float w2,
                                             vnl_vector_fixed<float, 3> & new_component)
 {
-
-    float denominator=w1+w2;
-    if(denominator<=0.0f) return false;
-    //mean
-    new_component[0]=(w1*mu1+w2*mu2)/denominator;
-    //variance
-    new_component[1]=w1*var1/denominator+w2*var2/denominator+(mu1-mu2)*(mu1-mu2)*(w1*w2/denominator/denominator);
-    //weight
-    new_component[2]=w1+w2;
-    return true;
+  float denominator=w1+w2;
+  if (denominator<=0.0f) return false;
+  //mean
+  new_component[0]=(w1*mu1+w2*mu2)/denominator;
+  //variance
+  new_component[1]=w1*var1/denominator+w2*var2/denominator+(mu1-mu2)*(mu1-mu2)*(w1*w2/denominator/denominator);
+  //weight
+  new_component[2]=w1+w2;
+  return true;
 }
 
 void  boxm2_mog3_grey_processor::merge_mixtures(vnl_vector_fixed<unsigned char, 8> & mog3_1, float w1,
                                                 vnl_vector_fixed<unsigned char, 8> & mog3_2, float w2,
                                                 vnl_vector_fixed<unsigned char, 8> & mog3_3)
 {
-    float w3=w1+w2;if(w3<=0.0f)return;
+  float w3=w1+w2;if (w3<=0.0f)return;
 
-    float mog3_float_1[9]={0.0f};
-    float mog3_float_2[9]={0.0f};
-    for(unsigned i=0;i<8;i++)
-        mog3_float_1[i]=(float)mog3_1[i]/255.0f;
-    if(mog3_float_1[2]>0.0f && mog3_float_1[5]>0.0f)
-         mog3_float_1[8]=vcl_max(0.0f,1-mog3_float_1[2]-mog3_float_1[5]);
-    
-    for(unsigned i=0;i<8;i++)
-        mog3_float_2[i]=(float)mog3_2[i]/255.0f;
-    if(mog3_float_2[2]>0.0f && mog3_float_2[5]>0.0f)
-         mog3_float_2[8]=vcl_max(0.0f,1-mog3_float_2[2]-mog3_float_2[5]);
+  float mog3_float_1[9]={0.0f};
+  float mog3_float_2[9]={0.0f};
+  for (unsigned i=0;i<8;i++)
+    mog3_float_1[i]=(float)mog3_1[i]/255.0f;
+  if (mog3_float_1[2]>0.0f && mog3_float_1[5]>0.0f)
+    mog3_float_1[8]=vcl_max(0.0f,1-mog3_float_1[2]-mog3_float_1[5]);
 
-    if(mog3_float_1[2]<=0.0f)
+  for (unsigned i=0;i<8;i++)
+    mog3_float_2[i]=(float)mog3_2[i]/255.0f;
+  if (mog3_float_2[2]>0.0f && mog3_float_2[5]>0.0f)
+    mog3_float_2[8]=vcl_max(0.0f,1-mog3_float_2[2]-mog3_float_2[5]);
+
+  if (mog3_float_1[2]<=0.0f)
+  {
+    mog3_3=mog3_2;return;
+  }
+  else if (mog3_float_2[2]<=0.0f)
+  {
+    mog3_3=mog3_1;return;
+  }
+  vcl_vector<vnl_vector_fixed<float,3> > merged;
+
+  // Merge all the compoentns.
+  for (unsigned i=0;i<3;i++)
+  {
+    float w1c=w1*mog3_float_1[i*3+2];
+    if (w1c<=0.0f || mog3_float_1[i*3+1] <=0.0f) continue;
+    for (unsigned j=0;j<3;j++)
     {
-        mog3_3=mog3_2;return;
+      vnl_vector_fixed<float,3> new_component(0.0f);
+      float w2c=w2*mog3_float_2[j*3+2];
+      if (w2c<=0.0f || mog3_float_2[j*3+1] <=0.0f ) continue;
+      if (merge_gauss(mog3_float_1[i*3+0],mog3_float_1[i*3+1],w1c,mog3_float_2[j*3+0],mog3_float_2[j*3+1],w2c,new_component))
+        merged.push_back(new_component);
     }
-    else if(mog3_float_2[2]<=0.0f)
+  }
+  // reduce the components to nine by merging the components with smallest weight/variance ratios.
+  while (merged.size()>3)
+  {
+    vcl_sort(merged.begin(),merged.end(),sort_components);
+    int compindex=merged.size()-1;
+    vnl_vector_fixed<float,3> new_component(0.0f);
+    if (merge_gauss(merged[compindex][0],merged[compindex][1],merged[compindex][2],
+                    merged[compindex-1][0],merged[compindex-1][1],merged[compindex-1][2],
+                    new_component))
     {
-        mog3_3=mog3_1;return;
+      merged.erase(merged.begin()+compindex);
+      merged.erase(merged.begin()+compindex-1);
+      merged.push_back(new_component);
     }
-    vcl_vector<vnl_vector_fixed<float,3> > merged;
+  }
 
-    //: Merge all the compoentns.
-   for(unsigned i=0;i<3;i++)
-   {
-       float w1c=w1*mog3_float_1[i*3+2];
-       if(w1c<=0.0f || mog3_float_1[i*3+1] <=0.0f) continue;
-       for(unsigned j=0;j<3;j++)
-       {
-           vnl_vector_fixed<float,3> new_component(0.0f);
-           float w2c=w2*mog3_float_2[j*3+2];
-           if(w2c<=0.0f || mog3_float_2[j*3+1] <=0.0f ) continue;
-           if(merge_gauss(mog3_float_1[i*3+0],mog3_float_1[i*3+1],w1c,mog3_float_2[j*3+0],mog3_float_2[j*3+1],w2c,new_component))
-               merged.push_back(new_component);
-       }
-   }
-   //: reduce the components to nine by merging the components with smallest weight/variance ratios.
-   while(merged.size()>3)
-    {
-        vcl_sort(merged.begin(),merged.end(),sort_components);
-        int compindex=merged.size()-1;
-        vnl_vector_fixed<float,3> new_component(0.0f);
-        if(merge_gauss(merged[compindex][0],merged[compindex][1],merged[compindex][2],
-                       merged[compindex-1][0],merged[compindex-1][1],merged[compindex-1][2],
-                       new_component))
-        {
-            merged.erase(merged.begin()+compindex);
-            merged.erase(merged.begin()+compindex-1);
-            merged.push_back(new_component);
-        }
-    }
-
-   //: renormalize the weights so that they sum to 1.
-   float sum=0.0f;
-   for(unsigned i=0;i<3 && i<merged.size();i++)
-       sum+=merged[i][2];
-   int count=-1;
-   for(unsigned i=0;i<3 && i<merged.size();i++)
-   {
-       mog3_3[++count]=(unsigned char)vcl_floor(merged[i][0]*255.0f);
-       mog3_3[++count]=(unsigned char)vcl_floor(merged[i][1]*255.0f);
-       if(i<2)
-           mog3_3[++count]=(unsigned char)vcl_floor(merged[i][2]/sum*255.0f);
-   }
-
-
+  // renormalize the weights so that they sum to 1.
+  float sum=0.0f;
+  for (unsigned i=0;i<3 && i<merged.size();i++)
+    sum+=merged[i][2];
+  int count=-1;
+  for (unsigned i=0;i<3 && i<merged.size();i++)
+  {
+    mog3_3[++count]=(unsigned char)vcl_floor(merged[i][0]*255.0f);
+    mog3_3[++count]=(unsigned char)vcl_floor(merged[i][1]*255.0f);
+    if (i<2)
+      mog3_3[++count]=(unsigned char)vcl_floor(merged[i][2]/sum*255.0f);
+  }
 }
