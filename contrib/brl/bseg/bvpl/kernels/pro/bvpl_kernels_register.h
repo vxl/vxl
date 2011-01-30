@@ -8,4 +8,4 @@ class bvpl_kernels_register
   static void register_process();
 };
 
-#endif // bvpl_register_h_
+#endif // bvpl_kernels_register_h_
