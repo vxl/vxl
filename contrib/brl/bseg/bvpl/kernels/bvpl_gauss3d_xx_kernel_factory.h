@@ -1,20 +1,18 @@
-// This is brl/bseg/bvpl/bvpl_gauss3d_xx_kernel_factory.h
+// This is brl/bseg/bvpl/kernels/bvpl_gauss3d_xx_kernel_factory.h
 #ifndef bvpl_gauss3d_xx_kernel_factory_h
 #define bvpl_gauss3d_xx_kernel_factory_h
-
-#include "bvpl_kernel_factory.h"
 //:
 // \file
-// \brief: A factory of the kernel of type "xx derivative of 3d gaussian"
-//
+// \brief A factory of the kernel of type "xx derivative of 3d gaussian"
 // \author Isabel Restrepo mir@lems.brown.edu
-//
-// \date  8/6/09
+// \date  August 6, 2009
 //
 // \verbatim
 //  Modifications
 //   <none yet>
 // \endverbatim
+
+#include "bvpl_kernel_factory.h"
 
 //: A class to generate kernels of the xx second derivative of gaussian. i.e. the first entry of the Hessian
 // This kernel can be constructed from 2 sigma values or 3 sigma values. In the first case the kernel

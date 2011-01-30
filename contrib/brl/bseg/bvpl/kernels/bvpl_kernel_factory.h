@@ -1,4 +1,4 @@
-// This is brl/bseg/bvpl/bvpl_kernel_factory.h
+// This is brl/bseg/bvpl/kernels/bvpl_kernel_factory.h
 #ifndef bvpl_kernel_base_h
 #define bvpl_kernel_base_h
 //:

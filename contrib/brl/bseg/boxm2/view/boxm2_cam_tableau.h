@@ -1,4 +1,4 @@
-// This is brl/bseg/boxm/ocl/view/boxm2_cam_tableau.h
+// This is brl/bseg/boxm2/view/boxm2_cam_tableau.h
 #ifndef boxm2_cam_tableau_h_
 #define boxm2_cam_tableau_h_
 //:
@@ -6,6 +6,7 @@
 // \brief A tableau with a single camera that changes viewpoints based on mouse and keyboard manipulations.
 // \author Andrew Miller
 // \date July 14, 2010
+
 #include <vgui/vgui_tableau.h>
 #include <vgui/vgui_drag_mixin.h>
 #include <vpgl/vpgl_perspective_camera.h>

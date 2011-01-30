@@ -1,10 +1,10 @@
-// This is brl/bseg/bvpl/bvpl_edge2d_kernel_factory.h
+// This is brl/bseg/bvpl/kernels/bvpl_edge2d_kernel_factory.h
 #ifndef bvpl_edge2d_kernel_h_
 #define bvpl_edge2d_kernel_h_
 //:
 // \file
-// \brief  A class for creating edge kernels. The edge lies on a single plane
-//         This class specializes bvpl_kernel_factory. Please refer to such class for usage details
+// \brief  A class for creating edge kernels. The edge lies on a single plane.
+// This class specializes bvpl_kernel_factory. Please refer to such class for usage details.
 // \author Isabel Restrepo mir@lems.brown.edu
 // \date  May 29, 2009
 //

@@ -1,4 +1,4 @@
-// This is brl/bseg/boxm/ocl/view/boxm_ocl_include_glew.h
+// This is brl/bseg/boxm2/view/boxm2_include_glew.h
 #ifndef boxm2_include_glew_h
 #define boxm2_include_glew_h
 //:

@@ -1,12 +1,10 @@
-// This is brl/bseg/bvpl/io/bvpl_io_kernel.h
+// This is brl/bseg/bvpl/kernels/io/bvpl_io_kernel.h
 #ifndef bvpl_kernel_io_h
 #define bvpl_kernel_io_h
 //:
 // \file
 // \brief Binary io for kernel and kernel_vector
-//
 // \author Isabel Restrepo mir@lems.brown.edu
-//
 // \date  June 23, 2009
 //
 // \verbatim

@@ -1,10 +1,10 @@
-// This is brl/bseg/bvpl/bvpl_create_directions.h
+// This is brl/bseg/bvpl/kernels/bvpl_create_directions.h
 #ifndef  bvpl_create_directions_h_
 #define  bvpl_create_directions_h_
 //:
 // \file
 // \brief File to store different functor to sample 3D directions on a sphere.
-//        The sphere is modeled by two angles azimuthal(\theta) and elevation(\phi from pole)
+// The sphere is modeled by two angles azimuthal($\theta$) and elevation($\phi$ from pole)
 //
 // \author Vishal Jain (vj@lems.brown.edu)
 // \date June 29, 2009
@@ -32,7 +32,7 @@ class bvpl_create_directions_base
 
  //:Print to file
  void save_directions_map(vcl_string outfile);
-  
+
  protected:
   vcl_vector<vnl_float_3> axes_;
   vcl_vector<float> angles_;
@@ -41,10 +41,9 @@ class bvpl_create_directions_base
 //: Creates directions aligned the positive x,y,z axis
 class bvpl_create_directions_xyz : public bvpl_create_directions_base
 {
-public:
+ public:
   bvpl_create_directions_xyz();
 };
-
 
 
 //:
@@ -57,7 +56,6 @@ class bvpl_create_directions_a: public bvpl_create_directions_base
  public:
   //: Default constructor
   bvpl_create_directions_a();
-
 };
 
 //: This class samples
@@ -69,8 +67,8 @@ class bvpl_create_directions_b: public bvpl_create_directions_base
  public:
   //: Default constructor
   bvpl_create_directions_b();
-
 };
+
 //: This class samples
 // phi = 0, theta= 0;
 // phi = pi/4 theta =[0, 2*pi)
@@ -82,23 +80,21 @@ class bvpl_create_directions_c: public bvpl_create_directions_base
  public:
   //: Default constructor
   bvpl_create_directions_c();
-
 };
+
 /**********************Corner directions************************/
 class bvpl_main_corner_dirs: public bvpl_create_directions_base
 {
-public:
+ public:
   //: Default constructor
   bvpl_main_corner_dirs();
-  
 };
- 
+
 class bvpl_main_plane_corner_dirs: public bvpl_create_directions_base
 {
-public:
+ public:
   //: Default constructor
   bvpl_main_plane_corner_dirs();
-  
 };
 
 //: This class samples
@@ -108,10 +104,9 @@ public:
 // rotation around the axis with resolution pi/4
 class bvpl_all_corner_dirs: public bvpl_create_directions_base
 {
-public:
+ public:
   //: Default constructor
   bvpl_all_corner_dirs();
-  
 };
 
 //: This class samples
@@ -120,10 +115,9 @@ public:
 // rotation around the axis with resolution pi/2
 class bvpl_pi_over_2_corner_dirs: public bvpl_create_directions_base
 {
-public:
+ public:
   //: Default constructor
   bvpl_pi_over_2_corner_dirs();
-  
 };
 
 

@@ -1,4 +1,4 @@
-// This is brl/bseg/bvpl/bvpl_negative_gauss_conv_functor.h
+// This is brl/bseg/bvpl/functors/bvpl_negative_gauss_conv_functor.h
 #ifndef bvpl_negative_gauss_conv_functor_h
 #define bvpl_negative_gauss_conv_functor_h
 //:
@@ -21,23 +21,23 @@
 // as a linear combination of input Gaussians weighted by the kernel value.
 class bvpl_negative_gauss_conv_functor
 {
-public:
+ public:
   //: Default constructor
   bvpl_negative_gauss_conv_functor();
-  
+
   //: Destructor
   ~bvpl_negative_gauss_conv_functor() {}
-  
+
   //: Multiply the dispatch and the input gaussians together
   void apply(bsta_gauss_f1& val, bvpl_kernel_dispatch& d);
-  
+
   //: Returns the final operation of this functor
   bsta_gauss_f1 result();
-  
-private:
+
+ private:
   float mean_;
   float var_;
-  
+
   //: Initializes class variables
   void init();
 };

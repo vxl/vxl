@@ -1,14 +1,13 @@
-// This is brl/bseg/bvpl/pro/processes/bvpl_create_gauss3d_xx_kernel_process.cxx
+// This is brl/bseg/bvpl/kernels/pro/processes/bvpl_create_gauss3d_xx_kernel_process.cxx
 #include <bprb/bprb_func_process.h>
 //:
 // \file
-// \brief A class for creating a volume second dderivative of gaussian
-//
+// \brief A class for creating a volume second derivative of gaussian
 // \author Isabel Restrepo
 // \date August 13, 2009
 // \verbatim
 //  Modifications
-//  <none yet>
+//   <none yet>
 // \endverbatim
 
 #include <bprb/bprb_parameters.h>

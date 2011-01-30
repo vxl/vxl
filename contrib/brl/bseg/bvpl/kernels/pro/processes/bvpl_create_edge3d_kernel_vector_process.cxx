@@ -1,22 +1,18 @@
-// This is brl/bseg/bvpl/pro/processes/bvpl_create_edge3d_kernel_vector_process.cxx
-
+// This is brl/bseg/bvpl/kernels/pro/processes/bvpl_create_edge3d_kernel_vector_process.cxx
+#include <bprb/bprb_func_process.h>
 //:
 // \file
 // \brief A class for creating a vector of 3D edge kernels
-//
 // \author Vishal Jain (copied the code from brl/bseg/bvpl/pro/processes/bvpl_create_edge2d_kernel_vector_process.cxx)
 // created by Isabel Restrepo
-// \date 6/29/09
+// \date June 29, 2009
 // \verbatim
 //  Modifications
-//  06/29/09 replaced 2d by 3d
+//   06/29/09 replaced 2d by 3d
 // \endverbatim
 
-#include <bprb/bprb_func_process.h>
 #include <bprb/bprb_parameters.h>
-
 #include <brdb/brdb_value.h>
-
 #include <bvpl/kernels/bvpl_edge3d_kernel_factory.h>
 #include <bvpl/kernels/bvpl_create_directions.h>
 

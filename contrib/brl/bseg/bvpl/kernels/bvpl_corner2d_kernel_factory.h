@@ -1,11 +1,10 @@
-// This is brl/bseg/bvpl/bvpl_corner2d_kernel_factory.h
+// This is brl/bseg/bvpl/kernels/bvpl_corner2d_kernel_factory.h
 #ifndef bvpl_corner2d_kernel_factory_h
 #define bvpl_corner2d_kernel_factory_h
 //:
 // \file
 // \brief A factory that creates volumetric 2-d edges
 // \author Isabel Restrepo mir@lems.brown.edu
-//
 // \date  August 25, 2009
 //
 // \verbatim

@@ -1,20 +1,17 @@
-// This is brl/bseg/bvpl/pro/processes/bvpl_create_corner2d_kernel_vector_process.cxx
-
+// This is brl/bseg/bvpl/kernels/pro/processes/bvpl_create_corner2d_kernel_vector_process.cxx
+#include <bprb/bprb_func_process.h>
 //:
 // \file
 // \brief A class for creating a vector of 2d-corner kernels
-//
 // \author Isabel Restrepo
-// \date 8/26/09
+// \date August 26, 2009
 // \verbatim
 //  Modifications
+//   <none yet>
 // \endverbatim
 
-#include <bprb/bprb_func_process.h>
 #include <bprb/bprb_parameters.h>
-
 #include <brdb/brdb_value.h>
-
 #include <bvpl/kernels/bvpl_corner2d_kernel_factory.h>
 #include <bvpl/kernels/bvpl_create_directions.h>
 

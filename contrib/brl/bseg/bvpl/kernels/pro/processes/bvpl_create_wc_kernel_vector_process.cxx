@@ -1,14 +1,13 @@
-// This is brl/bseg/bvpl/pro/processes/util/bvpl_create_wc_kernel_vector_process.cxx
+// This is brl/bseg/bvpl/kernels/pro/processes/bvpl_create_wc_kernel_vector_process.cxx
 #include <bvpl/kernels/bvpl_weighted_cube_kernel_factory.h>
 //:
 // \file
 // \brief A class for creating a vector of 3D cube kernels
-//
 // \author Isabel Restrepo
 // \date September 29, 2009
 // \verbatim
 //  Modifications
-//  <none yet>
+//   <none yet>
 // \endverbatim
 
 #include <bprb/bprb_func_process.h>

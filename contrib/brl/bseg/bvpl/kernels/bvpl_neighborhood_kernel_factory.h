@@ -1,9 +1,8 @@
-// This is brl/bseg/bvpl/bvpl_neighborhood_kernel_factory.h
+// This is brl/bseg/bvpl/kernels/bvpl_neighborhood_kernel_factory.h
 #ifndef bvpl_neighborhood_kernel_factory_h
 #define bvpl_neighborhood_kernel_factory_h
 //:
 // \file
-// \brief
 // \author Isabel Restrepo mir@lems.brown.edu
 // \date  October 6, 2009
 //

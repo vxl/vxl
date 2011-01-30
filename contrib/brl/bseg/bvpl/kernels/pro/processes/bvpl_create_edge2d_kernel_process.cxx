@@ -1,14 +1,13 @@
-// This is brl/bseg/bvpl/pro/processes/bvpl_create_edge2d_kernel_process.cxx
+// This is brl/bseg/bvpl/kernels/pro/processes/bvpl_create_edge2d_kernel_process.cxx
 #include <bprb/bprb_func_process.h>
 //:
 // \file
 // \brief A class for creating a planar edge kernel
-//
 // \author Isabel Restrepo
 // \date June 23, 2009
 // \verbatim
 //  Modifications
-//  <none yet>
+//   <none yet>
 // \endverbatim
 
 #include <bprb/bprb_parameters.h>

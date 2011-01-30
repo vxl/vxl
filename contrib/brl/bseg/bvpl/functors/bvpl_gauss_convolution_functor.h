@@ -1,4 +1,4 @@
-// This is brl/bseg/bvpl/bvpl_gauss_convolution_functor.h
+// This is brl/bseg/bvpl/functors/bvpl_gauss_convolution_functor.h
 #ifndef bvpl_gauss_convolution_functor_h
 #define bvpl_gauss_convolution_functor_h
 //:
