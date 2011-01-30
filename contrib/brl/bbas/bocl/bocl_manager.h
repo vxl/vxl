@@ -3,8 +3,7 @@
 #define bocl_manager_h_
 //:
 // \file
-// \brief
-//  A parent class for singleton opencl managers
+// \brief A parent class for singleton opencl managers
 // \author J. Mundy
 // \date November 13, 2009
 //
@@ -31,7 +30,6 @@
 template <class T>
 class bocl_manager
 {
-  
  public:
   cl_context context_;                        //!< CL context
 
@@ -43,13 +41,13 @@ class bocl_manager
 
   //: Queries found platforms, creates a list of CPU and GPU devices
   bool initialize_cl();
-  
+
   //: initialize context from a device
-  bool initialize_context(cl_device_id* device); 
-  
+  bool initialize_context(cl_device_id* device);
+
   //: Initialise the opencl environment
   void clear_cl();
-  
+
   //: available devices
   cl_device_id* devices() {return devices_;}
   cl_device_id* cpus() {return cpus_;}
@@ -60,15 +58,15 @@ class bocl_manager
   vcl_size_t group_size() const {return curr_info_.max_work_group_size_;}
   cl_ulong total_local_memory() const {return  curr_info_.total_local_memory_;}
   cl_bool image_support(){return curr_info_.image_support_;}
-  vcl_size_t image2d_max_width(){ return curr_info_.image2d_max_width_; }         
-  vcl_size_t image2d_max_height(){ return curr_info_.image2d_max_height_; }        
+  vcl_size_t image2d_max_width(){ return curr_info_.image2d_max_width_; }
+  vcl_size_t image2d_max_height(){ return curr_info_.image2d_max_height_; }
   vcl_string platform_name(){ return curr_info_.platform_name_; }
   cl_device_type device_type() { return curr_info_.device_type_; }
- 
+
  protected:
 
   //: Constructor
-  bocl_manager() : 
+  bocl_manager() :
     context_(0),
     devices_(0),
     gpus_(0),
@@ -77,12 +75,13 @@ class bocl_manager
   //Singleton instance of the manager
   static T* instance_;
 
-  //: OpenCL Current Device Info, number of devices and list of devices 
-  // associated with the current context
-  bocl_device_info curr_info_; 
+  //: OpenCL Current Device Info
+  bocl_device_info curr_info_;
+  //: OpenCL number of devices
   vcl_size_t number_devices_;
+  //: OpenCL list of devices associated with the current context
   cl_device_id* devices_;
-  
+
   //store gpus and cpus
   cl_device_id* gpus_;              //!< CL GPU device list
   unsigned    numGPUs_;
@@ -98,18 +97,17 @@ class bocl_manager
   bool create_buffer(void** buffer,vcl_string type,int elm_size,int length);
     //: program source
   vcl_string prog_;
-  
- public: 
-   //: Allocate host memory for use with clCreateBuffer (aligned if necessary)
+
+ public:
+  //: Allocate host memory for use with clCreateBuffer (aligned if necessary)
   void* allocate_host_mem(vcl_size_t size);
   bool load_kernel_source(vcl_string const& path);
   bool append_process_kernels(vcl_string const& path);
   bool write_program(vcl_string const& path);
   vcl_string program_source() const {return prog_;}
-  
-  //build kernel program: 
-  int build_kernel_program(cl_program & program, vcl_string options);
 
+  //build kernel program:
+  int build_kernel_program(cl_program & program, vcl_string options);
 };
 
 #endif // bocl_manager_h_

@@ -7,15 +7,14 @@
 
 #define MAX_BYTES 1024*1024*1024*4 //4 gigs of memory is max...
 
-//: A cache that keeps the most recently used blocks and data, while kicking out
-//  the least recently used blocks and data to make more room.  
+//: A cache that keeps the most recently used blocks and data, while kicking out the least recently used blocks and data to make more room.
 //  Currently just stores blocks in a map, not caring about space
-//  TODO: implement with timestamped maps. 
+//  TODO: implement with timestamped maps.
 class boxm2_lru_cache : public boxm2_cache
 {
   public:
     //: construct with directory and scene dimensions (blocknum)
-    boxm2_lru_cache(boxm2_scene* scene); 
+    boxm2_lru_cache(boxm2_scene* scene);
     ~boxm2_lru_cache();
 
     //: returns block pointer to block specified by ID
@@ -23,13 +22,13 @@ class boxm2_lru_cache : public boxm2_cache
 
     //: returns data_base pointer (THIS IS NECESSARY BECAUSE TEMPLATED FUNCTIONS CANNOT BE VIRTUAL)
     virtual boxm2_data_base* get_data_base(boxm2_block_id, vcl_string type);
-    
+
     //: returns data pointer to data block specified by ID
     template <boxm2_data_type T>
     boxm2_data<T>* get_data(boxm2_block_id id);
 
     //: to string method returns a string describing the cache's current state
-    vcl_string to_string(); 
+    vcl_string to_string();
 
   private:
 
@@ -41,7 +40,7 @@ class boxm2_lru_cache : public boxm2_cache
 
     //: directory where blocks are found
     vcl_string scene_dir_;
-    
+
     //---------Helper Methods --------------------------------------------------
     //: helper method returns a reference to correct data map (ensures one exists)
     vcl_map<boxm2_block_id, boxm2_data_base*>& cached_data_map(vcl_string prefix);
