@@ -272,3 +272,13 @@ void bprb_batch_process_manager::print_db()
 {
   DATABASE->print();
 }
+
+void bprb_batch_process_manager::b_write_db(const vcl_string& path)
+{
+	brdb_database_manager::save_database(path);
+}
+
+void bprb_batch_process_manager::b_read_db(const vcl_string& path)
+{
+	brdb_database_manager::load_database(path);
+}

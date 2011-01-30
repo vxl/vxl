@@ -69,6 +69,11 @@ class bprb_batch_process_manager : public bprb_process_manager<bprb_batch_proces
   //: Debug purposes
   void print_db();
 
+  //: Interface to database binary read/write
+  void b_write_db(vcl_string const& path);
+
+  void b_read_db(vcl_string const& path);
+
   friend class bprb_process_manager<bprb_batch_process_manager>;
 
  protected:
