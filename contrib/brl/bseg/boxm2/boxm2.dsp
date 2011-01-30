@@ -143,7 +143,7 @@ SOURCE=.\Templates/boxm2_data+BOXM2_NUM_OBS-.cxx
 SOURCE=.\Templates/boxm2_data+BOXM2_AUX-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vbl_array_2d+vil_image_view+byte--.cxx
+SOURCE=.\Templates/vbl_array_3d+vil_image_view+byte-~-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/vnl_vector_fixed+unsignedchar.8-.cxx
