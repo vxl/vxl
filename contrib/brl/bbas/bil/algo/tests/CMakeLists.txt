@@ -14,7 +14,7 @@ ADD_EXECUTABLE( bil_algo_test_all
 
 CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/c.20.tif ${CMAKE_CURRENT_BINARY_DIR}/c.20.tif)
 
-TARGET_LINK_LIBRARIES( bil_algo_test_all bil_algo sdet vil_algo vil vnl testlib )
+TARGET_LINK_LIBRARIES( bil_algo_test_all bil_algo vil_algo vil vnl testlib )
 ADD_TEST( bil_algo_test_bil_wshed2d       ${EXECUTABLE_OUTPUT_PATH}/bil_algo_test_all test_bil_wshed2d )
 ADD_TEST( bil_algo_test_bil_scale_image   ${EXECUTABLE_OUTPUT_PATH}/bil_algo_test_all test_bil_scale_image )
 ADD_TEST( bil_algo_test_bil_edt           ${EXECUTABLE_OUTPUT_PATH}/bil_algo_test_all test_bil_edt )
@@ -25,6 +25,6 @@ ADD_TEST( bil_algo_test_detect_ridges     ${EXECUTABLE_OUTPUT_PATH}/bil_algo_tes
 ADD_TEST( bil_algo_test_detect_blur_scale     ${EXECUTABLE_OUTPUT_PATH}/bil_algo_test_all test_bil_detect_blur_scale)
 
 ADD_EXECUTABLE( bil_algo_test_include test_include.cxx )
-TARGET_LINK_LIBRARIES( bil_algo_test_include bil_algo sdet )
+TARGET_LINK_LIBRARIES( bil_algo_test_include bil_algo )
 ADD_EXECUTABLE( bil_algo_test_template_include test_template_include.cxx )
-TARGET_LINK_LIBRARIES( bil_algo_test_template_include bil_algo sdet )
+TARGET_LINK_LIBRARIES( bil_algo_test_template_include bil_algo )
