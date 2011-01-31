@@ -276,15 +276,19 @@ void vsl_b_write(vsl_b_ostream& os, boxm2_block const& scene) {}
 void vsl_b_write(vsl_b_ostream& os, const boxm2_block* &p) {}
 void vsl_b_write(vsl_b_ostream& os, boxm2_block_sptr& sptr) {}
 #endif
+
 //: Binary write boxm2_block to stream.
-void vsl_b_write(vsl_b_ostream& os, boxm2_block_sptr const& sptr) {}
+// DUMMY IMPLEMENTATION: does nothing!
+void vsl_b_write(vsl_b_ostream&, boxm2_block_sptr const&) {}
 
 #if 0
 void vsl_b_read(vsl_b_istream& is, boxm2_block &scene) {}
 void vsl_b_read(vsl_b_istream& is, boxm2_block* p) {}
 #endif
 //: Binary load boxm2_block from stream.
-void vsl_b_read(vsl_b_istream& is, boxm2_block_sptr& sptr) {}
+// DUMMY IMPLEMENTATION: does nothing!
+void vsl_b_read(vsl_b_istream&, boxm2_block_sptr&) {}
 //: Binary load boxm2_block from stream.
-void vsl_b_read(vsl_b_istream& is, boxm2_block_sptr const& sptr) {}
+// DUMMY IMPLEMENTATION: does nothing!
+void vsl_b_read(vsl_b_istream&, boxm2_block_sptr const&) {}
 
