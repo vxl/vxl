@@ -1,10 +1,10 @@
-#include <boxm/ocl/view/boxm_ocl_update_tableau.h>
+#include "boxm_ocl_update_tableau.h"
 //:
 // \file
 
 #include <boxm/ocl/boxm_update_ocl_scene_manager.h>
-
 #include <boxm/ocl/boxm_ocl_utils.h>
+
 #include <vpgl/vpgl_calibration_matrix.h>
 #include <vgui/internals/trackball.h>
 #include <vgl/vgl_distance.h>

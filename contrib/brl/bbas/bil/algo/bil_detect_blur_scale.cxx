@@ -1,4 +1,5 @@
-#include <bil/algo/bil_detect_blur_scale.h>
+#include "bil_detect_blur_scale.h"
+//
 #include <sdet/sdet_detector.h>
 #include <vsol/vsol_digital_curve_2d_sptr.h>
 #include <vsol/vsol_digital_curve_2d.h>

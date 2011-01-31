@@ -1,10 +1,10 @@
-#include <boxm/ocl/view/boxm_ocl_change_detection_tableau.h>
+#include "boxm_ocl_change_detection_tableau.h"
 //:
 // \file
 
 #include <boxm/ocl/boxm_ocl_change_detection_manager.h>
-
 #include <boxm/ocl/boxm_ocl_utils.h>
+
 #include <vpgl/vpgl_calibration_matrix.h>
 #include <vgui/internals/trackball.h>
 #include <vgl/vgl_distance.h>
@@ -32,10 +32,10 @@ boxm_ocl_change_detection_tableau::~boxm_ocl_change_detection_tableau()
 
 //: initialize tableau properties
 bool boxm_ocl_change_detection_tableau::init(boxm_ocl_scene * scene,
-                                   vcl_vector<vcl_string> cam_files,
-                                   vcl_vector<vcl_string> img_files,
-                                   vcl_vector<float> &hist,
-                                   vcl_string save_img_dir)
+                                             vcl_vector<vcl_string> cam_files,
+                                             vcl_vector<vcl_string> img_files,
+                                             vcl_vector<float> &hist,
+                                             vcl_string save_img_dir)
 {
   //set image dimensions, camera and scene
   scene_ = scene;
@@ -46,31 +46,30 @@ bool boxm_ocl_change_detection_tableau::init(boxm_ocl_scene * scene,
 
   save_img_dir_=save_img_dir;
   hist_=hist;
-  if(cam_files_.size()>0 && img_files_.size()>0)
+  if (cam_files_.size()>0 && img_files_.size()>0)
   {
-      //build the camera from file
-      vcl_ifstream ifs(cam_files_[0].c_str());
-      cam_ = new vpgl_perspective_camera<double>;
-      if (!ifs.is_open()) {
-          vcl_cerr << "Failed to open file " << cam_files_[0] << vcl_endl;
-          return -1;
-      }
-      ifs >> *cam_;
+    //build the camera from file
+    vcl_ifstream ifs(cam_files_[0].c_str());
+    cam_ = new vpgl_perspective_camera<double>;
+    if (!ifs.is_open()) {
+      vcl_cerr << "Failed to open file " << cam_files_[0] << vcl_endl;
+      return -1;
+    }
+    ifs >> *cam_;
 
-      //load image from file
-      vil_image_view_base_sptr loaded_image = vil_load(img_files_[0].c_str());
-      ni_ = loaded_image->ni();
-      nj_ = loaded_image->nj();
-      obs_img_.set_size(ni_,nj_);
-      if (vil_image_view<vxl_byte> *img_byte = dynamic_cast<vil_image_view<vxl_byte>*>(loaded_image.ptr()))
-      {
-          vil_convert_stretch_range_limited(*img_byte ,obs_img_, vxl_byte(0), vxl_byte(255), 0.0f, 1.0f);
-      }
-      else {
-          vcl_cerr << "Failed to load image " << img_files_[curr_frame_] << vcl_endl;
-          return -1;
-      }
-
+    //load image from file
+    vil_image_view_base_sptr loaded_image = vil_load(img_files_[0].c_str());
+    ni_ = loaded_image->ni();
+    nj_ = loaded_image->nj();
+    obs_img_.set_size(ni_,nj_);
+    if (vil_image_view<vxl_byte> *img_byte = dynamic_cast<vil_image_view<vxl_byte>*>(loaded_image.ptr()))
+    {
+      vil_convert_stretch_range_limited(*img_byte ,obs_img_, vxl_byte(0), vxl_byte(255), 0.0f, 1.0f);
+    }
+    else {
+      vcl_cerr << "Failed to load image " << img_files_[curr_frame_] << vcl_endl;
+      return -1;
+    }
   }
   //initialize OCL stuff
   do_init_ocl_ = true;
@@ -94,13 +93,13 @@ bool boxm_ocl_change_detection_tableau::init_ocl()
   boxm_ocl_change_detection_manager* cd_mgr
       = boxm_ocl_change_detection_manager::instance();
   cl_device_id device = cd_mgr->devices()[0];
-  cl_platform_id platform_id[1]; 
+  cl_platform_id platform_id[1];
   int status = clGetDeviceInfo(device,CL_DEVICE_PLATFORM,sizeof(platform_id),(void*) platform_id,NULL);
   if (!check_val(status, CL_SUCCESS, "boxm2_render Tableau::create_cl_gl_context CL_DEVICE_PLATFORM failed."))
     return 0;
 
   //get context properties
-  //create OpenCL context 
+  //create OpenCL context
   cl_context compute_context;
 #ifdef WIN32
   cl_context_properties props[] =
@@ -113,15 +112,15 @@ bool boxm_ocl_change_detection_tableau::init_ocl()
   //create OpenCL context with display properties determined above
   compute_context = clCreateContext(props, 1, &device, NULL, NULL, &status);
 #elif defined(__APPLE__) || defined(MACOSX)
-  CGLContextObj kCGLContext = CGLGetCurrentContext();              
+  CGLContextObj kCGLContext = CGLGetCurrentContext();
   CGLShareGroupObj kCGLShareGroup = CGLGetShareGroup(kCGLContext);
-  
-  cl_context_properties props[] = { 
-    CL_CONTEXT_PROPERTY_USE_CGL_SHAREGROUP_APPLE, (cl_context_properties)kCGLShareGroup, 
+
+  cl_context_properties props[] = {
+    CL_CONTEXT_PROPERTY_USE_CGL_SHAREGROUP_APPLE, (cl_context_properties)kCGLShareGroup,
     CL_CONTEXT_PLATFORM, (cl_context_properties) platform_id[0],
-    0 
+    0
   };
-  //create a CL context from a CGL share group - no GPU devices must be passed, 
+  //create a CL context from a CGL share group - no GPU devices must be passed,
   //all CL compliant devices in the CGL share group will be used to create the context. more info in cl_gl_ext.h
   compute_context = clCreateContext(props, 0, 0, NULL, NULL, &status);
 #else
@@ -134,12 +133,12 @@ bool boxm_ocl_change_detection_tableau::init_ocl()
   };
   compute_context = clCreateContext(props, 1, &device, NULL, NULL, &status);
 #endif
-  
+
   if (status!=CL_SUCCESS) {
     vcl_cout<<"Error: Failed to create a compute CL/GL context!" << error_to_string(status) <<vcl_endl;
     return 0;
   }
-  
+
   //set OpenCL context with display properties determined above
   cd_mgr->context_ = compute_context;
 
@@ -149,7 +148,7 @@ bool boxm_ocl_change_detection_tableau::init_ocl()
   cd_mgr->set_bundle_ni(bundle_dim);
   cd_mgr->set_bundle_nj(bundle_dim);
   cd_mgr->init_ray_trace(scene_,cam_,obs_img_, expected);
-  bool good=true;  
+  bool good=true;
   good = good && cd_mgr->set_scene_data()
       && cd_mgr->set_all_blocks()
       && cd_mgr->set_scene_data_buffers()
@@ -176,9 +175,9 @@ bool boxm_ocl_change_detection_tableau::init_ocl()
 
   //create OpenCL buffer from GL PBO, and set kernel and arguments
   cd_mgr->image_gl_buf_ = clCreateFromGLBuffer(cd_mgr->context(),
-                                                 CL_MEM_WRITE_ONLY,
-                                                 pbuffer_,
-                                                 &status);
+                                               CL_MEM_WRITE_ONLY,
+                                               pbuffer_,
+                                               &status);
 
   cd_mgr->set_kernel();
   cd_mgr->set_args();
@@ -203,7 +202,7 @@ bool boxm_ocl_change_detection_tableau::change_detection()
     //load up the update manager instance
     boxm_ocl_change_detection_manager* cd_mgr = boxm_ocl_change_detection_manager::instance();
     cl_int status = clEnqueueAcquireGLObjects(cd_mgr->command_queue_, 1,
-        &cd_mgr->image_gl_buf_ , 0, 0, 0);
+                                              &cd_mgr->image_gl_buf_ , 0, 0, 0);
     if (!check_val(status,CL_SUCCESS,"clSetKernelArg failed. (input_image)"+error_to_string(status)))
         return false;
 
@@ -228,7 +227,6 @@ bool boxm_ocl_change_detection_tableau::change_detection()
         return -1;
     }
 
-
     //run the opencl update business
     cd_mgr->set_input_image(floatimg);
     cd_mgr->write_image_buffer();
@@ -236,7 +234,7 @@ bool boxm_ocl_change_detection_tableau::change_detection()
     cd_mgr->write_persp_camera_buffers();
     cd_mgr->run();
 
-    if(vul_file::is_directory(save_img_dir_.c_str()))
+    if (vul_file::is_directory(save_img_dir_.c_str()))
     {
         cd_mgr->read_output_image();
         vcl_string filename=vul_file::strip_directory(img_files_[curr_frame_].c_str());
@@ -252,6 +250,7 @@ bool boxm_ocl_change_detection_tableau::change_detection()
 
     return true;
 }
+
 //: sets up viewport and GL Modes
 void boxm_ocl_change_detection_tableau::setup_gl_matrices()
 {
@@ -291,10 +290,9 @@ bool boxm_ocl_change_detection_tableau::handle(vgui_event const &e)
     return true;
   }
   else if (e.type == vgui_KEY_PRESS && e.key == vgui_key('c')) {
-    vcl_cout<<"Change Detection "<<vcl_endl;
+    vcl_cout<<"Change Detection"<<vcl_endl;
     this->post_redraw();
   }
-
 
   //otherwise trigger cam handling events
   return vgui_tableau::handle(e);

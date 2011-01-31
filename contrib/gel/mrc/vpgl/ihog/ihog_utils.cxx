@@ -1,7 +1,9 @@
+#include "ihog_utils.h"
+//
 #include <vgl/vgl_box_2d.h>
 #include <vgl/vgl_polygon.h>
 #include <vgl/vgl_polygon_scan_iterator.h>
-#include <ihog/ihog_utils.h>
+
 void ihog_utils::image_bounds(unsigned source_ni, unsigned source_nj,
                               ihog_transform_2d const& t, unsigned& dest_ni,
                               unsigned& dest_nj, ihog_transform_2d& mod_trans)
@@ -55,7 +57,7 @@ ihog_image<float> ihog_utils::destination_mask(unsigned source_ni,
   poly.push_back(ul);poly.push_back(ur);poly.push_back(lr);poly.push_back(ll);
   vgl_polygon_scan_iterator<double> psc(poly, false);
   //set active mask pixels
-  for (psc.reset(); psc.next();){
+  for (psc.reset(); psc.next();) {
     int v = psc.scany();
     for (int u = psc.startx(); u<=psc.endx(); ++u)
       mask(u,v) = 1.0f;

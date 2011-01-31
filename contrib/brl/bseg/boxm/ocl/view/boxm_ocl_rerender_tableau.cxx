@@ -1,9 +1,9 @@
-#include <boxm/ocl/view/boxm_ocl_rerender_tableau.h>
+#include "boxm_ocl_rerender_tableau.h"
 //:
 // \file
 #include <boxm/ocl/boxm_render_ocl_scene_manager.h>
-
 #include <boxm/ocl/boxm_ocl_utils.h>
+
 #include <vpgl/vpgl_perspective_camera.h>
 #include <vpgl/vpgl_calibration_matrix.h>
 #include <vgui/internals/trackball.h>
@@ -22,10 +22,10 @@ boxm_ocl_rerender_tableau::boxm_ocl_rerender_tableau()
 
 
 //: initialize tableau properties
-bool boxm_ocl_rerender_tableau::init(boxm_ocl_scene * scene, unsigned ni, unsigned nj, 
-                                        vpgl_perspective_camera<double> * cam,
-                                        vil_image_view<float> & ext_image,
-                                        vpgl_perspective_camera<double> * ext_cam)
+bool boxm_ocl_rerender_tableau::init(boxm_ocl_scene * scene, unsigned ni, unsigned nj,
+                                     vpgl_perspective_camera<double> * cam,
+                                     vil_image_view<float> & ext_image,
+                                     vpgl_perspective_camera<double> * ext_cam)
 {
   //set image dimensions, camera and scene
   ni_=ni;
@@ -77,15 +77,15 @@ bool boxm_ocl_rerender_tableau::init_ocl()
   //create OpenCL context with display properties determined above
   compute_context = clCreateContext(props, 1, &ray_mgr->devices()[0], NULL, NULL, &status);
 #elif defined(__APPLE__) || defined(MACOSX)
-  CGLContextObj kCGLContext = CGLGetCurrentContext();              
+  CGLContextObj kCGLContext = CGLGetCurrentContext();
   CGLShareGroupObj kCGLShareGroup = CGLGetShareGroup(kCGLContext);
-  
-  cl_context_properties props[] = { 
-    CL_CONTEXT_PROPERTY_USE_CGL_SHAREGROUP_APPLE, (cl_context_properties)kCGLShareGroup, 
+
+  cl_context_properties props[] = {
+    CL_CONTEXT_PROPERTY_USE_CGL_SHAREGROUP_APPLE, (cl_context_properties)kCGLShareGroup,
     CL_CONTEXT_PLATFORM, (cl_context_properties) platform_id[0],
-    0 
+    0
   };
-  //create a CL context from a CGL share group - no GPU devices must be passed, 
+  //create a CL context from a CGL share group - no GPU devices must be passed,
   //all CL compliant devices in the CGL share group will be used to create the context. more info in cl_gl_ext.h
   compute_context = clCreateContext(props, 0, 0, NULL, NULL, &status);
 #else
@@ -98,22 +98,21 @@ bool boxm_ocl_rerender_tableau::init_ocl()
   };
   compute_context = clCreateContext(props, 1, &ray_mgr->devices()[0], NULL, NULL, &status);
 #endif
-  
+
   if (status!=CL_SUCCESS) {
     vcl_cout<<"Error: Failed to create a compute CL/GL context!" << error_to_string(status) <<vcl_endl;
     return 0;
   }
-  
-  //set OpenCL context with display properties determined above
-  ray_mgr->context_ = compute_context;
-  
 
-//  initialize ray trace using the input camera
+  // set OpenCL context with display properties determined above
+  ray_mgr->context_ = compute_context;
+
+  // initialize ray trace using the input camera
   int bundle_dim = 8;
   ray_mgr->set_bundle_ni(bundle_dim);
   ray_mgr->set_bundle_nj(bundle_dim);
   ray_mgr->init_ray_trace(scene_, &cam_, expected,true);
-  bool good=true;  
+  bool good=true;
   good = good && ray_mgr->set_scene_data()
               && ray_mgr->set_all_blocks()
               && ray_mgr->set_scene_data_buffers()
@@ -158,7 +157,7 @@ bool boxm_ocl_rerender_tableau::handle(vgui_event const &e)
   //draw handler - called on post_draw()
   if (e.type == vgui_DRAW)
   {
-      if (do_init_ocl_rerender){
+      if (do_init_ocl_rerender) {
         this->init_ocl();
         do_init_ocl_rerender = false;
       }

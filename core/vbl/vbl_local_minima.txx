@@ -1,6 +1,7 @@
 #ifndef VBL_LOCAL_MINIMA_TXX_
 #define VBL_LOCAL_MINIMA_TXX_
-#include <vbl/vbl_local_minima.h>
+#include "vbl_local_minima.h"
+//
 #include <vcl_iostream.h>
 #include <vcl_limits.h>
 #include <vcl_cassert.h>

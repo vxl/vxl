@@ -1,4 +1,4 @@
-#include <icam/icam_sample.h>
+#include "icam_sample.h"
 //:
 // \file
 #include <vil/vil_bilin_interp.h>
@@ -25,16 +25,15 @@ void icam_sample::sample( unsigned int ni_dest,  unsigned int nj_dest,
   unsigned src_istep = source.istep(), src_jstep = source.jstep();
   const float* src_ptr = &source(0,0);
 
-  for(unsigned j = 1; j<dest_lj; j++)
-    for(unsigned i = 1; i<dest_li; i++){
-
-      if(!dt.transform(i,j,to_u, to_v))
-
+  for (unsigned j = 1; j<dest_lj; j++)
+    for (unsigned i = 1; i<dest_li; i++)
+    {
+      if (!dt.transform(i,j,to_u, to_v))
         continue;
 
       //check to see if the source is being accessed out of bounds
       //then non bounds-checking bilinear interpolation can be called
-      if(to_u<0||to_v<0||to_u>=src_li||to_v>=src_lj){
+      if (to_u<0||to_v<0||to_u>=src_li||to_v>=src_lj) {
         mask[index++] = 0.0f;
         continue;
       }
@@ -42,8 +41,8 @@ void icam_sample::sample( unsigned int ni_dest,  unsigned int nj_dest,
       //assume grey scale, plane = 0
       //note that there is no bounds checking in this version
       double v = vil_bilin_interp(to_u, to_v, src_ptr,
-                                ni_source, nj_source,
-                                src_istep, src_jstep);
+                                  ni_source, nj_source,
+                                  src_istep, src_jstep);
 
       mask[index] = 1.0f;
       samples[index++] = v;
@@ -115,9 +114,9 @@ void icam_sample::sample(vil_image_view<float> const& map_dest,
   mask.fill(0.0);
   unsigned index = 0;
   n_samples = 0;
-  for(unsigned j = 1; j<nj_dest-1; ++j)
-    for(unsigned i = 1; i<ni_dest-1; ++i){
-      if(map_mask(i,j) == 0.0f){
+  for (unsigned j = 1; j<nj_dest-1; ++j)
+    for (unsigned i = 1; i<ni_dest-1; ++i) {
+      if (map_mask(i,j) == 0.0f) {
         mask[index++]=0.0f;
         continue;
       }

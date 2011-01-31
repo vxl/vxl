@@ -1,9 +1,8 @@
+#include "mbl_parse_keyword_list.h"
 //:
 // \file
 // \brief Parse list of strings
 // \author Tim Cootes
-
-#include <mbl/mbl_parse_keyword_list.h>
 
 #include <mbl/mbl_exception.h>
 #include <mbl/mbl_parse_block.h>
@@ -22,7 +21,7 @@
 // }
 // \endverbatim
 void mbl_parse_keyword_list(vcl_istream& is, const vcl_string& keyword,
-                vcl_vector<vcl_string>& items)
+                            vcl_vector<vcl_string>& items)
 {
   vcl_string s = mbl_parse_block(is);
   vcl_istringstream ss(s);
@@ -32,7 +31,7 @@ void mbl_parse_keyword_list(vcl_istream& is, const vcl_string& keyword,
   {
     throw mbl_exception_parse_error("Expected '{' in mbl_parse_keyword_list");
   }
-  
+
   items.resize(0);
   vcl_string label;
   while (!ss.eof())
@@ -63,7 +62,7 @@ void mbl_parse_keyword_list(vcl_istream& is, const vcl_string& keyword,
 // }
 // \endverbatim
 void mbl_parse_keyword_list2(vcl_istream& is, const vcl_string& keyword,
-                vcl_vector<vcl_string>& items)
+                             vcl_vector<vcl_string>& items)
 {
   vcl_string s = mbl_parse_block(is);
   vcl_istringstream ss(s);
@@ -73,7 +72,7 @@ void mbl_parse_keyword_list2(vcl_istream& is, const vcl_string& keyword,
   {
     throw mbl_exception_parse_error("Expected '{' in mbl_parse_keyword_list");
   }
-  
+
   items.resize(0);
   vcl_string label,string1,string2;
   while (!ss.eof())

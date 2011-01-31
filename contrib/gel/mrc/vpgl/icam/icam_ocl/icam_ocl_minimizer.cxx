@@ -1,5 +1,7 @@
-#include <icam_ocl/icam_ocl_minimizer.h>
+#include "icam_ocl_minimizer.h"
+//
 #include <vul/vul_timer.h>
+
 bool icam_ocl_minimizer::
 exhaustive_rotation_search(vgl_vector_3d<double> const& trans,
                            unsigned level,
@@ -12,7 +14,7 @@ exhaustive_rotation_search(vgl_vector_3d<double> const& trans,
 {
   if (setup)
     init_opencl_rotation(level);
-  if (finish){
+  if (finish) {
     finish_opencl();
     return true;
   }
@@ -40,7 +42,7 @@ initialized_rot_search(vgl_vector_3d<double> const& trans,
 {
   if (setup)
     init_opencl_rotation(initial_rot, initial_level, search_level);
-  if (finish){
+  if (finish) {
     finish_opencl();
     return true;
   }
@@ -112,11 +114,11 @@ init_opencl_rotation(vgl_rotation_3d<double> const& initial_rot,
 bool icam_ocl_minimizer::run_rotation_kernel()
 {
   vul_timer t;
-  for(unsigned i = 0; i<n_repeats_; ++i)
+  for (unsigned i = 0; i<n_repeats_; ++i)
     if (search_mgr_->run_rot_parallel_kernel()!=SDK_SUCCESS)
       return false;
   if (verbose_)
-    vcl_cout << "OpenCL search time per kernel execution " << t.real()/(n_repeats_*1000.0) << " seconds ( with "<< n_repeats_ <<" repeats ) \n" << vcl_flush;
+    vcl_cout << "OpenCL search time per kernel execution " << t.real()/(n_repeats_*1000.0) << " seconds ( with "<< n_repeats_ <<" repeats )\n" << vcl_flush;
   return true;
 }
 

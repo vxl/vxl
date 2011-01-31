@@ -1,6 +1,6 @@
 #ifndef vbl_attributes_txx_
 #define vbl_attributes_txx_
-#include <vbl/vbl_attributes.h>
+#include "vbl_attributes.h"
 //:
 // \file
 
@@ -16,7 +16,7 @@ T minval(vbl_array_1d<T> const& in)
   assert(in.size()>0);
   T mval = *(in.begin());
   for (typename vbl_array_1d<T>::const_iterator it = in.begin();
-       it != in.end(); ++it){
+       it != in.end(); ++it) {
     T v = *it;
     if (v<mval) mval = v;
   }
@@ -30,7 +30,7 @@ T maxval(vbl_array_1d<T> const& in)
   assert(in.size()>0);
   T mval = *(in.begin());
   for (typename vbl_array_1d<T>::const_iterator it = in.begin();
-       it != in.end(); ++it){
+       it != in.end(); ++it) {
     T v = *it;
     if (v>mval) mval = v;
   }
@@ -44,7 +44,7 @@ void bounds(vbl_array_1d<T> const& in, T& min, T& max)
   assert(in.size()>0);
   max = min = *(in.begin());
   for (typename vbl_array_1d<T>::const_iterator it = in.begin();
-       it != in.end(); ++it){
+       it != in.end(); ++it) {
     T v = *it;
     if (v>max) max = v;
     if (v<min) min = v;
@@ -73,7 +73,7 @@ T minval(vbl_array_2d<T> const& in)
   assert(in.size()>0);
   T mval = *(in.begin());
   for (typename vbl_array_2d<T>::const_iterator it = in.begin();
-       it != in.end(); ++it){
+       it != in.end(); ++it) {
     T v = *it;
     if (v<mval) mval = v;
   }
@@ -87,7 +87,7 @@ T maxval(vbl_array_2d<T> const& in)
   assert(in.size()>0);
   T mval = *(in.begin());
   for (typename vbl_array_2d<T>::const_iterator it = in.begin();
-       it != in.end(); ++it){
+       it != in.end(); ++it) {
     T v = *it;
     if (v>mval) mval = v;
   }
@@ -101,7 +101,7 @@ void bounds(vbl_array_2d<T> const& in, T& min, T& max)
   assert(in.size()>0);
   max = min = *(in.begin());
   for (typename vbl_array_2d<T>::const_iterator it = in.begin();
-       it != in.end(); ++it){
+       it != in.end(); ++it) {
     T v = *it;
     if (v>max) max = v;
     if (v<min) min = v;
@@ -130,7 +130,7 @@ T minval(vbl_array_3d<T> const& in)
   assert(in.size()>0);
   T mval = *(in.begin());
   for (typename vbl_array_3d<T>::const_iterator it = in.begin();
-       it != in.end(); ++it){
+       it != in.end(); ++it) {
     T v = *it;
     if (v<mval) mval = v;
   }
@@ -144,7 +144,7 @@ T maxval(vbl_array_3d<T> const& in)
   assert(in.size()>0);
   T mval = *(in.begin());
   for (typename vbl_array_3d<T>::const_iterator it = in.begin();
-       it != in.end(); ++it){
+       it != in.end(); ++it) {
     T v = *it;
     if (v>mval) mval = v;
   }
@@ -158,7 +158,7 @@ void bounds(vbl_array_3d<T> const& in, T& min, T& max)
   assert(in.size()>0);
   max = min = *(in.begin());
   for (typename vbl_array_3d<T>::const_iterator it = in.begin();
-       it != in.end(); ++it){
+       it != in.end(); ++it) {
     T v = *it;
     if (v>max) max = v;
     if (v<min) min = v;

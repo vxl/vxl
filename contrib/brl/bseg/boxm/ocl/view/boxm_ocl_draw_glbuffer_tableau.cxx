@@ -1,8 +1,8 @@
-#include "boxm_ocl_include_glew.h"
-#include <boxm/ocl/view/boxm_ocl_draw_glbuffer_tableau.h>
+#include "boxm_ocl_draw_glbuffer_tableau.h"
 //:
 // \file
 
+#include <boxm/ocl/view/boxm_ocl_include_glew.h>
 #include <boxm/ocl/boxm_render_ocl_scene_manager.h>
 #include <boxm/ocl/boxm_update_ocl_scene_manager.h>
 
@@ -17,10 +17,8 @@
 
 //: Constructor
 boxm_ocl_draw_glbuffer_tableau::boxm_ocl_draw_glbuffer_tableau()
+: pbuffer_(0), ni_(640), nj_(480)
 {
-    pbuffer_=0;
-    ni_=640;
-    nj_=480;
 }
 
 
@@ -61,7 +59,7 @@ bool boxm_ocl_draw_glbuffer_tableau::init_ocl()
       return 0;
   }
 
-  //create OpenCL context 
+  //create OpenCL context
   cl_context compute_context;
 #ifdef WIN32
   cl_context_properties props[] =
@@ -74,15 +72,15 @@ bool boxm_ocl_draw_glbuffer_tableau::init_ocl()
   //create OpenCL context with display properties determined above
   compute_context = clCreateContext(props, 1, &ray_mgr->devices()[0], NULL, NULL, &status);
 #elif defined(__APPLE__) || defined(MACOSX)
-  CGLContextObj kCGLContext = CGLGetCurrentContext();              
+  CGLContextObj kCGLContext = CGLGetCurrentContext();
   CGLShareGroupObj kCGLShareGroup = CGLGetShareGroup(kCGLContext);
-  
-  cl_context_properties props[] = { 
-    CL_CONTEXT_PROPERTY_USE_CGL_SHAREGROUP_APPLE, (cl_context_properties)kCGLShareGroup, 
+
+  cl_context_properties props[] = {
+    CL_CONTEXT_PROPERTY_USE_CGL_SHAREGROUP_APPLE, (cl_context_properties)kCGLShareGroup,
     CL_CONTEXT_PLATFORM, (cl_context_properties) platform_id[0],
-    0 
+    0
   };
-  //create a CL context from a CGL share group - no GPU devices must be passed, 
+  //create a CL context from a CGL share group - no GPU devices must be passed,
   //all CL compliant devices in the CGL share group will be used to create the context. more info in cl_gl_ext.h
   compute_context = clCreateContext(props, 0, 0, NULL, NULL, &status);
 #else
@@ -95,7 +93,7 @@ bool boxm_ocl_draw_glbuffer_tableau::init_ocl()
   };
   compute_context = clCreateContext(props, 1, &ray_mgr->devices()[0], NULL, NULL, &status);
 #endif
-  
+
   if (status!=CL_SUCCESS) {
     vcl_cout<<"Error: Failed to create a compute CL/GL context!" << error_to_string(status) <<vcl_endl;
     return 0;
@@ -151,7 +149,7 @@ bool boxm_ocl_draw_glbuffer_tableau::handle(vgui_event const &e)
   //draw handler - called on post_draw()
   if (e.type == vgui_DRAW)
   {
-      if (do_init_ocl){
+      if (do_init_ocl) {
         this->init_ocl();
         do_init_ocl = false;
       }

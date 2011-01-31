@@ -1,5 +1,4 @@
-#include <bbgm/bbgm_feature_image.h>
-
+#include "bbgm_feature_image.h"
 
 void vsl_add_to_binary_loader(bbgm_feature_image_base const& b)
 {

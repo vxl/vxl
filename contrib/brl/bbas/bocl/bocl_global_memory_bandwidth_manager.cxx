@@ -1,4 +1,5 @@
-#include <bocl/bocl_global_memory_bandwidth_manager.h>
+#include "bocl_global_memory_bandwidth_manager.h"
+//
 #include <vcl_cstdio.h>
 
 bocl_global_memory_bandwidth_manager::~bocl_global_memory_bandwidth_manager()

@@ -1,5 +1,5 @@
+#include "boxm_ocl_utils.h"
 // allocate child cells on the array
-#include <boxm/ocl/boxm_ocl_utils.h>
 #include <vcl_cstdlib.h> // for std::malloc()
 #if !defined (_WIN32) && !defined(__APPLE__)
 #include <malloc.h> // for memalign()
@@ -49,7 +49,7 @@ void boxm_ocl_utils::print_multi_block_tree(int* blocks, int* block_ptrs, int nu
   vcl_cout<<vcl_endl;
 
   //print out each tree
-  for (int i=0; i<numBlocks; i++){
+  for (int i=0; i<numBlocks; i++) {
     int blkRoot = block_ptrs[2*i];
     int blkSize = block_ptrs[2*i+1];
     vcl_cout<<"---- block "<<i<<" at "<<blkRoot<<"-----"<<vcl_endl;
@@ -116,7 +116,7 @@ bool boxm_ocl_utils ::verify_format(vcl_vector<vnl_vector_fixed<int, 4> > cell_a
     }
     // if child pointer isn't to the right place..
     if ((unsigned int)child_ptr != curr_index+1) {
-      vcl_cout<<"Children of "<<currNode<<" not in the right place"<<vcl_endl
+      vcl_cout<<"Children of "<<currNode<<" not in the right place\n"
               <<"should be at "<<curr_index+1<<", actually at "<<child_ptr<<vcl_endl;
       return false;
     }
@@ -213,7 +213,7 @@ int boxm_ocl_utils::getBufferIndex(bool rand,
     //if there isn't enough space in this buffer, find another one
     if (freeSpace < tree_size || blocksInBuffer[buffIndex] >= blocks_per_buffer) {
 #ifdef DEBUG
-      vcl_cout<<"Not going with first buffer "<<vcl_endl;
+      vcl_cout<<"Not going with first buffer"<<vcl_endl;
 #endif
       int bCount = 0;
       bool buffFound = false;
@@ -314,19 +314,17 @@ int boxm_ocl_utils::getBufferIndex(bool rand,
 void boxm_ocl_utils::random_permutation(int* buffer, int size)
 {
   vnl_random random(9667566);
-  
+
   //shuffle the buffer
-  for(int i=0; i<size; i++) 
+  for (int i=0; i<size; i++)
   {
     //swap current value with random one after it
-    int curr = buffer[i]; 
-    int rInd = random.lrand32(i, size-1); 
+    int curr = buffer[i];
+    int rInd = random.lrand32(i, size-1);
     buffer[i] = buffer[rInd];
-    buffer[rInd] = curr; 
+    buffer[rInd] = curr;
   }
-
 }
-
 
 
 void boxm_ocl_utils::compare_bit_scenes(boxm_ocl_bit_scene* one, boxm_ocl_bit_scene* two)
@@ -340,7 +338,7 @@ void boxm_ocl_utils::compare_bit_scenes(boxm_ocl_bit_scene* one, boxm_ocl_bit_sc
   if (numX != two->blocks_.get_row1_count() ||
       numY != two->blocks_.get_row2_count() ||
       numZ != two->blocks_.get_row3_count()) {
-    vcl_cout<<"Scene Sizes are different "<<vcl_endl;
+    vcl_cout<<"Scene Sizes are different"<<vcl_endl;
     return;
   }
 
@@ -384,11 +382,11 @@ void boxm_ocl_utils::compare_bit_scenes(boxm_ocl_bit_scene* one, boxm_ocl_bit_sc
     }
   }
 
-  vcl_cout<<"Blocks compared:   "<<cmpCount<<vcl_endl
-          <<"differences found: "<<diffCount<<vcl_endl
-          <<"converted bigger : "<<numConvBigger<<vcl_endl
-          <<"blocks unchanged:  "<<initCount<<vcl_endl
-          <<"Squared ERROR:     "<<error<<vcl_endl
+  vcl_cout<<"Blocks compared:   "<<cmpCount<<'\n'
+          <<"differences found: "<<diffCount<<'\n'
+          <<"converted bigger : "<<numConvBigger<<'\n'
+          <<"blocks unchanged:  "<<initCount<<'\n'
+          <<"Squared ERROR:     "<<error<<'\n'
           <<"mean sse     :     "<<error/cmpCount<<vcl_endl;
 
 #if 0
@@ -430,7 +428,7 @@ void boxm_ocl_utils::compare_bit_scenes(boxm_ocl_bit_scene* one, boxm_ocl_bit_sc
 
   //theoretical voxel count
   int numVoxels = blocks_.get_row1_count()*blocks_.get_row2_count()*blocks_.get_row3_count() * 8*8*8;
-  vcl_cout<<"Theoretical Number of Voxels: "<<numVoxels<<vcl_endl
+  vcl_cout<<"Theoretical Number of Voxels: "<<numVoxels<<'\n'
           <<"==============================================\n"<<vcl_endl;
 
   //probe zero alpha values

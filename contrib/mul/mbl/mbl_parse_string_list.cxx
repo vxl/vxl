@@ -1,9 +1,8 @@
+#include "mbl_parse_string_list.h"
 //:
 // \file
 // \brief Parse list of strings
 // \author Tim Cootes
-
-#include <mbl/mbl_parse_string_list.h>
 
 #include <mbl/mbl_exception.h>
 #include <mbl/mbl_parse_block.h>
@@ -18,8 +17,8 @@
 // \endverbatim
 // Throws a mbl_exception_parse_error if it fails.
 void mbl_parse_string_list(vcl_istream& is,
-                          vcl_vector<vcl_string>& items,
-                          const vcl_string& comment_str)
+                           vcl_vector<vcl_string>& items,
+                           const vcl_string& comment_str)
 {
   vcl_string s = mbl_parse_block(is);
   vcl_istringstream ss(s);
@@ -31,17 +30,17 @@ void mbl_parse_string_list(vcl_istream& is,
   }
 
   unsigned comment_len = comment_str.size();
-  
+
   items.resize(0);
   vcl_string label;
   while (!ss.eof())
   {
     ss >> label;
-    if (comment_len>0 && 
-        label.length()>=comment_len && 
+    if (comment_len>0 &&
+        label.length()>=comment_len &&
         label.substr(0,comment_len)==comment_str)
     {
-      // label begins with comment_str 
+      // label begins with comment_str
       // - treat as comment and discard rest of line
       vcl_string dummy;
       vcl_getline(ss,dummy);
@@ -66,8 +65,8 @@ void mbl_parse_string_list(vcl_istream& is,
 // \endverbatim
 // Throws a mbl_exception_parse_error if it fails.
 void mbl_parse_string_list(const vcl_string& data,
-                          vcl_vector<vcl_string>& items,
-                          const vcl_string& comment_str)
+                           vcl_vector<vcl_string>& items,
+                           const vcl_string& comment_str)
 {
   vcl_istringstream data_stream(data);
   mbl_parse_string_list(data_stream,items,comment_str);

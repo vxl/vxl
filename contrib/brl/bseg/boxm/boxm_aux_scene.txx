@@ -1,7 +1,7 @@
 #ifndef boxm_aux_scene_txx_
 #define boxm_aux_scene_txx_
 
-#include <boxm/boxm_aux_scene.h>
+#include "boxm_aux_scene.h"
 #include <boxm/boxm_aux_traits.h>
 
 #include <vpl/vpl.h>
@@ -71,7 +71,7 @@ boct_tree_cell_reader<T_loc, T_AUX>* boxm_aux_scene<T_loc,T,T_AUX>::get_block_in
 template <class T_loc, class T, class T_AUX>
 void boxm_aux_scene<T_loc,T,T_AUX>::clean_scene()
 {
-  vcl_cout<<"Clean AUX scene "<<vcl_endl;
+  vcl_cout<<"Clean AUX scene"<<vcl_endl;
   boxm_block_iterator<boct_tree<T_loc, T_AUX> > iter(aux_scene_);
   iter.begin();
   if (!aux_scene_->load_all_blocks())

@@ -1,14 +1,14 @@
 #ifndef boxm2_data_txx
 #define boxm2_data_txx
-#include <boxm2/boxm2_data.h>
+#include "boxm2_data.h"
 
 template <boxm2_data_type T>
-boxm2_data<T>::boxm2_data(char * data_buffer, 
-                          vcl_size_t length, 
+boxm2_data<T>::boxm2_data(char * data_buffer,
+                          vcl_size_t length,
                           boxm2_block_id id)
-                          :boxm2_data_base(data_buffer,length,id)
+: boxm2_data_base(data_buffer,length,id)
 {
-  unsigned array_length = buffer_length_/sizeof(datatype); 
+  unsigned array_length = buffer_length_/sizeof(datatype);
   data_array_ = boxm2_array_1d<datatype>(array_length, reinterpret_cast<datatype*>(data_buffer));
 }
 

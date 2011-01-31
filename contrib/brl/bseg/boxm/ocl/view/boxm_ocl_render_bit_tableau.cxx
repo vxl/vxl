@@ -1,9 +1,9 @@
-#include <boxm/ocl/view/boxm_ocl_render_bit_tableau.h>
+#include "boxm_ocl_render_bit_tableau.h"
 //:
 // \file
 #include <boxm/ocl/boxm_render_bit_scene_manager.h>
-
 #include <boxm/ocl/boxm_ocl_utils.h>
+
 #include <vpgl/vpgl_perspective_camera.h>
 #include <vpgl/vpgl_calibration_matrix.h>
 #include <vgui/internals/trackball.h>
@@ -50,7 +50,7 @@ bool boxm_ocl_render_bit_tableau::init_ocl()
   boxm_render_bit_scene_manager* ray_mgr
       = boxm_render_bit_scene_manager::instance();
   cl_device_id device = ray_mgr->devices()[0];
-  cl_platform_id platform_id[1]; 
+  cl_platform_id platform_id[1];
   int status = clGetDeviceInfo(device,CL_DEVICE_PLATFORM,sizeof(platform_id),(void*) platform_id,NULL);
   if (!check_val(status, CL_SUCCESS, "boxm2_render Tableau::create_cl_gl_context CL_DEVICE_PLATFORM failed."))
     return 0;
@@ -180,7 +180,7 @@ bool boxm_ocl_render_bit_tableau::handle(vgui_event const &e)
   //draw handler - called on post_draw()
   if (e.type == vgui_DRAW)
   {
-    if (do_init_ocl){
+    if (do_init_ocl) {
       this->init_ocl();
       do_init_ocl = false;
     }

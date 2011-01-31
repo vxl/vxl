@@ -1,4 +1,4 @@
-#include <boxm/ocl/view/boxm_cam_tableau.h>
+#include "boxm_cam_tableau.h"
 //:
 // \file
 #include <vgui/vgui_gl.h>
@@ -9,8 +9,8 @@
 #include <vgl/vgl_distance.h>
 
 
-boxm_cam_tableau::boxm_cam_tableau() :
-      c_mouse_rotate(vgui_LEFT),
+boxm_cam_tableau::boxm_cam_tableau()
+    : c_mouse_rotate(vgui_LEFT),
       c_mouse_translate(vgui_LEFT, vgui_CTRL),
       c_mouse_zoom(vgui_MIDDLE)
 {
@@ -100,7 +100,9 @@ bool boxm_cam_tableau::mouse_down(int x, int y, vgui_button /*button*/, vgui_mod
 //: called on mouse movement while mousedown is true
 bool boxm_cam_tableau::mouse_drag(int x, int y, vgui_button button, vgui_modifier modifier)
 {
-  //vcl_cout<<"Cam @ "<<cam_.get_camera_center()<<vcl_endl;
+#ifdef DEBUG
+  vcl_cout<<"Cam @ "<<cam_.get_camera_center()<<vcl_endl;
+#endif
   // SPINNING
   if (c_mouse_rotate(button, modifier)) {
 
@@ -131,7 +133,9 @@ bool boxm_cam_tableau::mouse_drag(int x, int y, vgui_button button, vgui_modifie
     cam_.set_camera_center(newCenter);
     cam_.look_at(stare_point_);
 
-    //vcl_cout<<cam_;
+#ifdef DEBUG
+    vcl_cout<<cam_;
+#endif
     this->post_redraw();
     return true;
   }
@@ -157,7 +161,9 @@ bool boxm_cam_tableau::mouse_drag(int x, int y, vgui_button button, vgui_modifie
 
   // TRANSLATION
   if (c_mouse_translate(button, modifier)) {
-    //vcl_cout<<"Translating: begin ("<<beginx<<','<<beginy<<") -> ("<<x<<','<<y<<')'<<vcl_endl;
+#ifdef DEBUG
+    vcl_cout<<"Translating: begin ("<<beginx<<','<<beginy<<") -> ("<<x<<','<<y<<')'<<vcl_endl;
+#endif
 
     //get viewport height, and mouse dx, dy
     GLint vp[4];
@@ -167,7 +173,6 @@ bool boxm_cam_tableau::mouse_drag(int x, int y, vgui_button button, vgui_modifie
     double dx = (beginx - x) / width;
     double dy = (beginy - y) / height;
     double scale = .5 * vcl_sqrt(vcl_pow(dx,2.0) + vcl_pow(dy,2.0));
-
 
     //get cam space points
     vgl_point_3d<double> p0(beginx/width, beginy/height, 0.0);
@@ -181,7 +186,9 @@ bool boxm_cam_tableau::mouse_drag(int x, int y, vgui_button button, vgui_modifie
     wp1 += cam_center - vgl_point_3d<double>(0,0,0);
     vgl_vector_3d<double> worldVec = scale * normalized(wp0-wp1);
 
-    //vcl_cout<<"  new cam center: "<<cam_center + worldVec<<vcl_endl;
+#ifdef DEBUG
+    vcl_cout<<"  new cam center: "<<cam_center + worldVec<<vcl_endl;
+#endif
     stare_point_ += worldVec;
     cam_.set_camera_center(cam_center + worldVec);
 
