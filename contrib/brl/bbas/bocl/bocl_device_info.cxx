@@ -6,14 +6,15 @@
 #include <vcl_fstream.h>
 #include <vcl_sstream.h>
 #include <vcl_cstdio.h>
+#include <vcl_cstdlib.h> // for std::malloc() and std::free()
 
 bocl_device_info::bocl_device_info(cl_device_id* device)
 {
   device_ = device;
   int status;
-  
+
   //get platform associated with device
-  cl_platform_id platform; 
+  cl_platform_id platform;
   status = clGetDeviceInfo(*device_,
                            CL_DEVICE_PLATFORM,
                            sizeof(platform),
@@ -25,8 +26,8 @@ bocl_device_info::bocl_device_info(cl_device_id* device)
   status = clGetPlatformInfo(platform,CL_PLATFORM_NAME,sizeof(platform_name),platform_name,NULL);
   if (!check_val(status, CL_SUCCESS, "clGetDeviceInfo CL_PLATFORM_NAME failed."))
     return;
-  platform_name_ = vcl_string(platform_name); 
-  
+  platform_name_ = vcl_string(platform_name);
+
   // Get device specific information
   char vendor[512];
   status = clGetDeviceInfo(*device_,
@@ -36,7 +37,7 @@ bocl_device_info::bocl_device_info(cl_device_id* device)
                            NULL);
   if (!check_val(status, CL_SUCCESS, "clGetDeviceInfo CL_DEVICE_VENDOR failed."))
     return;
-  device_vendor_ = vcl_string(vendor); 
+  device_vendor_ = vcl_string(vendor);
 
   //get Device Type
   status = clGetDeviceInfo(*device_,
@@ -68,7 +69,7 @@ bocl_device_info::bocl_device_info(cl_device_id* device)
     return;
 
   //get max work item sizes
-  max_work_item_sizes_ = (vcl_size_t*)malloc(max_dimensions_ * sizeof(vcl_size_t));
+  max_work_item_sizes_ = (vcl_size_t*)vcl_malloc(max_dimensions_ * sizeof(vcl_size_t));
   status = clGetDeviceInfo(*device_,
                            CL_DEVICE_MAX_WORK_ITEM_SIZES,
                            sizeof(vcl_size_t) * max_dimensions_,
@@ -85,8 +86,8 @@ bocl_device_info::bocl_device_info(cl_device_id* device)
                            NULL);
   if (!check_val(status, CL_SUCCESS, "clGetDeviceInfo CL_DEVICE_LOCAL_MEM_SIZE failed."))
     return;
-    
-    
+
+
   //get device global memory size
   status = clGetDeviceInfo(*device_,
                            CL_DEVICE_GLOBAL_MEM_SIZE,
@@ -142,7 +143,7 @@ bocl_device_info::bocl_device_info(cl_device_id* device)
                            NULL);
   if (!check_val(status,CL_SUCCESS,"clGetDeviceInfo CL_DEVICE_IMAGE_SUPPORT failed."))
     return;
-    
+
   //get device image2d max width
   status = clGetDeviceInfo(*device_,
                            CL_DEVICE_IMAGE2D_MAX_WIDTH,
@@ -151,7 +152,7 @@ bocl_device_info::bocl_device_info(cl_device_id* device)
                            NULL);
   if (!check_val(status, CL_SUCCESS, "clGetDeviceInfo CL_DEVICE_IMAGE2D_MAX_WIDTH failed."))
     return;
-    
+
   //get device image2d max height
   status = clGetDeviceInfo(*device_,
                            CL_DEVICE_IMAGE2D_MAX_HEIGHT,
@@ -170,8 +171,8 @@ bocl_device_info::bocl_device_info(cl_device_id* device)
                            NULL);
   if (!check_val(status, CL_SUCCESS, "clGetDeviceInfo CL_DEVICE_EXTENSIONS failed."))
     return;
-  extensions_supported_ = vcl_string(extensions); 
-    
+
+  extensions_supported_ = vcl_string(extensions);
 }
 
 
@@ -180,9 +181,9 @@ bocl_device_info::~bocl_device_info()
 {
   if (max_work_item_sizes_)
   {
-    free(max_work_item_sizes_);
+    vcl_free(max_work_item_sizes_);
     max_work_item_sizes_ = NULL;
-  }  
+  }
 }
 
 vcl_ostream& operator <<(vcl_ostream &s, bocl_device_info& info)
@@ -205,6 +206,7 @@ vcl_ostream& operator <<(vcl_ostream &s, bocl_device_info& info)
      << " Max 2D image width  " << info.image2d_max_width_ << '\n'
      << " Max 2D image height  " << info.image2d_max_height_ << '\n'
   ;
+  return s;
 }
 
 
