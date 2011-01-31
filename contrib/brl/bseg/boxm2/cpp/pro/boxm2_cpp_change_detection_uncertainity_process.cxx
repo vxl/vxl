@@ -1,4 +1,4 @@
-#include <boxm2/cpp/pro/boxm2_cpp_change_detection_uncertainity_process.h>
+#include "boxm2_cpp_change_detection_uncertainity_process.h"
 
 //boxm2 data structures
 #include <boxm2/boxm2_scene.h>
@@ -49,32 +49,29 @@ bool boxm2_cpp_change_detection_uncertainity_process::execute(vcl_vector<brdb_va
 
   boxm2_change_detection_with_uncertainity_functor cd_wu_functor(input_image->ni(),input_image->nj());
 
-  vcl_vector<boxm2_block_id>::iterator id; 
-  for(id = vis_order.begin(); id != vis_order.end(); ++id) 
+  vcl_vector<boxm2_block_id>::iterator id;
+  for (id = vis_order.begin(); id != vis_order.end(); ++id)
   {
+    boxm2_block *     blk  = this->cache_->get_block(*id);
+    boxm2_data_base *  alph = this->cache_->get_data_base(*id,boxm2_data_traits<BOXM2_ALPHA>::prefix());
+    boxm2_data_base *  mog  = this->cache_->get_data_base(*id,boxm2_data_traits<BOXM2_MOG3_GREY>::prefix());
+    vcl_vector<boxm2_data_base*> datas;
+    datas.push_back(alph);
+    datas.push_back(mog);
 
-      boxm2_block *     blk  = this->cache_->get_block(*id);
-      boxm2_data_base *  alph = this->cache_->get_data_base(*id,boxm2_data_traits<BOXM2_ALPHA>::prefix());
-      boxm2_data_base *  mog  = this->cache_->get_data_base(*id,boxm2_data_traits<BOXM2_MOG3_GREY>::prefix());
-      vcl_vector<boxm2_data_base*> datas;
-      datas.push_back(alph);
-      datas.push_back(mog);
+    boxm2_scene_info_wrapper *scene_info_wrapper=new boxm2_scene_info_wrapper();
+    scene_info_wrapper->info=scene->get_blk_metadata(*id);
+    scene_info_wrapper->info->tree_buffer_length = blk->tree_buff_length();
+    scene_info_wrapper->info->data_buffer_length = 65536;
+    scene_info_wrapper->info->num_buffer = blk->num_buffers();
 
-      boxm2_scene_info_wrapper *scene_info_wrapper=new boxm2_scene_info_wrapper();
-      scene_info_wrapper->info=scene->get_blk_metadata(*id);
-      scene_info_wrapper->info->tree_buffer_length = blk->tree_buff_length();
-      scene_info_wrapper->info->data_buffer_length = 65536;
-      scene_info_wrapper->info->num_buffer = blk->num_buffers();
-
-      cd_wu_functor.set_data(datas,input_image,image_);
-      cast_ray_per_block<boxm2_change_detection_with_uncertainity_functor>(cd_wu_functor,scene_info_wrapper->info,blk,cam,image_->ni(),image_->nj());
-
+    cd_wu_functor.set_data(datas,input_image,image_);
+    cast_ray_per_block<boxm2_change_detection_with_uncertainity_functor>(cd_wu_functor,scene_info_wrapper->info,blk,cam,image_->ni(),image_->nj());
   }
-  
+
   cd_wu_functor.finish();
 
-  vcl_cout<<"Execution time: "<<" ms"<<vcl_endl;
-
+  output.clear();
   return true;
 }
 

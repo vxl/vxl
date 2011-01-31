@@ -1,4 +1,4 @@
-#include <boxm2/cpp/pro/boxm2_cpp_change_detection_process.h>
+#include "boxm2_cpp_change_detection_process.h"
 
 //boxm2 data structures
 #include <boxm2/boxm2_scene.h>
@@ -48,33 +48,30 @@ bool boxm2_cpp_change_detection_process::execute(vcl_vector<brdb_value_sptr>& in
   }
   boxm2_change_detection_functor cd_functor;
 
-  vcl_vector<boxm2_block_id>::iterator id; 
-  for(id = vis_order.begin(); id != vis_order.end(); ++id) 
+  vcl_vector<boxm2_block_id>::iterator id;
+  for (id = vis_order.begin(); id != vis_order.end(); ++id)
   {
+    boxm2_block *     blk  = this->cache_->get_block(*id);
+    boxm2_data_base *  alph = this->cache_->get_data_base(*id,boxm2_data_traits<BOXM2_ALPHA>::prefix());
+    boxm2_data_base *  mog  = this->cache_->get_data_base(*id,boxm2_data_traits<BOXM2_MOG3_GREY>::prefix());
+    vcl_vector<boxm2_data_base*> datas;
+    datas.push_back(alph);
+    datas.push_back(mog);
 
-      boxm2_block *     blk  = this->cache_->get_block(*id);
-      boxm2_data_base *  alph = this->cache_->get_data_base(*id,boxm2_data_traits<BOXM2_ALPHA>::prefix());
-      boxm2_data_base *  mog  = this->cache_->get_data_base(*id,boxm2_data_traits<BOXM2_MOG3_GREY>::prefix());
-      vcl_vector<boxm2_data_base*> datas;
-      datas.push_back(alph);
-      datas.push_back(mog);
+    boxm2_scene_info_wrapper *scene_info_wrapper=new boxm2_scene_info_wrapper();
+    scene_info_wrapper->info=scene->get_blk_metadata(*id);
+    scene_info_wrapper->info->tree_buffer_length = blk->tree_buff_length();
+    scene_info_wrapper->info->data_buffer_length = 65536;
+    scene_info_wrapper->info->num_buffer = blk->num_buffers();
 
-      boxm2_scene_info_wrapper *scene_info_wrapper=new boxm2_scene_info_wrapper();
-      scene_info_wrapper->info=scene->get_blk_metadata(*id);
-      scene_info_wrapper->info->tree_buffer_length = blk->tree_buff_length();
-      scene_info_wrapper->info->data_buffer_length = 65536;
-      scene_info_wrapper->info->num_buffer = blk->num_buffers();
-
-      cd_functor.init_data(datas,input_image,image_,vis_img_);
-      cast_ray_per_block<boxm2_change_detection_functor>(cd_functor,scene_info_wrapper->info,blk,cam,image_->ni(),image_->nj());
-
+    cd_functor.init_data(datas,input_image,image_,vis_img_);
+    cast_ray_per_block<boxm2_change_detection_functor>(cd_functor,scene_info_wrapper->info,blk,cam,image_->ni(),image_->nj());
   }
-  
+
   normalize_foreground_probability_density f;
   vil_transform<float,normalize_foreground_probability_density>(*image_,f);
 
-  vcl_cout<<"Execution time: "<<" ms"<<vcl_endl;
-
+  output.clear();
   return true;
 }
 

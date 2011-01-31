@@ -1,4 +1,4 @@
-#include <boxm2/cpp/pro/boxm2_cpp_refine_process.h>
+#include "boxm2_cpp_refine_process.h"
 
 //boxm2 data structures
 #include <boxm2/boxm2_scene.h>
@@ -18,16 +18,15 @@
 
 bool boxm2_cpp_refine_process::execute(vcl_vector<brdb_value_sptr>& input, vcl_vector<brdb_value_sptr>& output)
 {
-
   //1. get the arguments blocks/camera/img etc from the input vector
   int i = 0;
   brdb_value_t<boxm2_scene_sptr>* brdb_scene      = static_cast<brdb_value_t<boxm2_scene_sptr>* >( input[i++].ptr() );
   boxm2_scene_sptr  scene                         = brdb_scene->value();
 
   //For each ID in the visibility order, grab that block
-  vcl_map<boxm2_block_id, boxm2_block_metadata> blocks = scene->blocks(); 
-  vcl_map<boxm2_block_id, boxm2_block_metadata>::iterator blk; 
-  for(blk = blocks.begin(); blk != blocks.end(); ++blk) 
+  vcl_map<boxm2_block_id, boxm2_block_metadata> blocks = scene->blocks();
+  vcl_map<boxm2_block_id, boxm2_block_metadata>::iterator blk;
+  for (blk = blocks.begin(); blk != blocks.end(); ++blk)
   {
     boxm2_block_id id = blk->first;
     vcl_cout<<"Refining Block: "<<id<<vcl_endl;
@@ -36,16 +35,17 @@ bool boxm2_cpp_refine_process::execute(vcl_vector<brdb_value_sptr>& input, vcl_v
     boxm2_data_base * alph    = this->cache_->get_data_base(id,boxm2_data_traits<BOXM2_ALPHA>::prefix());
     boxm2_data_base * mog     = this->cache_->get_data_base(id,boxm2_data_traits<BOXM2_MOG3_GREY>::prefix());
     boxm2_data_base * num_obs = this->cache_->get_data_base(id,boxm2_data_traits<BOXM2_MOG3_GREY>::prefix());
-    
+
     vcl_vector<boxm2_data_base*> datas;
     datas.push_back(alph);
     datas.push_back(mog);
-    datas.push_back(num_obs); 
-    
+    datas.push_back(num_obs);
+
     //refine block and datas
     boxm2_refine_block(blk,datas, .3f);
   }
-  vcl_cout<<"Execution time: "<<" ms"<<vcl_endl;
+
+  output.clear();
   return true;
 }
 
