@@ -2,7 +2,6 @@
 #include "bprb_batch_process_manager.h"
 //:
 // \file
-
 #include <brdb/brdb_database_manager.h>
 #include <brdb/brdb_relation.h>
 #include <brdb/brdb_selection.h>
@@ -31,7 +30,7 @@ bool bprb_batch_process_manager::init_process(vcl_string const& process_name)
 {
   bprb_process_sptr p = get_process_by_name(process_name);
   if (p) {
-    vcl_cout << "Process: " << p->name() << '\n';
+    vcl_cout << "Process: " << p->name() << vcl_endl;
     current_process_ = p;
     return true;
   }
@@ -44,7 +43,7 @@ bool bprb_batch_process_manager::print_default_params(vcl_string const & process
 {
   bprb_process_sptr p = get_process_by_name(process_name);
   if (p) {
-    vcl_cout << "Printing default params for process: " << p->name() << '\n';
+    vcl_cout << "Printing default params for process: " << p->name() << vcl_endl;
     (p->parameters())->print_def_XML(p->name(), params_XML);
     return true;
   }
@@ -55,13 +54,12 @@ bool bprb_batch_process_manager::print_default_params(vcl_string const & process
 bool bprb_batch_process_manager::set_params(vcl_string const& params_XML)
 {
   if (!current_process_) {
-    vcl_cout << "In bprb_batch_process_manager::set_params(.) -"
-             << " null process\n";
+    vcl_cout << "In bprb_batch_process_manager::set_params(.) - null process\n";
     return false;
   }
   if (!current_process_->parse_params_XML(params_XML)) {
-    vcl_cout << "In bprb_batch_process_manager::set_params(.) -"
-      << " not able to parse the XML file: " << params_XML << "\n";
+    vcl_cout << "In bprb_batch_process_manager::set_params(.) - not able to parse the XML file: "
+             << params_XML << vcl_endl;
     return false;
   }
   return true;
@@ -71,8 +69,7 @@ bool bprb_batch_process_manager::set_params(vcl_string const& params_XML)
 bool bprb_batch_process_manager::set_params(const bprb_parameters_sptr& params)
 {
   if (!current_process_) {
-    vcl_cout << "In bprb_batch_process_manager::set_params(.) -"
-             << " null process\n";
+    vcl_cout << "In bprb_batch_process_manager::set_params(.) - null process\n";
     return false;
   }
   current_process_->set_parameters(params);
@@ -84,13 +81,10 @@ bool bprb_batch_process_manager::
 set_input(unsigned i, brdb_value_sptr const& input)
 {
   if (!current_process_) {
-    vcl_cout << "In bprb_batch_process_manager::set_input(.) -"
-             << " null process\n";
+    vcl_cout << "In bprb_batch_process_manager::set_input(.) - null process\n";
     return false;
   }
-  if (!current_process_->set_input(i, input))
-    return false;
-  return true;
+  return current_process_->set_input(i, input);
 }
 
 //: set input from the database
@@ -108,24 +102,20 @@ bool bprb_batch_process_manager::set_input_from_db(unsigned i,
 
   brdb_selection_sptr selec = DATABASE->select(relation_name, Q);
   if (selec->size()!=1) {
-    vcl_cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
-             << " no selections\n";
+    vcl_cout << "in bprb_batch_process_manager::set_input_from_db(.) - no selections\n";
     return false;
   }
   brdb_value_sptr value;
   if (!selec->get_value(vcl_string("value"), value)) {
-    vcl_cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
-             << " didn't get value\n";
+    vcl_cout << "in bprb_batch_process_manager::set_input_from_db(.) - didn't get value\n";
     return false;
   }
   if (!value) {
-    vcl_cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
-             << " null value\n";
+    vcl_cout << "in bprb_batch_process_manager::set_input_from_db(.) - null value\n";
     return false;
   }
   if (!current_process_->set_input(i, value)){
-    vcl_cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
-             << " can't set input on process\n";
+    vcl_cout << "in bprb_batch_process_manager::set_input_from_db(.) - can't set input on process\n";
     return false;
   }
   return true;
@@ -146,24 +136,20 @@ bool bprb_batch_process_manager::set_input_from_db(unsigned i,
 
   brdb_selection_sptr selec = DATABASE->select(relation_name, Q);
   if (!selec||selec->size()!=1) {
-    vcl_cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
-             << " no selections\n";
+    vcl_cout << "in bprb_batch_process_manager::set_input_from_db(.) - no selections\n";
     return false;
   }
   brdb_value_sptr value;
   if (!selec->get_value(vcl_string("value"), value)) {
-    vcl_cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
-             << " didn't get value\n";
+    vcl_cout << "in bprb_batch_process_manager::set_input_from_db(.) - didn't get value\n";
     return false;
   }
   if (!value) {
-    vcl_cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
-             << " null value\n";
+    vcl_cout << "in bprb_batch_process_manager::set_input_from_db(.) - null value\n";
     return false;
   }
   if (!current_process_->set_input(i, value)){
-    vcl_cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
-             << " can't set input on process\n";
+    vcl_cout << "in bprb_batch_process_manager::set_input_from_db(.) - can't set input on process\n";
     return false;
   }
   return true;
@@ -189,16 +175,14 @@ bool bprb_batch_process_manager::commit_output(unsigned i, unsigned& id, vcl_str
   brdb_value_sptr vid = new brdb_value_t<unsigned>(id);
   brdb_value_sptr value = current_process_->output(i);
   if (!value) {
-    vcl_cout << "bprb_batch_process_manager::commit_output(.) -"
-             << " null process output\n";
+    vcl_cout << "bprb_batch_process_manager::commit_output(.) - null process output\n";
     return false;
   }
   brdb_tuple_sptr t = new brdb_tuple();
   t->add_value(vid); t->add_value(value);
   if (!DATABASE->add_tuple(relation_name, t)) {
-    vcl_cout << "bprb_batch_process_manager::commit_output(.) -"
-             << " failed to add tuple to relation " << relation_name
-             << '\n';
+    vcl_cout << "bprb_batch_process_manager::commit_output(.) - failed to add tuple to relation "
+             << relation_name << vcl_endl;
     return false;
   }
   return true;
@@ -245,7 +229,7 @@ bool bprb_batch_process_manager::process_init()
   bool to_return = false;
   if (!current_process_)
     return to_return;
-  vcl_cout << "Initializing process: " << current_process_->name() << '\n';
+  vcl_cout << "Initializing process: " << current_process_->name() << vcl_endl;
 
   to_return = current_process_->init();
 
@@ -258,7 +242,7 @@ bool bprb_batch_process_manager::run_process()
   bool to_return = false;
   if (!current_process_)
     return to_return;
-  vcl_cout << "Running process: " << current_process_->name() << '\n';
+  vcl_cout << "Running process: " << current_process_->name() << vcl_endl;
   // EXECUTE ///////////////////////////////////////////////
   to_return = current_process_->execute();
   //////////////////////////////////////////////////////////
@@ -275,10 +259,10 @@ void bprb_batch_process_manager::print_db()
 
 void bprb_batch_process_manager::b_write_db(const vcl_string& path)
 {
-	brdb_database_manager::save_database(path);
+  brdb_database_manager::save_database(path);
 }
 
 void bprb_batch_process_manager::b_read_db(const vcl_string& path)
 {
-	brdb_database_manager::load_database(path);
+  brdb_database_manager::load_database(path);
 }
