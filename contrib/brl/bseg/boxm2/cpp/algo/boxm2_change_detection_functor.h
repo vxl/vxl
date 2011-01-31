@@ -56,7 +56,7 @@ class normalize_foreground_probability_density
 
   float operator()(float &pix) const
   {
-    return 1/(1+pix)-0.5*vcl_min(pix,1/pix);
+    return 1.f/(1.f+pix)-0.5f*vcl_min(pix,1.f/pix);
   }
 };
 

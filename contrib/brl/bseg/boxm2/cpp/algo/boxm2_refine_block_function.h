@@ -77,7 +77,7 @@ bool boxm2_refine_block_function::init_data(boxm2_block* blk, vcl_vector<boxm2_d
     max_level_ = blk_->max_level();
 
     //max alpha integrated
-    max_alpha_int_ = (-1)*vcl_log(1.0 - prob_thresh);
+    max_alpha_int_ = -vcl_log(1.f - prob_thresh);
 
     //Data length now is constant
     data_len_ = 65536;
@@ -87,7 +87,7 @@ bool boxm2_refine_block_function::init_data(boxm2_block* blk, vcl_vector<boxm2_d
 
     //USE rootlevel to determine MAX_INNER and MAX_CELLS
     if (max_level_ == 1) {
-      vcl_cout<<"Trying to refine scene with max level 1 "<<vcl_endl;
+      vcl_cout<<"Trying to refine scene with max level 1"<<vcl_endl;
       return true;
     }
     else if (max_level_ == 2) {
@@ -201,7 +201,7 @@ bool boxm2_refine_block_function::refine()
 
             //calc new alpha
             int currLevel = curr_tree.depth_at(j);
-            float side_len = block_len_ / (float) (1<<currLevel);
+            float side_len = (float)block_len_ / (float)(1<<currLevel);
             float new_alpha = max_alpha_int_ / side_len;
             alpha_[offset+newDataPtr] = new_alpha;
 
@@ -290,7 +290,7 @@ boct_bit_tree2 boxm2_refine_block_function::refine_bit_tree(boct_bit_tree2& unre
       //////////////////////////////////////////////////
       //find side length for cell of this level = block_len/2^currDepth
       int currDepth = unrefined_tree.depth_at(i);
-      float side_len = block_len_/(float) (1<<currDepth);
+      float side_len = (float)block_len_/(float)(1<<currDepth);
 
       //get alpha value for this cell;
       int dataIndex = unrefined_tree.get_data_index(i) % data_len_;             //gets offset within buffer

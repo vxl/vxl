@@ -141,7 +141,7 @@ class boxm2_update_data_functor
     alpha_data_=new boxm2_data<BOXM2_ALPHA>(datas[1]->data_buffer(),datas[1]->buffer_length(),datas[1]->block_id());
     mog3_data_=new boxm2_data<BOXM2_MOG3_GREY>(datas[2]->data_buffer(),datas[2]->buffer_length(),datas[2]->block_id());
     nobs_data_=new boxm2_data<BOXM2_NUM_OBS>(datas[3]->data_buffer(),datas[3]->buffer_length(),datas[3]->block_id());
-    alpha_min_ = -vcl_log(1.0-0.0001)/(block_len/max_levels);
+    alpha_min_ = -vcl_log(1.f-0.0001f)/float(block_len/max_levels);
 
     return true;
   }
