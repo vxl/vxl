@@ -147,24 +147,24 @@ class boxm2_change_detection_with_uncertainity_functor
     float sigma =2.0f;
     for (unsigned j=0;j<nj_;j++)
       for (unsigned i=0;i<ni_;i++)
-        (*expected_img_)(i,j)+=(*vis_img_)(i,j)*0.5;
+        (*expected_img_)(i,j)+=(*vis_img_)(i,j)*0.5f;
 
     vil_image_view<float> expblur(expected_img_->ni(), expected_img_->nj());
 
-    vil_gauss_filter_2d((*expected_img_), expblur, sigma, (unsigned) 3*sigma);
+    vil_gauss_filter_2d((*expected_img_), expblur, sigma, (unsigned)(3*sigma+0.01f));
 
     for (unsigned j=0;j<nj_;j++)
       for (unsigned i=0;i<ni_;i++)
       {
         float pb=(*change_image_)(i,j);
         pb+=(*vis_img_)(i,j)*1.0f;
-        float bf=1/(1+pb)-0.5*vcl_min(pb,1/pb);
+        float bf=1.f/(1.f+pb)-0.5f*vcl_min(pb,1.f/pb);
 
         ++count;
         unsigned char * exp_distribution_array=reinterpret_cast<unsigned char *>(dist_image_->top_left_ptr()+count);
         vnl_vector_fixed<unsigned char,8> exp_distribution(exp_distribution_array);
         float pr=boxm2_data_traits<BOXM2_MOG3_GREY>::processor::prob_density(exp_distribution,expblur(i,j));
-        float br=pr/(1+pr)-0.5*vcl_min(pr,1/pr);
+        float br=pr/(1.f+pr)-0.5.f*vcl_min(pr,1.f/pr);
 
         (*change_image_)(i,j)=bf*br;
       }
