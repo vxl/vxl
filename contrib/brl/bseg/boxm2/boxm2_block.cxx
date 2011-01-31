@@ -133,8 +133,8 @@ bool boxm2_block::init_empty_block(boxm2_block_metadata data)
           //<<"parser says block nums = "<<parser_.block_nums()<<vcl_endl
           //<<"parser says p_init = "<<parser_.p_init();
   //calc max number of bytes, data buffer length, and alpha init (consts)
-  const int MAX_BYTES    = data.max_mb_*1024*1024;
-  const int BUFF_LENGTH  = vcl_pow((float)2,(float)16); //65536
+  const int MAX_BYTES    = int(data.max_mb_)*1024*1024;
+  const int BUFF_LENGTH  = 1L<<16; // 65536
   //const float ALPHA_INIT = -vcl_log(1.0f - data.p_init_) / (data.sub_block_dim_.x());
 
   //total number of (sub) blocks in the scene
@@ -170,7 +170,7 @@ bool boxm2_block::init_empty_block(boxm2_block_metadata data)
   byte_count_ = calc_byte_count(num_buffers, blocks_per_buffer, total_blocks);
   init_level_ = data.init_level_;
   max_level_  = data.max_level_;
-  max_mb_     = data.max_mb_;
+  max_mb_     = int(data.max_mb_);
   buffer_ = new char[byte_count_];
 
   //get member variable metadata straight, then write to the buffer
