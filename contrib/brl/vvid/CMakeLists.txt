@@ -3,10 +3,9 @@
 doxygen_add_library(contrib/brl/vvid
   DEPENDS contrib/brl/bbas/bgui contrib/brl/bseg/strk
   PACKAGE contrib/brl
-  )
+)
 
 INCLUDE_DIRECTORIES(${GEL_INCLUDE_DIR})
-INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR})
 INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR})
 
 # determines if vgui is built and opengl is available
@@ -36,8 +35,7 @@ IF(HAS_VGUI)
   SET(cmu_camera_sources
       cmu_1394_camera_params.cxx   cmu_1394_camera_params.h
       cmu_1394_camera.cxx          cmu_1394_camera.h
-      vvid_live_video_tableau.cxx  vvid_live_video_tableau.h
-                                   vvid_live_video_tableau_sptr.h
+      vvid_live_video_tableau.cxx  vvid_live_video_tableau.h  vvid_live_video_tableau_sptr.h
       vvid_live_video_manager.cxx  vvid_live_video_manager.h
       vvid_live_stereo_manager.cxx vvid_live_stereo_manager.h
   )
