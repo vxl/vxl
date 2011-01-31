@@ -14,7 +14,6 @@
 #include <vcl_iostream.h>
 #include <vcl_cassert.h>
 
-#include <msm/msm_ref_shape_instance.h>
 #include <msm/msm_ref_shape_model.h>
 #include <msm/msm_no_limiter.h>
 #include <mbl/mbl_matxvec.h>
