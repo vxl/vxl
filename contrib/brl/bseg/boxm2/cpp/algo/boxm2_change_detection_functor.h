@@ -164,7 +164,7 @@ class boxm2_change_detection_with_uncertainity_functor
         unsigned char * exp_distribution_array=reinterpret_cast<unsigned char *>(dist_image_->top_left_ptr()+count);
         vnl_vector_fixed<unsigned char,8> exp_distribution(exp_distribution_array);
         float pr=boxm2_data_traits<BOXM2_MOG3_GREY>::processor::prob_density(exp_distribution,expblur(i,j));
-        float br=pr/(1.f+pr)-0.5.f*vcl_min(pr,1.f/pr);
+        float br=pr/(1.f+pr)-0.5f*vcl_min(pr,1.f/pr);
 
         (*change_image_)(i,j)=bf*br;
       }
