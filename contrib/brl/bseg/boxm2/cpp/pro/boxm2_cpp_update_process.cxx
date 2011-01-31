@@ -127,7 +127,7 @@ bool boxm2_cpp_update_process::execute(vcl_vector<brdb_value_sptr>& input, vcl_v
      datas.push_back(mog);
      datas.push_back(nobs);
      boxm2_update_data_functor data_functor;
-     data_functor.init_data(datas, blk->sub_block_dim().x(), blk->max_level());
+     data_functor.init_data(datas, float(blk->sub_block_dim().x()), blk->max_level());
 
      boxm2_data_serial_iterator<boxm2_update_data_functor>(blk,data_functor);
   }
