@@ -7,7 +7,7 @@
 #include <boxm2/cpp/algo/boxm2_cast_ray_function.h>
 #include <boxm2/cpp/algo/boxm2_mog3_grey_processor.h>
 #include <vil/algo/vil_gauss_filter.h>
-#if DEBUG
+#ifdef DEBUG
 #include <vcl_iostream.h>
 #endif
 
@@ -118,7 +118,7 @@ class boxm2_change_detection_with_uncertainity_functor
       updated_exp_distribution=mog3_data_->data()[index];
     else
       boxm2_data_traits<BOXM2_MOG3_GREY>::processor::merge_mixtures(mog3,curr_p,exp_distribution,w2,updated_exp_distribution);
-#if DEBUG
+#ifdef DEBUG
     vcl_cout<<'[';
     for (unsigned k=0;k<8;k++)
       vcl_cout<<(int)exp_distribution[k]<<',';
