@@ -46,7 +46,7 @@ template <class T>
 bool bocl_manager<T>::initialize_cl()
 {
   cl_int status = CL_SUCCESS;
-  
+
   //////////////////////////////////////////////////////////////////////////////
   // Check the number of  available platforms
   //////////////////////////////////////////////////////////////////////////////
@@ -74,11 +74,11 @@ bool bocl_manager<T>::initialize_cl()
   //////////////////////////////////////////////////////////////////////////////
   // Get devices from platforms
   //////////////////////////////////////////////////////////////////////////////
-  char platform_name[256]; 
+  char platform_name[256];
   vcl_size_t ret_size;
   cl_device_id gpus[2];
-  cl_device_id cpus[2]; 
-  
+  cl_device_id cpus[2];
+
   //: First checking for GPU
   bool gpu_found=false;
   for (unsigned i=0;i<num_platforms;i++)
@@ -88,10 +88,10 @@ bool bocl_manager<T>::initialize_cl()
       clGetPlatformInfo(platform_id[i],CL_PLATFORM_NAME,sizeof(platform_name),platform_name,&ret_size);
       gpu_found=true;
       vcl_cout<<"Found "<<numGPUs_<<" GPUs"<<vcl_endl;
-      
+
       //store the GPU Devices on the heap
-      gpus_ = new cl_device_id[numGPUs_]; 
-      for(int i=0; i<numGPUs_; ++i) gpus_[i] = gpus[i]; 
+      gpus_ = new cl_device_id[numGPUs_];
+      for (unsigned int i=0; i<numGPUs_; ++i) gpus_[i] = gpus[i];
       break;
     }
   }
@@ -103,21 +103,21 @@ bool bocl_manager<T>::initialize_cl()
     {
       vcl_cout<<"FOUND "<<numCPUs_<<" CPUs"<<vcl_endl;
       cpu_found=true;
-      
+
       //store CPUs on the heap
-      cpus_ = new cl_device_id[numCPUs_]; 
-      for(int i=0; i<numCPUs_; ++i) cpus_[i] = cpus[i]; 
+      cpus_ = new cl_device_id[numCPUs_];
+      for (unsigned int i=0; i<numCPUs_; ++i) cpus_[i] = cpus[i];
       break;
     }
   }
   if (!gpu_found && !cpu_found) {
-    vcl_cout<<"No GPU or CPU found, manager is invalid"<<vcl_endl;  
+    vcl_cout<<"No GPU or CPU found, manager is invalid"<<vcl_endl;
     return false;
   }
-  
-  //intialize context by default - last GPU
+
+  //initialize context by default - last GPU
   this->initialize_context( &gpus_[numGPUs_-1] );
-  
+
   for (unsigned id = 0; id<number_devices_; ++id)
     vcl_cout << " Device id [" << id << "]: " << devices_[id] << '\n';
   return true;
@@ -127,12 +127,12 @@ template <class T>
 bool bocl_manager<T>::initialize_context(cl_device_id* device)
 {
   //create device info for this device
-  curr_info_ = bocl_device_info(device); 
+  curr_info_ = bocl_device_info(device);
   vcl_cout<<curr_info_<<vcl_endl;
-  
+
   //remove old context, if it exists
-  if(context_) clReleaseContext(context_); 
-  
+  if (context_) clReleaseContext(context_);
+
   //Create a context from the device ID
   int status = 1;
   context_ = clCreateContext(0, 1, device, NULL, NULL, &status);
@@ -141,7 +141,7 @@ bool bocl_manager<T>::initialize_context(cl_device_id* device)
   }
 
   vcl_size_t device_list_size = 0;
-  
+
   // First, get the size of device list data
   status = clGetContextInfo(context_,
                             CL_CONTEXT_DEVICES,
@@ -151,7 +151,7 @@ bool bocl_manager<T>::initialize_context(cl_device_id* device)
   if (!check_val(status,CL_SUCCESS,"clGetContextInfo failed."))
     return false;
   number_devices_ = device_list_size/sizeof(cl_device_id);
-  
+
   // Now allocate memory for device list based on the size we got earlier
   devices_ = (cl_device_id *)malloc(device_list_size);
   if (devices_==NULL) {
@@ -172,7 +172,7 @@ bool bocl_manager<T>::initialize_context(cl_device_id* device)
 
 
 ////////////////////////////////////////////////////////////////////////////////
-// Old kernel/program/alloc methods that have been 
+// Old kernel/program/alloc methods that have been
 // replaced by bocl_mem, bocl_kernel
 ////////////////////////////////////////////////////////////////////////////////
 template<class T>
