@@ -208,16 +208,16 @@ void vgui_gtk2_adaptor::kill_timer(int name)
 {
   vcl_map<int, internal_timer>::iterator it
     = timers_.find( name );
-  if( it == timers_.end() )  // if such timer does not exist
+  if ( it == timers_.end() )  // if such timer does not exist
     return;
-  
+
   internal_timer timer;
   timer = (*it).second;
   // remove timer
   gtk_timeout_remove(timer.real_id_);
   // remove callback ptr
   delete  (vgui_gtk2_adaptor_callback_data*)(timer.callback_ptr_);
-  
+
   // remove timer from map
   timers_.erase(it);
 }
@@ -257,7 +257,7 @@ gint vgui_gtk2_adaptor::handle_configure(
   // so that some GL functions (such as glGenLists()) can succeed.
   GdkGLContext *glcontext = gtk_widget_get_gl_context (widget);
   GdkGLDrawable *gldrawable = gtk_widget_get_gl_drawable (widget);
-  if (!gdk_gl_drawable_gl_begin (gldrawable, glcontext)) 
+  if (!gdk_gl_drawable_gl_begin (gldrawable, glcontext))
     return FALSE;
   gdk_gl_drawable_gl_end (gldrawable);
 
@@ -378,7 +378,6 @@ gint vgui_gtk2_adaptor::handle_enter_leave(
                                GdkEvent *gev,
                                gpointer context)
 {
-  vgui_gtk2_adaptor* adaptor = (vgui_gtk2_adaptor*) context;
   vgui_event event;
   GdkEventType type = gev->type;
 
@@ -407,7 +406,7 @@ gint vgui_gtk2_adaptor::handle(const vgui_event &event,
     ret_value = FALSE;
 
 #ifdef DEBUG
-  vcl_cerr << "vgui_event " << event << vcl_endl;
+  vcl_cerr << "vgui_event " << event << '\n';
 #endif
   // Only send events to the tableau if the widget is mapped; that is,
   // only when an OpenGL context exists.
