@@ -342,7 +342,7 @@ bool vgui_gtk2_dialog_impl::ask()
 
   // true if there is "line_break" element in the dialog.
   bool has_line_break = false;
-  GtkWidget* current_hbox;
+  GtkWidget* current_hbox = 0;
 
   // traverse the dialog elements to see if there is a line_break.
   for (vcl_vector<element>::iterator e_iter = elements.begin();
@@ -580,9 +580,8 @@ bool vgui_gtk2_dialog_impl::ask()
       current_hbox = gtk_hbox_new(FALSE, 6);
     }
     else if (l.type == button_elem) {
-      GtkWidget *hbox, *button;
       vgui_button_field *field = static_cast<vgui_button_field*>(l.field);
-      button = static_cast<GtkWidget*>(l.widget);
+      GtkWidget *button = static_cast<GtkWidget*>(l.widget);
       gtk_widget_show(button);
 
       // Connect the "clicked" signal to the callback function
