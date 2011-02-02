@@ -1,7 +1,7 @@
+#include "HMatrix2DComputeRobust.h"
 //:
 // \file
 
-#include "HMatrix2DComputeRobust.h"
 #include <vcl_cassert.h>
 #include <vcl_iostream.h>
 #include <vcl_cmath.h>
@@ -101,7 +101,7 @@ bool HMatrix2DComputeRobust::compute(PairMatchSetCorner& matches, HMatrix2D *H)
 
   HMatrix2D Hs;
   double Ds = 1e+10;
-  int count;
+  int count = 0;
   vcl_vector<bool> inlier_list(data_size_);
   vcl_vector<double> residualsH(data_size_, 100.0);
   // 300 random samples from the points set
