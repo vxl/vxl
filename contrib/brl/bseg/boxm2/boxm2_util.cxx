@@ -15,6 +15,10 @@
 //vil includes
 #include <vil/vil_image_view.h>
 
+//vcl io stuff
+#include <vcl_iostream.h>
+#include <vcl_fstream.h>
+
 void boxm2_util::random_permutation(int* buffer, int size)
 {
   vnl_random random(9667566);
@@ -97,3 +101,27 @@ boxm2_util::construct_camera( double elevation,
   //vcl_cout<<"Camera  :" <<*cam<<vcl_endl;
   return cam; 
 }
+
+
+bool boxm2_util::copy_file(vcl_string file, vcl_string dest)
+{
+  vcl_string line;
+  vcl_ifstream myfile (file.c_str());
+  vcl_ofstream outfile(dest.c_str());
+  if (myfile.is_open() && outfile.is_open())
+  {
+    while ( myfile.good() )
+    {
+      getline (myfile,line);
+      outfile << line << '\n'; 
+    }
+    myfile.close();
+    outfile.close();
+  }
+  else {
+    vcl_cout<<"Couldn't open " << file << " or " << dest << vcl_endl;
+    return false;
+  }
+  return true; 
+}
+

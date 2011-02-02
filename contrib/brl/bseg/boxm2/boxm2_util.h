@@ -31,6 +31,13 @@ class boxm2_util
                                                               unsigned ni,
                                                               unsigned nj,
                                                               vgl_box_3d<double> bb);
+                                                              
+    static bool copy_file(vcl_string file, vcl_string dest); 
+    
+    //Will be used to specify rows and cols for JavaScript App
+    static bool generate_html(int nrows, int ncols); 
+    static bool generate_jsfunc(int nrows, int ncols); 
+
 
 };
 
