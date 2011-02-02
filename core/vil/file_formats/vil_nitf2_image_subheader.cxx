@@ -766,8 +766,6 @@ get_correction_offset(double & u_off, double & v_off)
   vil_nitf2_tagged_record_sequence::iterator tres_itr;
   this->get_property("IXSHD", isxhd_tres);
 
-  bool success = false;
-
   double ulr=0;
   double ulc=0;
   // Check through the TREs to find "RPC"
@@ -776,53 +774,53 @@ get_correction_offset(double & u_off, double & v_off)
     vcl_string type = (*tres_itr)->name();
     if ( type == "ICHIPB" )
     {
-      double r_off;
-      double c_off;
-      success = (*tres_itr)->get_value("FI_ROW_11", r_off);
-      success = success && (*tres_itr)->get_value("FI_COL_11", c_off);
-      if (success)
+      double r_off=1.0; // dummy initialisation
+      double c_off=1.0; // to silence a compiler warning
+      if ( (*tres_itr)->get_value("FI_ROW_11", r_off) &&
+           (*tres_itr)->get_value("FI_COL_11", c_off) )
       {
         ulr+=r_off;
         ulc+=c_off;
       }
+      else
+        return false;
     }
-    if ( type == "STDIDC" )
+    else if ( type == "STDIDC" )
     {
       int r_off=1;
       int c_off=1;
-      success = (*tres_itr)->get_value("START_ROW", r_off);
-      success = success && (*tres_itr)->get_value("START_COLUMN", c_off);
-
-      if (success)
+      if ( (*tres_itr)->get_value("START_ROW",    r_off) &&
+           (*tres_itr)->get_value("START_COLUMN", c_off) )
       {
         ulr+=(double)((r_off-1)*get_pixels_per_block_y());
         ulc+=(double)((c_off-1)*get_pixels_per_block_x());
       }
+      else
+        return false;
     }
     else if ( type == "STDIDB" )
     {
       int r_off=1;
       int c_off=1;
-
-      success = (*tres_itr)->get_value("START_ROW", r_off);
       vcl_string temp_off;
-      success = success && (*tres_itr)->get_value("START_COLUMN", temp_off);
-      if ((int)temp_off[0]>=65)
-        c_off=((int)temp_off[0]-55)*10;
-      else
-        c_off=((int)temp_off[0]-48)*10;
-
-      c_off+=(int)temp_off[1]-48;
-      if (success)
+      if ( (*tres_itr)->get_value("START_ROW",    r_off) &&
+           (*tres_itr)->get_value("START_COLUMN", temp_off) )
       {
+        if ((int)temp_off[0]>=65)
+          c_off=((int)temp_off[0]-55)*10;
+        else
+          c_off=((int)temp_off[0]-48)*10;
+        c_off+=(int)temp_off[1]-48;
         ulr+=(r_off-1)*get_pixels_per_block_y();
         ulc+=(c_off-1)*get_pixels_per_block_x();
       }
+      else
+        return false;
     }
   }
   u_off=ulc;
   v_off=ulr;
-  return success;
+  return true;
 }
 
 // Collect the RPC parameters for the current image. Image corners are reported

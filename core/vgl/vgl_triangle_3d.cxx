@@ -815,8 +815,8 @@ vgl_triangle_3d_intersection_t vgl_triangle_3d_triangle_intersection(
   double p_b1, p_b2, p_b3;
   bool coplanar = false;
 
-  double a, b, c, x0, x1;
-  double d, e, f, y0, y1;
+  double a=0.0, b=0.0, c=0.0, x0=0.0, x1=0.0; // although variables are safely initialised further down,
+  double d=0.0, e=0.0, f=0.0, y0=0.0, y1=0.0; // these "=0.0" silence the compiler
   double xx, yy, xxyy, tmp;
   double TRI_TRI_EPS = 100000*vcl_numeric_limits<double>::epsilon();
 
