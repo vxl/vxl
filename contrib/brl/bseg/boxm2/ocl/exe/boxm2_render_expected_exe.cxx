@@ -50,6 +50,10 @@ int main(int argc,  char** argv)
   else  {
     ifs >> *pcam;
   }
+  vpgl_calibration_matrix<double> mat = pcam->get_calibration();
+  mat.set_focal_length(mat.focal_length()/10.0); 
+  mat.set_principal_point(vgl_point_2d<double>(64, 36)); 
+  pcam->set_calibration(mat); 
   vpgl_camera_double_sptr cam = pcam;
   brdb_value_sptr brdb_cam = new brdb_value_t<vpgl_camera_double_sptr>(cam);
 
