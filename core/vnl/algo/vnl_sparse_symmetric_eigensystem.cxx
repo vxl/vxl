@@ -247,7 +247,7 @@ int vnl_sparse_symmetric_eigensystem::CalculateNPairs(
   long  matSize = mat->columns();          // Dimension of the eigenproblem.
   long  ido = 0;        // ido == 0 means initialization
 
-  long  nconv;      // Number of "converged" Ritz values.
+  long  nconv = 0L;     // Number of "converged" Ritz values.
   long  numberLanczosVecsL = numberLanczosVecs;    // number of vectors to calc
   long  nEVL = nEV;    // long number of EVs to calc
 
