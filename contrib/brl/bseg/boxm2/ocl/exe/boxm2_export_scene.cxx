@@ -108,7 +108,7 @@ int main(int argc,  char** argv)
   js_files.push_back("/js/js.js");
 
   //copy files to dir() + js
-  for (int i=0; i<js_files.size(); ++i)
+  for (unsigned int i=0; i<js_files.size(); ++i)
     boxm2_util::copy_file(aux_dir + js_files[i], dir() + js_files[i]);
 
   //////////////////////////////////////////////////////////////////////////////
@@ -154,10 +154,10 @@ int main(int argc,  char** argv)
   vbl_array_2d<vil_image_view<vxl_byte>* > imgs(num_in(), num_az());
   double az_incr = 2.0*vnl_math::pi/num_az();
   double el_incr = vnl_math::pi/2.0/num_in();
-  for (int az_i = 0; az_i < num_az(); ++az_i)
+  for (unsigned int az_i = 0; az_i < num_az(); ++az_i)
   {
     double az = 2.0*vnl_math::pi - az_i * az_incr;
-    for (int el_i = 0.0; el_i < num_in(); ++el_i)
+    for (unsigned int el_i = 0.0; el_i < num_in(); ++el_i)
     {
       double el = vnl_math::pi/2.0 - el_i * el_incr;
 
