@@ -34,7 +34,6 @@
 #include <boxm2/ocl/pro/boxm2_opencl_render_process.h>
 #include <boxm2/ocl/pro/boxm2_opencl_update_process.h>
 #include <boxm2/ocl/pro/boxm2_opencl_refine_process.h>
-#include <boxm2/ocl/pro/boxm2_opencl_change_detection_process.h>
 #include <boxm2/io/boxm2_dumb_cache.h>
 #include <boxm2/io/boxm2_nn_cache.h>
 #include <boxm2/io/boxm2_lru_cache.h>
@@ -64,6 +63,8 @@ class boxm2_render_tableau : public boxm2_cam_tableau
   void set_statusbar(vgui_statusbar* status) { status_ = status; }
 
  protected:
+  bool render_and_save_image(int index, vil_image_view<vxl_byte> & byte_img);
+  bool compute_convergence();
 
   //vector of image files, vector of 
   vcl_vector<vcl_string> cam_files_;
@@ -72,10 +73,9 @@ class boxm2_render_tableau : public boxm2_cam_tableau
   //: gpu processor and render_process, update_process
   boxm2_opencl_processor* gpu_pro_;
   boxm2_opencl_render_process render_;
-  boxm2_opencl_render_process change_render_;
+  boxm2_opencl_render_process render_no_gl_;
   boxm2_opencl_update_process update_; 
   boxm2_opencl_refine_process refine_;
-  boxm2_opencl_change_detection_process change_;
   
   //: Boxm2 Scene
   boxm2_scene_sptr scene_;
@@ -92,7 +92,6 @@ class boxm2_render_tableau : public boxm2_cam_tableau
   //: update count, 
   bool do_update_;
   int update_count_; 
-  int change_count_; 
   vnl_random rand;
 
   //--Render, update, refine, save helper methods ------------------------------
@@ -100,7 +99,6 @@ class boxm2_render_tableau : public boxm2_cam_tableau
   float render_frame();
   float update_frame(); 
   float refine_model();
-  float change_frame();
   bool save_model(); 
 
   //-- HELPER INIT Methods and vars---------------------------------------------
@@ -108,7 +106,6 @@ class boxm2_render_tableau : public boxm2_cam_tableau
   cl_context create_clgl_context();
   bool init_clgl();
   bool do_init_ocl;
-  bool do_change_;
 };
 
 //: declare smart pointer

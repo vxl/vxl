@@ -17,7 +17,6 @@ boxm2_render_tableau::boxm2_render_tableau()
   ni_=640;
   nj_=480;
   do_update_ = false;
-  do_change_=false;
 }
 
 //: initialize tableau properties
@@ -56,19 +55,6 @@ bool boxm2_render_tableau::handle(vgui_event const &e)
       do_init_ocl = false;
     }
 
-    if(do_change_)
-    {    
-        this->change_frame();
-        this->setup_gl_matrices();
-        glClear(GL_COLOR_BUFFER_BIT);
-        glDisable(GL_DEPTH_TEST);
-        glRasterPos2i(0, 1);
-        glPixelZoom(1,-1);
-        glBindBuffer(GL_PIXEL_UNPACK_BUFFER_ARB, pbuffer_);
-        glDrawPixels(ni_, nj_, GL_RGBA, GL_UNSIGNED_BYTE, 0);
-        glBindBuffer(GL_PIXEL_UNPACK_BUFFER_ARB, 0);
-    }
-    else
     {
     float gpu_time = this->render_frame();
     this->setup_gl_matrices();
@@ -94,15 +80,6 @@ bool boxm2_render_tableau::handle(vgui_event const &e)
     vcl_cout<<"Continuing update"<<vcl_endl;
     do_update_ = true;
     this->post_idle_request();
-  }
-  else if (e.type == vgui_KEY_PRESS && e.key == vgui_key('c')) {
-    vcl_cout<<"Change Detection"<<vcl_endl;
-    do_change_=!do_change_;
-    this->post_idle_request();
-  }
-  else if (e.type == vgui_KEY_PRESS && e.key == vgui_key('n')) {
-    vcl_cout<<"Change Detection"<<vcl_endl;
-    this->post_redraw();
   }
 
   else if (e.type == vgui_KEY_PRESS && e.key == vgui_key('s')) {
@@ -243,113 +220,88 @@ float boxm2_render_tableau::render_frame()
 //: updates given a random frame
 float boxm2_render_tableau::update_frame()
 {
-  update_count_++;
+    update_count_++;
 
-  //pickup a random frame
-  int curr_frame = rand.lrand32(0,cam_files_.size()-1);
-  vcl_cout<<"Cam "<<cam_files_[curr_frame]<<'\n'
-          <<"Image "<<img_files_[curr_frame]<<vcl_endl;
+    if(update_count_%1==0)
+    {
+        this->compute_convergence();
+    }
+    if(update_count_%5==0)
+    {
+        float time=this->refine_model();
+    }
+    //pickup a random frame
+    int curr_frame = rand.lrand32(0,cam_files_.size()-1);
+    vcl_cout<<"Cam "<<cam_files_[curr_frame]<<'\n'
+        <<"Image "<<img_files_[curr_frame]<<vcl_endl;
 
-  //build the camera from file
-  vcl_ifstream ifs(cam_files_[curr_frame].c_str());
-  vpgl_perspective_camera<double>* pcam = new vpgl_perspective_camera<double>;
-  if (!ifs.is_open()) {
-      vcl_cerr << "Failed to open file " << cam_files_[curr_frame] << '\n';
-      return -1;
-  }
-  ifs >> *pcam;
-  vpgl_camera_double_sptr cam_sptr(pcam);
-  brdb_value_sptr brdb_cam = new brdb_value_t<vpgl_camera_double_sptr>(cam_sptr);
+    //build the camera from file
+    vcl_ifstream ifs(cam_files_[curr_frame].c_str());
+    vpgl_perspective_camera<double>* pcam = new vpgl_perspective_camera<double>;
+    if (!ifs.is_open()) {
+        vcl_cerr << "Failed to open file " << cam_files_[curr_frame] << '\n';
+        return -1;
+    }
+    ifs >> *pcam;
+    vpgl_camera_double_sptr cam_sptr(pcam);
+    brdb_value_sptr brdb_cam = new brdb_value_t<vpgl_camera_double_sptr>(cam_sptr);
 
-  //load image from file
-  vil_image_view_base_sptr loaded_image = vil_load(img_files_[curr_frame].c_str());
-  vil_image_view<float>* floatimg = new vil_image_view<float>(loaded_image->ni(), loaded_image->nj(), 1);
-  if (vil_image_view<vxl_byte> *img_byte = dynamic_cast<vil_image_view<vxl_byte>*>(loaded_image.ptr()))
-    vil_convert_stretch_range_limited(*img_byte, *floatimg, vxl_byte(0), vxl_byte(255), 0.0f, 1.0f);
-  else {
-    vcl_cerr << "Failed to load image " << img_files_[curr_frame] << '\n';
-    return -1;
-  }
-  //create input image buffer
-  vil_image_view_base_sptr floatimg_sptr(floatimg);
-  brdb_value_sptr brdb_inimg = new brdb_value_t<vil_image_view_base_sptr>(floatimg_sptr);
+    //load image from file
+    vil_image_view_base_sptr loaded_image = vil_load(img_files_[curr_frame].c_str());
+    vil_image_view<float>* floatimg = new vil_image_view<float>(loaded_image->ni(), loaded_image->nj(), 1);
+    if (vil_image_view<vxl_byte> *img_byte = dynamic_cast<vil_image_view<vxl_byte>*>(loaded_image.ptr()))
+        vil_convert_stretch_range_limited(*img_byte, *floatimg, vxl_byte(0), vxl_byte(255), 0.0f, 1.0f);
+    else {
+        vcl_cerr << "Failed to load image " << img_files_[curr_frame] << '\n';
+        return -1;
+    }
+    //create input image buffer
+    vil_image_view_base_sptr floatimg_sptr(floatimg);
+    brdb_value_sptr brdb_inimg = new brdb_value_t<vil_image_view_base_sptr>(floatimg_sptr);
 
-  //create generic scene
-  brdb_value_sptr brdb_scene = new brdb_value_t<boxm2_scene_sptr>(scene_);
+    //create generic scene
+    brdb_value_sptr brdb_scene = new brdb_value_t<boxm2_scene_sptr>(scene_);
 
-  //set inputs
-  vcl_vector<brdb_value_sptr> input;
-  input.push_back(brdb_scene);
-  input.push_back(brdb_cam);
-  input.push_back(brdb_inimg);
+    //set inputs
+    vcl_vector<brdb_value_sptr> input;
+    input.push_back(brdb_scene);
+    input.push_back(brdb_cam);
+    input.push_back(brdb_inimg);
 
-  //initoutput vector
-  vcl_vector<brdb_value_sptr> output;
+    //initoutput vector
+    vcl_vector<brdb_value_sptr> output;
 
-  //execute gpu_update
-  gpu_pro_->run(&update_, input, output);
-  return gpu_pro_->exec_time();
+    //execute gpu_update
+    gpu_pro_->run(&update_, input, output);
+    return gpu_pro_->exec_time();
+
 }
-//: updates given a random frame
-float boxm2_render_tableau::change_frame()
+bool boxm2_render_tableau::render_and_save_image(int index, vil_image_view<vxl_byte> & byte_img)
 {
-  change_count_++;
-  cl_int status = clEnqueueAcquireGLObjects( *gpu_pro_->get_queue(), 1,
-                                             &change_.image()->buffer() , 0, 0, 0);
-  exp_img_->zero_gpu_buffer( *gpu_pro_->get_queue() );
-  if (!check_val(status,CL_SUCCESS,"clEnqueueAcquireGLObjects failed. (gl_image)"+error_to_string(status)))
-    return false;
-
-  //pickup a random frame
-  int curr_frame = change_count_%cam_files_.size();
-  vcl_cout<<"Cam "<<cam_files_[curr_frame]<<'\n'
-          <<"Image "<<img_files_[curr_frame]<<vcl_endl;
-
   //build the camera from file
-  vcl_ifstream ifs(cam_files_[curr_frame].c_str());
+  vcl_ifstream ifs(cam_files_[index].c_str());
   vpgl_perspective_camera<double>* pcam = new vpgl_perspective_camera<double>;
   if (!ifs.is_open()) {
-      vcl_cerr << "Failed to open file " << cam_files_[curr_frame] << '\n';
+      vcl_cerr << "Failed to open file " << cam_files_[index] << '\n';
       return -1;
   }
   ifs >> *pcam;
   vpgl_camera_double_sptr cam_sptr(pcam);
   brdb_value_sptr brdb_cam = new brdb_value_t<vpgl_camera_double_sptr>(cam_sptr);
 
-
-
-  //load image from file
-  vil_image_view_base_sptr loaded_image = vil_load(img_files_[curr_frame].c_str());
-  vil_image_view<float>* floatimg = new vil_image_view<float>(loaded_image->ni(), loaded_image->nj(), 1);
-  if (vil_image_view<vxl_byte> *img_byte = dynamic_cast<vil_image_view<vxl_byte>*>(loaded_image.ptr()))
-    vil_convert_stretch_range_limited(*img_byte, *floatimg, vxl_byte(0), vxl_byte(255), 0.0f, 1.0f);
-  else {
-    vcl_cerr << "Failed to load image " << img_files_[curr_frame] << '\n';
-    return -1;
-  }
-  //create input image buffer
-  vil_image_view_base_sptr floatimg_sptr(floatimg);
-  brdb_value_sptr brdb_inimg = new brdb_value_t<vil_image_view_base_sptr>(floatimg_sptr);
-
-  //create out exp image buffer
-  vil_image_view<float>* expimg = new vil_image_view<float>(ni_, nj_);
-  expimg->fill(0.0f);
+  //create output image buffer
+  vil_image_view<unsigned int>* expimg = new vil_image_view<unsigned int>(ni_, nj_);
+  expimg->fill(0);
   brdb_value_sptr brdb_expimg = new brdb_value_t<vil_image_view_base_sptr>(expimg);
-
-
-  //create out cd image buffer
-  vil_image_view_base_sptr cdimg = new vil_image_view<float>(ni_, nj_);
-  brdb_value_sptr brdb_cdimg = new brdb_value_t<vil_image_view_base_sptr>(cdimg);
-  
 
   //create vis image buffer
   vil_image_view<float>* visimg = new vil_image_view<float>(ni_, nj_);
   visimg->fill(1.0f);
   brdb_value_sptr brdb_visimg = new brdb_value_t<vil_image_view_base_sptr>(visimg);
 
-
-  //create generic scene
+  //create scene brdbvalue pointer
   brdb_value_sptr brdb_scene = new brdb_value_t<boxm2_scene_sptr>(scene_);
+
   vcl_vector<brdb_value_sptr> input;
   input.push_back(brdb_scene);
   input.push_back(brdb_cam);
@@ -360,28 +312,41 @@ float boxm2_render_tableau::change_frame()
   vcl_vector<brdb_value_sptr> output;
 
   //initialize the GPU render process
-  gpu_pro_->run(&change_render_, input, output);
+  gpu_pro_->run(&render_no_gl_, input, output);
   gpu_pro_->finish();
-
-
-  //set inputs
-  vcl_vector<brdb_value_sptr> input1;
-  input1.push_back(brdb_scene);
-  input1.push_back(brdb_cam);
-  input1.push_back(brdb_inimg);
-  input1.push_back(brdb_expimg);
-  input1.push_back(brdb_cdimg);
-  input1.push_back(brdb_visimg);
-
-
-  //execute gpu_update
-  gpu_pro_->run(&change_, input1, output);
-
-  status = clEnqueueReleaseGLObjects( *gpu_pro_->get_queue(), 1, &change_.image()->buffer(), 0, 0, 0);
-  clFinish( *change_.command_queue() );
-  return gpu_pro_->exec_time();
+  //save to disk
+  for (unsigned int i=0; i<ni_; ++i)
+    for (unsigned int j=0; j<nj_; ++j)
+      byte_img(i,j) =  static_cast<vxl_byte>( (*expimg)(i,j) );   //just grab the first byte (all foura r the same)
 }
+bool boxm2_render_tableau::compute_convergence()
+{
+ int num_images=6;
+ int intervals=(img_files_.size()-1)/num_images;
+ float sum=0.0f;
+ for(unsigned i=0;i<num_images;i++)
+ {
+     int index=intervals*i;
+     vcl_stringstream ss;
+     ss << index;
 
+     vil_image_view<vxl_byte> byte_img(ni_,nj_);
+     vcl_string filename="f:/test"+ss.str()+".png";
+     render_and_save_image(index,byte_img);
+     if(vul_file::exists(filename.c_str()))
+     {
+         vil_image_view_base_sptr read_img_ptr=vil_load(filename.c_str());
+         if(vil_image_view<vxl_byte> * prev_img=dynamic_cast<vil_image_view<vxl_byte> * >(read_img_ptr.ptr()))
+         {
+            sum+=vil_math_ssd<unsigned char, float>(byte_img,*prev_img,sum);
+         }
+     }
+     vil_save(byte_img,filename.c_str());
+ }
+ vcl_cout<<"Error -------------> "<<vcl_sqrt(sum/(ni_*nj_*6))<<vcl_endl;
+
+ return true;
+}
 
 
 //: private helper method to init_clgl stuff (gpu processor)
@@ -419,14 +384,10 @@ bool boxm2_render_tableau::init_clgl()
   exp_img_ = new bocl_mem(gpu_pro_->context(), /*(void*) pbuffer_*/ NULL, ni_*nj_*sizeof(GLubyte)*4, "exp image (gl) buffer");
   exp_img_->set_gl_buffer(clgl_buffer_);
 
+  render_no_gl_.init_kernel(&gpu_pro_->context(), &gpu_pro_->devices()[0]);
   //initialize the GPU render process
   render_.init_kernel(&gpu_pro_->context(), &gpu_pro_->devices()[0]);
   render_.set_image(exp_img_);
-  //initialize the GPU change detection process
-  change_.init_kernel(&gpu_pro_->context(), &gpu_pro_->devices()[0]);
-  change_.set_image(exp_img_);
-  
-  change_render_.init_kernel(&gpu_pro_->context(), &gpu_pro_->devices()[0]);
 
   //initlaize gpu update process
   update_.init_kernel(&gpu_pro_->context(), &gpu_pro_->devices()[0]);
