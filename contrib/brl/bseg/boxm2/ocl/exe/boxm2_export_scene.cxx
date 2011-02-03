@@ -34,15 +34,15 @@
 //brdb stuff
 #include <brdb/brdb_value.h>
 
-//: Boxm2_Export_Scene executable will create a small, portable, pre rendered
+// Boxm2_Export_Scene executable will create a small, portable, pre rendered
 // scene that can be viewed on many devices.  Currently the output is a folder
 // with the following structure
-//   - Base directory (dir name given by input -dir)
-//      - index.html  (open this file in a browser to see the model\
+//   * Base directory (dir name given by input -dir)
+//      - index.html  (open this file in a browser to see the model
 //      - js directory (contains all jQuery and Reel javascript files)
-//      - img directory (contains a rendering of stills 
-// 
-//   - Pre Rendered Stills 
+//      - img directory (contains a rendering of stills
+//
+//   * Pre Rendered Stills
 
 int main(int argc,  char** argv)
 {
@@ -51,16 +51,16 @@ int main(int argc,  char** argv)
   vul_arg<vcl_string> dir("-dir", "output image directory", "");
   vul_arg<unsigned> ni("-ni", "Width of image", 640);
   vul_arg<unsigned> nj("-nj", "Height of image", 480);
-  vul_arg<unsigned> num_az("-num_az", "Number of views along azimuth", 36); 
-  vul_arg<unsigned> num_in("-num_in", "Number of views along 90 degree incline", 3); 
-  vul_arg<double> radius("-radius", "Distance from center of bounding box", 5.0); 
+  vul_arg<unsigned> num_az("-num_az", "Number of views along azimuth", 36);
+  vul_arg<unsigned> num_in("-num_in", "Number of views along 90 degree incline", 3);
+  vul_arg<double> radius("-radius", "Distance from center of bounding box", 5.0);
   vul_arg_parse(argc, argv);
 
   //////////////////////////////////////////////////////////////////////////////
   //Set Up Directory Structure
   //////////////////////////////////////////////////////////////////////////////
-  //see if directory exists 
-  if( vul_file::exists(dir()) && vul_file::is_directory(dir()) ) {
+  //see if directory exists
+  if ( vul_file::exists(dir()) && vul_file::is_directory(dir()) ) {
     vcl_cout<<"Directory "<<dir()<<" exists - overwriting it."<<vcl_endl;
   }
   else {
@@ -68,49 +68,49 @@ int main(int argc,  char** argv)
     //vcl_cout<<"Couldn't make directory at "<<dir()<<vcl_endl;
     //return -1;
   }
-  
+
   //see if img folder exists
-  vcl_string imgdir = dir() + "/img/"; 
-  if( vul_file::exists(imgdir) && vul_file::is_directory(imgdir) ){
-    vul_file::delete_file_glob(imgdir+"*"); 
+  vcl_string imgdir = dir() + "/img/";
+  if ( vul_file::exists(imgdir) && vul_file::is_directory(imgdir) ){
+    vul_file::delete_file_glob(imgdir+"*");
   }
   else {
     vul_file::make_directory_path(imgdir);
     //vcl_cout<<"Couldn't make img directory at "<<dir()<<vcl_endl;
     //return -1;
   }
-  
+
   //see if JS folder exists
-  vcl_string jsdir = dir() + "/js/"; 
-  if( vul_file::exists(jsdir) && vul_file::is_directory(jsdir) ){
-    vul_file::delete_file_glob(jsdir+"*"); 
+  vcl_string jsdir = dir() + "/js/";
+  if ( vul_file::exists(jsdir) && vul_file::is_directory(jsdir) ){
+    vul_file::delete_file_glob(jsdir+"*");
   }
-  else {  
+  else {
     vul_file::make_directory_path(jsdir);
     //vcl_cout<<"Couldn't make js directory at "<<dir()<<vcl_endl;
     //return -1;
   }
 
   //copy JS files into JS folder
-  vcl_string aux_dir = vcl_string(VCL_SOURCE_ROOT_DIR) + "/contrib/brl/bseg/boxm2/ocl/exe/aux/"; 
-  
+  vcl_string aux_dir = vcl_string(VCL_SOURCE_ROOT_DIR) + "/contrib/brl/bseg/boxm2/ocl/exe/aux/";
+
   //copy html and JS files
   vcl_string index_name = aux_dir + "index.html";
-  vcl_string dest_name = dir() + "/index.html"; 
-  boxm2_util::copy_file(index_name, dest_name); 
-  
-  vcl_vector<vcl_string> js_files; 
-  js_files.push_back("/js/jquery.min.js"); 
-  js_files.push_back("/js/jquery.cookie-min.js"); 
-  js_files.push_back("/js/jquery.disabletextselect-min.js"); 
-  js_files.push_back("/js/jquery.mousewheel-min.js"); 
-  js_files.push_back("/js/jquery.reel-min.js"); 
-  js_files.push_back("/js/js.js"); 
-  
+  vcl_string dest_name = dir() + "/index.html";
+  boxm2_util::copy_file(index_name, dest_name);
+
+  vcl_vector<vcl_string> js_files;
+  js_files.push_back("/js/jquery.min.js");
+  js_files.push_back("/js/jquery.cookie-min.js");
+  js_files.push_back("/js/jquery.disabletextselect-min.js");
+  js_files.push_back("/js/jquery.mousewheel-min.js");
+  js_files.push_back("/js/jquery.reel-min.js");
+  js_files.push_back("/js/js.js");
+
   //copy files to dir() + js
-  for(int i=0; i<js_files.size(); ++i) 
-    boxm2_util::copy_file(aux_dir + js_files[i], dir() + js_files[i]); 
-  
+  for (int i=0; i<js_files.size(); ++i)
+    boxm2_util::copy_file(aux_dir + js_files[i], dir() + js_files[i]);
+
   //////////////////////////////////////////////////////////////////////////////
   // Now Render Scene Images
   //////////////////////////////////////////////////////////////////////////////
@@ -120,7 +120,7 @@ int main(int argc,  char** argv)
 
   //get relevant blocks
   boxm2_lru_cache cache( scene.ptr() );
-  
+
   //initialize gpu pro / manager
   boxm2_opencl_processor* gpu_pro = boxm2_opencl_processor::instance();
   gpu_pro->set_scene(scene.ptr());
@@ -149,32 +149,32 @@ int main(int argc,  char** argv)
   vsph_view_sphere<vsph_view_point<vcl_string> > sphere(scene->bounding_box(), radius());
   sphere.add_uniform_views(vnl_math::pi/3, vnl_math::pi/18.0, ni(), nj());
   vcl_cout<<"Number of views to render: "<<sphere.size()<<vcl_endl;
-  
+
   //rendered array of views
-  vbl_array_2d<vil_image_view<vxl_byte>* > imgs(num_in(), num_az()); 
-  double az_incr = 2.0*vnl_math::pi/num_az(); 
+  vbl_array_2d<vil_image_view<vxl_byte>* > imgs(num_in(), num_az());
+  double az_incr = 2.0*vnl_math::pi/num_az();
   double el_incr = vnl_math::pi/2.0/num_in();
-  for(int az_i = 0; az_i < num_az(); ++az_i)
+  for (int az_i = 0; az_i < num_az(); ++az_i)
   {
-    double az = 2.0*vnl_math::pi - az_i * az_incr; 
-    for(int el_i = 0.0; el_i < num_in(); ++el_i)
+    double az = 2.0*vnl_math::pi - az_i * az_incr;
+    for (int el_i = 0.0; el_i < num_in(); ++el_i)
     {
-      double el = vnl_math::pi/2.0 - el_i * el_incr; 
-      
+      double el = vnl_math::pi/2.0 - el_i * el_incr;
+
       //convert to cartesian (as method is only in cartesian for some reason)
-      vsph_sph_point_3d curr_point(radius(), el, az); 
+      vsph_sph_point_3d curr_point(radius(), el, az);
       vgl_point_3d<double> cart_point = sphere.cart_coord(curr_point);
       int uid; double dist;
       vsph_view_point<vcl_string> view = sphere.find_closest(cart_point, uid, dist);
-      vpgl_camera_double_sptr cam_sptr = view.camera(); 
+      vpgl_camera_double_sptr cam_sptr = view.camera();
       brdb_value_sptr brdb_cam = new brdb_value_t<vpgl_camera_double_sptr>(cam_sptr);
 
       //set focal length and image size for camera
-      vpgl_perspective_camera<double>* cam = static_cast<vpgl_perspective_camera<double>* >(cam_sptr.ptr()); 
+      vpgl_perspective_camera<double>* cam = static_cast<vpgl_perspective_camera<double>* >(cam_sptr.ptr());
       vpgl_calibration_matrix<double> mat = cam->get_calibration();
-      mat.set_focal_length(mat.focal_length()); 
-      cam->set_calibration(mat); 
-      
+      mat.set_focal_length(mat.focal_length());
+      cam->set_calibration(mat);
+
       //render scene
       vcl_vector<brdb_value_sptr> input;
       input.push_back(brdb_scene);
@@ -186,23 +186,23 @@ int main(int argc,  char** argv)
       vis_img->fill(1.0f);
       gpu_pro->run(&gpu_render, input, output);
       gpu_pro->finish();
-      
+
       vil_image_view<unsigned int>* expimg_view = static_cast<vil_image_view<unsigned int>* >(expimg_sptr.ptr());
       vil_image_view<vxl_byte>* byte_img = new vil_image_view<vxl_byte>(ni(), nj());
       for (unsigned int i=0; i<ni(); ++i)
         for (unsigned int j=0; j<nj(); ++j)
           (*byte_img)(i,j) =  static_cast<vxl_byte>( (*expimg_view)(i,j) );   //just grab the first byte (all foura r the same)
-            
+
       //save as jpeg
       vcl_stringstream pngstream, jpgstream;
-      jpgstream<<imgdir<<"/scene_"<<el_i<<"_"<<az_i<<".jpg";
+      jpgstream<<imgdir<<"/scene_"<<el_i<<'_'<<az_i<<".jpg";
       vil_save( *byte_img, jpgstream.str().c_str() );
-      
+
       //and store for whatever reason
-      //imgs(el_i, az_i) = byte_img; 
+      //imgs(el_i, az_i) = byte_img;
     }
-  } 
-  
+  }
+
   return 0;
 }
 
