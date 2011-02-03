@@ -19,8 +19,6 @@ SET(bwm_pro_sources ${bwm_pro_sources}
 
 ADD_LIBRARY(bwm_pro ${bwm_pro_sources})
 
-TARGET_LINK_LIBRARIES(bwm_pro bwm bwm_io )
-
 #IF( BUILD_TESTING )
 #  SUBDIRS(tests)
 #ENDIF( BUILD_TESTING )
