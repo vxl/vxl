@@ -98,6 +98,17 @@ bool boct_loc_code<T>::isequal(const boct_loc_code<T> * test)
 }
 
 template <class T>
+bool boct_loc_code<T>::isequal(const boct_loc_code<T> &test)
+{
+  if (test.level != level)
+    return false;
+  if ((x_loc_==test.x_loc_) && (y_loc_==test.y_loc_) && (z_loc_==test.z_loc_))
+    return true;
+  else
+    return false;
+}
+
+template <class T>
 boct_loc_code<T> * boct_loc_code<T>::XOR(boct_loc_code<T> * b)
 {
     boct_loc_code<T> * xorcode=new boct_loc_code<T>();
