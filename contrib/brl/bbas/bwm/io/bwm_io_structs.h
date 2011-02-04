@@ -32,10 +32,10 @@ class bwm_io_tab_config
 {
  public:
   bwm_io_tab_config(vcl_string type, vcl_string tab_name, bool active_or_not)
-    : type_name(type), name(tab_name), status(active_or_not) {}
+    : name(tab_name), type_name(type), status(active_or_not) {}
 
   bwm_io_tab_config(bwm_io_tab_config const& t)
-    : type_name(t.type_name), name(t.name), status(t.status) {}
+    : name(t.name), type_name(t.type_name), status(t.status) {}
 
   virtual bwm_io_tab_config* clone()=0; // {return new bwm_io_tab_config(type_name, name, status); }
   vcl_string name;
@@ -82,8 +82,8 @@ struct bwm_io_tab_config_coin3d: public bwm_io_tab_config {
 struct bwm_io_tab_config_proj2d: public bwm_io_tab_config {
   bwm_io_tab_config_proj2d(vcl_string name, bool status,
     vcl_string p_type, vcl_string c_path, vcl_string c_type, vcl_string coin3d)
-    : bwm_io_tab_config(PROJ2D_TABLEAU_TAG, name, status), proj2d_type(p_type), cam_path(c_path),
-    cam_type(c_type), coin3d_tab_name(coin3d) {}
+    : bwm_io_tab_config(PROJ2D_TABLEAU_TAG, name, status), cam_path(c_path),
+    cam_type(c_type), proj2d_type(p_type), coin3d_tab_name(coin3d) {}
 
   bwm_io_tab_config_proj2d* clone() { return new bwm_io_tab_config_proj2d(name, status, proj2d_type, cam_path, cam_type, coin3d_tab_name); }
   vcl_string cam_path;
