@@ -53,9 +53,15 @@ INCLUDE(${MODULE_PATH}/NewCMake/FindWin32SDK.cmake)
 INCLUDE(${CMAKE_ROOT}/Modules/FindMFC.cmake)
 
 SET(J2K_SOURCES_FOUND "NO")
-IF (EXISTS ${vxl_SOURCE_DIR}/v3p/j2k/Source/include/NCSEcw.h)
+IF (EXISTS ${vxl_SOURCE_DIR}/v3p/j2k/Source/include/NCSEcw.h )
+IF (EXISTS ${vxl_SOURCE_DIR}/v3p/j2k/Source/include/NCSUtil.h)
+IF (EXISTS${vxl_SOURCE_DIR}/v3p/j2k/Source/include/NCSCnet.h)
 SET(J2K_SOURCES_FOUND "YES")
-ENDIF (EXISTS ${vxl_SOURCE_DIR}/v3p/j2k/Source/include/NCSEcw.h)
+ENDIF (EXISTS${vxl_SOURCE_DIR}/v3p/j2k/Source/include/NCSCnet.h)
+ENDIF (EXISTS ${vxl_SOURCE_DIR}/v3p/j2k/Source/include/NCSUtil.h)
+ENDIF (EXISTS ${vxl_SOURCE_DIR}/v3p/j2k/Source/include/NCSEcw.h )
+
+
  
  IF( WIN32 AND J2K_SOURCES_FOUND AND WIN32SDK_FOUND AND MFC_FOUND)
 
