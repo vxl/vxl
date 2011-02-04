@@ -51,7 +51,7 @@ MANPAGE_SOURCES += bwm_tableau.h
 SOURCES += process/bwm_process.cxx
 SOURCES += process/bwm_site_process.cxx
 
-SUBDIRS += algo io reg video
+SUBDIRS += algo io reg video pro
 
 #######################################
 include ${VXLROOT}/config/top-params.mk
