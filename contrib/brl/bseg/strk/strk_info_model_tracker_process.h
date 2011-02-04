@@ -4,7 +4,7 @@
 //----------------------------------------------------------------------------
 //:
 // \file
-// \brief tracks an articulated model using sdet_info_model_tracker
+// \brief tracks an articulated model using strk_info_model_tracker
 // \author
 //   J.L. Mundy
 //
