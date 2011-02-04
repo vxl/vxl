@@ -12,7 +12,7 @@ IF( PYTHON_FOUND )
   )
 
   ADD_LIBRARY(bpro_batch  ${bpro_batch_sources})
-  TARGET_LINK_LIBRARIES(bpro_batch bprb brdb bbas_pro)
+  TARGET_LINK_LIBRARIES(bpro_batch bprb brdb bbas_pro ${PYTHON_LIBRARY})
 
   IF( BUILD_TESTING )
     SUBDIRS(tests)
