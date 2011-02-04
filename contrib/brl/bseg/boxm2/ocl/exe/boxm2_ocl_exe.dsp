@@ -107,6 +107,9 @@ SOURCE=.\boxm2_render_hemisphere.cxx
 # Begin Source File
 SOURCE=.\boxm2_change_detection_view.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\boxm2_export_scene.cxx
+# End Source File
 # End Group
 # End Target
 # End Project
