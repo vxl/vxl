@@ -132,7 +132,7 @@ foreach $f (@FILES)
     if ($printed && $file =~ m!(\S+)\s*\<\<[^;]+\"([^\\]|\\.)\"!);
   $file =~ s/\005/\\\"/g;
   &msg(1, "consider removing space before \\n")
-    if ($printed && $file =~ m!(\s|\\t)\\n\b!);
+    if ($printed && $file =~ m!(\s|\\t)(\\n\b|\"\s*<<\s*vcl_endl)!);
 
 # 5. Consecutive comment blocks, separated by blank lines
   if ($file =~ m!\n(\s*)//:.*\n(\1//.*\n)*\s*\n\1// *[^:=*-]! &&
@@ -1027,7 +1027,7 @@ foreach $f (@FILES)
     | itege?ra\w*
     | integet
     | integrant
-    | intell\w*
+    | intell[^i]\w*
     | intensit[^iy]\S*
     | intera[tl]\S*
     | inte[^glmnrsx]\S*
@@ -1361,6 +1361,7 @@ foreach $f (@FILES)
     | vertics
     | verticies
     | vertexes
+    | vetical
     | virutal
     | vishual
     | visibli\S*
