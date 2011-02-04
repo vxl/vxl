@@ -13,6 +13,7 @@ SET(boxm_algo_sources
     boxm_merge_mog.h                        boxm_merge_mog.cxx
     boxm_split_sample.h
     boxm_compute_scene_difference.h
+    boxm_linear_operations.h
    )
 
 ADD_LIBRARY(boxm_algo ${boxm_algo_sources})
