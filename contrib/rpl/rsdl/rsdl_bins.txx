@@ -312,10 +312,13 @@ bin_indices( point_type const& pt ) const
   point_to_bin( pt-dist_tol_, bin_lo );
   point_to_bin( pt+dist_tol_, bin_hi );
 
+#if 0 // commented out impossible condition -- please revisit the original need for this piece of code...
   if ( bin_lo == bin_hi ) { // FIXME - this is impossible!!
     indices.push_back( bin_index( bin_lo ) );
   }
-  else {
+  else
+#endif
+  {
     int cur[N];
     scan_region( bin_lo, bin_hi, cur, 0, indices );
   }
