@@ -81,8 +81,8 @@ bgeo_lvcs& bgeo_lvcs::operator=(const bgeo_lvcs& lvcs)
 bgeo_lvcs::bgeo_lvcs(double orig_lat, double orig_lon, double orig_elev,
                      cs_names cs_name,
                      double lat_scale, double lon_scale,
-                     AngUnits ang_unit, /* = DEG */
-                     LenUnits len_unit /* =METERS */,
+                     AngUnits ang_unit, // = DEG
+                     LenUnits len_unit, // = METERS
                      double lox,
                      double loy,
                      double theta)
@@ -172,13 +172,13 @@ void bgeo_lvcs::degrees_to_dms(double geoval, int& degrees, int& minutes, double
 // compute the scales for the given coordinate system.
 void bgeo_lvcs::compute_scale()
 {
-  double wgs84_phi, wgs84_lamda, wgs84_hgt;  /* WGS84 coords of the origin */
-  double grs80_x, grs80_y, grs80_z;          /* GRS80 coords of the origin */
+  double wgs84_phi, wgs84_lamda, wgs84_hgt;  // WGS84 coords of the origin
+  double grs80_x, grs80_y, grs80_z;          // GRS80 coords of the origin
   double grs80_x1, grs80_y1, grs80_z1;
   double to_meters, to_feet, to_radians, to_degrees;
   this->set_angle_conversions(geo_angle_unit_, to_radians, to_degrees);
   this->set_length_conversions(localXYZUnit_, to_meters, to_feet);
-  /* Convert origin to WGS84 */
+  // Convert origin to WGS84
   switch (local_cs_name_)
   {
    case bgeo_lvcs::wgs84:
@@ -206,8 +206,8 @@ void bgeo_lvcs::compute_scale()
     wgs84_lamda *= to_radians;
     break;
    case bgeo_lvcs::NumNames:
-    break;
    default:
+     wgs84_phi = wgs84_lamda = wgs84_hgt = 0.0;  // dummy initialisation
     break;
   }
 
@@ -320,14 +320,10 @@ void bgeo_lvcs::local_to_global(const double pointin_x,
   double aligned_y = pointin_y;
   local_transform(aligned_x, aligned_y);
 
-  /* Now compute the lat, lon, elev of the output point in Local CS*/
-  local_lat =
-    aligned_y*local_to_meters*lat_scale_ + localCSOriginLat_*local_to_radians;
-
-  local_lon =
-    aligned_x*local_to_meters*lon_scale_  + localCSOriginLon_*local_to_radians;
-
-  local_elev = pointin_z*local_to_meters + localCSOriginElev_*local_to_meters;
+  // Now compute the lat, lon, elev of the output point in Local CS
+  local_lat = aligned_y*local_to_meters*lat_scale_ + localCSOriginLat_*local_to_radians;
+  local_lon = aligned_x*local_to_meters*lon_scale_ + localCSOriginLon_*local_to_radians;
+  local_elev = pointin_z*local_to_meters           + localCSOriginElev_*local_to_meters;
 
   local_lat *= RADIANS_TO_DEGREES;
   local_lon *= RADIANS_TO_DEGREES;
@@ -336,77 +332,84 @@ void bgeo_lvcs::local_to_global(const double pointin_x,
   //local_elev is in meters
   if (local_cs_name_ == global_cs_name)
   {
-    /* Local and global coord systems are the same */
+    // Local and global coord systems are the same
     global_lat = local_lat;
     global_lon = local_lon;
     global_elev = local_elev;
   }
-  else
-    if (local_cs_name_ ==  bgeo_lvcs::nad27n)
+  else if (local_cs_name_ ==  bgeo_lvcs::nad27n)
+  {
+    // Convert from "nad27n" to whatever
+    if (global_cs_name == bgeo_lvcs::wgs84)
     {
-      /* Convert from "nad27n" to whatever */
-      if (global_cs_name == bgeo_lvcs::wgs84)
-      {
-        nad27n_to_wgs84(local_lat,
-                        local_lon,
-                        local_elev,
-                        &global_lat, &global_lon, &global_elev);
-      }
-      else if (global_cs_name ==  bgeo_lvcs::wgs72)
-      {
-        nad27n_to_wgs72(local_lat, local_lon,
-                        local_elev,
-                        &global_lat, &global_lon, &global_elev);
-      }
-      else
-        vcl_cout << "Error: Global CS " << bgeo_lvcs::cs_name_strings[global_cs_name]
-                 << " unrecognized." << '\n';
+      nad27n_to_wgs84(local_lat,
+                      local_lon,
+                      local_elev,
+                      &global_lat, &global_lon, &global_elev);
     }
-    else if (local_cs_name_ == bgeo_lvcs::wgs72)
+    else if (global_cs_name ==  bgeo_lvcs::wgs72)
     {
-      /* Convert from "wgs72" to whatever */
-      if (global_cs_name == bgeo_lvcs::nad27n)
-      {
-        wgs72_to_nad27n(local_lat,
-                        local_lon,
-                        local_elev,
-                        &global_lat, &global_lon, &global_elev);
-      }
-      else if (global_cs_name == bgeo_lvcs::wgs84)
-      {
-        wgs72_to_wgs84(local_lat,
-                       local_lon,
-                       local_elev,
-                       &global_lat, &global_lon, &global_elev);
-      }
-      else
-        vcl_cout << "Error: Global CS " << bgeo_lvcs::cs_name_strings[global_cs_name]
-                 << " unrecognized." << '\n';
-  }
-    else if (local_cs_name_ == bgeo_lvcs::wgs84)
-    {
-      /* Convert from "wgs84" to whatever */
-      if (global_cs_name == bgeo_lvcs::nad27n)
-      {
-        wgs84_to_nad27n(local_lat,
-                        local_lon,
-                        local_elev,
-                        &global_lat, &global_lon, &global_elev);
-      }
-      else if (global_cs_name == bgeo_lvcs::wgs72)
-      {
-        wgs84_to_wgs72(local_lat,
-                       local_lon,
-                       local_elev,
-                       &global_lat, &global_lon, &global_elev);
-      }
-      else
-        vcl_cout << "Error: Global CS " << bgeo_lvcs::cs_name_strings[global_cs_name]
-                 << " unrecognized." << '\n';
+      nad27n_to_wgs72(local_lat, local_lon,
+                      local_elev,
+                      &global_lat, &global_lon, &global_elev);
     }
-    else
-      vcl_cout << "Error: Local CS " << bgeo_lvcs::cs_name_strings[local_cs_name_]
+    else {
+      vcl_cout << "Error: Global CS " << bgeo_lvcs::cs_name_strings[global_cs_name]
                << " unrecognized." << '\n';
+      global_lat = global_lon = global_elev = 0.0; // dummy initialisation
+    }
+  }
+  else if (local_cs_name_ == bgeo_lvcs::wgs72)
+  {
+    // Convert from "wgs72" to whatever
+    if (global_cs_name == bgeo_lvcs::nad27n)
+    {
+      wgs72_to_nad27n(local_lat,
+                      local_lon,
+                      local_elev,
+                      &global_lat, &global_lon, &global_elev);
+    }
+    else if (global_cs_name == bgeo_lvcs::wgs84)
+    {
+      wgs72_to_wgs84(local_lat,
+                     local_lon,
+                     local_elev,
+                     &global_lat, &global_lon, &global_elev);
+    }
+    else {
+      vcl_cout << "Error: Global CS " << bgeo_lvcs::cs_name_strings[global_cs_name]
+               << " unrecognized." << '\n';
+      global_lat = global_lon = global_elev = 0.0; // dummy initialisation
+    }
+  }
+  else if (local_cs_name_ == bgeo_lvcs::wgs84)
+  {
+    // Convert from "wgs84" to whatever
+    if (global_cs_name == bgeo_lvcs::nad27n)
+    {
+      wgs84_to_nad27n(local_lat,
+                      local_lon,
+                      local_elev,
+                      &global_lat, &global_lon, &global_elev);
+    }
+    else if (global_cs_name == bgeo_lvcs::wgs72)
+    {
+      wgs84_to_wgs72(local_lat,
+                     local_lon,
+                     local_elev,
+                     &global_lat, &global_lon, &global_elev);
+    }
+    else {
+      vcl_cout << "Error: Global CS " << bgeo_lvcs::cs_name_strings[global_cs_name]
+               << " unrecognized." << '\n';
+      global_lat = global_lon = global_elev = 0.0; // dummy initialisation
+    }
+  }
+  else {
+    vcl_cout << "Error: Local CS " << bgeo_lvcs::cs_name_strings[local_cs_name_]
+             << " unrecognized." << '\n';
+    global_lat = global_lon = global_elev = 0.0; // dummy initialisation
+  }
 
   //at this point, global_lat and global_lon are in degrees.
 
@@ -475,17 +478,17 @@ void bgeo_lvcs::global_to_local(const double pointin_lon,
   if (input_len_unit==FEET)
     global_elev *= FEET_TO_METERS;
 
-  /* Convert from global CS to local CS of the origin of LVCS */
+  // Convert from global CS to local CS of the origin of LVCS
   if (global_cs_name == local_cs_name_)
   {
-    /* Global and local coord systems are the same */
+    // Global and local coord systems are the same
     local_lat  = global_lat;
     local_lon  = global_lon;
     local_elev = global_elev;
   }
   else if (global_cs_name == bgeo_lvcs::nad27n)
   {
-    /* Convert from "nad27n" to whatever */
+    // Convert from "nad27n" to whatever
     if (local_cs_name_ == bgeo_lvcs::wgs84)
     {
       nad27n_to_wgs84(global_lat, global_lon, global_elev,
@@ -496,13 +499,15 @@ void bgeo_lvcs::global_to_local(const double pointin_lon,
       nad27n_to_wgs72(global_lat, global_lon, global_elev,
                       &local_lat, &local_lon, &local_elev);
     }
-    else
+    else {
       vcl_cout << "Error: Local CS " << bgeo_lvcs::cs_name_strings[local_cs_name_]
                << " unrecognized." << '\n';
+      local_lat = local_lon = local_elev = 0.0; // dummy initialisation
+    }
   }
   else if (global_cs_name == bgeo_lvcs::wgs72)
   {
-    /* Convert from "wgs72" to whatever */
+    // Convert from "wgs72" to whatever
     if (local_cs_name_ == bgeo_lvcs::nad27n)
     {
       wgs72_to_nad27n(global_lat, global_lon, global_elev,
@@ -513,13 +518,15 @@ void bgeo_lvcs::global_to_local(const double pointin_lon,
       wgs72_to_wgs84(global_lat, global_lon, global_elev,
                      &local_lat, &local_lon, &local_elev);
     }
-    else
+    else {
       vcl_cout << "Error: Local CS " << bgeo_lvcs::cs_name_strings[local_cs_name_]
                << " unrecognized." << '\n';
+      local_lat = local_lon = local_elev = 0.0; // dummy initialisation
+    }
   }
   else if (global_cs_name == bgeo_lvcs::wgs84)
   {
-    /* Convert from "wgs84" to whatever */
+    // Convert from "wgs84" to whatever
     if (local_cs_name_ == bgeo_lvcs::nad27n)
     {
       wgs84_to_nad27n(global_lat, global_lon, global_elev,
@@ -530,16 +537,19 @@ void bgeo_lvcs::global_to_local(const double pointin_lon,
       wgs84_to_wgs72(global_lat, global_lon, global_elev,
                      &local_lat, &local_lon, &local_elev);
     }
-    else
+    else {
       vcl_cout << "Error: Local CS " << bgeo_lvcs::cs_name_strings[local_cs_name_]
                << " unrecognized." << '\n';
+      local_lat = local_lon = local_elev = 0.0; // dummy initialisation
+    }
   }
-  else
+  else {
     vcl_cout << "Error: Global CS " <<  bgeo_lvcs::cs_name_strings[global_cs_name]
              << " unrecognized." << '\n';
+    local_lat = local_lon = local_elev = 0.0; // dummy initialisation
+  }
 
-
-  /* Now compute the x, y, z of the point in local vetical CS*/
+  // Now compute the x, y, z of the point in local vetical CS
   //first convert the local_lat to radians and local cs origin to meters
   pointout_lat =
     (local_lat*DEGREES_TO_RADIANS -
