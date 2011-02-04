@@ -92,7 +92,7 @@ int main(int argc,  char** argv)
   }
 
   //copy JS files into JS folder
-  vcl_string aux_dir = vcl_string(VCL_SOURCE_ROOT_DIR) + "/contrib/brl/bseg/boxm2/ocl/exe/aux/";
+  vcl_string aux_dir = vcl_string(VCL_SOURCE_ROOT_DIR) + "/contrib/brl/bseg/boxm2/ocl/exe/auxiliary/";
 
   //copy html and JS files
   vcl_string index_name = aux_dir + "index.html";
@@ -199,10 +199,32 @@ int main(int argc,  char** argv)
       vil_save( *byte_img, jpgstream.str().c_str() );
 
       //and store for whatever reason
-      //imgs(el_i, az_i) = byte_img;
+      imgs(el_i, az_i) = byte_img; 
     }
   }
 
+  //if stitch is specified, also save a big image
+  //if(stitch()) 
+  {
+      //construct a humungous image
+      vil_image_view<vxl_byte>* stitched = new vil_image_view<vxl_byte>(ni() * num_az(), nj() * num_in());
+      for(int row = 0; row < num_in(); ++row) {
+        for(int col = 0; col < num_az(); ++col) {
+        
+          //lil image to copy into big image
+          vil_image_view<vxl_byte>* lil_img = imgs(row, col); 
+          for(int i=0; i<lil_img->ni(); ++i)
+            for(int j=0; j<lil_img->nj(); ++j)
+              (*stitched)(ni()*col + i, nj()*row + j) = (*lil_img)(i,j); 
+          
+        }
+      }
+      
+      //save as pngv
+      vcl_string big = dir() + "/scene-reel.jpg"; 
+      vil_save( *stitched, big.c_str() );
+  }
+  
   return 0;
 }
 
