@@ -70,29 +70,29 @@ bapl_lowe_pyramid_set::bapl_lowe_pyramid_set( const vil_image_resource_sptr& ima
 
   // create the Gaussian Pyramid
   for (int lvl=0; lvl<num_octaves_; ++lvl) {
-    for (unsigned oct=0; oct<octave_size; ++oct) {
-      vil_copy_deep(temp, gauss_pyramid_(lvl,oct));
-      double scale = vcl_pow(2.0,double(oct)/octave_size_);
+    for (unsigned octsz=0; octsz<octave_size; ++octsz) {
+      vil_copy_deep(temp, gauss_pyramid_(lvl,octsz));
+      double scale = vcl_pow(2.0,double(octsz)/octave_size_);
       double sigma = scale*reduction;
       int size = 2*int(sigma*3.5+0.5)+1;
       assert(size > 0);
-      int ni = gauss_pyramid_(lvl,oct).ni();
-      int nj = gauss_pyramid_(lvl,oct).nj();
+      int ni = gauss_pyramid_(lvl,octsz).ni();
+      int nj = gauss_pyramid_(lvl,octsz).nj();
       int smaller = ni < nj ? ni : nj;
       if (size >= smaller) size = smaller - 1;
-      brip_gauss_filter( gauss_pyramid_(lvl,oct), temp,
+      brip_gauss_filter( gauss_pyramid_(lvl,octsz), temp,
                          sigma, size, vil_convolve_constant_extend );
-      vil_math_image_difference( temp, gauss_pyramid_(lvl,oct), dog_pyramid_(lvl,oct));
+      vil_math_image_difference( temp, gauss_pyramid_(lvl,octsz), dog_pyramid_(lvl,octsz));
     }
     temp = vil_decimate(temp,2);
   }
 
   // compute the gradient magnitude and orientation of each image in the gauss pyramid
   for (int lvl=0; lvl<num_octaves_; ++lvl) {
-    for (unsigned oct=0; oct<octave_size; ++oct) {
-      vil_orientations_from_sobel( gauss_pyramid_(lvl,oct),
-                                   grad_orient_pyramid_(lvl,oct),
-                                   grad_mag_pyramid_(lvl,oct) );
+    for (unsigned octsz=0; octsz<octave_size; ++octsz) {
+      vil_orientations_from_sobel( gauss_pyramid_(lvl,octsz),
+                                   grad_orient_pyramid_(lvl,octsz),
+                                   grad_mag_pyramid_(lvl,octsz) );
     }
   }
 }

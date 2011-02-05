@@ -24,11 +24,11 @@ int main( int argc, char* argv[] )
   vil_image_view<vxl_byte> image = vil_convert_to_grey_using_rgb_weighting (vil_load(in_path().c_str()));
   if (image.ni()==0)
   {
-    vcl_cout<<"Failed to load image."<<vcl_endl;
+    vcl_cerr<<"Failed to load image.\n";
     return 1;
   }
 
-  vcl_cout << "Constructing Pyramids" << vcl_endl;
+  vcl_cout << "Constructing Pyramids ...";
 
 
   vil_image_resource_sptr image_sptr = vil_new_image_resource_of_view(image);
@@ -37,25 +37,25 @@ int main( int argc, char* argv[] )
   // Save images
   vil_image_view<vxl_byte> temp;
   for (int lvl=0; lvl<pyramid_set.num_octaves(); ++lvl){
-    for (int oct=0; oct<pyramid_set.octave_size(); ++oct){
+    for (int octsz=0; octsz<pyramid_set.octave_size(); ++octsz){
       vcl_stringstream name_gauss, name_dog, name_grad_oreint, name_grad_mag;
-      name_gauss << out_path() << "/gauss"<<lvl<<'_'<<oct<<".jpg";
-      name_dog << out_path() << "/dog"<<lvl<<'_'<<oct<<".jpg";
-      name_grad_oreint << out_path() << "/orient"<<lvl<<'_'<<oct<<".jpg";
-      name_grad_mag << out_path() << "/mag"<<lvl<<'_'<<oct<<".jpg";
+      name_gauss << out_path() << "/gauss"<<lvl<<'_'<<octsz<<".jpg";
+      name_dog << out_path() << "/dog"<<lvl<<'_'<<octsz<<".jpg";
+      name_grad_oreint << out_path() << "/orient"<<lvl<<'_'<<octsz<<".jpg";
+      name_grad_mag << out_path() << "/mag"<<lvl<<'_'<<octsz<<".jpg";
 
-      vil_convert_stretch_range(pyramid_set.gauss_pyramid(lvl,oct),temp);
+      vil_convert_stretch_range(pyramid_set.gauss_pyramid(lvl,octsz),temp);
       vil_save(temp, name_gauss.str().c_str());
-      vil_convert_stretch_range(pyramid_set.dog_pyramid(lvl,oct),temp);
+      vil_convert_stretch_range(pyramid_set.dog_pyramid(lvl,octsz),temp);
       vil_save(temp, name_dog.str().c_str() );
-      vil_convert_stretch_range(pyramid_set.grad_orient_pyramid(lvl,oct),temp);
+      vil_convert_stretch_range(pyramid_set.grad_orient_pyramid(lvl,octsz),temp);
       vil_save(temp, name_grad_oreint.str().c_str());
-      vil_convert_stretch_range(pyramid_set.grad_mag_pyramid(lvl,oct),temp);
+      vil_convert_stretch_range(pyramid_set.grad_mag_pyramid(lvl,octsz),temp);
       vil_save(temp, name_grad_mag.str().c_str() );
     }
   }
 
-  vcl_cout <<  "done!" <<vcl_endl;
+  vcl_cout <<  " done!" <<vcl_endl;
   return 0;
 }
 
