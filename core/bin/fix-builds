@@ -1,0 +1,43 @@
+#! /bin/sh
+# To have a "shared libs" CMake config of vxl succeed, some library dependencies
+# must be (temporarily) disabled; this can be done by editing the corresponding
+# CMakeLists.txt files and removing some entries from TARGET_LINK_LIBRARIES
+# (** and then of course make sure not to check in those local changes! **)
+# At the time of this writing (Feb.2011), the following cyclic dependencies are
+# present and must thus be manually removed from the CMakeLists.txt files:
+# From contrib/brl/bbas/bil/algo/CMakeLists.txt:      sdet
+# From contrib/brl/bseg/boxm2/cpp/exe/CMakeLists.txt: sdet (2x)
+# From contrib/brl/bseg/boxm2/tests/CMakeLists.txt:   sdet
+# From contrib/brl/bseg/boxm2/ocl/CMakeLists.txt:     boxm2_ocl_pro
+# From contrib/brl/bseg/boxm2/CMakeLists.txt:         boxm2_io
+#
+# To "fix" the thus generated files called link.txt in the CMake build directory,
+# i.e., to add back the removed library dependencies into those link.txt files,
+# run this script immediately after you ran the "cmake" command.
+#
+# Author: Peter Vanroose, Leuven, Belgium
+# Date:   2011-02-04.
+#
+# This script should be run from the vxl source directory
+# please modify the next line (only) to reflect your build directory:
+BUILD_DIR=../Linux-i386
+BUILD_DIR=`cd $BUILD_DIR;pwd` # absolute path
+
+for f in `svn st | grep ^M | fgrep CMakeLists.txt | sed -e 's/M *//'`
+do 
+   libs=`svn diff $f | \
+         fgrep TARGET_LINK_LIBRARIES | \
+         grep -v '^ ' | \
+         perl -p -e 's/^(.)\s*TARGET_LINK_LIBRARIES\s*\(\s*\S+\s*/$1\t/;s/\s*\)\s*$/\n/;s/\s+/\t/g;s/([+-])\t(\S+)\t/$1\t$2\n$1\t/ while (m/[+-]\t\S+\t/);s/\n[+-]\t$/\n/;' | \
+         perl -e 'while (<>) { if (m/^-\t(\S+)/) { ++$a{$1}; } elsif (m/^\+\t(\S+)/) { --$a{$1}; } } foreach (keys %a) { print " lib/lib$_.so" if ($a{$_} > 0); }'`
+   echo $f:$libs
+   test "$libs" || continue
+   ff=`echo $f | sed -e 's/CMakeLists.txt$/CMakeFiles/'`
+   for b in `echo $BUILD_DIR/$ff/*/build.make`
+   do  perl -pi -e 's!$!'"$libs"'! if (m!lib/libvcl.so!);' $b
+   done
+   libs=`perl -e '$_='\\""$libs"\\"';s! ! '$BUILD_DIR'/!g;print'`
+   for b in `echo $BUILD_DIR/$ff/*/link.txt`
+   do  perl -pi -e 's!(libvcl.so )!$1'"$libs"' !;' $b
+   done
+done

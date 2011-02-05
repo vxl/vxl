@@ -17,6 +17,7 @@ check_dsp        crlf=input
 check_malindentation  crlf=input
 configure        crlf=input
 extract_all_doxygen_docs  crlf=input
+fix-builds       crlf=input
 install-sh       crlf=input
 makein           crlf=input
 script           crlf=input
