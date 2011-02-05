@@ -134,6 +134,9 @@ SOURCE=.\boxm_split_sample.h
 # Begin Source File
 SOURCE=.\boxm_merge_mog.h
 # End Source File
+# Begin Source File
+SOURCE=.\boxm_linear_operations.h
+# End Source File
 # End Group
 # End Target
 # End Project
