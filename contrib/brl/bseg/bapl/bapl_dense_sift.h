@@ -41,7 +41,7 @@ class bapl_dense_sift:public vbl_ref_count
 
   //output := keypoints
   //parameters := istep,jstep
-  bool make_keypoints(vcl_vector<bapl_lowe_keypoint_sptr>& keypoints, unsigned const istep = 1, unsigned const jstep = 1 );
+  bool make_dense_keypoints(vcl_vector<bapl_lowe_keypoint_sptr>& keypoints, unsigned const istep = 1, unsigned const jstep = 1 );
 
   //output := keypoints
   //parameters := target image locations (vgl_point_2d<unsigned> > pts)

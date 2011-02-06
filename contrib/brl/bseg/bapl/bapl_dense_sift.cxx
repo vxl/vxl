@@ -87,7 +87,7 @@ bool bapl_dense_sift::make_keypoints( vcl_vector<bapl_lowe_keypoint_sptr>& keypo
   return true;
 }//end bapl_dense_sift::make_keypoints
 
-bool bapl_dense_sift::make_keypoints(vcl_vector<bapl_lowe_keypoint_sptr>& keypoints, unsigned const istep, unsigned const jstep)
+bool bapl_dense_sift::make_dense_keypoints(vcl_vector<bapl_lowe_keypoint_sptr>& keypoints, unsigned const istep, unsigned const jstep)
 {
   //the original image resolution is on the second level of the pyramid.
   for (unsigned i = 0; i < this->ni_; i+=istep)
