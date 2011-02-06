@@ -47,6 +47,10 @@ class bapl_dense_sift:public vbl_ref_count
   //parameters := target image locations (vgl_point_2d<unsigned> > pts)
   bool make_keypoints( vcl_vector<bapl_lowe_keypoint_sptr>& keypoints, vcl_vector<vgl_point_2d<unsigned> > const& pts );
 
+  //input := vector of keypoints with locations specified in the keypoint 
+  //output := the modified keypoints
+  bool make_keypoints( vcl_vector<bapl_lowe_keypoint_sptr>& keypoints );
+
   bapl_lowe_pyramid_set_sptr pyramid_sptr() {return this->pyramid_sptr_;}
 
   unsigned ni() const {return this->ni_;}
