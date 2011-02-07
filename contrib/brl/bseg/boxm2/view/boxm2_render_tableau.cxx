@@ -324,12 +324,12 @@ bool boxm2_render_tableau::compute_convergence()
  int num_images=6;
  int intervals=(img_files_.size()-1)/num_images;
  float sum=0.0f;
+
  for(unsigned i=0;i<num_images;i++)
  {
      int index=intervals*i;
      vcl_stringstream ss;
      ss << index;
-
      vil_image_view<vxl_byte> byte_img(ni_,nj_);
      vcl_string filename="f:/test"+ss.str()+".png";
      render_and_save_image(index,byte_img);
@@ -337,12 +337,13 @@ bool boxm2_render_tableau::compute_convergence()
      {
          vil_image_view_base_sptr read_img_ptr=vil_load(filename.c_str());
          if(vil_image_view<vxl_byte> * prev_img=dynamic_cast<vil_image_view<vxl_byte> * >(read_img_ptr.ptr()))
-         {
             sum+=vil_math_ssd<unsigned char, float>(byte_img,*prev_img,sum);
-         }
      }
      vil_save(byte_img,filename.c_str());
  }
+ vcl_ofstream ofile("f:/errlog.txt",vcl_ios::app);
+ ofile<<vcl_sqrt(sum/(ni_*nj_*6))<<vcl_endl;
+ ofile.close();
  vcl_cout<<"Error -------------> "<<vcl_sqrt(sum/(ni_*nj_*6))<<vcl_endl;
 
  return true;
