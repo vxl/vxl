@@ -9,8 +9,10 @@
 #include <vsl/vsl_basic_xml_element.h>
 #include <vcl_sstream.h>
 #include <vcl_iostream.h>
+#include <vcl_fstream.h>
 #include <vcl_cstdio.h>
 #include <vcl_cstring.h>
+
 // --------------
 // --- PARSER ---
 // --------------
@@ -70,9 +72,11 @@ bwm_video_site_io ::cdataHandler(vcl_string name, vcl_string data)
   trim_string(data);
   if (name.compare(VIDEO_PATH_TAG) == 0 ) {
     video_path_.assign(data);
-  } else if (name.compare(CAMERA_PATH_TAG) == 0 ) {
+  }
+  else if (name.compare(CAMERA_PATH_TAG) == 0 ) {
     camera_path_.assign(data);
-  } else if (name.compare(SITE_DIR_TAG) == 0 ) {
+  }
+  else if (name.compare(SITE_DIR_TAG) == 0 ) {
     site_dir_.assign(data);
     cdata = "";
   }

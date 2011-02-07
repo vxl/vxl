@@ -5,6 +5,7 @@
 #include <bprb/bprb_parameters.h>
 #include <vcl_string.h>
 #include <vcl_iostream.h>
+#include <vcl_cstdio.h> // for std::FILE and std::fopen()
 
 #include <brdb/brdb_value.h>
 #include <brip/brip_vil_float_ops.h>
@@ -35,9 +36,9 @@ bool bwm_create_corr_file_process_cons(bprb_func_process& pro)
 bool bwm_create_corr_file_process(bprb_func_process& pro)
 {
   //check number of inputs
-  if(!pro.verify_inputs())
+  if (!pro.verify_inputs())
   {
-    vcl_cout << pro.name() << " Invalid inputs " << vcl_endl;
+    vcl_cout << pro.name() << " invalid inputs" << vcl_endl;
     return false;
   }
 
@@ -46,7 +47,7 @@ bool bwm_create_corr_file_process(bprb_func_process& pro)
   vcl_string cam_path = pro.get_input<vcl_string>(1);
   vcl_string site_file = pro.get_input<vcl_string>(2);
   int corr_cnt = pro.get_input<int>(3);
-  
+
   //parse the site file
   bwm_io_config_parser* parser = new bwm_io_config_parser();
   vcl_FILE* xmlFile = vcl_fopen(site_file.c_str(), "r");
@@ -62,9 +63,9 @@ bool bwm_create_corr_file_process(bprb_func_process& pro)
     delete parser;
     return false;
   }
-  
+
   bwm_site_sptr site = parser->site();
-  
+
   vcl_vector<vcl_vector<vcl_pair<vcl_string, vsol_point_2d> > > site_correspondences = site->corresp_;
   if (!site_correspondences.size() || !site_correspondences[0].size()) {
     vcl_cout << "The file: " << site_file << " does not contain any correspondences, returning!\n";
@@ -77,14 +78,15 @@ bool bwm_create_corr_file_process(bprb_func_process& pro)
   vcl_ifstream corr_file_r(file_name.c_str(), vcl_ios::in);
   if (!corr_file_r) {
     vcl_ofstream corr_file(file_name.c_str(), vcl_ios::out);
-    corr_file << corr_cnt << "\n";
+    corr_file << corr_cnt << '\n';
     corr_file.close();
-  } else
+  }
+  else
     corr_file_r.close();
 
   // now open corr_file in append mode
   vcl_ofstream corr_file(file_name.c_str(), vcl_ios::app);
-  
+
   if (!corr_file) {
     vcl_cout << "error in opening: " << file_name << vcl_endl;
     return false;
@@ -95,13 +97,13 @@ bool bwm_create_corr_file_process(bprb_func_process& pro)
   for (int j = 0; j < cam_size; j++) {
     corr_file << site->path_ << "\\cameras\\" << site_correspondences[0][j].first << ".RPB ";
     for (int i = 0; i < corr_cnt; i++) {
-      corr_file << site_correspondences[i][j].second.x() << " " << site_correspondences[i][j].second.y() << " ";
+      corr_file << site_correspondences[i][j].second.x() << ' ' << site_correspondences[i][j].second.y() << ' ';
     }
-    corr_file << "\n";
+    corr_file << '\n';
   }
 
   corr_file.close();
-  
+
   return true;
 }
 

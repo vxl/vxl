@@ -13,6 +13,7 @@
 #include <vpgl/vpgl_rational_camera.h>
 #include <vgui/vgui_error_dialog.h>
 #include <vcl_sstream.h>
+#include <vcl_cstdlib.h> // for std::system()
 
 double bwm_site_process::version_num = 0;
 
@@ -96,10 +97,10 @@ void bwm_site_process::RunBackgroundTask()
           base = vul_file::strip_extension(base);
           img_path = site_dir + "\\" + base;
         }
-        if (system(NULL)) {
+        if (vcl_system(NULL)) {
           vcl_cout << "Deleting the image from the site...\n";
           vcl_string command = "rd /q /s \"" + img_path + "\"";
-          if (system(command.data()) != 0)
+          if (vcl_system(command.data()) != 0)
             vcl_cerr << "An error occurred while removing the folder\n";
         }
       }
@@ -176,21 +177,21 @@ void bwm_site_process::RunBackgroundTask()
             img_path = new_site + "\\" + new_img_file;
             cam_img_file = img_path;
             //2. copy the image
-            if (system(NULL)) {
+            if (vcl_system(NULL)) {
               vcl_cout << "Copying the image to the site...\n";
               vcl_string command = "copy \""+ img + "\" \"" + img_path + "\"";
               vcl_cout << '[' << command << ']' << vcl_endl;
-              system(command.c_str());
+              vcl_system(command.c_str());
             }
 
             // 4. create the pyramid
             vcl_cout << "Checking if processor is available...";
-            if (system(NULL)) {
+            if (vcl_system(NULL)) {
               vcl_cout << "Executing pyramid creation...\n";
               pyr_exe = make_quoted(pyr_exe);
               vcl_string command =  pyr_exe + " \"" + new_site + "\" " + ext.substr(1, ext.size()-1) + " " + levels[i];
               vcl_cout << '[' << command << ']' << vcl_endl;
-              system(command.data());
+              vcl_system(command.data());
               // set the image path to the directory where pyramid resides
               img_path = new_site;
             }

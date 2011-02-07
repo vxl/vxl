@@ -1,6 +1,7 @@
 #include "bwm_utils.h"
 
 #include <vcl_iostream.h>
+#include <vcl_fstream.h>
 #include <vil/vil_config.h>
 
 #include <vgui/vgui_dialog.h>

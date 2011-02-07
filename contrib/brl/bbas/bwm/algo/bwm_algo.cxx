@@ -17,6 +17,9 @@
 
 #include <vil/vil_load.h>
 
+#include <vcl_iostream.h>
+#include <vcl_cstdlib.h> // for std::malloc()
+
 // The well-known square function
 static inline double square(double x) { return x * x; }
 
@@ -25,8 +28,8 @@ void bwm_algo::get_vertices_xy(vsol_polygon_2d_sptr poly2d,
                                float **x, float **y)
 {
   int n = poly2d->size();
-  *x = (float*) malloc(sizeof(float) * n);
-  *y = (float*) malloc(sizeof(float) * n);
+  *x = (float*) vcl_malloc(sizeof(float) * n);
+  *y = (float*) vcl_malloc(sizeof(float) * n);
   for (int i=0; i<n; i++) {
     (*x)[i] = (float) poly2d->vertex(i)->x();
     (*y)[i] = (float) poly2d->vertex(i)->y();
@@ -39,8 +42,8 @@ void bwm_algo::get_vertices_xy(vsol_polygon_2d_sptr poly2d,
                                double **x, double **y)
 {
   int n = poly2d->size();
-  *x = (double*) malloc(sizeof(double) * n);
-  *y = (double*) malloc(sizeof(double) * n);
+  *x = (double*) vcl_malloc(sizeof(double) * n);
+  *y = (double*) vcl_malloc(sizeof(double) * n);
   for (int i=0; i<n; i++) {
     (*x)[i] = (double) poly2d->vertex(i)->x();
     (*y)[i] = (double) poly2d->vertex(i)->y();
@@ -53,8 +56,8 @@ void bwm_algo::get_vertices_xy(vsol_polyline_2d_sptr poly2d,
                                float **x, float **y)
 {
   int n = poly2d->size();
-  *x = (float*) malloc(sizeof(float) * n);
-  *y = (float*) malloc(sizeof(float) * n);
+  *x = (float*) vcl_malloc(sizeof(float) * n);
+  *y = (float*) vcl_malloc(sizeof(float) * n);
   for (int i=0; i<n; i++) {
     (*x)[i] = (float) poly2d->vertex(i)->x();
     (*y)[i] = (float) poly2d->vertex(i)->y();
@@ -66,9 +69,9 @@ void bwm_algo::get_vertices_xyz(vsol_polygon_3d_sptr poly3d,
                                 double **x, double **y, double **z)
 {
   int n = poly3d->size();
-  *x = (double*) malloc(sizeof(double) * n);
-  *y = (double*) malloc(sizeof(double) * n);
-  *z = (double*) malloc(sizeof(double) * n);
+  *x = (double*) vcl_malloc(sizeof(double) * n);
+  *y = (double*) vcl_malloc(sizeof(double) * n);
+  *z = (double*) vcl_malloc(sizeof(double) * n);
   for (int i=0; i<n; i++) {
     (*x)[i] = poly3d->vertex(i)->x();
     (*y)[i] = poly3d->vertex(i)->y();
