@@ -7,6 +7,8 @@
 template <class T>
 void boxm_block<T>::init_tree(T * octree)
 {
+  if(octree_) //release old memory
+    delete octree_;
   octree_=octree;
   octree->set_bbox(bbox_);
 }
