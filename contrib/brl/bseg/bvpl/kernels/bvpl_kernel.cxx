@@ -101,6 +101,31 @@ bool bvpl_kernel::save_raw(vcl_string filename)
   return true;
 }
 
+float bvpl_kernel::min_val()
+{
+  
+  kernel_.begin();
+  float min = (float)((*kernel_).c_);
+  while (!kernel_.isDone()){
+    if((float)((*kernel_).c_)< min)
+      min = (float)((*kernel_).c_);
+    ++kernel_;
+  }
+  return min;
+}
+
+float bvpl_kernel::max_val()
+{
+  
+  kernel_.begin();
+  float max = (float)((*kernel_).c_);
+  while (!kernel_.isDone()){
+    if((float)((*kernel_).c_)> max)
+      max = (float)((*kernel_).c_);
+    ++kernel_;
+  }
+  return max;
+}
 
 //: Return an xml element
 bxml_data_sptr bvpl_kernel::xml_element()

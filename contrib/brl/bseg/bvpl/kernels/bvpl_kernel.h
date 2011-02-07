@@ -83,6 +83,10 @@ class bvpl_kernel: public vbl_ref_count
       ++kernel_;
     }
   }
+  
+  //: Return min and max values (kernel dispatch)
+  float max_val();
+  float min_val();
 
   void print_to_file(vcl_string filename);
 
