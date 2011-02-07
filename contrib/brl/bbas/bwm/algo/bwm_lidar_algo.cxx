@@ -111,7 +111,7 @@ void bwm_lidar_algo::label_lidar(vil_image_view<float> first_ret,
   bld = bld2;
 
 
-  % dilate vegetation mask, don't overtake buldings
+  % // dilate vegetation mask, don't overtake buldings
   veg = imdilate(veg,ones(3)) & ~bld;
 
   % swallow up any small unclassified points with ground
