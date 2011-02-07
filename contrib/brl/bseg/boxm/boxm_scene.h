@@ -94,7 +94,7 @@ class boxm_scene :public boxm_scene_base
   bool load_block_and_neighbors(vgl_point_3d<int> i){ return load_block_and_neighbors(i.x(), i.y(), i.z()); }
 
   //: Write the active block to disk
-  void write_active_block();
+  void write_active_block(bool unload_block=true);
 
   //: Returns the active block(in memory)
   boxm_block<T>* get_active_block();

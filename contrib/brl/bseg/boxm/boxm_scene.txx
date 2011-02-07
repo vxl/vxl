@@ -182,7 +182,7 @@ void boxm_scene<T>::clone_blocks(boxm_scene<T> &scene_out)
 }
 
 template <class T>
-void boxm_scene<T>::write_active_block()
+void boxm_scene<T>::write_active_block(bool unload_block)
 {
   if (valid_index(active_block_)&& (!load_all_blocks_))
   {
@@ -196,13 +196,13 @@ void boxm_scene<T>::write_active_block()
     blocks_(x,y,z)->b_write(os, save_internal_nodes_, save_platform_independent_);
 
     // delete the block's data
-#if 0 //Is this necessary? If so, let Isa know
-    boxm_block<T>* block = blocks_(x,y,z);
-    block->delete_tree();
-    block->set_tree(0);
-    active_b
-    lock_.set(-1,-1,-1);
-#endif
+    if(unload_block)
+    {
+      boxm_block<T>* block = blocks_(x,y,z);
+      block->delete_tree();
+      block->set_tree(0);
+      active_block_.set(-1,-1,-1);
+    }
     os.close();
   }
 }
@@ -350,7 +350,6 @@ bool boxm_scene<T>::discover_block(unsigned i, unsigned j, unsigned k)
 template <class T>
 bool boxm_scene<T>::load_block(unsigned i, unsigned j, unsigned k)
 {
-  bool exist=false;
   if (!valid_index(vgl_point_3d<int>(i,j,k)))
     return false;
 
@@ -378,7 +377,6 @@ bool boxm_scene<T>::load_block(unsigned i, unsigned j, unsigned k)
     //if the binary block file is not found
     if (!os) {
       if (blocks_(i,j,k)->get_tree()==NULL) {
-        exist = false;
         T* tree= new T(max_tree_level_,init_tree_level_);
         blocks_(i,j,k)->init_tree(tree);
       }
@@ -817,7 +815,16 @@ bool boxm_scene<T>::unload_blocks(vgl_point_3d<int> min_idx, vgl_point_3d<int> m
 template <class T>
 void boxm_scene<T>::unload_active_blocks()
 {
-  if (active_blocks_.size()==0)
+  //unload active block
+  if(valid_index(active_block_))
+  {
+    boxm_block<T>* block = blocks_(active_block_.x(), active_block_.y(),active_block_.z());
+    block->delete_tree();
+    block->set_tree(0);
+    active_block_ = vgl_point_3d<int>(-1,-1,-1);
+  }
+  
+  if(active_blocks_.size()==0)
     return;
 
   vcl_set<vgl_point_3d<int>, bvgl_point_3d_cmp<int> >::iterator unload_it = active_blocks_.begin();
@@ -829,17 +836,7 @@ void boxm_scene<T>::unload_active_blocks()
     block->set_tree(0);
   }
   active_blocks_.clear();
-
-  if (valid_index(active_block_))
-  {
-    boxm_block<T>* block = blocks_(active_block_.x(), active_block_.y(),active_block_.z());
-    block->delete_tree();
-    block->set_tree(0);
-    active_block_ = vgl_point_3d<int>(-1,-1,-1);
-  }
-
-  //unload active block
-
+  
   return;
 }
 
@@ -939,7 +936,13 @@ bool boxm_block_iterator<T>::end()
   scene_->block_num(x,y,z);
 
   //if ((i_==x-1) && (j_==y-1) && (k_==z-1))
-  return k_==z || k_ == -1;
+  bool end = (k_==z || k_ == -1);
+  
+  //:If end, release memory
+  if(end)
+    scene_->unload_active_blocks();
+  
+  return end;
 }
 
 template <class T>
