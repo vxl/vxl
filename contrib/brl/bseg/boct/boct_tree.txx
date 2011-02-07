@@ -650,7 +650,9 @@ void boct_tree<T_loc,T_data>::b_read(vsl_b_istream & is)
         vcl_cerr << "First WRONG ERROR CODE OR CELL FOUND:"<<curr_cell->code_<<"!="<<code<<vcl_endl;
     }
         
-
+    //release old memory
+    if(this->root_)  delete root_;
+     
     this->root_=root;
     this->root_level_ = num_levels_ -1;
     this->max_val_ = (double)(1<<root_level_);
