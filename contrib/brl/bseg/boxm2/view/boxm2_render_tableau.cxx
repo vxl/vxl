@@ -408,14 +408,11 @@ cl_context boxm2_render_tableau::create_clgl_context()
     vcl_cout<< "GlewInit Error: "<<glewGetErrorString(err)<<vcl_endl;    // Problem: glewInit failed, something is seriously wrong.
 
   //initialize the render manager
-  int status=0;
-  cl_platform_id platform_id[1];
-  status = clGetPlatformIDs (1, platform_id, NULL);
-  if (status!=CL_SUCCESS) {
-    vcl_cout<<error_to_string(status);
-    return 0;
-  }
   cl_device_id device = gpu_pro_->devices()[0];
+  cl_platform_id platform_id[1]; 
+  int status = clGetDeviceInfo(device,CL_DEVICE_PLATFORM,sizeof(platform_id),(void*) platform_id,NULL);
+  if (!check_val(status, CL_SUCCESS, "boxm2_render Tableau::create_cl_gl_context CL_DEVICE_PLATFORM failed."))
+    return 0;
 
   ////create OpenCL context
   cl_context ComputeContext;

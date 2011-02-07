@@ -36,7 +36,7 @@ bool boxm2_opencl_render_process::init_kernel(cl_context* context,
 
   //set kernel options
   vcl_string options = "-D INTENSITY ";
-  options += "-D NVIDIA ";
+  //options += "-D NVIDIA ";
   options += "-D RENDER ";
   options += opts;
 
