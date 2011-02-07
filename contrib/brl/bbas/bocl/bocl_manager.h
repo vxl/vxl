@@ -31,7 +31,8 @@ template <class T>
 class bocl_manager
 {
  public:
-  cl_context context_;                        //!< CL context
+  cl_context context_;                        //!< GPU context
+  cl_context cpu_context_;                    //!< CPU context
 
   //: Destructor
   virtual ~bocl_manager();
@@ -43,7 +44,7 @@ class bocl_manager
   bool initialize_cl();
 
   //: initialize context from a device
-  bool initialize_context(cl_device_id* device);
+  cl_context create_context(cl_device_id* device, int num_devices);
 
   //: Initialise the opencl environment
   void clear_cl();
@@ -52,6 +53,8 @@ class bocl_manager
   cl_device_id* devices() {return devices_;}
   cl_device_id* cpus() {return cpus_;}
   cl_device_id* gpus() {return gpus_;}
+  int numCPUs() { return numCPUs_; }
+  int numGPUs() { return numGPUs_; }
 
   //get for current manager information..
   cl_context& context() {return context_;}
@@ -90,7 +93,7 @@ class bocl_manager
 
 
   //////////////////////////////////////////////////////////////////////////////
-  // OLD helper methods
+  // OLD helper methods/ deprecated
   //////////////////////////////////////////////////////////////////////////////
   //Malloc and Free Helper methods
   bool free_buffer(void* buffer);

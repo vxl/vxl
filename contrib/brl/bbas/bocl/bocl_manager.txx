@@ -48,7 +48,7 @@ bool bocl_manager<T>::initialize_cl()
   cl_int status = CL_SUCCESS;
 
   //////////////////////////////////////////////////////////////////////////////
-  // Check the number of  available platforms
+  // Check the number of available platforms
   //////////////////////////////////////////////////////////////////////////////
   cl_uint num_platforms = 0;
   status = clGetPlatformIDs(0, NULL, &num_platforms);
@@ -79,10 +79,11 @@ bool bocl_manager<T>::initialize_cl()
   cl_device_id gpus[2];
   cl_device_id cpus[2];
 
-  //: First checking for GPU
+  // First checking for GPU
   bool gpu_found=false;
   for (unsigned i=0;i<num_platforms;i++)
   {
+    vcl_cout<<"PLatform number; "<<i<<vcl_endl;
     if ( clGetDeviceIDs(platform_id[i], CL_DEVICE_TYPE_GPU, 2, gpus, &numGPUs_)== CL_SUCCESS)
     {
       clGetPlatformInfo(platform_id[i],CL_PLATFORM_NAME,sizeof(platform_name),platform_name,&ret_size);
@@ -95,10 +96,11 @@ bool bocl_manager<T>::initialize_cl()
       break;
     }
   }
-  //: now check for CPUs
+  // now check for CPUs
   bool cpu_found=false;
   for (unsigned i=0;i<num_platforms;i++)
   {
+    vcl_cout<<"PLatform number; "<<i<<vcl_endl;
     if ( clGetDeviceIDs(platform_id[i], CL_DEVICE_TYPE_CPU, 2, cpus, &numCPUs_)== CL_SUCCESS)
     {
       vcl_cout<<"FOUND "<<numCPUs_<<" CPUs"<<vcl_endl;
@@ -114,36 +116,40 @@ bool bocl_manager<T>::initialize_cl()
     vcl_cout<<"No GPU or CPU found, manager is invalid"<<vcl_endl;
     return false;
   }
+  
+  //create OLD devices for backward compatibility (store as last GPU)
+  devices_ = new cl_device_id[1]; 
+  devices_[0] = gpus_[numGPUs_-1];  
+  curr_info_ = bocl_device_info(devices_); 
+  
+  //create cpu context 
+  cpu_context_ = this->create_context(cpus_, numCPUs_); 
+  
+  //create gpu context (or just context)
+  context_ = this->create_context(gpus_, numGPUs_); 
 
-  //initialize context by default - last GPU
-  this->initialize_context( &gpus_[numGPUs_-1] );
-
-  for (unsigned id = 0; id<number_devices_; ++id)
-    vcl_cout << " Device id [" << id << "]: " << devices_[id] << '\n';
   return true;
 }
 
 template <class T>
-bool bocl_manager<T>::initialize_context(cl_device_id* device)
+cl_context bocl_manager<T>::create_context(cl_device_id* device, int num_devices)
 {
   //create device info for this device
-  curr_info_ = bocl_device_info(device);
-  vcl_cout<<curr_info_<<vcl_endl;
-
-  //remove old context, if it exists
-  if (context_) clReleaseContext(context_);
+  bocl_device_info info(device); 
+  vcl_cout<<"creating context on device: "<<info<<vcl_endl;
 
   //Create a context from the device ID
   int status = 1;
-  context_ = clCreateContext(0, 1, device, NULL, NULL, &status);
-  if (!check_val(status,CL_SUCCESS,"clCreateContextFromType failed.")) {
-    return false;
+  cl_context context = clCreateContext(0, num_devices, device, NULL, NULL, &status);
+  if (!check_val(status,CL_SUCCESS,"clCreateContextFromType failed: " + error_to_string(status))) {
+    return 0;
   }
 
+#if 0 //below is the old method of storing devices - seemed roundabout
   vcl_size_t device_list_size = 0;
 
   // First, get the size of device list data
-  status = clGetContextInfo(context_,
+  status = clGetContextInfo(context,
                             CL_CONTEXT_DEVICES,
                             0,
                             NULL,
@@ -166,8 +172,9 @@ bool bocl_manager<T>::initialize_context(cl_device_id* device)
                             NULL);
   if (!check_val(status, CL_SUCCESS, "clGetGetContextInfo failed."))
     return false;
+#endif 
 
-  return true;
+  return context;
 }
 
 

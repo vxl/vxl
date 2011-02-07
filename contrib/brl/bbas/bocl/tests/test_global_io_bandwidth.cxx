@@ -427,9 +427,10 @@ static void test_global_io_bandwidth()
   unsigned len=1024*1024;
   float bandwidth=0.0f;
 
-  test_atom_cmpxchg(4096,bandwidth);
-  test_locking_mechanism(1024,bandwidth);
+  //test_atom_cmpxchg(4096,bandwidth);
+  //test_locking_mechanism(1024,bandwidth);
 
+  vcl_cout<<"BANDWIDTH IN MB/s"<<vcl_endl;
   if (test_single_thread_read_bandwidth(len,bandwidth))
     vcl_cout<<" test_single_thread_read_bandwidth "<<bandwidth<<vcl_endl;
   if (test_workgroup_uncoalesced_read_bandwidth(len,bandwidth))

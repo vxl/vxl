@@ -191,6 +191,7 @@ vcl_ostream& operator <<(vcl_ostream &s, bocl_device_info& info)
   unsigned size = sizeof(vcl_size_t);
   s  << " Device Description\n"
      << " Device vendor: " << info.device_vendor_ << '\n'
+     << " Device Platform: " << info.platform_name_ << '\n'
      << " Device extensions: " << info.extensions_supported_ << 'n'
      << " Number of compute units: " << info.max_compute_units_ << '\n'
      << " Maximum clock frequency: " << info.max_clock_freq_/1000.0 << " GHz\n"
