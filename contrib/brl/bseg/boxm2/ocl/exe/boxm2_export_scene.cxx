@@ -54,6 +54,7 @@ int main(int argc,  char** argv)
   vul_arg<unsigned> num_az("-num_az", "Number of views along azimuth", 36);
   vul_arg<unsigned> num_in("-num_in", "Number of views along 90 degree incline", 3);
   vul_arg<double> radius("-radius", "Distance from center of bounding box", 5.0);
+  vul_arg<bool> stitch("-stitch", "also save a large, stitched image", false); 
   vul_arg_parse(argc, argv);
 
   //////////////////////////////////////////////////////////////////////////////
@@ -100,18 +101,12 @@ int main(int argc,  char** argv)
   //copy JS files into JS folder
   vcl_string aux_dir = vcl_string(VCL_SOURCE_ROOT_DIR) + "/contrib/brl/bseg/boxm2/ocl/exe/auxiliary/";
 
-  //copy html and JS files
-  vcl_string index_name = aux_dir + "index.html";
-  vcl_string dest_name = dir() + "/index.html";
-  boxm2_util::copy_file(index_name, dest_name);
-
   vcl_vector<vcl_string> js_files;
   js_files.push_back("/js/jquery.min.js");
   js_files.push_back("/js/jquery.cookie-min.js");
   js_files.push_back("/js/jquery.disabletextselect-min.js");
   js_files.push_back("/js/jquery.mousewheel-min.js");
   js_files.push_back("/js/jquery.reel-min.js");
-  js_files.push_back("/js/js.js");
 
   //copy files to dir() + js
   for (unsigned int i=0; i<js_files.size(); ++i)
@@ -156,7 +151,12 @@ int main(int argc,  char** argv)
   sphere.add_uniform_views(vnl_math::pi/3, vnl_math::pi/18.0, ni(), nj());
   vcl_cout<<"Number of views to render: "<<sphere.size()<<vcl_endl;
 
+  //map of ID's that have been rendered
+  vcl_map<int, vcl_string> saved_imgs; 
+  vbl_array_2d<vcl_string> img_grid(num_in(), num_az()); 
+
   //rendered array of views
+  vcl_map<int, vil_image_view<vxl_byte>* > img_map; 
   vbl_array_2d<vil_image_view<vxl_byte>* > imgs(num_in(), num_az());
   double az_incr = 2.0*vnl_math::pi/num_az();
   double el_incr = vnl_math::pi/2.0/num_in();
@@ -172,46 +172,56 @@ int main(int argc,  char** argv)
       vgl_point_3d<double> cart_point = sphere.cart_coord(curr_point);
       int uid; double dist;
       vsph_view_point<vcl_string> view = sphere.find_closest(cart_point, uid, dist);
-      vpgl_camera_double_sptr cam_sptr = view.camera();
-      brdb_value_sptr brdb_cam = new brdb_value_t<vpgl_camera_double_sptr>(cam_sptr);
+      
+      //if the viewpoint has already been rendered, skip it
+      vcl_stringstream fstr, idstream;
+      fstr<<"scene_"<<uid<<".jpg"; 
+      img_grid(el_i, az_i) = fstr.str(); 
+      idstream<<imgdir<<"scene_"<<uid<<".jpg"; 
+      if( saved_imgs.find(uid) == saved_imgs.end() )
+      {
+        vpgl_camera_double_sptr cam_sptr = view.camera();
+        brdb_value_sptr brdb_cam = new brdb_value_t<vpgl_camera_double_sptr>(cam_sptr);
 
-      //set focal length and image size for camera
-      vpgl_perspective_camera<double>* cam = static_cast<vpgl_perspective_camera<double>* >(cam_sptr.ptr());
-      vpgl_calibration_matrix<double> mat = cam->get_calibration();
-      mat.set_focal_length(mat.focal_length());
-      cam->set_calibration(mat);
+        //set focal length and image size for camera
+        vpgl_perspective_camera<double>* cam = static_cast<vpgl_perspective_camera<double>* >(cam_sptr.ptr());
+        vpgl_calibration_matrix<double> mat = cam->get_calibration();
+        mat.set_focal_length(mat.focal_length());
+        cam->set_calibration(mat);
 
-      //render scene
-      vcl_vector<brdb_value_sptr> input;
-      input.push_back(brdb_scene);
-      input.push_back(brdb_cam);
-      input.push_back(brdb_expimg);
-      input.push_back(brdb_vis);
-      vcl_vector<brdb_value_sptr> output;
-      expimg->fill(0);
-      vis_img->fill(1.0f);
-      gpu_pro->run(&gpu_render, input, output);
-      gpu_pro->finish();
+        //render scene
+        vcl_vector<brdb_value_sptr> input;
+        input.push_back(brdb_scene);
+        input.push_back(brdb_cam);
+        input.push_back(brdb_expimg);
+        input.push_back(brdb_vis);
+        vcl_vector<brdb_value_sptr> output;
+        expimg->fill(0);
+        vis_img->fill(1.0f);
+        gpu_pro->run(&gpu_render, input, output);
+        gpu_pro->finish();
 
-      vil_image_view<unsigned int>* expimg_view = static_cast<vil_image_view<unsigned int>* >(expimg_sptr.ptr());
-      vil_image_view<vxl_byte>* byte_img = new vil_image_view<vxl_byte>(ni(), nj());
-      for (unsigned int i=0; i<ni(); ++i)
-        for (unsigned int j=0; j<nj(); ++j)
-          (*byte_img)(i,j) =  static_cast<vxl_byte>( (*expimg_view)(i,j) );   //just grab the first byte (all foura r the same)
+        vil_image_view<unsigned int>* expimg_view = static_cast<vil_image_view<unsigned int>* >(expimg_sptr.ptr());
+        vil_image_view<vxl_byte>* byte_img = new vil_image_view<vxl_byte>(ni(), nj());
+        for (unsigned int i=0; i<ni(); ++i)
+          for (unsigned int j=0; j<nj(); ++j)
+            (*byte_img)(i,j) =  static_cast<vxl_byte>( (*expimg_view)(i,j) );   //just grab the first byte (all foura r the same)
 
-      //save as jpeg
-      vcl_stringstream pngstream, jpgstream;
-      jpgstream<<imgdir<<"/scene_"<<el_i<<'_'<<az_i<<".jpg";
-      vil_save( *byte_img, jpgstream.str().c_str() );
-
-      //and store for whatever reason
-      imgs(el_i, az_i) = byte_img;
+        saved_imgs[uid] = idstream.str(); 
+        vil_save( *byte_img, idstream.str().c_str() );
+        
+        //and store for whatever reason
+        imgs(el_i, az_i) = byte_img;
+      }
     }
   }
 
-#if 0 // if stitch is specified, also save a big image
+  //need to generate a JS.JS file that lists an array of these images
+  boxm2_util::generate_jsfunc(img_grid, dir() + "/js/js.js"); 
+  boxm2_util::generate_html(num_in(), num_az(),  dir() + "/index.html"); 
+
+  // if stitch is specified, also save a big image
   if (stitch())
-#endif
   {
     //construct a humungous image
     vil_image_view<vxl_byte>* stitched = new vil_image_view<vxl_byte>(ni() * num_az(), nj() * num_in());
