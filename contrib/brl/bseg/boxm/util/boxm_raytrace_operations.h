@@ -300,7 +300,7 @@ void tri_fill_value(tri_it_T &tri_it, vil_image_view<T> &img, T val)
   return;
 }
 
-#ifdef DEBUG // this function commented out
+#if 0 // this function commented out
 template <class T>
 void tri_fill_value_aa(boxm_triangle_scan_iterator_aa &tri_it, vil_image_view<T> &img, vil_image_view<float> &aa_weights, T val)
 {
