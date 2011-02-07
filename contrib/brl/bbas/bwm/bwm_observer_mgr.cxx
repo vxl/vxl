@@ -161,7 +161,7 @@ void bwm_observer_mgr::set_corr_mode()
 
   if (!params.ask())
     return;
-  if (mode ==bwm_observer_mgr::WORLD_TO_IMAGE)
+  if (mode ==bwm_observer_mgr::WORLD_TO_IMAGE) {
     if (bwm_world::instance()->world_pt_valid()) {
       corr_mode_ =  bwm_observer_mgr::WORLD_TO_IMAGE;
       return;
@@ -169,8 +169,9 @@ void bwm_observer_mgr::set_corr_mode()
     else {
       vcl_cout << "In bwm_observer_mgr::set_corr_mode() -\n"
                << " can't use WORLD_TO_IMAGE mode since the 3-d world"
-               << " point is not defined\n";
+               << " point is not defined" << vcl_endl;
     }
+  }
 
   if (t == bwm_observer_mgr::FEATURE_CORR) {
     corr_type_ = bwm_observer_mgr::FEATURE_CORR;
@@ -179,8 +180,7 @@ void bwm_observer_mgr::set_corr_mode()
     corr_type_ = bwm_observer_mgr::TERRAIN_CORR;
   }
   else
-    vcl_cout << "In bwm_observer_mgr::set_corr_mode() Undefined TYPE -\n" ;
-
+    vcl_cout << "In bwm_observer_mgr::set_corr_mode() Undefined TYPE - " << t << vcl_endl;
 
   corr_mode_ = bwm_observer_mgr::IMAGE_TO_IMAGE;
 
@@ -247,13 +247,14 @@ void bwm_observer_mgr::collect_corr()
 
 void bwm_observer_mgr::set_corr(bwm_corr_sptr corr)
 {
-  if (corr->num_matches() > 0)
+  if (corr->num_matches() > 0) {
     if (corr_type_ == FEATURE_CORR) {
       corr_list_.push_back(corr);
     }
     else if (corr_type_ == TERRAIN_CORR) {
       terrain_corr_list_.push_back(corr);
     }
+  }
 }
 
 void bwm_observer_mgr::update_corr(bwm_observer_cam* obs,
@@ -305,10 +306,10 @@ void bwm_observer_mgr::save_corr(vcl_ostream& s)
     vcl_cerr << "No correspondences to save yet!\n";
   else
   {
+#if 0
     vcl_string fname = bwm_utils::select_file();
     vcl_ofstream s(fname.data());
 
-#if 0
     s << "Cameras:" << vcl_endl;
 #endif
     // first write down the camera info
@@ -322,20 +323,20 @@ void bwm_observer_mgr::save_corr(vcl_ostream& s)
 
         // check if that camera is involved with any of the correspondences
         if (obs_in_corr(obs)) {
-          s << "CAM_TAB: " << i << vcl_endl
-            << "IMAGE: " << obs->image_tableau()->file_name() << vcl_endl
-            << "CAMERA_TYPE: " ;
+          s << "CAM_TAB: " << i << '\n'
+            << "IMAGE: " << obs->image_tableau()->file_name() << '\n'
+            << "CAMERA_TYPE: ";
           if (observers_[i]->type_name().compare("bwm_observer_rat_cam") == 0)
             s << "rational" << vcl_endl;
           else if (observers_[i]->type_name().compare("bwm_observer_cam_proj") == 0)
             s << "projective" << vcl_endl;
-          s << "CAMERA_PATH: " << obs->camera_path() << vcl_endl << vcl_endl;
+          s << "CAMERA_PATH: " << obs->camera_path() << '\n' << vcl_endl;
           camera_map[obs] = i;
         }
       }
     }
 
-    s << "CORRESPONDENCES: " << corr_list_.size() << vcl_endl
+    s << "CORRESPONDENCES: " << corr_list_.size() << '\n'
       << "CORR_MODE: ";
     if (corr_mode_ == IMAGE_TO_IMAGE)
       s << "IMAGE_TO_IMAGE" << vcl_endl;
@@ -373,7 +374,7 @@ void bwm_observer_mgr::save_corr_XML()
     vcl_string fname = bwm_utils::select_file();
     vcl_ofstream s(fname.data());
 
-    s << "<BWM_CONFIG>" << vcl_endl
+    s << "<BWM_CONFIG>" << '\n'
       << "<TABLEAUS>" << vcl_endl;
     // first write down the camera info
     vcl_map<bwm_observer_cam*, unsigned> camera_map;
