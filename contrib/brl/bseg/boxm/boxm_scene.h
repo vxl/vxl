@@ -160,8 +160,15 @@ class boxm_scene :public boxm_scene_base
   boct_tree_cell<loc_type, datatype>* locate_point_in_memory(vgl_point_3d<double> &p);
 
   void set_block(vgl_point_3d<int> const& idx, boxm_block<T>* block)
-  { blocks_(idx.x(),idx.y(),idx.z()) = block; active_block_=idx; }
+  { 
+    if(blocks_(idx.x(),idx.y(),idx.z())) //release memory
+      delete blocks_(idx.x(),idx.y(),idx.z());
+    
+    blocks_(idx.x(),idx.y(),idx.z()) = block; active_block_=idx; 
+  }
 
+  void set_block(int i, int j, int k , boxm_block<T>* block) { set_block(vgl_point_3d<int>(i,j,k), block);}
+  
   void write_scene(vcl_string filename = "scene.xml");
 
   void load_scene(vcl_string filename);
