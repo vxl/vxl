@@ -14,7 +14,6 @@
 
 #include <vsol/vsol_point_2d.h>
 #include <vsol/vsol_point_3d.h>
-#include <vpgl/vpgl_rational_camera.h>
 
 class bwm_site : public vbl_ref_count
 {
@@ -26,7 +25,7 @@ class bwm_site : public vbl_ref_count
            vcl_vector<bool> is_pyr, vcl_vector<bool> is_act, vcl_vector<vcl_string> levels,
            vcl_vector<vcl_pair<vcl_string, vcl_string> > objects, vsol_point_3d_sptr lvcs)
     : name_(site_name), path_(site_dir), image_paths_(images), pyr_(is_pyr),
-    act_(is_act), pyr_levels_(levels), objects_(objects), lvcs_(lvcs) {}
+    act_(is_act), pyr_levels_(levels), lvcs_(lvcs), objects_(objects) {}
 
   virtual ~bwm_site();
 

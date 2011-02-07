@@ -35,7 +35,7 @@
 #define SHRINK_MESH 1
 
 bwm_observer_vgui::bwm_observer_vgui(bgui_image_tableau_sptr const& img)
-  : bwm_observer_img(img), moving_face_(0), corr_valid_(false)
+  : bwm_observer_img(img), corr_valid_(false), moving_face_(0)
 {
   //corr_.second = 0;
   mesh_style_= vgui_style::new_style();
@@ -280,7 +280,6 @@ void bwm_observer_vgui::draw_mesh(bwm_observable_sptr observable,
       vcl_vector<vsol_polygon_2d_sptr> mesh;
       while (iter != faces.end()) {
         // project the new object with the given camera
-        int face_id = iter->first;
         vsol_polygon_3d_sptr obj = iter->second;
         vsol_polygon_2d_sptr poly_2d;
         proj_poly(obj, poly_2d);

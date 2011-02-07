@@ -42,11 +42,10 @@ class bwm_observer_img : public bgui_vsol2D_tableau
                    vcl_string image_path, bool display_image_path);
 
   bwm_observer_img(bgui_image_tableau_sptr const& img)
-    : bgui_vsol2D_tableau(img), img_tab_(img), viewer_(0),
-    show_image_path_(false), start_x_(0), start_y_(0), moving_p_(0),
-    moving_v_(0), moving_vertex_(false), moving_polygon_(false),
-    in_jog_mode_(false), row_(0), col_(0), mask_(0), lock_vgui_status_(false),
-    vgui_status_on_(false), draw_mode_(MODE_2D_POLY), change_type_("change") {  }
+  : bgui_vsol2D_tableau(img), lock_vgui_status_(false), vgui_status_on_(false), draw_mode_(MODE_2D_POLY),
+    img_tab_(img), viewer_(0), mask_(0), change_type_("change"), show_image_path_(false),
+    start_x_(0), start_y_(0), moving_p_(0), moving_v_(0), moving_vertex_(false), moving_polygon_(false),
+    in_jog_mode_(false), row_(0), col_(0) {}
 
   virtual ~bwm_observer_img();
 

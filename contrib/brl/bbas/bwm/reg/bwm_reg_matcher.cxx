@@ -15,17 +15,18 @@ bwm_reg_matcher(vcl_vector<vsol_digital_curve_2d_sptr> const& model_edges,
                 unsigned search_col_origin, unsigned search_row_origin,
                 unsigned search_cols, unsigned search_rows,
                 vcl_vector<vsol_digital_curve_2d_sptr> const& search_edges
-               ) :  model_edges_(model_edges), angle_threshold_(0),
+               ) :  angle_threshold_(0),
                     search_col_origin_(search_col_origin),
                     search_row_origin_(search_row_origin),
                     search_cols_(search_cols), search_rows_(search_rows),
+                    model_edges_(model_edges),
                     search_edges_(search_edges),
                     champh_(bwm_reg_edge_champher(search_col_origin,
                                                   search_row_origin,
                                                   search_cols, search_rows,
                                                   search_edges)),
-                    hist_(bsta_histogram<double>(0.0,max_dist,dist_bins)),
-                    min_hist_(bsta_histogram<double>(0.0,max_dist,dist_bins))
+                    min_hist_(bsta_histogram<double>(0.0,max_dist,dist_bins)),
+                    hist_(bsta_histogram<double>(0.0,max_dist,dist_bins))
 {
   //get the bounds on the model edges
   double dcmin = vnl_numeric_traits<double>::maxval, dcmax = 0;

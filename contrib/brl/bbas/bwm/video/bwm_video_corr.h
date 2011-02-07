@@ -29,16 +29,17 @@ class bwm_video_corr : public vbl_ref_count
   // Constructors/Initializers/Destructors-------------------------------------
 
   //: Constructor - default
-  bwm_video_corr() : observer_(0), world_pt_valid_(false), id_(unique_id_++) {}
+  bwm_video_corr() : id_(unique_id_++), observer_(0), world_pt_valid_(false) {}
 
   //: Constructor - from data
   bwm_video_corr(bwm_observer_video* obs, unsigned frame_index,
-                 vgl_point_2d<double> const& pt): observer_(obs),
-    world_pt_valid_(false), id_(unique_id_++)
-    { matches_[frame_index]=pt; }
+                 vgl_point_2d<double> const& pt)
+  : id_(unique_id_++), observer_(obs), world_pt_valid_(false)
+  { matches_[frame_index]=pt; }
 
   //: Constructor - don't copy the ref count
-  bwm_video_corr(bwm_video_corr const& c) : vbl_ref_count() {}
+  bwm_video_corr(bwm_video_corr const& c)
+  : vbl_ref_count(), world_pt_valid_(c.world_pt_valid()), world_pt_(c.world_pt()) {}
 
   // Destructor
   ~bwm_video_corr() {}

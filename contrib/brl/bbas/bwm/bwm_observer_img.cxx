@@ -29,11 +29,9 @@
 #include <vcl_cmath.h>
 
 bwm_observer_img::bwm_observer_img(bgui_image_tableau_sptr const& img, vcl_string name, vcl_string image_path, bool display_image_path)
-: bgui_vsol2D_tableau(img), img_tab_(img), viewer_(0),
-  show_image_path_(false), start_x_(0), start_y_(0), moving_p_(0),
-  moving_v_(0), moving_vertex_(false), moving_polygon_(false),
-  in_jog_mode_(false), row_(0), col_(0), lock_vgui_status_(false),
-  vgui_status_on_(false), draw_mode_(MODE_2D_POLY), change_type_("change")
+: bgui_vsol2D_tableau(img), lock_vgui_status_(false), vgui_status_on_(false), draw_mode_(MODE_2D_POLY), img_tab_(img), viewer_(0),
+  change_type_("change"), show_image_path_(false), start_x_(0), start_y_(0), moving_p_(0), moving_v_(0), moving_vertex_(false),
+  moving_polygon_(false), in_jog_mode_(false), row_(0), col_(0)
 {
 // LOAD IMAGE
 
@@ -71,7 +69,7 @@ bool bwm_observer_img::handle(const vgui_event &e)
       moving_vertex_ = false;
       return true;
     }
-    else if (v = (bwm_soview2D_vertex*) get_selected_object(VERTEX_TYPE)) {
+    else if ((v = (bwm_soview2D_vertex*) get_selected_object(VERTEX_TYPE))) {
       pi.window_to_image_coordinates(e.wx, e.wy, start_x_, start_y_);
       moving_v_ = v;
       moving_p_ = v->obj();
@@ -81,7 +79,7 @@ bool bwm_observer_img::handle(const vgui_event &e)
     }
   }
   else if (e.type == vgui_MOTION && e.button == vgui_MIDDLE &&
-             e.modifier == vgui_SHIFT && moving_polygon_)
+           e.modifier == vgui_SHIFT && moving_polygon_)
   {
     float x, y;
     pi.window_to_image_coordinates(e.wx, e.wy, x, y);
@@ -294,8 +292,8 @@ void bwm_observer_img::paste(float x, float y)
 
 bool bwm_observer_img::get_selected_box(bgui_vsol_soview2D_polygon* &box)
 {
-  bgui_vsol_soview2D_polygon* p;
-  if (p = (bgui_vsol_soview2D_polygon*)get_selected_object(POLYGON_TYPE)) {
+  bgui_vsol_soview2D_polygon* p = (bgui_vsol_soview2D_polygon*)get_selected_object(POLYGON_TYPE);
+  if (p) {
 #if 0
     if (p->sptr()->size() != 4) {
       vcl_cerr << "Selected polygon is not a box\n";
@@ -756,10 +754,10 @@ void bwm_observer_img::zoom_to_fit()
   unsigned ni = img_tab_->get_image_resource()->ni();
   unsigned nj = img_tab_->get_image_resource()->nj();
 
+#if 0
   // current viewer scale
   float sx = viewer_->token.scaleX, sy = vcl_fabs(viewer_->token.scaleY);
 
-#if 0
   // the window size
   vgui_projection_inspector p_insp;
   vgl_box_2d<float> bb(p_insp.x1, p_insp.x2, p_insp.y1, p_insp.y2);
