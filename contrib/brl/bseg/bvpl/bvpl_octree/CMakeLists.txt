@@ -16,6 +16,7 @@ SET(bvpl_octree_sources
     bvpl_octree_vector_operator.h
     bvpl_scene_kernel_operator.h
     bvpl_scene_vector_operator.h
+    bvpl_block_kernel_operator
     bvpl_octree_sample.h               bvpl_octree_sample.txx
     bvpl_octree_vrml_util.h
     bvpl_cell_data_traits.h
@@ -23,6 +24,7 @@ SET(bvpl_octree_sources
     bvpl_scene_neighborhood_operator.h bvpl_scene_neighborhood_operator.cxx
     bvpl_scene_statistics.h           bvpl_scene_statistics.cxx
     bvpl_discover_pca_kernels.h       bvpl_discover_pca_kernels.cxx
+    bvpl_taylor_basis.h               bvpl_taylor_basis.cxx
    )
 
 AUX_SOURCE_DIRECTORY(Templates bvpl_octree_sources)
