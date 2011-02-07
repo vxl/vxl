@@ -36,7 +36,8 @@ class bwm_observable_point : public bwm_observable
 
   bwm_observable_point(const vgl_point_3d<double>& p) { object_ = new vsol_point_3d(p); }
 
-  bwm_observable_point(bwm_observable_point& p) { object_ = new vsol_point_3d(p.object_->get_p()); }
+  bwm_observable_point(bwm_observable_point& p)
+  : bwm_observable(), object_(new vsol_point_3d(p.object_->get_p())) {}
 
  private:
   vsol_point_3d_sptr object_;

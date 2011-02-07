@@ -31,7 +31,7 @@ class bwm_observable : public vgui_observable, public vbl_ref_count
   // constructor
   bwm_observable() {}
 
-  bwm_observable(const bwm_observable&) {}
+  bwm_observable(const bwm_observable&) : vgui_observable(), vbl_ref_count() {}
 
   virtual ~bwm_observable() {}
 
