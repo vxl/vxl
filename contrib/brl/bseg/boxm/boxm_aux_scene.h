@@ -43,6 +43,7 @@ class boxm_aux_scene
    boct_tree_cell_reader<T_loc, T_AUX >* get_block_incremental(vgl_point_3d<int> block_idx);
 
    void write_active_block() { aux_scene_->write_active_block(); }
+  void unload_active_blocks() { aux_scene_->unload_active_blocks(); } 
    void clean_scene();
 
  private:
