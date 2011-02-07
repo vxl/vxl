@@ -102,133 +102,135 @@ class boxm_raytrace_function
                 }
 
                  // get direction of vector and enter point - this depends on which camera type we have
-                        vgl_point_3d<double> ray_origin;
-                        vgl_vector_3d<double> direction;
-                        vgl_point_3d<double> enter_pt(0.0,0.0,0.0);
-                        vcl_vector<vgl_point_3d<double> > plane_intersections(6);
-                        // add 0.5 to get center of pixel
-                        generate_ray(i , j, block_bb, ray_origin, direction);
+                vgl_point_3d<double> ray_origin;
+                vgl_vector_3d<double> direction;
+                vgl_point_3d<double> enter_pt(0.0,0.0,0.0);
+                vcl_vector<vgl_point_3d<double> > plane_intersections(6);
+                // add 0.5 to get center of pixel
+                generate_ray(i , j, block_bb, ray_origin, direction);
 
-                        // compute intersection of each plane with ray
-                        double lambda[6];
-                        lambda[0] = (block_bb.min_x() - ray_origin.x())/direction.x();
-                        lambda[1] = (block_bb.max_x() - ray_origin.x())/direction.x();
-                        lambda[2] = (block_bb.min_y() - ray_origin.y())/direction.y();
-                        lambda[3] = (block_bb.max_y() - ray_origin.y())/direction.y();
-                        lambda[4] = (block_bb.min_z() - ray_origin.z())/direction.z();
-                        lambda[5] = (block_bb.max_z() - ray_origin.z())/direction.z();
+                // compute intersection of each plane with ray
+                double lambda[6];
+                lambda[0] = (block_bb.min_x() - ray_origin.x())/direction.x();
+                lambda[1] = (block_bb.max_x() - ray_origin.x())/direction.x();
+                lambda[2] = (block_bb.min_y() - ray_origin.y())/direction.y();
+                lambda[3] = (block_bb.max_y() - ray_origin.y())/direction.y();
+                lambda[4] = (block_bb.min_z() - ray_origin.z())/direction.z();
+                lambda[5] = (block_bb.max_z() - ray_origin.z())/direction.z();
 
-                        if (block_bb.contains(ray_origin))
-                            enter_pt=ray_origin;
-                        else
-                        {
-                            for (unsigned int face=0; face<6; ++face) {
-                                plane_intersections[face] = ray_origin + (direction * lambda[face]);
-                            }
+                if (block_bb.contains(ray_origin))
+                    enter_pt=ray_origin;
+                else
+                {
+                    for (unsigned int face=0; face<6; ++face) {
+                        plane_intersections[face] = ray_origin + (direction * lambda[face]);
+                    }
 
-                            // determine which point is the entrance point based on direction
-                            const double epsilon = 1e-6; // use in place of zero to avoid badly conditioned lambdas
-                            if ( (plane_intersections[5].x() >= block_bb.min_x()) && (plane_intersections[5].x() <= block_bb.max_x()) &&
-                                (plane_intersections[5].y() >= block_bb.min_y()) && (plane_intersections[5].y() <= block_bb.max_y()) &&
-                                (direction.z() < -epsilon) )
-                            {
-                                // ray intersects the zmax plane
-                                // check zmax first since it is probably the most common
-                                enter_pt = plane_intersections[5];
-                            }
-                            else if ( (plane_intersections[0].y() >= block_bb.min_y()) && (plane_intersections[0].y() <= block_bb.max_y()) &&
-                                (plane_intersections[0].z() >= block_bb.min_z()) && (plane_intersections[0].z() <= block_bb.max_z()) &&
-                                (direction.x() > epsilon) )
-                            {
-                                // ray intersects the xmin plane
-                                enter_pt = plane_intersections[0];
-                            }
-                            else if ( (plane_intersections[1].y() >= block_bb.min_y()) && (plane_intersections[1].y() <= block_bb.max_y()) &&
-                                (plane_intersections[1].z() >= block_bb.min_z()) && (plane_intersections[1].z() <= block_bb.max_z()) &&
-                                (direction.x() < -epsilon) )
-                            {
-                                // ray intersects the xmax plane
-                                enter_pt = plane_intersections[1];
-                            }
-                            else if ( (plane_intersections[2].x() >= block_bb.min_x()) && (plane_intersections[2].x() <= block_bb.max_x()) &&
-                                (plane_intersections[2].z() >= block_bb.min_z()) && (plane_intersections[2].z() <= block_bb.max_z()) &&
-                                (direction.y() > epsilon) )
-                            {
-                                // ray intersects the ymin plane
-                                enter_pt = plane_intersections[2];
-                            }
-                            else if ( (plane_intersections[3].x() >= block_bb.min_x()) && (plane_intersections[3].x() <= block_bb.max_x()) &&
-                                (plane_intersections[3].z() >= block_bb.min_z()) && (plane_intersections[3].z() <= block_bb.max_z()) &&
-                                (direction.y() < -epsilon) )
-                            {
-                                // ray intersects the ymax plane
-                                enter_pt = plane_intersections[3];
-                            }
-                            else if ( (plane_intersections[4].x() >= block_bb.min_x()) && (plane_intersections[4].x() <= block_bb.max_x()) &&
-                                (plane_intersections[4].y() >= block_bb.min_y()) && (plane_intersections[4].y() <= block_bb.max_y()) &&
-                                (direction.z() > epsilon) )
-                            {
-                                // ray intersects the zmin plane
-                                enter_pt = plane_intersections[4];
-                            }
-                            else {
-                                // no entry point into this block found
-                                continue;
-                            }
-                        }
-                        boct_tree_cell<T_loc,T_data > * curr_cell=tree->locate_point_global(enter_pt);
-                        while (true)
-                        {
-                            boct_loc_code<T_loc> cell_code(curr_cell->get_code());
+                    // determine which point is the entrance point based on direction
+                    const double epsilon = 1e-6; // use in place of zero to avoid badly conditioned lambdas
+                    if ( (plane_intersections[5].x() >= block_bb.min_x()) && (plane_intersections[5].x() <= block_bb.max_x()) &&
+                        (plane_intersections[5].y() >= block_bb.min_y()) && (plane_intersections[5].y() <= block_bb.max_y()) &&
+                        (direction.z() < -epsilon) )
+                    {
+                        // ray intersects the zmax plane
+                        // check zmax first since it is probably the most common
+                        enter_pt = plane_intersections[5];
+                    }
+                    else if ( (plane_intersections[0].y() >= block_bb.min_y()) && (plane_intersections[0].y() <= block_bb.max_y()) &&
+                        (plane_intersections[0].z() >= block_bb.min_z()) && (plane_intersections[0].z() <= block_bb.max_z()) &&
+                        (direction.x() > epsilon) )
+                    {
+                        // ray intersects the xmin plane
+                        enter_pt = plane_intersections[0];
+                    }
+                    else if ( (plane_intersections[1].y() >= block_bb.min_y()) && (plane_intersections[1].y() <= block_bb.max_y()) &&
+                        (plane_intersections[1].z() >= block_bb.min_z()) && (plane_intersections[1].z() <= block_bb.max_z()) &&
+                        (direction.x() < -epsilon) )
+                    {
+                        // ray intersects the xmax plane
+                        enter_pt = plane_intersections[1];
+                    }
+                    else if ( (plane_intersections[2].x() >= block_bb.min_x()) && (plane_intersections[2].x() <= block_bb.max_x()) &&
+                        (plane_intersections[2].z() >= block_bb.min_z()) && (plane_intersections[2].z() <= block_bb.max_z()) &&
+                        (direction.y() > epsilon) )
+                    {
+                        // ray intersects the ymin plane
+                        enter_pt = plane_intersections[2];
+                    }
+                    else if ( (plane_intersections[3].x() >= block_bb.min_x()) && (plane_intersections[3].x() <= block_bb.max_x()) &&
+                        (plane_intersections[3].z() >= block_bb.min_z()) && (plane_intersections[3].z() <= block_bb.max_z()) &&
+                        (direction.y() < -epsilon) )
+                    {
+                        // ray intersects the ymax plane
+                        enter_pt = plane_intersections[3];
+                    }
+                    else if ( (plane_intersections[4].x() >= block_bb.min_x()) && (plane_intersections[4].x() <= block_bb.max_x()) &&
+                        (plane_intersections[4].y() >= block_bb.min_y()) && (plane_intersections[4].y() <= block_bb.max_y()) &&
+                        (direction.z() > epsilon) )
+                    {
+                        // ray intersects the zmin plane
+                        enter_pt = plane_intersections[4];
+                    }
+                    else {
+                        // no entry point into this block found
+                        continue;
+                    }
+                }
+                boct_tree_cell<T_loc,T_data > * curr_cell=tree->locate_point_global(enter_pt);
+                while (true)
+                {
+                    boct_loc_code<T_loc> cell_code(curr_cell->get_code());
 
-                            boct_tree_cell<T_loc,T_aux > * curr_aux_cell=NULL;
-                            if (step_functor.is_aux_)
-                                curr_aux_cell=aux_tree->get_cell(cell_code);
-                            vgl_box_3d<double> cell_bb = tree->cell_bounding_box(curr_cell);
-                            // find exit point of cell
-                            vgl_point_3d<double> exit_pt;
-                            double lambda=0;
-                            boct_face_idx face_id=NONE;
-                            bool found_exit =boxm_utils::cube_exit_point(cell_bb,enter_pt,direction, exit_pt,lambda,face_id);
-                            if (!found_exit) {
-                                vcl_cerr << "error: could not find cell exit point\n"
-                                         << "   enter_pt = [" << enter_pt.x() << ", " << enter_pt.y() << ", " << enter_pt.z() << "]\n"
-                                         << "   direction = [" << direction.x() << ", " << direction.y() << ", " << direction.z() << "]\n"
-                                         << "   cell_bb = [" << cell_bb.min_x() <<", " << cell_bb.max_x() << "]  [" << cell_bb.min_y()
-                                         << ", " << cell_bb.max_y() << "]  [" << cell_bb.min_z() << ", " << cell_bb.max_z() <<"]\n";
-                                assert(found_exit);
-                                break;
-                            }
-                            T_data cell_val=curr_cell->data();
-                            T_aux aux_val;
-                            if (step_functor.is_aux_)
-                                aux_val=curr_aux_cell->data();
-                            continue_trace(i-img_i0_, j-img_j0_) = step_functor.step_cell(enter_pt, exit_pt, cell_val,aux_val);
-                            curr_cell->set_data(cell_val);
-                            if (step_functor.is_aux_)
-                                curr_aux_cell->set_data(aux_val);
-                            // normalize the point to [0-1]to obtain the index.
-                            vgl_point_3d<double> exit_pt_norm((exit_pt.x()-block_bb.min_x())/block_bb.width(),
-                                                              (exit_pt.y()-block_bb.min_y())/block_bb.height(),
-                                                              (exit_pt.z()-block_bb.min_z())/block_bb.depth());
-                            // obtain the code for the exit point
-                            boct_loc_code<T_loc> exit_loc_code(exit_pt_norm,tree->root_level());
-                            cell_type *neighborcell=NULL;
-                            if (curr_cell->find_neighbor(face_id,neighborcell,tree->root_level()))
-                                curr_cell=neighborcell->traverse_force(exit_loc_code);
-                            else
-                            {
-                                vcl_cerr << "NO NEIGHBORS FOUND!\n";
-                                break;
-                            }
-                            enter_pt=exit_pt;
-                        }
+                    boct_tree_cell<T_loc,T_aux > * curr_aux_cell=NULL;
+                    if (step_functor.is_aux_)
+                        curr_aux_cell=aux_tree->get_cell(cell_code);
+                    vgl_box_3d<double> cell_bb = tree->cell_bounding_box(curr_cell);
+                    // find exit point of cell
+                    vgl_point_3d<double> exit_pt;
+                    double lambda=0;
+                    boct_face_idx face_id=NONE;
+                    bool found_exit =boxm_utils::cube_exit_point(cell_bb,enter_pt,direction, exit_pt,lambda,face_id);
+                    if (!found_exit) {
+                        vcl_cerr << "error: could not find cell exit point\n"
+                                 << "   enter_pt = [" << enter_pt.x() << ", " << enter_pt.y() << ", " << enter_pt.z() << "]\n"
+                                 << "   direction = [" << direction.x() << ", " << direction.y() << ", " << direction.z() << "]\n"
+                                 << "   cell_bb = [" << cell_bb.min_x() <<", " << cell_bb.max_x() << "]  [" << cell_bb.min_y()
+                                 << ", " << cell_bb.max_y() << "]  [" << cell_bb.min_z() << ", " << cell_bb.max_z() <<"]\n";
+                        assert(found_exit);
+                        break;
+                    }
+                    T_data cell_val=curr_cell->data();
+                    T_aux aux_val;
+                    if (step_functor.is_aux_)
+                        aux_val=curr_aux_cell->data();
+                    continue_trace(i-img_i0_, j-img_j0_) = step_functor.step_cell(enter_pt, exit_pt, cell_val,aux_val);
+                    curr_cell->set_data(cell_val);
+                    if (step_functor.is_aux_)
+                        curr_aux_cell->set_data(aux_val);
+                    // normalize the point to [0-1]to obtain the index.
+                    vgl_point_3d<double> exit_pt_norm((exit_pt.x()-block_bb.min_x())/block_bb.width(),
+                                                      (exit_pt.y()-block_bb.min_y())/block_bb.height(),
+                                                      (exit_pt.z()-block_bb.min_z())/block_bb.depth());
+                    // obtain the code for the exit point
+                    boct_loc_code<T_loc> exit_loc_code(exit_pt_norm,tree->root_level());
+                    cell_type *neighborcell=NULL;
+                    if (curr_cell->find_neighbor(face_id,neighborcell,tree->root_level()))
+                        curr_cell=neighborcell->traverse_force(exit_loc_code);
+                    else
+                    {
+                        vcl_cerr << "NO NEIGHBORS FOUND!\n";
+                        break;
+                    }
+                    enter_pt=exit_pt;
+                }
                 if (!step_functor.scene_read_only_)
                     scene_.write_active_block();
                 if (step_functor.is_aux_)
                     aux_scene_.write_active_block();
             }
         }
+        scene_.unload_active_blocks();
+        aux_scene_.unload_active_blocks();
         return true;
     }
 
@@ -368,6 +370,8 @@ class boxm_raytrace_function
                 //vcl_cout << "load: " << load_time << "s  compute: " << compute_time << "s  save: " << save_time << 's' << vcl_endl;
             }
         }
+        scene_.unload_active_blocks();
+        aux_scene_.unload_active_blocks();
 
         //vcl_cout << "total load: " << total_load_time << "s  total compute: " << total_compute_time << "s  total save: " << total_save_time << 's' << vcl_endl;
         return true;
