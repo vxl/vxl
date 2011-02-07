@@ -92,13 +92,15 @@ bool convert_from_frame(vidl_frame_sptr const& frame,
       views.push_back(img);
     else
       return false;
-  }else if (frame->pixel_format() == VIDL_PIXEL_FORMAT_MONO_16){
+  }
+  else if (frame->pixel_format() == VIDL_PIXEL_FORMAT_MONO_16){
     static vil_image_view<vxl_uint_16> img;
     if (vidl_convert_to_view(*frame,img))
       views.push_back(brip_vil_float_ops::convert_to_float(img));
     else
       return false;
-  }else if(frame->pixel_format() == VIDL_PIXEL_COLOR_RGB){
+  }
+  else if (frame->pixel_format() == VIDL_PIXEL_FORMAT_RGB_24){
     static vil_image_view<vxl_byte> img;
     if (vidl_convert_to_view(*frame,img,VIDL_PIXEL_COLOR_RGB)) {
       unsigned ni = img.ni(), nj = img.nj();
@@ -110,7 +112,8 @@ bool convert_from_frame(vidl_frame_sptr const& frame,
             view(i,j) = img(i,j,p);
         views.push_back(view);
       }
-    }else
+    }
+    else
       return false;
   }
   return true;
@@ -124,7 +127,7 @@ convert_to_frame(vcl_vector<vil_image_view<float> >const&  views,
   if (!np)
     return 0;
   unsigned ni = views[0].ni(), nj = views[0].nj();
-  if(!preserve_float){
+  if (!preserve_float){
     vcl_vector<vil_image_view<unsigned char> > cviews;
     for (unsigned p = 0; p<np; ++p)
       cviews.push_back(brip_vil_float_ops::convert_to_byte(views[p]));
@@ -193,7 +196,6 @@ register_image_stream_planar(vidl_istream_sptr& in_stream,
   t[0][0]=1;  t[0][1]=0; t[0][2]=-bounds->get_min_x();
   t[1][0]=0;  t[1][1]=1; t[1][2]=-bounds->get_min_y();
   t[2][0]=0;  t[2][1]=0; t[2][2]=world_sample_distance;
-  unsigned f = 0;
   do
   {
     vul_timer tim;
@@ -263,14 +265,11 @@ register_planar_homographies(bwm_video_cam_istream_sptr& cam_istream,
   // ground sample distance
   double w = bounds->width(), h = bounds->height();
   w/=world_sample_distance;    h/=world_sample_distance;
-  unsigned out_ni = static_cast<unsigned>(w);
-  unsigned out_nj = static_cast<unsigned>(h);
 
   vnl_matrix_fixed<double,3, 3> t;
   t[0][0]=1;  t[0][1]=0; t[0][2]=-bounds->get_min_x();
   t[1][0]=0;  t[1][1]=1; t[1][2]=-bounds->get_min_y();
   t[2][0]=0;  t[2][1]=0; t[2][2]=world_sample_distance;
-  unsigned f = 0;
   do
   {
     vul_timer tim;
