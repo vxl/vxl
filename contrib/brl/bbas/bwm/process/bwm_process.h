@@ -1,9 +1,11 @@
 #ifndef bwm_process_h_
 #define bwm_process_h_
 
+#ifdef _MSC_VER
 #if _MSC_VER > 1000
 #pragma once
 #endif // _MSC_VER > 1000
+#endif // _MSC_VER
 
 #if 0
 #ifndef __AFXWIN_H__

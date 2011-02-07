@@ -3,9 +3,11 @@
 //:
 // \file
 
+#ifdef _MSC_VER
 #if _MSC_VER > 1000
 #pragma once
 #endif // _MSC_VER > 1000
+#endif // _MSC_VER
 
 #include "bwm_tableau_sptr.h"
 #include "bwm_tableau_cam.h"
@@ -22,6 +24,7 @@
 #include <vpgl/vpgl_proj_camera.h>
 #include <vpgl/vpgl_rational_camera.h>
 class bwm_observer_video;
+
 class bwm_tableau_mgr
 {
  public:
