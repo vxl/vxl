@@ -28,8 +28,6 @@ void bvpl_taylor_basis_factory::create_canonical()
   typedef bvpl_kernel_dispatch dispatch;
 
   vcl_ifstream ifs(filename_.c_str());
-  vnl_float_3 min_point;
-  vnl_float_3 max_point;
 
   //set the dimension of the 3-d bounding box containing the kernels
   if (!ifs.eof())
@@ -69,6 +67,7 @@ void bvpl_taylor_basis_loader::create_basis(vcl_map<vcl_string, bvpl_kernel_sptr
     vcl_cout << "Reading kernel file : " << filename << vcl_endl;
     bvpl_taylor_basis_factory factory(filename);
     bvpl_kernel_sptr kernel = new bvpl_kernel(factory.create());
+    //kernel->print();
     taylor_basis.insert(vcl_pair<vcl_string, bvpl_kernel_sptr>(*file_it, kernel));
   }
 }
@@ -76,7 +75,7 @@ void bvpl_taylor_basis_loader::create_basis(vcl_map<vcl_string, bvpl_kernel_sptr
 //: Kernels needed for 2 degree approximation of 3D functions
 void bvpl_taylor_basis_loader::files(vcl_vector<vcl_string> &filenames)
 {
-  if (degree_ -= 2)
+  if (degree_ == 2)
   {
     filenames.push_back("I0");
     filenames.push_back("Ix");
