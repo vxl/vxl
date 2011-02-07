@@ -235,13 +235,16 @@ refine_bit_scene(__constant  RenderSceneInfo    * linfo,
   
             //calc new alpha
             int currLevel = get_depth(j);
+            //int dataIndex = data_index_cached(local_tree, pj, bit_lookup, cumsum, &cumIndex, linfo->data_len); //gets offset within buffer
+            int pDataPtr = data_index(0, local_tree, pj, bit_lookup);
+
             float side_len = linfo->block_len / (float) (1<<currLevel);
             float new_alpha = max_alpha_int / side_len;              
             alpha_array[offset+newDataPtr] = new_alpha;
 
             //store parent's data in child cells
-            mixture_array[offset+newDataPtr] = (uchar8) 0;
-            num_obs_array[offset+newDataPtr] = (ushort4) 0;
+            mixture_array[offset+newDataPtr] = (uchar8) mixture_array[offset+pDataPtr];
+            num_obs_array[offset+newDataPtr] = (ushort4) (0,0,0,100);
 
             //update new data pointer
             newDataPtr = (newDataPtr+1)%linfo->data_len;
