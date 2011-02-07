@@ -8,12 +8,13 @@
 
 void test_cell_iterator()
 {
+  
+  clean_up();
   //create scene
   boxm_scene<boct_tree<short, float> > *scene = create_scene();
 
   //get the iterator
   boxm_cell_iterator<boct_tree<short, float > > iterator = scene->cell_iterator(&boxm_scene<boct_tree<short, float> >::load_block_and_neighbors);
-  
   iterator.begin();
   
   boct_tree_cell<short,float> *cell = *iterator;  
@@ -37,6 +38,9 @@ void test_cell_iterator()
   }
   
   TEST("Valid Test", result, true);
+#ifdef DEBUG_LEAKS
+  vcl_cerr << "Leaks at test_cell_iterator " << boct_tree_cell<short, float >::nleaks() << vcl_endl;
+#endif
   clean_up();
 
 }

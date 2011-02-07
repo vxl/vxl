@@ -10,9 +10,10 @@
 
 void test_region_finder()
 {
+  clean_up();
   //create scene
   boxm_scene<boct_tree<short, float> > *scene = create_scene();
-
+ 
   bool result = true;
 
   if(!scene) result=false;
@@ -27,7 +28,7 @@ void test_region_finder()
     vcl_vector<boct_tree_cell<short, float>* > cells;
     scene->leaves_in_region(roi,cells);
     
-    
+ 
     if(cells.size()!=64){
       result=false;
       vcl_cerr << "Number of cells in the region: " << cells.size() <<vcl_endl;
@@ -39,9 +40,14 @@ void test_region_finder()
         result = false;
         vcl_cerr << cells[i]->data()<<vcl_endl;
       }
+    
+    cells.clear();
+    scene->unload_active_blocks();
 
   }
-
+#ifdef DEBUG_LEAKS
+  vcl_cerr << "Leaks Region1: " << boct_tree_cell<short, float >::nleaks() << vcl_endl;
+#endif
   
   //find another region
   {
@@ -56,9 +62,13 @@ void test_region_finder()
       result=false;
       vcl_cerr << "Number of cells in the region: " << cells.size() <<vcl_endl;
     }
-
     
+    cells.clear();
+    scene->unload_active_blocks();    
   }
+#ifdef DEBUG_LEAKS
+  vcl_cerr << "Leaks Region2: " << boct_tree_cell<short, float >::nleaks() << vcl_endl;
+#endif
   
   if(!scene) result=false;
 

@@ -9,6 +9,7 @@
 
 void test_load_neighboring_blocks()
 {
+  clean_up();
   //create scene
   boxm_scene<boct_tree<short, float> > *scene = create_scene(4,4,4);
   vcl_cout << "Scene Created" << vcl_endl;
@@ -19,7 +20,7 @@ void test_load_neighboring_blocks()
   bool result = true;
   while (!iter.end()) {
     if (scene->load_block_and_neighbors(iter.index().x(),iter.index().y(),iter.index().z())) {
-      vcl_cout << "Center blocks : "  << iter.index()<< vcl_endl;
+      //vcl_cout << "Center blocks : "  << iter.index()<< vcl_endl;
       vcl_set<vgl_point_3d<int>, bvgl_point_3d_cmp<int> > active_blocks = scene->active_blocks();
       
       //iterate through the active blocks and check that their trees are in memory
@@ -67,15 +68,21 @@ void test_load_neighboring_blocks()
 #endif
     }
     iter++;
+
   }
-  
+
   scene->unload_active_blocks();
   if(scene->active_blocks().size()!=0){
     result = false;
     vcl_cout << "Failed to unload active blocks" << vcl_endl;
   }
   
+#ifdef DEBUG_LEAKS
+  vcl_cerr << "Leaks test_load_neighboring_blocks: " << boct_tree_cell<short, float >::nleaks() << vcl_endl;
+#endif
+
   TEST("Valid Test", result, true);
+  clean_up();
 }
 
 

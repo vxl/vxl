@@ -4,17 +4,23 @@
 #include <boct/boct_tree.h>
 #include <vul/vul_file.h>
 #include <vpl/vpl.h>
+
+#include "test_utils.h"
+
 typedef boct_tree<short,vgl_point_3d<double> > tree_type;
 
 static void test_block_iter()
 {
+  clean_up();
   short nlevels=5;
   tree_type * block = new tree_type(nlevels);
   TEST("No of Max levels of tree",nlevels, block->number_levels());
 
   block->split();
   block->print();
-
+  delete block;
+  
+  
   bgeo_lvcs lvcs(33.33,44.44,10.0, bgeo_lvcs::wgs84, bgeo_lvcs::DEG, bgeo_lvcs::METERS);
   vgl_point_3d<double> origin(10,10,20);
   vgl_vector_3d<double> block_dim(10,10,10);
@@ -35,7 +41,10 @@ static void test_block_iter()
   int x,y,z;
   scene.block_num(x,y,z);
   TEST("Number of blocks iterator visits", num_blocks, x*y*z);
-  
+#ifdef DEBUG_LEAKS
+  vcl_cerr << "Leaks in test_block_iter: " << boct_tree_cell<short,vgl_point_3d<double> >::nleaks() << vcl_endl;
+#endif
+  clean_up();
 }
 
 TESTMAIN(test_block_iter);
