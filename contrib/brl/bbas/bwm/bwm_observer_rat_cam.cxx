@@ -1133,8 +1133,7 @@ void bwm_observer_rat_cam::project_edges_from_master()
              << " no box selected\n";
     return;
   }
-  vcl_vector<vsol_digital_curve_2d_sptr>& edges_2d =
-    mobs->edges(box->get_id());
+  vcl_vector<vsol_digital_curve_2d_sptr> edges_2d = mobs->edges(box->get_id());
   if (!edges_2d.size())
   {
     vcl_cout << "In bwm_observer_rat_cam::project_edges_from_master() -"

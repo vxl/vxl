@@ -18,8 +18,8 @@ bwm_reg_processor(vil_image_resource_sptr const& model_image,
                   vgl_plane_3d<double> const& world_plane,
                   vil_image_resource_sptr const& search_image,
                   vpgl_rational_camera<double> const& search_cam
-                 ) : world_point_(world_point), world_plane_(world_plane),
-                     model_cam_(model_cam), search_cam_(search_cam)
+                 ) : model_cam_(model_cam), search_cam_(search_cam),
+                     world_point_(world_point), world_plane_(world_plane)
 {
   distance_threshold_ = vnl_numeric_traits<double>::maxval;
   angle_threshold_ = vnl_numeric_traits<double>::maxval;
@@ -40,9 +40,9 @@ bwm_reg_processor(vil_image_resource_sptr const& model_image,
                   vgl_plane_3d<double> const& world_plane,
                   vil_image_resource_sptr const& search_image,
                   vpgl_rational_camera<double> const& search_cam
-                 ) : world_point_(world_point), world_plane_(world_plane),
-                     model_cam_(model_cam), search_cam_(search_cam),
-                     other_mode_cam_(other_mode_cam)
+                 ) : model_cam_(model_cam), search_cam_(search_cam),
+                     other_mode_cam_(other_mode_cam),
+                     world_point_(world_point), world_plane_(world_plane)
 {
   distance_threshold_ = vnl_numeric_traits<double>::maxval;
   model_image_ = new bwm_reg_image(model_image, model_cam,
@@ -126,7 +126,7 @@ bool bwm_reg_processor::filter(double model_radius,
     return false;
   }
 
-  brip_roi& roi = other_mode_image_->roi();
+  brip_roi roi = other_mode_image_->roi();
   bwm_reg_matcher rm(trans_model_edges_,
                      roi.cmin(0), roi.rmin(0),
                      roi.csize(0), roi.rsize(0),
@@ -161,7 +161,7 @@ bool bwm_reg_processor::match_edges(int& tcol, int& trow)
     return false;
   }
 
-  brip_roi& roi = search_image_->roi();
+  brip_roi roi = search_image_->roi();
   bwm_reg_matcher rm(trans_model_edges_,
                      roi.cmin(0), roi.rmin(0),
                      roi.csize(0), roi.rsize(0),
