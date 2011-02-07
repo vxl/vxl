@@ -71,9 +71,12 @@ class bocl_manager
   //: Constructor
   bocl_manager() :
     context_(0),
+    cpu_context_(0),
     devices_(0),
     gpus_(0),
-    cpus_(0)  {}
+    cpus_(0),
+    numGPUs_(0),
+    numCPUs_(0) {}
 
   //Singleton instance of the manager
   static T* instance_;
