@@ -27,7 +27,8 @@ void test_kernel_set_up()
   vpl_mkdir("./svd",0777);
 
   bvpl_discover_pca_kernels pca_extractor(neighborhood, nsamples, scene, "./evd");
-  bvpl_discover_pca_kernels pca_extractor_svd(neighborhood, nsamples, scene, "./svd", false);
+   bvpl_discover_pca_kernels pca_extractor_svd(neighborhood, nsamples, scene, "./svd", false);
+
 
   //XML write
   pca_extractor.xml_write();
@@ -41,6 +42,9 @@ void test_kernel_set_up()
   pca_extractor.theoretical_training_error(t_verror);
   pca_extractor.compute_testing_error(testing_error);
   
+#ifdef DEBUG_LEAKS
+  vcl_cerr << "Leaks at test_pca_kernels - 1 " << boct_tree_cell<short, float >::nleaks() << vcl_endl;
+#endif
 
   result = verror[verror.size()-1] < 1.0e-7;
   TEST("Test training error:", result, true);  
@@ -76,7 +80,9 @@ void test_kernel_set_up()
   result = testing_error.is_equal(test_error2, 1.0e-9);
   TEST("Testing errors are equal:", result, true);
 
-  
+#ifdef DEBUG_LEAKS
+  vcl_cerr << "Leaks at test_pca_kernels - 2 " << boct_tree_cell<short, float >::nleaks() << vcl_endl;
+#endif
   
 #if 0
   

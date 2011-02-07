@@ -29,7 +29,6 @@ boxm_scene<boct_tree<short, float> >* create_scene(unsigned world_dimx,unsigned 
   scene->set_paths(scene_path, "test_scene");
   scene->set_appearance_model(BOXM_FLOAT);
   scene->write_scene("test_scene.xml");
-
   unsigned cell_index = 7;
   boxm_block_iterator<boct_tree<short, float> > iter=scene->iterator();
   iter.begin();
@@ -49,6 +48,9 @@ boxm_scene<boct_tree<short, float> >* create_scene(unsigned world_dimx,unsigned 
     ++iter;
   }
 
+#ifdef DEBUG_LEAKS
+  vcl_cerr << "Leaks Created by create_scene() : " << boct_tree_cell<short,float>::nleaks() << vcl_endl;
+#endif
   return scene;
 }
 
