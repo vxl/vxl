@@ -7,9 +7,18 @@
 #include <vcl_iostream.h>
 #include <vgl/vgl_intersection.h>
 
+#ifdef DEBUG_LEAKS
+template<class T_loc,class T_data> long unsigned boct_tree_cell<T_loc,T_data>::n_created_ =0;
+template<class T_loc,class T_data> long unsigned boct_tree_cell<T_loc,T_data>::n_destroyed_=0;
+#endif
+
+
 template<class T_loc,class T_data>
 boct_tree_cell<T_loc,T_data>::boct_tree_cell(const boct_loc_code<T_loc>& code)
 {
+#ifdef DEBUG_LEAKS
+  n_created_++;
+#endif
   code_=code;
   parent_=NULL;
   children_=NULL;
@@ -45,6 +54,9 @@ boct_tree_cell<T_loc,T_data>::get_code()
 template<class T_loc,class T_data>
 boct_tree_cell<T_loc,T_data>::~boct_tree_cell()
 {
+#ifdef DEBUG_LEAKS
+  n_destroyed_++;
+#endif
   delete_children();
   if (vis_node_) {
     delete vis_node_;

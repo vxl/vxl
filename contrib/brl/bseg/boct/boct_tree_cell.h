@@ -16,6 +16,8 @@
 #include "boct_loc_code.h"
 #include <vgl/vgl_box_3d.h>
 
+//#define DEBUG_LEAKS
+
 enum boct_cell_face {NONE = 0x00,
                      Z_LOW = 0x01,
                      Z_HIGH = 0x02,
@@ -36,15 +38,42 @@ class boct_tree_cell
  public:
   //: Default Constructor
   boct_tree_cell<T_loc,T_data>()
-  : children_(0), parent_(0), vis_node_(0) {}
+  {
+    children_= NULL;
+    parent_ = NULL;
+    vis_node_= NULL;
+#ifdef DEBUG_LEAKS
+    n_created_++;
+#endif
+  }
 
   //: Constructor from locational code and octree cell
   boct_tree_cell<T_loc,T_data>(const boct_loc_code<T_loc>& code, boct_tree_cell<T_loc,T_data>* p)
-  : code_(code), children_(0), parent_(p), vis_node_(0) {}
+  : code_(code), children_(0), parent_(p), vis_node_(0) 
+  {
+#ifdef DEBUG_LEAKS
+    n_created_++;
+#endif
+  }
 
   //: Constructor given code and level
   boct_tree_cell<T_loc,T_data>(const boct_loc_code<T_loc>& code);
 
+#ifdef DEBUG_LEAKS
+//It is not clear what should be done here. Shallow copy of all children? What about the parent? Setting it to Null causes chrashes
+//But it's not good that we are leaving it up to the compiler to manage our resources.... this is mainly used by STL containers
+  //: Copy constructor
+  boct_tree_cell<T_loc,T_data>(const boct_tree_cell &that)
+  {
+    code_ = that.code_;
+    data_ = that.data_;
+    children_= that.children_;
+    parent_ = that.parent_;
+    vis_node_= that.vis_node_;
+    n_created_++;
+  }
+#endif
+ 
   ~boct_tree_cell<T_loc,T_data>();
 
   //: Creates a new cell with the same data
@@ -147,6 +176,17 @@ class boct_tree_cell
   boct_loc_code<T_loc> code_;
 
   boct_tree_cell<T_loc,T_data>* children_;
+  
+#ifdef DEBUG_LEAKS
+  static long unsigned nleaks() { 
+    if(n_created_ >= n_destroyed_) 
+      return (n_created_ - n_destroyed_);
+    else {
+    vcl_cout << "n_destroyed is greater: " << n_created_ << ", " <<n_destroyed_ << vcl_endl;
+    return (n_destroyed_-n_created_);
+    }
+  }
+#endif
 
  protected:
 
@@ -155,6 +195,13 @@ class boct_tree_cell
   T_data data_;
 
   boct_cell_vis_graph_node<T_loc,T_data>* vis_node_;
+  
+#ifdef DEBUG_LEAKS
+  static long unsigned n_created_;
+  static long unsigned n_destroyed_;
+#endif
+
+  
 };
 
 template<class T_loc,class T_data>
