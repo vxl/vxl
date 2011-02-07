@@ -85,9 +85,8 @@ int bwm_delaunay_tri::triangulate(vcl_vector<vgl_point_3d<double> >& pxyz,
   vcl_vector<bool> complete;
   vcl_vector<vgl_point_2d<int> > edges;
   vcl_vector<vgl_point_2d<int> > p_EdgeTemp;
-  int nedge = 0;
-  int trimax, emax = 200;
-  int status = 0;
+  unsigned int nedge = 0;
+  unsigned int trimax, emax = 200;
   bool inside;
   vgl_point_2d<double> p, p1, p2, p3, c;
   double r;
@@ -147,7 +146,7 @@ int bwm_delaunay_tri::triangulate(vcl_vector<vgl_point_3d<double> >& pxyz,
     // If the point (xp,yp) lies inside the circumcircle then the
     // three edges of that triangle are added to the edge buffer
     // and that triangle is removed.
-    for (unsigned j = 0; j < ntri; j++)
+    for (int j = 0; j < ntri; ++j)
     {
       if (complete[j])
         continue;
@@ -162,7 +161,7 @@ int bwm_delaunay_tri::triangulate(vcl_vector<vgl_point_3d<double> >& pxyz,
           if (nedge + 3 >= emax) {
             emax += 100;
             p_EdgeTemp.resize(emax);
-            for (int i = 0; i < nv; i++) {
+            for (unsigned int i = 0; i < nv; ++i) {
               p_EdgeTemp[i] = edges[i];
             }
             edges.clear();
@@ -174,15 +173,15 @@ int bwm_delaunay_tri::triangulate(vcl_vector<vgl_point_3d<double> >& pxyz,
           nedge += 3;
           v[j] = v[ntri-1];
           complete[j] = complete[ntri-1];
-          ntri--;
-          j--;
+          --ntri;
+          --j;
         }
     }
     // Tag multiple edges
     // Note: if all triangles are specified anticlockwise then all
     // interior edges are opposite pointing in direction.
-    for (unsigned j = 0; j < nedge - 1; j++) {
-      for (unsigned k = j + 1; k < nedge; k++) {
+    for (unsigned j = 0; j+1 < nedge; ++j) {
+      for (unsigned k = j + 1; k < nedge; ++k) {
        if ((edges[j].x() == edges[k].y()) && (edges[j].y() == edges[k].x())) {
           edges[j].set(-1, -1);
           edges[k].set(-1, -1);
@@ -207,11 +206,11 @@ int bwm_delaunay_tri::triangulate(vcl_vector<vgl_point_3d<double> >& pxyz,
   }
   // Remove triangles with supertriangle vertices
   // These are triangles which have a vertex number greater than nv
-  for (unsigned i = 0; i < ntri; i++) {
-    if (v[i].x() >= nv || v[i].y() >= nv || v[i].z() >= nv) {
+  for (int i = 0; i < ntri; ++i) {
+    if (v[i].x() >= (int)nv || v[i].y() >= (int)nv || v[i].z() >= (int)nv) {
       v[i] = v[ntri-1];
-      ntri--;
-      i--;
+      --ntri;
+      --i;
     }
   }
   v.erase(v.begin()+ntri, v.end());

@@ -65,8 +65,10 @@ int main(int argc,  char** argv)
   }
   else {
     vul_file::make_directory_path(dir());
-    //vcl_cout<<"Couldn't make directory at "<<dir()<<vcl_endl;
-    //return -1;
+#ifdef DEBUG
+    vcl_cout<<"Couldn't make directory at "<<dir()<<vcl_endl;
+    return -1;
+#endif
   }
 
   //see if img folder exists
@@ -76,8 +78,10 @@ int main(int argc,  char** argv)
   }
   else {
     vul_file::make_directory_path(imgdir);
-    //vcl_cout<<"Couldn't make img directory at "<<dir()<<vcl_endl;
-    //return -1;
+#ifdef DEBUG
+    vcl_cout<<"Couldn't make img directory at "<<dir()<<vcl_endl;
+    return -1;
+#endif
   }
 
   //see if JS folder exists
@@ -87,8 +91,10 @@ int main(int argc,  char** argv)
   }
   else {
     vul_file::make_directory_path(jsdir);
-    //vcl_cout<<"Couldn't make js directory at "<<dir()<<vcl_endl;
-    //return -1;
+#ifdef DEBUG
+    vcl_cout<<"Couldn't make js directory at "<<dir()<<vcl_endl;
+    return -1;
+#endif
   }
 
   //copy JS files into JS folder
@@ -199,32 +205,31 @@ int main(int argc,  char** argv)
       vil_save( *byte_img, jpgstream.str().c_str() );
 
       //and store for whatever reason
-      imgs(el_i, az_i) = byte_img; 
+      imgs(el_i, az_i) = byte_img;
     }
   }
 
-  //if stitch is specified, also save a big image
-  //if(stitch()) 
+#if 0 // if stitch is specified, also save a big image
+  if (stitch())
+#endif
   {
-      //construct a humungous image
-      vil_image_view<vxl_byte>* stitched = new vil_image_view<vxl_byte>(ni() * num_az(), nj() * num_in());
-      for(int row = 0; row < num_in(); ++row) {
-        for(int col = 0; col < num_az(); ++col) {
-        
-          //lil image to copy into big image
-          vil_image_view<vxl_byte>* lil_img = imgs(row, col); 
-          for(int i=0; i<lil_img->ni(); ++i)
-            for(int j=0; j<lil_img->nj(); ++j)
-              (*stitched)(ni()*col + i, nj()*row + j) = (*lil_img)(i,j); 
-          
-        }
+    //construct a humungous image
+    vil_image_view<vxl_byte>* stitched = new vil_image_view<vxl_byte>(ni() * num_az(), nj() * num_in());
+    for (unsigned int row = 0; row < num_in(); ++row) {
+      for (unsigned int col = 0; col < num_az(); ++col) {
+        //lil image to copy into big image
+        vil_image_view<vxl_byte>* lil_img = imgs(row, col);
+        for (unsigned int i=0; i<lil_img->ni(); ++i)
+          for (unsigned int j=0; j<lil_img->nj(); ++j)
+            (*stitched)(ni()*col + i, nj()*row + j) = (*lil_img)(i,j);
       }
-      
-      //save as pngv
-      vcl_string big = dir() + "/scene-reel.jpg"; 
-      vil_save( *stitched, big.c_str() );
+    }
+
+    //save as pngv
+    vcl_string big = dir() + "/scene-reel.jpg";
+    vil_save( *stitched, big.c_str() );
   }
-  
+
   return 0;
 }
 

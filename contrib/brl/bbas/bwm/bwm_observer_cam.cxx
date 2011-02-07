@@ -169,7 +169,7 @@ bool bwm_observer_cam::handle(const vgui_event &e)
     if (moving_p_->type_name().compare(POLYGON_TYPE) == 0) {
       bgui_vsol_soview2D_polygon* polygon = (bgui_vsol_soview2D_polygon*) moving_p_;
       unsigned i = find_index_of_v(moving_v_, (bgui_vsol_soview2D_polygon*)moving_p_);
-      if (i == -1)
+      if (i == (unsigned int)(-1))
         return true;
       moving_v_->translate(x_diff, y_diff);
       polygon->sptr()->vertex(i)->set_x(polygon->sptr()->vertex(i)->x() + x_diff );
@@ -203,7 +203,7 @@ bool bwm_observer_cam::handle(const vgui_event &e)
            moving_vertex_ && moving_face_)
   {
     unsigned i = find_index_of_v(moving_v_, (bgui_vsol_soview2D_polygon*)moving_p_);
-    if (i == -1)
+    if (i == (unsigned int)(-1))
       return true;
     if (moving_p_->type_name().compare(POLYGON_TYPE) == 0) {
       bgui_vsol_soview2D_polygon* polygon = (bgui_vsol_soview2D_polygon*) moving_p_;
@@ -249,21 +249,23 @@ bool bwm_observer_cam::handle(const vgui_event &e)
   // moving along the optical axis
   if (e.type==vgui_KEY_PRESS && e.key == vgui_CURSOR_UP)
   {
-    if (this == bwm_observer_mgr::BWM_MASTER_OBSERVER)
+    if (this == bwm_observer_mgr::BWM_MASTER_OBSERVER) {
       if (e.modifier == vgui_SHIFT)
         this->translate_along_optical_axis(1.0);
       else
         this->translate_along_optical_axis(0.1);
+    }
     in_jog_mode_ = true;
     return true;
   }
   if (e.type==vgui_KEY_PRESS && e.key == vgui_CURSOR_DOWN)
   {
-    if (this == bwm_observer_mgr::BWM_MASTER_OBSERVER)
+    if (this == bwm_observer_mgr::BWM_MASTER_OBSERVER) {
       if (e.modifier == vgui_SHIFT)
         this->translate_along_optical_axis(-1.0);
       else
         this->translate_along_optical_axis(-0.1);
+    }
     in_jog_mode_ = true;
     return true;
   }
@@ -387,7 +389,6 @@ void bwm_observer_cam::move_ground_plane( vgl_plane_3d<double> master_plane,
     double b = master_plane.b();
     double c = master_plane.c();
 
-    double orig_d = d;
     vsol_point_3d_sptr old_pt3d;
     backproj_point(old_pt, old_pt3d);
     vgl_point_2d<double> master_img_pt;
@@ -676,11 +677,11 @@ bool bwm_observer_cam::find_intersection_points(vgl_point_2d<double> const img_p
   {
     double point1_x, point1_y, point1_z,
       point2_x, point2_y, point2_z;
-
+    unsigned
     int edge_index1 = vgl_closest_point_to_closed_polygon(point1_x, point1_y, point1_z,
                                                           x_list, y_list, z_list, poly3d->size(),
                                                           non_homg_p1.x(), non_homg_p1.y(), non_homg_p1.z());
-
+    unsigned
     int edge_index2 = vgl_closest_point_to_closed_polygon(point2_x, point2_y, point2_z,
                                                           x_list, y_list, z_list, poly3d->size(),
                                                           non_homg_p2.x(), non_homg_p2.y(), non_homg_p2.z());
@@ -691,7 +692,7 @@ bool bwm_observer_cam::find_intersection_points(vgl_point_2d<double> const img_p
     }
 
     l1 = vgl_point_3d<double> (x_list[edge_index1], y_list[edge_index1], z_list[edge_index1]);
-    int next_index = edge_index1+1;
+    unsigned int next_index = edge_index1+1;
     if (next_index == poly3d->size())
       next_index = 0;
     l2 = vgl_point_3d<double> (x_list[next_index], y_list[next_index], z_list[next_index]);
@@ -932,16 +933,16 @@ void bwm_observer_cam::extrude_face(vsol_point_2d_sptr pt)
     // find the index of the selected vertices, by searching for the
     // closest 3-d vertex to the backprojected 2-d vertex
     double min_dist1 = 1e23, min_dist2 = 1e23;
-    unsigned index1 = -1, index2 = -1;
-    vcl_cout << vcl_endl << "-- Selected v1=" << picked_v1->get_p() << vcl_endl
-             <<  "-- Selected v2=" << picked_v2->get_p() << vcl_endl;
+    unsigned index1 = (unsigned int)(-1), index2 = (unsigned int)(-1);
+    vcl_cout << "\n-- Selected v1=" << picked_v1->get_p()
+             << "\n-- Selected v2=" << picked_v2->get_p() << vcl_endl;
     for (unsigned i=0; i<face2d->size(); i++)
     {
       vgl_point_2d<double> pt = face2d->vertex(i)->get_p();
 
       double dist1 = (pt - picked_v1->get_p()).length();
       double dist2 = (pt - picked_v2->get_p()).length();
-      vcl_cout << i << "-- Vertex" << pt << " dist=" << dist1 << vcl_endl
+      vcl_cout << i << "-- Vertex" << pt << " dist=" << dist1 << '\n'
                << i << "-- Vertex" << pt << " dist=" << dist2 << vcl_endl;
       if (dist1 < min_dist1) {
         min_dist1 = dist1;
@@ -952,7 +953,7 @@ void bwm_observer_cam::extrude_face(vsol_point_2d_sptr pt)
         index2 = i;
       }
     }
-    if ((index1 == -1) || (index2 == -1)) {
+    if ((index1 == (unsigned int)(-1)) || (index2 == (unsigned int)(-1))) {
       vcl_cerr << "The vertices (one or both) cannot be found on the face\n";
       return;
     }
@@ -998,8 +999,8 @@ void bwm_observer_cam::extrude_face(vsol_point_2d_sptr pt)
                             face->vertex(index1)->get_p().y(),
                             face->vertex(index1)->get_p().z()+1);
 
-    vcl_cout << "p0-->" << p0 << vcl_endl
-             << "p1-->" << p1 << vcl_endl
+    vcl_cout << "p0-->" << p0 << '\n'
+             << "p1-->" << p1 << '\n'
              << "p2-->" << p2 << vcl_endl;
     vgl_plane_3d<double> plane(p0, p2, p1);
   #ifdef CAM_DEBUG
@@ -1237,7 +1238,7 @@ void bwm_observer_cam::save()
   vcl_string ext, file, empty="";
 
   params.file ("Save...", ext, file);
-  bool use_lvcs = false;
+  //bool use_lvcs = false;
   //params.checkbox("use lvcs",use_lvcs);
   if (!params.ask())
     return;
@@ -1258,7 +1259,7 @@ void bwm_observer_cam::save_all()
   vcl_string ext, file, empty="";
 
   params.file ("Save...", ext, file);
-  bool use_lvcs = false;
+  //bool use_lvcs = false;
   //params.checkbox("use lvcs",use_lvcs);
   if (!params.ask())
     return;
@@ -1295,7 +1296,7 @@ unsigned bwm_observer_cam::find_index_of_v(bwm_soview2D_vertex* vertex,
 {
   vsol_polygon_2d_sptr poly = polygon->sptr();
   double min_dist = 1e23;
-  unsigned index = -1;
+  unsigned index = (unsigned int)(-1);
   for (unsigned i=0; i<poly->size(); i++) {
     float x, y;
     vertex->get_centroid(&x, &y);
@@ -1724,8 +1725,7 @@ void bwm_observer_cam::load_boxm_scene()
 
   //create the observable mesh
   vgl_box_3d<double> world(world_min, world_max);
-  bwm_observable_mesh_sptr mesh = new bwm_observable_mesh();
+  bwm_observable_mesh_sptr mesh = new bwm_observable_mesh(world);
   bwm_world::instance()->add(mesh);
   bwm_observer_mgr::instance()->attach(mesh);
-  *mesh = bwm_observable_mesh(world);
 }

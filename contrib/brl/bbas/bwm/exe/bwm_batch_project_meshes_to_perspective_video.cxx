@@ -101,14 +101,10 @@ int main(int argc, char** argv)
       //save the polygon x-y coordinates
       for (psi.reset(); psi.next();)
       {
-        int y = psi.scany();
-        for (int x = psi.startx(); x<= psi.endx(); ++x)
-        {
-          if (x>=0 && y>=0 && x<img.ni() && y<img.nj())
-          {
+        unsigned int y = psi.scany();
+        if (y<img.nj())
+          for (unsigned int x = psi.startx(); (int)x<= psi.endx() && x<img.ni(); ++x)
             img(x,y)=255;
-          }
-        }
       }
     }
     vcl_stringstream polyfile_out;

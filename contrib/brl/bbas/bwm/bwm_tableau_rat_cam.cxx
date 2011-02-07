@@ -71,7 +71,7 @@ vcl_string bwm_tableau_rat_cam::save_camera()
   if (my_observer_->camera_adjusted()) {
     //need to save the new camera
     vcl_string new_cam_path = vul_file::strip_extension(cam_path);
-    int pos = new_cam_path.find("_v", 0);
+    unsigned int pos = new_cam_path.find("_v", 0);
     if (pos != vcl_string::npos) {
       new_cam_path.erase(pos, new_cam_path.length()-1);
     }

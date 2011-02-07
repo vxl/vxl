@@ -40,19 +40,19 @@ bool fit_plane_ransac(vcl_vector<vgl_homg_point_3d<double> > & points, vgl_homg_
   double err=10.0;
   double inlier_dist = 0.01;
   vcl_vector<int> best_inliers;
-  for (unsigned i=0;i<max_its;i++)
+  for (unsigned i=0;i<max_its;++i)
   {
     vcl_cout << '.';
     vcl_vector<vgl_homg_point_3d<double> > subset;
     vcl_vector<int> inliers;
-    for (unsigned j=0;j<nchoose;j++)
+    for (unsigned j=0;j<nchoose;++j)
       subset.push_back(points[vcl_rand()%nsize]);
     vcl_cout<<subset.size();vcl_cout.flush();
     vgl_fit_plane_3d<double> fit_plane(subset);
     if (fit_plane.fit(err))
     {
       vgl_homg_plane_3d<double> plane=fit_plane.get_plane();
-      for (unsigned j=0;j<nsize;j++)
+      for (unsigned j=0;j<nsize;++j)
       {
         double dist=vgl_distance<double>(points[j],plane);
         if (dist*dist<inlier_dist*inlier_dist)
@@ -66,7 +66,7 @@ bool fit_plane_ransac(vcl_vector<vgl_homg_point_3d<double> > & points, vgl_homg_
   }
   vgl_fit_plane_3d<double> fit_plane_inliers;
 
-  for (unsigned i=0;i<best_inliers.size();i++)
+  for (unsigned i=0;i<best_inliers.size();++i)
   {
     fit_plane_inliers.add_point(points[best_inliers[i]]);
   }
@@ -84,7 +84,7 @@ bool axis_align_scene(vcl_vector<bwm_video_corr_sptr> & corrs,
                       vcl_vector<vpgl_perspective_camera<double> > & cams)
 {
   vcl_vector<vgl_homg_point_3d<double> > points;
-  for (unsigned i=0;i<corrs.size();i++)
+  for (unsigned i=0;i<corrs.size();++i)
   {
     vgl_homg_point_3d<double> homg_world_pt(corrs[i]->world_pt());
     points.push_back(homg_world_pt);
@@ -100,7 +100,7 @@ bool axis_align_scene(vcl_vector<bwm_video_corr_sptr> & corrs,
   vgl_rotation_3d<double> rot_scene(plane.normal(),vgl_vector_3d<double>(0,0,1));
 
   double sumx=0,sumy=0,sumz=0;
-  for (unsigned i=0;i<corrs.size();i++)
+  for (unsigned i=0;i<corrs.size();++i)
   {
     vgl_homg_point_3d<double> p(corrs[i]->world_pt());
     vgl_homg_point_3d<double> pnew=rot_scene*p;
@@ -114,15 +114,15 @@ bool axis_align_scene(vcl_vector<bwm_video_corr_sptr> & corrs,
   vgl_point_3d<double> center(sumx/corrs.size(),sumy/corrs.size(),sumz/corrs.size());
   vnl_vector_fixed<double,3> tr(center.x(),center.y(),center.z());
   vcl_vector<vgl_homg_point_3d<double> > xformed_points;
-  for (unsigned i=0;i<corrs.size();i++)
+  for (unsigned i=0;i<corrs.size();++i)
   {
     vgl_point_3d<double> p(corrs[i]->world_pt());
     corrs[i]->set_world_pt(vgl_point_3d<double>(p.x()-center.x(),p.y()-center.y(),p.z()-center.z()));
     xformed_points.push_back(vgl_homg_point_3d<double>(p.x()-center.x(),p.y()-center.y(),p.z()-center.z()));
   }
   vcl_vector<vpgl_perspective_camera<double> > new_cams;
-  int up=0;
-  for (unsigned i=0;i<cams.size();i++)
+  unsigned int up=0;
+  for (unsigned i=0;i<cams.size();++i)
   {
     // new rotation
     vgl_rotation_3d<double> rot_cami=cams[i].get_rotation()*rot_scene.inverse();
@@ -133,15 +133,15 @@ bool axis_align_scene(vcl_vector<bwm_video_corr_sptr> & corrs,
     vgl_vector_3d<double> tr_cami=cams[i].get_translation()+translation_vec;
     new_cams.push_back(vpgl_perspective_camera<double>(cams[i].get_calibration(),rot_cami,tr_cami));
     if (new_cams[i].get_camera_center().z()>0)
-      up++;
+      ++up;
   }
 
-  if (up<cams.size()-up)// flip the world
+  if (2*up<cams.size())// flip the world
   {
-    vcl_cout<<"Flipping the world "<<vcl_endl;
+    vcl_cout<<"Flipping the world"<<vcl_endl;
     vnl_quaternion<double> q(vnl_math::pi,0,0);
     vgl_rotation_3d<double> rotx_pi(q);
-    for (unsigned i=0;i<corrs.size();i++)
+    for (unsigned i=0;i<corrs.size();++i)
     {
       vgl_homg_point_3d<double> p(corrs[i]->world_pt());
       vgl_homg_point_3d<double> pnew=rotx_pi*p;
@@ -151,14 +151,14 @@ bool axis_align_scene(vcl_vector<bwm_video_corr_sptr> & corrs,
         corrs[i]->set_world_pt(pnew_nonhomg);
       }
     }
-    for (unsigned i=0;i<cams.size();i++)
+    for (unsigned i=0;i<cams.size();++i)
     {
       // new rotation
       vgl_rotation_3d<double> rot_cami=new_cams[i].get_rotation()*rotx_pi.inverse();
       new_cams[i]=vpgl_perspective_camera<double>(new_cams[i].get_calibration(),rot_cami,new_cams[i].get_translation());
     }
   }
-  for (unsigned i=0;i<cams.size();i++)
+  for (unsigned i=0;i<cams.size();++i)
     cams[i]=new_cams[i];
 
   vgl_fit_plane_3d<double> fit_plane1(xformed_points);
@@ -220,7 +220,7 @@ int main(int argc, char** argv)
 
   if (bfile.eof())
   {
-    vcl_cout<<"File Missing data "<<vcl_endl;
+    vcl_cout<<"File Missing data"<<vcl_endl;
     return -1;
   }
 
@@ -232,7 +232,7 @@ int main(int argc, char** argv)
   vcl_set<int> bad_cams;
 
   // reading the cameras from bundler
-  for (unsigned i=0;i<num_cams;i++)
+  for (unsigned i=0;i<num_cams;++i)
   {
     double f,k1,k2;
     vnl_matrix_fixed<double,3,3> R;
@@ -266,7 +266,7 @@ int main(int argc, char** argv)
   double err=0;
   double cnt=0;
   // read the correspondence and 3-d points
-  for (unsigned i=0;i<num_pts;i++)
+  for (unsigned i=0;i<num_pts;++i)
   {
     bwm_video_corr_sptr  corr=new bwm_video_corr();
     double x,y,z;
@@ -284,7 +284,7 @@ int main(int argc, char** argv)
     unsigned num_views;
     bfile>>num_views;
 
-    for (unsigned j=0;j<num_views;j++)
+    for (unsigned j=0;j<num_views;++j)
     {
       unsigned view_number, key_number;
       double img_x,img_y;
@@ -300,7 +300,7 @@ int main(int argc, char** argv)
       {
         cams[view_number].project(x,y,z,u,v);
         err+=vcl_sqrt((u-img_x)*(u-img_x)+(v-img_y)*(v-img_y));
-        cnt++;
+        ++cnt;
       }
       corr->add(view_number,vgl_point_2d<double>(img_x,img_y));
     }
@@ -309,20 +309,20 @@ int main(int argc, char** argv)
   // save it to a site
   vcl_cout<<"Bad cameras "<<bad_cams.size()<<" :";
   vcl_set<int>::iterator iter=bad_cams.begin();
-  for (;iter!=bad_cams.end();iter++)
+  for (;iter!=bad_cams.end();++iter)
     vcl_cout<<*iter<<' ';
-  vcl_cout<<vcl_endl<<"Error per projection"<<err/cnt<<vcl_endl;
+  vcl_cout<<"\nError per projection "<<err/cnt<<vcl_endl;
   if (!axis_align_scene(corrs,cams))
     return -1;
   bwm_video_cam_ostream camstream(cam_dir());
-  for (unsigned i=0;i<num_cams;i++)
+  for (unsigned i=0;i<num_cams;++i)
     camstream.write_camera(&cams[i]);
   camstream.close();
 
   char filename[1024];
   if (vul_file::is_directory(cam_txt_dir().c_str()))
   {
-    for (unsigned i=0;i<num_cams;i++)
+    for (unsigned i=0;i<num_cams;++i)
     {
       vcl_sprintf(filename,"%s/camera%05d.txt",cam_txt_dir().c_str(),i);
       vcl_ofstream ofile(filename);
@@ -337,7 +337,7 @@ int main(int argc, char** argv)
     }
   }
   vgl_box_3d<double> bounding_box;
-  for (unsigned i=0;i<corrs.size();i++)
+  for (unsigned i=0;i<corrs.size();++i)
     bounding_box.add(corrs[i]->world_pt());
   vcl_cout<<"Bounding Box "<<bounding_box<<vcl_endl;
   bwm_video_site_io site;
