@@ -42,7 +42,7 @@ bool boxm2_opencl_update_process::init_kernel(cl_context* context,
 
   //create all passes
   bocl_kernel* seg_len = new bocl_kernel();
-  seg_len->create_kernel(context_, device, src_paths, "seg_len_main", options+" -D SEGLEN -D ATOMIC_OPT", "update::seg_len");
+  seg_len->create_kernel(context_, device, src_paths, "seg_len_main", options+" -D SEGLEN ", "update::seg_len");
   update_kernels_.push_back(seg_len);
 
   bocl_kernel* pre_inf = new bocl_kernel();
@@ -55,7 +55,7 @@ bool boxm2_opencl_update_process::init_kernel(cl_context* context,
   update_kernels_.push_back(proc_img);
 
   bocl_kernel* bayes_main = new bocl_kernel();
-  bayes_main->create_kernel(context_, device, src_paths, "bayes_main", options+" -D BAYES -D ATOMIC_OPT", "update::bayes_main");
+  bayes_main->create_kernel(context_, device, src_paths, "bayes_main", options+" -D BAYES ", "update::bayes_main");
   update_kernels_.push_back(bayes_main);
 
   //may need DIFF LIST OF SOURCES FOR THSI GUY TOO

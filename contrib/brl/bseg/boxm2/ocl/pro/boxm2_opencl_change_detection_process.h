@@ -20,7 +20,7 @@
 class boxm2_opencl_change_detection_process : public boxm2_opencl_process_base
 {
   public:
-    boxm2_opencl_change_detection_process() : in_image_(0), image_(0), vis_img_(0) {}
+    boxm2_opencl_change_detection_process() : in_image_(0),exp_image_(0),prob_exp_img_(0), image_(0), vis_img_(0) {}
     
     //: process init and execute
     bool init() { return true; }
@@ -40,13 +40,15 @@ class boxm2_opencl_change_detection_process : public boxm2_opencl_process_base
 
   private:
     bool write_input_image(vil_image_view<float>* input_image);
+    bool write_exp_image(vil_image_view<float>* exp_image);
 
-    //: render kernel (other processes may have many kernels
+    //: change detection kernel (other processes may have many kernels
     bocl_kernel change_kernel_;
     //: kernel to normalize images
     bocl_kernel normalize_change_kernel_;
     //: image (so it isn't created over and over)
     bocl_mem* in_image_;
+    bocl_mem* exp_image_;
 
     //: image (so it isn't created over and over)
     bocl_mem* image_;
@@ -54,6 +56,7 @@ class boxm2_opencl_change_detection_process : public boxm2_opencl_process_base
     //: visibility image
     bocl_mem* vis_img_; 
 
+    bocl_mem* prob_exp_img_; 
 };
 
 #endif

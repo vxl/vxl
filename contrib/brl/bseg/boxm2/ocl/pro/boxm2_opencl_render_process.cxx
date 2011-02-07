@@ -99,12 +99,14 @@ bool boxm2_opencl_render_process::execute(vcl_vector<brdb_value_sptr>& input, vc
   brdb_value_t<vil_image_view_base_sptr>* brdb_expimg = static_cast<brdb_value_t<vil_image_view_base_sptr>* >( input[i++].ptr() );
   vil_image_view_base_sptr expimg = brdb_expimg->value();
   vil_image_view<float>* exp_img_view = static_cast<vil_image_view<float>* >(expimg.ptr());
+  exp_img_view->fill(0.0f);
   if (!image_) {
     float* exp_buff = exp_img_view->begin();
     image_ = new bocl_mem((*context_), exp_buff, exp_img_view->size() * sizeof(float), "exp image buffer");
     image_->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
   }
   else {
+    image_->set_cpu_buffer(exp_img_view->begin());
     image_->write_to_buffer(*command_queue_);
   }
 
@@ -203,6 +205,9 @@ bool boxm2_opencl_render_process::execute(vcl_vector<brdb_value_sptr>& input, vc
   image_->read_to_buffer(*command_queue_);
   vis_img_->read_to_buffer(*command_queue_);
 
+
+
+      
   //clean up camera, lookup_arr, img_dim_buff
   delete[] output_arr;
   delete[] img_dim_buff;

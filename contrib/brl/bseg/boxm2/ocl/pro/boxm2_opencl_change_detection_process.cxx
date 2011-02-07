@@ -100,14 +100,20 @@ bool boxm2_opencl_change_detection_process::execute(vcl_vector<brdb_value_sptr>&
   vil_image_view_base_sptr inimg = brdb_inimg->value();
   vil_image_view<float>* in_img_view = static_cast<vil_image_view<float>* >(inimg.ptr());
   this->write_input_image(in_img_view);
-
-  //exp image buffer
+  //input exp image buffer
   brdb_value_t<vil_image_view_base_sptr>* brdb_expimg = static_cast<brdb_value_t<vil_image_view_base_sptr>* >( input[i++].ptr() );
   vil_image_view_base_sptr expimg = brdb_expimg->value();
   vil_image_view<float>* exp_img_view = static_cast<vil_image_view<float>* >(expimg.ptr());
+  this->write_exp_image(exp_img_view);
+
+  //cd image buffer
+  brdb_value_t<vil_image_view_base_sptr>* brdb_cdimg = static_cast<brdb_value_t<vil_image_view_base_sptr>* >( input[i++].ptr() );
+  vil_image_view_base_sptr cdimg = brdb_cdimg->value();
+  vil_image_view<unsigned int>* cd_img_view = static_cast<vil_image_view<unsigned int>* >(cdimg.ptr());
+  cd_img_view->fill(0);
   if (!image_) {
-    float* exp_buff = exp_img_view->begin();
-    image_ = new bocl_mem((*context_), exp_buff, exp_img_view->size() * sizeof(float), "exp image buffer");
+    unsigned int* cd_buff = cd_img_view->begin();
+    image_ = new bocl_mem((*context_), cd_buff, cd_img_view->size() * sizeof(unsigned int), "cd image buffer");
     image_->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
   }
   else {
@@ -127,13 +133,24 @@ bool boxm2_opencl_change_detection_process::execute(vcl_vector<brdb_value_sptr>&
     vis_img_->set_cpu_buffer(vis_img_view->begin());
     vis_img_->write_to_buffer(*command_queue_);
   }
+  vil_image_view<float>* prob_exp_img_view = new vil_image_view<float>(vis_img_view->ni(),vis_img_view->nj());
+  prob_exp_img_view->fill(0.0);
+  if (!prob_exp_img_) {
+    float* prob_exp_img_buff = prob_exp_img_view->begin();
+    prob_exp_img_ = new bocl_mem((*context_), prob_exp_img_buff, prob_exp_img_view->size() * sizeof(float), "visibility image buffer");
+    prob_exp_img_->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
+  }
+  else {
+    prob_exp_img_->set_cpu_buffer(prob_exp_img_view->begin());
+    prob_exp_img_->write_to_buffer(*command_queue_);
+  }
 
   //exp image dimensions
   int* img_dim_buff = new int[4];
-  img_dim_buff[0] = exp_img_view->ni();
-  img_dim_buff[1] = exp_img_view->nj();
-  img_dim_buff[2] = exp_img_view->ni();
-  img_dim_buff[3] = exp_img_view->nj();
+  img_dim_buff[0] = 0;
+  img_dim_buff[1] = 0;
+  img_dim_buff[2] = in_img_view->ni();
+  img_dim_buff[3] = in_img_view->nj();
   bocl_mem exp_img_dim((*context_), img_dim_buff, sizeof(int)*4, "image dims");
   exp_img_dim.create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
@@ -174,6 +191,8 @@ bool boxm2_opencl_change_detection_process::execute(vcl_vector<brdb_value_sptr>&
     change_kernel_.set_arg( mog );
     change_kernel_.set_arg( &persp_cam );
     change_kernel_.set_arg( in_image_ );
+    change_kernel_.set_arg( exp_image_ );
+    change_kernel_.set_arg( prob_exp_img_ );
     change_kernel_.set_arg( image_ );
     change_kernel_.set_arg( &exp_img_dim);
     change_kernel_.set_arg( &cl_output );
@@ -196,6 +215,7 @@ bool boxm2_opencl_change_detection_process::execute(vcl_vector<brdb_value_sptr>&
   // normalize
   {
       normalize_change_kernel_.set_arg( image_ );
+      normalize_change_kernel_.set_arg( prob_exp_img_ );
       normalize_change_kernel_.set_arg( vis_img_ );
       normalize_change_kernel_.set_arg( &exp_img_dim);
       normalize_change_kernel_.execute( (*command_queue_), lThreads, gThreads);
@@ -252,6 +272,29 @@ bool boxm2_opencl_change_detection_process::write_input_image(vil_image_view<flo
   }
   else {
     in_image_->write_to_buffer(*command_queue_);
+  }
+  return true;
+}
+
+bool boxm2_opencl_change_detection_process::write_exp_image(vil_image_view<float>* exp_image)
+{
+  vil_image_view<float>::iterator iter;
+
+  //write to buffer (or create it)
+  float* buff = (exp_image_) ? (float*) exp_image_->cpu_buffer() : new float[ exp_image->size()];
+  int i=0;
+  for (iter = exp_image->begin(); iter != exp_image->end(); ++iter, ++i) {
+    buff[i] = (*iter);
+  }
+
+  //now write to bocl_mem
+  if (!exp_image_) {
+    //create mem
+    exp_image_ = new bocl_mem((*context_), buff, exp_image->size() * sizeof(cl_float), "input image buffer");
+    exp_image_->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
+  }
+  else {
+    exp_image_->write_to_buffer(*command_queue_);
   }
   return true;
 }
