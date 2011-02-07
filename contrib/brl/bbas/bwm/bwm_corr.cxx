@@ -124,7 +124,6 @@ void bwm_corr::x_write(vcl_ostream &os)
 
    vcl_map<bwm_observer_cam*, vgl_point_2d<double> >::const_iterator
    iter = matches_.begin();
-   int i=0;
    while (iter != matches_.end()) {
      vsl_basic_xml_element corr_elm(CORRESP_ELM_TAG);
      corr_elm.x_write_open(os);
@@ -147,7 +146,6 @@ vcl_vector<vcl_pair<vcl_string, vsol_point_2d> > bwm_corr::match_list()
 {
   vcl_vector<vcl_pair<vcl_string, vsol_point_2d> > list;
   vcl_map<bwm_observer_cam*, vgl_point_2d<double> >::iterator iter = matches_.begin();
-  int i=0;
   while (iter != matches_.end()) {
    vcl_pair<vcl_string, vsol_point_2d> pair;
    pair.first = iter->first->tab_name();

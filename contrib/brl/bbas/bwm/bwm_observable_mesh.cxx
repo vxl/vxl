@@ -74,7 +74,7 @@ bwm_observable_mesh::bwm_observable_mesh(vgl_box_3d<double> box)
   v.push_back(new vsol_point_3d(p3));
   v.push_back(new vsol_point_3d(p2));
   vsol_polygon_3d_sptr poly = new vsol_polygon_3d(v);
-  
+
   // create the mesh
   object_ = new bmsh3d_mesh_mc;
   bmsh3d_face_mc* face = create_face(poly);
@@ -195,11 +195,13 @@ void bwm_observable_mesh::extrude(int face_id)
         object_ = new bmsh3d_mesh_mc();
         // the first polygon is always the outer one
         create_mesh_HE(poly, 0.01, inner_faces);
-      } else {
+      }
+      else {
         current_extr_face = extrude_face(object_, face);
       }
       notify_observers("update");
-    } else
+    }
+    else
       current_extr_face = 0;
    }
   vcl_cout << "FACES====>" << vcl_endl;
@@ -314,7 +316,6 @@ vsol_polygon_3d_sptr bwm_observable_mesh::extract_face(bmsh3d_face_mc* face,
   //open
   bwm_algo::move_points_to_plane(face);
 #endif
-  int i=0;
   do {
     bmsh3d_halfedge* next_he = (bmsh3d_halfedge*) cur_he->next();
     bmsh3d_vertex* vertex = (bmsh3d_vertex*) Es_sharing_V  (cur_he->edge(), next_he->edge());
@@ -451,7 +452,7 @@ void bwm_observable_mesh::create_interior()
 {
   if (object_) {
     bmsh3d_mesh_mc* interior = object_->clone();
-    double l = object_->edgemap(0)->length();
+    //double l = object_->edgemap(0)->length();
     shrink_mesh(interior, 0);//l/10.);
     //merge_mesh(object_, interior);
     object_=interior;
@@ -560,11 +561,13 @@ void bwm_observable_mesh::divide_face(unsigned face_id,
   bmsh3d_edge* edge1=0;
   bmsh3d_edge* edge2=0;
 
-  //vcl_cout << "p1=" << p1 << " p2=" << p2 << vcl_endl
-  //         << "l1=" << l1 << vcl_endl
-  //         << "l2=" << l2 << vcl_endl
-  //         << "l3=" << l3 << vcl_endl
-  //         << "l4=" << l4 << vcl_endl;
+#ifdef DEBUG
+  vcl_cout << "p1=" << p1 << " p2=" << p2 << '\n'
+           << "l1=" << l1 << '\n'
+           << "l2=" << l2 << '\n'
+           << "l3=" << l3 << '\n'
+           << "l4=" << l4 << vcl_endl;
+#endif
   double min_d1=1e23, min_d2=1e23;
   unsigned min_index1=0, min_index2=0;
   for (unsigned i=0; i<halfedges.size(); i++) {
@@ -617,7 +620,7 @@ void bwm_observable_mesh::divide_face(unsigned face_id,
 
   bmsh3d_face_mc *f1, *f2;
   mesh_break_face(object_, face, edge1, edge2, v1, v2, f1, f2);
-  int num_faces = object_->face_id_counter();
+  //int num_faces = object_->face_id_counter();
   object_->orient_face_normals();
   notify_observers("update");
 }
@@ -645,7 +648,8 @@ bmsh3d_face* bwm_observable_mesh::create_inner_face(vsol_polygon_3d_sptr polygon
       bmsh3d_edge* edge = new  bmsh3d_edge(prev_v, v, 100);
       bmsh3d_halfedge *he = new bmsh3d_halfedge (edge, inner_face);
       inner_face->_connect_HE_to_end(he);
-    } else {
+    }
+    else {
       v_first = v;
     }
     prev_v = v;
@@ -686,7 +690,7 @@ bmsh3d_face* bwm_observable_mesh::create_inner_face(vsol_polygon_3d_sptr polygon
   object_->_add_face(face);
 #endif
   for (unsigned i=0; i<n; i++) {
-    bmsh3d_vertex* vertex = (bmsh3d_vertex*) object_->vertexmap(i);
+    //bmsh3d_vertex* vertex = (bmsh3d_vertex*) object_->vertexmap(i);
     _connect_F_E_end (face, object_->edgemap(i));
   }
   face->_sort_HEs_circular();
@@ -725,7 +729,7 @@ void bwm_observable_mesh::create_mesh_HE(vsol_polygon_3d_sptr polygon,
   unsigned n = polygon->size();
 
   vcl_vector<bmsh3d_vertex* > v_list(2*n);
-  unsigned next_index, next_index_ext;
+  unsigned int next_index, next_index_ext;
 
   // first create the vertices
   for (unsigned i=0; i<n; i++) {
@@ -745,8 +749,8 @@ void bwm_observable_mesh::create_mesh_HE(vsol_polygon_3d_sptr polygon,
     vgl_vector_3d<double> normal = polygon->normal_at_point(p);
 #endif
     vgl_vector_3d<double> normal = polygon->normal();
-    double fact = dist;
 #if 0
+    double fact = dist;
     v->set_pt(vgl_point_3d<double>(polygon->vertex(i)->x() + fact*normal.x(),
                                    polygon->vertex(i)->y() + fact*normal.y(),
                                    polygon->vertex(i)->z() + fact*normal.z()));
@@ -804,7 +808,8 @@ void bwm_observable_mesh::create_mesh_HE(vsol_polygon_3d_sptr polygon,
     if (i == n-1) {
       next_index = 0;
       next_index_ext = n;
-    } else {
+    }
+    else {
       next_index = i+1;
       next_index_ext = n+i+1;
     }
@@ -872,7 +877,8 @@ void bwm_observable_mesh::attach_inner_face(unsigned face_id, vsol_polygon_3d_sp
     bmsh3d_halfedge* he = (bmsh3d_halfedge*) inner_face->halfedge();
     outer_face->add_mc_halfedge(he);
     notify_observers("update");
-  } else {
+  }
+  else {
     vcl_cerr << "bwm_observable_mesh::attach_inner_face() -- outer face id is not valid\n";
   }
 }
@@ -1018,7 +1024,7 @@ bmsh3d_face_mc* bwm_observable_mesh::extrude_face(bmsh3d_mesh_mc* M, bmsh3d_face
   bmsh3d_face_mc* new_face = M->_new_mc_face();
   M->_add_face (new_face);
   for (unsigned i=0; i < v_list.size(); i++) {
-    int next_index = i + 1;
+    unsigned int next_index = i + 1;
     if (next_index == v_list.size())
       next_index = 0;
     bmsh3d_edge* e = M->add_new_edge (v_list[i], v_list[next_index]);
@@ -1028,14 +1034,13 @@ bmsh3d_face_mc* bwm_observable_mesh::extrude_face(bmsh3d_mesh_mc* M, bmsh3d_face
 
   // create the in between faces
   he = cur_face->halfedge();
-  bmsh3d_edge* e = he->edge();
   next = he;
-  int i = 0, next_i = 1;
+  unsigned int i = 0, next_i = 1;
   do {
     bmsh3d_face_mc* face = M->_new_mc_face();
     M->_add_face (face);
     bmsh3d_edge* e = next->edge();
-    if (i == e_vert_list.size()-1)
+    if (i+1 == e_vert_list.size())
       next_i=0;
     else
       next_i = i+1;
@@ -1044,7 +1049,7 @@ bmsh3d_face_mc* bwm_observable_mesh::extrude_face(bmsh3d_mesh_mc* M, bmsh3d_face
     _connect_F_E_end (face, e_vert_list[next_i]);
     _connect_F_E_end (face, e);
     next = next->next();
-    i++;
+    ++i;
   } while (next != he);
 
   new_face->_sort_HEs_circular();
@@ -1076,7 +1081,8 @@ vgl_plane_3d<double> bwm_observable_mesh::get_plane(unsigned face_id)
 #endif
   if (fitter.fit(0.0001)) {
   plane = fitter.get_plane();
-  } else {
+  }
+  else {
     vcl_cout << "NO FITTING" << vcl_endl;
   }
 
@@ -1253,7 +1259,7 @@ void bwm_observable_mesh::save(const char* filename, bgeo_lvcs* lvcs)
     lvcs->global_to_local(V->pt().x(),V->pt().y(),V->pt().z(),bgeo_lvcs::wgs84,x,y,z,bgeo_lvcs::DEG,bgeo_lvcs::METERS);
     vgl_point_3d<double> new_pt(x,y,z);
     vcl_cout << "converted global <"<<V->pt().x() <<", "<< V->pt().y()
-             <<", "<< V->pt().z() <<"> to <" <<x<< ", "<<y<<" ,"<<z<<"> "<<vcl_endl;
+             <<", "<< V->pt().z() <<"> to <" <<x<< ", "<<y<<" ,"<<z<<'>'<<vcl_endl;
     V->set_pt(new_pt);
   }
 

@@ -6,7 +6,7 @@ bool bwm_shape_file::load(vcl_string filename)
 {
   vcl_string ext = vul_file::extension(filename);
   if (!ext.compare(".shp") == 0) {
-    vcl_cerr << filename << "is not a .shp file "<< vcl_endl;
+    vcl_cerr << filename << "is not a .shp file\n";
     return false;
   }
 
@@ -23,12 +23,12 @@ bool bwm_shape_file::load(vcl_string filename)
       SHPObject* obj = SHPReadObject( handle_, i );
       if (obj->nShapeId != -1) {  // undefined shape types are meaningless
         vlist.clear();
-        double xmin = obj->dfXMin;
-        double ymin = obj->dfYMin;
-        double zmin = obj->dfZMin;
-        double xmax = obj->dfXMax;
-        double ymax = obj->dfYMax;
-        double zmax = obj->dfZMax;
+        //double xmin = obj->dfXMin;
+        //double ymin = obj->dfYMin;
+        //double zmin = obj->dfZMin;
+        //double xmax = obj->dfXMax;
+        //double ymax = obj->dfYMax;
+        //double zmax = obj->dfZMax;
 
         for (int j=0; j<obj->nVertices; j++) {
           double x = obj->padfX[j];
@@ -47,16 +47,16 @@ bool bwm_shape_file::load(vcl_string filename)
 void bwm_shape_file::print()
 {
   if (handle_) {
-    vcl_cout << "SHAPE TYPE:" << nShapeType_ << vcl_endl
-             << "NUMBER OF OBJECTS:" << nEntities_ << vcl_endl
+    vcl_cout << "SHAPE TYPE:" << nShapeType_ << '\n'
+             << "NUMBER OF OBJECTS:" << nEntities_ << '\n'
              << "BOUNDING BOX:" << bb_ << vcl_endl;
 
     for (int i=0; i<nEntities_; i++) {
       SHPObject* obj = SHPReadObject( handle_, i );
-      vcl_cout << i << "th Object -----" << vcl_endl
-               << "SHAPE TYPE:" << obj->nSHPType << vcl_endl
-               << "SHAPE ID:" << obj->nShapeId << vcl_endl
-               << "NUM PARTS:" << obj->nParts << vcl_endl
+      vcl_cout << i << "th Object -----" << '\n'
+               << "SHAPE TYPE:" << obj->nSHPType << '\n'
+               << "SHAPE ID:" << obj->nShapeId << '\n'
+               << "NUM PARTS:" << obj->nParts << '\n'
                << "NUM Vertices:" << obj->nVertices << vcl_endl;
       for (int j=0; j<obj->nVertices; j++) {
         double x = obj->padfX[j];

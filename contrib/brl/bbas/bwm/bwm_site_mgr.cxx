@@ -24,6 +24,7 @@
 #include <vnl/vnl_quaternion.h>
 #include <vcl_cstdio.h>
 #include <vcl_sstream.h>
+#include <expatpplib.h> // for accessing methods in parent class of bwm_io_config_parser
 
 #include <vul/vul_file.h>
 #include <vul/vul_string.h>
@@ -166,7 +167,7 @@ void bwm_site_mgr::create_site()
   else
   {
     // collect the parameters
-    vcl_cout << "name:" << site_name << vcl_endl
+    vcl_cout << "name:" << site_name << '\n'
              << "dir:" << site_dir << vcl_endl;
 
     // make sure site name is filled
@@ -849,7 +850,6 @@ void bwm_site_mgr::load_cam_tableau()
   vgui_dialog_extensions params ("Camera Tableau");
   vcl_string ext, name, img_file, cam_file, empty="";
   int camera_type = 0;
-  vpgl_camera<double> *camera = (vpgl_camera<double>*)0;
 
   params.field("Tableau Name", name);
   params.line_break();
@@ -1015,6 +1015,7 @@ write_vrml_cameras(vcl_ofstream& str,
   }
 }
 
+#ifdef DEBUG
 static void
 write_vrml_box(vcl_ofstream& str,vgl_box_3d<double> box)
 {
@@ -1044,6 +1045,7 @@ write_vrml_box(vcl_ofstream& str,vgl_box_3d<double> box)
       <<  " ]\n"
       << "}\n";
 }
+#endif
 
 static void save_video_world_points_vrml_impl(vcl_ofstream& os)
 {
@@ -1265,7 +1267,9 @@ void bwm_site_mgr::save_video_cams_and_world_pts_vrml()
   {
     save_video_world_points_vrml_impl(os,box,res_);
     save_video_cameras_vrml_impl(os,box,res_*5);
-    //write_vrml_box(os, box);
+#ifdef DEBUG
+    write_vrml_box(os, box);
+#endif
   }
 }
 

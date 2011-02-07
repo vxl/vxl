@@ -15,7 +15,7 @@
 #include <vgui/vgui_shell_tableau.h>
 #include <vgui/vgui_command.h>
 
-  
+
 void bwm_tableau_img::get_popup(vgui_popup_params const &params, vgui_menu &menu)
 {
   menu.clear();
@@ -23,6 +23,7 @@ void bwm_tableau_img::get_popup(vgui_popup_params const &params, vgui_menu &menu
   bwm_popup_menu pop(this);
   pop.get_menu(menu);
 }
+
 void bwm_tableau_img::lock()
 {
   my_observer_->image_tableau()->lock_linenum(true);
@@ -32,7 +33,7 @@ void bwm_tableau_img::lock()
 void bwm_tableau_img::unlock()
 {
   my_observer_->lock_vgui_status(false);
-  if(!my_observer_->vgui_status_on())
+  if (!my_observer_->vgui_status_on())
     my_observer_->image_tableau()->lock_linenum(false);
 }
 
@@ -60,10 +61,10 @@ void bwm_tableau_img::create_polygon()
   set_color(1, 0, 0);
   pick_polygon(poly2d);
   if (!poly2d)
-    {
-      vcl_cerr << "In bwm_tableau_img::create_polygon() - picking failed\n";
-      return;
-    }
+  {
+    vcl_cerr << "In bwm_tableau_img::create_polygon() - picking failed\n";
+    return;
+  }
   this->unlock();
 
   // add the polygon to the list
@@ -80,10 +81,10 @@ void bwm_tableau_img::create_polyline()
   set_color(1, 0, 0);
   this->pick_polyline(poly2d);
   if (!poly2d)
-    {
-      vcl_cerr << "In bwm_tableau_img::create_polyline() - picking failed\n";
-      return;
-    }
+  {
+    vcl_cerr << "In bwm_tableau_img::create_polyline() - picking failed\n";
+    return;
+  }
 
   this->unlock();
   // add the polygon to the list
@@ -102,7 +103,7 @@ void bwm_tableau_img::create_point()
 void bwm_tableau_img::create_pointset()
 {
   vcl_vector<vsol_point_2d_sptr> pts;
-  bool picked = this->pick_point_set(pts, 10);
+  this->pick_point_set(pts, 10);
   for (vcl_vector<vsol_point_2d_sptr>::iterator pit = pts.begin();
        pit != pts.end(); ++pit)
     my_observer_->create_point(*pit);
@@ -174,36 +175,36 @@ void bwm_tableau_img::scroll_to_point()
 void bwm_tableau_img::save_mask()
 {
   vil_image_view_base_sptr mask = my_observer_->mask();
-  if(!mask)
+  if (!mask)
     return;
   vgui_dialog save_dlg("Save Mask");
   vcl_string ext, file_path;
   save_dlg.file("Mask Filename", ext, file_path);
-  if(!save_dlg.ask())
+  if (!save_dlg.ask())
     return;
-  if(file_path =="")
+  if (file_path =="")
     return;
   bool result = vil_save(*mask,file_path.c_str());
-  if( !result ) {
+  if ( !result ) {
     vcl_cerr << "Failed to save image to" << file_path << vcl_endl;
   }
 }
 
 void bwm_tableau_img::save_spatial_objects_2d()
 {
-  vcl_vector<vsol_spatial_object_2d_sptr> sos = 
+  vcl_vector<vsol_spatial_object_2d_sptr> sos =
     my_observer_->get_spatial_objects_2d();
-  if(!sos.size())
+  if (!sos.size())
     return;
   vgui_dialog save_dlg("Save Spatial Objects");
   vcl_string ext, binary_filename;
   save_dlg.file("Binary Filename", ext, binary_filename);
-  if(!save_dlg.ask())
+  if (!save_dlg.ask())
     return;
-  if(binary_filename == "")
+  if (binary_filename == "")
     return;
   vsl_b_ofstream ostr(binary_filename);
-  if(!ostr){
+  if (!ostr) {
     vcl_cerr << "Failed to open output stream "
              << binary_filename << vcl_endl;
     return;
@@ -252,31 +253,40 @@ bool bwm_tableau_img::handle(const vgui_event& e)
   if (e.key == 'p' && e.modifier == vgui_SHIFT) {
     create_polygon_mesh();
     return true;
-  } else if (e.key == 't' && e.modifier == vgui_SHIFT) {
+  }
+  else if (e.key == 't' && e.modifier == vgui_SHIFT) {
     this->triangulate_mesh();
     return true;
-  } else if ( e.key == 'm' && e.modifier == vgui_SHIFT) {
+  }
+  else if ( e.key == 'm' && e.modifier == vgui_SHIFT) {
     this->move_obj_by_vertex();
     return true;
-  } else if ( e.key == 'e' && e.modifier == vgui_SHIFT) {
+  }
+  else if ( e.key == 'e' && e.modifier == vgui_SHIFT) {
     this->extrude_face();
     return true;
-  } else if ( e.key == 's' && e.modifier == vgui_SHIFT) {
+  }
+  else if ( e.key == 's' && e.modifier == vgui_SHIFT) {
     this->save();
     return true;
-  } else if ( e.key == '-' && e.modifier == vgui_SHIFT) {
+  }
+  else if ( e.key == '-' && e.modifier == vgui_SHIFT) {
     this->deselect_all();
     return true;
-  } else if ( e.key == 'd' && e.modifier == vgui_SHIFT) {
+  }
+  else if ( e.key == 'd' && e.modifier == vgui_SHIFT) {
     this->clear_object();
     return true;
-  } else if ( e.key == 'a' && e.modifier == vgui_SHIFT) {
+  }
+  else if ( e.key == 'a' && e.modifier == vgui_SHIFT) {
     this->clear_all();
     return true;
-  } else if ( e.key == 'h' && e.modifier == vgui_SHIFT) {
+  }
+  else if ( e.key == 'h' && e.modifier == vgui_SHIFT) {
     this->help_pop();
     return true;
   }
+  else
 #endif // 0
   return bgui_picker_tableau::handle(e);
 }
@@ -300,7 +310,10 @@ void bwm_tableau_img::remove_poly_from_mask()
 {
   my_observer_->remove_poly_from_mask();
 }
-/*void bwm_tableau_img::create_mask()
+
+#if 0
+void bwm_tableau_img::create_mask()
 {
   my_observer_->create_mask();
-}*/
+}
+#endif

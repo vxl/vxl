@@ -208,7 +208,6 @@ void bwm_tableau_video::save_as_image_list()
 {
   vcl_string path = "";
   vcl_string ext = "";
-  static int junk = 0;
   vgui_dialog_extensions save_dlg("Save Video (Image List)");
   save_dlg.dir("Video Directory", ext, path);
   save_dlg.line_break();
