@@ -6,6 +6,7 @@
 
 DECLARE_FUNC_CONS(bvpl_scene_vector_operator_process);
 DECLARE_FUNC_CONS(bvpl_scene_kernel_operator_process);
+DECLARE_FUNC_CONS(bvpl_block_kernel_operator_process);
 DECLARE_FUNC_CONS(bvpl_save_vrml_process);
 DECLARE_FUNC_CONS(bvpl_create_scene_process);
 DECLARE_FUNC_CONS(bvpl_plane_propagate_process);
