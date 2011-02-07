@@ -17,4 +17,7 @@ DECLARE_FUNC_CONS(boxm_render_expected_edge_vrml_process);
 DECLARE_FUNC_CONS(boxm_merge_mixtures_process);
 DECLARE_FUNC_CONS(boxm_split_scene_process);
 DECLARE_FUNC_CONS(boxm_compute_scene_difference_process);
+DECLARE_FUNC_CONS(boxm_compute_entropy_process);
+DECLARE_FUNC_CONS(boxm_compute_expected_color_scene_process);
+DECLARE_FUNC_CONS(boxm_linear_combination_process);
 #endif

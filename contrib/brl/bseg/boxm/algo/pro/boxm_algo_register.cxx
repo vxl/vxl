@@ -24,4 +24,7 @@ void boxm_algo_register::register_process()
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm_merge_mixtures_process, "boxmMergeMixturesProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm_split_scene_process ,"boxmSplitSceneProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm_compute_scene_difference_process, "boxmComputeSceneDifferenceProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm_compute_entropy_process, "boxmComputeEntropyProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm_compute_expected_color_scene_process, "boxmComputeExpectedColorSceneProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm_linear_combination_process, "boxmLinearCombinationProcess");
 }
