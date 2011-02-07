@@ -56,7 +56,8 @@ struct bwm_io_tab_config_img : public bwm_io_tab_config {
 
 struct bwm_io_tab_config_cam : public bwm_io_tab_config {
   bwm_io_tab_config_cam(vcl_string name, bool status,
-    vcl_string i_path, vcl_string c_path, vcl_string c_type, bool adj=false)
+                        vcl_string i_path, vcl_string c_path, vcl_string c_type,
+                        bool /*adj*/=false)
     : bwm_io_tab_config(CAMERA_TABLEAU_TAG, name, status), img_path(i_path),
     cam_path(c_path), cam_type(c_type) {}
 
@@ -71,7 +72,7 @@ struct bwm_io_tab_config_cam : public bwm_io_tab_config {
 
 struct bwm_io_tab_config_coin3d: public bwm_io_tab_config {
   bwm_io_tab_config_coin3d(vcl_string name, bool status,
-    vcl_string c_path, vcl_string c_type)
+                           vcl_string c_path, vcl_string c_type)
     : bwm_io_tab_config(COIN3D_TABLEAU_TAG, name, status), cam_path(c_path), cam_type(c_type) {}
 
   bwm_io_tab_config_coin3d* clone() {return new bwm_io_tab_config_coin3d(name, status, cam_path, cam_type); }
@@ -81,9 +82,10 @@ struct bwm_io_tab_config_coin3d: public bwm_io_tab_config {
 
 struct bwm_io_tab_config_proj2d: public bwm_io_tab_config {
   bwm_io_tab_config_proj2d(vcl_string name, bool status,
-    vcl_string p_type, vcl_string c_path, vcl_string c_type, vcl_string coin3d)
+                           vcl_string p_type, vcl_string c_path,
+                           vcl_string c_type, vcl_string coin3d)
     : bwm_io_tab_config(PROJ2D_TABLEAU_TAG, name, status), cam_path(c_path),
-    cam_type(c_type), proj2d_type(p_type), coin3d_tab_name(coin3d) {}
+      cam_type(c_type), proj2d_type(p_type), coin3d_tab_name(coin3d) {}
 
   bwm_io_tab_config_proj2d* clone() { return new bwm_io_tab_config_proj2d(name, status, proj2d_type, cam_path, cam_type, coin3d_tab_name); }
   vcl_string cam_path;
@@ -94,7 +96,7 @@ struct bwm_io_tab_config_proj2d: public bwm_io_tab_config {
 
 struct bwm_io_tab_config_video: public bwm_io_tab_config {
   bwm_io_tab_config_video(vcl_string name, bool status,
-    vcl_string frames,  vcl_string cameras)
+                          vcl_string frames,  vcl_string cameras)
     : bwm_io_tab_config(VIDEO_TABLEAU_TAG, name, status), video_path(frames), camera_glob(cameras) {}
 
   bwm_io_tab_config_video* clone() { return new bwm_io_tab_config_video(name, status, video_path, camera_glob); }
