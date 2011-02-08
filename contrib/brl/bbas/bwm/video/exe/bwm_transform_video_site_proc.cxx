@@ -43,14 +43,13 @@ static bool process(vcl_string const& site_path,
   if (!vul_file::make_directory_path(trans_cam_dir))
     return false;
   bwm_video_cam_ostream cam_ostr(trans_cam_dir);
-  unsigned index = 0;
-  while(true){
+  while (true) {
     vpgl_perspective_camera<double>* cam = cam_istr.current_camera();
-    vpgl_perspective_camera<double>& tr_cam = 
+    vpgl_perspective_camera<double> tr_cam =
       vpgl_camera_homographies::transform_camera_to_plane(*cam, world_plane);
-    if(! cam_ostr.write_camera(&tr_cam))
+    if (! cam_ostr.write_camera(&tr_cam))
       return false;
-    if(!cam_istr.advance())
+    if (!cam_istr.advance())
       break;
   }
   //transform the points
@@ -67,18 +66,19 @@ int main(int argc, char** argv)
 {
   vul_arg_info_list arglist;
   vul_arg<vcl_string> site_path(arglist, "-site_path",
-                                 "video site path", "");
+                                "video site path", "");
   vul_arg<vcl_string> trans_site_path(arglist, "-trans_site_path",
                                       "transformed_site", "");
   vul_arg<vcl_string> trans_cam_dir(arglist, "-trans_cam_dir",
-                                      "transformed_cams", "");
+                                    "transformed_cams", "");
 
   vul_arg<vcl_string> plane_path(arglist, "-plane",
-                                      "path to 3d plane", "");
+                                 "path to 3d plane", "");
   arglist.parse(argc, argv, true);
 
   if (!process(site_path(), trans_site_path(), trans_cam_dir(),
                plane_path()))
     return -1;
-  return 0;
+  else
+    return 0;
 }
