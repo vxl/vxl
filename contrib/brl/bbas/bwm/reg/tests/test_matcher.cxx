@@ -30,7 +30,7 @@ void test_matcher()
 
   int mcol = 0, mrow = 0;
   double distance_threshold = 0.0, angle_tol = 0.01, min_probability = 0.8;
-  bool success = matcher.match(mcol, mrow, distance_threshold, angle_tol, min_probability);
+  /*bool success=*/ matcher.match(mcol, mrow, distance_threshold, angle_tol, min_probability);
   TEST("Match test ", mcol, 1);
 }
 

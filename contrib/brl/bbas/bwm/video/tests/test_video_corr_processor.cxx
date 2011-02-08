@@ -138,10 +138,10 @@ static void test_video_corr_processor()
   M[2][2]=1.0;
   vpgl_calibration_matrix<double> K(M);
   // estimated distance is 330 meters
-  bool good = cp.initialize_world_pts_and_cameras(K, 330);
+  /*bool good=*/ cp.initialize_world_pts_and_cameras(K, 330);
   vcl_vector<vpgl_perspective_camera<double> > cameras = cp.cameras();
   vcl_vector<bwm_video_corr_sptr> mcorrs = cp.correspondences();
-  bool valid = mcorrs[0]->world_pt_valid();
+  /* bool valid = mcorrs[0]->world_pt_valid(); */
   vgl_point_3d<double> p3d = mcorrs[0]->world_pt();
   vgl_point_2d<double> p2d = cameras[2].project(p3d);
   double x2 = 0.6*p0[0].x()+0.4*p5[0].x();
