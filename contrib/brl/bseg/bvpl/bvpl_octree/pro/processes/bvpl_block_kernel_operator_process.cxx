@@ -1,6 +1,6 @@
 //:
-// \brief
 // \file
+// \brief
 // \author Isabel Restrepo
 // \date 1-Feb-2011
 
@@ -9,7 +9,6 @@
 
 #include <brdb/brdb_value.h>
 
-
 #include <bvpl/bvpl_octree/bvpl_block_kernel_operator.h>
 #include <bvpl/bvpl_octree/bvpl_octree_sample.h>
 #include <bvpl/functors/bvpl_edge_geometric_mean_functor.h>
@@ -17,9 +16,6 @@
 #include <bvpl/functors/bvpl_gauss_convolution_functor.h>
 #include <bvpl/functors/bvpl_positive_gauss_conv_functor.h>
 #include <bvpl/functors/bvpl_algebraic_functor.h>
-
-#include <bprb/bprb_parameters.h>
-#include <brdb/brdb_value.h>
 
 #include <boxm/boxm_scene.h>
 #include <bsta/bsta_gauss_f1.h>
@@ -44,7 +40,7 @@ namespace bvpl_block_kernel_operator_process_globals
 bool bvpl_block_kernel_operator_process_cons(bprb_func_process& pro)
 {
   using namespace bvpl_block_kernel_operator_process_globals;
-  
+
   vcl_vector<vcl_string> input_types_(n_inputs_);
   unsigned i=0;
   input_types_[i++] = "boxm_scene_base_sptr";
@@ -54,23 +50,23 @@ bool bvpl_block_kernel_operator_process_cons(bprb_func_process& pro)
   input_types_[i++] = "int";
   input_types_[i++] = "vcl_string";
   input_types_[i++] = "vcl_string";
-  
+
   vcl_vector<vcl_string> output_types_(n_outputs_);
-  
+
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 }
 
 bool bvpl_block_kernel_operator_process(bprb_func_process& pro)
 {
   using namespace bvpl_block_kernel_operator_process_globals;
-  
+
   if (pro.n_inputs() < n_inputs_)
   {
     vcl_cerr << pro.name() << ": the input number should be " << n_inputs_
-    << " but instead it is " << pro.n_inputs() << vcl_endl;
+             << " but instead it is " << pro.n_inputs() << vcl_endl;
     return false;
   }
-  
+
   //get inputs:
   unsigned i = 0;
   boxm_scene_base_sptr scene_base = pro.get_input<boxm_scene_base_sptr>(i++);
@@ -82,24 +78,24 @@ bool bvpl_block_kernel_operator_process(bprb_func_process& pro)
   vcl_string functor_name = pro.get_input<vcl_string>(i++);
   vcl_string output_path = pro.get_input<vcl_string>(i++);
   //short level = 0;
-  
+
   //print inputs
   vcl_cout << "In bvpl_block_kernel_operator:\n"
-  << "Index(i,j,k) : (" << block_i << "," << block_j << "," << block_k << ")\n"
-  << "Functor Name: " << functor_name << "\n" 
-  << "Output path: " << output_path << vcl_endl;
+           << "Index(i,j,k) : (" << block_i << ',' << block_j << ',' << block_k << ")\n"
+           << "Functor Name: " << functor_name << '\n'
+           << "Output path: " << output_path << vcl_endl;
 
   //check input's validity
   if (!scene_base.ptr()) {
     vcl_cerr <<  " :-- Grid is not valid!\n";
     return false;
   }
-  
+
   if (!kernel) {
     vcl_cerr << pro.name() << " :-- Kernel is not valid!\n";
     return false;
   }
-  
+
 
   switch (scene_base->appearence_model())
   {
@@ -110,15 +106,15 @@ bool bvpl_block_kernel_operator_process(bprb_func_process& pro)
       boxm_scene<tree_type> *scene_in = static_cast<boxm_scene<tree_type>* > (scene_base.as_pointer());
       double finest_cell_length = scene_in->finest_cell_length();
       kernel->set_voxel_length(finest_cell_length);
-      
+
       //parameters of the output scene are the same as those of the input scene
       boxm_scene<tree_type> *scene_out =
       new boxm_scene<tree_type>(scene_in->lvcs(), scene_in->origin(), scene_in->block_dim(), scene_in->world_dim(), scene_in->max_level(), scene_in->init_level());
       scene_out->set_paths(output_path, "gauss_response_scene");
       scene_out->set_appearance_model(BSTA_GAUSS_F1);
-      if(!vul_file::exists(output_path + "/gauss_response_scene.xml"));
+      if (!vul_file::exists(output_path + "/gauss_response_scene.xml"));
          scene_out->write_scene("/gauss_response_scene.xml");
-      
+
       if (functor_name == "gauss_convolution") {
         bvpl_gauss_convolution_functor functor;
         bvpl_block_kernel_operator block_oper;
@@ -127,7 +123,7 @@ bool bvpl_block_kernel_operator_process(bprb_func_process& pro)
         //clean memory
         scene_in->unload_active_blocks();
         scene_out->unload_active_blocks();
-        
+
         return true;
       }
       else if (functor_name == "positive_gauss_convolution") {
@@ -138,14 +134,13 @@ bool bvpl_block_kernel_operator_process(bprb_func_process& pro)
         //clean memory
         scene_in->unload_active_blocks();
         scene_out->unload_active_blocks();
-        
+
         return true;
       }
       else
         return false;
-      
-      break;
 
+      break;
     }
     case BOXM_FLOAT:
     {
@@ -158,28 +153,28 @@ bool bvpl_block_kernel_operator_process(bprb_func_process& pro)
       new boxm_scene<tree_type>(scene_in->lvcs(), scene_in->origin(), scene_in->block_dim(), scene_in->world_dim(), scene_in->max_level(), scene_in->init_level());
       scene_out->set_paths(output_path, "response_scene");
       scene_out->set_appearance_model(BOXM_FLOAT);
-      if(!vul_file::exists(output_path + "/float_response_scene.xml"));
-         scene_out->write_scene("/float_response_scene.xml");
-      
-      if (functor_name == "edge_algebraic_mean") 
-      {        
+      if (!vul_file::exists(output_path + "/float_response_scene.xml"))
+        scene_out->write_scene("/float_response_scene.xml");
+
+      if (functor_name == "edge_algebraic_mean")
+      {
         bvpl_edge_algebraic_mean_functor<float> functor;
         bvpl_block_kernel_operator block_oper;
         //operate on scene
         block_oper.operate(*scene_in, functor, kernel, block_i, block_j, block_k, *scene_out);
-                
+
         //clean memory
         scene_in->unload_active_blocks();
         scene_out->unload_active_blocks();
         return true;
       }
-      else if (functor_name == "algebraic") 
+      else if (functor_name == "algebraic")
       {
         bvpl_algebraic_functor functor;
         bvpl_block_kernel_operator block_oper;
         //operate on scene
         block_oper.operate(*scene_in, functor, kernel, block_i, block_j, block_k, *scene_out);
-               
+
         //clean memory
         scene_in->unload_active_blocks();
         scene_out->unload_active_blocks();
@@ -187,7 +182,7 @@ bool bvpl_block_kernel_operator_process(bprb_func_process& pro)
       }
       else
         return false;
-      
+
       break;
     }
     default:
