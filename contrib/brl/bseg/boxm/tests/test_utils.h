@@ -1,5 +1,5 @@
-#ifndef test_utils_h_
-#define test_utils_h_
+#ifndef boxm_test_utils_h_
+#define boxm_test_utils_h_
 //:
 // \file
 // \brief  A file containing utility functions for other tests
