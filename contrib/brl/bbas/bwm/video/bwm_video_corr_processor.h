@@ -134,7 +134,7 @@ class bwm_video_corr_processor
   //: save cameras to output stream
   bool write_cameras_to_stream();
   //: save cameras as txt files to the directory cam_txt_dir
-  void write_cameras_txt(vcl_string const& cam_txt_dir, vcl_vector<vpgl_perspective_camera<double> >& cameras);
+  void write_cameras_txt(vcl_string const& cam_txt_dir, vcl_vector<vpgl_perspective_camera<double> > const& cameras);
 
   //: Find the missing correspondences by correlating with respect to the bounding adjacent frames with correspondences
   // Assumptions:

@@ -243,7 +243,7 @@ void bwm_video_corr_processor::convert_world_pts_to_local(bgeo_lvcs_sptr lvcs)
     if ((*cit)->world_pt_valid()) {
       vgl_point_3d<double> pt = (*cit)->world_pt();
       double x,y,z;
-      lvcs->global_to_local(pt.x(), pt.y(), pt.z(), lvcs->get_cs_name(), x,y,z); 
+      lvcs->global_to_local(pt.x(), pt.y(), pt.z(), lvcs->get_cs_name(), x,y,z);
       vgl_point_3d<double> new_pt(x,y,z);
       vcl_cout << "world pt: " << pt << " converted to " << new_pt << vcl_endl;
       (*cit)->set_world_pt(new_pt);
@@ -264,7 +264,7 @@ bool bwm_video_corr_processor::write_video_site(vcl_string const& site_path)
   return true;
 }
 
-void bwm_video_corr_processor::write_cameras_txt(vcl_string const& cam_txt_dir, vcl_vector<vpgl_perspective_camera<double> >& cameras)
+void bwm_video_corr_processor::write_cameras_txt(vcl_string const& cam_txt_dir, vcl_vector<vpgl_perspective_camera<double> > const& cameras)
 {
   char filename[1024];
   if (vul_file::is_directory(cam_txt_dir.c_str()))
