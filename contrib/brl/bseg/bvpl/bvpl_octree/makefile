@@ -5,6 +5,7 @@ LIBRARY := bvpl_octree
 SOURCES += bvpl_scene_neighborhood_operator.cxx
 SOURCES += bvpl_scene_statistics.cxx
 SOURCES += bvpl_discover_pca_kernels.cxx
+SOURCES += bvpl_taylor_basis.cxx
 MANPAGE_SOURCES += bvpl_octree_vector_operator.h
 MANPAGE_SOURCES += bvpl_octree_vector_operator_impl.h
 MANPAGE_SOURCES += bvpl_octree_kernel_operator.h
@@ -14,6 +15,7 @@ MANPAGE_SOURCES += bvpl_octree_sample.txx
 MANPAGE_SOURCES += bvpl_octree_vrml_util.h
 MANPAGE_SOURCES += bvpl_cell_data_traits.h
 MANPAGE_SOURCES += bvpl_octree_neighbors.h
+MANPAGE_SOURCES += bvpl_block_kernel_operator.h
 
 SUBDIRS += pro
 

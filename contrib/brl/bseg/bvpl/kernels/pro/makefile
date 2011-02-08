@@ -14,6 +14,7 @@ SOURCES += processes/bvpl_create_edge3d_kernel_process.cxx
 SOURCES += processes/bvpl_create_gauss3d_xx_kernel_vector_process.cxx
 SOURCES += processes/bvpl_create_corner2d_kernel_vector_process.cxx
 SOURCES += processes/bvpl_create_wc_kernel_vector_process.cxx
+SOURCES += processes/bvpl_load_taylor_kernel_process.cxx
 
 ################################
 include ${VXLROOT}/config/top.mk

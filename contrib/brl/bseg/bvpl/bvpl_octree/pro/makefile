@@ -15,6 +15,7 @@ SOURCES += processes/bvpl_nonmax_supp_process.cxx
 SOURCES += processes/bvpl_compute_gauss_gradients.cxx
 SOURCES += processes/bvpl_discover_pca_features_process.cxx
 SOURCES += processes/bvpl_compute_pca_test_error_process.cxx
+SOURCES += processes/bvpl_block_kernel_operator_process.cxx
 
 #######################################
 include ${VXLROOT}/config/top-params.mk
