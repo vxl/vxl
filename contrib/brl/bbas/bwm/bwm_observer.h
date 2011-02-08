@@ -25,7 +25,7 @@ class bwm_observer : public vgui_observer
   virtual void handle_update(vgui_message const& msg,
                              bwm_observable_sptr observable) = 0;
 
-  virtual void add_new_obj(bwm_observable_sptr observable){}
+  virtual void add_new_obj(bwm_observable_sptr /*observable*/) {}
 
 #if 0
   virtual void update_all()=0;
