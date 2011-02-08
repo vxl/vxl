@@ -3,7 +3,6 @@
 // \file
 #include <bwm/video/bwm_video_site_io.h>
 #include <bwm/video/bwm_video_corr.h>
-#include <vcl_cmath.h>
 #include <vnl/vnl_numeric_traits.h>
 #include <vnl/vnl_double_3.h>
 #include <vnl/algo/vnl_levenberg_marquardt.h>
@@ -27,6 +26,9 @@
 
 #include <vpgl/bgeo/bgeo_lvcs.h>
 
+#include <vcl_cmath.h>
+#include <vcl_cstdio.h> // for std::sprintf
+
 //Minimum number of correspondences on a frame to compute cameras
 //static const unsigned min_corrs = 10;
 //static const unsigned min_corrs = 9;
@@ -45,7 +47,7 @@ static void extract_window(float u, float v, int radius,
     for (float ui = umin; ui<=umax; ++ui)
       if (ui<0||vi<0||ui>=ni||vi>=nj)
         pixels.push_back(-1.0f);
-      else{
+      else {
         double val = brip_vil_float_ops::bilinear_interpolation(image, ui, vi);
         pixels.push_back(static_cast<float>(val));
       }
@@ -506,9 +508,9 @@ initialize_world_pts_and_cameras(vpgl_calibration_matrix<double> const& K,
 
   // execute the bundle adjustment
   vpgl_bundle_adjust adj;
-  bool success = adj.optimize(unknown_cameras,
-                              unknown_world, cimage_points,
-                              cmask);
+  /*bool success=*/ adj.optimize(unknown_cameras,
+                                 unknown_world, cimage_points,
+                                 cmask);
   //save the solved world points in the correspondences
   for (unsigned w = 0; w<npoints; ++w)
   {
@@ -942,9 +944,9 @@ bool bwm_video_corr_processor::refine_world_pts_and_cameras()
 
   // execute the bundle adjustment
   vpgl_bundle_adjust adj;
-  bool success = adj.optimize(unknown_cameras,
-                              unknown_world, cimage_points,
-                              cmask);
+  /*bool success=*/ adj.optimize(unknown_cameras,
+                                 unknown_world, cimage_points,
+                                 cmask);
   //save the solved world points in the correspondences
   for (unsigned w = 0; w<npoints; ++w)
   {
