@@ -60,11 +60,11 @@ class bocl_manager
   cl_context& context() {return context_;}
   vcl_size_t group_size() const {return curr_info_.max_work_group_size_;}
   cl_ulong total_local_memory() const {return  curr_info_.total_local_memory_;}
-  cl_bool image_support(){return curr_info_.image_support_;}
-  vcl_size_t image2d_max_width(){ return curr_info_.image2d_max_width_; }
-  vcl_size_t image2d_max_height(){ return curr_info_.image2d_max_height_; }
-  vcl_string platform_name(){ return curr_info_.platform_name_; }
-  cl_device_type device_type() { return curr_info_.device_type_; }
+  cl_bool image_support() const {return curr_info_.image_support_;}
+  vcl_size_t image2d_max_width() const { return curr_info_.image2d_max_width_; }
+  vcl_size_t image2d_max_height() const { return curr_info_.image2d_max_height_; }
+  vcl_string platform_name() const { return curr_info_.platform_name_; }
+  cl_device_type device_type() const { return curr_info_.device_type_; }
 
  protected:
 
@@ -74,8 +74,8 @@ class bocl_manager
     cpu_context_(0),
     devices_(0),
     gpus_(0),
-    cpus_(0),
     numGPUs_(0),
+    cpus_(0),
     numCPUs_(0) {}
 
   //Singleton instance of the manager
