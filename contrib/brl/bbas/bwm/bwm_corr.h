@@ -30,7 +30,7 @@ class bwm_corr : public vbl_ref_count
  public:
    bwm_corr() { mode_= true; }
   
-   bwm_corr(bwm_corr const& x) : vbl_ref_count() {}
+   bwm_corr(bwm_corr const& x) : vbl_ref_count(), mode_(x.mode()), world_pt_(x.world_pt()) {}
 
   ~bwm_corr() {}
 
