@@ -1,6 +1,6 @@
 //:
-// \brief A process to preform linear combination of blocks in situ i.e block1 = s1*block1+ s2*block2
 // \file
+// \brief A process to perform linear combination of blocks in situ i.e block1 = s1*block1+ s2*block2
 // \author Isabel Restrepo
 // \date 2-Feb-2011
 
@@ -13,7 +13,7 @@
 #include <boxm/algo/boxm_linear_operations.h>
 
 //:global variables
-namespace boxm_linear_combination_process_globals 
+namespace boxm_linear_combination_process_globals
 {
   const unsigned n_inputs_ = 7;
   const unsigned n_outputs_ = 0;
@@ -24,7 +24,7 @@ namespace boxm_linear_combination_process_globals
 bool boxm_linear_combination_process_cons(bprb_func_process& pro)
 {
   using namespace boxm_linear_combination_process_globals ;
-  
+
   vcl_vector<vcl_string> input_types_(n_inputs_);
   unsigned i = 0;
   input_types_[i++] = "boxm_scene_base_sptr" ; //scene1
@@ -36,7 +36,7 @@ bool boxm_linear_combination_process_cons(bprb_func_process& pro)
   input_types_[i++] = "int" ; //block index in z-dimension
 
   vcl_vector<vcl_string> output_types_(n_outputs_);
-  
+
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 }
 
@@ -45,7 +45,7 @@ bool boxm_linear_combination_process_cons(bprb_func_process& pro)
 bool boxm_linear_combination_process(bprb_func_process& pro)
 {
   using namespace boxm_linear_combination_process_globals;
-  
+
   //get inputs
   unsigned i = 0;
   boxm_scene_base_sptr scene_base1 = pro.get_input<boxm_scene_base_sptr>(i++);
@@ -56,49 +56,47 @@ bool boxm_linear_combination_process(bprb_func_process& pro)
   int block_j = pro.get_input<int>(i++);
   int block_k = pro.get_input<int>(i++);
 
-  if(!(scene_base1 && scene_base2))
+  if (!(scene_base1 && scene_base2))
   {
-    vcl_cerr << "In boxm_linear_combination_process: Null input scene" << vcl_endl;
+    vcl_cerr << "In boxm_linear_combination_process: Null input scene\n";
     return false;
-
   }
-  
-  switch (scene_base1->appearence_model()) 
+
+  switch (scene_base1->appearence_model())
   {
     case BOXM_FLOAT:
     {
-      
-      if(scene_base2->appearence_model()!= BOXM_FLOAT)
+      if (scene_base2->appearence_model()!= BOXM_FLOAT)
       {
-        vcl_cerr << "In boxm_linear_combination_process, datatype not supported" << vcl_endl;
+        vcl_cerr << "In boxm_linear_combination_process, datatype not supported\n";
         return false;
       }
       boxm_scene<boct_tree<short, float> > *scene1 = static_cast<boxm_scene<boct_tree<short, float> >*> (scene_base1.as_pointer());
       boxm_scene<boct_tree<short, float> > *scene2 = static_cast<boxm_scene<boct_tree<short, float> >*> (scene_base2.as_pointer());
-     
+
       scene1->load_block(block_i,block_j,block_k);
       scene2->load_block(block_i,block_j,block_k);
-      
+
       boxm_block<boct_tree<short, float> > *block1 = scene1->get_block(block_i,block_j,block_k);
       boxm_block<boct_tree<short, float> > *block2 = scene2->get_block(block_i,block_j,block_k);
 
       //The result is block1 = s1*block1+ s2*block2
       boxm_linear_combination(block1, block2, s1, s2);
-      
+
       //make sure to write the block back to disk
       scene1->write_active_block();
-      
+
       //clean memory
       scene1->unload_active_blocks();
       scene2->unload_active_blocks();
-      
+
       break;
-    }      
+    }
     default:
-      vcl_cerr << "In boxm_linear_combination_process: Invalid datatype" << vcl_endl;
+      vcl_cerr << "In boxm_linear_combination_process: Invalid datatype\n";
       return false;
       break;
   }
-  
+
   return true;
 }

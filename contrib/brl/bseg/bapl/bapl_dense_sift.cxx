@@ -104,12 +104,11 @@ bool bapl_dense_sift::make_dense_keypoints(vcl_vector<bapl_lowe_keypoint_sptr>& 
 
 bool bapl_dense_sift::make_keypoints(vcl_vector<bapl_lowe_keypoint_sptr>& keypoints)
 {
-	vcl_vector<bapl_lowe_keypoint_sptr>::iterator k_itr, k_end= keypoints.end();
+  vcl_vector<bapl_lowe_keypoint_sptr>::iterator k_itr, k_end= keypoints.end();
 
-	for( k_itr = keypoints.begin(); k_itr != k_end; ++k_itr )
-		if( !this->make_keypoint(*k_itr, (*k_itr)->location_i(), (*k_itr)->location_j()) )
-			return false;
-	
-	return true;
+  for ( k_itr = keypoints.begin(); k_itr != k_end; ++k_itr )
+    if ( !this->make_keypoint(*k_itr, (*k_itr)->location_i(), (*k_itr)->location_j()) )
+      return false;
 
+  return true;
 }//end bapl_dense_sift::make_keypoints
