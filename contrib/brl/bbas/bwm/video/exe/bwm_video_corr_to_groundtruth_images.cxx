@@ -19,7 +19,6 @@
 #include <bwm/video/bwm_video_corr.h>
 int main(int argc, char** argv)
 {
-
   //Input arguments
   vul_arg<vcl_string> site   ("-sitename", "Site Filename", "");
   vul_arg<vcl_string> gtdir  ("-gtdir", "Directory to store the ground truth", "");
@@ -46,27 +45,27 @@ int main(int argc, char** argv)
   }
   vcl_sort(img_files.begin(), img_files.end());
 
-  for(unsigned i=0;i<img_files.size();i++)
+  for (unsigned i=0;i<img_files.size();i++)
   {
-      vil_image_resource_sptr img_ptr=vil_load_image_resource(img_files[i].c_str());
-      vil_image_view<unsigned char> outimg(img_ptr->ni(),img_ptr->nj());
-      outimg.fill(0);
-      for(unsigned j=0;j<corrs.size();j++)
+    vil_image_resource_sptr img_ptr=vil_load_image_resource(img_files[i].c_str());
+    vil_image_view<unsigned char> outimg(img_ptr->ni(),img_ptr->nj());
+    outimg.fill(0);
+    for (unsigned j=0;j<corrs.size();j++)
+    {
+      vgl_point_2d<double> point2d;
+      if (corrs[j]->match(i,point2d))
       {
-          vgl_point_2d<double> point2d;
-          if(corrs[j]->match(i,point2d))
-          {
-              int u=(int)vcl_floor(point2d.x());
-              int v=(int)vcl_floor(point2d.y());
+        int u=(int)vcl_floor(point2d.x());
+        int v=(int)vcl_floor(point2d.y());
 
-              for(unsigned i=u-rx;i<=u+rx;i++)
-                  for(unsigned j=v-ry;j<=v+ry;j++)
-                      if(i>=0 && j>=0 && i<outimg.ni() && j<outimg.nj())
-                          outimg(i,j)=255;
-          }
+        for (int i=u-rx;i<=u+rx;i++)
+          for (int j=v-ry;j<=v+ry;j++)
+            if (i>=0 && j>=0 && i<(int)outimg.ni() && j<(int)outimg.nj())
+              outimg(i,j)=255;
       }
-      vcl_string outfile=gtdir()+"/"+vul_file::strip_extension(vul_file::basename(img_files[i]))+".tiff";
-      vil_save(outimg,outfile.c_str());
+    }
+    vcl_string outfile=gtdir()+"/"+vul_file::strip_extension(vul_file::basename(img_files[i]))+".tiff";
+    vil_save(outimg,outfile.c_str());
   }
   vcl_cout<<"Video Path "<<video_path<<vcl_endl;
   return 0;
