@@ -123,6 +123,9 @@ SOURCE=.\processes/bvpl_discover_pca_features_process.cxx
 SOURCE=.\processes/bvpl_compute_pca_test_error_process.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\processes/bvpl_block_kernel_operator_process.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/brdb_value_t+boxm_scene_base_sptr-.cxx
 # End Source File
 # End Group

@@ -230,7 +230,19 @@ SOURCE=.\test_save_scene_raw.cxx
 SOURCE=.\test_fill_in_mesh.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\test_linear_operations.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_utils.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\test_include.cxx
+# End Source File
+# End Group
+# Begin Group "Header Files"
+# PROP Default_Filter "h;txx"
+# Begin Source File
+SOURCE=.\test_utils.h
 # End Source File
 # End Group
 # End Target

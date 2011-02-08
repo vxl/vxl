@@ -126,6 +126,9 @@ SOURCE=.\processes/bvpl_create_corner2d_kernel_vector_process.cxx
 SOURCE=.\processes/bvpl_create_wc_kernel_vector_process.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\processes/bvpl_load_taylor_kernel_process.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/brdb_value_t+bvpl_kernel_sptr-.cxx
 # End Source File
 # End Group
