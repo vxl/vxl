@@ -131,7 +131,7 @@ int main(int argc, char** argv)
         for (psi.reset(); psi.next();)
         {
           unsigned int y = psi.scany();
-          for (unsigned int x = psi.startx(); x<= psi.endx(); ++x)
+          for (unsigned int x = psi.startx(); (int)x<= psi.endx(); ++x)
           {
             if (x < img->ni() && y < img ->nj())
               color_ofs << (*img)(x,y,p) << vcl_endl;
