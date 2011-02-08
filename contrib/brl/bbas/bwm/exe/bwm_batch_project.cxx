@@ -130,10 +130,10 @@ int main(int argc, char** argv)
         vcl_ofstream color_ofs(colorfile_out.str().c_str(), vcl_ios::app);
         for (psi.reset(); psi.next();)
         {
-          int y = psi.scany();
-          for (int x = psi.startx(); x<= psi.endx(); ++x)
+          unsigned int y = psi.scany();
+          for (unsigned int x = psi.startx(); x<= psi.endx(); ++x)
           {
-            if (x < img->ni() & y < img ->nj())
+            if (x < img->ni() && y < img ->nj())
               color_ofs << (*img)(x,y,p) << vcl_endl;
             else
               color_ofs << vcl_endl;
