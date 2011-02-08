@@ -13,6 +13,7 @@
 #include <vil/vil_load.h>
 #include <vpgl/vpgl_rational_camera.h>
 
+#if 0 // unused!!
 static void print_edges(vcl_vector<vsol_digital_curve_2d_sptr> const& edges)
 {
   for (unsigned cv = 0; cv<edges.size(); ++cv)
@@ -23,9 +24,10 @@ static void print_edges(vcl_vector<vsol_digital_curve_2d_sptr> const& edges)
              << dc->p0()->y() << ")\n";
   }
 }
+#endif // 0
 
-static
-void display_edges(vcl_vector<vsol_digital_curve_2d_sptr> const& edges)
+#if 0 // unused!!
+static void display_edges(vcl_vector<vsol_digital_curve_2d_sptr> const& edges)
 {
   //get the bounds on the model edges
   double dcmin = vnl_numeric_traits<double>::maxval, dcmax = 0;
@@ -71,6 +73,7 @@ void display_edges(vcl_vector<vsol_digital_curve_2d_sptr> const& edges)
     vcl_cout << '\n';
   }
 }
+#endif // 0
 
 void test_processor()
 {
