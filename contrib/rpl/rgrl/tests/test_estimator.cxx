@@ -2009,6 +2009,11 @@ static  vnl_random random;
 
         // estimate
         rgrl_transformation_sptr est = estimator->estimate( ms, *init_trans);
+        if (!est) {
+          TEST("rgrl_estimator::estimate() returns zero pointer!!", 0, 1);
+          homography_is_good = false;
+          break;
+        }
         rgrl_trans_homography2d* homo_est = rgrl_cast<rgrl_trans_homography2d*>(est.as_pointer());
         est_H = homo_est->H();
         est_H /= est_H.array_two_norm();
@@ -2096,7 +2101,7 @@ test_rad_dis_homo2d_lm()
   rgrl_estimator_sptr est_sptr = new rgrl_est_dis_homo2d_lm(centre, centre);
 
   rgrl_transformation_sptr result_sptr = est_sptr->estimate( ms, *init_xform );
-  TEST("valid transformation", bool(result_sptr), true );
+  TEST("rgrl_est_dis_homo2d_lm::estimate(): valid transformation", bool(result_sptr), true );
 }
 
 
