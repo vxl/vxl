@@ -36,6 +36,8 @@
 #include <vil3d/vil3d_clamp.h>
 #include <vil3d/vil3d_math.h>
 #include <vil3d/vil3d_decimate.h>
+#include <vil3d/algo/vil3d_structuring_element.h>
+#include <vil3d/algo/vil3d_abs_shuffle_distance.h>
 #include <vil3d/algo/vil3d_locally_z_normalise.h>
 #include <vimt3d/vimt3d_load.h>
 #include <vimt3d/vimt3d_save.h>
@@ -1856,6 +1858,27 @@ void smooth__image_3d_of_float__double(opstack_t& s)
   s.push_front(operand(o1));
 }
 
+void shuffle__image_3d_of_float__double__double(opstack_t& s)
+{
+  assert(s.size() >= 3);
+  vimt3d_image_3d_of<float> o2(s[2].as_image_3d_of_float());
+  vimt3d_image_3d_of<float> o1(s[1].as_image_3d_of_float());
+
+  float radius = static_cast<float>(s[0].as_double());
+  vil3d_structuring_element se;
+  se.set_to_circle_k( radius );
+
+  vimt3d_image_3d_of<float> result;
+  if( radius < 0.000001 )
+    vil3d_math_image_difference( o1.image(), o2.image(), result.image() );
+  else
+    vil3d_abs_shuffle_distance(  o1.image(), o2.image(), se, result.image() );
+
+  result.world2im() = o1.world2im();
+
+  s.pop(3);
+  s.push_front(operand(result));
+}
 
 //-------------------------------------------------------------------------------------
 // Execution infrastructure
@@ -2084,6 +2107,9 @@ class operations
     add_operation("--scale-and-offset", &scale_and_offset__image_3d_of_float__double__double,
                   function_type_t() << operand::e_image_3d_of_float << operand::e_double << operand::e_double,
                   "image scale offset", "image", "multiply images's voxels by scale and add offset");
+    add_operation("--shuffle", &shuffle__image_3d_of_float__double__double,
+                  function_type_t() << operand::e_image_3d_of_float << operand::e_image_3d_of_float <<operand::e_double,
+                  "image image radius", "image", "Apply shuffle differences to images ; radius being the radius of the circle used as structuring element in each z slice ");
     add_operation("--signed-distance-transform", &signed_distance_transform__image_3d_of_int,
                   function_type_t() << operand::e_image_3d_of_int,
                   "image", "image", "Calculate SDT from zero/non-zero boundary in image");
