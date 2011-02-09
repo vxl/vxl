@@ -192,7 +192,8 @@ bool boxm2_util::generate_jsfunc(vbl_array_2d<vcl_string> img_files, vcl_string 
   //go through the array in img_files
   for (unsigned int row=0; row<img_files.rows(); ++row) {
     for (unsigned int col=0; col<img_files.cols(); ++col) {
-      if (row != 0 && col != 0) js += ", "; //don't put a comma at the end...
+      if (!(row == 0 && col == 0)) 
+          js += ", "; //don't put a comma at the end...
       js += "'" + img_files(row, col) + "'";
     }
   }
