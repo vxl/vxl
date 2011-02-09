@@ -42,7 +42,7 @@ seg_len_main(__constant  RenderSceneInfo    * linfo,
   // check to see if the thread corresponds to an actual pixel as in some 
 
   // cases #of threads will be more than the pixels.
-  if (i>=(*imgdims).z || j>=(*imgdims).w) {
+  if (i>=(*imgdims).z || j>=(*imgdims).w || i<(*imgdims).x || j<(*imgdims).y) {
     return;
   }
 
@@ -135,7 +135,7 @@ pre_inf_main(__constant  RenderSceneInfo    * linfo,
 
   // check to see if the thread corresponds to an actual pixel as in some
   // cases #of threads will be more than the pixels.
-  if (i>=(*imgdims).z || j>=(*imgdims).w) {
+  if (i>=(*imgdims).z || j>=(*imgdims).w || i<(*imgdims).x || j<(*imgdims).y) {
     return;
   }
   float4 inImage = in_image[j*get_global_size(0) + i];
@@ -235,7 +235,7 @@ bayes_main(__constant  RenderSceneInfo    * linfo,
 
   // check to see if the thread corresponds to an actual pixel as in some
   // cases #of threads will be more than the pixels.
-  if (i>=(*imgdims).z || j>=(*imgdims).w) {
+  if (i>=(*imgdims).z || j>=(*imgdims).w || i<(*imgdims).x || j<(*imgdims).y) {
     return;
   }
   float4 inImage = in_image[j*get_global_size(0) + i];
