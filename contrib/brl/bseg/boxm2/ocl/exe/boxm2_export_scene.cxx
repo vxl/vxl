@@ -53,6 +53,8 @@ int main(int argc,  char** argv)
   vul_arg<unsigned> nj("-nj", "Height of image", 480);
   vul_arg<unsigned> num_az("-num_az", "Number of views along azimuth", 36);
   vul_arg<unsigned> num_in("-num_in", "Number of views along 90 degree incline", 3);
+  vul_arg<double> incline_0("-init_incline", "Initial angle of incline (degrees)", 45.0); 
+  vul_arg<double> incline_1("-end_incline", "Angle of incline nearest zenith (degrees)", 15.0); 
   vul_arg<double> radius("-radius", "Distance from center of bounding box", 5.0);
   vul_arg<bool> stitch("-stitch", "also save a large, stitched image", false); 
   vul_arg_parse(argc, argv);
@@ -148,24 +150,28 @@ int main(int argc,  char** argv)
   //////////////////////////////////////////////////////////////////////////////
   //set up a view sphere, use find closest for closest neighbors
   vsph_view_sphere<vsph_view_point<vcl_string> > sphere(scene->bounding_box(), radius());
-  sphere.add_uniform_views(vnl_math::pi/3, vnl_math::pi/18.0, ni(), nj());
-  vcl_cout<<"Number of views to render: "<<sphere.size()<<vcl_endl;
+  sphere.add_uniform_views(vnl_math::pi/2, vnl_math::pi/36.0, ni(), nj());
+  vcl_cout<<"Number of views on sphere: "<<sphere.size()<<vcl_endl;
 
   //map of ID's that have been rendered
   vcl_map<int, vcl_string> saved_imgs; 
   vbl_array_2d<vcl_string> img_grid(num_in(), num_az()); 
 
+  /////////////////////////////////////////////////////////////////////////////
   //rendered array of views
   vcl_map<int, vil_image_view<vxl_byte>* > img_map; 
   vbl_array_2d<vil_image_view<vxl_byte>* > imgs(num_in(), num_az());
+  
+  // determine increment along azimuth and elevation (incline)
   double az_incr = 2.0*vnl_math::pi/num_az();
-  double el_incr = vnl_math::pi/2.0/num_in();
+  double el_incr = (incline_0() - incline_1()) / (num_in()-1); //degrees (to include both start and end)
+  el_incr = (el_incr/360.0) * 2.0 * vnl_math::pi;  // radians
   for (unsigned int az_i = 0; az_i < num_az(); ++az_i)
   {
     double az = 2.0*vnl_math::pi - az_i * az_incr;
     for (unsigned int el_i = 0.0; el_i < num_in(); ++el_i)
     {
-      double el = vnl_math::pi/2.0 - el_i * el_incr;
+      double el = (2.0*vnl_math::pi) * (incline_0()/360.0) - el_i*el_incr;
 
       //convert to cartesian (as method is only in cartesian for some reason)
       vsph_sph_point_3d curr_point(radius(), el, az);
@@ -217,6 +223,7 @@ int main(int argc,  char** argv)
   }
 
   //need to generate a JS.JS file that lists an array of these images
+  vcl_cout<<"Rows: "<<num_in()<<" cols: "<<num_az()<<vcl_endl;
   boxm2_util::generate_jsfunc(img_grid, dir() + "/js/js.js"); 
   boxm2_util::generate_html(num_in(), num_az(),  dir() + "/index.html"); 
 
