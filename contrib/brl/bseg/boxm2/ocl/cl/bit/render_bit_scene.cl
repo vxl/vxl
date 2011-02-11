@@ -7,18 +7,18 @@
 ////////////////////////////////////////////////////////////////////////////////
 //Helper methods (that will hopefully, one day, become vector ops) 
 ////////////////////////////////////////////////////////////////////////////////
-float calc_pos(float t, float ray_o, float ray_d)
+inline float calc_pos(float t, float ray_o, float ray_d)
 {
   return (ray_o + (t + TREE_EPSILON)*ray_d);
 }
 
-float calc_tfar( float ray_ox, float ray_oy, float ray_oz,
+inline float calc_tfar( float ray_ox, float ray_oy, float ray_oz,
                         float ray_dx, float ray_dy, float ray_dz,
                         float max_facex, float max_facey, float max_facez)
 {
   return min(min( (max_facex-ray_ox)*(1.0f/ray_dx), (max_facey-ray_oy)*(1.0f/ray_dy)), (max_facez-ray_oz)*(1.0f/ray_dz));
 }                
-float calc_tnear(float ray_ox, float ray_oy, float ray_oz,
+inline float calc_tnear(float ray_ox, float ray_oy, float ray_oz,
                         float ray_dx, float ray_dy, float ray_dz,
                         float min_facex, float min_facey, float min_facez)
 {
@@ -26,7 +26,7 @@ float calc_tnear(float ray_ox, float ray_oy, float ray_oz,
 }
 
 //requries float position
-void calc_cell_min( float* cell_minx, float* cell_miny, float* cell_minz, 
+inline void calc_cell_min( float* cell_minx, float* cell_miny, float* cell_minz, 
                     float posx, float posy, float posz, int4 dims)
 {
   (*cell_minx) = clamp(floor(posx), 0.0f, dims.x-1.0f);
@@ -41,7 +41,7 @@ inline int calc_blkI(float cell_minx, float cell_miny, float cell_minz, int4 dim
 }
 
 //calc subblock exit point parameter (t) given cell_min and cell_length
-float calc_cell_exit(float cell_minx, float cell_miny, float cell_minz, float cell_len, 
+inline float calc_cell_exit(float cell_minx, float cell_miny, float cell_minz, float cell_len, 
                      float ray_ox, float ray_oy, float ray_oz,
                      float ray_dx, float ray_dy, float ray_dz)
 {
@@ -108,13 +108,13 @@ void cast_ray(
     return;
   
   //calculate entry point here, entry sub_block, and its index
-  float posx = calc_pos(tblock, ray_ox, ray_dx); //(ray_ox + (tblock + TREE_EPSILON)*ray_dx);
-  float posy = calc_pos(tblock, ray_oy, ray_dy); //(ray_oy + (tblock + TREE_EPSILON)*ray_dy);
-  float posz = calc_pos(tblock, ray_oz, ray_dz); //(ray_oz + (tblock + TREE_EPSILON)*ray_dz);
+  min_facex = calc_pos(tblock, ray_ox, ray_dx); //(ray_ox + (tblock + TREE_EPSILON)*ray_dx);
+  min_facey = calc_pos(tblock, ray_oy, ray_dy); //(ray_oy + (tblock + TREE_EPSILON)*ray_dy);
+  min_facez = calc_pos(tblock, ray_oz, ray_dz); //(ray_oz + (tblock + TREE_EPSILON)*ray_dz);
   
   //curr block index (var later used as cell_min), check to make sure block index isn't 192 or -1
   float cell_minx, cell_miny, cell_minz; 
-  calc_cell_min( &cell_minx, &cell_miny, &cell_minz, posx, posy, posz, linfo->dims);
+  calc_cell_min( &cell_minx, &cell_miny, &cell_minz, min_facex, min_facey, min_facez, linfo->dims);
 
   //load current block/tree
   int blkIndex = calc_blkI(cell_minx, cell_miny, cell_minz, linfo->dims); 
@@ -136,9 +136,9 @@ void cast_ray(
   {
     //-------------------------------------------------------------------------
     //find entry point (adjusted) and the current block index
-    posx = calc_pos(tblock, ray_ox, ray_dx); //(ray_ox + (tblock + TREE_EPSILON)*ray_dx);
-    posy = calc_pos(tblock, ray_oy, ray_dy); //(ray_oy + (tblock + TREE_EPSILON)*ray_dy);
-    posz = calc_pos(tblock, ray_oz, ray_dz); //(ray_oz + (tblock + TREE_EPSILON)*ray_dz);
+    float posx = calc_pos(tblock, ray_ox, ray_dx); //(ray_ox + (tblock + TREE_EPSILON)*ray_dx);
+    float posy = calc_pos(tblock, ray_oy, ray_dy); //(ray_oy + (tblock + TREE_EPSILON)*ray_dy);
+    float posz = calc_pos(tblock, ray_oz, ray_dz); //(ray_oz + (tblock + TREE_EPSILON)*ray_dz);
     if(tblock >= texit) {
 
       //curr block index (var later used as cell_min), check to make sure block index isn't 192 or -1
@@ -159,7 +159,7 @@ void cast_ray(
     }
 
     // traverse to leaf cell that contains the entry point, set bounding box
-    float vox_len=1.0f; //local_tree[llid].s0 = 0;
+    float vox_len=1.0f; 
     float vox_minx, vox_miny, vox_minz;
     int data_ptr = traverse_three(&local_tree[llid],
                                   posx-cell_minx, posy-cell_miny, posz-cell_minz,
@@ -187,7 +187,6 @@ void cast_ray(
     ////////////////////////////////////////////////////////////////////////////////
     // END Step Cell Functor
     ////////////////////////////////////////////////////////////////////////////////
-
   }
 
 #ifdef RENDER
@@ -414,7 +413,6 @@ render_bit_scene( __constant  RenderSceneInfo    * linfo,
   // check to see if the thread corresponds to an actual pixel as in some
   // cases #of threads will be more than the pixels.
   if (i>=(*exp_image_dims).z || j>=(*exp_image_dims).w) {
-    //exp_image[imIndex[llid]] = 0.0f;
     return;
   }
 
@@ -461,6 +459,7 @@ render_bit_scene( __constant  RenderSceneInfo    * linfo,
             exp_image,
             vis_image,
             output);
+            
 }
 #endif
 

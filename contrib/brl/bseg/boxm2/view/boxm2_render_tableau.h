@@ -106,6 +106,8 @@ class boxm2_render_tableau : public boxm2_cam_tableau
   cl_context create_clgl_context();
   bool init_clgl();
   bool do_init_ocl;
+  
+  int curr_frame_; 
 };
 
 //: declare smart pointer

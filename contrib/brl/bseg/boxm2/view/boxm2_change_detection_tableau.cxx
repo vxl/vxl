@@ -142,7 +142,7 @@ float boxm2_change_detection_tableau::change_frame()
 
   //initialize the GPU render process
   gpu_pro_->run(&change_render_, input, output);
-  gpu_pro_->finish();
+  //gpu_pro_->finish();
 
 
   //create vis image buffer

@@ -13,6 +13,7 @@
 //: Constructor
 boxm2_render_tableau::boxm2_render_tableau()
 {
+  curr_frame_ = 0;
   pbuffer_=0;
   ni_=640;
   nj_=480;
@@ -210,7 +211,7 @@ float boxm2_render_tableau::render_frame()
 
   //initialize the GPU render process
   gpu_pro_->run(&render_, input, output);
-  gpu_pro_->finish();
+  //gpu_pro_->finish();
 
   status = clEnqueueReleaseGLObjects( *gpu_pro_->get_queue(), 1, &render_.image()->buffer(), 0, 0, 0);
   clFinish( *render_.command_queue() );
@@ -224,7 +225,7 @@ float boxm2_render_tableau::update_frame()
 
     if(update_count_%1==0)
     {
-        this->compute_convergence();
+        //this->compute_convergence();
     }
     if(update_count_%5==0)
     {
@@ -232,6 +233,8 @@ float boxm2_render_tableau::update_frame()
     }
     //pickup a random frame
     int curr_frame = rand.lrand32(0,cam_files_.size()-1);
+    //curr_frame_ = (curr_frame_+1 >= cam_files_.size()) ? 0 : curr_frame_+1;
+    //int curr_frame = curr_frame_; 
     vcl_cout<<"Cam "<<cam_files_[curr_frame]<<'\n'
         <<"Image "<<img_files_[curr_frame]<<vcl_endl;
 
@@ -313,7 +316,7 @@ bool boxm2_render_tableau::render_and_save_image(int index, vil_image_view<vxl_b
 
   //initialize the GPU render process
   gpu_pro_->run(&render_no_gl_, input, output);
-  gpu_pro_->finish();
+  //gpu_pro_->finish();
   //save to disk
   for (unsigned int i=0; i<ni_; ++i)
     for (unsigned int j=0; j<nj_; ++j)

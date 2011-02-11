@@ -76,6 +76,7 @@ class boxm2_block_metadata: public vbl_ref_count
     int                     max_level_;    //each sub_blocks's max_level (default 4)
     double                  max_mb_;       //each total block mb
     double                  p_init_;       //initialize occupancy probs with this
+    bool                    random_;       //trees are randomly distributed through data cells in this one...
 };
 //: Smart_Pointer typedef for boxm2_block
 typedef vbl_smart_ptr<boxm2_block_metadata> boxm2_block_metadata_sptr;

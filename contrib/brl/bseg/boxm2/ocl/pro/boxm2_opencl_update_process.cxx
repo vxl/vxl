@@ -42,11 +42,11 @@ bool boxm2_opencl_update_process::init_kernel(cl_context* context,
 
   //create all passes
   bocl_kernel* seg_len = new bocl_kernel();
-  seg_len->create_kernel(context_, device, src_paths, "seg_len_main", options+" -D SEGLEN ", "update::seg_len");
+  seg_len->create_kernel(context_, device, src_paths, "seg_len_main", options+" -D SEGLEN -D ATOMIC_OPT", "update::seg_len");
   update_kernels_.push_back(seg_len);
 
   bocl_kernel* pre_inf = new bocl_kernel();
-  pre_inf->create_kernel(context_, device, src_paths, "pre_inf_main", options+" -D PREINF", "update::pre_inf");
+  pre_inf->create_kernel(context_, device, src_paths, "pre_inf_main", options+" -D PREINF -D ATOMIC_OPT", "update::pre_inf");
   update_kernels_.push_back(pre_inf);
 
   //may need DIFF LIST OF SOURCES FOR THIS GUY
@@ -55,7 +55,7 @@ bool boxm2_opencl_update_process::init_kernel(cl_context* context,
   update_kernels_.push_back(proc_img);
 
   bocl_kernel* bayes_main = new bocl_kernel();
-  bayes_main->create_kernel(context_, device, src_paths, "bayes_main", options+" -D BAYES ", "update::bayes_main");
+  bayes_main->create_kernel(context_, device, src_paths, "bayes_main", options+" -D BAYES -D ATOMIC_OPT ", "update::bayes_main");
   update_kernels_.push_back(bayes_main);
 
   //may need DIFF LIST OF SOURCES FOR THSI GUY TOO
@@ -101,8 +101,8 @@ bool boxm2_opencl_update_process::execute(vcl_vector<brdb_value_sptr>& input, vc
   img_size_[0] = img_view->ni();
   img_size_[1] = img_view->nj();
   int* img_dim_buff = new int[4];
-  img_dim_buff[0] = 0;
-  img_dim_buff[1] = 0;
+  img_dim_buff[0] = img_view->ni()/2;
+  img_dim_buff[1] = img_view->nj()/2;
   img_dim_buff[2] = img_view->ni();
   img_dim_buff[3] = img_view->nj();
   img_dim_ = new bocl_mem((*context_), img_dim_buff, sizeof(cl_int4), "image dims");
@@ -137,7 +137,7 @@ bool boxm2_opencl_update_process::execute(vcl_vector<brdb_value_sptr>& input, vc
 
   for (unsigned int i=0; i<update_kernels_.size(); ++i)
   {
-#ifdef DEBUG
+#if 1
     vcl_cout<<"UPDATE KERNEL : "<<i<<vcl_endl;
 #endif
     if ( i == UPDATE_PROC ) {
