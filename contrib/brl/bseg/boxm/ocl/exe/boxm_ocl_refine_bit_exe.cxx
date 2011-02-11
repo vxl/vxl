@@ -21,15 +21,14 @@ int main(int argc,  char** argv)
   vul_arg<vcl_string> camfile("-cam", "camera filename", "");
   vul_arg<unsigned> ni("-ni", "Width of image", 640);
   vul_arg<unsigned> nj("-nj", "Height of image", 480);
-  vul_arg<bool> use_cpu("-cpu", "Specifies to use CPU", false); 
+  vul_arg<bool> use_cpu("-cpu", "Specifies to use CPU", false);
 
   //// need this on some toolkit implementations to get the window up.
   vul_arg_parse(argc, argv);
 
   //1.  create ocl_scene from xml file
   boxm_ocl_bit_scene ocl_scene(scene_file());
-  vcl_cout<<"Scene Initialized...\n"
-          <<ocl_scene<<vcl_endl;
+  vcl_cout<<"Scene Initialized...\n" <<ocl_scene<<vcl_endl;
 
   //2.  build the camera from file
   vcl_ifstream ifs(camfile().c_str());
@@ -43,13 +42,15 @@ int main(int argc,  char** argv)
   vil_image_view<float> maskimg(ni(),nj(),1);
 
   //4.  initialize update manager
-  boxm_update_bit_scene_manager* updt_mgr 
+  boxm_update_bit_scene_manager* updt_mgr
     = boxm_update_bit_scene_manager::instance();
-  updt_mgr->set_use_gl(false); 
-  if( use_cpu() ) {
+  updt_mgr->set_use_gl(false);
+#if 0 // boxm_update_bit_scene_manager has no method initialize_context() ?!?!? - FIXME
+  if ( use_cpu() ) {
     vcl_cout<<"USING CPU For Update"<<vcl_endl;
-    updt_mgr->initialize_context(&updt_mgr->cpus()[0]); 
+    updt_mgr->initialize_context(&updt_mgr->cpus()[0]);
   }
+#endif
 
   vil_image_view<float> expected(ni(),nj());
   int bundle_dim = 8;
