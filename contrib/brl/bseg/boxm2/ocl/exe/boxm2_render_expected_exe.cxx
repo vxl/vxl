@@ -53,7 +53,7 @@ int main(int argc,  char** argv)
   vpgl_calibration_matrix<double> mat = pcam->get_calibration();
   mat.set_focal_length(mat.focal_length()/10.0); 
   mat.set_principal_point(vgl_point_2d<double>(64, 36)); 
-  pcam->set_calibration(mat); 
+  //pcam->set_calibration(mat); 
   vpgl_camera_double_sptr cam = pcam;
   brdb_value_sptr brdb_cam = new brdb_value_t<vpgl_camera_double_sptr>(cam);
 
@@ -106,18 +106,15 @@ int main(int argc,  char** argv)
     expimg->fill(0);
     vis_img->fill(1.0f);
     gpu_pro->run(&gpu_render, input, output);
-    gpu_pro->finish();
     //////////////////////////////////////////////////////////////////////
   }
   float time = t.all() / (float) numTrials;
   vcl_cout<<"average render time: "<<time<<" ms"<<vcl_endl;
 
-
-  vcl_cout<<cache<<vcl_endl;
-
   //clean up
   gpu_render.clean();
   gpu_pro->finish();
+  gpu_pro->clear_cl(); 
 
   //----------------------------------------------------------------------------
   //------- END API EXAMPLE ----------------------------------------------------

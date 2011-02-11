@@ -150,7 +150,7 @@ int main(int argc,  char** argv)
   //////////////////////////////////////////////////////////////////////////////
   //set up a view sphere, use find closest for closest neighbors
   vsph_view_sphere<vsph_view_point<vcl_string> > sphere(scene->bounding_box(), radius());
-  sphere.add_uniform_views(vnl_math::pi/2, vnl_math::pi/36.0, ni(), nj());
+  sphere.add_uniform_views(vnl_math::pi/2, vnl_math::pi/18.0, ni(), nj());
   vcl_cout<<"Number of views on sphere: "<<sphere.size()<<vcl_endl;
 
   //map of ID's that have been rendered
