@@ -54,11 +54,7 @@ class bocl_kernel
     //: sets a local arg of size "size"
     bool set_local_arg(vcl_size_t size);
 
-    bool clear_args() {
-      args_.clear();
-      local_args_.clear();
-      return true;
-    }
+    bool clear_args() { args_.clear(); local_args_.clear(); return true; }
 
     //: will return a reference to the cl_kernel this class wraps
     cl_kernel& kernel() { return kernel_; }
@@ -66,8 +62,19 @@ class bocl_kernel
     //: returns the number of arguments that you've given this kernel
     int arg_cnt() { return args_.size() + local_args_.size(); }
 
+    ////////////////////////////////////////////////////////////////////////////
+    // Profiling functions
     //: returns GPU time
     float exec_time();
+    //: returns local memory used by a single instance of kernel
+    unsigned long local_mem_size(); 
+    //: returns maximal workgroup size for this kernel
+    vcl_size_t workgroup_size(); 
+    //: returns a string of the build log for this program.
+    vcl_string build_log(); 
+    //: returns program binary associated with kernel (NVIDIA case returns PTX string)
+    vcl_string program_binaries();
+
 
   private:
 

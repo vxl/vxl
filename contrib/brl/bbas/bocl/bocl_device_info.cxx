@@ -201,6 +201,7 @@ vcl_ostream& operator <<(vcl_ostream &s, bocl_device_info& info)
      << " Device Name : " << info.device_name_ << '\n'
      << " Device Vendor: " << info.device_vendor_ << '\n'
      << " Device Platform: " << info.platform_name_ << '\n'
+     << " Device Driver Version: " << info.driver_version_ << '\n'
      << " Device Type: "; 
   if( info.device_type_ & CL_DEVICE_TYPE_CPU )
       s << "CL_DEVICE_TYPE_CPU \n"; 

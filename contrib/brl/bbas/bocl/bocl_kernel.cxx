@@ -1,4 +1,5 @@
 #include "bocl_kernel.h"
+#include "bocl_device_info.h"
 //:
 // \file
 #include <vcl_iostream.h>
@@ -35,11 +36,16 @@ bool bocl_kernel::create_kernel(cl_context* context,
     }
   }
 
+  bocl_device_info info(device); 
+  if(info.is_nvidia_device_)
+    options += "-cl-nv-verbose"; 
+
   //build cl_program object
   if ( !this->build_kernel_program(program_, options) ) {
     vcl_cerr<<"bocl_kernel::couldn't build program "<<id_<<'\n';
     return false;
   }
+  vcl_cout<<this->build_log()<<vcl_endl;
 
   //create cl_kernel object
   cl_int status = SDK_FAILURE;
@@ -98,7 +104,6 @@ bool bocl_kernel::execute(cl_command_queue& cmdQueue, vcl_size_t* localThreads, 
   if ( !check_val(status,CL_SUCCESS,"clEnqueueNDRangeKernel failed (" + id_ + ") " +error_to_string(status)) )
     return false;
 
-
   return true;
 }
 
@@ -129,6 +134,68 @@ float bocl_kernel::exec_time()
   return 1.0e-6f*float(tend - tstart);   
 }
 
+unsigned long bocl_kernel::local_mem_size()
+{
+  unsigned long size; 
+  int status = clGetKernelWorkGroupInfo(kernel_, (*device_), CL_KERNEL_LOCAL_MEM_SIZE, sizeof(size), (void*) &size, NULL); 
+  if ( !check_val(status,CL_SUCCESS,"bocl_kernel::local_mem_size() failed (" + id_ + ") " +error_to_string(status)) )
+    return 0;
+  return size; 
+}
+vcl_size_t bocl_kernel::workgroup_size()
+{
+  vcl_size_t size; 
+  int status = clGetKernelWorkGroupInfo(kernel_, (*device_), CL_KERNEL_WORK_GROUP_SIZE, sizeof(size), (void*) &size, NULL); 
+  if ( !check_val(status,CL_SUCCESS,"bocl_kernel::private_mem_size()  failed (" + id_ + ") " +error_to_string(status)) )
+    return 0;
+  return size; 
+}
+vcl_string bocl_kernel::build_log()
+{
+  char log[4*1024]; 
+  int status = clGetProgramBuildInfo( program_, (*device_), CL_PROGRAM_BUILD_LOG, sizeof(log), (void*) log, NULL); 
+  if ( !check_val(status,CL_SUCCESS,"bocl_kernel::build_log()  failed (" + id_ + ") " +error_to_string(status)) )
+    return "";
+  return vcl_string(log);  
+}
+vcl_string bocl_kernel::program_binaries()
+{
+  //get num devices
+  cl_uint numDevices;
+  cl_int status = clGetProgramInfo( program_, CL_PROGRAM_NUM_DEVICES, sizeof(numDevices), (void*) &numDevices, NULL);  
+  if ( !check_val(status,CL_SUCCESS,"bocl_kernel::program_binaries() numDevices failed (" + id_ + ") " +error_to_string(status)) )
+    return "";
+  
+  //get binary sizes for each device
+  vcl_size_t* sizes = new vcl_size_t[numDevices];
+  status = clGetProgramInfo( program_, CL_PROGRAM_BINARY_SIZES, numDevices*sizeof(vcl_size_t), (void*) sizes, NULL);  
+  if ( !check_val(status,CL_SUCCESS,"bocl_kernel::program_binaries() binary_sizes failed (" + id_ + ") " +error_to_string(status)) )
+    return "";
+  
+  //get binary for each device
+  vcl_size_t numBytes = 0; 
+  unsigned char** binaries = new unsigned char*[numDevices];  
+  for(int i=0; i<numDevices; ++i) {
+    numBytes += sizes[i]; 
+    binaries[i] = new unsigned char[sizes[i]];
+  } 
+  status = clGetProgramInfo( program_, CL_PROGRAM_BINARIES, numBytes, (void*) binaries, NULL);  
+  if ( !check_val(status,CL_SUCCESS,"bocl_kernel::program_binaries()  failed (" + id_ + ") " +error_to_string(status)) )
+    return "";
+  
+  //Stitch together binary string
+  vcl_string toReturn = "";
+  for(int i=0; i<numDevices; ++i)
+    toReturn += vcl_string((char*)binaries[i]); 
+  
+  //clean up aux data
+  delete[] sizes; 
+  for(int i=0; i<numDevices; ++i) delete[] binaries[i]; 
+  delete[] binaries; 
+  
+  //return stitched string
+  return toReturn;
+}
 
 //------------------------------------------------------------------------------
 // Private helper functions
@@ -199,11 +266,7 @@ bool bocl_kernel::build_kernel_program(cl_program &program, vcl_string options)
                           NULL);
   if (!check_val(status, CL_SUCCESS, error_to_string(status)))
   {
-    vcl_size_t len;
-    char buffer[2048];
-    clGetProgramBuildInfo(program, (*device_),
-                          CL_PROGRAM_BUILD_LOG, sizeof(buffer), buffer, &len);
-    vcl_printf("%s\n", buffer);
+    vcl_cout<<this->build_log()<<vcl_endl;
     return false;
   }
   else
