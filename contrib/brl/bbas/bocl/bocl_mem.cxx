@@ -36,10 +36,12 @@ bool bocl_mem::create_buffer(const cl_mem_flags& flags)
 }
 
 bool bocl_mem::release_memory()
-{
+{   
+  //release mem
   cl_int status = clReleaseMemObject(buffer_);
   if (!check_val(status,MEM_FAILURE,"clReleaseMemObject failed: " + this->id_))
     return MEM_FAILURE;
+  
   return MEM_SUCCESS;
 }
 

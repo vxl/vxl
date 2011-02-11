@@ -27,7 +27,8 @@ T* bocl_manager<T>::instance()
 template <class T>
 void bocl_manager<T>::clear_cl()
 {
-  clReleaseContext(context_);
+  if(context_) clReleaseContext(context_);
+  if(cpu_context_) clReleaseContext(cpu_context_); 
   if (devices_)
   {
     free(devices_);
@@ -123,10 +124,12 @@ bool bocl_manager<T>::initialize_cl()
   curr_info_ = bocl_device_info(devices_); 
   
   //create cpu context 
-  cpu_context_ = this->create_context(cpus_, numCPUs_); 
+  if(cpu_found)
+    cpu_context_ = this->create_context(cpus_, numCPUs_); 
   
   //create gpu context (or just context)
-  context_ = this->create_context(gpus_, numGPUs_); 
+  if(gpu_found)
+    context_ = this->create_context(gpus_, numGPUs_); 
 
   return true;
 }
