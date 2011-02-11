@@ -25,16 +25,20 @@ boxm2_opencl_cache::boxm2_opencl_cache(boxm2_cache* cpu_cache,
 //: destructor
 boxm2_opencl_cache::~boxm2_opencl_cache()
 {
-#if 0
   // clean up block
-  delete cached_block_;
+  if(cached_block_) delete cached_block_, cached_block_=0;
+  if(block_info_) delete block_info_, block_info_=0;
+  if(tree_ptrs_) delete tree_ptrs_, tree_ptrs_=0;
+  if(trees_per_buffer_) delete trees_per_buffer_, trees_per_buffer_=0;
+  if(mem_ptrs_) delete mem_ptrs_, mem_ptrs_=0;
 
   // clean up loaded data
-  vcl_map<vcl_string, boxm2_data_base* >::iterator iter;
+  vcl_map<vcl_string, bocl_mem*>::iterator iter;
   for (iter=cached_data_.begin(); iter!=cached_data_.end(); ++iter) {
-    delete (*iter).second;
+    bocl_mem* dat = iter->second; 
+    if(dat) delete dat; 
   }
-#endif // 0
+  cached_data_.clear(); 
 }
 
 //: realization of abstract "get_block(block_id)"

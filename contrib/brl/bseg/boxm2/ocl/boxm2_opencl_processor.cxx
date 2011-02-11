@@ -52,5 +52,11 @@ bool boxm2_opencl_processor::run(boxm2_process * process, vcl_vector<brdb_value_
 
 bool boxm2_opencl_processor::finish()
 {
+  if(gpu_cache_) delete gpu_cache_, gpu_cache_=0; 
+  for(int i=0; i<NUM_QUEUES; ++i) {
+    int status = clReleaseCommandQueue( queues_[i] ); 
+    if (!check_val(status,CL_SUCCESS,"Failed in release command queue " + error_to_string(status)))
+      return false;
+  }
   return true;
 }

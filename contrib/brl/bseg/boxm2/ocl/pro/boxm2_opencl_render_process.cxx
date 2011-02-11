@@ -47,11 +47,11 @@ bool boxm2_opencl_render_process::init_kernel(cl_context* context,
                                                 "render_bit_scene",   //kernel name
                                                 options,              //options
                                                 "boxm2 opencl render"); //kernel identifier (for error checking)
+                                                
+  //create normalize image kernel
   vcl_vector<vcl_string> norm_src_paths;
   norm_src_paths.push_back(source_dir + "cell_utils.cl");
   norm_src_paths.push_back(source_dir + "bit/normalize_kernels.cl");
-
-
   created = created && normalize_render_kernel_.create_kernel( context_,
                                                                device,
                                                                norm_src_paths,
@@ -204,9 +204,6 @@ bool boxm2_opencl_render_process::execute(vcl_vector<brdb_value_sptr>& input, vc
   //read image out to buffer (from gpu)
   image_->read_to_buffer(*command_queue_);
   vis_img_->read_to_buffer(*command_queue_);
-
-
-
       
   //clean up camera, lookup_arr, img_dim_buff
   delete[] output_arr;
