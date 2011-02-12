@@ -36,9 +36,9 @@ bool bocl_kernel::create_kernel(cl_context* context,
     }
   }
 
-  bocl_device_info info(device); 
-  if(info.is_nvidia_device_)
-    options += "-cl-nv-verbose"; 
+  bocl_device_info info(device);
+  if (info.is_nvidia_device_)
+    options += "-cl-nv-verbose";
 
   //build cl_program object
   if ( !this->build_kernel_program(program_, options) ) {
@@ -54,8 +54,8 @@ bool bocl_kernel::create_kernel(cl_context* context,
     vcl_cerr<<"bocl_kernel:: couldn't build program "<<id_<<'\n';
     return false;
   }
-
-  return true;
+  else
+    return true;
 }
 
 bocl_kernel::~bocl_kernel()
@@ -66,14 +66,14 @@ bocl_kernel::~bocl_kernel()
   }
   kernel_ = 0;
   if ( !check_val(status,CL_SUCCESS,"clReleaseKernel failed: " + this->id_) )
-    vcl_cout<<" release failed in bocl_kernel destructor "<<vcl_endl;
-    
-  if(program_) {
+    vcl_cout<<" release failed in bocl_kernel destructor"<<vcl_endl;
+
+  if (program_) {
     status = clReleaseProgram(program_);
   }
   program_ = 0;
   if ( !check_val(status,CL_SUCCESS,"clReleaseProgram failed: " + this->id_) )
-    vcl_cout<<" release failed in bocl_kernel destructor "<<vcl_endl;
+    vcl_cout<<" release failed in bocl_kernel destructor"<<vcl_endl;
 }
 
 bool bocl_kernel::execute(cl_command_queue& cmdQueue, vcl_size_t* localThreads, vcl_size_t* globalThreads)
@@ -103,8 +103,8 @@ bool bocl_kernel::execute(cl_command_queue& cmdQueue, vcl_size_t* localThreads, 
   status = clEnqueueNDRangeKernel(cmdQueue, kernel_, 2, NULL, globalThreads, localThreads, 0, NULL, &ceEvent_);
   if ( !check_val(status,CL_SUCCESS,"clEnqueueNDRangeKernel failed (" + id_ + ") " +error_to_string(status)) )
     return false;
-
-  return true;
+  else
+    return true;
 }
 
 bool bocl_kernel::set_local_arg(vcl_size_t size)
@@ -131,68 +131,74 @@ float bocl_kernel::exec_time()
     return false;
 
   //store execution time
-  return 1.0e-6f*float(tend - tstart);   
+  return 1.0e-6f*float(tend - tstart);
 }
 
 unsigned long bocl_kernel::local_mem_size()
 {
-  unsigned long size; 
-  int status = clGetKernelWorkGroupInfo(kernel_, (*device_), CL_KERNEL_LOCAL_MEM_SIZE, sizeof(size), (void*) &size, NULL); 
+  unsigned long size;
+  int status = clGetKernelWorkGroupInfo(kernel_, (*device_), CL_KERNEL_LOCAL_MEM_SIZE, sizeof(size), (void*) &size, NULL);
   if ( !check_val(status,CL_SUCCESS,"bocl_kernel::local_mem_size() failed (" + id_ + ") " +error_to_string(status)) )
     return 0;
-  return size; 
+  return size;
 }
+
 vcl_size_t bocl_kernel::workgroup_size()
 {
-  vcl_size_t size; 
-  int status = clGetKernelWorkGroupInfo(kernel_, (*device_), CL_KERNEL_WORK_GROUP_SIZE, sizeof(size), (void*) &size, NULL); 
+  vcl_size_t size;
+  int status = clGetKernelWorkGroupInfo(kernel_, (*device_), CL_KERNEL_WORK_GROUP_SIZE, sizeof(size), (void*) &size, NULL);
   if ( !check_val(status,CL_SUCCESS,"bocl_kernel::private_mem_size()  failed (" + id_ + ") " +error_to_string(status)) )
     return 0;
-  return size; 
+  else
+    return size;
 }
+
 vcl_string bocl_kernel::build_log()
 {
-  char log[4*1024]; 
-  int status = clGetProgramBuildInfo( program_, (*device_), CL_PROGRAM_BUILD_LOG, sizeof(log), (void*) log, NULL); 
+  char log[4*1024];
+  int status = clGetProgramBuildInfo( program_, (*device_), CL_PROGRAM_BUILD_LOG, sizeof(log), (void*) log, NULL);
   if ( !check_val(status,CL_SUCCESS,"bocl_kernel::build_log()  failed (" + id_ + ") " +error_to_string(status)) )
     return "";
-  return vcl_string(log);  
+  else
+    return vcl_string(log);
 }
+
 vcl_string bocl_kernel::program_binaries()
 {
   //get num devices
   cl_uint numDevices;
-  cl_int status = clGetProgramInfo( program_, CL_PROGRAM_NUM_DEVICES, sizeof(numDevices), (void*) &numDevices, NULL);  
+  cl_int status = clGetProgramInfo( program_, CL_PROGRAM_NUM_DEVICES, sizeof(numDevices), (void*) &numDevices, NULL);
   if ( !check_val(status,CL_SUCCESS,"bocl_kernel::program_binaries() numDevices failed (" + id_ + ") " +error_to_string(status)) )
     return "";
-  
+
   //get binary sizes for each device
   vcl_size_t* sizes = new vcl_size_t[numDevices];
-  status = clGetProgramInfo( program_, CL_PROGRAM_BINARY_SIZES, numDevices*sizeof(vcl_size_t), (void*) sizes, NULL);  
+  status = clGetProgramInfo( program_, CL_PROGRAM_BINARY_SIZES, numDevices*sizeof(vcl_size_t), (void*) sizes, NULL);
   if ( !check_val(status,CL_SUCCESS,"bocl_kernel::program_binaries() binary_sizes failed (" + id_ + ") " +error_to_string(status)) )
     return "";
-  
+
   //get binary for each device
-  vcl_size_t numBytes = 0; 
-  unsigned char** binaries = new unsigned char*[numDevices];  
-  for(int i=0; i<numDevices; ++i) {
-    numBytes += sizes[i]; 
+  vcl_size_t numBytes = 0;
+  unsigned char** binaries = new unsigned char*[numDevices];
+  for (unsigned int i=0; i<numDevices; ++i) {
+    numBytes += sizes[i];
     binaries[i] = new unsigned char[sizes[i]];
-  } 
-  status = clGetProgramInfo( program_, CL_PROGRAM_BINARIES, numBytes, (void*) binaries, NULL);  
+  }
+  status = clGetProgramInfo( program_, CL_PROGRAM_BINARIES, numBytes, (void*) binaries, NULL);
   if ( !check_val(status,CL_SUCCESS,"bocl_kernel::program_binaries()  failed (" + id_ + ") " +error_to_string(status)) )
     return "";
-  
+
   //Stitch together binary string
   vcl_string toReturn = "";
-  for(int i=0; i<numDevices; ++i)
-    toReturn += vcl_string((char*)binaries[i]); 
-  
+  for (unsigned int i=0; i<numDevices; ++i)
+    toReturn += vcl_string((char*)binaries[i]);
+
   //clean up aux data
-  delete[] sizes; 
-  for(int i=0; i<numDevices; ++i) delete[] binaries[i]; 
-  delete[] binaries; 
-  
+  delete[] sizes;
+  for (unsigned int i=0; i<numDevices; ++i)
+    delete[] binaries[i];
+  delete[] binaries;
+
   //return stitched string
   return toReturn;
 }
