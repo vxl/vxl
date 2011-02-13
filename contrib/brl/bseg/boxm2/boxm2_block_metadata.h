@@ -43,7 +43,8 @@ class boxm2_block_metadata: public vbl_ref_count
                                             init_level_(init_level),
                                             max_level_(max_level),
                                             max_mb_(max_mb),
-                                            p_init_(p_init) {}
+                                            p_init_(p_init),
+                                            random_(false) {}
 
     boxm2_block_metadata( const boxm2_block_metadata& that)
     : vbl_ref_count ()
@@ -55,12 +56,12 @@ class boxm2_block_metadata: public vbl_ref_count
     , max_level_    (that.max_level_)
     , max_mb_       (that.max_mb_)
     , p_init_       (that.p_init_)
+    , random_       (that.random_)
     {}
-    
-    
+
     //: method to calculate the number of cells allocated by a block of this size
-    long num_data_cells(); 
-    
+    long num_data_cells();
+
     //: id and local origin of the block
     boxm2_block_id          id_;
     vgl_point_3d<double>    local_origin_;
