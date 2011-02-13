@@ -22,11 +22,11 @@ boxm2_change_detection_tableau::boxm2_change_detection_tableau()
 
 //: initialize tableau properties
 bool boxm2_change_detection_tableau::init(vcl_string scene_file,
-                                unsigned ni,
-                                unsigned nj,
-                                vpgl_perspective_camera<double> * cam,
-                                vcl_vector<vcl_string> cam_files,
-                                vcl_vector<vcl_string> img_files)
+                                          unsigned ni,
+                                          unsigned nj,
+                                          vpgl_perspective_camera<double> * cam,
+                                          vcl_vector<vcl_string> cam_files,
+                                          vcl_vector<vcl_string> img_files)
 {
   //set image dimensions, camera and scene
   ni_ = ni;
@@ -45,30 +45,28 @@ bool boxm2_change_detection_tableau::init(vcl_string scene_file,
 //: Handles tableau events (drawing and keys)
 bool boxm2_change_detection_tableau::handle(vgui_event const &e)
 {
-    //draw handler - called on post_draw()
-    if (e.type == vgui_DRAW)
-    {
-        if (do_init_ocl) {
-            this->init_clgl();
-            do_init_ocl = false;
-        }
-
-        this->change_frame();
-        this->setup_gl_matrices();
-        glClear(GL_COLOR_BUFFER_BIT);
-        glDisable(GL_DEPTH_TEST);
-        glRasterPos2i(0, 1);
-        glPixelZoom(1,-1);
-        glBindBuffer(GL_PIXEL_UNPACK_BUFFER_ARB, pbuffer_);
-        glDrawPixels(ni_, nj_, GL_RGBA, GL_UNSIGNED_BYTE, 0);
-        glBindBuffer(GL_PIXEL_UNPACK_BUFFER_ARB, 0);
-    }
-    else if (e.type == vgui_KEY_PRESS && e.key == vgui_key('n')) {
-        vcl_cout<<"Change Detection"<<vcl_endl;
-        this->post_redraw();
+  //draw handler - called on post_draw()
+  if (e.type == vgui_DRAW)
+  {
+    if (do_init_ocl) {
+      this->init_clgl();
+      do_init_ocl = false;
     }
 
-
+    this->change_frame();
+    this->setup_gl_matrices();
+    glClear(GL_COLOR_BUFFER_BIT);
+    glDisable(GL_DEPTH_TEST);
+    glRasterPos2i(0, 1);
+    glPixelZoom(1,-1);
+    glBindBuffer(GL_PIXEL_UNPACK_BUFFER_ARB, pbuffer_);
+    glDrawPixels(ni_, nj_, GL_RGBA, GL_UNSIGNED_BYTE, 0);
+    glBindBuffer(GL_PIXEL_UNPACK_BUFFER_ARB, 0);
+  }
+  else if (e.type == vgui_KEY_PRESS && e.key == vgui_key('n')) {
+    vcl_cout<<"Change Detection"<<vcl_endl;
+    this->post_redraw();
+  }
 
   return false;
 }
@@ -98,8 +96,6 @@ float boxm2_change_detection_tableau::change_frame()
   vpgl_camera_double_sptr cam_sptr(pcam);
   brdb_value_sptr brdb_cam = new brdb_value_t<vpgl_camera_double_sptr>(cam_sptr);
 
-
-
   //load image from file
   vil_image_view_base_sptr loaded_image = vil_load(img_files_[curr_frame].c_str());
   vil_image_view<float>* floatimg = new vil_image_view<float>(loaded_image->ni(), loaded_image->nj(), 1);
@@ -118,17 +114,14 @@ float boxm2_change_detection_tableau::change_frame()
   expimg->fill(0);
   brdb_value_sptr brdb_expimg = new brdb_value_t<vil_image_view_base_sptr>(expimg);
 
-
   //create out cd image buffer
   vil_image_view_base_sptr cdimg = new vil_image_view<float>(ni_, nj_);
   brdb_value_sptr brdb_cdimg = new brdb_value_t<vil_image_view_base_sptr>(cdimg);
-  
 
   //create vis image buffer
   vil_image_view<float>* visimg = new vil_image_view<float>(ni_, nj_);
   visimg->fill(1.0f);
   brdb_value_sptr brdb_visimg = new brdb_value_t<vil_image_view_base_sptr>(visimg);
-
 
   //create generic scene
   brdb_value_sptr brdb_scene = new brdb_value_t<boxm2_scene_sptr>(scene_);
@@ -144,7 +137,6 @@ float boxm2_change_detection_tableau::change_frame()
   gpu_pro_->run(&change_render_, input, output);
   //gpu_pro_->finish();
 
-
   //create vis image buffer
   vil_image_view<float>* visimg1 = new vil_image_view<float>(ni_, nj_);
   visimg1->fill(1.0f);
@@ -159,7 +151,6 @@ float boxm2_change_detection_tableau::change_frame()
   input1.push_back(brdb_cdimg);
   input1.push_back(brdb_visimg1);
 
-
   //execute gpu_update
   gpu_pro_->run(&change_, input1, output);
 
@@ -172,7 +163,6 @@ float boxm2_change_detection_tableau::change_frame()
   clFinish( *change_.command_queue() );
   return gpu_pro_->exec_time();
 }
-
 
 
 //: private helper method to init_clgl stuff (gpu processor)
@@ -214,10 +204,9 @@ bool boxm2_change_detection_tableau::init_clgl()
   //initialize the GPU change detection process
   change_.init_kernel(&gpu_pro_->context(), &gpu_pro_->devices()[0]);
   change_.set_image(cd_img_);
-  
+
   change_render_.init_kernel(&gpu_pro_->context(), &gpu_pro_->devices()[0]);
 
-  
   return true;
 }
 
@@ -237,11 +226,11 @@ cl_context boxm2_change_detection_tableau::create_clgl_context()
     vcl_cout<<error_to_string(status);
     return 0;
   }
-  cl_device_id device = gpu_pro_->devices()[0];
 
   ////create OpenCL context
   cl_context ComputeContext;
 #ifdef WIN32
+
   cl_context_properties props[] =
   {
     CL_GL_CONTEXT_KHR, (cl_context_properties) wglGetCurrentContext(),
@@ -250,6 +239,7 @@ cl_context boxm2_change_detection_tableau::create_clgl_context()
     0
   };
   //create OpenCL context with display properties determined above
+  cl_device_id device = gpu_pro_->devices()[0];
   ComputeContext = clCreateContext(props, 1, &device, NULL, NULL, &status);
 #elif defined(__APPLE__) || defined(MACOSX)
   CGLContextObj kCGLContext = CGLGetCurrentContext();
@@ -271,6 +261,7 @@ cl_context boxm2_change_detection_tableau::create_clgl_context()
       CL_CONTEXT_PLATFORM, (cl_context_properties) platform_id[0],
       0
   };
+  cl_device_id device = gpu_pro_->devices()[0];
   ComputeContext = clCreateContext(props, 1, &device, NULL, NULL, &status);
 #endif
 
@@ -280,7 +271,6 @@ cl_context boxm2_change_detection_tableau::create_clgl_context()
   }
   return ComputeContext;
 }
-
 
 
 //: sets up viewport and GL Modes
