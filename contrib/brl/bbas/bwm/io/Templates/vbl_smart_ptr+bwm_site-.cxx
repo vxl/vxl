@@ -1,12 +1,8 @@
 #include <bwm/io/bwm_site.h>
-#include <vsol/vsol_box_2d.h>
-#include <vsol/vsol_box_3d.h>
-#include <vsol/vsol_point_2d.h>
-#include <vgui/vgui_range_map_params.h>
-#include <vgui/vgui_style.h>
-#include <vsol/vsol_polygon_2d.h>
-#include <vsol/vsol_digital_curve_2d.h>
-#include <vsol/vsol_line_2d.h>
 #include <vbl/vbl_smart_ptr.txx>
+
+// dummy declarations (to avoid having to include too many header files)
+class vsol_box_2d {public:static void ref(){} static void unref(){}};
+class vsol_box_3d {public:static void ref(){} static void unref(){}};
 
 VBL_SMART_PTR_INSTANTIATE(bwm_site);
