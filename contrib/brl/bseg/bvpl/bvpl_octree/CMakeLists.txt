@@ -16,7 +16,7 @@ SET(bvpl_octree_sources
     bvpl_octree_vector_operator.h
     bvpl_scene_kernel_operator.h
     bvpl_scene_vector_operator.h
-    bvpl_block_kernel_operator
+    bvpl_block_kernel_operator.h
     bvpl_octree_sample.h               bvpl_octree_sample.txx
     bvpl_octree_vrml_util.h
     bvpl_cell_data_traits.h
