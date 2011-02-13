@@ -183,11 +183,9 @@ bool boxm_vid_tableau::mouse_drag(int x, int y, vgui_button button, vgui_modifie
     //get viewport size
     GLdouble vp[4];
     glGetDoublev(GL_VIEWPORT, vp); // ok
-    double width = vp[2];
-    double height = vp[3];
 
     //dy determines distance change in principle axis
-    double dy = (beginy - y) / height;
+    double dy = (beginy - y) / vp[3];
 
     double scale = dy/2.0f;
     cam_.set_camera_center(cam_.get_camera_center() + scale*cam_.principal_axis());
