@@ -381,7 +381,7 @@ projective_estimate( vnl_matrix_fixed<double, Tdim+1, Fdim+1>& proj,
   else
     ret = lm.minimize_without_gradient(p);
   if ( !ret ) {
-    vcl_cerr <<  "Levenberg-Marquatt failed\n";
+    vcl_cerr <<  "Levenberg-Marquardt failed\n";
     lm.diagnose_outcome(vcl_cerr);
     return false;
   }
@@ -500,8 +500,8 @@ projective_estimate( vnl_matrix_fixed<double, Tdim+1, Fdim+1>& proj,
   else
     ret = lm.minimize_without_gradient(p);
   if ( !ret ) {
-    WarningMacro( "Levenberg-Marquatt failed" );
-    return 0;
+    WarningMacro( "Levenberg-Marquardt failed" );
+    return false;
   }
   //lm.diagnose_outcome(vcl_cout);
 

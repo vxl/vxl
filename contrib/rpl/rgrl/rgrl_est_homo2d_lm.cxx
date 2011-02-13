@@ -262,7 +262,7 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
   else
     ret = lm.minimize_without_gradient(p);
   if ( !ret ) {
-    WarningMacro( "Levenberg-Marquatt failed" );
+    WarningMacro( "Levenberg-Marquardt failed" );
     return 0;
   }
   // lm.diagnose_outcome(vcl_cout);

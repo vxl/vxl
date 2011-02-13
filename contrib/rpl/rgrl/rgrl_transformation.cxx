@@ -543,7 +543,7 @@ inv_map( const vnl_vector<double>& to,
     bool ret = lm.minimize_using_gradient( from );
 
     if ( !ret ) {
-      WarningMacro( "Levenberg-Marquatt in rgrl_transformation::inv_map has failed!!!" );
+      WarningMacro( "Levenberg-Marquardt in rgrl_transformation::inv_map has failed!!!" );
       return;
     }
   }
@@ -569,7 +569,7 @@ inv_map( const vnl_vector<double>& to,
     bool ret = lm.minimize_using_gradient( from );
 
     if ( !ret ) {
-      WarningMacro( "Levenberg-Marquatt in rgrl_transformation::inv_map has failed!!!" );
+      WarningMacro( "Levenberg-Marquardt in rgrl_transformation::inv_map has failed!!!" );
       return;
     }
   }
