@@ -141,14 +141,14 @@ bool boxm2_render_tableau::handle(vgui_event const &e)
 bool boxm2_render_tableau::save_model()
 {
   vcl_cout<<"SAVING MODEL!!!"<<vcl_endl;
-  
+
   //save blocks and data to disk for debugging
   vcl_map<boxm2_block_id, boxm2_block_metadata> blocks = scene_->blocks();
   vcl_map<boxm2_block_id, boxm2_block_metadata>::iterator iter;
-  for(iter = blocks.begin(); iter != blocks.end(); ++iter)
-  { 
-    boxm2_block_id id = iter->first; 
-    boxm2_sio_mgr::save_block(scene_->data_path(), cache_->get_block(id)); 
+  for (iter = blocks.begin(); iter != blocks.end(); ++iter)
+  {
+    boxm2_block_id id = iter->first;
+    boxm2_sio_mgr::save_block(scene_->data_path(), cache_->get_block(id));
     boxm2_sio_mgr::save_block_data(scene_->data_path(), id, cache_->get_data<BOXM2_ALPHA>(id) );
     boxm2_sio_mgr::save_block_data(scene_->data_path(), id, cache_->get_data<BOXM2_MOG3_GREY>(id) );
     boxm2_sio_mgr::save_block_data(scene_->data_path(), id, cache_->get_data<BOXM2_NUM_OBS>(id) );
@@ -223,20 +223,20 @@ float boxm2_render_tableau::update_frame()
 {
     update_count_++;
 
-    if(update_count_%1==0)
+    if (update_count_%1==0)
     {
         //this->compute_convergence();
     }
-    if(update_count_%5==0)
+    if (update_count_%5==0)
     {
         float time=this->refine_model();
     }
     //pickup a random frame
     int curr_frame = rand.lrand32(0,cam_files_.size()-1);
     //curr_frame_ = (curr_frame_+1 >= cam_files_.size()) ? 0 : curr_frame_+1;
-    //int curr_frame = curr_frame_; 
+    //int curr_frame = curr_frame_;
     vcl_cout<<"Cam "<<cam_files_[curr_frame]<<'\n'
-        <<"Image "<<img_files_[curr_frame]<<vcl_endl;
+            <<"Image "<<img_files_[curr_frame]<<vcl_endl;
 
     //build the camera from file
     vcl_ifstream ifs(cam_files_[curr_frame].c_str());
@@ -277,8 +277,8 @@ float boxm2_render_tableau::update_frame()
     //execute gpu_update
     gpu_pro_->run(&update_, input, output);
     return gpu_pro_->exec_time();
-
 }
+
 bool boxm2_render_tableau::render_and_save_image(int index, vil_image_view<vxl_byte> & byte_img)
 {
   //build the camera from file
@@ -286,7 +286,7 @@ bool boxm2_render_tableau::render_and_save_image(int index, vil_image_view<vxl_b
   vpgl_perspective_camera<double>* pcam = new vpgl_perspective_camera<double>;
   if (!ifs.is_open()) {
       vcl_cerr << "Failed to open file " << cam_files_[index] << '\n';
-      return -1;
+      return false;
   }
   ifs >> *pcam;
   vpgl_camera_double_sptr cam_sptr(pcam);
@@ -321,28 +321,31 @@ bool boxm2_render_tableau::render_and_save_image(int index, vil_image_view<vxl_b
   for (unsigned int i=0; i<ni_; ++i)
     for (unsigned int j=0; j<nj_; ++j)
       byte_img(i,j) =  static_cast<vxl_byte>( (*expimg)(i,j) );   //just grab the first byte (all foura r the same)
+
+  return true;
 }
+
 bool boxm2_render_tableau::compute_convergence()
 {
- int num_images=6;
+ unsigned int num_images=6;
  int intervals=(img_files_.size()-1)/num_images;
  float sum=0.0f;
 
- for(unsigned i=0;i<num_images;i++)
+ for (unsigned i=0;i<num_images;i++)
  {
-     int index=intervals*i;
-     vcl_stringstream ss;
-     ss << index;
-     vil_image_view<vxl_byte> byte_img(ni_,nj_);
-     vcl_string filename="f:/test"+ss.str()+".png";
-     render_and_save_image(index,byte_img);
-     if(vul_file::exists(filename.c_str()))
-     {
-         vil_image_view_base_sptr read_img_ptr=vil_load(filename.c_str());
-         if(vil_image_view<vxl_byte> * prev_img=dynamic_cast<vil_image_view<vxl_byte> * >(read_img_ptr.ptr()))
-            sum+=vil_math_ssd<unsigned char, float>(byte_img,*prev_img,sum);
-     }
-     vil_save(byte_img,filename.c_str());
+   int index=intervals*i;
+   vcl_stringstream ss;
+   ss << index;
+   vil_image_view<vxl_byte> byte_img(ni_,nj_);
+   vcl_string filename="f:/test"+ss.str()+".png";
+   render_and_save_image(index,byte_img);
+   if (vul_file::exists(filename.c_str()))
+   {
+     vil_image_view_base_sptr read_img_ptr=vil_load(filename.c_str());
+     if (vil_image_view<vxl_byte> * prev_img=dynamic_cast<vil_image_view<vxl_byte> * >(read_img_ptr.ptr()))
+        sum+=vil_math_ssd<unsigned char, float>(byte_img,*prev_img,sum);
+   }
+   vil_save(byte_img,filename.c_str());
  }
  vcl_ofstream ofile("f:/errlog.txt",vcl_ios::app);
  ofile<<vcl_sqrt(sum/(ni_*nj_*6))<<vcl_endl;
@@ -395,10 +398,10 @@ bool boxm2_render_tableau::init_clgl()
 
   //initlaize gpu update process
   update_.init_kernel(&gpu_pro_->context(), &gpu_pro_->devices()[0]);
-  
+
   //initialize refine process
   refine_.init_kernel(&gpu_pro_->context(), &gpu_pro_->devices()[0]);
-  
+
   return true;
 }
 
@@ -412,7 +415,7 @@ cl_context boxm2_render_tableau::create_clgl_context()
 
   //initialize the render manager
   cl_device_id device = gpu_pro_->devices()[0];
-  cl_platform_id platform_id[1]; 
+  cl_platform_id platform_id[1];
   int status = clGetDeviceInfo(device,CL_DEVICE_PLATFORM,sizeof(platform_id),(void*) platform_id,NULL);
   if (!check_val(status, CL_SUCCESS, "boxm2_render Tableau::create_cl_gl_context CL_DEVICE_PLATFORM failed."))
     return 0;
