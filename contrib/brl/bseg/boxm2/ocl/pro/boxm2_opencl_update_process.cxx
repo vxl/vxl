@@ -101,8 +101,8 @@ bool boxm2_opencl_update_process::execute(vcl_vector<brdb_value_sptr>& input, vc
   img_size_[0] = img_view->ni();
   img_size_[1] = img_view->nj();
   int* img_dim_buff = new int[4];
-  img_dim_buff[0] = img_view->ni()/2;
-  img_dim_buff[1] = img_view->nj()/2;
+  img_dim_buff[0] = 0;
+  img_dim_buff[1] = 0;
   img_dim_buff[2] = img_view->ni();
   img_dim_buff[3] = img_view->nj();
   img_dim_ = new bocl_mem((*context_), img_dim_buff, sizeof(cl_int4), "image dims");

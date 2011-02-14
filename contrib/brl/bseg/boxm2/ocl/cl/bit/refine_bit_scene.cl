@@ -29,6 +29,10 @@ int refine_tree(__constant RenderSceneInfo * linfo,
   unsigned gid = get_group_id(0);
   unsigned lid = get_local_id(0);
 
+  //cast local pointers to uchar arrays
+  __local uchar* unrefined = (__local uchar*) unrefined_tree; 
+  __local uchar* refined   = (__local uchar*) refined_tree; 
+
   //max alpha integrated
   float max_alpha_int = (-1)*log(1.0 - prob_thresh);      
   
@@ -43,8 +47,8 @@ int refine_tree(__constant RenderSceneInfo * linfo,
     
     //if current bit is 0 and parent bit is 1, you're at a leaf
     int pi = (i-1)>>3;           //Bit_index of parent bit    
-    bool validParent = tree_bit_at(unrefined_tree, pi) || (i==0); // special case for root
-    if(validParent && tree_bit_at(unrefined_tree, i)==0) {
+    bool validParent = tree_bit_at(unrefined, pi) || (i==0); // special case for root
+    if(validParent && tree_bit_at(unrefined, i)==0) {
     
       //////////////////////////////////////////////////
       //LEAF CODE HERE
@@ -54,7 +58,7 @@ int refine_tree(__constant RenderSceneInfo * linfo,
       float side_len = linfo->block_len/(float) (1<<currDepth);
      
       //get alpha value for this cell;
-      int dataIndex = data_index_cached(unrefined_tree, i, bit_lookup, cumsum, &cumIndex, linfo->data_len); //gets offset within buffer
+      int dataIndex = data_index_cached(unrefined, i, bit_lookup, cumsum, &cumIndex, linfo->data_len); //gets offset within buffer
       float alpha   = alpha_array[gid*linfo->data_len + dataIndex];
          
       //integrate alpha value
@@ -64,11 +68,11 @@ int refine_tree(__constant RenderSceneInfo * linfo,
       if(alpha_int > max_alpha_int && currDepth<linfo->root_level)  {
        
         //change value of bit_at(i) to 1;
-        set_tree_bit_at(refined_tree, i, true);
+        set_tree_bit_at(refined, i, true);
        
         //keep track of number of nodes that split
         numSplit++;
-        output[gid]++;
+        //output[gid]++;
       }
       ////////////////////////////////////////////
       //END LEAF SPECIFIC CODE

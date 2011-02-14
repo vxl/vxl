@@ -36,7 +36,6 @@ bool boxm2_opencl_render_process::init_kernel(cl_context* context,
 
   //set kernel options
   vcl_string options = "-D INTENSITY ";
-  //options += "-D NVIDIA ";
   options += "-D RENDER ";
   options += opts;
 
@@ -57,7 +56,7 @@ bool boxm2_opencl_render_process::init_kernel(cl_context* context,
                                                                norm_src_paths,
                                                                "normalize_render_kernel",   //kernel name
                                                                options,              //options
-                                                               "boxm2 opencl render"); //kernel identifier (for error checking)
+                                                               "normalize render kernel"); //kernel identifier (for error checking)
 
   return created;
 }
