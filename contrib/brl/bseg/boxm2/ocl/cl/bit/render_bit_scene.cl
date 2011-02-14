@@ -56,6 +56,8 @@ inline float calc_cell_exit(float cell_minx, float cell_miny, float cell_minz, f
 // END Helper methods 
 ////////////////////////////////////////////////////////////////////////////////
 
+
+
 #if 1
 void cast_ray(
           //---- RAY ARGUMENTS -------------------------------------------------
@@ -67,7 +69,7 @@ void cast_ray(
           __constant  RenderSceneInfo    * linfo,           //scene info (origin, block size, etc)
           __global    int4               * tree_array,      //tree buffers (loaded as int4, but read as uchar16
           __global    float              * alpha_array,     //voxel density buffer
-          __global    uchar8             * mixture_array,   //appearance model buffer
+          __global    int2               * mixture_array,   //appearance model buffer
 
           //---- UTILITY ARGUMENTS----------------------------------------------
           __local     uchar16            * local_tree,      //local tree for traversing
@@ -389,7 +391,7 @@ void
 render_bit_scene( __constant  RenderSceneInfo    * linfo,
                   __global    int4               * tree_array,
                   __global    float              * alpha_array,
-                  __global    uchar8             * mixture_array,
+                  __global    int2               * mixture_array,
                   __global    float16            * camera,        // camera orign and SVD of inverse of camera matrix
                   __global    float              * exp_image,      // input image and store vis_inf and pre_inf
                   __global    uint4              * exp_image_dims,
@@ -459,7 +461,6 @@ render_bit_scene( __constant  RenderSceneInfo    * linfo,
             exp_image,
             vis_image,
             output);
-            
 }
 #endif
 
