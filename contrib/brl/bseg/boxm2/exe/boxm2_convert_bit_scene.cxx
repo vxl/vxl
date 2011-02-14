@@ -43,9 +43,8 @@ int main(int argc,  char** argv)
 
   //1.  create bit_scene from xml file
   boxm_ocl_bit_scene bit_scene(bit_file());
-  vcl_cout<<"Scene Initialized... "<<vcl_endl
-          <<bit_scene<<vcl_endl; 
-  
+  vcl_cout<<"Scene Initialized...\n" <<bit_scene<<vcl_endl;
+
   //get some block metadata
   int init_level  = bit_scene.init_level();
   int max_level   = bit_scene.max_level();
@@ -53,31 +52,32 @@ int main(int argc,  char** argv)
   int num_buffers, tree_len, data_len;
   bit_scene.tree_buffer_shape(num_buffers, tree_len);
   bit_scene.data_buffer_shape(num_buffers, data_len);
-  
+
   //2. create empty boxm2_scene
   boxm2_scene new_scene;
-  
+
   //2.5 create new block metadata
   boxm2_block_metadata data;
-  data.id_ = boxm2_block_id(0,0,0); 
-  data.local_origin_  = bit_scene.origin(); 
-  data.sub_block_dim_ = bit_scene.block_dim();  
+  data.id_ = boxm2_block_id(0,0,0);
+  data.local_origin_  = bit_scene.origin();
+  data.sub_block_dim_ = bit_scene.block_dim();
   int nx,ny,nz; bit_scene.block_num(nx, ny, nz);
-  data.sub_block_num_ = vgl_vector_3d<unsigned>(nx,ny,nz); 
-  data.init_level_    = init_level; 
-  data.max_level_     = max_level; 
-  data.max_mb_        = (max_mb > 0)? max_mb : 400.0; 
-  data.p_init_        = .001; 
+  data.sub_block_num_ = vgl_vector_3d<unsigned>(nx,ny,nz);
+  data.init_level_    = init_level;
+  data.max_level_     = max_level;
+  data.max_mb_        = (max_mb > 0)? max_mb : 400.0;
+  data.p_init_        = .001;
+  data.random_        = false;
 
   //3. set scene metadata
-  new_scene.add_block_metadata(data); 
+  new_scene.add_block_metadata(data);
   new_scene.set_local_origin(bit_scene.origin());
   new_scene.set_rpc_origin(bit_scene.origin());
   new_scene.set_lvcs(bit_scene.lvcs());
   new_scene.set_xml_path(new_dir() + "/scene.xml");
   new_scene.set_data_path(new_dir());
   new_scene.save_scene();
- 
+
   //2.  Get the relevant arrays
   vbl_array_1d<ushort2> mem_ptrs = bit_scene.mem_ptrs();
   vbl_array_1d<ushort>  blocks_in_buffers = bit_scene.blocks_in_buffers();
@@ -145,11 +145,11 @@ int main(int argc,  char** argv)
     uchar data_lo  = tree[11];
     uchar buff_hi   = (uchar)(buff >> 8);
     uchar buff_lo   = (uchar)(buff & 255);
-    tree[10] = data_hi;  
-    tree[11] = data_lo; 
+    tree[10] = data_hi;
+    tree[11] = data_lo;
     tree[12] = buff_hi;
-    tree[13] = buff_lo; 
-    
+    tree[13] = buff_lo;
+
     //copy into stream
     vcl_memcpy(bsize+curr_byte, &tree, sizeof(tree));
     curr_byte += sizeof(uchar16);
@@ -188,7 +188,7 @@ int main(int argc,  char** argv)
   //Construct data blocks (MOG and ALPHA)
   //----------------------------------------------------------------------------
   vcl_cout<<"DATA LENGTH IS: "<<data_len<<vcl_endl;
-  int     numData = num_buffers * data_len; 
+  int     numData = num_buffers * data_len;
   float * alphas  = new float[numData];
   uchar8* mogs    = new uchar8[numData];
   bit_scene.get_alphas(alphas);
