@@ -39,7 +39,7 @@ class bocl_mem : public vbl_ref_count
     bool create_buffer(const cl_mem_flags& flags);
 
     bool create_image_buffer(const cl_mem_flags& flags, const cl_image_format* format,
-                             size_t width, size_t height);
+                             vcl_size_t width, vcl_size_t height);
 
     //: releases buffer memory
     bool release_memory();
@@ -49,18 +49,18 @@ class bocl_mem : public vbl_ref_count
     bool read_to_buffer(const cl_command_queue& cmdQueue);
 
     //: write to buffer asynchronously
-    bool write_to_buffer_async(const cl_command_queue& cmdQueue); 
-    bool finish_write_to_buffer(const cl_command_queue& cmdQueue); 
+    bool write_to_buffer_async(const cl_command_queue& cmdQueue);
+    bool finish_write_to_buffer(const cl_command_queue& cmdQueue);
 
     //: zeros out GPU buffer
-    bool zero_gpu_buffer(const cl_command_queue& cmdQueue); 
+    bool zero_gpu_buffer(const cl_command_queue& cmdQueue);
 
     //: returns a reference to the buffer
     cl_mem& buffer()        { return buffer_; }
 
     //: returns a reference to the cpu buffer
     void* cpu_buffer()      { return cpu_buf_; }
-    void set_cpu_buffer(void* buff) { cpu_buf_ = buff; } 
+    void set_cpu_buffer(void* buff) { cpu_buf_ = buff; }
 
     //: returns number of bytes in buffer
     vcl_size_t num_bytes()  { return num_bytes_; }
@@ -70,9 +70,9 @@ class bocl_mem : public vbl_ref_count
 
     //: set buffer used when a clCreateGLBuffer is called..
     bool set_gl_buffer(cl_mem buff) { buffer_ = buff; is_gl_=true; return true; }
-    
+
     //: time spend writing or reading
-    float exec_time(); 
+    float exec_time();
 
   private:
 
@@ -89,7 +89,7 @@ class bocl_mem : public vbl_ref_count
     const cl_context& context_;
 
     //: cl event object identifies read/write with this particular buffer
-    cl_event event_; 
+    cl_event event_;
 
     //: string identifier for error messages
     vcl_string id_;

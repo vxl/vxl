@@ -20,23 +20,23 @@ bocl_mem::~bocl_mem()
 bool bocl_mem::create_buffer(const cl_mem_flags& flags)
 {
   cl_int status = MEM_FAILURE;
-  
+
   // Create and initialize memory objects
   buffer_ = clCreateBuffer(this->context_, flags, this->num_bytes_, this->cpu_buf_, &status);
   if (!check_val(status, MEM_FAILURE, "clCreateBuffer failed: " + this->id_))
     return MEM_FAILURE;
-    
+
   //if memory was allocated and a null pointer was passed in, store it
-  if(flags & CL_MEM_ALLOC_HOST_PTR && cpu_buf_ == NULL) {
-    status = clGetMemObjectInfo (buffer_, CL_MEM_HOST_PTR, sizeof(void*), cpu_buf_, NULL); 
-    if( !check_val(status, MEM_FAILURE, "clGetMemObjectInfo CL_MEM_HOST_PTR failed: " + this->id_))
+  if (flags & CL_MEM_ALLOC_HOST_PTR && cpu_buf_ == NULL) {
+    status = clGetMemObjectInfo (buffer_, CL_MEM_HOST_PTR, sizeof(void*), cpu_buf_, NULL);
+    if (!check_val(status, MEM_FAILURE, "clGetMemObjectInfo CL_MEM_HOST_PTR failed: " + this->id_))
       return MEM_FAILURE;
   }
   return MEM_SUCCESS;
 }
 
 bool bocl_mem::create_image_buffer(const cl_mem_flags& flags, const cl_image_format* format,
-                                   size_t width, size_t height)
+                                   vcl_size_t width, vcl_size_t height)
 {
   cl_int status = MEM_FAILURE;
   buffer_ = clCreateImage2D(this->context_, flags, format, width, height,
@@ -46,12 +46,12 @@ bool bocl_mem::create_image_buffer(const cl_mem_flags& flags, const cl_image_for
 }
 
 bool bocl_mem::release_memory()
-{   
+{
   //release mem
   cl_int status = clReleaseMemObject(buffer_);
   if (!check_val(status,MEM_FAILURE,"clReleaseMemObject failed: " + this->id_))
     return MEM_FAILURE;
-  
+
   return MEM_SUCCESS;
 }
 
