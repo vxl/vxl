@@ -14,6 +14,9 @@
 // \endverbatim
 
 #include <boxm/boxm_apm_traits.h>
+#if 0 // operator<< in commented-out section
+#include <vcl_iosfwd.h>
+#endif
 
 class  boxm_simple_grey_processor
 {
@@ -23,12 +26,15 @@ class  boxm_simple_grey_processor
   typedef boxm_apm_traits<BOXM_APM_SIMPLE_GREY>::obs_datatype obs_datatype;
   typedef boxm_apm_traits<BOXM_APM_SIMPLE_GREY>::obs_mathtype obs_mathtype;
 
-  // one_over_sigma now a member of apm_datatype
-  //static const float one_over_sigma_;
- public:
-
   // all methods are static - no constructor needed
-  //boxm_simple_grey_processor(){};
+ private:
+  boxm_simple_grey_processor() {}
+
+#if 0  // one_over_sigma is now a member of apm_datatype
+  static const float one_over_sigma_;
+#endif
+
+ public:
 
   static float prob_density(apm_datatype const& appear, obs_datatype const& obs);
 
@@ -57,6 +63,8 @@ class  boxm_simple_grey_processor
   static float sigma_norm_factor(float nobs);
 };
 
-//vcl_ostream& operator<<(vcl_ostream &os, boxm_simple_grey const& apm);
+#if 0
+vcl_ostream& operator<<(vcl_ostream &os, boxm_simple_grey const& apm);
+#endif
 
 #endif // boxm_simple_grey_processor_h_

@@ -33,7 +33,7 @@ class bbgm_feature_image_base : public vbl_ref_count
     virtual vcl_string is_a() const=0;
 
     virtual bbgm_feature_image_base* clone() const = 0;
-    
+
     virtual unsigned int ni() const = 0;
     virtual unsigned int nj() const = 0;
 };
@@ -44,10 +44,10 @@ class bbgm_feature_image : public bbgm_feature_image_base
 {
  public:
   //: Constructor
-  bbgm_feature_image<f_type_>(){};
-  bbgm_feature_image<f_type_>(unsigned int ni, unsigned int nj): data_(nj,ni){}
+  bbgm_feature_image<f_type_>() {}
+  bbgm_feature_image<f_type_>(unsigned int ni, unsigned int nj): data_(nj,ni) {}
   bbgm_feature_image<f_type_>(unsigned int ni, unsigned int nj,
-                        const f_type_& feature) : data_(nj,ni,feature) {}
+                              f_type_ const& feature) : data_(nj,ni,feature) {}
 
 
   //: Return the width of the image
@@ -133,7 +133,6 @@ class bbgm_feature_image : public bbgm_feature_image_base
  private:
   //: the data
    vbl_array_2d<f_type_ > data_;
-
 };
 
 template <class f_type_>

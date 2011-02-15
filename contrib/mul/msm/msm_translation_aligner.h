@@ -18,15 +18,15 @@ class msm_translation_aligner : public msm_aligner
   virtual ~msm_translation_aligner() {}
 
   //: Return number of parameters defining the transformation
-  virtual unsigned size() const { return 2; };
+  virtual unsigned size() const { return 2; }
 
   //: Compute parameters for inverse transformation
   virtual vnl_vector<double> inverse(const vnl_vector<double>&) const;
 
   //: Apply the transformation to the given points
-  virtual void apply_transform(const msm_points& points, 
-                     const vnl_vector<double>& trans,
-                     msm_points& new_points) const;
+  virtual void apply_transform(const msm_points& points,
+                               const vnl_vector<double>& trans,
+                               msm_points& new_points) const;
 
   //: Return scaling applied by the transform with given parameters.
   virtual double scale(const vnl_vector<double>& trans) const;
@@ -44,8 +44,8 @@ class msm_translation_aligner : public msm_aligner
   //  method which is required where the orthogonality properties do not hold,
   //  or where weights are considered.
   virtual void calc_transform_from_ref(const msm_points& ref_points,
-                              const msm_points& points2,
-                              vnl_vector<double>& trans) const;
+                                       const msm_points& points2,
+                                       vnl_vector<double>& trans) const;
 
   //: Estimate parameter which best map points1 to points2
   //  Minimises ||points2-T(points1)||^2
@@ -57,17 +57,17 @@ class msm_translation_aligner : public msm_aligner
   //  Minimises sum of weighted squares error in frame of pts2,
   //  ie sum w_i * ||p2_i - T(p1_i)||
   virtual void calc_transform_wt(const msm_points& points1,
-                              const msm_points& points2,
-                              const vnl_vector<double>& wts,
-                              vnl_vector<double>& trans) const;
+                                 const msm_points& points2,
+                                 const vnl_vector<double>& wts,
+                                 vnl_vector<double>& trans) const;
 
   //: Estimate parameters which map points allowing for anisotropic wts
-//  Errors on point i are weighted by wt_mat[i] in pts2 frame.
-//  ie error is sum (p2_i-T(p1_i)'*wt_mat[i]*(p2_i-T(p1_i)
+  //  Errors on point i are weighted by wt_mat[i] in pts2 frame.
+  //  i.e. error is sum (p2_i-T(p1_i)'*wt_mat[i]*(p2_i-T(p1_i)
   virtual void calc_transform_wt_mat(const msm_points& points1,
-                              const msm_points& points2,
-                              const vcl_vector<msm_wt_mat_2d>& wt_mat,
-                              vnl_vector<double>& trans) const;
+                                     const msm_points& points2,
+                                     const vcl_vector<msm_wt_mat_2d>& wt_mat,
+                                     vnl_vector<double>& trans) const;
 
   //: Apply transform to weight matrices (ie ignore translation component)
   virtual void transform_wt_mat(const vcl_vector<msm_wt_mat_2d>& wt_mat,
@@ -76,10 +76,10 @@ class msm_translation_aligner : public msm_aligner
 
   //: Returns params of pose such that pose(x) = pose1(pose2(x))
   virtual vnl_vector<double> compose(const vnl_vector<double>& pose1,
-                         const vnl_vector<double>& pose2) const;
+                                     const vnl_vector<double>& pose2) const;
 
   //: Apply transform to generate points in reference frame
-  //  Translate so that the centre of gravity is at the origin 
+  //  Translate so that the centre of gravity is at the origin
   //  and scale to a unit size (points.vector().magnitude()==1)
   virtual void normalise_shape(msm_points& points) const;
 

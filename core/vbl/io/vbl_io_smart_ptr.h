@@ -48,10 +48,10 @@
 //   else
 //   {http://www.isbe.man.ac.uk/internal/software/c++/vxl-doxygen/
 //                              vcl/html/class_vcl_not_equal_to.html
-//     os << "T" << ": ";
+//     os << "T: ";
 //     vsl_print_summary(os, *p);
 //   }
-// };
+// }
 // \endcode
 //
 // Objects using I/O via a smart ptr, should not save the objects reference count.

@@ -23,8 +23,11 @@ class bvpl_create_directions_base
 {
  public:
  bvpl_create_directions_base(){}
+
+#if 0
  //:Destructor
-//  virtual ~bvpl_create_directions_base(){};
+ virtual ~bvpl_create_directions_base() {}
+#endif
 
  //:Accessor methods
  vcl_vector<vnl_float_3> get_axes(){ return axes_;}

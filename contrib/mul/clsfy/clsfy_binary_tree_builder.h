@@ -69,7 +69,6 @@ class clsfy_binary_tree_builder : public clsfy_builder_base
     //: Work space for randomising params (NB not thread safe)
     mutable vcl_vector<unsigned > base_indices_;
 
-
   public:
     // Dflt ctor
     clsfy_binary_tree_builder();
@@ -107,7 +106,7 @@ class clsfy_binary_tree_builder : public clsfy_builder_base
     virtual void b_read(vsl_b_istream& bfs);
 
     //: The max tree depth (default -1 means no max set )
-    int max_depth() const {return max_depth_;};
+    int max_depth() const {return max_depth_;}
 
     //: Set the number of nearest neighbours to look for.
     // If not see default is high value to force continuation till
