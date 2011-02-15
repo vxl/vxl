@@ -76,7 +76,7 @@ bocl_kernel::~bocl_kernel()
     vcl_cout<<" release failed in bocl_kernel destructor"<<vcl_endl;
 }
 
-bool bocl_kernel::execute(cl_command_queue& cmdQueue, vcl_size_t* localThreads, vcl_size_t* globalThreads)
+bool bocl_kernel::execute(cl_command_queue& cmdQueue, cl_uint dim, vcl_size_t* localThreads, vcl_size_t* globalThreads)
 {
   //set kernel args
   cl_int status = CL_SUCCESS;
@@ -100,7 +100,7 @@ bool bocl_kernel::execute(cl_command_queue& cmdQueue, vcl_size_t* localThreads, 
 
   //enqueue the kernel on the command queue
   ceEvent_ = 0;
-  status = clEnqueueNDRangeKernel(cmdQueue, kernel_, 2, NULL, globalThreads, localThreads, 0, NULL, &ceEvent_);
+  status = clEnqueueNDRangeKernel(cmdQueue, kernel_, dim, NULL, globalThreads, localThreads, 0, NULL, &ceEvent_);
   if ( !check_val(status,CL_SUCCESS,"clEnqueueNDRangeKernel failed (" + id_ + ") " +error_to_string(status)) )
     return false;
   else
@@ -124,14 +124,15 @@ bool bocl_kernel::set_arg(bocl_mem* buffer)
 //: THIS REQUIRES the queue to be finished
 float bocl_kernel::exec_time()
 {
-  long tend, tstart;
+  cl_ulong tend=0, tstart=0;
   int status = clGetEventProfilingInfo(ceEvent_,CL_PROFILING_COMMAND_END,sizeof(cl_ulong),&tend,0);
   status = clGetEventProfilingInfo(ceEvent_,CL_PROFILING_COMMAND_START,sizeof(cl_ulong),&tstart,0);
   if ( !check_val(status,CL_SUCCESS,"clFinish/ProfilingInfo failed (" + id_ + ") " +error_to_string(status)) )
     return false;
 
   //store execution time
-  return 1.0e-6f*float(tend - tstart);
+  long diff = tend - tstart;
+  return 1.0e-6f*float(diff);
 }
 
 unsigned long bocl_kernel::local_mem_size()
