@@ -35,6 +35,16 @@ bool bocl_mem::create_buffer(const cl_mem_flags& flags)
   return MEM_SUCCESS;
 }
 
+bool bocl_mem::create_image_buffer(const cl_mem_flags& flags, const cl_image_format* format,
+                                   size_t width, size_t height)
+{
+  cl_int status = MEM_FAILURE;
+  buffer_ = clCreateImage2D(this->context_, flags, format, width, height,
+                            this->num_bytes_, this->cpu_buf_, &status);
+  if (!check_val(status, MEM_FAILURE, "clCreateBuffer failed: " + this->id_))
+    return MEM_FAILURE;;
+}
+
 bool bocl_mem::release_memory()
 {   
   //release mem

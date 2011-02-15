@@ -38,6 +38,9 @@ class bocl_mem : public vbl_ref_count
     //: creates the memory for buffer
     bool create_buffer(const cl_mem_flags& flags);
 
+    bool create_image_buffer(const cl_mem_flags& flags, const cl_image_format* format,
+                             size_t width, size_t height);
+
     //: releases buffer memory
     bool release_memory();
 
