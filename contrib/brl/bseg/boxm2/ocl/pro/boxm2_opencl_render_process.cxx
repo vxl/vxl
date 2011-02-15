@@ -180,7 +180,7 @@ bool boxm2_opencl_render_process::execute(vcl_vector<brdb_value_sptr>& input, vc
     render_kernel_.set_local_arg( lThreads[0]*lThreads[1]*sizeof(cl_int) );
 
     //execute kernel
-    render_kernel_.execute( (*command_queue_), lThreads, gThreads);
+    render_kernel_.execute( (*command_queue_), 2, lThreads, gThreads);
     clFinish(*command_queue_);
     gpu_time_ += render_kernel_.exec_time();
 
@@ -193,7 +193,7 @@ bool boxm2_opencl_render_process::execute(vcl_vector<brdb_value_sptr>& input, vc
       normalize_render_kernel_.set_arg( image_ );
       normalize_render_kernel_.set_arg( vis_img_ );
       normalize_render_kernel_.set_arg( &exp_img_dim);
-      normalize_render_kernel_.execute( (*command_queue_), lThreads, gThreads);
+      normalize_render_kernel_.execute( (*command_queue_), 2, lThreads, gThreads);
       clFinish(*command_queue_);
       gpu_time_ += normalize_render_kernel_.exec_time();
 
