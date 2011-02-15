@@ -33,6 +33,10 @@ template <class T> class bsta_histogram : public bsta_histogram_base
   bsta_histogram(const T min, const T max, const unsigned int nbins,
                  const T min_prob = 0.0);
 
+  //:More general constructor specifying bin interval, delta
+  bsta_histogram(const unsigned int nbins, const T min, const T delta, 
+                 const T min_prob = 0.0);
+
   //:construct from other histogram data
   bsta_histogram(const T min, const T max, vcl_vector<T> const& data,
                  const T min_prob = 0.0);
