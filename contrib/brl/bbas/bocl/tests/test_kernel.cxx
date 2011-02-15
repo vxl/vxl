@@ -37,7 +37,7 @@ bool test_multiply_kernel()
   //execute kernel
   test_kernel.set_arg(&a_mem);
   test_kernel.set_arg(&b_mem);
-  test_kernel.execute(queue, lthread, gthread); 
+  test_kernel.execute(queue, 3, lthread, gthread); 
   clFinish(queue);
   vcl_cout<<"Execution time: "<<test_kernel.exec_time()<<" ms"<<vcl_endl;
   
