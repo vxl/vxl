@@ -217,7 +217,7 @@ vcl_string msm_shape_instance::is_a() const
 //=======================================================================
 
   // required if data is present in this class
-void msm_shape_instance::print_summary(vcl_ostream& os) const
+void msm_shape_instance::print_summary(vcl_ostream& /*os*/) const
 {
 }
 
