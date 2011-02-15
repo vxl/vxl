@@ -145,7 +145,7 @@ bool boxm2_opencl_update_process::execute(vcl_vector<brdb_value_sptr>& input, vc
       this->set_args(i);
 
       //execute kernel
-      update_kernels_[i]->execute( (*command_queue_), lThreads_, gThreads_);
+      update_kernels_[i]->execute( (*command_queue_), 2, lThreads_, gThreads_);
       int status = clFinish(*command_queue_);
       check_val(status, MEM_FAILURE, "UPDATE EXECUTE FAILED: " + error_to_string(status));
       update_kernels_[i]->clear_args();
@@ -173,7 +173,7 @@ bool boxm2_opencl_update_process::execute(vcl_vector<brdb_value_sptr>& input, vc
       this->set_args(i);
 
       //execute kernel
-      update_kernels_[i]->execute( (*command_queue_), lThreads_, gThreads_);
+      update_kernels_[i]->execute( (*command_queue_), 2, lThreads_, gThreads_);
       int status = clFinish(*command_queue_);
       check_val(status, MEM_FAILURE, "UPDATE EXECUTE FAILED: " + error_to_string(status));
       //gpu_time_ += update_kernels_[i]->exec_time();

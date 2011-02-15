@@ -113,7 +113,7 @@ bool boxm2_opencl_refine_process::execute(vcl_vector<brdb_value_sptr>& input, vc
     vcl_size_t gThreads[] = {info_buffer->num_buffer, 1};
     
     //execute kernel
-    refine_kernel_.execute( (*command_queue_), lThreads, gThreads);
+    refine_kernel_.execute( (*command_queue_), 2, lThreads, gThreads);
     clFinish(*command_queue_); 
     gpu_time_ += refine_kernel_.exec_time(); 
     

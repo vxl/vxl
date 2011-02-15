@@ -140,7 +140,7 @@ bool boxm2_opencl_render_depth_process::execute(vcl_vector<brdb_value_sptr>& inp
   render_kernel_.set_local_arg( lThreads[0]*lThreads[1]*sizeof(cl_int) );
 
   //execute kernel
-  render_kernel_.execute(command_queue_, lThreads, gThreads);
+  render_kernel_.execute(command_queue_, 2, lThreads, gThreads);
 
   //read output, do something, blah blah
   cl_output.read_to_buffer(command_queue_);

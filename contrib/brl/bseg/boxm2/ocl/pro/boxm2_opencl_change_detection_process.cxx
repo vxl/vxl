@@ -205,7 +205,7 @@ bool boxm2_opencl_change_detection_process::execute(vcl_vector<brdb_value_sptr>&
     change_kernel_.set_local_arg( lThreads[0]*lThreads[1]*sizeof(cl_int) );
 
     //execute kernel
-    change_kernel_.execute( (*command_queue_), lThreads, gThreads);
+    change_kernel_.execute( (*command_queue_), 2, lThreads, gThreads);
     clFinish(*command_queue_);
     gpu_time_ += change_kernel_.exec_time();
 
@@ -218,7 +218,7 @@ bool boxm2_opencl_change_detection_process::execute(vcl_vector<brdb_value_sptr>&
       normalize_change_kernel_.set_arg( prob_exp_img_ );
       normalize_change_kernel_.set_arg( vis_img_ );
       normalize_change_kernel_.set_arg( &exp_img_dim);
-      normalize_change_kernel_.execute( (*command_queue_), lThreads, gThreads);
+      normalize_change_kernel_.execute( (*command_queue_), 2, lThreads, gThreads);
       clFinish(*command_queue_);
       gpu_time_ += normalize_change_kernel_.exec_time();
 
