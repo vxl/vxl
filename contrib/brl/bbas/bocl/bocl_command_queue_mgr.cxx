@@ -100,7 +100,7 @@ bool bocl_command_queue_mgr::test_async_command_queue()
   kernel_a_.set_arg( pinned_in_ );  
   kernel_a_.set_arg( pinned_out_); 
   kernel_a_.set_arg( offset );
-  kernel_a_.execute( queue_a_, lThreads, gThreads); 
+  kernel_a_.execute( queue_a_, 2, lThreads, gThreads); 
   pinned_out_->read_to_buffer( queue_a_ );
   clFinish(queue_a_);
   
@@ -126,7 +126,7 @@ bool bocl_command_queue_mgr::test_async_command_queue()
   {
     //execute kernel and TIME
     vcl_cout<<"KERNEL A ARG COUNT: "<<kernel_a_.arg_cnt()<<vcl_endl;
-    kernel_a_.execute( queue_a_, lThreads, gThreads); 
+    kernel_a_.execute( queue_a_, 2, lThreads, gThreads); 
     pinned_in_->write_to_buffer( queue_a_ );
     clFinish(queue_a_);
   }
@@ -170,7 +170,7 @@ bool bocl_command_queue_mgr::test_async_command_queue()
       kernels_[k].set_arg( pinned_in_ );
       kernels_[k].set_arg( pinned_out_ );
       kernels_[k].set_arg( offsets_[k] );
-      kernels_[k].execute( queues_[k], lThreads, gThreads); 
+      kernels_[k].execute( queues_[k], 2, lThreads, gThreads); 
       
       // non blocking write of buffer B (on Queue B)
       int off = next * incr * sizeof(float);
