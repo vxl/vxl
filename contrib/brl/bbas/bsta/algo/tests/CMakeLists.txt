@@ -9,6 +9,7 @@ ADD_EXECUTABLE( bsta_algo_test_all
   test_fit_gaussian.cxx
   test_von_mises_update.cxx
   test_beta_updater.cxx
+  test_rand_sampling.cxx
 )
 
 TARGET_LINK_LIBRARIES( bsta_algo_test_all bsta_algo vnl vgl testlib )
@@ -23,7 +24,7 @@ ADD_TEST( bsta_algo_test_mean_shift  ${EXECUTABLE_OUTPUT_PATH}/bsta_algo_test_al
 ADD_TEST( bsta_algo_test_fit_gaussian ${EXECUTABLE_OUTPUT_PATH}/bsta_algo_test_all test_fit_gaussian )
 ADD_TEST( bsta_algo_test_von_mises_update  ${EXECUTABLE_OUTPUT_PATH}/bsta_algo_test_all test_von_mises_update )
 ADD_TEST( bsta_algo_test_beta_updater  ${EXECUTABLE_OUTPUT_PATH}/bsta_algo_test_all test_beta_updater )
-
+ADD_TEST( bsta_algo_test_rand_sampling  ${EXECUTABLE_OUTPUT_PATH}/bsta_algo_test_all test_rand_sampling )
 ADD_EXECUTABLE( bsta_algo_test_include test_include.cxx )
 TARGET_LINK_LIBRARIES( bsta_algo_test_include bsta_algo )
 ADD_EXECUTABLE( bsta_algo_test_template_include test_template_include.cxx )

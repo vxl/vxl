@@ -6,6 +6,7 @@ DECLARE( test_mean_shift );
 DECLARE( test_fit_gaussian );
 DECLARE( test_von_mises_update );
 DECLARE( test_beta_updater );
+DECLARE( test_rand_sampling );
 
 void
 register_tests()
@@ -15,7 +16,7 @@ register_tests()
   REGISTER( test_mean_shift );
   REGISTER( test_fit_gaussian );
   REGISTER( test_von_mises_update );
-  REGISTER( test_beta_updater );
+  REGISTER( test_rand_sampling );
 
 }
 
