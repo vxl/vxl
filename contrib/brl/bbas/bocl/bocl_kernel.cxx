@@ -37,15 +37,17 @@ bool bocl_kernel::create_kernel(cl_context* context,
   }
 
   bocl_device_info info(device);
-  if (info.is_nvidia_device_)
-    options += "-cl-nv-verbose";
+  if (info.is_nvidia_device_) {
+    vcl_cout<<"Compiling "<<id_<<" on an NVIDIA device"<<vcl_endl;
+    options += " -cl-nv-verbose";
+  }
 
   //build cl_program object
   if ( !this->build_kernel_program(program_, options) ) {
     vcl_cerr<<"bocl_kernel::couldn't build program "<<id_<<'\n';
     return false;
   }
-  vcl_cout<<this->build_log()<<vcl_endl;
+  vcl_cout<<"BUILD LOG: "<<this->build_log()<<vcl_endl;
 
   //create cl_kernel object
   cl_int status = SDK_FAILURE;
