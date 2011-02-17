@@ -71,16 +71,8 @@ render_bit_scene( __constant  RenderSceneInfo    * linfo,
   cast_ray( i, j,
             ray_ox, ray_oy, ray_oz,
             ray_dx, ray_dy, ray_dz,
-
-            //scene info
-            linfo, tree_array, 
-            //alpha_array, mixture_array, 
-
-            //utility info
-            local_tree, bit_lookup, cumsum, &vis,
-
-            //in image
-            aux_args); 
+            linfo, tree_array,                                    //scene info
+            local_tree, bit_lookup, cumsum, &vis, aux_args);      //utility info
             
   //store the expected intensity (as UINT)
   exp_image[imIndex[llid]] =  rgbaFloatToInt((float4) expint); 

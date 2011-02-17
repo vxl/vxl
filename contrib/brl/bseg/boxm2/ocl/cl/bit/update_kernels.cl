@@ -1,7 +1,6 @@
 //THIS IS UPDATE BIT SCENE OPT
 //Created Sept 30, 2010,
 //Implements the parallel work group segmentation algorithm.
-
 #pragma OPENCL EXTENSION cl_khr_global_int32_base_atomics: enable
 #if NVIDIA
  #pragma OPENCL EXTENSION cl_khr_gl_sharing : enable
@@ -84,36 +83,10 @@ seg_len_main(__constant  RenderSceneInfo    * linfo,
   aux_args.cached_aux = cached_aux_data; 
   aux_args.obs = obs; 
   cast_ray( i, j,
-          ray_ox, ray_oy, ray_oz,
-          ray_dx, ray_dy, ray_dz,
-
-          //scene info
-          linfo, tree_array, 
-
-          //utility info
-          local_tree, bit_lookup, cumsum, &vis,
-
-          //in image
-          aux_args); 
-  
-/*
-  cast_ray( i, j,
             ray_ox, ray_oy, ray_oz,
             ray_dx, ray_dy, ray_dz,
-
-            //scene info                              
-            linfo, 
-            tree_array, 
-
-            //utility info
-
-            //SEGLEN SPECIFIC ARGS
-            //factor,raybund,ptrs,cache,cache,image_vect (all NULL)
-            ray_bundle_array, cell_ptrs, obs, vis, cached_aux_data,
-
-            //io info
-            output);
-*/
+            linfo, tree_array,                                  //scene info
+            local_tree, bit_lookup, cumsum, &vis, aux_args);    //utility info
 }
 #endif
 
@@ -122,18 +95,14 @@ typedef struct
 {
   __global float* alpha; 
   __global uchar8* mog; 
-  __global ushort4* num_obs; 
   __global int* seg_len;
   __global int* mean_obs; 
-  __global int* vis_array;
-  __global int* beta_array;
            float4* inImage; 
 } AuxArgs;  
 
 //forward declare cast ray (so you can use it)
 void cast_ray(int,int,float,float,float,float,float,float,__constant RenderSceneInfo*, 
               __global int4*,local uchar16*,constant uchar *,local uchar *,float*,AuxArgs); 
-
 
 __kernel
 void
@@ -184,63 +153,25 @@ pre_inf_main(__constant  RenderSceneInfo    * linfo,
   AuxArgs aux_args; 
   aux_args.alpha   = alpha_array; 
   aux_args.mog     = mixture_array; 
-  aux_args.num_obs = num_obs_array; 
-  aux_args.seg_len = aux_array;
-  aux_args.mean_obs = &aux_array[linfo->num_buffer * linfo->data_len]; 
-  aux_args.vis_array = &aux_array[2 * linfo->num_buffer * linfo->data_len];
-  aux_args.beta_array = &aux_array[3 * linfo->num_buffer * linfo->data_len];
+  aux_args.seg_len   = aux_array;
+  aux_args.mean_obs  = &aux_array[linfo->num_buffer * linfo->data_len]; 
   aux_args.inImage = &inImage; 
   cast_ray( i, j,
             ray_ox, ray_oy, ray_oz,
             ray_dx, ray_dy, ray_dz,
+            linfo, tree_array,                                  //scene info
+            local_tree, bit_lookup, cumsum, &vis, aux_args);    //utility info
 
-            //scene info
-            linfo, tree_array, 
-
-            //utility info
-            local_tree, bit_lookup, cumsum, &vis,
-
-            //in image
-            aux_args); 
-/*
-  cast_ray( i, j,
-            ray_ox, ray_oy, ray_oz,
-            ray_dx, ray_dy, ray_dz,
-
-            //scene info                               
-            linfo, 
-            tree_array, 
-            alpha_array, 
-            mixture_array,  //mixture_array
-            num_obs_array,  //num_obs_arrya
-            
-            aux_array,                                        //seg_len_array, 
-            &aux_array[linfo->num_buffer * linfo->data_len],   //mean_obs_array,
-            &aux_array[2 * linfo->num_buffer * linfo->data_len],   //vis_array,
-            &aux_array[3 * linfo->num_buffer * linfo->data_len],   //beta_array,
-
-            //utility info
-            local_tree, bit_lookup, cumsum,
-
-            //PREINF SPECIFIC ARGS
-            &inImage,
-
-            //io info
-            output);
-*/
-  
   //store the vis_inf/pre_inf in the image          
   in_image[j*get_global_size(0)+i] = inImage;
 }
 #endif
-
 
 #ifdef BAYES
 typedef struct
 {
   __global float*   alpha; 
   __global uchar8*  mog; 
-  __global ushort4* num_obs; 
   __global int* seg_len;
   __global int* mean_obs; 
   __global int* vis_array;
@@ -294,9 +225,9 @@ bayes_main(__constant  RenderSceneInfo    * linfo,
 
   // check to see if the thread corresponds to an actual pixel as in some
   // cases #of threads will be more than the pixels.
-  if (i>=(*imgdims).z || j>=(*imgdims).w || i<(*imgdims).x || j<(*imgdims).y) {
+  if (i>=(*imgdims).z || j>=(*imgdims).w || i<(*imgdims).x || j<(*imgdims).y) 
     return;
-  }
+  float vis0 = 1.0f;
   float4 inImage = in_image[j*get_global_size(0) + i];
   float norm = inImage.x;
   float vis  = inImage.z;
@@ -317,10 +248,9 @@ bayes_main(__constant  RenderSceneInfo    * linfo,
   AuxArgs aux_args; 
   aux_args.alpha   = alpha_array; 
   aux_args.mog     = mixture_array; 
-  aux_args.num_obs = num_obs_array; 
   aux_args.seg_len = aux_array;
-  aux_args.mean_obs = &aux_array[linfo->num_buffer * linfo->data_len]; 
-  aux_args.vis_array = &aux_array[2 * linfo->num_buffer * linfo->data_len];
+  aux_args.mean_obs   = &aux_array[linfo->num_buffer * linfo->data_len]; 
+  aux_args.vis_array  = &aux_array[2 * linfo->num_buffer * linfo->data_len];
   aux_args.beta_array = &aux_array[3 * linfo->num_buffer * linfo->data_len];
   
   aux_args.ray_bundle_array = ray_bundle_array; 
@@ -332,42 +262,8 @@ bayes_main(__constant  RenderSceneInfo    * linfo,
   cast_ray( i, j,
             ray_ox, ray_oy, ray_oz,
             ray_dx, ray_dy, ray_dz,
-
-            //scene info
-            linfo, tree_array, 
-
-            //utility info
-            local_tree, bit_lookup, cumsum, &vis,
-
-            //in image
-            aux_args); 
-/*
-  cast_ray( i, j,
-            ray_ox, ray_oy, ray_oz,
-            ray_dx, ray_dy, ray_dz,
-
-            //scene info       
-            linfo, 
-            tree_array, 
-            alpha_array, 
-            mixture_array,  //mixture_array
-            num_obs_array,  //num_obs_arrya
-            
-            aux_array,                                        //seg_len_array, 
-            &aux_array[linfo->num_buffer * linfo->data_len],   //mean_obs_array,
-            &aux_array[2 * linfo->num_buffer * linfo->data_len],   //vis_array,
-            &aux_array[3 * linfo->num_buffer * linfo->data_len],   //beta_array,
-            
-            //utility info
-            local_tree, bit_lookup, cumsum,
-
-            //BAYES SPECIFIC ARGUMENTS
-            //factor,raybund,ptrs,cache,cache,image_vect (all NULL)
-            ray_bundle_array, cell_ptrs, cached_vis, norm, &vis, &pre,
-
-            //io info
-            output);
-*/
+            linfo, tree_array,                                  //scene info
+            local_tree, bit_lookup, cumsum, &vis0, aux_args);    //utility info
             
   //write out vis and pre
   in_image[j*get_global_size(0)+i].zw = (float2) (vis, pre); 
