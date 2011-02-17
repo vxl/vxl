@@ -33,10 +33,13 @@ bool boxm2_opencl_render_process::init_kernel(cl_context* context,
   src_paths.push_back(source_dir + "expected_functor.cl");
   src_paths.push_back(source_dir + "ray_bundle_library_opt.cl");
   src_paths.push_back(source_dir + "bit/render_bit_scene.cl");
+  src_paths.push_back(source_dir + "bit/cast_ray_bit.cl");
 
   //set kernel options
-  vcl_string options = "-D INTENSITY ";
-  options += "-D RENDER ";
+  //#define STEP_CELL step_cell_render(mixture_array, alpha_array, data_ptr, d, &vis, &expected_int);
+  vcl_string options = " -D INTENSITY ";
+  options += " -D RENDER ";
+  options += " -D STEP_CELL=step_cell_render(aux_args.mog,aux_args.alpha,data_ptr,d,vis,aux_args.expint)";
   options += opts;
 
   //have kernel construct itself using the context and device

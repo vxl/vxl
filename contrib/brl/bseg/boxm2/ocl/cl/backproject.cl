@@ -37,3 +37,31 @@ bool project(__global float16 * cam, float4 p3d, float2 * p2d)
     (*p2d)=(float2)(u/denom,v/denom);
     return true;
 }
+
+//utility method that uses backproject to output a single ray (6 floats) from a global cam
+bool calc_scene_ray(__constant RenderSceneInfo * linfo, 
+                    __global float16 * camera, 
+                    int i, int j,
+                    float* ray_ox, float* ray_oy, float* ray_oz,
+                    float* ray_dx, float* ray_dy, float* ray_dz)
+{
+  
+  float4 ray_o = (float4) camera[2].s4567; ray_o.w = 1.0f;
+  float4 ray_d = backproject(i, j, camera[0], camera[1], camera[2], ray_o);
+  ray_o = ray_o - linfo->origin; ray_o.w = 1.0f; //translate ray o to zero out scene origin
+  ray_o = ray_o/linfo->block_len; ray_o.w = 1.0f;
+
+  //thresh ray direction components - too small a treshhold causes axis aligned
+  //viewpoints to hang in infinite loop (block loop)
+  float thresh = exp2(-12.0f);
+  if (fabs(ray_d.x) < thresh) ray_d.x = copysign(thresh, ray_d.x);
+  if (fabs(ray_d.y) < thresh) ray_d.y = copysign(thresh, ray_d.y);
+  if (fabs(ray_d.z) < thresh) ray_d.z = copysign(thresh, ray_d.z);
+  ray_d.w = 0.0f; ray_d = normalize(ray_d);
+
+  //store float 3's
+  *ray_ox = ray_o.x;     *ray_oy = ray_o.y;     *ray_oz = ray_o.z;
+  *ray_dx = ray_d.x;     *ray_dy = ray_d.y;     *ray_dz = ray_d.z;
+  
+  
+}

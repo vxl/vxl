@@ -2,11 +2,26 @@
 //Created Sept 30, 2010,
 //Implements the parallel work group segmentation algorithm.
 
+#pragma OPENCL EXTENSION cl_khr_global_int32_base_atomics: enable
 #if NVIDIA
  #pragma OPENCL EXTENSION cl_khr_gl_sharing : enable
 #endif
 
 #ifdef SEGLEN
+typedef struct
+{
+  __global int* seg_len;
+  __global int* mean_obs; 
+
+  __local  short2* ray_bundle_array; 
+  __local  int*    cell_ptrs; 
+  __local  float4* cached_aux; 
+           float   obs; 
+} AuxArgs;  
+
+//forward declare cast ray (so you can use it)
+void cast_ray(int,int,float,float,float,float,float,float,__constant RenderSceneInfo*, 
+              __global int4*,local uchar16*,constant uchar *,local uchar *,float*,AuxArgs); 
 __kernel
 void
 seg_len_main(__constant  RenderSceneInfo    * linfo,
@@ -39,45 +54,49 @@ seg_len_main(__constant  RenderSceneInfo    * linfo,
   int i=0,j=0;
   i=get_global_id(0);
   j=get_global_id(1);
-  // check to see if the thread corresponds to an actual pixel as in some 
-
-  // cases #of threads will be more than the pixels.
-  if (i>=(*imgdims).z || j>=(*imgdims).w || i<(*imgdims).x || j<(*imgdims).y) {
-    return;
-  }
-
+  
+  //grab input image value (also holds vis)
   float4 inImage = in_image[j*get_global_size(0) + i];
   float obs = inImage.x;
   float vis = inImage.z;
   barrier(CLK_LOCAL_MEM_FENCE);
 
+  // cases #of threads will be more than the pixels.
+  if (i>=(*imgdims).z || j>=(*imgdims).w || i<(*imgdims).x || j<(*imgdims).y) 
+    return;
+
   //----------------------------------------------------------------------------
   // we know i,j map to a point on the image,
   // BEGIN RAY TRACE
   //----------------------------------------------------------------------------
-  // ray origin, ray direction, inverse ray direction (make sure ray direction is never axis aligned)
-  float4 ray_o = (float4) camera[2].s4567; ray_o.w = 1.0f;
-  float4 ray_d = backproject(i, j, camera[0], camera[1], camera[2], ray_o);
-  ray_o = ray_o - linfo->origin; ray_o.w = 1.0f; //translate ray o to zero out scene origin
-  ray_o = ray_o/linfo->block_len; ray_o.w = 1.0f;
-
-  //thresh ray direction components - too small a treshhold causes axis aligned
-  //viewpoints to hang in infinite loop (block loop)
-  float thresh = exp2(-12.0f);
-  if (fabs(ray_d.x) < thresh) ray_d.x = copysign(thresh, ray_d.x);
-  if (fabs(ray_d.y) < thresh) ray_d.y = copysign(thresh, ray_d.y);
-  if (fabs(ray_d.z) < thresh) ray_d.z = copysign(thresh, ray_d.z);
-  ray_d.w = 0.0; ray_d = normalize(ray_d);
-
-  //store float 3's
-  float ray_ox = ray_o.x;     float ray_oy = ray_o.y;     float ray_oz = ray_o.z;
-  float ray_dx = ray_d.x;     float ray_dy = ray_d.y;     float ray_dz = ray_d.z;
+  float ray_ox, ray_oy, ray_oz, ray_dx, ray_dy, ray_dz;
+  calc_scene_ray(linfo, camera, i, j, &ray_ox, &ray_oy, &ray_oz, &ray_dx, &ray_dy, &ray_dz);  
 
   //----------------------------------------------------------------------------
   // we know i,j map to a point on the image, have calculated ray
   // BEGIN RAY TRACE
   //----------------------------------------------------------------------------
+  AuxArgs aux_args; 
+  aux_args.seg_len  = aux_array;
+  aux_args.mean_obs = &aux_array[linfo->num_buffer * linfo->data_len]; 
+  aux_args.ray_bundle_array = ray_bundle_array;
+  aux_args.cell_ptrs  = cell_ptrs;
+  aux_args.cached_aux = cached_aux_data; 
+  aux_args.obs = obs; 
+  cast_ray( i, j,
+          ray_ox, ray_oy, ray_oz,
+          ray_dx, ray_dy, ray_dz,
 
+          //scene info
+          linfo, tree_array, 
+
+          //utility info
+          local_tree, bit_lookup, cumsum, &vis,
+
+          //in image
+          aux_args); 
+  
+/*
   cast_ray( i, j,
             ray_ox, ray_oy, ray_oz,
             ray_dx, ray_dy, ray_dz,
@@ -85,16 +104,8 @@ seg_len_main(__constant  RenderSceneInfo    * linfo,
             //scene info                              
             linfo, 
             tree_array, 
-            alpha_array, 
-            0,                                                //mixture_array
-            num_obs_array,                                    //num_obs_arrya
-            aux_array,                                        //seg_len_array, 
-            &aux_array[linfo->num_buffer * linfo->data_len],   //mean_obs_array,
-            0,                //vis_array
-            0,                //beta_array
 
             //utility info
-            local_tree, bit_lookup, cumsum,
 
             //SEGLEN SPECIFIC ARGS
             //factor,raybund,ptrs,cache,cache,image_vect (all NULL)
@@ -102,10 +113,28 @@ seg_len_main(__constant  RenderSceneInfo    * linfo,
 
             //io info
             output);
+*/
 }
 #endif
 
 #ifdef PREINF
+typedef struct
+{
+  __global float* alpha; 
+  __global uchar8* mog; 
+  __global ushort4* num_obs; 
+  __global int* seg_len;
+  __global int* mean_obs; 
+  __global int* vis_array;
+  __global int* beta_array;
+           float4* inImage; 
+} AuxArgs;  
+
+//forward declare cast ray (so you can use it)
+void cast_ray(int,int,float,float,float,float,float,float,__constant RenderSceneInfo*, 
+              __global int4*,local uchar16*,constant uchar *,local uchar *,float*,AuxArgs); 
+
+
 __kernel
 void
 pre_inf_main(__constant  RenderSceneInfo    * linfo,
@@ -135,38 +164,45 @@ pre_inf_main(__constant  RenderSceneInfo    * linfo,
 
   // check to see if the thread corresponds to an actual pixel as in some
   // cases #of threads will be more than the pixels.
-  if (i>=(*imgdims).z || j>=(*imgdims).w || i<(*imgdims).x || j<(*imgdims).y) {
+  if (i>=(*imgdims).z || j>=(*imgdims).w || i<(*imgdims).x || j<(*imgdims).y)
     return;
-  }
   float4 inImage = in_image[j*get_global_size(0) + i];
+  float vis = 1.0f; 
   barrier(CLK_LOCAL_MEM_FENCE);
 
   //----------------------------------------------------------------------------
   // we know i,j map to a point on the image,
   // BEGIN RAY TRACE
   //----------------------------------------------------------------------------
-  // ray origin, ray direction, inverse ray direction (make sure ray direction is never axis aligned)
-  float4 ray_o = (float4) camera[2].s4567; ray_o.w = 1.0f;
-  float4 ray_d = backproject(i, j, camera[0], camera[1], camera[2], ray_o);
-  ray_o = ray_o - linfo->origin; ray_o.w = 1.0f; //translate ray o to zero out scene origin
-  ray_o = ray_o/linfo->block_len; ray_o.w = 1.0f;
-
-  //thresh ray direction components - too small a treshhold causes axis aligned
-  //viewpoints to hang in infinite loop (block loop)
-  float thresh = exp2(-12.0f);
-  if (fabs(ray_d.x) < thresh) ray_d.x = copysign(thresh, ray_d.x);
-  if (fabs(ray_d.y) < thresh) ray_d.y = copysign(thresh, ray_d.y);
-  if (fabs(ray_d.z) < thresh) ray_d.z = copysign(thresh, ray_d.z);
-  ray_d.w = 0.0; ray_d = normalize(ray_d);
-
-  //store float 3's
-  float ray_ox = ray_o.x;     float ray_oy = ray_o.y;     float ray_oz = ray_o.z;
-  float ray_dx = ray_d.x;     float ray_dy = ray_d.y;     float ray_dz = ray_d.z;
+  float ray_ox, ray_oy, ray_oz, ray_dx, ray_dy, ray_dz;
+  calc_scene_ray(linfo, camera, i, j, &ray_ox, &ray_oy, &ray_oz, &ray_dx, &ray_dy, &ray_dz);  
 
   //----------------------------------------------------------------------------
   // we know i,j map to a point on the image, have calculated ray
   // BEGIN RAY TRACE
   //----------------------------------------------------------------------------
+  AuxArgs aux_args; 
+  aux_args.alpha   = alpha_array; 
+  aux_args.mog     = mixture_array; 
+  aux_args.num_obs = num_obs_array; 
+  aux_args.seg_len = aux_array;
+  aux_args.mean_obs = &aux_array[linfo->num_buffer * linfo->data_len]; 
+  aux_args.vis_array = &aux_array[2 * linfo->num_buffer * linfo->data_len];
+  aux_args.beta_array = &aux_array[3 * linfo->num_buffer * linfo->data_len];
+  aux_args.inImage = &inImage; 
+  cast_ray( i, j,
+            ray_ox, ray_oy, ray_oz,
+            ray_dx, ray_dy, ray_dz,
+
+            //scene info
+            linfo, tree_array, 
+
+            //utility info
+            local_tree, bit_lookup, cumsum, &vis,
+
+            //in image
+            aux_args); 
+/*
   cast_ray( i, j,
             ray_ox, ray_oy, ray_oz,
             ray_dx, ray_dy, ray_dz,
@@ -191,6 +227,7 @@ pre_inf_main(__constant  RenderSceneInfo    * linfo,
 
             //io info
             output);
+*/
   
   //store the vis_inf/pre_inf in the image          
   in_image[j*get_global_size(0)+i] = inImage;
@@ -199,6 +236,28 @@ pre_inf_main(__constant  RenderSceneInfo    * linfo,
 
 
 #ifdef BAYES
+typedef struct
+{
+  __global float*   alpha; 
+  __global uchar8*  mog; 
+  __global ushort4* num_obs; 
+  __global int* seg_len;
+  __global int* mean_obs; 
+  __global int* vis_array;
+  __global int* beta_array;
+  
+  __local  short2* ray_bundle_array; 
+  __local  int*    cell_ptrs; 
+  __local  float*  cached_vis; 
+           float   norm; 
+           float*  ray_vis; 
+           float*  ray_pre; 
+} AuxArgs;  
+
+//forward declare cast ray (so you can use it)
+void cast_ray(int,int,float,float,float,float,float,float,__constant RenderSceneInfo*, 
+              __global int4*,local uchar16*,constant uchar *,local uchar *,float*,AuxArgs); 
+
 __kernel
 void
 bayes_main(__constant  RenderSceneInfo    * linfo,
@@ -248,28 +307,41 @@ bayes_main(__constant  RenderSceneInfo    * linfo,
   // we know i,j map to a point on the image,
   // BEGIN RAY TRACE
   //----------------------------------------------------------------------------
-  // ray origin, ray direction, inverse ray direction (make sure ray direction is never axis aligned)
-  float4 ray_o = (float4) camera[2].s4567; ray_o.w = 1.0f;
-  float4 ray_d = backproject(i, j, camera[0], camera[1], camera[2], ray_o);
-  ray_o = ray_o - linfo->origin; ray_o.w = 1.0f; //translate ray o to zero out scene origin
-  ray_o = ray_o/linfo->block_len; ray_o.w = 1.0f;
-
-  //thresh ray direction components - too small a treshhold causes axis aligned
-  //viewpoints to hang in infinite loop (block loop)
-  float thresh = exp2(-12.0f);
-  if (fabs(ray_d.x) < thresh) ray_d.x = copysign(thresh, ray_d.x);
-  if (fabs(ray_d.y) < thresh) ray_d.y = copysign(thresh, ray_d.y);
-  if (fabs(ray_d.z) < thresh) ray_d.z = copysign(thresh, ray_d.z);
-  ray_d.w = 0.0; ray_d = normalize(ray_d);
-
-  //store float 3's
-  float ray_ox = ray_o.x;     float ray_oy = ray_o.y;     float ray_oz = ray_o.z;
-  float ray_dx = ray_d.x;     float ray_dy = ray_d.y;     float ray_dz = ray_d.z;
-
+  float ray_ox, ray_oy, ray_oz, ray_dx, ray_dy, ray_dz;
+  calc_scene_ray(linfo, camera, i, j, &ray_ox, &ray_oy, &ray_oz, &ray_dx, &ray_dy, &ray_dz);  
+  
   //----------------------------------------------------------------------------
   // we know i,j map to a point on the image, have calculated ray
   // BEGIN RAY TRACE
   //----------------------------------------------------------------------------
+  AuxArgs aux_args; 
+  aux_args.alpha   = alpha_array; 
+  aux_args.mog     = mixture_array; 
+  aux_args.num_obs = num_obs_array; 
+  aux_args.seg_len = aux_array;
+  aux_args.mean_obs = &aux_array[linfo->num_buffer * linfo->data_len]; 
+  aux_args.vis_array = &aux_array[2 * linfo->num_buffer * linfo->data_len];
+  aux_args.beta_array = &aux_array[3 * linfo->num_buffer * linfo->data_len];
+  
+  aux_args.ray_bundle_array = ray_bundle_array; 
+  aux_args.cell_ptrs = cell_ptrs; 
+  aux_args.cached_vis = cached_vis; 
+  aux_args.norm = norm; 
+  aux_args.ray_vis = &vis; 
+  aux_args.ray_pre = &pre; 
+  cast_ray( i, j,
+            ray_ox, ray_oy, ray_oz,
+            ray_dx, ray_dy, ray_dz,
+
+            //scene info
+            linfo, tree_array, 
+
+            //utility info
+            local_tree, bit_lookup, cumsum, &vis,
+
+            //in image
+            aux_args); 
+/*
   cast_ray( i, j,
             ray_ox, ray_oy, ray_oz,
             ray_dx, ray_dy, ray_dz,
@@ -295,6 +367,7 @@ bayes_main(__constant  RenderSceneInfo    * linfo,
 
             //io info
             output);
+*/
             
   //write out vis and pre
   in_image[j*get_global_size(0)+i].zw = (float2) (vis, pre); 

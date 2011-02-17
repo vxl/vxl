@@ -33,11 +33,17 @@ bool boxm2_opencl_change_detection_process::init_kernel(cl_context* context,
   src_paths.push_back(source_dir + "expected_functor.cl");
   src_paths.push_back(source_dir + "ray_bundle_library_opt.cl");
   src_paths.push_back(source_dir + "bit/render_bit_scene.cl");
+  src_paths.push_back(source_dir + "bit/cast_ray_bit.cl");
+
 
   //set kernel options
-  vcl_string options = "-D INTENSITY ";
-  options += "-D NVIDIA ";
-  options += "-D CHANGE ";
+  vcl_string options = " -D INTENSITY ";
+  options += " -D NVIDIA ";
+  options += " -D CHANGE ";
+  options += " -D STEP_CELL=step_cell_change_detection_uchar8_w_expected(\
+               aux_args.mog,aux_args.alpha,data_ptr,d,vis,aux_args.expint,\
+               aux_args.exp_prob_int,aux_args.intensity,aux_args.exp_intensity)"; 
+
   options += opts;
 
   //have kernel construct itself using the context and device

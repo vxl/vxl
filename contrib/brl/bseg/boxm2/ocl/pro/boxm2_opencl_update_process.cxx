@@ -32,33 +32,38 @@ bool boxm2_opencl_update_process::init_kernel(cl_context* context,
   src_paths.push_back(source_dir + "backproject.cl");
   src_paths.push_back(source_dir + "statistics_library_functions.cl");
   src_paths.push_back(source_dir + "ray_bundle_library_opt.cl");
-  src_paths.push_back(source_dir + "bit/cast_ray_bit.cl");
   src_paths.push_back(source_dir + "bit/update_kernels.cl");
+  src_paths.push_back(source_dir + "bit/cast_ray_bit.cl");
 
   //compilation options
-  vcl_string options = "-D INTENSITY ";
-  options += "-D NVIDIA ";
+  vcl_string options = " -D INTENSITY ";
+  options += " -D NVIDIA ";
+  options += " -D STEP_CELL=; "; 
   options += opts;
 
   //create all passes
   bocl_kernel* seg_len = new bocl_kernel();
-  seg_len->create_kernel(context_, device, src_paths, "seg_len_main", options+" -D SEGLEN -D ATOMIC_OPT", "update::seg_len");
+  seg_len->create_kernel(context_, device, src_paths, "seg_len_main", options+" -D SEGLEN ", "update::seg_len");
   update_kernels_.push_back(seg_len);
 
   bocl_kernel* pre_inf = new bocl_kernel();
-  pre_inf->create_kernel(context_, device, src_paths, "pre_inf_main", options+" -D PREINF -D ATOMIC_OPT", "update::pre_inf");
+  pre_inf->create_kernel(context_, device, src_paths, "pre_inf_main", options+" -D PREINF ", "update::pre_inf");
   update_kernels_.push_back(pre_inf);
 
   //may need DIFF LIST OF SOURCES FOR THIS GUY
+  src_paths.pop_back();  //remove 'bit/cast_ray_bit.cl"
   bocl_kernel* proc_img = new bocl_kernel();
   proc_img->create_kernel(context_, device, src_paths, "proc_norm_image", options, "update::proc_norm_image");
   update_kernels_.push_back(proc_img);
 
+  //push back cast_ray_bit
+  src_paths.push_back(source_dir + "bit/cast_ray_bit.cl");
   bocl_kernel* bayes_main = new bocl_kernel();
-  bayes_main->create_kernel(context_, device, src_paths, "bayes_main", options+" -D BAYES -D ATOMIC_OPT ", "update::bayes_main");
+  bayes_main->create_kernel(context_, device, src_paths, "bayes_main", options+" -D BAYES ", "update::bayes_main");
   update_kernels_.push_back(bayes_main);
 
   //may need DIFF LIST OF SOURCES FOR THSI GUY TOO
+  src_paths.pop_back();  //remove 'bit/cast_ray_bit.cl"
   bocl_kernel* update = new bocl_kernel();
   update->create_kernel(context_, device, src_paths, "update_bit_scene_main", options, "update::update_main");
   update_kernels_.push_back(update);
