@@ -172,7 +172,7 @@ test_single_thread_read_bandwidth(__global uint * len, __global float4* input_ar
     for (int i=0;i<worksize;i++)
     {
       temp=input_array[gid+i];
-      flag=flag && temp.x==(float)i &&  temp.y==0.0 && temp.z==0.0 && temp.w==0;
+      flag=flag && temp.x==(float)i &&  temp.y==0.0 && temp.z==0.0 && temp.w==0.0;
     }
     if (flag)
       result_array[gid]=(float)worksize;
@@ -188,15 +188,12 @@ test_workgroup_uncoalesced_read_bandwidth(__constant uint * len, __global float4
 {
   int gid=get_global_id(0);
   int lid=get_local_id(0);
-
   int worksize=get_local_size(0);
   int globalsize=get_global_size(0);
 
-  bool flag=true;
-
   int index=(gid+lid*worksize)%globalsize;
   float4 temp=input_array[index];
-  flag=flag && temp.x==(float)lid && temp.y==0.0 && temp.z==0.0 && temp.w==0;
+  bool flag=temp.x==(float)lid && temp.y==0.0 && temp.z==0.0 && temp.w==0;
   if (lid==0)
   {
     if (flag)
@@ -214,9 +211,9 @@ test_workgroup_coalesced_read_bandwidth(__constant uint * len, __global float4* 
   int lid=get_local_id(0);
   int globalsize=get_global_size(0);
   int worksize=get_local_size(0);
-  bool flag=true;
+  
   float4 temp=input_array[gid];
-  flag=flag && temp.x==(float)lid && temp.y==0.0 && temp.z==0.0 && temp.w==0.0;
+  bool flag=temp.x==(float)lid && temp.y==0.0 && temp.z==0.0 && temp.w==0.0;
   if (lid==0)
   {
     if (flag)
@@ -232,8 +229,8 @@ test_single_thread_read_bandwidth_local_meory(__constant uint * len, __global fl
 {
   int gid=get_global_id(0);
   int lid=get_local_id(0);
-
   int worksize=get_local_size(0);
+  
   float res=0.0;
   bool flag=true;
   if (lid==0)
@@ -257,16 +254,13 @@ test_workgroup_uncoalesced_read_bandwidth_local_meory(__constant uint * len, __g
 {
   int gid=get_global_id(0);
   int lid=get_local_id(0);
-
   int worksize=get_local_size(0);
   int globalsize=get_global_size(0);
 
-  bool flag=true;
   int index=(gid+lid*worksize)%globalsize;
-
   float4 temp=input_array[index];
   local_mem[lid]=temp.x;
-  flag=flag && local_mem[lid]==(float)lid && temp.y==0.0 && temp.z==0.0 && temp.w==0;
+  bool flag=local_mem[lid]==(float)lid && temp.y==0.0 && temp.z==0.0 && temp.w==0;
   if (lid==0)
   {
     if (flag)
@@ -284,11 +278,10 @@ test_workgroup_coalesced_read_bandwidth_local_memory(__constant uint * len, __gl
   int lid=get_local_id(0);
   int globalsize=get_global_size(0);
   int worksize=get_local_size(0);
-  bool flag=true;
 
   float4 temp=input_array[gid];
   local_mem[lid]=temp.x;
-  flag=flag && local_mem[lid]==(float)lid && temp.y==0.0 && temp.z==0.0 && temp.w==0;
+  bool flag=local_mem[lid]==(float)lid && temp.y==0.0 && temp.z==0.0 && temp.w==0;
   if (lid==0)
   {
     if (flag)
@@ -305,7 +298,6 @@ test_workgroup_prefetch_bandwidth_local_memory(__constant uint * len, __global f
   int lid=get_local_id(0);
   int globalsize=get_global_size(0);
   int worksize=get_local_size(0);
-  bool flag=true;
 
   if(lid==0)
   {
@@ -317,7 +309,7 @@ test_workgroup_prefetch_bandwidth_local_memory(__constant uint * len, __global f
   wait_group_events (1, &eventid);
 
  
-  flag=flag && local_mem[lid].x==(float)lid && local_mem[lid].y==0.0 && local_mem[lid].z==0.0 && local_mem[lid].w==0;
+  bool flag=local_mem[lid].x==(float)lid && local_mem[lid].y==0.0 && local_mem[lid].z==0.0 && local_mem[lid].w==0;
   if (lid==0)
   {
     if (flag)
@@ -363,10 +355,9 @@ test_workgroup_coalesced_read_bandwidth_image(__constant uint * len, __read_only
 {
   int gid=get_global_id(0);
   int lid=get_local_id(0);
-
   int worksize=get_local_size(0);
   int globalsize=get_global_size(0);
-  bool flag=true;
+  
   uint w=get_image_width(input_array);
   int2 pos;
   pos.y=gid/w;
@@ -374,7 +365,7 @@ test_workgroup_coalesced_read_bandwidth_image(__constant uint * len, __read_only
 
   float4 temp;
   temp=read_imagef(input_array,RowSampler,pos);
-  flag=flag && temp.x==(float)lid && temp.y==0.0 && temp.z==0.0 && temp.w==0;
+  bool flag=temp.x==(float)lid && temp.y==0.0 && temp.z==0.0 && temp.w==0;
   if (lid==0)
   {
     if (flag)

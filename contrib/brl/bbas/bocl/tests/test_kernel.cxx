@@ -7,10 +7,10 @@ bool test_multiply_kernel()
 {
   //initialize a buffer
   int length = 128*128; 
-  float* a = new float[length]; 
-  for(int i=0; i<length; ++i) a[i] = (float) i;
-  float* b = new float[length];
-  for(int i=0; i<length; ++i) b[i] = (float) i;
+  int* a = new int[length]; 
+  for(int i=0; i<length; ++i) a[i] = (int) i;
+  int* b = new int[length];
+  for(int i=0; i<length; ++i) b[i] = (int) i;
 
   //get manager
   bocl_command_queue_mgr* mgr = bocl_command_queue_mgr::instance(); 
@@ -25,9 +25,9 @@ bool test_multiply_kernel()
   test_kernel.create_kernel( &mgr->context(), &mgr->devices()[0], paths, "test_multiply", "", "bocl test multiply kernel");
   
   //create in and out mems
-  bocl_mem a_mem(mgr->context(), a, length * sizeof(float), "test float buffer");
+  bocl_mem a_mem(mgr->context(), a, length * sizeof(int), "test int buffer");
   a_mem.create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR); 
-  bocl_mem b_mem(mgr->context(), b, length * sizeof(float), "test float buffer");
+  bocl_mem b_mem(mgr->context(), b, length * sizeof(int), "test int buffer");
   b_mem.create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR); 
   
   //set up thread arrays
@@ -45,7 +45,7 @@ bool test_multiply_kernel()
   b_mem.read_to_buffer(queue); 
   for(int i=0; i<length; ++i) {
     if(b[i] != i*i) 
-      return false;
+     return false;
   }
   
   //clean up buffer
