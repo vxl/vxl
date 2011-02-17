@@ -114,7 +114,7 @@ inline void brip_gauss_filter( const vil_image_view<srcT>& src_im,
                   -int(k_size)/2, int(k_size-1)/2,
                   destT(0), option, option);
 
-  delete kernel;
+  delete [] kernel;
 }
 
 #endif // brip_vil_ops_h_
