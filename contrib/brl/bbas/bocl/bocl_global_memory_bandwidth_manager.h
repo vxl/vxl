@@ -46,7 +46,7 @@ class bocl_global_memory_bandwidth_manager : public bocl_manager<bocl_global_mem
   //: diff from run_kernel allocated array of float4 in local memoty
   bool run_kernel_prefetch();
 
-  int create_kernel(vcl_string const& kernel_name, vcl_string src_path);
+  int create_kernel(vcl_string const& kernel_name, vcl_string src_path, vcl_string options);
 
   float time_taken(){return time_in_secs_;}
   bocl_kernel kernel() {return kernel_;}

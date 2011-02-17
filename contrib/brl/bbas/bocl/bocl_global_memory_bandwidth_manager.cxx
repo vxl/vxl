@@ -2,6 +2,8 @@
 //
 #include <vcl_cstdio.h>
 
+#define local_workgroup_size 32
+
 bocl_global_memory_bandwidth_manager::~bocl_global_memory_bandwidth_manager()
 {
 }
@@ -12,10 +14,10 @@ bool bocl_global_memory_bandwidth_manager::setup_array(unsigned len)
   create_buffer((void**) &array_, "cl_float4",len * sizeof(cl_float4), 16);
   create_buffer((void**) &cl_len_, "cl_uint", sizeof(cl_uint), 16);
   unsigned i=0;
-  unsigned grpsize=this->group_size();
+  //unsigned grpsize=this->group_size();
   while (i<len_*4)
   {
-    array_[i]=(float)((i/4)%grpsize);
+    array_[i]=(float)((i/4)%local_workgroup_size);
     array_[i+1]=0.0f;
     array_[i+2]=0.0f;
     array_[i+3]=0.0f;
@@ -74,6 +76,7 @@ void bocl_global_memory_bandwidth_manager::release_buffers()
   result_array_buf_->release_memory();
   cl_len_buf_->release_memory();
   result_flag_buf_->release_memory();
+  kernel_.clear_args();
 }
 
 bool bocl_global_memory_bandwidth_manager::run_kernel()
@@ -82,7 +85,7 @@ bool bocl_global_memory_bandwidth_manager::run_kernel()
 
   // Create and initialize memory object
   create_buffers();
-
+  
   // -- Set appropriate arguments to the kernel --
   kernel_.set_arg( cl_len_buf_ );  
   kernel_.set_arg( array_buf_ );
@@ -103,8 +106,8 @@ bool bocl_global_memory_bandwidth_manager::run_kernel()
   if (!check_val(status,CL_SUCCESS,"clGetKernelWorkGroupInfo CL_KERNEL_WORK_GROUP_SIZE, failed."))
     return SDK_FAILURE;
 
-  vcl_size_t globalThreads[]= {RoundUp(len_,32)};
-  vcl_size_t localThreads[] = {32};
+  vcl_size_t globalThreads[]= {RoundUp(len_,local_workgroup_size)};
+  vcl_size_t localThreads[] = {local_workgroup_size};
 
   if (used_local_memory > this->total_local_memory())
   {
@@ -163,8 +166,8 @@ bool bocl_global_memory_bandwidth_manager::run_kernel_prefetch()
   if (!check_val(status,CL_SUCCESS,"clGetKernelWorkGroupInfo CL_KERNEL_WORK_GROUP_SIZE, failed."))
     return SDK_FAILURE;
 
-  vcl_size_t globalThreads[]= {RoundUp(len_,this->group_size())};
-  vcl_size_t localThreads[] = {this->group_size()};
+  vcl_size_t globalThreads[]= {RoundUp(len_,local_workgroup_size)};
+  vcl_size_t localThreads[] = {local_workgroup_size};//this->group_size()
 
   if (used_local_memory > this->total_local_memory())
   {
@@ -177,7 +180,7 @@ bool bocl_global_memory_bandwidth_manager::run_kernel_prefetch()
   if (!check_val(status,CL_SUCCESS,"Falied in command queue creation" + error_to_string(status)))
     return false;
 
-  kernel_.execute(command_queue_, 2, localThreads, globalThreads); 
+  kernel_.execute(command_queue_, 1, localThreads, globalThreads); 
   status = clFinish(command_queue_);
   time_in_secs_ = kernel_.exec_time();
   if (!check_val(status,CL_SUCCESS,"clFinish failed."+error_to_string(status)))
@@ -201,7 +204,7 @@ bool bocl_global_memory_bandwidth_manager::run_kernel_using_image()
   cl_int status = CL_SUCCESS;
   inputformat.image_channel_order = CL_RGBA;
   inputformat.image_channel_data_type = CL_FLOAT;
-
+  
   // Create and initialize memory objects
   array_buf_ = new bocl_mem(this->context(), array_, curr_info_.image2d_max_width_ * sizeof(cl_float4), "array_buf_");
   array_buf_->create_image_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR,&inputformat,
@@ -236,8 +239,8 @@ bool bocl_global_memory_bandwidth_manager::run_kernel_using_image()
   if (!check_val(status,CL_SUCCESS,"clGetKernelWorkGroupInfo CL_KERNEL_WORK_GROUP_SIZE, failed."))
     return SDK_FAILURE;
 
-  vcl_size_t globalThreads[]= {RoundUp(len_,this->group_size())};
-  vcl_size_t localThreads[] = {this->group_size()};
+  vcl_size_t globalThreads[]= {RoundUp(len_,local_workgroup_size)};
+  vcl_size_t localThreads[] = {local_workgroup_size};
 
   if (used_local_memory > this->total_local_memory())
   {
@@ -250,7 +253,7 @@ bool bocl_global_memory_bandwidth_manager::run_kernel_using_image()
   if (!check_val(status,CL_SUCCESS,"Falied in command queue creation" + error_to_string(status)))
     return false;
  
-  kernel_.execute(command_queue_, 2, localThreads, globalThreads);
+  kernel_.execute(command_queue_, 1, localThreads, globalThreads);
   status = clFinish(command_queue_);
   time_in_secs_ = kernel_.exec_time();
   if (!check_val(status,CL_SUCCESS,"clFinish failed."+error_to_string(status)))
@@ -264,16 +267,16 @@ bool bocl_global_memory_bandwidth_manager::run_kernel_using_image()
   if (!check_val(status,CL_SUCCESS,"clReleaseCommandQueue failed."))
     return SDK_FAILURE;
 
-  array_buf_->release_memory();
-  result_array_buf_->release_memory();
-  cl_len_buf_->release_memory();
-  result_flag_buf_->release_memory();
+  release_buffers();
   return SDK_SUCCESS;
 }
 
-int bocl_global_memory_bandwidth_manager::create_kernel(vcl_string const& kernel_name, vcl_string src_path)
+int bocl_global_memory_bandwidth_manager::create_kernel(vcl_string const& kernel_name, 
+                                                        vcl_string src_path, 
+                                                        vcl_string options)
 {
   vcl_vector<vcl_string> src_paths;
   src_paths.push_back(src_path);
-  return kernel_.create_kernel(&this->context(),&this->devices()[0], src_paths, kernel_name, "", "the kernel");
+  return kernel_.create_kernel(&this->context(),&this->devices()[0], 
+    src_paths, kernel_name, options, "the kernel");
 }
