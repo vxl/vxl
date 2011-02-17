@@ -42,7 +42,8 @@ bool bocl_mem::create_image_buffer(const cl_mem_flags& flags, const cl_image_for
   buffer_ = clCreateImage2D(this->context_, flags, format, width, height,
                             this->num_bytes_, this->cpu_buf_, &status);
   if (!check_val(status, MEM_FAILURE, "clCreateBuffer failed: " + this->id_))
-    return MEM_FAILURE;;
+    return MEM_FAILURE;
+  return MEM_SUCCESS;
 }
 
 bool bocl_mem::release_memory()
@@ -158,7 +159,7 @@ bool bocl_mem::finish_write_to_buffer(const cl_command_queue& cmdQueue)
 //: THIS REQUIRES the queue to be finished
 float bocl_mem::exec_time()
 {
-  long tend, tstart;
+  cl_ulong tend, tstart;
   int status = clGetEventProfilingInfo(ceEvent_,CL_PROFILING_COMMAND_END,sizeof(cl_ulong),&tend,0);
   status = clGetEventProfilingInfo(ceEvent_,CL_PROFILING_COMMAND_START,sizeof(cl_ulong),&tstart,0);
   if ( !check_val(status,CL_SUCCESS,"clFinish/ProfilingInfo failed (" + id_ + ") " +error_to_string(status)) )
