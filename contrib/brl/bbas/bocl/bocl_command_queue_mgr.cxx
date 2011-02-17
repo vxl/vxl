@@ -125,7 +125,6 @@ bool bocl_command_queue_mgr::test_async_command_queue()
   for(int i=0; i<numTrials; i++)
   {
     //execute kernel and TIME
-    vcl_cout<<"KERNEL A ARG COUNT: "<<kernel_a_.arg_cnt()<<vcl_endl;
     kernel_a_.execute( queue_a_, 2, lThreads, gThreads); 
     pinned_in_->write_to_buffer( queue_a_ );
     clFinish(queue_a_);
@@ -178,7 +177,7 @@ bool bocl_command_queue_mgr::test_async_command_queue()
       clEnqueueWriteBuffer( queues_[next], pinned_in_->buffer(),
                             CL_FALSE, off, incr*sizeof(float),
                             (void*) &buff[memHalf_], 0, NULL, NULL);
-      
+      kernels_[k].clear_args();
     }
   }
   for(int i=0; i<NUM_QUEUES; i++) clFinish(queues_[i]);
@@ -194,7 +193,6 @@ bool bocl_command_queue_mgr::test_async_command_queue()
       vcl_cout<<"CONTROL: "<<control[i]<<" != OUT: "<<out[i]<<vcl_endl;
       break;
     }
-    vcl_cout<<"out: "<<out[i]<<" for i:"<<i<<vcl_endl;
   }
   
   //delete buffer_a_;
