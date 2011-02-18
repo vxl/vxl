@@ -816,7 +816,7 @@ extract_histograms(vcl_vector<bsta_histogram<float> >& hists)
     vidl_frame_sptr frame = video_istr_->current_frame();
     if (!frame)
       return false;
-    bsta_histogram<float> h(0, 255.0f, 256);
+    bsta_histogram<float> h(0.0f, 255.0f, 256);
     vil_image_view_base_sptr fb = vidl_convert_wrap_in_view(*frame);
     vil_image_view<float> fimg = *vil_convert_cast(float(), fb);
     unsigned ni = fimg.ni(), nj = fimg.nj();
