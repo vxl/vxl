@@ -1,9 +1,14 @@
-ADD_EXECUTABLE( bocl_test_all
+SET( bocl_test_sources
   test_driver.cxx
   test_global_io_bandwidth.cxx
   test_command_queue.cxx
   test_kernel.cxx
+  bocl_global_memory_bandwidth_manager.h bocl_global_memory_bandwidth_manager.cxx
+  bocl_command_queue_mgr.h  bocl_command_queue_mgr.cxx
   )
+
+AUX_SOURCE_DIRECTORY(Templates bocl_test_sources)
+ADD_EXECUTABLE(bocl_test_all ${bocl_test_sources})
 
 TARGET_LINK_LIBRARIES( bocl_test_all bocl testlib vnl vpgl vgl_xio vgl_algo vil vgl vpl vul)
 

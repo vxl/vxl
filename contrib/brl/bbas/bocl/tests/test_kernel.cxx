@@ -1,7 +1,7 @@
 #include <testlib/testlib_test.h>
 #include <testlib/testlib_root_dir.h>
 #include <bocl/bocl_mem.h>
-#include <bocl/bocl_command_queue_mgr.h>
+#include "bocl_command_queue_mgr.h"
 
 bool test_multiply_kernel()
 {

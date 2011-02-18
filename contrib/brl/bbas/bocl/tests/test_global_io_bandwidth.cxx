@@ -1,6 +1,6 @@
 #include <testlib/testlib_test.h>
 #include <testlib/testlib_root_dir.h>
-#include <bocl/bocl_global_memory_bandwidth_manager.h>
+#include "bocl_global_memory_bandwidth_manager.h"
 
 bool test_atom_cmpxchg(unsigned len, float & bandwidth)
 {
