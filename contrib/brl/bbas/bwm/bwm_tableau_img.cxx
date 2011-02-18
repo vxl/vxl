@@ -103,7 +103,9 @@ void bwm_tableau_img::create_point()
 void bwm_tableau_img::create_pointset()
 {
   vcl_vector<vsol_point_2d_sptr> pts;
-  this->pick_point_set(pts, 10);
+
+  bool picked = this->pick_point_set(pts, 1000);
+
   for (vcl_vector<vsol_point_2d_sptr>::iterator pit = pts.begin();
        pit != pts.end(); ++pit)
     my_observer_->create_point(*pit);
@@ -211,7 +213,32 @@ void bwm_tableau_img::save_spatial_objects_2d()
   }
   vsl_b_write(ostr, sos);
 }
-
+void bwm_tableau_img::save_pointset_2d_ascii()
+{
+  vcl_vector<vsol_spatial_object_2d_sptr> sos = 
+    my_observer_->get_spatial_objects_2d();
+  if(!sos.size())
+    return;
+  vcl_vector<vsol_point_2d_sptr> pts;
+  for(unsigned i = 0; i<sos.size(); ++i){
+    vsol_spatial_object_2d_sptr so = sos[i];
+    vsol_point_2d_sptr pt = so->cast_to_point();
+    if(pt)
+      pts.push_back(pt);
+  }
+  vgui_dialog save_dlg("Save Pointset");
+  vcl_string ext, pt_filename;
+  save_dlg.file("Point Filename", ext, pt_filename);
+  if(!save_dlg.ask())
+    return;
+  vcl_ofstream os(pt_filename.c_str());
+  if(os.is_open()){
+    os << pts.size()<< '\n';
+    for(unsigned i = 0; i< pts.size(); i++)
+      os << pts[i]->x() << ' ' << pts[i]->y() << '\n';
+    os.close();
+  }
+}
 
 void bwm_tableau_img::help_pop()
 {

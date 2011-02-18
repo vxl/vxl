@@ -85,6 +85,7 @@ class bwm_tableau_img : public bwm_tableau, public bgui_picker_tableau
 
   //: utilities
   void save_spatial_objects_2d();
+  void save_pointset_2d_ascii();
 
   //: internal detail
   void set_viewer(vgui_viewer2D_tableau_sptr viewer) { my_observer_->set_viewer(viewer); }

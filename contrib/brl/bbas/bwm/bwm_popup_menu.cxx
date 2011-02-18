@@ -72,7 +72,9 @@ void bwm_popup_menu::get_menu(vgui_menu &menu)
                new vgui_command_simple<bwm_tableau_img>(img_tab,
                                                         &bwm_tableau_img::save_spatial_objects_2d));
   submenu.separator();
-
+  submenu.add( "Save Pointset 2D (ascii)",
+               new vgui_command_simple<bwm_tableau_img>(img_tab,
+                                                        &bwm_tableau_img::save_pointset_2d_ascii));
   // Delete 2D submenu
   vgui_menu selmenu;
   selmenu.add( "Delete Selected",
@@ -189,6 +191,11 @@ void bwm_popup_menu::get_menu(vgui_menu &menu)
     mesh_submenu.separator();
 
     mesh_submenu.add("Set Draw Mode", draw_menu);
+    mesh_submenu.separator();
+
+    mesh_submenu.add("Load Mesh",
+                     new vgui_command_simple<bwm_tableau_cam>(cam_tab,&bwm_tableau_cam::load_mesh),
+                     vgui_key('m'), vgui_modifier(vgui_SHIFT) );
     mesh_submenu.separator();
 
     mesh_submenu.add("Create Terrain",
