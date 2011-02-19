@@ -86,8 +86,8 @@ class bwm_observer_cam : public bwm_observer_vgui
                       vgl_plane_3d<double> proj_plane);
 
   //: Special case of backprojecting onto the projection plane
-  void backproj_poly(vsol_polygon_2d_sptr poly2d,
-                     vsol_polygon_3d_sptr& poly3d) {
+  virtual void backproj_poly(vsol_polygon_2d_sptr poly2d,
+                             vsol_polygon_3d_sptr& poly3d) {
     backproj_poly(poly2d, poly3d, proj_plane_);
   }
 
@@ -96,14 +96,14 @@ class bwm_observer_cam : public bwm_observer_vgui
                      vsol_polygon_3d_sptr& poly3d,
                      double dist);
 
-  void proj_point(vgl_point_3d<double> world_pt,
-                  vgl_point_2d<double> &image_pt);
+  virtual void proj_point(vgl_point_3d<double> world_pt,
+                          vgl_point_2d<double> &image_pt);
 
-  void proj_line(vsol_line_3d_sptr line_3d,
-                 vsol_line_2d_sptr &line_2d);
+  virtual void proj_line(vsol_line_3d_sptr line_3d,
+                         vsol_line_2d_sptr &line_2d);
 
-  void proj_poly(vsol_polygon_3d_sptr poly3d,
-                 vsol_polygon_2d_sptr& poly2d);
+  virtual void proj_poly(vsol_polygon_3d_sptr poly3d,
+                         vsol_polygon_2d_sptr& poly2d);
 
 #if 0
   void proj_poly(vcl_vector<bmsh3d_vertex*> verts,

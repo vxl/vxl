@@ -1222,7 +1222,7 @@ SoSeparator* bwm_observable_mesh::convert_coin3d(bool b_shape_hints,
 }
 #endif
 
-void bwm_observable_mesh::load_from(vcl_string filename)
+bool bwm_observable_mesh::load_from(vcl_string filename)
 {
   vcl_string msg = "new";
   if (object_) {
@@ -1233,13 +1233,14 @@ void bwm_observable_mesh::load_from(vcl_string filename)
   object_ = new bmsh3d_mesh_mc();
   if (!bmsh3d_load_ply(object_,filename.data())) {
     vcl_cerr << "Error loading mesh from " << filename << '\n';
-    return;
+    return false;
   }
 
   // build half-edge structure
   object_->IFS_to_MHE();
   object_->orient_face_normals();
   notify_observers(msg);
+  return true;
 }
 
 void bwm_observable_mesh::save(const char* filename, bgeo_lvcs* lvcs)

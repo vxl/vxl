@@ -90,6 +90,11 @@ void bwm_observer_mgr::attach(bwm_observable_sptr obs)
     obs->attach(observers_[i]);
 }
 
+void bwm_observer_mgr::detach(bwm_observable_sptr obs)
+{
+  for (unsigned i=0; i<observers_.size(); i++)
+    obs->detach(observers_[i]);
+}
 void bwm_observer_mgr::remove(bwm_observer* observer)
 {
   for (unsigned i=0; i<observers_.size(); i++)

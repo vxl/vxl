@@ -45,6 +45,9 @@ class bwm_observer_mgr
   //: attach the observable to all observers
   void attach(bwm_observable_sptr obs);
 
+  //: detach the observable from all observers
+  void detach(bwm_observable_sptr obs);
+
   bool comp_avg_camera_center(vgl_point_3d<double> &cam_center);
 
   // Correspondence methods

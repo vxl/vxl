@@ -101,6 +101,11 @@ void bwm_tableau_video::clear_video_corrs_display()
   my_observer_->clear_video_corrs_display();
 }
 
+void bwm_tableau_video::toggle_corr_display()
+{
+  my_observer_->toggle_corr_display();
+}
+
 void bwm_tableau_video::toggle_world_pt_display()
 {
   my_observer_->toggle_world_pt_display();

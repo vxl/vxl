@@ -23,6 +23,7 @@
 #include <vidl/vidl_dshow_file_istream.h>
 #endif
 #include <bwm/video/bwm_video_cam_istream.h>
+#include <bwm/bwm_world.h>
 #include <vidl/vidl_frame.h>
 #include <vidl/vidl_convert.h>
 bool bwm_observer_video::handle(const vgui_event &e)
@@ -152,6 +153,7 @@ void bwm_observer_video::display_current_frame()
     if (bwm_observer_mgr::instance()->in_corr_picking()) {
       img_tab_->lock_linenum(true);
       bwm_observer_img::lock_vgui_status(true);
+      display_corrs_ = false;
     }
     else {
       if (!bwm_observer_img::vgui_status_on())
@@ -194,9 +196,11 @@ void bwm_observer_video::display_current_frame()
   {
     this->clear_video_corrs_display();
       this->display_corr_track();
-  }
-
+  }else if(display_corrs_){
+    this->clear_video_corrs_display();
+    this->display_current_video_corrs();}
   this->display_corr_index();
+  this->display_3d_objects();
 }
 
 void bwm_observer_video::next_frame()
@@ -545,10 +549,8 @@ display_projected_3d_point(bwm_video_corr_sptr const& corr)
 {
   vgui_soview2D_point* pview = world_pt_map_[corr->id()];
   if (pview) this->remove(pview);
-  vgl_point_3d<double> world_pt = corr->world_pt();
-  vpgl_perspective_camera<double>* cam = cam_istr_->current_camera();
-  vgl_point_2d<double> image_pt = cam->project(world_pt);
-
+  vgl_point_2d<double> image_pt;
+  this->proj_point(corr->world_pt(), image_pt);
   pview = new vgui_soview2D_point(image_pt.x(), image_pt.y());
   pview->set_style(POINT_3D_STYLE);
   vgui_displaylist2D_tableau::add(pview);
@@ -568,6 +570,8 @@ void bwm_observer_video::display_video_corrs(unsigned frame_index)
   {
     bwm_video_corr_sptr c = (*cit).second;
     this->display_video_corr(c, frame_index, style);
+    if(display_world_pts_)
+      this->display_projected_3d_point(c);
   }
 }
 
@@ -854,4 +858,54 @@ save_as_image_list(vcl_string const& path)
   }
   os.close();
   return true;
+}
+
+void bwm_observer_video::proj_point(vgl_point_3d<double> world_pt,
+                                    vgl_point_2d<double> &image_pt)
+{
+  vpgl_perspective_camera<double>* cam = cam_istr_->current_camera();
+  if(!cam){
+    vcl_cout << "ERROR: null camera in ::proj_point(..)\n";
+    image_pt.set(0.0, 0.0);
+    return;
+  }
+  bwm_observer_cam::camera_ = cam;
+  bwm_observer_cam::proj_point(world_pt, image_pt);
+}
+
+void bwm_observer_video::proj_line(vsol_line_3d_sptr line_3d,
+                                   vsol_line_2d_sptr &line_2d){
+  vpgl_perspective_camera<double>* cam = cam_istr_->current_camera();
+  if(!cam){
+    vcl_cout << "ERROR: null camera in ::proj_line(..)\n";
+    line_2d = 0;
+    return;
+  }
+  bwm_observer_cam::camera_ = cam;
+  bwm_observer_cam::proj_line(line_3d, line_2d);
+}
+void bwm_observer_video::proj_poly(vsol_polygon_3d_sptr poly3d,
+                                   vsol_polygon_2d_sptr& poly2d)
+{
+  vpgl_perspective_camera<double>* cam = cam_istr_->current_camera();
+  if(!cam){
+    vcl_cout << "ERROR: null camera in ::proj_poly(..)\n";
+    poly2d = 0;
+    return;
+  }
+  bwm_observer_cam::camera_ = cam;
+  bwm_observer_cam::proj_poly(poly3d, poly2d);
+}
+
+void bwm_observer_video::display_3d_objects()
+{
+  //check if there are any to display
+  unsigned nobj = bwm_world::instance()->n_objects();
+  if(!nobj) return;
+  //tell each observable object to notify observers
+  vcl_vector<bwm_observable_sptr> objs = bwm_world::instance()->objects();
+  for(vcl_vector<bwm_observable_sptr>::iterator oit = objs.begin();
+      oit != objs.end(); ++oit){
+    (*oit)->send_update();
+}
 }

@@ -27,6 +27,9 @@ class bwm_world
   //: A horizontal plane through the world point
   vgl_plane_3d<double> world_plane() const { return world_plane_; }
 
+  //: the number of observable objects in the world such as feature meshes
+  unsigned n_objects() { return objects_.size(); }
+
   //: the set of observable objects in the world such as feature meshes
   vcl_vector<bwm_observable_sptr> objects() { return objects_; }
 

@@ -21,13 +21,14 @@ class bwm_observer_video : public bwm_observer_cam
 
   bwm_observer_video(bgui_image_tableau_sptr const& img,
                      vpgl_camera<double> *camera, vcl_string cam_path)
-    : bwm_observer_cam(img, camera, cam_path), display_world_pts_(false),
-    play_video_(false), time_interval_(0.0f), video_istr_(0), cam_istr_(0),
-    tracked_corr_(0)
+    : bwm_observer_cam(img, camera, cam_path), display_corrs_(false),
+    display_world_pts_(false), play_video_(false), time_interval_(0.0f), 
+    video_istr_(0), cam_istr_(0), tracked_corr_(0)
     {init();}
 
   bwm_observer_video(bgui_image_tableau_sptr const& img)
-    : bwm_observer_cam(img), display_world_pts_(false), play_video_(false),
+    : bwm_observer_cam(img), display_corrs_(false),
+    display_world_pts_(false), play_video_(false),
     time_interval_(0.0f), video_istr_(0), cam_istr_(0), tracked_corr_(0)
     {init();}
 
@@ -41,6 +42,15 @@ class bwm_observer_video : public bwm_observer_cam
   // one for each video frame
   bool open_video_stream(vcl_string const& video_path);
   bool open_camera_stream(vcl_string const& camera_path);
+  // virtual methods for projecting 3-d objects
+  virtual void proj_point(vgl_point_3d<double> world_pt,
+                          vgl_point_2d<double> &image_pt);
+
+  virtual void proj_line(vsol_line_3d_sptr line_3d,
+                         vsol_line_2d_sptr &line_2d);
+
+  virtual void proj_poly(vsol_polygon_3d_sptr poly3d,
+                         vsol_polygon_2d_sptr& poly2d);
   // standard video display functions
   void display_current_frame();
   void next_frame();
@@ -87,6 +97,10 @@ class bwm_observer_video : public bwm_observer_cam
 
   //: set the correspondences
   void set_corrs(vcl_vector<bwm_video_corr_sptr> const& corrs);
+
+  //: turn on/off world point display
+  void toggle_corr_display(){display_corrs_ = !display_corrs_;
+  if(!display_corrs_) this->clear_video_corrs_display();}
 
   //: turn on/off world point display
   void toggle_world_pt_display(){display_world_pts_ = !display_world_pts_;}
@@ -152,6 +166,11 @@ class bwm_observer_video : public bwm_observer_cam
   //: display the correspondence index number as text
   void display_corr_index();
 
+  //: display any 3-d objects
+  void display_3d_objects();
+
+  //: should the correspondences be displayed
+  bool display_corrs_;
   //: should the world points be displayed? (requires cameras)
   bool display_world_pts_;
   //:the video play state - if true the video is playing

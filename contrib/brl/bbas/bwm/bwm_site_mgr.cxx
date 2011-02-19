@@ -720,6 +720,20 @@ void bwm_site_mgr::load_video_site()
   site_dir_ = cio.site_directory();
   video_path_ = cio.video_path();
   camera_path_ = cio.camera_path();
+  vcl_vector<vcl_string> obj_types = cio.object_types();
+  vcl_vector<vcl_string> obj_paths = cio.object_paths();
+  unsigned nobj = obj_types.size();
+  if(!nobj) return;
+  for(unsigned i = 0; i<nobj; ++i){
+    if(obj_types[i]!="mesh_feature") continue;
+    bwm_observable_mesh_sptr mesh = new bwm_observable_mesh();
+    bwm_observer_mgr::instance()->attach(mesh);
+    mesh->load_from(obj_paths[i]);
+    if (mesh) 
+      bwm_world::instance()->add(mesh);
+    else
+      bwm_observer_mgr::instance()->detach(mesh);
+  }
 }
 
 void bwm_site_mgr::save_video_site()

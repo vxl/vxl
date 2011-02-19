@@ -122,13 +122,15 @@ class bwm_observable_mesh : public bwm_observable
 
   bwm_observable_sptr global_to_local(bgeo_lvcs* lvcs, double& min_z);
 
-  void load_from(vcl_string filename);
+  bool load_from(vcl_string filename);
 
   void save(const char* filename, bgeo_lvcs* lvcs);
 
   void save(const char* filename);
 
  protected:
+
+  void notify_observers(vcl_string message_type);
 
   bmsh3d_mesh_mc* object_;
 
@@ -149,7 +151,6 @@ class bwm_observable_mesh : public bwm_observable
 
   bmsh3d_face_mc* extrude_face(bmsh3d_mesh_mc* M, bmsh3d_face_mc* F);
 
-  void notify_observers(vcl_string message_type);
 
   void move_points_to_plane(bmsh3d_face_mc* face);
 

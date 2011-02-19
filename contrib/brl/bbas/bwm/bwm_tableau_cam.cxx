@@ -240,7 +240,11 @@ void bwm_tableau_cam::load_mesh()
   // load the mesh from the given file
   bwm_observable_mesh_sptr obj = new bwm_observable_mesh();
   bwm_observer_mgr::instance()->attach(obj);
-  obj->load_from(file.data());
+  bool success = obj->load_from(file.data());
+  if(success)
+    bwm_world::instance()->add(obj);
+  else 
+    bwm_observer_mgr::instance()->detach(obj);
 }
 
 void bwm_tableau_cam::load_mesh_multiple()

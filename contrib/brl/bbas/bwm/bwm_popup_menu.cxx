@@ -443,12 +443,12 @@ void bwm_popup_menu::get_menu(vgui_menu &menu)
                             &bwm_tableau_video::unset_selected_corr_for_tracking));
     video_corr_submenu.separator();
 
-    video_corr_submenu.add( "Display Corrs",
+    video_corr_submenu.add( "Display Corrs at Frame #",
                             new vgui_command_simple<bwm_tableau_video>(video_tab,
                             &bwm_tableau_video::display_video_corrs));
     video_corr_submenu.separator();
 
-    video_corr_submenu.add( "Display Current Corrs",
+    video_corr_submenu.add( "Display Corrs on Current Frame",
                             new vgui_command_simple<bwm_tableau_video>(video_tab,
                             &bwm_tableau_video::display_current_video_corrs));
     video_corr_submenu.separator();
@@ -458,7 +458,11 @@ void bwm_popup_menu::get_menu(vgui_menu &menu)
                             &bwm_tableau_video::clear_video_corrs_display));
     video_corr_submenu.separator();
 
-    video_corr_submenu.add( "Toggle World Point Display",
+    video_corr_submenu.add( "Toggle Correspondence Display (All Frames)",
+                            new vgui_command_simple<bwm_tableau_video>(video_tab,
+                            &bwm_tableau_video::toggle_corr_display));
+    video_corr_submenu.separator();
+    video_corr_submenu.add( "Toggle World Point Display (if corrs displayed)",
                             new vgui_command_simple<bwm_tableau_video>(video_tab,
                             &bwm_tableau_video::toggle_world_pt_display));
     video_corr_submenu.separator();

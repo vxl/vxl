@@ -25,10 +25,12 @@ class bwm_video_site_io : public expatpp
   vcl_string video_path() const {return video_path_;}
   vcl_string camera_path() const {return camera_path_;}
   vcl_vector<bwm_video_corr_sptr> corrs(){return corrs_;}
-
+  vcl_vector<vcl_string> object_types(){return obj_types_;}
+  vcl_vector<vcl_string> object_paths(){return obj_paths_;}
   void x_write(vcl_string const& xml_path);
 
  private:
+  bool fail_;
   virtual void startElement(const XML_Char* name, const XML_Char** atts);
   virtual void endElement(const XML_Char* name);
   virtual void charData(const XML_Char* s, int len);
@@ -49,7 +51,8 @@ class bwm_video_site_io : public expatpp
   bwm_video_corr_sptr corr_;
   //a set of frame-point pairs
   vcl_vector<bwm_video_corr_sptr> corrs_;
-
+  vcl_vector<vcl_string> obj_types_;
+  vcl_vector<vcl_string> obj_paths_;
   void trim_string(vcl_string& s);
 };
 

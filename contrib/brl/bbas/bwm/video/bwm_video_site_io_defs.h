@@ -11,5 +11,7 @@
 #define CORRESP_TAG "Correspondence"
 #define CORR_ELE "CE"
 #define CORRESP_WORLD_PT_TAG "corr_world_point"
-
+// Object Tags
+#define OBJECTS_TAG "Objects"
+#define OBJECT_TAG "Object"
 #endif //bwm_video_io_defs_h_

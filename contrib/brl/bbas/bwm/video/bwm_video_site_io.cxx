@@ -35,6 +35,7 @@ void bwm_video_site_io::init_params()
   video_path_ = "";
   camera_path_ = "";
   corr_ = 0;
+  fail_ = false;
 }
 
 void bwm_video_site_io::clear()
@@ -45,6 +46,7 @@ void bwm_video_site_io::clear()
   camera_path_ = "";
   corr_ = 0;
   corrs_.clear();
+  fail_=false;
 }
 
 bool bwm_video_site_io::open(vcl_string const& xml_path)
@@ -62,6 +64,7 @@ bool bwm_video_site_io::open(vcl_string const& xml_path)
              << this->XML_GetCurrentLineNumber() << vcl_endl;
     return false;
   }
+  if(fail_) return false;
   return true;
 }
 
@@ -105,6 +108,21 @@ bwm_video_site_io::startElement(const char* name, const char** atts)
   else if (vcl_strcmp(name, SITE_DIR_TAG) == 0) {
     if (vcl_strcmp(atts[0], "path") == 0)
       convert(atts[1], site_dir_);
+  }
+  else if (vcl_strcmp(name, OBJECTS_TAG) == 0) {
+    obj_types_.clear(); obj_paths_.clear();
+  }
+  else if (vcl_strcmp(name, OBJECT_TAG) == 0) {
+    vcl_string temp;
+    if(vcl_strcmp(atts[0], "type") == 0){
+      convert(atts[1], temp);
+      obj_types_.push_back(temp);
+    }
+    if(vcl_strcmp(atts[2], "path") == 0){
+      convert(atts[3], temp);
+      obj_paths_.push_back(temp);
+    }
+    if(obj_types_.size()!=obj_paths_.size()) fail_ = true;
   }
   else if (vcl_strcmp(name, CORRESPONDENCES_TAG) == 0) {
     corrs_.clear();
