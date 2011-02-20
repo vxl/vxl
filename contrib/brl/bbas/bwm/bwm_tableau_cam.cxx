@@ -244,6 +244,7 @@ void bwm_tableau_cam::load_mesh()
   if(success){
     bwm_world::instance()->add(obj);
     obj->set_path(file.data());
+    my_observer_->set_face_mode();
   }
   else 
     bwm_observer_mgr::instance()->detach(obj);

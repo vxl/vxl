@@ -1463,21 +1463,23 @@ void  bwm_observer_cam::position_vertex(bool show_as_geo)
     vcl_cerr << "Can't find selected vertex for geo_position!\n";
     return;
   }
-  bgeo_lvcs lvcs;
-  bwm_world::instance()->get_lvcs(lvcs);
-
-
   vsol_point_3d_sptr p3d = (*vit).second;
-  // convert point to local
   double lx,ly,lz;
+  bool lvcs_valid = bwm_world::instance()->lvcs_valid();
+  if(lvcs_valid){
+    bgeo_lvcs lvcs;
+    bwm_world::instance()->get_lvcs(lvcs);
+  // convert point to local
   lvcs.global_to_local(p3d->x(), p3d->y(), p3d->z(), bgeo_lvcs::wgs84,lx, ly, lz);
-
+  }else{ 
+    lx = p3d->x(); ly = p3d->y(); lz = p3d->z();
+  }
   vgui_text_tableau_sptr tt = img_tab_->text_tab();
   if (!tt) return;
   tt->clear();
   tt->set_colour(1.0, 1.0, 0.0);
   vcl_stringstream str;
-  if (show_as_geo)
+  if (show_as_geo&&lvcs_valid)
     str << vcl_fixed << vcl_setprecision(6)<< '(' << p3d->y()
         << ' '  << p3d->x() << vcl_setprecision(2)<< ' ' << p3d->z() << ')' << vcl_ends;
   else

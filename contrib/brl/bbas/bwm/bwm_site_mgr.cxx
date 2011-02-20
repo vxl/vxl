@@ -724,6 +724,7 @@ void bwm_site_mgr::load_video_site()
   vcl_vector<vcl_string> obj_paths = cio.object_paths();
   unsigned nobj = obj_types.size();
   if(!nobj) return;
+  bwm_tableau_mgr::instance()->set_draw_mode_face();
   for(unsigned i = 0; i<nobj; ++i){
     if(obj_types[i]!="mesh_feature") continue;
     bwm_observable_mesh_sptr mesh = new bwm_observable_mesh();
