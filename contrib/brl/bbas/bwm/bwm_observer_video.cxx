@@ -190,8 +190,6 @@ void bwm_observer_video::display_current_frame()
       img_tab_->set_image_view(*vb);
     }
   }
-  img_tab_->post_redraw();
-  vgui::run_till_idle();
   if (bwm_observer_mgr::instance()->in_corr_picking())
   {
     this->clear_video_corrs_display();
@@ -201,6 +199,8 @@ void bwm_observer_video::display_current_frame()
     this->display_current_video_corrs();}
   this->display_corr_index();
   this->display_3d_objects();
+  img_tab_->post_redraw();
+  vgui::run_till_idle();
 }
 
 void bwm_observer_video::next_frame()
@@ -908,5 +908,4 @@ void bwm_observer_video::display_3d_objects()
       oit != objs.end(); ++oit){
     (*oit)->send_update();
   }
-  this->post_redraw();
 }
