@@ -161,11 +161,12 @@ class vpgl_proj_camera : public vpgl_camera<T>
   virtual bool set_matrix( const T* new_camera_matrix );
 
   // I/O :---------------------
-
-  //: Binary save self to stream.
+  //: Save in ascii format
+  virtual void save(vcl_string cam_path);
+  //: Binary save self to binary stream.
   virtual void b_write(vsl_b_ostream &os) const;
 
-  //: Binary load self from stream.
+  //: Binary load self from binary tream.
   virtual void b_read(vsl_b_istream &is);
 
   //: IO version number

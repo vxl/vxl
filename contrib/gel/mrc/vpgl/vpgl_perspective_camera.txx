@@ -419,7 +419,18 @@ vcl_istream&  operator >>(vcl_istream& s,
   p.set_translation(t);
   return s ;
 }
-
+//: Save in ascii format
+template <class Type>
+void vpgl_perspective_camera<Type>::save(vcl_string cam_path)
+{
+  vcl_ofstream os(cam_path.c_str());
+  if(!os.is_open()){
+    vcl_cout << "unable to open output stream in vpgl_proj_camera<T>::save(.)\n";
+    return;
+  }
+  os << *this << '\n';
+  os.close();
+}
 //: Write vpgl_perspective_camera to a vrml file
 template <class Type>
 void vrml_write(vcl_ostream& str, vpgl_perspective_camera<Type> const& p, double rad)

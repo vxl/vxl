@@ -139,6 +139,8 @@ class vpgl_perspective_camera : public vpgl_proj_camera<T>
      camera_center_ == that.camera_center_ && this->R_.as_matrix() == that.R_.as_matrix()); }
 
   // I/O :---------------------
+  //: Save in ascii format
+  virtual void save(vcl_string cam_path);
 
   //: Binary save self to stream.
   virtual void b_write(vsl_b_ostream &os) const;

@@ -6,6 +6,7 @@
 
 #include "vpgl_proj_camera.h"
 #include <vcl_iostream.h>
+#include <vcl_fstream.h>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_ray_3d.h>
@@ -290,7 +291,17 @@ vcl_istream&  operator>>(vcl_istream& s,
 
   return s ;
 }
-
+template <class T>
+void vpgl_proj_camera<T>::save(vcl_string cam_path)
+{
+  vcl_ofstream os(cam_path.c_str());
+  if(!os.is_open()){
+    vcl_cout << "unable to open output stream in vpgl_proj_camera<T>::save(.)\n";
+    return;
+  }
+  os << this->get_matrix() << '\n';
+  os.close();
+}
 //: Allows derived class to be loaded by base-class pointer.
 //  A loader object exists which is invoked by calls
 //  of the form "vsl_b_read(os,base_ptr);".  This loads derived class
