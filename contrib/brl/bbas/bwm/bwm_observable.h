@@ -29,7 +29,7 @@ class bwm_observable : public vgui_observable, public vbl_ref_count
  public:
 
   // constructor
-  bwm_observable() {}
+  bwm_observable(): path_("") {}
 
   bwm_observable(const bwm_observable&) : vgui_observable(), vbl_ref_count() {}
 
@@ -97,8 +97,12 @@ class bwm_observable : public vgui_observable, public vbl_ref_count
 
   virtual void save(const char* filename)=0;
 
+  vcl_string path(){return path_;}
+  void set_path(vcl_string const& path){path_=path;}
+    
  protected:
-
+  //: the observable file path 
+  vcl_string path_;
   vgl_vector_3d<double> last_translation_;
 };
 

@@ -256,6 +256,23 @@ void bwm_video_site_io::x_write(vcl_string const& xml_path)
   cpath.add_attribute("path", camera_path_);
   cpath.x_write(os);
 
+  if(vul_file::is_directory(object_dir_)){
+    vsl_basic_xml_element mdpath(OBJECTS_TAG);
+    cpath.add_attribute("mesh_feature_dir", object_dir_);
+    cpath.x_write(os);
+  }else{
+	vsl_basic_xml_element mdpath(OBJECTS_TAG);
+    mdpath.add_attribute("mesh_feature_dir", "");
+    mdpath.x_write(os);
+    unsigned nobjs = obj_types_.size();
+    for(unsigned i = 0; i<nobjs; ++i)
+      {
+        vsl_basic_xml_element mpath(OBJECT_TAG);
+        mpath.add_attribute("type", obj_types_[i]);
+        mpath.add_attribute("path", obj_paths_[i]);
+        mpath.x_write(os);
+      }
+  }
   vsl_basic_xml_element sdir(SITE_DIR_TAG);
   sdir.add_attribute("path", site_dir_);
   sdir.x_write(os);

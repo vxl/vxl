@@ -729,9 +729,10 @@ void bwm_site_mgr::load_video_site()
     bwm_observable_mesh_sptr mesh = new bwm_observable_mesh();
     bwm_observer_mgr::instance()->attach(mesh);
     mesh->load_from(obj_paths[i]);
-    if (mesh) 
+    if (mesh) {
       bwm_world::instance()->add(mesh);
-    else
+      mesh->set_path(obj_paths[i]);
+    }else
       bwm_observer_mgr::instance()->detach(mesh);
   }
 }
@@ -739,6 +740,12 @@ void bwm_site_mgr::load_video_site()
 void bwm_site_mgr::save_video_site()
 {
   //for now - only support one video observer
+
+  //also for now if the site was intialized with just a directory containing
+  //mesh objects the saved site file will have a null directory path
+  //but with the individual object paths included inside the objects scope.
+  //the effect is the same it is just that the file is somewhat more verbose
+  // it is not clear where an object directory path should go bwm_world?
 
   bool found = false;
   vcl_vector<bwm_observer_cam*> obsvs =
@@ -758,8 +765,21 @@ void bwm_site_mgr::save_video_site()
     vcl_cerr << "In bwm_site_mgr::save_video_site() - no observer of type video\n";
     return;
   }
-
+    
   bwm_video_site_io vio;
+
+  vcl_vector<bwm_observable_sptr> objs = bwm_world::instance()->objects();
+    vcl_vector<vcl_string> obj_types;
+    vcl_vector<vcl_string> obj_paths;
+    for(vcl_vector<bwm_observable_sptr>::iterator oit = objs.begin();
+        oit != objs.end(); ++oit)
+      if((*oit)->type_name()=="bwm_observable_mesh"){
+        obj_types.push_back("mesh_feature");
+        obj_paths.push_back((*oit)->path());
+      }
+    vio.set_object_types(obj_types);
+    vio.set_object_paths(obj_paths);
+
 
   if ((this->site_name_.size() > 0) &&
       (this->site_dir_.size() > 0) &&
@@ -793,12 +813,14 @@ void bwm_site_mgr::save_video_site()
       vcl_cerr << "Please enter a directory for the video site\n";
       return;
     }
+      
     vio.set_name(this->site_name_);
     vio.set_site_directory(this->site_dir_);
     vio.set_video_path(obv->image_path());
     vio.set_camera_path(obv->camera_path());
   }
-
+  
+  
   vio.set_corrs(obv->corrs());
   long time = timer_.real();
   vcl_stringstream strm;

@@ -27,6 +27,10 @@ class bwm_video_site_io : public expatpp
   vcl_vector<bwm_video_corr_sptr> corrs(){return corrs_;}
   vcl_vector<vcl_string> object_types(){return obj_types_;}
   vcl_vector<vcl_string> object_paths(){return obj_paths_;}
+  void set_object_types(vcl_vector<vcl_string> object_types){
+    obj_types_=object_types;}
+  void set_object_paths(vcl_vector<vcl_string> object_paths){
+    obj_paths_=object_paths;}
   void x_write(vcl_string const& xml_path);
 
  private:

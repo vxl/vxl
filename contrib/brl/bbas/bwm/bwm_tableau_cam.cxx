@@ -241,8 +241,10 @@ void bwm_tableau_cam::load_mesh()
   bwm_observable_mesh_sptr obj = new bwm_observable_mesh();
   bwm_observer_mgr::instance()->attach(obj);
   bool success = obj->load_from(file.data());
-  if(success)
+  if(success){
     bwm_world::instance()->add(obj);
+    obj->set_path(file.data());
+  }
   else 
     bwm_observer_mgr::instance()->detach(obj);
 }
