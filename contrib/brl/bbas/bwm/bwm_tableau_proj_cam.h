@@ -1,6 +1,7 @@
 #ifndef bwm_tableau_proj_cam_h_
 #define bwm_tableau_proj_cam_h_
-
+//:
+// \file
 #include "bwm_tableau_cam.h"
 #include "bwm_observer_proj_cam.h"
 
