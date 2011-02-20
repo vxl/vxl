@@ -45,10 +45,14 @@ bwm_observer_proj_cam::bwm_observer_proj_cam(bgui_image_tableau_sptr img,
     return;
   }
   camera_ = read_projective_camera(cam_path).clone();
+  this->set_camera_path(cam_path);
 
+  //generate a unique tab name if null
+  if(name=="")
+    {name = cam_path;}
+  set_tab_name(name);
   // add the observer to the observer pool
   bwm_observer_mgr::instance()->add(this);
-  set_tab_name(name);
 }
 
 bool bwm_observer_proj_cam::intersect_ray_and_plane(vgl_point_2d<double> img_point,

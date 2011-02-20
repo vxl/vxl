@@ -68,9 +68,16 @@ class bwm_observer_cam : public bwm_observer_vgui
   void move_ground_plane(vgl_plane_3d<double> master_plane,
                          vsol_point_2d_sptr new_pt);
 
+#if 0  //replaced by translate along optical cone (remove after testing)
   //: Translate *this projection plane
   void translate_along_optical_axis(double da);
-
+#endif
+  //: Translate/scale according to the optical cone
+  // the object vertices are adjusted so that the projection in
+  // the master frame is invariant to the motion. This method is 
+  // useful for perpective cameras where object scale changes with distance
+  // from the center of projection
+  void translate_along_optical_cone(double da);
 
   vgl_plane_3d<double> get_proj_plane() const { return proj_plane_; }
 

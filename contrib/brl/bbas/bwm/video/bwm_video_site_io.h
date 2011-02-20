@@ -53,6 +53,7 @@ class bwm_video_site_io : public expatpp
   vcl_vector<bwm_video_corr_sptr> corrs_;
   vcl_vector<vcl_string> obj_types_;
   vcl_vector<vcl_string> obj_paths_;
+  vcl_string object_dir_;
   void trim_string(vcl_string& s);
 };
 

@@ -228,8 +228,10 @@ bool bwm_observer_cam::handle(const vgui_event &e)
   {
       if (e.modifier == vgui_SHIFT)
         extrude_obj_->move_extr_face(1.0);
-      else
+      else if(e.modifier == vgui_CTRL)
         extrude_obj_->move_extr_face(0.1);
+      else
+        extrude_obj_->move_extr_face(0.01);
     in_jog_mode_ = true;
     return true;
   }
@@ -237,8 +239,10 @@ bool bwm_observer_cam::handle(const vgui_event &e)
   {
       if (e.modifier == vgui_SHIFT)
         extrude_obj_->move_extr_face(-1.0);
-      else
+      else if(e.modifier == vgui_CTRL)
         extrude_obj_->move_extr_face(-0.1);
+      else
+        extrude_obj_->move_extr_face(-0.01);
     in_jog_mode_ = true;
     return true;
   }
@@ -251,9 +255,11 @@ bool bwm_observer_cam::handle(const vgui_event &e)
   {
     if (this == bwm_observer_mgr::BWM_MASTER_OBSERVER) {
       if (e.modifier == vgui_SHIFT)
-        this->translate_along_optical_axis(1.0);
+        this->translate_along_optical_cone(1.0);
+      else if(e.modifier == vgui_CTRL)
+        this->translate_along_optical_cone(0.1);
       else
-        this->translate_along_optical_axis(0.1);
+        this->translate_along_optical_cone(0.001);
     }
     in_jog_mode_ = true;
     return true;
@@ -262,9 +268,11 @@ bool bwm_observer_cam::handle(const vgui_event &e)
   {
     if (this == bwm_observer_mgr::BWM_MASTER_OBSERVER) {
       if (e.modifier == vgui_SHIFT)
-        this->translate_along_optical_axis(-1.0);
+        this->translate_along_optical_cone(-1.0);
+      else if(e.modifier == vgui_CTRL)
+        this->translate_along_optical_cone(-0.1);
       else
-        this->translate_along_optical_axis(-0.1);
+        this->translate_along_optical_cone(-0.001);
     }
     in_jog_mode_ = true;
     return true;
@@ -430,7 +438,7 @@ void bwm_observer_cam::move_ground_plane( vgl_plane_3d<double> master_plane,
   }
   vcl_cerr << "The original vertex to be moved is not selected!\n";
 }
-
+#if 0 //replaced by translate along optical cone
 //Translate along *this* observer's optical axis
 void bwm_observer_cam::translate_along_optical_axis(double da)
 {
@@ -476,6 +484,50 @@ void bwm_observer_cam::translate_along_optical_axis(double da)
   vcl_cerr << "In bwm_observer_cam::translate_along_optical_axis - "
            << "not exactly one selected vertex\n";
 }
+#endif
+// expand or contract the object boundary so that the projection in the 
+// image is invariant to perspective scale change
+void bwm_observer_cam::translate_along_optical_cone(double da){
+  vcl_vector<vgui_soview*> select_list = this->get_selected_soviews();
+#if 0
+  vcl_cout << "#selected before move = " << select_list.size() << '\n';
+#endif
+  if (select_list.size() == 1 &&
+      select_list[0]->type_name().compare("bgui_vsol_soview2D_polygon") == 0)
+  {
+    bgui_vsol_soview2D_polygon* poly =
+      static_cast<bgui_vsol_soview2D_polygon*> (select_list[0]);
+
+    //find the mesh this polygon belongs to
+    unsigned int face_id;
+    bwm_observable_sptr obs = find_object(poly->get_id(), face_id);
+    if (!obs)
+    {
+      vcl_cerr << "In bwm_observer_cam::translate_along_optical_axis - "
+               << "nothing selected to move\n";
+      return;
+    }
+    // cone method only available on observable_mesh, not in general
+    bwm_observable_mesh* omsh = 0;
+    if(obs->type_name()=="bwm_observable_mesh")
+      omsh = static_cast<bwm_observable_mesh*>(obs.ptr());
+    else return;
+
+    if(!omsh->move_poly_in_optical_cone(camera_,face_id,da))
+       return;
+#if 0
+     select_list = this->get_selected_soviews();
+    vcl_cout << "#selected after move = " << select_list.size() << '\n';
+#endif
+    //keep the object selected
+    this->select_object(obs);
+#if 0
+     select_list = this->get_selected_soviews();
+    vcl_cout << "#selected after select = " << select_list.size() << '\n';
+#endif
+    return;
+  }
+}
 
 void bwm_observer_cam::proj_point(vgl_point_3d<double> world_pt,
                                   vgl_point_2d<double> &image_pt)
@@ -509,7 +561,7 @@ void bwm_observer_cam::proj_poly(vsol_polygon_3d_sptr poly3d,
   for (unsigned i=0; i<poly3d->size(); i++) {
     double u = 0,v = 0;
 #ifdef DEBUG
-    vcl_cout << "point " << *(poly3d->vertex(i)) << vcl_endl;
+    vcl_cout << "3d point " << *(poly3d->vertex(i)) << vcl_endl;
 #endif
     camera_->project(poly3d->vertex(i)->x(), poly3d->vertex(i)->y(), poly3d->vertex(i)->z(),u,v);
     vsol_point_2d_sptr p = new vsol_point_2d(u,v);

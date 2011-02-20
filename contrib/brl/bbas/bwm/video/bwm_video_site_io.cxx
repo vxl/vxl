@@ -12,7 +12,8 @@
 #include <vcl_fstream.h>
 #include <vcl_cstdio.h>
 #include <vcl_cstring.h>
-
+#include <vul/vul_file.h>
+#include <vul/vul_file_iterator.h>
 // --------------
 // --- PARSER ---
 // --------------
@@ -35,6 +36,7 @@ void bwm_video_site_io::init_params()
   video_path_ = "";
   camera_path_ = "";
   corr_ = 0;
+  object_dir_ = "";
   fail_ = false;
 }
 
@@ -46,6 +48,7 @@ void bwm_video_site_io::clear()
   camera_path_ = "";
   corr_ = 0;
   corrs_.clear();
+  object_dir_ = "";
   fail_=false;
 }
 
@@ -110,7 +113,20 @@ bwm_video_site_io::startElement(const char* name, const char** atts)
       convert(atts[1], site_dir_);
   }
   else if (vcl_strcmp(name, OBJECTS_TAG) == 0) {
+    vcl_string object_dir;
     obj_types_.clear(); obj_paths_.clear();
+    if(vcl_strcmp(atts[0], "mesh_feature_dir") == 0)
+      {
+        convert(atts[1], object_dir);
+        if(vul_file::is_directory(object_dir)){
+          vcl_string dir = object_dir + "/*.ply";
+          for(vul_file_iterator fit = dir.c_str(); fit; ++fit)
+            {
+              obj_types_.push_back("mesh_feature");
+              obj_paths_.push_back(fit());
+            }
+        }
+      }
   }
   else if (vcl_strcmp(name, OBJECT_TAG) == 0) {
     vcl_string temp;

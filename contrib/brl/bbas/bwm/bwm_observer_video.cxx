@@ -907,5 +907,6 @@ void bwm_observer_video::display_3d_objects()
   for(vcl_vector<bwm_observable_sptr>::iterator oit = objs.begin();
       oit != objs.end(); ++oit){
     (*oit)->send_update();
-}
+  }
+  this->post_redraw();
 }

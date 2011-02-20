@@ -12,6 +12,9 @@
 
 #include "algo/bwm_utils.h"
 
+//note that it is essential for a tab_config to have a name 
+//or it can't be retrieved from the map index
+//if the name is null then the most relevant file path is used.
 bwm_tableau_img*
 bwm_tableau_factory::create_tableau(bwm_io_tab_config* t)
 {
@@ -19,6 +22,7 @@ bwm_tableau_factory::create_tableau(bwm_io_tab_config* t)
     bwm_io_tab_config_img* img_tab = static_cast<bwm_io_tab_config_img*> (t);
     vcl_string name = img_tab->name;
     vcl_string path = img_tab->img_path;
+    if(t->name == "") t->name = path;
     bgui_image_tableau_sptr img = bgui_image_tableau_new();
     bwm_observer_img* obs = new bwm_observer_img(img, name, path, false);
     bwm_tableau_img* tab = new bwm_tableau_img(obs);
@@ -32,6 +36,7 @@ bwm_tableau_factory::create_tableau(bwm_io_tab_config* t)
       bwm_observer_proj_cam* o = new bwm_observer_proj_cam(img, cam_tab->name,
         cam_tab->img_path, cam_tab->cam_path, cam_tab->cam_type, false);
       bwm_tableau_proj_cam* tab = new bwm_tableau_proj_cam(o);
+      if(t->name == "") t->name = cam_tab->cam_path;
       return tab;
     }
     else if (cam_tab->cam_type.compare("rational") == 0) {
@@ -39,6 +44,7 @@ bwm_tableau_factory::create_tableau(bwm_io_tab_config* t)
       bwm_observer_rat_cam* o = new bwm_observer_rat_cam(img, cam_tab->name,
         cam_tab->img_path, cam_tab->cam_path, false);
       bwm_tableau_rat_cam* tab = new bwm_tableau_rat_cam(o);
+      if(t->name == "") t->name = cam_tab->cam_path;
       return tab;
     }
     else {

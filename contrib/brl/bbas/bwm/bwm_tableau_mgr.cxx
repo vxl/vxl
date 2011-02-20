@@ -6,6 +6,7 @@
 #include "bwm_corr_sptr.h"
 #include "bwm_load_commands.h"
 #include "bwm_tableau_rat_cam.h"
+#include "bwm_tableau_proj_cam.h"
 #include "bwm_tableau_img.h"
 
 #include "algo/bwm_algo.h"
@@ -114,12 +115,19 @@ vcl_string bwm_tableau_mgr::save_camera(vcl_string tab_name)
   }
 
   if (tab->type_name().compare("bwm_tableau_rat_cam") == 0) {
-    bwm_tableau_rat_cam* tab_cam = static_cast<bwm_tableau_rat_cam*> (tab.as_pointer());
+    bwm_tableau_rat_cam* tab_cam = 
+      static_cast<bwm_tableau_rat_cam*> (tab.as_pointer());
     vcl_string path = tab_cam->save_camera();
     return path;
+  }else if(tab->type_name().compare("bwm_tableau_proj_cam") == 0){
+    bwm_tableau_proj_cam* tab_cam = 
+      static_cast<bwm_tableau_proj_cam*> (tab.as_pointer());
+    vcl_string path = tab_cam->save_camera();
+    return path;
+  }else{
+    vcl_cerr << "Tableau " << tab_name << "is an unknown camera tableau!\n";
+    return "";
   }
-  vcl_cerr << "Tableau " << tab_name << "is not a rational camera tableau!\n";
-  return "";
 }
 
 void bwm_tableau_mgr::save_cameras()

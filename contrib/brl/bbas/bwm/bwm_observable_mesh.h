@@ -17,6 +17,7 @@
 
 #include <bmsh3d/bmsh3d_mesh_mc.h>
 #include <bmsh3d/bmsh3d_face_mc.h>
+#include <vpgl/vpgl_camera.h>
 
 typedef enum {RoofSurface, WallSurface, None} BWM_FACE_LABEL;
 
@@ -55,6 +56,11 @@ class bwm_observable_mesh : public bwm_observable
   void translate(vgl_vector_3d<double> T);
 
   bwm_observable_sptr transform(vgl_h_matrix_3d<double> T_);
+
+  //:move along the rays through the vertices of a polygon so as to leave the camera projection unchanged
+  bool move_poly_in_optical_cone(vpgl_camera<double> * cam,
+                                 unsigned face_id,
+                                 double da);
 
   void send_update();
 
@@ -128,10 +134,14 @@ class bwm_observable_mesh : public bwm_observable
 
   void save(const char* filename);
 
- protected:
 
+
+ protected:
   void notify_observers(vcl_string message_type);
 
+  //:useful for adjusting  the face vertices
+  bool single_face_with_vertices(unsigned face_id, vsol_polygon_3d_sptr& poly,
+                                 vcl_vector<bmsh3d_vertex*>& verts);
   bmsh3d_mesh_mc* object_;
 
   bmsh3d_face_mc* current_extr_face;

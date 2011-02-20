@@ -20,9 +20,16 @@
 #include <vgl/vgl_homg_point_3d.h>
 #include <vgl/algo/vgl_fit_plane_3d.h>
 #include <vgl/vgl_distance.h>
+#include <vgl/vgl_polygon.h>
+#include <vgl/vgl_intersection.h>
+
+#include <vpgl/algo/vpgl_ray.h>
+#include <vpgl/algo/vpgl_backproject.h>
 
 #include <vsol/vsol_point_3d.h>
 #include <vsol/vsol_line_3d.h>
+#include <vsol/vsol_polygon_2d.h>
+#include <vsol/vsol_polygon_3d.h>
 #include <vsol/vsol_box_3d.h>
 
 #include <bmsh3d/bmsh3d_textured_mesh_mc.h>
@@ -30,19 +37,19 @@
 #include <bmsh3d/algo/bmsh3d_mesh_triangulate.h>
 
 bwm_observable_mesh::bwm_observable_mesh()
-: object_(0)
+  : object_(0)
 {
   //bwm_world::instance()->add(this);
 }
 
 bwm_observable_mesh::bwm_observable_mesh(BWM_MESH_TYPES type)
-: object_(0), mesh_type_(type)
+  : object_(0), mesh_type_(type)
 {
   //bwm_world::instance()->add(this);
 }
 
 bwm_observable_mesh::bwm_observable_mesh(bmsh3d_mesh_mc* object)
-: object_(object)
+  : object_(object)
 {
   //bwm_world::instance()->add(this);
 }
@@ -158,12 +165,25 @@ void bwm_observable_mesh::translate(vgl_vector_3d<double> T)
   while (iter != v_map.end()) {
     bmsh3d_vertex* v = (bmsh3d_vertex*) iter->second;
     v->set_pt (vgl_point_3d<double> (v->get_pt().x() + T.x() ,
-            v->get_pt().y() + T.y(),
-            v->get_pt().z() + T.z()));
+                                     v->get_pt().y() + T.y(),
+                                     v->get_pt().z() + T.z()));
     vcl_cout << v->get_pt() << vcl_endl;
     iter++;
   }
   notify_observers("move");
+}
+
+bool bwm_observable_mesh::
+single_face_with_vertices(unsigned face_id,
+                          vsol_polygon_3d_sptr& poly,
+                          vcl_vector<bmsh3d_vertex*>& verts)
+{
+  bmsh3d_face_mc* face = (bmsh3d_face_mc*)object_->facemap(face_id);
+  if (face && (object_->facemap().size() == 1)) {
+    bmsh3d_face_mc* face = (bmsh3d_face_mc*) object_->facemap(face_id);
+    poly = this->extract_face(face, verts);
+  }else{ return false;}
+  return true;
 }
 
 bwm_observable_sptr bwm_observable_mesh::transform(vgl_h_matrix_3d<double> T_)
@@ -178,7 +198,76 @@ bwm_observable_sptr bwm_observable_mesh::transform(vgl_h_matrix_3d<double> T_)
   }
   return new bwm_observable_mesh(M_copy);
 }
+// Move the polygon along the rays through its vertices.
+// The polygon shape will change as it moves, but the 
+// projection of the polygon in the camera is invariant motion along the rays
+bool bwm_observable_mesh::move_poly_in_optical_cone(vpgl_camera<double> * cam,
+                                                    unsigned face_id,
+                                                    double da)
+{
+  if(!cam) return false;
+  vsol_polygon_3d_sptr poly_3d;
+  vcl_vector<bmsh3d_vertex*> verts;
+  if(!this->single_face_with_vertices(face_id,poly_3d,verts))
+    {
+      vcl_cerr << "In bwm_observable_mesh::move_poly_in_optical_cone - "
+               << "meshes with more than one face not allowed\n";
+      return false;
+    }
+  // extract the 3-d plane of the mesh face
+  vgl_plane_3d<double> plane(poly_3d->plane());
+  // an arbitrary vertex to generate the movement vector
+  vgl_point_3d<double> pg3d= verts[0]->pt();
+  //get the direction of a ray
+  vgl_vector_3d<double> ray_dir;
+  if (!vpgl_ray::ray(cam, pg3d, ray_dir))
+    {
+      vcl_cerr << "In bwm_observable_mesh::move_poly_in_optical_cone - "
+               << "ray direction computation failed\n";
+      return false;
+    }
+  ray_dir /= ray_dir.length();
+  ray_dir *= da;  // ray_dir is now the motion vector
 
+  //extract the plane coefficients 
+  double a = plane.a(), b = plane.b(), c = plane.c(), d = plane.d();
+  vgl_vector_3d<double> normal(a, b, c);
+  double mag = normal.length();
+  // normalize the plane so that the normal is a unit vector
+  normal /= mag;
+  d /= mag; 
+  // translate the plane by the motion vector
+  d += dot_product(normal, ray_dir);
+  // -d now corresponds to the translated  plane distance from the origin
+  plane.set(normal.x(), normal.y(), normal.z(), d);
+
+  // intersect rays through each vertex to 
+  // get the vertices translated and scaled in the cone
+  for(vcl_vector<bmsh3d_vertex*>::iterator vit = verts.begin();
+      vit != verts.end(); ++vit){
+    vgl_point_3d<double> pg= (*vit)->pt();
+    //get the direction of a ray
+    vgl_vector_3d<double> rdir;
+    if (!vpgl_ray::ray(cam, pg, rdir))
+      {
+        vcl_cerr << "In bwm_observable_mesh::translate_along_optical_cone - "
+                 << "ray direction computation failed\n";
+        return false;
+      }
+    vgl_infinite_line_3d<double> l(pg, rdir);
+    vgl_point_3d<double> i_pt;
+    if(!vgl_intersection(l, plane, i_pt))
+      {
+        vcl_cerr << "In bwm_observable_mesh::translate_along_optical_cone - "
+                 << "ray intersection computation failed\n";
+        return false;
+      }
+    (*vit)->set_pt(i_pt);
+  }
+  // the mesh face has now been transformed by the motion along the cone
+  // so notify all the observers of the new shape
+  this->notify_observers("move");
+}
 void bwm_observable_mesh::extrude(int face_id)
 {
   this->extrude(face_id, 0.01);
@@ -203,7 +292,7 @@ void bwm_observable_mesh::extrude(int face_id)
     }
     else
       current_extr_face = 0;
-   }
+  }
   vcl_cout << "FACES====>" << vcl_endl;
   this->print_faces();
 #endif // 0
@@ -252,7 +341,7 @@ void bwm_observable_mesh::set_object(bmsh3d_mesh_mc* obj)
   object_ = obj;
   //object_->orient_face_normals();
   notify_observers(msg);
- }
+}
 
 void bwm_observable_mesh::set_object(vsol_polygon_3d_sptr poly, double z)
 {
@@ -342,24 +431,24 @@ bwm_observable_mesh::extract_inner_faces(bmsh3d_face_mc* face)
   vcl_map<int, vsol_polygon_3d_sptr> polygons;
   vcl_map<int, bmsh3d_halfedge*>::iterator it = set_he.begin();
   while (it != set_he.end())
-  {
-    bmsh3d_halfedge* he = it->second;
-    bmsh3d_halfedge* HE = he;
-    vcl_vector<vsol_point_3d_sptr> v_list;
+    {
+      bmsh3d_halfedge* he = it->second;
+      bmsh3d_halfedge* HE = he;
+      vcl_vector<vsol_point_3d_sptr> v_list;
 
-    do {
-      bmsh3d_halfedge* next_he = (bmsh3d_halfedge*) HE->next();
-      bmsh3d_vertex* vertex = (bmsh3d_vertex*) Es_sharing_V  (HE->edge(), next_he->edge());
-      //vertices.push_back(vertex);
-      vgl_point_3d<double> p = vertex->get_pt();
-      v_list.push_back(new vsol_point_3d (p.x(), p.y(), p.z()));
-      HE = next_he;
-    } while (HE != he);
+      do {
+        bmsh3d_halfedge* next_he = (bmsh3d_halfedge*) HE->next();
+        bmsh3d_vertex* vertex = (bmsh3d_vertex*) Es_sharing_V  (HE->edge(), next_he->edge());
+        //vertices.push_back(vertex);
+        vgl_point_3d<double> p = vertex->get_pt();
+        v_list.push_back(new vsol_point_3d (p.x(), p.y(), p.z()));
+        HE = next_he;
+      } while (HE != he);
 
-    vsol_polygon_3d_sptr poly3d = new vsol_polygon_3d(v_list);
-    polygons[it->first] = poly3d;
-    it++;
-  }
+      vsol_polygon_3d_sptr poly3d = new vsol_polygon_3d(v_list);
+      polygons[it->first] = poly3d;
+      it++;
+    }
   return polygons;
 }
 
@@ -498,8 +587,8 @@ void bwm_observable_mesh::move_normal_dir(double dist)
       bmsh3d_vertex* v = (bmsh3d_vertex*) vertices[i];
       vsol_point_3d_sptr p = poly->vertex(i);
       v->set_pt (vgl_point_3d<double> (v->get_pt().x() + dist*normal.x() ,
-            v->get_pt().y() + dist*normal.y(),
-            v->get_pt().z() + dist*normal.z()));
+                                       v->get_pt().y() + dist*normal.y(),
+                                       v->get_pt().z() + dist*normal.z()));
     }
     notify_observers("move");
   }
@@ -581,30 +670,30 @@ void bwm_observable_mesh::divide_face(unsigned face_id,
     vgl_line_3d_2_points<double> line(sp, ep);
     //vcl_cout << "edge" << edge->id() << " s=" << s->get_pt() << "e =" << e->get_pt() << vcl_endl;
 
-   double d1 = vgl_distance(vgl_point_3d<double>(l1), line);
-   double d2 = vgl_distance(vgl_point_3d<double>(l2), line);
-   double d3 = vgl_distance(vgl_point_3d<double>(l3), line);
-   double d4 = vgl_distance(vgl_point_3d<double>(l4), line);
+    double d1 = vgl_distance(vgl_point_3d<double>(l1), line);
+    double d2 = vgl_distance(vgl_point_3d<double>(l2), line);
+    double d3 = vgl_distance(vgl_point_3d<double>(l3), line);
+    double d4 = vgl_distance(vgl_point_3d<double>(l4), line);
 
-   // we are checking if the points l1, l2, l3 or l4 are on the line
-   if ((d1+d2) < min_d1) {
+    // we are checking if the points l1, l2, l3 or l4 are on the line
+    if ((d1+d2) < min_d1) {
       min_d1 = d1+d2;
       min_index1 = i;
-   }
+    }
 
-   if ((d3+d4) < min_d2) {
+    if ((d3+d4) < min_d2) {
       min_d2 = d3+d4;
       min_index2 = i;
-   }
+    }
 
 #if 0 // commented out
     if (collinear(line, vgl_point_3d<double>(l1)) &&
-      collinear(line, vgl_point_3d<double>(l2)))
-        edge1 = edge;
+        collinear(line, vgl_point_3d<double>(l2)))
+      edge1 = edge;
 
     if (collinear(line, vgl_point_3d<double>(l3)) &&
-      collinear(line, vgl_point_3d<double>(l4)))
-        edge2 = edge;
+        collinear(line, vgl_point_3d<double>(l4)))
+      edge2 = edge;
 #endif // 0
   }
   bmsh3d_halfedge* he1 = (bmsh3d_halfedge*) halfedges[min_index1];
@@ -663,7 +752,7 @@ bmsh3d_face* bwm_observable_mesh::create_inner_face(vsol_polygon_3d_sptr polygon
 }
 
 //: Creates a polygon from the given vertex list and adds it to the mesh
- bmsh3d_face_mc* bwm_observable_mesh::create_face(vsol_polygon_3d_sptr polygon)
+bmsh3d_face_mc* bwm_observable_mesh::create_face(vsol_polygon_3d_sptr polygon)
 {
   polygon = bwm_algo::move_points_to_plane(polygon);
   unsigned n = polygon->size();
@@ -735,7 +824,7 @@ void bwm_observable_mesh::create_mesh_HE(vsol_polygon_3d_sptr polygon,
   for (unsigned i=0; i<n; i++) {
     bmsh3d_vertex* v = (bmsh3d_vertex*) object_->_new_vertex ();
     v->set_pt (vgl_point_3d<double> (polygon->vertex(i)->x(),
-      polygon->vertex(i)->y(), polygon->vertex(i)->z()));
+                                     polygon->vertex(i)->y(), polygon->vertex(i)->z()));
     object_->_add_vertex (v);
     v_list[i] = v;
   }
@@ -756,8 +845,8 @@ void bwm_observable_mesh::create_mesh_HE(vsol_polygon_3d_sptr polygon,
                                    polygon->vertex(i)->z() + fact*normal.z()));
 #endif // 0
     v->set_pt (vgl_point_3d<double> (polygon->vertex(i)->x(),
-    polygon->vertex(i)->y(),
-    polygon->vertex(i)->z()-dist));
+                                     polygon->vertex(i)->y(),
+                                     polygon->vertex(i)->z()-dist));
     object_->_add_vertex (v);
     v_list[n+i] = v;
   }
@@ -778,7 +867,7 @@ void bwm_observable_mesh::create_mesh_HE(vsol_polygon_3d_sptr polygon,
   bmsh3d_face_mc* f0 = object_->_new_mc_face ();
   object_->_add_face (f0);
   for (unsigned i=0; i<n; i++) {
-     _connect_F_E_end(f0, e_list[i]);
+    _connect_F_E_end(f0, e_list[i]);
   }
 
   // re-attach the inner faces
@@ -890,104 +979,104 @@ bmsh3d_face_mc* bwm_observable_mesh::extrude_face(bmsh3d_mesh_mc* M, bmsh3d_face
   bmsh3d_face_mc* cur_face = F;
 #if 0 // commented out
   if (M->facemap().size() > 1)
-  {
-    vcl_vector<bmsh3d_edge*> inc_edges;
-    F->get_incident_edges (inc_edges);
-    bmsh3d_edge* first_edge = inc_edges[0];
-    vgl_vector_3d<double> face_normal = cur_face->compute_normal(center, first_edge, first_edge->s_vertex());
-    face_normal /= face_normal.length();
-    vcl_vector<bmsh3d_face*> incident_faces;
-    for (unsigned i=0; i<inc_edges.size(); i++) {
-      bmsh3d_edge* edge = inc_edges[i];
-      vcl_vector<bmsh3d_face*> faces;
-      edge->get_incident_faces(faces);
+    {
+      vcl_vector<bmsh3d_edge*> inc_edges;
+      F->get_incident_edges (inc_edges);
+      bmsh3d_edge* first_edge = inc_edges[0];
+      vgl_vector_3d<double> face_normal = cur_face->compute_normal(center, first_edge, first_edge->s_vertex());
+      face_normal /= face_normal.length();
+      vcl_vector<bmsh3d_face*> incident_faces;
+      for (unsigned i=0; i<inc_edges.size(); i++) {
+        bmsh3d_edge* edge = inc_edges[i];
+        vcl_vector<bmsh3d_face*> faces;
+        edge->get_incident_faces(faces);
 
-      for (unsigned j=0; j<faces.size(); j++) {
-        bmsh3d_face_mc* pair_face = (bmsh3d_face_mc*) faces[j];
-        if (pair_face!=F) {
-          pair_face->_sort_halfedges_circular();
-          vgl_point_3d<double> pair_center = pair_face->compute_center_pt();
-          vgl_vector_3d<double> n = pair_face->compute_normal(pair_center, edge, edge->s_vertex());
-          n /= n.length();
-          double a = angle(face_normal, n);
-          double ninety_deg = vnl_math::pi/2.0;
-          incident_faces.push_back(pair_face);
+        for (unsigned j=0; j<faces.size(); j++) {
+          bmsh3d_face_mc* pair_face = (bmsh3d_face_mc*) faces[j];
+          if (pair_face!=F) {
+            pair_face->_sort_halfedges_circular();
+            vgl_point_3d<double> pair_center = pair_face->compute_center_pt();
+            vgl_vector_3d<double> n = pair_face->compute_normal(pair_center, edge, edge->s_vertex());
+            n /= n.length();
+            double a = angle(face_normal, n);
+            double ninety_deg = vnl_math::pi/2.0;
+            incident_faces.push_back(pair_face);
 #if 0
-          // if both faces are on the same plane, they are planar
-          if ((a == 0) || (a == vnl_math::pi))
-            incident_faces.push_back(pair_face);
-          else if ((a <= ninety_deg-0.05) || (a >= ninety_deg+0.05))
-            incident_faces.push_back(pair_face);
+            // if both faces are on the same plane, they are planar
+            if ((a == 0) || (a == vnl_math::pi))
+              incident_faces.push_back(pair_face);
+            else if ((a <= ninety_deg-0.05) || (a >= ninety_deg+0.05))
+              incident_faces.push_back(pair_face);
 #endif // inner "#if 0"
+          }
         }
       }
-    }
 
-    for (unsigned i=0; i<incident_faces.size(); i++) {
-      bmsh3d_face_mc* inc_face = (bmsh3d_face_mc*) incident_faces[i];
-      // check with all the edges, if the incident face share this edge,
-      //trying to find the edge between the current face and the given face
+      for (unsigned i=0; i<incident_faces.size(); i++) {
+        bmsh3d_face_mc* inc_face = (bmsh3d_face_mc*) incident_faces[i];
+        // check with all the edges, if the incident face share this edge,
+        //trying to find the edge between the current face and the given face
+        vcl_vector<bmsh3d_edge*> inc_edges;
+        bmsh3d_edge* edge;
+        cur_face->get_incident_edges (inc_edges);
+        for (unsigned j=0; j<inc_edges.size(); j++) {
+          if (inc_edges[j]->is_face_incident(inc_face)){
+            edge = inc_edges[j];
+            break;
+          }
+        }
+
+        if (edge == 0) {
+          vcl_cerr << "ERROR: incident face is not found in extrude_face()\n";
+          return 0;
+        }
+
+        bmsh3d_halfedge* he = edge->incident_halfedge(cur_face);
+        bmsh3d_vertex* v0 = (bmsh3d_vertex*) M->_new_vertex ();
+        bmsh3d_vertex* s = (bmsh3d_vertex*) edge->s_vertex();
+        bmsh3d_vertex* e = (bmsh3d_vertex*) edge->e_vertex();
+        vgl_point_3d<double> p1 = s->get_pt();
+        v0->get_pt().set(p1.x(), p1.y(), p1.z());
+        bmsh3d_vertex* v1 = (bmsh3d_vertex*) M->_new_vertex ();
+        vgl_point_3d<double> p2 = e->get_pt();
+        v1->get_pt().set(p2.x(), p2.y(), p2.z());
+        bmsh3d_face_mc *f1, *f2;
+        bmsh3d_edge* next =  cur_face->find_other_edge(e, edge);
+        bmsh3d_edge* prev = cur_face->find_other_edge(s, edge);
+        mesh_break_face(M, cur_face, prev, next, v0, v1,  f1, f2);
+        if (f1->containing_vertex(s))
+          cur_face = f2;
+        else
+          cur_face = f1;
+        this->print_faces();
+      }
+      // there is only one face, so we will extrude iT anyway
+    }
+  else
+    {
       vcl_vector<bmsh3d_edge*> inc_edges;
-      bmsh3d_edge* edge;
       cur_face->get_incident_edges (inc_edges);
       for (unsigned j=0; j<inc_edges.size(); j++) {
-        if (inc_edges[j]->is_face_incident(inc_face)){
-          edge = inc_edges[j];
-          break;
-        }
+        bmsh3d_edge* edge = inc_edges[j];
+        bmsh3d_halfedge* he = edge->halfedge();
+        bmsh3d_vertex* v0 = (bmsh3d_vertex*) M->_new_vertex ();
+        bmsh3d_vertex* s = (bmsh3d_vertex*) edge->s_vertex();
+        bmsh3d_vertex* e = (bmsh3d_vertex*) edge->e_vertex();
+        vgl_point_3d<double> p1 = s->get_pt();
+        v0->get_pt().set(p1.x(), p1.y(), p1.z());
+        bmsh3d_vertex* v1 = (bmsh3d_vertex*) M->_new_vertex ();
+        vgl_point_3d<double> p2 = e->get_pt();
+        v1->get_pt().set(p2.x(), p2.y(), p2.z());
+        bmsh3d_face_mc *f1, *f2;
+        bmsh3d_edge* next =  cur_face->find_other_edge(e, edge);
+        bmsh3d_edge* prev = cur_face->find_other_edge(s, edge);
+        mesh_break_face(M, cur_face, prev, next, v0, v1, f1, f2);
+        if (f1->containing_vertex(s))
+          cur_face = f2;
+        else
+          cur_face = f1;
       }
-
-      if (edge == 0) {
-        vcl_cerr << "ERROR: incident face is not found in extrude_face()\n";
-        return 0;
-      }
-
-      bmsh3d_halfedge* he = edge->incident_halfedge(cur_face);
-      bmsh3d_vertex* v0 = (bmsh3d_vertex*) M->_new_vertex ();
-      bmsh3d_vertex* s = (bmsh3d_vertex*) edge->s_vertex();
-      bmsh3d_vertex* e = (bmsh3d_vertex*) edge->e_vertex();
-      vgl_point_3d<double> p1 = s->get_pt();
-      v0->get_pt().set(p1.x(), p1.y(), p1.z());
-      bmsh3d_vertex* v1 = (bmsh3d_vertex*) M->_new_vertex ();
-      vgl_point_3d<double> p2 = e->get_pt();
-      v1->get_pt().set(p2.x(), p2.y(), p2.z());
-      bmsh3d_face_mc *f1, *f2;
-      bmsh3d_edge* next =  cur_face->find_other_edge(e, edge);
-      bmsh3d_edge* prev = cur_face->find_other_edge(s, edge);
-      mesh_break_face(M, cur_face, prev, next, v0, v1,  f1, f2);
-      if (f1->containing_vertex(s))
-        cur_face = f2;
-      else
-        cur_face = f1;
-      this->print_faces();
     }
-  // there is only one face, so we will extrude iT anyway
-  }
-  else
-  {
-    vcl_vector<bmsh3d_edge*> inc_edges;
-    cur_face->get_incident_edges (inc_edges);
-    for (unsigned j=0; j<inc_edges.size(); j++) {
-      bmsh3d_edge* edge = inc_edges[j];
-      bmsh3d_halfedge* he = edge->halfedge();
-      bmsh3d_vertex* v0 = (bmsh3d_vertex*) M->_new_vertex ();
-      bmsh3d_vertex* s = (bmsh3d_vertex*) edge->s_vertex();
-      bmsh3d_vertex* e = (bmsh3d_vertex*) edge->e_vertex();
-      vgl_point_3d<double> p1 = s->get_pt();
-      v0->get_pt().set(p1.x(), p1.y(), p1.z());
-      bmsh3d_vertex* v1 = (bmsh3d_vertex*) M->_new_vertex ();
-      vgl_point_3d<double> p2 = e->get_pt();
-      v1->get_pt().set(p2.x(), p2.y(), p2.z());
-      bmsh3d_face_mc *f1, *f2;
-      bmsh3d_edge* next =  cur_face->find_other_edge(e, edge);
-      bmsh3d_edge* prev = cur_face->find_other_edge(s, edge);
-      mesh_break_face(M, cur_face, prev, next, v0, v1, f1, f2);
-      if (f1->containing_vertex(s))
-        cur_face = f2;
-      else
-        cur_face = f1;
-    }
-  }
 #endif // 0
   vcl_vector<bmsh3d_vertex*> v_list;
   vcl_vector<bmsh3d_edge*> e_vert_list;
@@ -1080,7 +1169,7 @@ vgl_plane_3d<double> bwm_observable_mesh::get_plane(unsigned face_id)
     return plane;
 #endif
   if (fitter.fit(0.0001)) {
-  plane = fitter.get_plane();
+    plane = fitter.get_plane();
   }
   else {
     vcl_cout << "NO FITTING" << vcl_endl;
@@ -1104,7 +1193,7 @@ void bwm_observable_mesh::print_faces()
 
 void bwm_observable_mesh::move_points_to_plane(bmsh3d_face_mc* face)
 {
- bmsh3d_face* temp = object_->facemap(face->id());
+  bmsh3d_face* temp = object_->facemap(face->id());
   if (temp->vertices().size()==0)
     return;
   vgl_plane_3d<double> plane = get_plane(face->id());

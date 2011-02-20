@@ -10,8 +10,7 @@
 #include <vgui/vgui_command.h>
 
 #include <bgui/bgui_picker_tableau.h>
-
-#include <vpgl/vpgl_proj_camera.h>
+#include <vul/vul_timer.h>
 
 class bwm_tableau_proj_cam : public bwm_tableau_cam
 {
@@ -28,10 +27,12 @@ class bwm_tableau_proj_cam : public bwm_tableau_cam
 
   void get_popup(vgui_popup_params const &params, vgui_menu &menu);
 
+  //: saves the camera with a new version number (if adjusted) and returns the path
+  vcl_string save_camera();
+
  protected:
-  vpgl_proj_camera<double> camera_;
   bwm_observer_proj_cam* my_observer_;
- 
+  vul_timer timer_; 
 };
 
 #endif
