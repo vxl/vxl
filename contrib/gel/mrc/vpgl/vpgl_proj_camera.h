@@ -66,7 +66,7 @@ template <class T>
 class vpgl_proj_camera : public vpgl_camera<T>
 {
  public:
-  //: Constructors:----------------------
+  // ----------------- Constructors:----------------------
 
   //: Default constructor makes an identity camera.
   vpgl_proj_camera();
@@ -91,7 +91,7 @@ class vpgl_proj_camera : public vpgl_camera<T>
 
   virtual ~vpgl_proj_camera();
 
-  // Projections and Backprojections:------------------------
+  // ----------------- Projections and Backprojections:------------------------
 
   //: Projection from base class
   virtual void project(const T x, const T y, const T z, T& u, T& v) const;
@@ -127,12 +127,10 @@ class vpgl_proj_camera : public vpgl_camera<T>
   //: Find the 3d ray that goes through the camera center and the provided image point.
   virtual vgl_homg_line_3d_2_points<T> backproject( const vgl_homg_point_2d<T>& image_point ) const;
 
-
   //: Find the 3d plane that contains the camera center and the provided line in the image plane.
   vgl_homg_plane_3d<T> backproject( const vgl_homg_line_2d<T>& image_line ) const;
 
-
-  // Misc Camera Functions:-------------------
+  // --------------------- Misc Camera Functions:-------------------
 
   //: Find the 3d coordinates of the center of the camera.
   virtual vgl_homg_point_3d<T> camera_center() const;
@@ -145,7 +143,7 @@ class vpgl_proj_camera : public vpgl_camera<T>
   vgl_homg_point_2d<T> y_vanishing_point() const{ return vgl_homg_point_2d<T>( P_(0,1), P_(1,1), P_(2,1) ); }
   vgl_homg_point_2d<T> z_vanishing_point() const{ return vgl_homg_point_2d<T>( P_(0,2), P_(1,2), P_(2,2) ); }
 
-  // Getters and Setters:---------------------
+  // --------------------- Getters and Setters:---------------------
 
   //: Return a copy of the camera matrix.
   const vnl_matrix_fixed<T,3,4>& get_matrix() const{ return P_; }
@@ -160,7 +158,8 @@ class vpgl_proj_camera : public vpgl_camera<T>
   virtual bool set_matrix( const vnl_matrix_fixed<T,3,4>& new_camera_matrix );
   virtual bool set_matrix( const T* new_camera_matrix );
 
-  // I/O :---------------------
+  // --------------------- I/O :---------------------
+
   //: Save in ascii format
   virtual void save(vcl_string cam_path);
   //: Binary save self to binary stream.
@@ -189,7 +188,7 @@ class vpgl_proj_camera : public vpgl_camera<T>
 
   //: Return `this' if `this' is a vpgl_perspective_camera, 0 otherwise
   // This is used by e.g. the storage class
-  // \todo code for affine camera and other children
+  // TODO: code for affine camera and other children
   virtual vpgl_perspective_camera<T> *cast_to_perspective_camera() {return 0;}
   virtual const vpgl_perspective_camera<T> *cast_to_perspective_camera() const {return 0;}
 
@@ -261,7 +260,6 @@ image_jacobians(const vpgl_proj_camera<T>& camera,
 // I/O ---
 
 //: Write vpgl_perspective_camera to stream
-
 template <class Type>
 vcl_ostream&  operator<<(vcl_ostream& s, vpgl_proj_camera<Type> const& p);
 

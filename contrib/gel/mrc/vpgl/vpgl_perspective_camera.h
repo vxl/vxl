@@ -138,7 +138,8 @@ class vpgl_perspective_camera : public vpgl_proj_camera<T>
     (K_ == that.K_ && this->get_matrix()== that.get_matrix() &&
      camera_center_ == that.camera_center_ && this->R_.as_matrix() == that.R_.as_matrix()); }
 
-  // I/O :---------------------
+  // -------------------- I/O :---------------------
+
   //: Save in ascii format
   virtual void save(vcl_string cam_path);
 
