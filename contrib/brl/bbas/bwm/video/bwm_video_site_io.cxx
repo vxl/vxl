@@ -67,7 +67,7 @@ bool bwm_video_site_io::open(vcl_string const& xml_path)
              << this->XML_GetCurrentLineNumber() << vcl_endl;
     return false;
   }
-  if(fail_) return false;
+  if (fail_) return false;
   return true;
 }
 
@@ -115,30 +115,30 @@ bwm_video_site_io::startElement(const char* name, const char** atts)
   else if (vcl_strcmp(name, OBJECTS_TAG) == 0) {
     vcl_string object_dir;
     obj_types_.clear(); obj_paths_.clear();
-    if(vcl_strcmp(atts[0], "mesh_feature_dir") == 0)
-      {
-        convert(atts[1], object_dir);
-        if(vul_file::is_directory(object_dir)){
-          vcl_string dir = object_dir + "/*.ply";
-          for(vul_file_iterator fit = dir.c_str(); fit; ++fit)
-            {
-              obj_types_.push_back("mesh_feature");
-              obj_paths_.push_back(fit());
-            }
+    if (vcl_strcmp(atts[0], "mesh_feature_dir") == 0)
+    {
+      convert(atts[1], object_dir);
+      if (vul_file::is_directory(object_dir)){
+        vcl_string dir = object_dir + "/*.ply";
+        for (vul_file_iterator fit = dir.c_str(); fit; ++fit)
+        {
+          obj_types_.push_back("mesh_feature");
+          obj_paths_.push_back(fit());
         }
       }
+    }
   }
   else if (vcl_strcmp(name, OBJECT_TAG) == 0) {
     vcl_string temp;
-    if(vcl_strcmp(atts[0], "type") == 0){
+    if (vcl_strcmp(atts[0], "type") == 0){
       convert(atts[1], temp);
       obj_types_.push_back(temp);
     }
-    if(vcl_strcmp(atts[2], "path") == 0){
+    if (vcl_strcmp(atts[2], "path") == 0){
       convert(atts[3], temp);
       obj_paths_.push_back(temp);
     }
-    if(obj_types_.size()!=obj_paths_.size()) fail_ = true;
+    if (obj_types_.size()!=obj_paths_.size()) fail_ = true;
   }
   else if (vcl_strcmp(name, CORRESPONDENCES_TAG) == 0) {
     corrs_.clear();
@@ -256,22 +256,23 @@ void bwm_video_site_io::x_write(vcl_string const& xml_path)
   cpath.add_attribute("path", camera_path_);
   cpath.x_write(os);
 
-  if(vul_file::is_directory(object_dir_)){
+  if (vul_file::is_directory(object_dir_)){
     vsl_basic_xml_element mdpath(OBJECTS_TAG);
     cpath.add_attribute("mesh_feature_dir", object_dir_);
     cpath.x_write(os);
-  }else{
-	vsl_basic_xml_element mdpath(OBJECTS_TAG);
+  }
+  else {
+    vsl_basic_xml_element mdpath(OBJECTS_TAG);
     mdpath.add_attribute("mesh_feature_dir", "");
     mdpath.x_write(os);
     unsigned nobjs = obj_types_.size();
-    for(unsigned i = 0; i<nobjs; ++i)
-      {
-        vsl_basic_xml_element mpath(OBJECT_TAG);
-        mpath.add_attribute("type", obj_types_[i]);
-        mpath.add_attribute("path", obj_paths_[i]);
-        mpath.x_write(os);
-      }
+    for (unsigned i = 0; i<nobjs; ++i)
+    {
+      vsl_basic_xml_element mpath(OBJECT_TAG);
+      mpath.add_attribute("type", obj_types_[i]);
+      mpath.add_attribute("path", obj_paths_[i]);
+      mpath.x_write(os);
+    }
   }
   vsl_basic_xml_element sdir(SITE_DIR_TAG);
   sdir.add_attribute("path", site_dir_);
