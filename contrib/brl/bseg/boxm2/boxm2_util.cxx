@@ -125,7 +125,7 @@ bool boxm2_util::copy_file(vcl_string file, vcl_string dest)
   return true;
 }
 
-bool boxm2_util::generate_html(int nrows, int ncols, vcl_string dest)
+bool boxm2_util::generate_html(int height, int width, int nrows, int ncols, vcl_string dest)
 {
   char html[4*1024];
   vcl_sprintf(html,
@@ -140,14 +140,28 @@ bool boxm2_util::generate_html(int nrows, int ncols, vcl_string dest)
   <script src='js/jquery.disabletextselect-min.js' type='text/javascript'></script>\n \
   <script src='js/jquery.mousewheel-min.js' type='text/javascript'></script>\n \
   <script src='js/js.js' type='text/javascript'></script>\n \
-  <meta name='viewport' content='width = 480' />\n \
+  <script src='js/miniZoomPan.js' type='text/javascript'></script>\n \
+  <style  src='css/miniZoomPan.css' type='text/css' />\n \
+  <meta name='viewport' content='width = %d' />\n \
   <style>\n \
-    html, body{ margin: 0; background: #000 url(iphone.instructions.gif) no-repeat 0 480px; }\n \
+    html, body{ margin: 0; background: #000 url(iphone.instructions.gif) no-repeat 0 %dpx; }\n \
   </style>\n \
+  <!-- ZOOM Script -->\n \
+  <script type= 'text/javascript'>/*<![CDATA[*/ \n \
+      $(function() { \n \
+	      $('#zoom01').miniZoomPan({ \n \
+			      sW: %d, \n \
+			      sH: %d, \n \
+			      lW: %d, \n \
+			      lH: %d  \n \
+		      }) \n \
+      }); \n \
+      /*]]>*/ \n \
+  </script> \n \
 </head>\n \
 <body>\n \
-  <div id='wrapper'>\n \
-    <img id='image' src='img/scene_0_0.jpg' width='640px' height='480px' />\n \
+  <div id='zoom01'>\n \
+    <img id='image' src='img/scene_0_0.jpg' width='%dpx' height=%dpx' />\n \
   </div>\n \
   <script type='text/javascript'>\n \
     $(document).ready(function(){\n \
@@ -166,6 +180,14 @@ bool boxm2_util::generate_html(int nrows, int ncols, vcl_string dest)
   </script>\n \
 </body>\n \
 </html>",
+              width,
+              width,
+              width,
+              height,
+              2*width,
+              2*height,
+              width,
+              height,
               ncols,
               ncols,
               nrows);

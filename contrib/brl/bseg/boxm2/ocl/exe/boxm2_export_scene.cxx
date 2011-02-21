@@ -100,19 +100,34 @@ int main(int argc,  char** argv)
 #endif
   }
 
+  //see if CSS folder exists
+  vcl_string cssdir = dir() + "/css/";
+  if ( vul_file::exists(cssdir) && vul_file::is_directory(cssdir) ){
+    vul_file::delete_file_glob(cssdir+"*");
+  }
+  else {
+    vul_file::make_directory_path(cssdir);
+#ifdef DEBUG
+    vcl_cout<<"Couldn't make css directory at "<<dir()<<vcl_endl;
+    return -1;
+#endif
+  }
+
   //copy JS files into JS folder
   vcl_string aux_dir = vcl_string(VCL_SOURCE_ROOT_DIR) + "/contrib/brl/bseg/boxm2/ocl/exe/auxiliary/";
-
   vcl_vector<vcl_string> js_files;
   js_files.push_back("/js/jquery.min.js");
   js_files.push_back("/js/jquery.cookie-min.js");
   js_files.push_back("/js/jquery.disabletextselect-min.js");
   js_files.push_back("/js/jquery.mousewheel-min.js");
   js_files.push_back("/js/jquery.reel-min.js");
-
+  js_files.push_back("/js/miniZoomPan.js");
   //copy files to dir() + js
   for (unsigned int i=0; i<js_files.size(); ++i)
     boxm2_util::copy_file(aux_dir + js_files[i], dir() + js_files[i]);
+    
+  //copy CSS file to css folder
+  boxm2_util::copy_file(aux_dir + "/css/miniZoomPan.css", dir() + "/css/miniZoomPan.css"); 
 
   //////////////////////////////////////////////////////////////////////////////
   // Now Render Scene Images
@@ -205,7 +220,7 @@ int main(int argc,  char** argv)
         expimg->fill(0);
         vis_img->fill(1.0f);
         gpu_pro->run(&gpu_render, input, output);
-        gpu_pro->finish();
+        //gpu_pro->finish();
 
         vil_image_view<unsigned int>* expimg_view = static_cast<vil_image_view<unsigned int>* >(expimg_sptr.ptr());
         vil_image_view<vxl_byte>* byte_img = new vil_image_view<vxl_byte>(ni(), nj());
@@ -225,7 +240,7 @@ int main(int argc,  char** argv)
   //need to generate a JS.JS file that lists an array of these images
   vcl_cout<<"Rows: "<<num_in()<<" cols: "<<num_az()<<vcl_endl;
   boxm2_util::generate_jsfunc(img_grid, dir() + "/js/js.js"); 
-  boxm2_util::generate_html(num_in(), num_az(),  dir() + "/index.html"); 
+  boxm2_util::generate_html(nj(),ni(), num_in(), num_az(),  dir() + "/index.html"); 
 
   // if stitch is specified, also save a big image
   if (stitch())

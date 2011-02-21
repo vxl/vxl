@@ -35,7 +35,7 @@ class boxm2_util
     static bool copy_file(vcl_string file, vcl_string dest); 
     
     //Will be used to specify rows and cols for JavaScript App
-    static bool generate_html(int nrows, int ncols, vcl_string dest); 
+    static bool generate_html(int width, int height, int nrows, int ncols, vcl_string dest); 
     static bool generate_jsfunc(vbl_array_2d<vcl_string> img_files, vcl_string dest); 
 
 
