@@ -147,17 +147,17 @@ bool boxm2_util::generate_html(int height, int width, int nrows, int ncols, vcl_
     html, body{ margin: 0; background: #000 url(iphone.instructions.gif) no-repeat 0 %dpx; }\n \
   </style>\n \
   <!-- ZOOM Script -->\n \
-  <script type= 'text/javascript'>/*<![CDATA[*/ \n \
-      $(function() { \n \
-	      $('#zoom01').miniZoomPan({ \n \
-			      sW: %d, \n \
-			      sH: %d, \n \
-			      lW: %d, \n \
-			      lH: %d  \n \
-		      }) \n \
-      }); \n \
-      /*]]>*/ \n \
-  </script> \n \
+  <script type= 'text/javascript'>/*<![CDATA[*/\n \
+      $(function() {\n \
+        $('#zoom01').miniZoomPan({\n \
+            sW: %d,\n \
+            sH: %d,\n \
+            lW: %d,\n \
+            lH: %d\n \
+          })\n \
+      });\n \
+      /*]]>*/\n \
+  </script>\n \
 </head>\n \
 <body>\n \
   <div id='zoom01'>\n \
@@ -214,8 +214,8 @@ bool boxm2_util::generate_jsfunc(vbl_array_2d<vcl_string> img_files, vcl_string 
   //go through the array in img_files
   for (unsigned int row=0; row<img_files.rows(); ++row) {
     for (unsigned int col=0; col<img_files.cols(); ++col) {
-      if (!(row == 0 && col == 0)) 
-          js += ", "; //don't put a comma at the end...
+      if (row != 0 || col != 0)
+        js += ", "; //don't put a comma at the beginning...
       js += "'" + img_files(row, col) + "'";
     }
   }
