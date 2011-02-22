@@ -728,13 +728,15 @@ void bwm_site_mgr::load_video_site()
   for(unsigned i = 0; i<nobj; ++i){
     if(obj_types[i]!="mesh_feature") continue;
     bwm_observable_mesh_sptr mesh = new bwm_observable_mesh();
-    bwm_observer_mgr::instance()->attach(mesh);
     mesh->load_from(obj_paths[i]);
     if (mesh) {
-      bwm_world::instance()->add(mesh);
-      mesh->set_path(obj_paths[i]);
-    }else
-      bwm_observer_mgr::instance()->detach(mesh);
+      bwm_observable_mesh_sptr obj = new bwm_observable_mesh();
+      bwm_observer_mgr::instance()->attach(obj);
+      obj->set_path(obj_paths[i]);
+      obj->set_mesh_type(bwm_observable_mesh::BWM_MESH_FEATURE);
+      obj->set_object(mesh->get_object()->clone());
+      bwm_world::instance()->add(obj);
+    }
   }
 }
 

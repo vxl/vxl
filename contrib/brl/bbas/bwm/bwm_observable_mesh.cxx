@@ -267,6 +267,7 @@ bool bwm_observable_mesh::move_poly_in_optical_cone(vpgl_camera<double> * cam,
   // the mesh face has now been transformed by the motion along the cone
   // so notify all the observers of the new shape
   this->notify_observers("move");
+  return true;
 }
 void bwm_observable_mesh::extrude(int face_id)
 {

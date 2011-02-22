@@ -12,8 +12,6 @@
 #include <vcl_fstream.h>
 #include <vcl_cstdio.h>
 #include <vcl_cstring.h>
-#include <vul/vul_file.h>
-#include <vul/vul_file_iterator.h>
 // --------------
 // --- PARSER ---
 // --------------
@@ -113,20 +111,7 @@ bwm_video_site_io::startElement(const char* name, const char** atts)
       convert(atts[1], site_dir_);
   }
   else if (vcl_strcmp(name, OBJECTS_TAG) == 0) {
-    vcl_string object_dir;
     obj_types_.clear(); obj_paths_.clear();
-    if (vcl_strcmp(atts[0], "mesh_feature_dir") == 0)
-    {
-      convert(atts[1], object_dir);
-      if (vul_file::is_directory(object_dir)){
-        vcl_string dir = object_dir + "/*.ply";
-        for (vul_file_iterator fit = dir.c_str(); fit; ++fit)
-        {
-          obj_types_.push_back("mesh_feature");
-          obj_paths_.push_back(fit());
-        }
-      }
-    }
   }
   else if (vcl_strcmp(name, OBJECT_TAG) == 0) {
     vcl_string temp;
@@ -256,34 +241,26 @@ void bwm_video_site_io::x_write(vcl_string const& xml_path)
   cpath.add_attribute("path", camera_path_);
   cpath.x_write(os);
 
-  if (vul_file::is_directory(object_dir_)){
-    vsl_basic_xml_element mdpath(OBJECTS_TAG);
-    cpath.add_attribute("mesh_feature_dir", object_dir_);
-    cpath.x_write(os);
-  }
-  else {
-    vsl_basic_xml_element mdpath(OBJECTS_TAG);
-    mdpath.add_attribute("mesh_feature_dir", "");
-    mdpath.x_write(os);
-    unsigned nobjs = obj_types_.size();
-    for (unsigned i = 0; i<nobjs; ++i)
+  vsl_basic_xml_element mdpath(OBJECTS_TAG);
+  mdpath.x_write(os);
+  unsigned nobjs = obj_types_.size();
+  for (unsigned i = 0; i<nobjs; ++i)
     {
       vsl_basic_xml_element mpath(OBJECT_TAG);
       mpath.add_attribute("type", obj_types_[i]);
       mpath.add_attribute("path", obj_paths_[i]);
       mpath.x_write(os);
     }
-  }
-  vsl_basic_xml_element sdir(SITE_DIR_TAG);
-  sdir.add_attribute("path", site_dir_);
-  sdir.x_write(os);
+vsl_basic_xml_element sdir(SITE_DIR_TAG);
+sdir.add_attribute("path", site_dir_);
+sdir.x_write(os);
 
-  //write the correspondences
-  vsl_basic_xml_element corrs(CORRESPONDENCES_TAG);
-  corrs.x_write_open(os);
-  vcl_vector<bwm_video_corr_sptr >::iterator cit = corrs_.begin();
-  for (; cit != corrs_.end(); ++cit)
-    (*cit)->x_write(os);
-  corrs.x_write_close(os);
-  vsite.x_write_close(os);
+//write the correspondences
+vsl_basic_xml_element corrs(CORRESPONDENCES_TAG);
+corrs.x_write_open(os);
+vcl_vector<bwm_video_corr_sptr >::iterator cit = corrs_.begin();
+for (; cit != corrs_.end(); ++cit)
+  (*cit)->x_write(os);
+corrs.x_write_close(os);
+vsite.x_write_close(os);
 }
