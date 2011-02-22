@@ -49,6 +49,8 @@ bool boxm2_opencl_refine_process::execute(vcl_vector<brdb_value_sptr>& input, vc
   //scene argument
   brdb_value_t<boxm2_scene_sptr>* scene_brdb = static_cast<brdb_value_t<boxm2_scene_sptr>* >( input[i++].ptr() );
   boxm2_scene_sptr scene = scene_brdb->value(); 
+  brdb_value_t<vcl_string>* brdb_data_type = static_cast<brdb_value_t<vcl_string>* >( input[i++].ptr() );
+  data_type_=brdb_data_type->value();
 
   //prob_thresh buffer
   float* prob_buff = new float[1];
@@ -85,7 +87,11 @@ bool boxm2_opencl_refine_process::execute(vcl_vector<brdb_value_sptr>& input, vc
   
     //data
     bocl_mem* alpha     = cache_->get_data<BOXM2_ALPHA>(id);
-    bocl_mem* mog       = cache_->get_data<BOXM2_MOG3_GREY>(id);
+    bocl_mem* mog;
+    if(data_type_=="8bit")
+        mog = cache_->get_data<BOXM2_MOG3_GREY>(id);
+    else if(data_type_=="16bit")
+        mog = cache_->get_data<BOXM2_MOG3_GREY_16>(id);
     bocl_mem* num_obs   = cache_->get_data<BOXM2_NUM_OBS>(id);
     bocl_mem* blk_info  = cache_->loaded_block_info(); 
     transfer_time_ += (float) transfer.all(); 

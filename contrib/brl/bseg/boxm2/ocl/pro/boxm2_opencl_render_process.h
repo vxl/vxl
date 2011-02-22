@@ -39,7 +39,7 @@ class boxm2_opencl_render_process : public boxm2_opencl_process_base
     ////////////////////////////////////////////////////////////////////////////
 
   private:
-
+    vcl_string data_type_;
     //: render kernel (other processes may have many kernels
     bocl_kernel render_kernel_;
     bocl_kernel normalize_render_kernel_;

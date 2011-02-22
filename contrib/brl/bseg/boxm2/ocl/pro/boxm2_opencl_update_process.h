@@ -29,7 +29,7 @@ enum {
 class boxm2_opencl_update_process : public boxm2_opencl_process_base
 {
   public:
-    boxm2_opencl_update_process() : image_(0) {}
+    boxm2_opencl_update_process() : image_(0),data_type_("8bit") {}
     
     //: process init and execute
     bool init() { return true; }
@@ -44,6 +44,7 @@ class boxm2_opencl_update_process : public boxm2_opencl_process_base
     //: render kernel (other processes may have many kernels
     vcl_vector<bocl_kernel*> update_kernels_;
 
+    vcl_string data_type_;
     //: workspace 
     vcl_size_t lThreads_[2]; 
     vcl_size_t gThreads_[2]; 

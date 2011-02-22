@@ -103,6 +103,9 @@ bool boxm2_opencl_update_process::execute(vcl_vector<brdb_value_sptr>& input, vc
   vil_image_view<float>* img_view = static_cast<vil_image_view<float>* >(img.ptr());
   this->write_input_image(img_view);
 
+
+  brdb_value_t<vcl_string>* brdb_data_type = static_cast<brdb_value_t<vcl_string>* >( input[i++].ptr() );
+  data_type_=brdb_data_type->value();
   //exp image dimensions
   img_size_[0] = img_view->ni();
   img_size_[1] = img_view->nj();
@@ -166,7 +169,10 @@ bool boxm2_opencl_update_process::execute(vcl_vector<brdb_value_sptr>& input, vc
       vul_timer transfer;
       blk_       = cache_->get_block(*id);
       alpha_     = cache_->get_data<BOXM2_ALPHA>(*id);
-      mog_       = cache_->get_data<BOXM2_MOG3_GREY>(*id);
+      if(data_type_=="8bit")
+        mog_       = cache_->get_data<BOXM2_MOG3_GREY>(*id);
+      else if(data_type_=="16bit")
+        mog_       = cache_->get_data<BOXM2_MOG3_GREY_16>(*id);
       num_obs_   = cache_->get_data<BOXM2_NUM_OBS>(*id);
       blk_info_  = cache_->loaded_block_info();
 

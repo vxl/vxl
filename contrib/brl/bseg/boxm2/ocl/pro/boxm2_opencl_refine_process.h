@@ -32,6 +32,7 @@ class boxm2_opencl_refine_process : public boxm2_opencl_process_base
 
 
   private:
+    vcl_string data_type_;
 
     //: render kernel (other processes may have many kernels
     bocl_kernel refine_kernel_;

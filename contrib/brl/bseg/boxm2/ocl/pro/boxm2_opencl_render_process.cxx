@@ -125,6 +125,9 @@ bool boxm2_opencl_render_process::execute(vcl_vector<brdb_value_sptr>& input, vc
     vis_img_->set_cpu_buffer(vis_img_view->begin());
     vis_img_->write_to_buffer(*command_queue_);
   }
+  brdb_value_t<vcl_string>* brdb_data_type = static_cast<brdb_value_t<vcl_string>* >( input[i++].ptr() );
+
+  data_type_=brdb_data_type->value();
 
   //exp image dimensions
   int* img_dim_buff = new int[4];
@@ -161,7 +164,11 @@ bool boxm2_opencl_render_process::execute(vcl_vector<brdb_value_sptr>& input, vc
     vul_timer transfer;
     bocl_mem* blk       = cache_->get_block(*id);
     bocl_mem* alpha     = cache_->get_data<BOXM2_ALPHA>(*id);
-    bocl_mem* mog       = cache_->get_data<BOXM2_MOG3_GREY>(*id);
+    bocl_mem* mog;
+    if(data_type_=="8bit")
+        mog       = cache_->get_data<BOXM2_MOG3_GREY>(*id);
+    else if(data_type_=="16bit")
+        mog       = cache_->get_data<BOXM2_MOG3_GREY_16>(*id);
     bocl_mem* blk_info  = cache_->loaded_block_info();
     transfer_time_ += (float) transfer.all();
 
