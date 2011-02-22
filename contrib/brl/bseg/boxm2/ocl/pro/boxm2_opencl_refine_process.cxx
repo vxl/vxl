@@ -34,7 +34,7 @@ bool boxm2_opencl_refine_process::init_kernel(cl_context* context,
                                                 device,
                                                 src_paths,
                                                 "refine_bit_scene",   //kernel name
-                                                "",                   //options
+                                                opts,                   //options
                                                 "boxm2 opencl refine"); //kernel identifier (for error checking)
   return created;
 }

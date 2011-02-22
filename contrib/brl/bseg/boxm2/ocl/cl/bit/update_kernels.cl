@@ -5,16 +5,18 @@
 #if NVIDIA
  #pragma OPENCL EXTENSION cl_khr_gl_sharing : enable
 #endif
-#ifndef MOG_TYPE
-#define MOG_TYPE uchar8
-#endif
-#if MOG_TYPE ==uchar8
-    #define CONVERT_FUNC_SAT_RTE(lhs,data) lhs=convert_uchar8_sat_rte(data);
-    #define NORM 255;
-#elif MOG_TYPE ==ushort8
+#ifdef MOG_TYPE_16 
     #define CONVERT_FUNC_SAT_RTE(lhs,data) lhs=convert_ushort8_sat_rte(data);
+    #define MOG_TYPE ushort8
     #define NORM 65535;
 #endif
+#ifdef MOG_TYPE_8 
+   #define CONVERT_FUNC_SAT_RTE(lhs,data) lhs=convert_uchar8_sat_rte(data);
+   #define MOG_TYPE uchar8
+   #define NORM 255;
+#endif
+
+
 
 #ifdef SEGLEN
 typedef struct

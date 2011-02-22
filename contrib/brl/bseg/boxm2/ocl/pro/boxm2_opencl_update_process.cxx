@@ -335,19 +335,37 @@ bool boxm2_opencl_update_process::write_input_image(vil_image_view<float>* input
   vil_image_view<float>::iterator iter;
 
   //write to buffer (or create it)
-  float* buff = (image_) ? (float*) image_->cpu_buffer() : new float[4 * input_image->size()];
-  int i=0;
-  for (iter = input_image->begin(); iter != input_image->end(); ++iter, ++i) {
-    buff[4*i] = (*iter);
-    buff[4*i + 1] = 0.0f;
-    buff[4*i + 2] = 1.0f;
-    buff[4*i + 3] = 0.0f;
+  unsigned ni=RoundUp(input_image->ni(),8);
+  unsigned nj=RoundUp(input_image->nj(),8);
+  float* buff = (image_) ? (float*) image_->cpu_buffer() : new float[4 * ni*nj];
+  int count=0;
+  for(unsigned j=0;j<nj;j++)
+  {
+      for(unsigned i=0;i<ni;i++)
+      {
+
+          buff[4*count] = 0.0f;
+          buff[4*count + 1] = 0.0f;
+          buff[4*count + 2] = 1.0f;
+          buff[4*count + 3] = 0.0f;
+          if(i<input_image->ni() && j< input_image->nj())
+              buff[4*count]=(*input_image)(i,j);
+
+          ++count;
+
+      }
   }
+  //for (iter = input_image->begin(); iter != input_image->end(); ++iter, ++i) {
+  //  buff[4*i] = (*iter);
+  //  buff[4*i + 1] = 0.0f;
+  //  buff[4*i + 2] = 1.0f;
+  //  buff[4*i + 3] = 0.0f;
+  //}
 
   //now write to bocl_mem
   if (!image_) {
     //create mem
-    image_ = new bocl_mem((*context_), buff, input_image->size() * sizeof(cl_float4), "input image buffer");
+    image_ = new bocl_mem((*context_), buff, ni*nj * sizeof(cl_float4), "input image buffer");
     image_->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
   }
   else {

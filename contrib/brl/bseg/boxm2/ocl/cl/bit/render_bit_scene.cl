@@ -3,7 +3,12 @@
 #endif
 
 
-
+#ifdef MOG_TYPE_16 
+    #define MOG_TYPE int4
+#endif
+#ifdef MOG_TYPE_8 
+    #define MOG_TYPE int2
+#endif
 #ifdef RENDER
 //need to define a struct of type AuxArgs with auxiliary arguments
 // to supplement cast ray args

@@ -1,7 +1,10 @@
-#if MOG_TYPE ==int2
+#ifdef MOG_TYPE_8 
+    #define MOG_TYPE int2
     #define CONVERT_FUNC(lhs,data) uchar8 lhs = as_uchar8(data);
     #define NORM 255;
-#elif MOG_TYPE ==int4
+#endif
+#if MOG_TYPE_16 
+    #define MOG_TYPE int4
     #define CONVERT_FUNC(lhs,data) ushort8 lhs = as_ushort8(data);
     #define NORM 65535;
 #endif

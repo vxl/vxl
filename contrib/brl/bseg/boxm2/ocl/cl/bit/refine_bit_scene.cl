@@ -5,7 +5,12 @@
 // Also macro "MAXCELLS" must be defined for moving refined data
 //------------------------------------------------------------------------------
 #pragma OPENCL EXTENSION cl_khr_global_int32_base_atomics : enable
-
+#ifdef MOG_TYPE_16 
+    #define MOG_TYPE ushort8
+#endif
+#ifdef MOG_TYPE_8 
+   #define MOG_TYPE uchar8
+#endif
 /////////////////////////////////////////////////////////////////
 ////Refine Tree (refines local tree)
 ////Depth first search iteration of the tree (keeping track of node level)
