@@ -1,5 +1,12 @@
+#if MOG_TYPE ==int2
+    #define CONVERT_FUNC(lhs,data) uchar8 lhs = as_uchar8(data);
+    #define NORM 255;
+#elif MOG_TYPE ==int4
+    #define CONVERT_FUNC(lhs,data) ushort8 lhs = as_ushort8(data);
+    #define NORM 65535;
+#endif
 
-void step_cell_render(__global int2   * cell_data, 
+void step_cell_render(__global MOG_TYPE   * cell_data, 
                       __global float  * alpha_data, 
                                int      data_ptr, 
                                float    d, 
@@ -12,10 +19,12 @@ void step_cell_render(__global int2   * cell_data,
   // for rendering only
   if(diff_omega<0.995f)
   {
-      uchar8 data = as_uchar8(cell_data[data_ptr]);
+      CONVERT_FUNC(udata,cell_data[data_ptr])
+      //uchar8 udata = as_uchar8(cell_data[data_ptr]);
+      float8  data=convert_float8(udata)/NORM;
       expected_int_cell = ((data.s0) * (data.s2)
                           +(data.s3) * (data.s5)
-                          +(data.s6) * (255.0f - data.s2 - data.s5))*1.53787005e-5f; // 1/255.0f/255.0f;
+                          +(data.s6) * (1 - data.s2 - data.s5)); 
   }
   float omega=(*vis) * (1.0f - diff_omega);
   (*vis) *= diff_omega;

@@ -2,13 +2,15 @@
  #pragma OPENCL EXTENSION cl_khr_gl_sharing : enable
 #endif
 
+
+
 #ifdef RENDER
 //need to define a struct of type AuxArgs with auxiliary arguments
 // to supplement cast ray args
 typedef struct
 {
   __global float* alpha; 
-  __global int2*  mog;
+  __global MOG_TYPE*  mog;
   float* expint; 
 } AuxArgs;  
 
@@ -22,7 +24,7 @@ void
 render_bit_scene( __constant  RenderSceneInfo    * linfo,
                   __global    int4               * tree_array,
                   __global    float              * alpha_array,
-                  __global    int2               * mixture_array,
+                  __global    MOG_TYPE           * mixture_array,
                   __global    float16            * camera,        // camera orign and SVD of inverse of camera matrix
                   __global    uint               * exp_image,      // input image and store vis_inf and pre_inf
                   __global    uint4              * exp_image_dims,

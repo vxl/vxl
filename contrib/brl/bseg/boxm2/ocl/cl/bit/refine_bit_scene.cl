@@ -101,7 +101,7 @@ refine_bit_scene(__constant  RenderSceneInfo    * linfo,
                  __global    ushort             * blocks_in_buffers,// number of blocks in each buffers
                 
                  __global    float              * alpha_array,      // alpha for each block
-                 __global    uchar8             * mixture_array,    // mixture for each block
+                 __global    MOG_TYPE             * mixture_array,    // mixture for each block
                  __global    ushort4            * num_obs_array,    // num obs for each block
                  
                  __constant  uchar              * bit_lookup,       // used to get data_index                  
@@ -247,7 +247,7 @@ refine_bit_scene(__constant  RenderSceneInfo    * linfo,
             alpha_array[offset+newDataPtr] = new_alpha;
 
             //store parent's data in child cells
-            mixture_array[offset+newDataPtr] = (uchar8) mixture_array[offset+pDataPtr];
+            mixture_array[offset+newDataPtr] = (MOG_TYPE) mixture_array[offset+pDataPtr];
             num_obs_array[offset+newDataPtr] = (ushort4) (0,0,0,100);
 
             //update new data pointer

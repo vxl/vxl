@@ -5,6 +5,16 @@
 #if NVIDIA
  #pragma OPENCL EXTENSION cl_khr_gl_sharing : enable
 #endif
+#ifndef MOG_TYPE
+#define MOG_TYPE uchar8
+#endif
+#if MOG_TYPE ==uchar8
+    #define CONVERT_FUNC_SAT_RTE(lhs,data) lhs=convert_uchar8_sat_rte(data);
+    #define NORM 255;
+#elif MOG_TYPE ==ushort8
+    #define CONVERT_FUNC_SAT_RTE(lhs,data) lhs=convert_ushort8_sat_rte(data);
+    #define NORM 65535;
+#endif
 
 #ifdef SEGLEN
 typedef struct
@@ -94,7 +104,7 @@ seg_len_main(__constant  RenderSceneInfo    * linfo,
 typedef struct
 {
   __global float* alpha; 
-  __global uchar8* mog; 
+  __global MOG_TYPE * mog; 
   __global int* seg_len;
   __global int* mean_obs; 
            float4* inImage; 
@@ -109,7 +119,7 @@ void
 pre_inf_main(__constant  RenderSceneInfo    * linfo,
              __global    int4               * tree_array,       // tree structure for each block
              __global    float              * alpha_array,      // alpha for each block
-             __global    uchar8             * mixture_array,    // mixture for each block
+             __global    MOG_TYPE           * mixture_array,    // mixture for each block
              __global    ushort4            * num_obs_array,    // num obs for each block
              __global    int                * aux_array,        // four aux arrays strung together
              __constant  uchar              * bit_lookup,       // used to get data_index
@@ -171,7 +181,7 @@ pre_inf_main(__constant  RenderSceneInfo    * linfo,
 typedef struct
 {
   __global float*   alpha; 
-  __global uchar8*  mog; 
+  __global MOG_TYPE * mog; 
   __global int* seg_len;
   __global int* mean_obs; 
   __global int* vis_array;
@@ -194,7 +204,7 @@ void
 bayes_main(__constant  RenderSceneInfo    * linfo,
            __global    int4               * tree_array,       // tree structure for each block
            __global    float              * alpha_array,      // alpha for each block
-           __global    uchar8             * mixture_array,    // mixture for each block
+           __global    MOG_TYPE           * mixture_array,    // mixture for each block
            __global    ushort4            * num_obs_array,    // num obs for each block
            __global    int                * aux_array,        // four aux arrays strung together
            __constant  uchar              * bit_lookup,       // used to get data_index
@@ -278,16 +288,11 @@ void
 proc_norm_image(__global float4* image, __global float4* p_inf, __global uint4 * imgdims)
 {
   // linear global id of the normalization image
-  int lgid = get_global_id(0) + get_global_size(0)*get_global_id(1);
 
   int i=0;
   int j=0;
-  map_work_space_2d(&i,&j);
   i=get_global_id(0);
   j=get_global_id(1);
-
-  if (i>=(*imgdims).z && j>=(*imgdims).w)
-    return;
 
   if (i>=(*imgdims).z && j>=(*imgdims).w)
     return;
@@ -318,7 +323,7 @@ __kernel
 void
 update_bit_scene_main(__global RenderSceneInfo  * info,
                       __global float            * alpha_array,
-                      __global uchar8           * mixture_array,
+                      __global MOG_TYPE         * mixture_array,
                       __global ushort4          * nobs_array,
                       __global int              * aux_array,
                       __global float            * output)
@@ -350,23 +355,24 @@ update_bit_scene_main(__global RenderSceneInfo  * info,
       float cell_beta = convert_float(beta_int)/SEGLEN_FACTOR;
       float4 aux_data = (float4) (cum_len, mean_obs, cell_beta, cell_vis/cum_len);
       float4 nobs     = convert_float4(nobs_array[gid]);
-      float8 mixture  = convert_float8(mixture_array[gid]);
+      float8 mixture  = convert_float8(mixture_array[gid])/NORM;
       float16 data = (float16) (alpha,
-                     (mixture.s0/255.0), (mixture.s1/255.0), (mixture.s2/255.0), (nobs.s0),
-                     (mixture.s3/255.0), (mixture.s4/255.0), (mixture.s5/255.0), (nobs.s1),
-                     (mixture.s6/255.0), (mixture.s7/255.0), (nobs.s2), (nobs.s3/100.0),
-                     0.0, 0.0, 0.0);
+                                 (mixture.s0), (mixture.s1), (mixture.s2), (nobs.s0),
+                                 (mixture.s3), (mixture.s4), (mixture.s5), (nobs.s1),
+                                 (mixture.s6), (mixture.s7), (nobs.s2), (nobs.s3/100.0),
+                                 0.0, 0.0, 0.0);
 
       //use aux data to update cells
-      update_cell(&data, aux_data, 2.5f, 0.09f, 0.03f);
+      update_cell(&data, aux_data, 2.5f, 0.06f, 0.02f);
+      //update_cell(&data, aux_data, 2.5f, 0.01f, 0.00375f);
 
       //reset the cells in memory
       alpha_array[gid]      = max(alphamin,data.s0);
       float8 post_mix       = (float8) (data.s1, data.s2, data.s3,
                                         data.s5, data.s6, data.s7,
-                                        data.s9, data.sa)*255.0;
+                                        data.s9, data.sa)*(float) NORM;
       float4 post_nobs      = (float4) (data.s4, data.s8, data.sb, data.sc*100.0);
-      mixture_array[gid]    = convert_uchar8_sat_rte(post_mix);
+      CONVERT_FUNC_SAT_RTE(mixture_array[gid],post_mix)
       nobs_array[gid]       = convert_ushort4_sat_rte(post_nobs);
 
     }
