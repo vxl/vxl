@@ -43,8 +43,11 @@
 #include <vgui/vgui_shell_tableau.h>
 #include <vgui/vgui_viewer2D_tableau.h>
 
+
 int main(int argc, char ** argv)
 {
+
+
     //init vgui (should choose/determine toolkit)
     vgui::init(argc, argv);
     vul_arg<vcl_string> scene_file("-scene", "scene filename", "");
@@ -62,7 +65,7 @@ int main(int argc, char ** argv)
     
     //get all of the cam and image files, sort them
     vcl_string camglob=camdir()+"/*.txt";
-    vcl_string imgglob=imgdir()+"/*.*g";
+    vcl_string imgglob=imgdir()+"/*.???";
     vul_file_iterator file_it(camglob.c_str());
     vul_file_iterator img_file_it(imgglob.c_str());
     vcl_vector<vcl_string> cam_files;
