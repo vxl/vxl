@@ -69,6 +69,7 @@ class boxm2_render_tableau : public boxm2_cam_tableau
   //vector of image files, vector of 
   vcl_vector<vcl_string> cam_files_;
   vcl_vector<vcl_string> img_files_;
+  vcl_string img_type_;
 
   //: gpu processor and render_process, update_process
   boxm2_opencl_processor* gpu_pro_;
