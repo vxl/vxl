@@ -158,7 +158,11 @@ bool boxm2_render_tableau::save_model()
     boxm2_block_id id = iter->first;
     boxm2_sio_mgr::save_block(scene_->data_path(), cache_->get_block(id));
     boxm2_sio_mgr::save_block_data(scene_->data_path(), id, cache_->get_data<BOXM2_ALPHA>(id) );
+    if(img_type_=="uchar")
+    boxm2_sio_mgr::save_block_data(scene_->data_path(), id, cache_->get_data<BOXM2_MOG3_GREY>(id) );
+    if(img_type_=="ushort")
     boxm2_sio_mgr::save_block_data(scene_->data_path(), id, cache_->get_data<BOXM2_MOG3_GREY_16>(id) );
+
     boxm2_sio_mgr::save_block_data(scene_->data_path(), id, cache_->get_data<BOXM2_NUM_OBS>(id) );
   }
   return true;
@@ -167,18 +171,24 @@ bool boxm2_render_tableau::save_model()
 //: refines model
 float boxm2_render_tableau::refine_model()
 {
-  //create generic scene
-  brdb_value_sptr brdb_scene = new brdb_value_t<boxm2_scene_sptr>(scene_);
+    //create generic scene
+    brdb_value_sptr brdb_scene = new brdb_value_t<boxm2_scene_sptr>(scene_);
+    brdb_value_sptr brdb_data_type;
+    if(img_type_=="uchar")
+        brdb_data_type= new brdb_value_t<vcl_string>(vcl_string("8bit"));
+    else if (img_type_=="ushort")
+        brdb_data_type= new brdb_value_t<vcl_string>(vcl_string("16bit"));
 
-  //set inputs
-  vcl_vector<brdb_value_sptr> input;
-  input.push_back(brdb_scene);
+    //set inputs
+    vcl_vector<brdb_value_sptr> input;
+    input.push_back(brdb_scene);
+    input.push_back(brdb_data_type);
 
-  //initoutput vector
-  vcl_vector<brdb_value_sptr> output;
+    //initoutput vector
+    vcl_vector<brdb_value_sptr> output;
 
-  //execute gpu_update
-  gpu_pro_->run(&refine_, input, output);
+    //execute gpu_update
+    gpu_pro_->run(&refine_, input, output);
   return gpu_pro_->exec_time();
 }
 
@@ -207,12 +217,18 @@ float boxm2_render_tableau::render_frame()
 
   //create scene brdbvalue pointer
   brdb_value_sptr brdb_scene = new brdb_value_t<boxm2_scene_sptr>(scene_);
+    brdb_value_sptr brdb_data_type;
+    if(img_type_=="uchar")
+     brdb_data_type= new brdb_value_t<vcl_string>(vcl_string("8bit"));
+    else if (img_type_=="ushort")
+     brdb_data_type= new brdb_value_t<vcl_string>(vcl_string("16bit"));
 
   vcl_vector<brdb_value_sptr> input;
   input.push_back(brdb_scene);
   input.push_back(brdb_cam);
   input.push_back(brdb_expimg);
   input.push_back(brdb_visimg);
+    input.push_back(brdb_data_type);
 
   //initoutput vector
   vcl_vector<brdb_value_sptr> output;
@@ -281,11 +297,18 @@ float boxm2_render_tableau::update_frame()
     //create generic scene
     brdb_value_sptr brdb_scene = new brdb_value_t<boxm2_scene_sptr>(scene_);
 
+    brdb_value_sptr brdb_data_type;
+    if(img_type_=="uchar")
+     brdb_data_type= new brdb_value_t<vcl_string>(vcl_string("8bit"));
+    else if (img_type_=="ushort")
+     brdb_data_type= new brdb_value_t<vcl_string>(vcl_string("16bit"));
+
     //set inputs
     vcl_vector<brdb_value_sptr> input;
     input.push_back(brdb_scene);
     input.push_back(brdb_cam);
     input.push_back(brdb_inimg);
+    input.push_back(brdb_data_type);
 
     //initoutput vector
     vcl_vector<brdb_value_sptr> output;
@@ -408,9 +431,9 @@ bool boxm2_render_tableau::init_clgl()
   exp_img_->set_gl_buffer(clgl_buffer_);
   vcl_string render_opts;
   if(img_type_=="uchar")
-    render_opts += " -D MOG_TYPE=int2"; 
+    render_opts += " -D MOG_TYPE_8"; 
   else if (img_type_=="ushort")
-    render_opts += " -D MOG_TYPE=int4"; 
+    render_opts += " -D MOG_TYPE_16"; 
 
   render_no_gl_.init_kernel(&gpu_pro_->context(), &gpu_pro_->devices()[0],render_opts);
   //initialize the GPU render process
@@ -421,14 +444,14 @@ bool boxm2_render_tableau::init_clgl()
   //initlaize gpu update process
   vcl_string update_opts;
   if(img_type_=="uchar")
-    update_opts += " -D MOG_TYPE=uchar8"; 
+    update_opts += " -D MOG_TYPE_8"; 
   else if (img_type_=="ushort")
-    update_opts += " -D MOG_TYPE=ushort8"; 
+    update_opts += " -D MOG_TYPE_16"; 
 
   update_.init_kernel(&gpu_pro_->context(), &gpu_pro_->devices()[0],update_opts);
 
   //initialize refine process
-  refine_.init_kernel(&gpu_pro_->context(), &gpu_pro_->devices()[0]);
+  refine_.init_kernel(&gpu_pro_->context(), &gpu_pro_->devices()[0],update_opts);
 
   return true;
 }
