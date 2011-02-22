@@ -169,9 +169,9 @@ bool boxm2_opencl_update_process::execute(vcl_vector<brdb_value_sptr>& input, vc
       vul_timer transfer;
       blk_       = cache_->get_block(*id);
       alpha_     = cache_->get_data<BOXM2_ALPHA>(*id);
-      if(data_type_=="8bit")
+      if (data_type_=="8bit")
         mog_       = cache_->get_data<BOXM2_MOG3_GREY>(*id);
-      else if(data_type_=="16bit")
+      else if (data_type_=="16bit")
         mog_       = cache_->get_data<BOXM2_MOG3_GREY_16>(*id);
       num_obs_   = cache_->get_data<BOXM2_NUM_OBS>(*id);
       blk_info_  = cache_->loaded_block_info();
@@ -332,35 +332,34 @@ bool boxm2_opencl_update_process::set_args(unsigned pass)
 
 bool boxm2_opencl_update_process::write_input_image(vil_image_view<float>* input_image)
 {
-  vil_image_view<float>::iterator iter;
-
   //write to buffer (or create it)
   unsigned ni=RoundUp(input_image->ni(),8);
   unsigned nj=RoundUp(input_image->nj(),8);
   float* buff = (image_) ? (float*) image_->cpu_buffer() : new float[4 * ni*nj];
   int count=0;
-  for(unsigned j=0;j<nj;j++)
+  for (unsigned j=0;j<nj;j++)
   {
-      for(unsigned i=0;i<ni;i++)
-      {
+    for (unsigned i=0;i<ni;i++)
+    {
+      buff[4*count] = 0.0f;
+      buff[4*count + 1] = 0.0f;
+      buff[4*count + 2] = 1.0f;
+      buff[4*count + 3] = 0.0f;
+      if (i<input_image->ni() && j< input_image->nj())
+        buff[4*count]=(*input_image)(i,j);
 
-          buff[4*count] = 0.0f;
-          buff[4*count + 1] = 0.0f;
-          buff[4*count + 2] = 1.0f;
-          buff[4*count + 3] = 0.0f;
-          if(i<input_image->ni() && j< input_image->nj())
-              buff[4*count]=(*input_image)(i,j);
-
-          ++count;
-
-      }
+      ++count;
+    }
   }
-  //for (iter = input_image->begin(); iter != input_image->end(); ++iter, ++i) {
-  //  buff[4*i] = (*iter);
-  //  buff[4*i + 1] = 0.0f;
-  //  buff[4*i + 2] = 1.0f;
-  //  buff[4*i + 3] = 0.0f;
-  //}
+#if 0
+  vil_image_view<float>::iterator iter;
+  for (iter = input_image->begin(); iter != input_image->end(); ++iter, ++count) {
+    buff[4*count] = (*iter);
+    buff[4*count + 1] = 0.0f;
+    buff[4*count + 2] = 1.0f;
+    buff[4*count + 3] = 0.0f;
+  }
+#endif // 0
 
   //now write to bocl_mem
   if (!image_) {
