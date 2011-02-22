@@ -38,6 +38,14 @@ bool boxm2_render_tableau::init(vcl_string scene_file,
   cam_files_ = cam_files;
   img_files_ = img_files;
 
+  //: default image type is uchar;
+  img_type_ ="uchar";
+  if(img_files_.size()>0)
+  {
+      vil_image_view_base_sptr loaded_image = vil_load(img_files_[0].c_str());
+      if (vil_image_view<unsigned short> *img_byte = dynamic_cast<vil_image_view<unsigned short>*>(loaded_image.ptr()))
+          img_type_="ushort";
+  }
   //create the scene
   scene_ = new boxm2_scene(scene_file);
 
@@ -150,7 +158,7 @@ bool boxm2_render_tableau::save_model()
     boxm2_block_id id = iter->first;
     boxm2_sio_mgr::save_block(scene_->data_path(), cache_->get_block(id));
     boxm2_sio_mgr::save_block_data(scene_->data_path(), id, cache_->get_data<BOXM2_ALPHA>(id) );
-    boxm2_sio_mgr::save_block_data(scene_->data_path(), id, cache_->get_data<BOXM2_MOG3_GREY>(id) );
+    boxm2_sio_mgr::save_block_data(scene_->data_path(), id, cache_->get_data<BOXM2_MOG3_GREY_16>(id) );
     boxm2_sio_mgr::save_block_data(scene_->data_path(), id, cache_->get_data<BOXM2_NUM_OBS>(id) );
   }
   return true;
@@ -229,6 +237,7 @@ float boxm2_render_tableau::update_frame()
     }
     if (update_count_%5==0)
     {
+        vcl_cout<<"Refining  "<<vcl_endl;
         float time=this->refine_model();
     }
     //pickup a random frame
@@ -247,6 +256,8 @@ float boxm2_render_tableau::update_frame()
     }
     ifs >> *pcam;
     vpgl_camera_double_sptr cam_sptr(pcam);
+
+
     brdb_value_sptr brdb_cam = new brdb_value_t<vpgl_camera_double_sptr>(cam_sptr);
 
     //load image from file
@@ -254,7 +265,12 @@ float boxm2_render_tableau::update_frame()
     vil_image_view<float>* floatimg = new vil_image_view<float>(loaded_image->ni(), loaded_image->nj(), 1);
     if (vil_image_view<vxl_byte> *img_byte = dynamic_cast<vil_image_view<vxl_byte>*>(loaded_image.ptr()))
         vil_convert_stretch_range_limited(*img_byte, *floatimg, vxl_byte(0), vxl_byte(255), 0.0f, 1.0f);
-    else {
+    else if (vil_image_view<unsigned short> *img_byte = dynamic_cast<vil_image_view<unsigned short>*>(loaded_image.ptr()))
+    {
+        vil_convert_stretch_range(*img_byte, *floatimg,  0.0f, 1.0f); //: hardcoded to be fixed.
+    }
+    else
+    {
         vcl_cerr << "Failed to load image " << img_files_[curr_frame] << '\n';
         return -1;
     }
@@ -390,14 +406,26 @@ bool boxm2_render_tableau::init_clgl()
                                       &status);
   exp_img_ = new bocl_mem(gpu_pro_->context(), /*(void*) pbuffer_*/ NULL, ni_*nj_*sizeof(GLubyte)*4, "exp image (gl) buffer");
   exp_img_->set_gl_buffer(clgl_buffer_);
+  vcl_string render_opts;
+  if(img_type_=="uchar")
+    render_opts += " -D MOG_TYPE=int2"; 
+  else if (img_type_=="ushort")
+    render_opts += " -D MOG_TYPE=int4"; 
 
-  render_no_gl_.init_kernel(&gpu_pro_->context(), &gpu_pro_->devices()[0]);
+  render_no_gl_.init_kernel(&gpu_pro_->context(), &gpu_pro_->devices()[0],render_opts);
   //initialize the GPU render process
-  render_.init_kernel(&gpu_pro_->context(), &gpu_pro_->devices()[0]);
+  
+  render_.init_kernel(&gpu_pro_->context(), &gpu_pro_->devices()[0],render_opts);
   render_.set_image(exp_img_);
 
   //initlaize gpu update process
-  update_.init_kernel(&gpu_pro_->context(), &gpu_pro_->devices()[0]);
+  vcl_string update_opts;
+  if(img_type_=="uchar")
+    update_opts += " -D MOG_TYPE=uchar8"; 
+  else if (img_type_=="ushort")
+    update_opts += " -D MOG_TYPE=ushort8"; 
+
+  update_.init_kernel(&gpu_pro_->context(), &gpu_pro_->devices()[0],update_opts);
 
   //initialize refine process
   refine_.init_kernel(&gpu_pro_->context(), &gpu_pro_->devices()[0]);
