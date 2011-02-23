@@ -383,7 +383,7 @@ update_bit_scene_main(__global RenderSceneInfo  * info,
       float16 mixture = convert_float16(mixture_array[gid]);
 
       //use aux data to update cells
-      float t_match = 2.5f; float init_sigma = 0.09f; float min_sigma = 0.03f; 
+      float t_match = 2.5f; float init_sigma = 0.03f; float min_sigma = 0.01f; 
       float4 mu0 = mixture.s0123; float4 sigma0 = mixture.s4567; 
       float  w0  = mixture.s7;
       float4 mu1 = mixture.s89AB; float4 sigma1 = mixture.sCDEF; 

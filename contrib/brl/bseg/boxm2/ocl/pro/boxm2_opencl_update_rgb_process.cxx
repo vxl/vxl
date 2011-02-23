@@ -230,6 +230,11 @@ bool boxm2_opencl_update_rgb_process::execute(vcl_vector<brdb_value_sptr>& input
 
       //read image out to buffer (from gpu)
       image_->read_to_buffer(*command_queue_);
+      vis_image_->read_to_buffer(*command_queue_);
+      pre_image_->read_to_buffer(*command_queue_);
+      alpha_int_image_->read_to_buffer(*command_queue_);
+      norm_image_->read_to_buffer(*command_queue_);
+
       cl_output_->read_to_buffer(*command_queue_);
       clFinish(*command_queue_);
     }
