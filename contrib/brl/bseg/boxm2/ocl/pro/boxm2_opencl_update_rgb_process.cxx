@@ -111,23 +111,32 @@ bool boxm2_opencl_update_rgb_process::execute(vcl_vector<brdb_value_sptr>& input
   this->write_input_image(img_view);
 
   //vis image buffer
+  float* vis_buffer = new float[img_view->size()]; 
+  for(int i=0; i<img_view->size(); ++i) vis_buffer[i] = 1.0f; 
   if(vis_image_) delete vis_image_; 
-  vis_image_ = new bocl_mem((*context_), NULL, img_view->size()*sizeof(cl_float), "vis_image_ buffer"); 
-  vis_image_->create_buffer(CL_MEM_READ_WRITE | CL_MEM_ALLOC_HOST_PTR); 
+  vis_image_ = new bocl_mem((*context_), vis_buffer, img_view->size()*sizeof(cl_float), "vis_image_ buffer"); 
+  vis_image_->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR); 
   
   //vis image buffer
+  float* pre_buffer = new float[img_view->size()]; 
+  for(int i=0; i<img_view->size(); ++i) pre_buffer[i] = 0.0f; 
   if(pre_image_) delete pre_image_; 
-  pre_image_ = new bocl_mem((*context_), NULL, img_view->size()*sizeof(cl_float), "pre_image_ buffer"); 
-  pre_image_->create_buffer(CL_MEM_READ_WRITE | CL_MEM_ALLOC_HOST_PTR); 
+  pre_image_ = new bocl_mem((*context_), pre_buffer, img_view->size()*sizeof(cl_float), "pre_image_ buffer"); 
+  pre_image_->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR); 
   
   //vis image buffer
+  float* alpha_int_buffer = new float[img_view->size()]; 
+  for(int i=0; i<img_view->size(); ++i) alpha_int_buffer[i] = 0.0f; 
   if(alpha_int_image_) delete alpha_int_image_; 
-  alpha_int_image_ = new bocl_mem((*context_), NULL, img_view->size()*sizeof(cl_float), "alpha_int_image_ buffer"); 
-  alpha_int_image_->create_buffer(CL_MEM_READ_WRITE | CL_MEM_ALLOC_HOST_PTR); 
+  alpha_int_image_ = new bocl_mem((*context_), alpha_int_buffer, img_view->size()*sizeof(cl_float), "alpha_int_image_ buffer"); 
+  alpha_int_image_->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR); 
 
+  //norm image buffer
+  float* norm_buffer = new float[img_view->size()]; 
+  for(int i=0; i<img_view->size(); ++i) norm_buffer[i] = 0.0f;  
   if(norm_image_) delete norm_image_; 
-  norm_image_ = new bocl_mem((*context_), NULL, img_view->size()*sizeof(cl_float), "norm_image_ buffer"); 
-  norm_image_->create_buffer(CL_MEM_READ_WRITE | CL_MEM_ALLOC_HOST_PTR);
+  norm_image_ = new bocl_mem((*context_), norm_buffer, img_view->size()*sizeof(cl_float), "norm_image_ buffer"); 
+  norm_image_->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
   //exp image dimensions
   img_size_[0] = img_view->ni();
@@ -166,11 +175,10 @@ bool boxm2_opencl_update_rgb_process::execute(vcl_vector<brdb_value_sptr>& input
   vcl_vector<boxm2_block_id>::iterator id;
 
   //Go through each kernel, execute on each block
-
   for (unsigned int i=0; i<update_kernels_.size(); ++i)
   {
 #if 1
-    vcl_cout<<"UPDATE RGB KERNEL : "<<i<<vcl_endl;
+    vcl_cout<<"UPDATE RGB KERNEL : "<<update_kernels_[i]->id()<<vcl_endl;
 #endif
     if ( i == UPDATE_PROC ) {
       this->set_workspace(i);
@@ -233,6 +241,11 @@ bool boxm2_opencl_update_rgb_process::execute(vcl_vector<brdb_value_sptr>& input
   delete[] lookup_arr;
   delete[] cam_buffer;
   delete[] app_buffer;
+  
+  delete[] vis_buffer;
+  delete[] pre_buffer; 
+  delete[] norm_buffer;
+  delete[] alpha_int_buffer;
 
   delete cl_output_;
   delete persp_cam_;

@@ -17,18 +17,20 @@
 #include <bocl/bocl_kernel.h>
 #include <bocl/bocl_mem.h>
 
-//PASS ENUM
-enum {
-  UPDATE_SEGLEN = 0,
-  UPDATE_PREINF = 1,
-  UPDATE_PROC   = 2,
-  UPDATE_BAYES  = 3,
-  UPDATE_CELL   = 4
-};
+
 
 class boxm2_opencl_update_process : public boxm2_opencl_process_base
 {
   public:
+    //PASS ENUM
+    enum {
+      UPDATE_SEGLEN = 0,
+      UPDATE_PREINF = 1,
+      UPDATE_PROC   = 2,
+      UPDATE_BAYES  = 3,
+      UPDATE_CELL   = 4
+    };
+  
     boxm2_opencl_update_process() : data_type_("8bit"), image_(0) {}
 
     //: process init and execute
