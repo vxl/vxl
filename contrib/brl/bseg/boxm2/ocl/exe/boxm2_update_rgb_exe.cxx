@@ -59,6 +59,7 @@ int main(int argc,  char** argv)
   for(iter = rgb_view->begin(); iter != rgb_view->end(); ++iter) 
     (*iter) = vil_rgba<vxl_byte>(iter->R(), iter->G(), iter->B(), 255); 
   vil_image_view_base_sptr rgba_sptr(rgb_view);// = new vil_image_view<unsigned int>(ni(), nj());
+  vcl_cout<<rgb_view->pixel_format()<<vcl_endl;
   brdb_value_sptr brdb_inimg = new brdb_value_t<vil_image_view_base_sptr>(rgba_sptr);
 
   //----------------------------------------------------------------------------

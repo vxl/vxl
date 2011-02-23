@@ -17,19 +17,21 @@
 #include <bocl/bocl_kernel.h>
 #include <bocl/bocl_mem.h>
 
-//PASS ENUM
-enum {
-  UPDATE_SEGLEN = 0,
-  UPDATE_COMPRESS_RGB = 1,
-  UPDATE_PREINF = 2,
-  UPDATE_PROC   = 3,
-  UPDATE_BAYES  = 4, 
-  UPDATE_CELL   = 5, 
-}; 
+
 
 class boxm2_opencl_update_rgb_process : public boxm2_opencl_process_base
 {
   public:
+    //PASS ENUM
+    enum {
+      UPDATE_SEGLEN = 0,
+      UPDATE_COMPRESS_RGB = 1,
+      UPDATE_PREINF = 2,
+      UPDATE_PROC   = 3,
+      UPDATE_BAYES  = 4, 
+      UPDATE_CELL   = 5, 
+    }; 
+      
     boxm2_opencl_update_rgb_process() : image_(0), 
                                         vis_image_(0), 
                                         pre_image_(0), 

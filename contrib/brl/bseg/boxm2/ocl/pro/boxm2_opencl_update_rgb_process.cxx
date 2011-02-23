@@ -170,7 +170,7 @@ bool boxm2_opencl_update_rgb_process::execute(vcl_vector<brdb_value_sptr>& input
   for (unsigned int i=0; i<update_kernels_.size(); ++i)
   {
 #if 1
-    vcl_cout<<"UPDATE KERNEL : "<<i<<vcl_endl;
+    vcl_cout<<"UPDATE RGB KERNEL : "<<i<<vcl_endl;
 #endif
     if ( i == UPDATE_PROC ) {
       this->set_workspace(i);
