@@ -371,6 +371,8 @@ update_bit_scene_main(__global RenderSceneInfo  * info,
     int len_int = aux_array[gid]; 
     float cum_len  = convert_float(len_int)/SEGLEN_FACTOR; 
 
+    float  alphamin = -log(1.0 - 0.0001)/cell_min; //minimum alpha value, don't let blocks get below this
+
     //update cell if alpha and cum_len are greater than 0
     if (alpha > 0.0f && cum_len > 1e-10f)
     {
@@ -423,7 +425,6 @@ update_bit_scene_main(__global RenderSceneInfo  * info,
       alpha *= cell_beta / cum_len;  // (*data).s0 *= aux_data.z/aux_data.x;
 
       //reset the cells in memory   
-      float  alphamin = -log(1.0 - 0.0001)/cell_min; //minimum alpha value, don't let blocks get below this
       alpha_array[gid]      = max(alphamin, alpha);
       
       //store post mix

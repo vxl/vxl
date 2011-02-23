@@ -361,7 +361,8 @@ update_bit_scene_main(__global RenderSceneInfo  * info,
       float16 data = (float16) (alpha,
                                  (mixture.s0), (mixture.s1), (mixture.s2), (nobs.s0),
                                  (mixture.s3), (mixture.s4), (mixture.s5), (nobs.s1),
-                                 (mixture.s6), (mixture.s7), (nobs.s2), (nobs.s3/100.0),
+                                  0.0f, 0.0f, 0.0f, (nobs.s3/100.0f),
+                                 //(mixture.s6), (mixture.s7), (nobs.s2), (nobs.s3/100.0),
                                  0.0, 0.0, 0.0);
 
       //use aux data to update cells

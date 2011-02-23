@@ -234,7 +234,7 @@ float boxm2_render_tableau::render_frame()
   vcl_vector<brdb_value_sptr> output;
 
   //initialize the GPU render process
-  gpu_pro_->run(&render_rgb_, input, output);
+  gpu_pro_->run(&render_, input, output);
 
   status = clEnqueueReleaseGLObjects( *gpu_pro_->get_queue(), 1, &render_.image()->buffer(), 0, 0, 0);
   clFinish( *gpu_pro_->get_queue() );
@@ -402,11 +402,17 @@ vil_image_view_base_sptr boxm2_render_tableau::prepare_input_image(vcl_string fi
     //make sure all alpha values are set to 255 (1)
     vil_image_view<vil_rgba<vxl_byte> >::iterator iter; 
     for(iter = rgba_view->begin(); iter != rgba_view->end(); ++iter) {
-      //(*iter) = vil_rgba<vxl_byte>(iter->R(), iter->G(), iter->B(), 255);
-      (*iter) = vil_rgba<vxl_byte>(iter->grey(), 0, 0, 255);
+      (*iter) = vil_rgba<vxl_byte>(iter->R(), iter->G(), iter->B(), 255);
+      //(*iter) = vil_rgba<vxl_byte>(iter->grey(), 0, 0, 255);
     }
     vil_image_view_base_sptr toReturn(rgba_view); 
-    return toReturn;   
+    
+    //vil_image_view<float>* floatimg = new vil_image_view<float>(loaded_image->ni(), loaded_image->nj(), 1);
+    //vil_image_view<float>::iterator fiter; 
+    //for(iter = rgba_view->begin(), fiter=floatimg->begin(); iter != rgba_view->end(); ++iter, ++fiter)
+    //  (*fiter) = (float) (iter->R()/255.0f);
+    //vil_image_view_base_sptr toReturn(floatimg); 
+    //return toReturn;   
   }
   
   //else if loaded planes is just one...

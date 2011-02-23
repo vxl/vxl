@@ -24,7 +24,8 @@ __kernel void normalize_render_kernel(__global uint * exp_img,
     //convert uchars to float intensity [0,1] values
     float4 fIntensity = convert_float4(intensity) / 255.0f; 
     fIntensity += (vis*0.5f);   // expected intensity of uniform distribution is 0.5
-    
+    fIntensity.y=0.0f; fIntensity.z=0.0f; fIntensity.w=1.0f;     
+
     //convert the intensities back into bytes
     uchar4 post_int = convert_uchar4(fIntensity * 255.0f); 
     exp_img[imindex] = as_uint(post_int);
