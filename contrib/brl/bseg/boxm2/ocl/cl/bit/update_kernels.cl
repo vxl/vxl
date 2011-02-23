@@ -365,7 +365,8 @@ update_bit_scene_main(__global RenderSceneInfo  * info,
                                  0.0, 0.0, 0.0);
 
       //use aux data to update cells
-      update_cell(&data, aux_data, 2.5f, 0.06f, 0.02f);
+      //update_cell(&data, aux_data, 2.5f, 0.06f, 0.02f);
+      update_cell(&data, aux_data, 2.5f, 0.02f, 0.033f);
       //update_cell(&data, aux_data, 2.5f, 0.01f, 0.00375f);
 
       //reset the cells in memory

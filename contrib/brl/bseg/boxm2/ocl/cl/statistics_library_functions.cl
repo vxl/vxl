@@ -6,10 +6,11 @@ float gauss_prob_density(float x, float mu, float sigma)
 
 //3D gaussian with assumed 3 independent dimensions
 //Gaussian parameters stored are Mus and Sigma (not sigma^2)
-inline float gauss_prob_density_rgb(float4 x, float4 mu, float4 sigma)
+inline float gauss_prob_density_rgba(float4 x, float4 mu, float4 sigma)
 {
-  float4 pwr = (x-mu)*(x-mu) / (sigma*sigma); 
-  return 0.0634936359f*(1.0f/(sigma.x*sigma.y*sigma.z))*exp(-0.5f*(pwr.x+pwr.y+pwr.z)); 
+  //float4 pwr = (x-mu)*(x-mu) / (sigma*sigma); 
+  //return 0.0634936359f*(1.0f/(sigma.x*sigma.y*sigma.z))*exp(-0.5f*(pwr.x+pwr.y+pwr.z)); 
+  return 0.398942280f*exp(-0.5f*(x.x - mu.x)*(x.x - mu.x)/(sigma.x*sigma.x))/sigma.x;
 }
 
 /* This mixture distribution function uses the value of the weights to 
@@ -50,7 +51,7 @@ float gauss_3_mixture_prob_density(float x,
 
 //Calculates the value of a mixture of 2, 3-d gaussians with independent 
 //dimensions.  A weight of 0 indicates that the component is not used...
-float gauss_2_mixture_rgb_prob_density(float4 x,
+float gauss_2_mixture_rgb_prob_densitya(float4 x,
                                        float4 mu0, float4 sigma0, float w0,
                                        float4 mu1, float4 sigma1, float w1)
 {
@@ -69,7 +70,7 @@ float gauss_2_mixture_rgb_prob_density(float4 x,
           sum/=sum_weights;
   }
   else 
-      sum=1.0f;
+      sum=.5f;
   return sum;  
 }
 
@@ -93,7 +94,7 @@ void update_gauss(float x, float rho, float* mu, float* sigma,
  * update a singel 3d (independent) gaussian with a sample.  params 
  * are mutated in place
  */
-void update_gauss_3d(float4 x, float rho, float4* mu, float4* sigma, float min_sigma)
+void update_gauss_3da(float4 x, float rho, float4* mu, float4* sigma, float min_sigma)
 {
   float4 var = (*sigma)*(*sigma);
   float4 diff = x-(*mu); 
@@ -168,7 +169,7 @@ void sort_mix_3(float* mu0, float* sigma0, float* w0, short* Nobs0,
   }
 }
 
-void sort_mix_2(float4* mu0, float4* sigma0, float* w0, short* Nobs0,
+void sort_mix_2a(float4* mu0, float4* sigma0, float* w0, short* Nobs0,
                 float4* mu1, float4* sigma1, float* w1, short* Nobs1)
 {
   /*  if second component exists, then sort */
@@ -221,7 +222,7 @@ void insert_gauss_3(float x, float init_weight, float init_sigma, int* match,
     }
 }
 
-void insert_gauss_2(float4 x, float init_weight, float init_sigma, int* match, 
+void insert_gauss_2a(float4 x, float init_weight, float init_sigma, int* match, 
                     float4* mu0, float4* sigma0, float* w0, short* Nobs0,
                     float4* mu1, float4* sigma1, float* w1, short* Nobs1)
 {
@@ -342,7 +343,7 @@ void update_gauss_3_mixture(float x, float w, float t_match,
  * Mahalanobis distance that the sample can have in order to be considered
  * to belong to a given component.
  */
-void update_gauss_2_mixture_rgb(float4 x, float w, float t_match,
+void update_gauss_2_mixture_rgba(float4 x, float w, float t_match,
                                 float init_sigma, float min_sigma,
                                 float4* mu0, float4* sigma0, float* w0, short* Nobs0,
                                 float4* mu1, float4* sigma1, float* w1, short* Nobs1,
@@ -358,7 +359,7 @@ void update_gauss_2_mixture_rgb(float4 x, float w, float t_match,
     /* test for a match of component 0 */
     if(*w0>0.0f && all((*sigma0)>0.0f)){
       weight = (1.0f-alpha)*(*w0);
-      if(match<0 && any(((x-*mu0)*(x-*mu0)/((*sigma0)*(*sigma0))) < tsq)){
+      if(match<0 && all(((x-*mu0)*(x-*mu0)/((*sigma0)*(*sigma0))) < tsq)){
         weight += alpha;
         (*Nobs0)++;
         rho = (1.0f-alpha)/((float)*Nobs0) + alpha;
@@ -370,7 +371,7 @@ void update_gauss_2_mixture_rgb(float4 x, float w, float t_match,
     ///* test for a match of component 1 */
     if(*w1>0.0f && all((*sigma1)>0.0f)){
       weight = (1.0f-alpha)*(*w1);
-      if(match<0 && any(((x-*mu1)*(x-*mu1)/((*sigma1)*(*sigma1))) < tsq)){
+      if(match<0 && all(((x-*mu1)*(x-*mu1)/((*sigma1)*(*sigma1))) < tsq)){
         weight += alpha;
         (*Nobs1)++;
         rho = (1.0f-alpha)/((float)*Nobs1) + alpha;

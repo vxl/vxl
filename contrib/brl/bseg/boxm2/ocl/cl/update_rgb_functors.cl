@@ -46,14 +46,27 @@ void step_cell_preinf(AuxArgs aux_args, int data_ptr, uchar llid, float d)
       // the mean intensity for the cell...
       float4 mean_obs = convert_float4( as_uchar4(aux_args.mean_obs[data_ptr]) ); 
       mean_obs = mean_obs/ (cum_len * 255.0f); 
-      PI = gauss_2_mixture_rgb_prob_density( mean_obs,
+    
+    /*  PI = gauss_2_mixture_rgb_prob_density( mean_obs,
                                              mixture.s0123, 
                                              mixture.s4567, 
                                              mixture.s7,
                                              mixture.s89AB, 
                                              mixture.sCDEF, 
                                              1.0f - mixture.s7
-                                            ); 
+                                            );  */
+    /*  DEBUGGER FOR RGB The mean intensity for the cell */
+    //                               float mu0, float sigma0, float w0,
+    ///                               float mu1, float sigma1, float w1,
+    //                               float mu2, float sigma2, float w2)
+    PI = gauss_3_mixture_prob_density( mean_obs.x,
+                                       mixture.s0, 
+                                       mixture.s4, 
+                                       mixture.s7,
+                                       mixture.s8, 
+                                       mixture.sC, 
+                                       1.0f-mixture.s7,
+                                       0.0f, 0.0f, 0.0f);/* PI */
     }
     // Calculate pre and vis infinity */
     // alpha integral += alpha * seg_len     
@@ -89,6 +102,8 @@ void step_cell_bayes(AuxArgs aux_args, int data_ptr, uchar llid, float d)
   if (d > 1.0e-10f) {    // if  too small, do nothing 
     float4 mean_obs = convert_float4( as_uchar4(aux_args.mean_obs[data_ptr]) ); 
     mean_obs = mean_obs/ (cum_len * 255.0f); 
+
+    /*
     PI = gauss_2_mixture_rgb_prob_density( mean_obs,
                                            mixture.s0123, 
                                            mixture.s4567, 
@@ -97,6 +112,21 @@ void step_cell_bayes(AuxArgs aux_args, int data_ptr, uchar llid, float d)
                                            mixture.sCDEF, 
                                            1.0f - mixture.s7
                                           ); 
+
+    /*  DEBUGGER FOR RGB The mean intensity for the cell */
+    //                               float mu0, float sigma0, float w0,
+    ///                               float mu1, float sigma1, float w1,
+    //                               float mu2, float sigma2, float w2)
+    PI = gauss_3_mixture_prob_density( mean_obs.x,
+                                       mixture.s0, 
+                                       mixture.s4, 
+                                       mixture.s7,
+                                       mixture.s8, 
+                                       mixture.sC, 
+                                       1.0f-mixture.s7,
+                                       0.0f, 0.0f, 0.0f);/* PI */
+     /////////////////////////////////////////////////////////////////////
+
   }
   
   //calculate this ray's contribution to beta

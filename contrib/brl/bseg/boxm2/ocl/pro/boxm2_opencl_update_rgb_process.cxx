@@ -389,7 +389,7 @@ bool boxm2_opencl_update_rgb_process::write_input_image(vil_image_view<vil_rgba<
   //now write to bocl_mem
   if (!image_) {
     //create mem
-    image_ = new bocl_mem((*context_), buff, input_image->size() * sizeof(cl_uchar4), "input image buffer");
+    image_ = new bocl_mem((*context_), buff, input_image->size() * sizeof(cl_uchar4), "rgb input image buffer");
     image_->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
   }
   else {

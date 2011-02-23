@@ -77,6 +77,7 @@ render_bit_scene( __constant  RenderSceneInfo    * linfo,
   //store the expected intensity (as UINT)
   //exp_image[imIndex[llid]] = rgbaFloatToInt((float4) expint); 
   uchar4 feint = convert_uchar4( expint*255.0f ); 
+  feint.w = 255; 
   exp_image[imIndex[llid]] = as_uint(feint); 
 
   //store visibility at the end of this block

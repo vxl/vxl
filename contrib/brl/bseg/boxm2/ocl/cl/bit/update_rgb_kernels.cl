@@ -108,7 +108,7 @@ compress_rgb(__global RenderSceneInfo  * info,
     int r_int = aux_array[datasize + gid]; 
     int g_int = aux_array[2*datasize + gid]; 
     int b_int = aux_array[3*datasize + gid];
-    float4 meanRGB; meanRGB.w = 0;
+    float4 meanRGB = (float4) 0.0f;
     meanRGB.x = convert_float(r_int) / (SEGLEN_FACTOR*cum_len); 
     meanRGB.y = convert_float(g_int) / (SEGLEN_FACTOR*cum_len); 
     meanRGB.z = convert_float(b_int) / (SEGLEN_FACTOR*cum_len); 
@@ -327,7 +327,7 @@ proc_norm_image(__global float* pre_inf,
   j=get_global_id(1);
   int imIndex = j*get_global_size(0)+i; 
 
-  if (i>=(*imgdims).z || j>=(*imgdims).w || i<(*imgdims).x || j<(*imgdims).y)
+  if (i>=(*imgdims).z && j>=(*imgdims).w)
     return;
 
   //get the vector of pre,vis,
@@ -376,7 +376,7 @@ update_bit_scene_main(__global RenderSceneInfo  * info,
     {
       float4 mean_obs = convert_float4( as_uchar4( aux_array[datasize + gid] ) ); //interpret the 32 bits as a uchar4 
       mean_obs = mean_obs/ (cum_len * 255.0f); 
-      float cell_vis  = convert_float(aux_array[2*datasize + gid])/SEGLEN_FACTOR;
+      float cell_vis  = convert_float(aux_array[2*datasize + gid])/(SEGLEN_FACTOR * cum_len);
       float cell_beta = convert_float(aux_array[3*datasize + gid])/SEGLEN_FACTOR;
       //float4 aux_data = (float4) (cum_len, mean_obs, cell_beta, cell_vis/cum_len);
       float4 nobs     = convert_float4(nobs_array[gid]);
@@ -393,17 +393,34 @@ update_bit_scene_main(__global RenderSceneInfo  * info,
 
       short Nobs0 = (short)nobs.s0, Nobs1 = (short)nobs.s1; 
       float Nobs_mix = nobs.s3/100.0f;
-      update_gauss_2_mixture_rgb(mean_obs, 
+      /*update_gauss_2_mixture_rgb(mean_obs, 
                                  cell_vis, 
                                  t_match, 
                                  init_sigma, 
                                  min_sigma, 
                                  &mu0, &sigma0, &w0, &Nobs0,
                                  &mu1, &sigma1, &w1, &Nobs1,
-                                 &Nobs_mix); 
+                                 &Nobs_mix);  */
+
+    //DEBUG DEUBG
+      float m0 = mu0.x; float s0 = sigma0.x; 
+      float m1 = mu1.x; float s1 = sigma1.x; 
+      float m2 = 0.0f; float s2 = 0.0f; float w2 = 0.0f; 
+      short Nobs2 = 0; 
+      update_gauss_3_mixture(   mean_obs.x,              //mean observation
+                                 cell_vis,              //cell_visability
+                                 t_match,                 
+                                 init_sigma,min_sigma,
+                                 &m0,&s0,&w0,&Nobs0,
+                                 &m1,&s1,&w1,&Nobs1,
+                                 &m2,&s2,&w2,&Nobs2,
+                                 &Nobs_mix);
+      mu0.x = m0; sigma0.x = s0; 
+      mu1.x = m1; sigma1.x = s1;
+    //END DEBUG DEUBG
       
       //update alpha
-      alpha = cell_beta / cum_len;  // (*data).s0 *= aux_data.z/aux_data.x;
+      alpha *= cell_beta / cum_len;  // (*data).s0 *= aux_data.z/aux_data.x;
 
       //reset the cells in memory   
       float  alphamin = -log(1.0 - 0.0001)/cell_min; //minimum alpha value, don't let blocks get below this

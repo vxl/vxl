@@ -228,7 +228,7 @@ float boxm2_render_tableau::render_frame()
   input.push_back(brdb_cam);
   input.push_back(brdb_expimg);
   input.push_back(brdb_visimg);
-  //input.push_back(brdb_data_type);
+  input.push_back(brdb_data_type);
 
   //initoutput vector
   vcl_vector<brdb_value_sptr> output;
@@ -401,8 +401,10 @@ vil_image_view_base_sptr boxm2_render_tableau::prepare_input_image(vcl_string fi
     
     //make sure all alpha values are set to 255 (1)
     vil_image_view<vil_rgba<vxl_byte> >::iterator iter; 
-    for(iter = rgba_view->begin(); iter != rgba_view->end(); ++iter) 
-      (*iter) = vil_rgba<vxl_byte>(iter->R(), iter->G(), iter->B(), 255);
+    for(iter = rgba_view->begin(); iter != rgba_view->end(); ++iter) {
+      //(*iter) = vil_rgba<vxl_byte>(iter->R(), iter->G(), iter->B(), 255);
+      (*iter) = vil_rgba<vxl_byte>(iter->grey(), 0, 0, 255);
+    }
     vil_image_view_base_sptr toReturn(rgba_view); 
     return toReturn;   
   }
