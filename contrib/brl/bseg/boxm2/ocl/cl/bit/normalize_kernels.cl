@@ -3,26 +3,31 @@
 #endif
 
 #ifdef RENDER
-__kernel void normalize_render_kernel(__global uint * exp_img , __global float* vis_img, __global    uint4    * imgdims)
+__kernel void normalize_render_kernel(__global uint * exp_img, 
+                                      __global float* vis_img, 
+                                      __global uint4* imgdims)
 {
     int i=0,j=0;
     i=get_global_id(0);
     j=get_global_id(1);
-
     int imindex=j*get_global_size(0)+i;
+   
     // check to see if the thread corresponds to an actual pixel as in some
     // cases #of threads will be more than the pixels.
-    if (i>=(*imgdims).z || j>=(*imgdims).w) {
+    if (i>=(*imgdims).z || j>=(*imgdims).w) 
         return;
-    }
+
+    //normalize image with respect to visibility
     float vis   = vis_img[imindex];
-    uint  eint  = as_uint(exp_img[imindex]);
-    uchar echar = convert_uchar(eint);
-    float expected_int = convert_float(echar)/255.0f;
-
-    expected_int+=(vis*0.5); // expected intensity of uniform distribution is 0.5
-
-    exp_img[imindex]=rgbaFloatToInt(expected_int);
+    uchar4 intensity  = as_uchar4(exp_img[imindex]);
+    
+    //convert uchars to float intensity [0,1] values
+    float4 fIntensity = convert_float4(intensity) / 255.0f; 
+    fIntensity += (vis*0.5f);   // expected intensity of uniform distribution is 0.5
+    
+    //convert the intensities back into bytes
+    uchar4 post_int = convert_uchar4(fIntensity * 255.0f); 
+    exp_img[imindex] = as_uint(post_int);
 }
 #endif
 

@@ -9,6 +9,8 @@ SET(boxm2_ocl_pro_sources
     boxm2_opencl_update_process.h           boxm2_opencl_update_process.cxx
     boxm2_opencl_refine_process.h           boxm2_opencl_refine_process.cxx
     boxm2_opencl_change_detection_process.h boxm2_opencl_change_detection_process.cxx
+    boxm2_opencl_update_rgb_process.h       boxm2_opencl_update_rgb_process.cxx
+    boxm2_opencl_render_rgb_process.h       boxm2_opencl_render_rgb_process.cxx
    )
 
 
