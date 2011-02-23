@@ -51,14 +51,14 @@ seg_len_main(__constant  RenderSceneInfo    * linfo,
   i=get_global_id(0);
   j=get_global_id(1);
   int imIndex = j*get_global_size(0) + i; 
-  
-  //grab input image value (all 4 potential components) and vis from vis_image
-  float4 obs = convert_float4(in_image[imIndex])/255.0f;       
-  float vis = vis_image[imIndex];
 
   // cases #of threads will be more than the pixels.
   if (i>=(*imgdims).z || j>=(*imgdims).w || i<(*imgdims).x || j<(*imgdims).y) 
     return;
+  
+  //grab input image value (all 4 potential components) and vis from vis_image
+  float4 obs = convert_float4(in_image[imIndex])/255.0f;       
+  float vis = vis_image[imIndex];
 
   //----------------------------------------------------------------------------
   // we know i,j map to a point on the image,
@@ -236,7 +236,7 @@ bayes_main(__constant  RenderSceneInfo    * linfo,
            __constant  uchar              * bit_lookup,       // used to get data_index
            __global    float16            * camera,           // camera orign and SVD of inverse of camera matrix
            __global    uint4              * imgdims,          // dimensions of the input image
-           __global    float4             * in_image,         // the input image
+           __global    uchar4             * in_image,         // the input image
            __global    float              * vis_image,        // visibility image (initial visibilty for this block)
            __global    float              * pre_image,        // pre image (initial pre for this block)
            __global    float              * norm_image,       // norm image spat out by proc_norm_image
@@ -287,7 +287,7 @@ bayes_main(__constant  RenderSceneInfo    * linfo,
   AuxArgs aux_args; 
   aux_args.alpha   = alpha_array; 
   aux_args.mog     = mixture_array; 
-  aux_args.seg_len = aux_array;
+  aux_args.seg_len    = aux_array;
   aux_args.mean_obs   = &aux_array[linfo->num_buffer * linfo->data_len]; 
   aux_args.vis_array  = &aux_array[2 * linfo->num_buffer * linfo->data_len];
   aux_args.beta_array = &aux_array[3 * linfo->num_buffer * linfo->data_len];
@@ -302,7 +302,9 @@ bayes_main(__constant  RenderSceneInfo    * linfo,
             local_tree, bit_lookup, cumsum, &vis0, aux_args);    //utility info
             
   //write out vis and pre
-  in_image[j*get_global_size(0)+i].zw = (float2) (vis, pre); 
+  //in_image[imIndex].zw = (float2) (vis, pre); 
+  vis_image[imIndex] = vis;
+  pre_image[imIndex] = pre;
 }
 #endif
 
