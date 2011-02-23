@@ -31,7 +31,7 @@ bool bocl_kernel::create_kernel(cl_context* context,
   }
   for (unsigned int i=1; i<src_paths.size(); ++i) {
     if (!this->append_process_kernels(src_paths[i])) {
-      vcl_cerr<<"bocl_kernel::couldn't load source from "<<src_paths[i]<<'\n';
+      vcl_cerr<<"bocl_kernel::couldn't append source from "<<src_paths[i]<<'\n';
       return false;
     }
   }

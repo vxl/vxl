@@ -59,6 +59,9 @@ class bocl_kernel
     //: will return a reference to the cl_kernel this class wraps
     cl_kernel& kernel() { return kernel_; }
 
+    //: returns the string ID
+    vcl_string id() { return id_; }
+
     //: returns the number of arguments that you've given this kernel
     int arg_cnt() { return args_.size() + local_args_.size(); }
 
