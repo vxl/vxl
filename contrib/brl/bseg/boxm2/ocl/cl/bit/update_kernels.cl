@@ -44,6 +44,7 @@ seg_len_main(__constant  RenderSceneInfo    * linfo,
              __global    float16            * camera,           // camera orign and SVD of inverse of camera matrix
              __global    uint4              * imgdims,          // dimensions of the input image
              __global    float4             * in_image,         // the input image
+             __global    float              * vis_image,        // Vis image to keep visibility over multiple blocks
              __global    float              * output,
              __local     uchar16            * local_tree,       // cache current tree into local memory
              __local     short2             * ray_bundle_array, // gives information for which ray takes over in the workgroup
@@ -65,11 +66,13 @@ seg_len_main(__constant  RenderSceneInfo    * linfo,
   int i=0,j=0;
   i=get_global_id(0);
   j=get_global_id(1);
+  int imIndex = j*get_global_size(0) + i;
   
   //grab input image value (also holds vis)
-  float4 inImage = in_image[j*get_global_size(0) + i];
+  float4 inImage = in_image[imIndex];
   float obs = inImage.x;
-  float vis = inImage.z;
+  float vis = vis_image[imIndex]; 
+  //float vis = inImage.z;
   barrier(CLK_LOCAL_MEM_FENCE);
 
   // cases #of threads will be more than the pixels.
@@ -99,6 +102,7 @@ seg_len_main(__constant  RenderSceneInfo    * linfo,
             ray_dx, ray_dy, ray_dz,
             linfo, tree_array,                                  //scene info
             local_tree, bit_lookup, cumsum, &vis, aux_args);    //utility info
+  vis_image[imIndex] = vis; 
 }
 #endif
 
@@ -361,8 +365,7 @@ update_bit_scene_main(__global RenderSceneInfo  * info,
       float16 data = (float16) (alpha,
                                  (mixture.s0), (mixture.s1), (mixture.s2), (nobs.s0),
                                  (mixture.s3), (mixture.s4), (mixture.s5), (nobs.s1),
-                                  0.0f, 0.0f, 0.0f, (nobs.s3/100.0f),
-                                 //(mixture.s6), (mixture.s7), (nobs.s2), (nobs.s3/100.0),
+                                 (mixture.s6), (mixture.s7), (nobs.s2), (nobs.s3/100.0),
                                  0.0, 0.0, 0.0);
 
       //use aux data to update cells

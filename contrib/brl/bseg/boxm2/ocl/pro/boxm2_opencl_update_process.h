@@ -54,6 +54,10 @@ class boxm2_opencl_update_process : public boxm2_opencl_process_base
 
     //: INPUT IMAGE:
     bocl_mem* image_;
+    bocl_mem* vis_image_;         //will be a float image, maintains visibility between blocks
+    bocl_mem* pre_image_;         //pre_image
+    bocl_mem* alpha_int_image_;   //alpha_int_image
+    bocl_mem* norm_image_;        //result of proc_norm_image 
 
     //: block stuff
     bocl_mem* blk_info_;

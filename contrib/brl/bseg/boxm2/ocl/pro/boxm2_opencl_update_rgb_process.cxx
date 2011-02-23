@@ -238,6 +238,8 @@ bool boxm2_opencl_update_rgb_process::execute(vcl_vector<brdb_value_sptr>& input
       cl_output_->read_to_buffer(*command_queue_);
       clFinish(*command_queue_);
     }
+       
+
   }
 
   //clean up camera, lookup_arr, img_dim_buff

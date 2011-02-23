@@ -103,6 +103,35 @@ bool boxm2_opencl_update_process::execute(vcl_vector<brdb_value_sptr>& input, vc
   vil_image_view<float>* img_view = static_cast<vil_image_view<float>* >(img.ptr());
   this->write_input_image(img_view);
 
+  ////////////////////////////////////////////////////////////////////////////////////////////////
+  //vis image buffer
+  float* vis_buffer = new float[img_view->size()]; 
+  for(int i=0; i<img_view->size(); ++i) vis_buffer[i] = 1.0f; 
+  if(vis_image_) delete vis_image_; 
+  vis_image_ = new bocl_mem((*context_), vis_buffer, img_view->size()*sizeof(cl_float), "vis_image_ buffer"); 
+  vis_image_->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR); 
+  
+  //vis image buffer
+  float* pre_buffer = new float[img_view->size()]; 
+  for(int i=0; i<img_view->size(); ++i) pre_buffer[i] = 0.0f; 
+  if(pre_image_) delete pre_image_; 
+  pre_image_ = new bocl_mem((*context_), pre_buffer, img_view->size()*sizeof(cl_float), "pre_image_ buffer"); 
+  pre_image_->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR); 
+  
+  //vis image buffer
+  float* alpha_int_buffer = new float[img_view->size()]; 
+  for(int i=0; i<img_view->size(); ++i) alpha_int_buffer[i] = 0.0f; 
+  if(alpha_int_image_) delete alpha_int_image_; 
+  alpha_int_image_ = new bocl_mem((*context_), alpha_int_buffer, img_view->size()*sizeof(cl_float), "alpha_int_image_ buffer"); 
+  alpha_int_image_->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR); 
+
+  //norm image buffer
+  float* norm_buffer = new float[img_view->size()]; 
+  for(int i=0; i<img_view->size(); ++i) norm_buffer[i] = 0.0f;  
+  if(norm_image_) delete norm_image_; 
+  norm_image_ = new bocl_mem((*context_), norm_buffer, img_view->size()*sizeof(cl_float), "norm_image_ buffer"); 
+  norm_image_->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
+  ////////////////////////////////////////////////////////////////////////////////////////////////////
 
   brdb_value_t<vcl_string>* brdb_data_type = static_cast<brdb_value_t<vcl_string>* >( input[i++].ptr() );
   data_type_=brdb_data_type->value();
@@ -272,6 +301,7 @@ bool boxm2_opencl_update_process::set_args(unsigned pass)
       update_kernels_[pass]->set_arg( persp_cam_ );
       update_kernels_[pass]->set_arg( img_dim_ );
       update_kernels_[pass]->set_arg( image_ );
+      update_kernels_[pass]->set_arg( vis_image_ );
       update_kernels_[pass]->set_arg( cl_output_ );
       update_kernels_[pass]->set_local_arg( lThreads_[0]*lThreads_[1]*sizeof(cl_uchar16) );//local tree,
       update_kernels_[pass]->set_local_arg( lThreads_[0]*lThreads_[1]*sizeof(cl_uchar4) ); //ray bundle,
