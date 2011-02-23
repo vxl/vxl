@@ -17,6 +17,7 @@ enum boxm2_data_type
   BOXM2_ALPHA=0,
   BOXM2_MOG3_GREY,
   BOXM2_MOG3_GREY_16,
+  BOXM2_MOG2_RGB,
   BOXM2_NUM_OBS,
   BOXM2_AUX,   
   BOXM2_UNKNOWN
@@ -45,6 +46,7 @@ class boxm2_data_traits<BOXM2_MOG3_GREY>
   static vcl_size_t datasize(){return sizeof(datatype);}
   static vcl_string prefix(){ return "boxm2_mog3_grey";}
 };
+
 template<>
 class boxm2_data_traits<BOXM2_MOG3_GREY_16>
 {
@@ -53,6 +55,15 @@ class boxm2_data_traits<BOXM2_MOG3_GREY_16>
   typedef vnl_vector_fixed<unsigned short, 8> datatype;
   static vcl_size_t datasize(){return sizeof(datatype);}
   static vcl_string prefix(){ return "boxm2_mog3_grey_16";}
+};
+
+template<>
+class boxm2_data_traits<BOXM2_MOG2_RGB>
+{
+ public:
+  typedef vnl_vector_fixed<unsigned char, 16> datatype;
+  static vcl_size_t datasize(){return sizeof(datatype);}
+  static vcl_string prefix(){ return "boxm2_mog2_rgb";}
 };
 
 template<>
@@ -93,6 +104,9 @@ class boxm2_data_info
 
       if(prefix == boxm2_data_traits<BOXM2_MOG3_GREY_16>::prefix())
         return boxm2_data_traits<BOXM2_MOG3_GREY_16>::datasize(); 
+      
+      if(prefix == boxm2_data_traits<BOXM2_MOG2_RGB>::prefix())
+        return boxm2_data_traits<BOXM2_MOG2_RGB>::datasize(); 
         
       if(prefix == boxm2_data_traits<BOXM2_NUM_OBS>::prefix())
         return boxm2_data_traits<BOXM2_NUM_OBS>::datasize(); 
