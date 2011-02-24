@@ -61,7 +61,7 @@ render_bit_scene( __constant  RenderSceneInfo    * linfo,
   //----------------------------------------------------------------------------
   //Store image index (may save a register).  Also initialize VIS and expected_int
   uchar4 eint   = as_uchar4(exp_image[imIndex[llid]]); //read image as uchar4 (3 bytes for RGB)
-  float4 expint = convert_float(eint)/255.0f; 
+  float4 expint = convert_float4(eint)/255.0f; 
   float vis     = vis_image[imIndex[llid]];
   AuxArgs aux_args; 
   aux_args.alpha  = alpha_array; 

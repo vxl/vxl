@@ -31,7 +31,12 @@ class boxm2_opencl_update_process : public boxm2_opencl_process_base
       UPDATE_CELL   = 4
     };
   
-    boxm2_opencl_update_process() : data_type_("8bit"), image_(0) {}
+    boxm2_opencl_update_process() : data_type_("8bit"), 
+                                    image_(0),
+                                    vis_image_(0), 
+                                    pre_image_(0), 
+                                    alpha_int_image_(0), 
+                                    norm_image_(0) {}
 
     //: process init and execute
     bool init() { return true; }

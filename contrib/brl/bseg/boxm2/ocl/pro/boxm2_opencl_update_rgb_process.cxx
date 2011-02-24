@@ -117,14 +117,14 @@ bool boxm2_opencl_update_rgb_process::execute(vcl_vector<brdb_value_sptr>& input
   vis_image_ = new bocl_mem((*context_), vis_buffer, img_view->size()*sizeof(cl_float), "vis_image_ buffer"); 
   vis_image_->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR); 
   
-  //vis image buffer
+  //pre buffer
   float* pre_buffer = new float[img_view->size()]; 
   for(int i=0; i<img_view->size(); ++i) pre_buffer[i] = 0.0f; 
   if(pre_image_) delete pre_image_; 
   pre_image_ = new bocl_mem((*context_), pre_buffer, img_view->size()*sizeof(cl_float), "pre_image_ buffer"); 
   pre_image_->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR); 
   
-  //vis image buffer
+  //aint buffer
   float* alpha_int_buffer = new float[img_view->size()]; 
   for(int i=0; i<img_view->size(); ++i) alpha_int_buffer[i] = 0.0f; 
   if(alpha_int_image_) delete alpha_int_image_; 

@@ -114,7 +114,7 @@ compress_rgb(__global RenderSceneInfo  * info,
     meanRGB.z = convert_float(b_int) / (SEGLEN_FACTOR*cum_len); 
 
     //store them as uchar4, pack it into the old R slot
-    uchar4 meanObs = convert_uchar( meanRGB*255.0f ); 
+    uchar4 meanObs = convert_uchar4( meanRGB*255.0f ); 
     aux_array[datasize + gid] = as_int(meanObs); 
   }
 }
@@ -385,7 +385,7 @@ update_bit_scene_main(__global RenderSceneInfo  * info,
       float16 mixture = convert_float16(mixture_array[gid]);
 
       //use aux data to update cells
-      float t_match = 2.5f; float init_sigma = 0.03f; float min_sigma = 0.01f; 
+      float t_match = 2.5f; float init_sigma = 0.03f; float min_sigma = 0.03f; 
       float4 mu0 = mixture.s0123; float4 sigma0 = mixture.s4567; 
       float  w0  = mixture.s7;
       float4 mu1 = mixture.s89AB; float4 sigma1 = mixture.sCDEF; 
