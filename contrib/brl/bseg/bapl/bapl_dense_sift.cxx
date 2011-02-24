@@ -25,7 +25,7 @@ bool bapl_dense_sift::make_keypoint(bapl_lowe_keypoint_sptr& keypoint, double co
   {
     vcl_map<float,float> scale_index_map;
 
-    for ( unsigned int scale_index = 0; scale_index+1 < this->octave_size_*this->num_octaves_; ++scale_index )
+    for ( unsigned int scale_index = 0; scale_index < this->octave_size_*this->num_octaves_; ++scale_index )
     {
       const vil_image_view<float>& current_dog = this->pyramid_sptr_->dog_pyramid(scale_index/this->octave_size_, scale_index%this->octave_size_);
 
@@ -34,13 +34,13 @@ bool bapl_dense_sift::make_keypoint(bapl_lowe_keypoint_sptr& keypoint, double co
       //ancillary images.
       float current_scale = (float)vcl_pow(2.0f,(float(scale_index)/this->octave_size_)-1);
 
-      //the first image in the pyramid is an 2x upsampled version of the original image with each resulting octave, the image resolution
+      //the first level in the pyramid is an 2x upsampled version of the original image with each resulting octave, the image resolution
       //is reduced by half. Therefore we need to divide the image coordinates by the correct power of two of the resolution.
       double resolution = (double)vcl_pow(2.0,double(scale_index/this->octave_size_)-1);
       double ri = i/resolution;
       double rj = j/resolution;
 
-      scale_index_map[current_dog(ri,rj)] = current_scale;
+      scale_index_map[vcl_fabs(current_dog(ri,rj))] = current_scale;
     }//end scale iteration
 
     //map stores pairs from lowest to highest key. Therefore maximal scale/index pair should be the last element of the map
