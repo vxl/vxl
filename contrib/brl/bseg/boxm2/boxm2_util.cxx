@@ -133,7 +133,7 @@ bool boxm2_util::generate_html(int height, int width, int nrows, int ncols, vcl_
 <html lang='en'>\n \
 <head>\n \
   <meta charset='utf-8' content='text/html' http-equiv='Content-type' />\n \
-  <title>Object on iPhone Example - jQuery Reel 360°</title>\n \
+  <title>Volume Visualizer</title>\n \
   <!-- Reel/Jquery Script Includes -->\n \
   <script src='js/jquery.min.js' type='text/javascript'></script>\n \
   <script src='js/jquery.reel-min.js' type='text/javascript'></script>\n \

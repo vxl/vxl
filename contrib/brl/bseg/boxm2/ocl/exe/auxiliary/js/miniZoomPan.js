@@ -37,7 +37,7 @@ jQuery.fn.miniZoomPan = function(settings) {
 		  ig.height(settings.sH); 
 		});
 		div.css({overflow: "hidden"});
-		jQuery("<span class='loader'>"+settings.loaderContent+"<\/span>").insertBefore(ig);
+		//jQuery("<span class='loader'>"+settings.loaderContent+"<\/span>").insertBefore(ig);
 						
 		div.mousewheel(function(e, delta) {
 			if (delta > 0)
