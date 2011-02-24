@@ -4,6 +4,7 @@
 
 #include <vcl_iostream.h>
 #include <vil/vil_load.h>
+#include <vil/vil_resample_bilin.h>
 
 //cvg includes
 #include <cvg/cvg_hemisphere_tableau.h>
@@ -43,8 +44,7 @@ int main(int argc, char **argv)
   sphere_os.close();
   vcl_cout<<"sphere info : "<<isphere.size()<<vcl_endl;
   
-  
-  //get first one and put it in image
+  //grab first image
   vcl_string* first_img = isphere.begin()->second.metadata();
   vcl_cout<<"first_img "<<(*first_img)<<vcl_endl;
   vil_image_resource_sptr im = vil_load_image_resource(first_img->c_str());
@@ -53,8 +53,20 @@ int main(int argc, char **argv)
     return 1;
   }
   
+  //scale your image... 
+  //get first one and put it in image
+  vil_image_view_base_sptr first = im->get_view();
+  double min_scale = vcl_pow(PYRAMID_SCALE, PYRAMID_MAX_LEVEL); 
+  vcl_cout<<"Min scale: "<<min_scale<<vcl_endl;
+  int sni = (int) (min_scale * first->ni()); 
+  int snj = (int) (min_scale * first->nj());
+  vcl_cout<<"Min size = "<<sni<<","<<snj<<vcl_endl;
+  vil_image_view<vxl_byte>* firstb = static_cast<vil_image_view<vxl_byte>* >(first.ptr()); 
+  vil_image_view<vxl_byte>* scaled = new vil_image_view<vxl_byte>(sni, snj);
+  vil_resample_bilin(*firstb, *scaled, sni, snj);
+  
   // Load image (given in the first command line param) into an image tableau.
-  cvg_hemisphere_tableau_new image(im, isphere);
+  cvg_hemisphere_tableau_new image(*first, isphere);
 
   // Put the image tableau inside a 2D viewer tableau (for zoom, etc).
   vgui_viewer2D_tableau_new viewer(image);
@@ -63,5 +75,5 @@ int main(int argc, char **argv)
   vgui_shell_tableau_new shell(viewer);
 
   // Create a window, add the tableau and show it on screen.
-  return vgui::run(shell, image->width()/2, image->height()/2);
+  return vgui::run(shell, sni, snj);
 }
