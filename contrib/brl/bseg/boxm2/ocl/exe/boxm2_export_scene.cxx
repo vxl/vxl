@@ -57,6 +57,7 @@ int main(int argc,  char** argv)
   vul_arg<double> incline_1("-end_incline", "Angle of incline nearest zenith (degrees)", 15.0); 
   vul_arg<double> radius("-radius", "Distance from center of bounding box", 5.0);
   vul_arg<bool> stitch("-stitch", "also save a large, stitched image", false); 
+  vul_arg<bool> bit8("-bit8", "True for 8 bit and false for 16 bit", true); 
   vul_arg_parse(argc, argv);
 
   //////////////////////////////////////////////////////////////////////////////
@@ -147,7 +148,14 @@ int main(int argc,  char** argv)
 
   //initialize the GPU render process
   boxm2_opencl_render_process gpu_render;
-  gpu_render.init_kernel(&gpu_pro->context(), &gpu_pro->devices()[0]);
+  vcl_string opts;
+
+  if(!bit8())
+    opts=" -D MOG_TYPE_16";
+  else
+    opts=" -D MOG_TYPE_8";
+
+  gpu_render.init_kernel(&gpu_pro->context(), &gpu_pro->devices()[0],opts);
 
   //create output image buffer
   vil_image_view<unsigned int>* expimg = new vil_image_view<unsigned int>(ni(), nj());
@@ -159,6 +167,12 @@ int main(int argc,  char** argv)
   vil_image_view<float>* vis_img = new vil_image_view<float>(ni(), nj());
   vis_img->fill(1.0f);
   brdb_value_sptr brdb_vis = new brdb_value_t<vil_image_view_base_sptr>(vis_img);
+
+  brdb_value_sptr brdb_data_type;
+  if(!bit8())
+      brdb_data_type= new brdb_value_t<vcl_string>(vcl_string("16bit"));
+  else
+      brdb_data_type= new brdb_value_t<vcl_string>(vcl_string("8bit"));
 
   //////////////////////////////////////////////////////////////////////////////
   // Else IF GRID
@@ -216,6 +230,7 @@ int main(int argc,  char** argv)
         input.push_back(brdb_cam);
         input.push_back(brdb_expimg);
         input.push_back(brdb_vis);
+        input.push_back(brdb_data_type);
         vcl_vector<brdb_value_sptr> output;
         expimg->fill(0);
         vis_img->fill(1.0f);
