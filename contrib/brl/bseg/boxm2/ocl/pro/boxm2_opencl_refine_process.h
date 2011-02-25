@@ -20,7 +20,15 @@
 class boxm2_opencl_refine_process : public boxm2_opencl_process_base
 {
   public:
-      boxm2_opencl_refine_process():data_type_("8bit") {}
+    //PASS ENUM
+    enum {
+      REFINE_TREES = 0,
+      REFINE_SCAN  = 1,
+      REFINE_DATA  = 2,
+      REFINE_RANDOM = 4,
+    };
+  
+    boxm2_opencl_refine_process():data_type_("8bit") {}
     
     //: process init and execute
     bool init() { return true; }
@@ -36,6 +44,12 @@ class boxm2_opencl_refine_process : public boxm2_opencl_process_base
 
     //: render kernel (other processes may have many kernels
     bocl_kernel refine_kernel_;
+    
+    
+    //: new refine kernels 
+    bocl_kernel refine_trees_; 
+    bocl_kernel refine_scan_; 
+    bocl_kernel refine_data_;
 
 };
 

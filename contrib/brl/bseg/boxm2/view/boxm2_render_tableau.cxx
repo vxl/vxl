@@ -406,11 +406,11 @@ vil_image_view_base_sptr boxm2_render_tableau::prepare_input_image(vcl_string fi
       //(*iter) = vil_rgba<vxl_byte>(iter->grey(), 0, 0, 255);
     }
     vil_image_view_base_sptr toReturn(rgba_view); 
-    
+    return toReturn; 
     //vil_image_view<float>* floatimg = new vil_image_view<float>(loaded_image->ni(), loaded_image->nj(), 1);
     //vil_image_view<float>::iterator fiter; 
     //for(iter = rgba_view->begin(), fiter=floatimg->begin(); iter != rgba_view->end(); ++iter, ++fiter)
-    //  (*fiter) = (float) (iter->R()/255.0f);
+      //(*fiter) = (float) (iter->R()/255.0f);
     //vil_image_view_base_sptr toReturn(floatimg); 
     //return toReturn;   
   }
@@ -485,7 +485,7 @@ bool boxm2_render_tableau::init_clgl()
   //initialize the GPU render process
   render_.init_kernel(&gpu_pro_->context(), &gpu_pro_->devices()[0],render_opts);
   render_.set_image(exp_img_);
-  render_rgb_.init_kernel(&gpu_pro_->context(), &gpu_pro_->devices()[0], "");
+  render_rgb_.init_kernel(&gpu_pro_->context(), &gpu_pro_->devices()[0], render_opts);
   render_rgb_.set_image(exp_img_); 
 
   //initlaize gpu update process
@@ -496,7 +496,7 @@ bool boxm2_render_tableau::init_clgl()
     update_opts += " -D MOG_TYPE_16"; 
 
   update_.init_kernel(&gpu_pro_->context(), &gpu_pro_->devices()[0],update_opts);
-  update_rgb_.init_kernel(&gpu_pro_->context(), &gpu_pro_->devices()[0], ""); 
+  update_rgb_.init_kernel(&gpu_pro_->context(), &gpu_pro_->devices()[0], update_opts); 
 
   //initialize refine process
   refine_.init_kernel(&gpu_pro_->context(), &gpu_pro_->devices()[0],update_opts);

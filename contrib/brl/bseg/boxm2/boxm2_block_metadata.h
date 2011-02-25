@@ -44,7 +44,7 @@ class boxm2_block_metadata: public vbl_ref_count
                                             max_level_(max_level),
                                             max_mb_(max_mb),
                                             p_init_(p_init),
-                                            random_(false) {}
+                                            random_(true) {}
 
     boxm2_block_metadata( const boxm2_block_metadata& that)
     : vbl_ref_count ()

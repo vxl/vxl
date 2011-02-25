@@ -30,12 +30,11 @@ bool boxm2_opencl_refine_process::init_kernel(cl_context* context,
   src_paths.push_back(source_dir + "bit/refine_bit_scene.cl");
   
   //have kernel construct itself using the context and device
-  bool created =  refine_kernel_.create_kernel( context_,
-                                                device,
-                                                src_paths,
-                                                "refine_bit_scene",   //kernel name
-                                                opts,                   //options
-                                                "boxm2 opencl refine"); //kernel identifier (for error checking)
+  bool created =  refine_kernel_.create_kernel( context_, device, src_paths, "refine_bit_scene", opts, "boxm2 opencl refine"); //kernel identifier (for error checking)
+  created = created&&refine_trees_.create_kernel( context_, device, src_paths, "refine_trees", opts, "boxm2 opencl refine trees (pass one)"); //kernel identifier (for error checking)
+  created = created&& refine_scan_.create_kernel( context_, device, src_paths, "refine_scan", opts, "boxm2 opencl refine scan (pass two)"); //kernel identifier (for error checking)
+  created = created&& refine_data_.create_kernel( context_, device, src_paths, "refine_data", opts, "boxm2 opencl refine data (pass three)"); //kernel identifier (for error checking)
+
   return created;
 }
 
@@ -72,67 +71,122 @@ bool boxm2_opencl_refine_process::execute(vcl_vector<brdb_value_sptr>& input, vc
    
   //For each ID in the visibility order, grab that block
   vcl_map<boxm2_block_id, boxm2_block_metadata> blocks = scene->blocks(); 
-  vcl_map<boxm2_block_id, boxm2_block_metadata>::iterator blk; 
-  for(blk = blocks.begin(); blk != blocks.end(); ++blk) 
+  vcl_map<boxm2_block_id, boxm2_block_metadata>::iterator blk_iter; 
+  for(blk_iter = blocks.begin(); blk_iter != blocks.end(); ++blk_iter) 
   {
-    //get id
-    boxm2_block_id id = blk->first; 
     
-    //write the image values to the buffer
-    vul_timer transfer; 
-    bocl_mem* blk       = cache_->get_block(id);
-    bocl_mem* blk_ptrs  = cache_->get_loaded_tree_ptrs(); 
-    bocl_mem* mem_ptrs  = cache_->get_loaded_mem_ptrs(); 
-    bocl_mem* blks_per  = cache_->get_loaded_trees_per_buffer(); 
-  
-    //data
-    bocl_mem* alpha     = cache_->get_data<BOXM2_ALPHA>(id);
-    bocl_mem* mog;
-    if(data_type_=="8bit")
-        mog = cache_->get_data<BOXM2_MOG3_GREY>(id);
-    else if(data_type_=="16bit")
-        mog = cache_->get_data<BOXM2_MOG3_GREY_16>(id);
-    bocl_mem* num_obs   = cache_->get_data<BOXM2_NUM_OBS>(id);
-    bocl_mem* blk_info  = cache_->loaded_block_info(); 
-    transfer_time_ += (float) transfer.all(); 
- 
-    //set kernel args
-    refine_kernel_.set_arg( blk_info );
-    refine_kernel_.set_arg( blk );
-    refine_kernel_.set_arg( blk_ptrs );
-    refine_kernel_.set_arg( mem_ptrs );
-    refine_kernel_.set_arg( blks_per );
-    refine_kernel_.set_arg( alpha );
-    refine_kernel_.set_arg( mog );
-    refine_kernel_.set_arg( num_obs );
-    refine_kernel_.set_arg( &lookup );
-    refine_kernel_.set_arg( &prob_thresh ); 
-    refine_kernel_.set_arg( &cl_output );
+    //----- IF THE BLOCK IS NOT RANDOMLY DISTRIBUTED, USE NEW METHOD -----------
+    boxm2_block_metadata data = blk_iter->second;
+    if(!data.random_)
+    {
+      //get id
+      boxm2_block_id id = blk_iter->first; 
+      
+      //write the image values to the buffer
+      vul_timer transfer; 
+      bocl_mem* blk       = cache_->get_block(id);
+      bocl_mem* alpha     = cache_->get_data<BOXM2_ALPHA>(id);
+      bocl_mem* blk_info  = cache_->loaded_block_info(); 
+      transfer_time_ += (float) transfer.all(); 
+      
+      //set up tree copy 
+      bocl_mem* blk_copy = new bocl_mem((*context_), NULL, blk->num_bytes(), "refine trees block copy buffer"); 
+      blk_copy->create_buffer(CL_MEM_READ_ONLY | CL_MEM_ALLOC_HOST_PTR);
+      
+      //set up tree size (first find num trees)
+      int numTrees = data.sub_block_num_.x() * data.sub_block_num_.y() * data.sub_block_num_.z(); 
+      bocl_mem* tree_sizes = new bocl_mem((*context_), NULL, sizeof(cl_int)*numTrees, "refine tree sizes buffer");
+      tree_sizes->create_buffer(CL_MEM_READ_ONLY | CL_MEM_ALLOC_HOST_PTR);
+
+      //set first kernel args
+      refine_trees_.set_arg( blk_info );
+      refine_trees_.set_arg( blk );
+      refine_trees_.set_arg( blk_copy ); 
+      refine_trees_.set_arg( alpha );
+      refine_trees_.set_arg( tree_sizes ); 
+      refine_trees_.set_arg( &prob_thresh ); 
+      refine_trees_.set_arg( &lookup );
+      refine_trees_.set_arg( &cl_output );
+      refine_trees_.set_local_arg( 16*sizeof(cl_uchar) );
+      refine_trees_.set_local_arg( sizeof(cl_uchar16) );
+      refine_trees_.set_local_arg( sizeof(cl_uchar16) );
+      
+      //set workspace
+      boxm2_scene_info* info_buffer = (boxm2_scene_info*) blk_info->cpu_buffer();
+      vcl_size_t lThreads[] = {1, 1};
+      vcl_size_t gThreads[] = {info_buffer->num_buffer, 1};
+      
+      //execute kernel
+      refine_trees_.execute( (*command_queue_), 2, lThreads, gThreads);
+      clFinish(*command_queue_); 
+      gpu_time_ += refine_kernel_.exec_time(); 
+      
+      //clear render kernel args so it can reset em on next execution
+      refine_kernel_.clear_args();
+      
+    }
+    else 
+    {
+      //----- OTHERWISE USE OLD METHOD (ranodmly distributed blocks into buffers)-----------
+      //get id
+      boxm2_block_id id = blk_iter->first; 
+      
+      //write the image values to the buffer
+      vul_timer transfer; 
+      bocl_mem* blk       = cache_->get_block(id);
+      bocl_mem* blk_ptrs  = cache_->get_loaded_tree_ptrs(); 
+      bocl_mem* mem_ptrs  = cache_->get_loaded_mem_ptrs(); 
+      bocl_mem* blks_per  = cache_->get_loaded_trees_per_buffer(); 
     
-    refine_kernel_.set_local_arg( 16*sizeof(cl_uchar) );
-    refine_kernel_.set_local_arg( sizeof(cl_uchar16) );
-    refine_kernel_.set_local_arg( sizeof(cl_uchar16) );
-        
-    //set workspace
-    boxm2_scene_info* info_buffer = (boxm2_scene_info*) blk_info->cpu_buffer();
-    vcl_size_t lThreads[] = {1, 1};
-    vcl_size_t gThreads[] = {info_buffer->num_buffer, 1};
-    
-    //execute kernel
-    refine_kernel_.execute( (*command_queue_), 2, lThreads, gThreads);
-    clFinish(*command_queue_); 
-    gpu_time_ += refine_kernel_.exec_time(); 
-    
-    //clear render kernel args so it can reset em on next execution
-    refine_kernel_.clear_args();
-    
-    //read blocks to CPU
-    blk->read_to_buffer(*command_queue_);
-    blk_ptrs->read_to_buffer(*command_queue_);
-    mem_ptrs->read_to_buffer(*command_queue_);
-    alpha->read_to_buffer(*command_queue_);
-    mog->read_to_buffer(*command_queue_);
-    num_obs->read_to_buffer(*command_queue_);
+      //data
+      bocl_mem* alpha     = cache_->get_data<BOXM2_ALPHA>(id);
+      bocl_mem* mog;
+      if(data_type_=="8bit")
+          mog = cache_->get_data<BOXM2_MOG3_GREY>(id);
+      else if(data_type_=="16bit")
+          mog = cache_->get_data<BOXM2_MOG3_GREY_16>(id);
+      bocl_mem* num_obs   = cache_->get_data<BOXM2_NUM_OBS>(id);
+      bocl_mem* blk_info  = cache_->loaded_block_info(); 
+      transfer_time_ += (float) transfer.all(); 
+   
+      //set kernel args
+      refine_kernel_.set_arg( blk_info );
+      refine_kernel_.set_arg( blk );
+      refine_kernel_.set_arg( blk_ptrs );
+      refine_kernel_.set_arg( mem_ptrs );
+      refine_kernel_.set_arg( blks_per );
+      refine_kernel_.set_arg( alpha );
+      refine_kernel_.set_arg( mog );
+      refine_kernel_.set_arg( num_obs );
+      refine_kernel_.set_arg( &lookup );
+      refine_kernel_.set_arg( &prob_thresh ); 
+      refine_kernel_.set_arg( &cl_output );
+      
+      refine_kernel_.set_local_arg( 16*sizeof(cl_uchar) );
+      refine_kernel_.set_local_arg( sizeof(cl_uchar16) );
+      refine_kernel_.set_local_arg( sizeof(cl_uchar16) );
+          
+      //set workspace
+      boxm2_scene_info* info_buffer = (boxm2_scene_info*) blk_info->cpu_buffer();
+      vcl_size_t lThreads[] = {1, 1};
+      vcl_size_t gThreads[] = {info_buffer->num_buffer, 1};
+      
+      //execute kernel
+      refine_kernel_.execute( (*command_queue_), 2, lThreads, gThreads);
+      clFinish(*command_queue_); 
+      gpu_time_ += refine_kernel_.exec_time(); 
+      
+      //clear render kernel args so it can reset em on next execution
+      refine_kernel_.clear_args();
+      
+      //read blocks to CPU
+      blk->read_to_buffer(*command_queue_);
+      blk_ptrs->read_to_buffer(*command_queue_);
+      mem_ptrs->read_to_buffer(*command_queue_);
+      alpha->read_to_buffer(*command_queue_);
+      mog->read_to_buffer(*command_queue_);
+      num_obs->read_to_buffer(*command_queue_);
+    }
   }
   
   //clean up camera, lookup_arr, img_dim_buff

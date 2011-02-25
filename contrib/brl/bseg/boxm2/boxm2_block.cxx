@@ -129,13 +129,9 @@ bool boxm2_block::b_write(char* buff)
 // allocate.  MAX_MB is assumed to include blocks, alpha, mog3, num_obs and 16 byte aux data
 bool boxm2_block::init_empty_block(boxm2_block_metadata data)
 {
-  //vcl_cout<<"Parser says max mb = "<<parser_.max_mb()<<vcl_endl
-          //<<"parser says block nums = "<<parser_.block_nums()<<vcl_endl
-          //<<"parser says p_init = "<<parser_.p_init();
   //calc max number of bytes, data buffer length, and alpha init (consts)
   const int MAX_BYTES    = int(data.max_mb_)*1024*1024;
   const int BUFF_LENGTH  = 1L<<16; // 65536
-  //const float ALPHA_INIT = -vcl_log(1.0f - data.p_init_) / (data.sub_block_dim_.x());
 
   //total number of (sub) blocks in the scene
   int total_blocks =  data.sub_block_num_.x()
@@ -150,7 +146,7 @@ bool boxm2_block::init_empty_block(boxm2_block_metadata data)
   int num_cells = (int) (freeBytes/dataSize);                         //number of cells given maxmb
   int num_buffers = (int) vcl_ceil( ((float)num_cells/(float)BUFF_LENGTH) );
   int blocks_per_buffer = (int) vcl_ceil((float)total_blocks/(float)num_buffers);
-  if (num_buffers * BUFF_LENGTH <= total_blocks) {
+  if (num_buffers * BUFF_LENGTH <= total_blocks && !data.random_) {
     vcl_cerr<<"**************************************************\n"
             <<"*** boxm2_block::init_empty_block: ERROR!!!!\n"
             <<"*** Max scene size not large enough to accommodate scene dimensions\n"
@@ -216,41 +212,72 @@ bool boxm2_block::init_empty_block(boxm2_block_metadata data)
   }
   bytes_read += sizeof(ushort2) * num_buffers;
 
-  //--- Now initialize blocks and their pointers randomly ---------------------
-  //6.a create a random 'iterator'
-  int* randIndex = new int[trees_.size()];
-  for (unsigned int i=0; i<trees_.size(); ++i) randIndex[i] = i;
-  boxm2_util::random_permutation(randIndex, trees_.size());
-  int tree_index = 0;
-  boxm2_array_3d<uchar16>::iterator iter;
-  for (iter = trees_.begin(); iter != trees_.end(); ++iter, ++tree_index)
+
+  //--- Now initialize blocks and their pointers --------- ---------------------
+  if(data.random_) 
   {
-    //get a random index, convert it to Buffer Index/Offset pair
-    int r_index  = randIndex[tree_index];
-    int b_index  = r_index / blocks_per_buffer;
-    int b_offset = r_index % blocks_per_buffer;
+    //6.a create a random 'iterator'
+    int* randIndex = new int[trees_.size()];
+    for (unsigned int i=0; i<trees_.size(); ++i) randIndex[i] = i;
+    boxm2_util::random_permutation(randIndex, trees_.size());
+    int tree_index = 0;
+    boxm2_array_3d<uchar16>::iterator iter;
+    for (iter = trees_.begin(); iter != trees_.end(); ++iter, ++tree_index)
+    {
+      //get a random index, convert it to Buffer Index/Offset pair
+      int r_index  = randIndex[tree_index];
+      int b_index  = r_index / blocks_per_buffer;
+      int b_offset = r_index % blocks_per_buffer;
 
-    //store buffer offset in bits [10,11]
-    uchar16 treeBlk( (unsigned char) 0 );
-    unsigned char off_hi = (unsigned char) (b_offset >> 8);
-    unsigned char off_lo = (unsigned char) (b_offset & 255);
-    treeBlk[10] = off_hi; treeBlk[11] = off_lo;
+      //store buffer offset in bits [10,11]
+      uchar16 treeBlk( (unsigned char) 0 );
+      unsigned char off_hi = (unsigned char) (b_offset >> 8);
+      unsigned char off_lo = (unsigned char) (b_offset & 255);
+      treeBlk[10] = off_hi; treeBlk[11] = off_lo;
 
-    //store buffer index in bits [12,13]
-    unsigned char b_hi = (unsigned char) (b_index >> 8);
-    unsigned char b_lo = (unsigned char) (b_index & 255);
-    treeBlk[12] = b_hi; treeBlk[13] = b_lo;
-    for (int i=0; i<16; i++)
-      (*iter)[i] = treeBlk[i];
+      //store buffer index in bits [12,13]
+      unsigned char b_hi = (unsigned char) (b_index >> 8);
+      unsigned char b_lo = (unsigned char) (b_index & 255);
+      treeBlk[12] = b_hi; treeBlk[13] = b_lo;
+      for (int i=0; i<16; i++)
+        (*iter)[i] = treeBlk[i];
 
-    //make sure mem_ptrs_ and blocks in buffers add up
-    mem_ptrs_[b_index][1]++;
-    trees_in_buffers_[b_index]++;
+      //make sure mem_ptrs_ and blocks in buffers add up
+      mem_ptrs_[b_index][1]++;
+      trees_in_buffers_[b_index]++;
 
-    //make sure block pointers points back to the right index
-    tree_ptrs_[b_index][b_offset] = tree_index;
+      //make sure block pointers points back to the right index
+      tree_ptrs_[b_index][b_offset] = tree_index;
+    }
+    delete [] randIndex;
   }
-  delete [] randIndex;
+  else 
+  {
+    //6.a create a random 'iterator'
+    int tree_index = 0;
+    boxm2_array_3d<uchar16>::iterator iter;
+    for (iter = trees_.begin(); iter != trees_.end(); ++iter, ++tree_index)
+    {
+      //data index is tree index at this point
+      //store data index in bits [10, 11, 12, 13] ; 
+      uchar16 treeBlk( (unsigned char) 0 );
+      unsigned char a[4];
+      treeBlk[10] = (tree_index) & 0xff;
+      treeBlk[11] = (tree_index>>8)  & 0xff;
+      treeBlk[12] = (tree_index>>16) & 0xff;
+      treeBlk[13] = (tree_index>>24) & 0xff;
+      for (int i=0; i<16; i++)
+        (*iter)[i] = treeBlk[i];
+
+      //make sure mem_ptrs_ and blocks in buffers add up
+      //Don't really need these for this ...
+      //mem_ptrs_[b_index][1]++;
+      //trees_in_buffers_[b_index]++;
+
+      //make sure block pointers points back to the right index
+      //tree_ptrs_[b_index][b_offset] = tree_index;
+    }
+  }
   return true;
 }
 

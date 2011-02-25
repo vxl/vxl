@@ -1,3 +1,4 @@
+
 #include "boxm2_opencl_update_rgb_process.h"
 
 //boxm2 data structures
@@ -45,35 +46,34 @@ bool boxm2_opencl_update_rgb_process::init_kernel(cl_context* context,
   //create all passes
   bocl_kernel* seg_len = new bocl_kernel();
   vcl_string seg_opts = options + " -D SEGLEN -D STEP_CELL=step_cell_seglen(aux_args,data_ptr,llid,d) "; 
-  seg_len->create_kernel(context_, device, src_paths, "seg_len_main", seg_opts, "update::seg_len");
+  seg_len->create_kernel(context_, device, src_paths, "seg_len_main", seg_opts, "update::seg_len (rgb)");
   update_kernels_.push_back(seg_len);
-  
-  //pack mean obs into one aux data member
-  bocl_kernel* compress_rgb = new bocl_kernel();
-  vcl_string comp_opts = options + " -D COMPRESS_RGB ";
-  compress_rgb->create_kernel(context_, device, non_ray_src, "compress_rgb", comp_opts, "update::compress_rgb"); 
-  update_kernels_.push_back(compress_rgb);
 
-  //preinf pass
+  //create  compress rgb pass
+  bocl_kernel* comp = new bocl_kernel();
+  vcl_string comp_opts = options + " -D COMPRESS_RGB "; 
+  comp->create_kernel(context_, device, non_ray_src, "compress_rgb", comp_opts, "update::compress_rgb");
+  update_kernels_.push_back(comp);
+
   bocl_kernel* pre_inf = new bocl_kernel();
   vcl_string pre_opts = options + " -D PREINF -D STEP_CELL=step_cell_preinf(aux_args,data_ptr,llid,d) "; 
-  pre_inf->create_kernel(context_, device, src_paths, "pre_inf_main", pre_opts, "update::pre_inf");
+  pre_inf->create_kernel(context_, device, src_paths, "pre_inf_main", pre_opts, "update::pre_inf (rgb)");
   update_kernels_.push_back(pre_inf);
 
   //may need DIFF LIST OF SOURCES FOR THIS GUY
   bocl_kernel* proc_img = new bocl_kernel();
-  proc_img->create_kernel(context_, device, non_ray_src, "proc_norm_image", options, "update::proc_norm_image");
+  proc_img->create_kernel(context_, device, non_ray_src, "proc_norm_image", options, "update::proc_norm_image (rgb)");
   update_kernels_.push_back(proc_img);
 
   //push back cast_ray_bit
   bocl_kernel* bayes_main = new bocl_kernel();
   vcl_string bayes_opt = options + " -D BAYES -D STEP_CELL=step_cell_bayes(aux_args,data_ptr,llid,d) "; 
-  bayes_main->create_kernel(context_, device, src_paths, "bayes_main", bayes_opt, "update::bayes_main");
+  bayes_main->create_kernel(context_, device, src_paths, "bayes_main", bayes_opt, "update::bayes_main (rgb)");
   update_kernels_.push_back(bayes_main);
 
   //may need DIFF LIST OF SOURCES FOR THSI GUY TOO
   bocl_kernel* update = new bocl_kernel();
-  update->create_kernel(context_, device, non_ray_src, "update_bit_scene_main", options, "update::update_main");
+  update->create_kernel(context_, device, non_ray_src, "update_bit_scene_main", options, "update::update_main (rgb)");
   update_kernels_.push_back(update);
 
   return true;
@@ -108,36 +108,13 @@ bool boxm2_opencl_update_rgb_process::execute(vcl_vector<brdb_value_sptr>& input
   brdb_value_t<vil_image_view_base_sptr>* brdb_img = static_cast<brdb_value_t<vil_image_view_base_sptr>* >( input[i++].ptr() );
   vil_image_view_base_sptr img = brdb_img->value();
   vil_image_view<vil_rgba<vxl_byte> >* img_view = static_cast<vil_image_view<vil_rgba<vxl_byte> >* >(img.ptr());
+  //vil_image_view<float>* img_view = static_cast<vil_image_view<float>* >(img.ptr());
   this->write_input_image(img_view);
-
-  //vis image buffer
-  float* vis_buffer = new float[img_view->size()]; 
-  for(int i=0; i<img_view->size(); ++i) vis_buffer[i] = 1.0f; 
-  if(vis_image_) delete vis_image_; 
-  vis_image_ = new bocl_mem((*context_), vis_buffer, img_view->size()*sizeof(cl_float), "vis_image_ buffer"); 
-  vis_image_->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR); 
   
-  //pre buffer
-  float* pre_buffer = new float[img_view->size()]; 
-  for(int i=0; i<img_view->size(); ++i) pre_buffer[i] = 0.0f; 
-  if(pre_image_) delete pre_image_; 
-  pre_image_ = new bocl_mem((*context_), pre_buffer, img_view->size()*sizeof(cl_float), "pre_image_ buffer"); 
-  pre_image_->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR); 
+  //store data type
+  brdb_value_t<vcl_string>* brdb_data_type = static_cast<brdb_value_t<vcl_string>* >( input[i++].ptr() );
+  data_type_=brdb_data_type->value();
   
-  //aint buffer
-  float* alpha_int_buffer = new float[img_view->size()]; 
-  for(int i=0; i<img_view->size(); ++i) alpha_int_buffer[i] = 0.0f; 
-  if(alpha_int_image_) delete alpha_int_image_; 
-  alpha_int_image_ = new bocl_mem((*context_), alpha_int_buffer, img_view->size()*sizeof(cl_float), "alpha_int_image_ buffer"); 
-  alpha_int_image_->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR); 
-
-  //norm image buffer
-  float* norm_buffer = new float[img_view->size()]; 
-  for(int i=0; i<img_view->size(); ++i) norm_buffer[i] = 0.0f;  
-  if(norm_image_) delete norm_image_; 
-  norm_image_ = new bocl_mem((*context_), norm_buffer, img_view->size()*sizeof(cl_float), "norm_image_ buffer"); 
-  norm_image_->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
-
   //exp image dimensions
   img_size_[0] = img_view->ni();
   img_size_[1] = img_view->nj();
@@ -175,10 +152,11 @@ bool boxm2_opencl_update_rgb_process::execute(vcl_vector<brdb_value_sptr>& input
   vcl_vector<boxm2_block_id>::iterator id;
 
   //Go through each kernel, execute on each block
+
   for (unsigned int i=0; i<update_kernels_.size(); ++i)
   {
 #if 1
-    vcl_cout<<"UPDATE RGB KERNEL : "<<update_kernels_[i]->id()<<vcl_endl;
+    vcl_cout<<"UPDATE KERNEL : "<<update_kernels_[i]->id()<<", datatype: "<<data_type_<<vcl_endl;
 #endif
     if ( i == UPDATE_PROC ) {
       this->set_workspace(i);
@@ -200,7 +178,11 @@ bool boxm2_opencl_update_rgb_process::execute(vcl_vector<brdb_value_sptr>& input
       vul_timer transfer;
       blk_       = cache_->get_block(*id);
       alpha_     = cache_->get_data<BOXM2_ALPHA>(*id);
-      mog_       = cache_->get_data<BOXM2_MOG2_RGB>(*id);
+      //mog_       = cache_->get_data<BOXM2_MOG2_RGB>(*id); 
+      if (data_type_=="8bit")
+        mog_       = cache_->get_data<BOXM2_MOG3_GREY>(*id);
+      else if (data_type_=="16bit")
+        mog_       = cache_->get_data<BOXM2_MOG3_GREY_16>(*id);
       num_obs_   = cache_->get_data<BOXM2_NUM_OBS>(*id);
       blk_info_  = cache_->loaded_block_info();
 
@@ -230,16 +212,9 @@ bool boxm2_opencl_update_rgb_process::execute(vcl_vector<brdb_value_sptr>& input
 
       //read image out to buffer (from gpu)
       image_->read_to_buffer(*command_queue_);
-      vis_image_->read_to_buffer(*command_queue_);
-      pre_image_->read_to_buffer(*command_queue_);
-      alpha_int_image_->read_to_buffer(*command_queue_);
-      norm_image_->read_to_buffer(*command_queue_);
-
       cl_output_->read_to_buffer(*command_queue_);
       clFinish(*command_queue_);
     }
-       
-
   }
 
   //clean up camera, lookup_arr, img_dim_buff
@@ -248,11 +223,6 @@ bool boxm2_opencl_update_rgb_process::execute(vcl_vector<brdb_value_sptr>& input
   delete[] lookup_arr;
   delete[] cam_buffer;
   delete[] app_buffer;
-  
-  delete[] vis_buffer;
-  delete[] pre_buffer; 
-  delete[] norm_buffer;
-  delete[] alpha_int_buffer;
 
   delete cl_output_;
   delete persp_cam_;
@@ -306,12 +276,13 @@ bool boxm2_opencl_update_rgb_process::set_args(unsigned pass)
     case UPDATE_SEGLEN :
       update_kernels_[pass]->set_arg( blk_info_ );
       update_kernels_[pass]->set_arg( blk_ );
+      update_kernels_[pass]->set_arg( alpha_ );
+      update_kernels_[pass]->set_arg( num_obs_ );
       update_kernels_[pass]->set_arg( aux_ );
       update_kernels_[pass]->set_arg( lookup_ );
       update_kernels_[pass]->set_arg( persp_cam_ );
       update_kernels_[pass]->set_arg( img_dim_ );
       update_kernels_[pass]->set_arg( image_ );
-      update_kernels_[pass]->set_arg( vis_image_ );
       update_kernels_[pass]->set_arg( cl_output_ );
       update_kernels_[pass]->set_local_arg( lThreads_[0]*lThreads_[1]*sizeof(cl_uchar16) );//local tree,
       update_kernels_[pass]->set_local_arg( lThreads_[0]*lThreads_[1]*sizeof(cl_uchar4) ); //ray bundle,
@@ -320,30 +291,27 @@ bool boxm2_opencl_update_rgb_process::set_args(unsigned pass)
       update_kernels_[pass]->set_local_arg( lThreads_[0]*lThreads_[1]*10*sizeof(cl_uchar) ); //cumsum buffer, imindex buffer
       break;
     case UPDATE_COMPRESS_RGB : 
-      update_kernels_[pass]->set_arg( blk_info_ ); 
-      update_kernels_[pass]->set_arg( aux_ ); 
-      break; 
+      update_kernels_[pass]->set_arg( blk_info_ );
+      update_kernels_[pass]->set_arg( aux_ );
+      break;
     case UPDATE_PREINF :
       update_kernels_[pass]->set_arg( blk_info_ );
       update_kernels_[pass]->set_arg( blk_ );
       update_kernels_[pass]->set_arg( alpha_ );
       update_kernels_[pass]->set_arg( mog_ );
+      update_kernels_[pass]->set_arg( num_obs_ );
       update_kernels_[pass]->set_arg( aux_ );
       update_kernels_[pass]->set_arg( lookup_ );
       update_kernels_[pass]->set_arg( persp_cam_ );
       update_kernels_[pass]->set_arg( img_dim_ );
       update_kernels_[pass]->set_arg( image_ );
-      update_kernels_[pass]->set_arg( vis_image_ );
-      update_kernels_[pass]->set_arg( pre_image_ ); 
-      update_kernels_[pass]->set_arg( alpha_int_image_ );
       update_kernels_[pass]->set_arg( cl_output_ );
       update_kernels_[pass]->set_local_arg( lThreads_[0]*lThreads_[1]*sizeof(cl_uchar16) );//local tree,
       update_kernels_[pass]->set_local_arg( lThreads_[0]*lThreads_[1]*10*sizeof(cl_uchar) ); //cumsum buffer, imindex buffer
       break;
     case UPDATE_PROC :
-      update_kernels_[pass]->set_arg( pre_image_ );
-      update_kernels_[pass]->set_arg( vis_image_ );
-      update_kernels_[pass]->set_arg( norm_image_ );
+      update_kernels_[pass]->set_arg( image_ );
+      update_kernels_[pass]->set_arg( app_density_ );
       update_kernels_[pass]->set_arg( img_dim_ );
       break;
     case UPDATE_BAYES :
@@ -351,14 +319,12 @@ bool boxm2_opencl_update_rgb_process::set_args(unsigned pass)
       update_kernels_[pass]->set_arg( blk_ );
       update_kernels_[pass]->set_arg( alpha_ );
       update_kernels_[pass]->set_arg( mog_ );
+      update_kernels_[pass]->set_arg( num_obs_ );
       update_kernels_[pass]->set_arg( aux_ );
       update_kernels_[pass]->set_arg( lookup_ );
       update_kernels_[pass]->set_arg( persp_cam_ );
       update_kernels_[pass]->set_arg( img_dim_ );
       update_kernels_[pass]->set_arg( image_ );
-      update_kernels_[pass]->set_arg( vis_image_ );
-      update_kernels_[pass]->set_arg( pre_image_ );
-      update_kernels_[pass]->set_arg( norm_image_ );
       update_kernels_[pass]->set_arg( cl_output_ );
       update_kernels_[pass]->set_local_arg( lThreads_[0]*lThreads_[1]*sizeof(cl_uchar16) );//local tree,
       update_kernels_[pass]->set_local_arg( lThreads_[0]*lThreads_[1]*sizeof(cl_short2) ); //ray bundle,
@@ -379,24 +345,42 @@ bool boxm2_opencl_update_rgb_process::set_args(unsigned pass)
 }
 
 
+//Gonna write RGB A values to last four of float8
 bool boxm2_opencl_update_rgb_process::write_input_image(vil_image_view<vil_rgba<vxl_byte> >* input_image)
 {
-  vil_image_view<vil_rgba<vxl_byte> >::iterator iter;
-
-  //write to buffer (or create it) //4 bytes for RGBA
-  vxl_byte* buff = (image_) ? (vxl_byte*) image_->cpu_buffer() : new vxl_byte[4 * input_image->size()];
-  int i=0;
-  for (iter = input_image->begin(); iter != input_image->end(); ++iter, ++i) {
-    buff[4*i]     = iter->R();
-    buff[4*i + 1] = iter->G();
-    buff[4*i + 2] = iter->B();
-    buff[4*i + 3] = iter->A();
+  //write to buffer (or create it)
+  unsigned ni=RoundUp(input_image->ni(),8);
+  unsigned nj=RoundUp(input_image->nj(),8);
+  int numFloats = 8; 
+  float* buff = (image_) ? (float*) image_->cpu_buffer() : new float[numFloats * ni*nj];
+  int count=0;
+  for (unsigned j=0;j<nj;j++)
+  {
+    for (unsigned i=0;i<ni;i++)
+    {
+      buff[numFloats*count] = 0.0f;
+      buff[numFloats*count + 1] = 0.0f;
+      buff[numFloats*count + 2] = 1.0f;
+      buff[numFloats*count + 3] = 0.0f;
+      //rgba values
+      buff[numFloats*count + 4] = 0.0f;
+      buff[numFloats*count + 5] = 0.0f;
+      buff[numFloats*count + 6] = 0.0f;
+      buff[numFloats*count + 7] = 1.0f;
+      if (i<input_image->ni() && j< input_image->nj()) {
+        vil_rgba<vxl_byte> rgba = (*input_image)(i,j); 
+        buff[numFloats*count + 4] = (float) rgba.R()/255.0f;
+        buff[numFloats*count + 5] = (float) rgba.G()/255.0f;
+        buff[numFloats*count + 6] = (float) rgba.B()/255.0f;
+        buff[numFloats*count + 7] = (float) rgba.A()/255.0f;
+      }
+      ++count;
+    }
   }
-
   //now write to bocl_mem
   if (!image_) {
     //create mem
-    image_ = new bocl_mem((*context_), buff, input_image->size() * sizeof(cl_uchar4), "rgb input image buffer");
+    image_ = new bocl_mem((*context_), buff, ni*nj * sizeof(cl_float8), "input image buffer");
     image_->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
   }
   else {
