@@ -25,7 +25,6 @@ IF(HAS_VGUI)
      bgui_picker_tableau.cxx           bgui_picker_tableau.h          bgui_picker_tableau_sptr.h
      bgui_image_tableau.cxx            bgui_image_tableau.h           bgui_image_tableau_sptr.h
      bgui_histogram_tableau.cxx        bgui_histogram_tableau.h       bgui_histogram_tableau_sptr.h
-     bgui_selector_tableau.cxx         bgui_selector_tableau.h        bgui_selector_tableau_sptr.h
      bgui_bargraph_clipon_tableau.cxx  bgui_bargraph_clipon_tableau.h bgui_bargraph_clipon_tableau_sptr.h
      bgui_range_adjuster_tableau.cxx   bgui_range_adjuster_tableau.h  bgui_range_adjuster_tableau_sptr.h
      bgui_graph_tableau.cxx            bgui_graph_tableau.h           bgui_graph_tableau_sptr.h

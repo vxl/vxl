@@ -94,6 +94,8 @@
 #include <vgui/vgui_satellite_tableau.h>
 #include <vgui/vgui_section_buffer.h>
 #include <vgui/vgui_section_render.h>
+#include <vgui/vgui_selector_tableau.h>
+#include <vgui/vgui_selector_tableau_sptr.h>
 #include <vgui/vgui_shell_tableau.h>
 #include <vgui/vgui_shell_tableau_sptr.h>
 #include <vgui/vgui_slider_tableau.h>

@@ -127,6 +127,7 @@ SET(vgui_sources
   vgui_grid_tableau.cxx         vgui_grid_tableau.h       vgui_grid_tableau_sptr.h
   vgui_drag_mixin.cxx           vgui_drag_mixin.h
   vgui_active_tableau.cxx       vgui_active_tableau.h     vgui_active_tableau_sptr.h
+  vgui_selector_tableau.cxx     vgui_selector_tableau.h   vgui_selector_tableau_sptr.h
                                 vgui_drag_tableau.h       vgui_drag_tableau_sptr.h
   vgui_clear_tableau.cxx        vgui_clear_tableau.h      vgui_clear_tableau_sptr.h
   vgui_debug_tableau.cxx        vgui_debug_tableau.h      vgui_debug_tableau_sptr.h

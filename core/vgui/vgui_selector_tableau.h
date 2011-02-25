@@ -1,6 +1,6 @@
-// This is brl/bbas/bgui/bgui_selector_tableau.h
-#ifndef bgui_selector_tableau_h_
-#define bgui_selector_tableau_h_
+// This is core/vgui/vgui_selector_tableau.h
+#ifndef vgui_selector_tableau_h_
+#define vgui_selector_tableau_h_
 //:
 // \file
 // \brief  Tableau that allows the selection of one active child but displays all children
@@ -19,34 +19,34 @@
 #include <vgui/vgui_parent_child_link.h>
 class vgui_event;
 
-#include "bgui_selector_tableau_sptr.h"
+#include "vgui_selector_tableau_sptr.h"
 
 //: Tableau that allows the selection of one active child but displays all children
 //
-//  The bgui_selector_tableau class can have any number of children, indexed
-//  from 0 upwards.  The draw action of bgui_selector_tableau is to draw each
+//  The vgui_selector_tableau class can have any number of children, indexed
+//  from 0 upwards.  The draw action of vgui_selector_tableau is to draw each
 //  of its children, in order, into  the current context if they are marked visible.
-//  Events reaching the bgui_selector_tableau are passed on to the active child only.
+//  Events reaching the vgui_selector_tableau are passed on to the active child only.
 //
 //  The exceptions to this rule are :
 //  [a] the DRAW, DRAW_OVERLAY events which are sent to all children.
-class bgui_selector_tableau : public vgui_tableau
+class vgui_selector_tableau : public vgui_tableau
 {
  public:
-  //: Constructor - don't use this, use bgui_selector_tableau_new.
+  //: Constructor - don't use this, use vgui_selector_tableau_new.
   //  Creates an empty composite tableau.
-  bgui_selector_tableau();
+  vgui_selector_tableau();
 
-  //: Constructor - don't use this, use bgui_selector_tableau_new.
+  //: Constructor - don't use this, use vgui_selector_tableau_new.
   //  Takes a vector of child tableaux.
-  bgui_selector_tableau(vcl_vector<vgui_tableau_sptr> const& children);
+  vgui_selector_tableau(vcl_vector<vgui_tableau_sptr> const& children);
 
   //: Handle all events sent to this tableau.
   //  Key-press '?' prints info on this file, before being sent to the children.
   virtual bool handle(const vgui_event&);
 
-  //: Returns the type of this tableau ('bgui_selector_tableau').
-  vcl_string type_name() const { return "bgui_selector_tableau"; }
+  //: Returns the type of this tableau ('vgui_selector_tableau').
+  vcl_string type_name() const { return "vgui_selector_tableau"; }
 
   //: There is no obvious filename, so this just returns the type.
   vcl_string file_name() const;
@@ -110,8 +110,8 @@ class bgui_selector_tableau : public vgui_tableau
   virtual void add_to_menu(vgui_menu& ){}
 
  protected:
-  //: Destructor - called by bgui_selector_tableau_sptr.
-  virtual ~bgui_selector_tableau();
+  //: Destructor - called by vgui_selector_tableau_sptr.
+  virtual ~vgui_selector_tableau();
 
   //: Returns a bounding box large enough to contain all child bounding boxes.
   bool get_bounding_box(float low[3], float high[3]) const;
@@ -138,19 +138,19 @@ class bgui_selector_tableau : public vgui_tableau
   vcl_string active_child_;
 };
 
-//: Creates a smart-pointer to a bgui_selector_tableau tableau.
-struct bgui_selector_tableau_new : public bgui_selector_tableau_sptr
+//: Creates a smart-pointer to a vgui_selector_tableau tableau.
+struct vgui_selector_tableau_new : public vgui_selector_tableau_sptr
 {
-  typedef bgui_selector_tableau_sptr base;
+  typedef vgui_selector_tableau_sptr base;
 
-  //: Constructor - creates a pointer to an empty bgui_selector_tableau.
-  bgui_selector_tableau_new() : base(new bgui_selector_tableau()) { }
+  //: Constructor - creates a pointer to an empty vgui_selector_tableau.
+  vgui_selector_tableau_new() : base(new vgui_selector_tableau()) { }
 
 
   //: Constructor - creates pointer to a composite with the given children.
   //  Takes a vector of child tableaux.
-  bgui_selector_tableau_new(vcl_vector<vgui_tableau_sptr> const& children)
-    : base(new bgui_selector_tableau(children)) {}
+  vgui_selector_tableau_new(vcl_vector<vgui_tableau_sptr> const& children)
+    : base(new vgui_selector_tableau(children)) {}
 };
 
-#endif // bgui_selector_tableau_h_
+#endif // vgui_selector_tableau_h_
