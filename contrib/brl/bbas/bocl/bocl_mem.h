@@ -38,6 +38,7 @@ class bocl_mem : public vbl_ref_count
     //: creates the memory for buffer
     bool create_buffer(const cl_mem_flags& flags);
 
+    //: create an image buffer
     bool create_image_buffer(const cl_mem_flags& flags, const cl_image_format* format,
                              vcl_size_t width, vcl_size_t height);
 
@@ -45,15 +46,15 @@ class bocl_mem : public vbl_ref_count
     bool release_memory();
 
     //: read/write to buffer (copies memory from cpu_buf to gpu buf)
-    bool write_to_buffer(const cl_command_queue& cmdQueue);
-    bool read_to_buffer(const cl_command_queue& cmdQueue);
+    bool write_to_buffer(const cl_command_queue& cmd_queue);
+    bool read_to_buffer(const cl_command_queue& cmd_queue);
 
     //: write to buffer asynchronously
-    bool write_to_buffer_async(const cl_command_queue& cmdQueue);
-    bool finish_write_to_buffer(const cl_command_queue& cmdQueue);
+    bool write_to_buffer_async(const cl_command_queue& cmd_queue);
+    bool finish_write_to_buffer(const cl_command_queue& cmd_queue);
 
     //: zeros out GPU buffer
-    bool zero_gpu_buffer(const cl_command_queue& cmdQueue);
+    bool zero_gpu_buffer(const cl_command_queue& cmd_queue);
 
     //: returns a reference to the buffer
     cl_mem& buffer()        { return buffer_; }

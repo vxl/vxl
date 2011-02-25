@@ -46,7 +46,8 @@ class bocl_kernel
                         vcl_string id);
 
     //: execute this kernel on given command queue with given workspace size
-    bool execute(cl_command_queue& cmdQueue, cl_uint dim, vcl_size_t* localThreads, vcl_size_t* globalThreads);
+    bool execute(cl_command_queue& cmd_queue, cl_uint dim, 
+      vcl_size_t* local_threads, vcl_size_t* global_threads);
 
     //: set a bocl_mem buffer arg (pushes it on the back)
     bool set_arg(bocl_mem* buffer);

@@ -57,13 +57,13 @@ bool bocl_mem::release_memory()
 }
 
 //: helper method to zero out gpu buffer
-bool bocl_mem::zero_gpu_buffer(const cl_command_queue& cmdQueue)
+bool bocl_mem::zero_gpu_buffer(const cl_command_queue& cmd_queue)
 {
   unsigned char* zeros = new unsigned char[this->num_bytes_]; // All 1000 values initialized to zero.
   vcl_memset(zeros, 0, this->num_bytes_);
   ceEvent_ = 0;
   cl_int status = MEM_FAILURE;
-  status = clEnqueueWriteBuffer(cmdQueue,
+  status = clEnqueueWriteBuffer(cmd_queue,
                                 this->buffer_,
                                 CL_TRUE,          //True=BLocking, False=NonBlocking
                                 0,
@@ -79,12 +79,12 @@ bool bocl_mem::zero_gpu_buffer(const cl_command_queue& cmdQueue)
 }
 
 //: write to command queue
-bool bocl_mem::write_to_buffer(const cl_command_queue& cmdQueue)
+bool bocl_mem::write_to_buffer(const cl_command_queue& cmd_queue)
 {
   if (!is_gl_) {
     ceEvent_ = 0;
     cl_int status = MEM_FAILURE;
-    status = clEnqueueWriteBuffer(cmdQueue,
+    status = clEnqueueWriteBuffer(cmd_queue,
                                   this->buffer_,
                                   CL_TRUE,          //True=BLocking, False=NonBlocking
                                   0,
@@ -101,12 +101,12 @@ bool bocl_mem::write_to_buffer(const cl_command_queue& cmdQueue)
 }
 
 //: read from command queue buffer...
-bool bocl_mem::read_to_buffer(const cl_command_queue& cmdQueue)
+bool bocl_mem::read_to_buffer(const cl_command_queue& cmd_queue)
 {
   if (!is_gl_) {
     int status = MEM_FAILURE;
     // Enqueue readBuffers
-    status= clEnqueueReadBuffer(cmdQueue,
+    status= clEnqueueReadBuffer(cmd_queue,
                                 this->buffer_,
                                 CL_TRUE,
                                 0,
@@ -123,11 +123,11 @@ bool bocl_mem::read_to_buffer(const cl_command_queue& cmdQueue)
 }
 
 //: write to command queue
-bool bocl_mem::write_to_buffer_async(const cl_command_queue& cmdQueue)
+bool bocl_mem::write_to_buffer_async(const cl_command_queue& cmd_queue)
 {
   if (!is_gl_) {
     cl_int status = MEM_FAILURE;
-    status = clEnqueueWriteBuffer(cmdQueue,
+    status = clEnqueueWriteBuffer(cmd_queue,
                                   this->buffer_,
                                   CL_FALSE,          //True=BLocking, False=NonBlocking
                                   0,
@@ -144,7 +144,7 @@ bool bocl_mem::write_to_buffer_async(const cl_command_queue& cmdQueue)
 }
 
 //: finish write to buffer using clWaitForEvent
-bool bocl_mem::finish_write_to_buffer(const cl_command_queue& cmdQueue)
+bool bocl_mem::finish_write_to_buffer(const cl_command_queue& cmd_queue)
 {
   if (!is_gl_) {
     cl_int status = MEM_FAILURE;
