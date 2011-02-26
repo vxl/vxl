@@ -83,7 +83,7 @@ class bwm_observer_vgui : public bwm_observer_img, public bwm_observer
   virtual void backproj_poly(vsol_polygon_2d_sptr poly2d,
                              vsol_polygon_3d_sptr& poly3d) = 0;
 
-  //: move the correspondence location and replace the cross soview
+  //: move the correspondence location and replace the cross soview. 
   void set_corr(float x, float y);
 
   //: the current location of the correspondence point

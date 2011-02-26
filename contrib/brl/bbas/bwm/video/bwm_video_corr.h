@@ -65,7 +65,9 @@ class bwm_video_corr : public vbl_ref_count
   //: Number of matches assigned, i.e. number of matched video frames.
   unsigned num_matches() const { return matches_.size(); }
 
+  //: A unique id
   unsigned id() const { return id_; }
+  void set_id(unsigned id){id_ = id;}
 
   //: the lowest frame number for which there is a match
   unsigned min_frame();

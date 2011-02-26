@@ -457,14 +457,10 @@ void bwm_observer_vgui::delete_all()
 
 void bwm_observer_vgui::set_corr(float x, float y)
 {
-  vcl_pair<vgl_point_2d<double>, bwm_soview2D_cross * > c;
-
-  c.first = vgl_homg_point_2d<double> (x, y);
-
-  // delete the previous correspondence point if valid
-  if (corr_valid_ && (corr_.size()>1)) {
-    this->remove(corr_[corr_.size()-1].second);
-    //corr_.second=0;
+   // delete the previous correspondence point if valid
+  if (corr_valid_ && (corr_.size()>=1)) {
+    //remove soview from display
+   this->remove(corr_[corr_.size()-1].second);
     corr_.pop_back();
   }
 

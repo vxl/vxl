@@ -72,7 +72,9 @@ class bwm_observer_img : public bgui_vsol2D_tableau
   void copy();
 
   void paste(float x, float y);
-
+  
+  void clear_objects();
+  
   bool get_selected_box(bgui_vsol_soview2D_polygon* &box);
 
   //: clears the edges inside a selected box
@@ -204,8 +206,8 @@ class bwm_observer_img : public bgui_vsol2D_tableau
   void delete_polygon(vgui_soview* obj);
   void delete_vertex(vgui_soview* vertex);
 
-  //: returns the type of selected object iff there is one object
-  vgui_soview2D* get_selected_object(vcl_string type);
+  //: returns the type of selected object iff there is one object. If warn is true, then issue a warning if the object is not found.
+  vgui_soview2D* get_selected_object(vcl_string type, bool warn = false);
 
   //: returns a list of selected object from the given type
   vcl_vector<vgui_soview2D*> get_selected_objects(vcl_string type);

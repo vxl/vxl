@@ -95,6 +95,7 @@ bool bwm_observer_img::handle(const vgui_event &e)
     }
     start_x_ = x;
     start_y_ = y;
+
     post_redraw();
     return true;
   }
@@ -290,6 +291,22 @@ void bwm_observer_img::paste(float x, float y)
   this->deselect_all();
 }
 
+void bwm_observer_img::clear_objects()
+{
+  vcl_map<unsigned, bgui_vsol_soview2D*>::iterator oit = obj_list.begin();
+  for(; oit!=obj_list.end(); ++oit)
+    this->remove((*oit).second);
+  obj_list.clear();
+  vcl_map<unsigned, vcl_vector<bwm_soview2D_vertex* > >::iterator vsit =
+    vert_list.begin();
+  for(; vsit != vert_list.end(); ++vsit){
+    vcl_vector<bwm_soview2D_vertex* >::iterator vit = (*vsit).second.begin();
+    for(; vit != (*vsit).second.end(); ++vit)
+      this->remove(*vit);
+  }
+  vert_list.clear();
+}
+
 bool bwm_observer_img::get_selected_box(bgui_vsol_soview2D_polygon* &box)
 {
   bgui_vsol_soview2D_polygon* p = (bgui_vsol_soview2D_polygon*)get_selected_object(POLYGON_TYPE);
@@ -309,14 +326,17 @@ bool bwm_observer_img::get_selected_box(bgui_vsol_soview2D_polygon* &box)
   return false;
 }
 
-vgui_soview2D* bwm_observer_img::get_selected_object(vcl_string type)
+vgui_soview2D* bwm_observer_img::get_selected_object(vcl_string type,
+                                                     bool warn)
 {
   vcl_vector<vgui_soview*> select_list = this->get_selected_soviews();
   vcl_vector<vgui_soview2D*> objs;
   vgui_soview2D* obj;
 
   for (unsigned i=0; i<select_list.size(); i++) {
+#if 0
     vcl_cout << select_list[i]->type_name();
+#endif
     if (select_list[i]->type_name().compare(type) == 0) {
       objs.push_back((vgui_soview2D*) select_list[i]);
     }
@@ -327,8 +347,9 @@ vgui_soview2D* bwm_observer_img::get_selected_object(vcl_string type)
     return obj;
   }
 
-  vcl_cerr << "\nThe number of selected " << type << " is "
-           << objs.size() << ". Please select only one!!!\n";
+  if(warn)
+    vcl_cerr << "\nThe number of selected " << type << " is "
+             << objs.size() << ". Please select only one!!!\n";
   return 0;
 }
 
@@ -398,11 +419,7 @@ void bwm_observer_img::delete_selected()
 
 void bwm_observer_img::delete_all()
 {
-  vcl_map<unsigned, bgui_vsol_soview2D*>::iterator it = obj_list.begin();
-  while (it != obj_list.end()) {
-    delete_polygon(it->second);
-    it = obj_list.begin();
-  }
+  this->clear_objects();
   this->post_redraw();
 }
 

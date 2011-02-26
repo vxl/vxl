@@ -74,8 +74,10 @@ bwm_tableau_factory::create_tableau(bwm_io_tab_config* t)
     bool open = obs->open_video_stream(video_path);
     if (camera_glob != ""){
       open = open && obs->open_camera_stream(camera_glob);
+#if 0//don't really want to see the world points
       if (open)
         obs->toggle_world_pt_display();
+#endif
     }
 
     if (open)

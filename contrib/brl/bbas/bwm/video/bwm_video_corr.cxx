@@ -83,6 +83,7 @@ bool bwm_video_corr::nearest_frame(unsigned frame, unsigned& near_frame)
 void bwm_video_corr::x_write(vcl_ostream &os)
 {
    vsl_basic_xml_element corr(CORRESP_TAG);
+   corr.add_attribute("id", static_cast<int>(id()));
    corr.x_write_open(os);
 
    if (world_pt_valid_) {

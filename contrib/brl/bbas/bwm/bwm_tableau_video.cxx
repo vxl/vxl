@@ -81,6 +81,11 @@ void bwm_tableau_video::unset_selected_corr_for_tracking()
   my_observer_->unset_selected_corr_for_tracking();
 }
 
+void bwm_tableau_video::add_match_at_vertex()
+{
+  my_observer_->add_match_at_vertex();
+}
+
 void bwm_tableau_video::display_video_corrs()
 {
   static unsigned frame_num = 0;

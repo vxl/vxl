@@ -54,6 +54,7 @@ class bwm_video_site_io : public expatpp
   vcl_string camera_path_;
   bwm_video_corr_sptr corr_;
   //a set of frame-point pairs
+  vcl_vector<unsigned> corr_ids_;
   vcl_vector<bwm_video_corr_sptr> corrs_;
   vcl_vector<vcl_string> obj_types_;
   vcl_vector<vcl_string> obj_paths_;

@@ -130,6 +130,11 @@ bwm_video_site_io::startElement(const char* name, const char** atts)
   }
   else if (vcl_strcmp(name, CORRESP_TAG) == 0) {
     corr_ = new bwm_video_corr();
+    int id = 0;
+    if (vcl_strcmp(atts[0], "id") == 0){
+      convert(atts[1], id);
+      corr_->set_id(id);
+    }
   }
   else if (vcl_strcmp(name, CORRESP_WORLD_PT_TAG) == 0) {
     double X = 0, Y = 0, Z = 0;
@@ -214,6 +219,7 @@ set_corrs(vcl_vector<bwm_video_corr_sptr> const& corrs)
   corrs_ = corrs;
 }
 
+
 void bwm_video_site_io::set_video_path(vcl_string const& video_path)
 {
   video_path_ = video_path;
@@ -233,6 +239,10 @@ void bwm_video_site_io::x_write(vcl_string const& xml_path)
   vsite.add_attribute("name", name_);
   vsite.x_write_open(os);
 
+  vsl_basic_xml_element sdir(SITE_DIR_TAG);
+  sdir.add_attribute("path", site_dir_);
+  sdir.x_write(os);
+
   vsl_basic_xml_element vpath(VIDEO_PATH_TAG);
   vpath.add_attribute("path", video_path_);
   vpath.x_write(os);
@@ -242,7 +252,7 @@ void bwm_video_site_io::x_write(vcl_string const& xml_path)
   cpath.x_write(os);
 
   vsl_basic_xml_element mdpath(OBJECTS_TAG);
-  mdpath.x_write(os);
+  mdpath.x_write_open(os);
   unsigned nobjs = obj_types_.size();
   for (unsigned i = 0; i<nobjs; ++i)
     {
@@ -251,9 +261,7 @@ void bwm_video_site_io::x_write(vcl_string const& xml_path)
       mpath.add_attribute("path", obj_paths_[i]);
       mpath.x_write(os);
     }
-vsl_basic_xml_element sdir(SITE_DIR_TAG);
-sdir.add_attribute("path", site_dir_);
-sdir.x_write(os);
+  mdpath.x_write_close(os);
 
 //write the correspondences
 vsl_basic_xml_element corrs(CORRESPONDENCES_TAG);

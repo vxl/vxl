@@ -51,6 +51,10 @@ class bwm_observer_video : public bwm_observer_cam
 
   virtual void proj_poly(vsol_polygon_3d_sptr poly3d,
                          vsol_polygon_2d_sptr& poly2d);
+
+  virtual bool intersect_ray_and_plane(vgl_point_2d<double> img_point,
+                                       vgl_plane_3d<double> plane,
+                                       vgl_point_3d<double> &world_point);
   // standard video display functions
   void display_current_frame();
   void next_frame();
@@ -67,7 +71,10 @@ class bwm_observer_video : public bwm_observer_cam
   void set_world_pt(double lat, double lon, double elev);
 
   //: add a match to an existing correspondence in the current frame
-  void add_match();
+  bool add_match();
+
+  //: add video corr at a selected vertex
+  bool add_match_at_vertex();
 
   //: remove the selected correspondence match
   void remove_selected_corr_match();
@@ -94,6 +101,7 @@ class bwm_observer_video : public bwm_observer_cam
 
   //: access the current set of correspondences
   vcl_vector<bwm_video_corr_sptr> corrs();
+
 
   //: set the correspondences
   void set_corrs(vcl_vector<bwm_video_corr_sptr> const& corrs);
@@ -138,12 +146,16 @@ class bwm_observer_video : public bwm_observer_cam
   virtual void correspondence_action();
 
   //: add the current correspondence on bwm_observer_vgui as a video_corr
-  void add_video_corr();
+  bool add_video_corr();
+
 
   //: find the currently selected correspondence
   bool find_selected_video_corr(unsigned& frame, unsigned& corr_index,
                                 bwm_soview2D_cross*& cross);
-  //: display a single video correspondence
+  //: find the soview for the correspondence at current frame with corr_index
+  bwm_soview2D_cross* corr_soview(unsigned corr_index);
+
+    //: display a single video correspondence
   void display_video_corr(bwm_video_corr_sptr const& corr,
                           unsigned frame_index,
                           vgui_style_sptr const& style);
@@ -157,8 +169,11 @@ class bwm_observer_video : public bwm_observer_cam
   //: select the correspondence from a different frame that is closest in time and position to the new correspondence
   void select_closest_match();
 
-  //: clear the entire display map
-  void clear_display_map();
+  //: clear the entire corr display map and remove corrs from display
+  void clear_corr_display_map();
+
+  //: clear the entire corr display map and remove corrs from display
+  void clear_world_pt_display_map();
 
   //: display the current frame matches and those closest in time to the current frame
   void display_corr_track();

@@ -423,6 +423,10 @@ void bwm_popup_menu::get_menu(vgui_menu &menu)
                             new vgui_command_simple<bwm_tableau_video>(video_tab,&bwm_tableau_video::add_match));
     video_corr_submenu.separator();
 
+    video_corr_submenu.add( "Add Match at Vertex",
+                            new vgui_command_simple<bwm_tableau_video>(video_tab,&bwm_tableau_video::add_match_at_vertex));
+    video_corr_submenu.separator();
+
     video_corr_submenu.add( "Remove Selected Corr Match",
                             new vgui_command_simple<bwm_tableau_video>(video_tab,
                             &bwm_tableau_video::remove_selected_corr_match));
