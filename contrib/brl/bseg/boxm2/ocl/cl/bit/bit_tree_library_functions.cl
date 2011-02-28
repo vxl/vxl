@@ -175,6 +175,33 @@ int data_index_cached(__local uchar* tree, ushort bit_index, __constant uchar* b
   return count - ((count>>16)<<16);
 }
 
+//Optimized using new scheme where bits [10,11,12,13] are data pointer, and only one data buffer
+int data_index_cached2(__local uchar* tree, ushort bit_index, __constant uchar* bit_lookup, __local uchar* cumsum, int *cumIndex)
+{
+  //root and first gen are special case, return just the root offset + bit_index 
+  int count = as_int((uchar4) (tree[10], tree[11], tree[12], tree[13]));
+
+  if(bit_index < 9)
+    return (count+bit_index);
+    
+  //otherwise get parent index, parent byte index and relative bit index
+  uchar oneuplevel        = (bit_index-1)>>3;           //Bit_index of parent bit
+  uchar byte_index        = ((oneuplevel-1)>>3) +1;     //byte_index of parent bit
+  uchar sub_bit_index     = 8-((oneuplevel-1)&(8-1));   //[0-7] bit index of parent bit
+
+  for(; (*cumIndex) < byte_index; ++(*cumIndex))  {
+    cumsum[(*cumIndex)] = cumsum[(*cumIndex)-1] + bit_lookup[tree[(*cumIndex)]];
+  }
+
+  uchar bits_before_parent = tree[byte_index]<<sub_bit_index; //number of bits before parent bit [0-6] in parent byte
+  bits_before_parent       = bit_lookup[bits_before_parent];
+  uchar finestleveloffset = (bit_index-1)&(8-1);              //[0-7] bit index of cell being looked up (@bit_index)
+  count += (cumsum[byte_index-1] + bits_before_parent)*8 + 1 + finestleveloffset; 
+  
+  //HARD CODED HACK TO ENSURE THAT COUNT IS LESS THAN DATALEN
+  return count;
+}
+
 //takes three floats instaed of float4s
 //TODO optimize point here - makei t a float 3 instead of a float4
 ushort traverse_three(__local uchar* tree, 

@@ -137,38 +137,52 @@ bool boxm2_block::init_empty_block(boxm2_block_metadata data)
   int total_blocks =  data.sub_block_num_.x()
                     * data.sub_block_num_.y()
                     * data.sub_block_num_.z();
-  int blockBytes = total_blocks*(sizeof(int) + 16*sizeof(char)); //16 byte tree, 4 byte int pointer
-  int freeBytes = MAX_BYTES - blockBytes;
-  int dataSize  = 8*sizeof(char) +    //MOG
-                  4*sizeof(short) +   //numObs
-                  sizeof(float) +     //alpha
-                  4*sizeof(int);      //aux data (cum_seg_len
-  int num_cells = (int) (freeBytes/dataSize);                         //number of cells given maxmb
-  int num_buffers = (int) vcl_ceil( ((float)num_cells/(float)BUFF_LENGTH) );
-  int blocks_per_buffer = (int) vcl_ceil((float)total_blocks/(float)num_buffers);
-  if (num_buffers * BUFF_LENGTH <= total_blocks && !data.random_) {
-    vcl_cerr<<"**************************************************\n"
-            <<"*** boxm2_block::init_empty_block: ERROR!!!!\n"
-            <<"*** Max scene size not large enough to accommodate scene dimensions\n"
-            <<"*** cells allocated:  "<<num_buffers * BUFF_LENGTH<<'\n'
-            <<"*** total subblocks:  "<<total_blocks<<'\n'
-            <<"**************************************************\n";
-    return false;
+                    
+  //to initialize
+  int num_buffers, blocks_per_buffer;
+  if(data.random_)
+  {
+
+    int blockBytes = total_blocks*(sizeof(int) + 16*sizeof(char)); //16 byte tree, 4 byte int pointer
+    int freeBytes = MAX_BYTES - blockBytes;
+    int dataSize  = 8*sizeof(char) +    //MOG
+                    4*sizeof(short) +   //numObs
+                    sizeof(float) +     //alpha
+                    4*sizeof(int);      //aux data (cum_seg_len
+    int num_cells = (int) (freeBytes/dataSize);                         //number of cells given maxmb
+    num_buffers = (int) vcl_ceil( ((float)num_cells/(float)BUFF_LENGTH) );
+    blocks_per_buffer = (int) vcl_ceil((float)total_blocks/(float)num_buffers);
+    if (num_buffers * BUFF_LENGTH <= total_blocks && !data.random_) {
+      vcl_cerr<<"**************************************************\n"
+              <<"*** boxm2_block::init_empty_block: ERROR!!!!\n"
+              <<"*** Max scene size not large enough to accommodate scene dimensions\n"
+              <<"*** cells allocated:  "<<num_buffers * BUFF_LENGTH<<'\n'
+              <<"*** total subblocks:  "<<total_blocks<<'\n'
+              <<"**************************************************\n";
+      return false;
+    }
+
+    vcl_cout<<"OCL Scene buffer shape: ["
+            <<num_buffers<<" buffers by "
+            <<BUFF_LENGTH<<" cells ("
+            <<blocks_per_buffer<<" trees per buffer)]. "
+            <<"[total tree:"<<num_buffers*BUFF_LENGTH<<']'<<vcl_endl;
   }
-
-  vcl_cout<<"OCL Scene buffer shape: ["
-          <<num_buffers<<" buffers by "
-          <<BUFF_LENGTH<<" cells ("
-          <<blocks_per_buffer<<" trees per buffer)]. "
-          <<"[total tree:"<<num_buffers*BUFF_LENGTH<<']'<<vcl_endl;
-
+  else
+  {
+    num_buffers = 1; 
+    blocks_per_buffer = total_blocks;
+    vcl_cout<<"Num buffers: "<<num_buffers
+            <<" .. num_trees: "<<blocks_per_buffer<<vcl_endl;
+  }
+  
   //now construct a byte stream, and read in with b_read
   byte_count_ = calc_byte_count(num_buffers, blocks_per_buffer, total_blocks);
   init_level_ = data.init_level_;
   max_level_  = data.max_level_;
   max_mb_     = int(data.max_mb_);
   buffer_ = new char[byte_count_];
-
+  
   //get member variable metadata straight, then write to the buffer
   long bytes_read = 0;
   bytes_read += sizeof(byte_count_);   //0. first 8 bytes denote size
@@ -268,14 +282,6 @@ bool boxm2_block::init_empty_block(boxm2_block_metadata data)
       treeBlk[13] = (tree_index>>24) & 0xff;
       for (int i=0; i<16; i++)
         (*iter)[i] = treeBlk[i];
-
-      //make sure mem_ptrs_ and blocks in buffers add up
-      //Don't really need these for this ...
-      //mem_ptrs_[b_index][1]++;
-      //trees_in_buffers_[b_index]++;
-
-      //make sure block pointers points back to the right index
-      //tree_ptrs_[b_index][b_offset] = tree_index;
     }
   }
   return true;

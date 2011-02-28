@@ -11,6 +11,10 @@
 #ifdef MOG_TYPE_8 
    #define MOG_TYPE uchar8
 #endif
+#ifdef MOG_TYPE_4
+   #define MOG_TYPE uchar4
+#endif
+
 /////////////////////////////////////////////////////////////////
 ////Refine Tree (refines local tree)
 ////Depth first search iteration of the tree (keeping track of node level)
@@ -91,6 +95,81 @@ int refine_tree(__constant RenderSceneInfo * linfo,
   return tree_size;
 }
 
+/////////////////////////////////////////////////////////////////
+////Refine Tree (refines local tree)
+// Refines tree using new data indexing scheme
+/////////////////////////////////////////////////////////////////
+int refine_tree2(__constant RenderSceneInfo * linfo, 
+                __local    uchar16         * unrefined_tree,
+                __local    uchar16         * refined_tree,
+                           int               tree_size, 
+                           int               blockIndex,
+                __global   float           * alpha_array,
+                           float             prob_thresh, 
+                __local    uchar           * cumsum, 
+                __constant uchar           * bit_lookup,       // used to get data_index
+                           int               MAX_INNER_CELLS,
+                __global   float           * output)
+{
+  unsigned gid = get_group_id(0);
+  unsigned lid = get_local_id(0);
+
+  //cast local pointers to uchar arrays
+  __local uchar* unrefined = (__local uchar*) unrefined_tree; 
+  __local uchar* refined   = (__local uchar*) refined_tree; 
+
+  //max alpha integrated
+  float max_alpha_int = (-1)*log(1.0 - prob_thresh);      
+  
+  //initialize cumsum buffer and cumIndex
+  cumsum[0] = (*unrefined_tree).s0;
+  int cumIndex = 1;
+  int numSplit = 0;
+  
+  //no need to do depth first search, just iterate and check each node along the way
+  //(iterate through the max number of inner cells)
+  for(int i=0; i<MAX_INNER_CELLS; i++) {
+    
+    //if current bit is 0 and parent bit is 1, you're at a leaf
+    int pi = (i-1)>>3;           //Bit_index of parent bit    
+    bool validParent = tree_bit_at(unrefined, pi) || (i==0); // special case for root
+    if(validParent && tree_bit_at(unrefined, i)==0) {
+    
+      //////////////////////////////////////////////////
+      //LEAF CODE HERE
+      //////////////////////////////////////////////////
+      //find side length for cell of this level = block_len/2^currDepth
+      int currDepth = get_depth(i);
+      float side_len = linfo->block_len/(float) (1<<currDepth);
+     
+      //get alpha value for this cell;
+      int dataIndex = data_index_cached2(unrefined, i, bit_lookup, cumsum, &cumIndex); //gets offset within buffer
+      float alpha   = alpha_array[dataIndex];
+         
+      //integrate alpha value
+      float alpha_int = alpha * side_len;
+      
+      //IF alpha value triggers split, tack on 8 children to end of tree array
+      if(alpha_int > max_alpha_int && currDepth<linfo->root_level)  {
+       
+        //change value of bit_at(i) to 1;
+        set_tree_bit_at(refined, i, true);
+       
+        //keep track of number of nodes that split
+        numSplit++;
+      }
+      ////////////////////////////////////////////
+      //END LEAF SPECIFIC CODE
+      ////////////////////////////////////////////
+      
+    }
+  }
+  
+  //tree and data size output
+  tree_size += numSplit * 8;
+  return tree_size;
+}
+
  
 //////////////////////////////////////////////////////////////////
 // Moves 
@@ -136,7 +215,7 @@ int move_data(__constant RenderSceneInfo * linfo,
       newInitCount++; 
 
       //calc new alpha
-      MOG_TYPE new_value; 
+      MOG_TYPE new_value;
       if(prob_thresh > 0.0f) {
         int currLevel = get_depth(j);
         int pDataPtr = data_index(0, unrefined_tree, pj, bit_lookup);
@@ -155,7 +234,6 @@ int move_data(__constant RenderSceneInfo * linfo,
     }
   }       
 }
-
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
@@ -180,8 +258,8 @@ __kernel void refine_trees(__constant RenderSceneInfo * linfo,
 {
   //global id will be the tree buffer
   unsigned gid = get_group_id(0);
-
   int numTrees = linfo->dims.x * linfo->dims.y * linfo->dims.z; 
+
   if(gid < numTrees) {
     //USE rootlevel to determine MAX_INNER and MAX_CELLS
     int MAX_INNER_CELLS, MAX_CELLS;
@@ -191,7 +269,7 @@ __kernel void refine_trees(__constant RenderSceneInfo * linfo,
       MAX_INNER_CELLS=9, MAX_CELLS=73; 
     else if (linfo->root_level == 3) 
       MAX_INNER_CELLS=73, MAX_CELLS=585; 
-        
+  
     //locally cache prob_thresh
     float prob_thresh = *prob_thresh_t;
 
@@ -200,11 +278,11 @@ __kernel void refine_trees(__constant RenderSceneInfo * linfo,
     (*local_tree)    = currTree; 
     (*refined_tree)  = currTree;
     int currTreeSize = num_cells(local_tree);
-
+    
     //3. refine tree locally (only updates refined_tree and returns new tree size)
     //NEEDS TO USE NEW VERSION OF DATA INDEXING... 
     //TODO FIX THIS REFINE TREE METHOD
-    int newSize = refine_tree(linfo, 
+    int newSize = refine_tree2(linfo, 
                               local_tree,
                               refined_tree, 
                               currTreeSize, 
@@ -275,6 +353,7 @@ __kernel void refine_data( __constant RenderSceneInfo * linfo,
     uchar16 currTree = as_uchar16(trees[gid]);
     (*local_tree)    = currTree; 
     int currTreeSize = num_cells(local_tree);
+    
     uchar16 newTree  = as_uchar16(trees_refined[gid]); 
     (*refined_tree)  = newTree;
     int newTreeSize  = num_cells(refined_tree); //this should also equal to tree_sizes[gid]-tree_sizes[gid-1]; 

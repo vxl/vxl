@@ -53,6 +53,8 @@ class boxm2_opencl_processor: public boxm2_processor, public bocl_manager<boxm2_
     void set_cpu_cache(boxm2_cache* cache) { cpu_cache_ = cache; }
     
     cl_command_queue* get_queue() { return &queues_[0]; } 
+    
+    boxm2_opencl_cache* gpu_cache() { return gpu_cache_; }
 
  protected:
   

@@ -49,8 +49,8 @@ class boxm2_opencl_refine_process : public boxm2_opencl_process_base
     //: new refine kernels 
     bocl_kernel refine_trees_; 
     bocl_kernel refine_scan_; 
-    bocl_kernel refine_data_;
-
+    vcl_map<int, bocl_kernel> refine_datas_; 
+    //bocl_kernel refine_data_;
 };
 
 #endif

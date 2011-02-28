@@ -21,7 +21,10 @@ TARGET_LINK_LIBRARIES(boxm2_ocl boxm2 boxm2_basic boxm2_io boxm2_ocl_pro bocl bo
 #pro
 SUBDIRS(pro)
 
-
 #exe
 SUBDIRS(exe)
+
+#tests
+SUBDIRS(tests)
+
 ENDIF(OPENCL_FOUND)

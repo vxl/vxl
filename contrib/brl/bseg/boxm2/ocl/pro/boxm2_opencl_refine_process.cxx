@@ -33,8 +33,16 @@ bool boxm2_opencl_refine_process::init_kernel(cl_context* context,
   bool created =  refine_kernel_.create_kernel( context_, device, src_paths, "refine_bit_scene", opts, "boxm2 opencl refine"); //kernel identifier (for error checking)
   created = created&&refine_trees_.create_kernel( context_, device, src_paths, "refine_trees", opts, "boxm2 opencl refine trees (pass one)"); //kernel identifier (for error checking)
   created = created&& refine_scan_.create_kernel( context_, device, src_paths, "refine_scan", opts, "boxm2 opencl refine scan (pass two)"); //kernel identifier (for error checking)
-  created = created&& refine_data_.create_kernel( context_, device, src_paths, "refine_data", opts, "boxm2 opencl refine data (pass three)"); //kernel identifier (for error checking)
-
+  
+  //set refine datas
+  bocl_kernel rd4, rd8, rd16; 
+  rd4.create_kernel( context_, device, src_paths, "refine_data", "-D MOG_TYPE_4 ", "boxm2 opencl refine data size 4 (pass three)"); 
+  rd8.create_kernel( context_, device, src_paths, "refine_data", "-D MOG_TYPE_8 ", "boxm2 opencl refine data size 8 (pass three)"); 
+  rd16.create_kernel( context_, device, src_paths, "refine_data", "-D MOG_TYPE_16 ", "boxm2 opencl refine data size 16 (pass three)"); 
+  refine_datas_[4] = rd4; 
+  refine_datas_[8] = rd8;
+  refine_datas_[16] = rd16; 
+  
   return created;
 }
 
@@ -91,12 +99,12 @@ bool boxm2_opencl_refine_process::execute(vcl_vector<brdb_value_sptr>& input, vc
       
       //set up tree copy 
       bocl_mem* blk_copy = new bocl_mem((*context_), NULL, blk->num_bytes(), "refine trees block copy buffer"); 
-      blk_copy->create_buffer(CL_MEM_READ_ONLY | CL_MEM_ALLOC_HOST_PTR);
+      blk_copy->create_buffer(CL_MEM_READ_WRITE| CL_MEM_ALLOC_HOST_PTR, (*command_queue_));
       
       //set up tree size (first find num trees)
       int numTrees = data.sub_block_num_.x() * data.sub_block_num_.y() * data.sub_block_num_.z(); 
       bocl_mem* tree_sizes = new bocl_mem((*context_), NULL, sizeof(cl_int)*numTrees, "refine tree sizes buffer");
-      tree_sizes->create_buffer(CL_MEM_READ_ONLY | CL_MEM_ALLOC_HOST_PTR);
+      tree_sizes->create_buffer(CL_MEM_READ_WRITE | CL_MEM_ALLOC_HOST_PTR, (*command_queue_));
 
       //set first kernel args
       refine_trees_.set_arg( blk_info );
@@ -112,9 +120,8 @@ bool boxm2_opencl_refine_process::execute(vcl_vector<brdb_value_sptr>& input, vc
       refine_trees_.set_local_arg( sizeof(cl_uchar16) );
       
       //set workspace
-      boxm2_scene_info* info_buffer = (boxm2_scene_info*) blk_info->cpu_buffer();
       vcl_size_t lThreads[] = {1, 1};
-      vcl_size_t gThreads[] = {info_buffer->num_buffer, 1};
+      vcl_size_t gThreads[] = {numTrees, 1};
       
       //execute kernel
       refine_trees_.execute( (*command_queue_), 2, lThreads, gThreads);
@@ -123,6 +130,90 @@ bool boxm2_opencl_refine_process::execute(vcl_vector<brdb_value_sptr>& input, vc
       
       //clear render kernel args so it can reset em on next execution
       refine_kernel_.clear_args();
+      
+      /////////////////////////////////////////////////////////////////////////
+      //STEP TWO
+      //read out tree_sizes and do cumulative sum on it
+      tree_sizes->read_to_buffer((*command_queue_));
+      int* sizebuff = (int*) tree_sizes->cpu_buffer();
+      for(int i=1; i<numTrees; ++i) sizebuff[i] += sizebuff[i-1];
+      int newDataSize = sizebuff[numTrees-1]; 
+      for(int i=numTrees-1; i>0; --i) sizebuff[i] = sizebuff[i-1]; 
+      sizebuff[0] = 0;
+      tree_sizes->write_to_buffer((*command_queue_));
+      vcl_cout<<"New data size: "<<newDataSize<<vcl_endl;
+      /////////////////////////////////////////////////////////////////////////
+      
+              
+      /////////////////////////////////////////////////////////////////////////
+      //STEP Three
+      //Move data into new data memory
+      //refine alhpa, mog and num obs
+      //set up alpha copy 
+      bocl_mem* alpha_copy = new bocl_mem((*context_), NULL, newDataSize*sizeof(float), "alpha block copy buffer"); 
+      alpha_copy->create_buffer(CL_MEM_READ_WRITE| CL_MEM_ALLOC_HOST_PTR, (*command_queue_));
+      
+      //init value buffer
+      float* init_a = new float[1]; init_a[0] = .03f;
+      bocl_mem init_alpha((*context_), init_a, sizeof(float), "init_alpha buffer");
+      init_alpha.create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
+            
+      refine_datas_[4].set_arg( blk_info );
+      refine_datas_[4].set_arg( blk );
+      refine_datas_[4].set_arg( blk_copy ); 
+      refine_datas_[4].set_arg( tree_sizes ); 
+      refine_datas_[4].set_arg( alpha );
+      refine_datas_[4].set_arg( alpha_copy );
+      refine_datas_[4].set_arg( &init_alpha );
+      refine_datas_[4].set_arg( &prob_thresh ); 
+      refine_datas_[4].set_arg( &lookup );
+      refine_datas_[4].set_arg( &cl_output );
+      refine_datas_[4].set_local_arg( 16*sizeof(cl_uchar) );
+      refine_datas_[4].set_local_arg( sizeof(cl_uchar16) );
+      refine_datas_[4].set_local_arg( sizeof(cl_uchar16) );
+      
+      //execute kernel
+      refine_datas_[4].execute( (*command_queue_), 2, lThreads, gThreads);
+      clFinish( (*command_queue_)); 
+      
+      //switch the pointers 
+      
+      ////refine mog----------------------------------
+      //bocl_mem* mog; int mog_size;
+      //if (data_type_=="8bit") {
+        //mog       = cache_->get_data<BOXM2_MOG3_GREY>(*id);
+        //mog_size = 8;
+      //}
+      //else if (data_type_=="16bit") {
+        //mog_       = cache_->get_data<BOXM2_MOG3_GREY_16>(*id);
+        //mog_size = 16; 
+      //}
+      //bocl_mem* mog_copy = new bocl_mem((*context_), NULL, newDataSize*sizeof(float), "alpha block copy buffer"); 
+      //alpha_copy->create_buffer(CL_MEM_READ_WRITE| CL_MEM_ALLOC_HOST_PTR, (*command_queue_));
+      
+      ////init value buffer
+      //float* init_a = new float[1]; init_a[0] = .03f;
+      //bocl_mem init_alpha((*context_), init_a, sizeof(float), "init_alpha buffer");
+      //init_alpha.create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
+            
+      //refine_datas_[4].set_arg( blk_info );
+      //refine_datas_[4].set_arg( blk );
+      //refine_datas_[4].set_arg( blk_copy ); 
+      //refine_datas_[4].set_arg( tree_sizes ); 
+      //refine_datas_[4].set_arg( alpha );
+      //refine_datas_[4].set_arg( alpha_copy );
+      //refine_datas_[4].set_arg( &init_alpha );
+      //refine_datas_[4].set_arg( &prob_thresh ); 
+      //refine_datas_[4].set_arg( &lookup );
+      //refine_datas_[4].set_arg( &cl_output );
+      //refine_datas_[4].set_local_arg( 16*sizeof(cl_uchar) );
+      //refine_datas_[4].set_local_arg( sizeof(cl_uchar16) );
+      //refine_datas_[4].set_local_arg( sizeof(cl_uchar16) );
+      
+      ////execute kernel
+      //refine_data.execute( *gpu_pro->get_queue(), 2, lThreads, gThreads);
+      //clFinish( *gpu_pro->get_queue()); 
+      
       
     }
     else 

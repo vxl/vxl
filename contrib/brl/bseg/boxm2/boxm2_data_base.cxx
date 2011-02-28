@@ -15,10 +15,13 @@ boxm2_data_base::boxm2_data_base(boxm2_block_metadata data, const vcl_string dat
   //determine number of cells to allocate - if random, then use the max_mb, otherwise use tree size
   // MAY want to create an initialize data that caters to size of trees, and doesn't assume only root
   long num_cells; 
-  if(data.random_)
+  if(data.random_) {
     num_cells = data.num_data_cells();
-  else 
+  }
+  else {
     num_cells = data.sub_block_num_.x() * data.sub_block_num_.y() * data.sub_block_num_.z(); 
+    vcl_cout<<"NUmber of data cells: "<<num_cells<<vcl_endl;
+  }
   
   vcl_size_t cell_size = boxm2_data_info::datasize(data_type);
   buffer_length_ = num_cells * cell_size;
