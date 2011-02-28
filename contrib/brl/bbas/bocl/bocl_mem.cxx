@@ -25,11 +25,28 @@ bool bocl_mem::create_buffer(const cl_mem_flags& flags)
   buffer_ = clCreateBuffer(this->context_, flags, this->num_bytes_, this->cpu_buf_, &status);
   if (!check_val(status, MEM_FAILURE, "clCreateBuffer failed: " + this->id_))
     return MEM_FAILURE;
+  return MEM_SUCCESS;
+}
+bool bocl_mem::create_buffer(const cl_mem_flags& flags, cl_command_queue& queue)
+{
+  cl_int status = MEM_FAILURE;
 
+  // Create and initialize memory objects
+  buffer_ = clCreateBuffer(this->context_, flags, this->num_bytes_, this->cpu_buf_, &status);
+  if (!check_val(status, MEM_FAILURE, "clCreateBuffer failed: " + this->id_))
+    return MEM_FAILURE;
+  
   //if memory was allocated and a null pointer was passed in, store it
-  if (flags & CL_MEM_ALLOC_HOST_PTR && cpu_buf_ == NULL) {
-    status = clGetMemObjectInfo (buffer_, CL_MEM_HOST_PTR, sizeof(void*), cpu_buf_, NULL);
-    if (!check_val(status, MEM_FAILURE, "clGetMemObjectInfo CL_MEM_HOST_PTR failed: " + this->id_))
+  if ( (flags & CL_MEM_ALLOC_HOST_PTR) && !cpu_buf_) {
+    cpu_buf_ = clEnqueueMapBuffer(queue, 
+                                  buffer_, 
+                                  CL_TRUE, 
+                                  CL_MAP_READ & CL_MAP_WRITE, 
+                                  0, 
+                                  this->num_bytes_,
+                                  0,NULL, NULL, &status); 
+    clFinish(queue);
+    if (!check_val(status, MEM_FAILURE, "clEnqueueMapBuffer CL_MEM_HOST_PTR failed: " + this->id_))
       return MEM_FAILURE;
   }
   return MEM_SUCCESS;

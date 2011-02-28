@@ -35,8 +35,9 @@ class bocl_mem : public vbl_ref_count
     bocl_mem(const cl_context& context, void* buffer, unsigned num_bytes, vcl_string id);
     ~bocl_mem();
 
-    //: creates the memory for buffer
+    //: creates the memory for buffer (create from command queue as welll)
     bool create_buffer(const cl_mem_flags& flags);
+    bool create_buffer(const cl_mem_flags& flags, cl_command_queue& queue);
 
     //: create an image buffer
     bool create_image_buffer(const cl_mem_flags& flags, const cl_image_format* format,
