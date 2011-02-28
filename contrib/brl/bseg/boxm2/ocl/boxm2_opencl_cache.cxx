@@ -40,7 +40,26 @@ boxm2_opencl_cache::~boxm2_opencl_cache()
   }
   cached_data_.clear(); 
 }
+bool boxm2_opencl_cache::clear_cache()
+{
 
+  if(cached_block_) delete cached_block_, cached_block_=0;
+  if(block_info_) delete block_info_, block_info_=0;
+  if(tree_ptrs_) delete tree_ptrs_, tree_ptrs_=0;
+  if(trees_per_buffer_) delete trees_per_buffer_, trees_per_buffer_=0;
+  if(mem_ptrs_) delete mem_ptrs_, mem_ptrs_=0;
+
+  // clean up loaded data
+  vcl_map<vcl_string, bocl_mem*>::iterator iter;
+  for (iter=cached_data_.begin(); iter!=cached_data_.end(); ++iter) {
+    bocl_mem* dat = iter->second; 
+    if(dat) delete dat; 
+  }
+  cached_data_.clear(); 
+  loaded_data_.clear(); 
+
+  return true;
+}
 //: realization of abstract "get_block(block_id)"
 bocl_mem* boxm2_opencl_cache::get_block(boxm2_block_id id)
 {
@@ -49,7 +68,8 @@ bocl_mem* boxm2_opencl_cache::get_block(boxm2_block_id id)
 
   //clean up...
   if (cached_block_)
-    delete cached_block_;
+    //delete cached_block_;
+      this->clear_cache();
   cached_block_ = 0;
 
   //otherwise load it from disk with blocking
@@ -78,8 +98,8 @@ bocl_mem* boxm2_opencl_cache::get_block(boxm2_block_id id)
 //: get tree_ptrs returns the tree pointers for the block currently in the cache
 bocl_mem* boxm2_opencl_cache::get_loaded_tree_ptrs()
 {  
-  if( tree_ptrs_ ) delete tree_ptrs_; 
-  tree_ptrs_ = 0;
+  //if( tree_ptrs_ ) delete tree_ptrs_; 
+  //tree_ptrs_ = 0;
  
   boxm2_block* loaded = cpu_cache_->get_block(loaded_); 
   boxm2_array_2d<int>& tree_ptrs = loaded->tree_ptrs(); 
@@ -90,8 +110,8 @@ bocl_mem* boxm2_opencl_cache::get_loaded_tree_ptrs()
 
 bocl_mem* boxm2_opencl_cache::get_loaded_trees_per_buffer()
 {
-  if( trees_per_buffer_ ) delete trees_per_buffer_; 
-  trees_per_buffer_ = 0;
+  //if( trees_per_buffer_ ) delete trees_per_buffer_; 
+  //trees_per_buffer_ = 0;
  
   boxm2_block* loaded = cpu_cache_->get_block(loaded_); 
   boxm2_array_1d<unsigned short>& trees_per_buffer = loaded->trees_in_buffers(); 
@@ -101,8 +121,8 @@ bocl_mem* boxm2_opencl_cache::get_loaded_trees_per_buffer()
 }
 bocl_mem* boxm2_opencl_cache::get_loaded_mem_ptrs()
 {
-  if( mem_ptrs_ ) delete mem_ptrs_; 
-  mem_ptrs_ = 0;
+  //if( mem_ptrs_ ) delete mem_ptrs_; 
+  //mem_ptrs_ = 0;
   boxm2_block* loaded = cpu_cache_->get_block(loaded_); 
   
   typedef vnl_vector_fixed<unsigned short, 2> ushort2; 

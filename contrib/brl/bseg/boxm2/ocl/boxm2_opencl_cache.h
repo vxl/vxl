@@ -44,6 +44,7 @@ class boxm2_opencl_cache
     template<boxm2_data_type T>
     bocl_mem* get_data(boxm2_block_id);
 
+    bool clear_cache();
   private:
 
     //: scene this cache is operating on
