@@ -53,11 +53,11 @@ int main(int argc,  char** argv)
 
   //load image from file and format it into RGBA
   vil_image_view_base_sptr loaded_image = vil_convert_to_n_planes(4, vil_load(img().c_str()));
-  vil_image_view_base_sptr comp_image = vil_convert_to_component_order(loaded_image); 
-  vil_image_view<vil_rgba<vxl_byte> >* rgb_view = new vil_image_view<vil_rgba<vxl_byte> >(comp_image); 
-  vil_image_view<vil_rgba<vxl_byte> >::iterator iter; 
-  for(iter = rgb_view->begin(); iter != rgb_view->end(); ++iter) 
-    (*iter) = vil_rgba<vxl_byte>(iter->R(), iter->G(), iter->B(), 255); 
+  vil_image_view_base_sptr comp_image = vil_convert_to_component_order(loaded_image);
+  vil_image_view<vil_rgba<vxl_byte> >* rgb_view = new vil_image_view<vil_rgba<vxl_byte> >(comp_image);
+  vil_image_view<vil_rgba<vxl_byte> >::iterator iter;
+  for (iter = rgb_view->begin(); iter != rgb_view->end(); ++iter)
+    (*iter) = vil_rgba<vxl_byte>(iter->R(), iter->G(), iter->B(), 255);
   vil_image_view_base_sptr rgba_sptr(rgb_view);// = new vil_image_view<unsigned int>(ni(), nj());
   vcl_cout<<rgb_view->pixel_format()<<vcl_endl;
   brdb_value_sptr brdb_inimg = new brdb_value_t<vil_image_view_base_sptr>(rgba_sptr);
@@ -89,10 +89,10 @@ int main(int argc,  char** argv)
 
   //////initialize GPU update process
   boxm2_opencl_update_rgb_process gpu_update;
-  gpu_update.init_kernel(&gpu_pro->context(), &gpu_pro->devices()[0]); 
-  
-  for(int i=0; i<1; i++) 
-    gpu_pro->run(&gpu_update, input, output); 
+  gpu_update.init_kernel(&gpu_pro->context(), &gpu_pro->devices()[0]);
+
+  for (int i=0; i<1; i++)
+    gpu_pro->run(&gpu_update, input, output);
 
   ////////////////////////////////////////////////////////////////////////////////
   //// RENDER SCENE FOR DEBUGGING
@@ -101,7 +101,7 @@ int main(int argc,  char** argv)
   expimg->fill(0);
   vil_image_view_base_sptr expimg_sptr(expimg);
   brdb_value_sptr brdb_expimg = new brdb_value_t<vil_image_view_base_sptr>(expimg_sptr);
- 
+
   //create vis image buffer
   vil_image_view<float>* vis_img = new vil_image_view<float>(ni(), nj());
   vis_img->fill(1.0f);
@@ -118,35 +118,41 @@ int main(int argc,  char** argv)
   boxm2_opencl_render_rgb_process gpu_render;
   gpu_render.init_kernel(&gpu_pro->context(), &gpu_pro->devices()[0]);
   gpu_pro->run(&gpu_render, r_input, output);
-  
-  //vcl_cout<<cache<<vcl_endl;
-  
-  ////save blocks and data to disk for debugging
-  //vcl_map<boxm2_block_id, boxm2_block_metadata> blocks = scene->blocks();
-  //vcl_map<boxm2_block_id, boxm2_block_metadata>::iterator iter;
-  //for(iter = blocks.begin(); iter != blocks.end(); ++iter)
-  //{ 
-    //boxm2_block_id id = iter->first; 
-    //boxm2_sio_mgr::save_block(scene->data_path(), cache.get_block(id)); 
-    //boxm2_sio_mgr::save_block_data(scene->data_path(), id, cache.get_data<BOXM2_ALPHA>(id) );
-    //boxm2_sio_mgr::save_block_data(scene->data_path(), id, cache.get_data<BOXM2_MOG3_GREY>(id) );
-    //boxm2_sio_mgr::save_block_data(scene->data_path(), id, cache.get_data<BOXM2_NUM_OBS>(id) );
-  //}
 
+#ifdef DEBUG
+  vcl_cout<<cache<<vcl_endl;
+#endif
+
+#if 0 // commented out
+  //save blocks and data to disk for debugging
+  vcl_map<boxm2_block_id, boxm2_block_metadata> blocks = scene->blocks();
+  vcl_map<boxm2_block_id, boxm2_block_metadata>::iterator iter;
+  for (iter = blocks.begin(); iter != blocks.end(); ++iter)
+  {
+    boxm2_block_id id = iter->first;
+    boxm2_sio_mgr::save_block(scene->data_path(), cache.get_block(id));
+    boxm2_sio_mgr::save_block_data(scene->data_path(), id, cache.get_data<BOXM2_ALPHA>(id) );
+    boxm2_sio_mgr::save_block_data(scene->data_path(), id, cache.get_data<BOXM2_MOG3_GREY>(id) );
+    boxm2_sio_mgr::save_block_data(scene->data_path(), id, cache.get_data<BOXM2_NUM_OBS>(id) );
+  }
   //----------------------------------------------------------------------------
   //------- END API EXAMPLE ----------------------------------------------------
   //----------------------------------------------------------------------------
+#endif // 0
+
   //save to disk
   //vil_image_view<vil_rgb<vxl_byte> >* expimg_view = static_cast<vil_image_view<vil_rgb<vxl_byte> >* >(expimg_sptr.ptr());
-  for(iter = expimg->begin(); iter != expimg->end(); ++iter) 
-    (*iter) = vil_rgba<vxl_byte>(iter->R(), iter->G(), iter->B(), 255); 
-  vil_save( *expimg, "exp_image.png"); 
+  for (iter = expimg->begin(); iter != expimg->end(); ++iter)
+    (*iter) = vil_rgba<vxl_byte>(iter->R(), iter->G(), iter->B(), 255);
+  vil_save( *expimg, "exp_image.png");
 
-  //vil_image_view<vxl_byte> byte_img(ni(), nj());
-  //for (unsigned int i=0; i<ni(); ++i)
-    //for (unsigned int j=0; j<nj(); ++j)
-      //byte_img(i,j) =  static_cast<vxl_byte>( (*expimg_view)(i,j) );   //just grab the first byte (all foura r the same)
-  //vil_save( byte_img, "exp_img.png");
+#if 0 // commented out
+  vil_image_view<vxl_byte> byte_img(ni(), nj());
+  for (unsigned int i=0; i<ni(); ++i)
+    for (unsigned int j=0; j<nj(); ++j)
+      byte_img(i,j) =  static_cast<vxl_byte>( (*expimg_view)(i,j) );   //just grab the first byte (all four are the same)
+  vil_save( byte_img, "exp_img.png");
+#endif // 0
 
   return 0;
 }
