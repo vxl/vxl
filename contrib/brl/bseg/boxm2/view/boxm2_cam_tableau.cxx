@@ -12,7 +12,7 @@
 boxm2_cam_tableau::boxm2_cam_tableau() :
       c_mouse_rotate(vgui_LEFT),
       c_mouse_translate(vgui_LEFT, vgui_CTRL),
-      c_mouse_zoom(vgui_MIDDLE)
+      c_mouse_zoom(vgui_LEFT, vgui_SHIFT)
 {
   stare_point_ = vgl_homg_point_3d<double>(0,0,0);
   vgl_point_3d<double> def(2,2,2);

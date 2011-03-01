@@ -252,8 +252,8 @@ float boxm2_render_tableau::update_frame()
     }
     if (update_count_%5==0)
     {
-        //vcl_cout<<"Refining  "<<vcl_endl;
-        //float time=this->refine_model();
+        vcl_cout<<"Refining  "<<vcl_endl;
+        float time=this->refine_model();
     }
     //pickup a random frame
     int curr_frame = rand.lrand32(0,cam_files_.size()-1);

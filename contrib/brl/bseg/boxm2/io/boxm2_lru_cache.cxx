@@ -44,7 +44,7 @@ boxm2_block* boxm2_lru_cache::get_block(boxm2_block_id id)
 
 
 //: get data by type and id
-boxm2_data_base* boxm2_lru_cache::get_data_base(boxm2_block_id id, vcl_string type)
+boxm2_data_base* boxm2_lru_cache::get_data_base(boxm2_block_id id, vcl_string type, vcl_size_t num_bytes)
 {
   //grab a reference to the map of cached_data_
   vcl_map<boxm2_block_id, boxm2_data_base*>& data_map =
@@ -64,12 +64,31 @@ boxm2_data_base* boxm2_lru_cache::get_data_base(boxm2_block_id id, vcl_string ty
   if(!loaded && scene_->block_exists(id)) {
     vcl_cout<<"boxm2_lru_cache::initializing empty data "<<id<<" type: "<<type<<vcl_endl;
     boxm2_block_metadata data = scene_->get_block_metadata(id); 
-    loaded = new boxm2_data_base(data, type); 
-  }
+    if(num_bytes > 0 && !data.random_) 
+      loaded = new boxm2_data_base(new char[num_bytes], num_bytes, id); 
+    else        
+      loaded = new boxm2_data_base(data, type); 
+  }	
 
-  //update data map
+  //update data map     
   data_map[id] = loaded; 
   return loaded;
+}
+
+//: removes data from this cache (may or may not write to disk first)
+void boxm2_lru_cache::remove_data_base(boxm2_block_id id, vcl_string type)
+{
+  //grab a reference to the map of cached_data_
+  vcl_map<boxm2_block_id, boxm2_data_base*>& data_map =
+    this->cached_data_map(type);
+
+  //then look for the block you're requesting
+  if ( data_map.find(id) != data_map.end() )
+  {
+    //found the block, now delete it
+    delete data_map[id]; 
+    data_map.erase(id); 
+  }
 }
 
 //: helper method returns a reference to correct data map (ensures one exists)

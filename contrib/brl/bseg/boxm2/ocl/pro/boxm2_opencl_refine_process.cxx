@@ -84,6 +84,16 @@ bool boxm2_opencl_refine_process::execute(vcl_vector<brdb_value_sptr>& input, vc
   {
     
     //----- IF THE BLOCK IS NOT RANDOMLY DISTRIBUTED, USE NEW METHOD -----------
+    // New Method Summary:
+    //  - Create Block Copy, refine trees into that copy, maintaining old copy and array of new tree sizes
+    //  - Do scan on size vector (cum sum)
+    //  - Swap data into new buffers: For each data type
+    //    - get BOCL_MEM* data independent of cpu pointer (from cache)
+    //    - remove the BOCL_MEM* from the gpu cache (don't delete it)
+    //    - do a deep delete (delete CPU buffer from CPU cache)
+    //    - get a new data pointer (with newSize), will create CPU buffer and GPU buffer
+    //    - Run refine_data_kernel with the two buffers
+    //    - delete the old BOCL_MEM*, and that's it...
     boxm2_block_metadata data = blk_iter->second;
     if(!data.random_)
     {
@@ -219,6 +229,7 @@ bool boxm2_opencl_refine_process::execute(vcl_vector<brdb_value_sptr>& input, vc
     else 
     {
       //----- OTHERWISE USE OLD METHOD (ranodmly distributed blocks into buffers)-----------
+      vcl_cout<<"Refining using random algo"<<vcl_endl;
       //get id
       boxm2_block_id id = blk_iter->first; 
       
@@ -232,10 +243,14 @@ bool boxm2_opencl_refine_process::execute(vcl_vector<brdb_value_sptr>& input, vc
       //data
       bocl_mem* alpha     = cache_->get_data<BOXM2_ALPHA>(id);
       bocl_mem* mog;
-      if(data_type_=="8bit")
-          mog = cache_->get_data<BOXM2_MOG3_GREY>(id);
-      else if(data_type_=="16bit")
+      if(data_type_=="16bit") {
+          vcl_cout<<"gett mog 8bit"<<vcl_endl;
           mog = cache_->get_data<BOXM2_MOG3_GREY_16>(id);
+      }
+      else {
+          vcl_cout<<"gett mog 8bit"<<vcl_endl;
+          mog = cache_->get_data<BOXM2_MOG3_GREY>(id);
+      }
       bocl_mem* num_obs   = cache_->get_data<BOXM2_NUM_OBS>(id);
       bocl_mem* blk_info  = cache_->loaded_block_info(); 
       transfer_time_ += (float) transfer.all(); 

@@ -13,16 +13,14 @@
 // \endverbatim
 
 #include <GL/glew.h>
-#if defined(UNIX)
-  #include <GL/glx.h>
-#endif
 #if defined(WIN32)
   #include <windows.h>
-#endif
-#if defined(__APPLE__) || defined(MACOSX)
+#elif defined(__APPLE__) || defined(MACOSX)
   #include <GL/glxew.h>
   #include <OpenGL/OpenGL.h>
   #include <OpenGL/CGLDevice.h>
+#else //defined(UNIX)
+  #include <GL/glx.h>
 #endif
 
 #endif

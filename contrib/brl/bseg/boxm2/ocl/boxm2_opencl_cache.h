@@ -42,9 +42,18 @@ class boxm2_opencl_cache
 
     //: returns data pointer to data block specified by ID
     template<boxm2_data_type T>
-    bocl_mem* get_data(boxm2_block_id);
+    bocl_mem* get_data(boxm2_block_id, vcl_size_t num_bytes=0);
 
     bool clear_cache();
+    
+    //: deep_delete removes the data from CPU cache (stays in this cache)
+    template<boxm2_data_type T>
+    void deep_delete(boxm2_block_id id) { cpu_cache_->remove_data_base(id, boxm2_data_traits<T>::prefix()); } 
+    
+    //: remove_data: removes data from cache but keeps it on the GPU  !!!THIS SEEMS DANGEROUS FOR WHEN CACHE MEASURES TOTAL BUFFER SIZE!!!
+    template<boxm2_data_type T>
+    void remove_data(boxm2_block_id id); 
+    
   private:
 
     //: scene this cache is operating on
@@ -89,7 +98,7 @@ class boxm2_opencl_cache
 
 //: get data by type and id
 template<boxm2_data_type T>
-bocl_mem* boxm2_opencl_cache::get_data(boxm2_block_id id)
+bocl_mem* boxm2_opencl_cache::get_data(boxm2_block_id id, vcl_size_t num_bytes)
 {
   //make sure that the data is in the
   if (loaded_data_[boxm2_data_traits<T>::prefix()] == id)
@@ -108,20 +117,26 @@ bocl_mem* boxm2_opencl_cache::get_data(boxm2_block_id id)
   }
 
   //create new memory
-  boxm2_data_base* data_base = cpu_cache_->get_data_base(id, boxm2_data_traits<T>::prefix());
+  boxm2_data_base* data_base = cpu_cache_->get_data_base(id, boxm2_data_traits<T>::prefix(), num_bytes);
   loaded_data_[boxm2_data_traits<T>::prefix()] = id;
   bocl_mem* data = new bocl_mem(*context_, data_base->data_buffer(), data_base->buffer_length(), boxm2_data_traits<T>::prefix());
   data->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
   cached_data_[boxm2_data_traits<T>::prefix()] = data;
 
-#ifdef DEBUG
-  vcl_cout<<"Data mem "<<boxm2_data_traits<T>::prefix()
-          <<" length: "<<data_base->buffer_length()
-          <<", cellsize: "<<boxm2_data_traits<T>::datasize()<<vcl_endl;
-#endif
-
   return data;
 }
 
+//: remove_data: removes data from cache but keeps it on the GPU  !!!THIS SEEMS DANGEROUS FOR WHEN CACHE MEASURES TOTAL BUFFER SIZE!!!
+template<boxm2_data_type T>
+void boxm2_opencl_cache::remove_data(boxm2_block_id id)
+{
+  //make sure that the data is in the
+  if (loaded_data_[boxm2_data_traits<T>::prefix()] == id) {
+    loaded_data_.erase(boxm2_data_traits<T>::prefix()); 
+    cached_data_.erase(boxm2_data_traits<T>::prefix());
+  }
+    
+    
+}
 
 #endif

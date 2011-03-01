@@ -26,7 +26,10 @@ class boxm2_cache
     virtual boxm2_block* get_block(boxm2_block_id id) = 0;
 
     //: returns data_base pointer (THIS IS NECESSARY BECAUSE TEMPLATED FUNCTIONS CANNOT BE VIRTUAL)
-    virtual boxm2_data_base* get_data_base(boxm2_block_id, vcl_string type) = 0;
+    virtual boxm2_data_base* get_data_base(boxm2_block_id id, vcl_string type, vcl_size_t num_bytes=0) = 0;
+
+    //: removes data from this cache (may or may not write to disk first)
+    virtual void remove_data_base(boxm2_block_id id, vcl_string type)=0; 
 
     //: returns data pointer to data specified by ID and data_type
     template <boxm2_data_type T>

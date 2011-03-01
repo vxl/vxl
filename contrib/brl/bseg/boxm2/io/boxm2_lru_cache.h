@@ -21,11 +21,10 @@ class boxm2_lru_cache : public boxm2_cache
     virtual boxm2_block* get_block(boxm2_block_id id);
 
     //: returns data_base pointer (THIS IS NECESSARY BECAUSE TEMPLATED FUNCTIONS CANNOT BE VIRTUAL)
-    virtual boxm2_data_base* get_data_base(boxm2_block_id, vcl_string type);
+    virtual boxm2_data_base* get_data_base(boxm2_block_id id, vcl_string type, vcl_size_t num_bytes=0);
 
-    //: returns data pointer to data block specified by ID
-    template <boxm2_data_type T>
-    boxm2_data<T>* get_data(boxm2_block_id id);
+    //: removes data from this cache (may or may not write to disk first)
+    virtual void remove_data_base(boxm2_block_id id, vcl_string type); 
 
     //: to string method returns a string describing the cache's current state
     vcl_string to_string();
@@ -52,13 +51,5 @@ class boxm2_lru_cache : public boxm2_cache
 
 //: shows elements in cache
 vcl_ostream& operator<<(vcl_ostream &s, boxm2_lru_cache& scene);
-
-
-//: get data by type and id
-template<boxm2_data_type T>
-boxm2_data<T>* boxm2_lru_cache::get_data(boxm2_block_id id)
-{
-  return (boxm2_data<T>*) this->get_data_base(id, boxm2_data_traits<T>::prefix());
-}
 
 #endif // boxm2_lru_cache_h_
