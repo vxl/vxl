@@ -73,8 +73,7 @@ scale_points(vcl_vector<vgl_point_3d<T> >& pts,
   {
     s += (pts[i]-origin).length();
   }
-  s /= vcl_sqrt(3)*pts.size();
-  s = 1/s;
+  s = vcl_sqrt(3.0)*pts.size()/s;
   for (unsigned i=0; i<pts.size(); ++i)
   {
     vgl_point_3d<T>& p = pts[i];
