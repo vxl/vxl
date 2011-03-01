@@ -23,5 +23,6 @@ DECLARE_FUNC_CONS(vpgl_save_perspective_camera_vrml_process);
 DECLARE_FUNC_CONS(vpgl_correct_rational_cameras_process);
 DECLARE_FUNC_CONS(vpgl_correct_rational_cameras_mult_corr_process);
 DECLARE_FUNC_CONS(vpgl_correct_rational_cameras_mult_corr_refine_process);
+DECLARE_FUNC_CONS(vpgl_project_process);
 
 #endif
