@@ -38,6 +38,7 @@
 #include <vgl/vgl_vector_3d.txx>
 #include <vgl/vgl_window_scan_iterator.txx>
 
+#include <vgl/algo/vgl_compute_similarity_3d.txx>
 #include <vgl/algo/vgl_conic_2d_regression.txx>
 #include <vgl/algo/vgl_convex_hull_2d.txx>
 #include <vgl/algo/vgl_ellipsoid_3d.txx>
