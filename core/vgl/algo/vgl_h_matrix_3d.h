@@ -137,6 +137,9 @@ class vgl_h_matrix_3d
   //  Just the upper 3x3 part of the matrix is replaced by a rotation matrix.
   vgl_h_matrix_3d& set_rotation_euler(T rz1, T ry, T rz2);
 
+  //: set the transformation to a reflection about a plane
+  void set_reflection_plane(const vgl_plane_3d<double>& p);
+
   bool is_rotation() const;
   bool is_euclidean() const;
 

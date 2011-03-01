@@ -12,15 +12,19 @@
 #include <testlib/testlib_test.h>
 #include <vgl/algo/vgl_h_matrix_3d.h>
 #include <vcl_cmath.h>
+#include <vcl_algorithm.h>
 #include <vcl_iostream.h>
 #include <vcl_sstream.h>
+#include <vgl/vgl_distance.h>
+#include <vgl/vgl_closest_point.h>
 #include <vgl/vgl_homg_point_3d.h>
 #include <vgl/vgl_point_3d.h>
+#include <vgl/vgl_plane_3d.h>
 #include <vnl/vnl_double_3.h>
 #include <vnl/vnl_double_4x4.h>
 #include <vnl/vnl_math.h>
 #include <vgl/algo/vgl_h_matrix_3d_compute_linear.h>
-#include <vgl/vgl_distance.h>
+#include <vnl/vnl_det.h>
 
 static bool equals(double x[16], double y[16])
 {
@@ -222,6 +226,37 @@ static void test_compute_linear_points()
   TEST_NEAR("testing computed H2o", dist, 0.0, 5e-03);
 }
 
+static void test_reflection_about_plane()
+{
+  vgl_h_matrix_3d<double> H;
+  vgl_plane_3d<double> plane(1,2,3,4);
+  H.set_reflection_plane(plane);
+  TEST_NEAR("determinant(reflection)", vnl_det(H.get_matrix()), -1, 1e-8);
+
+  vgl_point_3d<double> p1(10,10,10), p2(-20, -30, 50);
+  vgl_point_3d<double> p1r = H*vgl_homg_point_3d<double>(p1);
+  vgl_point_3d<double> p2r = H*vgl_homg_point_3d<double>(p2);
+  double plane_dist1 = vgl_distance(plane,p1);
+  double reflect_dist1 = vgl_distance(p1,p1r);
+  double plane_dist2 = vgl_distance(plane,p2);
+  double reflect_dist2 = vgl_distance(p2,p2r);
+  TEST_NEAR("reflection distance",
+            vcl_max(vcl_abs(plane_dist1-reflect_dist1/2.0),
+                    vcl_abs(plane_dist2-reflect_dist2/2.0)), 0.0, 1e-8);
+
+  double plane_err1 = vgl_distance(vgl_closest_point(plane,p1),midpoint(p1,p1r));
+  double plane_err2 = vgl_distance(vgl_closest_point(plane,p2),midpoint(p2,p2r));
+  TEST_NEAR("reflection midpoint",
+            vcl_max(plane_err1, plane_err2), 0.0, 1e-8);
+
+  vgl_point_3d<double> p1rr = H*vgl_homg_point_3d<double>(p1r);
+  vgl_point_3d<double> p2rr = H*vgl_homg_point_3d<double>(p2r);
+  TEST_NEAR("reflection reversible",
+            vcl_max(vgl_distance(p1,p1rr),vgl_distance(p2,p2rr)),
+            0.0, 1e-8);
+}
+
+
 static void test_h_matrix_3d()
 {
   vcl_cout << "\n==================== test_constructors ====================\n\n";
@@ -234,8 +269,10 @@ static void test_h_matrix_3d()
   test_projective_basis();
   vcl_cout << "\n================ test_rotation_about_axis =================\n\n";
   test_rotation_about_axis();
-  vcl_cout << "\n================ test_compute_linear_points =================\n\n";
+  vcl_cout << "\n=============== test_compute_linear_points ================\n\n";
   test_compute_linear_points();
+  vcl_cout << "\n=============== test_reflection_about_plane ===============\n\n";
+  test_reflection_about_plane();
 }
 
 TESTMAIN(test_h_matrix_3d);

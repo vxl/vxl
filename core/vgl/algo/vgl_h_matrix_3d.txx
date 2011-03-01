@@ -9,6 +9,7 @@
 #include <vcl_limits.h>
 #include <vcl_cassert.h>
 #include <vcl_cstdlib.h> // for exit()
+#include <vgl/vgl_plane_3d.h>
 #include <vnl/vnl_inverse.h>
 #include <vnl/vnl_numeric_traits.h>
 #include <vnl/vnl_vector_fixed.h>
@@ -303,6 +304,30 @@ set_rotation_matrix(vnl_matrix_fixed<T, 3, 3> const& R)
       t12_matrix_[r][c] = R[r][c];
   return *this;
 }
+
+
+//: set the transformation to a reflection about a plane
+template <class T>
+void
+vgl_h_matrix_3d<T>::set_reflection_plane(const vgl_plane_3d<double>& p)
+{
+  t12_matrix_.fill(0.0);
+  t12_matrix_(0,0) = p.nx()*p.nx();
+  t12_matrix_(1,1) = p.ny()*p.ny();
+  t12_matrix_(2,2) = p.nz()*p.nz();
+  t12_matrix_(0,1) = t12_matrix_(1,0) = p.nx()*p.ny();
+  t12_matrix_(0,2) = t12_matrix_(2,0) = p.nx()*p.nz();
+  t12_matrix_(1,2) = t12_matrix_(2,1) = p.ny()*p.nz();
+  t12_matrix_(0,3) = p.nx()*p.d();
+  t12_matrix_(1,3) = p.ny()*p.d();
+  t12_matrix_(2,3) = p.nz()*p.d();
+  t12_matrix_ *= -2/(t12_matrix_(0,0)+t12_matrix_(1,1)+t12_matrix_(2,2));
+  t12_matrix_(0,0) += 1;
+  t12_matrix_(1,1) += 1;
+  t12_matrix_(2,2) += 1;
+  t12_matrix_(3,3) += 1;
+}
+
 
 template <class T>
 bool vgl_h_matrix_3d<T>::is_rotation() const
