@@ -18,14 +18,14 @@
 #include "bocl_utils.h"
 
 //:  High level wrapper for an Opencl cl_kernel object.
-//  keeps ref to the context and device_id for which this kernel is created
-//  can create a kernel from source and device like the following:
-//  bocl_kernel render(context, device_id, vcl_vector<string> render_srcs, "render_kernel", "-DNVIDIA", "render_kernel");
-//  for each arg... render.set_arg(bocl_mem_buffer)
-//  for each local arg... render.set_local_arg(bocl_mem_buffer)
-//  render.execute(cmdQueue, localThreads, globalThreads);
+//  - keeps ref to the context and device_id for which this kernel is created
+//  - can create a kernel from source and device like the following:
+//    bocl_kernel render(context, device_id, vcl_vector<string> render_srcs, "render_kernel", "-DNVIDIA", "render_kernel");
+//  - for each arg... render.set_arg(bocl_mem_buffer)
+//  - for each local arg... render.set_local_arg(bocl_mem_buffer)
+//  - render.execute(cmdQueue, localThreads, globalThreads);
 //
-//  NOTE: local memory arguments must come after bocl_mem arguments
+//  NOTE: local memory arguments must come after bocl_mem arguments;
 //        this could be fixed with a vcl_map<bocl_mem*, vcl_size_t> object
 //        that just interprets null keys as local memory args instead of the two
 //        vcl_vectors currently implemented
@@ -46,8 +46,8 @@ class bocl_kernel
                         vcl_string id);
 
     //: execute this kernel on given command queue with given workspace size
-    bool execute(cl_command_queue& cmd_queue, cl_uint dim, 
-      vcl_size_t* local_threads, vcl_size_t* global_threads);
+    bool execute(cl_command_queue& cmd_queue, cl_uint dim,
+                 vcl_size_t* local_threads, vcl_size_t* global_threads);
 
     //: set a bocl_mem buffer arg (pushes it on the back)
     bool set_arg(bocl_mem* buffer);
@@ -68,17 +68,17 @@ class bocl_kernel
 
     ////////////////////////////////////////////////////////////////////////////
     // Profiling functions
+
     //: returns GPU time
     float exec_time();
     //: returns local memory used by a single instance of kernel
-    unsigned long local_mem_size(); 
+    unsigned long local_mem_size();
     //: returns maximal workgroup size for this kernel
-    vcl_size_t workgroup_size(); 
+    vcl_size_t workgroup_size();
     //: returns a string of the build log for this program.
-    vcl_string build_log(); 
+    vcl_string build_log();
     //: returns program binary associated with kernel (NVIDIA case returns PTX string)
     vcl_string program_binaries();
-
 
   private:
 
