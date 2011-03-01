@@ -120,9 +120,6 @@ SOURCE=.\bgui_vsol2D_tableau.cxx
 SOURCE=.\bgui_histogram_tableau.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\bgui_selector_tableau.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\bgui_bmrf_soview2D.cxx
 # End Source File
 # Begin Source File
@@ -187,12 +184,6 @@ SOURCE=.\bgui_histogram_tableau.h
 # End Source File
 # Begin Source File
 SOURCE=.\bgui_histogram_tableau_sptr.h
-# End Source File
-# Begin Source File
-SOURCE=.\bgui_selector_tableau.h
-# End Source File
-# Begin Source File
-SOURCE=.\bgui_selector_tableau_sptr.h
 # End Source File
 # Begin Source File
 SOURCE=.\bgui_bmrf_soview2D.h

@@ -186,6 +186,9 @@ SOURCE=.\test_infinite_line_3d.cxx
 SOURCE=.\test_ray_3d.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\test_compute_similarity_3d.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\test_include.cxx
 # End Source File
 # Begin Source File

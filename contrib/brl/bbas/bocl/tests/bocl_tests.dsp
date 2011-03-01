@@ -149,7 +149,16 @@ SOURCE=.\test_driver.cxx
 SOURCE=.\test_global_io_bandwidth.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\test_kernel.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\test_command_queue.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\bocl_global_memory_bandwidth_manager.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\bocl_command_queue_mgr.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\test_include.cxx
@@ -158,7 +167,19 @@ SOURCE=.\test_include.cxx
 SOURCE=.\test_template_include.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\test_kernel.cxx
+SOURCE=.\Templates/bocl_manager+bocl_global_memory_bandwidth_manager-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/bocl_manager+bocl_command_queue_mgr-.cxx
+# End Source File
+# End Group
+# Begin Group "Header Files"
+# PROP Default_Filter "h;txx"
+# Begin Source File
+SOURCE=.\bocl_global_memory_bandwidth_manager.h
+# End Source File
+# Begin Source File
+SOURCE=.\bocl_command_queue_mgr.h
 # End Source File
 # End Group
 # End Target

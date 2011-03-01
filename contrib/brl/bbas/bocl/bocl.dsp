@@ -96,31 +96,19 @@ LIB32=link.exe -lib
 SOURCE=.\bocl_utils.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\bocl_global_memory_bandwidth_manager.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\bocl_kernel.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\bocl_mem.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\bocl_command_queue_mgr.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\bocl_device_info.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/bocl_manager+bocl_global_memory_bandwidth_manager-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/brdb_value_t+bocl_mem_sptr-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/vbl_smart_ptr+bocl_mem-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/bocl_manager+bocl_command_queue_mgr-.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
@@ -138,9 +126,6 @@ SOURCE=.\bocl_manager.h
 SOURCE=.\bocl_manager.txx
 # End Source File
 # Begin Source File
-SOURCE=.\bocl_global_memory_bandwidth_manager.h
-# End Source File
-# Begin Source File
 SOURCE=.\bocl_utils.h
 # End Source File
 # Begin Source File
@@ -154,9 +139,6 @@ SOURCE=.\bocl_buffer.h
 # End Source File
 # Begin Source File
 SOURCE=.\bocl_buffer_mgr.h
-# End Source File
-# Begin Source File
-SOURCE=.\bocl_command_queue_mgr.h
 # End Source File
 # Begin Source File
 SOURCE=.\bocl_device_info.h

@@ -116,6 +116,9 @@ SOURCE=.\vgl_h_matrix_2d_compute_rigid_body.cxx
 SOURCE=.\vgl_h_matrix_3d_compute_linear.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\vgl_compute_similarity_3d.txx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/vgl_homg_operators_1d+double-.cxx
 # End Source File
 # Begin Source File
@@ -237,6 +240,9 @@ SOURCE=.\Templates/vgl_line_2d_regression+float-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/vgl_ellipsoid_3d+float-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vgl_compute_similarity_3d+double-.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
@@ -405,6 +411,9 @@ SOURCE=.\vgl_h_matrix_3d_compute_linear.h
 # End Source File
 # Begin Source File
 SOURCE=.\vgl_h_matrix_3d_compute.h
+# End Source File
+# Begin Source File
+SOURCE=.\vgl_compute_similarity_3d.h
 # End Source File
 # End Group
 # End Target

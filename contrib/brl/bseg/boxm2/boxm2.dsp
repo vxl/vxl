@@ -148,6 +148,12 @@ SOURCE=.\Templates/vbl_array_3d+vil_image_view+byte-~-.cxx
 # Begin Source File
 SOURCE=.\Templates/vnl_vector_fixed+unsignedchar.8-.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\Templates/boxm2_data+BOXM2_MOG3_GREY_16-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/boxm2_data+BOXM2_MOG2_RGB-.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"

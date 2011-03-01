@@ -644,6 +644,9 @@ SOURCE=.\vgui_dialog_extensions.cxx
 # Begin Source File
 SOURCE=.\vgui_range_map_params.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\vgui_selector_tableau.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
@@ -1267,6 +1270,12 @@ SOURCE=.\vgui_dialog_extensions.h
 # End Source File
 # Begin Source File
 SOURCE=.\vgui_vil_image_renderer.h
+# End Source File
+# Begin Source File
+SOURCE=.\vgui_selector_tableau_sptr.h
+# End Source File
+# Begin Source File
+SOURCE=.\vgui_selector_tableau.h
 # End Source File
 # Begin Source File
 SOURCE=.\vgui_config.h.in

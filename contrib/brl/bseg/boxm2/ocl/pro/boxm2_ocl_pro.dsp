@@ -107,6 +107,12 @@ SOURCE=.\boxm2_opencl_render_process.cxx
 # Begin Source File
 SOURCE=.\boxm2_opencl_refine_process.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\boxm2_opencl_render_rgb_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\boxm2_opencl_update_rgb_process.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
@@ -127,6 +133,12 @@ SOURCE=.\boxm2_opencl_render_process.h
 # End Source File
 # Begin Source File
 SOURCE=.\boxm2_opencl_process_base.h
+# End Source File
+# Begin Source File
+SOURCE=.\boxm2_opencl_render_rgb_process.h
+# End Source File
+# Begin Source File
+SOURCE=.\boxm2_opencl_update_rgb_process.h
 # End Source File
 # End Group
 # End Target
