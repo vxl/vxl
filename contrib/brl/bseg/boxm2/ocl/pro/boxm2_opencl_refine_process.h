@@ -45,12 +45,24 @@ class boxm2_opencl_refine_process : public boxm2_opencl_process_base
     //: render kernel (other processes may have many kernels
     bocl_kernel refine_kernel_;
     
-    
     //: new refine kernels 
     bocl_kernel refine_trees_; 
     bocl_kernel refine_scan_; 
-    vcl_map<int, bocl_kernel> refine_datas_; 
+    vcl_map<int, bocl_kernel*> refine_datas_; 
+    
     //bocl_kernel refine_data_;
+    
+    //Helper mems:
+    bocl_mem* prob_thresh_; 
+    bocl_mem* lookup_;
+    bocl_mem* cl_output_; 
+    
+    //Helper Methods:
+    void refine_block_copy(boxm2_block_id id, int numTrees, 
+                           bocl_mem* blk_copy, bocl_mem* tree_sizes); 
+                           
+    void swap_data(boxm2_block_id id, vcl_string type, int newDataSize,
+                   int numTrees, bocl_mem* blk_copy, bocl_mem* tree_sizes);
 };
 
 #endif

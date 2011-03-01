@@ -47,9 +47,15 @@ bool boxm2_opencl_render_process::init_kernel(cl_context* context,
                                                 device,
                                                 src_paths,
                                                 "render_bit_scene",   //kernel name
-                                                options,              //options
+                                                options + " -D DETERMINISTIC ",              //options
                                                 "boxm2 opencl render"); //kernel identifier (for error checking)
-                                                
+  
+  created = created&&rand_kernel_.create_kernel( context_,
+                                                device,
+                                                src_paths,
+                                                "render_bit_scene",   //kernel name
+                                                options,              //options
+                                                "boxm2 opencl render random blocks"); //kernel identifier (for error checking)
   //create normalize image kernel
   vcl_vector<vcl_string> norm_src_paths;
   norm_src_paths.push_back(source_dir + "cell_utils.cl");
@@ -160,6 +166,10 @@ bool boxm2_opencl_render_process::execute(vcl_vector<brdb_value_sptr>& input, vc
   vcl_vector<boxm2_block_id>::iterator id;
   for (id = vis_order.begin(); id != vis_order.end(); ++id)
   {
+    //choose correct render kernel
+    boxm2_block_metadata mdata = scene->get_block_metadata(*id); 
+    bocl_kernel& kern = (mdata.random_) ? rand_kernel_ : render_kernel_;
+        
     //write the image values to the buffer
     vul_timer transfer;
     bocl_mem* blk       = cache_->get_block(*id);
@@ -173,29 +183,29 @@ bool boxm2_opencl_render_process::execute(vcl_vector<brdb_value_sptr>& input, vc
     transfer_time_ += (float) transfer.all();
 
     ////3. SET args
-    render_kernel_.set_arg( blk_info );
-    render_kernel_.set_arg( blk );
-    render_kernel_.set_arg( alpha );
-    render_kernel_.set_arg( mog );
-    render_kernel_.set_arg( &persp_cam );
-    render_kernel_.set_arg( image_ );
-    render_kernel_.set_arg( &exp_img_dim);
-    render_kernel_.set_arg( &cl_output );
-    render_kernel_.set_arg( &lookup );
-    render_kernel_.set_arg( vis_img_ );
+    kern.set_arg( blk_info );
+    kern.set_arg( blk );
+    kern.set_arg( alpha );
+    kern.set_arg( mog );
+    kern.set_arg( &persp_cam );
+    kern.set_arg( image_ );
+    kern.set_arg( &exp_img_dim);
+    kern.set_arg( &cl_output );
+    kern.set_arg( &lookup );
+    kern.set_arg( vis_img_ );
 
     //local tree , cumsum buffer, imindex buffer
-    render_kernel_.set_local_arg( lThreads[0]*lThreads[1]*sizeof(cl_uchar16) );
-    render_kernel_.set_local_arg( lThreads[0]*lThreads[1]*10*sizeof(cl_uchar) );
-    render_kernel_.set_local_arg( lThreads[0]*lThreads[1]*sizeof(cl_int) );
+    kern.set_local_arg( lThreads[0]*lThreads[1]*sizeof(cl_uchar16) );
+    kern.set_local_arg( lThreads[0]*lThreads[1]*10*sizeof(cl_uchar) );
+    kern.set_local_arg( lThreads[0]*lThreads[1]*sizeof(cl_int) );
 
     //execute kernel
-    render_kernel_.execute( (*command_queue_), 2, lThreads, gThreads);
+    kern.execute( (*command_queue_), 2, lThreads, gThreads);
     clFinish(*command_queue_);
-    gpu_time_ += render_kernel_.exec_time();
+    gpu_time_ += kern.exec_time();
 
     //clear render kernel args so it can reset em on next execution
-    render_kernel_.clear_args();
+    kern.clear_args();
   }
 
   // normalize

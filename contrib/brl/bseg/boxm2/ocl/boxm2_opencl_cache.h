@@ -29,7 +29,10 @@ class boxm2_opencl_cache
                        cl_context* context,
                        cl_command_queue* queue,
                        boxm2_scene* scene);
-    ~boxm2_opencl_cache();
+    ~boxm2_opencl_cache() { this->clear_cache(); }
+    
+    //: empties out cache, deletes all bocl_mem*s
+    bool clear_cache();
 
     //: returns block pointer to block specified by ID
     bocl_mem* get_block(boxm2_block_id id);
@@ -43,16 +46,17 @@ class boxm2_opencl_cache
     //: returns data pointer to data block specified by ID
     template<boxm2_data_type T>
     bocl_mem* get_data(boxm2_block_id, vcl_size_t num_bytes=0);
+    bocl_mem* get_data(boxm2_block_id, vcl_string type, vcl_size_t num_bytes=0); 
 
-    bool clear_cache();
-    
     //: deep_delete removes the data from CPU cache (stays in this cache)
     template<boxm2_data_type T>
     void deep_delete(boxm2_block_id id) { cpu_cache_->remove_data_base(id, boxm2_data_traits<T>::prefix()); } 
+    void deep_delete(boxm2_block_id id, vcl_string type) { cpu_cache_->remove_data_base(id, type); } 
     
     //: remove_data: removes data from cache but keeps it on the GPU  !!!THIS SEEMS DANGEROUS FOR WHEN CACHE MEASURES TOTAL BUFFER SIZE!!!
     template<boxm2_data_type T>
     void remove_data(boxm2_block_id id); 
+    void remove_data(boxm2_block_id id, vcl_string type);
     
   private:
 
@@ -100,43 +104,14 @@ class boxm2_opencl_cache
 template<boxm2_data_type T>
 bocl_mem* boxm2_opencl_cache::get_data(boxm2_block_id id, vcl_size_t num_bytes)
 {
-  //make sure that the data is in the
-  if (loaded_data_[boxm2_data_traits<T>::prefix()] == id)
-    return cached_data_[boxm2_data_traits<T>::prefix()];
-
-  //otherwise get the data block from cpu cache
-  if ( cached_data_.find(boxm2_data_traits<T>::prefix()) != cached_data_.end())
-  {
-#ifdef DEBUG
-    vcl_cout<<"ocl_cache release memory for :"<<boxm2_data_traits<T>::prefix()<<vcl_endl;
-#endif
-    //release existing memory
-    bocl_mem* toDelete = cached_data_[boxm2_data_traits<T>::prefix()];
-    delete toDelete;
-    cached_data_[boxm2_data_traits<T>::prefix()] = 0;
-  }
-
-  //create new memory
-  boxm2_data_base* data_base = cpu_cache_->get_data_base(id, boxm2_data_traits<T>::prefix(), num_bytes);
-  loaded_data_[boxm2_data_traits<T>::prefix()] = id;
-  bocl_mem* data = new bocl_mem(*context_, data_base->data_buffer(), data_base->buffer_length(), boxm2_data_traits<T>::prefix());
-  data->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
-  cached_data_[boxm2_data_traits<T>::prefix()] = data;
-
-  return data;
+  return get_data(id, boxm2_data_traits<T>::prefix(), num_bytes); 
 }
 
 //: remove_data: removes data from cache but keeps it on the GPU  !!!THIS SEEMS DANGEROUS FOR WHEN CACHE MEASURES TOTAL BUFFER SIZE!!!
 template<boxm2_data_type T>
 void boxm2_opencl_cache::remove_data(boxm2_block_id id)
 {
-  //make sure that the data is in the
-  if (loaded_data_[boxm2_data_traits<T>::prefix()] == id) {
-    loaded_data_.erase(boxm2_data_traits<T>::prefix()); 
-    cached_data_.erase(boxm2_data_traits<T>::prefix());
-  }
-    
-    
+  this->remove_data(id, boxm2_data_traits<T>::prefix()); 
 }
 
 #endif

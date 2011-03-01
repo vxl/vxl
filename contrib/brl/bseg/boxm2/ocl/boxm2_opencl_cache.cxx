@@ -21,28 +21,8 @@ boxm2_opencl_cache::boxm2_opencl_cache(boxm2_cache* cpu_cache,
   scene_ = scene;
 }
 
-
-//: destructor
-boxm2_opencl_cache::~boxm2_opencl_cache()
-{
-  // clean up block
-  if(cached_block_) delete cached_block_, cached_block_=0;
-  if(block_info_) delete block_info_, block_info_=0;
-  if(tree_ptrs_) delete tree_ptrs_, tree_ptrs_=0;
-  if(trees_per_buffer_) delete trees_per_buffer_, trees_per_buffer_=0;
-  if(mem_ptrs_) delete mem_ptrs_, mem_ptrs_=0;
-
-  // clean up loaded data
-  vcl_map<vcl_string, bocl_mem*>::iterator iter;
-  for (iter=cached_data_.begin(); iter!=cached_data_.end(); ++iter) {
-    bocl_mem* dat = iter->second; 
-    if(dat) delete dat; 
-  }
-  cached_data_.clear(); 
-}
 bool boxm2_opencl_cache::clear_cache()
 {
-
   if(cached_block_) delete cached_block_, cached_block_=0;
   if(block_info_) delete block_info_, block_info_=0;
   if(tree_ptrs_) delete tree_ptrs_, tree_ptrs_=0;
@@ -68,8 +48,8 @@ bocl_mem* boxm2_opencl_cache::get_block(boxm2_block_id id)
 
   //clean up...
   if (cached_block_)
-    //delete cached_block_;
-      this->clear_cache();
+    delete cached_block_;
+    //this->clear_cache();
   cached_block_ = 0;
 
   //otherwise load it from disk with blocking
@@ -132,3 +112,55 @@ bocl_mem* boxm2_opencl_cache::get_loaded_mem_ptrs()
   return mem_ptrs_; 
 }
 
+
+//: Get data generic
+// Possible issue: if num_bytes is greater than 0, then should it always intiialize a new data object?
+bocl_mem* boxm2_opencl_cache::get_data(boxm2_block_id id, vcl_string type, vcl_size_t num_bytes)
+{
+  
+  //make sure that the data is in the
+  if (loaded_data_[type] == id) 
+    return cached_data_[type];
+
+  //otherwise get the data block from cpu cache
+  //this statment is: does cached_data_ contain(type)?
+  if ( cached_data_.find(type) != cached_data_.end()) 
+  {
+#ifdef DEBUG
+    vcl_cout<<"ocl_cache release memory for :"<<type<<vcl_endl;
+#endif
+    //release existing memory
+    bocl_mem* toDelete = cached_data_[type];
+    delete toDelete;
+    cached_data_[type] = 0;
+  }
+
+  //create new memory
+  boxm2_data_base* data_base = cpu_cache_->get_data_base(id,type,num_bytes);
+  if(num_bytes > 0 && data_base->buffer_length() != num_bytes )
+  {
+    vcl_cout<<"GRABBING "<<type<<" that doesn't match input size of "<<num_bytes<<vcl_endl;
+  }
+  loaded_data_[type] = id;
+  bocl_mem* data = new bocl_mem(*context_, data_base->data_buffer(), data_base->buffer_length(), type);
+  data->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
+  cached_data_[type] = data;
+
+  return data;
+} 
+
+//: Does a soft delete of data - removes it from the cache but it stays allocated
+//  this will have to NOT decrement the total bytes allocated counter or just 
+//  simply move the data to have a different type
+void boxm2_opencl_cache::remove_data(boxm2_block_id id, vcl_string type)
+{
+  //make sure that the data is in the
+  if (loaded_data_[type] == id) {
+    //loaded_data_[type] = 0; 
+    //cached_data_[type] = 0;
+    vcl_map<vcl_string, boxm2_block_id>::iterator liter = loaded_data_.find(type);
+    loaded_data_.erase(liter); 
+    vcl_map<vcl_string, bocl_mem* >::iterator citer = cached_data_.find(type);
+    cached_data_.erase(citer); 
+  }
+}

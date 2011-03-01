@@ -39,7 +39,7 @@ bool boxm2_opencl_update_process::init_kernel(cl_context* context,
 
   //compilation options
   vcl_string options = " -D INTENSITY ";
-  //options += " -D ATOMIC_OPT ";
+  options += " -D ATOMIC_OPT ";
   options += opts;
 
   //create all passes
@@ -207,6 +207,15 @@ bool boxm2_opencl_update_process::execute(vcl_vector<brdb_value_sptr>& input, vc
       num_obs_   = cache_->get_data<BOXM2_NUM_OBS>(*id);
       blk_info_  = cache_->loaded_block_info();
 
+      //make sure the data_len field in the info_buffer reflects the true data length
+      boxm2_block_metadata mdata = scene->get_block_metadata(*id); 
+      if(!mdata.random_) {
+        boxm2_scene_info* info_buffer = (boxm2_scene_info*) blk_info_->cpu_buffer();
+        int alphaTypeSize = boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
+        info_buffer->data_buffer_length = (int) (alpha_->num_bytes()/alphaTypeSize); 
+        blk_info_->write_to_buffer((*command_queue_));
+      }
+
       //get aux data
       aux_       = cache_->get_data<BOXM2_AUX>(*id);
       transfer_time_ += (float) transfer.all();
@@ -278,6 +287,7 @@ bool boxm2_opencl_update_process::set_workspace(unsigned pass)
       boxm2_scene_info* info_buffer = (boxm2_scene_info*) blk_info_->cpu_buffer();
       int numbuf = info_buffer->num_buffer;
       int datlen = info_buffer->data_buffer_length;
+      vcl_cout<<" update shape: num_buff="<<numbuf<<",bufflength:"<<datlen<<vcl_endl;
       gThreads_[0] = RoundUp(numbuf*datlen,64);
       gThreads_[1] = 1;
       lThreads_[0]  = 64;

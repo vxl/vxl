@@ -43,7 +43,8 @@ class boxm2_opencl_render_process : public boxm2_opencl_process_base
     //: render kernel (other processes may have many kernels
     bocl_kernel render_kernel_;
     bocl_kernel normalize_render_kernel_;
-
+    bocl_kernel rand_kernel_;
+  
     //: image (so it isn't created over and over)
     bocl_mem* image_;
     

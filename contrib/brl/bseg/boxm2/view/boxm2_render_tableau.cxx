@@ -148,7 +148,7 @@ bool boxm2_render_tableau::handle(vgui_event const &e)
 
 bool boxm2_render_tableau::save_model()
 {
-  vcl_cout<<"SAVING MODEL!!!"<<vcl_endl;
+  vcl_cout<<"SAVING MODEL to: "<< scene_->data_path() <<vcl_endl;
 
   //save blocks and data to disk for debugging
   vcl_map<boxm2_block_id, boxm2_block_metadata> blocks = scene_->blocks();
@@ -252,8 +252,8 @@ float boxm2_render_tableau::update_frame()
     }
     if (update_count_%5==0)
     {
-        vcl_cout<<"Refining  "<<vcl_endl;
-        float time=this->refine_model();
+        //vcl_cout<<"Refining  "<<vcl_endl;
+        //float time=this->refine_model();
     }
     //pickup a random frame
     int curr_frame = rand.lrand32(0,cam_files_.size()-1);

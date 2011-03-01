@@ -58,24 +58,22 @@ boxm2_data_base* boxm2_lru_cache::get_data_base(boxm2_block_id id, vcl_string ty
   if ( data_map.find(id) != data_map.end() )
   {
     //congrats you've found the data block in cache, update cache and return block
-#ifdef DEBUG
-    vcl_cout<<"DATA CACHE HIT! for "<<type<<vcl_endl;
-#endif
     return data_map[id];
   }
 
-  //otherwise it's a miss, load sync from disk, update cache
-#ifdef DEBUG
-  vcl_cout<<"Cache miss :( for "<<type<<vcl_endl;
-#endif
-  boxm2_data_base* loaded = boxm2_sio_mgr::load_block_data_generic(scene_dir_, id, type);
-  if (!loaded && scene_->block_exists(id)) {
-    vcl_cout<<"boxm2_lru_cache::initializing empty data "<<id<<" type: "<<type<<vcl_endl;
-    boxm2_block_metadata data = scene_->get_block_metadata(id);
-    if (num_bytes > 0 && !data.random_)
-      loaded = new boxm2_data_base(new char[num_bytes], num_bytes, id);
-    else
+  //if num_bytes is greater than zero, then you're initializing a new block
+  boxm2_data_base* loaded; 
+  if(num_bytes > 0) {
+    loaded = new boxm2_data_base(new char[num_bytes], num_bytes, id);
+  }
+  else {
+    //otherwise it's a miss, load sync from disk, update cache
+    loaded = boxm2_sio_mgr::load_block_data_generic(scene_dir_, id, type);
+    if (!loaded && scene_->block_exists(id)) {
+      vcl_cout<<"boxm2_lru_cache::initializing empty data "<<id<<" type: "<<type<<vcl_endl;
+      boxm2_block_metadata data = scene_->get_block_metadata(id);
       loaded = new boxm2_data_base(data, type);
+    }
   }
 
   //update data map
@@ -91,11 +89,15 @@ void boxm2_lru_cache::remove_data_base(boxm2_block_id id, vcl_string type)
     this->cached_data_map(type);
 
   //then look for the block you're requesting
-  if ( data_map.find(id) != data_map.end() )
+  vcl_map<boxm2_block_id, boxm2_data_base*>::iterator rem = data_map.find(id);
+  if ( rem != data_map.end() )
   {
+    vcl_cout<<"REMOVING ELEMENT "<<id<<" of type "<<type<<vcl_endl;
     //found the block, now delete it
     delete data_map[id];
-    data_map.erase(id);
+    data_map.erase(rem);
+    
+    //cached_data_[type] = data_map;
   }
 }
 
