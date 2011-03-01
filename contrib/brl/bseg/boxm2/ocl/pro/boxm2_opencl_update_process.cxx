@@ -33,23 +33,23 @@ bool boxm2_opencl_update_process::init_kernel(cl_context* context,
   src_paths.push_back(source_dir + "statistics_library_functions.cl");
   src_paths.push_back(source_dir + "ray_bundle_library_opt.cl");
   src_paths.push_back(source_dir + "bit/update_kernels.cl");
-  vcl_vector<vcl_string> non_ray_src = vcl_vector<vcl_string>(src_paths); 
+  vcl_vector<vcl_string> non_ray_src = vcl_vector<vcl_string>(src_paths);
   src_paths.push_back(source_dir + "update_functors.cl");
   src_paths.push_back(source_dir + "bit/cast_ray_bit.cl");
 
   //compilation options
   vcl_string options = " -D INTENSITY ";
-  //options += " -D ATOMIC_OPT "; 
+  //options += " -D ATOMIC_OPT ";
   options += opts;
 
   //create all passes
   bocl_kernel* seg_len = new bocl_kernel();
-  vcl_string seg_opts = options + " -D SEGLEN -D STEP_CELL=step_cell_seglen(aux_args,data_ptr,llid,d) "; 
+  vcl_string seg_opts = options + " -D SEGLEN -D STEP_CELL=step_cell_seglen(aux_args,data_ptr,llid,d) ";
   seg_len->create_kernel(context_, device, src_paths, "seg_len_main", seg_opts, "update::seg_len");
   update_kernels_.push_back(seg_len);
 
   bocl_kernel* pre_inf = new bocl_kernel();
-  vcl_string pre_opts = options + " -D PREINF -D STEP_CELL=step_cell_preinf(aux_args,data_ptr,llid,d) "; 
+  vcl_string pre_opts = options + " -D PREINF -D STEP_CELL=step_cell_preinf(aux_args,data_ptr,llid,d) ";
   pre_inf->create_kernel(context_, device, src_paths, "pre_inf_main", pre_opts, "update::pre_inf");
   update_kernels_.push_back(pre_inf);
 
@@ -60,7 +60,7 @@ bool boxm2_opencl_update_process::init_kernel(cl_context* context,
 
   //push back cast_ray_bit
   bocl_kernel* bayes_main = new bocl_kernel();
-  vcl_string bayes_opt = options + " -D BAYES -D STEP_CELL=step_cell_bayes(aux_args,data_ptr,llid,d) "; 
+  vcl_string bayes_opt = options + " -D BAYES -D STEP_CELL=step_cell_bayes(aux_args,data_ptr,llid,d) ";
   bayes_main->create_kernel(context_, device, src_paths, "bayes_main", bayes_opt, "update::bayes_main");
   update_kernels_.push_back(bayes_main);
 
@@ -105,38 +105,38 @@ bool boxm2_opencl_update_process::execute(vcl_vector<brdb_value_sptr>& input, vc
 
   /////////////////////// NEW IMAGE BUFFERS ////////////////////////////////////
   //vis image buffer
-  float* vis_buffer = new float[img_view->size()]; 
-  for(int i=0; i<img_view->size(); ++i) vis_buffer[i] = 1.0f; 
-  if(vis_image_) delete vis_image_; 
-  vis_image_ = new bocl_mem((*context_), vis_buffer, img_view->size()*sizeof(cl_float), "vis_image_ buffer"); 
-  vis_image_->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR); 
-  
+  float* vis_buffer = new float[img_view->size()];
+  for (unsigned int i=0; i<img_view->size(); ++i) vis_buffer[i] = 1.0f;
+  if (vis_image_) delete vis_image_;
+  vis_image_ = new bocl_mem((*context_), vis_buffer, img_view->size()*sizeof(cl_float), "vis_image_ buffer");
+  vis_image_->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
+
   //pre buffer
-  float* pre_buffer = new float[img_view->size()]; 
-  for(int i=0; i<img_view->size(); ++i) pre_buffer[i] = 0.0f; 
-  if(pre_image_) delete pre_image_; 
-  pre_image_ = new bocl_mem((*context_), pre_buffer, img_view->size()*sizeof(cl_float), "pre_image_ buffer"); 
-  pre_image_->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR); 
-  
+  float* pre_buffer = new float[img_view->size()];
+  for (unsigned int i=0; i<img_view->size(); ++i) pre_buffer[i] = 0.0f;
+  if (pre_image_) delete pre_image_;
+  pre_image_ = new bocl_mem((*context_), pre_buffer, img_view->size()*sizeof(cl_float), "pre_image_ buffer");
+  pre_image_->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
+
   //aint buffer
-  float* alpha_int_buffer = new float[img_view->size()]; 
-  for(int i=0; i<img_view->size(); ++i) alpha_int_buffer[i] = 0.0f; 
-  if(alpha_int_image_) delete alpha_int_image_; 
-  alpha_int_image_ = new bocl_mem((*context_), alpha_int_buffer, img_view->size()*sizeof(cl_float), "alpha_int_image_ buffer"); 
-  alpha_int_image_->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR); 
+  float* alpha_int_buffer = new float[img_view->size()];
+  for (unsigned int i=0; i<img_view->size(); ++i) alpha_int_buffer[i] = 0.0f;
+  if (alpha_int_image_) delete alpha_int_image_;
+  alpha_int_image_ = new bocl_mem((*context_), alpha_int_buffer, img_view->size()*sizeof(cl_float), "alpha_int_image_ buffer");
+  alpha_int_image_->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
   //norm image buffer
-  float* norm_buffer = new float[img_view->size()]; 
-  for(int i=0; i<img_view->size(); ++i) norm_buffer[i] = 0.0f;  
-  if(norm_image_) delete norm_image_; 
-  norm_image_ = new bocl_mem((*context_), norm_buffer, img_view->size()*sizeof(cl_float), "norm_image_ buffer"); 
+  float* norm_buffer = new float[img_view->size()];
+  for (unsigned int i=0; i<img_view->size(); ++i) norm_buffer[i] = 0.0f;
+  if (norm_image_) delete norm_image_;
+  norm_image_ = new bocl_mem((*context_), norm_buffer, img_view->size()*sizeof(cl_float), "norm_image_ buffer");
   norm_image_->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
   //////////////////////////////////////////////////////////////////////////////
 
   //store data type
   brdb_value_t<vcl_string>* brdb_data_type = static_cast<brdb_value_t<vcl_string>* >( input[i++].ptr() );
   data_type_=brdb_data_type->value();
-  
+
   //exp image dimensions
   img_size_[0] = img_view->ni();
   img_size_[1] = img_view->nj();
