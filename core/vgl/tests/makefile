@@ -38,6 +38,7 @@ TESTS += test_rtree.cxx
 TESTS += test_ellipsoid.cxx
 TESTS += test_infinite_line_3d.cxx
 TESTS += test_ray_3d.cxx
+TESTS += test_compute_similarity_3d.cxx
 
 MINI_PROG_SOURCES += test_include.cxx
 MINI_PROG_SOURCES += test_template_include.cxx

@@ -8,6 +8,8 @@ SOURCES += boxm2_opencl_render_depth_process.cxx
 SOURCES += boxm2_opencl_change_detection_process.cxx
 SOURCES += boxm2_opencl_render_process.cxx
 SOURCES += boxm2_opencl_refine_process.cxx
+SOURCES += boxm2_opencl_render_rgb_process.cxx
+SOURCES += boxm2_opencl_update_rgb_process.cxx
 
 ################################
 include ${VXLROOT}/config/top.mk

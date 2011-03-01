@@ -119,6 +119,8 @@ MANPAGE_SOURCES += vgui_slider_tableau_sptr.h
 SOURCES += vgui_color_text.cxx
 SOURCES += vgui_event_server.cxx
 SOURCES += vgui_error_dialog.cxx
+SOURCES += vgui_selector_tableau.cxx
+MANPAGE_SOURCES += vgui_selector_tableau_sptr.h
 
 # pcp
 SOURCES += vgui_soview.cxx

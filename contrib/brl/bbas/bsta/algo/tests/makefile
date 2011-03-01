@@ -9,6 +9,7 @@ TESTS += test_mean_shift.cxx
 TESTS += test_beta_updater.cxx
 TESTS += test_von_mises_update.cxx
 TESTS += test_fit_gaussian.cxx
+TESTS += test_rand_sampling.cxx
 
 MINI_PROG_SOURCES += test_include.cxx
 MINI_PROG_SOURCES += test_template_include.cxx

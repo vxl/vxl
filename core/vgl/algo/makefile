@@ -39,6 +39,7 @@ SOURCES += vgl_h_matrix_2d_compute_rigid_body.cxx
 MANPAGE_SOURCES += vgl_orient_box_3d_operators.txx
 MANPAGE_SOURCES += vgl_h_matrix_3d_compute.h
 SOURCES += vgl_h_matrix_3d_compute_linear.cxx
+MANPAGE_SOURCES += vgl_compute_similarity_3d.txx
 
 ################################
 include ${VXLROOT}/config/top.mk
