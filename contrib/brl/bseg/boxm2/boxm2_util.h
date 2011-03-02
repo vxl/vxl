@@ -25,12 +25,13 @@ class boxm2_util
                                                                              unsigned nj,
                                                                              vgl_box_3d<double> bb);
 
-    static vpgl_perspective_camera<double>*  construct_camera(double elevation, 
+    static vpgl_perspective_camera<double>* construct_camera(double elevation, 
                                                               double azimuth, 
                                                               double radius, 
                                                               unsigned ni,
                                                               unsigned nj,
-                                                              vgl_box_3d<double> bb);
+                                                              vgl_box_3d<double> bb,
+                                                              bool fit_bb=true);
                                                               
     static bool copy_file(vcl_string file, vcl_string dest); 
     

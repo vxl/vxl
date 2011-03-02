@@ -48,7 +48,8 @@ boxm2_util::construct_camera( double elevation,
                               double radius,
                               unsigned ni,
                               unsigned nj,
-                              vgl_box_3d<double> bb)
+                              vgl_box_3d<double> bb, 
+                              bool fit_bb)
 {
   double dni = static_cast<double>(ni);
   double dnj = static_cast<double>(nj);
@@ -88,13 +89,19 @@ boxm2_util::construct_camera( double elevation,
 
   //4) Adjust the focal length so that the box projects into the image
   // project the bounding box
-  vgl_box_2d<double> image_bb = vpgl_project::project_bounding_box(*cam, bb);
-  // get 2-d box diameter and image diameter
-  double bw = image_bb.width(), bh = image_bb.height();
-  double bd = vcl_sqrt(bw*bw + bh*bh);
   double id = vcl_sqrt(dni*dni + dnj*dnj);
-  //find the adjusted focal length
-  double f = id/bd;
+  double f; 
+  if(fit_bb) {
+    vgl_box_2d<double> image_bb = vpgl_project::project_bounding_box(*cam, bb);
+    // get 2-d box diameter and image diameter
+    double bw = image_bb.width(), bh = image_bb.height();
+    double bd = vcl_sqrt(bw*bw + bh*bh);
+    //find the adjusted focal length
+    f = id/bd;
+  }
+  else {
+    f = id; 
+  }
   K.set_focal_length(f);
   cam->set_calibration(K);
 

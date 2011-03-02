@@ -29,6 +29,12 @@ ADD_EXECUTABLE( boxm2_export_scene
 )
 TARGET_LINK_LIBRARIES( boxm2_export_scene boxm2 boxm2_basic boxm2_io sdet boxm2_ocl_pro boxm2_ocl bocl vil_pro vpgl_pro vsph vul )
 
+ADD_EXECUTABLE( boxm2_export_trajectory
+  boxm2_export_trajectory.cxx
+)
+TARGET_LINK_LIBRARIES( boxm2_export_trajectory boxm2 boxm2_basic boxm2_view boxm2_io sdet boxm2_ocl_pro boxm2_ocl vil_pro vpgl_pro vul )
+
+
 
 INCLUDE( ${BRL_MODULE_PATH}/FindGLEW.cmake )
 

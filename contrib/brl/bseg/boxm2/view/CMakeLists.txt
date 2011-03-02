@@ -21,12 +21,14 @@ IF(VGUI_FOUND)
       boxm2_render_tableau.cxx
       boxm2_change_detection_tableau.h
       boxm2_change_detection_tableau.cxx
+      boxm2_trajectory.h
+      boxm2_trajectory.cxx
       boxm2_include_glew.h
      )
 
   ADD_LIBRARY(boxm2_view ${boxm2_view_sources} )
 
-  TARGET_LINK_LIBRARIES(boxm2_view bocl   boxm2_ocl_pro boxm2_cpp  bprb bgeo vnl vnl_algo vbl_io vpgl vgl vil vbl vul ${GLEW_LIBRARY} ${OPENCL_LIBRARIES} )
+  TARGET_LINK_LIBRARIES(boxm2_view bocl   boxm2_ocl_pro boxm2_cpp  bprb bgeo vnl vnl_algo vbl_io vpgl vsph vgl vil vbl vul ${GLEW_LIBRARY} ${OPENCL_LIBRARIES} )
 
 ENDIF(VGUI_FOUND)
 ENDIF(GLEW_FOUND)
