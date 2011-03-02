@@ -7,6 +7,7 @@ MINI_PROG_SOURCES += boxm2_render_hemisphere.cxx
 MINI_PROG_SOURCES += boxm2_change_detection_view.cxx
 MINI_PROG_SOURCES += boxm2_export_scene.cxx
 MINI_PROG_SOURCES += boxm2_update_rgb_exe.cxx
+MINI_PROG_SOURCES += boxm2_refine_exe.cxx
 
 ################################
 include ${VXLROOT}/config/top.mk
