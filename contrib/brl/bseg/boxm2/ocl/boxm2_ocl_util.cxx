@@ -6,10 +6,10 @@
 #include <vnl/algo/vnl_svd.h>
 
 // fills a float buffer (should be 16*3 floats) with a perspective cam to be sent
-void boxm2_ocl_util::set_persp_camera(vpgl_camera_double_sptr cam, cl_float* persp_cam)
+void boxm2_ocl_util::set_persp_camera(vpgl_camera_double_sptr& cam, cl_float* persp_cam)
 {
   if (vpgl_proj_camera<double>* pcam =
-      dynamic_cast<vpgl_proj_camera<double>*>(cam.ptr()))
+      dynamic_cast<vpgl_proj_camera<double>* >(cam.ptr()))
   {
     //vcl_cout<<"CAM: "<<(*pcam)<<vcl_endl;
     vnl_svd<double>* svd=pcam->svd();
