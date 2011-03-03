@@ -137,12 +137,11 @@ bool boxm2_block::init_empty_block(boxm2_block_metadata data)
   int total_blocks =  data.sub_block_num_.x()
                     * data.sub_block_num_.y()
                     * data.sub_block_num_.z();
-                    
+
   //to initialize
   int num_buffers, blocks_per_buffer;
-  if(data.random_)
+  if (data.random_)
   {
-
     int blockBytes = total_blocks*(sizeof(int) + 16*sizeof(char)); //16 byte tree, 4 byte int pointer
     int freeBytes = MAX_BYTES - blockBytes;
     int dataSize  = 8*sizeof(char) +    //MOG
@@ -170,19 +169,19 @@ bool boxm2_block::init_empty_block(boxm2_block_metadata data)
   }
   else
   {
-    num_buffers = 1; 
+    num_buffers = 1;
     blocks_per_buffer = total_blocks;
     vcl_cout<<"Num buffers: "<<num_buffers
             <<" .. num_trees: "<<blocks_per_buffer<<vcl_endl;
   }
-  
+
   //now construct a byte stream, and read in with b_read
   byte_count_ = calc_byte_count(num_buffers, blocks_per_buffer, total_blocks);
   init_level_ = data.init_level_;
   max_level_  = data.max_level_;
   max_mb_     = int(data.max_mb_);
   buffer_ = new char[byte_count_];
-  
+
   //get member variable metadata straight, then write to the buffer
   long bytes_read = 0;
   bytes_read += sizeof(byte_count_);   //0. first 8 bytes denote size
@@ -228,7 +227,7 @@ bool boxm2_block::init_empty_block(boxm2_block_metadata data)
 
 
   //--- Now initialize blocks and their pointers --------- ---------------------
-  if(data.random_) 
+  if (data.random_)
   {
     //6.a create a random 'iterator'
     int* randIndex = new int[trees_.size()];
@@ -265,7 +264,7 @@ bool boxm2_block::init_empty_block(boxm2_block_metadata data)
     }
     delete [] randIndex;
   }
-  else 
+  else
   {
     //6.a create a random 'iterator'
     int tree_index = 0;
@@ -273,9 +272,8 @@ bool boxm2_block::init_empty_block(boxm2_block_metadata data)
     for (iter = trees_.begin(); iter != trees_.end(); ++iter, ++tree_index)
     {
       //data index is tree index at this point
-      //store data index in bits [10, 11, 12, 13] ; 
+      //store data index in bits [10, 11, 12, 13] ;
       uchar16 treeBlk( (unsigned char) 0 );
-      unsigned char a[4];
       treeBlk[10] = (tree_index) & 0xff;
       treeBlk[11] = (tree_index>>8)  & 0xff;
       treeBlk[12] = (tree_index>>16) & 0xff;
