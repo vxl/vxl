@@ -19,6 +19,11 @@
 #include <vcl_iostream.h>
 #include <vcl_fstream.h>
 #include <vcl_cstdio.h>
+#include <vcl_algorithm.h>
+
+//vul file includes
+#include <vul/vul_file.h>
+#include <vul/vul_file_iterator.h>
 
 void boxm2_util::random_permutation(int* buffer, int size)
 {
@@ -40,6 +45,65 @@ float boxm2_util::clamp(float x, float a, float b)
     return x < a ? a : (x > b ? b : x);
 }
 
+//: returns a list of cameras from specified directory
+vcl_vector<vpgl_perspective_camera<double>* > boxm2_util::cameras_from_directory(vcl_string dir)
+{
+  vcl_vector<vpgl_perspective_camera<double>* > toReturn; 
+  if (!vul_file::is_directory(dir.c_str()) ) {
+    vcl_cout<<"Cam dir is not a directory"<<vcl_endl;
+    return toReturn;
+  }
+  
+  //get all of the cam and image files, sort them
+  vcl_string camglob=dir+"/*.txt";
+  vul_file_iterator file_it(camglob.c_str());
+  vcl_vector<vcl_string> cam_files;
+  while (file_it) {
+    vcl_string camName(file_it());
+    cam_files.push_back(camName);
+    ++file_it;
+  }
+  vcl_sort(cam_files.begin(), cam_files.end());
+  
+  //take sorted lists and load from file
+  vcl_vector<vcl_string>::iterator iter;
+  for(iter = cam_files.begin(); iter != cam_files.end(); ++iter)
+  {
+      //load camera from file
+      vcl_ifstream ifs(iter->c_str());
+      vpgl_perspective_camera<double>* pcam =new vpgl_perspective_camera<double>;
+      if (!ifs.is_open()) {
+        vcl_cerr << "Failed to open file " << *iter << '\n';
+        return toReturn;
+      }
+      else  {
+        ifs >> *pcam;
+      }
+      
+      toReturn.push_back(pcam); 
+  }
+  return toReturn;  
+}
+
+//: returns a list of image strings from directory
+vcl_vector<vcl_string> boxm2_util::images_from_directory(vcl_string dir)
+{
+  vcl_vector<vcl_string> img_files;
+  if (!vul_file::is_directory(dir.c_str())) {
+    vcl_cout<<"img dir is not a directory"<<vcl_endl;
+    return img_files;
+  }
+  vcl_string imgglob=dir+"/*.png";
+  vul_file_iterator img_file_it(imgglob.c_str());
+  while (img_file_it) {
+    vcl_string imgName(img_file_it());
+    img_files.push_back(imgName);
+    ++img_file_it;
+  }
+  vcl_sort(img_files.begin(), img_files.end());
+  return img_files; 
+}  
+  
 
 //Constructs a camera given elevation, azimuth (degrees), radius, and bounding box.
 vpgl_perspective_camera<double>*

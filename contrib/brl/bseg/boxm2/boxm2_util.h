@@ -18,6 +18,9 @@ class boxm2_util
 
     static float clamp(float x, float a, float b);
     
+    static vcl_vector<vpgl_perspective_camera<double>* > cameras_from_directory(vcl_string dir); 
+    static vcl_vector<vcl_string> images_from_directory(vcl_string dir);
+
     static vbl_array_2d<vil_image_view<vxl_byte>* >  render_upper_hemisphere(int num_az, 
                                                                              int num_incline, 
                                                                              double radius,
