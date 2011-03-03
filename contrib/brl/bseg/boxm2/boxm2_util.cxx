@@ -1,4 +1,6 @@
 #include "boxm2_util.h"
+//:
+// \file
 
 //vgl includes
 #include <vgl/vgl_point_3d.h>
@@ -48,12 +50,12 @@ float boxm2_util::clamp(float x, float a, float b)
 //: returns a list of cameras from specified directory
 vcl_vector<vpgl_perspective_camera<double>* > boxm2_util::cameras_from_directory(vcl_string dir)
 {
-  vcl_vector<vpgl_perspective_camera<double>* > toReturn; 
+  vcl_vector<vpgl_perspective_camera<double>* > toReturn;
   if (!vul_file::is_directory(dir.c_str()) ) {
     vcl_cout<<"Cam dir is not a directory"<<vcl_endl;
     return toReturn;
   }
-  
+
   //get all of the cam and image files, sort them
   vcl_string camglob=dir+"/*.txt";
   vul_file_iterator file_it(camglob.c_str());
@@ -64,25 +66,25 @@ vcl_vector<vpgl_perspective_camera<double>* > boxm2_util::cameras_from_directory
     ++file_it;
   }
   vcl_sort(cam_files.begin(), cam_files.end());
-  
+
   //take sorted lists and load from file
   vcl_vector<vcl_string>::iterator iter;
-  for(iter = cam_files.begin(); iter != cam_files.end(); ++iter)
+  for (iter = cam_files.begin(); iter != cam_files.end(); ++iter)
   {
-      //load camera from file
-      vcl_ifstream ifs(iter->c_str());
-      vpgl_perspective_camera<double>* pcam =new vpgl_perspective_camera<double>;
-      if (!ifs.is_open()) {
-        vcl_cerr << "Failed to open file " << *iter << '\n';
-        return toReturn;
-      }
-      else  {
-        ifs >> *pcam;
-      }
-      
-      toReturn.push_back(pcam); 
+    //load camera from file
+    vcl_ifstream ifs(iter->c_str());
+    vpgl_perspective_camera<double>* pcam =new vpgl_perspective_camera<double>;
+    if (!ifs.is_open()) {
+      vcl_cerr << "Failed to open file " << *iter << '\n';
+      return toReturn;
+    }
+    else  {
+      ifs >> *pcam;
+    }
+
+    toReturn.push_back(pcam);
   }
-  return toReturn;  
+  return toReturn;
 }
 
 //: returns a list of image strings from directory
@@ -101,8 +103,9 @@ vcl_vector<vcl_string> boxm2_util::images_from_directory(vcl_string dir)
     ++img_file_it;
   }
   vcl_sort(img_files.begin(), img_files.end());
-  return img_files; 
-}  
+  return img_files;
+}
+
 //: returns a list of image strings from directory
 vcl_vector<vcl_string> boxm2_util::camfiles_from_directory(vcl_string dir)
 {
@@ -119,8 +122,8 @@ vcl_vector<vcl_string> boxm2_util::camfiles_from_directory(vcl_string dir)
     ++file_it;
   }
   vcl_sort(cam_files.begin(), cam_files.end());
-  return cam_files; 
-}  
+  return cam_files;
+}
 
 //Constructs a camera given elevation, azimuth (degrees), radius, and bounding box.
 vpgl_perspective_camera<double>*
@@ -129,7 +132,7 @@ boxm2_util::construct_camera( double elevation,
                               double radius,
                               unsigned ni,
                               unsigned nj,
-                              vgl_box_3d<double> bb, 
+                              vgl_box_3d<double> bb,
                               bool fit_bb)
 {
   double dni = static_cast<double>(ni);
@@ -145,9 +148,8 @@ boxm2_util::construct_camera( double elevation,
 
   // 2) determine camera center
   // the viewsphere radius is set to 10x the bounding box diameter
-  //double w = bb.width(), h = bb.height(), d = bb.depth();
-  double r = radius;//vcl_sqrt(w*w + h*h + d*d);
-  //r *=10;
+  double r = radius; // = vcl_sqrt(w*w + h*h + d*d); // where w=bb.width() etc.
+  //r *= 10;
   double deg_to_rad = vnl_math::pi/180.0;
   double el = elevation*deg_to_rad, az = azimuth*deg_to_rad;
   double cx = r*vcl_sin(el)*vcl_cos(az);
@@ -171,8 +173,8 @@ boxm2_util::construct_camera( double elevation,
   //4) Adjust the focal length so that the box projects into the image
   // project the bounding box
   double id = vcl_sqrt(dni*dni + dnj*dnj);
-  double f; 
-  if(fit_bb) {
+  double f;
+  if (fit_bb) {
     vgl_box_2d<double> image_bb = vpgl_project::project_bounding_box(*cam, bb);
     // get 2-d box diameter and image diameter
     double bw = image_bb.width(), bh = image_bb.height();
@@ -181,7 +183,7 @@ boxm2_util::construct_camera( double elevation,
     f = id/bd;
   }
   else {
-    f = id; 
+    f = id;
   }
   K.set_focal_length(f);
   cam->set_calibration(K);
