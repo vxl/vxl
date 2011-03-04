@@ -19,7 +19,7 @@ DECLARE( test_algo_fft );
 DECLARE( test_algo_histogram );
 DECLARE( test_algo_histogram_equalise );
 DECLARE( test_algo_distance_transform );
-DECLARE( test_algo_blob_finder );
+DECLARE( test_algo_blob );
 DECLARE( test_algo_find_peaks );
 DECLARE( test_algo_find_plateaus );
 DECLARE( test_algo_region_finder );
@@ -61,7 +61,7 @@ register_tests()
   REGISTER( test_algo_histogram );
   REGISTER( test_algo_histogram_equalise );
   REGISTER( test_algo_distance_transform );
-  REGISTER( test_algo_blob_finder );
+  REGISTER( test_algo_blob );
   REGISTER( test_algo_find_peaks );
   REGISTER( test_algo_find_plateaus );
   REGISTER( test_algo_region_finder );

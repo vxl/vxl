@@ -6,7 +6,7 @@
 #include <vil/vil_math.h>
 #include <vil/vil_image_view.h>
 #include <vil/algo/vil_structuring_element.h>
-#include <vil/algo/vil_blob_finder.h>
+#include <vil/algo/vil_blob.h>
 #include <vil/algo/vil_binary_closing.h>
 #include <vil/vil_convert.h>
 #include <vcl_iostream.h>
@@ -58,21 +58,26 @@ bool vil_blob_detection_process(bprb_func_process& pro)
       vil_binary_closing(*view,view_closed,selem);
       
       //: Find the blobs
-      vil_blob_finder blob_finder(*view);//view_closed);
+      vcl_vector<vil_blob_region> blob_regions;
+      {
+        vil_image_view<unsigned> blob_labels;
+        vil_blob_labels(*view, vil_blob_4_conn, blob_labels);//view_closed);
+        vil_blob_labels_to_regions(blob_labels, blob_regions);
+      }
       vil_image_view<bool> view_blobs(view->ni(),view->nj());
+
       view_blobs.fill(false);
 
       //: Threshold the blobs.
-      vcl_vector<vil_chord> bregions;
-      while(blob_finder.next_4con_region(bregions))
+      for (vcl_vector<vil_blob_region>::const_iterator it= blob_regions.begin(),
+        end=blob_regions.end(); it!=end; ++it)
       {
-          int sizecount=0;
-          for(unsigned i=0;i<bregions.size();i++)
-              sizecount+=bregions[i].length();
-          if(sizecount>min_size && sizecount<max_size)
-              for(unsigned i=0;i<bregions.size();i++)
-                  for(unsigned j=0;j<bregions[i].length();j++)
-                      view_blobs(bregions[i].ilo+j,bregions[i].j)=true;
+        vcl_size_t sizecount= vil_area(*it);
+        if(sizecount>min_size && sizecount<max_size)
+        for (vil_blob_region::const_iterator chords_it=it->begin(),
+          chords_end=it->end(); chords_it!=chords_end; ++chords_it)
+          for(unsigned i=chords_it->ilo; i<=chords_it->ihi; i++)
+            view_blobs(i,chords_it->j)=true;
       }
       vil_image_view<unsigned char>* temp_out = new vil_image_view<unsigned char>(view_blobs.ni(),view_blobs.nj());
 

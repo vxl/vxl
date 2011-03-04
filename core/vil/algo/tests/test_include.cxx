@@ -3,7 +3,7 @@
 #include <vil/algo/vil_binary_dilate.h>
 #include <vil/algo/vil_binary_erode.h>
 #include <vil/algo/vil_binary_opening.h>
-#include <vil/algo/vil_blob_finder.h>
+#include <vil/algo/vil_blob.h>
 #include <vil/algo/vil_cartesian_differential_invariants.h>
 #include <vil/algo/vil_checker_board.h>
 #include <vil/algo/vil_colour_space.h>
