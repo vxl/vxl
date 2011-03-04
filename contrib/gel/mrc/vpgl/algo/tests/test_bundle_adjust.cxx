@@ -325,11 +325,15 @@ static void test_bundle_adjust()
       if ( i == 6 || i == 10 ) // outliers
       {
         if (weights[i] > 0.5) // should have low weight
+        {
           outliers_downweighted = false;
+          vcl_cout << "outlier measurement "<<i<<" has high weight "<<weights[i]<<vcl_endl;
+        }
       }
       else if (weights[i] < 0.9) // inliers should have high weight
       {
         outliers_downweighted = false;
+        vcl_cout << "inlier measurement "<<i<<" has low weight "<<weights[i]<<vcl_endl;
       }
     }
     TEST("only outliers down-weighted",outliers_downweighted, true);
@@ -365,11 +369,15 @@ static void test_bundle_adjust()
       if ( i == 6 || i == 10 ) // outliers
       {
         if (weights[i] > 0.5) // should have low weight
+        {
           outliers_downweighted = false;
+          vcl_cout << "outlier measurement "<<i<<" has high weight "<<weights[i]<<vcl_endl;
+        }
       }
       else if (weights[i] < 0.9) // inliers should have high weight
       {
         outliers_downweighted = false;
+        vcl_cout << "inlier measurement "<<i<<" has low weight "<<weights[i]<<vcl_endl;
       }
     }
     TEST("only outliers down-weighted",outliers_downweighted, true);

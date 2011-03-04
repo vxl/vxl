@@ -107,23 +107,17 @@ public:
                        vnl_vector<double> const& c,
                        vnl_matrix<double>& Cij) = 0;
 
+  //: Use an M-estimator to compute weights
+  void compute_weight_ij(int i, int j,
+                         vnl_vector<double> const& ai,
+                         vnl_vector<double> const& bj,
+                         vnl_vector<double> const& c,
+                         vnl_vector<double> const& fij,
+                         double& weight);
+
   //: set the residual scale for the robust estimation
   void set_residual_scale(double scale) { scale2_ = scale*scale; }
 
-  //: Set the use of M-estimators for robust estimation
-  void set_use_m_estimator(bool use_m) { use_m_estimator_ = use_m; }
-
-  //: return true if using M-estimators for robust estimation
-  bool use_m_estimator() const { return use_m_estimator_; }
-
-
-  //: M-estimator weight function
-  // a positive, monotonically decreasing function with m_est_weight(k,0) == 1
-  virtual double m_est_weight(int k, double ek2);
-
-  //: Derivative of the M-estimator weight function
-  // used in weighting the Jacobians
-  virtual double deriv_m_est_weight(int k, double ek2);
 
   //: construct the j-th 3D point from parameter vector \param b and \param c
   vgl_homg_point_3d<double>
@@ -193,12 +187,7 @@ public:
   void reset()
   {
     iteration_count_ = 0;
-    for (unsigned int i=0; i<weights_.size(); ++i) 
-      weights_[i] = 1.0;
   }
-
-  //: return the current weights
-  const vcl_vector<double>& weights() const { return weights_; }
 
 
   //---------------------------------------------------------------------------
@@ -237,12 +226,9 @@ protected:
   vcl_vector<vnl_matrix<double> > factored_inv_covars_;
   //: Flag to enable covariance weighted errors
   bool use_covars_;
-  //: Flag to enable M-estimators
-  bool use_m_estimator_;
   //: The square of the scale of the robust estimator
   double scale2_;
-  //: The computed weights using the weight function
-  vcl_vector<double> weights_;
+
   int iteration_count_;
 };
 

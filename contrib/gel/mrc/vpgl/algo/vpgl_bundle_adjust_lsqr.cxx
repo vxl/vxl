@@ -22,12 +22,10 @@ vpgl_bundle_adjust_lsqr(unsigned int num_params_per_a,
                         const vcl_vector<vcl_vector<bool> >& mask)
  : vnl_sparse_lst_sqr_function(mask.size(),num_params_per_a,
                                mask[0].size(),num_params_per_b,
-                               num_params_c,mask,2,use_gradient),
+                               num_params_c,mask,2,use_gradient,use_weights),
    image_points_(image_points),
    use_covars_(false),
-   use_m_estimator_(false),
    scale2_(1.0),
-   weights_(image_points.size(),1.0),
    iteration_count_(0)
 {
 }
@@ -46,12 +44,10 @@ vpgl_bundle_adjust_lsqr(unsigned int num_params_per_a,
                         const vcl_vector<vcl_vector<bool> >& mask)
  : vnl_sparse_lst_sqr_function(mask.size(),num_params_per_a,
                                mask[0].size(),num_params_per_b,
-                               num_params_c,mask,2,use_gradient),
+                               num_params_c,mask,2,use_gradient,use_weights),
    image_points_(image_points),
    use_covars_(true),
-   use_m_estimator_(false),
    scale2_(1.0),
-   weights_(image_points.size(),1.0),
    iteration_count_(0)
 {
   assert(image_points.size() == inv_covars.size());
@@ -121,17 +117,6 @@ vpgl_bundle_adjust_lsqr::f(vnl_vector<double> const& a,
         eij[0] += eij[1]*Sij(0,1);
         eij[1] *= Sij(1,1);
       }
-      if (use_m_estimator_)
-      {
-        double e2 = eij[0]*eij[0] + eij[1]*eij[1];
-        weights_[k] = m_est_weight(k,e2);
-        if (weights_[k] <= 0.0)
-          weights_[k] = 0.0;
-        else
-          weights_[k] = vcl_sqrt(weights_[k]);
-        eij[0] *= weights_[k];
-        eij[1] *= weights_[k];
-      }
     }
   }
 
@@ -166,17 +151,6 @@ vpgl_bundle_adjust_lsqr::fij(int i, int j,
     fij[0] *= Sij(0,0);
     fij[0] += fij[1]*Sij(0,1);
     fij[1] *= Sij(1,1);
-  }
-  if (use_m_estimator_)
-  {
-    double e2 = fij[0]*fij[0] + fij[1]*fij[1];
-    weights_[k] = m_est_weight(k,e2);
-    if (weights_[k] <= 0.0)
-      weights_[k] = 0.0;
-    else
-      weights_[k] = vcl_sqrt(weights_[k]);
-    fij[0] *= weights_[k];
-    fij[1] *= weights_[k];
   }
 }
 
@@ -218,79 +192,28 @@ vpgl_bundle_adjust_lsqr::jac_blocks(vnl_vector<double> const& a,
         B[k] = Sij*B[k];
         C[k] = Sij*C[k];
       }
-
-      if (use_m_estimator_)
-      {
-        // need to recompute residual to get weights
-        vnl_vector_fixed<double,4> Xj = param_to_pt_vector(j,b,c);
-        vnl_vector_fixed<double,3> xij = Pi*Xj;
-        vnl_vector<double> e(2);
-        e[0] = xij[0]/xij[2] - image_points_[k].x();
-        e[1] = xij[1]/xij[2] - image_points_[k].y();
-        if (use_covars_){
-          // multiple this error by upper triangular Sij
-          const vnl_matrix<double>& Sij = factored_inv_covars_[k];
-          e[0] *= Sij(0,0);
-          e[0] += e[1]*Sij(0,1);
-          e[1] *= Sij(1,1);
-        }
-        double e2 = e[0]*e[0] + e[1]*e[1];
-        double w = m_est_weight(k,e2);
-        if( w <= 0 )
-        {
-          A[k] *= 0;
-          B[k] *= 0;
-          C[k] *= 0;
-        }
-        else{
-          w = vcl_sqrt(w);
-          double dw = deriv_m_est_weight(k,e2);
-          vnl_matrix<double> JW = outer_product(e,e);
-          JW *= (dw/w);
-          JW(0,0) += w;
-          JW(1,1) += w;
-          A[k] = JW*A[k];
-          B[k] = JW*B[k];
-          C[k] = JW*C[k];
-        }
-      }
-
     }
   }
 }
 
 
-//: M-estimator weight function
-// a positive, monotonically decreasing function with m_est_weight(k,0) == 1
-double
-vpgl_bundle_adjust_lsqr::m_est_weight(int k, double ek2)
+void
+vpgl_bundle_adjust_lsqr::compute_weight_ij(int /*i*/, int /*j*/,
+                                           vnl_vector<double> const& /*ai*/,
+                                           vnl_vector<double> const& /*bj*/,
+                                           vnl_vector<double> const& /*c*/,
+                                           vnl_vector<double> const& fij,
+                                           double& weight)
 {
+  double u2 = fij.squared_magnitude()/scale2_;
+
   // Beaton-Tukey
-  if ( ek2 > scale2_ ) 
-    return 0.0;
-  double tmp = ek2/scale2_;
-  tmp = 1 - ek2/scale2_;
-  return tmp*tmp;
+  weight = (u2 > 1.0) ? 0.0 : 1 - u2;
+  
   // Cauchy
-  // return 1 / (1 + ek2/scale2_);
+  //weight = vcl_sqrt(1 / (1 + u2));
 }
 
-
-//: Derivative of the M-estimator weight function
-// used in weighting the Jacobians
-double
-vpgl_bundle_adjust_lsqr::deriv_m_est_weight(int k, double ek2)
-{
-  // Beaton-Tukey
-  if ( ek2 > scale2_ ) 
-    return 0.0;
-  double tmp = ek2/scale2_;
-  return -2*(1 - ek2/scale2_)/scale2_;
-
-  // Cauchy
-  //double tmp = ek2/scale2_ + 1;
-  //return -1 / (scale2_ * tmp * tmp);
-}
 
 
 //: compute the 2x3 Jacobian of camera projection with respect to point location

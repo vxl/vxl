@@ -81,30 +81,24 @@ static void test_ba_shared_k_lsqr()
   
   double eps = 1e-8;
   func.set_residual_scale(1.0);
-  func.set_use_m_estimator(true);
-  TEST_NEAR("m_est_weight(0) == 1.0", func.m_est_weight(0,0.0), 1.0, 1e-8);
+  double weight = 0.0;
+  vnl_vector<double> dummy(2,0.0), fij(2,0.0);
+  func.compute_weight_ij(0,0,dummy,dummy,dummy,fij,weight);
+  TEST_NEAR("weight(0) == 1.0", weight, 1.0, 1e-8);
   double val = 1e-10;
   double last_weight = 1.0;
   bool weight_decreasing = true;
   bool weight_deriv = true;
   for (unsigned int i=0; i<20; ++i)
   {
-    double weight = func.m_est_weight(0,val);
-    double deriv_weight = func.deriv_m_est_weight(0,val);
+    fij[0] = val;
+    func.compute_weight_ij(0,0,dummy,dummy,dummy,fij,weight);
     if(weight> last_weight || weight < 0.0)
       weight_decreasing = false;
-    if(vcl_abs((func.m_est_weight(0,val+eps)-weight)/eps - deriv_weight) > 10*eps)
-    {
-      vcl_cout << "deriv_m_est_weight("<<val<<") is "<<deriv_weight
-               <<", finite diff error is "
-               <<(func.m_est_weight(0,val+eps)-weight)/eps - deriv_weight <<vcl_endl;
-      weight_deriv = false;
-    }
     last_weight = weight;
     val *= 10;
   }
-  TEST("m_est_weight() decreasing", weight_decreasing, true);
-  TEST("deriv(m_est_weight) = deriv_m_est_weight", weight_deriv, true);
+  TEST("weight decreasing", weight_decreasing, true);
 
 
 
