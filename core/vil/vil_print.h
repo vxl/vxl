@@ -15,7 +15,7 @@
 //: How to print value in vil_print_all(image_view)
 // \relatesalso vil_image_view
 template<class T>
-void vil_print_value(vcl_ostream& s, const T& value);
+void vil_print_value(vcl_ostream& s, const T& value, unsigned=0);
 
 // Specializations must be declared before use, so they need to be
 // declared here.
@@ -24,7 +24,7 @@ void vil_print_value(vcl_ostream& s, const T& value);
 
 #define vil_print_declare_specialization( T ) \
   VCL_DEFINE_SPECIALIZATION \
-  void vil_print_value(vcl_ostream& os, const T & value)
+  void vil_print_value(vcl_ostream& os, const T & value, unsigned)
 
 vil_print_declare_specialization( bool );
 vil_print_declare_specialization( vxl_byte );
@@ -74,9 +74,9 @@ vil_print_declare_specialization( vil_rgba<double> );
 //: Print all image data to os in a grid (rounds output to int)
 // \relatesalso vil_image_view
 template<class T>
-inline void vil_print_all(vcl_ostream& os,const vil_image_view<T>& view)
+inline void vil_print_all(vcl_ostream& os,const vil_image_view<T>& view, unsigned width=0)
 {
-  vcl_streamsize width = os.width();
+  if (!width) width = static_cast<unsigned>(os.width());
   os<<view.is_a()<<' '<<view.nplanes()<<" planes, each "<<view.ni()<<" x "<<view.nj()
     <<" istep: "<<(int)view.istep()<<' '
     <<" jstep: "<<(int)view.jstep()<<' '
@@ -89,7 +89,7 @@ inline void vil_print_all(vcl_ostream& os,const vil_image_view<T>& view)
       for (unsigned int i=0;i<view.ni();++i)
       {
         os<<' '<<vcl_setw(width);
-        vil_print_value(os,view(i,j,p));
+        vil_print_value(os,view(i,j,p), width);
       }
       os<<'\n'<<vcl_flush;
     }
