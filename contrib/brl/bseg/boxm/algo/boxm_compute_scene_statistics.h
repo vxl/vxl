@@ -5,6 +5,45 @@
 #include <vcl_iostream.h>
 #include <bsta/bsta_histogram.h>
 
+//: Compute histogram of a simple-type scenes. e.g. T_data = float, double
+template <class T_loc, class T_data>
+bool compute_scene_statistics(boxm_scene<boct_tree<T_loc, T_data > >* scene, bsta_histogram<T_data>& response_hist )//, bsta_histogram<float>& level_hist, unsigned& n_leaves)
+{
+  typedef boct_tree<T_loc, T_data> tree_type;
+  typedef boct_tree_cell<T_loc,T_data> cell_type;
+  
+  //(1) Traverse the leaves of the scene
+  boxm_cell_iterator<tree_type > iterator = scene->cell_iterator(&boxm_scene<tree_type>::load_block, true);
+  
+  iterator.begin();
+  float cell_count = 0;
+  T_data max = (*iterator)->data();
+  T_data min = max;
+  T_data this_val = max;
+  while (!iterator.end()) {
+    cell_count++;
+    this_val = (*iterator)->data();
+    if ( this_val > max)  max = this_val;
+    if ( this_val < min)  min = this_val;
+    ++iterator;
+  }
+  
+  unsigned nbins = vcl_floor(vcl_sqrt(cell_count));
+  response_hist = bsta_histogram<T_data>(min, max, nbins);
+  scene->unload_active_blocks();
+  iterator.begin();
+  while (!iterator.end()) {
+    response_hist.upcount(static_cast<T_data>((*iterator)->data()), 1.0f);
+    ++iterator;
+  }
+  
+  scene->unload_active_blocks();
+  
+  return true;
+  
+}
+
+//: Compute histogram for appearance model scene - where alpha, omega etc are relevant
 template <class T_loc, class T_data>
 bool compute_scene_statistics(boxm_scene<boct_tree<T_loc, T_data > >& scene, bsta_histogram<float>& omega_hist, bsta_histogram<float>& sigma_hist, bsta_histogram<float>& level_hist, unsigned& n_leaves)
 {
