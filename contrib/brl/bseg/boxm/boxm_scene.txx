@@ -207,6 +207,27 @@ void boxm_scene<T>::write_active_block(bool unload_block)
   }
 }
 
+//: Writes and unloads the specified block. It doesn't modify global variables
+template <class T>
+void boxm_scene<T>::write_block_thread_safe(unsigned i, unsigned j, unsigned k)
+{
+  if (valid_index(i,j,k)&& (!load_all_blocks_))
+  {
+    vcl_string path = gen_block_path(i,j,k);
+    vsl_b_ofstream os(path);
+
+    if(blocks_(i,j,k))
+      blocks_(i,j,k)->b_write(os, save_internal_nodes_, save_platform_independent_);
+    
+    // delete the block's data
+    boxm_block<T>* block = blocks_(i,j,k);
+    block->delete_tree();
+    block->set_tree(0);
+    
+    os.close();
+  }
+}
+
 template <class T>
 void boxm_scene<T>::force_write_blocks()
 {
@@ -259,11 +280,12 @@ bool boxm_scene<T>::get_block_index(vgl_point_3d<double>& p, vgl_point_3d<int> &
     unsigned j = static_cast<unsigned>((p.y()-origin_.y())/block_dim_.y());
     unsigned k = static_cast<unsigned>((p.z()-origin_.z())/block_dim_.z());
     // boundary case
-    if (p.x()==world.max_x())
+    double tol = 1e-9;
+    if (vcl_abs(p.x()-world.max_x())<tol)
       i-=1;
-    if (p.y()==world.max_y())
+    if (vcl_abs(p.y()-world.max_y())<tol)
       j-=1;
-    if (p.z()==world.max_z())
+    if (vcl_abs(p.z()-world.max_z())<tol)
       k-=1;
 
     index=vgl_point_3d<int>(i,j,k);
@@ -389,6 +411,70 @@ bool boxm_scene<T>::load_block(unsigned i, unsigned j, unsigned k)
   return true;
 }
 
+
+//: Load block into memory - this doesn't use global variables so user is reponsible for unloading it
+template <class T>
+bool boxm_scene<T>::load_block_thread_safe(unsigned i, unsigned j, unsigned k)
+{
+  if (!valid_index(vgl_point_3d<int>(i,j,k)))
+    return false;
+  
+  if (blocks_(i,j,k)->get_tree()==NULL) // read it from file
+  {
+    vcl_string block_path = gen_block_path(i,j,k);
+    vsl_b_ifstream os(block_path);
+    
+    //if the binary block file is not found
+    if (!os) {
+      if (blocks_(i,j,k)->get_tree()==NULL) {
+        T* tree= new T(max_tree_level_,init_tree_level_);
+        blocks_(i,j,k)->init_tree(tree);
+      }
+      return false;
+    }
+    blocks_(i,j,k)->b_read(os);
+    os.close();
+  }
+  
+  return true;
+}
+
+//: Reads and loads all blocks into memorty
+template <class T>
+bool boxm_scene<T>::read_all_blocks()
+{
+  load_all_blocks_ = true;
+  this->unload_active_blocks();
+ 
+  for(unsigned block_i = 0; block_i < blocks_.get_row1_count(); block_i++){
+    for(unsigned block_j = 0; block_j < blocks_.get_row2_count(); block_j++){
+      for(unsigned block_k = 0; block_k < blocks_.get_row3_count(); block_k++){
+        if (blocks_(block_i,block_j,block_k)->get_tree()==NULL) // read it from file
+        {
+          vcl_string block_path = gen_block_path(block_i,block_j,block_k);
+          vsl_b_ifstream os(block_path);
+          
+          //if the binary block file is not found
+          if (!os) {
+            if (blocks_(block_i,block_j,block_k)->get_tree()==NULL) {
+              T* tree= new T(max_tree_level_,init_tree_level_);
+              blocks_(block_i,block_j,block_k)->init_tree(tree);
+            }
+          }
+          else 
+            blocks_(block_i,block_j,block_k)->b_read(os);
+          
+          active_blocks_.insert(vgl_point_3d<int>(block_i, block_j, block_k));
+          os.close();
+          
+        }
+      }
+    }
+  }
+  
+  return true;
+}
+
 template <class T>
 bool boxm_scene<T>::load_block_and_neighbors(unsigned i, unsigned j, unsigned k)
 {
@@ -457,16 +543,6 @@ bool boxm_scene<T>::load_block_and_neighbors(unsigned i, unsigned j, unsigned k)
   return true;
 }
 
-template <class T>
-bool boxm_scene<T>::valid_index(vgl_point_3d<int> idx)
-{
-  vgl_point_3d<int> min_p(0,0,0);
-  vgl_point_3d<int> max_p(blocks_.get_row1_count(), blocks_.get_row2_count(), blocks_.get_row3_count());
-  vgl_box_3d<int> bbox(min_p, max_p);
-  return bbox.contains(idx);
-}
-
-
 //: Return the finest level in the scene
 template <class T>
 short boxm_scene<T>::finest_level()
@@ -487,6 +563,31 @@ short boxm_scene<T>::finest_level()
   return finest_level;
 }
 
+
+//: Return the finest level in the scene. Iterates through blocks assuming they are all in memory
+template <class T>
+short boxm_scene<T>::finest_level_in_memory()
+{
+  if(!load_all_blocks_)
+    return -1;
+  
+ //iterate through the blocks requesting the finest level
+  short finest_level = this->max_tree_level_;
+  for(unsigned block_i = 0; block_i < blocks_.get_row1_count(); block_i++){
+    for(unsigned block_j = 0; block_j < blocks_.get_row2_count(); block_j++){
+      for(unsigned block_k = 0; block_k < blocks_.get_row3_count(); block_k++){
+        if (blocks_(block_i,block_j,block_k)) {
+            short this_level = blocks_(block_i,block_j,block_k)->get_tree()->finest_level();
+            if (this_level < finest_level)
+              finest_level = this_level;
+          }
+      }
+    }
+  }
+ 
+  return finest_level;
+}
+
 //: Return the length of finest-level cell in the scene
 template <class T>
 double  boxm_scene<T>::finest_cell_length()
@@ -496,6 +597,18 @@ double  boxm_scene<T>::finest_cell_length()
   if ((vcl_abs(block_dim_.x() - block_dim_.y()) > 1.0e-7)   || (vcl_abs(block_dim_.x() - block_dim_.z()) > 1.0e-7))
     vcl_cerr << "Warning: In boxm_scene::finest_cell_length, cells aren't cubical, returning length along x direction\n";
 
+  return local_cell_length * block_dim_.x();
+}
+
+//: Return the length of finest-level cell in the scene. Iterates through blocks assuming they are all in memory
+template <class T>
+double  boxm_scene<T>::finest_cell_length_in_memory()
+{
+  double local_cell_length = 1.0/(double)(1<<((this->max_tree_level_ -1) - finest_level_in_memory()));
+  
+  if ((vcl_abs(block_dim_.x() - block_dim_.y()) > 1.0e-7)   || (vcl_abs(block_dim_.x() - block_dim_.z()) > 1.0e-7))
+    vcl_cerr << "Warning: In boxm_scene::finest_cell_length, cells aren't cubical, returning length along x direction\n";
+  
   return local_cell_length * block_dim_.x();
 }
 
@@ -575,6 +688,7 @@ void boxm_scene<T>::load_scene(vcl_string filename)
 {
   boxm_scene_parser parser;
   boxm_scene_base::load_scene(filename, parser);
+  this->filename_ = filename;
   parse_config(parser);
 }
 
@@ -912,9 +1026,13 @@ boct_tree_cell<typename T::loc_type, typename T::datatype>* boxm_scene<T>::locat
 
   //get the block, if block is not already in memory, return null
   boxm_block<T>* block = blocks_(block_idx.x(), block_idx.y(), block_idx.z());
+  if (!block) {
+    vcl_cerr << "In locate_point_in_memory: NULL block\n";
+    return NULL;
+  }
   T *tree = block->get_tree();
-  if (!block || !tree) {
-    vcl_cerr << " Cannot locate point, because block is not loaded in the memory\n";
+  if (!tree) {
+    vcl_cerr << "In locate_point_in_memory: NULL tree\n";
     return NULL;
   }
   return tree->locate_point_global(p);
@@ -1044,10 +1162,14 @@ boxm_cell_iterator<T>& boxm_cell_iterator<T>::begin()
 template <class T>
 bool boxm_cell_iterator<T>::end()
 {
-  if (cells_.empty())
-    return true;
-  else
-    return (block_iterator_.end() && (cells_iterator_ == cells_.end()));
+  bool end = false;
+  
+  end = cells_.empty() || (block_iterator_.end() && (cells_iterator_ == cells_.end()));
+  
+  if(end)
+    block_iterator_.scene_->unload_active_blocks();
+    
+  return end;
 }
 
 template <class T>
@@ -1077,7 +1199,7 @@ boxm_cell_iterator<T>& boxm_cell_iterator<T>::operator++()
   if (++cells_iterator_ == cells_.end())
   {
     if (!read_only_)
-      block_iterator_.scene_->write_active_block();
+      block_iterator_.scene_->write_active_block(false);
 
     ++block_iterator_;
 

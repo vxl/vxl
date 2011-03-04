@@ -83,6 +83,9 @@ class boxm_scene :public boxm_scene_base
   //: Loads block into memory.
   // Returns true if the block bin file is found on disc, otherwise returns false and creates a new tree for the block
   bool load_block(unsigned i, unsigned j, unsigned k);
+  
+  // Load block into memory without using global variables
+  bool load_block_thread_safe(unsigned i, unsigned j, unsigned k);
 
   //: Loads block into memory.
   bool load_block(vgl_point_3d<int> i) { return load_block(i.x(), i.y(), i.z()); }
@@ -92,9 +95,15 @@ class boxm_scene :public boxm_scene_base
 
   //: Loads a block and all its neighboring(adjacent) blocks
   bool load_block_and_neighbors(vgl_point_3d<int> i){ return load_block_and_neighbors(i.x(), i.y(), i.z()); }
+  
+  //: Reads and loads all blocks into memorty
+  bool read_all_blocks();
 
   //: Write the active block to disk
   void write_active_block(bool unload_block=true);
+  
+  //: Write the specified block to disk without changing global variables
+  void write_block_thread_safe(unsigned i, unsigned j, unsigned k);
 
   //: Returns the active block(in memory)
   boxm_block<T>* get_active_block();
@@ -125,7 +134,7 @@ class boxm_scene :public boxm_scene_base
     z=(int) blocks_.get_row3_count();
   }
 
-  vgl_vector_3d<unsigned> world_dim() const {
+  virtual vgl_vector_3d<unsigned> world_dim() const {
     unsigned x=(unsigned) blocks_.get_row1_count();
     unsigned y=(unsigned) blocks_.get_row2_count();
     unsigned z=(unsigned) blocks_.get_row3_count();
@@ -148,11 +157,15 @@ class boxm_scene :public boxm_scene_base
   //: Returns the index of the block containing this point
   bool get_block_index(vgl_point_3d<double>& p, vgl_point_3d<int> & index);
 
-  //: what is the use of this?
+  //: Returns a block, assumes block is in memory - if not it returns null
   boxm_block<T>* get_block(unsigned i, unsigned j, unsigned k) { return blocks_(i,j,k); }
 
+  //: Returns a block, assumes block is in memory - if not it returns null
   boxm_block<T>* get_block(const vgl_point_3d<int>& idx) { return blocks_(idx.x(), idx.y(), idx.z()); }
 
+  //: Returns a read-only block, assumes block is in memory - if not it returns null
+  const boxm_block<T>* get_block_read_only(unsigned i, unsigned j, unsigned k) { return blocks_(i,j,k); }
+  
   //: Return all leaf cells in a region
   void leaves_in_region(vgl_box_3d<double>, vcl_vector<boct_tree_cell<loc_type, datatype>* >& cells);
 
@@ -194,7 +207,16 @@ class boxm_scene :public boxm_scene_base
   //: Return the dimensions of the scene along each axis - this are equivalent to bbox width, length and depth
   void axes_length(double &x_length,double &y_length, double &z_length);
 
-  bool valid_index(vgl_point_3d<int> idx);
+  //: Return true if the block index is valid
+  bool valid_index(vgl_point_3d<int> const& idx) { return valid_index(idx.x(), idx.y(), idx.z()); }
+
+  
+  //: Return true if the block index is valid
+  inline bool valid_index(int const& x, int const& y, int const& z){
+    return  x >= (int)0 && x < (int)blocks_.get_row1_count() &&
+            y >= (int)0 && y < (int)blocks_.get_row2_count() &&
+            z >= (int)0 && z < (int)blocks_.get_row3_count();
+   }
 
   void set_pinit(float pinit){pinit_=pinit;}
 
@@ -247,6 +269,12 @@ class boxm_scene :public boxm_scene_base
   //: Return the length of finest-level cell in the scene
   double finest_cell_length();
 
+  //: Return the length of finest-level cell in the scene. Iterates through blocks assuming they are all in memory
+  double finest_cell_length_in_memory();
+  
+  //: Return the finest level in the scene. Iterates through blocks assuming they are all in memory
+  short finest_level_in_memory();
+  
   //: Return the number of leaf nodes in the scene
   unsigned long size();
 
