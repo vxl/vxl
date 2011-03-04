@@ -25,7 +25,7 @@ static vcl_ios_openmode modeflags(char const* mode)
     if (mode[1] == '+')
       return vcl_ios_in | vcl_ios_out | vcl_ios_trunc | modeflags(mode+2);
     else
-      return vcl_ios_out | modeflags(mode+1);
+      return vcl_ios_out | vcl_ios_trunc | modeflags(mode+1);
   }
 
   vcl_cerr << vcl_endl << __FILE__ ": DODGY MODE " << mode << vcl_endl;
