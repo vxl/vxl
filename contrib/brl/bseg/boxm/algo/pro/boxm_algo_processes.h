@@ -13,6 +13,7 @@ DECLARE_FUNC_CONS(boxm_replace_const_app_process);
 DECLARE_FUNC_CONS(boxm_roi_init_process);
 DECLARE_FUNC_CONS(boxm_roi_init_rational_camera_process);
 DECLARE_FUNC_CONS(boxm_save_occupancy_raw_process);
+DECLARE_FUNC_CONS(boxm_save_scene_raw_process);
 DECLARE_FUNC_CONS(boxm_render_expected_edge_vrml_process);
 DECLARE_FUNC_CONS(boxm_merge_mixtures_process);
 DECLARE_FUNC_CONS(boxm_split_scene_process);

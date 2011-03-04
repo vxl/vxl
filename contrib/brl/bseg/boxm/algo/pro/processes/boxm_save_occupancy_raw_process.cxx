@@ -2,7 +2,7 @@
 #include <bprb/bprb_func_process.h>
 //:
 // \file
-// \brief A class for obtaining roc curve from change detection results.
+// \brief A class for writing the occupancy probability of scenes to drishti raw files
 //
 // \author Gamze Tunali
 // \date Apr 14, 2009
