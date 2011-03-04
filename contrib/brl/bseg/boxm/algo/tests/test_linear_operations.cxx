@@ -10,6 +10,7 @@
 
 void test_linear_operations()
 {
+  clean_up();
   //create scene
   boxm_scene<boct_tree<short, float> > *scene1 = create_scene(2,2,2,true, "test_scene1");
   boxm_scene<boct_tree<short, float> > *scene2 = create_scene(2,2,2,true, "test_scene2");
@@ -69,7 +70,12 @@ void test_linear_operations()
     ++it2;
   }
 
+#ifdef DEBUG_LEAKS
+  vcl_cerr << "Leaks at test_linear_operations " << boct_tree_cell<short, float >::nleaks() << vcl_endl;
+#endif
+  
   TEST("Output data is correct", result, true);
+  clean_up();
 }
 
 
