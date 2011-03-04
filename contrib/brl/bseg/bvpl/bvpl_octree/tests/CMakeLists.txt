@@ -5,6 +5,7 @@ ADD_EXECUTABLE( bvpl_octree_test_all
   test_octree_kernel_operator.cxx
   test_octree_neighbors.cxx
   test_pca_kernels.cxx
+  test_taylor_basis.cxx
  )
 
 SET(bvpl_octree_test_all_sources
@@ -13,13 +14,15 @@ SET(bvpl_octree_test_all_sources
 
 ADD_LIBRARY(bvpl_octree_tests_util  ${bvpl_octree_test_all_sources})
 
-TARGET_LINK_LIBRARIES( bvpl_octree_test_all bvpl_octree_tests_util bvpl_octree bvpl boct boxm testlib vnl vul)
+TARGET_LINK_LIBRARIES( bvpl_octree_test_all bvpl_octree_tests_util bvpl_octree_io bvpl_octree bvpl boct boxm testlib vnl vul)
 
 ADD_TEST( bvpl_octree_test_kernel_operator ${EXECUTABLE_OUTPUT_PATH}/bvpl_octree_test_all test_octree_kernel_operator  )
 ADD_TEST( bvpl_octree_test_neighbors       ${EXECUTABLE_OUTPUT_PATH}/bvpl_octree_test_all test_octree_neighbors  )
 ADD_TEST( bvpl_octree_test_pca             ${EXECUTABLE_OUTPUT_PATH}/bvpl_octree_test_all test_pca_kernels )
+ADD_TEST( bvpl_octree_test_taylor_basis    ${EXECUTABLE_OUTPUT_PATH}/bvpl_octree_test_all test_taylor_basis ) 
 
 ADD_EXECUTABLE( bvpl_octree_test_include test_include.cxx )
 TARGET_LINK_LIBRARIES( bvpl_octree_test_include bvpl_octree)
+
 ADD_EXECUTABLE( bvpl_octree_test_template_include test_template_include.cxx )
 TARGET_LINK_LIBRARIES( bvpl_octree_test_template_include bvpl_octree)

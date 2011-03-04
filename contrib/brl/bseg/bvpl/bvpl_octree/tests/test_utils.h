@@ -11,9 +11,10 @@
 #include <vul/vul_file_iterator.h>
 #include <vpl/vpl.h>
 
-void init_tree(boct_tree<short,float> *tree, unsigned i);
+void init_tree(boct_tree<short,float> *tree, unsigned i, float init_val = 0.8);
 
-boxm_scene<boct_tree<short, float> >* create_scene(unsigned world_dimx = 2,unsigned world_dimy = 2,unsigned world_dimz = 2);
+boxm_scene<boct_tree<short, float> >* create_scene(unsigned world_dimx = 2,unsigned world_dimy = 2,unsigned world_dimz = 2,
+                                                   bool uniform = false, float val = 0.5, vcl_string scene_prefix = "test_scene");
 
 void clean_up();
 

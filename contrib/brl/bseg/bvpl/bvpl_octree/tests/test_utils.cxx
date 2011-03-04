@@ -4,16 +4,25 @@
 // \author Isabel Restrepo
 // \date 15-Aug-2010
 
-void init_tree(boct_tree<short,float> *tree, unsigned i)
+void init_tree(boct_tree<short,float> *tree, unsigned i, float init_val)
 {
   tree-> split(); //now we have 8 cells
   vcl_vector<boct_tree_cell<short,float>*> leaves = tree->leaf_cells();
-  leaves[i]->set_data(0.8f);
+  leaves[i]->set_data(init_val);
   leaves[i]->split();
+  
+  boct_loc_code<short> code = leaves[i]->get_code() ;
+  vcl_cerr<< "Create Scene Code: " << code << vcl_endl;
 }
 
-boxm_scene<boct_tree<short, float> >* create_scene(unsigned world_dimx,unsigned world_dimy,unsigned world_dimz)
+boxm_scene<boct_tree<short, float> >* create_scene(unsigned world_dimx,unsigned world_dimy,unsigned world_dimz, 
+                                                   bool uniform, float val, vcl_string scene_prefix)
 {
+  float init_val = 0.5f;
+  
+  if(uniform)
+     init_val = val;
+  
   //crete the input scene
   unsigned int max_tree_level = 3;
   unsigned int init_level = 1;
@@ -25,10 +34,10 @@ boxm_scene<boct_tree<short, float> >* create_scene(unsigned world_dimx,unsigned 
   vgl_vector_3d<unsigned> world_dim(world_dimx,world_dimy,world_dimz); //number of blocks in a scene
 
   boxm_scene<boct_tree<short, float> > *scene = new boxm_scene<boct_tree<short, float> >(lvcs, origin, block_dim, world_dim, max_tree_level, init_level );
-  vcl_string scene_path(".");
-  scene->set_paths(scene_path, "test_scene");
+  vcl_string scene_path(vul_file::get_cwd());
+  scene->set_paths(scene_path, scene_prefix);
   scene->set_appearance_model(BOXM_FLOAT);
-  scene->write_scene("test_scene.xml");
+  scene->write_scene(scene_prefix + ".xml");
   unsigned cell_index = 7;
   boxm_block_iterator<boct_tree<short, float> > iter=scene->iterator();
   iter.begin();
@@ -37,9 +46,12 @@ boxm_scene<boct_tree<short, float> >* create_scene(unsigned world_dimx,unsigned 
     scene->load_block(iter.index());
     boxm_block<boct_tree<short, float> > *block = scene->get_active_block();
     // Construct an empty tree with 3 maximum levels 1 levele initialized to 0.0
-    boct_tree<short,float> *tree = new boct_tree<short,float>(0.5f, 3, 1);
+    boct_tree<short,float> *tree = new boct_tree<short,float>(init_val, 3, 1);
     //tree->print();
-    init_tree(tree, cell_index);
+    if(uniform)
+      init_tree(tree, cell_index, init_val);
+    else
+      init_tree(tree, cell_index);
     //tree->print();
     block->init_tree(tree);
     scene->write_active_block();
