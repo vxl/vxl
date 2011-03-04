@@ -5,6 +5,12 @@ aren't documented here, unless the bug-fix has a major observable
 effect.  If you change something in VXL, please document it here.
 
 ---------------------------------------------------------------------------
+
+      - Generalized vnl_sparse_lst_sqr_function and vnl_sparse_lm
+        to allow for global parameters in the optimization.  Used
+        this in vpgl_bundle_adjust to allow for shared intrinsic
+        camera parameters in bundle adjustment.
+
 ******************************
 VXL 1.16.0    - December 2010
 ******************************
