@@ -54,6 +54,14 @@ class vpgl_bundle_adjust
   //: Return the raw world point parameters
   const vnl_vector<double>& point_params() const { return b_; }
 
+  //: Approximately depth invert the scene.
+  //  Apply this and re-optimize to get out of a common local minimum.
+  //  Find the mean axis between cameras and points, mirror the points about
+  //  a plane perpendicular to this axis, and rotate the cameras 180 degrees
+  //  around this axis
+  void depth_reverse(vcl_vector<vpgl_perspective_camera<double> >& cameras,
+                     vcl_vector<vgl_point_3d<double> >& world_points);
+
   //: Bundle Adjust
   bool optimize(vcl_vector<vpgl_perspective_camera<double> >& cameras,
                 vcl_vector<vgl_point_3d<double> >& world_points,
@@ -70,6 +78,14 @@ class vpgl_bundle_adjust
   //  return parameters such that original point are recovered as (ns*x+nx, ns*y+ny)
   void normalize_points(vcl_vector<vgl_point_2d<double> >& image_points,
                         double& nx, double& ny, double& ns);
+
+  // reflect the points about a plane
+  void reflect_points(const vgl_plane_3d<double>& plane,
+                      vcl_vector<vgl_point_3d<double> >& points);
+
+  // rotation the cameras 180 degrees around an axis
+  void rotate_cameras(const vgl_vector_3d<double>& axis,
+                      vcl_vector<vpgl_perspective_camera<double> >& cameras);
 
   //: The bundle adjustment error function
   vpgl_bundle_adjust_lsqr* ba_func_;

@@ -6,6 +6,9 @@
 
 
 #include <vnl/algo/vnl_sparse_lm.h>
+#include <vnl/vnl_double_3.h>
+
+#include <vgl/vgl_plane_3d.h>
 #include <vpgl/algo/vpgl_ba_fixed_k_lsqr.h>
 #include <vpgl/algo/vpgl_ba_shared_k_lsqr.h>
 #include <vgl/algo/vgl_rotation_3d.h>
@@ -62,6 +65,79 @@ vpgl_bundle_adjust::normalize_points(vcl_vector<vgl_point_2d<double> >& image_po
     image_points[i].x() /= ns;
     image_points[i].y() /= ns;
   }
+}
+
+
+// reflect the points about a plane
+void
+vpgl_bundle_adjust::
+reflect_points(const vgl_plane_3d<double>& plane,
+               vcl_vector<vgl_point_3d<double> >& points)
+{
+  vgl_h_matrix_3d<double> H;
+  H.set_reflection_plane(plane);
+  for(unsigned int i=0; i<points.size(); ++i)
+  {
+    points[i] = H * vgl_homg_point_3d<double>(points[i]);
+  }
+}
+
+
+// rotation the cameras 180 degrees around an axis
+void
+vpgl_bundle_adjust::
+rotate_cameras(const vgl_vector_3d<double>& axis,
+               vcl_vector<vpgl_perspective_camera<double> >& cameras)
+{
+  vnl_double_3 r(axis.x(), axis.y(), axis.z());
+  r.normalize();
+  r *= vnl_math::pi;
+  vgl_rotation_3d<double> R(r);
+  vgl_rotation_3d<double> R2(0.0, 0.0, vnl_math::pi);
+  for(unsigned int j=0; j<cameras.size(); ++j)
+  {
+    vpgl_perspective_camera<double>& c = cameras[j];
+    c.set_camera_center(R*c.get_camera_center());
+    c.set_rotation(R2*c.get_rotation()*R);
+  }
+}
+
+
+//: Approximately depth invert the scene.
+//  Apply this and re-optimize to get out of a common local minimum.
+//  Find the mean axis between cameras and points, mirror the points about
+//  a plane perpendicular to this axis, and rotate the cameras 180 degrees
+//  around this axis
+void
+vpgl_bundle_adjust::
+depth_reverse(vcl_vector<vpgl_perspective_camera<double> >& cameras,
+              vcl_vector<vgl_point_3d<double> >& points)
+{
+  vnl_double_3 pc(0.0,0.0,0.0), cc(0.0,0.0,0.0);
+  // compute the mean of the points
+  for(unsigned int i=0; i<points.size(); ++i)
+  {
+    pc += vnl_double_3(points[i].x(), points[i].y(), points[i].z());
+  }
+  pc /= points.size();
+  vgl_point_3d<double> point_center(pc[0],pc[1],pc[2]);
+
+  // compute the mean of the camera centers
+  for(unsigned int j=0; j<cameras.size(); ++j)
+  {
+    vgl_point_3d<double> c = cameras[j].get_camera_center();
+    cc += vnl_double_3(c.x(), c.y(), c.z());
+  }
+  cc /= cameras.size();
+  vgl_point_3d<double> camera_center(cc[0],cc[1],cc[2]);
+
+  // define the plane of reflection
+  vgl_vector_3d<double> axis(camera_center-point_center);
+  normalize(axis);
+  vgl_plane_3d<double> reflect_plane(axis, point_center);
+
+  reflect_points(reflect_plane,points);
+  rotate_cameras(axis, cameras);
 }
 
 
