@@ -10,7 +10,7 @@
 #include <brdb/brdb_value.h>
 
 #include <bvpl/bvpl_octree/bvpl_block_kernel_operator.h>
-#include <bvpl/bvpl_octree/bvpl_octree_sample.h>
+#include <bvpl/bvpl_octree/sample/bvpl_octree_sample.h>
 #include <bvpl/functors/bvpl_edge_geometric_mean_functor.h>
 #include <bvpl/functors/bvpl_edge_algebraic_mean_functor.h>
 #include <bvpl/functors/bvpl_gauss_convolution_functor.h>
