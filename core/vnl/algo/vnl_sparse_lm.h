@@ -43,12 +43,15 @@ class vnl_sparse_lm : public vnl_nonlinear_minimizer
   //: Minimize the function supplied in the constructor until convergence or failure.
   //  On return, a, b, and c are such that f(a,b,c) is the lowest value achieved.
   //  Returns true for convergence, false for failure.
-  //  if use_gradient is set to false, a finite difference approximation will be used,
-  //  even if the Jacobian functions have been provided
+  //  If use_gradient is set to false, a finite difference approximation will be used,
+  //  even if the Jacobian functions have been provided.
+  //  If use_weights is set to false, weights will not be computed even if a
+  //  weighting function has been provided.
   bool minimize(vnl_vector<double>& a,
                 vnl_vector<double>& b,
                 vnl_vector<double>& c,
-                bool use_gradient = true);
+                bool use_gradient = true,
+                bool use_weights = true);
 
   // Coping with failure-------------------------------------------------------
 
@@ -59,6 +62,9 @@ class vnl_sparse_lm : public vnl_nonlinear_minimizer
   //: Return J'*J computed at last minimum.
   //  it is an approximation of inverse of covariance
   vnl_matrix<double> const& get_JtJ();
+
+  //: Access the final weights after optimization
+  const vnl_vector<double>& get_weights() const { return weights_; }
 
 protected:
 
@@ -150,6 +156,9 @@ private:
 
   // Storage for residual vector
   vnl_vector<double> e_;
+
+  // Storage for weight vector
+  vnl_vector<double> weights_;
 
   // Storage for intermediate results
   vcl_vector<vnl_matrix<double> > inv_V_;

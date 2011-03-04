@@ -101,8 +101,9 @@ class bundle_2d : public vnl_sparse_lst_sqr_function
   bundle_2d(unsigned int num_cam, unsigned int num_pts,
             const vnl_vector<double>& data,
             const vcl_vector<vcl_vector<bool> >& xmask,
-            UseGradient g = use_gradient)
-   : vnl_sparse_lst_sqr_function(num_cam,3,num_pts,2,0,xmask,1,g), data_(data) {}
+            UseGradient g = use_gradient,
+            UseWeights w = no_weights)
+   : vnl_sparse_lst_sqr_function(num_cam,3,num_pts,2,0,xmask,1,g,w), data_(data) {}
 
   void fij(int i, int j,
            vnl_vector<double> const& ai,
@@ -563,78 +564,22 @@ class bundle_2d_robust : public bundle_2d
             const vnl_vector<double>& data,
             const vcl_vector<vcl_vector<bool> >& xmask,
             UseGradient g = use_gradient)
-   : bundle_2d(num_cam, num_pts, data, xmask, g), scale2_(1.0),
-     weights_(data.size(),1.0) {}
+   : bundle_2d(num_cam, num_pts, data, xmask, g, use_weights), scale2_(1.0) {}
 
   void set_scale(double scale) { scale2_ = scale*scale; }
 
-  void fij(int i, int j,
-           vnl_vector<double> const& ai,
-           vnl_vector<double> const& bj,
-           vnl_vector<double> const& c,
-           vnl_vector<double>& fxij)
+  void compute_weight_ij(int i, int j,
+                         vnl_vector<double> const& /*ai*/,
+                         vnl_vector<double> const& /*bj*/,
+                         vnl_vector<double> const& /*c*/,
+                         vnl_vector<double> const& fij,
+                         double& weight)
   {
-    bundle_2d::fij(i,j,ai,bj,c,fxij);
     int k = residual_indices_(i,j);
     assert(k>=0);
-    double ek2 = fxij.squared_magnitude();
-    weights_[k] = vcl_sqrt(mest(k,ek2));
-
-    fxij *= weights_[k];
+    double ek2 = fij.squared_magnitude();
+    weight = vcl_sqrt(mest(k,ek2));
   }
-
-  void jac_Aij(int i, int j,
-               vnl_vector<double> const& ai,
-               vnl_vector<double> const& bj,
-               vnl_vector<double> const& c,
-               vnl_matrix<double>& Aij)
-  {
-    bundle_2d::jac_Aij(i,j,ai,bj,c,Aij);
-    int k = residual_indices_(i,j);
-
-    vnl_vector<double> fxij(Aij.rows());
-    bundle_2d::fij(i,j,ai,bj,c,fxij);
-    double ek2 = fxij.squared_magnitude();
-    double w = vcl_sqrt(mest(k,ek2));
-    if(w==0)
-    {
-      Aij *= 0;
-      return;
-    }
-    double dw = d_mest(k,ek2);
-    vnl_matrix<double> JW = outer_product(fxij,fxij);
-    JW *= (dw/w);
-    JW += w;
-
-    Aij = JW * Aij;
-  }
-
-  void jac_Bij(int i, int j,
-               vnl_vector<double> const& ai,
-               vnl_vector<double> const& bj,
-               vnl_vector<double> const& c,
-               vnl_matrix<double>& Bij)
-  {
-    bundle_2d::jac_Bij(i,j,ai,bj,c,Bij);
-    int k = residual_indices_(i,j);
-
-    vnl_vector<double> fxij(Bij.rows());
-    bundle_2d::fij(i,j,ai,bj,c,fxij);
-    double ek2 = fxij.squared_magnitude();
-    double w = vcl_sqrt(mest(k,ek2));
-    if(w==0)
-    {
-      Bij *= 0;
-      return;
-    }
-    double dw = d_mest(k,ek2);
-    vnl_matrix<double> JW = outer_product(fxij,fxij);
-    JW *= (dw/w);
-    JW += w;
-
-    Bij = JW * Bij;
-  }
-
 
   double mest(int k, double ek2)
   {
@@ -666,7 +611,6 @@ class bundle_2d_robust : public bundle_2d
   }
 
   double scale2_;
-  vcl_vector<double> weights_;
 };
 
 
@@ -810,7 +754,7 @@ void test_prob3()
     my_func.set_scale(1.0);
 
     vnl_sparse_lm slm(my_func);
-    slm.set_verbose(true);
+    //slm.set_verbose(true);
     slm.minimize(pa,pb,pc);
     slm.diagnose_outcome();
 

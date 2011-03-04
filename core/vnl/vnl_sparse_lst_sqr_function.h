@@ -51,6 +51,10 @@ class vnl_sparse_lst_sqr_function
     no_gradient,
     use_gradient
   };
+  enum  UseWeights {
+    no_weights,
+    use_weights
+  };
   bool failure;
 
   //: Construct vnl_sparse_lst_sqr_function.
@@ -66,7 +70,8 @@ class vnl_sparse_lst_sqr_function
                               unsigned int num_params_per_b,
                               unsigned int num_params_c,
                               unsigned int num_residuals_per_e,
-                              UseGradient g = use_gradient);
+                              UseGradient g = use_gradient,
+                              UseWeights w = no_weights);
 
   //: Construct vnl_sparse_lst_sqr_function.
   // Assumes A consists of \p num_a parameters each of size \p num_params_per_a
@@ -83,7 +88,8 @@ class vnl_sparse_lst_sqr_function
                               unsigned int num_params_c,
                               const vcl_vector<vcl_vector<bool> >& xmask,
                               unsigned int num_residuals_per_e,
-                              UseGradient g = use_gradient);
+                              UseGradient g = use_gradient,
+                              UseWeights w = no_weights);
 
   //: Construct vnl_sparse_lst_sqr_function.
   // This constructor is the most general
@@ -100,7 +106,8 @@ class vnl_sparse_lst_sqr_function
                               unsigned int num_params_c,
                               const vcl_vector<unsigned int>& e_sizes,
                               const vcl_vector<vcl_vector<bool> >& xmask,
-                              UseGradient g = use_gradient);
+                              UseGradient g = use_gradient,
+                              UseWeights w = no_weights);
 
   virtual ~vnl_sparse_lst_sqr_function() {}
 
@@ -149,6 +156,36 @@ class vnl_sparse_lst_sqr_function
                              vcl_vector<vnl_matrix<double> >& B,
                              vcl_vector<vnl_matrix<double> >& C,
                              double stepsize);
+
+  //: If using weighted least squares, compute the weights for each i and j.
+  //  Return the weights in \a weights.
+  //  The default implementation computes \a weights by calling
+  //  compute_weight_ij for each valid pair of i and j.
+  //  You do not need to overload this method unless you want to provide
+  //  a more specialized implementation for your problem.
+  virtual void compute_weights(vnl_vector<double> const& a,
+                               vnl_vector<double> const& b,
+                               vnl_vector<double> const& c,
+                               vnl_vector<double> const& f,
+                               vnl_vector<double>& weights);
+
+  //: If using weighted least squares, apply the weights to residuals f.
+  //  The default implementation applies \a weights by calling
+  //  apply_weight_ij for each valid pair of i and j.
+  //  You do not need to overload this method unless you want to provide
+  //  a more specialized implementation for your problem.
+  virtual void apply_weights(vnl_vector<double> const& weights,
+                             vnl_vector<double>& f);
+
+  //: If using weighted least squares, apply the weights to residuals A, B, C.
+  //  The default implementation applies \a weights by calling
+  //  apply_weight_ij for each valid pair of i and j.
+  //  You do not need to overload this method unless you want to provide
+  //  a more specialized implementation for your problem.
+  virtual void apply_weights(vnl_vector<double> const& weights,
+                             vcl_vector<vnl_matrix<double> >& A,
+                             vcl_vector<vnl_matrix<double> >& B,
+                             vcl_vector<vnl_matrix<double> >& C);
 
   //: Compute the residuals from the ith component of a, the jth component of b.
   //  Given the parameter vectors ai, bj, and c, compute the vector of residuals fij.
@@ -204,6 +241,30 @@ class vnl_sparse_lst_sqr_function
                   vnl_matrix<double>& Cij,
                   double stepsize);
 
+  //: If using weighted least squares, compute the weight.
+  //  Return the weight in \a weight.
+  //  The default implementation sets weight = 1
+  virtual void compute_weight_ij(int i, int j,
+                               vnl_vector<double> const& ai,
+                               vnl_vector<double> const& bj,
+                               vnl_vector<double> const& c,
+                               vnl_vector<double> const& fij,
+                               double& weight);
+
+  //: If using weighted least squares, apply the weight to fij.
+  //  The default implementation multiplies fij by weight.
+  virtual void apply_weight_ij(int i, int j,
+                               double const& weight,
+                               vnl_vector<double>& fij);
+
+  //: If using weighted least squares, apply the weight to Aij, Bij, Cij.
+  //  The default implementation multiplies each matrix by weight.
+  virtual void apply_weight_ij(int i, int j,
+                               double const& weight,
+                               vnl_matrix<double>& Aij,
+                               vnl_matrix<double>& Bij,
+                               vnl_matrix<double>& Cij);
+
   //: Called after each LM iteration to print debugging etc.
   virtual void trace(int iteration,
                      vnl_vector<double> const& a,
@@ -252,6 +313,10 @@ class vnl_sparse_lst_sqr_function
   //: Return true if the derived class has indicated that gradf has been implemented
   bool has_gradient() const { return use_gradient_; }
 
+  //: Return true if the derived class has indicated that
+  //  \a apply_weights or \a apply_weight_ij have been implemented
+  bool has_weights() const { return use_weights_; }
+
   //: Return a const reference to the residual indexer
   const vnl_crs_index& residual_indices() const { return residual_indices_; }
 
@@ -263,6 +328,7 @@ class vnl_sparse_lst_sqr_function
   vcl_vector<unsigned int> indices_e_;
 
   bool use_gradient_;
+  bool use_weights_;
 
  private:
   void dim_warning(unsigned int n_unknowns, unsigned int n_residuals);

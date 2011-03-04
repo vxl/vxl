@@ -49,6 +49,7 @@ vnl_sparse_lm::vnl_sparse_lm(vnl_sparse_lst_sqr_function& f)
    eb_(size_b_),
    ec_(size_c_),
    e_(size_e_),
+   weights_(f.has_weights() ? num_e_ : 0, 1.0),
    inv_V_(num_b_),
    Y_(num_nz_),
    Z_(num_a_),
@@ -85,12 +86,15 @@ vnl_sparse_lm::~vnl_sparse_lm()
 //: Minimize the function supplied in the constructor until convergence or failure.
 //  On return, a, b, and c are such that f(a,b,c) is the lowest value achieved.
 //  Returns true for convergence, false for failure.
-//  if use_gradient is set to false, a finite difference approximation will be used,
-//  even if the Jacobian functions have been provided
+//  If use_gradient is set to false, a finite difference approximation will be used,
+//  even if the Jacobian functions have been provided.
+//  If use_weights is set to false, weights will not be computed even if a
+//  weighting function has been provided.
 bool vnl_sparse_lm::minimize(vnl_vector<double>& a,
                              vnl_vector<double>& b,
                              vnl_vector<double>& c,
-                             bool use_gradient)
+                             bool use_gradient,
+                             bool use_weights)
 {
   // verify that the vectors are of the correct size
   if(!check_vector_sizes(a,b,c))
@@ -116,6 +120,13 @@ bool vnl_sparse_lm::minimize(vnl_vector<double>& a,
   f_->f(a,b,c,e_);
   num_evaluations_ = 1;
 
+  // Compute and apply the weights if applicable
+  if (use_weights && f_->has_weights())
+  {
+    f_->compute_weights(a,b,c,e_,weights_);
+    f_->apply_weights(weights_, e_);
+  }
+
   double sqr_error = e_.squared_magnitude();
   start_error_ = vcl_sqrt(sqr_error/e_.size()); // RMS error
 
@@ -134,6 +145,12 @@ bool vnl_sparse_lm::minimize(vnl_vector<double>& a,
       f_->jac_blocks(a,b,c,A_,B_,C_);
     else
       f_->fd_jac_blocks(a,b,c,A_,B_,C_,epsfcn); // use finite differences
+
+    // Apply the weights if applicable
+    if (use_weights && f_->has_weights())
+    {
+      f_->apply_weights(weights_, A_,B_,C_);
+    }
 
     compute_normal_equations();
 
@@ -227,9 +244,18 @@ bool vnl_sparse_lm::minimize(vnl_vector<double>& a,
       }
 
       // compute updated parameters and residuals of the new parameters
-      vnl_vector<double> new_a(a-da), new_b(b-db), new_c(c-dc), new_e(e_.size());
+      vnl_vector<double> new_a(a-da), new_b(b-db), new_c(c-dc);
+      vnl_vector<double> new_e(e_.size()), new_weights(weights_.size());
       f_->f(new_a,new_b,new_c,new_e); // compute the new residual vector
       ++num_evaluations_;
+
+      // Compute and apply the weights if applicable
+      if (use_weights && f_->has_weights())
+      {
+        f_->compute_weights(new_a,new_b,new_c,new_e,new_weights);
+        f_->apply_weights(new_weights, new_e);
+      }
+  
       double new_sqr_error = new_e.squared_magnitude();
 
       double dF = sqr_error - new_sqr_error;
@@ -240,10 +266,11 @@ bool vnl_sparse_lm::minimize(vnl_vector<double>& a,
         double tmp = 2.0*dF/dL-1.0;
         mu *= vcl_max(1.0/3.0, 1.0 - tmp*tmp*tmp);
         nu = 2.0;
-        a = new_a;
-        b = new_b;
-        c = new_c;
-        e_ = new_e;
+        a.swap(new_a);
+        b.swap(new_b);
+        c.swap(new_c);
+        e_.swap(new_e);
+        weights_.swap(new_weights);
         sqr_error = new_sqr_error;
         break;
       }

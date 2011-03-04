@@ -10,8 +10,9 @@ class test_func1 : public vnl_sparse_lst_sqr_function
  public:
   test_func1(unsigned int num_a, unsigned int num_b,
              const vcl_vector<vcl_vector<bool> >& xmask,
-             UseGradient g = use_gradient)
-   : vnl_sparse_lst_sqr_function(num_a,2,num_b,3,2,xmask,2,g) {}
+             UseGradient g = use_gradient,
+             UseWeights w = use_weights)
+   : vnl_sparse_lst_sqr_function(num_a,2,num_b,3,2,xmask,2,g,w) {}
 
   void fij(int /*i*/, int /*j*/, 
            vnl_vector<double> const& ai,
@@ -59,6 +60,16 @@ class test_func1 : public vnl_sparse_lst_sqr_function
     Cij[0][1] = 0.0;
     Cij[1][0] = 0.0;
     Cij[1][1] = ai[1];
+  }
+
+  void compute_weight_ij(int i, int j,
+                         vnl_vector<double> const& /*ai*/,
+                         vnl_vector<double> const& /*bj*/,
+                         vnl_vector<double> const& /*c*/,
+                         vnl_vector<double> const& /*fij*/,
+                         double& weight)
+  {
+    weight = double((i+1)*(j+1))/(this->number_of_a()*this->number_of_b());
   }
 };
 
@@ -142,6 +153,55 @@ static void test_sparse_lst_sqr_function()
    vcl_cout << "Cij =\n" << Cij << vcl_endl
             << "fd Cij =\n" << fd_Cij << vcl_endl;
    TEST("finite difference Cij", (Cij-fd_Cij).absolute_value_max()<0.001,true);
+
+
+   vnl_vector<double> a(my_func.index_a(my_func.number_of_a()),1.0);
+   a[0] = 5.0;
+   a[2] = -1.0;
+   a[5] = 0.0;
+   vnl_vector<double> b(my_func.index_b(my_func.number_of_b()),2.0);
+   b[1] = 1.0;
+   b[5] = 0.0;
+   b[6] = -2.0;
+
+   vnl_vector<double> f(my_func.index_e(my_func.number_of_e()));
+   vcl_vector<vnl_matrix<double> > A(my_func.number_of_e(),vnl_matrix<double>(2,2,0.0));
+   vcl_vector<vnl_matrix<double> > B(my_func.number_of_e(),vnl_matrix<double>(2,3,0.0));
+   vcl_vector<vnl_matrix<double> > C(my_func.number_of_e(),vnl_matrix<double>(2,2,0.0));
+   my_func.f(a,b,c,f);
+   my_func.jac_blocks(a,b,c,A,B,C);
+
+
+   // compute weights
+   vnl_vector<double> weights(my_func.number_of_e(),1.0);
+   my_func.compute_weights(a,b,c,f,weights);
+
+   // apply weights
+   vnl_vector<double> wf(f);
+   vcl_vector<vnl_matrix<double> > wA(A), wB(B), wC(C);
+   my_func.apply_weights(weights,wf);
+   my_func.apply_weights(weights,wA,wB,wC);
+
+   bool weights_valid = true;
+   bool weights_applied = true;
+   double w_norm = my_func.number_of_a()*my_func.number_of_b();
+   for (unsigned int i=0; i<my_func.number_of_a(); ++i) {
+     for (unsigned int j=0; j<my_func.number_of_b(); ++j) {
+       int k = my_func.residual_indices()(i,j);
+       if (k<0)
+         continue;
+       weights_valid = weights_valid && (weights[k] == double((i+1)*(j+1))/w_norm);
+       weights_applied = weights_applied &&
+                         (wA[k] == A[k]*weights[k]) &&
+                         (wB[k] == B[k]*weights[k]) &&
+                         (wC[k] == C[k]*weights[k]) &&
+                         (wf[2*k] == f[2*k]*weights[k]) &&
+                         (wf[2*k+1] == f[2*k+1]*weights[k]);
+     }
+   }
+   TEST("has weights", my_func.has_weights(), true);
+   TEST("compute weights", weights_valid, true);
+   TEST("apply weights", weights_applied, true);
 }
 
 TESTMAIN(test_sparse_lst_sqr_function);

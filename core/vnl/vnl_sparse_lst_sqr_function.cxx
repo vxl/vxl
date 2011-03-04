@@ -36,14 +36,16 @@ vnl_sparse_lst_sqr_function::vnl_sparse_lst_sqr_function(
                                  unsigned int num_params_per_b,
                                  unsigned int num_params_c,
                                  unsigned int num_residuals_per_e,
-                                 UseGradient g)
+                                 UseGradient g,
+                                 UseWeights w)
  : failure(false),
    residual_indices_(),
    indices_a_(num_a+1,0),
    indices_b_(num_b+1,0),
    num_params_c_(num_params_c),
    indices_e_(num_a*num_b+1,0),
-   use_gradient_(g == use_gradient)
+   use_gradient_(g == use_gradient),
+   use_weights_(w == use_weights)
 {
   unsigned int k = num_params_per_a;
   for (unsigned int i=1; i<indices_a_.size(); ++i, k+=num_params_per_a)
@@ -74,14 +76,16 @@ vnl_sparse_lst_sqr_function::vnl_sparse_lst_sqr_function(
                                  unsigned int num_params_c,
                                  const vcl_vector<vcl_vector<bool> >& xmask,
                                  unsigned int num_residuals_per_e,
-                                 UseGradient g)
+                                 UseGradient g,
+                                 UseWeights w)
  : failure(false),
    residual_indices_(xmask),
    indices_a_(num_a+1,0),
    indices_b_(num_b+1,0),
    num_params_c_(num_params_c),
    indices_e_(residual_indices_.num_non_zero()+1,0),
-   use_gradient_(g == use_gradient)
+   use_gradient_(g == use_gradient),
+   use_weights_(w == use_weights)
 {
   unsigned int k = num_params_per_a;
   for (unsigned int i=1; i<indices_a_.size(); ++i, k+=num_params_per_a)
@@ -115,14 +119,16 @@ vnl_sparse_lst_sqr_function::vnl_sparse_lst_sqr_function(
                                  unsigned int num_params_c,
                                  const vcl_vector<unsigned int>& e_sizes,
                                  const vcl_vector<vcl_vector<bool> >& xmask,
-                                 UseGradient g)
+                                 UseGradient g,
+                                 UseWeights w)
  : failure(false),
    residual_indices_(xmask),
    indices_a_(a_sizes.size()+1,0),
    indices_b_(b_sizes.size()+1,0),
    num_params_c_(num_params_c),
    indices_e_(e_sizes.size()+1,0),
-   use_gradient_(g == use_gradient)
+   use_gradient_(g == use_gradient),
+   use_weights_(w == use_weights)
 {
   assert(residual_indices_.num_non_zero() == (int)e_sizes.size());
   assert(residual_indices_.num_rows() == (int)a_sizes.size());
@@ -252,6 +258,91 @@ vnl_sparse_lst_sqr_function::fd_jac_blocks(vnl_vector<double> const& a,
       fd_jac_Aij(i,j,ai,bj,c,A[k],stepsize);  // compute Jacobian A_ij with finite differences
       fd_jac_Bij(i,j,ai,bj,c,B[k],stepsize);  // compute Jacobian B_ij with finite differences
       fd_jac_Cij(i,j,ai,bj,c,C[k],stepsize);  // compute Jacobian C_ij with finite differences
+    }
+  }
+}
+
+
+//: If using weighted least squares, compute the weights for each i and j.
+//  Return the weights in \a weights.
+//  The default implementation computes \a weights by calling
+//  compute_weight_ij for each valid pair of i and j.
+//  You do not need to overload this method unless you want to provide
+//  a more specialized implementation for your problem.
+void
+vnl_sparse_lst_sqr_function::compute_weights(vnl_vector<double> const& a,
+                                             vnl_vector<double> const& b,
+                                             vnl_vector<double> const& c,
+                                             vnl_vector<double> const& e,
+                                             vnl_vector<double>& weights)
+{
+  typedef vnl_crs_index::sparse_vector::iterator sv_itr;
+  for (unsigned int i=0; i<number_of_a(); ++i)
+  {
+    // This is semi const incorrect - there is no vnl_vector_ref_const
+    const vnl_vector_ref<double> ai(number_of_params_a(i),
+                                    const_cast<double*>(a.data_block())+index_a(i));
+
+    vnl_crs_index::sparse_vector row = residual_indices_.sparse_row(i);
+    for (sv_itr r_itr=row.begin(); r_itr!=row.end(); ++r_itr)
+    {
+      unsigned int j = r_itr->second;
+      unsigned int k = r_itr->first;
+      // This is semi const incorrect - there is no vnl_vector_ref_const
+      const vnl_vector_ref<double> bj(number_of_params_b(j),
+                                      const_cast<double*>(b.data_block())+index_b(j));
+      const vnl_vector_ref<double> eij(number_of_residuals(k),
+                                       const_cast<double*>(e.data_block()+index_e(k)));
+      compute_weight_ij(i,j,ai,bj,c,eij,weights[k]);
+    }
+  }
+}
+
+
+//: If using weighted least squares, apply the weights to residuals f.
+//  The default implementation applies \a weights by calling
+//  apply_weight_ij for each valid pair of i and j.
+//  You do not need to overload this method unless you want to provide
+//  a more specialized implementation for your problem.
+void
+vnl_sparse_lst_sqr_function::apply_weights(vnl_vector<double> const& weights,
+                                           vnl_vector<double>& e)
+{
+  typedef vnl_crs_index::sparse_vector::iterator sv_itr;
+  for (unsigned int i=0; i<number_of_a(); ++i)
+  {
+    vnl_crs_index::sparse_vector row = residual_indices_.sparse_row(i);
+    for (sv_itr r_itr=row.begin(); r_itr!=row.end(); ++r_itr)
+    {
+      unsigned int j = r_itr->second;
+      unsigned int k = r_itr->first;
+      vnl_vector_ref<double> eij(number_of_residuals(k), e.data_block()+index_e(k));
+      apply_weight_ij(i,j,weights[k],eij);
+    }
+  }
+}
+
+
+//: If using weighted least squares, apply the weights to residuals A, B, C.
+//  The default implementation applies \a weights by calling
+//  apply_weight_ij for each valid pair of i and j.
+//  You do not need to overload this method unless you want to provide
+//  a more specialized implementation for your problem.
+void
+vnl_sparse_lst_sqr_function::apply_weights(vnl_vector<double> const& weights,
+                                           vcl_vector<vnl_matrix<double> >& A,
+                                           vcl_vector<vnl_matrix<double> >& B,
+                                           vcl_vector<vnl_matrix<double> >& C)
+{
+  typedef vnl_crs_index::sparse_vector::iterator sv_itr;
+  for (unsigned int i=0; i<number_of_a(); ++i)
+  {
+    vnl_crs_index::sparse_vector row = residual_indices_.sparse_row(i);
+    for (sv_itr r_itr=row.begin(); r_itr!=row.end(); ++r_itr)
+    {
+      unsigned int j = r_itr->second;
+      unsigned int k = r_itr->first;
+      apply_weight_ij(i,j,weights[k],A[k],B[k],C[k]);
     }
   }
 }
@@ -421,6 +512,47 @@ vnl_sparse_lst_sqr_function::fd_jac_Cij(int i, int j,
     // restore tc
     tc[ii] = c[ii];
   }
+}
+
+
+//: If using weighted least squares, compute the weight.
+//  Return the weight in \a weight.
+//  The default implementation sets weight = 1
+void
+vnl_sparse_lst_sqr_function::compute_weight_ij(int /*i*/, int /*j*/,
+                                               vnl_vector<double> const& /*ai*/,
+                                               vnl_vector<double> const& /*bj*/,
+                                               vnl_vector<double> const& /*c*/,
+                                               vnl_vector<double> const& /*fij*/,
+                                               double& weight)
+{
+  weight = 1.0;
+}
+
+
+//: If using weighted least squares, apply the weight to fij.
+//  The default implementation multiplies fij by weight.
+void
+vnl_sparse_lst_sqr_function::apply_weight_ij(int /*i*/, int /*j*/,
+                                             double const& weight,
+                                             vnl_vector<double>& fij)
+{
+  fij *= weight;
+}
+
+
+//: If using weighted least squares, apply the weight to Aij, Bij, Cij.
+//  The default implementation multiplies each matrix by weight.
+void
+vnl_sparse_lst_sqr_function::apply_weight_ij(int /*i*/, int /*j*/,
+                                             double const& weight,
+                                             vnl_matrix<double>& Aij,
+                                             vnl_matrix<double>& Bij,
+                                             vnl_matrix<double>& Cij)
+{
+  Aij *= weight;
+  Bij *= weight;
+  Cij *= weight;
 }
 
 
