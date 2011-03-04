@@ -64,6 +64,7 @@ bool boxm_create_scene_process(bprb_func_process& pro)
 
   boxm_scene_base_sptr scene_ptr=new boxm_scene_base();
   scene_ptr->load_scene(fname, parser);
+  vcl_cout << "Scene path: " << scene_ptr->filename()<< vcl_endl;;
   if (scene_ptr->appearence_model() == BOXM_APM_MOG_GREY) {
     if (!scene_ptr->multi_bin())
     {
@@ -102,7 +103,7 @@ bool boxm_create_scene_process(bprb_func_process& pro)
     else {
       typedef boct_tree<short,boxm_sample_multi_bin<BOXM_APM_SIMPLE_GREY> > tree_type;
       boxm_scene<tree_type>* scene = new boxm_scene<tree_type>();
-      scene->load_scene(parser);
+      scene->load_scene(fname);
       vcl_cout<<"Multi Bin set"<<vcl_endl;
       scene_ptr = scene;
     }
@@ -113,8 +114,10 @@ bool boxm_create_scene_process(bprb_func_process& pro)
       {
         typedef boct_tree<short,float> tree_type;
         boxm_scene<tree_type>* scene = new boxm_scene<tree_type>();
-        scene->load_scene(parser);
+        scene->load_scene(fname);
         scene_ptr = scene;
+        vcl_cout << "Scene path: " << scene->filename()<< vcl_endl;;
+
       }
     }
     else if (scene_ptr->appearence_model() == BSTA_MOG_F1) {
