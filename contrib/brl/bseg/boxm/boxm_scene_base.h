@@ -62,6 +62,8 @@ class boxm_scene_base : public vbl_ref_count
 
   virtual vgl_box_3d<double> get_world_bbox() {return vgl_box_3d<double>();}
 
+  virtual vgl_vector_3d<unsigned> world_dim() const { return vgl_vector_3d<unsigned>();}
+
 protected:
   boxm_apm_type app_model_;
 
