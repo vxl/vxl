@@ -13,6 +13,7 @@
 // \endverbatim
 
 #include <bvpl/kernels/bvpl_kernel_factory.h>
+#include <vgl/vgl_box_3d.h>
 
 //: This class reads from disk the taylor kernels.
 class bvpl_taylor_basis_factory: public bvpl_kernel_factory
@@ -33,22 +34,42 @@ class bvpl_taylor_basis_factory: public bvpl_kernel_factory
 };
 
 
+//: Helper class to load taylor kernels, response scenes and hold paths
 class bvpl_taylor_basis_loader
 {
  public:
-
-  bvpl_taylor_basis_loader(vcl_string path, unsigned degree=2): path_(path), degree_(degree){}
+  bvpl_taylor_basis_loader():path_(""), min_point_(vgl_point_3d<int>()), max_point_(vgl_point_3d<int>()), degree_(0){}
+  
+  bvpl_taylor_basis_loader(vcl_string path, 
+                           vgl_point_3d<int> min_point = vgl_point_3d<int>(-2,-2,-2),
+                           vgl_point_3d<int> max_point = vgl_point_3d<int>(2,2,2), 
+                           unsigned degree=2): path_(path), min_point_(min_point), max_point_(max_point),degree_(degree){}
 
   //: Returns a map of kernels and their names
   void create_basis(vcl_map<vcl_string, bvpl_kernel_sptr> &taylor_basis);
 
   //: List of filenames that should be present in path_
   void files(vcl_vector<vcl_string> &filenames);
+  
+  //: Return main path
+  vcl_string path() {return path_; } 
+  
+  //: Return the min point of bounding box of this set of kernels
+  vgl_point_3d<int> min_point() { return min_point_; }
+  
+  //: Return the max point of bounding box of this set of kernels
+  vgl_point_3d<int> max_point() { return max_point_; }
 
  private:
   //: Path to all kernels (must be a directory)
   vcl_string path_;
 
+  //: Min point of bounding box of these kernels
+  vgl_point_3d<int> min_point_;
+  
+  //: Max point of bounding box of these kernels
+  vgl_point_3d<int> max_point_;
+  
   //: The degree of taylor approximation
   unsigned degree_;
 };
