@@ -19,8 +19,9 @@ static PyObject *set_input_unsigned(PyObject *self, PyObject *args);
 static PyObject *set_input_long(PyObject *self, PyObject *args);
 static PyObject *set_input_float(PyObject *self, PyObject *args);
 static PyObject *set_input_double(PyObject *self, PyObject *args);
-static PyObject *get_input_float(PyObject *self, PyObject *args);
-static PyObject *get_input_unsigned(PyObject *self, PyObject *args);
+static PyObject *get_output_float(PyObject *self, PyObject *args);
+static PyObject *get_output_double(PyObject *self, PyObject *args);
+static PyObject *get_output_unsigned(PyObject *self, PyObject *args);
 static PyObject *process_print_default_params(PyObject *self, PyObject *args);
 static PyObject *process_init(PyObject *self, PyObject *args);
 static PyObject *set_params_process(PyObject *self, PyObject *args);
@@ -164,12 +165,11 @@ PyObject *set_input_double(PyObject * /*self*/, PyObject *args)
   return Py_BuildValue("b", result);
 }
 
-// ozge added the following to access the process outputs while running experiments using Python
-PyObject *get_input_float(PyObject * /*self*/, PyObject *args)
+PyObject *get_output_float(PyObject * /*self*/, PyObject *args)
 {
   unsigned id;
   float value;
-  if (!PyArg_ParseTuple(args, "i:get_input_float", &id))
+  if (!PyArg_ParseTuple(args, "i:get_output_float", &id))
     return NULL;
 
   vcl_string relation_name = "float_data";
@@ -179,18 +179,18 @@ PyObject *get_input_float(PyObject * /*self*/, PyObject *args)
   brdb_selection_sptr selec = DATABASE->select(relation_name, Q);
 
   if (selec->size()!=1) {
-    vcl_cout << "in get_input_float() - no relation with type" << relation_name << " id: " << id << vcl_endl;
+    vcl_cout << "in get_output_float() - no relation with type" << relation_name << " id: " << id << vcl_endl;
     return Py_BuildValue("f",-1.0);
   }
 
   brdb_value_sptr brdb_value;
   if (!selec->get_value(vcl_string("value"), brdb_value)) {
-    vcl_cout << "in get_input_float() didn't get value\n";
+    vcl_cout << "in get_output_float() didn't get value\n";
     return Py_BuildValue("f",-1.0);
   }
 
   if (!brdb_value) {
-    vcl_cout << "in get_input_float() - null value\n";
+    vcl_cout << "in get_output_float() - null value\n";
     return Py_BuildValue("f",-1.0);
   }
   brdb_value_t<float>* result_out = static_cast<brdb_value_t<float>* >(brdb_value.ptr());
@@ -199,12 +199,45 @@ PyObject *get_input_float(PyObject * /*self*/, PyObject *args)
   return Py_BuildValue("f", value);
 }
 
-// ozge added the following to access the process outputs while running experiments using Python
-PyObject *get_input_unsigned(PyObject * /*self*/, PyObject *args)
+PyObject *get_output_double(PyObject * /*self*/, PyObject *args)
+{
+  unsigned id;
+  float value;
+  if (!PyArg_ParseTuple(args, "i:get_output_double", &id))
+    return NULL;
+  
+  vcl_string relation_name = "double_data";
+  
+  // query to get the data
+  brdb_query_aptr Q = brdb_query_comp_new("id", brdb_query::EQ, id);
+  brdb_selection_sptr selec = DATABASE->select(relation_name, Q);
+  
+  if (selec->size()!=1) {
+    vcl_cout << "in get_output_double() - no relation with type" << relation_name << " id: " << id << vcl_endl;
+    return Py_BuildValue("d",-1.0);
+  }
+  
+  brdb_value_sptr brdb_value;
+  if (!selec->get_value(vcl_string("value"), brdb_value)) {
+    vcl_cout << "in get_output_double() didn't get value\n";
+    return Py_BuildValue("d",-1.0);
+  }
+  
+  if (!brdb_value) {
+    vcl_cout << "in get_output_double() - null value\n";
+    return Py_BuildValue("d",-1.0);
+  }
+  brdb_value_t<double>* result_out = static_cast<brdb_value_t<double>* >(brdb_value.ptr());
+  value = result_out->value();
+  
+  return Py_BuildValue("d", value);
+}
+
+PyObject *get_output_unsigned(PyObject * /*self*/, PyObject *args)
 {
   unsigned id;
   unsigned value;
-  if (!PyArg_ParseTuple(args, "i:get_input_unsigned", &id))
+  if (!PyArg_ParseTuple(args, "i:get_output_unsigned", &id))
     return NULL;
 
   vcl_string relation_name = "unsigned_data";
@@ -214,18 +247,18 @@ PyObject *get_input_unsigned(PyObject * /*self*/, PyObject *args)
   brdb_selection_sptr selec = DATABASE->select(relation_name, Q);
 
   if (selec->size()!=1) {
-    vcl_cout << "in get_input_unsigned() - no relation with type" << relation_name << " id: " << id << vcl_endl;
+    vcl_cout << "in get_output_unsigned() - no relation with type" << relation_name << " id: " << id << vcl_endl;
     return Py_BuildValue("b",1000);
   }
 
   brdb_value_sptr brdb_value;
   if (!selec->get_value(vcl_string("value"), brdb_value)) {
-    vcl_cout << "in get_input_unsigned() didn't get value\n";
+    vcl_cout << "in get_output_unsigned() didn't get value\n";
     return Py_BuildValue("b",1000);
   }
 
   if (!brdb_value) {
-    vcl_cout << "in get_input_unsigned() - null value\n";
+    vcl_cout << "in get_output_unsigned() - null value\n";
     return Py_BuildValue("b",1000);
   }
   brdb_value_t<unsigned>* result_out = static_cast<brdb_value_t<unsigned>* >(brdb_value.ptr());
