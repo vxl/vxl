@@ -12,7 +12,7 @@
 //   <none yet>
 // \endverbatim
 
-#include "bvpl_octree_sample.h"
+#include <bvpl/bvpl_octree/sample/bvpl_octree_sample.h>
 #include <boct/boct_tree_cell.h>
 #include <bsta/bsta_attributes.h>
 #include <bsta/bsta_gauss_f1.h>
