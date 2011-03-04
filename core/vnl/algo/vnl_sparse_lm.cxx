@@ -190,9 +190,17 @@ bool vnl_sparse_lm::minimize(vnl_vector<double>& a,
         compute_Z_Sa(Sa);
 
         // this large inverse is the bottle neck of this algorithm
-        vnl_cholesky Sa_cholesky(Sa);
-        //vnl_svd<double> Sa_svd(Sa);
-        vnl_matrix<double> H = Sa_cholesky.inverse();
+        vnl_matrix<double> H;
+        vnl_cholesky Sa_cholesky(Sa,vnl_cholesky::quiet);
+        vnl_svd<double> *Sa_svd = 0;
+        // use SVD as a backup if Cholesky is deficient
+        if ( Sa_cholesky.rank_deficiency() > 0 )
+        {
+          Sa_svd = new vnl_svd<double>(Sa);
+          H = Sa_svd->inverse();
+        }
+        else
+          H = Sa_cholesky.inverse();
 
         // construct the Ma = ZH
         compute_Ma(H);
@@ -205,8 +213,12 @@ bool vnl_sparse_lm::minimize(vnl_vector<double>& a,
         // compute sea from ea, Z, dc, Y, and eb
         compute_sea(dc,sea);
 
-        da = Sa_cholesky.solve(sea);
-        //da = Sa_svd.solve(sea);
+
+        if ( Sa_svd )
+          da = Sa_svd->solve(sea);
+        else
+          da = Sa_cholesky.solve(sea);
+        delete Sa_svd;
       }
       else // size_c_ == 0
       {
@@ -226,7 +238,16 @@ bool vnl_sparse_lm::minimize(vnl_vector<double>& a,
 
         // We could use a faster solver here, maybe conjugate gradients?
         // Solve the system  Sa*da = sea  for da
-        da = vnl_cholesky(Sa).solve(sea);
+        
+        vnl_cholesky Sa_cholesky(Sa,vnl_cholesky::quiet);
+        // use SVD as a backup if Cholesky is deficient
+        if ( Sa_cholesky.rank_deficiency() > 0 )
+        {
+          vnl_svd<double> Sa_svd(Sa);
+          da = Sa_svd.solve(sea);
+        }
+        else
+          da = Sa_cholesky.solve(sea);
       }
 
       // substitute da and dc to compute db
@@ -499,7 +520,15 @@ void vnl_sparse_lm::compute_invV_Y()
 
   for (unsigned int j=0; j<num_b_; ++j) {
     vnl_matrix<double>& inv_Vj = inv_V_[j];
-    inv_Vj = vnl_cholesky(V_[j]).inverse();
+    vnl_cholesky Vj_cholesky(V_[j],vnl_cholesky::quiet);
+    // use SVD as a backup if Cholesky is deficient
+    if ( Vj_cholesky.rank_deficiency() > 0 )
+    {
+      vnl_svd<double> Vj_svd(V_[j]);
+      inv_Vj = Vj_svd.inverse();
+    }
+    else
+      inv_Vj = Vj_cholesky.inverse();
 
     vnl_crs_index::sparse_vector col = crs.sparse_col(j);
     for (sv_itr c_itr=col.begin(); c_itr!=col.end(); ++c_itr)
@@ -652,8 +681,15 @@ void vnl_sparse_lm::solve_dc(vnl_vector<double>& dc)
   else
   {
     // Solve Sc*dc = sec for dc
-    dc = vnl_cholesky(Sc).solve(sec);
-    //dc = vnl_svd<double>(Sc).solve(sec);
+    vnl_cholesky Sc_cholesky(Sc,vnl_cholesky::quiet);
+    // use SVD as a backup if Cholesky is deficient
+    if ( Sc_cholesky.rank_deficiency() > 0 )
+    {
+      vnl_svd<double> Sc_svd(Sc);
+      dc = Sc_svd.solve(sec);
+    }
+    else
+      dc = Sc_cholesky.solve(sec);
   }
 }
 
