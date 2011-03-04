@@ -13,7 +13,7 @@
 // \endverbatim
 
 #include "bvpl_octree_kernel_operator.h"
-#include "bvpl_octree_sample.h"
+#include <bvpl/bvpl_octree/sample/bvpl_octree_sample.h>
 #include <bvpl/kernels/bvpl_kernel.h>
 #include <bvpl/functors/bvpl_local_max_functor.h>
 #include <boct/boct_tree.h>
