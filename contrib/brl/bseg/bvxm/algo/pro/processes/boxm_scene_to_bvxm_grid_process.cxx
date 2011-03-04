@@ -76,7 +76,7 @@ bool boxm_scene_to_bvxm_grid_process(bprb_func_process& pro)
   //check input's validity
   if (!scene_base.ptr())
   {
-    vcl_cerr << pro.name() << ": -- Input grid is not valid!\n";
+    vcl_cerr << pro.name() << ": -- Input scene is not valid!\n";
     return false;
   }
 
