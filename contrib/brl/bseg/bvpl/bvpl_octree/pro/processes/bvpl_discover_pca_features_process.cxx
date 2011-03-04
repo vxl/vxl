@@ -15,7 +15,7 @@
 //:global variables
 namespace bvpl_discover_pca_features_process_globals
 {
-  const unsigned n_inputs_ = 3;
+  const unsigned n_inputs_ = 9;
   const unsigned n_outputs_ = 0;
 }
 
@@ -26,9 +26,16 @@ bool bvpl_discover_pca_features_process_cons(bprb_func_process& pro)
   using namespace bvpl_discover_pca_features_process_globals ;
 
   vcl_vector<vcl_string> input_types_(n_inputs_);
-  input_types_[0] = "boxm_scene_base_sptr";
-  input_types_[1] = "vcl_string"; //directory to save PCA matrices
-  input_types_[2] = "double"; //fraction of the total number of leaves
+  unsigned i =0;
+  input_types_[i++] = "boxm_scene_base_sptr";
+  input_types_[i++] = "vcl_string";   //directory to save PCA matrices
+  input_types_[i++] = "double";   //fraction of the total number of leaves
+  input_types_[i++] = "int";    // min and max of kernel 
+  input_types_[i++] = "int";
+  input_types_[i++] = "int";
+  input_types_[i++] = "int";
+  input_types_[i++] = "int";
+  input_types_[i++] = "int";
 
 
   return pro.set_input_types(input_types_);
@@ -47,9 +54,17 @@ bool bvpl_discover_pca_features_process(bprb_func_process& pro)
   }
 
   //get inputs
-  boxm_scene_base_sptr scene_base = pro.get_input<boxm_scene_base_sptr>(0);
-  vcl_string pca_dir = pro.get_input<vcl_string>(1);
-  double frac = pro.get_input<double>(2);
+  unsigned i =0;
+  boxm_scene_base_sptr scene_base = pro.get_input<boxm_scene_base_sptr>(i++);
+  vcl_string pca_dir = pro.get_input<vcl_string>(i++);
+  double frac = pro.get_input<double>(i++);
+  int min_x = pro.get_input<int>(i++);
+  int min_y = pro.get_input<int>(i++);
+  int min_z = pro.get_input<int>(i++);
+  int max_x = pro.get_input<int>(i++);
+  int max_y = pro.get_input<int>(i++);
+  int max_z = pro.get_input<int>(i++);
+  
 
   //check input's validity
   if (!scene_base.ptr()) {
@@ -58,7 +73,7 @@ bool bvpl_discover_pca_features_process(bprb_func_process& pro)
   }
 
   //neighborhood box for volume "patches" 5x5x5 for now - this could be an input to the process
-  vgl_box_3d<int> neighborhood(vgl_point_3d<int>(-2,-2,-2), vgl_point_3d<int>(2,2,2));
+  vgl_box_3d<int> neighborhood(vgl_point_3d<int>(min_x,min_y, min_z), vgl_point_3d<int>(max_x, max_y, max_z));
 
   //cast scene
   boxm_scene<boct_tree<short, float > > *scene= dynamic_cast<boxm_scene<boct_tree<short, float > >* > (scene_base.as_pointer());
@@ -66,6 +81,8 @@ bool bvpl_discover_pca_features_process(bprb_func_process& pro)
     vcl_cout <<  " :-- Input Scene is not of supported type\n";
     return false;
   }
+  vcl_cout << "Scene path: " << scene->filename()<< vcl_endl;;
+
 
   //number of samples - 10% of total number of leaf-cells
   unsigned long nsamples = (unsigned long)((double)scene->size() * frac);
