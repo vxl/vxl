@@ -27,6 +27,9 @@ vpgl_bundle_adjust::vpgl_bundle_adjust()
     normalize_data_(true),
     verbose_(false),
     max_iterations_(1000),
+    x_tol_(1e-8),
+    g_tol_(1e-8),
+    epsilon_(1e-3),
     start_error_(0.0),
     end_error_(0.0)
 {
@@ -210,6 +213,9 @@ vpgl_bundle_adjust::optimize(vcl_vector<vpgl_perspective_camera<double> >& camer
   lm.set_verbose(verbose_);
 
   lm.set_max_function_evals(max_iterations_);
+  lm.set_x_tolerance(x_tol_);
+  lm.set_g_tolerance(g_tol_);
+  lm.set_epsilon_function(epsilon_);
   if (!lm.minimize(a_,b_,c_,use_gradient_,use_m_estimator_) &&
       lm.get_num_iterations() < max_iterations_)
   {

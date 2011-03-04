@@ -39,6 +39,10 @@ class vpgl_bundle_adjust
   void set_normalize_data(bool normalize) { normalize_data_ = normalize; }
   void set_verbose(bool verbose) { verbose_ = verbose; }
   void set_max_iterations(unsigned maxitr) { max_iterations_ = maxitr; }
+  void set_x_tolerence(double xtol) { x_tol_ = xtol; }
+  void set_g_tolerence(double gtol) { g_tol_ = gtol; }
+  //: step size for finite differencing operations
+  void set_epsilon(double eps) { epsilon_ = eps; }
 
   //: Return the ending error
   double end_error() const { return end_error_; }
@@ -106,6 +110,9 @@ class vpgl_bundle_adjust
   bool normalize_data_;
   bool verbose_;
   unsigned int max_iterations_;
+  double x_tol_;
+  double g_tol_;
+  double epsilon_;
 
   double start_error_;
   double end_error_;
