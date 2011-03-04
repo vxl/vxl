@@ -15,6 +15,7 @@ DECLARE( test_ray_intersect );
 DECLARE( test_adjust_rational_trans_onept );
 DECLARE( test_rational_geo_adjust );
 DECLARE( test_bundle_adjust );
+DECLARE( test_ba_shared_k_lsqr );
 DECLARE( test_interpolate );
 DECLARE( test_camera_homographies);
 DECLARE( test_camera_from_box );
@@ -36,6 +37,7 @@ void register_tests()
   REGISTER( test_adjust_rational_trans_onept );
   REGISTER( test_rational_geo_adjust );
   REGISTER( test_bundle_adjust );
+  REGISTER( test_ba_shared_k_lsqr );
   REGISTER( test_interpolate );
   REGISTER( test_camera_homographies );
   REGISTER( test_camera_from_box );

@@ -34,6 +34,9 @@ class vpgl_bundle_adjust
 
   void set_use_weights(bool use_weights) { use_weights_ = use_weights; }
   void set_use_gradient(bool use_gradient) { use_gradient_ = use_gradient; }
+  void set_self_calibrate(bool self_calibrate) { self_calibrate_ = self_calibrate; }
+  void set_normalize_data(bool normalize) { normalize_data_ = normalize; }
+  void set_max_iterations(unsigned maxitr) { max_iterations_ = maxitr; }
 
   //: Return the ending error
   double end_error() const { return end_error_; }
@@ -59,15 +62,25 @@ class vpgl_bundle_adjust
                          vcl_vector<vgl_point_3d<double> >& world_points);
 
  private:
+  //: normalize image points to be mean centered with scale sqrt(2)
+  //  return parameters such that original point are recovered as (ns*x+nx, ns*y+ny)
+  void normalize_points(vcl_vector<vgl_point_2d<double> >& image_points,
+                        double& nx, double& ny, double& ns);
+
   //: The bundle adjustment error function
   vpgl_bundle_adjust_lsqr* ba_func_;
   //: The last camera parameters
   vnl_vector<double> a_;
   //: The last point parameters
   vnl_vector<double> b_;
+  //: The last global parameters
+  vnl_vector<double> c_;
 
   bool use_weights_;
   bool use_gradient_;
+  bool self_calibrate_;
+  bool normalize_data_;
+  unsigned int max_iterations_;
 
   double start_error_;
   double end_error_;

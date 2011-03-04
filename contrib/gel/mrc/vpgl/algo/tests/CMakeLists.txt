@@ -16,6 +16,7 @@ ADD_EXECUTABLE( vpgl_algo_test_all
   test_adjust_rational_trans_onept.cxx
   test_rational_geo_adjust.cxx
   test_bundle_adjust.cxx
+  test_ba_shared_k_lsqr.cxx
   test_interpolate.cxx
   test_camera_homographies.cxx
   test_camera_from_box.cxx
@@ -39,6 +40,7 @@ ADD_TEST( vpgl_algo_test_backproject                 ${EXECUTABLE_OUTPUT_PATH}/v
 ADD_TEST( vpgl_algo_test_ray                         ${EXECUTABLE_OUTPUT_PATH}/vpgl_algo_test_all test_ray )
 ADD_TEST( vpgl_algo_test_ortho_procrustes            ${EXECUTABLE_OUTPUT_PATH}/vpgl_algo_test_all test_ortho_procrustes )
 ADD_TEST( vpgl_algo_test_bundle_adjust               ${EXECUTABLE_OUTPUT_PATH}/vpgl_algo_test_all test_bundle_adjust )
+ADD_TEST( vpgl_algo_test_ba_shared_k_lsqr            ${EXECUTABLE_OUTPUT_PATH}/vpgl_algo_test_all test_ba_shared_k_lsqr )
 ADD_TEST( vpgl_algo_test_interpolate                 ${EXECUTABLE_OUTPUT_PATH}/vpgl_algo_test_all test_interpolate )
 ADD_TEST( vpgl_algo_test_camera_homographies         ${EXECUTABLE_OUTPUT_PATH}/vpgl_algo_test_all test_camera_homographies )
 
