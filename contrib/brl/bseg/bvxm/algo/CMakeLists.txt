@@ -13,7 +13,7 @@ AUX_SOURCE_DIRECTORY(Templates bvxm_algo_sources)
 
 ADD_LIBRARY( bvxm_algo ${bvxm_algo_sources})
 
-TARGET_LINK_LIBRARIES( bvxm_algo bsta bvxm_grid boxm_util vnl vgl)
+TARGET_LINK_LIBRARIES( bvxm_algo bsta bvxm_grid_io boxm_util vnl vgl)
 
 SUBDIRS(pro)
 
