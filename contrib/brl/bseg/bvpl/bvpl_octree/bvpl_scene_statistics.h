@@ -23,36 +23,49 @@ bool compute_scene_statistics(boxm_scene<boct_tree<T_loc, T_data > >* scene, bst
 {
   typedef boct_tree<T_loc, T_data> tree_type;
   typedef boct_tree_cell<T_loc,T_data> cell_type;
-
-
+  
   //(1) Traverse the leaves of the scene
-  boxm_cell_iterator<boct_tree<short, T_data > > iterator =
-  scene->cell_iterator(&boxm_scene<boct_tree<short, T_data> >::load_block, true);
-
+  boxm_cell_iterator<tree_type > iterator = scene->cell_iterator(&boxm_scene<tree_type>::load_block, true);
+  
   iterator.begin();
-  unsigned int cell_count = 0;
+  float cell_count = 0;
+  T_data max = (*iterator)->data();
+  T_data min = max;
+  T_data this_val = max;
   while (!iterator.end()) {
     cell_count++;
+    this_val = (*iterator)->data();
+    if ( this_val > max)  max = this_val;
+    if ( this_val < min)  min = this_val;
     ++iterator;
   }
-
-  unsigned nbins = vcl_sqrt(cell_count);
-  response_hist = bsta_histogram<float>(0.0f, 1.0f, nbins);
-  //level_hist = bsta_histogram<float>(0.0f, 10.0f, 10);
-
+  
+  unsigned nbins = vcl_floor(vcl_sqrt(cell_count));
+  response_hist = bsta_histogram<float>(min, max, nbins);
+  scene->unload_active_blocks();
   iterator.begin();
-
   while (!iterator.end()) {
-    boct_tree_cell<short,T_data> *cell = *iterator;
-    //level_hist.upcount(static_cast<float>(level));
-    response_hist.upcount(static_cast<float>(cell->data()), 1.0f);
+    response_hist.upcount(static_cast<T_data>((*iterator)->data()), 1.0f);
     ++iterator;
-
   }
-
+  
   scene->unload_active_blocks();
   
   return true;
+  
 }
+
+//: Function that compute average value of a fraction of samples in the specified block. 
+//  Datatype is assumed to be float, but if could be templated to expand to other types
+double bvpl_average_value(boxm_scene_base_sptr scene_base, int block_i, int block_j, int block_k, unsigned long tree_nsamples);
+
+//: Function that compute average value of all positive samples in the specified block. 
+//  Datatype is assumed to be float, but if could be templated to expand to other types
+double bvpl_average_value(boxm_scene_base_sptr scene_base, int block_i, int block_j, int block_k);
+
+
+
+
+
 
 #endif // bvpl_scene_statistics_h
