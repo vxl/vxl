@@ -21,8 +21,7 @@
 
 #include <boxm/boxm_scene.h>
 #include <boxm/boxm_scene_parser.h>
-#include <bvpl/bvpl_octree/bvpl_octree_sample.h>
-
+#include <bvpl/bvpl_octree/sample/bvpl_octree_sample.h>
 //:global variables
 namespace bvpl_create_scene_process_globals
 {
