@@ -12,7 +12,7 @@
 // \endverbatim
 
 #include <bvpl/bvpl_octree/bvpl_octree_vrml_util.h>
-#include <bvpl/bvpl_octree/bvpl_octree_sample.h>
+#include <bvpl/bvpl_octree/sample/bvpl_octree_sample.h>
 #include <bvpl/kernels/bvpl_kernel.h>
 
 #include <bprb/bprb_parameters.h>
