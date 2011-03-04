@@ -11,7 +11,6 @@
 #include <boxm/boxm_scene_parser.h>
 #include <vcl_cassert.h>
 
-
 bvpl_discover_pca_kernels::bvpl_discover_pca_kernels(const vcl_string &path)
 {
   vcl_cout << "Loading pca info from xml-file" << vcl_endl;
@@ -42,7 +41,7 @@ bvpl_discover_pca_kernels::bvpl_discover_pca_kernels(const vcl_string &path)
   nbbox_elm->get_attribute("max_z", max_z);
   
   nbbox_ = vgl_box_3d<int>(vgl_point_3d<int>(min_x, min_y, min_y), vgl_point_3d<int>(max_x, max_y, max_z));
-  vcl_cout << "Neighborhood" << nbbox_ << vcl_endl;
+  vcl_cout << "Neighborhood: " << nbbox_ << vcl_endl;
   
   
   //Parse Number of samples
@@ -50,7 +49,7 @@ bvpl_discover_pca_kernels::bvpl_discover_pca_kernels(const vcl_string &path)
   bxml_data_sptr nsamples_data = bxml_find_by_name(root, nsamples_query);
   bxml_element* nsamples_elm = dynamic_cast<bxml_element*>(nsamples_data.ptr());
   nsamples_elm->get_attribute("nsamples", nsamples_);
-  vcl_cout << "Number of samples" << nsamples_ << vcl_endl;
+  vcl_cout << "Number of samples: " << nsamples_ << vcl_endl;
   
   
   //Parse dimension
@@ -58,7 +57,7 @@ bvpl_discover_pca_kernels::bvpl_discover_pca_kernels(const vcl_string &path)
   bxml_data_sptr dim_data = bxml_find_by_name(root, dim_query);
   bxml_element* dim_elm = dynamic_cast<bxml_element*>(dim_data.ptr());
   dim_elm->get_attribute("feature_dim", feature_dim_);
-  vcl_cout << "Feature dimension" << feature_dim_ << vcl_endl;
+  vcl_cout << "Feature dimension: " << feature_dim_ << vcl_endl;
   
   
   //Parse paths and set matrices
@@ -66,52 +65,98 @@ bvpl_discover_pca_kernels::bvpl_discover_pca_kernels(const vcl_string &path)
   bxml_data_sptr paths_data = bxml_find_by_name(root, paths_query);
   bxml_element* path_elm = dynamic_cast<bxml_element*>(paths_data.ptr());
   
-  bool valid = true;
+  int valid = 0;
   vcl_string ifs_path;
   
   path_elm->get_attribute("pc_path", ifs_path);
   if(ifs_path != pc_path())
-    valid = false;
+    valid = -1;
   else{
     vcl_ifstream ifs(ifs_path.c_str());
     ifs >> pc_;
     if(pc_.size()!=feature_dim_*feature_dim_)
-      valid = false;
+      valid = -2;
   }
   
   path_elm->get_attribute("weights_path", ifs_path);
   if(ifs_path != weights_path())
-    valid = false;
+    valid = -3;
   else{
     vcl_ifstream ifs(ifs_path.c_str());
     ifs >> weights_;
     if(weights_.size()!=feature_dim_)
-      valid = false;
+      valid = -4;
   }
   
-  path_elm->get_attribute("mean_path", ifs_path);
-  if(ifs_path != mean_path())
-    valid = false;
+  path_elm->get_attribute("sample_mean_path", ifs_path);
+  if(ifs_path != sample_mean_path())
+    valid = -5;
   else
   {
     vcl_ifstream ifs(ifs_path.c_str());
-    ifs >> mean_feature_ ;
-    if(mean_feature_.size()!=feature_dim_)
-      valid = false;
+    ifs >> sample_mean_feature_ ;
+    if(sample_mean_feature_.size()!=feature_dim_)
+      valid = -6;
   }
   
+ 
   path_elm->get_attribute("data_path", ifs_path);
   if(ifs_path != data_path())
-    valid = false;
+    valid = -7;
   
   path_elm->get_attribute("positions_path", ifs_path);
   if(ifs_path != pos_path())
-    valid = false;
+    valid = -8;
   
   path_elm->get_attribute("scene_path", scene_path_);
   
-  if(!valid)
-    vcl_cout << "bvpl_discover_pca_kernels - could not parse matrices\n";
+    
+  //load scene
+  boxm_scene_parser parser;
+  data_scene_base_=new boxm_scene_base();
+  data_scene_base_->load_scene(scene_path_, parser);
+  
+  //cast scene
+  boxm_scene<boct_tree<short, float > > *scene= new boxm_scene<boct_tree<short, float > >();
+  if (data_scene_base_->appearence_model() == BOXM_FLOAT){     
+    scene->load_scene(parser);
+    data_scene_base_ = scene;
+  }
+  
+  path_elm->get_attribute("data_mean_path", ifs_path);
+  if(ifs_path != data_mean_path()){
+    compute_mean_feature(scene);
+    valid = -9;
+    vcl_cout << "bvpl_discover_pca_kernels - errors parsing data_mean_feature.xml\n";
+
+  }
+  else
+  {
+    vcl_ifstream ifs(ifs_path.c_str());
+    ifs >> data_mean_feature_ ;
+    if(data_mean_feature_.size()!=feature_dim_)
+      valid = -10;
+  }
+  
+  //Parse dimension
+  bxml_element cell_length_query("finest_cell_length");
+  bxml_data_sptr cell_length_data = bxml_find_by_name(root, cell_length_query);
+  bxml_element* cell_length_elm = dynamic_cast<bxml_element*>(cell_length_data.ptr());
+  finest_cell_length_ = -1.0;
+  dim_elm->get_attribute("length", finest_cell_length_);
+  if (finest_cell_length_ < 0.0){
+     vcl_cout << "Error: Finest cell length read from file: " << finest_cell_length_ << vcl_endl;
+    finest_cell_length_ = scene->finest_cell_length();
+    valid = -11;
+  }
+  vcl_cout << "Finest cell length: " << finest_cell_length_ << vcl_endl;
+  
+  if(valid<0){
+    vcl_cout << "bvpl_discover_pca_kernels - errors parsing pca_info.xml. Error code: " << valid << vcl_endl;
+    xml_write();
+  }
+
+  
   
 }
 
@@ -170,9 +215,8 @@ vnl_matrix<double> bvpl_discover_pca_kernels::compute_scatter_matrix( boxm_scene
 {
   //init variables
   double scene_ncells = scene->size();
-  double cell_length = scene->finest_cell_length();
   scene->unload_active_blocks();
-  mean_feature_.fill(0.0f);  
+  sample_mean_feature_.fill(0.0f);  
   vnl_matrix<double> S(feature_dim_, feature_dim_, 0.0f);
   vnl_random rng(9667566ul);
   vcl_ofstream pos_ofs(pos_path().c_str());
@@ -208,8 +252,8 @@ vnl_matrix<double> bvpl_discover_pca_kernels::compute_scatter_matrix( boxm_scene
       vgl_point_3d<int> nmin = nbbox_.min_point();
       vgl_point_3d<int> nmax = nbbox_.max_point();
       
-      vgl_box_3d<double> roi(cell_length*(double)nmin.x(),cell_length*(double)nmin.y(),cell_length*(double)nmin.z(),
-                             cell_length*(double)nmax.x(),cell_length*(double)nmax.y(),cell_length*(double)nmax.z());
+      vgl_box_3d<double> roi(finest_cell_length_*(double)nmin.x(),finest_cell_length_*(double)nmin.y(),finest_cell_length_*(double)nmin.z(),
+                             finest_cell_length_*(double)nmax.x(),finest_cell_length_*(double)nmax.y(),finest_cell_length_*(double)nmax.z());
       roi.set_centroid(center_cell_centroid);
       
       //if neighborhood is not inclusive we would have missing features
@@ -227,9 +271,9 @@ vnl_matrix<double> bvpl_discover_pca_kernels::compute_scatter_matrix( boxm_scene
         for(int y = nbbox_.min_y(); y<=nbbox_.max_y(); y++)
           for(int x = nbbox_.min_x(); x<=nbbox_.max_x(); x++)
           {
-            vgl_point_3d<double> neighbor_centroid(center_cell_centroid.x() + (double)x*cell_length,
-                                                   center_cell_centroid.y() + (double)y*cell_length,
-                                                   center_cell_centroid.z() + (double)z*cell_length);
+            vgl_point_3d<double> neighbor_centroid(center_cell_centroid.x() + (double)x*finest_cell_length_,
+                                                   center_cell_centroid.y() + (double)y*finest_cell_length_,
+                                                   center_cell_centroid.z() + (double)z*finest_cell_length_);
             
             boct_tree_cell<short,float> *neighbor_cell = scene->locate_point_in_memory(neighbor_centroid);
             
@@ -249,13 +293,13 @@ vnl_matrix<double> bvpl_discover_pca_kernels::compute_scatter_matrix( boxm_scene
       double rho_comp = 1.0 - rho;
       
       // the difference vector between the sample and the mean
-      vnl_vector<double> diff = this_feature - mean_feature_;
+      vnl_vector<double> diff = this_feature - sample_mean_feature_;
       
       //update the covariance
       S += rho_comp*outer_product(diff,diff);
       
       //update the mean
-      mean_feature_ += (rho*diff);
+      sample_mean_feature_ += (rho*diff);
       
       ++nfeature;
       //vcl_cerr << "Feature EVD: " <<this_feature << vcl_endl;
@@ -267,9 +311,9 @@ vnl_matrix<double> bvpl_discover_pca_kernels::compute_scatter_matrix( boxm_scene
   
   pos_ofs.close();
   data_ofs.close();
-  vcl_ofstream mean_ofs(mean_path().c_str());
+  vcl_ofstream mean_ofs(sample_mean_path().c_str());
   mean_ofs.precision(15);
-  mean_ofs << mean_feature_;
+  mean_ofs << sample_mean_feature_;
   mean_ofs.close();
   
   nsamples_ = nfeature-1;
@@ -285,9 +329,7 @@ vnl_matrix<double> bvpl_discover_pca_kernels::compute_deviation_matrix( boxm_sce
 {
   //init variables
   float scene_ncells = scene->size();
-  double cell_length = scene->finest_cell_length();
-  scene->unload_active_blocks();
-  mean_feature_.fill(0.0f);  
+  sample_mean_feature_.fill(0.0f);  
   vnl_matrix<double> M(feature_dim_, nsamples_);
   vnl_random rng(9667566ul);
   vcl_ofstream pos_ofs(pos_path().c_str());
@@ -319,8 +361,8 @@ vnl_matrix<double> bvpl_discover_pca_kernels::compute_deviation_matrix( boxm_sce
       vgl_point_3d<int> nmin = nbbox_.min_point();
       vgl_point_3d<int> nmax = nbbox_.max_point();
       
-      vgl_box_3d<double> roi(cell_length*(double)nmin.x(),cell_length*(double)nmin.y(),cell_length*(double)nmin.z(),
-                             cell_length*(double)nmax.x(),cell_length*(double)nmax.y(),cell_length*(double)nmax.z());
+      vgl_box_3d<double> roi(finest_cell_length_*(double)nmin.x(),finest_cell_length_*(double)nmin.y(),finest_cell_length_*(double)nmin.z(),
+                             finest_cell_length_*(double)nmax.x(),finest_cell_length_*(double)nmax.y(),finest_cell_length_*(double)nmax.z());
       roi.set_centroid(center_cell_centroid);
       
       //if neighborhood is not inclusive we would have missing features
@@ -338,9 +380,9 @@ vnl_matrix<double> bvpl_discover_pca_kernels::compute_deviation_matrix( boxm_sce
         for(int y = nbbox_.min_y(); y<=nbbox_.max_y(); y++)
           for(int x = nbbox_.min_x(); x<=nbbox_.max_x(); x++)
           {
-            vgl_point_3d<double> neighbor_centroid(center_cell_centroid.x() + (double)x*cell_length,
-                                                   center_cell_centroid.y() + (double)y*cell_length,
-                                                   center_cell_centroid.z() + (double)z*cell_length);
+            vgl_point_3d<double> neighbor_centroid(center_cell_centroid.x() + (double)x*finest_cell_length_,
+                                                   center_cell_centroid.y() + (double)y*finest_cell_length_,
+                                                   center_cell_centroid.z() + (double)z*finest_cell_length_);
             
             boct_tree_cell<short,float> *neighbor_cell = scene->locate_point_in_memory(neighbor_centroid);
             
@@ -355,7 +397,7 @@ vnl_matrix<double> bvpl_discover_pca_kernels::compute_deviation_matrix( boxm_sce
       pos_ofs << center_cell_centroid <<'\n' ; 
       
       M.set_column(feature_col,this_feature);
-      mean_feature_+=this_feature;
+      sample_mean_feature_+=this_feature;
       ++feature_col;
       //vcl_cerr << "Feature SVD: " <<this_feature << vcl_endl;
       //vcl_cerr << "Mean Feature SVD: " <<mean_feature/(double)feature_col << vcl_endl;
@@ -372,15 +414,15 @@ vnl_matrix<double> bvpl_discover_pca_kernels::compute_deviation_matrix( boxm_sce
   
   
   //4. Normalize feature vector
-  mean_feature_/=feature_col;
+  sample_mean_feature_/=feature_col;
   //vcl_cerr << "Mean Feature SVD: " <<mean_feature << vcl_endl;
-  vcl_ofstream mean_ofs(mean_path().c_str());
+  vcl_ofstream mean_ofs(sample_mean_path().c_str());
   mean_ofs.precision(15);
-  mean_ofs << mean_feature_;
+  mean_ofs << sample_mean_feature_;
   mean_ofs.close();
   
   for (unsigned int j=0; j<feature_col; ++j)
-    F.set_column(j,F.get_column(j) - mean_feature_);   
+    F.set_column(j,F.get_column(j) - sample_mean_feature_);   
   
   return F;
 }
@@ -406,7 +448,7 @@ void bvpl_discover_pca_kernels::compute_training_error(vnl_vector<double> &proj_
     data_ifs >> norm_feature;
     //vcl_cerr << "Feature: " <<norm_feature << vcl_endl;
     
-    norm_feature-=mean_feature_;
+    norm_feature-=sample_mean_feature_;
     
     //solve for the coefficients
     vnl_vector<double> a(feature_dim_, 0.0);
@@ -452,28 +494,13 @@ void bvpl_discover_pca_kernels::compute_testing_error(vnl_vector<double> &proj_e
   proj_error.set_size(feature_dim_);
   proj_error.fill(0.0);
   
-  //load scene
-  boxm_scene_parser parser;
-  boxm_scene_base_sptr scene_base=new boxm_scene_base();
-  scene_base->load_scene(scene_path(), parser);
-  
+ 
   //cast scene
-  boxm_scene<boct_tree<short, float > > *scene= new boxm_scene<boct_tree<short, float > >();
-  if (scene_base->appearence_model() == BOXM_FLOAT){     
-    scene->load_scene(parser);
-    scene_base = scene;
-  }
-  else {
-    vcl_cout <<  " :-- Input Scene is not of supported type\n";
-    return;
-  }
-  
-  vnl_vector<double> mean_feature;
-  compute_mean_feature(scene, mean_feature);
+  boxm_scene<boct_tree<short, float > > *scene= dynamic_cast<boxm_scene<boct_tree<short, float > > *> (data_scene_base_.as_pointer());
+ 
+  compute_mean_feature(scene);
   
   //iterate through leaves and arrage as vectors.
-  double cell_length = scene->finest_cell_length();
-  
   boxm_cell_iterator<boct_tree<short, float > > cell_it = scene->cell_iterator(&boxm_scene<boct_tree<short, float> >::load_block_and_neighbors, true);
   cell_it.begin();
   
@@ -487,8 +514,8 @@ void bvpl_discover_pca_kernels::compute_testing_error(vnl_vector<double> &proj_e
     vgl_point_3d<int> nmin = nbbox_.min_point();
     vgl_point_3d<int> nmax = nbbox_.max_point();
     
-    vgl_box_3d<double> roi(cell_length*(double)nmin.x(),cell_length*(double)nmin.y(),cell_length*(double)nmin.z(),
-                           cell_length*(double)nmax.x(),cell_length*(double)nmax.y(),cell_length*(double)nmax.z());
+    vgl_box_3d<double> roi(finest_cell_length_*(double)nmin.x(),finest_cell_length_*(double)nmin.y(),finest_cell_length_*(double)nmin.z(),
+                           finest_cell_length_*(double)nmax.x(),finest_cell_length_*(double)nmax.y(),finest_cell_length_*(double)nmax.z());
     roi.set_centroid(center_cell_centroid);
     
     //if neighborhood is not inclusive we would have missing features
@@ -505,9 +532,9 @@ void bvpl_discover_pca_kernels::compute_testing_error(vnl_vector<double> &proj_e
       for(int y = nbbox_.min_y(); y<=nbbox_.max_y(); y++)
         for(int x = nbbox_.min_x(); x<=nbbox_.max_x(); x++)
         {
-          vgl_point_3d<double> neighbor_centroid(center_cell_centroid.x() + (double)x*cell_length,
-                                                 center_cell_centroid.y() + (double)y*cell_length,
-                                                 center_cell_centroid.z() + (double)z*cell_length);
+          vgl_point_3d<double> neighbor_centroid(center_cell_centroid.x() + (double)x*finest_cell_length_,
+                                                 center_cell_centroid.y() + (double)y*finest_cell_length_,
+                                                 center_cell_centroid.z() + (double)z*finest_cell_length_);
           
           boct_tree_cell<short,float> *neighbor_cell = scene->locate_point_in_memory(neighbor_centroid);
           
@@ -520,7 +547,7 @@ void bvpl_discover_pca_kernels::compute_testing_error(vnl_vector<double> &proj_e
     assert(curr_dim == feature_dim_);
     
     
-    this_feature-=mean_feature;
+    this_feature-=data_mean_feature_;
     
     //solve for the coefficients
     vnl_vector<double> a(feature_dim_, 0.0);
@@ -548,13 +575,326 @@ void bvpl_discover_pca_kernels::compute_testing_error(vnl_vector<double> &proj_e
   
 }
 
+//: Reconstructions error on testing samples. By block. Error is given as average error per sample
+void bvpl_discover_pca_kernels::compute_testing_error(boxm_scene_base_sptr error_scene_base, unsigned ncomponents,
+                                                      int block_i, int block_j, int block_k)
+{
+  typedef boct_tree<short,float> float_tree_type;
+  typedef boct_tree_cell<short,float> float_cell_type;
+  
+  //cast the scenes 
+  boxm_scene<float_tree_type>* data_scene = dynamic_cast<boxm_scene<float_tree_type>* > (data_scene_base_.as_pointer());
+  boxm_scene<float_tree_type> * error_scene = dynamic_cast<boxm_scene<float_tree_type>* > (error_scene_base.as_pointer());
+
+  if(!(data_scene &&error_scene)){
+    vcl_cerr << "Error in bvpl_discover_pca_kernels::compute_testing_error: Faild to cast scene" << vcl_endl;
+    return;
+  }
+
+  
+  //get the cells for this block
+  if(!(data_scene->valid_index(block_i, block_j, block_k) && error_scene->valid_index(block_i, block_j, block_k))){
+    vcl_cerr << "In compute_testing_error: Invalid block" << vcl_endl;
+    return;
+  }
+  data_scene->unload_active_blocks();
+  error_scene->unload_active_blocks();
+  data_scene->load_block_and_neighbors(block_i, block_j, block_k);
+  error_scene->load_block(block_i, block_j, block_k); 
+
+  //get the trees
+  float_tree_type* data_tree = data_scene->get_block(block_i, block_j, block_k)->get_tree();
+  float_tree_type* error_tree = data_tree->clone();
+  //error is always positive, therefore cells with negative errors can be identified as uninitialized.
+  error_tree->init_cells(-1.0f);
+
+  //get the leaves
+  vcl_vector<float_cell_type*> data_leaves = data_tree->leaf_cells();
+  vcl_vector<float_cell_type*> error_leaves = error_tree->leaf_cells();
+  
+  //CAUTION: the neigborhood box was suppossed to be defined as number of regular neigbors
+  //convert neighborhood box to scene coordinates
+  vgl_point_3d<int> min_point = nbbox_.min_point();
+  vgl_point_3d<int> max_point = nbbox_.max_point();
+  
+  for(unsigned i =0; i<data_leaves.size(); i++)
+  {
+    float_cell_type* data_cell = data_leaves[i];
+    
+    //create a region around the center cell
+    vgl_point_3d<double> centroid = data_tree->global_centroid(data_cell);
+    
+    //change the coordinates of enpoints to be in global coordinates abd text if they are contained in the scene
+    vgl_point_3d<double> min_point_global(centroid.x() + (double)min_point.x()*finest_cell_length_, centroid.y() + (double)min_point.y()*finest_cell_length_, centroid.z() + (double)min_point.z()*finest_cell_length_);
+    vgl_point_3d<double> max_point_global(centroid.x() + (double)max_point.x()*finest_cell_length_, centroid.y() + (double)max_point.y()*finest_cell_length_, centroid.z() + (double)max_point.z()*finest_cell_length_);
+    if(!(data_scene->locate_point_in_memory(min_point_global) && data_scene->locate_point_in_memory(max_point_global)))
+      continue;
+    
+    //3. Assemble neighbohood as a feature-vector
+    vnl_vector<double> this_feature(feature_dim_, 0.0f);
+    
+    unsigned curr_dim = 0;
+    for(int z = nbbox_.min_z(); z<=nbbox_.max_z(); z++)
+      for(int y = nbbox_.min_y(); y<=nbbox_.max_y(); y++)
+        for(int x = nbbox_.min_x(); x<=nbbox_.max_x(); x++)
+        {
+          vgl_point_3d<double> neighbor_centroid(centroid.x() + (double)x*finest_cell_length_,
+                                                 centroid.y() + (double)y*finest_cell_length_,
+                                                 centroid.z() + (double)z*finest_cell_length_);
+          
+          boct_tree_cell<short,float> *neighbor_cell = data_scene->locate_point_in_memory(neighbor_centroid);
+          
+          
+          if(!neighbor_cell){
+            vcl_cerr << "Error in compute_testing_error" <<vcl_endl;
+            return;
+          }
+          
+          this_feature[curr_dim] = (double)neighbor_cell->data();
+          curr_dim++;
+        }
+    
+    if(curr_dim != feature_dim_){
+      vcl_cerr << "Error in compute_testing_error" <<vcl_endl;
+      return;
+    }    
+    this_feature-=data_mean_feature_;
+    
+    //solve for the coefficients
+    vnl_vector<double> a(feature_dim_, 0.0);
+    a = pc_.transpose() * (this_feature);
+      
+    //project as a function of number of components
+    vnl_vector<double> feature_approx  = pc_.extract(feature_dim_, ncomponents) * a.extract(ncomponents);
+
+    //compute error
+    error_leaves[i]->set_data((float)((this_feature - feature_approx).squared_magnitude()));
+  }
+  
+  // write and release memory
+  error_scene->get_block(block_i, block_j, block_k)->init_tree(error_tree);
+  error_scene->write_active_block();
+  data_scene->unload_active_blocks();
+  error_scene->unload_active_blocks();
+
+}
+ 
+#if BVPL_OCTREE_HAS_PTHREADS
+void bvpl_discover_pca_kernels::compute_testing_error_thread_safe(boxm_scene<boct_tree<short,float> > * error_scene, 
+                                                                  unsigned ncomponents,
+                                                                  int block_i, int block_j, int block_k)
+{
+  typedef boct_tree<short,float> float_tree_type;
+  typedef boct_tree_cell<short,float> float_cell_type;
+  
+  //cast the scenes 
+  boxm_scene<float_tree_type>* data_scene = dynamic_cast<boxm_scene<float_tree_type>* > (data_scene_base_.as_pointer());
+  
+  if(!(data_scene &&error_scene)){
+    vcl_cerr << "Error in bvpl_discover_pca_kernels::compute_testing_error: Faild to cast scene" << vcl_endl;
+    return;
+  }
+  
+ 
+  if(!(data_scene->load_all_blocks() && error_scene->load_all_blocks())){
+    vcl_cerr << "Must load all blocks into memory before using threads " << vcl_endl;
+    return;
+  }
+  //get the cells for this block
+  if(!error_scene->valid_index(block_i, block_j, block_k)){
+    vcl_cerr << "In compute_testing_error: Invalid block" << vcl_endl;
+    return;
+  }
+  
+  //error_scene->load_block_thread_safe(block_i, block_j, block_k); 
+  
+  //get the trees
+  boxm_block<float_tree_type> *data_block = data_scene->get_block(block_i, block_j, block_k);
+  if(!data_block)
+    return;
+  
+  float_tree_type* data_tree = data_block->get_tree();
+  float_tree_type* error_tree = error_scene->get_block(block_i, block_j, block_k)->get_tree();
+  //error is always positive, therefore cells with negative errors can be identified as uninitialized.
+  // error_tree->init_cells(-1.0f);
+  
+  //get the leaves
+  vcl_vector<float_cell_type*> data_leaves = data_tree->leaf_cells();
+  //vcl_vector<float_cell_type*> error_leaves = error_tree->leaf_cells();
+  
+  //CAUTION: the neigborhood box was suppossed to be defined as number of regular neigbors
+  //convert neighborhood box to scene coordinates
+  vgl_point_3d<int> min_point = nbbox_.min_point();
+  vgl_point_3d<int> max_point = nbbox_.max_point();
+  
+  for(unsigned i =0; i<data_leaves.size(); i++)
+  {
+    float_cell_type* data_cell = data_leaves[i];
+    
+    //create a region around the center cell
+    vgl_point_3d<double> centroid = data_tree->global_centroid(data_cell);
+    
+    //change the coordinates of enpoints to be in global coordinates abd text if they are contained in the scene
+    vgl_point_3d<double> min_point_global(centroid.x() + (double)min_point.x()*finest_cell_length_, centroid.y() + (double)min_point.y()*finest_cell_length_, centroid.z() + (double)min_point.z()*finest_cell_length_);
+    vgl_point_3d<double> max_point_global(centroid.x() + (double)max_point.x()*finest_cell_length_, centroid.y() + (double)max_point.y()*finest_cell_length_, centroid.z() + (double)max_point.z()*finest_cell_length_);
+    if(!(data_scene->locate_point_in_memory(min_point_global) && data_scene->locate_point_in_memory(max_point_global)))
+      continue;
+    
+    //3. Assemble neighbohood as a feature-vector
+    vnl_vector<double> this_feature(feature_dim_, 0.0f);
+    
+    unsigned curr_dim = 0;
+    for(int z = nbbox_.min_z(); z<=nbbox_.max_z(); z++)
+      for(int y = nbbox_.min_y(); y<=nbbox_.max_y(); y++)
+        for(int x = nbbox_.min_x(); x<=nbbox_.max_x(); x++)
+        {
+          vgl_point_3d<double> neighbor_centroid(centroid.x() + (double)x*finest_cell_length_,
+                                                 centroid.y() + (double)y*finest_cell_length_,
+                                                 centroid.z() + (double)z*finest_cell_length_);
+          
+          boct_tree_cell<short,float> *neighbor_cell = data_scene->locate_point_in_memory(neighbor_centroid);
+          
+          
+          if(!neighbor_cell){
+            vcl_cerr << "Error in compute_testing_error" <<vcl_endl;
+            return;
+          }
+          
+          this_feature[curr_dim] = (double)neighbor_cell->data();
+          curr_dim++;
+        }
+    
+    if(curr_dim != feature_dim_){
+      vcl_cerr << "Error in compute_testing_error" <<vcl_endl;
+      return;
+    }    
+    this_feature-=data_mean_feature_;
+    
+    //solve for the coefficients
+    vnl_vector<double> a(feature_dim_, 0.0);
+    a = pc_.transpose() * (this_feature);
+    
+    //project as a function of number of components
+    vnl_vector<double> feature_approx  = pc_.extract(feature_dim_, ncomponents) * a.extract(ncomponents);
+    
+    //compute error
+    //error_leaves[i]->set_data((float)((this_feature - feature_approx).squared_magnitude()));
+  }
+  
+  // write and release memory
+  error_scene->get_block(block_i, block_j, block_k)->init_tree(error_tree);
+  error_scene->write_block_thread_safe(block_i, block_j, block_k);  
+}
+
+#endif
+
+//: Computes pca projection at each voxel on the block and it saves the specified number of coefficientes 
+void bvpl_discover_pca_kernels::project(boxm_scene<boct_tree<short, float> > *proj_scene, unsigned ncomponents,
+                                                      int block_i, int block_j, int block_k)
+{
+  //typedef boct_tree<short,float> float_tree_type;
+//  typedef boct_tree_cell<short,float> float_cell_type;
+//  
+//  //cast the scenes 
+//  boxm_scene<float_tree_type>* data_scene = dynamic_cast<boxm_scene<float_tree_type>* > (data_scene_base_.as_pointer());
+//  
+//  if(!(data_scene &&proj_scene)){
+//    vcl_cerr << "Error in bvpl_discover_pca_kernels::compute_testing_error: Faild to cast scene" << vcl_endl;
+//    return;
+//  }
+//  
+//  double cell_length = data_scene->finest_cell_length();
+//  
+//  //get the cells for this block
+//  if(!(data_scene->valid_index(block_i, block_j, block_k) && proj_scene->valid_index(block_i, block_j, block_k))){
+//    vcl_cerr << "In compute_testing_error: Invalid block" << vcl_endl;
+//    return;
+//  }
+//  
+//  data_scene->load_block_and_neighbors(block_i, block_j, block_k);
+//  proj_scene->load_block(block_i, block_j, block_k); 
+//  
+//  //get the trees
+//  float_tree_type* data_tree = data_scene->get_block(block_i, block_j, block_k)->get_tree();
+//  float_tree_type* error_tree = data_tree->clone();
+//  //error is always positive, therefore cells with negative errors can be identified as uninitialized.
+//  error_tree->init_cells(-1.0f);
+//  
+//  //get the leaves
+//  vcl_vector<float_cell_type*> data_leaves = data_tree->leaf_cells();
+//  vcl_vector<float_cell_type*> error_leaves = error_tree->leaf_cells();
+//  
+//  //CAUTION: the neigborhood box was suppossed to be defined as number of regular neigbors
+//  //convert neighborhood box to scene coordinates
+//  vgl_point_3d<int> min_point = nbbox_.min_point();
+//  vgl_point_3d<int> max_point = nbbox_.max_point();
+//  
+//  for(unsigned i =0; i<data_leaves.size(); i++)
+//  {
+//    float_cell_type* data_cell = data_leaves[i];
+//    
+//    //create a region around the center cell
+//    vgl_point_3d<double> centroid = data_tree->global_centroid(data_cell);
+//    
+//    //change the coordinates of enpoints to be in global coordinates abd text if they are contained in the scene
+//    vgl_point_3d<double> min_point_global(centroid.x() + (double)min_point.x()*cell_length, centroid.y() + (double)min_point.y()*cell_length, centroid.z() + (double)min_point.z()*cell_length);
+//    vgl_point_3d<double> max_point_global(centroid.x() + (double)max_point.x()*cell_length, centroid.y() + (double)max_point.y()*cell_length, centroid.z() + (double)max_point.z()*cell_length);
+//    if(!(data_scene->locate_point_in_memory(min_point_global) && data_scene->locate_point_in_memory(max_point_global)))
+//      continue;
+//    
+//    //3. Assemble neighbohood as a feature-vector
+//    vnl_vector<double> this_feature(feature_dim_, 0.0f);
+//    
+//    unsigned curr_dim = 0;
+//    for(int z = nbbox_.min_z(); z<=nbbox_.max_z(); z++)
+//      for(int y = nbbox_.min_y(); y<=nbbox_.max_y(); y++)
+//        for(int x = nbbox_.min_x(); x<=nbbox_.max_x(); x++)
+//        {
+//          vgl_point_3d<double> neighbor_centroid(centroid.x() + (double)x*cell_length,
+//                                                 centroid.y() + (double)y*cell_length,
+//                                                 centroid.z() + (double)z*cell_length);
+//          
+//          boct_tree_cell<short,float> *neighbor_cell = data_scene->locate_point_in_memory(neighbor_centroid);
+//          
+//          
+//          if(!neighbor_cell){
+//            vcl_cerr << "Error in compute_testing_error" <<vcl_endl;
+//            return;
+//          }
+//          
+//          this_feature[curr_dim] = (double)neighbor_cell->data();
+//          curr_dim++;
+//        }
+//    
+//    if(curr_dim != feature_dim_){
+//      vcl_cerr << "Error in compute_testing_error" <<vcl_endl;
+//      return;
+//    }    
+//    this_feature-=data_mean_feature_;
+//    
+//    //solve for the coefficients
+//    vnl_vector<double> a(feature_dim_, 0.0);
+//    a = pc_.transpose() * (this_feature);
+// 
+//    //compute error
+//    error_leaves[i]->set_data(a.extract(ncomponents));
+//  }
+//  
+//  // write and release memory
+//  proj_scene->get_block(block_i, block_j, block_k)->init_tree(error_tree);
+//  proj_scene->write_active_block();
+//  data_scene->unload_active_blocks();
+  
+}
+
+
 //: Compute mean feature of all "leaf-features" in a scene
-void bvpl_discover_pca_kernels::compute_mean_feature(boxm_scene<boct_tree<short, float> > *scene, vnl_vector<double>& mean_feature)
+void bvpl_discover_pca_kernels::compute_mean_feature(boxm_scene<boct_tree<short, float> > *scene)
 {
   //a vector to keep projection error - first element refers to error when using only first pc,
   //the sencond element, to error when projecting on frist 2 components and so on
-  mean_feature.set_size(feature_dim_);
-  mean_feature.fill(0.0);
+  data_mean_feature_.set_size(feature_dim_);
+  data_mean_feature_.fill(0.0);
   unsigned long nfeatures = 0;
   
   //iterate through leaves and arrage as vectors.
@@ -605,11 +945,16 @@ void bvpl_discover_pca_kernels::compute_mean_feature(boxm_scene<boct_tree<short,
     
     assert(curr_dim == feature_dim_);
     
-    mean_feature+=this_feature;
+    data_mean_feature_+=this_feature;
     nfeatures++;
     ++cell_it;
   }
-  mean_feature = mean_feature/(double)nfeatures;
+  data_mean_feature_ = data_mean_feature_/(double)nfeatures;
+  
+  vcl_ofstream mean_ofs(data_mean_path().c_str());
+  mean_ofs.precision(15);
+  mean_ofs << data_mean_feature_;
+  mean_ofs.close();
   
 }
 
@@ -734,7 +1079,8 @@ void bvpl_discover_pca_kernels::xml_write()
   paths->set_attribute("data_path", data_path() );
   paths->set_attribute("weights_path", weights_path() );
   paths->set_attribute("positions_path", pos_path()) ; 
-  paths->set_attribute("mean_path", mean_path());
+  paths->set_attribute("sample_mean_path", sample_mean_path());
+  paths->set_attribute("data_mean_path", data_mean_path());
   paths->set_attribute("scene_path", scene_path_);
   root->append_data(paths);
   root->append_text("\n");
@@ -761,6 +1107,13 @@ void bvpl_discover_pca_kernels::xml_write()
   dim->append_text("\n");
   dim->set_attribute("feature_dim", feature_dim_);
   root->append_data(dim);
+  root->append_text("\n");
+  
+  
+  bxml_element* cell_length = new bxml_element("finest_cell_length");
+  cell_length->append_text("\n");
+  cell_length->set_attribute("length", finest_cell_length_);
+  root->append_data(cell_length);
   root->append_text("\n");
   
   vcl_ofstream os(xml_path().c_str());
