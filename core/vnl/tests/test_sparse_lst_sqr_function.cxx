@@ -3,33 +3,43 @@
 #include <vcl_iostream.h>
 
 
-// all ai.size() == 2, all bj.size() == 3, all eij.size() == 2
+
+// all ai.size() == 2, all bj.size() == 3, c.size() == 2, all eij.size() == 2
 class test_func1 : public vnl_sparse_lst_sqr_function
 {
  public:
   test_func1(unsigned int num_a, unsigned int num_b,
              const vcl_vector<vcl_vector<bool> >& xmask,
              UseGradient g = use_gradient)
-   : vnl_sparse_lst_sqr_function(num_a,2,num_b,3,xmask,2,g) {}
+   : vnl_sparse_lst_sqr_function(num_a,2,num_b,3,2,xmask,2,g) {}
 
-  void fij(int /*i*/, int /*j*/, vnl_vector<double> const& ai,
-           vnl_vector<double> const& bj, vnl_vector<double>& eij)
+  void fij(int /*i*/, int /*j*/, 
+           vnl_vector<double> const& ai,
+           vnl_vector<double> const& bj,
+           vnl_vector<double> const& c,
+           vnl_vector<double>& eij)
   {
-    eij[0] = (ai[0]*ai[0]-bj[0]*ai[1])*bj[2]*bj[2]*bj[2];
-    eij[1] = (ai[1]*ai[1]-bj[1]*ai[0])*bj[2]*bj[2]*bj[2];
+    eij[0] = (ai[0]*ai[0]-bj[0]*ai[1])*bj[2]*bj[2]*bj[2] + c[0]*ai[0];
+    eij[1] = (ai[1]*ai[1]-bj[1]*ai[0])*bj[2]*bj[2]*bj[2] + c[1]*ai[1];
   }
 
-  void jac_Aij(int /*i*/, int /*j*/, vnl_vector<double> const& ai,
-               vnl_vector<double> const& bj, vnl_matrix<double>& Aij)
+  void jac_Aij(int /*i*/, int /*j*/,
+               vnl_vector<double> const& ai,
+               vnl_vector<double> const& bj,
+               vnl_vector<double> const& c,
+               vnl_matrix<double>& Aij)
   {
-    Aij[0][0] = 2.0*ai[0]*bj[2]*bj[2]*bj[2];
+    Aij[0][0] = 2.0*ai[0]*bj[2]*bj[2]*bj[2] + c[0];
     Aij[0][1] = -bj[0]*bj[2]*bj[2]*bj[2];
     Aij[1][0] = -bj[1]*bj[2]*bj[2]*bj[2];
-    Aij[1][1] = 2.0*ai[1]*bj[2]*bj[2]*bj[2];
+    Aij[1][1] = 2.0*ai[1]*bj[2]*bj[2]*bj[2] + c[1];
   }
 
-  void jac_Bij(int /*i*/, int /*j*/, vnl_vector<double> const& ai,
-               vnl_vector<double> const& bj, vnl_matrix<double>& Bij)
+  void jac_Bij(int /*i*/, int /*j*/,
+               vnl_vector<double> const& ai,
+               vnl_vector<double> const& bj,
+               vnl_vector<double> const& c,
+               vnl_matrix<double>& Bij)
   {
     Bij[0][0] = -ai[1]*bj[2]*bj[2]*bj[2];
     Bij[0][1] = 0.0;
@@ -37,6 +47,18 @@ class test_func1 : public vnl_sparse_lst_sqr_function
     Bij[1][0] = 0.0;
     Bij[1][1] = -ai[0]*bj[2]*bj[2]*bj[2];
     Bij[1][2] = (ai[1]*ai[1]-bj[1]*ai[0])*3.0*bj[2]*bj[2];
+  }
+
+  void jac_Cij(int /*i*/, int /*j*/,
+               vnl_vector<double> const& ai,
+               vnl_vector<double> const& bj,
+               vnl_vector<double> const& c,
+               vnl_matrix<double>& Cij)
+  {
+    Cij[0][0] = ai[0];
+    Cij[0][1] = 0.0;
+    Cij[1][0] = 0.0;
+    Cij[1][1] = ai[1];
   }
 };
 
@@ -83,6 +105,8 @@ static void test_sparse_lst_sqr_function()
    TEST("number_of_params_b",num_valid,true);
    TEST("index_b",index_valid,true);
 
+   TEST("number_of_params_c",2,my_func.number_of_params_c());
+
    num_valid = true;
    index_valid = true;
    for (unsigned int k=0; k<my_func.number_of_e(); ++k) {
@@ -92,18 +116,22 @@ static void test_sparse_lst_sqr_function()
    TEST("number_of_residuals",num_valid,true);
    TEST("index_e",index_valid,true);
 
-   vnl_vector<double> ai(2),bj(3),e(2);
+   vnl_vector<double> ai(2),bj(3),c(2),e(2);
    ai[0] = 5.0;  ai[1] = -1.0;
    bj[0] = 1.2;  bj[1] = 1.5;  bj[2] = 2.2;
+   c[0] = 1.0;   c[1] = 2.0;
    const double step = 0.001;
 
-   my_func.fij(0,0,ai,bj,e);
+   my_func.fij(0,0,ai,bj,c,e);
    vcl_cout << "e  = " << e << vcl_endl;
-   vnl_matrix<double> Aij(2,2), Bij(2,3), fd_Aij(2,2), fd_Bij(2,3);
-   my_func.jac_Aij(0,0,ai,bj,Aij);
-   my_func.fd_jac_Aij(0,0,ai,bj,fd_Aij,step);
-   my_func.jac_Bij(0,0,ai,bj,Bij);
-   my_func.fd_jac_Bij(0,0,ai,bj,fd_Bij,step);
+   vnl_matrix<double> Aij(2,2), Bij(2,3), Cij(2,2);
+   vnl_matrix<double> fd_Aij(2,2), fd_Bij(2,3), fd_Cij(2,2);
+   my_func.jac_Aij(0,0,ai,bj,c,Aij);
+   my_func.fd_jac_Aij(0,0,ai,bj,c,fd_Aij,step);
+   my_func.jac_Bij(0,0,ai,bj,c,Bij);
+   my_func.fd_jac_Bij(0,0,ai,bj,c,fd_Bij,step);
+   my_func.jac_Cij(0,0,ai,bj,c,Cij);
+   my_func.fd_jac_Cij(0,0,ai,bj,c,fd_Cij,step);
 
    vcl_cout << "Aij =\n" << Aij << vcl_endl
             << "fd Aij =\n" << fd_Aij << vcl_endl;
@@ -111,6 +139,9 @@ static void test_sparse_lst_sqr_function()
    vcl_cout << "Bij =\n" << Bij << vcl_endl
             << "fd Bij =\n" << fd_Bij << vcl_endl;
    TEST("finite difference Bij", (Bij-fd_Bij).absolute_value_max()<0.001,true);
+   vcl_cout << "Cij =\n" << Cij << vcl_endl
+            << "fd Cij =\n" << fd_Cij << vcl_endl;
+   TEST("finite difference Cij", (Cij-fd_Cij).absolute_value_max()<0.001,true);
 }
 
 TESTMAIN(test_sparse_lst_sqr_function);

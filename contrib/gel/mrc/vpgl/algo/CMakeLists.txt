@@ -28,8 +28,10 @@ SET( vpgl_algo_sources
   vpgl_ortho_procrustes.h          vpgl_ortho_procrustes.cxx
   vpgl_ray_intersect.h             vpgl_ray_intersect.cxx
   vpgl_adjust_rational_trans_onept.h vpgl_adjust_rational_trans_onept.cxx
-  vpgl_rational_geo_adjust.h        vpgl_rational_geo_adjust.cxx
+  vpgl_rational_geo_adjust.h       vpgl_rational_geo_adjust.cxx
   vpgl_bundle_adjust.h             vpgl_bundle_adjust.cxx
+  vpgl_bundle_adjust_lsqr.cxx      vpgl_bundle_adjust_lsqr.h
+  vpgl_ba_fixed_k_lsqr.cxx         vpgl_ba_fixed_k_lsqr.h
   vpgl_interpolate.h               vpgl_interpolate.cxx
   vpgl_camera_homographies.h       vpgl_camera_homographies.cxx
   vpgl_nitf_camera_coverage.h      vpgl_nitf_camera_coverage.cxx
