@@ -35,8 +35,7 @@ public:
                           unsigned int num_params_per_b,
                           unsigned int num_params_c,
                           const vcl_vector<vgl_point_2d<double> >& image_points,
-                          const vcl_vector<vcl_vector<bool> >& mask,
-                          bool use_confidence_weights = true);
+                          const vcl_vector<vcl_vector<bool> >& mask);
 
   //: Constructor
   //  Each image point is assigned an inverse covariance (error projector) matrix
@@ -47,8 +46,7 @@ public:
                           unsigned int num_params_c,
                           const vcl_vector<vgl_point_2d<double> >& image_points,
                           const vcl_vector<vnl_matrix<double> >& inv_covars,
-                          const vcl_vector<vcl_vector<bool> >& mask,
-                          bool use_confidence_weights = true);
+                          const vcl_vector<vcl_vector<bool> >& mask);
 
   // Destructor
   virtual ~vpgl_bundle_adjust_lsqr() {}
@@ -109,6 +107,23 @@ public:
                        vnl_vector<double> const& c,
                        vnl_matrix<double>& Cij) = 0;
 
+  //: set the residual scale for the robust estimation
+  void set_residual_scale(double scale) { scale2_ = scale*scale; }
+
+  //: Set the use of M-estimators for robust estimation
+  void set_use_m_estimator(bool use_m) { use_m_estimator_ = use_m; }
+
+  //: return true if using M-estimators for robust estimation
+  bool use_m_estimator() const { return use_m_estimator_; }
+
+
+  //: M-estimator weight function
+  // a positive, monotonically decreasing function with m_est_weight(k,0) == 1
+  virtual double m_est_weight(int k, double ek2);
+
+  //: Derivative of the M-estimator weight function
+  // used in weighting the Jacobians
+  virtual double deriv_m_est_weight(int k, double ek2);
 
   //: construct the j-th 3D point from parameter vector \param b and \param c
   vgl_homg_point_3d<double>
@@ -183,7 +198,7 @@ public:
   }
 
   //: return the current weights
-  vcl_vector<double> weights() const { return weights_; }
+  const vcl_vector<double>& weights() const { return weights_; }
 
 
   //---------------------------------------------------------------------------
@@ -222,9 +237,11 @@ protected:
   vcl_vector<vnl_matrix<double> > factored_inv_covars_;
   //: Flag to enable covariance weighted errors
   bool use_covars_;
-  //: Flag to enable confidence weighting
-  bool use_weights_;
-  //: The corresponding points in the image
+  //: Flag to enable M-estimators
+  bool use_m_estimator_;
+  //: The square of the scale of the robust estimator
+  double scale2_;
+  //: The computed weights using the weight function
   vcl_vector<double> weights_;
   int iteration_count_;
 };

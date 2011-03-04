@@ -32,10 +32,12 @@ class vpgl_bundle_adjust
   //: Destructor
   ~vpgl_bundle_adjust();
 
-  void set_use_weights(bool use_weights) { use_weights_ = use_weights; }
+  void set_use_m_estimator(bool use_m) { use_m_estimator_ = use_m; }
+  void set_m_estimator_scale(double scale) { m_estimator_scale_ = scale; }
   void set_use_gradient(bool use_gradient) { use_gradient_ = use_gradient; }
   void set_self_calibrate(bool self_calibrate) { self_calibrate_ = self_calibrate; }
   void set_normalize_data(bool normalize) { normalize_data_ = normalize; }
+  void set_verbose(bool verbose) { verbose_ = verbose; }
   void set_max_iterations(unsigned maxitr) { max_iterations_ = maxitr; }
 
   //: Return the ending error
@@ -44,6 +46,8 @@ class vpgl_bundle_adjust
   double start_error() const { return start_error_; }
   //: Return the number of iterations
   int num_iterations() const { return num_iterations_; }
+  //: Return the weights a the end of the optimization
+  const vcl_vector<double>& final_weights() const { return weights_; }
 
   //: Return the raw camera parameters
   const vnl_vector<double>& cam_params() const { return a_; }
@@ -75,11 +79,16 @@ class vpgl_bundle_adjust
   vnl_vector<double> b_;
   //: The last global parameters
   vnl_vector<double> c_;
+  //: The last estimated weights
+  vcl_vector<double> weights_;
 
-  bool use_weights_;
+
+  bool use_m_estimator_;
+  double m_estimator_scale_;
   bool use_gradient_;
   bool self_calibrate_;
   bool normalize_data_;
+  bool verbose_;
   unsigned int max_iterations_;
 
   double start_error_;

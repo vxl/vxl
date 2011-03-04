@@ -14,9 +14,8 @@
 vpgl_ba_shared_k_lsqr::
 vpgl_ba_shared_k_lsqr(const vpgl_calibration_matrix<double>& K,
                       const vcl_vector<vgl_point_2d<double> >& image_points,
-                      const vcl_vector<vcl_vector<bool> >& mask,
-                      bool use_confidence_weights)
- : vpgl_bundle_adjust_lsqr(6,3,1,image_points,mask,use_confidence_weights),
+                      const vcl_vector<vcl_vector<bool> >& mask)
+ : vpgl_bundle_adjust_lsqr(6,3,1,image_points,mask),
    K_(K)
 {
   // K_ is over parameterized, so enforce x_scale == 1.0
@@ -37,9 +36,8 @@ vpgl_ba_shared_k_lsqr::
 vpgl_ba_shared_k_lsqr(const vpgl_calibration_matrix<double>& K,
                       const vcl_vector<vgl_point_2d<double> >& image_points,
                       const vcl_vector<vnl_matrix<double> >& inv_covars,
-                      const vcl_vector<vcl_vector<bool> >& mask,
-                      bool use_confidence_weights)
- : vpgl_bundle_adjust_lsqr(6,3,1,image_points,inv_covars,mask,use_confidence_weights),
+                      const vcl_vector<vcl_vector<bool> >& mask)
+ : vpgl_bundle_adjust_lsqr(6,3,1,image_points,inv_covars,mask),
    K_(K)
 {
   // K_ is over parameterized, so enforce x_scale == 1.0

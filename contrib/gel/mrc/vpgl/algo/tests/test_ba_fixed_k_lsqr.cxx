@@ -1,5 +1,5 @@
 #include <testlib/testlib_test.h>
-#include <vpgl/algo/vpgl_ba_shared_k_lsqr.h>
+#include <vpgl/algo/vpgl_ba_fixed_k_lsqr.h>
 #include <vnl/vnl_random.h>
 
 namespace {
@@ -46,7 +46,7 @@ void setup_scene(const vpgl_calibration_matrix<double>& K,
 }
 
 
-static void test_ba_shared_k_lsqr()
+static void test_ba_fixed_k_lsqr()
 {
   vcl_vector<vgl_point_3d<double> > world;
   vcl_vector<vpgl_perspective_camera<double> > cameras;
@@ -55,14 +55,15 @@ static void test_ba_shared_k_lsqr()
   vpgl_calibration_matrix<double> K(2000.0,vgl_homg_point_2d<double>(512,384),1,0.7,2);
   setup_scene(K, world, cameras, image_points);
   vcl_vector<vcl_vector<bool> > mask(cameras.size(), vcl_vector<bool>(world.size(),true) );
+  vcl_vector<vpgl_calibration_matrix<double> > Ks(cameras.size(),K);
 
-  vpgl_ba_shared_k_lsqr func(K,image_points,mask);
+  vpgl_ba_fixed_k_lsqr func(Ks,image_points,mask);
 
 
   // Extract the camera and point parameters
   vnl_vector<double> a,b,c;
-  vpgl_ba_shared_k_lsqr::create_param_vector(cameras,a,c);
-  b = vpgl_ba_shared_k_lsqr::create_param_vector(world);
+  a = vpgl_ba_fixed_k_lsqr::create_param_vector(cameras);
+  b = vpgl_ba_fixed_k_lsqr::create_param_vector(world);
 
   // test conversion back to cameras
   bool valid = true;
@@ -108,9 +109,8 @@ static void test_ba_shared_k_lsqr()
 
 
 
-
   vnl_random rnd;
-  vnl_vector<double> a2(a),b2(b),c2(c);
+  vnl_vector<double> a2(a),b2(b);
   for( unsigned i=0; i<b2.size(); ++i)
   {
     b2[i] += rnd.normal()/1000;
@@ -124,22 +124,20 @@ static void test_ba_shared_k_lsqr()
 
   vcl_vector<vnl_matrix<double> > A(func.number_of_e(), vnl_matrix<double>(2,6));
   vcl_vector<vnl_matrix<double> > B(func.number_of_e(), vnl_matrix<double>(2,3));
-  vcl_vector<vnl_matrix<double> > C(func.number_of_e(), vnl_matrix<double>(2,1));
-  vcl_vector<vnl_matrix<double> > fdA(A), fdB(B), fdC(C);
-  func.jac_blocks(a2, b2, c2, A, B, C);
+  vcl_vector<vnl_matrix<double> > C(func.number_of_e(), vnl_matrix<double>(2,0));
+  vcl_vector<vnl_matrix<double> > fdA(A), fdB(B);
+  func.jac_blocks(a2, b2, c, A, B, C);
 
   eps = 1e-8;
-  func.fd_jac_blocks(a2, b2, c2, fdA, fdB, fdC, eps);
+  func.fd_jac_blocks(a2, b2, c, fdA, fdB, C, eps);
 
   TEST_NEAR("Jacobian A (same as finite diff)",
             (A[0]-fdA[0]).absolute_value_max(),0.0,1e-4);
   TEST_NEAR("Jacobian B (same as finite diff)",
             (B[0]-fdB[0]).absolute_value_max(),0.0,1e-4);
-  TEST_NEAR("Jacobian C (same as finite diff)",
-            (C[0]-fdC[0]).absolute_value_max(),0.0,1e-4);
 
 }
 
 }
 
-TESTMAIN(test_ba_shared_k_lsqr);
+TESTMAIN(test_ba_fixed_k_lsqr);

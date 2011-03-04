@@ -25,8 +25,7 @@ class vpgl_ba_fixed_k_lsqr : public vpgl_bundle_adjust_lsqr
   //       to measure projection error
   vpgl_ba_fixed_k_lsqr(const vcl_vector<vpgl_calibration_matrix<double> >& K,
                        const vcl_vector<vgl_point_2d<double> >& image_points,
-                       const vcl_vector<vcl_vector<bool> >& mask,
-                       bool use_confidence_weights = true);
+                       const vcl_vector<vcl_vector<bool> >& mask);
 
   //: Constructor
   //  Each image point is assigned an inverse covariance (error projector) matrix
@@ -35,8 +34,7 @@ class vpgl_ba_fixed_k_lsqr : public vpgl_bundle_adjust_lsqr
   vpgl_ba_fixed_k_lsqr(const vcl_vector<vpgl_calibration_matrix<double> >& K,
                        const vcl_vector<vgl_point_2d<double> >& image_points,
                        const vcl_vector<vnl_matrix<double> >& inv_covars,
-                       const vcl_vector<vcl_vector<bool> >& mask,
-                       bool use_confidence_weights = true);
+                       const vcl_vector<vcl_vector<bool> >& mask);
 
   // Destructor
   virtual ~vpgl_ba_fixed_k_lsqr() {}

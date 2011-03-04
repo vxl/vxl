@@ -17,10 +17,12 @@
 
 vpgl_bundle_adjust::vpgl_bundle_adjust()
   : ba_func_(NULL),
-    use_weights_(false),
+    use_m_estimator_(false),
+    m_estimator_scale_(1.0),
     use_gradient_(true),
     self_calibrate_(false),
     normalize_data_(true),
+    verbose_(false),
     max_iterations_(1000),
     start_error_(0.0),
     end_error_(0.0)
@@ -100,7 +102,7 @@ vpgl_bundle_adjust::optimize(vcl_vector<vpgl_perspective_camera<double> >& camer
                                       1.0,
                                       K_vals[1],
                                       K_vals[4]);
-    ba_func_ = new vpgl_ba_shared_k_lsqr(K,norm_image_points,mask,use_weights_);
+    ba_func_ = new vpgl_ba_shared_k_lsqr(K,norm_image_points,mask);
   }
   else
   {
@@ -120,22 +122,38 @@ vpgl_bundle_adjust::optimize(vcl_vector<vpgl_perspective_camera<double> >& camer
       }
       K.push_back(Ktmp);
     }
-    ba_func_ = new vpgl_ba_fixed_k_lsqr(K,norm_image_points,mask,use_weights_);
+    ba_func_ = new vpgl_ba_fixed_k_lsqr(K,norm_image_points,mask);
   }
+
+  // apply normalization to the scale of residuals
+  ba_func_->set_residual_scale(m_estimator_scale_/ns);
 
   // do the bundle adjustment
   vnl_sparse_lm lm(*ba_func_);
   lm.set_trace(true);
-  lm.set_verbose(true);
-  lm.set_max_function_evals(max_iterations_);
-  if (!lm.minimize(a_,b_,c_,use_gradient_))
-    return false;
+  lm.set_verbose(verbose_);
 
-  if (self_calibrate_)
+  ba_func_->set_use_m_estimator(use_m_estimator_);
+  lm.set_max_function_evals(max_iterations_);
+  if (!lm.minimize(a_,b_,c_,use_gradient_) &&
+      lm.get_num_iterations() < max_iterations_)
+  {
+    return false;
+  }
+
+  if(use_m_estimator_)
+    weights_ = ba_func_->weights();
+  else
+  {
+    weights_.clear();
+    weights_.resize(image_points.size(),1.0);
+  }
+
+  if (self_calibrate_ && verbose_)
     vcl_cout << "final focal length = "<<c_[0]*ns<<vcl_endl;
 
-  start_error_ = lm.get_start_error();
-  end_error_ = lm.get_end_error();
+  start_error_ = lm.get_start_error()*ns;
+  end_error_ = lm.get_end_error()*ns;
   num_iterations_ = lm.get_num_iterations();
 
   // Update the camera parameters
@@ -171,10 +189,13 @@ vpgl_bundle_adjust::write_vrml(const vcl_string& filename,
   vcl_ofstream os(filename.c_str());
   os << "#VRML V2.0 utf8\n\n";
 
+  // vrml views are rotated 180 degrees around the X axis
+  vgl_rotation_3d<double> rot180(vnl_math::pi, 0.0, 0.0);
+
   for (unsigned int i=0; i<cameras.size(); ++i){
     vnl_double_3x3 K = cameras[i].get_calibration().get_matrix();
 
-    const vgl_rotation_3d<double>& R = cameras[i].get_rotation();
+    vgl_rotation_3d<double> R = rot180*cameras[i].get_rotation();
     //R.set_row(1,-1.0*R.get_row(1));
     //R.set_row(2,-1.0*R.get_row(2));
     vgl_point_3d<double> ctr = cameras[i].get_camera_center();
