@@ -112,7 +112,59 @@ void vil_blob_labels(const vil_image_view<bool>& src_binary,
 }
 
 
-//: Produce a list of regions label image that enumerates all disjoint blobs in a binary image.
+//: Set all non-blob-edge pixels in a blob label image to zero.
+void vil_blob_labels_to_edge_labels(const vil_image_view<unsigned>& src_label,
+                                    vil_blob_connectivity conn,
+                                    vil_image_view<unsigned>& dest_label)
+{
+  unsigned ni=src_label.ni();
+  unsigned nj=src_label.nj();
+  dest_label.set_size(ni, nj);
+  dest_label.fill(0);
+
+  unsigned n_edge_neighbours;
+  switch (conn)
+  {
+   case vil_blob_4_conn:
+    n_edge_neighbours=8;
+    break;
+   case vil_blob_8_conn:
+    n_edge_neighbours=4;
+    break;
+   default:
+    n_edge_neighbours=0; assert(!"unknown connectivity");
+  }
+
+  // A  4-conn blob pixel is on the edge if any of its 8-conn neighbours has different value.
+  // An 8-conn blob pixel is on the edge if any of its 4-conn neighbours has different value.
+  int neighbourhood_ii[] = {  0, -1,  1,  0,  -1,  1, -1,  1};
+  int neighbourhood_jj[] = { -1,  0,  0,  1,  -1, -1,  1,  1};
+
+  for (unsigned j=0; j<nj; ++j)
+    for (unsigned i=0; i<ni; ++i)
+    {
+      unsigned v = src_label(i,j);
+      if (!v) continue;
+      for (unsigned l=0; l<n_edge_neighbours; ++l)
+      {
+        unsigned ii = i + neighbourhood_ii[l];
+        if (ii >= ni) continue; // rely on wraparound to find -ne overruns.
+        unsigned jj = j + neighbourhood_jj[l];
+        if (jj >= nj) continue;
+        if (v!=src_label(ii,jj)) // Only pixels that have neighbours with different values are edge pixels.
+        {
+          dest_label(i,j) = v;
+          break;
+        }
+      }
+    }
+
+
+}
+
+
+
+//: Convert a label image into a list of chorded regions.
 // A blob label value of n will be returned in dest_regions[n-1].
 void vil_blob_labels_to_regions(const vil_image_view<unsigned>& src_label,
                                 vcl_vector<vil_blob_region>& dest_regions)
@@ -136,5 +188,26 @@ void vil_blob_labels_to_regions(const vil_image_view<unsigned>& src_label,
       // Find end of chord.
       while (++i < ni && src_label(i,j)==label);
       dest_regions[label-1].push_back(vil_chord(i_start, i-1, j));
+    }
+}
+
+//: Convert a label image (or an edge label image) into a set of pixel lists.
+// A blob label value of n will be returned in dest_pixels_lists[n-1].
+// Note that pixel lists are not ordered.
+void vil_blob_labels_to_pixel_lists(const vil_image_view<unsigned>& src_label,
+                                vcl_vector<vil_blob_pixel_list>& dest_pixel_lists)
+{
+  dest_pixel_lists.clear();
+  unsigned ni=src_label.ni();
+  unsigned nj=src_label.nj();
+
+  for (unsigned j=0; j<nj; ++j)
+    for (unsigned i=0; i<ni; ++i)
+    {
+      unsigned label = src_label(i,j);
+      if (!label) continue;
+      // Make sure there is a pixel list for this label.
+      if (label > dest_pixel_lists.size()) dest_pixel_lists.resize(label);
+      dest_pixel_lists[label-1].push_back(vcl_make_pair(i,j));
     }
 }

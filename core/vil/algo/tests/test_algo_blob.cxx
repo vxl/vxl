@@ -83,7 +83,9 @@ static void test_algo_blob()
   vcl_cout<<"=== Testing vil_blob ===\n";
   vil_image_view<bool> image(10,11);
   vil_image_view<unsigned> labels;
-  vcl_vector<vcl_vector<vil_chord> > regions;
+  vil_image_view<unsigned> edge_labels;
+  vcl_vector<vil_blob_region > regions;
+  vcl_vector<vil_blob_pixel_list > edge_lists;
 
   // Create 3 x 3 square
   image.fill(false);
@@ -91,11 +93,15 @@ static void test_algo_blob()
 
   vil_blob_labels(image, vil_blob_4_conn, labels);
   vil_blob_labels_to_regions(labels, regions);
-
+  vil_blob_labels_to_edge_labels(labels, vil_blob_4_conn, edge_labels);
+  vil_blob_labels_to_pixel_lists(edge_labels, edge_lists);
   vil_print_all(vcl_cout, labels, 1);
+  vil_print_all(vcl_cout, edge_labels, 1);
 
   TEST("Count (3x3)", regions.size(), 1);
   TEST("Area (3x3)", vil_area(regions[0]), 9);
+  TEST("Count edge(3x3)", edge_lists.size(), 1);
+  TEST("Area edge(3x3)", edge_lists[0].size(), 8);
 
   // Create 1 x 5 line
   image.fill(false);
@@ -103,11 +109,15 @@ static void test_algo_blob()
 
   vil_blob_labels(image, vil_blob_4_conn, labels);
   vil_blob_labels_to_regions(labels, regions);
-
+  vil_blob_labels_to_edge_labels(labels, vil_blob_4_conn, edge_labels);
+  vil_blob_labels_to_pixel_lists(edge_labels, edge_lists);
   vil_print_all(vcl_cout, labels, 1);
+  vil_print_all(vcl_cout, edge_labels, 1);
 
   TEST("Count (1x5)", regions.size(), 1);
   TEST("Area (1x5)", vil_area(regions[0]), 5);
+  TEST("Count edge (1x5)", edge_lists.size(), 1);
+  TEST("Area edge (1x5)", edge_lists[0].size(), 5);
 
 
   // Make an L shape
@@ -152,7 +162,36 @@ static void test_algo_blob()
   vil_print_all(vcl_cout, labels, 1);
 
   TEST("Count (V shape 8-conn)", regions.size(), 1);
-  TEST("Area (V shape 4-conn - 1)", vil_area(regions[0]), 3);
+  TEST("Area (V shape 8-conn - 1)", vil_area(regions[0]), 3);
+
+  // Make a Cross shape
+  image.fill(false);
+  vil_crop(image, 5,1, 3,5).fill(true);
+  vil_crop(image, 3,5, 5,1).fill(true);
+
+  vil_blob_labels(image, vil_blob_4_conn, labels);
+  vil_blob_labels_to_regions(labels, regions);
+  vil_blob_labels_to_edge_labels(labels, vil_blob_4_conn, edge_labels);
+  vil_blob_labels_to_pixel_lists(edge_labels, edge_lists);
+  vil_print_all(vcl_cout, labels, 1);
+  vil_print_all(vcl_cout, edge_labels, 1);
+
+  TEST("Count (Cross shape 4-conn)", regions.size(), 1);
+  TEST("Area (Cross shape 4-conn)", vil_area(regions[0]), 9);
+  TEST("Count edge(Cross shape 4-conn)", edge_lists.size(), 1);
+  TEST("Area edge(Cross shape 4-conn)", edge_lists[0].size(), 9);
+  
+  vil_blob_labels(image, vil_blob_8_conn, labels);
+  vil_blob_labels_to_regions(labels, regions);
+  vil_blob_labels_to_edge_labels(labels, vil_blob_8_conn, edge_labels);
+  vil_blob_labels_to_pixel_lists(edge_labels, edge_lists);
+  vil_print_all(vcl_cout, labels, 1);
+  vil_print_all(vcl_cout, edge_labels, 1);
+
+  TEST("Count (Cross shape 8-conn)", regions.size(), 1);
+  TEST("Area (Cross shape 8-conn)", vil_area(regions[0]), 9);
+  TEST("Count edge(Cross shape 8-conn)", edge_lists.size(), 1);
+  TEST("Area edge(Cross shape 8-conn)", edge_lists[0].size(), 8);
 
   // Line up to edge
   image.fill(false);
@@ -197,11 +236,17 @@ static void test_algo_blob()
 
     vil_blob_labels(c_shape_image, vil_blob_8_conn, labels);
     vil_blob_labels_to_regions(labels, regions);
+    vil_blob_labels_to_edge_labels(labels, vil_blob_8_conn, edge_labels);
+    vil_blob_labels_to_pixel_lists(edge_labels, edge_lists);
     vil_print_all(vcl_cout, labels, 1);
+    vil_print_all(vcl_cout, edge_labels, 1);
 
     TEST("Number of blobs", regions.size(), 1 );
 
     TEST("Size of blob", vil_area(regions[0]), 64 );
+
+    TEST("Number of blob edge lists", edge_lists.size(), 1 );
+    TEST("Size of blob 8-conn edge ", edge_lists[0].size(), 40 );
 
   }
 }
