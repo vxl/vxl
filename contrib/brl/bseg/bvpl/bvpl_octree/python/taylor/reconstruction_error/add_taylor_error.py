@@ -8,17 +8,17 @@ Adds the error of a portion of voxels. Each block is processed in a separate thr
 This script assumes that the reconstruction error at each voxel has been computed
 """
 import os;
-import bvpl_octree_batch
-import multiprocessing
-import Queue 
-import time
-import random
-import optparse
+import bvpl_octree_batch;
+import multiprocessing;
+import Queue;
+import time;
+import random;
+import optparse;
 
 class dbvalue:
   def __init__(self, index, type):
-    self.id = index    # unsigned integer
-    self.type = type   # string
+    self.id = index;   # unsigned integer
+    self.type = type;  # string
 
 class taylor_error_job():
     def __init__(self, error_scene, fraction, block_i, block_j, block_k):
@@ -27,71 +27,71 @@ class taylor_error_job():
         self.block_i = block_i;
         self.block_j = block_j;
         self.block_k = block_k;
-        
+
 def execute_jobs(jobs, num_procs=4):
     # load up work queue
     work_queue=multiprocessing.Queue();
     for job in jobs:
-        work_queue.put(job)
-        
+        work_queue.put(job);
+
     # create a queue to pass to workers to store the results
     result_queue=multiprocessing.Queue();
-    
+
     # spawn workers
     for i in range(num_procs):
-        worker= taylor_error_worker(work_queue,result_queue)
+        worker= taylor_error_worker(work_queue,result_queue);
         worker.start();
-        print("worker with name ",worker.name," started!")
-        
+        print("worker with name ",worker.name," started!");
+
      # collect the results off the queue
-    results = []
+    results = [];
     while len(results) < len(jobs):
-        result = result_queue.get()
-        results.append(result)
- 
-    return results
-        
-        
+        result = result_queue.get();
+        results.append(result);
+
+    return results;
+
+
 class taylor_error_worker(multiprocessing.Process):
- 
+
     def __init__(self,work_queue,result_queue):
         # base class initialization
-        multiprocessing.Process.__init__(self)
+        multiprocessing.Process.__init__(self);
         # job management stuff
-        self.work_queue = work_queue
-        self.result_queue = result_queue
-        self.kill_received = False
-    
+        self.work_queue = work_queue;
+        self.result_queue = result_queue;
+        self.kill_received = False;
+
     def run(self):
         while not self.kill_received:
              # get a task
             try:
-                job = self.work_queue.get_nowait()
+                job = self.work_queue.get_nowait();
             except Queue.Empty:
-                break
-            
+                break;
+
             start_time = time.time();
-            
+
             print("Adding Errors");
             bvpl_octree_batch.init_process("bvplAddTaylorErrorsProcess");
             bvpl_octree_batch.set_input_from_db(0,job.error_scene);
             bvpl_octree_batch.set_input_double(1,job.fraction);
             bvpl_octree_batch.set_input_int(2, job.block_i);
-            bvpl_octree_batch.set_input_int(3, job.block_j)
-            bvpl_octree_batch.set_input_int(4, job.block_k)
+            bvpl_octree_batch.set_input_int(3, job.block_j);
+            bvpl_octree_batch.set_input_int(4, job.block_k);
             bvpl_octree_batch.run_process();
             (id, type) = bvpl_octree_batch.commit_output(0);
             error_val = dbvalue(id, type);
             error = bvpl_octree_batch.get_output_double(id);
-            
+
             self.result_queue.put(error);
 
             print("error");
             print(error);
- 
-            print ("Runing time for worker:", self.name)
+
+            print("Runing time for worker:", self.name);
             print(time.time() - start_time);
-            
+
 
 #***************** The Main Algorithm ************************#
 
@@ -112,7 +112,7 @@ if __name__=="__main__":
   parser.add_option('--nblocks_y', action="store", dest="nblocks_y", type="int", default = 1);
   parser.add_option('--nblocks_z', action="store", dest="nblocks_z", type="int", default = 1);
 
-  options, args = parser.parse_args()
+  options, args = parser.parse_args();
 
   model_dir = options.model_dir;
   taylor_dir = options.taylor_dir;
@@ -123,11 +123,11 @@ if __name__=="__main__":
   fraction = options.fraction;
 
   if not os.path.isdir(model_dir +"/"):
-      print "Invalid Model Dir"
+      print "Invalid Model Dir";
       sys.exit(-1);
 
   if not os.path.isdir(taylor_dir +"/"):
-      print "Invalid Taylor Dir"
+      print "Invalid Taylor Dir";
       sys.exit(-1);
 
 
@@ -158,8 +158,8 @@ if __name__=="__main__":
                 block_i = blocks_x[i]; block_j = blocks_y[j]; block_k = blocks_z[k];
                 current_job = taylor_error_job(error_scene, fraction, block_i, block_j, block_k);
                 job_list.append(current_job);
-   
-  #run                   
+
+  #run
   results=execute_jobs(job_list, num_cores);
 
   # dump results
@@ -167,15 +167,12 @@ if __name__=="__main__":
   for r in results:
       print(r);
       total_error = total_error + r;
-      
+
   # write schedule file
   int_frac = int(fraction*100);
   error_file = taylor_dir + "/error_" + str(int_frac) +".txt";
   fd = open(error_file,"w");
   print >>fd, total_error/len(results);
   print >>fd, results;
-  fd.close()
-  
-  
-    
-    
+  fd.close();
+

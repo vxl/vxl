@@ -1,67 +1,67 @@
 import os;
-import bvpl_octree_batch
-import multiprocessing
-import Queue 
-import time
-import random
-import optparse
+import bvpl_octree_batch;
+import multiprocessing;
+import Queue;
+import time;
+import random;
+import optparse;
 
 
 class dbvalue:
   def __init__(self, index, type):
-    self.id = index    # unsigned integer
-    self.type = type   # string
+    self.id = index;   # unsigned integer
+    self.type = type;  # string
 
 class histogram_job():
     def __init__(self, scene_path):
         self.scene_path = scene_path;
 
-        
+
 def execute_jobs(jobs, num_procs=4):
     work_queue=multiprocessing.Queue();
     result_queue=multiprocessing.Queue();
     for job in jobs:
-        work_queue.put(job)
-    
+        work_queue.put(job);
+
     for i in range(num_procs):
-        worker= histogram_worker(work_queue,result_queue)
+        worker= histogram_worker(work_queue,result_queue);
         worker.start();
-        print("worker with name ",worker.name," started!")
-        
-        
+        print("worker with name ",worker.name," started!");
+
+
 class histogram_worker(multiprocessing.Process):
- 
+
     def __init__(self,work_queue,result_queue):
         # base class initialization
-        multiprocessing.Process.__init__(self)
+        multiprocessing.Process.__init__(self);
         # job management stuff
-        self.work_queue = work_queue
-        self.result_queue = result_queue
-        self.kill_received = False
-    
+        self.work_queue = work_queue;
+        self.result_queue = result_queue;
+        self.kill_received = False;
+
     def run(self):
         while not self.kill_received:
              # get a task
             try:
-                job = self.work_queue.get_nowait()
+                job = self.work_queue.get_nowait();
             except Queue.Empty:
-                break
-            
+                break;
+
             start_time = time.time();
-            
+
             print("Creating a Scene");
             bvpl_octree_batch.init_process("boxmCreateSceneProcess");
             bvpl_octree_batch.set_input_string(0,  job.scene_path );
             bvpl_octree_batch.run_process();
             (scene_id, scene_type) = bvpl_octree_batch.commit_output(0);
             scene= dbvalue(scene_id, scene_type);
-  
+
             print("Explore Histogram");
             bvpl_octree_batch.init_process("bvplSceneHistorgramProcess");
             bvpl_octree_batch.set_input_from_db(0,scene);
             bvpl_octree_batch.run_process();
- 
-            print ("Runing time for worker:", self.name)
+
+            print("Runing time for worker:", self.name);
             print(time.time() - start_time);
 
 #*******************The Main Algorithm ************************#
@@ -76,15 +76,13 @@ if __name__=="__main__":
   parser.add_option('--taylor_dir', action="store", dest="taylor_dir");
   parser.add_option('--num_cores', action="store", dest="num_cores", type="int", default=4);
 
-
-
   options, args = parser.parse_args();
 
   taylor_dir = options.taylor_dir;
   num_cores = options.num_cores;
 
   if not os.path.isdir(taylor_dir + "/"):
-      print "Invalid Taylor Dir"
+      print "Invalid Taylor Dir";
       sys.exit(-1);
 
   #Kernel names for 2-degree approximation
@@ -100,19 +98,16 @@ if __name__=="__main__":
   kernel_list.append("Ixz");
   kernel_list.append("Iyz");
 
-
   #Begin multiprocessing
   t1=time.time();
   work_queue=multiprocessing.Queue();
   job_list=[];
 
-
- 
   #Enqueue jobs
   for curr_kernel in range(0, len(kernel_list)):
       scene_path = taylor_dir + "/" + kernel_list[curr_kernel]+ "/float_response_scene.xml";
       current_job = histogram_job(scene_path);
       job_list.append(current_job);
-              
+
   execute_jobs(job_list, num_cores);
-  
+

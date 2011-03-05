@@ -4,17 +4,17 @@ Created on Mon Feb 14, 2011
 
 @author:Isabel Restrepo
 
-A script that encapsulates all steps needed to computer pca training error as a the numebr of training samples varies
+A script that encapsulates all steps needed to computer pca training error as a the number of training samples varies
 """
 
 if [ $1 = "-r" ] ; then
   export PYTHONPATH=/Projects/vxl/bin/release/reconstruction_error/lib
 else
   if [ $1 = "-d" ] ; then
-      export PYTHONPATH=/Projects/vxl/bin/Debug/lib
+    export PYTHONPATH=/Projects/vxl/bin/Debug/lib
   else
-      echo "Need a flag, either -d or -r";
-  fi 
+    echo "Need a flag, either -d or -r";
+  fi
 fi
 
 echo "PYTHONPATH=" $PYTHONPATH

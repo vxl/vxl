@@ -13,7 +13,7 @@
 #include <bvpl/bvpl_octree/bvpl_taylor_basis.h>
 
 //:global variables
-namespace bvpl_load_taylor_responses_process_globals 
+namespace bvpl_load_taylor_responses_process_globals
 {
   const unsigned n_inputs_ = 1;
   const unsigned n_outputs_ = 1;
@@ -24,13 +24,13 @@ namespace bvpl_load_taylor_responses_process_globals
 bool bvpl_load_taylor_responses_process_cons(bprb_func_process& pro)
 {
   using namespace bvpl_load_taylor_responses_process_globals ;
-  
+
   vcl_vector<vcl_string> input_types_(n_inputs_);
   input_types_[0] = "vcl_string"; //parent dir of responses
-  
+
   vcl_vector<vcl_string> output_types_(n_outputs_);
   output_types_[0] = "bvpl_taylor_scenes_map_sptr";
-  
+
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 }
 
@@ -39,15 +39,15 @@ bool bvpl_load_taylor_responses_process_cons(bprb_func_process& pro)
 bool bvpl_load_taylor_responses_process(bprb_func_process& pro)
 {
   using namespace bvpl_load_taylor_responses_process_globals;
-  
+
   //get inputs
   vcl_string parent_dir = pro.get_input<vcl_string>(0);
-  
+
   bvpl_taylor_basis_loader loader(parent_dir);
   bvpl_taylor_scenes_map_sptr  taylor_scenes = new bvpl_taylor_scenes_map(loader);
- 
+
   //store output
   pro.set_output_val<bvpl_taylor_scenes_map_sptr>(0, taylor_scenes);
-  
+
   return true;
 }

@@ -1,17 +1,16 @@
 import os;
-from multiprocessing import Queue
-from taylor_kernel_threads import taylor_kernel_job,execute_jobs
-import time
-import bvpl_octree_batch
-import optparse
-import random
-
+from multiprocessing import Queue;
+from taylor_kernel_threads import taylor_kernel_job,execute_jobs;
+import time;
+import bvpl_octree_batch;
+import optparse;
+import random;
 
 
 class dbvalue:
   def __init__(self, index, type):
-    self.id = index    # unsigned integer
-    self.type = type   # string
+    self.id = index;   # unsigned integer
+    self.type = type;  # string
 
 
 if __name__=="__main__":
@@ -41,11 +40,11 @@ if __name__=="__main__":
   num_cores = options.num_cores;
 
   if not os.path.isdir(model_dir +"/"):
-      print "Invalid Model Dir"
+      print "Invalid Model Dir";
       sys.exit(-1);
 
   if not os.path.isdir(model_dir +"/"):
-      print "Invalid Kernel Path"
+      print "Invalid Kernel Path";
       sys.exit(-1);
 
   if not os.path.isdir( taylor_dir + "/"):
@@ -81,7 +80,7 @@ if __name__=="__main__":
   blocks_x = [i for i in range(0,nblocks_x)];
   blocks_y = [i for i in range(0,nblocks_y)];
   blocks_z = [i for i in range(0,nblocks_z)];
-  
+
   random.shuffle(blocks_x);
   random.shuffle(blocks_y);
   random.shuffle(blocks_y);
@@ -98,6 +97,6 @@ if __name__=="__main__":
                       os.mkdir( output_path + "/");
                   current_job = taylor_kernel_job(scene, curr_kernel_path, block_i, block_j, block_k, output_path);
                   job_list.append(current_job);
-              
+
   execute_jobs(job_list, num_cores);
-  
+

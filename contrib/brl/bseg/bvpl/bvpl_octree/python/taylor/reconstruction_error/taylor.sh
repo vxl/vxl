@@ -11,10 +11,10 @@ if [ $1 = "-r" ] ; then
   export PYTHONPATH=/Projects/vxl/bin/Release/lib
 else
   if [ $1 = "-d" ] ; then
-      export PYTHONPATH=/Projects/vxl/bin/Debug/lib
+    export PYTHONPATH=/Projects/vxl/bin/Debug/lib
   else
-      echo "Need a flag, either -d or -r";
-  fi 
+    echo "Need a flag, either -d or -r";
+  fi
 fi
 
 echo "PYTHONPATH=" $PYTHONPATH

@@ -10,7 +10,7 @@ This script assumes that the pca basis has been computed as gone by extract_pca_
 import os;
 import bvpl_octree_batch
 import multiprocessing
-import Queue 
+import Queue
 import time
 import random
 import optparse
@@ -20,50 +20,50 @@ import sys
 
 class dbvalue:
   def __init__(self, index, type):
-    self.id = index    # unsigned integer
-    self.type = type   # string
+    self.id = index;   # unsigned integer
+    self.type = type;  # string
 
 class pca_error_job():
     def __init__(self, pca_info, pca_error_scenes, block_i, block_j, block_k, dim):
         self.pca_info = pca_info;
-        self.pca_error_scenes = pca_error_scenes;     
+        self.pca_error_scenes = pca_error_scenes;
         self.block_i = block_i;
         self.block_j = block_j;
         self.block_k = block_k;
         self.dim=dim;
-        
+
 def execute_jobs(jobs, num_procs=4):
     work_queue=multiprocessing.Queue();
     result_queue=multiprocessing.Queue();
     for job in jobs:
-        work_queue.put(job)
-    
+        work_queue.put(job);
+
     for i in range(num_procs):
-        worker= pca_error_worker(work_queue,result_queue)
+        worker= pca_error_worker(work_queue,result_queue);
         worker.start();
-        print("worker with name ",worker.name," started!")
-        
-        
+        print("worker with name ",worker.name," started!");
+
+
 class pca_error_worker(multiprocessing.Process):
- 
+
     def __init__(self,work_queue,result_queue):
         # base class initialization
-        multiprocessing.Process.__init__(self)
+        multiprocessing.Process.__init__(self);
         # job management stuff
-        self.work_queue = work_queue
-        self.result_queue = result_queue
-        self.kill_received = False
-    
+        self.work_queue = work_queue;
+        self.result_queue = result_queue;
+        self.kill_received = False;
+
     def run(self):
         while not self.kill_received:
              # get a task
             try:
-                job = self.work_queue.get_nowait()
+                job = self.work_queue.get_nowait();
             except Queue.Empty:
-                break
-            
+                break;
+
             start_time = time.time();
-            
+
             print("Computing Error Scene");
             bvpl_octree_batch.init_process("bvplComputePCAErrorBlockProcess");
             bvpl_octree_batch.set_input_from_db(0,job.pca_info);
@@ -73,10 +73,10 @@ class pca_error_worker(multiprocessing.Process):
             bvpl_octree_batch.set_input_int(4, job.block_k);
             bvpl_octree_batch.set_input_unsigned(5, job.dim);
             bvpl_octree_batch.run_process();
- 
-            print ("Runing time for worker:", self.name)
+
+            print("Runing time for worker:", self.name);
             print(time.time() - start_time);
-            
+
 #*******************The Main Algorithm ************************#
 if __name__=="__main__":
   bvpl_octree_batch.register_processes();
@@ -94,7 +94,7 @@ if __name__=="__main__":
   parser.add_option('--dimension', action="store", dest="dimension", type="int");
 
 
-  options, args = parser.parse_args()
+  options, args = parser.parse_args();
 
   model_dir = options.model_dir;
   pca_dir = options.pca_dir;
@@ -105,11 +105,11 @@ if __name__=="__main__":
   dimension = options.dimension;
 
   if not os.path.isdir(model_dir +"/"):
-      print "Invalid Model Dir"
+      print "Invalid Model Dir";
       sys.exit(-1);
 
   if not os.path.isdir(pca_dir +"/"):
-      print "Invalid PCA Dir"
+      print "Invalid PCA Dir";
       sys.exit(-1);
 
 
@@ -130,8 +130,8 @@ if __name__=="__main__":
   bvpl_octree_batch.run_process();
   (id, type) = bvpl_octree_batch.commit_output(0);
   pca_scenes = dbvalue(id, type);
-  
-  
+
+
   print("Loading PCA Info");
   bvpl_octree_batch.init_process("bvplLoadPCAInfoProcess");
   bvpl_octree_batch.set_input_string(0, pca_dir);
@@ -143,22 +143,20 @@ if __name__=="__main__":
   work_queue=multiprocessing.Queue();
   job_list=[];
 
-
   #Enqueue jobs
-  all_indeces=[]
+  all_indices=[];
   for block_i in range(0,nblocks_x):
         for block_j in range(0,nblocks_y):
             for block_k in range(0,nblocks_z):
                 idx = [block_i, block_j, block_k];
-                all_indeces.append(idx);
-   
-  random.shuffle(all_indeces);
-   
-  for i in range (0, len(all_indeces)):
-      idx = all_indeces[i];
+                all_indices.append(idx);
+
+  random.shuffle(all_indices);
+
+  for i in range (0, len(all_indices)):
+      idx = all_indices[i];
       current_job = pca_error_job(pca_info, pca_scenes, idx[0], idx[1], idx[2], dimension);
-      job_list.append(current_job);          
-                              
+      job_list.append(current_job);
+
   execute_jobs(job_list, num_cores);
-    
-    
+

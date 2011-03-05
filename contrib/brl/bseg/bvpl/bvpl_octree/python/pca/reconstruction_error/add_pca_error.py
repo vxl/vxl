@@ -10,7 +10,7 @@ This script assumes that the reconstruction error at each voxel has been compute
 import os;
 import bvpl_octree_batch
 import multiprocessing
-import Queue 
+import Queue
 import time
 import random
 import optparse
@@ -28,22 +28,22 @@ class pca_error_job():
         self.block_i = block_i;
         self.block_j = block_j;
         self.block_k = block_k;
-        
+
 def execute_jobs(jobs, num_procs=4):
     # load up work queue
     work_queue=multiprocessing.Queue();
     for job in jobs:
-        work_queue.put(job)
-        
+        work_queue.put(job);
+
     # create a queue to pass to workers to store the results
     result_queue=multiprocessing.Queue();
-    
+
     # spawn workers
     for i in range(num_procs):
         worker= pca_error_worker(work_queue,result_queue)
         worker.start();
         print("worker with name ",worker.name," started!")
-        
+
      # collect the results off the queue
     #all_results=[];
 #    results = []
@@ -51,21 +51,20 @@ def execute_jobs(jobs, num_procs=4):
 #        result = result_queue.get()
 #        results.append(result)
 #        all_results[job.dim].append(result);
-# 
+#
 #    return all_results;
 
     # collect the results off the queue
     results = []
     while len(results) < len(jobs):
-        result = result_queue.get()
-        results.append(result)
- 
-    return results
+        result = result_queue.get();
+        results.append(result);
 
-        
-        
+    return results;
+
+
 class pca_error_worker(multiprocessing.Process):
- 
+
     def __init__(self,work_queue,result_queue):
         # base class initialization
         multiprocessing.Process.__init__(self)
@@ -73,17 +72,17 @@ class pca_error_worker(multiprocessing.Process):
         self.work_queue = work_queue
         self.result_queue = result_queue
         self.kill_received = False
-    
+
     def run(self):
         while not self.kill_received:
              # get a task
             try:
-                job = self.work_queue.get_nowait()
+                job = self.work_queue.get_nowait();
             except Queue.Empty:
-                break
-            
+                break;
+
             start_time = time.time();
-            
+
             print("Adding Errors");
             bvpl_octree_batch.init_process("bvplAddPCAErrorsProcess");
             bvpl_octree_batch.set_input_from_db(0,job.pca_scenes);
@@ -96,12 +95,12 @@ class pca_error_worker(multiprocessing.Process):
             (id, type) = bvpl_octree_batch.commit_output(0);
             error_val = dbvalue(id, type);
             error = bvpl_octree_batch.get_output_double(id);
-            
+
             self.result_queue.put(error);
 
-            print ("Runing time for worker:", self.name)
+            print("Runing time for worker:", self.name);
             print(time.time() - start_time);
-            
+
 
 #***************** The Main Algorithm ************************#
 
@@ -109,7 +108,6 @@ if __name__=="__main__":
 
   bvpl_octree_batch.register_processes();
   bvpl_octree_batch.register_datatypes();
-
 
   #Parse inputs
   parser = optparse.OptionParser(description='Compute PCA Error Scene');
@@ -133,13 +131,13 @@ if __name__=="__main__":
   nblocks_z = options.nblocks_z;
   num_cores = options.num_cores;
   dimension = options.dimension;
-  
+
   if not os.path.isdir(model_dir +"/"):
-      print "Invalid Model Dir"
+      print "Invalid Model Dir";
       sys.exit(-1);
 
   if not os.path.isdir(pca_dir +"/"):
-      print "Invalid PCA Dir"
+      print "Invalid PCA Dir";
       sys.exit(-1);
 
 
@@ -166,14 +164,14 @@ if __name__=="__main__":
   job_list=[];
   #for dim in range(0, pca_feature_dim):
   for block_i in range(0,nblocks_x):
-        for block_j in range(0,nblocks_y):
-            for block_k in range(0,nblocks_z):
-                current_job = pca_error_job(pca_scenes, dimension, fraction, block_i, block_j, block_k);
-                job_list.append(current_job);
-   
-  #run                   
+      for block_j in range(0,nblocks_y):
+          for block_k in range(0,nblocks_z):
+              current_job = pca_error_job(pca_scenes, dimension, fraction, block_i, block_j, block_k);
+              job_list.append(current_job);
+
+  #run
   results=execute_jobs(job_list, num_cores);
-  
+
   # dump results
   total_error = 0;
   for r in results:
@@ -184,10 +182,5 @@ if __name__=="__main__":
   fd = open(error_file,"w");
   print >>fd, total_error/len(results);
   print >>fd, results;
-  fd.close()
-      
+  fd.close();
 
-  
-  
-    
-    

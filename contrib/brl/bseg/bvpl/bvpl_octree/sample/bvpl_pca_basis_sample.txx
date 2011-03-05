@@ -14,7 +14,7 @@
 template <unsigned dim>
 vcl_ostream& operator << (vcl_ostream& os, const bvpl_pca_basis_sample<dim>& sample)
 {
-  os << "PCA projection = " << sample.pca_projections_ << vcl_endl; 
+  os << "PCA projection = " << sample.pca_projections_ << vcl_endl;
   return os;
 }
 
@@ -24,7 +24,6 @@ void vsl_b_write(vsl_b_ostream & os, bvpl_pca_basis_sample<dim> const &sample)
 {
   vsl_b_write(os, sample.version_no());
   vsl_b_write(os, sample.pca_projections_);
- 
 }
 
 template <unsigned dim>
@@ -39,7 +38,7 @@ template <unsigned dim>
 void vsl_b_read(vsl_b_istream & is, bvpl_pca_basis_sample<dim> &sample)
 {
   if (!is) return;
-  
+
   short version;
   vsl_b_read(is,version);
   switch (version)
@@ -49,11 +48,10 @@ void vsl_b_read(vsl_b_istream & is, bvpl_pca_basis_sample<dim> &sample)
       break;
     default:
       vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, boxm_sample<T>&)\n"
-      << "           Unknown version number "<< version << '\n';
+               << "           Unknown version number "<< version << '\n';
       is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
       break;
   }
-  
 }
 
 template <unsigned dim>
@@ -69,6 +67,6 @@ template vcl_ostream& operator << (vcl_ostream&, const bvpl_pca_basis_sample<T >
 template void vsl_b_write(vsl_b_ostream &, bvpl_pca_basis_sample<T > const &); \
 template void vsl_b_write(vsl_b_ostream &, bvpl_pca_basis_sample<T > const *&); \
 template void vsl_b_read(vsl_b_istream &, bvpl_pca_basis_sample<T > &); \
-template void vsl_b_read(vsl_b_istream &, bvpl_pca_basis_sample<T > *&); 
+template void vsl_b_read(vsl_b_istream &, bvpl_pca_basis_sample<T > *&)
 
 #endif
