@@ -23,6 +23,7 @@
 #include <vnl/algo/vnl_svd.h>
 
 #include <vcl_list.h>
+#include <vcl_iostream.h>
 
 #if BVPL_OCTREE_HAS_PTHREADS
 #include <pthread.h>
@@ -42,21 +43,20 @@ class bvpl_discover_pca_kernels: public vbl_ref_count
     scene_path_ = scene->filename();
     vcl_cout << "Scene path: " << scene->filename()<< vcl_endl;;
     data_scene_base_=scene;
-      
+
     finest_cell_length_ = scene->finest_cell_length();
- 
+
     feature_dim_ = (nbbox_.width()+1)*(nbbox_.height()+1)* (nbbox_.depth()+1);
     compute_mean_feature(scene);
-    
+
     sample_mean_feature_.set_size(feature_dim_);
-    
+
     if (use_evd)
       set_up_pca_evd(scene);
     else
       set_up_pca_svd(scene);
-    
-    scene->unload_active_blocks();
 
+    scene->unload_active_blocks();
   }
 
   //: Construct from xml file
@@ -84,36 +84,36 @@ class bvpl_discover_pca_kernels: public vbl_ref_count
   //: Project training samples onto pca space and return error as a function of number of components used
   void compute_training_error(vnl_vector<double> &proj_error);
 
-  //: Reconstrcution error on training samples. Same as above but it is not computed from samples. 
+  //: Reconstrcution error on training samples. Same as above but it is not computed from samples.
   void theoretical_training_error(vnl_vector<double> &proj_error);
-  
+
   //: Reconstructions error on testing samples. All training samples are excuded!
   void compute_testing_error(vnl_vector<double> &proj_error);
-  
+
   //: Reconstructions error on testing samples. By block. Error is given as average error per sample
   void compute_testing_error(boxm_scene_base_sptr error_scene_base, unsigned ncomponents,
                              int block_i, int block_j, int block_k);
-  
+
 #if BVPL_OCTREE_HAS_PTHREADS
-  
+
   void compute_testing_error_thread_safe(boxm_scene<boct_tree<short,float> > * error_scene, unsigned ncomponents,
                                          int block_i, int block_j, int block_k);
-  
+
 //  //: Reconstructions error on testing samples. By block. Error is the sse of feature vector approximation
 //  bool compute_testing_error_thread_safe(boxm_scene_base_sptr error_scene_base, unsigned ncomponents);
-//  
+//
 //  //: Reconstructions error on testing samples. By block. Error is the sse of feature vector approximation
 //  friend void *compute_testing_error_thread( void *ptr);
-  
+
 #endif
-  
+
   //: Computes pca projection at each voxel on the block and it save the specified number of dimensions (dim)
   void project(boxm_scene<boct_tree<short, float> > *proj_scene, unsigned ncomponents,
                int block_i, int block_j, int block_k);
- 
+
   //: Compute the mean feature of all "leaf" samples in the data scene associated with this class
   void compute_mean_feature(boxm_scene<boct_tree<short,float> > *scene);
-  
+
   //: Return the number of samples used
   unsigned long nsamples() { return nsamples_; }
 
@@ -125,20 +125,20 @@ class bvpl_discover_pca_kernels: public vbl_ref_count
 
   //: Return number of blocks in the data scene
   const vgl_vector_3d<unsigned> data_scene_dim() {return data_scene_base_->world_dim();}
-  
+
   bool load_all_scene_blocks()
   {
     boxm_scene<boct_tree<short,float> > *scene = dynamic_cast<boxm_scene<boct_tree<short,float> >* > (data_scene_base_.as_pointer());
     return scene->read_all_blocks();
   }
-  
+
   void unload_all_scene_blocks()
   {
     boxm_scene<boct_tree<short,float> > *scene = dynamic_cast<boxm_scene<boct_tree<short,float> >* > (data_scene_base_.as_pointer());
     scene->unload_active_blocks();
   }
-  
-    void xml_write();
+
+  void xml_write();
 
  protected:
 
@@ -177,7 +177,7 @@ class bvpl_discover_pca_kernels: public vbl_ref_count
   vnl_vector<double> data_mean_feature_;
   //: Pointer to data scene
   boxm_scene_base_sptr data_scene_base_;
-  //: Finest cell lenght of data scene
+  //: Finest cell length of data scene
   double finest_cell_length_;
 
   //: Paths for i/o of matrices and vectors
