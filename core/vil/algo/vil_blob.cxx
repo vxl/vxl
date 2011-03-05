@@ -5,8 +5,7 @@
 
 #include "vil_blob.h"
 #include <vcl_algorithm.h>
-
-
+#include <vcl_cassert.h>
 
 // Produce a label image that enumerates all disjoint blobs in a binary image
 void vil_blob_labels(const vil_image_view<bool>& src_binary,
@@ -158,10 +157,7 @@ void vil_blob_labels_to_edge_labels(const vil_image_view<unsigned>& src_label,
         }
       }
     }
-
-
 }
-
 
 
 //: Convert a label image into a list of chorded regions.
@@ -195,7 +191,7 @@ void vil_blob_labels_to_regions(const vil_image_view<unsigned>& src_label,
 // A blob label value of n will be returned in dest_pixels_lists[n-1].
 // Note that pixel lists are not ordered.
 void vil_blob_labels_to_pixel_lists(const vil_image_view<unsigned>& src_label,
-                                vcl_vector<vil_blob_pixel_list>& dest_pixel_lists)
+                                    vcl_vector<vil_blob_pixel_list>& dest_pixel_lists)
 {
   dest_pixel_lists.clear();
   unsigned ni=src_label.ni();
