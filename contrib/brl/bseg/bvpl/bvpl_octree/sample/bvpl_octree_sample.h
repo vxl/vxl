@@ -1,4 +1,4 @@
-// This is brl/bseg/bvpl/bvpl_octree/bvpl_octree_sample.h
+// This is brl/bseg/bvpl/bvpl_octree/sample/bvpl_octree_sample.h
 #ifndef bvpl_octree_sample_h
 #define bvpl_octree_sample_h
 //:
@@ -11,8 +11,6 @@
 //  Modifications
 //   <none yet>
 // \endverbatim
-
-#include <vcl_iostream.h>
 
 #include <vcl_iostream.h>
 #include <vsl/vsl_binary_io.h>
