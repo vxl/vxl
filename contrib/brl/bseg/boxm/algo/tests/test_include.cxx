@@ -8,6 +8,7 @@
 #include <boxm/algo/boxm_refine.h>
 #include <boxm/algo/boxm_save_block_raw.h>
 #include <boxm/algo/boxm_save_scene_raw.h>
+#include <boxm/algo/boxm_save_scene_raw_general.h>
 #include <boxm/algo/boxm_split_sample.h>
 #include <boxm/algo/boxm_upload_mesh.h>
 #include <boxm/algo/boxm_merge_mog.h>

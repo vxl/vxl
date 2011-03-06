@@ -1,6 +1,9 @@
 #include <vpgl/algo/vpgl_adjust_rational_trans_onept.h>
+#include <vpgl/algo/vpgl_ba_fixed_k_lsqr.h>
+#include <vpgl/algo/vpgl_ba_shared_k_lsqr.h>
 #include <vpgl/algo/vpgl_backproject.h>
 #include <vpgl/algo/vpgl_bundle_adjust.h>
+#include <vpgl/algo/vpgl_bundle_adjust_lsqr.h>
 #include <vpgl/algo/vpgl_bundle_rolling_shutter_adjust.h>
 #include <vpgl/algo/vpgl_camera_bounds.h>
 #include <vpgl/algo/vpgl_camera_compute.h>
