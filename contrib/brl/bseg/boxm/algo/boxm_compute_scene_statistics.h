@@ -1,6 +1,7 @@
 #ifndef boxm_compute_scene_statistics_h
 #define boxm_compute_scene_statistics_h
-
+//:
+// \file
 #include <boxm/boxm_scene.h>
 #include <vcl_iostream.h>
 #include <bsta/bsta_histogram.h>
@@ -11,10 +12,10 @@ bool compute_scene_statistics(boxm_scene<boct_tree<T_loc, T_data > >* scene, bst
 {
   typedef boct_tree<T_loc, T_data> tree_type;
   typedef boct_tree_cell<T_loc,T_data> cell_type;
-  
+
   //(1) Traverse the leaves of the scene
   boxm_cell_iterator<tree_type > iterator = scene->cell_iterator(&boxm_scene<tree_type>::load_block, true);
-  
+
   iterator.begin();
   float cell_count = 0;
   T_data max = (*iterator)->data();
@@ -27,7 +28,7 @@ bool compute_scene_statistics(boxm_scene<boct_tree<T_loc, T_data > >* scene, bst
     if ( this_val < min)  min = this_val;
     ++iterator;
   }
-  
+
   unsigned nbins = vcl_floor(vcl_sqrt(cell_count));
   response_hist = bsta_histogram<T_data>(min, max, nbins);
   scene->unload_active_blocks();
@@ -36,11 +37,10 @@ bool compute_scene_statistics(boxm_scene<boct_tree<T_loc, T_data > >* scene, bst
     response_hist.upcount(static_cast<T_data>((*iterator)->data()), 1.0f);
     ++iterator;
   }
-  
+
   scene->unload_active_blocks();
-  
+
   return true;
-  
 }
 
 //: Compute histogram for appearance model scene - where alpha, omega etc are relevant
