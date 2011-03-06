@@ -28,7 +28,7 @@
 template <class T>
 class vgl_compute_similarity_3d
 {
-public:
+ public:
 
   // Constructors/Initializers/Destructors-------------------------------------
 
@@ -62,7 +62,7 @@ public:
   //: Access he estimated scale
   T scale() const { return scale_; }
 
-protected:
+ protected:
   // Internal functions--------------------------------------------------------
 
   //: center all the points at the origin, and return the applied translation
@@ -70,7 +70,7 @@ protected:
                      vgl_vector_3d<T>& t) const;
 
   //: normalize the scale of the points, and return the applied scale
-  //  the average distance from the origin will be sqrt(3)
+  //  The average distance from the origin will be sqrt(3)
   void scale_points(vcl_vector<vgl_point_3d<T> >& pts,
                     T& s) const;
 

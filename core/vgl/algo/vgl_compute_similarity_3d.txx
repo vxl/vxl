@@ -61,7 +61,7 @@ center_points(vcl_vector<vgl_point_3d<T> >& pts,
 
 
 //: normalize the scale of the points, and return the applied scale
-//  the average distance from the origin will be sqrt(3)
+//  The average distance from the origin will be sqrt(3)
 template <class T>
 void vgl_compute_similarity_3d<T>::
 scale_points(vcl_vector<vgl_point_3d<T> >& pts,

@@ -3,8 +3,6 @@
 //:
 // \file
 
-
-
 #include <vnl/vnl_vector_ref.h>
 #include <vnl/vnl_double_3.h>
 
@@ -119,7 +117,6 @@ vpgl_bundle_adjust_lsqr::f(vnl_vector<double> const& a,
       }
     }
   }
-
 }
 
 
@@ -209,15 +206,13 @@ vpgl_bundle_adjust_lsqr::compute_weight_ij(int /*i*/, int /*j*/,
 
   // Beaton-Tukey
   weight = (u2 > 1.0) ? 0.0 : 1 - u2;
-  
+
   // Cauchy
   //weight = vcl_sqrt(1 / (1 + u2));
 }
 
 
-
-//: compute the 2x3 Jacobian of camera projection with respect to point location
-//  df/dpt  where f(pt) = P*pt
+//: compute the 2x3 Jacobian of camera projection with respect to point location df/dpt where $f(pt) = P*pt$
 void vpgl_bundle_adjust_lsqr::
 jac_inhomg_3d_point(vnl_double_3x4 const& P,
                     vnl_vector<double> const& pt,
@@ -250,8 +245,7 @@ jac_inhomg_3d_point(vnl_double_3x4 const& P,
 }
 
 
-//: compute the 2x3 Jacobian of camera projection with respect to camera center
-//  df/dC  where f(C) = [M | -M*C]*pt
+//: compute the 2x3 Jacobian of camera projection with respect to camera center df/dC where $f(C) = [M | -M*C]*pt$
 void vpgl_bundle_adjust_lsqr::jac_camera_center(vnl_double_3x3 const& M,
                                                 vnl_vector<double> const& C,
                                                 vnl_vector<double> const& pt,
@@ -266,8 +260,7 @@ void vpgl_bundle_adjust_lsqr::jac_camera_center(vnl_double_3x3 const& M,
 }
 
 
-//: compute the 2x3 Jacobian of camera projection with respect to camera rotation
-//  df/dr  where f(r) = K*rod_to_matrix(r)*[I | -C]*pt
+//: compute the 2x3 Jacobian of camera projection with respect to camera rotation df/dr where $f(r) = K*rod_to_matrix(r)*[I | -C]*pt$
 //  Here r is a Rodrigues vector, K is an upper triangular calibration matrix
 void vpgl_bundle_adjust_lsqr::jac_camera_rotation(vnl_double_3x3 const& K,
                                                   vnl_vector<double> const& C,
@@ -358,7 +351,6 @@ void vpgl_bundle_adjust_lsqr::jac_camera_rotation(vnl_double_3x3 const& K,
   J(0,2) *= K(0,0);
   J(0,2) += J(1,2)*K(0,1);
   J(1,2) *= K(1,1);
-
 }
 
 
@@ -396,6 +388,4 @@ vpgl_bundle_adjust_lsqr::rod_to_matrix(vnl_vector<double> const& r)
 
   return R;
 }
-
-
 

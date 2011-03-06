@@ -3,8 +3,6 @@
 //:
 // \file
 
-
-
 #include <vnl/vnl_vector_ref.h>
 #include <vgl/algo/vgl_rotation_3d.h>
 
@@ -38,7 +36,6 @@ vpgl_ba_fixed_k_lsqr(const vcl_vector<vpgl_calibration_matrix<double> >& K,
 }
 
 
-
 //: compute the Jacobian Aij
 void vpgl_ba_fixed_k_lsqr::jac_Aij(unsigned int i,
                                    unsigned int j,
@@ -63,7 +60,6 @@ void vpgl_ba_fixed_k_lsqr::jac_Aij(unsigned int i,
   // This is semi const incorrect - there is no vnl_vector_ref_const
   const vnl_vector_ref<double> r(3,const_cast<double*>(ai.data_block()));
   jac_camera_rotation(Km_[i],C,r,bj,Aij);
-
 }
 
 //: compute the Jacobian Bij
@@ -90,8 +86,7 @@ void vpgl_ba_fixed_k_lsqr::jac_Cij(unsigned int i,
   // do nothing, c parameters are not used
 }
 
-//: construct the j-th perspective camera
-//  from a pointer to the j-th parameters of \param b and parameters \param c
+//: construct the \param j-th perspective camera from a pointer to the j-th parameters of \param b and parameters \param c
 vgl_homg_point_3d<double>
 vpgl_ba_fixed_k_lsqr::param_to_point(int j,
                                      const double* bj,
@@ -100,8 +95,7 @@ vpgl_ba_fixed_k_lsqr::param_to_point(int j,
   return vgl_homg_point_3d<double>(bj[0], bj[1], bj[2]);
 }
 
-//: construct the j-th perspective camera
-//  from a pointer to the j-th parameters of \param b and parameters \param c
+//: construct the \param j-th perspective camera from a pointer to the j-th parameters of \param b and parameters \param c
 vnl_vector_fixed<double,4>
 vpgl_ba_fixed_k_lsqr::param_to_pt_vector(int j,
                                          const double* bj,
@@ -110,8 +104,7 @@ vpgl_ba_fixed_k_lsqr::param_to_pt_vector(int j,
   return vnl_vector_fixed<double,4>(bj[0], bj[1], bj[2], 1.0);
 }
 
-//: construct the ith perspective camera 
-//  from a pointer to the i-th parameters of \param a and parameters \param c
+//: construct the \param i-th perspective camera from a pointer to the i-th parameters of \param a and parameters \param c
 vpgl_perspective_camera<double>
 vpgl_ba_fixed_k_lsqr::param_to_cam(int i,
                                    const double* ai,
@@ -122,8 +115,7 @@ vpgl_ba_fixed_k_lsqr::param_to_cam(int i,
   return vpgl_perspective_camera<double>(K_[i],t,vgl_rotation_3d<double>(w));
 }
 
-//: compute a 3x4 camera matrix of camera i
-//  from a pointer to the i-th parameters of \param a and parameters \param c
+//: compute a 3x4 camera matrix of camera \param i from a pointer to the i-th parameters of \param a and parameters \param c
 vnl_double_3x4
 vpgl_ba_fixed_k_lsqr::param_to_cam_matrix(int i,
                                           const double* ai,
@@ -137,7 +129,6 @@ vpgl_ba_fixed_k_lsqr::param_to_cam_matrix(int i,
   P.set_column(3,-(M*center));
   return P;
 }
-
 
 
 //: Create the parameter vector \p a from a vector of cameras

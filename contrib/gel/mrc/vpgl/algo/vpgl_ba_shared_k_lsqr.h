@@ -8,13 +8,11 @@
 // \date March 24, 2010
 // \verbatim
 
-
-
 #include <vpgl/algo/vpgl_bundle_adjust_lsqr.h>
 
 
 //: a class for bundle adjustment with shared intrinsic parameters
-//  some shared intrinsic parameters can be estimated
+//  Some shared intrinsic parameters can be estimated
 //  currently only focal length is estimated
 class vpgl_ba_shared_k_lsqr : public vpgl_bundle_adjust_lsqr
 {
@@ -28,7 +26,7 @@ class vpgl_ba_shared_k_lsqr : public vpgl_bundle_adjust_lsqr
 
   //: Constructor
   //  Each image point is assigned an inverse covariance (error projector) matrix
-  // \note image points are not homogeneous because they require finite points 
+  // \note image points are not homogeneous because they require finite points
   //       to measure projection error
   vpgl_ba_shared_k_lsqr(const vpgl_calibration_matrix<double>& K,
                         const vcl_vector<vgl_point_2d<double> >& image_points,
@@ -67,30 +65,26 @@ class vpgl_ba_shared_k_lsqr : public vpgl_bundle_adjust_lsqr
                        vnl_matrix<double>& Cij);
 
 
-  //: construct the j-th perspective camera
-  //  from a pointer to the j-th parameters of \param b and parameters \param c
+  //: construct the \param j-th perspective camera from a pointer to the j-th parameters of \param b and parameters \param c
   virtual vgl_homg_point_3d<double>
   param_to_point(int j,
                  const double* bj,
                  const vnl_vector<double>& c) const;
 
-  //: construct the j-th perspective camera
-  //  from a pointer to the j-th parameters of \param b and parameters \param c
+  //: construct the \param j-th perspective camera from a pointer to the j-th parameters of \param b and parameters \param c
   virtual vnl_vector_fixed<double,4>
   param_to_pt_vector(int j,
                      const double* bj,
                      const vnl_vector<double>& c) const;
 
-  //: construct the ith perspective camera 
-  //  from a pointer to the i-th parameters of \param a and parameters \param c
+  //: construct the \param i-th perspective camera from a pointer to the i-th parameters of \param a and parameters \param c
   virtual vpgl_perspective_camera<double>
   param_to_cam(int i,
                const double* ai,
                const vnl_vector<double>& c) const;
 
-  //: compute a 3x4 camera matrix of camera i
-  //  from a pointer to the i-th parameters of \param a and parameters \param c
-  virtual vnl_double_3x4 
+  //: compute a 3x4 camera matrix of camera \param i from a pointer to the i-th parameters of \param a and parameters \param c
+  virtual vnl_double_3x4
   param_to_cam_matrix(int i,
                       const double* ai,
                       const vnl_vector<double>& c) const;

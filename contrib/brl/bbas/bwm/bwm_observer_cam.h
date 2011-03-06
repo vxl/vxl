@@ -73,8 +73,8 @@ class bwm_observer_cam : public bwm_observer_vgui
   void translate_along_optical_axis(double da);
 #endif
   //: Translate/scale according to the optical cone
-  // the object vertices are adjusted so that the projection in
-  // the master frame is invariant to the motion. This method is 
+  // The object vertices are adjusted so that the projection in
+  // the master frame is invariant to the motion. This method is
   // useful for perpective cameras where object scale changes with distance
   // from the center of projection
   void translate_along_optical_cone(double da);
@@ -132,7 +132,7 @@ class bwm_observer_cam : public bwm_observer_vgui
   virtual void camera_center(vgl_point_3d<double> & /*center*/) {}
 
   bool corr_pt(vgl_point_2d<double> &p) const
-  { if (corr_.size()>0) {p = corr_[corr_.size()-1].first; return true; } else return false; }
+  { if (corr_.size()>0) { p = corr_[corr_.size()-1].first; return true; } else return false; }
 
   //virtual vgl_vector_3d<double> camera_direction(vgl_point_3d<double> origin)=0;
 
