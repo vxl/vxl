@@ -4,7 +4,6 @@
 // \file
 
 
-
 #include <vnl/algo/vnl_sparse_lm.h>
 #include <vnl/vnl_double_3.h>
 
@@ -15,7 +14,6 @@
 
 #include <vcl_fstream.h>
 #include <vcl_algorithm.h>
-
 
 
 vpgl_bundle_adjust::vpgl_bundle_adjust()
@@ -41,7 +39,7 @@ vpgl_bundle_adjust::~vpgl_bundle_adjust()
 }
 
 //: normalize image points to be mean centered with scale sqrt(2)
-//  return parameters such that original point are recovered as (ns*x+nx, ns*y+ny)
+//  \return parameters such that original point are recovered as (ns*x+nx, ns*y+ny)
 void
 vpgl_bundle_adjust::normalize_points(vcl_vector<vgl_point_2d<double> >& image_points,
                                      double& nx, double& ny, double& ns)
@@ -79,14 +77,14 @@ reflect_points(const vgl_plane_3d<double>& plane,
 {
   vgl_h_matrix_3d<double> H;
   H.set_reflection_plane(plane);
-  for(unsigned int i=0; i<points.size(); ++i)
+  for (unsigned int i=0; i<points.size(); ++i)
   {
     points[i] = H * vgl_homg_point_3d<double>(points[i]);
   }
 }
 
 
-// rotation the cameras 180 degrees around an axis
+// rotate the cameras 180 degrees around an axis
 void
 vpgl_bundle_adjust::
 rotate_cameras(const vgl_vector_3d<double>& axis,
@@ -97,7 +95,7 @@ rotate_cameras(const vgl_vector_3d<double>& axis,
   r *= vnl_math::pi;
   vgl_rotation_3d<double> R(r);
   vgl_rotation_3d<double> R2(0.0, 0.0, vnl_math::pi);
-  for(unsigned int j=0; j<cameras.size(); ++j)
+  for (unsigned int j=0; j<cameras.size(); ++j)
   {
     vpgl_perspective_camera<double>& c = cameras[j];
     c.set_camera_center(R*c.get_camera_center());
@@ -118,7 +116,7 @@ depth_reverse(vcl_vector<vpgl_perspective_camera<double> >& cameras,
 {
   vnl_double_3 pc(0.0,0.0,0.0), cc(0.0,0.0,0.0);
   // compute the mean of the points
-  for(unsigned int i=0; i<points.size(); ++i)
+  for (unsigned int i=0; i<points.size(); ++i)
   {
     pc += vnl_double_3(points[i].x(), points[i].y(), points[i].z());
   }
@@ -126,7 +124,7 @@ depth_reverse(vcl_vector<vpgl_perspective_camera<double> >& cameras,
   vgl_point_3d<double> point_center(pc[0],pc[1],pc[2]);
 
   // compute the mean of the camera centers
-  for(unsigned int j=0; j<cameras.size(); ++j)
+  for (unsigned int j=0; j<cameras.size(); ++j)
   {
     vgl_point_3d<double> c = cameras[j].get_camera_center();
     cc += vnl_double_3(c.x(), c.y(), c.z());
@@ -155,7 +153,7 @@ vpgl_bundle_adjust::optimize(vcl_vector<vpgl_perspective_camera<double> >& camer
 
   double nx=0.0, ny=0.0, ns=1.0;
   vcl_vector<vgl_point_2d<double> > norm_image_points(image_points);
-  if(normalize_data_)
+  if (normalize_data_)
     normalize_points(norm_image_points,nx,ny,ns);
 
   // construct the bundle adjustment function
@@ -191,7 +189,7 @@ vpgl_bundle_adjust::optimize(vcl_vector<vpgl_perspective_camera<double> >& camer
     b_ = vpgl_ba_fixed_k_lsqr::create_param_vector(world_points);
     for (unsigned int i=0; i<cameras.size(); ++i){
       vpgl_calibration_matrix<double> Ktmp = cameras[i].get_calibration();
-      if(normalize_data_)
+      if (normalize_data_)
       {
         Ktmp.set_focal_length(Ktmp.focal_length()/ns);
         vgl_point_2d<double> pp = Ktmp.principal_point();
@@ -222,7 +220,7 @@ vpgl_bundle_adjust::optimize(vcl_vector<vpgl_perspective_camera<double> >& camer
     return false;
   }
 
-  if(use_m_estimator_)
+  if (use_m_estimator_)
   {
     weights_ = vcl_vector<double>(lm.get_weights().begin(), lm.get_weights().end());
   }
@@ -243,7 +241,7 @@ vpgl_bundle_adjust::optimize(vcl_vector<vpgl_perspective_camera<double> >& camer
   for (unsigned int i=0; i<cameras.size(); ++i)
   {
     cameras[i] = ba_func_->param_to_cam(i,a_,c_);
-    if(normalize_data_)
+    if (normalize_data_)
     {
       // undo the normalization in the camera calibration
       vpgl_calibration_matrix<double> K = cameras[i].get_calibration();

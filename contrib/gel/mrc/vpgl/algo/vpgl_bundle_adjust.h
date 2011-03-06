@@ -12,7 +12,6 @@
 // \endverbatim
 
 
-
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_sparse_lst_sqr_function.h>
 #include <vgl/vgl_point_2d.h>
@@ -20,7 +19,6 @@
 #include <vpgl/vpgl_perspective_camera.h>
 #include <vpgl/algo/vpgl_bundle_adjust_lsqr.h>
 #include <vcl_vector.h>
-
 
 
 //: Static functions for bundle adjustment
@@ -79,7 +77,7 @@ class vpgl_bundle_adjust
 
  private:
   //: normalize image points to be mean centered with scale sqrt(2)
-  //  return parameters such that original point are recovered as (ns*x+nx, ns*y+ny)
+  // \return parameters such that original point are recovered as (ns*x+nx, ns*y+ny)
   void normalize_points(vcl_vector<vgl_point_2d<double> >& image_points,
                         double& nx, double& ny, double& ns);
 
@@ -101,7 +99,6 @@ class vpgl_bundle_adjust
   vnl_vector<double> c_;
   //: The last estimated weights
   vcl_vector<double> weights_;
-
 
   bool use_m_estimator_;
   double m_estimator_scale_;
