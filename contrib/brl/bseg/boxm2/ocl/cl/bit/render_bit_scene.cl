@@ -27,9 +27,6 @@ void cast_ray(int,int,float,float,float,float,float,float,
 __kernel
 void
 render_bit_scene( __constant  RenderSceneInfo    * linfo,
-                  //__constant  float * mini,
-                  //__constant  float * maxi,
-                  //__constant  float * tf,
                   __global    int4               * tree_array,
                   __global    float              * alpha_array,
                   __global    MOG_TYPE           * mixture_array,
