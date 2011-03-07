@@ -301,75 +301,6 @@ void bayes_ratio_ind( float  seg_len,
 
 }
 
-///*
-// *
-// * Map the 2-d group id so that the mapped ids step by 2x in both column
-// * and row. The odd column indices are addressed after 1/2 of the
-// * groups have been processed. The two skipped odd row indices
-// * are processed after two even rows are processed.
-// *
-// */
-//
-void map_work_space_2d(int* mapped_id0,
-                       int* mapped_id1)
-{
-    unsigned lid0 = get_local_id(0);
-    unsigned lid1 = get_local_id(1);
-    int group_id0 = get_group_id(0), group_id1 = get_group_id(1);
-
-    /* map the group id to permuted 2d coordinates */
-    int ls0 = get_local_size(0), ls1 = get_local_size(1);
-    int ngi = (get_global_size(0))/ls0, ngj = (get_global_size(1))/ls1;
-    /* 1-dimensional group index */
-    int g_1d = group_id0+ngi*group_id1;
-
-    /* offset is 1 if the 1-d group index is past the halfway point */
-    int offset0 = 0;
-
-    int offset1 = 0;
-
-    if (g_1d>=(ngi*ngj)/4)
-    {
-        offset0=1;
-        if (g_1d>=(ngi*ngj)/2)
-        {
-            offset0=0;
-            offset1=1;
-            if (g_1d>=3*(ngi*ngj)/4)
-            {
-                offset0=1;
-            }
-        }
-    }
-
-    /* step by 2 in group column index - add offset for odd indices after 1/2
-    the groups have been processed*/
-    int mi = (group_id0 <ngi/2)? 2*(group_id0):2*(group_id0-ngi/2);
-    int mj = 4*(group_id1%(ngj/4))+2*(group_id0/(ngi/2));
-
-    mi=mi+offset0;
-    mj=mj+offset1;
-    /* map the individual bundle coordinates */
-    (*mapped_id0) = mi*ls0 + lid0;
-    (*mapped_id1) = mj*ls1 + lid1;
-}
-
-void map_work_space_2d_offset(int* mapped_id0,
-                              int* mapped_id1,
-                              int offset0,
-                              int offset1)
-{
-    unsigned lid0 = get_local_id(0);
-    unsigned lid1 = get_local_id(1);
-    int group_id0 = get_group_id(0), group_id1 = get_group_id(1);
-
-    /* map the group id to permuted 2d coordinates */
-    int ls0 = get_local_size(0), ls1 = get_local_size(1);
-
-    /* map the individual bundle coordinates */
-    (*mapped_id0) = (2*group_id0+offset0)*ls0 + lid0;
-    (*mapped_id1) = (2*group_id1+offset1)*ls1 + lid1;
-}
 
 
 
@@ -396,7 +327,10 @@ void update_cell(float16 * data, float4 aux_data,float t_match, float init_sigma
                            &mu1,&sigma1,&w1,&Nobs1,
                            &mu2,&sigma2,&w2,&Nobs2,
                            &Nobs_mix);
-    (*data).s0 *= aux_data.z/aux_data.x;
+    float beta=aux_data.z/aux_data.x;
+    
+    clamp(beta,0.5f,2.0f);
+    (*data).s0 *= beta;//aux_data.z/aux_data.x;
     (*data).s1=mu0; (*data).s2=sigma0, (*data).s3=w0;(*data).s4=(float)Nobs0;
     (*data).s5=mu1; (*data).s6=sigma1, (*data).s7=w1;(*data).s8=(float)Nobs1;
     (*data).s9=mu2; (*data).sa=sigma2, (*data).sb=(float)Nobs2;
