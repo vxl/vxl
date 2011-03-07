@@ -17,9 +17,11 @@ enum boxm2_data_type
   BOXM2_ALPHA=0,
   BOXM2_MOG3_GREY,
   BOXM2_MOG3_GREY_16,
+  BOXM2_BATCH_HISTOGRAM,
   BOXM2_MOG2_RGB,
   BOXM2_NUM_OBS,
   BOXM2_AUX,   
+  BOXM2_INTENSITY,
   BOXM2_UNKNOWN
 };
 
@@ -89,7 +91,22 @@ class boxm2_data_traits<BOXM2_AUX>
   static vcl_size_t datasize(){return sizeof(datatype);}
   static vcl_string prefix(){ return "aux";}
 };
-
+template<>
+class boxm2_data_traits<BOXM2_BATCH_HISTOGRAM>
+{
+ public:
+  typedef vnl_vector_fixed<float, 8> datatype;
+  static vcl_size_t datasize(){return sizeof(datatype);}
+  static vcl_string prefix(){ return "boxm2_batch_histogram";}
+};
+template<>
+class boxm2_data_traits<BOXM2_INTENSITY>
+{
+ public:
+  typedef float datatype;
+  static vcl_size_t datasize(){return sizeof(datatype);}
+  static vcl_string prefix(){ return "boxm2_intensity";}
+};
 //: HACKY WAY TO GENERICALLY GET DATASIZES -
 class boxm2_data_info
 {
@@ -104,6 +121,10 @@ class boxm2_data_info
 
       if(prefix == boxm2_data_traits<BOXM2_MOG3_GREY_16>::prefix())
         return boxm2_data_traits<BOXM2_MOG3_GREY_16>::datasize(); 
+
+      if(prefix == boxm2_data_traits<BOXM2_BATCH_HISTOGRAM>::prefix())
+        return boxm2_data_traits<BOXM2_BATCH_HISTOGRAM>::datasize(); 
+
       
       if(prefix == boxm2_data_traits<BOXM2_MOG2_RGB>::prefix())
         return boxm2_data_traits<BOXM2_MOG2_RGB>::datasize(); 
@@ -113,6 +134,8 @@ class boxm2_data_info
         
       if(prefix == boxm2_data_traits<BOXM2_AUX>::prefix())
         return boxm2_data_traits<BOXM2_AUX>::datasize();
+      if(prefix == boxm2_data_traits<BOXM2_INTENSITY>::prefix())
+        return boxm2_data_traits<BOXM2_INTENSITY>::datasize();
         
       return 0;
     }
