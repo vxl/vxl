@@ -143,3 +143,42 @@ void step_cell_bayes(AuxArgs aux_args, int data_ptr, uchar llid, float d)
   aux_args.cell_ptrs[llid] = -1;
 }
 #endif
+#ifdef UPDATE_HIST
+//bayes step cell functor
+void step_cell_update_hist(AuxArgs aux_args, int data_ptr, uchar llid, float d)
+{
+    //slow beta calculation ----------------------------------------------------
+    float  alpha    = aux_args.alpha[data_ptr];
+
+    //load aux data
+    float cum_len  = convert_float(aux_args.seg_len[data_ptr])/SEGLEN_FACTOR; 
+    float obs = aux_args.obs;
+
+    float vis=*(aux_args.vis);
+    float upcount=d/cum_len* vis;
+
+    int index1=(int)floor(obs*4);
+    index1=min(index1,3);
+
+    //discretize and store beta and vis contribution
+    int upcount_int = convert_int_rte(upcount * SEGLEN_FACTOR);
+    atom_add(&aux_args.hist[8*data_ptr+index1], upcount_int);  
+
+    int index2=(int)floor((obs-0.125)*3);
+    vis=vis*exp(-alpha*d);
+    *(aux_args.vis)=vis;
+    
+    if(index2>=0 && index2<=2)
+        atom_add(&aux_args.hist[8*data_ptr+4+index2], upcount_int);  
+    //atom_add(&aux_args.hist[8*data_ptr+7], upcount_int);  
+
+}
+#endif
+#ifdef CUMLEN
+void step_cell_cumlen(AuxArgs aux_args, int data_ptr, uchar llid, float d)
+{
+    //SLOW and accurate method
+    int seg_int = convert_int_rte(d * SEGLEN_FACTOR);
+    atom_add(&aux_args.seg_len[data_ptr], seg_int);  
+}
+#endif
