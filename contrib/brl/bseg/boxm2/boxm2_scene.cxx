@@ -57,7 +57,15 @@ void boxm2_scene::add_block_metadata(boxm2_block_metadata data)
   }
   blocks_[data.id_] = data; 
 }
-
+vcl_vector<boxm2_block_id> boxm2_scene::get_block_ids()
+{
+  vcl_map<boxm2_block_id, boxm2_block_metadata>::iterator iter; 
+  vcl_vector<boxm2_block_id> block_ids;
+  for(iter = blocks_.begin(); iter != blocks_.end(); ++iter) {
+      block_ids.push_back(iter->first);
+  }
+  return block_ids;
+}
 vcl_vector<boxm2_block_id> boxm2_scene::get_vis_blocks(vpgl_perspective_camera<double>* cam)
 {
   //get camera center and order blocks distance from the cam center
@@ -87,14 +95,14 @@ vcl_vector<boxm2_block_id> boxm2_scene::get_vis_blocks(vpgl_perspective_camera<d
   vcl_sort(distances.begin(), distances.end()); 
     
   //put blocks in "vis_order"
-  vcl_cout<<"CAM ORDER----------------------------------------"<<vcl_endl;
+  //vcl_cout<<"CAM ORDER----------------------------------------"<<vcl_endl;
   vcl_vector<boxm2_block_id> vis_order; 
   vcl_vector<boxm2_dist_id_pair>::iterator di; 
   for(di = distances.begin(); di != distances.end(); ++di) {
     vis_order.push_back(di->id_); 
-    vcl_cout<<di->id_<<"("<<di->dist_<<")    ";
+    //vcl_cout<<di->id_<<"("<<di->dist_<<")    ";
   }
-  vcl_cout<<vcl_endl<<"-----------------------------------------------"<<vcl_endl;
+  //vcl_cout<<vcl_endl<<"-----------------------------------------------"<<vcl_endl;
   return vis_order;
 }
 
