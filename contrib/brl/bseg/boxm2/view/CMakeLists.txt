@@ -8,6 +8,7 @@ INCLUDE( ${BRL_MODULE_PATH}/FindGLEW.cmake )
 IF(GLEW_FOUND)
 IF(VGUI_FOUND)
   INCLUDE_DIRECTORIES(${GLEW_INCLUDE_DIR} )
+  INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bpro )
   INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bseg )
   INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bbas )
   INCLUDE_DIRECTORIES( ${GEL_INCLUDE_DIR}/mrc/vpgl )
@@ -15,12 +16,10 @@ IF(VGUI_FOUND)
   LINK_DIRECTORIES(${OPENGL_LIBRARY_DIR})
 
   SET(boxm2_view_sources
-      boxm2_cam_tableau.h
-      boxm2_cam_tableau.cxx
-      boxm2_render_tableau.h
-      boxm2_render_tableau.cxx
-      boxm2_change_detection_tableau.h
-      boxm2_change_detection_tableau.cxx
+      boxm2_cam_tableau.h       boxm2_cam_tableau.cxx
+      boxm2_render_tableau.h    boxm2_render_tableau.cxx
+      boxm2_change_detection_tableau.h boxm2_change_detection_tableau.cxx
+      boxm2_batch_update_tableau.h boxm2_batch_update_tableau.cxx
       boxm2_trajectory.h
       boxm2_trajectory.cxx
       boxm2_include_glew.h
