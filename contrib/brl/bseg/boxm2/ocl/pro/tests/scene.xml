@@ -1,0 +1,18 @@
+<scene>
+<lvcs cs_name="wgs84" origin_lon="0.000000" origin_lat="0.000000" origin_elev="0.000000" lon_scale="0.000000" lat_scale="0.000000" local_XYZ_unit="meters" geo_angle_unit="degrees" local_origin_x="0.000000" local_origin_y="0.000000" theta="0.000000">
+</lvcs>
+<local_origin x="-0.0" y="-0.0" z="-0.0">
+</local_origin>
+<!-- replace this path with appropriate absolute path to this scene's data -->
+<scene_paths path="">
+</scene_paths>
+<block id_i="0" id_j="0" id_k="0" origin_x="-0.0" origin_y="0.0" origin_z="0.0" dim_x="0.25000" dim_y="0.25000" dim_z="0.25000" num_x="2" num_y="2" num_z="2" init_level="1" max_level="4" max_mb="2.000000" p_init="0.500" random="false">
+</block>
+<block id_i="1" id_j="0" id_k="0" origin_x="0.5" origin_y="0.0" origin_z="0.0" dim_x="0.25000" dim_y="0.25000" dim_z="0.25000" num_x="2" num_y="2" num_z="2" init_level="1" max_level="4" max_mb="2.000000" p_init="0.500" random="false">
+</block>
+<block id_i="1" id_j="1" id_k="0" origin_x="0.5" origin_y="0.5" origin_z="0.0" dim_x="0.25000" dim_y="0.25000" dim_z="0.25000" num_x="2" num_y="2" num_z="2" init_level="1" max_level="4" max_mb="2.000000" p_init="0.500" random="false">
+</block>
+<block id_i="0" id_j="1" id_k="0" origin_x="0.0" origin_y="0.5" origin_z="0.0" dim_x="0.25000" dim_y="0.25000" dim_z="0.25000" num_x="2" num_y="2" num_z="2" init_level="1" max_level="4" max_mb="2.000000" p_init="0.500" random="false">
+</block>
+</scene>
+
