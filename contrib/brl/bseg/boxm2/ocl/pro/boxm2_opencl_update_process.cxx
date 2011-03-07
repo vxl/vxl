@@ -132,6 +132,9 @@ bool boxm2_opencl_update_process::execute(vcl_vector<brdb_value_sptr>& input, vc
   norm_image_ = new bocl_mem((*context_), norm_buffer, img_view->size()*sizeof(cl_float), "norm_image_ buffer");
   norm_image_->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
   //////////////////////////////////////////////////////////////////////////////
+  //store data type
+  //brdb_value_t<float>* brdb_init_sigma = static_cast<brdb_value_t<float>* >( input[i++].ptr() );
+  //float init_sigma=brdb_data_type->value();
 
   //store data type
   brdb_value_t<vcl_string>* brdb_data_type = static_cast<brdb_value_t<vcl_string>* >( input[i++].ptr() );
@@ -307,7 +310,6 @@ bool boxm2_opencl_update_process::set_args(unsigned pass)
       update_kernels_[pass]->set_arg( blk_info_ );
       update_kernels_[pass]->set_arg( blk_ );
       update_kernels_[pass]->set_arg( alpha_ );
-      update_kernels_[pass]->set_arg( num_obs_ );
       update_kernels_[pass]->set_arg( aux_ );
       update_kernels_[pass]->set_arg( lookup_ );
       update_kernels_[pass]->set_arg( persp_cam_ );
@@ -393,15 +395,7 @@ bool boxm2_opencl_update_process::write_input_image(vil_image_view<float>* input
       ++count;
     }
   }
-#if 0
-  vil_image_view<float>::iterator iter;
-  for (iter = input_image->begin(); iter != input_image->end(); ++iter, ++count) {
-    buff[4*count] = (*iter);
-    buff[4*count + 1] = 0.0f;
-    buff[4*count + 2] = 1.0f;
-    buff[4*count + 3] = 0.0f;
-  }
-#endif // 0
+
 
   //now write to bocl_mem
   if (!image_) {
