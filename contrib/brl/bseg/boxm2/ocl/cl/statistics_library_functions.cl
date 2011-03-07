@@ -1,7 +1,8 @@
 #pragma OPENCL EXTENSION cl_khr_byte_addressable_store : enable
 float gauss_prob_density(float x, float mu, float sigma)
 {
-  return 0.398942280f*exp(-0.5f*(x - mu)*(x - mu)/(sigma*sigma))/sigma;
+  float ratio=(x - mu)/sigma;
+  return 0.398942280f*exp(-0.5f*ratio*ratio)/sigma;
 }
 
 //3D gaussian with assumed 3 independent dimensions
@@ -329,7 +330,39 @@ void update_gauss_3_mixture(float x, float w, float t_match,
 
 
 }
-
+//void update_gauss_3_mixture(float x, float w, float t_match,
+//                            float init_sigma, float min_sigma,
+//                            float* mu0, float* sigma0, float* w0, short* Nobs0,
+//                            float* mu1, float* sigma1, float* w1, short* Nobs1,
+//                            float* mu2, float* sigma2, float* w2, short* Nobs2,
+//                            float* Nobs_mix) 
+//{
+//  if(w>0.0f)
+//  {
+//      int match = -1;
+//      (*Nobs0) ++;
+//      float tsq=t_match*t_match;
+//      float weight = 0.0f;
+//
+//
+//      float rho = 1.0f/min((float)*Nobs0,20.0);
+//      /* test for a match of component 0 */
+//      if(*w0>0.0f && (*sigma0)>0.0f){
+//          weight = (1.0f-rho)*(*w0);
+//          weight += rho;
+//          update_gauss(x, rho, mu0, sigma0, min_sigma);
+//          match = 0;
+//          *w0 = weight;
+//      }
+//      else
+//      {
+//          insert_gauss_3(x, rho, init_sigma, &match,
+//                          mu0, sigma0, w0, Nobs0, 
+//                          mu1, sigma1, w1, Nobs1,
+//                          mu2, sigma2, w2, Nobs2);
+//      }
+//  }
+//}
 
 
 /* 
@@ -355,7 +388,6 @@ void update_gauss_2_mixture_rgb(float4 x, float w, float t_match,
     (*Nobs_mix) += w;
     float alpha = w/(*Nobs_mix), tsq=t_match*t_match;
     float weight = 0.0f, rho = 0.0f;
-  
     /* test for a match of component 0 */
     if(*w0>0.0f && all((*sigma0)>0.0f)){
       weight = (1.0f-alpha)*(*w0);
