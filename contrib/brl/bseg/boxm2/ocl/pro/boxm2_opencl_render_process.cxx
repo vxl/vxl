@@ -13,6 +13,7 @@
 //directory utility
 #include <vul/vul_timer.h>
 #include <vcl_where_root_dir.h>
+#include <bpro/core/bbas_pro/bbas_1d_array_float.h>
 
 //TODO IN THIS INIT METHOD: Need to pass in a ref to the OPENCL_CACHE so this
 //class can easily access BOCL_MEMs
@@ -66,6 +67,19 @@ bool boxm2_opencl_render_process::init_kernel(cl_context* context,
                                                                "normalize_render_kernel",   //kernel name
                                                                options,              //options
                                                                "normalize render kernel"); //kernel identifier (for error checking)
+  
+  vcl_string render_gl_options = " -D INTENSITY ";
+  render_gl_options += " -D RENDER_GL ";
+
+  vcl_vector<vcl_string> render_gl_src_paths;
+  render_gl_src_paths.push_back(source_dir + "cell_utils.cl");
+  render_gl_src_paths.push_back(source_dir + "bit/normalize_kernels.cl");
+  created = created && render_gl_kernel_.create_kernel( context_,
+                                                               device,
+                                                               render_gl_src_paths,
+                                                               "render_kernel_gl",   //kernel name
+                                                               render_gl_options,              //options
+                                                               " render gl kernel"); //kernel identifier (for error checking)
 
   return created;
 }
@@ -117,11 +131,20 @@ bool boxm2_opencl_render_process::execute(vcl_vector<brdb_value_sptr>& input, vc
     image_->set_cpu_buffer(exp_img_view->begin());
     image_->write_to_buffer(*command_queue_);
   }
+  if (!gl_image_) {
+    gl_image_ = new bocl_mem((*context_), NULL, exp_img_view->size() * sizeof(float), "exp image buffer");
+    gl_image_->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
+  }
+  else {
+    //image_->set_cpu_buffer(exp_img_view->begin());
+    gl_image_->write_to_buffer(*command_queue_);
+  }
 
   //vis image buffer
   brdb_value_t<vil_image_view_base_sptr>* brdb_vis = static_cast<brdb_value_t<vil_image_view_base_sptr>* >( input[i++].ptr() );
   vil_image_view_base_sptr visimg = brdb_vis->value();
   vil_image_view<float>* vis_img_view = static_cast<vil_image_view<float>* >(visimg.ptr());
+  vis_img_view->fill(1.0f);
   if (!vis_img_) {
     float* vis_buff = vis_img_view->begin();
     vis_img_ = new bocl_mem((*context_), vis_buff, vis_img_view->size() * sizeof(float), "visibility image buffer");
@@ -132,13 +155,12 @@ bool boxm2_opencl_render_process::execute(vcl_vector<brdb_value_sptr>& input, vc
     vis_img_->write_to_buffer(*command_queue_);
   }
   brdb_value_t<vcl_string>* brdb_data_type = static_cast<brdb_value_t<vcl_string>* >( input[i++].ptr() );
-
   data_type_=brdb_data_type->value();
 
   //exp image dimensions
   int* img_dim_buff = new int[4];
-  img_dim_buff[0] = exp_img_view->ni();
-  img_dim_buff[1] = exp_img_view->nj();
+  img_dim_buff[0] = 0;
+  img_dim_buff[1] = 0;
   img_dim_buff[2] = exp_img_view->ni();
   img_dim_buff[3] = exp_img_view->nj();
   bocl_mem exp_img_dim((*context_), img_dim_buff, sizeof(int)*4, "image dims");
@@ -207,7 +229,7 @@ bool boxm2_opencl_render_process::execute(vcl_vector<brdb_value_sptr>& input, vc
     //clear render kernel args so it can reset em on next execution
     kern.clear_args();
   }
-
+if(!gl_image_)
   // normalize
   {
       normalize_render_kernel_.set_arg( image_ );
@@ -219,11 +241,57 @@ bool boxm2_opencl_render_process::execute(vcl_vector<brdb_value_sptr>& input, vc
 
       //clear render kernel args so it can reset em on next execution
       normalize_render_kernel_.clear_args();
+      image_->read_to_buffer(*command_queue_);
+      vis_img_->read_to_buffer(*command_queue_);
+
   }
   //read image out to buffer (from gpu)
-  image_->read_to_buffer(*command_queue_);
-  vis_img_->read_to_buffer(*command_queue_);
-      
+
+  
+else
+  {
+      float* mini_buf = new float[1];
+      float* maxi_buf = new float[1];
+
+      brdb_value_t<float>* brdb_mini = static_cast<brdb_value_t<float>* >( input[i++].ptr() );
+      mini_buf[0]=brdb_mini->value();
+
+      brdb_value_t<float>* brdb_maxi = static_cast<brdb_value_t<float>* >( input[i++].ptr() );
+      maxi_buf[0]=brdb_maxi->value();
+
+
+      brdb_value_t<bbas_1d_array_float_sptr>* brdb_tf = static_cast<brdb_value_t<bbas_1d_array_float_sptr>* >( input[i++].ptr() );
+      bbas_1d_array_float_sptr tf=brdb_tf->value();
+
+      //mini_buf[0]=0.0f;
+      //maxi_buf[0]=1.0f;
+
+      float* tf_buf= new float[256];
+      for (int i=0; i<256; ++i) tf_buf[i] =tf->data_array[i] ;
+
+      mini_=new bocl_mem((*context_),mini_buf,sizeof(float),"Mini buffer");
+      mini_->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
+      maxi_=new bocl_mem((*context_),maxi_buf,sizeof(float),"Maxi buffer");
+      maxi_->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
+      tf_=new bocl_mem((*context_),tf_buf,256*sizeof(float),"TF buffer");
+      tf_->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
+
+      render_gl_kernel_.set_arg( mini_ );
+      render_gl_kernel_.set_arg( maxi_ );
+      render_gl_kernel_.set_arg( tf_ );
+      render_gl_kernel_.set_arg( vis_img_ );
+      render_gl_kernel_.set_arg( image_ );
+      render_gl_kernel_.set_arg( gl_image_ );
+      render_gl_kernel_.set_arg( &exp_img_dim);
+      render_gl_kernel_.execute( (*command_queue_), 2, lThreads, gThreads);
+      clFinish(*command_queue_);
+      gpu_time_ += render_gl_kernel_.exec_time();
+
+      //clear render kernel args so it can reset em on next execution
+      render_gl_kernel_.clear_args();
+
+
+  }
   //clean up camera, lookup_arr, img_dim_buff
   delete[] output_arr;
   delete[] img_dim_buff;
