@@ -18,3 +18,9 @@ TARGET_LINK_LIBRARIES(bwm_corr_proc_gt  bwm_video vgl_algo vnl vpl vul)
 
 ADD_EXECUTABLE(bwm_video_corr_to_groundtruth_images bwm_video_corr_to_groundtruth_images.cxx)
 TARGET_LINK_LIBRARIES(bwm_video_corr_to_groundtruth_images  bwm_video vnl vpl vul)
+
+ADD_EXECUTABLE(bwm_video_normalize bwm_video_normalize.cxx)
+TARGET_LINK_LIBRARIES(bwm_video_normalize  bwm_video vnl vpl vul)
+
+ADD_EXECUTABLE(bwm_video_normalize_3d_corr bwm_video_normalize_3d_corr.cxx)
+TARGET_LINK_LIBRARIES(bwm_video_normalize_3d_corr  bwm bwm_algo bwm_video vnl vpl vul)
