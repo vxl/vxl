@@ -39,7 +39,7 @@
 #include <boxm2/io/boxm2_dumb_cache.h>
 #include <boxm2/io/boxm2_nn_cache.h>
 #include <boxm2/io/boxm2_lru_cache.h>
-
+#include <bpro/core/bbas_pro/bbas_1d_array_float.h>
 //brdb stuff
 #include <brdb/brdb_value.h>
 
@@ -65,7 +65,6 @@ class boxm2_render_tableau : public boxm2_cam_tableau
   void set_statusbar(vgui_statusbar* status) { status_ = status; }
 
  protected:
-  bool render_and_save_image(int index, vil_image_view<vxl_byte> & byte_img);
   bool compute_convergence();
 
   //vector of image files, vector of 
@@ -76,7 +75,6 @@ class boxm2_render_tableau : public boxm2_cam_tableau
   //: gpu processor and render_process, update_process
   boxm2_opencl_processor* gpu_pro_;
   boxm2_opencl_render_process render_;
-  boxm2_opencl_render_process render_no_gl_;
   boxm2_opencl_update_process update_; 
   boxm2_opencl_refine_process refine_;
   boxm2_opencl_render_rgb_process render_rgb_;
@@ -108,12 +106,17 @@ class boxm2_render_tableau : public boxm2_cam_tableau
 
   //-- HELPER INIT Methods and vars---------------------------------------------
   //: create cl_gl_context
-  vil_image_view_base_sptr prepare_input_image(vcl_string filename);
+  //vil_image_view_base_sptr prepare_input_image(vcl_string filename);
   cl_context create_clgl_context();
   bool init_clgl();
   bool do_init_ocl;
   
   int curr_frame_; 
+
+  float mini_;
+  float maxi_;
+  float tf[256];
+  bbas_1d_array_float_sptr tf_sptr;
 };
 
 //: declare smart pointer
