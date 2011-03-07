@@ -27,11 +27,14 @@ void cast_ray(int,int,float,float,float,float,float,float,
 __kernel
 void
 render_bit_scene( __constant  RenderSceneInfo    * linfo,
+                  //__constant  float * mini,
+                  //__constant  float * maxi,
+                  //__constant  float * tf,
                   __global    int4               * tree_array,
                   __global    float              * alpha_array,
                   __global    MOG_TYPE           * mixture_array,
                   __global    float16            * camera,        // camera orign and SVD of inverse of camera matrix
-                  __global    uint               * exp_image,      // input image and store vis_inf and pre_inf
+                  __global    float              * exp_image,      // input image and store vis_inf and pre_inf
                   __global    uint4              * exp_image_dims,
                   __global    float              * output,
                   __constant  uchar              * bit_lookup,
@@ -67,9 +70,10 @@ render_bit_scene( __constant  RenderSceneInfo    * linfo,
   //----------------------------------------------------------------------------
   //Store image index (may save a register).  Also initialize VIS and expected_int
   imIndex[llid] = j*get_global_size(0)+i;
-  uint  eint    = as_uint(exp_image[imIndex[llid]]);
-  uchar echar   = convert_uchar(eint);
-  float expint  = convert_float(echar)/255.0f;
+  //uint  eint    = as_uint(exp_image[imIndex[llid]]);
+  //uchar echar   = convert_uchar(eint);
+  //float expint  = convert_float(echar)/255.0f;
+  float expint  = exp_image[imIndex[llid]];
   float vis     = vis_image[imIndex[llid]];
   AuxArgs aux_args; 
   aux_args.alpha  = alpha_array; 
@@ -82,7 +86,8 @@ render_bit_scene( __constant  RenderSceneInfo    * linfo,
             local_tree, bit_lookup, cumsum, &vis, aux_args);      //utility info
             
   //store the expected intensity (as UINT)
-  exp_image[imIndex[llid]] =  rgbaFloatToInt((float4) expint); 
+  exp_image[imIndex[llid]] =  expint;//rgbaFloatToInt((float4) expint); 
+  //exp_image[imIndex[llid]] =  rgbaFloatToInt_tf((float4) expint, *mini,*maxi,tf); 
 
   //store visibility at the end of this block
   vis_image[imIndex[llid]] = vis;

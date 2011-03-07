@@ -391,10 +391,10 @@ __kernel void refine_data( __constant RenderSceneInfo * linfo,
       //locally cache prob_thresh
       float prob_thresh = *prob_thresh_t;
       MOG_TYPE init_cell; 
-      if(prob_thresh > 0.0f) 
-        init_cell = prob_thresh;
-      else
-        init_cell = (MOG_TYPE) 0;  
+      //if(prob_thresh > 0.0f) 
+      //  init_cell = prob_thresh;
+      //else
+      //  init_cell = (MOG_TYPE) 0;  
 
       //do some Pointer arithmetic to pass in aligned data
       int numNew = move_data(linfo, 

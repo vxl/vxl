@@ -28,6 +28,7 @@ typedef struct
   __local  int*    cell_ptrs; 
   __local  float4* cached_aux; 
            float   obs; 
+           __global float * output;
 } AuxArgs;  
 
 //forward declare cast ray (so you can use it)
@@ -38,7 +39,6 @@ void
 seg_len_main(__constant  RenderSceneInfo    * linfo,
              __global    int4               * tree_array,       // tree structure for each block
              __global    float              * alpha_array,      // alpha for each block
-             __global    ushort4            * num_obs_array,    // num obs for each block
              __global    int                * aux_array,        // aux data array (four aux arrays strung together)
              __constant  uchar              * bit_lookup,       // used to get data_index
              __global    float16            * camera,           // camera orign and SVD of inverse of camera matrix
@@ -54,7 +54,6 @@ seg_len_main(__constant  RenderSceneInfo    * linfo,
 {
   //get local id (0-63 for an 8x8) of this patch
   uchar llid = (uchar)(get_local_id(0) + get_local_size(0)*get_local_id(1));
-
   //initialize pre-broken ray information (non broken rays will be re initialized)
   ray_bundle_array[llid] = (short2) (-1, 0);
   cell_ptrs[llid] = -1;
@@ -97,6 +96,7 @@ seg_len_main(__constant  RenderSceneInfo    * linfo,
   aux_args.cell_ptrs  = cell_ptrs;
   aux_args.cached_aux = cached_aux_data; 
   aux_args.obs = obs; 
+  aux_args.output = output; 
   cast_ray( i, j,
             ray_ox, ray_oy, ray_oz,
             ray_dx, ray_dy, ray_dz,
@@ -312,7 +312,9 @@ proc_norm_image(__global float4* image, __global float4* p_inf, __global uint4 *
                1.0f;
 #endif
   // compute the norm image
-  vect.x = vect.w + mult * vect.z;
+  //vect.x = vect.w + mult * vect.z;
+  vect.x = vect.w*(1-vect.z);
+
   // the following  quantities have to be re-initialized before
   // the bayes_ratio kernel is executed
   vect.y = 0.0f; // clear alpha integral
@@ -369,9 +371,8 @@ update_bit_scene_main(__global RenderSceneInfo  * info,
                                  0.0, 0.0, 0.0);
 
       //use aux data to update cells
+      update_cell(&data, aux_data, 2.5f, 0.06f, 0.002);
       //update_cell(&data, aux_data, 2.5f, 0.06f, 0.02f);
-      update_cell(&data, aux_data, 2.5f, 0.02f, 0.033f);
-      //update_cell(&data, aux_data, 2.5f, 0.01f, 0.00375f);
 
       //reset the cells in memory
       alpha_array[gid]      = max(alphamin,data.s0);

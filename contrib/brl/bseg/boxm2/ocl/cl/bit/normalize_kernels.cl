@@ -3,7 +3,7 @@
 #endif
 
 #ifdef RENDER
-__kernel void normalize_render_kernel(__global uint * exp_img, 
+__kernel void normalize_render_kernel(__global float * exp_img, 
                                       __global float* vis_img, 
                                       __global uint4* imgdims)
 {
@@ -19,20 +19,39 @@ __kernel void normalize_render_kernel(__global uint * exp_img,
 
     //normalize image with respect to visibility
     float vis   = vis_img[imindex];
-    uchar4 intensity  = as_uchar4(exp_img[imindex]);
-    
-    //convert uchars to float intensity [0,1] values
-    float4 fIntensity = convert_float4(intensity) / 255.0f; 
-    fIntensity += (vis*0.5f);   // expected intensity of uniform distribution is 0.5
-    fIntensity.w = 1.0f;    
-    //fIntensity.y=0.0f; fIntensity.z=0.0f; fIntensity.w=1.0f;     
-
-    //convert the intensities back into bytes
-    uchar4 post_int = convert_uchar4(fIntensity * 255.0f); 
-    exp_img[imindex] = as_uint(post_int);
+   //exp_img[imindex] =exp_img[imindex]+ (vis*0.5f);
 }
 #endif
+#ifdef RENDER_GL
+__kernel void render_kernel_gl(__constant float *min_i,
+                               __constant float *max_i,
+                               __constant float *tf,
+                               __global float   *vis_img,
+                               __global float   *exp_img,                               
+                               __global uint    *out_img,
+                               __global uint4   *imgdims)
+{
 
+    
+    int i=0,j=0;
+    i=get_global_id(0);
+    j=get_global_id(1);
+    int imindex=j*get_global_size(0)+i;
+
+    // check to see if the thread corresponds to an actual pixel as in some
+    // cases #of threads will be more than the pixels.
+    if (i<(*imgdims).x || j<(*imgdims).y|| i>=(*imgdims).z || j>=(*imgdims).w) 
+        return;
+
+    
+    float intensity  = exp_img[imindex];
+    float range=(*max_i-*min_i);
+    intensity+=(vis_img[imindex]*((*max_i+*min_i)/2));
+    //intensity=clamp(intensity,*mini,*maxi);
+    int index=(int)max(floor((intensity-*min_i)/range*255.0f),0.0f);
+    out_img[imindex] =rgbaFloatToInt((float4 )tf[index]);//(intensity-*min_i)/range) ;
+}
+#endif
 #ifdef CHANGE
 __kernel void normalize_change_kernel(__global uint * exp_img /* background probability density*/ , 
                                       __global uint * prob_exp_img ,
