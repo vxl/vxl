@@ -315,7 +315,7 @@ void mbl_logger::reinitialise()
   if (cat.output == mbl_log_categories::cat_spec::NAMED_STREAM)
   {
     delete output_;
-    output_ = new mbl_log_output_stream(vcl_cout, id);
+    output_ = new mbl_log_output_stream(*cat.stream, id);
 //    logstream_.tie(output_.real_stream_);
   }
   else if (cat.output == mbl_log_categories::cat_spec::FILE_OUT)
