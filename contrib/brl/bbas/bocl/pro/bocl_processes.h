@@ -5,6 +5,6 @@
 #include <bprb/bprb_macros.h>
 
 //the init functions
-DECLARE_FUNC_CONS(bocl_init_process);
+DECLARE_FUNC_CONS(bocl_init_manager_process);
 
 #endif

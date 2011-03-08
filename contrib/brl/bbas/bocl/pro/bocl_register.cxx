@@ -13,5 +13,5 @@ void bocl_register::register_datatype()
 
 void bocl_register::register_process()
 {
-    REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bocl_init_process,"boclInitProcess");
+    REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bocl_init_manager_process,"boclInitManagerProcess");
 }
