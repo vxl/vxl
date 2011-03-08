@@ -27,6 +27,9 @@
 //#define GROUP_SIZE 64
 #define VECTOR_SIZE 4
 
+#include <vbl/vbl_ref_count.h>
+#include <vbl/vbl_smart_ptr.h>
+
 template <class T>
 class bocl_manager
 {
@@ -115,5 +118,14 @@ class bocl_manager
   //build kernel program:
   int build_kernel_program(cl_program & program, vcl_string options);
 };
+
+class bocl_manager_child: public bocl_manager<bocl_manager_child>, public vbl_ref_count
+{
+ public:
+     bocl_manager_child():bocl_manager() {}
+     ~bocl_manager_child(){}
+};
+
+typedef vbl_smart_ptr<bocl_manager_child> bocl_manager_child_sptr;
 
 #endif // bocl_manager_h_
