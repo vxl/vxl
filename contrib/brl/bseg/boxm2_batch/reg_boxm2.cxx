@@ -8,6 +8,7 @@
 
 #if defined(HAS_OPENCL) && HAS_OPENCL
 #include <bocl/pro/bocl_register.h>
+#include <boxm2/ocl/pro/boxm2_ocl_register.h>
 #endif
 
 
@@ -17,6 +18,7 @@ register_processes(PyObject *self, PyObject *args)
   boxm2_register::register_process();
 #if defined(HAS_OPENCL) && HAS_OPENCL
   bocl_register::register_process();
+  boxm2_ocl_register::register_process();
 #endif
   Py_INCREF(Py_None);
   return Py_None;
@@ -28,6 +30,7 @@ register_datatypes(PyObject *self, PyObject *args)
   boxm2_register::register_datatype();
 #if defined(HAS_OPENCL) && HAS_OPENCL
   bocl_register::register_datatype();
+  boxm2_ocl_register::register_datatype();
 #endif
   Py_INCREF(Py_None);
   return Py_None;
