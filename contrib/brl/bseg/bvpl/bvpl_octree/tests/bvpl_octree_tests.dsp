@@ -108,6 +108,9 @@ SOURCE=.\test_octree_neighbors.cxx
 SOURCE=.\test_pca_kernels.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\test_taylor_basis.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\test_include.cxx
 # End Source File
 # Begin Source File

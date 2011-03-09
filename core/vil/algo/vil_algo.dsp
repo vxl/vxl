@@ -291,7 +291,7 @@ SOURCE=.\vil_histogram_equalise.cxx
 SOURCE=.\vil_distance_transform.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\vil_blob_finder.cxx
+SOURCE=.\vil_blob.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\vil_trace_4con_boundary.cxx
@@ -438,7 +438,7 @@ SOURCE=.\vil_histogram_equalise.h
 SOURCE=.\vil_distance_transform.h
 # End Source File
 # Begin Source File
-SOURCE=.\vil_blob_finder.h
+SOURCE=.\vil_blob.h
 # End Source File
 # Begin Source File
 SOURCE=.\vil_trace_4con_boundary.h

@@ -281,6 +281,9 @@ SOURCE=.\Templates/vnl_io_vector_fixed+uchar.16-.cxx
 # Begin Source File
 SOURCE=.\Templates/vnl_io_vector_fixed+int.4-.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\Templates/vnl_io_sym_matrix+float-.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"

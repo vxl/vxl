@@ -147,6 +147,12 @@ SOURCE=.\test_camera_from_box.cxx
 SOURCE=.\test_camera_bounds.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\test_ba_shared_k_lsqr.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_ba_fixed_k_lsqr.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\test_include.cxx
 # End Source File
 # Begin Source File

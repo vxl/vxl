@@ -126,6 +126,48 @@ SOURCE=.\processes/bvpl_compute_pca_test_error_process.cxx
 SOURCE=.\processes/bvpl_block_kernel_operator_process.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\processes/bvpl_add_taylor_errors_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/bvpl_add_pca_errors_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/brdb_value_t+bvpl_pca_error_scenes_sptr-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/bvpl_load_pca_error_scenes_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/bvpl_compute_taylor_error_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/bvpl_pca_project_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/bvpl_load_taylor_scenes_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/brdb_value_t+bvpl_taylor_scenes_map_sptr-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/bvpl_block_avg_value_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/bvpl_scene_histogram_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/brdb_value_t+bvpl_discover_pca_kernels_sptr-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/bvpl_compute_pca_error_block_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/bvpl_compute_pca_error_scene_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/bvpl_load_pca_info_process.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/brdb_value_t+boxm_scene_base_sptr-.cxx
 # End Source File
 # End Group

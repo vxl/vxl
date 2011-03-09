@@ -415,6 +415,9 @@ SOURCE=.\vgl_h_matrix_3d_compute.h
 # Begin Source File
 SOURCE=.\vgl_compute_similarity_3d.h
 # End Source File
+# Begin Source File
+SOURCE=.\vgl_compute_similarity_3d.txx
+# End Source File
 # End Group
 # End Target
 # End Project

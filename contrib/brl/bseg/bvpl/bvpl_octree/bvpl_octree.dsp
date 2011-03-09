@@ -105,13 +105,13 @@ SOURCE=.\bvpl_discover_pca_kernels.cxx
 SOURCE=.\bvpl_taylor_basis.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/bvpl_octree_sample+float-.cxx
+SOURCE=.\bvpl_pca_error_scenes.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\bvpl_taylor_scenes_map.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/boxm_block+boct_tree+short.bvpl_octree_sample+bsta_num_obs+bsta_gauss_f1----.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/bvpl_octree_sample+bsta_num_obs+bsta_gauss_f1--.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/boxm_block+boct_tree+short.bvpl_octree_sample+float---.cxx
@@ -127,6 +127,24 @@ SOURCE=.\Templates/boxm_block+boct_tree+short.vnl_vector_fixed+float.3---.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/boct_tree+short.vnl_vector_fixed+float.3--.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vbl_smart_ptr+bvpl_pca_error_scenes-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vbl_smart_ptr+bvpl_taylor_scenes_map-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vbl_smart_ptr+bvpl_discover_pca_kernels-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/boct_tree+short.bvpl_taylor_basis2_sample-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/boxm_block+boct_tree+short.bvpl_taylor_basis2_sample--.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/boct_tree+short.bvpl_pca_basis_sample+10--.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
@@ -145,12 +163,6 @@ SOURCE=.\bvpl_scene_vector_operator.h
 # End Source File
 # Begin Source File
 SOURCE=.\bvpl_octree_vector_operator_impl.h
-# End Source File
-# Begin Source File
-SOURCE=.\bvpl_octree_sample.txx
-# End Source File
-# Begin Source File
-SOURCE=.\bvpl_octree_sample.h
 # End Source File
 # Begin Source File
 SOURCE=.\bvpl_octree_vrml_util.h
@@ -175,6 +187,12 @@ SOURCE=.\bvpl_taylor_basis.h
 # End Source File
 # Begin Source File
 SOURCE=.\bvpl_block_kernel_operator.h
+# End Source File
+# Begin Source File
+SOURCE=.\bvpl_pca_error_scenes.h
+# End Source File
+# Begin Source File
+SOURCE=.\bvpl_taylor_scenes_map.h
 # End Source File
 # End Group
 # End Target

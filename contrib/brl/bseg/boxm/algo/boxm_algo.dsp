@@ -137,6 +137,9 @@ SOURCE=.\boxm_merge_mog.h
 # Begin Source File
 SOURCE=.\boxm_linear_operations.h
 # End Source File
+# Begin Source File
+SOURCE=.\boxm_save_scene_raw_general.h
+# End Source File
 # End Group
 # End Target
 # End Project

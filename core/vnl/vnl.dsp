@@ -180,12 +180,6 @@ SOURCE=.\vnl_numeric_traits.cxx
 SOURCE=.\vnl_na.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vnl_rank+double-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vnl_rank+int-.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\vnl_rational.cxx
 # End Source File
 # Begin Source File
@@ -208,6 +202,15 @@ SOURCE=.\vnl_random.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\vnl_sparse_matrix_linear_system.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vnl_rank+double-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vnl_rank+int-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vnl_sym_matrix+float-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/vnl_c_vector+double-.cxx

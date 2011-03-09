@@ -103,6 +103,9 @@ SOURCE=.\boxm2_cam_tableau.cxx
 # Begin Source File
 SOURCE=.\boxm2_change_detection_tableau.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\boxm2_trajectory.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
@@ -117,6 +120,9 @@ SOURCE=.\boxm2_cam_tableau.h
 # End Source File
 # Begin Source File
 SOURCE=.\boxm2_change_detection_tableau.h
+# End Source File
+# Begin Source File
+SOURCE=.\boxm2_trajectory.h
 # End Source File
 # End Group
 # End Target

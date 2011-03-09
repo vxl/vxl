@@ -165,7 +165,13 @@ SOURCE=.\vpgl_camera_from_box.cxx
 SOURCE=.\vpgl_camera_bounds.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\vpgl_bundle_rolling_shutter_adjust.cxx
+SOURCE=.\vpgl_bundle_adjust_lsqr.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vpgl_ba_shared_k_lsqr.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vpgl_ba_fixed_k_lsqr.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/vpgl_list+vgl_h_matrix_2d+double--.cxx
@@ -256,6 +262,15 @@ SOURCE=.\vpgl_camera_from_box.h
 # End Source File
 # Begin Source File
 SOURCE=.\vpgl_camera_bounds.h
+# End Source File
+# Begin Source File
+SOURCE=.\vpgl_ba_shared_k_lsqr.h
+# End Source File
+# Begin Source File
+SOURCE=.\vpgl_ba_fixed_k_lsqr.h
+# End Source File
+# Begin Source File
+SOURCE=.\vpgl_bundle_adjust_lsqr.h
 # End Source File
 # Begin Source File
 SOURCE=.\vpgl_bundle_rolling_shutter_adjust.h
