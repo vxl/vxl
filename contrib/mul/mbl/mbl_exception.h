@@ -154,6 +154,48 @@ void mbl_exception_warning(T exception)
 
 #if !VCL_HAS_EXCEPTIONS
 
+  //: Data from two sources or files was inconsistent.
+  class mbl_exception_inconsistent_external_data
+  {
+    vcl_string msg_;
+    vcl_string source1_, source2_;
+   public:
+     mbl_exception_inconsistent_external_data(const vcl_string &msg,
+       const vcl_string& source1, const vcl_string& source2)
+      : msg_(source1.empty() && source2.empty() ? msg : msg+" between "+source1+" and "+source2),
+        source1_(source1), source2_(source2) {}
+    const char * what() const {return msg_.c_str();}
+    const char * source1() const {return source1_.c_str();}
+    const char * source2() const {return source2_.c_str();}
+  };
+
+#else
+
+  //: Data from two sources or files was inconsistent.
+  // This is distinct from a parse error, which can be used when the data within
+  // in a single config file is inconsistent. This is most useful at algorithm run time,
+  // when there are several external data files, and some external agent has broken the
+  // consistency invariant by modifying one of them. The application can then report that
+  // someone has messed up its data.
+  class mbl_exception_inconsistent_external_data: public vcl_runtime_error
+  {
+    vcl_string source1_, source2_;
+   public:
+    mbl_exception_inconsistent_external_data(const vcl_string &msg,
+      const vcl_string& source1 = "", const vcl_string& source2 = "")
+      : vcl_runtime_error( source1.empty() && source2.empty()
+          ? msg : msg+" between "+source1+" and "+source2),
+        source1_(source1), source2_(source2) {}
+    const char * source1() const {return source1_.c_str();}
+    const char * source2() const {return source2_.c_str();}
+    virtual ~mbl_exception_inconsistent_external_data() throw() {}
+  };
+
+#endif
+
+
+#if !VCL_HAS_EXCEPTIONS
+
   //: Indicates that an expected property label was missing.
   class mbl_exception_missing_property
   {
