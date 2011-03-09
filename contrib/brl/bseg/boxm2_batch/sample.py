@@ -8,8 +8,7 @@ class dbvalue:
     self.id = index    # unsigned integer
     self.type = type   # string
 
-
-print("Loading a Scene");
+print "Loading a Scene";
 boxm2_batch.init_process("boxm2LoadSceneProcess");
 boxm2_batch.set_input_string(0,"f:/visdt/boxm2_empty/scene.xml");
 boxm2_batch.run_process();

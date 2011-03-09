@@ -10,10 +10,10 @@
 
 
 bocl_device::bocl_device(cl_device_id& device)
-{  
-  device_ = new cl_device_id[1]; 
-  device_[0] = device; 
-  info_ = bocl_device_info(device_); 
+{
+  device_ = new cl_device_id[1];
+  device_[0] = device;
+  info_ = bocl_device_info(device_);
 
   vcl_cout<<"Device specs: "<<info_<<vcl_endl;
 
@@ -28,8 +28,8 @@ bocl_device::bocl_device(cl_device_id& device)
 //destructor
 bocl_device::~bocl_device()
 {
-  if(context_) clReleaseContext(context_);
-  if(device_) delete[] device_; 
+  if (context_) clReleaseContext(context_);
+  if (device_) delete[] device_;
 }
 
 
@@ -38,9 +38,6 @@ vcl_ostream& operator <<(vcl_ostream &s, bocl_device& dev)
   s << dev.info() << vcl_endl;
   return s;
 }
-
-
-
 
 
 //: Binary save bocl_device  from stream.

@@ -24,7 +24,7 @@ template<class T_data>
 void vsl_b_read(vsl_b_istream & is, bvpl_octree_sample<T_data> &sample)
 {
   if (!is) return;
-  
+
   short version;
   vsl_b_read(is,version);
   switch (version)
@@ -35,7 +35,7 @@ void vsl_b_read(vsl_b_istream & is, bvpl_octree_sample<T_data> &sample)
       break;
     default:
       vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, boxm_sample<T>&)\n"
-      << "           Unknown version number "<< version << '\n';
+               << "           Unknown version number "<< version << '\n';
       is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
       break;
   }
@@ -67,6 +67,6 @@ template vcl_ostream& operator << (vcl_ostream&, const bvpl_octree_sample<T >&);
 template void vsl_b_write(vsl_b_ostream &, bvpl_octree_sample<T > const &); \
 template void vsl_b_write(vsl_b_ostream &, bvpl_octree_sample<T > const *&); \
 template void vsl_b_read(vsl_b_istream &, bvpl_octree_sample<T > &); \
-template void vsl_b_read(vsl_b_istream &, bvpl_octree_sample<T > *&);
+template void vsl_b_read(vsl_b_istream &, bvpl_octree_sample<T > *&)
 
 #endif
