@@ -51,14 +51,14 @@ class bocl_manager
   void clear_cl();
 
   //: available devices
-  vcl_vector<bocl_device*> gpus_; 
-  vcl_vector<bocl_device*> cpus_;
+  vcl_vector<bocl_device_sptr> gpus_; 
+  vcl_vector<bocl_device_sptr> cpus_;
   int numCPUs() { return cpus_.size(); }
   int numGPUs() { return gpus_.size(); }
   
   //////////////////////////////////////////////////////////////////////////////
   //: current device (defaults to last GPU), used for old methods
-  bocl_device* curr_device_; 
+  bocl_device_sptr curr_device_; 
   cl_device_id* devices() { return curr_device_->device_id(); }
 
   //get for current manager information..

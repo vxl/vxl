@@ -70,8 +70,8 @@ bool bocl_manager<T>::initialize_cl()
   //////////////////////////////////////////////////////////////////////////////
   // Get devices from platforms
   //////////////////////////////////////////////////////////////////////////////
-  vcl_size_t MAX_GPUS = 16; 
-  vcl_size_t MAX_CPUS = 16; 
+  const vcl_size_t MAX_GPUS = 16; 
+  const vcl_size_t MAX_CPUS = 16; 
   char platform_name[256];
   vcl_size_t ret_size;
 

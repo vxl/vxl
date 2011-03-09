@@ -8,6 +8,7 @@
 #include <vcl_cstdio.h>
 #include <vcl_cstring.h>
 
+
 bocl_device::bocl_device(cl_device_id& device)
 {  
   device_ = new cl_device_id[1]; 
@@ -39,3 +40,17 @@ vcl_ostream& operator <<(vcl_ostream &s, bocl_device& dev)
 }
 
 
+
+
+
+//: Binary save bocl_device  from stream.
+void vsl_b_write(vsl_b_ostream& os, bocl_device const& scene){}
+void vsl_b_write(vsl_b_ostream& os, const bocl_device* &p){}
+void vsl_b_write(vsl_b_ostream& os, bocl_device_sptr& sptr){}
+void vsl_b_write(vsl_b_ostream& os, bocl_device_sptr const& sptr){}
+
+//: Binary load bocl_device  from stream.
+void vsl_b_read(vsl_b_istream& is, bocl_device &scene){}
+void vsl_b_read(vsl_b_istream& is, bocl_device* p){}
+void vsl_b_read(vsl_b_istream& is, bocl_device_sptr& sptr){}
+void vsl_b_read(vsl_b_istream& is, bocl_device_sptr const& sptr){}
