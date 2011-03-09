@@ -16,10 +16,10 @@ IF(VGUI_FOUND)
   LINK_DIRECTORIES(${OPENGL_LIBRARY_DIR})
 
   SET(boxm2_view_sources
-      boxm2_cam_tableau.h       boxm2_cam_tableau.cxx
-      boxm2_render_tableau.h    boxm2_render_tableau.cxx
-      boxm2_change_detection_tableau.h boxm2_change_detection_tableau.cxx
-      boxm2_batch_update_tableau.h boxm2_batch_update_tableau.cxx
+      boxm2_cam_tableau.h               boxm2_cam_tableau.cxx
+      boxm2_render_tableau.h            boxm2_render_tableau.cxx
+      boxm2_change_detection_tableau.h  boxm2_change_detection_tableau.cxx
+      boxm2_batch_update_tableau.h      boxm2_batch_update_tableau.cxx
       boxm2_trajectory.h
       boxm2_trajectory.cxx
       boxm2_include_glew.h
