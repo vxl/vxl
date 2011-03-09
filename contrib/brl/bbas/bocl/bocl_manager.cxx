@@ -1,4 +1,6 @@
-#include <bocl/bocl_manager.h>
+#include "bocl_manager.h"
+//:
+// \file
 
 //: Binary save boxm2_scene scene from stream.
 void vsl_b_write(vsl_b_ostream& os, bocl_manager_child const& scene){}
