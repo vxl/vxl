@@ -23,6 +23,7 @@ exec perl -w -l012 -x $0 ${1+"$@"}
 
 undef $/;
 $full = '';
+$brief = '';
 $emacs = '';
 $vim = '';
 $check_includes = '';
@@ -31,6 +32,7 @@ while (@ARGV && $ARGV[0] =~ m!^-!)
 {
   $_ = shift @ARGV;
   if (m/^-f$/) { $full = 1; }
+  elsif (m/^-b$/) { $brief = 1; }
   elsif (m/^-e$/) { $emacs = 1; }
   elsif (m/^-v$/) { $vim = 1; }
   elsif (m/^-i$/) { $check_includes = 1; }
@@ -1769,5 +1771,5 @@ sub msg
   if ($emacs)  { print "$f:$linenum:\t\# $message"; }
   elsif ($vim) { print "vim +$linenum $f\t\# $message"; }
   else         { print "$f\t\# $message"; }
-  $printed = 1 unless defined($quiet);
+  $printed = 1 unless (defined($quiet) || $brief);
 }
