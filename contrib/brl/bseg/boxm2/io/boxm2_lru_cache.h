@@ -2,8 +2,8 @@
 #define boxm2_lru_cache_h_
 //:
 // \file
-// \brief boxm2_lru_cache (least recently used) is a singleton, derived from 
-//        abstract class boxm2_cache
+// \brief boxm2_lru_cache (least recently used) is a singleton, derived from abstract class boxm2_cache
+
 #include <boxm2/io/boxm2_cache.h>
 #include <vcl_iostream.h>
 
@@ -15,10 +15,10 @@
 class boxm2_lru_cache : public boxm2_cache
 {
   public:
-  
+
     //: create function used instead of constructor
-    static void create(boxm2_scene_sptr scene); 
-   
+    static void create(boxm2_scene_sptr scene);
+
     //: returns block pointer to block specified by ID
     virtual boxm2_block* get_block(boxm2_block_id id);
 
@@ -26,15 +26,17 @@ class boxm2_lru_cache : public boxm2_cache
     virtual boxm2_data_base* get_data_base(boxm2_block_id id, vcl_string type, vcl_size_t num_bytes=0);
 
     //: removes data from this cache (may or may not write to disk first)
-    virtual void remove_data_base(boxm2_block_id id, vcl_string type); 
+    virtual void remove_data_base(boxm2_block_id id, vcl_string type);
 
     //: to string method returns a string describing the cache's current state
     vcl_string to_string();
 
   private:
-    
-    //: hidden constructor
+
+    //: hidden constructor (private so it cannot be called -- forces the class to be singleton)
     boxm2_lru_cache(boxm2_scene_sptr scene);
+
+    //: hidden destructor (private so it cannot be called -- forces the class to be singleton)
     ~boxm2_lru_cache();
 
     //: keep a map of boxm2_block pointers (size will be limited to 9 blocks
@@ -47,6 +49,7 @@ class boxm2_lru_cache : public boxm2_cache
     vcl_string scene_dir_;
 
     //---------Helper Methods --------------------------------------------------
+
     //: helper method returns a reference to correct data map (ensures one exists)
     vcl_map<boxm2_block_id, boxm2_data_base*>& cached_data_map(vcl_string prefix);
 
