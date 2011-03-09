@@ -2,6 +2,8 @@
 #define boxm2_lru_cache_h_
 //:
 // \file
+// \brief boxm2_lru_cache (least recently used) is a singleton, derived from 
+//        abstract class boxm2_cache
 #include <boxm2/io/boxm2_cache.h>
 #include <vcl_iostream.h>
 
@@ -13,10 +15,10 @@
 class boxm2_lru_cache : public boxm2_cache
 {
   public:
-    //: construct with directory and scene dimensions (blocknum)
-    boxm2_lru_cache(boxm2_scene* scene);
-    ~boxm2_lru_cache();
-
+  
+    //: create function used instead of constructor
+    static void create(boxm2_scene* scene); 
+   
     //: returns block pointer to block specified by ID
     virtual boxm2_block* get_block(boxm2_block_id id);
 
@@ -30,6 +32,10 @@ class boxm2_lru_cache : public boxm2_cache
     vcl_string to_string();
 
   private:
+    
+    //: hidden constructor
+    boxm2_lru_cache(boxm2_scene* scene);
+    ~boxm2_lru_cache();
 
     //: keep a map of boxm2_block pointers (size will be limited to 9 blocks
     vcl_map<boxm2_block_id, boxm2_block*> cached_blocks_;

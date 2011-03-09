@@ -34,7 +34,6 @@
 #include <boxm2/ocl/pro/boxm2_opencl_render_process.h>
 #include <boxm2/ocl/pro/boxm2_opencl_batch_update_process.h>
 #include <boxm2/ocl/pro/boxm2_opencl_refine_process.h>
-#include <boxm2/io/boxm2_nn_cache.h>
 #include <boxm2/io/boxm2_lru_cache.h>
 #include <bpro/core/bbas_pro/bbas_1d_array_float.h>
 

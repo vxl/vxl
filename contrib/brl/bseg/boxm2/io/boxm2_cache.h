@@ -19,8 +19,10 @@
 class boxm2_cache
 {
   public:
-
-    boxm2_cache(boxm2_scene* scene) : scene_(scene) {}
+    
+    //: Use this instead of constructor
+    static boxm2_cache* instance();
+    static bool         exists() { return (boxm2_cache::instance_!=0); }
 
     //: returns block pointer to block specified by ID
     virtual boxm2_block* get_block(boxm2_block_id id) = 0;
@@ -36,6 +38,12 @@ class boxm2_cache
     boxm2_data<T>* get_data(boxm2_block_id id);
 
   protected:
+
+    //: hide constructor
+    boxm2_cache(boxm2_scene* scene) : scene_(scene) {}
+
+    //: singleton instance of boxm2_cache
+    static boxm2_cache* instance_; 
 
     //: boxm2_scene needs to be around to initialized uninitialized blocks
     boxm2_scene* scene_;

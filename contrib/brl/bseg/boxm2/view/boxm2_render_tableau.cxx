@@ -400,7 +400,10 @@ bool boxm2_render_tableau::init_clgl()
 {
   //get relevant blocks
   vcl_cout<<"Data Path: "<<scene_->data_path()<<vcl_endl;
-  cache_ = new boxm2_lru_cache(scene_.ptr());
+  
+  //create cache, grab singleton instance
+  boxm2_lru_cache::create(scene_.ptr()); 
+  cache_ = boxm2_cache::instance(); 
 
   //initialize gpu pro / manager
   gpu_pro_ = boxm2_opencl_processor::instance();

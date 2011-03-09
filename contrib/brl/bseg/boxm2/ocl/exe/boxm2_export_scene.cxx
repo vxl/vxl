@@ -137,13 +137,14 @@ int main(int argc,  char** argv)
   boxm2_scene_sptr scene = new boxm2_scene(scene_file());
   brdb_value_sptr brdb_scene = new brdb_value_t<boxm2_scene_sptr>(scene);
 
-  //get relevant blocks
-  boxm2_lru_cache cache( scene.ptr() );
+  //create cache
+  boxm2_lru_cache::create(scene.ptr()); 
+  boxm2_cache* cache = boxm2_cache::instance(); 
 
   //initialize gpu pro / manager
   boxm2_opencl_processor* gpu_pro = boxm2_opencl_processor::instance();
   gpu_pro->set_scene(scene.ptr());
-  gpu_pro->set_cpu_cache(&cache);
+  gpu_pro->set_cpu_cache(cache);
   gpu_pro->init();
 
   //initialize the GPU render process

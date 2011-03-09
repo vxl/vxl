@@ -42,13 +42,14 @@ void test_batch_update_kernels()
 
   boxm2_scene_sptr scene = new boxm2_scene(test_file);
 
-  //initialize a block and data cache
-  boxm2_lru_cache cache( scene.ptr() );
-
+  //initialize a block and data cache  
+  boxm2_lru_cache::create(scene.ptr()); 
+  boxm2_cache* cache = boxm2_cache::instance(); 
+  
   //initialize gpu pro / manager
   boxm2_opencl_processor* gpu_pro = boxm2_opencl_processor::instance();
   gpu_pro->set_scene(scene.ptr());
-  gpu_pro->set_cpu_cache(&cache);
+  gpu_pro->set_cpu_cache(cache);
   gpu_pro->init();
   vcl_string update_opts=" -D MOG_TYPE_8 ";
   boxm2_opencl_batch_update_process update;
@@ -77,17 +78,17 @@ void test_batch_update_kernels()
 
   for(;iter!=blk_map.end();iter++)
   {
-      boxm2_block *     blk     = cache.get_block(iter->first);
+      boxm2_block *     blk     = cache->get_block(iter->first);
       boxm2_array_3d<uchar16> trees=blk->trees();
 
       vcl_cout<<" DATA buffers "<< blk->num_buffers()<<vcl_endl;
-      boxm2_data_base * data_base=cache.get_data_base(iter->first,boxm2_data_traits<BOXM2_AUX>::prefix());
+      boxm2_data_base * data_base = cache->get_data_base(iter->first,boxm2_data_traits<BOXM2_AUX>::prefix());
       boxm2_data<BOXM2_AUX> *aux_data=new boxm2_data<BOXM2_AUX>(data_base->data_buffer(),data_base->buffer_length(),data_base->block_id());
       
-      boxm2_data_base * hist_base=cache.get_data_base(iter->first,boxm2_data_traits<BOXM2_BATCH_HISTOGRAM>::prefix());
+      boxm2_data_base * hist_base = cache->get_data_base(iter->first,boxm2_data_traits<BOXM2_BATCH_HISTOGRAM>::prefix());
       boxm2_data<BOXM2_BATCH_HISTOGRAM> *hist_data=new boxm2_data<BOXM2_BATCH_HISTOGRAM>(hist_base->data_buffer(),hist_base->buffer_length(),hist_base->block_id());
-      boxm2_data_base * alpha_data_base=cache.get_data_base(iter->first,boxm2_data_traits<BOXM2_ALPHA>::prefix());
-      boxm2_data<BOXM2_ALPHA> *alpha_data=new boxm2_data<BOXM2_ALPHA>(alpha_data_base->data_buffer(),alpha_data_base->buffer_length(),alpha_data_base->block_id());
+      boxm2_data_base * alpha_data_base  = cache->get_data_base(iter->first,boxm2_data_traits<BOXM2_ALPHA>::prefix());
+      boxm2_data<BOXM2_ALPHA> *alpha_data =new boxm2_data<BOXM2_ALPHA>(alpha_data_base->data_buffer(),alpha_data_base->buffer_length(),alpha_data_base->block_id());
 
       boxm2_array_1d<float4> data=aux_data->data();
       boxm2_array_1d<float8> hist_data_array=hist_data->data();

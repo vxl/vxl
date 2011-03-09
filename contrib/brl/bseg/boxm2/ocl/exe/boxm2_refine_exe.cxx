@@ -43,12 +43,13 @@ int main(int argc,  char** argv)
   brdb_value_sptr brdb_data_type = new brdb_value_t<vcl_string>(vcl_string("8bit"));
 
   //initialize a block and data cache
-  boxm2_lru_cache cache( scene.ptr() );
+  boxm2_lru_cache::create(scene.ptr()); 
+  boxm2_cache* cache = boxm2_cache::instance(); 
 
   //initialize gpu pro / manager
   boxm2_opencl_processor* gpu_pro = boxm2_opencl_processor::instance();
   gpu_pro->set_scene(scene.ptr());
-  gpu_pro->set_cpu_cache(&cache);
+  gpu_pro->set_cpu_cache(cache);
   gpu_pro->init();
 
   ////set inputs
@@ -76,10 +77,10 @@ int main(int argc,  char** argv)
   for(iter = blocks.begin(); iter != blocks.end(); ++iter)
   { 
     boxm2_block_id id = iter->first; 
-    boxm2_sio_mgr::save_block(scene->data_path(), cache.get_block(id)); 
-    boxm2_sio_mgr::save_block_data(scene->data_path(), id, cache.get_data<BOXM2_ALPHA>(id) );
-    boxm2_sio_mgr::save_block_data(scene->data_path(), id, cache.get_data<BOXM2_MOG3_GREY>(id) );
-    boxm2_sio_mgr::save_block_data(scene->data_path(), id, cache.get_data<BOXM2_NUM_OBS>(id) );
+    boxm2_sio_mgr::save_block(scene->data_path(), cache->get_block(id)); 
+    boxm2_sio_mgr::save_block_data(scene->data_path(), id, cache->get_data<BOXM2_ALPHA>(id) );
+    boxm2_sio_mgr::save_block_data(scene->data_path(), id, cache->get_data<BOXM2_MOG3_GREY>(id) );
+    boxm2_sio_mgr::save_block_data(scene->data_path(), id, cache->get_data<BOXM2_NUM_OBS>(id) );
   }
 
 
