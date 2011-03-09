@@ -43,6 +43,9 @@ IF(EXPAT_FOUND)
     #exes
     subdirs(exe)
 
+    #pro
+    subdirs(pro)
+
     #tableaus
     subdirs(view)
 
