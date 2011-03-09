@@ -6,7 +6,6 @@
 #include <vcl_fstream.h>
 #include <vcl_sstream.h>
 #include <vcl_cstdio.h>
-#include <vcl_cstdlib.h> // for std::malloc() and std::free()
 #include <vcl_cstring.h>
 
 bocl_device::bocl_device(cl_device_id& device)
@@ -14,6 +13,8 @@ bocl_device::bocl_device(cl_device_id& device)
   device_ = new cl_device_id[1]; 
   device_[0] = device; 
   info_ = bocl_device_info(device_); 
+
+  vcl_cout<<"Device specs: "<<info_<<vcl_endl;
 
   //Create a context from the device ID
   int status = 1;

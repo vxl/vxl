@@ -42,6 +42,7 @@ class bocl_device_info
     vcl_string device_vendor_; 
     vcl_string extensions_supported_; 
     vcl_string platform_name_; 
+    vcl_string platform_version_;
     vcl_string driver_version_; 
     cl_device_type device_type_; 
     cl_uint addr_bits_;                     //!< Device Address Bits (pointer size)

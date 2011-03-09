@@ -24,6 +24,10 @@ bocl_device_info::bocl_device_info(cl_device_id* device)
   if (!check_val(status, CL_SUCCESS, "clGetDeviceInfo CL_PLATFORM_NAME failed."))
     return;
   platform_name_ = vcl_string(platform_name);
+  status = clGetPlatformInfo(platform,CL_PLATFORM_VERSION,sizeof(platform_name),platform_name,NULL);
+  if (!check_val(status, CL_SUCCESS, "clGetDeviceInfo CL_PLATFORM_VERSION failed."))
+    return;
+  platform_version_ = vcl_string(platform_name);
   
   //get device name 
   char device_string[1024];
@@ -200,6 +204,7 @@ vcl_ostream& operator <<(vcl_ostream &s, bocl_device_info& info)
      << " Device Name : " << info.device_name_ << '\n'
      << " Device Vendor: " << info.device_vendor_ << '\n'
      << " Device Platform: " << info.platform_name_ << '\n'
+     << " Device Platform Version: " << info.platform_version_ << '\n'
      << " Device Driver Version: " << info.driver_version_ << '\n'
      << " Device Type: "; 
   if( info.device_type_ & CL_DEVICE_TYPE_CPU )

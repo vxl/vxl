@@ -28,8 +28,10 @@
 //#define GROUP_SIZE 64
 #define VECTOR_SIZE 4
 
+//makes a bocl_mem a sptr
 #include <vbl/vbl_ref_count.h>
 #include <vbl/vbl_smart_ptr.h>
+#include <vsl/vsl_binary_io.h>
 
 template <class T>
 class bocl_manager
