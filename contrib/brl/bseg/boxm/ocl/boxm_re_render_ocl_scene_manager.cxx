@@ -982,7 +982,7 @@ int boxm_re_render_ocl_scene_manager::build_kernel_program(cl_program & program)
   // create a cl program executable for all the devices specified
   status = clBuildProgram(program,
                           1,
-                          this->devices_,
+                          this->devices(),
                           "",
                           NULL,
                           NULL);
@@ -992,7 +992,7 @@ int boxm_re_render_ocl_scene_manager::build_kernel_program(cl_program & program)
   {
     vcl_size_t len;
     char buffer[2048];
-    clGetProgramBuildInfo(program, this->devices_[0],
+    clGetProgramBuildInfo(program, this->devices()[0],
                           CL_PROGRAM_BUILD_LOG, sizeof(buffer), buffer, &len);
     vcl_printf("%s\n", buffer);
     return SDK_FAILURE;
