@@ -25,20 +25,20 @@
 float avg_intensity(vil_image_view<float> & img, int rx, int ry, int u, int v)
 {
     float avgintensity=0.0;
-    for(unsigned m=u-rx;m<=u+rx;m++)
-        for(unsigned p=v-ry;p<=v+ry;p++)
+    for (unsigned m=u-rx;m<=u+rx;m++)
+        for (unsigned p=v-ry;p<=v+ry;p++)
             avgintensity+=img(m,p);
 
     return avgintensity/((2*rx+1)*(2*ry+1));
-
 }
+
 bool compute_correspondences(vcl_vector<vcl_string> img_files,
                              vcl_vector<vcl_string> cam_files,
                              vcl_vector<vcl_string> obj_files,
                              vcl_vector<vcl_vector<bool> > & mask,
                              vcl_vector<float> & corr_int)
 {
-    for(unsigned i=0;i<img_files.size();i++)
+    for (unsigned i=0;i<img_files.size();i++)
     {
         vil_image_view_base_sptr img_ptr=vil_load(img_files[i].c_str());
         vcl_vector<bool>  mask_j(obj_files.size(),false);
@@ -49,7 +49,7 @@ bool compute_correspondences(vcl_vector<vcl_string> img_files,
 
             vcl_ifstream ifs(cam_files[i].c_str());
             if (!ifs.is_open()) {
-                vcl_cerr << "Failed to open file " << cam_files[i] << vcl_endl;
+                vcl_cerr << "Failed to open file " << cam_files[i] << '\n';
                 return false;
             }
 
@@ -62,7 +62,6 @@ bool compute_correspondences(vcl_vector<vcl_string> img_files,
             //scan through polygons, retrieve contained pixels
             for (unsigned j = 0; j < poly_2d_list.size(); j++)
             {
-
                 vgl_polygon<double> this_poly = poly_2d_list[j];
                 vgl_polygon_scan_iterator<double> psi(this_poly);
 
@@ -80,7 +79,7 @@ bool compute_correspondences(vcl_vector<vcl_string> img_files,
                             mask_j[j]=true;
                         }
                 }
-                if(mask_j[j])
+                if (mask_j[j])
                     corr_int.push_back(meanintensity/countintensity);
             }
         }
@@ -88,10 +87,10 @@ bool compute_correspondences(vcl_vector<vcl_string> img_files,
     }
     return true;
 }
+
 // This code normalizes images (adjust gain and offset) based on 3-d ocrrespondences and cameras.
 int main(int argc, char** argv)
 {
-
     //Input arguments
     vul_arg<vcl_string> camdir   ("-camdir", "Camera Directory", "");
     vul_arg<vcl_string> imgdir   ("-imgdir", "Image Directory", "");
@@ -129,19 +128,19 @@ int main(int argc, char** argv)
     vcl_vector<vcl_vector<bool> > mask;
     vcl_vector<float> corr_int;
 
-    //: project polygons in the images and record corrspoonding intensities.
-    if(!compute_correspondences(img_files,cam_files,obj_files,mask,corr_int))
+    // project polygons in the images and record corresponding intensities.
+    if (!compute_correspondences(img_files,cam_files,obj_files,mask,corr_int))
         return -1;
 
     vcl_vector<float> mean_ref_intensity(obj_files.size(),0.0);
     vcl_vector<float> stdev_ref_intensity(obj_files.size(),0.0);
     vcl_vector<float> mean_ref_count(obj_files.size(),0.0);
     int pointindex=0;
-    for(unsigned i=0;i<mask.size();i++)
+    for (unsigned i=0;i<mask.size();i++)
     {
-        for(unsigned j=0;j<mask[i].size();j++)
+        for (unsigned j=0;j<mask[i].size();j++)
         {
-            if(mask[i][j])
+            if (mask[i][j])
             {
                 float curr_intensity=corr_int[pointindex++];
                 mean_ref_intensity[j]+=curr_intensity;
@@ -150,14 +149,14 @@ int main(int argc, char** argv)
             }
         }
     }
-    for(unsigned j=0;j<mean_ref_intensity.size();j++)
+    for (unsigned j=0;j<mean_ref_intensity.size();j++)
     {
         mean_ref_intensity[j]/=mean_ref_count[j];
         stdev_ref_intensity[j]=vcl_sqrt((stdev_ref_intensity[j]/mean_ref_count[j]-mean_ref_intensity[j]*mean_ref_intensity[j]));
         vcl_cout<<"Mean "<<mean_ref_intensity[j]<<" Std "<<stdev_ref_intensity[j]<<vcl_endl;
     }
     pointindex=0;
-    for(unsigned i=0;i<img_files.size();i++)
+    for (unsigned i=0;i<img_files.size();i++)
     {
         vil_image_view_base_sptr img_ptr=vil_load(img_files[i].c_str());
         vcl_string imgname=outdir()+"/"+vul_file::basename(img_files[i]);
@@ -172,11 +171,11 @@ int main(int argc, char** argv)
             float sumxi=0.0;   float sumxi2=0.0;
 
             float count=0.0;
-            for(unsigned j=0;j<mask[i].size();j++)
+            for (unsigned j=0;j<mask[i].size();j++)
             {
-                //: check for top right quarter.
-                if(!mask[i][j]) continue;
-                //: avg intensity over a neighborhood.
+                // check for top right quarter.
+                if (!mask[i][j]) continue;
+                // avg intensity over a neighborhood.
                 float mu=mean_ref_intensity[j];
                 float curr_pt_intensity=corr_int[pointindex++];
                 summuixi+=curr_pt_intensity*mean_ref_intensity[j];
@@ -184,10 +183,9 @@ int main(int argc, char** argv)
                 sumxi+=curr_pt_intensity;
                 sumxi2+=curr_pt_intensity*curr_pt_intensity;
                 count++;
-
             }
             // if count >2 then compute gain and offset.
-            if(count>=2)
+            if (count>=2)
             {
                 float a=(summuixi-summui*sumxi/count)/(sumxi2-sumxi*sumxi/count);
                 float b =(summui-a*sumxi)/count;
@@ -198,7 +196,7 @@ int main(int argc, char** argv)
                 vcl_cout<<" ======="<<vcl_endl;
             }
             else
-                vcl_cout<<" Only  "<<count << " correspondences "<<vcl_endl;
+                vcl_cout<<" Only  "<<count << " correspondences"<<vcl_endl;
         }
     }
 

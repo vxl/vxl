@@ -22,12 +22,11 @@
 float avg_intensity(vil_image_view<float> & img, int rx, int ry, int u, int v)
 {
     float avgintensity=0.0;
-    for(unsigned m=u-rx;m<=u+rx;m++)
-        for(unsigned p=v-ry;p<=v+ry;p++)
+    for (unsigned m=u-rx;m<=u+rx;m++)
+        for (unsigned p=v-ry;p<=v+ry;p++)
             avgintensity+=img(m,p);
 
     return avgintensity/((2*rx+1)*(2*ry+1));
-
 }
 
 void compute_corr_intensities(vcl_vector<vcl_string> img_files,
@@ -36,7 +35,7 @@ void compute_corr_intensities(vcl_vector<vcl_string> img_files,
                               vcl_vector<float> & counts,
                               int rx, int ry)
 {
-    for(unsigned i=0;i<img_files.size();i++)
+    for (unsigned i=0;i<img_files.size();i++)
     {
         vil_image_view_base_sptr img_ptr=vil_load(img_files[i].c_str());
         if (vil_image_view<vxl_byte> *img_byte = dynamic_cast<vil_image_view<vxl_byte>*>(img_ptr.ptr()))
@@ -47,30 +46,28 @@ void compute_corr_intensities(vcl_vector<vcl_string> img_files,
             unsigned ni=img_ptr->ni();
             unsigned nj=img_ptr->nj();
             int count=0;
-            for(unsigned j=0;j<corrs.size();j++)
+            for (unsigned j=0;j<corrs.size();j++)
             {
-                //: check for top right quarter.
+                // check for top right quarter.
                 vgl_point_2d<double> point2d;
-                if(!corrs[j]->match(i,point2d)) continue;
+                if (!corrs[j]->match(i,point2d)) continue;
 
                 int u=(int)vcl_floor(point2d.x());
                 int v=(int)vcl_floor(point2d.y());
 
-                if(u>=ni/2+rx && u<ni-rx && v>0+ry && v<nj-ry)
+                if (u>=ni/2+rx && u<ni-rx && v>0+ry && v<nj-ry)
                 {
-                    //: average value of a corr throughout the sequence
+                    // average value of a corr throughout the sequence
                     mus[j]+=avg_intensity(*floatimg,rx,ry,u,v);
                     counts[j]++;
                 }
-
             }
         }
     }
-
 }
+
 int main(int argc, char** argv)
 {
-
     //Input arguments
     vul_arg<vcl_string> site   ("-sitename", "Site Filename", "");
     vul_arg<int>        radiusx("-radiusx", "Radius along X direction", 3);
@@ -99,10 +96,10 @@ int main(int argc, char** argv)
     vcl_sort(img_files.begin(), img_files.end());
     vcl_vector<float> mus(corrs.size(),0.0);
     vcl_vector<float> counts(corrs.size(),0.0);
-    
+
     compute_corr_intensities(img_files, corrs, mus, counts,rx,ry);
 
-    for(unsigned i=0;i<img_files.size();i++)
+    for (unsigned i=0;i<img_files.size();i++)
     {
         vil_image_view_base_sptr img_ptr=vil_load(img_files[i].c_str());
         vcl_string imgname=outdir()+"/"+vul_file::basename(img_files[i]);
@@ -116,17 +113,17 @@ int main(int argc, char** argv)
             float count=0;
             float summui=0.0;  float summuixi=0.0;
             float sumxi=0.0;   float sumxi2=0.0;
-           
-            for(unsigned j=0;j<corrs.size();j++)
+
+            for (unsigned j=0;j<corrs.size();j++)
             {
-                //: check for top right quarter.
+                // check for top right quarter.
                 vgl_point_2d<double> point2d;
-                if(!corrs[j]->match(i,point2d)) continue;
+                if (!corrs[j]->match(i,point2d)) continue;
                 int u=(int)vcl_floor(point2d.x());
                 int v=(int)vcl_floor(point2d.y());
-                if(u>=ni/2+rx && u<ni-rx && v>0+ry && v<nj-ry)
+                if (u>=ni/2+rx && u<ni-rx && v>0+ry && v<nj-ry)
                 {
-                    //: avg intensity over a neighborhood.
+                    // avg intensity over a neighborhood.
                     float avgintensity=avg_intensity(*floatimg,rx,ry,u,v);
                     summuixi+=avgintensity*mus[j]/counts[j];
                     summui+=mus[j]/counts[j];;
@@ -135,7 +132,7 @@ int main(int argc, char** argv)
                     count++;
                 }
             }
-            if(count>=2)
+            if (count>=2)
             {
                 float a=(summuixi-summui*sumxi/count)/(sumxi2-sumxi*sumxi/count);
                 float b =(summui-a*sumxi)/count;
@@ -146,7 +143,7 @@ int main(int argc, char** argv)
                 vil_save(*img_byte,imgname.c_str());
             }
             else
-                vcl_cout<<" Only  "<<count << " correspondences "<<vcl_endl;
+                vcl_cout<<" Only "<<count << " correspondences"<<vcl_endl;
         }
     }
 
