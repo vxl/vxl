@@ -3,6 +3,35 @@
 // \file
 
 
+//: scnee/device constructor
+boxm2_opencl_cache::boxm2_opencl_cache(boxm2_scene* scene, 
+                                       bocl_device* device) 
+{
+  // by default try to create an LRU cache
+  boxm2_lru_cache::create(scene); 
+  cpu_cache_ = boxm2_cache::instance(); 
+  
+  context_ = &device->context(); 
+  
+  //create command queue... make sure this isn't destructed at the end of the function...
+  int status = 0;
+  cl_command_queue queue = clCreateCommandQueue(*context_,
+                                                *device->device_id(),
+                                                CL_QUEUE_PROFILING_ENABLE,
+                                                &status);
+  if (!check_val(status,CL_SUCCESS,"boxm2_opencl_cache:: failed in command queue creation" + error_to_string(status)))
+      return;
+  queue_ = &queue;   
+  
+  loaded_ = boxm2_block_id(-1,-1,-1); 
+  cached_block_ = 0;
+  block_info_ = 0;
+  tree_ptrs_ = 0;
+  trees_per_buffer_ = 0;
+  mem_ptrs_ = 0;
+  scene_ = scene;
+}
+
 //: constructor
 boxm2_opencl_cache::boxm2_opencl_cache(boxm2_cache* cpu_cache,
                                        cl_context* context,

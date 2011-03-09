@@ -11,6 +11,7 @@
 #include <boxm2/basic/boxm2_block_id.h>
 #include <boxm2/basic/boxm2_array_3d.h>
 #include <boxm2/io/boxm2_cache.h>
+#include <boxm2/io/boxm2_lru_cache.h>
 #include <brdb/brdb_value_sptr.h>
 #include <vcl_vector.h>
 #ifdef DEBUG
@@ -20,11 +21,14 @@
 //open cl includes
 #include <bocl/bocl_cl.h>
 #include <bocl/bocl_mem.h>
+#include <bocl/bocl_device.h>
 
 //: boxm2_dumb_cache - example realization of abstract cache class
 class boxm2_opencl_cache
 {
   public:
+    boxm2_opencl_cache(boxm2_scene* scene, 
+                       bocl_device* device); 
     boxm2_opencl_cache(boxm2_cache* cpu_cache,
                        cl_context* context,
                        cl_command_queue* queue,

@@ -38,6 +38,8 @@ class boxm2_cache: public vbl_ref_count
     //: returns data pointer to data specified by ID and data_type
     template <boxm2_data_type T>
     boxm2_data<T>* get_data(boxm2_block_id id);
+    
+    //: scene accessor
 
   protected:
 
