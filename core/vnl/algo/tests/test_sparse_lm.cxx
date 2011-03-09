@@ -20,7 +20,6 @@ static void normalize(vnl_vector<double>& a, vnl_vector<double>& b)
   x_mean /= num_pts;
   y_mean /= num_pts;
 
-
   // translate points to the origin
   for (unsigned int i=0; i<num_pts; ++i) {
     b[2*i] -= x_mean;
@@ -39,7 +38,6 @@ static void normalize(vnl_vector<double>& a, vnl_vector<double>& b)
     mean_dist += vcl_sqrt(b[2*i]*b[2*i] + b[2*i+1]*b[2*i+1]);
   }
   mean_dist /= num_pts;
-
 
   // scale points
   for (unsigned int i=0; i<b.size(); ++i) {
@@ -69,7 +67,6 @@ static void normalize(vnl_vector<double>& a, vnl_vector<double>& b)
   for (unsigned int i=0; i<a.size()/3; ++i) {
     a[3*i] -= angle;
   }
-
 }
 
 // compute difference in camera parameters accounting for cyclic angle parameters
@@ -77,11 +74,11 @@ vnl_vector<double> camera_diff(const vnl_vector<double>& a1,
                                const vnl_vector<double>& a2)
 {
   vnl_vector<double> da = a1-a2;
-  for (int i=0; i<da.size(); i+=3)
+  for (unsigned int i=0; i<da.size(); i+=3)
   {
-    if( da[i] > vnl_math::pi )
+    if ( da[i] > vnl_math::pi )
       da[i] -= vnl_math::pi*2;
-    if( da[i] < -vnl_math::pi )
+    if ( da[i] < -vnl_math::pi )
       da[i] += vnl_math::pi*2;
   }
   return da;
@@ -127,7 +124,8 @@ class bundle_2d : public vnl_sparse_lst_sqr_function
     double ca = vcl_cos(ai[0]);
     double denom = (sa*bj[0] + ca*bj[1] + ai[2]);
     Aij[0][0] = -((sa*bj[0] + ca*bj[1]) +
-                       (ca*bj[0] - sa*bj[1] + ai[1])*(ca*bj[0] - sa*bj[1])/denom)/denom;
+                  (ca*bj[0] - sa*bj[1] + ai[1])*
+                  (ca*bj[0] - sa*bj[1])/denom)/denom;
     Aij[0][1] = 1/denom;
     Aij[0][2] = -(ca*bj[0] - sa*bj[1] + ai[1]) / (denom*denom);
   }
@@ -174,10 +172,8 @@ void test_prob1()
                             -4.0,14.0, -2.0,14.0, 0.0,14.0, 2.0,14.0, 4.0,14.0,
                             -4.0,16.0, -2.0,16.0, 0.0,16.0, 2.0,16.0, 4.0,16.0};
 
-
    vnl_vector<double> a(a_data,12), b(b_data,50), proj(100,0.0);
    vnl_vector<double> c;
-
 
    // create a generator function with ideal data and zeros for all projections
    // the residuals of this functions are the ideal project points
@@ -188,7 +184,6 @@ void test_prob1()
    // the average distance to the origin is 1, and the vector between the
    // first two points is on the x-axis
    normalize(a,b);
-
 
    vnl_vector<double> proj_test(100,0.0);
    gen_func.f(a,b,c,proj_test);
@@ -216,8 +211,10 @@ void test_prob1()
      // first two points is on the x-axis
      normalize(pa,pb);
 
-     //vcl_cout << a <<"|"<<b<<vcl_endl;
-     //vcl_cout << pa <<"|"<<pb<<vcl_endl;
+#ifdef DEBUG
+     vcl_cout << a <<'|'<<b<<'\n'
+              << pa <<'|'<<pb<<vcl_endl;
+#endif
 
      double rms_error_a = camera_diff(a,pa).rms();
      double rms_error_b = (b-pb).rms();
@@ -409,9 +406,7 @@ void test_prob2()
                             -4.0,14.0, -2.0,14.0, 0.0,14.0, 2.0,14.0, 4.0,14.0,
                             -4.0,16.0, -2.0,16.0, 0.0,16.0, 2.0,16.0, 4.0,16.0};
 
-
    vnl_vector<double> a(a_data,12), b(b_data,50), c(1,1.5), proj(100,0.0);
-
 
    // create a generator function with ideal data and zeros for all projections
    // the residuals of this functions are the ideal project points
@@ -453,7 +448,7 @@ void test_prob2()
      TEST("w/ globals: convergence with all projections",
           rms_error_a + rms_error_b + rms_error_c < 1e-10, true);
    }
-   
+
    // remove several correspondences
    // we must see each point in at least 2 views
    // we must leave >= 62 residuals (since there are 62 unknowns)
@@ -561,9 +556,9 @@ class bundle_2d_robust : public bundle_2d
 {
  public:
   bundle_2d_robust(unsigned int num_cam, unsigned int num_pts,
-            const vnl_vector<double>& data,
-            const vcl_vector<vcl_vector<bool> >& xmask,
-            UseGradient g = use_gradient)
+                   const vnl_vector<double>& data,
+                   const vcl_vector<vcl_vector<bool> >& xmask,
+                   UseGradient g = use_gradient)
    : bundle_2d(num_cam, num_pts, data, xmask, g, use_weights), scale2_(1.0) {}
 
   void set_scale(double scale) { scale2_ = scale*scale; }
@@ -584,22 +579,22 @@ class bundle_2d_robust : public bundle_2d
   double mest(int k, double ek2)
   {
     // Beaton-Tukey
-    if ( ek2 > scale2_ ) 
+    if ( ek2 > scale2_ )
       return 0.0;
-    double tmp = ek2/scale2_;
-    tmp = 1 - ek2/scale2_;
-    return tmp*tmp;
+    else {
+      double tmp = 1 - ek2/scale2_;
+      return tmp*tmp;
+    }
   }
 
   double d_mest(int k, double ek2)
   {
     // Beaton-Tukey
-    if ( ek2 > scale2_ ) 
+    if ( ek2 > scale2_ )
       return 0.0;
-    double tmp = ek2/scale2_;
-    return -2*(1 - ek2/scale2_)/scale2_;
+    else
+      return -2*(1 - ek2/scale2_)/scale2_;
   }
-
 
   void trace(int iteration,
              vnl_vector<double> const& a,
@@ -629,7 +624,6 @@ void test_prob3()
                           -4.0,14.0, -2.0,14.0, 0.0,14.0, 2.0,14.0, 4.0,14.0,
                           -4.0,16.0, -2.0,16.0, 0.0,16.0, 2.0,16.0, 4.0,16.0};
 
-
   vnl_vector<double> a(a_data,12), b(b_data,50), proj(100,0.0);
   vnl_vector<double> c;
 
@@ -647,7 +641,6 @@ void test_prob3()
   {
     init_b[i] += rnd.normal()*sigma_pos;
   }
-
 
   // create a generator function with ideal data and zeros for all projections
   // the residuals of this functions are the ideal project points
@@ -689,7 +682,6 @@ void test_prob3()
     // initial conditions (all points at origin)
     vnl_vector<double> pa(init_a), pb(init_b), pc;
 
-
     bundle_2d_robust my_func(4,25,proj,mask,vnl_sparse_lst_sqr_function::use_gradient);
     my_func.set_scale(1.0);
 
@@ -704,13 +696,15 @@ void test_prob3()
     // first two points is on the x-axis
     normalize(pa,pb);
 
-    //vcl_cout << a <<"|"<<b<<vcl_endl;
-    //vcl_cout << pa <<"|"<<pb<<vcl_endl;
+#ifdef DEBUG
+    vcl_cout << a <<'|'<<b<<'\n'
+             << pa <<'|'<<pb<<vcl_endl;
+#endif
 
     double rms_error_a = camera_diff(a,pa).rms();
     double rms_error_b = (b-pb).rms();
     vcl_cout << "RMS camera error: "<<rms_error_a
-            << "\nRMS points error: "<<rms_error_b << vcl_endl;
+             << "\nRMS points error: "<<rms_error_b << vcl_endl;
     TEST("robust convergence with all projections",rms_error_a + rms_error_b < 1e-10, true);
   }
 
@@ -728,7 +722,6 @@ void test_prob3()
   mask[2][0] = false;
   mask[2][11] = false;
   mask[2][12] = false;
-
 
   // outliers
   proj[19] += 1.0;
@@ -766,7 +759,7 @@ void test_prob3()
     double rms_error_a = camera_diff(a,pa).rms();
     double rms_error_b = (b-pb).rms();
     vcl_cout << "RMS camera error: "<<rms_error_a
-            << "\nRMS points error: "<<rms_error_b << vcl_endl;
+             << "\nRMS points error: "<<rms_error_b << vcl_endl;
     TEST("convergence with missing projections",rms_error_a + rms_error_b < 1e-10, true);
   }
 
@@ -779,7 +772,6 @@ void test_prob3()
   {
     // initial conditions (all points at origin)
     vnl_vector<double> pa(init_a), pb(init_b), pc;
-
 
     bundle_2d_robust my_func(4,25,proj2,mask,vnl_sparse_lst_sqr_function::use_gradient);
     my_func.set_scale(1.0);
@@ -797,12 +789,11 @@ void test_prob3()
     double rms_error_a = camera_diff(a,pa).rms();
     double rms_error_b = (b-pb).rms();
     vcl_cout << "RMS camera error: "<<rms_error_a
-            << "\nRMS points error: "<<rms_error_a << vcl_endl;
+             << "\nRMS points error: "<<rms_error_a << vcl_endl;
     TEST("convergence with missing projections and noise",
-        rms_error_a <1e-4 && rms_error_b < 1e-4, true);
+         rms_error_a <1e-4 && rms_error_b < 1e-4, true);
   }
 }
-
 
 
 static void test_sparse_lm()
