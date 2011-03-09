@@ -112,8 +112,8 @@ bool bvpl_block_kernel_operator_process(bprb_func_process& pro)
       new boxm_scene<tree_type>(scene_in->lvcs(), scene_in->origin(), scene_in->block_dim(), scene_in->world_dim(), scene_in->max_level(), scene_in->init_level());
       scene_out->set_paths(output_path, "gauss_response_scene");
       scene_out->set_appearance_model(BSTA_GAUSS_F1);
-      if (!vul_file::exists(output_path + "/gauss_response_scene.xml"));
-         scene_out->write_scene("/gauss_response_scene.xml");
+      if (!vul_file::exists(output_path + "/gauss_response_scene.xml"))
+        scene_out->write_scene("/gauss_response_scene.xml");
 
       if (functor_name == "gauss_convolution") {
         bvpl_gauss_convolution_functor functor;
