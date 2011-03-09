@@ -11,13 +11,14 @@ MANPAGE_SOURCES += bvpl_octree_vector_operator_impl.h
 MANPAGE_SOURCES += bvpl_octree_kernel_operator.h
 MANPAGE_SOURCES += bvpl_scene_kernel_operator.h
 MANPAGE_SOURCES += bvpl_scene_vector_operator.h
-MANPAGE_SOURCES += bvpl_octree_sample.txx
 MANPAGE_SOURCES += bvpl_octree_vrml_util.h
 MANPAGE_SOURCES += bvpl_cell_data_traits.h
 MANPAGE_SOURCES += bvpl_octree_neighbors.h
 MANPAGE_SOURCES += bvpl_block_kernel_operator.h
+SOURCES += bvpl_pca_error_scenes.cxx
+SOURCES += bvpl_taylor_scenes_map.cxx
 
-SUBDIRS += pro
+SUBDIRS += pro sample io
 
 #######################################
 include ${VXLROOT}/config/top-params.mk

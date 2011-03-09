@@ -23,6 +23,8 @@ TESTS += test_ray.cxx
 TESTS += test_ray_intersect.cxx
 TESTS += test_camera_from_box.cxx
 TESTS += test_camera_bounds.cxx
+TESTS += test_ba_fixed_k_lsqr.cxx
+TESTS += test_ba_shared_k_lsqr.cxx
 
 MINI_PROG_SOURCES += test_include.cxx
 MINI_PROG_SOURCES += test_template_include.cxx

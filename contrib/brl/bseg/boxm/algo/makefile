@@ -15,6 +15,7 @@ MANPAGE_SOURCES += boxm_save_scene_raw.h
 MANPAGE_SOURCES += boxm_compute_scene_difference.h
 MANPAGE_SOURCES += boxm_split_sample.h
 MANPAGE_SOURCES += boxm_linear_operations.h
+MANPAGE_SOURCES += boxm_save_scene_raw_general.h
 
 SUBDIRS += pro rt sp
 

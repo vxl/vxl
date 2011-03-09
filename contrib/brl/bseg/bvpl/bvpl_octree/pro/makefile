@@ -16,6 +16,17 @@ SOURCES += processes/bvpl_compute_gauss_gradients.cxx
 SOURCES += processes/bvpl_discover_pca_features_process.cxx
 SOURCES += processes/bvpl_compute_pca_test_error_process.cxx
 SOURCES += processes/bvpl_block_kernel_operator_process.cxx
+SOURCES += processes/bvpl_add_taylor_errors_process.cxx
+SOURCES += processes/bvpl_add_pca_errors_process.cxx
+SOURCES += processes/bvpl_load_pca_error_scenes_process.cxx
+SOURCES += processes/bvpl_compute_taylor_error_process.cxx
+SOURCES += processes/bvpl_pca_project_process.cxx
+SOURCES += processes/bvpl_load_taylor_scenes_process.cxx
+SOURCES += processes/bvpl_block_avg_value_process.cxx
+SOURCES += processes/bvpl_scene_histogram_process.cxx
+SOURCES += processes/bvpl_compute_pca_error_block_process.cxx
+SOURCES += processes/bvpl_compute_pca_error_scene_process.cxx
+SOURCES += processes/bvpl_load_pca_info_process.cxx
 
 #######################################
 include ${VXLROOT}/config/top-params.mk
