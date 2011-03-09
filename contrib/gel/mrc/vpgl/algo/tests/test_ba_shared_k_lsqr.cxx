@@ -22,7 +22,6 @@ void setup_scene(const vpgl_calibration_matrix<double>& K,
   world.push_back(vgl_point_3d<double>(1.0, 1.0, 0.0));
   world.push_back(vgl_point_3d<double>(1.0, 1.0, 1.0));
 
-
   vgl_rotation_3d<double> I; // no rotation initially
 
   cameras.clear();
@@ -58,7 +57,6 @@ static void test_ba_shared_k_lsqr()
 
   vpgl_ba_shared_k_lsqr func(K,image_points,mask);
 
-
   // Extract the camera and point parameters
   vnl_vector<double> a,b,c;
   vpgl_ba_shared_k_lsqr::create_param_vector(cameras,a,c);
@@ -78,7 +76,7 @@ static void test_ba_shared_k_lsqr()
   for (unsigned int j=0; j<world.size(); ++j)
     valid &= world[j] == func.vpgl_bundle_adjust_lsqr::param_to_point(j,b,c);
   TEST("point conversion", valid, true);
-  
+
   double eps = 1e-8;
   func.set_residual_scale(1.0);
   double weight = 0.0;
@@ -88,28 +86,24 @@ static void test_ba_shared_k_lsqr()
   double val = 1e-10;
   double last_weight = 1.0;
   bool weight_decreasing = true;
-  bool weight_deriv = true;
   for (unsigned int i=0; i<20; ++i)
   {
     fij[0] = val;
     func.compute_weight_ij(0,0,dummy,dummy,dummy,fij,weight);
-    if(weight> last_weight || weight < 0.0)
+    if (weight> last_weight || weight < 0.0)
       weight_decreasing = false;
     last_weight = weight;
     val *= 10;
   }
   TEST("weight decreasing", weight_decreasing, true);
 
-
-
-
   vnl_random rnd;
   vnl_vector<double> a2(a),b2(b),c2(c);
-  for( unsigned i=0; i<b2.size(); ++i)
+  for ( unsigned i=0; i<b2.size(); ++i)
   {
     b2[i] += rnd.normal()/1000;
   }
-  for( unsigned i=0; i<a2.size(); ++i)
+  for ( unsigned i=0; i<a2.size(); ++i)
   {
     a2[i] += rnd.normal()/1000;
   }
@@ -131,9 +125,8 @@ static void test_ba_shared_k_lsqr()
             (B[0]-fdB[0]).absolute_value_max(),0.0,1e-4);
   TEST_NEAR("Jacobian C (same as finite diff)",
             (C[0]-fdC[0]).absolute_value_max(),0.0,1e-4);
-
 }
 
-}
+} // namespace
 
 TESTMAIN(test_ba_shared_k_lsqr);
