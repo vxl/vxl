@@ -1,4 +1,4 @@
-// This is brl/bseg/boxm/ocl/pro/processes/bocl_init_manager_process.cxx
+// This is brl/bbas/bocl/pro/processes/bocl_init_manager_process.cxx
 #include <bprb/bprb_func_process.h>
 //:
 // \file
@@ -24,14 +24,11 @@ namespace bocl_init_manager_process_globals
 bool bocl_init_manager_process_cons(bprb_func_process& pro)
 {
   using namespace bocl_init_manager_process_globals;
-  
+
   vcl_vector<vcl_string>  output_types_(n_outputs_);
   output_types_[0] = "bocl_manager_child_sptr";
-  if (!pro.set_output_types(output_types_))
-    return false;
 
-  return true;
-
+  return pro.set_output_types(output_types_);
 }
 
 bool bocl_init_manager_process(bprb_func_process& pro)
