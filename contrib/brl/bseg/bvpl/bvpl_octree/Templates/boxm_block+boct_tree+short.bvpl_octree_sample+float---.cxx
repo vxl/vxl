@@ -1,4 +1,5 @@
-#include <bvpl/bvpl_octree/sample/bvpl_octree_sample.h>#include <boct/boct_tree.h>
+#include <bvpl/bvpl_octree/sample/bvpl_octree_sample.h>
+#include <boct/boct_tree.h>
 #include <boxm/boxm_block.txx>
 #include <boxm/boxm_scene.txx>
 #include <vbl/vbl_array_3d.txx>
