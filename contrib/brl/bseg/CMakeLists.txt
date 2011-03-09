@@ -59,6 +59,9 @@ SUBDIRS(boxm)
 # updated, gpu compatible octree based modeling
 SUBDIRS(boxm2)
 
+# updated, gpu compatible octree based modeling
+SUBDIRS(boxm2_batch)
+
 # octree based modeling python interface
 SUBDIRS(boxm_batch)
 
@@ -71,7 +74,6 @@ SUBDIRS(bvpl_batch)
 # voxel processing library python interface for octrees
 SUBDIRS(bvpl_octree_batch)
 
-#SUBDIRS(btpl_satellite_tools)
 
 SUBDIRS(bvpgl)
 
