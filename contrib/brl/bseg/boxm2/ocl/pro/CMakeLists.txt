@@ -12,8 +12,12 @@ SET(boxm2_ocl_pro_sources
     boxm2_opencl_update_rgb_process.h       boxm2_opencl_update_rgb_process.cxx
     boxm2_opencl_render_rgb_process.h       boxm2_opencl_render_rgb_process.cxx
     boxm2_opencl_batch_update_process.h     boxm2_opencl_batch_update_process.cxx
+    boxm2_ocl_processes.h
+    boxm2_ocl_register.h     boxm2_ocl_register.cxx
+    
   )
 
+AUX_SOURCE_DIRECTORY(processes boxm2_ocl_pro_sources)
 
 ADD_LIBRARY(boxm2_ocl_pro  ${boxm2_ocl_pro_sources})
 TARGET_LINK_LIBRARIES(boxm2_ocl_pro boxm2_ocl boct brdb vbl_io expatpp vpgl vgl vgl_xio vbl vsl vcl)
