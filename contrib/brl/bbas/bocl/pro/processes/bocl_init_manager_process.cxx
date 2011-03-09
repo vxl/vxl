@@ -34,7 +34,7 @@ bool bocl_init_manager_process_cons(bprb_func_process& pro)
 
 }
 
-bool bocl_init_manager_process_process(bprb_func_process& pro)
+bool bocl_init_manager_process(bprb_func_process& pro)
 {
   using namespace bocl_init_manager_process_globals;
   bocl_manager_child_sptr mgr = new bocl_manager_child();
