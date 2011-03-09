@@ -17,7 +17,7 @@ class boxm2_lru_cache : public boxm2_cache
   public:
   
     //: create function used instead of constructor
-    static void create(boxm2_scene* scene); 
+    static void create(boxm2_scene_sptr scene); 
    
     //: returns block pointer to block specified by ID
     virtual boxm2_block* get_block(boxm2_block_id id);
@@ -34,7 +34,7 @@ class boxm2_lru_cache : public boxm2_cache
   private:
     
     //: hidden constructor
-    boxm2_lru_cache(boxm2_scene* scene);
+    boxm2_lru_cache(boxm2_scene_sptr scene);
     ~boxm2_lru_cache();
 
     //: keep a map of boxm2_block pointers (size will be limited to 9 blocks

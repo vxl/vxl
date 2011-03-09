@@ -5,7 +5,7 @@
 #include <vcl_sstream.h>
 
 //: PUBLIC create method, for creating singleton instance of boxm2_cache
-void boxm2_lru_cache::create(boxm2_scene* scene)
+void boxm2_lru_cache::create(boxm2_scene_sptr scene)
 {
   if(boxm2_cache::exists())
     vcl_cout << "boxm2_lru_cache:: boxm2_cache singleton already created" << vcl_endl;
@@ -14,7 +14,7 @@ void boxm2_lru_cache::create(boxm2_scene* scene)
 }
 
 //: constructor, set the directory path
-boxm2_lru_cache::boxm2_lru_cache(boxm2_scene* scene) : boxm2_cache(scene)
+boxm2_lru_cache::boxm2_lru_cache(boxm2_scene_sptr scene) : boxm2_cache(scene)
 {
   scene_dir_ = scene->data_path();
 }

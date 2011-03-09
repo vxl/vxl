@@ -9,6 +9,8 @@
 #include <boxm2/io/boxm2_asio_mgr.h>
 #include <boxm2/io/boxm2_sio_mgr.h>
 
+#include <vbl/vbl_ref_count.h>
+#include <vbl/vbl_smart_ptr.h>
 //: top level storage (abstract) class
 // - handles all block io, from both the cache/marshaller and the disk
 // TODO: needs some notion of scene size (number of blocks in each dimension ...)
@@ -16,7 +18,7 @@
 //  SOMETHING to discuss is whether generic blocks should be passed from cache
 //  or the specific templated blocks (as is implemented below).
 //  Either way, one of the two will have to cast from generic to templated.
-class boxm2_cache
+class boxm2_cache: public vbl_ref_count
 {
   public:
     
@@ -40,13 +42,13 @@ class boxm2_cache
   protected:
 
     //: hide constructor
-    boxm2_cache(boxm2_scene* scene) : scene_(scene) {}
+    boxm2_cache(boxm2_scene_sptr scene) : scene_(scene) {}
 
     //: singleton instance of boxm2_cache
     static boxm2_cache* instance_; 
 
     //: boxm2_scene needs to be around to initialized uninitialized blocks
-    boxm2_scene* scene_;
+    boxm2_scene_sptr scene_;
 
     //: boxm2_asio_manager handles asio requests
     boxm2_asio_mgr io_mgr_;
@@ -61,4 +63,5 @@ boxm2_data<T>* boxm2_cache::get_data(boxm2_block_id id)
   return static_cast<boxm2_data<T>* >(base);
 }
 
+typedef vbl_smart_ptr<boxm2_cache> boxm2_cache_sptr;
 #endif //boxm2_cache_h_
