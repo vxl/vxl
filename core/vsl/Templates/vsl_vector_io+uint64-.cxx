@@ -1,4 +1,4 @@
-#include <vcl_compiler.h>
+#include <vxl_config.h>
 
 #if VXL_HAS_INT_64 && !VXL_INT_64_IS_LONG
 #include <vsl/vsl_vector_io.txx>
