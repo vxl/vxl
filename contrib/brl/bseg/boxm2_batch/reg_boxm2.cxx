@@ -4,6 +4,7 @@
 #include <brdb/brdb_selection.h>
 
 // processes
+#include <boxm2/pro/boxm2_register.h>
 
 #if defined(HAS_OPENCL) && HAS_OPENCL
 #include <bocl/pro/bocl_register.h>
@@ -13,6 +14,7 @@
 PyObject *
 register_processes(PyObject *self, PyObject *args)
 {
+  boxm2_register::register_process();
 #if defined(HAS_OPENCL) && HAS_OPENCL
   bocl_register::register_process();
 #endif
@@ -23,6 +25,7 @@ register_processes(PyObject *self, PyObject *args)
 PyObject *
 register_datatypes(PyObject *self, PyObject *args)
 {
+  boxm2_register::register_datatype();
 #if defined(HAS_OPENCL) && HAS_OPENCL
   bocl_register::register_datatype();
 #endif
