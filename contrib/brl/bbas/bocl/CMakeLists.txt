@@ -11,6 +11,7 @@ IF(OPENCL_FOUND)
       bocl_cl.h
       bocl_cl_gl.h
       bocl_device_info.h  bocl_device_info.cxx
+      bocl_device.h       bocl_device.cxx
       bocl_utils.h        bocl_utils.cxx
       bocl_mem.h          bocl_mem.cxx
       bocl_kernel.h       bocl_kernel.cxx

@@ -183,7 +183,6 @@ bocl_device_info::bocl_device_info(cl_device_id* device)
 
 }
 
-
 //destructorrr
 bocl_device_info::~bocl_device_info()
 {

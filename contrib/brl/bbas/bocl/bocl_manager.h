@@ -17,6 +17,7 @@
 #include <vcl_iostream.h>
 #include <vcl_string.h>
 #include "bocl_cl.h"
+#include "bocl_device.h"
 #include "bocl_device_info.h"
 #include <vcl_cstddef.h>
 #if !defined(__APPLE__)
@@ -34,8 +35,6 @@ template <class T>
 class bocl_manager
 {
  public:
-  cl_context context_;                        //!< GPU context
-  cl_context cpu_context_;                    //!< CPU context
 
   //: Destructor
   virtual ~bocl_manager();
@@ -46,61 +45,46 @@ class bocl_manager
   //: Queries found platforms, creates a list of CPU and GPU devices
   bool initialize_cl();
 
-  //: initialize context from a device
-  cl_context create_context(cl_device_id* device, int num_devices);
-
   //: Initialise the opencl environment
   void clear_cl();
 
   //: available devices
-  cl_device_id* devices() {return devices_;}
-  cl_device_id* cpus() {return cpus_;}
-  cl_device_id* gpus() {return gpus_;}
-  int numCPUs() { return numCPUs_; }
-  int numGPUs() { return numGPUs_; }
+  vcl_vector<bocl_device*> gpus_; 
+  vcl_vector<bocl_device*> cpus_;
+  int numCPUs() { return cpus_.size(); }
+  int numGPUs() { return gpus_.size(); }
+  
+  //////////////////////////////////////////////////////////////////////////////
+  //: current device (defaults to last GPU), used for old methods
+  bocl_device* curr_device_; 
+  cl_device_id* devices() { return curr_device_->device_id(); }
 
   //get for current manager information..
-  cl_context& context() {return context_;}
-  vcl_size_t group_size() const {return curr_info_.max_work_group_size_;}
-  cl_ulong total_local_memory() const {return  curr_info_.total_local_memory_;}
-  cl_bool image_support() const {return curr_info_.image_support_;}
-  vcl_size_t image2d_max_width() const { return curr_info_.image2d_max_width_; }
-  vcl_size_t image2d_max_height() const { return curr_info_.image2d_max_height_; }
-  vcl_string platform_name() const { return curr_info_.platform_name_; }
-  cl_device_type device_type() const { return curr_info_.device_type_; }
+  cl_context context_; 
+  cl_context& context() {return context_; }
+  
+  //: current device info... 
+  vcl_size_t group_size()         { return curr_device_->info().max_work_group_size_;}
+  cl_ulong total_local_memory()   { return curr_device_->info().total_local_memory_;}
+  cl_bool image_support()         { return curr_device_->info().image_support_;}
+  vcl_size_t image2d_max_width()  { return curr_device_->info().image2d_max_width_; }
+  vcl_size_t image2d_max_height() { return curr_device_->info().image2d_max_height_; }
+  vcl_string platform_name()      { return curr_device_->info().platform_name_; }
+  cl_device_type device_type()    { return curr_device_->info().device_type_; }
+  //////////////////////////////////////////////////////////////////////////////
 
  protected:
 
   //: Constructor
-  bocl_manager() :
-    context_(0),
-    cpu_context_(0),
-    devices_(0),
-    gpus_(0),
-    numGPUs_(0),
-    cpus_(0),
-    numCPUs_(0) {}
+  bocl_manager() {}
 
   //Singleton instance of the manager
   static T* instance_;
 
-  //: OpenCL Current Device Info
-  bocl_device_info curr_info_;
-  //: OpenCL number of devices
-  vcl_size_t number_devices_;
-  //: OpenCL list of devices associated with the current context
-  cl_device_id* devices_;
 
-  //store gpus and cpus
-  cl_device_id* gpus_;              //!< CL GPU device list
-  unsigned    numGPUs_;
-  cl_device_id* cpus_;              //!< CL CPU device list
-  unsigned    numCPUs_;
-
-
-  //////////////////////////////////////////////////////////////////////////////
-  // OLD helper methods/ deprecated
-  //////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+// OLD helper methods/ deprecated
+////////////////////////////////////////////////////////////////////////////////
   //Malloc and Free Helper methods
   bool free_buffer(void* buffer);
   bool create_buffer(void** buffer,vcl_string type,int elm_size,int length);
@@ -114,6 +98,9 @@ class bocl_manager
   bool append_process_kernels(vcl_string const& path);
   bool write_program(vcl_string const& path);
   vcl_string program_source() const {return prog_;}
+  
+  //: initialize context from a device
+  cl_context create_context(cl_device_id* device, int num_devices);
 
   //build kernel program:
   int build_kernel_program(cl_program & program, vcl_string options);
@@ -122,7 +109,7 @@ class bocl_manager
 class bocl_manager_child: public bocl_manager<bocl_manager_child>, public vbl_ref_count
 {
  public:
-     bocl_manager_child():bocl_manager() {}
+     bocl_manager_child() : bocl_manager<bocl_manager_child>() {}
      ~bocl_manager_child(){}
 };
 

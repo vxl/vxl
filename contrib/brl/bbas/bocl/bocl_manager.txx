@@ -24,16 +24,11 @@ T* bocl_manager<T>::instance()
   return bocl_manager::instance_;
 }
 
+//: clears all opencl created objects
 template <class T>
 void bocl_manager<T>::clear_cl()
 {
-  if(context_) clReleaseContext(context_);
-  if(cpu_context_) clReleaseContext(cpu_context_); 
-  if (devices_)
-  {
-    free(devices_);
-    devices_ = NULL;
-  }
+  
 }
 
 //: Destructor
@@ -75,25 +70,32 @@ bool bocl_manager<T>::initialize_cl()
   //////////////////////////////////////////////////////////////////////////////
   // Get devices from platforms
   //////////////////////////////////////////////////////////////////////////////
+  vcl_size_t MAX_GPUS = 16; 
+  vcl_size_t MAX_CPUS = 16; 
   char platform_name[256];
   vcl_size_t ret_size;
-  cl_device_id gpus[2];
-  cl_device_id cpus[2];
 
   // First checking for GPU
   bool gpu_found=false;
   for (unsigned i=0;i<num_platforms;i++)
   {
     vcl_cout<<"PLatform number; "<<i<<vcl_endl;
-    if ( clGetDeviceIDs(platform_id[i], CL_DEVICE_TYPE_GPU, 2, gpus, &numGPUs_)== CL_SUCCESS)
+    
+    //grab device id's for type GPU
+    cl_device_id gpu_ids[MAX_GPUS]; 
+    cl_uint numGpus; 
+    if ( clGetDeviceIDs(platform_id[i], CL_DEVICE_TYPE_GPU, MAX_GPUS, gpu_ids, &numGpus)== CL_SUCCESS)
     {
       clGetPlatformInfo(platform_id[i],CL_PLATFORM_NAME,sizeof(platform_name),platform_name,&ret_size);
       gpu_found=true;
-      vcl_cout<<"Found "<<numGPUs_<<" GPUs"<<vcl_endl;
+      vcl_cout<<"Found "<<numGpus<<" GPUs"<<vcl_endl;
 
-      //store the GPU Devices on the heap
-      gpus_ = new cl_device_id[numGPUs_];
-      for (unsigned int i=0; i<numGPUs_; ++i) gpus_[i] = gpus[i];
+      //create device objects, push them onto gpu list
+      for(int i=0; i<numGpus; ++i) {
+        bocl_device* gpu = new bocl_device(gpu_ids[i]); 
+        gpus_.push_back(gpu); 
+      }
+
       break;
     }
   }
@@ -102,38 +104,41 @@ bool bocl_manager<T>::initialize_cl()
   for (unsigned i=0;i<num_platforms;i++)
   {
     vcl_cout<<"PLatform number; "<<i<<vcl_endl;
-    if ( clGetDeviceIDs(platform_id[i], CL_DEVICE_TYPE_CPU, 2, cpus, &numCPUs_)== CL_SUCCESS)
+    cl_device_id cpu_ids[MAX_CPUS]; 
+    cl_uint numCpus; 
+    if ( clGetDeviceIDs(platform_id[i], CL_DEVICE_TYPE_CPU, MAX_CPUS, cpu_ids, &numCpus)== CL_SUCCESS)
     {
-      vcl_cout<<"FOUND "<<numCPUs_<<" CPUs"<<vcl_endl;
+      vcl_cout<<"FOUND "<<numCpus<<" CPUs"<<vcl_endl;
       cpu_found=true;
 
-      //store CPUs on the heap
-      cpus_ = new cl_device_id[numCPUs_];
-      for (unsigned int i=0; i<numCPUs_; ++i) cpus_[i] = cpus[i];
+      //create device objects, push them onto gpu list
+      for(int i=0; i<numCpus; ++i) {
+        bocl_device* cpu = new bocl_device(cpu_ids[i]); 
+        cpus_.push_back(cpu); 
+      }
       break;
     }
   }
   if (!gpu_found && !cpu_found) {
-    vcl_cout<<"No GPU or CPU found, manager is invalid"<<vcl_endl;
+    vcl_cout<<"bocl_manager:: No devices (GPU or CPU) found, manager is invalid"<<vcl_endl;
     return false;
   }
   
-  //create OLD devices for backward compatibility (store as last GPU)
-  devices_ = new cl_device_id[1]; 
-  devices_[0] = gpus_[numGPUs_-1];  
-  curr_info_ = bocl_device_info(devices_); 
+  //////////////////////////////////////////////////////////////////////////////
+  //store current_device_/context for older functions that use bocl_manager
+  curr_device_ = gpus_[ gpus_.size()-1 ]; 
+  context_ = curr_device_->context(); 
+  //////////////////////////////////////////////////////////////////////////////
   
-  //create cpu context 
-  if(cpu_found)
-    cpu_context_ = this->create_context(cpus_, numCPUs_); 
-  
-  //create gpu context (or just context)
-  if(gpu_found)
-    context_ = this->create_context(gpus_, numGPUs_); 
-
   return true;
 }
 
+
+
+////////////////////////////////////////////////////////////////////////////////
+// Old kernel/program/alloc methods that have been
+// replaced by bocl_mem, bocl_kernel
+////////////////////////////////////////////////////////////////////////////////
 template <class T>
 cl_context bocl_manager<T>::create_context(cl_device_id* device, int num_devices)
 {
@@ -180,11 +185,6 @@ cl_context bocl_manager<T>::create_context(cl_device_id* device, int num_devices
   return context;
 }
 
-
-////////////////////////////////////////////////////////////////////////////////
-// Old kernel/program/alloc methods that have been
-// replaced by bocl_mem, bocl_kernel
-////////////////////////////////////////////////////////////////////////////////
 template<class T>
 bool bocl_manager<T>::load_kernel_source(vcl_string const& path)
 {
@@ -256,7 +256,7 @@ int bocl_manager<T>::build_kernel_program(cl_program & program, vcl_string optio
   }
   const char * source = this->prog_.c_str();
 
-  program = clCreateProgramWithSource(this->context_,
+  program = clCreateProgramWithSource(this->context(),
                                       1,
                                       &source,
                                       sourceSize,
@@ -267,7 +267,7 @@ int bocl_manager<T>::build_kernel_program(cl_program & program, vcl_string optio
   // create a cl program executable for all the devices specified
   status = clBuildProgram(program,
                           1,
-                          this->devices_,
+                          this->devices(),
                           options.c_str(),
                           NULL,
                           NULL);
@@ -275,7 +275,7 @@ int bocl_manager<T>::build_kernel_program(cl_program & program, vcl_string optio
   {
     vcl_size_t len;
     char buffer[2048];
-    clGetProgramBuildInfo(program, this->devices_[0],
+    clGetProgramBuildInfo(program, this->devices()[0],
                           CL_PROGRAM_BUILD_LOG, sizeof(buffer), buffer, &len);
     vcl_printf("%s\n", buffer);
     return SDK_FAILURE;
