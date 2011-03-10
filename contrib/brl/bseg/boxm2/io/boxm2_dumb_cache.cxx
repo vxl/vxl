@@ -79,6 +79,10 @@ void boxm2_dumb_cache::remove_data_base(boxm2_block_id, vcl_string type)
 {
   vcl_cout<<"BOXM2_DUMB_CACHE::remove_data_base not implemented"<<vcl_endl;
 }
+void boxm2_dumb_cache::replace_data_base(boxm2_block_id, vcl_string type, boxm2_data_base* replacement)
+{
+  vcl_cout<<"BOXM2_DUMB_CACHE::replace_data_base not implemented"<<vcl_endl;
+}
 
 
 //: update data cache by type

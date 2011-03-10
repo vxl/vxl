@@ -102,12 +102,25 @@ void boxm2_lru_cache::remove_data_base(boxm2_block_id id, vcl_string type)
   if ( rem != data_map.end() )
   {
     vcl_cout<<"REMOVING ELEMENT "<<id<<" of type "<<type<<vcl_endl;
-    //found the block, now delete it
-    delete data_map[id];
-    data_map.erase(rem);
     
-    //cached_data_[type] = data_map;
+    //found the block, now throw it away
+    boxm2_data_base* litter = data_map[id]; 
+    delete litter; 
+    data_map.erase(rem); 
   }
+}
+
+//: replaces data in the cache with one here
+void boxm2_lru_cache::replace_data_base(boxm2_block_id id, vcl_string type, boxm2_data_base* replacement)
+{
+  this->remove_data_base(id, type); 
+
+  //grab a reference to the map of cached_data_
+  vcl_map<boxm2_block_id, boxm2_data_base*>& data_map =
+    this->cached_data_map(type);
+
+  //put the new one in there
+  data_map[id] = replacement; 
 }
 
 //: helper method returns a reference to correct data map (ensures one exists)

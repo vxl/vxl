@@ -21,6 +21,8 @@ class boxm2_nn_cache : public boxm2_cache
     
     //: deletes a data item from the cpu cache
     virtual void remove_data_base(boxm2_block_id, vcl_string type); 
+    virtual void replace_data_base(boxm2_block_id, vcl_string type, boxm2_data_base* replacement);
+
    
     //: returns data pointer to data block specified by ID
     template <boxm2_data_type T>

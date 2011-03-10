@@ -33,8 +33,11 @@ class boxm2_cache: public vbl_ref_count
     virtual boxm2_data_base* get_data_base(boxm2_block_id id, vcl_string type, vcl_size_t num_bytes=0) = 0;
 
     //: removes data from this cache (may or may not write to disk first)
+    // note that this function does not delete the memory, just removes it from the cache
+    // and puts it in the garbage vector
     virtual void remove_data_base(boxm2_block_id id, vcl_string type)=0; 
-
+    virtual void replace_data_base(boxm2_block_id id, vcl_string type, boxm2_data_base* replacement)=0; 
+    
     //: returns data pointer to data specified by ID and data_type
     template <boxm2_data_type T>
     boxm2_data<T>* get_data(boxm2_block_id id);
@@ -54,6 +57,7 @@ class boxm2_cache: public vbl_ref_count
 
     //: boxm2_asio_manager handles asio requests
     boxm2_asio_mgr io_mgr_;
+    
 };
 
 //: returns a boxm2_data<T>* from the cache
