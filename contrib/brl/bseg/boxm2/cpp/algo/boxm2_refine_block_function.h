@@ -9,6 +9,7 @@
 #include <boct/boct_bit_tree2.h>
 #include <vnl/vnl_vector_fixed.h>
 #include <vcl_iostream.h>
+#include <boxm2/io/boxm2_cache.h>
 
 class boxm2_refine_block_function
 {
@@ -27,10 +28,19 @@ class boxm2_refine_block_function
 
   //: refine function;
   bool refine();
+  bool refine_deterministic(vcl_vector<boxm2_data_base*>& datas); 
 
   //: refine bit tree
   boct_bit_tree2 refine_bit_tree(boct_bit_tree2& curr_tree,
-                                 int buff_offset);
+                                 int buff_offset, 
+                                 bool is_random=true);
+      
+  //: move data into new location
+  int move_data(boct_bit_tree2& unrefined_tree, 
+                boct_bit_tree2& refined_tree, 
+                float*  alpha_cpy,
+                uchar8*  mog_cpy,
+                ushort4* num_obs_cpy );
 
   //: helper method
   int free_space(int startPtr, int endPtr);
@@ -261,6 +271,93 @@ bool boxm2_refine_block_function::refine()
   return true;
 }
 
+//----- IF THE BLOCK IS NOT RANDOMLY DISTRIBUTED, USE DETERMINISTIC METHOD -----
+// New Method Summary:
+//  - NEED TO CLEAR OUT THE GPU CACHE BEFORE YOU START.. so you don't overwrite stuff accidentally...
+//  - Create Block Copy, refine trees into that copy, maintaining old copy and array of new tree sizes
+//  - Do scan on size vector (cum sum)
+//  - Swap data into new buffers: For each data type
+//    - get BOCL_MEM* data independent of cpu pointer (from cache)
+//    - remove the BOCL_MEM* from the gpu cache (don't delete it)
+//    - do a deep delete (delete CPU buffer from CPU cache)
+//    - get a new data pointer (with newSize), will create CPU buffer and GPU buffer
+//    - Run refine_data_kernel with the two buffers
+//    - delete the old BOCL_MEM*, and that's it...
+bool boxm2_refine_block_function::refine_deterministic(vcl_vector<boxm2_data_base*>& datas)
+{
+  vcl_cout<<"CPU Non deterministic refine: "<<vcl_endl;
+  
+  //loop over each tree, refine it in place (keep a vector of locations for 
+  // posterities sake
+  boxm2_array_3d<uchar16>&  trees = blk_->trees();  //trees to refine
+  uchar16* trees_copy = new uchar16[trees.size()];  //copy of those trees
+  int* dataIndex = new int[trees.size()];           //data index for each new tree
+  int currIndex = 0;                                //curr tree being looked at
+  int dataSize = 0;                                 //running sum of data size
+  boxm2_array_3d<uchar16>::iterator blk_iter;  
+  for(blk_iter = trees.begin(); blk_iter != trees.end(); ++blk_iter, ++currIndex)
+  {
+      //0. store data index for eahc tree. 
+      dataIndex[currIndex] = dataSize; 
+
+      //1. get current tree information
+      uchar16 tree  = (*blk_iter);
+      boct_bit_tree2 curr_tree( (unsigned char*) tree.data_block(), max_level_);
+      int currTreeSize = curr_tree.num_cells();
+
+      //3. refine tree locally (only updates refined_tree and returns new tree size)
+      boct_bit_tree2 refined_tree = this->refine_bit_tree(curr_tree, 0, false);  //i.e. is not random
+      int newSize = refined_tree.num_cells();
+    
+      //cache refined tree
+      vcl_memcpy (trees_copy[currIndex].data_block(), refined_tree.get_bits(), 16); 
+      dataSize += newSize; 
+  }
+  
+  //2. allocate new data arrays of the appropriate size
+  vcl_cout<<"Allocating new data blocks"<<vcl_endl;
+  boxm2_block_id id = datas[0]->block_id();
+  boxm2_data_base* newA = new boxm2_data_base(new char[dataSize * sizeof(float) ], dataSize * sizeof(float), id);
+  boxm2_data_base* newM = new boxm2_data_base(new char[dataSize * sizeof(uchar8)], dataSize * sizeof(uchar8), id);
+  boxm2_data_base* newN = new boxm2_data_base(new char[dataSize * sizeof(ushort4)], dataSize * sizeof(ushort4), id);
+  float*   alpha_cpy = (float*) newA->data_buffer(); 
+  uchar8*  mog_cpy   = (uchar8*) newM->data_buffer();
+  ushort4* num_obs_cpy = (ushort4*) newN->data_buffer();
+  
+  //3. loop through tree again, putting the data in the right place
+  vcl_cout<<"Swapping data into new blocks... "<<vcl_endl;
+  currIndex = 0; 
+  for(blk_iter = trees.begin(); blk_iter != trees.end(); ++blk_iter, ++currIndex)
+  {
+      //1. get current tree information
+      uchar16 tree  = (*blk_iter);
+      boct_bit_tree2 old_tree( (unsigned char*) tree.data_block(), max_level_);
+
+      //2. refine tree locally (only updates refined_tree and returns new tree size)
+      boct_bit_tree2 refined_tree( (unsigned char*) trees_copy[currIndex].data_block(), max_level_);  
+
+      //2.5 pack data bits into refined tree
+      //store data index in bits [10, 11, 12, 13] ;
+      int root_index = dataIndex[currIndex]; 
+      refined_tree.set_data_ptr(root_index, false); //is not random 
+
+      //3. swap data from old location to new location
+      this->move_data(old_tree, refined_tree, alpha_cpy, mog_cpy, num_obs_cpy); 
+      
+      //4. store old tree in new tree, swap data out
+      vcl_memcpy(blk_iter, refined_tree.get_bits(), 16); 
+
+  }
+
+  //3. Replace data in the cache
+  boxm2_cache* cache = boxm2_cache::instance();    
+  cache->replace_data_base(id, boxm2_data_traits<BOXM2_ALPHA>::prefix(), newA); 
+  cache->replace_data_base(id, boxm2_data_traits<BOXM2_MOG3_GREY>::prefix(), newM); 
+  cache->replace_data_base(id, boxm2_data_traits<BOXM2_NUM_OBS>::prefix(), newN); 
+
+  return true;
+}
+
 
 /////////////////////////////////////////////////////////////////
 ////Refine Tree (refines local tree)
@@ -271,7 +368,8 @@ bool boxm2_refine_block_function::refine()
 // on the global level, so buffers, offsets are used
 /////////////////////////////////////////////////////////////////
 boct_bit_tree2 boxm2_refine_block_function::refine_bit_tree(boct_bit_tree2& unrefined_tree,
-                                                            int buff_offset)
+                                                            int buff_offset, 
+                                                            bool is_random)
 {
   //initialize tree to return
   boct_bit_tree2 refined_tree(unrefined_tree.get_bits(), max_level_);
@@ -293,9 +391,17 @@ boct_bit_tree2 boxm2_refine_block_function::refine_bit_tree(boct_bit_tree2& unre
       float side_len = (float)block_len_/(float)(1<<currDepth);
 
       //get alpha value for this cell;
-      int dataIndex = unrefined_tree.get_data_index(i) % data_len_;             //gets offset within buffer
-      float alpha   = alpha_[buff_offset + dataIndex];
-
+      int dataIndex; 
+      float alpha; 
+      if(is_random) {
+        dataIndex = unrefined_tree.get_data_index(i, is_random) % data_len_;             //gets offset within buffer
+        alpha   = alpha_[buff_offset + dataIndex];
+      }
+      else {
+        dataIndex = unrefined_tree.get_data_index(i, is_random); 
+        alpha   = alpha_[dataIndex]; 
+      }
+    
       //integrate alpha value
       float alpha_int = alpha * side_len;
 
@@ -317,22 +423,85 @@ boct_bit_tree2 boxm2_refine_block_function::refine_bit_tree(boct_bit_tree2& unre
 }
 
 
+//Deterministic move data
+//moves data from src to destination
+//returns the number of split nodes for this tree (for assertions)
+int boxm2_refine_block_function::move_data(boct_bit_tree2& unrefined_tree, 
+                                  boct_bit_tree2& refined_tree, 
+                                  float*  alpha_cpy,
+                                  uchar8*  mog_cpy,
+                                  ushort4* num_obs_cpy )
+{
+  
+  //zip through each leaf cell and 
+  int oldDataPtr = unrefined_tree.get_data_ptr(false); 
+  int newDataPtr = refined_tree.get_data_ptr(false);
+  int newInitCount = 0; int oldCount = 0;            
+  for(int j=0; j<MAX_CELLS_; ++j) {
+
+    //--------------------------------------------------------------------
+    //4 Cases:
+    // - Old cell and new cell exist - transfer data over
+    // - new cell exists, old cell doesn't - create new occupancy based on depth
+    // - old cell exists, new cell doesn't - uh oh this is bad news
+    // - neither cell exists - do nothing and carry on
+    //--------------------------------------------------------------------
+    //if parent bit is 1, then you're a valid cell
+    int pj = (j-1)>>3;           //Bit_index of parent bit
+    bool validCellOld = (j==0) || unrefined_tree.bit_at(pj);
+    bool validCellNew = (j==0) || refined_tree.bit_at(pj);
+    if(validCellOld && validCellNew) {
+      
+      //move root data to new location
+      alpha_cpy[newDataPtr]  = alpha_[oldDataPtr];
+      mog_cpy[newDataPtr]    = mog_[oldDataPtr];
+      num_obs_cpy[newDataPtr]= num_obs_[oldDataPtr];
+
+      //increment 
+      oldDataPtr++; 
+      newDataPtr++; 
+    } 
+    //case where it's a new leaf...
+    else if(validCellNew) {
+      newInitCount++; 
+
+      //move root data to new location
+      int currLevel = unrefined_tree.depth_at(j);
+      float side_len = block_len_ / (float) (1<<currLevel);
+      alpha_cpy[newDataPtr]  = (max_alpha_int_ / side_len);
+      mog_cpy[newDataPtr]    = uchar8((uchar) 0);
+      num_obs_cpy[newDataPtr]= ushort4((ushort) 0);
+
+      //update new data pointer
+      newDataPtr++; 
+    }
+  }       
+  return newInitCount;
+}
+
+
 int boxm2_refine_block_function::free_space(int startPtr, int endPtr)
 {
   int freeSpace = (startPtr >= endPtr)? startPtr-endPtr : data_len_ - (endPtr-startPtr);
   return freeSpace;
 }
 
+
 ////////////////////////////////////////////////////////////////////////////////
-//MAIN FUNCTION
+//MAIN REFINE FUNCTION
 ////////////////////////////////////////////////////////////////////////////////
 void boxm2_refine_block( boxm2_block* blk,
                          vcl_vector<boxm2_data_base*> & datas,
-                         float prob_thresh )
+                         float prob_thresh,
+                         bool is_random = true)
 {
   boxm2_refine_block_function refine_block;
   refine_block.init_data(blk, datas, prob_thresh);
-  refine_block.refine();
+  
+  if(is_random)
+    refine_block.refine();
+  else
+    refine_block.refine_deterministic(datas); 
 }
 
 #endif

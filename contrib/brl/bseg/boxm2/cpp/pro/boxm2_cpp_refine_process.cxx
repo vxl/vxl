@@ -25,10 +25,10 @@ bool boxm2_cpp_refine_process::execute(vcl_vector<brdb_value_sptr>& input, vcl_v
 
   //For each ID in the visibility order, grab that block
   vcl_map<boxm2_block_id, boxm2_block_metadata> blocks = scene->blocks();
-  vcl_map<boxm2_block_id, boxm2_block_metadata>::iterator blk;
-  for (blk = blocks.begin(); blk != blocks.end(); ++blk)
+  vcl_map<boxm2_block_id, boxm2_block_metadata>::iterator blk_iter;
+  for (blk_iter = blocks.begin(); blk_iter != blocks.end(); ++blk_iter)
   {
-    boxm2_block_id id = blk->first;
+    boxm2_block_id id = blk_iter->first;
     vcl_cout<<"Refining Block: "<<id<<vcl_endl;
 
     boxm2_block *     blk     = this->cache_->get_block(id);
@@ -42,7 +42,9 @@ bool boxm2_cpp_refine_process::execute(vcl_vector<brdb_value_sptr>& input, vcl_v
     datas.push_back(num_obs);
 
     //refine block and datas
-    boxm2_refine_block(blk,datas, .3f);
+    boxm2_block_metadata data = blk_iter->second;
+    bool is_random = data.random_; 
+    boxm2_refine_block(blk,datas, 0.3f, is_random);
   }
 
   output.clear();
