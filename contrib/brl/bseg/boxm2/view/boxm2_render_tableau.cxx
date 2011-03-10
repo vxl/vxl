@@ -41,7 +41,7 @@ bool boxm2_render_tableau::init(vcl_string scene_file,
 
   tf_sptr=new bbas_1d_array_float(256);
 
-  if(img_files_.size()>0)
+  if (img_files_.size()>0)
       boxm2_ocl_util::get_render_transfer_function(img_files_,mini_,maxi_,tf_sptr->data_array);
   else  //: else use the default values and a linear transfer function.
   {
@@ -49,10 +49,10 @@ bool boxm2_render_tableau::init(vcl_string scene_file,
         maxi_=1.0f;
         for (int i=0; i<256; ++i) tf_sptr->data_array[i] =(float)i/255.0f;
   }
-  
+
   //: default image type is uchar;
   img_type_ ="uchar";
-  if(img_files_.size()>0)
+  if (img_files_.size()>0)
   {
       vil_image_view_base_sptr loaded_image = vil_load(img_files_[0].c_str());
       if (vil_image_view<unsigned short> *img_byte = dynamic_cast<vil_image_view<unsigned short>*>(loaded_image.ptr()))
@@ -149,9 +149,9 @@ bool boxm2_render_tableau::save_model()
     boxm2_block_id id = iter->first;
     boxm2_sio_mgr::save_block(scene_->data_path(), cache_->get_block(id));
     boxm2_sio_mgr::save_block_data(scene_->data_path(), id, cache_->get_data<BOXM2_ALPHA>(id) );
-    if(img_type_=="uchar")
+    if (img_type_=="uchar")
       boxm2_sio_mgr::save_block_data(scene_->data_path(), id, cache_->get_data<BOXM2_MOG3_GREY>(id) );
-    if(img_type_=="ushort")
+    if (img_type_=="ushort")
       boxm2_sio_mgr::save_block_data(scene_->data_path(), id, cache_->get_data<BOXM2_MOG3_GREY_16>(id) );
 
     boxm2_sio_mgr::save_block_data(scene_->data_path(), id, cache_->get_data<BOXM2_NUM_OBS>(id) );
@@ -167,7 +167,7 @@ float boxm2_render_tableau::refine_model()
     brdb_value_sptr brdb_thresh = new brdb_value_t<float>(0.2f);
 
     brdb_value_sptr brdb_data_type;
-    if(img_type_=="uchar")
+    if (img_type_=="uchar")
         brdb_data_type= new brdb_value_t<vcl_string>(vcl_string("8bit"));
     else if (img_type_=="ushort")
         brdb_data_type= new brdb_value_t<vcl_string>(vcl_string("16bit"));
@@ -212,12 +212,12 @@ float boxm2_render_tableau::render_frame()
   //create scene brdbvalue pointer
   brdb_value_sptr brdb_scene = new brdb_value_t<boxm2_scene_sptr>(scene_);
   brdb_value_sptr brdb_data_type;
-  if(img_type_=="uchar")
+  if (img_type_=="uchar")
       brdb_data_type= new brdb_value_t<vcl_string>(vcl_string("8bit"));
   else if (img_type_=="ushort")
       brdb_data_type= new brdb_value_t<vcl_string>(vcl_string("16bit"));
- 
-  
+
+
   brdb_value_sptr brdb_mini = new brdb_value_t<float>(mini_);
   brdb_value_sptr brdb_maxi = new brdb_value_t<float>(maxi_);
   brdb_value_sptr brdb_float_array = new brdb_value_t<bbas_1d_array_float_sptr>(tf_sptr);
@@ -255,7 +255,7 @@ float boxm2_render_tableau::update_frame()
     }
     if (update_count_%5==0)
     {
-        //vcl_cout<<"Refining  "<<vcl_endl;
+        //vcl_cout<<"Refining"<<vcl_endl;
         //float time=this->refine_model();
     }
     //pickup a random frame
@@ -277,14 +277,14 @@ float boxm2_render_tableau::update_frame()
     brdb_value_sptr brdb_cam = new brdb_value_t<vpgl_camera_double_sptr>(cam_sptr);
 
     //load image from file, create input image buffer
-    vil_image_view_base_sptr loaded_image = boxm2_ocl_util::prepare_input_image(img_files_[curr_frame]); 
+    vil_image_view_base_sptr loaded_image = boxm2_ocl_util::prepare_input_image(img_files_[curr_frame]);
     brdb_value_sptr brdb_inimg = new brdb_value_t<vil_image_view_base_sptr>(loaded_image);
 
     //create generic scene
     brdb_value_sptr brdb_scene = new brdb_value_t<boxm2_scene_sptr>(scene_);
 
     brdb_value_sptr brdb_data_type;
-    if(img_type_=="uchar")
+    if (img_type_=="uchar")
      brdb_data_type= new brdb_value_t<vcl_string>(vcl_string("8bit"));
     else if (img_type_=="ushort")
      brdb_data_type= new brdb_value_t<vcl_string>(vcl_string("16bit"));
@@ -301,10 +301,10 @@ float boxm2_render_tableau::update_frame()
 
     //execute gpu_update
     //choose which process to run (depends on RGBA or not)
-    if(loaded_image->pixel_format()==VIL_PIXEL_FORMAT_RGBA_BYTE)
+    if (loaded_image->pixel_format()==VIL_PIXEL_FORMAT_RGBA_BYTE)
       gpu_pro_->run(&update_rgb_, input, output);
     else
-      gpu_pro_->run(&update_, input, output); 
+      gpu_pro_->run(&update_, input, output);
     return gpu_pro_->exec_time();
 }
 
@@ -338,72 +338,73 @@ bool boxm2_render_tableau::compute_convergence()
  return true;
 }
 
+#if 0 // method "prepare_input_image()" commented out
 
+//: private helper method prepares an input image to be processed by update
+vil_image_view_base_sptr boxm2_render_tableau::prepare_input_image(vcl_string filename)
+{
+  //load from file
+  vil_image_view_base_sptr loaded_image = vil_load(filename.c_str());
 
-////: private helper method prepares an input image to be processed by update
-//vil_image_view_base_sptr boxm2_render_tableau::prepare_input_image(vcl_string filename)
-//{
-//  //load from file
-//  vil_image_view_base_sptr loaded_image = vil_load(filename.c_str());
-//  
-//  //then it's an RGB image (assumes byte image...)
-//  if(loaded_image->nplanes() == 3 || loaded_image->nplanes() == 4) 
-//  { 
-//    //load image from file and format it into RGBA
-//    vil_image_view_base_sptr n_planes = vil_convert_to_n_planes(4, loaded_image); 
-//    vil_image_view_base_sptr comp_image = vil_convert_to_component_order(n_planes); 
-//    vil_image_view<vil_rgba<vxl_byte> >* rgba_view = new vil_image_view<vil_rgba<vxl_byte> >(comp_image); 
-//    
-//    //make sure all alpha values are set to 255 (1)
-//    vil_image_view<vil_rgba<vxl_byte> >::iterator iter; 
-//    for(iter = rgba_view->begin(); iter != rgba_view->end(); ++iter) {
-//      (*iter) = vil_rgba<vxl_byte>(iter->R(), iter->G(), iter->B(), 255);
-//      //(*iter) = vil_rgba<vxl_byte>(iter->grey(), 0, 0, 255);
-//    }
-//    vil_image_view_base_sptr toReturn(rgba_view); 
-//    return toReturn; 
-//    //vil_image_view<float>* floatimg = new vil_image_view<float>(loaded_image->ni(), loaded_image->nj(), 1);
-//    //vil_image_view<float>::iterator fiter; 
-//    //for(iter = rgba_view->begin(), fiter=floatimg->begin(); iter != rgba_view->end(); ++iter, ++fiter)
-//      //(*fiter) = (float) (iter->R()/255.0f);
-//    //vil_image_view_base_sptr toReturn(floatimg); 
-//    //return toReturn;   
-//  }
-//  
-//  //else if loaded planes is just one...
-//  if(loaded_image->nplanes() == 1)
-//  {
-//    vil_image_view<float>* floatimg = new vil_image_view<float>(loaded_image->ni(), loaded_image->nj(), 1);
-//    if (vil_image_view<vxl_byte> *img_byte = dynamic_cast<vil_image_view<vxl_byte>*>(loaded_image.ptr()))
-//    { 
-//        vil_convert_stretch_range_limited(*img_byte, *floatimg, vxl_byte(0), vxl_byte(255), 0.0f, 1.0f);
-//    }
-//    else if (vil_image_view<unsigned short> *img_byte = dynamic_cast<vil_image_view<unsigned short>*>(loaded_image.ptr())) 
-//    {
-//        vil_convert_stretch_range_limited(*img_byte, *floatimg,(unsigned short)30500,(unsigned short)32500,  0.0f, 1.0f); //: hardcoded to be fixed.
-//    }
-//    else {
-//        vcl_cerr << "Failed to load image " << filename << '\n';
-//        return 0;
-//    }
-//    vil_image_view_base_sptr toReturn(floatimg); 
-//    return toReturn; 
-//  }
-//
-//  //otherwise it's messed up, return a null pointer
-//  vcl_cerr<<"Failed to recognize input image type "<< filename << '\n';
-//  return 0; 
-//}
-//
+  //then it's an RGB image (assumes byte image...)
+  if (loaded_image->nplanes() == 3 || loaded_image->nplanes() == 4)
+  {
+    //load image from file and format it into RGBA
+    vil_image_view_base_sptr n_planes = vil_convert_to_n_planes(4, loaded_image);
+    vil_image_view_base_sptr comp_image = vil_convert_to_component_order(n_planes);
+    vil_image_view<vil_rgba<vxl_byte> >* rgba_view = new vil_image_view<vil_rgba<vxl_byte> >(comp_image);
+
+    //make sure all alpha values are set to 255 (1)
+    vil_image_view<vil_rgba<vxl_byte> >::iterator iter;
+    for (iter = rgba_view->begin(); iter != rgba_view->end(); ++iter) {
+      (*iter) = vil_rgba<vxl_byte>(iter->R(), iter->G(), iter->B(), 255);
+      // was: = vil_rgba<vxl_byte>(iter->grey(), 0, 0, 255);
+    }
+    vil_image_view_base_sptr toReturn(rgba_view);
+    return toReturn;
+    vil_image_view<float>* floatimg = new vil_image_view<float>(loaded_image->ni(), loaded_image->nj(), 1);
+    vil_image_view<float>::iterator fiter;
+    for (iter = rgba_view->begin(), fiter=floatimg->begin(); iter != rgba_view->end(); ++iter, ++fiter)
+      (*fiter) = (float) (iter->R()/255.0f);
+    vil_image_view_base_sptr toReturn(floatimg);
+    return toReturn;
+  }
+
+  //else if loaded planes is just one...
+  if (loaded_image->nplanes() == 1)
+  {
+    vil_image_view<float>* floatimg = new vil_image_view<float>(loaded_image->ni(), loaded_image->nj(), 1);
+    if (vil_image_view<vxl_byte> *img_byte = dynamic_cast<vil_image_view<vxl_byte>*>(loaded_image.ptr()))
+    {
+      vil_convert_stretch_range_limited(*img_byte, *floatimg, vxl_byte(0), vxl_byte(255), 0.0f, 1.0f);
+    }
+    else if (vil_image_view<unsigned short> *img_byte = dynamic_cast<vil_image_view<unsigned short>*>(loaded_image.ptr()))
+    {
+      vil_convert_stretch_range_limited(*img_byte, *floatimg,(unsigned short)30500,(unsigned short)32500,  0.0f, 1.0f); //: hardcoded to be fixed.
+    }
+    else {
+      vcl_cerr << "Failed to load image " << filename << '\n';
+      return 0;
+    }
+    vil_image_view_base_sptr toReturn(floatimg);
+    return toReturn;
+  }
+
+  //otherwise it's messed up, return a null pointer
+  vcl_cerr<<"Failed to recognize input image type "<< filename << '\n';
+  return 0;
+}
+#endif // 0
+
 //: private helper method to init_clgl stuff (gpu processor)
 bool boxm2_render_tableau::init_clgl()
 {
   //get relevant blocks
   vcl_cout<<"Data Path: "<<scene_->data_path()<<vcl_endl;
-  
+
   //create cache, grab singleton instance
-  boxm2_lru_cache::create(scene_.ptr()); 
-  cache_ = boxm2_cache::instance(); 
+  boxm2_lru_cache::create(scene_.ptr());
+  cache_ = boxm2_cache::instance();
 
   //initialize gpu pro / manager
   gpu_pro_ = boxm2_opencl_processor::instance();
@@ -433,25 +434,25 @@ bool boxm2_render_tableau::init_clgl()
   exp_img_ = new bocl_mem(gpu_pro_->context(), /*(void*) pbuffer_*/ NULL, RoundUp(ni_,8)*RoundUp(nj_,8)*sizeof(GLubyte)*4, "exp image (gl) buffer");
   exp_img_->set_gl_buffer(clgl_buffer_);
   vcl_string render_opts;
-  if(img_type_=="uchar")
-    render_opts += " -D MOG_TYPE_8"; 
+  if (img_type_=="uchar")
+    render_opts += " -D MOG_TYPE_8";
   else if (img_type_=="ushort")
-    render_opts += " -D MOG_TYPE_16"; 
+    render_opts += " -D MOG_TYPE_16";
 
-  
+
   //initialize the GPU render process
   render_.init_kernel(&gpu_pro_->context(), &gpu_pro_->devices()[0],render_opts);
   render_.set_gl_image(exp_img_);
   //render_rgb_.init_kernel(&gpu_pro_->context(), &gpu_pro_->devices()[0], render_opts);
-  //render_rgb_.set_image(exp_img_); 
+  //render_rgb_.set_image(exp_img_);
 
   //initlaize gpu update process
   vcl_string update_opts=" -D MOG_TYPE_8 ";
   if (img_type_=="ushort")
-    update_opts = " -D MOG_TYPE_16 "; 
+    update_opts = " -D MOG_TYPE_16 ";
 
   update_.init_kernel(&gpu_pro_->context(), &gpu_pro_->devices()[0],update_opts);
-  //update_rgb_.init_kernel(&gpu_pro_->context(), &gpu_pro_->devices()[0], update_opts); 
+  //update_rgb_.init_kernel(&gpu_pro_->context(), &gpu_pro_->devices()[0], update_opts);
 
   //initialize refine process
   refine_.init_kernel(&gpu_pro_->context(), &gpu_pro_->devices()[0],update_opts);
