@@ -314,6 +314,7 @@ bool boxm2_refine_block_function::refine_deterministic(vcl_vector<boxm2_data_bas
       dataSize += newSize; 
   }
   
+  
   //2. allocate new data arrays of the appropriate size
   vcl_cout<<"Allocating new data blocks"<<vcl_endl;
   boxm2_block_id id = datas[0]->block_id();
@@ -326,6 +327,7 @@ bool boxm2_refine_block_function::refine_deterministic(vcl_vector<boxm2_data_bas
   
   //3. loop through tree again, putting the data in the right place
   vcl_cout<<"Swapping data into new blocks... "<<vcl_endl;
+  int newInitCount = 0;
   currIndex = 0; 
   for(blk_iter = trees.begin(); blk_iter != trees.end(); ++blk_iter, ++currIndex)
   {
@@ -342,12 +344,13 @@ bool boxm2_refine_block_function::refine_deterministic(vcl_vector<boxm2_data_bas
       refined_tree.set_data_ptr(root_index, false); //is not random 
 
       //3. swap data from old location to new location
-      this->move_data(old_tree, refined_tree, alpha_cpy, mog_cpy, num_obs_cpy); 
+      newInitCount += this->move_data(old_tree, refined_tree, alpha_cpy, mog_cpy, num_obs_cpy); 
       
       //4. store old tree in new tree, swap data out
       vcl_memcpy(blk_iter, refined_tree.get_bits(), 16); 
-
   }
+  
+  vcl_cout<<"Number of new cells: "<<newInitCount<<vcl_endl;
 
   //3. Replace data in the cache
   boxm2_cache* cache = boxm2_cache::instance();    
@@ -427,10 +430,10 @@ boct_bit_tree2 boxm2_refine_block_function::refine_bit_tree(boct_bit_tree2& unre
 //moves data from src to destination
 //returns the number of split nodes for this tree (for assertions)
 int boxm2_refine_block_function::move_data(boct_bit_tree2& unrefined_tree, 
-                                  boct_bit_tree2& refined_tree, 
-                                  float*  alpha_cpy,
-                                  uchar8*  mog_cpy,
-                                  ushort4* num_obs_cpy )
+                                            boct_bit_tree2& refined_tree, 
+                                            float*  alpha_cpy,
+                                            uchar8*  mog_cpy,
+                                            ushort4* num_obs_cpy )
 {
   
   //zip through each leaf cell and 
