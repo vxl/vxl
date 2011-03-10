@@ -6,4 +6,6 @@
 
 //the init functions
 DECLARE_FUNC_CONS(boxm2_load_scene_process);
+DECLARE_FUNC_CONS(boxm2_create_cache_process);
+
 #endif

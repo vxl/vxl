@@ -4,8 +4,8 @@
 
 
 //: scnee/device constructor
-boxm2_opencl_cache::boxm2_opencl_cache(boxm2_scene* scene, 
-                                       bocl_device* device) 
+boxm2_opencl_cache::boxm2_opencl_cache(boxm2_scene_sptr scene, 
+                                       bocl_device_sptr device) 
 {
   // by default try to create an LRU cache
   boxm2_lru_cache::create(scene); 
@@ -198,3 +198,15 @@ void boxm2_opencl_cache::remove_data(boxm2_block_id id, vcl_string type)
     cached_data_.erase(citer);
   }
 }
+
+//: Binary write boxm2_cache  to stream
+void vsl_b_write(vsl_b_ostream& os, boxm2_opencl_cache const& scene){}
+void vsl_b_write(vsl_b_ostream& os, const boxm2_opencl_cache* &p){}
+void vsl_b_write(vsl_b_ostream& os, boxm2_opencl_cache_sptr& sptr){} 
+void vsl_b_write(vsl_b_ostream& os, boxm2_opencl_cache_sptr const& sptr){}
+
+//: Binary load boxm2_cache  from stream.
+void vsl_b_read(vsl_b_istream& is, boxm2_opencl_cache &scene){}
+void vsl_b_read(vsl_b_istream& is, boxm2_opencl_cache* p){}
+void vsl_b_read(vsl_b_istream& is, boxm2_opencl_cache_sptr& sptr){}
+void vsl_b_read(vsl_b_istream& is, boxm2_opencl_cache_sptr const& sptr){}

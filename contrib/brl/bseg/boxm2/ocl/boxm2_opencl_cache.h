@@ -22,13 +22,14 @@
 #include <bocl/bocl_cl.h>
 #include <bocl/bocl_mem.h>
 #include <bocl/bocl_device.h>
-
+#include <vbl/vbl_ref_count.h>
+#include <vbl/vbl_smart_ptr.h>
 //: boxm2_dumb_cache - example realization of abstract cache class
-class boxm2_opencl_cache
+class boxm2_opencl_cache: public vbl_ref_count
 {
   public:
-    boxm2_opencl_cache(boxm2_scene* scene, 
-                       bocl_device* device); 
+    boxm2_opencl_cache(boxm2_scene_sptr scene, 
+                       bocl_device_sptr device); 
     boxm2_opencl_cache(boxm2_cache* cpu_cache,
                        cl_context* context,
                        cl_command_queue* queue,
@@ -65,7 +66,7 @@ class boxm2_opencl_cache
   private:
 
     //: scene this cache is operating on
-    boxm2_scene* scene_;
+    boxm2_scene_sptr scene_;
 
     //: keep a pointer to the CPU cache
     boxm2_cache* cpu_cache_;
@@ -103,6 +104,7 @@ class boxm2_opencl_cache
     //: opencl command queue to use for writing to buffers
     cl_command_queue* queue_;
 };
+typedef vbl_smart_ptr<boxm2_opencl_cache> boxm2_opencl_cache_sptr;
 
 //: get data by type and id
 template<boxm2_data_type T>
@@ -118,4 +120,16 @@ void boxm2_opencl_cache::remove_data(boxm2_block_id id)
   this->remove_data(id, boxm2_data_traits<T>::prefix()); 
 }
 
+
+//: Binary write boxm2_cache  to stream
+void vsl_b_write(vsl_b_ostream& os, boxm2_opencl_cache const& scene);
+void vsl_b_write(vsl_b_ostream& os, const boxm2_opencl_cache* &p);
+void vsl_b_write(vsl_b_ostream& os, boxm2_opencl_cache_sptr& sptr); 
+void vsl_b_write(vsl_b_ostream& os, boxm2_opencl_cache_sptr const& sptr);
+
+//: Binary load boxm2_cache  from stream.
+void vsl_b_read(vsl_b_istream& is, boxm2_opencl_cache &scene);
+void vsl_b_read(vsl_b_istream& is, boxm2_opencl_cache* p);
+void vsl_b_read(vsl_b_istream& is, boxm2_opencl_cache_sptr& sptr);
+void vsl_b_read(vsl_b_istream& is, boxm2_opencl_cache_sptr const& sptr);
 #endif

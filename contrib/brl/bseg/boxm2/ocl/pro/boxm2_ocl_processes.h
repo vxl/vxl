@@ -5,5 +5,7 @@
 #include <bprb/bprb_macros.h>
 
 //the init functions
-//DECLARE_FUNC_CONS(boxm2_load_scene_process);
+DECLARE_FUNC_CONS(boxm2_create_opencl_cache_process);
+DECLARE_FUNC_CONS(boxm2_ocl_render_expected_image_process);
+
 #endif

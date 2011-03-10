@@ -14,6 +14,6 @@ SET(boxm2_io_sources
     boxm2_lru_cache.h      boxm2_lru_cache.cxx
     boxm2_scene_parser.h   boxm2_scene_parser.cxx
    )
-
+    AUX_SOURCE_DIRECTORY(Templates boxm2_io_sources)
 ADD_LIBRARY(boxm2_io  ${boxm2_io_sources})
 TARGET_LINK_LIBRARIES(boxm2_io boxm2 expatpp vpgl baio vpgl vgl_xio vgl vbl vul vsl vcl)
