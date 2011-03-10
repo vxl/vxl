@@ -93,30 +93,45 @@ int boct_bit_tree2::traverse(const vgl_point_3d<double> p)
 
 
 //: Return cell with a particular locational code
-int boct_bit_tree2::get_data_index(int bit_index)
+int boct_bit_tree2::get_data_index(int bit_index, bool is_random)
 {
   ////Unpack data offset (offset to root data)
   //tree[10] and [11] should form the short that refers to data offset
   //root and first gen are special case, return just the root offset + bit_index
-  int count_offset=(int)bits_[10]*256+(int)bits_[11];
+  
+  int count_offset; 
+  if(is_random) 
+    count_offset = (int)bits_[10]*256+(int)bits_[11];
+  else 
+    count_offset = (int) (bits_[13]<<24) | (bits_[12]<<16) | (bits_[11]<<8) | (bits_[10]); 
+  
+  return count_offset + this->get_relative_index(bit_index); 
+}
+
+//: returns bit index assuming root data is located at 0
+int  boct_bit_tree2::get_relative_index(int bit_index)
+{
   if (bit_index < 9)
-    return (count_offset+bit_index) - (((count_offset+bit_index)>>16)<<16);
+    return (bit_index);
 
   //otherwise get parent index, parent byte index and relative bit index
-  unsigned char oneuplevel=(bit_index-1)>>3;
-  unsigned char byte_index= ((oneuplevel-1)>>3) +1;
+  unsigned char oneuplevel = (bit_index-1)>>3;          //bit index of parent
+  unsigned char byte_index = ((oneuplevel-1)>>3) + 1;   //byte where parent is found
 
-  unsigned char sub_bit_index=8-((oneuplevel-1)&(8-1));
+  //count pre parent bits
   int count=0;
-  for (int i=0;i<byte_index;i++)
+  for (int i=0; i<byte_index; ++i)
     count += bit_lookup[bits_[i]];
 
-  unsigned char temp=bits_[byte_index]<<sub_bit_index;
-  count=count+bit_lookup[temp];
+  //dont forget parent bits occuring the parent BYTE
+  unsigned char sub_bit_index = 8-((oneuplevel-1)&(8-1));
+  unsigned char temp = bits_[byte_index]<<sub_bit_index;
+  
+  count = count + bit_lookup[temp];
   unsigned char finestleveloffset=(bit_index-1)&(8-1);
   count = 8*count+1 +finestleveloffset;
 
-  return (count_offset+count) - (((count_offset+count)>>16)<<16);
+  return (count);
 }
 
 //: return number of cells in this tree (size of data chunk)
@@ -213,20 +228,37 @@ int boct_bit_tree2::set_buffer_ptr(int ptr)
   return  0;
 }
 
-int boct_bit_tree2::get_data_ptr()
+int boct_bit_tree2::get_data_ptr(bool is_random)
 {
-  unsigned char hi = this->bits_[10]; 
-  unsigned char lo = this->bits_[11]; 
-  unsigned short value = (unsigned short) ((hi << 8) | lo);
-  return (int) value; 
+  if(is_random)
+  {
+    unsigned char hi = this->bits_[10]; 
+    unsigned char lo = this->bits_[11]; 
+    unsigned short value = (unsigned short) ((hi << 8) | lo);
+    return (int) value;
+  } 
+  else
+  {
+    return (int) (bits_[13]<<24) | (bits_[12]<<16) | (bits_[11]<<8) | (bits_[10]); 
+  }
 }
 
-int boct_bit_tree2::set_data_ptr(int ptr)
+int boct_bit_tree2::set_data_ptr(int ptr, bool is_random)
 {
-  unsigned char hi = (unsigned char)(ptr >> 8);
-  unsigned char lo = (unsigned char)(ptr & 255);
-  this->bits_[10] = hi; 
-  this->bits_[11] = lo; 
+  if(is_random)
+  {
+    unsigned char hi = (unsigned char)(ptr >> 8);
+    unsigned char lo = (unsigned char)(ptr & 255);
+    this->bits_[10] = hi; 
+    this->bits_[11] = lo; 
+  }
+  else
+  {     
+    this->bits_[10] = (ptr) & 0xff;
+    this->bits_[11] = (ptr>>8)  & 0xff;
+    this->bits_[12] = (ptr>>16) & 0xff;
+    this->bits_[13] = (ptr>>24) & 0xff;
+  }
   return 0;
 }
 

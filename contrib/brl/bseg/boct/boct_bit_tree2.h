@@ -36,7 +36,10 @@ class boct_bit_tree2
   }
 
   //: Returns index of data for given bit
-  int get_data_index(int bit_index);
+  int  get_data_index(int bit_index, bool is_random=true);
+  
+  //: returns bit index assuming root data is located at 0
+  int  get_relative_index(int bit_index); 
 
   //: traverse tree to get leaf index that contains point
   int traverse(const vgl_point_3d<double> p);
@@ -63,8 +66,8 @@ class boct_bit_tree2
   //: sets and gets pointers stored in bits 10, 11, 12, 13
   int get_buffer_ptr(); 
   int set_buffer_ptr(int ptr); 
-  int get_data_ptr(); 
-  int set_data_ptr(int ptr); 
+  int get_data_ptr(bool is_random=true); 
+  int set_data_ptr(int ptr, bool is_random=true); 
 
  private:
 
