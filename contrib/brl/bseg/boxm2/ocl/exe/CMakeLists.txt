@@ -12,7 +12,7 @@ TARGET_LINK_LIBRARIES( boxm2_update_exe boxm2_ocl_pro vil_pro vpgl_pro vul )
 ADD_EXECUTABLE( boxm2_refine_exe
   boxm2_refine_exe.cxx
 )
-TARGET_LINK_LIBRARIES( boxm2_refine_exe boxm2_ocl_pro vil_pro vpgl_pro vul )
+TARGET_LINK_LIBRARIES( boxm2_refine_exe boxm2_cpp_pro boxm2_ocl_pro boxm2_view vil_pro vpgl_pro vul )
 
 ADD_EXECUTABLE( boxm2_update_rgb_exe
   boxm2_update_rgb_exe.cxx
