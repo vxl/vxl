@@ -4,15 +4,15 @@
 
 
 //: scnee/device constructor
-boxm2_opencl_cache::boxm2_opencl_cache(boxm2_scene_sptr scene, 
-                                       bocl_device_sptr device) 
+boxm2_opencl_cache::boxm2_opencl_cache(boxm2_scene_sptr scene,
+                                       bocl_device_sptr device)
 {
   // by default try to create an LRU cache
-  boxm2_lru_cache::create(scene); 
-  cpu_cache_ = boxm2_cache::instance(); 
-  
-  context_ = &device->context(); 
-  
+  boxm2_lru_cache::create(scene);
+  cpu_cache_ = boxm2_cache::instance();
+
+  context_ = &device->context();
+
   //create command queue... make sure this isn't destructed at the end of the function...
   int status = 0;
   cl_command_queue queue = clCreateCommandQueue(*context_,
@@ -21,9 +21,9 @@ boxm2_opencl_cache::boxm2_opencl_cache(boxm2_scene_sptr scene,
                                                 &status);
   if (!check_val(status,CL_SUCCESS,"boxm2_opencl_cache:: failed in command queue creation" + error_to_string(status)))
       return;
-  queue_ = &queue;   
-  
-  loaded_ = boxm2_block_id(-1,-1,-1); 
+  queue_ = &queue;
+
+  loaded_ = boxm2_block_id(-1,-1,-1);
   cached_block_ = 0;
   block_info_ = 0;
   tree_ptrs_ = 0;
@@ -202,7 +202,7 @@ void boxm2_opencl_cache::remove_data(boxm2_block_id id, vcl_string type)
 //: Binary write boxm2_cache  to stream
 void vsl_b_write(vsl_b_ostream& os, boxm2_opencl_cache const& scene){}
 void vsl_b_write(vsl_b_ostream& os, const boxm2_opencl_cache* &p){}
-void vsl_b_write(vsl_b_ostream& os, boxm2_opencl_cache_sptr& sptr){} 
+void vsl_b_write(vsl_b_ostream& os, boxm2_opencl_cache_sptr& sptr){}
 void vsl_b_write(vsl_b_ostream& os, boxm2_opencl_cache_sptr const& sptr){}
 
 //: Binary load boxm2_cache  from stream.
