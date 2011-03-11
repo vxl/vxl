@@ -6,11 +6,12 @@ effect.  If you change something in VXL, please document it here.
 
 ---------------------------------------------------------------------------
 
+      - Added transpose and conjugate_transpose methods to vnl_sparse_matrix
+
       - Removed broken vil_blob_finder, and replaced it with
         vil_blob, a collection of blob manipulation functions.
         The new API is more batch oriented rather than the old
         iterator-style.
-
 
       - Generalized vnl_sparse_lst_sqr_function and vnl_sparse_lm
         to allow for global parameters in the optimization.  Used
