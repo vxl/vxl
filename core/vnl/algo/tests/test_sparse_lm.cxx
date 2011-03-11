@@ -105,7 +105,7 @@ class bundle_2d : public vnl_sparse_lst_sqr_function
   void fij(int i, int j,
            vnl_vector<double> const& ai,
            vnl_vector<double> const& bj,
-           vnl_vector<double> const& c,
+           vnl_vector<double> const& /*c*/,
            vnl_vector<double>& fxij)
   {
     double sa = vcl_sin(ai[0]);
@@ -117,7 +117,7 @@ class bundle_2d : public vnl_sparse_lst_sqr_function
   void jac_Aij(int /*i*/, int /*j*/,
                vnl_vector<double> const& ai,
                vnl_vector<double> const& bj,
-               vnl_vector<double> const& c,
+               vnl_vector<double> const& /*c*/,
                vnl_matrix<double>& Aij)
   {
     double sa = vcl_sin(ai[0]);
@@ -133,7 +133,7 @@ class bundle_2d : public vnl_sparse_lst_sqr_function
   void jac_Bij(int /*i*/, int /*j*/,
                vnl_vector<double> const& ai,
                vnl_vector<double> const& bj,
-               vnl_vector<double> const& c,
+               vnl_vector<double> const& /*c*/,
                vnl_matrix<double>& Bij)
   {
     double sa = vcl_sin(ai[0]);
@@ -144,11 +144,11 @@ class bundle_2d : public vnl_sparse_lst_sqr_function
     Bij[0][1] = (-sa - ca*numer/denom)/denom;
   }
 
-  void trace(int iteration,
-             vnl_vector<double> const& a,
-             vnl_vector<double> const& b,
-             vnl_vector<double> const& c,
-             vnl_vector<double> const& e)
+  void trace(int /*iteration*/,
+             vnl_vector<double> const& /*a*/,
+             vnl_vector<double> const& /*b*/,
+             vnl_vector<double> const& /*c*/,
+             vnl_vector<double> const& /*e*/)
   {
     //vcl_cout << "trace "<<iteration<< " a: "<<a<<vcl_endl;
   }
@@ -346,7 +346,7 @@ class bundle_2d_shared : public vnl_sparse_lst_sqr_function
              - data_[residual_indices_(i,j)];
   }
 
-  void jac_Aij(int i, int j,
+  void jac_Aij(int /*i*/, int /*j*/,
                vnl_vector<double> const& ai,
                vnl_vector<double> const& bj,
                vnl_vector<double> const& c,
@@ -361,7 +361,7 @@ class bundle_2d_shared : public vnl_sparse_lst_sqr_function
     Aij[0][2] = -c[0]*(ca*bj[0] - sa*bj[1] + ai[1]) / (denom*denom);
   }
 
-  void jac_Bij(int i, int j,
+  void jac_Bij(int /*i*/, int /*j*/,
                vnl_vector<double> const& ai,
                vnl_vector<double> const& bj,
                vnl_vector<double> const& c,
@@ -375,10 +375,10 @@ class bundle_2d_shared : public vnl_sparse_lst_sqr_function
     Bij[0][1] = (-c[0]*sa - ca*numer/denom)/denom;
   }
 
-  void jac_Cij(int i, int j,
+  void jac_Cij(int /*i*/, int /*j*/,
                vnl_vector<double> const& ai,
                vnl_vector<double> const& bj,
-               vnl_vector<double> const& c,
+               vnl_vector<double> const& /*c*/,
                vnl_matrix<double>& Cij)
   {
     double sa = vcl_sin(ai[0]);
@@ -576,7 +576,7 @@ class bundle_2d_robust : public bundle_2d
     weight = vcl_sqrt(mest(k,ek2));
   }
 
-  double mest(int k, double ek2)
+  double mest(int /*k*/, double ek2)
   {
     // Beaton-Tukey
     if ( ek2 > scale2_ )
@@ -587,7 +587,7 @@ class bundle_2d_robust : public bundle_2d
     }
   }
 
-  double d_mest(int k, double ek2)
+  double d_mest(int /*k*/, double ek2)
   {
     // Beaton-Tukey
     if ( ek2 > scale2_ )
@@ -596,11 +596,11 @@ class bundle_2d_robust : public bundle_2d
       return -2*(1 - ek2/scale2_)/scale2_;
   }
 
-  void trace(int iteration,
-             vnl_vector<double> const& a,
-             vnl_vector<double> const& b,
-             vnl_vector<double> const& c,
-             vnl_vector<double> const& e)
+  void trace(int /*iteration*/,
+             vnl_vector<double> const& /*a*/,
+             vnl_vector<double> const& /*b*/,
+             vnl_vector<double> const& /*c*/,
+             vnl_vector<double> const& /*e*/)
   {
     //vcl_cout << "trace "<<iteration<< " a: "<<a<<vcl_endl;
   }
