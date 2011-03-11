@@ -142,6 +142,25 @@ static void test_algo_blob()
   TEST("Count (T shape)", regions.size(), 1);
   TEST("Area (T shape)", vil_area(regions[0]), 6);
 
+
+  // Make a U shape
+  image.fill(false);
+  vil_crop(image, 3,5, 3,5).fill(true);
+  vil_crop(image, 4,3, 3,3).fill(false);
+  image(3,7)=false;
+  image(7,7)=false;
+  image(5,6)=false;
+
+  vil_blob_labels(image, vil_blob_4_conn, labels);
+  vil_blob_labels_to_regions(labels, regions);
+  vil_print_all(vcl_cout, labels, 1);
+
+  TEST("Count (U shape)", regions.size(), 1);
+  TEST("Area (U shape)", vil_area(regions[0]), 13);
+  
+
+
+
   // Make a V shape
   image.fill(false);
   image(6,5)=true;

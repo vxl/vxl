@@ -7,6 +7,78 @@
 #include <vcl_algorithm.h>
 #include <vcl_cassert.h>
 
+
+
+namespace
+{
+  //: Manages the relabelling structure.
+  // Got the idea from http://en.wikipedia.org/wiki/Disjoint-set_data_structure Mar 2011.
+  // although no code was copied.
+  class disjoint_sets
+  {
+    typedef unsigned LABEL;
+    typedef unsigned LEN;
+    struct node
+    {
+      LABEL parent;
+      LEN rank;
+    };
+    vcl_vector<node> store_;
+  public:
+    disjoint_sets(): store_(1u)
+    { // renumber 0->0
+      store_.front().parent=0;
+      store_.front().rank=0;
+    }
+
+    //: Get the root label for label v;
+    LABEL root(LABEL v)
+    {
+      node & n=store_[v];
+      if (n.parent == v)
+        return v;
+      else
+      {
+        n.parent=root(n.parent); // relabel to speed up later searches
+        return n.parent;
+      }
+    }
+
+    //: Merge two sets containing labels left and right.
+    void merge_labels(LABEL left, LABEL right)
+    {
+      LABEL left_root = root(left);
+      LABEL right_root = root(right);
+      if (left_root == right_root) return; // already merged.
+      node& left_root_node = store_[left_root];
+      node& right_root_node = store_[right_root];
+      if (left_root_node.rank > right_root_node.rank) // Find the larger tree.
+      { // add the right tree to the left
+        right_root_node.parent = left_root_node.parent;
+      }
+      else
+      { // add the left tree to the right
+        left_root_node.parent = right_root_node.parent;
+        if (left_root_node.rank == right_root_node.rank)
+          right_root_node.rank++;
+      }
+    }
+
+    //: Create a new label;
+    LABEL new_label()
+    {
+      node n = {store_.size(), 0};
+      store_.push_back(n);
+      return n.parent;
+    }
+
+    LEN size()
+    {
+      return store_.size();
+    }
+  };
+}
+
 // Produce a label image that enumerates all disjoint blobs in a binary image
 void vil_blob_labels(const vil_image_view<bool>& src_binary,
                      vil_blob_connectivity conn,
@@ -17,7 +89,7 @@ void vil_blob_labels(const vil_image_view<bool>& src_binary,
   dest_label.set_size(ni, nj);
   dest_label.fill(0);
 
-  vcl_vector<unsigned> renumbering(1u, 0u); // renumber 0->0
+  disjoint_sets merge_list;
   vcl_vector<unsigned> neighbouring_labels;
 
   unsigned n_prev_neighbours;
@@ -56,9 +128,8 @@ void vil_blob_labels(const vil_image_view<bool>& src_binary,
       }
       if (neighbouring_labels.empty())
       {
-        unsigned new_label = renumbering.size();
+        unsigned new_label = merge_list.new_label();
         dest_label(i,j) = new_label;
-        renumbering.push_back(new_label);
       }
       else
       {
@@ -76,14 +147,28 @@ void vil_blob_labels(const vil_image_view<bool>& src_binary,
         // If there was only a single unique label, the following for loop
         //   will not execute.
         for (; it!=end; ++it)
-          renumbering[*it] = vcl_min(renumbering[*it], label);
+          merge_list.merge_labels(*it, label);
       }
     }
+  unsigned n_merge=merge_list.size();
+  vcl_vector<unsigned> renumbering(n_merge, 0u);
+  // Convert the merge lsit into a simple renumbering array,
+  // and change to root of each disjoint set to its lowest member.
+  // The reinstates label order to the original raster order.
+  for (unsigned l=1; l<n_merge; ++l)
+  {
+    if (renumbering[l]!=0) continue;
+    unsigned root_label = merge_list.root(l);
+    unsigned root_label_renumber = renumbering[root_label];
+    if (root_label_renumber==0)
+    {
+      renumbering[root_label]=l;
+      renumbering[l]=l;
+    }
+    else
+      renumbering[l]=renumbering[root_label];
+  }
 
-  // Propagate the renumbering so that when 3 points to 2 and 2 points to 1,
-  //   3 should then point to 1.
-  for (ITER it=renumbering.begin(), end=renumbering.end(); it!=end; ++it)
-    *it = renumbering[*it];
 
   // Now due to the renumbering, the set of labels may not compactly occupy
   // the number line. So renumber the renumbering array.
