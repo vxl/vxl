@@ -193,8 +193,9 @@ int move_data(__constant RenderSceneInfo * linfo,
 
   //zip through each leaf cell and 
   int oldDataPtr = 0; int newDataPtr = 0; 
-  int newInitCount = 0; int oldCount = 0;            
-  for(int j=0; j<MAX_CELLS; ++j) {
+  int newInitCount = 0; int oldCount = 0;       
+  int newTreeSize = num_cells(refined_tree); 
+  for(int j=0; j<MAX_CELLS && newDataPtr<newTreeSize; ++j) {
 
     //--------------------------------------------------------------------
     //4 Cases:
@@ -228,7 +229,7 @@ int move_data(__constant RenderSceneInfo * linfo,
         new_value = (MOG_TYPE) (max_alpha_int / side_len);   
       }
       else {
-        new_value = (MOG_TYPE) init_cell; 
+        new_value = (MOG_TYPE) 0; 
       }
 
       //store parent's data in child cells
@@ -330,7 +331,7 @@ __kernel void refine_data( __constant RenderSceneInfo * linfo,
                            __global   int             * tree_sizes,       // tree size for each block
                            __global   MOG_TYPE        * data,             // Data array to be copied
                            __global   MOG_TYPE        * data_cpy,         // data array to be copied into, size(data_cpy) = tree_sizes[last] + sizeof(last_tree); 
-                           __global   float           * prob_thresh_t,    //IF THIS VALUE IS less than 0, then
+                           __global   float           * prob_thresh_t,    //IF THIS VALUE IS less than 0, then it is not the alpha pass
                            __constant uchar           * bit_lookup,       // used to get data_index                  
                            __global   float           * output, 
                            __local    uchar           * cumsum,
@@ -391,10 +392,10 @@ __kernel void refine_data( __constant RenderSceneInfo * linfo,
       //locally cache prob_thresh
       float prob_thresh = *prob_thresh_t;
       MOG_TYPE init_cell; 
-      //if(prob_thresh > 0.0f) 
-      //  init_cell = prob_thresh;
-      //else
-      //  init_cell = (MOG_TYPE) 0;  
+      if(prob_thresh > 0.0f) 
+        init_cell = prob_thresh;
+      else
+        init_cell = (MOG_TYPE) 0;  
 
       //do some Pointer arithmetic to pass in aligned data
       int numNew = move_data(linfo, 
@@ -424,7 +425,7 @@ refine_bit_scene(__constant  RenderSceneInfo    * linfo,
                  __global    ushort             * blocks_in_buffers,// number of blocks in each buffers
                 
                  __global    float              * alpha_array,      // alpha for each block
-                 __global    MOG_TYPE             * mixture_array,    // mixture for each block
+                 __global    MOG_TYPE           * mixture_array,    // mixture for each block
                  __global    ushort4            * num_obs_array,    // num obs for each block
                  
                  __constant  uchar              * bit_lookup,       // used to get data_index                  

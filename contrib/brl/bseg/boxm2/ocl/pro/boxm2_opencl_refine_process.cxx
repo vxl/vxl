@@ -98,13 +98,16 @@ bool boxm2_opencl_refine_process::execute(vcl_vector<brdb_value_sptr>& input, vc
     //    - get a new data pointer (with newSize), will create CPU buffer and GPU buffer
     //    - Run refine_data_kernel with the two buffers
     //    - delete the old BOCL_MEM*, and that's it...
+    
+    //clear cache
+    cache_->clear_cache(); 
     boxm2_block_metadata data = blk_iter->second;
     if (!data.random_)
     {
       vcl_cout<<"Doing non random refine:"<<vcl_endl;
 
       ////////////////////////////////////////////////////////////////////////////
-      // Step One
+      // Step One... currently mimics C++ implementation
       //get id and refine block into tree copy, and calc vector of new tree sizes
       boxm2_block_id id = blk_iter->first;
       int numTrees = data.sub_block_num_.x() * data.sub_block_num_.y() * data.sub_block_num_.z();
@@ -265,16 +268,11 @@ void boxm2_opencl_refine_process::swap_data(boxm2_block_id id,
   //get bocl_mem data independent of CPU pointer
   bocl_mem* dat = cache_->get_data(id, type);
 
-  //remove BOCL_MEM* from gpu cache (don't delete)
-  cache_->remove_data(id, type);
-
-  //do a deep delete (delete CPU buffer from CPU cache)
-  cache_->deep_delete(id, type);
-
   //get a new data pointer (with newSize), will create CPU buffer and GPU buffer
   vcl_cout<<type<<" new data size is: "<<newDataSize<<vcl_endl;
   int dataBytes = boxm2_data_info::datasize(type) * newDataSize;
-  bocl_mem* new_dat = cache_->get_data(id, type, dataBytes);
+  bocl_mem* new_dat = new bocl_mem((*context_), NULL, dataBytes, "new data buffer " + type);
+  new_dat->create_buffer(CL_MEM_READ_WRITE, (*command_queue_));  
 
   //grab the block out of the cache as well
   bocl_mem* blk = cache_->get_block(id);
@@ -313,14 +311,15 @@ void boxm2_opencl_refine_process::swap_data(boxm2_block_id id,
   clFinish( (*command_queue_));
   kern->clear_args();
 
-  //write the data to buffer
-  new_dat->read_to_buffer(*command_queue_);
-  if (type == boxm2_data_traits<BOXM2_ALPHA>::prefix())
+  ////write the data to buffer
+  cache_->deep_replace_data(id, type, new_dat); 
+  if(type == boxm2_data_traits<BOXM2_ALPHA>::prefix()) {
+    vcl_cout<<"Writing refined trees."<<vcl_endl;
     blk->read_to_buffer(*command_queue_);
-
+  }
+  
   //clean up DAT
   delete[] p_thresh;
-  delete dat;
 }
 
 //: Refines the block copy and returns blk_copy and tree_sizes bocl_mem pointers
@@ -356,7 +355,7 @@ void boxm2_opencl_refine_process::refine_block_copy(boxm2_block_id id,
   //execute kernel
   refine_trees_.execute( (*command_queue_), 2, lThreads, gThreads);
   clFinish(*command_queue_);
-  //gpu_time_ += refine_trees_.exec_time();
+  gpu_time_ += refine_trees_.exec_time();
 
   //clear render kernel args so it can reset em on next execution
   refine_trees_.clear_args();

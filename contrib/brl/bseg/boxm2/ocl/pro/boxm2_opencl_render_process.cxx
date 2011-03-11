@@ -229,9 +229,10 @@ bool boxm2_opencl_render_process::execute(vcl_vector<brdb_value_sptr>& input, vc
     //clear render kernel args so it can reset em on next execution
     kern.clear_args();
   }
-if(!gl_image_)
+  if(!gl_image_)
   // normalize
   {
+      vcl_cout<<"NOT DOING GL IMAGE"<<vcl_endl;
       normalize_render_kernel_.set_arg( image_ );
       normalize_render_kernel_.set_arg( vis_img_ );
       normalize_render_kernel_.set_arg( &exp_img_dim);
@@ -248,7 +249,7 @@ if(!gl_image_)
   //read image out to buffer (from gpu)
 
   
-else
+  else
   {
       float* mini_buf = new float[1];
       float* maxi_buf = new float[1];

@@ -285,7 +285,7 @@ bool boxm2_refine_block_function::refine()
 //    - delete the old BOCL_MEM*, and that's it...
 bool boxm2_refine_block_function::refine_deterministic(vcl_vector<boxm2_data_base*>& datas)
 {
-  vcl_cout<<"CPU Non deterministic refine: "<<vcl_endl;
+  vcl_cout<<"CPU deterministic refine: "<<vcl_endl;
   
   //loop over each tree, refine it in place (keep a vector of locations for 
   // posterities sake
@@ -435,12 +435,14 @@ int boxm2_refine_block_function::move_data(boct_bit_tree2& unrefined_tree,
                                             uchar8*  mog_cpy,
                                             ushort4* num_obs_cpy )
 {
+  int newSize = refined_tree.num_cells(); 
   
   //zip through each leaf cell and 
   int oldDataPtr = unrefined_tree.get_data_ptr(false); 
   int newDataPtr = refined_tree.get_data_ptr(false);
-  int newInitCount = 0; int oldCount = 0;            
-  for(int j=0; j<MAX_CELLS_; ++j) {
+  int newInitCount = 0;
+  int cellsMoved = 0;           
+  for(int j=0; j<MAX_CELLS_ && cellsMoved<newSize; ++j) {
 
     //--------------------------------------------------------------------
     //4 Cases:
@@ -463,10 +465,10 @@ int boxm2_refine_block_function::move_data(boct_bit_tree2& unrefined_tree,
       //increment 
       oldDataPtr++; 
       newDataPtr++; 
+      cellsMoved++; 
     } 
     //case where it's a new leaf...
     else if(validCellNew) {
-      newInitCount++; 
 
       //move root data to new location
       int currLevel = unrefined_tree.depth_at(j);
@@ -477,6 +479,8 @@ int boxm2_refine_block_function::move_data(boct_bit_tree2& unrefined_tree,
 
       //update new data pointer
       newDataPtr++; 
+      newInitCount++; 
+      cellsMoved++; 
     }
   }       
   return newInitCount;

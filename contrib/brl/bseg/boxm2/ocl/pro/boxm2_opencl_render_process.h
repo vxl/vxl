@@ -20,7 +20,7 @@
 class boxm2_opencl_render_process : public boxm2_opencl_process_base
 {
   public:
-    boxm2_opencl_render_process() : image_(0), vis_img_(0) {}
+    boxm2_opencl_render_process() : image_(0), vis_img_(0), gl_image_(0) {}
     
     //: process init and execute
     bool init() { return true; }

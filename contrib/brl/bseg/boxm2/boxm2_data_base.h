@@ -38,6 +38,9 @@ class boxm2_data_base : public vbl_ref_count
     char *            data_buffer()    { return data_buffer_; }
     vcl_size_t        buffer_length()  { return buffer_length_; }
     boxm2_block_id&   block_id()       { return id_; }
+    
+    //: setter for swapping out data buffer
+    
 
  protected:
     //: id for this particular block

@@ -217,10 +217,13 @@ bool boxm2_opencl_update_process::execute(vcl_vector<brdb_value_sptr>& input, vc
         int alphaTypeSize = boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
         info_buffer->data_buffer_length = (int) (alpha_->num_bytes()/alphaTypeSize); 
         blk_info_->write_to_buffer((*command_queue_));
+        aux_       = cache_->get_data<BOXM2_AUX>(*id, info_buffer->data_buffer_length * 4*sizeof(int));
+        vcl_cout<<"Alpha buffer length: "<<info_buffer->data_buffer_length<<vcl_endl; 
       }
-
-      //get aux data
-      aux_       = cache_->get_data<BOXM2_AUX>(*id);
+      else  {
+        //get aux data
+        aux_       = cache_->get_data<BOXM2_AUX>(*id);
+      } 
       transfer_time_ += (float) transfer.all();
 
       //set workspace and args for this pass

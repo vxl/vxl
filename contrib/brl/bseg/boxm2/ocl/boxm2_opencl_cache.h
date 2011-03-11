@@ -41,18 +41,29 @@ class boxm2_opencl_cache: public vbl_ref_count
 
     //: returns block pointer to block specified by ID
     bocl_mem* get_block(boxm2_block_id id);
+    
+    //: get scene info in bocl_mem*
+    bocl_mem* loaded_block_info() { return block_info_; }
+    ////////////////////////////////////////////////////////////////////
+    //deprecated when new refine is implemented
     bocl_mem* get_loaded_tree_ptrs();
     bocl_mem* get_loaded_trees_per_buffer();
     bocl_mem* get_loaded_mem_ptrs();
-
-    //: get scene info in bocl_mem*
-    bocl_mem* loaded_block_info() { return block_info_; }
+    ////////////////////////////////////////////////////////////////////
 
     //: returns data pointer to data block specified by ID
     template<boxm2_data_type T>
     bocl_mem* get_data(boxm2_block_id, vcl_size_t num_bytes=0);
     bocl_mem* get_data(boxm2_block_id, vcl_string type, vcl_size_t num_bytes=0); 
-
+    
+    //: deep_replace data replaces not only the current data on the gpu cachd, 
+    //  but pushes a block to the cpu cache
+    void deep_replace_data(boxm2_block_id id, vcl_string type, bocl_mem* mem); 
+    
+    
+/*
+    ////////////////////////////////////////////////////////////////////////////
+    // UNNEEDED NOW
     //: deep_delete removes the data from CPU cache (stays in this cache)
     template<boxm2_data_type T>
     void deep_delete(boxm2_block_id id) { cpu_cache_->remove_data_base(id, boxm2_data_traits<T>::prefix()); } 
@@ -62,6 +73,7 @@ class boxm2_opencl_cache: public vbl_ref_count
     template<boxm2_data_type T>
     void remove_data(boxm2_block_id id); 
     void remove_data(boxm2_block_id id, vcl_string type);
+*/
     
   private:
 
@@ -106,6 +118,7 @@ class boxm2_opencl_cache: public vbl_ref_count
 };
 typedef vbl_smart_ptr<boxm2_opencl_cache> boxm2_opencl_cache_sptr;
 
+
 //: get data by type and id
 template<boxm2_data_type T>
 bocl_mem* boxm2_opencl_cache::get_data(boxm2_block_id id, vcl_size_t num_bytes)
@@ -113,12 +126,14 @@ bocl_mem* boxm2_opencl_cache::get_data(boxm2_block_id id, vcl_size_t num_bytes)
   return get_data(id, boxm2_data_traits<T>::prefix(), num_bytes); 
 }
 
+/*
 //: remove_data: removes data from cache but keeps it on the GPU  !!!THIS SEEMS DANGEROUS FOR WHEN CACHE MEASURES TOTAL BUFFER SIZE!!!
 template<boxm2_data_type T>
 void boxm2_opencl_cache::remove_data(boxm2_block_id id)
 {
   this->remove_data(id, boxm2_data_traits<T>::prefix()); 
 }
+*/
 
 
 //: Binary write boxm2_cache  to stream

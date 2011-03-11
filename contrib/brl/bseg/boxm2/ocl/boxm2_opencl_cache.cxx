@@ -183,21 +183,48 @@ bocl_mem* boxm2_opencl_cache::get_data(boxm2_block_id id, vcl_string type, vcl_s
   return data;
 }
 
-//: Does a soft delete of data - removes it from the cache but it stays allocated
-//  This will have to NOT decrement the total bytes allocated counter or just
-//  simply move the data to have a different type
-void boxm2_opencl_cache::remove_data(boxm2_block_id id, vcl_string type)
+
+//: Deep data replace.  This replaces not only the data in the GPU cache, but 
+// in the cpu cache as well (by creating a new one)
+void boxm2_opencl_cache::deep_replace_data(boxm2_block_id id, vcl_string type, bocl_mem* mem)
 {
-  //make sure that the data is in the
-  if (loaded_data_[type] == id) {
-    //loaded_data_[type] = 0;
-    //cached_data_[type] = 0;
-    vcl_map<vcl_string, boxm2_block_id>::iterator liter = loaded_data_.find(type);
-    loaded_data_.erase(liter);
-    vcl_map<vcl_string, bocl_mem* >::iterator citer = cached_data_.find(type);
-    cached_data_.erase(citer);
+  //instantiate new data block
+  vcl_size_t numDataBytes = mem->num_bytes(); 
+  boxm2_data_base* newData = new boxm2_data_base(new char[numDataBytes], numDataBytes, id);
+  
+  //write bocl_mem data to cpu buffer
+  mem->set_cpu_buffer((void*) newData->data_buffer()); 
+  mem->write_to_buffer( *queue_ ); 
+  
+  //do deep replace
+  cpu_cache_->replace_data_base(id, type, newData); 
+  
+  //now replace the mem in the GPU cache.. first delete existing
+  if ( cached_data_.find(type) != cached_data_.end()) {
+    //release existing memory
+    bocl_mem* toDelete = cached_data_[type];
+    delete toDelete;
+    cached_data_[type] = 0;
   }
+  cached_data_[type] = mem; 
 }
+
+
+////: Does a soft delete of data - removes it from the cache but it stays allocated
+////  This will have to NOT decrement the total bytes allocated counter or just
+////  simply move the data to have a different type
+//void boxm2_opencl_cache::remove_data(boxm2_block_id id, vcl_string type)
+//{
+  ////make sure that the data is in the
+  //if (loaded_data_[type] == id) {
+    ////loaded_data_[type] = 0;
+    ////cached_data_[type] = 0;
+    //vcl_map<vcl_string, boxm2_block_id>::iterator liter = loaded_data_.find(type);
+    //loaded_data_.erase(liter);
+    //vcl_map<vcl_string, bocl_mem* >::iterator citer = cached_data_.find(type);
+    //cached_data_.erase(citer);
+  //}
+//}
 
 //: Binary write boxm2_cache  to stream
 void vsl_b_write(vsl_b_ostream& os, boxm2_opencl_cache const& scene){}
