@@ -310,21 +310,21 @@ template <class T>
 void
 vgl_h_matrix_3d<T>::set_reflection_plane(const vgl_plane_3d<double>& p)
 {
-  t12_matrix_.fill(0.0);
-  t12_matrix_(0,0) = p.nx()*p.nx();
-  t12_matrix_(1,1) = p.ny()*p.ny();
-  t12_matrix_(2,2) = p.nz()*p.nz();
-  t12_matrix_(0,1) = t12_matrix_(1,0) = p.nx()*p.ny();
-  t12_matrix_(0,2) = t12_matrix_(2,0) = p.nx()*p.nz();
-  t12_matrix_(1,2) = t12_matrix_(2,1) = p.ny()*p.nz();
-  t12_matrix_(0,3) = p.nx()*p.d();
-  t12_matrix_(1,3) = p.ny()*p.d();
-  t12_matrix_(2,3) = p.nz()*p.d();
+  t12_matrix_.fill(T(0));
+  t12_matrix_(0,0) = T(p.nx()*p.nx());
+  t12_matrix_(1,1) = T(p.ny()*p.ny());
+  t12_matrix_(2,2) = T(p.nz()*p.nz());
+  t12_matrix_(0,1) = t12_matrix_(1,0) = T(p.nx()*p.ny());
+  t12_matrix_(0,2) = t12_matrix_(2,0) = T(p.nx()*p.nz());
+  t12_matrix_(1,2) = t12_matrix_(2,1) = T(p.ny()*p.nz());
+  t12_matrix_(0,3) = T(p.nx()*p.d());
+  t12_matrix_(1,3) = T(p.ny()*p.d());
+  t12_matrix_(2,3) = T(p.nz()*p.d());
   t12_matrix_ *= -2/(t12_matrix_(0,0)+t12_matrix_(1,1)+t12_matrix_(2,2));
-  t12_matrix_(0,0) += 1;
-  t12_matrix_(1,1) += 1;
-  t12_matrix_(2,2) += 1;
-  t12_matrix_(3,3) += 1;
+  t12_matrix_(0,0) += (T)1;
+  t12_matrix_(1,1) += (T)1;
+  t12_matrix_(2,2) += (T)1;
+  t12_matrix_(3,3) += (T)1;
 }
 
 
