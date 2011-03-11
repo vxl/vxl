@@ -518,7 +518,7 @@ void test_prob2()
    // test 2D bundle adjustment with missing data and uniform noise
    {
      // initial conditions (all points at origin)
-     vnl_vector<double> pa(12,0.0), pb(50,0.0), pc(1.0);
+     vnl_vector<double> pa(12,0.0), pb(50,0.0), pc(1,1.0);
      pa[2]=pa[5]=pa[8]=pa[11]=10;
      pa[4]=5;
      pa[7]=-5;
