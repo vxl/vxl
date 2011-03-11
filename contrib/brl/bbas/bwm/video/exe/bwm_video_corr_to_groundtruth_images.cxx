@@ -17,10 +17,12 @@
 #include <vcl_cmath.h>
 #include <bwm/video/bwm_video_site_io.h>
 #include <bwm/video/bwm_video_corr.h>
+
 int main(int argc, char** argv)
 {
   //Input arguments
   vul_arg<vcl_string> site   ("-sitename", "Site Filename", "");
+  vul_arg<vcl_string> gtdir  ("-gtdir", "Directory to store the ground truth", "");
   vul_arg<int>        radiusx("-radiusx", "Radius along X direction", 3);
   vul_arg<int>        radiusy("-radiusy", "Radius along Y direction", 3);
   vul_arg_parse(argc, argv);
@@ -47,9 +49,13 @@ int main(int argc, char** argv)
 
   for (unsigned i=0;i<img_files.size();i++)
   {
-      vil_image_resource_sptr img_ptr=vil_load_image_resource(img_files[i].c_str());
-      for(unsigned j=0;j<corrs.size();j++)
-
+    vil_image_resource_sptr img_ptr=vil_load_image_resource(img_files[i].c_str());
+    vil_image_view<unsigned char> outimg(img_ptr->ni(),img_ptr->nj());
+    outimg.fill(0);
+    for (unsigned j=0; j<corrs.size(); ++j)
+    {
+      vgl_point_2d<double> point2d;
+      if (corrs[j]->match(i,point2d))
       {
         int u=(int)vcl_floor(point2d.x());
         int v=(int)vcl_floor(point2d.y());
@@ -59,11 +65,9 @@ int main(int argc, char** argv)
             if (i>=0 && j>=0 && i<(int)outimg.ni() && j<(int)outimg.nj())
               outimg(i,j)=255;
       }
-
     }
     vcl_string outfile=gtdir()+"/"+vul_file::strip_extension(vul_file::basename(img_files[i]))+".tiff";
     vil_save(outimg,outfile.c_str());
-
   }
   return 0;
 }
