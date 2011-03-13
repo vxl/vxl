@@ -1,4 +1,4 @@
-# Microsoft Developer Studio Project File - Name="bocl" - Package Owner=<4>
+# Microsoft Developer Studio Project File - Name="bocl_pro" - Package Owner=<4>
 # Microsoft Developer Studio Generated Build File, Format Version 6.00
 # ** DO NOT EDIT **
 
@@ -7,25 +7,25 @@
 # /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/core" /I "$(VXLROOT)/vcl/config.win32" /I "$(VXLROOT)/contrib/mul" == include path
 #   -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE == compiler defines
 #  == override in output directory
-# bocl  == name of output library
+# bocl_pro  == name of output library
 
 # TARGTYPE "Win32 (x86) Static Library" 0x0104
 
-CFG=bocl - Win32 Debug
+CFG=bocl_pro - Win32 Debug
 !MESSAGE This is not a valid makefile. To build this project using NMAKE,
 !MESSAGE use the Export Makefile command and run
 !MESSAGE 
-!MESSAGE NMAKE /f "bocl.mak".
+!MESSAGE NMAKE /f "bocl_pro.mak".
 !MESSAGE 
 !MESSAGE You can specify a configuration when running NMAKE
 !MESSAGE by defining the macro CFG on the command line. For example:
 !MESSAGE 
-!MESSAGE NMAKE /f "bocl.mak" CFG="vil2 - Win32 Debug"
+!MESSAGE NMAKE /f "bocl_pro.mak" CFG="vil2 - Win32 Debug"
 !MESSAGE 
 !MESSAGE Possible choices for configuration are:
 !MESSAGE 
-!MESSAGE "bocl - Win32 Debug" (based on "Win32 (x86) Static Library")
-!MESSAGE "bocl - Win32 Release" (based on "Win32 (x86) Static Library")
+!MESSAGE "bocl_pro - Win32 Debug" (based on "Win32 (x86) Static Library")
+!MESSAGE "bocl_pro - Win32 Release" (based on "Win32 (x86) Static Library")
 # Begin Project
 # PROP AllowPerConfigDependencies 0
 # PROP Scc_ProjName ""
@@ -33,7 +33,7 @@ CFG=bocl - Win32 Debug
 CPP=cl.exe
 RSC=rc.exe
 
-!IF  "$(CFG)" == "bocl - Win32 Release"
+!IF  "$(CFG)" == "bocl_pro - Win32 Release"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
@@ -47,7 +47,7 @@ RSC=rc.exe
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB" /FD /c
 # ADD CPP /nologo /D "NDEBUG" /D "WIN32" /D "_MBCS" /D "_LIB" /FD /c
-# ADD CPP /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/core" /I "$(VXLROOT)/vcl/config.win32" /I "$(VXLROOT)/contrib/mul" -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "bocl_EXPORTS"
+# ADD CPP /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/core" /I "$(VXLROOT)/vcl/config.win32" /I "$(VXLROOT)/contrib/mul" -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "bocl_pro_EXPORTS"
 # ADD CPP /W3 /Zm1000 /GX /GR
 # ADD CPP /MD /O2
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
@@ -59,7 +59,7 @@ LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo
 # ADD LIB32 /nologo
 
-!ELSEIF  "$(CFG)" == "bocl - Win32 Debug"
+!ELSEIF  "$(CFG)" == "bocl_pro - Win32 Debug"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
@@ -73,7 +73,7 @@ LIB32=link.exe -lib
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB" /FD /c
 # ADD CPP /nologo /D "_DEBUG" /D "WIN32" /D "_MBCS" /D "_LIB" /FD /GZ /c
-# ADD CPP /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/core" /I "$(VXLROOT)/vcl/config.win32" /I "$(VXLROOT)/contrib/mul" -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "bocl_EXPORTS"
+# ADD CPP /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/core" /I "$(VXLROOT)/vcl/config.win32" /I "$(VXLROOT)/contrib/mul" -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "bocl_pro_EXPORTS"
 # ADD CPP /W3 /Zm1000 /GX /GR
 # ADD CPP /MDd /Zi /Od /GZ
 # ADD BASE RSC /l 0x409 /d "_DEBUG"
@@ -87,85 +87,28 @@ LIB32=link.exe -lib
 
 # Begin Target
 
-# Name "bocl - Win32 Release"
-# Name "bocl - Win32 Debug"
+# Name "bocl_pro - Win32 Release"
+# Name "bocl_pro - Win32 Debug"
 
 # Begin Group "Source Files"
 # PROP Default_Filter "cxx"
 # Begin Source File
-SOURCE=.\bocl_utils.cxx
+SOURCE=.\bocl_register.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\bocl_kernel.cxx
+SOURCE=.\processes/bocl_get_device_process.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\bocl_mem.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\bocl_device_info.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\bocl_manager.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\bocl_device.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/brdb_value_t+bocl_mem_sptr-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vbl_smart_ptr+bocl_mem-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/brdb_value_t+bocl_device_sptr-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/brdb_value_t+bocl_manager_child_sptr-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vbl_smart_ptr+bocl_device-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/bocl_manager+bocl_manager_child-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vbl_smart_ptr+bocl_manager_child-.cxx
+SOURCE=.\processes/bocl_init_manager_process.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
 # Begin Source File
-SOURCE=.\bocl_cl.h
+SOURCE=.\bocl_register.h
 # End Source File
 # Begin Source File
-SOURCE=.\bocl_cl_gl.h
-# End Source File
-# Begin Source File
-SOURCE=.\bocl_manager.h
-# End Source File
-# Begin Source File
-SOURCE=.\bocl_manager.txx
-# End Source File
-# Begin Source File
-SOURCE=.\bocl_utils.h
-# End Source File
-# Begin Source File
-SOURCE=.\bocl_kernel.h
-# End Source File
-# Begin Source File
-SOURCE=.\bocl_mem.h
-# End Source File
-# Begin Source File
-SOURCE=.\bocl_buffer.h
-# End Source File
-# Begin Source File
-SOURCE=.\bocl_buffer_mgr.h
-# End Source File
-# Begin Source File
-SOURCE=.\bocl_device_info.h
-# End Source File
-# Begin Source File
-SOURCE=.\bocl_device.h
+SOURCE=.\bocl_processes.h
 # End Source File
 # End Group
 # End Target

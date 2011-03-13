@@ -824,6 +824,12 @@ SOURCE=.\Templates/vnl_c_na_vector+double-.cxx
 # Begin Source File
 SOURCE=.\Templates/vnl_c_na_vector+float-.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\Templates/vnl_sparse_matrix+vcl_complex+double--.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vnl_sparse_matrix+vcl_complex+float--.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"

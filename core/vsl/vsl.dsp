@@ -242,6 +242,12 @@ SOURCE=.\Templates/vsl_pair_io+uint.float-.cxx
 # Begin Source File
 SOURCE=.\Templates/vsl_deque_io+bool-.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\Templates/vsl_vector_io+int64-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vsl_vector_io+uint64-.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"

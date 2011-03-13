@@ -154,6 +154,9 @@ SOURCE=.\Templates/boxm2_data+BOXM2_MOG3_GREY_16-.cxx
 # Begin Source File
 SOURCE=.\Templates/boxm2_data+BOXM2_MOG2_RGB-.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\Templates/boxm2_data+BOXM2_BATCH_HISTOGRAM-.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"

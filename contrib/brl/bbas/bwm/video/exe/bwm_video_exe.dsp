@@ -114,6 +114,12 @@ SOURCE=.\bwm_video_corr_proc_gt.cxx
 # Begin Source File
 SOURCE=.\bwm_video_corr_to_groundtruth_images.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\bwm_video_normalize_3d_corr.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\bwm_video_normalize.cxx
+# End Source File
 # End Group
 # End Target
 # End Project

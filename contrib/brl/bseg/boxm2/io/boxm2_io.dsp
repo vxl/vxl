@@ -115,6 +115,12 @@ SOURCE=.\boxm2_scene_parser.cxx
 # Begin Source File
 SOURCE=.\boxm2_lru_cache.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\Templates/brdb_value_t+boxm2_cache_sptr-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vbl_smart_ptr+boxm2_cache-.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"

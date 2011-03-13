@@ -113,6 +113,18 @@ SOURCE=.\boxm2_opencl_render_rgb_process.cxx
 # Begin Source File
 SOURCE=.\boxm2_opencl_update_rgb_process.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\boxm2_ocl_register.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\boxm2_opencl_batch_update_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/boxm2_ocl_render_expected_image_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/boxm2_create_opencl_cache_process.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
@@ -139,6 +151,15 @@ SOURCE=.\boxm2_opencl_render_rgb_process.h
 # End Source File
 # Begin Source File
 SOURCE=.\boxm2_opencl_update_rgb_process.h
+# End Source File
+# Begin Source File
+SOURCE=.\boxm2_ocl_register.h
+# End Source File
+# Begin Source File
+SOURCE=.\boxm2_ocl_processes.h
+# End Source File
+# Begin Source File
+SOURCE=.\boxm2_opencl_batch_update_process.h
 # End Source File
 # End Group
 # End Target
