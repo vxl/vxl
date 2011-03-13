@@ -20,12 +20,12 @@
 class boxm2_opencl_render_process : public boxm2_opencl_process_base
 {
   public:
-    boxm2_opencl_render_process() : image_(0), vis_img_(0), gl_image_(0) {}
-    
+    boxm2_opencl_render_process() : image_(0), gl_image_(0), vis_img_(0) {}
+
     //: process init and execute
     bool init() { return true; }
     bool execute(vcl_vector<brdb_value_sptr> & input, vcl_vector<brdb_value_sptr> & output);
-    bool clean(); 
+    bool clean();
 
     //: opencl specific init - compiles kernels associated with this process
     virtual bool init_kernel(cl_context* context, cl_device_id* device, vcl_string opts="");
@@ -34,7 +34,7 @@ class boxm2_opencl_render_process : public boxm2_opencl_process_base
     //: render specific methods
     bool set_image( bocl_mem* img ) { image_ = img; return true; }
     bool set_gl_image( bocl_mem* img ) { gl_image_ = img; return true; }
-    
+
     //: get image
     bocl_mem* image() { return image_; }
     bocl_mem* gl_image() { return gl_image_; }
@@ -48,19 +48,18 @@ class boxm2_opencl_render_process : public boxm2_opencl_process_base
     bocl_kernel normalize_render_kernel_;
     bocl_kernel render_gl_kernel_;
     bocl_kernel rand_kernel_;
-  
+
     //: image (so it isn't created over and over)
     bocl_mem* image_;
     bocl_mem* gl_image_;
-    
+
     //: visibility image
-    bocl_mem* vis_img_; 
+    bocl_mem* vis_img_;
 
     bocl_mem* mini_;
     bocl_mem* maxi_;
 
     bocl_mem* tf_;
-    
 };
 
 #endif
