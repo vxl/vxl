@@ -24,24 +24,25 @@
 #include <bocl/bocl_device.h>
 #include <vbl/vbl_ref_count.h>
 #include <vbl/vbl_smart_ptr.h>
+
 //: boxm2_dumb_cache - example realization of abstract cache class
 class boxm2_opencl_cache: public vbl_ref_count
 {
   public:
-    boxm2_opencl_cache(boxm2_scene_sptr scene, 
-                       bocl_device_sptr device); 
+    boxm2_opencl_cache(boxm2_scene_sptr scene,
+                       bocl_device_sptr device);
     boxm2_opencl_cache(boxm2_cache* cpu_cache,
                        cl_context* context,
                        cl_command_queue* queue,
                        boxm2_scene* scene);
     ~boxm2_opencl_cache() { this->clear_cache(); }
-    
+
     //: empties out cache, deletes all bocl_mem*s
     bool clear_cache();
 
     //: returns block pointer to block specified by ID
     bocl_mem* get_block(boxm2_block_id id);
-    
+
     //: get scene info in bocl_mem*
     bocl_mem* loaded_block_info() { return block_info_; }
     ////////////////////////////////////////////////////////////////////
@@ -54,27 +55,24 @@ class boxm2_opencl_cache: public vbl_ref_count
     //: returns data pointer to data block specified by ID
     template<boxm2_data_type T>
     bocl_mem* get_data(boxm2_block_id, vcl_size_t num_bytes=0);
-    bocl_mem* get_data(boxm2_block_id, vcl_string type, vcl_size_t num_bytes=0); 
-    
-    //: deep_replace data replaces not only the current data on the gpu cachd, 
-    //  but pushes a block to the cpu cache
-    void deep_replace_data(boxm2_block_id id, vcl_string type, bocl_mem* mem); 
-    
-    
-/*
-    ////////////////////////////////////////////////////////////////////////////
-    // UNNEEDED NOW
+    bocl_mem* get_data(boxm2_block_id, vcl_string type, vcl_size_t num_bytes=0);
+
+    //: deep_replace data replaces not only the current data on the gpu cached, but pushes a block to the cpu cache
+    void deep_replace_data(boxm2_block_id id, vcl_string type, bocl_mem* mem);
+
+if 0 // UNNEEDED NOW ///////////////////////////////////////////////////
+
     //: deep_delete removes the data from CPU cache (stays in this cache)
     template<boxm2_data_type T>
-    void deep_delete(boxm2_block_id id) { cpu_cache_->remove_data_base(id, boxm2_data_traits<T>::prefix()); } 
-    void deep_delete(boxm2_block_id id, vcl_string type) { cpu_cache_->remove_data_base(id, type); } 
-    
+    void deep_delete(boxm2_block_id id) { cpu_cache_->remove_data_base(id, boxm2_data_traits<T>::prefix()); }
+    void deep_delete(boxm2_block_id id, vcl_string type) { cpu_cache_->remove_data_base(id, type); }
+
     //: remove_data: removes data from cache but keeps it on the GPU  !!!THIS SEEMS DANGEROUS FOR WHEN CACHE MEASURES TOTAL BUFFER SIZE!!!
     template<boxm2_data_type T>
-    void remove_data(boxm2_block_id id); 
+    void remove_data(boxm2_block_id id);
     void remove_data(boxm2_block_id id, vcl_string type);
-*/
-    
+#endif
+
   private:
 
     //: scene this cache is operating on
@@ -116,30 +114,29 @@ class boxm2_opencl_cache: public vbl_ref_count
     //: opencl command queue to use for writing to buffers
     cl_command_queue* queue_;
 };
-typedef vbl_smart_ptr<boxm2_opencl_cache> boxm2_opencl_cache_sptr;
 
+typedef vbl_smart_ptr<boxm2_opencl_cache> boxm2_opencl_cache_sptr;
 
 //: get data by type and id
 template<boxm2_data_type T>
 bocl_mem* boxm2_opencl_cache::get_data(boxm2_block_id id, vcl_size_t num_bytes)
 {
-  return get_data(id, boxm2_data_traits<T>::prefix(), num_bytes); 
+  return get_data(id, boxm2_data_traits<T>::prefix(), num_bytes);
 }
 
-/*
+#if 0
 //: remove_data: removes data from cache but keeps it on the GPU  !!!THIS SEEMS DANGEROUS FOR WHEN CACHE MEASURES TOTAL BUFFER SIZE!!!
 template<boxm2_data_type T>
 void boxm2_opencl_cache::remove_data(boxm2_block_id id)
 {
-  this->remove_data(id, boxm2_data_traits<T>::prefix()); 
+  this->remove_data(id, boxm2_data_traits<T>::prefix());
 }
-*/
-
+#endif
 
 //: Binary write boxm2_cache  to stream
 void vsl_b_write(vsl_b_ostream& os, boxm2_opencl_cache const& scene);
 void vsl_b_write(vsl_b_ostream& os, const boxm2_opencl_cache* &p);
-void vsl_b_write(vsl_b_ostream& os, boxm2_opencl_cache_sptr& sptr); 
+void vsl_b_write(vsl_b_ostream& os, boxm2_opencl_cache_sptr& sptr);
 void vsl_b_write(vsl_b_ostream& os, boxm2_opencl_cache_sptr const& sptr);
 
 //: Binary load boxm2_cache  from stream.
@@ -147,4 +144,5 @@ void vsl_b_read(vsl_b_istream& is, boxm2_opencl_cache &scene);
 void vsl_b_read(vsl_b_istream& is, boxm2_opencl_cache* p);
 void vsl_b_read(vsl_b_istream& is, boxm2_opencl_cache_sptr& sptr);
 void vsl_b_read(vsl_b_istream& is, boxm2_opencl_cache_sptr const& sptr);
-#endif
+
+#endif // boxm2_opencl_cache_h
