@@ -60,7 +60,7 @@ class boxm2_opencl_cache: public vbl_ref_count
     //: deep_replace data replaces not only the current data on the gpu cached, but pushes a block to the cpu cache
     void deep_replace_data(boxm2_block_id id, vcl_string type, bocl_mem* mem);
 
-if 0 // UNNEEDED NOW ///////////////////////////////////////////////////
+#if 0 // UNNEEDED NOW //////////////////////////////////////////////////
 
     //: deep_delete removes the data from CPU cache (stays in this cache)
     template<boxm2_data_type T>
