@@ -28,7 +28,6 @@ T* bocl_manager<T>::instance()
 template <class T>
 void bocl_manager<T>::clear_cl()
 {
-  
 }
 
 //: Destructor
@@ -70,8 +69,8 @@ bool bocl_manager<T>::initialize_cl()
   //////////////////////////////////////////////////////////////////////////////
   // Get devices from platforms
   //////////////////////////////////////////////////////////////////////////////
-  const vcl_size_t MAX_GPUS = 16; 
-  const vcl_size_t MAX_CPUS = 16; 
+  const vcl_size_t MAX_GPUS = 16;
+  const vcl_size_t MAX_CPUS = 16;
   char platform_name[256];
   vcl_size_t ret_size;
 
@@ -80,10 +79,10 @@ bool bocl_manager<T>::initialize_cl()
   for (unsigned i=0;i<num_platforms;i++)
   {
     vcl_cout<<"PLatform number; "<<i<<vcl_endl;
-    
+
     //grab device id's for type GPU
-    cl_device_id gpu_ids[MAX_GPUS]; 
-    cl_uint numGpus; 
+    cl_device_id gpu_ids[MAX_GPUS];
+    cl_uint numGpus;
     if ( clGetDeviceIDs(platform_id[i], CL_DEVICE_TYPE_GPU, MAX_GPUS, gpu_ids, &numGpus)== CL_SUCCESS)
     {
       clGetPlatformInfo(platform_id[i],CL_PLATFORM_NAME,sizeof(platform_name),platform_name,&ret_size);
@@ -91,9 +90,9 @@ bool bocl_manager<T>::initialize_cl()
       vcl_cout<<"Found "<<numGpus<<" GPUs"<<vcl_endl;
 
       //create device objects, push them onto gpu list
-      for(int i=0; i<numGpus; ++i) {
-        bocl_device* gpu = new bocl_device(gpu_ids[i]); 
-        gpus_.push_back(gpu); 
+      for (unsigned int i=0; i<numGpus; ++i) {
+        bocl_device* gpu = new bocl_device(gpu_ids[i]);
+        gpus_.push_back(gpu);
       }
 
       break;
@@ -104,17 +103,17 @@ bool bocl_manager<T>::initialize_cl()
   for (unsigned i=0;i<num_platforms;i++)
   {
     vcl_cout<<"PLatform number; "<<i<<vcl_endl;
-    cl_device_id cpu_ids[MAX_CPUS]; 
-    cl_uint numCpus; 
+    cl_device_id cpu_ids[MAX_CPUS];
+    cl_uint numCpus;
     if ( clGetDeviceIDs(platform_id[i], CL_DEVICE_TYPE_CPU, MAX_CPUS, cpu_ids, &numCpus)== CL_SUCCESS)
     {
       vcl_cout<<"FOUND "<<numCpus<<" CPUs"<<vcl_endl;
       cpu_found=true;
 
       //create device objects, push them onto gpu list
-      for(int i=0; i<numCpus; ++i) {
-        bocl_device* cpu = new bocl_device(cpu_ids[i]); 
-        cpus_.push_back(cpu); 
+      for (unsigned int i=0; i<numCpus; ++i) {
+        bocl_device* cpu = new bocl_device(cpu_ids[i]);
+        cpus_.push_back(cpu);
       }
       break;
     }
@@ -123,16 +122,15 @@ bool bocl_manager<T>::initialize_cl()
     vcl_cout<<"bocl_manager:: No devices (GPU or CPU) found, manager is invalid"<<vcl_endl;
     return false;
   }
-  
+
   //////////////////////////////////////////////////////////////////////////////
   //store current_device_/context for older functions that use bocl_manager
-  curr_device_ = gpus_[ gpus_.size()-1 ]; 
-  context_ = curr_device_->context(); 
+  curr_device_ = gpus_[ gpus_.size()-1 ];
+  context_ = curr_device_->context();
   //////////////////////////////////////////////////////////////////////////////
-  
+
   return true;
 }
-
 
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -143,7 +141,7 @@ template <class T>
 cl_context bocl_manager<T>::create_context(cl_device_id* device, int num_devices)
 {
   //create device info for this device
-  bocl_device_info info(device); 
+  bocl_device_info info(device);
   vcl_cout<<"creating context on device: "<<info<<vcl_endl;
 
   //Create a context from the device ID
@@ -180,7 +178,7 @@ cl_context bocl_manager<T>::create_context(cl_device_id* device, int num_devices
                             NULL);
   if (!check_val(status, CL_SUCCESS, "clGetGetContextInfo failed."))
     return false;
-#endif 
+#endif
 
   return context;
 }
