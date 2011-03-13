@@ -62,7 +62,7 @@ bool test_single_thread_read_bandwidth_image(unsigned len, float & bandwidth)
   mgr->setup_array(len);
   mgr->setup_result_array();
 
-  if (!mgr->create_kernel("test_single_thread_read_bandwidth_image",root_dir + 
+  if (!mgr->create_kernel("test_single_thread_read_bandwidth_image",root_dir +
     "/contrib/brl/bbas/bocl/tests/test_global_io_bandwidth.cl", "-D USEIMAGE")) {
     TEST("Create Kernel test_single_thread_read_bandwidth_image", false, true);
     return false;
@@ -97,8 +97,8 @@ bool test_workgroup_coalesced_read_bandwidth_image(unsigned len, float & bandwid
     return false;
   mgr->setup_array(len);
   mgr->setup_result_array();
- 
-  if (!mgr->create_kernel("test_workgroup_coalesced_read_bandwidth_image",root_dir + 
+
+  if (!mgr->create_kernel("test_workgroup_coalesced_read_bandwidth_image",root_dir +
     "/contrib/brl/bbas/bocl/tests/test_global_io_bandwidth.cl","-D USEIMAGE")) {
     TEST("Create Kernel test_workgroup_coalesced_read_bandwidth_image", false, true);
     return false;
@@ -107,7 +107,7 @@ bool test_workgroup_coalesced_read_bandwidth_image(unsigned len, float & bandwid
     TEST("Run Kernel test_workgroup_coalesced_read_bandwidth_image", false, true);
     return false;
   }
-  
+
   bandwidth=(float)4/*reads in float4*/ *(len*4)/mgr->time_taken()/(1024*1024);
 
   float sum=0.0;
@@ -133,7 +133,7 @@ bool test_single_thread_read_bandwidth(unsigned len, float & bandwidth)
   mgr->setup_array(len);
   mgr->setup_result_array();
 
-  if (!mgr->create_kernel("test_single_thread_read_bandwidth", 
+  if (!mgr->create_kernel("test_single_thread_read_bandwidth",
     root_dir + "/contrib/brl/bbas/bocl/tests/test_global_io_bandwidth.cl","")) {
     TEST("Create Kernel test_single_thread_read_bandwidth", false, true);
     return false;
@@ -142,13 +142,12 @@ bool test_single_thread_read_bandwidth(unsigned len, float & bandwidth)
     TEST("Run Kernel test_single_thread_read_bandwidth", false, true);
     return false;
   }
-  
-  float  t= mgr->time_taken();
+
   bandwidth=(float)4*(len*4)/mgr->time_taken()/(1024*1024);
 
   float sum=0.0;
   cl_float * result_array=mgr->result_array();
-  for (unsigned i=0;i<len;++i) 
+  for (unsigned i=0;i<len;++i)
     sum+=result_array[i];
 
   mgr->clean_array();
@@ -183,7 +182,7 @@ bool test_workgroup_uncoalesced_read_bandwidth(unsigned len, float & bandwidth)
   cl_float * result_array=mgr->result_array();
   for (unsigned i=0;i<len;++i) {
     //if (result_array[i] > 0)
-    //  vcl_cout << i << " " << result_array[i] << vcl_endl;
+    //  vcl_cout << i << ' ' << result_array[i] << vcl_endl;
     sum+=result_array[i];
   }
   mgr->clean_array();
@@ -203,7 +202,7 @@ bool test_workgroup_coalesced_read_bandwidth(unsigned len, float & bandwidth)
   bocl_global_memory_bandwidth_manager * mgr=bocl_global_memory_bandwidth_manager::instance();
   mgr->setup_array(len);
   mgr->setup_result_array();
-  
+
   if (!mgr->create_kernel("test_workgroup_coalesced_read_bandwidth",
     root_dir + "/contrib/brl/bbas/bocl/tests/test_global_io_bandwidth.cl","")) {
     TEST("Create Kernel test_workgroup_coalesced_read_bandwidth", false, true);
@@ -238,7 +237,7 @@ bool test_single_thread_read_bandwidth_local_meory(unsigned len, float & bandwid
   bocl_global_memory_bandwidth_manager * mgr=bocl_global_memory_bandwidth_manager::instance();
   mgr->setup_array(len);
   mgr->setup_result_array();
-  
+
   if (!mgr->create_kernel("test_single_thread_read_bandwidth_local_meory",
     root_dir + "/contrib/brl/bbas/bocl/tests/test_global_io_bandwidth.cl","")) {
     TEST("Create Kernel test_single_thread_read_bandwidth_local_meory", false, true);
@@ -275,7 +274,7 @@ bool test_workgroup_uncoalesced_read_bandwidth_local_meory(unsigned len, float &
   bocl_global_memory_bandwidth_manager * mgr=bocl_global_memory_bandwidth_manager::instance();
   mgr->setup_array(len);
   mgr->setup_result_array();
-  
+
   if (!mgr->create_kernel("test_workgroup_uncoalesced_read_bandwidth_local_meory",
     root_dir + "/contrib/brl/bbas/bocl/tests/test_global_io_bandwidth.cl","")) {
     TEST("Create Kernel test_workgroup_uncoalesced_read_bandwidth_local_meory", false, true);
@@ -285,7 +284,7 @@ bool test_workgroup_uncoalesced_read_bandwidth_local_meory(unsigned len, float &
     TEST("Run Kernel test_workgroup_uncoalesced_read_bandwidth_local_meory", false, true);
     return false;
   }
-  
+
   bandwidth=(float) 4*(len*4)/mgr->time_taken()/(1024*1024);
 
   float sum=0.0;
@@ -310,7 +309,7 @@ bool test_workgroup_coalesced_read_bandwidth_local_memory(unsigned len, float & 
   bocl_global_memory_bandwidth_manager * mgr=bocl_global_memory_bandwidth_manager::instance();
   mgr->setup_array(len);
   mgr->setup_result_array();
-  
+
   if (!mgr->create_kernel("test_workgroup_coalesced_read_bandwidth_local_memory",
     root_dir + "/contrib/brl/bbas/bocl/tests/test_global_io_bandwidth.cl","")) {
     TEST("Create Kernel test_workgroup_coalesced_read_bandwidth_local_memory", false, true);
@@ -347,7 +346,7 @@ bool test_workgroup_prefetch_bandwidth_local_memory(int len, float & bandwidth)
   bocl_global_memory_bandwidth_manager * mgr=bocl_global_memory_bandwidth_manager::instance();
   mgr->setup_array(len);
   mgr->setup_result_array();
-  
+
   if (!mgr->create_kernel("test_workgroup_prefetch_bandwidth_local_memory",
     root_dir + "/contrib/brl/bbas/bocl/tests/test_global_io_bandwidth.cl","")) {
     TEST("Create Kernel test_workgroup_coalesced_read_bandwidth_local_memory", false, true);
