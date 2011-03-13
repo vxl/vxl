@@ -10,6 +10,7 @@ MINI_PROG_SOURCES += boxm2_update_rgb_exe.cxx
 MINI_PROG_SOURCES += boxm2_refine_exe.cxx
 MINI_PROG_SOURCES += boxm2_update_trajectory.cxx
 MINI_PROG_SOURCES += boxm2_export_trajectory.cxx
+MINI_PROG_SOURCES += boxm2_batch_update_view.cxx
 
 ################################
 include ${VXLROOT}/config/top.mk
