@@ -13,3 +13,14 @@ boxm2_cache* boxm2_cache::instance()
   return instance_;
 }
 
+//: Binary write boxm2_cache  to stream
+void vsl_b_write(vsl_b_ostream& os, boxm2_cache const& scene){}
+void vsl_b_write(vsl_b_ostream& os, const boxm2_cache* &p){}
+void vsl_b_write(vsl_b_ostream& os, boxm2_cache_sptr& sptr){} 
+void vsl_b_write(vsl_b_ostream& os, boxm2_cache_sptr const& sptr){}
+
+//: Binary load boxm2_cache  from stream.
+void vsl_b_read(vsl_b_istream& is, boxm2_cache &scene){}
+void vsl_b_read(vsl_b_istream& is, boxm2_cache* p){}
+void vsl_b_read(vsl_b_istream& is, boxm2_cache_sptr& sptr){}
+void vsl_b_read(vsl_b_istream& is, boxm2_cache_sptr const& sptr){}
