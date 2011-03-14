@@ -23,6 +23,7 @@ SET(bapl_sources
    bapl_mi_matcher_params.h     bapl_mi_matcher_params.cxx
    bapl_connectivity.h          bapl_connectivity.cxx           bapl_connectivity_sptr.h
    bapl_dense_sift.h            bapl_dense_sift.cxx             bapl_dense_sift_sptr.h
+   bapl_dsift.h                 bapl_dsift.cxx                  bapl_dsift_sptr.h
 )
 
 AUX_SOURCE_DIRECTORY(Templates bapl_sources)
