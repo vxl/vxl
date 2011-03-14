@@ -173,7 +173,12 @@ bocl_mem* boxm2_opencl_cache::get_data(boxm2_block_id id, vcl_string type, vcl_s
   boxm2_data_base* data_base = cpu_cache_->get_data_base(id,type,num_bytes);
   if (num_bytes > 0 && data_base->buffer_length() != num_bytes )
   {
-    vcl_cout<<"GRABBING "<<type<<" that doesn't match input size of "<<num_bytes<<vcl_endl;
+    vcl_cout<<"Replacing data of type "<<type<<" that doesn't match input size of"<<num_bytes<<vcl_endl;
+    bocl_mem* data = new bocl_mem(*context_, NULL, num_bytes, type);
+    data->create_buffer(CL_MEM_READ_WRITE);    
+    data->zero_gpu_buffer(*queue_); 
+    this->deep_replace_data(id,type,data); 
+    return data; 
   }
   loaded_data_[type] = id;
   bocl_mem* data = new bocl_mem(*context_, data_base->data_buffer(), data_base->buffer_length(), type);
@@ -195,7 +200,7 @@ void boxm2_opencl_cache::deep_replace_data(boxm2_block_id id, vcl_string type, b
 
   //write bocl_mem data to cpu buffer
   mem->set_cpu_buffer((void*) newData->data_buffer());
-  mem->write_to_buffer( *queue_ );
+  mem->read_to_buffer( *queue_ );
 
   //do deep replace
   cpu_cache_->replace_data_base(id, type, newData);

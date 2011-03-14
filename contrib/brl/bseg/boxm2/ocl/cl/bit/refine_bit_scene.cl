@@ -180,16 +180,12 @@ int move_data(__constant RenderSceneInfo * linfo,
               __local    uchar16         * unrefined_tree,
               __local    uchar16         * refined_tree,
                          int               MAX_CELLS, 
-                         MOG_TYPE          init_cell,
               __constant uchar           * bit_lookup,
+                         float             prob_thresh,
                          bool              is_alpha)
 {
   //only used in alpha case
-  float max_alpha_int = 0.0f;
-#ifdef MOG_TYPE_4
-  if(is_alpha)  //ifthis is alpha, then the init_cell is the prob thresh
-    max_alpha_int = (-1.0f)*log(1.0 - as_float(init_cell));  //used for new leaves...
-#endif
+  float max_alpha_int = (-1)*log(1.0 - prob_thresh);      
 
   //zip through each leaf cell and 
   int oldDataPtr = 0; int newDataPtr = 0; 
@@ -224,16 +220,17 @@ int move_data(__constant RenderSceneInfo * linfo,
       MOG_TYPE new_value;
       if(is_alpha) {
         int currLevel = get_depth(j);
-        //int pDataPtr = data_index(0, unrefined_tree, pj, bit_lookup);
         float side_len = linfo->block_len / (float) (1<<currLevel);
-        new_value = (MOG_TYPE) (max_alpha_int / side_len);   
+        float newAlpha = (max_alpha_int / side_len); 
+        
+        //cast as float 
+        __global float* dest_f = (__global float*) dest; 
+        dest_f[newDataPtr] = newAlpha;  
       }
       else {
-        new_value = (MOG_TYPE) 0; 
+        //int pDataPtr = data_index(0, unrefined_tree, pj, bit_lookup);
+        dest[newDataPtr] = (MOG_TYPE) 0;
       }
-
-      //store parent's data in child cells
-      dest[newDataPtr] = (MOG_TYPE) new_value;
 
       //update new data pointer
       newDataPtr++; 
@@ -332,6 +329,7 @@ __kernel void refine_data( __constant RenderSceneInfo * linfo,
                            __global   MOG_TYPE        * data,             // Data array to be copied
                            __global   MOG_TYPE        * data_cpy,         // data array to be copied into, size(data_cpy) = tree_sizes[last] + sizeof(last_tree); 
                            __global   float           * prob_thresh_t,    //IF THIS VALUE IS less than 0, then it is not the alpha pass
+                           __global   bool            * is_alpha_t,       //this is true if you're refining alpha, otherwise it should be false
                            __constant uchar           * bit_lookup,       // used to get data_index                  
                            __global   float           * output, 
                            __local    uchar           * cumsum,
@@ -371,7 +369,7 @@ __kernel void refine_data( __constant RenderSceneInfo * linfo,
     (*refined_tree).sD = data_chars.w; 
     
     //if this is updating the ALPHA pass and is therefore the last one, write to new block
-    if( *prob_thresh_t > 0.0f) {
+    if( *is_alpha_t ) {
       trees[gid] = as_int4(*refined_tree);
     }
     
@@ -389,13 +387,10 @@ __kernel void refine_data( __constant RenderSceneInfo * linfo,
     }
     //otherwise if it was refined, then you got some work to do...
     else if(newTreeSize > currTreeSize) {
+      
       //locally cache prob_thresh
       float prob_thresh = *prob_thresh_t;
-      MOG_TYPE init_cell; 
-      if(prob_thresh > 0.0f) 
-        init_cell = prob_thresh;
-      else
-        init_cell = (MOG_TYPE) 0;  
+      bool is_alpha = (*is_alpha_t); 
 
       //do some Pointer arithmetic to pass in aligned data
       int numNew = move_data(linfo, 
@@ -404,9 +399,10 @@ __kernel void refine_data( __constant RenderSceneInfo * linfo,
                              local_tree, 
                              refined_tree, 
                              MAX_CELLS,  
-                             init_cell,
                              bit_lookup, 
-                             (prob_thresh > 0.0f)); 
+                             prob_thresh,
+                             is_alpha ); 
+                             
     }
   }
 }

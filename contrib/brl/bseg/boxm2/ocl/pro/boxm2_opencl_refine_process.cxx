@@ -129,6 +129,7 @@ bool boxm2_opencl_refine_process::execute(vcl_vector<brdb_value_sptr>& input, vc
       /////////////////////////////////////////////////////////////////////////
       //STEP TWO
       //read out tree_sizes and do cumulative sum on it
+      vul_timer scan_time; 
       tree_sizes->read_to_buffer((*command_queue_));
       int* sizebuff = (int*) tree_sizes->cpu_buffer();
       for (int i=1; i<numTrees; ++i)
@@ -139,6 +140,7 @@ bool boxm2_opencl_refine_process::execute(vcl_vector<brdb_value_sptr>& input, vc
       sizebuff[0] = 0;
       tree_sizes->write_to_buffer((*command_queue_));
       vcl_cout<<"New data size: "<<newDataSize<<vcl_endl;
+      vcl_cout<<"Scan data sizes time: "<<scan_time.all()<<vcl_endl;
       /////////////////////////////////////////////////////////////////////////
 
 
@@ -164,6 +166,11 @@ bool boxm2_opencl_refine_process::execute(vcl_vector<brdb_value_sptr>& input, vc
       //ALWAYS GOING TO REFINE ALPHA
       vcl_cout<<"Swapping alpha data... last step fingers cross..."<<vcl_endl;
       this->swap_data(id,boxm2_data_traits<BOXM2_ALPHA>::prefix(),newDataSize,numTrees,blk_copy,tree_sizes);
+      
+      //clean aux memory
+      delete blk_copy; 
+      delete tree_sizes; 
+      
     }
     else
     {
@@ -279,12 +286,12 @@ void boxm2_opencl_refine_process::swap_data(boxm2_block_id id,
   bocl_mem* blk_info = cache_->loaded_block_info();
 
   //prob_thresh buffer
-  float* p_thresh = new float[1];
+  bool* is_alpha_buffer = new bool[1];
   if (type == boxm2_data_traits<BOXM2_ALPHA>::prefix())
-    p_thresh[0] = .3f;
+    (*is_alpha_buffer) = true;
   else
-    p_thresh[0] = -100.0f;
-  bocl_mem is_alpha((*context_), p_thresh, sizeof(float), "is_alpha/prob_thresh buffer");
+    (*is_alpha_buffer) = false; 
+  bocl_mem is_alpha((*context_), is_alpha_buffer, sizeof(cl_bool), "is_alpha buffer");
   is_alpha.create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
   //make it a reference so the destructor isn't called at the end...
@@ -295,13 +302,14 @@ void boxm2_opencl_refine_process::swap_data(boxm2_block_id id,
   kern->set_arg( tree_sizes );
   kern->set_arg( dat );
   kern->set_arg( new_dat );
-  kern->set_arg( &is_alpha );
+  kern->set_arg( prob_thresh_ );
+  kern->set_arg( &is_alpha ); 
   kern->set_arg( lookup_ );
   kern->set_arg( cl_output_ );
   kern->set_local_arg( 16*sizeof(cl_uchar) );
   kern->set_local_arg( sizeof(cl_uchar16) );
   kern->set_local_arg( sizeof(cl_uchar16) );
-
+  
   //set workspace
   vcl_size_t lThreads[] = {1, 1};
   vcl_size_t gThreads[] = {numTrees, 1};
@@ -318,8 +326,11 @@ void boxm2_opencl_refine_process::swap_data(boxm2_block_id id,
     blk->read_to_buffer(*command_queue_);
   }
   
+  //prin tout alphas for debugging...
+  
+  
   //clean up DAT
-  delete[] p_thresh;
+  delete[] is_alpha_buffer;
 }
 
 //: Refines the block copy and returns blk_copy and tree_sizes bocl_mem pointers
