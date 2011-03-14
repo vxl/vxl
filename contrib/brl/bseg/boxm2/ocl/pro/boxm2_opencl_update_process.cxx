@@ -72,7 +72,6 @@ bool boxm2_opencl_update_process::init_kernel(cl_context* context,
   return true;
 }
 
-
 // Opencl Update Process
 // arguments will be (should be)
 // * scene pointer
@@ -118,19 +117,13 @@ bool boxm2_opencl_update_process::execute(vcl_vector<brdb_value_sptr>& input, vc
   pre_image_ = new bocl_mem((*context_), pre_buffer, img_view->size()*sizeof(cl_float), "pre_image_ buffer");
   pre_image_->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
-  //aint buffer
-  float* alpha_int_buffer = new float[img_view->size()];
-  for (unsigned int i=0; i<img_view->size(); ++i) alpha_int_buffer[i] = 0.0f;
-  if (alpha_int_image_) delete alpha_int_image_;
-  alpha_int_image_ = new bocl_mem((*context_), alpha_int_buffer, img_view->size()*sizeof(cl_float), "alpha_int_image_ buffer");
-  alpha_int_image_->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
-
   //norm image buffer
   float* norm_buffer = new float[img_view->size()];
   for (unsigned int i=0; i<img_view->size(); ++i) norm_buffer[i] = 0.0f;
   if (norm_image_) delete norm_image_;
   norm_image_ = new bocl_mem((*context_), norm_buffer, img_view->size()*sizeof(cl_float), "norm_image_ buffer");
   norm_image_->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
+  
   //////////////////////////////////////////////////////////////////////////////
   //store data type
   //brdb_value_t<float>* brdb_init_sigma = static_cast<brdb_value_t<float>* >( input[i++].ptr() );
@@ -193,6 +186,7 @@ bool boxm2_opencl_update_process::execute(vcl_vector<brdb_value_sptr>& input, vc
       check_val(status, MEM_FAILURE, "UPDATE EXECUTE FAILED: " + error_to_string(status));
       update_kernels_[i]->clear_args();
       image_->read_to_buffer(*command_queue_);
+      norm_image_->read_to_buffer(*command_queue_); 
       continue;
     }
 
@@ -217,7 +211,10 @@ bool boxm2_opencl_update_process::execute(vcl_vector<brdb_value_sptr>& input, vc
         int alphaTypeSize = boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
         info_buffer->data_buffer_length = (int) (alpha_->num_bytes()/alphaTypeSize); 
         blk_info_->write_to_buffer((*command_queue_));
-        aux_       = cache_->get_data<BOXM2_AUX>(*id, info_buffer->data_buffer_length * 4*sizeof(int));
+        
+        //grab an appropriately sized AUX data buffer
+        int auxTypeSize = boxm2_data_info::datasize(boxm2_data_traits<BOXM2_AUX>::prefix()); 
+        aux_       = cache_->get_data<BOXM2_AUX>(*id, info_buffer->data_buffer_length*auxTypeSize);
         vcl_cout<<"Alpha buffer length: "<<info_buffer->data_buffer_length<<vcl_endl; 
       }
       else  {
@@ -234,7 +231,7 @@ bool boxm2_opencl_update_process::execute(vcl_vector<brdb_value_sptr>& input, vc
       update_kernels_[i]->execute( (*command_queue_), 2, lThreads_, gThreads_);
       int status = clFinish(*command_queue_);
       check_val(status, MEM_FAILURE, "UPDATE EXECUTE FAILED: " + error_to_string(status));
-      //gpu_time_ += update_kernels_[i]->exec_time();
+      gpu_time_ += update_kernels_[i]->exec_time();
 
       //clear render kernel args so it can reset em on next execution
       update_kernels_[i]->clear_args();
@@ -248,6 +245,8 @@ bool boxm2_opencl_update_process::execute(vcl_vector<brdb_value_sptr>& input, vc
 
       //read image out to buffer (from gpu)
       image_->read_to_buffer(*command_queue_);
+      vis_image_->read_to_buffer(*command_queue_); 
+      pre_image_->read_to_buffer(*command_queue_); 
       cl_output_->read_to_buffer(*command_queue_);
       clFinish(*command_queue_);
     }
@@ -336,14 +335,16 @@ bool boxm2_opencl_update_process::set_args(unsigned pass)
       update_kernels_[pass]->set_arg( lookup_ );
       update_kernels_[pass]->set_arg( persp_cam_ );
       update_kernels_[pass]->set_arg( img_dim_ );
-      update_kernels_[pass]->set_arg( image_ );
+      update_kernels_[pass]->set_arg( vis_image_ );
+      update_kernels_[pass]->set_arg( pre_image_ );
       update_kernels_[pass]->set_arg( cl_output_ );
       update_kernels_[pass]->set_local_arg( lThreads_[0]*lThreads_[1]*sizeof(cl_uchar16) );//local tree,
       update_kernels_[pass]->set_local_arg( lThreads_[0]*lThreads_[1]*10*sizeof(cl_uchar) ); //cumsum buffer, imindex buffer
       break;
     case UPDATE_PROC :
-      update_kernels_[pass]->set_arg( image_ );
-      update_kernels_[pass]->set_arg( app_density_ );
+      update_kernels_[pass]->set_arg( norm_image_ );
+      update_kernels_[pass]->set_arg( vis_image_ );
+      update_kernels_[pass]->set_arg( pre_image_ );
       update_kernels_[pass]->set_arg( img_dim_ );
       break;
     case UPDATE_BAYES :
@@ -356,7 +357,9 @@ bool boxm2_opencl_update_process::set_args(unsigned pass)
       update_kernels_[pass]->set_arg( lookup_ );
       update_kernels_[pass]->set_arg( persp_cam_ );
       update_kernels_[pass]->set_arg( img_dim_ );
-      update_kernels_[pass]->set_arg( image_ );
+      update_kernels_[pass]->set_arg( vis_image_ );
+      update_kernels_[pass]->set_arg( pre_image_ );
+      update_kernels_[pass]->set_arg( norm_image_ );
       update_kernels_[pass]->set_arg( cl_output_ );
       update_kernels_[pass]->set_local_arg( lThreads_[0]*lThreads_[1]*sizeof(cl_uchar16) );//local tree,
       update_kernels_[pass]->set_local_arg( lThreads_[0]*lThreads_[1]*sizeof(cl_short2) ); //ray bundle,
@@ -382,19 +385,15 @@ bool boxm2_opencl_update_process::write_input_image(vil_image_view<float>* input
   //write to buffer (or create it)
   unsigned ni=RoundUp(input_image->ni(),8);
   unsigned nj=RoundUp(input_image->nj(),8);
-  float* buff = (image_) ? (float*) image_->cpu_buffer() : new float[4 * ni*nj];
+  float* buff = (image_) ? (float*) image_->cpu_buffer() : new float[ni*nj];
   int count=0;
   for (unsigned j=0;j<nj;j++)
   {
     for (unsigned i=0;i<ni;i++)
     {
-      buff[4*count] = 0.0f;
-      buff[4*count + 1] = 0.0f;
-      buff[4*count + 2] = 1.0f;
-      buff[4*count + 3] = 0.0f;
+      buff[count] = 0.0f;
       if (i<input_image->ni() && j< input_image->nj())
-        buff[4*count]=(*input_image)(i,j);
-
+        buff[count]=(*input_image)(i,j);
       ++count;
     }
   }
@@ -403,7 +402,7 @@ bool boxm2_opencl_update_process::write_input_image(vil_image_view<float>* input
   //now write to bocl_mem
   if (!image_) {
     //create mem
-    image_ = new bocl_mem((*context_), buff, ni*nj * sizeof(cl_float4), "input image buffer");
+    image_ = new bocl_mem((*context_), buff, ni*nj * sizeof(cl_float), "input image buffer (float image)");
     image_->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
   }
   else {

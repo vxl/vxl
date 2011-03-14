@@ -28,7 +28,7 @@ typedef struct
   __local  int*    cell_ptrs; 
   __local  float4* cached_aux; 
            float   obs; 
-           __global float * output;
+  __global float * output;
 } AuxArgs;  
 
 //forward declare cast ray (so you can use it)
@@ -43,7 +43,7 @@ seg_len_main(__constant  RenderSceneInfo    * linfo,
              __constant  uchar              * bit_lookup,       // used to get data_index
              __global    float16            * camera,           // camera orign and SVD of inverse of camera matrix
              __global    uint4              * imgdims,          // dimensions of the input image
-             __global    float4             * in_image,         // the input image
+             __global    float              * in_image,         // the input image
              __global    float              * vis_image,        // Vis image to keep visibility over multiple blocks
              __global    float              * output,
              __local     uchar16            * local_tree,       // cache current tree into local memory
@@ -68,10 +68,10 @@ seg_len_main(__constant  RenderSceneInfo    * linfo,
   int imIndex = j*get_global_size(0) + i;
   
   //grab input image value (also holds vis)
-  float4 inImage = in_image[imIndex];
-  float obs = inImage.x;
+  //float4 inImage = in_image[imIndex];
+  //float obs = inImage.x;
+  float obs = in_image[imIndex]; 
   float vis = vis_image[imIndex]; 
-  //float vis = inImage.z;
   barrier(CLK_LOCAL_MEM_FENCE);
 
   // cases #of threads will be more than the pixels.
@@ -102,6 +102,8 @@ seg_len_main(__constant  RenderSceneInfo    * linfo,
             ray_dx, ray_dy, ray_dz,
             linfo, tree_array,                                  //scene info
             local_tree, bit_lookup, cumsum, &vis, aux_args);    //utility info
+            
+  //store visibility so blocks that are farther start out correctly
   vis_image[imIndex] = vis; 
 }
 #endif
@@ -113,7 +115,8 @@ typedef struct
   __global MOG_TYPE * mog; 
   __global int* seg_len;
   __global int* mean_obs; 
-           float4* inImage; 
+           float* vis_inf; 
+           float* pre_inf; 
 } AuxArgs;  
 
 //forward declare cast ray (so you can use it)
@@ -131,7 +134,9 @@ pre_inf_main(__constant  RenderSceneInfo    * linfo,
              __constant  uchar              * bit_lookup,       // used to get data_index
              __global    float16            * camera,           // camera orign and SVD of inverse of camera matrix
              __global    uint4              * imgdims,          // dimensions of the input image
-             __global    float4             * in_image,         // the input image
+             //__global    float              * in_image,         // the input image
+             __global    float              * vis_image,        // visibility image 
+             __global    float              * pre_image,        // preinf image 
              __global    float              * output,
              __local     uchar16            * local_tree,       // cache current tree into local memory
              __local     uchar              * cumsum )           // cumulative sum for calculating data pointer
@@ -151,7 +156,11 @@ pre_inf_main(__constant  RenderSceneInfo    * linfo,
   // cases #of threads will be more than the pixels.
   if (i>=(*imgdims).z || j>=(*imgdims).w || i<(*imgdims).x || j<(*imgdims).y)
     return;
-  float4 inImage = in_image[j*get_global_size(0) + i];
+  //float4 inImage = in_image[j*get_global_size(0) + i];
+  float vis_inf = vis_image[j*get_global_size(0) + i]; 
+  float pre_inf = pre_image[j*get_global_size(0) + i]; 
+
+  //vis for cast_ray, never gets decremented so no cutoff occurs
   float vis = 1.0f; 
   barrier(CLK_LOCAL_MEM_FENCE);
 
@@ -171,15 +180,17 @@ pre_inf_main(__constant  RenderSceneInfo    * linfo,
   aux_args.mog     = mixture_array; 
   aux_args.seg_len   = aux_array;
   aux_args.mean_obs  = &aux_array[linfo->num_buffer * linfo->data_len]; 
-  aux_args.inImage = &inImage; 
+  aux_args.vis_inf = &vis_inf; 
+  aux_args.pre_inf = &pre_inf; 
   cast_ray( i, j,
             ray_ox, ray_oy, ray_oz,
             ray_dx, ray_dy, ray_dz,
             linfo, tree_array,                                  //scene info
             local_tree, bit_lookup, cumsum, &vis, aux_args);    //utility info
 
-  //store the vis_inf/pre_inf in the image          
-  in_image[j*get_global_size(0)+i] = inImage;
+  //store the vis_inf/pre_inf in the image      
+  vis_image[j*get_global_size(0)+i] = vis_inf; 
+  pre_image[j*get_global_size(0)+i] = pre_inf; 
 }
 #endif
 
@@ -216,7 +227,10 @@ bayes_main(__constant  RenderSceneInfo    * linfo,
            __constant  uchar              * bit_lookup,       // used to get data_index
            __global    float16            * camera,           // camera orign and SVD of inverse of camera matrix
            __global    uint4              * imgdims,          // dimensions of the input image
-           __global    float4             * in_image,         // the input image
+           //__global    float4             * in_image,         // the input image
+           __global    float              * vis_image,        // visibility image (for keeping vis accross blocks)
+           __global    float              * pre_image,        // preinf image (for keeping pre accross blocks)
+           __global    float              * norm_image,        // norm image (for bayes update normalization factor)
            __global    float              * output,
            __local     uchar16            * local_tree,       // cache current tree into local memory
            __local     short2             * ray_bundle_array, // gives information for which ray takes over in the workgroup
@@ -244,10 +258,11 @@ bayes_main(__constant  RenderSceneInfo    * linfo,
   if (i>=(*imgdims).z || j>=(*imgdims).w || i<(*imgdims).x || j<(*imgdims).y) 
     return;
   float vis0 = 1.0f;
-  float4 inImage = in_image[j*get_global_size(0) + i];
-  float norm = inImage.x;
-  float vis  = inImage.z;
-  float pre  = inImage.w;
+  //float4 inImage = in_image[j*get_global_size(0) + i];
+  float norm = norm_image[j*get_global_size(0) + i]; 
+  float vis = vis_image[j*get_global_size(0) + i]; 
+  float pre = pre_image[j*get_global_size(0) + i]; 
+  
   barrier(CLK_LOCAL_MEM_FENCE);
 
   //----------------------------------------------------------------------------
@@ -282,19 +297,21 @@ bayes_main(__constant  RenderSceneInfo    * linfo,
             local_tree, bit_lookup, cumsum, &vis0, aux_args);    //utility info
             
   //write out vis and pre
-  in_image[j*get_global_size(0)+i].zw = (float2) (vis, pre); 
+  vis_image[j*get_global_size(0)+i] = vis; 
+  pre_image[j*get_global_size(0)+i] = pre; 
 }
 #endif
-
 
 // normalize the pre_inf image...
 //
 __kernel
 void
-proc_norm_image(__global float4* image, __global float4* p_inf, __global uint4 * imgdims)
+proc_norm_image (  __global float* norm_image, 
+                   __global float* vis_image, 
+                   __global float* pre_image,                     
+                   __global uint4 * imgdims)
 {
   // linear global id of the normalization image
-
   int i=0;
   int j=0;
   i=get_global_id(0);
@@ -302,26 +319,16 @@ proc_norm_image(__global float4* image, __global float4* p_inf, __global uint4 *
 
   if (i>=(*imgdims).z && j>=(*imgdims).w)
     return;
-
-  float4 vect = image[j*get_global_size(0)+i];
-  float mult =
-#if 0
-               (p_inf[0].x>0.0f) ? 1.0f :
-               gauss_prob_density(vect.x, p_inf[0].y, p_inf[0].z);
-#else
-               1.0f;
-#endif
-  // compute the norm image
-  //vect.x = vect.w + mult * vect.z;
-  vect.x = vect.w*(1-vect.z);
+  
+  float vis = vis_image[j*get_global_size(0) + i]; 
+  float pre = pre_image[j*get_global_size(0) + i]; 
+  float norm = pre * (1.0f-vis); 
+  norm_image[j*get_global_size(0) + i] = norm; 
 
   // the following  quantities have to be re-initialized before
   // the bayes_ratio kernel is executed
-  vect.y = 0.0f; // clear alpha integral
-  vect.z = 1.0f; // initial vis = 1.0
-  vect.w = 0.0f; // initial pre = 0.0
-  // write it back
-  image[j*get_global_size(0)+i] = vect;
+  vis_image[j*get_global_size(0) + i] = 1.0f; // initial vis = 1.0f
+  pre_image[j*get_global_size(0) + i] = 0.0f; // initial pre = 0.0
 }
 
 

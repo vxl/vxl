@@ -56,7 +56,7 @@ void step_cell_preinf(AuxArgs aux_args, int data_ptr, uchar llid, float d)
     mean_obs = mean_obs/cum_len;
 
     //calculate pre_infinity denomanator (shape of image)
-    pre_infinity_opt(d, cum_len, mean_obs, aux_args.inImage, alpha, mixture, weight3);
+    pre_infinity_opt(d, cum_len, mean_obs, aux_args.vis_inf, aux_args.pre_inf, alpha, mixture, weight3);
 }
 #endif // PREINF
 

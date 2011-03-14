@@ -149,7 +149,9 @@ void seg_len_obs_functor(          float    seg_len,
 void pre_infinity_opt(  float    seg_len,
                         float    cum_len,
                         float    mean_obs,
-                        float4 * image_vect,
+                        //float4 * image_vect,
+                        float  * vis_inf, 
+                        float  * pre_inf, 
                         float    alpha,
                         float8   mixture,
                         float    weight3)
@@ -174,14 +176,27 @@ void pre_infinity_opt(  float    seg_len,
 
     /* Calculate pre and vis infinity */
     /*alpha integral += alpha * seg_len      */
-    (*image_vect).y += alpha * seg_len;
-
-    float vis_prob_end = exp(-(*image_vect).y); /* vis_prob_end */
+    //(*image_vect).y += alpha * seg_len;
+    //float vis_prob_end = exp(-(*image_vect).y); /* vis_prob_end */
+    
+    //float diff_omega = exp(-alpha * seg_len);
+    //float vis_prob_end = (*image_vect).z * diff_omega; 
 
     /* updated pre                      Omega         *   PI  */
-    (*image_vect).w += ((*image_vect).z - vis_prob_end) *  PI;
+    //(*image_vect).w += ((*image_vect).z - vis_prob_end) *  PI;
+    
     /* updated visibility probability */
-    (*image_vect).z = vis_prob_end;
+    //(*image_vect).z = vis_prob_end;
+    
+    float diff_omega = exp(-alpha * seg_len);
+    float vis_prob_end = (*vis_inf) * diff_omega; 
+
+    /* updated pre                      Omega         *   PI  */
+    (*pre_inf) += ((*vis_inf) - vis_prob_end) *  PI;
+    
+    /* updated visibility probability */
+    (*vis_inf) = vis_prob_end;
+
 }
 
 

@@ -35,7 +35,6 @@ class boxm2_opencl_update_process : public boxm2_opencl_process_base
                                     image_(0),
                                     vis_image_(0), 
                                     pre_image_(0), 
-                                    alpha_int_image_(0), 
                                     norm_image_(0) {}
 
     //: process init and execute
@@ -58,11 +57,10 @@ class boxm2_opencl_update_process : public boxm2_opencl_process_base
     vcl_size_t img_size_[2];
 
     //: INPUT IMAGE:
-    bocl_mem* image_;
+    bocl_mem* image_;             //float image of observed intensity
     bocl_mem* vis_image_;         //will be a float image, maintains visibility between blocks
-    bocl_mem* pre_image_;         //pre_image
-    bocl_mem* alpha_int_image_;   //alpha_int_image
-    bocl_mem* norm_image_;        //result of proc_norm_image 
+    bocl_mem* pre_image_;         //float image, maintains pre before proc_norm kernel 
+    bocl_mem* norm_image_;        //result of proc_norm_image, used in bayes update
 
     //: block stuff
     bocl_mem* blk_info_;
