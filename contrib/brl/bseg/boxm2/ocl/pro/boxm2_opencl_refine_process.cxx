@@ -307,17 +307,18 @@ void boxm2_opencl_refine_process::swap_data(boxm2_block_id id,
   kern->set_arg( lookup_ );
   kern->set_arg( cl_output_ );
   kern->set_local_arg( 16*sizeof(cl_uchar) );
-  kern->set_local_arg( sizeof(cl_uchar16) );
-  kern->set_local_arg( sizeof(cl_uchar16) );
+  kern->set_local_arg( 64*sizeof(cl_uchar16) );
+  kern->set_local_arg( 64*sizeof(cl_uchar16) );
   
   //set workspace
-  vcl_size_t lThreads[] = {1, 1};
-  vcl_size_t gThreads[] = {numTrees, 1};
+  vcl_size_t lThreads[] = {64, 1};
+  vcl_size_t gThreads[] = {RoundUp(numTrees,lThreads[0]), 1};
 
   //execute kernel
   kern->execute( (*command_queue_), 2, lThreads, gThreads);
   clFinish( (*command_queue_));
   kern->clear_args();
+  gpu_time_ += kern->exec_time();
 
   ////write the data to buffer
   cache_->deep_replace_data(id, type, new_dat); 
@@ -325,9 +326,6 @@ void boxm2_opencl_refine_process::swap_data(boxm2_block_id id,
     vcl_cout<<"Writing refined trees."<<vcl_endl;
     blk->read_to_buffer(*command_queue_);
   }
-  
-  //prin tout alphas for debugging...
-  
   
   //clean up DAT
   delete[] is_alpha_buffer;
@@ -356,12 +354,13 @@ void boxm2_opencl_refine_process::refine_block_copy(boxm2_block_id id,
   refine_trees_.set_arg( lookup_ );
   refine_trees_.set_arg( cl_output_ );
   refine_trees_.set_local_arg( 16*sizeof(cl_uchar) );
-  refine_trees_.set_local_arg( sizeof(cl_uchar16) );
-  refine_trees_.set_local_arg( sizeof(cl_uchar16) );
+  refine_trees_.set_local_arg( 64*sizeof(cl_uchar16) );
+  refine_trees_.set_local_arg( 64*sizeof(cl_uchar16) );
 
   //set workspace
-  vcl_size_t lThreads[] = {1, 1};
-  vcl_size_t gThreads[] = {numTrees, 1};
+  //set workspace
+  vcl_size_t lThreads[] = {64, 1};
+  vcl_size_t gThreads[] = {RoundUp(numTrees,lThreads[0]), 1};
 
   //execute kernel
   refine_trees_.execute( (*command_queue_), 2, lThreads, gThreads);

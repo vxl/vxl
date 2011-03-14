@@ -256,13 +256,17 @@ __kernel void refine_trees(__constant RenderSceneInfo * linfo,
                            __constant uchar           * bit_lookup,       // used to get data_index                  
                            __global   float           * output, 
                            __local    uchar           * cumsum,
-                           __local    uchar16         * local_tree,      // cache current tree into local memory
-                           __local    uchar16         * refined_tree )
+                           __local    uchar16         * all_local_tree,      // cache current tree into local memory
+                           __local    uchar16         * all_refined_tree )
 {
-  //global id will be the tree buffer
-  unsigned gid = get_group_id(0);
-  int numTrees = linfo->dims.x * linfo->dims.y * linfo->dims.z; 
+  //make sure local_tree points to the right one in shared memory
+  uchar llid = (uchar)(get_local_id(0) + get_local_size(0)*get_local_id(1));
+  __local uchar16* local_tree = &all_local_tree[llid]; 
+  __local uchar16* refined_tree = &all_refined_tree[llid]; 
 
+  //global id should be the same as treeIndex
+  unsigned gid = get_global_id(0);
+  int numTrees = linfo->dims.x * linfo->dims.y * linfo->dims.z; 
   if(gid < numTrees) {
     //USE rootlevel to determine MAX_INNER and MAX_CELLS
     int MAX_INNER_CELLS, MAX_CELLS;
@@ -333,12 +337,19 @@ __kernel void refine_data( __constant RenderSceneInfo * linfo,
                            __constant uchar           * bit_lookup,       // used to get data_index                  
                            __global   float           * output, 
                            __local    uchar           * cumsum,
-                           __local    uchar16         * local_tree,      // cache current tree into local memory
-                           __local    uchar16         * refined_tree )
+                           __local    uchar16         * all_local_tree,      // cache current tree into local memory
+                           __local    uchar16         * all_refined_tree )
 {
-  //global id will be the tree buffer
-  unsigned gid = get_group_id(0);
+  //make sure local_tree points to the right one in shared memory
+  uchar llid = (uchar)(get_local_id(0) + get_local_size(0)*get_local_id(1));
+  __local uchar16* local_tree = &all_local_tree[llid]; 
+  __local uchar16* refined_tree = &all_refined_tree[llid]; 
 
+  //global id should be the same as treeIndex
+  unsigned gid = get_global_id(0);
+  
+  //tree Index is global id 
+  unsigned treeIndex = gid; 
   int numTrees = linfo->dims.x * linfo->dims.y * linfo->dims.z; 
   if(gid < numTrees) {
     
@@ -352,16 +363,16 @@ __kernel void refine_data( __constant RenderSceneInfo * linfo,
       MAX_INNER_CELLS=73, MAX_CELLS=585; 
         
     //1. get current tree information
-    uchar16 currTree = as_uchar16(trees[gid]);
+    uchar16 currTree = as_uchar16(trees[treeIndex]);
     (*local_tree)    = currTree; 
     int currTreeSize = num_cells(local_tree);
     
-    uchar16 newTree  = as_uchar16(trees_refined[gid]); 
+    uchar16 newTree  = as_uchar16(trees_refined[treeIndex]); 
     (*refined_tree)  = newTree;
-    int newTreeSize  = num_cells(refined_tree); //this should also equal to tree_sizes[gid+1]-tree_sizes[gid]; 
+    int newTreeSize  = num_cells(refined_tree); //this should also equal to tree_sizes[treeIndex+1]-tree_sizes[treeIndex]; 
      
     //6a. update local tree's data pointer (store it back tree buffer)
-    int data_ptr = tree_sizes[gid]; 
+    int data_ptr = tree_sizes[treeIndex]; 
     uchar4 data_chars = as_uchar4(data_ptr);
     (*refined_tree).sA = data_chars.x; 
     (*refined_tree).sB = data_chars.y; 
@@ -370,7 +381,7 @@ __kernel void refine_data( __constant RenderSceneInfo * linfo,
     
     //if this is updating the ALPHA pass and is therefore the last one, write to new block
     if( *is_alpha_t ) {
-      trees[gid] = as_int4(*refined_tree);
+      trees[treeIndex] = as_int4(*refined_tree);
     }
     
     //6b. get old data pointer
