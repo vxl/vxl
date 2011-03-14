@@ -31,7 +31,7 @@ IF( PYTHON_FOUND )
     ENDIF(APPLE)
     SET_TARGET_PROPERTIES(boxm2_batch PROPERTIES PREFIX "")
 
-    TARGET_LINK_LIBRARIES(boxm2_batch bpro_batch boxm2_pro )
+    TARGET_LINK_LIBRARIES(boxm2_batch bpro_batch boxm2_pro vpgl_pro vil_pro brdb)
 
     IF(OPENCL_FOUND)
       ADD_DEFINITIONS(-DHAS_OPENCL=1)
