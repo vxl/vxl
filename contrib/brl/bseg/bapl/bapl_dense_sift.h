@@ -16,9 +16,12 @@
 #include <bapl/bapl_lowe_pyramid_set.h>
 #include <bapl/bapl_lowe_pyramid_set_sptr.h>
 
-#include <vgl/vgl_point_2d.h>
-#include <vil/vil_image_resource_sptr.h>
 #include <vbl/vbl_ref_count.h>
+
+#include <vgl/vgl_point_2d.h>
+
+#include <vil/vil_image_resource_sptr.h>
+
 
 #include <vcl_cmath.h>
 #include <vcl_map.h>

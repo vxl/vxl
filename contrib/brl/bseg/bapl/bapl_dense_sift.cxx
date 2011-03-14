@@ -1,5 +1,8 @@
 #include "bapl_dense_sift.h"
 
+#include<vil/algo/vil_orientations.h>
+#include<vnl/vnl_math.h>
+
 unsigned bapl_dense_sift::keypoint_id_ = 0;
 
 bapl_dense_sift::bapl_dense_sift( const vil_image_resource_sptr& image, unsigned octave_size, unsigned num_octaves )
