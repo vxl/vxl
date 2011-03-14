@@ -75,7 +75,7 @@ bool boxm2_block::b_read(char* buff)
     ushort2* memPtrsBuff = (ushort2*) (buff+bytes_read);
     mem_ptrs_ = boxm2_array_1d<ushort2>(numBuffers, memPtrsBuff);
     bytes_read += sizeof(ushort2) * numBuffers;
-
+    vcl_cout << *this;
     return true;
 }
 
@@ -302,6 +302,19 @@ long boxm2_block::calc_byte_count(int num_buffers, int trees_per_buffer, int num
 
 
 //------------ I/O -------------------------------------------------------------
+vcl_ostream& operator <<(vcl_ostream &s, boxm2_block& block)
+{
+  s << "Block ID=" << block.block_id() << vcl_endl;
+  s << "Byte Count=" << block.byte_count() << vcl_endl;
+  s << "Init level=" << block.init_level() << vcl_endl;
+  s << "Max level=" << block.max_level() << vcl_endl;
+  s << "Max MB=" << block.max_mb() << vcl_endl;
+  s << "Sub Block Dim=" << block.sub_block_dim() << vcl_endl;
+  s << "Sub Block Num=" << block.sub_block_num() << vcl_endl;
+  
+  return s;
+}
+
 #if 0
 void vsl_b_write(vsl_b_ostream& os, boxm2_block const& scene) {}
 void vsl_b_write(vsl_b_ostream& os, const boxm2_block* &p) {}

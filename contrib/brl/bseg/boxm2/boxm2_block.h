@@ -32,6 +32,7 @@
 
 class boxm2_block : public vbl_ref_count
 {
+ public:
   typedef vnl_vector_fixed<unsigned short, 2> ushort2;    //defines a block pointer
   typedef vnl_vector_fixed<unsigned char, 16> uchar16;    //defines a bit tree
   typedef unsigned short                      ushort;
@@ -116,7 +117,7 @@ class boxm2_block : public vbl_ref_count
 typedef vbl_smart_ptr<boxm2_block> boxm2_block_sptr;
 
 //: output stream 
-vcl_ostream& operator <<(vcl_ostream &s, boxm2_block& scene);
+vcl_ostream& operator <<(vcl_ostream &s, boxm2_block& block);
 
 //: write to xml file
 //void x_write(vcl_ostream &os, boxm2_block& scene, vcl_string name);
