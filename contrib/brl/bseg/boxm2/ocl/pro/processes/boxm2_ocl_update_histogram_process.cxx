@@ -267,6 +267,7 @@ bool boxm2_ocl_update_histogram_process(bprb_func_process& pro)
 
         transfer_time += (float) transfer.all();
         kern->set_arg( blk_info );
+        kern->set_arg( blk );
         kern->set_arg( aux );
         kern->set_arg( cl_output.ptr() );
 
