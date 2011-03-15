@@ -22,8 +22,8 @@
 float avg_intensity(vil_image_view<float> & img, int rx, int ry, int u, int v)
 {
     float avgintensity=0.0;
-    for (unsigned m=u-rx;m<=u+rx;m++)
-        for (unsigned p=v-ry;p<=v+ry;p++)
+    for (int m=u-rx;m<=u+rx;++m)
+        for (int p=v-ry;p<=v+ry;++p)
             avgintensity+=img(m,p);
 
     return avgintensity/((2*rx+1)*(2*ry+1));
@@ -45,7 +45,6 @@ void compute_corr_intensities(vcl_vector<vcl_string> img_files,
 
             unsigned ni=img_ptr->ni();
             unsigned nj=img_ptr->nj();
-            int count=0;
             for (unsigned j=0;j<corrs.size();j++)
             {
                 // check for top right quarter.
@@ -55,7 +54,7 @@ void compute_corr_intensities(vcl_vector<vcl_string> img_files,
                 int u=(int)vcl_floor(point2d.x());
                 int v=(int)vcl_floor(point2d.y());
 
-                if (u>=ni/2+rx && u<ni-rx && v>0+ry && v<nj-ry)
+                if (u>=ni/2+rx && u+rx<ni && v>ry && v+ry<nj)
                 {
                     // average value of a corr throughout the sequence
                     mus[j]+=avg_intensity(*floatimg,rx,ry,u,v);
@@ -114,14 +113,14 @@ int main(int argc, char** argv)
             float summui=0.0;  float summuixi=0.0;
             float sumxi=0.0;   float sumxi2=0.0;
 
-            for (unsigned j=0;j<corrs.size();j++)
+            for (unsigned j=0;j<corrs.size();++j)
             {
                 // check for top right quarter.
                 vgl_point_2d<double> point2d;
                 if (!corrs[j]->match(i,point2d)) continue;
                 int u=(int)vcl_floor(point2d.x());
                 int v=(int)vcl_floor(point2d.y());
-                if (u>=ni/2+rx && u<ni-rx && v>0+ry && v<nj-ry)
+                if (u>=ni/2+rx && u+rx<ni && v>ry && v+ry<nj)
                 {
                     // avg intensity over a neighborhood.
                     float avgintensity=avg_intensity(*floatimg,rx,ry,u,v);

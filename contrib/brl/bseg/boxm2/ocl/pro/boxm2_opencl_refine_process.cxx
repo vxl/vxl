@@ -98,9 +98,9 @@ bool boxm2_opencl_refine_process::execute(vcl_vector<brdb_value_sptr>& input, vc
     //    - get a new data pointer (with newSize), will create CPU buffer and GPU buffer
     //    - Run refine_data_kernel with the two buffers
     //    - delete the old BOCL_MEM*, and that's it...
-    
+
     //clear cache
-    cache_->clear_cache(); 
+    cache_->clear_cache();
     boxm2_block_metadata data = blk_iter->second;
     if (!data.random_)
     {
@@ -129,7 +129,7 @@ bool boxm2_opencl_refine_process::execute(vcl_vector<brdb_value_sptr>& input, vc
       /////////////////////////////////////////////////////////////////////////
       //STEP TWO
       //read out tree_sizes and do cumulative sum on it
-      vul_timer scan_time; 
+      vul_timer scan_time;
       tree_sizes->read_to_buffer((*command_queue_));
       int* sizebuff = (int*) tree_sizes->cpu_buffer();
       for (int i=1; i<numTrees; ++i)
@@ -139,8 +139,8 @@ bool boxm2_opencl_refine_process::execute(vcl_vector<brdb_value_sptr>& input, vc
         sizebuff[i] = sizebuff[i-1];
       sizebuff[0] = 0;
       tree_sizes->write_to_buffer((*command_queue_));
-      vcl_cout<<"New data size: "<<newDataSize<<vcl_endl;
-      vcl_cout<<"Scan data sizes time: "<<scan_time.all()<<vcl_endl;
+      vcl_cout<<"New data size: "<<newDataSize<<'\n'
+              <<"Scan data sizes time: "<<scan_time.all()<<vcl_endl;
       /////////////////////////////////////////////////////////////////////////
 
 
@@ -158,7 +158,7 @@ bool boxm2_opencl_refine_process::execute(vcl_vector<brdb_value_sptr>& input, vc
       vcl_vector<vcl_string> data_types;
       data_types.push_back(boxm2_data_traits<BOXM2_MOG3_GREY>::prefix());
       data_types.push_back(boxm2_data_traits<BOXM2_NUM_OBS>::prefix());
-      for (int i=0; i<data_types.size(); ++i)
+      for (unsigned int i=0; i<data_types.size(); ++i)
       {
         vcl_cout<<"Swapping data of type: "<<data_types[i]<<vcl_endl;
         this->swap_data(id,data_types[i],newDataSize,numTrees,blk_copy,tree_sizes);
@@ -166,11 +166,10 @@ bool boxm2_opencl_refine_process::execute(vcl_vector<brdb_value_sptr>& input, vc
       //ALWAYS GOING TO REFINE ALPHA
       vcl_cout<<"Swapping alpha data... last step fingers cross..."<<vcl_endl;
       this->swap_data(id,boxm2_data_traits<BOXM2_ALPHA>::prefix(),newDataSize,numTrees,blk_copy,tree_sizes);
-      
+
       //clean aux memory
-      delete blk_copy; 
-      delete tree_sizes; 
-      
+      delete blk_copy;
+      delete tree_sizes;
     }
     else
     {
@@ -279,7 +278,7 @@ void boxm2_opencl_refine_process::swap_data(boxm2_block_id id,
   vcl_cout<<type<<" new data size is: "<<newDataSize<<vcl_endl;
   int dataBytes = boxm2_data_info::datasize(type) * newDataSize;
   bocl_mem* new_dat = new bocl_mem((*context_), NULL, dataBytes, "new data buffer " + type);
-  new_dat->create_buffer(CL_MEM_READ_WRITE, (*command_queue_));  
+  new_dat->create_buffer(CL_MEM_READ_WRITE, (*command_queue_));
 
   //grab the block out of the cache as well
   bocl_mem* blk = cache_->get_block(id);
@@ -290,7 +289,7 @@ void boxm2_opencl_refine_process::swap_data(boxm2_block_id id,
   if (type == boxm2_data_traits<BOXM2_ALPHA>::prefix())
     (*is_alpha_buffer) = true;
   else
-    (*is_alpha_buffer) = false; 
+    (*is_alpha_buffer) = false;
   bocl_mem is_alpha((*context_), is_alpha_buffer, sizeof(cl_bool), "is_alpha buffer");
   is_alpha.create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
@@ -303,13 +302,13 @@ void boxm2_opencl_refine_process::swap_data(boxm2_block_id id,
   kern->set_arg( dat );
   kern->set_arg( new_dat );
   kern->set_arg( prob_thresh_ );
-  kern->set_arg( &is_alpha ); 
+  kern->set_arg( &is_alpha );
   kern->set_arg( lookup_ );
   kern->set_arg( cl_output_ );
   kern->set_local_arg( 16*sizeof(cl_uchar) );
   kern->set_local_arg( 64*sizeof(cl_uchar16) );
   kern->set_local_arg( 64*sizeof(cl_uchar16) );
-  
+
   //set workspace
   vcl_size_t lThreads[] = {64, 1};
   vcl_size_t gThreads[] = {RoundUp(numTrees,lThreads[0]), 1};
@@ -321,12 +320,12 @@ void boxm2_opencl_refine_process::swap_data(boxm2_block_id id,
   gpu_time_ += kern->exec_time();
 
   ////write the data to buffer
-  cache_->deep_replace_data(id, type, new_dat); 
-  if(type == boxm2_data_traits<BOXM2_ALPHA>::prefix()) {
+  cache_->deep_replace_data(id, type, new_dat);
+  if (type == boxm2_data_traits<BOXM2_ALPHA>::prefix()) {
     vcl_cout<<"Writing refined trees."<<vcl_endl;
     blk->read_to_buffer(*command_queue_);
   }
-  
+
   //clean up DAT
   delete[] is_alpha_buffer;
 }
