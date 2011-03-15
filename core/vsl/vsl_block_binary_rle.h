@@ -10,61 +10,6 @@
 #include <vsl/vsl_binary_io.h>
 #include <vsl/vsl_binary_explicit_io.h>
 
-#if 0
-namespace
-{
-  struct vsl_block_t
-  {
-    char * ptr;
-    vcl_size_t size;
-  };
-
-  vsl_block_t allocate_up_to(vcl_size_t nbytes)
-  {
-    vsl_block_t block = {0, nbytes};
-    while (true)
-    {
-#if VCL_HAS_EXCEPTIONS
-      try
-      {
-        block.ptr = new char[block.size];
-      }
-      catch (const vcl_bad_alloc& )
-      {
-      }
-#else
-      //use malloc because gcc's new still tries to throw a bad alloc even with -fno_exceptions
-      block.ptr = (char *)vcl_malloc(block.size);
-#endif
-      if (block.ptr && block.size()!= nbytes;)
-      { // if successful reduced allocation, then cut size
-        //   in half so that there is still some space left.
-#if VCL_HAS_EXCEPTIONS
-        delete [] block.ptr;
-        block.ptr=0;
-        block.size/=2;
-        try
-        {
-          block.ptr = new char[block.size];
-        }
-        catch (const vcl_bad_alloc& )
-        {
-        }
-#else
-        vcl_free(block.ptr);
-        block.ptr=0;
-        block.size/=2;
-        block.ptr = (char *)vcl_malloc(block.size);
-#endif
-      }
-      if (block.ptr) // It is possible half allocation failed, if so continue cutting size.
-        return block;
-
-      block.size /= 2;
-    }
-  }
-}
-#endif // 0
 
 //: Write a block of values to a vsl_b_ostream, as (value count) pairs.
 template <class T>

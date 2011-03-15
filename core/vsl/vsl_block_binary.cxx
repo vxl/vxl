@@ -299,3 +299,9 @@ template void vsl_block_binary_write_byte_impl(vsl_b_ostream &, const unsigned c
 template void vsl_block_binary_read_byte_impl(vsl_b_istream &, signed char*, vcl_size_t);
 template void vsl_block_binary_read_byte_impl(vsl_b_istream &, unsigned char*, vcl_size_t);
 
+#if VXL_HAS_INT_64 && !VXL_INT_64_IS_LONG
+template void vsl_block_binary_write_int_impl(vsl_b_ostream &, const vxl_int_64*, vcl_size_t);
+template void vsl_block_binary_write_int_impl(vsl_b_ostream &, const vxl_uint_64*, vcl_size_t);
+template void vsl_block_binary_read_int_impl(vsl_b_istream &, vxl_int_64*, vcl_size_t);
+template void vsl_block_binary_read_int_impl(vsl_b_istream &, vxl_uint_64*, vcl_size_t);
+#endif //VXL_HAS_INT_64 && !VXL_INT_64_IS_LONG
