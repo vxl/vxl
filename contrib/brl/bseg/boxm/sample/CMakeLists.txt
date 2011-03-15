@@ -19,7 +19,7 @@ SET(boxm_sample_sources
 AUX_SOURCE_DIRECTORY(Templates boxm_sample_sources)
 
 ADD_LIBRARY(boxm_sample ${boxm_sample_sources})
-TARGET_LINK_LIBRARIES(boxm_sample boxm vgl_io bsta vil vgl vbl vsl vcl)
+TARGET_LINK_LIBRARIES(boxm_sample boxm_util boxm vgl_io bsta vil vgl vbl vsl vcl)
 
 IF( BUILD_TESTING )
   SUBDIRS(tests)
