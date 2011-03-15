@@ -168,7 +168,7 @@ SOURCE=.\Templates/vbl_smart_ptr+bapl_conn_table-.cxx
 SOURCE=.\Templates/vbl_smart_ptr+bapl_dense_sift-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vbl_smart_ptr+bapl_dsfit-.cxx
+SOURCE=.\Templates/vbl_smart_ptr+bapl_dsift-.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"

@@ -116,9 +116,6 @@ SOURCE=.\vgl_h_matrix_2d_compute_rigid_body.cxx
 SOURCE=.\vgl_h_matrix_3d_compute_linear.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\vgl_compute_similarity_3d.txx
-# End Source File
-# Begin Source File
 SOURCE=.\Templates/vgl_homg_operators_1d+double-.cxx
 # End Source File
 # Begin Source File
