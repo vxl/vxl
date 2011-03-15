@@ -8,7 +8,7 @@
     #define CONVERT_FUNC(lhs,data) ushort8 lhs = as_ushort8(data);
     #define NORM 65535;
 #endif
-
+#ifdef RENDER
 void step_cell_render(__global MOG_TYPE   * cell_data, 
                       __global float  * alpha_data, 
                                int      data_ptr, 
@@ -33,7 +33,7 @@ void step_cell_render(__global MOG_TYPE   * cell_data,
   (*vis) *= diff_omega;
   (*expected_i)+=expected_int_cell*omega;
 }
-
+#endif
 void step_cell_change_detection_uchar8(__global uchar8* cell_data, __global float* alpha_data,int data_ptr,
                                 float d, float * vis,float * change_density, float img_intensity)
 {
@@ -148,20 +148,26 @@ void step_cell_visibility(__global float* cell_data, int data_ptr,
   (*data_return) = alpha_integral;
 }
 
-
+#ifdef RENDER_DEPTH
 void step_cell_render_depth2(float depth, 
-                      __global float  * alpha_data, 
-                               int      data_ptr, 
-                               float    d, 
-                               float  * vis,
-                               float  * expected_depth)
+                             __global float  * alpha_data, 
+                             int      data_ptr, 
+                             float    d, 
+                             float  * vis,
+                             float  * expected_depth,
+                             float  * expected_depth_square,
+                             float  * probsum)
 {
   float alpha = alpha_data[data_ptr];
   float diff_omega=exp(-alpha*d);
   float omega=(*vis) * (1.0f - diff_omega);
+  (*probsum)+=omega;
   (*vis) *= diff_omega;
   (*expected_depth)+=depth*omega;
+  (*expected_depth_square)+=depth*depth*omega;
+  
 }
 
+#endif
 
 
