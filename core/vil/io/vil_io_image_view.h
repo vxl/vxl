@@ -7,6 +7,7 @@
 
 #include <vcl_cstddef.h>
 #include <vcl_iostream.h>
+#include <vxl_config.h>
 #include <vil/vil_image_view.h>
 #include <vil/io/vil_io_memory_chunk.h>
 
@@ -90,7 +91,7 @@ inline void vsl_b_read(vsl_b_istream &is, vil_image_view<T>& image)
     vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vil_image_view<T>&)\n"
              << "           Unknown version number "<< w << '\n';
     is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
-    return;
+    break;
   }
 }
 
@@ -117,6 +118,76 @@ template<class T>
 inline void vsl_print_summary(vcl_ostream& os,const vil_image_view<T>& image)
 {
   image.print(os);
+}
+
+//: Binary save vil_image_view_base to stream.
+// \relatesalso vil_image_view_base
+inline void vsl_b_write(vsl_b_ostream &os, const vil_image_view_base& image)
+{
+  const short io_version_no = 1;
+  vsl_b_write(os, io_version_no);
+  vsl_b_write(os, image.ni());
+  vsl_b_write(os, image.nj());
+  vsl_b_write(os, image.nplanes());
+}
+
+//: Binary load vil_image_view_base from stream.
+// \relatesalso vil_image_view_base
+inline void vsl_b_read(vsl_b_istream &is, vil_image_view_base& image)
+{
+  if (!is) return;
+
+  unsigned ni,nj,np;
+  short w;
+  vsl_b_read(is, w);
+  switch (w)
+  {
+   case 1:
+    vsl_b_read(is, ni);
+    vsl_b_read(is, nj);
+    vsl_b_read(is, np);
+    image.set_size(ni, nj, np);
+    break;
+
+   default:
+    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vil_image_view_base&)\n"
+             << "           Unknown version number "<< w << '\n';
+    is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+    break;
+  }
+}
+
+//: Binary load vil_image_view_base from stream onto the heap
+// \relatesalso vil_image_view_base
+inline void vsl_b_read(vsl_b_istream &is, vil_image_view_base*& p)
+{
+  if (!is) return;
+
+  bool not_null_ptr;
+  vsl_b_read(is, not_null_ptr);
+  if (not_null_ptr)
+  {
+    unsigned ni,nj,np;
+    short w;
+    vsl_b_read(is, w);
+    switch (w)
+    {
+     case 1:
+      vsl_b_read(is, ni);
+      vsl_b_read(is, nj);
+      vsl_b_read(is, np);
+      p->set_size(ni, nj, np);
+      break;
+
+     default:
+      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vil_image_view_base&)\n"
+               << "           Unknown version number "<< w << '\n';
+      is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+      break;
+    }
+  }
+  else
+    p = 0;
 }
 
 #endif // vil_io_image_view_h_
