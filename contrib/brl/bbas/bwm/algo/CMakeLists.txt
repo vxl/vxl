@@ -8,7 +8,6 @@ SET(bwm_algo_sources
    bwm_lidar_algo.cxx             bwm_lidar_algo.h
    bwm_utm_lat_lon.cxx            bwm_utm_lat_lon.h
    bwm_rat_proj_camera.cxx        bwm_rat_proj_camera.h
-   bwm_plane_fitting_lsf.cxx      bwm_plane_fitting_lsf.h
    bwm_soview2D_cross.cxx         bwm_soview2D_cross.h
                                   bwm_soview2D_vertex.h
    bwm_image_processor.cxx        bwm_image_processor.h
@@ -21,6 +20,7 @@ INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/b3p/shapelib)
   SET(bwm_algo_sources             ${bwm_algo_sources}
       bwm_shape_file.cxx             bwm_shape_file.h
       bwm_utils.cxx                  bwm_utils.h
+      bwm_plane_fitting_lsf.cxx      bwm_plane_fitting_lsf.h
      )
   ADD_DEFINITIONS( -DHAS_SHAPELIB=1 )
 ENDIF(SHAPELIB_FOUND)
