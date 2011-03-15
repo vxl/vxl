@@ -1,12 +1,11 @@
-// This is brl/bseg/boxm2/pro/processes/boxm2_ocl_update_histogram_process.cxx
+// This is brl/bseg/boxm2/ocl/pro/processes/boxm2_ocl_update_histogram_process.cxx
+#include <bprb/bprb_func_process.h>
 //:
 // \file
 // \brief  A process for updating the histogram given an image.
 //
 // \author Vishal Jain
 // \date Mar 10, 2011
-
-#include <bprb/bprb_func_process.h>
 
 #include <vcl_fstream.h>
 #include <boxm2/ocl/boxm2_opencl_cache.h>
@@ -32,45 +31,45 @@ namespace boxm2_ocl_update_histogram_process_globals
   vcl_size_t local_threads[]={8,8};
   void compile_kernel(bocl_device_sptr device,vcl_vector<bocl_kernel*> & vec_kernels)
   {
-      vcl_vector<vcl_string> src_paths;
-      vcl_string source_dir = vcl_string(VCL_SOURCE_ROOT_DIR) + "/contrib/brl/bseg/boxm2/ocl/cl/";
-      src_paths.push_back(source_dir + "scene_info.cl");
-      src_paths.push_back(source_dir + "cell_utils.cl");
-      src_paths.push_back(source_dir + "bit/bit_tree_library_functions.cl");
-      src_paths.push_back(source_dir + "backproject.cl");
-      src_paths.push_back(source_dir + "ray_bundle_library_opt.cl");
-      src_paths.push_back(source_dir + "bit/batchkernels.cl");
-      src_paths.push_back(source_dir + "update_functors.cl");
-      src_paths.push_back(source_dir + "bit/cast_ray_bit.cl");
+    vcl_vector<vcl_string> src_paths;
+    vcl_string source_dir = vcl_string(VCL_SOURCE_ROOT_DIR) + "/contrib/brl/bseg/boxm2/ocl/cl/";
+    src_paths.push_back(source_dir + "scene_info.cl");
+    src_paths.push_back(source_dir + "cell_utils.cl");
+    src_paths.push_back(source_dir + "bit/bit_tree_library_functions.cl");
+    src_paths.push_back(source_dir + "backproject.cl");
+    src_paths.push_back(source_dir + "ray_bundle_library_opt.cl");
+    src_paths.push_back(source_dir + "bit/batchkernels.cl");
+    src_paths.push_back(source_dir + "update_functors.cl");
+    src_paths.push_back(source_dir + "bit/cast_ray_bit.cl");
 
-      //compilation options
-      vcl_string options = " -D INTENSITY ";
-      options += " -D MOG_TYPE_8 "; 
+    //compilation options
+    vcl_string options = " -D INTENSITY ";
+    options += " -D MOG_TYPE_8 ";
 
-      //create all passes
-      bocl_kernel* seg_len = new bocl_kernel();
-      vcl_string seg_opts = options + " -D CUMLEN -D STEP_CELL=step_cell_cumlen(aux_args,data_ptr,llid,d) ";
-      seg_len->create_kernel(&device->context(), device->device_id(), src_paths, "cum_len_main", seg_opts, "update::seg_len");
-      vec_kernels.push_back(seg_len);
+    //create all passes
+    bocl_kernel* seg_len = new bocl_kernel();
+    vcl_string seg_opts = options + " -D CUMLEN -D STEP_CELL=step_cell_cumlen(aux_args,data_ptr,llid,d) ";
+    seg_len->create_kernel(&device->context(), device->device_id(), src_paths, "cum_len_main", seg_opts, "update::seg_len");
+    vec_kernels.push_back(seg_len);
 
 
-      bocl_kernel* update_hist = new bocl_kernel();
-      vcl_string hist_opts = options + " -D UPDATE_HIST -D STEP_CELL=step_cell_update_hist(aux_args,data_ptr,llid,d) ";
-      update_hist->create_kernel(&device->context(), device->device_id(), src_paths, "update_hist_main", hist_opts, "update::hist");
-      vec_kernels.push_back(update_hist);
+    bocl_kernel* update_hist = new bocl_kernel();
+    vcl_string hist_opts = options + " -D UPDATE_HIST -D STEP_CELL=step_cell_update_hist(aux_args,data_ptr,llid,d) ";
+    update_hist->create_kernel(&device->context(), device->device_id(), src_paths, "update_hist_main", hist_opts, "update::hist");
+    vec_kernels.push_back(update_hist);
 
-      vcl_vector<vcl_string> clean_seg_kernels_src;
-      clean_seg_kernels_src.push_back(source_dir + "scene_info.cl");
-      clean_seg_kernels_src.push_back(source_dir + "bit/batchkernels.cl");
+    vcl_vector<vcl_string> clean_seg_kernels_src;
+    clean_seg_kernels_src.push_back(source_dir + "scene_info.cl");
+    clean_seg_kernels_src.push_back(source_dir + "bit/batchkernels.cl");
 
-      bocl_kernel* clean_seg_len = new bocl_kernel();
-      vcl_string clean_seg_len_opts = options + " -D CLEAN_SEG_LEN ";
-      clean_seg_len->create_kernel(&device->context(), device->device_id(), clean_seg_kernels_src, "clean_seg_len_main", clean_seg_len_opts, "clean::seg_len");
-      vec_kernels.push_back(clean_seg_len);
-
+    bocl_kernel* clean_seg_len = new bocl_kernel();
+    vcl_string clean_seg_len_opts = options + " -D CLEAN_SEG_LEN ";
+    clean_seg_len->create_kernel(&device->context(), device->device_id(), clean_seg_kernels_src, "clean_seg_len_main", clean_seg_len_opts, "clean::seg_len");
+    vec_kernels.push_back(clean_seg_len);
   }
   static vcl_map<cl_device_id*,vcl_vector<bocl_kernel*> > kernels;
 }
+
 bool boxm2_ocl_update_histogram_process_cons(bprb_func_process& pro)
 {
   using namespace boxm2_ocl_update_histogram_process_globals;
@@ -92,7 +91,7 @@ bool boxm2_ocl_update_histogram_process_cons(bprb_func_process& pro)
 bool boxm2_ocl_update_histogram_process(bprb_func_process& pro)
 {
   using namespace boxm2_ocl_update_histogram_process_globals;
-  
+
   if ( pro.n_inputs() < n_inputs_ ){
     vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
     return false;
@@ -114,16 +113,16 @@ bool boxm2_ocl_update_histogram_process(bprb_func_process& pro)
                                                 *(device->device_id()),
                                                 CL_QUEUE_PROFILING_ENABLE,
                                                 &status);
-  if(status!=0)
-      return false;
+  if (status!=0)
+    return false;
 
-  //: compile the kernel 
-  if(kernels.find((device->device_id()))==kernels.end())
+  //: compile the kernel
+  if (kernels.find((device->device_id()))==kernels.end())
   {
-      vcl_cout<<"===========Compiling kernels=========== "<<vcl_endl;
-      vcl_vector<bocl_kernel*> ks;
-      compile_kernel(device,ks);
-      kernels[(device->device_id())]=ks;
+    vcl_cout<<"===========Compiling kernels==========="<<vcl_endl;
+    vcl_vector<bocl_kernel*> ks;
+    compile_kernel(device,ks);
+    kernels[(device->device_id())]=ks;
   }
   //: create all buffers
   cl_float cam_buffer[48];
@@ -133,29 +132,29 @@ bool boxm2_ocl_update_histogram_process(bprb_func_process& pro)
 
 
   vil_image_view_base_sptr in_img=boxm2_ocl_util::prepare_input_image(in_img_name);
-  
+
   unsigned ni=in_img->ni();
   unsigned nj=in_img->nj();
-  
+
 
   unsigned cl_ni=RoundUp(ni,local_threads[0]);
   unsigned cl_nj=RoundUp(nj,local_threads[1]);
   float* buff = new float[cl_ni*cl_nj];
-  if(vil_image_view<float> * in_img_float=dynamic_cast<vil_image_view<float> *>(in_img.ptr()))
+  if (vil_image_view<float> * in_img_float=dynamic_cast<vil_image_view<float> *>(in_img.ptr()))
   {
-      int count=0;
-      for (unsigned j=0;j<cl_nj;j++)
-          for (unsigned i=0;i<cl_ni;i++)
-          {
-              if (i<ni && j< nj)
-                  buff[count]=(*in_img_float)(i,j);
-              ++count;
-          }
+    int count=0;
+    for (unsigned j=0;j<cl_nj;j++)
+      for (unsigned i=0;i<cl_ni;i++)
+      {
+        if (i<ni && j< nj)
+          buff[count]=(*in_img_float)(i,j);
+        ++count;
+      }
   }
   else
-      return false;
+    return false;
   float* vis_buff = new float[cl_ni*cl_nj];
-  for(unsigned i=0;i<cl_ni*cl_nj;i++) vis_buff[i]=1.0f;
+  for (unsigned i=0;i<cl_ni*cl_nj;i++) vis_buff[i]=1.0f;
 
   bocl_mem_sptr in_image=new bocl_mem(device->context(),buff,cl_ni*cl_nj*sizeof(float),"exp image buffer");
   in_image->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
@@ -185,109 +184,107 @@ bool boxm2_ocl_update_histogram_process(bprb_func_process& pro)
   lookup->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
 
   //2. set workgroup size
-  for(unsigned kernelindex=0;kernelindex<3;kernelindex++)
+  for (unsigned kernelindex=0;kernelindex<3;kernelindex++)
   {
+    // set arguments
+    vcl_vector<boxm2_block_id> vis_order = scene->get_vis_blocks( (vpgl_perspective_camera<double>*) cam.ptr());
+    vcl_vector<boxm2_block_id>::iterator id;
+    for (id = vis_order.begin(); id != vis_order.end(); ++id)
+    {
+      //choose correct render kernel
+      boxm2_block_metadata mdata = scene->get_block_metadata(*id);
+      bocl_kernel* kern =  kernels[(device->device_id())][kernelindex];
 
-      //: set arguments 
-      vcl_vector<boxm2_block_id> vis_order = scene->get_vis_blocks( (vpgl_perspective_camera<double>*) cam.ptr());
-      vcl_vector<boxm2_block_id>::iterator id;
-      for (id = vis_order.begin(); id != vis_order.end(); ++id)
+      if (kernelindex==0)
       {
-          //choose correct render kernel
-          boxm2_block_metadata mdata = scene->get_block_metadata(*id); 
-          bocl_kernel* kern =  kernels[(device->device_id())][kernelindex];
+        //write the image values to the buffer
+        vul_timer transfer;
+        bocl_mem * blk       = opencl_cache->get_block(*id);
+        bocl_mem * blk_info  = opencl_cache->loaded_block_info();
+        bocl_mem * aux       = opencl_cache->get_data<BOXM2_AUX>(*id);
 
-          if(kernelindex==0)
-          {
-              //write the image values to the buffer
-              vul_timer transfer;
-              bocl_mem * blk       = opencl_cache->get_block(*id);
-              bocl_mem * blk_info  = opencl_cache->loaded_block_info();
-              bocl_mem * aux       = opencl_cache->get_data<BOXM2_AUX>(*id);
+        transfer_time += (float) transfer.all();
 
-              transfer_time += (float) transfer.all();
+        ////3. SET args
+        kern->set_arg( blk_info );
+        kern->set_arg( blk );
+        kern->set_arg( aux );
+        kern->set_arg( lookup.ptr() );
+        kern->set_arg( persp_cam.ptr() );
+        kern->set_arg( exp_img_dim.ptr());
+        kern->set_arg( cl_output.ptr() );
 
-              ////3. SET args
-              kern->set_arg( blk_info );
-              kern->set_arg( blk );
-              kern->set_arg( aux );
-              kern->set_arg( lookup.ptr() );
-              kern->set_arg( persp_cam.ptr() );
-              kern->set_arg( exp_img_dim.ptr());
-              kern->set_arg( cl_output.ptr() );
-
-              //local tree , cumsum buffer
-              kern->set_local_arg( local_threads[0]*local_threads[1]*sizeof(cl_uchar16) );
-              kern->set_local_arg( local_threads[0]*local_threads[1]*10*sizeof(cl_uchar) );
-              vcl_size_t lThreads[] = {8, 8};
-              vcl_size_t gThreads[] = {cl_ni,cl_nj};
-              //execute kernel
-              kern->execute(queue, 2, lThreads, gThreads);
-              clFinish(queue);
-              gpu_time += kern->exec_time();
-
-          }
-          else if(kernelindex==1)
-          {
-              vul_timer transfer;
-              bocl_mem * blk       = opencl_cache->get_block(*id);
-              bocl_mem * blk_info  = opencl_cache->loaded_block_info();
-              bocl_mem * alpha     = opencl_cache->get_data<BOXM2_ALPHA>(*id);
-              bocl_mem * hist      = opencl_cache->get_data<BOXM2_BATCH_HISTOGRAM>(*id);
-              bocl_mem * aux       = opencl_cache->get_data<BOXM2_AUX>(*id);
-
-              transfer_time += (float) transfer.all();
-
-              kern->set_arg( blk_info );
-              kern->set_arg( blk );
-              kern->set_arg( alpha );
-              kern->set_arg( aux );
-              kern->set_arg( hist );
-              kern->set_arg( lookup.ptr() );
-              kern->set_arg( persp_cam.ptr() );
-              kern->set_arg( exp_img_dim.ptr() );
-              kern->set_arg( in_image.ptr() );
-              kern->set_arg( vis_image.ptr() );
-              kern->set_arg( cl_output.ptr() );
-              //local tree , cumsum buffer
-              kern->set_local_arg( local_threads[0]*local_threads[1]*sizeof(cl_uchar16) );
-              kern->set_local_arg( local_threads[0]*local_threads[1]*10*sizeof(cl_uchar) );
-              vcl_size_t gThreads[] = {cl_ni,cl_nj};
-              //execute kernel
-              vcl_cout<<"Updating Histogram "<<vcl_endl;
-              kern->execute(queue, 2, local_threads, gThreads);
-              clFinish(queue);
-              gpu_time += kern->exec_time();
-
-              hist->read_to_buffer(queue);
-          }
-          else if(kernelindex==2) // clean seg len
-          {
-              vul_timer transfer;
-              bocl_mem * blk       = opencl_cache->get_block(*id);
-              bocl_mem * blk_info  = opencl_cache->loaded_block_info();
-              bocl_mem * aux       = opencl_cache->get_data<BOXM2_AUX>(*id);
-
-              transfer_time += (float) transfer.all();
-              kern->set_arg( blk_info );
-              kern->set_arg( aux );
-              kern->set_arg( cl_output.ptr() );
-
-              boxm2_scene_info* info_buffer = (boxm2_scene_info*) blk_info->cpu_buffer();
-              int numbuf = info_buffer->num_buffer;
-              int datlen = info_buffer->data_buffer_length;
-              vcl_size_t lThreads[] = { 1,1};
-              vcl_size_t gThreads[] = { RoundUp(numbuf*datlen,64),1};
-              //execute kernel
-              kern->execute(queue, 2, lThreads, gThreads);
-              clFinish(queue);
-              gpu_time += kern->exec_time();
-
-              aux->read_to_buffer(queue);
-          }
-          //clear render kernel args so it can reset em on next execution
-          kern->clear_args();
+        //local tree , cumsum buffer
+        kern->set_local_arg( local_threads[0]*local_threads[1]*sizeof(cl_uchar16) );
+        kern->set_local_arg( local_threads[0]*local_threads[1]*10*sizeof(cl_uchar) );
+        vcl_size_t lThreads[] = {8, 8};
+        vcl_size_t gThreads[] = {cl_ni,cl_nj};
+        //execute kernel
+        kern->execute(queue, 2, lThreads, gThreads);
+        clFinish(queue);
+        gpu_time += kern->exec_time();
       }
+      else if (kernelindex==1)
+      {
+        vul_timer transfer;
+        bocl_mem * blk       = opencl_cache->get_block(*id);
+        bocl_mem * blk_info  = opencl_cache->loaded_block_info();
+        bocl_mem * alpha     = opencl_cache->get_data<BOXM2_ALPHA>(*id);
+        bocl_mem * hist      = opencl_cache->get_data<BOXM2_BATCH_HISTOGRAM>(*id);
+        bocl_mem * aux       = opencl_cache->get_data<BOXM2_AUX>(*id);
+
+        transfer_time += (float) transfer.all();
+
+        kern->set_arg( blk_info );
+        kern->set_arg( blk );
+        kern->set_arg( alpha );
+        kern->set_arg( aux );
+        kern->set_arg( hist );
+        kern->set_arg( lookup.ptr() );
+        kern->set_arg( persp_cam.ptr() );
+        kern->set_arg( exp_img_dim.ptr() );
+        kern->set_arg( in_image.ptr() );
+        kern->set_arg( vis_image.ptr() );
+        kern->set_arg( cl_output.ptr() );
+        //local tree , cumsum buffer
+        kern->set_local_arg( local_threads[0]*local_threads[1]*sizeof(cl_uchar16) );
+        kern->set_local_arg( local_threads[0]*local_threads[1]*10*sizeof(cl_uchar) );
+        vcl_size_t gThreads[] = {cl_ni,cl_nj};
+        //execute kernel
+        vcl_cout<<"Updating Histogram"<<vcl_endl;
+        kern->execute(queue, 2, local_threads, gThreads);
+        clFinish(queue);
+        gpu_time += kern->exec_time();
+
+        hist->read_to_buffer(queue);
+      }
+      else if (kernelindex==2) // clean seg len
+      {
+        vul_timer transfer;
+        bocl_mem * blk       = opencl_cache->get_block(*id);
+        bocl_mem * blk_info  = opencl_cache->loaded_block_info();
+        bocl_mem * aux       = opencl_cache->get_data<BOXM2_AUX>(*id);
+
+        transfer_time += (float) transfer.all();
+        kern->set_arg( blk_info );
+        kern->set_arg( aux );
+        kern->set_arg( cl_output.ptr() );
+
+        boxm2_scene_info* info_buffer = (boxm2_scene_info*) blk_info->cpu_buffer();
+        int numbuf = info_buffer->num_buffer;
+        int datlen = info_buffer->data_buffer_length;
+        vcl_size_t lThreads[] = { 1,1};
+        vcl_size_t gThreads[] = { RoundUp(numbuf*datlen,64),1};
+        //execute kernel
+        kern->execute(queue, 2, lThreads, gThreads);
+        clFinish(queue);
+        gpu_time += kern->exec_time();
+
+        aux->read_to_buffer(queue);
+      }
+      //clear render kernel args so it can reset em on next execution
+      kern->clear_args();
+    }
   }
   clReleaseCommandQueue(queue);
   return true;

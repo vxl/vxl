@@ -1,12 +1,11 @@
-// This is brl/bseg/boxm2/ocl/pro/processes/boxm2_write_scene_xml_process.cxx
+// This is brl/bseg/boxm2/pro/processes/boxm2_write_scene_xml_process.cxx
+#include <bprb/bprb_func_process.h>
 //:
 // \file
 // \brief  A process for creating a scene
 //
 // \author Vishal Jain
 // \date Mar 15, 2011
-
-#include <bprb/bprb_func_process.h>
 
 #include <vcl_fstream.h>
 #include <boxm2/boxm2_scene.h>
