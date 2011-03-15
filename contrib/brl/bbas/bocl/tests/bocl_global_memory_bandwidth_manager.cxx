@@ -58,14 +58,14 @@ void bocl_global_memory_bandwidth_manager::clean_result_array()
 void bocl_global_memory_bandwidth_manager::create_buffers()
 {
   array_buf_ = new bocl_mem(this->context(), array_, len_ * sizeof(cl_float4), "array_buf_");
-  array_buf_->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR); 
+  array_buf_->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
 
   result_array_buf_ = new bocl_mem(this->context(), result_array_, len_ * sizeof(cl_float), "result_array_buf_");
   result_array_buf_->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
-                                   
+
   cl_len_buf_ = new bocl_mem(this->context(), cl_len_, sizeof(cl_uint), "cl_len_");
   cl_len_buf_->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
-    
+
   result_flag_buf_ = new bocl_mem(this->context(), result_flag_, sizeof(cl_int), "result_flag_buf_");
   result_flag_buf_->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 }
@@ -85,9 +85,9 @@ bool bocl_global_memory_bandwidth_manager::run_kernel()
 
   // Create and initialize memory object
   create_buffers();
-  
+
   // -- Set appropriate arguments to the kernel --
-  kernel_.set_arg( cl_len_buf_ );  
+  kernel_.set_arg( cl_len_buf_ );
   kernel_.set_arg( array_buf_ );
   kernel_.set_arg( result_array_buf_ );
   kernel_.set_arg( result_flag_buf_ );
@@ -120,7 +120,7 @@ bool bocl_global_memory_bandwidth_manager::run_kernel()
   if (!check_val(status,CL_SUCCESS,"Falied in command queue creation" + error_to_string(status)))
     return false;
 
-  kernel_.execute(command_queue_, 1, localThreads, globalThreads); 
+  kernel_.execute(command_queue_, 1, localThreads, globalThreads);
   status = clFinish(command_queue_);
   time_in_secs_ = kernel_.exec_time();
   if (!check_val(status,CL_SUCCESS,"clFinish failed."+error_to_string(status)))
@@ -144,15 +144,15 @@ bool bocl_global_memory_bandwidth_manager::run_kernel_prefetch()
 
   // Create and initialize memory objects
   create_buffers();
-  
+
   // -- Set appropriate arguments to the kernel --
-  kernel_.set_arg( cl_len_buf_ );  
+  kernel_.set_arg( cl_len_buf_ );
   kernel_.set_arg( array_buf_ );
   kernel_.set_arg( result_array_buf_ );
   kernel_.set_arg( result_flag_buf_ );
   kernel_.set_local_arg(sizeof(cl_float4)*this->group_size());
   kernel_.set_local_arg(sizeof(cl_uint));
-  
+
   cl_ulong used_local_memory;
   status = clGetKernelWorkGroupInfo(kernel_.kernel(),this->devices()[0],CL_KERNEL_LOCAL_MEM_SIZE,
                                     sizeof(cl_ulong),&used_local_memory,NULL);
@@ -180,7 +180,7 @@ bool bocl_global_memory_bandwidth_manager::run_kernel_prefetch()
   if (!check_val(status,CL_SUCCESS,"Falied in command queue creation" + error_to_string(status)))
     return false;
 
-  kernel_.execute(command_queue_, 1, localThreads, globalThreads); 
+  kernel_.execute(command_queue_, 1, localThreads, globalThreads);
   status = clFinish(command_queue_);
   time_in_secs_ = kernel_.exec_time();
   if (!check_val(status,CL_SUCCESS,"clFinish failed."+error_to_string(status)))
@@ -204,23 +204,23 @@ bool bocl_global_memory_bandwidth_manager::run_kernel_using_image()
   cl_int status = CL_SUCCESS;
   inputformat.image_channel_order = CL_RGBA;
   inputformat.image_channel_data_type = CL_FLOAT;
-  
+
   // Create and initialize memory objects
-  array_buf_ = new bocl_mem(this->context(), array_, curr_info_.image2d_max_width_ * sizeof(cl_float4), "array_buf_");
+  array_buf_ = new bocl_mem(this->context(), array_, curr_device_->info().image2d_max_width_ * sizeof(cl_float4), "array_buf_");
   array_buf_->create_image_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR,&inputformat,
-                                 this->image2d_max_width(),len_/this->image2d_max_width()); 
+                                  this->image2d_max_width(),len_/this->image2d_max_width());
 
   result_array_buf_ = new bocl_mem(this->context(), result_array_, len_ * sizeof(cl_float), "result_array_buf_");
-  result_array_buf_->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR); 
+  result_array_buf_->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
   cl_len_buf_ = new bocl_mem(this->context(), cl_len_, sizeof(cl_uint), "cl_len_buf_");
-  cl_len_buf_->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR); 
+  cl_len_buf_->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
   result_flag_buf_ = new bocl_mem(this->context(), result_flag_, sizeof(cl_int), "result_flag_buf_");
   result_flag_buf_->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
   // -- Set appropriate arguments to the kernel --
-  kernel_.set_arg( cl_len_buf_ );  
+  kernel_.set_arg( cl_len_buf_ );
   kernel_.set_arg( array_buf_ );
   kernel_.set_arg( result_array_buf_ );
   kernel_.set_arg( result_flag_buf_ );
@@ -252,7 +252,7 @@ bool bocl_global_memory_bandwidth_manager::run_kernel_using_image()
   command_queue_ = clCreateCommandQueue(this->context(),this->devices()[0],CL_QUEUE_PROFILING_ENABLE,&status);
   if (!check_val(status,CL_SUCCESS,"Falied in command queue creation" + error_to_string(status)))
     return false;
- 
+
   kernel_.execute(command_queue_, 1, localThreads, globalThreads);
   status = clFinish(command_queue_);
   time_in_secs_ = kernel_.exec_time();
@@ -271,12 +271,12 @@ bool bocl_global_memory_bandwidth_manager::run_kernel_using_image()
   return SDK_SUCCESS;
 }
 
-int bocl_global_memory_bandwidth_manager::create_kernel(vcl_string const& kernel_name, 
-                                                        vcl_string src_path, 
+int bocl_global_memory_bandwidth_manager::create_kernel(vcl_string const& kernel_name,
+                                                        vcl_string src_path,
                                                         vcl_string options)
 {
   vcl_vector<vcl_string> src_paths;
   src_paths.push_back(src_path);
-  return kernel_.create_kernel(&this->context(),&this->devices()[0], 
-    src_paths, kernel_name, options, "the kernel");
+  return kernel_.create_kernel(&this->context(),&this->devices()[0],
+                               src_paths, kernel_name, options, "the kernel");
 }
