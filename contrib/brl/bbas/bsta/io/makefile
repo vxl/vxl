@@ -14,6 +14,14 @@ MANPAGE_SOURCES += bsta_io_parzen_sphere.h
 MANPAGE_SOURCES += bsta_io_von_mises.h
 MANPAGE_SOURCES += bsta_io_beta.h
 
-################################
-include ${VXLROOT}/config/top.mk
-################################
+#######################################
+include ${VXLROOT}/config/top-params.mk
+#######################################
+
+ifndef NOTEST
+SUBDIRS += tests
+endif
+
+######################################
+include ${VXLROOT}/config/top-rules.mk
+######################################

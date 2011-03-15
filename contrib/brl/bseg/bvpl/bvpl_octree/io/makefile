@@ -6,6 +6,14 @@ SOURCES += bvpl_io_pca_error_scenes.cxx
 SOURCES += bvpl_io_discover_pca_kernels.cxx
 SOURCES += bvpl_io_taylor_scenes_map.cxx
 
-################################
-include ${VXLROOT}/config/top.mk
-################################
+#######################################
+include ${VXLROOT}/config/top-params.mk
+#######################################
+
+ifndef NOTEST
+SUBDIRS += tests
+endif
+
+######################################
+include ${VXLROOT}/config/top-rules.mk
+######################################

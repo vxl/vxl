@@ -18,6 +18,14 @@ SOURCES += bwm_delaunay_tri.cxx
 SOURCES += bwm_shape_file.cxx
 endif
 
-################################
-include ${VXLROOT}/config/top.mk
-################################
+#######################################
+include ${VXLROOT}/config/top-params.mk
+#######################################
+
+ifndef NOTEST
+SUBDIRS += tests
+endif
+
+######################################
+include ${VXLROOT}/config/top-rules.mk
+######################################

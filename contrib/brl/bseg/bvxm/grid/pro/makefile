@@ -18,6 +18,14 @@ SOURCES += processes/bvxm_create_grid_process.cxx
 SOURCES += processes/bvxm_fill_mesh_normals_grid_process.cxx
 SOURCES += processes/bvxm_save_rgba_grid_vrml_process.cxx
 
-################################
-include ${VXLROOT}/config/top.mk
-################################
+#######################################
+include ${VXLROOT}/config/top-params.mk
+#######################################
+
+ifndef NOTEST
+SUBDIRS += tests
+endif
+
+######################################
+include ${VXLROOT}/config/top-rules.mk
+######################################

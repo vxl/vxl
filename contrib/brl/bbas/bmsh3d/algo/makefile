@@ -10,6 +10,14 @@ SOURCES += bmsh3d_mesh_bnd.cxx
 SOURCES += bmsh3d_mesh_tri.cxx
 SOURCES += bmsh3d_mesh_triangulate.cxx
 
-################################
-include ${VXLROOT}/config/top.mk
-################################
+#######################################
+include ${VXLROOT}/config/top-params.mk
+#######################################
+
+ifndef NOTEST
+SUBDIRS += tests
+endif
+
+######################################
+include ${VXLROOT}/config/top-rules.mk
+######################################

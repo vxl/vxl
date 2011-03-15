@@ -10,6 +10,14 @@ SOURCES += bvxm_slab_to_image.cxx
 SOURCES += bvxm_grid_to_image_stack.cxx
 SOURCES += bvxm_vrml_voxel_grid.cxx
 
-################################
-include ${VXLROOT}/config/top.mk
-################################
+#######################################
+include ${VXLROOT}/config/top-params.mk
+#######################################
+
+ifndef NOTEST
+SUBDIRS += tests
+endif
+
+######################################
+include ${VXLROOT}/config/top-rules.mk
+######################################

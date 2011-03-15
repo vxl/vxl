@@ -9,6 +9,14 @@ SOURCES += breg3d_init_ekf_camera_optimizer_process.cxx
 SOURCES += breg3d_zero_occupancy_borders_process.cxx
 SOURCES += breg3d_init_ekf_camera_optimizer_planar_process.cxx
 
-################################
-include ${VXLROOT}/config/top.mk
-################################
+#######################################
+include ${VXLROOT}/config/top-params.mk
+#######################################
+
+ifndef NOTEST
+SUBDIRS += tests
+endif
+
+######################################
+include ${VXLROOT}/config/top-rules.mk
+######################################

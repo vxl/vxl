@@ -22,6 +22,14 @@ SOURCES += processes/boxm_compute_entropy_process.cxx
 SOURCES += processes/boxm_compute_expected_color_scene_process.cxx
 SOURCES += processes/boxm_save_scene_raw_process.cxx
 
-################################
-include ${VXLROOT}/config/top.mk
-################################
+#######################################
+include ${VXLROOT}/config/top-params.mk
+#######################################
+
+ifndef NOTEST
+SUBDIRS += tests
+endif
+
+######################################
+include ${VXLROOT}/config/top-rules.mk
+######################################

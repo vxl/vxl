@@ -15,6 +15,14 @@ SOURCES += processes/boxm_camera_viewing_scene_process.cxx
 SOURCES += processes/boxm_clean_scene_process.cxx
 SOURCES += processes/boxm_force_write_blocks_process.cxx
 
-################################
-include ${VXLROOT}/config/top.mk
-################################
+#######################################
+include ${VXLROOT}/config/top-params.mk
+#######################################
+
+ifndef NOTEST
+SUBDIRS += tests
+endif
+
+######################################
+include ${VXLROOT}/config/top-rules.mk
+######################################

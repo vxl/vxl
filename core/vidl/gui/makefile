@@ -7,6 +7,14 @@ SOURCES += vidl_gui_param_dialog.cxx
 SOURCES += vidl_capture_tableau.cxx
 MANPAGE_SOURCES += vidl_capture_tableau_sptr.h
 
-################################
-include ${VXLROOT}/config/top.mk
-################################
+#######################################
+include ${VXLROOT}/config/top-params.mk
+#######################################
+
+ifndef NOTEST
+SUBDIRS += tests
+endif
+
+######################################
+include ${VXLROOT}/config/top-rules.mk
+######################################

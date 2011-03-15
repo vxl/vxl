@@ -39,6 +39,14 @@ MANPAGE_SOURCES += vil3d_world_gradients.txx
 MANPAGE_SOURCES += vil3d_suppress_non_max_edges.txx
 MANPAGE_SOURCES += vil3d_fill_border.h
 
-################################
-include ${VXLROOT}/config/top.mk
-################################
+#######################################
+include ${VXLROOT}/config/top-params.mk
+#######################################
+
+ifndef NOTEST
+SUBDIRS += tests
+endif
+
+######################################
+include ${VXLROOT}/config/top-rules.mk
+######################################

@@ -9,6 +9,14 @@ SOURCES += processes/boxm_update_process.cxx
 SOURCES += processes/boxm_volume_visibility_process.cxx
 SOURCES += processes/boxm_render_expected_process.cxx
 
-################################
-include ${VXLROOT}/config/top.mk
-################################
+#######################################
+include ${VXLROOT}/config/top-params.mk
+#######################################
+
+ifndef NOTEST
+SUBDIRS += tests
+endif
+
+######################################
+include ${VXLROOT}/config/top-rules.mk
+######################################

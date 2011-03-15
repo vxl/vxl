@@ -25,6 +25,14 @@ SOURCES += processes/boxm_init_bit_scene_process.cxx
 SOURCES += processes/boxm_refine_bit_scene_process.cxx
 SOURCES += processes/boxm_clean_aux_data_scene_process.cxx
 
-################################
-include ${VXLROOT}/config/top.mk
-################################
+#######################################
+include ${VXLROOT}/config/top-params.mk
+#######################################
+
+ifndef NOTEST
+SUBDIRS += tests
+endif
+
+######################################
+include ${VXLROOT}/config/top-rules.mk
+######################################

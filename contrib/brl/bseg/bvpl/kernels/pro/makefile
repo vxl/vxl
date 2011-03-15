@@ -17,6 +17,14 @@ SOURCES += processes/bvpl_create_wc_kernel_vector_process.cxx
 SOURCES += processes/bvpl_load_taylor_kernel_process.cxx
 SOURCES += processes/bvpl_load_taylor_responses_process.cxx
 
-################################
-include ${VXLROOT}/config/top.mk
-################################
+#######################################
+include ${VXLROOT}/config/top-params.mk
+#######################################
+
+ifndef NOTEST
+SUBDIRS += tests
+endif
+
+######################################
+include ${VXLROOT}/config/top-rules.mk
+######################################

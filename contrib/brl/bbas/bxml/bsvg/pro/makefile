@@ -8,6 +8,14 @@ MANPAGE_SOURCES += bsvg_processes.h
 SOURCES += processes/bsvg_plot_roc_process.cxx
 SOURCES += processes/bsvg_plot_bar_processes.cxx
 
-################################
-include ${VXLROOT}/config/top.mk
-################################
+#######################################
+include ${VXLROOT}/config/top-params.mk
+#######################################
+
+ifndef NOTEST
+SUBDIRS += tests
+endif
+
+######################################
+include ${VXLROOT}/config/top-rules.mk
+######################################

@@ -24,6 +24,14 @@ SOURCES += processes/util/bvpl_find_pairs_process.cxx
 SOURCES += processes/util/bvpl_convert_pair_to_hue_process.cxx
 SOURCES += processes/util/bvpl_load_pair_grid_process.cxx
 
-################################
-include ${VXLROOT}/config/top.mk
-################################
+#######################################
+include ${VXLROOT}/config/top-params.mk
+#######################################
+
+ifndef NOTEST
+SUBDIRS += tests
+endif
+
+######################################
+include ${VXLROOT}/config/top-rules.mk
+######################################
