@@ -15,6 +15,19 @@ void boxm2_ocl_register::register_datatype()
 
 void boxm2_ocl_register::register_process()
 {
-  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_create_opencl_cache_process, "boxm2CreateOpenclCacheProcess");
+  //: utilites
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_ocl_render_expected_image_process, "boxm2OclRenderExpectedImageProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_ocl_render_expected_depth_process, "boxm2OclRenderExpectedDepthProcess");
+
+
+  //: research
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_ocl_update_histogram_process, "boxm2OclUpdateHistogramProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_ocl_batch_probability_process, "boxm2OclBatchProbabilityProcess");
+  
+  //: tools 
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_ocl_query_hist_data_process, "boxm2OclQueryHistDataProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_ocl_query_cell_data_process, "boxm2OclQueryCellDataProcess");
+
+  //: admin 
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_create_opencl_cache_process, "boxm2CreateOpenclCacheProcess");
 }

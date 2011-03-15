@@ -7,5 +7,9 @@
 //the init functions
 DECLARE_FUNC_CONS(boxm2_create_opencl_cache_process);
 DECLARE_FUNC_CONS(boxm2_ocl_render_expected_image_process);
-
+DECLARE_FUNC_CONS(boxm2_ocl_render_expected_depth_process);
+DECLARE_FUNC_CONS(boxm2_ocl_update_histogram_process);
+DECLARE_FUNC_CONS(boxm2_ocl_query_hist_data_process);
+DECLARE_FUNC_CONS(boxm2_ocl_batch_probability_process);
+DECLARE_FUNC_CONS(boxm2_ocl_query_cell_data_process);
 #endif

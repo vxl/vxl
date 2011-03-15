@@ -156,7 +156,10 @@ bool boxm2_opencl_refine_process::execute(vcl_vector<brdb_value_sptr>& input, vc
       // POSSIBLE PROBLEMS: data may not exist in cache and may need to be initialized...
       //this vector will be passed in (listing data types to refine)
       vcl_vector<vcl_string> data_types;
-      data_types.push_back(boxm2_data_traits<BOXM2_MOG3_GREY>::prefix());
+      if (data_type_=="16bit") 
+          data_types.push_back(boxm2_data_traits<BOXM2_MOG3_GREY_16>::prefix());
+      if (data_type_ =="8bit")
+          data_types.push_back(boxm2_data_traits<BOXM2_MOG3_GREY>::prefix());
       data_types.push_back(boxm2_data_traits<BOXM2_NUM_OBS>::prefix());
       for (unsigned int i=0; i<data_types.size(); ++i)
       {

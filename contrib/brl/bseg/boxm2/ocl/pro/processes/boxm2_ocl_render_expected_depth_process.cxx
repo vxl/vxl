@@ -1,7 +1,7 @@
-// This is brl/bseg/boxm2/ocl/pro/processes/boxm2_ocl_render_expected_image_process.cxx
+// This is brl/bseg/boxm2/ocl/pro/processes/boxm2_ocl_render_expected_depth_process.cxx
 //:
 // \file
-// \brief  A process for rendering the scene.
+// \brief  A process for rendering depth map of a scene.
 //
 // \author Vishal Jain
 // \date Mar 10, 2011
@@ -25,10 +25,10 @@
 #include <bocl/bocl_device.h>
 #include <bocl/bocl_kernel.h>
 
-namespace boxm2_ocl_render_expected_image_process_globals
+namespace boxm2_ocl_render_expected_depth_process_globals
 {
   const unsigned n_inputs_ = 6;
-  const unsigned n_outputs_ = 1;
+  const unsigned n_outputs_ = 2;
   const vcl_size_t local_threads[2]={8,8};
   void compile_kernel(bocl_device_sptr device,vcl_vector<bocl_kernel*> & vec_kernels)
   {
@@ -46,11 +46,9 @@ namespace boxm2_ocl_render_expected_image_process_globals
     src_paths.push_back(source_dir + "bit/cast_ray_bit.cl");
 
     //set kernel options
-    //#define STEP_CELL step_cell_render(mixture_array, alpha_array, data_ptr, d, &vis, &expected_int);
-    vcl_string options = " -D INTENSITY ";
-    options += " -D RENDER ";
-    options += " -D DETERMINISTIC ";
-    options += " -D STEP_CELL=step_cell_render(aux_args.mog,aux_args.alpha,data_ptr,d,vis,aux_args.expint)";
+    vcl_string options = " -D RENDER_DEPTH ";
+    options +=  "-D DETERMINISTIC";
+    options += " -D STEP_CELL=step_cell_render_depth2(tblock,aux_args.alpha,data_ptr,d,vis,aux_args.expdepth,aux_args.expdepthsqr,aux_args.probsum)";
 
     //have kernel construct itself using the context and device
     bocl_kernel * ray_trace_kernel=new bocl_kernel();
@@ -58,10 +56,11 @@ namespace boxm2_ocl_render_expected_image_process_globals
     ray_trace_kernel->create_kernel( &device->context(),
                                      device->device_id(),
                                      src_paths,
-                                     "render_bit_scene",   //kernel name
-                                     options+" -D MOG_TYPE_8 ",              //options
-                                     "boxm2 opencl render random blocks"); //kernel identifier (for error checking)
+                                     "render_depth",   //kernel name
+                                     options,              //options
+                                     "boxm2 opencl render depth image"); //kernel identifier (for error checking)
     vec_kernels.push_back(ray_trace_kernel);
+
     //create normalize image kernel
     vcl_vector<vcl_string> norm_src_paths;
     norm_src_paths.push_back(source_dir + "cell_utils.cl");
@@ -71,9 +70,9 @@ namespace boxm2_ocl_render_expected_image_process_globals
     normalize_render_kernel->create_kernel( &device->context(),
                                             device->device_id(),
                                             norm_src_paths,
-                                            "normalize_render_kernel",   //kernel name
+                                            "normalize_render_depth_kernel",   //kernel name
                                             options,              //options
-                                            "normalize render kernel"); //kernel identifier (for error checking)
+                                            "normalize render depth kernel"); //kernel identifier (for error checking)
 
 
     vec_kernels.push_back(normalize_render_kernel);
@@ -81,9 +80,9 @@ namespace boxm2_ocl_render_expected_image_process_globals
   static vcl_map<cl_device_id*,vcl_vector<bocl_kernel*> > kernels;
 }
 
-bool boxm2_ocl_render_expected_image_process_cons(bprb_func_process& pro)
+bool boxm2_ocl_render_expected_depth_process_cons(bprb_func_process& pro)
 {
-  using namespace boxm2_ocl_render_expected_image_process_globals;
+  using namespace boxm2_ocl_render_expected_depth_process_globals;
 
   //process takes 1 input
   vcl_vector<vcl_string> input_types_(n_inputs_);
@@ -99,13 +98,14 @@ bool boxm2_ocl_render_expected_image_process_cons(bprb_func_process& pro)
   // output[0]: scene sptr
   vcl_vector<vcl_string>  output_types_(n_outputs_);
   output_types_[0] = "vil_image_view_base_sptr";
+  output_types_[1] = "vil_image_view_base_sptr";
 
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 }
 
-bool boxm2_ocl_render_expected_image_process(bprb_func_process& pro)
+bool boxm2_ocl_render_expected_depth_process(bprb_func_process& pro)
 {
-  using namespace boxm2_ocl_render_expected_image_process_globals;
+  using namespace boxm2_ocl_render_expected_depth_process_globals;
 
   if ( pro.n_inputs() < n_inputs_ ){
     vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
@@ -151,14 +151,25 @@ bool boxm2_ocl_render_expected_image_process(bprb_func_process& pro)
   unsigned cl_nj=RoundUp(nj,local_threads[1]);
   float* buff = new float[cl_ni*cl_nj];
   for (unsigned i=0;i<cl_ni*cl_nj;i++) buff[i]=0.0f;
+  float* var_buff = new float[cl_ni*cl_nj];
+  for (unsigned i=0;i<cl_ni*cl_nj;i++) var_buff[i]=0.0f;
   float* vis_buff = new float[cl_ni*cl_nj];
   for (unsigned i=0;i<cl_ni*cl_nj;i++) vis_buff[i]=1.0f;
+  float* prob_buff = new float[cl_ni*cl_nj];
+  for (unsigned i=0;i<cl_ni*cl_nj;i++) prob_buff[i]=0.0f;
 
   bocl_mem_sptr exp_image=new bocl_mem(device->context(),buff,cl_ni*cl_nj*sizeof(float),"exp image buffer");
   exp_image->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
-  bocl_mem_sptr vis_image=new bocl_mem(device->context(),vis_buff,cl_ni*cl_nj*sizeof(float),"exp image buffer");
+  bocl_mem_sptr var_image=new bocl_mem(device->context(),var_buff,cl_ni*cl_nj*sizeof(float),"var image buffer");
+  var_image->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
+
+  bocl_mem_sptr vis_image=new bocl_mem(device->context(),vis_buff,cl_ni*cl_nj*sizeof(float),"vis image buffer");
   vis_image->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
+
+  bocl_mem_sptr prob_image=new bocl_mem(device->context(),prob_buff,cl_ni*cl_nj*sizeof(float),"vis x omega image buffer");
+  prob_image->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
+
 
   //: Image Dimensions
   int img_dim_buff[4];
@@ -185,7 +196,6 @@ bool boxm2_ocl_render_expected_image_process(bprb_func_process& pro)
   vcl_size_t lThreads[] = {8, 8};
   vcl_size_t gThreads[] = {cl_ni,cl_nj};
 
-  vcl_string data_type_="8bit";
   //: set arguments
   vcl_vector<boxm2_block_id> vis_order = scene->get_vis_blocks( (vpgl_perspective_camera<double>*) cam.ptr());
   vcl_vector<boxm2_block_id>::iterator id;
@@ -193,32 +203,27 @@ bool boxm2_ocl_render_expected_image_process(bprb_func_process& pro)
   {
     //choose correct render kernel
     boxm2_block_metadata mdata = scene->get_block_metadata(*id);
-    vcl_cout<<"Data is Random "<<mdata.random_<<vcl_endl;
     bocl_kernel* kern =  kernels[(device->device_id())][0];
 
     //write the image values to the buffer
     vul_timer transfer;
-    bocl_mem* blk       = opencl_cache->get_block(*id);
-    bocl_mem* alpha     = opencl_cache->get_data<BOXM2_ALPHA>(*id);
-    bocl_mem* mog;
-    if (data_type_=="8bit")
-      mog       = opencl_cache->get_data<BOXM2_MOG3_GREY>(*id);
-    else if (data_type_=="16bit")
-      mog       = opencl_cache->get_data<BOXM2_MOG3_GREY_16>(*id);
-    bocl_mem * blk_info  = opencl_cache->loaded_block_info();
-    transfer_time += (float) transfer.all();
+    bocl_mem* blk           = opencl_cache->get_block(*id);
+    bocl_mem* alpha         = opencl_cache->get_data<BOXM2_ALPHA>(*id);
+    bocl_mem * blk_info     = opencl_cache->loaded_block_info();
+    transfer_time          += (float) transfer.all();
 
     ////3. SET args
     kern->set_arg( blk_info );
     kern->set_arg( blk );
     kern->set_arg( alpha );
-    kern->set_arg( mog );
     kern->set_arg( persp_cam.ptr() );
     kern->set_arg( exp_image.ptr() );
+    kern->set_arg( var_image.ptr() );
     kern->set_arg( exp_img_dim.ptr());
     kern->set_arg( cl_output.ptr() );
     kern->set_arg( lookup.ptr() );
     kern->set_arg( vis_image.ptr() );
+    kern->set_arg( prob_image.ptr() );
 
     //local tree , cumsum buffer, imindex buffer
     kern->set_local_arg( local_threads[0]*local_threads[1]*sizeof(cl_uchar16) );
@@ -230,6 +235,10 @@ bool boxm2_ocl_render_expected_image_process(bprb_func_process& pro)
     clFinish(queue);
     gpu_time += kern->exec_time();
 
+    cl_output->read_to_buffer(queue);
+    for (int i=0; i<100; ++i) vcl_cout<<output_arr[i]<<" ";
+
+
     //clear render kernel args so it can reset em on next execution
     kern->clear_args();
   }
@@ -237,7 +246,8 @@ bool boxm2_ocl_render_expected_image_process(bprb_func_process& pro)
   {
     bocl_kernel* normalize_kern= kernels[(device->device_id())][1];
     normalize_kern->set_arg( exp_image.ptr() );
-    normalize_kern->set_arg( vis_image.ptr() );
+    normalize_kern->set_arg( var_image.ptr() );
+    normalize_kern->set_arg( prob_image.ptr() );
     normalize_kern->set_arg( exp_img_dim.ptr());
     normalize_kern->execute( queue, 2, lThreads, gThreads);
     clFinish(queue);
@@ -246,18 +256,25 @@ bool boxm2_ocl_render_expected_image_process(bprb_func_process& pro)
     //clear render kernel args so it can reset em on next execution
     normalize_kern->clear_args();
     exp_image->read_to_buffer(queue);
+    var_image->read_to_buffer(queue);
     vis_image->read_to_buffer(queue);
   }
 
-  vil_image_view<float>* exp_img_out=new vil_image_view<float>(ni,nj);
-
-  for (unsigned c=0;c<nj;c++)
-    for (unsigned r=0;r<ni;r++)
-      (*exp_img_out)(r,c)=buff[c*cl_ni+r];
 
   clReleaseCommandQueue(queue);
   i=0;
+
+  vil_image_view<float>* exp_img_out=new vil_image_view<float>(ni,nj);
+  vil_image_view<float>* exp_var_out=new vil_image_view<float>(ni,nj);
+
+  for (unsigned c=0;c<nj;c++)
+    for (unsigned r=0;r<ni;r++)
+    {
+        (*exp_img_out)(r,c)=buff[c*cl_ni+r];
+        (*exp_var_out)(r,c)=var_buff[c*cl_ni+r];
+    }
   // store scene smaprt pointer
   pro.set_output_val<vil_image_view_base_sptr>(i++, exp_img_out);
+  pro.set_output_val<vil_image_view_base_sptr>(i++, exp_var_out);
   return true;
 }
