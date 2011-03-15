@@ -53,7 +53,8 @@ bool boxm2_create_scene_process(bprb_func_process& pro)
 
   if (!vul_file::make_directory_path(datapath.c_str()))
     return false;
-  boxm2_scene_sptr scene =new boxm2_scene(datapath,vgl_point_3d<double>(origin_x,origin_y,origin_z));
+  boxm2_scene_sptr scene =new boxm2_scene(datapath);
+  scene->set_local_origin(vgl_point_3d<double>(origin_x,origin_y,origin_z));
 
   i=0;  // store scene smart pointer
   pro.set_output_val<boxm2_scene_sptr>(i++, scene);
