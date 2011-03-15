@@ -147,6 +147,8 @@ void test_vlarge_block_io()
   test_vlarge_block(blocks.back(), s-1, (float) 0);
   test_vlarge_block(blocks.back(), s-1019, (float) 0);
   test_vlarge_block(blocks.back(), s, (double) 0);
+  test_vlarge_block(blocks.back(), s, (vxl_int_64) 0);
+
   free_blocks(blocks);
 }
 
