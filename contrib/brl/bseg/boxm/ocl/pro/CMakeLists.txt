@@ -20,7 +20,7 @@ IF(EXPAT_FOUND)
  
   ADD_LIBRARY(boxm_ocl_pro ${boxm_ocl_pro_sources} )
 
-  TARGET_LINK_LIBRARIES(boxm_ocl_pro bbas_pro boxm_ocl boxm boxm_sample bprb brdb brip sdet vsol vil_io vil)
+  TARGET_LINK_LIBRARIES(boxm_ocl_pro bbas_pro boxm_ocl boxm boxm_sample bprb brdb brip sdet vsol vil_pro vil)
 
   IF( BUILD_TESTING )
     SUBDIRS(tests)

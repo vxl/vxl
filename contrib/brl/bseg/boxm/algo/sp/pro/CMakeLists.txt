@@ -21,7 +21,7 @@ IF(EXPAT_FOUND)
 
   ADD_LIBRARY(boxm_algo_sp_pro ${boxm_algo_sp_pro_sources} )
 
-  TARGET_LINK_LIBRARIES(boxm_algo_sp_pro boxm boxm_algo_sp bprb brdb brip sdet vsol vil_io vil)
+  TARGET_LINK_LIBRARIES(boxm_algo_sp_pro boxm boxm_algo_sp bprb brdb brip sdet vsol vil_pro vil)
 
   IF( BUILD_TESTING )
     SUBDIRS(tests)
