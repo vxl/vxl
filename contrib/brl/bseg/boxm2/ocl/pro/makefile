@@ -16,6 +16,11 @@ SOURCES += boxm2_ocl_register.cxx
 MANPAGE_SOURCES += boxm2_ocl_processes.h
 SOURCES += processes/boxm2_ocl_render_expected_image_process.cxx
 SOURCES += processes/boxm2_create_opencl_cache_process.cxx
+SOURCES += processes/boxm2_ocl_query_hist_data_process.cxx
+SOURCES += processes/boxm2_ocl_update_histogram_process.cxx
+SOURCES += processes/boxm2_ocl_batch_probability_process.cxx
+SOURCES += processes/boxm2_ocl_query_cell_data_process.cxx
+SOURCES += processes/boxm2_ocl_render_expected_depth_process.cxx
 
 #######################################
 include ${VXLROOT}/config/top-params.mk
