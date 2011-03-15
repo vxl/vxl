@@ -125,6 +125,21 @@ SOURCE=.\processes/boxm2_ocl_render_expected_image_process.cxx
 # Begin Source File
 SOURCE=.\processes/boxm2_create_opencl_cache_process.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\processes/boxm2_ocl_query_hist_data_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/boxm2_ocl_update_histogram_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/boxm2_ocl_batch_probability_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/boxm2_ocl_query_cell_data_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/boxm2_ocl_render_expected_depth_process.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"

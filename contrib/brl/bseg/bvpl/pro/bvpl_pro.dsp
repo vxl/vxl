@@ -152,6 +152,15 @@ SOURCE=.\processes/util/bvpl_load_pair_grid_process.cxx
 # Begin Source File
 SOURCE=.\Templates/brdb_value_t+bvpl_corner_pairs_sptr-.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\Templates/brdb_value_t+bvxm_voxel_grid_base_sptr-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/brdb_value_t+bvpl_kernel_sptr-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vbl_io_smart_ptr+bvxm_voxel_grid_base-.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"

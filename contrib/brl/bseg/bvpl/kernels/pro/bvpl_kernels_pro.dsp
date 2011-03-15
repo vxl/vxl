@@ -134,6 +134,12 @@ SOURCE=.\processes/bvpl_load_taylor_responses_process.cxx
 # Begin Source File
 SOURCE=.\Templates/brdb_value_t+bvpl_kernel_sptr-.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\Templates/brdb_value_t+bvpl_taylor_scenes_map_sptr-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vbl_io_smart_ptr+bvpl_taylor_scenes_map-.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"

@@ -110,6 +110,9 @@ SOURCE=.\Templates/brdb_value_t+bapl_conn_table_sptr-.cxx
 # Begin Source File
 SOURCE=.\Templates/brdb_value_t+bapl_keypoint_set_sptr-.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\Templates/brdb_value_t+vil_image_view_base_sptr-.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"

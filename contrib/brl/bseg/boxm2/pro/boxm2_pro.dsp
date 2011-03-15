@@ -101,6 +101,15 @@ SOURCE=.\processes/boxm2_load_scene_process.cxx
 # Begin Source File
 SOURCE=.\processes/boxm2_create_cache_process.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\processes/boxm2_add_block_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/boxm2_write_scene_xml_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/boxm2_create_scene_process.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
