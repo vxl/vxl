@@ -1,4 +1,5 @@
-// This is brl/bseg/boxm2/ocl/pro/processes/boxm2_add_block_process.cxx
+// This is brl/bseg/boxm2/pro/processes/boxm2_add_block_process.cxx
+#include <bprb/bprb_func_process.h>
 //:
 // \file
 // \brief  A process for creating a scene
@@ -6,10 +7,7 @@
 // \author Vishal Jain
 // \date Mar 15, 2011
 
-#include <bprb/bprb_func_process.h>
-
 #include <vcl_fstream.h>
-#include <boxm2/boxm2_scene.h>
 #include <vul/vul_file.h>
 #include <boxm2/boxm2_scene.h>
 
@@ -66,18 +64,17 @@ bool boxm2_add_block_process(bprb_func_process& pro)
   float    local_x          =pro.get_input<float>           (i++);
   float    local_y          =pro.get_input<float>           (i++);
   float    local_z          =pro.get_input<float>           (i++);
-  
+
   float    blk_dims         =pro.get_input<float>           (i++);
   float    max_data_size    =pro.get_input<float>           (i++);
   float    p_init           =pro.get_input<float>           (i++);
 
-
   boxm2_block_id id(index_i,index_j,index_k);
   vcl_map<boxm2_block_id, boxm2_block_metadata> blks=scene->blocks();
 
-  if(blks.find(id)!=blks.end())
+  if (blks.find(id)!=blks.end())
   {
-      vcl_cout<<"block already exists "<<vcl_endl;
+      vcl_cout<<"block already exists"<<vcl_endl;
       return false;
   }
 

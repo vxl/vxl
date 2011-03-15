@@ -1,4 +1,5 @@
-// This is brl/bseg/boxm2/ocl/pro/processes/boxm2_create_scene_process.cxx
+// This is brl/bseg/boxm2/pro/processes/boxm2_create_scene_process.cxx
+#include <bprb/bprb_func_process.h>
 //:
 // \file
 // \brief  A process for creating a scene
@@ -6,10 +7,7 @@
 // \author Vishal Jain
 // \date Mar 15, 2011
 
-#include <bprb/bprb_func_process.h>
-
 #include <vcl_fstream.h>
-#include <boxm2/boxm2_scene.h>
 #include <vul/vul_file.h>
 #include <boxm2/boxm2_scene.h>
 
@@ -53,8 +51,8 @@ bool boxm2_create_scene_process(bprb_func_process& pro)
   float origin_z= pro.get_input<float>(i++);
 
 
-  if(!vul_file::make_directory_path(datapath.c_str()))
-      return false;
+  if (!vul_file::make_directory_path(datapath.c_str()))
+    return false;
   boxm2_scene_sptr scene =new boxm2_scene(datapath,vgl_point_3d<double>(origin_x,origin_y,origin_z));
 
   i=0;  // store scene smart pointer
