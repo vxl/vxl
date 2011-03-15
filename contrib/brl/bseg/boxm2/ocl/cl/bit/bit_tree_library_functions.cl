@@ -117,6 +117,12 @@ void set_tree_bit_at(__local uchar* tree, int index, bool val)
   tree[byte_index] = (val)? (byte | mask) : (byte & (mask ^ 0xFF));
 }
 
+
+//-----------------------------------------------------------------------------
+//TODO: turn all data_index functions into two steps:
+//      1. Unpack root pointer
+//      2. do relative data index sum
+//-----------------------------------------------------------------------------
 //--------------------------------------------------------------------
 // returns the short offset of the data 
 // unpacks offset (ushort) from tree[10] and tree[11],
@@ -147,6 +153,31 @@ int data_index(int rIndex, __local uchar* tree, ushort bit_index, __constant uch
 
   return (count_offset+count) - (((count_offset+count)>>16)<<16);
 }
+
+//Data index relative without any caching
+int data_index_relative(__local uchar* tree, ushort bit_index, __constant uchar* bit_lookup)
+{
+  ////Unpack data offset (offset to root data)
+  if(bit_index < 9)
+    return bit_index;
+ 
+  //otherwise get parent index, parent byte index and relative bit index
+  uchar oneuplevel=(bit_index-1)>>3;
+  uchar byte_index= ((oneuplevel-1)>>3) +1;
+
+  uchar sub_bit_index=8-((oneuplevel-1)&(8-1));
+  int count=0;
+  for(int i=0;i<byte_index;i++)
+    count += bit_lookup[tree[i]];
+
+  uchar temp=tree[byte_index]<<sub_bit_index;
+  count=count+bit_lookup[temp];
+  uchar finestleveloffset=(bit_index-1)&(8-1);
+  count = 8*count+1 +finestleveloffset;
+
+  return count; 
+}
+
 
 //optimized to use cumulative sum counts
 int data_index_cached(__local uchar* tree, ushort bit_index, __constant uchar* bit_lookup, __local uchar* cumsum, int *cumIndex, int data_len)

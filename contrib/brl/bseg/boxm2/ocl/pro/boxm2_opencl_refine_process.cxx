@@ -284,7 +284,7 @@ void boxm2_opencl_refine_process::swap_data(boxm2_block_id id,
   bocl_mem* blk = cache_->get_block(id);
   bocl_mem* blk_info = cache_->loaded_block_info();
 
-  //prob_thresh buffer
+  //is alpha buffer
   bool* is_alpha_buffer = new bool[1];
   if (type == boxm2_data_traits<BOXM2_ALPHA>::prefix())
     (*is_alpha_buffer) = true;
@@ -292,6 +292,15 @@ void boxm2_opencl_refine_process::swap_data(boxm2_block_id id,
     (*is_alpha_buffer) = false;
   bocl_mem is_alpha((*context_), is_alpha_buffer, sizeof(cl_bool), "is_alpha buffer");
   is_alpha.create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
+  
+  //copy parent behavior.. if true, Data copies its parent
+  bool* copy_parent_buffer = new bool[1];
+  if (type == boxm2_data_traits<BOXM2_MOG3_GREY>::prefix() || type == boxm2_data_traits<BOXM2_MOG3_GREY_16>::prefix())
+    (*copy_parent_buffer) = true; 
+  else 
+    (*copy_parent_buffer) = false; 
+  bocl_mem copy_parent((*context_), copy_parent_buffer, sizeof(cl_bool), "copy_parent buffer");
+  copy_parent.create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
   //make it a reference so the destructor isn't called at the end...
   bocl_kernel* kern = refine_datas_[boxm2_data_info::datasize(type)];
@@ -303,6 +312,7 @@ void boxm2_opencl_refine_process::swap_data(boxm2_block_id id,
   kern->set_arg( new_dat );
   kern->set_arg( prob_thresh_ );
   kern->set_arg( &is_alpha );
+  kern->set_arg( &copy_parent ); 
   kern->set_arg( lookup_ );
   kern->set_arg( cl_output_ );
   kern->set_local_arg( 16*sizeof(cl_uchar) );
@@ -327,7 +337,8 @@ void boxm2_opencl_refine_process::swap_data(boxm2_block_id id,
   }
 
   //clean up DAT
-  delete[] is_alpha_buffer;
+  delete[] is_alpha_buffer;  
+  delete[] copy_parent_buffer;
 }
 
 //: Refines the block copy and returns blk_copy and tree_sizes bocl_mem pointers

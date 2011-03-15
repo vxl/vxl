@@ -182,7 +182,8 @@ int move_data(__constant RenderSceneInfo * linfo,
                          int               MAX_CELLS, 
               __constant uchar           * bit_lookup,
                          float             prob_thresh,
-                         bool              is_alpha)
+                         bool              is_alpha,
+                         bool              copy_parent)
 {
   //only used in alpha case
   float max_alpha_int = (-1)*log(1.0 - prob_thresh);      
@@ -227,8 +228,11 @@ int move_data(__constant RenderSceneInfo * linfo,
         __global float* dest_f = (__global float*) dest; 
         dest_f[newDataPtr] = newAlpha;  
       }
+      else if(copy_parent && pj >= 0) {
+        int pDataPtr = data_index_relative(unrefined_tree, pj, bit_lookup);
+        dest[newDataPtr] = src[pDataPtr]; 
+      }
       else {
-        //int pDataPtr = data_index(0, unrefined_tree, pj, bit_lookup);
         dest[newDataPtr] = (MOG_TYPE) 0;
       }
 
@@ -334,6 +338,7 @@ __kernel void refine_data( __constant RenderSceneInfo * linfo,
                            __global   MOG_TYPE        * data_cpy,         // data array to be copied into, size(data_cpy) = tree_sizes[last] + sizeof(last_tree); 
                            __global   float           * prob_thresh_t,    //IF THIS VALUE IS less than 0, then it is not the alpha pass
                            __global   bool            * is_alpha_t,       //this is true if you're refining alpha, otherwise it should be false
+                           __global   bool            * copy_parent_t,    //if this is true, then new cells should copy parent values
                            __constant uchar           * bit_lookup,       // used to get data_index                  
                            __global   float           * output, 
                            __local    uchar           * cumsum,
@@ -402,6 +407,7 @@ __kernel void refine_data( __constant RenderSceneInfo * linfo,
       //locally cache prob_thresh
       float prob_thresh = *prob_thresh_t;
       bool is_alpha = (*is_alpha_t); 
+      bool copy_parent = (*copy_parent_t);
 
       //do some Pointer arithmetic to pass in aligned data
       int numNew = move_data(linfo, 
@@ -412,7 +418,8 @@ __kernel void refine_data( __constant RenderSceneInfo * linfo,
                              MAX_CELLS,  
                              bit_lookup, 
                              prob_thresh,
-                             is_alpha ); 
+                             is_alpha,
+                             copy_parent ); 
                              
     }
   }
