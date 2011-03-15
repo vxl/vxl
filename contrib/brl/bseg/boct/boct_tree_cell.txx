@@ -204,11 +204,10 @@ void boct_tree_cell<T_loc,T_data>::delete_children()
       delete vis_node_;
       vis_node_ = NULL;
     }
-  } else {
-    if (vis_node_) {
-      delete vis_node_;
-      vis_node_ = NULL;
-    }
+  }
+  else if (vis_node_) {
+    delete vis_node_;
+    vis_node_ = NULL;
   }
 }
 
@@ -333,18 +332,17 @@ bool boct_tree_cell<T_loc,T_data>::insert_subtree( boct_tree_cell<T_loc,T_data>*
   // make sure it is leaf
   if (!this->is_leaf() || subtree->is_leaf())
     return false;
-    
+
   // check if the max tree levels are going to be exceeded
-    
+
   children_ = subtree->children();
   subtree->set_children_null();
-  short child_level = this->level()-1;
   // update location code for the newly added subtree nodes
   for (unsigned i=0; i<8; i++) {
     children_[i].set_parent(this);
     children_[i].update_code(i,*this);
   }
-  
+
   return true;
 }
 
@@ -827,9 +825,8 @@ void boct_tree_cell<T_loc,T_data>::print()
 {
   vcl_cout << "LEVEL=" << this->level()
            << " code=" << code_
-           << " parent=" << parent_;
-
-  vcl_cout << " data=" << data_;
+           << " parent=" << parent_
+           << " data=" << data_;
 
   if (is_leaf())
     vcl_cout << " LEAF" << vcl_endl;
@@ -856,9 +853,9 @@ void vsl_b_write(vsl_b_ostream & os, boct_tree_cell<T_loc,T_data>& cell)
       vsl_b_write(os, children[i]);
   }
   else // no children
-      {
-      vsl_b_write(os, leaf);
-      }
+  {
+    vsl_b_write(os, leaf);
+  }
 }
 
 template<class T_loc,class T_data>
@@ -870,30 +867,30 @@ void vsl_b_read(vsl_b_istream & is, boct_tree_cell<T_loc,T_data>& c, boct_tree_c
   vsl_b_read(is,version);
   switch (version)
   {
-    case 1: {
-     vsl_b_read(is, c.code_);
-     T_data data;
-     vsl_b_read(is, data);
-     c.set_data(data);
-     c.set_parent(parent);
-     c.set_vis_node(NULL);
-     bool leaf;
-     vsl_b_read(is, leaf);
-     if (!leaf) {
-       c.split();
-       boct_tree_cell<T_loc,T_data>* children = c.children();
-       for (unsigned i=0; i<8; i++) {
-         children[i].set_parent(&c);
-         vsl_b_read(is, children[i], &c);
-       }
-     }
-     break;
+   case 1: {
+    vsl_b_read(is, c.code_);
+    T_data data;
+    vsl_b_read(is, data);
+    c.set_data(data);
+    c.set_parent(parent);
+    c.set_vis_node(NULL);
+    bool leaf;
+    vsl_b_read(is, leaf);
+    if (!leaf) {
+      c.split();
+      boct_tree_cell<T_loc,T_data>* children = c.children();
+      for (unsigned i=0; i<8; i++) {
+        children[i].set_parent(&c);
+        vsl_b_read(is, children[i], &c);
+      }
     }
-    default:
-     vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, boct_tree<T>&)\n"
-              << "           Unknown version number "<< version << '\n';
-     is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
-     return;
+    break;
+   }
+   default:
+    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, boct_tree<T>&)\n"
+             << "           Unknown version number "<< version << '\n';
+    is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+    return;
   }
 }
 
@@ -910,4 +907,5 @@ template vcl_ostream& operator <<(vcl_ostream &s, boct_tree_cell<T_loc,T_data >&
 template void vsl_b_read(vsl_b_istream &, boct_tree_cell<T_loc,T_data >&, boct_tree_cell<T_loc,T_data >*); \
 template void vsl_b_write(vsl_b_ostream &, boct_tree_cell<T_loc,T_data >&); \
 template class boct_cell_vis_graph_node<T_loc,T_data >
+
 #endif // boct_tree_cell_txx_
