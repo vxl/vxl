@@ -158,6 +158,11 @@ class boct_tree_cell
   void set_data(T_data const& data) {data_=data; }
   T_data data() {return data_; }
 
+  //: uding the parent node's location code, updates the location code of a child
+  // this is used for nodes inserted (insert_subtree) later after the main tree is 
+  // already constructed
+  void update_code(unsigned i, boct_tree_cell<T_loc,T_data>& parent);
+
   void set_vis_node(boct_cell_vis_graph_node<T_loc,T_data> * node) {vis_node_=node; }
   boct_cell_vis_graph_node<T_loc,T_data> * vis_node() {return vis_node_; }
 
@@ -166,6 +171,11 @@ class boct_tree_cell
 
   // splits and puts the data value new_data at the newly created cells
   bool split(T_data new_data);
+
+  //: inserts a tree(already created in the same exact cell boundaries) at a leaf node
+  // subtree does not contain any children anymore after the insertion, it's children 
+  // are inserted into this tree and detached from it
+  bool insert_subtree( boct_tree_cell<T_loc,T_data>*& subtree);
 
   void print();
 

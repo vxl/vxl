@@ -315,6 +315,40 @@ bool boct_tree_cell<T_loc,T_data>::split(T_data data)
 }
 
 template<class T_loc,class T_data>
+void boct_tree_cell<T_loc,T_data>::update_code(unsigned i, boct_tree_cell<T_loc,T_data>& parent)
+{
+  short child_level = parent.level()-1;
+  this->code_ = parent.code_.child_loc_code(i, child_level);
+  this->code_.level = child_level;
+  if (is_leaf())
+    return;
+  for (unsigned j=0; j<8; j++) {
+    children_[j].update_code(j, *this);
+  }
+}
+
+template<class T_loc,class T_data>
+bool boct_tree_cell<T_loc,T_data>::insert_subtree( boct_tree_cell<T_loc,T_data>*& subtree)
+{
+  // make sure it is leaf
+  if (!this->is_leaf() || subtree->is_leaf())
+    return false;
+    
+  // check if the max tree levels are going to be exceeded
+    
+  children_ = subtree->children();
+  subtree->set_children_null();
+  short child_level = this->level()-1;
+  // update location code for the newly added subtree nodes
+  for (unsigned i=0; i<8; i++) {
+    children_[i].set_parent(this);
+    children_[i].update_code(i,*this);
+  }
+  
+  return true;
+}
+
+template<class T_loc,class T_data>
 boct_tree_cell<T_loc,T_data>* boct_tree_cell<T_loc,T_data>::get_common_ancestor(short binarydiff)
 {
   short curr_level=this->level();
