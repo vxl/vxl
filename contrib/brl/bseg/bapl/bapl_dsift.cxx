@@ -111,7 +111,7 @@ vnl_vector<double> bapl_dsift::vnl_dsift( unsigned const& key_x, unsigned const&
 
               float gw = bapl_dsift::gaussian((xc-float(key_x)), (yc-float(key_y)));
 
-              float weight = this->grad_mag_(xc,yc) * interp_x * interp_y * bapl_dsift::gaussian((xc-float(key_x)), (yc-float(key_y)));
+              float weight = this->grad_mag_(xc,yc) * interp_x * interp_y * gw;
 
               float orient = this->grad_orient_(xc,yc)-key_orient+vnl_math::pi;
 
