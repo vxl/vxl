@@ -14,3 +14,7 @@ AUX_SOURCE_DIRECTORY(processes bsvg_pro_sources)
 
 ADD_LIBRARY(bsvg_pro ${bsvg_pro_sources})
 TARGET_LINK_LIBRARIES(bsvg_pro bsvg bprb brdb vbl_io vul)
+
+IF( BUILD_TESTING )
+  SUBDIRS(tests)
+ENDIF( BUILD_TESTING )

@@ -1,0 +1,2 @@
+ADD_EXECUTABLE( vpgl_file_formats_test_include test_include.cxx )
+TARGET_LINK_LIBRARIES( vpgl_file_formats_test_include vpgl_file_formats)

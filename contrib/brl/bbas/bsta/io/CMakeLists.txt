@@ -21,3 +21,7 @@ SET(bsta_io_sources
 
 #ADD_LIBRARY(bsta_io  ${bsta_io_sources})
 #TARGET_LINK_LIBRARIES(bsta_io bsta vnl_io vbl_io vbl)
+
+IF( BUILD_TESTING )
+  SUBDIRS(tests)
+ENDIF( BUILD_TESTING )

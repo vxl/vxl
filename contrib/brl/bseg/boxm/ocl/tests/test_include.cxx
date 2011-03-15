@@ -18,7 +18,4 @@
 #include <boxm/ocl/boxm_render_probe_manager_sptr.h>
 #include <boxm/ocl/boxm_update_bit_scene_manager_sptr.h>
 
-#include <boxm/ocl/pro/boxm_ocl_processes.h>
-#include <boxm/ocl/pro/boxm_ocl_register.h>
-
 int main() { return 0; }

@@ -24,4 +24,8 @@ IF(EXPAT_FOUND)
   # Need vpgl_pro only for the instantiation of brdb_value_t<vbl_smart_ptr<vpgl_camera<double> > >
   # Need vil_pro  only for the instantiation of brdb_value_t<vil_smart_ptr<vil_image_view_base> >
 
+  IF( BUILD_TESTING )
+    SUBDIRS(tests)
+  ENDIF( BUILD_TESTING )
+
 ENDIF(EXPAT_FOUND)

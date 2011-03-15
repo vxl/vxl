@@ -8,8 +8,6 @@
 #include <bgrl2/bgrl2_vertex.h>
 #include <bgrl2/bgrl2_graph.h>
 
-#include <bgrl2/algo/bgrl2_algs.h>
-
 #include "test_node.h"
 #include "test_edge.h"
 #include "test_graph.h"

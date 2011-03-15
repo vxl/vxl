@@ -1,0 +1,5 @@
+ADD_EXECUTABLE( vgl_algo_test_include test_include.cxx )
+TARGET_LINK_LIBRARIES( vgl_algo_test_include vgl_algo)
+
+ADD_EXECUTABLE( vgl_algo_test_template_include test_template_include.cxx )
+TARGET_LINK_LIBRARIES( vgl_algo_test_template_include vgl_algo)

@@ -1,20 +1,3 @@
-#include <bwm/algo/bwm_algo.h>
-#include <bwm/algo/bwm_delaunay_tri.h>
-#include <bwm/algo/bwm_image_processor.h>
-#include <bwm/algo/bwm_lidar_algo.h>
-#include <bwm/algo/bwm_plane_fitting_lsf.h>
-#include <bwm/algo/bwm_rat_proj_camera.h>
-#include <bwm/algo/bwm_shape_file.h>
-#include <bwm/algo/bwm_soview2D_cross.h>
-#include <bwm/algo/bwm_soview2D_vertex.h>
-#include <bwm/algo/bwm_utils.h>
-#include <bwm/algo/bwm_utm_lat_lon.h>
-
-#include <bwm/io/bwm_io_config_parser.h>
-#include <bwm/io/bwm_io_structs.h>
-#include <bwm/io/bwm_site.h>
-#include <bwm/io/bwm_site_sptr.h>
-
 #include <bwm/bwm_command.h>
 #include <bwm/bwm_command_macros.h>
 #include <bwm/bwm_command_sptr.h>
@@ -60,8 +43,5 @@
 #include <bwm/bwm_tableau_video.h>
 #include <bwm/bwm_texture_map_generator.h>
 #include <bwm/bwm_world.h>
-
-#include <bwm/pro/bwm_processes.h>
-#include <bwm/pro/bwm_register.h>
 
 int main() { return 0; }

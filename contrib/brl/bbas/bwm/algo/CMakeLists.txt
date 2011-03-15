@@ -33,7 +33,7 @@ ENDIF(ECW_FOUND)
 
 ADD_LIBRARY(bwm_algo ${bwm_algo_sources})
 
-TARGET_LINK_LIBRARIES( bwm_algo bwm sdet vtol vil vil_algo vgl vgl_algo vnl vnl_algo vsol vpgl vpgl_algo vpgl_file_formats bgui brip vdgl bsta vgui vul vcl shapelib )
+TARGET_LINK_LIBRARIES( bwm_algo sdet vtol vil vil_algo vgl vgl_algo vnl vnl_algo vsol vpgl vpgl_algo vpgl_file_formats bgui brip vdgl bsta vgui vul vcl shapelib )
 
 IF( BUILD_TESTING )
   SUBDIRS(tests)

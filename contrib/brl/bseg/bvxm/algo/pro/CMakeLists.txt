@@ -16,5 +16,10 @@ IF(EXPAT_FOUND)
 
   ADD_LIBRARY(bvxm_algo_pro ${bvxm_algo_pro_sources} )
 
-  TARGET_LINK_LIBRARIES(bvxm_algo_pro bvxm_algo bprb brdb vul)
+  TARGET_LINK_LIBRARIES(bvxm_algo_pro bvxm_algo bvxm_grid_pro bprb brdb vul)
+
+  IF( BUILD_TESTING )
+    SUBDIRS(tests)
+  ENDIF( BUILD_TESTING )
+
 ENDIF(EXPAT_FOUND)

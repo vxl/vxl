@@ -39,3 +39,7 @@ ADD_LIBRARY(vil3d_algo ${vil3d_algo_sources})
 INSTALL_TARGETS(/lib vil3d_algo)
 INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/mul/vil3d/algo ${vil3d_algo_sources})
 TARGET_LINK_LIBRARIES( vil3d_algo vil3d vil_algo vil vnl vgl )
+
+IF( BUILD_TESTING )
+  SUBDIRS(tests)
+ENDIF( BUILD_TESTING )

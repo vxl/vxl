@@ -1,0 +1,2 @@
+ADD_EXECUTABLE( bvpl_kernels_io_test_include test_include.cxx )
+TARGET_LINK_LIBRARIES( bvpl_kernels_io_test_include bvpl_kernels_io)

@@ -10,3 +10,7 @@ AUX_SOURCE_DIRECTORY(Templates bvpl_octree_io_sources)
 
 ADD_LIBRARY(bvpl_octree_io ${bvpl_octree_io_sources})
 TARGET_LINK_LIBRARIES(bvpl_octree_io bvpl_octree vbl_io vsl vbl)
+
+IF( BUILD_TESTING )
+  SUBDIRS(tests)
+ENDIF( BUILD_TESTING )

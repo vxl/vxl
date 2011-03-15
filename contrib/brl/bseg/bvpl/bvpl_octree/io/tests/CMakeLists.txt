@@ -1,0 +1,2 @@
+ADD_EXECUTABLE( bvpl_octree_io_test_include test_include.cxx )
+TARGET_LINK_LIBRARIES( bvpl_octree_io_test_include bvpl_octree_io)

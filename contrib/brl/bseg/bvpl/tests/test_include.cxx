@@ -7,7 +7,4 @@
 #include <bvpl/bvpl_vector_operator.h>
 #include <bvpl/bvpl_voxel_subgrid.h>
 
-#include <bvpl/pro/bvpl_processes.h>
-#include <bvpl/pro/bvpl_register.h>
-
 int main() { return 0; }

@@ -9,7 +9,4 @@
 #include <bocl/bocl_mem.h>
 #include <bocl/bocl_utils.h>
 
-#include <bocl/pro/bocl_processes.h>
-#include <bocl/pro/bocl_register.h>
-
 int main() { return 0; }

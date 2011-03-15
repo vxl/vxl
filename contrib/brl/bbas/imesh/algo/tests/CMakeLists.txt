@@ -1,0 +1,5 @@
+ADD_EXECUTABLE( imesh_algo_test_include test_include.cxx )
+TARGET_LINK_LIBRARIES( imesh_algo_test_include imesh_algo)
+
+ADD_EXECUTABLE( imesh_algo_test_template_include test_template_include.cxx )
+TARGET_LINK_LIBRARIES( imesh_algo_test_template_include imesh_algo)

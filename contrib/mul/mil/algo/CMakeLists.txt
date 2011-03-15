@@ -18,3 +18,7 @@ ADD_LIBRARY(mil_algo ${mil_algo_sources})
 INSTALL_TARGETS(/lib mil_algo)
 INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/mul/mil/algo ${mil_algo_sources})
 TARGET_LINK_LIBRARIES(mil_algo mil mbl vnl vsl)
+
+IF( BUILD_TESTING )
+  SUBDIRS(tests)
+ENDIF( BUILD_TESTING )

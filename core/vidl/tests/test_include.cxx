@@ -47,8 +47,4 @@
 #include <vidl/vidl_v4l_ulong_fix.h>
 #endif // 0
 
-#include <vidl/gui/vidl_gui_param_dialog.h>
-#include <vidl/gui/vidl_capture_tableau.h>
-#include <vidl/gui/vidl_capture_tableau_sptr.h>
-
 int main() { return 0; }

@@ -1,0 +1,2 @@
+ADD_EXECUTABLE( bvxm_algo_pro_test_include test_include.cxx )
+TARGET_LINK_LIBRARIES( bvxm_algo_pro_test_include bvxm_algo_pro)

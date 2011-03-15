@@ -20,8 +20,8 @@ AUX_SOURCE_DIRECTORY(processes bapl_pro_sources)
 
 ADD_LIBRARY(bapl_pro ${bapl_pro_sources})
 
-TARGET_LINK_LIBRARIES(bapl_pro bapl)
+TARGET_LINK_LIBRARIES(bapl_pro bapl bprb brdb vil_io)
 
-#IF( BUILD_TESTING )
-#  SUBDIRS(tests)
-#ENDIF( BUILD_TESTING )
+IF( BUILD_TESTING )
+  SUBDIRS(tests)
+ENDIF( BUILD_TESTING )

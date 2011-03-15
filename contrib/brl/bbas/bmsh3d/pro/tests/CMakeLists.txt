@@ -1,0 +1,2 @@
+ADD_EXECUTABLE( bmsh3d_pro_test_include test_include.cxx )
+TARGET_LINK_LIBRARIES( bmsh3d_pro_test_include bmsh3d_pro)

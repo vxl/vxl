@@ -24,4 +24,8 @@ IF(EXPAT_FOUND)
 
   TARGET_LINK_LIBRARIES(boxm_algo_rt_pro boxm_algo_rt boxm_algo_pro boxm boxm_sample boxm_sample_algo boct bprb brdb brip sdet vgl vnl_algo vil vul vcl)
 
+  IF( BUILD_TESTING )
+    SUBDIRS(tests)
+  ENDIF( BUILD_TESTING )
+
 ENDIF(EXPAT_FOUND)

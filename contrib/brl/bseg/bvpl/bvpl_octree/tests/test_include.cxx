@@ -14,12 +14,4 @@
 #include <bvpl/bvpl_octree/bvpl_taylor_basis.h>
 #include <bvpl/bvpl_octree/bvpl_taylor_scenes_map.h>
 
-#include <bvpl/bvpl_octree/io/bvpl_io_discover_pca_kernels.h>
-#include <bvpl/bvpl_octree/io/bvpl_io_pca_error_scenes.h>
-#include <bvpl/bvpl_octree/io/bvpl_io_taylor_scenes_map.h>
-
-#include <bvpl/bvpl_octree/sample/bvpl_octree_sample.h>
-#include <bvpl/bvpl_octree/sample/bvpl_pca_basis_sample.h>
-#include <bvpl/bvpl_octree/sample/bvpl_taylor_basis_sample.h>
-
 int main() { return 0; }

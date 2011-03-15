@@ -13,7 +13,6 @@
 #include <vpgl/vpgl_rational_camera.txx>
 #include <vpgl/vpgl_reg_fundamental_matrix.txx>
 
-#include <vpgl/io/vpgl_io_camera.txx>
 #include <vpgl/xio/vpgl_xio_calibration_matrix.txx>
 
 int main() { return 0; }

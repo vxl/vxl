@@ -25,3 +25,7 @@ ENDIF(TIFF_FOUND)
 ADD_LIBRARY(vpgl_file_formats ${vpgl_file_formats_sources})
 
 TARGET_LINK_LIBRARIES(vpgl_file_formats vpgl vil vnl)
+
+IF( BUILD_TESTING )
+  SUBDIRS(tests)
+ENDIF( BUILD_TESTING )

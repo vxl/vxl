@@ -14,3 +14,7 @@ SET( bmsh3d_algo_sources
 
 ADD_LIBRARY( bmsh3d_algo  ${bmsh3d_algo_sources})
 TARGET_LINK_LIBRARIES( bmsh3d_algo bmsh3d rply vgl vnl vul)
+
+IF( BUILD_TESTING )
+  SUBDIRS(tests)
+ENDIF( BUILD_TESTING )

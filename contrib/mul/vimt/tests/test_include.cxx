@@ -1,10 +1,5 @@
 #include <vimt/vimt_fwd.h>
 
-#include <vimt/algo/vimt_correlate_2d.h>
-#include <vimt/algo/vimt_find_peaks.h>
-#include <vimt/algo/vimt_find_troughs.h>
-#include <vimt/algo/vimt_normalised_correlation_2d.h>
-#include <vimt/algo/vimt_pyramid_values_at_point.h>
 #include <vimt/vimt_add_all_binary_loaders.h>
 #include <vimt/vimt_bilin_interp.h>
 #include <vimt/vimt_convert.h>

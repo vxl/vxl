@@ -1,0 +1,5 @@
+ADD_EXECUTABLE( vtol_algo_test_include test_include.cxx )
+TARGET_LINK_LIBRARIES( vtol_algo_test_include vtol_algo)
+
+ADD_EXECUTABLE( vtol_algo_test_template_include test_template_include.cxx )
+TARGET_LINK_LIBRARIES( vtol_algo_test_template_include vtol_algo)

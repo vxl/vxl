@@ -21,11 +21,4 @@
 #include <bmsh3d/bmsh3d_he_mesh.h>
 #include <bmsh3d/bmsh3d_textured_mesh_mc.h>
 
-#include <bmsh3d/algo/bmsh3d_fileio.h>
-#include <bmsh3d/algo/bmsh3d_mesh_bnd.h>
-#include <bmsh3d/algo/bmsh3d_mesh_tri.h>
-#include <bmsh3d/algo/bmsh3d_mesh_triangulate.h>
-
-#include <bmsh3d/pro/bmsh3d_cmdpara.h>
-
 int main() { return 0; }

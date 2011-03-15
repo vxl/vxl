@@ -16,4 +16,8 @@ INSTALL_TARGETS(/lib vidl_gui)
 INSTALL_NOBASE_HEADER_FILES(/include/vxl/core/vidl/gui ${vidl_gui_sources})
 TARGET_LINK_LIBRARIES( vidl_gui vidl vgui vil )
 
+IF( BUILD_TESTING )
+  SUBDIRS(tests)
+ENDIF( BUILD_TESTING )
+
 ENDIF( HAS_VGUI )

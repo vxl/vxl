@@ -18,4 +18,9 @@ IF(EXPAT_FOUND)
   ADD_LIBRARY(bocl_pro ${bocl_pro_sources} )
 
   TARGET_LINK_LIBRARIES(bocl_pro bocl bprb brdb )
+
+  IF( BUILD_TESTING )
+    SUBDIRS(tests)
+  ENDIF( BUILD_TESTING )
+
 ENDIF(EXPAT_FOUND)
