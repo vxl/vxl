@@ -54,7 +54,7 @@ void compute_corr_intensities(vcl_vector<vcl_string> img_files,
                 int u=(int)vcl_floor(point2d.x());
                 int v=(int)vcl_floor(point2d.y());
 
-                if (u>=ni/2+rx && u+rx<ni && v>ry && v+ry<nj)
+                if (u>=(int)ni/2+rx && u+rx<(int)ni && v>ry && v+ry<(int)nj)
                 {
                     // average value of a corr throughout the sequence
                     mus[j]+=avg_intensity(*floatimg,rx,ry,u,v);
@@ -120,7 +120,7 @@ int main(int argc, char** argv)
                 if (!corrs[j]->match(i,point2d)) continue;
                 int u=(int)vcl_floor(point2d.x());
                 int v=(int)vcl_floor(point2d.y());
-                if (u>=ni/2+rx && u+rx<ni && v>ry && v+ry<nj)
+                if (u>=(int)ni/2+rx && u+rx<(int)ni && v>ry && v+ry<(int)nj)
                 {
                     // avg intensity over a neighborhood.
                     float avgintensity=avg_intensity(*floatimg,rx,ry,u,v);
