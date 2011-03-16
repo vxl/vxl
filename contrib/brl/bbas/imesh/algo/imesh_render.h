@@ -69,8 +69,8 @@ void imesh_render_triangle_label(const vgl_point_3d<double>& v1,
 
 
 //: Render a textured triangle defined by its vertices
-// v1,v2,v3 are coordinates in the projected image (plus depth)
-// t1,t2,t3 are corresponding texture coordinates (in the unit square)
+// \p v1,v2,v3 are coordinates in the projected image (plus depth)
+// \p t1,t2,t3 are corresponding texture coordinates (in the unit square)
 void imesh_render_triangle_texture(const vgl_point_3d<double>& v1,
                                    const vgl_point_3d<double>& v2,
                                    const vgl_point_3d<double>& v3,
