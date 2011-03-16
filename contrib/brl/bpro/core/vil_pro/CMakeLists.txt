@@ -6,7 +6,6 @@ INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bseg )
 INCLUDE_DIRECTORIES( ${GEL_INCLUDE_DIR} )
 
 SET(vil_pro_sources
-    vil_io_image_view_base.h            vil_io_image_view_base.cxx
     vil_math_functors.h
     vil_register.h                       vil_register.cxx
     vil_processes.h
