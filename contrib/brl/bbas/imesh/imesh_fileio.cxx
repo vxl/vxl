@@ -361,9 +361,8 @@ void imesh_write_obj(vcl_ostream& os, const imesh_mesh& mesh)
         }
         if (mesh.has_tex_coords() == imesh_mesh::TEX_COORD_ON_VERT)
           os << faces(f,v)+1;
-        os << '/';
         if (verts.has_normals())
-          os << faces(f,v)+1;
+          os << '/' << faces(f,v)+1;
       }
     }
     os << '\n';
