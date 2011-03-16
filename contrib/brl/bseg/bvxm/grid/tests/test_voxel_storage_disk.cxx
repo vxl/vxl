@@ -37,7 +37,9 @@ static void test_voxel_storage_disk()
       bvxm_voxel_slab<float>::iterator vit;
       for (vit = slab.begin(); vit != slab.end(); vit++, count++) {
         if (*vit != init_val) {
+#ifdef DEBUG
           vcl_cerr << "error: read in value does not match init value! slice = " << i << ", count = " << count << vcl_endl;
+#endif
           init_check = false;
         }
         // write new value
@@ -63,7 +65,9 @@ static void test_voxel_storage_disk()
       bvxm_voxel_slab<float>::iterator vit;
       for (vit = slab.begin(); vit != slab.end(); vit++, count++) {
         if (*vit != static_cast<float>(count)) {
+#ifdef DEBUG
           vcl_cerr << "error: read in value does not match written value! slice = " << i << ", count = " << count << vcl_endl;
+#endif
           write_read_check = false;
         }
       }
