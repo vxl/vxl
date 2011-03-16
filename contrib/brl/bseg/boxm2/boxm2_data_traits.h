@@ -18,8 +18,10 @@ enum boxm2_data_type
   BOXM2_MOG3_GREY,
   BOXM2_MOG3_GREY_16,
   BOXM2_BATCH_HISTOGRAM,
+  BOXM2_GAUSS_RGB,
   BOXM2_MOG2_RGB,
   BOXM2_NUM_OBS,
+  BOXM2_NUM_OBS_SINGLE,
   BOXM2_AUX,   
   BOXM2_INTENSITY,
   BOXM2_UNKNOWN
@@ -60,6 +62,15 @@ class boxm2_data_traits<BOXM2_MOG3_GREY_16>
 };
 
 template<>
+class boxm2_data_traits<BOXM2_GAUSS_RGB>
+{
+ public:
+  typedef vnl_vector_fixed<unsigned char, 8> datatype;
+  static vcl_size_t datasize(){return sizeof(datatype);}
+  static vcl_string prefix(){ return "boxm2_gauss_rgb";}
+};
+
+template<>
 class boxm2_data_traits<BOXM2_MOG2_RGB>
 {
  public:
@@ -75,6 +86,15 @@ class boxm2_data_traits<BOXM2_NUM_OBS>
     typedef vnl_vector_fixed<unsigned short, 4> datatype;
     static vcl_size_t datasize(){return sizeof(datatype);}
     static vcl_string prefix(){ return "boxm2_num_obs";}
+};
+
+template<>
+class boxm2_data_traits<BOXM2_NUM_OBS_SINGLE>
+{
+  public:
+    typedef unsigned short datatype;
+    static vcl_size_t datasize(){return sizeof(datatype);}
+    static vcl_string prefix(){ return "boxm2_num_obs_single";}
 };
 
 
@@ -134,8 +154,15 @@ class boxm2_data_info
         
       if(prefix == boxm2_data_traits<BOXM2_AUX>::prefix())
         return boxm2_data_traits<BOXM2_AUX>::datasize();
+     
       if(prefix == boxm2_data_traits<BOXM2_INTENSITY>::prefix())
         return boxm2_data_traits<BOXM2_INTENSITY>::datasize();
+     
+      if(prefix == boxm2_data_traits<BOXM2_GAUSS_RGB>::prefix())
+        return boxm2_data_traits<BOXM2_GAUSS_RGB>::datasize();   
+     
+      if(prefix == boxm2_data_traits<BOXM2_NUM_OBS_SINGLE>::prefix())
+        return boxm2_data_traits<BOXM2_NUM_OBS_SINGLE>::datasize();   
         
       return 0;
     }
