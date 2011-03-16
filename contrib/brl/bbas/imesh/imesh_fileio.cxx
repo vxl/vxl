@@ -244,7 +244,7 @@ bool imesh_read_obj(vcl_istream& is, imesh_mesh& mesh)
                   ni.push_back(v-1);
                 }
                 else {
-                  vcl_cerr << "improperly formed face line in OBJ 1: "<<line<<'\n';
+                  vcl_cerr << "improperly formed face line in OBJ: "<<line<<'\n';
                   return false;
                 }
               }
@@ -256,7 +256,7 @@ bool imesh_read_obj(vcl_istream& is, imesh_mesh& mesh)
                 ni.push_back(v-1);
               }
               else {
-                vcl_cerr << "improperly formed face line in OBJ 2: "<<line<<'\n';
+                vcl_cerr << "improperly formed face line in OBJ: "<<line<<'\n';
                 return false;
               }
             }
