@@ -328,7 +328,7 @@ void imesh_write_obj(vcl_ostream& os, const imesh_mesh& mesh)
   if (mesh.has_tex_coords()) {
     const vcl_vector<vgl_point_2d<double> >& tex = mesh.tex_coords();
     for (unsigned int t=0; t<tex.size(); ++t) {
-      os << "vt " << tex[t].x() << ' ' << tex[t].y() << " 0.0\n";
+      os << "vt " << tex[t].x() << ' ' << tex[t].y() << "\n";
     }
   }
 
