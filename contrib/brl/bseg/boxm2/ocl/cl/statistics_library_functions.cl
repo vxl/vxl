@@ -1,6 +1,9 @@
 #pragma OPENCL EXTENSION cl_khr_byte_addressable_store : enable
 float gauss_prob_density(float x, float mu, float sigma)
 {
+  if(sigma <= 0.0f) 
+    return 1.0f; 
+  
   float ratio=(x - mu)/sigma;
   return 0.398942280f*exp(-0.5f*ratio*ratio)/sigma;
 }
@@ -9,6 +12,9 @@ float gauss_prob_density(float x, float mu, float sigma)
 //Gaussian parameters stored are Mus and Sigma (not sigma^2)
 inline float gauss_prob_density_rgb(float4 x, float4 mu, float4 sigma)
 {
+  if( any(sigma <= 0.0f) )
+    return 1.0f; 
+    
   float4 pwr = (x-mu)*(x-mu) / (sigma*sigma); 
   return 0.0634936359f*(1.0f/(sigma.x*sigma.y*sigma.z))*exp(-0.5f*(pwr.x+pwr.y+pwr.z)); 
   //return 0.398942280f*exp(-0.5f*(x.x - mu.x)*(x.x - mu.x)/(sigma.x*sigma.x))/sigma.x;

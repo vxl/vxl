@@ -44,7 +44,6 @@ seg_len_main(__constant  RenderSceneInfo    * linfo,
              __global    float16            * camera,           // camera orign and SVD of inverse of camera matrix
              __global    uint4              * imgdims,          // dimensions of the input image
              __global    float              * in_image,         // the input image
-             __global    float              * vis_image,        // Vis image to keep visibility over multiple blocks
              __global    float              * output,
              __local     uchar16            * local_tree,       // cache current tree into local memory
              __local     short2             * ray_bundle_array, // gives information for which ray takes over in the workgroup
@@ -68,10 +67,8 @@ seg_len_main(__constant  RenderSceneInfo    * linfo,
   int imIndex = j*get_global_size(0) + i;
   
   //grab input image value (also holds vis)
-  //float4 inImage = in_image[imIndex];
-  //float obs = inImage.x;
   float obs = in_image[imIndex]; 
-  float vis = vis_image[imIndex]; 
+  float vis = 1.0f;  //no visibility in this pass
   barrier(CLK_LOCAL_MEM_FENCE);
 
   // cases #of threads will be more than the pixels.
@@ -103,8 +100,6 @@ seg_len_main(__constant  RenderSceneInfo    * linfo,
             linfo, tree_array,                                  //scene info
             local_tree, bit_lookup, cumsum, &vis, aux_args);    //utility info
             
-  //store visibility so blocks that are farther start out correctly
-  vis_image[imIndex] = vis; 
 }
 #endif
 
@@ -134,7 +129,6 @@ pre_inf_main(__constant  RenderSceneInfo    * linfo,
              __constant  uchar              * bit_lookup,       // used to get data_index
              __global    float16            * camera,           // camera orign and SVD of inverse of camera matrix
              __global    uint4              * imgdims,          // dimensions of the input image
-             //__global    float              * in_image,         // the input image
              __global    float              * vis_image,        // visibility image 
              __global    float              * pre_image,        // preinf image 
              __global    float              * output,
@@ -227,7 +221,6 @@ bayes_main(__constant  RenderSceneInfo    * linfo,
            __constant  uchar              * bit_lookup,       // used to get data_index
            __global    float16            * camera,           // camera orign and SVD of inverse of camera matrix
            __global    uint4              * imgdims,          // dimensions of the input image
-           //__global    float4             * in_image,         // the input image
            __global    float              * vis_image,        // visibility image (for keeping vis accross blocks)
            __global    float              * pre_image,        // preinf image (for keeping pre accross blocks)
            __global    float              * norm_image,        // norm image (for bayes update normalization factor)
@@ -258,7 +251,6 @@ bayes_main(__constant  RenderSceneInfo    * linfo,
   if (i>=(*imgdims).z || j>=(*imgdims).w || i<(*imgdims).x || j<(*imgdims).y) 
     return;
   float vis0 = 1.0f;
-  //float4 inImage = in_image[j*get_global_size(0) + i];
   float norm = norm_image[j*get_global_size(0) + i]; 
   float vis = vis_image[j*get_global_size(0) + i]; 
   float pre = pre_image[j*get_global_size(0) + i]; 

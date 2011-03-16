@@ -10,7 +10,7 @@
 typedef struct
 {
   __global float*   alpha; //alpha
-  __global int4 *   mog;    //mixture of 2 3-d gaussians (as uchar 16
+  __global int2 *   mog;    //mixture of 2 3-d gaussians (as uchar 16
            float*   vis; 
            float4*  expint; //expected intensity (3 channels)
 } AuxArgs;  
@@ -18,13 +18,14 @@ typedef struct
 //forward declare cast ray (so you can use it)
 void cast_ray(int,int,float,float,float,float,float,float,__constant RenderSceneInfo*,
               __global int4*,__local uchar16*,__constant uchar*,__local uchar*,float*,AuxArgs); 
-__kernel void
+__kernel
+void
 render_bit_scene( __constant  RenderSceneInfo    * linfo,
                   __global    int4               * tree_array,
                   __global    float              * alpha_array,
-                  __global    int4               * mixture_array,
+                  __global    int2               * mixture_array,
                   __global    float16            * camera,        // camera orign and SVD of inverse of camera matrix
-                  __global    uint               * exp_image,      // input image and store vis_inf and pre_inf
+                  __global    float4             * exp_image,      // input image and store vis_inf and pre_inf
                   __global    uint4              * exp_image_dims,
                   __global    float              * output,
                   __constant  uchar              * bit_lookup,
@@ -41,7 +42,6 @@ render_bit_scene( __constant  RenderSceneInfo    * linfo,
   int i=0,j=0;
   i=get_global_id(0);
   j=get_global_id(1);
-  imIndex[llid] = j*get_global_size(0)+i;
 
   // check to see if the thread corresponds to an actual pixel as in some
   // cases #of threads will be more than the pixels.
@@ -60,9 +60,9 @@ render_bit_scene( __constant  RenderSceneInfo    * linfo,
   // BEGIN RAY TRACE
   //----------------------------------------------------------------------------
   //Store image index (may save a register).  Also initialize VIS and expected_int
-  uchar4 eint   = as_uchar4(exp_image[imIndex[llid]]); //read image as uchar4 (3 bytes for RGB)
-  float4 expint = convert_float4(eint)/255.0f; 
-  float vis     = vis_image[imIndex[llid]];
+  imIndex[llid] = j*get_global_size(0)+i;
+  float4  expint = exp_image[imIndex[llid]];
+  float  vis     = vis_image[imIndex[llid]];
   AuxArgs aux_args; 
   aux_args.alpha  = alpha_array; 
   aux_args.mog    = mixture_array;
@@ -75,15 +75,11 @@ render_bit_scene( __constant  RenderSceneInfo    * linfo,
             local_tree, bit_lookup, cumsum, &vis, aux_args);      //utility info
             
   //store the expected intensity (as UINT)
-  //exp_image[imIndex[llid]] = rgbaFloatToInt((float4) expint); 
-  uchar4 feint = convert_uchar4( expint*255.0f ); 
-  feint.w = 255; 
-  exp_image[imIndex[llid]] = as_uint(feint); 
+  exp_image[imIndex[llid]] = expint; 
 
   //store visibility at the end of this block
   vis_image[imIndex[llid]] = vis;
 }
-
 void step_cell_render(AuxArgs aux_args, int data_ptr, uchar llid, float d)
 {
   float alpha = aux_args.alpha[data_ptr];
@@ -93,11 +89,14 @@ void step_cell_render(AuxArgs aux_args, int data_ptr, uchar llid, float d)
   // for rendering only
   if(diff_omega<0.995f)
   {
-    uchar16 udata = as_uchar16(aux_args.mog[data_ptr]); 
-    float16 data = convert_float16(udata)/255.0f; 
-    expected_int_cell = (data.s0123 * data.s7) + (data.s89AB * (1.0f-data.s7)); 
+    uchar8 udata = as_uchar8(aux_args.mog[data_ptr]); 
+    float8 data = convert_float8(udata)/255.0f; 
+    //expected_int_cell = (data.s0123); //just take mean values (0,1,2,3)
+   
+    expected_int_cell = data.s0123; 
   }
   
+  //calc and store visibility
   float omega = (*aux_args.vis) * (1.0f - diff_omega);
   (*aux_args.vis) *= diff_omega;
   (*aux_args.expint) += expected_int_cell*omega;

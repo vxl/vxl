@@ -14,6 +14,9 @@
 #ifdef MOG_TYPE_4
    #define MOG_TYPE uchar4
 #endif
+#ifdef MOG_TYPE_2
+   #define MOG_TYPE uchar2
+#endif
 
 /////////////////////////////////////////////////////////////////
 ////Refine Tree (refines local tree)
