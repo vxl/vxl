@@ -11,7 +11,7 @@ SET( imesh_algo_sources
   imesh_project.cxx            imesh_project.h
   imesh_detect.cxx             imesh_detect.h
   imesh_kd_tree.cxx            imesh_kd_tree.h      imesh_kd_tree.txx
-                               imesh_render.h
+  imesh_render.cxx             imesh_render.h
   imesh_imls_surface.cxx       imesh_imls_surface.h imesh_imls_surface.txx
 )
 AUX_SOURCE_DIRECTORY(Templates imesh_algo_sources)

@@ -17,12 +17,15 @@
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_vector_3d.h>
 #include <vgl/vgl_triangle_scan_iterator.h>
+#include <vpgl/vpgl_perspective_camera.h>
 #include <vcl_cassert.h>
 
 
-//: Render a triangle defined by its vertices
-// For each 3d point, X and Y map to image coordinates and Z maps to depth
-// The values i1,i2,i3 are interpolated and rendered into image
+//: Render a triangle defined by its vertices.
+// For each 3d point, X and Y map to image coordinates and Z maps to depth.
+// Assign label to each pixel in image such that the pixel is within
+// the triangle and the interpolated depth is less than the value in depth_img.
+// The depth is also updated for each pixel that is labeled
 template <class T>
 void imesh_render_triangle_label(const vgl_point_3d<double>& v1,
                                  const vgl_point_3d<double>& v2,
@@ -63,5 +66,30 @@ void imesh_render_triangle_label(const vgl_point_3d<double>& v1,
     }
   }
 }
+
+
+//: Render a textured triangle defined by its vertices
+// v1,v2,v3 are coordinates in the projected image (plus depth)
+// t1,t2,t3 are corresponding texture coordinates (in the unit square)
+void imesh_render_triangle_texture(const vgl_point_3d<double>& v1,
+                                   const vgl_point_3d<double>& v2,
+                                   const vgl_point_3d<double>& v3,
+                                   const vgl_point_2d<double>& t1,
+                                   const vgl_point_2d<double>& t2,
+                                   const vgl_point_2d<double>& t3,
+                                   const vil_image_view<vxl_byte>& texture,
+                                   vil_image_view<vxl_byte>& image,
+                                   vil_image_view<double>& depth_img);
+
+
+//: Render the mesh using the camera and a texture image
+//  A depth map is also computed and used for occlusion.
+//  Texture mapping uses interpolates from the texture image with no
+//  additional lighting calculations.
+void imesh_render_textured(const imesh_mesh& mesh,
+                           const vpgl_proj_camera<double>& camera,
+                           const vil_image_view<vxl_byte>& texture,
+                           vil_image_view<vxl_byte>& image,
+                           vil_image_view<double>& depth_img);
 
 #endif // imesh_render_h_
