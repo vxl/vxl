@@ -140,6 +140,15 @@ bool imesh_project_texture_to_barycentric(const imesh_mesh& mesh,
 vnl_matrix_fixed<double,3,3>
 imesh_project_texture_to_3d_map(const imesh_mesh& mesh, unsigned int tidx);
 
+//: compute the affine matrix that maps triangle (a1,b1,c1) to (a2,b2,c2)
+vnl_matrix_fixed<double,3,3>
+imesh_affine_map(const vgl_point_2d<double>& a1,
+                 const vgl_point_2d<double>& b1,
+                 const vgl_point_2d<double>& c1,
+                 const vgl_point_2d<double>& a2,
+                 const vgl_point_2d<double>& b2,
+                 const vgl_point_2d<double>& c2);
+
 //: project barycentric coordinates with an index to texture space
 //  \param idx is the face index
 vgl_point_2d<double>

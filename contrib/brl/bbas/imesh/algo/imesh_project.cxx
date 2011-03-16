@@ -921,6 +921,38 @@ imesh_project_texture_to_3d_map(const imesh_mesh& mesh, unsigned int tidx)
 }
 
 
+//: compute the affine matrix that maps triangle (a1,b1,c1) to (a2,b2,c2)
+vnl_matrix_fixed<double,3,3>
+imesh_affine_map(const vgl_point_2d<double>& a1,
+                 const vgl_point_2d<double>& b1,
+                 const vgl_point_2d<double>& c1,
+                 const vgl_point_2d<double>& a2,
+                 const vgl_point_2d<double>& b2,
+                 const vgl_point_2d<double>& c2)
+{
+  // triangle 1 to barycentric coordinates
+  vnl_matrix_fixed<double,3,3> M1;
+  {
+    vgl_vector_2d<double> v1(b1-a1), v2(c1-a1);
+    double s = 1.0 / (v2.y()*v1.x() - v2.x()*v1.y());
+    M1(0,0) = v2.y()*s;   M1(0,1) = -v2.x()*s;   M1(0,2) = (a1.y()*c1.x()-a1.x()*c1.y())*s;
+    M1(1,0) = -v1.y()*s;  M1(1,1) = v1.x()*s;    M1(1,2) = (a1.x()*b1.y()-a1.y()*b1.x())*s;
+    M1(2,0) = 0.0;        M1(2,1) = 0.0;         M1(2,2) = 1.0;
+  }
+
+  // barycentric coordinates to triangle 2
+  vnl_matrix_fixed<double,3,3> M2;
+  {
+    vgl_vector_2d<double> v1(b2-a2), v2(c2-a2);
+    M2(0,0) = v1.x();   M2(0,1) = v2.x();   M2(0,2) = a2.x();
+    M2(1,0) = v1.y();   M2(1,1) = v2.y();   M2(1,2) = a2.y();
+    M2(2,0) = 0.0;      M2(2,1) = 0.0;      M2(2,2) = 1.0;
+  }
+
+  return M2*M1;
+}
+
+
 //: project barycentric coordinates with an index to texture space
 //  \param idx is the face index
 vgl_point_2d<double>
