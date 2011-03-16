@@ -33,17 +33,21 @@ bool boxm2_opencl_refine_process::init_kernel(cl_context* context,
   src_paths.push_back(source_dir + "bit/refine_bit_scene.cl");
 
   //have kernel construct itself using the context and device
-  bool created =  refine_kernel_.create_kernel( context_, device, src_paths, "refine_bit_scene", opts, "boxm2 opencl refine"); //kernel identifier (for error checking)
+  if(opts == "") opts += "-D MOG_TYPE_8 "; 
+  bool created = true; // refine_kernel_.create_kernel( context_, device, src_paths, "refine_bit_scene", opts, "boxm2 opencl refine (random)"); //kernel identifier (for error checking)
   created = created&&refine_trees_.create_kernel( context_, device, src_paths, "refine_trees", opts, "boxm2 opencl refine trees (pass one)"); //kernel identifier (for error checking)
   //created = created&& refine_scan_.create_kernel( context_, device, src_paths, "refine_scan", opts, "boxm2 opencl refine scan (pass two)"); //kernel identifier (for error checking)
 
   //set refine datas
+  bocl_kernel* rd2 = new bocl_kernel(); 
   bocl_kernel* rd4 = new bocl_kernel();
   bocl_kernel* rd8 = new bocl_kernel();
   bocl_kernel* rd16= new bocl_kernel();
+  rd2->create_kernel( context_, device, src_paths, "refine_data", "-D MOG_TYPE_2 ", "boxm2 opencl refine data size 2 (pass three)");
   rd4->create_kernel( context_, device, src_paths, "refine_data", "-D MOG_TYPE_4 ", "boxm2 opencl refine data size 4 (pass three)");
   rd8->create_kernel( context_, device, src_paths, "refine_data", "-D MOG_TYPE_8 ", "boxm2 opencl refine data size 8 (pass three)");
   rd16->create_kernel( context_, device, src_paths, "refine_data", "-D MOG_TYPE_16 ", "boxm2 opencl refine data size 16 (pass three)");
+  refine_datas_[2] = rd2; 
   refine_datas_[4] = rd4;
   refine_datas_[8] = rd8;
   refine_datas_[16] = rd16;
@@ -156,11 +160,8 @@ bool boxm2_opencl_refine_process::execute(vcl_vector<brdb_value_sptr>& input, vc
       // POSSIBLE PROBLEMS: data may not exist in cache and may need to be initialized...
       //this vector will be passed in (listing data types to refine)
       vcl_vector<vcl_string> data_types;
-      if (data_type_=="16bit") 
-          data_types.push_back(boxm2_data_traits<BOXM2_MOG3_GREY_16>::prefix());
-      if (data_type_ =="8bit")
-          data_types.push_back(boxm2_data_traits<BOXM2_MOG3_GREY>::prefix());
-      data_types.push_back(boxm2_data_traits<BOXM2_NUM_OBS>::prefix());
+      data_types.push_back(boxm2_data_traits<BOXM2_GAUSS_RGB>::prefix());
+      data_types.push_back(boxm2_data_traits<BOXM2_NUM_OBS_SINGLE>::prefix());
       for (unsigned int i=0; i<data_types.size(); ++i)
       {
         vcl_cout<<"Swapping data of type: "<<data_types[i]<<vcl_endl;

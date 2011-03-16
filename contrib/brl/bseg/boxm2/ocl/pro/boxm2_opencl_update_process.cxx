@@ -185,7 +185,6 @@ bool boxm2_opencl_update_process::execute(vcl_vector<brdb_value_sptr>& input, vc
       int status = clFinish(*command_queue_);
       check_val(status, MEM_FAILURE, "UPDATE EXECUTE FAILED: " + error_to_string(status));
       update_kernels_[i]->clear_args();
-      image_->read_to_buffer(*command_queue_);
       norm_image_->read_to_buffer(*command_queue_); 
       continue;
     }
@@ -317,7 +316,6 @@ bool boxm2_opencl_update_process::set_args(unsigned pass)
       update_kernels_[pass]->set_arg( persp_cam_ );
       update_kernels_[pass]->set_arg( img_dim_ );
       update_kernels_[pass]->set_arg( image_ );
-      update_kernels_[pass]->set_arg( vis_image_ );
       update_kernels_[pass]->set_arg( cl_output_ );
       update_kernels_[pass]->set_local_arg( lThreads_[0]*lThreads_[1]*sizeof(cl_uchar16) );//local tree,
       update_kernels_[pass]->set_local_arg( lThreads_[0]*lThreads_[1]*sizeof(cl_uchar4) ); //ray bundle,

@@ -33,6 +33,7 @@
 
 //vgui stuff
 #include <boxm2/view/boxm2_render_tableau.h>
+#include <boxm2/view/boxm2_render_rgb_tableau.h>
 #include <vgui/vgui.h>
 #include <vgui/vgui_adaptor.h>
 #include <vgui/vgui_window.h>
@@ -53,6 +54,7 @@ int main(int argc, char ** argv)
     vul_arg<vcl_string> scene_file("-scene", "scene filename", "");
     vul_arg<vcl_string> camdir("-cam", "camera directory", "");
     vul_arg<vcl_string> imgdir("-img", "image directory", "");
+    vul_arg<bool> rgb("-rgb", "update rgb model", false); 
     vul_arg<unsigned> ni("-ni", "Width of output image", 1280);
     vul_arg<unsigned> nj("-nj", "Height of output image", 720);
 
@@ -95,17 +97,35 @@ int main(int argc, char ** argv)
       ifs >> *pcam;
     }
   
-    //create a new ocl_draw_glbuffer_tableau, window, and initialize it
-    boxm2_render_tableau_new bit_tableau;  
-    bit_tableau->init(scene_file(),ni(),nj(),pcam, cam_files, img_files);
-
-    //create window, attach the new tableau and status bar
-    vgui_window* win = vgui::produce_window(ni(), nj(), "OpenCl Volume Visualizer");
-    win->get_adaptor()->set_tableau(bit_tableau); 
-    bit_tableau->set_statusbar(win->get_statusbar());
-    win->show();
-   
-    GLboolean bGLEW = glewIsSupported("GL_VERSION_2_0  GL_ARB_pixel_buffer_object");
-    vcl_cout << "GLEW is supported= " << bGLEW << vcl_endl;
-    return vgui::run();
+    //if RGB, use an RGB tableau...
+    if( rgb() ) {
+      //create a new ocl_draw_glbuffer_tableau, window, and initialize it
+      boxm2_render_rgb_tableau_new bit_tableau;  
+      bit_tableau->init(scene_file(), ni(), nj(), pcam, cam_files, img_files);
+      
+      //create window, attach the new tableau and status bar
+      vgui_window* win = vgui::produce_window(ni(), nj(), "OpenCl Volume Visualizer");
+      win->get_adaptor()->set_tableau(bit_tableau); 
+      bit_tableau->set_statusbar(win->get_statusbar());
+      win->show();
+     
+      GLboolean bGLEW = glewIsSupported("GL_VERSION_2_0  GL_ARB_pixel_buffer_object");
+      vcl_cout << "GLEW is supported= " << bGLEW << vcl_endl;
+      return vgui::run();    
+    }
+    else {
+      //create a new ocl_draw_glbuffer_tableau, window, and initialize it
+      boxm2_render_tableau_new bit_tableau;  
+      bit_tableau->init(scene_file(),ni(),nj(),pcam, cam_files, img_files);
+      
+      //create window, attach the new tableau and status bar
+      vgui_window* win = vgui::produce_window(ni(), nj(), "OpenCl Volume Visualizer");
+      win->get_adaptor()->set_tableau(bit_tableau); 
+      bit_tableau->set_statusbar(win->get_statusbar());
+      win->show();
+     
+      GLboolean bGLEW = glewIsSupported("GL_VERSION_2_0  GL_ARB_pixel_buffer_object");
+      vcl_cout << "GLEW is supported= " << bGLEW << vcl_endl;
+      return vgui::run();
+    }
 }
