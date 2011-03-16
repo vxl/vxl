@@ -1,3 +1,8 @@
+USES += contrib/brl contrib/brl/bbas core
+
+LIBRARY := brdb
+VERSION := 1.0
+
 SOURCES += brdb_database.cxx
 MANPAGE_SOURCES += brdb_database_sptr.h
 SOURCES += brdb_database_manager.cxx
@@ -13,4 +18,14 @@ SOURCES += brdb_value.cxx
 MANPAGE_SOURCES += brdb_value.txx
 MANPAGE_SOURCES += brdb_value_sptr.h
 
-SUBDIRS += tests
+#######################################
+include ${VXLROOT}/config/top-params.mk
+#######################################
+
+ifndef NOTEST
+ SUBDIRS += tests
+endif
+
+######################################
+include ${VXLROOT}/config/top-rules.mk
+######################################

@@ -1,3 +1,8 @@
+USES += contrib/brl contrib/brl/bbas core
+
+LIBRARY := bvrml
+VERSION := 1.0
+
 SOURCES += bvrml_write.cxx
 
 #######################################

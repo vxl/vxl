@@ -12,3 +12,7 @@ SUBDIRS += core
 SUBDIRS += bpro_batch
 
 endif
+
+################################
+include ${VXLROOT}/config/top.mk
+################################
