@@ -14,7 +14,7 @@
 #include <vil/vil_load.h>
 #include <vil/vil_math.h>
 #include <vil/vil_convert.h>
-#include <core/vil_pro/vil_io_image_view_base.h>
+#include <vil/io/vil_io_image_view_base.h>
 
 #include <brip/brip_vil_float_ops.h>
 #include <bsta/algo/bsta_gaussian_updater.h>

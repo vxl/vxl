@@ -16,7 +16,7 @@
 #include <vil/vil_load.h>
 #include <vil/vil_math.h>
 #include <vil/vil_convert.h>
-#include <core/vil_pro/vil_io_image_view_base.h>
+#include <vil/io/vil_io_image_view_base.h>
 
 #include <vul/vul_file.h>
 
