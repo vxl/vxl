@@ -6,7 +6,7 @@
 #include <bprb/bprb_parameters.h>
 #include <vcl_string.h>
 #include <vil/vil_image_view_base.h>
-#include <core/vil_pro/vil_io_image_view_base.h>
+#include <vil/io/vil_io_image_view_base.h>
 
 //: Constructor
 bool vil_save_image_view_binary_process_cons(bprb_func_process& pro)
