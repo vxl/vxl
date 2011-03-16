@@ -57,6 +57,8 @@ class boxm2_scene : public vbl_ref_count
 
     //: empty scene, needs to be initialized manually
     boxm2_scene() {}
+
+    boxm2_scene(vcl_string data_path, vgl_point_3d<double> origin);
     
     //: initializes scene from xmlFile
     boxm2_scene(vcl_string filename);
@@ -108,7 +110,7 @@ class boxm2_scene : public vbl_ref_count
     
     //: scene path mutators
     void set_xml_path(vcl_string path)              { xml_path_ = path; }
-    void set_data_path(vcl_string path)             { data_path_ = path; }
+    void set_data_path(vcl_string path)             { data_path_ = path+"/"; }
 
   private:
 

@@ -15,6 +15,15 @@
 #include <vgl/vgl_distance.h>
 
 
+boxm2_scene::boxm2_scene(vcl_string data_path, vgl_point_3d<double> origin)
+{
+    local_origin_=origin;
+    data_path_   = data_path;
+    xml_path_  = data_path_ + "/scene.xml"; 
+    vcl_cout<<"PATH "<<xml_path_<<vcl_endl;
+}
+
+
 //: initializes Scene from XML file
 boxm2_scene::boxm2_scene(vcl_string filename)
 {
@@ -245,6 +254,9 @@ void x_write(vcl_ostream &os, boxm2_scene& scene, vcl_string name)
       
       //block prob init
       block.add_attribute("p_init", data.p_init_); 
+
+            //block prob init
+      block.add_attribute("random", 0); 
 
       //write tag to stream
       block.x_write(os); 
