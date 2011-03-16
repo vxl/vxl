@@ -238,15 +238,28 @@ bool imesh_read_obj(vcl_istream& is, imesh_mesh& mesh)
             if (ss.peek() != '/') {
               ss >> v;
               ti.push_back(v-1);
+              if (ss.peek() == '/') {
+                ss.ignore();
+                if (ss.peek() >= '0' && ss.peek() <= '9') {
+                  ss >> v;
+                  ni.push_back(v-1);
+                }
+                else {
+                  vcl_cerr << "improperly formed face line in OBJ 1: "<<line<<'\n';
+                  return false;
+                }
+              }
             }
-            if (ss.peek() != '/') {
-              vcl_cerr << "improperly formed face line in OBJ: "<<line<<'\n';
-              return false;
-            }
-            ss.ignore();
-            if (ss.peek() >= '0' && ss.peek() <= '9') {
-              ss >> v;
-              ni.push_back(v-1);
+            else {
+              ss.ignore();
+              if (ss.peek() >= '0' && ss.peek() <= '9') {
+                ss >> v;
+                ni.push_back(v-1);
+              }
+              else {
+                vcl_cerr << "improperly formed face line in OBJ 2: "<<line<<'\n';
+                return false;
+              }
             }
           }
         }
