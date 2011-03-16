@@ -1,9 +1,10 @@
 # core/vil/io/CMakeLists.txt
 
 SET(vil_io_sources
-  vil_io_memory_chunk.cxx vil_io_memory_chunk.h
-  vil_io_smart_ptr.txx    vil_io_smart_ptr.h
+  vil_io_memory_chunk.cxx  vil_io_memory_chunk.h
+  vil_io_smart_ptr.txx     vil_io_smart_ptr.h
   vil_io_image_view.h
+  vil_io_image_view_base.h vil_io_image_view_base.cxx
 )
 AUX_SOURCE_DIRECTORY(Templates vil_io_sources)
 
