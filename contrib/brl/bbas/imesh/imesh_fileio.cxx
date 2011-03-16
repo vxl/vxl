@@ -179,7 +179,6 @@ bool imesh_read_obj(const vcl_string& filename, imesh_mesh& mesh)
 
 
 //: Read a mesh from a wavefront OBJ stream
-// Rotated about X because Y is up in wavefront (not Z)
 bool imesh_read_obj(vcl_istream& is, imesh_mesh& mesh)
 {
   vcl_auto_ptr<imesh_vertex_array<3> > verts(new imesh_vertex_array<3>);
@@ -201,8 +200,8 @@ bool imesh_read_obj(vcl_istream& is, imesh_mesh& mesh)
           {
             is.ignore();
             double x,y,z;
-            is >> x >> z >> y;
-            normals.push_back(vgl_vector_3d<double>(x,-y,z));
+            is >> x >> y >> z;
+            normals.push_back(vgl_vector_3d<double>(x,y,z));
             break;
           }
           case 't': // read a texture coord
@@ -217,8 +216,8 @@ bool imesh_read_obj(vcl_istream& is, imesh_mesh& mesh)
           default: // read a position
           {
             double x,y,z;
-            is >> x >> z >> y;
-            verts->push_back(imesh_vertex<3>(x,-y,z));
+            is >> x >> y >> z;
+            verts->push_back(imesh_vertex<3>(x,y,z));
             break;
           }
         }
