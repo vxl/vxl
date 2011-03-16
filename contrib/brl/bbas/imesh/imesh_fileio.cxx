@@ -310,8 +310,8 @@ void imesh_write_obj(vcl_ostream& os, const imesh_mesh& mesh)
   for (unsigned int v=0; v<verts.size(); ++v) {
     os << "v "
        << verts(v,0) << ' '
-       << verts(v,2) << ' '
-       << -verts(v,1) << '\n';
+       << verts(v,1) << ' '
+       << verts(v,2) << '\n';
   }
 
   if (verts.has_normals()) {
@@ -319,8 +319,8 @@ void imesh_write_obj(vcl_ostream& os, const imesh_mesh& mesh)
       const vgl_vector_3d<double>& v = verts.normal(n);
       os << "vn "
          << v.x() << ' '
-         << v.z() << ' '
-         << -v.y() << '\n';
+         << v.y() << ' '
+         << v.z() << '\n';
     }
   }
 
