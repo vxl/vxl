@@ -72,7 +72,9 @@ static void test_voxel_grid()
       bvxm_voxel_slab<float>::iterator vit;
       for (vit = slab_it->begin(); vit != slab_it->end(); vit++, count++) {
         if (*vit != init_val) {
+#ifdef DEBUG
           vcl_cerr << "error: read in value does not match init value! count = " << count << vcl_endl;
+#endif
           init_check = false;
         }
         // write new value
@@ -98,7 +100,9 @@ static void test_voxel_grid()
       bvxm_voxel_slab<float>::const_iterator vit;
       for (vit = slab_it_const->begin(); vit != slab_it_const->end(); vit++, count++) {
         if (*vit != static_cast<float>(count)) {
+#ifdef DEBUG
           vcl_cerr << "error: read in value does not match written value! count = " << count << vcl_endl;
+#endif
           write_read_check = false;
         }
       }
