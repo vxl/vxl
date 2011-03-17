@@ -15,6 +15,7 @@
 #define LVCS_TAG "lvcs"
 #define LOCAL_ORIGIN_TAG "local_origin"
 #define SCENE_PATHS_TAG "scene_paths"
+#define APM_TAG "appearance"
 
 //block level metadata
 #define BLOCK_TAG "block"
@@ -26,6 +27,7 @@
 #define TREE_MAX_LEVEL_TAG "tree_max_level"
 #define P_INIT_TAG "p_init"
 #define MAX_MB_TAG "max_mb"
+ 
 
 
 class boxm2_scene_parser : public expatpp
@@ -40,6 +42,7 @@ class boxm2_scene_parser : public expatpp
    vcl_string path() { return path_; }
    vcl_string name() { return name_; }
    vcl_map<boxm2_block_id, boxm2_block_metadata> blocks() { return blocks_; }
+   vcl_vector<vcl_string> appearances() { return appearances_; }
    
  private:
   virtual void startElement(const XML_Char* name, const XML_Char** atts);
@@ -72,6 +75,9 @@ class boxm2_scene_parser : public expatpp
   
   // block list
   vcl_map<boxm2_block_id, boxm2_block_metadata> blocks_; 
+
+  // list of apperances
+  vcl_vector<vcl_string> appearances_; 
 
 };
 

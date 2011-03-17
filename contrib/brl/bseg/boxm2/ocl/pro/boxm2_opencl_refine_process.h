@@ -28,7 +28,7 @@ class boxm2_opencl_refine_process : public boxm2_opencl_process_base
       REFINE_RANDOM = 4,
     };
   
-    boxm2_opencl_refine_process():data_type_("8bit") {}
+    boxm2_opencl_refine_process() : data_type_("8bit") {}
     
     //: process init and execute
     bool init() { return true; }

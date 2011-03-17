@@ -49,6 +49,7 @@ bool boxm2_render_rgb_tableau::init(vcl_string scene_file,
   
   //create the scene
   scene_ = new boxm2_scene(scene_file);
+  vcl_cout<<*scene_<<vcl_endl;
 
   return true;
 }
@@ -131,6 +132,7 @@ bool boxm2_render_rgb_tableau::save_model()
   vcl_cout<<"SAVING MODEL!!!"<<vcl_endl;
 
   //save blocks and data to disk for debugging
+  vcl_vector<vcl_string> apps = scene_->appearances(); 
   vcl_map<boxm2_block_id, boxm2_block_metadata> blocks = scene_->blocks();
   vcl_map<boxm2_block_id, boxm2_block_metadata>::iterator iter;
   for (iter = blocks.begin(); iter != blocks.end(); ++iter)
@@ -138,12 +140,10 @@ bool boxm2_render_rgb_tableau::save_model()
     boxm2_block_id id = iter->first;
     boxm2_sio_mgr::save_block(scene_->data_path(), cache_->get_block(id));
     boxm2_sio_mgr::save_block_data(scene_->data_path(), id, cache_->get_data<BOXM2_ALPHA>(id) );
-    if(img_type_=="uchar")
-    boxm2_sio_mgr::save_block_data(scene_->data_path(), id, cache_->get_data<BOXM2_MOG3_GREY>(id) );
-    if(img_type_=="ushort")
-    boxm2_sio_mgr::save_block_data(scene_->data_path(), id, cache_->get_data<BOXM2_MOG3_GREY_16>(id) );
-
-    boxm2_sio_mgr::save_block_data(scene_->data_path(), id, cache_->get_data<BOXM2_NUM_OBS>(id) );
+    
+    //save scene's appearance models (app and num obs)
+    for(int i=0; i<apps.size(); ++i)
+      boxm2_sio_mgr::save_block_data_base(scene_->data_path(), id, cache_->get_data_base(id, apps[i]), apps[i]);
   }
   return true;
 }

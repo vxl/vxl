@@ -51,6 +51,8 @@ class boxm2_opencl_update_process : public boxm2_opencl_process_base
     vcl_vector<bocl_kernel*> update_kernels_;
 
     vcl_string data_type_;
+    vcl_string num_obs_type_; 
+    
     //: workspace
     vcl_size_t lThreads_[2];
     vcl_size_t gThreads_[2];

@@ -35,8 +35,10 @@ bool boxm2_opencl_refine_process::init_kernel(cl_context* context,
   //have kernel construct itself using the context and device
   if(opts == "") opts += "-D MOG_TYPE_8 "; 
   bool created = true; // refine_kernel_.create_kernel( context_, device, src_paths, "refine_bit_scene", opts, "boxm2 opencl refine (random)"); //kernel identifier (for error checking)
-  created = created&&refine_trees_.create_kernel( context_, device, src_paths, "refine_trees", opts, "boxm2 opencl refine trees (pass one)"); //kernel identifier (for error checking)
-  //created = created&& refine_scan_.create_kernel( context_, device, src_paths, "refine_scan", opts, "boxm2 opencl refine scan (pass two)"); //kernel identifier (for error checking)
+  
+  //create refine trees kernel (refine trees deterministic.  MOG type is necessary 
+  // to define, but not used by the kernel - using default value here
+  refine_trees_.create_kernel( context_, device, src_paths, "refine_trees", " -D MOG_TYPE_8 ", "boxm2 opencl refine trees (pass one)"); //kernel identifier (for error checking)
 
   //set refine datas
   bocl_kernel* rd2 = new bocl_kernel(); 
@@ -159,9 +161,9 @@ bool boxm2_opencl_refine_process::execute(vcl_vector<brdb_value_sptr>& input, vc
       //    - delete the old BOCL_MEM*, and that's it...
       // POSSIBLE PROBLEMS: data may not exist in cache and may need to be initialized...
       //this vector will be passed in (listing data types to refine)
-      vcl_vector<vcl_string> data_types;
-      data_types.push_back(boxm2_data_traits<BOXM2_GAUSS_RGB>::prefix());
-      data_types.push_back(boxm2_data_traits<BOXM2_NUM_OBS_SINGLE>::prefix());
+      vcl_vector<vcl_string> data_types = scene->appearances(); 
+      //data_types.push_back(boxm2_data_traits<BOXM2_GAUSS_RGB>::prefix());
+      //data_types.push_back(boxm2_data_traits<BOXM2_NUM_OBS_SINGLE>::prefix());
       for (unsigned int i=0; i<data_types.size(); ++i)
       {
         vcl_cout<<"Swapping data of type: "<<data_types[i]<<vcl_endl;
@@ -299,7 +301,9 @@ void boxm2_opencl_refine_process::swap_data(boxm2_block_id id,
   
   //copy parent behavior.. if true, Data copies its parent
   bool* copy_parent_buffer = new bool[1];
-  if (type == boxm2_data_traits<BOXM2_MOG3_GREY>::prefix() || type == boxm2_data_traits<BOXM2_MOG3_GREY_16>::prefix())
+  if (type == boxm2_data_traits<BOXM2_MOG3_GREY>::prefix() || 
+      type == boxm2_data_traits<BOXM2_MOG3_GREY_16>::prefix() ||
+      type == boxm2_data_traits<BOXM2_GAUSS_RGB>::prefix() )
     (*copy_parent_buffer) = true; 
   else 
     (*copy_parent_buffer) = false; 

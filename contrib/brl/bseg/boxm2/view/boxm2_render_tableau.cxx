@@ -60,6 +60,7 @@ bool boxm2_render_tableau::init(vcl_string scene_file,
   }
   //create the scene
   scene_ = new boxm2_scene(scene_file);
+  vcl_cout<<*scene_<<vcl_endl;
 
   return true;
 }

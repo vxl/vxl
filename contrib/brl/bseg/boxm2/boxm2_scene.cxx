@@ -54,6 +54,9 @@ boxm2_scene::boxm2_scene(vcl_string filename)
     
     //store BLOCKS
     blocks_ = parser.blocks();
+    
+    //store list of appearances
+    appearances_ = parser.appearances(); 
 }
 
 
@@ -215,6 +218,13 @@ void x_write(vcl_ostream &os, boxm2_scene& scene, vcl_string name)
     paths.add_attribute("path", path);
     paths.x_write(os);
     
+    //write list of appearance models
+    vsl_basic_xml_element apms(APM_TAG);
+    vcl_vector<vcl_string> apps = scene.appearances();  
+    for(int i=0; i<apps.size(); ++i)
+      apms.add_attribute("apm", apps[i]); 
+    apms.x_write(os); 
+    
     //write block informaiton for each block
     vcl_map<boxm2_block_id, boxm2_block_metadata> blocks = scene.blocks(); 
     vcl_map<boxm2_block_id, boxm2_block_metadata>::iterator iter; 
@@ -272,9 +282,16 @@ vcl_ostream& operator <<(vcl_ostream &s, boxm2_scene& scene)
     s <<"--- BOXM2_SCENE -----------------------------\n"
       <<"xml_path:         "<<scene.xml_path()<<'\n'
       <<"data_path:        "<<scene.data_path()<<'\n'
-      <<"world origin:     "<<scene.rpc_origin()<<'\n';
-      //<<"number of blocks: "<<scene.block_num()<<'\n'
-      //<<"block dimensions: "<<scene.block_dim()<<'\n'; 
+      <<"world origin:     "<<scene.rpc_origin()<<'\n'
+      <<"list of APMs:     "<<'\n';
+    
+    //list appearance models for this scene
+    vcl_vector<vcl_string> apps = scene.appearances(); 
+    for(int i=0; i<apps.size(); ++i)
+      s << "    " << apps[i] << ", "; 
+    s << '\n'; 
+
+    //list of block ids for this scene....
     return s;
 }
 

@@ -98,6 +98,9 @@ class boxm2_scene : public vbl_ref_count
     vcl_string              xml_path()    const { return xml_path_; }
     vcl_string              data_path()   const { return data_path_; }
     
+    //: appearance model accessor
+    vcl_vector<vcl_string> appearances()  const { return appearances_; }
+    
     //: scene version number
     static short version_no() { return 1; }
 
@@ -124,6 +127,9 @@ class boxm2_scene : public vbl_ref_count
     
     //: list of block meta data available to this scene
     vcl_map<boxm2_block_id, boxm2_block_metadata> blocks_; 
+    
+    //: list of appearance models/observation models used by this scene
+    vcl_vector<vcl_string> appearances_; 
     
 };
 

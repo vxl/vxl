@@ -103,14 +103,27 @@ bool boxm2_opencl_render_process::execute(vcl_vector<brdb_value_sptr>& input, vc
 {
   transfer_time_ = 0.0f; gpu_time_ = 0.0f; total_time_ = 0.0f;
   vul_timer total;
-  int i = 0;
+  int inIdx = 0;
 
   //scene argument
-  brdb_value_t<boxm2_scene_sptr>* scene_brdb = static_cast<brdb_value_t<boxm2_scene_sptr>* >( input[i++].ptr() );
+  brdb_value_t<boxm2_scene_sptr>* scene_brdb = static_cast<brdb_value_t<boxm2_scene_sptr>* >( input[inIdx++].ptr() );
   boxm2_scene_sptr scene = scene_brdb->value();
+  bool foundDataType = false;
+  vcl_vector<vcl_string> apps = scene->appearances(); 
+  for(int i=0; i<apps.size(); ++i) {
+    if( apps[i] == boxm2_data_traits<BOXM2_MOG3_GREY>::prefix() || apps[i] == boxm2_data_traits<BOXM2_MOG3_GREY>::prefix() ) 
+    {
+      data_type_ = apps[i]; 
+      foundDataType = true;
+    }
+  }
+  if(!foundDataType) {
+    vcl_cout<<"BOXM2_OPENCL_RENDER_PROCESS ERROR: scene doesn't have BOXM2_MOG3_GREY or BOXM2_MOG3_GREY_16 data type"<<vcl_endl;
+    return false;
+  }
 
   //camera
-  brdb_value_t<vpgl_camera_double_sptr>* brdb_cam = static_cast<brdb_value_t<vpgl_camera_double_sptr>* >( input[i++].ptr() );
+  brdb_value_t<vpgl_camera_double_sptr>* brdb_cam = static_cast<brdb_value_t<vpgl_camera_double_sptr>* >( input[inIdx++].ptr() );
   vpgl_camera_double_sptr cam = brdb_cam->value();
   cl_float* cam_buffer = new cl_float[16*3];
   boxm2_ocl_util::set_persp_camera(cam, cam_buffer);
@@ -118,7 +131,7 @@ bool boxm2_opencl_render_process::execute(vcl_vector<brdb_value_sptr>& input, vc
   persp_cam.create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
   //exp image buffer
-  brdb_value_t<vil_image_view_base_sptr>* brdb_expimg = static_cast<brdb_value_t<vil_image_view_base_sptr>* >( input[i++].ptr() );
+  brdb_value_t<vil_image_view_base_sptr>* brdb_expimg = static_cast<brdb_value_t<vil_image_view_base_sptr>* >( input[inIdx++].ptr() );
   vil_image_view_base_sptr expimg = brdb_expimg->value();
   vil_image_view<float>* exp_img_view = static_cast<vil_image_view<float>* >(expimg.ptr());
   exp_img_view->fill(0.0f);
@@ -141,7 +154,7 @@ bool boxm2_opencl_render_process::execute(vcl_vector<brdb_value_sptr>& input, vc
   }
 
   //vis image buffer
-  brdb_value_t<vil_image_view_base_sptr>* brdb_vis = static_cast<brdb_value_t<vil_image_view_base_sptr>* >( input[i++].ptr() );
+  brdb_value_t<vil_image_view_base_sptr>* brdb_vis = static_cast<brdb_value_t<vil_image_view_base_sptr>* >( input[inIdx++].ptr() );
   vil_image_view_base_sptr visimg = brdb_vis->value();
   vil_image_view<float>* vis_img_view = static_cast<vil_image_view<float>* >(visimg.ptr());
   vis_img_view->fill(1.0f);
@@ -154,8 +167,9 @@ bool boxm2_opencl_render_process::execute(vcl_vector<brdb_value_sptr>& input, vc
     vis_img_->set_cpu_buffer(vis_img_view->begin());
     vis_img_->write_to_buffer(*command_queue_);
   }
-  brdb_value_t<vcl_string>* brdb_data_type = static_cast<brdb_value_t<vcl_string>* >( input[i++].ptr() );
-  data_type_=brdb_data_type->value();
+
+  brdb_value_t<vcl_string>* brdb_data_type = static_cast<brdb_value_t<vcl_string>* >( input[inIdx++].ptr() );
+  //data_type_=brdb_data_type->value();
 
   //exp image dimensions
   int* img_dim_buff = new int[4];
@@ -196,11 +210,7 @@ bool boxm2_opencl_render_process::execute(vcl_vector<brdb_value_sptr>& input, vc
     vul_timer transfer;
     bocl_mem* blk       = cache_->get_block(*id);
     bocl_mem* alpha     = cache_->get_data<BOXM2_ALPHA>(*id);
-    bocl_mem* mog;
-    if(data_type_=="8bit")
-        mog       = cache_->get_data<BOXM2_MOG3_GREY>(*id);
-    else if(data_type_=="16bit")
-        mog       = cache_->get_data<BOXM2_MOG3_GREY_16>(*id);
+    bocl_mem* mog       = cache_->get_data(*id, data_type_);
     bocl_mem* blk_info  = cache_->loaded_block_info();
     transfer_time_ += (float) transfer.all();
 
@@ -254,14 +264,14 @@ bool boxm2_opencl_render_process::execute(vcl_vector<brdb_value_sptr>& input, vc
       float* mini_buf = new float[1];
       float* maxi_buf = new float[1];
 
-      brdb_value_t<float>* brdb_mini = static_cast<brdb_value_t<float>* >( input[i++].ptr() );
+      brdb_value_t<float>* brdb_mini = static_cast<brdb_value_t<float>* >( input[inIdx++].ptr() );
       mini_buf[0]=brdb_mini->value();
 
-      brdb_value_t<float>* brdb_maxi = static_cast<brdb_value_t<float>* >( input[i++].ptr() );
+      brdb_value_t<float>* brdb_maxi = static_cast<brdb_value_t<float>* >( input[inIdx++].ptr() );
       maxi_buf[0]=brdb_maxi->value();
 
 
-      brdb_value_t<bbas_1d_array_float_sptr>* brdb_tf = static_cast<brdb_value_t<bbas_1d_array_float_sptr>* >( input[i++].ptr() );
+      brdb_value_t<bbas_1d_array_float_sptr>* brdb_tf = static_cast<brdb_value_t<bbas_1d_array_float_sptr>* >( input[inIdx++].ptr() );
       bbas_1d_array_float_sptr tf=brdb_tf->value();
 
       //mini_buf[0]=0.0f;

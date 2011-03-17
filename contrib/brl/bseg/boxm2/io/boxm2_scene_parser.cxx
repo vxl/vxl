@@ -146,7 +146,18 @@ boxm2_scene_parser::startElement(const char* name, const char** atts)
         convert(atts[i+1], path_);
     }
   }
-
+  
+  //----------- APPEARANCE TAG -------------------------------------------------
+  else if (vcl_strcmp(name, APM_TAG) == 0) {
+    for (int i=0; atts[i]; i+=2) {
+      vcl_string buff; 
+      if (vcl_strcmp(atts[i], "apm") == 0) {
+        convert(atts[i+1], buff);
+        appearances_.push_back(buff); 
+      }
+    }
+  }
+    
   //---------- BLOCK TAG -------------------------------------------------------
   else if (vcl_strcmp(name, BLOCK_TAG) == 0) {
     boxm2_block_metadata metadata;

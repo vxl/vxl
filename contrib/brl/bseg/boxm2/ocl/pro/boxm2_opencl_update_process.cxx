@@ -82,14 +82,37 @@ bool boxm2_opencl_update_process::execute(vcl_vector<brdb_value_sptr>& input, vc
 {
   transfer_time_ = 0.0f; gpu_time_ = 0.0f; total_time_ = 0.0f;
   vul_timer total;
-  int i = 0;
+  int inIdx = 0;
 
-  //scene argument
-  brdb_value_t<boxm2_scene_sptr>* scene_brdb = static_cast<brdb_value_t<boxm2_scene_sptr>* >( input[i++].ptr() );
+  //scene argument and APP_TYPE and OBS_TYPE (if needed)
+  brdb_value_t<boxm2_scene_sptr>* scene_brdb = static_cast<brdb_value_t<boxm2_scene_sptr>* >( input[inIdx++].ptr() );
   boxm2_scene_sptr scene = scene_brdb->value();
+  bool foundDataType = false, foundNumObsType = false;
+  vcl_vector<vcl_string> apps = scene->appearances(); 
+  for(int i=0; i<apps.size(); ++i) {
+    if( apps[i] == boxm2_data_traits<BOXM2_MOG3_GREY>::prefix() || apps[i] == boxm2_data_traits<BOXM2_MOG3_GREY>::prefix() ) 
+    {
+      data_type_ = apps[i]; 
+      foundDataType = true;
+    }
+    else if( apps[i] == boxm2_data_traits<BOXM2_NUM_OBS>::prefix() ) 
+    {
+      num_obs_type_ = apps[i];
+      foundNumObsType = true; 
+    }
+  }
+  if(!foundDataType) {
+    vcl_cout<<"BOXM2_OPENCL_UPDATE_PROCESS ERROR: scene doesn't have BOXM2_MOG3_GREY or BOXM2_MOG3_GREY_16 data type"<<vcl_endl;
+    return false;
+  }
+  if(!foundNumObsType) {
+    vcl_cout<<"BOXM2_OPENCL_UPDATE_PROCESS ERROR: scene doesn't have BOXM2_NUM_OBS type"<<vcl_endl;
+    return false;
+  }
+
 
   //camera
-  brdb_value_t<vpgl_camera_double_sptr>* brdb_cam = static_cast<brdb_value_t<vpgl_camera_double_sptr>* >( input[i++].ptr() );
+  brdb_value_t<vpgl_camera_double_sptr>* brdb_cam = static_cast<brdb_value_t<vpgl_camera_double_sptr>* >( input[inIdx++].ptr() );
   vpgl_camera_double_sptr cam = brdb_cam->value();
   cl_float* cam_buffer = new cl_float[16*3];
   boxm2_ocl_util::set_persp_camera(cam, cam_buffer);
@@ -97,7 +120,7 @@ bool boxm2_opencl_update_process::execute(vcl_vector<brdb_value_sptr>& input, vc
   persp_cam_->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
   //input image buffer
-  brdb_value_t<vil_image_view_base_sptr>* brdb_img = static_cast<brdb_value_t<vil_image_view_base_sptr>* >( input[i++].ptr() );
+  brdb_value_t<vil_image_view_base_sptr>* brdb_img = static_cast<brdb_value_t<vil_image_view_base_sptr>* >( input[inIdx++].ptr() );
   vil_image_view_base_sptr img = brdb_img->value();
   vil_image_view<float>* img_view = static_cast<vil_image_view<float>* >(img.ptr());
   this->write_input_image(img_view);
@@ -128,10 +151,10 @@ bool boxm2_opencl_update_process::execute(vcl_vector<brdb_value_sptr>& input, vc
   //store data type
   //brdb_value_t<float>* brdb_init_sigma = static_cast<brdb_value_t<float>* >( input[i++].ptr() );
   //float init_sigma=brdb_data_type->value();
-
-  //store data type
-  brdb_value_t<vcl_string>* brdb_data_type = static_cast<brdb_value_t<vcl_string>* >( input[i++].ptr() );
-  data_type_=brdb_data_type->value();
+  ////store data type
+  //brdb_value_t<vcl_string>* brdb_data_type = static_cast<brdb_value_t<vcl_string>* >( input[inIdx++].ptr() );
+  //data_type_=brdb_data_type->value();
+  //////////////////////////////////////////////////////////////////////////////
 
   //exp image dimensions
   img_size_[0] = img_view->ni();
@@ -170,7 +193,6 @@ bool boxm2_opencl_update_process::execute(vcl_vector<brdb_value_sptr>& input, vc
   vcl_vector<boxm2_block_id>::iterator id;
 
   //Go through each kernel, execute on each block
-
   for (unsigned int i=0; i<update_kernels_.size(); ++i)
   {
 #if 1
@@ -196,11 +218,8 @@ bool boxm2_opencl_update_process::execute(vcl_vector<brdb_value_sptr>& input, vc
       vul_timer transfer;
       blk_       = cache_->get_block(*id);
       alpha_     = cache_->get_data<BOXM2_ALPHA>(*id);
-      if (data_type_=="8bit")
-        mog_       = cache_->get_data<BOXM2_MOG3_GREY>(*id);
-      else if (data_type_=="16bit")
-        mog_       = cache_->get_data<BOXM2_MOG3_GREY_16>(*id);
-      num_obs_   = cache_->get_data<BOXM2_NUM_OBS>(*id);
+      mog_       = cache_->get_data(*id, data_type_);
+      num_obs_   = cache_->get_data(*id, num_obs_type_);
       blk_info_  = cache_->loaded_block_info();
 
       //make sure the data_len field in the info_buffer reflects the true data length
