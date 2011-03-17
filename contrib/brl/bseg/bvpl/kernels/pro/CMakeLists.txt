@@ -18,7 +18,7 @@ IF(EXPAT_FOUND)
 
   ADD_LIBRARY(bvpl_kernels_pro ${bvpl_kernels_pro_sources})
 
-  TARGET_LINK_LIBRARIES(bvpl_kernels_pro bvpl_kernels bvpl_kernels_io bvpl_octree bsta bprb brdb bvpl vnl vul vbl_io)
+  TARGET_LINK_LIBRARIES(bvpl_kernels_pro bvpl_kernels bvpl_kernels_io bvpl_octree bvpl_octree_io bsta bprb brdb bvpl vnl vul vbl_io)
 
   IF( BUILD_TESTING )
     SUBDIRS(tests)
