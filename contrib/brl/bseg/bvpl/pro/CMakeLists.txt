@@ -1,7 +1,7 @@
 # This is contrib/brl/bseg/bvpl/pro/CMakeLists.txt
-# bvxm's Process Library
+# bvpl's Process Library
 
-# bprb depends on expat and bvxm_pro depends on bprb primarily
+# bprb depends on expat and bvpl_pro depends on bprb primarily
 INCLUDE( ${BRL_MODULE_PATH}/FindEXPAT.cmake )
 IF(EXPAT_FOUND)
   INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bpro )
