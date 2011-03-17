@@ -10,20 +10,25 @@
 
 #include <vsl/vsl_binary_io.h>
 #include <vil/vil_image_view_base.h>
+#include <vil/io/vil_io_smart_ptr.h>
 
 //: Binary write voxel world to stream
+VCL_DEFINE_SPECIALIZATION
 void vsl_b_write(vsl_b_ostream & os, vil_image_view_base_sptr const& view_base);
 
 
 //: Binary load voxel world from stream.
+VCL_DEFINE_SPECIALIZATION
 void vsl_b_read(vsl_b_istream & is, vil_image_view_base_sptr &view_base);
 
-
+#if 0
 //: Binary write voxel world to stream
+VCL_DEFINE_SPECIALIZATION
 void vsl_b_write(vsl_b_ostream & os, vil_image_view_base const& view_base);
 
-
 //: Binary load voxel world from stream.
+VCL_DEFINE_SPECIALIZATION
 void vsl_b_read(vsl_b_istream & is, vil_image_view_base &view_base);
+#endif // 0
 
 #endif

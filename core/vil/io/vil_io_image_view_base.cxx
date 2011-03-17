@@ -8,6 +8,7 @@
 #include <vil/io/vil_io_image_view.h>
 
 //: Binary write image view base to stream
+VCL_DEFINE_SPECIALIZATION
 void vsl_b_write(vsl_b_ostream & os, vil_image_view_base_sptr const& view_base)
 {
   switch (view_base->pixel_format())
@@ -69,6 +70,7 @@ void vsl_b_write(vsl_b_ostream & os, vil_image_view_base_sptr const& view_base)
 }
 
 //: Binary load image view base from stream.
+VCL_DEFINE_SPECIALIZATION
 void vsl_b_read(vsl_b_istream& is, vil_image_view_base_sptr &view_base)
 {
   if (!is) return;
@@ -94,7 +96,8 @@ void vsl_b_read(vsl_b_istream& is, vil_image_view_base_sptr &view_base)
   if (ni*nj*np==0) {
     vcl_cerr << "warning: vsl_b_read image ni*nj*np = 0\n";
     //image.set_size(0,0,0);
-  } else {
+  }
+  else {
     vsl_b_read(is, chunk);
     vsl_b_read(is, offset);
 
@@ -155,8 +158,9 @@ void vsl_b_read(vsl_b_istream& is, vil_image_view_base_sptr &view_base)
 //vcl_cerr << "warning: vsl_b_read not implemented for vil_image_view_base_sptr\n";
 }
 
+#if 0
 //: Binary write voxel world to stream
-/*void vsl_b_write(vsl_b_ostream & , vil_image_view_base const&)
+void vsl_b_write(vsl_b_ostream & , vil_image_view_base const&)
 {
   vcl_cerr << "warning: vsl_b_write not implemented for vil_image_view_base\n";
 }
@@ -165,4 +169,5 @@ void vsl_b_read(vsl_b_istream& is, vil_image_view_base_sptr &view_base)
 void vsl_b_read(vsl_b_istream &, vil_image_view_base &)
 {
   vcl_cerr << "warning: vsl_b_read not implemented for vil_image_view_base\n";
-}*/
+}
+#endif // 0
