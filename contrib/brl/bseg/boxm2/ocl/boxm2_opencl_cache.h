@@ -45,6 +45,7 @@ class boxm2_opencl_cache: public vbl_ref_count
 
     //: get scene info in bocl_mem*
     bocl_mem* loaded_block_info() { return block_info_; }
+    
     ////////////////////////////////////////////////////////////////////
     //deprecated when new refine is implemented
     bocl_mem* get_loaded_tree_ptrs();
@@ -59,19 +60,6 @@ class boxm2_opencl_cache: public vbl_ref_count
 
     //: deep_replace data replaces not only the current data on the gpu cached, but pushes a block to the cpu cache
     void deep_replace_data(boxm2_block_id id, vcl_string type, bocl_mem* mem);
-
-#if 0 // UNNEEDED NOW //////////////////////////////////////////////////
-
-    //: deep_delete removes the data from CPU cache (stays in this cache)
-    template<boxm2_data_type T>
-    void deep_delete(boxm2_block_id id) { cpu_cache_->remove_data_base(id, boxm2_data_traits<T>::prefix()); }
-    void deep_delete(boxm2_block_id id, vcl_string type) { cpu_cache_->remove_data_base(id, type); }
-
-    //: remove_data: removes data from cache but keeps it on the GPU  !!!THIS SEEMS DANGEROUS FOR WHEN CACHE MEASURES TOTAL BUFFER SIZE!!!
-    template<boxm2_data_type T>
-    void remove_data(boxm2_block_id id);
-    void remove_data(boxm2_block_id id, vcl_string type);
-#endif
 
   private:
 
@@ -113,6 +101,7 @@ class boxm2_opencl_cache: public vbl_ref_count
     cl_context*       context_;
     //: opencl command queue to use for writing to buffers
     cl_command_queue* queue_;
+    cl_command_queue q_; 
 };
 
 typedef vbl_smart_ptr<boxm2_opencl_cache> boxm2_opencl_cache_sptr;
@@ -123,15 +112,6 @@ bocl_mem* boxm2_opencl_cache::get_data(boxm2_block_id id, vcl_size_t num_bytes)
 {
   return get_data(id, boxm2_data_traits<T>::prefix(), num_bytes);
 }
-
-#if 0
-//: remove_data: removes data from cache but keeps it on the GPU  !!!THIS SEEMS DANGEROUS FOR WHEN CACHE MEASURES TOTAL BUFFER SIZE!!!
-template<boxm2_data_type T>
-void boxm2_opencl_cache::remove_data(boxm2_block_id id)
-{
-  this->remove_data(id, boxm2_data_traits<T>::prefix());
-}
-#endif
 
 //: Binary write boxm2_cache  to stream
 void vsl_b_write(vsl_b_ostream& os, boxm2_opencl_cache const& scene);

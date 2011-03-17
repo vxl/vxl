@@ -150,7 +150,7 @@ bool boxm2_opencl_render_rgb_process::execute(vcl_vector<brdb_value_sptr>& input
   }
   else {
     //image_->set_cpu_buffer(exp_img_view->begin());
-    gl_image_->write_to_buffer(*command_queue_);
+    //gl_image_->write_to_buffer(*command_queue_);
   }
 
   //vis image buffer

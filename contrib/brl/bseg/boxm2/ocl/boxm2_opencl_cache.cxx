@@ -15,13 +15,13 @@ boxm2_opencl_cache::boxm2_opencl_cache(boxm2_scene_sptr scene,
 
   //create command queue... make sure this isn't destructed at the end of the function...
   int status = 0;
-  cl_command_queue queue = clCreateCommandQueue(*context_,
-                                                *device->device_id(),
-                                                CL_QUEUE_PROFILING_ENABLE,
-                                                &status);
+  q_ = clCreateCommandQueue(*context_,
+                            *device->device_id(),
+                            CL_QUEUE_PROFILING_ENABLE,
+                            &status);
   if (!check_val(status,CL_SUCCESS,"boxm2_opencl_cache:: failed in command queue creation" + error_to_string(status)))
       return;
-  queue_ = &queue;
+  queue_ = &q_;
 
   loaded_ = boxm2_block_id(-1,-1,-1);
   cached_block_ = 0;
@@ -214,25 +214,6 @@ void boxm2_opencl_cache::deep_replace_data(boxm2_block_id id, vcl_string type, b
   }
   cached_data_[type] = mem;
 }
-
-
-#if 0
-//: Does a soft delete of data - removes it from the cache but it stays allocated
-//  This will have to NOT decrement the total bytes allocated counter or just
-//  simply move the data to have a different type
-void boxm2_opencl_cache::remove_data(boxm2_block_id id, vcl_string type)
-{
-  //make sure that the data is in the
-  if (loaded_data_[type] == id) {
-    //loaded_data_[type] = 0;
-    //cached_data_[type] = 0;
-    vcl_map<vcl_string, boxm2_block_id>::iterator liter = loaded_data_.find(type);
-    loaded_data_.erase(liter);
-    vcl_map<vcl_string, bocl_mem* >::iterator citer = cached_data_.find(type);
-    cached_data_.erase(citer);
-  }
-}
-#endif // 0
 
 //: Binary write boxm2_cache  to stream
 void vsl_b_write(vsl_b_ostream& os, boxm2_opencl_cache const& scene){}
