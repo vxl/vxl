@@ -25,19 +25,19 @@ void boxm2_ocl_util::set_persp_camera(vpgl_camera_double_sptr& cam, cl_float* pe
     vnl_vector<double> Winv=svd->Winverse().diagonal();
 
     int cnt=0;
-    for (unsigned i=0;i<Ut.rows();i++)
+    for (unsigned i=0;i<Ut.rows();++i)
     {
-      for (unsigned j=0;j<Ut.cols();j++)
+      for (unsigned j=0;j<Ut.cols();++j)
         persp_cam[cnt++]=(cl_float)Ut(i,j);
 
       persp_cam[cnt++]=0;
     }
 
-    for (unsigned i=0;i<V.rows();i++)
-      for (unsigned j=0;j<V.cols();j++)
+    for (unsigned i=0;i<V.rows();++i)
+      for (unsigned j=0;j<V.cols();++j)
         persp_cam[cnt++]=(cl_float)V(i,j);
 
-    for (unsigned i=0;i<Winv.size();i++)
+    for (unsigned i=0;i<Winv.size();++i)
       persp_cam[cnt++]=(cl_float)Winv(i);
 
     vgl_point_3d<double> cam_center=pcam->camera_center();
@@ -60,19 +60,19 @@ void boxm2_ocl_util::set_persp_camera(vpgl_perspective_camera<double> * pcam, cl
   vnl_vector<double> Winv=svd->Winverse().diagonal();
 
   int cnt=0;
-  for (unsigned i=0;i<Ut.rows();i++)
+  for (unsigned i=0;i<Ut.rows();++i)
   {
-    for (unsigned j=0;j<Ut.cols();j++)
+    for (unsigned j=0;j<Ut.cols();++j)
       persp_cam[cnt++]=(cl_float)Ut(i,j);
 
     persp_cam[cnt++]=0;
   }
 
-  for (unsigned i=0;i<V.rows();i++)
-    for (unsigned j=0;j<V.cols();j++)
+  for (unsigned i=0;i<V.rows();++i)
+    for (unsigned j=0;j<V.cols();++j)
       persp_cam[cnt++]=(cl_float)V(i,j);
 
-  for (unsigned i=0;i<Winv.size();i++)
+  for (unsigned i=0;i<Winv.size();++i)
     persp_cam[cnt++]=(cl_float)Winv(i);
 
   vgl_point_3d<double> cam_center=pcam->camera_center();
@@ -113,7 +113,7 @@ vil_image_view_base_sptr boxm2_ocl_util::prepare_input_image(vcl_string filename
   //then it's an RGB image (assumes byte image...)
   if (loaded_image->nplanes() == 3 || loaded_image->nplanes() == 4)
   {
-    vcl_cout<<"preparing rgb image "<<vcl_endl;
+    vcl_cout<<"preparing rgb image"<<vcl_endl;
     //load image from file and format it into RGBA
     vil_image_view_base_sptr n_planes = vil_convert_to_n_planes(4, loaded_image);
     vil_image_view_base_sptr comp_image = vil_convert_to_component_order(n_planes);
@@ -131,7 +131,7 @@ vil_image_view_base_sptr boxm2_ocl_util::prepare_input_image(vcl_string filename
   //else if loaded planes is just one...
   if (loaded_image->nplanes() == 1)
   {
-    vcl_cout<<"Preparing grey scale image "<<vcl_endl;
+    vcl_cout<<"Preparing grey scale image"<<vcl_endl;
     vil_image_view<float>* floatimg = new vil_image_view<float>(loaded_image->ni(), loaded_image->nj(), 1);
     if (vil_image_view<vxl_byte> *img_byte = dynamic_cast<vil_image_view<vxl_byte>*>(loaded_image.ptr()))
         vil_convert_stretch_range_limited(*img_byte, *floatimg, vxl_byte(0), vxl_byte(255), 0.0f, 1.0f);
@@ -165,8 +165,8 @@ boxm2_ocl_util::load_perspective_camera(vcl_string filename, vpgl_perspective_ca
 
 void boxm2_ocl_util::get_render_transfer_function(vcl_vector<vcl_string> imgfilenames, float & min, float & max, vbl_array_1d<float> & tf)
 {
-  min=1.0;
-  max=0.0;
+  min= 3e38f;
+  max=-3e38f;
   unsigned int interval=1;
 
   if (imgfilenames.size()>10)
@@ -175,13 +175,13 @@ void boxm2_ocl_util::get_render_transfer_function(vcl_vector<vcl_string> imgfile
   // this loop obtains min and max over all images.
   for (unsigned i=0;i<imgfilenames.size();i=i+interval)
   {
-    float mini=0.0, maxi=0.0;
     vil_image_view_base_sptr img_ptr=boxm2_ocl_util::prepare_input_image(imgfilenames[i]);
-    if ( vil_image_view<float> * imgf=dynamic_cast<vil_image_view<float>*>(img_ptr.ptr()))
+    if (vil_image_view<float> * imgf=dynamic_cast<vil_image_view<float>*>(img_ptr.ptr()))
     {
+      float mini, maxi;
       vil_math_value_range<float>(*imgf, mini,maxi);
-      if (min>mini)min=mini;
-      if (max<maxi)max=maxi;
+      if (min>mini) min=mini;
+      if (max<maxi) max=maxi;
     }
   }
 
@@ -190,14 +190,13 @@ void boxm2_ocl_util::get_render_transfer_function(vcl_vector<vcl_string> imgfile
   vil_image_view<float>::iterator iter;
   for (unsigned i=0;i<imgfilenames.size();i+=interval)
   {
-    float mini=0.0, maxi=0.0;
     vil_image_view_base_sptr img_ptr=boxm2_ocl_util::prepare_input_image(imgfilenames[i]);
     if ( vil_image_view<float> * imgf=dynamic_cast<vil_image_view<float>*>(img_ptr.ptr()))
-      for (iter=imgf->begin();iter!=imgf->end();iter++)
+      for (iter=imgf->begin();iter!=imgf->end();++iter)
         hist.upcount(*iter,1);
   }
-  float sum=0.0;
-  for (unsigned i=0;i<hist.nbins();i++)
+  float sum=0.0f;
+  for (unsigned i=0;i<hist.nbins();++i)
   {
     sum+=hist.p(i);
     tf[i]=sum;
