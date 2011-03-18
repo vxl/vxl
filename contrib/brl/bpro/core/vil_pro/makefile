@@ -4,7 +4,6 @@ LIBRARY := vil_pro
 VERSION := 1.0
 
 MANPAGE_SOURCES += vil_math_functors.h
-SOURCES += vil_io_image_view_base.cxx
 SOURCES += vil_register.cxx
 
 MANPAGE_SOURCES += vil_processes.h

@@ -12,7 +12,7 @@ SOURCES += imesh_operations.cxx
 SOURCES += imesh_pca.cxx
 SOURCES += imesh_project.cxx
 SOURCES += imesh_transform.cxx
-MANPAGE_SOURCES += imesh_render.h
+SOURCES += imesh_render.cxx
 
 #######################################
 include ${VXLROOT}/config/top-params.mk
