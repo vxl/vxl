@@ -109,6 +109,9 @@ SOURCE=.\boxm2_trajectory.cxx
 # Begin Source File
 SOURCE=.\boxm2_batch_update_tableau.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\boxm2_render_rgb_tableau.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
@@ -129,6 +132,9 @@ SOURCE=.\boxm2_trajectory.h
 # End Source File
 # Begin Source File
 SOURCE=.\boxm2_batch_update_tableau.h
+# End Source File
+# Begin Source File
+SOURCE=.\boxm2_render_rgb_tableau.h
 # End Source File
 # End Group
 # End Target

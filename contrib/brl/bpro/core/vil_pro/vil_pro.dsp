@@ -93,9 +93,6 @@ LIB32=link.exe -lib
 # Begin Group "Source Files"
 # PROP Default_Filter "cxx"
 # Begin Source File
-SOURCE=.\vil_io_image_view_base.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\vil_register.cxx
 # End Source File
 # Begin Source File
@@ -176,9 +173,6 @@ SOURCE=.\Templates/brdb_value_t+vil_image_view_base_sptr-.cxx
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
-# Begin Source File
-SOURCE=.\vil_io_image_view_base.h
-# End Source File
 # Begin Source File
 SOURCE=.\vil_math_functors.h
 # End Source File

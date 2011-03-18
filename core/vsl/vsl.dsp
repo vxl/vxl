@@ -248,6 +248,12 @@ SOURCE=.\Templates/vsl_vector_io+int64-.cxx
 # Begin Source File
 SOURCE=.\Templates/vsl_vector_io+uint64-.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\Templates/vsl_set_io+uint-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vsl_map_io+uint.bool-.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"

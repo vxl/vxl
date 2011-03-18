@@ -117,6 +117,9 @@ SOURCE=.\imesh_project.cxx
 SOURCE=.\imesh_transform.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\imesh_render.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/imesh_imls_surface+vgl_vector_2d+double-.vgl_point_3d+double--.cxx
 # End Source File
 # Begin Source File
