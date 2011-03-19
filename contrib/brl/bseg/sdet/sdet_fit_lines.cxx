@@ -56,6 +56,7 @@ bool sdet_fit_lines::fit_lines()
     return false;
   if (!edges_.size())
     return false;
+  line_segs_.clear();
   fitter_.set_min_fit_length(min_fit_length_);
   fitter_.set_rms_error_tol(rms_distance_);
   for (vcl_vector<vtol_edge_2d_sptr>::iterator eit = edges_.begin();
@@ -80,12 +81,7 @@ bool sdet_fit_lines::fit_lines()
     vcl_vector<vgl_line_segment_2d<double> >& segs = fitter_.get_line_segs();
     for (vcl_vector<vgl_line_segment_2d<double> >::iterator sit=segs.begin();
          sit != segs.end(); sit++)
-    {
-      vsol_line_2d_sptr line = new vsol_line_2d(*sit);
-      // make sure the start point and end point of line are not the same
-      if ( line->length() != 0.0 )
-        line_segs_.push_back(line);
-    }
+      line_segs_.push_back(*sit);
   }
   segs_valid_ = true;
   return true;
@@ -94,12 +90,29 @@ bool sdet_fit_lines::fit_lines()
 //-------------------------------------------------------------------------
 //: Get the line segments
 //
-vcl_vector<vsol_line_2d_sptr>& sdet_fit_lines::get_line_segs()
+vcl_vector<vsol_line_2d_sptr> sdet_fit_lines::get_line_segs()
 {
-  if (segs_valid_)
-    return line_segs_;
-  this->fit_lines();
-  return line_segs_;
+  vcl_vector<vsol_line_2d_sptr> ret;
+  if(!segs_valid_)
+    this->fit_lines();
+  for (vcl_vector<vgl_line_segment_2d<double> >::iterator sit=line_segs_.begin();
+         sit != line_segs_.end(); sit++)
+    {
+      vsol_line_2d_sptr line = new vsol_line_2d(*sit);
+      // make sure the start point and end point of line are not the same
+      if ( line->length() != 0.0 )
+        ret.push_back(line);
+    }
+  return ret;
+}
+void sdet_fit_lines::get_line_segs(vcl_vector<vsol_line_2d_sptr>& lines)
+{
+  lines = this->get_line_segs();
+}
+void sdet_fit_lines::
+get_line_segs(vcl_vector<vgl_line_segment_2d<double> >& lines)
+{
+  lines = line_segs_;
 }
 
 //----------------------------------------------------------

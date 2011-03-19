@@ -25,6 +25,7 @@
 #include <vgl/algo/vgl_fit_lines_2d.h>
 #include <vsol/vsol_line_2d_sptr.h>
 #include <vtol/vtol_edge_2d_sptr.h>
+#include <vgl/vgl_line_segment_2d.h>
 #include <sdet/sdet_fit_lines_params.h>
 
 class sdet_fit_lines : public sdet_fit_lines_params
@@ -39,8 +40,10 @@ class sdet_fit_lines : public sdet_fit_lines_params
   void clear();
   //: Accessors
   void set_edges(vcl_vector<vtol_edge_2d_sptr> const& edges);
-  vcl_vector<vsol_line_2d_sptr>& get_line_segs();
-  void get_line_segs(vcl_vector<vsol_line_2d_sptr>& lines){lines=line_segs_;}
+  vcl_vector<vsol_line_2d_sptr> get_line_segs();
+  void get_line_segs(vcl_vector<vsol_line_2d_sptr>& lines);
+  void get_line_segs(vcl_vector<vgl_line_segment_2d<double> >& lines);
+
  protected:
   //:protected methods
 
@@ -48,7 +51,7 @@ class sdet_fit_lines : public sdet_fit_lines_params
   bool segs_valid_;      //process state flag
   vcl_vector<vtol_edge_2d_sptr> edges_;// the input edges
   vgl_fit_lines_2d<double> fitter_;//the fitting class
-  vcl_vector<vsol_line_2d_sptr> line_segs_;
+  vcl_vector<vgl_line_segment_2d<double> > line_segs_;
 };
 
 #endif // sdet_fit_lines_h_
