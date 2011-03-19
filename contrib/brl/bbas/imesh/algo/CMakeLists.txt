@@ -1,6 +1,6 @@
 # brl/bbas/imesh/algo/CMakeLists.txt
 # indexed mesh library algorithms
-
+INCLUDE( ${MODULE_PATH}/FindNetlib.cmake )
 INCLUDE_DIRECTORIES( ${GEL_INCLUDE_DIR}/mrc )
 
 SET( imesh_algo_sources
@@ -16,10 +16,23 @@ SET( imesh_algo_sources
 )
 AUX_SOURCE_DIRECTORY(Templates imesh_algo_sources)
 
+IF(NETLIB_FOUND)
+  INCLUDE_DIRECTORIES( ${NETLIB_INCLUDE_DIR} )
+  SET(imesh_algo_sources ${imesh_algo_sources} 
+     imesh_generate_mesh.cxx     imesh_generate_mesh.h)
+ENDIF (NETLIB_FOUND)
+
 ADD_LIBRARY( imesh_algo ${imesh_algo_sources} )
 
+IF(NETLIB_FOUND)
+
+TARGET_LINK_LIBRARIES( imesh_algo imesh vpgl vgl_algo vgl vnl_algo vnl vil netlib)
+ELSE(NETLIB_FOUND)
 TARGET_LINK_LIBRARIES( imesh_algo imesh vpgl vgl_algo vgl vnl_algo vnl vil )
+ENDIF(NETLIB_FOUND)
+
 
 IF( BUILD_TESTING )
   SUBDIRS(tests)
 ENDIF( BUILD_TESTING )
+
