@@ -41,7 +41,7 @@ bool vpro_line_fit_process::execute()
   fitter.set_edges(edges);
   if (!fitter.fit_lines())
     return false;
-  vcl_vector<vsol_line_2d_sptr> & lines = fitter.get_line_segs();
+  vcl_vector<vsol_line_2d_sptr> lines = fitter.get_line_segs();
   for (vcl_vector<vsol_line_2d_sptr>::iterator lit = lines.begin();
        lit != lines.end(); lit++)
     output_spat_objs_.push_back((*lit)->cast_to_spatial_object());
