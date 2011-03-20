@@ -4,6 +4,7 @@
 #include <vgl/vgl_line_segment_2d.h>
 #include <vcl_vector.h>
 #include <vcl_iostream.h>
+
 static void test_generate_mesh()
 {
   vgl_point_2d<double> p0(0.0, 0.0);
@@ -13,8 +14,8 @@ static void test_generate_mesh()
   vgl_point_2d<double> p4(0.25, 5.0);
   vgl_point_2d<double> p5(0.75, 5.0);
   vcl_vector<vgl_point_2d<double> > c_hull;
-  c_hull.push_back(p0);   c_hull.push_back(p1);   c_hull.push_back(p2);
-  c_hull.push_back(p3); 
+  c_hull.push_back(p0);   c_hull.push_back(p1);
+  c_hull.push_back(p2);   c_hull.push_back(p3);
   vgl_line_segment_2d<double> ls(p4, p5);
   vcl_vector<vgl_line_segment_2d<double> > segs;
   segs.push_back(ls);
@@ -32,16 +33,16 @@ static void test_generate_mesh()
   unsigned nverts = mesh2.num_verts();
   unsigned ntris =  mesh2.num_faces();
   TEST("two segs", nverts*ntris, 56);
+#if 0
   const imesh_regular_face_array<3>& tris =
     static_cast<const imesh_regular_face_array<3>&>(mesh2.faces());
   const imesh_vertex_array<2>& verts = mesh2.vertices<2>();
-#if 0
   vcl_cout << "verts\n";
-  for(unsigned i = 0; i< nverts; ++i)
+  for (unsigned i = 0; i< nverts; ++i)
     vcl_cout << "v[" << i << "](" << verts[i][0] << ' ' << verts[i][1] << ")\n";
   vcl_cout << "faces\n";
-  for(unsigned i = 0; i< ntris; ++i)
-    vcl_cout << "f[" << i << "](" << tris[i][0]<< ' ' << tris[i][1] 
+  for (unsigned i = 0; i< ntris; ++i)
+    vcl_cout << "f[" << i << "](" << tris[i][0]<< ' ' << tris[i][1]
              << ' ' << tris[i][2] << ")\n";
 #endif
 }
