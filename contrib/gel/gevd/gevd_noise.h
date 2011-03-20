@@ -59,6 +59,8 @@ class gevd_noise
                                   float& index);
   static bool RealZeroCrossing(const float* dhist, const int nbin,
                                float& index);
+ private:
+  gevd_noise() {} // no default constructor!
 };
 
 #endif // gevd_noise_h_
