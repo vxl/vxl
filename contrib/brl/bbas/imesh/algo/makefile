@@ -13,6 +13,7 @@ SOURCES += imesh_pca.cxx
 SOURCES += imesh_project.cxx
 SOURCES += imesh_transform.cxx
 SOURCES += imesh_render.cxx
+SOURCES += imesh_generate_mesh.cxx
 
 #######################################
 include ${VXLROOT}/config/top-params.mk
