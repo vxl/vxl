@@ -1,3 +1,4 @@
+#include "boxm_sigma_normalizer.h"
 //:
 // \file
 // \brief A class for adjusting sample standard deviation values such that the probability of underestimation of the true std. dev. is fixed.
@@ -8,8 +9,6 @@
 #include <vnl/vnl_gamma.h>
 #include <vnl/vnl_least_squares_function.h>
 #include <vnl/algo/vnl_levenberg_marquardt.h>
-
-#include "boxm_sigma_normalizer.h"
 
 boxm_sigma_normalizer::boxm_sigma_normalizer(float under_estimation_probability) : unbias_const_(N_PRECOMPUTED_+1, 0.0f)
 {
@@ -36,11 +35,11 @@ boxm_sigma_normalizer::boxm_sigma_normalizer(float under_estimation_probability)
 
   // sanity check on probability
   if (under_estimation_probability < 1e-4) {
-    vcl_cout << "error : boxm_sigma_normalizer : under_estimation_probability " << under_estimation_probability << " too low " << vcl_endl;
+    vcl_cout << "error : boxm_sigma_normalizer : under_estimation_probability " << under_estimation_probability << " too low" << vcl_endl;
     return;
   }
   if (under_estimation_probability > (1 - 1e-4)) {
-    vcl_cout << "error : boxm_sigma_normalizer : under_estimation_probability " << under_estimation_probability << " too high " << vcl_endl;
+    vcl_cout << "error : boxm_sigma_normalizer : under_estimation_probability " << under_estimation_probability << " too high" << vcl_endl;
     return;
   }
 
@@ -57,7 +56,7 @@ boxm_sigma_normalizer::boxm_sigma_normalizer(float under_estimation_probability)
     //minimizer.diagnose_outcome();
     double end_error = minimizer.get_end_error();
     if (end_error > 1e-3) {
-      vcl_cerr << "error: boxm_sigma_normalizer: levenberg_marquardt final error = " << end_error << vcl_endl;
+      vcl_cerr << "error: boxm_sigma_normalizer: levenberg_marquardt final error = " << end_error << '\n';
     }
     float unbias_constant = (float)vcl_sqrt((float)(n-1) / x[0]);
 

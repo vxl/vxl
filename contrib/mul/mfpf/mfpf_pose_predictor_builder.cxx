@@ -4,7 +4,6 @@
 // \brief Trains regressor in an mfpf_pose_predictor
 // \author Tim Cootes
 
-#include "mfpf_pose_predictor_builder.h"
 #include <vsl/vsl_binary_loader.h>
 #include <vcl_cmath.h>
 #include <vcl_algorithm.h>

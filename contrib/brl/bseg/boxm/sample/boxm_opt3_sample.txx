@@ -1,6 +1,8 @@
 #ifndef boxm_opt3_sample_txx_
 #define boxm_opt3_sample_txx_
 
+#include "boxm_opt3_sample.h"
+
 #include <vsl/vsl_vector_io.h>
 #include <vsl/vsl_binary_io.h>
 #include <bsta/bsta_attributes.h>
@@ -11,9 +13,6 @@
 #include <boxm/boxm_apm_traits.h>
 #include <boxm/sample/algo/boxm_mog_grey_processor.h>
 //#include <boxm/boxm_mog_rgb_processor.h>
-
-#include "boxm_opt3_sample.h"
-
 
 template <boxm_apm_type APM>
 void boxm_opt3_sample<APM>::print(vcl_ostream& os) const

@@ -1,9 +1,10 @@
 #ifndef boxm_plane_obs_txx_
 #define boxm_plane_obs_txx_
 
+#include "boxm_plane_obs.h"
+
 #include "boxm_edge_tangent_sample.h"
 #include "boxm_inf_line_sample.h"
-#include "boxm_plane_obs.h"
 
 #include <vgl/io/vgl_io_homg_plane_3d.h>
 #include <vgl/io/vgl_io_infinite_line_3d.h>
