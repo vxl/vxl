@@ -120,6 +120,9 @@ SOURCE=.\imesh_transform.cxx
 SOURCE=.\imesh_render.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\imesh_generate_mesh.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/imesh_imls_surface+vgl_vector_2d+double-.vgl_point_3d+double--.cxx
 # End Source File
 # Begin Source File
@@ -160,6 +163,9 @@ SOURCE=.\imesh_render.h
 # End Source File
 # Begin Source File
 SOURCE=.\imesh_transform.h
+# End Source File
+# Begin Source File
+SOURCE=.\imesh_generate_mesh.h
 # End Source File
 # End Group
 # End Target
