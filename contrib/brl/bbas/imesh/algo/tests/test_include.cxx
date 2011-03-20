@@ -1,4 +1,5 @@
 #include <imesh/algo/imesh_detect.h>
+#include <imesh/algo/imesh_generate_mesh.h>
 #include <imesh/algo/imesh_imls_surface.h>
 #include <imesh/algo/imesh_intersect.h>
 #include <imesh/algo/imesh_kd_tree.h>
