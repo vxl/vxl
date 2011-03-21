@@ -18,6 +18,9 @@
 #include <vidl/vidl_config.h>
 extern "C" {
 #if FFMPEG_IN_SEVERAL_DIRECTORIES
+#ifndef __STDC_CONSTANT_MACROS
+#  define __STDC_CONSTANT_MACROS
+#endif
 #include <libavcodec/avcodec.h>
 #else
 #include <ffmpeg/avcodec.h>
