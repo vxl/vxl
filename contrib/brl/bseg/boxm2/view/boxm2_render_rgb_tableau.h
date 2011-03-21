@@ -100,8 +100,6 @@ class boxm2_render_rgb_tableau : public boxm2_cam_tableau
 
   //-- HELPER INIT Methods and vars---------------------------------------------
   //: create cl_gl_context
-  vil_image_view_base_sptr prepare_input_image(vcl_string filename);
-  cl_context create_clgl_context();
   bool init_clgl();
   bool do_init_ocl;
   

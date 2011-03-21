@@ -34,6 +34,7 @@
 #include <boxm2/ocl/pro/boxm2_opencl_render_process.h>
 #include <boxm2/ocl/pro/boxm2_opencl_update_process.h>
 #include <boxm2/ocl/pro/boxm2_opencl_refine_process.h>
+#include <boxm2/cpp/pro/boxm2_cpp_refine_process.h>
 #include <boxm2/ocl/pro/boxm2_opencl_render_rgb_process.h>
 #include <boxm2/ocl/pro/boxm2_opencl_update_rgb_process.h>
 #include <boxm2/io/boxm2_dumb_cache.h>
@@ -77,8 +78,6 @@ class boxm2_render_tableau : public boxm2_cam_tableau
   boxm2_opencl_render_process render_;
   boxm2_opencl_update_process update_; 
   boxm2_opencl_refine_process refine_;
-  boxm2_opencl_render_rgb_process render_rgb_;
-  boxm2_opencl_update_rgb_process update_rgb_; 
   
   //: Boxm2 Scene
   boxm2_scene_sptr scene_;
@@ -107,7 +106,6 @@ class boxm2_render_tableau : public boxm2_cam_tableau
   //-- HELPER INIT Methods and vars---------------------------------------------
   //: create cl_gl_context
   //vil_image_view_base_sptr prepare_input_image(vcl_string filename);
-  cl_context create_clgl_context();
   bool init_clgl();
   bool do_init_ocl;
   

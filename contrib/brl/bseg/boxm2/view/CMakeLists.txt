@@ -24,6 +24,7 @@ IF(VGUI_FOUND)
       boxm2_trajectory.h
       boxm2_trajectory.cxx
       boxm2_include_glew.h
+      boxm2_view_utils.h                boxm2_view_utils.cxx
      )
 
   ADD_LIBRARY(boxm2_view ${boxm2_view_sources} )

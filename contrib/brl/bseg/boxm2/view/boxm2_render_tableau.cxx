@@ -1,7 +1,6 @@
 #include "boxm2_render_tableau.h"
 //:
 // \file
-#include <boxm/ocl/boxm_ocl_utils.h>
 #include <vpgl/vpgl_perspective_camera.h>
 #include <vpgl/vpgl_calibration_matrix.h>
 #include <vgui/internals/trackball.h>
@@ -9,6 +8,7 @@
 #include <vgl/vgl_distance.h>
 #include <vcl_sstream.h>
 #include <boxm2/ocl/boxm2_ocl_util.h>
+#include <boxm2/view/boxm2_view_utils.h>
 
 //: Constructor
 boxm2_render_tableau::boxm2_render_tableau()
@@ -302,10 +302,7 @@ float boxm2_render_tableau::update_frame()
 
     //execute gpu_update
     //choose which process to run (depends on RGBA or not)
-    if (loaded_image->pixel_format()==VIL_PIXEL_FORMAT_RGBA_BYTE)
-      gpu_pro_->run(&update_rgb_, input, output);
-    else
-      gpu_pro_->run(&update_, input, output);
+    gpu_pro_->run(&update_, input, output);
     return gpu_pro_->exec_time();
 }
 
@@ -339,64 +336,6 @@ bool boxm2_render_tableau::compute_convergence()
  return true;
 }
 
-#if 0 // method "prepare_input_image()" commented out
-
-//: private helper method prepares an input image to be processed by update
-vil_image_view_base_sptr boxm2_render_tableau::prepare_input_image(vcl_string filename)
-{
-  //load from file
-  vil_image_view_base_sptr loaded_image = vil_load(filename.c_str());
-
-  //then it's an RGB image (assumes byte image...)
-  if (loaded_image->nplanes() == 3 || loaded_image->nplanes() == 4)
-  {
-    //load image from file and format it into RGBA
-    vil_image_view_base_sptr n_planes = vil_convert_to_n_planes(4, loaded_image);
-    vil_image_view_base_sptr comp_image = vil_convert_to_component_order(n_planes);
-    vil_image_view<vil_rgba<vxl_byte> >* rgba_view = new vil_image_view<vil_rgba<vxl_byte> >(comp_image);
-
-    //make sure all alpha values are set to 255 (1)
-    vil_image_view<vil_rgba<vxl_byte> >::iterator iter;
-    for (iter = rgba_view->begin(); iter != rgba_view->end(); ++iter) {
-      (*iter) = vil_rgba<vxl_byte>(iter->R(), iter->G(), iter->B(), 255);
-      // was: = vil_rgba<vxl_byte>(iter->grey(), 0, 0, 255);
-    }
-    vil_image_view_base_sptr toReturn(rgba_view);
-    return toReturn;
-    vil_image_view<float>* floatimg = new vil_image_view<float>(loaded_image->ni(), loaded_image->nj(), 1);
-    vil_image_view<float>::iterator fiter;
-    for (iter = rgba_view->begin(), fiter=floatimg->begin(); iter != rgba_view->end(); ++iter, ++fiter)
-      (*fiter) = (float) (iter->R()/255.0f);
-    vil_image_view_base_sptr toReturn(floatimg);
-    return toReturn;
-  }
-
-  //else if loaded planes is just one...
-  if (loaded_image->nplanes() == 1)
-  {
-    vil_image_view<float>* floatimg = new vil_image_view<float>(loaded_image->ni(), loaded_image->nj(), 1);
-    if (vil_image_view<vxl_byte> *img_byte = dynamic_cast<vil_image_view<vxl_byte>*>(loaded_image.ptr()))
-    {
-      vil_convert_stretch_range_limited(*img_byte, *floatimg, vxl_byte(0), vxl_byte(255), 0.0f, 1.0f);
-    }
-    else if (vil_image_view<unsigned short> *img_byte = dynamic_cast<vil_image_view<unsigned short>*>(loaded_image.ptr()))
-    {
-      vil_convert_stretch_range_limited(*img_byte, *floatimg,(unsigned short)30500,(unsigned short)32500,  0.0f, 1.0f); //: hardcoded to be fixed.
-    }
-    else {
-      vcl_cerr << "Failed to load image " << filename << '\n';
-      return 0;
-    }
-    vil_image_view_base_sptr toReturn(floatimg);
-    return toReturn;
-  }
-
-  //otherwise it's messed up, return a null pointer
-  vcl_cerr<<"Failed to recognize input image type "<< filename << '\n';
-  return 0;
-}
-#endif // 0
-
 //: private helper method to init_clgl stuff (gpu processor)
 bool boxm2_render_tableau::init_clgl()
 {
@@ -409,7 +348,9 @@ bool boxm2_render_tableau::init_clgl()
 
   //initialize gpu pro / manager
   gpu_pro_ = boxm2_opencl_processor::instance();
-  gpu_pro_->context_ = create_clgl_context();
+  //gpu_pro_->context_ = create_clgl_context();
+  gpu_pro_->context_ = boxm2_view_utils::create_clgl_context(gpu_pro_->devices()[0]);
+  
   gpu_pro_->set_scene(scene_.ptr());
   gpu_pro_->set_cpu_cache(cache_);
   gpu_pro_->init();
@@ -444,8 +385,6 @@ bool boxm2_render_tableau::init_clgl()
   //initialize the GPU render process
   render_.init_kernel(&gpu_pro_->context(), &gpu_pro_->devices()[0],render_opts);
   render_.set_gl_image(exp_img_);
-  render_rgb_.init_kernel(&gpu_pro_->context(), &gpu_pro_->devices()[0], render_opts);
-  //render_rgb_.set_image(exp_img_);
 
   //initlaize gpu update process
   vcl_string update_opts=" -D MOG_TYPE_8 ";
@@ -453,68 +392,9 @@ bool boxm2_render_tableau::init_clgl()
     update_opts = " -D MOG_TYPE_16 ";
 
   update_.init_kernel(&gpu_pro_->context(), &gpu_pro_->devices()[0],update_opts);
-  update_rgb_.init_kernel(&gpu_pro_->context(), &gpu_pro_->devices()[0], update_opts);
 
   //initialize refine process
   refine_.init_kernel(&gpu_pro_->context(), &gpu_pro_->devices()[0],update_opts);
 
   return true;
 }
-
-//: private helper method to create clgl context using cl_context properties
-cl_context boxm2_render_tableau::create_clgl_context()
-{
-  //init glew
-  GLenum err = glewInit();
-  if (GLEW_OK != err)
-    vcl_cout<< "GlewInit Error: "<<glewGetErrorString(err)<<vcl_endl;    // Problem: glewInit failed, something is seriously wrong.
-
-  //initialize the render manager
-  cl_device_id device = gpu_pro_->devices()[0];
-  cl_platform_id platform_id[1];
-  int status = clGetDeviceInfo(device,CL_DEVICE_PLATFORM,sizeof(platform_id),(void*) platform_id,NULL);
-  if (!check_val(status, CL_SUCCESS, "boxm2_render Tableau::create_cl_gl_context CL_DEVICE_PLATFORM failed."))
-    return 0;
-
-  ////create OpenCL context
-  cl_context ComputeContext;
-#ifdef WIN32
-  cl_context_properties props[] =
-  {
-    CL_GL_CONTEXT_KHR, (cl_context_properties) wglGetCurrentContext(),
-    CL_WGL_HDC_KHR, (cl_context_properties) wglGetCurrentDC(),
-    CL_CONTEXT_PLATFORM, (cl_context_properties) platform_id[0],
-    0
-  };
-  //create OpenCL context with display properties determined above
-  ComputeContext = clCreateContext(props, 1, &device, NULL, NULL, &status);
-#elif defined(__APPLE__) || defined(MACOSX)
-  CGLContextObj kCGLContext = CGLGetCurrentContext();
-  CGLShareGroupObj kCGLShareGroup = CGLGetShareGroup(kCGLContext);
-
-  cl_context_properties props[] = {
-    CL_CONTEXT_PROPERTY_USE_CGL_SHAREGROUP_APPLE, (cl_context_properties)kCGLShareGroup,
-    CL_CONTEXT_PLATFORM, (cl_context_properties) platform_id[0],
-    0
-  };
-  //create a CL context from a CGL share group - no GPU devices must be passed,
-  //all CL compliant devices in the CGL share group will be used to create the context. more info in cl_gl_ext.h
-  ComputeContext = clCreateContext(props, 0, 0, NULL, NULL, &status);
-#else
-  cl_context_properties props[] =
-  {
-      CL_GL_CONTEXT_KHR, (cl_context_properties)glXGetCurrentContext(),
-      CL_GLX_DISPLAY_KHR, (cl_context_properties)glXGetCurrentDisplay(),
-      CL_CONTEXT_PLATFORM, (cl_context_properties) platform_id[0],
-      0
-  };
-  ComputeContext = clCreateContext(props, 1, &device, NULL, NULL, &status);
-#endif
-
-  if (status!=CL_SUCCESS) {
-    vcl_cout<<"Error: Failed to create a compute CL/GL context!" << error_to_string(status) <<vcl_endl;
-    return 0;
-  }
-  return ComputeContext;
-}
-

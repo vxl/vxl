@@ -93,7 +93,7 @@ int main(int argc,  char** argv)
 
     //initialize GPU update process
     boxm2_opencl_refine_process refine;
-    refine.init_kernel(&gpu_pro->context(), &gpu_pro->devices()[0], " -D MOG_TYPE_8");
+    refine.init_kernel(&gpu_pro->context(), &gpu_pro->devices()[0], "");
     gpu_pro->run(&refine, input, output);
   }
 

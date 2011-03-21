@@ -334,8 +334,8 @@ __kernel void refine_scan( __constant RenderSceneInfo * linfo,
 // if it is refining alpha, ste the init_cell to the correct alpha each time
 /////////////////////////////////////////// 
 __kernel void refine_data( __constant RenderSceneInfo * linfo,
-                           __global   int4            * trees,
-                           __global   int4            * trees_refined,        // refined trees
+                           __global   uchar16            * trees,
+                           __global   uchar16            * trees_refined,        // refined trees
                            __global   int             * tree_sizes,       // tree size for each block
                            __global   MOG_TYPE        * data,             // Data array to be copied
                            __global   MOG_TYPE        * data_cpy,         // data array to be copied into, size(data_cpy) = tree_sizes[last] + sizeof(last_tree); 
@@ -382,19 +382,28 @@ __kernel void refine_data( __constant RenderSceneInfo * linfo,
     //6a. update local tree's data pointer (store it back tree buffer)
     int data_ptr = tree_sizes[treeIndex]; 
     uchar4 data_chars = as_uchar4(data_ptr);
-    (*refined_tree).sA = data_chars.x; 
-    (*refined_tree).sB = data_chars.y; 
-    (*refined_tree).sC = data_chars.z; 
-    (*refined_tree).sD = data_chars.w; 
+/*
+    (*refined_tree).sa = (uchar) data_chars.s0; 
+    (*refined_tree).sb = (uchar) data_chars.s1; 
+    (*refined_tree).sc = (uchar) data_chars.s2; 
+    (*refined_tree).sd = (uchar) data_chars.s3; 
+*/
+    
+    __local uchar* tree_bits = (__local uchar*) refined_tree; 
+    tree_bits[10] = (uchar) data_chars.s0; 
+    tree_bits[11] = (uchar) data_chars.s1; 
+    tree_bits[12] = (uchar) data_chars.s2; 
+    tree_bits[13] = (uchar) data_chars.s3; 
+
     
     //if this is updating the ALPHA pass and is therefore the last one, write to new block
     if( *is_alpha_t ) {
-      trees[treeIndex] = as_int4(*refined_tree);
+      trees[treeIndex] = (*refined_tree);
     }
     
     //6b. get old data pointer
     //as_int((uchar4) (tree[10], tree[11], tree[12], tree[13]));
-    int old_data_ptr = as_int((uchar4) ((*local_tree).sA,(*local_tree).sB,(*local_tree).sC, (*local_tree).sD)); 
+    int old_data_ptr = as_int((uchar4) ((*local_tree).sa,(*local_tree).sb,(*local_tree).sc, (*local_tree).sd)); 
   
     //6. if the tree was not refined (simple case) just move it on into the right slot
     if(newTreeSize == currTreeSize) {

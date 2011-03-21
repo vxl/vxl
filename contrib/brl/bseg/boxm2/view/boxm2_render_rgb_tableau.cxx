@@ -2,6 +2,8 @@
 //:
 // \file
 #include <boxm2/ocl/boxm2_ocl_util.h>
+#include <boxm2/view/boxm2_view_utils.h>
+
 #include <vpgl/vpgl_perspective_camera.h>
 #include <vpgl/vpgl_calibration_matrix.h>
 #include <vgui/internals/trackball.h>
@@ -187,7 +189,8 @@ float boxm2_render_rgb_tableau::render_frame()
   brdb_value_sptr brdb_cam = new brdb_value_t<vpgl_camera_double_sptr>(cam);
 
   //create output image buffer (rgba float image)
-  vil_image_view_base_sptr expimg = new vil_image_view<vil_rgba<float> >(ni_, nj_);
+  vil_image_view<vil_rgba<float> >* expimg = new vil_image_view<vil_rgba<float> >(ni_, nj_);
+  expimg->fill(vil_rgba<float>(0.0f)); 
   brdb_value_sptr brdb_expimg = new brdb_value_t<vil_image_view_base_sptr>(expimg);
 
   //create vis image buffer
@@ -286,7 +289,7 @@ bool boxm2_render_rgb_tableau::init_clgl()
 
   //initialize gpu pro / manager
   gpu_pro_ = boxm2_opencl_processor::instance();
-  gpu_pro_->context_ = create_clgl_context();
+  gpu_pro_->context_ = boxm2_view_utils::create_clgl_context(gpu_pro_->devices()[0]);
   gpu_pro_->set_scene(scene_.ptr());
   gpu_pro_->set_cpu_cache(cache_);
   gpu_pro_->init();
@@ -327,61 +330,3 @@ bool boxm2_render_rgb_tableau::init_clgl()
 
   return true;
 }
-
-//: private helper method to create clgl context using cl_context properties
-cl_context boxm2_render_rgb_tableau::create_clgl_context()
-{
-  //init glew
-  GLenum err = glewInit();
-  if (GLEW_OK != err)
-    vcl_cout<< "GlewInit Error: "<<glewGetErrorString(err)<<vcl_endl;    // Problem: glewInit failed, something is seriously wrong.
-
-  //initialize the render manager
-  cl_device_id device = gpu_pro_->devices()[0];
-  cl_platform_id platform_id[1];
-  int status = clGetDeviceInfo(device,CL_DEVICE_PLATFORM,sizeof(platform_id),(void*) platform_id,NULL);
-  if (!check_val(status, CL_SUCCESS, "boxm2_render Tableau::create_cl_gl_context CL_DEVICE_PLATFORM failed."))
-    return 0;
-
-  ////create OpenCL context
-  cl_context ComputeContext;
-#ifdef WIN32
-  cl_context_properties props[] =
-  {
-    CL_GL_CONTEXT_KHR, (cl_context_properties) wglGetCurrentContext(),
-    CL_WGL_HDC_KHR, (cl_context_properties) wglGetCurrentDC(),
-    CL_CONTEXT_PLATFORM, (cl_context_properties) platform_id[0],
-    0
-  };
-  //create OpenCL context with display properties determined above
-  ComputeContext = clCreateContext(props, 1, &device, NULL, NULL, &status);
-#elif defined(__APPLE__) || defined(MACOSX)
-  CGLContextObj kCGLContext = CGLGetCurrentContext();
-  CGLShareGroupObj kCGLShareGroup = CGLGetShareGroup(kCGLContext);
-
-  cl_context_properties props[] = {
-    CL_CONTEXT_PROPERTY_USE_CGL_SHAREGROUP_APPLE, (cl_context_properties)kCGLShareGroup,
-    CL_CONTEXT_PLATFORM, (cl_context_properties) platform_id[0],
-    0
-  };
-  //create a CL context from a CGL share group - no GPU devices must be passed,
-  //all CL compliant devices in the CGL share group will be used to create the context. more info in cl_gl_ext.h
-  ComputeContext = clCreateContext(props, 0, 0, NULL, NULL, &status);
-#else
-  cl_context_properties props[] =
-  {
-      CL_GL_CONTEXT_KHR, (cl_context_properties)glXGetCurrentContext(),
-      CL_GLX_DISPLAY_KHR, (cl_context_properties)glXGetCurrentDisplay(),
-      CL_CONTEXT_PLATFORM, (cl_context_properties) platform_id[0],
-      0
-  };
-  ComputeContext = clCreateContext(props, 1, &device, NULL, NULL, &status);
-#endif
-
-  if (status!=CL_SUCCESS) {
-    vcl_cout<<"Error: Failed to create a compute CL/GL context!" << error_to_string(status) <<vcl_endl;
-    return 0;
-  }
-  return ComputeContext;
-}
-

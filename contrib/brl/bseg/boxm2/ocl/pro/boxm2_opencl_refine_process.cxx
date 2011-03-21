@@ -17,6 +17,8 @@
 #include <vul/vul_timer.h>
 #include <vcl_where_root_dir.h>
 
+#include <boct/boct_bit_tree2.h>
+
 //TODO IN THIS INIT METHOD: Need to pass in a ref to the OPENCL_CACHE so this
 //class can easily access BOCL_MEMs
 bool boxm2_opencl_refine_process::init_kernel(cl_context* context,
@@ -131,6 +133,8 @@ bool boxm2_opencl_refine_process::execute(vcl_vector<brdb_value_sptr>& input, vc
 
       //run refine block into copy
       this->refine_block_copy(id, numTrees, blk_copy, tree_sizes);
+      
+      blk_copy->read_to_buffer(*command_queue_); 
 
       /////////////////////////////////////////////////////////////////////////
       //STEP TWO
@@ -161,9 +165,15 @@ bool boxm2_opencl_refine_process::execute(vcl_vector<brdb_value_sptr>& input, vc
       //    - delete the old BOCL_MEM*, and that's it...
       // POSSIBLE PROBLEMS: data may not exist in cache and may need to be initialized...
       //this vector will be passed in (listing data types to refine)
+      
+      //check out old alphas
+      bocl_mem* old_alph = cache_->get_data(id, boxm2_data_traits<BOXM2_ALPHA>::prefix());
+      int numAlphas = old_alph->num_bytes()/sizeof(float); 
+      float* abuff = (float*) old_alph->cpu_buffer(); 
+      float* old_alphas = new float[numAlphas]; 
+      for(int i=0; i<numAlphas; ++i) old_alphas[i] = abuff[i]; 
+
       vcl_vector<vcl_string> data_types = scene->appearances(); 
-      //data_types.push_back(boxm2_data_traits<BOXM2_GAUSS_RGB>::prefix());
-      //data_types.push_back(boxm2_data_traits<BOXM2_NUM_OBS_SINGLE>::prefix());
       for (unsigned int i=0; i<data_types.size(); ++i)
       {
         vcl_cout<<"Swapping data of type: "<<data_types[i]<<vcl_endl;
@@ -172,6 +182,47 @@ bool boxm2_opencl_refine_process::execute(vcl_vector<brdb_value_sptr>& input, vc
       //ALWAYS GOING TO REFINE ALPHA
       vcl_cout<<"Swapping alpha data... last step fingers cross..."<<vcl_endl;
       this->swap_data(id,boxm2_data_traits<BOXM2_ALPHA>::prefix(),newDataSize,numTrees,blk_copy,tree_sizes);
+
+
+#if 0 //old debugging code
+      //compare old alpha to new alpha
+      vcl_cout<<"Cross checking old alphas against new ones"<<vcl_endl;
+      bocl_mem* dat = cache_->get_data(id, boxm2_data_traits<BOXM2_ALPHA>::prefix());
+      float* new_alphas = (float*) dat->cpu_buffer(); 
+      vcl_cout<<"First alpha: "<<new_alphas[0]<<vcl_endl;
+      for(int j=0; j<numAlphas; ++j) {
+        if(new_alphas[j] != old_alphas[j]) {
+          vcl_cout<<"New and old alphas don't match: (new)"<<new_alphas[j]<<" != "<<" (old) "<<old_alphas[j]<<vcl_endl;
+          break; 
+        }
+      }
+      delete[] old_alphas;
+      
+      //compare old blocks to new blocks
+      bocl_mem* blk = cache_->get_block(id);
+      char* blks = (char*) blk->cpu_buffer();
+      char* blkcpy = (char*) blk_copy->cpu_buffer();  
+      for(int j=0; j<numTrees; ++j) {
+        
+        //print out data index 
+        boct_bit_tree2 tree( (unsigned char*) &blks[16*j] ) ; 
+        vcl_cout<<"ptr for: "<<j<<":"<<tree.get_data_ptr(false)
+                <<": "<<vcl_hex<<(int)blks[16*j+10]
+                <<" "<<(int)blks[16*j+11]
+                <<" "<<(int)blks[16*j+12]
+                <<" "<<(int)blks[16*j+13]<<vcl_dec<<vcl_endl;
+
+        bool matches = true; 
+        for(int ch=0; ch<16; ++ch)
+        {
+          if(blks[16*j+ch] != blkcpy[16*j+ch]) {
+            vcl_cout<<"Block "<<j<<" doesn't match at byte "<<ch<<vcl_endl;
+            matches = false;
+          }
+        }
+        
+      }
+#endif
 
       //clean aux memory
       delete blk_copy;

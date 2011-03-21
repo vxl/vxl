@@ -12,6 +12,7 @@
 #include <vpgl/vpgl_perspective_camera.h>
 #include <bsta/bsta_histogram.h>
 
+
 // fills a float buffer (should be 16*3 floats) with a perspective cam to be sent
 void boxm2_ocl_util::set_persp_camera(vpgl_camera_double_sptr& cam, cl_float* persp_cam)
 {
@@ -202,3 +203,5 @@ void boxm2_ocl_util::get_render_transfer_function(vcl_vector<vcl_string> imgfile
     tf[i]=sum;
   }
 }
+
+
