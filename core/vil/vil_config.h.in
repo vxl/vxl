@@ -22,12 +22,13 @@
 #define HAS_GEN   0
 
 //: These formats are supported using external libraries, and hence may not be present in a given build.
-#define HAS_JPEG    @HAS_JPEG@
-#define HAS_PNG     @HAS_PNG@
-#define HAS_TIFF    @HAS_TIFF@
-#define HAS_GEOTIFF @HAS_GEOTIFF@
-#define HAS_DCMTK   @HAS_DCMTK@
-#define HAS_J2K     @HAS_J2K@
+#define HAS_JPEG      @HAS_JPEG@
+#define HAS_PNG       @HAS_PNG@
+#define HAS_TIFF      @HAS_TIFF@
+#define HAS_GEOTIFF   @HAS_GEOTIFF@
+#define HAS_DCMTK     @HAS_DCMTK@
+#define HAS_J2K       @HAS_J2K@
+#define HAS_OPENJPEG2 @HAS_OPENJPEG2@
 
 
 //: Set to 0 if you don't want to use SSE2 instructions to implement rounding, floor, and ceil functions.

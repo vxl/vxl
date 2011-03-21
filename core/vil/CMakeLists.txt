@@ -55,6 +55,22 @@ ELSE(ECW_FOUND)
   SET( HAS_J2K 0 )
 ENDIF(ECW_FOUND)
 
+##############################
+# JPEG2000 via OpenJPEG
+##############################
+INCLUDE( ${MODULE_PATH}/FindOpenJPEG2.cmake )
+IF(OPENJPEG2_FOUND)
+  SET( vil_sources ${vil_sources}
+    file_formats/vil_openjpeg.h  file_formats/vil_openjpeg.cxx
+    file_formats/vil_openjpeg_pyramid_image_resource.h
+    file_formats/vil_openjpeg_pyramid_image_resource.cxx)
+  INCLUDE_DIRECTORIES(${OPENJPEG2_INCLUDE_DIR})
+  ADD_DEFINITIONS( ${OPENJPEG2_DEFINITIONS} )
+  SET( HAS_OPENJPEG2 1 )
+ELSE(OPENJPEG2_FOUND)
+  SET( HAS_OPENJPEG2 0 )
+ENDIF(OPENJPEG2_FOUND)
+
 SET( HAS_TIFF 0 )
 SET( HAS_GEOTIFF 0 )
 INCLUDE(${MODULE_PATH}/FindTIFF.cmake)
@@ -327,6 +343,9 @@ INSTALL_NOBASE_HEADER_FILES(/include/vxl/core/vil
 IF(ECW_FOUND)
   TARGET_LINK_LIBRARIES( vil ${ECW_LIBRARIES} )
 ENDIF(ECW_FOUND)
+IF(OPENJPEG2_FOUND)
+  TARGET_LINK_LIBRARIES( vil ${OPENJPEG2_LIBRARIES} )
+ENDIF(OPENJPEG2_FOUND)
 
 IF( BUILD_EXAMPLES )
   SUBDIRS( examples )

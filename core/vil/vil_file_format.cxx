@@ -71,6 +71,10 @@ vil_file_format::~vil_file_format()
 #include <vil/file_formats/vil_j2k_image.h>
 #endif
 
+#if HAS_OPENJPEG2
+#include <vil/file_formats/vil_openjpeg.h>
+#endif
+
 const unsigned MAX_FILE_FORMATS=256;
 //: Local class to hold file format list
 // Clears list on deletion.
@@ -125,6 +129,12 @@ struct vil_file_format_storage
 
 #if HAS_J2K
   l[c++] = new vil_j2k_file_format;
+#endif
+
+#if HAS_OPENJPEG2
+  l[c++] = new vil_openjpeg_jp2_file_format;
+  //l[c++] = new vil_openjpeg_jpt_file_format;
+  l[c++] = new vil_openjpeg_j2k_file_format;
 #endif
 
 #if HAS_TIFF
