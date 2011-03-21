@@ -5,6 +5,7 @@
 *.bmp           -crlf
 *.dsptemplate   -crlf
 *.ico           -crlf
+*.jp2           -crlf
 *.jpg           -crlf
 *.pl             crlf=input
 *.png           -crlf

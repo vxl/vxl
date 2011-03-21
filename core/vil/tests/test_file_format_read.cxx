@@ -434,6 +434,37 @@ CheckFormat( Compare<TruePixelType,ImgPixelType> const& check,
 }
 
 
+// ===========================================================================
+// Compute the peak difference between 2 views across the entire image
+//
+template<typename T_PIXEL>
+bool
+image_equals( const vcl_string &test_file, const vcl_string &ref_file)
+{
+  vil_image_view_base_sptr view_test_ptr =
+    vil_load((image_base+test_file).c_str());
+  if( !view_test_ptr )
+  {
+    vcl_cout << "[ couldn't open or decode file " << test_file << " ]\n";
+    return false;
+  }
+  vil_image_view_base_sptr view_ref_ptr =
+    vil_load((image_base+ref_file).c_str());
+  if( !view_ref_ptr )
+  {
+    vcl_cout << "[ couldn't open or decode file " << ref_file << " ]\n";
+    return false;
+  }
+
+  vil_image_view<T_PIXEL> *view_test =
+    dynamic_cast<vil_image_view<T_PIXEL>*>(view_test_ptr.as_pointer());
+  vil_image_view<T_PIXEL> *view_ref =
+    dynamic_cast<vil_image_view<T_PIXEL>*>(view_ref_ptr.as_pointer());
+
+  return vil_image_view_deep_equality(*view_test, *view_ref);
+}
+
+
 static void
 test_file_format_read( int argc, char* argv[] )
 {
@@ -511,6 +542,18 @@ test_file_format_read( int argc, char* argv[] )
   vcl_cout << "NITF 2.1 [nitf] (JPEG 2000 compressed)\n";
   TEST("p0_12 (3x5x1 x 8Bit)", CheckFile(CompareGrey<vxl_byte>(), "p0_12_true.txt", "p0_12a.ntf" ), true);
 #endif // HAS_J2K
+
+#if HAS_OPENJPEG2
+  vcl_cout << "OpenJPEG v2 \n";
+  TEST("file1 (768x512 8Bit RGB)", image_equals<vxl_byte>("jpeg2000/file1.jp2", "jpeg2000/opj_file1.tif"), true);
+  TEST("file2 (480x640 8Bit RGB)", image_equals<vxl_byte>("jpeg2000/file2.jp2", "jpeg2000/opj_file2.tif"), true);
+  TEST("file4 (768x512 8Bit Grey)", image_equals<vxl_byte>("jpeg2000/file4.jp2", "jpeg2000/opj_file4.tif"), true);
+  TEST("file5 (768x512 8Bit RGB)", image_equals<vxl_byte>("jpeg2000/file5.jp2", "jpeg2000/opj_file5.tif"), true);
+  //TEST("file6 (768x512 12Bit Grey)", image_diff_peak<vxl_uint_16>("jpeg2000/file6.jp2", "jpeg2000/opj_file6.tif"), 0);
+  TEST("file7 (480x640 16Bit RGB)", image_equals<vxl_uint_16>("jpeg2000/file7.jp2", "jpeg2000/opj_file7.tif"), true);
+  TEST("file8 (700x400 8Bit RGB)", image_equals<vxl_byte>("jpeg2000/file8.jp2", "jpeg2000/opj_file8.tif"), true);
+  TEST("file9 (768x512 8Bit RGB)", image_equals<vxl_byte>("jpeg2000/file9.jp2", "jpeg2000/opj_file9.tif"), true);
+#endif
 
   vcl_cout << "Sun raster [ras]\n";
   TEST("8-bit grey, no colourmap", CheckFile(CompareGrey<vxl_byte>(), "ff_grey8bit_true.txt", "ff_grey8bit_nocol.ras" ), true);

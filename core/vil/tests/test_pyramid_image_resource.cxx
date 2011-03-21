@@ -24,6 +24,10 @@
 #include <vil/file_formats/vil_j2k_nitf2_pyramid_image_resource.h>
 #include <vil/file_formats/vil_j2k_image.h>
 #endif
+#if HAS_OPENJPEG2
+#include <vil/file_formats/vil_openjpeg_pyramid_image_resource.h>
+#include <vil/file_formats/vil_openjpeg.h>
+#endif
 #define DEBUG
 
 static void test_pyramid_image_resource( int argc, char* argv[] )
@@ -382,6 +386,42 @@ static void test_pyramid_image_resource( int argc, char* argv[] )
   vpl_unlink(uncomp_file.c_str());
   vpl_unlink(long_comp_file.c_str());
 #endif //HAS_J2K
+
+  //
+  //------- Test OpenJPEG image pyramid resource ------------------//
+  //
+#if HAS_OPENJPEG2
+  good = true;
+  vcl_string filepath = image_base+"jpeg2000/file1.jp2";
+  vil_image_resource_sptr resc = vil_load_image_resource(filepath.c_str());
+  if (resc)
+  {
+    vil_openjpeg_image* j2k = static_cast<vil_openjpeg_image*>(resc.ptr());
+    good = j2k && j2k->is_valid();
+    vil_openjpeg_pyramid_image_resource* j2k_pyr =
+      new vil_openjpeg_pyramid_image_resource(resc);
+    unsigned n_i = j2k_pyr->ni(), n_j = j2k_pyr->nj();
+    unsigned nlevels = j2k_pyr->nlevels();
+    good = good && n_i == 768 && n_j == 512 && nlevels == 6;
+    vil_image_view_base_sptr view = j2k_pyr->get_copy_view(0);
+    good = good && view && view->pixel_format()==VIL_PIXEL_FORMAT_BYTE;
+    view = j2k_pyr->get_copy_view(1);
+    good = good && view->ni() == 384 && view->nj() == 256;
+    view = j2k_pyr->get_copy_view(2);
+    good = good && view->ni() == 192 && view->nj() == 128;
+    view = j2k_pyr->get_copy_view(3);
+    good = good && view->ni() == 96 && view->nj() == 64;
+    view = j2k_pyr->get_copy_view(4);
+    good = good && view->ni() == 48 && view->nj() == 32;
+    view = j2k_pyr->get_copy_view(5);
+    good = good && view->ni() == 24 && view->nj() == 16;
+    TEST("OpenJPEG pyramid resource", good, true);
+  }
+  else
+  { 
+    TEST("OpenJPEG pyramid resource", false, true);
+  }
+#endif //HAS_OPENJPEG
 }
 
 TESTMAIN_ARGS(test_pyramid_image_resource);
