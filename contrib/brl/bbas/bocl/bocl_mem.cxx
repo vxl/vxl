@@ -132,7 +132,7 @@ bool bocl_mem::read_to_buffer(const cl_command_queue& cmd_queue)
                                 0,
                                 NULL,
                                 &ceEvent_);
-    if (!check_val(status,MEM_FAILURE,"clEnqueueReadBuffer failed: " + this->id_))
+    if (!check_val(status,MEM_FAILURE,"clEnqueueReadBuffer failed: " + this->id_ + error_to_string(status)))
       return MEM_FAILURE;
     return MEM_SUCCESS;
   }
@@ -166,7 +166,7 @@ bool bocl_mem::finish_write_to_buffer(const cl_command_queue& cmd_queue)
   if (!is_gl_) {
     cl_int status = MEM_FAILURE;
     status = clWaitForEvents(1, &event_);
-    if (!check_val(status,MEM_FAILURE,"clWaitForEvents failed: " + this->id_))
+    if (!check_val(status,MEM_FAILURE,"clWaitForEvents failed: " + this->id_ + error_to_string(status)))
       return MEM_FAILURE;
     return MEM_SUCCESS;
   }

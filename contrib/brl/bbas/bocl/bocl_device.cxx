@@ -15,7 +15,7 @@ bocl_device::bocl_device(cl_device_id& device)
   device_[0] = device;
   info_ = bocl_device_info(device_);
 
-  vcl_cout<<"Device specs: "<<info_<<vcl_endl;
+  //vcl_cout<<"Device specs: "<<info_<<vcl_endl;
 
   //Create a context from the device ID
   int status = 1;

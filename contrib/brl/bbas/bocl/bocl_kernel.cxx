@@ -38,7 +38,7 @@ bool bocl_kernel::create_kernel(cl_context* context,
 
   bocl_device_info info(device);
   if (info.is_nvidia_device_) {
-    vcl_cout<<"Compiling "<<id_<<" on an NVIDIA device"<<vcl_endl;
+    vcl_cout<<"Compiling kernel ["<<id_<<"] on an NVIDIA device"<<vcl_endl;
     options += " -cl-nv-verbose";
   }
 
@@ -47,7 +47,6 @@ bool bocl_kernel::create_kernel(cl_context* context,
     vcl_cerr<<"bocl_kernel::couldn't build program "<<id_<<'\n';
     return false;
   }
-  vcl_cout<<"BUILD LOG: "<<this->build_log()<<vcl_endl;
 
   //create cl_kernel object
   cl_int status = SDK_FAILURE;
@@ -275,7 +274,7 @@ bool bocl_kernel::build_kernel_program(cl_program &program, vcl_string options)
                           NULL);
   if (!check_val(status, CL_SUCCESS, error_to_string(status)))
   {
-    vcl_cout<<this->build_log()<<vcl_endl;
+    vcl_cout<<"BUILD ERROR: "<<this->build_log()<<vcl_endl;
     return false;
   }
   else
