@@ -113,6 +113,10 @@
 #include <vil/file_formats/vil_j2k_pyramid_image_resource.h>
 #include <vil/file_formats/NCSJPCVilIOStream.h>
 #endif
+#if HAS_OPENJPEG2
+#include <vil/file_formats/vil_openjpeg.h>
+#include <vil/file_formats/vil_openjpeg_pyramid_image_resource.h>
+#endif
 #if HAS_DCMTK
 #include <vil/file_formats/vil_dicom.h>
 #include <vil/file_formats/vil_dicom_header.h>

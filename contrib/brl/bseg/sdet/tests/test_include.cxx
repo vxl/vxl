@@ -12,6 +12,10 @@
 #include <sdet/sdet_grid_finder_params.h>
 #include <sdet/sdet_harris_detector.h>
 #include <sdet/sdet_harris_detector_params.h>
+#include <sdet/sdet_image_mesh.h>
+#include <sdet/sdet_image_mesh_params.h>
+#include <sdet/sdet_img_edge.h>
+#include <sdet/sdet_nms.h>
 #include <sdet/sdet_nonmax_suppression.h>
 #include <sdet/sdet_nonmax_suppression_params.h>
 #include <sdet/sdet_region.h>
@@ -20,11 +24,9 @@
 #include <sdet/sdet_region_proc.h>
 #include <sdet/sdet_region_proc_params.h>
 #include <sdet/sdet_region_sptr.h>
-#include <sdet/sdet_watershed_region_proc.h>
-#include <sdet/sdet_watershed_region_proc_params.h>
-#include <sdet/sdet_img_edge.h>
 #include <sdet/sdet_third_order_edge_det.h>
 #include <sdet/sdet_third_order_edge_det_params.h>
-#include <sdet/sdet_nms.h>
+#include <sdet/sdet_watershed_region_proc.h>
+#include <sdet/sdet_watershed_region_proc_params.h>
 
 int main() { return 0; }
