@@ -330,6 +330,12 @@ SOURCE=.\file_formats/vil_j2k_pyramid_image_resource.cxx
 SOURCE=.\file_formats/vil_j2k_nitf2_pyramid_image_resource.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\file_formats/vil_openjpeg.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\file_formats/vil_openjpeg_pyramid_image_resource.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/vil_image_view+bool-.cxx
 # End Source File
 # Begin Source File
@@ -1099,6 +1105,12 @@ SOURCE=.\file_formats/vil_j2k_nitf2_pyramid_image_resource.h
 # End Source File
 # Begin Source File
 SOURCE=.\file_formats/vil_j2k_pyramid_image_resource.h
+# End Source File
+# Begin Source File
+SOURCE=.\file_formats/vil_openjpeg.h
+# End Source File
+# Begin Source File
+SOURCE=.\file_formats/vil_openjpeg_pyramid_image_resource.h
 # End Source File
 # Begin Source File
 SOURCE=.\vil_pyramid_image_view.h

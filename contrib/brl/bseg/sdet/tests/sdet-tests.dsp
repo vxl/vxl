@@ -254,6 +254,9 @@ SOURCE=.\test_region_proc.cxx
 SOURCE=.\test_gauss_fit.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\test_image_mesh.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\test_include.cxx
 # End Source File
 # End Group
