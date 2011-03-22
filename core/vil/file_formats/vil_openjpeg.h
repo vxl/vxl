@@ -31,9 +31,9 @@ enum vil_openjpeg_format
 
 
 //: Derived class for JPEG2000 imagery using OpenJPEG
-class vil_openjpeg_file_format 
+class vil_openjpeg_file_format
 {
-public:
+ public:
   vil_image_resource_sptr make_input_image(vil_stream* vs,
                                            vil_openjpeg_format opjfmt);
   vil_image_resource_sptr make_output_image(vil_stream* vs,
@@ -47,13 +47,13 @@ public:
 class vil_openjpeg_jp2_file_format : public vil_file_format,
                                      public vil_openjpeg_file_format
 {
-public:
+ public:
   virtual const char * tag() const { return "jp2"; }
 
   virtual vil_image_resource_sptr make_input_image(vil_stream* vs)
-  { 
+  {
     return static_cast<vil_openjpeg_file_format*>(this)->
-           make_input_image(vs, VIL_OPENJPEG_JP2); 
+           make_input_image(vs, VIL_OPENJPEG_JP2);
   }
 
   virtual vil_image_resource_sptr make_output_image(vil_stream* vs,
@@ -61,23 +61,23 @@ public:
                                                     unsigned int nj,
                                                     unsigned int nplanes,
                                                     vil_pixel_format format)
-  { 
+  {
     return static_cast<vil_openjpeg_file_format*>(this)->
-           make_output_image(vs, ni, nj, nplanes, format, VIL_OPENJPEG_JP2); 
+           make_output_image(vs, ni, nj, nplanes, format, VIL_OPENJPEG_JP2);
   }
 };
 
-/*
+#if 0
 class vil_openjpeg_jpt_file_format : public vil_file_format,
                                      public vil_openjpeg_file_format
 {
-public:
+ public:
   virtual const char * tag() const { return "jpt"; }
-  
+
   virtual vil_image_resource_sptr make_input_image(vil_stream* vs)
-  { 
+  {
     return static_cast<vil_openjpeg_file_format*>(this)->
-           make_input_image(vs, VIL_OPENJPEG_JPT); 
+           make_input_image(vs, VIL_OPENJPEG_JPT);
   }
 
   virtual vil_image_resource_sptr make_output_image(vil_stream* vs,
@@ -85,23 +85,23 @@ public:
                                                     unsigned int nj,
                                                     unsigned int nplanes,
                                                     vil_pixel_format format)
-  { 
+  {
     return static_cast<vil_openjpeg_file_format*>(this)->
-           make_output_image(vs, ni, nj, nplanes, format, VIL_OPENJPEG_JPT); 
+           make_output_image(vs, ni, nj, nplanes, format, VIL_OPENJPEG_JPT);
   }
 };
-*/
+#endif // 0
 
 class vil_openjpeg_j2k_file_format : public vil_file_format,
                                      public vil_openjpeg_file_format
 {
-public:
+ public:
   virtual const char * tag() const { return "j2k"; }
-  
+
   virtual vil_image_resource_sptr make_input_image(vil_stream* vs)
-  { 
+  {
     return static_cast<vil_openjpeg_file_format*>(this)->
-           make_input_image(vs, VIL_OPENJPEG_J2K); 
+           make_input_image(vs, VIL_OPENJPEG_J2K);
   }
 
   virtual vil_image_resource_sptr make_output_image(vil_stream* vs,
@@ -109,9 +109,9 @@ public:
                                                     unsigned int nj,
                                                     unsigned int nplanes,
                                                     vil_pixel_format format)
-  { 
+  {
     return static_cast<vil_openjpeg_file_format*>(this)->
-           make_output_image(vs, ni, nj, nplanes, format, VIL_OPENJPEG_J2K); 
+           make_output_image(vs, ni, nj, nplanes, format, VIL_OPENJPEG_J2K);
   }
 };
 
@@ -120,8 +120,8 @@ struct vil_openjpeg_image_impl;
 //: Derived image resource for JPEG2000 imagery using OpenJPEG
 class vil_openjpeg_image : public vil_image_resource
 {
-public:
-  vil_openjpeg_image (vil_stream* is, 
+ public:
+  vil_openjpeg_image (vil_stream* is,
                       unsigned int ni, unsigned int nj, unsigned int nplanes,
                       vil_pixel_format format, vil_openjpeg_format opjfmt);
   vil_openjpeg_image(vil_stream* is, vil_openjpeg_format opjfmt);
@@ -156,19 +156,19 @@ public:
     unsigned i0, unsigned ni, unsigned j0, unsigned nj,
     unsigned reduction) const;
 
-  virtual bool put_view(const vil_image_view_base& im, 
+  virtual bool put_view(const vil_image_view_base& im,
     unsigned int i0, unsigned int j0);
 
   virtual bool get_property(char const* tag, void* property_value = 0) const;
 
-private:
+ private:
   bool validate_format();
 
   int maxbpp(void) const;
-  
+
   template<typename PIXEL_TYPE>
   vil_image_view_base_sptr opj2vil(
-    void *opj_view, 
+    void *opj_view,
     unsigned int i0, unsigned int ni, unsigned int j0, unsigned int nji) const;
 //    vil_memory_chunk_sptr image_mem_ptr);
 
@@ -176,4 +176,3 @@ private:
 };
 
 #endif
-
