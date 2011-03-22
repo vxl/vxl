@@ -39,7 +39,7 @@ bool boxm2_opencl_update_process::init_kernel(cl_context* context,
 
   //compilation options
   vcl_string options = " -D INTENSITY ";
-  options += " -D ATOMIC_OPT -D DETERMINISTIC ";
+  options += " -D DETERMINISTIC ";
   options += opts;
 
   //create all passes

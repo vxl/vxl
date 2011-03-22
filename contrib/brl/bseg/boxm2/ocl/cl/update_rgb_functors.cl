@@ -207,6 +207,35 @@ void bayes_ratio_rgb_functor(         float   seg_len,          // segment lengt
     barrier(CLK_LOCAL_MEM_FENCE); 
 }
 
+/* Image vector */
+void bayes_ratio_rgb_ind(     float   seg_len,          // segment length for this ray
+                              float4  mean_obs,         // mean observation for the currently intersected cell
+                              float * ray_pre,              // ray pre
+                              float * ray_vis,              // ray vis
+                              float   norm,             // normalization (pre_inf + vis_inf)
+                              float * cell_beta,
+                              float * cell_vis, 
+                              float   alpha, 
+                              float8  mixture)
+{
+    // linear thread id
+    uchar llid = (uchar)(get_local_id(0) + get_local_size(0)*get_local_id(1));
+    
+    // Compute PI for all threads 
+    float PI = 0.0f;
+    if (seg_len>1.0e-10f)
+    {
+        PI = gauss_prob_density_rgb( mean_obs, mixture.s0123, mixture.s4567);  
+        (*cell_beta) = ((*ray_pre) + PI*(*ray_vis))*seg_len/norm;
+        (*cell_vis) = (*ray_vis) * seg_len;  
+    }
+  
+    //update ray pre and vis
+    float temp = exp(-alpha * seg_len);
+    (*ray_pre) += (*ray_vis)*(1-temp)*PI;
+    (*ray_vis) *= temp;
+}
+
 
 //bayes step cell functor
 void step_cell_bayes(AuxArgs aux_args, int data_ptr, uchar llid, float d)
@@ -220,7 +249,6 @@ void step_cell_bayes(AuxArgs aux_args, int data_ptr, uchar llid, float d)
     //load aux data
     float cum_len  = convert_float(aux_args.seg_len[data_ptr])/SEGLEN_FACTOR;
     float4 meanObs = convert_float4(as_uchar4(aux_args.mean_obs[data_ptr]))/255.0f; 
-    float mean_obs = meanObs.x; 
   
 #ifdef ATOMIC_OPT
     //keep track of cells being hit
@@ -257,24 +285,27 @@ void step_cell_bayes(AuxArgs aux_args, int data_ptr, uchar llid, float d)
     }
 #else
     //slow beta calculation ----------------------------------------------------
-    float ray_beta, vis_cont;
-    bayes_ratio_ind( d,
-                     alpha,
-                     mixture,
-                     weight3,
-                     cum_len,
-                     mean_obs,
-                     aux_args.norm,
-                     aux_args.ray_pre,
-                     aux_args.ray_vis,
-                     &ray_beta,
-                     &vis_cont);
+    float cell_beta = 0.0f;
+    float cell_vis = 0.0f;
+    bayes_ratio_rgb_ind( d,
+                         meanObs,
+                         aux_args.ray_pre,
+                         aux_args.ray_vis,
+                         aux_args.norm,
+                         &cell_beta, 
+                         &cell_vis,
+                         alpha,
+                         mixture);                          
 
     //discretize and store beta and vis contribution
-    int beta_int = convert_int_rte(ray_beta * SEGLEN_FACTOR);
-    atom_add(&aux_args.beta_array[data_ptr], beta_int);
-    int vis_int  = convert_int_rte(vis_cont * SEGLEN_FACTOR);
-    atom_add(&aux_args.vis_array[data_ptr], vis_int);
+    if(cell_beta > 0.0f) {
+      int beta_int = convert_int_rte(cell_beta * SEGLEN_FACTOR);
+      atom_add(&aux_args.beta_array[data_ptr], beta_int);
+    }
+    if(cell_vis > 0.0f) {
+      int vis_int  = convert_int_rte(cell_vis * SEGLEN_FACTOR);
+      atom_add(&aux_args.vis_array[data_ptr], vis_int);
+    }
     //-------------------------------------------------------------------------- */
 #endif
 

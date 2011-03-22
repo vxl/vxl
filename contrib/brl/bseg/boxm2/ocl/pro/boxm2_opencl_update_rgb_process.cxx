@@ -40,7 +40,7 @@ bool boxm2_opencl_update_rgb_process::init_kernel(cl_context* context,
 
   //compilation options
   vcl_string options = " -D INTENSITY ";
-  options += " -D ATOMIC_OPT -D DETERMINISTIC -D MOG_TYPE_8 ";
+  options += " -D DETERMINISTIC -D MOG_TYPE_8 ";
   options += opts;
 
   //seg len pass
