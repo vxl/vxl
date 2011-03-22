@@ -9,6 +9,7 @@
 #include <sdet/sdet_image_mesh_params.h>
 #include <imesh/imesh_fileio.h>
 #include <testlib/testlib_test.h>
+
 static void test_image_mesh()
 {
   vcl_string image_path = "c:/images/MeshStudies/depth-grey-cropped.tif";
@@ -36,7 +37,9 @@ static void test_image_mesh()
            << "  number of faces "<< mesh.num_faces()<< '\n';
   vcl_string vrfile = "c:/images/MeshStudies/vrmesh.wrl";
   vcl_ofstream os(vrfile.c_str());
+#ifdef HAS_IMESH_WRITE_VRML
   imesh_write_vrml(os, mesh);
+#endif
   os.close();
 }
 
