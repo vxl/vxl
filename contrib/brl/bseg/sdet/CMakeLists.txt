@@ -37,6 +37,8 @@ SET(sdet_sources
     sdet_nms.cxx                    sdet_nms.h
     sdet_third_order_edge_det_params.cxx   sdet_third_order_edge_det_params.h
     sdet_third_order_edge_det.cxx   sdet_third_order_edge_det.h
+    sdet_image_mesh.cxx             sdet_image_mesh.h
+    sdet_image_mesh_params.cxx      sdet_image_mesh_params.h
 )
 AUX_SOURCE_DIRECTORY(Templates sdet_sources)
 
@@ -44,7 +46,7 @@ ADD_LIBRARY(sdet ${sdet_sources})
 INSTALL_TARGETS(/lib sdet)
 INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bseg/sdet ${sdet_sources})
 
-TARGET_LINK_LIBRARIES(sdet brip bsol btol bdgl gevd vdgl vtol vsol bil_algo vil vil_algo vil1 vgl_algo vgl vnl_algo vnl vul vbl)
+TARGET_LINK_LIBRARIES(sdet brip bsol btol bdgl gevd vdgl vtol vsol imesh bil_algo vil vil_algo vil1 vgl_algo vgl vnl_algo vnl vul vbl)
 
 IF(BUILD_TESTING)
   SUBDIRS(tests)
