@@ -553,3 +553,52 @@ void imesh_write_kml_collada(vcl_ostream& os, const imesh_mesh& mesh)
      << "  </scene>\n"
      << "</COLLADA>\n";
 }
+void imesh_write_vrml(vcl_ostream& os, const imesh_mesh& mesh)
+{
+  // get mesh faces as triangles
+  if (mesh.faces().regularity() != 3)
+  {
+    vcl_cerr << "ERROR! only triangle meshes are supported.\n";
+    return;
+  }
+  const imesh_regular_face_array<3>& tris =
+    static_cast<const imesh_regular_face_array<3>&>(mesh.faces());
+  const imesh_vertex_array_base& vertsb = mesh.vertices();
+  unsigned d = vertsb.dim();
+  if(d!=2&&d!=3)
+  {
+    vcl_cerr << "vertex dimension must be 2 or 3.\n";
+    return;
+  }
+  const unsigned int nfaces = tris.size();
+os << "#VRML V2.0 utf8\n\n";
+ os << "Shape {\n";
+ os << " geometry IndexedFaceSet\n";
+ os << "  { \n";
+ os << "   coord Coordinate{\n";
+ os << "    point [ \n";
+ if(d == 2){
+   const imesh_vertex_array<2>& verts2= mesh.vertices<2>();
+   for(unsigned i=0;i<verts2.size();++i) 
+     os << verts2[i][0] << ' ' << verts2[i][1] << ' ' << 0.0 << '\n';
+ }else{
+   const imesh_vertex_array<3>& verts3= mesh.vertices<3>();
+   for(unsigned i=0;i<verts3.size();++i) 
+     os << verts3[i][0] << ' ' << verts3[i][1] << ' ' << verts3[i][2] << '\n';
+ }
+ os << "    ]} \n";
+ os << "  coordIndex [ \n";
+ 
+ for(unsigned i=0;i<nfaces;++i)
+   os << tris[i][0] << ' ' << tris[i][1] 
+ << ' ' << tris[i][2] << ' ' << -1 << '\n';
+
+ os << "  ]\n";
+ os << "  colorPerVertex FALSE\n";
+ os << "  color Color {\n";
+ os << "   color [ ]\n";
+ os << "  }\n";
+ os << "  colorIndex [ ]\n";
+ os << " } \n";         
+ os << "} \n"; 
+}
