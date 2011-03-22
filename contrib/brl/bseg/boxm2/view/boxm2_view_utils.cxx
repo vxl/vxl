@@ -1,4 +1,6 @@
 #include "boxm2_view_utils.h"
+//:
+// \file
 #include <bocl/bocl_utils.h> //for check_val and error_to_string
 
 //: Helper method to create a shared cl-gl context on a device
