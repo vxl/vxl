@@ -9,6 +9,7 @@ SOURCES += boxm2_change_detection_tableau.cxx
 SOURCES += boxm2_trajectory.cxx
 SOURCES += boxm2_batch_update_tableau.cxx
 SOURCES += boxm2_render_rgb_tableau.cxx
+SOURCES += boxm2_view_utils.cxx
 
 ################################
 include ${VXLROOT}/config/top.mk

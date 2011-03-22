@@ -62,6 +62,11 @@ SOURCES += file_formats/vil_jpeg_destination_mgr.cxx
 SOURCES += file_formats/vil_jpeg_source_mgr.cxx
 MANPAGE_SOURCES += file_formats/vil_jpeglib.h
 endif
+ifeq ($(HAS_OPENJPEG2),1)
+USE_OPENJPEG2 := 1
+SOURCES += file_formats/vil_openjpeg.cxx
+SOURCES += file_formats/vil_openjpeg_pyramid_image_resource.cxx
+endif
 ifeq ($(HAS_ECW),1)
 USE_ECW := 1
 SOURCES += file_formats/vil_j2k_image.cxx

@@ -30,6 +30,10 @@ ifneq (,$(strip $(wildcard $(JPEG_INC_DIR)/../v3p_tag)))
 SUBDIRS += jpeg
 endif
 
+ifneq (,$(strip $(wildcard $(OPENJPEG2_INC_DIR)/../v3p_tag)))
+SUBDIRS += openjpeg2
+endif
+
 ifneq (,$(strip $(wildcard $(TIFF_INC_DIR)/../v3p_tag)))
 SUBDIRS += tiff
 endif
