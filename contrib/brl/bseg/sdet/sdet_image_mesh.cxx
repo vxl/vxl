@@ -98,7 +98,6 @@ bool sdet_image_mesh::compute_mesh()
   vcl_vector<vgl_point_2d<double> > convex_hull;
   convex_hull.push_back(ul);   convex_hull.push_back(ur);
   convex_hull.push_back(lr);   convex_hull.push_back(ll);
-  unsigned nsegs = segs_pair.size();
   imesh_generate_mesh_2d(convex_hull, segs_pair, mesh_);
 
   //lift vertices to 3-d

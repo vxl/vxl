@@ -744,8 +744,6 @@ vil_openjpeg_image
   if ( pixel_format == VIL_PIXEL_FORMAT_UNKNOWN )
     return 0;
 
-  unsigned int nplanes = this->nplanes();
-
   // Set up decoder
   this->impl_->vstream_->seek(this->impl_->vstream_start_);
   vil_openjpeg_decoder decoder(this->impl_->opj_codec_format_);
