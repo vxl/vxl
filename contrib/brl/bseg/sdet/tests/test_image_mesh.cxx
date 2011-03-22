@@ -29,11 +29,11 @@ static void test_image_mesh()
   // the mesh processor
   sdet_image_mesh im(imp);
   im.set_image(imgr);
-  if(!im.compute_mesh())
+  if (!im.compute_mesh())
     return;
   imesh_mesh& mesh = im.get_mesh();
   vcl_cout << "Number of vertices " << mesh.num_verts()
-	  << "  number of faces "<< mesh.num_faces()<< '\n';
+           << "  number of faces "<< mesh.num_faces()<< '\n';
   vcl_string vrfile = "c:/images/MeshStudies/vrmesh.wrl";
   vcl_ofstream os(vrfile.c_str());
   imesh_write_vrml(os, mesh);

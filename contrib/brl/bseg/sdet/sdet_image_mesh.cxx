@@ -11,8 +11,8 @@
 #include <sdet/sdet_detector.h>
 #include <sdet/sdet_fit_lines_params.h>
 #include <sdet/sdet_fit_lines.h>
-#include <vgl/vgl_line_segment_2d.h>
 #include <imesh/algo/imesh_generate_mesh.h>
+
 //note: this method is somewhat of a hack and should be replaced by
 // a computed step function transition width, e.g. by a 2nd derivative
 // operator
@@ -20,7 +20,7 @@ bool sdet_image_mesh:: step_boundary(vgl_line_segment_2d<double> const& parent,
                                      vgl_line_segment_2d<double>& child0,
                                      vgl_line_segment_2d<double>& child1)
 {
-  if(! resc_ ) return false;
+  if (! resc_ ) return false;
   unsigned ni = resc_->ni(), nj = resc_->nj();
   vgl_vector_2d<double> n = parent.normal();
   vgl_point_2d<double> p1 = parent.point1();
@@ -29,25 +29,24 @@ bool sdet_image_mesh:: step_boundary(vgl_line_segment_2d<double> const& parent,
   vgl_point_2d<double> p11 = p1 + step_half_width_*n;
   vgl_point_2d<double> p20 = p2 - step_half_width_*n;
   vgl_point_2d<double> p21 = p2 + step_half_width_*n;
-  if(p10.x()<0 || p10.y()<0||p20.x()<0||p20.y()<0||
-     p10.x()>=ni ||p10.y()>=nj||p20.x()>=ni||p20.y()>=nj)
+  if (p10.x()<0 || p10.y()<0||p20.x()<0||p20.y()<0||
+      p10.x()>=ni ||p10.y()>=nj||p20.x()>=ni||p20.y()>=nj)
     return false;
-  else
-    child0 = vgl_line_segment_2d<double>(p10, p20);
-  if(p11.x()<0 || p11.y()<0||p21.x()<0||p21.y()<0||
-     p11.x()>=ni ||p11.y()>=nj||p21.x()>=ni||p21.y()>=nj)
+
+  if (p11.x()<0 || p11.y()<0||p21.x()<0||p21.y()<0||
+      p11.x()>=ni ||p11.y()>=nj||p21.x()>=ni||p21.y()>=nj)
     return false;
-  else
-    child1 = vgl_line_segment_2d<double>(p11, p21);
+
+  child0 = vgl_line_segment_2d<double>(p10, p20);
+  child1 = vgl_line_segment_2d<double>(p11, p21);
   return true;
 }
 
 //---------------------------------------------------------------
 // Constructors
-//
 //----------------------------------------------------------------
 
-//: constructor from a parameter block (the only way)
+// constructor from a parameter block (the only way)
 sdet_image_mesh::sdet_image_mesh(sdet_image_mesh_params& imp)
   : sdet_image_mesh_params(imp), mesh_valid_(false), resc_(0)
 {
@@ -60,7 +59,7 @@ sdet_image_mesh::~sdet_image_mesh()
 
 bool sdet_image_mesh::compute_mesh()
 {
-  if(!resc_) return false;
+  if (!resc_) return false;
   mesh_valid_ = false;
   sdet_detector_params dp;
   dp.smooth= smooth_;
@@ -71,7 +70,7 @@ bool sdet_image_mesh::compute_mesh()
   det.SetImage(resc_);
   det.DoContour();
   vcl_vector<vtol_edge_2d_sptr>* edges = det.GetEdges();
-  if(!edges)
+  if (!edges)
     return false;
   sdet_fit_lines_params flp;
   flp.min_fit_length_ = min_fit_length_;
@@ -79,19 +78,20 @@ bool sdet_image_mesh::compute_mesh()
   sdet_fit_lines fl(flp);
   fl.set_edges(*edges);
   bool fit_worked = fl.fit_lines();
-  if(!fit_worked) return false;
+  if (!fit_worked) return false;
   vcl_vector<vgl_line_segment_2d<double> > segs, segs_pair;
   fl.get_line_segs(segs);
-  for(unsigned i = 0; i<segs.size(); ++i)
+  for (unsigned i = 0; i<segs.size(); ++i)
   {
     vgl_line_segment_2d<double> child0, child1;
-    if(this->step_boundary(segs[i],child0, child1))
-      {
-        segs_pair.push_back(child0);
-        segs_pair.push_back(child1);
-      } else {
-        segs_pair.push_back(segs[i]);
-      }
+    if (this->step_boundary(segs[i],child0, child1))
+    {
+      segs_pair.push_back(child0);
+      segs_pair.push_back(child1);
+    }
+    else {
+      segs_pair.push_back(segs[i]);
+    }
   }
   vgl_point_2d<double> ul(0.0, 0.0), ur(resc_->ni(),0.0);
   vgl_point_2d<double> lr(resc_->ni(), resc_->nj()), ll(0.0, resc_->nj());
@@ -110,17 +110,17 @@ bool sdet_image_mesh::compute_mesh()
   float minv=0, maxv=0;
   vil_math_value_range(view, minv, maxv);
   unsigned nverts = mesh_.num_verts();
-  for(unsigned iv = 0; iv<nverts; ++iv)
-    {
-      unsigned i = static_cast<unsigned>(verts[iv][0]);
-      unsigned j = static_cast<unsigned>(verts[iv][1]);
-	  double height =maxv;
-	  if(i<ni && j<nj)
-       height = static_cast<double>(view(i,j));
-      height = maxv-height;
-      imesh_vertex<3> v3(verts[iv][0], verts[iv][1], height);
-      verts3->push_back(v3);
-    }
+  for (unsigned iv = 0; iv<nverts; ++iv)
+  {
+    unsigned i = static_cast<unsigned>(verts[iv][0]);
+    unsigned j = static_cast<unsigned>(verts[iv][1]);
+    double height =maxv;
+    if (i<ni && j<nj)
+      height = static_cast<double>(view(i,j));
+    height = maxv-height;
+    imesh_vertex<3> v3(verts[iv][0], verts[iv][1], height);
+    verts3->push_back(v3);
+  }
   vcl_auto_ptr<imesh_vertex_array_base> v3(verts3);
   mesh_.set_vertices(v3);
   mesh_valid_ = true;

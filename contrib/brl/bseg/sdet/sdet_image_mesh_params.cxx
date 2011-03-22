@@ -19,7 +19,7 @@ sdet_image_mesh_params(const sdet_image_mesh_params& imp)
   InitParams(imp.smooth_, imp.thresh_,
              imp.min_fit_length_,
              imp.rms_distance_,
-			 imp.step_half_width_);
+             imp.step_half_width_);
 }
 
 sdet_image_mesh_params::
@@ -55,15 +55,15 @@ bool sdet_image_mesh_params::SanityCheck()
   bool valid = true;
 
   if (smooth_ < 0.5f)
-    {
-      msg << "ERROR: smoothing has no effect!\n";
-      valid = false;
-    }
+  {
+    msg << "ERROR: smoothing has no effect!\n";
+    valid = false;
+  }
   if (thresh_ < 0.0f)
-    {
-      msg << "ERROR: threshold cannot be negative\n";
-      valid = false;
-    }
+  {
+    msg << "ERROR: threshold cannot be negative\n";
+    valid = false;
+  }
   if (min_fit_length_<3)
   {
     msg << "ERROR: need at least 3 points for a fit\n";
