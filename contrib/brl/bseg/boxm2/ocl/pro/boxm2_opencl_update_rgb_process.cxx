@@ -20,8 +20,8 @@
 //TODO IN THIS INIT METHOD: Need to pass in a ref to the OPENCL_CACHE so this
 //class can easily access BOCL_MEMs
 bool boxm2_opencl_update_rgb_process::init_kernel(cl_context* context,
-                                              cl_device_id* device,
-                                              vcl_string opts)
+                                                  cl_device_id* device,
+                                                  vcl_string opts)
 {
   context_ = context;
 
@@ -51,7 +51,7 @@ bool boxm2_opencl_update_rgb_process::init_kernel(cl_context* context,
 
   //create  compress rgb pass
   bocl_kernel* comp = new bocl_kernel();
-  vcl_string comp_opts = options + " -D COMPRESS_RGB "; 
+  vcl_string comp_opts = options + " -D COMPRESS_RGB ";
   comp->create_kernel(context_, device, non_ray_src, "compress_rgb", comp_opts, "update::compress_rgb");
   update_kernels_.push_back(comp);
 
@@ -89,36 +89,36 @@ bool boxm2_opencl_update_rgb_process::execute(vcl_vector<brdb_value_sptr>& input
 {
   transfer_time_ = 0.0f; gpu_time_ = 0.0f; total_time_ = 0.0f;
   vul_timer total;
-  int i = 0;
+  int inIdx = 0;
 
   //scene argument
-  brdb_value_t<boxm2_scene_sptr>* scene_brdb = static_cast<brdb_value_t<boxm2_scene_sptr>* >( input[i++].ptr() );
+  brdb_value_t<boxm2_scene_sptr>* scene_brdb = static_cast<brdb_value_t<boxm2_scene_sptr>* >( input[inIdx++].ptr() );
   boxm2_scene_sptr scene = scene_brdb->value();
   bool foundDataType = false, foundNumObsType = false;
-  vcl_vector<vcl_string> apps = scene->appearances(); 
-  for(int i=0; i<apps.size(); ++i) {
-    if( apps[i] == boxm2_data_traits<BOXM2_GAUSS_RGB>::prefix() ) 
+  vcl_vector<vcl_string> apps = scene->appearances();
+  for (unsigned int i=0; i<apps.size(); ++i) {
+    if ( apps[i] == boxm2_data_traits<BOXM2_GAUSS_RGB>::prefix() )
     {
-      data_type_ = apps[i]; 
+      data_type_ = apps[i];
       foundDataType = true;
     }
-    else if( apps[i] == boxm2_data_traits<BOXM2_NUM_OBS_SINGLE>::prefix() ) 
+    else if ( apps[i] == boxm2_data_traits<BOXM2_NUM_OBS_SINGLE>::prefix() )
     {
       num_obs_type_ = apps[i];
-      foundNumObsType = true; 
+      foundNumObsType = true;
     }
   }
-  if(!foundDataType) {
+  if (!foundDataType) {
     vcl_cout<<"BOXM2_OPENCL_UPDATE_RGB_PROCESS ERROR: scene doesn't have BOXM2_GAUSS_RGB data type"<<vcl_endl;
     return false;
   }
-  if(!foundNumObsType) {
+  if (!foundNumObsType) {
     vcl_cout<<"BOXM2_OPENCL_UPDATE_RGB_PROCESS ERROR: scene doesn't have BOXM2_NUM_OBS_SINGLE type"<<vcl_endl;
     return false;
   }
 
   //camera
-  brdb_value_t<vpgl_camera_double_sptr>* brdb_cam = static_cast<brdb_value_t<vpgl_camera_double_sptr>* >( input[i++].ptr() );
+  brdb_value_t<vpgl_camera_double_sptr>* brdb_cam = static_cast<brdb_value_t<vpgl_camera_double_sptr>* >( input[inIdx++].ptr() );
   vpgl_camera_double_sptr cam = brdb_cam->value();
   cl_float* cam_buffer = new cl_float[16*3];
   boxm2_ocl_util::set_persp_camera(cam, cam_buffer);
@@ -126,7 +126,7 @@ bool boxm2_opencl_update_rgb_process::execute(vcl_vector<brdb_value_sptr>& input
   persp_cam_->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
   //input image buffer
-  brdb_value_t<vil_image_view_base_sptr>* brdb_img = static_cast<brdb_value_t<vil_image_view_base_sptr>* >( input[i++].ptr() );
+  brdb_value_t<vil_image_view_base_sptr>* brdb_img = static_cast<brdb_value_t<vil_image_view_base_sptr>* >( input[inIdx++].ptr() );
   vil_image_view_base_sptr img = brdb_img->value();
   //vil_image_view<float>* img_view = static_cast<vil_image_view<float>* >(img.ptr());
   vil_image_view<vil_rgba<vxl_byte> >* img_view = static_cast<vil_image_view<vil_rgba<vxl_byte> >* >(img.ptr());
@@ -153,7 +153,7 @@ bool boxm2_opencl_update_rgb_process::execute(vcl_vector<brdb_value_sptr>& input
   if (norm_image_) delete norm_image_;
   norm_image_ = new bocl_mem((*context_), norm_buffer, img_view->size()*sizeof(cl_float), "norm_image_ buffer");
   norm_image_->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
-  
+
   //exp image dimensions
   img_size_[0] = img_view->ni();
   img_size_[1] = img_view->nj();
@@ -206,7 +206,7 @@ bool boxm2_opencl_update_rgb_process::execute(vcl_vector<brdb_value_sptr>& input
       int status = clFinish(*command_queue_);
       check_val(status, MEM_FAILURE, "UPDATE EXECUTE FAILED: " + error_to_string(status));
       update_kernels_[i]->clear_args();
-      norm_image_->read_to_buffer(*command_queue_); 
+      norm_image_->read_to_buffer(*command_queue_);
       continue;
     }
 
@@ -222,22 +222,22 @@ bool boxm2_opencl_update_rgb_process::execute(vcl_vector<brdb_value_sptr>& input
       blk_info_  = cache_->loaded_block_info();
 
       //make sure the data_len field in the info_buffer reflects the true data length
-      boxm2_block_metadata mdata = scene->get_block_metadata(*id); 
-      if(!mdata.random_) {
+      boxm2_block_metadata mdata = scene->get_block_metadata(*id);
+      if (!mdata.random_) {
         boxm2_scene_info* info_buffer = (boxm2_scene_info*) blk_info_->cpu_buffer();
         int alphaTypeSize = boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
-        info_buffer->data_buffer_length = (int) (alpha_->num_bytes()/alphaTypeSize); 
+        info_buffer->data_buffer_length = (int) (alpha_->num_bytes()/alphaTypeSize);
         blk_info_->write_to_buffer((*command_queue_));
-        
+
         //grab an appropriately sized AUX data buffer
-        int auxTypeSize = boxm2_data_info::datasize(boxm2_data_traits<BOXM2_AUX>::prefix()); 
+        int auxTypeSize = boxm2_data_info::datasize(boxm2_data_traits<BOXM2_AUX>::prefix());
         aux_       = cache_->get_data<BOXM2_AUX>(*id, info_buffer->data_buffer_length*auxTypeSize);
-        vcl_cout<<"Alpha buffer length: "<<info_buffer->data_buffer_length<<vcl_endl; 
+        vcl_cout<<"Alpha buffer length: "<<info_buffer->data_buffer_length<<vcl_endl;
       }
       else  {
         //get aux data
         aux_       = cache_->get_data<BOXM2_AUX>(*id);
-      } 
+      }
       transfer_time_ += (float) transfer.all();
 
       //set workspace and args for this pass
@@ -262,8 +262,8 @@ bool boxm2_opencl_update_rgb_process::execute(vcl_vector<brdb_value_sptr>& input
 
       //read image out to buffer (from gpu)
       image_->read_to_buffer(*command_queue_);
-      vis_image_->read_to_buffer(*command_queue_); 
-      pre_image_->read_to_buffer(*command_queue_); 
+      vis_image_->read_to_buffer(*command_queue_);
+      pre_image_->read_to_buffer(*command_queue_);
       cl_output_->read_to_buffer(*command_queue_);
       clFinish(*command_queue_);
     }
@@ -292,7 +292,7 @@ bool boxm2_opencl_update_rgb_process::clean()
   return true;
 }
 
-bool boxm2_opencl_update_rgb_process::set_workspace(unsigned pass)
+bool boxm2_opencl_update_rgb_process::set_workspace(unsigned int pass)
 {
   switch (pass) {
     case UPDATE_SEGLEN:
@@ -322,7 +322,7 @@ bool boxm2_opencl_update_rgb_process::set_workspace(unsigned pass)
 }
 
 
-bool boxm2_opencl_update_rgb_process::set_args(unsigned pass)
+bool boxm2_opencl_update_rgb_process::set_args(unsigned int pass)
 {
   switch (pass)
   {
@@ -342,7 +342,7 @@ bool boxm2_opencl_update_rgb_process::set_args(unsigned pass)
       update_kernels_[pass]->set_local_arg( lThreads_[0]*lThreads_[1]*sizeof(cl_float4) ); //cached aux,
       update_kernels_[pass]->set_local_arg( lThreads_[0]*lThreads_[1]*10*sizeof(cl_uchar) ); //cumsum buffer, imindex buffer
       break;
-    case UPDATE_COMPRESS_RGB : 
+    case UPDATE_COMPRESS_RGB :
       update_kernels_[pass]->set_arg( blk_info_ );
       update_kernels_[pass]->set_arg( aux_ );
       break;
@@ -404,15 +404,15 @@ bool boxm2_opencl_update_rgb_process::set_args(unsigned pass)
 bool boxm2_opencl_update_rgb_process::write_input_image(vil_image_view<vil_rgba<vxl_byte> >* input_image)
 {
   //write to buffer (or create it)
-  unsigned ni=RoundUp(input_image->ni(),8);
-  unsigned nj=RoundUp(input_image->nj(),8);
-  int numFloats = 4; 
-  
+  unsigned int ni=RoundUp(input_image->ni(),8);
+  unsigned int nj=RoundUp(input_image->nj(),8);
+  int numFloats = 4;
+
   float* buff = (image_) ? (float*) image_->cpu_buffer() : new float[numFloats * ni * nj];
   int count=0;
-  for (unsigned j=0;j<nj;j++)
+  for (unsigned int j=0;j<nj;++j)
   {
-    for (unsigned i=0;i<ni;i++)
+    for (unsigned int i=0;i<ni;++i)
     {
       //rgba values
       buff[numFloats*count] = 0.0f;
@@ -420,7 +420,7 @@ bool boxm2_opencl_update_rgb_process::write_input_image(vil_image_view<vil_rgba<
       buff[numFloats*count + 2] = 0.0f;
       buff[numFloats*count + 3] = 1.0f;
       if (i<input_image->ni() && j< input_image->nj()) {
-        vil_rgba<vxl_byte> rgba = (*input_image)(i,j); 
+        vil_rgba<vxl_byte> rgba = (*input_image)(i,j);
         buff[numFloats*count + 0] = (float) rgba.R() / 255.0f;
         buff[numFloats*count + 1] = (float) rgba.G() / 255.0f;
         buff[numFloats*count + 2] = (float) rgba.B() / 255.0f;
@@ -428,7 +428,7 @@ bool boxm2_opencl_update_rgb_process::write_input_image(vil_image_view<vil_rgba<
       }
       ++count;
     }
-  }  
+  }
 
 
   //now write to bocl_mem

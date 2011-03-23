@@ -88,24 +88,24 @@ bool boxm2_opencl_update_process::execute(vcl_vector<brdb_value_sptr>& input, vc
   brdb_value_t<boxm2_scene_sptr>* scene_brdb = static_cast<brdb_value_t<boxm2_scene_sptr>* >( input[inIdx++].ptr() );
   boxm2_scene_sptr scene = scene_brdb->value();
   bool foundDataType = false, foundNumObsType = false;
-  vcl_vector<vcl_string> apps = scene->appearances(); 
-  for(int i=0; i<apps.size(); ++i) {
-    if( apps[i] == boxm2_data_traits<BOXM2_MOG3_GREY>::prefix() || apps[i] == boxm2_data_traits<BOXM2_MOG3_GREY>::prefix() ) 
+  vcl_vector<vcl_string> apps = scene->appearances();
+  for (unsigned int i=0; i<apps.size(); ++i) {
+    if ( apps[i] == boxm2_data_traits<BOXM2_MOG3_GREY>::prefix() || apps[i] == boxm2_data_traits<BOXM2_MOG3_GREY>::prefix() )
     {
-      data_type_ = apps[i]; 
+      data_type_ = apps[i];
       foundDataType = true;
     }
-    else if( apps[i] == boxm2_data_traits<BOXM2_NUM_OBS>::prefix() ) 
+    else if ( apps[i] == boxm2_data_traits<BOXM2_NUM_OBS>::prefix() )
     {
       num_obs_type_ = apps[i];
-      foundNumObsType = true; 
+      foundNumObsType = true;
     }
   }
-  if(!foundDataType) {
+  if (!foundDataType) {
     vcl_cout<<"BOXM2_OPENCL_UPDATE_PROCESS ERROR: scene doesn't have BOXM2_MOG3_GREY or BOXM2_MOG3_GREY_16 data type"<<vcl_endl;
     return false;
   }
-  if(!foundNumObsType) {
+  if (!foundNumObsType) {
     vcl_cout<<"BOXM2_OPENCL_UPDATE_PROCESS ERROR: scene doesn't have BOXM2_NUM_OBS type"<<vcl_endl;
     return false;
   }
@@ -146,15 +146,15 @@ bool boxm2_opencl_update_process::execute(vcl_vector<brdb_value_sptr>& input, vc
   if (norm_image_) delete norm_image_;
   norm_image_ = new bocl_mem((*context_), norm_buffer, img_view->size()*sizeof(cl_float), "norm_image_ buffer");
   norm_image_->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
-  
-  //////////////////////////////////////////////////////////////////////////////
+
+#if 0 //////////////////////////////////////////////////////////////////////////////
   //store data type
-  //brdb_value_t<float>* brdb_init_sigma = static_cast<brdb_value_t<float>* >( input[i++].ptr() );
-  //float init_sigma=brdb_data_type->value();
-  ////store data type
-  //brdb_value_t<vcl_string>* brdb_data_type = static_cast<brdb_value_t<vcl_string>* >( input[inIdx++].ptr() );
-  //data_type_=brdb_data_type->value();
-  //////////////////////////////////////////////////////////////////////////////
+  brdb_value_t<float>* brdb_init_sigma = static_cast<brdb_value_t<float>* >( input[inIdx++].ptr() );
+  float init_sigma=brdb_data_type->value();
+  //store data type
+  brdb_value_t<vcl_string>* brdb_data_type = static_cast<brdb_value_t<vcl_string>* >( input[inIdx++].ptr() );
+  data_type_=brdb_data_type->value();
+#endif //////////////////////////////////////////////////////////////////////////////
 
   //exp image dimensions
   img_size_[0] = img_view->ni();
@@ -207,7 +207,7 @@ bool boxm2_opencl_update_process::execute(vcl_vector<brdb_value_sptr>& input, vc
       int status = clFinish(*command_queue_);
       check_val(status, MEM_FAILURE, "UPDATE EXECUTE FAILED: " + error_to_string(status));
       update_kernels_[i]->clear_args();
-      norm_image_->read_to_buffer(*command_queue_); 
+      norm_image_->read_to_buffer(*command_queue_);
       continue;
     }
 
@@ -223,22 +223,22 @@ bool boxm2_opencl_update_process::execute(vcl_vector<brdb_value_sptr>& input, vc
       blk_info_  = cache_->loaded_block_info();
 
       //make sure the data_len field in the info_buffer reflects the true data length
-      boxm2_block_metadata mdata = scene->get_block_metadata(*id); 
-      if(!mdata.random_) {
+      boxm2_block_metadata mdata = scene->get_block_metadata(*id);
+      if (!mdata.random_) {
         boxm2_scene_info* info_buffer = (boxm2_scene_info*) blk_info_->cpu_buffer();
         int alphaTypeSize = boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
-        info_buffer->data_buffer_length = (int) (alpha_->num_bytes()/alphaTypeSize); 
+        info_buffer->data_buffer_length = (int) (alpha_->num_bytes()/alphaTypeSize);
         blk_info_->write_to_buffer((*command_queue_));
-        
+
         //grab an appropriately sized AUX data buffer
-        int auxTypeSize = boxm2_data_info::datasize(boxm2_data_traits<BOXM2_AUX>::prefix()); 
+        int auxTypeSize = boxm2_data_info::datasize(boxm2_data_traits<BOXM2_AUX>::prefix());
         aux_       = cache_->get_data<BOXM2_AUX>(*id, info_buffer->data_buffer_length*auxTypeSize);
-        vcl_cout<<"Alpha buffer length: "<<info_buffer->data_buffer_length<<vcl_endl; 
+        vcl_cout<<"Alpha buffer length: "<<info_buffer->data_buffer_length<<vcl_endl;
       }
       else  {
         //get aux data
         aux_       = cache_->get_data<BOXM2_AUX>(*id);
-      } 
+      }
       transfer_time_ += (float) transfer.all();
 
       //set workspace and args for this pass
@@ -263,8 +263,8 @@ bool boxm2_opencl_update_process::execute(vcl_vector<brdb_value_sptr>& input, vc
 
       //read image out to buffer (from gpu)
       image_->read_to_buffer(*command_queue_);
-      vis_image_->read_to_buffer(*command_queue_); 
-      pre_image_->read_to_buffer(*command_queue_); 
+      vis_image_->read_to_buffer(*command_queue_);
+      pre_image_->read_to_buffer(*command_queue_);
       cl_output_->read_to_buffer(*command_queue_);
       clFinish(*command_queue_);
     }
@@ -293,7 +293,7 @@ bool boxm2_opencl_update_process::clean()
   return true;
 }
 
-bool boxm2_opencl_update_process::set_workspace(unsigned pass)
+bool boxm2_opencl_update_process::set_workspace(unsigned int pass)
 {
   switch (pass) {
     case UPDATE_SEGLEN:
@@ -322,7 +322,7 @@ bool boxm2_opencl_update_process::set_workspace(unsigned pass)
 }
 
 
-bool boxm2_opencl_update_process::set_args(unsigned pass)
+bool boxm2_opencl_update_process::set_args(unsigned int pass)
 {
   switch (pass)
   {
@@ -400,13 +400,13 @@ bool boxm2_opencl_update_process::set_args(unsigned pass)
 bool boxm2_opencl_update_process::write_input_image(vil_image_view<float>* input_image)
 {
   //write to buffer (or create it)
-  unsigned ni=RoundUp(input_image->ni(),8);
-  unsigned nj=RoundUp(input_image->nj(),8);
+  unsigned int ni=RoundUp(input_image->ni(),8);
+  unsigned int nj=RoundUp(input_image->nj(),8);
   float* buff = (image_) ? (float*) image_->cpu_buffer() : new float[ni*nj];
   int count=0;
-  for (unsigned j=0;j<nj;j++)
+  for (unsigned int j=0;j<nj;++j)
   {
-    for (unsigned i=0;i<ni;i++)
+    for (unsigned int i=0;i<ni;++i)
     {
       buff[count] = 0.0f;
       if (i<input_image->ni() && j< input_image->nj())
