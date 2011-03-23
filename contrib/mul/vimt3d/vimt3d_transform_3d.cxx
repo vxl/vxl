@@ -45,6 +45,21 @@ void vimt3d_transform_3d::matrix(vnl_matrix<double>& M) const
 }
 
 //=======================================================================
+// Define the transform in terms of a 4x4 homogeneous matrix.
+void vimt3d_transform_3d::set(const vnl_matrix<double>& M, 
+                              Form form/*=Affine*/) 
+{
+  if (M.rows()!=4 || M.cols()!=4)
+    mbl_exception_error(mbl_exception_abort("vimt3d_transform_3d::set(matrix,form): input matrix must be 4x4"));
+
+  form_=form;
+  xx_=M[0][0]; xy_=M[0][1]; xz_=M[0][2]; xt_=M[0][3];
+  yx_=M[1][0]; yy_=M[1][1]; yz_=M[1][2]; yt_=M[1][3];
+  zx_=M[2][0]; zy_=M[2][1]; zz_=M[2][2]; zt_=M[2][3];
+  tx_=M[3][0]; ty_=M[3][1]; tz_=M[3][2]; tt_=M[3][3];
+}
+
+//=======================================================================
 // See also vnl_rotation_matrix(), vgl_rotation_3d, and vnl_quaternion
 void vimt3d_transform_3d::angles(double& phi_x, double& phi_y, double& phi_z) const
 {

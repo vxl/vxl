@@ -333,6 +333,61 @@ static void test_affine_puvw()
 #endif
 }
 
+//=========================================================================
+// Test the set(matrix, Form) function
+static bool test_set_matrix()
+{
+  double tx=1.0, ty=2.0, tz=3.0;
+  double rx=0.1, ry=0.2, rz=0.3;
+  double sx=0.9, sy=1.0, sz=1.1;
+
+  vnl_matrix<double> M,N;
+  vimt3d_transform_3d T;
+  vimt3d_transform_3d::Form form;
+
+  // rigid_body
+  form = vimt3d_transform_3d::RigidBody;
+  vimt3d_transform_3d R;
+  R.set_rigid_body(rx, ry, rz, tx, ty, tz);
+  R.matrix(M);
+  T.set(M, form);
+  T.matrix(N);
+  if ((M-N).fro_norm()>1e-12 || T.form()!=form)
+    return false;
+
+  // zoom_only
+  form = vimt3d_transform_3d::ZoomOnly;
+  vimt3d_transform_3d Z;
+  Z.set_zoom_only(sx, sy, sz, tx, ty, tz);
+  Z.matrix(M);
+  T.set(M, form);
+  T.matrix(N);
+  if ((M-N).fro_norm()>1e-12 || T.form()!=form)
+    return false;
+
+  // similarity  
+  form = vimt3d_transform_3d::Similarity;
+  vimt3d_transform_3d S;
+  S.set_similarity(sx, rx, ry, rz, tx, ty, tz);
+  S.matrix(M);
+  T.set(M, form);
+  T.matrix(N);
+  if ((M-N).fro_norm()>1e-12 || T.form()!=form)
+    return false;
+
+  // affine  
+  form = vimt3d_transform_3d::Affine;
+  vimt3d_transform_3d A;
+  A.set_affine(sx, sy, sz, rx, ry, rz, tx, ty, tz);
+  A.matrix(M);
+  T.set(M, form);
+  T.matrix(N);
+  if ((M-N).fro_norm()>1e-12 || T.form()!=form)
+    return false;
+
+  // All tests passed
+  return true;
+}
 
 //=========================================================================
 // Main testing function
@@ -526,6 +581,10 @@ static void test_transform_3d()
   // --- Test the function delta()
   vcl_cout << "\n== Testing delta() ==\n";
   TEST("Test delta()", test_delta(), true);
+
+  // --- Test the function set(matrix, Form)
+  vcl_cout << "\n== Testing set(matrix, Form) ==\n";
+  TEST("Test set(matrix, Form)", test_set_matrix(), true);
 
 }
 
