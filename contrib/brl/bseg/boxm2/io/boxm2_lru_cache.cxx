@@ -73,6 +73,7 @@ boxm2_data_base* boxm2_lru_cache::get_data_base(boxm2_block_id id, vcl_string ty
   //if num_bytes is greater than zero, then you're initializing a new block
   boxm2_data_base* loaded; 
   if(num_bytes > 0) {
+    vcl_cout<<"boxm2_lru_cache::initializing empty data "<<id<<" type: "<<type<<vcl_endl;
     loaded = new boxm2_data_base(new char[num_bytes], num_bytes, id);
   }
   else {
