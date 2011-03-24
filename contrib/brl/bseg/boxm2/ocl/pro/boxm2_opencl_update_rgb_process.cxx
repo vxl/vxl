@@ -90,6 +90,9 @@ bool boxm2_opencl_update_rgb_process::execute(vcl_vector<brdb_value_sptr>& input
   transfer_time_ = 0.0f; gpu_time_ = 0.0f; total_time_ = 0.0f;
   vul_timer total;
   int inIdx = 0;
+  
+  //clear cache before every update
+  cache_->clear_cache();
 
   //scene argument
   brdb_value_t<boxm2_scene_sptr>* scene_brdb = static_cast<brdb_value_t<boxm2_scene_sptr>* >( input[inIdx++].ptr() );
@@ -254,6 +257,7 @@ bool boxm2_opencl_update_rgb_process::execute(vcl_vector<brdb_value_sptr>& input
       update_kernels_[i]->clear_args();
 
       //write info to disk
+      transfer.mark();
       blk_->read_to_buffer(*command_queue_);
       alpha_->read_to_buffer(*command_queue_);
       mog_->read_to_buffer(*command_queue_);
@@ -266,6 +270,7 @@ bool boxm2_opencl_update_rgb_process::execute(vcl_vector<brdb_value_sptr>& input
       pre_image_->read_to_buffer(*command_queue_);
       cl_output_->read_to_buffer(*command_queue_);
       clFinish(*command_queue_);
+      transfer_time_ += (float) transfer.all();
     }
   }
 
