@@ -45,16 +45,15 @@ namespace boxm2_ocl_update_histogram_process_globals
     //compilation options
     vcl_string options = " -D INTENSITY ";
     options += " -D MOG_TYPE_8 ";
-
     //create all passes
     bocl_kernel* seg_len = new bocl_kernel();
-    vcl_string seg_opts = options + " -D CUMLEN -D STEP_CELL=step_cell_cumlen(aux_args,data_ptr,llid,d) ";
+    vcl_string seg_opts = options + "-D DETERMINISTIC -D CUMLEN -D STEP_CELL=step_cell_cumlen(aux_args,data_ptr,llid,d) ";
     seg_len->create_kernel(&device->context(), device->device_id(), src_paths, "cum_len_main", seg_opts, "update::seg_len");
     vec_kernels.push_back(seg_len);
 
 
     bocl_kernel* update_hist = new bocl_kernel();
-    vcl_string hist_opts = options + " -D UPDATE_HIST -D STEP_CELL=step_cell_update_hist(aux_args,data_ptr,llid,d) ";
+    vcl_string hist_opts = options + "-D DETERMINISTIC -D UPDATE_HIST -D STEP_CELL=step_cell_update_hist(aux_args,data_ptr,llid,d) ";
     update_hist->create_kernel(&device->context(), device->device_id(), src_paths, "update_hist_main", hist_opts, "update::hist");
     vec_kernels.push_back(update_hist);
 
@@ -223,6 +222,7 @@ bool boxm2_ocl_update_histogram_process(bprb_func_process& pro)
         kern->execute(queue, 2, lThreads, gThreads);
         clFinish(queue);
         gpu_time += kern->exec_time();
+        aux->read_to_buffer(queue);
       }
       else if (kernelindex==1)
       {
@@ -251,11 +251,10 @@ bool boxm2_ocl_update_histogram_process(bprb_func_process& pro)
         kern->set_local_arg( local_threads[0]*local_threads[1]*10*sizeof(cl_uchar) );
         vcl_size_t gThreads[] = {cl_ni,cl_nj};
         //execute kernel
-        vcl_cout<<"Updating Histogram"<<vcl_endl;
         kern->execute(queue, 2, local_threads, gThreads);
         clFinish(queue);
         gpu_time += kern->exec_time();
-
+        aux->read_to_buffer(queue);
         hist->read_to_buffer(queue);
       }
       else if (kernelindex==2) // clean seg len
@@ -265,15 +264,19 @@ bool boxm2_ocl_update_histogram_process(bprb_func_process& pro)
         bocl_mem * blk_info  = opencl_cache->loaded_block_info();
         bocl_mem * aux       = opencl_cache->get_data<BOXM2_AUX>(*id);
 
+
+        boxm2_scene_info* info_buffer = (boxm2_scene_info*) blk_info->cpu_buffer();
+        int aux_type_size = boxm2_data_info::datasize(boxm2_data_traits<BOXM2_AUX>::prefix());
+        info_buffer->data_buffer_length = (int) (aux->num_bytes()/aux_type_size); 
+        blk_info->write_to_buffer(queue);
+
+        int numbuf = info_buffer->num_buffer;
+        int datlen = info_buffer->data_buffer_length;
         transfer_time += (float) transfer.all();
         kern->set_arg( blk_info );
-        kern->set_arg( blk );
         kern->set_arg( aux );
         kern->set_arg( cl_output.ptr() );
 
-        boxm2_scene_info* info_buffer = (boxm2_scene_info*) blk_info->cpu_buffer();
-        int numbuf = info_buffer->num_buffer;
-        int datlen = info_buffer->data_buffer_length;
         vcl_size_t lThreads[] = { 1,1};
         vcl_size_t gThreads[] = { RoundUp(numbuf*datlen,64),1};
         //execute kernel

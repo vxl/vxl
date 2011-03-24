@@ -143,6 +143,7 @@ bool boxm2_ocl_batch_probability_process(bprb_func_process& pro)
 
     //local tree , cumsum buffer
     kern->set_local_arg( lThreads[0]*lThreads[1]*sizeof(cl_uchar16) );
+    kern->set_local_arg( lThreads[0]*lThreads[1]*10*sizeof(cl_uchar) );
 
     // TOFIX:::note that this for fixed grid.
     boxm2_scene_info* info_buffer = (boxm2_scene_info*) blk_info->cpu_buffer();

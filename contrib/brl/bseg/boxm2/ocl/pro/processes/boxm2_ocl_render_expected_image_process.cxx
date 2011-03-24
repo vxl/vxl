@@ -29,7 +29,7 @@ namespace boxm2_ocl_render_expected_image_process_globals
 {
   const unsigned n_inputs_ = 6;
   const unsigned n_outputs_ = 1;
-  const vcl_size_t local_threads[2]={8,8};
+  vcl_size_t lthreads[2]={8,8};
   void compile_kernel(bocl_device_sptr device,vcl_vector<bocl_kernel*> & vec_kernels)
   {
     //gather all render sources... seems like a lot for rendering...
@@ -123,6 +123,20 @@ bool boxm2_ocl_render_expected_image_process(bprb_func_process& pro)
   unsigned ni=pro.get_input<unsigned>(i++);
   unsigned nj=pro.get_input<unsigned>(i++);
 
+  bool foundDataType = false;
+  vcl_string data_type;
+  vcl_vector<vcl_string> apps = scene->appearances(); 
+  for(int i=0; i<apps.size(); ++i) {
+    if( apps[i] == boxm2_data_traits<BOXM2_MOG3_GREY>::prefix() || apps[i] == boxm2_data_traits<BOXM2_MOG3_GREY>::prefix() ) 
+    {
+      data_type = apps[i]; 
+      foundDataType = true;
+    }
+  }
+  if(!foundDataType) {
+    vcl_cout<<"BOXM2_OCL_RENDER_PROCESS ERROR: scene doesn't have BOXM2_MOG3_GREY or BOXM2_MOG3_GREY_16 data type"<<vcl_endl;
+    return false;
+  }
 
 //: create a command queue.
   int status=0;
@@ -147,8 +161,8 @@ bool boxm2_ocl_render_expected_image_process(bprb_func_process& pro)
   bocl_mem_sptr persp_cam=new bocl_mem(device->context(), cam_buffer, 3*sizeof(cl_float16), "persp cam buffer");
   persp_cam->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
-  unsigned cl_ni=RoundUp(ni,local_threads[0]);
-  unsigned cl_nj=RoundUp(nj,local_threads[1]);
+  unsigned cl_ni=RoundUp(ni,lthreads[0]);
+  unsigned cl_nj=RoundUp(nj,lthreads[1]);
   float* buff = new float[cl_ni*cl_nj];
   for (unsigned i=0;i<cl_ni*cl_nj;i++) buff[i]=0.0f;
   float* vis_buff = new float[cl_ni*cl_nj];
@@ -181,11 +195,9 @@ bool boxm2_ocl_render_expected_image_process(bprb_func_process& pro)
   bocl_mem_sptr lookup=new bocl_mem(device->context(), lookup_arr, sizeof(cl_uchar)*256, "bit lookup buffer");
   lookup->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
 
-  //2. set workgroup size
-  vcl_size_t lThreads[] = {8, 8};
+  //2. set global thread size
   vcl_size_t gThreads[] = {cl_ni,cl_nj};
 
-  vcl_string data_type_="8bit";
   //: set arguments
   vcl_vector<boxm2_block_id> vis_order = scene->get_vis_blocks( (vpgl_perspective_camera<double>*) cam.ptr());
   vcl_vector<boxm2_block_id>::iterator id;
@@ -200,11 +212,7 @@ bool boxm2_ocl_render_expected_image_process(bprb_func_process& pro)
     vul_timer transfer;
     bocl_mem* blk       = opencl_cache->get_block(*id);
     bocl_mem* alpha     = opencl_cache->get_data<BOXM2_ALPHA>(*id);
-    bocl_mem* mog;
-    if (data_type_=="8bit")
-      mog       = opencl_cache->get_data<BOXM2_MOG3_GREY>(*id);
-    else if (data_type_=="16bit")
-      mog       = opencl_cache->get_data<BOXM2_MOG3_GREY_16>(*id);
+    bocl_mem* mog       = opencl_cache->get_data(*id,data_type);
     bocl_mem * blk_info  = opencl_cache->loaded_block_info();
     transfer_time += (float) transfer.all();
 
@@ -221,12 +229,12 @@ bool boxm2_ocl_render_expected_image_process(bprb_func_process& pro)
     kern->set_arg( vis_image.ptr() );
 
     //local tree , cumsum buffer, imindex buffer
-    kern->set_local_arg( local_threads[0]*local_threads[1]*sizeof(cl_uchar16) );
-    kern->set_local_arg( local_threads[0]*local_threads[1]*10*sizeof(cl_uchar) );
-    kern->set_local_arg( local_threads[0]*local_threads[1]*sizeof(cl_int) );
+    kern->set_local_arg( lthreads[0]*lthreads[1]*sizeof(cl_uchar16) );
+    kern->set_local_arg( lthreads[0]*lthreads[1]*10*sizeof(cl_uchar) );
+    kern->set_local_arg( lthreads[0]*lthreads[1]*sizeof(cl_int) );
 
     //execute kernel
-    kern->execute(queue, 2, lThreads, gThreads);
+    kern->execute(queue, 2, lthreads, gThreads);
     clFinish(queue);
     gpu_time += kern->exec_time();
 
@@ -239,7 +247,7 @@ bool boxm2_ocl_render_expected_image_process(bprb_func_process& pro)
     normalize_kern->set_arg( exp_image.ptr() );
     normalize_kern->set_arg( vis_image.ptr() );
     normalize_kern->set_arg( exp_img_dim.ptr());
-    normalize_kern->execute( queue, 2, lThreads, gThreads);
+    normalize_kern->execute( queue, 2, lthreads, gThreads);
     clFinish(queue);
     gpu_time += normalize_kern->exec_time();
 

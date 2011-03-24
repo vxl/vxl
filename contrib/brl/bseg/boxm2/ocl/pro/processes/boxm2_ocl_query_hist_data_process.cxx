@@ -77,12 +77,8 @@ bool boxm2_ocl_query_hist_data_process(bprb_func_process& pro)
                                mdata.sub_block_dim_.y()*mdata.sub_block_num_.y(),
                                mdata.sub_block_dim_.z()*mdata.sub_block_num_.z());
 
-    vgl_box_3d<double> bbox(mdata.local_origin_.x(),
-                            mdata.local_origin_.y(),
-                            mdata.local_origin_.z(),
-                            dims.x(),
-                            dims.y(),
-                            dims.z());
+    vgl_point_3d<double> lorigin=mdata.local_origin_;
+    vgl_box_3d<double> bbox(lorigin,lorigin+dims);
     if (!bbox.contains(x,y,z)) continue;
 
     //: get the data pointer of the cell containin the given point.
@@ -100,8 +96,8 @@ bool boxm2_ocl_query_hist_data_process(bprb_func_process& pro)
     boct_bit_tree2 tree(treebits.data_block(),mdata.max_level_);
     int bit_index=tree.traverse(vgl_point_3d<double>(local_x,local_y,local_z));
 
-    int buff_index=(int)treebits[12]*256+(int)treebits[13];
-    int data_offset=buff_index*65536+tree.get_data_index(bit_index);
+    //int buff_index=(int)treebits[12]*256+(int)treebits[13];
+    int data_offset=tree.get_data_index(bit_index,false);//buff_index*65536+tree.get_data_index(bit_index);
 
     boxm2_data_base *  hist_base  = cache->get_data_base(*id,boxm2_data_traits<BOXM2_BATCH_HISTOGRAM>::prefix());
     boxm2_data<BOXM2_BATCH_HISTOGRAM> *hist_data=new boxm2_data<BOXM2_BATCH_HISTOGRAM>(hist_base->data_buffer(),hist_base->buffer_length(),hist_base->block_id());

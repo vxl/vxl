@@ -45,13 +45,13 @@ bool boxm2_opencl_batch_update_process::init_kernel(cl_context* context,
 
   //create all passes
   bocl_kernel* seg_len = new bocl_kernel();
-  vcl_string seg_opts = options + " -D CUMLEN -D STEP_CELL=step_cell_cumlen(aux_args,data_ptr,llid,d) ";
+  vcl_string seg_opts = options + " -D DETERMINISTIC -D CUMLEN -D STEP_CELL=step_cell_cumlen(aux_args,data_ptr,llid,d) ";
   seg_len->create_kernel(context_, device, src_paths, "cum_len_main", seg_opts, "update::seg_len");
   update_kernels_.push_back(seg_len);
 
 
   bocl_kernel* update_hist = new bocl_kernel();
-  vcl_string hist_opts = options + " -D UPDATE_HIST -D STEP_CELL=step_cell_update_hist(aux_args,data_ptr,llid,d) ";
+  vcl_string hist_opts = options + " -D DETERMINISTIC -D UPDATE_HIST -D STEP_CELL=step_cell_update_hist(aux_args,data_ptr,llid,d) ";
   update_hist->create_kernel(context_, device, src_paths, "update_hist_main", hist_opts, "update::hist");
   update_kernels_.push_back(update_hist);
   
@@ -182,12 +182,16 @@ bool boxm2_opencl_batch_update_process::execute(vcl_vector<brdb_value_sptr>& inp
                 hist_      = cache_->get_data<BOXM2_BATCH_HISTOGRAM>(*id);
                 //get aux data
                 aux_       = cache_->get_data<BOXM2_AUX>(*id);
-                transfer_time_ += (float) transfer.all();
+                boxm2_scene_info* info_buffer = (boxm2_scene_info*) blk_info_->cpu_buffer();
+                int aux_type_size = boxm2_data_info::datasize(boxm2_data_traits<BOXM2_AUX>::prefix());
+                info_buffer->data_buffer_length = (int) (aux_->num_bytes()/aux_type_size); 
+                blk_info_->write_to_buffer((*command_queue_));
+
+                 transfer_time_ += (float) transfer.all();
                 //set workspace and args for this pass
                 this->set_workspace(i);
                 this->set_args(i);
-
-                //execute kernel
+               //execute kernel
                 update_kernels_[i]->execute( (*command_queue_), 2, lThreads_, gThreads_);
                 int status = clFinish(*command_queue_);
                 check_val(status, MEM_FAILURE, "UPDATE EXECUTE FAILED: " + error_to_string(status));
@@ -366,7 +370,7 @@ bool boxm2_opencl_batch_update_process::write_input_image(vil_image_view<float>*
     //write to buffer (or create it)
     unsigned ni=RoundUp(input_image->ni(),8);
     unsigned nj=RoundUp(input_image->nj(),8);
-    float* buff = (image_) ? (float*) image_->cpu_buffer() : new float[4*ni*nj];
+    float* buff = (image_) ? (float*) image_->cpu_buffer() : new float[ni*nj];
     float* vis_buff = (vis_image_) ? (float*) vis_image_->cpu_buffer() : new float[ni*nj];
 
     int count=0;
@@ -374,12 +378,8 @@ bool boxm2_opencl_batch_update_process::write_input_image(vil_image_view<float>*
     {
         for (unsigned i=0;i<ni;i++)
         {
-      buff[4*count] = 0.0f;
-      buff[4*count + 1] = 0.0f;
-      buff[4*count + 2] = 1.0f;
-      buff[4*count + 3] = 0.0f;
             if (i<input_image->ni() && j< input_image->nj())
-                buff[4*count]=(*input_image)(i,j);
+                buff[count]=(*input_image)(i,j);
 
             vis_buff[count]=1.0f;
             ++count;
@@ -388,7 +388,7 @@ bool boxm2_opencl_batch_update_process::write_input_image(vil_image_view<float>*
     //now write to bocl_mem
     if (!image_) {
         //create mem
-        image_ = new bocl_mem((*context_), buff, ni*nj * sizeof(cl_float4), "input image buffer");
+        image_ = new bocl_mem((*context_), buff, ni*nj * sizeof(cl_float), "input image buffer");
         image_->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
     }
     else {
