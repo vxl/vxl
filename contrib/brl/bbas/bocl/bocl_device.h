@@ -30,6 +30,8 @@ class bocl_device: public vbl_ref_count
     cl_device_id*     device_id() { return device_; }
     cl_context&       context() { return context_; }
     bocl_device_info& info() { return info_; }
+    //: function which returns a unique string for a device.
+    vcl_string device_identifier();
   private: 
   
     //:Store a pointer to the cl_device_id
