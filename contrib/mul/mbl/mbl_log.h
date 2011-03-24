@@ -48,10 +48,21 @@
 // Of course, you should just use MBL_LOG which handles this for you. Additionally
 // MBL_LOG sorts out termination of the log message without using vcl_endl, allowing you to send
 // multi-line messages in a single log output.
-
+//
+// You can also use the logger to control the dumping of data files straight to the filesystem.
+// /code
+// if (my_log.level() >= mbl_logger::INFO && my_log.dump())
+// {
+//   vcl_string filename=my_log.dump_dir()+"/my_image.png";
+//   if (vil_save(my_image, filename.c_str()))
+//     MBL_LOG(INFO, my_log, "Saved my_image to " << filename);
+//   else
+//     MBL_LOG(ERR, my_log, "Failed to save my_image to " << filename);
+// }
+// \endcode
+//
 #include <vcl_fstream.h>
 #include <vcl_streambuf.h>
-// not used? #include <vcl_memory.h>
 #include <vcl_string.h>
 #include <vcl_ostream.h>
 #include <vcl_set.h>
@@ -97,6 +108,7 @@ class mbl_log_output_base
   //: Finish the log entry, sent from explicit function call, e.g. by MBL_LOG.
   virtual void terminate_flush()=0;
   //: Which logger id are we using.
+  // char * for efficiency, since logger name is in executable's static_data.
   virtual const char *id()=0;
 };
 
@@ -147,7 +159,7 @@ class mbl_log_output_file: public mbl_log_output_base
   //: Ignore calls to terminate_flush.
   // The current log message should be manually terminated.
   bool ignore_flush_;
- public:
+public:
   mbl_log_output_file(const vcl_string &filename, const char *id);
   //: Start a new log entry, with id info.
   // Future calls to terminate_flush will be ignored.
@@ -178,13 +190,17 @@ class mbl_logger
   int level() const { return -1000; }
   vcl_ostream &log(int level) { return nullstream_; }
   vcl_ostream &mtlog() {return nullstream_;}
+  bool dump() const { return false; }
+  const vcl_string& dump_dir() const { return ""; }
 #else
   int level_;
   mbl_log_output_base *output_;
   mbl_log_streambuf streambuf_;
   vcl_ostream logstream_;
   vcl_ostream *mt_logstream_;
-
+  //: File location to dump files.
+  // If empty - don't dump files.
+  vcl_string dump_dir_;
   //: Default constructor only available to root's default logger.
   mbl_logger();
 
@@ -193,7 +209,7 @@ class mbl_logger
   //: Update settings in light of changes to the root / configuration.
   void reinitialise();
 
- public:
+public:
   mbl_logger(const char *id);
   ~mbl_logger();
 
@@ -207,6 +223,13 @@ class mbl_logger
   vcl_ostream &mtlog() {return *mt_logstream_;}
   void mtstart(int level, const char * srcfile="", int srcline=0);
   void mtstop();
+
+  //: Is this logger allowed to dump data files directly to the filestore?
+  bool dump() const {return !dump_dir_.empty();}
+
+  //: A filepath prefix that this logger should use when creating files.
+  const vcl_string& dump_dir() const {return dump_dir_;}
+
 #endif
 
   static mbl_logger_root &root();
@@ -233,6 +256,7 @@ class mbl_log_categories
     int level;
     enum output_type {FILE_OUT, NAMED_STREAM} output;
     vcl_string name;
+    vcl_string dump_dir;
     vcl_ostream *stream;
   };
 
@@ -302,6 +326,7 @@ class mbl_logger_root
   // root: { level: INFO stream_output: test }
   // obj3: { level: INFO stream_output: vcl_cout }\n
   // obj3.obj6: { level: INFO file_output: results.txt }\n
+  // obj3.obj7.images: { level: INFO stream_output: vcl_cout dump_dir: ./logging_dir }\n
   //\endverbatim
   // where LEVEL is an integer - setting the logging level.
   // see mbl_logger:levels for useful values.
@@ -315,6 +340,13 @@ class mbl_logger_root
 #ifdef MBL_LOG_DISABLE_ALL_LOGGING
 # define MBL_LOG(my_level, logger, message) do {} while (false)
 #else
+//: Log a message.
+// This macro wraps up normal uses of the logger efficiently in source code-length and run-time.
+// \code
+// MBL_LOG(DEBUG, my_logger, "time: " << time() << "\nstatus: " << my_data);
+// \endcode
+// No function evaluations (e.g. of time() ) will take place unless the logger is enabled.
+// The logger will also work correctly even if \c operator<<(my_data_t&) flushes the stream.
 # define MBL_LOG(my_level, logger, message) \
   do { mbl_logger &rlogger = logger; \
     if (rlogger.level() >= mbl_logger:: my_level) {\

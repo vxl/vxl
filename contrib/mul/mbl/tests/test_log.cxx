@@ -84,7 +84,7 @@ void test_log()
     vcl_ofstream cfg_file("mbl_log.properties");
     cfg_file <<
       "root: { level: INFO stream_output: test }\n"
-      "obj3: { level: INFO stream_output: cout }\n"
+      "obj3: { level: INFO stream_output: cout dump_dir: . }\n"
       "obj4: { level: INFO stream_output: test_streambuf }\n";
   }
   vcl_map<vcl_string, vcl_ostream*> registered_streams;
@@ -104,7 +104,8 @@ void test_log()
           " and" << vcl_endl << "multiline message" << vcl_setprecision(16));
 
 
-  MBL_LOG( WARN, current2, "Check the precision changes do not propagate: " << 1.0/3.0);
+  MBL_LOG( WARN, current2, "Check the precision changes do not propagate: " << 1.0/3.0 <<
+    " (should be 6 not 16 prec)");
 
 // Manual expansion of MBL_LOG macro
 //  if (current.level() >= mbl_logger:: WARN)
@@ -122,7 +123,7 @@ void test_log()
   TEST("Log output is as expected", output.str(),
        "INFO: wibble1 Output this whatever\n"
        "WARN: wibble1 Also this number 54 and\nmultiline message\n"
-       "WARN: wibble2 Check the precision changes do not propagate: 0.333333\n");
+       "WARN: wibble2 Check the precision changes do not propagate: 0.333333 (should be 6 not 16 prec)\n");
 
 
   mbl_logger obj3("obj3");
@@ -151,18 +152,23 @@ void test_log()
   TEST ("Message 1 correct", my_test_streambuf.messages[0], "WARN: obj4 A split line\nmessage\n");
   TEST ("Message 2 correct", my_test_streambuf.messages[1], "NOTICE: obj4 A second message\n");
 
+  // Test dump_dir stuff works
+  TEST ("obj3.dump", obj3.dump(), true);
+  TEST ("obj3.dump_dir", obj3.dump_dir(), ".");
+  TEST ("obj4.dump", obj4.dump(), false);
+  TEST ("current2.dump", current2.dump(), false);
 
   vcl_cout << "\n\n";
 
   {
     vcl_ofstream cfg_file("mbl_log.properties");
     cfg_file <<
-      "AA.11.bb: { level: CRIT stream_output: cerr }\n"
+      "AA.11.bb: { level: CRIT stream_output: cerr dump_dir: ./logdump1 }\n"
       "AA.22.aa.ii: { level: WARN file_output: test1.log }\n"
       "AA.11.aa: { level: ALERT }\n"
       "AA: { level: DEBUG }\n"
       "BB: { level: INFO }\n"
-      "AA.11: { level: ERR }\n"
+      "AA.11: { level: ERR dump_dir: ./logdump2 }\n"
       "root: { level: EMERG }\n";
   }
 
@@ -171,8 +177,11 @@ void test_log()
   vcl_cout << "\n\n";
 
   TEST("AA.11.dd", mbl_logger::root().categories().get("AA.11.dd").level, mbl_logger::ERR);
+  TEST("AA.11.dd dump", mbl_logger::root().categories().get("AA.11.dd").dump_dir, "./logdump2");
   TEST("AA.22", mbl_logger::root().categories().get("AA.22").level, mbl_logger::DEBUG);
+  TEST("AA.22 dump", mbl_logger::root().categories().get("AA.22").dump_dir, "");
   TEST("AA.111", mbl_logger::root().categories().get("AA.111").level, mbl_logger::DEBUG);
+  TEST("AA.111 dump", mbl_logger::root().categories().get("AA.111").dump_dir, "");
 }
 
 TESTMAIN(test_log);

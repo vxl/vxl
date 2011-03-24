@@ -127,6 +127,7 @@ vcl_streamsize mbl_log_streambuf::xsputn( const char *ptr, vcl_streamsize nchar)
 
 #ifndef MBL_LOG_DISABLE_ALL_LOGGING
 
+
 //: Default constructor only available to root's default logger.
 mbl_logger::mbl_logger():
   level_(NOTICE),
@@ -289,6 +290,7 @@ mbl_logger::mbl_logger(const char *id):
     mbl_logger::root().categories().get(id);
 
   level_ = cat.level;
+  dump_dir_ = cat.dump_dir;
 
   if (cat.output == mbl_log_categories::cat_spec::NAMED_STREAM)
   {
@@ -459,7 +461,7 @@ mbl_log_categories::mbl_log_categories()
   default_spec.output = cat_spec::NAMED_STREAM;
   default_spec.name = "vcl_cerr";
   default_spec.stream = &vcl_cerr;
-
+  default_spec.dump_dir = "";
   cat_list_[""] = default_spec;
 }
 
@@ -502,6 +504,8 @@ inline mbl_log_categories::cat_spec parse_cat_spec(const vcl_string &str,
     // Default to NOTICE if no exceptions.
     spec.level = mbl_logger::NOTICE;
   }
+
+  spec.dump_dir = props.get_optional_property("dump_dir");
 
   if (props.find("file_output") != props.end())
   {
@@ -582,6 +586,7 @@ void mbl_log_categories::clear()
   default_spec.name = "cerr";
   default_spec.stream = &vcl_cerr;
   default_spec.output = cat_spec::NAMED_STREAM;
+  default_spec.dump_dir = "";
   cat_list_[""] = default_spec;
 }
 
@@ -637,6 +642,9 @@ vcl_ostream& operator<<(vcl_ostream&os, const mbl_log_categories::cat_spec& spec
     assert(!"This should not happen: invalid spec.output");
     break;
   }
+  if (!spec.dump_dir.empty())
+    os << " dump_dir: " << spec.dump_dir;
+
   os << " }";
   return os;
 }
