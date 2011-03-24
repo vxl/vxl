@@ -49,6 +49,8 @@ class bocl_device_info
     vcl_size_t max_work_group_size_;        //!< Max allowed work-items in a group
     cl_uint max_dimensions_;                //!< Max group dimensions allowed
     vcl_size_t * max_work_item_sizes_;      //!< Max work-items sizes in each dimension
+    cl_ulong max_mem_alloc_size_;           //!< Max memory alloc size for a buffer
+    cl_ulong max_parameter_size_;           //!< Max buffer size that can be passed to a kernel
     cl_ulong total_local_memory_;           //!< Max local memory allowed
     cl_ulong total_global_memory_;          //!< Max global memory allowed
     cl_uint max_compute_units_;             //!< Max compute units

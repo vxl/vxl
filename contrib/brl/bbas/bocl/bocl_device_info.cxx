@@ -53,6 +53,7 @@ bocl_device_info::bocl_device_info(cl_device_id* device)
     return;
   driver_version_ = vcl_string(device_string); 
     
+  
   //Get device max work gropu size
   status = clGetDeviceInfo(*device_,CL_DEVICE_MAX_WORK_GROUP_SIZE,sizeof(vcl_size_t),(void*)&max_work_group_size_,NULL);
   if (!check_val(status, CL_SUCCESS, "clGetDeviceInfo CL_DEVICE_MAX_WORK_GROUP_SIZE failed."))
@@ -77,7 +78,17 @@ bocl_device_info::bocl_device_info(cl_device_id* device)
   status = clGetDeviceInfo(*device_, CL_DEVICE_GLOBAL_MEM_SIZE, sizeof(cl_ulong), (void *)&total_global_memory_, NULL);
   if (!check_val(status,CL_SUCCESS,"clGetDeviceInfo CL_DEVICE_GLOBAL_MEM_SIZE failed."))
     return;
-  
+
+  //store max buffer alloc size
+  status = clGetDeviceInfo(*device_, CL_DEVICE_MAX_MEM_ALLOC_SIZE, sizeof(cl_ulong), (void *)&max_mem_alloc_size_, NULL);
+  if (!check_val(status,CL_SUCCESS,"clGetDeviceInfo CL_DEVICE_MAX_MEM_ALLOC_SIZE failed."))
+    return;
+    
+  //store max param size  
+  status = clGetDeviceInfo(*device_, CL_DEVICE_MAX_PARAMETER_SIZE, sizeof(cl_ulong), (void *)&max_parameter_size_, NULL);
+  if (!check_val(status,CL_SUCCESS,"clGetDeviceInfo CL_DEVICE_MAX_PARAMETER_SIZE failed."))
+    return;
+    
   //address bits (pointer size on device)
   status = clGetDeviceInfo(*device_, CL_DEVICE_ADDRESS_BITS, sizeof(addr_bits_), &addr_bits_, NULL);
   if (!check_val(status,CL_SUCCESS,"clGetDeviceInfo CL_DEVICE_ADDRESS_BITS failed."))
@@ -201,6 +212,7 @@ vcl_ostream& operator <<(vcl_ostream &s, bocl_device_info& info)
 {
   unsigned size = sizeof(vcl_size_t);
   s  << " Device Description: \n"
+     << " Device ID : " << (long) (*info.device_) << '\n'
      << " Device Name : " << info.device_name_ << '\n'
      << " Device Vendor: " << info.device_vendor_ << '\n'
      << " Device Platform: " << info.platform_name_ << '\n'
@@ -220,6 +232,8 @@ vcl_ostream& operator <<(vcl_ostream &s, bocl_device_info& info)
      << " Maximum clock frequency: " << info.max_clock_freq_/1000.0 << " GHz\n"
      << " Total global memory: "<< info.total_global_memory_/1073741824.0 /* 2^30 */ << " GBytes\n"
      << " Total local memory: "<< info.total_local_memory_/1024.0 << " KBytes\n"
+     << " Maximum mem object size: "<< info.max_mem_alloc_size_/1073741824.0 /*2^30 */ << " GBytes\n"
+     << " Maximum param size : "<< info.max_parameter_size_/1073741824.0 /*2^30*/ << " GBytes\n"
      << " Device Address Bits: "<< info.addr_bits_ << " bits\n"
      << " Maximum work group size: " << info.max_work_group_size_ << '\n'
      << " Maximum work item sizes: (" << (cl_uint) info.max_work_item_sizes_[0]/size << ','
