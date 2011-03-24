@@ -23,7 +23,7 @@
 //=========================================================================
 static mbl_logger& logger()
 {
-  static mbl_logger l("vxl.contrib.mul.mbl.tools.sample_stats");
+  static mbl_logger l("mul.mbl.tools.sample_stats");
   return l;
 }
 

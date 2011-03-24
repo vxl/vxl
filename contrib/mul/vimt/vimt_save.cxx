@@ -17,7 +17,7 @@
 
 static mbl_logger& logger()
 {
-  static mbl_logger l("contrib.mul.vimt.save");
+  static mbl_logger l("mul.vimt.save");
   return l;
 }
 

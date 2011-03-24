@@ -17,7 +17,7 @@
 //=========================================================================
 static mbl_logger& logger()
 {
-  static mbl_logger l("contrib.mul.tools.reflect_image_3d");
+  static mbl_logger l("mul.tools.reflect_image_3d");
   return l;
 }
 

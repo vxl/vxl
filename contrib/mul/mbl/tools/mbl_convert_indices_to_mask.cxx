@@ -19,7 +19,7 @@
 //=========================================================================
 static mbl_logger& logger()
 {
-  static mbl_logger l("vxl.contrib.mul.mbl.tools.convert_indices_to_mask");
+  static mbl_logger l("mul.mbl.tools.convert_indices_to_mask");
   return l;
 }
 

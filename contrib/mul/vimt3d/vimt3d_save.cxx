@@ -17,7 +17,7 @@
 
 static mbl_logger& logger()
 {
-  static mbl_logger l("contrib.mul.vimt3d.save");
+  static mbl_logger l("mul.vimt3d.save");
   return l;
 }
 

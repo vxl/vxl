@@ -15,7 +15,7 @@
 //=========================================================================
 static mbl_logger& logger()
 {
-  static mbl_logger l("vxl.contrib.mul.mbl.tools.convert_mask_to_indices");
+  static mbl_logger l("mul.mbl.tools.convert_mask_to_indices");
   return l;
 }
 
