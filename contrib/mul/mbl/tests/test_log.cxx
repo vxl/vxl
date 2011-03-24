@@ -84,7 +84,7 @@ void test_log()
     vcl_ofstream cfg_file("mbl_log.properties");
     cfg_file <<
       "root: { level: INFO stream_output: test }\n"
-      "obj3: { level: INFO stream_output: cout dump_dir: . }\n"
+      "obj3: { level: INFO stream_output: cout dump_dir: ./ }\n"
       "obj4: { level: INFO stream_output: test_streambuf }\n";
   }
   vcl_map<vcl_string, vcl_ostream*> registered_streams;
@@ -154,7 +154,7 @@ void test_log()
 
   // Test dump_dir stuff works
   TEST ("obj3.dump", obj3.dump(), true);
-  TEST ("obj3.dump_dir", obj3.dump_dir(), ".");
+  TEST ("obj3.dump_dir", obj3.dump_dir(), "./");
   TEST ("obj4.dump", obj4.dump(), false);
   TEST ("current2.dump", current2.dump(), false);
 
@@ -163,12 +163,12 @@ void test_log()
   {
     vcl_ofstream cfg_file("mbl_log.properties");
     cfg_file <<
-      "AA.11.bb: { level: CRIT stream_output: cerr dump_dir: ./logdump1 }\n"
+      "AA.11.bb: { level: CRIT stream_output: cerr dump_dir: ./logdump1_ }\n"
       "AA.22.aa.ii: { level: WARN file_output: test1.log }\n"
       "AA.11.aa: { level: ALERT }\n"
       "AA: { level: DEBUG }\n"
       "BB: { level: INFO }\n"
-      "AA.11: { level: ERR dump_dir: ./logdump2 }\n"
+      "AA.11: { level: ERR dump_dir: ./logdump2_ }\n"
       "root: { level: EMERG }\n";
   }
 
@@ -177,7 +177,7 @@ void test_log()
   vcl_cout << "\n\n";
 
   TEST("AA.11.dd", mbl_logger::root().categories().get("AA.11.dd").level, mbl_logger::ERR);
-  TEST("AA.11.dd dump", mbl_logger::root().categories().get("AA.11.dd").dump_dir, "./logdump2");
+  TEST("AA.11.dd dump", mbl_logger::root().categories().get("AA.11.dd").dump_dir, "./logdump2_");
   TEST("AA.22", mbl_logger::root().categories().get("AA.22").level, mbl_logger::DEBUG);
   TEST("AA.22 dump", mbl_logger::root().categories().get("AA.22").dump_dir, "");
   TEST("AA.111", mbl_logger::root().categories().get("AA.111").level, mbl_logger::DEBUG);
