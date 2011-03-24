@@ -30,7 +30,7 @@ namespace boxm2_ocl_render_expected_image_process_globals
   const unsigned n_inputs_ = 6;
   const unsigned n_outputs_ = 1;
   vcl_size_t lthreads[2]={8,8};
-  void compile_kernel(bocl_device_sptr device,vcl_vector<bocl_kernel*> & vec_kernels)
+  void compile_kernel(bocl_device_sptr device,vcl_vector<bocl_kernel*> & vec_kernels, vcl_string opts)
   {
     //gather all render sources... seems like a lot for rendering...
     vcl_vector<vcl_string> src_paths;
@@ -47,7 +47,7 @@ namespace boxm2_ocl_render_expected_image_process_globals
 
     //set kernel options
     //#define STEP_CELL step_cell_render(mixture_array, alpha_array, data_ptr, d, &vis, &expected_int);
-    vcl_string options = " -D INTENSITY ";
+    vcl_string options = opts+" -D INTENSITY ";
     options += " -D RENDER ";
     options += " -D DETERMINISTIC ";
     options += " -D STEP_CELL=step_cell_render(aux_args.mog,aux_args.alpha,data_ptr,d,vis,aux_args.expint)";
@@ -59,7 +59,7 @@ namespace boxm2_ocl_render_expected_image_process_globals
                                      device->device_id(),
                                      src_paths,
                                      "render_bit_scene",   //kernel name
-                                     options+" -D MOG_TYPE_8 ",              //options
+                                     options,              //options
                                      "boxm2 opencl render random blocks"); //kernel identifier (for error checking)
     vec_kernels.push_back(ray_trace_kernel);
     //create normalize image kernel
@@ -78,7 +78,7 @@ namespace boxm2_ocl_render_expected_image_process_globals
 
     vec_kernels.push_back(normalize_render_kernel);
   }
-  static vcl_map<cl_device_id*,vcl_vector<bocl_kernel*> > kernels;
+  static vcl_map<vcl_string,vcl_vector<bocl_kernel*> > kernels;
 }
 
 bool boxm2_ocl_render_expected_image_process_cons(bprb_func_process& pro)
@@ -124,13 +124,20 @@ bool boxm2_ocl_render_expected_image_process(bprb_func_process& pro)
   unsigned nj=pro.get_input<unsigned>(i++);
 
   bool foundDataType = false;
-  vcl_string data_type;
-  vcl_vector<vcl_string> apps = scene->appearances(); 
-  for(int i=0; i<apps.size(); ++i) {
-    if( apps[i] == boxm2_data_traits<BOXM2_MOG3_GREY>::prefix() || apps[i] == boxm2_data_traits<BOXM2_MOG3_GREY>::prefix() ) 
+  vcl_string data_type,options;
+  vcl_vector<vcl_string> apps = scene->appearances();
+  for (unsigned int i=0; i<apps.size(); ++i) {
+    if ( apps[i] == boxm2_data_traits<BOXM2_MOG3_GREY>::prefix() )
     {
-      data_type = apps[i]; 
+      data_type = apps[i];
       foundDataType = true;
+      options=" -D MOG_TYPE_8 ";
+    }
+    else if ( apps[i] == boxm2_data_traits<BOXM2_MOG3_GREY_16>::prefix() )
+    {
+      data_type = apps[i];
+      foundDataType = true;
+      options=" -D MOG_TYPE_16 ";
     }
   }
   if(!foundDataType) {
@@ -140,20 +147,19 @@ bool boxm2_ocl_render_expected_image_process(bprb_func_process& pro)
 
 //: create a command queue.
   int status=0;
-  cl_command_queue queue = clCreateCommandQueue(device->context(),
-                                                *(device->device_id()),
-                                                CL_QUEUE_PROFILING_ENABLE,
-                                                &status);
+  cl_command_queue queue = clCreateCommandQueue(device->context(),*(device->device_id()),
+                                                CL_QUEUE_PROFILING_ENABLE,&status);
   if (status!=0)
     return false;
+  vcl_string identifier=device->device_identifier()+options;
 
   //: compile the kernel
-  if (kernels.find((device->device_id()))==kernels.end())
+  if (kernels.find(identifier)==kernels.end())
   {
     vcl_cout<<"===========Compiling kernels==========="<<vcl_endl;
     vcl_vector<bocl_kernel*> ks;
-    compile_kernel(device,ks);
-    kernels[(device->device_id())]=ks;
+    compile_kernel(device,ks,options);
+    kernels[identifier]=ks;
   }
   //: create all buffers
   cl_float cam_buffer[48];
@@ -206,7 +212,7 @@ bool boxm2_ocl_render_expected_image_process(bprb_func_process& pro)
     //choose correct render kernel
     boxm2_block_metadata mdata = scene->get_block_metadata(*id);
     vcl_cout<<"Data is Random "<<mdata.random_<<vcl_endl;
-    bocl_kernel* kern =  kernels[(device->device_id())][0];
+    bocl_kernel* kern =  kernels[identifier][0];
 
     //write the image values to the buffer
     vul_timer transfer;
@@ -243,7 +249,7 @@ bool boxm2_ocl_render_expected_image_process(bprb_func_process& pro)
   }
   // normalize
   {
-    bocl_kernel* normalize_kern= kernels[(device->device_id())][1];
+    bocl_kernel* normalize_kern= kernels[identifier][1];
     normalize_kern->set_arg( exp_image.ptr() );
     normalize_kern->set_arg( vis_image.ptr() );
     normalize_kern->set_arg( exp_img_dim.ptr());

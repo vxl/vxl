@@ -39,7 +39,7 @@ namespace boxm2_ocl_update_process_globals
       UPDATE_CELL   = 4
   };
 
-  void compile_kernel(bocl_device_sptr device,vcl_vector<bocl_kernel*> & vec_kernels)
+  void compile_kernel(bocl_device_sptr device,vcl_vector<bocl_kernel*> & vec_kernels,vcl_string opts)
   {
       //gather all render sources... seems like a lot for rendering...
       vcl_vector<vcl_string> src_paths;
@@ -56,7 +56,7 @@ namespace boxm2_ocl_update_process_globals
       src_paths.push_back(source_dir + "bit/cast_ray_bit.cl");
 
       //compilation options
-      vcl_string options = " -D INTENSITY -D MOG_TYPE_8 ";
+      vcl_string options = opts+" -D INTENSITY  ";
       options += " -D DETERMINISTIC ";
 
       //create all passes
@@ -90,7 +90,7 @@ namespace boxm2_ocl_update_process_globals
   }
 
 
-  static vcl_map<cl_device_id*,vcl_vector<bocl_kernel*> > kernels;
+  static vcl_map<vcl_string,vcl_vector<bocl_kernel*> > kernels;
 }
 
 bool boxm2_ocl_update_process_cons(bprb_func_process& pro)
@@ -131,13 +131,20 @@ bool boxm2_ocl_update_process(bprb_func_process& pro)
   vil_image_view_base_sptr img =pro.get_input<vil_image_view_base_sptr>(i++);
 
   bool foundDataType = false, foundNumObsType = false;
-  vcl_string data_type,num_obs_type;
+  vcl_string data_type,num_obs_type,options;
   vcl_vector<vcl_string> apps = scene->appearances();
   for (unsigned int i=0; i<apps.size(); ++i) {
-    if ( apps[i] == boxm2_data_traits<BOXM2_MOG3_GREY>::prefix() || apps[i] == boxm2_data_traits<BOXM2_MOG3_GREY>::prefix() )
+    if ( apps[i] == boxm2_data_traits<BOXM2_MOG3_GREY>::prefix() )
     {
       data_type = apps[i];
       foundDataType = true;
+      options=" -D MOG_TYPE_8 ";
+    }
+    else if ( apps[i] == boxm2_data_traits<BOXM2_MOG3_GREY_16>::prefix() )
+    {
+      data_type = apps[i];
+      foundDataType = true;
+      options=" -D MOG_TYPE_16 ";
     }
     else if ( apps[i] == boxm2_data_traits<BOXM2_NUM_OBS>::prefix() )
     {
@@ -160,13 +167,14 @@ bool boxm2_ocl_update_process(bprb_func_process& pro)
                                                 CL_QUEUE_PROFILING_ENABLE,&status);
   if (status!=0) return false;
 
+  vcl_string identifier=device->device_identifier()+options;
   //: compile the kernel
-  if (kernels.find((device->device_id()))==kernels.end())
+  if (kernels.find(identifier)==kernels.end())
   {
     vcl_cout<<"===========Compiling kernels==========="<<vcl_endl;
     vcl_vector<bocl_kernel*> ks;
-    compile_kernel(device,ks);
-    kernels[(device->device_id())]=ks;
+    compile_kernel(device,ks,options);
+    kernels[identifier]=ks;
   }
   
   //: create all buffers
@@ -245,10 +253,10 @@ bool boxm2_ocl_update_process(bprb_func_process& pro)
   //: set arguments
   vcl_vector<boxm2_block_id> vis_order = scene->get_vis_blocks( (vpgl_perspective_camera<double>*) cam.ptr());
   vcl_vector<boxm2_block_id>::iterator id;
-  for (unsigned int i=0; i<kernels[(device->device_id())].size(); ++i)
+  for (unsigned int i=0; i<kernels[identifier].size(); ++i)
   {
     if ( i == UPDATE_PROC ) {      
-      bocl_kernel * proc_kern=kernels[(device->device_id())][i];
+      bocl_kernel * proc_kern=kernels[identifier][i];
         
       proc_kern->set_arg( norm_image.ptr() );
       proc_kern->set_arg( vis_image.ptr() );
@@ -267,7 +275,7 @@ bool boxm2_ocl_update_process(bprb_func_process& pro)
     {
         //choose correct render kernel
         boxm2_block_metadata mdata = scene->get_block_metadata(*id);
-        bocl_kernel* kern =  kernels[(device->device_id())][i];
+        bocl_kernel* kern =  kernels[identifier][i];
 
         //write the image values to the buffer
         vul_timer transfer;
