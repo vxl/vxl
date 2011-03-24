@@ -35,7 +35,7 @@ class sdet_image_mesh : public sdet_image_mesh_params
 
   ~sdet_image_mesh();
   //: Process methods
-  void set_image(vil_image_resource_sptr const& resource){resc_ = resource;}
+  void set_image(vil_image_resource_sptr const& resource); 
   bool compute_mesh();
   //: Accessors
   imesh_mesh& get_mesh(){return mesh_;}
