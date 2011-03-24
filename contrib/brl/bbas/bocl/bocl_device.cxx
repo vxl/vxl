@@ -28,7 +28,7 @@ bocl_device::bocl_device(cl_device_id& device)
 vcl_string bocl_device::device_identifier()
 {
     vcl_stringstream outstr;
-    outstr<<(int)(device_[0]);
+    outstr<<(long)(device_[0]);
     return info_.device_name_+outstr.str();
 }
 //destructor
