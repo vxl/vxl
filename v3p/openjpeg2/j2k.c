@@ -7663,13 +7663,13 @@ bool j2k_copy_default_tcp_and_create_tcd
 			if
 				(l_src_mcc_rec->m_decorrelation_array)
 			{
-				l_offset = l_src_mcc_rec->m_decorrelation_array - l_default_tcp->m_mct_records;
+				l_offset = (OPJ_UINT32)(l_src_mcc_rec->m_decorrelation_array - l_default_tcp->m_mct_records);
 				l_dest_mcc_rec->m_decorrelation_array = l_tcp->m_mct_records + l_offset;
 			}
 			if
 				(l_src_mcc_rec->m_offset_array)
 			{
-				l_offset = l_src_mcc_rec->m_offset_array - l_default_tcp->m_mct_records;
+				l_offset = (OPJ_UINT32)(l_src_mcc_rec->m_offset_array - l_default_tcp->m_mct_records);
 				l_dest_mcc_rec->m_offset_array = l_tcp->m_mct_records + l_offset;
 			}
 			++l_src_mcc_rec;
@@ -9322,13 +9322,13 @@ bool j2k_set_decode_area(
 }
 
 void j2k_dump_image(FILE *fd, opj_image_t * img) {
-	int compno;
+	unsigned compno;
 	fprintf(fd, "image {\n");
 	fprintf(fd, "  x0=%d, y0=%d, x1=%d, y1=%d\n", img->x0, img->y0, img->x1, img->y1);
 	fprintf(fd, "  numcomps=%d\n", img->numcomps);
 	for (compno = 0; compno < img->numcomps; compno++) {
 		opj_image_comp_t *comp = &img->comps[compno];
-		fprintf(fd, "  comp %d {\n", compno);
+		fprintf(fd, "  comp %u {\n", compno);
 		fprintf(fd, "    dx=%d, dy=%d\n", comp->dx, comp->dy);
 		fprintf(fd, "    prec=%d\n", comp->prec);
 		//fprintf(fd, "    bpp=%d\n", comp->bpp);
