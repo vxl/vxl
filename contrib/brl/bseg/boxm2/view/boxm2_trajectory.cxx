@@ -63,5 +63,4 @@ void boxm2_trajectory::init_cameras(double incline0, double incline1, double rad
 
     currInc+=.5;
   }
-  vcl_cout<<"Rendering "<<cams_.size()<<" total images"<<vcl_endl;
 }

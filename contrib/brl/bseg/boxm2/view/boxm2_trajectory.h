@@ -27,6 +27,9 @@ class boxm2_trajectory
     }
     virtual ~boxm2_trajectory() {}
 
+    //: number of cameras in the trajectory
+    unsigned size() { return cams_.size(); }
+
     //: Iterator
     typedef vcl_vector<vpgl_camera_double_sptr>::iterator iterator;
     iterator begin() { return cams_.begin(); }
