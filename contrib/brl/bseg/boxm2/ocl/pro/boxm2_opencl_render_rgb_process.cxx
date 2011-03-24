@@ -64,7 +64,7 @@ bool boxm2_opencl_render_rgb_process::init_kernel(cl_context* context,
   created = created && normalize_render_kernel_.create_kernel( context_,
                                                                device,
                                                                norm_src_paths,
-                                                               "normalize_render_kernel",   //kernel name
+                                                               "normalize_render_rgb_kernel",   //kernel name
                                                                options,              //options
                                                                "normalize render kernel"); //kernel identifier (for error checking)
   
@@ -144,14 +144,10 @@ bool boxm2_opencl_render_rgb_process::execute(vcl_vector<brdb_value_sptr>& input
     image_->set_cpu_buffer(exp_img_view->begin());
     image_->write_to_buffer(*command_queue_);
   }
-  if (!gl_image_) {
-    gl_image_ = new bocl_mem((*context_), NULL, exp_img_view->size() * sizeof(float), "exp image buffer");
-    gl_image_->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
-  }
-  else {
-    //image_->set_cpu_buffer(exp_img_view->begin());
-    //gl_image_->write_to_buffer(*command_queue_);
-  }
+  //if (!gl_image_) {
+    //gl_image_ = new bocl_mem((*context_), NULL, exp_img_view->size() * sizeof(float), "exp image buffer");
+    //gl_image_->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
+  //}
 
   //vis image buffer
   brdb_value_t<vil_image_view_base_sptr>* brdb_vis = static_cast<brdb_value_t<vil_image_view_base_sptr>* >( input[inIdx++].ptr() );
