@@ -19,6 +19,8 @@ class boxm2_ocl_util
     static void set_bit_lookup(cl_uchar* lookup);
     //: private helper method prepares an input image to be processed by update
     static vil_image_view_base_sptr prepare_input_image(vcl_string filename);
+    static vil_image_view_base_sptr prepare_input_image(vil_image_view_base_sptr loaded_image);
+
     static void load_perspective_camera(vcl_string filename, vpgl_perspective_camera<double> & pcam);
 
     //: this function obtains a cdf of the intensity distribution over a sequcne of image which can be used for rendering images.

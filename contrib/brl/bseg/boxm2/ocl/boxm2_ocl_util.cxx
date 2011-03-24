@@ -110,6 +110,12 @@ vil_image_view_base_sptr boxm2_ocl_util::prepare_input_image(vcl_string filename
 {
   //load from file
   vil_image_view_base_sptr loaded_image = vil_load(filename.c_str());
+  return boxm2_ocl_util::prepare_input_image(loaded_image);
+}
+// private helper method prepares an input image to be processed by update
+vil_image_view_base_sptr boxm2_ocl_util::prepare_input_image(vil_image_view_base_sptr loaded_image)
+{
+  //load from file
 
   //then it's an RGB image (assumes byte image...)
   if (loaded_image->nplanes() == 3 || loaded_image->nplanes() == 4)
@@ -137,9 +143,10 @@ vil_image_view_base_sptr boxm2_ocl_util::prepare_input_image(vcl_string filename
     if (vil_image_view<vxl_byte> *img_byte = dynamic_cast<vil_image_view<vxl_byte>*>(loaded_image.ptr()))
         vil_convert_stretch_range_limited(*img_byte, *floatimg, vxl_byte(0), vxl_byte(255), 0.0f, 1.0f);
     else if (vil_image_view<unsigned short> *img_byte = dynamic_cast<vil_image_view<unsigned short>*>(loaded_image.ptr()))
-        vil_convert_stretch_range_limited(*img_byte, *floatimg,(unsigned short)30500,(unsigned short)32500,  0.0f, 1.0f); // hardcoded to be fixed.
+        vil_convert_stretch_range_limited(*img_byte, *floatimg,(unsigned short)28000,(unsigned short)33000,  0.0f, 1.0f); // hardcoded to be fixed.
+        //vil_convert_stretch_range(*img_byte, *floatimg,  0.0f, 1.0f); // hardcoded to be fixed.
     else {
-        vcl_cerr << "Failed to load image " << filename << '\n';
+        vcl_cerr << "Failed to load image "  << '\n';
         return 0;
     }
     vil_image_view_base_sptr toReturn(floatimg);
@@ -147,10 +154,9 @@ vil_image_view_base_sptr boxm2_ocl_util::prepare_input_image(vcl_string filename
   }
 
   //otherwise it's messed up, return a null pointer
-  vcl_cerr<<"Failed to recognize input image type "<< filename << '\n';
+  vcl_cerr<<"Failed to recognize input image type " << '\n';
   return 0;
 }
-
 void
 boxm2_ocl_util::load_perspective_camera(vcl_string filename, vpgl_perspective_camera<double> & pcam)
 {
