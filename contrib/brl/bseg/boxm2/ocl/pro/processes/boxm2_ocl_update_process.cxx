@@ -206,8 +206,7 @@ bool boxm2_ocl_update_process(bprb_func_process& pro)
     for (unsigned int i=0;i<cl_ni;++i)
     {
       input_buff[count] = 0.0f;
-      if (i<img_view->ni() && j< img_view->nj())
-        input_buff[count]=(*img_view)(i,j);
+      if (i<img_view->ni() && j< img_view->nj()) input_buff[count]=(*img_view)(i,j);
       ++count;
     }
 

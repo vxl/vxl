@@ -29,7 +29,7 @@ namespace boxm2_ocl_render_expected_depth_process_globals
 {
   const unsigned n_inputs_ = 6;
   const unsigned n_outputs_ = 2;
-  const vcl_size_t local_threads[2]={8,8};
+  vcl_size_t local_threads[2]={8,8};
   void compile_kernel(bocl_device_sptr device,vcl_vector<bocl_kernel*> & vec_kernels)
   {
     //gather all render sources... seems like a lot for rendering...
@@ -77,7 +77,7 @@ namespace boxm2_ocl_render_expected_depth_process_globals
 
     vec_kernels.push_back(normalize_render_kernel);
   }
-  static vcl_map<cl_device_id*,vcl_vector<bocl_kernel*> > kernels;
+  static vcl_map<vcl_string,vcl_vector<bocl_kernel*> > kernels;
 }
 
 bool boxm2_ocl_render_expected_depth_process_cons(bprb_func_process& pro)
@@ -123,6 +123,7 @@ bool boxm2_ocl_render_expected_depth_process(bprb_func_process& pro)
   unsigned ni=pro.get_input<unsigned>(i++);
   unsigned nj=pro.get_input<unsigned>(i++);
 
+  vcl_string identifier=device->device_identifier();
 
 //: create a command queue.
   int status=0;
@@ -134,12 +135,12 @@ bool boxm2_ocl_render_expected_depth_process(bprb_func_process& pro)
     return false;
 
   //: compile the kernel
-  if (kernels.find((device->device_id()))==kernels.end())
+  if (kernels.find(identifier)==kernels.end())
   {
     vcl_cout<<"===========Compiling kernels==========="<<vcl_endl;
     vcl_vector<bocl_kernel*> ks;
     compile_kernel(device,ks);
-    kernels[(device->device_id())]=ks;
+    kernels[identifier]=ks;
   }
   //: create all buffers
   cl_float cam_buffer[48];
@@ -203,7 +204,7 @@ bool boxm2_ocl_render_expected_depth_process(bprb_func_process& pro)
   {
     //choose correct render kernel
     boxm2_block_metadata mdata = scene->get_block_metadata(*id);
-    bocl_kernel* kern =  kernels[(device->device_id())][0];
+    bocl_kernel* kern =  kernels[identifier][0];
 
     //write the image values to the buffer
     vul_timer transfer;
@@ -231,12 +232,11 @@ bool boxm2_ocl_render_expected_depth_process(bprb_func_process& pro)
     kern->set_local_arg( local_threads[0]*local_threads[1]*sizeof(cl_int) );
 
     //execute kernel
-    kern->execute(queue, 2, lThreads, gThreads);
+    kern->execute(queue, 2, local_threads, gThreads);
     clFinish(queue);
     gpu_time += kern->exec_time();
 
     cl_output->read_to_buffer(queue);
-    for (int i=0; i<100; ++i) vcl_cout<<output_arr[i]<<" ";
 
 
     //clear render kernel args so it can reset em on next execution
@@ -244,12 +244,12 @@ bool boxm2_ocl_render_expected_depth_process(bprb_func_process& pro)
   }
   // normalize
   {
-    bocl_kernel* normalize_kern= kernels[(device->device_id())][1];
+    bocl_kernel* normalize_kern= kernels[identifier][1];
     normalize_kern->set_arg( exp_image.ptr() );
     normalize_kern->set_arg( var_image.ptr() );
     normalize_kern->set_arg( prob_image.ptr() );
     normalize_kern->set_arg( exp_img_dim.ptr());
-    normalize_kern->execute( queue, 2, lThreads, gThreads);
+    normalize_kern->execute( queue, 2, local_threads, gThreads);
     clFinish(queue);
     gpu_time += normalize_kern->exec_time();
 
