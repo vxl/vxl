@@ -166,7 +166,7 @@ bocl_mem* boxm2_opencl_cache::get_data(boxm2_block_id id, vcl_string type, vcl_s
     //release existing memory
     bocl_mem* toDelete = cached_data_[type];
     delete toDelete;
-    cached_data_[type] = 0;
+    cached_data_.erase(cached_data_.find(type)); 
   }
 
   //create new memory
@@ -176,8 +176,8 @@ bocl_mem* boxm2_opencl_cache::get_data(boxm2_block_id id, vcl_string type, vcl_s
     vcl_cout<<"Replacing data of type "<<type<<" that doesn't match input size of"<<num_bytes<<vcl_endl;
     bocl_mem* data = new bocl_mem(*context_, NULL, num_bytes, type);
     data->create_buffer(CL_MEM_READ_WRITE);    
-    data->zero_gpu_buffer(*queue_); 
     this->deep_replace_data(id,type,data); 
+    data->zero_gpu_buffer(*queue_); 
     return data; 
   }
   loaded_data_[type] = id;
@@ -210,7 +210,7 @@ void boxm2_opencl_cache::deep_replace_data(boxm2_block_id id, vcl_string type, b
     //release existing memory
     bocl_mem* toDelete = cached_data_[type];
     delete toDelete;
-    cached_data_[type] = 0;
+    cached_data_.erase(cached_data_.find(type)); 
   }
   cached_data_[type] = mem;
 }
