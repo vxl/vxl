@@ -109,10 +109,11 @@ bool sdet_image_mesh::compute_mesh()
         segs_pair.push_back(segs[i]);
       }
   }
-  
+
   //generate a 2d mesh based on the edges
-  vgl_point_2d<double> ul(0.0, 0.0), ur(resc_->ni(),0.0);
-  vgl_point_2d<double> lr(resc_->ni(), resc_->nj()), ll(0.0, resc_->nj());
+  vgl_point_2d<double> ul(0.0, 0.0), ur(resc_->ni()-1,0.0);
+  vgl_point_2d<double> lr(resc_->ni()-1, resc_->nj()-1), ll(0.0, resc_->nj()-1);
+
   vcl_vector<vgl_point_2d<double> > convex_hull;
   convex_hull.push_back(ul);   convex_hull.push_back(ur);
   convex_hull.push_back(lr);   convex_hull.push_back(ll);
