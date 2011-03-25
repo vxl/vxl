@@ -1,4 +1,6 @@
 #include <sdet/sdet_contour.h>
+#include <sdet/sdet_denoise_mrf.h>
+#include <sdet/sdet_denoise_mrf_params.h>
 #include <sdet/sdet_detector.h>
 #include <sdet/sdet_detector_params.h>
 #include <sdet/sdet_edge_champher.h>
