@@ -79,3 +79,6 @@ SUBDIRS(bvpgl)
 
 # Brown affine patch library, SIFT keypoint & descriptor
 SUBDIRS(bapl)
+
+#the bridge lib to convert between boxm and boxm2 scenes
+SUBDIRS(boxm_bridge)
