@@ -93,7 +93,7 @@ int boct_bit_tree2::traverse(const vgl_point_3d<double> p)
 
 
 //: Return cell with a particular locational code
-int boct_bit_tree2::get_data_index(int bit_index, bool is_random)
+int boct_bit_tree2::get_data_index(int bit_index, bool is_random) const
 {
   ////Unpack data offset (offset to root data)
   //tree[10] and [11] should form the short that refers to data offset
@@ -109,7 +109,7 @@ int boct_bit_tree2::get_data_index(int bit_index, bool is_random)
 }
 
 //: returns bit index assuming root data is located at 0
-int  boct_bit_tree2::get_relative_index(int bit_index)
+int  boct_bit_tree2::get_relative_index(int bit_index) const
 {
   if (bit_index < 9)
     return (bit_index);
@@ -152,7 +152,7 @@ int boct_bit_tree2::num_cells() const
 
 //----BIT MANIP Methods -----------------------------------------------
 unsigned char
-boct_bit_tree2::bit_at(int index)
+boct_bit_tree2::bit_at(int index) const
 {
   //make sure it's in bounds - all higher cells are leaves and thus 0
   if (index > 72)

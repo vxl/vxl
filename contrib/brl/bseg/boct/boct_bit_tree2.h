@@ -36,10 +36,10 @@ class boct_bit_tree2
   }
 
   //: Returns index of data for given bit
-  int  get_data_index(int bit_index, bool is_random=true);
+  int  get_data_index(int bit_index, bool is_random=true) const;
   
   //: returns bit index assuming root data is located at 0
-  int  get_relative_index(int bit_index); 
+  int  get_relative_index(int bit_index) const; 
 
   //: traverse tree to get leaf index that contains point
   int traverse(const vgl_point_3d<double> p);
@@ -55,7 +55,7 @@ class boct_bit_tree2
   int depth_at(int index) const;
 
   //: returns value (0 or 1) of bit at given index (0,73);
-  unsigned char bit_at(int index);
+  unsigned char bit_at(int index) const;
   
   //: sets bit at given index with bool value
   void set_bit_at(int index, bool val);
