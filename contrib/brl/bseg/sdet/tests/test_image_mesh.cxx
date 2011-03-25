@@ -45,7 +45,7 @@ static void test_image_mesh()
     return;
   }
   imesh_mesh& mesh = im.get_mesh();
-  vcl_cout << "Number of vertices " << mesh.num_verts()
+  vcl_cout << "Number of vertices " << mesh.num_verts();
   vcl_string vrfile = "C:/images/MeshStudies/vmidrmesh.wrl";
   vcl_ofstream os(vrfile.c_str());
   imesh_write_vrml(os, mesh);
