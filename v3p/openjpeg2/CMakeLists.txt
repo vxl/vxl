@@ -34,15 +34,13 @@ set(OPENJPEG2_SRCS
   tcd.h            tcd.c
   tgt.h            tgt.c
 )
+add_definitions( ${OPENJPEG2_DEFINITIONS} )
 
 # Pass proper definition to preprocessor to generate shared lib
 add_library(openjpeg2 ${OPENJPEG2_SRCS})
 set_target_properties(openjpeg2 PROPERTIES
                       VERSION       2.0.0
                       DEFINE_SYMBOL OPJ_EXPORTS)
-if( NOT BUILD_SHARED_LIBS )
-  add_definitions( "-DOPJ_STATIC" )
-endif( NOT BUILD_SHARED_LIBS )
  
 # Install library
 INSTALL_TARGETS(/lib openjpeg2)

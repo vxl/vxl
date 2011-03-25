@@ -10,7 +10,9 @@
 #
 # OPENJPEG2_FOUND       - Set to true if OpenJPEG v2 can be found
 # OPENJPEG2_INCLUDE_DIR - The path to the OpenJPEG v2 header files
-# OPENJPEG2_LIBRARIES     - The full path to the OpenJPEG v2 library
+# OPENJPEG2_LIBRARIES   - The full path to the OpenJPEG v2 library
+# OPENJPEG2_DEFINITIONS - You should ADD_DEFINITONS(${OPENJPEG2_DEFINITIONS})
+#                         before compiling code that includes OpenJPEG2 library files.
 
 if( NOT VXL_FORCE_V3P_OPENJPEG2 )
   if( NOT OPENJPEG2_FOUND )
@@ -18,7 +20,7 @@ if( NOT VXL_FORCE_V3P_OPENJPEG2 )
     include(CheckFunctionExists)
 
     find_path( OPENJPEG2_INCLUDE_DIR openjpeg.h )
-    message(STATUS "Looking for openjpeg.h - ${OPENJPEG2_INCLUDE_DIR}")
+#    message(STATUS "Looking for openjpeg.h - ${OPENJPEG2_INCLUDE_DIR}")
  
     if( OPENJPEG2_INCLUDE_DIR )
       #The opj_cio struct is only preset in the old v1 API
@@ -32,11 +34,11 @@ if( NOT VXL_FORCE_V3P_OPENJPEG2 )
       else(HAVE_STRUCT_OPJ_CIO)
         set(OPENJPEG2_INCLUDE_V2 TRUE)
       endif(HAVE_STRUCT_OPJ_CIO)
-      message(STATUS "Checking OpenJPEG header for v2 API - " ${OPENJPEG2_INCLUDE_V2})
+#      message(STATUS "Checking OpenJPEG header for v2 API - " ${OPENJPEG2_INCLUDE_V2})
     endif( OPENJPEG2_INCLUDE_DIR )
   
     find_library( OPENJPEG2_LIBRARIES "libopenjpeg" )
-    message(STATUS "Looking for libopenjpeg - ${OPENJPEG2_LIBRARIES}")
+#    message(STATUS "Looking for libopenjpeg - ${OPENJPEG2_LIBRARIES}")
 
     if( OPENJPEG2_LIBRARIES )
       #opj_cio_open is part of the old API and has been removed in v2
@@ -48,12 +50,15 @@ if( NOT VXL_FORCE_V3P_OPENJPEG2 )
       else(HAVE_OPJ_CIO_OPEN)
         set(OPENJPEG2_LIBRARIES_V2 TRUE)
       endif(HAVE_OPJ_CIO_OPEN)
-      message(STATUS "Checking OpenJPEG library for v2 API - " ${OPENJPEG2_LIBRARIES_V2})
+#      message(STATUS "Checking OpenJPEG library for v2 API - " ${OPENJPEG2_LIBRARIES_V2})
     endif(OPENJPEG2_LIBRARIES)
     include( FindPackageHandleStandardArgs )
     FIND_PACKAGE_HANDLE_STANDARD_ARGS( OPENJPEG2 OPENJPEG2_INCLUDE_DIR OPENJPEG2_INCLUDE_V2 OPENJPEG2_LIBRARIES OPENJPEG2_LIBRARIES_V2 )
   endif(NOT OPENJPEG2_FOUND)
 endif(NOT VXL_FORCE_V3P_OPENJPEG2)
+
+set(OPENJPEG2_DEFINITIONS "")
+
 
 if(OPENJPEG2_FOUND)
   set(VXL_USING_NATIVE_OPENJPEG2 "YES")
@@ -62,6 +67,9 @@ else(OPENJPEG2_FOUND)
     set(OPENJPEG2_FOUND TRUE)
     set(OPENJPEG2_INCLUDE_DIR ${vxl_SOURCE_DIR}/v3p/openjpeg2)
     set(OPENJPEG2_LIBRARIES openjpeg2)
+    if (NOT BUILD_SHARED_LIBRARIES)
+      set(OPENJPEG2_DEFINITIONS ${OPENJPEG2_DEFINITIONS} -DOPJ_STATIC)
+    endif (NOT BUILD_SHARED_LIBRARIES)
   endif( EXISTS ${vxl_SOURCE_DIR}/v3p/openjpeg2/openjpeg.h)
 endif(OPENJPEG2_FOUND)
 

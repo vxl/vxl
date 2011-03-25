@@ -60,11 +60,12 @@ ENDIF(ECW_FOUND)
 ##############################
 INCLUDE( ${MODULE_PATH}/FindOpenJPEG2.cmake )
 IF(OPENJPEG2_FOUND)
+  INCLUDE_DIRECTORIES(${OPENJPEG2_INCLUDE_DIR})
+  ADD_DEFINITIONS( ${OPENJPEG2_DEFINITIONS} )
   SET( vil_sources ${vil_sources}
     file_formats/vil_openjpeg.h  file_formats/vil_openjpeg.cxx
     file_formats/vil_openjpeg_pyramid_image_resource.h
     file_formats/vil_openjpeg_pyramid_image_resource.cxx)
-  INCLUDE_DIRECTORIES(${OPENJPEG2_INCLUDE_DIR})
   ADD_DEFINITIONS( ${OPENJPEG2_DEFINITIONS} )
   SET( HAS_OPENJPEG2 1 )
 ELSE(OPENJPEG2_FOUND)
@@ -324,6 +325,9 @@ ENDIF(PNG_FOUND)
 IF(DCMTK_FOUND)
   TARGET_LINK_LIBRARIES( vil ${DCMTK_LIBRARIES} )
 ENDIF(DCMTK_FOUND)
+IF(OPENJPEG2_FOUND)
+  TARGET_LINK_LIBRARIES( vil ${OPENJPEG2_LIBRARIES} )
+ENDIF(OPENJPEG2_FOUND)
 
 TARGET_LINK_LIBRARIES( vil vcl )
 
