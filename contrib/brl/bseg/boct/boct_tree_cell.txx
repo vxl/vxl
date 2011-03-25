@@ -330,17 +330,26 @@ template<class T_loc,class T_data>
 bool boct_tree_cell<T_loc,T_data>::insert_subtree( boct_tree_cell<T_loc,T_data>*& subtree)
 {
   // make sure it is leaf
-  if (!this->is_leaf() || subtree->is_leaf())
+  if (!this->is_leaf()) {
+    vcl_cout << "ERROR! boct_tree_cell<T_loc,T_data>::insert_subtree -- subtree cannot be inserted, the node is not leaf" << vcl_endl;
     return false;
-
-  // check if the max tree levels are going to be exceeded
-
+  }
+  
+  //check if the levels are going to be exceeded
+  int sl=subtree->level();
+  if (sl > this->code_.level) {
+    vcl_cout << "ERROR! boct_tree_cell<T_loc,T_data>::insert_subtree -- subtree exceeds the max levels" << vcl_endl;
+    return false;
+  }
   children_ = subtree->children();
+  this->data_ = subtree->data_;
   subtree->set_children_null();
-  // update location code for the newly added subtree nodes
-  for (unsigned i=0; i<8; i++) {
-    children_[i].set_parent(this);
-    children_[i].update_code(i,*this);
+  if (children_) {
+    // update location code for the newly added subtree nodes
+    for (unsigned i=0; i<8; i++) {
+      children_[i].set_parent(this);
+      children_[i].update_code(i,*this);
+    }
   }
 
   return true;
