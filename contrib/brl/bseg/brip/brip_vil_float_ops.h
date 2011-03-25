@@ -393,6 +393,11 @@ class brip_vil_float_ops
                    brip_roi_sptr const& roi,
                    vil_image_resource_sptr & chip);
 
+  //: chip multiple images. Must be all the same dimensions
+  static bool chip(vcl_vector<vil_image_resource_sptr> const& images,
+                   brip_roi_sptr const& roi,
+                   vcl_vector<vil_image_resource_sptr>& chips);
+
   //: compute the average of the image intensity within the specified region
   static float average_in_box(vil_image_view<float> const& v,
                               vgl_box_2d<double> const& box);

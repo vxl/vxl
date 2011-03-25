@@ -2338,6 +2338,7 @@ fourier_transform(vil_image_view<float> const& input,
                   vil_image_view<float>& phase)
 {
   unsigned w = input.ni(), h = input.nj();
+  
   vnl_fft_prime_factors<float> pfx (w);
   vnl_fft_prime_factors<float> pfy (h);
   if (!pfx.pqr()[0]||!pfy.pqr()[0])
@@ -2373,7 +2374,6 @@ fourier_transform(vil_image_view<float> const& input,
       mag(c,r) = vcl_sqrt(re*re + im*im);
       phase(c,r) = vcl_atan2(im, re);
     }
-
   return true;
 }
 
@@ -2804,7 +2804,19 @@ bool brip_vil_float_ops::chip(vil_image_resource_sptr const& image,
   }
   return false;
 }
-
+bool brip_vil_float_ops::
+chip(vcl_vector<vil_image_resource_sptr> const& images,
+     brip_roi_sptr const& roi,
+     vcl_vector<vil_image_resource_sptr>& chips)
+{
+  for(vcl_vector<vil_image_resource_sptr>::const_iterator iit = images.begin(); iit != images.end(); ++iit){
+    vil_image_resource_sptr chip;
+    if(!brip_vil_float_ops::chip(*iit, roi, chip))
+      return false;
+    chips.push_back(chip);
+  }
+  return true;
+}
 
 //: perform normalized cross-correlation at a sub-pixel location.
 // Thus all the pixel values are interpolated.
