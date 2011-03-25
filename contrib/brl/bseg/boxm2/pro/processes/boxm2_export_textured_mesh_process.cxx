@@ -49,7 +49,7 @@ bool boxm2_export_textured_mesh_process(bprb_func_process& pro)
 {
   using namespace boxm2_export_textured_mesh_process_globals;
 
-  if ( pro.n_inputs() < n_inputs_ ){
+  if ( pro.n_inputs() < n_inputs_ ) {
     vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
     return false;
   }
@@ -60,7 +60,7 @@ bool boxm2_export_textured_mesh_process(bprb_func_process& pro)
   vcl_string img_dir           = pro.get_input<vcl_string>(argIdx++);
   vcl_string cam_dir           = pro.get_input<vcl_string>(argIdx++);
   vcl_string out_dir           = pro.get_input<vcl_string>(argIdx++);
-  
+
   //create the mesh directory
   if (!vul_file::make_directory_path(out_dir.c_str())) {
     vcl_cout<<"Couldn't make directory path "<<out_dir<<vcl_endl;
@@ -68,113 +68,111 @@ bool boxm2_export_textured_mesh_process(bprb_func_process& pro)
   }
 
   //cast camera and image so they are useful
-  vpgl_perspective_camera<double>* pcam = (vpgl_perspective_camera<double>*) cam.ptr(); 
-  vil_image_view<float>* depth = (vil_image_view<float>*) img.ptr(); 
+  vpgl_perspective_camera<double>* pcam = (vpgl_perspective_camera<double>*) cam.ptr();
+  vil_image_view<float>* depth = (vil_image_view<float>*) img.ptr();
 
   //determine size of depth image
   unsigned ni = img->ni();
   unsigned nj = img->nj();
-  
+
   //calculate XYZ image image that corresponds to depth image
-  vil_image_view<vil_rgba<float> >* xyz_img = new vil_image_view<vil_rgba<float> >(ni, nj); 
-  for(int i=0; i<ni; ++i) {
-    for(int j=0; j<nj; ++j) {
-        
-        //grab the ray from the camera
-        vgl_ray_3d<double> ray = pcam->backproject_ray(i,j);
-        
-        //ray o
-        float ray_ox=ray.origin().x();
-        float ray_oy=ray.origin().y();
-        float ray_oz=ray.origin().z();
-        
-        //ray dir
-        float dray_x = float(ray.direction().x()),
-              dray_y = float(ray.direction().y()),
-              dray_z = float(ray.direction().z());
-    
-        //expected ray depth
-        float ray_t = (*depth)(i,j); 
-    
-        //calculate x,y,z position at expected depth
-        (*xyz_img)(i,j) = vil_rgba<float>(ray_ox + ray_t*dray_x,
-                                          ray_oy + ray_t*dray_y,
-                                          ray_oz + ray_t*dray_z,
-                                          0.0f); 
+  vil_image_view<vil_rgba<float> >* xyz_img = new vil_image_view<vil_rgba<float> >(ni, nj);
+  for (int i=0; i<ni; ++i) {
+    for (int j=0; j<nj; ++j) {
+      //grab the ray from the camera
+      vgl_ray_3d<double> ray = pcam->backproject_ray(i,j);
+
+      //ray o
+      float ray_ox=ray.origin().x();
+      float ray_oy=ray.origin().y();
+      float ray_oz=ray.origin().z();
+
+      //ray dir
+      float dray_x = float(ray.direction().x()),
+            dray_y = float(ray.direction().y()),
+            dray_z = float(ray.direction().z());
+
+      //expected ray depth
+      float ray_t = (*depth)(i,j);
+
+      //calculate x,y,z position at expected depth
+      (*xyz_img)(i,j) = vil_rgba<float>(ray_ox + ray_t*dray_x,
+                                        ray_oy + ray_t*dray_y,
+                                        ray_oz + ray_t*dray_z,
+                                        0.0f);
     }
   }
 
   //
-  
-  
-   //////////////////////////////////////////////////////////////////////////////
+
+  //////////////////////////////////////////////////////////////////////////////
   //Get XY bounding box for image
   //////////////////////////////////////////////////////////////////////////////
   vgl_box_2d<double> image_bb = vpgl_project::project_bounding_box(*pcam, scene->bounding_box());
-  vgl_point_2d<double> xy_min(scene->bounding_box().min_x(), scene->bounding_box().min_y()); 
-  vgl_point_2d<double> xy_max(scene->bounding_box().max_x(), scene->bounding_box().max_y()); 
-  vgl_box_2d<double> scene_xy(xy_min, xy_max); 
-  vcl_cout<<"Image bounding box (scene xy box): "<<image_bb<<vcl_endl;
-  vcl_cout<<"Scene 2d bounding box (xy) : "<<scene_xy<<vcl_endl;
-  
-  
+  vgl_point_2d<double> xy_min(scene->bounding_box().min_x(), scene->bounding_box().min_y());
+  vgl_point_2d<double> xy_max(scene->bounding_box().max_x(), scene->bounding_box().max_y());
+  vgl_box_2d<double> scene_xy(xy_min, xy_max);
+  vcl_cout<<"Image bounding box (scene xy box): "<<image_bb<<'\n'
+          <<"Scene 2d bounding box (xy) : "<<scene_xy<<vcl_endl;
+
+#if 0
   //////////////////////////////////////////////////////////////////////////////
   // Generate 3d mesh from depth image
   //////////////////////////////////////////////////////////////////////////////
-  //vcl_cout<<"Generating image mesh"<<vcl_endl;
+  vcl_cout<<"Generating image mesh"<<vcl_endl;
 
-  ////create new resource sptr
-  //vil_image_resource_sptr depth_resc = vil_new_image_resource_of_view(*depth_im);
+  //create new resource sptr
+  vil_image_resource_sptr depth_resc = vil_new_image_resource_of_view(*depth_im);
 
-  ////intiialize some sdet_image_mesh parameters
-  //sdet_image_mesh_params imp;
-  //// sigma of the Gaussian for smoothing the image prior to edge detection
-  //imp.smooth_ = 2.0f;
-  //// the edge detection threshold
-  //imp.thresh_ = 2.0f;
-  //// the shortest edgel chain that is considered for line fitting
-  //imp.min_fit_length_ = 7;
-  //// the threshold on rms pixel distance of edgels to the line
-  //imp.rms_distance_ = 0.1;
-  //// the width in pixels of the transition of a step edge
-  //imp.step_half_width_ = 5.0;
-  
-  //// the mesh processor
-  //sdet_image_mesh im(imp);
-  //im.set_image(depth_resc);
-  //if(!im.compute_mesh()) {
-    //vcl_cout<<"mesh could not be computed"<<vcl_endl;
-    //return 0;
-  //}
-  //imesh_mesh& mesh = im.get_mesh();
-  //vcl_cout << "Number of vertices " << mesh.num_verts()
-           //<< "  number of faces "<< mesh.num_faces()<< '\n';
+  //initialize some sdet_image_mesh parameters
+  sdet_image_mesh_params imp;
+  // sigma of the Gaussian for smoothing the image prior to edge detection
+  imp.smooth_ = 2.0f;
+  // the edge detection threshold
+  imp.thresh_ = 2.0f;
+  // the shortest edgel chain that is considered for line fitting
+  imp.min_fit_length_ = 7;
+  // the threshold on rms pixel distance of edgels to the line
+  imp.rms_distance_ = 0.1;
+  // the width in pixels of the transition of a step edge
+  imp.step_half_width_ = 5.0;
 
-  ////////////////////////////////////////////////////////////////////////////////
-  //// normalize mesh world points to fit in the image_bb from above
-  ////////////////////////////////////////////////////////////////////////////////
-  
-  
-  ////////////////////////////////////////////////////////////////////////////////
-  //// Generate top down image from same camera as above
-  ////////////////////////////////////////////////////////////////////////////////
-  
-  
-  ////////////////////////////////////////////////////////////////////////////////
-  //// for each triangle, 
-  ////   if surface normal is less than X degrees off horizontal
-  ////      project triangle onto image, store triangle points (see if there are functions for this in imesh)
-  ////////////////////////////////////////////////////////////////////////////////
-  
-  
-  ////////////////////////////////////////////////////////////////////////////////
-  //// Write out in VRML format
-  ////////////////////////////////////////////////////////////////////////////////
-  //vcl_string vrfile = dir() + "/vrmesh.wrl";
-  //vcl_ofstream os(vrfile.c_str());
-  //imesh_write_vrml(os, mesh);
-  //os.close();
-  
-  
+  // the mesh processor
+  sdet_image_mesh im(imp);
+  im.set_image(depth_resc);
+  if (!im.compute_mesh()) {
+    vcl_cout<<"mesh could not be computed"<<vcl_endl;
+    return 0;
+  }
+  imesh_mesh& mesh = im.get_mesh();
+  vcl_cout << "Number of vertices " << mesh.num_verts()
+           << "  number of faces "<< mesh.num_faces()<< '\n';
+
+  //////////////////////////////////////////////////////////////////////////////
+  // normalize mesh world points to fit in the image_bb from above
+  //////////////////////////////////////////////////////////////////////////////
+
+
+  //////////////////////////////////////////////////////////////////////////////
+  // Generate top down image from same camera as above
+  //////////////////////////////////////////////////////////////////////////////
+
+
+  //////////////////////////////////////////////////////////////////////////////
+  // for each triangle,
+  //   if surface normal is less than X degrees off horizontal
+  //      project triangle onto image, store triangle points (see if there are functions for this in imesh)
+  //////////////////////////////////////////////////////////////////////////////
+
+
+  //////////////////////////////////////////////////////////////////////////////
+  // Write out in VRML format
+  //////////////////////////////////////////////////////////////////////////////
+  vcl_string vrfile = dir() + "/vrmesh.wrl";
+  vcl_ofstream os(vrfile.c_str());
+  imesh_write_vrml(os, mesh);
+  os.close();
+#endif // 0
+
   return true;
 }
