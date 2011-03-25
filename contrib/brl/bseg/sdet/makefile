@@ -34,6 +34,8 @@ SOURCES += sdet_third_order_edge_det_params.cxx
 SOURCES += sdet_nms.cxx
 SOURCES += sdet_image_mesh.cxx
 SOURCES += sdet_image_mesh_params.cxx
+SOURCES += sdet_denoise_mrf.cxx
+SOURCES += sdet_denoise_mrf_params.cxx
 
 #######################################
 include ${VXLROOT}/config/top-params.mk
