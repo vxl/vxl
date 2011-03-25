@@ -232,6 +232,22 @@ void segv_vil_menus::line_image_callback()
 {
   segv_vil_segmentation_manager::instance()->draw_line_image();
 }
+void segv_vil_menus::display_roi_callback()
+{
+  segv_vil_segmentation_manager::instance()->display_roi();
+}
+void segv_vil_menus::create_roi_callback()
+{
+  segv_vil_segmentation_manager::instance()->create_roi();
+}
+void segv_vil_menus::crop_image_callback()
+{
+  segv_vil_segmentation_manager::instance()->crop_image();
+}
+void segv_vil_menus::gaussian_callback()
+{
+  segv_vil_segmentation_manager::instance()->gaussian();
+}
 
 //segv_vil_menus definition
 vgui_menu segv_vil_menus::get_menu()
@@ -250,6 +266,7 @@ vgui_menu segv_vil_menus::get_menu()
   //view menu entries
   menuview.add("Remove Image", remove_image_callback);
   menuview.add("Clear Spatial Objects", clear_display_callback);
+  menuview.add("Display ROI", display_roi_callback);
   menuview.add("Intensity Profile", intensity_profile_callback);
   menuview.add("Set Range Params", set_range_params_callback);
   menuview.add("Inline Histogram Viewer", inline_viewer_callback);
@@ -282,11 +299,13 @@ vgui_menu segv_vil_menus::get_menu()
   menuedit.add("Load Line Image", line_image_callback);
 
   //operation menu entries
+  menuops.add("Create ROI:" , create_roi_callback);
   menuops.add("Convert To Greyscale:", convert_to_grey_callback);
+  menuops.add("Crop Image:", crop_image_callback);
   menuops.add("Add Images:", add_images_callback);
   menuops.add("Subtract Images:", subtract_images_callback);
-
   menuops.add("Negate Image:", negate_image_callback);
+  menuops.add("Gaussian Smoothing:", gaussian_callback);
   menuops.add("Entropy", entropy_callback);
   menuops.add("Mutal Information", minfo_callback);
   menuops.add("Max Trace Scale",  max_trace_scale_callback);

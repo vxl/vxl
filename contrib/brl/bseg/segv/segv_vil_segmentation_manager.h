@@ -33,7 +33,7 @@
 #include <bgui/bgui_bargraph_clipon_tableau_sptr.h>
 #include <bgui/bgui_graph_tableau_sptr.h>
 #include <bgui/bgui_graph_tableau.h>
-
+#include <brip/brip_roi_sptr.h>
 class vgui_window;
 
 class segv_vil_segmentation_manager : public vgui_wrapper_tableau
@@ -84,6 +84,7 @@ class segv_vil_segmentation_manager : public vgui_wrapper_tableau
   void parallel_coverage();
   void gradient_mag_angle();
   void fft();
+  void gaussian();
   // -- segmentation --
 
   void threshold_image();
@@ -111,8 +112,11 @@ class segv_vil_segmentation_manager : public vgui_wrapper_tableau
   void clear_mask();
   void add_poly_to_mask();
   void load_image_nomenu(vcl_string const& path);
+  void crop_image();
   //: drawing
   void create_polygon();
+  void create_roi();
+  void display_roi();
   //: access to the window
   vgui_window* get_window(){return win_;}
   //: access to the window
@@ -161,6 +165,7 @@ class segv_vil_segmentation_manager : public vgui_wrapper_tableau
   vtol_face_2d_sptr background_face_;
   bgui_bargraph_clipon_tableau_sptr bargraph_;
   vcl_vector<vsol_polygon_2d_sptr> mask_;
+  brip_roi_sptr roi_;
   static segv_vil_segmentation_manager *instance_;
 };
 

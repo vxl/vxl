@@ -61,9 +61,13 @@
 #include <bgui/bgui_image_utils.h>
 #include <vsol/vsol_point_2d.h>
 #include <vsol/vsol_point_2d_sptr.h>
+#include <vsol/vsol_box_2d.h>
+#include <vsol/vsol_box_2d_sptr.h>
 #include <vsol/vsol_conic_2d.h>
 #include <vsol/vsol_polyline_2d_sptr.h>
 #include <vsol/vsol_polyline_2d.h>
+#include <vsol/vsol_polygon_2d.h>
+#include <vsol/vsol_polygon_2d_sptr.h>
 #include <vtol/vtol_vertex_2d.h>
 #include <vtol/vtol_vertex.h>
 #include <vtol/vtol_edge_2d.h>
@@ -71,6 +75,7 @@
 #include <brip/brip_vil1_float_ops.h>
 #include <brip/brip_vil_float_ops.h>
 #include <brip/brip_para_cvrg_params.h>
+#include <brip/brip_roi.h>
 #include <brip/brip_para_cvrg.h>
 #include <brip/brip_watershed_params.h>
 #include <brip/brip_max_scale_response.h>
@@ -1367,6 +1372,82 @@ void segv_vil_segmentation_manager::intensity_profile()
     return;
   }
 delete ip_dialog;
+}
+
+void segv_vil_segmentation_manager::display_roi()
+{
+  if(!roi_){
+    vcl_cout << " Null ROI \n";
+    return;
+  }
+  //assume only one region
+  if(roi_->n_regions() != 1)
+    {
+      vcl_cout << " Can't handle a roi with more than one region \n";
+      return;
+    }
+  int cmin=roi_->cmin(0), cmax=roi_->cmax(0), 
+    rmin=roi_->rmin(0), rmax = roi_->rmax(0);
+  
+  // display the roi as a vsol polygon
+  vsol_point_2d_sptr p0 = new vsol_point_2d(cmin, rmin);
+  vsol_point_2d_sptr p1 = new vsol_point_2d(cmax, rmin);
+  vsol_point_2d_sptr p2 = new vsol_point_2d(cmax, rmax);
+  vsol_point_2d_sptr p3 = new vsol_point_2d(cmin, rmax);
+  vcl_vector<vsol_point_2d_sptr> pts;
+  pts.push_back(p0);pts.push_back(p1);pts.push_back(p2);pts.push_back(p3);
+  vsol_polygon_2d_sptr poly = new vsol_polygon_2d(pts);
+  bgui_vtol2D_tableau_sptr t2D = this->selected_vtol2D_tab();
+  if (!t2D)
+    return;
+  t2D->clear_all();
+  t2D->add_vsol_polygon_2d(poly);
+}
+void segv_vil_segmentation_manager::create_roi()
+{
+  bgui_picker_tableau_sptr ptab = selected_picker_tab();
+  float start_col=0, end_col=0, start_row=0, end_row=0;
+  ptab->pick_box(&start_col, &start_row, &end_col, &end_row);
+  roi_ = new brip_roi();
+  roi_->add_region(start_col, start_row, 
+                   (end_col-start_col), (end_row-start_row));
+  this->display_roi();
+}
+void segv_vil_segmentation_manager::crop_image()
+{
+  vil_image_resource_sptr img = this->selected_image();
+  if(!img){
+    vcl_cout << "No image to crop\n";
+    return;
+  }
+  if(!roi_){
+    vcl_cout << "No crop roi specified\n";
+    return;
+  }
+  vil_image_resource_sptr chip;
+  if(!brip_vil_float_ops::chip(img, roi_, chip))
+    {
+      vcl_cout << "Crop operation failed\n";
+      return;
+    }
+  this->add_image(chip);
+}
+void segv_vil_segmentation_manager::gaussian()
+{
+  vil_image_resource_sptr img = this->selected_image();
+  if(!img){
+    vcl_cout << "No image to smooth\n";
+    return;
+  }
+  vil_image_view<float> view = brip_vil_float_ops::convert_to_float(img);
+  static float sigma = 1.0f;
+  vgui_dialog gauss_dialog("Gaussian Smoothing");
+  gauss_dialog.field("Gauss sigma", sigma);
+  if (!gauss_dialog.ask())
+    return;
+  vil_image_view<float> gauss = brip_vil_float_ops::gaussian(view, sigma);
+  vil_image_resource_sptr gaussr = vil_new_image_resource_of_view(gauss);
+  this->add_image(gaussr);
 }
 
 void segv_vil_segmentation_manager::inline_viewer()
