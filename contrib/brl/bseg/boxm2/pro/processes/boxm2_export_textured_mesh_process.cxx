@@ -16,9 +16,12 @@
 
 //vgl
 #include <vgl/vgl_ray_3d.h>
+#include <vgl/vgl_point_2d.h>
+#include <vgl/vgl_box_2d.h>
 
 //vpgl camera stuff
 #include <vpgl/vpgl_perspective_camera.h>
+#include <vpgl/algo/vpgl_project.h>
 
 namespace boxm2_export_textured_mesh_process_globals
 {
