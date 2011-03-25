@@ -256,9 +256,12 @@ SOURCE=.\test_gauss_fit.cxx
 # Begin Source File
 SOURCE=.\test_image_mesh.cxx
 # End Source File
+# End Project
+# Begin Source File
+SOURCE=.\test_denoise_mrf.cxx
+# End Source File
 # Begin Source File
 SOURCE=.\test_include.cxx
 # End Source File
 # End Group
 # End Target
-# End Project
