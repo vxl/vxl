@@ -15,4 +15,4 @@ SUBDIRS(pro)
 SUBDIRS(algo)
 
 # cpp process APIs.
-SUBDIRS(exe)
+# SUBDIRS(exe)
