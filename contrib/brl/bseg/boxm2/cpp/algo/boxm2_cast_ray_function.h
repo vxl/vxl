@@ -85,11 +85,6 @@ void boxm2_cast_ray_function(vgl_ray_3d<float> & ray,
 
     boct_bit_tree2 bit_tree((unsigned char*)tree.data_block(),linfo->root_level+1);
 
-    unsigned short buff_index=tree[12];
-    buff_index=(buff_index<<8)+tree[13];
-
-    int data_index=(int)buff_index*(int)linfo->data_buffer_length;
-
 //    //local ray origin is entry point (point should be in [0,1])
 //    //(note that cell_min is the current block index at this point)
 //    //setting local_ray_o to block_pos allows ttree to start at 0
@@ -126,7 +121,7 @@ void boxm2_cast_ray_function(vgl_ray_3d<float> & ray,
       cell_miny=vcl_floor(posy/cell_len)* cell_len;
       cell_minz=vcl_floor(posz/cell_len)* cell_len;
 
-      int data_offset=data_index+bit_tree.get_data_index(bit_index);
+      int data_offset=bit_tree.get_data_index(bit_index);
 
       // check to see how close tnear and tfar are
       cell_minx = (ray_dx > 0.0f) ? cell_minx+cell_len : cell_minx;
@@ -153,8 +148,8 @@ void boxm2_cast_ray_function(vgl_ray_3d<float> & ray,
   }
 }
 
-template <class fucntor_type>
-bool cast_ray_per_block(fucntor_type functor,
+template <class functor_type>
+bool cast_ray_per_block(functor_type functor,
                         boxm2_scene_info * linfo,
                         boxm2_block * blk_sptr,
                         vpgl_camera_double_sptr cam ,
@@ -167,12 +162,10 @@ bool cast_ray_per_block(fucntor_type functor,
   {
     for (unsigned i=roi_ni0;i<roi_ni;++i)
     {
-      if (i%10==0)
-        vcl_cout<<'.';
+      if (i%10==0) vcl_cout<<'.';
       for (unsigned j=roi_nj0;j<roi_nj;++j)
       {
         vgl_ray_3d<double> ray_ij=pcam->backproject_ray(i,j);
-
         vgl_point_3d<float> block_origin(float(ray_ij.origin().x()-linfo->scene_origin[0])/linfo->block_len,
                                          float(ray_ij.origin().y()-linfo->scene_origin[1])/linfo->block_len,
                                          float(ray_ij.origin().z()-linfo->scene_origin[2])/linfo->block_len);
@@ -190,7 +183,7 @@ bool cast_ray_per_block(fucntor_type functor,
 
         vgl_vector_3d<float> direction(dray_ij_x,dray_ij_y,dray_ij_z);
         vgl_ray_3d<float> norm_ray_ij(block_origin,direction);
-        boxm2_cast_ray_function<fucntor_type>(norm_ray_ij,linfo,blk_sptr,i,j,functor);
+        boxm2_cast_ray_function<functor_type>(norm_ray_ij,linfo,blk_sptr,i,j,functor);
       }
     }
     return true;

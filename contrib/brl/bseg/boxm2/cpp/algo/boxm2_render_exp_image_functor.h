@@ -67,7 +67,8 @@ void boxm2_render_exp_image(boxm2_scene_info * linfo,
 {
   boxm2_render_exp_image_functor render_functor;
   render_functor.init_data(datas,expected,vis);
-  cast_ray_per_block<boxm2_render_exp_image_functor>(render_functor,linfo,blk_sptr,cam,roi_ni,roi_nj,roi_ni0,roi_nj0);
+  cast_ray_per_block<boxm2_render_exp_image_functor>
+      (render_functor,linfo,blk_sptr,cam,roi_ni,roi_nj,roi_ni0,roi_nj0);
 }
 
 #endif
