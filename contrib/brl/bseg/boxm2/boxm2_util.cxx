@@ -8,6 +8,7 @@
 #include <vgl/vgl_box_3d.h>
 #include <vgl/vgl_box_2d.h>
 #include <vpgl/algo/vpgl_project.h>
+#include <vil/vil_convert.h>
 
 //vnl includes
 #include <vnl/vnl_vector.h>
@@ -325,3 +326,49 @@ bool boxm2_util::generate_jsfunc(vbl_array_2d<vcl_string> img_files, vcl_string 
   }
 }
 
+
+// private helper method prepares an input image to be processed by update
+vil_image_view_base_sptr boxm2_util::prepare_input_image(vil_image_view_base_sptr loaded_image)
+{
+  //load from file
+
+  //then it's an RGB image (assumes byte image...)
+  if (loaded_image->nplanes() == 3 || loaded_image->nplanes() == 4)
+  {
+    vcl_cout<<"preparing rgb image"<<vcl_endl;
+    //load image from file and format it into RGBA
+    vil_image_view_base_sptr n_planes = vil_convert_to_n_planes(4, loaded_image);
+    vil_image_view_base_sptr comp_image = vil_convert_to_component_order(n_planes);
+    vil_image_view<vil_rgba<vxl_byte> >* rgba_view = new vil_image_view<vil_rgba<vxl_byte> >(comp_image);
+
+    //make sure all alpha values are set to 255 (1)
+    vil_image_view<vil_rgba<vxl_byte> >::iterator iter;
+    for (iter = rgba_view->begin(); iter != rgba_view->end(); ++iter) {
+      (*iter) = vil_rgba<vxl_byte>(iter->R(), iter->G(), iter->B(), 255);
+    }
+    vil_image_view_base_sptr toReturn(rgba_view);
+    return toReturn;
+  }
+
+  //else if loaded planes is just one...
+  if (loaded_image->nplanes() == 1)
+  {
+    vcl_cout<<"Preparing grey scale image"<<vcl_endl;
+    vil_image_view<float>* floatimg = new vil_image_view<float>(loaded_image->ni(), loaded_image->nj(), 1);
+    if (vil_image_view<vxl_byte> *img_byte = dynamic_cast<vil_image_view<vxl_byte>*>(loaded_image.ptr()))
+        vil_convert_stretch_range_limited(*img_byte, *floatimg, vxl_byte(0), vxl_byte(255), 0.0f, 1.0f);
+    else if (vil_image_view<unsigned short> *img_byte = dynamic_cast<vil_image_view<unsigned short>*>(loaded_image.ptr()))
+        vil_convert_stretch_range_limited(*img_byte, *floatimg,(unsigned short)28000,(unsigned short)33000,  0.0f, 1.0f); // hardcoded to be fixed.
+        //vil_convert_stretch_range(*img_byte, *floatimg,  0.0f, 1.0f); // hardcoded to be fixed.
+    else {
+        vcl_cerr << "Failed to load image "  << '\n';
+        return 0;
+    }
+    vil_image_view_base_sptr toReturn(floatimg);
+    return toReturn;
+  }
+
+  //otherwise it's messed up, return a null pointer
+  vcl_cerr<<"Failed to recognize input image type " << '\n';
+  return 0;
+}

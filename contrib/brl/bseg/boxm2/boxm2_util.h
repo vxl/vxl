@@ -25,10 +25,12 @@ class boxm2_util
     static vbl_array_2d<vil_image_view<vxl_byte>* >  render_upper_hemisphere(int num_az, 
                                                                              int num_incline, 
                                                                              double radius,
+    
                                                                              unsigned ni,
                                                                              unsigned nj,
                                                                              vgl_box_3d<double> bb);
 
+    static vil_image_view_base_sptr prepare_input_image(vil_image_view_base_sptr loaded_image);
     static vpgl_perspective_camera<double>* construct_camera(double elevation, 
                                                               double azimuth, 
                                                               double radius, 
