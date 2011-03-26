@@ -7,6 +7,7 @@
 #include <boxm2/boxm2_data_base.h>
 #include <vil/vil_save.h>
 #include <vil/vil_math.h>
+#include <vil/vil_transform.h>
 
 #include <boxm2/boxm2_util.h>
 #include <boxm2/cpp/algo/boxm2_render_exp_image_functor.h>
