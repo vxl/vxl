@@ -1,12 +1,11 @@
-// This is brl/bseg/boxm2/ocl/pro/processes/boxm2_cpp_change_detection_process2.cxx
+// This is brl/bseg/boxm2/cpp/pro/processes/boxm2_cpp_change_detection_process2.cxx
+#include <bprb/bprb_func_process.h>
 //:
 // \file
 // \brief  A process for rendering the scene.
 //
 // \author Vishal Jain
 // \date Mar 10, 2011
-
-#include <bprb/bprb_func_process.h>
 
 #include <vcl_fstream.h>
 #include <boxm2/io/boxm2_cache.h>
@@ -82,14 +81,14 @@ bool boxm2_cpp_change_detection_process2(bprb_func_process& pro)
       foundDataType = true;
     }
   }
-  if(!foundDataType) {
+  if (!foundDataType) {
     vcl_cout<<"BOXM2_OCL_RENDER_PROCESS ERROR: scene doesn't have BOXM2_MOG3_GREY or BOXM2_MOG3_GREY_16 data type"<<vcl_endl;
     return false;
   }
 
   vil_image_view_base_sptr in_float_img=boxm2_util::prepare_input_image(input_img);
-  if(  vil_image_view<float> * in_img=dynamic_cast<vil_image_view<float> *> ( in_float_img.ptr()))
-      if(  vil_image_view<float> * exp_img=dynamic_cast<vil_image_view<float> *> ( exp_in_img.ptr()))
+  if (vil_image_view<float> * in_img=dynamic_cast<vil_image_view<float> *> ( in_float_img.ptr()))
+      if (vil_image_view<float> * exp_img=dynamic_cast<vil_image_view<float> *> ( exp_in_img.ptr()))
       {
           //: function call
           vil_image_view<float> * vis_img=new vil_image_view<float>(in_img->ni(),in_img->nj());

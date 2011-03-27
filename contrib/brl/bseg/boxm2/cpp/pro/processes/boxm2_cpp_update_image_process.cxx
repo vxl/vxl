@@ -1,12 +1,11 @@
-// This is brl/bseg/boxm2/ocl/pro/processes/boxm2_cpp_update_image_process.cxx
+// This is brl/bseg/boxm2/cpp/pro/processes/boxm2_cpp_update_image_process.cxx
+#include <bprb/bprb_func_process.h>
 //:
 // \file
 // \brief  A process for updating the scene.
 //
 // \author Vishal Jain
 // \date Mar 10, 2011
-
-#include <bprb/bprb_func_process.h>
 
 #include <vcl_fstream.h>
 #include <boxm2/io/boxm2_cache.h>
@@ -65,7 +64,7 @@ bool boxm2_cpp_update_image_process(bprb_func_process& pro)
     vpgl_camera_double_sptr cam= pro.get_input<vpgl_camera_double_sptr>(i++);
     vil_image_view_base_sptr in_img=pro.get_input<vil_image_view_base_sptr>(i++);
     vil_image_view_base_sptr float_image=boxm2_util::prepare_input_image(in_img);
-    if(vil_image_view<float> * input_image=dynamic_cast<vil_image_view<float> * > (float_image.ptr()))
+    if (vil_image_view<float> * input_image=dynamic_cast<vil_image_view<float> * > (float_image.ptr()))
     {
         bool foundDataType = false;
         vcl_string data_type;
@@ -82,7 +81,7 @@ bool boxm2_cpp_update_image_process(bprb_func_process& pro)
                 foundDataType = true;
             }
         }
-        if(!foundDataType) {
+        if (!foundDataType) {
             vcl_cout<<"BOXM2_OCL_RENDER_PROCESS ERROR: scene doesn't have BOXM2_MOG3_GREY or BOXM2_MOG3_GREY_16 data type"<<vcl_endl;
             return false;
         }
