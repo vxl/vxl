@@ -10,9 +10,5 @@ TARGET_LINK_LIBRARIES(boxm2_cpp boxm2 boxm2_basic boxm2_io  boct brdb vbl_io exp
 # cpp process APIs.
 SUBDIRS(pro)
 
-
 # cpp process APIs.
 SUBDIRS(algo)
-
-# cpp process APIs.
-# SUBDIRS(exe)

@@ -1,5 +1,7 @@
+//:
+// \file
 #include <vcl_queue.h>
-//#include <vcl_cmath.h>
+#include <vcl_cassert.h>
 
 //executable args
 #include <vul/vul_arg.h>
@@ -25,21 +27,23 @@
 #include <boxm/boxm_scene.h>
 #include <boxm/boxm_apm_traits.h>
 
-//: computes the log2 of a number and returns it, 
-// power_of_2 is true if it is a power of two
+//: computes the log2 of a number and returns it.
+// power_of_2 is set to true if \p x is an exact power of two.
+// returns -1 when \p x is zero.
 int mylog2(unsigned x, bool& power_of_2)
 {
   unsigned orig_x = x;
   int l = -1; // mylog2(0) will return -1
   while (x != 0u){
-    x = x >> 1u;
+    x >>= 1u;
     ++l;
   }
-  power_of_2 = true;
   if (orig_x > vcl_pow(2.0,l)) {
     power_of_2 = false;
-    l++;
+    ++l;
   }
+  else
+    power_of_2 = true;
   return l;
 }
 
@@ -48,7 +52,7 @@ template <class T_loc, class T_data>
 void insert(boct_tree<T_loc,T_data>*& tree, boct_tree<T_loc,T_data>*& subtree, vgl_box_3d<double> cell_bb)
 {
   // find the leaf node in the tree to insert subtree
-  boct_tree_cell<T_loc,T_data>* node = tree->locate_point(cell_bb.centroid()); 
+  boct_tree_cell<T_loc,T_data>* node = tree->locate_point(cell_bb.centroid());
   if (!node)
     vcl_cout << "The node COULD not be FOUND" << vcl_endl;
   if (node->children()) {
@@ -60,9 +64,9 @@ void insert(boct_tree<T_loc,T_data>*& tree, boct_tree<T_loc,T_data>*& subtree, v
   node->insert_subtree(sub_root);
 }
 
-//: combine the data values to create a sample 
+//: combine the data values to create a sample
 boxm_sample<BOXM_APM_MOG_GREY> create_sample(float alpha,
-                                             boxm2_data_traits<BOXM2_MOG3_GREY>::datatype data, 
+                                             boxm2_data_traits<BOXM2_MOG3_GREY>::datatype data,
                                              boxm2_data_traits<BOXM2_NUM_OBS>::datatype num_obs)
 {
   float m0=data[0]/255.0;
@@ -76,7 +80,7 @@ boxm_sample<BOXM_APM_MOG_GREY> create_sample(float alpha,
   float w2=0;
   if (w0>0 && w1>0)
     w2=1.0-w0-w1;
-   
+
   unsigned short n0=num_obs[0];
   unsigned short n1=num_obs[1];
   unsigned short n2=num_obs[2];
@@ -84,22 +88,22 @@ boxm_sample<BOXM_APM_MOG_GREY> create_sample(float alpha,
 
   typedef boxm_apm_traits<BOXM_APM_MOG_GREY>::gauss_type_f1 gauss_type_f1;
   typedef boxm_apm_traits<BOXM_APM_MOG_GREY>::mix_gauss_f1_type mix_gauss_f1_type;
-  
- 
-  bsta_gauss_f1 dist0((float)m0, (float)v0);
-  bsta_num_obs<bsta_gauss_f1> num_obs_dist0(dist0, n0); 
-  bsta_gauss_f1 dist1((float)m1, (float)v1);
-  bsta_num_obs<bsta_gauss_f1> num_obs_dist1(dist1, n1); 
-  bsta_gauss_f1 dist2((float)m2, (float)v2);
-  bsta_num_obs<bsta_gauss_f1> num_obs_dist2(dist2, n2); 
 
-  bsta_mixture_fixed<gauss_type_f1, 3>  mf; 
+
+  bsta_gauss_f1 dist0((float)m0, (float)v0);
+  bsta_num_obs<bsta_gauss_f1> num_obs_dist0(dist0, n0);
+  bsta_gauss_f1 dist1((float)m1, (float)v1);
+  bsta_num_obs<bsta_gauss_f1> num_obs_dist1(dist1, n1);
+  bsta_gauss_f1 dist2((float)m2, (float)v2);
+  bsta_num_obs<bsta_gauss_f1> num_obs_dist2(dist2, n2);
+
+  bsta_mixture_fixed<gauss_type_f1, 3>  mf;
   mf.insert(num_obs_dist0,w0);
   mf.insert(num_obs_dist1,w1);
   mf.insert(num_obs_dist2,w2);
 
   bsta_num_obs<bsta_mixture_fixed<gauss_type_f1, 3> > obs(mf,nmix/100.0);
-  
+
   boxm_sample<BOXM_APM_MOG_GREY> sample(alpha, obs);
   return sample;
 }
@@ -143,7 +147,7 @@ void convert_tree(boct_bit_tree2 const& bit_tree, boct_tree<T_loc,T_data>*& tree
         boct_tree_cell<T_loc,T_data>* ptr = Q.front();
         ptr->set_data(sample);
         Q.pop();
-        if (bit_tree.bit_at(i)) {  
+        if (bit_tree.bit_at(i)) {
           ptr->split();
           boct_tree_cell<T_loc,T_data>* children = ptr->children();
           for (unsigned j=0; j<8; j++) {
@@ -154,7 +158,7 @@ void convert_tree(boct_bit_tree2 const& bit_tree, boct_tree<T_loc,T_data>*& tree
       }
     }
   }
-  
+
   // some of the leaf nodes are still in the queue, fill them with data
   while (!Q.empty()){
     if (data_idx > bit_tree.get_data_index(0,false)+585)
@@ -170,7 +174,7 @@ void convert_tree(boct_bit_tree2 const& bit_tree, boct_tree<T_loc,T_data>*& tree
   }
 }
 
-int main(int argc, char** argv) 
+int main(int argc, char** argv)
 {
   vcl_cout<<"Converting boxm2 scene to boxm Scene"<<vcl_endl;
   vul_arg<vcl_string> boxm2_file("-scene", "scene filename", "");
@@ -179,8 +183,8 @@ int main(int argc, char** argv)
 
   boxm2_scene scene2(boxm2_file()); //"C:/data/boxm2/downtown/scene.xml");
 
-  //initialize a block and data cache  
-  boxm2_lru_cache::create(&scene2); 
+  //initialize a block and data cache
+  boxm2_lru_cache::create(&scene2);
   boxm2_cache* cache = boxm2_cache::instance();
 
   bgeo_lvcs lvcs = scene2.lvcs();
@@ -197,7 +201,7 @@ int main(int argc, char** argv)
   vcl_string scene_path=boxm_dir(); //"C:/data/boxm2/downtown/boxm_scene";
   scene.set_paths(scene_path,"block");
   scene.set_appearance_model(BOXM_APM_MOG_GREY);
-    
+
   int x_dim;
   while (iter != blocks.end()) {
     boxm2_block_metadata metadata = iter ->second;
@@ -206,7 +210,7 @@ int main(int argc, char** argv)
     vcl_cout<<" DATA buffers "<< block->num_buffers()<<vcl_endl;
     boxm2_data_base * data_base = cache->get_data_base(iter->first,boxm2_data_traits<BOXM2_NUM_OBS>::prefix());
     boxm2_data<BOXM2_NUM_OBS> *num_obs=new boxm2_data<BOXM2_NUM_OBS>(data_base->data_buffer(),data_base->buffer_length(),data_base->block_id());
-      
+
     boxm2_data_base * mog3_data_base = cache->get_data_base(iter->first,boxm2_data_traits<BOXM2_MOG3_GREY>::prefix());
     boxm2_data<BOXM2_MOG3_GREY> *mog3_data=new boxm2_data<BOXM2_MOG3_GREY>(mog3_data_base->data_buffer(),mog3_data_base->buffer_length(),mog3_data_base->block_id());
     boxm2_data_base * alpha_data_base  = cache->get_data_base(iter->first,boxm2_data_traits<BOXM2_ALPHA>::prefix());
@@ -220,7 +224,7 @@ int main(int argc, char** argv)
     bool equal = (dim.x()==dim.y());
     equal = equal && (dim.x()==dim.z());
     assert(equal);
-    
+
     // the block dimensions should be the power of 2 for octree creation
     bool pow_of_2;
     x_dim = mylog2((double)dim.x(),pow_of_2);
@@ -242,14 +246,14 @@ int main(int argc, char** argv)
         for (unsigned x=0; x<dim.x(); x++) {
           boxm2_block::uchar16 tree = block->trees()[x][y][z];
           boct_bit_tree2 bit_tree((unsigned char*)tree.data_block());
-          if (bit_tree.num_cells() >= 1) {  
+          if (bit_tree.num_cells() >= 1) {
             tree_type* octree;
             convert_tree(bit_tree,octree,alpha_data,mog3_data,num_obs);
             int n1=bit_tree.num_cells();
             int n2=octree->all_cells().size();
             if (n1 != n2) {
-              vcl_cout << x << "," << y << "," << z << vcl_endl;
-              vcl_cout << "ERROR! The converted tree is not right, should have " << n1 << " nodes instead of " << n2 << vcl_endl;
+              vcl_cout << x << ',' << y << ',' << z << '\n'
+                       << "ERROR! The converted tree is not right, should have " << n1 << " nodes instead of " << n2 << vcl_endl;
             }
 
             // all three dimensions should be same now, so we can use the one value
