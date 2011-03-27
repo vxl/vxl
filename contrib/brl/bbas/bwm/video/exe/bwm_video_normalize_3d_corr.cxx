@@ -21,7 +21,6 @@
 #include <bwm/video/bwm_video_corr.h>
 #include <bwm/bwm_observer_cam.h>
 #include <vpgl/vpgl_perspective_camera.h>
-#include <vil/vil_convert.h>
 
 float avg_intensity(vil_image_view<float> & img, int rx, int ry, int u, int v)
 {
