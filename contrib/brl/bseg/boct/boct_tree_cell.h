@@ -2,7 +2,7 @@
 #define boct_tree_cell_h_
 //:
 // \file
-// \brief  Generic octree cell, traversal operations as described in
+// \brief  Generic octree cell, traversal operations as described in Frisken & Perry
 //         [Simple and Efficient Traversal Methods for Quadtrees and Octrees/ Frisken, Perry 2002]
 //
 // \author Gamze Tunali/Vishal Jain
@@ -49,7 +49,7 @@ class boct_tree_cell
 
   //: Constructor from locational code and octree cell
   boct_tree_cell<T_loc,T_data>(const boct_loc_code<T_loc>& code, boct_tree_cell<T_loc,T_data>* p)
-  : code_(code), children_(0), parent_(p), vis_node_(0) 
+  : code_(code), children_(0), parent_(p), vis_node_(0)
   {
 #ifdef DEBUG_LEAKS
     n_created_++;
@@ -60,8 +60,9 @@ class boct_tree_cell
   boct_tree_cell<T_loc,T_data>(const boct_loc_code<T_loc>& code);
 
 #ifdef DEBUG_LEAKS
-//It is not clear what should be done here. Shallow copy of all children? What about the parent? Setting it to Null causes chrashes
+//It is not clear what should be done here. Shallow copy of all children? What about the parent? Setting it to Null causes crashes
 //But it's not good that we are leaving it up to the compiler to manage our resources.... this is mainly used by STL containers
+
   //: Copy constructor
   boct_tree_cell<T_loc,T_data>(const boct_tree_cell &that)
   {
@@ -73,13 +74,13 @@ class boct_tree_cell
     n_created_++;
   }
 #endif
- 
+
   ~boct_tree_cell<T_loc,T_data>();
 
   //: Creates a new cell with the same data
   boct_tree_cell<T_loc,T_data>* clone(boct_tree_cell<T_loc,T_data>* parent);
 
-  //Clones a cell, shifting its location code according to shift_code. This is useful when creating subtrees.
+  //: Clones a cell, shifting its location code according to shift_code. This is useful when creating subtrees.
   boct_tree_cell<T_loc,T_data>* clone(boct_tree_cell<T_loc,T_data>* parent, boct_loc_code<T_loc> *shift_code);
 
   //: Clones a cell if it intersects a region
@@ -158,8 +159,8 @@ class boct_tree_cell
   void set_data(T_data const& data) {data_=data; }
   T_data data() {return data_; }
 
-  //: uding the parent node's location code, updates the location code of a child
-  // this is used for nodes inserted (insert_subtree) later after the main tree is 
+  //: given the parent node's location code, updates the location code of a child
+  // This is used for nodes inserted (insert_subtree) later, after the main tree is
   // already constructed
   void update_code(unsigned i, boct_tree_cell<T_loc,T_data>& parent);
 
@@ -172,8 +173,8 @@ class boct_tree_cell
   // splits and puts the data value new_data at the newly created cells
   bool split(T_data new_data);
 
-  //: inserts a tree(already created in the same exact cell boundaries) at a leaf node
-  // subtree does not contain any children anymore after the insertion, it's children 
+  //: inserts a tree (already created in the same exact cell boundaries) at a leaf node.
+  // Subtree does not contain any children anymore after the insertion, its children
   // are inserted into this tree and detached from it
   bool insert_subtree( boct_tree_cell<T_loc,T_data>*& subtree);
 
@@ -186,14 +187,14 @@ class boct_tree_cell
   boct_loc_code<T_loc> code_;
 
   boct_tree_cell<T_loc,T_data>* children_;
-  
+
 #ifdef DEBUG_LEAKS
-  static long unsigned nleaks() { 
-    if(n_created_ >= n_destroyed_) 
-      return (n_created_ - n_destroyed_);
+  static long unsigned nleaks() {
+    if (n_created_ >= n_destroyed_)
+      return n_created_-n_destroyed_;
     else {
-    vcl_cout << "n_destroyed is greater: " << n_created_ << ", " <<n_destroyed_ << vcl_endl;
-    return (n_destroyed_-n_created_);
+      vcl_cout << "n_destroyed="<<n_destroyed_<<" is greater than n_created=" << n_created_ << vcl_endl;
+      return n_destroyed_-n_created_;
     }
   }
 #endif
@@ -205,13 +206,11 @@ class boct_tree_cell
   T_data data_;
 
   boct_cell_vis_graph_node<T_loc,T_data>* vis_node_;
-  
+
 #ifdef DEBUG_LEAKS
   static long unsigned n_created_;
   static long unsigned n_destroyed_;
 #endif
-
-  
 };
 
 template<class T_loc,class T_data>
