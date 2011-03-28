@@ -23,6 +23,9 @@ SUBDIRS(pro)
 #exe
 SUBDIRS(exe)
 
+#algo
+SUBDIRS(algo)
+
 #tests
 SUBDIRS(tests)
 
