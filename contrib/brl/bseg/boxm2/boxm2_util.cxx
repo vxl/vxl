@@ -194,6 +194,32 @@ boxm2_util::construct_camera( double elevation,
 }
 
 
+//: searches through the list of perspective cameras and returns a pointer to
+//  the one that most closely aligns with the normal
+unsigned boxm2_util::find_nearest_cam(vgl_vector_3d<double>& normal, 
+                                      vcl_vector<vpgl_perspective_camera<double>* >& cams)
+{
+  if(cams.empty()) {
+    vcl_cout<<"boxm2_util::find_nearest_cam camera list empty!, returning null"<<vcl_endl;
+    return 0; 
+  }
+  
+  //find minimal dot product amongst cams/images
+  double minDot = 10e20; 
+  unsigned minCam = 0; 
+  for(int i=0; i<cams.size(); ++i) {
+    double dp = dot_product( cams[i]->principal_axis(), normal ); 
+    if(dp < minDot) {
+      minDot = dp; 
+      minCam = i; 
+    }
+  }
+  
+  //return the min cam
+  return minCam;
+}
+                                                      
+
 bool boxm2_util::copy_file(vcl_string file, vcl_string dest)
 {
   vcl_string line;
