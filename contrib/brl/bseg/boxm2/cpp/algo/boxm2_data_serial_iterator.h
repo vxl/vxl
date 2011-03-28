@@ -7,12 +7,14 @@
 #include <boxm2/boxm2_data.h>
 
 template <class F>
-void boxm2_data_serial_iterator(boxm2_block * blk_sptr,
+void boxm2_data_serial_iterator(int data_buff_length,
                                 F functor)
 {
-    for (int i=0; i<blk_sptr->num_buffers()*65536; ++i)
+    for (int i=0; i<data_buff_length; ++i)
         functor.process_cell(i);
 }
+
+
 
 
 #endif // boxm2_data_serial_iterator_h_
