@@ -85,13 +85,13 @@ void boxm2_cast_ray_function(vgl_ray_3d<float> & ray,
 
     boct_bit_tree2 bit_tree((unsigned char*)tree.data_block(),linfo->root_level+1);
 
-//    //local ray origin is entry point (point should be in [0,1])
-//    //(note that cell_min is the current block index at this point)
-//    //setting local_ray_o to block_pos allows ttree to start at 0
+    //local ray origin is entry point (point should be in [0,1])
+    //(note that cell_min is the current block index at this point)
+    //setting local_ray_o to block_pos allows ttree to start at 0
     float lrayx = (posx - cell_minx);
     float lrayy = (posy - cell_miny);
     float lrayz = (posz - cell_minz);
-//
+
     //get scene level t exit value.  check to make sure that the ray is progressing.
     //When rays are close to axis aligned, t values found for intersection become ill-defined, causing an infinite block loop
     cell_minx = (ray_dx > 0) ? cell_minx+1.0f : cell_minx;
@@ -139,10 +139,7 @@ void boxm2_cast_ray_function(vgl_ray_3d<float> & ray,
       functor.step_cell(d,data_offset,i,j);
     }
 
-    //--------------------------------------------------------------------------
-    // finding the next block (using exit point already found before tree loop)
-    //--------------------------------------------------------------------------
-    //scale texit back up
+   //scale texit back up
     texit = texit + tblock + BLOCK_EPSILON;
     tblock = texit;
   }
