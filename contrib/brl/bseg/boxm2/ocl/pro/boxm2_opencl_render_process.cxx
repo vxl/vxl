@@ -111,7 +111,7 @@ bool boxm2_opencl_render_process::execute(vcl_vector<brdb_value_sptr>& input, vc
   bool foundDataType = false;
   vcl_vector<vcl_string> apps = scene->appearances(); 
   for(int i=0; i<apps.size(); ++i) {
-    if( apps[i] == boxm2_data_traits<BOXM2_MOG3_GREY>::prefix() || apps[i] == boxm2_data_traits<BOXM2_MOG3_GREY>::prefix() ) 
+    if( apps[i] == boxm2_data_traits<BOXM2_MOG3_GREY>::prefix() || apps[i] == boxm2_data_traits<BOXM2_MOG3_GREY_16>::prefix() ) 
     {
       data_type_ = apps[i]; 
       foundDataType = true;

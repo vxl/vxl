@@ -20,7 +20,7 @@ SET(boxm2_ocl_pro_sources
 AUX_SOURCE_DIRECTORY(processes boxm2_ocl_pro_sources)
 
 ADD_LIBRARY(boxm2_ocl_pro  ${boxm2_ocl_pro_sources})
-TARGET_LINK_LIBRARIES(boxm2_ocl_pro boxm2_ocl boct brdb vbl_io expatpp vpgl vgl vgl_xio vbl vsl vcl)
+TARGET_LINK_LIBRARIES(boxm2_ocl_pro boxm2_ocl_algo boct brdb vbl_io expatpp vpgl vgl vgl_xio vbl vsl vcl)
 
 
 #tests

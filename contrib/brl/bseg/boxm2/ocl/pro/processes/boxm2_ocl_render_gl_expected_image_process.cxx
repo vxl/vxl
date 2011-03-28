@@ -1,4 +1,4 @@
-// This is brl/bseg/boxm2/ocl/pro/processes/boxm2_ocl_render_expected_image_process.cxx
+// This is brl/bseg/boxm2/ocl/pro/processes/boxm2_ocl_render_gl_expected_image_process.cxx
 //:
 // \file
 // \brief  A process for rendering the scene.
@@ -28,10 +28,10 @@
 
 
 
-namespace boxm2_ocl_render_expected_image_process_globals
+namespace boxm2_ocl_render_gl_expected_image_process_globals
 {
-  const unsigned n_inputs_ = 6;
-  const unsigned n_outputs_ = 1;
+  const unsigned n_inputs_ = 8 ;
+  const unsigned n_outputs_ = 0;
   vcl_size_t lthreads[2]={8,8};
 
   static vcl_map<vcl_string,vcl_vector<bocl_kernel*> > kernels;
@@ -76,8 +76,8 @@ namespace boxm2_ocl_render_expected_image_process_globals
     normalize_render_kernel->create_kernel( &device->context(),
                                             device->device_id(),
                                             norm_src_paths,
-                                            "normalize_render_kernel",   //kernel name
-                                            options,              //options
+                                            "normalize_render_kernel_gl",   //kernel name
+                                            " -D NORMALIZE_RENDER_GL ",              //options
                                             "normalize render kernel"); //kernel identifier (for error checking)
 
 
@@ -86,9 +86,9 @@ namespace boxm2_ocl_render_expected_image_process_globals
 
 }
 
-bool boxm2_ocl_render_expected_image_process_cons(bprb_func_process& pro)
+bool boxm2_ocl_render_gl_expected_image_process_cons(bprb_func_process& pro)
 {
-  using namespace boxm2_ocl_render_expected_image_process_globals;
+  using namespace boxm2_ocl_render_gl_expected_image_process_globals;
 
   //process takes 1 input
   vcl_vector<vcl_string> input_types_(n_inputs_);
@@ -98,19 +98,18 @@ bool boxm2_ocl_render_expected_image_process_cons(bprb_func_process& pro)
   input_types_[3] = "vpgl_camera_double_sptr";
   input_types_[4] = "unsigned";
   input_types_[5] = "unsigned";
+  input_types_[6] = "bocl_mem_sptr"; // exp image buffer;
+  input_types_[7] = "bocl_mem_sptr"; // exp image dimensions buffer;
 
 
-  // process has 1 output:
-  // output[0]: scene sptr
-  vcl_vector<vcl_string>  output_types_(n_outputs_);
-  output_types_[0] = "vil_image_view_base_sptr";
+  vcl_vector<vcl_string> output_types_(n_outputs_);
 
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 }
 
-bool boxm2_ocl_render_expected_image_process(bprb_func_process& pro)
+bool boxm2_ocl_render_gl_expected_image_process(bprb_func_process& pro)
 {
-  using namespace boxm2_ocl_render_expected_image_process_globals;
+  using namespace boxm2_ocl_render_gl_expected_image_process_globals;
 
   if ( pro.n_inputs() < n_inputs_ ){
     vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
@@ -125,6 +124,8 @@ bool boxm2_ocl_render_expected_image_process(bprb_func_process& pro)
   vpgl_camera_double_sptr cam= pro.get_input<vpgl_camera_double_sptr>(i++);
   unsigned ni=pro.get_input<unsigned>(i++);
   unsigned nj=pro.get_input<unsigned>(i++);
+  bocl_mem_sptr exp_image =pro.get_input<bocl_mem_sptr>(i++);
+  bocl_mem_sptr exp_img_dim =pro.get_input<bocl_mem_sptr>(i++);
 
   bool foundDataType = false;
   vcl_string data_type,options;
@@ -166,33 +167,14 @@ bool boxm2_ocl_render_expected_image_process(bprb_func_process& pro)
 
   unsigned cl_ni=RoundUp(ni,lthreads[0]);
   unsigned cl_nj=RoundUp(nj,lthreads[1]);
-  float* buff = new float[cl_ni*cl_nj];
-  for (unsigned i=0;i<cl_ni*cl_nj;i++) buff[i]=0.0f;
-
-  bocl_mem_sptr exp_image=new bocl_mem(device->context(),buff,cl_ni*cl_nj*sizeof(float),"exp image buffer");
-  exp_image->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
-
-  int img_dim_buff[4];
-  img_dim_buff[0] = 0;   img_dim_buff[2] = ni;
-  img_dim_buff[1] = 0;   img_dim_buff[3] = nj;
-  bocl_mem_sptr exp_img_dim=new bocl_mem(device->context(), img_dim_buff, sizeof(int)*4, "image dims");
-  exp_img_dim->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
   //: run expected image function
   render_expected_image(device,scene,opencl_cache,cam,
                         queue,exp_image,exp_img_dim,
                         identifier,data_type,kernels,lthreads,cl_ni,cl_nj);
   //: read out expected image
-  exp_image->read_to_buffer(queue);
-  vil_image_view<float>* exp_img_out=new vil_image_view<float>(ni,nj);
-
-  for (unsigned c=0;c<nj;c++)
-    for (unsigned r=0;r<ni;r++)
-      (*exp_img_out)(r,c)=buff[c*cl_ni+r];
-
   clReleaseCommandQueue(queue);
   i=0;
   // store scene smaprt pointer
-  pro.set_output_val<vil_image_view_base_sptr>(i++, exp_img_out);
   return true;
 }

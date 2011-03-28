@@ -71,6 +71,8 @@ namespace boxm2_ocl_refine_process_globals
             options= "-D MOG_TYPE_6 ";break;
         case 8:
             options= "-D MOG_TYPE_8 ";break;
+        case 16:
+            options= "-D MOG_TYPE_16 ";break;
         default:
             break;
         }

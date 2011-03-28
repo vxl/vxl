@@ -388,6 +388,7 @@ bool boxm2_ocl_update_process(bprb_func_process& pro)
         clFinish(queue);
     }
   }
+  vcl_cout<<"Gpu time "<<gpu_time<<" transfer time "<<transfer_time<<vcl_endl;
   clReleaseCommandQueue(queue);
   return true;
 }
