@@ -53,6 +53,7 @@ void test_shape_model()
 
   TEST("N.Points",shape_model.size(),4);
   TEST("N.Modes",shape_model.n_modes(),1);
+  TEST_NEAR("Mean length",shape_model.mean().magnitude(),1,1e-6);
 
   msm_shape_instance instance(shape_model);
   instance.fit_to_points(shapes[2]);
@@ -70,6 +71,7 @@ void test_shape_model()
   for (unsigned i=0;i<4;++i) wt_mat[i]*=(1+i);
   instance.fit_to_points_wt_mat(shapes[4],wt_mat);
   TEST("Wt.Mat.Fit is accurate",instance.points(),shapes[4]);
+
 }
 
 TESTMAIN(test_shape_model);

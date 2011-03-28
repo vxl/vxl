@@ -20,6 +20,7 @@
 //=======================================================================
 
 msm_shape_instance::msm_shape_instance()
+  : model_(0)
 {
 }
 
@@ -104,6 +105,7 @@ void msm_shape_instance::fit_to_points(const msm_points& pts,
   // Catch case when fitting to self
   if (&pts == &points_) return;
 
+/*
   // Estimate pose from mean model points to target points
   // Assuming that the modes are orthogonal to the mean,
   // and to the rotation vector for the mean,
@@ -119,6 +121,30 @@ void msm_shape_instance::fit_to_points(const msm_points& pts,
 
   ref_shape_.fit_to_points(tmp_points_,rv);
   points_valid_=false;
+*/
+  vnl_vector<double> pose0 = pose_;
+
+  // Estimate pose from current model points to target points
+  model().aligner().calc_transform(model_points(),pts,pose_);
+
+  double dp=1.0;
+  while (dp>1e-6)
+  {
+    // Transform pts into model frame with these parameters
+    vnl_vector<double> pose_inv = model().aligner().inverse(pose_);
+    model().aligner().apply_transform(pts,pose_inv,tmp_points_);
+
+    double s = model().aligner().scale(pose_);
+    double rv=res_var/(s*s);  // Scale variance into ref frame.
+
+    ref_shape_.fit_to_points(tmp_points_,rv);
+    points_valid_=false;
+
+    // Check that the pose has converged - if not repeat the loop.
+    pose0 = pose_;
+    model().aligner().calc_transform(model_points(),pts,pose_);
+    dp = (pose_-pose0).magnitude();
+  }
 }
 
 //: Finds parameters and pose to best match to points
@@ -130,6 +156,7 @@ void msm_shape_instance::fit_to_points_wt(const msm_points& pts,
   if (&pts == &points_) return;
 
   vnl_vector<double> pose0 = pose_;
+  vnl_vector<double> ref_wts;
 
   // Estimate pose from current model points to target points
   model().aligner().calc_transform_wt(model_points(),pts,wts,pose_);
@@ -141,7 +168,20 @@ void msm_shape_instance::fit_to_points_wt(const msm_points& pts,
     vnl_vector<double> pose_inv = model().aligner().inverse(pose_);
     model().aligner().apply_transform(pts,pose_inv,tmp_points_);
 
-    ref_shape_.fit_to_points_wt(tmp_points_,wts);
+    if (ref_shape_.use_prior())
+    {
+      // Need to scale the weights into the reference frame
+      double s = model().aligner().scale(pose_);
+      ref_wts=wts/(s*s);
+      ref_shape_.fit_to_points_wt(tmp_points_,ref_wts);
+    }
+    else
+    {
+      // Absolute value of weights not important, only relative values
+      // So no need to scale them.
+      ref_shape_.fit_to_points_wt(tmp_points_,wts);
+    }
+
     points_valid_=false;
 
     // Check that the pose has converged - if not repeat the loop.
@@ -180,7 +220,7 @@ void msm_shape_instance::fit_to_points_wt_mat(const msm_points& pts,
     // error is (A*dx)'*W*(A*dx), thus:
     // wt_mat2[i] = A'*wt_mat[i]*A
     vcl_vector<msm_wt_mat_2d> wt_mat2(n);
-    model().aligner().transform_wt_mat(wt_mat,pose_,wt_mat2);
+    model().aligner().transform_wt_mat(wt_mat,pose_inv,wt_mat2);
 
     ref_shape_.fit_to_points_wt_mat(tmp_points_,wt_mat2);
     points_valid_=false;

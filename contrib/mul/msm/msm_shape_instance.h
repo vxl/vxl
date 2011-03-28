@@ -104,9 +104,12 @@ class msm_shape_instance
   void fit_to_points(const msm_points& points, double pt_var=0);
 
   //: Finds parameters and pose to best match to points
-  //  Errors on point i are weighted by wts[i]
+  //  Errors on point i are weighted by wts[i].
+  //  wts[i] is treated as the inverse of the error variance of
+  //  point i, in the target frame.
   void fit_to_points_wt(const msm_points& points,
                         const vnl_vector<double>& wts);
+
   //: Finds parameters and pose to best match to points
   //  Errors on point i are weighted by wt_mat[i] in target frame
   void fit_to_points_wt_mat(const msm_points& pts,

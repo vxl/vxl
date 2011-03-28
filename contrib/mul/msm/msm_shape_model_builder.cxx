@@ -156,8 +156,8 @@ void msm_shape_model_builder::print_summary(vcl_ostream& os) const
 void msm_shape_model_builder::b_write(vsl_b_ostream& bfs) const
 {
   vsl_b_write(bfs,version_no());
-  vsl_b_write(bfs,param_limiter_);
   vsl_b_write(bfs,aligner_);
+  vsl_b_write(bfs,param_limiter_);
   vsl_b_write(bfs,min_modes_);
   vsl_b_write(bfs,max_modes_);
   vsl_b_write(bfs,var_prop_);
