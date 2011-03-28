@@ -116,6 +116,9 @@ class imesh_mesh
 
   //: Set the texture coordinates
   void set_tex_coords(const vcl_vector<vgl_point_2d<double> >& tc);
+  
+  //: set the texture sources
+  void set_tex_sources(const vcl_vector<vcl_string>& ts) { tex_sources_ = ts; }
 
   //: Return a vector indicating which faces have texture
   const vcl_vector<bool>& valid_tex_faces() const { return valid_tex_faces_; }
@@ -139,6 +142,10 @@ class imesh_mesh
 
   //: vector of texture coordinates
   vcl_vector<vgl_point_2d<double> > tex_coords_;
+  
+  //: vector of texture sources
+  vcl_vector<vcl_string> tex_sources_; 
+  
   //: indicate which faces have texture data
   vcl_vector<bool> valid_tex_faces_;
   //: the type of texture coordinates

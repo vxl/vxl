@@ -7,6 +7,7 @@
 #include <vcl_sstream.h>
 #include <vcl_limits.h>
 #include <vul/vul_file.h>
+#include <vgl/vgl_point_2d.h>
 
 
 //: Read a mesh from a file, determine type from extension
@@ -553,6 +554,7 @@ void imesh_write_kml_collada(vcl_ostream& os, const imesh_mesh& mesh)
      << "  </scene>\n"
      << "</COLLADA>\n";
 }
+
 void imesh_write_vrml(vcl_ostream& os, const imesh_mesh& mesh)
 {
   // get mesh faces as triangles
@@ -573,6 +575,16 @@ void imesh_write_vrml(vcl_ostream& os, const imesh_mesh& mesh)
   const unsigned int nfaces = tris.size();
   os << "#VRML V2.0 utf8\n\n";
   os << "Shape {\n";
+  
+  //write appearance
+  os << "  appearance Appearance { \n "
+     << "    material Material{} \n"
+     << "    texture ImageTexture { \n"
+     << "      url \"exp.png\" \n"
+     << "    } \n"
+     << "  } \n"; 
+  
+  //write coordinates in 2 or 3d 
   os << " geometry IndexedFaceSet\n";
   os << "  { \n";
   os << "   coord Coordinate{\n";
@@ -580,25 +592,64 @@ void imesh_write_vrml(vcl_ostream& os, const imesh_mesh& mesh)
   if(d == 2){
     const imesh_vertex_array<2>& verts2= mesh.vertices<2>();
     for(unsigned i=0;i<verts2.size();++i) 
-      os << verts2[i][0] << ' ' << verts2[i][1] << ' ' << 0.0 << '\n';
+      os << "    " << verts2[i][0] << ' ' << verts2[i][1] << ' ' << 0.0 << '\n';
   }else{
     const imesh_vertex_array<3>& verts3= mesh.vertices<3>();
     for(unsigned i=0;i<verts3.size();++i) 
-      os << verts3[i][0] << ' ' << verts3[i][1] << ' ' << verts3[i][2] << '\n';
+      os << "    " << verts3[i][0] << ' ' << verts3[i][1] << ' ' << verts3[i][2] << '\n';
   }
   os << "    ]} \n";
+  
+  //write faces (all triangles)
   os << "  coordIndex [ \n";
-
-  for(unsigned i=0;i<nfaces;++i)
-    os << tris[i][0] << ' ' << tris[i][1] 
-  << ' ' << tris[i][2] << ' ' << -1 << '\n';
-
+  for(unsigned i=0;i<nfaces;++i) {
+    os << "    "
+       << tris[i][0] << ' ' 
+       << tris[i][1] << ' ' 
+       << tris[i][2] << ' ' 
+       << -1 << '\n';
+  }
   os << "  ]\n";
-  os << "  colorPerVertex FALSE\n";
-  os << "  color Color {\n";
-  os << "   color [ ]\n";
-  os << "  }\n";
-  os << "  colorIndex [ ]\n";
+  
+  //write texture coordinates 
+  if(mesh.has_tex_coords() == imesh_mesh::TEX_COORD_ON_VERT) {
+    os << " texCoord TextureCoordinate { \n "
+       << "   point [ \n "; 
+    
+    //write tex coordinates (should be same number as vertices above)
+    const vcl_vector<vgl_point_2d<double> >& tc = mesh.tex_coords();
+    for(int i=0; i<tc.size(); ++i) 
+      os << "    " << tc[i].x() << ' ' << tc[i].y() << ",\n"; 
+    
+    //close texture coordinates 
+    os << "    ]} \n";
+
+    //write face mapping again 
+    os << "   texCoordIndex [ \n";
+    for(unsigned i=0;i<nfaces;++i) {
+      os << "    "
+         << tris[i][0] << ' ' 
+         << tris[i][1] << ' ' 
+         << tris[i][2] << ' ' 
+         << -1 << '\n';
+    }
+    os << "  ]\n";
+  }
+
+  //
+  os << "solid TRUE\n"
+     << "convex FALSE\n"
+     << "creaseAngle 0\n"; 
+  
+  //os << "  colorPerVertex FALSE\n";
+  //os << "  color Color {\n";
+  //os << "   color [ ]\n";
+  //os << "  }\n";
+  //os << "  colorIndex [ ]\n";
+  
+  //close geometry indexed face set
   os << " } \n";         
+  
+  //close shape
   os << "} \n"; 
 }
