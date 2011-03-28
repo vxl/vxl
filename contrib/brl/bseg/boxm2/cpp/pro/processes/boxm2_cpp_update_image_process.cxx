@@ -86,7 +86,6 @@ bool boxm2_cpp_update_image_process(bprb_func_process& pro)
             return false;
         }
         vcl_vector<boxm2_block_id> vis_order=scene->get_vis_blocks(reinterpret_cast<vpgl_perspective_camera<double>*>(cam.ptr()));
-
         if (vis_order.empty())
         {
             vcl_cout<<" None of the blocks are visible from this viewpoint"<<vcl_endl;
@@ -106,13 +105,13 @@ bool boxm2_cpp_update_image_process(bprb_func_process& pro)
 
         proc_norm_img.fill(0.0f);
 
-        for (unsigned int i=0;i<num_passes;i++)
+        for (unsigned int pass_no=0;pass_no<num_passes;pass_no++)
         {
             vcl_vector<boxm2_block_id>::iterator id;
             pre_img.fill(0.0f);
             vis_img.fill(1.0f);
 
-            vcl_cout<<"Pass "<<i<<' ';
+            vcl_cout<<"Pass "<<pass_no<<' ';
             for (id = vis_order.begin(); id != vis_order.end(); ++id)
             {
                 vcl_cout<<"Block id "<<(*id)<<' ';
@@ -127,7 +126,7 @@ bool boxm2_cpp_update_image_process(bprb_func_process& pro)
                 boxm2_scene_info_wrapper *scene_info_wrapper=new boxm2_scene_info_wrapper();
                 scene_info_wrapper->info=scene->get_blk_metadata(*id);
                 //pass 0
-                if (i==0)
+                if (pass_no==0)
                 {
                     pass0.init_data(datas,input_image);
                     success=success && cast_ray_per_block<boxm2_update_pass0_functor>(pass0,
@@ -138,28 +137,29 @@ bool boxm2_cpp_update_image_process(bprb_func_process& pro)
                         input_image->nj());
                 }
                 //pass 1
-                else if (i==1)
+                else if (pass_no==1)
                 {
                     pass1.init_data(datas,&pre_img,&vis_img);
-                    success=success && cast_ray_per_block<boxm2_update_pass1_functor>(pass1,
-                        scene_info_wrapper->info,
-                        blk,
-                        cam,
-                        input_image->ni(),
-                        input_image->nj());
+                    success=success && 
+                            cast_ray_per_block<boxm2_update_pass1_functor>(pass1,
+                                                                           scene_info_wrapper->info,
+                                                                           blk,
+                                                                           cam,
+                                                                           input_image->ni(),
+                                                                           input_image->nj());
                 }
-                else if (i==2)
+                else if (pass_no==2)
                 {
                     pass2.init_data(datas,&pre_img,&vis_img, & proc_norm_img);
                     success=success && cast_ray_per_block<boxm2_update_pass2_functor>(pass2,
-                        scene_info_wrapper->info,
-                        blk,
-                        cam,
-                        input_image->ni(),
-                        input_image->nj());
+                                                                                      scene_info_wrapper->info,
+                                                                                      blk,
+                                                                                      cam,
+                                                                                      input_image->ni(),
+                                                                                      input_image->nj());
                 }
             }
-            if (i==1)
+            if (pass_no==1)
                 vil_math_image_sum<float,float,float>(pre_img,vis_img,proc_norm_img);
             vcl_cout<<vcl_endl;
         }
@@ -178,8 +178,9 @@ bool boxm2_cpp_update_image_process(bprb_func_process& pro)
             datas.push_back(nobs);
             boxm2_update_data_functor data_functor;
             data_functor.init_data(datas, float(blk->sub_block_dim().x()), blk->max_level());
-
-            boxm2_data_serial_iterator<boxm2_update_data_functor>(blk,data_functor);
+            int alphaTypeSize      = boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
+            int data_buff_length = (int) (alph->buffer_length()/alphaTypeSize);
+            boxm2_data_serial_iterator<boxm2_update_data_functor>(data_buff_length,data_functor);
         }
         return true;
     }
