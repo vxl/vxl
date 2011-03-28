@@ -52,7 +52,21 @@ bool boxm2_save_data_process(bprb_func_process& pro)
     boxm2_block_id id = iter->first;
     boxm2_sio_mgr::save_block(scene->data_path(), cache->get_block(id));
     boxm2_sio_mgr::save_block_data(scene->data_path(), id, cache->get_data<BOXM2_ALPHA>(id) );
-    boxm2_sio_mgr::save_block_data(scene->data_path(), id, cache->get_data<BOXM2_MOG3_GREY>(id) );
+    vcl_vector<vcl_string> apps = scene->appearances();
+    for(unsigned j=0;j<apps.size();j++)
+    {
+
+        if(apps[j]== boxm2_data_traits<BOXM2_MOG3_GREY>::prefix() )
+           boxm2_sio_mgr::save_block_data(scene->data_path(), id, cache->get_data<BOXM2_MOG3_GREY>(id) );
+        else if(apps[j]== boxm2_data_traits<BOXM2_MOG3_GREY_16>::prefix())
+           boxm2_sio_mgr::save_block_data(scene->data_path(), id, cache->get_data<BOXM2_MOG3_GREY_16>(id) );
+        else if(apps[j]== boxm2_data_traits<BOXM2_NUM_OBS>::prefix())
+           boxm2_sio_mgr::save_block_data(scene->data_path(), id, cache->get_data<BOXM2_NUM_OBS>(id) );
+        else 
+        {
+            vcl_cout<<"Write function missing for "<<apps[j]<<vcl_endl;
+        }
+    }   
   }
   return true;
 }
