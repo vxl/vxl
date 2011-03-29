@@ -41,6 +41,7 @@ class boxm2_render_exp_image_functor
   vil_image_view<float> *expected_img_;
   vil_image_view<float> *vis_img_;
 };
+
 //: Functor class to normalize expected image
 class normalize_intensity
 {
@@ -53,7 +54,6 @@ class normalize_intensity
   }
 };
 
-
 void boxm2_render_exp_image(boxm2_scene_info * linfo,
                             boxm2_block * blk_sptr,
                             vcl_vector<boxm2_data_base*> & datas,
@@ -63,12 +63,6 @@ void boxm2_render_exp_image(boxm2_scene_info * linfo,
                             unsigned int roi_ni,
                             unsigned int roi_nj,
                             unsigned int roi_ni0=0,
-                            unsigned int roi_nj0=0)
-{
-  boxm2_render_exp_image_functor render_functor;
-  render_functor.init_data(datas,expected,vis);
-  cast_ray_per_block<boxm2_render_exp_image_functor>
-      (render_functor,linfo,blk_sptr,cam,roi_ni,roi_nj,roi_ni0,roi_nj0);
-}
+                            unsigned int roi_nj0=0);
 
 #endif
