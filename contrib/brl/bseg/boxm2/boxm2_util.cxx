@@ -2,13 +2,13 @@
 //:
 // \file
 
+#include <vpgl/algo/vpgl_project.h>
+
 //vgl includes
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_homg_point_3d.h>
 #include <vgl/vgl_box_3d.h>
 #include <vgl/vgl_box_2d.h>
-#include <vpgl/algo/vpgl_project.h>
-#include <vil/vil_convert.h>
 
 //vnl includes
 #include <vnl/vnl_vector.h>
@@ -16,17 +16,18 @@
 #include <vnl/algo/vnl_svd.h>
 
 //vil includes
+#include <vil/vil_convert.h>
 #include <vil/vil_image_view.h>
+
+//vul file includes
+#include <vul/vul_file.h>
+#include <vul/vul_file_iterator.h>
 
 //vcl io stuff
 #include <vcl_iostream.h>
 #include <vcl_fstream.h>
 #include <vcl_cstdio.h>
 #include <vcl_algorithm.h>
-
-//vul file includes
-#include <vul/vul_file.h>
-#include <vul/vul_file_iterator.h>
 
 void boxm2_util::random_permutation(int* buffer, int size)
 {
@@ -194,31 +195,30 @@ boxm2_util::construct_camera( double elevation,
 }
 
 
-//: searches through the list of perspective cameras and returns a pointer to
-//  the one that most closely aligns with the normal
-unsigned boxm2_util::find_nearest_cam(vgl_vector_3d<double>& normal, 
+//: searches through the list of perspective cameras and returns a pointer to the one that most closely aligns with the normal
+unsigned boxm2_util::find_nearest_cam(vgl_vector_3d<double>& normal,
                                       vcl_vector<vpgl_perspective_camera<double>* >& cams)
 {
-  if(cams.empty()) {
+  if (cams.empty()) {
     vcl_cout<<"boxm2_util::find_nearest_cam camera list empty!, returning null"<<vcl_endl;
-    return 0; 
+    return 0;
   }
-  
+
   //find minimal dot product amongst cams/images
-  double minDot = 10e20; 
-  unsigned minCam = 0; 
-  for(int i=0; i<cams.size(); ++i) {
-    double dp = dot_product( cams[i]->principal_axis(), normal ); 
-    if(dp < minDot) {
-      minDot = dp; 
-      minCam = i; 
+  double minDot = 10e20;
+  unsigned minCam = 0;
+  for (int i=0; i<cams.size(); ++i) {
+    double dp = dot_product( cams[i]->principal_axis(), normal );
+    if (dp < minDot) {
+      minDot = dp;
+      minCam = i;
     }
   }
-  
+
   //return the min cam
   return minCam;
 }
-                                                      
+
 
 bool boxm2_util::copy_file(vcl_string file, vcl_string dest)
 {
@@ -387,7 +387,7 @@ vil_image_view_base_sptr boxm2_util::prepare_input_image(vil_image_view_base_spt
         vil_convert_stretch_range_limited(*img_byte, *floatimg,(unsigned short)28000,(unsigned short)33000,  0.0f, 1.0f); // hardcoded to be fixed.
         //vil_convert_stretch_range(*img_byte, *floatimg,  0.0f, 1.0f); // hardcoded to be fixed.
     else {
-        vcl_cerr << "Failed to load image "  << '\n';
+        vcl_cerr << "Failed to load image\n";
         return 0;
     }
     vil_image_view_base_sptr toReturn(floatimg);
@@ -395,6 +395,6 @@ vil_image_view_base_sptr boxm2_util::prepare_input_image(vil_image_view_base_spt
   }
 
   //otherwise it's messed up, return a null pointer
-  vcl_cerr<<"Failed to recognize input image type " << '\n';
+  vcl_cerr<<"Failed to recognize input image type\n";
   return 0;
 }
