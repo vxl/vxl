@@ -1,5 +1,4 @@
 //:
-// \brief
 // \file
 // \author Isabel Restrepo
 // \date 17-Mar-2011
@@ -15,7 +14,7 @@
 #include <bvpl/bvpl_octree/bvpl_global_pca.h>
 
 //:global variables
-namespace bvpl_combine_pairwise_statistics_process_globals 
+namespace bvpl_combine_pairwise_statistics_process_globals
 {
   const unsigned n_inputs_ = 3;
   const unsigned n_outputs_ = 0;
@@ -26,7 +25,7 @@ namespace bvpl_combine_pairwise_statistics_process_globals
 bool bvpl_combine_pairwise_statistics_process_cons(bprb_func_process& pro)
 {
   using namespace bvpl_combine_pairwise_statistics_process_globals ;
-  
+
   vcl_vector<vcl_string> input_types_(n_inputs_);
   unsigned i=0;
   input_types_[i++] = "vcl_string" ; //stats_file1
@@ -34,7 +33,7 @@ bool bvpl_combine_pairwise_statistics_process_cons(bprb_func_process& pro)
   input_types_[i++] = "vcl_string" ; //stats_file_out
 
   vcl_vector<vcl_string> output_types_(n_outputs_);
-  
+
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 }
 
@@ -43,56 +42,54 @@ bool bvpl_combine_pairwise_statistics_process_cons(bprb_func_process& pro)
 bool bvpl_combine_pairwise_statistics_process(bprb_func_process& pro)
 {
   using namespace bvpl_combine_pairwise_statistics_process_globals;
-  
+
   //get inputs
   unsigned i= 0;
   vcl_string stats_file1 = pro.get_input<vcl_string>(i++);
   vcl_string stats_file2 = pro.get_input<vcl_string>(i++);
   vcl_string stats_file_out = pro.get_input<vcl_string>(i++);
-  
-  //load files 
+
+  //load files
   vnl_matrix_fixed<double, 125, 125> S1(0.0);
   vnl_vector_fixed<double, 125> mean1(0.0);
   unsigned long nfeatures1 =0;
   {
     vcl_ifstream stats_ifs(stats_file1.c_str());
-    if(!stats_ifs.is_open()){
-      vcl_cerr << "Error: Failed to open file1" << vcl_endl;
+    if (!stats_ifs.is_open()){
+      vcl_cerr << "Error: Failed to open file1\n";
       return false;
     }
     stats_ifs >> nfeatures1;
     stats_ifs >> mean1;
     stats_ifs >> S1;
-
   }
-  
+
   vnl_matrix_fixed<double, 125, 125> S2(0.0);
   vnl_vector_fixed<double, 125> mean2(0.0);
   unsigned long nfeatures2 =0;
-  
+
   {
     vcl_ifstream stats_ifs(stats_file2.c_str());
-    if(!stats_ifs.is_open()){
-      vcl_cerr << "Warning: Failed to open file2 - output file will be identical to file1" << vcl_endl;
+    if (!stats_ifs.is_open()){
+      vcl_cerr << "Warning: Failed to open file2 - output file will be identical to file1\n";
       vcl_ofstream stats_ofs(stats_file_out.c_str());
       stats_ofs.precision(15);
-      stats_ofs << nfeatures1 << "\n" << mean1 << "\n" << S1;
+      stats_ofs << nfeatures1 << '\n' << mean1 << '\n' << S1 << '\n';
       return true;
     }
     stats_ifs >> nfeatures2;
     stats_ifs >> mean2;
     stats_ifs >> S2;
-
   }
-  
+
   vnl_matrix_fixed<double, 125, 125> S_out(0.0);
   vnl_vector_fixed<double, 125> mean_out(0.0);
   double nfeatures_out =0.0;
   bvpl_global_pca<125>::combine_pairwise_statistics(mean1, S1, (double)nfeatures1, mean2, S2, (double)nfeatures2, mean_out, S_out, nfeatures_out);
-  
+
   vcl_ofstream stats_ofs(stats_file_out.c_str());
   stats_ofs.precision(15);
-  stats_ofs << nfeatures_out << "\n" << mean_out << "\n" << S_out;
-  
+  stats_ofs << nfeatures_out << '\n' << mean_out << '\n' << S_out << '\n';
+
   return true;
 }
