@@ -9,3 +9,5 @@ SET(boxm2_ocl_algo_sources
 ADD_LIBRARY(boxm2_ocl_algo  ${boxm2_ocl_algo_sources})
 TARGET_LINK_LIBRARIES(boxm2_ocl_algo boxm2_ocl)
 
+#tests
+SUBDIRS(tests)
