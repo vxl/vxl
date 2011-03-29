@@ -107,6 +107,21 @@ SOURCE=.\boxm2_cpp_refine_process.cxx
 # Begin Source File
 SOURCE=.\boxm2_cpp_change_detection_uncertainity_process.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\boxm2_cpp_register.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/boxm2_cpp_refine_process2.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/boxm2_cpp_render_expected_image_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/boxm2_cpp_update_image_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/boxm2_cpp_change_detection_process2.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
@@ -127,6 +142,12 @@ SOURCE=.\boxm2_cpp_process_base.h
 # End Source File
 # Begin Source File
 SOURCE=.\boxm2_cpp_change_detection_uncertainity_process.h
+# End Source File
+# Begin Source File
+SOURCE=.\boxm2_cpp_register.h
+# End Source File
+# Begin Source File
+SOURCE=.\boxm2_cpp_processes.h
 # End Source File
 # End Group
 # End Target

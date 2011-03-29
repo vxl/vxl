@@ -243,10 +243,10 @@ SOURCE=.\Templates/vsl_pair_io+uint.float-.cxx
 SOURCE=.\Templates/vsl_deque_io+bool-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vsl_vector_io+int64-.cxx
+SOURCE=.\Templates/vsl_vector_io+int_64-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vsl_vector_io+uint64-.cxx
+SOURCE=.\Templates/vsl_vector_io+uint_64-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/vsl_set_io+uint-.cxx

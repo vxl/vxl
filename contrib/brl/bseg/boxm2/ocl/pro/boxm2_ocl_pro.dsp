@@ -146,6 +146,9 @@ SOURCE=.\processes/boxm2_ocl_update_process.cxx
 # Begin Source File
 SOURCE=.\processes/boxm2_ocl_refine_process.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\processes/boxm2_ocl_render_gl_expected_image_process.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"

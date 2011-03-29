@@ -113,6 +113,9 @@ SOURCE=.\processes/boxm2_create_scene_process.cxx
 # Begin Source File
 SOURCE=.\processes/boxm2_export_textured_mesh_process.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\processes/boxm2_save_data_process.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"

@@ -115,6 +115,9 @@ SOURCE=.\boxm2_render_rgb_tableau.cxx
 # Begin Source File
 SOURCE=.\boxm2_view_utils.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\boxm2_ocl_render_tableau.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
@@ -141,6 +144,9 @@ SOURCE=.\boxm2_render_rgb_tableau.h
 # End Source File
 # Begin Source File
 SOURCE=.\boxm2_view_utils.h
+# End Source File
+# Begin Source File
+SOURCE=.\boxm2_ocl_render_tableau.h
 # End Source File
 # End Group
 # End Target
