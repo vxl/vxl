@@ -21,10 +21,18 @@ template <unsigned dim>
 class bvpl_pca_basis_sample{
   
 public:
-  bvpl_pca_basis_sample(){}
-  short version_no() const{ return 1; }
+  bvpl_pca_basis_sample(){
+    pca_projections_.fill(0);
+  }
+
+  bvpl_pca_basis_sample(vnl_vector_fixed<double,dim> pp){
+    pca_projections_ = pp;
+  }
+  inline short version_no() const{ return 1; }
+  
   //: Vector of projections on pca space
   vnl_vector_fixed<double,dim> pca_projections_;
+  
 };
 
 

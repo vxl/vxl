@@ -9,7 +9,6 @@ void vsl_b_write(vsl_b_ostream & os, bvpl_octree_sample<T_data> const &sample)
 {
   vsl_b_write(os, sample.version_no());
   vsl_b_write(os, sample.response_);
-  vsl_b_write(os, sample.id_);
 }
 
 template<class T_data>
@@ -31,7 +30,6 @@ void vsl_b_read(vsl_b_istream & is, bvpl_octree_sample<T_data> &sample)
   {
     case 1:
       vsl_b_read(is, sample.response_);
-      vsl_b_read(is, sample.id_);
       break;
     default:
       vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, boxm_sample<T>&)\n"
