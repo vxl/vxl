@@ -15,7 +15,8 @@ imesh_mesh::imesh_mesh(const imesh_mesh& other)
     half_edges_(other.half_edges_),
     tex_coords_(other.tex_coords_),
     valid_tex_faces_(other.valid_tex_faces_),
-    tex_coord_status_(other.tex_coord_status_)
+    tex_coord_status_(other.tex_coord_status_), 
+    tex_source_(other.tex_source_)
 {
 }
 

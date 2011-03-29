@@ -82,13 +82,11 @@ bool imesh_read_ply(vcl_istream& is, imesh_mesh& mesh)
     if (str.compare("element")==0)  {
       is >> str;
       if (str.compare("vertex")==0) {
-        is >> num_verts;
-      }
-      else if (str.compare("face")==0) {
-        is >> num_faces;
-      }
-    }
-    else if (str.compare("end_header")==0)  {
+        is >> num_verts; 
+      } else if (str.compare("face")==0) {
+        is >> num_faces; 
+      } 
+    } else if (str.compare("end_header")==0)  {
       done = true;
     }
   }
@@ -330,7 +328,7 @@ void imesh_write_obj(vcl_ostream& os, const imesh_mesh& mesh)
   if (mesh.has_tex_coords()) {
     const vcl_vector<vgl_point_2d<double> >& tex = mesh.tex_coords();
     for (unsigned int t=0; t<tex.size(); ++t) {
-      os << "vt " << tex[t].x() << ' ' << tex[t].y() << '\n';
+      os << "vt " << tex[t].x() << ' ' << tex[t].y() << "\n";
     }
   }
 
@@ -391,7 +389,7 @@ void imesh_write_kml(vcl_ostream& os, const imesh_mesh& mesh)
        << "        <altitudeMode>absolute</altitudeMode>\n"
        << "        <outerBoundaryIs>\n"
        << "          <LinearRing>\n"
-       << "            <coordinates>\n";
+       << "            <coordinates>" << vcl_endl;
 
     for (unsigned int v=0; v<faces.num_verts(f); ++v) {
       unsigned int idx = faces(f,v);
@@ -410,9 +408,8 @@ void imesh_write_kml(vcl_ostream& os, const imesh_mesh& mesh)
        << "            </coordinates>\n"
        << "          </LinearRing>\n"
        << "        </outerBoundaryIs>\n"
-       << "      </Polygon>\n";
+       << "      </Polygon>" << vcl_endl;
   }
-  os << vcl_endl;
 }
 
 void imesh_write_kml_collada(vcl_ostream& os, const imesh_mesh& mesh)
@@ -445,22 +442,21 @@ void imesh_write_kml_collada(vcl_ostream& os, const imesh_mesh& mesh)
      << "    <contributor>\n"
      << "      <authoring_tool>VXL imesh library</authoring_tool>\n"
      << "    </contributor>\n";
-#if 0 // When we figure out how to get a date string we can write this
-  os << "    <created>2008-04-08T13:07:52-08:00</created>\n"
-     << "    <modified>2008-04-08T13:07:52-08:00</modified>\n";
-#endif
+  // When we figure out how to get a date string we can write this
+  // os << "    <created>2008-04-08T13:07:52-08:00</created>\n";
+  // os << "    <modified>2008-04-08T13:07:52-08:00</modified>\n";
   os << "    <unit name=\"meters\" meter=\"1\"/>\n"
      << "    <up_axis>Z_UP</up_axis>\n"
      << "  </asset>\n";
 
   // Write materials.  Use a single grey material
-  os << "  <library_materials>\n"
-     << "    <material id=\"GreyID\" name=\"Grey\">\n"
-     << "       <instance_effect url=\"#Grey-effect\"/>\n"
-     << "    </material>\n"
-     << "  </library_materials>\n"
+  os << "  <library_materials>" << vcl_endl
+     << "    <material id=\"GreyID\" name=\"Grey\">"<< vcl_endl
+     << "       <instance_effect url=\"#Grey-effect\"/>"<< vcl_endl
+     << "    </material>"<< vcl_endl
+     << "  </library_materials>"<< vcl_endl
 
-     << "  <library_effects>\n"
+     << "  <library_effects>"<< vcl_endl
      << "    <effect id=\"Grey-effect\" name=\"Grey-effect\">\n"
      << "      <profile_COMMON>\n"
      << "         <technique sid=\"COMMON\">\n"
@@ -571,7 +567,7 @@ void imesh_write_vrml(vcl_ostream& os, const imesh_mesh& mesh)
     static_cast<const imesh_regular_face_array<3>&>(mesh.faces());
   const imesh_vertex_array_base& vertsb = mesh.vertices();
   unsigned d = vertsb.dim();
-  if (d!=2&&d!=3)
+  if(d!=2&&d!=3)
   {
     vcl_cerr << "vertex dimension must be 2 or 3.\n";
     return;
@@ -579,63 +575,62 @@ void imesh_write_vrml(vcl_ostream& os, const imesh_mesh& mesh)
   const unsigned int nfaces = tris.size();
   os << "#VRML V2.0 utf8\n\n";
   os << "Shape {\n";
-
+  
   //write appearance
-  os << "  appearance Appearance {\n"
-     << "    material Material{}\n"
-     << "    texture ImageTexture {\n"
-     << "      url \"exp.png\"\n"
-     << "    }\n"
-     << "  }\n";
-
-  //write coordinates in 2 or 3d
+  os << "  appearance Appearance { \n "
+     << "    material Material{} \n"
+     << "    texture ImageTexture { \n"
+     << "      url \""<< mesh.tex_source() <<"\" \n"
+     << "    } \n"
+     << "  } \n"; 
+  
+  //write coordinates in 2 or 3d 
   os << " geometry IndexedFaceSet\n";
-  os << "  {\n";
+  os << "  { \n";
   os << "   coord Coordinate{\n";
-  os << "    point [\n";
-  if (d == 2) {
+  os << "    point [ \n";
+  if(d == 2){
     const imesh_vertex_array<2>& verts2= mesh.vertices<2>();
-    for (unsigned i=0;i<verts2.size();++i)
+    for(unsigned i=0;i<verts2.size();++i) 
       os << "    " << verts2[i][0] << ' ' << verts2[i][1] << ' ' << 0.0 << '\n';
-  }
-  else {
+  }else{
     const imesh_vertex_array<3>& verts3= mesh.vertices<3>();
-    for (unsigned i=0;i<verts3.size();++i)
+    for(unsigned i=0;i<verts3.size();++i) 
       os << "    " << verts3[i][0] << ' ' << verts3[i][1] << ' ' << verts3[i][2] << '\n';
   }
-  os << "    ]}\n";
-
+  os << "    ]} \n";
+  
   //write faces (all triangles)
-  os << "  coordIndex [\n";
-  for (unsigned i=0;i<nfaces;++i) {
+  os << "  coordIndex [ \n";
+  for(unsigned i=0;i<nfaces;++i) {
     os << "    "
-       << tris[i][0] << ' '
-       << tris[i][1] << ' '
-       << tris[i][2] << ' '
+       << tris[i][0] << ' ' 
+       << tris[i][1] << ' ' 
+       << tris[i][2] << ' ' 
        << -1 << '\n';
   }
   os << "  ]\n";
-
-  //write texture coordinates
-  if (mesh.has_tex_coords() == imesh_mesh::TEX_COORD_ON_VERT) {
-    os << " texCoord TextureCoordinate {\n"
-       << "   point [\n";
-
+  
+  //write texture coordinates 
+  if(mesh.has_tex_coords() == imesh_mesh::TEX_COORD_ON_VERT) {
+    os << " texCoord TextureCoordinate { \n "
+       << "   point [ \n "; 
+    
     //write tex coordinates (should be same number as vertices above)
     const vcl_vector<vgl_point_2d<double> >& tc = mesh.tex_coords();
-    for (unsigned int i=0; i<tc.size(); ++i)
-      os << "    " << tc[i].x() << ' ' << tc[i].y() << ",\n";
+    for(int i=0; i<tc.size(); ++i) 
+      os << "    " << tc[i].x() << ' ' << tc[i].y() << ",\n"; 
+    
+    //close texture coordinates 
+    os << "    ]} \n";
 
-    //close texture coordinates
-    os << "    ]}\n";
-
-    //write face mapping again
-    os << "   texCoordIndex [\n";
-    for (unsigned i=0;i<nfaces;++i) {
+    //write face mapping again 
+    os << "   texCoordIndex [ \n";
+    for(unsigned i=0;i<nfaces;++i) {
       os << "    "
-         << tris[i][0] << ' '
-         << tris[i][1] << ' '
-         << tris[i][2] << ' '
+         << tris[i][0] << ' ' 
+         << tris[i][1] << ' ' 
+         << tris[i][2] << ' ' 
          << -1 << '\n';
     }
     os << "  ]\n";
@@ -644,17 +639,17 @@ void imesh_write_vrml(vcl_ostream& os, const imesh_mesh& mesh)
   //
   os << "solid TRUE\n"
      << "convex FALSE\n"
-     << "creaseAngle 0\n";
-
+     << "creaseAngle 0\n"; 
+  
   //os << "  colorPerVertex FALSE\n";
   //os << "  color Color {\n";
   //os << "   color [ ]\n";
   //os << "  }\n";
   //os << "  colorIndex [ ]\n";
-
+  
   //close geometry indexed face set
-  os << " }\n";
-
+  os << " } \n";         
+  
   //close shape
-  os << "}\n";
+  os << "} \n"; 
 }
