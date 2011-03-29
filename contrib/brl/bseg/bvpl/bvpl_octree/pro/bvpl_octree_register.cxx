@@ -38,4 +38,10 @@ void bvpl_octree_register::register_process()
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvpl_block_avg_value_process, "bvplBlockAvgValueProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvpl_add_pca_errors_process, "bvplAddPCAErrorsProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvpl_load_pca_info_process, "bvplLoadPCAInfoProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvpl_pca_project_process, "bvplPCAProjectProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvpl_normalize_pca_training_error_process, "bvplNormalizePCATrainingErrorProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvpl_pca_global_statistics_process, "bvplPCAGlobalStatisticsProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvpl_combine_pairwise_statistics_process, "bvplCombinePairwiseStatisticsProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvpl_global_pca_process, "bvplGlobalPCAProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvpl_init_global_pca_process, "bvplInitGlobalPCAProcess");
 }

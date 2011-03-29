@@ -24,4 +24,10 @@ DECLARE_FUNC_CONS(bvpl_load_pca_error_scenes_process);
 DECLARE_FUNC_CONS(bvpl_block_avg_value_process);
 DECLARE_FUNC_CONS(bvpl_add_pca_errors_process);
 DECLARE_FUNC_CONS(bvpl_load_pca_info_process);
+DECLARE_FUNC_CONS(bvpl_pca_project_process);
+DECLARE_FUNC_CONS(bvpl_normalize_pca_training_error_process);
+DECLARE_FUNC_CONS(bvpl_pca_global_statistics_process);
+DECLARE_FUNC_CONS(bvpl_combine_pairwise_statistics_process);
+DECLARE_FUNC_CONS(bvpl_global_pca_process);
+DECLARE_FUNC_CONS(bvpl_init_global_pca_process);
 #endif
