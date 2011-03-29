@@ -102,7 +102,7 @@ foreach my $dir (@DIRS)
       }
       closedir(UPDIR);
     }
-    foreach my $subdir (qw(algo io file_formats gui pro xio vpdt filter section accessors vipl_with_section/accessors vipl_with_vbl_array_2d/accessors vipl_with_vnl_matrix/accessors))
+    foreach my $subdir (qw(algo io file_formats gui pro xio vpdt sample filter section accessors vipl_with_section/accessors vipl_with_vbl_array_2d/accessors vipl_with_vnl_matrix/accessors))
     {
       if (! -d "$dir/../$subdir/tests" && opendir UPDIR,"$dir/../$subdir") {
         foreach (grep {m/\.h(|xx)$/} readdir(UPDIR))
@@ -149,7 +149,7 @@ foreach my $dir (@DIRS)
       }
       closedir(UPDIR);
     }
-    foreach my $subdir (qw(algo io file_formats gui pro xio vpdt filter section accessors vipl_with_section/accessors vipl_with_vbl_array_2d/accessors vipl_with_vnl_matrix/accessors))
+    foreach my $subdir (qw(algo io file_formats gui pro xio vpdt sample filter section accessors vipl_with_section/accessors vipl_with_vbl_array_2d/accessors vipl_with_vnl_matrix/accessors))
     {
       if (! -d "$dir/../$subdir/tests" && opendir UPDIR,"$dir/../$subdir") {
         foreach (grep {m/\.txx$/} readdir(UPDIR))
@@ -322,7 +322,7 @@ foreach my $dir (@DIRS)
   $cmakefile =~ s/\# (AUX_SOURCE_DIRECTORY)/$1/g if ($dir =~ m!\btbl/v.pl!); # add back Templates subdirs in tbl
 
   # General manipulations of the CMakeLists.txt content:
-  $cmakefile =~ s/\n\s*\#[^\n]*//g;
+  $cmakefile =~ s/\s*\#[^\n]*//g;
   $cmakefile =~ s!\$\{EXECUTABLE_OUTPUT_PATH\}/!!g;
   my $moc_files = '';
   if ($cmakefile =~ s/\bQT_WRAP_CPP\s*\(\s*(\S+)\s+(\S+)\s+(.+?)\)//s) {
