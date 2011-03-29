@@ -10,7 +10,6 @@
 #include <boxm2/boxm2_block_metadata.h>
 #include <vpgl/bgeo/bgeo_lvcs.h>
 #include <vgl/vgl_point_3d.h>
-#include <vgl/vgl_vector_3d.h>
 #include <vgl/vgl_box_3d.h>
 #include <vcl_iosfwd.h>
 #include <vul/vul_file.h>
@@ -59,26 +58,26 @@ class boxm2_scene : public vbl_ref_count
     boxm2_scene() {}
 
     boxm2_scene(vcl_string data_path, vgl_point_3d<double> origin);
-    
+
     //: initializes scene from xmlFile
     boxm2_scene(vcl_string filename);
 
     //: destructor
     ~boxm2_scene() { }
-    
+
     //: save scene xml file
-    void save_scene(); 
-    
+    void save_scene();
+
     //: return a vector of block ids in visibility order
-    vcl_vector<boxm2_block_id> get_vis_blocks(vpgl_perspective_camera<double>* cam); 
-    
-    //: return a heap pointer to a scene info 
-    boxm2_scene_info* get_blk_metadata(boxm2_block_id id); 
+    vcl_vector<boxm2_block_id> get_vis_blocks(vpgl_perspective_camera<double>* cam);
+
+    //: return a heap pointer to a scene info
+    boxm2_scene_info* get_blk_metadata(boxm2_block_id id);
     bool block_exists(boxm2_block_id id) { return blocks_.find(id) != blocks_.end(); }
     bool block_on_disk(boxm2_block_id id) { return vul_file::exists( data_path_ + id.to_string() + ".bin"); }
-    bool data_on_disk(boxm2_block_id id, vcl_string data_type) { 
-      return vul_file::exists(data_path_ + data_type + "_" + id.to_string() + ".bin"); 
-    } 
+    bool data_on_disk(boxm2_block_id id, vcl_string data_type) {
+      return vul_file::exists(data_path_ + data_type + "_" + id.to_string() + ".bin");
+    }
 
     //: a list of block metadata...
     vcl_map<boxm2_block_id, boxm2_block_metadata>& blocks() { return blocks_; }
@@ -87,7 +86,7 @@ class boxm2_scene : public vbl_ref_count
     vcl_vector<boxm2_block_id> get_block_ids();
 
     //: gets a tight bounding box for the scene
-    vgl_box_3d<double>      bounding_box(); 
+    vgl_box_3d<double>      bounding_box();
 
     //: scene dimensions accessors
     vgl_point_3d<double>    local_origin()const { return local_origin_; }
@@ -97,20 +96,20 @@ class boxm2_scene : public vbl_ref_count
     //: scene path accessors
     vcl_string              xml_path()    const { return xml_path_; }
     vcl_string              data_path()   const { return data_path_; }
-    
+
     //: appearance model accessor
     vcl_vector<vcl_string> appearances()  const { return appearances_; }
-    
+
     //: scene version number
     static short version_no() { return 1; }
 
-    //: scene mutators 
+    //: scene mutators
     void set_local_origin(vgl_point_3d<double> org) { local_origin_ = org; }
     void set_rpc_origin(vgl_point_3d<double> rpc)   { rpc_origin_ = rpc; }
     void set_lvcs(bgeo_lvcs lvcs)                   { lvcs_ = lvcs; }
     void set_blocks(vcl_map<boxm2_block_id, boxm2_block_metadata> blocks) { blocks_ = blocks; }
-    void add_block_metadata(boxm2_block_metadata data); 
-    
+    void add_block_metadata(boxm2_block_metadata data);
+
     //: scene path mutators
     void set_xml_path(vcl_string path)              { xml_path_ = path; }
     void set_data_path(vcl_string path)             { data_path_ = path+"/"; }
@@ -124,13 +123,12 @@ class boxm2_scene : public vbl_ref_count
 
     //: location on disk of xml file and data/block files
     vcl_string data_path_, xml_path_;
-    
+
     //: list of block meta data available to this scene
-    vcl_map<boxm2_block_id, boxm2_block_metadata> blocks_; 
-    
+    vcl_map<boxm2_block_id, boxm2_block_metadata> blocks_;
+
     //: list of appearance models/observation models used by this scene
-    vcl_vector<vcl_string> appearances_; 
-    
+    vcl_vector<vcl_string> appearances_;
 };
 
 
@@ -139,12 +137,12 @@ class boxm2_dist_id_pair
 {
   public:
     boxm2_dist_id_pair(double dist, boxm2_block_id id) : dist_(dist), id_(id) {}
-    double dist_; 
+    double dist_;
     boxm2_block_id id_;
-  
+
     inline bool operator < (boxm2_dist_id_pair const& v) const {
-      return dist_ < v.dist_; 
-    } 
+      return dist_ < v.dist_;
+    }
 };
 
 //Smart_Pointer typedef for boxm2_scene
@@ -161,7 +159,7 @@ void x_write(vcl_ostream &os, boxm2_scene& scene, vcl_string name);
 //: Binary write boxm2_scene scene to stream
 void vsl_b_write(vsl_b_ostream& os, boxm2_scene const& scene);
 void vsl_b_write(vsl_b_ostream& os, const boxm2_scene* &p);
-void vsl_b_write(vsl_b_ostream& os, boxm2_scene_sptr& sptr); 
+void vsl_b_write(vsl_b_ostream& os, boxm2_scene_sptr& sptr);
 void vsl_b_write(vsl_b_ostream& os, boxm2_scene_sptr const& sptr);
 
 //: Binary load boxm2_scene scene from stream.
@@ -173,7 +171,7 @@ void vsl_b_read(vsl_b_istream& is, boxm2_scene_sptr const& sptr);
 //: Binary write boxm2_scene scene to stream
 void vsl_b_write(vsl_b_ostream& os, boxm2_scene_info_wrapper const& scene);
 void vsl_b_write(vsl_b_ostream& os, const boxm2_scene_info_wrapper* &p);
-void vsl_b_write(vsl_b_ostream& os, boxm2_scene_info_wrapper_sptr& sptr); 
+void vsl_b_write(vsl_b_ostream& os, boxm2_scene_info_wrapper_sptr& sptr);
 void vsl_b_write(vsl_b_ostream& os, boxm2_scene_info_wrapper_sptr const& sptr);
 
 //: Binary load boxm2_scene scene from stream.
