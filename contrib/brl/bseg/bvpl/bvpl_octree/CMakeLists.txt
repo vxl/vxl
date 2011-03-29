@@ -29,6 +29,7 @@ SET(bvpl_octree_sources
     bvpl_scene_statistics.h               bvpl_scene_statistics.cxx
     bvpl_discover_pca_kernels.h           bvpl_discover_pca_kernels.cxx
     bvpl_pca_error_scenes.h               bvpl_pca_error_scenes.cxx
+    bvpl_global_pca.h                     bvpl_global_pca.txx
     bvpl_taylor_scenes_map.h              bvpl_taylor_scenes_map.cxx
     bvpl_taylor_basis.h                   bvpl_taylor_basis.cxx
    )
