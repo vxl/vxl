@@ -53,7 +53,7 @@
 // /code
 // if (my_log.level() >= mbl_logger::INFO && my_log.dump())
 // {
-//   vcl_string filename=my_log.dump_dir()+"my_image.png";
+//   vcl_string filename=my_log.dump_prefix()+"my_image.png";
 //   if (vil_save(my_image, filename.c_str()))
 //     MBL_LOG(INFO, my_log, "Saved my_image to " << filename);
 //   else
@@ -191,7 +191,7 @@ class mbl_logger
   vcl_ostream &log(int level) { return nullstream_; }
   vcl_ostream &mtlog() {return nullstream_;}
   bool dump() const { return false; }
-  const vcl_string& dump_dir() const { return ""; }
+  const vcl_string& dump_prefix() const { return ""; }
 #else
   int level_;
   mbl_log_output_base *output_;
@@ -200,7 +200,7 @@ class mbl_logger
   vcl_ostream *mt_logstream_;
   //: File location to dump files.
   // If empty - don't dump files.
-  vcl_string dump_dir_;
+  vcl_string dump_prefix_;
   //: Default constructor only available to root's default logger.
   mbl_logger();
 
@@ -225,13 +225,13 @@ public:
   void mtstop();
 
   //: Is this logger allowed to dump data files directly to the filestore?
-  bool dump() const {return !dump_dir_.empty();}
+  bool dump() const {return !dump_prefix_.empty();}
 
   //: A filepath prefix that this logger should use when creating dump files.
   // Normal behaviour is to treat this as a prefix rather than a dir, so
   // "./my_dump_area/foo_" indicates the program should create files
   // that begin with "foo_" in sub-directory my_dump_area of the cwd.
-  const vcl_string& dump_dir() const {return dump_dir_;}
+  const vcl_string& dump_prefix() const {return dump_prefix_;}
 
 #endif
 
@@ -259,7 +259,7 @@ class mbl_log_categories
     int level;
     enum output_type {FILE_OUT, NAMED_STREAM} output;
     vcl_string name;
-    vcl_string dump_dir;
+    vcl_string dump_prefix;
     vcl_ostream *stream;
   };
 
@@ -329,7 +329,7 @@ class mbl_logger_root
   // root: { level: INFO stream_output: test }
   // obj3: { level: INFO stream_output: vcl_cout }\n
   // obj3.obj6: { level: INFO file_output: results.txt }\n
-  // obj3.obj7.images: { level: INFO stream_output: vcl_cout dump_dir: ./logging_dir/ }\n
+  // obj3.obj7.images: { level: INFO stream_output: vcl_cout dump_prefix: ./logging_dir/ }\n
   //\endverbatim
   // where LEVEL is an integer - setting the logging level.
   // see mbl_logger:levels for useful values.

@@ -290,7 +290,7 @@ mbl_logger::mbl_logger(const char *id):
     mbl_logger::root().categories().get(id);
 
   level_ = cat.level;
-  dump_dir_ = cat.dump_dir;
+  dump_prefix_ = cat.dump_prefix;
 
   if (cat.output == mbl_log_categories::cat_spec::NAMED_STREAM)
   {
@@ -461,7 +461,7 @@ mbl_log_categories::mbl_log_categories()
   default_spec.output = cat_spec::NAMED_STREAM;
   default_spec.name = "vcl_cerr";
   default_spec.stream = &vcl_cerr;
-  default_spec.dump_dir = "";
+  default_spec.dump_prefix = "";
   cat_list_[""] = default_spec;
 }
 
@@ -505,7 +505,7 @@ inline mbl_log_categories::cat_spec parse_cat_spec(const vcl_string &str,
     spec.level = mbl_logger::NOTICE;
   }
 
-  spec.dump_dir = props.get_optional_property("dump_dir");
+  spec.dump_prefix = props.get_optional_property("dump_prefix");
 
   if (props.find("file_output") != props.end())
   {
@@ -586,7 +586,7 @@ void mbl_log_categories::clear()
   default_spec.name = "cerr";
   default_spec.stream = &vcl_cerr;
   default_spec.output = cat_spec::NAMED_STREAM;
-  default_spec.dump_dir = "";
+  default_spec.dump_prefix = "";
   cat_list_[""] = default_spec;
 }
 
@@ -642,8 +642,8 @@ vcl_ostream& operator<<(vcl_ostream&os, const mbl_log_categories::cat_spec& spec
     assert(!"This should not happen: invalid spec.output");
     break;
   }
-  if (!spec.dump_dir.empty())
-    os << " dump_dir: " << spec.dump_dir;
+  if (!spec.dump_prefix.empty())
+    os << " dump_prefix: " << spec.dump_prefix;
 
   os << " }";
   return os;
