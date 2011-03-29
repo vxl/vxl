@@ -5,6 +5,7 @@
 
 #include <boct/boct_tree.h>
 #include <boct/boct_bit_tree2.h>
+#include <boxm2/boxm2_data.h>
 #include <boxm2/boxm2_data_traits.h>
 #include <boxm/sample/boxm_sample.h>
 
