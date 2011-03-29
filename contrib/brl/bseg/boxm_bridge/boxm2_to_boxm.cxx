@@ -194,8 +194,13 @@ int main(int argc, char** argv)
   vcl_map<boxm2_block_id, boxm2_block_metadata>::iterator iter = blocks.begin();
 
   typedef boct_tree<short, boxm_sample<BOXM_APM_MOG_GREY> > tree_type;
+#ifdef BOXM2_SCENE_HAS_DIMENSIONS
   vgl_vector_3d<unsigned int> block_nums = scene2.scene_dimensions();
   vgl_vector_3d<double> ww(world.width()/block_nums.x(),world.height()/block_nums.y(),world.depth()/block_nums.z());
+#else // FIXME - to be removed when boxm2_scene is adapted
+  vgl_vector_3d<unsigned int> block_nums(1,1,1);
+  vgl_vector_3d<double> ww(world.width(),world.height(),world.depth());
+#endif
 
   boxm_scene<tree_type> scene(lvcs, origin, ww, block_nums);
   vcl_string scene_path=boxm_dir(); //"C:/data/boxm2/downtown/boxm_scene";
@@ -236,7 +241,6 @@ int main(int argc, char** argv)
     p[2] = metadata.local_origin_.z();
     vgl_box_3d<double> block_bb(p, subdim.x(), subdim.y(), subdim.z(), vgl_box_3d<double>::min_pos);
     tree_type* block_tree=new tree_type(x_dim+4, x_dim+1); // FIX take max of 3 dims instead
-    int cellss=block_tree->leaf_cells().size();
     block_tree->set_bbox(block_bb);
     block_tree->init_cells(0);
     scene.load_block(id.i(),id.j(),id.k());
