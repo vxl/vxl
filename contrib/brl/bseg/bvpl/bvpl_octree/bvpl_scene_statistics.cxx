@@ -108,9 +108,10 @@ double bvpl_average_value(boxm_scene_base_sptr scene_base, int block_i, int bloc
       continue;
     }
     else {
-      avg_val+=(double)center_cell->data();    
+      avg_val+=(double)center_cell->data();  
+      actual_samples = actual_samples +1.0;
+
     }
-    actual_samples = actual_samples +1.0;
   }    
   
   vcl_cout << "Adding errors of : " << actual_samples << " samples" << vcl_endl;
