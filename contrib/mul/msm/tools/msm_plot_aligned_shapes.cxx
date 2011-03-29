@@ -20,7 +20,6 @@
 #include <msm/msm_add_all_loaders.h>
 #include <msm/utils/msm_draw_shape_to_eps.h>
 
-
 /*
 Parameter file format:
 <START FILE>
@@ -35,7 +34,6 @@ mean_colour: red
 
 // Approximate width of region to display shape
 display_width: 256
-
 
 // When supplied, draw curves for mean shape
 curves_path: face_front.crvs
@@ -73,7 +71,6 @@ struct tool_params
   //: Colour to draw curves
   vcl_string line_colour;
 
-
   //: Directory containing images
   vcl_string image_dir;
 
@@ -89,7 +86,6 @@ struct tool_params
 
   //: Radius of points to display (if <0, then don't draw points)
   double point_radius;
-
 
   //: File to save EPS file to
   vcl_string output_path;
@@ -129,11 +125,10 @@ void tool_params::read_from_file(const vcl_string& path)
   image_dir=props.get_optional_property("image_dir","./");
   points_dir=props.get_optional_property("points_dir","./");
   output_path=props.get_optional_property("output_path",
-                                       "aligned.eps");
+                                          "aligned.eps");
 
   {
-    vcl_string aligner_str 
-       = props.get_required_property("aligner");
+    vcl_string aligner_str = props.get_required_property("aligner");
     vcl_stringstream ss(aligner_str);
     aligner = msm_aligner::create_from_stream(ss);
   }
@@ -177,13 +172,13 @@ int main(int argc, char** argv)
   }
 
   tool_params params;
-  try 
+  try
   {
-    params.read_from_file(param_path()); 
+    params.read_from_file(param_path());
   }
   catch (mbl_exception_parse_error& e)
   {
-    vcl_cerr<<"Error: "<<e.what()<<vcl_endl;
+    vcl_cerr<<"Error: "<<e.what()<<'\n';
     return 1;
   }
 
@@ -244,7 +239,6 @@ int main(int argc, char** argv)
   // Draw curves if available
   writer.set_colour(params.line_colour);
   msm_draw_shape_to_eps(writer,points,curves);
-
 
   writer.close();
   vcl_cout<<"Plotted shapes to "<<params.output_path<<vcl_endl;
