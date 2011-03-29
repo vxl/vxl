@@ -105,7 +105,7 @@ void msm_shape_instance::fit_to_points(const msm_points& pts,
   // Catch case when fitting to self
   if (&pts == &points_) return;
 
-/*
+#if 0 // commented out
   // Estimate pose from mean model points to target points
   // Assuming that the modes are orthogonal to the mean,
   // and to the rotation vector for the mean,
@@ -121,7 +121,7 @@ void msm_shape_instance::fit_to_points(const msm_points& pts,
 
   ref_shape_.fit_to_points(tmp_points_,rv);
   points_valid_=false;
-*/
+#endif // 0
   vnl_vector<double> pose0 = pose_;
 
   // Estimate pose from current model points to target points
