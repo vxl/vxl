@@ -34,12 +34,12 @@ bool sdet_image_mesh:: step_boundary(vgl_line_segment_2d<double> const& parent,
   vgl_point_2d<double> p20 = p2 - step_half_width_*n;
   vgl_point_2d<double> p21 = p2 + step_half_width_*n;
   if (p10.x()<0 || p10.y()<0||p20.x()<0||p20.y()<0||
-     p10.x()>=ni ||p10.y()>=nj||p20.x()>=ni||p20.y()>=nj)
+      p10.x()>=ni ||p10.y()>=nj||p20.x()>=ni||p20.y()>=nj)
     return false;
   else
     child0 = vgl_line_segment_2d<double>(p10, p20);
   if (p11.x()<0 || p11.y()<0||p21.x()<0||p21.y()<0||
-     p11.x()>=ni ||p11.y()>=nj||p21.x()>=ni||p21.y()>=nj)
+      p11.x()>=ni ||p11.y()>=nj||p21.x()>=ni||p21.y()>=nj)
     return false;
   else
     child1 = vgl_line_segment_2d<double>(p11, p21);
@@ -117,7 +117,6 @@ bool sdet_image_mesh::compute_mesh()
   vcl_vector<vgl_point_2d<double> > convex_hull;
   convex_hull.push_back(ul);   convex_hull.push_back(ur);
   convex_hull.push_back(lr);   convex_hull.push_back(ll);
-  unsigned nsegs = segs_pair.size();
   imesh_generate_mesh_2d(convex_hull, segs_pair, mesh_);
 
   //lift vertices to 3-d
