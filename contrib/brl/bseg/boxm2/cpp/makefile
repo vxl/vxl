@@ -4,7 +4,7 @@ LIBRARY := boxm2_cpp
 
 SOURCES += boxm2_cpp_processor.cxx
 
-SUBDIRS += pro algo exe
+SUBDIRS += pro algo
 
 ################################
 include ${VXLROOT}/config/top.mk

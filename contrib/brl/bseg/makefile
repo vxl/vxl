@@ -53,6 +53,9 @@ SUBDIRS += boct
 # octree based modeling 
 SUBDIRS += boxm boxm2
 
+#the bridge lib to convert between boxm and boxm2 scenes
+SUBDIRS += boxm_bridge
+
 # octree based modeling python interface
 SUBDIRS += boxm_batch boxm2_batch
 
