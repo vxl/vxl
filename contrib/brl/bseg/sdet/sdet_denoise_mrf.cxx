@@ -110,7 +110,7 @@ void sdet_denoise_mrf::compute_incidence_matrix()
           int indx_nbr = (ioff) + ni*(joff);
           if (indx_nbr<0||indx_nbr>=npix)
             continue;
-          if (indx_nbr!=indx) {
+          if ((unsigned int)indx_nbr!=indx) {
             double w = weight(i, j, i+ki, j+kj, inv, varv);
             if (w>0.0) {
               W_mat_.put(indx, indx_nbr, w);
@@ -191,7 +191,6 @@ bool sdet_denoise_mrf::denoise()
   vcl_cout << "solved LU decomposition and back substitution in "
            << t.real()/1000.0 << " seconds\n";
   int ni = in_resc_->ni(), nj = in_resc_->nj();
-  int ir = static_cast<int>(radius_);
   vil_image_view<float> out_view(ni, nj);
   out_view.fill(0.0f);
   for (int j = 0; j<nj; ++j)
