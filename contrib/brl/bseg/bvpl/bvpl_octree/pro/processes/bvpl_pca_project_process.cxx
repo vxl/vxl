@@ -9,14 +9,14 @@
 
 #include <brdb/brdb_value.h>
 
-#include <bvpl/bvpl_octree/bvpl_discover_pca_kernels.h>
+#include <bvpl/bvpl_octree/bvpl_global_pca.h>
 
 #include <vul/vul_file.h>
 
 //:global variables
 namespace bvpl_pca_project_process_globals
 {
-  const unsigned n_inputs_  = 6;
+  const unsigned n_inputs_ = 5;
   const unsigned n_outputs_ = 0;
 }
 
@@ -28,12 +28,11 @@ bool bvpl_pca_project_process_cons(bprb_func_process& pro)
 
   vcl_vector<vcl_string> input_types_(n_inputs_);
   unsigned i = 0;
-  input_types_[i++] = "vcl_string" ;  //pca dir
-  input_types_[i++] = "boxm_scene_base_sptr"; //projection scene
-  input_types_[i++] = "int";   //block Indices
+  input_types_[i++] = "vcl_string" ;  //path of pca_global_info.xml
+  input_types_[i++] = "int"; //scene id
+  input_types_[i++] = "int";  //block Indeces
   input_types_[i++] = "int";
   input_types_[i++] = "int";
-  input_types_[i++] = "unsigned";  //num_components
 
   vcl_vector<vcl_string> output_types_(n_outputs_);
 
@@ -49,22 +48,16 @@ bool bvpl_pca_project_process(bprb_func_process& pro)
   //get inputs
   unsigned i = 0;
   vcl_string pca_dir = pro.get_input<vcl_string>(i++);
-  boxm_scene_base_sptr proj_scene_base = pro.get_input<boxm_scene_base_sptr>(i++);
+  int scene_id = pro.get_input<int>(i++);
   int block_i = pro.get_input<int>(i++);
   int block_j = pro.get_input<int>(i++);
   int block_k = pro.get_input<int>(i++);
-  unsigned num_components = pro.get_input<unsigned>(i++);
 
   if (!vul_file::is_directory(pca_dir))
     return false;
-
-  if (!proj_scene_base)
-    return false;
-
-  boxm_scene<boct_tree<short, float> >* proj_scene = dynamic_cast<boxm_scene<boct_tree<short, float> >*> (proj_scene_base.as_pointer());
-
-  bvpl_discover_pca_kernels pca_extractor(pca_dir);
-  pca_extractor.project(proj_scene, num_components, block_i, block_j, block_k);
+  
+  bvpl_global_pca<125> global_pca(pca_dir);
+  global_pca.project(scene_id, block_i, block_j, block_k);
 
   return true;
 }
