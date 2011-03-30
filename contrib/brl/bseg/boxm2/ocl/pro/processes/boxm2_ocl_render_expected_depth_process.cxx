@@ -232,7 +232,7 @@ bool boxm2_ocl_render_expected_depth_process(bprb_func_process& pro)
     kern->set_local_arg( local_threads[0]*local_threads[1]*sizeof(cl_int) );
 
     //execute kernel
-    kern->execute(queue, 2, local_threads, gThreads);
+    kern->execute(queue, 2, lThreads, gThreads);
     clFinish(queue);
     gpu_time += kern->exec_time();
 
