@@ -22,7 +22,7 @@ IF(EXPAT_FOUND)
 
   ADD_LIBRARY(boxm2_pro ${boxm2_pro_sources})
 
-  TARGET_LINK_LIBRARIES(boxm2_pro boxm2 bprb brdb brip vsol bsta bsta_pro vnl vil vgl vbl_io vul)
+  TARGET_LINK_LIBRARIES(boxm2_pro boxm2 sdet bprb brdb brip imesh vsol bsta bsta_pro vnl vil vgl vbl_io vul)
 
   IF( BUILD_TESTING )
     SUBDIRS(tests)
