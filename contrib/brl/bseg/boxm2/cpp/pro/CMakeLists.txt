@@ -11,7 +11,7 @@ SET(boxm2_cpp_pro_sources
 AUX_SOURCE_DIRECTORY(processes boxm2_cpp_pro_sources)
 ADD_LIBRARY(boxm2_cpp_pro  ${boxm2_cpp_pro_sources})
 
-TARGET_LINK_LIBRARIES(boxm2_cpp_pro boxm2_cpp_algo brdb vbl_io expatpp vpgl vil vgl vgl_xio vbl vsl vcl)
+TARGET_LINK_LIBRARIES(boxm2_cpp_pro boxm2_cpp_algo bprb brdb vbl_io expatpp vpgl vil vgl vgl_xio vbl vsl vcl)
 
 IF( BUILD_TESTING )
   SUBDIRS(tests)
