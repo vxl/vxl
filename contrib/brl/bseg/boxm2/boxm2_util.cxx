@@ -2,12 +2,13 @@
 //:
 // \file
 
+#include <vpgl/algo/vpgl_project.h>
+
 //vgl includes
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_homg_point_3d.h>
 #include <vgl/vgl_box_3d.h>
 #include <vgl/vgl_box_2d.h>
-#include <vpgl/algo/vpgl_project.h>
 #include <vil/vil_convert.h>
 
 //vnl includes
@@ -194,32 +195,31 @@ boxm2_util::construct_camera( double elevation,
 }
 
 
-//: searches through the list of perspective cameras and returns a pointer to
-//  the one that most closely aligns with the normal
-unsigned boxm2_util::find_nearest_cam(vgl_vector_3d<double>& normal, 
+//: searches through the list of perspective cameras and returns a pointer to the one that most closely aligns with the normal
+unsigned boxm2_util::find_nearest_cam(vgl_vector_3d<double>& normal,
                                       vcl_vector<vpgl_perspective_camera<double>* >& cams)
 {
-  if(cams.empty()) {
+  if (cams.empty()) {
     vcl_cout<<"boxm2_util::find_nearest_cam camera list empty!, returning null"<<vcl_endl;
-    return 0; 
+    return 0;
   }
-  
+
   //find minimal dot product amongst cams/images
-  double minAngle = 10e20; 
-  unsigned minCam = 0; 
-  for(int i=0; i<cams.size(); ++i) {
-    double dp = dot_product( cams[i]->principal_axis(), normal ); 
-    double angle = vcl_fabs( vcl_acos(dp) ); 
-    if(angle < minAngle) {
-      minAngle = angle; 
-      minCam = i; 
+  double minAngle = 10e20;
+  unsigned minCam = 0;
+  for (unsigned int i=0; i<cams.size(); ++i) {
+    double dp = dot_product( cams[i]->principal_axis(), normal );
+    double angle = vcl_fabs( vcl_acos(dp) );
+    if (angle < minAngle) {
+      minAngle = angle;
+      minCam = i;
     }
   }
-  
+
   //return the min cam
   return minCam;
 }
-                                                      
+
 
 bool boxm2_util::copy_file(vcl_string file, vcl_string dest)
 {

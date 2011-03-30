@@ -18,8 +18,8 @@
 //TODO IN THIS INIT METHOD: Need to pass in a ref to the OPENCL_CACHE so this
 //class can easily access BOCL_MEMs
 bool boxm2_opencl_render_rgb_process::init_kernel(cl_context* context,
-                                              cl_device_id* device,
-                                              vcl_string opts)
+                                                  cl_device_id* device,
+                                                  vcl_string opts)
 {
   context_ = context;
 
@@ -50,8 +50,8 @@ bool boxm2_opencl_render_rgb_process::init_kernel(cl_context* context,
                                                 "render_bit_scene",   //kernel name
                                                 options + " -D DETERMINISTIC ",              //options
                                                 "boxm2 opencl render"); //kernel identifier (for error checking)
-  
-  created = created&&rand_kernel_.create_kernel( context_,
+
+  created = created&&rand_kernel_.create_kernel(context_,
                                                 device,
                                                 src_paths,
                                                 "render_bit_scene",   //kernel name
@@ -67,7 +67,7 @@ bool boxm2_opencl_render_rgb_process::init_kernel(cl_context* context,
                                                                "normalize_render_rgb_kernel",   //kernel name
                                                                options,              //options
                                                                "normalize render kernel"); //kernel identifier (for error checking)
-  
+
   vcl_string render_gl_options = " -D INTENSITY ";
   render_gl_options += " -D RENDER_GL ";
 
@@ -75,11 +75,11 @@ bool boxm2_opencl_render_rgb_process::init_kernel(cl_context* context,
   render_gl_src_paths.push_back(source_dir + "cell_utils.cl");
   render_gl_src_paths.push_back(source_dir + "bit/normalize_kernels.cl");
   created = created && render_gl_kernel_.create_kernel( context_,
-                                                               device,
-                                                               render_gl_src_paths,
-                                                               "render_kernel_rgb_gl",   //kernel name
-                                                               render_gl_options,              //options
-                                                               " render rgb gl kernel"); //kernel identifier (for error checking)
+                                                        device,
+                                                        render_gl_src_paths,
+                                                        "render_kernel_rgb_gl",   //kernel name
+                                                        render_gl_options,              //options
+                                                        " render rgb gl kernel"); //kernel identifier (for error checking)
 
   return created;
 }
@@ -109,19 +109,19 @@ bool boxm2_opencl_render_rgb_process::execute(vcl_vector<brdb_value_sptr>& input
   brdb_value_t<boxm2_scene_sptr>* scene_brdb = static_cast<brdb_value_t<boxm2_scene_sptr>* >( input[inIdx++].ptr() );
   boxm2_scene_sptr scene = scene_brdb->value();
   bool foundDataType = false;
-  vcl_vector<vcl_string> apps = scene->appearances(); 
-  for(int i=0; i<apps.size(); ++i) {
-    if( apps[i] == boxm2_data_traits<BOXM2_GAUSS_RGB>::prefix() ) 
+  vcl_vector<vcl_string> apps = scene->appearances();
+  for (unsigned int i=0; i<apps.size(); ++i) {
+    if ( apps[i] == boxm2_data_traits<BOXM2_GAUSS_RGB>::prefix() )
     {
-      data_type_ = apps[i]; 
+      data_type_ = apps[i];
       foundDataType = true;
     }
   }
-  if(!foundDataType) {
+  if (!foundDataType) {
     vcl_cout<<"BOXM2_OPENCL_RENDER_PROCESS ERROR: scene doesn't have BOXM2_GAUSS_RGB data type"<<vcl_endl;
     return false;
   }
-  
+
   //camera
   brdb_value_t<vpgl_camera_double_sptr>* brdb_cam = static_cast<brdb_value_t<vpgl_camera_double_sptr>* >( input[inIdx++].ptr() );
   vpgl_camera_double_sptr cam = brdb_cam->value();
@@ -163,10 +163,10 @@ bool boxm2_opencl_render_rgb_process::execute(vcl_vector<brdb_value_sptr>& input
     vis_img_->set_cpu_buffer(vis_img_view->begin());
     vis_img_->write_to_buffer(*command_queue_);
   }
-  
+#if 0
   brdb_value_t<vcl_string>* brdb_data_type = static_cast<brdb_value_t<vcl_string>* >( input[inIdx++].ptr() );
-  //data_type_=brdb_data_type->value();
-
+  data_type_=brdb_data_type->value();
+#endif
   //exp image dimensions
   int* img_dim_buff = new int[4];
   img_dim_buff[0] = 0;
@@ -199,9 +199,9 @@ bool boxm2_opencl_render_rgb_process::execute(vcl_vector<brdb_value_sptr>& input
   for (id = vis_order.begin(); id != vis_order.end(); ++id)
   {
     //choose correct render kernel
-    boxm2_block_metadata mdata = scene->get_block_metadata(*id); 
+    boxm2_block_metadata mdata = scene->get_block_metadata(*id);
     bocl_kernel& kern = (mdata.random_) ? rand_kernel_ : render_kernel_;
-        
+
     //write the image values to the buffer
     vul_timer transfer;
     bocl_mem* blk       = cache_->get_block(*id);
@@ -235,70 +235,67 @@ bool boxm2_opencl_render_rgb_process::execute(vcl_vector<brdb_value_sptr>& input
     //clear render kernel args so it can reset em on next execution
     kern.clear_args();
   }
-  if(!gl_image_)
+  if (!gl_image_)
   // normalize
   {
-      vcl_cout<<"NOT DOING GL IMAGE"<<vcl_endl;
-      normalize_render_kernel_.set_arg( image_ );
-      normalize_render_kernel_.set_arg( vis_img_ );
-      normalize_render_kernel_.set_arg( &exp_img_dim);
-      normalize_render_kernel_.execute( (*command_queue_), 2, lThreads, gThreads);
-      clFinish(*command_queue_);
-      gpu_time_ += normalize_render_kernel_.exec_time();
+    vcl_cout<<"NOT DOING GL IMAGE"<<vcl_endl;
+    normalize_render_kernel_.set_arg( image_ );
+    normalize_render_kernel_.set_arg( vis_img_ );
+    normalize_render_kernel_.set_arg( &exp_img_dim);
+    normalize_render_kernel_.execute( (*command_queue_), 2, lThreads, gThreads);
+    clFinish(*command_queue_);
+    gpu_time_ += normalize_render_kernel_.exec_time();
 
-      //clear render kernel args so it can reset em on next execution
-      normalize_render_kernel_.clear_args();
-      image_->read_to_buffer(*command_queue_);
-      vis_img_->read_to_buffer(*command_queue_);
-
+    //clear render kernel args so it can reset em on next execution
+    normalize_render_kernel_.clear_args();
+    image_->read_to_buffer(*command_queue_);
+    vis_img_->read_to_buffer(*command_queue_);
   }
   //read image out to buffer (from gpu)
 
-  
   else
   {
-      float* mini_buf = new float[1];
-      float* maxi_buf = new float[1];
+    float* mini_buf = new float[1];
+    float* maxi_buf = new float[1];
 
-      brdb_value_t<float>* brdb_mini = static_cast<brdb_value_t<float>* >( input[inIdx++].ptr() );
-      mini_buf[0]=brdb_mini->value();
+    brdb_value_t<float>* brdb_mini = static_cast<brdb_value_t<float>* >( input[inIdx++].ptr() );
+    mini_buf[0]=brdb_mini->value();
 
-      brdb_value_t<float>* brdb_maxi = static_cast<brdb_value_t<float>* >( input[inIdx++].ptr() );
-      maxi_buf[0]=brdb_maxi->value();
-
-
-      brdb_value_t<bbas_1d_array_float_sptr>* brdb_tf = static_cast<brdb_value_t<bbas_1d_array_float_sptr>* >( input[inIdx++].ptr() );
-      bbas_1d_array_float_sptr tf=brdb_tf->value();
-
-      //mini_buf[0]=0.0f;
-      //maxi_buf[0]=1.0f;
-
-      float* tf_buf= new float[256];
-      for (int i=0; i<256; ++i) tf_buf[i] =tf->data_array[i] ;
-
-      mini_=new bocl_mem((*context_),mini_buf,sizeof(float),"Mini buffer");
-      mini_->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
-      maxi_=new bocl_mem((*context_),maxi_buf,sizeof(float),"Maxi buffer");
-      maxi_->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
-      tf_=new bocl_mem((*context_),tf_buf,256*sizeof(float),"TF buffer");
-      tf_->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
-
-      render_gl_kernel_.set_arg( mini_ );
-      render_gl_kernel_.set_arg( maxi_ );
-      render_gl_kernel_.set_arg( tf_ );
-      render_gl_kernel_.set_arg( vis_img_ );
-      render_gl_kernel_.set_arg( image_ );
-      render_gl_kernel_.set_arg( gl_image_ );
-      render_gl_kernel_.set_arg( &exp_img_dim);
-      render_gl_kernel_.execute( (*command_queue_), 2, lThreads, gThreads);
-      clFinish(*command_queue_);
-      gpu_time_ += render_gl_kernel_.exec_time();
-
-      //clear render kernel args so it can reset em on next execution
-      render_gl_kernel_.clear_args();
+    brdb_value_t<float>* brdb_maxi = static_cast<brdb_value_t<float>* >( input[inIdx++].ptr() );
+    maxi_buf[0]=brdb_maxi->value();
 
 
+    brdb_value_t<bbas_1d_array_float_sptr>* brdb_tf = static_cast<brdb_value_t<bbas_1d_array_float_sptr>* >( input[inIdx++].ptr() );
+    bbas_1d_array_float_sptr tf=brdb_tf->value();
+
+    //mini_buf[0]=0.0f;
+    //maxi_buf[0]=1.0f;
+
+    float* tf_buf= new float[256];
+    for (int i=0; i<256; ++i) tf_buf[i] =tf->data_array[i] ;
+
+    mini_=new bocl_mem((*context_),mini_buf,sizeof(float),"Mini buffer");
+    mini_->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
+    maxi_=new bocl_mem((*context_),maxi_buf,sizeof(float),"Maxi buffer");
+    maxi_->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
+    tf_=new bocl_mem((*context_),tf_buf,256*sizeof(float),"TF buffer");
+    tf_->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
+
+    render_gl_kernel_.set_arg( mini_ );
+    render_gl_kernel_.set_arg( maxi_ );
+    render_gl_kernel_.set_arg( tf_ );
+    render_gl_kernel_.set_arg( vis_img_ );
+    render_gl_kernel_.set_arg( image_ );
+    render_gl_kernel_.set_arg( gl_image_ );
+    render_gl_kernel_.set_arg( &exp_img_dim);
+    render_gl_kernel_.execute( (*command_queue_), 2, lThreads, gThreads);
+    clFinish(*command_queue_);
+    gpu_time_ += render_gl_kernel_.exec_time();
+
+    //clear render kernel args so it can reset em on next execution
+    render_gl_kernel_.clear_args();
   }
+
   //clean up camera, lookup_arr, img_dim_buff
   delete[] output_arr;
   delete[] img_dim_buff;
