@@ -56,6 +56,16 @@ point_colour: red
 // Approximate width of region to display shape
 width: 100
 
+// Optional paths to text files containing a matrix and vector
+// defining a linear subspace of the parameter space.
+// When supplied, the tool will generate the shapes by
+// moving along the modes defined in the subspace.
+// A subspace model of the form x=mean+(PQ)b is created,
+// where P is the matrix of original modes, Q is the loaded matrix
+// defining the subspace.  so each column defines a subspace mode.
+// subspace_mode_path: subspace_mode_matrix.txt
+// subspace_var_path: subspace_var_vector.txt
+
 base_name: mode
 output_dir: ./
 
@@ -95,6 +105,13 @@ struct tool_params
 
   //: Approximate width of region to display shape
   double width;
+
+  //: Optional path to text file containing a mode matrix
+  vcl_string subspace_mode_path;
+
+  //: Optional path to text files containing a variance vector
+  vcl_string subspace_var_path;
+
 
   //: Base name for output
   vcl_string base_name;
@@ -145,6 +162,14 @@ void tool_params::read_from_file(const vcl_string& path)
                                                "shape_aam.bfs");
 
   if (make_movie) overlap_shapes=true;
+
+  subspace_mode_path = props["subspace_mode_path"];
+  if (subspace_mode_path=="-") subspace_mode_path="";
+
+  subspace_var_path = props["subspace_var_path"];
+  if (subspace_var_path=="-") subspace_var_path="";
+
+
 
   // Don't look for unused props so can use a single common parameter file.
 }
@@ -212,6 +237,75 @@ void draw_mode_frames(msm_shape_mode_view& mode_view,
           <<params.base_name<<"_s"<<m<<"_XX.eps"<<vcl_endl;
 }
 
+//: Create new model where modes are a subspace of the original model
+//  Loads in a matrix Q defining modes, and vector V defining variance
+//  Modes of new model are given by (PQ) where P are the modes of the
+//  original.
+msm_shape_model create_subspace_model(
+            const msm_shape_model& shape_model,
+            const vcl_string& mode_path,
+            const vcl_string& var_path)
+{
+  // Attempt to load in modes
+  vnl_matrix<double> Q;
+  vcl_ifstream Qs(mode_path.c_str());
+  if (!Qs)
+  {
+    vcl_cout<<"Failed to open "<<mode_path<<vcl_endl;
+    vcl_abort();
+  }
+
+  if (!Q.read_ascii(Qs))
+  {
+    vcl_cerr<<"Failed to read matrix from "<<mode_path<<vcl_endl;
+    vcl_abort();
+  }
+  Qs.close();
+
+  vnl_vector<double> new_var;
+  vcl_ifstream Vs(var_path.c_str());
+  if (!Vs)
+  {
+    vcl_cout<<"Failed to open "<<var_path<<vcl_endl;
+    vcl_abort();
+  }
+  if (!new_var.read_ascii(Vs))
+  {
+    vcl_cerr<<"Failed to read vector from "<<var_path<<vcl_endl;
+    vcl_abort();
+  }
+  Vs.close();
+
+vcl_cout<<"new_var: "<<new_var<<vcl_endl;
+
+  vcl_cerr<<"Number of subspace modes = "<<Q.columns()<<vcl_endl;
+
+  if (Q.columns()!=new_var.size())
+  {
+    vcl_cerr<<"Number of variances = "<<new_var.size()<<vcl_endl;
+    vcl_cerr<<"Numbers differ."<<vcl_endl;
+    vcl_abort();
+  }
+
+  if (Q.rows()>shape_model.n_modes())
+  {
+    vcl_cerr<<"More rows in matrix than number of modes available."<<vcl_endl;
+    vcl_abort();
+  }
+
+  const vnl_matrix<double>& allP = shape_model.modes();
+  vnl_matrix<double> subP = allP.extract(allP.rows(),Q.rows());
+
+  vnl_matrix<double> newP = subP * Q;
+
+  msm_shape_model new_model;
+  new_model.set(shape_model.mean_points(),newP,new_var,
+                shape_model.default_pose(),
+                shape_model.aligner(),
+                shape_model.param_limiter());
+
+  return new_model;
+}
 
 int main(int argc, char** argv)
 {
@@ -247,6 +341,16 @@ int main(int argc, char** argv)
   }
 
   vcl_cout<<"Model: "<<shape_model<<vcl_endl;
+  vcl_cerr<<"First mode variances are ";
+  for (unsigned i=0;i<8;++i)
+    if (i<shape_model.n_modes()) 
+      vcl_cout<<shape_model.mode_var()[i]<<" ";
+  vcl_cout<<vcl_endl;
+
+  if (params.subspace_mode_path!="")
+    shape_model = create_subspace_model(shape_model,
+                                      params.subspace_mode_path,
+                                      params.subspace_var_path);
 
   msm_curves curves;
   if (!curves.read_text_file(params.curves_path))
