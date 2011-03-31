@@ -39,8 +39,8 @@ class boxm2_util
                                                               vgl_box_3d<double> bb,
                                                               bool fit_bb=true);
                                                               
-    static unsigned find_nearest_cam(vgl_vector_3d<double>& normal, 
-                                     vcl_vector<vpgl_perspective_camera<double>* >& cams); 
+    static int find_nearest_cam(vgl_vector_3d<double>& normal, 
+                                vcl_vector<vpgl_perspective_camera<double>* >& cams); 
                                                               
     static bool copy_file(vcl_string file, vcl_string dest); 
     

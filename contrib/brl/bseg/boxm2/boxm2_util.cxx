@@ -196,21 +196,21 @@ boxm2_util::construct_camera( double elevation,
 
 
 //: searches through the list of perspective cameras and returns a pointer to the one that most closely aligns with the normal
-unsigned boxm2_util::find_nearest_cam(vgl_vector_3d<double>& normal,
-                                      vcl_vector<vpgl_perspective_camera<double>* >& cams)
+// returns negative one if the list is empty
+int boxm2_util::find_nearest_cam(vgl_vector_3d<double>& normal,
+                                 vcl_vector<vpgl_perspective_camera<double>* >& cams)
 {
   if (cams.empty()) {
-    vcl_cout<<"boxm2_util::find_nearest_cam camera list empty!, returning null"<<vcl_endl;
-    return 0;
+    return -1;
   }
 
   //find minimal dot product amongst cams/images
   double minAngle = 10e20;
-  unsigned minCam = 0;
+  unsigned minCam = -1;
   for (unsigned int i=0; i<cams.size(); ++i) {
-    double dp = dot_product( cams[i]->principal_axis(), normal );
+    double dp = dot_product( -1*cams[i]->principal_axis(), normal );
     double angle = vcl_fabs( vcl_acos(dp) );
-    if (angle < minAngle) {
+    if (angle < minAngle && angle < vnl_math::pi/3.0) {
       minAngle = angle;
       minCam = i;
     }
