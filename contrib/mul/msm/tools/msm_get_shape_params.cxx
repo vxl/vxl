@@ -32,8 +32,10 @@ images: {
   image1.pts : image1.jpg
   image2.pts : image2.jpg
 }
-
 <END FILE>
+
+Note: You can use the same file as was used to build the model, defining the output
+      path using the -o command line option.
 */
 
 void print_usage()
@@ -125,6 +127,9 @@ void load_shapes(const vcl_string& points_dir,
 int main(int argc, char** argv)
 {
   vul_arg<vcl_string> param_path("-p","Parameter filename");
+  vul_arg<vcl_string> out_path("-o","Output path (over-riding param file)");
+  vul_arg<bool> no_pose("-no_pose","Don't display pose",false);
+  vul_arg<bool> use_pts_name("-use_pts_name","Include name of points at beginning of the line",false);
   vul_arg_parse(argc,argv);
 
   msm_add_all_loaders();
@@ -145,6 +150,8 @@ int main(int argc, char** argv)
     vcl_cerr<<"Error: "<<e.what()<<vcl_endl;
     return 1;
   }
+
+  if (out_path()!="") params.output_path = out_path();
 
   msm_shape_model shape_model;
 
@@ -174,9 +181,14 @@ int main(int argc, char** argv)
   {
     sm_instance.fit_to_points(shapes[i]);
 
-    // Write pose parameters
-    for (unsigned j=0;j<sm_instance.pose().size();++j)
-      ofs<<sm_instance.pose()[j]<<" ";
+    if (use_pts_name()) ofs<<params.points_names[i]<<" ";
+
+    if (!no_pose())
+    {
+      // Write pose parameters
+      for (unsigned j=0;j<sm_instance.pose().size();++j)
+        ofs<<sm_instance.pose()[j]<<" ";
+    }
 
     // Write shape parameters
     for (unsigned j=0;j<sm_instance.params().size();++j)
@@ -187,8 +199,9 @@ int main(int argc, char** argv)
   ofs.close();
 
   vcl_cout<<"Wrote parameters for "<<shapes.size()<<" shapes to "<<params.output_path<<vcl_endl;
-  vcl_cout<<"First "<<sm_instance.pose().size()<<" are pose."<<vcl_endl;
-  vcl_cout<<"Next "<<sm_instance.params().size()<<" are shape."<<vcl_endl;
+  if (use_pts_name()) vcl_cout<<"Each line starts with filename."<<vcl_endl;
+  if (!no_pose()) vcl_cout<<"First "<<sm_instance.pose().size()<<" values are pose."<<vcl_endl;
+  vcl_cout<<"Next "<<sm_instance.params().size()<<" values are shape."<<vcl_endl;
 
   return 0;
 }
