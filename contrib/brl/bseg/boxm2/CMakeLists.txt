@@ -9,7 +9,7 @@ IF(EXPAT_FOUND)
   INCLUDE_DIRECTORIES( ${GEL_INCLUDE_DIR} )
   INCLUDE_DIRECTORIES( ${GEL_INCLUDE_DIR}/mrc )
   INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/b3p/expatpp )
-    INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bbas )
+  INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bbas )
 
     SET(boxm2_sources
         boxm2_scene.h                 boxm2_scene.cxx
