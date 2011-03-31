@@ -259,3 +259,10 @@ void imesh_mesh::label_ccw_tex_faces_valid()
   }
 }
 
+//Smart Pointer IO 
+void vsl_b_write(vsl_b_ostream& /*os*/, imesh_mesh_sptr&) {}
+void vsl_b_write(vsl_b_ostream& /*os*/, imesh_mesh_sptr const&) {}
+
+//: Binary load boxm scene from stream.
+void vsl_b_read(vsl_b_istream& /*is*/, imesh_mesh_sptr&) {}
+void vsl_b_read(vsl_b_istream& /*is*/, imesh_mesh_sptr const&) {}

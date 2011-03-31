@@ -17,6 +17,7 @@ SET(bvgl_sources
  bvgl_changes.h      bvgl_changes.cxx
  bvgl_changes_sptr.h
  bvgl_point_3d_cmp.h
+ bvgl_triangle_interpolation_iterator.h  bvgl_triangle_interpolation_iterator.txx
 )
 AUX_SOURCE_DIRECTORY(Templates bvgl_sources)
 

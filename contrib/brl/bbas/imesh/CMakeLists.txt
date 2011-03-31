@@ -19,11 +19,11 @@ SET(imesh_sources
 
 )
 
-#AUX_SOURCE_DIRECTORY(Templates imesh_sources)
+AUX_SOURCE_DIRECTORY(Templates imesh_sources)
 
 ADD_LIBRARY(imesh  ${imesh_sources})
 
-TARGET_LINK_LIBRARIES(imesh vgl vul)
+TARGET_LINK_LIBRARIES(imesh vgl vul brdb vbl_io )
 
 # Algorithms
 SUBDIRS( algo )

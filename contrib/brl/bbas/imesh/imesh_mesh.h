@@ -17,8 +17,13 @@
 
 #include <vgl/vgl_point_2d.h>
 
+//for brdb smart pointer
+#include <vbl/vbl_ref_count.h>
+#include <vbl/vbl_smart_ptr.h>
+#include <vsl/vsl_binary_io.h>
+
 //: A simple mesh
-class imesh_mesh
+class imesh_mesh : public vbl_ref_count
 {
  public:
   //: Default Constructor
@@ -153,5 +158,16 @@ class imesh_mesh
   tex_coord_type tex_coord_status_;
 };
 
+//smartptr
+typedef vbl_smart_ptr<imesh_mesh> imesh_mesh_sptr;
+
+//--- IO read/write for sptrs--------------------------------------------------
+//: Binary write boxm2_scene scene to stream
+void vsl_b_write(vsl_b_ostream& os, imesh_mesh_sptr& sptr);
+void vsl_b_write(vsl_b_ostream& os, imesh_mesh_sptr const& sptr);
+
+//: Binary load boxm2_scene scene from stream.
+void vsl_b_read(vsl_b_istream& is, imesh_mesh_sptr& sptr);
+void vsl_b_read(vsl_b_istream& is, imesh_mesh_sptr const& sptr);
 
 #endif // imesh_mesh_h_
