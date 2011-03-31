@@ -53,7 +53,7 @@ images: {
 
 void print_usage()
 {
-  vcl_cout << "msm_build_shape_model -p param_file\n"
+  vcl_cout << "msm_plot_aligned_shapes -p param_file\n"
            << "Generate EPS file containing aligned shape points.\n"
            << vcl_endl;
 
