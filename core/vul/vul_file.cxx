@@ -112,7 +112,17 @@ unsigned long vul_file::size(char const* fn)
 bool vul_file::exists(char const* fn)
 {
   struct stat fs;
-  return stat(fn, &fs) == 0;
+  vcl_string name(fn);
+
+#if defined(VCL_WIN32) && !defined(__CYGWIN__)
+  vcl_string::size_type last_non_slash_index = name.find_last_not_of("\\/");
+#else
+  vcl_string::size_type last_non_slash_index = name.rfind('/');
+#endif
+  if (last_non_slash_index != vcl_string::npos)
+    last_non_slash_index++;
+  name = name.substr(0, last_non_slash_index);
+  return stat(name.c_str(), &fs) == 0;
 }
 
 vcl_string vul_file::dirname(char const* fn)
