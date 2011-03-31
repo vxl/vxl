@@ -170,4 +170,24 @@ void step_cell_render_depth2(float depth,
 
 #endif
 
+#ifdef  RENDER_HEIGHT_MAP
+void step_cell_render_depth2(float depth, 
+                             __global float  * alpha_data, 
+                             int      data_ptr, 
+                             float    d, 
+                             float  * vis,
+                             float  * expected_depth,
+                             float  * expected_depth_square,
+                             float  * probsum)
+{
+  float alpha = alpha_data[data_ptr];
+  float diff_omega=exp(-alpha*d);
+  float omega=(*vis) * (1.0f - diff_omega);
+  (*probsum)+=omega;
+  (*vis) *= diff_omega;
+  (*expected_depth)+=depth*omega;
+  (*expected_depth_square)+=depth*depth*omega;
+  
+}
 
+#endif
