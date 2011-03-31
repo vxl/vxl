@@ -85,7 +85,8 @@ void test_log()
     cfg_file <<
       "root: { level: INFO stream_output: test }\n"
       "obj3: { level: INFO stream_output: cout dump_prefix: ./ }\n"
-      "obj4: { level: INFO stream_output: test_streambuf }\n";
+      "obj4: { level: INFO stream_output: test_streambuf }\n"
+      "mul.mbl.log: { level: NOTICE stream_output: test_streambuf }\n";
   }
   vcl_map<vcl_string, vcl_ostream*> registered_streams;
   registered_streams["test"] = &output;

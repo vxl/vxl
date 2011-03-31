@@ -64,6 +64,28 @@ vcl_ostream& operator<<(vcl_ostream&os, mbl_logger::levels level)
 }
 
 
+vcl_ostream& operator<<(vcl_ostream&os, const mbl_log_categories::cat_spec& spec)
+{
+  os << "{ level: " << static_cast<mbl_logger::levels>(spec.level);
+  switch (spec.output)
+  {
+   case mbl_log_categories::cat_spec::FILE_OUT:
+    os << " file_output: " << spec.name;
+    break;
+   case mbl_log_categories::cat_spec::NAMED_STREAM:
+    os << " stream_output: " << spec.name;
+    break;
+   default:
+    assert(!"This should not happen: invalid spec.output");
+    break;
+  }
+  if (!spec.dump_prefix.empty())
+    os << " dump_prefix: " << spec.dump_prefix;
+
+  os << " }";
+  return os;
+}
+
 //Notes - use two different stream bufs to hendle the mt_log() and the log().
 // one should response to flushes with a terminate - the other not.
 
@@ -126,7 +148,6 @@ vcl_streamsize mbl_log_streambuf::xsputn( const char *ptr, vcl_streamsize nchar)
 }
 
 #ifndef MBL_LOG_DISABLE_ALL_LOGGING
-
 
 //: Default constructor only available to root's default logger.
 mbl_logger::mbl_logger():
@@ -279,6 +300,11 @@ void mbl_log_output_file::terminate_flush()
   }
 }
 
+static mbl_logger& local_logger()
+{
+  static mbl_logger l("mul.mbl.log");
+  return l;
+}
 
 mbl_logger::mbl_logger(const char *id):
   output_(0),
@@ -286,8 +312,10 @@ mbl_logger::mbl_logger(const char *id):
   logstream_(&streambuf_),
   mt_logstream_(&logstream_)
 {
+  MBL_LOG(INFO, local_logger(), "Creating logger: " << id);
   const mbl_log_categories::cat_spec &cat =
     mbl_logger::root().categories().get(id);
+  MBL_LOG(DEBUG, local_logger(), "Using cat_spec: " << cat);
 
   level_ = cat.level;
   dump_prefix_ = cat.dump_prefix;
@@ -626,28 +654,6 @@ const mbl_log_categories::cat_spec&
   return it->second;
 }
 
-
-vcl_ostream& operator<<(vcl_ostream&os, const mbl_log_categories::cat_spec& spec)
-{
-  os << "{ level: " << static_cast<mbl_logger::levels>(spec.level);
-  switch (spec.output)
-  {
-   case mbl_log_categories::cat_spec::FILE_OUT:
-    os << " file_output: " << spec.name;
-    break;
-   case mbl_log_categories::cat_spec::NAMED_STREAM:
-    os << " stream_output: " << spec.name;
-    break;
-   default:
-    assert(!"This should not happen: invalid spec.output");
-    break;
-  }
-  if (!spec.dump_prefix.empty())
-    os << " dump_prefix: " << spec.dump_prefix;
-
-  os << " }";
-  return os;
-}
 
 void mbl_log_categories::print(vcl_ostream& os) const
 {
