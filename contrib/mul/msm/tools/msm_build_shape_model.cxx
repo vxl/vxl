@@ -138,6 +138,7 @@ void tool_params::read_from_file(const vcl_string& path)
 int main(int argc, char** argv)
 {
   vul_arg<vcl_string> param_path("-p","Parameter filename");
+  vul_arg<vcl_string> mode_var_path("-vp","Path for output of mode variances");
   vul_arg_parse(argc,argv);
 
   msm_add_all_loaders();
@@ -180,6 +181,20 @@ int main(int argc, char** argv)
   {
     vcl_cerr<<"Failed to save to "<<params.shape_model_path<<vcl_endl;
     return 3;
+  }
+
+  if (mode_var_path()!="")
+  {
+    vcl_ofstream ofs(mode_var_path().c_str());
+    if (!ofs)
+    {
+      vcl_cerr<<"Failed to open "<<mode_var_path()<<" for output."<<vcl_endl;
+      return 4;
+    }
+    for (unsigned i=0;i<shape_model.n_modes();++i)
+      ofs<<shape_model.mode_var()[i]<<vcl_endl;
+    ofs.close();
+    vcl_cout<<"Saved mode variances to "<<mode_var_path()<<vcl_endl;
   }
 
   return 0;
