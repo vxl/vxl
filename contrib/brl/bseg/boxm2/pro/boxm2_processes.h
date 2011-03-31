@@ -12,4 +12,5 @@ DECLARE_FUNC_CONS(boxm2_write_scene_xml_process);
 DECLARE_FUNC_CONS(boxm2_add_block_process);
 DECLARE_FUNC_CONS(boxm2_save_data_process);
 DECLARE_FUNC_CONS(boxm2_export_textured_mesh_process);
+DECLARE_FUNC_CONS(boxm2_export_mesh_process);
 #endif
