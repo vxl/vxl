@@ -35,7 +35,7 @@
 namespace boxm2_export_mesh_process_globals
 {
   const unsigned n_inputs_ = 4;
-  const unsigned n_outputs_ = 0;
+  const unsigned n_outputs_ = 1;
 }
 
 bool boxm2_export_mesh_process_cons(bprb_func_process& pro)
@@ -52,7 +52,7 @@ bool boxm2_export_mesh_process_cons(bprb_func_process& pro)
 
   // process has 1 output
   vcl_vector<vcl_string>  output_types_(n_outputs_);
-  //output_types_[0] = "boxm2_scene_sptr";
+  output_types_[0] = "imesh_mesh_sptr";
 
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 }
@@ -84,8 +84,8 @@ bool boxm2_export_mesh_process(bprb_func_process& pro)
   vil_image_view<float>* y_img = (vil_image_view<float>*) yimg.ptr(); 
 
   //determine size of depth image
-  unsigned ni = img->ni();
-  unsigned nj = img->nj();
+  unsigned ni = z_img->ni();
+  unsigned nj = z_img->nj();
   
   //create new resource sptr
   vil_image_resource_sptr z_img_res = vil_new_image_resource_of_view(*z_img);
@@ -154,6 +154,10 @@ bool boxm2_export_mesh_process(bprb_func_process& pro)
   imesh_write_vrml(os, mesh);
   os.close();
   
+  // store scene smart pointer
+  argIdx = 0; 
+  imesh_mesh_sptr mesh_sptr = new imesh_mesh(mesh); 
+  pro.set_output_val<imesh_mesh_sptr>(argIdx++, mesh_sptr);
   
   return true;
 }
