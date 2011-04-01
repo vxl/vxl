@@ -23,6 +23,7 @@
 #include <vgl/vgl_distance.h>
 #include <vgl/vgl_polygon.h>
 #include <vgl/vgl_polygon_scan_iterator.h>
+#include <vgl/vgl_triangle_3d.h>
 #include <bvgl/bvgl_triangle_interpolation_iterator.h>
 
 //vpgl camera stuff
@@ -40,6 +41,12 @@ namespace boxm2_texture_mesh_process_globals
   const unsigned n_inputs_ = 4;
   const unsigned n_outputs_ = 0;
 
+  //struct for passing 3d triangles (couldn't find a 3d triangle in VGL...)
+  struct triangle_3d {
+    vgl_point_3d<double> points[3]; 
+    unsigned face_id; 
+  };
+
   //helper texture map methods
   void boxm2_texture_mesh_from_imgs(vcl_string im_dir,
                                     vcl_string cam_dir,
@@ -55,10 +62,21 @@ namespace boxm2_texture_mesh_process_globals
   //checks if a triangle in UV space is visible.  us and vs are double buffers of length 3
   bool face_is_visible( vpgl_perspective_camera<double>* cam, 
                         vil_image_view<int>* vis_img,
-                        double* us, 
-                        double* vs,
-                        int face_id); 
-
+                        triangle_3d& world_tri); 
+                        
+  //matches textures 
+  void boxm2_match_textures(vcl_vector<vil_image_view<int>* >& vis_images, 
+                            vcl_vector<vpgl_perspective_camera<double>* >& cameras,
+                            vcl_vector<vcl_string>& imfiles,
+                            imesh_mesh& in_mesh,
+                            vcl_map<vcl_string, vcl_vector<unsigned> >& app_faces, 
+                            vcl_map<vcl_string, vpgl_perspective_camera<double>* >& texture_cams);
+                            
+  //returns a list of visible triangles given a camera, 
+  //visibility image, and world coordinate 3d triangel
+  vcl_vector<triangle_3d> get_visible_triangles(vpgl_perspective_camera<double>* cam, 
+                                                vil_image_view<int>* vis_img,
+                                                triangle_3d& world_tri); 
 }
 
 bool boxm2_texture_mesh_process_cons(bprb_func_process& pro)
@@ -140,22 +158,8 @@ void boxm2_texture_mesh_process_globals::boxm2_texture_mesh_from_imgs(vcl_string
   // BEGIN TEXTURE MAPPING
   // Gather cameras and iamges that will contribute to the texture
   ////////////////////////////////////////////////////////////////////////////////
-  vcl_vector<vcl_string> camfiles = boxm2_util::camfiles_from_directory(cam_dir);
   vcl_vector<vcl_string> imfiles  = boxm2_util::images_from_directory(im_dir);
-
-  vcl_vector<vpgl_perspective_camera<double>* > cameras;
-  for (unsigned int i=0; i<camfiles.size(); ++i) {
-    //build the camera from file
-    vcl_ifstream ifs(camfiles[i].c_str());
-    vpgl_perspective_camera<double>* icam = new vpgl_perspective_camera<double>;
-    if (!ifs.is_open()) {
-      vcl_cerr << "Failed to open file " << camfiles[i] << '\n';
-      return;
-    }
-    ifs >> *icam;
-    cameras.push_back(icam);
-    vcl_cout<<icam->principal_axis()<<vcl_endl;
-  }
+  vcl_vector<vpgl_perspective_camera<double>* > cameras = boxm2_util::cameras_from_directory(cam_dir); 
 
   ////////////////////////////////////////////////////////////////////////////////
   // Grab input mesh vertices and input mesh faces
@@ -174,69 +178,19 @@ void boxm2_texture_mesh_process_globals::boxm2_texture_mesh_from_imgs(vcl_string
   ////////////////////////////////////////////////////////////////////////////////
   // For each Face:
   //   determine which image is closest in normal and visible, store face index in a map[image_str, vector<int>face]
+  // match each face to best image
   ////////////////////////////////////////////////////////////////////////////////
-  //texture index
   vcl_cout<<"Populating faces for each texture"<<vcl_endl;
   vcl_map<vcl_string, vcl_vector<unsigned> > app_faces; //image_name to face_list
   vcl_map<vcl_string, vpgl_perspective_camera<double>* > texture_cams;
-  for (unsigned iface = 0; iface<nfaces; ++iface)
-  {
-    
-    //create list of cameras from which you can see this face
-    vcl_vector<vpgl_perspective_camera<double>* > visible_views; 
-    for(int i=0; i<vis_images.size(); ++i) {
-      
-      //project triangle 
-      double us[3], vs[3]; 
-      for(int vIdx=0; vIdx<3; ++vIdx) {
-        unsigned vertIdx = in_faces[iface][vIdx]; 
-        
-        //project these verts into UV
-        double x = in_verts[vertIdx][0], y = in_verts[vertIdx][1], z = in_verts[vertIdx][2];
-        double u,v;
-        cameras[i]->project(x, y, z, u, v);
-        us[vIdx] = u; 
-        vs[vIdx] = v; 
-      }
-      if( face_is_visible( cameras[i], vis_images[i], us, vs, iface) ) 
-        visible_views.push_back(cameras[i]); 
-    }
-    
-    //now compare the normal to each of the visible view cameras
-    vgl_vector_3d<double>& normal = in_faces.normal(iface);
-
-    //find camera with the closest look vector to this normal
-    int closeIdx = boxm2_util::find_nearest_cam(normal, visible_views);
-    vpgl_perspective_camera<double>* closest = NULL; 
-    vcl_string im_name = "empty"; 
-    if(closeIdx >= 0) {
-      closest = cameras[closeIdx];
-      im_name = imfiles[closeIdx];
-    }
-    
-    //grab appropriate face list (create it if it's not there)
-    vcl_map<vcl_string, vcl_vector<unsigned> >::iterator iter = app_faces.find(im_name);
-    if ( iter == app_faces.end() ) {
-      vcl_cout<<"Adding image: "<<im_name<<" to texture list"<<vcl_endl;
-      vcl_vector<unsigned> faceList;
-      faceList.push_back(iface);
-      app_faces[im_name] = faceList;
-
-      //keep track of the camera
-      texture_cams[im_name] = closest;
-    }
-    else {
-      app_faces[im_name].push_back(iface);
-    }
-  }
-
+  boxm2_match_textures(vis_images, cameras, imfiles, in_mesh, app_faces, texture_cams); 
+  
   ////////////////////////////////////////////////////////////////////////////////
   // For each image/appearance:
   //   - create a vert list
   //   - create a face list
   //   - create a sub mesh that is textured
   ////////////////////////////////////////////////////////////////////////////////
-
   //for each appearance (texture image), create an imesh_mesh (subMesh);
   vcl_cout<<"Creating Sub Meshes for each texture"<<vcl_endl;
   vcl_map<vcl_string, vcl_vector<unsigned> >::iterator apps;
@@ -322,12 +276,176 @@ void boxm2_texture_mesh_process_globals::boxm2_texture_mesh_from_imgs(vcl_string
   }
 }
 
-bool boxm2_texture_mesh_process_globals::face_is_visible( vpgl_perspective_camera<double>* cam, 
-                                                                  vil_image_view<int>* vis_img,
-                                                                  double* us, 
-                                                                  double* vs,
-                                                                  int face_id)
+
+//image_name to face_list
+void boxm2_texture_mesh_process_globals::boxm2_match_textures(vcl_vector<vil_image_view<int>* >& vis_images, 
+                                                              vcl_vector<vpgl_perspective_camera<double>* >& cameras,
+                                                              vcl_vector<vcl_string>& imfiles,
+                                                              imesh_mesh& in_mesh,
+                                                              vcl_map<vcl_string, vcl_vector<unsigned> >& app_faces, 
+                                                              vcl_map<vcl_string, vpgl_perspective_camera<double>* >& texture_cams)
 {
+  //grab faces and vertices from the mesh
+  imesh_regular_face_array<3>& in_faces = (imesh_regular_face_array<3>&) in_mesh.faces();
+  unsigned nfaces = in_mesh.num_faces();
+  imesh_vertex_array<3>& in_verts = in_mesh.vertices<3>();
+  
+  //for each face, determine which view is best
+  for (unsigned iface = 0; iface<nfaces; ++iface)
+  {
+    //make a triangle_3d out of this face
+    triangle_3d world_tri; 
+    world_tri.face_id = iface;
+    for(int i=0; i<3; ++i) {
+      unsigned vertexId = in_faces[iface][i]; 
+      double x = in_verts[vertexId][0];
+      double y = in_verts[vertexId][1];
+      double z = in_verts[vertexId][2];
+      world_tri.points[i] = vgl_point_3d<double>(x,y,z); 
+    }
+    
+    //create list of cameras from which you can see this face
+    vcl_vector<vpgl_perspective_camera<double>* > visible_views; 
+    for(int i=0; i<vis_images.size(); ++i) {
+      if( face_is_visible( cameras[i], vis_images[i], world_tri) ) 
+        visible_views.push_back(cameras[i]); 
+    }
+    
+    //now compare the normal to each of the visible view cameras
+    vgl_vector_3d<double>& normal = in_faces.normal(iface);
+
+    //find camera with the closest look vector to this normal
+    int closeIdx = boxm2_util::find_nearest_cam(normal, visible_views);
+    vpgl_perspective_camera<double>* closest = NULL; 
+    vcl_string im_name = "empty"; 
+    if(closeIdx >= 0) {
+      closest = cameras[closeIdx];
+      im_name = imfiles[closeIdx];
+    }
+    
+    //grab appropriate face list (create it if it's not there)
+    vcl_map<vcl_string, vcl_vector<unsigned> >::iterator iter = app_faces.find(im_name);
+    if ( iter == app_faces.end() ) {
+      vcl_cout<<"boxm2_match_textures:: Adding image "<<im_name<<" to texture list"<<vcl_endl;
+      vcl_vector<unsigned> faceList;
+      faceList.push_back(iface);
+      app_faces[im_name] = faceList;
+
+      //keep track of the camera
+      texture_cams[im_name] = closest;
+    }
+    else {
+      app_faces[im_name].push_back(iface);
+    }
+  }
+  
+#if 0
+  ////////////////////////////////////////////////////////////////////////////////
+  // Now there is a set of faces without textures, 
+  // for each face
+  //    for each image
+  //      - find visible portions of these faces, record area and angle from dist
+  //    find angle < 60 degrees AND largest area patch
+  //    cut the face such that the patch is exposed (patch may be some arbitrary polygon)
+  //    triangulate the n-gon into n triangles
+  //    add the *new* points to the mesh, as well as the new faces 
+  //    remember to not leave the old face in the mesh...
+  ////////////////////////////////////////////////////////////////////////////////
+  for (unsigned iface = 0; iface<nfaces; ++iface)
+  { 
+    //whole first chunk figures out which set of triangles this face should be broken into 
+    double max_area = 0.0; 
+    double max_img = -1; 
+    vcl_vector<triangle_3d> final_triangles; 
+    for(int imIdx=0; imIdx<vis_images.size(); ++imIdx) {
+          
+      //if this angle is too large, just pass over it
+      double midAngle = angle(in_faces.normal(iface), -1*cameras[imIdx]->principal_axis()); // return acos(cos_angle(a,b));
+      if(midAngle > vnl_math::pi/3) continue; 
+    
+      //find visible portion of iface on this image, record area (make a 3d tri out of it first)
+      triangle_3d world_tri; 
+      world_tri.face_id = iface;
+      for(int i=0; i<3; ++i) {
+        unsigned vertexId = in_faces[iface][i]; 
+        double x = in_verts[vertexId][0];
+        double y = in_verts[vertexId][1];
+        double z = in_verts[vertexId][2];
+        world_tri.points[i] = vgl_point_3d<double>(x,y,z); 
+      }
+      vcl_vector<triangle_3d> vis_tris = get_visible_triangles(cameras[imIdx], vis_images[imIdx], world_tri); 
+      
+      //get the total area of the triangles
+      double totalArea = 0; 
+      for(int tri_i = 0; tri_i < vis_tris.size(); ++tri_i) {
+        totalArea+= vgl_triangle_3d_area(vis_tris[tri_i].points[0], 
+                                         vis_tris[tri_i].points[1], 
+                                         vis_tris[tri_i].points[2]); 
+      }
+       
+      //store it if it's the biggest patch so far
+      if(totalArea > max_area) {
+        max_area = totalArea;
+        max_img = imIdx; 
+        final_triangles = vis_tris; 
+      }
+    }
+
+    //now that you have the visible triangles that will be mapped in your mesh... 
+    // 1. add the new vertices
+    // 2. add the new faces
+    
+    
+    
+    // 3. add the new faces to the correct texture list 
+    vcl_string im_name = 
+    app_faces[im_name].push_back(iface);
+
+
+  }
+   
+  //BE wary of this interpolation iterator - didn't match up with the imesh one
+  //bvgl_triangle_interpolation_iterator(double *verts_x, double *verts_y, T *values, unsigned int v0 = 0, unsigned int v1 = 1, unsigned int v2 = 2);
+  
+  // Create a new face list with the faces split by visibility
+  imesh_regular_face_array<3>* newFaces = new imesh_regular_face_array<3>();
+#endif
+
+}
+
+
+//returns a list of visible triangles given a camera, 
+//visibility image, and world coordinate 3d triangel
+vcl_vector<boxm2_texture_mesh_process_globals::triangle_3d> 
+boxm2_texture_mesh_process_globals::get_visible_triangles(vpgl_perspective_camera<double>* cam, 
+                                                          vil_image_view<int>* vis_img,
+                                                          triangle_3d& world_tri)
+{
+  vcl_vector<triangle_3d> triangles; 
+}
+
+
+
+//given a camera, and an image with ID faces, this method returns true if the entire
+//triangle (id face_id) is unoccluded from this point of view
+bool boxm2_texture_mesh_process_globals::face_is_visible( vpgl_perspective_camera<double>* cam, 
+                                                          vil_image_view<int>* vis_img,
+                                                          triangle_3d& world_tri)
+{
+  //project triangle 
+  double us[3], vs[3]; 
+  for(int vIdx=0; vIdx<3; ++vIdx) {
+    
+    //project these verts into UV
+    double x = world_tri.points[vIdx].x();  
+    double y = world_tri.points[vIdx].y();  
+    double z = world_tri.points[vIdx].z();  
+    double u,v;
+    cam->project(x, y, z, u, v);
+    us[vIdx] = u; 
+    vs[vIdx] = v; 
+  }
+  
   //now create a polygon, and find the integer image coordinates (U,V) that this polygon covers
   int ni = vis_img->ni(); 
   int nj = vis_img->nj();
@@ -346,7 +464,7 @@ bool boxm2_texture_mesh_process_globals::face_is_visible( vpgl_perspective_camer
     if (min_x < 0) min_x = 0;
     if (max_x >= (int)vis_img->ni()) max_x = vis_img->ni()-1;
     for (int x = min_x; x <= max_x; ++x) {
-      if ( (*vis_img)(x,y) != face_id )
+      if ( (*vis_img)(x,y) != world_tri.face_id )
         return false;
     }
   }
@@ -355,10 +473,12 @@ bool boxm2_texture_mesh_process_globals::face_is_visible( vpgl_perspective_camer
   return true; 
 }
 
-
+//Constructs vector of visibility images - images that identify which triangle
+//is visible at which pixel 
+// function is more or less complete - not much more to it.
 void boxm2_texture_mesh_process_globals::boxm2_visible_faces( vcl_vector<vpgl_perspective_camera<double>* >& cameras, 
-                                                                      vcl_vector<vil_image_view<int >* >& vis_images,
-                                                                      imesh_mesh& in_mesh)
+                                                              vcl_vector<vil_image_view<int >* >& vis_images,
+                                                              imesh_mesh& in_mesh)
 {
   imesh_regular_face_array<3>& in_faces = (imesh_regular_face_array<3>&) in_mesh.faces();
   unsigned nfaces = in_mesh.num_faces();

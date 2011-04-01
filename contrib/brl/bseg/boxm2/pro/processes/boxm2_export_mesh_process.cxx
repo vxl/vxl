@@ -113,6 +113,70 @@ bool boxm2_export_mesh_process(bprb_func_process& pro)
   imesh_mesh& mesh = im.get_mesh();
   vcl_cout << "Number of vertices " << mesh.num_verts()
            << "  number of faces "<< mesh.num_faces()<< '\n';
+           
+  ////////////////////////////////////////////////////////////////////////////////
+  // Take mesh and add points to triangles of high depth variance
+  // I.E. if a triangle in mesh has corners both very close and very far from top
+  // camera, take it's centroid point and add x,y,z point, creating 3 new faces
+  ////////////////////////////////////////////////////////////////////////////////
+  mesh.compute_vertex_normals_from_faces();
+  imesh_regular_face_array<3>& faces = (imesh_regular_face_array<3>&) mesh.faces();
+  unsigned nfaces = mesh.num_faces();
+  imesh_vertex_array<3>& verts = mesh.vertices<3>();
+
+  // new face list
+  double diff = 0; 
+  imesh_regular_face_array<3>* newFaces = new imesh_regular_face_array<3>();
+  for (unsigned iface = 0; iface<nfaces; ++iface)
+  {
+    unsigned v1 = faces[iface][0]; 
+    unsigned v2 = faces[iface][1]; 
+    unsigned v3 = faces[iface][2]; 
+    vgl_point_3d<double> vert1(verts[v1][0], verts[v1][1], verts[v1][2]); 
+    vgl_point_3d<double> vert2(verts[v2][0], verts[v2][1], verts[v2][2]); 
+    vgl_point_3d<double> vert3(verts[v3][0], verts[v3][1], verts[v3][2]); 
+    
+    //get the min z and max z out of this bunch
+    double minZ = vcl_min(vert1.z(), vcl_min(vert2.z(), vert3.z()));
+    double maxZ = vcl_max(vert1.z(), vcl_min(vert2.z(), vert3.z()));
+    
+    //if the difference between min and max Z is sufficient, add a point to the mix 
+    // right in the middle of the triangle
+    double thresh = 10.0; 
+    double ang = angle(faces.normal(iface), vgl_vector_3d<double>(0,0,1)); // return acos(cos_angle(a,b));
+    diff += (maxZ-minZ); 
+    if( (maxZ-minZ > thresh) && (ang < vnl_math::pi/4.0) ) {
+      
+      //this center of the triangle gives you X,Y center, but grab Z from the z_img
+      vgl_point_3d<double> center = centre<double>(vert1, vert2, vert3); 
+      unsigned i = static_cast<unsigned>(center.x());
+      unsigned j = static_cast<unsigned>(center.y());      
+      double centerZ = (*z_img)(i,j); 
+
+      //pop vertex onto the end of the list
+      imesh_vertex<3> point(center.x(),center.y(), centerZ);
+      verts.push_back(point);
+      unsigned vCenter = verts.size()-1; 
+      
+      //now add the three faces that would result from this
+      //v1, v2, center; v1, center, v3; v2, v3, center
+      imesh_tri tri1(v1, v2, vCenter);
+      imesh_tri tri2(v1, vCenter, v3);
+      imesh_tri tri3(v2, v3, vCenter);
+      newFaces->push_back(tri1); 
+      newFaces->push_back(tri2); 
+      newFaces->push_back(tri3); 
+    } 
+    //otherwise just push the face back on the list
+    else {
+      imesh_tri tri(v1, v2, v3);
+      newFaces->push_back(tri);
+    }
+  }
+  vcl_cout<<"Diff average is "<<diff/nfaces<<vcl_endl;
+  vcl_auto_ptr<imesh_face_array_base> face_ptr(newFaces);
+  mesh.set_faces(face_ptr);
+
 
   ////////////////////////////////////////////////////////////////////////////////
   //// normalize mesh world points to fit in the image_bb from above
@@ -124,7 +188,6 @@ bool boxm2_export_mesh_process(bprb_func_process& pro)
   vcl_cout<<"Min z: "<<minz<<" Max z: "<<maxz<<vcl_endl;
   
   //grab vertices in the mesh - convert them to scene coordinates (not image)
-  imesh_vertex_array<3>& verts = mesh.vertices<3>(); 
   unsigned nverts = mesh.num_verts();
   for(unsigned iv = 0; iv<nverts; ++iv)
   {
@@ -138,18 +201,12 @@ bool boxm2_export_mesh_process(bprb_func_process& pro)
         verts[iv][1] = (*y_img)(i,j); 
         verts[iv][2] = (*z_img)(i,j); 
     }
-    //for each vertex, convert (X,Y) from [0, ni], [0, nj] (image coordinates)
-    //to [-x,x], [-y,y] scene coordinates 
-    //double scene_x = (scene_xy.width() * verts[iv][0] / (double) ni) + scene_xy.min_x(); 
-    //double scene_y = (scene_xy.height()* verts[iv][1] / (double) nj) + scene_xy.min_y(); 
-    //double scene_z = height; 
-    
   }
   
   ////////////////////////////////////////////////////////////////////////////////
   //// Write out in VRML format
   ////////////////////////////////////////////////////////////////////////////////
-  vcl_string vrfile = out_dir + "/vrmesh.wrl";
+  vcl_string vrfile = out_dir + "/untextured.wrl";
   vcl_ofstream os(vrfile.c_str());
   imesh_write_vrml(os, mesh);
   os.close();
