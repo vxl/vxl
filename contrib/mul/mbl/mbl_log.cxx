@@ -300,11 +300,16 @@ void mbl_log_output_file::terminate_flush()
   }
 }
 
+#if 0 // This logger causes gcc to throw a recursive_init
+      // Not entirely surprising, by MSVC didn't complain.
+      // FIXME This logger is useful - for finding every logger in use
+      // in a program
 static mbl_logger& local_logger()
 {
   static mbl_logger l("mul.mbl.log");
   return l;
 }
+#endif
 
 mbl_logger::mbl_logger(const char *id):
   output_(0),
@@ -312,10 +317,14 @@ mbl_logger::mbl_logger(const char *id):
   logstream_(&streambuf_),
   mt_logstream_(&logstream_)
 {
+#if 0 // FIXME
   MBL_LOG(INFO, local_logger(), "Creating logger: " << id);
+#endif
   const mbl_log_categories::cat_spec &cat =
     mbl_logger::root().categories().get(id);
+#if 0 // FIXME
   MBL_LOG(DEBUG, local_logger(), "Using cat_spec: " << cat);
+#endif
 
   level_ = cat.level;
   dump_prefix_ = cat.dump_prefix;
