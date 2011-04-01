@@ -16,6 +16,16 @@
 // \author
 //  J.L. Mundy - March 22, 2011
 //
+//
+// The mrf energy minimization is carried out with a closed form algorithm
+// i.e. non-iterative as compared with belief propagation, 
+// which requires iterations of message passing. The algorithm is based in
+// part on the paper:
+// "Continuous MRF-based image denoising with a closed form solution,"
+// Ming Liu, Shifeng Chen, and Jianzhuang Liu
+//  Proc. IEEE 17th International Conference on Image Processing, 2010
+//
+//
 // \verbatim
 //  Modifications
 //   <none>
