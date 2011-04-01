@@ -21,5 +21,10 @@ void
 imesh_generate_mesh_2d(vcl_vector<vgl_point_2d<double> > const& convex_hull,
                        vcl_vector< vgl_line_segment_2d<double> > const & segs,
                        imesh_mesh& mesh);
+void 
+imesh_generate_mesh_2d_2(vcl_vector<vgl_point_2d<double> > const& convex_hull,
+                       vcl_vector<vgl_line_segment_2d<double> > const& segs,
+                       vcl_vector<vgl_point_2d<double> > const & points,
+                       imesh_mesh& mesh);
 
 #endif // imesh_generate_mesh_h_
