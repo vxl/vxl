@@ -181,7 +181,7 @@ int main(int argc, char** argv)
   vul_arg<vcl_string> boxm_dir("-out", "output directory", "");
   vul_arg_parse(argc, argv);
 
-  boxm2_scene scene2(boxm2_file()); //"C:/data/boxm2/downtown/scene.xml");
+  boxm2_scene scene2(boxm2_file());
 
   //initialize a block and data cache
   boxm2_lru_cache::create(&scene2);
@@ -202,7 +202,7 @@ int main(int argc, char** argv)
   vgl_vector_3d<double> ww(world.width(),world.height(),world.depth());
 #endif
 
-  boxm_scene<tree_type> scene(lvcs, origin, ww, block_nums);
+  boxm_scene<tree_type> scene(lvcs, origin, ww, block_nums,false,true,true);
   vcl_string scene_path=boxm_dir(); //"C:/data/boxm2/downtown/boxm_scene";
   scene.set_paths(scene_path,"block");
   scene.set_appearance_model(BOXM_APM_MOG_GREY);
