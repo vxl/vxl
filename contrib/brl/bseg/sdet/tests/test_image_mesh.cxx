@@ -14,7 +14,11 @@ static void test_image_mesh()
 {
   //  vcl_string image_path = "C:/images/MeshStudies/depth-grey-cropped.tif";
   //  vcl_string image_path = "C:/images/MeshStudies/depth-grey-smooth.tif";
-  vcl_string image_path = "C:/images/MeshStudies/mrf_med_grey.tif";
+  //  vcl_string image_path = "C:/images/MeshStudies/mrf_med_grey.tif";
+  //  vcl_string image_path = "c:/images/MeshStudies/depth-grey-cropped.tif";
+  //  vcl_string image_path = "c:/images/MeshStudies/depth-grey-smooth.tif";
+  vcl_string image_path = "C:/images/MeshStudies/vj_large_grey.tif";
+
 
   vcl_cout<<"TESTING image mesh"<<vcl_endl;
 
@@ -35,7 +39,7 @@ static void test_image_mesh()
   // the threshold on rms pixel distance of edgels to the line
   imp.rms_distance_ = 0.1;
   // the width in pixels of the transition of a step edge
-  imp.step_half_width_ = 4.0;
+  imp.step_half_width_ = 6.0;
 
   // the mesh processor
   sdet_image_mesh im(imp);
@@ -45,8 +49,12 @@ static void test_image_mesh()
     return;
   }
   imesh_mesh& mesh = im.get_mesh();
-  vcl_cout << "Number of vertices " << mesh.num_verts();
-  vcl_string vrfile = "C:/images/MeshStudies/vmidrmesh.wrl";
+
+  vcl_cout << "Number of vertices " << mesh.num_verts()
+
+	  << "  number of faces "<< mesh.num_faces()<< '\n';
+  vcl_string vrfile = "c:/images/MeshStudies/vj_large_diff.wrl";
+
   vcl_ofstream os(vrfile.c_str());
   imesh_write_vrml(os, mesh);
   os.close();

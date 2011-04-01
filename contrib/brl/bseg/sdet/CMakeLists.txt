@@ -41,6 +41,10 @@ SET(sdet_sources
     sdet_image_mesh_params.cxx      sdet_image_mesh_params.h
     sdet_denoise_mrf.cxx            sdet_denoise_mrf.h
     sdet_denoise_mrf_params.cxx     sdet_denoise_mrf_params.h
+    sdet_mrf_site_bp.cxx            sdet_mrf_site_bp.h  sdet_mrf_site_bp_sptr.h
+    sdet_mrf_bp.cxx                 sdet_mrf_bp.h       sdet_mrf_bp_sptr.h
+    sdet_denoise_mrf_bp.cxx         sdet_denoise_mrf_bp.h 
+    sdet_denoise_mrf_bp_params.cxx  sdet_denoise_mrf_bp_params.h
 )
 AUX_SOURCE_DIRECTORY(Templates sdet_sources)
 
