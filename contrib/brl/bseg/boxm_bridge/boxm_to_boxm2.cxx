@@ -1,3 +1,6 @@
+#include "boxm_to_boxm2.h"
+//:
+// \file
 #include <vcl_queue.h>
 
 //executable args
@@ -52,7 +55,7 @@ void deconstruct_sample(boxm_sample<BOXM_APM_MOG_GREY> sample,
     data[i*3+1]=v;
     if (i<2)
       data[i*3+2]=w;
-  } 
+  }
 }
 
 //: extracts the tree cell's data into an array format for boxm2 representation
@@ -90,7 +93,7 @@ void set_bits(boct_bit_tree2*& bit_tree, int idx, unsigned int child_idx, boct_t
   if (!cell.is_leaf()) {
     int bit_idx=idx*8+1+child_idx;
     bit_tree->set_bit_at(bit_idx,true);
-    for (unsigned i=0; i<8; i++) 
+    for (unsigned i=0; i<8; i++)
       set_bits(bit_tree, bit_idx, i, cell.children()[i]);
   }
 }
@@ -112,15 +115,15 @@ void convert_to_bittree(boct_tree_cell<T_loc,T_data>* tree_cell, boct_bit_tree2*
   if (tree_cell->is_leaf()) {
     return;
   }
-  
+
   int idx=0;
   bit_tree->set_bit_at(idx,true); // root
   for (unsigned i=0; i<8; i++) {  // level root-1
     set_bits(bit_tree, idx, i, tree_cell->children()[i]);
-  } 
+  }
 }
 
-int main(int argc, char** argv) 
+int main(int argc, char** argv)
 {
   vcl_cout << "Converting boxm scene to boxm2 Scene" << vcl_endl;
   vul_arg<vcl_string> scene_path("-scene", "scene filename", "");
@@ -139,8 +142,8 @@ int main(int argc, char** argv)
   new_scene.set_lvcs(scene.lvcs());
   new_scene.set_xml_path(out_dir()+"/scene.xml");
 
-  //initialize a block and data cache  
-  boxm2_lru_cache::create(&new_scene); 
+  //initialize a block and data cache
+  boxm2_lru_cache::create(&new_scene);
   boxm2_cache* cache = boxm2_cache::instance();
 
   vcl_map<boxm2_block_id, boxm2_block_metadata> new_blocks;
@@ -162,7 +165,7 @@ int main(int argc, char** argv)
       metadata.random_=false;
       boxm2_block new_block(metadata);
       new_blocks[block_id]=metadata;
-       
+
       // find the total number of cells to figure out data array sizes, as the first step
       int data_size=0;
       for (unsigned z=0; z<dim; z++) {
@@ -174,7 +177,7 @@ int main(int argc, char** argv)
             p[1] = y*cell_dim;
             p[2] = z*cell_dim;
             vgl_box_3d<double> cell_bb(p, cell_dim, cell_dim, cell_dim, vgl_box_3d<double>::min_pos);
-            boct_tree_cell<short,boxm_sample<BOXM_APM_MOG_GREY> >* node = tree->locate_point_at_level(cell_bb.centroid(),3); 
+            boct_tree_cell<short,boxm_sample<BOXM_APM_MOG_GREY> >* node = tree->locate_point_at_level(cell_bb.centroid(),3);
             if (!node)
               vcl_cout << "The node COULD not be FOUND" << vcl_endl;
             else {
@@ -204,7 +207,7 @@ int main(int argc, char** argv)
             p[1] = y*cell_dim;
             p[2] = z*cell_dim;
             vgl_box_3d<double> cell_bb(p, cell_dim, cell_dim, cell_dim, vgl_box_3d<double>::min_pos);
-            boct_tree_cell<short,boxm_sample<BOXM_APM_MOG_GREY> >* node = tree->locate_point_at_level(cell_bb.centroid(),3); 
+            boct_tree_cell<short,boxm_sample<BOXM_APM_MOG_GREY> >* node = tree->locate_point_at_level(cell_bb.centroid(),3);
             if (!node)
               vcl_cout << "The node COULD not be FOUND" << vcl_endl;
             else {
@@ -216,15 +219,15 @@ int main(int argc, char** argv)
               convert_to_bittree(node, bit_tree);
               int n1=bit_tree->num_cells();
               int start=data_idx;
-              convert_data(node, alpha_arr, data_arr, num_obs_arr, data_idx); 
+              convert_data(node, alpha_arr, data_arr, num_obs_arr, data_idx);
               // set the data index at the tree
               bit_tree->set_data_ptr(start, false);
               // set the tree at the block
               boxm2_block::uchar16& t=trees[x][y][z];
               t.set(bit_tree->get_bits());
               if (n1 != n2) {
-                vcl_cout << x << "," << y << "," << z << vcl_endl;
-                vcl_cout << "ERROR! The converted tree is not right, should have " << n1 << " nodes instead of " << n2 << vcl_endl;
+                vcl_cout << x << ',' << y << ',' << z << '\n'
+                         << "ERROR! The converted tree is not right, should have " << n1 << " nodes instead of " << n2 << vcl_endl;
               }
             }
           }
@@ -246,7 +249,7 @@ int main(int argc, char** argv)
       delete [] data_arr;
       delete [] num_obs_arr;
       iter++;
-    } 
+    }
     new_scene.set_blocks(new_blocks);
     new_scene.save_scene();
   }
