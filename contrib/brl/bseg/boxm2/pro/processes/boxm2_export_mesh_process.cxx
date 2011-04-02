@@ -43,7 +43,7 @@ bool boxm2_export_mesh_process_cons(bprb_func_process& pro)
   using namespace boxm2_export_mesh_process_globals;
 
   //process takes 2 inputs
-  int i=0; 
+  int i=0;
   vcl_vector<vcl_string> input_types_(n_inputs_);
   input_types_[i++] = "vil_image_view_base_sptr";  //depth image
   input_types_[i++] = "vil_image_view_base_sptr";  //x image
@@ -64,14 +64,14 @@ bool boxm2_export_mesh_process(bprb_func_process& pro)
     vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
     return false;
   }
-  
+
   //get the inputs
   unsigned argIdx = 0;
   vil_image_view_base_sptr img = pro.get_input<vil_image_view_base_sptr>(argIdx++);
   vil_image_view_base_sptr ximg = pro.get_input<vil_image_view_base_sptr>(argIdx++);
   vil_image_view_base_sptr yimg = pro.get_input<vil_image_view_base_sptr>(argIdx++);
   vcl_string out_dir           = pro.get_input<vcl_string>(argIdx++);
-  
+
   //create the mesh directory
   if (!vul_file::make_directory_path(out_dir.c_str())) {
     vcl_cout<<"Couldn't make directory path "<<out_dir<<vcl_endl;
@@ -79,18 +79,18 @@ bool boxm2_export_mesh_process(bprb_func_process& pro)
   }
 
   //cast camera and image so they are useful
-  vil_image_view<float>* z_img = (vil_image_view<float>*) img.ptr(); 
-  vil_image_view<float>* x_img = (vil_image_view<float>*) ximg.ptr(); 
-  vil_image_view<float>* y_img = (vil_image_view<float>*) yimg.ptr(); 
+  vil_image_view<float>* z_img = (vil_image_view<float>*) img.ptr();
+  vil_image_view<float>* x_img = (vil_image_view<float>*) ximg.ptr();
+  vil_image_view<float>* y_img = (vil_image_view<float>*) yimg.ptr();
 
   //determine size of depth image
   unsigned ni = z_img->ni();
   unsigned nj = z_img->nj();
-  
+
   //create new resource sptr
   vil_image_resource_sptr z_img_res = vil_new_image_resource_of_view(*z_img);
 
-  //intiialize some sdet_image_mesh parameters
+  //initialize some sdet_image_mesh parameters
   sdet_image_mesh_params imp;
   // sigma of the Gaussian for smoothing the image prior to edge detection
   imp.smooth_ = 0.5f;
@@ -102,18 +102,18 @@ bool boxm2_export_mesh_process(bprb_func_process& pro)
   imp.rms_distance_ = 0.15;
   // the width in pixels of the transition of a step edge
   imp.step_half_width_ = 1.0;
-  
+
   // the mesh processor
   sdet_image_mesh im(imp);
   im.set_image(z_img_res);
-  if(!im.compute_mesh()) {
+  if (!im.compute_mesh()) {
     vcl_cout<<"mesh could not be computed"<<vcl_endl;
     return 0;
   }
   imesh_mesh& mesh = im.get_mesh();
   vcl_cout << "Number of vertices " << mesh.num_verts()
            << "  number of faces "<< mesh.num_faces()<< '\n';
-           
+
   ////////////////////////////////////////////////////////////////////////////////
   // Take mesh and add points to triangles of high depth variance
   // I.E. if a triangle in mesh has corners both very close and very far from top
@@ -125,48 +125,48 @@ bool boxm2_export_mesh_process(bprb_func_process& pro)
   imesh_vertex_array<3>& verts = mesh.vertices<3>();
 
   // new face list
-  double diff = 0; 
+  double diff = 0;
   imesh_regular_face_array<3>* newFaces = new imesh_regular_face_array<3>();
   for (unsigned iface = 0; iface<nfaces; ++iface)
   {
-    unsigned v1 = faces[iface][0]; 
-    unsigned v2 = faces[iface][1]; 
-    unsigned v3 = faces[iface][2]; 
-    vgl_point_3d<double> vert1(verts[v1][0], verts[v1][1], verts[v1][2]); 
-    vgl_point_3d<double> vert2(verts[v2][0], verts[v2][1], verts[v2][2]); 
-    vgl_point_3d<double> vert3(verts[v3][0], verts[v3][1], verts[v3][2]); 
-    
+    unsigned v1 = faces[iface][0];
+    unsigned v2 = faces[iface][1];
+    unsigned v3 = faces[iface][2];
+    vgl_point_3d<double> vert1(verts[v1][0], verts[v1][1], verts[v1][2]);
+    vgl_point_3d<double> vert2(verts[v2][0], verts[v2][1], verts[v2][2]);
+    vgl_point_3d<double> vert3(verts[v3][0], verts[v3][1], verts[v3][2]);
+
     //get the min z and max z out of this bunch
     double minZ = vcl_min(vert1.z(), vcl_min(vert2.z(), vert3.z()));
     double maxZ = vcl_max(vert1.z(), vcl_min(vert2.z(), vert3.z()));
-    
-    //if the difference between min and max Z is sufficient, add a point to the mix 
+
+    //if the difference between min and max Z is sufficient, add a point to the mix
     // right in the middle of the triangle
-    double thresh = 10.0; 
+    double thresh = 10.0;
     double ang = angle(faces.normal(iface), vgl_vector_3d<double>(0,0,1)); // return acos(cos_angle(a,b));
-    diff += (maxZ-minZ); 
-    if( (maxZ-minZ > thresh) && (ang < vnl_math::pi/4.0) ) {
-      
+    diff += (maxZ-minZ);
+    if ( (maxZ-minZ > thresh) && (ang < vnl_math::pi/4.0) ) {
+
       //this center of the triangle gives you X,Y center, but grab Z from the z_img
-      vgl_point_3d<double> center = centre<double>(vert1, vert2, vert3); 
+      vgl_point_3d<double> center = centre<double>(vert1, vert2, vert3);
       unsigned i = static_cast<unsigned>(center.x());
-      unsigned j = static_cast<unsigned>(center.y());      
-      double centerZ = (*z_img)(i,j); 
+      unsigned j = static_cast<unsigned>(center.y());
+      double centerZ = (*z_img)(i,j);
 
       //pop vertex onto the end of the list
       imesh_vertex<3> point(center.x(),center.y(), centerZ);
       verts.push_back(point);
-      unsigned vCenter = verts.size()-1; 
-      
+      unsigned vCenter = verts.size()-1;
+
       //now add the three faces that would result from this
       //v1, v2, center; v1, center, v3; v2, v3, center
       imesh_tri tri1(v1, v2, vCenter);
       imesh_tri tri2(v1, vCenter, v3);
       imesh_tri tri3(v2, v3, vCenter);
-      newFaces->push_back(tri1); 
-      newFaces->push_back(tri2); 
-      newFaces->push_back(tri3); 
-    } 
+      newFaces->push_back(tri1);
+      newFaces->push_back(tri2);
+      newFaces->push_back(tri3);
+    }
     //otherwise just push the face back on the list
     else {
       imesh_tri tri(v1, v2, v3);
@@ -181,28 +181,27 @@ bool boxm2_export_mesh_process(bprb_func_process& pro)
   ////////////////////////////////////////////////////////////////////////////////
   //// normalize mesh world points to fit in the image_bb from above
   ////////////////////////////////////////////////////////////////////////////////
-  
+
   // get min and max z values
   float minz=0, maxz=0;
   vil_math_value_range(*z_img, minz, maxz);
   vcl_cout<<"Min z: "<<minz<<" Max z: "<<maxz<<vcl_endl;
-  
+
   //grab vertices in the mesh - convert them to scene coordinates (not image)
   unsigned nverts = mesh.num_verts();
-  for(unsigned iv = 0; iv<nverts; ++iv)
+  for (unsigned iv = 0; iv<nverts; ++iv)
   {
     //get coordinates so you can index into the height map
     unsigned i = static_cast<unsigned>(verts[iv][0]);
     unsigned j = static_cast<unsigned>(verts[iv][1]);
-    double height = minz;
-    if(i<ni && j<nj) 
+    if (i<ni && j<nj)
     {
-        verts[iv][0] = (*x_img)(i,j); 
-        verts[iv][1] = (*y_img)(i,j); 
-        verts[iv][2] = (*z_img)(i,j); 
+      verts[iv][0] = (*x_img)(i,j);
+      verts[iv][1] = (*y_img)(i,j);
+      verts[iv][2] = (*z_img)(i,j);
     }
   }
-  
+
   ////////////////////////////////////////////////////////////////////////////////
   //// Write out in VRML format
   ////////////////////////////////////////////////////////////////////////////////
@@ -210,11 +209,11 @@ bool boxm2_export_mesh_process(bprb_func_process& pro)
   vcl_ofstream os(vrfile.c_str());
   imesh_write_vrml(os, mesh);
   os.close();
-  
+
   // store scene smart pointer
-  argIdx = 0; 
-  imesh_mesh_sptr mesh_sptr = new imesh_mesh(mesh); 
+  argIdx = 0;
+  imesh_mesh_sptr mesh_sptr = new imesh_mesh(mesh);
   pro.set_output_val<imesh_mesh_sptr>(argIdx++, mesh_sptr);
-  
+
   return true;
 }
