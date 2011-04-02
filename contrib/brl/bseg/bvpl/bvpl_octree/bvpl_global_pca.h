@@ -90,7 +90,10 @@ public:
   //: Computes 10-dimensional pca projection at each voxel on the block and saves it
   void project(int scene_id, int block_i, int block_j, int block_k);
   
-  vcl_string path_out() {return path_out_;}
+  vcl_string path_out() {return path_out_;}  
+  
+  vcl_vector<vcl_string> scenes() { return scenes_;}
+  vcl_vector<vcl_string> aux_dirs() { return aux_dirs_;}
 
   
 protected:
@@ -135,11 +138,19 @@ protected:
   void write_pca_matrices();
   
   boxm_scene_base_sptr load_scene (int scene_id);
-  boxm_scene_base_sptr load_aux_scene (int scene_id);
+  boxm_scene_base_sptr load_train_scene (int scene_id);
+  boxm_scene_base_sptr load_valid_scene (int scene_id);
   boxm_scene_base_sptr load_projection_scene (int scene_id);
 
   
 };
+
+
+/************************* PCA helper functions ******************************/
+
+
+
+
 #endif
 
 
