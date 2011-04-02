@@ -6,19 +6,19 @@
 // \author J.L. Mundy
 // \date   26 March 2011
 //
-//: stores two sets of buffer arrays,one for messages received at the last step
+// Stores two sets of buffer arrays,one for messages received at the last step
 //  and one for messages coming in during the current iteration
-// the MRF has a 4-neigborhood (u, l, r, d) with the neighbor index 
+// the MRF has a 4-neighborhood (u, l, r, d) with the neighbor index
 // in this order
-// The data cost for each site is D(fp) = lambda_*(fp-x)^2, where x is the 
+// The data cost for each site is D(fp) = lambda_*(fp-x)^2, where x is the
 // observed data and fp is a site label.
 // D(fp) is set to min(D(fp), truncation_cost_);
 //
 //  Each site stores a pair of label buffers for each of the neighbors
 //  One buffer in the pair stores the message received on the last
 //  iteration (p), the other receives the current messages (c). On each
-//  iteration, the buffers are swapped. A pairs of buffers is allocated for 
-//  each of the (u, l, r, d) neighbors in the 4-connected neighborhood 
+//  iteration, the buffers are swapped. A pairs of buffers is allocated for
+//  each of the (u, l, r, d) neighbors in the 4-connected neighborhood
 //  as shown below.
 //
 //          (c p)
@@ -32,7 +32,7 @@
 class sdet_mrf_site_bp : public vbl_ref_count
 {
  public:
-  
+
   sdet_mrf_site_bp(unsigned n_labels, float lambda, float truncation_cost);
   void switch_buffers(){ prior_ = 1-prior_;}
   int prior() {return prior_;}
@@ -40,7 +40,8 @@ class sdet_mrf_site_bp : public vbl_ref_count
   //: set the observed label
   void set_label(float obs_label){obs_label_ = obs_label;}
 
-  //: cost functions
+  // === cost functions ===
+
   //:data cost due to observed continuous label value
   float D(unsigned fp);
   //:prior cost, sum over stored messages, except for neighbor nq
@@ -48,7 +49,7 @@ class sdet_mrf_site_bp : public vbl_ref_count
   //:total of D and M
   float h(unsigned nq, unsigned fp){ return D(fp) + M(nq, fp);}
 
-    //:belief
+  //:belief
   float b(unsigned fp);
 
   //:the most probable label
@@ -76,13 +77,13 @@ class sdet_mrf_site_bp : public vbl_ref_count
 
   //:clear messages
   void clear();
- //print the value of the messages held in the prior queue.
+  //: print the value of the messages held in the prior queue.
   void print_prior_messages();
   void print_current_messages();
   void print_belief_vector();
 
  protected:
-  //:parameters for computing message values
+  // parameters for computing message values
   float lambda_;
   float truncation_cost_;
 
@@ -94,11 +95,12 @@ class sdet_mrf_site_bp : public vbl_ref_count
 
   //: currently 4, but might change in the future
   unsigned n_ngbh_;
-  
-  // define the neighor index
+
+  // define the neighbor index
   //     0
   //   1 x 2
   //     3
+
   //: a set of 2 message buffers, prior and current, one for each neighbor
   //  (p, c)     n_ngbh_    n_labels_
   // cut down storage using short (for byte images should be in range)
