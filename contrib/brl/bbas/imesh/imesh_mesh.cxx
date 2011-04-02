@@ -10,7 +10,8 @@
 
 //: Copy Constructor
 imesh_mesh::imesh_mesh(const imesh_mesh& other)
-  : verts_((other.verts_.get()) ? other.verts_->clone() : 0),
+  : vbl_ref_count(),
+    verts_((other.verts_.get()) ? other.verts_->clone() : 0),
     faces_((other.faces_.get()) ? other.faces_->clone() : 0),
     half_edges_(other.half_edges_),
     tex_coords_(other.tex_coords_),
@@ -259,7 +260,7 @@ void imesh_mesh::label_ccw_tex_faces_valid()
   }
 }
 
-//Smart Pointer IO 
+//Smart Pointer IO
 void vsl_b_write(vsl_b_ostream& /*os*/, imesh_mesh_sptr&) {}
 void vsl_b_write(vsl_b_ostream& /*os*/, imesh_mesh_sptr const&) {}
 
