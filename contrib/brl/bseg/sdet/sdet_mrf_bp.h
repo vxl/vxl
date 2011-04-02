@@ -24,24 +24,24 @@ class sdet_mrf_bp : public vbl_ref_count
   sdet_mrf_bp(unsigned ni, unsigned nj, unsigned n_labels);
 
   //: constructor with observed labels provided by resc
-  // in this case the data cost is just lambda_*(fp-x)^2
+  // In this case the data cost is just $\lambda \times (fp-x)^2$
   sdet_mrf_bp(vil_image_resource_sptr obs_labels, unsigned n_labels,
               float discontinuity_cost, float truncation_cost,
               float kappa, float lambda);
 
-  //: constructor with observed labels view 
+  //: constructor with observed labels view
   sdet_mrf_bp(vil_image_view<float> const& obs_labels, unsigned n_labels,
               float discontinuity_cost, float truncation_cost,
               float kappa, float lambda);
 
-  //: constructor with observed labels and variance resources 
-  sdet_mrf_bp(vil_image_resource_sptr obs_labels, 
+  //: constructor with observed labels and variance resources
+  sdet_mrf_bp(vil_image_resource_sptr obs_labels,
               vil_image_resource_sptr var,  unsigned n_labels,
               float discontinuity_cost, float truncation_cost,
               float kappa, float lambda);
 
-  //: constructor with observed label and variance views. 
-  sdet_mrf_bp(vil_image_view<float> const& obs_labels, 
+  //: constructor with observed label and variance views.
+  sdet_mrf_bp(vil_image_view<float> const& obs_labels,
               vil_image_view<float> const& var,  unsigned n_labels,
               float discontinuity_cost, float truncation_cost,
               float kappa, float lambda);
@@ -58,13 +58,15 @@ class sdet_mrf_bp : public vbl_ref_count
   //: the contribution of neighbor label difference to cost
   void set_kappa(float kappa){ kappa_ = kappa;}
 
-  // transforms to and from image coordinates and node indices
+  //: transform from image coordinates to node indices
   unsigned image_to_index(unsigned i, unsigned j){return i + ni_*j;}
+  //: transform to image coordinates from node indices
   void index_to_image(unsigned p, unsigned& i, unsigned& j)
     { j = p/ni_; i = p-j*ni_;}
 
-  //: mrf dimensions
+  //: mrf dimension
   unsigned ni(){return ni_;}
+  //: mrf dimension
   unsigned nj(){return nj_;}
 
   //: retrieve a site by image index
@@ -78,11 +80,11 @@ class sdet_mrf_bp : public vbl_ref_count
   vcl_vector<float> prior_message(unsigned i, unsigned j, unsigned n);
 
   //: set the contents of a prior message buffer
-  void set_prior_message(unsigned i, unsigned j, unsigned n, 
+  void set_prior_message(unsigned i, unsigned j, unsigned n,
                          vcl_vector<float> const& msg);
 
-
-  //: all sites send messages to current buffer of neighbors,
+  //:
+  // all sites send messages to current buffer of neighbors,
   // using an O(n_labels) algorithm based on the lower envelope
   void send_messages_optimized();
 
@@ -95,9 +97,10 @@ class sdet_mrf_bp : public vbl_ref_count
   //: all sites print their belief vector
   void print_belief_vectors();
 
-  //: outputs
+  //: output
   vil_image_resource_sptr belief_image();
 
+  //: output
   vil_image_resource_sptr expected_image();
 
  protected:
@@ -107,19 +110,23 @@ class sdet_mrf_bp : public vbl_ref_count
   unsigned n_labels_;
   float discontinuity_cost_;
   float truncation_cost_;
-  float kappa_; 
+  float kappa_;
   float lambda_;
   //the array of sites
   vbl_array_2d<sdet_mrf_site_bp_sptr> sites_;
   sdet_mrf_bp();
 };
-//  public functions
-// computes the lower envelope of a message array
-// with V(fp, fq) = w|fp-fq| , computes in place
+
+// === public functions ===
+
+//: computes the lower envelope of a message array with $V(fp, fq) = w|fp-fq|$
+//  Computes in place
 void lower_envelope_linear(float w, vcl_vector<float>& msg);
 
-// with V(fp, fq) = w(fp-fq)^2 (used in current implementation)
-vcl_vector<float> lower_envelope_quadratic(float w, 
+//: computes the lower envelope of a message array with $V(fp, fq) = w(fp-fq)^2$
+//  Used in current implementation
+vcl_vector<float> lower_envelope_quadratic(float w,
                                            vcl_vector<float> const& h);
+
 #include <sdet/sdet_mrf_bp_sptr.h>
 #endif // sdet_mrf_bp_h_
