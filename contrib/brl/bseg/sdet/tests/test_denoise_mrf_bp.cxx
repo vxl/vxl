@@ -11,7 +11,6 @@
 
 static void test_denoise_mrf_bp()
 {
-
   vil_image_resource_sptr depth =
     vil_load_image_resource("C:/images/MeshStudies/depth-joint-crop-float_max.tif");
   vil_image_resource_sptr var =
@@ -23,7 +22,7 @@ static void test_denoise_mrf_bp()
   sdet_denoise_mrf_bp mbp(dmbp);
   mbp.set_image(depth);   mbp.set_variance(var);
   bool success = mbp.denoise();
-  if(success){
+  if (success) {
     vil_image_resource_sptr outr = mbp.output();
     vil_save_image_resource(outr,
                             "C:/images/MeshStudies/sdet_belief_max.tif",
@@ -31,14 +30,14 @@ static void test_denoise_mrf_bp()
 #if 0
     unsigned pi = 214, pj = 88;
     sdet_mrf_bp_sptr mrf = mbp.mrf();
-	sdet_mrf_site_bp_sptr s = mrf->site(pi, pj);
-    for(unsigned lab = 0; lab < dmbp.n_labels_; ++ lab)
+    sdet_mrf_site_bp_sptr s = mrf->site(pi, pj);
+    for (unsigned lab = 0; lab < dmbp.n_labels_; ++ lab)
       vcl_cout << s->prior_message(0,lab) << ' '
                << s->prior_message(1,lab) << ' '
                << s->prior_message(2,lab) << ' '
                << s->prior_message(3,lab) << '\n';
-    
 #endif
   }
 }
+
 TESTMAIN(test_denoise_mrf_bp);

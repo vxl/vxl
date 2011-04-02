@@ -51,8 +51,7 @@ static void test_image_mesh()
   imesh_mesh& mesh = im.get_mesh();
 
   vcl_cout << "Number of vertices " << mesh.num_verts()
-
-	  << "  number of faces "<< mesh.num_faces()<< '\n';
+           << ", number of faces "<< mesh.num_faces()<< '\n';
   vcl_string vrfile = "c:/images/MeshStudies/vj_large_diff.wrl";
 
   vcl_ofstream os(vrfile.c_str());
