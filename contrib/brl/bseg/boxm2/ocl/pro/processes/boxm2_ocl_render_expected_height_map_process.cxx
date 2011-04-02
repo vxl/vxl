@@ -74,7 +74,6 @@ namespace boxm2_ocl_render_expected_height_map_process_globals
                                             norm_options,              //options
                                             "normalize render depth kernel"); //kernel identifier (for error checking)
 
-
     vec_kernels.push_back(normalize_render_kernel);
   }
   static vcl_map<vcl_string,vcl_vector<bocl_kernel*> > kernels;
@@ -89,8 +88,6 @@ bool boxm2_ocl_render_expected_height_map_process_cons(bprb_func_process& pro)
   input_types_[0] = "bocl_device_sptr";
   input_types_[1] = "boxm2_scene_sptr";
   input_types_[2] = "boxm2_opencl_cache_sptr";
-
-
 
   // process has 1 output:
   // output[0]: scene sptr
@@ -131,10 +128,10 @@ bool boxm2_ocl_render_expected_height_map_process(bprb_func_process& pro)
     xint=mdata.sub_block_dim_.x()/8.0;
     yint=mdata.sub_block_dim_.y()/8.0;
   }
-  int ni=(int)vcl_ceil(bbox.width()/xint);
-  int nj=(int)vcl_ceil(bbox.height()/yint);
-  
-  vcl_cout<<"Size of the image "<<ni<<","<<nj<<vcl_endl;
+  unsigned int ni=(unsigned int)vcl_ceil(bbox.width()/xint);
+  unsigned int nj=(unsigned int)vcl_ceil(bbox.height()/yint);
+
+  vcl_cout<<"Size of the image "<<ni<<','<<nj<<vcl_endl;
   float z= bbox.max_z();
   vcl_string identifier=device->device_identifier();
 
@@ -190,7 +187,6 @@ bool boxm2_ocl_render_expected_height_map_process(bprb_func_process& pro)
 
   bocl_mem_sptr prob_image=new bocl_mem(device->context(),prob_buff,cl_ni*cl_nj*sizeof(float),"vis x omega image buffer");
   prob_image->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
-
 
   //: Image Dimensions
   int img_dim_buff[4];
@@ -253,12 +249,11 @@ bool boxm2_ocl_render_expected_height_map_process(bprb_func_process& pro)
     kern->set_local_arg( local_threads[0]*local_threads[1]*sizeof(cl_int) );
 
     //execute kernel
-    kern->execute(queue, 2, local_threads, gThreads);
+    kern->execute(queue, 2, lThreads, gThreads);
     clFinish(queue);
     gpu_time += kern->exec_time();
 
     cl_output->read_to_buffer(queue);
-
 
     //clear render kernel args so it can reset em on next execution
     kern->clear_args();
@@ -281,7 +276,6 @@ bool boxm2_ocl_render_expected_height_map_process(bprb_func_process& pro)
     vis_image->read_to_buffer(queue);
   }
 
-
   clReleaseCommandQueue(queue);
   i=0;
 
@@ -290,8 +284,8 @@ bool boxm2_ocl_render_expected_height_map_process(bprb_func_process& pro)
   vil_image_view<float>* xcoord_img=new vil_image_view<float>(ni,nj);
   vil_image_view<float>* ycoord_img=new vil_image_view<float>(ni,nj);
 
-  for (unsigned c=0;c<nj;c++)
-    for (unsigned r=0;r<ni;r++)
+  for (unsigned c=0;c<nj;++c)
+    for (unsigned r=0;r<ni;++r)
     {
         (*exp_img_out)(r,c)=buff[c*cl_ni+r];
         (*exp_var_out)(r,c)=var_buff[c*cl_ni+r];
