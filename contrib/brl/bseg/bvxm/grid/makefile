@@ -7,6 +7,7 @@ MANPAGE_SOURCES += bvxm_voxel_storage.h
 MANPAGE_SOURCES += bvxm_voxel_storage_disk.txx
 MANPAGE_SOURCES += bvxm_voxel_storage_mem.txx
 MANPAGE_SOURCES += bvxm_voxel_grid_base.h
+MANPAGE_SOURCES += bvxm_voxel_grid_base_sptr.h
 MANPAGE_SOURCES += bvxm_voxel_slab_base.h
 MANPAGE_SOURCES += bvxm_voxel_grid.txx
 MANPAGE_SOURCES += bvxm_voxel_storage_disk_cached.txx
