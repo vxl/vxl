@@ -1,3 +1,5 @@
+#include <vpgl/icam/icam_view_sphere_sptr.h>
+
 #include <vpgl/icam/icam_cost_func.h>
 #include <vpgl/icam/icam_depth_trans_pyramid.h>
 #include <vpgl/icam/icam_depth_transform.h>

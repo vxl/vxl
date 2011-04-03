@@ -11,7 +11,7 @@ SET(icam_sources
     icam_depth_trans_pyramid.h icam_depth_trans_pyramid.cxx
     icam_sample.h              icam_sample.cxx
     icam_view_metadata.h       icam_view_metadata.cxx
-    icam_view_sphere.h         icam_view_sphere.cxx
+    icam_view_sphere.h         icam_view_sphere.cxx         icam_view_sphere_sptr.h
     icam_transform_2d.h        icam_transform_2d.cxx
     icam_image.h
    )

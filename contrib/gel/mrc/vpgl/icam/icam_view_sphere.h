@@ -46,7 +46,7 @@ class icam_view_sphere : public vbl_ref_count
     {ground_truth_cam_ = gt_cam;}
 
   //: the mapped source image and actual destination image at a level
-  void mapped_image(unsigned viewpoint_id, 
+  void mapped_image(unsigned viewpoint_id,
                     vil_image_view<float> const& source_img,
                     vgl_rotation_3d<double>& rot,
                     vgl_vector_3d<double>& trans, unsigned level,
@@ -69,12 +69,11 @@ class icam_view_sphere : public vbl_ref_count
   const double ICAM_LOCAL_MIN_THRESH_;
 };
 
-typedef vbl_smart_ptr<icam_view_sphere> icam_view_sphere_sptr;
-
 void vsl_b_read(vsl_b_istream &is, icam_view_sphere &sp);
 void vsl_b_write(vsl_b_ostream &os, icam_view_sphere const& sp);
 void vsl_b_read(vsl_b_istream &is, icam_view_sphere* sp);
 void vsl_b_write(vsl_b_ostream &os, const icam_view_sphere* sp);
 
+#include "icam_view_sphere_sptr.h"
 
 #endif
