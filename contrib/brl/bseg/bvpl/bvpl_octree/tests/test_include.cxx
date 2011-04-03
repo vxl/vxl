@@ -1,6 +1,7 @@
 #include <bvpl/bvpl_octree/bvpl_block_kernel_operator.h>
 #include <bvpl/bvpl_octree/bvpl_cell_data_traits.h>
 #include <bvpl/bvpl_octree/bvpl_discover_pca_kernels.h>
+#include <bvpl/bvpl_octree/bvpl_global_pca.h>
 #include <bvpl/bvpl_octree/bvpl_octree_kernel_operator.h>
 #include <bvpl/bvpl_octree/bvpl_octree_neighbors.h>
 #include <bvpl/bvpl_octree/bvpl_octree_vector_operator.h>

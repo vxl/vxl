@@ -1,5 +1,12 @@
+#include <sdet/sdet_mrf_bp_sptr.h>
+#include <sdet/sdet_mrf_site_bp_sptr.h>
+#include <sdet/sdet_region_edge_sptr.h>
+#include <sdet/sdet_region_sptr.h>
+
 #include <sdet/sdet_contour.h>
 #include <sdet/sdet_denoise_mrf.h>
+#include <sdet/sdet_denoise_mrf_bp.h>
+#include <sdet/sdet_denoise_mrf_bp_params.h>
 #include <sdet/sdet_denoise_mrf_params.h>
 #include <sdet/sdet_detector.h>
 #include <sdet/sdet_detector_params.h>
@@ -17,15 +24,15 @@
 #include <sdet/sdet_image_mesh.h>
 #include <sdet/sdet_image_mesh_params.h>
 #include <sdet/sdet_img_edge.h>
+#include <sdet/sdet_mrf_bp.h>
+#include <sdet/sdet_mrf_site_bp.h>
 #include <sdet/sdet_nms.h>
 #include <sdet/sdet_nonmax_suppression.h>
 #include <sdet/sdet_nonmax_suppression_params.h>
 #include <sdet/sdet_region.h>
 #include <sdet/sdet_region_edge.h>
-#include <sdet/sdet_region_edge_sptr.h>
 #include <sdet/sdet_region_proc.h>
 #include <sdet/sdet_region_proc_params.h>
-#include <sdet/sdet_region_sptr.h>
 #include <sdet/sdet_third_order_edge_det.h>
 #include <sdet/sdet_third_order_edge_det_params.h>
 #include <sdet/sdet_watershed_region_proc.h>
