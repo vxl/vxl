@@ -32,7 +32,7 @@
 #include <vgui/vgui_rubberband_tableau.h>
 #include <bgui/bgui_vtol2D_rubberband_client.h>
 #include <vgui/vgui_composite_tableau.h>
-#include <vsol/vsol_point_2d.h>
+#include <vsol/vsol_point_2d_sptr.h>
 #include <vtol/vtol_face_2d.h>
 #include <brip/brip_vil1_float_ops.h>
 #include <bsol/bsol_algs.h>

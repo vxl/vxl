@@ -17,7 +17,7 @@
 
 #include <vnl/vnl_least_squares_function.h>
 #include <vgl/vgl_homg_plane_3d.h>
-#include <vsol/vsol_point_2d.h>
+#include <vsol/vsol_point_2d_sptr.h>
 
 class bwm_plane_fitting_lsf : public vnl_least_squares_function
 {

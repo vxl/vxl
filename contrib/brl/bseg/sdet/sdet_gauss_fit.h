@@ -13,7 +13,6 @@
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_least_squares_function.h>
 #include <vgl/vgl_point_3d.h>
-#include <vsol/vsol_point_2d.h>
 #include <vsol/vsol_point_2d_sptr.h>
 
 //: Class to fit a 2-d Gaussian to small peaks in a polygon drawn on image.

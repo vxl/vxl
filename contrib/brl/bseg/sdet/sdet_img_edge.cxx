@@ -27,7 +27,7 @@
 #include <vcl_cassert.h>
 #include <vgl/vgl_line_2d.h>
 #include <vsol/vsol_line_2d.h>
-#include <vsol/vsol_point_2d.h>
+#include <vsol/vsol_point_2d_sptr.h>
 #include <vsol/vsol_digital_curve_2d.h>
 #include <sdet/sdet_fit_lines_params.h>
 #include <sdet/sdet_fit_lines.h>
@@ -97,7 +97,6 @@ vil_image_view<vxl_byte> sdet_img_edge::detect_edges(vil_image_view<vxl_byte> im
     img_edge(0,j) = 0;
     img_edge(temp_index,j) = 0;
   }
-
   return img_edge;
 }
 
@@ -360,7 +359,6 @@ sdet_img_edge::detect_edge_line_fitted(vil_image_view<vxl_byte> img,
       edge_img(xc, yc, 2) = static_cast<float>(angle);
     }
   }
-
   return edge_img;
 }
 
@@ -435,7 +433,6 @@ vil_image_view<float> sdet_img_edge::multiply_image_with_gaussian_kernel(vil_ima
       ret_img(i,j) = (float)gaussian.G((double)img(i,j));
     }
   }
-
   return ret_img;
 }
 
@@ -462,7 +459,6 @@ vbl_array_2d<float> sdet_img_edge::get_spherical_gaussian_kernel(const int size,
       kernel(i,j) = gaussian.probability(min_pt,max_pt);
     }
   }
-
   return kernel;
 }
 
@@ -501,7 +497,7 @@ void sdet_img_edge::convert_true_edge_prob_to_edge_statistics(
     for (unsigned j=0; j<img_tep.nj(); j++) {
       img_es(i,j) = ((img_tep(i,j)-img_mean)*(img_tep(i,j)-img_mean))/img_var;
     }
-  } 
+  }
 }
 
 float sdet_img_edge::convert_edge_statistics_to_probability(float edge_statistic, float n_normal, int dof)
@@ -509,8 +505,5 @@ float sdet_img_edge::convert_edge_statistics_to_probability(float edge_statistic
   if (dof<1) {
     return edge_statistic;
   }
-
-  float prob = (float)vnl_chi_squared_cumulative(edge_statistic,dof);
-
-  return prob;
+  return (float)vnl_chi_squared_cumulative(edge_statistic,dof);
 }

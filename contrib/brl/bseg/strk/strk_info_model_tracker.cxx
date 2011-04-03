@@ -5,7 +5,7 @@
 #include <vcl_algorithm.h>
 #include <vul/vul_timer.h>
 #include <vil1/vil1_memory_image_of.h>
-#include <vsol/vsol_point_2d.h>
+#include <vsol/vsol_point_2d_sptr.h>
 #include <btol/btol_face_algs.h>
 #include <brip/brip_vil1_float_ops.h>
 #include <strk/strk_art_info_model.h>

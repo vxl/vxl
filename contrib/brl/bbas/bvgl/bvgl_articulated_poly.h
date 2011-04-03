@@ -11,7 +11,7 @@
 //-----------------------------------------------------------------------------
 #include <vcl_vector.h>
 #include <vgl/algo/vgl_h_matrix_2d.h>
-#include <vsol/vsol_point_2d.h>
+#include <vsol/vsol_point_2d_sptr.h>
 #include <vsol/vsol_polyline_2d.h>
 #include "bvgl_articulated_poly_sptr.h"
 
