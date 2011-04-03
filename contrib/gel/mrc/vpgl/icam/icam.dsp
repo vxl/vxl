@@ -167,6 +167,9 @@ SOURCE=.\icam_transform_2d.h
 # Begin Source File
 SOURCE=.\icam_minimizer_params.h
 # End Source File
+# Begin Source File
+SOURCE=.\icam_view_sphere_sptr.h
+# End Source File
 # End Group
 # End Target
 # End Project
