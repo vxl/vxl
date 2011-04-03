@@ -8,6 +8,7 @@
 #include <vcl_cmath.h>
 #include <vgl/vgl_point_3d.h>
 #include <vnl/vnl_math.h>
+#include <vsol/vsol_point_2d.h> // for dereferencing ps_list[j]
 
 // for new matrix operations
 #include <vnl/vnl_matrix_fixed.h>
@@ -58,7 +59,7 @@ void sdet_adjust_lsqr::f( vnl_vector<double> const& unknowns,
   vnl_vector<double> fit_value(num_pixels_); // the gaussian predictions of image intensity
   vnl_vector<double> sum(num_pixels_); // the sum of gaussians from all peaks
   // zero out all sums
-  for (unsigned i=0; i < num_pixels_; i++)  {
+  for (unsigned i=0; i < num_pixels_; ++i)  {
     sum[i] = 0.0;
   }
 
@@ -66,7 +67,7 @@ void sdet_adjust_lsqr::f( vnl_vector<double> const& unknowns,
   //   peaks must be added together to get the predicted value at a pixel
 
   // Loop through the peaks to add up predicted value for each pixel
-  for (int j=0; j < n_peaks_; j++)
+  for (int j=0; j < n_peaks_; ++j)
   {
     vnl_matrix_fixed<double,2,2> V;
     V(0,0) = unknowns[6*j+4];                    // the x variance
@@ -76,7 +77,7 @@ void sdet_adjust_lsqr::f( vnl_vector<double> const& unknowns,
 
     vnl_matrix_fixed<double,2,2> Vinv = vnl_inverse(V);
 
-    for (unsigned i=0; i < img_pts_.size(); i++)
+    for (unsigned i=0; i < img_pts_.size(); ++i)
     {
       double peak_delta = unknowns[6*j+1] - unknowns[0]; //predicted height of peak above bkgd
 
@@ -96,7 +97,7 @@ void sdet_adjust_lsqr::f( vnl_vector<double> const& unknowns,
   }
 
   // finally, add "floor" value to sum
-  for (unsigned i=0; i < img_pts_.size(); i++)
+  for (unsigned i=0; i < img_pts_.size(); ++i)
     fit_value[i] = sum[i] + unknowns[0];    // add value of pixel above "floor"
 
 #if 0 // Debug:  print out values for this step
@@ -128,7 +129,7 @@ static bool init(vcl_vector<vgl_point_3d<double> > img_pts, vcl_vector<double>& 
 {
   //find the smallest intensity value in polygon
   plane = 65000.;
-  for (unsigned i=0; i<img_pts.size(); i++)
+  for (unsigned i=0; i<img_pts.size(); ++i)
   {
     if ( img_pts[i].z() < plane )
     plane = img_pts[i].z();
@@ -138,7 +139,7 @@ static bool init(vcl_vector<vgl_point_3d<double> > img_pts, vcl_vector<double>& 
   // Let's assume that the largest value around each peak will occur near the
   //   selected position.  So let's just look in that local area for a couple pixels.
 
-  for (int j=0; j < n_peaks; j++)
+  for (int j=0; j < n_peaks; ++j)
   {
     peak.push_back(0.0);                // create vector elements for this peak
     ux.push_back(0.0);
@@ -150,7 +151,7 @@ static bool init(vcl_vector<vgl_point_3d<double> > img_pts, vcl_vector<double>& 
     double xf = ps_list[j]->x() - xmin;            // "picked" values of x & y for this peak
     double yf = ps_list[j]->y() - ymin;
 
-    for ( unsigned i=0; i<img_pts.size(); i++)
+    for (unsigned i=0; i<img_pts.size(); ++i)
     {
       double dx = img_pts[i].x() - xf;
       double dy = img_pts[i].y() - yf;
@@ -174,7 +175,7 @@ static bool init(vcl_vector<vgl_point_3d<double> > img_pts, vcl_vector<double>& 
     double sum = 0.0;
     ux = 0.0;
     uy = 0.0;
-    for (unsigned i=0; i<img_pts.size(); i++)
+    for (unsigned i=0; i<img_pts.size(); ++i)
     {
       vgl_point_3d<double>& p = img_pts[i];
       double w = p.z()-plane;
@@ -194,7 +195,7 @@ static bool init(vcl_vector<vgl_point_3d<double> > img_pts, vcl_vector<double>& 
     syy[j] = 0;
     sxy[j] = 0;
 
-    for (unsigned i=0; i<img_pts.size(); i++)
+    for (unsigned i=0; i<img_pts.size(); ++i)
     {
       vgl_point_3d<double>& p = img_pts[i];
       double w = p.z()-plane;
@@ -251,7 +252,7 @@ vnl_vector<double> sdet_gauss_fit::adjust( vcl_vector<vgl_point_3d<double> > img
     vcl_cerr << "ERROR!! sdet_gauss_fit::adjust(), Cannot init()\n";
   }
 
-  for (int i=0; i < n_peaks; i++)
+  for (int i=0; i < n_peaks; ++i)
   {
 #if 0
     outfile << "Init values:\n-----------------------------------------------\n Peak "
@@ -301,7 +302,7 @@ vnl_vector<double> sdet_gauss_fit::adjust( vcl_vector<vgl_point_3d<double> > img
   vnl_vector<double> unknowns(num_unknowns);
 
   unknowns[0] = plane;
-  for (int i=0; i < n_peaks; i++)
+  for (int i=0; i < n_peaks; ++i)
   {
     unknowns[1+6*i] = peak[i];
     unknowns[2+6*i] = ux[i];
@@ -323,10 +324,10 @@ vnl_vector<double> sdet_gauss_fit::adjust( vcl_vector<vgl_point_3d<double> > img
   levmarq.diagnose_outcome();
 #if 0
   outfile << "Min error of " << levmarq.get_end_error()
-          << " at the following local minima : " << vcl_endl;
+          << " at the following local minima :" << vcl_endl;
 #endif
   vcl_cout << "Min error of " << levmarq.get_end_error()
-           << " at the following local minima : " << vcl_endl;
+           << " at the following local minima :" << vcl_endl;
 
   // print out parameter fit results
 #if 0
@@ -334,7 +335,7 @@ vnl_vector<double> sdet_gauss_fit::adjust( vcl_vector<vgl_point_3d<double> > img
 #endif
   vcl_cout << "  -----------------------------\nFitted parameters:\n------------" << vcl_endl;
 
-  for (unsigned i=0; i<num_unknowns; i++)
+  for (unsigned i=0; i<num_unknowns; ++i)
   {
 #if 0
     outfile << "unknowns[" << i << "]= " << unknowns[i] << vcl_endl;

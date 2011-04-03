@@ -9,6 +9,7 @@
 #include <vnl/vnl_numeric_traits.h>
 #include <vgl/vgl_homg_point_2d.h>
 #include <vgl/vgl_point_2d.h>
+#include <vsol/vsol_point_2d.h>
 
 //empty constructor
 bvgl_articulated_poly::bvgl_articulated_poly(const unsigned n_joints)
