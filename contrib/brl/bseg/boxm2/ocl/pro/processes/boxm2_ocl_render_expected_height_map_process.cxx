@@ -287,7 +287,7 @@ bool boxm2_ocl_render_expected_height_map_process(bprb_func_process& pro)
   for (unsigned c=0;c<nj;++c)
     for (unsigned r=0;r<ni;++r)
     {
-        (*exp_img_out)(r,c)=buff[c*cl_ni+r];
+        (*exp_img_out)(r,c)=z-buff[c*cl_ni+r];
         (*exp_var_out)(r,c)=var_buff[c*cl_ni+r];
         (*xcoord_img)(r,c)=r*xint+scene_origin[0];
         (*ycoord_img)(r,c)=c*yint+scene_origin[1];

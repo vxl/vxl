@@ -190,6 +190,7 @@ bool boxm2_ocl_render_expected_image_process(bprb_func_process& pro)
     for (unsigned r=0;r<ni;r++)
       (*exp_img_out)(r,c)=buff[c*cl_ni+r];
 
+  delete [] buff;
   clReleaseCommandQueue(queue);
   i=0;
   // store scene smaprt pointer

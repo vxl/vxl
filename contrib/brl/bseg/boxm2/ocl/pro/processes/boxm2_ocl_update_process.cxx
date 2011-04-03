@@ -388,6 +388,13 @@ bool boxm2_ocl_update_process(bprb_func_process& pro)
         clFinish(queue);
     }
   }
+
+
+   delete [] vis_buff;  
+   delete [] pre_buff;  
+   delete [] norm_buff; 
+   delete [] input_buff;
+
   vcl_cout<<"Gpu time "<<gpu_time<<" transfer time "<<transfer_time<<vcl_endl;
   clReleaseCommandQueue(queue);
   return true;

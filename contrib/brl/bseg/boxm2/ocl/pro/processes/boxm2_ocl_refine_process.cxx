@@ -279,8 +279,6 @@ bool boxm2_ocl_refine_process(bprb_func_process& pro)
         bocl_mem* old_alph = opencl_cache->get_data(id, boxm2_data_traits<BOXM2_ALPHA>::prefix());
         int numAlphas = old_alph->num_bytes()/sizeof(float); 
         float* abuff = (float*) old_alph->cpu_buffer(); 
-        float* old_alphas = new float[numAlphas]; 
-        for(int i=0; i<numAlphas; ++i) old_alphas[i] = abuff[i]; 
 
         vcl_vector<vcl_string> data_types = scene->appearances(); 
         data_types.push_back(boxm2_data_traits<BOXM2_ALPHA>::prefix());
