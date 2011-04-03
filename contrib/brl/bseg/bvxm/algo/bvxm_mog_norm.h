@@ -20,7 +20,7 @@
 #include <bsta/bsta_mixture_fixed.h>
 #include <bsta/bsta_mixture.h>
 #include <bsta/bsta_gaussian_indep.h>
-#include <bvxm/grid/bvxm_voxel_grid_base.h>
+#include <bvxm/grid/bvxm_voxel_grid_base_sptr.h>
 
 template <class T>
 class bvxm_mog_norm

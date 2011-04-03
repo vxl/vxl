@@ -5,7 +5,7 @@
 #include <bprb/bprb_parameters.h>
 #include <brdb/brdb_value.h>
 #include <bvxm/bvxm_voxel_world.h>
-#include <bvxm/grid/bvxm_voxel_grid_base.h>
+#include <bvxm/grid/bvxm_voxel_grid_base_sptr.h>
 
 //:sets input and output types for bvxm_clean_world_process
 

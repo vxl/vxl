@@ -2,7 +2,7 @@
 //:
 // \file
 #include "bvxm_grid_processes.h"
-#include <bvxm/grid/bvxm_voxel_grid_base.h>
+#include <bvxm/grid/bvxm_voxel_grid_base_sptr.h>
 #include <bprb/bprb_macros.h>
 #include <bprb/bprb_batch_process_manager.h>
 #include <bprb/bprb_func_process.h>
