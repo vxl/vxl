@@ -14,6 +14,7 @@ SOURCES += icam_utils.cxx
 SOURCES += icam_transform_2d.cxx
 MANPAGE_SOURCES += icam_image.h
 MANPAGE_SOURCES += icam_minimizer_params.h
+MANPAGE_SOURCES += icam_view_sphere_sptr.h
 
 SUBDIRS += icam_ocl
 
