@@ -1,7 +1,6 @@
 // This is gel/mrc/vpgl/vpgl_camera.h
 #ifndef vpgl_camera_h_
 #define vpgl_camera_h_
-
 //:
 // \file
 // \brief A general camera class.
@@ -18,11 +17,11 @@
 //   October 26, 2006 - Moved homogeneous methods to projective camera, since
 //                      projective geometry may not apply in the most general case, e.g. rational cameras. - JLM
 // \endverbatim
+
 #include <vcl_string.h>
 #include <vbl/vbl_ref_count.h>
-#include <vbl/vbl_smart_ptr.h>
 
-template<class T>
+template <class T>
 class vpgl_camera : public vbl_ref_count
 {
  public:
@@ -36,8 +35,7 @@ class vpgl_camera : public vbl_ref_count
   virtual void project(const T x, const T y, const T z, T& u, T& v) const = 0;
 };
 
-// convienance typedefs for smart pointers to generic cameras
-typedef vbl_smart_ptr<vpgl_camera<double> > vpgl_camera_double_sptr;
-
+// conveniance typedefs for smart pointers to generic cameras
+#include "vpgl_camera_sptr.h"
 
 #endif // vpgl_camera_h_

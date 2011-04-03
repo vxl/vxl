@@ -10,7 +10,7 @@ doxygen_add_library(contrib/gel/mrc/vpgl
 INCLUDE_DIRECTORIES( ${GEL_INCLUDE_DIR}/mrc)
 
 SET( vpgl_sources
-  vpgl_camera.h
+  vpgl_camera.h                    vpgl_camera_sptr.h
   vpgl_proj_camera.h               vpgl_proj_camera.txx
   vpgl_calibration_matrix.h        vpgl_calibration_matrix.txx
   vpgl_perspective_camera.h        vpgl_perspective_camera.txx
