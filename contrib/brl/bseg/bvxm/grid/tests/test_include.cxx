@@ -1,3 +1,5 @@
+#include <bvxm/grid/bvxm_voxel_grid_base_sptr.h>
+
 #include <bvxm/grid/bvxm_memory_chunk.h>
 #include <bvxm/grid/bvxm_opinion.h>
 #include <bvxm/grid/bvxm_voxel_grid.h>
