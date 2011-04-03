@@ -260,6 +260,9 @@ SOURCE=.\vpgl_local_rational_camera.h
 # Begin Source File
 SOURCE=.\vpgl_local_rational_camera.txx
 # End Source File
+# Begin Source File
+SOURCE=.\vpgl_camera_sptr.h
+# End Source File
 # End Group
 # End Target
 # End Project
