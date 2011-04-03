@@ -3,6 +3,7 @@
 #include <vcl_iostream.h>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_vector_2d.h>
+#include <vsol/vsol_point_2d.h>
 #include <vsol/vsol_point_3d.h>
 
 void bwm_plane_fitting_lsf::f(vnl_vector<double> const &x, vnl_vector< double > &fx)
