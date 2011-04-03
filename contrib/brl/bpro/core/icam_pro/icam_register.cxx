@@ -5,7 +5,7 @@
 #include <bprb/bprb_func_process.h>
 
 #include "icam_processes.h"
-#include <icam/icam_view_sphere.h>
+#include <icam/icam_view_sphere_sptr.h>
 
 void icam_register::register_datatype()
 {
