@@ -83,7 +83,7 @@
 #include <vnl/vnl_math.h>
 
 #include <vil/vil_image_view.h>
-#include <vpgl/vpgl_camera.h>
+#include <vpgl/vpgl_camera_sptr.h>
 
 #include "bvxm_image_metadata.h"
 #include "bvxm_mog_grey_processor.h"

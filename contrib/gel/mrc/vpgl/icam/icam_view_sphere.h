@@ -5,7 +5,7 @@
 #include "icam_view_metadata.h"
 #include <vsph/vsph_view_sphere.h>
 #include <vsph/vsph_view_point.h>
-#include <vpgl/vpgl_camera.h>
+#include <vpgl/vpgl_camera_sptr.h>
 #include <vil/vil_image_view.h>
 #include <vbl/vbl_smart_ptr.h>
 #include <vsl/vsl_binary_io.h>

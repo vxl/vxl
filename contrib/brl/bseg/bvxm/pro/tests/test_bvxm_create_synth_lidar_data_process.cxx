@@ -12,7 +12,7 @@
 
 #include <vil/vil_save.h>
 #include <vil/vil_image_view_base.h>
-#include <vpgl/vpgl_camera.h>
+#include <vpgl/vpgl_camera_sptr.h>
 
 #include <bvxm/pro/processes/bvxm_synth_world_generator.h>
 

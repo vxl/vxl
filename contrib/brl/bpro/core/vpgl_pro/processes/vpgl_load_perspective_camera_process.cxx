@@ -5,7 +5,7 @@
 
 #include <vcl_iostream.h>
 #include <vcl_fstream.h>
-#include <vpgl/vpgl_camera.h>
+#include <vpgl/vpgl_camera_sptr.h>
 #include <vpgl/vpgl_perspective_camera.h>
 #include <vpgl/vpgl_calibration_matrix.h>
 #include <vsl/vsl_binary_io.h>
@@ -43,17 +43,18 @@ bool vpgl_load_perspective_camera_process(bprb_func_process& pro)
   // read projection matrix from the file.
   vcl_ifstream ifs(camera_filename.c_str());
   if (!ifs.is_open()) {
-    vcl_cerr << "Failed to open file " << camera_filename << vcl_endl;
+    vcl_cerr << "Failed to open file " << camera_filename << '\n';
     return false;
   }
   vpgl_perspective_camera<double>* pcam =new vpgl_perspective_camera<double>;
   vcl_string ext = vul_file_extension(camera_filename);
-  if(ext == ".vsl") // binary form
-    {
-      vsl_b_ifstream bp_in(camera_filename.c_str());
-      pcam->b_read(bp_in);
-      bp_in.close();
-  }else{
+  if (ext == ".vsl") // binary form
+  {
+    vsl_b_ifstream bp_in(camera_filename.c_str());
+    pcam->b_read(bp_in);
+    bp_in.close();
+  }
+  else {
    ifs >> *pcam;
   }
   vcl_cout << " cent: " << pcam->camera_center() << vcl_endl;

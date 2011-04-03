@@ -9,7 +9,7 @@
 #include <vil/vil_save.h>
 #include <vil/vil_plane.h>
 #include <vcl_fstream.h>
-#include <vpgl/vpgl_camera.h>
+#include <vpgl/vpgl_camera_sptr.h>
 #include <vpgl/vpgl_perspective_camera.h>
 #include <vgl/vgl_point_3d.h>
 #include <vpgl/vpgl_calibration_matrix.h>

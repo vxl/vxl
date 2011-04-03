@@ -7,7 +7,7 @@
 #include <boxm2/boxm2_data.h>
 #include <testlib/testlib_test.h>
 #include <vnl/vnl_vector_fixed.h>
-#include <vpgl/vpgl_camera.h>
+#include <vpgl/vpgl_camera_sptr.h>
 
 
 class boxm2_test_utils
@@ -23,7 +23,7 @@ class boxm2_test_utils
                                               int max_mb );
 
     static void   save_test_scene_to_disk();
-    static void   delete_test_scene_from_disk(vcl_string dir=""); 
+    static void   delete_test_scene_from_disk(vcl_string dir="");
 
     static vcl_string   save_test_simple_scene();
     static vcl_string   save_test_empty_scene();
@@ -33,7 +33,6 @@ class boxm2_test_utils
     template <boxm2_data_type data_type>
     static void test_data_equivalence(boxm2_data<data_type>& a, boxm2_data<data_type>& b);
     static vpgl_camera_double_sptr test_camera();
-
 };
 
 
@@ -47,8 +46,8 @@ void boxm2_test_utils::test_data_equivalence(boxm2_data<data_type>& a, boxm2_dat
   typedef typename boxm2_data<data_type>::datatype dtype;
   boxm2_array_1d<dtype> adat = a.data();
   boxm2_array_1d<dtype> bdat = b.data();
-  vcl_cout<<"Adat size: "<<adat.size()<<vcl_endl;
-  vcl_cout<<"Bdat size: "<<bdat.size()<<vcl_endl;
+  vcl_cout<<"Adat size: "<<adat.size()<<'\n'
+          <<"Bdat size: "<<bdat.size()<<vcl_endl;
   TEST("Data array size matches", adat.size(), bdat.size());
 
   // make sure buffers match

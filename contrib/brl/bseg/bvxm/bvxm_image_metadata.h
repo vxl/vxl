@@ -10,7 +10,7 @@
 
 #include <vil/vil_image_view_base.h>
 #include <vnl/vnl_vector.h>
-#include <vpgl/vpgl_camera.h>
+#include <vpgl/vpgl_camera_sptr.h>
 
 class bvxm_image_metadata
 {

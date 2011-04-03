@@ -9,7 +9,7 @@
 #include <vpl/vpl.h>
 #include <boxm/algo/sp/boxm_render_image.h>
 #include <vul/vul_file.h>
-#include <vpgl/vpgl_camera.h>
+#include <vpgl/vpgl_camera_sptr.h>
 #include <vpgl/vpgl_perspective_camera.h>
 #include <vpgl/vpgl_calibration_matrix.h>
 

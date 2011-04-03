@@ -12,7 +12,7 @@
 #include <boxm/basic/boxm_block_vis_graph_iterator.h>
 #include <boxm/basic/boxm_cell_vis_graph_iterator.h>
 #include <boxm/sample/algo/boxm_mog_grey_processor.h>
-#include <vpgl/vpgl_camera.h>
+#include <vpgl/vpgl_camera_sptr.h>
 
 #include <vil/vil_image_view.h>
 #include <vil/vil_math.h>

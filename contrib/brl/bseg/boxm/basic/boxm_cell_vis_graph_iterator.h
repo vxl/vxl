@@ -4,7 +4,7 @@
 // \file
 #include <boct/boct_tree_cell.h>
 #include <boct/boct_tree.h>
-#include <vpgl/vpgl_camera.h>
+#include <vpgl/vpgl_camera_sptr.h>
 #include <vcl_vector.h>
 
 template <class T_loc, class T_data>

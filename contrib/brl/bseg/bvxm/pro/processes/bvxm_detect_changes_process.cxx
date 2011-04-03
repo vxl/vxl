@@ -11,7 +11,7 @@
 #include <vil/vil_math.h>
 #include <vil/algo/vil_threshold.h>
 
-#include <vpgl/vpgl_camera.h>
+#include <vpgl/vpgl_camera_sptr.h>
 
 #include <bvxm/bvxm_voxel_world.h>
 #include <bvxm/bvxm_image_metadata.h>

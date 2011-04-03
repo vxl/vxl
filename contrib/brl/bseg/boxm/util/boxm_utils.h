@@ -14,7 +14,7 @@
 #include "boxm_quad_scan_iterator.h"
 #include <vgl/vgl_box_3d.h>
 #include <vgl/vgl_point_3d.h>
-#include <vpgl/vpgl_camera.h>
+#include <vpgl/vpgl_camera_sptr.h>
 #include <boct/boct_tree_cell.h>
 #include <boxm/boxm_apm_traits.h>
 #include <vil/vil_image_view.h>

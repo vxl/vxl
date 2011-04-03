@@ -9,7 +9,7 @@
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_vector_3d.h>
 #include <vgl/vgl_polygon.h>
-#include <vpgl/vpgl_camera.h>
+#include <vpgl/vpgl_camera_sptr.h>
 #include <vpgl/vpgl_perspective_camera.h>
 #include <vil/vil_image_view.h>
 #include <vil/vil_transform.h>

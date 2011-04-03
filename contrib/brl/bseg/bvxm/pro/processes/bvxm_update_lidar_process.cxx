@@ -6,7 +6,7 @@
 #include <bprb/bprb_parameters.h>
 
 #include <vil/vil_image_view_base.h>
-#include <vpgl/vpgl_camera.h>
+#include <vpgl/vpgl_camera_sptr.h>
 
 #include <bvxm/bvxm_voxel_world.h>
 #include <bvxm/bvxm_image_metadata.h>
@@ -106,6 +106,6 @@ bool bvxm_update_lidar_process(bprb_func_process& pro)
     vcl_cerr << "error bvxm_update_lidar_process: failed to update observation\n";
     return false;
   }
-
-  return true;
+  else
+    return true;
 }

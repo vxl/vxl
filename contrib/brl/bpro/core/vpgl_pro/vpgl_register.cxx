@@ -1,6 +1,6 @@
 #include "vpgl_register.h"
 #include "vpgl_processes.h"
-#include <vpgl/vpgl_camera.h>
+#include <vpgl/vpgl_camera_sptr.h>
 
 #include <bprb/bprb_macros.h>
 #include <bprb/bprb_func_process.h>
@@ -8,7 +8,6 @@
 
 void vpgl_register::register_datatype()
 {
-  typedef vbl_smart_ptr<vpgl_camera<double> > vpgl_camera_double_sptr;
   REGISTER_DATATYPE( vpgl_camera_double_sptr );
 }
 

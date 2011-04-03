@@ -16,7 +16,7 @@
 
 #include <brdb/brdb_value.h>
 #include <brip/brip_vil_float_ops.h>
-#include <vpgl/vpgl_camera.h>
+#include <vpgl/vpgl_camera_sptr.h>
 
 bool bvxm_create_mog_image_process_cons(bprb_func_process& pro)
 {

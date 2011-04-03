@@ -14,19 +14,13 @@
 //: Constructor
 bool vpgl_load_proj_camera_process_cons(bprb_func_process& pro)
 {
-  //this process takes one input: the filename
-  bool ok=false;
+  //this process takes one input: the filename, and one output: the camera
   vcl_vector<vcl_string> input_types;
-  input_types.push_back("vcl_string"); 
-  ok = pro.set_input_types(input_types);
-  if (!ok) return ok;
-
+  input_types.push_back("vcl_string");
   vcl_vector<vcl_string> output_types;
   output_types.push_back("vpgl_camera_double_sptr");  // label image
-  ok = pro.set_output_types(output_types);
-  if (!ok) return ok;
-  
-  return true;
+  return pro.set_input_types(input_types)
+      && pro.set_output_types(output_types);
 }
 
 
@@ -47,7 +41,7 @@ bool vpgl_load_proj_camera_process(bprb_func_process& pro)
     vsl_b_ifstream ins(camera_filename.c_str());
     procamp->b_read(ins);
     ins.close();
-    vbl_smart_ptr<vpgl_camera<double> > procam = procamp;
+    vpgl_camera_double_sptr procam = procamp;
     pro.set_output_val<vpgl_camera_double_sptr>(0, procam);
     return true;
   }
@@ -55,13 +49,13 @@ bool vpgl_load_proj_camera_process(bprb_func_process& pro)
   // read projection matrix from the file.
   vcl_ifstream ifs(camera_filename.c_str());
   if (!ifs.is_open()) {
-    vcl_cerr << "Failed to open file " << camera_filename << vcl_endl;
+    vcl_cerr << "Failed to open file " << camera_filename << '\n';
     return false;
   }
   vnl_matrix_fixed<double,3,4> projection_matrix;
   ifs >> projection_matrix;
 
-  vbl_smart_ptr<vpgl_camera<double> > procam = new vpgl_proj_camera<double>(projection_matrix);
+  vpgl_camera_double_sptr procam = new vpgl_proj_camera<double>(projection_matrix);
 
   pro.set_output_val<vpgl_camera_double_sptr>(0, procam);
 
