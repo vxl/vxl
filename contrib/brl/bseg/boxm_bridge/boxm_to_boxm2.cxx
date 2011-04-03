@@ -142,9 +142,8 @@ int main(int argc, char** argv)
   new_scene.set_lvcs(scene.lvcs());
   new_scene.set_xml_path(out_dir()+"/scene.xml");
 
-  //initialize a block and data cache
+  //initialize a block
   boxm2_lru_cache::create(&new_scene);
-  boxm2_cache* cache = boxm2_cache::instance();
 
   vcl_map<boxm2_block_id, boxm2_block_metadata> new_blocks;
   unsigned int dim=sub_block_dim();
