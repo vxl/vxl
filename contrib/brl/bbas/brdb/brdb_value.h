@@ -85,14 +85,14 @@ class brdb_value : public vbl_ref_count
 
   //: binary io read value only
   //  Handles only the value (without version or type info)
-  virtual void b_read_value(vsl_b_istream& is)
+  virtual void b_read_value(vsl_b_istream&)
   {
     vcl_cout << "Warning: calling binary read on parent value class, this value is not being read" << vcl_endl;
   }
 
   //: binary io write value only
   //  Handles only the value (without version or type info)
-  virtual void b_write_value(vsl_b_ostream& os)
+  virtual void b_write_value(vsl_b_ostream&)
   {
     vcl_cout << "Warning: calling binary write on parent value class, this value is not being saved" << vcl_endl;
   }
