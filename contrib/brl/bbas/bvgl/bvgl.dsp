@@ -110,6 +110,12 @@ SOURCE=.\Templates/vbl_smart_ptr+bvgl_change_obj-.cxx
 # Begin Source File
 SOURCE=.\Templates/vbl_smart_ptr+bvgl_changes-.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\Templates/bvgl_triangle_interpolation_iterator+double-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/bvgl_triangle_interpolation_iterator+float-.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
@@ -133,6 +139,12 @@ SOURCE=.\bvgl_changes_sptr.h
 # End Source File
 # Begin Source File
 SOURCE=.\bvgl_point_3d_cmp.h
+# End Source File
+# Begin Source File
+SOURCE=.\bvgl_triangle_interpolation_iterator.txx
+# End Source File
+# Begin Source File
+SOURCE=.\bvgl_triangle_interpolation_iterator.h
 # End Source File
 # End Group
 # End Target

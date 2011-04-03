@@ -261,6 +261,9 @@ SOURCE=.\test_image_mesh.cxx
 SOURCE=.\test_denoise_mrf.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\test_denoise_mrf_bp.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\test_include.cxx
 # End Source File
 # End Group

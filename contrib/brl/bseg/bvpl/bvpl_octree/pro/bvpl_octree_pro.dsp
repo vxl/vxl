@@ -168,6 +168,21 @@ SOURCE=.\processes/bvpl_compute_pca_error_scene_process.cxx
 SOURCE=.\processes/bvpl_load_pca_info_process.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\processes/bvpl_init_global_pca_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/bvpl_pca_global_statistics_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/bvpl_global_pca_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/bvpl_normalize_pca_training_error_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/bvpl_combine_pairwise_statistics_process.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/brdb_value_t+boxm_scene_base_sptr-.cxx
 # End Source File
 # End Group

@@ -105,6 +105,9 @@ SOURCE=.\msm_build_shape_model.cxx
 # Begin Source File
 SOURCE=.\msm_plot_aligned_shapes.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\msm_get_shape_params.cxx
+# End Source File
 # End Group
 # End Target
 # End Project

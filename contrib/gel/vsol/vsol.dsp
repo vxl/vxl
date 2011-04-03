@@ -261,7 +261,7 @@ SOURCE=.\Templates/vsl_vector_io+vsol_point_3d_sptr-.cxx
 SOURCE=.\Templates/vsl_vector_io+vsol_spatial_object_3d_sptr-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vcl_map+uint.vbl_smart_ptr+vsol_point_2d--.cxx
+SOURCE=.\Templates/vcl_map+uint.vsol_point_2d_sptr-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/vbl_io_smart_ptr+vsol_cylinder-.cxx

@@ -113,6 +113,12 @@ SOURCE=.\imesh_operations.cxx
 # Begin Source File
 SOURCE=.\imesh_vertex.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\Templates/brdb_value_t+imesh_mesh_sptr-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vbl_smart_ptr+imesh_mesh-.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"

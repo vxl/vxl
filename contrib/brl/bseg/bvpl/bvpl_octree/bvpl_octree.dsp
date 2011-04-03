@@ -146,6 +146,24 @@ SOURCE=.\Templates/boxm_block+boct_tree+short.bvpl_taylor_basis2_sample--.cxx
 # Begin Source File
 SOURCE=.\Templates/boct_tree+short.bvpl_pca_basis_sample+10--.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\Templates/vnl_vector_fixed+double.125-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/bvpl_global_pca+125-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/boct_tree+short.vnl_vector_fixed+double.10--.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vnl_matrix_fixed+double.125.125-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/boxm_block+boct_tree+short.bvpl_pca_basis_sample+10---.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/boxm_block+boct_tree+short.vnl_vector_fixed+double.10---.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
@@ -193,6 +211,12 @@ SOURCE=.\bvpl_pca_error_scenes.h
 # End Source File
 # Begin Source File
 SOURCE=.\bvpl_taylor_scenes_map.h
+# End Source File
+# Begin Source File
+SOURCE=.\bvpl_global_pca.h
+# End Source File
+# Begin Source File
+SOURCE=.\bvpl_global_pca.txx
 # End Source File
 # End Group
 # End Target

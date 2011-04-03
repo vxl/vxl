@@ -144,7 +144,7 @@ SOURCE=.\processes/vpgl_save_perspective_camera_vrml_process.cxx
 SOURCE=.\processes/vpgl_project_process.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/brdb_value_t+vbl_smart_ptr+vpgl_camera+double---.cxx
+SOURCE=.\Templates/brdb_value_t+vpgl_camera_double_sptr-.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"

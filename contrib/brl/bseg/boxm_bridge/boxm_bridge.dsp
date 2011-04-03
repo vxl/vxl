@@ -97,11 +97,17 @@ LIB32=link.exe -lib
 # Begin Source File
 SOURCE=.\boxm2_to_boxm.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\boxm_to_boxm2.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
 # Begin Source File
 SOURCE=.\boxm2_to_boxm.h
+# End Source File
+# Begin Source File
+SOURCE=.\boxm_to_boxm2.h
 # End Source File
 # End Group
 # End Target

@@ -134,6 +134,12 @@ SOURCE=.\Templates/boct_tree+short.int-.cxx
 # Begin Source File
 SOURCE=.\Templates/boct_tree_cell+short.int-.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\Templates/boct_tree+short.bool-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/boct_tree_cell+short.bool-.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"

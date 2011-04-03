@@ -102,7 +102,7 @@ SOURCE=.\processes/icam_create_view_sphere_process.cxx
 SOURCE=.\processes/icam_register_image_process.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/brdb_value_t+vbl_smart_ptr+icam_view_sphere--.cxx
+SOURCE=.\Templates/brdb_value_t+icam_view_sphere_sptr-.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
