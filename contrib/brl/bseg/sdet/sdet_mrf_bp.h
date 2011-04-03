@@ -16,6 +16,8 @@
 #include <vil/vil_image_resource.h>
 #include <vil/vil_image_view.h>
 #include <vbl/vbl_array_2d.h>
+#include <vbl/vbl_ref_count.h>
+#include <vcl_vector.h>
 
 class sdet_mrf_bp : public vbl_ref_count
 {
