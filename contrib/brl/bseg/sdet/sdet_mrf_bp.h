@@ -12,7 +12,7 @@
 //     d
 // with index (u, l, r, d) ==> (0, 1, 2, 3)
 //
-#include <sdet/sdet_mrf_site_bp.h>
+#include <sdet/sdet_mrf_site_bp_sptr.h>
 #include <vil/vil_image_resource.h>
 #include <vil/vil_image_view.h>
 #include <vbl/vbl_array_2d.h>
