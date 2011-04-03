@@ -519,6 +519,9 @@ SOURCE=.\bvxm_opinion.h
 # Begin Source File
 SOURCE=.\bvxm_voxel_grid_opinion_basic_ops.h
 # End Source File
+# Begin Source File
+SOURCE=.\bvxm_voxel_grid_base_sptr.h
+# End Source File
 # End Group
 # End Target
 # End Project
