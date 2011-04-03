@@ -23,10 +23,13 @@
 #include <vgui/vgui_viewer2D_tableau.h>
 #include <vgui/vgui_grid_tableau.h>
 #include <vgui/vgui_image_tableau.h>
+#if 0 // currently unused
 #include <vsol/vsol_point_2d.h>
 #include <vsol/vsol_polygon_2d.h>
+#endif
 #include <vpro/vpro_vil_video_process.h>
 #include <vpro/vpro_roi_process.h>
+
 //static manager instance
 vvid_vil_file_manager *vvid_vil_file_manager::instance_ = 0;
 
