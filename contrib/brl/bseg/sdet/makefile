@@ -36,6 +36,12 @@ SOURCES += sdet_image_mesh.cxx
 SOURCES += sdet_image_mesh_params.cxx
 SOURCES += sdet_denoise_mrf.cxx
 SOURCES += sdet_denoise_mrf_params.cxx
+SOURCES += sdet_mrf_site_bp.cxx
+MANPAGE_SOURCES += sdet_mrf_site_bp_sptr.h
+SOURCES += sdet_denoise_mrf_bp.cxx
+SOURCES += sdet_denoise_mrf_bp_params.cxx
+SOURCES += sdet_mrf_bp.cxx
+MANPAGE_SOURCES += sdet_mrf_bp_sptr.h
 
 #######################################
 include ${VXLROOT}/config/top-params.mk

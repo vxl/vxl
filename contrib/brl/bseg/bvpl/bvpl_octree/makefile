@@ -17,6 +17,7 @@ MANPAGE_SOURCES += bvpl_octree_neighbors.h
 MANPAGE_SOURCES += bvpl_block_kernel_operator.h
 SOURCES += bvpl_pca_error_scenes.cxx
 SOURCES += bvpl_taylor_scenes_map.cxx
+MANPAGE_SOURCES += bvpl_global_pca.txx
 
 SUBDIRS += pro sample io
 

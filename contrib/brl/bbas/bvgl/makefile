@@ -11,6 +11,7 @@ MANPAGE_SOURCES += bvgl_change_obj_sptr.h
 SOURCES += bvgl_changes.cxx
 MANPAGE_SOURCES += bvgl_changes_sptr.h
 MANPAGE_SOURCES += bvgl_point_3d_cmp.h
+MANPAGE_SOURCES += bvgl_triangle_interpolation_iterator.txx
 
 #######################################
 include ${VXLROOT}/config/top-params.mk

@@ -24,6 +24,7 @@ SOURCES += processes/boxm2_ocl_render_expected_depth_process.cxx
 SOURCES += processes/boxm2_ocl_update_process.cxx
 SOURCES += processes/boxm2_ocl_refine_process.cxx
 SOURCES += processes/boxm2_ocl_render_gl_expected_image_process.cxx
+SOURCES += processes/boxm2_ocl_render_expected_height_map_process.cxx
 
 #######################################
 include ${VXLROOT}/config/top-params.mk

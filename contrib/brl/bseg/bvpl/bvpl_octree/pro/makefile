@@ -27,6 +27,11 @@ SOURCES += processes/bvpl_scene_histogram_process.cxx
 SOURCES += processes/bvpl_compute_pca_error_block_process.cxx
 SOURCES += processes/bvpl_compute_pca_error_scene_process.cxx
 SOURCES += processes/bvpl_load_pca_info_process.cxx
+SOURCES += processes/bvpl_init_global_pca_process.cxx
+SOURCES += processes/bvpl_pca_global_statistics_process.cxx
+SOURCES += processes/bvpl_global_pca_process.cxx
+SOURCES += processes/bvpl_normalize_pca_training_error_process.cxx
+SOURCES += processes/bvpl_combine_pairwise_statistics_process.cxx
 
 #######################################
 include ${VXLROOT}/config/top-params.mk
