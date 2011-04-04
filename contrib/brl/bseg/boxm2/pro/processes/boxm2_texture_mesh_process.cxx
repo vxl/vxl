@@ -441,7 +441,9 @@ bool boxm2_texture_mesh_process_globals::face_is_visible( vpgl_perspective_camer
   //now create a polygon, and find the integer image coordinates (U,V) that this polygon covers
   int ni = vis_img->ni();
   int nj = vis_img->nj();
-
+  int numPixels = 0; 
+  int numMatches = 0; 
+  
   vgl_triangle_scan_iterator<double> tsi;
   tsi.a.x = us[0];  tsi.a.y = vs[0];
   tsi.b.x = us[1];  tsi.b.y = vs[1];
@@ -456,13 +458,20 @@ bool boxm2_texture_mesh_process_globals::face_is_visible( vpgl_perspective_camer
     if (min_x < 0) min_x = 0;
     if (max_x >= ni) max_x = ni-1;
     for (int x = min_x; x <= max_x; ++x) {
-      if ( (*vis_img)(x,y) != world_tri.face_id )
-        return false;
+      numPixels++; 
+      if ( (*vis_img)(x,y) == world_tri.face_id )
+        numMatches++;
     }
   }
-
+  
+  //if the majority match, it's visible
+  if( (double) numMatches / (double) numPixels > .25) 
+    return true;
+  else
+    return false;
+    
   //if it made it this far, it's completely visible
-  return true;
+  //return true;
 }
 
 //Constructs vector of visibility images - images that identify which triangle
