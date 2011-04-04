@@ -79,6 +79,7 @@
 #include <brip/brip_para_cvrg.h>
 #include <brip/brip_watershed_params.h>
 #include <brip/brip_max_scale_response.h>
+#include <sdet/sdet_vrml_display.h>
 #include <sdet/sdet_watershed_region_proc_params.h>
 #include <sdet/sdet_watershed_region_proc.h>
 #include <sdet/sdet_region_proc_params.h>
@@ -1879,7 +1880,7 @@ void segv_vil_segmentation_manager::image_as_vrml_points()
     return;
   vil_image_view<float> fimg =
     brip_vil_float_ops::convert_to_float(img);
-#if 0
+#if 1
   sdet_vrml_display::write_vrml_header(ostr);
   sdet_vrml_display::write_vrml_height_map(ostr, fimg);
 #endif
