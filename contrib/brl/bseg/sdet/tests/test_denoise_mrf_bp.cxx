@@ -12,20 +12,24 @@
 static void test_denoise_mrf_bp()
 {
   vil_image_resource_sptr depth =
-    vil_load_image_resource("C:/images/MeshStudies/depth-joint-crop-float_max.tif");
+    vil_load_image_resource("C:/images/MeshStudies/Quantico/depth_med.tif");
   vil_image_resource_sptr var =
-    vil_load_image_resource("C:/images/MeshStudies/var-joint-crop-float_max.tif");
+    vil_load_image_resource("C:/images/MeshStudies/Quantico/var_med.tif");
   sdet_denoise_mrf_bp_params dmbp;
   dmbp.n_iter_ = 3;
   dmbp.pyramid_levels_ = 5;
-  dmbp.lambda_=0.001f;
+  dmbp.discontinuity_cost_ = 5.0;
+  dmbp.truncation_cost_=400;
+  dmbp.n_labels_ = 64;
+  //dmbp.lambda_=0.000001f;
+  dmbp.lambda_=0.0000003f;
   sdet_denoise_mrf_bp mbp(dmbp);
   mbp.set_image(depth);   mbp.set_variance(var);
   bool success = mbp.denoise();
   if (success) {
     vil_image_resource_sptr outr = mbp.output();
     vil_save_image_resource(outr,
-                            "C:/images/MeshStudies/sdet_belief_max.tif",
+                            "C:/images/MeshStudies/Quantico/belief_med.tif",
                             "tiff");
 #if 0
     unsigned pi = 214, pj = 88;
