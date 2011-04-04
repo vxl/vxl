@@ -22,6 +22,7 @@
 #include <vgl/vgl_ray_3d.h>
 #include <vgl/vgl_box_2d.h>
 #include <vgl/vgl_box_3d.h>
+#include <bvgl/bvgl_triangle_interpolation_iterator.h>
 
 //vpgl camera stuff
 #include <vpgl/vpgl_perspective_camera.h>
@@ -36,9 +37,6 @@ namespace boxm2_export_mesh_process_globals
 {
   const unsigned n_inputs_ = 4;
   const unsigned n_outputs_ = 1;
-  
-  //helper split method
-  void split_triangles(imesh_mesh& mesh, vil_image_view<float>* zimg); 
 }
 
 bool boxm2_export_mesh_process_cons(bprb_func_process& pro)
@@ -76,9 +74,11 @@ bool boxm2_export_mesh_process(bprb_func_process& pro)
   vcl_string out_dir           = pro.get_input<vcl_string>(argIdx++);
 
   //create the mesh directory
-  if (!vul_file::make_directory_path(out_dir.c_str())) {
-    vcl_cout<<"Couldn't make directory path "<<out_dir<<vcl_endl;
-    return false;
+  if(out_dir != "") {
+    if (!vul_file::make_directory_path(out_dir.c_str())) {
+      vcl_cout<<"Couldn't make directory path "<<out_dir<<vcl_endl;
+      return false;
+    }
   }
 
   //cast camera and image so they are useful
@@ -96,13 +96,13 @@ bool boxm2_export_mesh_process(bprb_func_process& pro)
   //initialize some sdet_image_mesh parameters
   sdet_image_mesh_params imp;
   // sigma of the Gaussian for smoothing the image prior to edge detection
-  imp.smooth_ = 0.5f;
+  imp.smooth_ = 2.0f;
   // the edge detection threshold
-  imp.thresh_ = 2.0f;
+  imp.thresh_ = 1.0f;
   // the shortest edgel chain that is considered for line fitting
   imp.min_fit_length_ = 7;
   // the threshold on rms pixel distance of edgels to the line
-  imp.rms_distance_ = 0.15;
+  imp.rms_distance_ = 0.5;
   // the width in pixels of the transition of a step edge
   imp.step_half_width_ = 1.0;
 
@@ -123,7 +123,6 @@ bool boxm2_export_mesh_process(bprb_func_process& pro)
   // camera, take it's centroid point and add x,y,z point, creating 3 new faces
   ////////////////////////////////////////////////////////////////////////////////
   mesh.compute_vertex_normals_from_faces();
-  split_triangles(mesh, z_img); 
 
   ////////////////////////////////////////////////////////////////////////////////
   //// normalize mesh world points to fit in the image_bb from above
@@ -162,86 +161,4 @@ bool boxm2_export_mesh_process(bprb_func_process& pro)
   imesh_mesh_sptr mesh_sptr = new imesh_mesh(mesh);
   pro.set_output_val<imesh_mesh_sptr>(argIdx++, mesh_sptr);
   return true;
-}
-
-void boxm2_export_mesh_process_globals::split_triangles(imesh_mesh& mesh, 
-                                                        vil_image_view<float>* z_img)
-{
-  //find the range of triangles in the Z direction
-  double minZ = 10e100, maxZ = -10e100; 
-  imesh_regular_face_array<3>& faces = (imesh_regular_face_array<3>&) mesh.faces();
-  imesh_vertex_array<3>& verts = mesh.vertices<3>();
-  unsigned nfaces = mesh.num_faces();
-  for (unsigned iface = 0; iface<nfaces; ++iface)
-  {
-    unsigned v1 = faces[iface][0]; 
-    unsigned v2 = faces[iface][1]; 
-    unsigned v3 = faces[iface][2]; 
-    double z1 = verts[v1][2]; 
-    double z2 = verts[v2][2]; 
-    double z3 = verts[v3][2]; 
-
-    //get the min z and max z out of this bunch
-    minZ = vcl_min(vcl_min(z1, vcl_min(z2, z3)), minZ);
-    maxZ = vcl_max(vcl_max(z1, vcl_min(z2, z3)), maxZ); 
-  }
-  
-  //maximum z diff allowed for a triangle is 1/512 of the total z range
-  double max_z_diff = (maxZ-minZ)/512.0; 
-
-  //number of tris that split
-  int numSplit = 0;
-  bool didSplit = true; 
-  while( numSplit < 10000 && didSplit ) {
-    
-    //nothing has split yet
-    didSplit = false;
-    
-    //grab the mesh's faces and verts
-    imesh_regular_face_array<3>& faces = (imesh_regular_face_array<3>&) mesh.faces();
-    imesh_vertex_array<3>& verts = mesh.vertices<3>();
-    unsigned nfaces = mesh.num_faces();
-    for (unsigned iface = 0; iface<nfaces; ++iface)
-    {
-      unsigned v1 = faces[iface][0]; 
-      unsigned v2 = faces[iface][1]; 
-      unsigned v3 = faces[iface][2]; 
-      vgl_point_3d<double> vert1(verts[v1][0], verts[v1][1], verts[v1][2]); 
-      vgl_point_3d<double> vert2(verts[v2][0], verts[v2][1], verts[v2][2]); 
-      vgl_point_3d<double> vert3(verts[v3][0], verts[v3][1], verts[v3][2]); 
-      
-      //get the min z and max z out of this bunch
-      double minZ = vcl_min(vert1.z(), vcl_min(vert2.z(), vert3.z()));
-      double maxZ = vcl_max(vert1.z(), vcl_min(vert2.z(), vert3.z()));
-      
-      //if the difference between min and max Z is sufficient, add a point to the mix 
-      // right in the middle of the triangle
-      if( (maxZ-minZ > max_z_diff) ) {
-      
-        //split the triangle: 
-        didSplit = true;
-        numSplit++;
-        
-        //this center of the triangle gives you X,Y center, but grab Z from the z_img
-        vgl_point_3d<double> center = centre<double>(vert1, vert2, vert3); 
-        unsigned i = static_cast<unsigned>(center.x());
-        unsigned j = static_cast<unsigned>(center.y());      
-        double centerZ = (*z_img)(i,j); 
-      
-        //pop vertex onto the end of the list
-        imesh_vertex<3> point(center.x(),center.y(),centerZ);
-        verts.push_back(point);
-        unsigned vCenter = verts.size()-1; 
-        
-        //now add the three faces that would result from this
-        //v1, v2, center; v1, center, v3; v2, v3, center
-        imesh_tri tri1(v1, v2, vCenter);
-        imesh_tri tri2(v1, vCenter, v3);
-        imesh_tri tri3(v2, v3, vCenter);
-        faces[iface] = tri1;  
-        faces.push_back(tri2); 
-        faces.push_back(tri3); 
-      } 
-    }
-  }
 }

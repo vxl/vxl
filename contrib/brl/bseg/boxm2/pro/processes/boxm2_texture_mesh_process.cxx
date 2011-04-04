@@ -10,6 +10,7 @@
 #include <vcl_fstream.h>
 #include <vul/vul_file.h>
 #include <vul/vul_timer.h>
+#include <vnl/vnl_random.h>
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/boxm2_util.h>
 
@@ -72,7 +73,7 @@ namespace boxm2_texture_mesh_process_globals
                             vcl_map<vcl_string, vpgl_perspective_camera<double>* >& texture_cams);
 
   //returns a list of visible triangles given a camera,
-  //visibility image, and world coordinate 3d triangel
+  //visibility image, and world coordinate 3d triangle
   vcl_vector<triangle_3d> get_visible_triangles(vpgl_perspective_camera<double>* cam,
                                                 vil_image_view<int>* vis_img,
                                                 triangle_3d& world_tri);
@@ -104,7 +105,6 @@ bool boxm2_texture_mesh_process(bprb_func_process& pro)
     vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
     return false;
   }
-
   unsigned argIdx = 0;
   imesh_mesh_sptr mesh = pro.get_input<imesh_mesh_sptr>(argIdx++);
   vcl_string img_dir   = pro.get_input<vcl_string>(argIdx++);
@@ -112,9 +112,11 @@ bool boxm2_texture_mesh_process(bprb_func_process& pro)
   vcl_string out_dir   = pro.get_input<vcl_string>(argIdx++);
 
   //create the mesh directory
-  if (!vul_file::make_directory_path(out_dir.c_str())) {
-    vcl_cout<<"Couldn't make directory path "<<out_dir<<vcl_endl;
-    return false;
+  if(out_dir != "") {
+    if (!vul_file::make_directory_path(out_dir.c_str())) {
+      vcl_cout<<"Couldn't make directory path "<<out_dir<<vcl_endl;
+      return false;
+    }
   }
 
   //////////////////////////////////////////////////////////////////////////////
@@ -157,19 +159,40 @@ void boxm2_texture_mesh_process_globals::boxm2_texture_mesh_from_imgs(vcl_string
   // BEGIN TEXTURE MAPPING
   // Gather cameras and iamges that will contribute to the texture
   ////////////////////////////////////////////////////////////////////////////////
-  vcl_vector<vcl_string> imfiles  = boxm2_util::images_from_directory(im_dir);
-  vcl_vector<vpgl_perspective_camera<double>* > cameras = boxm2_util::cameras_from_directory(cam_dir);
+  vcl_vector<vcl_string> allims  = boxm2_util::images_from_directory(im_dir);
+  vcl_vector<vpgl_perspective_camera<double>* > allcams = boxm2_util::cameras_from_directory(cam_dir);
+  if(allims.size() != allcams.size()) {
+    vcl_cout<<"Texture images are not 1 to 1 with cameras:: dirs "<<im_dir<<" and "<<cam_dir<<vcl_endl;
+    return; 
+  }
+  
+  //choose a few random images
+  vcl_vector<vcl_string> imfiles; 
+  vcl_vector<vpgl_perspective_camera<double>* > cameras; 
+
+  int handpicked[] = { 0, 1, 40, 82, 96, 105, 133, 153}; 
+  //int handpicked[] = { 0,133 }; 
+  for(int i=0; i<sizeof(handpicked)/sizeof(int); ++i) {
+    imfiles.push_back(allims[handpicked[i]]); 
+    cameras.push_back(allcams[handpicked[i]]); 
+    vcl_cout<<"added image: "<<imfiles[i]<<vcl_endl;
+  }
+  //vnl_random rand(9667566);
+  //for(int i=0; i<5; ++i) {
+    //unsigned filenum = rand.lrand32(1, allims.size()-1); 
+    //imfiles.push_back(allims[filenum]); 
+    //cameras.push_back(allcams[filenum]); 
+  //}
 
   ////////////////////////////////////////////////////////////////////////////////
-  // Grab input mesh vertices and input mesh faces
+  // make sure mesh has computed vertex normals
   ////////////////////////////////////////////////////////////////////////////////
   in_mesh.compute_vertex_normals_from_faces();
-  imesh_regular_face_array<3>& in_faces = (imesh_regular_face_array<3>&) in_mesh.faces();
-  imesh_vertex_array<3>& in_verts = in_mesh.vertices<3>();
 
   ////////////////////////////////////////////////////////////////////////////////
   // Render Visibility Images
   ////////////////////////////////////////////////////////////////////////////////
+  vcl_cout<<"calculating visibility images (for each textured image)"<<vcl_endl;
   vcl_vector<vil_image_view<int>* > vis_images;
   boxm2_visible_faces(cameras, vis_images, in_mesh);
 
@@ -189,7 +212,9 @@ void boxm2_texture_mesh_process_globals::boxm2_texture_mesh_from_imgs(vcl_string
   //   - create a face list
   //   - create a sub mesh that is textured
   ////////////////////////////////////////////////////////////////////////////////
-  //for each appearance (texture image), create an imesh_mesh (subMesh);
+  imesh_regular_face_array<3>& in_faces = (imesh_regular_face_array<3>&) in_mesh.faces();
+  imesh_vertex_array<3>& in_verts = in_mesh.vertices<3>();
+  //for each appearance (texture image), create an imesh_mesh (subMesh);  
   vcl_cout<<"Creating Sub Meshes for each texture"<<vcl_endl;
   vcl_map<vcl_string, vcl_vector<unsigned> >::iterator apps;
   for (apps = app_faces.begin(); apps != app_faces.end(); ++apps)
@@ -465,7 +490,7 @@ bool boxm2_texture_mesh_process_globals::face_is_visible( vpgl_perspective_camer
   }
   
   //if the majority match, it's visible
-  if( (double) numMatches / (double) numPixels > .25) 
+  if( (double) numMatches / (double) numPixels > .9) 
     return true;
   else
     return false;
