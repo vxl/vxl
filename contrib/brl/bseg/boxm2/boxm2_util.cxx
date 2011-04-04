@@ -208,10 +208,9 @@ int boxm2_util::find_nearest_cam(vgl_vector_3d<double>& normal,
   double minAngle = 10e20;
   unsigned minCam = -1;
   for (unsigned int i=0; i<cams.size(); ++i) {
-    double dp = dot_product( -1*cams[i]->principal_axis(), normal );
-    double angle = vcl_fabs( vcl_acos(dp) );
-    if (angle < minAngle && angle < vnl_math::pi/3.0) {
-      minAngle = angle;
+    double ang = angle(normal, -1*cams[i]->principal_axis()); //vcl_fabs( vcl_acos(dp) );
+    if (ang < minAngle && ang < vnl_math::pi/2.0) {
+      minAngle = ang;
       minCam = i;
     }
   }
