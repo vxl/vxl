@@ -45,6 +45,8 @@ class sdet_image_mesh : public sdet_image_mesh_params
   bool step_boundary(vgl_line_segment_2d<double> const& parent,
                      vgl_line_segment_2d<double>& child0,
                      vgl_line_segment_2d<double>& child1);
+  void set_anchor_points(imesh_mesh& mesh);
+
   //:members
   bool mesh_valid_;      //process state flag
   vil_image_resource_sptr resc_;

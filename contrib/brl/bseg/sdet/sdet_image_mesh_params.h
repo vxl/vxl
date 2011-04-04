@@ -13,6 +13,7 @@
 #include <vbl/vbl_ref_count.h>
 #include <gevd/gevd_param_mixin.h>
 #include <vcl_iosfwd.h>
+#include <vgl/vgl_point_2d.h>
 
 class sdet_image_mesh_params : public gevd_param_mixin, public vbl_ref_count
 {
@@ -40,6 +41,8 @@ class sdet_image_mesh_params : public gevd_param_mixin, public vbl_ref_count
   int  min_fit_length_; //!< the shortest curve to fit a line
   double rms_distance_; //!< the max rms distance error for the fit
   double step_half_width_; //!< half the step transition width (in pixels)
+  vcl_vector<vgl_point_2d<double> > anchor_points_; //!< additional anchor points to generate 2d mesh
+
 };
 
 #endif // sdet_image_mesh_params_h_
