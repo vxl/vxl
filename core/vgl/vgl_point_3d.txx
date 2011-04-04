@@ -12,6 +12,7 @@
 
 #include <vcl_iostream.h>
 #include <vcl_iomanip.h>
+#include <vcl_cmath.h> // for std::sqrt
 
 //: Construct from homogeneous point
 template <class Type>
@@ -125,6 +126,26 @@ vcl_istream&  operator>>(vcl_istream& is, vgl_point_3d<Type>& p)
   return p.read(is);
 }
 
+//: Return the "average deviation" of a set of given points from its centre of gravity.
+//  "Average" in the sense of the standard deviation (2-norm, i.e., square root
+//  of sum of squares) of the distances from that centre of gravity.
+// \relatesalso vgl_point_3d
+template <class Type>
+double stddev(vcl_vector<vgl_point_3d<Type> > const& v)
+{
+  int n=v.size();
+  double d = 0.0;
+  if (n<=1) return d;
+  vgl_point_3d<Type> c = centre(v);
+  Type cx = c.x(), cy = c.y(), cz = c.z();
+#define vgl_sqr(x) double((x)*(x))
+  for (int i=0; i<n; ++i)
+    d += vgl_sqr(v[i].x()-cx) + vgl_sqr(v[i].y()-cy) + vgl_sqr(v[i].z()-cz);
+#undef vgl_sqr
+  return vcl_sqrt(d);
+}
+
+
 #undef VGL_POINT_3D_INSTANTIATE
 #define VGL_POINT_3D_INSTANTIATE(T) \
 template class vgl_point_3d<T >; \
@@ -133,6 +154,7 @@ template double cross_ratio(vgl_point_3d<T >const&, vgl_point_3d<T >const&, \
 template bool coplanar(vgl_point_3d<T > const&, vgl_point_3d<T > const&, \
                        vgl_point_3d<T > const&, vgl_point_3d<T > const&); \
 template vcl_ostream& operator<<(vcl_ostream&, const vgl_point_3d<T >&); \
-template vcl_istream& operator>>(vcl_istream&, vgl_point_3d<T >&)
+template vcl_istream& operator>>(vcl_istream&, vgl_point_3d<T >&); \
+template double stddev(vcl_vector<vgl_point_3d<T > > const&)
 
 #endif // vgl_point_3d_txx_

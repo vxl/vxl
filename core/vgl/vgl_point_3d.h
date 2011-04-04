@@ -262,6 +262,13 @@ vgl_point_3d<Type> centre(vcl_vector<vgl_point_3d<Type> > const& v)
   return vgl_point_3d<Type>(x/n,y/n,z/n);
 }
 
+//: Return the "average deviation" of a set of given points from its centre of gravity.
+//  "Average" in the sense of the standard deviation (2-norm, i.e., square root
+//  of sum of squares) of the distances from that centre of gravity.
+// \relatesalso vgl_point_3d
+template <class Type>
+double stddev(vcl_vector<vgl_point_3d<Type> > const& v);
+
 //: Return true iff the 4 points are coplanar, i.e., they belong to a common plane
 // \relatesalso vgl_point_3d
 template <class Type>
