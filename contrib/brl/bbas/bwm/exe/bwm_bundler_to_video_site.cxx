@@ -9,7 +9,7 @@
 
 #include <vcl_vector.h>
 #include <vcl_set.h>
-
+#include <vcl_cassert.h>
 #include <vcl_iostream.h>
 #include <vcl_fstream.h>
 #include <vcl_string.h>
@@ -44,6 +44,7 @@
 #include <vil/vil_save.h>
 #include <vcl_cstdlib.h> // for rand()
 #include <bwm/bwm_site_mgr.h>
+
 static void write_vrml_header(vcl_ofstream& str)
 {
   str << "#VRML V2.0 utf8\n"
@@ -52,6 +53,7 @@ static void write_vrml_header(vcl_ofstream& str)
       << "  groundColor [ 0 0 0 ]\n"
       << "}\n";
 }
+
 static void
 write_vrml_cameras(vcl_ofstream& str,vcl_vector<vpgl_perspective_camera<double> > & cams, double rad, vcl_set<int> const& bad_cams)
 {
@@ -71,7 +73,7 @@ write_vrml_cameras(vcl_ofstream& str,vcl_vector<vpgl_perspective_camera<double> 
         << " appearance Appearance{\n"
         << "   material Material\n"
         << "    {\n";
-    if( bad_cams.count(i) )
+    if ( bad_cams.count(i) )
         str << "      diffuseColor " << 1.0 << ' ' << 0.0 << ' ' << 0.0 << '\n';
     else
         str << "     diffuseColor " << 1.0 << ' ' << 1.0 << ' ' << 0.0 << '\n';
@@ -115,49 +117,50 @@ write_vrml_cameras(vcl_ofstream& str,vcl_vector<vpgl_perspective_camera<double> 
         << "}\n";
   }
 }
+
 static void write_vrml_points(vcl_ofstream& str,
                               vcl_vector<vgl_point_3d<double> > const& pts3d, double rad=2.0)
 {
   int n = pts3d.size();
-  str<<"Shape {\n";
-  str<<"geometry PointSet {\n";
-  str<<"coord Coordinate {\n";
-  str<<"point [\n";
+  str<<"Shape {\n"
+     <<"geometry PointSet {\n"
+     <<"coord Coordinate {\n"
+     <<"point [\n";
   for (int i =0; i<n; i++)
-    str<<pts3d[i].x()<<' '<<pts3d[i].y()<<' '<< pts3d[i].z() <<','<<"\n";
+    str<<pts3d[i].x()<<' '<<pts3d[i].y()<<' '<< pts3d[i].z() <<",\n";
 
-  str<<"]\n";
-  str<<"}\n";
-  str<<"color Color {\n";
-  str<<"color [\n";
+  str<<"]\n"
+     <<"}\n"
+     <<"color Color {\n"
+     <<"color [\n";
   for (int i =0; i<n; i++)
-    str<<0<<' '<<1.0<<' '<< 0.0 <<','<<"\n";
-  str<<"]\n";
-  str<<"}\n";
-  str<<"}\n";
-  str<<"}\n";
+    str<<0<<' '<<1.0<<' '<< 0.0 <<",\n";
+  str<<"]\n"
+     <<"}\n"
+     <<"}\n"
+     <<"}\n";
 }
 
 static void write_vrml_box(vcl_ofstream& os,
                            vgl_box_3d<double> const& bounding_box,
                            vnl_vector_fixed<double,3> const& color, float const& transparency)
 {
-    os << "Transform {\n";
-    os << "  translation " << bounding_box.centroid_x() << " " << bounding_box.centroid_y() << " " << bounding_box.centroid_z() << "\n";
-    os << "     children[\n";
-    os << "     Shape {\n";
-    os << "         appearance Appearance{ \n";
-    os << "                         material Material{\n";
-    os << "                                      diffuseColor " << color[0] << " " << color[1] << " " << color[2] << "\n";
-    os << "                                      transparency " << transparency << "\n";                                         
-    os << "                                          }\n";//end material
-    os << "                     }\n";//end appearance
-    os << "         geometry Box {\n";
-    os << "         size " << bounding_box.width() << " " << bounding_box.height() << " " << bounding_box.depth() << "\n";
-    os << "         }\n";//end box
-    os << "     }\n";//end Shape
-    os << "     ]\n";//end children
-    os << "}\n";//end Transform
+    os << "Transform {\n"
+       << "  translation " << bounding_box.centroid_x() << ' ' << bounding_box.centroid_y() << ' ' << bounding_box.centroid_z() << '\n'
+       << "     children[\n"
+       << "     Shape {\n"
+       << "         appearance Appearance{\n"
+       << "                         material Material{\n"
+       << "                                      diffuseColor " << color[0] << ' ' << color[1] << ' ' << color[2] << '\n'
+       << "                                      transparency " << transparency << '\n'
+       << "                                          }\n" //end material
+       << "                     }\n" //end appearance
+       << "         geometry Box {\n"
+       << "         size " << bounding_box.width() << ' ' << bounding_box.height() << ' ' << bounding_box.depth() << '\n'
+       << "         }\n" //end box
+       << "     }\n" //end Shape
+       << "     ]\n" //end children
+       << "}\n"; //end Transform
 }
 
 bool fit_plane_ransac(vcl_vector<vgl_homg_point_3d<double> > & points, vgl_homg_plane_3d<double>  & plane)
@@ -298,30 +301,30 @@ bool axis_align_scene(vcl_vector<bwm_video_corr_sptr> & corrs,
 
 vnl_vector_fixed<double,3> stddev( vcl_vector<vgl_point_3d<double> > const& v)
 {
-    unsigned n = v.size();
-    assert(n>0);
-    vnl_vector_fixed<double,3> m(0.0f), stddev(0.0f);
+  unsigned n = v.size();
+  assert(n>0);
+  vnl_vector_fixed<double,3> m(0.0f), stddev(0.0f);
 
-    for(unsigned i = 0; i < n; ++i)
-    {
-        m[0]+=v[i].x();
-        m[1]+=v[i].y();
-        m[2]+=v[i].z();
-    }
-    for(unsigned i = 0; i < 3; ++i)
-        m[i]/=n;
+  for (unsigned i = 0; i < n; ++i)
+  {
+    m[0]+=v[i].x();
+    m[1]+=v[i].y();
+    m[2]+=v[i].z();
+  }
+  for (unsigned i = 0; i < 3; ++i)
+    m[i]/=n;
 
-    for(unsigned i = 0; i < n; ++i)
-    {
-        stddev[0] += (v[i].x()-m[0])*(v[i].x()-m[0]);
-        stddev[1] += (v[i].y()-m[1])*(v[i].y()-m[1]);
-        stddev[2] += (v[i].z()-m[2])*(v[i].z()-m[2]);
-    }
-   
-    for(unsigned i = 0; i < 3; ++i)
-        stddev[i] = vcl_sqrt(stddev[i]/(n-1));
+  for (unsigned i = 0; i < n; ++i)
+  {
+    stddev[0] += (v[i].x()-m[0])*(v[i].x()-m[0]);
+    stddev[1] += (v[i].y()-m[1])*(v[i].y()-m[1]);
+    stddev[2] += (v[i].z()-m[2])*(v[i].z()-m[2]);
+  }
 
-    return stddev;
+  for (unsigned i = 0; i < 3; ++i)
+    stddev[i] = vcl_sqrt(stddev[i]/(n-1));
+
+  return stddev;
 }
 
 // An executable that read bundler file and convert it into video site.
@@ -449,9 +452,8 @@ int main(int argc, char** argv)
       unsigned view_number, key_number;
       double img_x,img_y;
 
-      
       bfile>>view_number>>key_number>>img_x>>img_y;
-      
+
       img_x=img_x+principal_point.x();
       img_y=nj-(img_y+principal_point.y());
       double maxerrframe=0;
@@ -469,8 +471,8 @@ int main(int argc, char** argv)
     }
     corrs.push_back(corr);
   }
-  vcl_cout<<"Avg Error per projection "<<err/cnt<<vcl_endl;
-  vcl_cout<<"Max Error"<<maxerr<<" is in camera # "<<maxerrcam<<vcl_endl;
+  vcl_cout<<"Avg Error per projection "<<err/cnt<<'\n'
+          <<"Max Error"<<maxerr<<" is in camera # "<<maxerrcam<<vcl_endl;
   // save it to a site
   if (!axis_align_scene(corrs,cams))
     return -1;
@@ -504,7 +506,7 @@ int main(int argc, char** argv)
     bounding_box.add(corrs[i]->world_pt());
     pts_3d.push_back(corrs[i]->world_pt());
   }
-  //: Dimesnions of the World
+  // Dimensions of the World
   vcl_cout<<"Bounding Box "<<bounding_box<<vcl_endl;
   vgl_point_3d<double> c = centre(pts_3d);
   vcl_cout<<"Center       "<<centre(pts_3d)<<vcl_endl;
@@ -512,25 +514,25 @@ int main(int argc, char** argv)
   vcl_cout<<"Stddev       "<< sigma <<vcl_endl;
 
   vgl_box_3d<double> bounding_box2;
-  for(unsigned i = 0; i < pts_3d.size(); ++i)
+  for (unsigned i = 0; i < pts_3d.size(); ++i)
   {
-      if( vcl_abs(pts_3d[i].x()-c.x()) < 2*sigma[0] &&
-          vcl_abs(pts_3d[i].y()-c.y()) < 2*sigma[1] &&
-          vcl_abs(pts_3d[i].z()-c.z()) < 2*sigma[2] )
-          bounding_box2.add(pts_3d[i]);
+    if ( vcl_abs(pts_3d[i].x()-c.x()) < 2*sigma[0] &&
+         vcl_abs(pts_3d[i].y()-c.y()) < 2*sigma[1] &&
+         vcl_abs(pts_3d[i].z()-c.z()) < 2*sigma[2] )
+      bounding_box2.add(pts_3d[i]);
   }
-  vcl_cout << "Bounding Box containing points which are 2*sigma about the scene center: " <<bounding_box2<<vcl_endl;
-  vcl_cout << "min_x = " << bounding_box2.min_x() << vcl_endl;
-  vcl_cout << "min_y = " << bounding_box2.min_y() << vcl_endl;
-  vcl_cout << "min_z = " << bounding_box2.min_z() << vcl_endl;
-  vcl_cout << "max_x = " << bounding_box2.max_x() << vcl_endl;
-  vcl_cout << "max_y = " << bounding_box2.max_y() << vcl_endl;
-  vcl_cout << "max_z = " << bounding_box2.max_z() << vcl_endl;
-  vcl_cout << "width = " << bounding_box2.width() << vcl_endl;
-  vcl_cout << "depth = " << bounding_box2.depth() << vcl_endl;
-  vcl_cout << "height = " << bounding_box2.height() << vcl_endl;
+  vcl_cout << "Bounding Box containing points which are 2*sigma about the scene center: " <<bounding_box2<<'\n'
+           << "min_x = " << bounding_box2.min_x() << '\n'
+           << "min_y = " << bounding_box2.min_y() << '\n'
+           << "min_z = " << bounding_box2.min_z() << '\n'
+           << "max_x = " << bounding_box2.max_x() << '\n'
+           << "max_y = " << bounding_box2.max_y() << '\n'
+           << "max_z = " << bounding_box2.max_z() << '\n'
+           << "width = " << bounding_box2.width() << '\n'
+           << "depth = " << bounding_box2.depth() << '\n'
+           << "height= " << bounding_box2.height() << vcl_endl;
 
-  //: Determing the resolution of the cells
+  // Determining the resolution of the cells
   vgl_ray_3d<double> cone_axis;
   double cone_half_angle;
   double solid_angle;
@@ -544,13 +546,13 @@ int main(int argc, char** argv)
   vcl_ofstream os(vrml_file().c_str());
   if (os)
   {
-      write_vrml_header(os);
-      write_vrml_points(os,pts_3d,res);
-      write_vrml_cameras(os,cams,res*10,bad_cams);
-      if(draw_box())
-        write_vrml_box(os,bounding_box2,vnl_vector_fixed<double,3>(0.0,0.0,1.0),0.6f);
+    write_vrml_header(os);
+    write_vrml_points(os,pts_3d,res);
+    write_vrml_cameras(os,cams,res*10,bad_cams);
+    if (draw_box())
+      write_vrml_box(os,bounding_box2,vnl_vector_fixed<double,3>(0.0,0.0,1.0),0.6f);
   else
-      vcl_cout<<"ERROR OPENING  "<< vrml_file() <<vcl_endl;
+    vcl_cout<<"ERROR OPENING  "<< vrml_file() <<vcl_endl;
   }
 
   bwm_video_site_io site;
@@ -567,6 +569,4 @@ int main(int argc, char** argv)
   vcl_set<int>::iterator iter=bad_cams.begin();
   for (;iter!=bad_cams.end();++iter)
     vcl_cout<<*iter<<' ';
-
-
 }
