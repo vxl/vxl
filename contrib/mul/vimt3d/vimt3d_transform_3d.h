@@ -87,10 +87,9 @@ class vimt3d_transform_3d
 
   //: Define the transform in terms of a 4x4 homogeneous matrix.
   // \param M 4x4 homogeneous matrix defining the transform.
-  // \param form The expected form of the transform.
   // \note Client must ensure that \a M is a valid representation of an affine (or simpler) transform.
-  // \sa simplify()
-  void set(const vnl_matrix<double>& M, Form form=Affine);
+  // \note The form will be set to Affine - call simplify() if you need the simplest form.
+  void set_matrix(const vnl_matrix<double>& M);
 
   //: Sets transform using v
   void set(const vnl_vector<double>& v, Form);
