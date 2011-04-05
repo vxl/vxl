@@ -44,7 +44,9 @@ bwm_site_mgr* bwm_site_mgr::instance()
 bwm_site_mgr::bwm_site_mgr(): site_name_(""), site_dir_(""), pyr_exe_(""),
                               camera_path_(""), video_path_("")
 {
+#if (HAS_MFC)
   site_create_process_ = new bwm_site_process();
+#endif
   object_types_.resize(OBJ_UNDEF);
   object_types_[MESH_FEATURE] = BWM_MESH_FEATURE_STR;
   object_types_[MESH_IMAGE_PROCESSING] = BWM_MESH_IMAGE_PROCESSING_STR;
@@ -54,7 +56,9 @@ bwm_site_mgr::bwm_site_mgr(): site_name_(""), site_dir_(""), pyr_exe_(""),
 
 bwm_site_mgr::~bwm_site_mgr()
 {
+#if (HAS_MFC)
   delete site_create_process_;
+#endif
 }
 
 void bwm_site_mgr::init_site()
@@ -71,12 +75,12 @@ void bwm_site_mgr::init_site()
 
   // clear the objects
   site_objs_.clear();
-
+#if (HAS_MFC)
   if (site_create_process_) {
     delete site_create_process_;
     this->site_create_process_ = new bwm_site_process();
   }
-
+#endif
   site_name_="";
   site_dir_="";
   pyr_exe_="";
@@ -230,9 +234,17 @@ void bwm_site_mgr::create_site()
 
   // temporarily setting the exe path, will find a better solution later - Gamze
   site->pyr_exe_path_ = pyr_exe_path;
-
+#if (HAS_MFC)
   site_create_process_->set_site(site);
   site_create_process_->StartBackgroundTask();
+#else
+  vgui_dialog error ("Error");
+  error.message ("Site is not created! MFC (Windows platforms) is needed for this task!" );
+  error.ask();
+  if (! site_dialog.ask())
+    return;
+  vcl_cout << "Site is not created MFC (Windows) is needed for this task!" << vcl_endl;
+#endif
 }
 
 //: create a dialog box to create site to add images, objects, etc..
@@ -431,8 +443,10 @@ void bwm_site_mgr::edit_site()
 #endif // 0
 
     site->add(files, pyramid, active, levels, objects, new vsol_point_3d(lat, lon, elev));
+#if (HAS_MFC)
     site_create_process_->set_site(site);
     site_create_process_->StartBackgroundTask();
+#endif
   }
 }
 

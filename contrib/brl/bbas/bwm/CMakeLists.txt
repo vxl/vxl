@@ -91,6 +91,7 @@ ENDIF(NOT MINGW)
 IF(MFC_FOUND)
   # add stuff to use MFC in this executable
   ADD_DEFINITIONS( "-D_AFXDLL" )
+  ADD_DEFINITIONS( -DHAS_MFC=1 )
   SET(CMAKE_MFC_FLAG 2)
   SET(bwm_sources ${bwm_sources}
      process/bwm_process.cxx           process/bwm_process.h
