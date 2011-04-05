@@ -122,7 +122,11 @@ SOURCE=.\boxm2_update_trajectory.cxx
 # Begin Source File
 SOURCE=.\boxm2_export_trajectory.cxx
 # End Source File
+# Begin Source File
 SOURCE=.\boxm2_batch_update_view.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\boxm2_ocl_render_view.cxx
 # End Source File
 # End Group
 # End Target

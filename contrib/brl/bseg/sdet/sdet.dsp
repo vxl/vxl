@@ -201,6 +201,9 @@ SOURCE=.\sdet_mrf_site_bp.cxx
 SOURCE=.\sdet_mrf_bp.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\sdet_vrml_display.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/vbl_smart_ptr+sdet_region_edge-.cxx
 # End Source File
 # Begin Source File
@@ -331,6 +334,9 @@ SOURCE=.\sdet_denoise_mrf_bp.h
 # End Source File
 # Begin Source File
 SOURCE=.\sdet_mrf_bp_sptr.h
+# End Source File
+# Begin Source File
+SOURCE=.\sdet_vrml_display.h
 # End Source File
 # End Group
 # End Target
