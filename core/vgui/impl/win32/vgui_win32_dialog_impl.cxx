@@ -317,7 +317,11 @@ bool vgui_win32_dialog_impl::ask()
   FindDialogSize(width, height, max_length, fbsr_count, cxChar, cyChar,
                  width_sep, height_sep, button_length, edit_length, browser_length);
 
+#ifdef _WIN64
+  HINSTANCE hInstance = (HINSTANCE)GetWindowLong(hWndParent, GWLP_HINSTANCE);
+#else
   HINSTANCE hInstance = (HINSTANCE)GetWindowLong(hWndParent, GWL_HINSTANCE);
+#endif //_WIN64
   // Get the position and size of the parent window to position the
   // popup dialog box.
   GetWindowRect(hWndParent, &rect);
