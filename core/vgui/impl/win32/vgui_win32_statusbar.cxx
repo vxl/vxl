@@ -5,15 +5,15 @@
 
 int vgui_win32_statusbar::statusBarID = 200;
 
-vgui_win32_statusbar::vgui_win32_statusbar(HWND hwndParent, int numPanes) 
+vgui_win32_statusbar::vgui_win32_statusbar(HWND hwndParent, int numPanes)
   : statusbuf(new vgui_statusbuf(this)), out(statusbuf),
      hwndParent_(hwndParent), numPanes_(numPanes)
 {
 #ifdef _WIN64
-	  hwnd_ = CreateWindowEx(
+  hwnd_ = CreateWindowEx(
          0L,                                       // no extended styles
          STATUSCLASSNAME,                          // status bar
-         "",                                       // no text 
+         "",                                       // no text
          WS_CHILD|WS_BORDER|WS_VISIBLE,            // styles
          -100, -100, 10, 10,                       // x, y, cx, cy
          hwndParent,                               // parent window
@@ -21,13 +21,13 @@ vgui_win32_statusbar::vgui_win32_statusbar(HWND hwndParent, int numPanes)
          (HINSTANCE)GetWindowLong(hwndParent, GWLP_HINSTANCE), // instance
          NULL);                                    // window data
   if ( hwnd_ == NULL )
-    MessageBox(NULL, TEXT("Fail to create status bar"), TEXT("Error"), 
+    MessageBox(NULL, TEXT("Fail to create status bar"), TEXT("Error"),
                MB_ICONERROR | MB_OK);
 #else
   hwnd_ = CreateWindowEx(
          0L,                                       // no extended styles
          STATUSCLASSNAME,                          // status bar
-         "",                                       // no text 
+         "",                                       // no text
          WS_CHILD|WS_BORDER|WS_VISIBLE,            // styles
          -100, -100, 10, 10,                       // x, y, cx, cy
          hwndParent,                               // parent window
@@ -35,10 +35,9 @@ vgui_win32_statusbar::vgui_win32_statusbar(HWND hwndParent, int numPanes)
          (HINSTANCE)GetWindowLong(hwndParent, GWL_HINSTANCE), // instance
          NULL);                                    // window data
   if ( hwnd_ == NULL )
-    MessageBox(NULL, TEXT("Fail to create status bar"), TEXT("Error"), 
+    MessageBox(NULL, TEXT("Fail to create status bar"), TEXT("Error"),
                MB_ICONERROR | MB_OK);
 #endif //_WIN64
-
 }
 
 vgui_win32_statusbar::~vgui_win32_statusbar()
@@ -72,7 +71,7 @@ int vgui_win32_statusbar::write(const char* text, int n)
       linebuffer = "";
     }
   }
- 
+
   return n;
 }
 
