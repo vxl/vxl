@@ -101,5 +101,6 @@ void render_expected_image(bocl_device_sptr & device,
         normalize_kern->clear_args();
     }
 
+    delete [] vis_buff;
     vcl_cout<<"Gpu time "<<gpu_time<<" transfer time "<<transfer_time<<vcl_endl;
 }
