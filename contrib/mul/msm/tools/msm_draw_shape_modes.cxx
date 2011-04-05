@@ -24,6 +24,7 @@
 #include <msm/utils/msm_draw_shape_to_eps.h>
 #include <msm/utils/msm_shape_mode_view.h>
 
+
 /*
 Parameter file format:
 <START FILE>
@@ -49,6 +50,9 @@ overlap_shapes: false
 
 //: Radius of points to display (if <0, then don't draw points)
 point_radius: 2
+
+//: Line width
+line-width: 1
 
 line_colour: black
 point_colour: red
@@ -128,6 +132,9 @@ struct tool_params
   //: Radius of points to display (if <0, then don't draw points)
   double point_radius;
 
+  //: Line width
+  double line_width;
+
   //: Parse named text file to read in data
   //  Throws a mbl_exception_parse_error if fails
   void read_from_file(const vcl_string& path);
@@ -153,6 +160,7 @@ void tool_params::read_from_file(const vcl_string& path)
   make_movie=vul_string_to_bool(props.get_optional_property("make_movie","false"));
   n_sds=vul_string_atof(props.get_optional_property("n_sds","3.0"));
   point_radius=vul_string_atof(props.get_optional_property("point_radius","1.5"));
+  line_width=vul_string_atof(props.get_optional_property("line_width","1"));
   width=vul_string_atof(props.get_optional_property("width","100"));
   line_colour=props.get_optional_property("line_colour","black");
   point_colour=props.get_optional_property("point_colour","red");
@@ -195,6 +203,7 @@ void draw_mode(msm_shape_mode_view& mode_view,
       msm_draw_points_to_eps(writer,mode_view.points()[i],
                              params.point_radius);
     writer.set_colour(params.line_colour);
+    writer.set_line_width(params.line_width);
     msm_draw_shape_to_eps(writer,mode_view.points()[i],curves);
   }
   writer.close();
@@ -229,6 +238,7 @@ void draw_mode_frames(msm_shape_mode_view& mode_view,
       msm_draw_points_to_eps(writer,mode_view.points()[f],
                              params.point_radius);
     writer.set_colour(params.line_colour);
+    writer.set_line_width(params.line_width);
     msm_draw_shape_to_eps(writer,mode_view.points()[f],curves);
 
     writer.close();
