@@ -19,7 +19,6 @@ MANPAGE_SOURCES += bil_roi_mask.h
 MANPAGE_SOURCES += bil_scale_image.txx
 SOURCES += bil_compass_edge_detector.cxx
 SOURCES += bil_nms.cxx
-SOURCES += bil_detect_blur_scale.cxx
 
 #######################################
 include ${VXLROOT}/config/top-params.mk
