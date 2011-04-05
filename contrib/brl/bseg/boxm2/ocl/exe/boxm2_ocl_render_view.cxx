@@ -27,7 +27,7 @@
 
 //vgui stuff
 #include <boxm2/view/boxm2_ocl_render_tableau.h>
-
+#include <boxm2/view/boxm2_view_utils.h>
 #include <vgui/vgui.h>
 #include <vgui/vgui_adaptor.h>
 #include <vgui/vgui_window.h>
@@ -64,9 +64,19 @@ int main(int argc, char ** argv)
     else {
         ifs >> *pcam;
     }
+    bocl_manager_child_sptr mgr =bocl_manager_child::instance();
+    bocl_device_sptr device = mgr->gpus_[0];
+    device->context() = boxm2_view_utils::create_clgl_context(*(device->device_id()));
+
+    boxm2_scene_sptr scene = new boxm2_scene(scene_file());
+
+    //create cache, grab singleton instance
+    boxm2_lru_cache::create(scene);
+    boxm2_opencl_cache_sptr opencl_cache=new boxm2_opencl_cache(scene, device);
+
     //create a new ocl_draw_glbuffer_tableau, window, and initialize it
     boxm2_ocl_render_tableau_new bit_tableau;  
-    bit_tableau->init(scene_file(),ni(),nj(),pcam);
+    bit_tableau->init(device,opencl_cache,scene,ni(),nj(),pcam);
 
     //create window, attach the new tableau and status bar
     vgui_window* win = vgui::produce_window(ni(), nj(), "OpenCl Volume Visualizer");
