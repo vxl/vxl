@@ -27,6 +27,7 @@
 #include <sdet/sdet_image_mesh_params.h>
 #include <imesh/imesh_mesh.h>
 #include <vil/vil_image_resource.h>
+#include <vil/vil_image_view.h>
 class sdet_image_mesh : public sdet_image_mesh_params
 {
  public:
@@ -45,7 +46,7 @@ class sdet_image_mesh : public sdet_image_mesh_params
   bool step_boundary(vgl_line_segment_2d<double> const& parent,
                      vgl_line_segment_2d<double>& child0,
                      vgl_line_segment_2d<double>& child1);
-  void set_anchor_points(imesh_mesh& mesh);
+  void set_anchor_points(imesh_mesh& mesh, vil_image_view<float> dt_img);
 
   //:members
   bool mesh_valid_;      //process state flag
