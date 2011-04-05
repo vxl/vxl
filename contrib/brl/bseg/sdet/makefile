@@ -42,6 +42,7 @@ SOURCES += sdet_denoise_mrf_bp.cxx
 SOURCES += sdet_denoise_mrf_bp_params.cxx
 SOURCES += sdet_mrf_bp.cxx
 MANPAGE_SOURCES += sdet_mrf_bp_sptr.h
+SOURCES += sdet_vrml_display.cxx
 
 #######################################
 include ${VXLROOT}/config/top-params.mk
