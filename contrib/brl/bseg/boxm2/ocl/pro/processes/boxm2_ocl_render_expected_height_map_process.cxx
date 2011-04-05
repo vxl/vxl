@@ -125,8 +125,9 @@ bool boxm2_ocl_render_expected_height_map_process(bprb_func_process& pro)
   for (id = vis_order.begin(); id != vis_order.end(); ++id)
   {
     boxm2_block_metadata mdata=scene->get_block_metadata(*id);
-    xint=mdata.sub_block_dim_.x()/8.0;
-    yint=mdata.sub_block_dim_.y()/8.0;
+    float num_octree_cells=vcl_pow(2.0f,(float)mdata.max_level_-1);
+    xint=mdata.sub_block_dim_.x()/num_octree_cells;
+    yint=mdata.sub_block_dim_.y()/num_octree_cells;
   }
   unsigned int ni=(unsigned int)vcl_ceil(bbox.width()/xint);
   unsigned int nj=(unsigned int)vcl_ceil(bbox.height()/yint);
