@@ -9,6 +9,21 @@ vgui_win32_statusbar::vgui_win32_statusbar(HWND hwndParent, int numPanes)
   : statusbuf(new vgui_statusbuf(this)), out(statusbuf),
      hwndParent_(hwndParent), numPanes_(numPanes)
 {
+#ifdef _WIN64
+	  hwnd_ = CreateWindowEx(
+         0L,                                       // no extended styles
+         STATUSCLASSNAME,                          // status bar
+         "",                                       // no text 
+         WS_CHILD|WS_BORDER|WS_VISIBLE,            // styles
+         -100, -100, 10, 10,                       // x, y, cx, cy
+         hwndParent,                               // parent window
+         (HMENU)statusBarID,                       // window ID
+         (HINSTANCE)GetWindowLong(hwndParent, GWLP_HINSTANCE), // instance
+         NULL);                                    // window data
+  if ( hwnd_ == NULL )
+    MessageBox(NULL, TEXT("Fail to create status bar"), TEXT("Error"), 
+               MB_ICONERROR | MB_OK);
+#else
   hwnd_ = CreateWindowEx(
          0L,                                       // no extended styles
          STATUSCLASSNAME,                          // status bar
@@ -22,6 +37,7 @@ vgui_win32_statusbar::vgui_win32_statusbar(HWND hwndParent, int numPanes)
   if ( hwnd_ == NULL )
     MessageBox(NULL, TEXT("Fail to create status bar"), TEXT("Error"), 
                MB_ICONERROR | MB_OK);
+#endif //_WIN64
 
 }
 
