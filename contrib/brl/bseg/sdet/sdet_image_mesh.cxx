@@ -18,9 +18,9 @@
 #include <sdet/sdet_fit_lines_params.h>
 #include <sdet/sdet_fit_lines.h>
 #include <bbas/bil/algo/bil_cedt.h>
-#include <vgl/vgl_line_segment_2d.h>
 #include <bvgl/bvgl_triangle_interpolation_iterator.h>
 #include <imesh/algo/imesh_generate_mesh.h>
+
 #include <vnl/vnl_random.h>
 
 //note: this method is somewhat of a hack and should be replaced by
@@ -117,36 +117,36 @@ bool sdet_image_mesh::compute_mesh()
     }
   }
   ////======================================///
-   vil_image_view<unsigned char> line_img(resc_->ni(),resc_->nj());//some resource
-   line_img.fill(255);
-   
-   for(unsigned i = 0;i<segs_pair.size();i++)
-   {
-       bool init = true;
+  vil_image_view<unsigned char> line_img(resc_->ni(),resc_->nj());//some resource
+  line_img.fill(255);
 
-       float xs= segs_pair[i].point1().x();
-       float ys= segs_pair[i].point1().y();
-       float xe= segs_pair[i].point2().x();
-       float ye= segs_pair[i].point2().y();
-       float x=0.0;
-       float y=0.0;
-       while (brip_line_generator::generate(init, xs, ys, xe, ye, x, y))
-       {
-           int xi = (int)x;
-           int yi = (int)y; //convert the pixel location to integer
-           line_img(xi, yi)=0;
-       }
-   }
-   bil_cedt dt(line_img);
-   if(!dt.compute_cedt())
-   {
-    vcl_cout<<"Error in computing DT "<<vcl_endl;
-   }
+  for (unsigned i = 0;i<segs_pair.size();i++)
+  {
+    bool init = true;
 
-   vil_save(line_img,"f:/visdt/line_img.png");
-   vil_image_view<float> dtimg=dt.cedtimg();
+    float xs= segs_pair[i].point1().x();
+    float ys= segs_pair[i].point1().y();
+    float xe= segs_pair[i].point2().x();
+    float ye= segs_pair[i].point2().y();
+    float x=0.0;
+    float y=0.0;
+    while (brip_line_generator::generate(init, xs, ys, xe, ye, x, y))
+    {
+      int xi = (int)x;
+      int yi = (int)y; //convert the pixel location to integer
+      line_img(xi, yi)=0;
+    }
+  }
+  bil_cedt dt(line_img);
+  if (!dt.compute_cedt())
+  {
+    vcl_cout<<"Error in computing DT"<<vcl_endl;
+  }
+
+  vil_save(line_img,"f:/visdt/line_img.png");
+  vil_image_view<float> dtimg=dt.cedtimg();
   ////======================================///
-   //generate a 2d mesh based on the edges
+  //generate a 2d mesh based on the edges
   vgl_point_2d<double> ul(0.0, 0.0), ur(resc_->ni()-1,0.0);
   vgl_point_2d<double> lr(resc_->ni()-1, resc_->nj()-1), ll(0.0, resc_->nj()-1);
 
@@ -185,7 +185,7 @@ bool sdet_image_mesh::compute_mesh()
   ///////////////////////////////////////////////////////
   //compute anchor points, and rerun generate_mesh_2d_2
   ///////////////////////////////////////////////////////
-  this->set_anchor_points(mesh_one,dtimg); 
+  this->set_anchor_points(mesh_one,dtimg);
 
   vcl_cout<<"Number of anchor points: "<<anchor_points_.size()<<vcl_endl;
   imesh_generate_mesh_2d_2(cvexh, segs_pair, anchor_points_, mesh_);
@@ -259,11 +259,11 @@ void sdet_image_mesh::set_anchor_points(imesh_mesh& mesh, vil_image_view<float> 
 
   //maximum z diff allowed for a triangle is 1/512 of the total z range
   vil_image_view<float> z_img = brip_vil_float_ops::convert_to_float(resc_);
-  double max_z_diff = (maxz-minz)/256.0; 
-  for(int i=0; i<ni; i+=4)
-    for(int j=0; j<nj; j+=4)
-      if( vcl_fabs( tri_depth(i,j)- z_img(i,j) ) > max_z_diff && dt_img(i,j)>5.0 )
-        anchor_points_.push_back(vgl_point_2d<double>(i,j)); 
+  double max_z_diff = (maxz-minz)/256.0;
+  for (int i=0; i<ni; i+=4)
+    for (int j=0; j<nj; j+=4)
+      if ( vcl_fabs( tri_depth(i,j)- z_img(i,j) ) > max_z_diff && dt_img(i,j)>5.0 )
+        anchor_points_.push_back(vgl_point_2d<double>(i,j));
 }
 
 //ensure the image is a byte image (between 0 and 255)
