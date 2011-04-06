@@ -785,28 +785,6 @@ void bwm_site_mgr::save_video_site()
     
   bwm_video_site_io vio;
 
-  vcl_vector<bwm_observable_sptr> objs = bwm_world::instance()->objects();
-  vcl_vector<vcl_string> obj_types;
-  vcl_vector<vcl_string> obj_paths;
-  vcl_string obj_dir = site_dir_ + "\\" + site_name_ + "_objects\\";
-  vul_file::make_directory(obj_dir);
-  unsigned iobj = 0;
-  for(vcl_vector<bwm_observable_sptr>::iterator oit = objs.begin();
-      oit != objs.end(); ++oit, ++iobj)
-    if((*oit)->type_name()=="bwm_observable_mesh"){
-      vcl_stringstream strm;
-      strm << vcl_fixed << iobj;
-      vcl_string str(strm.str());
-      vcl_string path = obj_dir + "mesh_" + str + ".ply";
-      obj_types.push_back("mesh_feature");
-      obj_paths.push_back(path);
-      (*oit)->save(path.c_str());
-    }else
-      vcl_cout << "Can't save object of type " << (*oit)->type_name() << '\n';
-  vio.set_object_types(obj_types);
-  vio.set_object_paths(obj_paths);
-
-
   if ((this->site_name_.size() > 0) &&
       (this->site_dir_.size() > 0) &&
       (vul_file::exists(this->site_dir_)))
@@ -839,13 +817,33 @@ void bwm_site_mgr::save_video_site()
       vcl_cerr << "Please enter a directory for the video site\n";
       return;
     }
-      
+  
     vio.set_name(this->site_name_);
     vio.set_site_directory(this->site_dir_);
     vio.set_video_path(obv->image_path());
     vio.set_camera_path(obv->camera_path());
   }
-  
+
+  vcl_vector<bwm_observable_sptr> objs = bwm_world::instance()->objects();
+  vcl_vector<vcl_string> obj_types;
+  vcl_vector<vcl_string> obj_paths;
+  vcl_string obj_dir = site_dir_ + "\\" + site_name_ + "_objects\\";
+  vul_file::make_directory(obj_dir);
+  unsigned iobj = 0;
+  for(vcl_vector<bwm_observable_sptr>::iterator oit = objs.begin();
+      oit != objs.end(); ++oit, ++iobj)
+    if((*oit)->type_name()=="bwm_observable_mesh"){
+      vcl_stringstream strm;
+      strm << vcl_fixed << iobj;
+      vcl_string str(strm.str());
+      vcl_string path = obj_dir + "mesh_" + str + ".ply";
+      obj_types.push_back("mesh_feature");
+      obj_paths.push_back(path);
+      (*oit)->save(path.c_str());
+    }else
+      vcl_cout << "Can't save object of type " << (*oit)->type_name() << '\n';
+  vio.set_object_types(obj_types);
+  vio.set_object_paths(obj_paths);
 
   vcl_vector<bwm_video_corr_sptr> corrs = obv->corrs();
   vio.set_corrs(corrs);
