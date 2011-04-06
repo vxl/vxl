@@ -974,7 +974,7 @@ intersect_ray_and_plane(vgl_point_2d<double> img_point,
   if(!camera_)
     return false;
   vpgl_proj_camera<double>* proj_cam = 
-    static_cast<vpgl_proj_camera<double> *> (camera_);
+    static_cast<vpgl_proj_camera<double> *> (cam_istr_->current_camera());//camera_);
   vgl_homg_point_2d<double> img_point_h(img_point);
   vgl_homg_line_3d_2_points<double> ray = proj_cam->backproject(img_point_h);
   vgl_homg_operators_3d<double> oper;
