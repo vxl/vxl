@@ -46,6 +46,7 @@ n_per_mode: 3
 make_movie: false
 
 //: When true, overlap all the shapes to highlight changes
+//  Shapes on one side of mean are drawn with dashes, on the other with dots.
 overlap_shapes: false
 
 //: Radius of points to display (if <0, then don't draw points)
@@ -196,7 +197,8 @@ void draw_mode(msm_shape_mode_view& mode_view,
   mbl_eps_writer writer(ss.str().c_str(),
                         win_box.width(),win_box.height());
 
-  for (unsigned i=0;i<mode_view.points().size();++i)
+  unsigned n_shapes = mode_view.points().size();
+  for (unsigned i=0;i<n_shapes;++i)
   {
     writer.set_colour(params.point_colour);
     if (params.point_radius>0)
@@ -204,6 +206,15 @@ void draw_mode(msm_shape_mode_view& mode_view,
                              params.point_radius);
     writer.set_colour(params.line_colour);
     writer.set_line_width(params.line_width);
+    if (params.overlap_shapes)
+    {
+      // Use dashes for one side of mean, dots for the other
+      if (i<n_shapes/2) writer.ofs()<<"[3 2] 0 setdash"<<vcl_endl;  // Dashes
+      else
+      if (i==n_shapes/2) writer.ofs()<<"[1 0] 0 setdash"<<vcl_endl;  // Solid
+      else
+        writer.ofs()<<"[1 2] 0 setdash"<<vcl_endl;  // Dots
+    }
     msm_draw_shape_to_eps(writer,mode_view.points()[i],curves);
   }
   writer.close();
