@@ -76,7 +76,7 @@ int main(int argc, char ** argv)
 
     //create a new ocl_draw_glbuffer_tableau, window, and initialize it
     boxm2_ocl_render_tableau_new bit_tableau;  
-    bit_tableau->init(device,opencl_cache,scene,ni(),nj(),pcam);
+    bit_tableau->init(scene_file(),ni(),nj(),pcam);
 
     //create window, attach the new tableau and status bar
     vgui_window* win = vgui::produce_window(ni(), nj(), "OpenCl Volume Visualizer");
