@@ -42,7 +42,9 @@ class boxm2_ocl_render_tableau : public boxm2_cam_tableau
   virtual ~boxm2_ocl_render_tableau() {}
   
   //: initialize tableau with scene_file, viewport size, initial cam,  
-  bool init(vcl_string scene_file,
+  bool init(bocl_device_sptr device,
+            boxm2_opencl_cache_sptr opencl_cache,
+            boxm2_scene_sptr scene,
             unsigned ni,
             unsigned nj,
             vpgl_perspective_camera<double>* cam);

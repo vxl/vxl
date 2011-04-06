@@ -5,7 +5,7 @@
 #include <vgui/vgui_modifier.h>
 #include <vcl_sstream.h>
 #include <boxm2/ocl/boxm2_ocl_util.h>
-#include <boxm2/view/boxm2_view_utils.h>
+
 #include <bocl/bocl_device.h>
 #include <bocl/bocl_kernel.h>
 
@@ -34,7 +34,9 @@ boxm2_ocl_render_tableau::boxm2_ocl_render_tableau()
 }
 
 //: initialize tableau properties
-bool boxm2_ocl_render_tableau::init(vcl_string scene_file,
+bool boxm2_ocl_render_tableau::init(bocl_device_sptr device,
+                                    boxm2_opencl_cache_sptr opencl_cache,
+                                    boxm2_scene_sptr scene,
                                     unsigned ni,
                                     unsigned nj,
                                     vpgl_perspective_camera<double> * cam)
@@ -45,7 +47,9 @@ bool boxm2_ocl_render_tableau::init(vcl_string scene_file,
     cam_   = (*cam);
     default_cam_ = (*cam);
     //create the scene
-    scene_ = new boxm2_scene(scene_file);
+    scene_ = scene;
+    opencl_cache_=opencl_cache;
+    device_=device;
     do_init_ocl=true;
 
   return true;
@@ -61,7 +65,6 @@ bool boxm2_ocl_render_tableau::handle(vgui_event const &e)
     if (do_init_ocl) {
       this->init_clgl();
       do_init_ocl = false;
-      vcl_cout<<" ::::::"<<do_init_ocl<<";;;;;;;";
     }
     float gpu_time = this->render_frame();
     this->setup_gl_matrices();
@@ -127,13 +130,6 @@ bool boxm2_ocl_render_tableau::init_clgl()
 {
   //get relevant blocks
   vcl_cout<<"Data Path: "<<scene_->data_path()<<vcl_endl;
-  mgr_ =bocl_manager_child::instance();
-  device_ = mgr_->gpus_[0];
-  device_->context() = boxm2_view_utils::create_clgl_context(*(device_->device_id()));
-
-  //create cache, grab singleton instance
-  boxm2_lru_cache::create(scene_);
-  opencl_cache_=new boxm2_opencl_cache(scene_, device_);
 
 
   int status_queue=0;
