@@ -350,7 +350,8 @@ static bool test_set_matrix()
   vimt3d_transform_3d R;
   R.set_rigid_body(rx, ry, rz, tx, ty, tz);
   R.matrix(M);
-  T.set(M, form);
+  T.set_matrix(M);
+  T.simplify();
   T.matrix(N);
   if ((M-N).fro_norm()>1e-12 || T.form()!=form)
     return false;
@@ -360,7 +361,8 @@ static bool test_set_matrix()
   vimt3d_transform_3d Z;
   Z.set_zoom_only(sx, sy, sz, tx, ty, tz);
   Z.matrix(M);
-  T.set(M, form);
+  T.set_matrix(M);
+  T.simplify();
   T.matrix(N);
   if ((M-N).fro_norm()>1e-12 || T.form()!=form)
     return false;
@@ -370,7 +372,8 @@ static bool test_set_matrix()
   vimt3d_transform_3d S;
   S.set_similarity(sx, rx, ry, rz, tx, ty, tz);
   S.matrix(M);
-  T.set(M, form);
+  T.set_matrix(M);
+  T.simplify();
   T.matrix(N);
   if ((M-N).fro_norm()>1e-12 || T.form()!=form)
     return false;
@@ -380,7 +383,8 @@ static bool test_set_matrix()
   vimt3d_transform_3d A;
   A.set_affine(sx, sy, sz, rx, ry, rz, tx, ty, tz);
   A.matrix(M);
-  T.set(M, form);
+  T.set_matrix(M);
+  T.simplify();
   T.matrix(N);
   if ((M-N).fro_norm()>1e-12 || T.form()!=form)
     return false;
