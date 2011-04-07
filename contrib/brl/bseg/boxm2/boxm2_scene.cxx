@@ -126,6 +126,7 @@ void boxm2_scene::save_scene()
   //write out to XML file
   vcl_ofstream xmlstrm(xml_path_.c_str());
   x_write(xmlstrm, (*this), "scene");
+  xmlstrm.close();
 }
 
 //: return a heap pointer to a scene info
@@ -198,6 +199,20 @@ vgl_box_3d<double> boxm2_scene::bounding_box()
                             xmax, ymax, zmax);
 }
 
+vgl_vector_3d<unsigned int>  boxm2_scene::scene_dimensions()
+{
+  vcl_vector<boxm2_block_id> ids = this->get_block_ids();
+  int i=0,j=0,k=0;
+  for (unsigned n=0; n<ids.size(); n++) {
+    if (ids[n].i() > i)
+      i=ids[n].i();
+    if (ids[n].j() > j)
+      j=ids[n].j();
+    if (ids[n].k() > k)
+      k=ids[n].k();
+  }
+  return vgl_vector_3d<unsigned int>(++i,++j,++k);
+}
 
 //---------------------------------------------------------------------
 // NON CLASS FUNCTIONS

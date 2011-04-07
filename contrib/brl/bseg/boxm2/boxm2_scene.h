@@ -88,6 +88,9 @@ class boxm2_scene : public vbl_ref_count
     //: gets a tight bounding box for the scene
     vgl_box_3d<double>      bounding_box();
 
+    // returns the dimesnsion of the scene grid where each grid element is a block
+    vgl_vector_3d<unsigned int>   scene_dimensions();
+
     //: scene dimensions accessors
     vgl_point_3d<double>    local_origin()const { return local_origin_; }
     vgl_point_3d<double>    rpc_origin()  const { return rpc_origin_; }
