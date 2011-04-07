@@ -112,7 +112,7 @@ bool boxm2_texture_mesh_process(bprb_func_process& pro)
   vcl_string out_dir   = pro.get_input<vcl_string>(argIdx++);
 
   //create the mesh directory
-  if(out_dir != "") {
+  if (out_dir != "") {
     if (!vul_file::make_directory_path(out_dir.c_str())) {
       vcl_cout<<"Couldn't make directory path "<<out_dir<<vcl_endl;
       return false;
@@ -161,28 +161,30 @@ void boxm2_texture_mesh_process_globals::boxm2_texture_mesh_from_imgs(vcl_string
   ////////////////////////////////////////////////////////////////////////////////
   vcl_vector<vcl_string> allims  = boxm2_util::images_from_directory(im_dir);
   vcl_vector<vpgl_perspective_camera<double>* > allcams = boxm2_util::cameras_from_directory(cam_dir);
-  if(allims.size() != allcams.size()) {
+  if (allims.size() != allcams.size()) {
     vcl_cout<<"Texture images are not 1 to 1 with cameras:: dirs "<<im_dir<<" and "<<cam_dir<<vcl_endl;
-    return; 
+    return;
   }
-  
-  //choose a few random images
-  vcl_vector<vcl_string> imfiles; 
-  vcl_vector<vpgl_perspective_camera<double>* > cameras; 
 
-  int handpicked[] = { 0, 1, 40, 82, 96, 105, 133, 153}; 
-  //int handpicked[] = { 0,133 }; 
-  for(int i=0; i<sizeof(handpicked)/sizeof(int); ++i) {
-    imfiles.push_back(allims[handpicked[i]]); 
-    cameras.push_back(allcams[handpicked[i]]); 
+  //choose a few random images
+  vcl_vector<vcl_string> imfiles;
+  vcl_vector<vpgl_perspective_camera<double>* > cameras;
+
+  int handpicked[] = { 0, 1, 40, 82, 96, 105, 133, 153};
+  //int handpicked[] = { 0,133 };
+  for (unsigned int i=0; i<sizeof(handpicked)/sizeof(int); ++i) {
+    imfiles.push_back(allims[handpicked[i]]);
+    cameras.push_back(allcams[handpicked[i]]);
     vcl_cout<<"added image: "<<imfiles[i]<<vcl_endl;
   }
-  //vnl_random rand(9667566);
-  //for(int i=0; i<5; ++i) {
-    //unsigned filenum = rand.lrand32(1, allims.size()-1); 
-    //imfiles.push_back(allims[filenum]); 
-    //cameras.push_back(allcams[filenum]); 
-  //}
+#if 0
+  vnl_random rand(9667566);
+  for (int i=0; i<5; ++i) {
+    unsigned filenum = rand.lrand32(1, allims.size()-1);
+    imfiles.push_back(allims[filenum]);
+    cameras.push_back(allcams[filenum]);
+  }
+#endif
 
   ////////////////////////////////////////////////////////////////////////////////
   // make sure mesh has computed vertex normals
@@ -214,7 +216,7 @@ void boxm2_texture_mesh_process_globals::boxm2_texture_mesh_from_imgs(vcl_string
   ////////////////////////////////////////////////////////////////////////////////
   imesh_regular_face_array<3>& in_faces = (imesh_regular_face_array<3>&) in_mesh.faces();
   imesh_vertex_array<3>& in_verts = in_mesh.vertices<3>();
-  //for each appearance (texture image), create an imesh_mesh (subMesh);  
+  //for each appearance (texture image), create an imesh_mesh (subMesh);
   vcl_cout<<"Creating Sub Meshes for each texture"<<vcl_endl;
   vcl_map<vcl_string, vcl_vector<unsigned> >::iterator apps;
   for (apps = app_faces.begin(); apps != app_faces.end(); ++apps)
@@ -466,9 +468,9 @@ bool boxm2_texture_mesh_process_globals::face_is_visible( vpgl_perspective_camer
   //now create a polygon, and find the integer image coordinates (U,V) that this polygon covers
   int ni = vis_img->ni();
   int nj = vis_img->nj();
-  int numPixels = 0; 
-  int numMatches = 0; 
-  
+  unsigned int numPixels = 0;
+  unsigned int numMatches = 0;
+
   vgl_triangle_scan_iterator<double> tsi;
   tsi.a.x = us[0];  tsi.a.y = vs[0];
   tsi.b.x = us[1];  tsi.b.y = vs[1];
@@ -483,20 +485,14 @@ bool boxm2_texture_mesh_process_globals::face_is_visible( vpgl_perspective_camer
     if (min_x < 0) min_x = 0;
     if (max_x >= ni) max_x = ni-1;
     for (int x = min_x; x <= max_x; ++x) {
-      numPixels++; 
+      ++numPixels;
       if ( (*vis_img)(x,y) == world_tri.face_id )
-        numMatches++;
+        ++numMatches;
     }
   }
-  
-  //if the majority match, it's visible
-  if( (double) numMatches / (double) numPixels > .9) 
-    return true;
-  else
-    return false;
-    
-  //if it made it this far, it's completely visible
-  //return true;
+
+  // if the majority (90%) match, it's visible:
+  return  numMatches * 10 > numPixels * 9;
 }
 
 //Constructs vector of visibility images - images that identify which triangle
