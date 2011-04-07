@@ -74,7 +74,9 @@ sdet_image_mesh::sdet_image_mesh(sdet_image_mesh_params& imp)
 sdet_image_mesh::~sdet_image_mesh()
 {
 }
-bool sdet_image_mesh::compute_line_segments(vil_image_resource_sptr & resc, vcl_vector<vgl_line_segment_2d<double> > & segs)
+
+bool sdet_image_mesh::compute_line_segments(vil_image_resource_sptr const& resc,
+                                            vcl_vector<vgl_line_segment_2d<double> > & segs)
 {
   if (!resc) return false;
   mesh_valid_ = false;
@@ -107,6 +109,7 @@ bool sdet_image_mesh::compute_line_segments(vil_image_resource_sptr & resc, vcl_
   fl.get_line_segs(segs);
   return true;
 }
+
 bool sdet_image_mesh::compute_mesh()
 {
     vil_image_view<unsigned char> line_img(resc_->ni(),resc_->nj());//some resource
@@ -125,32 +128,31 @@ bool sdet_image_mesh::compute_mesh()
     for (vcl_vector<vtol_edge_2d_sptr>::iterator eit = edges->begin();
         eit != edges->end(); eit++)
     {
-        vsol_curve_2d_sptr c = (*eit)->curve();
-        vdgl_digital_curve_sptr dc = c->cast_to_vdgl_digital_curve();
-        if (!dc)
-            continue;
-        vdgl_interpolator_sptr intp = dc->get_interpolator();
-        vdgl_edgel_chain_sptr ec = intp->get_edgel_chain();
-        int nedgl = ec->size();
-        for (int i=0; i<nedgl; i++)
-        {
-           // anchor_points_.push_back(vgl_point_2d<double>((*ec)[i].x(),(*ec)[i].y()));
-            line_img((int)(*ec)[i].x(),(int) (*ec)[i].y())=0;
-        }
+      vsol_curve_2d_sptr c = (*eit)->curve();
+      vdgl_digital_curve_sptr dc = c->cast_to_vdgl_digital_curve();
+      if (!dc)
+        continue;
+      vdgl_interpolator_sptr intp = dc->get_interpolator();
+      vdgl_edgel_chain_sptr ec = intp->get_edgel_chain();
+      int nedgl = ec->size();
+      for (int i=0; i<nedgl; i++)
+      {
+        // anchor_points_.push_back(vgl_point_2d<double>((*ec)[i].x(),(*ec)[i].y()));
+        line_img((int)(*ec)[i].x(),(int) (*ec)[i].y())=0;
+      }
     }
 
-
-   
    bil_cedt dt(line_img);
-   if(!dt.compute_cedt())
-    vcl_cout<<"Error in computing DT "<<vcl_endl;
+   if (!dt.compute_cedt())
+    vcl_cout<<"Error in computing DT"<<vcl_endl;
 
    vil_image_view<float> dtimg=dt.cedtimg();
    vil_image_view<unsigned char> dtimg_threshed(dtimg.ni(),dtimg.nj());dtimg_threshed.fill(0);
-   for(unsigned i=0;i<dtimg.ni();i++)
-       for(unsigned j=0;j<dtimg.nj();j++)
-           if(dtimg(i,j)<3.0) dtimg_threshed(i,j)=255;
-   vil_save(dtimg_threshed,"f:/visdt/dt_thresh.png");
+   for (unsigned i=0;i<dtimg.ni();i++)
+     for (unsigned j=0;j<dtimg.nj();j++)
+       if (dtimg(i,j)<3.0)
+         dtimg_threshed(i,j)=255;
+   vil_save(dtimg_threshed,"F:/visdt/dt_thresh.png");
 
    //segs_pair.clear();
    vcl_vector<vgl_line_segment_2d<double> > lines;
@@ -158,27 +160,27 @@ bool sdet_image_mesh::compute_mesh()
    segs_pair.insert(segs_pair.end(),lines.begin(),lines.end());
    line_img.fill(255);
 
-   for(unsigned i = 0;i<segs_pair.size();i++)
+   for (unsigned i = 0;i<segs_pair.size();i++)
    {
-       bool init = true;
-       float xs= segs_pair[i].point1().x();
-       float ys= segs_pair[i].point1().y();
-       float xe= segs_pair[i].point2().x();
-       float ye= segs_pair[i].point2().y();
-       float x=0.0;
-       float y=0.0;
-       while (brip_line_generator::generate(init, xs, ys, xe, ye, x, y))
-       {
-           int xi = (int)x;
-           int yi = (int)y; //convert the pixel location to integer
-           line_img(xi, yi)=0;
-       }
+     bool init = true;
+     float xs= segs_pair[i].point1().x();
+     float ys= segs_pair[i].point1().y();
+     float xe= segs_pair[i].point2().x();
+     float ye= segs_pair[i].point2().y();
+     float x=0.0;
+     float y=0.0;
+     while (brip_line_generator::generate(init, xs, ys, xe, ye, x, y))
+     {
+       int xi = (int)x;
+       int yi = (int)y; //convert the pixel location to integer
+       line_img(xi, yi)=0;
+     }
    }
-   vil_save(line_img,"f:/visdt/line_img_more.png");
+   vil_save(line_img,"F:/visdt/line_img_more.png");
 
    bil_cedt dt1(line_img);
-   if(!dt1.compute_cedt())
-       vcl_cout<<"Error in computing DT "<<vcl_endl;
+   if (!dt1.compute_cedt())
+     vcl_cout<<"Error in computing DT"<<vcl_endl;
 
   //generate a 2d mesh based on the edges
   vgl_point_2d<double> ul(0.0, 0.0), ur(resc_->ni()-1,0.0);
@@ -247,6 +249,7 @@ bool sdet_image_mesh::compute_mesh()
 
   return true;
 }
+
 //takes the 3d mesh, calculates depth disparity map (from top)
 void sdet_image_mesh::set_anchor_points(imesh_mesh& mesh, vil_image_view<float> dt_img)
 {
@@ -285,7 +288,6 @@ void sdet_image_mesh::set_anchor_points(imesh_mesh& mesh, vil_image_view<float> 
     }
   }
 
-
   //get range of triangle depths
   float minz, maxz;
   vil_math_value_range(tri_depth, minz, maxz);
@@ -293,12 +295,11 @@ void sdet_image_mesh::set_anchor_points(imesh_mesh& mesh, vil_image_view<float> 
   //maximum z diff allowed for a triangle is 1/512 of the total z range
   vil_image_view<float> z_img = brip_vil_float_ops::convert_to_float(resc_);
 
-  double max_z_diff = (maxz-minz)/256.0; 
-  for(int i=0; i<ni; i+=4)
-    for(int j=0; j<nj; j+=4)
-      if( vcl_fabs( tri_depth(i,j)- z_img(i,j) ) > max_z_diff && dt_img(i,j)>=3.0 )
-        anchor_points_.push_back(vgl_point_2d<double>(i,j)); 
-
+  double max_z_diff = (maxz-minz)/256.0;
+  for (int i=0; i<ni; i+=4)
+    for (int j=0; j<nj; j+=4)
+      if ( vcl_fabs( tri_depth(i,j)- z_img(i,j) ) > max_z_diff && dt_img(i,j)>=3.0 )
+        anchor_points_.push_back(vgl_point_2d<double>(i,j));
 }
 
 //ensure the image is a byte image (between 0 and 255)
