@@ -9,7 +9,14 @@
 #include <vil/vil_pixel_format.h>
 #include <vil/vil_save.h>
 #include <vtol/vtol_edge_2d_sptr.h>
+#include <vsol/vsol_line_2d.h>
 #include <vtol/vtol_edge_2d.h>
+#include <vdgl/vdgl_digital_curve.h>
+#include <vdgl/vdgl_interpolator.h>
+#include <vdgl/vdgl_interpolator_sptr.h>
+#include <vdgl/vdgl_edgel_chain.h>
+#include <vdgl/vdgl_edgel_chain_sptr.h>
+
 #include <brip/brip_vil_float_ops.h>
 #include <brip/brip_line_generator.h>
 
@@ -67,21 +74,17 @@ sdet_image_mesh::sdet_image_mesh(sdet_image_mesh_params& imp)
 sdet_image_mesh::~sdet_image_mesh()
 {
 }
-
-bool sdet_image_mesh::compute_mesh()
+bool sdet_image_mesh::compute_line_segments(vil_image_resource_sptr & resc, vcl_vector<vgl_line_segment_2d<double> > & segs)
 {
-  //ensure the image resource is loaded
-  if (!resc_) return false;
+  if (!resc) return false;
   mesh_valid_ = false;
-
-  //detect edges in the image
   sdet_detector_params dp;
   dp.smooth= smooth_;
   dp.noise_multiplier = thresh_;
   dp.aggressive_junction_closure=0;
   dp.junctionp=false;
   sdet_detector det(dp);
-  det.SetImage(resc_);
+  det.SetImage(resc);
   det.DoContour();
   vcl_vector<vtol_edge_2d_sptr>* edges = det.GetEdges();
   if (!edges) {
@@ -101,51 +104,82 @@ bool sdet_image_mesh::compute_mesh()
     return false;
   }
 
-  //get line segments, and do a little hack to make it fall in the middle
-  vcl_vector<vgl_line_segment_2d<double> > segs, segs_pair;
   fl.get_line_segs(segs);
-  for (unsigned i = 0; i<segs.size(); ++i)
-  {
-    vgl_line_segment_2d<double> child0, child1;
-    if (this->step_boundary(segs[i],child0, child1))
+  return true;
+}
+bool sdet_image_mesh::compute_mesh()
+{
+    vil_image_view<unsigned char> line_img(resc_->ni(),resc_->nj());//some resource
+    line_img.fill(255);
+
+    vcl_vector<vgl_line_segment_2d<double> > segs, segs_pair;
+    sdet_detector_params dp;
+    dp.smooth= smooth_;
+    dp.noise_multiplier = thresh_;
+    dp.aggressive_junction_closure=0;
+    dp.junctionp=false;
+    sdet_detector det(dp);
+    det.SetImage(resc_);
+    det.DoContour();
+    vcl_vector<vtol_edge_2d_sptr>* edges = det.GetEdges();
+    for (vcl_vector<vtol_edge_2d_sptr>::iterator eit = edges->begin();
+        eit != edges->end(); eit++)
     {
-      segs_pair.push_back(child0);
-      segs_pair.push_back(child1);
+        vsol_curve_2d_sptr c = (*eit)->curve();
+        vdgl_digital_curve_sptr dc = c->cast_to_vdgl_digital_curve();
+        if (!dc)
+            continue;
+        vdgl_interpolator_sptr intp = dc->get_interpolator();
+        vdgl_edgel_chain_sptr ec = intp->get_edgel_chain();
+        int nedgl = ec->size();
+        for (int i=0; i<nedgl; i++)
+        {
+           // anchor_points_.push_back(vgl_point_2d<double>((*ec)[i].x(),(*ec)[i].y()));
+            line_img((int)(*ec)[i].x(),(int) (*ec)[i].y())=0;
+        }
     }
-    else {
-      segs_pair.push_back(segs[i]);
-    }
-  }
-  ////======================================///
-  vil_image_view<unsigned char> line_img(resc_->ni(),resc_->nj());//some resource
-  line_img.fill(255);
 
-  for (unsigned i = 0;i<segs_pair.size();i++)
-  {
-    bool init = true;
 
-    float xs= segs_pair[i].point1().x();
-    float ys= segs_pair[i].point1().y();
-    float xe= segs_pair[i].point2().x();
-    float ye= segs_pair[i].point2().y();
-    float x=0.0;
-    float y=0.0;
-    while (brip_line_generator::generate(init, xs, ys, xe, ye, x, y))
-    {
-      int xi = (int)x;
-      int yi = (int)y; //convert the pixel location to integer
-      line_img(xi, yi)=0;
-    }
-  }
-  bil_cedt dt(line_img);
-  if (!dt.compute_cedt())
-  {
-    vcl_cout<<"Error in computing DT"<<vcl_endl;
-  }
+   
+   bil_cedt dt(line_img);
+   if(!dt.compute_cedt())
+    vcl_cout<<"Error in computing DT "<<vcl_endl;
 
-  vil_save(line_img,"f:/visdt/line_img.png");
-  vil_image_view<float> dtimg=dt.cedtimg();
-  ////======================================///
+   vil_image_view<float> dtimg=dt.cedtimg();
+   vil_image_view<unsigned char> dtimg_threshed(dtimg.ni(),dtimg.nj());dtimg_threshed.fill(0);
+   for(unsigned i=0;i<dtimg.ni();i++)
+       for(unsigned j=0;j<dtimg.nj();j++)
+           if(dtimg(i,j)<3.0) dtimg_threshed(i,j)=255;
+   vil_save(dtimg_threshed,"f:/visdt/dt_thresh.png");
+
+   //segs_pair.clear();
+   vcl_vector<vgl_line_segment_2d<double> > lines;
+   this->compute_line_segments(vil_new_image_resource_of_view(dtimg_threshed),lines);
+   segs_pair.insert(segs_pair.end(),lines.begin(),lines.end());
+   line_img.fill(255);
+
+   for(unsigned i = 0;i<segs_pair.size();i++)
+   {
+       bool init = true;
+       float xs= segs_pair[i].point1().x();
+       float ys= segs_pair[i].point1().y();
+       float xe= segs_pair[i].point2().x();
+       float ye= segs_pair[i].point2().y();
+       float x=0.0;
+       float y=0.0;
+       while (brip_line_generator::generate(init, xs, ys, xe, ye, x, y))
+       {
+           int xi = (int)x;
+           int yi = (int)y; //convert the pixel location to integer
+           line_img(xi, yi)=0;
+       }
+   }
+   vil_save(line_img,"f:/visdt/line_img_more.png");
+
+   bil_cedt dt1(line_img);
+   if(!dt1.compute_cedt())
+       vcl_cout<<"Error in computing DT "<<vcl_endl;
+
   //generate a 2d mesh based on the edges
   vgl_point_2d<double> ul(0.0, 0.0), ur(resc_->ni()-1,0.0);
   vgl_point_2d<double> lr(resc_->ni()-1, resc_->nj()-1), ll(0.0, resc_->nj()-1);
@@ -155,7 +189,7 @@ bool sdet_image_mesh::compute_mesh()
   convex_hull.push_back(lr);   convex_hull.push_back(ll);
   vcl_vector<vgl_point_2d<double> > cvexh = convex_hull;
   imesh_mesh mesh_one;
-  imesh_generate_mesh_2d(convex_hull, segs_pair, mesh_one);
+  imesh_generate_mesh_2d_2(convex_hull, segs_pair,anchor_points_, mesh_one);
 
   //lift vertices to 3-d
   const imesh_vertex_array<2>& verts = mesh_one.vertices<2>();
@@ -185,7 +219,7 @@ bool sdet_image_mesh::compute_mesh()
   ///////////////////////////////////////////////////////
   //compute anchor points, and rerun generate_mesh_2d_2
   ///////////////////////////////////////////////////////
-  this->set_anchor_points(mesh_one,dtimg);
+  this->set_anchor_points(mesh_one,dt1.cedtimg());
 
   vcl_cout<<"Number of anchor points: "<<anchor_points_.size()<<vcl_endl;
   imesh_generate_mesh_2d_2(cvexh, segs_pair, anchor_points_, mesh_);
@@ -251,7 +285,6 @@ void sdet_image_mesh::set_anchor_points(imesh_mesh& mesh, vil_image_view<float> 
     }
   }
 
-  vil_save(tri_depth, "/media/VXL/tri_depth.tiff");
 
   //get range of triangle depths
   float minz, maxz;
@@ -259,11 +292,13 @@ void sdet_image_mesh::set_anchor_points(imesh_mesh& mesh, vil_image_view<float> 
 
   //maximum z diff allowed for a triangle is 1/512 of the total z range
   vil_image_view<float> z_img = brip_vil_float_ops::convert_to_float(resc_);
-  double max_z_diff = (maxz-minz)/256.0;
-  for (int i=0; i<ni; i+=4)
-    for (int j=0; j<nj; j+=4)
-      if ( vcl_fabs( tri_depth(i,j)- z_img(i,j) ) > max_z_diff && dt_img(i,j)>5.0 )
-        anchor_points_.push_back(vgl_point_2d<double>(i,j));
+
+  double max_z_diff = (maxz-minz)/256.0; 
+  for(int i=0; i<ni; i+=4)
+    for(int j=0; j<nj; j+=4)
+      if( vcl_fabs( tri_depth(i,j)- z_img(i,j) ) > max_z_diff && dt_img(i,j)>=3.0 )
+        anchor_points_.push_back(vgl_point_2d<double>(i,j)); 
+
 }
 
 //ensure the image is a byte image (between 0 and 255)

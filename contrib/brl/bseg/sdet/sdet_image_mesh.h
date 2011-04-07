@@ -47,6 +47,8 @@ class sdet_image_mesh : public sdet_image_mesh_params
                      vgl_line_segment_2d<double>& child0,
                      vgl_line_segment_2d<double>& child1);
   void set_anchor_points(imesh_mesh& mesh, vil_image_view<float> dt_img);
+  bool compute_line_segments(vil_image_resource_sptr & resc, 
+                              vcl_vector<vgl_line_segment_2d<double> >& segs);
 
   //:members
   bool mesh_valid_;      //process state flag
