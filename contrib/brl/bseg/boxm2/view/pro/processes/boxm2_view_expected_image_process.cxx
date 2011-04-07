@@ -1,12 +1,11 @@
-// This is brl/bseg/boxm2/ocl/pro/processes/boxm2_view_expected_image_process.cxx
+// This is brl/bseg/boxm2/view/pro/processes/boxm2_view_expected_image_process.cxx
+#include <bprb/bprb_func_process.h>
 //:
 // \file
 // \brief  A process for rendering the scene.
 //
 // \author Vishal Jain
 // \date Mar 10, 2011
-
-#include <bprb/bprb_func_process.h>
 
 #include <vcl_fstream.h>
 #include <boxm2/ocl/boxm2_opencl_cache.h>
@@ -40,7 +39,6 @@ namespace boxm2_view_expected_image_process_globals
 {
   const unsigned n_inputs_ = 6;
   const unsigned n_outputs_ = 0;
-
 }
 
 bool boxm2_view_expected_image_process_cons(bprb_func_process& pro)
@@ -53,8 +51,8 @@ bool boxm2_view_expected_image_process_cons(bprb_func_process& pro)
   input_types_[1] = "boxm2_scene_sptr";
   input_types_[2] = "boxm2_opencl_cache_sptr";
   input_types_[3] = "vpgl_camera_double_sptr";
-  input_types_[4] = "unsigned";
-  input_types_[5] = "unsigned";
+  input_types_[4] = "unsigned"; // ni
+  input_types_[5] = "unsigned"; // nj
 
 
   // process has 1 output:
@@ -72,6 +70,9 @@ bool boxm2_view_expected_image_process(bprb_func_process& pro)
     vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
     return false;
   }
+
+  return false;
+#if 0
   //get the inputs
   unsigned i = 0;
   bocl_device_sptr device= pro.get_input<bocl_device_sptr>(i++);
@@ -79,32 +80,31 @@ bool boxm2_view_expected_image_process(bprb_func_process& pro)
 
   boxm2_opencl_cache_sptr opencl_cache= pro.get_input<boxm2_opencl_cache_sptr>(i++);
   vpgl_camera_double_sptr cam= pro.get_input<vpgl_camera_double_sptr>(i++);
-  unsigned ni=pro.get_input<unsigned>(i++);
-  unsigned nj=pro.get_input<unsigned>(i++);
 
+  if (vpgl_perspective_camera<double> * pcam =dynamic_cast<vpgl_perspective_camera<double> * >(cam.ptr()))
+  {
+    unsigned ni=pro.get_input<unsigned>(i++);
+    unsigned nj=pro.get_input<unsigned>(i++);
+    //create a new ocl_draw_glbuffer_tableau, window, and initialize it
+    boxm2_ocl_render_tableau_new bit_tableau;
+    bit_tableau->init(device,opencl_cache,scene,ni,nj,pcam);
+    int my_argc = 1;
+    char** my_argv = new char*[1];
+    my_argv[0] = new char[13];
+    vcl_strcpy(my_argv[0], "--mfc-use-gl");
+    vgui::init(my_argc, my_argv);
 
-  //if(vpgl_perspective_camera<double> * pcam =dynamic_cast<vpgl_perspective_camera<double> * >(cam.ptr()))
-  //{
-  ////create a new ocl_draw_glbuffer_tableau, window, and initialize it
-  //boxm2_ocl_render_tableau_new bit_tableau;  
-  //bit_tableau->init(device,opencl_cache,scene,ni,nj,pcam);
-  //int my_argc = 1;
-  //char** my_argv = new char*[1];
-  //my_argv[0] = new char[13];
-  //vcl_strcpy(my_argv[0], "--mfc-use-gl");
-  //vgui::init(my_argc, my_argv);
+    //create window, attach the new tableau and status bar
+    vgui_window* win = vgui::produce_window(ni, nj, "OpenCl Volume Visualizer");
+    win->get_adaptor()->set_tableau(bit_tableau);
+    bit_tableau->set_statusbar(win->get_statusbar());
+    win->show();
 
-  ////create window, attach the new tableau and status bar
-  //vgui_window* win = vgui::produce_window(ni, nj, "OpenCl Volume Visualizer");
-  //win->get_adaptor()->set_tableau(bit_tableau); 
-  //bit_tableau->set_statusbar(win->get_statusbar());
-  //win->show();
+    GLboolean bGLEW = glewIsSupported("GL_VERSION_2_0  GL_ARB_pixel_buffer_object");
+    vcl_cout << "GLEW is supported= " << bGLEW << vcl_endl;
+    device->context() = boxm2_view_utils::create_clgl_context(*(device->device_id()));
 
-  //GLboolean bGLEW = glewIsSupported("GL_VERSION_2_0  GL_ARB_pixel_buffer_object");
-  //vcl_cout << "GLEW is supported= " << bGLEW << vcl_endl;
-  //device->context() = boxm2_view_utils::create_clgl_context(*(device->device_id()));
-
-  //return vgui::run();
-  //}
-  return false;
+    return vgui::run();
+  }
+#endif // 0
 }
