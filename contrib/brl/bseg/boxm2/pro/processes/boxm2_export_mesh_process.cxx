@@ -96,15 +96,16 @@ bool boxm2_export_mesh_process(bprb_func_process& pro)
   //initialize some sdet_image_mesh parameters
   sdet_image_mesh_params imp;
   // sigma of the Gaussian for smoothing the image prior to edge detection
-  imp.smooth_ = 2.0f;
+  imp.smooth_ = 1.5f;
   // the edge detection threshold
-  imp.thresh_ = 1.0f;
+  imp.thresh_ = 1.5f;
   // the shortest edgel chain that is considered for line fitting
-  imp.min_fit_length_ = 7;
+  imp.min_fit_length_ = 5;
+
   // the threshold on rms pixel distance of edgels to the line
-  imp.rms_distance_ = 0.5;
+  imp.rms_distance_ = 0.3;
   // the width in pixels of the transition of a step edge
-  imp.step_half_width_ = 1.0;
+  imp.step_half_width_ = 0.0;
 
   // the mesh processor
   sdet_image_mesh im(imp);
