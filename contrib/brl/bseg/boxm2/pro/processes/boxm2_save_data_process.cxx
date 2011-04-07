@@ -62,6 +62,10 @@ bool boxm2_save_data_process(bprb_func_process& pro)
            boxm2_sio_mgr::save_block_data(scene->data_path(), id, cache->get_data<BOXM2_MOG3_GREY_16>(id) );
         else if(apps[j]== boxm2_data_traits<BOXM2_NUM_OBS>::prefix())
            boxm2_sio_mgr::save_block_data(scene->data_path(), id, cache->get_data<BOXM2_NUM_OBS>(id) );
+        else if(apps[j]== boxm2_data_traits<BOXM2_NUM_OBS_SINGLE>::prefix())
+           boxm2_sio_mgr::save_block_data(scene->data_path(), id, cache->get_data<BOXM2_NUM_OBS_SINGLE>(id) );
+        else if(apps[j]== boxm2_data_traits<BOXM2_GAUSS_RGB>::prefix())
+           boxm2_sio_mgr::save_block_data(scene->data_path(), id, cache->get_data<BOXM2_GAUSS_RGB>(id) );
         else 
         {
             vcl_cout<<"Write function missing for "<<apps[j]<<vcl_endl;

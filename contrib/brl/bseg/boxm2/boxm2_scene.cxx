@@ -214,6 +214,15 @@ vgl_vector_3d<unsigned int>  boxm2_scene::scene_dimensions()
   return vgl_vector_3d<unsigned int>(++i,++j,++k);
 }
 
+//: returns true if the scene has specified data type (simple linear search)
+bool boxm2_scene::has_data_type(vcl_string data_type)
+{
+  for (unsigned int i=0; i<appearances_.size(); ++i) 
+    if ( appearances_[i] == data_type )
+      return true; 
+  return false; 
+}
+
 //---------------------------------------------------------------------
 // NON CLASS FUNCTIONS
 //---------------------------------------------------------------------

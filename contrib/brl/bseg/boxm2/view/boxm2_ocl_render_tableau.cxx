@@ -5,6 +5,7 @@
 #include <vgui/vgui_modifier.h>
 #include <vcl_sstream.h>
 #include <boxm2/ocl/boxm2_ocl_util.h>
+#include <boxm2/view/boxm2_view_utils.h>
 
 #include <bocl/bocl_device.h>
 #include <bocl/bocl_kernel.h>
@@ -26,7 +27,9 @@ boxm2_ocl_render_tableau::boxm2_ocl_render_tableau()
   ni_=640;
   nj_=480;
   DECLARE_FUNC_CONS(boxm2_ocl_render_gl_expected_image_process);
+  DECLARE_FUNC_CONS(boxm2_ocl_render_gl_expected_color_process);
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_ocl_render_gl_expected_image_process, "boxm2OclRenderGlExpectedImageProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_ocl_render_gl_expected_color_process, "boxm2OclRenderGlExpectedColorProcess");
 
   REGISTER_DATATYPE(boxm2_opencl_cache_sptr);
   REGISTER_DATATYPE(boxm2_scene_sptr);
@@ -52,7 +55,7 @@ bool boxm2_ocl_render_tableau::init(bocl_device_sptr device,
     device_=device;
     do_init_ocl=true;
 
-  return true;
+    return true;
 }
 
 
@@ -84,8 +87,6 @@ bool boxm2_ocl_render_tableau::handle(vgui_event const &e)
     return true;
   }
 
-
-
   if (boxm2_cam_tableau::handle(e))
     return true;
 
@@ -99,6 +100,8 @@ float boxm2_ocl_render_tableau::render_frame()
     exp_img_->zero_gpu_buffer( queue_ );
     if (!check_val(status,CL_SUCCESS,"clEnqueueAcquireGLObjects failed. (gl_image)"+error_to_string(status)))
         return -1.0f;
+        
+    //set up brdb_value_sptr arguments...
     brdb_value_sptr brdb_device = new brdb_value_t<bocl_device_sptr>(device_);
     brdb_value_sptr brdb_scene = new brdb_value_t<boxm2_scene_sptr>(scene_);
     brdb_value_sptr brdb_opencl_cache = new brdb_value_t<boxm2_opencl_cache_sptr>(opencl_cache_);
@@ -108,8 +111,15 @@ float boxm2_ocl_render_tableau::render_frame()
     brdb_value_sptr brdb_nj = new brdb_value_t<unsigned>(nj_);
     brdb_value_sptr exp_img = new brdb_value_t<bocl_mem_sptr>(exp_img_);
     brdb_value_sptr exp_img_dim = new brdb_value_t<bocl_mem_sptr>(exp_img_dim_);
-    //: the process goes here
-    bool good = bprb_batch_process_manager::instance()->init_process("boxm2OclRenderGlExpectedImageProcess");
+    
+    //if scene has RGB data type, use color render process
+    bool good = true; 
+    if(scene_->has_data_type(boxm2_data_traits<BOXM2_GAUSS_RGB>::prefix()) )
+      good = bprb_batch_process_manager::instance()->init_process("boxm2OclRenderGlExpectedColorProcess");
+    else
+      good = bprb_batch_process_manager::instance()->init_process("boxm2OclRenderGlExpectedImageProcess");
+      
+    //set process args
     good = good && bprb_batch_process_manager::instance()->set_input(0, brdb_device); // device
     good = good && bprb_batch_process_manager::instance()->set_input(1, brdb_scene); //  scene 
     good = good && bprb_batch_process_manager::instance()->set_input(2, brdb_opencl_cache); 
@@ -119,7 +129,8 @@ float boxm2_ocl_render_tableau::render_frame()
     good = good && bprb_batch_process_manager::instance()->set_input(6, exp_img);   // exp image ( gl buffer)
     good = good && bprb_batch_process_manager::instance()->set_input(7, exp_img_dim);   // exp image dimensions
     good = good && bprb_batch_process_manager::instance()->run_process();
-
+    
+    //release gl buffer
     status = clEnqueueReleaseGLObjects(queue_, 1, &exp_img_->buffer(), 0, 0, 0);
     clFinish( queue_ );
     return 0.0f;
@@ -130,7 +141,7 @@ bool boxm2_ocl_render_tableau::init_clgl()
 {
   //get relevant blocks
   vcl_cout<<"Data Path: "<<scene_->data_path()<<vcl_endl;
-
+  device_->context() = boxm2_view_utils::create_clgl_context(*(device_->device_id()));
 
   int status_queue=0;
   queue_ =  clCreateCommandQueue(device_->context(),*(device_->device_id()),CL_QUEUE_PROFILING_ENABLE,&status_queue);

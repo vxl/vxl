@@ -102,6 +102,7 @@ class boxm2_scene : public vbl_ref_count
 
     //: appearance model accessor
     vcl_vector<vcl_string> appearances()  const { return appearances_; }
+    bool has_data_type(vcl_string data_type);  
 
     //: scene version number
     static short version_no() { return 1; }
