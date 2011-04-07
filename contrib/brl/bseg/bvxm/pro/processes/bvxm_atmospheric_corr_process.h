@@ -1,0 +1,37 @@
+// This is brl/bseg/bvxm/pro/processes/bvxm_atmospheric_corr_process.h
+#ifndef bvxm_atmospheric_corr_process_h_
+#define bvxm_atmospheric_corr_process_h_
+//:
+// \file
+// \brief A process for correcting the effects of the atmosphere on image data
+// \author J.L. Mundy
+// \date January 2, 2010
+// \verbatim
+//  Modifications
+// \endverbatim
+
+#include <bprb/bprb_func_process.h>
+#include <vcl_string.h>
+
+#include <vil/vil_image_view_base.h>
+#include <vil/vil_image_view.h>
+#include <bvxm/bvxm_voxel_traits.h>
+#include <bvxm/grid/bvxm_voxel_slab_base.h>
+
+// global variables/functions for bvxm_atmospheric_corr_process_globals
+namespace bvxm_atmospheric_corr_process_globals
+{
+  const unsigned n_inputs_ = 2;
+  const unsigned n_outputs_ = 1;
+
+  // other gloabal variables
+  unsigned ni_= 0;
+  unsigned nj_= 0;
+  unsigned nplanes_=0;
+}
+
+bool bvxm_atmospheric_corr_process_cons(bprb_func_process& pro);
+
+bool bvxm_atmospheric_corr_process(bprb_func_process& pro);
+
+#endif // bvxm_atmospheric_corr_process_h_

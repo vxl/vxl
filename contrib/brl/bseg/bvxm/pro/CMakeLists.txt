@@ -74,11 +74,13 @@ SET(bvxm_pro_sources ${bvxm_pro_sources}
     processes/bvxm_estimate_camera_process.h          processes/bvxm_estimate_camera_process.cxx
     processes/bvxm_expected_edge_functor.h            processes/bvxm_expected_edge_functor.cxx
     processes/bvxm_estimate_camera_utils.cxx
+    processes/bvxm_atmospheric_corr_process.cxx 
+    processes/bvxm_atmospheric_corr_process.h
    )
 
 ADD_LIBRARY(bvxm_pro ${bvxm_pro_sources})
 
-TARGET_LINK_LIBRARIES(bvxm_pro bprb bvxm bvxm_io bvxm_grid bvxm_grid_io sdet vpgl vpgl_io vpgl_algo vpgl_file_formats vpgl_pro vsol vil_io vil_pro vgl_algo vnl_algo vnl_io vnl vil_algo vil vgl vul bgeo brdb vbl_io)
+TARGET_LINK_LIBRARIES(bvxm_pro bprb bvxm bvxm_io bvxm_grid bvxm_grid_io expatpp sdet vpgl vpgl_io vpgl_algo vpgl_file_formats vpgl_pro vsol vil_io vil_pro vgl_algo vnl_algo vnl_io vnl vil_algo vil vgl vul bgeo brdb vbl_io)
 
 IF( BUILD_TESTING )
   SUBDIRS(tests)
