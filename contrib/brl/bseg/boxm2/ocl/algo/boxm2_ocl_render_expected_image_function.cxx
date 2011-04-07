@@ -3,18 +3,19 @@
 #include <vul/vul_timer.h>
 #include <boxm2/ocl/boxm2_ocl_util.h>
 
-void render_expected_image(bocl_device_sptr & device,
-                           boxm2_scene_sptr & scene,
-                           boxm2_opencl_cache_sptr & opencl_cache,
-                           vpgl_camera_double_sptr & cam,
-                           cl_command_queue & queue,
-                           bocl_mem_sptr & exp_image,
-                           bocl_mem_sptr & exp_img_dim,
-                           vcl_string identifier,
-                           vcl_string data_type,
-                           vcl_map<vcl_string,vcl_vector<bocl_kernel*> > & kernels,
-                           vcl_size_t * lthreads,
-                           unsigned cl_ni,unsigned cl_nj)
+void render_expected_image( boxm2_scene_sptr & scene,
+                            bocl_device_sptr & device,
+                            boxm2_opencl_cache_sptr & opencl_cache,
+                            cl_command_queue & queue,
+                            vpgl_camera_double_sptr & cam,
+                            bocl_mem_sptr & exp_image,
+                            bocl_mem_sptr & vis_image, 
+                            bocl_mem_sptr & exp_img_dim,
+                            vcl_string data_type,
+                            bocl_kernel* kernel,
+                            vcl_size_t * lthreads,
+                            unsigned cl_ni,
+                            unsigned cl_nj )
 {
     float transfer_time=0.0f;
     float gpu_time=0.0f;
@@ -23,13 +24,7 @@ void render_expected_image(bocl_device_sptr & device,
     boxm2_ocl_util::set_persp_camera(cam, cam_buffer);
     bocl_mem_sptr persp_cam=new bocl_mem(device->context(), cam_buffer, 3*sizeof(cl_float16), "persp cam buffer");
     persp_cam->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
-    // visibility image
-    float* vis_buff = new float[cl_ni*cl_nj];
-    for (unsigned i=0;i<cl_ni*cl_nj;i++) vis_buff[i]=1.0f;
-
-    bocl_mem_sptr vis_image=new bocl_mem(device->context(),vis_buff,cl_ni*cl_nj*sizeof(float),"exp image buffer");
-    vis_image->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
-
+    
     // Output Array
     float output_arr[100];
     for (int i=0; i<100; ++i) output_arr[i] = 0.0f;
@@ -52,7 +47,7 @@ void render_expected_image(bocl_device_sptr & device,
     {
         //choose correct render kernel
         boxm2_block_metadata mdata = scene->get_block_metadata(*id);
-        bocl_kernel* kern =  kernels[identifier][0];
+        bocl_kernel* kern =  kernel;
 
         //write the image values to the buffer
         vul_timer transfer;
@@ -87,20 +82,7 @@ void render_expected_image(bocl_device_sptr & device,
         //clear render kernel args so it can reset em on next execution
         kern->clear_args();
     }
-    // normalize
-    {
-        bocl_kernel* normalize_kern= kernels[identifier][1];
-        normalize_kern->set_arg( exp_image.ptr() );
-        normalize_kern->set_arg( vis_image.ptr() );
-        normalize_kern->set_arg( exp_img_dim.ptr());
-        normalize_kern->execute( queue, 2, lthreads, gThreads);
-        clFinish(queue);
-        gpu_time += normalize_kern->exec_time();
 
-        //clear render kernel args so it can reset em on next execution
-        normalize_kern->clear_args();
-    }
-
-    delete [] vis_buff;
     vcl_cout<<"Gpu time "<<gpu_time<<" transfer time "<<transfer_time<<vcl_endl;
 }
+
