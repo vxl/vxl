@@ -16,4 +16,8 @@ DECLARE_FUNC_CONS(boxm2_ocl_update_histogram_process);
 DECLARE_FUNC_CONS(boxm2_ocl_query_hist_data_process);
 DECLARE_FUNC_CONS(boxm2_ocl_batch_probability_process);
 DECLARE_FUNC_CONS(boxm2_ocl_query_cell_data_process);
+DECLARE_FUNC_CONS(boxm2_ocl_render_expected_color_process);
+DECLARE_FUNC_CONS(boxm2_ocl_update_color_process);
+DECLARE_FUNC_CONS(boxm2_ocl_render_gl_expected_color_process);
+
 #endif
