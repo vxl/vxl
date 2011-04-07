@@ -9,6 +9,7 @@
 #include <bprb/bprb_func_process.h>
 
 #include <vcl_fstream.h>
+#include <vcl_algorithm.h>
 #include <boxm2/ocl/boxm2_opencl_cache.h>
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/boxm2_block.h>
@@ -42,7 +43,6 @@ namespace boxm2_ocl_render_gl_expected_image_process_globals
     vcl_vector<vcl_string> src_paths;
     vcl_string source_dir = vcl_string(VCL_SOURCE_ROOT_DIR) + "/contrib/brl/bseg/boxm2/ocl/cl/";
     src_paths.push_back(source_dir + "scene_info.cl");
-    src_paths.push_back(source_dir + "cell_utils.cl");
     src_paths.push_back(source_dir + "bit/bit_tree_library_functions.cl");
     src_paths.push_back(source_dir + "backproject.cl");
     src_paths.push_back(source_dir + "statistics_library_functions.cl");
@@ -69,7 +69,7 @@ namespace boxm2_ocl_render_gl_expected_image_process_globals
     vec_kernels.push_back(ray_trace_kernel);
     //create normalize image kernel
     vcl_vector<vcl_string> norm_src_paths;
-    norm_src_paths.push_back(source_dir + "cell_utils.cl");
+    norm_src_paths.push_back(source_dir + "pixel_conversion.cl");
     norm_src_paths.push_back(source_dir + "bit/normalize_kernels.cl");
     bocl_kernel * normalize_render_kernel=new bocl_kernel();
 
@@ -78,7 +78,7 @@ namespace boxm2_ocl_render_gl_expected_image_process_globals
                                             norm_src_paths,
                                             "normalize_render_kernel_gl",   //kernel name
                                             " -D NORMALIZE_RENDER_GL ",              //options
-                                            "normalize render kernel"); //kernel identifier (for error checking)
+                                            "normalize render kernel gl"); //kernel identifier (for error checking)
 
 
     vec_kernels.push_back(normalize_render_kernel);
@@ -168,10 +168,31 @@ bool boxm2_ocl_render_gl_expected_image_process(bprb_func_process& pro)
   unsigned cl_ni=RoundUp(ni,lthreads[0]);
   unsigned cl_nj=RoundUp(nj,lthreads[1]);
 
+  // visibility image
+  float* vis_buff = new float[cl_ni*cl_nj];
+  vcl_fill(vis_buff, vis_buff + cl_ni*cl_nj, 1.0f); 
+  bocl_mem_sptr vis_image = new bocl_mem(device->context(), vis_buff, cl_ni*cl_nj*sizeof(float), "exp image buffer");
+  vis_image->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
+
   //: run expected image function
-  render_expected_image(device,scene,opencl_cache,cam,
-                        queue,exp_image,exp_img_dim,
-                        identifier,data_type,kernels,lthreads,cl_ni,cl_nj);
+  render_expected_image(scene, device, opencl_cache, queue,
+                        cam, exp_image, vis_image, exp_img_dim,
+                        data_type, kernels[identifier][0], lthreads, cl_ni, cl_nj);  
+                        
+  // normalize
+  {
+    vcl_size_t gThreads[] = {cl_ni,cl_nj};
+    bocl_kernel* normalize_kern= kernels[identifier][1];
+    normalize_kern->set_arg( exp_image.ptr() );
+    normalize_kern->set_arg( vis_image.ptr() );
+    normalize_kern->set_arg( exp_img_dim.ptr());
+    normalize_kern->execute( queue, 2, lthreads, gThreads);
+    clFinish(queue);
+
+    //clear render kernel args so it can reset em on next execution
+    normalize_kern->clear_args();
+  }                     
+                        
   //: read out expected image
   clReleaseCommandQueue(queue);
   i=0;
