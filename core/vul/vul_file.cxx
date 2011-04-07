@@ -117,7 +117,7 @@ bool vul_file::exists(char const* fn)
 #if defined(VCL_WIN32) && !defined(__CYGWIN__)
   vcl_string::size_type last_non_slash_index = name.find_last_not_of("\\/");
 #else
-  vcl_string::size_type last_non_slash_index = name.rfind('/');
+  vcl_string::size_type last_non_slash_index = name.find_last_not_of('/');
 #endif
   if (last_non_slash_index != vcl_string::npos)
     last_non_slash_index++;
