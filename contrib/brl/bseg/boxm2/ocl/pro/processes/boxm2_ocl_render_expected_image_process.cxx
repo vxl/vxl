@@ -9,6 +9,7 @@
 #include <bprb/bprb_func_process.h>
 
 #include <vcl_fstream.h>
+#include <vcl_algorithm.h>
 #include <boxm2/ocl/boxm2_opencl_cache.h>
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/boxm2_block.h>
@@ -178,10 +179,31 @@ bool boxm2_ocl_render_expected_image_process(bprb_func_process& pro)
   bocl_mem_sptr exp_img_dim=new bocl_mem(device->context(), img_dim_buff, sizeof(int)*4, "image dims");
   exp_img_dim->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
+  // visibility image
+  float* vis_buff = new float[cl_ni*cl_nj];
+  vcl_fill(vis_buff, vis_buff + cl_ni*cl_nj, 1.0f); 
+  bocl_mem_sptr vis_image = new bocl_mem(device->context(), vis_buff, cl_ni*cl_nj*sizeof(float), "exp image buffer");
+  vis_image->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
+
   //: run expected image function
-  //render_expected_image(device,scene,opencl_cache,cam,
-                        //queue,exp_image,exp_img_dim,
-                        //identifier,data_type,kernels,lthreads,cl_ni,cl_nj);
+  render_expected_image(scene, device, opencl_cache, queue,
+                        cam, exp_image, vis_image, exp_img_dim,
+                        data_type, kernels[identifier][0], lthreads, cl_ni, cl_nj);  
+                        
+  // normalize
+  {
+    vcl_size_t gThreads[] = {cl_ni,cl_nj};
+    bocl_kernel* normalize_kern = kernels[identifier][1];
+    normalize_kern->set_arg( exp_image.ptr() );
+    normalize_kern->set_arg( vis_image.ptr() );
+    normalize_kern->set_arg( exp_img_dim.ptr());
+    normalize_kern->execute( queue, 2, lthreads, gThreads);
+    clFinish(queue);
+
+    //clear render kernel args so it can reset em on next execution
+    normalize_kern->clear_args();
+  }
+                        
   //: read out expected image
   exp_image->read_to_buffer(queue);
   vil_image_view<float>* exp_img_out=new vil_image_view<float>(ni,nj);

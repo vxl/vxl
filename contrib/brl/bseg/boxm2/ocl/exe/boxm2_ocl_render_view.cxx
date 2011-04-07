@@ -28,6 +28,7 @@
 //vgui stuff
 #include <boxm2/view/boxm2_ocl_render_tableau.h>
 #include <boxm2/view/boxm2_view_utils.h>
+#include <boxm2/boxm2_util.h>
 #include <vgui/vgui.h>
 #include <vgui/vgui_adaptor.h>
 #include <vgui/vgui_window.h>
@@ -44,31 +45,24 @@ int main(int argc, char ** argv)
     //init vgui (should choose/determine toolkit)
     vgui::init(argc, argv);
     vul_arg<vcl_string> scene_file("-scene", "scene filename", "");
-    vul_arg<vcl_string> camfile("-cam", "starting cam ", "");
     vul_arg<unsigned> ni("-ni", "Width of output image", 1280);
     vul_arg<unsigned> nj("-nj", "Height of output image", 720);
 
     // need this on some toolkit implementations to get the window up.
     vul_arg_parse(argc, argv);
-    if (!vul_file::exists(camfile().c_str())) {
-        vcl_cout<<"Cam file dows not exist "<<vcl_endl;
-        return -1;
-    }
-    //create initial cam
-    vcl_ifstream ifs(camfile().c_str());
-    vpgl_perspective_camera<double>* pcam = new vpgl_perspective_camera<double>;
-    if (!ifs.is_open()) {
-        vcl_cerr << "Failed to open file " << camfile() << '\n';
-        return -1;
-    }
-    else {
-        ifs >> *pcam;
-    }
+
+    //make bocl manager
     bocl_manager_child_sptr mgr =bocl_manager_child::instance();
     bocl_device_sptr device = mgr->gpus_[0];
-    device->context() = boxm2_view_utils::create_clgl_context(*(device->device_id()));
-
     boxm2_scene_sptr scene = new boxm2_scene(scene_file());
+    
+    //create initial cam
+    double currInc = 45.0;
+    double currRadius = 2.0;
+    double currAz = 0.0;
+    vpgl_perspective_camera<double>* pcam; 
+    pcam = boxm2_util::construct_camera(currInc, currAz, currRadius, ni(), nj(), 
+                                       scene->bounding_box(), false);
 
     //create cache, grab singleton instance
     boxm2_lru_cache::create(scene);
@@ -76,7 +70,7 @@ int main(int argc, char ** argv)
 
     //create a new ocl_draw_glbuffer_tableau, window, and initialize it
     boxm2_ocl_render_tableau_new bit_tableau;  
-    bit_tableau->init(scene_file(),ni(),nj(),pcam);
+    bit_tableau->init(device, opencl_cache, scene, ni(), nj(), pcam); 
 
     //create window, attach the new tableau and status bar
     vgui_window* win = vgui::produce_window(ni(), nj(), "OpenCl Volume Visualizer");
