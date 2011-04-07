@@ -55,9 +55,6 @@ class sdet_mrf_site_bp : public vbl_ref_count
   //:the most probable label
   unsigned believed_label();
 
-  //:the expected label
-  float expected_label();
-
   //set the current message from neighbor nq
   void set_cur_message(unsigned nq, unsigned fp, float msg);
 

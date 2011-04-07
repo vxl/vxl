@@ -95,31 +95,6 @@ unsigned sdet_mrf_site_bp::believed_label()
   return lmax;
 }
 
-float sdet_mrf_site_bp::expected_label()
-{
-  float sumn = 0.0f, sumd= 0.0f;
-  //find bounds on belief
-  float mmin = vnl_numeric_traits<float>::maxval;
-  float mmax = -vnl_numeric_traits<float>::maxval;
-  for (unsigned d = 0; d<n_labels_; ++d){
-    float bl = b(d);
-    if (bl<mmin)
-      mmin = bl;
-    if (bl>mmax)
-      mmax = bl;
-  }
-  if (mmax<=mmin)
-    return -1.0f;//nonsense value
-  float sc = 1.0f/(mmax-mmin);
-  for (unsigned d = 0; d<n_labels_; ++d){
-    float p = (-b(d)+mmax)*sc;
-    sumn += d*p;
-    sumd += p;
-  }
-  if (sumd<=0) return -1;
-  return sumn/sumd;
-}
-
 void sdet_mrf_site_bp::print_belief_vector()
 {
   vcl_cout << "Belief\n";

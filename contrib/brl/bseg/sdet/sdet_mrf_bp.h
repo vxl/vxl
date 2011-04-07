@@ -102,8 +102,6 @@ class sdet_mrf_bp : public vbl_ref_count
   //: output
   vil_image_resource_sptr belief_image();
 
-  //: output
-  vil_image_resource_sptr expected_image();
 
  protected:
   //members
@@ -114,6 +112,8 @@ class sdet_mrf_bp : public vbl_ref_count
   float truncation_cost_;
   float kappa_;
   float lambda_;
+  float min_;
+  float max_;
   //the array of sites
   vbl_array_2d<sdet_mrf_site_bp_sptr> sites_;
   sdet_mrf_bp();

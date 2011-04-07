@@ -72,7 +72,7 @@ vcl_vector<float> lower_envelope_quadratic(float w,
 sdet_mrf_bp::sdet_mrf_bp(unsigned ni, unsigned nj,
                          unsigned n_labels)
   : ni_(ni), nj_(nj), n_labels_(n_labels), discontinuity_cost_(1.0f),
-    truncation_cost_(1.0f), kappa_(1.0f), lambda_(1.0f)
+    truncation_cost_(1.0f), kappa_(1.0f), lambda_(1.0f), min_(0.0f), max_(0.0f)
 {
   sites_.resize(nj_, ni_);
   for (unsigned j = 0; j<nj_; ++j)
@@ -86,22 +86,21 @@ sdet_mrf_bp::sdet_mrf_bp(vil_image_resource_sptr obs_labels, unsigned n_labels,
   : ni_(0), nj_(0), n_labels_(n_labels),
     discontinuity_cost_(discontinuity_cost),
     truncation_cost_(truncation_cost), kappa_(kappa),
-    lambda_(lambda)
+    lambda_(lambda), min_(0.0f), max_(0.0f)
 {
   if (!obs_labels) return;
   ni_=obs_labels->ni();   nj_=obs_labels->nj();
   vil_image_view_base_sptr temp = obs_labels->get_view();
   vil_image_view<float> view = *vil_convert_cast(float(), temp);
-  float minv=0.0f, maxv=0.0f;
-  vil_math_value_range(view, minv, maxv);
-  if (minv >= maxv) return;
+  vil_math_value_range(view, min_, max_);
+  if (min_ >= max_) return;
   sites_.resize(nj_, ni_);
-  float scale = (n_labels-1)/(maxv-minv);
+  float scale = (n_labels-1)/(max_-min_);
   for (unsigned j = 0; j<nj_; ++j)
     for (unsigned i = 0; i<ni_; ++i){
       sdet_mrf_site_bp_sptr s =
         new sdet_mrf_site_bp(n_labels_, lambda_, truncation_cost_);
-      s->set_label(scale*(view(i,j)-minv));
+      s->set_label(scale*(view(i,j)-min_));
       sites_[j][i]=s;
     }
 }
@@ -109,19 +108,21 @@ sdet_mrf_bp::sdet_mrf_bp(vil_image_resource_sptr obs_labels, unsigned n_labels,
 sdet_mrf_bp::sdet_mrf_bp(vil_image_view<float> const& obs_labels,
                          unsigned n_labels, float discontinuity_cost,
                          float truncation_cost, float kappa, float lambda)
+  : n_labels_(n_labels), discontinuity_cost_(discontinuity_cost),
+    truncation_cost_(truncation_cost), kappa_(kappa), lambda_(lambda),
+    min_(0.0f), max_(0.0f)
 {
   if (!obs_labels) return;
   ni_=obs_labels.ni();   nj_=obs_labels.nj();
-  float minv=0.0f, maxv=0.0f;
-  vil_math_value_range(obs_labels, minv, maxv);
-  if (minv >= maxv) return;
+  vil_math_value_range(obs_labels, min_, max_);
+  if (min_ >= max_) return;
   sites_.resize(nj_, ni_);
-  float scale = (n_labels-1)/(maxv-minv);
+  float scale = (n_labels-1)/(max_-min_);
   for (unsigned j = 0; j<nj_; ++j)
     for (unsigned i = 0; i<ni_; ++i){
       sdet_mrf_site_bp_sptr s =
         new sdet_mrf_site_bp(n_labels_, lambda_, truncation_cost_);
-      s->set_label(scale*(obs_labels(i,j)-minv));
+      s->set_label(scale*(obs_labels(i,j)-min_));
       sites_[j][i]=s;
     }
 }
@@ -130,18 +131,16 @@ sdet_mrf_bp::sdet_mrf_bp(vil_image_view<float> const& obs_labels,
                          vil_image_view<float> const& var,  unsigned n_labels,
                          float discontinuity_cost, float truncation_cost,
                          float kappa, float lambda)
-  : ni_(0), nj_(0), n_labels_(n_labels),
-    discontinuity_cost_(discontinuity_cost),
+  : n_labels_(n_labels), discontinuity_cost_(discontinuity_cost),
     truncation_cost_(truncation_cost), kappa_(kappa),
-    lambda_(lambda)
+    lambda_(lambda), min_(0.0f), max_(0.0f)
 {
   ni_=obs_labels.ni();   nj_=obs_labels.nj();
   if (!ni_||!nj_) return;
-  float minv=0.0f, maxv=0.0f;
-  vil_math_value_range(obs_labels, minv, maxv);
-  if (minv >= maxv) return;
+  vil_math_value_range(obs_labels, min_, max_);
+  if (min_ >= max_) return;
   sites_.resize(nj_, ni_);
-  float scale = (n_labels-1)/(maxv-minv);
+  float scale = (n_labels-1)/(max_-min_);
   int ni = static_cast<int>(ni_), nj = static_cast<int>(nj_);
   for (int j = 0; j<nj; ++j)
     for (int i = 0; i<ni; ++i){
@@ -150,7 +149,7 @@ sdet_mrf_bp::sdet_mrf_bp(vil_image_view<float> const& obs_labels,
         vlamb = lambda_/var(i,j);
       sdet_mrf_site_bp_sptr s =
         new sdet_mrf_site_bp(n_labels_,vlamb, truncation_cost_);
-      s->set_label(scale*(obs_labels(i,j)-minv));
+      s->set_label(scale*(obs_labels(i,j)-min_));
       sites_[j][i]=s;
     }
 }
@@ -159,18 +158,18 @@ sdet_mrf_bp::sdet_mrf_bp(vil_image_resource_sptr  obs_labels,
                          vil_image_resource_sptr  var,
                          unsigned n_labels, float discontinuity_cost,
                          float truncation_cost, float kappa, float lambda)
-  :  ni_(0), nj_(0), n_labels_(n_labels),discontinuity_cost_(discontinuity_cost),
-     truncation_cost_(truncation_cost), kappa_(kappa), lambda_(lambda)
+  :  n_labels_(n_labels),discontinuity_cost_(discontinuity_cost),
+     truncation_cost_(truncation_cost), kappa_(kappa), lambda_(lambda), 
+     min_(0.0f), max_(0.0f)
 {
   if (!obs_labels) return;
   ni_=obs_labels->ni();   nj_=obs_labels->nj();
   vil_image_view_base_sptr temp = obs_labels->get_view();
   vil_image_view<float> view = *vil_convert_cast(float(), temp);
-  float minv=0.0f, maxv=0.0f;
-  vil_math_value_range(view, minv, maxv);
-  if (minv >= maxv) return;
+  vil_math_value_range(view, min_, max_);
+  if (min_ >= max_) return;
   sites_.resize(nj_, ni_);
-  float scale = (n_labels-1)/(maxv-minv);
+  float scale = (n_labels-1)/(max_-min_);
   vil_image_view_base_sptr tempv = var->get_view();
   vil_image_view<float> var_view = *vil_convert_cast(float(), temp);
   int ni = static_cast<int>(ni_), nj = static_cast<int>(nj_);
@@ -179,7 +178,7 @@ sdet_mrf_bp::sdet_mrf_bp(vil_image_resource_sptr  obs_labels,
       float vlamb = lambda_/var_view(i,j);
       sdet_mrf_site_bp_sptr s =
         new sdet_mrf_site_bp(n_labels_,vlamb, truncation_cost_);
-      s->set_label(scale*(view(i,j)-minv));
+      s->set_label(scale*(view(i,j)-min_));
       sites_[j][i]=s;
     }
 }
@@ -280,28 +279,15 @@ vil_image_resource_sptr sdet_mrf_bp::belief_image()
   if (nj_==0||ni_==0)
     return ret;
   vil_image_view<float> view(ni_, nj_);
-  for (unsigned j = 0; j<nj_; ++j)
-    for (unsigned i = 0; i<ni_; ++i){
-      sdet_mrf_site_bp_sptr sp = sites_[j][i];
-      if (!sp) continue;
-      unsigned label = sp->believed_label();
-      view(i,j) = static_cast<float>(label);
-    }
-  ret = vil_new_image_resource_of_view(view);
-  return ret;
-}
-
-vil_image_resource_sptr sdet_mrf_bp::expected_image()
-{
-  vil_image_resource_sptr ret = 0;
-  if (nj_==0||ni_==0)
+  if(min_==max_)
     return ret;
-  vil_image_view<float> view(ni_, nj_);
+  float scale = (max_-min_)/static_cast<float>(n_labels_-1);
   for (unsigned j = 0; j<nj_; ++j)
     for (unsigned i = 0; i<ni_; ++i){
       sdet_mrf_site_bp_sptr sp = sites_[j][i];
       if (!sp) continue;
-      view(i,j) = sp->expected_label();
+      float label = static_cast<float>(sp->believed_label());
+      view(i,j) = scale*label + min_;
     }
   ret = vil_new_image_resource_of_view(view);
   return ret;
