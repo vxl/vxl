@@ -62,6 +62,7 @@ render_bit_scene( __constant  RenderSceneInfo    * linfo,
   //Store image index (may save a register).  Also initialize VIS and expected_int
   imIndex[llid] = j*get_global_size(0)+i;
   float4  expint = exp_image[imIndex[llid]];
+  expint = rgb2yuv(expint); 
   float  vis     = vis_image[imIndex[llid]];
   AuxArgs aux_args; 
   aux_args.alpha  = alpha_array; 
@@ -75,7 +76,9 @@ render_bit_scene( __constant  RenderSceneInfo    * linfo,
             local_tree, bit_lookup, cumsum, &vis, aux_args);      //utility info
             
   //store the expected intensity (as UINT)
-  exp_image[imIndex[llid]] = expint; 
+  //YUV edit
+  expint = yuv2rgb(expint); 
+  exp_image[imIndex[llid]] = expint;  
 
   //store visibility at the end of this block
   vis_image[imIndex[llid]] = vis;
@@ -91,9 +94,14 @@ void step_cell_render(AuxArgs aux_args, int data_ptr, uchar llid, float d)
   {
     uchar8 udata = as_uchar8(aux_args.mog[data_ptr]); 
     float8 data = convert_float8(udata)/255.0f; 
-    //expected_int_cell = (data.s0123); //just take mean values (0,1,2,3)
-   
+    
+    //expected cell is just the means
     expected_int_cell = data.s0123; 
+    
+    //undo the step taken in compress RGB U/V is in [0,1], 
+    // put them back in ranges U in [-.436, .436] and V in [-.615, .615]
+    expected_int_cell.y = expected_int_cell.y*U_RANGE - U_MAX; 
+    expected_int_cell.z = expected_int_cell.z*V_RANGE - V_MAX; 
   }
   
   //calc and store visibility

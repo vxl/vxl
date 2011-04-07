@@ -6,6 +6,7 @@
 #define Z_MIN (short4)(0,0,1,0);
 #define Z_MAX (short4)(0,0,1,1);
 
+/*
 uint rgbaFloatToInt(float4 rgba)
 {
     rgba.x = clamp(rgba.x,0.0f,1.0f);
@@ -20,6 +21,7 @@ uint intensityFloatToInt(float intensity)
     intensity = clamp(intensity, 0.0f, 1.0f);
     return ((uint)(intensity*255.0f)<<24) | ((uint)(intensity*255.0f)<<16) | ((uint)(intensity*255.0f)<<8) | (uint)(intensity*255.0f);
 }
+*/
 
 //---------------------------------------------------------------------
 // The vector result for the exit face as a short vector in X, Y, Z
