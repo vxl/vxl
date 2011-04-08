@@ -13,7 +13,7 @@
 
 namespace boxm2_add_block_process_globals
 {
-  const unsigned n_inputs_  = 13;
+  const unsigned n_inputs_  = 14;
   const unsigned n_outputs_ = 0;
 }
 
@@ -30,12 +30,13 @@ bool boxm2_add_block_process_cons(bprb_func_process& pro)
   input_types_[4]  = "unsigned";
   input_types_[5]  = "unsigned";
   input_types_[6]  = "unsigned";
-  input_types_[7]  = "float"; // local origin x
-  input_types_[8]  = "float"; // local origin y
-  input_types_[9]  = "float"; // local origin z
-  input_types_[10] = "float"; // block dims
-  input_types_[11] = "float"; // max_mb
-  input_types_[12] = "float"; // p_init
+  input_types_[7]  = "unsigned"; // maximum tree depth
+  input_types_[8]  = "float";    // local origin x
+  input_types_[9]  = "float";    // local origin y
+  input_types_[10]  = "float";    // local origin z
+  input_types_[11] = "float";    // block dims
+  input_types_[12] = "float";    // max_mb
+  input_types_[13] = "float";    // p_init
 
   // process has 1 output
   vcl_vector<vcl_string> output_types_(n_outputs_);
@@ -61,6 +62,8 @@ bool boxm2_add_block_process(bprb_func_process& pro)
   unsigned num_y            =pro.get_input<unsigned>        (i++);
   unsigned num_z            =pro.get_input<unsigned>        (i++);
 
+  unsigned max_num_lvls     =pro.get_input<unsigned>        (i++);
+
   float    local_x          =pro.get_input<float>           (i++);
   float    local_y          =pro.get_input<float>           (i++);
   float    local_z          =pro.get_input<float>           (i++);
@@ -82,7 +85,7 @@ bool boxm2_add_block_process(bprb_func_process& pro)
                              vgl_point_3d<double>(local_x,local_y,local_z),
                              vgl_vector_3d<double>(blk_dims,blk_dims,blk_dims),
                              vgl_vector_3d<unsigned>(num_x,num_y,num_z),
-                             1,4,max_data_size,p_init);
+                             1,max_num_lvls,max_data_size,p_init);
 
   blks[id]=mdata;
   scene->set_blocks(blks);
