@@ -214,6 +214,21 @@ void boxm2_opencl_cache::deep_replace_data(boxm2_block_id id, vcl_string type, b
   }
   cached_data_[type] = mem;
 }
+void boxm2_opencl_cache::deep_remove_data(boxm2_block_id id, vcl_string type)
+{
+
+
+  //now replace the mem in the GPU cache.. first delete existing
+  if ( cached_data_.find(type) != cached_data_.end()) {
+    //release existing memory
+    bocl_mem* toDelete = cached_data_[type];
+    delete toDelete;
+    cached_data_.erase(cached_data_.find(type)); 
+  }
+  //do deep delete
+  cpu_cache_->remove_data_base(id, type);
+
+}
 
 //: Binary write boxm2_cache  to stream
 void vsl_b_write(vsl_b_ostream& os, boxm2_opencl_cache const& scene){}
