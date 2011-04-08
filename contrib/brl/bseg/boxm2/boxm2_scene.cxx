@@ -245,11 +245,15 @@ void x_write(vcl_ostream &os, boxm2_scene& scene, vcl_string name)
     paths.x_write(os);
 
     //write list of appearance models
-    vsl_basic_xml_element apms(APM_TAG);
+    
     vcl_vector<vcl_string> apps = scene.appearances();
     for (unsigned int i=0; i<apps.size(); ++i)
+	{
+	  vsl_basic_xml_element apms(APM_TAG);
       apms.add_attribute("apm", apps[i]);
-    apms.x_write(os);
+	  apms.x_write(os);
+	}
+    
 
     //write block information for each block
     vcl_map<boxm2_block_id, boxm2_block_metadata> blocks = scene.blocks();
