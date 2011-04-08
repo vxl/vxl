@@ -150,7 +150,7 @@ bool sdet_image_mesh::compute_mesh()
    vil_image_view<unsigned char> dtimg_threshed(dtimg.ni(),dtimg.nj());dtimg_threshed.fill(0);
    for (unsigned i=0;i<dtimg.ni();i++)
      for (unsigned j=0;j<dtimg.nj();j++)
-       if (dtimg(i,j)<3.0)
+       if (dtimg(i,j)<2.0)
          dtimg_threshed(i,j)=255;
    vil_save(dtimg_threshed,"F:/visdt/dt_thresh.png");
 
@@ -295,11 +295,14 @@ void sdet_image_mesh::set_anchor_points(imesh_mesh& mesh, vil_image_view<float> 
   //maximum z diff allowed for a triangle is 1/512 of the total z range
   vil_image_view<float> z_img = brip_vil_float_ops::convert_to_float(resc_);
 
-  double max_z_diff = (maxz-minz)/256.0;
-  for (int i=0; i<ni; i+=4)
-    for (int j=0; j<nj; j+=4)
-      if ( vcl_fabs( tri_depth(i,j)- z_img(i,j) ) > max_z_diff && dt_img(i,j)>=3.0 )
-        anchor_points_.push_back(vgl_point_2d<double>(i,j));
+  //for ( unsigned niter=1;niter<16;niter*=2)
+  {
+      double max_z_diff = 4*(maxz-minz)/256.0; 
+      for(int i=0; i<ni; i+=4)
+          for(int j=0; j<nj; j+=4)
+              if( vcl_fabs( tri_depth(i,j)- z_img(i,j) ) > max_z_diff && dt_img(i,j)>=3.5 )
+                  anchor_points_.push_back(vgl_point_2d<double>(i,j)); 
+  }
 }
 
 //ensure the image is a byte image (between 0 and 255)
