@@ -152,6 +152,15 @@ SOURCE=.\processes/boxm2_ocl_render_gl_expected_image_process.cxx
 # Begin Source File
 SOURCE=.\processes/boxm2_ocl_render_expected_height_map_process.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\processes/boxm2_ocl_update_color_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/boxm2_ocl_render_expected_color_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/boxm2_ocl_render_gl_expected_color_process.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
