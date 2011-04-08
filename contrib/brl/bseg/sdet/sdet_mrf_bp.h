@@ -6,7 +6,7 @@
 // \author J.L. Mundy
 // \date   26 March 2011
 //
-//  Each MRF has a 4-neighborhood,
+//  Each MRF site has a 4-neighborhood,
 //     u
 //   l x  r
 //     d
@@ -47,9 +47,11 @@ class sdet_mrf_bp : public vbl_ref_count
               vil_image_view<float> const& var,  unsigned n_labels,
               float discontinuity_cost, float truncation_cost,
               float kappa, float lambda);
+
   //: limit cost at a discontinuity
   void set_discontinuity_cost(float discontinuity_cost)
     { discontinuity_cost_ = discontinuity_cost;}
+
   //: truncation of data cost
   void set_truncation_cost(float truncation_cost)
     { truncation_cost_ =truncation_cost;}
@@ -62,13 +64,14 @@ class sdet_mrf_bp : public vbl_ref_count
 
   //: transform from image coordinates to node indices
   unsigned image_to_index(unsigned i, unsigned j){return i + ni_*j;}
-  //: transform to image coordinates from node indices
+
+  //: transform from node indices to image coordinates 
   void index_to_image(unsigned p, unsigned& i, unsigned& j)
     { j = p/ni_; i = p-j*ni_;}
 
-  //: mrf dimension
+  //: mrf dimension (columns)
   unsigned ni(){return ni_;}
-  //: mrf dimension
+  //: mrf dimension (rows)
   unsigned nj(){return nj_;}
 
   //: retrieve a site by image index

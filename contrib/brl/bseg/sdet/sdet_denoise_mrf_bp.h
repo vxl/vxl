@@ -14,6 +14,7 @@
 //  a variance value at each pixel. The smoothing is carried out
 //  by a MRF with binary cliques all of equal weight (kappa_)
 //  The data cost is related to the variance by 
+//
 //  D(fp) = lambda_*(fp-x)^2
 //         -------
 //           var
@@ -28,7 +29,11 @@
 //  The MRF message storage could be reduced by 1/2
 //  if a checkerboard update scheme is used, but it was decided to 
 //  update all sites on each itertation. 
-//  
+//
+//  If a variance image is not set, then the data cost is
+//
+//   D(fp) = lambda_*(fp-x)^2
+//
 // \verbatim
 //  Modifications
 //   <none>
@@ -64,10 +69,15 @@ class sdet_denoise_mrf_bp : public sdet_denoise_mrf_bp_params
 
  protected:
   //:protected methods
-  //upsample the messages from a mrf by a factor of two. 
-  //level is the resolution of the input mrf.
+
+  // upsample the messages from a mrf by a factor of two. 
+  // level is the pyramid level of the input mrf.
+  // the returned mrf is at the next higher resolution level of the pyramid.
+  // the prior messages of the returned mrf are initialized be the message
+  // values of in_mrf.
   sdet_mrf_bp_sptr pyramid_upsample(sdet_mrf_bp_sptr const& in_mrf, 
                                     unsigned level);
+
   //:members
   bool output_valid_;      //process state flag
   bool use_var_; 
