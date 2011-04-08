@@ -13,6 +13,8 @@
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>
 #include <vnl/vnl_inverse.h>
+#include <vnl/vnl_det.h>
+#include <vnl/vnl_math.h>
 
 vnl_matrix<double> vimt_transform_2d::matrix() const
 {
@@ -29,6 +31,23 @@ void vimt_transform_2d::matrix(vnl_matrix<double>& M) const
     m_data[1][0]=yx_;   m_data[1][1]=yy_;   m_data[1][2]=yt_;
     m_data[2][0]=tx_;   m_data[2][1]=ty_;   m_data[2][2]=tt_;
 }
+
+//=======================================================================
+// Define the transform in terms of a 3x3 homogeneous matrix.
+void vimt_transform_2d::set_matrix(const vnl_matrix<double>& M) 
+{
+  if (M.rows()!=3 || M.cols()!=3)
+  {
+    vcl_cerr<<"vimt_transform_2d::set_matrix(mat): mat not 3x3\n";
+    vcl_abort(); 
+  }
+
+  form_=Affine;
+  xx_=M[0][0]; xy_=M[0][1]; xt_=M[0][2];
+  yx_=M[1][0]; yy_=M[1][1]; yt_=M[1][2];
+  tx_=M[2][0]; ty_=M[2][1]; tt_=M[2][2];
+}
+
 
 void vimt_transform_2d::params_of(vnl_vector<double>& v, Form form) const
 {
@@ -81,6 +100,76 @@ void vimt_transform_2d::params_of(vnl_vector<double>& v, Form form) const
             vcl_cerr<<"vimt_transform_2d::params() Unexpected form: "<<int(form)<<vcl_endl;
             vcl_abort();
     }
+}
+//=======================================================================
+void vimt_transform_2d::simplify(double tol /*=1e-10*/)
+{
+  double r;
+  double sx, sy;
+  double det;
+  switch (form_)
+  {
+   case Affine:
+    { // Not really true affine, because shear is forbidden.
+      r = vcl_atan2(-xy_,xx_);
+      double matrix_form[]= {xx_, yx_, xy_, yy_};
+      vnl_matrix_fixed<double, 3, 3> X(matrix_form);
+      vnl_matrix_fixed<double, 3, 3> S2 = X.transpose() * X;
+      // if X=R*S then X'X = S'*R'*R*S
+      // if R is a rotation matrix then R'*R=I and so X'X = S'*S = [s_x^2 0 0; 0 s_y^2 0]
+      if (S2(0,1)*S2(0,1) + S2(1,0)*S2(1,0) >= tol*tol*6)
+        return;
+
+      // mirroring if det is negative;
+      double mirror=vnl_math_sgn(vnl_det(X[0], X[1]));
+
+      sx = vcl_sqrt(vcl_abs(S2(0,0))) * mirror;
+      sy = vcl_sqrt(vcl_abs(S2(1,1))) * mirror;
+      if (vnl_math_sqr(sx-sy) < tol*tol)
+        this->set_similarity(sx, r, xt_, yt_ );
+      else if (r*r < tol*tol)
+        this->set_zoom_only(sx, xt_, yt_);
+      else
+        return;
+      simplify();
+      return;
+    }
+   case Similarity:
+    r = vcl_atan2(-xy_,xx_);
+
+    det=+xx_*yy_-yx_*xy_;
+    sx=vcl_sqrt(xx_*xx_ + yx_*yx_)* vnl_math_sgn(det);
+    if (r*r < tol*tol)
+      this->set_zoom_only(sx, xt_, yt_);
+    else if (vnl_math_sqr(sx-1.0) < tol*tol)
+      this->set_rigid_body(r, xt_, yt_);
+    else
+      return;
+    simplify();
+    return;
+
+   case RigidBody:
+    r = vcl_atan2(-xy_,xx_);
+
+    if (r*r >= tol*tol)
+      return;
+    this->set_translation(xt_, yt_);
+    simplify();
+    return;
+   case ZoomOnly:
+    if (vnl_math_sqr(xx_-1.0) + vnl_math_sqr(yy_-1.0) >= tol*tol)
+      return;
+    set_translation(xt_, yt_);
+   case Translation:
+    if (xt_*xt_+yt_*yt_<tol*tol)
+      set_identity();
+    return;
+   case Identity:
+    return;
+   default:
+    vcl_cerr << "vimt3d_transform_3d::simplify() Unexpected form:" <<  form_ << vcl_endl;
+    vcl_abort();
+  }
 }
 
 void vimt_transform_2d::setCheck(int n1,int n2,const char* str) const

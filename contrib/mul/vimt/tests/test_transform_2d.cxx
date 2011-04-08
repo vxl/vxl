@@ -79,6 +79,81 @@ static void test_the_transform(vimt_transform_2d& t)
    test_products(t);
 }
 
+static void test_simplify(const vimt_transform_2d& input, const vimt_transform_2d& expected)
+{
+  vcl_cout << "Testing Simplify\n";
+  
+  vimt_transform_2d copy(input);
+  copy.simplify();
+
+  TEST("Expected form", copy.form(), expected.form());
+  TEST_NEAR("Expected matrix", (copy.matrix()-expected.matrix()).fro_norm(), 0, 1e-12);
+
+}
+
+//=========================================================================
+// Test the set_matrix(matrix) function
+static bool test_set_matrix()
+{
+  double tx=1.0, ty=2.0;
+  double r=0.1;
+  double sx=0.9, sy=1.0;
+
+  vnl_matrix<double> M,N;
+  vimt_transform_2d T;
+  vimt_transform_2d::Form form;
+
+  // rigid_body
+  form = vimt_transform_2d::RigidBody;
+  vimt_transform_2d R;
+  R.set_rigid_body(r, tx, ty);
+  R.matrix(M);
+  T.set_matrix(M);
+  T.simplify();
+  T.matrix(N);
+  if ((M-N).fro_norm()>1e-12 || T.form()!=form)
+    return false;
+
+  // zoom_only
+  form = vimt_transform_2d::ZoomOnly;
+  vimt_transform_2d Z;
+  Z.set_zoom_only(sx, sy, tx, ty);
+  Z.matrix(M);
+  T.set_matrix(M);
+  T.simplify();
+  T.matrix(N);
+  if ((M-N).fro_norm()>1e-12 || T.form()!=form)
+    return false;
+
+  // similarity  
+  form = vimt_transform_2d::Similarity;
+  vimt_transform_2d S;
+  S.set_similarity(sx, r, tx, ty);
+  S.matrix(M);
+  T.set_matrix(M);
+  T.simplify();
+  T.matrix(N);
+  if ((M-N).fro_norm()>1e-12 || T.form()!=form)
+    return false;
+
+  // affine  
+  form = vimt_transform_2d::Affine;
+  vimt_transform_2d A;
+  A.set_affine(vgl_point_2d<double>(tx, ty),
+    sx*vgl_vector_2d<double>(vcl_cos(r), vcl_cos(r)),
+    sy*vgl_vector_2d<double>(-vcl_sin(r), vcl_cos(r)) );
+  A.matrix(M);
+  T.set_matrix(M);
+  T.simplify();
+  T.matrix(N);
+  if ((M-N).fro_norm()>1e-12 || T.form()!=form)
+    return false;
+
+  // All tests passed
+  return true;
+}
+
+
 static void test_transform_2d()
 {
   vcl_cout << "***************************\n"
@@ -128,6 +203,7 @@ static void test_transform_2d()
    trans0.set_projective(P);
    test_the_transform(trans0);
 
+  //TEST("set_matrix", test_set_matrix(), true);
 
   // -------- Test the binary I/O --------
 

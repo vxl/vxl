@@ -75,6 +75,12 @@ class vimt_transform_2d
     Form form() const { return form_; }
     vnl_matrix<double> matrix() const;
     void matrix(vnl_matrix<double>&) const;
+    //: Define the transform in terms of a 3x3 homogeneous matrix.
+    // \param M 3x3 homogeneous matrix defining the transform.
+    // \note Client must ensure that \a M is a valid representation of an affine (or simpler) transform.
+    // \note The form will be set to Affine - call simplify() if you need the simplest form.
+    void set_matrix(const vnl_matrix<double>& M);
+
 
     //: Fills v with parameters
     void params(vnl_vector<double>& v) const { params_of(v,form_); }
@@ -171,6 +177,9 @@ class vimt_transform_2d
 
     //: True if t is the same as this
     bool operator==(const vimt_transform_2d& t) const;
+
+    //: Reduce to the simplest form possible.
+    void simplify(double tol =1e-10);
 
  private:
 
