@@ -57,8 +57,8 @@ void vsl_b_read(vsl_b_istream& is, vcl_vector<T>& v)
                // constructable. It is very hard to see how to avoid this requirement,
                // without designing types that are constructable directly from a stream.
 
-  // There is nothing in the STL standard that says that vector<> has
-  // to store its data in a contiguous memory block. However, most
+  // In some old versions of the standard STL there is no requirement for
+  // vector<> to store its data in a contiguous memory block. However, most
   // implementations do store data this way.
   // Check this assumption holds.
   assert(n == 0 || &v[n-1] + 1 == &v[0] + n);
@@ -74,7 +74,7 @@ void vsl_b_read(vsl_b_istream& is, vcl_vector<T>& v)
    case 2:
     if (n!=0)
     {
-      if (vsl_is_char(T())) // signed char or unsigned char
+      if (vsl_is_char(v.front())) // signed char or unsigned char
       {
         vsl_block_binary_read_confirm_specialisation(is, false);
         vsl_b_read_block_old(is, &v.front(), n);
