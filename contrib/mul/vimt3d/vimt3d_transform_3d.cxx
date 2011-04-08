@@ -49,7 +49,7 @@ void vimt3d_transform_3d::matrix(vnl_matrix<double>& M) const
 void vimt3d_transform_3d::set_matrix(const vnl_matrix<double>& M) 
 {
   if (M.rows()!=4 || M.cols()!=4)
-    mbl_exception_error(mbl_exception_abort("vimt3d_transform_3d::set(matrix,form): input matrix must be 4x4"));
+    mbl_exception_error(mbl_exception_abort("vimt3d_transform_3d::set_matrix(matrix): input matrix must be 4x4"));
 
   form_=Affine;
   xx_=M[0][0]; xy_=M[0][1]; xz_=M[0][2]; xt_=M[0][3];

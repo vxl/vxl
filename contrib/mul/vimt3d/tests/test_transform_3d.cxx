@@ -334,8 +334,8 @@ static void test_affine_puvw()
 }
 
 //=========================================================================
-// Test the set(matrix, Form) function
-static bool test_set_matrix()
+// Test the set_matrix(matrix) function
+static void test_set_matrix()
 {
   double tx=1.0, ty=2.0, tz=3.0;
   double rx=0.1, ry=0.2, rz=0.3;
@@ -353,8 +353,8 @@ static bool test_set_matrix()
   T.set_matrix(M);
   T.simplify();
   T.matrix(N);
-  if ((M-N).fro_norm()>1e-12 || T.form()!=form)
-    return false;
+  TEST_NEAR("set_matrix and simplify of RigidBody", (M-N).fro_norm(), 0, 1e-12);
+  TEST("set_matrix and simplify of RigidBody", T.form(), form);
 
   // zoom_only
   form = vimt3d_transform_3d::ZoomOnly;
@@ -364,8 +364,8 @@ static bool test_set_matrix()
   T.set_matrix(M);
   T.simplify();
   T.matrix(N);
-  if ((M-N).fro_norm()>1e-12 || T.form()!=form)
-    return false;
+  TEST_NEAR("set_matrix and simplify of ZoomOnly", (M-N).fro_norm(), 0, 1e-12);
+  TEST("set_matrix and simplify of ZoomOnly", T.form(), form);
 
   // similarity  
   form = vimt3d_transform_3d::Similarity;
@@ -375,8 +375,8 @@ static bool test_set_matrix()
   T.set_matrix(M);
   T.simplify();
   T.matrix(N);
-  if ((M-N).fro_norm()>1e-12 || T.form()!=form)
-    return false;
+  TEST_NEAR("set_matrix and simplify of Similarity", (M-N).fro_norm(), 0, 1e-12);
+  TEST("set_matrix and simplify of Similarity", T.form(), form);
 
   // affine  
   form = vimt3d_transform_3d::Affine;
@@ -386,11 +386,9 @@ static bool test_set_matrix()
   T.set_matrix(M);
   T.simplify();
   T.matrix(N);
-  if ((M-N).fro_norm()>1e-12 || T.form()!=form)
-    return false;
+  TEST_NEAR("set_matrix and simplify of Affine", (M-N).fro_norm(), 0, 1e-12);
+  TEST("set_matrix and simplify of Affine", T.form(), form);
 
-  // All tests passed
-  return true;
 }
 
 //=========================================================================
@@ -588,7 +586,7 @@ static void test_transform_3d()
 
   // --- Test the function set(matrix, Form)
   vcl_cout << "\n== Testing set(matrix, Form) ==\n";
-  TEST("Test set(matrix, Form)", test_set_matrix(), true);
+  test_set_matrix();
 
 }
 
