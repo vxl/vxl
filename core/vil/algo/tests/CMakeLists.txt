@@ -15,8 +15,6 @@ ADD_EXECUTABLE( vil_algo_test_all
   test_algo_threshold.cxx
   test_algo_grid_merge.cxx
   test_algo_find_4con_boundary.cxx
-  test_algo_trace_4con_boundary.cxx
-  test_algo_trace_8con_boundary.cxx
   test_algo_fft.cxx
   test_algo_histogram.cxx
   test_algo_histogram_equalise.cxx
@@ -64,8 +62,6 @@ ADD_TEST( vil_algo_test_line_filter         ${EXECUTABLE_OUTPUT_PATH}/vil_algo_t
 ADD_TEST( vil_algo_test_threshold           ${EXECUTABLE_OUTPUT_PATH}/vil_algo_test_all test_algo_threshold)
 ADD_TEST( vil_algo_test_grid_merge          ${EXECUTABLE_OUTPUT_PATH}/vil_algo_test_all test_algo_grid_merge )
 ADD_TEST( vil_algo_test_find_4con_boundary  ${EXECUTABLE_OUTPUT_PATH}/vil_algo_test_all test_algo_find_4con_boundary )
-ADD_TEST( vil_algo_test_trace_4con_boundary ${EXECUTABLE_OUTPUT_PATH}/vil_algo_test_all test_algo_trace_4con_boundary )
-ADD_TEST( vil_algo_test_trace_8con_boundary ${EXECUTABLE_OUTPUT_PATH}/vil_algo_test_all test_algo_trace_8con_boundary )
 ADD_TEST( vil_algo_test_fft                 ${EXECUTABLE_OUTPUT_PATH}/vil_algo_test_all test_algo_fft )
 ADD_TEST( vil_algo_test_histogram           ${EXECUTABLE_OUTPUT_PATH}/vil_algo_test_all test_algo_histogram )
 ADD_TEST( vil_algo_test_histogram_equalise  ${EXECUTABLE_OUTPUT_PATH}/vil_algo_test_all test_algo_histogram_equalise )

@@ -41,8 +41,6 @@ SET( vil_algo_sources
   vil_fft.txx                      vil_fft.h
   vil_histogram.cxx                vil_histogram.h
   vil_histogram_equalise.cxx       vil_histogram_equalise.h
-  vil_trace_4con_boundary.cxx      vil_trace_4con_boundary.h
-  vil_trace_8con_boundary.cxx      vil_trace_8con_boundary.h
   vil_blob.cxx                     vil_blob.h
   vil_distance_transform.cxx       vil_distance_transform.h
   vil_corners.cxx                  vil_corners.h
