@@ -38,7 +38,7 @@ struct boxm2_scene_info
   int      data_buffer_length;       // length of data buffer (number of cells)
 };
 
-class boxm2_scene_info_wrapper:public vbl_ref_count
+class boxm2_scene_info_wrapper : public vbl_ref_count
 {
   public:
     boxm2_scene_info * info;
@@ -102,7 +102,7 @@ class boxm2_scene : public vbl_ref_count
 
     //: appearance model accessor
     vcl_vector<vcl_string> appearances()  const { return appearances_; }
-    bool has_data_type(vcl_string data_type);  
+    bool has_data_type(vcl_string data_type);
 
     //: scene version number
     static short version_no() { return 1; }
@@ -113,7 +113,7 @@ class boxm2_scene : public vbl_ref_count
     void set_lvcs(bgeo_lvcs lvcs)                   { lvcs_ = lvcs; }
     void set_blocks(vcl_map<boxm2_block_id, boxm2_block_metadata> blocks) { blocks_ = blocks; }
     void add_block_metadata(boxm2_block_metadata data);
-	void set_appearances(vcl_vector<vcl_string> const& appearances){ this->appearances_ = appearances; }
+    void set_appearances(vcl_vector<vcl_string> const& appearances){ this->appearances_ = appearances; }
 
     //: scene path mutators
     void set_xml_path(vcl_string path)              { xml_path_ = path; }

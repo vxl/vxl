@@ -48,12 +48,12 @@ bool boxm2_create_scene_process(bprb_func_process& pro)
   //get the inputs
   vcl_vector<vcl_string> appearance(2,"");
   unsigned i = 0;
-  vcl_string datapath		=pro.get_input<vcl_string>(i++);
-  appearance[0]				=pro.get_input<vcl_string>(i++); //Appearance Model String
-  appearance[1]				=pro.get_input<vcl_string>(i++); //Occupancy Model String
-  float origin_x			=pro.get_input<float>(i++);
-  float origin_y			=pro.get_input<float>(i++);
-  float origin_z			=pro.get_input<float>(i++);
+  vcl_string datapath = pro.get_input<vcl_string>(i++);
+  appearance[0]       = pro.get_input<vcl_string>(i++); //Appearance Model String
+  appearance[1]       = pro.get_input<vcl_string>(i++); //Occupancy Model String
+  float origin_x      = pro.get_input<float>(i++);
+  float origin_y      = pro.get_input<float>(i++);
+  float origin_z      = pro.get_input<float>(i++);
 
   if (!vul_file::make_directory_path(datapath.c_str()))
     return false;
