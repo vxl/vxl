@@ -12,6 +12,8 @@ SOURCES += boxm2_render_rgb_tableau.cxx
 SOURCES += boxm2_view_utils.cxx
 SOURCES += boxm2_ocl_render_tableau.cxx
 
+SUBDIRS += pro
+
 ################################
 include ${VXLROOT}/config/top.mk
 ################################
