@@ -24,6 +24,10 @@ enum boxm2_data_type
   BOXM2_NUM_OBS_SINGLE,
   BOXM2_AUX,   
   BOXM2_INTENSITY,
+  BOXM2_AUX0,
+  BOXM2_AUX1,
+  BOXM2_AUX2,
+  BOXM2_AUX3,
   BOXM2_UNKNOWN
 };
 
@@ -111,6 +115,39 @@ class boxm2_data_traits<BOXM2_AUX>
   static vcl_size_t datasize(){return sizeof(datatype);}
   static vcl_string prefix(){ return "aux";}
 };
+
+template<>
+class boxm2_data_traits<BOXM2_AUX0>
+{
+ public:
+  typedef float datatype;
+  static vcl_size_t datasize(){return sizeof(datatype);}
+  static vcl_string prefix(){ return "aux0";}
+};
+template<>
+class boxm2_data_traits<BOXM2_AUX1>
+{
+ public:
+  typedef float datatype;
+  static vcl_size_t datasize(){return sizeof(datatype);}
+  static vcl_string prefix(){ return "aux1";}
+};
+template<>
+class boxm2_data_traits<BOXM2_AUX2>
+{
+ public:
+  typedef float datatype;
+  static vcl_size_t datasize(){return sizeof(datatype);}
+  static vcl_string prefix(){ return "aux2";}
+};
+template<>
+class boxm2_data_traits<BOXM2_AUX3>
+{
+ public:
+  typedef float datatype;
+  static vcl_size_t datasize(){return sizeof(datatype);}
+  static vcl_string prefix(){ return "aux3";}
+};
 template<>
 class boxm2_data_traits<BOXM2_BATCH_HISTOGRAM>
 {
@@ -154,6 +191,14 @@ class boxm2_data_info
         
       if(prefix == boxm2_data_traits<BOXM2_AUX>::prefix())
         return boxm2_data_traits<BOXM2_AUX>::datasize();
+      if(prefix == boxm2_data_traits<BOXM2_AUX0>::prefix())
+        return boxm2_data_traits<BOXM2_AUX0>::datasize();
+      if(prefix == boxm2_data_traits<BOXM2_AUX1>::prefix())
+        return boxm2_data_traits<BOXM2_AUX1>::datasize();
+      if(prefix == boxm2_data_traits<BOXM2_AUX2>::prefix())
+        return boxm2_data_traits<BOXM2_AUX2>::datasize();
+      if(prefix == boxm2_data_traits<BOXM2_AUX3>::prefix())
+        return boxm2_data_traits<BOXM2_AUX3>::datasize();
      
       if(prefix == boxm2_data_traits<BOXM2_INTENSITY>::prefix())
         return boxm2_data_traits<BOXM2_INTENSITY>::datasize();
