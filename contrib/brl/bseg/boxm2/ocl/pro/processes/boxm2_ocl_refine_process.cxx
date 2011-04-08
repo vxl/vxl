@@ -168,7 +168,7 @@ bool boxm2_ocl_refine_process(bprb_func_process& pro)
     lookup->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
 
     //2. set workgroup size
-
+    opencl_cache->clear_cache();
     vcl_map<boxm2_block_id, boxm2_block_metadata> blocks = scene->blocks();
     vcl_map<boxm2_block_id, boxm2_block_metadata>::iterator blk_iter;
     for (blk_iter = blocks.begin(); blk_iter != blocks.end(); ++blk_iter)
@@ -367,6 +367,8 @@ bool boxm2_ocl_refine_process(bprb_func_process& pro)
         }
         //clean aux memory
         delete tree_sizes;
+
+
     }
 
 

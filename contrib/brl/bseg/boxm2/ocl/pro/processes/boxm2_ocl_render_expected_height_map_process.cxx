@@ -28,7 +28,7 @@
 namespace boxm2_ocl_render_expected_height_map_process_globals
 {
   const unsigned n_inputs_  = 3;
-  const unsigned n_outputs_ = 4;
+  const unsigned n_outputs_ = 5;
   vcl_size_t local_threads[2]={8,8};
   void compile_kernel(bocl_device_sptr device,vcl_vector<bocl_kernel*> & vec_kernels)
   {
@@ -96,6 +96,7 @@ bool boxm2_ocl_render_expected_height_map_process_cons(bprb_func_process& pro)
   output_types_[1] = "vil_image_view_base_sptr";
   output_types_[2] = "vil_image_view_base_sptr";
   output_types_[3] = "vil_image_view_base_sptr";
+  output_types_[4] = "vil_image_view_base_sptr";
 
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 }
@@ -275,6 +276,7 @@ bool boxm2_ocl_render_expected_height_map_process(bprb_func_process& pro)
     exp_image->read_to_buffer(queue);
     var_image->read_to_buffer(queue);
     vis_image->read_to_buffer(queue);
+    prob_image->read_to_buffer(queue);
   }
 
   clReleaseCommandQueue(queue);
@@ -284,6 +286,7 @@ bool boxm2_ocl_render_expected_height_map_process(bprb_func_process& pro)
   vil_image_view<float>* exp_var_out=new vil_image_view<float>(ni,nj);
   vil_image_view<float>* xcoord_img=new vil_image_view<float>(ni,nj);
   vil_image_view<float>* ycoord_img=new vil_image_view<float>(ni,nj);
+  vil_image_view<float>* prob_img=new vil_image_view<float>(ni,nj);
 
   for (unsigned c=0;c<nj;++c)
     for (unsigned r=0;r<ni;++r)
@@ -292,11 +295,13 @@ bool boxm2_ocl_render_expected_height_map_process(bprb_func_process& pro)
         (*exp_var_out)(r,c)=var_buff[c*cl_ni+r];
         (*xcoord_img)(r,c)=r*xint+scene_origin[0];
         (*ycoord_img)(r,c)=c*yint+scene_origin[1];
+        (*prob_img)(r,c)=prob_buff[c*cl_ni+r];
     }
   // store scene smaprt pointer
   pro.set_output_val<vil_image_view_base_sptr>(i++, exp_img_out);
   pro.set_output_val<vil_image_view_base_sptr>(i++, exp_var_out);
   pro.set_output_val<vil_image_view_base_sptr>(i++, xcoord_img);
   pro.set_output_val<vil_image_view_base_sptr>(i++, ycoord_img);
+  pro.set_output_val<vil_image_view_base_sptr>(i++, prob_img);
   return true;
 }

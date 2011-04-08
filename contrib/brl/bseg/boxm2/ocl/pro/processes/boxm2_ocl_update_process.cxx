@@ -29,8 +29,6 @@ namespace boxm2_ocl_update_process_globals
 {
   const unsigned n_inputs_  = 5;
   const unsigned n_outputs_ = 0;
-  vcl_size_t local_threads[2]={8,8};
-  vcl_size_t global_threads[2]={8,8};
   enum {
       UPDATE_SEGLEN = 0,
       UPDATE_PREINF = 1,
@@ -115,6 +113,8 @@ bool boxm2_ocl_update_process_cons(bprb_func_process& pro)
 bool boxm2_ocl_update_process(bprb_func_process& pro)
 {
   using namespace boxm2_ocl_update_process_globals;
+  vcl_size_t local_threads[2]={8,8};
+  vcl_size_t global_threads[2]={8,8};
 
   if ( pro.n_inputs() < n_inputs_ ){
     vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
@@ -279,27 +279,35 @@ bool boxm2_ocl_update_process(bprb_func_process& pro)
         //write the image values to the buffer
         vul_timer transfer;
         bocl_mem* blk       = opencl_cache->get_block(*id);
-        bocl_mem* alpha     = opencl_cache->get_data<BOXM2_ALPHA>(*id);
-        bocl_mem* mog       = opencl_cache->get_data(*id,data_type);
-        bocl_mem* num_obs   = opencl_cache->get_data(*id, num_obs_type);
         bocl_mem * blk_info  = opencl_cache->loaded_block_info();
-
+        bocl_mem* alpha     = opencl_cache->get_data<BOXM2_ALPHA>(*id);
         boxm2_scene_info* info_buffer = (boxm2_scene_info*) blk_info->cpu_buffer();
         int alphaTypeSize = boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
         info_buffer->data_buffer_length = (int) (alpha->num_bytes()/alphaTypeSize);
         blk_info->write_to_buffer((queue));
 
+        bocl_mem* mog       = opencl_cache->get_data(*id,data_type);    //info_buffer->data_buffer_length*boxm2_data_info::datasize(data_type));
+        bocl_mem* num_obs   = opencl_cache->get_data(*id,num_obs_type);//,info_buffer->data_buffer_length*boxm2_data_info::datasize(num_obs_type));
+
+
+
         //grab an appropriately sized AUX data buffer
-        int auxTypeSize = boxm2_data_info::datasize(boxm2_data_traits<BOXM2_AUX>::prefix());
-        bocl_mem *aux   = opencl_cache->get_data<BOXM2_AUX>(*id, info_buffer->data_buffer_length*auxTypeSize);
+        int auxTypeSize = boxm2_data_info::datasize(boxm2_data_traits<BOXM2_AUX0>::prefix());
+        bocl_mem *aux0   = opencl_cache->get_data<BOXM2_AUX0>(*id, info_buffer->data_buffer_length*auxTypeSize);
+        auxTypeSize = boxm2_data_info::datasize(boxm2_data_traits<BOXM2_AUX1>::prefix());
+        bocl_mem *aux1   = opencl_cache->get_data<BOXM2_AUX1>(*id, info_buffer->data_buffer_length*auxTypeSize);
 
         transfer_time += (float) transfer.all();
         if(i==UPDATE_SEGLEN)
         {
+            aux0->zero_gpu_buffer(queue);
+            aux1->zero_gpu_buffer(queue);
+            vcl_cout<<"UPDATE_SEGLEN"<<vcl_endl;
             kern->set_arg( blk_info );
             kern->set_arg( blk );
             kern->set_arg( alpha );
-            kern->set_arg( aux );
+            kern->set_arg( aux0 );
+            kern->set_arg( aux1 );
             kern->set_arg( lookup.ptr() );
             kern->set_arg( persp_cam.ptr() );
             kern->set_arg( img_dim.ptr() );
@@ -310,15 +318,29 @@ bool boxm2_ocl_update_process(bprb_func_process& pro)
             kern->set_local_arg( local_threads[0]*local_threads[1]*sizeof(cl_int) );    //cell pointers,
             kern->set_local_arg( local_threads[0]*local_threads[1]*sizeof(cl_float4) ); //cached aux,
             kern->set_local_arg( local_threads[0]*local_threads[1]*10*sizeof(cl_uchar) ); //cumsum buffer, imindex buffer
+
+            //execute kernel
+            kern->execute(queue, 2, local_threads, global_threads);
+            int status = clFinish(queue);
+            check_val(status, MEM_FAILURE, "UPDATE EXECUTE FAILED: " + error_to_string(status));
+            gpu_time += kern->exec_time();
+
+            //clear render kernel args so it can reset em on next execution
+            kern->clear_args();
+
+            aux0->read_to_buffer(queue);
+            aux1->read_to_buffer(queue);
         }
         else if(i==UPDATE_PREINF)
         {
+            vcl_cout<<"UPDATE_PREINF"<<vcl_endl;
             kern->set_arg( blk_info );
             kern->set_arg( blk );
             kern->set_arg( alpha );
             kern->set_arg( mog );
             kern->set_arg( num_obs );
-            kern->set_arg( aux );
+            kern->set_arg( aux0 );
+            kern->set_arg( aux1 );
             kern->set_arg( lookup.ptr() );
             kern->set_arg( persp_cam.ptr() );
             kern->set_arg( img_dim.ptr() );
@@ -327,15 +349,37 @@ bool boxm2_ocl_update_process(bprb_func_process& pro)
             kern->set_arg( cl_output.ptr() );
             kern->set_local_arg( local_threads[0]*local_threads[1]*sizeof(cl_uchar16) );//local tree,
             kern->set_local_arg( local_threads[0]*local_threads[1]*10*sizeof(cl_uchar) ); //cumsum buffer, imindex buffer
+            //execute kernel
+            kern->execute(queue, 2, local_threads, global_threads);
+            int status = clFinish(queue);
+            check_val(status, MEM_FAILURE, "UPDATE EXECUTE FAILED: " + error_to_string(status));
+            gpu_time += kern->exec_time();
+
+            //clear render kernel args so it can reset em on next execution
+            kern->clear_args();
+
+            //write info to disk
         }
         else if(i==UPDATE_BAYES)
         {
+            vcl_cout<<"UPDATE_BAYES"<<vcl_endl;
+
+            auxTypeSize = boxm2_data_info::datasize(boxm2_data_traits<BOXM2_AUX2>::prefix());
+            bocl_mem *aux2   = opencl_cache->get_data<BOXM2_AUX2>(*id, info_buffer->data_buffer_length*auxTypeSize);
+            aux2->zero_gpu_buffer(queue);
+            auxTypeSize = boxm2_data_info::datasize(boxm2_data_traits<BOXM2_AUX3>::prefix());
+            bocl_mem *aux3   = opencl_cache->get_data<BOXM2_AUX3>(*id, info_buffer->data_buffer_length*auxTypeSize);
+            aux3->zero_gpu_buffer(queue);
+
             kern->set_arg( blk_info );
             kern->set_arg( blk );
             kern->set_arg( alpha );
             kern->set_arg( mog );
             kern->set_arg( num_obs );
-            kern->set_arg( aux );
+            kern->set_arg( aux0 );
+            kern->set_arg( aux1 );
+            kern->set_arg( aux2 );
+            kern->set_arg( aux3 );
             kern->set_arg( lookup.ptr() );
             kern->set_arg( persp_cam.ptr() );
             kern->set_arg( img_dim.ptr() );
@@ -348,9 +392,27 @@ bool boxm2_ocl_update_process(bprb_func_process& pro)
             kern->set_local_arg( local_threads[0]*local_threads[1]*sizeof(cl_int) );    //cell pointers,
             kern->set_local_arg( local_threads[0]*local_threads[1]*sizeof(cl_float) ); //cached aux,
             kern->set_local_arg( local_threads[0]*local_threads[1]*10*sizeof(cl_uchar) ); //cumsum buffer, imindex buffer
+                    //execute kernel
+            kern->execute(queue, 2, local_threads, global_threads);
+            int status = clFinish(queue);
+            check_val(status, MEM_FAILURE, "UPDATE EXECUTE FAILED: " + error_to_string(status));
+            gpu_time += kern->exec_time();
+
+            //clear render kernel args so it can reset em on next execution
+            kern->clear_args();
+            aux2->read_to_buffer(queue);
+            aux3->read_to_buffer(queue);
         }
         else if(i==UPDATE_CELL)
         {
+            vcl_cout<<"UPDATE_CELL"<<vcl_endl;
+
+            auxTypeSize = boxm2_data_info::datasize(boxm2_data_traits<BOXM2_AUX2>::prefix());
+            bocl_mem *aux2   = opencl_cache->get_data<BOXM2_AUX2>(*id, info_buffer->data_buffer_length*auxTypeSize);
+
+            auxTypeSize = boxm2_data_info::datasize(boxm2_data_traits<BOXM2_AUX3>::prefix());
+            bocl_mem *aux3   = opencl_cache->get_data<BOXM2_AUX3>(*id, info_buffer->data_buffer_length*auxTypeSize);
+
             local_threads[0] = 64;
             local_threads[1] = 1 ;        
             global_threads[0]=RoundUp(info_buffer->data_buffer_length,local_threads[0]);
@@ -361,24 +423,26 @@ bool boxm2_ocl_update_process(bprb_func_process& pro)
             kern->set_arg( alpha );
             kern->set_arg( mog );
             kern->set_arg( num_obs );
-            kern->set_arg( aux );
+            kern->set_arg( aux0 );
+            kern->set_arg( aux1 );
+            kern->set_arg( aux2 );
+            kern->set_arg( aux3 );
             kern->set_arg( cl_output.ptr() );
+                    //execute kernel
+            kern->execute(queue, 2, local_threads, global_threads);
+            int status = clFinish(queue);
+            check_val(status, MEM_FAILURE, "UPDATE EXECUTE FAILED: " + error_to_string(status));
+            gpu_time += kern->exec_time();
+
+            //clear render kernel args so it can reset em on next execution
+            kern->clear_args();
+
+            //write info to disk
+            alpha->read_to_buffer(queue);
+            mog->read_to_buffer(queue);
+            num_obs->read_to_buffer(queue);
         }
-        //execute kernel
-        kern->execute(queue, 2, local_threads, global_threads);
-        int status = clFinish(queue);
-        check_val(status, MEM_FAILURE, "UPDATE EXECUTE FAILED: " + error_to_string(status));
-        gpu_time += kern->exec_time();
 
-        //clear render kernel args so it can reset em on next execution
-        kern->clear_args();
-
-        //write info to disk
-        blk->read_to_buffer(queue);
-        alpha->read_to_buffer(queue);
-        mog->read_to_buffer(queue);
-        num_obs->read_to_buffer(queue);
-        aux->read_to_buffer(queue);
 
         //read image out to buffer (from gpu)
         in_image->read_to_buffer(queue);
