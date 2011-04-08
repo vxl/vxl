@@ -39,7 +39,8 @@ void
 seg_len_main(__constant  RenderSceneInfo    * linfo,
              __global    int4               * tree_array,       // tree structure for each block
              __global    float              * alpha_array,      // alpha for each block
-             __global    int                * aux_array,        // aux data array (four aux arrays strung together)
+             __global    int                * aux_array0,        // aux data array (four aux arrays strung together)
+             __global    int                * aux_array1,        // aux data array (four aux arrays strung together)
              __constant  uchar              * bit_lookup,       // used to get data_index
              __global    float16            * camera,           // camera orign and SVD of inverse of camera matrix
              __global    uint4              * imgdims,          // dimensions of the input image
@@ -87,8 +88,8 @@ seg_len_main(__constant  RenderSceneInfo    * linfo,
   // BEGIN RAY TRACE
   //----------------------------------------------------------------------------
   AuxArgs aux_args; 
-  aux_args.seg_len  = aux_array;
-  aux_args.mean_obs = &aux_array[linfo->num_buffer * linfo->data_len]; 
+  aux_args.seg_len  = aux_array0;
+  aux_args.mean_obs = aux_array1;
   aux_args.ray_bundle_array = ray_bundle_array;
   aux_args.cell_ptrs  = cell_ptrs;
   aux_args.cached_aux = cached_aux_data; 
@@ -125,7 +126,8 @@ pre_inf_main(__constant  RenderSceneInfo    * linfo,
              __global    float              * alpha_array,      // alpha for each block
              __global    MOG_TYPE           * mixture_array,    // mixture for each block
              __global    ushort4            * num_obs_array,    // num obs for each block
-             __global    int                * aux_array,        // four aux arrays strung together
+             __global    int                * aux_array0,        // four aux arrays strung together
+             __global    int                * aux_array1,        // four aux arrays strung together
              __constant  uchar              * bit_lookup,       // used to get data_index
              __global    float16            * camera,           // camera orign and SVD of inverse of camera matrix
              __global    uint4              * imgdims,          // dimensions of the input image
@@ -172,8 +174,8 @@ pre_inf_main(__constant  RenderSceneInfo    * linfo,
   AuxArgs aux_args; 
   aux_args.alpha   = alpha_array; 
   aux_args.mog     = mixture_array; 
-  aux_args.seg_len   = aux_array;
-  aux_args.mean_obs  = &aux_array[linfo->num_buffer * linfo->data_len]; 
+  aux_args.seg_len   = aux_array0;
+  aux_args.mean_obs  = aux_array1;
   aux_args.vis_inf = &vis_inf; 
   aux_args.pre_inf = &pre_inf; 
   cast_ray( i, j,
@@ -213,23 +215,26 @@ void cast_ray(int,int,float,float,float,float,float,float,__constant RenderScene
 __kernel
 void
 bayes_main(__constant  RenderSceneInfo    * linfo,
-           __global    int4               * tree_array,       // tree structure for each block
-           __global    float              * alpha_array,      // alpha for each block
-           __global    MOG_TYPE           * mixture_array,    // mixture for each block
-           __global    ushort4            * num_obs_array,    // num obs for each block
-           __global    int                * aux_array,        // four aux arrays strung together
-           __constant  uchar              * bit_lookup,       // used to get data_index
-           __global    float16            * camera,           // camera orign and SVD of inverse of camera matrix
-           __global    uint4              * imgdims,          // dimensions of the input image
-           __global    float              * vis_image,        // visibility image (for keeping vis accross blocks)
-           __global    float              * pre_image,        // preinf image (for keeping pre accross blocks)
+           __global    int4               * tree_array,        // tree structure for each block
+           __global    float              * alpha_array,       // alpha for each block
+           __global    MOG_TYPE           * mixture_array,     // mixture for each block
+           __global    ushort4            * num_obs_array,     // num obs for each block
+           __global    int                * aux_array0,        // four aux arrays strung together
+           __global    int                * aux_array1,        // four aux arrays strung together
+           __global    int                * aux_array2,        // four aux arrays strung together
+           __global    int                * aux_array3,        // four aux arrays strung together
+           __constant  uchar              * bit_lookup,        // used to get data_index
+           __global    float16            * camera,            // camera orign and SVD of inverse of camera matrix
+           __global    uint4              * imgdims,           // dimensions of the input image
+           __global    float              * vis_image,         // visibility image (for keeping vis accross blocks)
+           __global    float              * pre_image,         // preinf image (for keeping pre accross blocks)
            __global    float              * norm_image,        // norm image (for bayes update normalization factor)
            __global    float              * output,
-           __local     uchar16            * local_tree,       // cache current tree into local memory
-           __local     short2             * ray_bundle_array, // gives information for which ray takes over in the workgroup
-           __local     int                * cell_ptrs,        // local list of cell_ptrs (cells that are hit by this workgroup
-           __local     float              * cached_vis,       // cached vis used to sum up vis contribution locally
-           __local     uchar              * cumsum)          // cumulative sum for calculating data pointer
+           __local     uchar16            * local_tree,        // cache current tree into local memory
+           __local     short2             * ray_bundle_array,  // gives information for which ray takes over in the workgroup
+           __local     int                * cell_ptrs,         // local list of cell_ptrs (cells that are hit by this workgroup
+           __local     float              * cached_vis,        // cached vis used to sum up vis contribution locally
+           __local     uchar              * cumsum)            // cumulative sum for calculating data pointer
 {
   //get local id (0-63 for an 8x8) of this patch
   uchar llid = (uchar)(get_local_id(0) + get_local_size(0)*get_local_id(1));
@@ -269,12 +274,12 @@ bayes_main(__constant  RenderSceneInfo    * linfo,
   // BEGIN RAY TRACE
   //----------------------------------------------------------------------------
   AuxArgs aux_args; 
-  aux_args.alpha   = alpha_array; 
-  aux_args.mog     = mixture_array; 
-  aux_args.seg_len = aux_array;
-  aux_args.mean_obs   = &aux_array[linfo->num_buffer * linfo->data_len]; 
-  aux_args.vis_array  = &aux_array[2 * linfo->num_buffer * linfo->data_len];
-  aux_args.beta_array = &aux_array[3 * linfo->num_buffer * linfo->data_len];
+  aux_args.alpha      = alpha_array; 
+  aux_args.mog        = mixture_array; 
+  aux_args.seg_len    = aux_array0;
+  aux_args.mean_obs   = aux_array1;
+  aux_args.vis_array  = aux_array2;
+  aux_args.beta_array = aux_array3;
   
   aux_args.ray_bundle_array = ray_bundle_array; 
   aux_args.cell_ptrs = cell_ptrs; 
@@ -314,7 +319,7 @@ proc_norm_image (  __global float* norm_image,
   
   float vis = vis_image[j*get_global_size(0) + i]; 
   float pre = pre_image[j*get_global_size(0) + i]; 
-  float norm = pre * (1.0f-vis); 
+  float norm = pre +vis;//* (1.0f-vis); 
   norm_image[j*get_global_size(0) + i] = norm; 
 
   // the following  quantities have to be re-initialized before
@@ -332,11 +337,14 @@ update_bit_scene_main(__global RenderSceneInfo  * info,
                       __global float            * alpha_array,
                       __global MOG_TYPE         * mixture_array,
                       __global ushort4          * nobs_array,
-                      __global int              * aux_array,
+                      __global int              * aux_array0,
+                      __global int              * aux_array1,
+                      __global int              * aux_array2,
+                      __global int              * aux_array3,
                       __global float            * output)
 {
   int gid=get_global_id(0);
-  int datasize = info->data_len * info->num_buffer;
+  int datasize = info->data_len ;//* info->num_buffer;
   if (gid<datasize)
   {
     //if alpha is less than zero don't update
@@ -344,7 +352,7 @@ update_bit_scene_main(__global RenderSceneInfo  * info,
     float  cell_min = info->block_len/(float)(1<<info->root_level);
 
     //get cell cumulative length and make sure it isn't 0
-    int len_int = aux_array[gid]; 
+    int len_int = aux_array0[gid]; 
     float cum_len  = convert_float(len_int)/SEGLEN_FACTOR; 
 
     //minimum alpha value, don't let blocks get below this
@@ -353,9 +361,10 @@ update_bit_scene_main(__global RenderSceneInfo  * info,
     //update cell if alpha and cum_len are greater than 0
     if (alpha > 0.0f && cum_len > 1e-10f)
     {
-      int obs_int = aux_array[datasize + gid]; 
-      int vis_int = aux_array[2*datasize + gid]; 
-      int beta_int= aux_array[3*datasize + gid];
+      int obs_int = aux_array1[gid]; 
+      int vis_int = aux_array2[gid]; 
+      int beta_int= aux_array3[gid];
+
       float mean_obs = convert_float(obs_int)/SEGLEN_FACTOR;
       mean_obs = mean_obs / cum_len;  
       float cell_vis  = convert_float(vis_int)/SEGLEN_FACTOR;
@@ -370,8 +379,7 @@ update_bit_scene_main(__global RenderSceneInfo  * info,
                                  0.0, 0.0, 0.0);
 
       //use aux data to update cells
-      update_cell(&data, aux_data, 2.5f, 0.06f, 0.002);
-      //update_cell(&data, aux_data, 2.5f, 0.06f, 0.02f);
+      update_cell(&data, aux_data, 2.5f, 0.03f, 0.02);
 
       //reset the cells in memory
       alpha_array[gid]      = max(alphamin,data.s0);
@@ -385,10 +393,10 @@ update_bit_scene_main(__global RenderSceneInfo  * info,
     }
     
     //clear out aux data
-    aux_array[gid] = 0; 
-    aux_array[gid + datasize] = 0; 
-    aux_array[gid + 2*datasize] = 0;
-    aux_array[gid + 3*datasize] = 0;
+    aux_array0[gid] = 0; 
+    aux_array1[gid] = 0; 
+    aux_array2[gid] = 0;
+    aux_array3[gid] = 0;
   }
   
 }
