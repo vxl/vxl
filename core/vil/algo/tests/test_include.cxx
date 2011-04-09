@@ -18,10 +18,10 @@
 #include <vil/algo/vil_exp_filter_1d.h>
 #include <vil/algo/vil_exp_filter_2d.h>
 #include <vil/algo/vil_exp_grad_filter_1d.h>
+#include <vil/algo/vil_fft.h>
 #include <vil/algo/vil_find_4con_boundary.h>
 #include <vil/algo/vil_find_peaks.h>
 #include <vil/algo/vil_find_plateaus.h>
-#include <vil/algo/vil_fft.h>
 #include <vil/algo/vil_flood_fill.h>
 #include <vil/algo/vil_gauss_filter.h>
 #include <vil/algo/vil_gauss_reduce.h>
@@ -42,9 +42,11 @@
 #include <vil/algo/vil_sobel_3x3.h>
 #include <vil/algo/vil_structuring_element.h>
 #include <vil/algo/vil_suppress_non_max.h>
-#include <vil/algo/vil_suppress_non_plateau.h>
 #include <vil/algo/vil_suppress_non_max_edges.h>
+#include <vil/algo/vil_suppress_non_plateau.h>
 #include <vil/algo/vil_threshold.h>
 #include <vil/algo/vil_tile_images.h>
+#include <vil/algo/vil_trace_4con_boundary.h>
+#include <vil/algo/vil_trace_8con_boundary.h>
 
 int main() { return 0; }
