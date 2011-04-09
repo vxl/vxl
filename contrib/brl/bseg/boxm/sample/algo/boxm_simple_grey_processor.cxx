@@ -87,7 +87,7 @@ void boxm_simple_grey_processor::compute_appearance(vcl_vector<boxm_apm_traits<B
     // one observation: Just return the value as the mean, and a big sigma.
     model = boxm_simple_grey(obs[0], big_sigma);
     return;
-  } 
+  }
   //vcl_cout << "nobs = " << obs.size() << vcl_endl;
   //for (unsigned int i=0; i<obs.size(); ++i) {
   //  vcl_cout << "obs=" << obs[i] << " vis=" << vis[i] << "pre=" << pre[i] << vcl_endl;
@@ -207,7 +207,8 @@ void boxm_simple_grey_processor::update_appearance(vcl_vector<boxm_apm_traits<BO
         const float p_gauss = p_total - p_uniform;
         if (p_total > 0.0f) {
           obs_gauss_weights[n] = weights[n] * p_gauss / p_total;
-        } else {
+        }
+        else {
           obs_gauss_weights[n] = 0.0f;
         }
         gauss_weight += obs_gauss_weights[n];
@@ -337,15 +338,15 @@ float boxm_simple_grey_processor::sigma_norm_factor(unsigned int nobs)
 }
 
 void boxm_simple_grey_processor::
-boxm_compute_shadow_appearance(vcl_vector<boxm_apm_traits<BOXM_APM_SIMPLE_GREY>::obs_datatype> const& obs, 
-                                             vcl_vector<float> const& pre, 
-                                             vcl_vector<float> const& vis,
-                                             boxm_apm_traits<BOXM_APM_SIMPLE_GREY>::apm_datatype &model, 
-                                             float min_app_sigma,
-                                             float shadow_prior,
-                                             float shadow_mean, 
-                                             float shadow_sigma,
-                                             bool verbose )
+boxm_compute_shadow_appearance(vcl_vector<boxm_apm_traits<BOXM_APM_SIMPLE_GREY>::obs_datatype> const& obs,
+                               vcl_vector<float> const& pre,
+                               vcl_vector<float> const& vis,
+                               boxm_apm_traits<BOXM_APM_SIMPLE_GREY>::apm_datatype &model,
+                               float min_app_sigma,
+                               float shadow_prior,
+                               float shadow_mean,
+                               float shadow_sigma,
+                               bool verbose )
 {
   vcl_vector<float> obs_weights(vis.size(), 0.0f);
   vcl_vector<float> sh_density(vis.size(), 0.0f);
@@ -358,16 +359,16 @@ boxm_compute_shadow_appearance(vcl_vector<boxm_apm_traits<BOXM_APM_SIMPLE_GREY>:
   // sh_density. vis is the visibilty probability
   //
   boxm_simple_grey shadow_dist(shadow_mean, shadow_sigma);
-  for(unsigned n = 0; n<obs.size(); ++n)
-    {
-      //2.0 x density since centered on zero
-      sh_density[n] = 
-        2.0f*boxm_simple_grey_processor::prob_density(shadow_dist, obs[n]);
-      float neu = vis[n]*(1-shadow_prior);
-      float weight = 
-        neu/(neu + sh_density[n]*shadow_prior);
-      obs_weights[n]=weight;
-    }
+  for (unsigned n = 0; n<obs.size(); ++n)
+  {
+    //2.0 x density since centered on zero
+    sh_density[n] =
+      2.0f*boxm_simple_grey_processor::prob_density(shadow_dist, obs[n]);
+    float neu = vis[n]*(1-shadow_prior);
+    float weight =
+      neu/(neu + sh_density[n]*shadow_prior);
+    obs_weights[n]=weight;
+  }
   vcl_vector<float> initial_weights = obs_weights;
   // initial estimate for the illuminated appearance model
   boxm_simple_grey_processor::compute_appearance(obs,obs_weights,model,min_app_sigma);
@@ -388,8 +389,7 @@ boxm_compute_shadow_appearance(vcl_vector<boxm_apm_traits<BOXM_APM_SIMPLE_GREY>:
     float max_weight_change = 0.0f;
     // EXPECTATION - determine the weights
     for (unsigned int n=0; n<nobs; ++n) {
-
-		float PI = vis[n] * boxm_simple_grey_processor::prob_density(model,obs[n]);
+      float PI = vis[n] * boxm_simple_grey_processor::prob_density(model,obs[n]);
       float neu = PI*(1-shadow_prior);
       float den = (PI + pre[n])*(1-shadow_prior) + shadow_prior*sh_density[n];
       float new_obs_weight = 0;
@@ -409,29 +409,29 @@ boxm_compute_shadow_appearance(vcl_vector<boxm_apm_traits<BOXM_APM_SIMPLE_GREY>:
     // MAXIMIZATION - determine the parameters of the appearance distribution
     boxm_simple_grey_processor::update_appearance(obs,obs_weights,model,min_app_sigma);
   }
-  if(verbose) {
+  if (verbose) {
     bool print = false;
-    for(unsigned n = 0; n<obs.size(); ++n)
-      if(obs[n]>0) print = true;
-      if(i<max_its&&print){
-        vcl_cout << "converged after " << i << " iterations.\n";
-        vcl_cout << " initial mean = " << initial_mean << " final mean = " 
-                 << model.color() << '\n';
-        vcl_cout << " initial sigma = " << initial_sigma << " final sigma = " 
+    for (unsigned n = 0; n<obs.size(); ++n) {
+      if (obs[n]>0) print = true;
+      if (i<max_its&&print) {
+        vcl_cout << "converged after " << i << " iterations.\n"
+                 << " initial mean = " << initial_mean << " final mean = "
+                 << model.color() << '\n'
+                 << " initial sigma = " << initial_sigma << " final sigma = "
                  << model.sigma() << '\n';
-      }else{ vcl_cout << "failed to converge\n";}
+      }
+      else { vcl_cout << "failed to converge\n"; }
 
       vcl_cout << "Initial (Observations, Weights):\n";
-      for(unsigned n=0; n<obs.size(); ++n)
+      for (unsigned n=0; n<obs.size(); ++n)
         vcl_cout << '('<< obs[n] << ' ' << initial_weights[n] << ") ";
-      vcl_cout << '\n';
-      vcl_cout << "Final (Observations, Weights):\n";
-      for(unsigned n=0; n<obs.size(); ++n)
+      vcl_cout << "\nFinal (Observations, Weights):\n";
+      for (unsigned n=0; n<obs.size(); ++n)
         vcl_cout << '('<< obs[n] << ' ' << obs_weights[n] << ") ";
       vcl_cout << '\n';
+    }
   }
 
   // adjust model to account for small sample sizes.
   boxm_simple_grey_processor::finalize_appearance(obs,obs_weights,model);
-
 }
