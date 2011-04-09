@@ -28,7 +28,6 @@
 #include <boxm2/ocl/algo/boxm2_ocl_render_expected_image_function.h>
 
 
-
 namespace boxm2_ocl_render_expected_color_process_globals
 {
   const unsigned n_inputs_ = 6;
@@ -66,7 +65,7 @@ namespace boxm2_ocl_render_expected_color_process_globals
                                      options,              //options
                                      "boxm2 opencl render process color"); //kernel identifier (for error checking)
     vec_kernels.push_back(ray_trace_kernel);
-    
+
     //create normalize image kernel
     vcl_vector<vcl_string> norm_src_paths;
     norm_src_paths.push_back(source_dir + "pixel_conversion.cl");
@@ -81,7 +80,6 @@ namespace boxm2_ocl_render_expected_color_process_globals
                                             "normalize render color kernel"); //kernel identifier (for error checking)
     vec_kernels.push_back(normalize_render_kernel);
   }
-
 }
 
 bool boxm2_ocl_render_expected_color_process_cons(bprb_func_process& pro)
@@ -96,7 +94,6 @@ bool boxm2_ocl_render_expected_color_process_cons(bprb_func_process& pro)
   input_types_[3] = "vpgl_camera_double_sptr";
   input_types_[4] = "unsigned";
   input_types_[5] = "unsigned";
-
 
   // process has 1 output:
   // output[0]: scene sptr
@@ -135,7 +132,7 @@ bool boxm2_ocl_render_expected_color_process(bprb_func_process& pro)
       options=" -D MOG_TYPE_8 ";
     }
   }
-  if(!foundDataType) {
+  if (!foundDataType) {
     vcl_cout<<"BOXM2_OCL_RENDER_COLOR_PROCESS ERROR: scene doesn't have BOXM2_GAUSS_RGB data type"<<vcl_endl;
     return false;
   }
@@ -157,20 +154,20 @@ bool boxm2_ocl_render_expected_color_process(bprb_func_process& pro)
   }
   unsigned cl_ni=RoundUp(ni,lthreads[0]);
   unsigned cl_nj=RoundUp(nj,lthreads[1]);
-  
+
   //create color buffer
   float* buff = new float[4*cl_ni*cl_nj];
-  vcl_fill(buff, buff + 4*cl_ni*cl_nj, 0.0f); 
+  vcl_fill(buff, buff + 4*cl_ni*cl_nj, 0.0f);
   bocl_mem_sptr exp_image = new bocl_mem(device->context(), buff, cl_ni*cl_nj*sizeof(cl_float4), "exp color image (float4) buffer");
   exp_image->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
   // visibility image
   float* vis_buff = new float[cl_ni*cl_nj];
-  vcl_fill(vis_buff, vis_buff + cl_ni*cl_nj, 1.0f); 
+  vcl_fill(vis_buff, vis_buff + cl_ni*cl_nj, 1.0f);
   bocl_mem_sptr vis_image = new bocl_mem(device->context(), vis_buff, cl_ni*cl_nj*sizeof(cl_float), "vis image (single float) buffer");
   vis_image->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
-  //image dimensions 
+  //image dimensions
   int img_dim_buff[4];
   img_dim_buff[0] = 0;   img_dim_buff[2] = ni;
   img_dim_buff[1] = 0;   img_dim_buff[3] = nj;
@@ -180,27 +177,26 @@ bool boxm2_ocl_render_expected_color_process(bprb_func_process& pro)
   //: run expected image function
   render_expected_image(scene, device, opencl_cache, queue,
                         cam, exp_image, vis_image, exp_img_dim,
-                        data_type, kernels[identifier][0], lthreads, cl_ni, cl_nj);  
+                        data_type, kernels[identifier][0], lthreads, cl_ni, cl_nj);
 
   //: read out expected image
   exp_image->read_to_buffer(queue);
   vil_image_view<vil_rgba<vxl_byte> >* exp_img_out = new vil_image_view<vil_rgba<vxl_byte> >(ni,nj);
 
-  int numFloats = 4; 
-  int count = 0; 
-  for (unsigned c=0;c<nj;c++) {
-    for (unsigned r=0;r<ni;r++) {
-      vil_rgba<vxl_byte> rgba( (vxl_byte) (buff[count]*255.0f), 
-                               (vxl_byte) (buff[count+1]*255.0f), 
-                               (vxl_byte) (buff[count+2]*255.0f), 
-                               (vxl_byte) 255 ); 
-      (*exp_img_out)(r,c) = rgba;
-      count += 4; 
+  int numFloats = 4;
+  int count = 0;
+  for (unsigned c=0;c<nj;++c) {
+    for (unsigned r=0;r<ni;++r,count+=numFloats) {
+      (*exp_img_out)(r,c) =
+      vil_rgba<vxl_byte> ( (vxl_byte) (buff[count]*255.0f),
+                           (vxl_byte) (buff[count+1]*255.0f),
+                           (vxl_byte) (buff[count+2]*255.0f),
+                           (vxl_byte) 255 );
     }
   }
 
   delete [] buff;
-  delete [] vis_buff; 
+  delete [] vis_buff;
   clReleaseCommandQueue(queue);
   argIdx=0;
   // store scene smaprt pointer
