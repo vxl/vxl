@@ -55,17 +55,16 @@ class  boxm_simple_grey_processor
 
   static void finalize_appearance(vcl_vector<boxm_apm_traits<BOXM_APM_SIMPLE_GREY>::obs_datatype> const& obs, vcl_vector<float> const& weights, boxm_apm_traits<BOXM_APM_SIMPLE_GREY>::apm_datatype &model);
 
-  //: includes a shadow density component to the single gaussian scalar 
-  // appearance model, defined by a fixed shadow mean and sigma. 
+  //: includes a shadow density component to the single gaussian scalar appearance model, defined by a fixed shadow mean and sigma.
   // The shadow prior defines the probability that an observation is in shadow.
-  // The function updates the "model" mean and sigma. 
-  static void boxm_compute_shadow_appearance(vcl_vector<boxm_apm_traits<BOXM_APM_SIMPLE_GREY>::obs_datatype> const& obs, 
-                                             vcl_vector<float> const& pre, 
+  // The function updates the "model" mean and sigma.
+  static void boxm_compute_shadow_appearance(vcl_vector<boxm_apm_traits<BOXM_APM_SIMPLE_GREY>::obs_datatype> const& obs,
+                                             vcl_vector<float> const& pre,
                                              vcl_vector<float> const& vis,
-                                             boxm_apm_traits<BOXM_APM_SIMPLE_GREY>::apm_datatype &model, 
+                                             boxm_apm_traits<BOXM_APM_SIMPLE_GREY>::apm_datatype &model,
                                              float min_app_sigma,
                                              float shadow_prior,
-                                             float shadow_mean, 
+                                             float shadow_mean,
                                              float shadow_sigma,
                                              bool verbose = false);
  private:
