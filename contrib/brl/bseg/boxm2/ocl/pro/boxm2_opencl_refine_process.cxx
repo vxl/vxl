@@ -230,6 +230,7 @@ bool boxm2_opencl_refine_process::execute(vcl_vector<brdb_value_sptr>& input, vc
     }
     else
     {
+#if 0
       //----- OTHERWISE USE OLD METHOD (ranodmly distributed blocks into buffers)-----------
       vcl_cout<<"Refining using random algo"<<vcl_endl;
       //get id
@@ -294,6 +295,7 @@ bool boxm2_opencl_refine_process::execute(vcl_vector<brdb_value_sptr>& input, vc
       alpha->read_to_buffer(*command_queue_);
       mog->read_to_buffer(*command_queue_);
       num_obs->read_to_buffer(*command_queue_);
+#endif
     }
   }
 
