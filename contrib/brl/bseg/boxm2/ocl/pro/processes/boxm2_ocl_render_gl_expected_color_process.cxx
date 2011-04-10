@@ -186,6 +186,7 @@ bool boxm2_ocl_render_gl_expected_color_process(bprb_func_process& pro)
   
   //delete visibilty image
   delete[] vis_buff; 
+  delete[] buff; 
   
   //: read out expected image
   clReleaseCommandQueue(queue);

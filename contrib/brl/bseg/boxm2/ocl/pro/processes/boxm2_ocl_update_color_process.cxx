@@ -308,9 +308,15 @@ bool boxm2_ocl_update_color_process(bprb_func_process& pro)
         blk_info->write_to_buffer((queue));
 
         //grab an appropriately sized AUX data buffer
-        int auxTypeSize = boxm2_data_info::datasize(boxm2_data_traits<BOXM2_AUX>::prefix());
-        bocl_mem *aux   = opencl_cache->get_data<BOXM2_AUX>(*id, info_buffer->data_buffer_length*auxTypeSize);
-
+        int auxTypeSize = boxm2_data_info::datasize(boxm2_data_traits<BOXM2_AUX0>::prefix());
+        bocl_mem *aux0   = opencl_cache->get_data<BOXM2_AUX0>(*id, info_buffer->data_buffer_length*auxTypeSize);
+        auxTypeSize = boxm2_data_info::datasize(boxm2_data_traits<BOXM2_AUX1>::prefix());
+        bocl_mem *aux1   = opencl_cache->get_data<BOXM2_AUX1>(*id, info_buffer->data_buffer_length*auxTypeSize);
+        auxTypeSize = boxm2_data_info::datasize(boxm2_data_traits<BOXM2_AUX2>::prefix());
+        bocl_mem *aux2   = opencl_cache->get_data<BOXM2_AUX2>(*id, info_buffer->data_buffer_length*auxTypeSize);
+        auxTypeSize = boxm2_data_info::datasize(boxm2_data_traits<BOXM2_AUX3>::prefix());
+        bocl_mem *aux3   = opencl_cache->get_data<BOXM2_AUX3>(*id, info_buffer->data_buffer_length*auxTypeSize);
+     
         transfer_time += (float) transfer.all();
         if(i==UPDATE_SEGLEN)
         {
@@ -319,7 +325,10 @@ bool boxm2_ocl_update_color_process(bprb_func_process& pro)
             kern->set_arg( blk_info );
             kern->set_arg( blk );
             kern->set_arg( alpha );
-            kern->set_arg( aux );
+            kern->set_arg( aux0 );
+            kern->set_arg( aux1 );
+            kern->set_arg( aux2 );
+            kern->set_arg( aux3 );
             kern->set_arg( lookup.ptr() );
             kern->set_arg( persp_cam.ptr() );
             kern->set_arg( img_dim.ptr() );
@@ -338,7 +347,10 @@ bool boxm2_ocl_update_color_process(bprb_func_process& pro)
             global_threads[0]=RoundUp(info_buffer->data_buffer_length,local_threads[0]);
             global_threads[1]=1;
             kern->set_arg( blk_info );
-            kern->set_arg( aux );
+            kern->set_arg( aux0 );
+            kern->set_arg( aux1 );
+            kern->set_arg( aux2 );
+            kern->set_arg( aux3 );
         }
         else if(i==UPDATE_PREINF)
         {
@@ -349,7 +361,8 @@ bool boxm2_ocl_update_color_process(bprb_func_process& pro)
             kern->set_arg( alpha );
             kern->set_arg( mog );
             kern->set_arg( num_obs );
-            kern->set_arg( aux );
+            kern->set_arg( aux0 );
+            kern->set_arg( aux1 );
             kern->set_arg( lookup.ptr() );
             kern->set_arg( persp_cam.ptr() );
             kern->set_arg( img_dim.ptr() );
@@ -368,7 +381,10 @@ bool boxm2_ocl_update_color_process(bprb_func_process& pro)
             kern->set_arg( alpha );
             kern->set_arg( mog );
             kern->set_arg( num_obs );
-            kern->set_arg( aux );
+            kern->set_arg( aux0 );
+            kern->set_arg( aux1 );
+            kern->set_arg( aux2 );
+            kern->set_arg( aux3 );
             kern->set_arg( lookup.ptr() );
             kern->set_arg( persp_cam.ptr() );
             kern->set_arg( img_dim.ptr() );
@@ -393,7 +409,10 @@ bool boxm2_ocl_update_color_process(bprb_func_process& pro)
             kern->set_arg( alpha );
             kern->set_arg( mog );
             kern->set_arg( num_obs );
-            kern->set_arg( aux );
+            kern->set_arg( aux0 );
+            kern->set_arg( aux1 );
+            kern->set_arg( aux2 );
+            kern->set_arg( aux3 );
             kern->set_arg( cl_output.ptr() );
         }
         //execute kernel
@@ -406,12 +425,15 @@ bool boxm2_ocl_update_color_process(bprb_func_process& pro)
         //clear render kernel args so it can reset em on next execution
         kern->clear_args();
 
-        //write info to disk
+        //read info back to host memory
         blk->read_to_buffer(queue);
         alpha->read_to_buffer(queue);
         mog->read_to_buffer(queue);
         num_obs->read_to_buffer(queue);
-        aux->read_to_buffer(queue);
+        aux0->read_to_buffer(queue);
+        aux1->read_to_buffer(queue);
+        aux2->read_to_buffer(queue);
+        aux3->read_to_buffer(queue);
 
         //read image out to buffer (from gpu)
         in_image->read_to_buffer(queue);
