@@ -36,7 +36,7 @@ class boct_bit_tree2
   }
 
   //: Returns index of data for given bit
-  int  get_data_index(int bit_index, bool is_random=true) const;
+  int  get_data_index(int bit_index, bool is_random=false) const;
   
   //: returns bit index assuming root data is located at 0
   int  get_relative_index(int bit_index) const; 
