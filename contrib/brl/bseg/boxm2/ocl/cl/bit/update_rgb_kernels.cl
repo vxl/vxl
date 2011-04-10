@@ -40,7 +40,10 @@ void
 seg_len_main(__constant  RenderSceneInfo    * linfo,
              __global    int4               * tree_array,       // tree structure for each block
              __global    float              * alpha_array,      // alpha for each block
-             __global    int                * aux_array,        // aux data array (four aux arrays strung together)
+             __global    int                * aux_seg_len,        // seg len aux array
+             __global    int                * aux_mean_obsY,      // mean obs r aux array
+             __global    int                * aux_mean_obsU,      // mean obs r aux array
+             __global    int                * aux_mean_obsV,      // mean obs r aux array
              __constant  uchar              * bit_lookup,       // used to get data_index
              __global    float16            * camera,           // camera orign and SVD of inverse of camera matrix
              __global    uint4              * imgdims,          // dimensions of the input image
@@ -88,10 +91,10 @@ seg_len_main(__constant  RenderSceneInfo    * linfo,
   // BEGIN RAY TRACE
   //----------------------------------------------------------------------------
   AuxArgs aux_args; 
-  aux_args.seg_len  = aux_array;
-  aux_args.mean_obsR = &aux_array[linfo->num_buffer * linfo->data_len]; 
-  aux_args.mean_obsG = &aux_array[2 * linfo->num_buffer * linfo->data_len]; 
-  aux_args.mean_obsB = &aux_array[3 * linfo->num_buffer * linfo->data_len]; 
+  aux_args.seg_len  = aux_seg_len;
+  aux_args.mean_obsR = aux_mean_obsY; //&aux_array[linfo->num_buffer * linfo->data_len]; 
+  aux_args.mean_obsG = aux_mean_obsU; //&aux_array[2 * linfo->num_buffer * linfo->data_len]; 
+  aux_args.mean_obsB = aux_mean_obsV; //&aux_array[3 * linfo->num_buffer * linfo->data_len]; 
 
   aux_args.ray_bundle_array = ray_bundle_array;
   aux_args.cell_ptrs  = cell_ptrs;
@@ -114,21 +117,24 @@ seg_len_main(__constant  RenderSceneInfo    * linfo,
 #ifdef COMPRESS_RGB
 __kernel
 void
-compress_rgb(__global RenderSceneInfo  * info,
-             __global int              * aux_array)
+compress_rgb(__global RenderSceneInfo * info,
+             __global int             * aux_seg_len,        // seg len aux array
+             __global int             * aux_mean_obsY,      // mean obs r aux array
+             __global int             * aux_mean_obsU,      // mean obs r aux array
+             __global int             * aux_mean_obsV)      // mean obs r aux array)
 {
   int gid = get_global_id(0);
   int datasize = info->data_len * info->num_buffer;
   if (gid<datasize)
   {
     //get the segment length
-    int len_int = aux_array[gid]; 
+    int len_int = aux_seg_len[gid]; 
     float cum_len  = convert_float(len_int)/SEGLEN_FACTOR; 
 
     //get cumulative observation values for r g and b
-    int r_int = aux_array[datasize + gid];   //Y int
-    int g_int = aux_array[2*datasize + gid]; //U int
-    int b_int = aux_array[3*datasize + gid]; //V int
+    int r_int = aux_mean_obsY[gid]; //aux_array[datasize + gid];   //Y int
+    int g_int = aux_mean_obsU[gid]; //aux_array[2*datasize + gid]; //U int
+    int b_int = aux_mean_obsV[gid]; // aux_array[3*datasize + gid]; //V int
     
     //normalize mean obs by CUM_LEN and SEGLEN_FACTOR
     int4 rgbs = (int4) (r_int, g_int, b_int, 0); 
@@ -144,11 +150,11 @@ compress_rgb(__global RenderSceneInfo  * info,
     
     //pack them in a single integer, and store in global memory
     uchar4 packed = convert_uchar4_sat_rte(mean_obs*255.0f); 
-    aux_array[datasize + gid] = as_int(packed); 
+    aux_mean_obsY[gid] = as_int(packed); //aux_array[datasize + gid] = as_int(packed); 
     
     //zero out the rest of the aux array
-    aux_array[2*datasize + gid] = 0; 
-    aux_array[3*datasize + gid] = 0;
+    aux_mean_obsU[gid] = 0; //aux_array[2*datasize + gid] = 0; 
+    aux_mean_obsV[gid] = 0; // aux_array[3*datasize + gid] = 0;
   }
 }
 #endif
@@ -175,7 +181,8 @@ pre_inf_main(__constant  RenderSceneInfo    * linfo,
              __global    float              * alpha_array,      // alpha for each block
              __global    MOG_TYPE           * mixture_array,    // mixture for each block
              __global    ushort4            * num_obs_array,    // num obs for each block
-             __global    int                * aux_array,        // four aux arrays strung together
+             __global    int                * aux_seg_len,       // seg len aux array
+             __global    int                * aux_mean_obs,      // mean obs aux array
              __constant  uchar              * bit_lookup,       // used to get data_index
              __global    float16            * camera,           // camera orign and SVD of inverse of camera matrix
              __global    uint4              * imgdims,          // dimensions of the input image
@@ -222,8 +229,8 @@ pre_inf_main(__constant  RenderSceneInfo    * linfo,
   AuxArgs aux_args; 
   aux_args.alpha   = alpha_array; 
   aux_args.mog     = mixture_array; 
-  aux_args.seg_len   = aux_array;
-  aux_args.mean_obs  = &aux_array[linfo->num_buffer * linfo->data_len]; 
+  aux_args.seg_len   = aux_seg_len;
+  aux_args.mean_obs  = aux_mean_obs; //&aux_array[linfo->num_buffer * linfo->data_len]; 
   aux_args.vis_inf = &vis_inf; 
   aux_args.pre_inf = &pre_inf; 
   cast_ray( i, j,
@@ -267,7 +274,10 @@ bayes_main(__constant  RenderSceneInfo    * linfo,
            __global    float              * alpha_array,      // alpha for each block
            __global    MOG_TYPE           * mixture_array,    // mixture for each block
            __global    ushort4            * num_obs_array,    // num obs for each block
-           __global    int                * aux_array,        // four aux arrays strung together
+           __global    int                * aux_seg_len,        // seg len aux array
+           __global    int                * aux_mean_obs,      // mean obs r aux array
+           __global    int                * aux_vis,      // mean obs r aux array
+           __global    int                * aux_beta,      // mean obs r aux array
            __constant  uchar              * bit_lookup,       // used to get data_index
            __global    float16            * camera,           // camera orign and SVD of inverse of camera matrix
            __global    uint4              * imgdims,          // dimensions of the input image
@@ -321,10 +331,10 @@ bayes_main(__constant  RenderSceneInfo    * linfo,
   AuxArgs aux_args; 
   aux_args.alpha   = alpha_array; 
   aux_args.mog     = mixture_array; 
-  aux_args.seg_len = aux_array;
-  aux_args.mean_obs   = &aux_array[linfo->num_buffer * linfo->data_len]; 
-  aux_args.vis_array  = &aux_array[2 * linfo->num_buffer * linfo->data_len];
-  aux_args.beta_array = &aux_array[3 * linfo->num_buffer * linfo->data_len];
+  aux_args.seg_len = aux_seg_len;
+  aux_args.mean_obs   = aux_mean_obs;//&aux_array[linfo->num_buffer * linfo->data_len]; 
+  aux_args.vis_array  = aux_vis; //&aux_array[2 * linfo->num_buffer * linfo->data_len];
+  aux_args.beta_array = aux_beta; //&aux_array[3 * linfo->num_buffer * linfo->data_len];
   
   aux_args.ray_bundle_array = ray_bundle_array; 
   aux_args.cell_ptrs = cell_ptrs; 
@@ -461,7 +471,10 @@ update_bit_scene_main(__global RenderSceneInfo  * info,
                       __global float            * alpha_array,
                       __global MOG_TYPE         * mixture_array,
                       __global ushort           * nobs_array,
-                      __global int              * aux_array,
+                      __global int              * aux_seg_len,        // seg len aux array
+                      __global int              * aux_mean_obs,      // mean obs r aux array
+                      __global int              * aux_vis,      // mean obs r aux array
+                      __global int              * aux_beta,      // mean obs r aux array
                       __global float            * output)
 {
   float t_match = 2.5f;  
@@ -476,7 +489,7 @@ update_bit_scene_main(__global RenderSceneInfo  * info,
     float  cell_min = info->block_len/(float)(1<<info->root_level);
 
     //get cell cumulative length and make sure it isn't 0
-    int len_int = aux_array[gid]; 
+    int len_int = aux_seg_len[gid]; 
     float cum_len  = convert_float(len_int)/SEGLEN_FACTOR; 
 
     //minimum alpha value, don't let blocks get below this
@@ -485,9 +498,9 @@ update_bit_scene_main(__global RenderSceneInfo  * info,
     //update cell if alpha and cum_len are greater than 0
     if (alpha > 0.0f && cum_len > 1e-10f)
     {
-      int obs_int = aux_array[datasize + gid]; 
-      int vis_int = aux_array[2*datasize + gid]; 
-      int beta_int= aux_array[3*datasize + gid];
+      int obs_int = aux_mean_obs[gid]; 
+      int vis_int = aux_vis[gid]; 
+      int beta_int= aux_beta[gid];
       
       //float mean_obs = convert_float(obs_int)/SEGLEN_FACTOR;
       //mean_obs = mean_obs / cum_len;  
@@ -499,15 +512,8 @@ update_bit_scene_main(__global RenderSceneInfo  * info,
       float4 aux_data = (float4) (cum_len, mean_obs, cell_beta, cell_vis/cum_len);
       float8 mixture  = convert_float8(mixture_array[gid])/NORM;
       
-      //update appearance
-      //float4 nobs     = convert_float4(nobs_array[gid]); nobs.s3 = nobs.s3/100.0; 
-      //update_rgb_appearance(&mixture, &nobs, mean_obs, cell_vis, t_match, init_sigma, min_sigma);
-      //nobs.s3 = nobs.s3*100.0f; 
-      //nobs_array[gid]       = convert_ushort4_sat_rte(nobs);
-      
       //single gauss appearance update
       float nob_single = convert_float(nobs_array[gid])/100.0f; 
-      //update_3d_gauss(&mixture, &nob_single, meanObs, cell_vis, min_sigma); 
       
       //-----YUV edit ----
       update_yuv_appearance(&mixture, &nob_single, meanObs, cell_vis, min_sigma); 
@@ -526,10 +532,10 @@ update_bit_scene_main(__global RenderSceneInfo  * info,
     }
     
     //clear out aux data
-    aux_array[gid] = 0; 
-    aux_array[gid + datasize] = 0; 
-    aux_array[gid + 2*datasize] = 0;
-    aux_array[gid + 3*datasize] = 0;
+    aux_seg_len[gid] = 0; 
+    aux_mean_obs[gid] = 0; 
+    aux_vis[gid] = 0; 
+    aux_beta[gid] = 0;
   }
   
 }
