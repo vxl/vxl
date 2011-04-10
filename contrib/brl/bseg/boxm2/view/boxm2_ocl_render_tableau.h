@@ -31,6 +31,7 @@
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/boxm2_data.h>
 #include <boxm2/ocl/boxm2_opencl_cache.h>
+#include <boxm2/view/boxm2_trajectory.h>
 #include <bocl/bocl_manager.h>
 //brdb stuff
 #include <brdb/brdb_value.h>
@@ -75,6 +76,11 @@ class boxm2_ocl_render_tableau : public boxm2_cam_tableau
   cl_mem clgl_buffer_;
   bocl_mem*  exp_img_;
   bocl_mem * exp_img_dim_;
+  
+  //: trajectory for idle rendering
+  bool render_trajectory_; 
+  boxm2_trajectory* trajectory_;
+  boxm2_trajectory::iterator cam_iter_;
 
   //--Render, update, refine, save helper methods ------------------------------
   //func to render frame on GPU (returns gpu time)

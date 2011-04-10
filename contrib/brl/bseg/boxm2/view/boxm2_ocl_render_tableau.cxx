@@ -54,7 +54,9 @@ bool boxm2_ocl_render_tableau::init(bocl_device_sptr device,
     opencl_cache_=opencl_cache;
     device_=device;
     do_init_ocl=true;
-
+    render_trajectory_ = true;
+    trajectory_ = new boxm2_trajectory(45.0, 65.0, -1.0, scene_->bounding_box(), ni, nj); 
+    cam_iter_ = trajectory_->begin(); 
     return true;
 }
 
@@ -87,8 +89,39 @@ bool boxm2_ocl_render_tableau::handle(vgui_event const &e)
     return true;
   }
 
-  if (boxm2_cam_tableau::handle(e))
+  //handle update command - keyboard press U
+  else if (e.type == vgui_KEY_PRESS && e.key == vgui_key('t')) {
+    vcl_cout<<"rendering trajectory..."<<vcl_endl;
+    render_trajectory_ = true; 
+    this->post_idle_request();
+  }
+
+  //Handles Idle events - should render trajectory
+  else if (e.type == vgui_IDLE)
+  {
+    if(render_trajectory_) {
+      vpgl_camera_double_sptr& camSptr = *cam_iter_; 
+      vpgl_perspective_camera<double>* camPtr = (vpgl_perspective_camera<double>*) camSptr.ptr(); 
+      cam_ = *camPtr;
+    
+      //increment cam iter
+      ++cam_iter_; 
+      if(cam_iter_ == trajectory_->end())
+        cam_iter_ = trajectory_->begin(); 
+      
+      //rerender
+      this->post_redraw();
+      return true; 
+    }
+    else {
+      return false; 
+    }
+  }
+  
+  if (boxm2_cam_tableau::handle(e)) {
+    render_trajectory_ = false; 
     return true;
+  }
 
   return false;
 }

@@ -13,6 +13,11 @@
 // Remember that an incline of 0 is straight up, and pi/2 is ground level
 void boxm2_trajectory::init_cameras(double incline0, double incline1, double radius, vgl_box_3d<double> bb, unsigned ni, unsigned nj)
 {
+  //choose a sensible radius if defualt is turned on. 
+  if(radius < 0.0) {
+    radius = bb.width(); 
+  }
+  
   //generate a trajectory by varying the incline, azimuth and radius
   double currInc = incline0;
   double currRadius = radius;
