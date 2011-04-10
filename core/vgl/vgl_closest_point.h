@@ -229,13 +229,10 @@ vgl_point_3d<T> vgl_closest_point(vgl_infinite_line_3d<T> const& l,
                                   vgl_point_3d<T> const& p){
   return vgl_closest_point(p,l);}
 
-template <class T> inline
+template <class T>
 vgl_point_3d<T> vgl_closest_point(vgl_point_3d<T> const& p,
-                                  vgl_ray_3d<T> const& r)
-{
-  vgl_line_3d_2_points<T> l2(p, p+r.direction()); 
-  return vgl_closest_point(p,l2);
-}
+                                  vgl_ray_3d<T> const& r);
+
 template <class T> inline
 vgl_point_3d<T> vgl_closest_point(vgl_ray_3d<T> const& r,
                                   vgl_point_3d<T> const& p){

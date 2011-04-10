@@ -19,6 +19,7 @@
 #include <vgl/vgl_line_3d_2_points.h>
 #include <vgl/vgl_line_segment_3d.h>
 #include <vgl/vgl_polygon.h>
+#include <vgl/vgl_ray_3d.h>
 #include <vcl_cassert.h>
 #include <vcl_cmath.h> // for std::abs(double)
 
@@ -466,7 +467,13 @@ vgl_closest_points(const vgl_line_3d_2_points<T>& l1,
 
   return ret;
 }
-
+template <class T>
+vgl_point_3d<T> vgl_closest_point(vgl_point_3d<T> const& p,
+                                  vgl_ray_3d<T> const& r)
+{
+  vgl_line_3d_2_points<T> l2(r.origin(), r.origin()+r.direction()); 
+  return vgl_closest_point(p,l2);
+}
 
 //: Return the points of closest approach on 2 3D line segments.
 template <class T>
@@ -612,6 +619,7 @@ template vgl_point_2d<T > vgl_closest_point(vgl_line_2d<T >const&,vgl_point_2d<T
 template vgl_point_2d<T > vgl_closest_point(vgl_point_2d<T >const&,vgl_line_2d<T >const&); \
 template double vgl_closest_point_t(vgl_line_3d_2_points<T >const&,vgl_point_3d<T >const&); \
 template vgl_point_3d<T > vgl_closest_point(vgl_line_3d_2_points<T >const&,vgl_point_3d<T >const&); \
+template vgl_point_3d<T> vgl_closest_point(vgl_point_3d<T> const& p,vgl_ray_3d<T> const& r); \
 template vgl_homg_point_2d<T > vgl_closest_point(vgl_homg_line_2d<T >const&,vgl_homg_point_2d<T >const&); \
 template vgl_homg_point_2d<T > vgl_closest_point(vgl_homg_point_2d<T >const&,vgl_homg_line_2d<T >const&); \
 template vgl_point_3d<T > vgl_closest_point(vgl_plane_3d<T >const&,vgl_point_3d<T >const&); \

@@ -324,6 +324,13 @@ double vgl_distance(vgl_line_segment_3d<T> const& l,
                                      p.x(), p.y(), p.z());
 }
 
+//: return the closest distance from a point to a ray
+template <class T>
+double vgl_distance(vgl_ray_3d<T> const& r, vgl_point_3d<T> const& p)
+{
+  vgl_point_3d<T> q = vgl_closest_point(r, p);
+  return vgl_distance(p,q);
+}  
 
 #undef VGL_DISTANCE_INSTANTIATE
 #define VGL_DISTANCE_INSTANTIATE(T) \
@@ -358,6 +365,7 @@ template double vgl_distance(vgl_polygon<T >const&,vgl_point_2d<T >const&,bool);
 template double vgl_distance(vgl_homg_line_3d_2_points<T >const&,vgl_homg_line_3d_2_points<T >const&); \
 template double vgl_distance(vgl_homg_line_3d_2_points<T >const&,vgl_homg_point_3d<T >const&); \
 template double vgl_distance(vgl_line_3d_2_points<T >const&,vgl_point_3d<T >const&); \
+template double vgl_distance(vgl_ray_3d<T> const& r, vgl_point_3d<T> const& p); \
 template double vgl_distance(vgl_homg_point_3d<T > const&,vgl_homg_line_3d_2_points<T > const&); \
 template double vgl_distance(vgl_line_segment_2d<T > const&, vgl_point_2d<T > const&); \
 template double vgl_distance(vgl_line_segment_3d<T > const&, vgl_point_3d<T > const&)
