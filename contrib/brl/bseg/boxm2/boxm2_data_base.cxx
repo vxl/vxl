@@ -43,6 +43,9 @@ boxm2_data_base::boxm2_data_base(boxm2_block_metadata data, const vcl_string dat
            data_type == boxm2_data_traits<BOXM2_AUX>::prefix() ) {
     vcl_memset(data_buffer_, 0, buffer_length_);
   }
+  else if (data_type == boxm2_data_traits<BOXM2_GAUSS_RGB>::prefix()) {
+    vcl_memset(data_buffer_, (vxl_byte) 128, buffer_length_);
+  }
   else {
     vcl_memset(data_buffer_, 0, buffer_length_);
   }
