@@ -21,13 +21,24 @@
 #include <vbl/vbl_array_2d.h>
 
 //boxm2 scene stuff
-#include <boxm2/io/boxm2_nn_cache.h>
+#include <boxm2/io/boxm2_lru_cache.h>
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/boxm2_util.h>
 #include <boxm2/basic/boxm2_block_id.h>
-#include <boxm2/ocl/boxm2_opencl_processor.h>
-#include <boxm2/ocl/pro/boxm2_opencl_render_process.h>
+#include <boxm2/ocl/boxm2_opencl_cache.h>
+#include <bocl/bocl_device.h>
+#include <bocl/bocl_kernel.h>
+#include <bocl/bocl_manager.h>
 
+#include <bpro/core/vil_pro/vil_register.h>
+#include <vil/vil_image_view_base.h>
+#include <brdb/brdb_value.h>
+#include <brdb/brdb_selection.h>
+
+#include <bprb/bprb_batch_process_manager.h>
+#include <bprb/bprb_parameters.h>
+#include <bprb/bprb_macros.h>
+#include <bprb/bprb_func_process.h>
 //brdb stuff
 #include <brdb/brdb_value.h>
 
@@ -45,33 +56,37 @@ int main(int argc,  char** argv)
   vul_arg<bool>   stitch("-stitch", "stitches the images together into one large image", false);
   vul_arg_parse(argc, argv);
 
+  DECLARE_FUNC_CONS(boxm2_ocl_render_expected_image_process);
+  DECLARE_FUNC_CONS(boxm2_ocl_render_expected_color_process);
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_ocl_render_expected_image_process, "boxm2OclRenderExpectedImageProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_ocl_render_expected_color_process, "boxm2OclRenderExpectedColorProcess");
+
+  REGISTER_DATATYPE(boxm2_opencl_cache_sptr);
+  REGISTER_DATATYPE(boxm2_scene_sptr);
+  REGISTER_DATATYPE(bocl_mem_sptr);
+  vil_register::register_datatype();
+  //REGISTER_DATATYPE(vil_image_view_base_sptr);
+
   //create scene
   boxm2_scene_sptr scene = new boxm2_scene(scene_file());
+
+  bocl_manager_child_sptr mgr =bocl_manager_child::instance();
+  bocl_device_sptr device = mgr->gpus_[0];
+    
+
+  //create cache, grab singleton instance
+  boxm2_lru_cache::create(scene);
+  boxm2_opencl_cache_sptr opencl_cache=new boxm2_opencl_cache(scene, device, 1); //allow 4 blocks inthe cache
+
+  brdb_value_sptr brdb_device = new brdb_value_t<bocl_device_sptr>(device);
   brdb_value_sptr brdb_scene = new brdb_value_t<boxm2_scene_sptr>(scene);
+  brdb_value_sptr brdb_opencl_cache = new brdb_value_t<boxm2_opencl_cache_sptr>(opencl_cache);
+  brdb_value_sptr brdb_ni = new brdb_value_t<unsigned>(ni());
+  brdb_value_sptr brdb_nj = new brdb_value_t<unsigned>(nj());
 
-  //get relevant blocks
-  boxm2_nn_cache cache( scene.ptr() );
 
-  //initialize gpu pro / manager
-  boxm2_opencl_processor* gpu_pro = boxm2_opencl_processor::instance();
-  gpu_pro->set_scene(scene.ptr());
-  gpu_pro->set_cpu_cache(&cache);
-  gpu_pro->init();
 
-  //initialize the GPU render process
-  boxm2_opencl_render_process gpu_render;
-  gpu_render.init_kernel(&gpu_pro->context(), &gpu_pro->devices()[0]);
 
-  //create output image buffer
-  vil_image_view<unsigned int>* expimg = new vil_image_view<unsigned int>(ni(), nj());
-  expimg->fill(0);
-  vil_image_view_base_sptr expimg_sptr(expimg);// = new vil_image_view<unsigned int>(ni(), nj());
-  brdb_value_sptr brdb_expimg = new brdb_value_t<vil_image_view_base_sptr>(expimg_sptr);
-
-  //create vis image buffer
-  vil_image_view<float>* vis_img = new vil_image_view<float>(ni(), nj());
-  vis_img->fill(1.0f);
-  brdb_value_sptr brdb_vis = new brdb_value_t<vil_image_view_base_sptr>(vis_img);
 
 
   /////////////////////////////////////////////////////////////////////////////
@@ -98,23 +113,44 @@ int main(int argc,  char** argv)
       mat.set_focal_length(mat.focal_length()/2);
       cam->set_calibration(mat);
 
-      //render scene
-      vcl_vector<brdb_value_sptr> input;
-      input.push_back(brdb_scene);
-      input.push_back(brdb_cam);
-      input.push_back(brdb_expimg);
-      input.push_back(brdb_vis);
-      vcl_vector<brdb_value_sptr> output;
-      expimg->fill(0);
-      vis_img->fill(1.0f);
-      gpu_pro->run(&gpu_render, input, output);
-      gpu_pro->finish();
+      //if scene has RGB data type, use color render process
+      bool good = true; 
+      if(scene->has_data_type(boxm2_data_traits<BOXM2_GAUSS_RGB>::prefix()) )
+          good = bprb_batch_process_manager::instance()->init_process("boxm2OclRenderExpectedColorProcess");
+      else
+          good = bprb_batch_process_manager::instance()->init_process("boxm2OclRenderExpectedImageProcess");
 
-      vil_image_view<unsigned int>* expimg_view = static_cast<vil_image_view<unsigned int>* >(expimg_sptr.ptr());
+      //set process args
+      good = good && bprb_batch_process_manager::instance()->set_input(0, brdb_device); // device
+      good = good && bprb_batch_process_manager::instance()->set_input(1, brdb_scene); //  scene 
+      good = good && bprb_batch_process_manager::instance()->set_input(2, brdb_opencl_cache); 
+      good = good && bprb_batch_process_manager::instance()->set_input(3, brdb_cam);// camera
+      good = good && bprb_batch_process_manager::instance()->set_input(4, brdb_ni);  // ni for rendered image
+      good = good && bprb_batch_process_manager::instance()->set_input(5, brdb_nj);   // nj for rendered image
+      good = good && bprb_batch_process_manager::instance()->run_process();
+
+      unsigned int img_id=0;
+      good = good && bprb_batch_process_manager::instance()->commit_output(0, img_id);
+      brdb_query_aptr Q = brdb_query_comp_new("id", brdb_query::EQ, img_id);
+      brdb_selection_sptr S = DATABASE->select("vil_image_view_base_sptr_data", Q);
+      if (S->size()!=1){
+          vcl_cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
+              << " no selections\n";
+      }
+
+      brdb_value_sptr value;
+      if (!S->get_value(vcl_string("value"), value)) {
+          vcl_cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
+              << " didn't get value\n";
+      }
+
+      vil_image_view_base_sptr outimg=value->val<vil_image_view_base_sptr>();
+
+      vil_image_view<float>* expimg_view = static_cast<vil_image_view<float>* >(outimg.ptr());
       vil_image_view<vxl_byte>* byte_img = new vil_image_view<vxl_byte>(ni(), nj());
       for (unsigned int i=0; i<ni(); ++i)
         for (unsigned int j=0; j<nj(); ++j)
-          (*byte_img)(i,j) =  static_cast<vxl_byte>( (*expimg_view)(i,j) );   //just grab the first byte (all foura r the same)
+          (*byte_img)(i,j) =  (unsigned char)((*expimg_view)(i,j) *255.0f);   //just grab the first byte (all foura r the same)
 
       //save image
       vcl_stringstream stream, tfstream, jpgstream;
@@ -180,31 +216,44 @@ int main(int argc,  char** argv)
         mat.set_focal_length(mat.focal_length());
         cam->set_calibration(mat);
 
-        //construct camera
-        //vpgl_perspective_camera<double>* cam
-            //= boxm2_util::construct_camera(el, az, radius(), ni(), nj(), scene->bounding_box());
-        //vpgl_calibration_matrix<double> mat = cam->get_calibration();
-        //mat.set_focal_length(mat.focal_length()*5.0);
-        //cam->set_calibration(mat);
-        //vpgl_camera_double_sptr cam_sptr = cam;
+      //if scene has RGB data type, use color render process
+      bool good = true; 
+      if(scene->has_data_type(boxm2_data_traits<BOXM2_GAUSS_RGB>::prefix()) )
+          good = bprb_batch_process_manager::instance()->init_process("boxm2OclRenderExpectedColorProcess");
+      else
+          good = bprb_batch_process_manager::instance()->init_process("boxm2OclRenderExpectedImageProcess");
 
-        //render scene
-        vcl_vector<brdb_value_sptr> input;
-        input.push_back(brdb_scene);
-        input.push_back(brdb_cam);
-        input.push_back(brdb_expimg);
-        input.push_back(brdb_vis);
-        vcl_vector<brdb_value_sptr> output;
-        expimg->fill(0);
-        vis_img->fill(1.0f);
-        gpu_pro->run(&gpu_render, input, output);
-        gpu_pro->finish();
+      //set process args
+      good = good && bprb_batch_process_manager::instance()->set_input(0, brdb_device); // device
+      good = good && bprb_batch_process_manager::instance()->set_input(1, brdb_scene); //  scene 
+      good = good && bprb_batch_process_manager::instance()->set_input(2, brdb_opencl_cache); 
+      good = good && bprb_batch_process_manager::instance()->set_input(3, brdb_cam);// camera
+      good = good && bprb_batch_process_manager::instance()->set_input(4, brdb_ni);  // ni for rendered image
+      good = good && bprb_batch_process_manager::instance()->set_input(5, brdb_nj);   // nj for rendered image
+      good = good && bprb_batch_process_manager::instance()->run_process();
 
-        vil_image_view<unsigned int>* expimg_view = static_cast<vil_image_view<unsigned int>* >(expimg_sptr.ptr());
-        vil_image_view<vxl_byte>* byte_img = new vil_image_view<vxl_byte>(ni(), nj());
-        for (unsigned int i=0; i<ni(); ++i)
-          for (unsigned int j=0; j<nj(); ++j)
-            (*byte_img)(i,j) =  static_cast<vxl_byte>( (*expimg_view)(i,j) );   //just grab the first byte (all foura r the same)
+      unsigned int img_id=0;
+      good = good && bprb_batch_process_manager::instance()->commit_output(0, img_id);
+      brdb_query_aptr Q = brdb_query_comp_new("id", brdb_query::EQ, img_id);
+      brdb_selection_sptr S = DATABASE->select("vil_image_view_base_sptr_data", Q);
+      if (S->size()!=1){
+          vcl_cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
+              << " no selections\n";
+      }
+
+      brdb_value_sptr value;
+      if (!S->get_value(vcl_string("value"), value)) {
+          vcl_cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
+              << " didn't get value\n";
+      }
+
+      vil_image_view_base_sptr outimg=value->val<vil_image_view_base_sptr>();
+
+      vil_image_view<float>* expimg_view = static_cast<vil_image_view<float>* >(outimg.ptr());
+      vil_image_view<vxl_byte>* byte_img = new vil_image_view<vxl_byte>(ni(), nj());
+      for (unsigned int i=0; i<ni(); ++i)
+        for (unsigned int j=0; j<nj(); ++j)
+          (*byte_img)(i,j) =  (unsigned char)((*expimg_view)(i,j) *255.0f);   //just grab the first byte (all foura r the same)
 
         //save as jpeg
         vcl_stringstream pngstream, jpgstream;
