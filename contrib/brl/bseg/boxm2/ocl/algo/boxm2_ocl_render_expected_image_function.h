@@ -7,7 +7,7 @@
 #include <boxm2/boxm2_block.h>
 #include <boxm2/ocl/boxm2_opencl_cache.h>
 
-void render_expected_image( boxm2_scene_sptr & scene,
+float render_expected_image( boxm2_scene_sptr & scene,
                             bocl_device_sptr & device,
                             boxm2_opencl_cache_sptr & opencl_cache,
                             cl_command_queue & queue,

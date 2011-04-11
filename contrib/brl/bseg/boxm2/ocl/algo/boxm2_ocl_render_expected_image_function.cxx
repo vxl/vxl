@@ -3,7 +3,7 @@
 #include <vul/vul_timer.h>
 #include <boxm2/ocl/boxm2_ocl_util.h>
 
-void render_expected_image( boxm2_scene_sptr & scene,
+float render_expected_image( boxm2_scene_sptr & scene,
                             bocl_device_sptr & device,
                             boxm2_opencl_cache_sptr & opencl_cache,
                             cl_command_queue & queue,
@@ -84,5 +84,6 @@ void render_expected_image( boxm2_scene_sptr & scene,
     }
 
     vcl_cout<<"Gpu time "<<gpu_time<<" transfer time "<<transfer_time<<vcl_endl;
+    return (gpu_time + transfer_time); 
 }
 
