@@ -106,7 +106,7 @@ __kernel void normalize_render_kernel_rgb_gl( __global float4* exp_img,
         return;
 
     float vis = vis_img[imindex];
-    float4 intensity = exp_img[imindex] + (vis*0.5f);; 
+    float4 intensity = exp_img[imindex] + (vis*0.5f);
     gl_im[imindex]   = (rgbaFloatToInt(intensity));//(intensity-*min_i)/range) ;
 }
 #endif
