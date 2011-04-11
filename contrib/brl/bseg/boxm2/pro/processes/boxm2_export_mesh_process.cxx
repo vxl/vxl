@@ -22,6 +22,8 @@
 #include <vgl/vgl_ray_3d.h>
 #include <vgl/vgl_box_2d.h>
 #include <vgl/vgl_box_3d.h>
+#include <vgl/vgl_point_3d.h>
+#include <vgl/vgl_vector_3d.h>
 #include <bvgl/bvgl_triangle_interpolation_iterator.h>
 
 //vpgl camera stuff
@@ -32,6 +34,7 @@
 #include <sdet/sdet_image_mesh.h>
 #include <sdet/sdet_image_mesh_params.h>
 #include <imesh/imesh_fileio.h>
+#include <imesh/imesh_operations.h>
 
 namespace boxm2_export_mesh_process_globals
 {
@@ -96,14 +99,14 @@ bool boxm2_export_mesh_process(bprb_func_process& pro)
   //initialize some sdet_image_mesh parameters
   sdet_image_mesh_params imp;
   // sigma of the Gaussian for smoothing the image prior to edge detection
-  imp.smooth_ = 1.5f;
+  imp.smooth_ = 1.0f;
   // the edge detection threshold
-  imp.thresh_ = 1.5f;
+  imp.thresh_ = 1.7f;
   // the shortest edgel chain that is considered for line fitting
-  imp.min_fit_length_ = 5;
+  imp.min_fit_length_ = 6;
 
   // the threshold on rms pixel distance of edgels to the line
-  imp.rms_distance_ = 0.3;
+  imp.rms_distance_ = 0.12;
   // the width in pixels of the transition of a step edge
   imp.step_half_width_ = 0.0;
 
@@ -148,6 +151,61 @@ bool boxm2_export_mesh_process(bprb_func_process& pro)
       verts[iv][2] = (*z_img)(i,j);
     }
   }
+  
+  ////////////////////////////////////////////////////////////////////////////////
+  //// cut tall triangles into quarters (find midpoints of each 
+  ////////////////////////////////////////////////////////////////////////////////
+  bool did_divide = true; 
+  //while(did_divide) 
+  {
+    
+    vcl_set<unsigned int> sel_faces; 
+    double maxLen = (maxz-minz) / 5.0; 
+    imesh_regular_face_array<3>& faces = (imesh_regular_face_array<3>&) mesh.faces();
+    imesh_vertex_array<3>&       verts = mesh.vertices<3>();
+
+    unsigned nfaces = mesh.num_faces();
+    for (unsigned iface = 0; iface<nfaces; ++iface)
+    {
+      //store three 3d points
+      vcl_vector<vgl_point_3d<double> > points; 
+      unsigned originalVertIdx[3]; 
+      for (int i=0; i<3; ++i) {
+        unsigned vertexId = faces[iface][i];
+        originalVertIdx[i] = vertexId; 
+        double x = verts[vertexId][0];
+        double y = verts[vertexId][1];
+        double z = verts[vertexId][2];
+        points.push_back( vgl_point_3d<double>(x,y,z) );
+      }
+      
+      //if any one side of the triangle is too long, cut it
+      double lenA = (points[0]-points[1]).length();
+      double lenB = (points[1]-points[2]).length(); 
+      double lenC = (points[0]-points[2]).length(); 
+      if(lenA > maxLen || lenB > maxLen || lenC > maxLen) {
+        sel_faces.insert(iface); 
+      }
+    }  
+    
+    //if the divide face set is not empty, divide the faces
+    if( !sel_faces.empty() ) {
+      did_divide = true; 
+    
+      vcl_cout<<"Subdividing mesh"<<vcl_endl;
+      imesh_quad_subdivide(mesh, sel_faces);
+      
+      vcl_cout<<"Re triangulating mesh"<<vcl_endl;
+      imesh_triangulate(mesh);
+    }
+    else {
+      did_divide = false;
+    }
+  }
+  
+  //i donno why i have to flip faces...
+  imesh_flip_faces(mesh );
+  imesh_mesh_sptr mesh_sptr = new imesh_mesh(mesh); 
 
   ////////////////////////////////////////////////////////////////////////////////
   //// Write out in VRML format
@@ -159,7 +217,6 @@ bool boxm2_export_mesh_process(bprb_func_process& pro)
 
   // store scene smart pointer
   argIdx = 0;
-  imesh_mesh_sptr mesh_sptr = new imesh_mesh(mesh);
   pro.set_output_val<imesh_mesh_sptr>(argIdx++, mesh_sptr);
   return true;
 }
