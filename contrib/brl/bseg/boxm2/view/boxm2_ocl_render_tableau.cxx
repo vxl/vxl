@@ -34,6 +34,7 @@ boxm2_ocl_render_tableau::boxm2_ocl_render_tableau()
   REGISTER_DATATYPE(boxm2_opencl_cache_sptr);
   REGISTER_DATATYPE(boxm2_scene_sptr);
   REGISTER_DATATYPE(bocl_mem_sptr);
+  REGISTER_DATATYPE(float);
 }
 
 //: initialize tableau properties
@@ -55,7 +56,7 @@ bool boxm2_ocl_render_tableau::init(bocl_device_sptr device,
     device_=device;
     do_init_ocl=true;
     render_trajectory_ = true;
-    trajectory_ = new boxm2_trajectory(45.0, 65.0, -1.0, scene_->bounding_box(), ni, nj); 
+    trajectory_ = new boxm2_trajectory(30.0, 45.0, -1.0, scene_->bounding_box(), ni, nj); 
     cam_iter_ = trajectory_->begin(); 
     return true;
 }
@@ -133,6 +134,8 @@ float boxm2_ocl_render_tableau::render_frame()
     exp_img_->zero_gpu_buffer( queue_ );
     if (!check_val(status,CL_SUCCESS,"clEnqueueAcquireGLObjects failed. (gl_image)"+error_to_string(status)))
         return -1.0f;
+    
+    vcl_cout<<cam_<<vcl_endl;
         
     //set up brdb_value_sptr arguments...
     brdb_value_sptr brdb_device = new brdb_value_t<bocl_device_sptr>(device_);
@@ -163,10 +166,27 @@ float boxm2_ocl_render_tableau::render_frame()
     good = good && bprb_batch_process_manager::instance()->set_input(7, exp_img_dim);   // exp image dimensions
     good = good && bprb_batch_process_manager::instance()->run_process();
     
+    //grab float output from render gl process
+    unsigned int time_id = 0;
+    good = good && bprb_batch_process_manager::instance()->commit_output(0, time_id);
+    brdb_query_aptr Q = brdb_query_comp_new("id", brdb_query::EQ, time_id);
+    brdb_selection_sptr S = DATABASE->select("float_data", Q);
+    if (S->size()!=1){
+        vcl_cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
+            << " no selections\n";
+    }
+    brdb_value_sptr value;
+    if (!S->get_value(vcl_string("value"), value)) {
+        vcl_cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
+            << " didn't get value\n";
+    }
+    float time = value->val<float>();
+    
     //release gl buffer
     status = clEnqueueReleaseGLObjects(queue_, 1, &exp_img_->buffer(), 0, 0, 0);
     clFinish( queue_ );
-    return 0.0f;
+    
+    return time;
 }
 
 //: private helper method to init_clgl stuff (gpu processor)
