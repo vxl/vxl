@@ -32,7 +32,7 @@
 namespace boxm2_ocl_render_gl_expected_image_process_globals
 {
   const unsigned n_inputs_ = 8 ;
-  const unsigned n_outputs_ = 0;
+  const unsigned n_outputs_ = 1;
   vcl_size_t lthreads[2]={8,8};
 
   static vcl_map<vcl_string,vcl_vector<bocl_kernel*> > kernels;
@@ -103,6 +103,7 @@ bool boxm2_ocl_render_gl_expected_image_process_cons(bprb_func_process& pro)
 
 
   vcl_vector<vcl_string> output_types_(n_outputs_);
+  output_types_[0] = "float";
 
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 }
@@ -175,9 +176,9 @@ bool boxm2_ocl_render_gl_expected_image_process(bprb_func_process& pro)
   vis_image->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
   //: run expected image function
-  render_expected_image(scene, device, opencl_cache, queue,
-                        cam, exp_image, vis_image, exp_img_dim,
-                        data_type, kernels[identifier][0], lthreads, cl_ni, cl_nj);  
+  float time = render_expected_image( scene, device, opencl_cache, queue,
+                                      cam, exp_image, vis_image, exp_img_dim,
+                                      data_type, kernels[identifier][0], lthreads, cl_ni, cl_nj);  
                         
   // normalize
   {
@@ -191,11 +192,14 @@ bool boxm2_ocl_render_gl_expected_image_process(bprb_func_process& pro)
 
     //clear render kernel args so it can reset em on next execution
     normalize_kern->clear_args();
+    time += normalize_kern->exec_time(); 
   }                     
                         
   //: read out expected image
   clReleaseCommandQueue(queue);
-  i=0;
-  // store scene smaprt pointer
+
+  //store render time
+  int argIdx = 0;
+  pro.set_output_val<float>(argIdx, time);
   return true;
 }

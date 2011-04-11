@@ -30,7 +30,7 @@
 namespace boxm2_ocl_render_gl_expected_color_process_globals
 {
   const unsigned n_inputs_ = 8 ;
-  const unsigned n_outputs_ = 0;
+  const unsigned n_outputs_ = 1;
   vcl_size_t lthreads[2]={8,8};
 
   static vcl_map<vcl_string,vcl_vector<bocl_kernel*> > kernels;
@@ -97,8 +97,8 @@ bool boxm2_ocl_render_gl_expected_color_process_cons(bprb_func_process& pro)
   input_types_[6] = "bocl_mem_sptr"; // exp image buffer;
   input_types_[7] = "bocl_mem_sptr"; // exp image dimensions buffer;
 
-
   vcl_vector<vcl_string> output_types_(n_outputs_);
+  output_types_[0] = "float"; 
 
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 }
@@ -167,9 +167,9 @@ bool boxm2_ocl_render_gl_expected_color_process(bprb_func_process& pro)
   vis_image->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
   //: run expected image function
-  render_expected_image(scene, device, opencl_cache, queue,
-                        cam, exp_color, vis_image, exp_img_dim,
-                        data_type, kernels[identifier][0], lthreads, cl_ni, cl_nj);  
+  float time = render_expected_image(scene, device, opencl_cache, queue,
+                                     cam, exp_color, vis_image, exp_img_dim,
+                                     data_type, kernels[identifier][0], lthreads, cl_ni, cl_nj);  
 
   //: normalize and write image to GL buffer
   {
@@ -182,6 +182,7 @@ bool boxm2_ocl_render_gl_expected_color_process(bprb_func_process& pro)
     norm_rgb_gl->execute( queue, 2, lthreads, gThreads);
     clFinish(queue);
     norm_rgb_gl->clear_args();
+    time += norm_rgb_gl->exec_time(); 
   }
   
   //delete visibilty image
@@ -190,5 +191,9 @@ bool boxm2_ocl_render_gl_expected_color_process(bprb_func_process& pro)
   
   //: read out expected image
   clReleaseCommandQueue(queue);
+  
+  // store scene smart pointer
+  int argIdx = 0;
+  pro.set_output_val<float>(argIdx, time);
   return true;
 }
