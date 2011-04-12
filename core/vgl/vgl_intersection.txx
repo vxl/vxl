@@ -61,9 +61,9 @@ bool vgl_intersection(vgl_box_3d<T> const& box,
                             static_cast<double>(di.z()));
   vgl_infinite_line_3d<double> dline_3d(dpt, dir);
   // expand box by epsilon tolerance
-  double xmin = box.min_x()-eps, xmax = box.max_x()+eps,
-         ymin = box.min_y()-eps, ymax = box.max_y()+eps,
-         zmin = box.min_z()-eps, zmax = box.max_z()+eps;
+  double xmin = box.min_x(), xmax = box.max_x(),
+         ymin = box.min_y(), ymax = box.max_y(),
+         zmin = box.min_z(), zmax = box.max_z();
   vgl_point_3d<double> minp(xmin, ymin, zmin), maxp(xmax, ymax, zmax);
   // find intersection point of the line with each of the six box planes
   vgl_vector_3d<double> vxmin(-1.0, 0.0, 0.0), vxmax(1.0, 0.0, 0.0),

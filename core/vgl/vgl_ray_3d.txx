@@ -4,6 +4,7 @@
 
 #include "vgl_ray_3d.h"
 #include <vcl_cassert.h>
+#include <vcl_algorithm.h>
 #include <vcl_iostream.h>
 #include <vcl_cmath.h> // for fabs
 #include <vgl/vgl_closest_point.h>
@@ -13,7 +14,7 @@ bool vgl_ray_3d<Type>::contains(const vgl_point_3d<Type>& p ) const
 {
   vgl_point_3d<Type> pcls = vgl_closest_point(*this, p); 
   Type len = static_cast<Type>(length(pcls-p));
-  if(len>vgl_tolerance<Type>::position)
+  if(len*len > static_cast<Type>(10) * vcl_max(vgl_tolerance<Type>::position, p.x()*p.x()+p.y()*p.y()+p.z()*p.z()) * vgl_tolerance<Type>::position)
     return false;
   Type dp = dot_product(t_, pcls-p0_);
   Type tol = vgl_tolerance<Type>::position;
