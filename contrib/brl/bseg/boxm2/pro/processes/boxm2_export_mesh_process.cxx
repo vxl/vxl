@@ -101,12 +101,12 @@ bool boxm2_export_mesh_process(bprb_func_process& pro)
   // sigma of the Gaussian for smoothing the image prior to edge detection
   imp.smooth_ = 1.0f;
   // the edge detection threshold
-  imp.thresh_ = 1.7f;
+  imp.thresh_ = 1.68f;
   // the shortest edgel chain that is considered for line fitting
-  imp.min_fit_length_ = 6;
+  imp.min_fit_length_ = 5;
 
   // the threshold on rms pixel distance of edgels to the line
-  imp.rms_distance_ = 0.12;
+  imp.rms_distance_ = 0.11;
   // the width in pixels of the transition of a step edge
   imp.step_half_width_ = 0.0;
 
@@ -160,7 +160,7 @@ bool boxm2_export_mesh_process(bprb_func_process& pro)
   {
     
     vcl_set<unsigned int> sel_faces; 
-    double maxLen = (maxz-minz) / 5.0; 
+    double maxLen = (maxz-minz) / 3.0; 
     imesh_regular_face_array<3>& faces = (imesh_regular_face_array<3>&) mesh.faces();
     imesh_vertex_array<3>&       verts = mesh.vertices<3>();
 
@@ -204,7 +204,7 @@ bool boxm2_export_mesh_process(bprb_func_process& pro)
   }
   
   //i donno why i have to flip faces...
-  imesh_flip_faces(mesh );
+  //imesh_flip_faces(mesh );
   imesh_mesh_sptr mesh_sptr = new imesh_mesh(mesh); 
 
   ////////////////////////////////////////////////////////////////////////////////
