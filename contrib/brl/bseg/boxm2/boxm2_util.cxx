@@ -210,7 +210,7 @@ int boxm2_util::find_nearest_cam(vgl_vector_3d<double>& normal,
   for (unsigned int i=0; i<cams.size(); ++i) {
     //double ang = vcl_fabs(angle(normal, -1*cams[i]->principal_axis())); //vcl_fabs( vcl_acos(dp) );
     
-    double dotProd = dot_product( normal, cams[i]->principal_axis()); 
+    double dotProd = dot_product( normal, -1*cams[i]->principal_axis()); 
     double ang = vcl_acos(dotProd); 
     
     //if( vcl_fabs(normal.z()) > .8 ) {
@@ -405,4 +405,23 @@ vil_image_view_base_sptr boxm2_util::prepare_input_image(vil_image_view_base_spt
   //otherwise it's messed up, return a null pointer
   vcl_cerr<<"Failed to recognize input image type " << '\n';
   return 0;
+}
+
+vil_rgba<vxl_byte> boxm2_util::mean_pixel(vil_image_view<vil_rgba<vxl_byte> >& img)
+{
+  double mean[] = {0.0, 0.0, 0.0, 0.0}; 
+  int count = 0; 
+  for(int i=0; i<img.ni(); ++i) {
+    for(int j=0; j<img.nj(); ++j) {
+      mean[0] += (double) (img(i,j).R()); 
+      mean[1] += (double) (img(i,j).G()); 
+      mean[2] += (double) (img(i,j).B()); 
+      mean[3] += (double) (img(i,j).A()); 
+      count++;
+    }
+  }
+  return vil_rgba<vxl_byte>( (vxl_byte) (mean[0]/count),
+                             (vxl_byte) (mean[1]/count),
+                             (vxl_byte) (mean[2]/count),
+                             255 ); 
 }

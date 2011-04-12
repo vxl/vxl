@@ -59,6 +59,7 @@ namespace boxm2_texture_mesh_process_globals
   //a separate image
   void boxm2_texture_mesh_from_imgs(vcl_string im_dir,
                                     vcl_string cam_dir,
+                                    vcl_string out_dir,
                                     imesh_mesh& in_mesh,
                                     vcl_map<vcl_string, imesh_mesh>& meshes);
   
@@ -144,18 +145,13 @@ bool boxm2_texture_mesh_process(bprb_func_process& pro)
       return false;
     }
   }
-
-  //create blank texturemap image
-  vil_image_view<vxl_byte> grey(4,4); 
-  grey.fill((vxl_byte) 180); 
-  vil_save(grey, (out_dir + "/empty.png").c_str()); 
       
   //////////////////////////////////////////////////////////////////////////////
   //Texture map the mesh
   //////////////////////////////////////////////////////////////////////////////
   vul_timer t;
   vcl_map<vcl_string, imesh_mesh> meshes;
-  boxm2_texture_mesh_from_imgs(img_dir, cam_dir, *mesh, meshes);
+  boxm2_texture_mesh_from_imgs(img_dir, cam_dir, out_dir, *mesh, meshes);
 
   ////////////////////////////////////////////////////////////////////////////////
   //// Write out in VRML format
@@ -183,6 +179,7 @@ bool boxm2_texture_mesh_process(bprb_func_process& pro)
 //map of textured meshes (imesh doesn't ostensibly handle meshes from multiple textures)
 void boxm2_texture_mesh_process_globals::boxm2_texture_mesh_from_imgs(vcl_string im_dir,
                                                                       vcl_string cam_dir,
+                                                                      vcl_string out_dir,
                                                                       imesh_mesh& in_mesh,
                                                                       vcl_map<vcl_string, imesh_mesh>& meshes)
 {
@@ -191,11 +188,28 @@ void boxm2_texture_mesh_process_globals::boxm2_texture_mesh_from_imgs(vcl_string
   // Gather cameras and iamges that will contribute to the texture
   ////////////////////////////////////////////////////////////////////////////////
   vcl_vector<vcl_string> allims  = boxm2_util::images_from_directory(im_dir);
+  
+  //create blank texturemap image
+  vil_image_view_base_sptr first_im = boxm2_util::prepare_input_image(allims[0]);
+  vil_image_view<vil_rgba<vxl_byte> >* imptr = (vil_image_view<vil_rgba<vxl_byte> >*) first_im.ptr(); 
+  vil_rgba<vxl_byte> mean = boxm2_util::mean_pixel(*imptr);
+  vil_image_view<vil_rgba<vxl_byte> > def(4,4); 
+  def.fill( mean ); 
+  vil_save(def, (out_dir + "/empty.png").c_str()); 
+  
+  //chop paths to make mesh portable
+  for(int i=0; i<allims.size(); ++i) {
+    vcl_string full_path = allims[i]; 
+    vcl_string rel_path = vul_file::basename(full_path);
+    allims[i] = rel_path;
+  }
   vcl_vector<vpgl_perspective_camera<double>* > allcams = boxm2_util::cameras_from_directory(cam_dir);
   if (allims.size() != allcams.size()) {
     vcl_cout<<"Texture images are not 1 to 1 with cameras:: dirs "<<im_dir<<" and "<<cam_dir<<vcl_endl;
     return;
   }
+
+
 
   //choose a few random images
   vcl_vector<vcl_string> imfiles;
@@ -397,8 +411,8 @@ void boxm2_texture_mesh_process_globals::boxm2_match_textures(vcl_vector<vpgl_pe
     //vcl_cout<<"Face "<<iface<<" normal: "<<normal<<vcl_endl;
 
     //find camera with the closest look vector to this normal
-    int closeIdx = boxm2_util::find_nearest_cam(normal, visible_views);
-    //int closeIdx = get_best_view(visible_views, vis_images, normx, normy, normz, world_tri); 
+    //int closeIdx = boxm2_util::find_nearest_cam(normal, visible_views);
+    int closeIdx = get_best_view(visible_views, vis_images, normx, normy, normz, world_tri); 
     vpgl_perspective_camera<double>* closest = NULL;
     vcl_string im_name = "empty.png";
     if (closeIdx >= 0) {
