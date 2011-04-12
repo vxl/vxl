@@ -577,7 +577,10 @@ void imesh_write_vrml(vcl_ostream& os, const imesh_mesh& mesh)
   }
   const unsigned int nfaces = tris.size();
   os << "#VRML V2.0 utf8\n\n"
-     << "Shape {\n";
+     << "Transform {\n"
+     << "  translation 0 0 0\n"
+     << "  children\n"
+     << " Shape {\n";
 
   //write appearance
   os << "  appearance Appearance {\n"
@@ -657,5 +660,8 @@ void imesh_write_vrml(vcl_ostream& os, const imesh_mesh& mesh)
   os << " }\n";
 
   //close shape
+  os << "}\n";
+  
+  //close transform
   os << "}\n";
 }
