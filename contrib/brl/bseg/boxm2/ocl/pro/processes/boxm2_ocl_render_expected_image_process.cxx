@@ -206,15 +206,11 @@ bool boxm2_ocl_render_expected_image_process(bprb_func_process& pro)
                         
   //: read out expected image
   exp_image->read_to_buffer(queue);
-  //vil_image_view<float>* exp_img_out=new vil_image_view<float>(ni,nj);
-
-  //for (unsigned c=0;c<nj;c++)
-    //for (unsigned r=0;r<ni;r++)
-      //(*exp_img_out)(r,c)=buff[c*cl_ni+r];
-  vil_image_view<vxl_byte>* exp_img_out=new vil_image_view<vxl_byte>(ni,nj);
+  
+  vil_image_view<float>* exp_img_out=new vil_image_view<float>(ni,nj);
   for (unsigned c=0;c<nj;c++)
     for (unsigned r=0;r<ni;r++)
-      (*exp_img_out)(r,c)= (vxl_byte) (buff[c*cl_ni+r] * 255.0f);
+      (*exp_img_out)(r,c)=buff[c*cl_ni+r];
 
   delete [] buff;
   clReleaseCommandQueue(queue);
