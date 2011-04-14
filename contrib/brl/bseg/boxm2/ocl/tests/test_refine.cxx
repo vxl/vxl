@@ -9,7 +9,6 @@
 #include <bocl/bocl_manager.h>
 #include <bocl/bocl_kernel.h>
 #include <bocl/bocl_mem.h>
-#include <boxm2/ocl/boxm2_opencl_processor.h>
 #include <boxm2/ocl/boxm2_ocl_util.h>
 #include <boxm2/boxm2_block.h>
 #include <boxm2/io/boxm2_lru_cache.h>
@@ -42,10 +41,10 @@ void test_refine_trees_kernel()
   boxm2_cache* cache = boxm2_cache::instance(); 
 
   //initialize gpu pro / manager
-  boxm2_opencl_processor* gpu_pro = boxm2_opencl_processor::instance();
-  gpu_pro->set_scene(scene.ptr());
-  gpu_pro->set_cpu_cache(cache);
-  gpu_pro->init();
+  //boxm2_opencl_processor* gpu_pro = boxm2_opencl_processor::instance();
+  //gpu_pro->set_scene(scene.ptr());
+  //gpu_pro->set_cpu_cache(cache);
+  //gpu_pro->init();
 
   //rendering sources
   vcl_vector<vcl_string> src_paths;

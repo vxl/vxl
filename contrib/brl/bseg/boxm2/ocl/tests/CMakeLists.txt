@@ -1,6 +1,6 @@
 ADD_EXECUTABLE( boxm2_ocl_test_all
   test_driver.cxx
-  test_refine.cxx
+  #test_refine.cxx
  )
 
 TARGET_LINK_LIBRARIES( boxm2_ocl_test_all testlib boxm2_ocl brdb vpgl_algo vpgl_pro vil_pro sdet vul vpl )

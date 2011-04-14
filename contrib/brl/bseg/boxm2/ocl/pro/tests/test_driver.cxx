@@ -1,10 +1,10 @@
 #include <testlib/testlib_register.h>
 
-DECLARE( test_batch_update );
+//DECLARE( test_batch_update );
 
 void register_tests()
 {
-  REGISTER( test_batch_update );
+  //REGISTER( test_batch_update );
   
 }
 

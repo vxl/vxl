@@ -257,18 +257,39 @@ int main(int argc,  char** argv)
                 }
 
                 vil_image_view_base_sptr outimg=value->val<vil_image_view_base_sptr>();
+                
+                if(scene->has_data_type(boxm2_data_traits<BOXM2_GAUSS_RGB>::prefix()) ) 
+                {
+                  vil_image_view<vil_rgba<vxl_byte> >* exp_img_out = static_cast<vil_image_view<vil_rgba<vxl_byte> > *>(outimg.ptr()); 
+                  saved_imgs[uid] = idstream.str(); 
 
-                vil_image_view<float>* expimg_view = static_cast<vil_image_view<float>* >(outimg.ptr());
-                vil_image_view<vxl_byte>* byte_img = new vil_image_view<vxl_byte>(ni(), nj());
-                for (unsigned int i=0; i<ni(); ++i)
-                    for (unsigned int j=0; j<nj(); ++j)
-                        (*byte_img)(i,j) =  (unsigned char)((*expimg_view)(i,j) *255.0f);   //just grab the first byte (all foura r the same)
+                  vil_image_view<vxl_byte> jpg_out(ni(), nj(),3); 
+                  for (unsigned int i=0; i<ni(); ++i) {
+                    for (unsigned int j=0; j<nj(); ++j) {
+                      jpg_out(i,j,0) = (*exp_img_out)(i,j).R(); 
+                      jpg_out(i,j,1) = (*exp_img_out)(i,j).G(); 
+                      jpg_out(i,j,2) = (*exp_img_out)(i,j).B(); 
+                    }
+                  }
+                  vil_save( jpg_out, idstream.str().c_str() );
 
-                saved_imgs[uid] = idstream.str(); 
-                vil_save( *byte_img, idstream.str().c_str() );
+                  //and store for whatever reason
+                  //imgs(el_i, az_i) = exp_img_out;
+                }
+                else 
+                {
+                  vil_image_view<float>* expimg_view = static_cast<vil_image_view<float>* >(outimg.ptr());
+                  vil_image_view<vxl_byte>* byte_img = new vil_image_view<vxl_byte>(ni(), nj());
+                  for (unsigned int i=0; i<ni(); ++i)
+                      for (unsigned int j=0; j<nj(); ++j)
+                          (*byte_img)(i,j) =  (unsigned char)((*expimg_view)(i,j) *255.0f);   //just grab the first byte (all foura r the same)
 
-                //and store for whatever reason
-                imgs(el_i, az_i) = byte_img;
+                  saved_imgs[uid] = idstream.str(); 
+                  vil_save( *byte_img, idstream.str().c_str() );
+
+                  //and store for whatever reason
+                  imgs(el_i, az_i) = byte_img;
+                }
             }
         }
     }

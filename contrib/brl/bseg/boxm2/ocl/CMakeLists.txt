@@ -7,7 +7,7 @@ INCLUDE_DIRECTORIES( ${OPENCL_INCLUDE_PATH} )
 INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bbas )
 
 SET(boxm2_ocl_sources
-    boxm2_opencl_processor.h                boxm2_opencl_processor.cxx
+    #boxm2_opencl_processor.h                boxm2_opencl_processor.cxx
     boxm2_opencl_cache.h                    boxm2_opencl_cache.cxx
     boxm2_ocl_util.h                        boxm2_ocl_util.cxx
    )

@@ -1,10 +1,10 @@
 #include <testlib/testlib_register.h>
 
-DECLARE( test_refine );
+//DECLARE( test_refine );
 
 void register_tests()
 {
-  REGISTER( test_refine );
+  //REGISTER( test_refine );
   
 }
 

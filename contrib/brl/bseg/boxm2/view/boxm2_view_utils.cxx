@@ -68,15 +68,16 @@ boxm2_view_utils::convert_camera_to_vrml(vgl_vector_3d<double>  look,
                                        vgl_vector_3d<double> & res_axis_out,
                                        double & res_angle)
 {
-    look=normalize(look);
-    up_in=normalize(up_in);
-	double temp_d = dot_product(look,up_in);
+  look=normalize(look);
+  up_in=normalize(up_in);
+  double temp_d = dot_product(look,up_in);
 
-    vgl_vector_3d<double> v_vxl=normalize(up_in-look*temp_d);
-    vgl_vector_3d<double> norm_axis_vxl(look.y(),-look.x(),0);
-    norm_axis_vxl=normalize(norm_axis_vxl);
+  vgl_vector_3d<double> v_vxl = (up_in-look*temp_d);
+  v_vxl = normalize(v_vxl);
+  vgl_vector_3d<double> norm_axis_vxl(look.y(),-look.x(),0);
+  norm_axis_vxl = normalize(norm_axis_vxl);
 
-    vnl_quaternion<double> norm_quat_vxl;
+  vnl_quaternion<double> norm_quat_vxl;
 
 	if ( dot_product(norm_axis_vxl, norm_axis_vxl) < 1e-8 )
 	{
