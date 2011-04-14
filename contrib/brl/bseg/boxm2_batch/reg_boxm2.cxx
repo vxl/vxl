@@ -43,6 +43,7 @@ register_datatypes(PyObject *self, PyObject *args)
 #if defined(HAS_OPENCL) && HAS_OPENCL
   bocl_register::register_datatype();
   boxm2_ocl_register::register_datatype();
+  boxm2_view_register::register_datatype(); 
 #endif
   Py_INCREF(Py_None);
   return Py_None;
