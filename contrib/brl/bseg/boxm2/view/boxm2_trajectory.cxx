@@ -68,4 +68,25 @@ void boxm2_trajectory::init_cameras(double incline0, double incline1, double rad
 
     currInc+=.5;
   }
+  
+  //initialize iterator for list
+  iter_ = cams_.begin(); 
 }
+
+//: Binary write boxm2_data_base to stream
+void vsl_b_write(vsl_b_ostream& os, boxm2_trajectory const& scene) {}
+//: Binary write boxm2_data_base to stream
+void vsl_b_write(vsl_b_ostream& os, const boxm2_trajectory* &p) {}
+//: Binary write boxm2_data_base_sptr to stream
+void vsl_b_write(vsl_b_ostream& os, boxm2_trajectory_sptr& sptr) {}
+//: Binary write boxm2_data_base_sptr to stream
+void vsl_b_write(vsl_b_ostream& os, boxm2_trajectory_sptr const& sptr) {}
+
+//: Binary load boxm2_data_base from stream.
+void vsl_b_read(vsl_b_istream& is, boxm2_trajectory &scene) {}
+//: Binary load boxm2_data_base from stream.
+void vsl_b_read(vsl_b_istream& is, boxm2_trajectory* p) {}
+//: Binary load boxm2_data_base_sptr from stream.
+void vsl_b_read(vsl_b_istream& is, boxm2_trajectory_sptr& sptr) {}
+//: Binary load boxm2_data_base_sptr from stream.
+void vsl_b_read(vsl_b_istream& is, boxm2_trajectory_sptr const& sptr) {}

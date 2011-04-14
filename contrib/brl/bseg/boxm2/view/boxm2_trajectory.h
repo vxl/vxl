@@ -17,7 +17,12 @@
 #include <vgl/vgl_box_3d.h>
 #include <vpgl/vpgl_perspective_camera.h>
 
-class boxm2_trajectory
+//smart ptr includes
+#include <vbl/vbl_ref_count.h>
+#include <vbl/vbl_smart_ptr.h>
+
+
+class boxm2_trajectory : public vbl_ref_count
 {
  public:
 
@@ -34,15 +39,40 @@ class boxm2_trajectory
     typedef vcl_vector<vpgl_camera_double_sptr>::iterator iterator;
     iterator begin() { return cams_.begin(); }
     iterator end() { return cams_.end(); }
+    
+    //: next method
+    vpgl_camera_double_sptr next() { 
+      if( iter_ == cams_.end() ) iter_ = cams_.begin(); 
+      return (*iter_++); 
+    }
 
  protected:
 
-    //Current Cam, init cam and current stare point
+    //list of cams
     vcl_vector<vpgl_camera_double_sptr> cams_; 
+    
+    //next cam
+     vcl_vector<vpgl_camera_double_sptr>::iterator iter_; 
     
     //: initialize cameras
     void init_cameras(double incline0, double incline1, double radius, vgl_box_3d<double> bb, unsigned ni, unsigned nj); 
 
 };
+
+//: Smart_Pointer typedef for boxm2_data_base
+typedef vbl_smart_ptr<boxm2_trajectory> boxm2_trajectory_sptr;
+
+//: Binary write boxm_update_bit_scene_manager scene to stream
+void vsl_b_write(vsl_b_ostream& os, boxm2_trajectory const& scene);
+void vsl_b_write(vsl_b_ostream& os, const boxm2_trajectory* &p);
+void vsl_b_write(vsl_b_ostream& os, boxm2_trajectory_sptr& sptr);
+void vsl_b_write(vsl_b_ostream& os, boxm2_trajectory_sptr const& sptr);
+
+//: Binary load boxm_update_bit_scene_manager scene from stream.
+void vsl_b_read(vsl_b_istream& is, boxm2_trajectory &scene);
+void vsl_b_read(vsl_b_istream& is, boxm2_trajectory* p);
+void vsl_b_read(vsl_b_istream& is, boxm2_trajectory_sptr& sptr);
+void vsl_b_read(vsl_b_istream& is, boxm2_trajectory_sptr const& sptr);
+
 #endif // boxm2_trajectory_h_
 

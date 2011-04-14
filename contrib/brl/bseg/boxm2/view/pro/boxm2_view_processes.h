@@ -6,5 +6,7 @@
 
 //the init functions
 DECLARE_FUNC_CONS(boxm2_view_expected_image_process);
+DECLARE_FUNC_CONS(boxm2_view_init_trajectory_process);
+DECLARE_FUNC_CONS(boxm2_view_trajectory_next_process);
 
 #endif

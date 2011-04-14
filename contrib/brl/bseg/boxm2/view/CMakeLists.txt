@@ -27,6 +27,7 @@ IF(VGUI_FOUND)
       boxm2_include_glew.h
       boxm2_view_utils.h                boxm2_view_utils.cxx
      )
+  AUX_SOURCE_DIRECTORY(Templates boxm2_view_sources)
 
   ADD_LIBRARY(boxm2_view ${boxm2_view_sources} )
 
