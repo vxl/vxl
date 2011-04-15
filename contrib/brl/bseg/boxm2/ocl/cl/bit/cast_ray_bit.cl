@@ -161,12 +161,9 @@ void cast_ray(
     int data_ptr = traverse_three(&local_tree[llid],
                                   posx-cell_minx, posy-cell_miny, posz-cell_minz,
                                   &vox_minx, &vox_miny, &vox_minz, &vox_len);
-#ifndef DETERMINISTIC
-    data_ptr = data_index_cached(&local_tree[llid], data_ptr, bit_lookup, &cumsum[llid*10], &cumIndex, linfo->data_len);
-    data_ptr = (buff_index*linfo->data_len) + data_ptr;
-#else
-    data_ptr = data_index_cached2(&local_tree[llid], data_ptr, bit_lookup, &cumsum[llid*10], &cumIndex);
-#endif
+    //data index is relative data (data_index_cached) plus data_index_root
+    data_ptr = data_index_cached(&local_tree[llid], data_ptr, bit_lookup, &cumsum[llid*10], &cumIndex) 
+                + data_index_root(&local_tree[llid]);
 
     // get texit along the voxel
     float t_vox_exit = calc_cell_exit(vox_minx+cell_minx, vox_miny+cell_miny, vox_minz+cell_minz, vox_len,

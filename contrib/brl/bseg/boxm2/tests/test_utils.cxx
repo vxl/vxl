@@ -22,8 +22,8 @@ char* boxm2_test_utils::construct_block_test_stream(int numBuffers,
     //write size, init_level, max_level, max_mb
     int numTrees = nums[0]*nums[1]*nums[2];
     long size = numTrees*(sizeof(int) + sizeof(uchar16)) +
-                numBuffers*(sizeof(ushort) + sizeof(ushort2)) +
-                sizeof(long) + 3*sizeof(int) + 4*sizeof(double) + 6*sizeof(int);
+                //numBuffers*(sizeof(ushort) + sizeof(ushort2)) +
+                sizeof(long) + 3*sizeof(int) + 4*sizeof(double) + 4*sizeof(int);
 
     //1. construct a dummy block byte stream manually
     char* bsize = new char[size];
@@ -46,14 +46,6 @@ char* boxm2_test_utils::construct_block_test_stream(int numBuffers,
     vcl_memcpy(bsize+curr_byte, nums, 4 * sizeof(int));
     curr_byte += 4 * sizeof(int);
 
-    //3. write number of buffers
-    vcl_memcpy(bsize+curr_byte, &numBuffers, sizeof(numBuffers));
-    curr_byte += sizeof(numBuffers);
-
-    //3.a write length of tree buffers
-    vcl_memcpy(bsize+curr_byte, &treeLen, sizeof(treeLen));
-    curr_byte += sizeof(treeLen);
-
     //4. put some tree values in there
     //write in the buffer some values for the trees (each tree gets a 1 as the root)
     short buff_index=0;
@@ -74,26 +66,6 @@ char* boxm2_test_utils::construct_block_test_stream(int numBuffers,
       }
     }
     curr_byte += sizeof(uchar16)*numTrees;
-
-    //5. 2d array of tree pointers
-    int* treePtrsBuff = (int*) (bsize+curr_byte);
-    for (int i=0; i<numTrees; i++)
-      treePtrsBuff[i] = i;
-    curr_byte += sizeof(int) * numTrees;
-
-    //6. fill in some blocks in buffers numbers
-    ushort* treeCountBuff = (ushort*) (bsize + curr_byte);
-    for (int i=0; i<numBuffers; i++)
-      treeCountBuff[i] = (ushort) treeLen;
-    curr_byte += sizeof(ushort) * numBuffers;
-
-    //7. 1d array of mem pointers
-    ushort2* memPtrsBuff = (ushort2*) (bsize + curr_byte);
-    for (int i=0; i<numBuffers; i++) {
-      memPtrsBuff[i][0] = 0;
-      memPtrsBuff[i][1] = treeLen+1;
-    }
-    curr_byte += sizeof(ushort2) * numBuffers;
 
     if (curr_byte != size)
       vcl_cerr<<"size "<<size<<" doesn't match offset "<<curr_byte<<'\n';
@@ -220,38 +192,6 @@ void boxm2_test_utils::test_block_equivalence(boxm2_block& a, boxm2_block& b)
       }
     }
     TEST("boxm2_block: trees initialized properly", true, true);
-
-    boxm2_array_2d<int>& treePtrsA = a.tree_ptrs();
-    boxm2_array_2d<int>& treePtrsB = b.tree_ptrs();
-    for (int i=0; i<a.num_buffers(); i++) {
-      for (int j=0; j<a.tree_buff_length(); j++) {
-        if (treePtrsA[i][j] != treePtrsB[i][j]) {
-          TEST("boxm2_block: trees ptrs not initialized properly", true, false);
-          return;
-        }
-      }
-    }
-    TEST("boxm2_block: tree ptrs initialized properly", true, true);
-
-    boxm2_array_1d<ushort> b_in_ba = a.trees_in_buffers();
-    boxm2_array_1d<ushort> b_in_bb = b.trees_in_buffers();
-    for (int i=0; i<a.num_buffers(); i++) {
-      if (b_in_ba[i] != b_in_bb[i]) {
-        TEST("boxm2_block: blocks in buffers not initialized properly", true, false);
-        return;
-      }
-    }
-    TEST("boxm2_block: blocks in buffers initialized properly", true, true);
-
-    boxm2_array_1d<ushort2> memPtrsA = a.mem_ptrs();
-    boxm2_array_1d<ushort2> memPtrsB = b.mem_ptrs();
-    for (int i=0; i<a.num_buffers(); i++) {
-      if (memPtrsA[i] != memPtrsB[i]) {
-        TEST("boxm2_block: mem_ptrs not initialized properly", true, false);
-        return;
-      }
-    }
-    TEST("boxm2_block: mem_ptrs initialized properly", true, true);
 }
 
 vcl_string boxm2_test_utils::save_test_empty_scene()

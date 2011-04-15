@@ -28,7 +28,7 @@
 class boxm2_block_metadata: public vbl_ref_count
 {
   public:
-    boxm2_block_metadata() : random_(true) {}
+    boxm2_block_metadata() {}
     boxm2_block_metadata( boxm2_block_id id,
                           vgl_point_3d<double> local_origin,
                           vgl_vector_3d<double> sub_block_dim,
@@ -43,8 +43,7 @@ class boxm2_block_metadata: public vbl_ref_count
                                             init_level_(init_level),
                                             max_level_(max_level),
                                             max_mb_(max_mb),
-                                            p_init_(p_init),
-                                            random_(true) {}
+                                            p_init_(p_init) {}
 
     boxm2_block_metadata( const boxm2_block_metadata& that)
     : vbl_ref_count ()
@@ -56,7 +55,6 @@ class boxm2_block_metadata: public vbl_ref_count
     , max_level_    (that.max_level_)
     , max_mb_       (that.max_mb_)
     , p_init_       (that.p_init_)
-    , random_       (that.random_)
     {}
 
     //: method to calculate the number of cells allocated by a block of this size
@@ -77,7 +75,6 @@ class boxm2_block_metadata: public vbl_ref_count
     int                     max_level_;    //each sub_blocks's max_level (default 4)
     double                  max_mb_;       //each total block mb
     double                  p_init_;       //initialize occupancy probs with this
-    bool                    random_;       //trees are randomly distributed through data cells in this one...
 };
 //: Smart_Pointer typedef for boxm2_block
 typedef vbl_smart_ptr<boxm2_block_metadata> boxm2_block_metadata_sptr;

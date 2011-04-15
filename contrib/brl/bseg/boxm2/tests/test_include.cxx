@@ -3,8 +3,6 @@
 #include <boxm2/boxm2_data.h>
 #include <boxm2/boxm2_data_base.h>
 #include <boxm2/boxm2_data_traits.h>
-#include <boxm2/boxm2_process.h>
-#include <boxm2/boxm2_processor.h>
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/boxm2_util.h>
 

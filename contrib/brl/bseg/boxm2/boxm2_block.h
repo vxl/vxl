@@ -63,13 +63,10 @@ class boxm2_block : public vbl_ref_count
   boxm2_block_id&           block_id()          { return block_id_; }         //somehow make this a const return..
   char*                     buffer()            { return buffer_; }
   boxm2_array_3d<uchar16>&  trees()             { return trees_; }
-  boxm2_array_2d<int>&      tree_ptrs()         { return tree_ptrs_; }
-  boxm2_array_1d<ushort>&   trees_in_buffers()  { return trees_in_buffers_; }
-  boxm2_array_1d<ushort2>&  mem_ptrs()          { return mem_ptrs_; }
   vgl_vector_3d<double>&    sub_block_dim()     { return sub_block_dim_; }
   vgl_vector_3d<unsigned>&  sub_block_num()     { return sub_block_num_; }
-  int                       num_buffers()       { return tree_ptrs_.rows(); }
-  int                       tree_buff_length()  { return tree_ptrs_.cols(); }
+  int                       num_buffers()       { return 1; }
+  int                       tree_buff_length()  { return trees_.size(); }
   int                       init_level()        { return init_level_; }
   int                       max_level()         { return max_level_; }
   int                       max_mb()            { return max_mb_; }
@@ -98,9 +95,6 @@ class boxm2_block : public vbl_ref_count
 
   //: high level arrays store sub block information
   boxm2_array_3d<uchar16> trees_;
-  boxm2_array_2d<int>     tree_ptrs_;
-  boxm2_array_1d<ushort>  trees_in_buffers_;
-  boxm2_array_1d<ushort2> mem_ptrs_;
 
   //: World dimensions of a block .e.g 1 meter x 1 meter x 1 meter
   vgl_vector_3d<double>   sub_block_dim_;

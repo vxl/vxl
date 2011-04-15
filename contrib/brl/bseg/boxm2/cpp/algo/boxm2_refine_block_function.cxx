@@ -55,154 +55,6 @@ bool boxm2_refine_block_function::init_data(boxm2_block* blk, vcl_vector<boxm2_d
     return true;
 }
 
-bool boxm2_refine_block_function::refine()
-{
-  //Go through each buffer, updating the tree pointers
-  for (int buffIndex = 0; buffIndex < blk_->num_buffers(); ++buffIndex)
-  {
-    //cache some buffer variables in registers:
-    int numBlocks = blk_->trees_in_buffers()[buffIndex]; //number of blocks in this buffer;
-    int startPtr  = blk_->mem_ptrs()[buffIndex][0];       //points to first element in data buffer
-    int endPtr    = blk_->mem_ptrs()[buffIndex][1];       //points to TWO after the last element in data buffer
-
-    //---- special case that may not be necessary ----------------------------
-    //0. if there aren't 585 cells in this buffer, quit refining
-    int preFreeSpace = free_space(startPtr, endPtr);
-    if (preFreeSpace < 585) {
-      vcl_cout<<"Skipping because of pre free space"<<vcl_endl;
-      continue;
-    }
-    //------------------------------------------------------------------------
-
-    //Iterate over each tree in buffer=gid
-    for (int subIndex=0; subIndex<numBlocks; ++subIndex)
-    {
-      //1. get current tree information
-      int treeIndex = blk_->tree_ptrs()[buffIndex][subIndex];
-      uchar16 tree  = trees_[treeIndex];
-
-      boct_bit_tree2 curr_tree( (unsigned char*) tree.data_block(), max_level_);
-      int currTreeSize = curr_tree.num_cells();
-
-      //3. refine tree locally (only updates refined_tree and returns new tree size)
-      boct_bit_tree2 refined_tree = this->refine_bit_tree(curr_tree,
-                                                          buffIndex*data_len_);
-      int newSize = refined_tree.num_cells();
-
-      //4. update start pointer (as data will be moved up to the end)
-      startPtr = (startPtr+currTreeSize) % data_len_;
-
-      //5. if there's enough space, move tree
-      int freeSpace = free_space(startPtr, endPtr);
-
-      //6. if the tree was refined (and it fits)
-      if (newSize > currTreeSize && newSize <= freeSpace)
-      {
-        //6a. update local tree's data pointer (store it back tree buffer)
-        int buffOffset = (endPtr-1 + data_len_) % data_len_;
-        refined_tree.set_data_ptr(buffOffset);
-
-        //store this refined tree in blocks' tree at treeIndex (make this legal somehow)
-        vcl_memcpy(&trees_[treeIndex], refined_tree.get_bits(), sizeof(uchar16));
-
-        //cache old data pointer and new data pointer
-        int oldDataPtr = curr_tree.get_data_index(0);
-        int newDataPtr = buffOffset;                                       //new root offset within buffer
-
-        //next start moving cells, must zip through max number of cells
-        int offset = buffIndex*data_len_;                   //absolute buffer offset
-        int newInitCount = 0; int oldCount = 0;             //counts used for assertions
-        for (int j=0; j<MAX_CELLS_; j++)
-        {
-          //--------------------------------------------------------------------
-          //4 Cases:
-          // - Old cell and new cell exist - transfer data over
-          // - new cell exists, old cell doesn't - create new occupancy based on depth
-          // - old cell exists, new cell doesn't - uh oh this is bad news
-          // - neither cell exists - do nothing and carry on
-          //--------------------------------------------------------------------
-          //if parent bit is 1, then you're a valid cell
-          int pj = (j-1)>>3;           //Bit_index of parent bit
-          bool validCellOld = (j==0) || curr_tree.bit_at(pj);
-          bool validCellNew = (j==0) || refined_tree.bit_at(pj);
-          if (validCellOld && validCellNew) {
-            oldCount++;
-
-            //move root data to new location
-            alpha_  [offset + newDataPtr] = alpha_  [offset + oldDataPtr];
-            mog_    [offset + newDataPtr] = mog_    [offset + oldDataPtr];
-            num_obs_[offset + newDataPtr] = num_obs_[offset + oldDataPtr];
-
-            //increment
-            oldDataPtr = (oldDataPtr+1) % data_len_;
-            newDataPtr = (newDataPtr+1) % data_len_;
-          }
-          //case where it's a new leaf...
-          else if (validCellNew) {
-            newInitCount++;
-
-            //calc new alpha
-            int currLevel = curr_tree.depth_at(j);
-            float side_len = (float)block_len_ / (float)(1<<currLevel);
-            float new_alpha = max_alpha_int_ / side_len;
-            alpha_[offset+newDataPtr] = new_alpha;
-
-            //store parent's data in child cells
-            mog_    [offset+newDataPtr].fill(0);
-            num_obs_[offset+newDataPtr].fill(0);
-
-            //update new data pointer
-            newDataPtr = (newDataPtr+1) % data_len_;
-          }
-        }
-
-        //6c. update endPtr
-        endPtr = (newDataPtr+1) % data_len_;
-      }
-      //otherwise just move the unrefined tree quickly
-      else if (currTreeSize <= freeSpace)
-      {
-        //6a. update local tree's data pointer (store it back tree buffer)
-        int buffOffset = (endPtr-1 + data_len_) % data_len_;
-        int oldDataPtr = curr_tree.get_data_index(0);
-        curr_tree.set_data_ptr(buffOffset);
-
-        //store this refined tree in blocks' tree at treeIndex (make this legal somehow)
-        vcl_memcpy(&trees_[treeIndex], curr_tree.get_bits(), sizeof(uchar16));
-
-        //6b. move data up to end pointer
-        int newDataPtr = buffOffset;
-        int offset = buffIndex * data_len_;                   //absolute buffer offset
-        for (int j=0; j<currTreeSize; j++) {
-          alpha_  [offset + newDataPtr] = alpha_  [offset + oldDataPtr];
-          mog_    [offset + newDataPtr] = mog_    [offset + oldDataPtr];
-          num_obs_[offset + newDataPtr] = num_obs_[offset + oldDataPtr];
-
-          //increment
-          oldDataPtr = (oldDataPtr+1)%data_len_;
-          newDataPtr = (newDataPtr+1)%data_len_;
-        }
-
-        //6c. update endPtr
-        endPtr = (endPtr+currTreeSize) % data_len_;
-      }
-      //THIS SHOULDN"T EVER HAPPEN, buffer is full even though the tree didn't refine!
-      else {
-        //move start pointer back
-        startPtr = (startPtr - currTreeSize + data_len_)%data_len_;
-        break;
-      }
-    } //end for loop
-
-    //update mem pointers before returning
-    blk_->mem_ptrs()[buffIndex][0] = startPtr;
-    blk_->mem_ptrs()[buffIndex][1] = endPtr;
-  } //end if (gid < num_buffer)
-
-  vcl_cout<<"NUm SPLIT: "<<num_split_<<vcl_endl;
-  return true;
-}
-
 //----- IF THE BLOCK IS NOT RANDOMLY DISTRIBUTED, USE DETERMINISTIC METHOD -----
 // New Method Summary:
 //  - NEED TO CLEAR OUT THE GPU CACHE BEFORE YOU START.. so you don't overwrite stuff accidentally...
@@ -291,7 +143,6 @@ bool boxm2_refine_block_function::refine_deterministic(vcl_vector<boxm2_data_bas
 
   return true;
 }
-
 
 /////////////////////////////////////////////////////////////////
 ////Refine Tree (refines local tree)
@@ -434,9 +285,6 @@ void boxm2_refine_block( boxm2_block* blk,
   boxm2_refine_block_function refine_block;
   refine_block.init_data(blk, datas, prob_thresh);
 
-  if (is_random)
-    refine_block.refine();
-  else
-    refine_block.refine_deterministic(datas);
+  refine_block.refine_deterministic(datas);
 }
 

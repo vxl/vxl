@@ -7,27 +7,16 @@ boxm2_data_base::boxm2_data_base(boxm2_block_metadata data, const vcl_string dat
 {
   id_ = data.id_;
   
-#if 0 // variables not used
-  const int MAX_BYTES    = data.max_mb_*1024*1024;
-  const int BUFF_LENGTH  = 1<<16; // = 65536
-#endif
-
   //determine number of cells to allocate - if random, then use the max_mb, otherwise use tree size
   // MAY want to create an initialize data that caters to size of trees, and doesn't assume only root
-  long num_cells; 
-  if(data.random_) {
-    vcl_cout<<"DATA OF TYPE: "<<data_type<<" is initialized randomly!!!!!!"<<vcl_endl;
-    num_cells = data.num_data_cells();
-  }
-  else {
-    vcl_cout<<"DATA OF TYPE: "<<data_type<<" is initialized DETERMINISTACALLY!!!!!!"<<vcl_endl;
-    num_cells = data.sub_block_num_.x() * data.sub_block_num_.y() * data.sub_block_num_.z(); 
-    vcl_cout<<"NUmber of data cells: "<<num_cells<<vcl_endl;
-  }
-  
+  long num_cells = data.sub_block_num_.x() * 
+                   data.sub_block_num_.y() * 
+                   data.sub_block_num_.z(); 
   vcl_size_t cell_size = boxm2_data_info::datasize(data_type);
   buffer_length_ = num_cells * cell_size;
-  vcl_cout<<"Data size: "<<num_cells<<", bytes:"<<buffer_length_<<vcl_endl;
+  vcl_cout<<"boxm2_data_base::empty "<<data_type<<" num cells: "
+          <<num_cells<<'\n'
+          <<"  number of bytes: "<<buffer_length_<<vcl_endl;
 
   //now construct a byte stream, and read in with b_read
   data_buffer_ = new char[buffer_length_];

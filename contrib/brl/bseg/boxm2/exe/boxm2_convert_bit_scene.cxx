@@ -67,7 +67,6 @@ int main(int argc,  char** argv)
   data.max_level_     = max_level;
   data.max_mb_        = (max_mb > 0)? max_mb : 400.0;
   data.p_init_        = .001;
-  data.random_        = false;
 
   //3. set scene metadata
   new_scene.add_block_metadata(data);

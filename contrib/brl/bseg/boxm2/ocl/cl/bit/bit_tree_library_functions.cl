@@ -124,9 +124,7 @@ void set_tree_bit_at(__local uchar* tree, int index, bool val)
 //      2. do relative data index sum
 //-----------------------------------------------------------------------------
 //--------------------------------------------------------------------
-// returns the short offset of the data 
-// unpacks offset (ushort) from tree[10] and tree[11],
-// also counts the bits until parent of index, adds it to the offset
+// THIS IS DEPRECATED
 //--------------------------------------------------------------------
 int data_index(int rIndex, __local uchar* tree, ushort bit_index, __constant uchar* bit_lookup)
 {
@@ -178,59 +176,46 @@ int data_index_relative(__local uchar* tree, ushort bit_index, __constant uchar*
   return count; 
 }
 
-
-//optimized to use cumulative sum counts
-int data_index_cached(__local uchar* tree, ushort bit_index, __constant uchar* bit_lookup, __local uchar* cumsum, int *cumIndex, int data_len)
+// Data_index_cached returns the relative data index (0 to 585) for this tree
+// Add this to the data_ptr value (gotten below)
+int data_index_cached(__local uchar* tree, ushort bit_index, __constant uchar* bit_lookup, __local uchar* cumsum, int *cumIndex)
 {
   //root and first gen are special case, return just the root offset + bit_index 
-  int count = (int)as_ushort((uchar2) (tree[11], tree[10]));
-  
   if(bit_index < 9)
-    return (count+bit_index) - (((count+bit_index)>>16)<<16);
+    return bit_index;
     
   //otherwise get parent index, parent byte index and relative bit index
   uchar oneuplevel        = (bit_index-1)>>3;           //Bit_index of parent bit
-  uchar byte_index        = ((oneuplevel-1)>>3) +1;     //byte_index of parent bit
+  uchar byte_index        = ((oneuplevel-1)>>3) + 1;     //byte_index of parent bit
   uchar sub_bit_index     = 8-((oneuplevel-1)&(8-1));   //[0-7] bit index of parent bit
 
+  //cache the bit indices so far
   for(; (*cumIndex) < byte_index; ++(*cumIndex))  {
     cumsum[(*cumIndex)] = cumsum[(*cumIndex)-1] + bit_lookup[tree[(*cumIndex)]];
   }
 
+  //count up number of bits before parent bit in the last byte (not included in loop above)
   uchar bits_before_parent = tree[byte_index]<<sub_bit_index; //number of bits before parent bit [0-6] in parent byte
   bits_before_parent       = bit_lookup[bits_before_parent];
   uchar finestleveloffset = (bit_index-1)&(8-1);              //[0-7] bit index of cell being looked up (@bit_index)
-  count += (cumsum[byte_index-1] + bits_before_parent)*8 + 1 + finestleveloffset; 
+  int data_index = (cumsum[byte_index-1] + bits_before_parent)*8 + 1 + finestleveloffset; 
   
-  //HARD CODED HACK TO ENSURE THAT COUNT IS LESS THAN DATALEN
-  return count - ((count>>16)<<16);
+  return data_index;
 }
 
-//Optimized using new scheme where bits [10,11,12,13] are data pointer, and only one data buffer
-int data_index_cached2(__local uchar* tree, ushort bit_index, __constant uchar* bit_lookup, __local uchar* cumsum, int *cumIndex)
+//returns root level data index
+int data_index_root(__local uchar* tree)
 {
-  //root and first gen are special case, return just the root offset + bit_index 
-  int count = as_int((uchar4) (tree[10], tree[11], tree[12], tree[13]));
+  return as_int((uchar4) (tree[10], tree[11], tree[12], tree[13]));
+}
 
-  if(bit_index < 9)
-    return (count+bit_index);
-    
-  //otherwise get parent index, parent byte index and relative bit index
-  uchar oneuplevel        = (bit_index-1)>>3;           //Bit_index of parent bit
-  uchar byte_index        = ((oneuplevel-1)>>3) +1;     //byte_index of parent bit
-  uchar sub_bit_index     = 8-((oneuplevel-1)&(8-1));   //[0-7] bit index of parent bit
-
-  for(; (*cumIndex) < byte_index; ++(*cumIndex))  {
-    cumsum[(*cumIndex)] = cumsum[(*cumIndex)-1] + bit_lookup[tree[(*cumIndex)]];
-  }
-
-  uchar bits_before_parent = tree[byte_index]<<sub_bit_index; //number of bits before parent bit [0-6] in parent byte
-  bits_before_parent       = bit_lookup[bits_before_parent];
-  uchar finestleveloffset = (bit_index-1)&(8-1);              //[0-7] bit index of cell being looked up (@bit_index)
-  count += (cumsum[byte_index-1] + bits_before_parent)*8 + 1 + finestleveloffset; 
-  
-  //HARD CODED HACK TO ENSURE THAT COUNT IS LESS THAN DATALEN
-  return count;
+void set_data_index_root(__local uchar* tree, int root_index)
+{
+  uchar4 data_chars = as_uchar4(root_index);
+  tree[10] = (uchar) data_chars.s0; 
+  tree[11] = (uchar) data_chars.s1; 
+  tree[12] = (uchar) data_chars.s2; 
+  tree[13] = (uchar) data_chars.s3; 
 }
 
 //takes three floats instaed of float4s
@@ -279,6 +264,4 @@ ushort traverse_three(__local uchar* tree,
   return bit_index;
 }
 
-
-
-// end of library kernels
+// end of library functions

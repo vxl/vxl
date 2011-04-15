@@ -139,38 +139,6 @@ void test_block()
     }
     TEST("boxm2_block: trees initialized properly", true, true);
 
-    boxm2_array_2d<int>& treePtrs = test_block.tree_ptrs();
-    int index = 0;
-    for (int i=0; i<numBuffers; i++) {
-      for (int j=0; j<treeLen; j++) {
-        if (treePtrs[i][j] != index) {
-          TEST("boxm2_block: trees ptrs not initialized properly", true, false);
-          return;
-        }
-        index++;
-      }
-    }
-    TEST("boxm2_block: tree ptrs initialized properly", true, true);
-
-    boxm2_array_1d<ushort> b_in_b = test_block.trees_in_buffers();
-    for (int i=0; i<numBuffers; i++) {
-      if (b_in_b[i] != treeLen) {
-        TEST("boxm2_block: blocks in buffers not initialized properly", true, false);
-        return;
-      }
-    }
-    TEST("boxm2_block: blocks in buffers initialized properly", true, true);
-
-    boxm2_array_1d<ushort2> memPtrs = test_block.mem_ptrs();
-    ushort2 memInit((ushort) 0); memInit[1] = treeLen+1;
-    for (int i=0; i<numBuffers; i++) {
-      if (memPtrs[i] != memInit) {
-        TEST("boxm2_block: mem_ptrs not initialized properly", true, false);
-        return;
-      }
-    }
-    TEST("boxm2_block: mem_ptrs initialized properly", true, true);
-
     ////2. read in sub block dimension, sub block num
     boxm2_block* loaded = boxm2_sio_mgr::load_block(test_file, boxm2_block_id(0,0,0));
     boxm2_test_utils::test_block_equivalence(test_block, *loaded);

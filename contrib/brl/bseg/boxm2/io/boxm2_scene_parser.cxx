@@ -201,8 +201,6 @@ boxm2_scene_parser::startElement(const char* name, const char** atts)
         convert(atts[i+1], metadata.max_mb_);
       else if (vcl_strcmp(atts[i], "p_init")==0)
         convert(atts[i+1], metadata.p_init_);
-      else if (vcl_strcmp(atts[i], "random")==0)
-        convert(atts[i+1], metadata.random_); 
     }
     metadata.id_ = boxm2_block_id(idi, idj, idk);
     metadata.local_origin_ = vgl_point_3d<double>(ox, oy, oz);
