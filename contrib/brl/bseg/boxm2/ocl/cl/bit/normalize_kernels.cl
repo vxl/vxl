@@ -173,8 +173,8 @@ __kernel void render_kernel_rgb_gl(__constant float *min_i,
 #endif
 
 #ifdef CHANGE
-__kernel void normalize_change_kernel(__global uint * exp_img /* background probability density*/ , 
-                                      __global uint * prob_exp_img ,
+__kernel void normalize_change_kernel(__global float * exp_img /* background probability density*/ , 
+                                      __global float * prob_exp_img ,
                                       __global float* vis_img, 
                                       __global uint4* imgdims)
 {
@@ -191,22 +191,15 @@ __kernel void normalize_change_kernel(__global uint * exp_img /* background prob
     }
     float vis   = vis_img[imindex];
 
-    uint  eint  = as_uint(exp_img[imindex]);
-    uchar echar = convert_uchar(eint);
-    float prob_int = convert_float(echar)/255.0f;
-
-    prob_int=1/prob_int -1;
+    
+    float prob_int = exp_img[imindex] ; 
     prob_int+=vis;
 
-    uint  prob_eint  = as_uint(prob_exp_img[imindex]);
-    uchar prob_echar = convert_uchar(prob_eint);
-    float prob_exp_int = convert_float(prob_echar)/255.0f;
- 
-    prob_exp_int=1/prob_exp_int -1;
+    float prob_exp_int = prob_exp_img[imindex];
     prob_exp_int+=vis;
 
     float fgbelief=1.0f/(1.0f+prob_int)-0.5f*min(prob_int,1/prob_int);
     float raybelief=prob_exp_int/(1.0f+prob_exp_int)-0.5*min(prob_exp_int,1/prob_exp_int);
-    exp_img[imindex]=rgbaFloatToInt(raybelief*fgbelief);
+    exp_img[imindex]=fgbelief;
 }
 #endif
