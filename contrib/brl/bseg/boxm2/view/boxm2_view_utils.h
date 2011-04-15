@@ -3,9 +3,9 @@
 //:
 // \file
 // \brief boxm2_view_utils contains factored out methods used in multiple tableaus
+#include "boxm2_include_glew.h"
 #include <vcl_iostream.h>
 #include <bocl/bocl_cl.h>
-#include "boxm2_include_glew.h"
 #include <vgl/vgl_vector_3d.h>
 #include <vcl_vector.h>
 #include <vpgl/vpgl_camera.h>
