@@ -18,8 +18,6 @@ IF(EXPAT_FOUND)
         boxm2_data_base.h             boxm2_data_base.cxx
         boxm2_data.h                  boxm2_data.txx
         boxm2_data_traits.h
-        boxm2_processor.h
-        boxm2_process.h
         boxm2_util.h                  boxm2_util.cxx
        )
 
