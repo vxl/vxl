@@ -29,6 +29,7 @@ public:
                   vgl_box_3d<int> nbbox,  double training_fraction = 0.1, vcl_string path_out = "./"): 
   scenes_(scenes), aux_dirs_(aux_dirs), finest_cell_length_(finest_cell_length), nbbox_(nbbox), training_fraction_(training_fraction),path_out_(path_out)
   {
+    training_scenes_ = vcl_vector<bool>(scenes_.size(), true);
     nsamples_ = 0;
     training_mean_.fill(0.0);
     pc_.fill(0.0);
@@ -92,9 +93,10 @@ public:
   
   vcl_string path_out() {return path_out_;}  
   
-  vcl_vector<vcl_string> scenes() { return scenes_;}
-  vcl_vector<vcl_string> aux_dirs() { return aux_dirs_;}
-
+  vcl_vector<vcl_string> scenes() { return scenes_; }
+  vcl_vector<vcl_string> aux_dirs() { return aux_dirs_; }
+  vcl_vector<double> cell_lenghts() { return finest_cell_length_; }
+  vcl_vector<bool> training_scenes() { return training_scenes_; }
   
 protected:
   
@@ -104,6 +106,8 @@ protected:
   vcl_vector<vcl_string> aux_dirs_;
   //: A vector to hold the finest cell lenght of the corresponding scene scene
   vcl_vector<double> finest_cell_length_;
+  //: A vector that indicates whether a scene should be used as train (True) or test(False). Order is equivalent to scenes_
+  vcl_vector<bool> training_scenes_;
 
 
   
@@ -144,12 +148,6 @@ protected:
 
   
 };
-
-
-/************************* PCA helper functions ******************************/
-
-
-
 
 #endif
 

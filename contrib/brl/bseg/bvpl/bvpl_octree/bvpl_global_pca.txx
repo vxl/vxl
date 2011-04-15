@@ -86,95 +86,128 @@ bvpl_global_pca<feature_dim>::bvpl_global_pca(const vcl_string &path)
   
   
   //Parse scenes
-  bxml_element scenes_query("scenes");
-  bxml_data_sptr scenes_data = bxml_find_by_name(root, scenes_query);
+  bxml_element scenes_query("scene");
+  vcl_vector<bxml_data_sptr> scenes_data = bxml_find_all_with_name(root, scenes_query);
   
-  bxml_element* scenes_elm = dynamic_cast<bxml_element*>(scenes_data.ptr());
-  scenes_.reserve(nscenes);
-  aux_dirs_.reserve(nscenes);
-  finest_cell_length_.reserve(nscenes);
-  for (unsigned i =0; i<nscenes; i++) {
- 
-    vcl_stringstream scene_ss;
-    scene_ss<< "scene" << i;
-    vcl_string scene_path = "";
-    scenes_elm->get_attribute(scene_ss.str(), scene_path);
-    scenes_.push_back(scene_path);
-
+  if(nscenes !=scenes_data.size()){
+    vcl_cerr<<"Wrong number of scenes \n";
+    throw;
+  }
+  
+  scenes_.clear();
+  scenes_.resize(nscenes);
+  
+  aux_dirs_.clear();
+  aux_dirs_.resize(nscenes);
+  
+  finest_cell_length_.clear();
+  finest_cell_length_.resize(nscenes);
+  
+  for(unsigned si = 0; si < nscenes; si++)
+  {
+    bxml_element* scenes_elm = dynamic_cast<bxml_element*>(scenes_data[si].ptr());
+    int id = -1;
+    scenes_elm->get_attribute("id", id);
+    scenes_elm->get_attribute("path", scenes_[id]);
+    scenes_elm->get_attribute("aux_dir", aux_dirs_[id]);
+    scenes_elm->get_attribute("cell_length" , finest_cell_length_[id]);
     
-    vcl_stringstream aux_dir_ss;
-    aux_dir_ss<< "aux_dir" << i; 
-    vcl_string aux_dir_path = "";
-    scenes_elm->get_attribute(aux_dir_ss.str(), aux_dir_path);
-    aux_dirs_.push_back(aux_dir_path);
-    
-    vcl_stringstream cell_length_ss;
-    cell_length_ss<< "cell_length" << i; 
-    double cell_length = 0.0;
-    scenes_elm->get_attribute(cell_length_ss.str(), cell_length);
-    finest_cell_length_.push_back(cell_length);
-
-  }  
+    vcl_cout << "Scene " << id << " is " << path << "\n";
+  }
+  
+  //Parse training scenes
+  bxml_element train_query("training_scenes");
+  bxml_element* train_elm = dynamic_cast<bxml_element*>(bxml_find_by_name(root, train_query).ptr());
+  unsigned n_train_scenes = 0;
+  train_elm->get_attribute("nscenes", n_train_scenes);
+  training_scenes_.clear();
+  training_scenes_.resize(nscenes, false);
+  
+  //read out the scenes
+  for (bxml_element::const_data_iterator s_it = train_elm->data_begin(); s_it != train_elm->data_end(); s_it++) {
+    if ((*s_it)->type() == bxml_data::TEXT) {
+      bxml_text* t = dynamic_cast<bxml_text*>((*s_it).ptr());
+      vcl_stringstream text_d(t->data()); vcl_string buf;
+      vcl_vector<vcl_string> tokens;
+      while (text_d >> buf) {
+        tokens.push_back(buf);
+      }
+      if (tokens.size() != n_train_scenes)
+        continue;
+      for (unsigned i = 0; i < n_train_scenes; i++) {
+        vcl_stringstream ss2(tokens[i]); int s_type_id;
+        ss2 >> s_type_id;
+        vcl_cout << "Scene: " << s_type_id << " is used for training \n";
+        training_scenes_[s_type_id]=true;
+      }
+      break;
+    }
+  }
+  
   
   //Parse paths and set matrices
   bxml_element paths_query("paths");
   bxml_data_sptr paths_data = bxml_find_by_name(root, paths_query);
-  bxml_element* path_elm = dynamic_cast<bxml_element*>(paths_data.ptr());
-  
-  
-  vcl_string ifs_path;
-  
-  path_elm->get_attribute("pc_path", ifs_path);
-  if(ifs_path != pc_path())
-    valid = -1;
-  else{
-    vcl_ifstream ifs(ifs_path.c_str());
-    ifs >> pc_;
-    if(pc_.size()!=feature_dim*feature_dim)
-      valid = -2;
-  }
-  
-  path_elm->get_attribute("weights_path", ifs_path);
-  if(ifs_path != weights_path())
-    valid = -3;
-  else{
-    vcl_ifstream ifs(ifs_path.c_str());
-    ifs >> weights_;
-    if(weights_.size()!=feature_dim)
-      valid = -4;
-  }
-  
-  path_elm->get_attribute("mean_path", ifs_path);
-  if(ifs_path != mean_path())
-    valid = -5;
-  else
+  if(paths_data)
   {
-    if ( vul_file::exists(ifs_path))
-    {
-      vcl_ifstream ifs(ifs_path.c_str());
-      ifs >> training_mean_;
-    }
+  
+    bxml_element* path_elm = dynamic_cast<bxml_element*>(paths_data.ptr());
+    
+    
+    vcl_string ifs_path;
+    
+    path_elm->get_attribute("pc_path", ifs_path);
+    if(ifs_path != pc_path())
+      valid = -1;
     else{
-      vcl_cout << " Warning: Mean file is empty" <<vcl_endl;
-      training_mean_.fill(0.0);
+      vcl_ifstream ifs(ifs_path.c_str());
+      ifs >> pc_;
+      if(pc_.size()!=feature_dim*feature_dim)
+        valid = -2;
     }
-  
-    path_elm->get_attribute("scatter_path", ifs_path);
-    if(ifs_path != scatter_path())
-      valid = -6;
-    else if(vul_file::exists(ifs_path)){
-      vcl_ifstream(ifs_path);
-      ifs_path >> scatter_;
-    }else{
-      vcl_cout << " Warning: Scatter file is empty" <<vcl_endl;
-      scatter_.fill(0.0);
+    
+    path_elm->get_attribute("weights_path", ifs_path);
+    if(ifs_path != weights_path())
+      valid = -3;
+    else{
+      vcl_ifstream ifs(ifs_path.c_str());
+      ifs >> weights_;
+      if(weights_.size()!=feature_dim)
+        valid = -4;
     }
-  
-    if(valid<0){
-      vcl_cout << "bvpl_discover_pca_kernels - errors parsing pca_info.xml. Error code: " << valid << vcl_endl;
-      xml_write();
+    
+    path_elm->get_attribute("mean_path", ifs_path);
+    if(ifs_path != mean_path())
+      valid = -5;
+    else
+    {
+      if ( vul_file::exists(ifs_path))
+      {
+        vcl_ifstream ifs(ifs_path.c_str());
+        ifs >> training_mean_;
+      }
+      else{
+        vcl_cout << " Warning: Mean file is empty" <<vcl_endl;
+        training_mean_.fill(0.0);
+      }
+    
+      path_elm->get_attribute("scatter_path", ifs_path);
+      if(ifs_path != scatter_path())
+        valid = -6;
+      else if(vul_file::exists(ifs_path)){
+        vcl_ifstream(ifs_path);
+        ifs_path >> scatter_;
+      }else{
+        vcl_cout << " Warning: Scatter file is empty" <<vcl_endl;
+        scatter_.fill(0.0);
+      }
+    
+      if(valid<0){
+        vcl_cout << "bvpl_discover_pca_kernels - errors parsing pca_info.xml. Error code: " << valid << vcl_endl;
+        xml_write();
+      }
+    
     }
-  
   }
   
 }
@@ -255,6 +288,11 @@ bool bvpl_global_pca<feature_dim>::sample_statistics( int scene_id, int block_i,
                                                       vnl_vector_fixed<double, feature_dim> &mean,
                                                       unsigned long &nfeature)
 {
+  if(!training_scenes_[scene_id]){
+    vcl_cout << "Skiping scene, labeled for testing \n";
+    return true;
+  }
+    
   
   typedef boct_tree<short,float> float_tree_type;
   typedef boct_tree_cell<short,float> float_cell_type;
@@ -899,23 +937,31 @@ void bvpl_global_pca<feature_dim>::xml_write()
   root->append_text("\n");
   
   //write the scenes
-  bxml_element* scenes_elm = new bxml_element("scenes");
-  scenes_elm->append_text("\n");
-  
-  
-  for(unsigned i =0; i<scenes_.size(); i++) {
-    vcl_stringstream scene_ss;
-    scene_ss<< "scene" << i;  
-    vcl_stringstream aux_dir_ss;
-    aux_dir_ss<< "aux_dir" << i;
-    vcl_stringstream cell_length_ss;
-    cell_length_ss<< "cell_length" << i;
-    scenes_elm->set_attribute(scene_ss.str(), scenes_[i]);
-    scenes_elm->set_attribute(aux_dir_ss.str(), aux_dirs_[i]);
-    scenes_elm->set_attribute(cell_length_ss.str(), finest_cell_length_[i]);
+  for(unsigned i =0; i<scenes_.size(); i++) 
+  {
+    bxml_element* scenes_elm = new bxml_element("scene");
+    scenes_elm->append_text("\n");
+    scenes_elm->set_attribute("id", i);
+    scenes_elm->set_attribute("path", scenes_[i]);
+    scenes_elm->set_attribute("aux_dir", aux_dirs_[i]);
+    scenes_elm->set_attribute("cell_length", finest_cell_length_[i]);
+    root->append_data(scenes_elm);
+    root->append_text("\n");
   }
   
-  root->append_data(scenes_elm);
+  //write training scenes
+  bxml_element* train_elm = new bxml_element("training_scenes");
+  train_elm->append_text("\n");
+  train_elm->set_attribute("nscenes", training_scenes_.size());
+  
+  vcl_stringstream ss;
+  for (unsigned i = 0; i< training_scenes_.size(); i++) {
+    if (training_scenes_[i])
+      ss << i << " ";
+  }
+  train_elm->append_text(ss.str());
+  train_elm->append_text("\n");
+  root->append_data(train_elm);
   root->append_text("\n");
   
   //write to disk  
