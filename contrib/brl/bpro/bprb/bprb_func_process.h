@@ -57,7 +57,7 @@ class bprb_func_process: public bprb_process_ext
         return 0;
       }
       if (!(input_data_[i]->is_a()==input_types_[i])) {
-        vcl_cerr << "Wrong INPUT TYPE!\n";
+        vcl_cerr << "Input: [" << i << "] has wrong INPUT TYPE! \n" << "Should be: " << input_types_[i] << " is: " <<input_data_[i]->is_a() << "\n";
         return 0;
       }
     }
