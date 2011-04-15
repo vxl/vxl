@@ -117,6 +117,7 @@ class boct_tree
 
     return;
   }
+  
 
   //: Returns all leaf cells entirely contained in 3d region in global coordinates
   void locate_region_leaves_global_2(const vgl_box_3d<double>& r, vcl_vector<boct_tree_cell<T_loc,T_data>*> &leaves)
@@ -136,6 +137,47 @@ class boct_tree
         leaves.push_back(*it);
     }
 
+    return;
+  }
+  
+  //: Returns all leaf cells entirely contained in 3d region in global coordinates
+  //Code assumes boxes have the same centroid 
+  void locate_leaves_in_hollow_region_global(const vgl_box_3d<double>& outer_r, const vgl_box_3d<double>& inner_r, vcl_vector<boct_tree_cell<T_loc,T_data>*> &leaves)
+  {
+    boct_tree_cell<T_loc,T_data>* root = locate_region_global(outer_r);
+    vcl_vector<boct_tree_cell<T_loc,T_data>*> all_leaves;
+    root->leaf_children(all_leaves);
+    
+    //now check that the leaves are contained in the "in_between" region
+    typename vcl_vector<boct_tree_cell<T_loc,T_data>*>::iterator it = all_leaves.begin();
+    for (; it!=all_leaves.end(); ++it)
+    {
+      if ((!vgl_intersection(cell_bounding_box(*it),outer_r).is_empty())&&(vgl_intersection(cell_bounding_box(*it),inner_r).is_empty()))
+        leaves.push_back(*it);
+    }
+    
+    return;
+  }
+  
+  
+  //: Change the date of all leaf cells entirely contained in 3d region in global coordinates
+  void change_leaves_in_global_region_leaves_global(const vgl_box_3d<double>& r, const T_data &val)
+  {
+    boct_tree_cell<T_loc,T_data>* root = locate_region_global(r);
+    vcl_vector<boct_tree_cell<T_loc,T_data>*> all_leaves;
+    root->leaf_children(all_leaves);
+    
+    //now check that the leaves are contained in the region
+    vgl_point_3d<double>  centroid = r.centroid();
+    boct_tree_cell<T_loc,T_data> *centroid_cell = locate_point_global(centroid);
+    double radius = vcl_sqrt(r.width()*r.width() + r.depth()*r.depth()+r.height()*r.height()) + 1e-7;
+    typename vcl_vector<boct_tree_cell<T_loc,T_data>*>::iterator it = all_leaves.begin();
+    for (; it!=all_leaves.end(); ++it)
+    {
+      if ((global_origin(*it) - global_origin(centroid_cell)).length() < radius)
+        (*it)->set_data(val);
+    }
+    
     return;
   }
 
