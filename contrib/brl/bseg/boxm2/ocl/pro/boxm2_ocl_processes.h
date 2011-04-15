@@ -19,5 +19,8 @@ DECLARE_FUNC_CONS(boxm2_ocl_query_cell_data_process);
 DECLARE_FUNC_CONS(boxm2_ocl_render_expected_color_process);
 DECLARE_FUNC_CONS(boxm2_ocl_update_color_process);
 DECLARE_FUNC_CONS(boxm2_ocl_render_gl_expected_color_process);
+DECLARE_FUNC_CONS(boxm2_ocl_change_detection_process);
+
+
 
 #endif
