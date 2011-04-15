@@ -34,6 +34,7 @@ enum boxm_apm_type
   BOXM_APM_MOB_GREY,
   BOXM_FLOAT,
   BOXM_INT,
+  BOXM_CHAR,
   BOXM_BOOL,
   VNL_DOUBLE_10,
   BSTA_MOG_F1,
