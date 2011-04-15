@@ -445,6 +445,20 @@ void bsta_histogram<T>::print_to_m(vcl_ostream& os) const
   os << "bar(x,y,'r')\n";
 }
 
+//: print x and y arrays
+template <class T>
+void bsta_histogram<T>::print_to_arrays(vcl_ostream& os) const
+{
+  os << min_;
+  for (unsigned int i=1; i<nbins_; i++)
+    os << ", " << min_ + i*delta_;
+  os << "\n";
+  os << p((unsigned int)0);
+  for (unsigned int i=1; i<nbins_; i++)
+    os << ", " << p(i);
+  os << "\n";
+}
+
 template <class T>
 void bsta_histogram<T>::print_vals_prob(vcl_ostream& os) const
 {

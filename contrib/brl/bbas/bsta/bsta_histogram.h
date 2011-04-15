@@ -157,6 +157,9 @@ template <class T> class bsta_histogram : public bsta_histogram_base
 
   //: print as a matlab plot command
   void print_to_m(vcl_ostream& os = vcl_cout) const;
+  
+  //: print x and y arrays
+  void print_to_arrays(vcl_ostream& os = vcl_cout) const;
 
   //: print values and bin probability in full (even if counts ==0)
   void print_vals_prob(vcl_ostream& os = vcl_cout) const;
@@ -187,6 +190,9 @@ vcl_ostream&  operator<<(vcl_ostream& s, bsta_histogram<T> const& h);
 template <class T>
 vcl_istream&  operator>>(vcl_istream& is,  bsta_histogram<T>& h);
 
+//: Forward declaration of specialization
+template <>
+void bsta_histogram<char>::pretty_print(vcl_ostream& os) const;
 
 #define BSTA_HISTOGRAM_INSTANTIATE(T) extern "Please #include <bsta/bsta_histogram.txx>"
 
