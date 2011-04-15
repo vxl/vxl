@@ -1,6 +1,6 @@
 INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bseg )
 SET(boxm2_cpp_sources
-    boxm2_cpp_processor.h         boxm2_cpp_processor.cxx
+
    )
 AUX_SOURCE_DIRECTORY(Templates boxm2_cpp_sources)
 ADD_LIBRARY(boxm2_cpp  ${boxm2_cpp_sources})
