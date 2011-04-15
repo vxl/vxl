@@ -83,3 +83,27 @@ bxml_data_sptr bxml_find_by_name(const bxml_data_sptr& head,
   return NULL;
 }
 
+//: Find all elements that match
+vcl_vector<bxml_data_sptr> bxml_find_all_with_name(const bxml_data_sptr& head,
+                                                   const bxml_element& query)
+{
+  vcl_vector<bxml_data_sptr> all_results;
+  
+  if (head->type() != bxml_data::ELEMENT)
+    return all_results;
+  bxml_element* h_elm = static_cast<bxml_element*>(head.ptr());
+  if ( bxml_matches_by_name(*h_elm, query) )
+    return all_results;
+  else{
+    // recursively check nested elements
+    for (bxml_element::const_data_iterator i = h_elm->data_begin();
+         i != h_elm->data_end();  ++i)
+    {
+      bxml_data_sptr result = bxml_find_by_name(*i, query);
+      if (result)
+        all_results.push_back(result);
+    }
+  }
+  return all_results;
+}
+

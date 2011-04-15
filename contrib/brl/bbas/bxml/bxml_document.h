@@ -112,6 +112,36 @@ class bxml_element : public bxml_data
     s >> value;
     return true;
   }
+  
+  
+  //: Return the values of all attributes with a given name
+  vcl_vector<vcl_string> attributes(const vcl_string& attr_name) const;
+  
+  //: Specialization for vcl_string.
+  bool get_attributea(const vcl_string& attr_name, vcl_vector<vcl_string>& values) const
+  {
+    values = this->attributes(attr_name);
+    return true;
+  }
+  
+  //: Return the value of an attribute.
+  // \see specialization for vcl_string.
+  template <class T>
+  bool get_attributes(const vcl_string& attr_name, vcl_vector<T>& values) const
+  {
+    values.clear();
+    vcl_vector<vcl_string> values_str = attributes(attr_name);
+    for (unsigned vi=0; vi<values_str.size(); vi++) {
+      vcl_stringstream s(values_str[vi]);
+      if (s.str() == "")
+        return false;
+      T value_t;
+      s >> value_t;
+      values.push_back(value_t);
+      
+    }
+    return true;
+  }
 
   //: Return the number of attributes
   unsigned int num_attributes() const { return attributes_.size(); }
@@ -138,17 +168,18 @@ class bxml_element : public bxml_data
   void append_data(const bxml_data_sptr& el)
   { data_.push_back(el); }
 
-  void set_attribute(const vcl_string& attr_name, const vcl_string& attr_value)
-  { attributes_[attr_name] = attr_value; }
-
-  //: \see specialization for vcl_string below.
+  //: Set attribute with and optional precision.
   template <class T>
-  void set_attribute(const vcl_string& attr_name, const T& attr_value)
+  void set_attribute(const vcl_string& attr_name, const T& attr_value, unsigned p = 5)
   {
     vcl_stringstream s;
+    s.precision(p);
     s << attr_value;
     attributes_[attr_name] = s.str();
   }
+  //: Specialization for vcl_string below.
+  void set_attribute(const vcl_string& attr_name, const vcl_string& attr_value)
+  { attributes_[attr_name] = attr_value; }
 
  private:
   //: The name of the element
