@@ -2,6 +2,10 @@
 # Brown Voxel Processing library for octrees
 
 INCLUDE( ${BRL_MODULE_PATH}/FindEXPAT.cmake )
+
+#OPTION( VXL_FORCE_V3P_RPLY "Use v3p ply library" YES)
+#MARK_AS_ADVANCED( VXL_FORCE_V3P_RPLY )
+
 IF(EXPAT_FOUND)
 
 FIND_PACKAGE( Threads )
@@ -22,6 +26,7 @@ SET(bvpl_octree_sources
     bvpl_scene_kernel_operator.h
     bvpl_scene_vector_operator.h
     bvpl_block_kernel_operator.h
+    bvpl_block_vector_operator.h
     bvpl_octree_vrml_util.h
     bvpl_cell_data_traits.h
     bvpl_octree_neighbors.h
@@ -32,6 +37,7 @@ SET(bvpl_octree_sources
     bvpl_global_pca.h                     bvpl_global_pca.txx
     bvpl_taylor_scenes_map.h              bvpl_taylor_scenes_map.cxx
     bvpl_taylor_basis.h                   bvpl_taylor_basis.cxx
+    bvpl_global_taylor.h                  bvpl_global_taylor.cxx
    )
 
 AUX_SOURCE_DIRECTORY(Templates bvpl_octree_sources)
