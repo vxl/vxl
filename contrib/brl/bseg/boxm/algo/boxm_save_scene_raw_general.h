@@ -90,6 +90,12 @@ void boxm_save_scene_raw_general(boxm_scene<boct_tree<T_loc, T_data > > &scene,
                          vcl_string filename,
                          unsigned int resolution_level)
 {
+  
+  bsta_histogram<float> hist;
+  compute_scene_statistics(&scene, hist);
+  hist.pretty_print();
+  
+  
   typedef boct_tree<T_loc, T_data > tree_type;
   
   // create an array for each block, and save in a binary file

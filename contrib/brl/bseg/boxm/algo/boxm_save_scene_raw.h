@@ -168,7 +168,7 @@ void boxm_save_scene_raw(boxm_scene<boct_tree<T_loc, T_data > > &scene,
     vcl_string fn(strm.str());
     vsl_b_ofstream os(fn.c_str(),vcl_ios::binary);
     if (!os.os().good()) {
-      vcl_cerr << "error opening " << filename << " for write!\n";
+      vcl_cerr << "error opening " << fn << " for write!\n";
       return;
     }
 
