@@ -15,6 +15,7 @@ py_funcs("set_input_float",set_input_float,METH_VARARGS,"set_input_(i,f) set inp
 py_funcs("set_input_double",set_input_double,METH_VARARGS,"set_input_(i,d) set input i on current process to a double value"),
 py_funcs("get_output_float",get_output_float,METH_VARARGS,"get_output_float(i) return value of output i in the database"),
 py_funcs("get_output_double",get_output_double,METH_VARARGS,"get_output_double(i) return value of output i in the database"),
+py_funcs("get_output_int",get_output_int,METH_VARARGS,"get_output_int(i) return value of output i in the database"),
 py_funcs("get_output_unsigned",get_output_unsigned,METH_VARARGS,"get_output_unsigned(i) return value of output i in the database"),
 py_funcs("process_init",process_init,METH_VARARGS,"process_init() initialize the current process state before execution"),
 py_funcs("run_process",run_process,METH_VARARGS,"run_process() run the current process"),

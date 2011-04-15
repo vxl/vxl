@@ -21,6 +21,7 @@ static PyObject *set_input_float(PyObject *self, PyObject *args);
 static PyObject *set_input_double(PyObject *self, PyObject *args);
 static PyObject *get_output_float(PyObject *self, PyObject *args);
 static PyObject *get_output_double(PyObject *self, PyObject *args);
+static PyObject *get_output_int(PyObject *self, PyObject *args);
 static PyObject *get_output_unsigned(PyObject *self, PyObject *args);
 static PyObject *process_print_default_params(PyObject *self, PyObject *args);
 static PyObject *process_init(PyObject *self, PyObject *args);
@@ -109,7 +110,7 @@ PyObject *set_input_unsigned(PyObject * /*self*/, PyObject *args)
 {
   int input;
   unsigned ivalue;
-  if (!PyArg_ParseTuple(args, "ii:set_input_int", &input, &ivalue))
+  if (!PyArg_ParseTuple(args, "ii:set_input_unsigned", &input, &ivalue))
     return NULL;
   brdb_value_sptr iv = new brdb_value_t<unsigned>(ivalue);
   vcl_cout << "input[" << input << "](unsigned): " << ivalue << '\n';
@@ -231,6 +232,40 @@ PyObject *get_output_double(PyObject * /*self*/, PyObject *args)
   value = result_out->value();
   
   return Py_BuildValue("d", value);
+}
+
+PyObject *get_output_int(PyObject * /*self*/, PyObject *args)
+{
+  unsigned id;
+  unsigned value;
+  if (!PyArg_ParseTuple(args, "i:get_output_unsigned", &id))
+    return NULL;
+  
+  vcl_string relation_name = "int_data";
+  
+  // query to get the data
+  brdb_query_aptr Q = brdb_query_comp_new("id", brdb_query::EQ, id);
+  brdb_selection_sptr selec = DATABASE->select(relation_name, Q);
+  
+  if (selec->size()!=1) {
+    vcl_cout << "in get_output_int() - no relation with type" << relation_name << " id: " << id << vcl_endl;
+    return Py_BuildValue("b",1000);
+  }
+  
+  brdb_value_sptr brdb_value;
+  if (!selec->get_value(vcl_string("value"), brdb_value)) {
+    vcl_cout << "in get_output_int() didn't get value\n";
+    return Py_BuildValue("b",1000);
+  }
+  
+  if (!brdb_value) {
+    vcl_cout << "in get_output_int() - null value\n";
+    return Py_BuildValue("b",1000);
+  }
+  brdb_value_t<int>* result_out = static_cast<brdb_value_t<int>* >(brdb_value.ptr());
+  value = result_out->value();
+  
+  return Py_BuildValue("b", value);
 }
 
 PyObject *get_output_unsigned(PyObject * /*self*/, PyObject *args)
