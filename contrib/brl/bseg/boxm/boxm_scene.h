@@ -102,6 +102,9 @@ class boxm_scene :public boxm_scene_base
   //: Write the active block to disk
   void write_active_block(bool unload_block=true);
   
+  //: Write the active blocks to disk
+  void write_active_blocks(bool unload_block=true);
+  
   //: Write the specified block to disk without changing global variables
   void write_block_thread_safe(unsigned i, unsigned j, unsigned k);
 
@@ -168,7 +171,14 @@ class boxm_scene :public boxm_scene_base
   
   //: Return all leaf cells in a region
   void leaves_in_region(vgl_box_3d<double>, vcl_vector<boct_tree_cell<loc_type, datatype>* >& cells);
+  
+  //: Return all leaf cells between an inner box and an outter box
+  void leaves_in_hollow_region(vgl_box_3d<double> outer_box, vgl_box_3d<double> inner_box, vcl_vector<boct_tree_cell<loc_type, datatype>* >& cells);
 
+  //: Locates and modifies the value of all cells within a 3d region, which coordinates are given in scene coordinates
+  void change_leaves_in_region(vgl_box_3d<double> box, const datatype &cell_data);
+  void change_leaves_in_regions(vcl_vector<vgl_box_3d<double> > boxes, const vcl_vector<datatype> &all_data);
+  
   //: Locate point in scene coordinates. Assumes that the block containing the point is already loaded into memory
   boct_tree_cell<loc_type, datatype>* locate_point_in_memory(vgl_point_3d<double> &p);
 
@@ -241,16 +251,20 @@ class boxm_scene :public boxm_scene_base
   template <class T_out>
   void clone_blocks_to_type(boxm_scene<T_out> &scene_out, typename boxm_scene<T_out>::datatype data )
   {
+    vcl_cout << "Clone blocks to type \n";
     boxm_block_iterator<T> iter(this);
     boxm_block_iterator<T_out> iter_out = scene_out.iterator();
     iter.begin();
     iter_out.begin();
     while (!iter.end())
     {
+      vcl_cout << "Clone blocks to type -block i \n";
       load_block(iter.index());
+      scene_out.load_block(iter.index());
       T_out  *tree_out =(*iter)->get_tree()->template clone_to_type<typename boxm_scene<T_out>::datatype>();
       (*iter_out)->init_tree(tree_out);
       tree_out->init_cells(data);
+      vcl_cout << "Clone blocks to type -block ii \n";
       scene_out.write_active_block();
       ++iter;
       ++iter_out;

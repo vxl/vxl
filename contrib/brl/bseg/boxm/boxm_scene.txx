@@ -184,12 +184,14 @@ void boxm_scene<T>::clone_blocks(boxm_scene<T> &scene_out)
 template <class T>
 void boxm_scene<T>::write_active_block(bool unload_block)
 {
+  vcl_cout << active_block_ <<vcl_endl;
   if (valid_index(active_block_)&& (!load_all_blocks_))
   {
     int x=active_block_.x(), y=active_block_.y(), z=active_block_.z();
     vcl_string path = gen_block_path(x,y,z);
     vsl_b_ofstream os(path);
 #ifdef DEBUG
+    vcl_cout << "block path: " << path << "\n";
     vcl_cout<<"Load All blocks "<<load_all_blocks_<<vcl_endl
             <<"Internal Nodes 2: " << save_internal_nodes_ << " save_platform_independent_ " << save_platform_independent_ << vcl_endl;
 #endif
@@ -204,6 +206,38 @@ void boxm_scene<T>::write_active_block(bool unload_block)
       active_block_.set(-1,-1,-1);
     }
     os.close();
+  }
+}
+
+
+template <class T>
+void boxm_scene<T>::write_active_blocks(bool unload_block)
+{
+  vcl_set<vgl_point_3d<int>, bvgl_point_3d_cmp<int> >::iterator it = active_blocks_.begin();
+  for(; it!=active_blocks_.end(); it++)
+  {
+    vgl_point_3d<int> bidx = *it;
+    if (valid_index(bidx)&& (!load_all_blocks_))
+    {
+      int x=bidx.x(), y=bidx.y(), z=bidx.z();
+      vcl_string path = gen_block_path(x,y,z);
+      vsl_b_ofstream os(path);
+  #ifdef DEBUG
+      vcl_cout<<"Load All blocks "<<load_all_blocks_<<vcl_endl
+      <<"Internal Nodes 2: " << save_internal_nodes_ << " save_platform_independent_ " << save_platform_independent_ << vcl_endl;
+  #endif
+      blocks_(x,y,z)->b_write(os, save_internal_nodes_, save_platform_independent_);
+      
+      // delete the block's data
+      if(unload_block)
+      {
+        boxm_block<T>* block = blocks_(x,y,z);
+        block->delete_tree();
+        block->set_tree(0);
+        active_block_.set(-1,-1,-1);
+      }
+      os.close();
+    }
   }
 }
 
@@ -955,7 +989,7 @@ void boxm_scene<T>::unload_active_blocks()
 }
 
 
-//: Locate all cells within a 3d region, which coordinates are given in scene coordinates
+//: Locate all cells within a 3d region, which coordinates are given in scene coordinates. Use with care --- blocks need to be unloaded by user
 template <class T>
 void boxm_scene<T>::leaves_in_region(vgl_box_3d<double> box, vcl_vector<boct_tree_cell<typename T::loc_type, typename T::datatype>* > &cells)
 {
@@ -999,6 +1033,164 @@ void boxm_scene<T>::leaves_in_region(vgl_box_3d<double> box, vcl_vector<boct_tre
   //FIXME: I should unload the blocks
   return;
 }
+
+//: Return all leaf cells between an inner box and an outter box. Use with care --- blocks need to be unloaded by user
+template <class T>
+void boxm_scene<T>::leaves_in_hollow_region(vgl_box_3d<double> outer_box, vgl_box_3d<double> inner_box, vcl_vector<boct_tree_cell<loc_type, datatype>* >& cells)
+{
+  if(!outer_box.contains(inner_box))
+    return;
+  
+  //load blocks intersecting the region
+  vgl_point_3d<double> min_point = outer_box.min_point();
+  vgl_point_3d<int> min_idx;
+  get_block_index(min_point, min_idx);
+  
+  vgl_point_3d<double> max_point = outer_box.max_point();
+  vgl_point_3d<int> max_idx;
+  get_block_index(max_point, max_idx);
+  
+  if (!load_blocks(min_idx, max_idx))
+    return;
+  
+  //traverse blocks. for each block get the cells intersects the portion of the region contained in the block
+  for (int k = min_idx.z(); k <= max_idx.z(); k++)
+  {
+    for (int j = min_idx.y(); j <= max_idx.y(); j++)
+    {
+      for (int i = min_idx.x(); i <= max_idx.x();i++)
+      {
+        boxm_block<T>* block = blocks_(i,j,k);
+        vgl_box_3d<double> local_box = vgl_intersection(get_block_bbox(i,j,k),outer_box);
+        
+        //subtract a little from the max point because octree cell are give by a half-closed interval [...).
+        //if this is not done, the endpoint may be out of bounds
+        vgl_box_3d<double> local_outer_box_exclusive(local_box.min_point().x(), local_box.min_point().y(), local_box.min_point().z(),
+                                               local_box.max_point().x()- 1e-7, local_box.max_point().y()- 1e-7,local_box.max_point().z()- 1e-7);
+        
+        vgl_box_3d<double> local_inner_box_exclusive = vgl_intersection(local_outer_box_exclusive,inner_box);
+        
+        T *tree = block->get_tree();
+        if (!tree)
+          continue;
+        vcl_vector<boct_tree_cell<loc_type, datatype>* > temp_cells;
+        temp_cells.clear();
+        tree->locate_leaves_in_hollow_region_global(local_outer_box_exclusive, local_inner_box_exclusive, temp_cells);
+        cells.insert(cells.end(), temp_cells.begin(), temp_cells.end());
+      }
+    }
+  }
+  
+  //FIXME: I should unload the blocks
+  return;
+}
+
+//: Locates and modifies the value of all cells within a 3d region, which coordinates are given in scene coordinates
+template <class T>
+void boxm_scene<T>::change_leaves_in_region(vgl_box_3d<double> box, const typename T::datatype &cell_data)
+{
+  //load blocks intersecting the region
+  vgl_point_3d<double> min_point = box.min_point();
+  vgl_point_3d<int> min_idx;
+  get_block_index(min_point, min_idx);
+  
+  vgl_point_3d<double> max_point = box.max_point();
+  vgl_point_3d<int> max_idx;
+  get_block_index(max_point, max_idx);
+  
+  if (!load_blocks(min_idx, max_idx))
+    return;
+  
+  //traverse blocks. for each block get the cells intersects the portion of the region contained in the block
+  for (int k = min_idx.z(); k <= max_idx.z(); k++)
+  {
+    for (int j = min_idx.y(); j <= max_idx.y(); j++)
+    {
+      for (int i = min_idx.x(); i <= max_idx.x();i++)
+      {
+        boxm_block<T>* block = blocks_(i,j,k);
+        vgl_box_3d<double> local_box = vgl_intersection(get_block_bbox(i,j,k),box);
+        
+        //subtract a little from the max point because octree cell are give by a half-closed interval [...).
+        //if this is not done, the endpoint may be out of bounds
+        vgl_box_3d<double> local_box_exclusive(local_box.min_point().x(), local_box.min_point().y(), local_box.min_point().z(),
+                                               local_box.max_point().x()- 1e-7, local_box.max_point().y()- 1e-7,local_box.max_point().z()- 1e-7);
+        T *tree = block->get_tree();
+        if (!tree)
+          continue;
+
+        tree->change_leaves_in_global_region_leaves_global(local_box_exclusive, cell_data);
+        
+        vcl_string path = gen_block_path(i,j,k);
+        vsl_b_ofstream os(path);
+        block->b_write(os, save_internal_nodes_, save_platform_independent_);
+        
+      }
+    }
+  }
+  
+  unload_active_blocks();
+  return;
+}
+
+//: Locates and modifies the value of all cells within a 3d region, which coordinates are given in scene coordinates
+template <class T>
+void boxm_scene<T>::change_leaves_in_regions(vcl_vector<vgl_box_3d<double> > boxes, const vcl_vector<typename T::datatype> &all_data)
+{
+  if(boxes.size()!= all_data.size()){
+    vcl_cerr << "Error in boxm_scene<T>::change_leaves_in_regions --> Input vectors don't have the same size \n";
+    return;
+  }
+  
+  for(unsigned bi = 0; bi < boxes.size(); bi++){
+  
+    const vgl_box_3d<double> &box = boxes[bi];
+    const datatype &cell_data=all_data[bi];
+    //load blocks intersecting the region
+    vgl_point_3d<double> min_point = box.min_point();
+    vgl_point_3d<int> min_idx;
+    get_block_index(min_point, min_idx);
+    
+    vgl_point_3d<double> max_point = box.max_point();
+    vgl_point_3d<int> max_idx;
+    get_block_index(max_point, max_idx);
+    
+    if (!load_blocks(min_idx, max_idx))
+      return;
+    
+    //traverse blocks. for each block get the cells intersects the portion of the region contained in the block
+    for (int k = min_idx.z(); k <= max_idx.z(); k++)
+    {
+      for (int j = min_idx.y(); j <= max_idx.y(); j++)
+      {
+        for (int i = min_idx.x(); i <= max_idx.x();i++)
+        {
+          boxm_block<T>* block = blocks_(i,j,k);
+          vgl_box_3d<double> local_box = vgl_intersection(get_block_bbox(i,j,k),box);
+          
+          //subtract a little from the max point because octree cell are give by a half-closed interval [...).
+          //if this is not done, the endpoint may be out of bounds
+          vgl_box_3d<double> local_box_exclusive(local_box.min_point().x(), local_box.min_point().y(), local_box.min_point().z(),
+                                                 local_box.max_point().x()- 1e-7, local_box.max_point().y()- 1e-7,local_box.max_point().z()- 1e-7);
+          T *tree = block->get_tree();
+          if (!tree)
+            continue;
+          
+          tree->change_leaves_in_global_region_leaves_global(local_box_exclusive, cell_data);
+          
+          vcl_string path = gen_block_path(i,j,k);
+          vsl_b_ofstream os(path);
+          block->b_write(os, save_internal_nodes_, save_platform_independent_);
+          
+        }
+      }
+    }
+  }
+  
+  unload_active_blocks();
+  return;
+}
+
 
 //: Locate point
 template <class T>
