@@ -1079,25 +1079,22 @@ upsample_rays(vcl_vector<vgl_ray_3d<double> > const& ray_nbrs,
   vgl_vector_3d<double> dddv = 0.5*(dir3-dir0);
 
   //first sub ray
-  interp_rays.push_back(ray);
+  interp_rays[0] = ray;
 
   //second sub ray
   vgl_point_3d<double>  iorg = org + 0.5*dodu;
   vgl_vector_3d<double> idir = dir + 0.5*dddu;
-  vgl_ray_3d<double> r10(iorg, idir);
-  interp_rays.push_back(r10);
+  interp_rays[1].set(iorg, idir);
 
   //third sub ray
   iorg = org + 0.5*dodv;
   idir = dir + 0.5*dddv;
-  vgl_ray_3d<double> r01(iorg, idir);
-  interp_rays.push_back(r01);
+  interp_rays[2].set(iorg, idir);
 
   //fourth sub ray
   iorg = org + 0.5*dodu + 0.5*dodv;
   idir = dir + 0.5*dddu + 0.5*dddv;
-  vgl_ray_3d<double> r11(iorg, idir);
-  interp_rays.push_back(r11);
+  interp_rays[3].set(iorg, idir);
 
   return true;
 }
@@ -1197,6 +1194,7 @@ compute( vpgl_local_rational_camera<double> const& rat_cam,
     // ray origin and ray direction
     need_interp = false;
     max_org_err = 0.0; max_ang_err = 0.0;
+    vcl_vector<vgl_ray_3d<double> > ray_nbrs(4);
     for(int j =1; j<(nr[lev]-1)&&!need_interp; j++){
       for(int i =1;(i<nc[lev]-1)&&!need_interp; i++){
         vgl_ray_3d<double> ray = ray_pyr[lev][j][i];
@@ -1206,11 +1204,11 @@ compute( vpgl_local_rational_camera<double> const& rat_cam,
         //        0
         //      1 x 2
         //        3
-        vcl_vector<vgl_ray_3d<double> > ray_nbrs;
-        ray_nbrs.push_back(ray_pyr[lev][j-1][i]);
-        ray_nbrs.push_back(ray_pyr[lev][j][i-1]);
-        ray_nbrs.push_back(ray_pyr[lev][j][i+1]);
-        ray_nbrs.push_back(ray_pyr[lev][j+1][i]);
+        //
+        ray_nbrs[0]=ray_pyr[lev][j-1][i];
+        ray_nbrs[1]=ray_pyr[lev][j][i-1];
+        ray_nbrs[2]=ray_pyr[lev][j][i+1];
+        ray_nbrs[3]=ray_pyr[lev][j+1][i];
         //interpolate using neighbors
         vgl_ray_3d<double> intp_ray;
         if(!interp_ray(ray_nbrs, intp_ray))
@@ -1232,21 +1230,24 @@ compute( vpgl_local_rational_camera<double> const& rat_cam,
   for(;lev>0; --lev){
     int ncr = nc[lev];
     int nrb = nr[lev];
+    vbl_array_2d<vgl_ray_3d<double> >& clev = ray_pyr[lev];
+    vbl_array_2d<vgl_ray_3d<double> >& nlev = ray_pyr[lev-1];
+    vcl_vector<vgl_ray_3d<double> > ray_nbrs(4);
+    vcl_vector<vgl_ray_3d<double> > interp_rays(4);
     for(int j = 1; j<=nrb-2; ++j)
       for(int i = 1; i<=ncr-2; ++i){
-        vcl_vector<vgl_ray_3d<double> > ray_nbrs;
-        ray_nbrs.push_back(ray_pyr[lev][j-1][i]);
-        ray_nbrs.push_back(ray_pyr[lev][j][i-1]);
-        ray_nbrs.push_back(ray_pyr[lev][j][i+1]);
-        ray_nbrs.push_back(ray_pyr[lev][j+1][i]);
-        vcl_vector<vgl_ray_3d<double> > interp_rays;
-        if(!upsample_rays(ray_nbrs, ray_pyr[lev][j][i], interp_rays))
+        ray_nbrs[0] = clev[j-1][i];
+        ray_nbrs[1] = clev[j][i-1];
+        ray_nbrs[2] = clev[j][i+1];
+        ray_nbrs[3] = clev[j+1][i];
+        if(!upsample_rays(ray_nbrs, clev[j][i], interp_rays))
           return false;
-        ray_pyr[lev-1][2*j][2*i]=interp_rays[0];
-        ray_pyr[lev-1][2*j][2*i+1]=interp_rays[1];
-        ray_pyr[lev-1][2*j+1][2*i]=interp_rays[2];
-        ray_pyr[lev-1][2*j+1][2*i+1]=interp_rays[3];
+        nlev[2*j][2*i]    =interp_rays[0];
+        nlev[2*j][2*i+1]  =interp_rays[1];
+        nlev[2*j+1][2*i]  =interp_rays[2];
+        nlev[2*j+1][2*i+1]=interp_rays[3];
       }
+
     // at this point there is a border of undefined rays
     // all the way around the lev-1 array
     int ncrs = 2*(ncr-2)+1; // column start of valid rays at lev-1
@@ -1314,6 +1315,7 @@ compute( vpgl_local_rational_camera<double> const& rat_cam,
         ray_pyr[lev-1][j][i] = interp_pair(r0, r1, i-ncrs);
     }
   }
+
   vcl_cout << "interpolate lower layers in "
            << t.real()/1000.0 << " secs. \n";
   gen_cam = vpgl_generic_camera<double>(ray_pyr[0]);
