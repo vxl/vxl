@@ -31,7 +31,7 @@
 #include <vbl/vbl_array_2d.h>
 #include <vpgl/bgeo/bgeo_lvcs.h>
 #include <vpgl/algo/vpgl_backproject.h>
-#include <vul/vul_timer.h>
+
 //#define CAMERA_DEBUG
 //------------------------------------------
 bool
@@ -1124,7 +1124,6 @@ bool vpgl_generic_camera_compute::
 compute( vpgl_local_rational_camera<double> const& rat_cam,
          int ni, int nj, vpgl_generic_camera<double> & gen_cam)
 {
-  vul_timer t;
   // get z bounds
   double zoff = rat_cam.offset(vpgl_rational_camera<double>::Z_INDX);
   double zscl = rat_cam.scale(vpgl_rational_camera<double>::Z_INDX);
@@ -1221,9 +1220,6 @@ compute( vpgl_local_rational_camera<double> const& rat_cam,
       }
     }
   }
-  vcl_cout << "find level with rays within tolerance in "
-           << t.real()/1000.0 << " secs. \n";
-  t.mark();
   // found level where interpolation is within tolerance
   // fill in values at lower levels
   lev++;
@@ -1315,9 +1311,6 @@ compute( vpgl_local_rational_camera<double> const& rat_cam,
         ray_pyr[lev-1][j][i] = interp_pair(r0, r1, i-ncrs);
     }
   }
-
-  vcl_cout << "interpolate lower layers in "
-           << t.real()/1000.0 << " secs. \n";
   gen_cam = vpgl_generic_camera<double>(ray_pyr[0]);
   return true;
 }
