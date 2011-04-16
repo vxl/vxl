@@ -10,12 +10,14 @@
 #include <vgl/algo/vgl_h_matrix_3d.h>
 #include <vgl/algo/vgl_rotation_3d.h>
 #include <vpgl/algo/vpgl_camera_compute.h>
+#include <vpgl/algo/vpgl_ray.h>
 #include <vpgl/vpgl_proj_camera.h>
 #include <vpgl/vpgl_affine_camera.h>
 #include <vpgl/vpgl_rational_camera.h>
 #include <vpgl/vpgl_perspective_camera.h>
 #include <vpgl/vpgl_calibration_matrix.h>
-
+#include <vpgl/vpgl_generic_camera.h>
+#include <vul/vul_timer.h>
 static void test_camera_compute_setup()
 {
   // PART 1: Test the affine camera computation
@@ -96,7 +98,53 @@ vpgl_rational_camera<double> construct_rational_camera()
   vpgl_rational_camera<double> rat_cam(cmatrix, scale_offsets);
   return rat_cam;
 }
+//local rational camera for testing the generic camera conversion
+vpgl_local_rational_camera<double> construct_local_rational_camera()
+{
+  double n_u[20] = {-7.81964e-006,6.39341e-005,4.67275e-006,0.00423585,
+                    -9.69009e-005,-5.10745e-006,-0.00114887,-1.64125e-005,
+                    0.000489928,0.993274,-0.000131889,-4.58868e-006,
+                    0.000902171,2.37398e-007,-0.000430274,-0.00825765,
+                    2.42847e-007, -1.07917e-005,-0.0143585,-0.00327465};
+  double d_u[20] = {7.0187e-008,-5.40373e-007,0,-2.08288e-005,-1.0929e-006,
+                    -8.71068e-008,-4.65334e-005,8.89371e-008,-3.75089e-006,
+                    -0.000956589,5.16632e-007,-1.30439e-007,7.87054e-005,
+                    -4.07253e-008, 2.88935e-006, 0.00111511,2.12671e-008,
+                    -1.69864e-005,-0.000537438,1};
+  double n_v[20] = {9.93585e-007,4.86672e-006,2.26215e-007,-0.000188252,
+                    5.27564e-005,-1.5669e-007,0.00153582,6.71638e-007,
+                    2.8673e-005,-0.0486115,3.90973e-005,5.30928e-006,
+                    -0.00419213,1.40611e-005,0.000269255,-1.03953,
+                    1.22934e-007,3.19812e-006,-0.00884028,0.00575278};
+  double d_v[20] = {8.51615e-007,6.74855e-007,1.26254e-007,-1.59186e-005,
+                    1.97482e-005,-4.07044e-007,3.29326e-005,-1.30921e-008,
+                    -6.1929e-007,0.0018664,0.000136792,-2.30798e-006,
+                    4.13577e-005,-1.38488e-007,2.19449e-006,0.00166379,
+                    8.0006e-008,-1.38346e-005,0.000332436,1};  
+  vnl_matrix_fixed<double, 4, 20> cmatrix;
+  for (unsigned i = 0; i<20; ++i)
+  {
+    cmatrix[0][i]=n_u[i];  cmatrix[1][i]=d_u[i];
+    cmatrix[2][i]=n_v[i];  cmatrix[3][i]=d_v[i];
+  }
 
+  //The scales and offsets
+  vpgl_scale_offset<double> sox(0.0986, 44.4692);
+  vpgl_scale_offset<double> soy(0.1058, 33.252);
+  vpgl_scale_offset<double> soz(500,34);
+  vpgl_scale_offset<double> sou(13982, 12782.0673959);
+  vpgl_scale_offset<double> sov(17213, 13798.1995849);
+  vcl_vector<vpgl_scale_offset<double> > scale_offsets;
+  scale_offsets.push_back(sox);   scale_offsets.push_back(soy);
+  scale_offsets.push_back(soz);   scale_offsets.push_back(sou);
+  scale_offsets.push_back(sov);
+  bgeo_lvcs lvcs(33.331465, 44.37697, 0.0, bgeo_lvcs::wgs84,bgeo_lvcs::DEG,bgeo_lvcs::METERS);
+  //Construct the rational camera
+  vpgl_rational_camera<double> rat_cam(cmatrix, scale_offsets);
+  //Construct the local rational camera
+  vpgl_local_rational_camera<double> loc_rat_cam(lvcs, rat_cam);
+  return loc_rat_cam;
+}
 #if 0
 vpgl_rational_camera<double> read_rational_camera()
 {
@@ -238,7 +286,47 @@ void test_rational_camera_approx(vcl_string dir_base)
   vpgl_perspective_camera_compute::compute(*rat_cam2, approx_vol2, pc2, norm_trans2);
   vcl_cout << "Test Result\n" << pc2 << '\n';
 }
-
+void test_generic_camera_compute(){
+  vpgl_local_rational_camera<double> lcam = construct_local_rational_camera();
+  unsigned ni = 833, nj = 877;
+  vul_timer t;
+  vpgl_generic_camera<double> gcam;
+  bool success = vpgl_generic_camera_compute::compute(lcam, ni, nj, gcam);
+  vcl_cout << " computed generic cam in " << t.real()/1000.0 << " secs.\n";
+  TEST("compute generic cam", success, true);
+  if(success){
+    double tu = 433, tv = 325;
+	double x = 457.0765, y = 526.2103, z = 34.68;
+	double u0=0, v0=0;
+	lcam.project(x, y, z, u0, v0);
+    vgl_ray_3d<double> lray, gray;
+	success = vpgl_ray::ray(lcam, tu, tv, lray);
+	gray = gcam.ray(tu, tv);
+	vgl_point_3d<double> lorg = lray.origin(), gorg = gray.origin();
+	vgl_vector_3d<double> ldir = lray.direction(), gdir = gray.direction();
+	double dorg = (lorg-gorg).length();
+	double dang = angle(ldir, gdir);
+	double u, v;
+    gcam.project(x, y, z, u, v);
+	double du = vcl_fabs(u-u0);
+	double dv = vcl_fabs(v-v0);
+	double del = du + dv;
+	TEST_NEAR("test ray projection at center", del, 0.0, 0.5);
+  // four corners
+  int ua[4] = { 0, 832,   0, 832};
+  int va[4] = { 0,   0, 876, 876};
+  dorg = 0.0; dang = 0.0;
+  for(unsigned k = 0; k<4; ++k){
+    gray = gcam.ray(ua[k], va[k]);
+    success = success && vpgl_ray::ray(lcam, ua[k], va[k], lray);
+    lorg = lray.origin(), gorg  = gray.origin();
+    ldir = lray.direction(), gdir  = gray.direction();
+    dorg += (lorg-gorg).length();
+    dang += vcl_fabs(angle(ldir, gdir));
+  }
+  TEST("corner rays", success && dorg<0.1 && dang < 0.0001, true);
+  }
+}
 static void test_camera_compute(int argc, char* argv[])
 {
   vcl_string dir_base;
@@ -253,10 +341,11 @@ static void test_camera_compute(int argc, char* argv[])
   }
   test_camera_compute_setup();
   test_perspective_compute();
-
+  test_generic_camera_compute();
 #if 0 // commented out till the new code is created for that test
   test_rational_camera_approx(dir_base);
 #endif
+
 }
 
 TESTMAIN_ARGS(test_camera_compute)

@@ -17,6 +17,8 @@
 #include <vpgl/vpgl_proj_camera.h>
 #include <vpgl/vpgl_affine_camera.h>
 #include <vpgl/vpgl_rational_camera.h>
+#include <vpgl/vpgl_local_rational_camera.h>
+#include <vpgl/vpgl_generic_camera.h>
 #include <vgl/algo/vgl_h_matrix_3d.h>
 
 //: Basic least squares solution for a general projective camera given corresponding world and image points.
@@ -40,8 +42,8 @@ class vpgl_proj_camera_compute
 
 
   //:An auxiliary matrix that transforms (normalizes) world points prior to projection by a projective camera.  (lon, lat, elevation)->[-1, 1].
- static vgl_h_matrix_3d<double>
-   norm_trans(vpgl_rational_camera<double> const& rat_cam);
+  static vgl_h_matrix_3d<double>
+    norm_trans(vpgl_rational_camera<double> const& rat_cam);
 
  private:
   //:default constructor (is private)
@@ -55,9 +57,9 @@ class vpgl_affine_camera_compute
  public:
   //: Compute from two sets of corresponding points.
   // Put the resulting camera into camera, return true if successful.
- static bool compute( const vcl_vector< vgl_point_2d<double> >& image_pts,
-                      const vcl_vector< vgl_point_3d<double> >& world_pts,
-                      vpgl_affine_camera<double>& camera );
+  static bool compute( const vcl_vector< vgl_point_2d<double> >& image_pts,
+                       const vcl_vector< vgl_point_3d<double> >& world_pts,
+                       vpgl_affine_camera<double>& camera );
  private:
   vpgl_affine_camera_compute();
 };
@@ -104,4 +106,28 @@ class vpgl_perspective_camera_compute
   vpgl_perspective_camera_compute();
 };
 
+//:Various methods for computing a generic camera
+class vpgl_generic_camera_compute
+{
+ public:
+
+  //: Compute a generic camera from a local rational camera
+  static bool compute( vpgl_local_rational_camera<double> const& rat_cam,
+                       int ni, int nj,
+                       vpgl_generic_camera<double> & gen_cam);
+
+
+ private:
+  //utility methods 
+  //: interpolate rays to fill next higher pyramid layer
+  static bool 
+    upsample_rays(vcl_vector<vgl_ray_3d<double> > const& ray_nbrs,
+                  vgl_ray_3d<double> const& ray,
+                  vcl_vector<vgl_ray_3d<double> >& interp_rays);
+  //: interpolate a span of rays base on a linear interpolation. n_grid is the step distance from r1. r0 and r1 are one unit apart.
+  static vgl_ray_3d<double> interp_pair(vgl_ray_3d<double> const& r0, 
+                                        vgl_ray_3d<double> const& r1,
+                                        double n_grid);
+  vpgl_generic_camera_compute();
+};
 #endif // vpgl_camera_compute_h_

@@ -10,6 +10,10 @@
 #include <vcl_cmath.h>
 #include <vgl/vgl_distance.h>
 #include <vgl/vgl_closest_point.h>
+#include <vgl/vgl_intersection.h>
+#include <vgl/vgl_vector_2d.h>
+#include <vgl/vgl_point_2d.h>
+#include <vgl/vgl_plane_3d.h>
 #include <vcl_iostream.h>
 //-------------------------------------------
 template <class T>
@@ -91,100 +95,77 @@ void vpgl_generic_camera<T>::nearest_ray(int level,
     }
 }
 // refine the projection to sub-pixel accuracy
-// using a Taylor series approximation in the ray neigborhood
+// use an affine invariant map between the plane passing through p and the 
+// image plane. The plane normal is given by the direction of the 
+// nearest ray to p, but negated, so as to point upward.
 template <class T>
 void vpgl_generic_camera<T>::
 refine_projection(int nearest_c, int nearest_r, vgl_point_3d<T> const& p,
                   T& u, T& v) const
 {
   // the ray closest to the projected 3-d point 
-  vgl_ray_3d<T> r = rays_[0][nearest_r][nearest_c];
+  vgl_ray_3d<T> nr = rays_[0][nearest_r][nearest_c];
 
-  //extract the neigboring ray origins and corresponding pixel differences
-  vcl_vector<vgl_point_3d<T> > origins;
-  vcl_vector<double> du, dv;
+  // construct plane with normal given by -nr.direction() through p
+  vgl_plane_3d<double> pl(-nr.direction(), p);
+  bool valid_inter = true;
+  // find intersection of nearest ray with the plane
+  vcl_vector<vgl_point_3d<T> > inter_pts;
+  vcl_vector<vgl_point_2d<T> > img_pts;
+  vgl_point_3d<double> ipt;
+  valid_inter = vgl_intersection(nr, pl, ipt);
+  inter_pts.push_back(ipt);
+  //find intersections of neigboring rays with the plane
+  //need at least two neigbors
+  img_pts.push_back(vgl_point_2d<double>(0.0, 0.0));
   if(nearest_r>0){
-    origins.push_back(rays_[0][nearest_r-1][nearest_c].origin());
-    du.push_back(0.0);
-    dv.push_back(-1.0);
+    vgl_ray_3d<double> r = rays_[0][nearest_r-1][nearest_c];
+    valid_inter = vgl_intersection(r, pl, ipt);
+    inter_pts.push_back(ipt);
+    img_pts.push_back(vgl_point_2d<double>(0.0, -1.0));
   }
   if(nearest_c>0){
-    origins.push_back(rays_[0][nearest_r][nearest_c-1].origin());
-    du.push_back(-1.0);
-    dv.push_back(0.0);
-  }
-  int nbl = static_cast<int>(rows())-1;
-  if(nearest_r<nbl){
-    origins.push_back(rays_[0][nearest_r+1][nearest_c].origin());
-    du.push_back(0.0);
-    dv.push_back(1.0);
+    vgl_ray_3d<double> r = rays_[0][nearest_r][nearest_c-1];
+    valid_inter = vgl_intersection(r, pl, ipt);
+    inter_pts.push_back(ipt);
+    img_pts.push_back(vgl_point_2d<double>(-1.0, 0.0));
   }
   int nrght = static_cast<int>(cols())-1;
   if(nearest_c<nrght){
-    origins.push_back(rays_[0][nearest_r][nearest_c+1].origin());
-    du.push_back(1.0);
-    dv.push_back(0.0);
+    vgl_ray_3d<double> r = rays_[0][nearest_r][nearest_c+1];
+    valid_inter = vgl_intersection(r, pl, ipt);
+    inter_pts.push_back(ipt);
+    img_pts.push_back(vgl_point_2d<double>(1.0, 0.0));
   }
-  //no neighbors, shouldn't happen!
-  if(!origins.size()){
+  int nbl = static_cast<int>(rows())-1;
+  if(nearest_r<nbl){
+    vgl_ray_3d<double> r = rays_[0][nearest_r+1][nearest_c];
+    valid_inter = vgl_intersection(r, pl, ipt);
+    inter_pts.push_back(ipt);
+    img_pts.push_back(vgl_point_2d<double>(0.0, 1.0));
+  }
+  //less than two neighbors, shouldn't happen!
+  if(!valid_inter||inter_pts.size()<3){
     u = static_cast<T>(nearest_c);
     v = static_cast<T>(nearest_r);
     return;
   }
+  // compute 2-d plane coordinates for points
+  vgl_point_3d<double> p0 = inter_pts[0];// origin
+  // coordinate axes
+  vgl_vector_3d<double> v0 = inter_pts[1]- p0;
+  vgl_vector_3d<double> v1 = inter_pts[2]- p0;
+  vgl_vector_3d<double> vp = p-p0;
+  // coordinates of p in the plane
+  double x0 = dot_product(v0, vp), x1 = dot_product(v1, vp);
 
-  // do a local Taylor series expansion in the closest ray neigborhood
-  double tol = 1.0e-8;
-  // partial derivatives
-  double dudx = 0.0, dudy = 0.0, dudz = 0.0;
-  double dvdx = 0.0, dvdy = 0.0, dvdz = 0.0;
-  double sx = 0.0, sy = 0.0, sz = 0.0;
-  for(unsigned i = 0; i< origins.size(); ++i){
-    vgl_point_3d<T> org_i = origins[i];
-    vgl_point_3d<T> cp = vgl_closest_point(org_i, r);
-    vgl_vector_3d<T> q = org_i-cp;
-    double du_i = du[i], dv_i = dv[i];
-    //accumulate partial derivatives based on neighbors
-    if(vcl_fabs(q.x())>tol){
-      dudx += du_i/q.x();
-      dvdx += dv_i/q.x();
-      sx +=1.0;
-    }
-    if(vcl_fabs(q.y())>tol){
-      dudy += du_i/q.y();
-      dvdy += dv_i/q.y();
-      sy +=1.0;
-    }
-    if(vcl_fabs(q.z())>tol){
-      dudz += du_i/q.z();
-      dvdz += dv_i/q.z();
-      sz +=1.0;
-    }
-  }
-  //normalize partial derivatives
-  if(sx>0.0){
-    dudx /= sx;
-    dvdx /= sx;
-  }
-  if(sy>0.0){
-    dudy /= sy;
-    dvdy /= sy;
-  }
-  if(sz>0.0){
-    dudz /= sz;
-    dvdz /= sz;
-  }
-  // the closest point on the nearest ray to the projected point
-  vgl_point_3d<T> np = vgl_closest_point(p, r);
-
-  // the corresponding perpendicular vector
-  vgl_vector_3d<T> vp = p - np;
-
-  // expand using the  Taylor series
-  double eu = nearest_c, ev = nearest_r;
-  eu = eu + dudx*vp.x() + dudy*vp.y() + dudz*vp.z();
-  ev = ev + dvdx*vp.x() + dvdy*vp.y() + dvdz*vp.z();
-  u = static_cast<T>(eu);
-  v = static_cast<T>(ev);
+  // in image space
+  vgl_point_2d<double> ip0 = img_pts[0];
+  vgl_vector_2d<double> iv0 = img_pts[1]-ip0;
+  vgl_vector_2d<double> iv1 = img_pts[2]-ip0;
+  vgl_vector_2d<double>  del = x0*iv0 + x1*iv1;
+  u = nearest_c + del.x();
+  v = nearest_r + del.y();
 }
 // projects by exhaustive search in a pyramid. 
 template <class T>
