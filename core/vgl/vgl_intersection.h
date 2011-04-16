@@ -134,6 +134,14 @@ bool vgl_intersection(vgl_infinite_line_3d<T> const& line,
                       vgl_plane_3d<T> const& plane,
                       vgl_point_3d<T> & i_pt);
 
+//: Return the intersection point of a ray and a plane.
+// \relatesalso vgl_line_segment_3d
+// \relatesalso vgl_plane_3d
+template <class T>
+bool vgl_intersection(vgl_ray_3d<T> const& ray,
+                      vgl_plane_3d<T> const& plane,
+                      vgl_point_3d<T> & i_pt);
+
 //: Return the intersection line of two planes.
 // Returns false if planes are effectively parallel
 // \relatesalso vgl_line_segment_3d
