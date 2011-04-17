@@ -135,6 +135,9 @@ class vpgl_generic_camera_compute
   static bool compute( vpgl_affine_camera<double> const& aff_cam,
                        int ni, int nj, vpgl_generic_camera<double> & gen_cam);
 
+  //::convert abstract camera to generic camera
+  static bool compute( vpgl_camera_double_sptr const& camera, int ni, int nj,
+                       vpgl_generic_camera<double> & gen_cam);
  private:
   //utility methods 
   //: interpolate rays to fill next higher resolution pyramid layer

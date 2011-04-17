@@ -1358,4 +1358,22 @@ compute( vpgl_affine_camera<double> const& aff_cam, int ni, int nj,
   gen_cam = vpgl_generic_camera<double>(rays);
   return true;
 }
+bool vpgl_generic_camera_compute::
+compute( vpgl_camera_double_sptr const& camera, int ni, int nj,
+         vpgl_generic_camera<double> & gen_cam)
+{
+  if(vpgl_local_rational_camera<double>* cam =
+     dynamic_cast<vpgl_local_rational_camera<double>*>(camera.ptr()))
+    return vpgl_generic_camera_compute::compute(*cam, ni, nj, gen_cam);
+
+  if (vpgl_proj_camera<double>* cam = 
+      dynamic_cast<vpgl_proj_camera<double>*>(camera.ptr()))
+    return vpgl_generic_camera_compute::compute(*cam, ni, nj, gen_cam);
+
+  if(vpgl_affine_camera<double>* cam = 
+     dynamic_cast<vpgl_affine_camera<double>*>(camera.ptr()))
+    return vpgl_generic_camera_compute::compute(*cam, ni, nj, gen_cam);
+
+  return false;
+}
 #endif // vpgl_camera_compute_cxx_
