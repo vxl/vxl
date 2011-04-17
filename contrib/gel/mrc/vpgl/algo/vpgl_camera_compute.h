@@ -116,10 +116,28 @@ class vpgl_generic_camera_compute
                        int ni, int nj,
                        vpgl_generic_camera<double> & gen_cam);
 
+  //: Compute a generic camera from a projective camera. Also covers the perspetive case
+  static bool compute( vpgl_proj_camera<double> const& prj_cam,
+                       int ni, int nj,
+                       vpgl_generic_camera<double> & gen_cam);
+
+  static bool compute( vpgl_perspective_camera<double> const& per_cam,
+                       int ni, int nj,
+                       vpgl_generic_camera<double> & gen_cam)
+    {
+      vpgl_perspective_camera<double> nc_cam(per_cam); 
+      vpgl_proj_camera<double>* prj_cam_ptr = 
+        dynamic_cast<vpgl_proj_camera<double>*>(&nc_cam);
+      if(!prj_cam_ptr) return false;
+      return compute(*prj_cam_ptr, ni, nj, gen_cam);
+    }
+  //: compute a generic camera from an affine camera
+  static bool compute( vpgl_affine_camera<double> const& aff_cam,
+                       int ni, int nj, vpgl_generic_camera<double> & gen_cam);
 
  private:
   //utility methods 
-  //: interpolate rays to fill next higher pyramid layer
+  //: interpolate rays to fill next higher resolution pyramid layer
   static bool 
     upsample_rays(vcl_vector<vgl_ray_3d<double> > const& ray_nbrs,
                   vgl_ray_3d<double> const& ray,

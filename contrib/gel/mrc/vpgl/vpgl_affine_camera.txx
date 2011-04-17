@@ -9,6 +9,7 @@
 #include <vnl/vnl_matrix_fixed.h>
 #include <vgl/algo/vgl_rotation_3d.h>
 #include <vgl/vgl_closest_point.h>
+#include <vgl/vgl_tolerance.h>
 #include <vcl_cassert.h>
 
 //-------------------------------------------
@@ -138,15 +139,20 @@ template <class T>
 vgl_homg_line_3d_2_points<T> vpgl_affine_camera<T>::
 backproject( const vgl_homg_point_2d<T>& image_point ) const
 {
+  vgl_homg_line_3d_2_points<T> ret;
   //get line from projective camera
   vgl_homg_line_3d_2_points<T> line =
     vpgl_proj_camera<T>::backproject(image_point);
   vgl_homg_point_3d<T> cph = vgl_closest_point_origin(line);
+  if(!is_ideal(cph, vgl_tolerance<T>::position)){
   vgl_point_3d<T> cp(cph);
   vgl_point_3d<T> eye_pt = cp-(view_distance_*ray_dir_);
   vgl_homg_point_3d<T> pt_fin(eye_pt.x(), eye_pt.y(), eye_pt.z());
   vgl_homg_point_3d<T> pinf(ray_dir_.x(), ray_dir_.y(), ray_dir_.z(), (T)0);
-  vgl_homg_line_3d_2_points<T> ret(pt_fin, pinf);
+  ret = vgl_homg_line_3d_2_points<T>(pt_fin, pinf);
+  }else
+    vcl_cout << "Warning vpgl_affine_camera::backproject produced line "
+             << " at infinity \n";
   return ret;
 }
 
