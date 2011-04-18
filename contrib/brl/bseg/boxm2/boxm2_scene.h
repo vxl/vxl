@@ -20,7 +20,7 @@
 
 //vpgl camera
 #include <vpgl/vpgl_generic_camera.h>
-
+#include <vpgl/vpgl_perspective_camera.h>
 
 //: block info that can be easily made into a buffer and sent to gpu
 struct boxm2_scene_info
@@ -70,6 +70,7 @@ class boxm2_scene : public vbl_ref_count
 
     //: return a vector of block ids in visibility order
     vcl_vector<boxm2_block_id> get_vis_blocks(vpgl_generic_camera<double>* cam);
+    vcl_vector<boxm2_block_id> get_vis_blocks(vpgl_perspective_camera<double>* cam);
     //: return a heap pointer to a scene info
     boxm2_scene_info* get_blk_metadata(boxm2_block_id id);
     bool block_exists(boxm2_block_id id) { return blocks_.find(id) != blocks_.end(); }
