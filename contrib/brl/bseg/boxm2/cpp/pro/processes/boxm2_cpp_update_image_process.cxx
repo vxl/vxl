@@ -71,7 +71,10 @@ bool boxm2_cpp_update_image_process(bprb_func_process& pro)
     if (vil_image_view<float> * input_image=dynamic_cast<vil_image_view<float> * > (float_image.ptr()))
     {
         bool foundDataType = false;
+        bool foundNumObsType = false;
+
         vcl_string data_type;
+        vcl_string num_obs_type;
         vcl_vector<vcl_string> apps = scene->appearances();
         for (unsigned int i=0; i<apps.size(); ++i) {
             if ( apps[i] == boxm2_data_traits<BOXM2_MOG3_GREY>::prefix() )
@@ -83,6 +86,11 @@ bool boxm2_cpp_update_image_process(bprb_func_process& pro)
             {
                 data_type = apps[i];
                 foundDataType = true;
+            }
+            else if ( apps[i] == boxm2_data_traits<BOXM2_NUM_OBS>::prefix() )
+            {
+                num_obs_type = apps[i];
+                foundNumObsType = true;
             }
         }
         if (!foundDataType) {
@@ -122,6 +130,7 @@ bool boxm2_cpp_update_image_process(bprb_func_process& pro)
                 boxm2_block *     blk   = cache->get_block(*id);
                 boxm2_data_base *  alph = cache->get_data_base(*id,boxm2_data_traits<BOXM2_ALPHA>::prefix());
                 boxm2_data_base *  mog  = cache->get_data_base(*id,data_type);
+                boxm2_data_base *  nobs  = cache->get_data_base(*id,num_obs_type);
                 boxm2_data_base *  aux  = cache->get_data_base(*id,boxm2_data_traits<BOXM2_AUX>::prefix());
                 vcl_vector<boxm2_data_base*> datas;
                 datas.push_back(aux);
@@ -172,8 +181,8 @@ bool boxm2_cpp_update_image_process(bprb_func_process& pro)
         {
             boxm2_block     *  blk   = cache->get_block(*id);
             boxm2_data_base *  alph  = cache->get_data_base(*id,boxm2_data_traits<BOXM2_ALPHA>::prefix());
-            boxm2_data_base *  mog   = cache->get_data_base(*id,boxm2_data_traits<BOXM2_MOG3_GREY>::prefix());
-            boxm2_data_base *  nobs  = cache->get_data_base(*id,boxm2_data_traits<BOXM2_NUM_OBS>::prefix());
+            boxm2_data_base *  mog   = cache->get_data_base(*id,data_type);
+            boxm2_data_base *  nobs  = cache->get_data_base(*id,num_obs_type);
             boxm2_data_base *  aux   = cache->get_data_base(*id,boxm2_data_traits<BOXM2_AUX>::prefix());
             vcl_vector<boxm2_data_base*> datas;
             datas.push_back(aux);
@@ -182,7 +191,7 @@ bool boxm2_cpp_update_image_process(bprb_func_process& pro)
             datas.push_back(nobs);
             boxm2_update_data_functor data_functor;
             data_functor.init_data(datas, float(blk->sub_block_dim().x()), blk->max_level());
-            int alphaTypeSize      = boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
+            int alphaTypeSize    = boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
             int data_buff_length = (int) (alph->buffer_length()/alphaTypeSize);
             boxm2_data_serial_iterator<boxm2_update_data_functor>(data_buff_length,data_functor);
         }
