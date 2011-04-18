@@ -3,6 +3,7 @@
 ADD_EXECUTABLE(bvgl_test_all
   test_driver.cxx
   test_bvgl_changes.cxx
+  test_bvgl_volume_of_intersection.cxx
 )
 TARGET_LINK_LIBRARIES(bvgl_test_all bvgl vgl testlib)
 
