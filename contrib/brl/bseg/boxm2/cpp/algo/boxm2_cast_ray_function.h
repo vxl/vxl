@@ -18,6 +18,8 @@
 #include <boct/boct_bit_tree2.h>
 
 #include <vcl_algorithm.h>
+#include <vpgl/vpgl_generic_camera.h>
+
 #define BLOCK_EPSILON .006125f
 #define TREE_EPSILON  .005f
 
@@ -155,14 +157,15 @@ bool cast_ray_per_block(functor_type functor,
                         unsigned int roi_ni0=0,
                         unsigned int roi_nj0=0)
 {
-  if (vpgl_perspective_camera<double> * pcam=dynamic_cast<vpgl_perspective_camera<double> *>(cam.ptr()))
+  if (vpgl_generic_camera<double>* gcam = 
+      dynamic_cast<vpgl_generic_camera<double> *>(cam.ptr()))
   {
     for (unsigned i=roi_ni0;i<roi_ni;++i)
     {
       if (i%10==0) vcl_cout<<'.';
       for (unsigned j=roi_nj0;j<roi_nj;++j)
       {
-        vgl_ray_3d<double> ray_ij=pcam->backproject_ray(i,j);
+        vgl_ray_3d<double> ray_ij = gcam->ray(i,j);
         vgl_point_3d<float> block_origin(float(ray_ij.origin().x()-linfo->scene_origin[0])/linfo->block_len,
                                          float(ray_ij.origin().y()-linfo->scene_origin[1])/linfo->block_len,
                                          float(ray_ij.origin().z()-linfo->scene_origin[2])/linfo->block_len);

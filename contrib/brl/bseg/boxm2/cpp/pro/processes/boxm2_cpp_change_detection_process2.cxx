@@ -93,7 +93,7 @@ bool boxm2_cpp_change_detection_process2(bprb_func_process& pro)
           //: function call
           vil_image_view<float> * vis_img=new vil_image_view<float>(in_img->ni(),in_img->nj());
           vis_img->fill(1.0f);
-          vcl_vector<boxm2_block_id> vis_order=scene->get_vis_blocks(reinterpret_cast<vpgl_perspective_camera<double>*>(cam.ptr()));
+          vcl_vector<boxm2_block_id> vis_order=scene->get_vis_blocks(reinterpret_cast<vpgl_generic_camera<double>*>(cam.ptr()));
           if (vis_order.empty())
           {
               vcl_cout<<" None of the blocks are visible from this viewpoint"<<vcl_endl;

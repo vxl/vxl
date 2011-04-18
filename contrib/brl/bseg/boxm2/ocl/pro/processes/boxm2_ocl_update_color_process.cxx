@@ -264,7 +264,7 @@ bool boxm2_ocl_update_color_process(bprb_func_process& pro)
   app_density->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
   //: set arguments
-  vcl_vector<boxm2_block_id> vis_order = scene->get_vis_blocks( (vpgl_perspective_camera<double>*) cam.ptr());
+  vcl_vector<boxm2_block_id> vis_order = scene->get_vis_blocks( (vpgl_generic_camera<double>*) cam.ptr());
   vcl_vector<boxm2_block_id>::iterator id;
   for (unsigned int i=0; i<kernels[identifier].size(); ++i)
   {

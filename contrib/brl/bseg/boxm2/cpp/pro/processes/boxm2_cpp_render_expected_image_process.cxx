@@ -92,7 +92,7 @@ bool boxm2_cpp_render_expected_image_process(bprb_func_process& pro)
   vil_image_view<float> * vis_img=new vil_image_view<float>(ni,nj);
   exp_img->fill(0.0f);
   vis_img->fill(1.0f);
-  vcl_vector<boxm2_block_id> vis_order=scene->get_vis_blocks(reinterpret_cast<vpgl_perspective_camera<double>*>(cam.ptr()));
+  vcl_vector<boxm2_block_id> vis_order=scene->get_vis_blocks(reinterpret_cast<vpgl_generic_camera<double>*>(cam.ptr()));
   vcl_vector<boxm2_block_id>::iterator id;
   for (id = vis_order.begin(); id != vis_order.end(); ++id)
   {

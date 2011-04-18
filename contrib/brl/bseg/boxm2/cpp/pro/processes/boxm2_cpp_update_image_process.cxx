@@ -36,7 +36,11 @@ bool boxm2_cpp_update_image_process_cons(bprb_func_process& pro)
 {
   using namespace boxm2_cpp_update_image_process_globals;
 
-  //process takes 1 input
+  //process takes 4 inputs
+  // 0) scene
+  // 1) cache
+  // 2) camera
+  // 3) image
   vcl_vector<vcl_string> input_types_(n_inputs_);
   input_types_[0] = "boxm2_scene_sptr";
   input_types_[1] = "boxm2_cache_sptr";
@@ -85,7 +89,7 @@ bool boxm2_cpp_update_image_process(bprb_func_process& pro)
             vcl_cout<<"BOXM2_OCL_RENDER_PROCESS ERROR: scene doesn't have BOXM2_MOG3_GREY or BOXM2_MOG3_GREY_16 data type"<<vcl_endl;
             return false;
         }
-        vcl_vector<boxm2_block_id> vis_order=scene->get_vis_blocks(reinterpret_cast<vpgl_perspective_camera<double>*>(cam.ptr()));
+        vcl_vector<boxm2_block_id> vis_order=scene->get_vis_blocks(reinterpret_cast<vpgl_generic_camera<double>*>(cam.ptr()));
         if (vis_order.empty())
         {
             vcl_cout<<" None of the blocks are visible from this viewpoint"<<vcl_endl;

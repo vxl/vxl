@@ -81,10 +81,17 @@ vcl_vector<boxm2_block_id> boxm2_scene::get_block_ids()
   return block_ids;
 }
 
-vcl_vector<boxm2_block_id> boxm2_scene::get_vis_blocks(vpgl_perspective_camera<double>* cam)
+vcl_vector<boxm2_block_id> boxm2_scene::get_vis_blocks(vpgl_generic_camera<double>* cam)
 {
+  vcl_vector<boxm2_block_id> vis_order;
+  if(!cam){
+    vcl_cout << "null camera in boxm2_scene::get_vis_blocks(.)\n";
+    return vis_order;
+  }
   //get camera center and order blocks distance from the cam center
-  vgl_point_3d<double> cam_center = cam->camera_center();
+  //for non-projective cameras there may not be a single center of projection
+  //so instead get the ray origin farthest from the scene origin.
+  vgl_point_3d<double> cam_center = cam->max_ray_origin();
 
   //Map of distance, id
   vcl_vector<boxm2_dist_id_pair> distances;
@@ -110,7 +117,6 @@ vcl_vector<boxm2_block_id> boxm2_scene::get_vis_blocks(vpgl_perspective_camera<d
 
   //put blocks in "vis_order"
   //vcl_cout<<"CAM ORDER----------------------------------------"<<vcl_endl;
-  vcl_vector<boxm2_block_id> vis_order;
   vcl_vector<boxm2_dist_id_pair>::iterator di;
   for (di = distances.begin(); di != distances.end(); ++di) {
     vis_order.push_back(di->id_);
@@ -319,8 +325,31 @@ vcl_ostream& operator <<(vcl_ostream &s, boxm2_scene& scene)
   for (unsigned int i=0; i<apps.size(); ++i)
     s << "    " << apps[i] << ", ";
   s << '\n';
+  bgeo_lvcs lvcs = scene.lvcs();
+  s << lvcs << '\n';
+
+  vgl_box_3d<double> bb = scene.bounding_box();
+  vgl_point_3d<double> minp = bb.min_point();
+  vgl_point_3d<double> maxp = bb.max_point();
+  s << "bounds : ( " << minp.x() << ' ' << minp.y() << ' ' << minp.z()
+ << " )==>( " << maxp.x() << ' ' << maxp.y() << ' ' << maxp.z() << " )\n";
 
   //list of block ids for this scene....
+  vgl_vector_3d<unsigned> dims = scene.scene_dimensions();
+  s << "block array dims(" << dims.x() << ' ' << dims.y() << ' ' << dims.z() << ")\n";
+  vcl_map<boxm2_block_id, boxm2_block_metadata>& blk = scene.blocks();
+  s << " blocks:==>\n";
+  for(vcl_map<boxm2_block_id, boxm2_block_metadata>::iterator bit=blk.begin();
+      bit != blk.end(); ++bit){
+    s << (*bit).second.id_ << ' ';
+    vgl_point_3d<double> org = (*bit).second.local_origin_;
+    s << ", org( " << org.x() << ' ' << org.y() << ' ' << org.z() << ") ";
+    vgl_vector_3d<double> dim = (*bit).second.sub_block_dim_;
+    s << ", dim( " << dim.x() << ' ' << dim.y() << ' ' << dim.z() << ") ";
+    vgl_vector_3d<unsigned> num = (*bit).second.sub_block_num_;
+    s << ", num( " << num.x() << ' ' << num.y() << ' ' << num.z() << ") \n";
+  }
+  s << "<=====:end blocks\n";
   return s;
 }
 

@@ -27,7 +27,7 @@ bool boxm2_save_data_process_cons(bprb_func_process& pro)
   input_types_[0]  = "boxm2_scene_sptr";
   input_types_[1]  = "boxm2_cache_sptr";
 
-  // process has 1 output
+  // process has 0 outputs
   vcl_vector<vcl_string> output_types_(n_outputs_);
 
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
