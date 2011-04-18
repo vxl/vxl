@@ -259,7 +259,7 @@ bool boxm2_ocl_change_detection_process(bprb_func_process& pro)
   bocl_mem_sptr lookup=new bocl_mem(device->context(), lookup_arr, sizeof(cl_uchar)*256, "bit lookup buffer");
   lookup->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
   //For each ID in the visibility order, grab that block
-  vcl_vector<boxm2_block_id> vis_order = scene->get_vis_blocks( (vpgl_generic_camera<double>*) cam.ptr());
+  vcl_vector<boxm2_block_id> vis_order = scene->get_vis_blocks(  (vpgl_perspective_camera<double>*) cam.ptr());
   vcl_vector<boxm2_block_id>::iterator id;
   for (id = vis_order.begin(); id != vis_order.end(); ++id)
   {

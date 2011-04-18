@@ -198,7 +198,7 @@ bool boxm2_ocl_render_expected_depth_process(bprb_func_process& pro)
   vcl_size_t gThreads[] = {cl_ni,cl_nj};
 
   //: set arguments
-  vcl_vector<boxm2_block_id> vis_order = scene->get_vis_blocks( (vpgl_generic_camera<double>*) cam.ptr());
+  vcl_vector<boxm2_block_id> vis_order = scene->get_vis_blocks((vpgl_perspective_camera<double>*) cam.ptr());
   vcl_vector<boxm2_block_id>::iterator id;
   for (id = vis_order.begin(); id != vis_order.end(); ++id)
   {
