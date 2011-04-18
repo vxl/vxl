@@ -27,6 +27,8 @@
 #include <boxm/boxm_scene.h>
 #include <boxm/boxm_apm_traits.h>
 
+#define BOXM2_SCENE_HAS_DIMENSIONS
+
 //: computes the log2 of a number and returns it.
 // power_of_2 is set to true if \p x is an exact power of two.
 // returns -1 when \p x is zero.
@@ -279,6 +281,7 @@ int main(int argc, char** argv)
     scene.write_active_block();
     iter++;
   }
+  vcl_cout << "Writing BOXM Scene\n";
   scene.set_octree_levels(x_dim+4, x_dim+1);
-  scene.write_scene("scene.xml");
+  scene.write_scene("boxm_scene.xml");
 }
