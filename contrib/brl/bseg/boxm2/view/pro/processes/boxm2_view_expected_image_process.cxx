@@ -7,6 +7,7 @@
 // \author Vishal Jain
 // \date Mar 10, 2011
 
+#include <boxm2/view/boxm2_include_glew.h>
 #include <vcl_fstream.h>
 #include <boxm2/ocl/boxm2_opencl_cache.h>
 #include <boxm2/boxm2_scene.h>
