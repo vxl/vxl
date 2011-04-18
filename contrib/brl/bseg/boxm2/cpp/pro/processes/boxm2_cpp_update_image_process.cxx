@@ -198,6 +198,7 @@ bool boxm2_cpp_update_image_process(bprb_func_process& pro)
             data_functor.init_data(datas, float(blk->sub_block_dim().x()), blk->max_level());
             int data_buff_length = (int) (alph->buffer_length()/alphaTypeSize);
             boxm2_data_serial_iterator<boxm2_update_data_functor>(data_buff_length,data_functor);
+            cache->remove_data_base(*id,boxm2_data_traits<BOXM2_AUX>::prefix());
         }
         return true;
     }
