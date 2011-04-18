@@ -131,7 +131,10 @@ bool boxm2_cpp_update_image_process(bprb_func_process& pro)
                 boxm2_data_base *  alph = cache->get_data_base(*id,boxm2_data_traits<BOXM2_ALPHA>::prefix());
                 boxm2_data_base *  mog  = cache->get_data_base(*id,data_type);
                 boxm2_data_base *  nobs  = cache->get_data_base(*id,num_obs_type);
-                boxm2_data_base *  aux  = cache->get_data_base(*id,boxm2_data_traits<BOXM2_AUX>::prefix());
+                int alphaTypeSize = boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
+                int auxTypeSize = boxm2_data_info::datasize(boxm2_data_traits<BOXM2_AUX>::prefix());
+                boxm2_data_base *  aux  = cache->get_data_base(*id,boxm2_data_traits<BOXM2_AUX>::prefix(),alph->buffer_length()/alphaTypeSize*auxTypeSize);
+
                 vcl_vector<boxm2_data_base*> datas;
                 datas.push_back(aux);
                 datas.push_back(alph);
