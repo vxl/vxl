@@ -241,7 +241,7 @@ int main(int argc, char** argv)
     p[0] = metadata.local_origin_.x();
     p[1] = metadata.local_origin_.y();
     p[2] = metadata.local_origin_.z();
-    vgl_box_3d<double> block_bb(p, subdim.x(), subdim.y(), subdim.z(), vgl_box_3d<double>::min_pos);
+    vgl_box_3d<double> block_bb(p, subdim.x()*dim.x(), subdim.y()*dim.y(), subdim.z()*dim.z(), vgl_box_3d<double>::min_pos);
     tree_type* block_tree=new tree_type(x_dim+4, x_dim+1); // FIX take max of 3 dims instead
     block_tree->set_bbox(block_bb);
     block_tree->init_cells(0);
