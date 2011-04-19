@@ -145,7 +145,9 @@ bool boxm2_block::init_empty_block(boxm2_block_metadata data)
   {
     //data index is tree index at this point
     //store data index in bits [10, 11, 12, 13] ;
-    uchar16 treeBlk( (unsigned char) 0 );
+    for (int i=0; i<16; i++)
+        treeBlk[i]=0;
+
     treeBlk[10] = (tree_index) & 0xff;
     treeBlk[11] = (tree_index>>8)  & 0xff;
     treeBlk[12] = (tree_index>>16) & 0xff;
