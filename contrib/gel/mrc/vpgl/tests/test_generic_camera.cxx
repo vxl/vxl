@@ -9,28 +9,27 @@
 #include <vcl_cmath.h>
 static void test_generic_camera()
 {
-  //construct a 5x7 image to test pyramid 
+  //construct a 5x7 image to test pyramid
   vbl_array_2d<vgl_ray_3d<double> > img(5, 7);
   // simple rays along -z
   vgl_vector_3d<double> dir(0.0, 0.0, -1.0);
-  for(int r =0; r<5; ++r)
-    for(int c =0; c<7; ++c)
-      {
-        vgl_point_3d<double> p(c, r, 10.0);// 10 above the ground plane
-        img[r][c]=vgl_ray_3d<double>(p, dir);
-      }
+  for (int r =0; r<5; ++r)
+    for (int c =0; c<7; ++c)
+    {
+      vgl_point_3d<double> p(c, r, 10.0);// 10 above the ground plane
+      img[r][c]=vgl_ray_3d<double>(p, dir);
+    }
   vpgl_generic_camera<double> c(img);
 #if 0
- 
-  for(int i = 0; i<2; ++i){
-	  vcl_cout << "level " << i << '\n';
-		c.print_orig(i);
+  for (int i = 0; i<2; ++i) {
+    vcl_cout << "level " << i << '\n';
+    c.print_orig(i);
   }
 #endif
   vgl_ray_3d<double> interp_ray = c.ray(3.5, 2.5);
   vgl_point_3d<double> org = interp_ray.origin();
   double er = vcl_fabs(org.x()-3.190983) + vcl_fabs(org.y()-2.190983);
-  TEST_NEAR("intepolated ray", er, 0.0, 0.0001);
+  TEST_NEAR("interpolated ray", er, 0.0, 0.0001);
   double x = 1.5, y = 2.5, z = 0.0, u = 0.0, v= 0.0;
   c.project(x, y, z, u, v);
   er = vcl_fabs(u-1.5) + vcl_fabs(v-2.5);
@@ -44,4 +43,5 @@ static void test_generic_camera()
   er += vcl_fabs(u2-6.8) + vcl_fabs(v2-5.2);
   TEST_NEAR("project", er, 0.0, 0.0001);
 }
+
 TESTMAIN(test_generic_camera);
