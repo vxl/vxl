@@ -95,9 +95,9 @@ void sdet_third_order_edge_det::apply(vil_image_view<vxl_byte> const& image)
   double noise_sigma = 1.5;
   double rel_thresh = 1.3*noise_sigma/(sigma_*sigma_*sigma_);
   sdet_nms NMS(sdet_nms_params(thresh_, (sdet_nms_params::PFIT_TYPE)pfit_type_,
-                               (4*sigma_+1)*(1 << interp_factor_), // 2^interp_factor_
+                               int(4*sigma_+1)*(1 << interp_factor_), // 2^interp_factor_
                                rel_thresh, adapt_thresh_),
-                grad_x, grad_y, grad_mag);
+               grad_x, grad_y, grad_mag);
 
   //  NMS.apply(true, edge_locs, orientation, mag, d2f, pix_locs);
   NMS.apply(true, edge_locs, orientation, mag);
@@ -267,7 +267,7 @@ bool sdet_third_order_edge_det::apply_color(vil_image_view<vxl_byte> const& imag
     {
       scale = 1 << interp_factor_; // 2^interp_factor_
       //compute gradients
-      if (conv_algo_==0){
+      if (conv_algo_==0) {
         brip_subpix_convolve_2d(comp1, f1_dx, brip_Gx_kernel(sigma_), float(), interp_factor_);
         brip_subpix_convolve_2d(comp1, f1_dy, brip_Gy_kernel(sigma_), float(), interp_factor_);
         brip_subpix_convolve_2d(comp2, f2_dx, brip_Gx_kernel(sigma_), float(), interp_factor_);
@@ -290,7 +290,7 @@ bool sdet_third_order_edge_det::apply_color(vil_image_view<vxl_byte> const& imag
       scale = 1 << interp_factor_; // 2^interp_factor_
 
       //compute gradients
-      if (conv_algo_==0){
+      if (conv_algo_==0) {
         brip_subpix_convolve_2d(comp1, f1_dx, brip_h0_Gx_kernel(sigma_), float(), interp_factor_);
         brip_subpix_convolve_2d(comp1, f1_dy, brip_h0_Gy_kernel(sigma_), float(), interp_factor_);
         brip_subpix_convolve_2d(comp2, f2_dx, brip_h0_Gx_kernel(sigma_), float(), interp_factor_);
@@ -314,7 +314,7 @@ bool sdet_third_order_edge_det::apply_color(vil_image_view<vxl_byte> const& imag
       scale = 1 << interp_factor_; // 2^interp_factor_
 
       //compute gradients
-      if (conv_algo_==0){
+      if (conv_algo_==0) {
         brip_subpix_convolve_2d(comp1, f1_dx, brip_h1_Gx_kernel(sigma_), float(), interp_factor_);
         brip_subpix_convolve_2d(comp1, f1_dy, brip_h1_Gy_kernel(sigma_), float(), interp_factor_);
         brip_subpix_convolve_2d(comp2, f2_dx, brip_h1_Gx_kernel(sigma_), float(), interp_factor_);
@@ -359,7 +359,7 @@ bool sdet_third_order_edge_det::apply_color(vil_image_view<vxl_byte> const& imag
 
     double l = (A+C+ vcl_sqrt((A-C)*(A-C) + 4*B*B))/2;
 
-    if (vcl_fabs(B)>1e-2){
+    if (vcl_fabs(B)>1e-2) {
       n1[i] = B/vcl_sqrt(B*B+(l-A)*(l-A));
       n2[i] = (l-A)/vcl_sqrt(B*B+(l-A)*(l-A));
     }
@@ -542,7 +542,7 @@ bool sdet_third_order_edge_det::apply_color(vil_image_view<vxl_byte> const& imag
 
     // when B is zero, these derivatives need to be corrected to the limiting value
     double n1x, n1y, n2x, n2y;
-    if (vcl_fabs(B)>1e-2){
+    if (vcl_fabs(B)>1e-2) {
       n1x = ( 2*(Ax-Cx)/d - (A-C)*(2*(C-A)*(Cx-Ax) + 8*B*Bx)/(d*d*d))/2/n1;
       n1y = ( 2*(Ay-Cy)/d - (A-C)*(2*(C-A)*(Cy-Ay) + 8*B*By)/(d*d*d))/2/n1;
       n2x = (-2*(Ax-Cx)/d + (A-C)*(2*(C-A)*(Cx-Ax) + 8*B*Bx)/(d*d*d))/2/n2;
@@ -558,7 +558,7 @@ bool sdet_third_order_edge_det::apply_color(vil_image_view<vxl_byte> const& imag
 
     double n1, n2, n1x, n1y, n2x, n2y;
     // when B is zero, these derivatives need to be fixed
-    if (vcl_fabs(B)>1e-2){
+    if (vcl_fabs(B)>1e-2) {
       double f = vcl_sqrt(B*B+(l-A)*(l-A));
 
       n1 = B/f;
@@ -611,8 +611,8 @@ bool sdet_third_order_edge_det::apply_color(vil_image_view<vxl_byte> const& imag
   //create a new edgemap from the tokens collected from NMS
   brip_edgemap_sptr edge_map = new brip_edgemap(comp1.ni(), comp1.nj());
 
-  for (unsigned i=0; i<edge_locations.size(); i++){
-    if (reduce_tokens){
+  for (unsigned i=0; i<edge_locations.size(); i++) {
+    if (reduce_tokens) {
       //only insert one edgel per grid position
       int xx = brip_round(edge_locations[i].x());
       int yy = brip_round(edge_locations[i].y());
@@ -657,8 +657,8 @@ bool sdet_third_order_edge_det::save_edg_ascii(const vcl_string& filename, unsig
   //1) If file open fails, return.
   vcl_ofstream outfp(filename.c_str(), vcl_ios::out);
 
-  if (!outfp){
-    vcl_cerr << " Error opening file  " << filename.c_str() << vcl_endl;
+  if (!outfp) {
+    vcl_cerr << "*** Error opening file " << filename.c_str() << '\n';
     return false;
   }
 
