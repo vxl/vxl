@@ -166,14 +166,12 @@ static void test_mutual_info()
   bsta_histogram<float> h1_empty = compute_hist(I_empty);
   vcl_cout << "empty hist\n";
   h1_empty.print();
-  unsigned n_empty = x_empty.size();
   vcl_vector<float> I_occ, x_occ;
   data("C:/images/Calibration/occ-points.txt", x_occ, I_occ);
   bsta_joint_histogram<float> h_occ = compute_jhist(x_occ, I_occ);
   bsta_histogram<float> h1_occ = compute_hist(I_occ);
   vcl_cout << "occ hist\n";
   h1_occ.print();
-  unsigned n_occ = x_occ.size();
 #if 0
   vcl_ofstream os("C:/images/Calibration/hist_empty.wrl");
   if (os.is_open()) {
@@ -188,6 +186,7 @@ static void test_mutual_info()
   vcl_cout << "Empty case\n";
   float p_empty = 0.5f, p_occ = 0.5f;
   float Im_empty = 0.0;
+  unsigned n_empty = x_empty.size();
   unsigned n_items_empty = 1;
   for (unsigned ie = 1; ie<n_empty; ++ie) {
     float xe = x_empty[ie], Ie = I_empty[ie];
@@ -205,6 +204,7 @@ static void test_mutual_info()
   vcl_cout << "Occupied case\n";
   p_empty = 0.5f; p_occ = 0.5f;
   float Im_occ = I_occ[0];
+  unsigned n_occ = x_occ.size();
   unsigned n_items_occ = 1;
   for (unsigned io= 0; io<n_occ; ++io) {
     float xo = x_occ[io], Io = I_occ[io];

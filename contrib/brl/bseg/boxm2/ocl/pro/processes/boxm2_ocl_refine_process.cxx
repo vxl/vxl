@@ -1,12 +1,11 @@
 // This is brl/bseg/boxm2/ocl/pro/processes/boxm2_ocl_refine_process.cxx
+#include <bprb/bprb_func_process.h>
 //:
 // \file
 // \brief  A process for rendering depth map of a scene.
 //
 // \author Vishal Jain
 // \date Mar 10, 2011
-
-#include <bprb/bprb_func_process.h>
 
 #include <vcl_fstream.h>
 #include <boxm2/ocl/boxm2_opencl_cache.h>
@@ -39,11 +38,11 @@ namespace boxm2_ocl_refine_process_globals
         src_paths.push_back(source_dir + "bit/refine_bit_scene.cl");
 
 
-        //create refine trees kernel (refine trees deterministic.  MOG type is necessary 
+        //create refine trees kernel (refine trees deterministic.  MOG type is necessary
         // to define, but not used by the kernel - using default value here
         refine_tree_kernel->create_kernel( &device->context(), device->device_id(), src_paths,
-            "refine_trees", " -D MOG_TYPE_8 ", 
-            "boxm2 opencl refine trees (pass one)"); //kernel identifier (for error checking)
+                                           "refine_trees", " -D MOG_TYPE_8 ",
+                                           "boxm2 opencl refine trees (pass one)"); //kernel identifier (for error checking)
     }
     void compile_refine_data_kernel(bocl_device_sptr device,bocl_kernel * refine_data_kernel, vcl_string option)
     {
@@ -53,27 +52,27 @@ namespace boxm2_ocl_refine_process_globals
         src_paths.push_back(source_dir + "bit/bit_tree_library_functions.cl");
         src_paths.push_back(source_dir + "bit/refine_bit_scene.cl");
 
-        refine_data_kernel->create_kernel( &device->context(), device->device_id(), 
-            src_paths, "refine_data",option, 
-            "boxm2 opencl refine data size 2 (pass three)");
+        refine_data_kernel->create_kernel( &device->context(), device->device_id(),
+                                           src_paths, "refine_data",option,
+                                           "boxm2 opencl refine data size 2 (pass three)");
     }
 
     vcl_string get_option_string(int datasize)
     {
         vcl_string options="";
-        switch( datasize)
+        switch (datasize)
         {
-        case 2: 
+          case 2:
             options= "-D MOG_TYPE_2 ";break;
-        case 4:
+          case 4:
             options= "-D MOG_TYPE_4 ";break;
-        case 6:
+          case 6:
             options= "-D MOG_TYPE_6 ";break;
-        case 8:
+          case 8:
             options= "-D MOG_TYPE_8 ";break;
-        case 16:
+          case 16:
             options= "-D MOG_TYPE_16 ";break;
-        default:
+          default:
             break;
         }
 
@@ -121,17 +120,17 @@ bool boxm2_ocl_refine_process(bprb_func_process& pro)
 
     vcl_string identifier=device->device_identifier();
 
-    //: create a command queue.
+    // create a command queue.
     int status=0;
     cl_command_queue queue = clCreateCommandQueue(device->context(),
-        *(device->device_id()),
-        CL_QUEUE_PROFILING_ENABLE,&status);
+                                                  *(device->device_id()),
+                                                  CL_QUEUE_PROFILING_ENABLE,&status);
     if (status!=0) {
-        vcl_cout<<" ERROR in initializing a queue"<<vcl_endl;   
+        vcl_cout<<" ERROR in initializing a queue"<<vcl_endl;
         return false;
     }
     vcl_string tree_identifier=identifier+"tree";
-    //: compile the kernel
+    // compile the kernel
     if (kernels.find(tree_identifier)==kernels.end())
     {
         vcl_cout<<"===========Compiling kernels==========="<<vcl_endl;
@@ -146,7 +145,7 @@ bool boxm2_ocl_refine_process(bprb_func_process& pro)
     {
         vcl_string options=get_option_string(boxm2_data_info::datasize(data_types[i]));
         vcl_string data_identifier= identifier+options;
-        if(kernels.find(data_identifier)==kernels.end())
+        if (kernels.find(data_identifier)==kernels.end())
         {
             bocl_kernel * data_kernel=new bocl_kernel();
             compile_refine_data_kernel(device,data_kernel,options);
@@ -161,7 +160,7 @@ bool boxm2_ocl_refine_process(bprb_func_process& pro)
     for (int i=0; i<100; ++i) output_arr[i] = 0.0f;
     bocl_mem_sptr  cl_output=new bocl_mem(device->context(), output_arr, sizeof(float)*100, "output buffer");
     cl_output->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
-    //: bit lookup buffer
+    // bit lookup buffer
     cl_uchar lookup_arr[256];
     boxm2_ocl_util::set_bit_lookup(lookup_arr);
     bocl_mem_sptr lookup=new bocl_mem(device->context(), lookup_arr, sizeof(cl_uchar)*256, "bit lookup buffer");
@@ -221,7 +220,7 @@ bool boxm2_ocl_refine_process(bprb_func_process& pro)
         vcl_size_t gThreads[] = {RoundUp(numTrees,lThreads[0]), 1};
 
         float alphasize=(float)alpha->num_bytes()/1024/1024;
-        if(alphasize >= (float)blk_iter->second.max_mb_/10.0){
+        if (alphasize >= (float)blk_iter->second.max_mb_/10.0){
             vcl_cout<<"Refine STOP !!!"<<vcl_endl;
             continue;
         }
@@ -245,7 +244,7 @@ bool boxm2_ocl_refine_process(bprb_func_process& pro)
         //clear render kernel args so it can reset em on next execution
         kern->clear_args();
 
-        blk_copy->read_to_buffer(queue); 
+        blk_copy->read_to_buffer(queue);
 
         /////////////////////////////////////////////////////////////////////////
         //STEP TWO
@@ -261,7 +260,7 @@ bool boxm2_ocl_refine_process(bprb_func_process& pro)
         sizebuff[0] = 0;
         tree_sizes->write_to_buffer((queue));
         vcl_cout<<"New data size: "<<newDataSize<<'\n'
-            <<"Scan data sizes time: "<<scan_time.all()<<vcl_endl;
+                <<"Scan data sizes time: "<<scan_time.all()<<vcl_endl;
         /////////////////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////////////////
         //STEP Three
@@ -275,23 +274,24 @@ bool boxm2_ocl_refine_process(bprb_func_process& pro)
         // POSSIBLE PROBLEMS: data may not exist in cache and may need to be initialized...
         //this vector will be passed in (listing data types to refine)
 
+#if 0 // unused variables...
         //check out old alphas
         bocl_mem* old_alph = opencl_cache->get_data(id, boxm2_data_traits<BOXM2_ALPHA>::prefix());
-        int numAlphas = old_alph->num_bytes()/sizeof(float); 
-        float* abuff = (float*) old_alph->cpu_buffer(); 
-
-        vcl_vector<vcl_string> data_types = scene->appearances(); 
+        int numAlphas = old_alph->num_bytes()/sizeof(float);
+        float* abuff = (float*) old_alph->cpu_buffer();
+#endif
+        vcl_vector<vcl_string> data_types = scene->appearances();
         data_types.push_back(boxm2_data_traits<BOXM2_ALPHA>::prefix());
         for (unsigned int i=0; i<data_types.size(); ++i)
         {
             vcl_cout<<"Swapping data of type: "<<data_types[i]<<vcl_endl;
             vcl_string options=get_option_string(boxm2_data_info::datasize(data_types[i]));
             vcl_string data_identifier= identifier+options;
-            if(kernels.find(data_identifier)==kernels.end())
+            if (kernels.find(data_identifier)==kernels.end())
             {
                 vcl_cout<<"boxm2_opencl_refine::Kernel for swapping datatype: "
-                    <<data_types[i]<<" and size "<<boxm2_data_info::datasize(data_types[i])
-                    <<" is not compiled."<<vcl_endl;
+                        <<data_types[i]<<" and size "<<boxm2_data_info::datasize(data_types[i])
+                        <<" is not compiled."<<vcl_endl;
                 return false;
             }
             bocl_kernel * kern=kernels[data_identifier];
@@ -319,12 +319,12 @@ bool boxm2_ocl_refine_process(bprb_func_process& pro)
 
             //copy parent behavior.. if true, Data copies its parent
             bool* copy_parent_buffer = new bool[1];
-            if (data_types[i] == boxm2_data_traits<BOXM2_MOG3_GREY>::prefix() || 
+            if (data_types[i] == boxm2_data_traits<BOXM2_MOG3_GREY>::prefix() ||
                 data_types[i] == boxm2_data_traits<BOXM2_MOG3_GREY_16>::prefix() ||
                 data_types[i] == boxm2_data_traits<BOXM2_GAUSS_RGB>::prefix() )
-                (*copy_parent_buffer) = true; 
-            else 
-                (*copy_parent_buffer) = false; 
+                (*copy_parent_buffer) = true;
+            else
+                (*copy_parent_buffer) = false;
             bocl_mem copy_parent(device->context(), copy_parent_buffer, sizeof(cl_bool), "copy_parent buffer");
             copy_parent.create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
@@ -337,7 +337,7 @@ bool boxm2_ocl_refine_process(bprb_func_process& pro)
             kern->set_arg( new_dat );
             kern->set_arg( prob_thresh.ptr());
             kern->set_arg( &is_alpha );
-            kern->set_arg( &copy_parent ); 
+            kern->set_arg( &copy_parent );
             kern->set_arg( lookup.ptr() );
             kern->set_arg( cl_output.ptr() );
             kern->set_local_arg( 16*sizeof(cl_uchar) );
@@ -362,18 +362,16 @@ bool boxm2_ocl_refine_process(bprb_func_process& pro)
             }
 
             //clean up DAT
-            //delete[] is_alpha_buffer;  
+            //delete[] is_alpha_buffer;
             delete[] copy_parent_buffer;
         }
         //clean aux memory
         delete tree_sizes;
-
-
     }
-
-
+#if 0
     //record total time
-    // float total_time = (float) total.all();
+    float total_time = (float) total.all();
+#endif
     return true;
 }
 
