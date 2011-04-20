@@ -41,6 +41,9 @@ SUBDIRS(bocl)
 # Brown asychronous IO library
 SUBDIRS(baio)
 
+# Brown radiometry library
+SUBDIRS(brad)
+
 IF( BUILD_GEL )
   # spatial object algorithms
   SUBDIRS(bsol)
