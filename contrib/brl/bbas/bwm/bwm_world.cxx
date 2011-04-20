@@ -36,10 +36,10 @@ bool bwm_world::add(bwm_observable_sptr obj)
 {
   // find the object
   vcl_vector<bwm_observable_sptr>::iterator it = objects_.begin();
-  while (it != objects_.end()){ 
+  while (it != objects_.end()) {
     if (*it == obj)
       return false;
-	it++;
+    ++it;
   }
   objects_.push_back(obj); 
   return true;

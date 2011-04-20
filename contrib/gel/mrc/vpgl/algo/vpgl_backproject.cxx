@@ -16,17 +16,17 @@ bool vpgl_backproject::bproj_plane(const vpgl_camera<double>* cam,
                                    vnl_double_3& world_point)
 {
   // special case of a generic camera
-  if(cam->type_name()=="vpgl_generic_camera")
+  if (cam->type_name()=="vpgl_generic_camera")
   {
-	vgl_ray_3d<double> ray;
-	vgl_point_3d<double> ipt;
-	vgl_plane_3d<double> gplane(plane[0], plane[1], plane[2], plane[3]);
-	const vpgl_generic_camera<double>* gcam = dynamic_cast<const vpgl_generic_camera<double>*>(cam);
-	ray = gcam->ray(image_point[0], image_point[1]);
-   if(!vgl_intersection<double>(ray, gplane, ipt))
-	   return false;
-   world_point[0]=ipt.x(); world_point[1]=ipt.y(); world_point[2]=ipt.z();
-   return true;
+    vgl_ray_3d<double> ray;
+    vgl_point_3d<double> ipt;
+    vgl_plane_3d<double> gplane(plane[0], plane[1], plane[2], plane[3]);
+    const vpgl_generic_camera<double>* gcam = dynamic_cast<const vpgl_generic_camera<double>*>(cam);
+    ray = gcam->ray(image_point[0], image_point[1]);
+    if (!vgl_intersection<double>(ray, gplane, ipt))
+      return false;
+    world_point[0]=ipt.x(); world_point[1]=ipt.y(); world_point[2]=ipt.z();
+    return true;
   }
   // general case
   vpgl_invmap_cost_function cf(image_point, plane, cam);
@@ -92,10 +92,11 @@ bool vpgl_backproject::bproj_plane(vpgl_rational_camera<double> const& rcam,
   const vpgl_camera<double>* const cam = static_cast<const vpgl_camera<double>* >(&rcam);
   return bproj_plane(cam, image_point, plane, initial_guess, world_point);
 }
-//Only the direction of the vector is important so it can be 
+
+//Only the direction of the vector is important so it can be
 //normalized to a unit vector. Two rays can be constructed, one through
 //point and one through a point formed by adding the vector to the point
-bool 
+bool
 vpgl_backproject::bproj_point_vector(vpgl_proj_camera<double> const& cam,
                                vgl_point_2d<double> const& point,
                                vgl_vector_2d<double> const& vect,

@@ -175,7 +175,7 @@ void bwm_popup_menu::get_menu(vgui_menu &menu)
   if ((tab_->type_name().compare("bwm_tableau_proj_cam") == 0) ||
       (tab_->type_name().compare("bwm_tableau_rat_cam") == 0)  ||
       (tab_->type_name().compare("bwm_tableau_video") == 0)||
-	   tab_->type_name().compare("bwm_tableau_generic_cam") == 0)
+       tab_->type_name().compare("bwm_tableau_generic_cam") == 0)
   {
     // 3D Objects menu
     bwm_tableau_cam* cam_tab = static_cast<bwm_tableau_cam* > (tab_.as_pointer());
@@ -253,7 +253,7 @@ void bwm_popup_menu::get_menu(vgui_menu &menu)
     boxm_submenu.separator();
     boxm_submenu.add("Load BOXM scene",
                      new vgui_command_simple<bwm_tableau_cam>(cam_tab,&bwm_tableau_cam::load_boxm_scene));
- 
+
     mesh_submenu.add("BOXM", boxm_submenu);
 
     if (tab_->type_name().compare("bwm_tableau_rat_cam") == 0) {

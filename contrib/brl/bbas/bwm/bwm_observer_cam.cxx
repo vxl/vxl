@@ -229,7 +229,7 @@ bool bwm_observer_cam::handle(const vgui_event &e)
   {
       if (e.modifier == vgui_SHIFT)
         extrude_obj_->move_extr_face(1.0);
-      else if(e.modifier == vgui_CTRL)
+      else if (e.modifier == vgui_CTRL)
         extrude_obj_->move_extr_face(0.1);
       else
         extrude_obj_->move_extr_face(0.01);
@@ -240,7 +240,7 @@ bool bwm_observer_cam::handle(const vgui_event &e)
   {
       if (e.modifier == vgui_SHIFT)
         extrude_obj_->move_extr_face(-1.0);
-      else if(e.modifier == vgui_CTRL)
+      else if (e.modifier == vgui_CTRL)
         extrude_obj_->move_extr_face(-0.1);
       else
         extrude_obj_->move_extr_face(-0.01);
@@ -257,7 +257,7 @@ bool bwm_observer_cam::handle(const vgui_event &e)
     if (this == bwm_observer_mgr::BWM_MASTER_OBSERVER) {
       if (e.modifier == vgui_SHIFT)
         this->translate_along_optical_cone(1.0);
-      else if(e.modifier == vgui_CTRL)
+      else if (e.modifier == vgui_CTRL)
         this->translate_along_optical_cone(0.1);
       else
         this->translate_along_optical_cone(0.001);
@@ -270,7 +270,7 @@ bool bwm_observer_cam::handle(const vgui_event &e)
     if (this == bwm_observer_mgr::BWM_MASTER_OBSERVER) {
       if (e.modifier == vgui_SHIFT)
         this->translate_along_optical_cone(-1.0);
-      else if(e.modifier == vgui_CTRL)
+      else if (e.modifier == vgui_CTRL)
         this->translate_along_optical_cone(-0.1);
       else
         this->translate_along_optical_cone(-0.001);
@@ -439,6 +439,7 @@ void bwm_observer_cam::move_ground_plane( vgl_plane_3d<double> master_plane,
   }
   vcl_cerr << "The original vertex to be moved is not selected!\n";
 }
+
 #if 0 //replaced by translate along optical cone
 //Translate along *this* observer's optical axis
 void bwm_observer_cam::translate_along_optical_axis(double da)
@@ -486,9 +487,11 @@ void bwm_observer_cam::translate_along_optical_axis(double da)
            << "not exactly one selected vertex\n";
 }
 #endif
-// expand or contract the object boundary so that the projection in the 
+
+// expand or contract the object boundary so that the projection in the
 // image is invariant to perspective scale change
-void bwm_observer_cam::translate_along_optical_cone(double da){
+void bwm_observer_cam::translate_along_optical_cone(double da)
+{
   vcl_vector<vgui_soview*> select_list = this->get_selected_soviews();
 #if 0
   vcl_cout << "#selected before move = " << select_list.size() << '\n';
@@ -510,11 +513,11 @@ void bwm_observer_cam::translate_along_optical_cone(double da){
     }
     // cone method only available on observable_mesh, not in general
     bwm_observable_mesh* omsh = 0;
-    if(obs->type_name()=="bwm_observable_mesh")
+    if (obs->type_name()=="bwm_observable_mesh")
       omsh = static_cast<bwm_observable_mesh*>(obs.ptr());
     else return;
 
-    if(!omsh->move_poly_in_optical_cone(camera_,face_id,da))
+    if (!omsh->move_poly_in_optical_cone(camera_,face_id,da))
        return;
 #if 0
      select_list = this->get_selected_soviews();
@@ -1210,12 +1213,12 @@ void bwm_observer_cam::backproj_poly(vsol_polygon_2d_sptr poly2d,
     vsol_point_2d_sptr p = poly2d->vertex(i);
     vgl_point_2d<double> image_point(p->x(), p->y());
 
-	if(!this->intersect_ray_and_plane(image_point,proj_plane,world_point)){
-		vcl_cout << "Intersection failed in backproj_poly \n";
-		projected_list.clear();
-		poly3d = new vsol_polygon_3d(projected_list);
-		return;
-	}
+    if (!this->intersect_ray_and_plane(image_point,proj_plane,world_point)) {
+      vcl_cout << "Intersection failed in backproj_poly\n";
+      projected_list.clear();
+      poly3d = new vsol_polygon_3d(projected_list);
+      return;
+    }
     double x = world_point.x();
     double y = world_point.y();
     double z = world_point.z();
@@ -1470,12 +1473,13 @@ void  bwm_observer_cam::position_vertex(bool show_as_geo)
   vsol_point_3d_sptr p3d = (*vit).second;
   double lx,ly,lz;
   bool lvcs_valid = bwm_world::instance()->lvcs_valid();
-  if(lvcs_valid){
+  if (lvcs_valid) {
     bgeo_lvcs lvcs;
     bwm_world::instance()->get_lvcs(lvcs);
   // convert point to local
   lvcs.global_to_local(p3d->x(), p3d->y(), p3d->z(), bgeo_lvcs::wgs84,lx, ly, lz);
-  }else{ 
+  }
+  else {
     lx = p3d->x(); ly = p3d->y(); lz = p3d->z();
   }
   vgui_text_tableau_sptr tt = img_tab_->text_tab();
@@ -1762,7 +1766,7 @@ void bwm_observer_cam::load_boxm_scene()
   double z_size = dims.z()*block_dim.z();
 
   bgeo_lvcs lvcs;
-  if(parser.lvcs(lvcs)){
+  if (parser.lvcs(lvcs)) {
     // set lvcs
     bwm_world::instance()->set_lvcs(lvcs);
     vcl_cout << "defining lvcs with origin = <" << lvcs << vcl_endl;
@@ -1780,7 +1784,8 @@ void bwm_observer_cam::load_boxm_scene()
     double w_max_z = loc_origin.z() + z_size;
     lvcs.local_to_global(w_max_x, w_max_y, w_max_z, bgeo_lvcs::wgs84, lon, lat, elev);
     world_max.set(lon,lat,elev);
-  }else{
+  }
+  else {
     world_min = loc_origin;
     world_max.set(loc_origin.x()+x_size, loc_origin.y()+y_size,
                   loc_origin.z()+z_size);

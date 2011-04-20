@@ -13,35 +13,37 @@
 #include <vgl/algo/vgl_homg_operators_3d.h>
 #include <vpgl/vpgl_perspective_camera.h>
 #define DEBUG
+
 vpgl_camera<double>* bwm_observer_proj_cam::
-read_camera(vcl_string cam_path, vcl_string subtype){
+read_camera(vcl_string cam_path, vcl_string subtype)
+{
   vcl_string ext = vul_file_extension(cam_path);
-  if(ext == ".rpc")
-	  return 0;
-  if (subtype=="perspective"){
+  if (ext == ".rpc")
+    return 0;
+  if (subtype=="perspective") {
     if (ext == ".vsl") // binary form
-      {
-        vpgl_perspective_camera<double> pcam;
-        vsl_b_ifstream bp_in(cam_path.c_str());
-        if (!bp_in){
-          vcl_cerr << "In bwm_observer_proj_cam::read_camera(.) -\n"
-                   << " invalid binary camera file " << cam_path.data() << '\n';
-          return 0;
-        }
-        pcam.b_read(bp_in);
-        bp_in.close();
-        vpgl_proj_camera<double> cam(pcam.get_matrix());
-        return cam.clone();
+    {
+      vpgl_perspective_camera<double> pcam;
+      vsl_b_ifstream bp_in(cam_path.c_str());
+      if (!bp_in) {
+        vcl_cerr << "In bwm_observer_proj_cam::read_camera(.) -\n"
+                 << " invalid binary camera file " << cam_path.data() << '\n';
+        return 0;
       }
+      pcam.b_read(bp_in);
+      bp_in.close();
+      vpgl_proj_camera<double> cam(pcam.get_matrix());
+      return cam.clone();
+    }
     //An ASCII stream for perspective camera
     vpgl_perspective_camera<double> pcam;
     vcl_ifstream cam_stream(cam_path.data());
     if (!cam_stream.is_open())
-      {
-        vcl_cerr << "In bwm_observer_proj_cam::read_projective_camera(.) -\n"
-                 << " invalid camera file " << cam_path.data() << '\n';
-        return 0;
-      }
+    {
+      vcl_cerr << "In bwm_observer_proj_cam::read_projective_camera(.) -\n"
+               << " invalid camera file " << cam_path.data() << '\n';
+      return 0;
+    }
 
     cam_stream >> pcam;
 #ifdef DEBUG
@@ -86,15 +88,15 @@ bwm_observer_proj_cam::bwm_observer_proj_cam(bgui_image_tableau_sptr img,
   // check if the camera path is not empty, if it is NITF, the camera
   // info is in the image, not a separate file
   if (cam_path.size() == 0)
-    {
-      bwm_utils::show_error("Camera tableaus need a valid camera path!");
-      return;
-    }
+  {
+    bwm_utils::show_error("Camera tableaus need a valid camera path!");
+    return;
+  }
   this->set_camera_path(cam_path);
   camera_ = bwm_observer_proj_cam::read_camera(cam_path,subtype);
   //generate a unique tab name if null
-  if(name=="")
-    {name = cam_path;}
+  if (name=="")
+    name = cam_path;
   set_tab_name(name);
   // add the observer to the observer pool
   bwm_observer_mgr::instance()->add(this);
