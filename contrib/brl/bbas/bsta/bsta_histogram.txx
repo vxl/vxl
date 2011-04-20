@@ -52,8 +52,9 @@ bsta_histogram<T>::bsta_histogram(const T min, const T max,
     delta_ = 0;
   }
 }
+
 template <class T>
-bsta_histogram<T>::bsta_histogram(const unsigned int nbins, const T min, const T delta, 
+bsta_histogram<T>::bsta_histogram(const unsigned int nbins, const T min, const T delta,
                                   const T min_prob)
  : area_valid_(false), area_(0), nbins_(nbins), delta_(delta),
     min_prob_(min_prob), min_ (min), max_(min+nbins*delta)
@@ -88,7 +89,7 @@ void bsta_histogram<T>::upcount(T x, T mag)
 {
   if (x<min_||x>max_)
     return;
-  for (unsigned int i = 0; i<nbins_; i++)
+  for (unsigned int i = 0; i<nbins_; ++i)
     if ((i+1)*delta_>=(x-min_))
     {
       counts_[i] += mag;
@@ -103,7 +104,7 @@ int bsta_histogram<T>::bin_at_val(T x)
 {
   if (x<min_||x>max_)
     return -1;
-  for (unsigned int i = 0; i<nbins_; i++)
+  for (unsigned int i = 0; i<nbins_; ++i)
     if ((i+1)*delta_>=(x-min_))
     {
       return i;
@@ -115,7 +116,7 @@ template <class T>
 void bsta_histogram<T>::compute_area() const
 {
   area_ =0;
-  for (unsigned int i = 0; i<nbins_; i++)
+  for (unsigned int i = 0; i<nbins_; ++i)
     area_ += counts_[i];
   area_valid_ = true;
 }
@@ -124,7 +125,7 @@ template <class T>
 T bsta_histogram<T>::cumulative_area(unsigned bin) const
 {
   T area =0;
-  for (unsigned int i = 0; i<bin; i++)
+  for (unsigned int i = 0; i<bin; ++i)
     area += counts_[i];
   return area;
 }
@@ -152,10 +153,10 @@ T bsta_histogram<T>::p(const T val) const
   if (area_ == T(0))
     return 0;
   else
-    for (unsigned int i = 0; i<nbins_; i++)
+    for (unsigned int i = 0; i<nbins_; ++i)
       if ((i+1)*delta_>=(val-min_))
         return counts_[i]/area_;
-return 0;
+  return 0;
 }
 
 template <class T>
@@ -197,18 +198,19 @@ T bsta_histogram<T>::mean_vals(const T low, const T high) const
 {
   //find bin indices
   T tlow=low, thigh=high;
-  if(tlow<min_) tlow = min_; if(thigh>max_) thigh = max_;
+  if (tlow<min_) tlow = min_;
+  if (thigh>max_) thigh = max_;
   unsigned low_bin=0, high_bin = 0;
-  for (unsigned int i = 0; i<nbins_; i++)
+  for (unsigned int i = 0; i<nbins_; ++i)
     if ((i+1)*delta_>=(tlow-min_)){
       low_bin = i;
       break;
-      }
-  for (unsigned int i = 0; i<nbins_; i++)
+    }
+  for (unsigned int i = 0; i<nbins_; ++i)
     if ((i+1)*delta_>=(thigh-min_)){
       high_bin = i;
       break;
-      }
+    }
   return this->mean(low_bin, high_bin);
 }
 
@@ -237,56 +239,58 @@ variance(const unsigned int lowbin, const unsigned int highbin) const
   }
   if (sum==0)
     return 0;
-  T result = sumx2/sum;
-  return result;
+  else
+    return sumx2/sum;
 }
 
 template <class T>
 T bsta_histogram<T>::
 variance_vals(const T low, const T high) const
 {
-//find bin indices
+  //find bin indices
   T tlow=low, thigh=high;
-  if(tlow<min_) tlow = min_; if(thigh>max_) thigh = max_;
+  if (tlow<min_) tlow = min_;
+  if (thigh>max_) thigh = max_;
   unsigned low_bin=0, high_bin = 0;
-  for (unsigned int i = 0; i<nbins_; i++)
+  for (unsigned int i = 0; i<nbins_; ++i)
     if ((i+1)*delta_>=(tlow-min_)){
       low_bin = i;
       break;
-      }
-  for (unsigned int i = 0; i<nbins_; i++)
+    }
+  for (unsigned int i = 0; i<nbins_; ++i)
     if ((i+1)*delta_>=(thigh-min_)){
       high_bin = i;
       break;
-      }
-    return this->variance(low_bin, high_bin);
+    }
+  return this->variance(low_bin, high_bin);
 }
+
 template <class T>
 T bsta_histogram<T>::entropy() const
 {
-  T ent = 0;
+  double ent = 0;
   for (unsigned int i = 0; i<nbins_; ++i)
   {
-    T pi = this->p(i);
+    double pi = this->p(i);
     if (pi>min_prob_)
-      ent -= pi*T(vcl_log(pi));
+      ent -= pi*vcl_log(pi);
   }
-  ent *= (T)vnl_math::log2e;
-  return ent;
+  ent *= vnl_math::log2e;
+  return (T)ent;
 }
 
 template <class T>
 T bsta_histogram<T>::renyi_entropy() const
 {
-  T sum = 0, ent = 0;
+  double sum = 0, ent = 0;
   for (unsigned int i = 0; i<nbins_; ++i)
   {
-    T pi = this->p(i);
+    double pi = this->p(i);
     sum += pi*pi;
   }
   if (sum>min_prob_)
-    ent = - T(vcl_log(sum))*(T)vnl_math::log2e;
-  return ent;
+    ent = - vcl_log(sum)*vnl_math::log2e;
+  return (T)ent;
 }
 
 template <class T>
@@ -296,10 +300,10 @@ void bsta_histogram<T>::parzen(const T sigma)
     return;
   double sd = (double)sigma;
   vcl_vector<double> in(nbins_), out(nbins_);
-  for (unsigned int i=0; i<nbins_; i++)
+  for (unsigned int i=0; i<nbins_; ++i)
     in[i]=counts_[i];
   bsta_gauss::bsta_1d_gaussian(sd, in, out);
-  for (unsigned int i=0; i<nbins_; i++)
+  for (unsigned int i=0; i<nbins_; ++i)
     counts_[i]=(T)out[i];
 }
 
@@ -332,12 +336,12 @@ T bsta_histogram<T>::fraction_below(const T value) const
   if (area_ == T(0))
     return 0;
   T sum = 0, limit=(value-min_);
-  for (unsigned int i = 0; i<nbins_; i++)
+  for (unsigned int i = 0; i<nbins_; ++i)
     if ((i+1)*delta_<limit)
       sum+=counts_[i];
     else
       return sum/area_;
- return 0;
+  return 0;
 }
 
 // Fraction of area greater than value
@@ -351,7 +355,7 @@ T bsta_histogram<T>::fraction_above(const T value) const
   if (area_ == T(0))
     return 0;
   T sum = 0, limit=(value-min_);
-  for (unsigned int i = 0; i<nbins_; i++)
+  for (unsigned int i = 0; i<nbins_; ++i)
     if ((i+1)*delta_>limit)
       sum+=counts_[i];
   return sum/area_;
@@ -368,7 +372,7 @@ T bsta_histogram<T>::value_with_area_below(const T area_fraction) const
   if (area_ == T(0))
     return 0;
   T sum = 0;
-  for (unsigned int i=0; i<nbins_; i++)
+  for (unsigned int i=0; i<nbins_; ++i)
   {
     sum += counts_[i];
     if (sum>=area_fraction*area_)
@@ -409,7 +413,7 @@ void bsta_histogram<T>::clear()
 template <class T>
 void bsta_histogram<T>::print(vcl_ostream& os) const
 {
-  for (unsigned int i=0; i<nbins_; i++)
+  for (unsigned int i=0; i<nbins_; ++i)
     if (p(i) > 0)
       os << "p[" << i << "]=" << p(i) << '\n';
 }
@@ -417,32 +421,33 @@ void bsta_histogram<T>::print(vcl_ostream& os) const
 template <class T>
 void bsta_histogram<T>::pretty_print(vcl_ostream& os) const
 {
-  os << "area valid: " << area_valid_ << "\n"
-  << "area: " << area_ << "\n"
-  << "number of bins: " <<  nbins_ << "\n"
-  << "range: " << range_ << "\n"
-  << "delta: " << delta_ << "\n"
-  << "min_prob: " << min_prob_ << "\n"
-  << "min: " << min_ << "\n"
-  << "max: " << max_ << "\n" 
-  << "counts: ";
-  for (unsigned i = 0; i < counts_.size() ; i++)
-  os << counts_[i] << ' ';
-
+  os << "area valid: " << area_valid_ << '\n'
+     << "area: " << area_ << '\n'
+     << "number of bins: " <<  nbins_ << '\n'
+     << "range: " << range_ << '\n'
+     << "delta: " << delta_ << '\n'
+     << "min_prob: " << min_prob_ << '\n'
+     << "min: " << min_ << '\n'
+     << "max: " << max_ << '\n'
+     << "counts: ";
+  for (unsigned i = 0; i < counts_.size() ; ++i)
+    os << counts_[i] << ' ';
+  os << '\n';
 }
+
 //: print as a matlab plot command
 template <class T>
 void bsta_histogram<T>::print_to_m(vcl_ostream& os) const
 {
   os << "x = [" << min_;
-  for (unsigned int i=1; i<nbins_; i++)
+  for (unsigned int i=1; i<nbins_; ++i)
     os << ", " << min_ + i*delta_;
-  os << "];\n";
-  os << "y = [" << p((unsigned int)0);
-  for (unsigned int i=1; i<nbins_; i++)
+  os << "];\n"
+     << "y = [" << p((unsigned int)0);
+  for (unsigned int i=1; i<nbins_; ++i)
     os << ", " << p(i);
-  os << "];\n";
-  os << "bar(x,y,'r')\n";
+  os << "];\n"
+     << "bar(x,y,'r')\n";
 }
 
 //: print x and y arrays
@@ -450,19 +455,19 @@ template <class T>
 void bsta_histogram<T>::print_to_arrays(vcl_ostream& os) const
 {
   os << min_;
-  for (unsigned int i=1; i<nbins_; i++)
+  for (unsigned int i=1; i<nbins_; ++i)
     os << ", " << min_ + i*delta_;
-  os << "\n";
-  os << p((unsigned int)0);
-  for (unsigned int i=1; i<nbins_; i++)
+  os << '\n'
+     << p((unsigned int)0);
+  for (unsigned int i=1; i<nbins_; ++i)
     os << ", " << p(i);
-  os << "\n";
+  os << '\n';
 }
 
 template <class T>
 void bsta_histogram<T>::print_vals_prob(vcl_ostream& os) const
 {
-  for(unsigned i = 0; i<nbins_; ++i)
+  for (unsigned i = 0; i<nbins_; ++i)
     os << avg_bin_value(i) << ' ' << p(i) << '\n';
 }
 
@@ -477,7 +482,7 @@ vcl_ostream& bsta_histogram<T>::write(vcl_ostream& s) const
     << min_prob_ << ' '
     << min_ << ' '
     << max_ << ' ';
-  for (unsigned i = 0; i < counts_.size() ; i++)
+  for (unsigned i = 0; i < counts_.size() ; ++i)
     s << counts_[i] << ' ';
 
   return  s << '\n';
@@ -495,7 +500,7 @@ vcl_istream& bsta_histogram<T>::read(vcl_istream& s)
     >> min_
     >> max_;
   counts_.resize(nbins_);
-  for (unsigned i = 0; i < counts_.size() ; i++)
+  for (unsigned i = 0; i < counts_.size() ; ++i)
     s >> counts_[i] ;
   return  s;
 }
