@@ -3,7 +3,7 @@
 #define vpgl_generic_camera_h_
 //:
 // \file
-// \brief The generic camera 
+// \brief The generic camera
 // \author J.L. Mundy
 // \date April 10, 2011
 //
@@ -11,10 +11,10 @@
 //   and a mapping between rays and image coordinates. This model has been
 //   used to unify various camera types such as fisheye, cadadioptric, etc.
 //   Although it is possible to encounter cameras where the rays are
-//   general curves, this class restricts the geometry of a ray to a 3-d line. 
+//   general curves, this class restricts the geometry of a ray to a 3-d line.
 //   In the generic camera it is not necessary that all the rays intersect
 //   at a single point as in the projective camera. In this implementation,
-//   the image-to-ray map is restricted to a 2-d array, even though in general 
+//   the image-to-ray map is restricted to a 2-d array, even though in general
 //   the map can be more complex. It is assumed that the ray field is smooth
 //   so that local derivatives are defined
 //
@@ -66,30 +66,34 @@ class vpgl_generic_camera : public vpgl_camera<T>
   //: the furthest ray origin from the coordinate origin
   vgl_point_3d<T> max_ray_origin(){return max_ray_origin_;}
 
-  //: debug functions
+  //: debug function
   void print_orig(int level);
 
  protected:
   //: nearest ray at level
-  void nearest_ray(int level, vgl_point_3d<T> const& p, 
+  void nearest_ray(int level, vgl_point_3d<T> const& p,
                    int start_r, int end_r, int start_c, int end_c,
                    int& nearest_r, int& nearest_c) const;
+
   //: refine the projection to sub pixel
   void refine_projection(int nearest_c, int nearest_r,
                          vgl_point_3d<T> const& p, T& u, T& v) const;
-  //: members
-  //: ray origin bounds to support occulsion reasoning
+
+  // === members ===
+
+  //: ray origin bound to support occlusion reasoning
   vgl_point_3d<T> min_ray_origin_;
+  //: ray origin bound to support occlusion reasoning
   vgl_point_3d<T> max_ray_origin_;
 
-  //a pyramid data structure for the rays to support efficient projection
-  //level == 0 is the highest resolution
+  //: a pyramid data structure for the rays to support efficient projection
+  // (level == 0 is the highest resolution)
   int n_levels_;
-  //:num rows at each resolution level
+  //: num rows at each resolution level
   vcl_vector<int> nr_;
-  //:num cols at each resolution level
+  //: num cols at each resolution level
   vcl_vector<int> nc_;
-  //:the pyramid
+  //: the pyramid
   vcl_vector<vbl_array_2d<vgl_ray_3d<T> > > rays_;
 };
 

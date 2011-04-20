@@ -2,16 +2,16 @@
 //:
 // \file
 
-//allocate an empty data diddy
+//: allocate an empty data diddy
 boxm2_data_base::boxm2_data_base(boxm2_block_metadata data, const vcl_string data_type)
 {
   id_ = data.id_;
-  
+
   //determine number of cells to allocate - if random, then use the max_mb, otherwise use tree size
   // MAY want to create an initialize data that caters to size of trees, and doesn't assume only root
-  long num_cells = data.sub_block_num_.x() * 
-                   data.sub_block_num_.y() * 
-                   data.sub_block_num_.z(); 
+  long num_cells = data.sub_block_num_.x() *
+                   data.sub_block_num_.y() *
+                   data.sub_block_num_.z();
   vcl_size_t cell_size = boxm2_data_info::datasize(data_type);
   buffer_length_ = num_cells * cell_size;
   vcl_cout<<"boxm2_data_base::empty "<<data_type<<" num cells: "
