@@ -35,7 +35,7 @@ IF( PYTHON_FOUND )
 
     IF(OPENCL_FOUND)
       ADD_DEFINITIONS(-DHAS_OPENCL=1)
-      TARGET_LINK_LIBRARIES(boxm2_batch bocl_pro  boxm2_ocl_pro  boxm2_view_pro)
+      TARGET_LINK_LIBRARIES(boxm2_batch bocl_pro  boxm2_ocl_pro )
     ENDIF(OPENCL_FOUND)
 
     IF (PYTHON_DEBUG_LIBRARIES)
