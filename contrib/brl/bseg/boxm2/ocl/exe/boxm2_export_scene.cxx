@@ -34,7 +34,7 @@
 #include <bocl/bocl_manager.h>
 
 #include <bpro/core/vil_pro/vil_register.h>
-#include <vil/vil_image_view_base.h>
+//brdb stuff
 #include <brdb/brdb_value.h>
 #include <brdb/brdb_selection.h>
 
@@ -42,8 +42,6 @@
 #include <bprb/bprb_parameters.h>
 #include <bprb/bprb_macros.h>
 #include <bprb/bprb_func_process.h>
-//brdb stuff
-#include <brdb/brdb_value.h>
 
 // Boxm2_Export_Scene executable will create a small, portable, pre rendered
 // scene that can be viewed on many devices.  Currently the output is a folder
@@ -64,10 +62,10 @@ int main(int argc,  char** argv)
     vul_arg<unsigned> nj("-nj", "Height of image", 480);
     vul_arg<unsigned> num_az("-num_az", "Number of views along azimuth", 36);
     vul_arg<unsigned> num_in("-num_in", "Number of views along 90 degree incline", 3);
-    vul_arg<double> incline_0("-init_incline", "Initial angle of incline (degrees)", 45.0); 
-    vul_arg<double> incline_1("-end_incline", "Angle of incline nearest zenith (degrees)", 15.0); 
+    vul_arg<double> incline_0("-init_incline", "Initial angle of incline (degrees)", 45.0);
+    vul_arg<double> incline_1("-end_incline", "Angle of incline nearest zenith (degrees)", 15.0);
     vul_arg<double> radius("-radius", "Distance from center of bounding box", 5.0);
-    vul_arg<bool> stitch("-stitch", "also save a large, stitched image", false); 
+    vul_arg<bool> stitch("-stitch", "also save a large, stitched image", false);
     vul_arg_parse(argc, argv);
 
     //////////////////////////////////////////////////////////////////////////////
@@ -138,7 +136,7 @@ int main(int argc,  char** argv)
         boxm2_util::copy_file(aux_dir + js_files[i], dir() + js_files[i]);
 
     //copy CSS file to css folder
-    boxm2_util::copy_file(aux_dir + "/css/miniZoomPan.css", dir() + "/css/miniZoomPan.css"); 
+    boxm2_util::copy_file(aux_dir + "/css/miniZoomPan.css", dir() + "/css/miniZoomPan.css");
 
     //////////////////////////////////////////////////////////////////////////////
     // Now Render Scene Images
@@ -175,7 +173,7 @@ int main(int argc,  char** argv)
     //////////////////////////////////////////////////////////////////////////////
     //set up a view sphere, use find closest for closest neighbors
     vsph_view_sphere<vsph_view_point<vcl_string> > sphere(scene->bounding_box(), radius());
-        
+
 
     // Uncomment the below for non-grid representation
 #if 0
@@ -183,12 +181,12 @@ int main(int argc,  char** argv)
     vcl_cout<<"Number of views on sphere: "<<sphere.size()<<vcl_endl;
 #endif
     //map of ID's that have been rendered
-    vcl_map<int, vcl_string> saved_imgs; 
-    vbl_array_2d<vcl_string> img_grid(num_in(), num_az()); 
+    vcl_map<int, vcl_string> saved_imgs;
+    vbl_array_2d<vcl_string> img_grid(num_in(), num_az());
 
     /////////////////////////////////////////////////////////////////////////////
     //rendered array of views
-    vcl_map<int, vil_image_view<vxl_byte>* > img_map; 
+    vcl_map<int, vil_image_view<vxl_byte>* > img_map;
     vbl_array_2d<vil_image_view<vxl_byte>* > imgs(num_in(), num_az());
 
     // determine increment along azimuth and elevation (incline)
@@ -211,10 +209,10 @@ int main(int argc,  char** argv)
 
             //if the viewpoint has already been rendered, skip it
             vcl_stringstream fstr, idstream;
-            fstr<<"scene_"<<uid<<".jpg"; 
-            img_grid(el_i, az_i) = fstr.str(); 
-            idstream<<imgdir<<"scene_"<<uid<<".jpg"; 
-            if( saved_imgs.find(uid) == saved_imgs.end() )
+            fstr<<"scene_"<<uid<<".jpg";
+            img_grid(el_i, az_i) = fstr.str();
+            idstream<<imgdir<<"scene_"<<uid<<".jpg";
+            if ( saved_imgs.find(uid) == saved_imgs.end() )
             {
                 vpgl_camera_double_sptr cam_sptr = view.camera();
                 brdb_value_sptr brdb_cam = new brdb_value_t<vpgl_camera_double_sptr>(cam_sptr);
@@ -226,49 +224,50 @@ int main(int argc,  char** argv)
                 cam->set_calibration(mat);
 
                 //if scene has RGB data type, use color render process
-                bool good = true; 
-                if(scene->has_data_type(boxm2_data_traits<BOXM2_GAUSS_RGB>::prefix()) )
-                    good = bprb_batch_process_manager::instance()->init_process("boxm2OclRenderExpectedColorProcess");
+                bool good;
+                if (scene->has_data_type(boxm2_data_traits<BOXM2_GAUSS_RGB>::prefix()) )
+                  good = bprb_batch_process_manager::instance()->init_process("boxm2OclRenderExpectedColorProcess");
                 else
-                    good = bprb_batch_process_manager::instance()->init_process("boxm2OclRenderExpectedImageProcess");
+                  good = bprb_batch_process_manager::instance()->init_process("boxm2OclRenderExpectedImageProcess");
 
                 //set process args
-                good = good && bprb_batch_process_manager::instance()->set_input(0, brdb_device); // device
-                good = good && bprb_batch_process_manager::instance()->set_input(1, brdb_scene); //  scene 
-                good = good && bprb_batch_process_manager::instance()->set_input(2, brdb_opencl_cache); 
-                good = good && bprb_batch_process_manager::instance()->set_input(3, brdb_cam);// camera
-                good = good && bprb_batch_process_manager::instance()->set_input(4, brdb_ni);  // ni for rendered image
-                good = good && bprb_batch_process_manager::instance()->set_input(5, brdb_nj);   // nj for rendered image
-                good = good && bprb_batch_process_manager::instance()->run_process();
+                good = good
+                    && bprb_batch_process_manager::instance()->set_input(0, brdb_device) // device
+                    && bprb_batch_process_manager::instance()->set_input(1, brdb_scene)  //  scene
+                    && bprb_batch_process_manager::instance()->set_input(2, brdb_opencl_cache)
+                    && bprb_batch_process_manager::instance()->set_input(3, brdb_cam)    // camera
+                    && bprb_batch_process_manager::instance()->set_input(4, brdb_ni)     // ni for rendered image
+                    && bprb_batch_process_manager::instance()->set_input(5, brdb_nj)     // nj for rendered image
+                    && bprb_batch_process_manager::instance()->run_process();
 
                 unsigned int img_id=0;
                 good = good && bprb_batch_process_manager::instance()->commit_output(0, img_id);
                 brdb_query_aptr Q = brdb_query_comp_new("id", brdb_query::EQ, img_id);
                 brdb_selection_sptr S = DATABASE->select("vil_image_view_base_sptr_data", Q);
                 if (S->size()!=1){
-                    vcl_cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
-                        << " no selections\n";
+                  vcl_cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
+                           << " no selections\n";
                 }
 
                 brdb_value_sptr value;
                 if (!S->get_value(vcl_string("value"), value)) {
-                    vcl_cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
-                        << " didn't get value\n";
+                  vcl_cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
+                           << " didn't get value\n";
                 }
 
                 vil_image_view_base_sptr outimg=value->val<vil_image_view_base_sptr>();
-                
-                if(scene->has_data_type(boxm2_data_traits<BOXM2_GAUSS_RGB>::prefix()) ) 
-                {
-                  vil_image_view<vil_rgba<vxl_byte> >* exp_img_out = static_cast<vil_image_view<vil_rgba<vxl_byte> > *>(outimg.ptr()); 
-                  saved_imgs[uid] = idstream.str(); 
 
-                  vil_image_view<vxl_byte> jpg_out(ni(), nj(),3); 
+                if (scene->has_data_type(boxm2_data_traits<BOXM2_GAUSS_RGB>::prefix()) )
+                {
+                  vil_image_view<vil_rgba<vxl_byte> >* exp_img_out = static_cast<vil_image_view<vil_rgba<vxl_byte> > *>(outimg.ptr());
+                  saved_imgs[uid] = idstream.str();
+
+                  vil_image_view<vxl_byte> jpg_out(ni(), nj(),3);
                   for (unsigned int i=0; i<ni(); ++i) {
                     for (unsigned int j=0; j<nj(); ++j) {
-                      jpg_out(i,j,0) = (*exp_img_out)(i,j).R(); 
-                      jpg_out(i,j,1) = (*exp_img_out)(i,j).G(); 
-                      jpg_out(i,j,2) = (*exp_img_out)(i,j).B(); 
+                      jpg_out(i,j,0) = (*exp_img_out)(i,j).R();
+                      jpg_out(i,j,1) = (*exp_img_out)(i,j).G();
+                      jpg_out(i,j,2) = (*exp_img_out)(i,j).B();
                     }
                   }
                   vil_save( jpg_out, idstream.str().c_str() );
@@ -276,7 +275,7 @@ int main(int argc,  char** argv)
                   //and store for whatever reason
                   //imgs(el_i, az_i) = exp_img_out;
                 }
-                else 
+                else
                 {
                   vil_image_view<float>* expimg_view = static_cast<vil_image_view<float>* >(outimg.ptr());
                   vil_image_view<vxl_byte>* byte_img = new vil_image_view<vxl_byte>(ni(), nj());
@@ -284,7 +283,7 @@ int main(int argc,  char** argv)
                       for (unsigned int j=0; j<nj(); ++j)
                           (*byte_img)(i,j) =  (unsigned char)((*expimg_view)(i,j) *255.0f);   //just grab the first byte (all foura r the same)
 
-                  saved_imgs[uid] = idstream.str(); 
+                  saved_imgs[uid] = idstream.str();
                   vil_save( *byte_img, idstream.str().c_str() );
 
                   //and store for whatever reason
@@ -296,8 +295,8 @@ int main(int argc,  char** argv)
 
     //need to generate a JS.JS file that lists an array of these images
     vcl_cout<<"Rows: "<<num_in()<<" cols: "<<num_az()<<vcl_endl;
-    boxm2_util::generate_jsfunc(img_grid, dir() + "/js/js.js"); 
-    boxm2_util::generate_html(nj(),ni(), num_in(), num_az(),  dir() + "/index.html"); 
+    boxm2_util::generate_jsfunc(img_grid, dir() + "/js/js.js");
+    boxm2_util::generate_html(nj(),ni(), num_in(), num_az(),  dir() + "/index.html");
 
     // if stitch is specified, also save a big image
     if (stitch())

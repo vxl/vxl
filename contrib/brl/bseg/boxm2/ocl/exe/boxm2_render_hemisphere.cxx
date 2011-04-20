@@ -31,7 +31,7 @@
 #include <bocl/bocl_manager.h>
 
 #include <bpro/core/vil_pro/vil_register.h>
-#include <vil/vil_image_view_base.h>
+//brdb stuff
 #include <brdb/brdb_value.h>
 #include <brdb/brdb_selection.h>
 
@@ -39,8 +39,6 @@
 #include <bprb/bprb_parameters.h>
 #include <bprb/bprb_macros.h>
 #include <bprb/bprb_func_process.h>
-//brdb stuff
-#include <brdb/brdb_value.h>
 
 int main(int argc,  char** argv)
 {
@@ -72,7 +70,6 @@ int main(int argc,  char** argv)
 
   bocl_manager_child_sptr mgr =bocl_manager_child::instance();
   bocl_device_sptr device = mgr->gpus_[0];
-    
 
   //create cache, grab singleton instance
   boxm2_lru_cache::create(scene);
@@ -83,11 +80,6 @@ int main(int argc,  char** argv)
   brdb_value_sptr brdb_opencl_cache = new brdb_value_t<boxm2_opencl_cache_sptr>(opencl_cache);
   brdb_value_sptr brdb_ni = new brdb_value_t<unsigned>(ni());
   brdb_value_sptr brdb_nj = new brdb_value_t<unsigned>(nj());
-
-
-
-
-
 
   /////////////////////////////////////////////////////////////////////////////
   // CREATE VIEWSPHERE around the bounding box
@@ -114,34 +106,35 @@ int main(int argc,  char** argv)
       cam->set_calibration(mat);
 
       //if scene has RGB data type, use color render process
-      bool good = true; 
-      if(scene->has_data_type(boxm2_data_traits<BOXM2_GAUSS_RGB>::prefix()) )
-          good = bprb_batch_process_manager::instance()->init_process("boxm2OclRenderExpectedColorProcess");
+      bool good;
+      if (scene->has_data_type(boxm2_data_traits<BOXM2_GAUSS_RGB>::prefix()) )
+        good = bprb_batch_process_manager::instance()->init_process("boxm2OclRenderExpectedColorProcess");
       else
-          good = bprb_batch_process_manager::instance()->init_process("boxm2OclRenderExpectedImageProcess");
+        good = bprb_batch_process_manager::instance()->init_process("boxm2OclRenderExpectedImageProcess");
 
-      //set process args
-      good = good && bprb_batch_process_manager::instance()->set_input(0, brdb_device); // device
-      good = good && bprb_batch_process_manager::instance()->set_input(1, brdb_scene); //  scene 
-      good = good && bprb_batch_process_manager::instance()->set_input(2, brdb_opencl_cache); 
-      good = good && bprb_batch_process_manager::instance()->set_input(3, brdb_cam);// camera
-      good = good && bprb_batch_process_manager::instance()->set_input(4, brdb_ni);  // ni for rendered image
-      good = good && bprb_batch_process_manager::instance()->set_input(5, brdb_nj);   // nj for rendered image
-      good = good && bprb_batch_process_manager::instance()->run_process();
+      //set process args and run process
+      good = good
+          && bprb_batch_process_manager::instance()->set_input(0, brdb_device) // device
+          && bprb_batch_process_manager::instance()->set_input(1, brdb_scene)  //  scene
+          && bprb_batch_process_manager::instance()->set_input(2, brdb_opencl_cache)
+          && bprb_batch_process_manager::instance()->set_input(3, brdb_cam)    // camera
+          && bprb_batch_process_manager::instance()->set_input(4, brdb_ni)     // ni for rendered image
+          && bprb_batch_process_manager::instance()->set_input(5, brdb_nj)     // nj for rendered image
+          && bprb_batch_process_manager::instance()->run_process();
 
       unsigned int img_id=0;
       good = good && bprb_batch_process_manager::instance()->commit_output(0, img_id);
       brdb_query_aptr Q = brdb_query_comp_new("id", brdb_query::EQ, img_id);
       brdb_selection_sptr S = DATABASE->select("vil_image_view_base_sptr_data", Q);
-      if (S->size()!=1){
-          vcl_cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
-              << " no selections\n";
+      if (S->size()!=1) {
+        vcl_cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
+                 << " no selections\n";
       }
 
       brdb_value_sptr value;
       if (!S->get_value(vcl_string("value"), value)) {
-          vcl_cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
-              << " didn't get value\n";
+        vcl_cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
+                 << " didn't get value\n";
       }
 
       vil_image_view_base_sptr outimg=value->val<vil_image_view_base_sptr>();
@@ -216,54 +209,55 @@ int main(int argc,  char** argv)
         mat.set_focal_length(mat.focal_length());
         cam->set_calibration(mat);
 
-      //if scene has RGB data type, use color render process
-      bool good = true; 
-      if(scene->has_data_type(boxm2_data_traits<BOXM2_GAUSS_RGB>::prefix()) )
+        //if scene has RGB data type, use color render process
+        bool good;
+        if (scene->has_data_type(boxm2_data_traits<BOXM2_GAUSS_RGB>::prefix()) )
           good = bprb_batch_process_manager::instance()->init_process("boxm2OclRenderExpectedColorProcess");
-      else
+        else
           good = bprb_batch_process_manager::instance()->init_process("boxm2OclRenderExpectedImageProcess");
 
-      //set process args
-      good = good && bprb_batch_process_manager::instance()->set_input(0, brdb_device); // device
-      good = good && bprb_batch_process_manager::instance()->set_input(1, brdb_scene); //  scene 
-      good = good && bprb_batch_process_manager::instance()->set_input(2, brdb_opencl_cache); 
-      good = good && bprb_batch_process_manager::instance()->set_input(3, brdb_cam);// camera
-      good = good && bprb_batch_process_manager::instance()->set_input(4, brdb_ni);  // ni for rendered image
-      good = good && bprb_batch_process_manager::instance()->set_input(5, brdb_nj);   // nj for rendered image
-      good = good && bprb_batch_process_manager::instance()->run_process();
+        //set process args and run process
+        good = good
+            && bprb_batch_process_manager::instance()->set_input(0, brdb_device) // device
+            && bprb_batch_process_manager::instance()->set_input(1, brdb_scene)  //  scene
+            && bprb_batch_process_manager::instance()->set_input(2, brdb_opencl_cache)
+            && bprb_batch_process_manager::instance()->set_input(3, brdb_cam)    // camera
+            && bprb_batch_process_manager::instance()->set_input(4, brdb_ni)     // ni for rendered image
+            && bprb_batch_process_manager::instance()->set_input(5, brdb_nj)     // nj for rendered image
+            && bprb_batch_process_manager::instance()->run_process();
 
-      unsigned int img_id=0;
-      good = good && bprb_batch_process_manager::instance()->commit_output(0, img_id);
-      brdb_query_aptr Q = brdb_query_comp_new("id", brdb_query::EQ, img_id);
-      brdb_selection_sptr S = DATABASE->select("vil_image_view_base_sptr_data", Q);
-      if (S->size()!=1){
+        unsigned int img_id=0;
+        good = good && bprb_batch_process_manager::instance()->commit_output(0, img_id);
+        brdb_query_aptr Q = brdb_query_comp_new("id", brdb_query::EQ, img_id);
+        brdb_selection_sptr S = DATABASE->select("vil_image_view_base_sptr_data", Q);
+        if (S->size()!=1) {
           vcl_cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
-              << " no selections\n";
-      }
+                   << " no selections\n";
+        }
 
-      brdb_value_sptr value;
-      if (!S->get_value(vcl_string("value"), value)) {
+        brdb_value_sptr value;
+        if (!S->get_value(vcl_string("value"), value)) {
           vcl_cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
-              << " didn't get value\n";
-      }
+                   << " didn't get value\n";
+        }
 
-      vil_image_view_base_sptr outimg=value->val<vil_image_view_base_sptr>();
+        vil_image_view_base_sptr outimg=value->val<vil_image_view_base_sptr>();
 
-      vil_image_view<float>* expimg_view = static_cast<vil_image_view<float>* >(outimg.ptr());
-      vil_image_view<vxl_byte>* byte_img = new vil_image_view<vxl_byte>(ni(), nj());
-      for (unsigned int i=0; i<ni(); ++i)
-        for (unsigned int j=0; j<nj(); ++j)
-          (*byte_img)(i,j) =  (unsigned char)((*expimg_view)(i,j) *255.0f);   //just grab the first byte (all foura r the same)
+        vil_image_view<float>* expimg_view = static_cast<vil_image_view<float>* >(outimg.ptr());
+        vil_image_view<vxl_byte>* byte_img = new vil_image_view<vxl_byte>(ni(), nj());
+        for (unsigned int i=0; i<ni(); ++i)
+          for (unsigned int j=0; j<nj(); ++j)
+            (*byte_img)(i,j) =  (unsigned char)((*expimg_view)(i,j) *255.0f);   //just grab the first byte (all foura r the same)
 
         //save as jpeg
         vcl_stringstream pngstream, jpgstream;
-        jpgstream<<img()<<"/jimg_"<<el_i<<"_"<<az_i<<".jpeg";
+        jpgstream<<img()<<"/jimg_"<<el_i<<'_'<<az_i<<".jpeg";
         vil_save( *byte_img, jpgstream.str().c_str() );
-
-        ////save as png
-        //pngstream<<img()<<"/pimg_"<<el_i<<"_"<<az_i<<".png";
-        //vil_save( *byte_img, pngstream.str().c_str() );
-
+#if 0
+        //save as png
+        pngstream<<img()<<"/pimg_"<<el_i<<'_'<<az_i<<".png";
+        vil_save( *byte_img, pngstream.str().c_str() );
+#endif
         //and store for whatever reason
         imgs(el_i, az_i) = byte_img;
       }
@@ -271,21 +265,21 @@ int main(int argc,  char** argv)
 
     //if stitch is specified, also save a big image
     if (stitch()) {
-        //construct a humungous image
-        vil_image_view<vxl_byte>* stitched = new vil_image_view<vxl_byte>(ni() * num_az(), nj() * num_in());
-        for (unsigned int row = 0; row < num_in(); ++row) {
-          for (unsigned int col = 0; col < num_az(); ++col) {
-            //lil image to copy into big image
-            vil_image_view<vxl_byte>* lil_img = imgs(row, col);
-            for (unsigned int i=0; i<lil_img->ni(); ++i)
-              for (unsigned int j=0; j<lil_img->nj(); ++j)
-                (*stitched)(ni()*col + i, nj()*row + j) = (*lil_img)(i,j);
-          }
+      //construct a humungous image
+      vil_image_view<vxl_byte>* stitched = new vil_image_view<vxl_byte>(ni() * num_az(), nj() * num_in());
+      for (unsigned int row = 0; row < num_in(); ++row) {
+        for (unsigned int col = 0; col < num_az(); ++col) {
+          //lil image to copy into big image
+          vil_image_view<vxl_byte>* lil_img = imgs(row, col);
+          for (unsigned int i=0; i<lil_img->ni(); ++i)
+            for (unsigned int j=0; j<lil_img->nj(); ++j)
+              (*stitched)(ni()*col + i, nj()*row + j) = (*lil_img)(i,j);
         }
+      }
 
-        //save as pngv
-        vcl_string big = img() + "/scene-reel.jpeg";
-        vil_save( *stitched, big.c_str() );
+      //save as pngv
+      vcl_string big = img() + "/scene-reel.jpeg";
+      vil_save( *stitched, big.c_str() );
     }
   }
 
