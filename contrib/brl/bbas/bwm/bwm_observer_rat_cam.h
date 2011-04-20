@@ -43,6 +43,9 @@ class bwm_observer_rat_cam : public bwm_observer_cam
 
   vpgl_rational_camera<double> camera();
 
+  static vpgl_camera<double>* read_camera(vcl_string cam_path,
+                                          bool& local);
+
   virtual bool intersect_ray_and_plane(vgl_point_2d<double> img_point,
                                        vgl_plane_3d<double> plane,
                                        vgl_point_3d<double> &world_point);

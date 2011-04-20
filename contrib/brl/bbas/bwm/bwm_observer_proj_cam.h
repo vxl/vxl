@@ -42,9 +42,11 @@ class bwm_observer_proj_cam : public bwm_observer_cam
                                        vgl_plane_3d<double> plane,
                                        vgl_point_3d<double> &world_point);
 
-  vpgl_proj_camera<double> read_projective_camera(vcl_string cam_path);
-
   vcl_ostream& print_camera(vcl_ostream& s);
+
+  static vpgl_camera<double>* 
+    read_camera(vcl_string cam_path, vcl_string subtype);
+
  protected:
   vcl_string subtype_;
 };

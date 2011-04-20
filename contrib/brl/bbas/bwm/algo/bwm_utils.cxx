@@ -316,11 +316,11 @@ bwm_utils::load_image(vcl_string& filename, vgui_range_map_params_sptr& rmps)
       }
 #endif //HAS_J2K
   }
+  if(!res) return 0;
   float gamma = 1.0f;
   bool invert = false;
   bool gl_map = false;
   bool cache = true;
-
   bool is_pyr = res->get_property(vil_property_pyramid, 0);
   if (is_pyr)
   { gl_map = true; cache = true;}

@@ -47,6 +47,7 @@
 #include <boxm/boxm_apm_traits.h>
 #include <boxm/boxm_scene_parser.h>
 #include <vsl/vsl_basic_xml_element.h>
+#include <vpgl/algo/vpgl_camera_compute.h>
 
 bool bwm_observer_cam::geo_position(double u, double v,
                                     double& x, double& y, double& z)
@@ -557,7 +558,6 @@ void bwm_observer_cam::proj_poly(vsol_polygon_3d_sptr poly3d,
     return;
 
   vcl_vector<vsol_point_2d_sptr> vertices;
-
   for (unsigned i=0; i<poly3d->size(); i++) {
     double u = 0,v = 0;
 #ifdef DEBUG
@@ -567,7 +567,6 @@ void bwm_observer_cam::proj_poly(vsol_polygon_3d_sptr poly3d,
     vsol_point_2d_sptr p = new vsol_point_2d(u,v);
     vertices.push_back(p);
   }
-
   poly2d = new vsol_polygon_2d (vertices);
 }
 
@@ -1211,7 +1210,12 @@ void bwm_observer_cam::backproj_poly(vsol_polygon_2d_sptr poly2d,
     vsol_point_2d_sptr p = poly2d->vertex(i);
     vgl_point_2d<double> image_point(p->x(), p->y());
 
-    this->intersect_ray_and_plane(image_point,proj_plane,world_point);
+	if(!this->intersect_ray_and_plane(image_point,proj_plane,world_point)){
+		vcl_cout << "Intersection failed in backproj_poly \n";
+		projected_list.clear();
+		poly3d = new vsol_polygon_3d(projected_list);
+		return;
+	}
     double x = world_point.x();
     double y = world_point.y();
     double z = world_point.z();
@@ -1749,34 +1753,38 @@ void bwm_observer_cam::load_boxm_scene()
   boxm_scene_base scene_base;
   scene_base.load_scene(file, parser);
   //parse_config(parser);
-
-  bgeo_lvcs lvcs;
-  parser.lvcs(lvcs);
+  vgl_point_3d<double> world_min,world_max;
   vgl_vector_3d<unsigned> dims = parser.block_nums();
   vgl_point_3d<double> loc_origin =  parser.origin();
   vgl_vector_3d<double> block_dim = parser.block_dim();
+  double x_size = dims.x()*block_dim.x();
+  double y_size = dims.y()*block_dim.y();
+  double z_size = dims.z()*block_dim.z();
 
-  // set lvcs
-  bwm_world::instance()->set_lvcs(lvcs);
-  vcl_cout << "defining lvcs with origin = <" << lvcs << vcl_endl;
+  bgeo_lvcs lvcs;
+  if(parser.lvcs(lvcs)){
+    // set lvcs
+    bwm_world::instance()->set_lvcs(lvcs);
+    vcl_cout << "defining lvcs with origin = <" << lvcs << vcl_endl;
 
-  // create the world
-  unsigned x_dim = dims.x()*block_dim.x();
-  unsigned y_dim = dims.y()*block_dim.y();
-  unsigned z_dim = dims.z()*block_dim.z();
+    // create the world
 
-  // find the origin in global coordinates
-  double lon, lat, elev;
-  lvcs.local_to_global(loc_origin.x(), loc_origin.y(), loc_origin.z(), bgeo_lvcs::wgs84, lon, lat, elev);
-  vgl_point_3d<double> world_min(lon,lat,elev);
+    // find the origin in global coordinates
+    double lon, lat, elev;
+    lvcs.local_to_global(loc_origin.x(), loc_origin.y(), loc_origin.z(), bgeo_lvcs::wgs84, lon, lat, elev);
+    world_min.set(lon,lat,elev);
 
-  //find the max point of world in local coordinates
-  double w_max_x = loc_origin.x() + x_dim;
-  double w_max_y = loc_origin.y() + y_dim;
-  double w_max_z = loc_origin.z() + z_dim;
-  lvcs.local_to_global(w_max_x, w_max_y, w_max_z, bgeo_lvcs::wgs84, lon, lat, elev);
-  vgl_point_3d<double> world_max(lon,lat,elev);
-
+    //find the max point of world in local coordinates
+    double w_max_x = loc_origin.x() + x_size;
+    double w_max_y = loc_origin.y() + y_size;
+    double w_max_z = loc_origin.z() + z_size;
+    lvcs.local_to_global(w_max_x, w_max_y, w_max_z, bgeo_lvcs::wgs84, lon, lat, elev);
+    world_max.set(lon,lat,elev);
+  }else{
+    world_min = loc_origin;
+    world_max.set(loc_origin.x()+x_size, loc_origin.y()+y_size,
+                  loc_origin.z()+z_size);
+  }
   //create the observable mesh
   vgl_box_3d<double> world(world_min, world_max);
   bwm_observable_mesh_sptr mesh = new bwm_observable_mesh(world);

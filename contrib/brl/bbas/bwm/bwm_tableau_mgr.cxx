@@ -124,6 +124,9 @@ vcl_string bwm_tableau_mgr::save_camera(vcl_string tab_name)
       static_cast<bwm_tableau_proj_cam*> (tab.as_pointer());
     vcl_string path = tab_cam->save_camera();
     return path;
+  }else if(tab->type_name().compare("bwm_tableau_generic_cam") == 0){
+    vcl_cout << " generic cams not currently saved \n";
+    return "";
   }else{
     vcl_cerr << "Tableau " << tab_name << "is an unknown camera tableau!\n";
     return "";

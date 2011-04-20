@@ -5,6 +5,8 @@
 
 #include "bwm_tableau_proj_cam.h"
 #include "bwm_observer_proj_cam.h"
+#include "bwm_observer_generic_cam.h"
+#include "bwm_tableau_generic_cam.h"
 #include "bwm_tableau_rat_cam.h"
 #include "bwm_tableau_video.h"
 
@@ -31,23 +33,30 @@ bwm_tableau_factory::create_tableau(bwm_io_tab_config* t)
   else if (t->type_name.compare(CAMERA_TABLEAU_TAG) == 0) {
     bwm_io_tab_config_cam* cam_tab = static_cast<bwm_io_tab_config_cam* > (t);
     if (cam_tab->cam_type.compare("projective") == 0||
-        cam_tab->cam_type.compare("perspective") == 0) {
+        cam_tab->cam_type.compare("perspective") == 0)
+		{
       bgui_image_tableau_sptr img = bgui_image_tableau_new();
       bwm_observer_proj_cam* o = new bwm_observer_proj_cam(img, cam_tab->name,
         cam_tab->img_path, cam_tab->cam_path, cam_tab->cam_type, false);
       bwm_tableau_proj_cam* tab = new bwm_tableau_proj_cam(o);
       if(t->name == "") t->name = cam_tab->cam_path;
       return tab;
-    }
-    else if (cam_tab->cam_type.compare("rational") == 0) {
+    }else if (cam_tab->cam_type.compare("rational") == 0) {
       bgui_image_tableau_sptr img = bgui_image_tableau_new();
       bwm_observer_rat_cam* o = new bwm_observer_rat_cam(img, cam_tab->name,
         cam_tab->img_path, cam_tab->cam_path, false);
       bwm_tableau_rat_cam* tab = new bwm_tableau_rat_cam(o);
       if(t->name == "") t->name = cam_tab->cam_path;
       return tab;
-    }
-    else {
+    }else if (cam_tab->cam_type.compare("generic") == 0) {
+      bgui_image_tableau_sptr img = bgui_image_tableau_new();
+      bwm_observer_generic_cam* o = 
+        new bwm_observer_generic_cam(img, cam_tab->name,
+        cam_tab->img_path, cam_tab->cam_path, cam_tab->cam_type, false);
+      bwm_tableau_generic_cam* tab = new bwm_tableau_generic_cam(o);
+      if(t->name == "") t->name = cam_tab->cam_path;
+      return tab;
+    }else {
       vcl_cerr << "Unknown camera type " << cam_tab->cam_type << "coming from parser!\n";
       return 0;
     }

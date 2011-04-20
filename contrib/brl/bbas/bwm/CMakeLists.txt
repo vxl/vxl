@@ -65,6 +65,7 @@ IF(EXPAT_FOUND)
        bwm_tableau_factory.cxx          bwm_tableau_factory.h
        bwm_tableau_proj_cam.cxx         bwm_tableau_proj_cam.h
        bwm_tableau_rat_cam.cxx          bwm_tableau_rat_cam.h
+       bwm_tableau_generic_cam.cxx      bwm_tableau_generic_cam.h
        bwm_tableau_video.cxx            bwm_tableau_video.h
        bwm_observable_mesh.cxx          bwm_observable_mesh.h             bwm_observable_mesh_sptr.h
        bwm_observer_cam.cxx             bwm_observer_cam.h
@@ -73,6 +74,7 @@ IF(EXPAT_FOUND)
        bwm_observer_mgr.cxx             bwm_observer_mgr.h
        bwm_observer_proj_cam.cxx        bwm_observer_proj_cam.h
        bwm_observer_rat_cam.cxx         bwm_observer_rat_cam.h
+       bwm_observer_generic_cam.cxx     bwm_observer_generic_cam.h
        bwm_observable_mesh_circular.cxx bwm_observable_mesh_circular.h
        bwm_observable_textured_mesh.cxx bwm_observable_textured_mesh.h    bwm_observable_textured_mesh_sptr.h
        bwm_texture_map_generator.cxx    bwm_texture_map_generator.h

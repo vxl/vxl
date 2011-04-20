@@ -174,7 +174,8 @@ void bwm_popup_menu::get_menu(vgui_menu &menu)
   // all camera tableau children will do the following menu items
   if ((tab_->type_name().compare("bwm_tableau_proj_cam") == 0) ||
       (tab_->type_name().compare("bwm_tableau_rat_cam") == 0)  ||
-      (tab_->type_name().compare("bwm_tableau_video") == 0))
+      (tab_->type_name().compare("bwm_tableau_video") == 0)||
+	   tab_->type_name().compare("bwm_tableau_generic_cam") == 0)
   {
     // 3D Objects menu
     bwm_tableau_cam* cam_tab = static_cast<bwm_tableau_cam* > (tab_.as_pointer());

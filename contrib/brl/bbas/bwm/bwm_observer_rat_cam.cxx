@@ -40,6 +40,26 @@
 #include <bmsh3d/bmsh3d_textured_mesh_mc.h>
 #include <vpgl/vpgl_local_rational_camera.h>
 
+vpgl_camera<double>* bwm_observer_rat_cam::read_camera(vcl_string cam_path,
+                                                       bool& local)
+{
+  local = true;
+  //vpgl_rational_camera<double> *
+  //rational camera may be local, therefore we check if it's local first
+  vpgl_camera<double>* cam  = read_local_rational_camera<double>(cam_path);
+
+  if ( !cam ) {
+    vcl_cout << "Rational camera isn't local... trying global" << vcl_endl;
+    cam = read_rational_camera<double>(cam_path);
+    local = false;
+  }
+
+  if (!cam) {
+    bwm_utils::show_error("[" + cam_path + "] is not a valid rational camera path");
+    return 0;
+  }
+  return cam;
+}
 bwm_observer_rat_cam::bwm_observer_rat_cam(bgui_image_tableau_sptr img,
                                            vcl_string& name,
                                            vcl_string& image_path,
@@ -68,21 +88,9 @@ bwm_observer_rat_cam::bwm_observer_rat_cam(bgui_image_tableau_sptr img,
     bwm_utils::show_error("Camera tableaus need a valid camera path!");
     return;
   }
-
-  //vpgl_rational_camera<double> *
-  //rational camera may be local, therefore we check if it's local first
-  camera_ = read_local_rational_camera<double>(cam_path);
-
-  if ( !camera_ ) {
-    vcl_cout << "Rational camera isn't local... trying global" << vcl_endl;
-    camera_ = read_rational_camera<double>(cam_path);
-  }
-
-  if (!camera_) {
-    bwm_utils::show_error("[" + cam_path + "] is not a valid rational camera path");
-    return;
-  }
-
+  set_camera_path(cam_path);
+  bool local = false;
+  camera_ = this->read_camera(cam_path, local);
   bwm_observer_mgr::instance()->add(this);
   set_tab_name(name);
   set_camera_path(cam_path);

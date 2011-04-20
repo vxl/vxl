@@ -1,0 +1,83 @@
+#include "bwm_observer_generic_cam.h"
+#include "bwm_observer_mgr.h"
+#include "bwm_observer_proj_cam.h"
+#include "bwm_observer_generic_cam.h"
+#include "algo/bwm_utils.h"
+#include <vul/vul_file.h>
+#include <vsl/vsl_binary_io.h>
+#include <vgl/vgl_point_2d.h>
+#include <vgl/vgl_point_3d.h>
+#include <vgl/vgl_vector_3d.h>
+#include <vgl/vgl_plane_3d.h>
+#include <vgl/vgl_ray_3d.h>
+#include <vgl/vgl_intersection.h>
+#include <vpgl/vpgl_generic_camera.h>
+#include <vpgl/algo/vpgl_camera_compute.h>
+#include <vil/vil_image_resource.h>
+#define DEBUG
+
+bwm_observer_generic_cam::bwm_observer_generic_cam(bgui_image_tableau_sptr img,
+                                             vcl_string name,
+                                             vcl_string& image_path,
+                                             vcl_string& cam_path,
+                                             vcl_string& subtype,
+                                             bool display_image_path)
+: bwm_observer_cam(img)
+{
+  img->show_image_path(display_image_path);
+  
+  // LOAD IMAGE
+  vgui_range_map_params_sptr params;
+  vil_image_resource_sptr img_res = bwm_utils::load_image(image_path, params);
+
+  if (!img_res) {
+    bwm_utils::show_error("Image [" + image_path + "] is NOT found");
+    return;
+  }
+
+  img->set_image_resource(img_res, params);
+  img->set_file_name(image_path);
+
+  // check if the camera path is not empty, if it is NITF, the camera
+  // info is in the image, not a separate file
+  if (cam_path.size() == 0)
+  {
+    bwm_utils::show_error("Camera tableaus need a valid camera path!");
+    return;
+  }
+  this->set_camera_path(cam_path);  
+  bool local = false;
+  vpgl_camera<double>* cam = 
+    bwm_observer_proj_cam::read_camera(cam_path, "perspective");
+  if(!cam)
+    cam = bwm_observer_proj_cam::read_camera(cam_path, "projective");
+  if(!cam)
+    cam = bwm_observer_rat_cam::read_camera(cam_path, local);
+  if(!cam||!local)
+    camera_ = 0;
+  else{
+      vpgl_generic_camera<double> gcam;
+      int ni = img_res->ni(), nj = img_res->nj();
+      vpgl_generic_camera_compute::compute(cam, ni, nj, gcam);
+      camera_ = new vpgl_generic_camera<double>(gcam);
+  }
+    
+  //generate a unique tab name if null
+  if(name=="")
+    {name = cam_path;}
+  set_tab_name(name);
+  // add the observer to the observer pool
+  bwm_observer_mgr::instance()->add(this);
+}
+
+bool bwm_observer_generic_cam::intersect_ray_and_plane(vgl_point_2d<double> img_point,
+                                                    vgl_plane_3d<double> plane,
+                                                    vgl_point_3d<double> &world_point)
+{
+  vpgl_generic_camera<double>* generic_cam = static_cast<vpgl_generic_camera<double> *> (camera_);
+  
+  vgl_ray_3d<double> ray = generic_cam->ray(img_point.x(), img_point.y());
+  return vgl_intersection(ray, plane, world_point);
+}
+
+

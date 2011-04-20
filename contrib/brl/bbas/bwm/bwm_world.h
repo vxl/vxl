@@ -33,7 +33,7 @@ class bwm_world
   //: the set of observable objects in the world such as feature meshes
   vcl_vector<bwm_observable_sptr> objects() { return objects_; }
 
-  void add(bwm_observable_sptr obj) { objects_.push_back(obj); }
+  bool add(bwm_observable_sptr obj);
 
   //: removes the observable from world.
   //  Returns true if deletion is successful, false if it cannot be found

@@ -31,7 +31,19 @@ void  bwm_world::set_world_pt(vgl_point_3d<double> const& pt)
   world_plane_ = vgl_plane_3d<double>(normal, pt);
   world_pt_valid_ = true;
 }
-
+// adds an observable to the world
+bool bwm_world::add(bwm_observable_sptr obj)
+{
+  // find the object
+  vcl_vector<bwm_observable_sptr>::iterator it = objects_.begin();
+  while (it != objects_.end()){ 
+    if (*it == obj)
+      return false;
+	it++;
+  }
+  objects_.push_back(obj); 
+  return true;
+}
 // removes an observable from the world
 bool bwm_world::remove(bwm_observable_sptr obj)
 {
@@ -44,7 +56,7 @@ bool bwm_world::remove(bwm_observable_sptr obj)
     }
     it++;
   }
-  return true;
+  return false; // object was not in the world
 }
 
 void bwm_world::set_lvcs(double lat, double lon, double elev)
