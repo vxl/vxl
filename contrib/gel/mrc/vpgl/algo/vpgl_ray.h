@@ -10,6 +10,7 @@
 #include <vpgl/vpgl_rational_camera.h>
 #include <vpgl/vpgl_local_rational_camera.h>
 #include <vpgl/vpgl_perspective_camera.h>
+#include <vpgl/vpgl_generic_camera.h>
 #include <vnl/vnl_double_3.h>
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_vector_3d.h>
@@ -88,6 +89,10 @@ class vpgl_ray
                   vgl_point_3d<double> const& world_pt,
                   vgl_ray_3d<double>& ray);
 
+  // ====== generic camera =====
+  static bool ray(vpgl_generic_camera<double> const& cam,
+                  vgl_point_3d<double> const& world_pt,
+                  vgl_ray_3d<double>& ray);
  private:
   //: constructor private - static methods only
   vpgl_ray();

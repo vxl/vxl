@@ -52,6 +52,7 @@ vpgl_generic_camera( vbl_array_2d<vgl_ray_3d<T> > const& rays)
     dim = nr;
   double lv = vcl_log(dim)/vcl_log(2.0);
   n_levels_ = static_cast<int>(lv);// round down
+  if(dim/vcl_pow(2.0, static_cast<double>(n_levels_-1)) < 3.0) n_levels_--;
   rays_.resize(n_levels_);
   nr_.resize(n_levels_);
   nc_.resize(n_levels_);
@@ -68,6 +69,7 @@ vpgl_generic_camera( vbl_array_2d<vgl_ray_3d<T> > const& rays)
     nrlv /= 2; nclv /= 2;
   }  
 }
+
 // the ray closest to the given 3-d point is selected
 // note that the ray is taken to be an infinite 3-d line
 // and so the bound of the ray origin is not taken into account
@@ -94,6 +96,55 @@ void vpgl_generic_camera<T>::nearest_ray(int level,
       }
     }
 }
+template <class T>
+void vpgl_generic_camera<T>::
+nearest_ray_to_point(vgl_point_3d<T> const& p,
+                     int& nearest_r, int& nearest_c) const
+{
+  int lev = n_levels_-1;
+  int start_r = 0, end_r = nr_[lev];
+  int start_c = 0, end_c = nc_[lev];
+  for(; lev >= 0; --lev){
+    if(start_r<0) start_r = 0;
+    if(start_c<0) start_c = 0;
+    if(end_r>=nr_[lev]) end_r = nr_[lev]-1;
+    if(end_c>=nc_[lev]) end_c = nc_[lev]-1;
+    nearest_ray(lev, p, start_r, end_r, start_c, end_c,
+                nearest_r, nearest_c);
+    // compute new bounds
+    start_r = 2*nearest_r-1; start_c = 2*nearest_c-1;
+    end_r = start_r + 2; end_c = start_c +2;
+    // check if the image sizes are odd, so search range is extended
+    if(lev ==1&&nr_[0]%2!=0) end_r++;
+    if(lev ==1&&nc_[0]%2!=0) end_c++;
+  }
+}
+template <class T>
+void vpgl_generic_camera<T>::
+refine_ray_at_point(int nearest_c, int nearest_r,
+                           vgl_point_3d<T> const& p,
+                           vgl_ray_3d<T>& ray) const
+{
+  T u = static_cast<T>(nearest_c), v = static_cast<T>(nearest_r);
+  ray = this->ray(u, v);
+  vgl_point_3d<double> cp = vgl_closest_point(p, ray);
+  vgl_vector_3d<double> t = p-cp;
+  vgl_point_3d<double> org = ray.origin();
+  org += t; //shift origin by vector from closest point, cp to p
+  ray.set(org, ray.direction());
+}
+//: a ray passing through a given 3-d point
+template <class T>
+vgl_ray_3d<T> vpgl_generic_camera<T>::
+ray(vgl_point_3d<T> const& p) const
+{
+  int nearest_c = -1, nearest_r = -1;
+  this->nearest_ray_to_point(p, nearest_r, nearest_c);
+  vgl_ray_3d<T> r;
+  this->refine_ray_at_point(nearest_c, nearest_r, p, r);
+  return r;
+}
+
 // refine the projection to sub-pixel accuracy
 // use an affine invariant map between the plane passing through p and the 
 // image plane. The plane normal is given by the direction of the 
@@ -173,30 +224,14 @@ void vpgl_generic_camera<T>::project(const T x, const T y, const T z,
                                      T& u, T& v) const
 {
   vgl_point_3d<T> p(x, y, z);
-  int lev = n_levels_-1;
-  int start_r = 0, end_r = nr_[lev];
-  int start_c = 0, end_c = nc_[lev];
-  int nearest_r = 0, nearest_c = 0;
-  for(; lev >= 0; --lev){
-    if(start_r<0) start_r = 0;
-    if(start_c<0) start_c = 0;
-    if(end_r>=nr_[lev]) end_r = nr_[lev]-1;
-    if(end_c>=nc_[lev]) end_c = nc_[lev]-1;
-    nearest_ray(lev, p, start_r, end_r, start_c, end_c,
-                nearest_r, nearest_c);
-    // compute new bounds
-    start_r = 2*nearest_r-1; start_c = 2*nearest_c-1;
-    end_r = start_r + 2; end_c = start_c +2;
-    // check if the image sizes are odd, so search range is extended
-    if(lev ==1&&nr_[0]%2!=0) end_r++;
-    if(lev ==1&&nc_[0]%2!=0) end_c++;
-  }
+  int nearest_c=-1, nearest_r=-1;
+  this->nearest_ray_to_point(p, nearest_r, nearest_c);
   // refine to sub-pixel accuracy using a Taylor series approximation
   this->refine_projection(nearest_c, nearest_r, p, u, v);
 }
 // a ray specified by an image location (can be sub-pixel)
 template <class T>
-vgl_ray_3d<T> vpgl_generic_camera<T>::ray(const T u, const T v)
+vgl_ray_3d<T> vpgl_generic_camera<T>::ray(const T u, const T v) const
 {
   double du = static_cast<double>(u);
   double dv = static_cast<double>(v);

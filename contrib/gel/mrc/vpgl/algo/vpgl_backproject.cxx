@@ -6,7 +6,8 @@
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_plane_3d.h>
 #include <vnl/algo/vnl_amoeba.h>
-
+#include <vgl/vgl_intersection.h>
+#include <vpgl/vpgl_generic_camera.h>
 //: Backproject an image point onto a plane, start with initial_guess
 bool vpgl_backproject::bproj_plane(const vpgl_camera<double>* cam,
                                    vnl_double_2 const& image_point,
@@ -14,6 +15,20 @@ bool vpgl_backproject::bproj_plane(const vpgl_camera<double>* cam,
                                    vnl_double_3 const& initial_guess,
                                    vnl_double_3& world_point)
 {
+  // special case of a generic camera
+  if(cam->type_name()=="vpgl_generic_camera")
+  {
+	vgl_ray_3d<double> ray;
+	vgl_point_3d<double> ipt;
+	vgl_plane_3d<double> gplane(plane[0], plane[1], plane[2], plane[3]);
+	const vpgl_generic_camera<double>* gcam = dynamic_cast<const vpgl_generic_camera<double>*>(cam);
+	ray = gcam->ray(image_point[0], image_point[1]);
+   if(!vgl_intersection<double>(ray, gplane, ipt))
+	   return false;
+   world_point[0]=ipt.x(); world_point[1]=ipt.y(); world_point[2]=ipt.z();
+   return true;
+  }
+  // general case
   vpgl_invmap_cost_function cf(image_point, plane, cam);
   vnl_double_2 x1(0.0, 0.0);
 

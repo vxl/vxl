@@ -55,7 +55,10 @@ class vpgl_generic_camera : public vpgl_camera<T>
   unsigned n_levels(){return static_cast<unsigned>(n_levels_);}
 
   //: the ray corresponding to a given pixel
-  vgl_ray_3d<T> ray(const T u, const T v);
+  vgl_ray_3d<T> ray(const T u, const T v) const;
+
+  //: a ray passing through a given 3-d point
+  vgl_ray_3d<T> ray(vgl_point_3d<T> const& p) const;
 
   //: the ray index at a given level
   vbl_array_2d<vgl_ray_3d<T> > rays(int level){ return rays_[level];}
@@ -70,6 +73,8 @@ class vpgl_generic_camera : public vpgl_camera<T>
   void print_orig(int level);
 
  protected:
+  void nearest_ray_to_point(vgl_point_3d<T> const& p,
+                            int& nearest_r, int& nearest_c) const;
   //: nearest ray at level
   void nearest_ray(int level, vgl_point_3d<T> const& p,
                    int start_r, int end_r, int start_c, int end_c,
@@ -78,6 +83,11 @@ class vpgl_generic_camera : public vpgl_camera<T>
   //: refine the projection to sub pixel
   void refine_projection(int nearest_c, int nearest_r,
                          vgl_point_3d<T> const& p, T& u, T& v) const;
+
+  //: refine ray 
+  void refine_ray_at_point(int nearest_c, int nearest_r,
+                           vgl_point_3d<T> const& p,
+                           vgl_ray_3d<T>& ray) const;
 
   // === members ===
 

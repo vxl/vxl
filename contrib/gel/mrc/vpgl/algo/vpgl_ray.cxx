@@ -16,6 +16,17 @@ bool vpgl_ray::ray(const vpgl_camera<double>* cam,
                    vnl_double_3 const& point_3d,
                    vnl_double_3& r)
 {
+  // special case of a generic camera
+  if(cam->type_name()=="vpgl_generic_camera")
+  {
+    vgl_point_3d<double> p(point_3d[0], point_3d[1], point_3d[2]);
+	vgl_ray_3d<double> ray;
+	const vpgl_generic_camera<double>* gcam = dynamic_cast<const vpgl_generic_camera<double>*>(cam);
+	ray = gcam->ray(p);
+	vgl_vector_3d<double> dir = ray.direction();
+	r = vnl_double_3(dir.x(), dir.y(), dir.z());
+	return true;
+  }
   //create an image point
   double u, v;
   cam->project(point_3d[0], point_3d[1], point_3d[2], u, v);
@@ -200,5 +211,12 @@ bool vpgl_ray::ray(vpgl_perspective_camera<double> const& cam,
   if (cam.is_behind_camera(vgl_homg_point_3d<double>(world_pt.x(), world_pt.y(), world_pt.z())))
     return false;
   ray = vgl_ray_3d<double>(cam.camera_center(), world_pt);
+  return true;
+}
+bool vpgl_ray::ray(vpgl_generic_camera<double> const& cam,
+                   vgl_point_3d<double> const& world_pt,
+                   vgl_ray_3d<double>& ray)
+{
+  ray = cam.ray(world_pt);
   return true;
 }

@@ -1137,9 +1137,10 @@ compute( vpgl_local_rational_camera<double> const& rat_cam,
   // compute the required number of levels
   double dim = ni;
   if(nj<ni)
-    dim = ni;
+    dim = nj;
   double lv = vcl_log(dim)/vcl_log(2.0);
   int n_levels = static_cast<int>(lv);// round down
+  if(dim/vcl_pow(2.0, static_cast<double>(n_levels-1)) < 3.0) n_levels--;
 
   // contruct pyramid of ray indices
   // the row and column dimensions at each level
