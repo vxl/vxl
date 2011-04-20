@@ -163,7 +163,8 @@ void convert_tree(boct_bit_tree2 const& bit_tree, boct_tree<T_loc,T_data>*& tree
 
   // some of the leaf nodes are still in the queue, fill them with data
   while (!Q.empty()){
-    if (data_idx > bit_tree.get_data_index(0,false)+585) vcl_cout << "ERROR! exceeded!" << vcl_endl;
+    if (data_idx > bit_tree.get_data_index(0,false)+585)
+      vcl_cout << "ERROR! exceeded!" << vcl_endl;
     boxm2_data_traits<BOXM2_MOG3_GREY>::datatype data = mog3_data->data()[data_idx];
     boxm2_data_traits<BOXM2_NUM_OBS>::datatype nums = num_obs->data()[data_idx];
     boxm2_data<BOXM2_ALPHA>::datatype alpha = alpha_data->data()[data_idx];
@@ -254,6 +255,13 @@ int main(int argc, char** argv)
           if (bit_tree.num_cells() >= 1) {
             tree_type* octree;
             convert_tree(bit_tree,octree,alpha_data,mog3_data,num_obs);
+            int n1=bit_tree.num_cells();
+            int n2=octree->all_cells().size();
+            if (n1 != n2) {
+              vcl_cout << x << ',' << y << ',' << z << '\n'
+                       << "ERROR! The converted tree is not right, should have " << n1 << " nodes instead of " << n2 << vcl_endl;
+            }
+
             // all three dimensions should be same now, so we can use the one value
             double cell_dim=1./dim.x();
             p[0] = x*cell_dim;

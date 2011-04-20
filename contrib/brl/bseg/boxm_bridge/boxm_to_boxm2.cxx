@@ -46,10 +46,10 @@ void deconstruct_sample(boxm_sample<BOXM_APM_MOG_GREY> sample,
 
   for (unsigned i=0; i<obs.num_components(); i++) {
     gauss_type_f1  mf=obs.distribution(i);
-    unsigned char w = (unsigned char)obs.weight(i)*255.0;
-    unsigned int n = (unsigned char)mf.num_observations;
-    unsigned char m = (unsigned char)mf.mean()*255.0;
-    unsigned char v = (unsigned char) mf.var()*255.0;
+    unsigned char w = (unsigned char)vcl_floor(obs.weight(i)*255.0);
+    unsigned int  n = (unsigned char)mf.num_observations;
+    unsigned char m = (unsigned char)vcl_floor(mf.mean()*255.0);
+    unsigned char v = (unsigned char)vcl_floor(mf.var()*255.0);
     num_obs[i]=n;
     data[i*3]=m;
     data[i*3+1]=v;
@@ -66,26 +66,29 @@ void convert_data(boct_tree_cell<T_loc,T_data>* tree_cell,
                   boxm2_data_traits<BOXM2_NUM_OBS>::datatype* num_obs,
                   int& data_idx)
 {
-  // go through the tree, in depth first order to collect data
-  vcl_queue<boct_tree_cell<T_loc,T_data>*> Q;
-  Q.push(tree_cell);
-  while (!Q.empty()) {
-    boct_tree_cell<T_loc,T_data>* ptr = Q.front();
-    deconstruct_sample(ptr->data(),alpha[data_idx],data[data_idx],num_obs[data_idx]);
-    data_idx++;
-    Q.pop();
-    if (!ptr->is_leaf()) {
-      boct_tree_cell<T_loc,T_data>* children = ptr->children();
-      for (unsigned j=0; j<8; j++) {
-        Q.push(&children[j]);
-      }
+    // go through the tree, in depth first order to collect data
+    vcl_queue<boct_tree_cell<T_loc,T_data>*> Q;
+    Q.push(tree_cell);
+    while (!Q.empty()) {
+        boct_tree_cell<T_loc,T_data>* ptr = Q.front();
+        {
+            deconstruct_sample(ptr->data(),alpha[data_idx],data[data_idx],num_obs[data_idx]);
+            data_idx++;
+            if (!ptr->is_leaf()) {
+                boct_tree_cell<T_loc,T_data>* children = ptr->children();
+                for (unsigned j=0; j<8; j++) {
+                    Q.push(&children[j]);
+                }
+            }
+        }
+        Q.pop();
+
     }
-  }
 }
 
 //: recursively sets the bits based on the octree structure
 template <class T_loc, class T_data>
-void set_bits(boct_bit_tree2*& bit_tree, int idx, unsigned int child_idx, boct_tree_cell<T_loc,T_data> cell)
+void set_bits(boct_bit_tree2*& bit_tree, int idx, unsigned int child_idx, boct_tree_cell<T_loc,T_data> & cell)
 {
   if (cell.code_.level == 0)
     return;
@@ -154,13 +157,18 @@ int main(int argc, char** argv)
       scene.load_block(idx);
       boxm_block<tree_type >* block = scene.get_block(idx);
       vgl_box_3d<double> block_bb = block->bounding_box();
+      vcl_cout<<block_bb<<vcl_endl;
       tree_type * tree = block->get_tree();
 
       // create metadata for the block
       boxm2_block_id block_id(idx.x(),idx.y(),idx.z());
       vgl_vector_3d<double> sub_block_dim(1.0/dim,1.0/dim,1.0/dim);
       vgl_vector_3d<unsigned> sub_block_num(dim,dim,dim);
-      boxm2_block_metadata metadata(block_id, block->bounding_box().min_point(),sub_block_dim,sub_block_num,1,4,650.0,0.001);
+      vgl_vector_3d<double> real_block_dim(sub_block_dim.x()*scene.block_dim().x(),
+                                           sub_block_dim.y()*scene.block_dim().y(),
+                                           sub_block_dim.z()*scene.block_dim().z());
+      boxm2_block_metadata metadata(block_id, block->bounding_box().min_point(),
+                                    real_block_dim,sub_block_num,1,4,650.0,0.001);
       boxm2_block new_block(metadata);
       new_blocks[block_id]=metadata;
 
