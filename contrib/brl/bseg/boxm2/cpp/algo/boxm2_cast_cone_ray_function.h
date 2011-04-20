@@ -96,7 +96,7 @@ void boxm2_cast_cone_ray_function(vgl_box_3d<double>& block_box,
           int data_ptr = bit_tree.get_data_ptr(); 
 
           //calculate the theoretical radius of this cell
-          double cellR = 3.0 * vcl_sqrt( 3.0 / (4.0*vnl_math::pi) ); 
+          double cellR = vcl_pow( 3.0/(4.0*vnl_math::pi), 1.0/3.0);  
           vgl_point_3d<double> cellCenter( (double) x + 0.5, 
                                            (double) y + 0.5, 
                                            (double) z + 0.5 ); 
