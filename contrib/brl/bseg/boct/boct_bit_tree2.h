@@ -66,8 +66,8 @@ class boct_bit_tree2
   //: sets and gets pointers stored in bits 10, 11, 12, 13
   int get_buffer_ptr(); 
   int set_buffer_ptr(int ptr); 
-  int get_data_ptr(bool is_random=true); 
-  int set_data_ptr(int ptr, bool is_random=true); 
+  int get_data_ptr(bool is_random=false); 
+  int set_data_ptr(int ptr, bool is_random=false); 
 
  private:
 
