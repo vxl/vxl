@@ -46,7 +46,7 @@ static void test_create_tree()
   tree->split();
   tree->init_cells(vgl_point_3d<double>(0,0,0));
 
-  //create the tree to be inserted 
+  //create the tree to be inserted
   boct_tree<short,vgl_point_3d<double> > * subtree=new boct_tree<short,vgl_point_3d<double> >(3, 3);
   subtree->init_cells(vgl_point_3d<double> (10,10,10) );
   boct_tree_cell<short,vgl_point_3d<double> > *node = tree->leaf_cells()[3];
@@ -54,14 +54,13 @@ static void test_create_tree()
   int before = tree->leaf_cells().size();
   int sub_count=subtree->leaf_cells().size();
   node->insert_subtree(sub_root);
-  int after = tree->leaf_cells().size();
 
   leaves.clear();
   leaves = tree->leaf_cells();
   TEST_EQUAL("Inserting the subtree, leaf nodes count", before+sub_count-1, leaves.size());
   TEST("Inserting the subtree, leaf nodes data at index 3", leaves[3]->data(), vgl_point_3d<double> (10,10,10));
   TEST("Inserting the subtree, leaf nodes data at index 67", leaves[67]->data(), vgl_point_3d<double> (0,0,0));
- 
+
   delete tree;
   delete subtree;
 }
