@@ -145,8 +145,8 @@ bapl_lowe_pyramid_set::pyramid_at( const bapl_lowe_pyramid<float> & pyramid,
     sub_index = octave_size_-1;
   }
 
-  if ( actual_scale ) *actual_scale = vcl_pow(2.0, octave-1);
-  if ( rel_scale ) *rel_scale = vcl_pow(2.0, double(sub_index)/octave_size_);
+  if ( actual_scale ) *actual_scale = 1 << (octave-1);
+  if ( rel_scale ) *rel_scale = vcl_pow(2.0f, float(sub_index)/octave_size_);
 
   return pyramid(octave, sub_index);
 }
@@ -164,12 +164,12 @@ bapl_lowe_pyramid_set::make_descriptor(bapl_lowe_keypoint* keypoint)
   vnl_vector_fixed<double,128> histograms(0.0);
 
   float actual_scale, ref_scale;
-  double key_scale = keypoint->scale();
+  float key_scale = keypoint->scale();
   const vil_image_view<float> & grad_orient = grad_orient_at(key_scale, &actual_scale, &ref_scale);
   const vil_image_view<float> & grad_mag =  grad_mag_at(key_scale);
 
-  double key_x = keypoint->location_i() / actual_scale;
-  double key_y = keypoint->location_j() / actual_scale;
+  float key_x = keypoint->location_i() / actual_scale;
+  float key_y = keypoint->location_j() / actual_scale;
   double key_orient = keypoint->orientation();
 
   for (int hi=0; hi<4; ++hi) {
@@ -185,11 +185,11 @@ bapl_lowe_pyramid_set::make_descriptor(bapl_lowe_keypoint* keypoint)
             int yc = int(y+key_y) + c%2;
             if ( xc>=0 && xc<int(grad_orient.ni()) &&
                  yc>=0 && yc<int(grad_orient.nj()) ) {
-              float interp_x = 1.0f - vcl_fabs( x+key_x - float(xc) );
-              float interp_y = 1.0f - vcl_fabs( y+key_y - float(yc) );
+              float interp_x = 1.0f - vcl_fabs( key_x + float(x-xc) );
+              float interp_y = 1.0f - vcl_fabs( key_y + float(y-yc) );
               float weight = grad_mag(xc,yc) * interp_x * interp_y
                            * gaussian((xc-key_x)/ref_scale, (yc-key_y)/ref_scale);
-              float orient = grad_orient(xc,yc)-key_orient+vnl_math::pi;
+              float orient = float(grad_orient(xc,yc)-key_orient+vnl_math::pi);
               while (orient > float(2*vnl_math::pi)) orient -= float(2*vnl_math::pi);
               while (orient < 0.0f)                  orient += float(2*vnl_math::pi);
               int bin = ((int(orient*15/float(2*vnl_math::pi))+1)/2)%8;

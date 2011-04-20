@@ -11,7 +11,7 @@
 bapl_lowe_keypoint::bapl_lowe_keypoint()
 {
   // make a random keypoint
-  for ( int i=0; i<128; ++i){
+  for ( int i=0; i<128; ++i) {
     descriptor_[i] = vcl_rand();
   }
   this->normalize();
@@ -64,8 +64,8 @@ bapl_lowe_keypoint::normalize()
 {
   descriptor_.normalize();
   bool changed = false;
-  for ( int i=0; i<128; ++i){
-    if ( descriptor_[i] > 0.2 ){
+  for ( int i=0; i<128; ++i) {
+    if ( descriptor_[i] > 0.2 ) {
       descriptor_[i] = 0.2;
       changed = true;
     }
@@ -89,21 +89,19 @@ bapl_lowe_keypoint::print_summary(vcl_ostream& os) const
 bapl_lowe_keypoint_sptr read_from_file(vcl_istream& ifs, int len, int img_width, int img_height)
 {
   float loc_x, loc_y, scale, orientation;
-  ifs >> loc_x; ifs >> loc_y; ifs >> scale; ifs >> orientation;
+  ifs >> loc_x >> loc_y >> scale >> orientation;
   if (img_height > 0 && img_width > 0) {
     loc_y = img_height - loc_y - 1.0f;
-    loc_x -= 0.5*img_width;
-    loc_y -= 0.5*img_height;
+    loc_x -= 0.5f*img_width;
+    loc_y -= 0.5f*img_height;
   }
   if (len != 128) {  // not possible to use this method for any other sized descriptor
     vcl_cout << "In bapl_lowe_keypoint_sptr read_from_file() -- this method assumes 128 length descriptor vector!\n";
     return 0;
   }
   vnl_vector_fixed<double, 128> desc;
-  for (int j = 0; j < len; j++) {
-    double val;
-    ifs >> val;
-    desc[j] = val;
+  for (int j = 0; j < len; ++j) {
+    ifs >> desc[j];
   }
   bapl_lowe_pyramid_set_sptr py;
   bapl_lowe_keypoint_sptr kp = new bapl_lowe_keypoint(py, loc_y, loc_x, scale, orientation, desc);

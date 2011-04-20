@@ -49,14 +49,14 @@ vcl_vector<float> bapl_dsift::dsift( unsigned const& key_x, unsigned const& key_
             int yc = int(y+key_y) + c%2;
 
             if ( xc>=0 && xc<int(this->grad_orient_.ni()) &&
-              yc>=0 && yc<int(this->grad_orient_.nj()) )
+                 yc>=0 && yc<int(this->grad_orient_.nj()) )
             {
-              float interp_x = 1.0f - vcl_fabs( x+key_x - float(xc) );
-              float interp_y = 1.0f - vcl_fabs( y+key_y - float(yc) );
+              float interp_x = 1.0f - vcl_fabs( key_x + float(x-xc) );
+              float interp_y = 1.0f - vcl_fabs( key_y + float(y-yc) );
 
-              float weight = this->grad_mag_(xc,yc) * interp_x * interp_y * bapl_dsift::gaussian((xc-key_x), (yc-key_y));
+              float weight = this->grad_mag_(xc,yc) * interp_x * interp_y * bapl_dsift::gaussian(float(xc-key_x), float(yc-key_y));
 
-              float orient = this->grad_orient_(xc,yc)-key_orient+vnl_math::pi;
+              float orient = this->grad_orient_(xc,yc)-key_orient+float(vnl_math::pi);
 
               while (orient > float(2*vnl_math::pi)) orient -= float(2*vnl_math::pi);
               while (orient < 0.0f)                  orient += float(2*vnl_math::pi);
@@ -103,8 +103,8 @@ vnl_vector<double> bapl_dsift::vnl_dsift( unsigned const& key_x, unsigned const&
             if ( xc>=0 && xc<int(this->grad_orient_.ni()) &&
               yc>=0 && yc<int(this->grad_orient_.nj()) )
             {
-              float interp_x = 1.0f - vcl_fabs( x+key_x - float(xc) );
-              float interp_y = 1.0f - vcl_fabs( y+key_y - float(yc) );
+              float interp_x = 1.0f - vcl_fabs( key_x + float(x-xc) );
+              float interp_y = 1.0f - vcl_fabs( key_y + float(y-yc) );
 
               //int diff_x = xc-int(key_x);
               //int diff_y = yc-int(key_y);
@@ -113,7 +113,7 @@ vnl_vector<double> bapl_dsift::vnl_dsift( unsigned const& key_x, unsigned const&
 
               float weight = this->grad_mag_(xc,yc) * interp_x * interp_y * gw;
 
-              float orient = this->grad_orient_(xc,yc)-key_orient+vnl_math::pi;
+              float orient = this->grad_orient_(xc,yc)-key_orient+float(vnl_math::pi);
 
               while (orient > float(2*vnl_math::pi)) orient -= float(2*vnl_math::pi);
               while (orient < 0.0f)                  orient += float(2*vnl_math::pi);
