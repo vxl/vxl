@@ -3,7 +3,7 @@
 #define bvgl_volume_of_intersection_txx_
 //:
 // \file
-// \author Gamze Tunali
+// \author Andrew Miller
 
 #include "bvgl_volume_of_intersection.h"
 
