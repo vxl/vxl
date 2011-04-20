@@ -1,7 +1,10 @@
 INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bseg )
 SET(boxm2_cpp_algo_sources
     boxm2_cast_ray_function.h
-    boxm2_render_exp_image_functor.h  boxm2_render_exp_image_functor.cxx
+    boxm2_cast_cone_ray_function.h
+    boxm2_render_functions.h          boxm2_render_functions.cxx
+    boxm2_render_exp_image_functor.h  
+    boxm2_render_cone_functor.h
     boxm2_update_image_functor.h
     boxm2_refine_block_function.h     boxm2_refine_block_function.cxx
     boxm2_change_detection_functor.h
@@ -11,7 +14,7 @@ SET(boxm2_cpp_algo_sources
 
 ADD_LIBRARY(boxm2_cpp_algo  ${boxm2_cpp_algo_sources})
 
-TARGET_LINK_LIBRARIES(boxm2_cpp_algo boxm2_cpp boct brdb vbl_io expatpp vpgl vil_algo vil vgl vgl_xio vbl vsl vcl)
+TARGET_LINK_LIBRARIES(boxm2_cpp_algo boxm2_cpp boct brdb vbl_io expatpp vpgl vil_algo vil bvgl vgl vgl_xio vbl vsl vcl)
 
 SUBDIRS(tests)
 

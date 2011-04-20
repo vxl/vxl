@@ -157,15 +157,15 @@ bool cast_ray_per_block(functor_type functor,
                         unsigned int roi_ni0=0,
                         unsigned int roi_nj0=0)
 {
-  if (vpgl_generic_camera<double>* gcam = 
-      dynamic_cast<vpgl_generic_camera<double> *>(cam.ptr()))
+  if (vpgl_perspective_camera<double>* gcam = 
+      dynamic_cast<vpgl_perspective_camera<double> *>(cam.ptr()))
   {
     for (unsigned i=roi_ni0;i<roi_ni;++i)
     {
-      if (i%10==0) vcl_cout<<'.';
+      if (i%10==0) vcl_cout<<'.'<<vcl_flush;
       for (unsigned j=roi_nj0;j<roi_nj;++j)
       {
-        vgl_ray_3d<double> ray_ij = gcam->ray(i,j);
+        vgl_ray_3d<double> ray_ij = gcam->backproject(i,j);
         vgl_point_3d<float> block_origin(float(ray_ij.origin().x()-linfo->scene_origin[0])/linfo->block_len,
                                          float(ray_ij.origin().y()-linfo->scene_origin[1])/linfo->block_len,
                                          float(ray_ij.origin().z()-linfo->scene_origin[2])/linfo->block_len);
@@ -188,6 +188,8 @@ bool cast_ray_per_block(functor_type functor,
     }
     return true;
   }
+  
+  vcl_cout<<"boxm2_cast_ray_function cannot dynamic cast camera"<<vcl_endl;
   return false;
 }
 

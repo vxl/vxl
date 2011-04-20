@@ -1,4 +1,4 @@
-// This is brl/bseg/boxm2/cpp/pro/processes/boxm2_cpp_render_expected_image_process.cxx
+// This is brl/bseg/boxm2/cpp/pro/processes/boxm2_cpp_render_cone_expected_image_process.cxx
 #include <bprb/bprb_func_process.h>
 //:
 // \file
@@ -12,27 +12,30 @@
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/boxm2_block.h>
 #include <boxm2/boxm2_data_base.h>
+#include <boxm2/cpp/algo/boxm2_render_functions.h>
+
+//vil includes
 #include <vil/vil_save.h>
 #include <vil/vil_image_view.h>
 #include <vil/vil_transform.h>
+
 //brdb stuff
 #include <brdb/brdb_value.h>
-#include <boxm2/cpp/algo/boxm2_render_functions.h>
 
 //directory utility
 #include <vul/vul_timer.h>
 #include <vcl_where_root_dir.h>
 
-namespace boxm2_cpp_render_expected_image_process_globals
+namespace boxm2_cpp_render_cone_expected_image_process_globals
 {
   const unsigned n_inputs_ = 5;
   const unsigned n_outputs_ = 1;
   vcl_size_t lthreads[2]={8,8};
 }
 
-bool boxm2_cpp_render_expected_image_process_cons(bprb_func_process& pro)
+bool boxm2_cpp_render_cone_expected_image_process_cons(bprb_func_process& pro)
 {
-  using namespace boxm2_cpp_render_expected_image_process_globals;
+  using namespace boxm2_cpp_render_cone_expected_image_process_globals;
 
   //process takes 1 input
   vcl_vector<vcl_string> input_types_(n_inputs_);
@@ -51,14 +54,15 @@ bool boxm2_cpp_render_expected_image_process_cons(bprb_func_process& pro)
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 }
 
-bool boxm2_cpp_render_expected_image_process(bprb_func_process& pro)
+bool boxm2_cpp_render_cone_expected_image_process(bprb_func_process& pro)
 {
-  using namespace boxm2_cpp_render_expected_image_process_globals;
+  using namespace boxm2_cpp_render_cone_expected_image_process_globals;
 
   if ( pro.n_inputs() < n_inputs_ ){
     vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
     return false;
   }
+  
   //get the inputs
   unsigned i = 0;
   boxm2_scene_sptr scene =pro.get_input<boxm2_scene_sptr>(i++);
@@ -67,37 +71,30 @@ bool boxm2_cpp_render_expected_image_process(bprb_func_process& pro)
   unsigned ni=pro.get_input<unsigned>(i++);
   unsigned nj=pro.get_input<unsigned>(i++);
 
-  bool foundDataType = false;
-  vcl_string data_type;
-  vcl_vector<vcl_string> apps = scene->appearances();
-  for (unsigned int i=0; i<apps.size(); ++i) {
-    if ( apps[i] == boxm2_data_traits<BOXM2_MOG3_GREY>::prefix() )
-    {
-      data_type = apps[i];
-      foundDataType = true;
-    }
-    else if ( apps[i] == boxm2_data_traits<BOXM2_MOG3_GREY_16>::prefix() )
-    {
-      data_type = apps[i];
-      foundDataType = true;
-    }
+  //make sure the scene corresponds to this datatype 
+  bool foundDataType = false, foundNumObsType = false;
+  vcl_string data_type, num_obs_type, options;
+  if( scene->has_data_type(boxm2_data_traits<BOXM2_MOG3_GREY>::prefix()) ) {
+    data_type = boxm2_data_traits<BOXM2_MOG3_GREY>::prefix();
+    foundDataType = true;
+    options=" -D MOG_TYPE_8 ";
   }
   if (!foundDataType) {
-    vcl_cout<<"BOXM2_CPP_RENDER_PROCESS ERROR: scene doesn't have BOXM2_MOG3_GREY or BOXM2_MOG3_GREY_16 data type"<<vcl_endl;
+    vcl_cout<<"boxm2_cpp_render_cone_process ERROR: scene doesn't have BOXM2_GAUSS_RGB data type"<<vcl_endl;
     return false;
   }
 
   //: function call
-  vil_image_view<float> * exp_img=new vil_image_view<float>(ni,nj);
-  vil_image_view<float> * vis_img=new vil_image_view<float>(ni,nj);
+  vil_image_view<float> * exp_img = new vil_image_view<float>(ni,nj);
+  vil_image_view<float> * vis_img = new vil_image_view<float>(ni,nj);
   exp_img->fill(0.0f);
   vis_img->fill(1.0f);
-  vcl_vector<boxm2_block_id> vis_order=scene->get_vis_blocks(reinterpret_cast<vpgl_generic_camera<double>*>(cam.ptr()));
+  vcl_vector<boxm2_block_id> vis_order=scene->get_vis_blocks(reinterpret_cast<vpgl_perspective_camera<double>*>(cam.ptr()));
   vcl_vector<boxm2_block_id>::iterator id;
   for (id = vis_order.begin(); id != vis_order.end(); ++id)
   {
-    vcl_cout<<"Block Id "<<(*id)<<vcl_endl;
-    boxm2_block *     blk  =  cache->get_block(*id);
+    vcl_cout<<"Cone Rendering Block Id "<<(*id)<<vcl_endl;
+    boxm2_block *      blk  = cache->get_block(*id);
     boxm2_data_base *  alph = cache->get_data_base(*id,boxm2_data_traits<BOXM2_ALPHA>::prefix());
     boxm2_data_base *  mog  = cache->get_data_base(*id,data_type);
     vcl_vector<boxm2_data_base*> datas;
@@ -106,16 +103,16 @@ bool boxm2_cpp_render_expected_image_process(bprb_func_process& pro)
 
     boxm2_scene_info_wrapper *scene_info_wrapper=new boxm2_scene_info_wrapper();
     scene_info_wrapper->info=scene->get_blk_metadata(*id);
-    //scene_info_wrapper->info->tree_buffer_length = blk->tree_buff_length();
-    //scene_info_wrapper->info->data_buffer_length = 65536;
-    //scene_info_wrapper->info->num_buffer = blk->num_buffers();
 
-    boxm2_render_expected_image(scene_info_wrapper->info,
+    boxm2_render_cone_exp_image(scene_info_wrapper->info,
                                 blk,datas,cam,exp_img,vis_img,ni,nj);
   }
 
-  normalize_intensity f;
-  vil_transform2<float,float, normalize_intensity>(*vis_img,*exp_img,f);
+  //normalize_intensity f;
+  //vil_transform2<float,float, normalize_intensity>(*vis_img,*exp_img,f);
+  
+  vil_save(*vis_img, "vis_img.tiff");
+  
   // store scene smaprt pointer
   pro.set_output_val<vil_image_view_base_sptr>(0, exp_img);
   return true;
