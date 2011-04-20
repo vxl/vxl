@@ -22,7 +22,6 @@
 bvpl_global_taylor::bvpl_global_taylor(const vcl_string &path)
 {
   vcl_cout << "Loading taylor info from xml-file" << vcl_endl;
-  int valid = 0;
   path_out_ = path;
   vcl_ifstream xml_ifs(xml_path().c_str());
   if (!xml_ifs.is_open()){
@@ -390,7 +389,6 @@ void bvpl_global_taylor::extract_coefficient_scene(int scene_id, int coefficient
     vcl_vector<float_cell_type *> float_leaves = float_tree->leaf_cells();
 
     float tree_ncells = projection_leaves.size();
-    bool zero_mean = false;
 
     for (unsigned long i =0; i<tree_ncells; i++)
     {
