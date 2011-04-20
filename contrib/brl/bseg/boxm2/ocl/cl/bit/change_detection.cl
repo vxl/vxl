@@ -3,10 +3,10 @@
 #endif
 
 
-#ifdef MOG_TYPE_16 
+#ifdef MOG_TYPE_16
     #define MOG_TYPE int4
 #endif
-#ifdef MOG_TYPE_8 
+#ifdef MOG_TYPE_8
     #define MOG_TYPE int2
 #endif
 
@@ -15,17 +15,17 @@
 // to supplement cast ray args
 typedef struct
 {
-  __global float* alpha; 
+  __global float* alpha;
   __global MOG_TYPE *  mog;
   float intensity;
   float intensity_exp;
-  float* change; 
-  float* change_exp; 
-} AuxArgs;  
+  float* change;
+  float* change_exp;
+} AuxArgs;
 
 //forward declare cast ray (so you can use it)
 void cast_ray(int,int,float,float,float,float,float,float,constant RenderSceneInfo*,
-              global int4*,local uchar16*,constant uchar*,local uchar*, float*, AuxArgs); 
+              global int4*,local uchar16*,constant uchar*,local uchar*, float*, AuxArgs);
 
 __kernel
 void
@@ -67,7 +67,7 @@ change_detection_bit_scene( __constant  RenderSceneInfo    * linfo,
   // (make sure ray direction is never axis aligned)
   //----------------------------------------------------------------------------
   float ray_ox, ray_oy, ray_oz, ray_dx, ray_dy, ray_dz;
-  calc_scene_ray(linfo, camera, i, j, &ray_ox, &ray_oy, &ray_oz, &ray_dx, &ray_dy, &ray_dz);  
+  calc_scene_ray(linfo, camera, i, j, &ray_ox, &ray_oy, &ray_oz, &ray_dx, &ray_dy, &ray_dz);
 
   //----------------------------------------------------------------------------
   // we know i,j map to a point on the image, have calculated ray
@@ -80,30 +80,31 @@ change_detection_bit_scene( __constant  RenderSceneInfo    * linfo,
   float intensity       = in_image[imIndex[llid]];
 
   float vis             = vis_image[imIndex[llid]];
-  AuxArgs aux_args; 
-  aux_args.alpha        = alpha_array; 
-  aux_args.mog          = mixture_array; 
-  aux_args.intensity    = intensity; 
-  aux_args.intensity_exp= intensity_exp; 
-  aux_args.change       = &change; 
+  AuxArgs aux_args;
+  aux_args.alpha        = alpha_array;
+  aux_args.mog          = mixture_array;
+  aux_args.intensity    = intensity;
+  aux_args.intensity_exp= intensity_exp;
+  aux_args.change       = &change;
   aux_args.change_exp   = &change_exp;
-  
+
   cast_ray( i, j,
             ray_ox, ray_oy, ray_oz,
             ray_dx, ray_dy, ray_dz,
 
             //scene info
-            linfo, tree_array, 
-            
+            linfo, tree_array,
+
             //utility info
             local_tree, bit_lookup, cumsum, &vis,
 
             //RENDER SPECIFIC ARGS
             aux_args);
-  
+
   //expected image gets rendered
   change_image[imIndex[llid]]     =  change; //expected_int;
   change_exp_image[imIndex[llid]] =  change_exp; //expected_int;
   vis_image[imIndex[llid]]        = vis;
 }
+
 #endif

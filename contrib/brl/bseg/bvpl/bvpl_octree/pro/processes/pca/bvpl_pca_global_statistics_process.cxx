@@ -1,6 +1,6 @@
 //:
-// \brief  A process that computes pca stistics (scatter matrix and mean) on a per block baisis
 // \file
+// \brief  A process that computes pca statistics (scatter matrix and mean) on a per block basis
 // \author Isabel Restrepo
 // \date 14-Mar-2011
 
@@ -12,7 +12,7 @@
 #include <bvpl/bvpl_octree/bvpl_global_pca.h>
 
 //:global variables
-namespace bvpl_pca_global_statistics_process_globals 
+namespace bvpl_pca_global_statistics_process_globals
 {
   const unsigned n_inputs_ = 6;
   const unsigned n_outputs_ = 0;
@@ -23,18 +23,18 @@ namespace bvpl_pca_global_statistics_process_globals
 bool bvpl_pca_global_statistics_process_cons(bprb_func_process& pro)
 {
   using namespace bvpl_pca_global_statistics_process_globals ;
-  
+
   vcl_vector<vcl_string> input_types_(n_inputs_);
   unsigned i =0;
   input_types_[i++] = "vcl_string" ; //pca_info_file
   input_types_[i++] = "int"; //scene_id (this can be confirmed in xml file pca_info.xml)
-  input_types_[i++] = "int";   //block Indeces
+  input_types_[i++] = "int";   //block Indices
   input_types_[i++] = "int";
   input_types_[i++] = "int";
   input_types_[i++] = "vcl_string"; //path to file to hold statistics of this block
-  
+
   vcl_vector<vcl_string> output_types_(n_outputs_);
-  
+
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 }
 
@@ -43,7 +43,7 @@ bool bvpl_pca_global_statistics_process_cons(bprb_func_process& pro)
 bool bvpl_pca_global_statistics_process(bprb_func_process& pro)
 {
   using namespace bvpl_pca_global_statistics_process_globals;
-  
+
   //get inputs
   unsigned i = 0;
   vcl_string pca_file = pro.get_input<vcl_string>(i++);
@@ -52,17 +52,16 @@ bool bvpl_pca_global_statistics_process(bprb_func_process& pro)
   int block_j = pro.get_input<int>(i++);
   int block_k = pro.get_input<int>(i++);
   vcl_string stats_file = pro.get_input<vcl_string>(i++);
-  
+
   bvpl_global_pca<125> global_pca(pca_file);
   vnl_matrix_fixed<double, 125, 125> S(0.0);
   vnl_vector_fixed<double, 125> mean(0.0);
   unsigned long nfeatures = 0;
   global_pca.sample_statistics(scene_id, block_i, block_j, block_k, S, mean, nfeatures);
-  
+
   vcl_ofstream stats_ofs(stats_file.c_str());
   stats_ofs.precision(15);
-  stats_ofs << nfeatures << "\n" << mean << "\n" << S;
-  
-  
+  stats_ofs << nfeatures << '\n' << mean << '\n' << S;
+
   return true;
 }

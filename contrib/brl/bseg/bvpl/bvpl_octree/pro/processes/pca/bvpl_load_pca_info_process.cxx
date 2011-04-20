@@ -1,5 +1,4 @@
 //:
-// \brief
 // \file
 // \author Isabel Restrepo
 // \date 3-Mar-2011
@@ -14,7 +13,7 @@
 #include <bvpl/bvpl_octree/bvpl_discover_pca_kernels.h>
 
 //:global variables
-namespace bvpl_load_pca_info_process_globals 
+namespace bvpl_load_pca_info_process_globals
 {
   const unsigned n_inputs_ = 1;
   const unsigned n_outputs_ = 1;
@@ -25,13 +24,13 @@ namespace bvpl_load_pca_info_process_globals
 bool bvpl_load_pca_info_process_cons(bprb_func_process& pro)
 {
   using namespace bvpl_load_pca_info_process_globals ;
-  
+
   vcl_vector<vcl_string> input_types_(n_inputs_);
   input_types_[0] = "vcl_string" ;  //directory path
-  
+
   vcl_vector<vcl_string> output_types_(n_outputs_);
   output_types_[0] = "bvpl_discover_pca_kernels_sptr";  //pca info
-  
+
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 }
 
@@ -40,17 +39,17 @@ bool bvpl_load_pca_info_process_cons(bprb_func_process& pro)
 bool bvpl_load_pca_info_process(bprb_func_process& pro)
 {
   using namespace bvpl_load_pca_info_process_globals;
-  
+
   //get inputs
   vcl_string pca_dir = pro.get_input<vcl_string>(0);
-  
-  if(!vul_file::is_directory(pca_dir))
+
+  if (!vul_file::is_directory(pca_dir))
     return false;
- 
+
   bvpl_discover_pca_kernels_sptr pca_extractor = new bvpl_discover_pca_kernels(pca_dir);
 
   //store output
   pro.set_output_val<bvpl_discover_pca_kernels_sptr>(0, pca_extractor);
-  
+
   return true;
 }
