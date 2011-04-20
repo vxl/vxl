@@ -190,13 +190,15 @@ boxm2_util::construct_camera( double elevation,
   K.set_focal_length(f);
   cam->set_calibration(K);
 
-  //vcl_cout<<"Camera  :" <<*cam<<vcl_endl;
+#ifdef DEBUG
+  vcl_cout<<"Camera : " <<*cam<<vcl_endl;
+#endif
   return cam;
 }
 
 
 //: searches through the list of perspective cameras and returns a pointer to the one that most closely aligns with the normal
-// returns negative one if the list is empty
+//  \returns negative one if the list is empty
 int boxm2_util::find_nearest_cam(vgl_vector_3d<double>& normal,
                                  vcl_vector<vpgl_perspective_camera<double>* >& cams)
 {
@@ -209,14 +211,14 @@ int boxm2_util::find_nearest_cam(vgl_vector_3d<double>& normal,
   unsigned minCam = -1;
   for (unsigned int i=0; i<cams.size(); ++i) {
     //double ang = vcl_fabs(angle(normal, -1*cams[i]->principal_axis())); //vcl_fabs( vcl_acos(dp) );
-    
-    double dotProd = dot_product( normal, -1*cams[i]->principal_axis()); 
-    double ang = vcl_acos(dotProd); 
-    
-    //if( vcl_fabs(normal.z()) > .8 ) {
-      //vcl_cout<<"Face normal: "<<normal<<"  principal axis: "<<cams[i]->principal_axis()<<vcl_endl
-              //<<" and angle: " <<ang * 180/vnl_math::pi<<vcl_endl;
-    //}
+    double dotProd = dot_product( normal, -1*cams[i]->principal_axis());
+    double ang = vcl_acos(dotProd);
+#ifdef DEBUG
+    if ( vcl_fabs(normal.z()) > .8 ) {
+      vcl_cout<<"Face normal: "<<normal<<"  principal axis: "<<cams[i]->principal_axis()<<vcl_endl
+              <<" and angle: " <<ang * 180/vnl_math::pi<<vcl_endl;
+    }
+#endif // DEBUG
     if (ang < minAngle && ang < vnl_math::pi/3.0) {
       minAngle = ang;
       minCam = i;
@@ -323,12 +325,12 @@ bool boxm2_util::generate_html(int height, int width, int nrows, int ncols, vcl_
   {
     outfile << html;
     outfile.close();
+    return true;
   }
   else {
     vcl_cout<<"Couldn't open " << dest << vcl_endl;
     return false;
   }
-  return true;
 }
 
 
@@ -409,19 +411,19 @@ vil_image_view_base_sptr boxm2_util::prepare_input_image(vil_image_view_base_spt
 
 vil_rgba<vxl_byte> boxm2_util::mean_pixel(vil_image_view<vil_rgba<vxl_byte> >& img)
 {
-  double mean[] = {0.0, 0.0, 0.0, 0.0}; 
-  int count = 0; 
-  for(int i=0; i<img.ni(); ++i) {
-    for(int j=0; j<img.nj(); ++j) {
-      mean[0] += (double) (img(i,j).R()); 
-      mean[1] += (double) (img(i,j).G()); 
-      mean[2] += (double) (img(i,j).B()); 
-      mean[3] += (double) (img(i,j).A()); 
-      count++;
+  double mean[] = {0.0, 0.0, 0.0, 0.0};
+  int count = 0;
+  for (unsigned int i=0; i<img.ni(); ++i) {
+    for (unsigned int j=0; j<img.nj(); ++j) {
+      mean[0] += (double) (img(i,j).R());
+      mean[1] += (double) (img(i,j).G());
+      mean[2] += (double) (img(i,j).B());
+      mean[3] += (double) (img(i,j).A());
+      ++count;
     }
   }
   return vil_rgba<vxl_byte>( (vxl_byte) (mean[0]/count),
                              (vxl_byte) (mean[1]/count),
                              (vxl_byte) (mean[2]/count),
-                             255 ); 
+                             255 );
 }

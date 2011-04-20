@@ -10,7 +10,7 @@ boxm2_opencl_cache::boxm2_opencl_cache(boxm2_scene_sptr scene,
                                        int maxBlocks)
 {
   maxBlocksInCache = maxBlocks;
-  
+
   // by default try to create an LRU cache
   boxm2_lru_cache::create(scene);
   cpu_cache_ = boxm2_cache::instance();
@@ -48,36 +48,36 @@ boxm2_opencl_cache::boxm2_opencl_cache(boxm2_cache* cpu_cache,
 bool boxm2_opencl_cache::clear_cache()
 {
   //delete stored block info
-  if(block_info_) {
+  if (block_info_) {
     boxm2_scene_info* buff = (boxm2_scene_info*) block_info_->cpu_buffer();
     delete buff;
-    delete block_info_;       
+    delete block_info_;
     block_info_=0;
   }
 
   //delete blocks in cache
   vcl_map<boxm2_block_id, bocl_mem*>::iterator blks;
-  for(blks=cached_blocks_.begin(); blks!=cached_blocks_.end(); ++blks)
+  for (blks=cached_blocks_.begin(); blks!=cached_blocks_.end(); ++blks)
   {
-    bocl_mem* toDelete = blks->second;  
-    delete toDelete; 
+    bocl_mem* toDelete = blks->second;
+    delete toDelete;
   }
-  cached_blocks_.clear(); 
-  
+  cached_blocks_.clear();
+
   //delete data from each cache
   vcl_map<vcl_string, vcl_map<boxm2_block_id, bocl_mem*> >::iterator datas;
-  for(datas=cached_data_.begin(); datas!=cached_data_.end(); ++datas)
+  for (datas=cached_data_.begin(); datas!=cached_data_.end(); ++datas)
   {
-    vcl_map<boxm2_block_id, bocl_mem*>& data_map = datas->second; 
+    vcl_map<boxm2_block_id, bocl_mem*>& data_map = datas->second;
     vcl_map<boxm2_block_id, bocl_mem*>::iterator data_blks;
-    for(data_blks=data_map.begin(); data_blks!=data_map.end(); ++data_blks)
+    for (data_blks=data_map.begin(); data_blks!=data_map.end(); ++data_blks)
     {
-      bocl_mem* toDelete = data_blks->second;  
-      delete toDelete; 
+      bocl_mem* toDelete = data_blks->second;
+      delete toDelete;
     }
-    data_map.clear(); 
+    data_map.clear();
   }
-  cached_data_.clear(); 
+  cached_data_.clear();
   return true;
 }
 
@@ -86,7 +86,7 @@ bocl_mem* boxm2_opencl_cache::get_block(boxm2_block_id id)
 {
   //then look for the block you're requesting
   if ( cached_blocks_.find(id) != cached_blocks_.end() ) {
-    
+
     //load block info
     boxm2_block* loaded = cpu_cache_->get_block(id);
     if (block_info_) {
@@ -102,16 +102,16 @@ bocl_mem* boxm2_opencl_cache::get_block(boxm2_block_id id)
     block_info_->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR );
     return cached_blocks_[id];
   }
-  
+
   //check to see which block to kick out
-  if( cached_blocks_.size() >= maxBlocksInCache ) {
-    vnl_random rand; 
+  if ( cached_blocks_.size() >= (unsigned int)maxBlocksInCache ) {
+    vnl_random rand;
     unsigned rIdx = rand.lrand32(0, cached_blocks_.size()-1);
-    vcl_map<boxm2_block_id, bocl_mem*>::iterator iter = cached_blocks_.begin(); 
-    for(int i=0; i<rIdx; ++i) ++iter; 
-    bocl_mem* toDelete = iter->second;  
-    delete toDelete; 
-    cached_blocks_.erase(iter); 
+    vcl_map<boxm2_block_id, bocl_mem*>::iterator iter = cached_blocks_.begin();
+    for (unsigned int i=0; i<rIdx; ++i) ++iter;
+    bocl_mem* toDelete = iter->second;
+    delete toDelete;
+    cached_blocks_.erase(iter);
   }
 
   //otherwise load it from disk with blocking
@@ -119,10 +119,10 @@ bocl_mem* boxm2_opencl_cache::get_block(boxm2_block_id id)
   boxm2_array_3d<uchar16>& trees = loaded->trees();
   bocl_mem* blk = new bocl_mem(*context_, trees.data_block(), trees.size()*sizeof(uchar16), "3d trees buffer " + id.to_string() );
   blk->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR );
-  
+
   //store the requested block in the cache
-  cached_blocks_[id] = blk; 
-  
+  cached_blocks_[id] = blk;
+
   //////////////////////////////////////////////////////
   //load block info
   if (block_info_) {
@@ -137,8 +137,8 @@ bocl_mem* boxm2_opencl_cache::get_block(boxm2_block_id id)
   block_info_ = new bocl_mem(*context_, info_buffer, sizeof(boxm2_scene_info), "scene info buffer");
   block_info_->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR );
   //////////////////////////////////////////////////////
-  
-  return blk; 
+
+  return blk;
 }
 
 bocl_mem* boxm2_opencl_cache::get_block_info(boxm2_block_id id)
@@ -149,8 +149,8 @@ bocl_mem* boxm2_opencl_cache::get_block_info(boxm2_block_id id)
      delete buff;
      delete block_info_;
   }
-  
-  //get blcok info from scene/block
+
+  //get block info from scene/block
   boxm2_scene_info* info_buffer = scene_->get_blk_metadata(id);
   boxm2_block* blk = cpu_cache_->get_block(id);
   info_buffer->num_buffer = blk->num_buffers();
@@ -170,36 +170,37 @@ bocl_mem* boxm2_opencl_cache::get_data(boxm2_block_id id, vcl_string type, vcl_s
     this->cached_data_map(type);
 
   //then look for the block you're requesting
-  vcl_map<boxm2_block_id, bocl_mem*>::iterator iter = data_map.find(id); 
+  vcl_map<boxm2_block_id, bocl_mem*>::iterator iter = data_map.find(id);
   if ( iter != data_map.end() ) {
-    
-    ////mem currently stored
-    //bocl_mem* mem = data_map[id]; 
-    //if( num_bytes > 0 && mem->num_bytes() != num_bytes )
-    //{
-      ////if the data size doesn't match, match it. 
-      //bocl_mem* data = new bocl_mem(*context_, NULL, num_bytes, type);
-      //data->create_buffer(CL_MEM_READ_WRITE);    
-      //this->deep_replace_data(id,type,data); 
-      //data->zero_gpu_buffer(*queue_); 
-      
-      //delete mem; 
-      //data_map.erase(iter); 
-      //data_map[id] = data; 
-      //return data; 
-    //}
-    return (iter->second);
+#if 0
+    //mem currently stored
+    bocl_mem* mem = data_map[id];
+    if ( num_bytes > 0 && mem->num_bytes() != num_bytes )
+    {
+      //if the data size doesn't match, match it.
+      bocl_mem* data = new bocl_mem(*context_, NULL, num_bytes, type);
+      data->create_buffer(CL_MEM_READ_WRITE);
+      this->deep_replace_data(id,type,data);
+      data->zero_gpu_buffer(*queue_);
+
+      delete mem;
+      data_map.erase(iter);
+      data_map[id] = data;
+      return data;
+    }
+#endif // 0
+    return iter->second;
   }
-  
+
   //make sure the map has a legal number of data blocks
-  if( data_map.size() >= maxBlocksInCache ) {
-    vnl_random rand; 
+  if ( data_map.size() >= (unsigned int)maxBlocksInCache ) {
+    vnl_random rand;
     unsigned rIdx = rand.lrand32(0, data_map.size()-1);
-    vcl_map<boxm2_block_id, bocl_mem*>::iterator riter = data_map.begin(); 
-    for(int i=0; i<rIdx; ++i) ++riter; 
-    bocl_mem* toDelete = riter->second;  
-    delete toDelete; 
-    data_map.erase(riter); 
+    vcl_map<boxm2_block_id, bocl_mem*>::iterator riter = data_map.begin();
+    for (unsigned int i=0; i<rIdx; ++i) ++riter;
+    bocl_mem* toDelete = riter->second;
+    delete toDelete;
+    data_map.erase(riter);
   }
 
   //data block isn't found...
@@ -207,15 +208,15 @@ bocl_mem* boxm2_opencl_cache::get_data(boxm2_block_id id, vcl_string type, vcl_s
   if (num_bytes > 0 && data_base->buffer_length() != num_bytes )
   {
     bocl_mem* data = new bocl_mem(*context_, NULL, num_bytes, type);
-    data->create_buffer(CL_MEM_READ_WRITE);    
-    this->deep_replace_data(id,type,data); 
-    data->zero_gpu_buffer(*queue_); 
+    data->create_buffer(CL_MEM_READ_WRITE);
+    this->deep_replace_data(id,type,data);
+    data->zero_gpu_buffer(*queue_);
     data_map[id] = data;
-    return data; 
+    return data;
   }
   bocl_mem* data = new bocl_mem(*context_, data_base->data_buffer(), data_base->buffer_length(), type);
   data->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
-  data_map[id] = data; 
+  data_map[id] = data;
   return data;
 }
 
@@ -237,12 +238,12 @@ void boxm2_opencl_cache::deep_replace_data(boxm2_block_id id, vcl_string type, b
 
   //now replace the mem in the GPU cache.. first delete existing
   vcl_map<boxm2_block_id, bocl_mem*>& data_map = this->cached_data_map(type);
-  vcl_map<boxm2_block_id, bocl_mem*>::iterator iter = data_map.find(id); 
+  vcl_map<boxm2_block_id, bocl_mem*>::iterator iter = data_map.find(id);
   if ( iter != data_map.end()) {
     //release existing memory
     bocl_mem* toDelete = iter->second;
     delete toDelete;
-    data_map.erase(iter); 
+    data_map.erase(iter);
   }
   data_map[id] = mem;
 }
@@ -445,7 +446,7 @@ bocl_mem* boxm2_opencl_cache::get_data(boxm2_block_id id, vcl_string type, vcl_s
     //release existing memory
     bocl_mem* toDelete = cached_data_[type];
     delete toDelete;
-    cached_data_.erase(cached_data_.find(type)); 
+    cached_data_.erase(cached_data_.find(type));
   }
 
   //create new memory
@@ -454,10 +455,10 @@ bocl_mem* boxm2_opencl_cache::get_data(boxm2_block_id id, vcl_string type, vcl_s
   {
     vcl_cout<<"Replacing data of type "<<type<<" that doesn't match input size of"<<num_bytes<<vcl_endl;
     bocl_mem* data = new bocl_mem(*context_, NULL, num_bytes, type);
-    data->create_buffer(CL_MEM_READ_WRITE);    
-    this->deep_replace_data(id,type,data); 
-    data->zero_gpu_buffer(*queue_); 
-    return data; 
+    data->create_buffer(CL_MEM_READ_WRITE);
+    this->deep_replace_data(id,type,data);
+    data->zero_gpu_buffer(*queue_);
+    return data;
   }
   loaded_data_[type] = id;
   bocl_mem* data = new bocl_mem(*context_, data_base->data_buffer(), data_base->buffer_length(), type);
@@ -489,24 +490,22 @@ void boxm2_opencl_cache::deep_replace_data(boxm2_block_id id, vcl_string type, b
     //release existing memory
     bocl_mem* toDelete = cached_data_[type];
     delete toDelete;
-    cached_data_.erase(cached_data_.find(type)); 
+    cached_data_.erase(cached_data_.find(type));
   }
   cached_data_[type] = mem;
 }
+
 void boxm2_opencl_cache::deep_remove_data(boxm2_block_id id, vcl_string type)
 {
-
-
   //now replace the mem in the GPU cache.. first delete existing
   if ( cached_data_.find(type) != cached_data_.end()) {
     //release existing memory
     bocl_mem* toDelete = cached_data_[type];
     delete toDelete;
-    cached_data_.erase(cached_data_.find(type)); 
+    cached_data_.erase(cached_data_.find(type));
   }
   //do deep delete
   cpu_cache_->remove_data_base(id, type);
-
 }
 
 //: Binary write boxm2_cache  to stream
@@ -520,4 +519,5 @@ void vsl_b_read(vsl_b_istream& is, boxm2_opencl_cache &scene){}
 void vsl_b_read(vsl_b_istream& is, boxm2_opencl_cache* p){}
 void vsl_b_read(vsl_b_istream& is, boxm2_opencl_cache_sptr& sptr){}
 void vsl_b_read(vsl_b_istream& is, boxm2_opencl_cache_sptr const& sptr){}
-#endif 
+
+#endif
