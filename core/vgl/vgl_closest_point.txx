@@ -467,11 +467,12 @@ vgl_closest_points(const vgl_line_3d_2_points<T>& l1,
 
   return ret;
 }
+
 template <class T>
 vgl_point_3d<T> vgl_closest_point(vgl_point_3d<T> const& p,
                                   vgl_ray_3d<T> const& r)
 {
-  vgl_line_3d_2_points<T> l2(r.origin(), r.origin()+r.direction()); 
+  vgl_line_3d_2_points<T> l2(r.origin(), r.origin()+r.direction());
   return vgl_closest_point(p,l2);
 }
 
@@ -596,10 +597,8 @@ vgl_closest_points(vgl_line_segment_3d<T> const& l1,
   return ret;
 }
 
-
 #undef DIST_SQR_TO_LINE_SEG_2D
 #undef DIST_SQR_TO_LINE_SEG_3D
-
 
 #undef VGL_CLOSEST_POINT_INSTANTIATE
 #define VGL_CLOSEST_POINT_INSTANTIATE(T) \
@@ -619,7 +618,7 @@ template vgl_point_2d<T > vgl_closest_point(vgl_line_2d<T >const&,vgl_point_2d<T
 template vgl_point_2d<T > vgl_closest_point(vgl_point_2d<T >const&,vgl_line_2d<T >const&); \
 template double vgl_closest_point_t(vgl_line_3d_2_points<T >const&,vgl_point_3d<T >const&); \
 template vgl_point_3d<T > vgl_closest_point(vgl_line_3d_2_points<T >const&,vgl_point_3d<T >const&); \
-template vgl_point_3d<T> vgl_closest_point(vgl_point_3d<T> const& p,vgl_ray_3d<T> const& r); \
+template vgl_point_3d<T > vgl_closest_point(vgl_point_3d<T > const& p,vgl_ray_3d<T > const& r); \
 template vgl_homg_point_2d<T > vgl_closest_point(vgl_homg_line_2d<T >const&,vgl_homg_point_2d<T >const&); \
 template vgl_homg_point_2d<T > vgl_closest_point(vgl_homg_point_2d<T >const&,vgl_homg_line_2d<T >const&); \
 template vgl_point_3d<T > vgl_closest_point(vgl_plane_3d<T >const&,vgl_point_3d<T >const&); \
