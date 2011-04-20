@@ -44,7 +44,7 @@ void deconstruct_sample(boxm_sample<BOXM_APM_MOG_GREY> sample,
   unsigned int nmix = obs.num_observations*100.0;
   num_obs[3] = nmix;
 
-  for (unsigned i=0; i<obs.num_components(); i++){
+  for (unsigned i=0; i<obs.num_components(); i++) {
     gauss_type_f1  mf=obs.distribution(i);
     unsigned char w = (unsigned char)obs.weight(i)*255.0;
     unsigned int n = (unsigned char)mf.num_observations;
@@ -161,7 +161,6 @@ int main(int argc, char** argv)
       vgl_vector_3d<double> sub_block_dim(1.0/dim,1.0/dim,1.0/dim);
       vgl_vector_3d<unsigned> sub_block_num(dim,dim,dim);
       boxm2_block_metadata metadata(block_id, block->bounding_box().min_point(),sub_block_dim,sub_block_num,1,4,650.0,0.001);
-      metadata.random_=false;
       boxm2_block new_block(metadata);
       new_blocks[block_id]=metadata;
 
