@@ -65,6 +65,7 @@ class boxm2_render_cone_functor
     float vis = (*vis_img_)(i,j); 
     vis *= (1.0-sphere_occ_prob); 
     (*vis_img_)(i,j) = vis; 
+	return true;
   }
   
   inline bool update_expected_int(float expected_int, float sphere_occ_prob, unsigned i, unsigned j) {
@@ -73,6 +74,7 @@ class boxm2_render_cone_functor
 
     ei += vis * expected_int * sphere_occ_prob; 
     (*expected_img_)(i,j) = ei;
+	return true;
   }
   
  private:
