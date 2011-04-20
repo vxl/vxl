@@ -38,8 +38,6 @@ ADD_EXECUTABLE( vil_algo_test_all
   test_algo_checker_board.cxx
   test_algo_quad_distance_function.cxx
   test_algo_flood_fill.cxx
-  test_algo_trace_4con_boundary.cxx
-  test_algo_trace_8con_boundary.cxx
 )
 
 IF(CMAKE_COMPILER_IS_GNUCXX)
@@ -87,8 +85,6 @@ ADD_TEST( vil_algo_test_suppress_non_max_edges   ${EXECUTABLE_OUTPUT_PATH}/vil_a
 ADD_TEST( vil_algo_test_checker_board       ${EXECUTABLE_OUTPUT_PATH}/vil_algo_test_all test_algo_checker_board)
 ADD_TEST( vil_algo_test_quad_distance_function   ${EXECUTABLE_OUTPUT_PATH}/vil_algo_test_all test_algo_quad_distance_function)
 ADD_TEST( vil_algo_test_flood_fill          ${EXECUTABLE_OUTPUT_PATH}/vil_algo_test_all test_algo_flood_fill)
-ADD_TEST( vil_algo_test_trace_4con_boundary ${EXECUTABLE_OUTPUT_PATH}/vil_algo_test_all test_algo_trace_4con_boundary)
-ADD_TEST( vil_algo_test_trace_8con_boundary ${EXECUTABLE_OUTPUT_PATH}/vil_algo_test_all test_algo_trace_8con_boundary)
   
 
 #ADD_EXECUTABLE( vil_mil_gauss_general_timings vil_mil_gauss_general_timings.cxx)

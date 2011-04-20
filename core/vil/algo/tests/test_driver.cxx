@@ -36,8 +36,6 @@ DECLARE( test_algo_suppress_non_max_edges );
 DECLARE( test_algo_checker_board );
 DECLARE( test_algo_quad_distance_function );
 DECLARE( test_algo_flood_fill );
-DECLARE( test_algo_trace_4con_boundary );
-DECLARE( test_algo_trace_8con_boundary );
 
 void
 register_tests()
@@ -78,8 +76,6 @@ register_tests()
   REGISTER( test_algo_checker_board );
   REGISTER( test_algo_quad_distance_function );
   REGISTER( test_algo_flood_fill );
-  REGISTER( test_algo_trace_4con_boundary );
-  REGISTER( test_algo_trace_8con_boundary );
 }
 
 DEFINE_MAIN;
