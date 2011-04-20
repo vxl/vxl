@@ -1,4 +1,4 @@
-// This is core/vgl/bvgl_volume_of_intersection.h
+// This is brl/bbas/bvgl/bvgl_volume_of_intersection.h
 #ifndef bvgl_volume_of_intersection_h_
 #define bvgl_volume_of_intersection_h_
 //:
@@ -20,9 +20,9 @@
 #include <vcl_vector.h>
 #include <vgl/vgl_sphere_3d.h>
 
-template<typename T>
-T bvgl_volume_of_intersection(vgl_sphere_3d<T> const& A, vgl_sphere_3d<T> const& B); 
+template <typename T>
+T bvgl_volume_of_intersection(vgl_sphere_3d<T> const& A, vgl_sphere_3d<T> const& B);
 
-#define BVGL_VOLUME_OF_INTERSECTION(T) extern "please include vgl/bvgl_volume_of_intersection.txx first"
+#define BVGL_VOLUME_OF_INTERSECTION(T) extern "please include bbas/bvgl/bvgl_volume_of_intersection.txx first"
 
 #endif // bvgl_volume_of_intersection_h_
