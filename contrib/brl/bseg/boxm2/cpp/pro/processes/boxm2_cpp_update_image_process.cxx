@@ -139,24 +139,26 @@ bool boxm2_cpp_update_image_process(bprb_func_process& pro)
                 datas.push_back(aux);
                 datas.push_back(alph);
                 datas.push_back(mog);
+                datas.push_back(nobs);
                 boxm2_scene_info_wrapper *scene_info_wrapper=new boxm2_scene_info_wrapper();
                 scene_info_wrapper->info=scene->get_blk_metadata(*id);
                 //pass 0
                 if (pass_no==0)
                 {
                     pass0.init_data(datas,input_image);
-                    success=success && cast_ray_per_block<boxm2_update_pass0_functor>(pass0,
-                        scene_info_wrapper->info,
-                        blk,
-                        cam,
-                        input_image->ni(),
-                        input_image->nj());
+                    success=success &&
+                            cast_ray_per_block<boxm2_update_pass0_functor>(pass0,
+                                                                           scene_info_wrapper->info,
+                                                                           blk,
+                                                                           cam,
+                                                                           input_image->ni(),
+                                                                           input_image->nj());
                 }
                 //pass 1
                 else if (pass_no==1)
                 {
                     pass1.init_data(datas,&pre_img,&vis_img);
-                    success=success && 
+                    success=success &&
                             cast_ray_per_block<boxm2_update_pass1_functor>(pass1,
                                                                            scene_info_wrapper->info,
                                                                            blk,
@@ -167,12 +169,13 @@ bool boxm2_cpp_update_image_process(bprb_func_process& pro)
                 else if (pass_no==2)
                 {
                     pass2.init_data(datas,&pre_img,&vis_img, & proc_norm_img);
-                    success=success && cast_ray_per_block<boxm2_update_pass2_functor>(pass2,
-                                                                                      scene_info_wrapper->info,
-                                                                                      blk,
-                                                                                      cam,
-                                                                                      input_image->ni(),
-                                                                                      input_image->nj());
+                    success=success &&
+                            cast_ray_per_block<boxm2_update_pass2_functor>(pass2,
+                                                                           scene_info_wrapper->info,
+                                                                           blk,
+                                                                           cam,
+                                                                           input_image->ni(),
+                                                                           input_image->nj());
                 }
             }
             if (pass_no==1)
