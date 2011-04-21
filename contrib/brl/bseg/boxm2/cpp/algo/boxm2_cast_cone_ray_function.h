@@ -88,7 +88,6 @@ void boxm2_cast_cone_ray_function(vgl_box_3d<double>& block_box,
     float intensity_norm = 0.0f;
     float weighted_int = 0.0f;
     float vol_alpha = 0.0f;
-    float prob_surface = 0.0f, total_volume = 0.0f; 
     for (int x=minCell.x(); x<maxCell.x(); ++x) {
       for (int y=minCell.y(); y<maxCell.y(); ++y) {
         for (int z=minCell.z(); z<maxCell.z(); ++z) {
@@ -107,24 +106,24 @@ void boxm2_cast_cone_ray_function(vgl_box_3d<double>& block_box,
 
           //call step cell
           functor.step_cell(intersect_volume, data_ptr, i, j, linfo->block_len,
-                            vol_alpha, intensity_norm, weighted_int, prob_surface);
+                            vol_alpha, intensity_norm, weighted_int);
           numCells++;
-          total_volume += intersect_volume; 
         }
       }
     }
 
     //calculate ray/sphere occupancy prob
-    //float sphere_occ_prob = 1.0 - vcl_exp(vol_alpha);
-    float sphere_occ_prob = prob_surface/total_volume;
+    float sphere_occ_prob = 1.0 - vcl_exp(vol_alpha);
+    //float sphere_occ_prob = prob_surface/total_volume;
 
     //update intensity
-    if(intensity_norm > 1e-10 && total_volume > 1e-10) {
+    if(intensity_norm > 1e-10) {
       functor.update_expected_int( weighted_int/intensity_norm, sphere_occ_prob, i, j );
       
-      //update visibility after all cells have accounted for
-      functor.update_vis( sphere_occ_prob, i, j);
+
     }
+    //update visibility after all cells have accounted for
+  functor.update_vis( sphere_occ_prob, i, j);
 
     //calculate the next sphere's R and T
     float rPrime = sinAlpha * (currR + currT) / (1.0-sinAlpha);
