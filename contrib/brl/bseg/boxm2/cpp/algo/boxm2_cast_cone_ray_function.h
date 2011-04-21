@@ -77,12 +77,6 @@ void boxm2_cast_cone_ray_function(vgl_box_3d<double>& block_box,
     //intersect the current sphere with
     vgl_sphere_3d<double> currSphere( ray.origin() + ray.direction() * currT, currR);
 
-#if 0
-    if (i==7 && j==6) {
-      vcl_cout<<"Curr Sphere: "<<currSphere.centre()<<','<<currSphere.radius()<<vcl_endl;
-    }
-#endif // 0
-
     //minimum/maximum cell eclipsed
     vgl_point_3d<int> minCell( (int) (currSphere.centre().x() - currR),
                                (int) (currSphere.centre().y() - currR),
@@ -109,11 +103,7 @@ void boxm2_cast_cone_ray_function(vgl_box_3d<double>& block_box,
                                            (double) z + 0.5 );
           vgl_sphere_3d<double> cellSphere(cellCenter, cellR);
           double intersect_volume = bvgl_volume_of_intersection(currSphere, cellSphere);
-#if 0
-          if (i==7 && j==6) {
-            vcl_cout<<"  curr voxel: "<<x<<','<<y<<','<<z<<vcl_endl;
-          }
-#endif // 0
+
           //call step cell
           functor.step_cell(intersect_volume, data_ptr, i, j, linfo->block_len,
                             vol_alpha, intensity_norm, weighted_int);
@@ -126,8 +116,10 @@ void boxm2_cast_cone_ray_function(vgl_box_3d<double>& block_box,
     float sphere_occ_prob = 1.0 - vcl_exp(vol_alpha);
 
     //update intensity
-    functor.update_expected_int( weighted_int/intensity_norm, sphere_occ_prob, i, j );
-
+    if(intensity_norm > 1e-10) {
+      functor.update_expected_int( weighted_int/intensity_norm, sphere_occ_prob, i, j );
+    }
+    
     //update visibility after all cells have accounted for
     functor.update_vis( sphere_occ_prob, i, j);
 
@@ -169,12 +161,14 @@ bool cast_cone_ray_per_block( functor_type functor,
         //thresh ray direction components - too small a treshhold causes axis aligned
         //viewpoints to hang in infinite loop (block loop)
         double dray_ij_x=double(ray_ij.direction().x()),
-              dray_ij_y=double(ray_ij.direction().y()),
-              dray_ij_z=double(ray_ij.direction().z());
+               dray_ij_y=double(ray_ij.direction().y()),
+               dray_ij_z=double(ray_ij.direction().z());
         double thresh = vcl_exp(-12.0f);
+/*
         if (vcl_fabs(dray_ij_x) < thresh) dray_ij_x = (dray_ij_x>0)?thresh:-thresh;
         if (vcl_fabs(dray_ij_y) < thresh) dray_ij_y = (dray_ij_y>0)?thresh:-thresh;
         if (vcl_fabs(dray_ij_z) < thresh) dray_ij_z = (dray_ij_z>0)?thresh:-thresh;
+*/
 
         //calculate vgl box 3d
         vgl_point_3d<double> minCorner(0.0, 0.0, 0.0);

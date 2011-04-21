@@ -41,26 +41,7 @@ class boxm2_render_cone_functor
     intensity_norm += cell_occupancy_prob;
 
     //probability that current cell is visible
-    //float curr_p = cell_occupancy_prob*vis;
     vol_alpha += (-alpha*volume*block_len);
-
-    //current vis/expected intensity
-    //float vis=(*vis_img_)(i,j);
-    //float exp_int=(*expected_img_)(i,j);
-#if 0
-    if (i==7 && j==6) {
-      vcl_cout<<"data index: "<<index<<" at ("<<i<<','<<j<<") :\n"
-              <<"  voxel contrib: "<<contr<<'\n'
-              <<"  cell occ prob: "<<cell_occupancy_prob<<'\n'
-              <<"  curr prob    : "<<curr_p<<'\n'
-              <<"  intersect vol: "<<volume<<'\n'
-              <<"  cell vis     : "<<vis<<vcl_endl;
-    }
-#endif // 0
-#if 0
-    exp_int += contr;
-    (*expected_img_)(i,j) = exp_int;
-#endif // 0
     return true;
   }
 
@@ -72,9 +53,10 @@ class boxm2_render_cone_functor
   }
 
   inline bool update_expected_int(float expected_int, float sphere_occ_prob, unsigned i, unsigned j) {
-    int ei = (*expected_img_)(i,j);
+    float ei = (*expected_img_)(i,j);
     float vis = (*vis_img_)(i,j);
 
+    //expected intensity is Visibility * Weighted Intensity * Occupancy 
     ei += vis * expected_int * sphere_occ_prob;
     (*expected_img_)(i,j) = ei;
     return true;

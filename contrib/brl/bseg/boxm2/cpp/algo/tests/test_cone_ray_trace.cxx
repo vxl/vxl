@@ -47,7 +47,7 @@ void test_cone_ray_trace()
   vcl_map<boxm2_block_id, boxm2_block_metadata> blocks; 
   boxm2_block_id id(0,0,0); 
   boxm2_block_metadata data(id, 
-                           vgl_point_3d<double>(1.0/16.0,1.0/16.0,1.0/16.0),
+                           vgl_point_3d<double>(0,0,0),
                            vgl_vector_3d<double>(1.0/8.0, 1.0/8.0, 1.0/8.0),
                            vgl_vector_3d<unsigned>(8,8,1), 
                            1, 1, 100, 
