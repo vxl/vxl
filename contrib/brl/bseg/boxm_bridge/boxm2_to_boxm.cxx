@@ -190,19 +190,18 @@ int main(int argc, char** argv)
   boxm2_cache* cache = boxm2_cache::instance();
 
   bgeo_lvcs lvcs = scene2.lvcs();
-  vgl_point_3d<double> origin = scene2.local_origin();
+  //vgl_point_3d<double> origin = scene2.local_origin();
   vgl_box_3d<double> world = scene2.bounding_box();
   vcl_map<boxm2_block_id, boxm2_block_metadata> blocks = scene2.blocks();
   vcl_map<boxm2_block_id, boxm2_block_metadata>::iterator iter = blocks.begin();
 
   typedef boct_tree<short, boxm_sample<BOXM_APM_MOG_GREY> > tree_type;
-#ifdef BOXM2_SCENE_HAS_DIMENSIONS
   vgl_vector_3d<unsigned int> block_nums = scene2.scene_dimensions();
+  vgl_point_3d<int> min_block_index;
+  vgl_point_3d<double> origin;
+  scene2.min_block_index(min_block_index, origin);
   vgl_vector_3d<double> ww(world.width()/block_nums.x(),world.height()/block_nums.y(),world.depth()/block_nums.z());
-#else // FIXME - to be removed when boxm2_scene is adapted
-  vgl_vector_3d<unsigned int> block_nums(1,1,1);
-  vgl_vector_3d<double> ww(world.width(),world.height(),world.depth());
-#endif
+
 
   boxm_scene<tree_type> scene(lvcs, origin, ww, block_nums,false,true,true);
   vcl_string scene_path=boxm_dir(); //"C:/data/boxm2/downtown/boxm_scene";
@@ -245,7 +244,12 @@ int main(int argc, char** argv)
     tree_type* block_tree=new tree_type(x_dim+4, x_dim+1); // FIX take max of 3 dims instead
     block_tree->set_bbox(block_bb);
     block_tree->init_cells(0);
-    scene.load_block(id.i(),id.j(),id.k());
+    
+    int block_i = id.i() - min_block_index.x();
+    int block_j = id.j() - min_block_index.y();
+    int block_k = id.k() - min_block_index.z();
+    
+    scene.load_block(block_i, block_j, block_k);
     // go over the subtrees
     for (unsigned z=0; z<dim.z(); z++) {
       for (unsigned y=0; y<dim.y(); y++) {
@@ -276,12 +280,11 @@ int main(int argc, char** argv)
         }
       }
     }
-    boxm_block<tree_type>* block_new = scene.get_block(id.i(),id.j(),id.k());
+    boxm_block<tree_type>* block_new = scene.get_block(block_i, block_j, block_k);
     block_new->init_tree(block_tree);
     scene.write_active_block();
     iter++;
   }
-  vcl_cout << "Writing BOXM Scene\n";
   scene.set_octree_levels(x_dim+4, x_dim+1);
   scene.write_scene("boxm_scene.xml");
 }
