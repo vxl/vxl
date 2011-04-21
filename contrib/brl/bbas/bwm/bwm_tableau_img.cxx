@@ -42,7 +42,7 @@ void bwm_tableau_img::create_box()
   // first lock the bgui_image _tableau
   this->lock();
   set_color(1, 0, 0);
-  float x1=0, y1=0, x2=0, y2=0;
+  float x1, y1, x2, y2;
   pick_box(&x1, &y1, &x2, &y2);
   vsol_box_2d_sptr box2d = new vsol_box_2d();
   box2d->add_point(x1, y1);
@@ -188,7 +188,7 @@ void bwm_tableau_img::save_mask()
     return;
   bool result = vil_save(*mask,file_path.c_str());
   if ( !result ) {
-    vcl_cerr << "Failed to save image to" << file_path << vcl_endl;
+    vcl_cerr << "Failed to save image to " << file_path << '\n';
   }
 }
 
@@ -196,7 +196,7 @@ void bwm_tableau_img::save_spatial_objects_2d()
 {
   vcl_vector<vsol_spatial_object_2d_sptr> sos =
     my_observer_->get_spatial_objects_2d();
-  if (!sos.size())
+  if (sos.size() == 0)
     return;
   vgui_dialog save_dlg("Save Spatial Objects");
   vcl_string ext, binary_filename;
@@ -213,28 +213,29 @@ void bwm_tableau_img::save_spatial_objects_2d()
   }
   vsl_b_write(ostr, sos);
 }
+
 void bwm_tableau_img::save_pointset_2d_ascii()
 {
-  vcl_vector<vsol_spatial_object_2d_sptr> sos = 
+  vcl_vector<vsol_spatial_object_2d_sptr> sos =
     my_observer_->get_spatial_objects_2d();
-  if(!sos.size())
+  if (sos.size() == 0)
     return;
   vcl_vector<vsol_point_2d_sptr> pts;
-  for(unsigned i = 0; i<sos.size(); ++i){
+  for (unsigned i=0; i<sos.size(); ++i) {
     vsol_spatial_object_2d_sptr so = sos[i];
     vsol_point_2d_sptr pt = so->cast_to_point();
-    if(pt)
+    if (pt)
       pts.push_back(pt);
   }
   vgui_dialog save_dlg("Save Pointset");
   vcl_string ext, pt_filename;
   save_dlg.file("Point Filename", ext, pt_filename);
-  if(!save_dlg.ask())
+  if (!save_dlg.ask())
     return;
   vcl_ofstream os(pt_filename.c_str());
-  if(os.is_open()){
+  if (os.is_open()) {
     os << pts.size()<< '\n';
-    for(unsigned i = 0; i< pts.size(); i++)
+    for (unsigned i=0; i<pts.size(); ++i)
       os << pts[i]->x() << ' ' << pts[i]->y() << '\n';
     os.close();
   }
@@ -242,15 +243,15 @@ void bwm_tableau_img::save_pointset_2d_ascii()
 
 void bwm_tableau_img::help_pop()
 {
-bwm_tableau_text* text = new bwm_tableau_text(500, 500);
+  bwm_tableau_text* text = new bwm_tableau_text(500, 500);
 
-text->set_text("C:\\lems\\lemsvxlsrc\\lemsvxlsrc\\contrib\\bwm\\doc\\doc\\HELP_cam.txt");
-vgui_tableau_sptr v = vgui_viewer2D_tableau_new(text);
-vgui_tableau_sptr s = vgui_shell_tableau_new(v);
-vgui_dialog popup("CAMERA TABLEAU HELP");
-popup.inline_tableau(s, 550, 550);
-if (!popup.ask())
-  return;
+  text->set_text("C:/lems/lemsvxlsrc/contrib/bwm/doc/HELP_cam.txt");
+  vgui_tableau_sptr v = vgui_viewer2D_tableau_new(text);
+  vgui_tableau_sptr s = vgui_shell_tableau_new(v);
+  vgui_dialog popup("CAMERA TABLEAU HELP");
+  popup.inline_tableau(s, 550, 550);
+  if (!popup.ask())
+    return;
 }
 
 void bwm_tableau_img::step_edges_vd()
@@ -275,7 +276,7 @@ void bwm_tableau_img::recover_lines()
 
 bool bwm_tableau_img::handle(const vgui_event& e)
 {
-	return bgui_picker_tableau::handle(e);
+  return bgui_picker_tableau::handle(e);
 }
 
 void bwm_tableau_img::init_mask()
@@ -288,10 +289,12 @@ void bwm_tableau_img::add_poly_to_mask()
   my_observer_->add_poly_to_mask();
 }
 
-/*void bwm_tableau_img::add_dontcare_poly_to_mask()
+#if 0
+void bwm_tableau_img::add_dontcare_poly_to_mask()
 {
   my_observer_->add_dontcare_poly_to_mask();
-}*/
+}
+#endif
 
 void bwm_tableau_img::remove_poly_from_mask()
 {
