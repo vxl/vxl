@@ -88,6 +88,7 @@ void boxm2_cast_cone_ray_function(vgl_box_3d<double>& block_box,
     float intensity_norm = 0.0f;
     float weighted_int = 0.0f;
     float vol_alpha = 0.0f;
+    float prob_surface = 0.0f, total_volume = 0.0f; 
     for (int x=minCell.x(); x<maxCell.x(); ++x) {
       for (int y=minCell.y(); y<maxCell.y(); ++y) {
         for (int z=minCell.z(); z<maxCell.z(); ++z) {
@@ -106,26 +107,29 @@ void boxm2_cast_cone_ray_function(vgl_box_3d<double>& block_box,
 
           //call step cell
           functor.step_cell(intersect_volume, data_ptr, i, j, linfo->block_len,
-                            vol_alpha, intensity_norm, weighted_int);
+                            vol_alpha, intensity_norm, weighted_int, prob_surface);
           numCells++;
+          total_volume += intersect_volume; 
         }
       }
     }
 
     //calculate ray/sphere occupancy prob
-    float sphere_occ_prob = 1.0 - vcl_exp(vol_alpha);
+    //float sphere_occ_prob = 1.0 - vcl_exp(vol_alpha);
+    float sphere_occ_prob = prob_surface/total_volume;
 
     //update intensity
-    if (intensity_norm > 1e-10) {
+    if(intensity_norm > 1e-10 && total_volume > 1e-10) {
       functor.update_expected_int( weighted_int/intensity_norm, sphere_occ_prob, i, j );
+      
+      //update visibility after all cells have accounted for
+      functor.update_vis( sphere_occ_prob, i, j);
     }
 
-    //update visibility after all cells have accounted for
-    functor.update_vis( sphere_occ_prob, i, j);
-
     //calculate the next sphere's R and T
-    currR = sinAlpha * (currR + currT) / (1.0-sinAlpha);
-    currT += currR;
+    float rPrime = sinAlpha * (currR + currT) / (1.0-sinAlpha);
+    currT += (rPrime + currR);
+    currR = rPrime;
   }
 }
 
@@ -164,14 +168,10 @@ bool cast_cone_ray_per_block( functor_type functor,
                dray_ij_y=double(ray_ij.direction().y()),
                dray_ij_z=double(ray_ij.direction().z());
         double thresh = vcl_exp(-12.0f);
-#if 0
-        if (dray_ij_x < thresh && dray_ij_x > 0) dray_ij_x = thresh;
-        if (dray_ij_y < thresh && dray_ij_y > 0) dray_ij_y = thresh;
-        if (dray_ij_z < thresh && dray_ij_z > 0) dray_ij_z = thresh;
-        if (dray_ij_x <=0 && dray_ij_x > -thresh) dray_ij_x = -thresh;
-        if (dray_ij_y <=0 && dray_ij_y > -thresh) dray_ij_y = -thresh;
-        if (dray_ij_z <=0 && dray_ij_z > -thresh) dray_ij_z = -thresh;
-#endif
+        if (vcl_fabs(dray_ij_x) < thresh) dray_ij_x = (dray_ij_x>0)?thresh:-thresh;
+        if (vcl_fabs(dray_ij_y) < thresh) dray_ij_y = (dray_ij_y>0)?thresh:-thresh;
+        if (vcl_fabs(dray_ij_z) < thresh) dray_ij_z = (dray_ij_z>0)?thresh:-thresh;
+
         //calculate vgl box 3d
         vgl_point_3d<double> minCorner(0.0, 0.0, 0.0);
         vgl_point_3d<double> maxCorner( (double) linfo->scene_dims[0],
@@ -187,10 +187,8 @@ bool cast_cone_ray_per_block( functor_type functor,
     }
     return true;
   }
-  else {
-    vcl_cout<<"Cast Cone Ray Per Block Returning False"<<vcl_endl;
-    return false;
-  }
+  vcl_cout<<"Cast Cone Ray Per Block Returning False"<<vcl_endl;
+  return false;
 }
 
 
