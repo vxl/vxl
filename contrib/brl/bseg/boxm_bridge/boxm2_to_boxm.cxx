@@ -71,14 +71,14 @@ boxm_sample<BOXM_APM_MOG_GREY> create_sample(float alpha,
                                              boxm2_data_traits<BOXM2_MOG3_GREY>::datatype data,
                                              boxm2_data_traits<BOXM2_NUM_OBS>::datatype num_obs)
 {
-  float m0=data[0]/255.0;
-  float v0=data[1]/255.0;
-  float w0=data[2]/255.0;
-  float m1=data[3]/255.0;
-  float v1=data[4]/255.0;
-  float w1=data[5]/255.0;
-  float m2=data[6]/255.0;
-  float v2=data[7]/255.0;
+  float m0=data[0]/255.0f;
+  float v0=data[1]/255.0f;
+  float w0=data[2]/255.0f;
+  float m1=data[3]/255.0f;
+  float v1=data[4]/255.0f;
+  float w1=data[5]/255.0f;
+  float m2=data[6]/255.0f;
+  float v2=data[7]/255.0f;
   float w2=0;
   if (w0>0 && w1>0)
     w2=1.0-w0-w1;
@@ -104,7 +104,7 @@ boxm_sample<BOXM_APM_MOG_GREY> create_sample(float alpha,
   mf.insert(num_obs_dist1,w1);
   mf.insert(num_obs_dist2,w2);
 
-  bsta_num_obs<bsta_mixture_fixed<gauss_type_f1, 3> > obs(mf,nmix/100.0);
+  bsta_num_obs<bsta_mixture_fixed<gauss_type_f1, 3> > obs(mf,nmix/100.0f);
 
   boxm_sample<BOXM_APM_MOG_GREY> sample(alpha, obs);
   return sample;
