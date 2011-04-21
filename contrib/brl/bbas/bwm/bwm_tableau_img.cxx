@@ -275,47 +275,7 @@ void bwm_tableau_img::recover_lines()
 
 bool bwm_tableau_img::handle(const vgui_event& e)
 {
-#if 0 // commented out
-  vcl_cout << "Key:" << e.key << " modif: " << e.modifier << vcl_endl;
-  if (e.key == 'p' && e.modifier == vgui_SHIFT) {
-    create_polygon_mesh();
-    return true;
-  }
-  else if (e.key == 't' && e.modifier == vgui_SHIFT) {
-    this->triangulate_mesh();
-    return true;
-  }
-  else if ( e.key == 'm' && e.modifier == vgui_SHIFT) {
-    this->move_obj_by_vertex();
-    return true;
-  }
-  else if ( e.key == 'e' && e.modifier == vgui_SHIFT) {
-    this->extrude_face();
-    return true;
-  }
-  else if ( e.key == 's' && e.modifier == vgui_SHIFT) {
-    this->save();
-    return true;
-  }
-  else if ( e.key == '-' && e.modifier == vgui_SHIFT) {
-    this->deselect_all();
-    return true;
-  }
-  else if ( e.key == 'd' && e.modifier == vgui_SHIFT) {
-    this->clear_object();
-    return true;
-  }
-  else if ( e.key == 'a' && e.modifier == vgui_SHIFT) {
-    this->clear_all();
-    return true;
-  }
-  else if ( e.key == 'h' && e.modifier == vgui_SHIFT) {
-    this->help_pop();
-    return true;
-  }
-  else
-#endif // 0
-  return bgui_picker_tableau::handle(e);
+	return bgui_picker_tableau::handle(e);
 }
 
 void bwm_tableau_img::init_mask()

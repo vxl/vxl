@@ -364,35 +364,35 @@ void bwm_tableau_cam::help_pop()
 bool bwm_tableau_cam::handle(const vgui_event& e)
 {
   //vcl_cout << "Key:" << e.key << " modif: " << e.modifier << vcl_endl;
-  if (e.key == 'p' && e.modifier == vgui_SHIFT) {
+  if (e.key == 'p' && e.modifier == vgui_SHIFT && e.type == vgui_KEY_PRESS){
     create_polygon_mesh();
     return true;
   }
-  else if (e.key == 't' && e.modifier == vgui_SHIFT) {
+  else if (e.key == 't' && e.modifier==vgui_SHIFT && e.type==vgui_KEY_PRESS){
     this->triangulate_mesh();
     return true;
   }
-  else if ( e.key == 'm' && e.modifier == vgui_SHIFT) {
+  else if ( e.key == 'm' && e.modifier==vgui_SHIFT && e.type==vgui_KEY_PRESS){
     this->move_obj_by_vertex();
     return true;
   }
-  else if ( e.key == 'e' && e.modifier == vgui_SHIFT) {
+  else if ( e.key == 'e' && e.modifier==vgui_SHIFT && e.type==vgui_KEY_PRESS){
     this->extrude_face();
     return true;
   }
-  else if ( e.key == 's' && e.modifier == vgui_SHIFT) {
+  else if ( e.key == 's' && e.modifier==vgui_SHIFT && e.type==vgui_KEY_PRESS){
     this->save();
     return true;
   }
-  else if ( e.key == '-' && e.modifier == vgui_SHIFT) {
+  else if ( e.key == '-' && e.modifier==vgui_SHIFT && e.type==vgui_KEY_PRESS){
     this->deselect_all();
     return true;
   }
-  else if ( e.key == 'a' && e.modifier == vgui_SHIFT) {
+  else if ( e.key == 'a' && e.modifier==vgui_SHIFT && e.type==vgui_KEY_PRESS){
     this->clear_all();
     return true;
   }
-  else if ( e.key == 'h' && e.modifier == vgui_SHIFT) {
+  else if ( e.key == 'h' && e.modifier==vgui_SHIFT && e.type==vgui_KEY_PRESS){
     this->help_pop();
     return true;
   }
