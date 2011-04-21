@@ -10,8 +10,8 @@ IF(OPENCL_FOUND)
 
   ADD_EXECUTABLE( boxm_to_boxm2_exe boxm_to_boxm2.cxx  boxm_to_boxm2.h)
 
-  TARGET_LINK_LIBRARIES( boxm2_to_boxm_exe boxm2 boxm boxm_sample boct vbl vnl vcl)
-  TARGET_LINK_LIBRARIES( boxm_to_boxm2_exe boxm2 boxm boxm_sample boct vbl vnl vcl)
+  TARGET_LINK_LIBRARIES( boxm2_to_boxm_exe boxm2 boxm boxm_sample boxm2_io boct vbl vnl vcl)
+  TARGET_LINK_LIBRARIES( boxm_to_boxm2_exe boxm2 boxm boxm_sample boxm2_io boct vbl vnl vcl)
 
   #tests
   SUBDIRS(tests)
