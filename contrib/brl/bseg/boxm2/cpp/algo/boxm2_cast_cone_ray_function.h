@@ -26,6 +26,10 @@
 #define TREE_EPSILON  .005f
 #define MIN_T         1.0
 
+
+// vcl_pow( 3.0/(4.0*vnl_math::pi), 1.0/3.0);
+#define UNIT_SPHERE_RADIUS 0.620350490899400016668006812
+
 //: Return true if ray intersects box. If so, compute intersection points.
 template<class F>
 void boxm2_cast_cone_ray_function(vgl_box_3d<double>& block_box,
@@ -71,13 +75,15 @@ void boxm2_cast_cone_ray_function(vgl_box_3d<double>& block_box,
   double currR = currT * sinAlpha;
 
   //iterate over spheres
-  int numCells = 0;
   while (currT < tFar)
   {
+    //if this pixel is no longer visible, quit
+    if(functor.vis(i,j) < .01) return; 
+    
     //intersect the current sphere with
     vgl_sphere_3d<double> currSphere( ray.origin() + ray.direction() * currT, currR);
 
-    //minimum/maximum cell eclipsed
+    //minimum/maximum subblock eclipsed
     vgl_point_3d<int> minCell( (int) (currSphere.centre().x() - currR),
                                (int) (currSphere.centre().y() - currR),
                                (int) (currSphere.centre().z() - currR) );
@@ -87,17 +93,31 @@ void boxm2_cast_cone_ray_function(vgl_box_3d<double>& block_box,
 
     float intensity_norm = 0.0f;
     float weighted_int = 0.0f;
-    float vol_alpha = 0.0f;
+    float prob_surface = 0.0f, total_volume = 0.0f; 
     for (int x=minCell.x(); x<maxCell.x(); ++x) {
       for (int y=minCell.y(); y<maxCell.y(); ++y) {
         for (int z=minCell.z(); z<maxCell.z(); ++z) {
+          
           //load current block/tree
           uchar16 tree = blk_sptr->trees()(x,y,z);
           boct_bit_tree2 bit_tree( (unsigned char*)tree.data_block(), linfo->root_level+1);
           int data_ptr = bit_tree.get_data_ptr();
+          
+          //calculate contribution from each subblock's voxels
+/*
+          //if the current raysphere diameter is less than cell length, traverse
+          if( 2.0*currR < linfo->block_len ) {
 
+            float cell_len = linfo->block_len; 
+            while( 2.0*currR < cell_len ) 
+            {
+              
+            }
+          }
+*/
+          
           //calculate the theoretical radius of this cell
-          double cellR = vcl_pow( 3.0/(4.0*vnl_math::pi), 1.0/3.0);
+          double cellR = UNIT_SPHERE_RADIUS; 
           vgl_point_3d<double> cellCenter( (double) x + 0.5,
                                            (double) y + 0.5,
                                            (double) z + 0.5 );
@@ -105,25 +125,23 @@ void boxm2_cast_cone_ray_function(vgl_box_3d<double>& block_box,
           double intersect_volume = bvgl_volume_of_intersection(currSphere, cellSphere);
 
           //call step cell
-          functor.step_cell(intersect_volume, data_ptr, i, j, linfo->block_len,
-                            vol_alpha, intensity_norm, weighted_int);
-          numCells++;
+          functor.step_cell(intersect_volume, data_ptr, i, j, linfo->block_len, 
+                            intensity_norm, weighted_int, prob_surface);
+          total_volume += intersect_volume; 
         }
       }
     }
 
     //calculate ray/sphere occupancy prob
-    float sphere_occ_prob = 1.0 - vcl_exp(vol_alpha);
-    //float sphere_occ_prob = prob_surface/total_volume;
+    float sphere_occ_prob = prob_surface/total_volume;
 
     //update intensity
-    if(intensity_norm > 1e-10) {
+    if(intensity_norm > 1e-10 && total_volume > 1e-10) {
       functor.update_expected_int( weighted_int/intensity_norm, sphere_occ_prob, i, j );
       
-
+      //update visibility after all cells have accounted for
+      functor.update_vis( sphere_occ_prob, i, j);
     }
-    //update visibility after all cells have accounted for
-  functor.update_vis( sphere_occ_prob, i, j);
 
     //calculate the next sphere's R and T
     float rPrime = sinAlpha * (currR + currT) / (1.0-sinAlpha);

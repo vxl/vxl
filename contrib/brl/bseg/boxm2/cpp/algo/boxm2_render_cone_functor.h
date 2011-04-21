@@ -27,21 +27,22 @@ class boxm2_render_cone_functor
   }
 
   inline bool step_cell(float volume, int index, unsigned i, unsigned j,
-                        float block_len, float& vol_alpha, float& intensity_norm, float& weighted_int)
+                        float block_len, float& intensity_norm, float& weighted_int, 
+                        float& prob_surface)
   {
     //grab voxel alpha and intensity
     boxm2_data<BOXM2_ALPHA>::datatype alpha = alpha_data_->data()[index];
     float voxel_int = boxm2_data_traits<BOXM2_MOG3_GREY>::processor::expected_color(mog3_data_->data()[index]);
 
     //probability that this voxel is occupied by surface
-    float cell_occupancy_prob = (1.0-vcl_exp(-alpha*volume*block_len));
+    float cell_occupancy_prob = (1.0-vcl_exp(-alpha*block_len));
+    prob_surface += cell_occupancy_prob * volume; 
 
     //weighted intensity for this voxel
-    weighted_int += cell_occupancy_prob * voxel_int;
-    intensity_norm += cell_occupancy_prob;
+    weighted_int += cell_occupancy_prob * volume * voxel_int;
+    intensity_norm += cell_occupancy_prob * volume;
 
     //probability that current cell is visible
-    vol_alpha += (-alpha*volume*block_len);
     return true;
   }
 
@@ -60,6 +61,10 @@ class boxm2_render_cone_functor
     ei += vis * expected_int * sphere_occ_prob;
     (*expected_img_)(i,j) = ei;
     return true;
+  }
+  
+  inline float vis(unsigned i, unsigned j) {
+    return (*vis_img_)(i,j); 
   }
 
  private:
