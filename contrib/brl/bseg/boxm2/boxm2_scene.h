@@ -87,6 +87,10 @@ class boxm2_scene : public vbl_ref_count
 
     //: gets a tight bounding box for the scene
     vgl_box_3d<double>      bounding_box();
+  
+    //: gets the smallest block index in all dimensions
+    void min_block_index(vgl_point_3d<int> &idx,
+                         vgl_point_3d<double> &local_origin);
 
     // returns the dimesnsion of the scene grid where each grid element is a block
     vgl_vector_3d<unsigned int>   scene_dimensions();
