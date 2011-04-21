@@ -249,17 +249,72 @@ vgl_box_3d<double> boxm2_scene::bounding_box()
 vgl_vector_3d<unsigned int>  boxm2_scene::scene_dimensions()
 {
   vcl_vector<boxm2_block_id> ids = this->get_block_ids();
-  int i=0,j=0,k=0;
+  
+  if(ids.empty())
+    return vgl_vector_3d<unsigned int>(0,0,0);
+  
+  int max_i=ids[0].i(),max_j=ids[0].j(),max_k=ids[0].k();
+  int min_i=ids[0].i(),min_j=ids[0].j(),min_k=ids[0].k();
+
   for (unsigned n=0; n<ids.size(); n++) {
-    if (ids[n].i() > i)
-      i=ids[n].i();
-    if (ids[n].j() > j)
-      j=ids[n].j();
-    if (ids[n].k() > k)
-      k=ids[n].k();
+    if (ids[n].i() > max_i)
+      max_i=ids[n].i();
+    if (ids[n].j() > max_j)
+      max_j=ids[n].j();
+    if (ids[n].k() > max_k)
+      max_k=ids[n].k();
+    
+    if (ids[n].i() < min_i)
+      min_i=ids[n].i();
+    if (ids[n].j() < min_j)
+      min_j=ids[n].j();
+    if (ids[n].k() < min_k)
+      min_k=ids[n].k();
   }
-  return vgl_vector_3d<unsigned int>(++i,++j,++k);
+  max_i++; max_j++; max_k++;
+  
+  return vgl_vector_3d<unsigned int>((max_i-min_i),(max_j - min_j),(max_k-min_k));
 }
+
+//: gets the smallest block index
+void boxm2_scene::min_block_index (vgl_point_3d<int> &idx,
+                                   vgl_point_3d<double> &local_origin)
+{
+  vcl_map<boxm2_block_id, boxm2_block_metadata>::iterator iter= blocks_.begin();
+  
+  boxm2_block_id id = iter->first;
+  boxm2_block_metadata data = iter->second;
+
+  int min_i=id.i(),min_j=id.j(),min_k=id.k();
+  double min_x = data.local_origin_.x(), min_y= data.local_origin_.y(), min_z= data.local_origin_.z();
+  
+  for (; iter != blocks_.end(); ++iter) {
+    
+    id = iter->first;
+    data = iter->second;
+  
+    if (id.i() < min_i){
+      min_i=id.i();
+      min_x = data.local_origin_.x();
+    }
+    if (id.j() < min_j){
+      min_j=id.j();
+      min_y = data.local_origin_.y();
+
+    }
+    if (id.k() < min_k){
+      min_k=id.k();
+      min_z = data.local_origin_.z();
+
+    }
+  }
+  
+  idx.set(min_i,min_j,min_k);
+  local_origin.set(min_x, min_y, min_z);
+}
+
+
+
 
 //: returns true if the scene has specified data type (simple linear search)
 bool boxm2_scene::has_data_type(vcl_string data_type)
