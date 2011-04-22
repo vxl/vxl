@@ -40,7 +40,7 @@
 
 namespace boxm2_texture_mesh_process_globals
 {
-  const unsigned n_inputs_ = 4;
+  const unsigned n_inputs_  = 4;
   const unsigned n_outputs_ = 0;
 
   //struct for passing 3d triangles (couldn't find a 3d triangle in VGL...)
@@ -49,29 +49,27 @@ namespace boxm2_texture_mesh_process_globals
     unsigned face_id;
   };
 
-
   //aux data structures (norm images, vis images)
   vcl_vector<vil_image_view<int>* > vis_images_;
-  vcl_vector<vil_image_view<float>* > normx_, normy_, normz_; 
+  vcl_vector<vil_image_view<float>* > normx_, normy_, normz_;
 
-
-  //main helper method - fills out a map of imesh_mesh's, each texture mapped with 
-  //a separate image
+  //main helper method - fills out a map of imesh_mesh's, each texture mapped with a separate image
   void boxm2_texture_mesh_from_imgs(vcl_string im_dir,
                                     vcl_string cam_dir,
                                     vcl_string out_dir,
                                     imesh_mesh& in_mesh,
                                     vcl_map<vcl_string, imesh_mesh>& meshes);
-  
+
   //populates a vector of visibility images (by face id int)
   void boxm2_visible_faces( vcl_vector<vpgl_perspective_camera<double>* >& cameras,
                             imesh_mesh& in_mesh);
-  
+
   //stores a norm image (3d face norm) for each of the texture images
   void compute_norm_images( vcl_vector<vpgl_perspective_camera<double>* >& cameras,
-                             imesh_mesh& in_mesh); 
+                            imesh_mesh& in_mesh);
+
   //smooths the vector of norm images above
-  void smooth_norm_images(double sigma); 
+  void smooth_norm_images(double sigma);
 
   //checks if a triangle in UV space is visible.  us and vs are double buffers of length 3
   bool face_is_visible( vpgl_perspective_camera<double>* cam,
@@ -92,18 +90,19 @@ namespace boxm2_texture_mesh_process_globals
                                                 triangle_3d& world_tri);
 
   //given revised lists of visible images, norms, etc, return the index of the best view
-  int get_best_view(vcl_vector<vpgl_perspective_camera<double>* >& cams, 
+  int get_best_view(vcl_vector<vpgl_perspective_camera<double>* >& cams,
                     vcl_vector<vil_image_view<int>* >& vis_images,
-                    vcl_vector<vil_image_view<float>* >& normx, 
+                    vcl_vector<vil_image_view<float>* >& normx,
                     vcl_vector<vil_image_view<float>* >& normy,
                     vcl_vector<vil_image_view<float>* >& normz,
                     triangle_3d& world_tri );
+
   vgl_vector_3d<double> calc_smooth_norm( vpgl_perspective_camera<double>* cam,
-                                          vil_image_view<int>* vis_img, 
+                                          vil_image_view<int>* vis_img,
                                           vil_image_view<float>* normx,
                                           vil_image_view<float>* normy,
-                                          vil_image_view<float>* normz, 
-                                          triangle_3d& world_tri); 
+                                          vil_image_view<float>* normz,
+                                          triangle_3d& world_tri);
 }
 
 bool boxm2_texture_mesh_process_cons(bprb_func_process& pro)
@@ -114,9 +113,9 @@ bool boxm2_texture_mesh_process_cons(bprb_func_process& pro)
   int i=0;
   vcl_vector<vcl_string> input_types_(n_inputs_);
   input_types_[i++] = "imesh_mesh_sptr";  //depth image
-  input_types_[i++] = "vcl_string";                //directory of scene images
-  input_types_[i++] = "vcl_string";                //directory of corresponding cams
-  input_types_[i++] = "vcl_string";                //output dir of saved mesh
+  input_types_[i++] = "vcl_string";       //directory of scene images
+  input_types_[i++] = "vcl_string";       //directory of corresponding cams
+  input_types_[i++] = "vcl_string";       //output dir of saved mesh
 
   // process has 1 output
   vcl_vector<vcl_string>  output_types_(n_outputs_);
@@ -145,7 +144,7 @@ bool boxm2_texture_mesh_process(bprb_func_process& pro)
       return false;
     }
   }
-      
+
   //////////////////////////////////////////////////////////////////////////////
   //Texture map the mesh
   //////////////////////////////////////////////////////////////////////////////
@@ -175,8 +174,8 @@ bool boxm2_texture_mesh_process(bprb_func_process& pro)
 }
 
 
-//Given a directory of images, dir cams, an input mesh, this function creates
-//map of textured meshes (imesh doesn't ostensibly handle meshes from multiple textures)
+//: Given a directory of images, dir cams, an input mesh, this function creates a map of textured meshes
+// (imesh doesn't ostensibly handle meshes from multiple textures)
 void boxm2_texture_mesh_process_globals::boxm2_texture_mesh_from_imgs(vcl_string im_dir,
                                                                       vcl_string cam_dir,
                                                                       vcl_string out_dir,
@@ -188,18 +187,18 @@ void boxm2_texture_mesh_process_globals::boxm2_texture_mesh_from_imgs(vcl_string
   // Gather cameras and iamges that will contribute to the texture
   ////////////////////////////////////////////////////////////////////////////////
   vcl_vector<vcl_string> allims  = boxm2_util::images_from_directory(im_dir);
-  
+
   //create blank texturemap image
   vil_image_view_base_sptr first_im = boxm2_util::prepare_input_image(allims[0]);
-  vil_image_view<vil_rgba<vxl_byte> >* imptr = (vil_image_view<vil_rgba<vxl_byte> >*) first_im.ptr(); 
+  vil_image_view<vil_rgba<vxl_byte> >* imptr = (vil_image_view<vil_rgba<vxl_byte> >*) first_im.ptr();
   vil_rgba<vxl_byte> mean = boxm2_util::mean_pixel(*imptr);
-  vil_image_view<vil_rgba<vxl_byte> > def(4,4); 
-  def.fill( mean ); 
-  vil_save(def, (out_dir + "/empty.png").c_str()); 
-  
+  vil_image_view<vil_rgba<vxl_byte> > def(4,4);
+  def.fill( mean );
+  vil_save(def, (out_dir + "/empty.png").c_str());
+
   //chop paths to make mesh portable
-  for(int i=0; i<allims.size(); ++i) {
-    vcl_string full_path = allims[i]; 
+  for (unsigned int i=0; i<allims.size(); ++i) {
+    vcl_string full_path = allims[i];
     vcl_string rel_path = vul_file::basename(full_path);
     allims[i] = rel_path;
   }
@@ -209,21 +208,19 @@ void boxm2_texture_mesh_process_globals::boxm2_texture_mesh_from_imgs(vcl_string
     return;
   }
 
-
-
   //choose a few random images
   vcl_vector<vcl_string> imfiles;
   vcl_vector<vpgl_perspective_camera<double>* > cameras;
 
-  int handpicked[] = { 0,1,13,25,33,40,51,64,73,82,96,105,109,114,125,133,140,147,153,164,175};
+  unsigned int handpicked[] = {0,1,13,25,33,40,51,64,73,82,96,105,109,114,125,133,140,147,153,164,175};
   //int handpicked[] = { 0,1,13,25,33,51,73,96,109,114,133,147,164};
-  //int handpicked[] = {0,12,18}; 
-  //int handpicked[] = {0, 1, 26, 33, 56, 96, 114, 133 }; 
-  //int handpicked[] = {0, 8, 16, 23 }; 
-  for(int i=0; i<sizeof(handpicked)/sizeof(int); ++i) {
-    if(handpicked[i] < allims.size()) {
-      imfiles.push_back(allims[handpicked[i]]); 
-      cameras.push_back(allcams[handpicked[i]]); 
+  //int handpicked[] = {0,12,18};
+  //int handpicked[] = {0, 1, 26, 33, 56, 96, 114, 133 };
+  //int handpicked[] = {0, 8, 16, 23 };
+  for (unsigned int i=0; i*sizeof(int)<sizeof(handpicked); ++i) {
+    if (handpicked[i] < allims.size()) {
+      imfiles.push_back(allims[handpicked[i]]);
+      cameras.push_back(allcams[handpicked[i]]);
       vcl_cout<<"added image: "<<imfiles[i]<<vcl_endl;
     }
   }
@@ -246,13 +243,13 @@ void boxm2_texture_mesh_process_globals::boxm2_texture_mesh_from_imgs(vcl_string
   ////////////////////////////////////////////////////////////////////////////////
   vcl_cout<<"calculating visibility images (for each textured image)"<<vcl_endl;
   boxm2_visible_faces(cameras, in_mesh);
-  
+
   ////////////////////////////////////////////////////////////////////////////////
   // Render norm images (and then smooth them)
   ////////////////////////////////////////////////////////////////////////////////
   vcl_cout<<"calculating norm images (for each texture image)"<<vcl_endl;
   compute_norm_images(cameras, in_mesh);
-  smooth_norm_images(30.0); 
+  smooth_norm_images(30.0);
 
   ////////////////////////////////////////////////////////////////////////////////
   // match each face to best image, store a list for each texture image
@@ -356,7 +353,7 @@ void boxm2_texture_mesh_process_globals::boxm2_texture_mesh_from_imgs(vcl_string
       //otherwise put in default texture (grey)
       vcl_vector<vgl_point_2d<double> > tex_coords(nverts, vgl_point_2d<double>(0.0,0.0));
       for (unsigned iv = 0; iv<nverts; ++iv) {
-        tex_coords[iv] = vgl_point_2d<double>(.5, .5); 
+        tex_coords[iv] = vgl_point_2d<double>(.5, .5);
       }
       mesh.set_tex_coords(tex_coords);
     }
@@ -391,28 +388,30 @@ void boxm2_texture_mesh_process_globals::boxm2_match_textures(vcl_vector<vpgl_pe
     }
 
     //create list of cameras from which you can see this face
-    vcl_vector<vcl_string> visible_imfiles; 
+    vcl_vector<vcl_string> visible_imfiles;
     vcl_vector<vpgl_perspective_camera<double>* > visible_views;
     vcl_vector<vil_image_view<int>* > vis_images;
-    vcl_vector<vil_image_view<float>* > normx, normy, normz; 
+    vcl_vector<vil_image_view<float>* > normx, normy, normz;
     for (unsigned int i=0; i<vis_images_.size(); ++i) {
       if ( face_is_visible( cameras[i], vis_images_[i], world_tri) ) {
-        visible_imfiles.push_back(imfiles[i]); 
+        visible_imfiles.push_back(imfiles[i]);
         visible_views.push_back(cameras[i]);
-        vis_images.push_back(vis_images_[i]); 
-        normx.push_back(normx_[i]); 
-        normy.push_back(normy_[i]); 
-        normz.push_back(normz_[i]);       
+        vis_images.push_back(vis_images_[i]);
+        normx.push_back(normx_[i]);
+        normy.push_back(normy_[i]);
+        normz.push_back(normz_[i]);
       }
     }
 
     //now compare the normal to each of the visible view cameras
+#ifdef DEBUG
     vgl_vector_3d<double>& normal = in_faces.normal(iface);
-    //vcl_cout<<"Face "<<iface<<" normal: "<<normal<<vcl_endl;
+    vcl_cout<<"Face "<<iface<<" normal: "<<normal<<vcl_endl;
+#endif
 
     //find camera with the closest look vector to this normal
     //int closeIdx = boxm2_util::find_nearest_cam(normal, visible_views);
-    int closeIdx = get_best_view(visible_views, vis_images, normx, normy, normz, world_tri); 
+    int closeIdx = get_best_view(visible_views, vis_images, normx, normy, normz, world_tri);
     vpgl_perspective_camera<double>* closest = NULL;
     vcl_string im_name = "empty.png";
     if (closeIdx >= 0) {
@@ -504,11 +503,10 @@ void boxm2_texture_mesh_process_globals::boxm2_match_textures(vcl_vector<vpgl_pe
 #endif
 }
 
-//Compares each visible camera with the average normal from each norm image, 
-//chooses the one that most closely matches
-int boxm2_texture_mesh_process_globals::get_best_view(vcl_vector<vpgl_perspective_camera<double>* >& cams, 
+//: Compares each visible camera with the average normal from each norm image, chooses the one that most closely matches
+int boxm2_texture_mesh_process_globals::get_best_view(vcl_vector<vpgl_perspective_camera<double>* >& cams,
                                                       vcl_vector<vil_image_view<int>* >& vis_images,
-                                                      vcl_vector<vil_image_view<float>* >& normx, 
+                                                      vcl_vector<vil_image_view<float>* >& normx,
                                                       vcl_vector<vil_image_view<float>* >& normy,
                                                       vcl_vector<vil_image_view<float>* >& normz,
                                                       triangle_3d& world_tri)
@@ -521,14 +519,13 @@ int boxm2_texture_mesh_process_globals::get_best_view(vcl_vector<vpgl_perspectiv
   double minAngle = 10e20;
   unsigned minCam = -1;
   for (unsigned int i=0; i<cams.size(); ++i) {
-    
     //get the smooth norm corresponding to this camera view
-    vgl_vector_3d<double> normal = calc_smooth_norm( cams[i], vis_images[i], normx[i], normy[i], normz[i], world_tri); 
+    vgl_vector_3d<double> normal = calc_smooth_norm( cams[i], vis_images[i], normx[i], normy[i], normz[i], world_tri);
     //vcl_cout<<"   face "<<world_tri.face_id<<" image "<<i<<" normal: "<<normal<<vcl_endl;
 
-    double dotProd = dot_product( normal, -1*cams[i]->principal_axis()); 
-    double ang = vcl_acos(dotProd); 
-    //if( vcl_fabs(normal.z()) > .8 ) {
+    double dotProd = dot_product( normal, -1*cams[i]->principal_axis());
+    double ang = vcl_acos(dotProd);
+    //if ( vcl_fabs(normal.z()) > .8 ) {
       //vcl_cout<<"Face normal: "<<normal<<"  principal axis: "<<cams[i]->principal_axis()<<vcl_endl
               //<<" and angle: " <<ang * 180/vnl_math::pi<<vcl_endl;
     //}
@@ -542,12 +539,12 @@ int boxm2_texture_mesh_process_globals::get_best_view(vcl_vector<vpgl_perspectiv
   return minCam;
 }
 
-vgl_vector_3d<double> 
+vgl_vector_3d<double>
 boxm2_texture_mesh_process_globals::calc_smooth_norm( vpgl_perspective_camera<double>* cam,
-                                                      vil_image_view<int>* vis_img, 
+                                                      vil_image_view<int>* vis_img,
                                                       vil_image_view<float>* normx,
                                                       vil_image_view<float>* normy,
-                                                      vil_image_view<float>* normz, 
+                                                      vil_image_view<float>* normz,
                                                       triangle_3d& world_tri)
 {
   //project triangle
@@ -566,8 +563,8 @@ boxm2_texture_mesh_process_globals::calc_smooth_norm( vpgl_perspective_camera<do
   //now create a polygon, and find the integer image coordinates (U,V) that this polygon covers
   int ni = vis_img->ni();
   int nj = vis_img->nj();
-  double nx=0.0, ny=0.0, nz=0.0; //intiialize normal
-  int numNormals = 0; 
+  double nx=0.0, ny=0.0, nz=0.0; //initialize normal
+  int numNormals = 0;
 
   vgl_triangle_scan_iterator<double> tsi;
   tsi.a.x = us[0];  tsi.a.y = vs[0];
@@ -583,33 +580,34 @@ boxm2_texture_mesh_process_globals::calc_smooth_norm( vpgl_perspective_camera<do
     if (min_x < 0) min_x = 0;
     if (max_x >= ni) max_x = ni-1;
     for (int x = min_x; x <= max_x; ++x) {
-      if( (*vis_img)(x,y) == world_tri.face_id ) {
-        nx += (*normx)(x,y); 
-        ny += (*normy)(x,y); 
-        nz += (*normz)(x,y); 
-        numNormals++; 
+      if ( (*vis_img)(x,y) == int(world_tri.face_id) ) {
+        nx += (*normx)(x,y);
+        ny += (*normy)(x,y);
+        nz += (*normz)(x,y);
+        numNormals++;
       }
     }
   }
-  return vgl_vector_3d<double>(nx/numNormals, ny/numNormals, nz/numNormals); 
+  return vgl_vector_3d<double>(nx/numNormals, ny/numNormals, nz/numNormals);
 }
 
 
-//returns a list of visible triangles given a camera,
-//visibility image, and world coordinate 3d triangle
+//:
+// returns a list of visible triangles given a camera,
+// visibility image, and world coordinate 3d triangle
 vcl_vector<boxm2_texture_mesh_process_globals::triangle_3d>
-boxm2_texture_mesh_process_globals::get_visible_triangles(vpgl_perspective_camera<double>* cam,
-                                                          vil_image_view<int>* vis_img,
-                                                          triangle_3d& world_tri)
+boxm2_texture_mesh_process_globals::get_visible_triangles(vpgl_perspective_camera<double>* /*cam*/,
+                                                          vil_image_view<int>* /*vis_img*/,
+                                                          triangle_3d& /*world_tri*/)
 {
-  vcl_vector<triangle_3d> triangles;
   vcl_cerr << "TODO: boxm2_texture_mesh_process_globals::get_visible_triangles is not yet implemented\n";
-  return triangles;
+  return vcl_vector<triangle_3d>();
 }
 
 
-//given a camera, and an image with ID faces, this method returns true if the entire
-//triangle (id face_id) is unoccluded from this point of view
+//:
+// given a camera, and an image with ID faces, this method returns true if the entire
+// triangle (id face_id) is unoccluded from this point of view
 bool boxm2_texture_mesh_process_globals::face_is_visible( vpgl_perspective_camera<double>* cam,
                                                           vil_image_view<int>* vis_img,
                                                           triangle_3d& world_tri)
@@ -648,24 +646,20 @@ bool boxm2_texture_mesh_process_globals::face_is_visible( vpgl_perspective_camer
     if (max_x >= ni) max_x = ni-1;
     for (int x = min_x; x <= max_x; ++x) {
       ++numPixels;
-      if ( (*vis_img)(x,y) == world_tri.face_id )
+      if ( (*vis_img)(x,y) == int(world_tri.face_id) )
         ++numMatches;
     }
   }
-  
+
   //if the majority match, it's visible
-  if( (double) numMatches / (double) numPixels > .99) 
+  if ( (double) numMatches / (double) numPixels > .99)
     return true;
   else
     return false;
-    
-  //if it made it this far, it's completely visible
-  //return true;
 }
 
-//Constructs vector of visibility images - images that identify which triangle
-//is visible at which pixel
-// function is more or less complete - not much more to it.
+//: Constructs vector of visibility images - images that identify which triangle is visible at which pixel.
+// Function is more or less complete - not much more to it.
 void boxm2_texture_mesh_process_globals::boxm2_visible_faces( vcl_vector<vpgl_perspective_camera<double>* >& cameras,
                                                               imesh_mesh& in_mesh)
 {
@@ -673,10 +667,10 @@ void boxm2_texture_mesh_process_globals::boxm2_visible_faces( vcl_vector<vpgl_pe
   unsigned nfaces = in_mesh.num_faces();
   imesh_vertex_array<3>& in_verts = in_mesh.vertices<3>();
 
-  //iterate over each camera, creating a visibility image for each
+  // iterate over each camera, creating a visibility image for each
   for (unsigned int i=0; i<cameras.size(); ++i)
   {
-    //get the principal point of the cam for image size
+    // get the principal point of the cam for image size
     vpgl_perspective_camera<double>* pcam = cameras[i];
     vgl_point_2d<double> principal_point = pcam->get_calibration().principal_point();
     unsigned ni = (unsigned) (principal_point.x()*2.0);
@@ -689,6 +683,102 @@ void boxm2_texture_mesh_process_globals::boxm2_visible_faces( vcl_vector<vpgl_pe
     face_im->fill(-1); //initial face id is -1
     for (unsigned iface = 0; iface<nfaces; ++iface)
     {
+      // get the vertices from the face, project into UVs
+      double us[3], vs[3], dists[3];
+      for (int vIdx=0; vIdx<3; ++vIdx) {
+        unsigned vertIdx = in_faces[iface][vIdx];
+
+        // project these verts into UV
+        double x = in_verts[vertIdx][0], y = in_verts[vertIdx][1], z = in_verts[vertIdx][2];
+        double u,v;
+        pcam->project(x, y, z, u, v);
+        us[vIdx] = u;
+        vs[vIdx] = v;
+
+        // keep track of distance to each vertex
+        dists[vIdx] = vgl_distance(vgl_point_3d<double>(x,y,z), pcam->get_camera_center());
+      }
+
+      // render the triangle label onto the label image, using the depth image
+      vgl_point_3d<double> v1(us[0], vs[0], dists[0]);
+      vgl_point_3d<double> v2(us[1], vs[1], dists[1]);
+      vgl_point_3d<double> v3(us[2], vs[2], dists[2]);
+      imesh_render_triangle_label<int>(v1, v2, v3, (int) iface, (*face_im), depth_im);
+    } //end for iface
+
+    // keep the vis_image just calculated
+    vis_images_.push_back(face_im);
+  }
+}
+
+//: Constructs vector of visibility images - images that identify which triangle is visible at which pixel.
+// Function is more or less complete - not much more to it.
+void boxm2_texture_mesh_process_globals::compute_norm_images( vcl_vector<vpgl_perspective_camera<double>* >& cameras,
+                                                              imesh_mesh& in_mesh)
+{
+  imesh_regular_face_array<3>& in_faces = (imesh_regular_face_array<3>&) in_mesh.faces();
+  unsigned nfaces = in_mesh.num_faces();
+
+  for (unsigned int i=0; i<vis_images_.size(); ++i) {
+    // get the principal point/ni,nj
+    vpgl_perspective_camera<double>* pcam = cameras[i];
+    vgl_point_2d<double> principal_point = pcam->get_calibration().principal_point();
+    unsigned ni = (unsigned) (principal_point.x()*2.0);
+    unsigned nj = (unsigned) (principal_point.y()*2.0);
+
+    // create a norm x,y, and z image for each visibility image
+    vil_image_view<int>* vis = vis_images_[i];
+    vil_image_view<float>* nx = new vil_image_view<float>(ni, nj);
+    vil_image_view<float>* ny = new vil_image_view<float>(ni, nj);
+    vil_image_view<float>* nz = new vil_image_view<float>(ni, nj);
+    vgl_vector_3d<double> paxis = cameras[i]->principal_axis();
+    nx->fill( (float) paxis.x());
+    ny->fill( (float) paxis.y());
+    nz->fill( (float) paxis.z());
+    for (unsigned int x=0; x<ni; ++x) {
+      for (unsigned int y=0; y<nj; ++y) {
+        int face_id = (*vis)(x,y);
+        if (face_id >= 0 && face_id < (int)nfaces) {
+          vgl_vector_3d<double> fnorm = in_faces.normal(face_id);
+          (*nx)(x,y) = (float) fnorm.x();
+          (*ny)(x,y) = (float) fnorm.y();
+          (*nz)(x,y) = (float) fnorm.z();
+        }
+      }
+    }
+
+    //keep the vis_image just calculated
+    normx_.push_back(nx);
+    normy_.push_back(ny);
+    normz_.push_back(nz);
+  }
+
+#if 0 // commented out ...
+  imesh_vertex_array<3>& in_verts = in_mesh.vertices<3>();
+  //iterate over each camera, creating a visibility image for each
+  for (unsigned int i=0; i<cameras.size(); ++i)
+  {
+    //get the principal point of the cam for image size
+    vpgl_perspective_camera<double>* pcam = cameras[i];
+    vgl_point_2d<double> principal_point = pcam->get_calibration().principal_point();
+    unsigned ni = (unsigned) (principal_point.x()*2.0);
+    unsigned nj = (unsigned) (principal_point.y()*2.0);
+
+    // render the norm images in each dimension
+    vil_image_view<float>* nx = new vil_image_view<float>(ni, nj);
+    vil_image_view<float>* ny = new vil_image_view<float>(ni, nj);
+    vil_image_view<float>* nz = new vil_image_view<float>(ni, nj);
+    vgl_vector_3d<double> paxis = cameras[i]->principal_axis();
+    nx->fill( (float) paxis.x());
+    ny->fill( (float) paxis.y());
+    nz->fill( (float) paxis.z());
+    vil_image_view<double> depth_im(ni, nj);
+    depth_im.fill(10e100);
+    for (unsigned iface = 0; iface<nfaces; ++iface)
+    {
+      //get face normal - this will be the "ID"
+      vgl_vector_3d<double> fnorm = in_faces.normal(iface);
+
       //get the vertices from the face, project into UVs
       double us[3], vs[3], dists[3];
       for (int vIdx=0; vIdx<3; ++vIdx) {
@@ -709,139 +799,42 @@ void boxm2_texture_mesh_process_globals::boxm2_visible_faces( vcl_vector<vpgl_pe
       vgl_point_3d<double> v1(us[0], vs[0], dists[0]);
       vgl_point_3d<double> v2(us[1], vs[1], dists[1]);
       vgl_point_3d<double> v3(us[2], vs[2], dists[2]);
-      imesh_render_triangle_label<int>(v1, v2, v3, (int) iface, (*face_im), depth_im);
+      imesh_render_triangle_label<float>(v1, v2, v3, (float) fnorm.x(), (*nx), depth_im);
+      imesh_render_triangle_label<float>(v1, v2, v3, (float) fnorm.y(), (*ny), depth_im);
+      imesh_render_triangle_label<float>(v1, v2, v3, (float) fnorm.z(), (*nz), depth_im);
     } //end for iface
 
     //keep the vis_image just calculated
-    vis_images_.push_back(face_im);
+    normx_.push_back(nx);
+    normy_.push_back(ny);
+    normz_.push_back(nz);
   }
-}
-
-//Constructs vector of visibility images - images that identify which triangle
-//is visible at which pixel
-// function is more or less complete - not much more to it.
-void boxm2_texture_mesh_process_globals::compute_norm_images( vcl_vector<vpgl_perspective_camera<double>* >& cameras,
-                                                              imesh_mesh& in_mesh)
-{
-  imesh_regular_face_array<3>& in_faces = (imesh_regular_face_array<3>&) in_mesh.faces();
-  unsigned nfaces = in_mesh.num_faces();
-  imesh_vertex_array<3>& in_verts = in_mesh.vertices<3>();
-  
-  for(unsigned int i=0; i<vis_images_.size(); ++i) {
-    
-    //get the principal point/ni,nj
-    vpgl_perspective_camera<double>* pcam = cameras[i];
-    vgl_point_2d<double> principal_point = pcam->get_calibration().principal_point();
-    unsigned ni = (unsigned) (principal_point.x()*2.0);
-    unsigned nj = (unsigned) (principal_point.y()*2.0);
-    
-    //create a norm x,y, and z image for each visibility image
-    vil_image_view<int>* vis = vis_images_[i]; 
-    vil_image_view<float>* nx = new vil_image_view<float>(ni, nj);
-    vil_image_view<float>* ny = new vil_image_view<float>(ni, nj);
-    vil_image_view<float>* nz = new vil_image_view<float>(ni, nj);
-    vgl_vector_3d<double> paxis = cameras[i]->principal_axis(); 
-    nx->fill( (float) paxis.x()); 
-    ny->fill( (float) paxis.y()); 
-    nz->fill( (float) paxis.z());     
-    for(int x=0; x<ni; ++x) {
-      for(int y=0; y<nj; ++y) {
-        int face_id = (*vis)(x,y); 
-        if(face_id >= 0 && face_id < nfaces) {
-          vgl_vector_3d<double> fnorm = in_faces.normal(face_id); 
-          (*nx)(x,y) = (float) fnorm.x(); 
-          (*ny)(x,y) = (float) fnorm.y(); 
-          (*nz)(x,y) = (float) fnorm.z(); 
-        }
-      }
-    }
-    
-    //keep the vis_image just calculated
-    normx_.push_back(nx); 
-    normy_.push_back(ny); 
-    normz_.push_back(nz); 
-  }
-  
-
-  ////iterate over each camera, creating a visibility image for each
-  //for (unsigned int i=0; i<cameras.size(); ++i)
-  //{
-    ////get the principal point of the cam for image size
-    //vpgl_perspective_camera<double>* pcam = cameras[i];
-    //vgl_point_2d<double> principal_point = pcam->get_calibration().principal_point();
-    //unsigned ni = (unsigned) (principal_point.x()*2.0);
-    //unsigned nj = (unsigned) (principal_point.y()*2.0);
-
-    //// render the norm images in each dimension
-    //vil_image_view<float>* nx = new vil_image_view<float>(ni, nj);
-    //vil_image_view<float>* ny = new vil_image_view<float>(ni, nj);
-    //vil_image_view<float>* nz = new vil_image_view<float>(ni, nj);
-    //vgl_vector_3d<double> paxis = cameras[i]->principal_axis(); 
-    //nx->fill( (float) paxis.x()); 
-    //ny->fill( (float) paxis.y()); 
-    //nz->fill( (float) paxis.z()); 
-    //vil_image_view<double> depth_im(ni, nj);
-    //depth_im.fill(10e100); 
-    //for (unsigned iface = 0; iface<nfaces; ++iface)
-    //{
-      ////get face normal - this will be the "ID"
-      //vgl_vector_3d<double> fnorm = in_faces.normal(iface); 
-      
-      ////get the vertices from the face, project into UVs
-      //double us[3], vs[3], dists[3];
-      //for (int vIdx=0; vIdx<3; ++vIdx) {
-        //unsigned vertIdx = in_faces[iface][vIdx];
-
-        ////project these verts into UV
-        //double x = in_verts[vertIdx][0], y = in_verts[vertIdx][1], z = in_verts[vertIdx][2];
-        //double u,v;
-        //pcam->project(x, y, z, u, v);
-        //us[vIdx] = u;
-        //vs[vIdx] = v;
-
-        ////keep track of distance to each vertex
-        //dists[vIdx] = vgl_distance(vgl_point_3d<double>(x,y,z), pcam->get_camera_center());
-      //}
-
-      ////render the triangle label onto the label image, using the depth image
-      //vgl_point_3d<double> v1(us[0], vs[0], dists[0]);
-      //vgl_point_3d<double> v2(us[1], vs[1], dists[1]);
-      //vgl_point_3d<double> v3(us[2], vs[2], dists[2]);
-      //imesh_render_triangle_label<float>(v1, v2, v3, (float) fnorm.x(), (*nx), depth_im);
-      //imesh_render_triangle_label<float>(v1, v2, v3, (float) fnorm.y(), (*ny), depth_im);
-      //imesh_render_triangle_label<float>(v1, v2, v3, (float) fnorm.z(), (*nz), depth_im);
-    //} //end for iface
-
-    ////keep the vis_image just calculated
-    //normx_.push_back(nx); 
-    //normy_.push_back(ny); 
-    //normz_.push_back(nz); 
-  //}
+#endif // 0
 }
 
 void boxm2_texture_mesh_process_globals::smooth_norm_images(double sigma)
 {
   vil_gauss_filter_5tap_params params(sigma); //set SIGMA
-  for(int i=0; i<normx_.size(); ++i) {
-    vil_image_view<float>* currX = normx_[i]; 
-    vil_image_view<float>* newX = new vil_image_view<float>(currX->ni(), currX->nj()); 
+  for (unsigned int i=0; i<normx_.size(); ++i) {
+    vil_image_view<float>* currX = normx_[i];
+    vil_image_view<float>* newX = new vil_image_view<float>(currX->ni(), currX->nj());
     vil_gauss_filter_5tap(*currX, *newX, params);
     //store the filtered image
-    delete currX; 
-    normx_[i] = newX; 
-    
+    delete currX;
+    normx_[i] = newX;
+
     //repeat for y
-    vil_image_view<float>* currY = normy_[i]; 
-    vil_image_view<float>* newY = new vil_image_view<float>(currY->ni(), currY->nj()); 
+    vil_image_view<float>* currY = normy_[i];
+    vil_image_view<float>* newY = new vil_image_view<float>(currY->ni(), currY->nj());
     vil_gauss_filter_5tap(*currY, *newY, params);
-    delete currY; 
-    normy_[i] = newY; 
-    
+    delete currY;
+    normy_[i] = newY;
+
     //z
-    vil_image_view<float>* currZ = normz_[i]; 
-    vil_image_view<float>* newZ = new vil_image_view<float>(currZ->ni(), currZ->nj()); 
+    vil_image_view<float>* currZ = normz_[i];
+    vil_image_view<float>* newZ = new vil_image_view<float>(currZ->ni(), currZ->nj());
     vil_gauss_filter_5tap(*currZ, *newZ, params);
-    delete currZ; 
-    normz_[i] = newZ; 
+    delete currZ;
+    normz_[i] = newZ;
   }
 }
