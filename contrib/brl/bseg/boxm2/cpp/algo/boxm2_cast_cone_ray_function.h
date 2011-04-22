@@ -22,13 +22,8 @@
 #include <vpgl/vpgl_generic_camera.h>
 #include <vpgl/algo/vpgl_camera_bounds.h>
 
-#define BLOCK_EPSILON .006125f
-#define TREE_EPSILON  .005f
 #define MIN_T         1.0
-
-
-// vcl_pow( 3.0/(4.0*vnl_math::pi), 1.0/3.0);
-#define UNIT_SPHERE_RADIUS 0.620350490899400016668006812
+#define UNIT_SPHERE_RADIUS 0.620350490899400016668006812 // = 1/vcl_cbrt(vnl_math::pi*4/3);
 
 //: Return true if ray intersects box. If so, compute intersection points.
 template<class F>
@@ -78,8 +73,8 @@ void boxm2_cast_cone_ray_function(vgl_box_3d<double>& block_box,
   while (currT < tFar)
   {
     //if this pixel is no longer visible, quit
-    if(functor.vis(i,j) < .01) return; 
-    
+    if (functor.vis(i,j) < .01) return;
+
     //intersect the current sphere with
     vgl_sphere_3d<double> currSphere( ray.origin() + ray.direction() * currT, currR);
 
@@ -93,31 +88,28 @@ void boxm2_cast_cone_ray_function(vgl_box_3d<double>& block_box,
 
     float intensity_norm = 0.0f;
     float weighted_int = 0.0f;
-    float prob_surface = 0.0f, total_volume = 0.0f; 
+    float prob_surface = 0.0f, total_volume = 0.0f;
     for (int x=minCell.x(); x<maxCell.x(); ++x) {
       for (int y=minCell.y(); y<maxCell.y(); ++y) {
         for (int z=minCell.z(); z<maxCell.z(); ++z) {
-          
           //load current block/tree
           uchar16 tree = blk_sptr->trees()(x,y,z);
           boct_bit_tree2 bit_tree( (unsigned char*)tree.data_block(), linfo->root_level+1);
           int data_ptr = bit_tree.get_data_ptr();
-          
-          //calculate contribution from each subblock's voxels
-/*
-          //if the current raysphere diameter is less than cell length, traverse
-          if( 2.0*currR < linfo->block_len ) {
 
-            float cell_len = linfo->block_len; 
-            while( 2.0*currR < cell_len ) 
+#if 0
+          //calculate contribution from each subblock's voxels
+          //if the current raysphere diameter is less than cell length, traverse
+          if ( 2.0*currR < linfo->block_len ) {
+            float cell_len = linfo->block_len;
+            while ( 2.0*currR < cell_len )
             {
-              
             }
           }
-*/
-          
+#endif
+
           //calculate the theoretical radius of this cell
-          double cellR = UNIT_SPHERE_RADIUS; 
+          double cellR = UNIT_SPHERE_RADIUS;
           vgl_point_3d<double> cellCenter( (double) x + 0.5,
                                            (double) y + 0.5,
                                            (double) z + 0.5 );
@@ -125,9 +117,9 @@ void boxm2_cast_cone_ray_function(vgl_box_3d<double>& block_box,
           double intersect_volume = bvgl_volume_of_intersection(currSphere, cellSphere);
 
           //call step cell
-          functor.step_cell(intersect_volume, data_ptr, i, j, linfo->block_len, 
+          functor.step_cell(intersect_volume, data_ptr, i, j, linfo->block_len,
                             intensity_norm, weighted_int, prob_surface);
-          total_volume += intersect_volume; 
+          total_volume += intersect_volume;
         }
       }
     }
@@ -136,9 +128,9 @@ void boxm2_cast_cone_ray_function(vgl_box_3d<double>& block_box,
     float sphere_occ_prob = prob_surface/total_volume;
 
     //update intensity
-    if(intensity_norm > 1e-10 && total_volume > 1e-10) {
+    if (intensity_norm > 1e-10 && total_volume > 1e-10) {
       functor.update_expected_int( weighted_int/intensity_norm, sphere_occ_prob, i, j );
-      
+
       //update visibility after all cells have accounted for
       functor.update_vis( sphere_occ_prob, i, j);
     }
@@ -160,8 +152,7 @@ bool cast_cone_ray_per_block( functor_type functor,
                               unsigned int roi_ni0=0,
                               unsigned int roi_nj0=0)
 {
-  if (vpgl_perspective_camera<double>* gcam =
-      dynamic_cast<vpgl_perspective_camera<double> *>(cam.ptr()))
+  if (dynamic_cast<vpgl_perspective_camera<double> *>(cam.ptr()))
   {
     for (unsigned i=roi_ni0;i<roi_ni;++i)
     {
@@ -169,7 +160,7 @@ bool cast_cone_ray_per_block( functor_type functor,
       for (unsigned j=roi_nj0;j<roi_nj;++j)
       {
         //calculate ray and ray angles at pixel ij
-        vgl_ray_3d<double> ray_ij; //= gcam->ray(i,j);
+        vgl_ray_3d<double> ray_ij; //= cam->ray(i,j);
         double cone_half_angle, solid_angle;
         vpgl_perspective_camera<double>* pcam = (vpgl_perspective_camera<double>*) cam.ptr();
         vpgl_camera_bounds::pixel_solid_angle(*pcam, i, j, ray_ij, cone_half_angle, solid_angle);

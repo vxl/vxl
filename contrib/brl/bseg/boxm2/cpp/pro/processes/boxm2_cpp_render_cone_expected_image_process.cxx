@@ -62,7 +62,7 @@ bool boxm2_cpp_render_cone_expected_image_process(bprb_func_process& pro)
     vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
     return false;
   }
-  
+
   //get the inputs
   unsigned i = 0;
   boxm2_scene_sptr scene =pro.get_input<boxm2_scene_sptr>(i++);
@@ -71,15 +71,13 @@ bool boxm2_cpp_render_cone_expected_image_process(bprb_func_process& pro)
   unsigned ni=pro.get_input<unsigned>(i++);
   unsigned nj=pro.get_input<unsigned>(i++);
 
-  //make sure the scene corresponds to this datatype 
-  bool foundDataType = false, foundNumObsType = false;
+  //make sure the scene corresponds to this datatype
   vcl_string data_type, num_obs_type, options;
-  if( scene->has_data_type(boxm2_data_traits<BOXM2_MOG3_GREY>::prefix()) ) {
+  if ( scene->has_data_type(boxm2_data_traits<BOXM2_MOG3_GREY>::prefix()) ) {
     data_type = boxm2_data_traits<BOXM2_MOG3_GREY>::prefix();
-    foundDataType = true;
     options=" -D MOG_TYPE_8 ";
   }
-  if (!foundDataType) {
+  else {
     vcl_cout<<"boxm2_cpp_render_cone_process ERROR: scene doesn't have BOXM2_GAUSS_RGB data type"<<vcl_endl;
     return false;
   }
@@ -110,9 +108,9 @@ bool boxm2_cpp_render_cone_expected_image_process(bprb_func_process& pro)
 
   //normalize_intensity f;
   //vil_transform2<float,float, normalize_intensity>(*vis_img,*exp_img,f);
-  
+
   vil_save(*vis_img, "vis_img.tiff");
-  
+
   // store scene smaprt pointer
   pro.set_output_val<vil_image_view_base_sptr>(0, exp_img);
   return true;
