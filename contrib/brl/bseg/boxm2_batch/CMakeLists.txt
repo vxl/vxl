@@ -1,6 +1,7 @@
 # contrib/brl/bseg/boxm2_batch/CMakeLists.txt
 INCLUDE( ${VXL_CMAKE_DIR}/NewCMake/FindPython.cmake )
 INCLUDE( ${VXL_CMAKE_DIR}/NewCMake/FindOpenCL.cmake )
+INCLUDE( ${BRL_MODULE_PATH}/FindGLEW.cmake )
 
 IF( PYTHON_FOUND )
   INCLUDE( ${BRL_MODULE_PATH}/FindEXPAT.cmake )
@@ -31,7 +32,12 @@ IF( PYTHON_FOUND )
     ENDIF(APPLE)
     SET_TARGET_PROPERTIES(boxm2_batch PROPERTIES PREFIX "")
 
-    TARGET_LINK_LIBRARIES(boxm2_batch bpro_batch boxm2_pro boxm2_cpp_pro boxm2_view_pro vpgl_pro vil_pro brdb)
+    TARGET_LINK_LIBRARIES(boxm2_batch bpro_batch boxm2_pro boxm2_cpp_pro vpgl_pro vil_pro brdb)
+
+    IF(GLEW_FOUND)
+      ADD_DEFINITIONS(-DHAS_GLEW=1)
+      TARGET_LINK_LIBRARIES(boxm2_batch boxm2_view_pro )
+    ENDIF(GLEW_FOUND)
 
     IF(OPENCL_FOUND)
       ADD_DEFINITIONS(-DHAS_OPENCL=1)

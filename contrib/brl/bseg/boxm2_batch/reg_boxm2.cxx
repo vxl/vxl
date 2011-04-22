@@ -12,7 +12,9 @@
 #if defined(HAS_OPENCL) && HAS_OPENCL
 #include <bocl/pro/bocl_register.h>
 #include <boxm2/ocl/pro/boxm2_ocl_register.h>
+#if defined(HAS_GLEW) && HAS_GLEW
 #include <boxm2/view/pro/boxm2_view_register.h>
+#endif
 #endif
 
 
@@ -26,11 +28,14 @@ register_processes(PyObject *self, PyObject *args)
 #if defined(HAS_OPENCL) && HAS_OPENCL
   bocl_register::register_process();
   boxm2_ocl_register::register_process();
+#if defined(HAS_GLEW) && HAS_GLEW
   boxm2_view_register::register_process();
+#endif
 #endif
   Py_INCREF(Py_None);
   return Py_None;
 }
+
 
 PyObject *
 register_datatypes(PyObject *self, PyObject *args)
@@ -44,12 +49,14 @@ register_datatypes(PyObject *self, PyObject *args)
 #if defined(HAS_OPENCL) && HAS_OPENCL
   bocl_register::register_datatype();
   boxm2_ocl_register::register_datatype();
+#if defined(HAS_GLEW) && HAS_GLEW
   boxm2_view_register::register_datatype();
+#endif
 #endif
   Py_INCREF(Py_None);
   return Py_None;
 }
-    
+
 
 PyMODINIT_FUNC
 initboxm2_batch(void)
@@ -60,13 +67,11 @@ initboxm2_batch(void)
   reg_pro.ml_doc = "register_processes() create instances of each defined process";
   reg_pro.ml_flags = METH_VARARGS;
 
-
   PyMethodDef reg_data;
   reg_data.ml_name = "register_datatypes";
   reg_data.ml_meth = register_datatypes;
   reg_data.ml_doc = "register_datatypes() insert tables in the database for each type";
   reg_data.ml_flags = METH_VARARGS;
-
 
   boxm2_batch_methods[0]=reg_pro;
   boxm2_batch_methods[1]=reg_data;
