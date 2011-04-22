@@ -2,28 +2,60 @@
 //
 #include <vul/vul_timer.h>
 #include <boxm2/ocl/boxm2_ocl_util.h>
+#include <boxm2/ocl/algo/boxm2_ocl_camera_converter.h>
 
-float render_expected_image( boxm2_scene_sptr & scene,
-                            bocl_device_sptr & device,
-                            boxm2_opencl_cache_sptr & opencl_cache,
-                            cl_command_queue & queue,
-                            vpgl_camera_double_sptr & cam,
-                            bocl_mem_sptr & exp_image,
-                            bocl_mem_sptr & vis_image, 
-                            bocl_mem_sptr & exp_img_dim,
-                            vcl_string data_type,
-                            bocl_kernel* kernel,
-                            vcl_size_t * lthreads,
-                            unsigned cl_ni,
-                            unsigned cl_nj )
+float render_expected_image(  boxm2_scene_sptr & scene,
+                              bocl_device_sptr & device,
+                              boxm2_opencl_cache_sptr & opencl_cache,
+                              cl_command_queue & queue,
+                              vpgl_camera_double_sptr & cam,
+                              bocl_mem_sptr & exp_image,
+                              bocl_mem_sptr & vis_image, 
+                              bocl_mem_sptr & exp_img_dim,
+                              vcl_string data_type,
+                              bocl_kernel* kernel,
+                              vcl_size_t * lthreads,
+                              unsigned cl_ni,
+                              unsigned cl_nj )
 {
     float transfer_time=0.0f;
     float gpu_time=0.0f;
-    // create all buffers
-    cl_float cam_buffer[48];
-    boxm2_ocl_util::set_persp_camera(cam, cam_buffer);
-    bocl_mem_sptr persp_cam=new bocl_mem(device->context(), cam_buffer, 3*sizeof(cl_float16), "persp cam buffer");
-    persp_cam->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
+    
+    //camera check
+    if(cam->type_name()!= "vpgl_perspective_camera" && cam->type_name() != "vpgl_generic_camera" ) {
+      vcl_cout<<"Cannot render with camera of type "<<cam->type_name()<<vcl_endl;
+      return 0.0f; 
+    }
+    
+    //when you know what kind of camera it is, do block order stuff
+    vcl_vector<boxm2_block_id> vis_order;  
+
+    //set generic cam and get visible block order 
+    cl_float* ray_origins = new cl_float[4*cl_ni*cl_nj]; 
+    cl_float* ray_directions = new cl_float[4*cl_ni*cl_nj]; 
+    bocl_mem_sptr ray_o_buff = new bocl_mem(device->context(), ray_origins, cl_ni*cl_nj * sizeof(cl_float4) , "ray_origins buffer");
+    bocl_mem_sptr ray_d_buff = new bocl_mem(device->context(), ray_directions,  cl_ni*cl_nj * sizeof(cl_float4), "ray_directions buffer");
+    if(cam->type_name() == "vpgl_perspective_camera") {
+      vcl_cout<<"Converting perspective cam to generic !!"<<vcl_endl;
+      vis_order = scene->get_vis_blocks((vpgl_perspective_camera<double>*)  cam.ptr());
+      float convTime = 
+        boxm2_ocl_camera_converter::convert_persp_to_generic( device,
+                                                              queue,
+                                                              cam,
+                                                              ray_o_buff,
+                                                              ray_d_buff, 
+                                                              cl_ni,
+                                                              cl_nj ); 
+      vcl_cout<<"Camera Convert Time: "<<convTime<<" ms"<<vcl_endl;
+    }
+    else if(cam->type_name() == "vpgl_generic_camera") {
+      vis_order = scene->get_vis_blocks((vpgl_generic_camera<double>*)  cam.ptr());
+      
+      //set the ray images, and write to buffer
+      boxm2_ocl_util::set_generic_camera(cam, ray_origins, ray_directions);
+      ray_o_buff->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
+      ray_d_buff->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
+    }
     
     // Output Array
     float output_arr[100];
@@ -41,7 +73,7 @@ float render_expected_image( boxm2_scene_sptr & scene,
     vcl_size_t gThreads[] = {cl_ni,cl_nj};
 
     // set arguments
-    vcl_vector<boxm2_block_id> vis_order = scene->get_vis_blocks((vpgl_perspective_camera<double>*)  cam.ptr());
+    //vcl_vector<boxm2_block_id> vis_order = scene->get_vis_blocks((vpgl_generic_camera<double>*)  cam.ptr());
     vcl_vector<boxm2_block_id>::iterator id;
     for (id = vis_order.begin(); id != vis_order.end(); ++id)
     {
@@ -62,7 +94,8 @@ float render_expected_image( boxm2_scene_sptr & scene,
         kern->set_arg( blk );
         kern->set_arg( alpha );
         kern->set_arg( mog );
-        kern->set_arg( persp_cam.ptr() );
+        kern->set_arg( ray_o_buff.ptr() );
+        kern->set_arg( ray_d_buff.ptr() );
         kern->set_arg( exp_image.ptr() );
         kern->set_arg( exp_img_dim.ptr());
         kern->set_arg( cl_output.ptr() );
@@ -82,6 +115,10 @@ float render_expected_image( boxm2_scene_sptr & scene,
         //clear render kernel args so it can reset em on next execution
         kern->clear_args();
     }
+
+    //clean up cam
+    delete[] ray_origins; 
+    delete[] ray_directions;
 
     vcl_cout<<"Gpu time "<<gpu_time<<" transfer time "<<transfer_time<<vcl_endl;
     return (gpu_time + transfer_time); 
