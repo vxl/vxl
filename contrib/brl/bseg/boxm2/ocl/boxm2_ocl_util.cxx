@@ -1,5 +1,6 @@
 #include "boxm2_ocl_util.h"
-
+//:
+// \file
 #include <vgl/vgl_point_3d.h>
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_random.h>
@@ -85,29 +86,26 @@ void boxm2_ocl_util::set_persp_camera(vpgl_perspective_camera<double> * pcam, cl
 void boxm2_ocl_util::set_generic_camera(vpgl_camera_double_sptr& cam, cl_float* ray_origins, cl_float* ray_directions)
 {
   if (vpgl_generic_camera<double>* gcam =
-        dynamic_cast<vpgl_generic_camera<double>* >(cam.ptr()))
+      dynamic_cast<vpgl_generic_camera<double>* >(cam.ptr()))
   {
     //iterate through each ray and record origin/direction
-    int count = 0; 
-    for(int v=0; v<gcam->rows(); ++v) {
-      for(int u=0; u<gcam->cols(); ++u) {
-
+    int count = 0;
+    for (unsigned int v=0; v<gcam->rows(); ++v) {
+      for (unsigned int u=0; u<gcam->cols(); ++u, ++count) {
         //: the ray corresponding to a given pixel
         vgl_ray_3d<double> ray = gcam->ray(u, v);
-        
-        //origin  
-        ray_origins[4*count ] = ray.origin().x(); 
+
+        //origin
+        ray_origins[4*count  ] = ray.origin().x();
         ray_origins[4*count+1] = ray.origin().y();
-        ray_origins[4*count+2] = ray.origin().z(); 
-        ray_origins[4*count+3] = 1.0f; 
-        
+        ray_origins[4*count+2] = ray.origin().z();
+        ray_origins[4*count+3] = 1.0f;
+
         //direction
-        ray_directions[4*count ]  = ray.direction().x(); 
+        ray_directions[4*count  ] = ray.direction().x();
         ray_directions[4*count+1] = ray.direction().y();
-        ray_directions[4*count+2] = ray.direction().z(); 
-        ray_directions[4*count+3] = 0.0f;  
-       
-        ++count;
+        ray_directions[4*count+2] = ray.direction().z();
+        ray_directions[4*count+3] = 0.0f;
       }
     }
   }
@@ -147,6 +145,7 @@ vil_image_view_base_sptr boxm2_ocl_util::prepare_input_image(vcl_string filename
   vil_image_view_base_sptr loaded_image = vil_load(filename.c_str());
   return boxm2_ocl_util::prepare_input_image(loaded_image);
 }
+
 // private helper method prepares an input image to be processed by update
 vil_image_view_base_sptr boxm2_ocl_util::prepare_input_image(vil_image_view_base_sptr loaded_image)
 {
@@ -181,7 +180,7 @@ vil_image_view_base_sptr boxm2_ocl_util::prepare_input_image(vil_image_view_base
         vil_convert_stretch_range_limited(*img_byte, *floatimg,(unsigned short)28000,(unsigned short)33000,  0.0f, 1.0f); // hardcoded to be fixed.
         //vil_convert_stretch_range(*img_byte, *floatimg,  0.0f, 1.0f); // hardcoded to be fixed.
     else {
-        vcl_cerr << "Failed to load image "  << '\n';
+        vcl_cerr << "Failed to load image\n";
         return 0;
     }
     vil_image_view_base_sptr toReturn(floatimg);
@@ -189,9 +188,10 @@ vil_image_view_base_sptr boxm2_ocl_util::prepare_input_image(vil_image_view_base
   }
 
   //otherwise it's messed up, return a null pointer
-  vcl_cerr<<"Failed to recognize input image type " << '\n';
+  vcl_cerr<<"Failed to recognize input image type\n";
   return 0;
 }
+
 void
 boxm2_ocl_util::load_perspective_camera(vcl_string filename, vpgl_perspective_camera<double> & pcam)
 {
@@ -244,5 +244,4 @@ void boxm2_ocl_util::get_render_transfer_function(vcl_vector<vcl_string> imgfile
     tf[i]=sum;
   }
 }
-
 
