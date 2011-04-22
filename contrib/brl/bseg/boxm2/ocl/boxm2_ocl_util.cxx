@@ -82,6 +82,41 @@ void boxm2_ocl_util::set_persp_camera(vpgl_perspective_camera<double> * pcam, cl
   persp_cam[cnt++]=(cl_float)cam_center.z();
 }
 
+void boxm2_ocl_util::set_generic_camera(vpgl_camera_double_sptr& cam, cl_float* ray_origins, cl_float* ray_directions)
+{
+  if (vpgl_generic_camera<double>* gcam =
+        dynamic_cast<vpgl_generic_camera<double>* >(cam.ptr()))
+  {
+    //iterate through each ray and record origin/direction
+    int count = 0; 
+    for(int v=0; v<gcam->rows(); ++v) {
+      for(int u=0; u<gcam->cols(); ++u) {
+
+        //: the ray corresponding to a given pixel
+        vgl_ray_3d<double> ray = gcam->ray(u, v);
+        
+        //origin  
+        ray_origins[4*count ] = ray.origin().x(); 
+        ray_origins[4*count+1] = ray.origin().y();
+        ray_origins[4*count+2] = ray.origin().z(); 
+        ray_origins[4*count+3] = 1.0f; 
+        
+        //direction
+        ray_directions[4*count ]  = ray.direction().x(); 
+        ray_directions[4*count+1] = ray.direction().y();
+        ray_directions[4*count+2] = ray.direction().z(); 
+        ray_directions[4*count+3] = 0.0f;  
+       
+        ++count;
+      }
+    }
+  }
+  else {
+    vcl_cerr << "Error set_generic_camera() : unsupported camera type\n";
+  }
+}
+
+
 // fills in a 256 char array with number of BITS for each value (255 = 8, 254 = 7 etc)
 void boxm2_ocl_util::set_bit_lookup(cl_uchar* lookup)
 {

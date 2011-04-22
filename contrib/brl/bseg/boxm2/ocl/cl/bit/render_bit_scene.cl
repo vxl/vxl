@@ -2,13 +2,13 @@
  #pragma OPENCL EXTENSION cl_khr_gl_sharing : enable
 #endif
 
-
 #ifdef MOG_TYPE_16 
     #define MOG_TYPE int4
 #endif
 #ifdef MOG_TYPE_8 
     #define MOG_TYPE int2
 #endif
+
 #ifdef RENDER
 //need to define a struct of type AuxArgs with auxiliary arguments
 // to supplement cast ray args
@@ -30,7 +30,9 @@ render_bit_scene( __constant  RenderSceneInfo    * linfo,
                   __global    int4               * tree_array,
                   __global    float              * alpha_array,
                   __global    MOG_TYPE           * mixture_array,
-                  __global    float16            * camera,        // camera orign and SVD of inverse of camera matrix
+                  __global    float4             * ray_origins,
+                  __global    float4             * ray_directions,
+                  //__global    float16            * camera,        // camera orign and SVD of inverse of camera matrix
                   __global    float              * exp_image,      // input image and store vis_inf and pre_inf
                   __global    uint4              * exp_image_dims,
                   __global    float              * output,
@@ -54,19 +56,23 @@ render_bit_scene( __constant  RenderSceneInfo    * linfo,
   if (i>=(*exp_image_dims).z || j>=(*exp_image_dims).w) 
     return;
 
+  //Store image index (may save a register).  Also initialize VIS and expected_int
+  imIndex[llid] = j*get_global_size(0)+i;
+
   //----------------------------------------------------------------------------
   // Calculate ray origin, and direction
   // (make sure ray direction is never axis aligned)
   //----------------------------------------------------------------------------
+  float4 ray_o = ray_origins[ imIndex[llid] ]; 
+  float4 ray_d = ray_directions[ imIndex[llid] ]; 
   float ray_ox, ray_oy, ray_oz, ray_dx, ray_dy, ray_dz;
-  calc_scene_ray(linfo, camera, i, j, &ray_ox, &ray_oy, &ray_oz, &ray_dx, &ray_dy, &ray_dz);  
+  //calc_scene_ray(linfo, camera, i, j, &ray_ox, &ray_oy, &ray_oz, &ray_dx, &ray_dy, &ray_dz);  
+  calc_scene_ray_generic_cam(linfo, ray_o, ray_d, &ray_ox, &ray_oy, &ray_oz, &ray_dx, &ray_dy, &ray_dz);  
 
   //----------------------------------------------------------------------------
   // we know i,j map to a point on the image, have calculated ray
   // BEGIN RAY TRACE
   //----------------------------------------------------------------------------
-  //Store image index (may save a register).  Also initialize VIS and expected_int
-  imIndex[llid] = j*get_global_size(0)+i;
   //uint  eint    = as_uint(exp_image[imIndex[llid]]);
   //uchar echar   = convert_uchar(eint);
   //float expint  = convert_float(echar)/255.0f;
@@ -197,7 +203,9 @@ change_detection_bit_scene( __constant  RenderSceneInfo    * linfo,
                             __global    int4               * tree_array,
                             __global    float              * alpha_array,
                             __global    uchar8             * mixture_array,
-                            __global    float16            * camera,        // camera orign and SVD of inverse of camera matrix
+                            __global    float4             * ray_origins,
+                            __global    float4             * ray_directions,
+                            //          __global    float16            * camera,        // camera orign and SVD of inverse of camera matrix
                             __global    float              * in_image,      // input image and store vis_inf and pre_inf
                             __global    uint               * exp_image,      // input image and store vis_inf and pre_inf
                             __global    uint               * prob_exp_image,       //input image
@@ -230,8 +238,11 @@ change_detection_bit_scene( __constant  RenderSceneInfo    * linfo,
   // Calculate ray origin, and direction
   // (make sure ray direction is never axis aligned)
   //----------------------------------------------------------------------------
+  float4 ray_o = ray_origins[ imIndex[llid] ]; 
+  float4 ray_d = ray_directions[ imIndex[llid] ]; 
   float ray_ox, ray_oy, ray_oz, ray_dx, ray_dy, ray_dz;
-  calc_scene_ray(linfo, camera, i, j, &ray_ox, &ray_oy, &ray_oz, &ray_dx, &ray_dy, &ray_dz);  
+  //calc_scene_ray(linfo, camera, i, j, &ray_ox, &ray_oy, &ray_oz, &ray_dx, &ray_dy, &ray_dz);  
+  calc_scene_ray_generic_cam(linfo, ray_o, ray_d, &ray_ox, &ray_oy, &ray_oz, &ray_dx, &ray_dy, &ray_dz);  
 
   //----------------------------------------------------------------------------
   // we know i,j map to a point on the image, have calculated ray

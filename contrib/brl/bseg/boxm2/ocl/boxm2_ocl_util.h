@@ -4,6 +4,7 @@
 // \file
 #include <vcl_iostream.h>
 #include <vpgl/vpgl_proj_camera.h>
+#include <vpgl/vpgl_generic_camera.h>
 #include <bocl/bocl_cl.h>
 #include <vil/vil_image_view_base.h>
 #include <vbl/vbl_array_1d.h>
@@ -14,6 +15,7 @@ class boxm2_ocl_util
     //: fills a float buffer (should be 16*3 floats) with a perspective cam to be sent
     static void set_persp_camera(vpgl_camera_double_sptr& cam, cl_float* persp_cam);
     static void set_persp_camera(vpgl_perspective_camera<double> * pcam, cl_float* persp_cam);
+    static void set_generic_camera(vpgl_camera_double_sptr& cam, cl_float* ray_origins, cl_float* ray_directions); 
 
     //: fills in a 256 char array with number of BITS for each value (255 = 8, 254 = 7 etc)
     static void set_bit_lookup(cl_uchar* lookup);
