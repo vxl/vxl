@@ -116,6 +116,7 @@ bool boxm2_cpp_render_expected_image_process(bprb_func_process& pro)
 
   normalize_intensity f;
   vil_transform2<float,float, normalize_intensity>(*vis_img,*exp_img,f);
+  
   // store scene smaprt pointer
   pro.set_output_val<vil_image_view_base_sptr>(0, exp_img);
   return true;

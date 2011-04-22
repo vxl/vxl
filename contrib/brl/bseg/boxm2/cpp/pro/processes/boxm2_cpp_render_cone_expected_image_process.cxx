@@ -106,8 +106,9 @@ bool boxm2_cpp_render_cone_expected_image_process(bprb_func_process& pro)
                                 blk,datas,cam,exp_img,vis_img,ni,nj);
   }
 
-  //normalize_intensity f;
-  //vil_transform2<float,float, normalize_intensity>(*vis_img,*exp_img,f);
+  //normalize the expected image... 
+  normalize_intensity f;
+  vil_transform2<float,float, normalize_intensity>(*vis_img,*exp_img,f);
 
   vil_save(*vis_img, "vis_img.tiff");
 
