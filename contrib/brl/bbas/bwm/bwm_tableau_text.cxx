@@ -33,3 +33,22 @@ void bwm_tableau_text::set_text(vcl_string filename)
     ypos += 15;
   }
 }
+void bwm_tableau_text::set_string(vcl_string & str)
+{
+  unsigned width = xdim_ - 2*xmarg_;
+  this->set_colour(1, 1, 1);
+  float ypos = ymarg_;
+  unsigned int spos=0, fpos;
+  while(ypos<(ydim_-ymarg_)){
+    fpos= str.find('\n',spos);
+    if(fpos >= str.size())
+      break;
+    unsigned nc = fpos-spos;
+    vcl_string s = str.substr(spos, nc);
+    add(xmarg_, ypos, s.c_str());
+    ypos += 15;
+    spos = fpos+1;
+	if(spos >= str.size())
+      break;
+  }
+}

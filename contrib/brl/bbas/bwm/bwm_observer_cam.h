@@ -225,7 +225,7 @@ class bwm_observer_cam : public bwm_observer_vgui
                              vgl_point_2d<double> img_point,
                              vgl_point_3d <double> &point);
 
-  void backproj_poly(vsol_polygon_2d_sptr poly2d,
+  bool backproj_poly(vsol_polygon_2d_sptr poly2d,
                      vsol_polygon_3d_sptr& poly3d,
                      vgl_plane_3d<double> proj_plane);
 

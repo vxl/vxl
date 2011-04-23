@@ -13,7 +13,8 @@
 #include <vgl/vgl_intersection.h>
 #include <vpgl/vpgl_generic_camera.h>
 #include <vpgl/algo/vpgl_camera_compute.h>
-#include <vil/vil_image_resource.h>
+#include <vil/vil_image_view.h>
+#include <vil/vil_new.h>
 #define DEBUG
 
 bwm_observer_generic_cam::bwm_observer_generic_cam(bgui_image_tableau_sptr img,
@@ -75,9 +76,39 @@ bool bwm_observer_generic_cam::intersect_ray_and_plane(vgl_point_2d<double> img_
                                                     vgl_point_3d<double> &world_point)
 {
   vpgl_generic_camera<double>* generic_cam = static_cast<vpgl_generic_camera<double> *> (camera_);
-  
+  double ni = generic_cam->cols(), nj = generic_cam->rows();
+  if(img_point.x()<0.0 ||img_point.y()<0.0||
+     img_point.x()>=ni||img_point.y()>=nj)
+    return false;
   vgl_ray_3d<double> ray = generic_cam->ray(img_point.x(), img_point.y());
   return vgl_intersection(ray, plane, world_point);
 }
 
 
+vil_image_resource_sptr 
+bwm_observer_generic_cam::ray_image(int component) const
+{
+  bool orgt = (component == 0);
+  bool dirt = (component == 1);
+  vpgl_generic_camera<double>* gcam = 
+    static_cast<vpgl_generic_camera<double> *> (camera_);
+  if(!gcam) return 0;
+  int nc = gcam->cols(), nr = gcam->rows();
+  vbl_array_2d<vgl_ray_3d<double> >& rays = gcam->rays(0);
+  vil_image_view<float> view(nc, nr, 3);
+  for(int r = 0; r<nr; ++r)
+    for(int c = 0; c<nc; ++c){
+      if(orgt){
+        vgl_point_3d<double> org = rays[r][c].origin();
+        view(c,r,0) = static_cast<float>(org.x());
+        view(c,r,1) = static_cast<float>(org.y());
+        view(c,r,2) = static_cast<float>(org.z());
+      }else if(dirt){
+         vgl_vector_3d<double> dir = rays[r][c].direction();
+         view(c,r,0) = static_cast<float>(dir.x());
+         view(c,r,1) = static_cast<float>(dir.y());
+         view(c,r,2) = static_cast<float>(dir.z());
+      }else return 0;
+    }
+  return vil_new_image_resource_of_view(view);
+}

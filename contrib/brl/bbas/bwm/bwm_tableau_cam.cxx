@@ -49,6 +49,11 @@ void bwm_tableau_cam::create_polygon_mesh()
   }
   vsol_polygon_3d_sptr poly3d;
   my_observer_->backproj_poly(poly2d, poly3d);
+  if(!poly3d){
+	  vcl_cout << "in bwm_tableau_cam::create_polygon_mesh -"
+		  << " backprojection failed\n";
+	  return;
+  }
   bwm_observable_mesh_sptr my_polygon = new bwm_observable_mesh(bwm_observable_mesh::BWM_MESH_FEATURE);
   bwm_world::instance()->add(my_polygon);
   bwm_observer_mgr::instance()->attach(my_polygon);
@@ -350,10 +355,12 @@ void bwm_tableau_cam::create_terrain()
 
 void bwm_tableau_cam::help_pop()
 {
-  bwm_tableau_text* text = new bwm_tableau_text(500, 500);
+  bwm_tableau_text* text_tab = new bwm_tableau_text(500, 500);
 
-  text->set_text("C:\\lems\\lemsvxlsrc\\lemsvxlsrc\\contrib\\bwm\\doc\\doc\\HELP_cam.txt");
-  vgui_tableau_sptr v = vgui_viewer2D_tableau_new(text);
+  //  text->set_text("C:\\lems\\lemsvxlsrc\\lemsvxlsrc\\contrib\\bwm\\doc\\doc\\HELP_cam.txt");
+  vcl_string h("SHIFT p = create 3-d polygon\nSHIFT t = triangulate_mesh\nSHIFT m = move object by vertex\nSHIFT e = extrude face\nSHIFT s = save a selected 3-d polygon\nSHIFT h = key help documentation\n");
+  text_tab->set_string(h);
+  vgui_tableau_sptr v = vgui_viewer2D_tableau_new(text_tab);
   vgui_tableau_sptr s = vgui_shell_tableau_new(v);
   vgui_dialog popup("CAMERA TABLEAU HELP");
   popup.inline_tableau(s, 550, 550);
@@ -384,7 +391,8 @@ bool bwm_tableau_cam::handle(const vgui_event& e)
     this->save();
     return true;
   }
-  else if ( e.key == '-' && e.modifier==vgui_SHIFT && e.type==vgui_KEY_PRESS){
+#if 0 //flakey behavior --needs work
+  else if ( e.key == 'z' && e.modifier==vgui_SHIFT && e.type==vgui_KEY_PRESS){
     this->deselect_all();
     return true;
   }
@@ -392,11 +400,12 @@ bool bwm_tableau_cam::handle(const vgui_event& e)
     this->clear_all();
     return true;
   }
+#endif
   else if ( e.key == 'h' && e.modifier==vgui_SHIFT && e.type==vgui_KEY_PRESS){
     this->help_pop();
     return true;
   }
-  return bwm_tableau_img::handle(e);
+ return bwm_tableau_img::handle(e);
 }
 
 // Private Methods

@@ -4,6 +4,7 @@
 
 #include "bwm_tableau_img.h"
 #include "bwm_tableau_rat_cam.h"
+#include "bwm_tableau_generic_cam.h"
 #include "bwm_tableau_video.h"
 #include "bwm_command_macros.h"
 #include "bwm_tableau_mgr.h"
@@ -179,6 +180,11 @@ void bwm_popup_menu::get_menu(vgui_menu &menu)
   {
     // 3D Objects menu
     bwm_tableau_cam* cam_tab = static_cast<bwm_tableau_cam* > (tab_.as_pointer());
+    //might be a generic camera tableau
+    bwm_tableau_generic_cam* gen_tab = 0;
+    if(cam_tab->type_name()=="bwm_tableau_generic_cam")
+      gen_tab = static_cast<bwm_tableau_generic_cam* > (tab_.as_pointer());
+
     vgui_menu mesh_submenu;
     vcl_string on = "[x] ", off = "[ ] ";
     mesh_submenu.add( ((cam_tab->show_vertices_)?on:off)+"show vertices",
@@ -302,6 +308,10 @@ void bwm_popup_menu::get_menu(vgui_menu &menu)
 
     menu.add( "Set as Master", new vgui_command_simple<bwm_tableau_cam>(cam_tab,&bwm_tableau_cam::set_master));
 
+    if(gen_tab){
+      menu.separator();
+      menu.add( "Ray image", new vgui_command_simple<bwm_tableau_generic_cam>(gen_tab,&bwm_tableau_generic_cam::ray_image));
+    }
     reg_submenu.add( "Set as EO", new vgui_command_simple<bwm_tableau_cam>(cam_tab,&bwm_tableau_cam::set_eo));
     reg_submenu.separator();
     reg_submenu.add( "Set as Other Mode", new vgui_command_simple<bwm_tableau_cam>(cam_tab,&bwm_tableau_cam::set_other_mode));

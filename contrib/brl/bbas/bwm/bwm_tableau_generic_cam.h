@@ -30,7 +30,7 @@ class bwm_tableau_generic_cam : public bwm_tableau_cam
 
   //: saves the camera with a new version number (if adjusted) and returns the path
   vcl_string save_camera();
-
+  void ray_image();
  protected:
   bwm_observer_generic_cam* my_observer_;
   vul_timer timer_; 
