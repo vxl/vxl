@@ -295,19 +295,19 @@ unsigned vil_dicom_image::nj() const
 
 enum vil_pixel_format vil_dicom_image::pixel_format() const
 {
-  return pixels_->pixel_format();
+  return pixels_ ? pixels_->pixel_format() : VIL_PIXEL_FORMAT_UNKNOWN;
 }
 
 vil_image_view_base_sptr vil_dicom_image::get_copy_view(
   unsigned x0, unsigned nx, unsigned y0, unsigned ny) const
 {
-  return pixels_->get_copy_view( x0, nx, y0, ny );
+  return pixels_ ? pixels_->get_copy_view( x0, nx, y0, ny ) : 0;
 }
 
 vil_image_view_base_sptr vil_dicom_image::get_view(
   unsigned x0, unsigned nx, unsigned y0, unsigned ny) const
 {
-  return pixels_->get_view( x0, nx, y0, ny );
+  return pixels_ ? pixels_->get_view( x0, nx, y0, ny ) : 0;
 }
 
 bool vil_dicom_image::put_view(const vil_image_view_base& view,
