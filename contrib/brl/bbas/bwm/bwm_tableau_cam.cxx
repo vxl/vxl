@@ -42,17 +42,17 @@ void bwm_tableau_cam::create_polygon_mesh()
   vsol_polygon_2d_sptr poly2d;
   set_color(1, 0, 0);
   pick_polygon(poly2d);
-  if (! poly2d){
+  if (! poly2d) {
     vcl_cerr << "In bwm_tableau_cam::create_polygon_mesh -"
              << " pick_polygon failed\n";
     return ;
   }
   vsol_polygon_3d_sptr poly3d;
   my_observer_->backproj_poly(poly2d, poly3d);
-  if(!poly3d){
-	  vcl_cout << "in bwm_tableau_cam::create_polygon_mesh -"
-		  << " backprojection failed\n";
-	  return;
+  if (!poly3d) {
+    vcl_cout << "in bwm_tableau_cam::create_polygon_mesh -"
+             << " backprojection failed\n";
+    return;
   }
   bwm_observable_mesh_sptr my_polygon = new bwm_observable_mesh(bwm_observable_mesh::BWM_MESH_FEATURE);
   bwm_world::instance()->add(my_polygon);
@@ -76,7 +76,7 @@ void bwm_tableau_cam::create_circular_polygon()
   vcl_vector< vsol_point_2d_sptr > ps_list;
   unsigned max = 10;
   pick_point_set(ps_list, max);
-  if (ps_list.size() == 0){
+  if (ps_list.size() == 0) {
     vcl_cerr << "In bwm_tableau_cam::create_circle -"
              << " pick_points failed\n";
     return ;
@@ -246,12 +246,12 @@ void bwm_tableau_cam::load_mesh()
   bwm_observable_mesh_sptr obj = new bwm_observable_mesh();
   bwm_observer_mgr::instance()->attach(obj);
   bool success = obj->load_from(file.data());
-  if(success){
+  if (success) {
     bwm_world::instance()->add(obj);
     obj->set_path(file.data());
     my_observer_->set_face_mode();
   }
-  else 
+  else
     bwm_observer_mgr::instance()->detach(obj);
 }
 
@@ -371,37 +371,37 @@ void bwm_tableau_cam::help_pop()
 bool bwm_tableau_cam::handle(const vgui_event& e)
 {
   //vcl_cout << "Key:" << e.key << " modif: " << e.modifier << vcl_endl;
-  if (e.key == 'p' && e.modifier == vgui_SHIFT && e.type == vgui_KEY_PRESS){
+  if (e.key == 'p' && e.modifier == vgui_SHIFT && e.type == vgui_KEY_PRESS) {
     create_polygon_mesh();
     return true;
   }
-  else if (e.key == 't' && e.modifier==vgui_SHIFT && e.type==vgui_KEY_PRESS){
+  else if (e.key == 't' && e.modifier==vgui_SHIFT && e.type==vgui_KEY_PRESS) {
     this->triangulate_mesh();
     return true;
   }
-  else if ( e.key == 'm' && e.modifier==vgui_SHIFT && e.type==vgui_KEY_PRESS){
+  else if ( e.key == 'm' && e.modifier==vgui_SHIFT && e.type==vgui_KEY_PRESS) {
     this->move_obj_by_vertex();
     return true;
   }
-  else if ( e.key == 'e' && e.modifier==vgui_SHIFT && e.type==vgui_KEY_PRESS){
+  else if ( e.key == 'e' && e.modifier==vgui_SHIFT && e.type==vgui_KEY_PRESS) {
     this->extrude_face();
     return true;
   }
-  else if ( e.key == 's' && e.modifier==vgui_SHIFT && e.type==vgui_KEY_PRESS){
+  else if ( e.key == 's' && e.modifier==vgui_SHIFT && e.type==vgui_KEY_PRESS) {
     this->save();
     return true;
   }
 #if 0 //flakey behavior --needs work
-  else if ( e.key == 'z' && e.modifier==vgui_SHIFT && e.type==vgui_KEY_PRESS){
+  else if ( e.key == 'z' && e.modifier==vgui_SHIFT && e.type==vgui_KEY_PRESS) {
     this->deselect_all();
     return true;
   }
-  else if ( e.key == 'a' && e.modifier==vgui_SHIFT && e.type==vgui_KEY_PRESS){
+  else if ( e.key == 'a' && e.modifier==vgui_SHIFT && e.type==vgui_KEY_PRESS) {
     this->clear_all();
     return true;
   }
 #endif
-  else if ( e.key == 'h' && e.modifier==vgui_SHIFT && e.type==vgui_KEY_PRESS){
+  else if ( e.key == 'h' && e.modifier==vgui_SHIFT && e.type==vgui_KEY_PRESS) {
     this->help_pop();
     return true;
   }

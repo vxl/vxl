@@ -338,7 +338,7 @@ void bwm_observer_cam::set_ground_plane(double x1, double y1, double x2, double 
   vgl_point_3d<double> world_point1, world_point2;
   vgl_plane_3d<double> xy_plane(0, 0, 1, 0);
 
-  if(!intersect_ray_and_plane(vgl_point_2d<double> (x1, y1), xy_plane, world_point1)||intersect_ray_and_plane(vgl_point_2d<double> (x2, y2), xy_plane, world_point2)){
+  if (!intersect_ray_and_plane(vgl_point_2d<double> (x1, y1), xy_plane, world_point1)||intersect_ray_and_plane(vgl_point_2d<double> (x2, y2), xy_plane, world_point2)) {
     vcl_cout << "bwm_observer_cam::set_ground_plane(.) -"
              << " intersect ray and plane failed\n";
     return;
@@ -708,7 +708,7 @@ bool bwm_observer_cam::find_intersection_points(vgl_point_2d<double> const img_p
   vgl_plane_3d<double> poly_plane = poly3d->plane();
 
   vgl_point_3d<double> p1,p2;
-  if(!intersect_ray_and_plane(img_point1, poly_plane, p1)||
+  if (!intersect_ray_and_plane(img_point1, poly_plane, p1)||
      !intersect_ray_and_plane(img_point2, poly_plane, p2))
     return false;
   ;
@@ -903,7 +903,7 @@ bool bwm_observer_cam::find_intersection_point(vgl_point_2d<double> img_point,
   vgl_plane_3d<double> poly_plane = poly3d->plane(); //find_plane(poly3d);
   vgl_point_3d<double> p3d_homg;
 
-  if (!intersect_ray_and_plane(img_point,poly_plane,p3d_homg)){
+  if (!intersect_ray_and_plane(img_point,poly_plane,p3d_homg)) {
     vcl_cout << "in bwm_observer_cam::find_intersection_point(.) -"
              << " intersect ray and plane failed\n";
     return false;
@@ -1220,11 +1220,10 @@ bool bwm_observer_cam::backproj_poly(vsol_polygon_2d_sptr poly2d,
     vsol_point_2d_sptr p = poly2d->vertex(i);
     vgl_point_2d<double> image_point(p->x(), p->y());
 
-
-	if(!this->intersect_ray_and_plane(image_point,proj_plane,world_point)){
-		vcl_cout << "Intersection failed in backproj_poly \n";
-		return false;
-	}
+    if (!this->intersect_ray_and_plane(image_point,proj_plane,world_point)) {
+      vcl_cout << "Intersection failed in backproj_poly\n";
+      return false;
+    }
     double x = world_point.x();
     double y = world_point.y();
     double z = world_point.z();
@@ -1265,7 +1264,7 @@ bool bwm_observer_cam::intersect_ray_and_box(vgl_box_3d<double> box,
 
   for (unsigned i=0; i<planes.size(); i++) {
     vgl_point_3d<double> p;
-    if(intersect_ray_and_plane(img_point,planes[i],p)){
+    if (intersect_ray_and_plane(img_point,planes[i],p)) {
     vcl_cout << "ray-plane intersection failed\n" << vcl_endl;
       return false;
     }
