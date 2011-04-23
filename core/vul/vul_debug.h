@@ -10,7 +10,8 @@
 //: Dump a core file.
 // \param filename can have up to one "%d" option, which will be given a different index number
 // on each core dump.
-void vul_debug_core_dump(const char * filename);
+// \returns true on success, false when coredump could not be taken
+bool vul_debug_core_dump(const char * filename);
 
 
 //: Force a core dump whilst inside a Structured Exception Handler in a windows program.
@@ -28,7 +29,8 @@ void vul_debug_core_dump(const char * filename);
 // \endverbatim
 // \param filename can have up to one "%d" option, which will be given a different index number
 // on each core dump.
-void vul_debug_core_dump_in_windows_se(const char * filename,
+// \returns true on success, false when coredump could not be taken
+bool vul_debug_core_dump_in_windows_se(const char * filename,
                                        void* pep);
 #include <vcl_config_compiler.h>
 

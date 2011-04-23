@@ -32,7 +32,7 @@ static void test_debug()
     vcl_string long_filename = vul_sprintf("%s.%d", base_filename, pid);
     vpl_unlink(long_filename.c_str());
 
-    vul_debug_core_dump(filetemplate);
+    if (!vul_debug_core_dump(filetemplate)) { vcl_cout << "Warning: no coredump could be taken\n"; return; }
 
     TEST("Core dump file exists", vul_file_exists(base_filename) || vul_file_exists(long_filename), true);
     TEST("Core dump file is sensible size", vul_file_size(base_filename)+vul_file_size(long_filename) > 100, true);

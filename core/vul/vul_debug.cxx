@@ -35,7 +35,7 @@
 #include <vcl_cstdio.h>
 #pragma comment (lib, "dbghelp")
 
-static void vul_debug_core_dump_in_windows_seh(const char * filename,
+static bool vul_debug_core_dump_in_windows_seh(const char * filename,
                                                EXCEPTION_POINTERS* pep)
 {
   static char buffer[2048];
@@ -49,7 +49,7 @@ static void vul_debug_core_dump_in_windows_seh(const char * filename,
   if ( ( hFile == NULL ) || ( hFile == INVALID_HANDLE_VALUE ) )
   {
     vcl_cerr << "WARNING: vul_debug_core_dump: Unable to create core dump file: " << filename << vcl_endl;
-    return;
+    return false;
   }
 
   MINIDUMP_EXCEPTION_INFORMATION mdei;
@@ -62,12 +62,13 @@ static void vul_debug_core_dump_in_windows_seh(const char * filename,
     vcl_cerr << "WARNING: vul_debug_core_dump: Unable to dump core: " << filename << vcl_endl;
 
   CloseHandle( hFile );
+  return true;
 }
 
-void vul_debug_core_dump_in_windows_seh(const char * filename,
+bool vul_debug_core_dump_in_windows_seh(const char * filename,
                                         void* pep)
 {
-  vul_debug_core_dump_in_windows_seh(filename, (EXCEPTION_POINTERS*)pep);
+  return vul_debug_core_dump_in_windows_seh(filename, (EXCEPTION_POINTERS*)pep);
 }
 
 // Default builds don't set the correct compiler flags
@@ -75,7 +76,7 @@ void vul_debug_core_dump_in_windows_seh(const char * filename,
 #pragma warning (disable: 4535)
 
 
-void vul_debug_core_dump(const char * filename)
+bool vul_debug_core_dump(const char * filename)
 {
   _se_translator_function current = _set_se_translator(0);
 
@@ -86,6 +87,7 @@ void vul_debug_core_dump(const char * filename)
   __except(vul_debug_core_dump_in_windows_seh(filename, GetExceptionInformation()),1)
   {}
   _set_se_translator(current);
+  return true;
 }
 
 #if VCL_HAS_EXCEPTIONS
@@ -135,14 +137,16 @@ void vul_debug_set_coredump_and_throw_on_windows_se(const char * filename)
 
 # else //VXL_HAS_DBGHELP_H
 
-void vul_debug_core_dump_in_windows_seh(const char *, void*)
+bool vul_debug_core_dump_in_windows_seh(const char *, void*)
 {
   vcl_cerr << "WARNING: vul_debug_core_dump_in_windows_seh: Unable to core dump\n";
+  return false;
 }
 
-void vul_debug_core_dump(const char *)
+bool vul_debug_core_dump(const char *)
 {
   vcl_cerr << "WARNING: vul_debug_core_dump: Unable to core dump\n";
+  return false;
 }
 
 //: Windows structured exception code.
@@ -181,20 +185,21 @@ void vul_debug_set_coredump_and_throw_on_windows_se(const char * )
 #endif
 #include <vul/vul_sprintf.h>
 
-void vul_debug_core_dump(const char * filename)
+bool vul_debug_core_dump(const char * filename)
 {
   static int count = 0;
 #ifdef VXL_UNISTD_HAS_GETPID
   vcl_string syscall = "gcore -o ";
   syscall += vul_sprintf(filename, count++);
   syscall += vul_sprintf(" %d", getpid());
-  if (system(syscall.c_str())==0) return;
+  if (system(syscall.c_str())==0) return true;
   syscall = "gcore -s -c ";
   syscall += filename;
   syscall += vul_sprintf(" %d", getpid());
-  if (system(syscall.c_str())==0) return;
+  if (system(syscall.c_str())==0) return true;
 #endif
   vcl_cerr << "WARNING: vul_debug_core_dump: Unable to core dump\n";
+  return false;
 }
 // For a more reliable way of dumping core try forking and sending a SIGSTOP to the child.
 // see http://kasperd.net/~kasperd/comp.os.linux.development.faq
