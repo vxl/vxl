@@ -18,9 +18,10 @@ test_gevd_noise()
 {
   const int size=100000;
   vnl_sample_reseed();
-  float data[size];
+  float* data = new float[size];
   for (int i=0; i<size; ++i) data[i]=(float)vnl_sample_normal(.5,.1);
-  gevd_noise noise_estim(data,size);
+  gevd_noise noise_estim(data,size); // default # bins (200)
+  delete[] data; // "data" should not be needed after constructor is called!
   float sensor_noise, texture_noise;
   bool st = noise_estim.EstimateSensorTexture(sensor_noise, texture_noise);
   TEST("gevd_noise::EstimateSensorTexture()", st, true);
