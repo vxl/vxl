@@ -162,12 +162,6 @@ SOURCE=.\test_algo_histogram_equalise.cxx
 SOURCE=.\test_algo_distance_transform.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\test_algo_trace_4con_boundary.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\test_algo_trace_8con_boundary.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\test_algo_blob.cxx
 # End Source File
 # Begin Source File

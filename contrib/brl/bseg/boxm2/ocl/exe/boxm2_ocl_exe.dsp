@@ -93,37 +93,10 @@ LIB32=link.exe -lib
 # Begin Group "Source Files"
 # PROP Default_Filter "cxx"
 # Begin Source File
-SOURCE=.\boxm2_update_exe.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\boxm2_render_expected_exe.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\boxm2_render_view.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\boxm2_render_hemisphere.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\boxm2_change_detection_view.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\boxm2_export_scene.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\boxm2_update_rgb_exe.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\boxm2_refine_exe.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\boxm2_update_trajectory.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\boxm2_export_trajectory.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\boxm2_batch_update_view.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\boxm2_ocl_render_view.cxx
@@ -131,4 +104,3 @@ SOURCE=.\boxm2_ocl_render_view.cxx
 # End Group
 # End Target
 # End Project
-# Begin Source File

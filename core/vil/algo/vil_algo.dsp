@@ -294,12 +294,6 @@ SOURCE=.\vil_distance_transform.cxx
 SOURCE=.\vil_blob.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\vil_trace_4con_boundary.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\vil_trace_8con_boundary.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\vil_corners.cxx
 # End Source File
 # Begin Source File
@@ -439,12 +433,6 @@ SOURCE=.\vil_distance_transform.h
 # End Source File
 # Begin Source File
 SOURCE=.\vil_blob.h
-# End Source File
-# Begin Source File
-SOURCE=.\vil_trace_4con_boundary.h
-# End Source File
-# Begin Source File
-SOURCE=.\vil_trace_8con_boundary.h
 # End Source File
 # Begin Source File
 SOURCE=.\vil_corners.h

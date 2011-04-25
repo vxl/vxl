@@ -111,6 +111,9 @@ SOURCE=.\bvpl_pca_error_scenes.cxx
 SOURCE=.\bvpl_taylor_scenes_map.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\bvpl_global_taylor.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/boxm_block+boct_tree+short.bvpl_octree_sample+bsta_num_obs+bsta_gauss_f1----.cxx
 # End Source File
 # Begin Source File
@@ -217,6 +220,12 @@ SOURCE=.\bvpl_global_pca.h
 # End Source File
 # Begin Source File
 SOURCE=.\bvpl_global_pca.txx
+# End Source File
+# Begin Source File
+SOURCE=.\bvpl_global_taylor.h
+# End Source File
+# Begin Source File
+SOURCE=.\bvpl_block_vector_operator.h
 # End Source File
 # End Group
 # End Target

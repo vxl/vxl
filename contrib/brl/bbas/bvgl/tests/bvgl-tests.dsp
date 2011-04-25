@@ -248,6 +248,9 @@ SOURCE=.\test_include.cxx
 # Begin Source File
 SOURCE=.\test_bvgl_changes.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\test_bvgl_volume_of_intersection.cxx
+# End Source File
 # End Group
 # End Target
 # End Project

@@ -105,6 +105,9 @@ SOURCE=.\bsta_int_histogram_1d.cxx
 SOURCE=.\bsta_int_histogram_2d.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\bsta_histogram.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/bsta_histogram+double-.cxx
 # End Source File
 # Begin Source File
@@ -217,6 +220,9 @@ SOURCE=.\Templates/bsta_gaussian_indep+double.4-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/bsta_gaussian_full+double.2-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/bsta_histogram+char-.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"

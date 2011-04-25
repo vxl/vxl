@@ -170,6 +170,12 @@ SOURCE=.\Templates/vpgl_rational_camera+float-.cxx
 # Begin Source File
 SOURCE=.\Templates/vsl_binary_loader+vpgl_proj_camera+float--.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\Templates/vpgl_segmented_rolling_shutter_camera+double-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vpgl_generic_camera+double-.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
@@ -262,6 +268,21 @@ SOURCE=.\vpgl_local_rational_camera.txx
 # End Source File
 # Begin Source File
 SOURCE=.\vpgl_camera_sptr.h
+# End Source File
+# Begin Source File
+SOURCE=.\vpgl_rolling_shutter_camera.h
+# End Source File
+# Begin Source File
+SOURCE=.\vpgl_segmented_rolling_shutter_camera.h
+# End Source File
+# Begin Source File
+SOURCE=.\vpgl_generic_camera.txx
+# End Source File
+# Begin Source File
+SOURCE=.\vpgl_generic_camera.h
+# End Source File
+# Begin Source File
+SOURCE=.\vpgl_segmented_rolling_shutter_camera.txx
 # End Source File
 # End Group
 # End Target

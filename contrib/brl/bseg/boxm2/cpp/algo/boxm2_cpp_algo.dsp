@@ -99,7 +99,7 @@ SOURCE=.\boxm2_mog3_grey_processor.cxx
 SOURCE=.\boxm2_refine_block_function.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\boxm2_render_exp_image_functor.cxx
+SOURCE=.\boxm2_render_functions.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
@@ -124,6 +124,15 @@ SOURCE=.\boxm2_update_image_functor.h
 # End Source File
 # Begin Source File
 SOURCE=.\boxm2_change_detection_functor.h
+# End Source File
+# Begin Source File
+SOURCE=.\boxm2_render_cone_functor.h
+# End Source File
+# Begin Source File
+SOURCE=.\boxm2_cast_cone_ray_function.h
+# End Source File
+# Begin Source File
+SOURCE=.\boxm2_render_functions.h
 # End Source File
 # End Group
 # End Target

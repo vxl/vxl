@@ -95,28 +95,22 @@ LIB32=link.exe -lib
 # Begin Group "Source Files"
 # PROP Default_Filter "cxx"
 # Begin Source File
-SOURCE=.\boxm2_render_tableau.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\boxm2_cam_tableau.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\boxm2_change_detection_tableau.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\boxm2_trajectory.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\boxm2_batch_update_tableau.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\boxm2_render_rgb_tableau.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\boxm2_view_utils.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\boxm2_ocl_render_tableau.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vbl_smart_ptr+boxm2_trajectory-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/brdb_value_t+boxm2_trajectory_sptr-.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
@@ -125,22 +119,10 @@ SOURCE=.\boxm2_ocl_render_tableau.cxx
 SOURCE=.\boxm2_include_glew.h
 # End Source File
 # Begin Source File
-SOURCE=.\boxm2_render_tableau.h
-# End Source File
-# Begin Source File
 SOURCE=.\boxm2_cam_tableau.h
 # End Source File
 # Begin Source File
-SOURCE=.\boxm2_change_detection_tableau.h
-# End Source File
-# Begin Source File
 SOURCE=.\boxm2_trajectory.h
-# End Source File
-# Begin Source File
-SOURCE=.\boxm2_batch_update_tableau.h
-# End Source File
-# Begin Source File
-SOURCE=.\boxm2_render_rgb_tableau.h
 # End Source File
 # Begin Source File
 SOURCE=.\boxm2_view_utils.h

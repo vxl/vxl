@@ -176,12 +176,6 @@ SOURCE=.\boxm2_data.txx
 SOURCE=.\boxm2_data_traits.h
 # End Source File
 # Begin Source File
-SOURCE=.\boxm2_process.h
-# End Source File
-# Begin Source File
-SOURCE=.\boxm2_processor.h
-# End Source File
-# Begin Source File
 SOURCE=.\boxm2_data_base.h
 # End Source File
 # Begin Source File

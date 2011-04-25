@@ -98,9 +98,6 @@ LIB32=link.exe -lib
 SOURCE=.\boxm2_opencl_cache.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\boxm2_opencl_processor.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\boxm2_ocl_util.cxx
 # End Source File
 # Begin Source File
@@ -117,9 +114,6 @@ SOURCE=.\Templates/brdb_value_t+boxm2_opencl_cache_sptr-.cxx
 # PROP Default_Filter "h;txx"
 # Begin Source File
 SOURCE=.\boxm2_opencl_cache.h
-# End Source File
-# Begin Source File
-SOURCE=.\boxm2_opencl_processor.h
 # End Source File
 # Begin Source File
 SOURCE=.\boxm2_ocl_util.h

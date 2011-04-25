@@ -126,6 +126,12 @@ SOURCE=.\test_essential_matrix.cxx
 SOURCE=.\test_local_rational_camera.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\test_segmented_rolling_shutter_camera.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_generic_camera.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\test_include.cxx
 # End Source File
 # Begin Source File

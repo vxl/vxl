@@ -275,6 +275,9 @@ SOURCE=.\vpgl_bundle_adjust_lsqr.h
 # Begin Source File
 SOURCE=.\vpgl_bundle_rolling_shutter_adjust.h
 # End Source File
+# Begin Source File
+SOURCE=.\vpgl_em_compute_5_point.h
+# End Source File
 # End Group
 # End Target
 # End Project

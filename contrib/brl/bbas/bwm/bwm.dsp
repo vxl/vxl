@@ -3,21 +3,6 @@
 # Begin Group "Source Files"
 # PROP Default_Filter "cxx"
 # Begin Source File
-SOURCE=.\Templates/vbl_smart_ptr+bwm_command-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vbl_smart_ptr+bwm_corr-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vbl_smart_ptr+bwm_observable-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vbl_smart_ptr+bwm_observable_mesh-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vbl_smart_ptr+bwm_observable_textured_mesh-.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\bwm_corr.cxx
 # End Source File
 # Begin Source File
@@ -106,6 +91,27 @@ SOURCE=.\bwm_tableau_factory.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\bwm_observable_mesh_circular.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\bwm_observer_generic_cam.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\bwm_tableau_generic_cam.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vbl_smart_ptr+bwm_command-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vbl_smart_ptr+bwm_corr-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vbl_smart_ptr+bwm_observable-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vbl_smart_ptr+bwm_observable_mesh-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vbl_smart_ptr+bwm_observable_textured_mesh-.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
@@ -250,6 +256,12 @@ SOURCE=.\bwm_tableau_factory.h
 # End Source File
 # Begin Source File
 SOURCE=.\bwm_observable_mesh_circular.h
+# End Source File
+# Begin Source File
+SOURCE=.\bwm_observer_generic_cam.h
+# End Source File
+# Begin Source File
+SOURCE=.\bwm_tableau_generic_cam.h
 # End Source File
 # End Group
 # End Target

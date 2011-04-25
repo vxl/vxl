@@ -93,31 +93,7 @@ LIB32=link.exe -lib
 # Begin Group "Source Files"
 # PROP Default_Filter "cxx"
 # Begin Source File
-SOURCE=.\boxm2_opencl_update_process.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\boxm2_opencl_render_depth_process.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\boxm2_opencl_change_detection_process.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\boxm2_opencl_render_process.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\boxm2_opencl_refine_process.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\boxm2_opencl_render_rgb_process.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\boxm2_opencl_update_rgb_process.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\boxm2_ocl_register.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\boxm2_opencl_batch_update_process.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\processes/boxm2_ocl_render_expected_image_process.cxx
@@ -161,41 +137,17 @@ SOURCE=.\processes/boxm2_ocl_render_expected_color_process.cxx
 # Begin Source File
 SOURCE=.\processes/boxm2_ocl_render_gl_expected_color_process.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\processes/boxm2_ocl_change_detection_process.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
-# Begin Source File
-SOURCE=.\boxm2_opencl_render_depth_process.h
-# End Source File
-# Begin Source File
-SOURCE=.\boxm2_opencl_update_process.h
-# End Source File
-# Begin Source File
-SOURCE=.\boxm2_opencl_refine_process.h
-# End Source File
-# Begin Source File
-SOURCE=.\boxm2_opencl_change_detection_process.h
-# End Source File
-# Begin Source File
-SOURCE=.\boxm2_opencl_render_process.h
-# End Source File
-# Begin Source File
-SOURCE=.\boxm2_opencl_process_base.h
-# End Source File
-# Begin Source File
-SOURCE=.\boxm2_opencl_render_rgb_process.h
-# End Source File
-# Begin Source File
-SOURCE=.\boxm2_opencl_update_rgb_process.h
-# End Source File
 # Begin Source File
 SOURCE=.\boxm2_ocl_register.h
 # End Source File
 # Begin Source File
 SOURCE=.\boxm2_ocl_processes.h
-# End Source File
-# Begin Source File
-SOURCE=.\boxm2_opencl_batch_update_process.h
 # End Source File
 # End Group
 # End Target

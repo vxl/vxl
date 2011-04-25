@@ -98,6 +98,12 @@ SOURCE=.\boxm2_view_register.cxx
 # Begin Source File
 SOURCE=.\processes/boxm2_view_expected_image_process.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\processes/boxm2_view_init_trajectory_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/boxm2_view_trajectory_next_process.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"

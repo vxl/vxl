@@ -95,16 +95,7 @@ LIB32=link.exe -lib
 # Begin Group "Source Files"
 # PROP Default_Filter "cxx"
 # Begin Source File
-SOURCE=.\boxm2_cpp_processor.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\Templates/brdb_value_t+vil_image_view_base_sptr-.cxx
-# End Source File
-# End Group
-# Begin Group "Header Files"
-# PROP Default_Filter "h;txx"
-# Begin Source File
-SOURCE=.\boxm2_cpp_processor.h
 # End Source File
 # End Group
 # End Target

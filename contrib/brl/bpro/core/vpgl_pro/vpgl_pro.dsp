@@ -144,6 +144,9 @@ SOURCE=.\processes/vpgl_save_perspective_camera_vrml_process.cxx
 SOURCE=.\processes/vpgl_project_process.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\processes/vpgl_convert_to_generic_camera_process.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/brdb_value_t+vpgl_camera_double_sptr-.cxx
 # End Source File
 # End Group
