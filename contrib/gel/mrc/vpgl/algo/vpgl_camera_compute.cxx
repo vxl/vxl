@@ -1056,6 +1056,7 @@ static bool ray_tol(vpgl_local_rational_camera<double> const& rat_cam,
 // the neighbor rays are shown as X's
 // This method is used to populate higher resolution layers of the 
 // ray pyramid
+
 bool vpgl_generic_camera_compute::
 upsample_rays(vcl_vector<vgl_ray_3d<double> > const& ray_nbrs,
               vgl_ray_3d<double> const& ray,
@@ -1063,42 +1064,46 @@ upsample_rays(vcl_vector<vgl_ray_3d<double> > const& ray_nbrs,
 {
   unsigned nrays = ray_nbrs.size();
   if(nrays!=4) return false;
-  vgl_ray_3d<double> r0 = ray_nbrs[0], r1 = ray_nbrs[1];
-  vgl_ray_3d<double> r2 = ray_nbrs[2], r3 = ray_nbrs[3];
+  vgl_ray_3d<double> r00 = ray_nbrs[0], 
+                     r01 = ray_nbrs[1];
+  vgl_ray_3d<double> r10 = ray_nbrs[2], 
+                     r11 = ray_nbrs[3];
   vgl_point_3d<double> org = ray.origin();
   vgl_vector_3d<double> dir = ray.direction();
-  vgl_point_3d<double> org0 = r0.origin(), org1 = r1.origin();
-  vgl_point_3d<double> org2 = r2.origin(), org3 = r3.origin();
-  vgl_vector_3d<double> dir0 = r0.direction(), dir1 = r1.direction();
-  vgl_vector_3d<double> dir2 = r2.direction(), dir3 = r3.direction();
+  vgl_point_3d<double> org00 = r00.origin(), 
+                       org01 = r01.origin();
+  vgl_point_3d<double> org10 = r10.origin(), 
+                       org11 = r11.origin();
+  vgl_vector_3d<double> dir00 = r00.direction(), dir01 = r01.direction();
+  vgl_vector_3d<double> dir10 = r10.direction(), dir11 = r11.direction();
 
   // the first derivatives of ray components
-  vgl_vector_3d<double> dodu = 0.5*(org2-org1);
-  vgl_vector_3d<double> dodv = 0.5*(org3-org0);
-  vgl_vector_3d<double> dddu = 0.5*(dir2-dir1);
-  vgl_vector_3d<double> dddv = 0.5*(dir3-dir0);
+  //vgl_vector_3d<double> dodu = (org01-org00);
+  //vgl_vector_3d<double> dodv = (org3-org0);
+  //vgl_vector_3d<double> dddu = (dir2-dir1);
+  //vgl_vector_3d<double> dddv = (dir3-dir0);
 
   //first sub ray
   interp_rays[0] = ray;
 
   //second sub ray
-  vgl_point_3d<double>  iorg = org + 0.5*dodu;
-  vgl_vector_3d<double> idir = dir + 0.5*dddu;
+  vgl_point_3d<double>  iorg = org00+ (org01-org00)*0.5;
+  vgl_vector_3d<double> idir = dir00*0.5 + dir01*0.5;
   interp_rays[1].set(iorg, idir);
 
   //third sub ray
-  iorg = org + 0.5*dodv;
-  idir = dir + 0.5*dddv;
+  iorg = org00+ (org10-org00)*0.5;
+  idir = 0.5*dir00 + 0.5*dir10;
   interp_rays[2].set(iorg, idir);
 
   //fourth sub ray
-  iorg = org + 0.5*dodu + 0.5*dodv;
-  idir = dir + 0.5*dddu + 0.5*dddv;
+  iorg = org00+0.25*(org01-org00) + 0.25*(org10-org00)+ 0.25*(org11-org00);
+  idir = 0.25*dir00 + 0.25*dir01+ 0.25*dir10+0.25*dir11;
   interp_rays[3].set(iorg, idir);
 
   return true;
 }
-// r0 and r1 are rays spaced a unit grid distance apart (either row or col)
+// r0 and r1 are rays spaced a unit grid distane apart (either row or col)
 // r is the interpolated ray at n_grid unit distances past r1
 vgl_ray_3d<double>
 vpgl_generic_camera_compute::interp_pair(vgl_ray_3d<double> const& r0,
@@ -1139,28 +1144,30 @@ compute( vpgl_local_rational_camera<double> const& rat_cam,
   if(nj<ni)
     dim = nj;
   double lv = vcl_log(dim)/vcl_log(2.0);
-  int n_levels = static_cast<int>(lv);// round down
+  int n_levels = static_cast<int>(lv+1.0);// round up
   if(dim/vcl_pow(2.0, static_cast<double>(n_levels-1)) < 3.0) n_levels--;
-
   // contruct pyramid of ray indices
   // the row and column dimensions at each level
   vcl_vector<int> nr(n_levels,0), nc(n_levels,0);
   // the scale factor at each level (to transform back to level 0)
-  vcl_vector<double> scl(n_levels);
+  vcl_vector<double> scl(n_levels,1.0);
   vcl_vector<vbl_array_2d<vgl_ray_3d<double> > > ray_pyr(n_levels);
   ray_pyr[0].resize(nj, ni);
-  ray_pyr[0].fill(vgl_ray_3d<double>(vgl_point_3d<double>(0,0,0),
-                                     vgl_vector_3d<double>(0,0,1)));
+  ray_pyr[0].fill(vgl_ray_3d<double>(vgl_point_3d<double>(0,0,0),vgl_vector_3d<double>(0,0,1)));
   nr[0]=nj;   nc[0]=ni; scl[0]=1.0;
-  int di = ni/2, dj = nj/2;
-  int lev = 1;
-  for(; lev<n_levels&&(di>=2||dj>=2); ++lev){
-    nr[lev]=dj;   nc[lev]=di;
-    ray_pyr[lev].resize(dj, di);
-    ray_pyr[lev].fill(vgl_ray_3d<double>(vgl_point_3d<double>(0,0,0),
+  int di = vcl_ceil((float)ni/2)+1, 
+      dj = vcl_ceil((float)nj/2)+1;
+
+  for(unsigned i=1;i<n_levels;i++)
+  {
+      ray_pyr[i].resize(dj,di);
+      ray_pyr[i].fill(vgl_ray_3d<double>(vgl_point_3d<double>(0,0,0),
                                          vgl_vector_3d<double>(0,0,1)));
-    di = di/2; dj = dj/2;
-    scl[lev]=2.0*scl[lev-1];
+      nr[i]=dj;   
+      nc[i]=di;
+      scl[i]=2.0*scl[i-1];
+      di = vcl_ceil((float)di/2)+1;
+      dj = vcl_ceil((float)dj/2)+1;
   }
   // compute the ray interpolation tolerances
   double org_tol = 0.0;
@@ -1170,16 +1177,16 @@ compute( vpgl_local_rational_camera<double> const& rat_cam,
               org, low, endpt, org_tol, ang_tol))
     return false;
   bool need_interp = true;
-  lev = n_levels-1;
+  int lev = n_levels-1;
   for(;lev>=0&&need_interp; --lev){
     // set rays at current pyramid level
     for(int j =0; j<nr[lev]; j++){
       int sj = static_cast<int>(scl[lev]*j);
-      if(sj>=nj) sj = nj;
+      //if(sj>=nj) sj = nj;
       for(int i =0;i<nc[lev]; i++)
         {
           int si = static_cast<int>(scl[lev]*i);
-          if(si>=ni) si = ni;
+          //if(si>=ni) si = ni;
           vgl_point_2d<double> ip(si,sj);
           if(!vpgl_backproject::bproj_plane(&rat_cam, ip, high, org, org))
             return false;
@@ -1231,90 +1238,30 @@ compute( vpgl_local_rational_camera<double> const& rat_cam,
     vbl_array_2d<vgl_ray_3d<double> >& nlev = ray_pyr[lev-1];
     vcl_vector<vgl_ray_3d<double> > ray_nbrs(4);
     vcl_vector<vgl_ray_3d<double> > interp_rays(4);
-    for(int j = 1; j<=nrb-2; ++j)
-      for(int i = 1; i<=ncr-2; ++i){
-        ray_nbrs[0] = clev[j-1][i];
-        ray_nbrs[1] = clev[j][i-1];
-        ray_nbrs[2] = clev[j][i+1];
-        ray_nbrs[3] = clev[j+1][i];
-        if(!upsample_rays(ray_nbrs, clev[j][i], interp_rays))
-          return false;
-        nlev[2*j][2*i]    =interp_rays[0];
-        nlev[2*j][2*i+1]  =interp_rays[1];
-        nlev[2*j+1][2*i]  =interp_rays[2];
-        nlev[2*j+1][2*i+1]=interp_rays[3];
+    for(int j = 0; j<nrb; j++)
+      for(int i = 0; i<ncr; i++){
+          ray_nbrs[0] = clev[j][i];
+          ray_nbrs[1] = clev[j][i];
+          ray_nbrs[2] = clev[j][i];
+          ray_nbrs[3] = clev[j][i];
+          if(i<ncr-1) ray_nbrs[1] = clev[j][i+1];
+          if(j<nrb-1) ray_nbrs[2] = clev[j+1][i];
+          if(i<ncr-1 && j<nrb-1) ray_nbrs[3] = clev[j+1][i+1];
+          if(!upsample_rays(ray_nbrs, clev[j][i], interp_rays))
+              return false;
+          if(2*i<nlev.cols() && 2*j<nlev.rows())
+          {
+              nlev[2*j][2*i]    =interp_rays[0];
+              if(2*i<nlev.cols()-1)                      nlev[2*j][2*i+1]  =interp_rays[1];
+              if(2*j<nlev.rows()-1)                      nlev[2*j+1][2*i]  =interp_rays[2];
+              if(2*i<nlev.cols()-1 && 2*j<nlev.rows()-1) nlev[2*j+1][2*i+1]=interp_rays[3];
+          }
       }
-
-    // at this point there is a border of undefined rays
-    // all the way around the lev-1 array
-    int ncrs = 2*(ncr-2)+1; // column start of valid rays at lev-1
-    int nrbs = 2*(nrb-2)+1; // row start of valid rays at lev-1
-    ncr = nc[lev-1]; // number of columns at lev-1
-    nrb = nr[lev-1];//  number of rows at lev-1
-    // fill upper strip
-    for(int i = 2; i<=(ncrs); ++i){
-      vgl_ray_3d<double>& r0 = ray_pyr[lev-1][3][i];
-      vgl_ray_3d<double>& r1 = ray_pyr[lev-1][2][i];
-      ray_pyr[lev-1][0][i] = interp_pair(r0, r1, 2.0);
-      ray_pyr[lev-1][1][i] = interp_pair(r0, r1, 1.0);
-    }    
-    // fill lower strip
-    for(int i = 2; i<=(ncrs); ++i){
-      vgl_ray_3d<double>& r0 = ray_pyr[lev-1][nrbs-1][i];
-      vgl_ray_3d<double>& r1 = ray_pyr[lev-1][nrbs][i];
-      for(int j = nrbs+1; j<nrb; ++j)
-        ray_pyr[lev-1][j][i] = interp_pair(r0, r1, j-nrbs);
-    }    
-    // fill left strip
-    for(int j = 2; j<=(nrbs); ++j){
-      vgl_ray_3d<double>& r0 = ray_pyr[lev-1][j][3];
-      vgl_ray_3d<double>& r1 = ray_pyr[lev-1][j][2];
-      ray_pyr[lev-1][j][0] = interp_pair(r0, r1, 2.0);
-      ray_pyr[lev-1][j][1] = interp_pair(r0, r1, 1.0);
-    }    
-    // fill right strip
-    for(int j = 2; j<=(nrbs); ++j){
-      vgl_ray_3d<double>& r0 = ray_pyr[lev-1][j][ncrs-1];
-      vgl_ray_3d<double>& r1 = ray_pyr[lev-1][j][ncrs];
-      for(int i = ncrs+1; i<ncr; ++i)
-        ray_pyr[lev-1][j][i] = interp_pair(r0, r1, i-ncrs);
-    }    
-    // at this point there are 4 corners left to be filled
-    // upper left 2x2
-    vgl_ray_3d<double>& r0 = ray_pyr[lev-1][0][3];
-    vgl_ray_3d<double>& r1 = ray_pyr[lev-1][0][2];
-    ray_pyr[lev-1][0][0] = interp_pair(r0, r1, 2.0);
-    ray_pyr[lev-1][0][1] = interp_pair(r0, r1, 1.0);
-    r0 = ray_pyr[lev-1][1][3];
-    r1 = ray_pyr[lev-1][1][2];
-    ray_pyr[lev-1][1][0] = interp_pair(r0, r1, 2.0);
-    ray_pyr[lev-1][1][1] = interp_pair(r0, r1, 1.0);
-
-    //upper right corner 2 x (ncr-ncrs) block
-    for(int j = 0; j<2; ++j){
-      r0 = ray_pyr[lev-1][j][ncrs-1];
-      r1 = ray_pyr[lev-1][j][ncrs];
-      for(int i = ncrs+1; i<ncr; ++i)
-        ray_pyr[lev-1][j][i] = interp_pair(r0, r1, i-ncrs);
-    }
-    //lower left, (nbr-nbrs) x 2 block
-    for(int i = 0; i<2; ++i){
-      r0 = ray_pyr[lev-1][nrbs-1][i];
-      r1 = ray_pyr[lev-1][nrbs][i];
-      for(int j = nrbs+1; j<nrb; ++j)
-        ray_pyr[lev-1][j][i] = interp_pair(r0, r1, j-nrbs);
-    }
-    //lower right (nbr-nbrs) x (ncr-ncrs) block
-    for(int j = nrbs+1; j<nrb; ++j){
-      r0 = ray_pyr[lev-1][j][ncrs-1];
-      r1 = ray_pyr[lev-1][j][ncrs];
-      for(int i = ncrs+1; i<ncr; ++i)
-        ray_pyr[lev-1][j][i] = interp_pair(r0, r1, i-ncrs);
-    }
   }
   gen_cam = vpgl_generic_camera<double>(ray_pyr[0]);
   return true;
 }
+
 
 bool vpgl_generic_camera_compute::
 compute( vpgl_proj_camera<double> const& prj_cam, int ni, int nj,
