@@ -187,11 +187,6 @@ bool boxm2_ocl_update_process(bprb_func_process& pro)
   global_threads[0]=cl_ni;
   global_threads[1]=cl_nj;
   
-  ////: create all buffers
-  //cl_float cam_buffer[48];
-  //boxm2_ocl_util::set_persp_camera(cam, cam_buffer);
-  //bocl_mem_sptr persp_cam=new bocl_mem(device->context(), cam_buffer, 3*sizeof(cl_float16), "persp cam buffer");
-  //persp_cam->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
   //set generic cam 
   cl_float* ray_origins = new cl_float[4*cl_ni*cl_nj]; 
   cl_float* ray_directions = new cl_float[4*cl_ni*cl_nj]; 
@@ -476,6 +471,8 @@ bool boxm2_ocl_update_process(bprb_func_process& pro)
    delete [] pre_buff;  
    delete [] norm_buff; 
    delete [] input_buff;
+   delete [] ray_origins;  
+   delete [] ray_directions; 
 
   vcl_cout<<"Gpu time "<<gpu_time<<" transfer time "<<transfer_time<<vcl_endl;
   clReleaseCommandQueue(queue);
