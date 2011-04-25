@@ -10,8 +10,8 @@
 #include <bwm/bwm_menu.h>
 #include <bwm/bwm_observable.h>
 #include <bwm/bwm_observable_mesh.h>
-#include <bwm/bwm_observable_mesh_sptr.h>
 #include <bwm/bwm_observable_mesh_circular.h>
+#include <bwm/bwm_observable_mesh_sptr.h>
 #include <bwm/bwm_observable_point.h>
 #include <bwm/bwm_observable_point_sptr.h>
 #include <bwm/bwm_observable_polyline.h>
@@ -21,6 +21,7 @@
 #include <bwm/bwm_observable_textured_mesh_sptr.h>
 #include <bwm/bwm_observer.h>
 #include <bwm/bwm_observer_cam.h>
+#include <bwm/bwm_observer_generic_cam.h>
 #include <bwm/bwm_observer_img.h>
 #include <bwm/bwm_observer_mgr.h>
 #include <bwm/bwm_observer_proj_cam.h>
@@ -34,6 +35,7 @@
 #include <bwm/bwm_tableau.h>
 #include <bwm/bwm_tableau_cam.h>
 #include <bwm/bwm_tableau_factory.h>
+#include <bwm/bwm_tableau_generic_cam.h>
 #include <bwm/bwm_tableau_img.h>
 #include <bwm/bwm_tableau_mgr.h>
 #include <bwm/bwm_tableau_proj_cam.h>

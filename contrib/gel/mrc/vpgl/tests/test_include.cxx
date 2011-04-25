@@ -7,6 +7,7 @@
 #include <vpgl/vpgl_comp_rational_camera.h>
 #include <vpgl/vpgl_essential_matrix.h>
 #include <vpgl/vpgl_fundamental_matrix.h>
+#include <vpgl/vpgl_generic_camera.h>
 #include <vpgl/vpgl_lens_distortion.h>
 #include <vpgl/vpgl_local_rational_camera.h>
 #include <vpgl/vpgl_perspective_camera.h>
@@ -15,6 +16,8 @@
 #include <vpgl/vpgl_radial_distortion.h>
 #include <vpgl/vpgl_rational_camera.h>
 #include <vpgl/vpgl_reg_fundamental_matrix.h>
+#include <vpgl/vpgl_rolling_shutter_camera.h>
+#include <vpgl/vpgl_segmented_rolling_shutter_camera.h>
 
 #include <vpgl/xio/vpgl_xio_calibration_matrix.h>
 
