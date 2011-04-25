@@ -8,14 +8,51 @@
 //Default private variables to null/0
 bocl_kernel* boxm2_ocl_camera_converter::persp_to_generic_kernel = 0; 
 
-//Convert perspective cam to generic cam
-float boxm2_ocl_camera_converter::convert_persp_to_generic( bocl_device_sptr & device,
-                                cl_command_queue & queue,
-                                vpgl_camera_double_sptr & pcam,
-                                bocl_mem_sptr & ray_origins,
-                                bocl_mem_sptr & ray_directions, 
-                                unsigned cl_ni,
-                                unsigned cl_nj )
+
+//takes in an unknown camera (must be vpgl_generic or perspective) 
+// cam, it's cl_ni, nj, and creates ray image
+void boxm2_ocl_camera_converter::compute_ray_image( bocl_device_sptr & device,
+                                                     cl_command_queue & queue,
+                                                     vpgl_camera_double_sptr & cam, 
+                                                     unsigned cl_ni,
+                                                     unsigned cl_nj,
+                                                     bocl_mem_sptr & ray_origins,
+                                                     bocl_mem_sptr & ray_directions)
+{
+  if(cam->type_name() == "vpgl_perspective_camera") {
+    vcl_cout<<"Converting perspective cam to generic !!"<<vcl_endl;
+    float convTime = 
+      boxm2_ocl_camera_converter::convert_persp_to_generic( device,
+                                                            queue,
+                                                            (vpgl_perspective_camera<double>*) cam.ptr(),
+                                                            ray_origins,
+                                                            ray_directions, 
+                                                            cl_ni,
+                                                            cl_nj ); 
+    vcl_cout<<"Camera Convert Time: "<<convTime<<" ms"<<vcl_endl;
+    return; 
+  }
+  else if(cam->type_name() == "vpgl_generic_camera") {
+    //set the ray images, and write to buffer
+    boxm2_ocl_util::set_generic_camera(cam, (cl_float*) ray_origins->cpu_buffer(), (cl_float*) ray_directions->cpu_buffer());
+    ray_origins->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
+    ray_directions->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
+  }
+  else {
+    vcl_cout<<"Camera type "<<cam->type_name()<<" not supported by boxm2_ocl_camera_converter"<<vcl_endl;
+    ray_origins->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR); 
+    ray_directions->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
+  }
+}
+
+//converts persp to generic cam on gpu
+float boxm2_ocl_camera_converter::convert_persp_to_generic(bocl_device_sptr & device,
+                                                           cl_command_queue & queue,
+                                                           vpgl_perspective_camera<double>* pcam,
+                                                           bocl_mem_sptr & ray_origins,
+                                                           bocl_mem_sptr & ray_directions, 
+                                                           unsigned cl_ni,
+                                                           unsigned cl_nj)
 {
     float transfer_time=0.0f;
     float gpu_time=0.0f;

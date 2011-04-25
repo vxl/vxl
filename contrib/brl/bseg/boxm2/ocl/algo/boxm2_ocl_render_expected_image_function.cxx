@@ -27,36 +27,13 @@ float render_expected_image(  boxm2_scene_sptr & scene,
       return 0.0f; 
     }
     
-    //when you know what kind of camera it is, do block order stuff
-    vcl_vector<boxm2_block_id> vis_order;  
-
     //set generic cam and get visible block order 
     cl_float* ray_origins = new cl_float[4*cl_ni*cl_nj]; 
     cl_float* ray_directions = new cl_float[4*cl_ni*cl_nj]; 
     bocl_mem_sptr ray_o_buff = new bocl_mem(device->context(), ray_origins, cl_ni*cl_nj * sizeof(cl_float4) , "ray_origins buffer");
     bocl_mem_sptr ray_d_buff = new bocl_mem(device->context(), ray_directions,  cl_ni*cl_nj * sizeof(cl_float4), "ray_directions buffer");
-    if(cam->type_name() == "vpgl_perspective_camera") {
-      vcl_cout<<"Converting perspective cam to generic !!"<<vcl_endl;
-      vis_order = scene->get_vis_blocks((vpgl_perspective_camera<double>*)  cam.ptr());
-      float convTime = 
-        boxm2_ocl_camera_converter::convert_persp_to_generic( device,
-                                                              queue,
-                                                              cam,
-                                                              ray_o_buff,
-                                                              ray_d_buff, 
-                                                              cl_ni,
-                                                              cl_nj ); 
-      vcl_cout<<"Camera Convert Time: "<<convTime<<" ms"<<vcl_endl;
-    }
-    else if(cam->type_name() == "vpgl_generic_camera") {
-      vis_order = scene->get_vis_blocks((vpgl_generic_camera<double>*)  cam.ptr());
-      
-      //set the ray images, and write to buffer
-      boxm2_ocl_util::set_generic_camera(cam, ray_origins, ray_directions);
-      ray_o_buff->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
-      ray_d_buff->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
-    }
-    
+    boxm2_ocl_camera_converter::compute_ray_image( device, queue, cam, cl_ni, cl_nj, ray_o_buff, ray_d_buff); 
+   
     // Output Array
     float output_arr[100];
     for (int i=0; i<100; ++i) output_arr[i] = 0.0f;
@@ -73,7 +50,7 @@ float render_expected_image(  boxm2_scene_sptr & scene,
     vcl_size_t gThreads[] = {cl_ni,cl_nj};
 
     // set arguments
-    //vcl_vector<boxm2_block_id> vis_order = scene->get_vis_blocks((vpgl_generic_camera<double>*)  cam.ptr());
+    vcl_vector<boxm2_block_id> vis_order = scene->get_vis_blocks(cam);
     vcl_vector<boxm2_block_id>::iterator id;
     for (id = vis_order.begin(); id != vis_order.end(); ++id)
     {
