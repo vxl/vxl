@@ -47,6 +47,9 @@
 #include <vcl_cstdlib.h> // for rand()
 #include <bwm/bwm_site_mgr.h>
 
+
+#include <bxml/bxml_write.h>
+
 static void write_vrml_header(vcl_ofstream& str)
 {
   str << "#VRML V2.0 utf8\n"
@@ -341,6 +344,7 @@ int main(int argc, char** argv)
   vul_arg<vcl_string> site_directory("-site_dir", "Directory for the site", "");
   vul_arg<vcl_string> cam_txt_dir   ("-cam_txt_dir",      "directory to store txt cams", "");
   vul_arg<vcl_string> vrml_file     ("-vrml_file",      "vrml file", "");
+  vul_arg<vcl_string> xml_file      ("-xml_file",      "xml file", "");
   vul_arg<bool>       draw_box      ("-draw_box", "Draw Bounding Box around points within 2*(standard deviation) from the center of scene",true);
   vul_arg<bool>       filter        ("-filter_cams", "Filter camera based on Reprojection error of 3d correspondences", false);
   vul_arg<float>      filter_thresh ("-filter_thresh", "Threshold for average rms value for a given view. Units are pixels", .75);
@@ -617,6 +621,26 @@ int main(int argc, char** argv)
          vcl_abs(pts_3d[i].z()-c.z()) < 2*sigma[2] )
       bounding_box2.add(pts_3d[i]);
   }
+
+  //write bounding boxm to xml file
+  bxml_document doc;
+  bxml_element *root = new bxml_element("bwm_info_for_boxm2");
+  doc.set_root_element(root);
+  root->append_text("\n");
+
+  bxml_element* bbox_elm = new bxml_element("bbox");
+  bbox_elm->append_text("\n");
+  bbox_elm->set_attribute("minx", -3.0f*sigma[0] );
+  bbox_elm->set_attribute("miny", -3.0f*sigma[1]  );
+  bbox_elm->set_attribute("minz", -2.0f*sigma[2] );
+  bbox_elm->set_attribute("maxx", 3.0f*sigma[0] );
+  bbox_elm->set_attribute("maxy", 3.0f*sigma[1] );
+  bbox_elm->set_attribute("maxz", 4.0f*sigma[2] );
+  root->append_data(bbox_elm);
+  root->append_text("\n");
+  
+
+
   vcl_cout << "Bounding Box containing points which are 2*sigma about the scene center: " <<bounding_box2<<'\n'
            << "min_x = " << bounding_box2.min_x() << '\n'
            << "min_y = " << bounding_box2.min_y() << '\n'
@@ -639,6 +663,20 @@ int main(int argc, char** argv)
   double res=2*(cc-centre(pts_3d)).length()*cone_half_angle;
 
   vcl_cout<<"Resolution     "<<res<<vcl_endl;
+
+  //write resolution to xml
+  bxml_element* res_elm = new bxml_element("resolution");
+  res_elm->append_text("\n");
+  res_elm->set_attribute("val", res);
+  root->append_data(res_elm);
+  root->append_text("\n");
+
+  //write to disk  
+  vcl_ofstream xml_os(xml_file().c_str());
+  bxml_write(xml_os, doc);
+  xml_os.close();
+
+
   vcl_ofstream os(vrml_file().c_str());
   if (os)
   {
