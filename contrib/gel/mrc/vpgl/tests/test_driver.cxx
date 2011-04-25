@@ -10,6 +10,7 @@ DECLARE( test_camera_io );
 DECLARE( test_poly_radial_distortion );
 DECLARE( test_rational_camera );
 DECLARE( test_local_rational_camera );
+DECLARE( test_segmented_rolling_shutter_camera );
 DECLARE( test_generic_camera );
 
 void register_tests()
@@ -24,6 +25,7 @@ void register_tests()
   REGISTER( test_poly_radial_distortion );
   REGISTER( test_rational_camera );
   REGISTER( test_local_rational_camera );
+  REGISTER( test_segmented_rolling_shutter_camera );
   REGISTER( test_generic_camera );
 }
 
