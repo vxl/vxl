@@ -44,7 +44,7 @@ template <class T>
 void vpgl_segmented_rolling_shutter_camera<T>::project(const T x, const T y, const T z,T& u, T& v) 
 {
    
- for(maptype::iterator iter=cam_map_.begin();iter!=cam_map_.end();)
+ for(iterator iter=cam_map_.begin();iter!=cam_map_.end(); )
     {
         iter->second.project(x,y,z,u,v);
         ++iter;
@@ -77,7 +77,7 @@ template <class T>
 bool vpgl_segmented_rolling_shutter_camera<T>::cam_index(T v, unsigned int & index)
 {
     index=0;
-    for(maptype::iterator iter=cam_map_.begin();iter!=cam_map_.end();)
+    for(iterator iter=cam_map_.begin();iter!=cam_map_.end();)
     {
         ++iter;
         if(cam_map_.upper_bound((unsigned int)v)==iter)
