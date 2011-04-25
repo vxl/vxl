@@ -1077,12 +1077,6 @@ upsample_rays(vcl_vector<vgl_ray_3d<double> > const& ray_nbrs,
   vgl_vector_3d<double> dir00 = r00.direction(), dir01 = r01.direction();
   vgl_vector_3d<double> dir10 = r10.direction(), dir11 = r11.direction();
 
-  // the first derivatives of ray components
-  //vgl_vector_3d<double> dodu = (org01-org00);
-  //vgl_vector_3d<double> dodv = (org3-org0);
-  //vgl_vector_3d<double> dddu = (dir2-dir1);
-  //vgl_vector_3d<double> dddv = (dir3-dir0);
-
   //first sub ray
   interp_rays[0] = ray;
 
@@ -1188,14 +1182,16 @@ compute( vpgl_local_rational_camera<double> const& rat_cam,
           int si = static_cast<int>(scl[lev]*i);
           //if(si>=ni) si = ni;
           vgl_point_2d<double> ip(si,sj);
-          if(!vpgl_backproject::bproj_plane(&rat_cam, ip, high, org, org))
+          if(!vpgl_backproject::bproj_plane(&rat_cam, ip, high, vgl_point_3d<double>(0.0,0.0,0.0), org))
             return false;
-          if(!vpgl_backproject::bproj_plane(&rat_cam, ip, low, endpt, endpt))
+          if(!vpgl_backproject::bproj_plane(&rat_cam, ip, low, vgl_point_3d<double>(0.0,0.0,0.0), endpt))
             return false;
           vgl_vector_3d<double> dir = endpt-org;
           ray_pyr[lev][j][i].set(org, dir);
         }
     }
+
+    
     // check for interpolation accuracy at the current level
     // scan through the array and find largest discrepancy in
     // ray origin and ray direction
