@@ -343,7 +343,7 @@ void x_write(vcl_ostream &os, boxm2_scene& scene, vcl_string name)
   //write scene path for (needs to know where blocks are)
   vcl_string path = scene.data_path();
   vsl_basic_xml_element paths(SCENE_PATHS_TAG);
-  paths.add_attribute("path", path);
+  paths.add_attribute("path", path + '/');
   paths.x_write(os);
 
   //write list of appearance models
