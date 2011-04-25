@@ -6,6 +6,7 @@ VERSION := 1.0
 SOURCES += bsta_gauss.cxx
 MANPAGE_SOURCES += bsta_histogram_base.h
 MANPAGE_SOURCES += bsta_histogram.txx
+SOURCES += bsta_histogram.cxx
 MANPAGE_SOURCES += bsta_joint_histogram_base.h
 MANPAGE_SOURCES += bsta_joint_histogram.txx
 SOURCES += bsta_k_medoid.cxx

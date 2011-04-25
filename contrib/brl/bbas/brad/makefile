@@ -1,8 +1,9 @@
-USES += contrib/brl contrib/brl/bbas contrib/brl/bseg core
+USES += contrib/brl contrib/brl/bbas core
 
-LIBRARY := boxm2_cpp
+LIBRARY := brad
+VERSION := 1.0
 
-SUBDIRS += pro algo
+SOURCES += dummy.cxx
 
 ################################
 include ${VXLROOT}/config/top.mk

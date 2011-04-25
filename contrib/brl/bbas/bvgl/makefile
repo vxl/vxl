@@ -12,6 +12,7 @@ SOURCES += bvgl_changes.cxx
 MANPAGE_SOURCES += bvgl_changes_sptr.h
 MANPAGE_SOURCES += bvgl_point_3d_cmp.h
 MANPAGE_SOURCES += bvgl_triangle_interpolation_iterator.txx
+MANPAGE_SOURCES += bvgl_volume_of_intersection.txx
 
 #######################################
 include ${VXLROOT}/config/top-params.mk

@@ -48,6 +48,9 @@ MANPAGE_SOURCES += bwm_observable.h
 MANPAGE_SOURCES += bwm_observable_sptr.h
 MANPAGE_SOURCES += bwm_process_commands.h
 MANPAGE_SOURCES += bwm_tableau.h
+SOURCES += bwm_observer_generic_cam.cxx
+SOURCES += bwm_tableau_generic_cam.cxx
+
 SOURCES += process/bwm_process.cxx
 SOURCES += process/bwm_site_process.cxx
 

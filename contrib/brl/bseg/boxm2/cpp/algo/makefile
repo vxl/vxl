@@ -10,7 +10,9 @@ MANPAGE_SOURCES += boxm2_data_serial_iterator.h
 MANPAGE_SOURCES += boxm2_update_image_functor.h
 MANPAGE_SOURCES += boxm2_change_detection_functor.h
 SOURCES += boxm2_refine_block_function.cxx
-SOURCES += boxm2_render_exp_image_functor.cxx
+SOURCES += boxm2_render_functions.cxx
+MANPAGE_SOURCES += boxm2_render_cone_functor.h
+MANPAGE_SOURCES += boxm2_cast_cone_ray_function.h
 
 #######################################
 include ${VXLROOT}/config/top-params.mk

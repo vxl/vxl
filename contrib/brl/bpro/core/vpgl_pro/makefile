@@ -21,6 +21,7 @@ SOURCES += processes/vpgl_create_perspective_camera_process.cxx
 SOURCES += processes/vpgl_correct_rational_camera_process.cxx
 SOURCES += processes/vpgl_save_perspective_camera_vrml_process.cxx
 SOURCES += processes/vpgl_project_process.cxx
+SOURCES += processes/vpgl_convert_to_generic_camera_process.cxx
 
 ################################
 include ${VXLROOT}/config/top.mk

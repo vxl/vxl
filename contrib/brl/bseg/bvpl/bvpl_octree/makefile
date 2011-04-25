@@ -18,6 +18,8 @@ MANPAGE_SOURCES += bvpl_block_kernel_operator.h
 SOURCES += bvpl_pca_error_scenes.cxx
 SOURCES += bvpl_taylor_scenes_map.cxx
 MANPAGE_SOURCES += bvpl_global_pca.txx
+SOURCES += bvpl_global_taylor.cxx
+MANPAGE_SOURCES += bvpl_block_vector_operator.h
 
 SUBDIRS += pro sample io
 

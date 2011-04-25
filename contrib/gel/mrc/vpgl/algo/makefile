@@ -34,6 +34,7 @@ MANPAGE_SOURCES += vpgl_bundle_rolling_shutter_adjust.h
 SOURCES += vpgl_bundle_adjust_lsqr.cxx
 SOURCES += vpgl_ba_shared_k_lsqr.cxx
 SOURCES += vpgl_ba_fixed_k_lsqr.cxx
+MANPAGE_SOURCES += vpgl_em_compute_5_point.h
 
 #######################################
 include ${VXLROOT}/config/top-params.mk

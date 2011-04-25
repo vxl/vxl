@@ -21,6 +21,10 @@ MANPAGE_SOURCES += vpgl_affine_fundamental_matrix.txx
 MANPAGE_SOURCES += vpgl_essential_matrix.txx
 MANPAGE_SOURCES += vpgl_comp_rational_camera.txx
 MANPAGE_SOURCES += vpgl_local_rational_camera.txx
+MANPAGE_SOURCES += vpgl_rolling_shutter_camera.h
+MANPAGE_SOURCES += vpgl_segmented_rolling_shutter_camera.h
+MANPAGE_SOURCES += vpgl_generic_camera.txx
+MANPAGE_SOURCES += vpgl_segmented_rolling_shutter_camera.txx
 
 SUBDIRS += io xio algo file_formats bgeo ihog vsph icam
 

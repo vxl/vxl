@@ -14,6 +14,7 @@ SOURCES += processes/boxm2_export_textured_mesh_process.cxx
 SOURCES += processes/boxm2_save_data_process.cxx
 SOURCES += processes/boxm2_texture_mesh_process.cxx
 SOURCES += processes/boxm2_export_mesh_process.cxx
+SOURCES += processes/boxm2_describe_scene_process.cxx
 
 #######################################
 include ${VXLROOT}/config/top-params.mk
