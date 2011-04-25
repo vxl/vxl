@@ -15,6 +15,7 @@
 #include <boxm2/boxm2_block.h>
 #include <boxm2/boxm2_data_base.h>
 #include <boxm2/ocl/boxm2_ocl_util.h>
+#include <boxm2/ocl/algo/boxm2_ocl_camera_converter.h>
 #include <vil/vil_save.h>
 #include <vil/vil_image_view.h>
 //brdb stuff
@@ -176,12 +177,6 @@ bool boxm2_ocl_update_color_process(bprb_func_process& pro)
     kernels[identifier]=ks;
   }
   
-  //: create all buffers
-  cl_float cam_buffer[48];
-  boxm2_ocl_util::set_persp_camera(cam, cam_buffer);
-  bocl_mem_sptr persp_cam = new bocl_mem(device->context(), cam_buffer, 3*sizeof(cl_float16), "persp cam buffer");
-  persp_cam->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
-
   //prepare input image
   vil_image_view_base_sptr float_img = boxm2_ocl_util::prepare_input_image(img);
   if( float_img->pixel_format() != VIL_PIXEL_FORMAT_RGBA_BYTE ) {
@@ -193,9 +188,21 @@ bool boxm2_ocl_update_color_process(bprb_func_process& pro)
   //grab input image dimensions - round up to the nearest 8 for OPENCL
   unsigned cl_ni=RoundUp(img_view->ni(),local_threads[0]);
   unsigned cl_nj=RoundUp(img_view->nj(),local_threads[1]);
-
   global_threads[0]=cl_ni;
   global_threads[1]=cl_nj;
+  
+  //: create all buffers
+  //cl_float cam_buffer[48];
+  //boxm2_ocl_util::set_persp_camera(cam, cam_buffer);
+  //bocl_mem_sptr persp_cam = new bocl_mem(device->context(), cam_buffer, 3*sizeof(cl_float16), "persp cam buffer");
+  //persp_cam->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
+  cl_float* ray_origins = new cl_float[4*cl_ni*cl_nj]; 
+  cl_float* ray_directions = new cl_float[4*cl_ni*cl_nj]; 
+  bocl_mem_sptr ray_o_buff = new bocl_mem(device->context(), ray_origins, cl_ni*cl_nj * sizeof(cl_float4) , "ray_origins buffer");
+  bocl_mem_sptr ray_d_buff = new bocl_mem(device->context(), ray_directions,  cl_ni*cl_nj * sizeof(cl_float4), "ray_directions buffer");
+  boxm2_ocl_camera_converter::compute_ray_image( device, queue, cam, cl_ni, cl_nj, ray_o_buff, ray_d_buff); 
+
+  //create vis, pre, norm and input image buffers
   float* vis_buff = new float[cl_ni*cl_nj];
   float* pre_buff = new float[cl_ni*cl_nj];
   float* norm_buff = new float[cl_ni*cl_nj];
@@ -330,7 +337,10 @@ bool boxm2_ocl_update_color_process(bprb_func_process& pro)
             kern->set_arg( aux2 );
             kern->set_arg( aux3 );
             kern->set_arg( lookup.ptr() );
-            kern->set_arg( persp_cam.ptr() );
+            // kern->set_arg( persp_cam.ptr() );
+            kern->set_arg( ray_o_buff.ptr() );
+            kern->set_arg( ray_d_buff.ptr() );
+            
             kern->set_arg( img_dim.ptr() );
             kern->set_arg( in_image.ptr() );
             kern->set_arg( cl_output.ptr() );
@@ -363,8 +373,12 @@ bool boxm2_ocl_update_color_process(bprb_func_process& pro)
             kern->set_arg( num_obs );
             kern->set_arg( aux0 );
             kern->set_arg( aux1 );
-            kern->set_arg( lookup.ptr() );
-            kern->set_arg( persp_cam.ptr() );
+            kern->set_arg( lookup.ptr() );    
+            
+            // kern->set_arg( persp_cam.ptr() );
+            kern->set_arg( ray_o_buff.ptr() );
+            kern->set_arg( ray_d_buff.ptr() );
+            
             kern->set_arg( img_dim.ptr() );
             kern->set_arg( vis_image.ptr() );
             kern->set_arg( pre_image.ptr() );
@@ -386,7 +400,11 @@ bool boxm2_ocl_update_color_process(bprb_func_process& pro)
             kern->set_arg( aux2 );
             kern->set_arg( aux3 );
             kern->set_arg( lookup.ptr() );
-            kern->set_arg( persp_cam.ptr() );
+            
+            // kern->set_arg( persp_cam.ptr() );
+            kern->set_arg( ray_o_buff.ptr() );
+            kern->set_arg( ray_d_buff.ptr() );
+            
             kern->set_arg( img_dim.ptr() );
             kern->set_arg( vis_image.ptr() );
             kern->set_arg( pre_image.ptr() );

@@ -16,6 +16,8 @@
 #include <boxm2/ocl/boxm2_ocl_util.h>
 #include <vil/vil_save.h>
 #include <vil/vil_image_view.h>
+#include <boxm2/ocl/algo/boxm2_ocl_camera_converter.h>
+
 //brdb stuff
 #include <brdb/brdb_value.h>
 
@@ -161,14 +163,14 @@ bool boxm2_ocl_update_process(bprb_func_process& pro)
     return false;
   }
 
-//: create a command queue.
+  //: create a command queue.
   int status=0;
   cl_command_queue queue = clCreateCommandQueue(device->context(),*(device->device_id()),
                                                 CL_QUEUE_PROFILING_ENABLE,&status);
   if (status!=0) return false;
 
   vcl_string identifier=device->device_identifier()+options;
-  //: compile the kernel
+  //: compile the kernel if not already compiled
   if (kernels.find(identifier)==kernels.end())
   {
     vcl_cout<<"===========Compiling kernels==========="<<vcl_endl;
@@ -177,20 +179,28 @@ bool boxm2_ocl_update_process(bprb_func_process& pro)
     kernels[identifier]=ks;
   }
   
-  //: create all buffers
-  cl_float cam_buffer[48];
-  boxm2_ocl_util::set_persp_camera(cam, cam_buffer);
-  bocl_mem_sptr persp_cam=new bocl_mem(device->context(), cam_buffer, 3*sizeof(cl_float16), "persp cam buffer");
-  persp_cam->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
-
+  //grab input image, establish cl_ni, cl_nj (so global size is divisible by local size)
   vil_image_view_base_sptr float_img=boxm2_ocl_util::prepare_input_image(img);
   vil_image_view<float>* img_view = static_cast<vil_image_view<float>* >(float_img.ptr());
-
   unsigned cl_ni=RoundUp(img_view->ni(),local_threads[0]);
   unsigned cl_nj=RoundUp(img_view->nj(),local_threads[1]);
-
   global_threads[0]=cl_ni;
   global_threads[1]=cl_nj;
+  
+  ////: create all buffers
+  //cl_float cam_buffer[48];
+  //boxm2_ocl_util::set_persp_camera(cam, cam_buffer);
+  //bocl_mem_sptr persp_cam=new bocl_mem(device->context(), cam_buffer, 3*sizeof(cl_float16), "persp cam buffer");
+  //persp_cam->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
+  //set generic cam 
+  cl_float* ray_origins = new cl_float[4*cl_ni*cl_nj]; 
+  cl_float* ray_directions = new cl_float[4*cl_ni*cl_nj]; 
+  bocl_mem_sptr ray_o_buff = new bocl_mem(device->context(), ray_origins, cl_ni*cl_nj * sizeof(cl_float4) , "ray_origins buffer");
+  bocl_mem_sptr ray_d_buff = new bocl_mem(device->context(), ray_directions,  cl_ni*cl_nj * sizeof(cl_float4), "ray_directions buffer");
+  boxm2_ocl_camera_converter::compute_ray_image( device, queue, cam, cl_ni, cl_nj, ray_o_buff, ray_d_buff); 
+
+
+  //Visibility, Preinf, Norm, and input image buffers
   float* vis_buff = new float[cl_ni*cl_nj];
   float* pre_buff = new float[cl_ni*cl_nj];
   float* norm_buff = new float[cl_ni*cl_nj];
@@ -279,7 +289,7 @@ bool boxm2_ocl_update_process(bprb_func_process& pro)
         //write the image values to the buffer
         vul_timer transfer;
         bocl_mem* blk       = opencl_cache->get_block(*id);
-        bocl_mem * blk_info  = opencl_cache->loaded_block_info();
+        bocl_mem* blk_info  = opencl_cache->loaded_block_info();
         bocl_mem* alpha     = opencl_cache->get_data<BOXM2_ALPHA>(*id);
         boxm2_scene_info* info_buffer = (boxm2_scene_info*) blk_info->cpu_buffer();
         int alphaTypeSize = boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
@@ -288,8 +298,6 @@ bool boxm2_ocl_update_process(bprb_func_process& pro)
 
         bocl_mem* mog       = opencl_cache->get_data(*id,data_type);    //info_buffer->data_buffer_length*boxm2_data_info::datasize(data_type));
         bocl_mem* num_obs   = opencl_cache->get_data(*id,num_obs_type);//,info_buffer->data_buffer_length*boxm2_data_info::datasize(num_obs_type));
-
-
 
         //grab an appropriately sized AUX data buffer
         int auxTypeSize = boxm2_data_info::datasize(boxm2_data_traits<BOXM2_AUX0>::prefix());
@@ -309,7 +317,11 @@ bool boxm2_ocl_update_process(bprb_func_process& pro)
             kern->set_arg( aux0 );
             kern->set_arg( aux1 );
             kern->set_arg( lookup.ptr() );
-            kern->set_arg( persp_cam.ptr() );
+            
+            // kern->set_arg( persp_cam.ptr() );
+            kern->set_arg( ray_o_buff.ptr() );
+            kern->set_arg( ray_d_buff.ptr() );
+            
             kern->set_arg( img_dim.ptr() );
             kern->set_arg( in_image.ptr() );
             kern->set_arg( cl_output.ptr() );
@@ -342,7 +354,10 @@ bool boxm2_ocl_update_process(bprb_func_process& pro)
             kern->set_arg( aux0 );
             kern->set_arg( aux1 );
             kern->set_arg( lookup.ptr() );
-            kern->set_arg( persp_cam.ptr() );
+            // kern->set_arg( persp_cam.ptr() );
+            kern->set_arg( ray_o_buff.ptr() );
+            kern->set_arg( ray_d_buff.ptr() );
+            
             kern->set_arg( img_dim.ptr() );
             kern->set_arg( vis_image.ptr() );
             kern->set_arg( pre_image.ptr() );
@@ -381,7 +396,10 @@ bool boxm2_ocl_update_process(bprb_func_process& pro)
             kern->set_arg( aux2 );
             kern->set_arg( aux3 );
             kern->set_arg( lookup.ptr() );
-            kern->set_arg( persp_cam.ptr() );
+            // kern->set_arg( persp_cam.ptr() );
+            kern->set_arg( ray_o_buff.ptr() );
+            kern->set_arg( ray_d_buff.ptr() );
+            
             kern->set_arg( img_dim.ptr() );
             kern->set_arg( vis_image.ptr() );
             kern->set_arg( pre_image.ptr() );

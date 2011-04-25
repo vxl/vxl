@@ -71,6 +71,19 @@ class boxm2_scene : public vbl_ref_count
     //: return a vector of block ids in visibility order
     vcl_vector<boxm2_block_id> get_vis_blocks(vpgl_generic_camera<double>* cam);
     vcl_vector<boxm2_block_id> get_vis_blocks(vpgl_perspective_camera<double>* cam);
+    vcl_vector<boxm2_block_id> get_vis_blocks(vpgl_camera_double_sptr & cam) {
+      if( cam->type_name() == "vpgl_generic_camera" ) 
+        return this->get_vis_blocks( (vpgl_generic_camera<double>*) cam.ptr() ); 
+      else if( cam->type_name() == "vpgl_perspective_camera" )
+        return this->get_vis_blocks( (vpgl_perspective_camera<double>*) cam.ptr() ); 
+      else 
+        vcl_cout<<"boxm2_scene::get_vis_blocks doesn't support camera type "<<cam->type_name()<<vcl_endl;
+      
+      //else return empty
+      vcl_vector<boxm2_block_id> empty; 
+      return empty; 
+    }
+    
     //: return a heap pointer to a scene info
     boxm2_scene_info* get_blk_metadata(boxm2_block_id id);
     bool block_exists(boxm2_block_id id) { return blocks_.find(id) != blocks_.end(); }

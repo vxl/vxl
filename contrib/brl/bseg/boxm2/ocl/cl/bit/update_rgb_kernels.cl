@@ -45,7 +45,9 @@ seg_len_main(__constant  RenderSceneInfo    * linfo,
              __global    int                * aux_mean_obsU,      // mean obs r aux array
              __global    int                * aux_mean_obsV,      // mean obs r aux array
              __constant  uchar              * bit_lookup,       // used to get data_index
-             __global    float16            * camera,           // camera orign and SVD of inverse of camera matrix
+             __global    float4             * ray_origins,
+             __global    float4             * ray_directions,
+             //__global    float16            * camera,           // camera orign and SVD of inverse of camera matrix
              __global    uint4              * imgdims,          // dimensions of the input image
              __global    float4             * in_image,         // the input image
              __global    float              * output,
@@ -83,8 +85,11 @@ seg_len_main(__constant  RenderSceneInfo    * linfo,
   // we know i,j map to a point on the image,
   // BEGIN RAY TRACE
   //----------------------------------------------------------------------------
+  float4 ray_o = ray_origins[ imIndex ]; 
+  float4 ray_d = ray_directions[ imIndex ]; 
   float ray_ox, ray_oy, ray_oz, ray_dx, ray_dy, ray_dz;
-  calc_scene_ray(linfo, camera, i, j, &ray_ox, &ray_oy, &ray_oz, &ray_dx, &ray_dy, &ray_dz);  
+  //calc_scene_ray(linfo, camera, i, j, &ray_ox, &ray_oy, &ray_oz, &ray_dx, &ray_dy, &ray_dz);  
+  calc_scene_ray_generic_cam(linfo, ray_o, ray_d, &ray_ox, &ray_oy, &ray_oz, &ray_dx, &ray_dy, &ray_dz);  
 
   //----------------------------------------------------------------------------
   // we know i,j map to a point on the image, have calculated ray
@@ -184,7 +189,9 @@ pre_inf_main(__constant  RenderSceneInfo    * linfo,
              __global    int                * aux_seg_len,       // seg len aux array
              __global    int                * aux_mean_obs,      // mean obs aux array
              __constant  uchar              * bit_lookup,       // used to get data_index
-             __global    float16            * camera,           // camera orign and SVD of inverse of camera matrix
+             __global    float4             * ray_origins,
+             __global    float4             * ray_directions,
+             //__global    float16            * camera,           // camera orign and SVD of inverse of camera matrix
              __global    uint4              * imgdims,          // dimensions of the input image
              __global    float              * vis_image,        // visibility image 
              __global    float              * pre_image,        // preinf image 
@@ -219,8 +226,11 @@ pre_inf_main(__constant  RenderSceneInfo    * linfo,
   // we know i,j map to a point on the image,
   // BEGIN RAY TRACE
   //----------------------------------------------------------------------------
+  float4 ray_o = ray_origins[ j*get_global_size(0) + i ]; 
+  float4 ray_d = ray_directions[ j*get_global_size(0) + i ]; 
   float ray_ox, ray_oy, ray_oz, ray_dx, ray_dy, ray_dz;
-  calc_scene_ray(linfo, camera, i, j, &ray_ox, &ray_oy, &ray_oz, &ray_dx, &ray_dy, &ray_dz);  
+  //calc_scene_ray(linfo, camera, i, j, &ray_ox, &ray_oy, &ray_oz, &ray_dx, &ray_dy, &ray_dz);  
+  calc_scene_ray_generic_cam(linfo, ray_o, ray_d, &ray_ox, &ray_oy, &ray_oz, &ray_dx, &ray_dy, &ray_dz);  
 
   //----------------------------------------------------------------------------
   // we know i,j map to a point on the image, have calculated ray
@@ -279,7 +289,9 @@ bayes_main(__constant  RenderSceneInfo    * linfo,
            __global    int                * aux_vis,      // mean obs r aux array
            __global    int                * aux_beta,      // mean obs r aux array
            __constant  uchar              * bit_lookup,       // used to get data_index
-           __global    float16            * camera,           // camera orign and SVD of inverse of camera matrix
+           __global    float4             * ray_origins,
+           __global    float4             * ray_directions,
+           //__global    float16            * camera,           // camera orign and SVD of inverse of camera matrix
            __global    uint4              * imgdims,          // dimensions of the input image
            __global    float              * vis_image,        // visibility image (for keeping vis accross blocks)
            __global    float              * pre_image,        // preinf image (for keeping pre accross blocks)
@@ -321,8 +333,11 @@ bayes_main(__constant  RenderSceneInfo    * linfo,
   // we know i,j map to a point on the image,
   // BEGIN RAY TRACE
   //----------------------------------------------------------------------------
+  float4 ray_o = ray_origins[ j*get_global_size(0) + i ]; 
+  float4 ray_d = ray_directions[ j*get_global_size(0) + i ]; 
   float ray_ox, ray_oy, ray_oz, ray_dx, ray_dy, ray_dz;
-  calc_scene_ray(linfo, camera, i, j, &ray_ox, &ray_oy, &ray_oz, &ray_dx, &ray_dy, &ray_dz);  
+  //calc_scene_ray(linfo, camera, i, j, &ray_ox, &ray_oy, &ray_oz, &ray_dx, &ray_dy, &ray_dz);  
+  calc_scene_ray_generic_cam(linfo, ray_o, ray_d, &ray_ox, &ray_oy, &ray_oz, &ray_dx, &ray_dy, &ray_dz);  
   
   //----------------------------------------------------------------------------
   // we know i,j map to a point on the image, have calculated ray
