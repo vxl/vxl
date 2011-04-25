@@ -26,9 +26,10 @@ class vsph_spherical_coord : public vbl_ref_count
   //***************************************************************************
 
   // Default constructor
-  vsph_spherical_coord() : radius_(1), origin_(vgl_point_3d<double>(0,0,0)) {}
+  vsph_spherical_coord() : radius_(1.0), origin_(vgl_point_3d<double>(0,0,0)) {}
 
-  vsph_spherical_coord(vgl_point_3d<double> origin, double radius);
+  vsph_spherical_coord(vgl_point_3d<double> origin, double radius = 1.0)
+  : radius_(radius), origin_(origin) {}
 
   //: Copy constructor
   vsph_spherical_coord(vsph_spherical_coord const& rhs)
@@ -45,14 +46,14 @@ class vsph_spherical_coord : public vbl_ref_count
 
   vgl_point_3d<double> origin() const { return origin_; }
 
-  vsph_sph_point_3d create_point(double theta, double phi) { return vsph_sph_point_3d(radius_,theta,phi); }
+  vsph_sph_point_3d create_point(double theta, double phi) const { return vsph_sph_point_3d(radius_,theta,phi); }
 
   void spherical_coord(vgl_point_3d<double> cp, vsph_sph_point_3d& sp);
 
-  //: converts to cartesian coordinate
+  //: converts to cartesian coordinates
   vgl_point_3d<double> cart_coord(vsph_sph_point_3d const& p) const;
 
-  //: converts to cartesian coordinate
+  //: converts to cartesian coordinates
   vgl_point_3d<double> cart_coord(double theta, double phi) const { return cart_coord(vsph_sph_point_3d(radius_,theta,phi)); }
 
   //: moves the point onto the surface of the sphere on the ray from origin to the point
@@ -65,7 +66,7 @@ class vsph_spherical_coord : public vbl_ref_count
 
   void b_write(vsl_b_ostream& os);
 
-  short version() { return 1; }
+  short version() const { return 1; }
 
  private:
   double radius_;                // distance from the origin

@@ -5,26 +5,17 @@
 
 #include <vgl/io/vgl_io_point_3d.h>
 
-
 #define RADIUS_THRESH 0.0001
 
 
-
-vsph_spherical_coord::vsph_spherical_coord(vgl_point_3d<double> origin, double radius)
-: radius_(radius), origin_(origin)
-{
-}
-
 void vsph_spherical_coord::spherical_coord(vgl_point_3d<double> cp, vsph_sph_point_3d& sp)
 {
-  double radius=0.0, theta=0.0, phi=0.0;
-
-  // move the point to the spherical coordinate system
+  // translate the point to the spherical coordinate system
   double x = cp.x() - origin_.x();
   double y = cp.y() - origin_.y();
   double z = cp.z() - origin_.z();
 
-  radius = vcl_sqrt(x*x+y*y+z*z);
+  double radius = vcl_sqrt(x*x+y*y+z*z);
 
   // if radius is zero, the rsult does not make sense
   if (vcl_abs(radius) < RADIUS_THRESH) {
@@ -32,21 +23,19 @@ void vsph_spherical_coord::spherical_coord(vgl_point_3d<double> cp, vsph_sph_poi
     return;
   }
 
-  phi = vcl_atan2(y,x);
-  theta = vcl_acos(z/radius);
+  double phi = vcl_atan2(y,x);
+  double theta = vcl_acos(z/radius);
   sp.set(radius, theta, phi);
 }
 
 vgl_point_3d<double> vsph_spherical_coord::cart_coord(vsph_sph_point_3d const& p) const
 {
-
-  double x,y,z;
-  x = radius_*vcl_sin(p.theta_)*vcl_cos(p.phi_);
-  y = radius_*vcl_sin(p.theta_)*vcl_sin(p.phi_);
-  z = radius_*vcl_cos(p.theta_);
+  // Important note: does not use the "radius_" part of *this! Only origin_
+  double x = p.radius_*vcl_sin(p.theta_)*vcl_cos(p.phi_);
+  double y = p.radius_*vcl_sin(p.theta_)*vcl_sin(p.phi_);
+  double z = p.radius_*vcl_cos(p.theta_);
   // translate the point based on the origin
-  vgl_point_3d<double> c(x+origin_.x(),y+origin_.y(),z+origin_.z());
-  return c;
+  return vgl_point_3d<double>(x+origin_.x(),y+origin_.y(),z+origin_.z());
 }
 
 bool vsph_spherical_coord::move_point(vsph_sph_point_3d& p)
@@ -85,7 +74,7 @@ void vsph_spherical_coord::b_read(vsl_b_istream& is)
 void vsph_spherical_coord::b_write(vsl_b_ostream& os)
 {
   vsl_b_write(os, version());
-  vsl_b_write(os, radius_); 
+  vsl_b_write(os, radius_);
   vsl_b_write(os, origin_);
 }
 
