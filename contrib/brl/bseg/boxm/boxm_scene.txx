@@ -1447,7 +1447,7 @@ vgl_point_3d<double> boxm_cell_iterator<T>::global_centroid()
 template<class T>
 double boxm_cell_iterator<T>::length()
 {
-  return (*block_iterator_)->get_tree()->cell_length(*cells_iterator_);
+  return (*block_iterator_)->get_tree()->cell_length(*cells_iterator_)*(*block_iterator_)->bounding_box().width();
 }
 
 /******************************************* I/ O *******************************************************/
