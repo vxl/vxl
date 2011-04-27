@@ -131,7 +131,7 @@ void boxm2_cast_cone_ray_function(vgl_box_3d<double>& block_box,
           //10                 label e
           
           //max cell - go through deepest generation
-          int max_cell = (vcl_pow(8, deepest_gen+1) - 1) / 7;
+          int max_cell = (int)(vcl_pow(8.0, deepest_gen+1) - 1) / 7;
           
           //iterate through each voxel cell
           for(int bitI=0; bitI<max_cell; ++bitI) {
