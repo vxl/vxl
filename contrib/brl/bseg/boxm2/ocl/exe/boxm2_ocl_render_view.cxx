@@ -58,7 +58,7 @@ int main(int argc, char ** argv)
     
     //create initial cam
     double currInc = 45.0;
-    double currRadius = 2.0;
+    double currRadius = scene->bounding_box().height(); //2.0f;
     double currAz = 0.0;
     vpgl_perspective_camera<double>* pcam; 
     pcam = boxm2_util::construct_camera(currInc, currAz, currRadius, ni(), nj(), 
