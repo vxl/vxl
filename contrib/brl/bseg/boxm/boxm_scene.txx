@@ -989,18 +989,24 @@ void boxm_scene<T>::unload_active_blocks()
 }
 
 
-//: Locate all cells within a 3d region, which coordinates are given in scene coordinates. Use with care --- blocks need to be unloaded by user
+//: Locate all cells within a 3d region, which coordinates are given in scene coordinates. 
+//  Use with care --- blocks need to be unloaded by user to not create memory leaks
 template <class T>
 void boxm_scene<T>::leaves_in_region(vgl_box_3d<double> box, vcl_vector<boct_tree_cell<typename T::loc_type, typename T::datatype>* > &cells)
 {
+  vgl_box_3d<double> valid_box = vgl_intersection(get_world_bbox(),box);
+  
+  vgl_point_3d<double> min_point = valid_box.min_point();
+  vgl_point_3d<double> max_point = valid_box.max_point();
+   
   //load blocks intersecting the region
-  vgl_point_3d<double> min_point = box.min_point();
   vgl_point_3d<int> min_idx;
   get_block_index(min_point, min_idx);
 
-  vgl_point_3d<double> max_point = box.max_point();
   vgl_point_3d<int> max_idx;
   get_block_index(max_point, max_idx);
+  
+  vcl_cout << "Loading Region beteween blocks: " << max_idx << ", " << min_idx << vcl_endl;
 
   if (!load_blocks(min_idx, max_idx))
     return;
