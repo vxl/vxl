@@ -157,7 +157,7 @@ boxm2_util::construct_camera( double elevation,
   double cx = r*vcl_sin(el)*vcl_cos(az);
   double cy = r*vcl_sin(el)*vcl_sin(az);
   double cz = r*vcl_cos(el);
-  vgl_point_3d<double> cent(cx+cn.x(), cy+cn.y(), cz);
+  vgl_point_3d<double> cent(cx+cn.x(), cy+cn.y(), cz+cn.z());
 
   // 3) start with a unit focal length and position the camera
   vpgl_calibration_matrix<double> K(1.0, vgl_point_2d<double>(ni/2, nj/2));
