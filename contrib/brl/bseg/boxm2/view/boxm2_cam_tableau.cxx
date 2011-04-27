@@ -12,9 +12,10 @@
 boxm2_cam_tableau::boxm2_cam_tableau() :
       c_mouse_rotate(vgui_LEFT),
       c_mouse_translate(vgui_LEFT, vgui_CTRL),
-      c_mouse_zoom(vgui_LEFT, vgui_SHIFT)
+      c_mouse_zoom(vgui_LEFT, vgui_SHIFT),
 {
   stare_point_ = vgl_homg_point_3d<double>(0,0,0);
+  default_stare_point_= vgl_homg_point_3d<double>(0,0,0);
   vgl_point_3d<double> def(2,2,2);
   cam_.set_camera_center(def);
   default_cam_.set_camera_center(def);
@@ -43,27 +44,27 @@ bool boxm2_cam_tableau::handle(vgui_event const &e)
   {
     if (e.key == vgui_key('r')) {
         vcl_cout<<"resetting to initial camera view"<<vcl_endl;
-        stare_point_ = vgl_homg_point_3d<double>(0,0,0);
+        stare_point_ = default_stare_point_;//vgl_homg_point_3d<double>(0,0,0);
         cam_.set_camera_center(default_cam_.get_camera_center());
         cam_.set_rotation(default_cam_.get_rotation());
     }
     else if (e.key == vgui_key('x')) {
         vcl_cout<<"looking down X axis at the origin"<<vcl_endl;
-        stare_point_ = vgl_homg_point_3d<double>(0,0,0);
-        cam_.set_camera_center(vgl_point_3d<double>(2,0,0));
-        cam_.look_at(vgl_homg_point_3d<double>(0,0,0));
+        stare_point_ = default_stare_point_;//vgl_homg_point_3d<double>(0,0,0);
+        cam_.set_camera_center(vgl_point_3d<double>(stare_point_.x(),default_cam_.camera_center().y(),stare_point_.z()));
+        cam_.look_at(stare_point_);
     }
     else if (e.key == vgui_key('y')) {
         vcl_cout<<"looking down Y axis at the origin"<<vcl_endl;
-        stare_point_ = vgl_homg_point_3d<double>(0,0,0);
-        cam_.set_camera_center(vgl_point_3d<double>(0,2,0));
-        cam_.look_at(vgl_homg_point_3d<double>(0,0,0));
+        stare_point_ = default_stare_point_;//vgl_homg_point_3d<double>(0,0,0);
+        cam_.set_camera_center(vgl_point_3d<double>(default_cam_.camera_center().x(),stare_point_.y(),stare_point_.z()));
+        cam_.look_at(stare_point_);
     }
     else if (e.key == vgui_key('z')) {
         vcl_cout<<"looking down Z axis at the origin"<<vcl_endl;
-        stare_point_ = vgl_homg_point_3d<double>(0,0,0);
-        cam_.set_camera_center(vgl_point_3d<double>(0,0,2));
-        cam_.look_at(vgl_homg_point_3d<double>(0,0,0));
+        stare_point_ = default_stare_point_;//vgl_homg_point_3d<double>(0,0,0);
+        cam_.set_camera_center(vgl_point_3d<double>(stare_point_.x(),stare_point_.y(),default_cam_.camera_center().z()));
+        cam_.look_at(stare_point_);
     }
     this->post_redraw();
   }
@@ -116,19 +117,22 @@ bool boxm2_cam_tableau::mouse_drag(int x, int y, vgui_button button, vgui_modifi
 
     //cam location in spherical coordinates (this should be relative to the stare point
     vgl_point_3d<double> cam_center = cam_.get_camera_center();
-    vgl_point_3d<double> origin(0.0f,0.0f,0.0f);
+    vgl_point_3d<double> origin(default_stare_point_.x(),
+                                default_stare_point_.y(),
+                                default_stare_point_.z());
     double rad = vgl_distance<double>(cam_center, origin);
-    double theta = vcl_acos(cam_center.z()/rad);
-    double phi = vcl_atan2(cam_center.y(), cam_center.x());
+    double theta = vcl_acos((cam_center.z()-origin.z())/rad);
+    double phi = vcl_atan2((cam_center.y()-origin.y()), (cam_center.x()-origin.x()));
 
     //update theta by a function of dy
     double angleScale = .1;
     double newTheta = theta - dy * angleScale;
     double newPhi = phi + dx * angleScale;
-    vgl_point_3d<double> newCenter(rad * vcl_sin(newTheta) * vcl_cos(newPhi),
-                                   rad * vcl_sin(newTheta) * vcl_sin(newPhi),
-                                   rad * vcl_cos(newTheta));
+    vgl_point_3d<double> newCenter(origin.x()+rad * vcl_sin(newTheta) * vcl_cos(newPhi),
+                                   origin.y()+rad * vcl_sin(newTheta) * vcl_sin(newPhi),
+                                   origin.z()+rad * vcl_cos(newTheta));
     cam_.set_camera_center(newCenter);
+    vcl_cout<<"New center"<<newCenter<<" old center "<<cam_center<<vcl_endl;
     cam_.look_at(stare_point_);
 
     //vcl_cout<<cam_;
@@ -148,8 +152,8 @@ bool boxm2_cam_tableau::mouse_drag(int x, int y, vgui_button button, vgui_modifi
     //dy determines distance change in principle axis
     double dy = (beginy - y) / height;
 
-    double scale = dy/2.0f;
-    cam_.set_camera_center(cam_.get_camera_center() + scale*cam_.principal_axis());
+        double scale = dy/2.0f;
+    cam_.set_camera_center(cam_.get_camera_center() + scale_*scale*cam_.principal_axis());
 
     this->post_redraw();
     return true;

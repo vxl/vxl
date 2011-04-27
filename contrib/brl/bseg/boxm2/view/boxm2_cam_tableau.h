@@ -12,8 +12,9 @@
 #include <vpgl/vpgl_perspective_camera.h>
 #include <vgui/vgui_event_condition.h>
 #include <vgui/vgui_tableau_sptr.h>
+#include <vgui/vgui_grid_tableau.h>
 
-class boxm2_cam_tableau: public vgui_tableau, public vgui_drag_mixin
+class boxm2_cam_tableau:  public vgui_tableau, public vgui_drag_mixin
 {
  public:
 
@@ -43,6 +44,9 @@ class boxm2_cam_tableau: public vgui_tableau, public vgui_drag_mixin
     vpgl_perspective_camera<double> cam_;
     vpgl_perspective_camera<double> default_cam_;
     vgl_homg_point_3d<double> stare_point_;
+    vgl_homg_point_3d<double> default_stare_point_;
+
+    double scale_;
 
     //keep track of events
     vgui_event event;

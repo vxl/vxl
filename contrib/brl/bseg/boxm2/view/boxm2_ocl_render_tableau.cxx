@@ -48,8 +48,15 @@ bool boxm2_ocl_render_tableau::init(bocl_device_sptr device,
     //set image dimensions, camera and scene
     ni_ = ni;
     nj_ = nj;
+
     cam_   = (*cam);
     default_cam_ = (*cam);
+
+    stare_point_=default_stare_point_;
+    default_stare_point_.set(scene->bounding_box().centroid().x(),
+                             scene->bounding_box().centroid().y(),
+                             scene->bounding_box().centroid().z());
+    scale_ =scene->bounding_box().height();
     //create the scene
     scene_ = scene;
     opencl_cache_=opencl_cache;
