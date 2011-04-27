@@ -44,11 +44,23 @@ class boct_bit_tree2
   //: traverse tree to get leaf index that contains point
   int traverse(const vgl_point_3d<double> p);
 
+  //: gets the cell center (octree is assumed to be [0,1]x[0,1]x[0,1]
+  vgl_point_3d<double> cell_center(int bit_index); 
+  
+  //: tells you if a valid cell is at bit_index (if and only if its parent is 1)
+  bool valid_cell(int bit_index); 
+  
+  //: tells you if the bit_index is a leaf
+  bool is_leaf(int bit_index); 
+
   //: Return the maximum number of levels, which is root_level+1
   short number_levels() const { return num_levels_; }
 
   //: Return number of cells in this tree
   int num_cells() const;
+
+  //: return maximum number of cells in this tree
+  int max_num_cells() { return (vcl_pow(8, num_levels_+1) - 1) / 7; }
 
   //: returns depth (0,1,2,3) at given index
   //  Note that cumulative nodes = (1/7) * (8^(n+1) -1)
@@ -68,6 +80,7 @@ class boct_bit_tree2
   int set_buffer_ptr(int ptr); 
   int get_data_ptr(bool is_random=false); 
   int set_data_ptr(int ptr, bool is_random=false); 
+  
 
  private:
 
