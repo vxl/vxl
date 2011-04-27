@@ -92,22 +92,75 @@ void boxm2_cast_cone_ray_function(vgl_box_3d<double>& block_box,
     for (int x=minCell.x(); x<maxCell.x(); ++x) {
       for (int y=minCell.y(); y<maxCell.y(); ++y) {
         for (int z=minCell.z(); z<maxCell.z(); ++z) {
+          
           //load current block/tree
           uchar16 tree = blk_sptr->trees()(x,y,z);
           boct_bit_tree2 bit_tree( (unsigned char*)tree.data_block(), linfo->root_level+1);
-          int data_ptr = bit_tree.get_data_ptr();
 
-#if 0
-          //calculate contribution from each subblock's voxels
-          //if the current raysphere diameter is less than cell length, traverse
-          if ( 2.0*currR < linfo->block_len ) {
-            float cell_len = linfo->block_len;
-            while ( 2.0*currR < cell_len )
+          //determine how deep in each block you'll go
+          float finest_len = 1.0; 
+          unsigned deepest_gen = 0; 
+          while(finest_len > 2*currR && deepest_gen < linfo->root_level) {
+            finest_len *= .5f; 
+            deepest_gen ++; 
+          }
+          
+          //start with the top generation
+          // procedure intersect_voxels(bit_tree, curr_bit)
+          //  - label curr_bit as visited
+          //  - if(generation >= deepest_gen) 
+          //       step_cell with this sphere and alpha 
+          //  - else
+          //    - Intersect the octree cell with the current sphere, 
+          //    - mark non zero intersection cells as 'to visit'
+          //    -  for each child bit_index i
+          //        if 'to visit' that node && generation < deepest_gen
+          //          intersect_voxels(bit_tree, i, 
+          //      
+          
+          //Probably should do this with a DFS
+          //1  procedure DFS(G,v):
+          //2      label v as explored
+          //3      for all edges e in G.incidentEdges(v) do
+          //4          if edge e is unexplored then
+          //5              w ← G.opposite(v,e)
+          //6              if vertex w is unexplored then
+          //7                  label e as a discovery edge
+          //8                  recursively call DFS(G,w)
+          //9              else 
+          //10                 label e
+          
+          //max cell - go through deepest generation
+          int max_cell = (vcl_pow(8, deepest_gen+1) - 1) / 7;
+          
+          //iterate through each voxel cell
+          for(int bitI=0; bitI<max_cell; ++bitI) {
+            
+            if( bit_tree.is_leaf(bitI) ) 
             {
+              //curr depth
+              int curr_depth = bit_tree.depth_at(bitI); 
+              
+              //calculate the theoretical radius of this cell
+              double side_len = 1.0 / (double) (1<<curr_depth); 
+              double cellR = UNIT_SPHERE_RADIUS * side_len;
+              
+              //intersect the cell, grab the intersection volume
+              vgl_point_3d<double> localCenter = bit_tree.cell_center(bitI); 
+              vgl_point_3d<double> cellCenter(localCenter.x() + x, localCenter.y() + y, localCenter.z() + z); 
+              vgl_sphere_3d<double> cellSphere(cellCenter, cellR);
+              double intersect_volume = bvgl_volume_of_intersection(currSphere, cellSphere);
+
+              if(intersect_volume > 0.0) {
+                //call step cell
+                int data_ptr = bit_tree.get_data_index(bitI); 
+                functor.step_cell(intersect_volume, data_ptr, i, j, side_len * linfo->block_len,
+                                  intensity_norm, weighted_int, prob_surface);
+                total_volume += intersect_volume;
+              }
             }
           }
-#endif
-
+/*
           //calculate the theoretical radius of this cell
           double cellR = UNIT_SPHERE_RADIUS;
           vgl_point_3d<double> cellCenter( (double) x + 0.5,
@@ -117,9 +170,11 @@ void boxm2_cast_cone_ray_function(vgl_box_3d<double>& block_box,
           double intersect_volume = bvgl_volume_of_intersection(currSphere, cellSphere);
 
           //call step cell
+          int data_ptr = bit_tree.get_data_ptr(); 
           functor.step_cell(intersect_volume, data_ptr, i, j, linfo->block_len,
                             intensity_norm, weighted_int, prob_surface);
           total_volume += intersect_volume;
+*/
         }
       }
     }
