@@ -60,7 +60,7 @@ class boct_bit_tree2
   int num_cells() const;
 
   //: return maximum number of cells in this tree
-  int max_num_cells() { return (vcl_pow(8, num_levels_+1) - 1) / 7; }
+  int max_num_cells() { return (int) ((vcl_pow(8.0, num_levels_+1) - 1.0) / 7.0); }
 
   //: returns depth (0,1,2,3) at given index
   //  Note that cumulative nodes = (1/7) * (8^(n+1) -1)
