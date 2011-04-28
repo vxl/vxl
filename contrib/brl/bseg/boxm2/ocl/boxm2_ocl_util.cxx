@@ -83,18 +83,25 @@ void boxm2_ocl_util::set_persp_camera(vpgl_perspective_camera<double> * pcam, cl
   persp_cam[cnt++]=(cl_float)cam_center.z();
 }
 
-void boxm2_ocl_util::set_generic_camera(vpgl_camera_double_sptr& cam, cl_float* ray_origins, cl_float* ray_directions)
+void boxm2_ocl_util::set_generic_camera(vpgl_camera_double_sptr& cam, cl_float* ray_origins, cl_float* ray_directions, unsigned cl_ni, unsigned cl_nj)
 {
   if (vpgl_generic_camera<double>* gcam =
       dynamic_cast<vpgl_generic_camera<double>* >(cam.ptr()))
   {
     //iterate through each ray and record origin/direction
     int count = 0;
-    for (unsigned int v=0; v<gcam->rows(); ++v) {
-      for (unsigned int u=0; u<gcam->cols(); ++u, ++count) {
-        //: the ray corresponding to a given pixel
-        vgl_ray_3d<double> ray = gcam->ray(u, v);
-
+	  for (unsigned int v=0; v<cl_nj; ++v) {
+      for (unsigned int u=0; u<cl_ni; ++u, ++count) {
+		    vgl_ray_3d<double> ray;
+		    if (u>=gcam->cols()||v>=gcam->rows()) {
+		      vgl_point_3d<double> p(0,0,0); // dummy
+          vgl_vector_3d<double> t(0,0,0);   // dummy
+			    ray = vgl_ray_3d<double>(p, t);
+		    } else {
+			    //: the ray corresponding to a given pixel
+			    ray = gcam->ray(u, v);
+		    }
+      
         //origin
         ray_origins[4*count  ] = ray.origin().x();
         ray_origins[4*count+1] = ray.origin().y();
