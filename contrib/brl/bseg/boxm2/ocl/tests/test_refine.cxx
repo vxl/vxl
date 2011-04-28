@@ -37,13 +37,12 @@ void test_refine_trees_kernel()
   boxm2_scene_sptr scene = new boxm2_scene(test_file);
 
   //initialize a block and data cache
-  boxm2_lru_cache::create(scene.ptr()); 
-  boxm2_cache* cache = boxm2_cache::instance(); 
+  boxm2_lru_cache::create(scene.ptr());
 
   //initialize gpu pro / manager
   //boxm2_opencl_processor* gpu_pro = boxm2_opencl_processor::instance();
   //gpu_pro->set_scene(scene.ptr());
-  //gpu_pro->set_cpu_cache(cache);
+  //gpu_pro->set_cpu_cache(boxm2_cache::instance());
   //gpu_pro->init();
 
   //rendering sources
