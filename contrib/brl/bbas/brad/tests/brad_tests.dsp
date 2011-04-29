@@ -93,16 +93,13 @@ LIB32=link.exe -lib
 # Begin Group "Source Files"
 # PROP Default_Filter "cxx"
 # Begin Source File
-SOURCE=.\brad_illum_util.cxx
-# End Source File
-# End Group
-# Begin Group "Header Files"
-# PROP Default_Filter "h"
-# Begin Source File
-SOURCE=.\brad_illum_cost_function.h
+SOURCE=.\test_driver.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\brad_illum_util.h
+SOURCE=.\test_illum.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_include.cxx
 # End Source File
 # End Group
 # End Target

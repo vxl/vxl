@@ -142,6 +142,9 @@ SOURCE=.\msm_ellipsoid_limiter.cxx
 SOURCE=.\msm_ref_shape_model.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\msm_shape_perturber.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/mbl_cloneables_factory+msm_param_limiter-.cxx
 # End Source File
 # Begin Source File
@@ -206,6 +209,9 @@ SOURCE=.\msm_zoom_aligner.h
 # End Source File
 # Begin Source File
 SOURCE=.\msm_ref_shape_model.h
+# End Source File
+# Begin Source File
+SOURCE=.\msm_shape_perturber.h
 # End Source File
 # End Group
 # End Target
