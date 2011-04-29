@@ -28,7 +28,7 @@ do
    libs=`svn diff $f | \
          fgrep TARGET_LINK_LIBRARIES | \
          grep -v '^ ' | \
-         perl -p -e 's/^(.)\s*TARGET_LINK_LIBRARIES\s*\(\s*\S+\s*/$1\t/;s/\s*\)\s*$/\n/;s/\s+/\t/g;s/([+-])\t(\S+)\t/$1\t$2\n$1\t/ while (m/[+-]\t\S+\t/);s/\n[+-]\t$/\n/;' | \
+         perl -p -e 's/\s*#.*//;s/^(.)\s*TARGET_LINK_LIBRARIES\s*\(\s*\S+\s*/$1\t/;s/\s*\)\s*$/\n/;s/\s+/\t/g;s/([+-])\t(\S+)\t/$1\t$2\n$1\t/ while (m/[+-]\t\S+\t/);s/\n[+-]\t$/\n/;' | \
          perl -e 'while (<>) { if (m/^-\t(\S+)/) { ++$a{$1}; } elsif (m/^\+\t(\S+)/) { --$a{$1}; } } foreach (keys %a) { print " lib/lib$_.so" if ($a{$_} > 0); }'`
    echo $f:$libs
    test "$libs" || continue
