@@ -37,7 +37,7 @@ bsta_histogram<T>::bsta_histogram(const T min, const T max,
                                   const unsigned int nbins,
                                   const T min_prob)
   : area_valid_(false), area_(0), nbins_(nbins), delta_(0),
-    min_prob_(min_prob), min_ (min), max_(max)
+    min_prob_(min_prob), min_(min), max_(max)
 {
   bsta_histogram_base::type_ = bsta_histogram_traits<T>::type();
   if (nbins>0)
@@ -57,7 +57,7 @@ template <class T>
 bsta_histogram<T>::bsta_histogram(const unsigned int nbins, const T min, const T delta,
                                   const T min_prob)
  : area_valid_(false), area_(0), nbins_(nbins), delta_(delta),
-    min_prob_(min_prob), min_ (min), max_(min+nbins*delta)
+    min_prob_(min_prob), min_(min), max_(min+nbins*delta)
 {
   bsta_histogram_base::type_ = bsta_histogram_traits<T>::type();
   if (nbins>0)
@@ -73,7 +73,7 @@ template <class T>
 bsta_histogram<T>::bsta_histogram(const T min, const T max,
                                   vcl_vector<T> const& data, const T min_prob)
   : area_valid_(false), area_(0), delta_(0), min_prob_(min_prob),
-    min_ (min), max_(max), counts_(data)
+    min_(min), max_(max), counts_(data)
 {
   bsta_histogram_base::type_ = bsta_histogram_traits<T>::type();
   nbins_ = data.size();
@@ -90,7 +90,7 @@ void bsta_histogram<T>::upcount(T x, T mag)
   if (x<min_||x>max_)
     return;
   for (unsigned int i = 0; i<nbins_; ++i)
-    if ((i+1)*delta_>=(x-min_))
+    if (T((i+1)*delta_) + min_ >= x)
     {
       counts_[i] += mag;
       break;
@@ -105,7 +105,7 @@ int bsta_histogram<T>::bin_at_val(T x)
   if (x<min_||x>max_)
     return -1;
   for (unsigned int i = 0; i<nbins_; ++i)
-    if ((i+1)*delta_>=(x-min_))
+    if (T((i+1)*delta_) + min_ >= x)
     {
       return i;
     }
@@ -154,7 +154,7 @@ T bsta_histogram<T>::p(const T val) const
     return 0;
   else
     for (unsigned int i = 0; i<nbins_; ++i)
-      if ((i+1)*delta_>=(val-min_))
+      if (T((i+1)*delta_) + min_ >= val)
         return counts_[i]/area_;
   return 0;
 }
@@ -202,12 +202,12 @@ T bsta_histogram<T>::mean_vals(const T low, const T high) const
   if (thigh>max_) thigh = max_;
   unsigned low_bin=0, high_bin = 0;
   for (unsigned int i = 0; i<nbins_; ++i)
-    if ((i+1)*delta_>=(tlow-min_)){
+    if (T((i+1)*delta_) + min_ >= tlow) {
       low_bin = i;
       break;
     }
   for (unsigned int i = 0; i<nbins_; ++i)
-    if ((i+1)*delta_>=(thigh-min_)){
+    if (T((i+1)*delta_) + min_ >= thigh) {
       high_bin = i;
       break;
     }
@@ -253,12 +253,12 @@ variance_vals(const T low, const T high) const
   if (thigh>max_) thigh = max_;
   unsigned low_bin=0, high_bin = 0;
   for (unsigned int i = 0; i<nbins_; ++i)
-    if ((i+1)*delta_>=(tlow-min_)){
+    if (T((i+1)*delta_) + min_ >= tlow) {
       low_bin = i;
       break;
     }
   for (unsigned int i = 0; i<nbins_; ++i)
-    if ((i+1)*delta_>=(thigh-min_)){
+    if (T((i+1)*delta_) + min_ >= thigh) {
       high_bin = i;
       break;
     }
@@ -273,7 +273,6 @@ T bsta_histogram<T>::entropy() const
   {
     double pi = this->p(i);
     if (pi>min_prob_)
-
       ent -= pi*T(vcl_log(static_cast<double>(pi)));
   }
   ent *= vnl_math::log2e;
@@ -338,7 +337,7 @@ T bsta_histogram<T>::fraction_below(const T value) const
     return 0;
   T sum = 0, limit=(value-min_);
   for (unsigned int i = 0; i<nbins_; ++i)
-    if ((i+1)*delta_<limit)
+    if (T((i+1)*delta_)<limit)
       sum+=counts_[i];
     else
       return sum/area_;
@@ -357,7 +356,7 @@ T bsta_histogram<T>::fraction_above(const T value) const
     return 0;
   T sum = 0, limit=(value-min_);
   for (unsigned int i = 0; i<nbins_; ++i)
-    if ((i+1)*delta_>limit)
+    if (T((i+1)*delta_)>limit)
       sum+=counts_[i];
   return sum/area_;
 }
