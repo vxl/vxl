@@ -273,9 +273,6 @@ SOURCE=.\bsta_detector_mixture.h
 SOURCE=.\bsta_distribution.h
 # End Source File
 # Begin Source File
-SOURCE=.\bsta_gauss_f1.h
-# End Source File
-# Begin Source File
 SOURCE=.\bsta_gauss_fd3.h
 # End Source File
 # Begin Source File
@@ -333,9 +330,6 @@ SOURCE=.\bsta_joint_histogram_base.h
 SOURCE=.\bsta_joint_histogram_sptr.h
 # End Source File
 # Begin Source File
-SOURCE=.\bsta_gauss_f2.h
-# End Source File
-# Begin Source File
 SOURCE=.\bsta_weibull.h
 # End Source File
 # Begin Source File
@@ -385,6 +379,45 @@ SOURCE=.\bsta_kent.h
 # End Source File
 # Begin Source File
 SOURCE=.\bsta_kent.txx
+# End Source File
+# Begin Source File
+SOURCE=.\bsta_gauss_sf1.h
+# End Source File
+# Begin Source File
+SOURCE=.\bsta_gauss_fd2.h
+# End Source File
+# Begin Source File
+SOURCE=.\bsta_gauss_sd1.h
+# End Source File
+# Begin Source File
+SOURCE=.\bsta_gauss_if1.h
+# End Source File
+# Begin Source File
+SOURCE=.\bsta_gauss_ff2.h
+# End Source File
+# Begin Source File
+SOURCE=.\bsta_gauss_id1.h
+# End Source File
+# Begin Source File
+SOURCE=.\bsta_gauss_id2.h
+# End Source File
+# Begin Source File
+SOURCE=.\bsta_gauss_fd1.h
+# End Source File
+# Begin Source File
+SOURCE=.\bsta_gauss_ff1.h
+# End Source File
+# Begin Source File
+SOURCE=.\bsta_parzen_sf2.h
+# End Source File
+# Begin Source File
+SOURCE=.\bsta_gauss_if2.h
+# End Source File
+# Begin Source File
+SOURCE=.\bsta_gauss_sd2.h
+# End Source File
+# Begin Source File
+SOURCE=.\bsta_gauss_if4.h
 # End Source File
 # End Group
 # End Target

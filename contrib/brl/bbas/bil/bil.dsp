@@ -96,10 +96,10 @@ LIB32=link.exe -lib
 SOURCE=.\Templates/bil_bounded_image_view+double-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/bil_bounded_image_view+unsigned_char-.cxx
+SOURCE=.\Templates/bil_bounded_image_view+uchar-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/bil_bounded_image_view+unsigned_short-.cxx
+SOURCE=.\Templates/bil_bounded_image_view+ushort-.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"

@@ -360,19 +360,19 @@ SOURCE=.\Templates/mbl_save_text_file+vgl_point_3d+double--.cxx
 SOURCE=.\Templates/mbl_load_text_file+vcl_string-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/mbl_data_array_wrapper+unsigned-.cxx
+SOURCE=.\Templates/mbl_data_array_wrapper+uint-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/mbl_data_collector_list+unsigned-.cxx
+SOURCE=.\Templates/mbl_data_collector_list+uint-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/mbl_data_collector+unsigned-.cxx
+SOURCE=.\Templates/mbl_data_collector+uint-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/mbl_data_wrapper+unsigned-.cxx
+SOURCE=.\Templates/mbl_data_wrapper+uint-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/mbl_stochastic_data_collector+unsigned-.cxx
+SOURCE=.\Templates/mbl_stochastic_data_collector+uint-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/mbl_load_text_file+uint-.cxx

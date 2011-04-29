@@ -111,7 +111,7 @@ SOURCE=.\bbgm_feature_image.cxx
 SOURCE=.\Templates/bbgm_image_of+bsta_mixture+bsta_num_obs+bsta_gauss_if3---.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/bbgm_image_of+bsta_num_obs+bsta_mixture+bsta_num_obs+bsta_gauss_f1----.cxx
+SOURCE=.\Templates/bbgm_image_of+bsta_num_obs+bsta_mixture+bsta_num_obs+bsta_gauss_sf1----.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/bbgm_image_of+bsta_num_obs+bsta_mixture+bsta_num_obs+bsta_gauss_ff3----.cxx
@@ -153,7 +153,7 @@ SOURCE=.\Templates/bbgm_image_of+bsta_num_obs+bsta_gaussian_sphere+float.1---.cx
 SOURCE=.\Templates/bbgm_image_of+bsta_num_obs+bsta_mixture_fixed+bsta_num_obs+bsta_gaussian_indep+float.4--.3---.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/bbgm_image_of+bsta_num_obs+bsta_mixture_fixed+bsta_num_obs+bsta_gauss_f1-.3---.cxx
+SOURCE=.\Templates/bbgm_image_of+bsta_num_obs+bsta_mixture_fixed+bsta_num_obs+bsta_gauss_sf1-.3---.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/bbgm_image_of+bsta_parzen_sphere+float.3--.cxx

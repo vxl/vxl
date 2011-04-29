@@ -108,10 +108,10 @@ SOURCE=.\Templates/vbl_io_array_2d+double-.cxx
 SOURCE=.\Templates/vbl_io_array_2d+int-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vbl_io_array_2d+unsigned-.cxx
+SOURCE=.\Templates/vbl_io_array_2d+uint-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vbl_io_array_2d+unsignedchar-.cxx
+SOURCE=.\Templates/vbl_io_array_2d+uchar-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/vbl_io_array_2d+float-.cxx

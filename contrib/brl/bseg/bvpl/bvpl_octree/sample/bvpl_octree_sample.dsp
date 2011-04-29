@@ -102,7 +102,7 @@ SOURCE=.\Templates/bvpl_octree_sample+float-.cxx
 SOURCE=.\Templates/bvpl_pca_basis_sample+10-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/bvpl_octree_sample+bsta_num_obs+bsta_gauss_f1--.cxx
+SOURCE=.\Templates/bvpl_octree_sample+bsta_num_obs+bsta_gauss_sf1--.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"

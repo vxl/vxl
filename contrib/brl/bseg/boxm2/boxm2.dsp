@@ -146,7 +146,7 @@ SOURCE=.\Templates/boxm2_data+BOXM2_AUX-.cxx
 SOURCE=.\Templates/vbl_array_3d+vil_image_view+byte-~-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vnl_vector_fixed+unsignedchar.8-.cxx
+SOURCE=.\Templates/vnl_vector_fixed+uchar.8-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/boxm2_data+BOXM2_MOG3_GREY_16-.cxx

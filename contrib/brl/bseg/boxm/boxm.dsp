@@ -110,16 +110,16 @@ SOURCE=.\boxm_apm_traits.cxx
 SOURCE=.\Templates/boxm_scene+boct_tree+short.int--.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/boxm_block+boct_tree+short.bsta_num_obs+bsta_gauss_f1---.cxx
+SOURCE=.\Templates/boxm_block+boct_tree+short.bsta_num_obs+bsta_gauss_sf1---.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/boct_tree_cell+short.bsta_num_obs+bsta_gauss_f1--.cxx
+SOURCE=.\Templates/boct_tree_cell+short.bsta_num_obs+bsta_gauss_sf1--.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/vbl_io_smart_ptr+boxm_scene_base-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/boct_tree+short.bsta_num_obs+bsta_gauss_f1--.cxx
+SOURCE=.\Templates/boct_tree+short.bsta_num_obs+bsta_gauss_sf1--.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/vbl_array_3d+boxm_block+boct_tree+short.float--~-.cxx
@@ -140,10 +140,10 @@ SOURCE=.\Templates/vbl_array_3d+boxm_block+boct_tree+short.int--~-.cxx
 SOURCE=.\Templates/vbl_smart_ptr+boxm_scene_base-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vbl_array_3d+boxm_block+boct_tree+short.bsta_num_obs+bsta_gauss_f1---~-.cxx
+SOURCE=.\Templates/vbl_array_3d+boxm_block+boct_tree+short.bsta_num_obs+bsta_gauss_sf1---~-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/boxm_scene+boct_tree+short.bsta_num_obs+bsta_gauss_f1---.cxx
+SOURCE=.\Templates/boxm_scene+boct_tree+short.bsta_num_obs+bsta_gauss_sf1---.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/boxm_block+boct_tree+short.vgl_point_3d+double---.cxx
@@ -161,7 +161,7 @@ SOURCE=.\Templates/boxm_scene+boct_tree+short.vgl_point_3d+double---.cxx
 SOURCE=.\Templates/vbl_array_3d+boxm_block+boct_tree+short.vgl_point_3d+double---~-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/boxm_block_iterator+boct_tree+short.bsta_num_obs+bsta_gauss_f1---.cxx
+SOURCE=.\Templates/boxm_block_iterator+boct_tree+short.bsta_num_obs+bsta_gauss_sf1---.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/boxm_block_iterator+boct_tree+short.vgl_point_3d+double---.cxx

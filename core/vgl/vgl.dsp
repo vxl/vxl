@@ -336,13 +336,13 @@ SOURCE=.\Templates/vgl_convex+double-.cxx
 SOURCE=.\Templates/vgl_convex+float-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vgl_box_2d+unsigned-.cxx
+SOURCE=.\Templates/vgl_box_2d+uint-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vgl_homg_point_2d+unsigned-.cxx
+SOURCE=.\Templates/vgl_homg_point_2d+uint-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vgl_point_2d+unsigned-.cxx
+SOURCE=.\Templates/vgl_point_2d+uint-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/vgl_conic_segment_2d+double-.cxx
@@ -375,7 +375,7 @@ SOURCE=.\Templates/vgl_tolerance+float-.cxx
 SOURCE=.\Templates/vgl_tolerance+int-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vgl_tolerance+unsigned-.cxx
+SOURCE=.\Templates/vgl_tolerance+uint-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/vgl_infinite_line_3d+int-.cxx

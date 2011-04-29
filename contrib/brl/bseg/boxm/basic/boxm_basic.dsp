@@ -98,7 +98,7 @@ LIB32=link.exe -lib
 SOURCE=.\boxm_util_data_types.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/boxm_block_iterator+boct_tree+short.bsta_num_obs+bsta_gauss_f1---.cxx
+SOURCE=.\Templates/boxm_block_iterator+boct_tree+short.bsta_num_obs+bsta_gauss_sf1---.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/boxm_cell_vis_graph_iterator+short.boxm_sample_multi_bin+BOXM_APM_MOG_GREY--.cxx

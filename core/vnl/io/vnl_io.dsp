@@ -204,7 +204,7 @@ SOURCE=.\Templates/vsl_vector_io+vcl_vector+vcl_vector+vnl_vector+double----.cxx
 SOURCE=.\Templates/vsl_vector_io+vnl_matrix+double--.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vsl_vector_io+vcl_vector+vnl_vector_fixed+unsigned_short.2---.cxx
+SOURCE=.\Templates/vsl_vector_io+vcl_vector+vnl_vector_fixed+ushort.2---.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/vnl_io_vector_fixed+double.2-.cxx
@@ -234,7 +234,7 @@ SOURCE=.\Templates/vnl_io_matrix_fixed+float.3.3-.cxx
 SOURCE=.\Templates/vnl_io_vector_fixed+float.3-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vsl_map_io+unsigned.vnl_double_2-.cxx
+SOURCE=.\Templates/vsl_map_io+uint.vnl_double_2-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/vnl_io_matrix_fixed+double.4.20-.cxx
@@ -246,7 +246,7 @@ SOURCE=.\Templates/vnl_io_matrix_fixed+double.6.6-.cxx
 SOURCE=.\Templates/vnl_io_vector_fixed+double.6-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vnl_io_vector_fixed+unsigned_short.2-.cxx
+SOURCE=.\Templates/vnl_io_vector_fixed+ushort.2-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/vnl_io_vector_fixed+float.4-.cxx

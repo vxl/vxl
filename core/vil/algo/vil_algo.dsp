@@ -228,7 +228,7 @@ SOURCE=.\Templates/vil_histogram+short-.cxx
 SOURCE=.\Templates/vil_histogram+signed_char-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vil_histogram+unsigned_short-.cxx
+SOURCE=.\Templates/vil_histogram+ushort-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/vil_abs_shuffle_distance+byte.byte-.cxx

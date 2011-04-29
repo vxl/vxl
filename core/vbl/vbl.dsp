@@ -126,10 +126,10 @@ SOURCE=.\Templates/vbl_array_2d+int-.cxx
 SOURCE=.\Templates/vbl_array_2d+short-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vbl_array_2d+unsigned-.cxx
+SOURCE=.\Templates/vbl_array_2d+uint-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vbl_array_2d+unsignedchar-.cxx
+SOURCE=.\Templates/vbl_array_2d+uchar-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/vbl_array_3d+double-.cxx
@@ -216,7 +216,7 @@ SOURCE=.\Templates/vbl_array_3d+float-.cxx
 SOURCE=.\Templates/vbl_array_1d+ushort-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vbl_local_minima+unsigned-.cxx
+SOURCE=.\Templates/vbl_local_minima+uint-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/vbl_local_minima+float-.cxx
@@ -231,7 +231,7 @@ SOURCE=.\Templates/vbl_attributes+double-.cxx
 SOURCE=.\Templates/vbl_attributes+float-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vbl_attributes+unsigned-.cxx
+SOURCE=.\Templates/vbl_attributes+uint-.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"

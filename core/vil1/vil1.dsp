@@ -177,13 +177,13 @@ SOURCE=.\Templates/vil1_memory_image_of+signed_int-.cxx
 SOURCE=.\Templates/vil1_memory_image_of+signed_short-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vil1_memory_image_of+unsigned_char-.cxx
+SOURCE=.\Templates/vil1_memory_image_of+uchar-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vil1_memory_image_of+unsigned_int-.cxx
+SOURCE=.\Templates/vil1_memory_image_of+uint-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vil1_memory_image_of+unsigned_short-.cxx
+SOURCE=.\Templates/vil1_memory_image_of+ushort-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/vil1_memory_image_of+vcl_complex+double--.cxx
@@ -231,7 +231,7 @@ SOURCE=.\Templates/vil1_rgb+long-.cxx
 SOURCE=.\Templates/vil1_rgb+uint-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vil1_rgb+unsignedchar-.cxx
+SOURCE=.\Templates/vil1_rgb+uchar-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/vil1_rgb+vxl_uint_16-.cxx
@@ -240,7 +240,7 @@ SOURCE=.\Templates/vil1_rgb+vxl_uint_16-.cxx
 SOURCE=.\Templates/vil1_rgba+float-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vil1_rgba+unsignedchar-.cxx
+SOURCE=.\Templates/vil1_rgba+uchar-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/vil1_ssd+float.float.double-.cxx

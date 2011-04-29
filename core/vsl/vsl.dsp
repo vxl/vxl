@@ -210,7 +210,7 @@ SOURCE=.\Templates/vsl_vector_io+vcl_pair+int.int--.cxx
 SOURCE=.\Templates/vsl_vector_io+vcl_pair+int.double--.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vsl_map_io+unsigned.unsigned-.cxx
+SOURCE=.\Templates/vsl_map_io+uint.uint-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/vsl_pair_io+int.double-.cxx
@@ -228,7 +228,7 @@ SOURCE=.\Templates/vsl_pair_io+int.float-.cxx
 SOURCE=.\Templates/vsl_vector_io+vcl_pair+int.float--.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vsl_vector_io+vcl_vector+unsigned--.cxx
+SOURCE=.\Templates/vsl_vector_io+vcl_vector+uint--.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/vsl_vector_io+long-.cxx

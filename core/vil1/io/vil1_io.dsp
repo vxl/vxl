@@ -114,13 +114,13 @@ SOURCE=.\Templates/vil1_io_memory_image_of+short-.cxx
 SOURCE=.\Templates/vil1_io_memory_image_of+signed_char-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vil1_io_memory_image_of+unsigned_char-.cxx
+SOURCE=.\Templates/vil1_io_memory_image_of+uchar-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vil1_io_memory_image_of+unsigned_int-.cxx
+SOURCE=.\Templates/vil1_io_memory_image_of+uint-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vil1_io_memory_image_of+unsigned_short-.cxx
+SOURCE=.\Templates/vil1_io_memory_image_of+ushort-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/vil1_io_memory_image_of+vcl_complex+double--.cxx

@@ -118,10 +118,7 @@ SOURCE=.\Templates/bprb_parameters+float-.cxx
 SOURCE=.\Templates/bprb_parameters+int-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/bprb_parameters+unsigned-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/bprb_parameters+unsigned_int-.cxx
+SOURCE=.\Templates/bprb_parameters+uint-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/bprb_parameters+vcl_string-.cxx

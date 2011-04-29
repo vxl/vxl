@@ -114,7 +114,7 @@ SOURCE=.\bvpl_taylor_scenes_map.cxx
 SOURCE=.\bvpl_global_taylor.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/boxm_block+boct_tree+short.bvpl_octree_sample+bsta_num_obs+bsta_gauss_f1----.cxx
+SOURCE=.\Templates/boxm_block+boct_tree+short.bvpl_octree_sample+bsta_num_obs+bsta_gauss_sf1----.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/boxm_block+boct_tree+short.bvpl_octree_sample+float---.cxx
@@ -123,7 +123,7 @@ SOURCE=.\Templates/boxm_block+boct_tree+short.bvpl_octree_sample+float---.cxx
 SOURCE=.\Templates/boct_tree+short.bvpl_octree_sample+float--.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/boct_tree+short.bvpl_octree_sample+bsta_num_obs+bsta_gauss_f1---.cxx
+SOURCE=.\Templates/boct_tree+short.bvpl_octree_sample+bsta_num_obs+bsta_gauss_sf1---.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/boxm_block+boct_tree+short.vnl_vector_fixed+float.3---.cxx

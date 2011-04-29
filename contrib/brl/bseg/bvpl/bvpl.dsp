@@ -102,7 +102,7 @@ SOURCE=.\Templates/vbl_array_3d+bvxm_opinion-.cxx
 SOURCE=.\Templates/bvpl_subgrid_iterator+vnl_float_3-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/bvpl_subgrid_iterator+bsta_gauss_f1-.cxx
+SOURCE=.\Templates/bvpl_subgrid_iterator+bsta_gauss_sf1-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/vbl_smart_ptr+bvpl_subgrid_iterator_base-.cxx
@@ -120,7 +120,7 @@ SOURCE=.\Templates/bvpl_voxel_subgrid+float-.cxx
 SOURCE=.\Templates/bvpl_voxel_subgrid+vnl_float_3-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/bvpl_voxel_subgrid+bsta_gauss_f1-.cxx
+SOURCE=.\Templates/bvpl_voxel_subgrid+bsta_gauss_sf1-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/bvpl_voxel_subgrid+uint-.cxx

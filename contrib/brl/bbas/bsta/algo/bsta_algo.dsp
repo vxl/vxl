@@ -94,7 +94,7 @@ LIB32=link.exe -lib
 SOURCE=.\bsta_fit_weibull.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/bsta_adaptive_updater+bsta_mixture+bsta_num_obs+bsta_gauss_f1---.cxx
+SOURCE=.\Templates/bsta_adaptive_updater+bsta_mixture+bsta_num_obs+bsta_gauss_sf1---.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/bsta_adaptive_updater+bsta_mixture+bsta_num_obs+bsta_gauss_fd3---.cxx
@@ -115,7 +115,7 @@ SOURCE=.\Templates/bsta_adaptive_updater+bsta_mixture+bsta_num_obs+bsta_gauss_sd
 SOURCE=.\Templates/bsta_adaptive_updater+bsta_mixture+bsta_num_obs+bsta_gauss_sf3---.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/bsta_adaptive_updater+bsta_mixture_fixed+bsta_num_obs+bsta_gauss_f1-.3--.cxx
+SOURCE=.\Templates/bsta_adaptive_updater+bsta_mixture_fixed+bsta_num_obs+bsta_gauss_sf1-.3--.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/bsta_adaptive_updater+bsta_mixture_fixed+bsta_num_obs+bsta_gauss_if3-.3--.cxx
