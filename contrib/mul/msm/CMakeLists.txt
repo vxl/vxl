@@ -17,6 +17,7 @@ SET(msm_sources
   msm_shape_model_builder.h   msm_shape_model_builder.cxx
   msm_ref_shape_instance.h    msm_ref_shape_instance.cxx
   msm_shape_instance.h        msm_shape_instance.cxx
+  msm_shape_perturber.h       msm_shape_perturber.cxx
   msm_wt_mat_2d.h             msm_wt_mat_2d.cxx
 
   msm_aligner.h               msm_aligner.cxx

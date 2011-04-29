@@ -9,8 +9,9 @@
 #include <msm/msm_ref_shape_instance.h>
 #include <msm/msm_ref_shape_model.h>
 #include <msm/msm_shape_instance.h>
-#include <msm/msm_shape_model_builder.h>
 #include <msm/msm_shape_model.h>
+#include <msm/msm_shape_model_builder.h>
+#include <msm/msm_shape_perturber.h>
 #include <msm/msm_similarity_aligner.h>
 #include <msm/msm_translation_aligner.h>
 #include <msm/msm_wt_mat_2d.h>
