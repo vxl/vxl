@@ -20,6 +20,8 @@ DECLARE_FUNC_CONS(boxm2_ocl_render_expected_color_process);
 DECLARE_FUNC_CONS(boxm2_ocl_update_color_process);
 DECLARE_FUNC_CONS(boxm2_ocl_render_gl_expected_color_process);
 DECLARE_FUNC_CONS(boxm2_ocl_change_detection_process);
+DECLARE_FUNC_CONS(boxm2_ocl_probability_of_image_process);
+DECLARE_FUNC_CONS(boxm2_ocl_convert_float_image_to_rgba_process);
 
 
 
