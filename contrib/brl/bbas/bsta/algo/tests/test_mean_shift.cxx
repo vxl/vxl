@@ -2,7 +2,6 @@
 #include <bsta/algo/bsta_mean_shift.h>
 #include <bsta/algo/bsta_sample_set.h>
 #include <vcl_string.h>
-#include <bsta/bsta_gauss_f1.h>
 #include <bsta/bsta_gaussian_indep.h>
 #include <bsta/bsta_gaussian_full.h>
 #include <vcl_fstream.h>
