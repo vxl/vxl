@@ -11,7 +11,6 @@
 //   <none yet>
 // \endverbatim
 
-#include <vnl/vnl_matrix.h>
 #include <vcl_string.h>
 #include <vcl_vector.h>
 #include <vcl_iostream.h>
@@ -20,6 +19,7 @@
 #include <vnl/vnl_double_4.h>
 #include <vnl/vnl_matrix.h>
 #include <vnl/vnl_vector.h>
+
 class brad_illum_util
 {
  public:
@@ -29,14 +29,15 @@ class brad_illum_util
   static bool
     load_illumination_dirs(vcl_string const& path,
                            vcl_vector<vnl_double_3>& ill_dirs);
-static bool 
+static bool
   load_norm_intensities(vcl_string const& path,
                         vcl_vector<double>& norm_ints);
 
 
-  //: given a set of illumination directions and image intensities,
+  //:
+  // Given a set of illumination directions and image intensities,
   // find the surface normal and ambient illumination factor, where
-  // both are weighted by the surface albedo. A minium of 4 directions
+  // both are weighted by the surface albedo. A minimum of 4 directions
   // are required.
   static bool solve_lambertian_model(vcl_vector<vnl_double_3> const& ill_dirs,
                                      vcl_vector<double> const& intensities,
@@ -47,11 +48,12 @@ static bool
   static double expected_intensity(vnl_double_3 const& illum_dir,
                                    vnl_double_4 const& model_params);
 
-  //: Test the error in adding a new image observation to the model
+  //:
+  // Test the error in adding a new image observation to the model
   // based on a full solution with the new point. Leave one out method
   static void solution_error(vcl_vector<vnl_double_3> const& ill_dirs,
-                               vcl_vector<double> const& intensities,
-                               vcl_vector<double>& fitting_error);  
+                             vcl_vector<double> const& intensities,
+                             vcl_vector<double>& fitting_error);
 
   //: Find the nearest illumination orientation
   static double nearest_ill_dir(vcl_vector<vnl_double_3> const& ill_dirs,
@@ -66,8 +68,8 @@ static bool
                                       vnl_vector<double>& scene_irrad,
                                       vnl_matrix<double>& surf_normals,
                                       vnl_vector<double>& reflectances);
-                             
-  
+
+
   static void solve_atmospheric_model(vnl_matrix<double> illum_dirs,
                                       vnl_matrix<double> corr_intens,
                                       unsigned max_iterations,
@@ -83,7 +85,7 @@ static bool
                              vnl_vector<double> reflectances,
                              vnl_matrix<double>& fit_errors,
                              vnl_matrix<double>& pred_intensities);
-                             
+
   static void solution_error(vnl_matrix<double> illum_dirs,
                              vnl_matrix<double> corr_intens,
                              vnl_matrix<double> surf_normals,
@@ -96,13 +98,13 @@ static bool
                                  double scene_irrad,
                                  vnl_double_3 const& surface_norm,
                                  double reflectance
-                                 );
+                                );
 
   static void display_illumination_space_vrml(vnl_matrix<double> illum_dirs,
                                               vcl_string const& path,
-                                              vnl_double_3 degenerate_dir = 
+                                              vnl_double_3 degenerate_dir =
                                               vnl_double_3(0,0,0)
-                                              );
+                                             );
 };
 
 #endif // brad_illum_util_h_
