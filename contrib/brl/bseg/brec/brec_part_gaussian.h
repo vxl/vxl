@@ -24,7 +24,6 @@
 #include <vil/vil_image_view.h>
 #include <vbl/vbl_array_2d.h>
 #include <bsta/bsta_weibull.h>
-#include <bsta/bsta_gauss_f1.h>
 
 #include <vul/vul_psfile.h>
 

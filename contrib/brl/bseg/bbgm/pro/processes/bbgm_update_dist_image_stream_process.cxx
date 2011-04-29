@@ -8,7 +8,6 @@
 #include <bbgm/bbgm_update.h>
 #include <bsta/bsta_attributes.h>
 #include <bsta/bsta_gauss_if3.h>
-#include <bsta/bsta_gauss_f1.h>
 #include <bsta/bsta_mixture.h>
 #include <bsta/algo/bsta_adaptive_updater.h>
 #include <brdb/brdb_value.h>

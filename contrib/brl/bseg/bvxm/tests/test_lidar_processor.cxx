@@ -4,7 +4,6 @@
 #include <bvxm/bvxm_lidar_processor.h>
 #include <bvxm/grid/bvxm_memory_chunk.h>
 
-#include <bsta/bsta_gauss_f1.h>
 #include <bsta/bsta_gaussian_indep.h>
 #include <bsta/algo/bsta_adaptive_updater.h>
 

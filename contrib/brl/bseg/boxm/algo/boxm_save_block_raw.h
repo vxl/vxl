@@ -14,7 +14,6 @@
 #include <vpgl/vpgl_camera.h>
 
 #include <bsta/bsta_attributes.h>
-#include <bsta/bsta_gauss_f1.h>
 
 #include <vcl_iostream.h>
 
