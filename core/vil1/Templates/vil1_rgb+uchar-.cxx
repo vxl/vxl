@@ -6,7 +6,8 @@ typedef vil1_rgb<double> vil1_rgb_double;
 
 VCL_DECLARE_SPECIALIZATION(vil1_rgb<unsigned char>::vil1_rgb(const vil1_rgb_double& r))
 VCL_DEFINE_SPECIALIZATION
-vil1_rgb<unsigned char>::vil1_rgb(const vil1_rgb_double& r) {
+vil1_rgb<unsigned char>::vil1_rgb(const vil1_rgb_double& r)
+{
   double r_R = r.r;
   double r_G = r.g;
   double r_B = r.b;
