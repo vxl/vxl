@@ -93,6 +93,29 @@ void step_cell_change_detection_uchar8_w_expected(__global MOG_TYPE * cell_data,
 
 }
 #endif
+#ifdef PROB_IMAGE
+void step_cell_compute_probability_of_intensity(__global MOG_TYPE * cell_data,
+                                                  __global float* alpha_data,
+                                                  int data_ptr,
+                                                  float d, 
+                                                  float * vis,
+                                                  float * prob_image,
+                                                  float img_intensity)
+{
+  CONVERT_FUNC(uchar_data,cell_data[data_ptr])
+  float8 data= convert_float8(uchar_data)/NORM;
+
+  float prob_den=gauss_3_mixture_prob_density(img_intensity,
+                                              data.s0,data.s1,data.s2,
+                                              data.s3,data.s4,data.s5,
+                                              data.s6,data.s7,1-data.s2-data.s5);
+  float alpha    = alpha_data[data_ptr];
+  float prob     = 1-exp(-alpha*d);
+  float omega    = (*vis)*prob;
+  (*vis)         = (*vis)*(1-prob);
+  (*prob_image) += prob_den*omega;
+}
+#endif
 
 void step_cell_change_detection(__global uchar8* cell_data, __global float* alpha_data,int data_ptr,
                                 float d, float4 * data_return, float img_intensity)
