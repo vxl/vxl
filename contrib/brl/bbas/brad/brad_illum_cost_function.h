@@ -18,8 +18,8 @@ class brad_illum_cost_function : public vnl_cost_function
                            double theta_min, double theta_max,
                            double a_uu, double a_uv, double a_vv,
                            double a_uh, double a_vh, double a_hh)
-    : vnl_cost_function(1),u_(u), v_(v), theta_min_(theta_min), 
-    theta_max_(theta_max), a_uu_(a_uu), a_uv_(a_uv), a_vv_(a_vv),
+    : vnl_cost_function(1), theta_min_(theta_min),  theta_max_(theta_max),
+    u_(u), v_(v), a_uu_(a_uu), a_uv_(a_uv), a_vv_(a_vv),
     a_uh_(a_uh), a_vh_(a_vh), a_hh_(a_hh){}
 
   virtual ~brad_illum_cost_function() {}
@@ -36,23 +36,22 @@ class brad_illum_cost_function : public vnl_cost_function
   }
   //:setup for brent minimizer
   void determine_brackets(double& a, double& b, double& c, double interval = 0.1)
+  {
+    double min = 1.0e10, vmin = 0;
+    vnl_vector<double> x(1);
+    for (double v = theta_min_; v<=theta_max_; v+=interval)
     {
-      double pi = vnl_math::pi;
-      double min = 1.0e10, vmin = 0;
-      vnl_vector<double> x(1);
-      for(double v = theta_min_; v<=theta_max_; v+=interval)
-        {
-          x[0]=v;
-          double temp = f(x);
-          if(temp<min){
-            min = temp;
-            vmin = v;
-          }
-        }
-      a = vmin-interval;
-      b = vmin;
-      c = vmin+interval;
+      x[0]=v;
+      double temp = f(x);
+      if (temp<min){
+        min = temp;
+        vmin = v;
+      }
     }
+    a = vmin-interval;
+    b = vmin;
+    c = vmin+interval;
+  }
  private:
   double theta_min_, theta_max_;
   vnl_vector<double> u_, v_;
