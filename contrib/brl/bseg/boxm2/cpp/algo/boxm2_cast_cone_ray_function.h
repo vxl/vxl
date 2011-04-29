@@ -93,59 +93,53 @@ void boxm2_cast_cone_ray_function(vgl_box_3d<double>& block_box,
     for (int x=minCell.x(); x<maxCell.x(); ++x) {
       for (int y=minCell.y(); y<maxCell.y(); ++y) {
         for (int z=minCell.z(); z<maxCell.z(); ++z) {
-          
           //load current block/tree
           uchar16 tree = blk_sptr->trees()(x,y,z);
           boct_bit_tree2 bit_tree( (unsigned char*) tree.data_block(), linfo->root_level+1);
 
           //determine how deep in each block you'll go
-          unsigned deepest_gen = linfo->root_level; 
-          
+          unsigned deepest_gen = linfo->root_level;
+
           //max cell - go through deepest generation
-          int max_cell = (int)(vcl_pow(8.0, deepest_gen+1) - 1) / 7;
-          max_cell = vcl_min(585, max_cell); 
-          
+          int max_cell = ((1 << (3*(deepest_gen+1))) - 1) / 7;
+          max_cell = vcl_min(585, max_cell);
+
           //depth first search through the tree
           vcl_list<unsigned> toVisit;
-          toVisit.push_back( 0 ); 
-          while( !toVisit.empty() )
+          toVisit.push_back( 0 );
+          while ( !toVisit.empty() )
           {
             //pop current node off the top of the list
-            unsigned currBitIndex = toVisit.front(); 
-            toVisit.pop_front(); 
-            
+            unsigned currBitIndex = toVisit.front();
+            toVisit.pop_front();
+
             //calculate the theoretical radius of this cell
-            int curr_depth = bit_tree.depth_at(currBitIndex); 
-            double side_len = 1.0 / (double) (1<<curr_depth); 
+            int curr_depth = bit_tree.depth_at(currBitIndex);
+            double side_len = 1.0 / (double) (1<<curr_depth);
             double cellR = UNIT_SPHERE_RADIUS * side_len;
-            
-            //intersect the cell, 
-            vgl_point_3d<double> localCenter = bit_tree.cell_center(currBitIndex); 
-            vgl_point_3d<double> cellCenter(localCenter.x() + x, localCenter.y() + y, localCenter.z() + z); 
+
+            //intersect the cell,
+            vgl_point_3d<double> localCenter = bit_tree.cell_center(currBitIndex);
+            vgl_point_3d<double> cellCenter(localCenter.x() + x, localCenter.y() + y, localCenter.z() + z);
             vgl_sphere_3d<double> cellSphere(cellCenter, cellR);
             double intersect_volume = bvgl_volume_of_intersection(currSphere, cellSphere);
-        
+
             //if it intersects, do one of two things
-            if( intersect_volume > 0 ) {
-              
+            if ( intersect_volume > 0 ) {
               //if the tree is a leaf, then update it's contribution
-              if( bit_tree.is_leaf(currBitIndex)) {
-                int data_ptr = bit_tree.get_data_index(currBitIndex); 
+              if ( bit_tree.is_leaf(currBitIndex)) {
+                int data_ptr = bit_tree.get_data_index(currBitIndex);
                 functor.step_cell(intersect_volume, data_ptr, i, j, side_len * linfo->block_len,
                                   intensity_norm, weighted_int, prob_surface);
                 total_volume += intersect_volume;
               }
-              else { //add children to the visit list 
-                unsigned firstChild = 8 * currBitIndex + 1; 
-                for(int ci = 0; ci < 8; ++ci) 
-                  toVisit.push_back( firstChild + ci ); 
+              else { //add children to the visit list
+                unsigned firstChild = 8 * currBitIndex + 1;
+                for (int ci = 0; ci < 8; ++ci)
+                  toVisit.push_back( firstChild + ci );
               }
-              
             }
-            
           } //end DFS while
-          
-          
         } //end z for
       } //end y for
     } //end x for
