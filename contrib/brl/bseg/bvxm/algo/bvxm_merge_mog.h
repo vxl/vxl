@@ -13,7 +13,7 @@
 // \endverbatim
 
 #include <bsta/bsta_distribution.h>
-#include <bsta/bsta_gauss_f1.h>
+#include <bsta/bsta_gauss_sf1.h>
 #include <bsta/bsta_attributes.h>
 #include <bsta/bsta_mixture_fixed.h>
 #include <bsta/bsta_gaussian_indep.h>
@@ -24,7 +24,7 @@ class bvxm_merge_mog
  private:
   //Only floating point are supported for now and mixtures with 3 components.
   //This class can be further templated if necessary
-  typedef bsta_num_obs<bsta_gauss_f1> gauss_type;
+  typedef bsta_num_obs<bsta_gauss_sf1> gauss_type;
   typedef bsta_mixture_fixed<gauss_type, 3> mix_gauss;
   typedef bsta_num_obs<mix_gauss> mix_gauss_type;
 
@@ -42,7 +42,7 @@ class bvxm_merge_mog
   //Distribution operations
 
   //:Merges all the components in the mixture into one component that minimizes the KL divergence between the two distributions
-  static void kl_merge(mix_gauss_type const& mixture,bsta_gauss_f1 &gaussian);
+  static void kl_merge(mix_gauss_type const& mixture,bsta_gauss_sf1 &gaussian);
 };
 
 #endif

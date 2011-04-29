@@ -2,7 +2,7 @@
 #include <testlib/testlib_test.h>
 #include <vnl/vnl_random.h>
 #include <boxm/util/boxm_sigma_normalizer.h>
-#include <bsta/bsta_gauss_f1.h>
+#include <bsta/bsta_gauss_sf1.h>
 #include <bsta/algo/bsta_fit_gaussian.h>
 
 
@@ -32,7 +32,7 @@ static void test_sigma_normalizer()
         weights.push_back(1.0f);
       }
       // compute the sample mean and variance
-      bsta_gauss_f1 gauss_model;
+      bsta_gauss_sf1 gauss_model;
       bsta_fit_gaussian(samples, weights, gauss_model);
       float normalized_sigma = vcl_sqrt(gauss_model.var()) * normalizer.normalization_factor_int(n_observations);
       if (normalized_sigma < true_sigma) {
@@ -52,7 +52,7 @@ static void test_sigma_normalizer()
 
     TEST_NEAR("normalization factor (float) approaches 1 for large N",norm_factor_f, 1.0, 0.1);
     TEST_NEAR("normalization factor (int) approaches 1 for large N",norm_factor_i, 1.0, 0.1);
-  }  
+  }
   return;
 }
 

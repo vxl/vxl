@@ -3,7 +3,7 @@
 // \file
 #include <bsta/algo/bsta_adaptive_updater.h>
 #include <bsta/bsta_distribution.h>
-#include <bsta/bsta_gauss_f1.h>
+#include <bsta/bsta_gauss_sf1.h>
 #include <bsta/bsta_attributes.h>
 #include <bsta/bsta_mixture_fixed.h>
 #include <bsta/bsta_gaussian_indep.h>
@@ -62,11 +62,11 @@ bool boxm_mog_grey_processor::update( apm_datatype &appear, obs_datatype const& 
   float init_variance = 0.008f;
   float min_stddev = 0.030f; //TO UNDERSTAND: changed from 0.02 for dinoRing dataset -dec
   float g_thresh = 2.5; // number of std devs from mean sample must be
-  bsta_gauss_f1 this_gauss(0.0f, init_variance);
+  bsta_gauss_sf1 this_gauss(0.0f, init_variance);
 
   const unsigned int nmodes = boxm_apm_traits<BOXM_APM_MOG_GREY>::n_gaussian_modes_;
 
-  typedef bsta_num_obs<bsta_gauss_f1> gauss_type;
+  typedef bsta_num_obs<bsta_gauss_sf1> gauss_type;
   typedef bsta_mixture_fixed<gauss_type, nmodes> mix_gauss;
 
   // the updater
@@ -139,9 +139,9 @@ void boxm_mog_grey_processor::compute_appearance(vcl_vector<boxm_apm_traits<BOXM
     return;
   }
   if (nobs == 1) {
-    model = bsta_num_obs<bsta_mixture_fixed<bsta_num_obs<bsta_gauss_f1>, max_nmodes> >();
-    bsta_gauss_f1 mode(obs[0], big_sigma*big_sigma);
-    model.insert(bsta_num_obs<bsta_gauss_f1>(mode), 1.0f);
+    model = bsta_num_obs<bsta_mixture_fixed<bsta_num_obs<bsta_gauss_sf1>, max_nmodes> >();
+    bsta_gauss_sf1 mode(obs[0], big_sigma*big_sigma);
+    model.insert(bsta_num_obs<bsta_gauss_sf1>(mode), 1.0f);
     return;
   }
 
@@ -149,7 +149,7 @@ void boxm_mog_grey_processor::compute_appearance(vcl_vector<boxm_apm_traits<BOXM
 
   if (nmodes == 0) {
     // if initial model is "blank", create an arbitrary starting point for the optimization with max number of modes
-    model = bsta_num_obs<bsta_mixture_fixed<bsta_num_obs<bsta_gauss_f1>, max_nmodes> >();
+    model = bsta_num_obs<bsta_mixture_fixed<bsta_num_obs<bsta_gauss_sf1>, max_nmodes> >();
     nmodes = max_nmodes;
     // no need for model to have more modes than observations
     if (nobs < nmodes) {
@@ -160,8 +160,8 @@ void boxm_mog_grey_processor::compute_appearance(vcl_vector<boxm_apm_traits<BOXM
       float mean = (float(m) + 0.5f) / float(nmodes);
       float sigma = 0.3f;
       float mode_weight = 1.0f / float(nmodes);
-      bsta_gauss_f1 mode(mean, sigma*sigma);
-      model.insert(bsta_num_obs<bsta_gauss_f1>(mode), mode_weight);
+      bsta_gauss_sf1 mode(mean, sigma*sigma);
+      model.insert(bsta_num_obs<bsta_gauss_sf1>(mode), mode_weight);
     }
   }
 
@@ -223,7 +223,7 @@ void boxm_mog_grey_processor::compute_appearance(vcl_vector<boxm_apm_traits<BOXM
       total_weight_sum += mode_weight_sum[m];
       float mode_mean(0.5f);
       float mode_var(1.0f);
-      bsta_gauss_f1 single_gauss(mode_mean,mode_var);
+      bsta_gauss_sf1 single_gauss(mode_mean,mode_var);
       bsta_fit_gaussian(obs, obs_weights, single_gauss);
       mode_mean = single_gauss.mean();
       mode_var = single_gauss.var();

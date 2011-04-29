@@ -20,7 +20,7 @@
 
 #include <bsta/algo/bsta_adaptive_updater.h>
 #include <bsta/bsta_distribution.h>
-#include <bsta/bsta_gauss_f1.h>
+#include <bsta/bsta_gauss_sf1.h>
 #include <bsta/bsta_attributes.h>
 #include <bsta/bsta_mixture_fixed.h>
 #include <bsta/bsta_gaussian_indep.h>
@@ -34,7 +34,7 @@ class  bvxm_mog_grey_processor
  protected:
   static const unsigned n_gaussian_modes_ = 3;
 
-  typedef bsta_num_obs<bsta_gauss_f1> gauss_type;
+  typedef bsta_num_obs<bsta_gauss_sf1> gauss_type;
   typedef bsta_mixture_fixed<gauss_type, n_gaussian_modes_> mix_gauss;
   typedef bsta_num_obs<mix_gauss> mix_gauss_type;
  public:

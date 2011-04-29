@@ -18,7 +18,7 @@
 
 #include <bsta/bsta_attributes.h>
 #include <bsta/bsta_mixture_fixed.h>
-#include <bsta/bsta_gauss_f1.h>
+#include <bsta/bsta_gauss_sf1.h>
 #include <bsta/bsta_gauss_if3.h>
 
 
@@ -70,9 +70,9 @@ bool boxm_scene_to_bvxm_grid_process(bprb_func_process& pro)
   bool enforce_level = pro.get_input<bool>(3);
 
   static const unsigned int n_gaussian_modes_ = 3;
-  typedef bsta_num_obs<bsta_gauss_f1> gauss_type_f1;
-  typedef bsta_num_obs<bsta_mixture_fixed<gauss_type_f1, n_gaussian_modes_> > mix_gauss_f1_type;
-  
+  typedef bsta_num_obs<bsta_gauss_sf1> gauss_type_sf1;
+  typedef bsta_num_obs<bsta_mixture_fixed<gauss_type_sf1, n_gaussian_modes_> > mix_gauss_sf1_type;
+
   //check input's validity
   if (!scene_base.ptr())
   {
@@ -86,16 +86,16 @@ bool boxm_scene_to_bvxm_grid_process(bprb_func_process& pro)
     pro.set_output_val<bvxm_voxel_grid_base_sptr>(0, grid);
     return true;
   }
-  else if ( boxm_scene< boct_tree<short, bsta_num_obs<bsta_gauss_f1> > > *scene= dynamic_cast<boxm_scene< boct_tree<short, bsta_num_obs<bsta_gauss_f1> > > * >(scene_base.as_pointer()))
+  else if ( boxm_scene< boct_tree<short, bsta_num_obs<bsta_gauss_sf1> > > *scene= dynamic_cast<boxm_scene< boct_tree<short, bsta_num_obs<bsta_gauss_sf1> > > * >(scene_base.as_pointer()))
   {
-    bvxm_voxel_grid<bsta_num_obs<bsta_gauss_f1> > *grid = boxm_scene_to_bvxm_grid(*scene, filepath, resolution_level, enforce_level);
+    bvxm_voxel_grid<bsta_num_obs<bsta_gauss_sf1> > *grid = boxm_scene_to_bvxm_grid(*scene, filepath, resolution_level, enforce_level);
     pro.set_output_val<bvxm_voxel_grid_base_sptr>(0, grid);
     return true;
   }
-  else if( boxm_scene< boct_tree<short, mix_gauss_f1_type > > *scene= 
-          dynamic_cast<boxm_scene< boct_tree<short, mix_gauss_f1_type > > * >(scene_base.as_pointer()))
+  else if ( boxm_scene< boct_tree<short, mix_gauss_sf1_type > > *scene=
+          dynamic_cast<boxm_scene< boct_tree<short, mix_gauss_sf1_type > > * >(scene_base.as_pointer()))
   {
-    bvxm_voxel_grid<mix_gauss_f1_type > *grid = boxm_scene_to_bvxm_grid(*scene, filepath, resolution_level, enforce_level);
+    bvxm_voxel_grid<mix_gauss_sf1_type > *grid = boxm_scene_to_bvxm_grid(*scene, filepath, resolution_level, enforce_level);
     pro.set_output_val<bvxm_voxel_grid_base_sptr>(0, grid);
     return true;
   }

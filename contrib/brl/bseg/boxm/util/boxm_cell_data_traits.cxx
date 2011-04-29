@@ -13,13 +13,13 @@ float boxm_zero_val<short, float>()
 
 //: Template specialization of zero_val for unimodal gaussian
 template <>
-bsta_num_obs<bsta_gauss_f1> boxm_zero_val<short, bsta_num_obs<bsta_gauss_f1> >()
+bsta_num_obs<bsta_gauss_sf1> boxm_zero_val<short, bsta_num_obs<bsta_gauss_sf1> >()
 {
-  return bsta_num_obs<bsta_gauss_f1>();
+  return bsta_num_obs<bsta_gauss_sf1>();
 }
 
 template <>
-mix_gauss_f1_type boxm_zero_val<short, mix_gauss_f1_type>()
+mix_gauss_sf1_type boxm_zero_val<short, mix_gauss_sf1_type>()
 {
-  return mix_gauss_f1_type();
+  return mix_gauss_sf1_type();
 }

@@ -16,7 +16,7 @@
 
 #include <bsta/algo/bsta_adaptive_updater.h>
 #include <bsta/bsta_distribution.h>
-#include <bsta/bsta_gauss_f1.h>
+#include <bsta/bsta_gauss_sf1.h>
 #include <bsta/bsta_gauss_if3.h>
 #include <bsta/bsta_attributes.h>
 #include <bsta/bsta_mixture_fixed.h>
@@ -30,7 +30,7 @@ class  bvxm_lidar_processor
  public:
 
   bvxm_lidar_processor(unsigned vox_thresh)
-    : gauss_(bsta_gauss_f1(0,1)), vox_thresh_(vox_thresh) {}
+    : gauss_(bsta_gauss_sf1(0,1)), vox_thresh_(vox_thresh) {}
 
   //: A function that assigns a gaussian weight to the lidar observation
   bvxm_voxel_slab<float>  prob_density(float z_dim,
@@ -44,7 +44,7 @@ class  bvxm_lidar_processor
                      float voxel_width);
 
  private:
-  bsta_gauss_f1 gauss_;
+  bsta_gauss_sf1 gauss_;
   unsigned vox_thresh_;
 };
 

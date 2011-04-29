@@ -5,9 +5,9 @@
 #include <vbl/vbl_array_3d.txx>
 #include <vcl_string.h>
 #include <bsta/bsta_attributes.h>
-#include <bsta/bsta_gauss_f1.h>
+#include <bsta/bsta_gauss_sf1.h>
 
-typedef bsta_num_obs<bsta_gauss_f1> gauss_type;
+typedef bsta_num_obs<bsta_gauss_sf1> gauss_type;
 typedef boct_tree<short, bvpl_octree_sample< gauss_type> > tree_type;
 
 BOXM_BLOCK_INSTANTIATE(tree_type);

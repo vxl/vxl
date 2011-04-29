@@ -76,8 +76,8 @@ bool bvpl_save_vrml_process(bprb_func_process& pro)
   {
     bvpl_octree_vrml_util::write_scene_as_disks(ofs, scene_in, kernel_vector);
   }
-  else if (boxm_scene<boct_tree<short, bvpl_octree_sample<bsta_num_obs<bsta_gauss_f1> > > > *scene_in =
-           dynamic_cast<boxm_scene<boct_tree<short, bvpl_octree_sample<bsta_num_obs<bsta_gauss_f1> > > >* >(scene_base.as_pointer()))
+  else if (boxm_scene<boct_tree<short, bvpl_octree_sample<bsta_num_obs<bsta_gauss_sf1> > > > *scene_in =
+           dynamic_cast<boxm_scene<boct_tree<short, bvpl_octree_sample<bsta_num_obs<bsta_gauss_sf1> > > >* >(scene_base.as_pointer()))
   {
     bvpl_octree_vrml_util::write_scene_as_disks(ofs, scene_in, kernel_vector);
   }

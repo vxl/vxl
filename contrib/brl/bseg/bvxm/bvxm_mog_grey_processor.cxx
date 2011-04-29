@@ -36,8 +36,6 @@ bvxm_mog_grey_processor::region_prob_density(bvxm_voxel_slab<float> &probabiliti
                                              bvxm_voxel_slab<float> const& obs,
                                              bvxm_voxel_slab<float> const& mask)
 {
-  
-
   //the slab iterators
   bvxm_voxel_slab<mix_gauss_type>::const_iterator appear_it=appear.begin();
   bvxm_voxel_slab<float>::const_iterator obs_it = obs.begin();
@@ -46,9 +44,9 @@ bvxm_mog_grey_processor::region_prob_density(bvxm_voxel_slab<float> &probabiliti
 
   for (; appear_it!= appear.end(); ++appear_it, ++obs_it, ++prob_it, ++mask_it)
   {
-    if(*mask_it > 0.0)
+    if (*mask_it > 0.0)
     {
-     (*prob_it) = (*appear_it).prob_density(*obs_it);
+      (*prob_it) = (*appear_it).prob_density(*obs_it);
     }
   }
 
@@ -91,7 +89,7 @@ bool bvxm_mog_grey_processor::update( bvxm_voxel_slab<mix_gauss_type> &appear,
   float init_variance = 0.008f;
   float min_stddev = 0.02f;
   float g_thresh = 2.5; // number of std devs from mean sample must be
-  bsta_gauss_f1 this_gauss(0.0f, init_variance);
+  bsta_gauss_sf1 this_gauss(0.0f, init_variance);
 
  // the updater
   bsta_mg_grimson_weighted_updater<mix_gauss> updater(this_gauss,this->n_gaussian_modes_,g_thresh,min_stddev);
@@ -179,7 +177,7 @@ bvxm_voxel_slab<float> bvxm_mog_grey_processor::sample(bvxm_voxel_slab<mix_gauss
   for (appear_it = appear.begin(); appear_it!= appear.end();++appear_it, ++ec_it)
   {
     if ((*appear_it).num_components() > 0) {
-      (*ec_it) = (*appear_it).sample(rng);  
+      (*ec_it) = (*appear_it).sample(rng);
     }
   }
 

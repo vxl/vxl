@@ -26,7 +26,7 @@ class boxm_vrml_util
   static void write_vrml_scene(vcl_ofstream& str, boxm_scene<boct_tree<short,T_data> > *scene,
                                const float threshold= 0.0f);
 #if 0 // not yet working?
-  static void write_vrml_scene(vcl_ofstream& str, bvxm_voxel_scene<bsta_num_obs<bsta_gauss_f1> > *scene,
+  static void write_vrml_scene(vcl_ofstream& str, bvxm_voxel_scene<bsta_num_obs<bsta_gauss_sf1> > *scene,
                                const float threshold);
   static void write_vrml_scene_as_spheres(vcl_ofstream& str, bvxm_voxel_scene<float> *scene, float threshold);
   static void write_vrml_scene_as_spheres(vcl_ofstream& str, bvxm_voxel_scene<vnl_float_4> *scene, float threshold, int s=1);
@@ -97,9 +97,9 @@ void boxm_vrml_util::write_vrml_scene(vcl_ofstream& str, boxm_scene<boct_tree<sh
 }
 
 #if 0 // not yet working?
-void bvxm_vrml_voxel_grid::write_vrml_grid(vcl_ofstream& str, bvxm_voxel_grid<bsta_num_obs<bsta_gauss_f1> > *grid, float threshold)
+void bvxm_vrml_voxel_grid::write_vrml_grid(vcl_ofstream& str, bvxm_voxel_grid<bsta_num_obs<bsta_gauss_sf1> > *grid, float threshold)
 {
-  bvxm_voxel_grid<bsta_num_obs<bsta_gauss_f1> >::iterator grid_it = grid->begin();
+  bvxm_voxel_grid<bsta_num_obs<bsta_gauss_sf1> >::iterator grid_it = grid->begin();
 
   str << "Shape {\n"
       << "  appearance NULL\n"

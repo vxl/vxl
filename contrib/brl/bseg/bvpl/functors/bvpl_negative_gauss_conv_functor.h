@@ -13,7 +13,7 @@
 // \endverbatim
 
 #include <bvpl/kernels/bvpl_kernel_iterator.h>
-#include <bsta/bsta_gauss_f1.h>
+#include <bsta/bsta_gauss_sf1.h>
 #include <bsta/bsta_attributes.h>
 
 //: This class convolves a kernel with Gaussian distributions.
@@ -29,10 +29,10 @@ class bvpl_negative_gauss_conv_functor
   ~bvpl_negative_gauss_conv_functor() {}
 
   //: Multiply the dispatch and the input gaussians together
-  void apply(bsta_gauss_f1& val, bvpl_kernel_dispatch& d);
+  void apply(bsta_gauss_sf1& val, bvpl_kernel_dispatch& d);
 
   //: Returns the final operation of this functor
-  bsta_gauss_f1 result();
+  bsta_gauss_sf1 result();
 
  private:
   float mean_;

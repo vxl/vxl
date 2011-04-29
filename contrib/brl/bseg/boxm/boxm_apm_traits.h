@@ -9,7 +9,7 @@
 
 #include <bsta/bsta_attributes.h>
 #include <bsta/bsta_mixture_fixed.h>
-#include <bsta/bsta_gauss_f1.h>
+#include <bsta/bsta_gauss_sf1.h>
 #include <bsta/bsta_gauss_if3.h>
 #include <bsta/bsta_beta.h>
 #include <bsta/bsta_beta_f1.h>
@@ -71,12 +71,12 @@ class boxm_apm_traits<BOXM_APM_MOG_GREY>
  public:
   static const unsigned int n_gaussian_modes_ = 3;
 
-  typedef bsta_num_obs<bsta_gauss_f1> gauss_type_f1;
-  typedef bsta_num_obs<bsta_mixture_fixed<gauss_type_f1, n_gaussian_modes_> > mix_gauss_f1_type;
+  typedef bsta_num_obs<bsta_gauss_sf1> gauss_type_sf1;
+  typedef bsta_num_obs<bsta_mixture_fixed<gauss_type_sf1, n_gaussian_modes_> > mix_gauss_sf1_type;
 
  public:
   static const unsigned int obs_dim = 1;
-  typedef  mix_gauss_f1_type apm_datatype;
+  typedef  mix_gauss_sf1_type apm_datatype;
   typedef float obs_datatype;
   typedef float obs_mathtype;
   typedef boxm_mog_grey_processor apm_processor;

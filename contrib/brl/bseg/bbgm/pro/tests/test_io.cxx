@@ -9,7 +9,7 @@
 #include <bsta/bsta_mixture_fixed.h>
 #include <bsta/bsta_gauss_if3.h>
 #include <bsta/algo/bsta_adaptive_updater.h>
-#include <bsta/bsta_gauss_f1.h>
+#include <bsta/bsta_gauss_sf1.h>
 
 #include <bbgm/bbgm_update.h>
 #include <bbgm/bbgm_loader.h>
@@ -63,11 +63,11 @@ void test_io_function_2(void)
   vil_image_view<float> img(ni,nj,1);
   init_random_image(img);
 
-  typedef bsta_num_obs<bsta_gauss_f1> gauss_type;
+  typedef bsta_num_obs<bsta_gauss_sf1> gauss_type;
   typedef bsta_mixture_fixed<gauss_type,3> mix_gauss_type;
   typedef bsta_num_obs<mix_gauss_type> obs_mix_gauss_type;
 
-  bsta_gauss_f1 init_gauss( init_mean, init_var );
+  bsta_gauss_sf1 init_gauss( init_mean, init_var );
   bsta_mg_window_updater<mix_gauss_type> updater( init_gauss,
                                                   max_components,
                                                   window_size);
@@ -127,7 +127,7 @@ static void test_io()
   typedef bsta_mixture_fixed<gauss_type,3> mix_gauss_type;
   typedef bsta_num_obs<mix_gauss_type> obs_mix_gauss_type;
 
-  typedef bsta_num_obs<bsta_gauss_f1> sph_gauss_type;
+  typedef bsta_num_obs<bsta_gauss_sf1> sph_gauss_type;
   typedef bsta_num_obs<bsta_mixture_fixed<sph_gauss_type, 3> > sph_mix_gauss_type_fixed;
 
   bsta_gauss_if3 init_gauss( init_mean, init_covar );

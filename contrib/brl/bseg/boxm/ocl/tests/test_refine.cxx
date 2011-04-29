@@ -123,48 +123,48 @@ boxm_scene<boct_tree<short, boxm_sample<BOXM_APM_MOG_GREY> > > create_simple_sce
   scene.set_octree_levels(max_level, init_level);
 
   // default model (alpha = .001)
-  bsta_gauss_f1 simple_gauss_f1(0.0f,0.1f);
-  bsta_num_obs<bsta_gauss_f1> simple_obs_gauss_val_f1(simple_gauss_f1,1);
-  bsta_mixture_fixed<bsta_num_obs<bsta_gauss_f1>, 3>  simple_mix_gauss_val_f1;
+  bsta_gauss_sf1 simple_gauss_sf1(0.0f,0.1f);
+  bsta_num_obs<bsta_gauss_sf1> simple_obs_gauss_val_sf1(simple_gauss_sf1,1);
+  bsta_mixture_fixed<bsta_num_obs<bsta_gauss_sf1>, 3>  simple_mix_gauss_val_sf1;
 
-  simple_mix_gauss_val_f1.insert(simple_obs_gauss_val_f1,0.1f);
-  simple_mix_gauss_val_f1.insert(simple_obs_gauss_val_f1,0.1f);
-  simple_mix_gauss_val_f1.insert(simple_obs_gauss_val_f1,0.1f);
+  simple_mix_gauss_val_sf1.insert(simple_obs_gauss_val_sf1,0.1f);
+  simple_mix_gauss_val_sf1.insert(simple_obs_gauss_val_sf1,0.1f);
+  simple_mix_gauss_val_sf1.insert(simple_obs_gauss_val_sf1,0.1f);
 
-  typedef bsta_mixture_fixed<bsta_num_obs<bsta_gauss_f1>,3>  simple_bsta_mixture_fixed_f1_3;
-  bsta_num_obs<simple_bsta_mixture_fixed_f1_3>  simple_obs_mix_gauss_val_f1(simple_mix_gauss_val_f1);
+  typedef bsta_mixture_fixed<bsta_num_obs<bsta_gauss_sf1>,3>  simple_bsta_mixture_fixed_sf1_3;
+  bsta_num_obs<simple_bsta_mixture_fixed_sf1_3>  simple_obs_mix_gauss_val_sf1(simple_mix_gauss_val_sf1);
 
   data_type default_sample;
   default_sample.alpha=0.11f;
-  default_sample.set_appearance(simple_obs_mix_gauss_val_f1);
+  default_sample.set_appearance(simple_obs_mix_gauss_val_sf1);
 
   // sample 1 (alpha = .6)
-  bsta_gauss_f1 s1_simple_gauss_f1(0.5f,0.1f);
-  bsta_num_obs<bsta_gauss_f1> s1_simple_obs_gauss_val_f1(s1_simple_gauss_f1,1);
-  bsta_mixture_fixed<bsta_num_obs<bsta_gauss_f1>, 3>  s1_simple_mix_gauss_val_f1;
+  bsta_gauss_sf1 s1_simple_gauss_sf1(0.5f,0.1f);
+  bsta_num_obs<bsta_gauss_sf1> s1_simple_obs_gauss_val_sf1(s1_simple_gauss_sf1,1);
+  bsta_mixture_fixed<bsta_num_obs<bsta_gauss_sf1>, 3>  s1_simple_mix_gauss_val_sf1;
 
-  s1_simple_mix_gauss_val_f1.insert(s1_simple_obs_gauss_val_f1,1);
+  s1_simple_mix_gauss_val_sf1.insert(s1_simple_obs_gauss_val_sf1,1);
 
-  typedef bsta_mixture_fixed<bsta_num_obs<bsta_gauss_f1>,3>  s1_simple_bsta_mixture_fixed_f1_3;
-  bsta_num_obs<s1_simple_bsta_mixture_fixed_f1_3>  s1_simple_obs_mix_gauss_val_f1(s1_simple_mix_gauss_val_f1);
+  typedef bsta_mixture_fixed<bsta_num_obs<bsta_gauss_sf1>,3>  s1_simple_bsta_mixture_fixed_sf1_3;
+  bsta_num_obs<s1_simple_bsta_mixture_fixed_sf1_3>  s1_simple_obs_mix_gauss_val_sf1(s1_simple_mix_gauss_val_sf1);
 
   data_type s1_sample;
   s1_sample.alpha=6.0f;
-  s1_sample.set_appearance(s1_simple_obs_mix_gauss_val_f1);
+  s1_sample.set_appearance(s1_simple_obs_mix_gauss_val_sf1);
 
   // sample 2 (alpha = .6)
-  bsta_gauss_f1 s2_simple_gauss_f1(1.0f,0.1f);
-  bsta_num_obs<bsta_gauss_f1> s2_simple_obs_gauss_val_f1(s2_simple_gauss_f1,1);
-  bsta_mixture_fixed<bsta_num_obs<bsta_gauss_f1>, 3>  s2_simple_mix_gauss_val_f1;
+  bsta_gauss_sf1 s2_simple_gauss_sf1(1.0f,0.1f);
+  bsta_num_obs<bsta_gauss_sf1> s2_simple_obs_gauss_val_sf1(s2_simple_gauss_sf1,1);
+  bsta_mixture_fixed<bsta_num_obs<bsta_gauss_sf1>, 3>  s2_simple_mix_gauss_val_sf1;
 
-  s2_simple_mix_gauss_val_f1.insert(s2_simple_obs_gauss_val_f1,1);
+  s2_simple_mix_gauss_val_sf1.insert(s2_simple_obs_gauss_val_sf1,1);
 
-  typedef bsta_mixture_fixed<bsta_num_obs<bsta_gauss_f1>,3>  s2_simple_bsta_mixture_fixed_f1_3;
-  bsta_num_obs<s2_simple_bsta_mixture_fixed_f1_3>  s2_simple_obs_mix_gauss_val_f1(s2_simple_mix_gauss_val_f1);
+  typedef bsta_mixture_fixed<bsta_num_obs<bsta_gauss_sf1>,3>  s2_simple_bsta_mixture_fixed_sf1_3;
+  bsta_num_obs<s2_simple_bsta_mixture_fixed_sf1_3>  s2_simple_obs_mix_gauss_val_sf1(s2_simple_mix_gauss_val_sf1);
 
   data_type s2_sample;
   s2_sample.alpha=6.0f;
-  s2_sample.set_appearance(s2_simple_obs_mix_gauss_val_f1);
+  s2_sample.set_appearance(s2_simple_obs_mix_gauss_val_sf1);
 
   float count=6.0f;
   boxm_block_iterator<tree_type> iter(&scene);
@@ -235,7 +235,7 @@ bool test_refine_simple_scene()
   // Set up test tree
   typedef boxm_sample<BOXM_APM_MOG_GREY> data_type;
   typedef boct_tree<short,data_type> tree_type;
-  
+
 
 #if 0  //NEED TO REIMPLEMENT THIS USING UPDATED REFINE MANAGER
   //-------- GPU side: refine the scene using the opencl refine manager -------
@@ -327,7 +327,7 @@ bool test_refine_simple_scene()
 
   // free memory used by the manager
   mgr->clean_refine();
-  
+
 #endif
 
   return true;

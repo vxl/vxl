@@ -22,7 +22,7 @@
 
 #include <bsta/algo/bsta_fit_weibull.h>
 #include <bsta/bsta_histogram.h>
-#include <bsta/bsta_gauss_f1.h>
+#include <bsta/bsta_gauss_sf1.h>
 
 #include <vul/vul_file.h>
 #include <vul/vul_psfile.h>
@@ -645,7 +645,7 @@ bool brec_part_gaussian::extract(vil_image_view<float>& img, vil_image_view<floa
       float pf = fg_prob_operator(fg_prob_image, i, j); // was: fg_prob_image(i, j);
 
       float pdb = 0.0f;
-      bsta_gauss_f1 pdbg(mu_bk, sigma_bk*sigma_bk);
+      bsta_gauss_sf1 pdbg(mu_bk, sigma_bk*sigma_bk);
       pdb = pdbg.prob_density(res);
 
       float pd_c = pd_class.prob_density(res); // prob density class
@@ -791,7 +791,7 @@ bool brec_part_gaussian::update_foreground_posterior(vil_image_view<float>& img,
             prob_back = 1.0f-prob_fore;
 #endif // 0
 
-      bsta_gauss_f1 pdbg(mu_bk, sigma_bk*sigma_bk);
+      bsta_gauss_sf1 pdbg(mu_bk, sigma_bk*sigma_bk);
       float pdb = pdbg.prob_density(res);
 
       float pdf = 0.0f; // was: = pdfg.prob_density(res); // prob density foreground

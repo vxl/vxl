@@ -59,7 +59,7 @@ bool bvpl_compute_gauss_gradients(bprb_func_process& pro)
 
   //get scene
   typedef boct_tree<short, float> float_tree_type;
-  typedef bsta_num_obs<bsta_gauss_f1> gauss_type;
+  typedef bsta_num_obs<bsta_gauss_sf1> gauss_type;
   typedef boct_tree<short, gauss_type > gauss_tree_type;
   typedef boct_tree<short, vnl_vector_fixed< float,3 > > grad_tree_type;
 

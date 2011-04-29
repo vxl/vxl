@@ -49,37 +49,36 @@ void set_data(boct_tree<short,float >* tree)
   vcl_vector<boct_tree_cell<short, float >* >::iterator lit = tleaves.begin();
   for (; lit!= tleaves.end(); ++lit, ++i)
   {
-    if(i==21 || i==41 || i==35) {
+    if (i==21 || i==41 || i==35) {
       float v((float)2.0);
       (*lit)->set_data(v);
-    } else {
+    }
+    else {
       float v((float)0.1);
       (*lit)->set_data(v);
-    }  
+    }
   }
-};
+}
+
 template <>
 void set_data(boct_tree<short,boxm_sample<BOXM_APM_MOG_GREY> >* tree)
 {
-  typedef bsta_num_obs<bsta_gauss_f1> gauss_type_f1;
-  typedef bsta_num_obs<bsta_mixture_fixed<gauss_type_f1, 3> > mix_type;
+  typedef bsta_num_obs<bsta_gauss_sf1> gauss_type_sf1;
+  typedef bsta_num_obs<bsta_mixture_fixed<gauss_type_sf1, 3> > mix_type;
   vcl_vector<boct_tree_cell<short, boxm_sample<BOXM_APM_MOG_GREY> >* > tleaves;
   tleaves = tree->leaf_cells();
   vcl_size_t i = 0;
   vcl_vector<boct_tree_cell<short, boxm_sample<BOXM_APM_MOG_GREY> >* >::iterator lit = tleaves.begin();
-  gauss_type_f1 g;
+  gauss_type_sf1 g;
   g.set_mean(0.533333f); g.set_var(0.01f); g.num_observations = 1;
   mix_type mix;
   mix.insert(g, 1.0f); mix.num_observations = 1;
   boxm_sample<BOXM_APM_MOG_GREY> samp;
   samp.set_appearance(mix);
   samp.alpha = 1.38629f;
-    for (; lit!= tleaves.end(); ++lit, ++i)
+  for (; lit!= tleaves.end(); ++lit, ++i)
   {
     (*lit)->set_data(samp);
-  }  
-};
-
-
-
+  }
+}
 

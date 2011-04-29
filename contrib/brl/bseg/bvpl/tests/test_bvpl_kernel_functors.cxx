@@ -10,7 +10,7 @@
 #include <bvpl/kernels/bvpl_create_directions.h>
 
 #include <bvxm/grid/bvxm_opinion.h>
-#include <bsta/bsta_gauss_f1.h>
+#include <bsta/bsta_gauss_sf1.h>
 
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_random.h>
@@ -49,7 +49,7 @@ void fill_in_data(vbl_array_3d<data_type> & data,data_type min_p, data_type max_
 
 // Specialization for gaussian second derivative. Here we want a wall or blob rather than an edge
 template<>
-void fill_in_data(vbl_array_3d<bsta_gauss_f1> & data,bsta_gauss_f1 min_p, bsta_gauss_f1 max_p, vnl_float_3 axis)
+void fill_in_data(vbl_array_3d<bsta_gauss_sf1> & data,bsta_gauss_sf1 min_p, bsta_gauss_sf1 max_p, vnl_float_3 axis)
 {
   unsigned ni=data.get_row1_count();
   unsigned nj=data.get_row2_count();
@@ -152,10 +152,10 @@ bool is_correct_solution(bvpl_kernel_vector_sptr kernel_vec,
   return flag;
 }
 
-template <class F>//,class bsta_gauss_f1 >
+template <class F>//,class bsta_gauss_sf1 >
 bool is_correct_solution(bvpl_kernel_vector_sptr kernel_vec,
-                         vbl_array_3d<bsta_gauss_f1> & data, F func,
-                         bsta_gauss_f1 min_p, bsta_gauss_f1 max_p, float sigma_noise, bsta_gauss_f1 maxval,
+                         vbl_array_3d<bsta_gauss_sf1> & data, F func,
+                         bsta_gauss_sf1 min_p, bsta_gauss_sf1 max_p, float sigma_noise, bsta_gauss_sf1 maxval,
                          vnl_vector<float> &response)
 {
   vnl_float_3 axis;
@@ -173,13 +173,13 @@ bool is_correct_solution(bvpl_kernel_vector_sptr kernel_vec,
     axis[2]+=float(rand.normal()*sigma_noise);
 
     data.fill(min_p);
-    fill_in_data<bsta_gauss_f1> (data,min_p,max_p,axis);
+    fill_in_data<bsta_gauss_sf1> (data,min_p,max_p,axis);
 
-    bsta_gauss_f1 max_val=maxval;
+    bsta_gauss_sf1 max_val=maxval;
     unsigned axis_result=0;
     for (unsigned i=0;i<kernel_vec->kernels_.size();i++)
     {
-      bsta_gauss_f1 val=run_kernel_at_the_center<F>(data,kernel_vec->kernels_[i],func);
+      bsta_gauss_sf1 val=run_kernel_at_the_center<F>(data,kernel_vec->kernels_[i],func);
 #ifdef DEBUG
       if (val>0)
         entropy_sum-=val*vcl_log(val);
@@ -251,10 +251,10 @@ void test_edge_functors()
 void test_gaussian_kernels()
 {
   bool result=false;
-  bsta_gauss_f1 edge(200,1);
-  bsta_gauss_f1 empty(10,1);
+  bsta_gauss_sf1 edge(200,1);
+  bsta_gauss_sf1 empty(10,1);
 
-  vbl_array_3d<bsta_gauss_f1> data(100,100,100);
+  vbl_array_3d<bsta_gauss_sf1> data(100,100,100);
   data.fill(empty);
 
   float var[3] ={1.0, 1.5, 2};
@@ -291,9 +291,9 @@ void test_gaussian_kernels()
 void test_gauss_convolve()
 {
   //create some gaussians
-  bsta_gauss_f1 f1(0,1);
-  bsta_gauss_f1 f2(4,1);
-  bsta_gauss_f1 f3(12,3);
+  bsta_gauss_sf1 f1(0,1);
+  bsta_gauss_sf1 f2(4,1);
+  bsta_gauss_sf1 f3(12,3);
 
   bvpl_gauss_convolution_functor functor;
   bvpl_kernel_dispatch d(-6.0f);
@@ -303,7 +303,7 @@ void test_gauss_convolve()
   d=-1.0f;
   functor.apply(f3, d);
 
-  bsta_gauss_f1 result = functor.result();
+  bsta_gauss_sf1 result = functor.result();
 
   TEST_NEAR("Mean test", result.mean(), 0.0f, 0.001f);
   TEST_NEAR("Var test", result.var(), 48.0f, 0.001f);

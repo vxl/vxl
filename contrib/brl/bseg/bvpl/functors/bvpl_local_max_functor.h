@@ -15,7 +15,7 @@
 
 #include <bvpl/kernels/bvpl_kernel_iterator.h>
 #include <bvxm/grid/bvxm_opinion.h>
-#include <bsta/bsta_gauss_f1.h>
+#include <bsta/bsta_gauss_sf1.h>
 #include <bsta/bsta_attributes.h>
 #include <vcl_limits.h>
 #ifdef DEBUG
@@ -60,15 +60,15 @@ class bvpl_local_max_functor
 template <>
 void bvpl_local_max_functor<bvxm_opinion>::init();
 template <>
-void bvpl_local_max_functor<bsta_num_obs<bsta_gauss_f1> >::init();
+void bvpl_local_max_functor<bsta_num_obs<bsta_gauss_sf1> >::init();
 template <>
-bool bvpl_local_max_functor<bsta_num_obs<bsta_gauss_f1> >::greater_than(const bsta_num_obs<bsta_gauss_f1>& g1, const bsta_num_obs<bsta_gauss_f1>& g2);
+bool bvpl_local_max_functor<bsta_num_obs<bsta_gauss_sf1> >::greater_than(const bsta_num_obs<bsta_gauss_sf1>& g1, const bsta_num_obs<bsta_gauss_sf1>& g2);
 template <>
 bvxm_opinion bvpl_local_max_functor<bvxm_opinion >::min_response();
 template <>
-bsta_num_obs<bsta_gauss_f1> bvpl_local_max_functor<bsta_num_obs<bsta_gauss_f1> >::min_response();
+bsta_num_obs<bsta_gauss_sf1> bvpl_local_max_functor<bsta_num_obs<bsta_gauss_sf1> >::min_response();
 template <>
-float bvpl_local_max_functor<bsta_num_obs<bsta_gauss_f1> >::filter_response(unsigned id, unsigned target_id, bsta_num_obs<bsta_gauss_f1> curr_val);
+float bvpl_local_max_functor<bsta_num_obs<bsta_gauss_sf1> >::filter_response(unsigned id, unsigned target_id, bsta_num_obs<bsta_gauss_sf1> curr_val);
 
 
 //: Default constructor

@@ -325,17 +325,17 @@ void bvpl_convert_id_grid_to_hsv_grid(bvxm_voxel_grid<int> *id_grid,
 }
 
 void bvpl_convert_id_grid_to_hsv_grid(bvxm_voxel_grid<int> *id_grid,
-                                      bvxm_voxel_grid<bsta_num_obs<bsta_gauss_f1> > *response_grid,
+                                      bvxm_voxel_grid<bsta_num_obs<bsta_gauss_sf1> > *response_grid,
                                       bvxm_voxel_grid<vnl_float_4> *out_grid,
                                       vcl_vector<float> colors)
 {
-  bvxm_voxel_grid<bsta_num_obs<bsta_gauss_f1> >::iterator response_grid_it = response_grid->begin();
+  bvxm_voxel_grid<bsta_num_obs<bsta_gauss_sf1> >::iterator response_grid_it = response_grid->begin();
    //calculate max response and normalize the range from 0-1
   float min = ((*(response_grid_it->begin())).mean());
   float max = ((*(response_grid_it->begin())).mean());
   for (; response_grid_it != response_grid->end(); ++response_grid_it)
   {
-    bvxm_voxel_slab<bsta_num_obs<bsta_gauss_f1> >::iterator response_slab_it = (*response_grid_it).begin();
+    bvxm_voxel_slab<bsta_num_obs<bsta_gauss_sf1> >::iterator response_slab_it = (*response_grid_it).begin();
     for (; response_slab_it!=(*response_grid_it).end(); ++response_slab_it )
     {
      if (((*response_slab_it).mean()) > max)
@@ -358,7 +358,7 @@ void bvpl_convert_id_grid_to_hsv_grid(bvxm_voxel_grid<int> *id_grid,
   for (; id_grid_it != id_grid->end(); ++id_grid_it, ++response_grid_it, ++out_grid_it)
   {
     bvxm_voxel_slab<int>::iterator id_slab_it = (*id_grid_it).begin();
-    bvxm_voxel_slab<bsta_num_obs<bsta_gauss_f1> >::iterator response_slab_it = (*response_grid_it).begin();
+    bvxm_voxel_slab<bsta_num_obs<bsta_gauss_sf1> >::iterator response_slab_it = (*response_grid_it).begin();
     bvxm_voxel_slab<vnl_float_4>::iterator out_slab_it = (*out_grid_it).begin();
     for (; id_slab_it!=(*id_grid_it).end(); ++id_slab_it ,++response_slab_it, ++ out_slab_it)
     {

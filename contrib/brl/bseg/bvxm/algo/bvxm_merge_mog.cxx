@@ -6,7 +6,7 @@
 #include <vcl_vector.h>
 #include <bvxm/grid/bvxm_voxel_grid.h>
 
-void bvxm_merge_mog::kl_merge(bvxm_merge_mog::mix_gauss_type const& mixture, bsta_gauss_f1 &gaussian)
+void bvxm_merge_mog::kl_merge(bvxm_merge_mog::mix_gauss_type const& mixture, bsta_gauss_sf1 &gaussian)
 {
   //When merging components of gaussian mixtures, we need to perform the following calculations
   //1. find the normalizing weight of the new component. In this case this value is 1 because

@@ -7,7 +7,7 @@
 
 //: Save to Drishti raw file
 VCL_DEFINE_SPECIALIZATION
-bool bvxm_grid_save_raw<bsta_num_obs<bsta_gauss_f1> >(bvxm_voxel_grid<bsta_num_obs<bsta_gauss_f1> > *grid,  vcl_string filename)
+bool bvxm_grid_save_raw<bsta_num_obs<bsta_gauss_sf1> >(bvxm_voxel_grid<bsta_num_obs<bsta_gauss_sf1> > *grid,  vcl_string filename)
 {
     vcl_fstream ofs(filename.c_str(),vcl_ios::binary | vcl_ios::out);
     if (!ofs.is_open()) {
@@ -16,7 +16,7 @@ bool bvxm_grid_save_raw<bsta_num_obs<bsta_gauss_f1> >(bvxm_voxel_grid<bsta_num_o
     }
 
     // write header
-    unsigned char data_type = bvxm_dristhi_traits<bsta_num_obs<bsta_gauss_f1> >::dristhi_header();
+    unsigned char data_type = bvxm_dristhi_traits<bsta_num_obs<bsta_gauss_sf1> >::dristhi_header();
 
     vxl_uint_32 nx = grid->grid_size().x();
     vxl_uint_32 ny = grid->grid_size().y();
@@ -29,11 +29,11 @@ bool bvxm_grid_save_raw<bsta_num_obs<bsta_gauss_f1> >(bvxm_voxel_grid<bsta_num_o
 
     // write data
     // iterate through slabs and fill in memory array
-    typedef  bvxm_dristhi_traits<bsta_num_obs<bsta_gauss_f1> >::datatype DataType;
+    typedef  bvxm_dristhi_traits<bsta_num_obs<bsta_gauss_sf1> >::datatype DataType;
     DataType *data_array = new DataType[nx*ny*nz];
 
     //get the range
-    bvxm_voxel_grid<bsta_num_obs<bsta_gauss_f1> >::iterator grid_it = grid->begin();
+    bvxm_voxel_grid<bsta_num_obs<bsta_gauss_sf1> >::iterator grid_it = grid->begin();
     float max=vcl_abs(((*grid_it)(0,0)).mean());
     float min=vcl_abs(((*grid_it)(0,0)).mean());
     for (unsigned k=0; grid_it != grid->end(); ++grid_it, ++k) {

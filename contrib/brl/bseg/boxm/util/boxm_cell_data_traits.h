@@ -14,7 +14,7 @@
 
 #include <boct/boct_tree_cell.h>
 #include <bsta/bsta_attributes.h>
-#include <bsta/bsta_gauss_f1.h>
+#include <bsta/bsta_gauss_sf1.h>
 #include <boxm/sample/boxm_scalar_sample.h>
 
 //: Float to float
@@ -27,7 +27,7 @@ float boxm_cell_to_float(boct_tree_cell<T_loc, float >* cell,  double /*step_len
 
 //: Mixture of gaussians to float; return the mean
 template <class T_loc>
-float boxm_cell_to_float(boct_tree_cell<T_loc, bsta_num_obs<bsta_gauss_f1> >* cell, double /*step_len*/)
+float boxm_cell_to_float(boct_tree_cell<T_loc, bsta_num_obs<bsta_gauss_sf1> >* cell, double /*step_len*/)
 {
   return cell->data().mean();
 }
@@ -54,13 +54,13 @@ T_data boxm_zero_val()
 }
 
 static const unsigned int n_gaussian_modes_ = 3;
-typedef bsta_num_obs<bsta_gauss_f1> gauss_type_f1;
-typedef bsta_num_obs<bsta_mixture_fixed<gauss_type_f1, n_gaussian_modes_> > mix_gauss_f1_type;
+typedef bsta_num_obs<bsta_gauss_sf1> gauss_type_sf1;
+typedef bsta_num_obs<bsta_mixture_fixed<gauss_type_sf1, n_gaussian_modes_> > mix_gauss_sf1_type;
 template <>
-mix_gauss_f1_type boxm_zero_val<short, mix_gauss_f1_type>();
+mix_gauss_sf1_type boxm_zero_val<short, mix_gauss_sf1_type>();
 
 template <>
-bsta_num_obs<bsta_gauss_f1> boxm_zero_val<short, bsta_num_obs<bsta_gauss_f1> >();
+bsta_num_obs<bsta_gauss_sf1> boxm_zero_val<short, bsta_num_obs<bsta_gauss_sf1> >();
 
 template <>
 float boxm_zero_val<short, float >();

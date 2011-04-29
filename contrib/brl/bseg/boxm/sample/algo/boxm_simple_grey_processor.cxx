@@ -3,7 +3,7 @@
 // \file
 
 #include <vnl/vnl_erf.h>
-#include <bsta/bsta_gauss_f1.h>
+#include <bsta/bsta_gauss_sf1.h>
 #include <bsta/algo/bsta_fit_gaussian.h>
 
 #include <boxm/util/boxm_sigma_normalizer.h>
@@ -74,7 +74,7 @@ boxm_simple_grey_processor::obs_datatype boxm_simple_grey_processor::most_probab
 
 void boxm_simple_grey_processor::compute_appearance(vcl_vector<boxm_apm_traits<BOXM_APM_SIMPLE_GREY>::obs_datatype> const& obs, vcl_vector<float> const& pre, vcl_vector<float> const& vis, boxm_apm_traits<BOXM_APM_SIMPLE_GREY>::apm_datatype &model, float min_sigma)
 {
-  bsta_gauss_f1 model_bsta(model.color(),model.sigma()*model.sigma());
+  bsta_gauss_sf1 model_bsta(model.color(),model.sigma()*model.sigma());
   const float big_sigma = (float)vnl_math::sqrt1_2; // maximum possible std. dev for set of samples drawn from [0 1]
   unsigned int nobs = obs.size();
   // check for some simple cases first

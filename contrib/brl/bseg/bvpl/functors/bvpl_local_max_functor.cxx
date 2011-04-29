@@ -10,22 +10,22 @@ void bvpl_local_max_functor<bvxm_opinion>::init()
 }
 
 template <>
-void bvpl_local_max_functor<bsta_num_obs<bsta_gauss_f1> >::init()
+void bvpl_local_max_functor<bsta_num_obs<bsta_gauss_sf1> >::init()
 {
-  max_= bsta_gauss_f1(0.0f, 1.0f);
+  max_= bsta_gauss_sf1(0.0f, 1.0f);
 }
 
 template <>
-bool bvpl_local_max_functor<bsta_num_obs<bsta_gauss_f1> >::greater_than(const bsta_num_obs<bsta_gauss_f1>& g1, const bsta_num_obs<bsta_gauss_f1>& g2)
+bool bvpl_local_max_functor<bsta_num_obs<bsta_gauss_sf1> >::greater_than(const bsta_num_obs<bsta_gauss_sf1>& g1, const bsta_num_obs<bsta_gauss_sf1>& g2)
 {
   return (g1.mean() - g2.mean()) > 0.0f;
   //return vcl_abs(g1.mean()) - vcl_abs(g2.mean()) > vcl_numeric_limits<float>::epsilon();
 }
 
 template <>
-bsta_num_obs<bsta_gauss_f1> bvpl_local_max_functor<bsta_num_obs<bsta_gauss_f1> >::min_response()
+bsta_num_obs<bsta_gauss_sf1> bvpl_local_max_functor<bsta_num_obs<bsta_gauss_sf1> >::min_response()
 {
-  return bsta_gauss_f1(0.0f, 1.0f);
+  return bsta_gauss_sf1(0.0f, 1.0f);
 }
 
 template <>
@@ -35,7 +35,7 @@ bvxm_opinion bvpl_local_max_functor<bvxm_opinion >::min_response()
 }
 
 template <>
-float bvpl_local_max_functor<bsta_num_obs<bsta_gauss_f1> >::filter_response(unsigned id, unsigned target_id, bsta_num_obs<bsta_gauss_f1> curr_val)
+float bvpl_local_max_functor<bsta_num_obs<bsta_gauss_sf1> >::filter_response(unsigned id, unsigned target_id, bsta_num_obs<bsta_gauss_sf1> curr_val)
 {
   if (id !=target_id)
     return 0.0f;

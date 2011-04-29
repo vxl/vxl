@@ -18,7 +18,7 @@
 #include <bvxm/grid/bvxm_voxel_grid.h>
 #include <bvxm/grid/bvxm_opinion.h>
 
-#include <bsta/bsta_gauss_f1.h>
+#include <bsta/bsta_gauss_sf1.h>
 
 #include <bvpl/kernels/bvpl_kernel_factory.h>
 #include <bvpl/functors/bvpl_edge2d_functor.h>
@@ -138,7 +138,7 @@ bool bvpl_neighborhood_operator_process(bprb_func_process& pro)
     return false;
   }
   else if (ocp_type == "bsta_gauss_f1") {
-    typedef bsta_num_obs<bsta_gauss_f1> gauss_type;
+    typedef bsta_num_obs<bsta_gauss_sf1> gauss_type;
     bvxm_voxel_grid<gauss_type> *grid_out= new bvxm_voxel_grid<gauss_type>(out_grid_path, input_grid->grid_size());
     if (bvxm_voxel_grid<gauss_type> * gauss_input_grid=dynamic_cast<bvxm_voxel_grid<gauss_type> *>(input_grid.ptr())){
       if (functor_name == "gauss_convolution") {

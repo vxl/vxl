@@ -16,7 +16,7 @@
 #include <bvxm/grid/bvxm_voxel_grid.h>
 #include <bvxm/grid/bvxm_opinion.h>
 #include <vul/vul_file.h>
-#include <bsta/bsta_gauss_f1.h>
+#include <bsta/bsta_gauss_sf1.h>
 #include <bsta/bsta_attributes.h>
 #include <vnl/vnl_float_4.h>
 
@@ -49,7 +49,7 @@ bool bvxm_crop_grid_process_cons(bprb_func_process& pro)
 bool bvxm_crop_grid_process(bprb_func_process& pro)
 {
   using namespace bvpl_crop_grid_process_globals;
-  typedef bsta_num_obs<bsta_gauss_f1> gauss_type;
+  typedef bsta_num_obs<bsta_gauss_sf1> gauss_type;
 
   // check number of inputs
   if (pro.n_inputs() != n_inputs_)

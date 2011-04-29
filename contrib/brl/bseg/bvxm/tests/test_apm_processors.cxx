@@ -8,7 +8,7 @@
 
 #include <bsta/bsta_attributes.h>
 #include <bsta/bsta_mixture.h>
-#include <bsta/bsta_gauss_f1.h>
+#include <bsta/bsta_gauss_sf1.h>
 #include <bsta/bsta_gauss_if3.h>
 #include <bsta/bsta_gaussian_indep.h>
 #include <bsta/algo/bsta_adaptive_updater.h>
@@ -16,12 +16,12 @@
 
 void test_mog_grey_processor()
 {
-  typedef bsta_num_obs<bsta_gauss_f1> gauss_type;
+  typedef bsta_num_obs<bsta_gauss_sf1> gauss_type;
   typedef bsta_num_obs<bsta_mixture_fixed<gauss_type,3> > mix_gauss_type;
   bvxm_mog_grey_processor processor;
   bool result = true;
 
-  vcl_cout << "Initializing slabs " << vcl_endl;
+  vcl_cout << "Initializing slabs" << vcl_endl;
   bvxm_voxel_slab<float> obs(10,10,1);
   obs.fill(0.3f);
 
@@ -32,7 +32,7 @@ void test_mog_grey_processor()
   appear.fill(mix_gauss_type());
 
   // test the  update, expected_color and most_probable_mode_color methods
-  vcl_cout << "Updating model " << vcl_endl;
+  vcl_cout << "Updating model" << vcl_endl;
   result= result & processor.update(appear, obs, weight);
   obs.fill(0.8f);
   result = result & processor.update(appear, obs, weight);
@@ -56,7 +56,7 @@ void test_mog_rgb_processor()
   bvxm_mog_rgb_processor processor;
   bool result = true;
 
-  vcl_cout << "Initializing slabs " << vcl_endl;
+  vcl_cout << "Initializing slabs" << vcl_endl;
   bvxm_voxel_slab<bvxm_mog_rgb_processor::obs_datatype> obs(10,10,1);
   obs.fill(bvxm_mog_rgb_processor::obs_datatype(0.3f));
 
@@ -67,7 +67,7 @@ void test_mog_rgb_processor()
   appear.fill(mix_gauss_type());
 
   // test the  update, expected_color and most_probable_mode_color methods
-  vcl_cout << "Updating model " << vcl_endl;
+  vcl_cout << "Updating model" << vcl_endl;
   result = result & processor.update(appear, obs, weight);
   obs.fill(bvxm_mog_rgb_processor::obs_datatype(0.8f));
   result = result & processor.update(appear, obs, weight);
@@ -99,7 +99,7 @@ void test_mog_mc_processor()
   bvxm_mog_mc_processor<dim,modes> processor;
   bool result = true;
 
-  vcl_cout << "Initializing slabs " << vcl_endl;
+  vcl_cout << "Initializing slabs" << vcl_endl;
   bvxm_voxel_slab<data_type_> obs1(10,10,1);
   obs1.fill(data_type_(0.3f));
 

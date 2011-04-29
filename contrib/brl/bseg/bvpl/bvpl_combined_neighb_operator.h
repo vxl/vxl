@@ -23,7 +23,7 @@
 #include <vgl/vgl_point_3d.h>
 
 #include <bsta/bsta_attributes.h>
-#include <bsta/bsta_gauss_f1.h>
+#include <bsta/bsta_gauss_sf1.h>
 
 
 template <class OCP_FUNC, class APP_FUNC>
@@ -35,19 +35,19 @@ class bvpl_combined_neighb_operator
 
   // makes the neighborhood operation and stores the result in the output subgrid, which may be equal to the input
   void operate(bvxm_voxel_grid<float>* ocp_grid,
-               bvxm_voxel_grid<bsta_num_obs<bsta_gauss_f1> >* app_grid,
+               bvxm_voxel_grid<bsta_num_obs<bsta_gauss_sf1> >* app_grid,
                bvpl_kernel_sptr kernel,
                bvxm_voxel_grid<float>* out_grid)
   {
     bvpl_subgrid_iterator<float> ocp_iter(ocp_grid, kernel->min_point(), kernel->max_point());
-    bvpl_subgrid_iterator<bsta_num_obs<bsta_gauss_f1> > app_iter(app_grid, kernel->min_point(), kernel->max_point());
+    bvpl_subgrid_iterator<bsta_num_obs<bsta_gauss_sf1> > app_iter(app_grid, kernel->min_point(), kernel->max_point());
     bvpl_subgrid_iterator<float> output_iter(out_grid, kernel->min_point(), kernel->max_point());
 
     //kernel->print();
     while (!ocp_iter.isDone() && !app_iter.isDone()) {
       bvpl_kernel_iterator kernel_iter = kernel->iterator();
       bvpl_voxel_subgrid<float> ocp_subgrid = *ocp_iter;
-      bvpl_voxel_subgrid<bsta_num_obs<bsta_gauss_f1> > app_subgrid = *app_iter;
+      bvpl_voxel_subgrid<bsta_num_obs<bsta_gauss_sf1> > app_subgrid = *app_iter;
 
       if (ocp_subgrid.get_voxel()>0.0f)
       {
@@ -56,7 +56,7 @@ class bvpl_combined_neighb_operator
         while (!kernel_iter.isDone()) {
           vgl_point_3d<int> idx = kernel_iter.index();
           float ocp_val;
-          bsta_num_obs<bsta_gauss_f1> gauss_val;
+          bsta_num_obs<bsta_gauss_sf1> gauss_val;
           if (ocp_subgrid.voxel(idx, ocp_val) && app_subgrid.voxel(idx, gauss_val)) {
             //vcl_cout<< val << "at " << idx <<vcl_endl;
             bvpl_kernel_dispatch d = *kernel_iter;

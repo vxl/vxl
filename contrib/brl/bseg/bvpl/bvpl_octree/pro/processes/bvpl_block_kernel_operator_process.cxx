@@ -18,7 +18,7 @@
 #include <bvpl/functors/bvpl_algebraic_functor.h>
 
 #include <boxm/boxm_scene.h>
-#include <bsta/bsta_gauss_f1.h>
+#include <bsta/bsta_gauss_sf1.h>
 #include <bsta/bsta_attributes.h>
 
 #include <vul/vul_file.h>
@@ -63,7 +63,7 @@ bool bvpl_block_kernel_operator_process(bprb_func_process& pro)
   if (pro.n_inputs() < n_inputs_)
   {
     vcl_cerr << pro.name() << ": the input number should be " << n_inputs_
-             << " but instead it is " << pro.n_inputs() << vcl_endl;
+             << " but instead it is " << pro.n_inputs() << '\n';
     return false;
   }
 
@@ -101,7 +101,7 @@ bool bvpl_block_kernel_operator_process(bprb_func_process& pro)
   {
     case BSTA_GAUSS_F1:
     {
-      typedef bsta_num_obs<bsta_gauss_f1> gauss_type;
+      typedef bsta_num_obs<bsta_gauss_sf1> gauss_type;
       typedef boct_tree<short, gauss_type > tree_type;
       boxm_scene<tree_type> *scene_in = static_cast<boxm_scene<tree_type>* > (scene_base.as_pointer());
       double finest_cell_length = scene_in->finest_cell_length();

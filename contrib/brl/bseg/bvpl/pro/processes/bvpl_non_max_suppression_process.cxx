@@ -18,7 +18,7 @@
 #include <bvpl/bvpl_vector_operator.h>
 
 #include <bsta/bsta_attributes.h>
-#include <bsta/bsta_gauss_f1.h>
+#include <bsta/bsta_gauss_sf1.h>
 
 namespace bvpl_non_max_suppression_process_globals
 {
@@ -65,7 +65,7 @@ bool bvpl_non_max_suppression_process(bprb_func_process& pro)
   bvxm_voxel_grid_base_sptr id_grid_base = pro.get_input<bvxm_voxel_grid_base_sptr>(i++);
   bvpl_kernel_vector_sptr kernel = pro.get_input<bvpl_kernel_vector_sptr>(i++);
   vcl_string out_grid_path = pro.get_input<vcl_string>(i++);
-  typedef bsta_num_obs<bsta_gauss_f1> gauss_type;
+  typedef bsta_num_obs<bsta_gauss_sf1> gauss_type;
 
   //check input's validity
   if (!grid_base.ptr()) {

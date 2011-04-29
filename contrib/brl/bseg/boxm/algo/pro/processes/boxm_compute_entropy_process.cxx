@@ -58,7 +58,7 @@ bool boxm_compute_entropy_process(bprb_func_process& pro)
 
   //:Note initial implementation is for fixed types, but this can be changed if more cases are needed
 
-  typedef bsta_num_obs<bsta_gauss_f1> gauss_type;
+  typedef bsta_num_obs<bsta_gauss_sf1> gauss_type;
   typedef boct_tree<short, gauss_type> gauss_tree_type;
 
   boxm_scene<gauss_tree_type> *gauss_scene = dynamic_cast<boxm_scene<gauss_tree_type>* > (scene_base.as_pointer());

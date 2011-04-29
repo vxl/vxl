@@ -21,7 +21,7 @@
 #include "../bvxm_voxel_grid_base.h"
 #include "../bvxm_opinion.h"
 #include <bsta/bsta_attributes.h>
-#include <bsta/bsta_gauss_f1.h>
+#include <bsta/bsta_gauss_sf1.h>
 #include <vcl_limits.h>
 #include <vcl_iostream.h>
 
@@ -81,7 +81,7 @@ class bvxm_dristhi_traits<bvxm_opinion>
 };
 
 template <>
-class bvxm_dristhi_traits<bsta_num_obs<bsta_gauss_f1> >
+class bvxm_dristhi_traits<bsta_num_obs<bsta_gauss_sf1> >
 {
  public:
   static unsigned char dristhi_header() {return 8;}
@@ -149,6 +149,6 @@ bool bvxm_grid_save_raw(bvxm_voxel_grid<T> *grid,  vcl_string filename)
 }
 
 template <>
-bool bvxm_grid_save_raw<bsta_num_obs<bsta_gauss_f1> >(bvxm_voxel_grid<bsta_num_obs<bsta_gauss_f1> > *grid,  vcl_string filename);
+bool bvxm_grid_save_raw<bsta_num_obs<bsta_gauss_sf1> >(bvxm_voxel_grid<bsta_num_obs<bsta_gauss_sf1> > *grid,  vcl_string filename);
 
 #endif // bvxm_io_voxel_grid_h

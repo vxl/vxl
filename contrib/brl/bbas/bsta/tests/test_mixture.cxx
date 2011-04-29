@@ -2,7 +2,7 @@
 #include <vcl_string.h>
 #include <bsta/bsta_mixture.h>
 #include <bsta/bsta_mixture_fixed.h>
-#include <bsta/bsta_gauss_f1.h>
+#include <bsta/bsta_gauss_sf1.h>
 #include <bsta/bsta_basic_functors.h>
 
 template <class T>
@@ -18,7 +18,7 @@ void test_probability_functor()
   const float covar = 0.01f;
   const float mod_covar = 0.02f;
   const float sample = 0.25f;
-  typedef bsta_gauss_f1 bsta_gauss_t;
+  typedef bsta_gauss_sf1 bsta_gauss_t;
   typedef bsta_gauss_t::covar_type covar_t;
   typedef bsta_gauss_t::vector_type vector_t;
   typedef bsta_mixture<bsta_gauss_t> mix_gauss_type;
@@ -47,7 +47,7 @@ void test_probability_functor()
 void test_sampling()
 {
   vcl_cout << "Starting test of sampling\n";
-  typedef bsta_gauss_f1 bsta_gauss_t;
+  typedef bsta_gauss_sf1 bsta_gauss_t;
   typedef bsta_gauss_t::covar_type covar_t;
   typedef bsta_gauss_t::vector_type vector_t;
   const float covar = 0.01f;

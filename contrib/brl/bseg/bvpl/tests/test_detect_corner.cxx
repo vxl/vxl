@@ -20,31 +20,31 @@
 #include <vcl_iostream.h>
 #include <vcl_iomanip.h>
 
-typedef bsta_num_obs<bsta_gauss_f1> gauss_f1;
+typedef bsta_num_obs<bsta_gauss_sf1> gauss_sf1;
 
-void create_window(bvxm_voxel_grid<gauss_f1> *grid)
+void create_window(bvxm_voxel_grid<gauss_sf1> *grid)
 {
   //fill in window grid
   vgl_vector_3d<unsigned> grid_dim = grid->grid_size();
-  grid->initialize_data(bsta_gauss_f1(0.99f, 1.0f));
+  grid->initialize_data(bsta_gauss_sf1(0.99f, 1.0f));
   unsigned ni=grid_dim.x();
   unsigned nj=grid_dim.y();
   unsigned nk=grid_dim.z();
 
   unsigned slab_idx = 0;
-  bvxm_voxel_grid<gauss_f1>::iterator grid_it = grid->slab_iterator(slab_idx,nk);
+  bvxm_voxel_grid<gauss_sf1>::iterator grid_it = grid->slab_iterator(slab_idx,nk);
 
   for (unsigned x= 0; x<ni; x++)
     for (unsigned z = nk/3 + 1; z < 2*nk/3 + 1; z++)
       for (unsigned y = nj/3 + 1; y < 2*nj/3 + 1; y++)
-        (*grid_it)(x,y,z)=bsta_gauss_f1(0.01f, 1.0f);
+        (*grid_it)(x,y,z)=bsta_gauss_sf1(0.01f, 1.0f);
 }
 
-bool test_result(bvxm_voxel_grid<gauss_f1> *grid, unsigned x, unsigned y, unsigned z)
+bool test_result(bvxm_voxel_grid<gauss_sf1> *grid, unsigned x, unsigned y, unsigned z)
 {
   // iterate through the grid and get the max
 
-  bvxm_voxel_grid<gauss_f1>::iterator grid_it = grid->begin();
+  bvxm_voxel_grid<gauss_sf1>::iterator grid_it = grid->begin();
   float max =  vcl_abs(((*grid_it)(0,0)).mean());
   unsigned max_x =0;
   unsigned max_y =0;
@@ -63,7 +63,7 @@ bool test_result(bvxm_voxel_grid<gauss_f1> *grid, unsigned x, unsigned y, unsign
   if ((x!=max_x)||(y!=max_y) || (z!=max_z))
     return false;
 
-  bvxm_voxel_grid<gauss_f1>::iterator grid_it2 = grid->slab_iterator(0,grid->grid_size().z());
+  bvxm_voxel_grid<gauss_sf1>::iterator grid_it2 = grid->slab_iterator(0,grid->grid_size().z());
   vcl_cout << "Max response= " << vcl_abs(((*grid_it2)(max_x,max_y, max_z)).mean()) << vcl_endl;
   return true;
 }
@@ -78,10 +78,10 @@ bool test_id_grid(bvxm_voxel_grid<int> *grid,unsigned x, unsigned y, unsigned z,
   return (*grid_it)(x,y,z)==id;
 }
 
-bool test_non_max_grid(bvxm_voxel_grid<gauss_f1> *grid)
+bool test_non_max_grid(bvxm_voxel_grid<gauss_sf1> *grid)
 {
   vcl_cout << vcl_endl;
-  bvxm_voxel_grid<gauss_f1>::iterator grid_it = grid->begin();
+  bvxm_voxel_grid<gauss_sf1>::iterator grid_it = grid->begin();
   unsigned count = 0;
   for (unsigned k=0; k <grid->grid_size().z()-2; ++grid_it, ++k) {
     for (unsigned i=0; i<(*grid_it).nx(); ++i) {
@@ -113,15 +113,15 @@ static void test_detect_corner()
   kernel_vector->kernels_.push_back(kernel);
 
   //Create a synthetic world, with a window
-  bvxm_voxel_grid<gauss_f1> *grid = new bvxm_voxel_grid<gauss_f1> (vgl_vector_3d<unsigned>(5,12,12));
+  bvxm_voxel_grid<gauss_sf1> *grid = new bvxm_voxel_grid<gauss_sf1> (vgl_vector_3d<unsigned>(5,12,12));
   create_window(grid);
 
-  bvxm_voxel_grid<gauss_f1> *grid_out = new bvxm_voxel_grid<gauss_f1> (vgl_vector_3d<unsigned>(5,12,12));
-  grid_out->initialize_data(bsta_gauss_f1(0.0f,1.0f));
+  bvxm_voxel_grid<gauss_sf1> *grid_out = new bvxm_voxel_grid<gauss_sf1> (vgl_vector_3d<unsigned>(5,12,12));
+  grid_out->initialize_data(bsta_gauss_sf1(0.0f,1.0f));
 
   //Run apply kernel to world
   bvpl_gauss_convolution_functor func(kernel->iterator());
-  bvpl_neighb_operator<gauss_f1, bvpl_gauss_convolution_functor> oper(func);
+  bvpl_neighb_operator<gauss_sf1, bvpl_gauss_convolution_functor> oper(func);
   oper.operate(grid, kernel, grid_out);
 
   //run several kernels and determine which window is being found
@@ -157,8 +157,8 @@ static void test_detect_corner()
   TEST("Id at Corner 4", true, test_id_grid(id_grid,2,4,4,3));
 
   //test non-maxima suppression
-  //bvxm_voxel_grid<gauss_f1> *non_max_grid= new bvxm_voxel_grid<gauss_f1>(grid->grid_size());
-  //bvxm_voxel_grid_copy<gauss_f1> (grid_out, non_max_grid);
+  //bvxm_voxel_grid<gauss_sf1> *non_max_grid= new bvxm_voxel_grid<gauss_sf1>(grid->grid_size());
+  //bvxm_voxel_grid_copy<gauss_sf1> (grid_out, non_max_grid);
   vector_oper.non_maxima_suppression(grid_out,id_grid,kernel_vector);
   vcl_cout << vcl_endl;
   TEST("Number of corners after non_max", true, test_non_max_grid(grid_out));

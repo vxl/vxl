@@ -28,7 +28,7 @@
 #include <bvpl/bvpl_vector_operator.h>
 
 #include <bsta/bsta_attributes.h>
-#include <bsta/bsta_gauss_f1.h>
+#include <bsta/bsta_gauss_sf1.h>
 
 namespace bvpl_vector_operator_process_globals
 {
@@ -145,7 +145,7 @@ bool bvpl_vector_operator_process(bprb_func_process& pro)
     return true;
   }
   else if (datatype == "bsta_gauss_f1") {
-    typedef bsta_num_obs<bsta_gauss_f1> gauss_type;
+    typedef bsta_num_obs<bsta_gauss_sf1> gauss_type;
     if (bvxm_voxel_grid<gauss_type>* grid=dynamic_cast<bvxm_voxel_grid<gauss_type> *>(grid_base.ptr())) {
       bvxm_voxel_grid<gauss_type> *grid_out= new bvxm_voxel_grid<gauss_type>(out_grid_path, grid->grid_size());
       bvxm_voxel_grid<int > *id_grid=new bvxm_voxel_grid<int >(id_grid_path, grid->grid_size());

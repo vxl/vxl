@@ -26,16 +26,16 @@ void bvpl_gauss_convolution_functor::init()
 }
 
 //: Multiply the dispatch and the input gaussians together
-void bvpl_gauss_convolution_functor::apply(bsta_gauss_f1& gauss, bvpl_kernel_dispatch& d)
+void bvpl_gauss_convolution_functor::apply(bsta_gauss_sf1& gauss, bvpl_kernel_dispatch& d)
 {
   mean_+= d.c_*gauss.mean();
   var_+= d.c_*d.c_*gauss.var();
 }
 
 //: Return the final result
-bsta_gauss_f1 bvpl_gauss_convolution_functor::result()
+bsta_gauss_sf1 bvpl_gauss_convolution_functor::result()
 {
-   bsta_gauss_f1 final_gauss;
+   bsta_gauss_sf1 final_gauss;
    //if (max_ > 1.0e-10){
    // final_gauss.set_mean(mean_/max_);
    // final_gauss.set_var(var_);

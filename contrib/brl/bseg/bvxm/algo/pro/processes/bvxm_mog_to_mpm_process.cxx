@@ -16,7 +16,7 @@
 #include <bvxm/algo/bvxm_merge_mog.h>
 #include <bvxm/grid/bvxm_voxel_grid_base.h>
 #include <bvxm/grid/bvxm_voxel_grid.h>
-#include <bsta/bsta_gauss_f1.h>
+#include <bsta/bsta_gauss_sf1.h>
 
 #include <vcl_string.h>
 
@@ -55,7 +55,7 @@ bool bvxm_mog_to_mpm_process(bprb_func_process& pro)
   vcl_string output_path = pro.get_input<vcl_string>(1);
 
   //get the grids
-  typedef bsta_num_obs<bsta_gauss_f1> gauss_type;
+  typedef bsta_num_obs<bsta_gauss_sf1> gauss_type;
   typedef bsta_mixture_fixed<gauss_type, 3> mix_gauss;
   typedef bsta_num_obs<mix_gauss> mix_gauss_type;
 

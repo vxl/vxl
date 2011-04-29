@@ -88,23 +88,23 @@ boxm_sample<BOXM_APM_MOG_GREY> create_sample(float alpha,
   unsigned short n2=num_obs[2];
   unsigned short nmix=num_obs[3];
 
-  typedef boxm_apm_traits<BOXM_APM_MOG_GREY>::gauss_type_f1 gauss_type_f1;
-  typedef boxm_apm_traits<BOXM_APM_MOG_GREY>::mix_gauss_f1_type mix_gauss_f1_type;
+  typedef boxm_apm_traits<BOXM_APM_MOG_GREY>::gauss_type_sf1 gauss_type_sf1;
+  typedef boxm_apm_traits<BOXM_APM_MOG_GREY>::mix_gauss_sf1_type mix_gauss_sf1_type;
 
 
-  bsta_gauss_f1 dist0((float)m0, (float)v0);
-  bsta_num_obs<bsta_gauss_f1> num_obs_dist0(dist0, n0);
-  bsta_gauss_f1 dist1((float)m1, (float)v1);
-  bsta_num_obs<bsta_gauss_f1> num_obs_dist1(dist1, n1);
-  bsta_gauss_f1 dist2((float)m2, (float)v2);
-  bsta_num_obs<bsta_gauss_f1> num_obs_dist2(dist2, n2);
+  bsta_gauss_sf1 dist0((float)m0, (float)v0);
+  bsta_num_obs<bsta_gauss_sf1> num_obs_dist0(dist0, n0);
+  bsta_gauss_sf1 dist1((float)m1, (float)v1);
+  bsta_num_obs<bsta_gauss_sf1> num_obs_dist1(dist1, n1);
+  bsta_gauss_sf1 dist2((float)m2, (float)v2);
+  bsta_num_obs<bsta_gauss_sf1> num_obs_dist2(dist2, n2);
 
-  bsta_mixture_fixed<gauss_type_f1, 3>  mf;
+  bsta_mixture_fixed<gauss_type_sf1, 3>  mf;
   mf.insert(num_obs_dist0,w0);
   mf.insert(num_obs_dist1,w1);
   mf.insert(num_obs_dist2,w2);
 
-  bsta_num_obs<bsta_mixture_fixed<gauss_type_f1, 3> > obs(mf,nmix/100.0f);
+  bsta_num_obs<bsta_mixture_fixed<gauss_type_sf1, 3> > obs(mf,nmix/100.0f);
 
   boxm_sample<BOXM_APM_MOG_GREY> sample(alpha, obs);
   return sample;
@@ -244,11 +244,11 @@ int main(int argc, char** argv)
     tree_type* block_tree=new tree_type(x_dim+4, x_dim+1); // FIX take max of 3 dims instead
     block_tree->set_bbox(block_bb);
     block_tree->init_cells(0);
-    
+
     int block_i = id.i() - min_block_index.x();
     int block_j = id.j() - min_block_index.y();
     int block_k = id.k() - min_block_index.z();
-    
+
     scene.load_block(block_i, block_j, block_k);
     // go over the subtrees
     for (unsigned z=0; z<dim.z(); z++) {

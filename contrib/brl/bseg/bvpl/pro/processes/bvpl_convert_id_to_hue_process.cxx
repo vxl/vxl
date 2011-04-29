@@ -97,7 +97,7 @@ bool bvpl_convert_id_to_hue_process(bprb_func_process& pro)
       bvpl_write_colors_to_svg(kernel_vector,colors,map_output_file);
       return true;
     }
-    if (bvxm_voxel_grid<bsta_num_obs<bsta_gauss_f1 > > *response_grid = dynamic_cast< bvxm_voxel_grid<bsta_num_obs<bsta_gauss_f1 > >* >(response_base.ptr()))
+    if (bvxm_voxel_grid<bsta_num_obs<bsta_gauss_sf1 > > *response_grid = dynamic_cast< bvxm_voxel_grid<bsta_num_obs<bsta_gauss_sf1 > >* >(response_base.ptr()))
     {
       //assign hue values evenly dristributed on the color wheel
       //the wheel starts and ends on red, so we don't want to get back to the end

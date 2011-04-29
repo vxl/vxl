@@ -10,7 +10,7 @@
 
 #include <boxm/sample/algo/boxm_mog_grey_processor.h>
 
-void boxm_merge_mog::kl_merge(mix_gauss_type const& mixture,bsta_gauss_f1 &gaussian)
+void boxm_merge_mog::kl_merge(mix_gauss_type const& mixture,bsta_gauss_sf1 &gaussian)
 {
   //When merging components of gaussian mixtures, we need to perform the following calculations
   //1. find the normalizing weight of the new component.
@@ -95,79 +95,76 @@ bool boxm_merge_mog::kl_merge_octree(boct_tree<short, mix_gauss_type> *mog_tree,
 /********************** Non-class functions************************************/
 
 //: Computes the differential entropy of a gaussian scene- only for leave cells
-bool compute_differential_entropy(boxm_scene<boct_tree<short, bsta_num_obs<bsta_gauss_f1> > >& scene_in,boxm_scene<boct_tree<short, float> >& scene_out)
+bool compute_differential_entropy(boxm_scene<boct_tree<short, bsta_num_obs<bsta_gauss_sf1> > >& scene_in,boxm_scene<boct_tree<short, float> >& scene_out)
 {
-  typedef bsta_num_obs<bsta_gauss_f1> gauss_type;
-  
+  typedef bsta_num_obs<bsta_gauss_sf1> gauss_type;
+
   scene_in.clone_blocks_to_type<boct_tree<short, float > >(scene_out, vcl_numeric_limits<float>::min());
-  
-  //iterate thorugh the leaf cells computing entropy
+
+  //iterate through the leaf cells computing entropy
   boxm_cell_iterator<boct_tree<short, gauss_type > > it_in =
   scene_in.cell_iterator(&boxm_scene<boct_tree<short, gauss_type> >::load_block);
-  
+
   boxm_cell_iterator<boct_tree<short, float > > it_out =
   scene_out.cell_iterator(&boxm_scene<boct_tree<short, float> >::load_block);
-  
+
   it_in.begin();
   it_out.begin();
-  
+
   while ( !(it_in.end() || it_out.end()) ) {
-    
-    boct_tree_cell<short,gauss_type> *cell_in = *it_in; 
-    boct_tree_cell<short,float> *cell_out = *it_out; 
-    
+    boct_tree_cell<short,gauss_type> *cell_in = *it_in;
+    boct_tree_cell<short,float> *cell_out = *it_out;
+
     boct_loc_code<short> out_code = cell_in->get_code();
     boct_loc_code<short> in_code = cell_out->get_code();
-    
+
     //if level and location code of cells isn't the same then continue
-    if((cell_in->level() != cell_out->level()) || !(in_code.isequal(&out_code))){
-      vcl_cerr << " Input and output cells don't have the same structure " << vcl_endl;
+    if ((cell_in->level() != cell_out->level()) || !(in_code.isequal(&out_code))){
+      vcl_cerr << " Input and output cells don't have the same structure\n";
       ++it_in;
       ++it_out;
       continue;
     }
-    
+
     float h = 0.5f*vcl_log(vnl_math::pi*vnl_math::e*2.0f*cell_in->data().var());
     cell_out->set_data(h);
     ++it_in;
     ++it_out;
   }
-  
+
   return true;
-  
 }
 
 bool compute_expected_color(boxm_scene<boct_tree<short, boxm_sample<BOXM_APM_MOG_GREY> > >& scene_in, boxm_scene<boct_tree<short, float > >& scene_out)
 {
   typedef boct_tree<short, boxm_sample<BOXM_APM_MOG_GREY> > scene_tree_type;
   scene_in.clone_blocks_to_type<boct_tree<short, float > >(scene_out, vcl_numeric_limits<float>::min());
-  
-  //iterate thorugh the leaf cells computing mean appearance
+
+  //iterate through the leaf cells computing mean appearance
   boxm_cell_iterator<scene_tree_type > it_in =
   scene_in.cell_iterator(&boxm_scene<scene_tree_type >::load_block, true);
-  
+
   boxm_cell_iterator<boct_tree<short, float > > it_out =
   scene_out.cell_iterator(&boxm_scene<boct_tree<short, float> >::load_block);
-  
+
   it_in.begin();
   it_out.begin();
-  
+
   while ( !(it_in.end() || it_out.end()) ) {
-    
-    boct_tree_cell<short,boxm_sample<BOXM_APM_MOG_GREY> > *cell_in = *it_in; 
-    boct_tree_cell<short,float> *cell_out = *it_out; 
-    
+    boct_tree_cell<short,boxm_sample<BOXM_APM_MOG_GREY> > *cell_in = *it_in;
+    boct_tree_cell<short,float> *cell_out = *it_out;
+
     boct_loc_code<short> out_code = cell_in->get_code();
     boct_loc_code<short> in_code = cell_out->get_code();
-    
+
     //if level and location code of cells isn't the same then continue
-    if((cell_in->level() != cell_out->level()) || !(in_code.isequal(&out_code))){
-      vcl_cerr << " Input and output cells don't have the same structure " << vcl_endl;
+    if ((cell_in->level() != cell_out->level()) || !(in_code.isequal(&out_code))){
+      vcl_cerr << " Input and output cells don't have the same structure\n";
       ++it_in;
       ++it_out;
       continue;
     }
-    
+
     float mean_color = boxm_mog_grey_processor::expected_color(cell_in->data().appearance());
     // update alpha integral
     float vis_color = (1.0 - vcl_exp(- cell_in->data().alpha * it_in.length()))*mean_color;
@@ -175,7 +172,6 @@ bool compute_expected_color(boxm_scene<boct_tree<short, boxm_sample<BOXM_APM_MOG
     ++it_in;
     ++it_out;
   }
-  
+
   return true;
-  
 }

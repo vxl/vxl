@@ -24,7 +24,7 @@
 
 #include <boxm/boxm_scene.h>
 
-#include <bsta/bsta_gauss_f1.h>
+#include <bsta/bsta_gauss_sf1.h>
 #include <bsta/bsta_attributes.h>
 
 namespace bvpl_scene_kernel_operator_process_globals
@@ -69,7 +69,7 @@ bool bvpl_scene_kernel_operator_process(bprb_func_process& pro)
   if (pro.n_inputs() < n_inputs_)
   {
     vcl_cerr << pro.name() << ": the input number should be " << n_inputs_
-             << " but instead it is " << pro.n_inputs() << vcl_endl;
+             << " but instead it is " << pro.n_inputs() << '\n';
     return false;
   }
 
@@ -84,8 +84,8 @@ bool bvpl_scene_kernel_operator_process(bprb_func_process& pro)
 
   //print inputs
   vcl_cout << "In bvpl_scene_kernel_operator:\n"
-  << "Datatype:     " << datatype << vcl_endl
-  << "Functor Name: " << functor_name << vcl_endl;
+           << "Datatype:     " << datatype << vcl_endl
+           << "Functor Name: " << functor_name << vcl_endl;
 
   //check input's validity
   if (!scene_base.ptr()) {
@@ -102,7 +102,7 @@ bool bvpl_scene_kernel_operator_process(bprb_func_process& pro)
 
   if (datatype == "bsta_gauss_f1")
   {
-    typedef bsta_num_obs<bsta_gauss_f1> gauss_type;
+    typedef bsta_num_obs<bsta_gauss_sf1> gauss_type;
     typedef boct_tree<short, gauss_type > tree_type;
     boxm_scene<tree_type> *scene_in = static_cast<boxm_scene<tree_type>* > (scene_base.as_pointer());
     double finest_cell_length = scene_in->finest_cell_length();
@@ -131,11 +131,11 @@ bool bvpl_scene_kernel_operator_process(bprb_func_process& pro)
       scene_oper.operate(*scene_in, functor, kernel, *scene_out);
       scene_ptr = scene_out;
       pro.set_output_val<boxm_scene_base_sptr>(0, scene_ptr);
-      
+
       //clean memory
       scene_in->unload_active_blocks();
       scene_out->unload_active_blocks();
-      
+
       return true;
     }
       return false;

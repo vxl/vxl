@@ -65,14 +65,14 @@ static void test_brec_create_mog_image_process()
   }
   // create distribution slab
   float init_variance = 0.008f;
-  bsta_gauss_f1 this_gauss(0.0f, init_variance);
-  bsta_num_obs<bsta_gauss_f1> tg_o(this_gauss);
-  bsta_mixture_fixed<bsta_num_obs<bsta_gauss_f1>, 3> mix_gauss;
+  bsta_gauss_sf1 this_gauss(0.0f, init_variance);
+  bsta_num_obs<bsta_gauss_sf1> tg_o(this_gauss);
+  bsta_mixture_fixed<bsta_num_obs<bsta_gauss_sf1>, 3> mix_gauss;
   mix_gauss.insert(tg_o, 0.3f);
   mix_gauss.insert(tg_o, 0.3f);
   mix_gauss.insert(tg_o, 0.4f);
-  bsta_num_obs<bsta_mixture_fixed<bsta_num_obs<bsta_gauss_f1>, 3> > tg_mg(mix_gauss);
-  typedef bsta_num_obs<bsta_mixture_fixed<bsta_num_obs<bsta_gauss_f1>, 3> > mix_type;
+  bsta_num_obs<bsta_mixture_fixed<bsta_num_obs<bsta_gauss_sf1>, 3> > tg_mg(mix_gauss);
+  typedef bsta_num_obs<bsta_mixture_fixed<bsta_num_obs<bsta_gauss_sf1>, 3> > mix_type;
 
   bvxm_voxel_slab<mog_type> slab(100,100,1);
   slab.fill(tg_mg);

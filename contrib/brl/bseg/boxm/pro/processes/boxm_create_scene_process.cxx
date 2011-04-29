@@ -80,7 +80,8 @@ bool boxm_create_scene_process(bprb_func_process& pro)
       vcl_cout<<"Multi Bin set"<<vcl_endl;
       scene_ptr = scene;
     }
-  } else if (scene_ptr->appearence_model() == BOXM_APM_MOB_GREY) {
+  }
+  else if (scene_ptr->appearence_model() == BOXM_APM_MOB_GREY) {
     if (!scene_ptr->multi_bin())
     {
       typedef boct_tree<short,boxm_sample<BOXM_APM_MOB_GREY> > tree_type;
@@ -89,9 +90,10 @@ bool boxm_create_scene_process(bprb_func_process& pro)
       scene_ptr = scene;
     }
     else {
-      vcl_cout<<"Multi Bin for BOXM_APM_MOB_GREY is not defined yet "<<vcl_endl;
+      vcl_cout<<"Multi Bin for BOXM_APM_MOB_GREY is not defined yet"<<vcl_endl;
     }
-  } else if (scene_ptr->appearence_model() == BOXM_APM_SIMPLE_GREY) {
+  }
+  else if (scene_ptr->appearence_model() == BOXM_APM_SIMPLE_GREY) {
     if (!scene_ptr->multi_bin())
     {
       typedef boct_tree<short,boxm_sample<BOXM_APM_SIMPLE_GREY> > tree_type;
@@ -116,8 +118,7 @@ bool boxm_create_scene_process(bprb_func_process& pro)
         boxm_scene<tree_type>* scene = new boxm_scene<tree_type>();
         scene->load_scene(fname);
         scene_ptr = scene;
-        vcl_cout << "Scene path: " << scene->filename()<< vcl_endl;;
-
+        vcl_cout << "Scene path: " << scene->filename()<< vcl_endl;
       }
     }
     else if (scene_ptr->appearence_model() == BSTA_MOG_F1) {
@@ -132,7 +133,7 @@ bool boxm_create_scene_process(bprb_func_process& pro)
     else if (scene_ptr->appearence_model() == BSTA_GAUSS_F1) {
       if (!scene_ptr->multi_bin())
       {
-        typedef boct_tree<short,bsta_num_obs<bsta_gauss_f1> > tree_type;
+        typedef boct_tree<short,bsta_num_obs<bsta_gauss_sf1> > tree_type;
         boxm_scene<tree_type>* scene = new boxm_scene<tree_type>();
         scene->load_scene(parser);
         scene_ptr = scene;
@@ -164,12 +165,14 @@ bool boxm_create_scene_process(bprb_func_process& pro)
         scene->load_scene(parser);
         scene_ptr = scene;
       }
-    }else if (scene_ptr->appearence_model() == BOXM_SCALAR_FLOAT) {
+    }
+    else if (scene_ptr->appearence_model() == BOXM_SCALAR_FLOAT) {
       typedef boct_tree<short, boxm_scalar_sample<float> > tree_type;
       boxm_scene<tree_type>* scene = new boxm_scene<tree_type>();
       scene->load_scene(parser);
       scene_ptr = scene;
-    }else {
+    }
+    else {
       vcl_cerr << "boxm_create_scene_process: undefined APM type\n";
       return false;
     }

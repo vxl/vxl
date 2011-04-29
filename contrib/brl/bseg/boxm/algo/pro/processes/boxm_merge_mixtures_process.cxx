@@ -64,7 +64,7 @@ bool boxm_merge_mixtures_process(bprb_func_process& pro)
   typedef boxm_apm_traits<BOXM_APM_MOG_GREY>::apm_datatype apm_datatype;
   typedef boct_tree<short, apm_datatype> mog_tree_type;
 
-  typedef bsta_num_obs<bsta_gauss_f1> gauss_type;
+  typedef bsta_num_obs<bsta_gauss_sf1> gauss_type;
   typedef boct_tree<short, gauss_type> gauss_tree_type;
 
   boxm_scene<mog_tree_type> *mog_scene = dynamic_cast<boxm_scene<mog_tree_type>* > (scene_base.as_pointer());
@@ -77,7 +77,7 @@ bool boxm_merge_mixtures_process(bprb_func_process& pro)
 
   //parameters of the output scene are the same as those of the input scene
   boxm_scene<gauss_tree_type> *gauss_scene = new boxm_scene<gauss_tree_type>(mog_scene->lvcs(), mog_scene->origin(), mog_scene->block_dim(), mog_scene->world_dim());
-  gauss_scene->set_paths(mog_scene->path(), "bsta_gauss_f1");
+  gauss_scene->set_paths(mog_scene->path(), "bsta_gauss_sf1");
   gauss_scene->set_appearance_model(BSTA_GAUSS_F1);
 
   boxm_merge_mog merger;

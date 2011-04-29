@@ -10,7 +10,7 @@
 #include <bbgm/bbgm_update.h>
 #include <bsta/bsta_attributes.h>
 #include <bsta/bsta_gauss_if3.h>
-#include <bsta/bsta_gauss_f1.h>
+#include <bsta/bsta_gauss_sf1.h>
 #if 0
 #include <bsta/bsta_parzen_sphere.h>
 #endif
@@ -64,7 +64,7 @@ bool bbgm_measure_process(bprb_func_process& pro)
   vcl_size_t str_indx = image_type.find("parzen_sphere");
   bool parzen = str_indx != vcl_string::npos;
 
-  vil_image_view_base_sptr img_ptr = 
+  vil_image_view_base_sptr img_ptr =
     pro.get_input<vil_image_view_base_sptr>(1);
   if (!img_ptr) {
     vcl_cerr << "In bbgm_measure_process::execute() -"
@@ -85,7 +85,7 @@ bool bbgm_measure_process(bprb_func_process& pro)
 
   vil_image_view<float> result;
   if (np ==1) {
-    typedef bsta_gauss_f1 bsta_gauss1_t;
+    typedef bsta_gauss_sf1 bsta_gauss1_t;
     typedef bsta_num_obs<bsta_gauss1_t> gauss_type1;
     typedef bsta_mixture<gauss_type1> mix_gauss_type1;
     typedef bsta_num_obs<mix_gauss_type1> obs_mix_gauss_type1;

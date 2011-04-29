@@ -37,15 +37,15 @@ void deconstruct_sample(boxm_sample<BOXM_APM_MOG_GREY> sample,
 {
   alpha=sample.alpha;
 
-  typedef boxm_apm_traits<BOXM_APM_MOG_GREY>::gauss_type_f1 gauss_type_f1;
-  typedef boxm_apm_traits<BOXM_APM_MOG_GREY>::mix_gauss_f1_type mix_gauss_f1_type;
+  typedef boxm_apm_traits<BOXM_APM_MOG_GREY>::gauss_type_sf1 gauss_type_sf1;
+  typedef boxm_apm_traits<BOXM_APM_MOG_GREY>::mix_gauss_sf1_type mix_gauss_sf1_type;
 
-  bsta_num_obs<bsta_mixture_fixed<gauss_type_f1, 3> > obs = sample.appearance();
+  bsta_num_obs<bsta_mixture_fixed<gauss_type_sf1, 3> > obs = sample.appearance();
   unsigned int nmix = obs.num_observations*100.0;
   num_obs[3] = nmix;
 
   for (unsigned i=0; i<obs.num_components(); i++) {
-    gauss_type_f1  mf=obs.distribution(i);
+    gauss_type_sf1  mf=obs.distribution(i);
     unsigned char w = (unsigned char)vcl_floor(obs.weight(i)*255.0);
     unsigned int  n = (unsigned char)mf.num_observations;
     unsigned char m = (unsigned char)vcl_floor(mf.mean()*255.0);
@@ -82,7 +82,6 @@ void convert_data(boct_tree_cell<T_loc,T_data>* tree_cell,
             }
         }
         Q.pop();
-
     }
 }
 

@@ -18,7 +18,7 @@
 #include <bvxm/grid/io/bvxm_io_voxel_grid.h>
 #include <bvxm/grid/bvxm_opinion.h>
 #include <bsta/bsta_attributes.h>
-#include <bsta/bsta_gauss_f1.h>
+#include <bsta/bsta_gauss_sf1.h>
 
 namespace bvxm_save_grid_raw_process_globals
 {
@@ -67,8 +67,8 @@ bool bvxm_save_grid_raw_process(bprb_func_process& pro)
     bvxm_grid_save_raw(grid,volume_path);
     return true;
   }
-  else if ( bvxm_voxel_grid<bsta_num_obs<bsta_gauss_f1> > *grid = dynamic_cast<bvxm_voxel_grid<bsta_num_obs<bsta_gauss_f1> >* >(grid_base.ptr())) {
-    bvxm_grid_save_raw<bsta_num_obs<bsta_gauss_f1> >(grid,volume_path);
+  else if ( bvxm_voxel_grid<bsta_num_obs<bsta_gauss_sf1> > *grid = dynamic_cast<bvxm_voxel_grid<bsta_num_obs<bsta_gauss_sf1> >* >(grid_base.ptr())) {
+    bvxm_grid_save_raw<bsta_num_obs<bsta_gauss_sf1> >(grid,volume_path);
     return true;
   }
   else

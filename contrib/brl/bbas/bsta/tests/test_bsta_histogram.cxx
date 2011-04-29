@@ -14,7 +14,7 @@
 #include <bsta/bsta_histogram_sptr.h>
 #include <bsta/bsta_joint_histogram_sptr.h>
 
-#include <bsta/bsta_gauss_f1.h>
+#include <bsta/bsta_gauss_sf1.h>
 
 static void test_int_hist()
 {
@@ -93,7 +93,7 @@ void test_bsta_histogram()
     jh.avg_and_variance_bin_for_row_a(a, avg, var);
     vcl_cout << "avg: " << avg << " var: " << var << vcl_endl;
 
-    bsta_gauss_f1 g(static_cast<float>(avg), static_cast<float>(var));
+    bsta_gauss_sf1 g(static_cast<float>(avg), static_cast<float>(var));
     for (int b = 0; b < bins; b++) {
       float b_val = g.prob_density(static_cast<float>((b+1)*delta));
       new_jh.upcount(static_cast<float>((a+1)*delta), 0.0f, static_cast<float>((b+1)*delta), b_val);

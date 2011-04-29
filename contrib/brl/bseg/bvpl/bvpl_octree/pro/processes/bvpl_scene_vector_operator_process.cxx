@@ -20,7 +20,7 @@
 #include <brdb/brdb_value.h>
 
 #include <boxm/boxm_scene.h>
-#include <bsta/bsta_gauss_f1.h>
+#include <bsta/bsta_gauss_sf1.h>
 #include <bsta/bsta_attributes.h>
 
 namespace bvpl_scene_vector_operator_process_globals
@@ -121,7 +121,7 @@ bool bvpl_scene_vector_operator_process(bprb_func_process& pro)
   }
   if (datatype == "bsta_gauss_f1")
   {
-    typedef bsta_num_obs<bsta_gauss_f1> gauss_type;
+    typedef bsta_num_obs<bsta_gauss_sf1> gauss_type;
     typedef boct_tree<short, gauss_type > tree_type;
     boxm_scene<tree_type> *scene_in = static_cast<boxm_scene<tree_type>* > (scene_base.as_pointer());
 

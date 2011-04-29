@@ -1,4 +1,4 @@
-// This is boxm_save_scene_raw_general.h
+// This is brl/bseg/boxm/algo/boxm_save_scene_raw_general.h
 #ifndef boxm_save_scene_raw_general_h
 #define boxm_save_scene_raw_general_h
 
@@ -53,58 +53,57 @@ class boxm_dristhi_traits;
 template <>
 class boxm_dristhi_traits<float>
 {
-public:
+ public:
   static unsigned char dristhi_header() {return 8;}
 };
 
 template <>
 class boxm_dristhi_traits<unsigned char>
 {
-public:
+ public:
   static unsigned char dristhi_header() {return 0;}
 };
 
 template <>
 class boxm_dristhi_traits<char>
 {
-public:
+ public:
   static unsigned char dristhi_header() {return 1;}
 };
 
 template <>
 class boxm_dristhi_traits<unsigned int>
 {
-public:
+ public:
   static unsigned char dristhi_header() {return 4;}
 };
 
 template <>
-class boxm_dristhi_traits<bsta_num_obs<bsta_gauss_f1> >
+class boxm_dristhi_traits<bsta_num_obs<bsta_gauss_sf1> >
 {
-public:
+ public:
   static unsigned char dristhi_header() {return 8;}
 };
 
 template <class T_loc, class T_data>
 void boxm_save_scene_raw_general(boxm_scene<boct_tree<T_loc, T_data > > &scene,
-                         vcl_string filename,
-                         unsigned int resolution_level)
+                                 vcl_string filename,
+                                 unsigned int resolution_level)
 {
-  
   bsta_histogram<float> hist;
   compute_scene_statistics(&scene, hist);
   hist.pretty_print();
-  
-  
+
+
   typedef boct_tree<T_loc, T_data > tree_type;
-  
+
   // create an array for each block, and save in a binary file
-  
+
   // number of cells for each block should be the same, because they have the
   // same tree max_level definitions
   unsigned int ncells = 0;
   boxm_block_iterator<tree_type> iter(&scene);
-  
+
   unsigned int finest_level=100000;
   // find the finest levels in the blocks
   while (!iter.end()) {
@@ -118,12 +117,12 @@ void boxm_save_scene_raw_general(boxm_scene<boct_tree<T_loc, T_data > > &scene,
     }
     iter++;
   }
-  
+
   // query the finest level of the tree and do not make the resolution
   // smaller than that
   if (resolution_level < finest_level)
     resolution_level=finest_level;
-  
+
   iter.begin();
   while (!iter.end()) {
     vgl_point_3d<int> idx = iter.index();
@@ -131,49 +130,49 @@ void boxm_save_scene_raw_general(boxm_scene<boct_tree<T_loc, T_data > > &scene,
     boxm_block<tree_type>* block = scene.get_block(idx);
     vgl_box_3d<double> block_bb = block->bounding_box();
     tree_type* tree = block->get_tree();
-    
+
     // get origin of block
     vgl_point_3d<double> min = block_bb.min_point();
-    
+
     ncells = 1 << (tree->root_level() - (int)resolution_level);
-    
+
     // assume that bounding box is a cube
     const double step_len = ((block_bb.max_x() - block_bb.min_x())/double(ncells));
-    
+
     // origin should specify center of first cell
     vgl_point_3d<double> data_og(min.x() + (step_len/2.0), min.y() + (step_len/2.0), min.z() + (step_len/2.0));
-    
+
     int data_size = ncells*ncells*ncells;
     T_data *data = 0;
     vcl_cout << "Data Size=" << data_size << vcl_endl;
     data = new (std::nothrow)T_data[data_size];
-    
+
     if (data == 0) {
       vcl_cout << "boxm_save_block_raw: Could not allocate data!" << vcl_endl;
       return;
     }
-    
+
     // init to zero
     for (T_data* dp = data; dp < data + ncells*ncells*ncells; ++dp) {
       *dp = (T_data)0.0;
     }
 
-    
+
     double out_cell_norm_volume = (tree->number_levels() - (int)resolution_level + 1);
     out_cell_norm_volume = out_cell_norm_volume*out_cell_norm_volume*out_cell_norm_volume;
-    
+
     vcl_vector<boct_tree_cell<T_loc, T_data > *> cells = tree->leaf_cells();
     for (unsigned i=0; i<cells.size(); i++)
     {
       vgl_point_3d<double> node = tree->cell_bounding_box_local(cells[i]).min_point();
-      
+
       T_data cell_val = cells[i]->data();
-      
+
       unsigned int level = cells[i]->get_code().level;
       if (level == resolution_level) {
         // just copy value to output array
         int out_index=static_cast<int>(ncells-1-(node.z()/step_len) + (node.y()/step_len)*ncells + (node.x()/step_len)*ncells*ncells);
-        
+
         if (out_index >= data_size)
           vcl_cout << "boxm_save_block_raw, array out of index! " << out_index << " -- " << data_size << vcl_endl;
         else
@@ -188,9 +187,8 @@ void boxm_save_scene_raw_general(boxm_scene<boct_tree<T_loc, T_data > > &scene,
         for (unsigned int z=node_z_start; z<node_z_start+us_factor; ++z) {
           for (unsigned int y=node_y_start; y<node_y_start+us_factor; ++y) {
             for (unsigned int x=node_x_start; x<node_x_start+us_factor; ++x) {
-
               int out_index=ncells-1-z + y*ncells + x*ncells*ncells;
-                 
+
               if (out_index >= data_size)
                 vcl_cout << "boxm_save_block_raw, array out of index! " << out_index << " -- " << data_size << vcl_endl;
               else
@@ -211,7 +209,7 @@ void boxm_save_scene_raw_general(boxm_scene<boct_tree<T_loc, T_data > > &scene,
         data[out_index] += (T_data)(cell_val*update_weight);
       }
     }
-    
+
     // write the data into a bin file, generate a file name
     vcl_stringstream strm;
     strm << filename<< idx.x() << '_' << idx.y() << '_' << idx.z() << ".bin";
@@ -221,11 +219,11 @@ void boxm_save_scene_raw_general(boxm_scene<boct_tree<T_loc, T_data > > &scene,
       vcl_cerr << "error opening " << filename << " for write!\n";
       return;
     }
-    
+
     vsl_b_write(os, (unsigned int) ncells);  // x dimension
     vsl_b_write(os, (unsigned int) ncells);  // y dimension
     vsl_b_write(os, (unsigned int) ncells);  // z dimension
-    
+
     T_data* dp = data;
     for (; dp < data + data_size; ++dp) {
       T_data v = *dp;
@@ -236,7 +234,7 @@ void boxm_save_scene_raw_general(boxm_scene<boct_tree<T_loc, T_data > > &scene,
     iter++;
   }
   assert(ncells > 0);
-  
+
   // combine the blocks
   vgl_vector_3d<unsigned> dim = scene.world_dim();
   unsigned dimx = dim.x()*ncells;
@@ -249,7 +247,7 @@ void boxm_save_scene_raw_general(boxm_scene<boct_tree<T_loc, T_data > > &scene,
     vcl_cout << "boxm_save_block_raw: Could not allocate read data!" << vcl_endl;
     return;
   }
-  
+
   // open the binary files streams, saved earlier
   unsigned int nx,ny,nz;
   vbl_array_3d<vsl_b_ifstream*> streams(dim.x(), dim.y(), dim.z());
@@ -267,9 +265,9 @@ void boxm_save_scene_raw_general(boxm_scene<boct_tree<T_loc, T_data > > &scene,
       }
     }
   }
-  
+
   // start writing the raw header
-  unsigned char data_type = boxm_dristhi_traits<T_data>::dristhi_header(); 
+  unsigned char data_type = boxm_dristhi_traits<T_data>::dristhi_header();
   vxl_uint_32 nx_uint = dimx;
   vxl_uint_32 ny_uint = dimy;
   vxl_uint_32 nz_uint = dimz;
@@ -278,12 +276,12 @@ void boxm_save_scene_raw_general(boxm_scene<boct_tree<T_loc, T_data > > &scene,
     vcl_cerr << "error opening " << filename << " for write!\n";
     return;
   }
-  
+
   os.write(reinterpret_cast<char*>(&data_type),sizeof(data_type));
   os.write(reinterpret_cast<char*>(&nx_uint),sizeof(nx_uint));
   os.write(reinterpret_cast<char*>(&ny_uint),sizeof(ny_uint));
   os.write(reinterpret_cast<char*>(&nz_uint),sizeof(nz_uint));
-  
+
   // combine the column from streams to generate one raw file
   for (unsigned x=0; x<dim.x(); x++) {
     unsigned k=0;
@@ -302,10 +300,10 @@ void boxm_save_scene_raw_general(boxm_scene<boct_tree<T_loc, T_data > > &scene,
       }
     }
   }
-  
+
   os.close();
   delete[] read_data;
-  
+
   // remove the intermediate bin files
   for (unsigned z=0; z<dim.z(); z++) {
     for (unsigned y=0; y<dim.y(); y++) {
@@ -331,17 +329,17 @@ void boxm_save_scene_raw_general_to_byte(boxm_scene<boct_tree<T_loc, T_data > > 
                          unsigned int resolution_level)
 {
   typedef boct_tree<T_loc, T_data > tree_type;
-  
+
   bsta_histogram<T_data> hist;
   compute_scene_statistics(&scene, hist);
- 
+
   // create an array for each block, and save in a binary file
-  
+
   // number of cells for each block should be the same, because they have the
   // same tree max_level definitions
   unsigned int ncells = 0;
   boxm_block_iterator<tree_type> iter(&scene);
-  
+
   unsigned int finest_level=100000;
   // find the finest levels in the blocks
   while (!iter.end()) {
@@ -355,12 +353,12 @@ void boxm_save_scene_raw_general_to_byte(boxm_scene<boct_tree<T_loc, T_data > > 
     }
     iter++;
   }
-  
+
   // query the finest level of the tree and do not make the resolution
   // smaller than that
   if (resolution_level < finest_level)
     resolution_level=finest_level;
-  
+
   iter.begin();
   while (!iter.end()) {
     vgl_point_3d<int> idx = iter.index();
@@ -368,23 +366,23 @@ void boxm_save_scene_raw_general_to_byte(boxm_scene<boct_tree<T_loc, T_data > > 
     boxm_block<tree_type>* block = scene.get_block(idx);
     vgl_box_3d<double> block_bb = block->bounding_box();
     tree_type* tree = block->get_tree();
-    
+
     // get origin of block
     vgl_point_3d<double> min = block_bb.min_point();
-    
+
     ncells = 1 << (tree->root_level() - (int)resolution_level);
-    
+
     // assume that bounding box is a cube
     const double step_len = ((block_bb.max_x() - block_bb.min_x())/double(ncells));
-    
+
     // origin should specify center of first cell
     vgl_point_3d<double> data_og(min.x() + (step_len/2.0), min.y() + (step_len/2.0), min.z() + (step_len/2.0));
-    
+
     int data_size = ncells*ncells*ncells;
     float *data = 0;
     vcl_cout << "Data Size=" << data_size << vcl_endl;
     data = new (std::nothrow)float[data_size];
-    
+
     if (data == 0) {
       vcl_cout << "boxm_save_block_raw: Could not allocate data!" << vcl_endl;
       return;
@@ -393,17 +391,17 @@ void boxm_save_scene_raw_general_to_byte(boxm_scene<boct_tree<T_loc, T_data > > 
     for (float* dp = data; dp < data + ncells*ncells*ncells; ++dp) {
       *dp = 0.0f;
     }
-    
+
     double out_cell_norm_volume = (tree->number_levels() - (int)resolution_level + 1);
     out_cell_norm_volume = out_cell_norm_volume*out_cell_norm_volume*out_cell_norm_volume;
-    
+
     vcl_vector<boct_tree_cell<T_loc, T_data > *> cells = tree->leaf_cells();
     for (unsigned i=0; i<cells.size(); i++)
     {
       vgl_point_3d<double> node = tree->cell_bounding_box_local(cells[i]).min_point();
-      
+
       float cell_val = boxm_cell_to_float(cells[i], step_len);
-      
+
       unsigned int level = cells[i]->get_code().level;
       if (level == resolution_level) {
         // just copy value to output array
@@ -411,7 +409,7 @@ void boxm_save_scene_raw_general_to_byte(boxm_scene<boct_tree<T_loc, T_data > > 
         int out_index=static_cast<int>(ncells-1-(node.z()/step_len) + (node.y()/step_len)*ncells + (node.x()/step_len)*ncells*ncells);
         //////int out_index=static_cast<int>((node.z()/step_len) + (node.y()/step_len)*ncells + (node.x()/step_len)*ncells*ncells);
         //////int out_index=static_cast<int>(ncells-(node.z()/step_len)-1 + (node.x()/step_len)*ncells + (node.y()/step_len)*ncells*ncells);
-        
+
         if (out_index >= data_size)
           vcl_cout << "boxm_save_block_raw, array out of index! " << out_index << " -- " << data_size << vcl_endl;
         else
@@ -430,7 +428,7 @@ void boxm_save_scene_raw_general_to_byte(boxm_scene<boct_tree<T_loc, T_data > > 
               int out_index=ncells-1-z + y*ncells + x*ncells*ncells;
               //////int out_index=z + y*ncells + x*ncells*ncells;
               //////int out_index=ncells-1-z + x*ncells + y*ncells*ncells;
-              
+
               if (out_index >= data_size)
                 vcl_cout << "boxm_save_block_raw, array out of index! " << out_index << " -- " << data_size << vcl_endl;
               else
@@ -450,11 +448,11 @@ void boxm_save_scene_raw_general_to_byte(boxm_scene<boct_tree<T_loc, T_data > > 
         int out_index=ncells-1-node_z + node_y*ncells + node_x*ncells*ncells;
         //////int out_index=node_z + node_y*ncells + node_x*ncells*ncells;
         //////int out_index=ncells-1-node_z + node_x*ncells + node_y*ncells*ncells;
-        
+
         data[out_index] += float(cell_val*update_weight);
       }
     }
-    
+
     // write the data into a bin file, generate a file name
     vcl_stringstream strm;
     strm << filename<< idx.x() << '_' << idx.y() << '_' << idx.z() << ".bin";
@@ -464,16 +462,16 @@ void boxm_save_scene_raw_general_to_byte(boxm_scene<boct_tree<T_loc, T_data > > 
       vcl_cerr << "error opening " << filename << " for write!\n";
       return;
     }
-    
+
     vsl_b_write(os, (unsigned int) ncells);  // x dimension
     vsl_b_write(os, (unsigned int) ncells);  // y dimension
     vsl_b_write(os, (unsigned int) ncells);  // z dimension
-    
+
 
     T_data minv = hist.min();
     T_data maxv = hist.max();
     T_data rangev = maxv-minv;
-    
+
     float* dp = data;
     for (; dp < data + data_size; ++dp) {
       unsigned char c = (unsigned char)(vcl_floor((255.0f * float((*dp)-minv)/float(rangev)) + 0.5f));
@@ -484,7 +482,7 @@ void boxm_save_scene_raw_general_to_byte(boxm_scene<boct_tree<T_loc, T_data > > 
     iter++;
   }
   assert(ncells > 0);
-  
+
   // combine the blocks
   vgl_vector_3d<unsigned> dim = scene.world_dim();
   unsigned dimx = dim.x()*ncells;
@@ -497,7 +495,7 @@ void boxm_save_scene_raw_general_to_byte(boxm_scene<boct_tree<T_loc, T_data > > 
     vcl_cout << "boxm_save_block_raw: Could not allocate byte data!" << vcl_endl;
     return;
   }
-  
+
   // open the binary files streams, saved earlier
   unsigned int nx,ny,nz;
   vbl_array_3d<vsl_b_ifstream*> streams(dim.x(), dim.y(), dim.z());
@@ -515,7 +513,7 @@ void boxm_save_scene_raw_general_to_byte(boxm_scene<boct_tree<T_loc, T_data > > 
       }
     }
   }
-  
+
   // start writing the raw header
   unsigned char data_type = 0; // 0 means unsigned byte
   vxl_uint_32 nx_uint = dimx;
@@ -526,12 +524,12 @@ void boxm_save_scene_raw_general_to_byte(boxm_scene<boct_tree<T_loc, T_data > > 
     vcl_cerr << "error opening " << filename << " for write!\n";
     return;
   }
-  
+
   os.write(reinterpret_cast<char*>(&data_type),sizeof(data_type));
   os.write(reinterpret_cast<char*>(&nx_uint),sizeof(nx_uint));
   os.write(reinterpret_cast<char*>(&ny_uint),sizeof(ny_uint));
   os.write(reinterpret_cast<char*>(&nz_uint),sizeof(nz_uint));
-  
+
   // combine the column from streams to generate one raw file
   for (unsigned x=0; x<dim.x(); x++) {
     unsigned k=0;
@@ -550,10 +548,10 @@ void boxm_save_scene_raw_general_to_byte(boxm_scene<boct_tree<T_loc, T_data > > 
       }
     }
   }
-  
+
   os.close();
   delete[] byte_data;
-  
+
   // remove the intermediate bin files
   for (unsigned z=0; z<dim.z(); z++) {
     for (unsigned y=0; y<dim.y(); y++) {

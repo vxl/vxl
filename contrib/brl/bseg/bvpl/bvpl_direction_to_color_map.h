@@ -8,7 +8,7 @@
 #include <bdgl/bdgl_peano_curve.h>
 
 #include <bsta/bsta_attributes.h>
-#include <bsta/bsta_gauss_f1.h>
+#include <bsta/bsta_gauss_sf1.h>
 
 #include <bxml/bsvg/bsvg_document.h>
 #include <bxml/bsvg/bsvg_element.h>
@@ -64,7 +64,7 @@ void bvpl_convert_id_grid_to_hsv_grid(bvxm_voxel_grid<int> *id_grid,
                                       vcl_vector<float> colors);
 
 void bvpl_convert_id_grid_to_hsv_grid(bvxm_voxel_grid<int> *id_grid,
-                                      bvxm_voxel_grid<bsta_num_obs<bsta_gauss_f1> > *response_grid,
+                                      bvxm_voxel_grid<bsta_num_obs<bsta_gauss_sf1> > *response_grid,
                                       bvxm_voxel_grid<vnl_float_4> *out_grid,
                                       vcl_vector<float> colors);
 

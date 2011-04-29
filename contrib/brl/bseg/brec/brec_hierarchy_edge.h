@@ -38,7 +38,7 @@ class brec_hierarchy_edge : public bgrl2_edge<brec_part_base>
   //: if the model is updated then the to_central flag is made false since the edge becomes a non-central edge
   void update_dist_model(const float dist);
   void update_angle_model(const float angle);
-  //void set_model(const bsta_gauss_f2& mod) { loc_model_ = mod; to_central_ = false; }
+  //void set_model(const bsta_gauss_sf2& mod) { loc_model_ = mod; to_central_ = false; }
   void set_model(const bsta_gaussian_sphere<double,1>& dist_mod, const bsta_gaussian_sphere<double,1>& angle_mod, double weight) { dist_model_ = dist_mod; angle_model_ = angle_mod; to_central_ = false; weight_ = weight; }
 
   double prob_density(const float dist, const float angle);  //vnl_vector_fixed<float,2>& pt);

@@ -114,8 +114,8 @@ bool boxm_generate_opt2_samples_process(bprb_func_process& pro)
       if (shadow_prior > 0.0f) {
         boxm_apm_traits<BOXM_APM_MOG_GREY>::apm_datatype shadow_model;
         // insert a single mode with mean at 0
-        bsta_gauss_f1 single_mode(0.0f, shadow_sigma*shadow_sigma);
-        shadow_model.insert(bsta_num_obs<bsta_gauss_f1>(single_mode), 1.0f);
+        bsta_gauss_sf1 single_mode(0.0f, shadow_sigma*shadow_sigma);
+        shadow_model.insert(bsta_num_obs<bsta_gauss_sf1>(single_mode), 1.0f);
         alt_appearance_priors.push_back(shadow_prior);
         alt_appearance_models.push_back(shadow_model);
       }

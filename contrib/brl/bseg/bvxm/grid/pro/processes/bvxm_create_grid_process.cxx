@@ -20,7 +20,7 @@
 #include <vul/vul_file.h>
 
 #include <bsta/bsta_distribution.h>
-#include <bsta/bsta_gauss_f1.h>
+#include <bsta/bsta_gauss_sf1.h>
 #include <bsta/bsta_attributes.h>
 #include <bsta/bsta_mixture_fixed.h>
 #include <bsta/bsta_mixture.h>
@@ -95,7 +95,7 @@ bool bvxm_create_grid_process(bprb_func_process& pro)
   }
   else if (datatype == "bsta_gaussian_mixture_float_3"){
     //Only floating point are supported for now and mixtures with 3 components.
-    typedef bsta_num_obs<bsta_gauss_f1> gauss_type;
+    typedef bsta_num_obs<bsta_gauss_sf1> gauss_type;
     typedef bsta_mixture_fixed<gauss_type, 3> mix_gauss;
     typedef bsta_num_obs<mix_gauss> mix_gauss_type;
     bvxm_voxel_grid_base_sptr grid = new bvxm_voxel_grid<mix_gauss_type>(input_path,vgl_vector_3d<unsigned>(dim_x,dim_y,dim_z));
@@ -111,7 +111,8 @@ bool bvxm_create_grid_process(bprb_func_process& pro)
     bvxm_voxel_grid_base_sptr grid = new bvxm_voxel_grid<vnl_vector_fixed<float,4> >(input_path,vgl_vector_3d<unsigned>(dim_x,dim_y,dim_z));
     pro.set_output_val<bvxm_voxel_grid_base_sptr>(0, grid);
     return true;
-  }else{
+  }
+  else {
     vcl_cerr << "datatype not supported\n";
   }
 

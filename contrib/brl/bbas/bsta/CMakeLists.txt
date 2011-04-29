@@ -29,12 +29,17 @@ SET(bsta_sources
   bsta_gaussian_sphere.txx       bsta_gaussian_sphere.h
   bsta_parzen_sphere.txx         bsta_parzen_sphere.h
   bsta_parzen_sf1.h
+  bsta_parzen_sf2.h
   bsta_parzen_sf3.h
-  bsta_gauss_f1.h
-  bsta_gauss_f2.h
-  bsta_gauss_sf2.h
+  bsta_gauss_sf1.h               bsta_gauss_sd1.h
+  bsta_gauss_sf2.h               bsta_gauss_sd2.h
   bsta_gauss_sf3.h               bsta_gauss_sd3.h
+  bsta_gauss_if1.h               bsta_gauss_id1.h
+  bsta_gauss_if2.h               bsta_gauss_id2.h
   bsta_gauss_if3.h               bsta_gauss_id3.h
+  bsta_gauss_if4.h
+  bsta_gauss_ff1.h               bsta_gauss_fd1.h
+  bsta_gauss_ff2.h               bsta_gauss_fd2.h
   bsta_gauss_ff3.h               bsta_gauss_fd3.h
 
   bsta_mixture.h

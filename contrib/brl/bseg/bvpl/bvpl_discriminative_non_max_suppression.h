@@ -33,7 +33,7 @@ class bvpl_discriminative_non_max_suppression
 
   //: Using appearance and occupancy grids simultaneously, this function applies a one kernel at a time, performs non-maxima suppression and combines the top three responses at every voxel
   template<class OCP_FUNC, class APP_FUNC>
-  void suppress_and_combine(bvxm_voxel_grid<float>* ocp_grid, bvxm_voxel_grid<bsta_num_obs<bsta_gauss_f1> >* app_grid, bvpl_kernel_vector_sptr kernel_vector,
+  void suppress_and_combine(bvxm_voxel_grid<float>* ocp_grid, bvxm_voxel_grid<bsta_num_obs<bsta_gauss_sf1> >* app_grid, bvpl_kernel_vector_sptr kernel_vector,
                             bvpl_combined_neighb_operator<OCP_FUNC,APP_FUNC>* oper, bvxm_voxel_grid<vnl_vector_fixed<float,3> >* out_grid,
                             bvxm_voxel_grid<vnl_vector_fixed<int,3> >* id_grid);
 
@@ -52,7 +52,7 @@ class bvpl_discriminative_non_max_suppression
   //: Keeps the n top responses after non-maxima suppression
   template<unsigned n_responses>
   void  keep_top_responses(bvxm_voxel_grid<vnl_vector_fixed<float, n_responses> >* top_resp_grid,
-                           bvxm_voxel_grid<bsta_num_obs<bsta_gauss_f1> >* grid_in,
+                           bvxm_voxel_grid<bsta_num_obs<bsta_gauss_sf1> >* grid_in,
                            bvxm_voxel_grid<vnl_vector_fixed<int, n_responses> >* id_grid,
                            int this_id);
 };
@@ -101,7 +101,7 @@ void bvpl_discriminative_non_max_suppression::suppress_and_combine(bvxm_voxel_gr
 //: Using appearance and occupancy grids simultaneously, this function applies one kernel at a time, performs non-maxima suppression and combines the top three responses at every voxel
 template<class OCP_FUNC, class APP_FUNC>
 void bvpl_discriminative_non_max_suppression::suppress_and_combine(bvxm_voxel_grid<float>* ocp_grid,
-                                                                   bvxm_voxel_grid<bsta_num_obs<bsta_gauss_f1> >* app_grid,
+                                                                   bvxm_voxel_grid<bsta_num_obs<bsta_gauss_sf1> >* app_grid,
                                                                    bvpl_kernel_vector_sptr kernel_vector,
                                                                    bvpl_combined_neighb_operator<OCP_FUNC,APP_FUNC>* oper,
                                                                    bvxm_voxel_grid<vnl_vector_fixed<float,3> >* out_grid,
@@ -225,17 +225,17 @@ void  bvpl_discriminative_non_max_suppression::keep_top_responses(bvxm_voxel_gri
 
 template<unsigned n_responses>
 void  bvpl_discriminative_non_max_suppression::keep_top_responses(bvxm_voxel_grid<vnl_vector_fixed<float, n_responses> >* top_resp_grid,
-                                                                  bvxm_voxel_grid<bsta_num_obs<bsta_gauss_f1> >* grid_in,
+                                                                  bvxm_voxel_grid<bsta_num_obs<bsta_gauss_sf1> >* grid_in,
                                                                   bvxm_voxel_grid<vnl_vector_fixed<int, n_responses> >* id_grid,
                                                                   int this_id)
 {
-  bvxm_voxel_grid<bsta_num_obs<bsta_gauss_f1> >::iterator grid_in_it = grid_in->begin();
+  bvxm_voxel_grid<bsta_num_obs<bsta_gauss_sf1> >::iterator grid_in_it = grid_in->begin();
   typename bvxm_voxel_grid<vnl_vector_fixed<float, n_responses> >::iterator top_resp_grid_it = top_resp_grid->begin();
   typename bvxm_voxel_grid<vnl_vector_fixed<int, n_responses> >::iterator id_grid_it = id_grid->begin();
 
   for (; grid_in_it!=grid_in->end(); ++grid_in_it, ++top_resp_grid_it, ++id_grid_it)
   {
-    bvxm_voxel_slab<bsta_num_obs<bsta_gauss_f1> >::iterator slab_in_it = grid_in_it->begin();
+    bvxm_voxel_slab<bsta_num_obs<bsta_gauss_sf1> >::iterator slab_in_it = grid_in_it->begin();
     typename bvxm_voxel_slab<vnl_vector_fixed<float, n_responses> >::iterator slab_resp_it = top_resp_grid_it->begin();
     typename bvxm_voxel_slab<vnl_vector_fixed<int, n_responses> >::iterator id_slab_it = id_grid_it->begin();
     for (; slab_in_it!=grid_in_it->end(); ++slab_in_it, ++ slab_resp_it, ++ id_slab_it)
