@@ -40,10 +40,10 @@ void test_refine_trees_kernel()
   boxm2_lru_cache::create(scene.ptr());
 
   //initialize gpu pro / manager
-  //boxm2_opencl_processor* gpu_pro = boxm2_opencl_processor::instance();
-  //gpu_pro->set_scene(scene.ptr());
-  //gpu_pro->set_cpu_cache(boxm2_cache::instance());
-  //gpu_pro->init();
+  boxm2_opencl_processor* gpu_pro = boxm2_opencl_processor::instance();
+  gpu_pro->set_scene(scene.ptr());
+  gpu_pro->set_cpu_cache(boxm2_cache::instance());
+  gpu_pro->init();
 
   //rendering sources
   vcl_vector<vcl_string> src_paths;
@@ -237,6 +237,5 @@ void test_refine()
 {
   test_refine_trees_kernel();
 }
-
 
 TESTMAIN( test_refine );
