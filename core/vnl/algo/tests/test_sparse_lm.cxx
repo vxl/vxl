@@ -789,7 +789,7 @@ void test_prob3()
     double rms_error_a = camera_diff(a,pa).rms();
     double rms_error_b = (b-pb).rms();
     vcl_cout << "RMS camera error: "<<rms_error_a
-             << "\nRMS points error: "<<rms_error_a << vcl_endl;
+             << "\nRMS points error: "<<rms_error_b << vcl_endl;
     TEST("convergence with missing projections and noise",
          rms_error_a <1e-4 && rms_error_b < 1e-4, true);
   }
