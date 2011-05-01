@@ -3,6 +3,7 @@
 #include <vcl_fstream.h>
 #include <vgl/vgl_point_3d.h>
 #include <vpgl/vpgl_perspective_camera.h>
+#include <vpgl/vpgl_generic_camera.h>
 #include <vgl/vgl_box_2d.h>
 #include <vgl/vgl_box_3d.h>
 #include <vgl/vgl_ray_3d.h>
@@ -195,32 +196,24 @@ static void test_camera_bounds()
   double t_er  = (trel_act-trel).length();
   TEST_NEAR("relative camera transform", rod_er + t_er, 0.0, 0.00001);
 
-  // c 3
-  double r3 [] ={   0.0,  1.0,  0.0, 
-                    0.671559,  0.0, -0.740951, 
-                   -0.740951,  0.0, -0.671559 };
-  vnl_matrix_fixed<double, 3, 3> M3(r3);
-  vgl_rotation_3d<double> R3(M3);
-  vgl_vector_3d<double> t3(0.25, 0.531426, 4.90929);
-  vpgl_perspective_camera<double> c3(K01, R3, t3);
-  vgl_rotation_3d<double> Rrel_3;
-  vgl_vector_3d<double> trel_3;
-  vpgl_camera_bounds::relative_transf(c3, c1, Rrel_3, trel_3);
-  vcl_cout << "Relative trans 3-145 " << trel_3 << '\n';
-  vcl_cout << "Relative rot_rod 3-145 " << Rrel_3.as_rodrigues() << '\n';
-
-
-double r239 [] ={0.134418, 0.990925,0.0,
-                 0.604004, -0.0819325, -0.792759,
-                 -0.785564, 0.106561, -0.609535};
-  vnl_matrix_fixed<double, 3, 3> M239(r239);
-  vgl_rotation_3d<double> R239(M239);
-  vgl_vector_3d<double> t239(0.294777, 0.508022, 4.89551);
-  vpgl_perspective_camera<double> c239(K01, R239, t239);
-  vgl_rotation_3d<double> Rrel_239;
-  vgl_vector_3d<double> trel_239;
-  vpgl_camera_bounds::relative_transf(c239, c1, Rrel_239, trel_239);
-  vcl_cout << "Relative trans 239-145 " << trel_239 << '\n';
-  vcl_cout << "Relative rot_rod 239-145 " << Rrel_239.as_rodrigues() << '\n';
+  // test cylinder 
+  vbl_array_2d<vgl_ray_3d<double> > rays(2,2);
+  vgl_vector_3d<double> dir(0.70711, 0.0, -0.70711);
+  rays[0][0]= vgl_ray_3d<double>(vgl_point_3d<double>(0.0,0.0,1.0), dir);
+  rays[0][1]= vgl_ray_3d<double>(vgl_point_3d<double>(1.0,0.0,1.0), dir);
+  rays[1][0]= vgl_ray_3d<double>(vgl_point_3d<double>(0.0,1.0,1.0), dir);
+  rays[1][1]= vgl_ray_3d<double>(vgl_point_3d<double>(1.0,1.0,1.0), dir);
+  vpgl_generic_camera<double> gcam(rays);
+  double r00, r01, r10, r11;
+  vgl_ray_3d<double> axis;
+  vpgl_camera_bounds::pixel_cylinder(gcam, 0, 0, axis, r00);
+  vpgl_camera_bounds::pixel_cylinder(gcam, 0, 1, axis, r01);
+  vpgl_camera_bounds::pixel_cylinder(gcam, 1, 0, axis, r10);
+  vpgl_camera_bounds::pixel_cylinder(gcam, 1, 1, axis, r11);
+  bool cy1 = axis.origin() == vgl_point_3d<double>(1.0,1.0,1.0);
+  double er = (axis.direction()-dir).length();
+  bool cy2 = er<0.00001;
+  bool cy3 = (r00 == r01)&&(r00 == r10)&&(r00 == r11);
+  TEST("pixel cylinder",cy1&&cy2&&cy3, true);
 }
 TESTMAIN(test_camera_bounds);

@@ -3,6 +3,7 @@
 #include <vpgl/algo/vpgl_ray.h>
 #include <vpgl/vpgl_calibration_matrix.h>
 #include <vgl/algo/vgl_rotation_3d.h>
+#include <vgl/vgl_closest_point.h>
 #include <vcl_cmath.h>
 #include <vnl/vnl_math.h>
 
@@ -245,4 +246,30 @@ relative_transf(vpgl_perspective_camera<double> const& c0,
   rel_rot = R1*(R0.transpose());
   vgl_vector_3d<double> td = rel_rot*t0;
   rel_trans = -td + t1;
+}
+
+bool vpgl_camera_bounds::pixel_cylinder(vpgl_generic_camera<double> const& cam,
+                                        unsigned u, unsigned v,
+                                        vgl_ray_3d<double>& cylinder_axis,
+                                        double& cylinder_radius)
+{
+  unsigned nc = cam.cols(), nr = cam.rows();
+  cylinder_axis = cam.ray(u, v);
+  vgl_point_3d<double> axis_origin = cylinder_axis.origin();
+  vgl_ray_3d<double> corner_ray;
+  if(u>0&&v>0&&u<nc&&v<nr)
+    corner_ray = cam.ray(u-0.5, v-0.5);
+  else if(u>0&&v==0&&u<nc)
+    corner_ray = cam.ray(u-0.5, v+0.5);
+  else if(u==0&&v>0&&v<nr)
+    corner_ray = cam.ray(u+0.5, v-0.5);
+  else if(u==0&&v==0)
+    corner_ray = cam.ray(u+0.5, v+0.5);
+  else{
+    cylinder_radius = 0;
+    return false;
+  }
+  vgl_point_3d<double> cp = vgl_closest_point(axis_origin, corner_ray);
+  cylinder_radius = (axis_origin-cp).length();
+  return true;
 }

@@ -28,6 +28,7 @@ vpgl_generic_camera<T>::
 vpgl_generic_camera( vbl_array_2d<vgl_ray_3d<T> > const& rays)
 {
   int nc = rays.cols(), nr = rays.rows();
+  assert(nc>0&&nr>0);
   //compute bounds on ray origins
   double min_dist = vnl_numeric_traits<double>::maxval;
   double max_dist = 0.0;
@@ -53,6 +54,7 @@ vpgl_generic_camera( vbl_array_2d<vgl_ray_3d<T> > const& rays)
   double lv = vcl_log(dim)/vcl_log(2.0);
   n_levels_ = static_cast<int>(lv);// round down
   if(dim/vcl_pow(2.0, static_cast<double>(n_levels_-1)) < 3.0) n_levels_--;
+  if(n_levels_<=0) n_levels_ = 1;
   rays_.resize(n_levels_);
   nr_.resize(n_levels_);
   nc_.resize(n_levels_);

@@ -13,7 +13,7 @@
 #include <vgl/vgl_box_2d.h>
 #include <vgl/vgl_box_3d.h>
 #include <vgl/algo/vgl_rotation_3d.h>
-#include <vpgl/vpgl_proj_camera.h>
+#include <vpgl/vpgl_generic_camera.h>
 #include <vpgl/vpgl_affine_camera.h>
 #include <vpgl/vpgl_perspective_camera.h>
 
@@ -77,7 +77,7 @@ class vpgl_camera_bounds
 
   //: conversion between solid angle and cone half angle
   static double cone_half_angle(double solid_angle);
-#if 0 // move to vpgl_ray
+#if 0 // moved to vpgl_ray
   //: angle between principal ray of one rotation and the principal ray of a second rotation
   // Rotations \p r0 and \p r1 are expressed as Rodrigues vectors
   static double angle_between_rays(vgl_rotation_3d<double> const& r0, vgl_rotation_3d<double> const& r1);
@@ -91,6 +91,13 @@ class vpgl_camera_bounds
                               vpgl_perspective_camera<double> const& c1,
                               vgl_rotation_3d<double>& rel_rot,
                               vgl_vector_3d<double>& rel_trans);
+
+  //: For cameras with nearly parallel rays a pixel backprojects to a cylinder. The cylinder circumscribes the pixel. Returns false if (u, v) are out of bounds.
+  static bool pixel_cylinder(vpgl_generic_camera<double> const& cam,
+                             unsigned u, unsigned v,
+                             vgl_ray_3d<double>& cylinder_axis,
+                             double& cylinder_radius);
+
 
  private:
   //: constructor private - class contains static methods only
