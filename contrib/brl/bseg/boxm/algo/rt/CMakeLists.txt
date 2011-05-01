@@ -24,9 +24,12 @@ SET(boxm_algo_rt_sources
     boxm_update_image_functor.h
     boxm_compute_num_rays_statistics.h
     boxm_expected_edge_functor.h
+    boxm_shadow_appearance_estimator.h	
+    boxm_generate_shadow_sample_functor.h
+    boxm_shadow_app_initializer.h            boxm_shadow_app_initializer.txx
+    boxm_shadow_bayes_optimizer.h            boxm_shadow_bayes_optimizer.txx
     dummy.cxx
    )
-
 
 AUX_SOURCE_DIRECTORY(Templates boxm_algo_rt_sources)
 

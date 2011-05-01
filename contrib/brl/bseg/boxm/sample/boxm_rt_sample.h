@@ -13,8 +13,8 @@ class boxm_rt_sample
 {
  public:
   boxm_rt_sample()
-  : obs_(0), pre_(0.0f), vis_(0.0f), PI_(0.0f), seg_len_(0.0f), Beta_(0.0f)
-  { updatefactor_=0.0f; }
+    : obs_(0), pre_(0.0f), vis_(0.0f), PI_(0.0f), seg_len_(0.0f), Beta_(0.0f),
+    updatefactor_(0.0f), log_sum_(0.0f) {}
   ~boxm_rt_sample() {}
   static short version_no() { return 1; }
   void print(vcl_ostream& os) const;
@@ -26,6 +26,7 @@ class boxm_rt_sample
   float seg_len_;
   float Beta_;
   float updatefactor_;
+  float log_sum_;
 };
 
 
