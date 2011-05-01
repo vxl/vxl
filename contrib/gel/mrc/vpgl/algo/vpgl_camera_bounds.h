@@ -77,13 +77,13 @@ class vpgl_camera_bounds
 
   //: conversion between solid angle and cone half angle
   static double cone_half_angle(double solid_angle);
-
+#if 0 // move to vpgl_ray
   //: angle between principal ray of one rotation and the principal ray of a second rotation
   // Rotations \p r0 and \p r1 are expressed as Rodrigues vectors
   static double angle_between_rays(vgl_rotation_3d<double> const& r0, vgl_rotation_3d<double> const& r1);
   //: the rotation about the principal ray required to go from \p r0 to \p r1
   static double rot_about_ray(vgl_rotation_3d<double> const& r0, vgl_rotation_3d<double> const& r1);
-
+#endif
   //: The relative rotation and translation between camera \p c0 and \p c1
   //  In more detail, the relative transformation aligns c1 with the
   //  identity camera

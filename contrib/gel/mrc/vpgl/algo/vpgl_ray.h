@@ -3,11 +3,12 @@
 #define vpgl_ray_h_
 //:
 // \file
-// \brief Methods for computing the camera ray direction at a given 3-d point
+// \brief Methods for computing the camera ray direction at a given 3-d point and other operations on camera rays
 // \author J. L. Mundy
 // \date Dec 22, 2007
 
 #include <vpgl/vpgl_rational_camera.h>
+#include <vgl/algo/vgl_rotation_3d.h>
 #include <vpgl/vpgl_local_rational_camera.h>
 #include <vpgl/vpgl_perspective_camera.h>
 #include <vpgl/vpgl_generic_camera.h>
@@ -19,8 +20,6 @@
 class vpgl_ray
 {
  public:
-  ~vpgl_ray();
-
   //: Generic camera interfaces (pointer for abstract class)
   // Solves using back-project so will work for any camera
   // The ray direction assumes the camera is in the positive half-space
@@ -93,9 +92,20 @@ class vpgl_ray
   static bool ray(vpgl_generic_camera<double> const& cam,
                   vgl_point_3d<double> const& world_pt,
                   vgl_ray_3d<double>& ray);
+
+  // ====== operations on rotation matrices with respect to camera rays ======
+
+    //: angle between principal ray of one rotation and the principal ray of a second rotation
+  // Rotations \p r0 and \p r1 are expressed as Rodrigues vectors
+  static double angle_between_rays(vgl_rotation_3d<double> const& r0, vgl_rotation_3d<double> const& r1);
+
+  //: the rotation about the principal ray required to go from \p r0 to \p r1
+  static double rot_about_ray(vgl_rotation_3d<double> const& r0, vgl_rotation_3d<double> const& r1);
+
  private:
-  //: constructor private - static methods only
+  //: constructor/destructor private - static methods only
   vpgl_ray();
+  ~vpgl_ray();
 };
 
 #endif // vpgl_ray_h_

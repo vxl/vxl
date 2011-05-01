@@ -16,6 +16,7 @@
 #include <vul/vul_timer.h>
 #include <icam/icam_depth_trans_pyramid.h>
 #include <icam/icam_sample.h>
+#include <vpgl/algo/vpgl_ray.h>
 
 static bool smallest_local_minima(vbl_array_3d<double> const& in,
                                   double min_thresh,
@@ -1053,7 +1054,7 @@ void icam_minimizer::print_axis_search_info(unsigned level,
   double search_cone_ang = image_cone_ang;
   if (!top_level)
     search_cone_ang = pixel_cone_ang*params_.axis_search_cone_multiplier_;
-  double act_ang = vpgl_camera_bounds::angle_between_rays(init, actual);
+  double act_ang = vpgl_ray::angle_between_rays(init, actual);
   vcl_cout << " axis cone search space angle " << search_cone_ang
            << " angle between actual and initial axes " << act_ang << " >\n";
 }
@@ -1069,6 +1070,6 @@ void icam_minimizer::print_polar_search_info(unsigned level, vgl_rotation_3d<dou
   // if top level
   if (top_level)
     polar_range = vnl_math::pi;
-  double polar_needed = vpgl_camera_bounds::rot_about_ray(init, actual_rot_);
+  double polar_needed = vpgl_ray::rot_about_ray(init, actual_rot_);
   vcl_cout << "polar range " << polar_range << " polar rotation needed " << polar_needed << " >\n";
 }

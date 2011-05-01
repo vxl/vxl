@@ -202,7 +202,7 @@ rotation_angle_interval(vpgl_perspective_camera<double> const& cam)
   double half_angle = vcl_atan(0.5/rmin);
   return 2.0*half_angle;
 }
-
+#if 0 // moved to vpgl_ray
 double vpgl_camera_bounds::angle_between_rays(vgl_rotation_3d<double> const& r0,
                                               vgl_rotation_3d<double> const& r1)
 {
@@ -231,7 +231,7 @@ rot_about_ray(vgl_rotation_3d<double> const& r0, vgl_rotation_3d<double> const& 
   double ang0 = r0_alpha_rod.magnitude(), ang1 = r1_alpha_rod.magnitude();
   return vcl_fabs(ang0-ang1);
 }
-
+#endif
 void vpgl_camera_bounds::
 relative_transf(vpgl_perspective_camera<double> const& c0,
                 vpgl_perspective_camera<double> const& c1,
