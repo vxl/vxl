@@ -22,7 +22,6 @@
 //: Constructor
 boxm2_ocl_render_tableau::boxm2_ocl_render_tableau()
 {
-  curr_frame_ = 0;
   pbuffer_=0;
   ni_=640;
   nj_=480;
@@ -137,6 +136,7 @@ bool boxm2_ocl_render_tableau::handle(vgui_event const &e)
 //: calls on ray manager to render frame into the pbuffer_
 float boxm2_ocl_render_tableau::render_frame()
 {
+    vcl_cout<<"Acquiring GL obj"<<vcl_endl;
     cl_int status = clEnqueueAcquireGLObjects( queue_, 1,&exp_img_->buffer(), 0, 0, 0);
     exp_img_->zero_gpu_buffer( queue_ );
     if (!check_val(status,CL_SUCCESS,"clEnqueueAcquireGLObjects failed. (gl_image)"+error_to_string(status)))
@@ -190,6 +190,7 @@ float boxm2_ocl_render_tableau::render_frame()
     float time = value->val<float>();
     
     //release gl buffer
+    vcl_cout<<"REleasing GL Objs"<<vcl_endl;
     status = clEnqueueReleaseGLObjects(queue_, 1, &exp_img_->buffer(), 0, 0, 0);
     clFinish( queue_ );
     

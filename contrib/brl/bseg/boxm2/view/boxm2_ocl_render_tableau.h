@@ -60,7 +60,6 @@ class boxm2_ocl_render_tableau : public boxm2_cam_tableau
  protected:
 
   //vector of image files, vector of 
-
   bocl_manager_child_sptr mgr_;
   bocl_device_sptr device_;
   cl_command_queue queue_;
@@ -75,7 +74,7 @@ class boxm2_ocl_render_tableau : public boxm2_cam_tableau
   GLuint pbuffer_;
   cl_mem clgl_buffer_;
   bocl_mem*  exp_img_;
-  bocl_mem * exp_img_dim_;
+  bocl_mem * exp_img_dim_; 
   
   //: trajectory for idle rendering
   bool render_trajectory_; 
@@ -89,8 +88,6 @@ class boxm2_ocl_render_tableau : public boxm2_cam_tableau
   bool init_clgl();
   bool do_init_ocl;
   
-  int curr_frame_; 
-
 };
 
 //: declare smart pointer
