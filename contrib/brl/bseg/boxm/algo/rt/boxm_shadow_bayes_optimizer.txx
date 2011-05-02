@@ -13,7 +13,7 @@
 
 template <class T_loc, boxm_apm_type APM, boxm_aux_type AUX>
 boxm_shadow_bayes_optimizer<T_loc,APM,AUX>::boxm_shadow_bayes_optimizer(
-                                                                        boxm_scene<boct_tree<T_loc, boxm_sample<APM> > > &scene, 
+                                                                        boxm_scene<boct_tree<T_loc, boxm_sample<APM> > > &scene,
                                                                         vcl_vector<vcl_string> const& image_ids, float min_app_sigma,
                                                                         float shadow_prior, float shadow_mean, float shadow_sigma,
                                                                         bool verbose, vgl_point_3d<double> debug_pt)
@@ -31,7 +31,7 @@ bool boxm_shadow_bayes_optimizer<T_loc,APM,AUX>::optimize_cells(double damping_f
 
   typedef boct_tree<T_loc, boxm_sample<APM> > tree_type;
   typedef boct_tree<T_loc, aux_type > aux_tree_type;
-  
+
   vcl_vector<boxm_aux_scene<T_loc,  boxm_sample<APM>, aux_type> > aux_scenes;
   for (unsigned int i=0; i<image_ids_.size(); ++i) {
     boxm_aux_scene<T_loc, boxm_sample<APM>, aux_type> aux_scene(&scene_,image_ids_[i],boxm_aux_scene<T_loc, boxm_sample<APM>, aux_type>::LOAD);
@@ -49,7 +49,7 @@ bool boxm_shadow_bayes_optimizer<T_loc,APM,AUX>::optimize_cells(double damping_f
       boxm_block<tree_type>* block = *iter;
       boct_tree<T_loc, boxm_sample<APM> >* tree = block->get_tree();
       boct_tree_cell<T_loc,boxm_sample<APM> >* debug_cell  = 0;
-      if(verbose_)
+      if (verbose_)
         debug_cell = tree->locate_point_global(debug_pt_);
       vcl_vector<boct_tree_cell<T_loc,boxm_sample<APM> >*> cells = tree->leaf_cells();
 
@@ -86,17 +86,19 @@ bool boxm_shadow_bayes_optimizer<T_loc,APM,AUX>::optimize_cells(double damping_f
           float log_sum = 0.0f;
           float total_length_sum = 0.0f;
           //===
-          typedef boxm_apm_traits<APM>::obs_datatype obs_type;
-          vcl_vector<typename obs_type> obs_vector(n_samp);
-          //        double Beta = 1.0; // old beta calculation
-          if(verbose_&&cell == debug_cell){
+          typedef typename boxm_apm_traits<APM>::obs_datatype obs_type;
+          vcl_vector<obs_type> obs_vector(n_samp);
+//#if 0 // old beta calculation
+          double Beta = 1.0;
+//#endif
+          if (verbose_&&cell == debug_cell){
             vcl_cout << "Contents of Debug Cell \n";
             vcl_cout << "s    vis[s]    pre[s]    beta[s]\n";
           }
           double vis_sum = 0;
           for (unsigned int s=0; s<n_samp; ++s) {
             float seg_len_sum = aux_samples[s].seg_len_;
-            typename obs_type obs = aux_samples[s].obs_;
+            obs_type obs = aux_samples[s].obs_;
             if (seg_len_sum > 1e-5) {
               obs_vector[s] = obs / seg_len_sum;
               float pre = aux_samples[s].pre_ / seg_len_sum;
@@ -104,22 +106,21 @@ bool boxm_shadow_bayes_optimizer<T_loc,APM,AUX>::optimize_cells(double damping_f
               pre_vector[s] = pre;
               vis_vector[s] = vis;
 
+//#if 0 // old beta calculation
               double beta_s = (aux_samples[s].Beta_ / seg_len_sum);
-#if 0 // old beta calculation
               Beta *= beta_s;
-#endif
-#if 1
-              // New discrete prob code
+//#else // New discrete prob code
               log_sum += aux_samples[s].log_sum_;
               total_length_sum += seg_len_sum;
-#endif
+//#endif
               // ====
-              if(cell == debug_cell)
-                {
-                  vcl_cout << s << ' ' << vis << ' ' << pre << ' ' 
-                           << beta_s << '\n';
-                }
-            }else {
+              if (cell == debug_cell)
+              {
+                vcl_cout << s << ' ' << vis << ' ' << pre << ' '
+                         << beta_s << '\n';
+              }
+            }
+            else {
               pre_vector[s] = 0.0f;
               vis_vector[s] = 0.0f;
               obs_vector[s] = typename boxm_apm_traits<APM>::obs_datatype(0);
@@ -127,23 +128,21 @@ bool boxm_shadow_bayes_optimizer<T_loc,APM,AUX>::optimize_cells(double damping_f
           }
           vis_sum /= n_samp;
 
-#if 0
+#if 0 // old beta calculation
           double damped_Beta = 1.0;
-          if(n_samp>1.0){
+          if (n_samp>1.0){
             damped_Beta = vcl_pow(Beta, 1.0/n_samp);
           }
-#endif
-#if 0
+#else
           double damped_Beta = (Beta + damping_factor)/(damping_factor*Beta + 1.0);
-      
+
           if ((damped_Beta < 0.00000001) && (damped_Beta > -0.00000001))
             vcl_cout << "ERROR: damped_Beta is:" << damped_Beta << vcl_endl;
 
           data.alpha *= static_cast<float>(damped_Beta);
-#endif        
-#if 1
+
           float alpha_post = data.alpha;
-          if(total_length_sum > 0.0f) alpha_post = log_sum/total_length_sum;
+          if (total_length_sum > 0.0f) alpha_post = log_sum/total_length_sum;
           data.alpha = alpha_post;
 #endif
           // do bounds check on new alpha value
@@ -162,8 +161,8 @@ bool boxm_shadow_bayes_optimizer<T_loc,APM,AUX>::optimize_cells(double damping_f
           }
           // update with new appearance
           bool print_p = false;
-          if(verbose_&&cell == debug_cell){
-            vcl_cout << "Cell Level = " << cell->level() 
+          if (verbose_&&cell == debug_cell){
+            vcl_cout << "Cell Level = " << cell->level()
                      << "  AlphaPosterior  = " << data.alpha << '\n';
             print_p = true;
           }
@@ -181,7 +180,7 @@ bool boxm_shadow_bayes_optimizer<T_loc,APM,AUX>::optimize_cells(double damping_f
   for (unsigned i=0; i<aux_scenes.size(); i++) {
     aux_scenes[i].clean_scene();
   }
-  
+
   return true;
 }
 

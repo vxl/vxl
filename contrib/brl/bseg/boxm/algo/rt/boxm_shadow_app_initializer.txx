@@ -78,12 +78,12 @@ bool boxm_shadow_app_initializer<T_loc,APM,AUX>::initialize()
           aux_samples.push_back(temp_cell.data());
         }
       }
-      typedef boxm_apm_traits<APM>::obs_datatype obs_type;
-      vcl_vector<typename obs_type> obs_vector;
+      typedef typename boxm_apm_traits<APM>::obs_datatype obs_type;
+      vcl_vector<obs_type> obs_vector;
       for (unsigned int s=0; s<aux_samples.size(); ++s) {
         float seg_len = aux_samples[s].seg_len_;
-        typename obs_type obs = aux_samples[s].obs_;
-        if ( seg_len > 1e-5 && (obs > typename obs_type(0)) ){
+        obs_type obs = aux_samples[s].obs_;
+        if ( seg_len > 1e-5 && (obs > obs_type(0)) ){
           obs_vector.push_back(obs / seg_len);
         }
       }
