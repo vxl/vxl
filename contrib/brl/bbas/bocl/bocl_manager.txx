@@ -125,7 +125,11 @@ bool bocl_manager<T>::initialize_cl()
 
   //////////////////////////////////////////////////////////////////////////////
   //store current_device_/context for older functions that use bocl_manager
+  if(gpu_found)
   curr_device_ = gpus_[0];
+  else if(cpu_found)
+  curr_device_ = cpus_[0];
+  else return false;
   context_ = curr_device_->context();
   vcl_cout<<"Default device: "<<*curr_device_<<vcl_endl;
   //////////////////////////////////////////////////////////////////////////////
