@@ -9,6 +9,7 @@
 #include <boxm/algo/rt/boxm_generate_opt2_sample_functor.h>
 #include <boxm/algo/rt/boxm_generate_opt3_sample_functor.h>
 #include <boxm/algo/rt/boxm_generate_opt_sample_functor.h>
+#include <boxm/algo/rt/boxm_generate_shadow_sample_functor.h>
 #include <boxm/algo/rt/boxm_opt2_optimizer.h>
 #include <boxm/algo/rt/boxm_opt3_optimizer.h>
 #include <boxm/algo/rt/boxm_opt_appearance_estimator.h>
@@ -20,6 +21,9 @@
 #include <boxm/algo/rt/boxm_render_expected_image_functor.h>
 #include <boxm/algo/rt/boxm_render_expected_shadow_image_functor.h>
 #include <boxm/algo/rt/boxm_rpc_registration.h>
+#include <boxm/algo/rt/boxm_shadow_app_initializer.h>
+#include <boxm/algo/rt/boxm_shadow_appearance_estimator.h>
+#include <boxm/algo/rt/boxm_shadow_bayes_optimizer.h>
 #include <boxm/algo/rt/boxm_sun_vis_prob_functor.h>
 #include <boxm/algo/rt/boxm_update_image_functor.h>
 
