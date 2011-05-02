@@ -24,7 +24,7 @@ SET(boxm_algo_rt_sources
     boxm_update_image_functor.h
     boxm_compute_num_rays_statistics.h
     boxm_expected_edge_functor.h
-    boxm_shadow_appearance_estimator.h	
+    boxm_shadow_appearance_estimator.h
     boxm_generate_shadow_sample_functor.h
     boxm_shadow_app_initializer.h            boxm_shadow_app_initializer.txx
     boxm_shadow_bayes_optimizer.h            boxm_shadow_bayes_optimizer.txx
@@ -41,6 +41,6 @@ SUBDIRS(pro)
 IF( BUILD_TESTING )
   SUBDIRS(tests)
 ENDIF( BUILD_TESTING )
- 
+
 TARGET_LINK_LIBRARIES(boxm_algo_rt boxm boxm_sample boxm_sample_algo boxm_basic boxm_util vil vcl vgl vbl vgl_algo bsta vnl sdet brip vpgl vpgl_algo bgeo)
 
