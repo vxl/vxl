@@ -19,6 +19,7 @@ class boxm2_util
 
     static float clamp(float x, float a, float b);
     
+    static vpgl_camera_double_sptr camera_from_file(vcl_string camfile);
     static vcl_vector<vpgl_perspective_camera<double>* > cameras_from_directory(vcl_string dir); 
     static vcl_vector<vcl_string> images_from_directory(vcl_string dir);
     static vcl_vector<vcl_string> camfiles_from_directory(vcl_string dir);

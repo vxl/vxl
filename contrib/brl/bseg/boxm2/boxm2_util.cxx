@@ -89,6 +89,22 @@ vcl_vector<vpgl_perspective_camera<double>* > boxm2_util::cameras_from_directory
   return toReturn;
 }
 
+//: returns a single camera from file
+vpgl_camera_double_sptr boxm2_util::camera_from_file(vcl_string camfile)
+{
+  //load camera from file
+  vcl_ifstream ifs(camfile.c_str());
+  vpgl_perspective_camera<double>* pcam =new vpgl_perspective_camera<double>;
+  if (!ifs.is_open()) {
+    vcl_cerr << "Failed to open file " << camfile << '\n';
+    return vpgl_camera_double_sptr(pcam);
+  }
+  else  {
+    ifs >> *pcam;
+  }
+  return vpgl_camera_double_sptr(pcam); 
+}
+
 //: returns a list of image strings from directory
 vcl_vector<vcl_string> boxm2_util::images_from_directory(vcl_string dir)
 {
