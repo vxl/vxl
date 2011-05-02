@@ -141,7 +141,7 @@ SOURCE=.\processes/boxm2_ocl_render_gl_expected_color_process.cxx
 SOURCE=.\processes/boxm2_ocl_change_detection_process.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\processes/boxm2_ocl_convert_float_image_to_rgba_proces.cxx
+SOURCE=.\processes/boxm2_ocl_convert_float_image_to_rgba_process.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\processes/boxm2_ocl_probability_of_image_process.cxx

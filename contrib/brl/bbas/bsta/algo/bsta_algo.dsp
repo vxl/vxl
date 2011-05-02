@@ -121,10 +121,10 @@ SOURCE=.\Templates/bsta_adaptive_updater+bsta_mixture_fixed+bsta_num_obs+bsta_ga
 SOURCE=.\Templates/bsta_adaptive_updater+bsta_mixture_fixed+bsta_num_obs+bsta_gauss_if3-.3--.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/bsta_adaptive_updater+bsta_mixture_fixed+bsta_num_obs+bsta_gaussian_indep+float.2--.3--.cxx
+SOURCE=.\Templates/bsta_adaptive_updater+bsta_mixture_fixed+bsta_num_obs+bsta_gauss_if2-.3--.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/bsta_adaptive_updater+bsta_mixture_fixed+bsta_num_obs+bsta_gaussian_indep+float.4--.3--.cxx
+SOURCE=.\Templates/bsta_adaptive_updater+bsta_mixture_fixed+bsta_num_obs+bsta_gauss_if4-.3--.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/bsta_parzen_updater+bsta_parzen_sphere+float.3--.cxx

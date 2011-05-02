@@ -144,13 +144,13 @@ SOURCE=.\Templates/vsl_vector_io+vbl_array_2d+float--.cxx
 SOURCE=.\Templates/vsl_vector_io+vbl_array_2d+int--.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/bbgm_image_of+bsta_num_obs+bsta_gaussian_indep+float.3---.cxx
+SOURCE=.\Templates/bbgm_image_of+bsta_num_obs+bsta_gauss_if3--.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/bbgm_image_of+bsta_num_obs+bsta_gaussian_sphere+float.1---.cxx
+SOURCE=.\Templates/bbgm_image_of+bsta_num_obs+bsta_gauss_sf1--.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/bbgm_image_of+bsta_num_obs+bsta_mixture_fixed+bsta_num_obs+bsta_gaussian_indep+float.4--.3---.cxx
+SOURCE=.\Templates/bbgm_image_of+bsta_num_obs+bsta_mixture_fixed+bsta_num_obs+bsta_gauss_if4-.3---.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/bbgm_image_of+bsta_num_obs+bsta_mixture_fixed+bsta_num_obs+bsta_gauss_sf1-.3---.cxx

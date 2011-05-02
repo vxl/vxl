@@ -102,6 +102,9 @@ SOURCE=.\test_bayesian_optimizer.cxx
 SOURCE=.\test_edges.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\test_shadow_appearance.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\test_include.cxx
 # End Source File
 # Begin Source File

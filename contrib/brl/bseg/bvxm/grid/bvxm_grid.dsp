@@ -100,13 +100,7 @@ SOURCE=.\bvxm_voxel_grid_opinion_basic_ops.cxx
 SOURCE=.\bvxm_voxel_grid_basic_ops.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/bvxm_voxel_storage_mem+bsta_num_obs+bsta_mixture_fixed+bsta_num_obs+bsta_gaussian_indep+float.2--.3---.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\Templates/bvxm_voxel_storage_disk_cached+float-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/bvxm_voxel_slab_iterator+bsta_num_obs+bsta_mixture_fixed+bsta_num_obs+bsta_gaussian_indep+float.4--.3---.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/bvxm_voxel_storage_disk+bsta_num_obs+bsta_gauss_sf1--.cxx
@@ -115,22 +109,13 @@ SOURCE=.\Templates/bvxm_voxel_storage_disk+bsta_num_obs+bsta_gauss_sf1--.cxx
 SOURCE=.\Templates/vbl_smart_ptr+bvxm_voxel_slab_base-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/bvxm_voxel_storage_disk_cached+bsta_num_obs+bsta_mixture_fixed+bsta_num_obs+bsta_gaussian_indep+float.4--.3---.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\Templates/bvxm_voxel_storage_disk_cached+bsta_num_obs+bsta_mixture_fixed+bsta_num_obs+bsta_gauss_sf1-.3---.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/bvxm_voxel_slab+bsta_num_obs+bsta_mixture_fixed+bsta_num_obs+bsta_gaussian_indep+float.4--.3---.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/bvxm_voxel_storage_mem+float-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/bvxm_voxel_slab_iterator+bsta_num_obs+bsta_mixture_fixed+bsta_num_obs+bsta_gauss_if3-.3---.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/bvxm_voxel_storage_disk_cached+bsta_num_obs+bsta_mixture_fixed+bsta_num_obs+bsta_gaussian_indep+float.2--.3---.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/bvxm_voxel_storage_mem+bsta_num_obs+bsta_gauss_sf1--.cxx
@@ -154,25 +139,13 @@ SOURCE=.\Templates/bvxm_voxel_storage_disk_cached+bsta_num_obs+bsta_mixture_fixe
 SOURCE=.\Templates/bvxm_voxel_slab+bsta_num_obs+bsta_mixture_fixed+bsta_num_obs+bsta_gauss_sf1-.3---.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/bvxm_voxel_slab_iterator+bsta_num_obs+bsta_mixture_fixed+bsta_num_obs+bsta_gaussian_indep+float.2--.3---.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\Templates/bvxm_voxel_grid+bsta_num_obs+bsta_mixture_fixed+bsta_num_obs+bsta_gauss_sf1-.3---.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/bvxm_voxel_storage_disk+bsta_num_obs+bsta_mixture_fixed+bsta_num_obs+bsta_gaussian_indep+float.2--.3---.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/bvxm_voxel_slab_iterator+bsta_num_obs+bsta_mixture_fixed+bsta_num_obs+bsta_gaussian_indep+float.3--.3---.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/bvxm_voxel_grid+float-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/bvxm_voxel_storage_disk+bsta_num_obs+bsta_mixture_fixed+bsta_num_obs+bsta_gauss_if3-.3---.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/bvxm_voxel_storage_mem+bsta_num_obs+bsta_mixture_fixed+bsta_num_obs+bsta_gaussian_indep+float.4--.3---.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/bvxm_voxel_slab+uint-.cxx
@@ -184,16 +157,10 @@ SOURCE=.\Templates/bvxm_voxel_storage_disk+float-.cxx
 SOURCE=.\Templates/bvxm_voxel_storage_disk_cached+bsta_num_obs+bsta_gauss_sf1--.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/bvxm_voxel_grid+bsta_num_obs+bsta_mixture_fixed+bsta_num_obs+bsta_gaussian_indep+float.4--.3---.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\Templates/bvxm_voxel_grid+bsta_num_obs+bsta_gauss_sf1--.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/bvxm_voxel_storage_mem+bsta_num_obs+bsta_mixture_fixed+bsta_num_obs+bsta_gauss_if3-.3---.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/bvxm_voxel_storage_disk+bsta_num_obs+bsta_mixture_fixed+bsta_num_obs+bsta_gaussian_indep+float.4--.3---.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/bvxm_voxel_storage_mem+bsta_num_obs+bsta_mixture_fixed+bsta_num_obs+bsta_gauss_sf1-.3---.cxx
@@ -220,13 +187,7 @@ SOURCE=.\Templates/bvxm_voxel_slab+float-.cxx
 SOURCE=.\Templates/vbl_smart_ptr+bvxm_voxel_grid_base-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/bvxm_voxel_grid+bsta_num_obs+bsta_mixture_fixed+bsta_num_obs+bsta_gaussian_indep+float.2--.3---.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\Templates/bvxm_voxel_slab+vnl_vector_fixed+float.3--.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/bvxm_voxel_slab+bsta_num_obs+bsta_mixture_fixed+bsta_num_obs+bsta_gaussian_indep+float.2--.3---.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/bvxm_voxel_slab+bsta_num_obs+bsta_mixture_fixed+bsta_num_obs+bsta_gauss_if3-.3---.cxx
@@ -349,12 +310,6 @@ SOURCE=.\Templates/bvxm_voxel_storage_disk_cached+bsta_vsum_num_obs+bsta_von_mis
 SOURCE=.\Templates/bvxm_voxel_slab_iterator+bsta_vsum_num_obs+bsta_von_mises+double.3---.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/bvxm_voxel_storage_disk+bsta_num_obs+bsta_gaussian_sphere+float.3---.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/bvxm_voxel_storage_mem+bsta_num_obs+bsta_gaussian_sphere+double.2---.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\Templates/bvxm_voxel_slab_iterator+vnl_vector_fixed+double.2--.cxx
 # End Source File
 # Begin Source File
@@ -367,49 +322,22 @@ SOURCE=.\Templates/bvxm_voxel_storage_mem+bsta_vsum_num_obs+bsta_von_mises+doubl
 SOURCE=.\Templates/bvxm_voxel_grid+bsta_vsum_num_obs+bsta_von_mises+float.3---.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/bvxm_voxel_storage_disk+bsta_num_obs+bsta_gaussian_sphere+float.2---.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\Templates/bvxm_voxel_storage_disk_cached+bsta_vsum_num_obs+bsta_von_mises+double.3---.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/bvxm_voxel_storage_disk+bsta_num_obs+bsta_gaussian_sphere+double.2---.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/bvxm_voxel_storage_mem+bsta_num_obs+bsta_gaussian_sphere+float.3---.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/bvxm_voxel_slab_iterator+vnl_vector_fixed+float.3--.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/bvxm_voxel_storage_disk_cached+bsta_num_obs+bsta_gaussian_sphere+float.3---.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/bvxm_voxel_grid+bsta_num_obs+bsta_gaussian_sphere+float.2---.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\Templates/bvxm_voxel_slab_iterator+vnl_vector_fixed+float.2--.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/bvxm_voxel_grid+bsta_num_obs+bsta_gaussian_sphere+double.2---.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/bvxm_voxel_slab_iterator+vnl_vector_fixed+double.3--.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/bvxm_voxel_storage_disk_cached+bsta_num_obs+bsta_gaussian_sphere+double.2---.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\Templates/bvxm_voxel_storage_disk+bsta_vsum_num_obs+bsta_von_mises+float.3---.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/bvxm_voxel_storage_disk+bsta_num_obs+bsta_gaussian_sphere+double.3---.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\Templates/bvxm_voxel_slab+vnl_vector_fixed+double.3--.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/bvxm_voxel_storage_disk_cached+bsta_num_obs+bsta_gaussian_sphere+double.3---.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/bvxm_voxel_slab+bsta_vsum_num_obs+bsta_von_mises+float.3---.cxx
@@ -421,40 +349,109 @@ SOURCE=.\Templates/bvxm_voxel_grid+bsta_vsum_num_obs+bsta_von_mises+double.3---.
 SOURCE=.\Templates/bvxm_voxel_storage_disk+bsta_vsum_num_obs+bsta_von_mises+double.3---.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/bvxm_voxel_storage_mem+bsta_num_obs+bsta_gaussian_sphere+float.2---.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/bvxm_voxel_slab_iterator+bsta_num_obs+bsta_gaussian_sphere+double.2---.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/bvxm_voxel_slab+bsta_num_obs+bsta_gaussian_sphere+float.2---.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/bvxm_voxel_storage_disk_cached+bsta_num_obs+bsta_gaussian_sphere+float.2---.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/bvxm_voxel_slab_iterator+bsta_num_obs+bsta_gaussian_sphere+float.2---.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/bvxm_voxel_slab+bsta_num_obs+bsta_gaussian_sphere+double.2---.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\Templates/bvxm_voxel_slab+bsta_vsum_num_obs+bsta_von_mises+double.3---.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/bvxm_voxel_storage_mem+bsta_num_obs+bsta_gaussian_sphere+double.3---.cxx
+SOURCE=.\Templates/bvxm_voxel_storage_mem+bsta_num_obs+bsta_gauss_sf2--.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/bvxm_voxel_slab_iterator+bsta_vsum_num_obs+bsta_gaussian_sphere+double.3---.cxx
+SOURCE=.\Templates/bvxm_voxel_slab+bsta_vsum_num_obs+bsta_gauss_sd3--.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/bvxm_voxel_slab+bsta_num_obs+bsta_gaussian_sphere+double.3---.cxx
+SOURCE=.\Templates/bvxm_voxel_slab_iterator+bsta_num_obs+bsta_gauss_sd2--.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/bvxm_voxel_slab+bsta_num_obs+bsta_gaussian_sphere+float.3---.cxx
+SOURCE=.\Templates/bvxm_voxel_slab_iterator+bsta_vsum_num_obs+bsta_gauss_sd3--.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/bvxm_voxel_slab+bsta_vsum_num_obs+bsta_gaussian_sphere+double.3---.cxx
+SOURCE=.\Templates/bvxm_voxel_grid+bsta_num_obs+bsta_gauss_sf2--.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/bvxm_voxel_slab_iterator+bsta_num_obs+bsta_mixture_fixed+bsta_num_obs+bsta_gauss_if2-.3---.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/bvxm_voxel_storage_disk_cached+bsta_num_obs+bsta_gauss_sd2--.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/bvxm_voxel_grid+bsta_num_obs+bsta_mixture_fixed+bsta_num_obs+bsta_gauss_if4-.3---.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/bvxm_voxel_storage_mem+bsta_num_obs+bsta_mixture_fixed+bsta_num_obs+bsta_gauss_if2-.3---.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/bvxm_voxel_storage_mem+bsta_num_obs+bsta_mixture_fixed+bsta_num_obs+bsta_gauss_if4-.3---.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/bvxm_voxel_storage_disk_cached+bsta_num_obs+bsta_mixture_fixed+bsta_num_obs+bsta_gauss_if4-.3---.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/bvxm_voxel_storage_disk+bsta_num_obs+bsta_gauss_sf3--.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/bvxm_voxel_storage_disk_cached+bsta_num_obs+bsta_gauss_sf2--.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/bvxm_voxel_slab+bsta_num_obs+bsta_gauss_sd3--.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/bvxm_voxel_slab+bsta_num_obs+bsta_mixture_fixed+bsta_num_obs+bsta_gauss_if4-.3---.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/bvxm_voxel_slab+bsta_num_obs+bsta_gauss_sf3--.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/bvxm_voxel_grid+bsta_num_obs+bsta_gauss_sd2--.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/bvxm_voxel_storage_mem+bsta_num_obs+bsta_gauss_sd3--.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/bvxm_voxel_slab+bsta_num_obs+bsta_gauss_sf2--.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/bvxm_voxel_storage_mem+bsta_num_obs+bsta_gauss_sf3--.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/bvxm_voxel_storage_disk+bsta_num_obs+bsta_mixture_fixed+bsta_num_obs+bsta_gauss_if4-.3---.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/bvxm_voxel_slab_iterator+bsta_num_obs+bsta_mixture_fixed+bsta_num_obs+bsta_gauss_if4-.3---.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/bvxm_voxel_storage_disk+bsta_num_obs+bsta_mixture_fixed+bsta_num_obs+bsta_gauss_if2-.3---.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/bvxm_voxel_storage_mem+bsta_num_obs+bsta_gauss_sd2--.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/bvxm_voxel_slab+bsta_num_obs+bsta_gauss_sd2--.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/bvxm_voxel_slab_iterator+bsta_num_obs+bsta_gauss_sf2--.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/bvxm_voxel_storage_disk_cached+bsta_num_obs+bsta_gauss_sf3--.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/bvxm_voxel_grid+bsta_num_obs+bsta_mixture_fixed+bsta_num_obs+bsta_gauss_if2-.3---.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/bvxm_voxel_storage_disk+bsta_num_obs+bsta_gauss_sd2--.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/bvxm_voxel_storage_disk+bsta_num_obs+bsta_gauss_sf2--.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/bvxm_voxel_slab+bsta_num_obs+bsta_mixture_fixed+bsta_num_obs+bsta_gauss_if2-.3---.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/bvxm_voxel_storage_disk_cached+bsta_num_obs+bsta_mixture_fixed+bsta_num_obs+bsta_gauss_if2-.3---.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/bvxm_voxel_storage_disk_cached+bsta_num_obs+bsta_gauss_sd3--.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/bvxm_voxel_storage_disk+bsta_num_obs+bsta_gauss_sd3--.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"

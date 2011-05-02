@@ -122,6 +122,12 @@ SOURCE=.\Templates/boxm_opt3_optimizer+short.BOXM_APM_SIMPLE_GREY.BOXM_APM_MOG_G
 # Begin Source File
 SOURCE=.\Templates/bvpgl_camera_estimator+boxm_expected_edge_functor+short.boxm_inf_line_sample+float---.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\Templates/boxm_shadow_bayes_optimizer+short.BOXM_APM_SIMPLE_GREY.BOXM_AUX_OPT_RT_GREY-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/boxm_shadow_app_initializer+short.BOXM_APM_SIMPLE_GREY.BOXM_AUX_OPT_RT_GREY-.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
@@ -211,6 +217,24 @@ SOURCE=.\boxm_change_3d_functor.h
 # End Source File
 # Begin Source File
 SOURCE=.\boxm_expected_edge_functor.h
+# End Source File
+# Begin Source File
+SOURCE=.\boxm_shadow_app_initializer.h
+# End Source File
+# Begin Source File
+SOURCE=.\boxm_shadow_bayes_optimizer.txx
+# End Source File
+# Begin Source File
+SOURCE=.\boxm_shadow_appearance_estimator.h
+# End Source File
+# Begin Source File
+SOURCE=.\boxm_shadow_bayes_optimizer.h
+# End Source File
+# Begin Source File
+SOURCE=.\boxm_shadow_app_initializer.txx
+# End Source File
+# Begin Source File
+SOURCE=.\boxm_generate_shadow_sample_functor.h
 # End Source File
 # End Group
 # End Target
