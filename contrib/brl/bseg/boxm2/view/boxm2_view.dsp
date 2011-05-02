@@ -107,6 +107,9 @@ SOURCE=.\boxm2_view_utils.cxx
 SOURCE=.\boxm2_ocl_render_tableau.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\boxm2_ocl_update_tableau.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/vbl_smart_ptr+boxm2_trajectory-.cxx
 # End Source File
 # Begin Source File
@@ -129,6 +132,9 @@ SOURCE=.\boxm2_view_utils.h
 # End Source File
 # Begin Source File
 SOURCE=.\boxm2_ocl_render_tableau.h
+# End Source File
+# Begin Source File
+SOURCE=.\boxm2_ocl_update_tableau.h
 # End Source File
 # End Group
 # End Target
