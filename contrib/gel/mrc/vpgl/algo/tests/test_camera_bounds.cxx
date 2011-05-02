@@ -68,7 +68,7 @@ write_points_vrml(vcl_ofstream& str,
 
 static void test_camera_bounds()
 {
-  double rad_to_deg = 180.0/vnl_math::pi;
+  const double rad_to_deg = 180.0*vnl_math::one_over_pi;
   vnl_matrix_fixed<double, 3, 3> Km(0.0);
   Km[0][0] = 1871.2; Km[1][1] = 1871.2;
   Km[0][2] = 640.0;   Km[1][2] = 360.0;
@@ -141,8 +141,8 @@ static void test_camera_bounds()
   vcl_vector<vgl_point_3d<double> > pts;
   for (prs.reset(); prs.next();)
   {
-    vcl_cout << "theta = " << prs.theta()*180.0/vnl_math::pi
-             << " phi = " << prs.phi()*180.0/vnl_math::pi << '\n';
+    vcl_cout << "theta = " << prs.theta()*rad_to_deg
+             << " phi = " << prs.phi()*rad_to_deg << '\n';
     pts.push_back(prs.pt_on_unit_sphere());
   }
   vcl_ofstream os("C:/images/calibration/sphere.wrl");
@@ -154,8 +154,8 @@ static void test_camera_bounds()
   vgl_point_3d<double> pt =  prs.pt_on_unit_sphere(indx), zaxis(0.0, 0.0, 1.0);
   vgl_rotation_3d<double> rot = prs.rot(indx, ang_pr);
   vgl_point_3d<double> rot_z = (rot.transpose())*zaxis;
-  vcl_cout << "theta = " << prs.theta(indx)*180.0/vnl_math::pi
-           << " phi = " << prs.phi(indx)*180.0/vnl_math::pi << '\n'
+  vcl_cout << "theta = " << prs.theta(indx)*rad_to_deg
+           << " phi = " << prs.phi(indx)*rad_to_deg << '\n'
            << " pt on unit sphere " << pt << '\n'
            << " rotated zaxis " << rot_z << '\n';
   TEST_NEAR("rotation scan", rot_z.x(), pt.x(), 1.0e-4);
@@ -165,22 +165,22 @@ static void test_camera_bounds()
   vpgl_calibration_matrix<double> K01(k);
   // test relative camera transform
   // c142
-  double r0 [] ={   0.067851,  0.994060,  0.085090, 
-                    0.669585,  0.017856, -0.742521, 
+  double r0 [] ={   0.067851,  0.994060,  0.085090,
+                    0.669585,  0.017856, -0.742521,
                    -0.739630,  0.107355, -0.664396 };
   vnl_matrix_fixed<double, 3, 3> M0(r0);
   vgl_rotation_3d<double> R0(M0);
   vgl_vector_3d<double> t0(-0.013036, 0.387514, 4.134744);
 
   //c 145
-  double r1 [] ={ 0.167131,  0.982859,  0.077819, 
-                  0.675937, -0.056764, -0.734770, 
+  double r1 [] ={ 0.167131,  0.982859,  0.077819,
+                  0.675937, -0.056764, -0.734770,
                  -0.717758,  0.175403, -0.673837 };
-                  
+
   vnl_matrix_fixed<double, 3, 3> M1(r1);
   vgl_rotation_3d<double> R1(M1);
   vgl_vector_3d<double> t1(0.046931, 0.355840, 4.112037);
- 
+
   vpgl_perspective_camera<double> c0(K01, R0, t0);
   vpgl_perspective_camera<double> c1(K01, R1, t1);
 
@@ -196,9 +196,9 @@ static void test_camera_bounds()
   double t_er  = (trel_act-trel).length();
   TEST_NEAR("relative camera transform", rod_er + t_er, 0.0, 0.00001);
 
-  // test cylinder 
+  // test cylinder
   vbl_array_2d<vgl_ray_3d<double> > rays(2,2);
-  vgl_vector_3d<double> dir(0.70711, 0.0, -0.70711);
+  vgl_vector_3d<double> dir(vnl_math::sqrt1_2, 0.0, -vnl_math::sqrt1_2);
   rays[0][0]= vgl_ray_3d<double>(vgl_point_3d<double>(0.0,0.0,1.0), dir);
   rays[0][1]= vgl_ray_3d<double>(vgl_point_3d<double>(1.0,0.0,1.0), dir);
   rays[1][0]= vgl_ray_3d<double>(vgl_point_3d<double>(0.0,1.0,1.0), dir);
@@ -216,4 +216,5 @@ static void test_camera_bounds()
   bool cy3 = (r00 == r01)&&(r00 == r10)&&(r00 == r11);
   TEST("pixel cylinder",cy1&&cy2&&cy3, true);
 }
+
 TESTMAIN(test_camera_bounds);
