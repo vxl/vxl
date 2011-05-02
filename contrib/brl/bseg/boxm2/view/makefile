@@ -7,6 +7,7 @@ MANPAGE_SOURCES += boxm2_include_glew.h
 SOURCES += boxm2_trajectory.cxx
 SOURCES += boxm2_view_utils.cxx
 SOURCES += boxm2_ocl_render_tableau.cxx
+SOURCES += boxm2_ocl_update_tableau.cxx
 
 SUBDIRS += pro
 
