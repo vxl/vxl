@@ -88,27 +88,28 @@ void boxm2_ocl_util::set_generic_camera(vpgl_camera_double_sptr& cam, cl_float* 
   if (vpgl_generic_camera<double>* gcam =
       dynamic_cast<vpgl_generic_camera<double>* >(cam.ptr()))
   {
-    //iterate through each ray and record origin/direction
+    // iterate through each ray and record origin/direction
     int count = 0;
-	  for (unsigned int v=0; v<cl_nj; ++v) {
+    for (unsigned int v=0; v<cl_nj; ++v) {
       for (unsigned int u=0; u<cl_ni; ++u, ++count) {
-		    vgl_ray_3d<double> ray;
-		    if (u>=gcam->cols()||v>=gcam->rows()) {
-		      vgl_point_3d<double> p(0,0,0); // dummy
+        vgl_ray_3d<double> ray;
+        if (u>=gcam->cols()||v>=gcam->rows()) {
+          vgl_point_3d<double> p(0,0,0); // dummy
           vgl_vector_3d<double> t(0,0,0);   // dummy
-			    ray = vgl_ray_3d<double>(p, t);
-		    } else {
-			    //: the ray corresponding to a given pixel
-			    ray = gcam->ray(u, v);
-		    }
-      
-        //origin
+          ray = vgl_ray_3d<double>(p, t);
+        }
+        else {
+          // the ray corresponding to a given pixel
+          ray = gcam->ray(u, v);
+        }
+
+        // origin
         ray_origins[4*count  ] = static_cast<float>(ray.origin().x());
         ray_origins[4*count+1] = static_cast<float>(ray.origin().y());
         ray_origins[4*count+2] = static_cast<float>(ray.origin().z());
         ray_origins[4*count+3] = 1.0f;
 
-        //direction
+        // direction
         ray_directions[4*count  ] = static_cast<float>(ray.direction().x());
         ray_directions[4*count+1] = static_cast<float>(ray.direction().y());
         ray_directions[4*count+2] = static_cast<float>(ray.direction().z());
@@ -126,20 +127,20 @@ void boxm2_ocl_util::set_generic_camera(vpgl_camera_double_sptr& cam, cl_float* 
 void boxm2_ocl_util::set_bit_lookup(cl_uchar* lookup)
 {
   unsigned char bits[] = { 0,   1,   1,   2,   1,   2,   2,   3,   1,   2,   2,   3,   2,   3,   3,   4,
-                           1,   2,   2,   3,   2,   3,   3,   4,   2,   3,   3,   4,   3,   4,   4,   5 ,
-                           1,   2,   2,   3,   2,   3,   3,   4,   2,   3,   3,   4,   3,   4,   4,   5  ,
-                           2,   3,   3,   4,   3,   4,   4,   5,   3,   4,   4,   5,   4,   5,   5,   6  ,
-                           1,   2,   2,   3,   2,   3,   3,   4,   2,   3,   3,   4,   3,   4,   4,   5  ,
-                           2,   3,   3,   4,   3,   4,   4,   5,   3,   4,   4,   5,   4,   5,   5,   6  ,
-                           2,   3,   3,   4,   3,   4,   4,   5,   3,   4,   4,   5,   4,   5,   5,   6  ,
-                           3,   4,   4,   5,   4,   5,   5,   6,   4,   5,   5,   6,   5,   6,   6,   7  ,
-                           1,   2,   2,   3,   2,   3,   3,   4,   2,   3,   3,   4,   3,   4,   4,   5  ,
-                           2,   3,   3,   4,   3,   4,   4,   5,   3,   4,   4,   5,   4,   5,   5,   6  ,
-                           2,   3,   3,   4,   3,   4,   4,   5,   3,   4,   4,   5,   4,   5,   5,   6  ,
-                           3,   4,   4,   5,   4,   5,   5,   6,   4,   5,   5,   6,   5,   6,   6,   7  ,
-                           2,   3,   3,   4,   3,   4,   4,   5,   3,   4,   4,   5,   4,   5,   5,   6  ,
-                           3,   4,   4,   5,   4,   5,   5,   6,   4,   5,   5,   6,   5,   6,   6,   7  ,
-                           3,   4,   4,   5,   4,   5,   5,   6,   4,   5,   5,   6,   5,   6,   6,   7  ,
+                           1,   2,   2,   3,   2,   3,   3,   4,   2,   3,   3,   4,   3,   4,   4,   5,
+                           1,   2,   2,   3,   2,   3,   3,   4,   2,   3,   3,   4,   3,   4,   4,   5,
+                           2,   3,   3,   4,   3,   4,   4,   5,   3,   4,   4,   5,   4,   5,   5,   6,
+                           1,   2,   2,   3,   2,   3,   3,   4,   2,   3,   3,   4,   3,   4,   4,   5,
+                           2,   3,   3,   4,   3,   4,   4,   5,   3,   4,   4,   5,   4,   5,   5,   6,
+                           2,   3,   3,   4,   3,   4,   4,   5,   3,   4,   4,   5,   4,   5,   5,   6,
+                           3,   4,   4,   5,   4,   5,   5,   6,   4,   5,   5,   6,   5,   6,   6,   7,
+                           1,   2,   2,   3,   2,   3,   3,   4,   2,   3,   3,   4,   3,   4,   4,   5,
+                           2,   3,   3,   4,   3,   4,   4,   5,   3,   4,   4,   5,   4,   5,   5,   6,
+                           2,   3,   3,   4,   3,   4,   4,   5,   3,   4,   4,   5,   4,   5,   5,   6,
+                           3,   4,   4,   5,   4,   5,   5,   6,   4,   5,   5,   6,   5,   6,   6,   7,
+                           2,   3,   3,   4,   3,   4,   4,   5,   3,   4,   4,   5,   4,   5,   5,   6,
+                           3,   4,   4,   5,   4,   5,   5,   6,   4,   5,   5,   6,   5,   6,   6,   7,
+                           3,   4,   4,   5,   4,   5,   5,   6,   4,   5,   5,   6,   5,   6,   6,   7,
                            4,   5,   5,   6,   5,   6,   6,   7,   5,   6,   6,   7,   6,   7,   7,   8 };
   vcl_memcpy(lookup, bits, 256);
 }
