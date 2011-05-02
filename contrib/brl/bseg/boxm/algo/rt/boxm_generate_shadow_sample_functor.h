@@ -3,12 +3,12 @@
 //:
 // \file
 #include <boxm/boxm_apm_traits.h>
-#include <boxm/opt/boxm_raytrace_function.h>
-#include <boxm/opt/boxm_rt_sample.h>
-#include <boxm/boxm_mog_grey_processor.h>
-#include <boxm/opt/boxm_seg_length_functor.h>
-#include <boxm/opt/boxm_pre_infinity_functor.h>
-#include <boxm/boxm_simple_grey_processor.h>
+#include <boxm/basic/boxm_raytrace_function.h>
+#include <boxm/sample/boxm_rt_sample.h>
+#include <boxm/sample/algo/boxm_mog_grey_processor.h>
+#include <boxm/basic/boxm_seg_length_functor.h>
+#include <boxm/algo/rt/boxm_pre_infinity_functor.h>
+#include <boxm/sample/algo/boxm_simple_grey_processor.h>
 #include <vil/vil_math.h>
 #include <vil/vil_save.h>
 #include <vcl_iostream.h>
@@ -19,7 +19,7 @@ class boxm_generate_shadow_sample_functor_pass_2
  public:
   //: "default" constructor
   boxm_generate_shadow_sample_functor_pass_2(vil_image_view<typename boxm_apm_traits<APM>::obs_datatype> const& image,
-                                          vil_image_view<float> const& Beta_denom, float shadow_prior, vil_image_view<float> const& shadow_density)
+                                             vil_image_view<float> const& Beta_denom, float shadow_prior, vil_image_view<float> const& shadow_density)
     : obs_(image), Beta_denom_(Beta_denom), vis_img_(image.ni(),image.nj(),1), pre_img_(image.ni(),image.nj(),1), alpha_integral_(image.ni(),image.nj(),1), shadow_prior_(shadow_prior), shadow_density_(shadow_density)
   {
     alpha_integral_.fill(0.0f);
@@ -70,14 +70,14 @@ class boxm_generate_shadow_sample_functor_pass_2
     }
     if (Beta < 0) {
       if (Beta < -1e-5) {
-        vcl_cerr << " error: beta = " << Beta << "  setting to 0. " << vcl_endl;
+        vcl_cerr << " error: beta = " << Beta << "  setting to 0.\n";
       }
       Beta = 0;
     }
 #if 0
-    if(mean_obs == 0.0f){
+    if (mean_obs == 0.0f){
       vcl_cout << PI << ' ' << shadow_density_(i,j) << ' '
-               << pre << ' ' << vis << ' ' << Beta_denom_(i,j) 
+               << pre << ' ' << vis << ' ' << Beta_denom_(i,j)
                << ' ' << Beta << '\n';
     }
 #endif
@@ -85,7 +85,7 @@ class boxm_generate_shadow_sample_functor_pass_2
     //New discrete probability computations
     float PQ_prior = 1.0f - vcl_exp(-alpha_l);
     float PQ_post = Beta*PQ_prior;
-    if(PQ_post>=0.999f) PQ_post = 0.999f;
+    if (PQ_post>=0.999f) PQ_post = 0.999f;
     //         v------note minus sign
     float lg = -vcl_log(1.0f-PQ_post);
     aux_val.log_sum_ += lg;
@@ -113,7 +113,6 @@ void boxm_initial_shadow_sampler_rt(boxm_scene<boct_tree<T_loc, T_data > > &scen
                                     vpgl_camera_double_sptr cam,
                                     vil_image_view<typename T_data::obs_datatype> &obs,
                                     vcl_string iname)
-
 {
     typedef boxm_aux_traits<BOXM_AUX_OPT_RT_GREY>::sample_datatype sample_datatype;
     boxm_aux_scene<T_loc, T_data,  sample_datatype> aux_scene(&scene,iname, boxm_aux_scene<T_loc, T_data,  sample_datatype>::CLONE);
@@ -127,13 +126,13 @@ void boxm_initial_shadow_sampler_rt(boxm_scene<boct_tree<T_loc, T_data > > &scen
 
 template <class T_loc, class T_data>
 void boxm_generate_shadow_sample_rt(boxm_scene<boct_tree<T_loc, T_data > > &scene,
-                                 vpgl_camera_double_sptr cam,
-                                 vil_image_view<typename T_data::obs_datatype> &obs,
-                                     vcl_string iname,
-                                     float shadow_prior,
-                                     float shadow_mean,
-                                     float shadow_sigma,
-                                     bool black_background = false)
+                                    vpgl_camera_double_sptr cam,
+                                    vil_image_view<typename T_data::obs_datatype> &obs,
+                                    vcl_string iname,
+                                    float shadow_prior,
+                                    float shadow_mean,
+                                    float shadow_sigma,
+                                    bool black_background = false)
 {
     typedef boxm_aux_traits<BOXM_AUX_OPT_RT_GREY>::sample_datatype sample_datatype;
     boxm_aux_scene<T_loc, T_data,  sample_datatype> aux_scene(&scene,iname, boxm_aux_scene<T_loc, T_data,  sample_datatype>::CLONE);
@@ -180,16 +179,16 @@ void boxm_generate_shadow_sample_rt(boxm_scene<boct_tree<T_loc, T_data > > &scen
 
     boxm_simple_grey shadow_dist(shadow_mean, shadow_sigma);
     vil_image_view<float> shadow_density(obs.ni(), obs.nj());
-    for(unsigned j=0; j<obs.nj(); ++j)
-      for(unsigned i=0; i<obs.ni(); ++i)
-        {
-          float sh_density = 
-            boxm_simple_grey_processor::prob_density(shadow_dist, obs(i,j));
-          sh_density *=2.0f;//if Gaussian centered at 0
-          shadow_density(i,j) = sh_density*shadow_prior;
-          Beta_denom_img(i,j) *= (1.0f-shadow_prior);
-          Beta_denom_img(i,j) += shadow_density(i,j);
-        }
+    for (unsigned j=0; j<obs.nj(); ++j)
+      for (unsigned i=0; i<obs.ni(); ++i)
+      {
+        float sh_density =
+          boxm_simple_grey_processor::prob_density(shadow_dist, obs(i,j));
+        sh_density *=2.0f;//if Gaussian centered at 0
+        shadow_density(i,j) = sh_density*shadow_prior;
+        Beta_denom_img(i,j) *= (1.0f-shadow_prior);
+        Beta_denom_img(i,j) += shadow_density(i,j);
+      }
 
 #if 0
     vil_save(vis_inf, "e:\\ShadowSite\\vis_inf.tiff");
