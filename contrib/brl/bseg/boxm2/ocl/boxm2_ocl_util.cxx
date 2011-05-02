@@ -103,15 +103,15 @@ void boxm2_ocl_util::set_generic_camera(vpgl_camera_double_sptr& cam, cl_float* 
 		    }
       
         //origin
-        ray_origins[4*count  ] = ray.origin().x();
-        ray_origins[4*count+1] = ray.origin().y();
-        ray_origins[4*count+2] = ray.origin().z();
+        ray_origins[4*count  ] = static_cast<float>(ray.origin().x());
+        ray_origins[4*count+1] = static_cast<float>(ray.origin().y());
+        ray_origins[4*count+2] = static_cast<float>(ray.origin().z());
         ray_origins[4*count+3] = 1.0f;
 
         //direction
-        ray_directions[4*count  ] = ray.direction().x();
-        ray_directions[4*count+1] = ray.direction().y();
-        ray_directions[4*count+2] = ray.direction().z();
+        ray_directions[4*count  ] = static_cast<float>(ray.direction().x());
+        ray_directions[4*count+1] = static_cast<float>(ray.direction().y());
+        ray_directions[4*count+2] = static_cast<float>(ray.direction().z());
         ray_directions[4*count+3] = 0.0f;
       }
     }
