@@ -6,6 +6,7 @@ TESTMAIN := test_driver.cxx
 
 TESTS += test_bayesian_optimizer.cxx
 TESTS += test_edges.cxx
+TESTS += test_shadow_appearance.cxx
 
 MINI_PROG_SOURCES += test_include.cxx
 MINI_PROG_SOURCES += test_template_include.cxx
