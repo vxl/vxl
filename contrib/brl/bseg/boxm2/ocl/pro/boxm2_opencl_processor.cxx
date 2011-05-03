@@ -29,10 +29,12 @@ bool boxm2_opencl_processor::init()
   }
 
   //set up our cache
+#if 0
   gpu_cache_ = new boxm2_opencl_cache(cpu_cache_,
                                       &(this->context()),
                                       &queues_[0],
                                       scene_);
+#endif //0
   return true;
 }
 
