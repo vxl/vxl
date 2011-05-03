@@ -4,7 +4,7 @@
 // \file
 
 
-//: scnee/device constructor
+//: scene/device constructor
 boxm2_opencl_cache::boxm2_opencl_cache(boxm2_scene_sptr scene,
                                        bocl_device_sptr device,
                                        int maxBlocks)
@@ -14,8 +14,8 @@ boxm2_opencl_cache::boxm2_opencl_cache(boxm2_scene_sptr scene,
   // by default try to create an LRU cache
   boxm2_lru_cache::create(scene);
   cpu_cache_ = boxm2_cache::instance();
-  
-  device_ = device; 
+
+  device_ = device;
   context_ = &device->context();
 
   //create command queue... make sure this isn't destructed at the end of the function...
@@ -25,26 +25,26 @@ boxm2_opencl_cache::boxm2_opencl_cache(boxm2_scene_sptr scene,
                             CL_QUEUE_PROFILING_ENABLE,
                             &status);
   if (!check_val(status,CL_SUCCESS,"boxm2_opencl_cache:: failed in command queue creation" + error_to_string(status)))
-      return;
-  queue_ = &q_;
+    return;
 
+  queue_ = &q_;
   block_info_ = 0;
   scene_ = scene;
 }
 
-//: sets a context in case the default context off the device is old (this 
-// is used for the tableau's shared cl_gl context
+//: sets a context in case the default context off the device is old
+// (this  is used for the tableau's shared cl_gl context)
 void boxm2_opencl_cache::set_context(cl_context& context)
 {
-  context_ = &context; 
-  int status = clReleaseCommandQueue(q_); 
+  context_ = &context;
+  int status = clReleaseCommandQueue(q_);
   if (!check_val(status,CL_SUCCESS,"boxm2_opencl_cache::set_context failed to release old queue" + error_to_string(status)))
     return;
-  
-  q_ = clCreateCommandQueue(*context_, 
+
+  q_ = clCreateCommandQueue(*context_,
                             *device_->device_id(),
                             CL_QUEUE_PROFILING_ENABLE,
-                            &status); 
+                            &status);
   if (!check_val(status,CL_SUCCESS,"boxm2_opencl_cache::set_context failed in command queue creation" + error_to_string(status)))
     return;
   queue_ = &q_;
@@ -91,7 +91,6 @@ bocl_mem* boxm2_opencl_cache::get_block(boxm2_block_id id)
 {
   //then look for the block you're requesting
   if ( cached_blocks_.find(id) != cached_blocks_.end() ) {
-
     //load block info
     boxm2_block* loaded = cpu_cache_->get_block(id);
     if (block_info_) {
@@ -131,9 +130,9 @@ bocl_mem* boxm2_opencl_cache::get_block(boxm2_block_id id)
   //////////////////////////////////////////////////////
   //load block info
   if (block_info_) {
-     boxm2_scene_info* buff = (boxm2_scene_info*) block_info_->cpu_buffer();
-     delete buff;
-     delete block_info_;
+    boxm2_scene_info* buff = (boxm2_scene_info*) block_info_->cpu_buffer();
+    delete buff;
+    delete block_info_;
   }
   boxm2_scene_info* info_buffer = scene_->get_blk_metadata(id);
   info_buffer->num_buffer = loaded->num_buffers();
@@ -150,9 +149,9 @@ bocl_mem* boxm2_opencl_cache::get_block_info(boxm2_block_id id)
 {
   //clean up
   if (block_info_) {
-     boxm2_scene_info* buff = (boxm2_scene_info*) block_info_->cpu_buffer();
-     delete buff;
-     delete block_info_;
+    boxm2_scene_info* buff = (boxm2_scene_info*) block_info_->cpu_buffer();
+    delete buff;
+    delete block_info_;
   }
 
   //get block info from scene/block
