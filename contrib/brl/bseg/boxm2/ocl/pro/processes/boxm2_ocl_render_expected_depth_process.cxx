@@ -25,6 +25,8 @@
 #include <bocl/bocl_device.h>
 #include <bocl/bocl_kernel.h>
 
+#include <boxm2/ocl/algo/boxm2_ocl_camera_converter.h>
+
 namespace boxm2_ocl_render_expected_depth_process_globals
 {
   const unsigned n_inputs_ = 6;
@@ -143,10 +145,12 @@ bool boxm2_ocl_render_expected_depth_process(bprb_func_process& pro)
     kernels[identifier]=ks;
   }
   //: create all buffers
+  /*
   cl_float cam_buffer[48];
   boxm2_ocl_util::set_persp_camera(cam, cam_buffer);
   bocl_mem_sptr persp_cam=new bocl_mem(device->context(), cam_buffer, 3*sizeof(cl_float16), "persp cam buffer");
   persp_cam->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
+  */
 
   unsigned cl_ni=RoundUp(ni,local_threads[0]);
   unsigned cl_nj=RoundUp(nj,local_threads[1]);
@@ -171,6 +175,12 @@ bool boxm2_ocl_render_expected_depth_process(bprb_func_process& pro)
   bocl_mem_sptr prob_image=new bocl_mem(device->context(),prob_buff,cl_ni*cl_nj*sizeof(float),"vis x omega image buffer");
   prob_image->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
+  //set generic cam
+  cl_float* ray_origins = new cl_float[4*cl_ni*cl_nj]; 
+  cl_float* ray_directions = new cl_float[4*cl_ni*cl_nj]; 
+  bocl_mem_sptr ray_o_buff = new bocl_mem(device->context(), ray_origins, cl_ni*cl_nj * sizeof(cl_float4) , "ray_origins buffer");
+  bocl_mem_sptr ray_d_buff = new bocl_mem(device->context(), ray_directions,  cl_ni*cl_nj * sizeof(cl_float4), "ray_directions buffer");
+  boxm2_ocl_camera_converter::compute_ray_image( device, queue, cam, cl_ni, cl_nj, ray_o_buff, ray_d_buff);  
 
   //: Image Dimensions
   int img_dim_buff[4];
@@ -198,7 +208,7 @@ bool boxm2_ocl_render_expected_depth_process(bprb_func_process& pro)
   vcl_size_t gThreads[] = {cl_ni,cl_nj};
 
   //: set arguments
-  vcl_vector<boxm2_block_id> vis_order = scene->get_vis_blocks((vpgl_perspective_camera<double>*) cam.ptr());
+  vcl_vector<boxm2_block_id> vis_order = scene->get_vis_blocks(cam);
   vcl_vector<boxm2_block_id>::iterator id;
   for (id = vis_order.begin(); id != vis_order.end(); ++id)
   {
@@ -217,7 +227,9 @@ bool boxm2_ocl_render_expected_depth_process(bprb_func_process& pro)
     kern->set_arg( blk_info );
     kern->set_arg( blk );
     kern->set_arg( alpha );
-    kern->set_arg( persp_cam.ptr() );
+    //kern->set_arg( persp_cam.ptr() );
+    kern->set_arg( ray_o_buff.ptr() );
+    kern->set_arg( ray_d_buff.ptr() );
     kern->set_arg( exp_image.ptr() );
     kern->set_arg( var_image.ptr() );
     kern->set_arg( exp_img_dim.ptr());
