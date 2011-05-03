@@ -10,4 +10,6 @@ DECLARE_FUNC_CONS(boxm2_cpp_render_cone_expected_image_process);
 DECLARE_FUNC_CONS(boxm2_cpp_update_image_process);
 DECLARE_FUNC_CONS(boxm2_cpp_refine_process2);
 DECLARE_FUNC_CONS(boxm2_cpp_change_detection_process2);
+DECLARE_FUNC_CONS(boxm2_cpp_render_expected_image_process);
+DECLARE_FUNC_CONS(boxm2_cpp_render_expected_depth_process);
 #endif

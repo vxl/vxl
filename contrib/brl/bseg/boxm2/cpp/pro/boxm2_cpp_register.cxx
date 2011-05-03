@@ -18,4 +18,5 @@ void boxm2_cpp_register::register_process()
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_cpp_update_image_process, "boxm2CppUpdateImageProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_cpp_refine_process2, "boxm2CppRefineProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_cpp_change_detection_process2, "boxm2CppChangeDetectionProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_cpp_render_expected_depth_process, "boxm2CppRenderExpectedDepthProcess");
 }
