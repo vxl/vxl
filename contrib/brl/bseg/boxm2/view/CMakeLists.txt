@@ -30,7 +30,7 @@ IF(VGUI_FOUND)
 
   ADD_LIBRARY(boxm2_view ${boxm2_view_sources} )
 
-  TARGET_LINK_LIBRARIES(boxm2_view bocl   boxm2_ocl_pro boxm2_cpp  vgui bprb bgeo vnl vnl_algo vbl_io vpgl vsph vgl vil vbl vul ${GLEW_LIBRARY} ${OPENCL_LIBRARIES} )
+  TARGET_LINK_LIBRARIES(boxm2_view bocl boxm2_pro boxm2_ocl_pro boxm2_cpp  vgui bprb bgeo vnl vnl_algo vbl_io vpgl vsph vgl vil vbl vul ${GLEW_LIBRARY} ${OPENCL_LIBRARIES} )
 #pro
 SUBDIRS(pro)
 #pro

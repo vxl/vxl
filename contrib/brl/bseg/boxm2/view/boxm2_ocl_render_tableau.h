@@ -73,8 +73,8 @@ class boxm2_ocl_render_tableau : public boxm2_cam_tableau
   //: shared GL_CL image buffer
   GLuint pbuffer_;
   cl_mem clgl_buffer_;
-  bocl_mem*  exp_img_;
-  bocl_mem * exp_img_dim_; 
+  bocl_mem_sptr exp_img_;
+  bocl_mem_sptr exp_img_dim_; 
   
   //: trajectory for idle rendering
   bool render_trajectory_; 
