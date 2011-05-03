@@ -3,7 +3,8 @@ SET(boxm2_cpp_algo_sources
     boxm2_cast_ray_function.h
     boxm2_cast_cone_ray_function.h
     boxm2_render_functions.h          boxm2_render_functions.cxx
-    boxm2_render_exp_image_functor.h  
+    boxm2_render_exp_image_functor.h 
+    boxm2_render_exp_depth_functor.h 
     boxm2_render_cone_functor.h
     boxm2_update_image_functor.h
     boxm2_refine_block_function.h     boxm2_refine_block_function.cxx
