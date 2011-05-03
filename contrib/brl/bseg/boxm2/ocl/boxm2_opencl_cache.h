@@ -35,13 +35,11 @@ class boxm2_opencl_cache: public vbl_ref_count
     boxm2_opencl_cache(boxm2_scene_sptr scene,
                        bocl_device_sptr device,
                        int maxBlocks=1);
-    boxm2_opencl_cache(boxm2_cache* cpu_cache,
-                       cl_context* context,
-                       cl_command_queue* queue,
-                       boxm2_scene* scene,
-                       int maxBlocks=1);
-
     ~boxm2_opencl_cache() { this->clear_cache(); }
+    
+    
+    void set_context(cl_context& context); 
+    boxm2_cache* get_cpu_cache() { return cpu_cache_; }
 
     //: returns block pointer to block specified by ID
     bocl_mem* get_block(boxm2_block_id id);
@@ -90,6 +88,9 @@ class boxm2_opencl_cache: public vbl_ref_count
     ////////////////////////////////////////////////////////////////////////////
     // opencl objects
     ////////////////////////////////////////////////////////////////////////////
+    //use this for the context
+    bocl_device_sptr device_; 
+    
     //: opencl context to use for writing to buffers
     cl_context*       context_;
     //: opencl command queue to use for writing to buffers
