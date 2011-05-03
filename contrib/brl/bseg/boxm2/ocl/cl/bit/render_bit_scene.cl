@@ -117,7 +117,9 @@ void
 render_depth( __constant  RenderSceneInfo    * linfo,
                   __global    int4               * tree_array,
                   __global    float              * alpha_array,
-                  __global    float16            * camera,        // camera orign and SVD of inverse of camera matrix
+                  __global    float4             * ray_origins,
+                  __global    float4             * ray_directions,
+                  //__global    float16            * camera,        // camera orign and SVD of inverse of camera matrix
                   __global    float              * exp_image,          // input image and store vis_inf and pre_inf
                   __global    float              * exp_sqr_image,      // sum of squares.
                   __global    uint4              * exp_image_dims,
@@ -143,19 +145,23 @@ render_depth( __constant  RenderSceneInfo    * linfo,
   if (i>=(*exp_image_dims).z || j>=(*exp_image_dims).w) 
     return;
 
+   //Store image index (may save a register).  Also initialize VIS and expected_int
+  imIndex[llid] = j*get_global_size(0)+i;
+
   //----------------------------------------------------------------------------
   // Calculate ray origin, and direction
   // (make sure ray direction is never axis aligned)
   //----------------------------------------------------------------------------
+  float4 ray_o = ray_origins[ imIndex[llid] ]; 
+  float4 ray_d = ray_directions[ imIndex[llid] ]; 
   float ray_ox, ray_oy, ray_oz, ray_dx, ray_dy, ray_dz;
-  calc_scene_ray(linfo, camera, i, j, &ray_ox, &ray_oy, &ray_oz, &ray_dx, &ray_dy, &ray_dz);  
+  //calc_scene_ray(linfo, camera, i, j, &ray_ox, &ray_oy, &ray_oz, &ray_dx, &ray_dy, &ray_dz); 
+  calc_scene_ray_generic_cam(linfo, ray_o, ray_d, &ray_ox, &ray_oy, &ray_oz, &ray_dx, &ray_dy, &ray_dz);
 
   //----------------------------------------------------------------------------
   // we know i,j map to a point on the image, have calculated ray
   // BEGIN RAY TRACE
   //----------------------------------------------------------------------------
-  //Store image index (may save a register).  Also initialize VIS and expected_int
-  imIndex[llid] = j*get_global_size(0)+i;
 
   float expdepth   = 0.0f;
   float expdepthsqr= 0.0f;
