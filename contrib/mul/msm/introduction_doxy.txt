@@ -61,4 +61,6 @@
 * - msm_build_shape_model : Construct a shape model from a set of files
 * - msm_draw_shape_modes : Generate EPS files displaying modes of a model
 * - msm_draw_points_on_image : Generate an EPS file showing points + curves on an image
+* - msm_plot_aligned_shapes : Generate EPS file showing scatterplots of aligned shapes
+* - msm_get_shape_params: Compute shape parameters for each example and save to a file
 */
