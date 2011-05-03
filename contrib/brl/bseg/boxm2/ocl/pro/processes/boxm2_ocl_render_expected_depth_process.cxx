@@ -1,12 +1,11 @@
 // This is brl/bseg/boxm2/ocl/pro/processes/boxm2_ocl_render_expected_depth_process.cxx
+#include <bprb/bprb_func_process.h>
 //:
 // \file
 // \brief  A process for rendering depth map of a scene.
 //
 // \author Vishal Jain
 // \date Mar 10, 2011
-
-#include <bprb/bprb_func_process.h>
 
 #include <vcl_fstream.h>
 #include <boxm2/ocl/boxm2_opencl_cache.h>
@@ -20,10 +19,10 @@
 #include <brdb/brdb_value.h>
 
 //directory utility
-#include <vul/vul_timer.h>
 #include <vcl_where_root_dir.h>
 #include <bocl/bocl_device.h>
 #include <bocl/bocl_kernel.h>
+#include <vul/vul_timer.h>
 
 #include <boxm2/ocl/algo/boxm2_ocl_camera_converter.h>
 
@@ -127,7 +126,7 @@ bool boxm2_ocl_render_expected_depth_process(bprb_func_process& pro)
 
   vcl_string identifier=device->device_identifier();
 
-//: create a command queue.
+  // create a command queue.
   int status=0;
   cl_command_queue queue = clCreateCommandQueue(device->context(),
                                                 *(device->device_id()),
@@ -136,7 +135,7 @@ bool boxm2_ocl_render_expected_depth_process(bprb_func_process& pro)
   if (status!=0)
     return false;
 
-  //: compile the kernel
+  // compile the kernel
   if (kernels.find(identifier)==kernels.end())
   {
     vcl_cout<<"===========Compiling kernels==========="<<vcl_endl;
@@ -144,13 +143,14 @@ bool boxm2_ocl_render_expected_depth_process(bprb_func_process& pro)
     compile_kernel(device,ks);
     kernels[identifier]=ks;
   }
-  //: create all buffers
-  /*
+
+#if 0
+  // create all buffers
   cl_float cam_buffer[48];
   boxm2_ocl_util::set_persp_camera(cam, cam_buffer);
   bocl_mem_sptr persp_cam=new bocl_mem(device->context(), cam_buffer, 3*sizeof(cl_float16), "persp cam buffer");
   persp_cam->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
-  */
+#endif
 
   unsigned cl_ni=RoundUp(ni,local_threads[0]);
   unsigned cl_nj=RoundUp(nj,local_threads[1]);
@@ -176,13 +176,13 @@ bool boxm2_ocl_render_expected_depth_process(bprb_func_process& pro)
   prob_image->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
   //set generic cam
-  cl_float* ray_origins = new cl_float[4*cl_ni*cl_nj]; 
-  cl_float* ray_directions = new cl_float[4*cl_ni*cl_nj]; 
+  cl_float* ray_origins = new cl_float[4*cl_ni*cl_nj];
+  cl_float* ray_directions = new cl_float[4*cl_ni*cl_nj];
   bocl_mem_sptr ray_o_buff = new bocl_mem(device->context(), ray_origins, cl_ni*cl_nj * sizeof(cl_float4) , "ray_origins buffer");
   bocl_mem_sptr ray_d_buff = new bocl_mem(device->context(), ray_directions,  cl_ni*cl_nj * sizeof(cl_float4), "ray_directions buffer");
-  boxm2_ocl_camera_converter::compute_ray_image( device, queue, cam, cl_ni, cl_nj, ray_o_buff, ray_d_buff);  
+  boxm2_ocl_camera_converter::compute_ray_image( device, queue, cam, cl_ni, cl_nj, ray_o_buff, ray_d_buff);
 
-  //: Image Dimensions
+  // Image Dimensions
   int img_dim_buff[4];
   img_dim_buff[0] = 0;
   img_dim_buff[1] = 0;
@@ -191,13 +191,13 @@ bool boxm2_ocl_render_expected_depth_process(bprb_func_process& pro)
   bocl_mem_sptr exp_img_dim=new bocl_mem(device->context(), img_dim_buff, sizeof(int)*4, "image dims");
   exp_img_dim->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
-  //: Output Array
+  // Output Array
   float output_arr[100];
   for (int i=0; i<100; ++i) output_arr[i] = 0.0f;
   bocl_mem_sptr  cl_output=new bocl_mem(device->context(), output_arr, sizeof(float)*100, "output buffer");
   cl_output->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
-  //: bit lookup buffer
+  // bit lookup buffer
   cl_uchar lookup_arr[256];
   boxm2_ocl_util::set_bit_lookup(lookup_arr);
   bocl_mem_sptr lookup=new bocl_mem(device->context(), lookup_arr, sizeof(cl_uchar)*256, "bit lookup buffer");
@@ -207,7 +207,7 @@ bool boxm2_ocl_render_expected_depth_process(bprb_func_process& pro)
   vcl_size_t lThreads[] = {8, 8};
   vcl_size_t gThreads[] = {cl_ni,cl_nj};
 
-  //: set arguments
+  // set arguments
   vcl_vector<boxm2_block_id> vis_order = scene->get_vis_blocks(cam);
   vcl_vector<boxm2_block_id>::iterator id;
   for (id = vis_order.begin(); id != vis_order.end(); ++id)
@@ -250,8 +250,7 @@ bool boxm2_ocl_render_expected_depth_process(bprb_func_process& pro)
 
     cl_output->read_to_buffer(queue);
 
-
-    //clear render kernel args so it can reset em on next execution
+    // clear render kernel args so it can reset em on next execution
     kern->clear_args();
   }
   // normalize
@@ -282,8 +281,8 @@ bool boxm2_ocl_render_expected_depth_process(bprb_func_process& pro)
   for (unsigned c=0;c<nj;c++)
     for (unsigned r=0;r<ni;r++)
     {
-        (*exp_img_out)(r,c)=buff[c*cl_ni+r];
-        (*exp_var_out)(r,c)=var_buff[c*cl_ni+r];
+      (*exp_img_out)(r,c)=buff[c*cl_ni+r];
+      (*exp_var_out)(r,c)=var_buff[c*cl_ni+r];
     }
   // store scene smaprt pointer
   pro.set_output_val<vil_image_view_base_sptr>(i++, exp_img_out);
