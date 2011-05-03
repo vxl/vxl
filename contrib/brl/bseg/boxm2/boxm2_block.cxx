@@ -92,9 +92,11 @@ bool boxm2_block::b_write(char* buff)
 // allocate.  MAX_MB is assumed to include blocks, alpha, mog3, num_obs and 16 byte aux data
 bool boxm2_block::init_empty_block(boxm2_block_metadata data)
 {
+#if 0 // unused constants
   //calc max number of bytes, data buffer length, and alpha init (consts)
   const int MAX_BYTES    = int(data.max_mb_)*1024*1024;
   const int BUFF_LENGTH  = 1L<<16; // 65536
+#endif
 
   //total number of (sub) blocks in the scene
   int total_blocks =  data.sub_block_num_.x()
@@ -156,7 +158,7 @@ bool boxm2_block::init_empty_block(boxm2_block_metadata data)
     for (int i=0; i<16; i++)
       (*iter)[i] = treeBlk[i];
   }
-  
+
   return true;
 }
 
@@ -165,14 +167,14 @@ bool boxm2_block::init_empty_block(boxm2_block_metadata data)
 // \return size of byte stream
 long boxm2_block::calc_byte_count(int num_buffers, int trees_per_buffer, int num_trees)
 {
-  long toReturn = num_trees * sizeof(uchar16) +                     //3d block pointers
-                  //num_buffers*trees_per_buffer * sizeof(int) +     //tree pointers
-                  //num_buffers*(sizeof(ushort) + sizeof(ushort2)) +  //blocks in buffers and mem ptrs
-                  sizeof(long) +                      //this number
-                  3*sizeof(int) +                     //init level, max level, max_mb
-                  4*sizeof(double) +                  //dims
-                  4*sizeof(int); // +                     //nums 
-                  //sizeof(int) + sizeof(int);          //+ numBuffers, treeLen
+  long toReturn = num_trees * sizeof(uchar16)                    //3d block pointers
+             // + num_buffers*trees_per_buffer * sizeof(int)     //tree pointers
+             // + num_buffers*(sizeof(ushort) + sizeof(ushort2)) //blocks in buffers and mem ptrs
+                + sizeof(long)                        // this number
+                + 3*sizeof(int)                       // init level, max level, max_mb
+                + 4*sizeof(double)                    // dims
+                + 4*sizeof(int);                      // nums
+             // + sizeof(int) + sizeof(int);          // numBuffers, treeLen
   return toReturn;
 }
 
@@ -180,14 +182,14 @@ long boxm2_block::calc_byte_count(int num_buffers, int trees_per_buffer, int num
 //------------ I/O -------------------------------------------------------------
 vcl_ostream& operator <<(vcl_ostream &s, boxm2_block& block)
 {
-  s << "Block ID=" << block.block_id() << vcl_endl;
-  s << "Byte Count=" << block.byte_count() << vcl_endl;
-  s << "Init level=" << block.init_level() << vcl_endl;
-  s << "Max level=" << block.max_level() << vcl_endl;
-  s << "Max MB=" << block.max_mb() << vcl_endl;
-  s << "Sub Block Dim=" << block.sub_block_dim() << vcl_endl;
-  s << "Sub Block Num=" << block.sub_block_num() << vcl_endl;
-  return s;
+  return
+  s << "Block ID=" << block.block_id() << '\n'
+    << "Byte Count=" << block.byte_count() << '\n'
+    << "Init level=" << block.init_level() << '\n'
+    << "Max level=" << block.max_level() << '\n'
+    << "Max MB=" << block.max_mb() << '\n'
+    << "Sub Block Dim=" << block.sub_block_dim() << '\n'
+    << "Sub Block Num=" << block.sub_block_num() << vcl_endl;
 }
 
 //: Binary write boxm2_block to stream.
