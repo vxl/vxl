@@ -204,7 +204,7 @@ bool boxm2_ocl_refine_process(bprb_func_process& pro)
 
         //set up tree size (first find num trees)
         vcl_cout<<"creating tree sizes buff"<<vcl_endl;
-        bocl_mem* tree_sizes = new bocl_mem(device->context(), NULL, sizeof(cl_int)*numTrees, "refine tree sizes buffer");
+        bocl_mem_sptr tree_sizes = new bocl_mem(device->context(), NULL, sizeof(cl_int)*numTrees, "refine tree sizes buffer");
         tree_sizes->create_buffer(CL_MEM_READ_WRITE | CL_MEM_ALLOC_HOST_PTR, (queue));
         clFinish((queue));
 
@@ -229,13 +229,14 @@ bool boxm2_ocl_refine_process(bprb_func_process& pro)
         kern->set_arg( blk );
         kern->set_arg( blk_copy.ptr() );
         kern->set_arg( alpha );
-        kern->set_arg( tree_sizes );
+        kern->set_arg( tree_sizes.ptr() );
         kern->set_arg( prob_thresh.ptr() );
         kern->set_arg( lookup.ptr() );
         kern->set_arg( cl_output.ptr() );
         kern->set_local_arg( 16*sizeof(cl_uchar) );
         kern->set_local_arg( lThreads[0]*sizeof(cl_uchar16) );
         kern->set_local_arg( lThreads[0]*sizeof(cl_uchar16) );
+        
         //execute kernel
         kern->execute( queue, 2, lThreads, gThreads);
         clFinish(queue);
@@ -243,7 +244,6 @@ bool boxm2_ocl_refine_process(bprb_func_process& pro)
 
         //clear render kernel args so it can reset em on next execution
         kern->clear_args();
-
         blk_copy->read_to_buffer(queue);
 
         /////////////////////////////////////////////////////////////////////////
@@ -262,6 +262,7 @@ bool boxm2_ocl_refine_process(bprb_func_process& pro)
         vcl_cout<<"New data size: "<<newDataSize<<'\n'
                 <<"Scan data sizes time: "<<scan_time.all()<<vcl_endl;
         /////////////////////////////////////////////////////////////////////////
+        
         /////////////////////////////////////////////////////////////////////////
         //STEP Three
         //  - Swap data into new buffers: For each data type
@@ -273,13 +274,6 @@ bool boxm2_ocl_refine_process(bprb_func_process& pro)
         //    - delete the old BOCL_MEM*, and that's it...
         // POSSIBLE PROBLEMS: data may not exist in cache and may need to be initialized...
         //this vector will be passed in (listing data types to refine)
-
-#if 0 // unused variables...
-        //check out old alphas
-        bocl_mem* old_alph = opencl_cache->get_data(id, boxm2_data_traits<BOXM2_ALPHA>::prefix());
-        int numAlphas = old_alph->num_bytes()/sizeof(float);
-        float* abuff = (float*) old_alph->cpu_buffer();
-#endif
         vcl_vector<vcl_string> data_types = scene->appearances();
         data_types.push_back(boxm2_data_traits<BOXM2_ALPHA>::prefix());
         for (unsigned int i=0; i<data_types.size(); ++i)
@@ -295,6 +289,7 @@ bool boxm2_ocl_refine_process(bprb_func_process& pro)
                 return false;
             }
             bocl_kernel * kern=kernels[data_identifier];
+            
             //get bocl_mem data independent of CPU pointer
             bocl_mem* dat = opencl_cache->get_data(id, data_types[i]);
 
@@ -309,16 +304,13 @@ bool boxm2_ocl_refine_process(bprb_func_process& pro)
             bocl_mem* blk_info = opencl_cache->loaded_block_info();
 
             //is alpha buffer
-            bool is_alpha_buffer[1];
-            if (data_types[i] == boxm2_data_traits<BOXM2_ALPHA>::prefix())
-                (*is_alpha_buffer) = true;
-            else
-                (*is_alpha_buffer) = false;
+            bool is_alpha_buffer[1] = 
+              { (data_types[i] == boxm2_data_traits<BOXM2_ALPHA>::prefix()) }; 
             bocl_mem is_alpha(device->context(), is_alpha_buffer, sizeof(cl_bool), "is_alpha buffer");
             is_alpha.create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
             //copy parent behavior.. if true, Data copies its parent
-            bool* copy_parent_buffer = new bool[1];
+            bool copy_parent_buffer[1];
             if (data_types[i] == boxm2_data_traits<BOXM2_MOG3_GREY>::prefix() ||
                 data_types[i] == boxm2_data_traits<BOXM2_MOG3_GREY_16>::prefix() ||
                 data_types[i] == boxm2_data_traits<BOXM2_GAUSS_RGB>::prefix() )
@@ -332,7 +324,7 @@ bool boxm2_ocl_refine_process(bprb_func_process& pro)
             kern->set_arg( blk_info );
             kern->set_arg( blk );
             kern->set_arg( blk_copy.ptr() );
-            kern->set_arg( tree_sizes );
+            kern->set_arg( tree_sizes.ptr() );
             kern->set_arg( dat );
             kern->set_arg( new_dat );
             kern->set_arg( prob_thresh.ptr());
@@ -360,13 +352,7 @@ bool boxm2_ocl_refine_process(bprb_func_process& pro)
                 vcl_cout<<"Writing refined trees."<<vcl_endl;
                 blk->read_to_buffer(queue);
             }
-
-            //clean up DAT
-            //delete[] is_alpha_buffer;
-            delete[] copy_parent_buffer;
         }
-        //clean aux memory
-        delete tree_sizes;
     }
 #if 0
     //record total time
