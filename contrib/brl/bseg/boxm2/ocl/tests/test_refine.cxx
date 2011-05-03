@@ -2,19 +2,18 @@
 // \file
 // \author Andy Miller
 // \date 26-Oct-2010
+
 #include <testlib/testlib_test.h>
 #include <testlib/testlib_root_dir.h>
 #include <vcl_where_root_dir.h>
 
-#include <bocl/bocl_manager.h>
 #include <bocl/bocl_kernel.h>
 #include <bocl/bocl_mem.h>
-#include <boxm2/ocl/boxm2_ocl_util.h>
-#include <boxm2/boxm2_block.h>
-#include <boxm2/io/boxm2_lru_cache.h>
-
 #include <boxm2/basic/boxm2_block_id.h>
-#include <boxm2/io/boxm2_sio_mgr.h>
+#include <boxm2/ocl/boxm2_ocl_util.h>
+#include <boxm2/ocl/boxm2_opencl_cache.h>
+#include <boxm2/ocl/pro/boxm2_opencl_processor.h>
+
 #include <vnl/vnl_vector_fixed.h>
 
 #include <vcl_iostream.h>
@@ -23,8 +22,7 @@
 #include <vcl_map.h>
 #include <vcl_algorithm.h>
 
-
-//: Three unit tests for the three main refine kernel functions,
+//: Three unit tests for the three main refine kernel functions
 
 void test_refine_trees_kernel()
 {
