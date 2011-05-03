@@ -26,6 +26,7 @@
 
 void test_refine_trees_kernel()
 {
+#if 0
   //----------------------------------------------------------------------------
   //--- BEGIN BOXM2 API EXAMPLE ------------------------------------------------
   //----------------------------------------------------------------------------
@@ -221,6 +222,8 @@ void test_refine_trees_kernel()
     }
   }
   TEST(" Third Pass TREE passes ", true, true);
+
+#endif
 }
 
 void test_refine_scan_kernel()
