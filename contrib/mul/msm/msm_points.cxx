@@ -141,7 +141,6 @@ void msm_points::translate_by(double tx, double ty)
 //: Transform current points with similarity transform
 void msm_points::transform_by(double a, double b, double tx, double ty)
 {
-  if (tx==0.0 && ty==0.0) return;
   double* v=v_.data_block();
   double* end_v=v+2*size();
   for (;v!=end_v;v+=2)
@@ -151,7 +150,6 @@ void msm_points::transform_by(double a, double b, double tx, double ty)
     v[1]=b*x+a*y+ty;
   }
 }
-
 
 //: Transform current points with t
 void msm_points::transform_by(const vimt_transform_2d& t)

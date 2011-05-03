@@ -32,8 +32,18 @@ void msm_similarity_aligner::apply_transform(const msm_points& points,
                                              const vnl_vector<double>& trans,
                                              msm_points& new_points) const
 {
-  new_points=points;
-  new_points.transform_by(1.0+trans[0],trans[1],trans[2],trans[3]);
+  new_points.vector().set_size(points.vector().size());
+  double a=1.0+trans[0], b=trans[1], tx=trans[2], ty=trans[3];
+
+  const double* v1=points.vector().data_block();
+  const double* end_v=points.vector().end();
+  double* v2=new_points.vector().data_block();
+  for (;v1!=end_v;v1+=2,v2+=2)
+  {
+    double x=v1[0],y=v1[1];
+    v2[0]=a*x-b*y+tx;
+    v2[1]=b*x+a*y+ty;
+  }
 }
 
 //: Return scaling applied by the transform with given parameters.
