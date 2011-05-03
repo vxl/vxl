@@ -4,18 +4,7 @@
 // \file
 // \brief Orthogonalise a basis using modified Gram-Schmidt (and normalise)
 // \author Martin Roberts
-
-// \verbatim
-// Modifications
-// Mar. 2011 - Patrick Sauer - added variant that returns normalisation multipliers
-
-
-
-#include <vcl_vector.h>
-#include <vnl/vnl_vector.h>
-
-//=======================================================================
-//: Orthogonalise a basis using modified Gram-Schmidt
+//
 // Transform basis {vk} to orthonormal basis {ek} with k in range 1..N
 // for j = 1 to N
 //     ej = vj
@@ -24,7 +13,16 @@
 //     end
 //     ej = ej/|ej|
 //  end
+//
+// \verbatim
+//  Modifications
+//   Mar. 2011 - Patrick Sauer - added variant that returns normalisation multipliers
+// \endverbatim
 
+#include <vcl_vector.h>
+#include <vnl/vnl_vector.h>
+
+//=======================================================================
 //: Convert input basis {v} to orthonormal basis {e}
 // Each basis vector is a column of v, and likewise the orthonormal bases are returned as columns of e
 void mbl_mod_gram_schmidt(const vnl_matrix<double>& v,
@@ -55,7 +53,7 @@ void mbl_mod_gram_schmidt(const vnl_matrix<double>& v,
         {
             evecs[j] -= dot_product(evecs[j],evecs[k]) * evecs[k];
         }
-        evecs[j].normalize(); 
+        evecs[j].normalize();
     }
 
     //And copy into column-wise matrix (kth base is the kth column)
@@ -100,7 +98,7 @@ void mbl_mod_gram_schmidt(const vnl_matrix<double>& v,
             evecs[j] -= dot_product(evecs[j],evecs[k]) * evecs[k];
         }
         np[j]     = evecs[j].magnitude();
-        evecs[j] /= np[j]; 
+        evecs[j] /= np[j];
     }
 
     //And copy into column-wise matrix (kth base is the kth column)
