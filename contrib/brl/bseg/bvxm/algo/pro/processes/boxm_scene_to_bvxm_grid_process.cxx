@@ -108,3 +108,24 @@ bool boxm_scene_to_bvxm_grid_process(bprb_func_process& pro)
   return false;
 }
 
+#include <boxm/boxm_scene.txx>
+#include <boxm/boxm_block.txx>
+#include <boct/boct_tree.txx>
+#include <boct/boct_tree_cell.txx>
+#include <vbl/vbl_array_3d.txx>
+
+typedef bsta_num_obs<bsta_gauss_sf1> gauss_type;
+typedef bsta_num_obs<bsta_mixture_fixed<gauss_type,3> > mixture_type;
+typedef boct_tree<short,mixture_type> tree_type;
+typedef boxm_block<tree_type> block_type;
+
+BOCT_TREE_INSTANTIATE(short,mixture_type);
+BOCT_TREE_CELL_INSTANTIATE(short,mixture_type);
+BOXM_SCENE_INSTANTIATE(tree_type);
+BOXM_BLOCK_INSTANTIATE(tree_type);
+VBL_ARRAY_3D_INSTANTIATE(block_type);
+
+void vsl_b_write(vsl_b_ostream&, bsta_mixture_fixed<bsta_num_obs<bsta_gaussian_sphere<float,1> >,3>&) {}
+void vsl_b_read(vsl_b_istream&, bsta_mixture_fixed<bsta_num_obs<bsta_gaussian_sphere<float,1> >,3>&) {}
+void vsl_b_read(vsl_b_istream&, bsta_gaussian_sphere<float,1>&) {}
+bool operator==(block_type const&, block_type const&) { return false; }
