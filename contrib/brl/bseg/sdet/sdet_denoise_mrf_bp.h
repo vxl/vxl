@@ -9,26 +9,25 @@
 // \author
 //  J.L. Mundy - March 30, 2011
 //
-//  
-//  This algorithm selectively smooths the image based on 
+//  This algorithm selectively smooths the image based on
 //  a variance value at each pixel. The smoothing is carried out
 //  by a MRF with binary cliques all of equal weight (kappa_)
-//  The data cost is related to the variance by 
+//  The data cost is related to the variance by
 //
 //  D(fp) = lambda_*(fp-x)^2
 //         -------
 //           var
 //  The clique cost is V(fp, fq) = kappa_(fp-fq)^2
 //
-//  The algorithm uses belief propagation based on the paper by 
+//  The algorithm uses belief propagation based on the paper by
 //
-//  Pedro F. Felzenszwalb, Daniel P. Huttenlocher, 
-//  Efficient Belief Propagation for Early Vision 
+//  Pedro F. Felzenszwalb, Daniel P. Huttenlocher,
+//  Efficient Belief Propagation for Early Vision
 //  International Journal of Computer Vision 70(1): 41-54 (2006)
-// 
+//
 //  The MRF message storage could be reduced by 1/2
-//  if a checkerboard update scheme is used, but it was decided to 
-//  update all sites on each itertation. 
+//  if a checkerboard update scheme is used, but it was decided to
+//  update all sites on each iteration.
 //
 //  If a variance image is not set, then the data cost is
 //
@@ -36,7 +35,7 @@
 //
 // \verbatim
 //  Modifications
-//   <none>
+//   <none yet>
 // \endverbatim
 //
 //-------------------------------------------------------------------------
@@ -68,19 +67,20 @@ class sdet_denoise_mrf_bp : public sdet_denoise_mrf_bp_params
   sdet_mrf_bp_sptr mrf() {return mrf_;}
 
  protected:
-  //:protected methods
+  // === protected methods ===
 
-  // upsample the messages from a mrf by a factor of two. 
-  // level is the pyramid level of the input mrf.
+  //: upsample the messages from a mrf by a factor of two.
+  // \p level is the pyramid level of the input mrf.
   // the returned mrf is at the next higher resolution level of the pyramid.
   // the prior messages of the returned mrf are initialized be the message
   // values of in_mrf.
-  sdet_mrf_bp_sptr pyramid_upsample(sdet_mrf_bp_sptr const& in_mrf, 
+  sdet_mrf_bp_sptr pyramid_upsample(sdet_mrf_bp_sptr const& in_mrf,
                                     unsigned level);
 
-  //:members
-  bool output_valid_;      //process state flag
-  bool use_var_; 
+  // === members ===
+
+  bool output_valid_;      //!< process state flag
+  bool use_var_;
   vil_pyramid_image_view<float> pyr_in_;
   vil_pyramid_image_view<float> pyr_var_;
   vil_image_resource_sptr out_resc_;
