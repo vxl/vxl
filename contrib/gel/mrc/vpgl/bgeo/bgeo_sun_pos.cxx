@@ -1,7 +1,7 @@
 #include "bgeo_sun_pos.h"
 #include <vnl/vnl_math.h>
 #include <vcl_cmath.h>
-
+#include <vcl_iostream.h>
 // Declaration of some constants
 static double twopi  = 2.0*vnl_math::pi;
 static double rad    = vnl_math::pi/180.0;
