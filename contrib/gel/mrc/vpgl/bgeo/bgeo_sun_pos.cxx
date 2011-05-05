@@ -14,6 +14,8 @@ void bgeo_sun_pos(int year, int month, int day,
                   double longitude, double latitude,
                   double& sun_azimuth, double& sun_elevation)
 {
+  vcl_cout << "This class is deprecated! Moved to brl/bbas/brad/brad_sun_pos."
+           << " code will be removed shortly\n";
 // Main variables
   double dElapsedJulianDays;
   double dDecimalHours;
