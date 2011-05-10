@@ -66,11 +66,14 @@ rsdl_kd_tree::rsdl_kd_tree( const vcl_vector< rsdl_point >& points,
 }
 
 
-bool
-first_less( const vcl_pair<double,int>& left,
-            const vcl_pair<double,int>& right )
-{
-  return left.first < right.first;
+/*Using anonymous namespaces to avoid name conflict.*/
+namespace{
+    bool
+    first_less( const vcl_pair<double,int>& left,
+                const vcl_pair<double,int>& right )
+    {
+      return left.first < right.first;
+    }
 }
 
 
