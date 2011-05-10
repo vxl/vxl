@@ -1,6 +1,8 @@
 # gel/mrc/vpgl/algo/CMakeLists.txt
 # Photogrammetry Algorithms Library.
 
+set(BUILD_BUNDLER false)
+
 # vpgl/algo requires these other sections of contrib
 IF(BUILD_RPL)
 
@@ -19,6 +21,7 @@ SET( vpgl_algo_sources
   vpgl_fm_compute_ransac.h         vpgl_fm_compute_ransac.cxx
   vpgl_fm_compute_reg_ransac.h     vpgl_fm_compute_reg_ransac.cxx
   vpgl_fm_compute_affine_ransac.h  vpgl_fm_compute_affine_ransac.cxx
+  vpgl_em_compute_5_point.h        
   vpgl_lens_warp_mapper.h
   vpgl_vsol_lens_warp.h            vpgl_vsol_lens_warp.cxx
   vpgl_list.h                      vpgl_list.txx
@@ -41,10 +44,34 @@ SET( vpgl_algo_sources
   vpgl_bundle_rolling_shutter_adjust.h  # vpgl_bundle_rolling_shutter_adjust.cxx
 )
 
+IF(BUILD_BUNDLER)
+    INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR})
+    INCLUDE_DIRECTORIES(${VXLCORE_INCLUDE_DIR})
+
+    SET(vpgl_algo_sources ${vpgl_algo_sources}
+          vpgl_bundler.h                   vpgl_bundler.cxx
+
+          vpgl_bundler_sfm.h
+          vpgl_bundler_sfm_impl.h       vpgl_bundler_sfm_impl.cxx
+
+          vpgl_bundler_tracks.h
+          vpgl_bundler_tracks_impl.h       vpgl_bundler_tracks_impl.cxx
+
+          vpgl_bundler_settings.h
+          vpgl_bundler_inters.h)
+ENDIF(BUILD_BUNDLER)
+
+
 AUX_SOURCE_DIRECTORY(Templates vpgl_algo_sources)
 
 ADD_LIBRARY(vpgl_algo ${vpgl_algo_sources})
-TARGET_LINK_LIBRARIES( vpgl_algo vpgl vpgl_file_formats rrel vsol bgeo vgl_algo vnl_algo vnl vgl vil vul )
+
+IF( BUILD_BUNDLER )
+    TARGET_LINK_LIBRARIES( vpgl_algo vpgl vpgl_file_formats rrel vsol bgeo vgl_algo vnl_algo vnl vgl vil vul )
+ELSE( BUILD_BUNDLER )
+    TARGET_LINK_LIBRARIES( vpgl_algo vpgl vpgl_file_formats rrel vsol bgeo vgl_algo vnl_algo vnl vgl vil vul bapl rsdl vbl)
+ENDIF( BUILD_BUNDLER)
+
 
 IF( BUILD_TESTING )
   SUBDIRS(tests)
