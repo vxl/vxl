@@ -5,10 +5,14 @@
 // \file
 
 #include "vpgl_fundamental_matrix.h"
+#include "vpgl_essential_matrix.h"
+#include "vpgl_calibration_matrix.h"
+
 //
 #include <vnl/vnl_vector_fixed.h>
 #include <vnl/vnl_matrix_fixed.h>
 #include <vnl/vnl_cross_product_matrix.h>
+#include <vnl/vnl_inverse.h>
 #include <vnl/io/vnl_io_matrix_fixed.h>
 #include <vnl/algo/vnl_svd.h>
 #include <vnl/vnl_vector.h>
@@ -38,6 +42,26 @@ vpgl_fundamental_matrix<T>::vpgl_fundamental_matrix(
   : cached_svd_(NULL)
 {
   set_matrix( other.F_ );
+}
+
+//---------------------------------
+//: From Essential Matrix.
+//: Since E = Kl^T * F * Kr, F = Kl^-T * F * Kr^-1
+template <class T>
+vpgl_fundamental_matrix<T>::vpgl_fundamental_matrix(
+    const vpgl_calibration_matrix<T> &kr,
+    const vpgl_calibration_matrix<T> &kl,
+    const vpgl_essential_matrix<T> &em) : cached_svd_(NULL){
+
+    vnl_matrix_fixed<T, 3, 3> kl_tinv = 
+        vnl_inverse(kl.get_matrix().transpose());
+
+    vnl_matrix_fixed<T, 3, 3> em_inv = em.cached_svd_->inverse();
+
+    vnl_matrix_fixed<T, 3, 3> kr_inv = 
+        vnl_inverse(kl.get_matrix());
+
+    set_matrix(kl_tinv * em_inv * kr_inv);
 }
 
 

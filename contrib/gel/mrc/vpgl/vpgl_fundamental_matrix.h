@@ -22,6 +22,8 @@
 // \verbatim
 //  Modifications
 //   May 06, 2009  Ricardo Fabbri   Overloaded {l,r}_epipolar_line to take line as input
+//   May 10, 2010 Andrew Hoelscher - Added a constructor based off two
+//      calibration matrices and an essential matrix.
 // \endverbatim
 
 #include <vnl/vnl_fwd.h>
@@ -30,6 +32,8 @@
 
 #include "vpgl_proj_camera.h"
 
+template <class T> class vpgl_essential_matrix;
+template <class T> class vpgl_calibration_matrix;
 
 template <class T>
 class vpgl_fundamental_matrix
@@ -53,6 +57,12 @@ class vpgl_fundamental_matrix
   //: Copy Constructor
   vpgl_fundamental_matrix(const vpgl_fundamental_matrix<T>& other);
 
+  //: Construct from an essential matrix and two calibration matrices.
+  // Since E = Kl^T * F * Kr, then F = Kl^-T * F * Kr^-1.
+  // WARNING! This constructor uses two 3x3 inverse calculations, so it is expensive.
+  vpgl_fundamental_matrix(const vpgl_calibration_matrix<T> &kr,
+                          const vpgl_calibration_matrix<T> &kl,
+                          const vpgl_essential_matrix<T> &em); 
   //: Assignment
   const vpgl_fundamental_matrix<T>& operator=( const vpgl_fundamental_matrix<T>& fm );
 
