@@ -67,9 +67,13 @@ AUX_SOURCE_DIRECTORY(Templates vpgl_algo_sources)
 ADD_LIBRARY(vpgl_algo ${vpgl_algo_sources})
 
 IF( BUILD_BUNDLER )
-    TARGET_LINK_LIBRARIES( vpgl_algo vpgl vpgl_file_formats rrel vsol bgeo vgl_algo vnl_algo vnl vgl vil vul )
+    TARGET_LINK_LIBRARIES( vpgl_algo vpgl vpgl_file_formats rrel vsol bgeo
+        vgl_algo vnl_algo vnl vgl vil vul bapl rsdl vbl)
+
 ELSE( BUILD_BUNDLER )
-    TARGET_LINK_LIBRARIES( vpgl_algo vpgl vpgl_file_formats rrel vsol bgeo vgl_algo vnl_algo vnl vgl vil vul bapl rsdl vbl)
+
+    TARGET_LINK_LIBRARIES( vpgl_algo vpgl vpgl_file_formats rrel vsol bgeo 
+        vgl_algo vnl_algo vnl vgl vil vul )
 ENDIF( BUILD_BUNDLER)
 
 
