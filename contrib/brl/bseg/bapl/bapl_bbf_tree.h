@@ -11,6 +11,7 @@
 //
 // \verbatim
 //  Modifications
+//  May 10, 2010 Andrew Hoelscher - Added verbose option to disable printing
 // \endverbatim
 
 #include <vcl_vector.h>

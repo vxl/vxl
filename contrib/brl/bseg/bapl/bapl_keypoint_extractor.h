@@ -9,6 +9,7 @@
 //
 // \verbatim
 //  Modifications
+//  May 10, 2010 Andrew Hoelscher - Added verbose option to disable printing
 // \endverbatim
 
 #include <vxl_config.h>
@@ -25,7 +26,8 @@
 //: Extract the lowe keypoints from an image
 bool bapl_keypoint_extractor( const vil_image_resource_sptr & image,
                               vcl_vector<bapl_keypoint_sptr> & keypoints,
-                              float curve_ratio = 10.0f );
+                              float curve_ratio = 10.0f,
+                              bool verbose = true);
 
 //: Find the peaks in the DoG pyramid
 void bapl_dog_peaks( vcl_vector<vgl_point_3d<float> >& peak_pts,

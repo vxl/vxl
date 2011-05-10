@@ -9,6 +9,7 @@
 //
 // \verbatim
 //  Modifications
+//  May 10, 2010 Andrew Hoelscher - Added verbose option to disable printing
 // \endverbatim
 
 #include <vil/vil_image_view.h>
@@ -29,7 +30,8 @@ class bapl_lowe_pyramid_set : public vbl_ref_count
   //: Constructor
   // if \param num_octaves is zero the number of octaves is determined from the image size
   bapl_lowe_pyramid_set( const vil_image_resource_sptr& image,
-                         unsigned octave_size=3, unsigned num_octaves=0 );
+                         unsigned octave_size=3, unsigned num_octaves=0,
+                         bool verbose=true);
 
   //: Accessor for the Gaussian pyramid
   const vil_image_view<float>& gauss_at( float scale,
@@ -95,6 +97,7 @@ class bapl_lowe_pyramid_set : public vbl_ref_count
 
   int num_octaves_;
   int octave_size_;
+  bool verbose_;
 };
 
 #endif // bapl_lowe_pyramid_set_h_

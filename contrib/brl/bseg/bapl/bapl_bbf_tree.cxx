@@ -106,11 +106,13 @@ bapl_bbf_tree::bapl_bbf_tree(const vcl_vector< bapl_keypoint_sptr >& points, int
 
 
 //: For sorting pairs by their first element
-bool
-first_less( const vcl_pair<double,int>& left_pair,
-            const vcl_pair<double,int>& right_pair )
-{
-  return left_pair.first < right_pair.first;
+namespace{
+    bool
+    first_less( const vcl_pair<double,int>& left_pair,
+                const vcl_pair<double,int>& right_pair )
+    {
+      return left_pair.first < right_pair.first;
+    }
 }
 
 

@@ -21,17 +21,22 @@
 //: Extract the lowe keypoints from an image
 bool bapl_keypoint_extractor( const vil_image_resource_sptr & image,
                               vcl_vector<bapl_keypoint_sptr> & keypoints,
-                              float curve_ratio )
+                              float curve_ratio, bool verbose)
 {
   // Create the group of image pyramids
   bapl_lowe_pyramid_set_sptr pyramid_set = new bapl_lowe_pyramid_set(image,3,6);
 
-  vcl_cout << "Detecting Peaks" << vcl_endl;
+  if(verbose){
+    vcl_cout << "Detecting Peaks" << vcl_endl;
+  }
+
   // detect the peaks
   vcl_vector<vgl_point_3d<float> > peak_pts;
   bapl_dog_peaks(peak_pts, pyramid_set, curve_ratio);
 
-  vcl_cout << "Peak count: " << peak_pts.size() <<vcl_endl;
+  if(verbose){
+    vcl_cout << "Peak count: " << peak_pts.size() <<vcl_endl;
+  }
 
   bapl_lowe_orientation orientor(3.0, 36);
   for (unsigned i=0;i<peak_pts.size();++i)
@@ -57,8 +62,9 @@ bool bapl_keypoint_extractor( const vil_image_resource_sptr & image,
     keypoints[i]->set_id(i);
   }
 
-  vcl_cout<<"Found "<<keypoints.size()<<" keypoints."<<vcl_endl;
-
+  if(verbose){
+    vcl_cout<<"Found "<<keypoints.size()<<" keypoints."<<vcl_endl;
+  }
 
   return true;
 }

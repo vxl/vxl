@@ -20,13 +20,14 @@
 
 //: Constructor
 bapl_lowe_pyramid_set::bapl_lowe_pyramid_set( const vil_image_resource_sptr& image,
-                                              unsigned octave_size, unsigned num_octaves )
+                                              unsigned octave_size, unsigned num_octaves, bool verbose)
  : gauss_pyramid_(octave_size, num_octaves),
    dog_pyramid_(octave_size, num_octaves),
    grad_orient_pyramid_(octave_size, num_octaves),
    grad_mag_pyramid_(octave_size, num_octaves),
    num_octaves_(num_octaves),
-   octave_size_(octave_size)
+   octave_size_(octave_size),
+   verbose_(verbose)
 {
   // determine the number of octaves if not provided
   if ( num_octaves == 0 ) {
@@ -41,7 +42,10 @@ bapl_lowe_pyramid_set::bapl_lowe_pyramid_set( const vil_image_resource_sptr& ima
     grad_orient_pyramid_.resize(num_octaves_);
     grad_mag_pyramid_.resize(num_octaves_);
   }
-  vcl_cout << " number of octaves: " << num_octaves_ << vcl_endl;
+  
+  if(verbose){
+    vcl_cout << " number of octaves: " << num_octaves_ << vcl_endl;
+  }
 
   // Cast into float and upsample by 2x
   vil_image_view<float> image2x;
