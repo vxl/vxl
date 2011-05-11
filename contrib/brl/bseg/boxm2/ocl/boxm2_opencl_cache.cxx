@@ -9,12 +9,17 @@ boxm2_opencl_cache::boxm2_opencl_cache(boxm2_scene_sptr scene,
                                        bocl_device_sptr device,
                                        int maxBlocks)
 {
+  //store max bytes allowed in cache - subtract 15% MB for saftey
   maxBlocksInCache = maxBlocks;
+  maxBytesInCache_ = (long) device->info().total_global_memory_; 
+  maxBytesInCache_ -= (long) (maxBytesInCache_ * .20); 
+  bytesInCache_ = 0; 
 
   // by default try to create an LRU cache
   boxm2_lru_cache::create(scene);
   cpu_cache_ = boxm2_cache::instance();
 
+  //store the device pointer and context associated with the device
   device_ = device;
   context_ = &device->context();
 
@@ -26,7 +31,6 @@ boxm2_opencl_cache::boxm2_opencl_cache(boxm2_scene_sptr scene,
                             &status);
   if (!check_val(status,CL_SUCCESS,"boxm2_opencl_cache:: failed in command queue creation" + error_to_string(status)))
     return;
-
   queue_ = &q_;
   block_info_ = 0;
   scene_ = scene;
@@ -65,6 +69,8 @@ bool boxm2_opencl_cache::clear_cache()
   for (blks=cached_blocks_.begin(); blks!=cached_blocks_.end(); ++blks)
   {
     bocl_mem* toDelete = blks->second;
+    bytesInCache_ -= toDelete->num_bytes(); 
+    //vcl_cout<<"Deleting block: "<<toDelete->id()<<"...size: "<<toDelete->num_bytes()<<vcl_endl;
     delete toDelete;
   }
   cached_blocks_.clear();
@@ -78,12 +84,44 @@ bool boxm2_opencl_cache::clear_cache()
     for (data_blks=data_map.begin(); data_blks!=data_map.end(); ++data_blks)
     {
       bocl_mem* toDelete = data_blks->second;
+      bytesInCache_ -= toDelete->num_bytes();
+      boxm2_block_id bid = data_blks->first; 
+      //vcl_cout<<"Deleting data type: "<<datas->first<<" id "<<bid<<"..size: "<<toDelete->num_bytes()<<vcl_endl;
       delete toDelete;
     }
     data_map.clear();
   }
   cached_data_.clear();
+  
+  //notify exceptional case
   return true;
+}
+
+long boxm2_opencl_cache::bytes_in_cache() 
+{ 
+  //count up bytes in cache (like clearing, but no deleting...
+  long count = 0; 
+
+  vcl_map<boxm2_block_id, bocl_mem*>::iterator blks;
+  for (blks=cached_blocks_.begin(); blks!=cached_blocks_.end(); ++blks)
+  {
+    bocl_mem* curr = blks->second;
+    count += curr->num_bytes(); 
+  }
+
+  //delete data from each cache
+  vcl_map<vcl_string, vcl_map<boxm2_block_id, bocl_mem*> >::iterator datas;
+  for (datas=cached_data_.begin(); datas!=cached_data_.end(); ++datas)
+  {
+    vcl_map<boxm2_block_id, bocl_mem*>& data_map = datas->second;
+    vcl_map<boxm2_block_id, bocl_mem*>::iterator data_blks;
+    for (data_blks=data_map.begin(); data_blks!=data_map.end(); ++data_blks)
+    {
+      bocl_mem* curr = data_blks->second;
+      count += curr->num_bytes();
+    }
+  }
+  return count; 
 }
 
 //: realization of abstract "get_block(block_id)"
@@ -91,6 +129,7 @@ bocl_mem* boxm2_opencl_cache::get_block(boxm2_block_id id)
 {
   //then look for the block you're requesting
   if ( cached_blocks_.find(id) != cached_blocks_.end() ) {
+    
     //load block info
     boxm2_block* loaded = cpu_cache_->get_block(id);
     if (block_info_) {
@@ -108,22 +147,31 @@ bocl_mem* boxm2_opencl_cache::get_block(boxm2_block_id id)
   }
 
   //check to see which block to kick out
-  if ( cached_blocks_.size() >= (unsigned int)maxBlocksInCache ) {
+  //grab block from CPU cache and see if the GPU cache needs some cleaning
+  boxm2_block* loaded = cpu_cache_->get_block(id);
+  boxm2_array_3d<uchar16>& trees = loaded->trees();
+  vcl_size_t toLoadSize = trees.size()*sizeof(uchar16); 
+  
+  if ( this->bytes_in_cache()+toLoadSize > maxBytesInCache_ && !cached_blocks_.empty() )
+  {
+    //grab random block
     vnl_random rand;
     unsigned rIdx = rand.lrand32(0, cached_blocks_.size()-1);
     vcl_map<boxm2_block_id, bocl_mem*>::iterator iter = cached_blocks_.begin();
     for (unsigned int i=0; i<rIdx; ++i) ++iter;
+    
+    //subtract size and delete
     bocl_mem* toDelete = iter->second;
+    bytesInCache_ -= toDelete->num_bytes(); 
     delete toDelete;
     cached_blocks_.erase(iter);
   }
 
   //otherwise load it from disk with blocking
-  boxm2_block* loaded = cpu_cache_->get_block(id);
-  boxm2_array_3d<uchar16>& trees = loaded->trees();
-  bocl_mem* blk = new bocl_mem(*context_, trees.data_block(), trees.size()*sizeof(uchar16), "3d trees buffer " + id.to_string() );
+  bocl_mem* blk = new bocl_mem(*context_, trees.data_block(), toLoadSize, "3d trees buffer " + id.to_string() );
   blk->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR );
-
+  bytesInCache_ += blk->num_bytes(); 
+  
   //store the requested block in the cache
   cached_blocks_[id] = blk;
 
@@ -176,7 +224,7 @@ bocl_mem* boxm2_opencl_cache::get_data(boxm2_block_id id, vcl_string type, vcl_s
   //then look for the block you're requesting
   vcl_map<boxm2_block_id, bocl_mem*>::iterator iter = data_map.find(id);
   if ( iter != data_map.end() ) {
-#if 0
+#if 0 //commented out because refine CLEARS CACHE
     //mem currently stored
     bocl_mem* mem = data_map[id];
     if ( num_bytes > 0 && mem->num_bytes() != num_bytes )
@@ -196,19 +244,30 @@ bocl_mem* boxm2_opencl_cache::get_data(boxm2_block_id id, vcl_string type, vcl_s
     return iter->second;
   }
 
-  //make sure the map has a legal number of data blocks
-  if ( data_map.size() >= (unsigned int)maxBlocksInCache ) {
+  //load data into CPU cache and check size to see if GPU cache needs cleaning
+  boxm2_data_base* data_base = cpu_cache_->get_data_base(id,type,num_bytes);
+  vcl_size_t toLoadSize; 
+  if (num_bytes > 0 && data_base->buffer_length() != num_bytes )
+    toLoadSize = num_bytes; 
+  else
+    toLoadSize = data_base->buffer_length(); 
+  
+  //if ( data_map.size() >= (unsigned int)maxBlocksInCache ) 
+  if ( this->bytes_in_cache()+toLoadSize > maxBytesInCache_ && !data_map.empty() )
+  {
+    vcl_cout<<"Bytes in cache: "<<bytesInCache_<<" max bytes in cache! "<<maxBytesInCache_<<vcl_endl;
     vnl_random rand;
     unsigned rIdx = rand.lrand32(0, data_map.size()-1);
     vcl_map<boxm2_block_id, bocl_mem*>::iterator riter = data_map.begin();
     for (unsigned int i=0; i<rIdx; ++i) ++riter;
     bocl_mem* toDelete = riter->second;
+    bytesInCache_ -= toDelete->num_bytes(); 
     delete toDelete;
     data_map.erase(riter);
   }
 
   //data block isn't found...
-  boxm2_data_base* data_base = cpu_cache_->get_data_base(id,type,num_bytes);
+  //if num bytes is specified and the data doesn't match, create empty buffer
   if (num_bytes > 0 && data_base->buffer_length() != num_bytes )
   {
     bocl_mem* data = new bocl_mem(*context_, NULL, num_bytes, type);
@@ -216,10 +275,14 @@ bocl_mem* boxm2_opencl_cache::get_data(boxm2_block_id id, vcl_string type, vcl_s
     this->deep_replace_data(id,type,data);
     data->zero_gpu_buffer(*queue_);
     data_map[id] = data;
+    bytesInCache_ += data->num_bytes(); 
     return data;
   }
+  
+  //otherwise initialize buffer from CPU cache and return
   bocl_mem* data = new bocl_mem(*context_, data_base->data_buffer(), data_base->buffer_length(), type);
   data->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
+  bytesInCache_ += data->num_bytes(); 
   data_map[id] = data;
   return data;
 }
@@ -243,9 +306,10 @@ void boxm2_opencl_cache::deep_replace_data(boxm2_block_id id, vcl_string type, b
   //now replace the mem in the GPU cache.. first delete existing
   vcl_map<boxm2_block_id, bocl_mem*>& data_map = this->cached_data_map(type);
   vcl_map<boxm2_block_id, bocl_mem*>::iterator iter = data_map.find(id);
-  if ( iter != data_map.end()) {
+  if ( iter != data_map.end() ) {
     //release existing memory
     bocl_mem* toDelete = iter->second;
+    //bytesInCache_ -= toDelete->num_bytes(); 
     delete toDelete;
     data_map.erase(iter);
   }

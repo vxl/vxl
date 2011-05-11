@@ -55,6 +55,9 @@ class boxm2_opencl_cache: public vbl_ref_count
 
     //: empties out cache, deletes all bocl_mem*s
     bool clear_cache();
+    
+    //: returns num bytes in cache
+    long bytes_in_cache(); 
 
     //: deep_replace data replaces not only the current data on the gpu cached, but pushes a block to the cpu cache
     void deep_replace_data(boxm2_block_id id, vcl_string type, bocl_mem* mem);
@@ -69,6 +72,8 @@ class boxm2_opencl_cache: public vbl_ref_count
 
     //: maximum number of blocks this cache will allow (eventually this will become smart)
     int maxBlocksInCache;
+    long bytesInCache_; 
+    long maxBytesInCache_; 
 
     ////////////////////////////////////////////////////////////////////////////
     // bocl_mem objects
@@ -93,6 +98,7 @@ class boxm2_opencl_cache: public vbl_ref_count
     
     //: opencl context to use for writing to buffers
     cl_context*       context_;
+    
     //: opencl command queue to use for writing to buffers
     cl_command_queue* queue_;
     cl_command_queue q_;
@@ -166,7 +172,7 @@ class boxm2_opencl_cache: public vbl_ref_count, public boxm2_opencl_cache_base
 
     //: empties out cache, deletes all bocl_mem*s
     bool clear_cache();
-
+    
     //: returns block pointer to block specified by ID
     bocl_mem* get_block(boxm2_block_id id);
 
@@ -189,6 +195,7 @@ class boxm2_opencl_cache: public vbl_ref_count, public boxm2_opencl_cache_base
 
     //: deep_replace data replaces not only the current data on the gpu cached, but pushes a block to the cpu cache
     void deep_replace_data(boxm2_block_id id, vcl_string type, bocl_mem* mem);
+    
 
   private:
 
