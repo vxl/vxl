@@ -333,8 +333,8 @@ template <class T>
 T bsta_spherical_histogram<T>::total_counts(){
   if(!total_counts_valid_){
     total_counts_ = T(0);
-    for(vcl_map<int, T>::iterator cit = counts_.begin();
-        cit != counts_.end(); ++cit)
+    typename vcl_map<int, T>::iterator cit = counts_.begin(); 
+    for(; cit != counts_.end(); ++cit)
       total_counts_ += (*cit).second;
     total_counts_valid_ = true;
   }
