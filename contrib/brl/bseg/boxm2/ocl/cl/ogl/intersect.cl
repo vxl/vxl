@@ -1,25 +1,27 @@
-//tolerance constants/functions
+//:
+// \file
+// \brief tolerance constants/functions
 #define OGL_EPS 1.0e-8; // tolerance for intersections
 #define FOUR_THIRDS_PI 4.188790204786391f
 #define ONE_THIRD_PI 1.04719755119659775f
 
 //: calculate the volume of intersection between these two spheres
-// A sphere is represented by a float4, where (x,y,z) is it's 3d center, and 
+// A sphere is represented by a float4, where (x,y,z) is it's 3d center, and
 // w is it's radius
 float sphere_intersection_volume(float4 A, float4 B)
 {
   //distance between two spheres and radius
-  float r0 = A.w; 
+  float r0 = A.w;
   float r1 = B.w;
-  A.w = 0.0f; B.w = 0.0f; 
-  float d = distance(A,B); 
-  float difR = fabs(r0-r1); 
+  A.w = 0.0f; B.w = 0.0f;
+  float d = distance(A,B);
+  float difR = fabs(r0-r1);
 
   //0. if one sphere is completely inside the other one
   if ( d <= difR )
   {
-    float minR = min(r0, r1); 
-    return FOUR_THIRDS_PI * minR * minR * minR; 
+    float minR = min(r0, r1);
+    return FOUR_THIRDS_PI * minR * minR * minR;
   }
 
   //1. The two spheres intersect...
