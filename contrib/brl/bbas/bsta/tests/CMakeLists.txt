@@ -16,6 +16,7 @@ ADD_EXECUTABLE( bsta_test_all
   test_von_mises.cxx
   test_beta.cxx
   test_kent.cxx
+  test_spherical_histogram.cxx
 )
 
 TARGET_LINK_LIBRARIES( bsta_test_all bsta vnl vpl vbl_io vsl vbl vgl testlib )

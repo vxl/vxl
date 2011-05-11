@@ -13,7 +13,7 @@ DECLARE( test_otsu_threshold );
 DECLARE( test_sampler );
 DECLARE( test_beta );
 DECLARE( test_kent );
-
+DECLARE( test_spherical_histogram );
 void
 register_tests()
 {
@@ -30,6 +30,7 @@ register_tests()
   REGISTER( test_sampler );
   REGISTER( test_beta );
   REGISTER( test_kent );
+  REGISTER( test_spherical_histogram );
 }
 
 DEFINE_MAIN;
