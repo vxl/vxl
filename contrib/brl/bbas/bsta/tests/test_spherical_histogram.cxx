@@ -35,8 +35,8 @@ void test_spherical_histogram()
   shr.elevation_interval( el_ind, el_start, el_range);
   shr.upcount(pi/16.0, pi/16.0);
   vcl_cout << shr << '\n';
-  er = vcl_fabs(az_start) + vcl_fabs(az_range-.7853982);
-  er += vcl_fabs(el_start) + vcl_fabs(el_range-.3926991);
+  er = vcl_fabs(az_start) + vcl_fabs(az_range-pi/4.0);
+  er += vcl_fabs(el_start) + vcl_fabs(el_range-pi/8.0);
   cnt = shr.counts(pi/16.0, pi/16.0);
   er += vcl_fabs(cnt-1.0);
   TEST_NEAR("Earth coordinates - radians", er, 0.0, 0.0001);
@@ -53,7 +53,7 @@ void test_spherical_histogram()
   cnt = sh0360.counts(10.0, 10.0);
   er += vcl_fabs(cnt-1.0);
   TEST_NEAR("Math spherical coordinates - degrees", er, 0.0, 0.0001);
-  bsta_spherical_histogram<double> 
+  bsta_spherical_histogram<double>
     sh0360cut(3, 4, 337.5, 45.0, 0.0, 90.0,
               bsta_spherical_histogram<double>::DEG,
               bsta_spherical_histogram<double>::B_0_360);
