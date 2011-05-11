@@ -82,7 +82,13 @@ class boct_bit_tree2
   int set_data_ptr(int ptr, bool is_random=false); 
   
 
- private:
+  //cached arrays are public - make em const too
+  static unsigned char bit_lookup[256]; 
+  static float         centerX[585]; 
+  static float         centerY[585]; 
+  static float         centerZ[585]; 
+
+private:
 
   //: Tree structure stored as "bits" = really a char array
   unsigned char* bits_;
