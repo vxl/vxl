@@ -23,6 +23,29 @@ float4 backproject(unsigned i,unsigned j,float16 Ut,float16 V,float16 w, float4 
   return X;
 }
 
+float4 backproject_corner(unsigned i,unsigned j,float16 Ut,float16 V,float16 w, float4 origin)
+{
+  float4 inputpoint=(float4)((float)i,(float)j,1.0f,0.0f);
+
+  float4 X=(float4)(dot((float4)(Ut.s0123),inputpoint),
+                    dot((float4)(Ut.s4567),inputpoint),
+                    dot((float4)(Ut.s89ab),inputpoint),
+                    dot((float4)(Ut.scdef),inputpoint));
+
+  X=X*(float4)(w.s0123);
+
+  X=(float4)(dot((float4)(V.s0123),X),
+             dot((float4)(V.s4567),X),
+             dot((float4)(V.s89ab),X),
+             dot((float4)(V.scdef),X));
+
+  X= X / X.w;
+
+  X=normalize(X-(float4)(origin.xyzw));
+
+  return X;
+}
+
 
 bool project(__global float16 * cam, float4 p3d, float2 * p2d)
 {
@@ -63,6 +86,8 @@ bool calc_scene_ray(__constant RenderSceneInfo * linfo,
   //store float 3's
   *ray_ox = ray_o.x;     *ray_oy = ray_o.y;     *ray_oz = ray_o.z;
   *ray_dx = ray_d.x;     *ray_dy = ray_d.y;     *ray_dz = ray_d.z;
+  
+  return true;
 }
 
 
@@ -86,4 +111,6 @@ bool calc_scene_ray_generic_cam(__constant RenderSceneInfo * linfo,
   //store float 3's
   *ray_ox = ray_o.x;     *ray_oy = ray_o.y;     *ray_oz = ray_o.z;
   *ray_dx = ray_d.x;     *ray_dy = ray_d.y;     *ray_dz = ray_d.z;
+  
+  return true;
 }

@@ -50,6 +50,8 @@ int get_depth(int i) {
   
   if(i < 4681)
     return 4;
+  
+  return -1; 
 }
 
 
@@ -72,6 +74,11 @@ bool children_are_leaves(__local uchar* tree, int i)
 */
 }
 
+//parent index is floor( (bit_index-1) / 8 ) (using shifts here)
+int parent_index( int bit_index ) 
+{
+  return (bit_index-1)>>3;
+}
 
 //---------------------------------------------------------------------
 // Tree Bit manipulation helper functions

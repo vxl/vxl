@@ -14,7 +14,7 @@ SET(boxm2_ocl_pro_sources
     #boxm2_opencl_batch_update_process.h     boxm2_opencl_batch_update_process.cxx
     boxm2_ocl_processes.h
     boxm2_ocl_register.h                     boxm2_ocl_register.cxx
-    boxm2_opencl_processor.h                 boxm2_opencl_processor.cxx
+    #boxm2_opencl_processor.h                 boxm2_opencl_processor.cxx
   )
 
 AUX_SOURCE_DIRECTORY(Templates boxm2_ocl_pro_sources)
