@@ -35,7 +35,8 @@ void bvpl_taylor_basis_factory::create_canonical()
     ifs >> min_point_;
     ifs >> max_point_;
   }
-
+  vcl_cout << " Max point: " << max_point_ << " Min point: " << min_point_ << vcl_endl;
+  
   while (!ifs.eof())
   {
     vgl_point_3d<float> this_loc;
