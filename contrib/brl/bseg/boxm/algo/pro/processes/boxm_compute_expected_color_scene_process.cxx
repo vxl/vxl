@@ -15,7 +15,7 @@
 //:global variables
 namespace boxm_compute_expected_color_scene_process_globals
 {
-  const unsigned n_inputs_ = 1 ;
+  const unsigned n_inputs_ = 2 ;
   const unsigned n_outputs_ = 1;
 }
 
@@ -27,6 +27,7 @@ bool boxm_compute_expected_color_scene_process_cons(bprb_func_process& pro)
 
   vcl_vector<vcl_string> input_types_(n_inputs_);
   input_types_[0] = "boxm_scene_base_sptr";
+  input_types_[1] = "float"; //offset for appearance values
 
   vcl_vector<vcl_string> output_types_(n_outputs_);
   output_types_[0] = "boxm_scene_base_sptr";
@@ -49,7 +50,8 @@ bool boxm_compute_expected_color_scene_process(bprb_func_process& pro)
 
   //get inputs:
   boxm_scene_base_sptr scene_base = pro.get_input<boxm_scene_base_sptr>(0);
-
+  float grey_offset = pro.get_input<float>(1);
+  
   //check input's validity
   if (!scene_base.ptr()) {
     vcl_cout <<  " :-- Scene is not valid!\n";
@@ -73,7 +75,7 @@ bool boxm_compute_expected_color_scene_process(bprb_func_process& pro)
   mean_color_scene->set_paths(scene->path(), "mean_color");
   mean_color_scene->set_appearance_model(BOXM_FLOAT);
 
-  compute_expected_color(*scene, *mean_color_scene);
+  compute_expected_color(*scene, *mean_color_scene, grey_offset);
   mean_color_scene->write_scene("mean_color_scene.xml");
   pro.set_output_val<boxm_scene_base_sptr>(0, mean_color_scene);
 
