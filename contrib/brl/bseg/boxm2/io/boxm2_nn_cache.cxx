@@ -15,6 +15,10 @@ boxm2_nn_cache::~boxm2_nn_cache()
 {
   this->finish_async_blocks();
 
+  if (!read_only_) { // TODO: save the data to disk!! 
+
+  }
+
 #if 0
   // clean up block
   vcl_map<boxm2_block_id, boxm2_block* >::iterator blk_i;
@@ -169,6 +173,9 @@ boxm2_data_base* boxm2_nn_cache::get_data_base(boxm2_block_id id, vcl_string typ
 void boxm2_nn_cache::remove_data_base(boxm2_block_id, vcl_string type)
 {
   vcl_cout<<"BOXM2_DUMB_CACHE::remove_data_base not implemented"<<vcl_endl;
+  if (!read_only_) { // TODO: save the data to disk!! 
+
+  }
 }
 
 
