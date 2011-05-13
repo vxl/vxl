@@ -6,6 +6,7 @@
 
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/io/boxm2_cache.h>
+#include <boxm2/io/boxm2_stream_cache.h>
 
 #include <imesh/imesh_mesh.h>
 
@@ -16,6 +17,7 @@ void boxm2_register::register_datatype()
   REGISTER_DATATYPE( boxm2_scene_sptr );
   REGISTER_DATATYPE( boxm2_cache_sptr );
   REGISTER_DATATYPE( imesh_mesh_sptr );
+  REGISTER_DATATYPE( boxm2_stream_cache_sptr );
 }
 
 void boxm2_register::register_process()
@@ -30,4 +32,6 @@ void boxm2_register::register_process()
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_export_mesh_process,"boxm2ExportMeshProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_texture_mesh_process,"boxm2TextureMeshProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_describe_scene_process,"boxm2DescribeSceneProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_create_rw_cache_process, "boxm2CreateRWCacheProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_create_stream_cache_process, "boxm2CreateStreamCacheProcess");
 }
