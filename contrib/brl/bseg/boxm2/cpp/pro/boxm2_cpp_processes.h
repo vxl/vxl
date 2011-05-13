@@ -12,4 +12,7 @@ DECLARE_FUNC_CONS(boxm2_cpp_refine_process2);
 DECLARE_FUNC_CONS(boxm2_cpp_change_detection_process2);
 DECLARE_FUNC_CONS(boxm2_cpp_render_expected_image_process);
 DECLARE_FUNC_CONS(boxm2_cpp_render_expected_depth_process);
+DECLARE_FUNC_CONS(boxm2_cpp_cast_intensities_process);
+DECLARE_FUNC_CONS(boxm2_cpp_mean_intensities_batch_process);
+DECLARE_FUNC_CONS(boxm2_cpp_mean_intensities_print_process);
 #endif
