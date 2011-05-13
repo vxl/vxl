@@ -49,19 +49,7 @@ void boxm_save_scene_raw(boxm_scene<boct_tree<T_loc, T_data > > &scene,
   unsigned int ncells = 0;
   boxm_block_iterator<tree_type> iter(&scene);
 
-  unsigned int finest_level=100000;
-  // find the finest levels in the blocks
-  while (!iter.end()) {
-    vgl_point_3d<int> idx = iter.index();
-    scene.load_block(idx);
-    boxm_block<tree_type>* block = scene.get_block(idx);
-    vgl_box_3d<double> block_bb = block->bounding_box();
-    tree_type* tree = block->get_tree();
-    if (tree->finest_level() < int(finest_level)) {
-      finest_level = tree->finest_level();
-    }
-    iter++;
-  }
+  unsigned int finest_level=scene.finest_level();
 
   // query the finest level of the tree and do not make the resolution
   // smaller than that
@@ -191,6 +179,8 @@ void boxm_save_scene_raw(boxm_scene<boct_tree<T_loc, T_data > > &scene,
     os.close();
     iter++;
   }
+  scene.unload_active_blocks();
+  
   assert(ncells > 0);
 
   // combine the blocks
