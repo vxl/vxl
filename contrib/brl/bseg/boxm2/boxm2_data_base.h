@@ -38,6 +38,8 @@ class boxm2_data_base : public vbl_ref_count
     char *            data_buffer()    { return data_buffer_; }
     vcl_size_t        buffer_length()  { return buffer_length_; }
     boxm2_block_id&   block_id()       { return id_; }
+    //: accessor to a portion of the byte buffer 
+    char *            cell_buffer(int i, vcl_size_t cell_size);  
     
     //: setter for swapping out data buffer
     
