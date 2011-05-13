@@ -79,7 +79,6 @@ int main2(int argc, char *argv[])
   else
   {
     is = &vcl_cin;
-    vcl_cout << "Please provide some input data (or use -? for help)." << vcl_endl;
   }
 
   // Load the data from stream until end
@@ -137,7 +136,7 @@ int main2(int argc, char *argv[])
   }
 
   // Output requested statistics
-  MBL_LOG(NOTICE, logger(), "in_file: " << in_file());
+  MBL_LOG(INFO, logger(), "in_file: " << in_file());
 
   // Write a line of column headers unless suppressed
   if (!nohead())
@@ -149,12 +148,13 @@ int main2(int argc, char *argv[])
     }
     if (ofs && ofs->good()) *ofs << '\n';
   }
-
+  vcl_string my_label = in_file();
+  if (label.set()) my_label = label();
   // Write statistics in a single line
-  if (ofs && ofs->good()) *ofs << in_file() << sep();
+  if (ofs && ofs->good()) *ofs << my_label << sep();
   for (vcl_map<vcl_string,double>::const_iterator it=stats.begin(); it!=stats.end(); ++it)
   {
-    vcl_cout <<  label() << " " << it->first << ": " << it->second << vcl_endl;
+    vcl_cout <<  my_label << " " << it->first << ": " << it->second << vcl_endl;
     if (ofs && ofs->good()) *ofs << it->second << sep();
   }
   if (ofs && ofs->good()) *ofs << vcl_endl;
