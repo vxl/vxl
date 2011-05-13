@@ -1,0 +1,252 @@
+#include "boxm2_stream_cache.h"
+//:
+// \file
+
+boxm2_stream_cache_helper::~boxm2_stream_cache_helper()
+{
+  if (buf_) delete buf_;
+  if (ifs_) ifs_.close();
+}
+bool boxm2_stream_cache_helper::open_file(vcl_string filename)
+{
+  ifs_.clear();
+  ifs_.open(filename.c_str(), vcl_ios::in | vcl_ios::binary);
+  if (!ifs_) return false;
+  if (buf_) { delete buf_; buf_ = 0; }
+  return true;
+}
+void boxm2_stream_cache_helper::read(unsigned long size, boxm2_block_id id)
+{
+  char * bytes = new char[size];
+  ifs_.read(bytes, size);
+  int cnt = (int)ifs_.gcount();
+  if (buf_)
+    delete buf_;
+  buf_ = new boxm2_data_base(bytes,cnt,id);
+}     
+void boxm2_stream_cache_helper::close_file()
+{
+  ifs_.close();
+  if (buf_) { delete buf_; buf_ = 0; }
+  index_ = -1; 
+}
+
+//: return the byte buffer that contains ith cell, i is with respect to the global file
+char *boxm2_stream_cache_helper::get_cell(int i, vcl_size_t cell_size, boxm2_block_id id)
+{
+  if (i < index_) { vcl_cerr << "cannot backtrack in the file!\n"; throw 0; }
+  int dif = i-index_;
+  if (dif >= num_cells(cell_size)) return 0; // means new buf needs to be loaded
+  int byte_ind = (int)(dif*cell_size);
+  return buf_->cell_buffer(byte_ind, cell_size);
+}
+
+//: return num cells on the buf
+int boxm2_stream_cache_helper::num_cells(vcl_size_t cell_size)
+{
+  return (int)(buf_->buffer_length()/cell_size);
+}
+
+//: global initialization for singleton instance_
+boxm2_stream_cache* boxm2_stream_cache::instance_ = 0;
+
+//: global initialization for singleton destroyer instance
+boxm2_stream_cache_destroyer boxm2_stream_cache::destroyer_; 
+
+boxm2_stream_cache::boxm2_stream_cache(boxm2_scene_sptr scene, 
+                                       const vcl_vector<vcl_string>& data_types, 
+                                       const vcl_vector<vcl_string>& identifier_list, 
+                                       float num_giga) 
+ : scene_(scene), identifier_list_(identifier_list) 
+{
+  mem_size_ = (unsigned long)(num_giga*vcl_pow(2.0, 30.0));
+  vcl_cout << "Stream cache will take up " << num_giga << " GB of mem (" << mem_size_ << " bytes)." << vcl_endl;
+
+  //: populate the data type map with sizes
+  for (unsigned i = 0; i < data_types.size(); i++) {
+    boxm2_stream_cache_datatype_helper_sptr h = new boxm2_stream_cache_datatype_helper;
+    h->cell_size_ = boxm2_data_info::datasize(data_types[i]);
+    data_types_[data_types[i]] = h;
+
+    vcl_vector<boxm2_stream_cache_helper_sptr> tmp;
+    for (unsigned j = 0; j < identifier_list.size(); j++) {
+      boxm2_stream_cache_helper_sptr hh = new boxm2_stream_cache_helper;  // initializes file stream
+      tmp.push_back(hh);
+    }
+    data_streams_[data_types[i]] = tmp;
+  }
+  unsigned long tot_size = 0;
+  for (vcl_map<vcl_string, boxm2_stream_cache_datatype_helper_sptr>::iterator it = data_types_.begin(); it != data_types_.end(); it++) {
+    tot_size += (unsigned long)it->second->cell_size_;
+  }
+  unsigned long k = (unsigned long)vcl_floor(float(mem_size_)/(identifier_list_.size()*tot_size));
+  
+  //: set buffer size in bytes for each data type 
+  for (vcl_map<vcl_string, boxm2_stream_cache_datatype_helper_sptr>::iterator it = data_types_.begin(); it != data_types_.end(); it++) {
+    it->second->buf_size_  = (unsigned long)it->second->cell_size_*k;
+    vcl_cout << it->first << " will have " << it->second->buf_size_/vcl_pow(2.0, 20.0) << " MB buffers per identifier.\n";
+  } 
+}
+
+//: Only one instance should be created
+boxm2_stream_cache* boxm2_stream_cache::instance()
+{
+  if (!instance_)
+    vcl_cerr<<"warning: boxm2_stream_cache:: instance has not been created\n";
+  return instance_;
+}
+
+//: hidden destructor (private so it cannot be called -- forces the class to be singleton)
+boxm2_stream_cache::~boxm2_stream_cache()
+{
+  data_types_.clear();
+  for (vcl_map<vcl_string, vcl_vector<boxm2_stream_cache_helper_sptr> >::iterator it = data_streams_.begin(); 
+    it != data_streams_.end(); it++) {
+      it->second.clear(); // calls the destructor for each member which closes the streams
+  }
+  data_streams_.clear();
+}
+
+//: PUBLIC create method, for creating singleton instance of boxm2_cache
+void boxm2_stream_cache::create(boxm2_scene_sptr scene, 
+                                const vcl_vector<vcl_string>& data_types, 
+                                const vcl_vector<vcl_string>& identifier_list, float num_giga)
+{
+  if(boxm2_stream_cache::exists())
+    vcl_cout << "boxm2_lru_cache:: boxm2_cache singleton already created" << vcl_endl;
+  else {
+    instance_ = new boxm2_stream_cache(scene, data_types, identifier_list, num_giga); 
+    destroyer_.set_singleton(instance_);
+  }
+}
+
+template <boxm2_data_type T>
+bool boxm2_stream_cache::open_streams(vcl_string data_type, boxm2_stream_cache_datatype_helper_sptr h) 
+{
+  vcl_vector<boxm2_stream_cache_helper_sptr>& strs = data_streams_[data_type];
+  if (strs.size() != identifier_list_.size()) return false;
+  
+  for (unsigned i = 0; i < identifier_list_.size(); i++) {
+    vcl_string key = boxm2_data_traits<T>::prefix(identifier_list_[i]);
+    vcl_string filename = scene_->data_path() + key + "_" + h->current_block_.to_string() + ".bin";
+    unsigned long numBytes = vul_file::size(filename);
+    int cnt = int(numBytes/(float)h->cell_size_);
+    if (h->cell_cnt_ < 0) h->cell_cnt_ = cnt;
+    else if (h->cell_cnt_ != cnt) return false;
+    if (!strs[i]->open_file(filename.c_str())) {
+      vcl_cerr<<"boxm2_stream_cache::get_next cannot open file "<<filename<<vcl_endl;
+      throw 0;
+    }
+  }
+
+  return true;
+}
+
+boxm2_stream_cache_datatype_helper_sptr boxm2_stream_cache::get_helper(vcl_string& data_type) 
+{
+  vcl_map<vcl_string, boxm2_stream_cache_datatype_helper_sptr >::iterator it = data_types_.find(data_type);
+  if (it == data_types_.end()) {
+    vcl_cerr << "boxm2_stream_cache::get_next cannot locate datatype: "<<data_type<<vcl_endl;
+    throw 0;
+  }
+  return it->second;
+}
+
+//: returns the data points pointed by the current_index_ and then advances the current_index_ by 1
+template <boxm2_data_type T, class datatype> vcl_vector<datatype> boxm2_stream_cache::get_next(boxm2_block_id id, int index)
+{
+  //: get the data of this data type
+  vcl_string data_type = boxm2_data_traits<T>::prefix();
+  boxm2_stream_cache_datatype_helper_sptr h = get_helper(data_type);
+  vcl_vector<boxm2_stream_cache_helper_sptr>& streams = data_streams_[data_type];
+
+  if (h->current_index_ < 0) {  // this is the first time we're doing anything about this data type
+    h->current_block_ = id;
+    h->current_index_ = 0;
+    //: open up all the streams
+    if (!open_streams<T>(data_type, h)) { vcl_cout << "Error opening streams!\n"; throw 0; }
+  } else if (h->current_block_ != id) {  // opening a new block, clear the current streams and open new ones
+    h->current_block_ = id;
+    h->current_index_ = 0;
+    for (unsigned i = 0; i < streams.size(); i++) {
+      streams[i]->close_file();
+    }
+    //: open up all the streams
+    if (!open_streams<T>(data_type, h)) { vcl_cout << "Error opening streams!\n"; throw 0; }
+  }
+
+  // now return the data elements at the current index, if buf indices are zero it means the buf was never read
+  vcl_vector<datatype> output;
+  if (!streams.size()) return output;  // return an empty list
+  if (h->current_index_ >= h->cell_cnt_) { // we've reached end of file
+    for (unsigned i =0; i < streams.size(); i++) {
+      streams[i]->close_file();
+    }
+    h->current_index_ = -1;
+    return output;  
+  }
+
+  if (index >=0 && h->current_index_ != index) {
+    vcl_cerr << "Indices are not in sync!\n";
+    throw 0;
+  }
+
+  if (streams[0]->index_ < 0) {  // read the first chunks into the bufs
+    for (unsigned i = 0; i < streams.size(); i++) {
+      streams[i]->read(h->buf_size_, h->current_block_);
+      streams[i]->index_ = 0;
+    }
+  }
+  
+  //: read the next cell
+  for (unsigned i = 0; i < streams.size(); i++) {
+    char * cell = streams[i]->get_cell(h->current_index_, h->cell_size_, h->current_block_);
+    if (!cell) {  // need to read next chunk
+      streams[i]->index_ = streams[i]->index_ + streams[i]->num_cells(h->cell_size_);
+      streams[i]->read(h->buf_size_, h->current_block_);
+      //: now it should be alright
+      cell = streams[i]->get_cell(h->current_index_, h->cell_size_, h->current_block_); 
+      if (!cell) { vcl_cerr << "problem in reading from files!\n"; throw 0; }
+    }
+    output.push_back(reinterpret_cast<datatype*>(cell)[0]);
+  }
+  h->current_index_++;
+
+  //: check again as there may not be another call
+  if (h->current_index_ >= h->cell_cnt_) { // we've reached end of file
+    for (unsigned i =0; i < streams.size(); i++) {
+      streams[i]->close_file();
+    }
+    h->current_index_ = -1;
+  }
+  
+  return output;
+}
+
+//: Binary write boxm2_cache  to stream
+void vsl_b_write(vsl_b_ostream& os, boxm2_stream_cache const& scene){}
+void vsl_b_write(vsl_b_ostream& os, const boxm2_stream_cache* &p){}
+void vsl_b_write(vsl_b_ostream& os, boxm2_stream_cache_sptr& sptr){}
+void vsl_b_write(vsl_b_ostream& os, boxm2_stream_cache_sptr const& sptr){}
+
+//: Binary load boxm2_cache  from stream.
+void vsl_b_read(vsl_b_istream& is, boxm2_stream_cache &scene){}
+void vsl_b_read(vsl_b_istream& is, boxm2_stream_cache* p){}
+void vsl_b_read(vsl_b_istream& is, boxm2_stream_cache_sptr& sptr){}
+void vsl_b_read(vsl_b_istream& is, boxm2_stream_cache_sptr const& sptr){}
+
+boxm2_stream_cache_destroyer::boxm2_stream_cache_destroyer(boxm2_stream_cache* s) 
+{
+  s_ = s;
+}
+//: the destructor deletes the instance
+boxm2_stream_cache_destroyer::~boxm2_stream_cache_destroyer()
+{
+  if (s_ != 0)
+    delete s_;
+}
+
+void boxm2_stream_cache_destroyer::set_singleton(boxm2_stream_cache *s) 
+{
+  s_ = s;
+}
