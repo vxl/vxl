@@ -227,8 +227,9 @@ static unsigned replace(char from, char to, vcl_string &s)
 bool vul_file::delete_file_glob(vcl_string const& file_glob)
 {
 #if defined(VCL_WIN32) && !defined(__CYGWIN__)
-  vcl_string command = "del " + file_glob;
+  vcl_string command = file_glob;
   replace('/', '\\', command);
+  command = "del /Q " + command;
 #else
   vcl_string command = "/bin/rm -f " + file_glob;
 #endif
