@@ -120,7 +120,8 @@ class boxm2_data_traits<BOXM2_AUX>
  public:
   typedef vnl_vector_fixed<float, 4> datatype;
   static vcl_size_t datasize(){return sizeof(datatype);}
-  static vcl_string prefix(){ return "aux";}
+  static vcl_string prefix(const vcl_string& identifier = "")
+  { if (!identifier.size()) return "aux"; else return "aux_"+identifier; }
 };
 
 template<>
@@ -129,7 +130,8 @@ class boxm2_data_traits<BOXM2_AUX0>
  public:
   typedef float datatype;
   static vcl_size_t datasize(){return sizeof(datatype);}
-  static vcl_string prefix(){ return "aux0";}
+  static vcl_string prefix(const vcl_string& identifier = "")
+  { if (!identifier.size()) return "aux0"; else return "aux0_"+identifier; }
 };
 template<>
 class boxm2_data_traits<BOXM2_AUX1>
@@ -137,7 +139,8 @@ class boxm2_data_traits<BOXM2_AUX1>
  public:
   typedef float datatype;
   static vcl_size_t datasize(){return sizeof(datatype);}
-  static vcl_string prefix(){ return "aux1";}
+  static vcl_string prefix(const vcl_string& identifier = "")
+  { if (!identifier.size()) return "aux1"; else return "aux1_"+identifier; }
 };
 template<>
 class boxm2_data_traits<BOXM2_AUX2>
@@ -145,7 +148,8 @@ class boxm2_data_traits<BOXM2_AUX2>
  public:
   typedef float datatype;
   static vcl_size_t datasize(){return sizeof(datatype);}
-  static vcl_string prefix(){ return "aux2";}
+  static vcl_string prefix(const vcl_string& identifier = "")
+  { if (!identifier.size()) return "aux2"; else return "aux2_"+identifier; }
 };
 template<>
 class boxm2_data_traits<BOXM2_AUX3>
@@ -153,7 +157,8 @@ class boxm2_data_traits<BOXM2_AUX3>
  public:
   typedef float datatype;
   static vcl_size_t datasize(){return sizeof(datatype);}
-  static vcl_string prefix(){ return "aux3";}
+  static vcl_string prefix(const vcl_string& identifier = "")
+  { if (!identifier.size()) return "aux3"; else return "aux3_"+identifier; }
 };
 template<>
 class boxm2_data_traits<BOXM2_BATCH_HISTOGRAM>
@@ -169,7 +174,8 @@ class boxm2_data_traits<BOXM2_INTENSITY>
  public:
   typedef float datatype;
   static vcl_size_t datasize(){return sizeof(datatype);}
-  static vcl_string prefix(){ return "boxm2_intensity";}
+  static vcl_string prefix(const vcl_string& identifier = "")
+  { if (!identifier.size()) return "boxm2_intensity"; else return "boxm2_intensity_"+identifier; }
 };
 //: HACKY WAY TO GENERICALLY GET DATASIZES -
 class boxm2_data_info
@@ -196,16 +202,16 @@ class boxm2_data_info
       if(prefix == boxm2_data_traits<BOXM2_NUM_OBS>::prefix())
         return boxm2_data_traits<BOXM2_NUM_OBS>::datasize(); 
         
-      if(prefix == boxm2_data_traits<BOXM2_AUX>::prefix())
-        return boxm2_data_traits<BOXM2_AUX>::datasize();
-      if(prefix == boxm2_data_traits<BOXM2_AUX0>::prefix())
+      if(prefix.find(boxm2_data_traits<BOXM2_AUX0>::prefix()) != vcl_string::npos)
         return boxm2_data_traits<BOXM2_AUX0>::datasize();
-      if(prefix == boxm2_data_traits<BOXM2_AUX1>::prefix())
+      if(prefix.find(boxm2_data_traits<BOXM2_AUX1>::prefix()) != vcl_string::npos)
         return boxm2_data_traits<BOXM2_AUX1>::datasize();
-      if(prefix == boxm2_data_traits<BOXM2_AUX2>::prefix())
+      if(prefix.find(boxm2_data_traits<BOXM2_AUX2>::prefix()) != vcl_string::npos)
         return boxm2_data_traits<BOXM2_AUX2>::datasize();
-      if(prefix == boxm2_data_traits<BOXM2_AUX3>::prefix())
+      if(prefix.find(boxm2_data_traits<BOXM2_AUX3>::prefix()) != vcl_string::npos)
         return boxm2_data_traits<BOXM2_AUX3>::datasize();
+      if(prefix.find(boxm2_data_traits<BOXM2_AUX>::prefix()) != vcl_string::npos)
+        return boxm2_data_traits<BOXM2_AUX>::datasize();
      
       if(prefix.find(boxm2_data_traits<BOXM2_INTENSITY>::prefix()) != vcl_string::npos)
         return boxm2_data_traits<BOXM2_INTENSITY>::datasize();
