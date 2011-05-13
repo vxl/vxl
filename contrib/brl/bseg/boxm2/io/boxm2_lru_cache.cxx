@@ -9,8 +9,10 @@ void boxm2_lru_cache::create(boxm2_scene_sptr scene)
 {
   if(boxm2_cache::exists())
     vcl_cout << "boxm2_lru_cache:: boxm2_cache singleton already created" << vcl_endl;
-  else
+  else {
     instance_ = new boxm2_lru_cache(scene); 
+    destroyer_.set_singleton(instance_);
+  }
 }
 
 //: constructor, set the directory path
@@ -22,7 +24,30 @@ boxm2_lru_cache::boxm2_lru_cache(boxm2_scene_sptr scene) : boxm2_cache(scene)
 //: destructor flushes the memory for currently ongoing asynchronous requests
 boxm2_lru_cache::~boxm2_lru_cache()
 {
-  //DELETE items in both maps
+  if (!read_only_) {
+    vcl_cout << "In CACHE DESTRUCTOR!!\n";
+    //DELETE items in both maps
+    // save the data and delete
+    for (vcl_map<vcl_string, vcl_map<boxm2_block_id, boxm2_data_base*> >::iterator iter = cached_data_.begin(); 
+      iter != cached_data_.end(); iter++) 
+    {
+      vcl_cout << "cache saving data type: " << iter->first << "\n";
+      for (vcl_map<boxm2_block_id, boxm2_data_base*>::iterator it = iter->second.begin(); it != iter->second.end(); it++) {
+        boxm2_sio_mgr::save_block_data_base(scene_dir_, it->first, it->second, iter->first);
+        // now throw it away
+        delete it->second;  
+      }
+      iter->second.clear();
+    }
+
+    for (vcl_map<boxm2_block_id, boxm2_block*>::iterator iter = cached_blocks_.begin();
+      iter != cached_blocks_.end(); iter++)
+    {
+      boxm2_block_id id = iter->first;
+      vcl_cout << "cache saving data block: " << id.to_string() << "\n";
+      boxm2_sio_mgr::save_block(scene_dir_, iter->second);
+    }
+  }
 }
 
 //: realization of abstract "get_block(block_id)"
@@ -101,11 +126,13 @@ void boxm2_lru_cache::remove_data_base(boxm2_block_id id, vcl_string type)
   //then look for the block you're requesting
   vcl_map<boxm2_block_id, boxm2_data_base*>::iterator rem = data_map.find(id);
   if ( rem != data_map.end() )
-  {
-    vcl_cout<<"REMOVING ELEMENT "<<id<<" of type "<<type<<vcl_endl;
-    
-    //found the block, now throw it away
+  { 
+    // found the block,
     boxm2_data_base* litter = data_map[id]; 
+    if (!read_only_) {// save it
+      boxm2_sio_mgr::save_block_data_base(scene_dir_, id, litter, type);
+    } 
+    // now throw it away
     delete litter; 
     data_map.erase(rem); 
   }
