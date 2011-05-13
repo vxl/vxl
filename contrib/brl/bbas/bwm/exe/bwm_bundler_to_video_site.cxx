@@ -266,6 +266,7 @@ bool axis_align_scene(vcl_vector<bwm_video_corr_sptr> & corrs,
     vnl_vector_fixed<double,3> newtranslation=rot_cami.as_matrix()*tr;
     vgl_vector_3d<double> translation_vec(newtranslation[0],newtranslation[1],newtranslation[2]);
     vgl_vector_3d<double> tr_cami=cams[i].get_translation()+translation_vec;
+
     new_cams.push_back(vpgl_perspective_camera<double>(cams[i].get_calibration(),rot_cami,tr_cami));
     if (new_cams[i].get_camera_center().z()>0)
       ++up;
@@ -613,14 +614,13 @@ int main(int argc, char** argv)
   vnl_vector_fixed<double,3> sigma = stddev(pts_3d);
   vcl_cout<<"Stddev       "<< sigma <<vcl_endl;
 
-  vgl_box_3d<double> bounding_box2;
-  for (unsigned i = 0; i < pts_3d.size(); ++i)
-  {
-    if ( vcl_abs(pts_3d[i].x()-c.x()) < 2*sigma[0] &&
-         vcl_abs(pts_3d[i].y()-c.y()) < 2*sigma[1] &&
-         vcl_abs(pts_3d[i].z()-c.z()) < 2*sigma[2] )
-      bounding_box2.add(pts_3d[i]);
-  }
+  //Define dimensions to be used for a boxm scne
+  //: Note: x-y dimensions are kind of a good approximation
+  //the z-dimension however suffers because most points tend to be on the ground and the average miss represents points of the gound
+  double minx=-3.0f*sigma[0], miny=-3.0f*sigma[1], minz=-1.0f*sigma[2];
+  double maxx=3.0f*sigma[0], maxy=3.0f*sigma[1], maxz=5.0f*sigma[2];
+
+  vgl_box_3d<double> bounding_box2(minx, miny, minz, maxx, maxy,maxz);
 
   //write bounding boxm to xml file
   bxml_document doc;
@@ -630,18 +630,18 @@ int main(int argc, char** argv)
 
   bxml_element* bbox_elm = new bxml_element("bbox");
   bbox_elm->append_text("\n");
-  bbox_elm->set_attribute("minx", -3.0f*sigma[0] );
-  bbox_elm->set_attribute("miny", -3.0f*sigma[1]  );
-  bbox_elm->set_attribute("minz", -2.0f*sigma[2] );
-  bbox_elm->set_attribute("maxx", 3.0f*sigma[0] );
-  bbox_elm->set_attribute("maxy", 3.0f*sigma[1] );
-  bbox_elm->set_attribute("maxz", 4.0f*sigma[2] );
+  bbox_elm->set_attribute("minx", minx );
+  bbox_elm->set_attribute("miny", miny);
+  bbox_elm->set_attribute("minz", minz );
+  bbox_elm->set_attribute("maxx", maxx );
+  bbox_elm->set_attribute("maxy", maxy );
+  bbox_elm->set_attribute("maxz", maxz );
   root->append_data(bbox_elm);
   root->append_text("\n");
   
 
 
-  vcl_cout << "Bounding Box containing points which are 2*sigma about the scene center: " <<bounding_box2<<'\n'
+  vcl_cout << "Bounding Box containing points which are [-3,3]sigma about x and y and [-1,5]-z_sigma about the scene center: " <<bounding_box2<<'\n'
            << "min_x = " << bounding_box2.min_x() << '\n'
            << "min_y = " << bounding_box2.min_y() << '\n'
            << "min_z = " << bounding_box2.min_z() << '\n'
