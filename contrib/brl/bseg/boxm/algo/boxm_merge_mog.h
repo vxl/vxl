@@ -61,5 +61,5 @@ class boxm_merge_mog
 bool compute_differential_entropy(boxm_scene<boct_tree<short, bsta_num_obs<bsta_gauss_sf1> > >& scene,boxm_scene<boct_tree<short, float > >& scene_out);
 
 //: Computes expected color of a voxel as mean/occupancy
-bool compute_expected_color(boxm_scene<boct_tree<short, boxm_sample<BOXM_APM_MOG_GREY> > >& scene, boxm_scene<boct_tree<short, float > >& scene_out);
+bool compute_expected_color(boxm_scene<boct_tree<short, boxm_sample<BOXM_APM_MOG_GREY> > >& scene, boxm_scene<boct_tree<short, float > >& scene_out, float grey_offset);
 #endif
