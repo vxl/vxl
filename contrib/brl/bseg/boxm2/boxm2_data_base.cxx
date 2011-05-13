@@ -23,9 +23,9 @@ boxm2_data_base::boxm2_data_base(boxm2_block_metadata data, const vcl_string dat
 
   //initialize the data to the correct value
   if (data_type == boxm2_data_traits<BOXM2_ALPHA>::prefix()) {
-    const float ALPHA_INIT = -vcl_log(1.0f - data.p_init_) / (data.sub_block_dim_.x());
+    const float ALPHA_INIT = float(-vcl_log(1.0f - data.p_init_) / (data.sub_block_dim_.x()));
     float* alphas = (float*) data_buffer_;
-    int buffer_length = buffer_length_/sizeof(float);
+    int buffer_length = (int)(buffer_length_/sizeof(float));
     for (int i=0; i<buffer_length; ++i) alphas[i] = ALPHA_INIT;
   }
   else if (data_type == boxm2_data_traits<BOXM2_NUM_OBS>::prefix() ||
@@ -38,6 +38,18 @@ boxm2_data_base::boxm2_data_base(boxm2_block_metadata data, const vcl_string dat
   else {
     vcl_memset(data_buffer_, 0, buffer_length_);
   }
+}
+
+//: accessor to a portion of the byte buffer
+char * boxm2_data_base::cell_buffer(int i, vcl_size_t cell_size) 
+{
+  if ((i+cell_size-1) < buffer_length_) {
+    char * out = new char[cell_size];
+    for (int j = 0; j < (int)cell_size; j++) {
+      out[j] = data_buffer_[i+j];
+    }
+    return out;
+  } else return 0;
 }
 
 
