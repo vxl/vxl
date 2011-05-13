@@ -1,0 +1,138 @@
+// This is brl/bseg/boxm2/cpp/pro/processes/boxm2_cpp_cast_intensities_process.cxx
+#include <bprb/bprb_func_process.h>
+//:
+// \file
+// \brief  A process for finding mean intensities at each voxel using a set of data blocks in a batch mode
+//
+// \author Ozge C. Ozcanli
+// \date May 12, 2011
+
+#include <vcl_fstream.h>
+#include <boxm2/io/boxm2_stream_cache.h>
+#include <boxm2/io/boxm2_cache.h>
+#include <boxm2/boxm2_scene.h>
+#include <boxm2/boxm2_block.h>
+#include <boxm2/boxm2_data_base.h>
+#
+//brdb stuff
+#include <brdb/brdb_value.h>
+#include <boxm2/boxm2_util.h>
+
+#include <boxm2/cpp/algo/boxm2_mean_intensities_batch_functor.h>
+#include <boxm2/cpp/algo/boxm2_data_serial_iterator.h>
+
+namespace boxm2_cpp_mean_intensities_batch_process_globals
+{
+  const unsigned n_inputs_ = 3;
+  const unsigned n_outputs_ = 0;
+}
+
+bool boxm2_cpp_mean_intensities_batch_process_cons(bprb_func_process& pro)
+{
+  using namespace boxm2_cpp_mean_intensities_batch_process_globals;
+
+  //process takes 3 inputs
+  // 0) scene
+  // 2) cache
+  // 3) stream cache 
+  vcl_vector<vcl_string> input_types_(n_inputs_);
+  input_types_[0] = "boxm2_scene_sptr";
+  input_types_[1] = "boxm2_cache_sptr";
+  input_types_[2] = "boxm2_stream_cache_sptr";
+  // process has 0 output:
+  vcl_vector<vcl_string>  output_types_(n_outputs_);
+
+  return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
+}
+
+bool boxm2_cpp_mean_intensities_batch_process(bprb_func_process& pro)
+{
+  using namespace boxm2_cpp_mean_intensities_batch_process_globals;
+
+  if ( pro.n_inputs() < n_inputs_ ){
+      vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
+      return false;
+  }
+  //get the inputs
+  unsigned i = 0;
+  boxm2_scene_sptr scene =pro.get_input<boxm2_scene_sptr>(i++);
+  boxm2_cache_sptr cache =pro.get_input<boxm2_cache_sptr>(i++);
+  boxm2_stream_cache_sptr str_cache= pro.get_input<boxm2_stream_cache_sptr>(i++);
+    
+  //: assumes that the intensities of each image have been cast into data models of type ALPHA previously
+  int alphaTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
+  //: iterate the scene block by block and write to output
+  vcl_vector<boxm2_block_id> blk_ids = scene->get_block_ids();
+  vcl_vector<boxm2_block_id>::iterator id;
+  id = blk_ids.begin();
+  for (id = blk_ids.begin(); id != blk_ids.end(); ++id) {
+    boxm2_block     *  blk   = cache->get_block(*id);
+    //: we're assuming that we have enough RAM to store the whole output block for alpha
+    boxm2_data_base *  output_alph  = cache->get_data_base(*id,boxm2_data_traits<BOXM2_ALPHA>::prefix());
+    boxm2_mean_intensities_batch_functor data_functor;
+    data_functor.init_data(output_alph, str_cache);
+    int data_buff_length = (int) (output_alph->buffer_length()/alphaTypeSize);
+    boxm2_data_serial_iterator<boxm2_mean_intensities_batch_functor>(data_buff_length,data_functor);
+    cache->remove_data_base(*id,boxm2_data_traits<BOXM2_ALPHA>::prefix());  // cache needs to be read-write cache for output alpha blocks to be written before being discarded
+  }
+   
+  return true;
+}
+
+namespace boxm2_cpp_mean_intensities_print_process_globals
+{
+  const unsigned n_inputs_ = 3;
+  const unsigned n_outputs_ = 0;
+}
+
+bool boxm2_cpp_mean_intensities_print_process_cons(bprb_func_process& pro)
+{
+  using namespace boxm2_cpp_mean_intensities_print_process_globals;
+
+  //process takes 3 inputs
+  // 0) scene
+  // 1) cache
+  vcl_vector<vcl_string> input_types_(n_inputs_);
+  input_types_[0] = "boxm2_scene_sptr";
+  input_types_[1] = "boxm2_cache_sptr";
+  input_types_[2] = "boxm2_stream_cache_sptr";
+  // process has 0 output:
+  vcl_vector<vcl_string>  output_types_(n_outputs_);
+
+  return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
+}
+
+bool boxm2_cpp_mean_intensities_print_process(bprb_func_process& pro)
+{
+  using namespace boxm2_cpp_mean_intensities_print_process_globals;
+
+  if ( pro.n_inputs() < n_inputs_ ){
+      vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
+      return false;
+  }
+  //get the inputs
+  unsigned i = 0;
+  boxm2_scene_sptr scene =pro.get_input<boxm2_scene_sptr>(i++);
+  boxm2_cache_sptr cache =pro.get_input<boxm2_cache_sptr>(i++);
+  boxm2_stream_cache_sptr str_cache =pro.get_input<boxm2_stream_cache_sptr>(i++);
+    
+  //: assumes that the intensities of each image have been cast into data models of type ALPHA previously
+  int alphaTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
+  //: iterate the scene block by block and write to output
+
+  vcl_vector<boxm2_block_id> blk_ids = scene->get_block_ids();
+  for (vcl_vector<boxm2_block_id>::iterator id = blk_ids.begin(); id != blk_ids.end(); ++id)
+  {
+    boxm2_block * blk = cache->get_block(*id);
+    //: we're assuming that we have enough RAM to store the whole output block for alpha
+    boxm2_data_base * output_alph  = cache->get_data_base(*id,boxm2_data_traits<BOXM2_ALPHA>::prefix());
+    boxm2_mean_intensities_print_functor data_functor;
+    data_functor.init_data(output_alph,str_cache);
+    int data_buff_length = (int) (output_alph->buffer_length()/alphaTypeSize);
+    boxm2_data_serial_iterator<boxm2_mean_intensities_print_functor>(data_buff_length,data_functor);
+    cache->remove_data_base(*id,boxm2_data_traits<BOXM2_ALPHA>::prefix());
+  }
+  
+  cache->disable_write();
+  return true;
+}
