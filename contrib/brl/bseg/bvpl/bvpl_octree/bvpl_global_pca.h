@@ -30,6 +30,7 @@ public:
   scenes_(scenes), aux_dirs_(aux_dirs), finest_cell_length_(finest_cell_length), nbbox_(nbbox), training_fraction_(training_fraction),path_out_(path_out)
   {
     training_scenes_ = vcl_vector<bool>(scenes_.size(), true);
+    nleaves_ =  vcl_vector<unsigned long>(scenes_.size(), 0);
     nsamples_ = 0;
     training_mean_.fill(0.0);
     pc_.fill(0.0);
@@ -108,6 +109,8 @@ protected:
   vcl_vector<double> finest_cell_length_;
   //: A vector that indicates whether a scene should be used as train (True) or test(False). Order is equivalent to scenes_
   vcl_vector<bool> training_scenes_;
+  //: A vector to keep the size of each scene
+  vcl_vector<unsigned long> nleaves_;
 
 
   

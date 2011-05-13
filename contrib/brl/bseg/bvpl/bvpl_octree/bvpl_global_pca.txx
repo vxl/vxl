@@ -73,7 +73,6 @@ bvpl_global_pca<feature_dim>::bvpl_global_pca(const vcl_string &path)
   if (temp_dim!=feature_dim) {
     valid = -10;
   }
-  //properties_elm->get_attribute("finest_cell_length", finest_cell_length_);
   properties_elm->get_attribute("training_fraction", training_fraction_);
 
   unsigned nscenes = 0;
@@ -81,7 +80,6 @@ bvpl_global_pca<feature_dim>::bvpl_global_pca(const vcl_string &path)
   
   vcl_cout << "Number of samples: " << nsamples_ << vcl_endl;
   vcl_cout << "Feature dimension: " << temp_dim << vcl_endl;
-  //vcl_cout << "Finest cell length: " << finest_cell_length_ << vcl_endl;
   vcl_cout << "Number of scenes: " << nscenes <<vcl_endl;
   
   
@@ -103,6 +101,9 @@ bvpl_global_pca<feature_dim>::bvpl_global_pca(const vcl_string &path)
   finest_cell_length_.clear();
   finest_cell_length_.resize(nscenes);
   
+  nleaves_.clear();
+  nleaves_.resize(nscenes);
+  
   for(unsigned si = 0; si < nscenes; si++)
   {
     bxml_element* scenes_elm = dynamic_cast<bxml_element*>(scenes_data[si].ptr());
@@ -111,6 +112,7 @@ bvpl_global_pca<feature_dim>::bvpl_global_pca(const vcl_string &path)
     scenes_elm->get_attribute("path", scenes_[id]);
     scenes_elm->get_attribute("aux_dir", aux_dirs_[id]);
     scenes_elm->get_attribute("cell_length" , finest_cell_length_[id]);
+    scenes_elm->get_attribute("nleaves", nleaves_[id]);
     
     vcl_cout << "Scene " << id << " is " << path << "\n";
   }
@@ -226,6 +228,7 @@ void bvpl_global_pca<feature_dim>::init()
     }
     double finest_cell_length = data_scene->finest_cell_length();
     finest_cell_length_[i] = finest_cell_length;
+    nleaves_[i] = data_scene->size();
     
     if (!(vul_file::exists(aux_dirs_[i]) && vul_file::is_directory(aux_dirs_[i]))){
       vul_file::make_directory(aux_dirs_[i]);
@@ -945,6 +948,7 @@ void bvpl_global_pca<feature_dim>::xml_write()
     scenes_elm->set_attribute("path", scenes_[i]);
     scenes_elm->set_attribute("aux_dir", aux_dirs_[i]);
     scenes_elm->set_attribute("cell_length", finest_cell_length_[i]);
+    scenes_elm->set_attribute("nleaves", nleaves_[i]);
     root->append_data(scenes_elm);
     root->append_text("\n");
   }
