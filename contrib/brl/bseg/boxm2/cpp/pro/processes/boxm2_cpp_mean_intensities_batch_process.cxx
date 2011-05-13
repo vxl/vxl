@@ -60,7 +60,7 @@ bool boxm2_cpp_mean_intensities_batch_process(bprb_func_process& pro)
   boxm2_stream_cache_sptr str_cache= pro.get_input<boxm2_stream_cache_sptr>(i++);
     
   //: assumes that the intensities of each image have been cast into data models of type ALPHA previously
-  int alphaTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
+  int alphaTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_AUX0>::prefix());
   //: iterate the scene block by block and write to output
   vcl_vector<boxm2_block_id> blk_ids = scene->get_block_ids();
   vcl_vector<boxm2_block_id>::iterator id;
@@ -68,12 +68,12 @@ bool boxm2_cpp_mean_intensities_batch_process(bprb_func_process& pro)
   for (id = blk_ids.begin(); id != blk_ids.end(); ++id) {
     boxm2_block     *  blk   = cache->get_block(*id);
     //: we're assuming that we have enough RAM to store the whole output block for alpha
-    boxm2_data_base *  output_alph  = cache->get_data_base(*id,boxm2_data_traits<BOXM2_ALPHA>::prefix());
+    boxm2_data_base *  output_alph  = cache->get_data_base(*id,boxm2_data_traits<BOXM2_AUX0>::prefix());
     boxm2_mean_intensities_batch_functor data_functor;
     data_functor.init_data(output_alph, str_cache);
     int data_buff_length = (int) (output_alph->buffer_length()/alphaTypeSize);
     boxm2_data_serial_iterator<boxm2_mean_intensities_batch_functor>(data_buff_length,data_functor);
-    cache->remove_data_base(*id,boxm2_data_traits<BOXM2_ALPHA>::prefix());  // cache needs to be read-write cache for output alpha blocks to be written before being discarded
+    cache->remove_data_base(*id,boxm2_data_traits<BOXM2_AUX0>::prefix());  // cache needs to be read-write cache for output alpha blocks to be written before being discarded
   }
    
   return true;
@@ -117,7 +117,7 @@ bool boxm2_cpp_mean_intensities_print_process(bprb_func_process& pro)
   boxm2_stream_cache_sptr str_cache =pro.get_input<boxm2_stream_cache_sptr>(i++);
     
   //: assumes that the intensities of each image have been cast into data models of type ALPHA previously
-  int alphaTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
+  int alphaTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_AUX0>::prefix());
   //: iterate the scene block by block and write to output
 
   vcl_vector<boxm2_block_id> blk_ids = scene->get_block_ids();
@@ -125,12 +125,12 @@ bool boxm2_cpp_mean_intensities_print_process(bprb_func_process& pro)
   {
     boxm2_block * blk = cache->get_block(*id);
     //: we're assuming that we have enough RAM to store the whole output block for alpha
-    boxm2_data_base * output_alph  = cache->get_data_base(*id,boxm2_data_traits<BOXM2_ALPHA>::prefix());
+    boxm2_data_base * output_alph  = cache->get_data_base(*id,boxm2_data_traits<BOXM2_AUX0>::prefix());
     boxm2_mean_intensities_print_functor data_functor;
     data_functor.init_data(output_alph,str_cache);
     int data_buff_length = (int) (output_alph->buffer_length()/alphaTypeSize);
     boxm2_data_serial_iterator<boxm2_mean_intensities_print_functor>(data_buff_length,data_functor);
-    cache->remove_data_base(*id,boxm2_data_traits<BOXM2_ALPHA>::prefix());
+    cache->remove_data_base(*id,boxm2_data_traits<BOXM2_AUX0>::prefix());
   }
   
   cache->disable_write();
