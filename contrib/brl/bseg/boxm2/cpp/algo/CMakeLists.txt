@@ -11,6 +11,8 @@ SET(boxm2_cpp_algo_sources
     boxm2_change_detection_functor.h
     boxm2_mog3_grey_processor.h       boxm2_mog3_grey_processor.cxx
     boxm2_data_serial_iterator.h
+    boxm2_cast_intensities_functor.h
+    boxm2_mean_intensities_batch_functor.h
    )
 
 ADD_LIBRARY(boxm2_cpp_algo  ${boxm2_cpp_algo_sources})
