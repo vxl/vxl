@@ -19,7 +19,7 @@ static int test_save_scene_raw()
 {
   bgeo_lvcs lvcs(33.33,44.44,10.0, bgeo_lvcs::wgs84, bgeo_lvcs::DEG, bgeo_lvcs::METERS);
   vgl_point_3d<double> origin(0,0,0);
-  vgl_vector_3d<double> block_dim(10,10,10);
+  vgl_vector_3d<double> block_dim(5,5,5);
   vgl_vector_3d<unsigned> world_dim(1,1,1);
   boxm_scene<boct_tree<short,boxm_sample<BOXM_APM_MOG_GREY> > > scene(lvcs, origin, block_dim, world_dim);
   scene.set_appearance_model(BOXM_APM_MOG_GREY);
@@ -115,6 +115,9 @@ static int test_save_scene_raw()
   for (unsigned i=0; i<10; i++) {
     boxm_refine_scene<short, boxm_sample<BOXM_APM_MOG_GREY> >(scene, thresh, reset);
     boxm_save_scene_raw<short,boxm_sample<BOXM_APM_MOG_GREY> >(scene, "scene.raw", 0);
+#ifdef DEBUG_LEAKS
+    vcl_cerr << "Leaks at test_save_scene_raw " << boct_tree_cell<short, float >::nleaks() << vcl_endl;
+#endif
   }
 
   SUMMARY();
