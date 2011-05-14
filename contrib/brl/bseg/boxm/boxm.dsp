@@ -184,6 +184,18 @@ SOURCE=.\Templates/boxm_block_iterator+boct_tree+short.bool--.cxx
 # Begin Source File
 SOURCE=.\Templates/boxm_block+boct_tree+short.bool--.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\Templates/boxm_block+boct_tree+short.char--.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/boxm_block_iterator+boct_tree+short.char--.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/boxm_scene+boct_tree+short.char--.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vbl_array_3d+boxm_block+boct_tree+short.char--~-.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"

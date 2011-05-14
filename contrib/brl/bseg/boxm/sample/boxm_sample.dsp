@@ -353,9 +353,6 @@ SOURCE=.\Templates/boxm_scene+boct_tree+short.boxm_sample+BOXM_APM_MOG_GREY---.c
 SOURCE=.\Templates/boxm_scene+boct_tree+short.boxm_sample+BOXM_APM_SIMPLE_GREY---.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/boxm_scene+boct_tree+short.bsta_num_obs+bsta_gauss_sf1---.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\Templates/boxm_scene+boct_tree+short.vgl_point_3d+double---.cxx
 # End Source File
 # Begin Source File

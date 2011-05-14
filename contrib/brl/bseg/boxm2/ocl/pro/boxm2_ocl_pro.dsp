@@ -96,6 +96,9 @@ LIB32=link.exe -lib
 SOURCE=.\boxm2_ocl_register.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\boxm2_opencl_processor.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\processes/boxm2_ocl_render_expected_image_process.cxx
 # End Source File
 # Begin Source File
@@ -146,6 +149,15 @@ SOURCE=.\processes/boxm2_ocl_convert_float_image_to_rgba_process.cxx
 # Begin Source File
 SOURCE=.\processes/boxm2_ocl_probability_of_image_process.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\processes/boxm2_ocl_probability_of_image_gl_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/boxm2_ocl_render_cone_expected_image_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/bocl_manager+boxm2_opencl_processor-.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
@@ -154,6 +166,9 @@ SOURCE=.\boxm2_ocl_register.h
 # End Source File
 # Begin Source File
 SOURCE=.\boxm2_ocl_processes.h
+# End Source File
+# Begin Source File
+SOURCE=.\boxm2_opencl_processor.h
 # End Source File
 # End Group
 # End Target

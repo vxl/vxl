@@ -134,6 +134,15 @@ SOURCE=.\boxm2_cast_cone_ray_function.h
 # Begin Source File
 SOURCE=.\boxm2_render_functions.h
 # End Source File
+# Begin Source File
+SOURCE=.\boxm2_render_exp_depth_functor.h
+# End Source File
+# Begin Source File
+SOURCE=.\boxm2_cast_intensities_functor.h
+# End Source File
+# Begin Source File
+SOURCE=.\boxm2_mean_intensities_batch_functor.h
+# End Source File
 # End Group
 # End Target
 # End Project

@@ -110,6 +110,15 @@ SOURCE=.\processes/boxm2_cpp_change_detection_process2.cxx
 # Begin Source File
 SOURCE=.\processes/boxm2_cpp_render_cone_expected_image_process.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\processes/boxm2_cpp_render_expected_depth_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/boxm2_cpp_cast_intensities_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/boxm2_cpp_mean_intensities_batch_process.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"

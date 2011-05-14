@@ -224,6 +224,12 @@ SOURCE=.\Templates/bsta_gaussian_full+double.2-.cxx
 # Begin Source File
 SOURCE=.\Templates/bsta_histogram+char-.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\Templates/bsta_spherical_histogram+double-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/bsta_spherical_histogram+float-.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
@@ -418,6 +424,12 @@ SOURCE=.\bsta_gauss_sd2.h
 # End Source File
 # Begin Source File
 SOURCE=.\bsta_gauss_if4.h
+# End Source File
+# Begin Source File
+SOURCE=.\bsta_spherical_histogram.h
+# End Source File
+# Begin Source File
+SOURCE=.\bsta_spherical_histogram.txx
 # End Source File
 # End Group
 # End Target

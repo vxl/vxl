@@ -116,10 +116,16 @@ SOURCE=.\boxm2_scene_parser.cxx
 SOURCE=.\boxm2_lru_cache.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\boxm2_stream_cache.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/brdb_value_t+boxm2_cache_sptr-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/vbl_smart_ptr+boxm2_cache-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/boxm2_stream_cache+etc-.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
@@ -144,6 +150,12 @@ SOURCE=.\boxm2_scene_parser.h
 # End Source File
 # Begin Source File
 SOURCE=.\boxm2_lru_cache.h
+# End Source File
+# Begin Source File
+SOURCE=.\boxm2_stream_cache.h
+# End Source File
+# Begin Source File
+SOURCE=.\boxm2_stream_cache.txx
 # End Source File
 # End Group
 # End Target

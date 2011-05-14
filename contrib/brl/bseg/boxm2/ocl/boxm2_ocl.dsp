@@ -101,9 +101,6 @@ SOURCE=.\boxm2_opencl_cache.cxx
 SOURCE=.\boxm2_ocl_util.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/bocl_manager+boxm2_opencl_processor-.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\Templates/vbl_smart_ptr+boxm2_opencl_cache-.cxx
 # End Source File
 # Begin Source File
