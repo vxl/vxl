@@ -36,6 +36,7 @@ ADD_TEST( bsta_test_otsu_threshold          ${EXECUTABLE_OUTPUT_PATH}/bsta_test_
 ADD_TEST( bsta_test_sampler                 ${EXECUTABLE_OUTPUT_PATH}/bsta_test_all test_sampler )
 ADD_TEST( bsta_test_beta                    ${EXECUTABLE_OUTPUT_PATH}/bsta_test_all test_beta )
 ADD_TEST( bsta_test_kent                    ${EXECUTABLE_OUTPUT_PATH}/bsta_test_all test_kent )
+ADD_TEST( bsta_test_spherical_histogram     ${EXECUTABLE_OUTPUT_PATH}/bsta_test_all test_spherical_histogram )
 
 ADD_EXECUTABLE( bsta_test_include test_include.cxx )
 TARGET_LINK_LIBRARIES( bsta_test_include bsta vsl)
