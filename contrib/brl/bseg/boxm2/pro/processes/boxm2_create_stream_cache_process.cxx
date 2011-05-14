@@ -1,12 +1,11 @@
-// This is brl/bseg/boxm2/pro/processes/boxm2_create_cache_process.cxx
+// This is brl/bseg/boxm2/pro/processes/boxm2_create_stream_cache_process.cxx
+#include <bprb/bprb_func_process.h>
 //:
 // \file
-// \brief  A process for creating stream cache. 
+// \brief  A process for creating stream cache.
 //
 // \author Ozge C. Ozcanli
 // \date May 10, 2011
-
-#include <bprb/bprb_func_process.h>
 
 #include <vcl_fstream.h>
 #include <boxm2/boxm2_scene.h>
@@ -17,6 +16,7 @@ namespace boxm2_create_stream_cache_process_globals
   const unsigned n_inputs_ = 4;
   const unsigned n_outputs_ = 1;
 }
+
 bool boxm2_create_stream_cache_process_cons(bprb_func_process& pro)
 {
   using namespace boxm2_create_stream_cache_process_globals;
@@ -50,7 +50,7 @@ bool boxm2_create_stream_cache_process(bprb_func_process& pro)
   vcl_string data_type_fname = pro.get_input<vcl_string>(i++);   // open data streams of this type with each identifier
   vcl_string identifier_fname= pro.get_input<vcl_string>(i++);
   float num_giga = pro.get_input<float>(i++);
-  
+
   // extract list of image_ids from file
   vcl_ifstream ifs(identifier_fname.c_str());
   if (!ifs.good()) {
@@ -86,7 +86,7 @@ bool boxm2_create_stream_cache_process(bprb_func_process& pro)
   ifst.close();
 
   boxm2_stream_cache::create(scene, type_names, image_ids, num_giga);
-  
+
   // store cache pointer
   pro.set_output_val<boxm2_stream_cache_sptr>(0, boxm2_stream_cache::instance());
   return true;

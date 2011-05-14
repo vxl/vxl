@@ -1,4 +1,4 @@
-// This is brl/bseg/boxm2/cpp/pro/processes/boxm2_cpp_cast_intensities_process.cxx
+// This is brl/bseg/boxm2/cpp/pro/processes/boxm2_cpp_mean_intensities_batch_process.cxx
 #include <bprb/bprb_func_process.h>
 //:
 // \file
@@ -34,7 +34,7 @@ bool boxm2_cpp_mean_intensities_batch_process_cons(bprb_func_process& pro)
   //process takes 3 inputs
   // 0) scene
   // 2) cache
-  // 3) stream cache 
+  // 3) stream cache
   vcl_vector<vcl_string> input_types_(n_inputs_);
   input_types_[0] = "boxm2_scene_sptr";
   input_types_[1] = "boxm2_cache_sptr";
@@ -58,7 +58,7 @@ bool boxm2_cpp_mean_intensities_batch_process(bprb_func_process& pro)
   boxm2_scene_sptr scene =pro.get_input<boxm2_scene_sptr>(i++);
   boxm2_cache_sptr cache =pro.get_input<boxm2_cache_sptr>(i++);
   boxm2_stream_cache_sptr str_cache= pro.get_input<boxm2_stream_cache_sptr>(i++);
-    
+
   //: assumes that the intensities of each image have been cast into data models of type ALPHA previously
   int alphaTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_AUX0>::prefix());
   //: iterate the scene block by block and write to output
@@ -75,7 +75,7 @@ bool boxm2_cpp_mean_intensities_batch_process(bprb_func_process& pro)
     boxm2_data_serial_iterator<boxm2_mean_intensities_batch_functor>(data_buff_length,data_functor);
     cache->remove_data_base(*id,boxm2_data_traits<BOXM2_AUX0>::prefix());  // cache needs to be read-write cache for output alpha blocks to be written before being discarded
   }
-   
+
   return true;
 }
 
@@ -115,7 +115,7 @@ bool boxm2_cpp_mean_intensities_print_process(bprb_func_process& pro)
   boxm2_scene_sptr scene =pro.get_input<boxm2_scene_sptr>(i++);
   boxm2_cache_sptr cache =pro.get_input<boxm2_cache_sptr>(i++);
   boxm2_stream_cache_sptr str_cache =pro.get_input<boxm2_stream_cache_sptr>(i++);
-    
+
   //: assumes that the intensities of each image have been cast into data models of type ALPHA previously
   int alphaTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_AUX0>::prefix());
   //: iterate the scene block by block and write to output
@@ -132,7 +132,7 @@ bool boxm2_cpp_mean_intensities_print_process(bprb_func_process& pro)
     boxm2_data_serial_iterator<boxm2_mean_intensities_print_functor>(data_buff_length,data_functor);
     cache->remove_data_base(*id,boxm2_data_traits<BOXM2_AUX0>::prefix());
   }
-  
+
   cache->disable_write();
   return true;
 }
