@@ -9,6 +9,7 @@ long boxm2_block_metadata::num_data_cells()
   const int MAX_BYTES    = this->max_mb_*1024*1024;
   const int BUFF_LENGTH  = vcl_pow((float)2,(float)16); //65536
   const float ALPHA_INIT = -vcl_log(1.0f - this->p_init_) / (this->sub_block_dim_.x());
+  vcl_cerr << "ALPHA_INIT = " << ALPHA_INIT << '\n';
 
   //total number of (sub) blocks in the scene
   int total_blocks =  this->sub_block_num_.x()
@@ -29,6 +30,7 @@ long boxm2_block_metadata::num_data_cells()
             <<"*** Max scene size not large enough to accommodate scene dimensions\n"
             <<"*** cells allocated:  "<<num_buffers * BUFF_LENGTH<<'\n'
             <<"*** total subblocks:  "<<total_blocks<<'\n'
+            <<"*** blocks per buffer:  "<<blocks_per_buffer<<'\n'
             <<"**************************************************\n";
     return 0;
   }

@@ -50,8 +50,8 @@ bool boxm2_cpp_mean_intensities_batch_process(bprb_func_process& pro)
   using namespace boxm2_cpp_mean_intensities_batch_process_globals;
 
   if ( pro.n_inputs() < n_inputs_ ){
-      vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
-      return false;
+    vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
+    return false;
   }
   //get the inputs
   unsigned i = 0;
@@ -59,15 +59,14 @@ bool boxm2_cpp_mean_intensities_batch_process(bprb_func_process& pro)
   boxm2_cache_sptr cache =pro.get_input<boxm2_cache_sptr>(i++);
   boxm2_stream_cache_sptr str_cache= pro.get_input<boxm2_stream_cache_sptr>(i++);
 
-  //: assumes that the intensities of each image have been cast into data models of type ALPHA previously
+  // assumes that the intensities of each image have been cast into data models of type ALPHA previously
   int alphaTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_AUX0>::prefix());
-  //: iterate the scene block by block and write to output
+  // iterate the scene block by block and write to output
   vcl_vector<boxm2_block_id> blk_ids = scene->get_block_ids();
   vcl_vector<boxm2_block_id>::iterator id;
   id = blk_ids.begin();
   for (id = blk_ids.begin(); id != blk_ids.end(); ++id) {
-    boxm2_block     *  blk   = cache->get_block(*id);
-    //: we're assuming that we have enough RAM to store the whole output block for alpha
+    // we're assuming that we have enough RAM to store the whole output block for alpha
     boxm2_data_base *  output_alph  = cache->get_data_base(*id,boxm2_data_traits<BOXM2_AUX0>::prefix());
     boxm2_mean_intensities_batch_functor data_functor;
     data_functor.init_data(output_alph, str_cache);
@@ -116,15 +115,13 @@ bool boxm2_cpp_mean_intensities_print_process(bprb_func_process& pro)
   boxm2_cache_sptr cache =pro.get_input<boxm2_cache_sptr>(i++);
   boxm2_stream_cache_sptr str_cache =pro.get_input<boxm2_stream_cache_sptr>(i++);
 
-  //: assumes that the intensities of each image have been cast into data models of type ALPHA previously
+  // assumes that the intensities of each image have been cast into data models of type ALPHA previously
   int alphaTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_AUX0>::prefix());
-  //: iterate the scene block by block and write to output
-
+  // iterate the scene block by block and write to output
   vcl_vector<boxm2_block_id> blk_ids = scene->get_block_ids();
   for (vcl_vector<boxm2_block_id>::iterator id = blk_ids.begin(); id != blk_ids.end(); ++id)
   {
-    boxm2_block * blk = cache->get_block(*id);
-    //: we're assuming that we have enough RAM to store the whole output block for alpha
+    // we're assuming that we have enough RAM to store the whole output block for alpha
     boxm2_data_base * output_alph  = cache->get_data_base(*id,boxm2_data_traits<BOXM2_AUX0>::prefix());
     boxm2_mean_intensities_print_functor data_functor;
     data_functor.init_data(output_alph,str_cache);
