@@ -38,6 +38,7 @@
 //
 
 #include <vcl_map.h>
+#include <vcl_vector.h>
 #include <vcl_iostream.h>
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_matrix_fixed.h>
@@ -101,6 +102,7 @@ class bsta_spherical_histogram
 
   T azimuth_center(int azimuth_index) const;
   T elevation_center(int elevation_index) const;
+  void center(int linear_index, T& az_center, T& el_center);
 
   //: increment the count in a given bin by mag
   void upcount(T azimuth, T elevation, T mag = T(1.0));
@@ -146,6 +148,11 @@ class bsta_spherical_histogram
 
   //: marginal standard deviations
   void std_dev(T& std_dev_az, T& std_dev_el);
+
+  //: linear index of bins which have centers lying inside the cone
+  vcl_vector<int> bins_intersecting_cone(T center_az, T center_el,
+                                         T cone_half_angle);
+
 
   //:unit conversions
   static T deg_to_rad(T ang){return static_cast<T>(vnl_math::pi*ang/180.0);}

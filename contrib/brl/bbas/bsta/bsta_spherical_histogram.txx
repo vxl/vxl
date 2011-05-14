@@ -8,6 +8,7 @@
 #include <vcl_iostream.h>
 #include <vcl_cassert.h>
 #include <vnl/vnl_math.h> 
+#include <vnl/vnl_vector.h>
 //
 // determine if an angle lies inside an interval that possibly contains 
 // the branch cut at 0/360
@@ -155,6 +156,16 @@ T bsta_spherical_histogram<T>::elevation_center(int elevation_index) const
     return deg_to_rad(middle);
   return middle;
 }
+template <class T>
+void bsta_spherical_histogram<T>::
+center(int linear_index, T& az_center, T& el_center){
+  //convert linear_index to azimuth and elevation index
+  int el_index = linear_index/n_azimuth_;
+  int az_index = linear_index%n_azimuth_;
+  az_center = azimuth_center(az_index);
+  el_center = elevation_center(el_index);
+}
+
 template <class T>
 void bsta_spherical_histogram<T>::
 convert_to_cartesian(T azimuth, T elevation, T& x, T& y, T& z) const{
@@ -356,7 +367,9 @@ T bsta_spherical_histogram<T>::p(int azimuth_index, int elevation_index)
 template <class T>
 void bsta_spherical_histogram<T>::mean(T& mean_az, T& mean_el)
 {
-  T mean_x = T(0), mean_y = T(0), mean_z = T(0);
+  //define mean as the average Cartesian unit vector for the
+  //unit vectors corresponding to the centers of the occupied bins
+  double mean_x = 0.0, mean_y = 0.0, mean_z = 0.0;
   for(int el = 0; el<static_cast<int>(n_elevation_); ++el){
     T ec = elevation_center(el);
     for(int az = 0; az<static_cast<int>(n_azimuth_); ++az){
@@ -367,13 +380,21 @@ void bsta_spherical_histogram<T>::mean(T& mean_az, T& mean_el)
       mean_x  += pc*x;      mean_y  += pc*y;       mean_z  += pc*z;
     }
   }
-  convert_to_spherical(mean_x, mean_y, mean_z, mean_az, mean_el);
+  double length = vcl_sqrt(mean_x*mean_x + mean_y*mean_y + mean_z*mean_z);
+  if(length<1.0e-8){
+    mean_az = 0;
+    mean_el = 0;
+    return;
+  }
+  mean_x /= length;   mean_y /= length;   mean_z /= length;
+  convert_to_spherical(static_cast<T>(mean_x), static_cast<T>(mean_y),
+   static_cast<T>(mean_z), mean_az, mean_el);
 }
 
 template <class T>
 vnl_matrix_fixed<T, 2, 2> bsta_spherical_histogram<T>::covariance_matrix()
 {
-  T mean_x = T(0), mean_y = T(0) , mean_z = T(0);
+  double mean_x = T(0), mean_y = T(0) , mean_z = T(0);
   T two_pi = T(360);
   if(units_ == RADIANS)
     two_pi = static_cast<T>(2.0*vnl_math::pi);
@@ -388,8 +409,13 @@ vnl_matrix_fixed<T, 2, 2> bsta_spherical_histogram<T>::covariance_matrix()
       mean_x  += pc*x;      mean_y  += pc*y;  mean_z  += pc*z;
     }
   }
+  double length = vcl_sqrt(mean_x*mean_x + mean_y*mean_y + mean_z*mean_z);
+  if(length<1.0e-8)
+    return vnl_matrix_fixed<T, 2 ,2> ();
+  mean_x /= length;   mean_y /= length;   mean_z /= length;
   T mean_az, mean_el;
-  convert_to_spherical(mean_x, mean_y, mean_z, mean_az, mean_el);
+  convert_to_spherical(static_cast<T>(mean_x), static_cast<T>(mean_y),
+   static_cast<T>(mean_z), mean_az, mean_el);
   T caz=T(0), caz_el=T(0), cel=T(0);
   for(int el = 0; el<static_cast<int>(n_elevation_); ++el){
     T ec = elevation_center(el);
@@ -416,6 +442,30 @@ void bsta_spherical_histogram<T>::std_dev(T& std_dev_az, T& std_dev_el)
   double var_az = covar[0][0], var_el = covar[1][1];
   std_dev_az = static_cast<T>(vcl_sqrt(var_az));
   std_dev_el = static_cast<T>(vcl_sqrt(var_el));
+}
+template <class T>
+vcl_vector<int> bsta_spherical_histogram<T>::
+bins_intersecting_cone(T center_az, T center_el, T cone_half_angle)
+{
+  vcl_vector<int> ret;
+  T xc, yc ,zc;
+  convert_to_cartesian(center_az, center_el, xc, yc, zc);
+  vnl_vector<double> cone_axis(3);
+  cone_axis[0]=xc; cone_axis[1]=yc; cone_axis[2]=zc;
+  for(int az = 0; az<int(n_azimuth_); ++az)
+    for(int el = 0; el<int(n_elevation_); ++el){
+      T azc = azimuth_center(az), elc = elevation_center(el);
+      T xb, yb, zb;
+      convert_to_cartesian(azc, elc, xb, yb, zb);
+      vnl_vector<double> bin_vector(3);
+      bin_vector[0]=xb; bin_vector[1]=yb; bin_vector[2]=zb;
+      double ang = angle(cone_axis, bin_vector);
+      if(units_ = DEG)
+        ang = rad_to_deg(static_cast<T>(ang));
+      if(vcl_fabs(ang)<=cone_half_angle)
+        ret.push_back(linear_index(az, el));
+    }
+  return ret;
 }
 template <class T>
 void bsta_spherical_histogram<T>::

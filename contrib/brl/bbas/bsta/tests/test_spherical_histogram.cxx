@@ -87,11 +87,24 @@ void test_spherical_histogram()
   double mean_az, mean_el;
   sh0360cut.mean(mean_az, mean_el);
   vcl_cout << "mean(" << mean_az << ' ' << mean_el << ")\n";
+  er = vcl_fabs(mean_az -359.189) + vcl_fabs(mean_el- 19.0974);
   vnl_matrix_fixed<double, 2, 2> cmat = sh0360cut.covariance_matrix();
   vcl_cout << cmat << '\n';
-  er = vcl_fabs(cmat[0][0]-150.657) + vcl_fabs(cmat[0][1]-112.803);
-  er += vcl_fabs(cmat[1][1]-112.64);
-  TEST_NEAR("covariance matrix", er, 0.0, 0.001);
+  er += vcl_fabs(cmat[0][0]-150.657) + vcl_fabs(cmat[0][1]-112.218);
+  er += vcl_fabs(cmat[1][1]-112.621);
+  TEST_NEAR("mean and covariance matrix", er, 0.0, 0.01);
+  vcl_vector<int> inter_bins = sh0360cut.bins_intersecting_cone(mean_az, mean_el, 25.0);
+  double el_center, az_center;
+  double tcnts = 0;
+  for(vcl_vector<int>::iterator cit = inter_bins.begin(); 
+      cit != inter_bins.end(); ++cit){
+    sh0360cut.center(*cit, az_center, el_center);
+	tcnts += sh0360cut.counts(*cit);
+	vcl_cout << "c(" << az_center << ' ' << el_center << "):" 
+		<< sh0360cut.counts(*cit) << "\n";
+  }
+  vcl_cout << "Cone total = " << tcnts << " Full total = " <<  sh0360cut.total_counts() << '\n';
+  TEST_NEAR("bins intersecting cone", tcnts, sh0360cut.total_counts(), 0.01);
 }
 
 TESTMAIN(test_spherical_histogram);
