@@ -96,12 +96,12 @@ void test_spherical_histogram()
   vcl_vector<int> inter_bins = sh0360cut.bins_intersecting_cone(mean_az, mean_el, 25.0);
   double el_center, az_center;
   double tcnts = 0;
-  for(vcl_vector<int>::iterator cit = inter_bins.begin(); 
-      cit != inter_bins.end(); ++cit){
+  for (vcl_vector<int>::iterator cit = inter_bins.begin();
+       cit != inter_bins.end(); ++cit) {
     sh0360cut.center(*cit, az_center, el_center);
-	tcnts += sh0360cut.counts(*cit);
-	vcl_cout << "c(" << az_center << ' ' << el_center << "):" 
-		<< sh0360cut.counts(*cit) << "\n";
+    tcnts += sh0360cut.counts(*cit);
+    vcl_cout << "c(" << az_center << ' ' << el_center << "): "
+             << sh0360cut.counts(*cit) << '\n';
   }
   vcl_cout << "Cone total = " << tcnts << " Full total = " <<  sh0360cut.total_counts() << '\n';
   TEST_NEAR("bins intersecting cone", tcnts, sh0360cut.total_counts(), 0.01);
