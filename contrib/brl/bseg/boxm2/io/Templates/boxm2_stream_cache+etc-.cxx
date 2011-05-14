@@ -1,4 +1,4 @@
-#include <boxm2/io/boxm2_stream_cache.cxx>
+#include <boxm2/io/boxm2_stream_cache.txx>
 #include <vcl_vector.h>
 
 template vcl_vector<boxm2_data_traits<BOXM2_ALPHA>::datatype> boxm2_stream_cache::get_next<BOXM2_ALPHA,boxm2_data_traits<BOXM2_ALPHA>::datatype>(boxm2_block_id id, int index);
