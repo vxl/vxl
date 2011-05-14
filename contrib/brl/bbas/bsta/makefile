@@ -61,6 +61,7 @@ MANPAGE_SOURCES += bsta_gauss_sf2.h
 MANPAGE_SOURCES += bsta_von_mises.txx
 MANPAGE_SOURCES += bsta_beta_f1.h
 MANPAGE_SOURCES += bsta_kent.txx
+MANPAGE_SOURCES += bsta_spherical_histogram.txx
 
 SUBDIRS += algo pro io vis
 

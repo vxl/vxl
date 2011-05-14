@@ -1,6 +1,6 @@
 USES += contrib/gel contrib/rpl contrib/gel/mrc core
 
-LIBRARY := vpgl-algo
+LIBRARY := vpgl_algo
 VERSION := 1.0
 
 SOURCES += vpgl_camera_compute.cxx
@@ -35,6 +35,13 @@ SOURCES += vpgl_bundle_adjust_lsqr.cxx
 SOURCES += vpgl_ba_shared_k_lsqr.cxx
 SOURCES += vpgl_ba_fixed_k_lsqr.cxx
 MANPAGE_SOURCES += vpgl_em_compute_5_point.h
+MANPAGE_SOURCES += vpgl_bundler.h
+MANPAGE_SOURCES += vpgl_bundler_inters.h
+MANPAGE_SOURCES += vpgl_bundler_settings.h
+MANPAGE_SOURCES += vpgl_bundler_sfm.h
+MANPAGE_SOURCES += vpgl_bundler_sfm_impl.h
+MANPAGE_SOURCES += vpgl_bundler_tracks.h
+MANPAGE_SOURCES += vpgl_bundler_tracks_impl.h
 
 #######################################
 include ${VXLROOT}/config/top-params.mk

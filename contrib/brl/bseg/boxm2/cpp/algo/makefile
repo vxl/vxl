@@ -13,6 +13,9 @@ SOURCES += boxm2_refine_block_function.cxx
 SOURCES += boxm2_render_functions.cxx
 MANPAGE_SOURCES += boxm2_render_cone_functor.h
 MANPAGE_SOURCES += boxm2_cast_cone_ray_function.h
+MANPAGE_SOURCES += boxm2_render_exp_depth_functor.h
+MANPAGE_SOURCES += boxm2_cast_intensities_functor.h
+MANPAGE_SOURCES += boxm2_mean_intensities_batch_functor.h
 
 #######################################
 include ${VXLROOT}/config/top-params.mk

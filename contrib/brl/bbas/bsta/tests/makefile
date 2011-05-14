@@ -16,6 +16,7 @@ TESTS += test_parzen_sphere.cxx
 TESTS += test_beta.cxx
 TESTS += test_von_mises.cxx
 TESTS += test_kent.cxx
+TESTS += test_spherical_histogram.cxx
 
 MINI_PROG_SOURCES += test_include.cxx
 MINI_PROG_SOURCES += test_template_include.cxx
