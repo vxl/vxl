@@ -8,6 +8,7 @@
 #include <bsta/bsta_otsu_threshold.txx>
 #include <bsta/bsta_parzen_sphere.txx>
 #include <bsta/bsta_sampler.txx>
+#include <bsta/bsta_spherical_histogram.txx>
 #include <bsta/bsta_von_mises.txx>
 #include <bsta/bsta_weibull.txx>
 
