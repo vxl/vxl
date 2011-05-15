@@ -127,6 +127,18 @@ SOURCE=.\Templates/vbl_smart_ptr+boxm2_cache-.cxx
 # Begin Source File
 SOURCE=.\Templates/boxm2_stream_cache+etc-.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\Templates/vbl_smart_ptr+boxm2_stream_cache_datatype_helper-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vbl_smart_ptr+boxm2_stream_cache_helper-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/brdb_value_t+boxm2_stream_cache_sptr-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vbl_smart_ptr+boxm2_stream_cache-.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
