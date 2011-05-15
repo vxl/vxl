@@ -4,28 +4,29 @@
 # bprb depends on expat and bvxm_pro depends on bprb primarily
 INCLUDE( ${BRL_MODULE_PATH}/FindEXPAT.cmake )
 IF(EXPAT_FOUND)
-INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bpro )
-INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bpro/bprb )
-INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bseg )
-INCLUDE_DIRECTORIES( ${GEL_INCLUDE_DIR}/mrc )
-INCLUDE_DIRECTORIES( ${GEL_INCLUDE_DIR})
-INCLUDE(${MODULE_PATH}/FindTIFF.cmake)
-IF(TIFF_FOUND)
-  INCLUDE_DIRECTORIES(${TIFF_INCLUDE_DIR})
-  INCLUDE( ${MODULE_PATH}/FindGEOTIFF.cmake)
-  IF(GEOTIFF_FOUND)
-    INCLUDE_DIRECTORIES(${GEOTIFF_INCLUDE_DIR})
-  ENDIF(GEOTIFF_FOUND)
-ENDIF(TIFF_FOUND)
+  INCLUDE_DIRECTORIES( ${EXPAT_INCLUDE_DIR} )
+  INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bpro )
+  INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bpro/bprb )
+  INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bseg )
+  INCLUDE_DIRECTORIES( ${GEL_INCLUDE_DIR}/mrc )
+  INCLUDE_DIRECTORIES( ${GEL_INCLUDE_DIR})
+  INCLUDE(${MODULE_PATH}/FindTIFF.cmake)
+  IF(TIFF_FOUND)
+    INCLUDE_DIRECTORIES(${TIFF_INCLUDE_DIR})
+    INCLUDE( ${MODULE_PATH}/FindGEOTIFF.cmake)
+    IF(GEOTIFF_FOUND)
+      INCLUDE_DIRECTORIES(${GEOTIFF_INCLUDE_DIR})
+    ENDIF(GEOTIFF_FOUND)
+  ENDIF(TIFF_FOUND)
 
-SET(bvxm_pro_sources
-    bvxm_processes.h
-    bvxm_register.h    bvxm_register.cxx
-   )
+  SET(bvxm_pro_sources
+      bvxm_processes.h
+      bvxm_register.h    bvxm_register.cxx
+     )
 
-AUX_SOURCE_DIRECTORY(Templates bvxm_pro_sources)
+  AUX_SOURCE_DIRECTORY(Templates bvxm_pro_sources)
 
-SET(bvxm_pro_sources ${bvxm_pro_sources}
+  SET(bvxm_pro_sources ${bvxm_pro_sources}
     processes/bvxm_normalization_util.h               processes/bvxm_normalization_util.cxx
     processes/bvxm_illum_index_process.h              processes/bvxm_illum_index_process.cxx
     processes/bvxm_create_local_rpc_process.h         processes/bvxm_create_local_rpc_process.cxx
@@ -78,11 +79,11 @@ SET(bvxm_pro_sources ${bvxm_pro_sources}
     processes/bvxm_atmospheric_corr_process.h
    )
 
-ADD_LIBRARY(bvxm_pro ${bvxm_pro_sources})
+  ADD_LIBRARY(bvxm_pro ${bvxm_pro_sources})
 
-TARGET_LINK_LIBRARIES(bvxm_pro bprb bvxm bvxm_io bvxm_grid bvxm_grid_io expatpp sdet vpgl vpgl_io vpgl_algo vpgl_file_formats vpgl_pro vsol vil_io vil_pro vgl_algo vnl_algo vnl_io vnl vil_algo vil vgl vul bgeo brdb vbl_io)
+  TARGET_LINK_LIBRARIES(bvxm_pro bprb bvxm bvxm_io bvxm_grid bvxm_grid_io expatpp sdet vpgl vpgl_io vpgl_algo vpgl_file_formats vpgl_pro vsol vil_io vil_pro vgl_algo vnl_algo vnl_io vnl vil_algo vil vgl vul bgeo brdb vbl_io)
 
-IF( BUILD_TESTING )
-  SUBDIRS(tests)
-ENDIF( BUILD_TESTING )
+  IF( BUILD_TESTING )
+    SUBDIRS(tests)
+  ENDIF( BUILD_TESTING )
 ENDIF(EXPAT_FOUND)
