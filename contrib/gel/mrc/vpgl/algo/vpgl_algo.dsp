@@ -174,6 +174,18 @@ SOURCE=.\vpgl_ba_shared_k_lsqr.cxx
 SOURCE=.\vpgl_ba_fixed_k_lsqr.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\vpgl_bundle_rolling_shutter_adjust.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vpgl_bundler.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vpgl_bundler_sfm_impl.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vpgl_bundler_tracks_impl.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/vpgl_list+vgl_h_matrix_2d+double--.cxx
 # End Source File
 # Begin Source File
