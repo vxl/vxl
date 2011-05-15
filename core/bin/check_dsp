@@ -385,6 +385,7 @@ foreach my $dir (@DIRS)
   # now try to do a reasonable guess about the IF .. ELSE .. ENDIF constructs:
   while ($cmakefile =~ s/\bIF\s*\(\s*([A-Z0-9_]+_FOUND)\s*\)(.*?)ELSE\s*\(\s*\1\s*\).*?ENDIF\s*\(\s*\1\s*\)/$2/gs) {}
   while ($cmakefile =~ s/\bIF\s*\(\s*(HAS_[A-Z0-9_]+)\s*\)(.*?)ELSE\s*\(\s*\1\s*\).*?ENDIF\s*\(\s*\1\s*\)/$2/gs) {}
+  while ($cmakefile =~ s/\bIF\s*\(\s*(BUILD_[A-Z0-9_]+)\s*\)(.*?)ELSE\s*\(\s*\1\s*\).*?ENDIF\s*\(\s*\1\s*\)/$2/gs) {}
   while ($cmakefile =~ s/\bIF\s*\(\s*(NOT.*?)\)(.*?)ELSE\s*\(\s*\1\s*\).*?ENDIF\s*\(\s*\1\s*\)/$2/gs) {}
   while ($cmakefile =~ s/\bIF\s*\(\s*(.*?)\).*?ELSE\s*\(\s*\1\s*\)(.*?)ENDIF\s*\(\s*\1\s*\)/$2/gs) {}
 
