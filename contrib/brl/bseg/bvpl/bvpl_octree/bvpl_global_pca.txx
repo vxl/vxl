@@ -123,7 +123,7 @@ bvpl_global_pca<feature_dim>::bvpl_global_pca(const vcl_string &path)
   unsigned n_train_scenes = 0;
   train_elm->get_attribute("nscenes", n_train_scenes);
   training_scenes_.clear();
-  training_scenes_.resize(n_train_scenes, false);
+  training_scenes_.resize(nscenes, false);
   
   //read out the scenes
   for (bxml_element::const_data_iterator s_it = train_elm->data_begin(); s_it != train_elm->data_end(); s_it++) {
@@ -145,7 +145,6 @@ bvpl_global_pca<feature_dim>::bvpl_global_pca(const vcl_string &path)
       break;
     }
   }
-  
   
   //Parse paths and set matrices
   bxml_element paths_query("paths");
@@ -962,13 +961,18 @@ void bvpl_global_pca<feature_dim>::xml_write()
   //write training scenes
   bxml_element* train_elm = new bxml_element("training_scenes");
   train_elm->append_text("\n");
-  train_elm->set_attribute("nscenes", training_scenes_.size());
   
   vcl_stringstream ss;
+  unsigned ts = 0;
+  
   for (unsigned i = 0; i< training_scenes_.size(); i++) {
-    if (training_scenes_[i])
+    if (training_scenes_[i]){
       ss << i << " ";
+      ts++;
+    }
   }
+  
+  train_elm->set_attribute("nscenes", ts);
   train_elm->append_text(ss.str());
   train_elm->append_text("\n");
   root->append_data(train_elm);
