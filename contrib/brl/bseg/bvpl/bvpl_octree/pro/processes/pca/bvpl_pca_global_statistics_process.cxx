@@ -26,7 +26,7 @@ bool bvpl_pca_global_statistics_process_cons(bprb_func_process& pro)
 
   vcl_vector<vcl_string> input_types_(n_inputs_);
   unsigned i =0;
-  input_types_[i++] = "vcl_string" ; //pca_info_file
+  input_types_[i++] = "bvpl_global_pca_125_sptr" ; //global pca class
   input_types_[i++] = "int"; //scene_id (this can be confirmed in xml file pca_info.xml)
   input_types_[i++] = "int";   //block Indices
   input_types_[i++] = "int";
@@ -46,22 +46,30 @@ bool bvpl_pca_global_statistics_process(bprb_func_process& pro)
 
   //get inputs
   unsigned i = 0;
-  vcl_string pca_file = pro.get_input<vcl_string>(i++);
+  bvpl_global_pca_125_sptr global_pca = pro.get_input<bvpl_global_pca_125_sptr>(i++);
   int scene_id = pro.get_input<int>(i++);
   int block_i = pro.get_input<int>(i++);
   int block_j = pro.get_input<int>(i++);
   int block_k = pro.get_input<int>(i++);
   vcl_string stats_file = pro.get_input<vcl_string>(i++);
 
-  bvpl_global_pca<125> global_pca(pca_file);
+  if(!global_pca)
+  {
+    vcl_cerr << "Global PCA is NULL \n";
+    return false;
+  }
   vnl_matrix_fixed<double, 125, 125> S(0.0);
   vnl_vector_fixed<double, 125> mean(0.0);
   unsigned long nfeatures = 0;
-  global_pca.sample_statistics(scene_id, block_i, block_j, block_k, S, mean, nfeatures);
-
-  vcl_ofstream stats_ofs(stats_file.c_str());
-  stats_ofs.precision(15);
-  stats_ofs << nfeatures << '\n' << mean << '\n' << S;
+  
+    
+  if(global_pca->sample_statistics(scene_id, block_i, block_j, block_k, S, mean, nfeatures))
+  {
+    vcl_ofstream stats_ofs(stats_file.c_str());
+    stats_ofs.precision(15);
+    stats_ofs << nfeatures << '\n' << mean << '\n' << S;
+    stats_ofs.close();
+  }
 
   return true;
 }

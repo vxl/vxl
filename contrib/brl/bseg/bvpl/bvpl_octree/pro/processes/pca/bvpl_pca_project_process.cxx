@@ -28,7 +28,7 @@ bool bvpl_pca_project_process_cons(bprb_func_process& pro)
 
   vcl_vector<vcl_string> input_types_(n_inputs_);
   unsigned i = 0;
-  input_types_[i++] = "vcl_string" ;  //path of pca_global_info.xml
+  input_types_[i++] = "bvpl_global_pca_125_sptr" ; //global pca class
   input_types_[i++] = "int"; //scene id
   input_types_[i++] = "int";  //block Indeces
   input_types_[i++] = "int";
@@ -47,17 +47,19 @@ bool bvpl_pca_project_process(bprb_func_process& pro)
 
   //get inputs
   unsigned i = 0;
-  vcl_string pca_dir = pro.get_input<vcl_string>(i++);
+  bvpl_global_pca_125_sptr global_pca = pro.get_input<bvpl_global_pca_125_sptr>(i++);
   int scene_id = pro.get_input<int>(i++);
   int block_i = pro.get_input<int>(i++);
   int block_j = pro.get_input<int>(i++);
   int block_k = pro.get_input<int>(i++);
 
-  if (!vul_file::is_directory(pca_dir))
+  if(!global_pca)
+  {
+    vcl_cerr << "Global PCA is NULL \n";
     return false;
+  }
   
-  bvpl_global_pca<125> global_pca(pca_dir);
-  global_pca.project(scene_id, block_i, block_j, block_k);
+  global_pca->project(scene_id, block_i, block_j, block_k);
 
   return true;
 }
