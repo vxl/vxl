@@ -30,6 +30,7 @@ DECLARE_FUNC_CONS(bvpl_pca_global_statistics_process);
 DECLARE_FUNC_CONS(bvpl_combine_pairwise_statistics_process);
 DECLARE_FUNC_CONS(bvpl_global_pca_process);
 DECLARE_FUNC_CONS(bvpl_init_global_pca_process);
+DECLARE_FUNC_CONS(bvpl_load_global_pca_125_process);
 
 //Taylor related
 DECLARE_FUNC_CONS(bvpl_load_taylor_scenes_process);

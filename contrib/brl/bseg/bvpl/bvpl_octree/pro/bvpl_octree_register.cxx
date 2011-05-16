@@ -5,15 +5,18 @@
 #include <bprb/bprb_func_process.h>
 
 #include "bvpl_octree_processes.h"
-#include <bvpl/bvpl_octree/bvpl_taylor_scenes_map.h>
-#include <bvpl/bvpl_octree/bvpl_pca_error_scenes.h>
-#include <bvpl/bvpl_octree/bvpl_discover_pca_kernels.h>
+#include <bvpl_octree/bvpl_taylor_scenes_map.h>
+#include <bvpl_octree/bvpl_pca_error_scenes.h>
+#include <bvpl_octree/bvpl_discover_pca_kernels.h>
+#include <bvpl_octree/bvpl_global_pca.h>
 
 void bvpl_octree_register::register_datatype()
 {
   REGISTER_DATATYPE(bvpl_taylor_scenes_map_sptr);
   REGISTER_DATATYPE(bvpl_pca_error_scenes_sptr);
   REGISTER_DATATYPE(bvpl_discover_pca_kernels_sptr);
+  REGISTER_DATATYPE(bvpl_global_pca_125_sptr);
+  
 }
 
 void bvpl_octree_register::register_process()
@@ -44,6 +47,7 @@ void bvpl_octree_register::register_process()
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvpl_combine_pairwise_statistics_process, "bvplCombinePairwiseStatisticsProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvpl_global_pca_process, "bvplGlobalPCAProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvpl_init_global_pca_process, "bvplInitGlobalPCAProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvpl_load_global_pca_125_process, "bvplLoadGlobalPCA125Process");
   
   //Taylor related
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvpl_load_taylor_scenes_process, "bvplLoadTaylorScenesProcess");
