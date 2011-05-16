@@ -63,7 +63,7 @@ vpgl_bundle_rolling_shutter_adj_lsqr::
                                        const vcl_vector<vcl_vector<bool> >& mask,
                                        double rolling_rate,
                                        bool use_confidence_weights)
- : vnl_sparse_lst_sqr_function(K.size(),12,mask[0].size(),3,mask,2,use_gradient),
+ : vnl_sparse_lst_sqr_function(K.size(),12,mask[0].size(),3,0,mask,2,use_gradient),
    K_(K),
    image_points_(image_points),
    use_covars_(false),
@@ -86,7 +86,7 @@ vpgl_bundle_rolling_shutter_adj_lsqr(const vcl_vector<vpgl_calibration_matrix<do
                                      const vcl_vector<vnl_matrix<double> >& inv_covars,
                                      const vcl_vector<vcl_vector<bool> >& mask,
                                      bool use_confidence_weights)
- : vnl_sparse_lst_sqr_function(K.size(),6,mask[0].size(),3,mask,2,use_gradient),
+ : vnl_sparse_lst_sqr_function(K.size(),6,mask[0].size(),3,0,mask,2,use_gradient),
    K_(K),
    image_points_(image_points),
    use_covars_(true),
@@ -754,7 +754,8 @@ vpgl_bundle_rolling_shutter_adjust::optimize(vcl_vector<vpgl_perspective_camera<
   lm.set_trace(true);
   lm.set_verbose(true);
   lm.set_x_tolerance(1e-7);
-  if (!lm.minimize(a_,b_,use_gradient_))
+  vnl_vector<double> dummy(1); // TODO -- this workaround will most likely not function very well...
+  if (!lm.minimize(a_,b_,dummy,use_gradient_))
     return false;
 
   start_error_ = lm.get_start_error();
