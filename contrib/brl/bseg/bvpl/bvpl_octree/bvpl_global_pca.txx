@@ -114,7 +114,7 @@ bvpl_global_pca<feature_dim>::bvpl_global_pca(const vcl_string &path)
     scenes_elm->get_attribute("cell_length" , finest_cell_length_[id]);
     scenes_elm->get_attribute("nleaves", nleaves_[id]);
     
-    vcl_cout << "Scene " << id << " is " << path << "\n";
+    vcl_cout << "Scene " << id << " is " << scenes_[id] << "\n";
   }
   
   //Parse training scenes
@@ -123,7 +123,7 @@ bvpl_global_pca<feature_dim>::bvpl_global_pca(const vcl_string &path)
   unsigned n_train_scenes = 0;
   train_elm->get_attribute("nscenes", n_train_scenes);
   training_scenes_.clear();
-  training_scenes_.resize(nscenes, false);
+  training_scenes_.resize(n_train_scenes, false);
   
   //read out the scenes
   for (bxml_element::const_data_iterator s_it = train_elm->data_begin(); s_it != train_elm->data_end(); s_it++) {
@@ -164,6 +164,7 @@ bvpl_global_pca<feature_dim>::bvpl_global_pca(const vcl_string &path)
     else{
       vcl_ifstream ifs(ifs_path.c_str());
       ifs >> pc_;
+      ifs.close();
       if(pc_.size()!=feature_dim*feature_dim)
         valid = -2;
     }
@@ -174,6 +175,7 @@ bvpl_global_pca<feature_dim>::bvpl_global_pca(const vcl_string &path)
     else{
       vcl_ifstream ifs(ifs_path.c_str());
       ifs >> weights_;
+      ifs.close();
       if(weights_.size()!=feature_dim)
         valid = -4;
     }
@@ -187,6 +189,7 @@ bvpl_global_pca<feature_dim>::bvpl_global_pca(const vcl_string &path)
       {
         vcl_ifstream ifs(ifs_path.c_str());
         ifs >> training_mean_;
+        ifs.close();
       }
       else{
         vcl_cout << " Warning: Mean file is empty" <<vcl_endl;
@@ -199,6 +202,7 @@ bvpl_global_pca<feature_dim>::bvpl_global_pca(const vcl_string &path)
       else if(vul_file::exists(ifs_path)){
         vcl_ifstream(ifs_path);
         ifs_path >> scatter_;
+        ifs_path.close();
       }else{
         vcl_cout << " Warning: Scatter file is empty" <<vcl_endl;
         scatter_.fill(0.0);
@@ -211,6 +215,8 @@ bvpl_global_pca<feature_dim>::bvpl_global_pca(const vcl_string &path)
     
     }
   }
+  
+  xml_ifs.close();
   
 }
 
@@ -292,8 +298,8 @@ bool bvpl_global_pca<feature_dim>::sample_statistics( int scene_id, int block_i,
                                                       unsigned long &nfeature)
 {
   if(!training_scenes_[scene_id]){
-    vcl_cout << "Skiping scene, labeled for testing \n";
-    return true;
+    vcl_cout << "Skiping scene: " << scene_id <<", labeled for testing \n";
+    return false;
   }
     
   
