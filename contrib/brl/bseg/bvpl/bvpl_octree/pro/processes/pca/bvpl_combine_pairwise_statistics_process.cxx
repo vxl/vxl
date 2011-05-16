@@ -60,6 +60,8 @@ bool bvpl_combine_pairwise_statistics_process(bprb_func_process& pro)
       return false;
     }
     stats_ifs >> nfeatures1 >> mean1 >> S1;
+    stats_ifs.close();
+
   }
 
   vnl_matrix_fixed<double, 125, 125> S2(0.0);
@@ -76,6 +78,7 @@ bool bvpl_combine_pairwise_statistics_process(bprb_func_process& pro)
       return true;
     }
     stats_ifs >> nfeatures2 >> mean2 >> S2;
+    stats_ifs.close();
   }
 
   vnl_matrix_fixed<double, 125, 125> S_out(0.0);
@@ -86,6 +89,7 @@ bool bvpl_combine_pairwise_statistics_process(bprb_func_process& pro)
   vcl_ofstream stats_ofs(stats_file_out.c_str());
   stats_ofs.precision(15);
   stats_ofs << nfeatures_out << '\n' << mean_out << '\n' << S_out;
+  stats_ofs.close();
 
   return true;
 }
