@@ -14,8 +14,10 @@ bool boxm_scene_base::load_scene(vcl_string filename, boxm_scene_parser& parser)
     if (!parser.parseFile(xmlFile)) {
       vcl_cerr << XML_ErrorString(parser.XML_GetErrorCode()) << " at line "
                << parser.XML_GetCurrentLineNumber() << '\n';
+      vcl_fclose(xmlFile);
       return false;
     }
+    vcl_fclose(xmlFile);
   }
   else
     vcl_cerr << " Filename is empty" << vcl_endl;
