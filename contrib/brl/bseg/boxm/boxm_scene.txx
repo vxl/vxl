@@ -628,8 +628,10 @@ double  boxm_scene<T>::finest_cell_length()
 {
   double local_cell_length = 1.0/(double)(1<<((this->max_tree_level_ -1) - finest_level()));
 
-  if ((vcl_abs(block_dim_.x() - block_dim_.y()) > 1.0e-7)   || (vcl_abs(block_dim_.x() - block_dim_.z()) > 1.0e-7))
+  if ((vcl_abs(block_dim_.x() - block_dim_.y()) > 1.0e-7)   || (vcl_abs(block_dim_.x() - block_dim_.z()) > 1.0e-7)){
     vcl_cerr << "Warning: In boxm_scene::finest_cell_length, cells aren't cubical, returning length along x direction\n";
+    vcl_cerr << block_dim_.x() <<", " << block_dim_.y()<< ", " << block_dim_.x() << "\n";
+  }
 
   return local_cell_length * block_dim_.x();
 }
