@@ -20,7 +20,7 @@
 #include <boxm/boxm_scene.h>
 
 template <unsigned feature_dim>
-class bvpl_global_pca
+class bvpl_global_pca: public vbl_ref_count
 {
   
 public:
@@ -151,6 +151,8 @@ protected:
 
   
 };
+
+typedef vbl_smart_ptr<bvpl_global_pca<125> > bvpl_global_pca_125_sptr;
 
 #endif
 
