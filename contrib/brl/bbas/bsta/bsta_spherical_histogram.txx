@@ -530,7 +530,8 @@ void bsta_spherical_histogram<T>::print_to_text(vcl_ostream& os)
 }
 
 template <class T>
-void bsta_spherical_histogram<T>::print_to_vrml(vcl_ostream& os)
+void bsta_spherical_histogram<T>::print_to_vrml(vcl_ostream& os,
+                                                T transparency)
 {
   os << "#VRML V2.0 utf8\n"
      << "Background {\n"
@@ -546,25 +547,6 @@ void bsta_spherical_histogram<T>::print_to_vrml(vcl_ostream& os)
      << "attenuation 1 0 0\n"
      << "radius 100\n"
      << "}\n";
-#if 0
-     << "Shape {\n"
-     << "  appearance NULL\n"
-     << "    geometry PointSet {\n"
-     << "      color NULL\n"
-     << "      coord Coordinate{\n"
-     << "       point[\n";
-  for (int az = 0; az<int(n_azimuth_); ++az)
-    for (int el = 0; el<int(n_elevation_); ++el) {
-      T cnts = counts(az, el);
-      if (cnts>0) {
-        T azc = azimuth_center(az), elc = elevation_center(el);
-        T x, y, z;
-        convert_to_cartesian(azc, elc, x, y, z);
-        os << x << ' ' << y << ' ' << z << '\n';
-      }
-    }
-  os << "   ]\n  }\n }\n}\n"
-#endif
     for (int az = 0; az<int(n_azimuth_); ++az)
       for (int el = 0; el<int(n_elevation_); ++el) {
         T cnts = counts(az, el);
@@ -580,8 +562,8 @@ void bsta_spherical_histogram<T>::print_to_vrml(vcl_ostream& os)
             << " appearance Appearance{\n"
             << "   material Material\n"
             << "    {\n"
-            << "      diffuseColor " << 0 << ' ' << 1 << ' ' << 0 << '\n'
-            << "      transparency " << 0 << '\n'
+            << "      diffuseColor " << 1 << ' ' << 1 << ' ' << 0 << '\n'
+            << "      transparency " << transparency << '\n'
             << "    }\n"
             << "  }\n"
             << " geometry Sphere\n"

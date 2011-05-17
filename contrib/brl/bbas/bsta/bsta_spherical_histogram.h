@@ -168,7 +168,7 @@ class bsta_spherical_histogram
   void print_to_text(vcl_ostream& os);
 
   //: display counts in vrml with reference sphere
-  void print_to_vrml(vcl_ostream& os);
+  void print_to_vrml(vcl_ostream& os, T transparency = T(0));
 
   //: convenient utilities
   void convert_to_cartesian(T azimuth, T elevation, T& x, T& y, T& z) const;
