@@ -17,6 +17,18 @@ bapl_dsift::bapl_dsift( vil_image_view<float> const& img ):grad_valid_(true)
   vil_orientations_from_sobel( img, this->grad_orient_, this->grad_mag_ );
 }//end bapl_dsift::bapl_dsift
 
+bapl_dsift::bapl_dsift( vil_image_view<vxl_byte> const& img ):grad_valid_(true)
+{
+  vil_orientations_from_sobel( img, this->grad_orient_, this->grad_mag_ );
+}//end bapl_dsift::bapl_dsift
+
+bool bapl_dsift::set_img( vil_image_view<vxl_byte> const& img )
+{
+  vil_orientations_from_sobel( img, this->grad_orient_, this->grad_mag_ );
+  this->grad_valid_ = true;
+  return this->grad_valid_;
+}
+
 bool bapl_dsift::set_img( vil_image_view<float> const& img )
 {
   vil_orientations_from_sobel( img, this->grad_orient_, this->grad_mag_ );
@@ -130,3 +142,44 @@ vnl_vector<double> bapl_dsift::vnl_dsift( unsigned const& key_x, unsigned const&
 
   return histogram;
 }//end dsift
+
+void bapl_dsift::b_write(vsl_b_ostream& os) const
+{
+	const short version_no = 1;
+	vsl_b_write(os, version_no);
+	vsl_b_write(os, this->grad_valid_);
+
+	if(this->grad_valid_)
+	{
+		vsl_b_write(os, grad_mag_);
+		vsl_b_write(os, grad_orient_);
+	}
+	
+}//end bapl_dsift::b_write
+
+void bapl_dsift::b_read(vsl_b_istream& is)
+{
+	if(!is) return;
+	short v;
+	vsl_b_read(is,v);
+	switch(v)
+	{
+	case 1:
+		{
+			vsl_b_read(is,this->grad_valid_);
+			if(this->grad_valid_)
+			{
+				vsl_b_read(is,this->grad_mag_);
+				vsl_b_read(is,this->grad_orient_);
+			}
+		}//end case 1
+		break;
+	default:
+		{
+            vcl_cerr << "----I/O ERROR: bapl_dsift::b_read ----\n"
+				     << "	 UNKNOWN VERSION NUMBER " << v << "\n";
+			is.is().clear(vcl_ios::badbit); //set an unrecoverable IO error on stream
+			return;
+		}//end default
+	}//end switch
+}//end bapl_dsift::b_read

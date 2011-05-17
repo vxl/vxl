@@ -17,10 +17,17 @@
 // \endverbatim
 
 #include <vbl/vbl_ref_count.h>
+
 #include <vcl_cmath.h>
+
 #include <vgl/vgl_point_2d.h>
+
 #include <vil/vil_image_view.h>
+#include <vil/io/vil_io_image_view.h>
+
 #include <vnl/vnl_vector.h>
+
+#include <vsl/vsl_binary_io.h>
 
 //:
 // Ignores Scale and Orientation computations and produces a sift descriptor at the scale of the image,
@@ -30,13 +37,19 @@ class bapl_dsift: public vbl_ref_count
  public:
   bapl_dsift() : grad_valid_(false) {}
   bapl_dsift( vil_image_view<float> const& img );
-  ~bapl_dsift() {}
+  bapl_dsift( vil_image_view<vxl_byte> const& img);
+   ~bapl_dsift() {}
 
   bool set_img( vil_image_view<float> const& img );
-
+  bool set_img( vil_image_view<vxl_byte> const& img );
+ 
   vcl_vector<float> dsift( unsigned const& key_x, unsigned const& key_y, float const& key_orient = 0.0f );
 
   vnl_vector<double> vnl_dsift( unsigned const& key_x, unsigned const& key_y, float const& key_orient = 0.0f );
+
+  void b_write(vsl_b_ostream& os) const;
+
+  void b_read(vsl_b_istream& is);
 
  protected:
   vil_image_view<float> grad_mag_;
