@@ -27,7 +27,7 @@ class boxm2_cache: public vbl_ref_count
 
   //: Use this instead of constructor
   static boxm2_cache* instance();
-  static bool         exists() const { return boxm2_cache::instance_!=0; }
+  static bool         exists() { return boxm2_cache::instance_!=0; }
 
   //: the destroyer instance, to make sure memory is deallocated when the program exits
   static boxm2_cache_destroyer destroyer_;  // it's not a pointer so C++ will make sure that its destructor will be called
