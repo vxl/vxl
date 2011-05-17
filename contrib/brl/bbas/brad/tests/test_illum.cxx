@@ -79,10 +79,10 @@ static void test_illum()
   vcl_vector<double> intensities(intens, intens+31);
   vcl_vector<double> fitting_error;
   vnl_double_4 model_params;
-  brad_illum_util::solve_lambertian_model(illumination_dirs,
-                                          intensities,
-                                          model_params,
-                                          fitting_error);
+  brad_solve_lambertian_model(illumination_dirs,
+                              intensities,
+                              model_params,
+                              fitting_error);
 
   double er = 0.0;
   unsigned m = fitting_error.size();
@@ -99,10 +99,10 @@ static void test_illum()
 
   vcl_cout << "Predicted Intensity \n";
   for(unsigned i = 0; i<m; ++i)
-    vcl_cout << brad_illum_util::expected_intensity(illumination_dirs[i], model_params)
+    vcl_cout << brad_expected_intensity(illumination_dirs[i], model_params)
              << '\n';
   vcl_vector<double> fitting_errors;
-  brad_illum_util::solution_error(illumination_dirs, intensities, fitting_errors);
+  brad_solution_error(illumination_dirs, intensities, fitting_errors);
   vcl_cout << "Interpolated intensity \n";
   for(unsigned i = 0; i<m; ++i)
     vcl_cout << fitting_errors[i] << '\n';

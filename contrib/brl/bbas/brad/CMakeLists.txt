@@ -3,7 +3,9 @@
   INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bbas )
 
   SET(brad_sources
-      brad_illum_util.h  brad_illum_util.cxx brad_illum_cost_function.h
+      brad_illum_util.h        brad_illum_util.cxx brad_illum_cost_function.h
+      brad_sun_pos.h           brad_sun_pos.cxx
+      brad_sun_dir_index.h     brad_sun_dir_index.cxx
   )
   AUX_SOURCE_DIRECTORY(Templates brad_sources)
   ADD_LIBRARY(brad ${brad_sources} )

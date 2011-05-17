@@ -12,30 +12,29 @@
 #include <vnl/vnl_cross.h>
 #include <brad/brad_illum_cost_function.h>
 
-bool brad_illum_util::
-load_surface_nhbds(vcl_string const& path,
-                   vcl_vector<vcl_vector<vnl_matrix<float> > >& nhds)
+bool brad_load_surface_nhbds(vcl_string const& path,
+                             vcl_vector<vcl_vector<vnl_matrix<float> > >& nhds)
 {
   vcl_ifstream is(path.c_str());
   if (!is.is_open())
-  {
-    vcl_cerr << "In brad_illum_util::load_surface_nhbds(.) - "
-             <<"neighborhood path is not valid\n";
-    return false;
-  }
+    {
+      vcl_cerr << "In load_surface_nhbds(.) - "
+               <<"neighborhood path is not valid\n";
+      return false;
+    }
 
   unsigned dim, ntracks;
   vcl_string temp;
   is >> temp;
   if (temp!="dim:") {
-    vcl_cerr << "In brad_illum_util::load_surface_nhbds(.) - "
+    vcl_cerr << "In load_surface_nhbds(.) - "
              <<"file parse error\n";
     return false;
   }
   is >> dim;
   is >> temp;
   if (temp!="n_tracks:") {
-    vcl_cerr << "In brad_illum_util::load_surface_nhbds(.) - "
+    vcl_cerr << "In load_surface_nhbds(.) - "
              <<"file parse error\n";
     return false;
   }
@@ -44,95 +43,92 @@ load_surface_nhbds(vcl_string const& path,
     vcl_vector<vnl_matrix<float> > nbs;
     is >> temp;
     if (temp!="n_i:") {
-      vcl_cerr << "In brad_illum_util::load_surface_nhbds(.) - "
+      vcl_cerr << "In load_surface_nhbds(.) - "
                <<"file parse error\n";
       return false;
     }
     unsigned ni;
     is >> ni;
     for (unsigned i = 0; i<ni; ++i)
-    {
-      vnl_matrix<float> m(dim, dim);
-      is >> m;
-      nbs.push_back(m);
-    }
+      {
+        vnl_matrix<float> m(dim, dim);
+        is >> m;
+        nbs.push_back(m);
+      }
     nhds.push_back(nbs);
   }
   return true;
 }
 
-bool
-brad_illum_util::load_illumination_dirs(vcl_string const& path,
-                                        vcl_vector<vnl_double_3>& ill_dirs)
+bool brad_load_illumination_dirs(vcl_string const& path,
+                                 vcl_vector<vnl_double_3>& ill_dirs)
 {
   vcl_ifstream is(path.c_str());
   if (!is.is_open())
-  {
-    vcl_cerr << "In brad_illum_util::load_illumination_dirs(.) - "
-             <<"illumination dir path is not valid\n";
-    return false;
-  }
+    {
+      vcl_cerr << "In load_illumination_dirs(.) - "
+               <<"illumination dir path is not valid\n";
+      return false;
+    }
   ill_dirs.clear();
   vcl_string temp;
   is >> temp;
   if (temp != "n_dirs:")
-  {
-    vcl_cerr << "In brad_illum_util::load_illumination_dirs(.) - "
-             <<"invalid file syntax\n";
-    return false;
-  }
+    {
+      vcl_cerr << "In load_illumination_dirs(.) - "
+               <<"invalid file syntax\n";
+      return false;
+    }
   unsigned n_dirs = 0;
   is >> n_dirs;
   for (unsigned i = 0; i<n_dirs; ++i)
-  {
-    vnl_double_3 v;
-    is >> v;
-    ill_dirs.push_back(v);
-  }
+    {
+      vnl_double_3 v;
+      is >> v;
+      ill_dirs.push_back(v);
+    }
   return true;
 }
 
-bool brad_illum_util::
-load_norm_intensities(vcl_string const& path,
-                      vcl_vector<double>& norm_ints)
+bool brad_load_norm_intensities(vcl_string const& path,
+                                vcl_vector<double>& norm_ints)
 {
   vcl_ifstream is(path.c_str());
   if (!is.is_open())
-  {
-    vcl_cerr << "In brad_illum_util::load_norm_intensities(.) - "
-             <<"normlized intensity path is not valid\n";
-    return false;
-  }
+    {
+      vcl_cerr << "In load_norm_intensities(.) - "
+               <<"normlized intensity path is not valid\n";
+      return false;
+    }
   norm_ints.clear();
   vcl_string temp;
   is >> temp;
   if (temp != "n_ints:")
-  {
-    vcl_cerr << "In brad_illum_util::load_norm_intensities(.) - "
-             <<"invalid file syntax\n";
-    return false;
-  }
+    {
+      vcl_cerr << "In load_norm_intensities(.) - "
+               <<"invalid file syntax\n";
+      return false;
+    }
   unsigned n_ints = 0;
   is >> n_ints;
   for (unsigned i = 0; i<n_ints; ++i)
-  {
-    double v;
-    is >> v;
-    norm_ints.push_back(v);
-  }
+    {
+      double v;
+      is >> v;
+      norm_ints.push_back(v);
+    }
   return true;
 }
 
-bool brad_illum_util::
-solve_lambertian_model(vcl_vector<vnl_double_3> const& ill_dirs,
-                       vcl_vector<double> const& intensities,
-                       vnl_double_4& model_params,
-                       vcl_vector<double>& fitting_error)
+bool brad_solve_lambertian_model(vcl_vector<vnl_double_3> const& ill_dirs,
+                                 vcl_vector<double> const& intensities,
+                                 vnl_double_4& model_params,
+                                 vcl_vector<double>& fitting_error)
 {
   // form the "A" and "b" matrices
   unsigned m = ill_dirs.size(), n = 3;
   if (m<4) {
-    vcl_cerr << "In brad_illum_util::solve_lambertian_model(.) - "
+    vcl_cerr << "In solve_lambertian_model(.) - "
              <<"insufficient number of illumination dirs\n";
     return false;
   }
@@ -175,18 +171,18 @@ solve_lambertian_model(vcl_vector<vnl_double_3> const& ill_dirs,
   // compute model fitting error
 
   for (unsigned j = 0; j<m; ++j)
-  {
-    double Im = S[j][0]*model_params[0];
-    Im += S[j][1]*model_params[1]; Im += S[j][2]*model_params[2];
-    Im += model_params[3];
-    double Io = intensities[j];
-    fitting_error.push_back((Im-Io)*(Im-Io));
-  }
+    {
+      double Im = S[j][0]*model_params[0];
+      Im += S[j][1]*model_params[1]; Im += S[j][2]*model_params[2];
+      Im += model_params[3];
+      double Io = intensities[j];
+      fitting_error.push_back((Im-Io)*(Im-Io));
+    }
   return true;
 }
 
-double brad_illum_util::expected_intensity(vnl_double_3 const& illum_dir,
-                                           vnl_double_4 const& model_params)
+double brad_expected_intensity(vnl_double_3 const& illum_dir,
+                               vnl_double_4 const& model_params)
 {
   double Im = 0.0;
   for (unsigned i = 0; i<3; ++i)
@@ -195,89 +191,87 @@ double brad_illum_util::expected_intensity(vnl_double_3 const& illum_dir,
   return Im;
 }
 
-double brad_illum_util::
-nearest_ill_dir(vcl_vector<vnl_double_3> const& ill_dirs,
-                vnl_double_3 const& dir)
+double brad_nearest_ill_dir(vcl_vector<vnl_double_3> const& ill_dirs,
+                            vnl_double_3 const& dir)
 {
   double min_ang = 1.0e10;
   for (unsigned i = 0; i<ill_dirs.size(); ++i)
-  {
-    double dot = dot_product(ill_dirs[i],dir);
-    double ang = 180.0*vcl_acos(dot)/vnl_math::pi;
-    if (ang<min_ang)
-      min_ang = ang;
-  }
+    {
+      double dot = dot_product(ill_dirs[i],dir);
+      double ang = 180.0*vcl_acos(dot)/vnl_math::pi;
+      if (ang<min_ang)
+        min_ang = ang;
+    }
   return min_ang;
 }
 
-void brad_illum_util::
-solution_error(vcl_vector<vnl_double_3> const& ill_dirs,
-               vcl_vector<double> const& intensities,
-               vcl_vector<double>& fitting_error)
+void brad_solution_error(vcl_vector<vnl_double_3> const& ill_dirs,
+                         vcl_vector<double> const& intensities,
+                         vcl_vector<double>& fitting_error)
 {
   unsigned m = ill_dirs.size();
   // direction to leave out
   for (unsigned j = 0; j<m; j++)
-  {
-    vcl_vector<vnl_double_3> ill_dir_1;
-    vcl_vector<double> intens_1;
-    for (unsigned i = 0; i<m; ++i)
-      //if (i!=j&&i!=j+1) {
-      if (i!=j) {
-        ill_dir_1.push_back(ill_dirs[i]);
-        intens_1.push_back(intensities[i]);
-      }
-    //find prior fitting error
-    vcl_vector<double> fit_error;
-    vnl_double_4 model_params;
-    solve_lambertian_model(ill_dir_1,
-                           intens_1,
-                           model_params,
-                           fit_error);
+    {
+      vcl_vector<vnl_double_3> ill_dir_1;
+      vcl_vector<double> intens_1;
+      for (unsigned i = 0; i<m; ++i)
+        //if (i!=j&&i!=j+1) {
+        if (i!=j) {
+          ill_dir_1.push_back(ill_dirs[i]);
+          intens_1.push_back(intensities[i]);
+        }
+      //find prior fitting error
+      vcl_vector<double> fit_error;
+      vnl_double_4 model_params;
+      brad_solve_lambertian_model(ill_dir_1,
+                             intens_1,
+                             model_params,
+                             fit_error);
 
-    double ex_int0 = brad_illum_util::expected_intensity(ill_dirs[j],model_params);
-    //double ex_int1 = brad_illum_util::expected_intensity(ill_dirs[j+1],model_params);
-    double er0 = vcl_fabs(ex_int0-intensities[j]);
-    // double er1 = vcl_fabs(ex_int1-intensities[j+1]);
-    fitting_error.push_back(er0);
-    //fitting_error.push_back(er1);
-  }
+      double ex_int0 = brad_expected_intensity(ill_dirs[j],model_params);
+      //double ex_int1 = expected_intensity(ill_dirs[j+1],model_params);
+      double er0 = vcl_fabs(ex_int0-intensities[j]);
+      // double er1 = vcl_fabs(ex_int1-intensities[j+1]);
+      fitting_error.push_back(er0);
+      //fitting_error.push_back(er1);
+    }
 }
 
 // Find the range in surface normal orientation angle for which
 // the dot product with respect to illumination direction is
 // positive for all images
-static void search_range(vnl_matrix<double> illum_dirs,
-                         vnl_vector<double> u, vnl_vector<double> v,
-                         double& theta_min, double& theta_max)
+static void brad_search_range(vnl_matrix<double> illum_dirs,
+                              vnl_vector<double> u, vnl_vector<double> v,
+                              double& theta_min, double& theta_max)
 {
   unsigned n_dirs = illum_dirs.rows();
   double min = 0, max = 0.0;
   for (unsigned j = 0; j<n_dirs; ++j)
-  {
-    vnl_vector<double> ill_dir = illum_dirs.get_row(j);
-    double dpu = dot_product(u, ill_dir);
-    double dpv = dot_product(v, ill_dir);
-    double theta = -vcl_atan( dpu/dpv);
-    double tmid = theta + vnl_math::pi/2.0;
-    vnl_vector<double> n_mid = vcl_cos(tmid)*u + vcl_sin(tmid)*v;
-    double dp_mid = dot_product(n_mid, ill_dir);
-    double t_min = theta, t_max = theta+vnl_math::pi;
-    if (dp_mid<0) {
-      t_min = theta-vnl_math::pi, t_max = theta;
+    {
+      vnl_vector<double> ill_dir = illum_dirs.get_row(j);
+      double dpu = dot_product(u, ill_dir);
+      double dpv = dot_product(v, ill_dir);
+      double theta = -vcl_atan( dpu/dpv);
+      double tmid = theta + vnl_math::pi/2.0;
+      vnl_vector<double> n_mid = vcl_cos(tmid)*u + vcl_sin(tmid)*v;
+      double dp_mid = dot_product(n_mid, ill_dir);
+      double t_min = theta, t_max = theta+vnl_math::pi;
+      if (dp_mid<0) {
+        t_min = theta-vnl_math::pi, t_max = theta;
+      }
+      if (j==0) {min = t_min; max = t_max; continue;}
+      //shrink the range
+      if (t_min>min) min = t_min;
+      if (t_max<max) max = t_max;
     }
-    if (j==0) {min = t_min; max = t_max; continue;}
-    //shrink the range
-    if (t_min>min) min = t_min;
-    if (t_max<max) max = t_max;
-  }
   theta_min = min; theta_max = max;
 }
 
 // nearest surface normal to the z direction
 //
-void nearest_to_z(vnl_vector<double> u, vnl_vector<double> v,
-                  vnl_vector<double>& n)
+static void nearest_to_z(vnl_vector<double> u, vnl_vector<double> v,
+                         vnl_vector<double>& n)
 {
   double dpu = u[2], dpv = v[2];
   if (vcl_fabs(dpu)<1e-3) {
@@ -291,14 +285,14 @@ void nearest_to_z(vnl_vector<double> u, vnl_vector<double> v,
   if (n[2]<0) n = -n;
 }
 
-void brad_illum_util::solve_atmospheric_model(vnl_matrix<double> illum_dirs,
-                                              vnl_matrix<double> intensities,
-                                              vnl_vector<double> airlight,
-                                              unsigned max_iterations,
-                                              double max_fitting_error,
-                                              vnl_vector<double>& scene_irrad,
-                                              vnl_matrix<double>& surf_normals,
-                                              vnl_vector<double>& reflectances)
+void brad_solve_atmospheric_model(vnl_matrix<double> illum_dirs,
+                                  vnl_matrix<double> intensities,
+                                  vnl_vector<double> airlight,
+                                  unsigned max_iterations,
+                                  double max_fitting_error,
+                                  vnl_vector<double>& scene_irrad,
+                                  vnl_matrix<double>& surf_normals,
+                                  vnl_vector<double>& reflectances)
 {
   unsigned n_images = illum_dirs.rows(), n_surfs = intensities.cols();
   vnl_matrix<double> pred_ints;
@@ -329,7 +323,7 @@ void brad_illum_util::solve_atmospheric_model(vnl_matrix<double> illum_dirs,
   vcl_cout << "a_uu= " << a_uu << " a_uv= " << a_uv << " a_vv= "
            << a_vv << '\n';
   double theta_min = 0, theta_max = 0;
-  search_range(illum_dirs, u, v, theta_min, theta_max);
+  brad_search_range(illum_dirs, u, v, theta_min, theta_max);
   vcl_cout << "theta_min = " <<  theta_min << " theta_max = " <<  theta_max << '\n';
   vnl_matrix<double> an(3, n_surfs, 0.0);//initial guess at normals
   //find closest normal vector to nz
@@ -413,14 +407,14 @@ void brad_illum_util::solve_atmospheric_model(vnl_matrix<double> illum_dirs,
     // b)Solve for the reflectances
     double rsum = 0.0;
     for (unsigned i = 0; i<n_surfs; ++i) {
-       double r = (nbetas[i]-0.5*n_images*mu)/snsj[i];
-       double temp;
-       if (r>0)
-         temp=r;
-       else
-         temp=0.01;
-       rsum += temp;
-       reflec[i]=temp;
+      double r = (nbetas[i]-0.5*n_images*mu)/snsj[i];
+      double temp;
+      if (r>0)
+        temp=r;
+      else
+        temp=0.01;
+      rsum += temp;
+      reflec[i]=temp;
     }
     rsum /= n_surfs; //average
     for (unsigned i = 0; i<n_surfs; ++i)
@@ -428,25 +422,25 @@ void brad_illum_util::solve_atmospheric_model(vnl_matrix<double> illum_dirs,
     //5) compute the surface normals
     // a) define residual coefficients that depend on the individual surface
     for (unsigned i = 0; i<n_surfs; ++i)
-    {
-      vnl_vector<double> Gi = norm_intens.get_column(i);
-      vnl_vector<double> hi = illum_dirs.transpose()*Gi/reflec[i];
-      double a_uh = dot_product(us, hi),a_vh = dot_product(vs,hi),
-        a_hh = dot_product(hi,hi);
+      {
+        vnl_vector<double> Gi = norm_intens.get_column(i);
+        vnl_vector<double> hi = illum_dirs.transpose()*Gi/reflec[i];
+        double a_uh = dot_product(us, hi),a_vh = dot_product(vs,hi),
+          a_hh = dot_product(hi,hi);
 #ifdef DEBUG
-      vcl_cout << "hi " << hi << "\na_uh= " << a_uh << " a_vh= " << a_vh
-               << " a_hh= " << a_hh << '\n';
+        vcl_cout << "hi " << hi << "\na_uh= " << a_uh << " a_vh= " << a_vh
+                 << " a_hh= " << a_hh << '\n';
 #endif
-      // b) Solve for surface normal
-      brad_illum_cost_function icf(u, v, theta_min, theta_max,
-                                   a_uu, a_uv, a_vv, a_uh, a_vh, a_hh);
-      double ax=0, bx=0, cx=0;
-      icf.determine_brackets(ax, bx, cx, 0.05);
-      vnl_brent_minimizer bm(icf);
-      double x = bm.minimize_given_bounds(ax, bx, cx);
-      vnl_vector<double> ndir = vcl_cos(x)*u + vcl_sin(x)*v;
-      norm_dirs.set_column(i, ndir);
-    }
+        // b) Solve for surface normal
+        brad_illum_cost_function icf(u, v, theta_min, theta_max,
+                                     a_uu, a_uv, a_vv, a_uh, a_vh, a_hh);
+        double ax=0, bx=0, cx=0;
+        icf.determine_brackets(ax, bx, cx, 0.05);
+        vnl_brent_minimizer bm(icf);
+        double x = bm.minimize_given_bounds(ax, bx, cx);
+        vnl_vector<double> ndir = vcl_cos(x)*u + vcl_sin(x)*v;
+        norm_dirs.set_column(i, ndir);
+      }
 #if 1
     //6) compute next irradiance estimate
     for (unsigned r = 0; r<n_images; ++r) {
@@ -464,12 +458,12 @@ void brad_illum_util::solve_atmospheric_model(vnl_matrix<double> illum_dirs,
              << "Reflectances\n" << reflec << '\n'
              << "Surf Norms\n" << norm_dirs << '\n';
     vnl_matrix<double> fit_errs;
-    brad_illum_util::solution_error(illum_dirs, intensities, airlight,
-                                    irrad_avg,
-                                    norm_dirs,
-                                    reflec,
-                                    fit_errs,
-                                    pred_ints);
+    brad_solution_error(illum_dirs, intensities, airlight,
+                   irrad_avg,
+                   norm_dirs,
+                   reflec,
+                   fit_errs,
+                   pred_ints);
 #ifdef DEBUG
     vcl_cout << "Fit Errors\n" << fit_errs << '\n';
 #endif
@@ -485,14 +479,14 @@ void brad_illum_util::solve_atmospheric_model(vnl_matrix<double> illum_dirs,
 }
 
 
-void brad_illum_util::solution_error(vnl_matrix<double> illum_dirs,
-                                     vnl_matrix<double> intensities,
-                                     vnl_vector<double> airlight,
-                                     vnl_vector<double> scene_irrad,
-                                     vnl_matrix<double> surf_normals,
-                                     vnl_vector<double> reflectances,
-                                     vnl_matrix<double>& fit_errors,
-                                     vnl_matrix<double>& pred_intensities)
+void brad_solution_error(vnl_matrix<double> illum_dirs,
+                         vnl_matrix<double> intensities,
+                         vnl_vector<double> airlight,
+                         vnl_vector<double> scene_irrad,
+                         vnl_matrix<double> surf_normals,
+                         vnl_vector<double> reflectances,
+                         vnl_matrix<double>& fit_errors,
+                         vnl_matrix<double>& pred_intensities)
 {
   unsigned n_images = illum_dirs.rows(), n_surfs = intensities.cols();
   // compute reflected radiance =
@@ -519,24 +513,24 @@ void brad_illum_util::solution_error(vnl_matrix<double> illum_dirs,
   }
 }
 
-double brad_illum_util::atmos_prediction(vnl_double_3 const& ill_dir,
-                                         double airlight,
-                                         double scene_irrad,
-                                         vnl_double_3 const& surface_norm,
-                                         double reflectance
-                                         )
+double brad_atmos_prediction(vnl_double_3 const& ill_dir,
+                             double airlight,
+                             double scene_irrad,
+                             vnl_double_3 const& surface_norm,
+                             double reflectance
+                             )
 {
   double dp = dot_product(ill_dir, surface_norm);
   double radiance = dp*reflectance*scene_irrad;
   return radiance + airlight;
 }
 
-void brad_illum_util::solve_atmospheric_model(vnl_matrix<double> illum_dirs,
-                                              vnl_matrix<double> corr_intens,
-                                              unsigned max_iterations,
-                                              double max_fitting_error,
-                                              vnl_matrix<double>& surf_normals,
-                                              vnl_vector<double>& reflectances)
+void brad_solve_atmospheric_model(vnl_matrix<double> illum_dirs,
+                                  vnl_matrix<double> corr_intens,
+                                  unsigned max_iterations,
+                                  double max_fitting_error,
+                                  vnl_matrix<double>& surf_normals,
+                                  vnl_vector<double>& reflectances)
 {
   unsigned n_images = illum_dirs.rows(), n_surfs = corr_intens.cols();
   vnl_matrix<double> pred_ints;
@@ -567,7 +561,7 @@ void brad_illum_util::solve_atmospheric_model(vnl_matrix<double> illum_dirs,
   vcl_cout << "a_uu= " << a_uu << " a_uv= " << a_uv << " a_vv= "
            << a_vv << '\n';
   double theta_min = 0, theta_max = 0;
-  search_range(illum_dirs, u, v, theta_min, theta_max);
+  brad_search_range(illum_dirs, u, v, theta_min, theta_max);
   vcl_cout << "theta_min = " <<  theta_min << " theta_max = " <<  theta_max << '\n';
   vnl_matrix<double> an(3, n_surfs, 0.0);//initial guess at normals
   //find closest normal vector to nz
@@ -586,93 +580,93 @@ void brad_illum_util::solve_atmospheric_model(vnl_matrix<double> illum_dirs,
   vnl_vector<double> reflec(n_surfs);
   vnl_matrix<double> fit_errs;
   while (count<max_iterations)
-  {
-    //4) Solve for reflectance
-    // a) Compute the lagrange multiplier, mu.
-    double sum_den = 0;
-    double sum_neu = 0;
-    vcl_vector<double> nbetas(n_surfs), snsj(n_surfs);
-    for (unsigned i = 0; i<n_surfs; ++i) {
-      double sum_nsj = 0;
-      double sum_nbeta = 0;
-      vnl_vector<double> norm_dir = norm_dirs.get_column(i);
-      for (unsigned j = 0; j<n_images; ++j) {
-        vnl_vector<double> ill_dir = illum_dirs.get_row(j);
-        double Ij_betaj = corr_intens[j][i];
-        double dp = dot_product(ill_dir, norm_dir);
-        sum_nsj += dp*dp;
-        sum_nbeta += dp*Ij_betaj;
-      }
-      snsj[i] = sum_nsj;
-      nbetas[i]=sum_nbeta;
-      sum_den += 1/sum_nsj;
-      sum_neu += sum_nbeta/sum_nsj;
-    }
-    sum_den/=n_surfs;
-    sum_neu/=n_surfs;
-    double mu = (2.0/n_images)*(sum_neu -1)/sum_den;
-    // b)Solve for the reflectances
-    double rsum = 0.0;
-    for (unsigned i = 0; i<n_surfs; ++i) {
-       double r = (nbetas[i]-0.5*n_images*mu)/snsj[i];
-       double temp;
-       if (r>0)
-         temp=r;
-       else
-         temp=0.01;
-       rsum += temp;
-       reflec[i]=temp;
-    }
-    rsum /= n_surfs; //average
-    for (unsigned i = 0; i<n_surfs; ++i)
-      reflec[i]/=rsum;
-    //5) compute the surface normals
-    // a) define residual coefficients that depend on the individual surface
-    for (unsigned i = 0; i<n_surfs; ++i)
     {
-      vnl_vector<double> Gi = corr_intens.get_column(i);
-      vnl_vector<double> hi = illum_dirs.transpose()*Gi/reflec[i];
-      double a_uh = dot_product(us, hi),a_vh = dot_product(vs,hi),
-        a_hh = dot_product(hi,hi);
+      //4) Solve for reflectance
+      // a) Compute the lagrange multiplier, mu.
+      double sum_den = 0;
+      double sum_neu = 0;
+      vcl_vector<double> nbetas(n_surfs), snsj(n_surfs);
+      for (unsigned i = 0; i<n_surfs; ++i) {
+        double sum_nsj = 0;
+        double sum_nbeta = 0;
+        vnl_vector<double> norm_dir = norm_dirs.get_column(i);
+        for (unsigned j = 0; j<n_images; ++j) {
+          vnl_vector<double> ill_dir = illum_dirs.get_row(j);
+          double Ij_betaj = corr_intens[j][i];
+          double dp = dot_product(ill_dir, norm_dir);
+          sum_nsj += dp*dp;
+          sum_nbeta += dp*Ij_betaj;
+        }
+        snsj[i] = sum_nsj;
+        nbetas[i]=sum_nbeta;
+        sum_den += 1/sum_nsj;
+        sum_neu += sum_nbeta/sum_nsj;
+      }
+      sum_den/=n_surfs;
+      sum_neu/=n_surfs;
+      double mu = (2.0/n_images)*(sum_neu -1)/sum_den;
+      // b)Solve for the reflectances
+      double rsum = 0.0;
+      for (unsigned i = 0; i<n_surfs; ++i) {
+        double r = (nbetas[i]-0.5*n_images*mu)/snsj[i];
+        double temp;
+        if (r>0)
+          temp=r;
+        else
+          temp=0.01;
+        rsum += temp;
+        reflec[i]=temp;
+      }
+      rsum /= n_surfs; //average
+      for (unsigned i = 0; i<n_surfs; ++i)
+        reflec[i]/=rsum;
+      //5) compute the surface normals
+      // a) define residual coefficients that depend on the individual surface
+      for (unsigned i = 0; i<n_surfs; ++i)
+        {
+          vnl_vector<double> Gi = corr_intens.get_column(i);
+          vnl_vector<double> hi = illum_dirs.transpose()*Gi/reflec[i];
+          double a_uh = dot_product(us, hi),a_vh = dot_product(vs,hi),
+            a_hh = dot_product(hi,hi);
 #ifdef DEBUG
-      vcl_cout << "hi " << hi << "\na_uh= " << a_uh << " a_vh= " << a_vh
-               << " a_hh= " << a_hh << '\n';
+          vcl_cout << "hi " << hi << "\na_uh= " << a_uh << " a_vh= " << a_vh
+                   << " a_hh= " << a_hh << '\n';
 #endif
-      // b) Solve for surface normal
-      brad_illum_cost_function icf(u, v, theta_min, theta_max,
-                                   a_uu, a_uv, a_vv, a_uh, a_vh, a_hh);
-      double ax=0, bx=0, cx=0;
-      icf.determine_brackets(ax, bx, cx, 0.05);
-      vnl_brent_minimizer bm(icf);
-      double x = bm.minimize_given_bounds(ax, bx, cx);
-      vnl_vector<double> ndir = vcl_cos(x)*u + vcl_sin(x)*v;
-      norm_dirs.set_column(i, ndir);
+          // b) Solve for surface normal
+          brad_illum_cost_function icf(u, v, theta_min, theta_max,
+                                       a_uu, a_uv, a_vv, a_uh, a_vh, a_hh);
+          double ax=0, bx=0, cx=0;
+          icf.determine_brackets(ax, bx, cx, 0.05);
+          vnl_brent_minimizer bm(icf);
+          double x = bm.minimize_given_bounds(ax, bx, cx);
+          vnl_vector<double> ndir = vcl_cos(x)*u + vcl_sin(x)*v;
+          norm_dirs.set_column(i, ndir);
+        }
+      vcl_cout << "Iteration " << count << '\n'
+               << "Reflectances\n" << reflec << '\n'
+               << "Surf Norms\n" << norm_dirs << '\n';
+      brad_solution_error(illum_dirs, corr_intens,
+                     norm_dirs,
+                     reflec,
+                     fit_errs);
+#ifdef DEBUG
+      vcl_cout << "Fit Errors\n" << fit_errs << '\n';
+#endif
+      double er = fit_errs.absolute_value_sum()/(n_images*n_surfs);
+      vcl_cout << "Average Fit Error "<< er << '\n';
+      count++;
     }
-    vcl_cout << "Iteration " << count << '\n'
-             << "Reflectances\n" << reflec << '\n'
-             << "Surf Norms\n" << norm_dirs << '\n';
-    brad_illum_util::solution_error(illum_dirs, corr_intens,
-                                    norm_dirs,
-                                    reflec,
-                                    fit_errs);
-#ifdef DEBUG
-    vcl_cout << "Fit Errors\n" << fit_errs << '\n';
-#endif
-    double er = fit_errs.absolute_value_sum()/(n_images*n_surfs);
-    vcl_cout << "Average Fit Error "<< er << '\n';
-    count++;
-  }
   vcl_cout << "FitErrors\n" << fit_errs << '\n';
   // 7) set outputs
   surf_normals = norm_dirs;
   reflectances = reflec;
 }
 
-void brad_illum_util::solution_error(vnl_matrix<double> illum_dirs,
-                                     vnl_matrix<double> corr_intens,
-                                     vnl_matrix<double> surf_normals,
-                                     vnl_vector<double> reflectances,
-                                     vnl_matrix<double>& fit_errors)
+void brad_solution_error(vnl_matrix<double> illum_dirs,
+                         vnl_matrix<double> corr_intens,
+                         vnl_matrix<double> surf_normals,
+                         vnl_vector<double> reflectances,
+                         vnl_matrix<double>& fit_errors)
 {
   unsigned n_images = illum_dirs.rows(), n_surfs = corr_intens.cols();
 
@@ -688,18 +682,17 @@ void brad_illum_util::solution_error(vnl_matrix<double> illum_dirs,
   }
 }
 
-void   brad_illum_util::
-display_illumination_space_vrml(vnl_matrix<double> illum_dirs,
-                                vcl_string const& path,
-                                vnl_double_3 degenerate_dir)
+void  brad_display_illumination_space_vrml(vnl_matrix<double> illum_dirs,
+                                           vcl_string const& path,
+                                           vnl_double_3 degenerate_dir)
 {
   vcl_ofstream str(path.c_str());
   if (!str.is_open())
-  {
-    vcl_cerr << "In brad_illum_util::display_illumination_space(.) - "
-             <<"vrml file path is not valid\n";
-    return;
-  }
+    {
+      vcl_cerr << "In display_illumination_space(.) - "
+               <<"vrml file path is not valid\n";
+      return;
+    }
   str << "#VRML V2.0 utf8\n"
       << "Background {\n"
       << "  skyColor [ 0 0 0 ]\n"
@@ -711,32 +704,32 @@ display_illumination_space_vrml(vnl_matrix<double> illum_dirs,
   for (unsigned i =0; i<n; i++) {
     vgl_vector_3d<double> r(illum_dirs[i][0], illum_dirs[i][1],
                             illum_dirs[i][2]);
-  vnl_double_3 yaxis(0.0, 1.0, 0.0), pvec(r.x(), r.y(), r.z());
-  vgl_rotation_3d<double> rot(yaxis, pvec);
-  vnl_quaternion<double> q = rot.as_quaternion();
-  vnl_double_3 axis = q.axis();
-  double ang = q.angle();
-  str <<  "Transform {\n"
-      << " translation " << cent.x()+ rad*r.x() << ' ' << cent.y()+rad*r.y()
-      << ' ' << cent.z()+rad*r.z() << '\n'
-      << " rotation " << axis[0] << ' ' << axis[1] << ' ' << axis[2] << ' ' <<  ang << '\n'
-      << "children [\n"
-      << " Shape {\n"
-      << " appearance Appearance{\n"
-      << "  material Material\n"
-      << "   {\n"
-      << "     diffuseColor 1 0 0\n"
-      << "     transparency 0\n"
-      << "    }\n"
-      << "  }\n"
-      << " geometry Cylinder\n"
-      << "{\n"
-      << " radius 0.250000\n"
-      << " height " << 2*rad << '\n'
-      << " }\n"
-      << " }\n"
-      << "]\n"
-      << "}\n";
+    vnl_double_3 yaxis(0.0, 1.0, 0.0), pvec(r.x(), r.y(), r.z());
+    vgl_rotation_3d<double> rot(yaxis, pvec);
+    vnl_quaternion<double> q = rot.as_quaternion();
+    vnl_double_3 axis = q.axis();
+    double ang = q.angle();
+    str <<  "Transform {\n"
+        << " translation " << cent.x()+ rad*r.x() << ' ' << cent.y()+rad*r.y()
+        << ' ' << cent.z()+rad*r.z() << '\n'
+        << " rotation " << axis[0] << ' ' << axis[1] << ' ' << axis[2] << ' ' <<  ang << '\n'
+        << "children [\n"
+        << " Shape {\n"
+        << " appearance Appearance{\n"
+        << "  material Material\n"
+        << "   {\n"
+        << "     diffuseColor 1 0 0\n"
+        << "     transparency 0\n"
+        << "    }\n"
+        << "  }\n"
+        << " geometry Cylinder\n"
+        << "{\n"
+        << " radius 0.250000\n"
+        << " height " << 2*rad << '\n'
+        << " }\n"
+        << " }\n"
+        << "]\n"
+        << "}\n";
   }
   if (degenerate_dir[0]==0&&degenerate_dir[1]==0&&degenerate_dir[2]==0) {
     str.close();

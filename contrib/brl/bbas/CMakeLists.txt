@@ -42,7 +42,7 @@ SUBDIRS(bocl)
 SUBDIRS(baio)
 
 # Brown radiometry library
-#SUBDIRS(brad)
+SUBDIRS(brad)
 
 IF( BUILD_GEL )
   # spatial object algorithms
