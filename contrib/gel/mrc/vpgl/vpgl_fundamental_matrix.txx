@@ -46,22 +46,18 @@ vpgl_fundamental_matrix<T>::vpgl_fundamental_matrix(
 
 //---------------------------------
 //: From Essential Matrix.
-//: Since E = Kl^T * F * Kr, F = Kl^-T * F * Kr^-1
+//  Since $E = Kl^T \times F \times Kr$, $F = Kl^{-T} \times F \times Kr^{-1}$
 template <class T>
 vpgl_fundamental_matrix<T>::vpgl_fundamental_matrix(
     const vpgl_calibration_matrix<T> &kr,
     const vpgl_calibration_matrix<T> &kl,
-    const vpgl_essential_matrix<T> &em) : cached_svd_(NULL){
-
-    vnl_matrix_fixed<T, 3, 3> kl_tinv = 
-        vnl_inverse(kl.get_matrix().transpose());
-
-    vnl_matrix_fixed<T, 3, 3> em_inv = em.cached_svd_->inverse();
-
-    vnl_matrix_fixed<T, 3, 3> kr_inv = 
-        vnl_inverse(kl.get_matrix());
-
-    set_matrix(kl_tinv * em_inv * kr_inv);
+    const vpgl_essential_matrix<T>   &em)
+  : cached_svd_(NULL)
+{
+  vnl_matrix_fixed<T, 3, 3> kl_tinv = vnl_inverse(kl.get_matrix().transpose());
+  vnl_matrix_fixed<T, 3, 3> em_inv = em.cached_svd_->inverse();
+  vnl_matrix_fixed<T, 3, 3> kr_inv = vnl_inverse(kl.get_matrix());
+  this->set_matrix(kl_tinv * em_inv * kr_inv);
 }
 
 
@@ -201,14 +197,14 @@ vpgl_proj_camera<T> vpgl_fundamental_matrix<T>::extract_left_camera(
 
   vnl_matrix<T> A( 3*image_points.size(), 4 );
   vnl_vector<T> y( 3*image_points.size() );
-  for ( unsigned p = 0; p < image_points.size(); p++ ){
+  for ( unsigned p = 0; p < image_points.size(); p++ ) {
     vnl_vector_fixed<T,3> wp_vnl(
       world_points[p].x(), world_points[p].y(), world_points[p].z() );
     vnl_vector_fixed<T,3> ip_vnl(
       image_points[p].x(), image_points[p].y(), (T)1 );
     vnl_vector_fixed<T,3> yp = ip_vnl - elxF * wp_vnl;
     T ei;
-    for ( unsigned i = 0; i < 3; i++ ){
+    for ( unsigned i = 0; i < 3; i++ ) {
       y(3*p+i) = yp(i);
       if ( i == 0 ) ei = el.x(); else if ( i == 1 ) ei = el.y(); else ei = el.w();
       A(3*p+i,0) = ei*wp_vnl[0]; A(3*p+i,1) = ei*wp_vnl[1]; A(3*p+i,2) = ei*wp_vnl[2];
@@ -243,8 +239,7 @@ void vpgl_fundamental_matrix<T>::set_matrix( const vnl_matrix_fixed<T,3,3>& F )
   cached_svd_ = new vnl_svd<T>( F_.as_ref() );
 }
 
-//:vpgl_fundamental_matrix stream I/O
-
+//: write vpgl_fundamental_matrix to stream
 template <class T>
 vcl_ostream&  operator<<(vcl_ostream& s, vpgl_fundamental_matrix<T> const& p)
 {
@@ -252,7 +247,7 @@ vcl_ostream&  operator<<(vcl_ostream& s, vpgl_fundamental_matrix<T> const& p)
   return s;
 }
 
-//: Read vpgl_perspective_camera  from stream
+//: Read vpgl_perspective_camera from stream
 template <class T>
 vcl_istream&  operator>>(vcl_istream& s, vpgl_fundamental_matrix<T>& p)
 {
@@ -261,7 +256,8 @@ vcl_istream&  operator>>(vcl_istream& s, vpgl_fundamental_matrix<T>& p)
   p.set_matrix(m);
   return s;
 }
-// Code for easy instantiation.
+
+// Macro for easy instantiation.
 #undef vpgl_FUNDAMENTAL_MATRIX_INSTANTIATE
 #define vpgl_FUNDAMENTAL_MATRIX_INSTANTIATE(T) \
 template class vpgl_fundamental_matrix<T >; \
