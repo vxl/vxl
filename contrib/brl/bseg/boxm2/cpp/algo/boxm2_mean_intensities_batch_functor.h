@@ -1,5 +1,5 @@
-#ifndef boxm2_update_image_functor_h
-#define boxm2_update_image_functor_h
+#ifndef boxm2_mean_intensities_batch_functor_h_
+#define boxm2_mean_intensities_batch_functor_h_
 //:
 // \file
 
@@ -25,6 +25,7 @@ class boxm2_mean_intensities_batch_functor
     id_ = output_alph->block_id();
     return true;
   }
+
   inline bool process_cell(int index)
   {
     datatype & alpha=alpha_data_->data()[index];
@@ -37,6 +38,7 @@ class boxm2_mean_intensities_batch_functor
     alpha /= datatype(out.size());
     return true;
   }
+
  private:
   boxm2_data<BOXM2_AUX0>     * alpha_data_;
   boxm2_stream_cache_sptr str_cache_;
@@ -74,10 +76,11 @@ class boxm2_mean_intensities_print_functor
     }
     return true;
   }
+
  private:
   boxm2_data<BOXM2_AUX0>     * alpha_data_;
   boxm2_stream_cache_sptr str_cache_;
   boxm2_block_id id_;
 };
 
-#endif
+#endif // boxm2_mean_intensities_batch_functor_h_
