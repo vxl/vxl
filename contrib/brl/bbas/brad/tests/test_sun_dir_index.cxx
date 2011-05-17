@@ -5,11 +5,12 @@
 #include <vcl_fstream.h>
 #include <vnl/vnl_double_2.h>
 #include <vnl/vnl_double_3.h>
-//: illumination directions for longitude = 33.331465, latitude =44.376970 deg
+
+// illumination directions for longitude = 33.331465, latitude =44.376970 deg
 // for images taken over a 7 year period at roughly 07:30Z
 static vcl_vector<vnl_double_3> illum_dirs()
 {
- vnl_double_3 ill_dirs[]={
+  vnl_double_3 ill_dirs[]={
     vnl_double_3(0.344759944,-0.307169525,0.887010408),
     vnl_double_3(0.358640131,-0.377927323,0.853550347),
     vnl_double_3(0.359314323,-0.71441535,0.60041979),
@@ -45,51 +46,52 @@ static vcl_vector<vnl_double_3> illum_dirs()
   vcl_vector<vnl_double_3> illumination_dirs(ill_dirs, ill_dirs+31);
   return illumination_dirs;
 }
+
 // azimuth and elevation angles taken directly from IMD files
 static vcl_vector<vnl_double_2> illum_angles()
 {
- vnl_double_2 ill_angs[]={
-vnl_double_2(62.5, 131.7),
-vnl_double_2(58.6, 136.5),
-vnl_double_2(36.9, 153.3),
-vnl_double_2(70.6, 117.5),
-vnl_double_2(68.3, 118.6),
-vnl_double_2(71.1, 123.1),
-vnl_double_2(39.9, 161.6),
-vnl_double_2(57.2, 145.2),
-vnl_double_2(56.4, 144.7),
-vnl_double_2(59.5, 127.4),
-vnl_double_2(31,   156.3),
-vnl_double_2(32.2, 152.9),
-vnl_double_2(68,   116.7),
-vnl_double_2(63.2, 136.7),
-vnl_double_2(40.6, 147.3),
-vnl_double_2(68.7, 117.9),
-vnl_double_2(67.7, 130.5),
-vnl_double_2(58.5, 146),
-vnl_double_2(68,   133.3),
-vnl_double_2(67.7, 138.3),
-vnl_double_2(67.3, 144.1),
-vnl_double_2(72.9, 123.4),
-vnl_double_2(50,   148.8),
-vnl_double_2(35.2, 169.4),
-vnl_double_2(45.1, 159),
-vnl_double_2(73.8, 131.6),
-vnl_double_2(71.9, 139.2),
-vnl_double_2(39,   170.4),
-vnl_double_2(35,   159),
-vnl_double_2(36.9, 164.2),
-vnl_double_2(74.7, 130.4),
-vnl_double_2(74,   138.8)};
+  vnl_double_2 ill_angs[]={
+  vnl_double_2(62.5, 131.7),
+  vnl_double_2(58.6, 136.5),
+  vnl_double_2(36.9, 153.3),
+  vnl_double_2(70.6, 117.5),
+  vnl_double_2(68.3, 118.6),
+  vnl_double_2(71.1, 123.1),
+  vnl_double_2(39.9, 161.6),
+  vnl_double_2(57.2, 145.2),
+  vnl_double_2(56.4, 144.7),
+  vnl_double_2(59.5, 127.4),
+  vnl_double_2(31,   156.3),
+  vnl_double_2(32.2, 152.9),
+  vnl_double_2(68,   116.7),
+  vnl_double_2(63.2, 136.7),
+  vnl_double_2(40.6, 147.3),
+  vnl_double_2(68.7, 117.9),
+  vnl_double_2(67.7, 130.5),
+  vnl_double_2(58.5, 146),
+  vnl_double_2(68,   133.3),
+  vnl_double_2(67.7, 138.3),
+  vnl_double_2(67.3, 144.1),
+  vnl_double_2(72.9, 123.4),
+  vnl_double_2(50,   148.8),
+  vnl_double_2(35.2, 169.4),
+  vnl_double_2(45.1, 159),
+  vnl_double_2(73.8, 131.6),
+  vnl_double_2(71.9, 139.2),
+  vnl_double_2(39,   170.4),
+  vnl_double_2(35,   159),
+  vnl_double_2(36.9, 164.2),
+  vnl_double_2(74.7, 130.4),
+  vnl_double_2(74,   138.8)};
 
- vcl_vector<vnl_double_2> illumination_angs(ill_angs, ill_angs+32);
+  vcl_vector<vnl_double_2> illumination_angs(ill_angs, ill_angs+32);
   return illumination_angs;
 }
 
 static void test_sun_dir_index()
 {
   START("sun direction index test");
-  int oyear = 2002, ohour = 7, omin = 43, orange = 20, inter_years = 5; 
+  int oyear = 2002, ohour = 7, omin = 43, orange = 20, inter_years = 5;
   double longitude = 44.56780378, latitude = 33.34870538;
   bsta_spherical_histogram<double> h;
   brad_sun_dir_index diridx(longitude, latitude,oyear, ohour, omin,
@@ -105,14 +107,14 @@ static void test_sun_dir_index()
 #if 0
   vcl_cout << "Dirs from metadata\n";
   vcl_vector<vnl_double_2> ill_angs = illum_angles();
-  for(unsigned i = 0; i<ill_angs.size(); ++i)
-    diridx.index(ill_angs[i][1], ill_angs[i][0]); 
+  for (unsigned i = 0; i<ill_angs.size(); ++i)
+    diridx.index(ill_angs[i][1], ill_angs[i][0]);
 
- vcl_cout << "Major Path\n";
+  vcl_cout << "Major Path\n";
   vcl_vector<vnl_double_3> path =diridx.major_path();
-   for(unsigned i = 0; i<path.size(); ++i)
-	   vcl_cout << path[i] << '\n';
+  for (unsigned i = 0; i<path.size(); ++i)
+    vcl_cout << path[i] << '\n';
 #endif
-
 }
+
 TESTMAIN( test_sun_dir_index );
