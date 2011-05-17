@@ -1,6 +1,3 @@
-//:
-// \file
-
 #include <bwm/bwm_observer_cam.h>
 #include <bwm/video/bwm_video_cam_ostream.h>
 #include <bwm/video/bwm_video_corr_sptr.h>
@@ -478,19 +475,16 @@ int main(int argc, char** argv)
         ++cnt;
 
         vcl_map<unsigned,double>::iterator ve_itr = view_error_map.find(view_number);
-        if(ve_itr == view_error_map.end())
+        if (ve_itr == view_error_map.end())
         {
-            view_error_map[view_number]=rms;
-            view_count_map[view_number]=1;
+          view_error_map[view_number]=rms;
+          view_count_map[view_number]=1;
         }
         else
         {
-            view_error_map[view_number]+=rms;
-            view_count_map[view_number]+=1;
+          view_error_map[view_number]+=rms;
+          view_count_map[view_number]+=1;
         }
-
-        
-        
       }
       corr->add(view_number,vgl_point_2d<double>(img_x,img_y));
     }
@@ -499,15 +493,13 @@ int main(int argc, char** argv)
   vcl_cout<<"Avg Error per projection "<<err/cnt<<'\n'
           <<"Max Error"<<maxerr<<" is in camera # "<<maxerrcam<<vcl_endl;
 
-    // save it to a site
+  // save it to a site
   if (!axis_align_scene(corrs,cams))
     return -1;
   bwm_video_cam_ostream camstream(cam_dir());
   for (unsigned i=0;i<num_cams;++i)
     camstream.write_camera(&cams[i]);
   camstream.close();
-
-
 
   char filename[1024];
   if (vul_file::is_directory(cam_txt_dir().c_str()))
@@ -527,78 +519,79 @@ int main(int argc, char** argv)
     }
   }
 
-  if( filter() )
+  if ( filter() )
   {
+    vcl_map<unsigned,double>::iterator ve_itr = view_error_map.begin(), ve_end = view_error_map.end();
+    for (;ve_itr!=ve_end;++ve_itr)
+    {
+      ve_itr->second/=view_count_map[ve_itr->first];
+      if (ve_itr->second>filter_thresh())
+        bad_cams.insert(ve_itr->first);
+    }
+
+    //save reprojection rms to a file
+    vcl_string rms_file=site_directory()+"/rms_error.txt";
+    vcl_ofstream ofstr(rms_file.c_str());
+    if (ofstr)
+    {
       vcl_map<unsigned,double>::iterator ve_itr = view_error_map.begin(), ve_end = view_error_map.end();
-      for(;ve_itr!=ve_end;++ve_itr)
+      for (; ve_itr != ve_end; ++ve_itr)
+        ofstr << "View: " << ve_itr->first << "\t RMS Error: " << ve_itr->second << vcl_endl;
+    }
+    else
+        vcl_cout << "ERROR SAVING RMS FILE!" << vcl_endl;
+    ofstr.close();
+
+    vcl_string img_dir = site_directory()+"/frames";
+    if ( !vul_file::is_directory(img_dir) ) { vul_file::make_directory(img_dir); }
+    unsigned cnt=0;
+    for (unsigned i = 0; i < num_cams; ++i)
+    {
+      if ( !bad_cams.count(i) )
       {
-          ve_itr->second/=view_count_map[ve_itr->first];
-          if(ve_itr->second>filter_thresh())
-              bad_cams.insert(ve_itr->first);
+        vil_image_view<vxl_byte> curr_img;
+        imgstream.seek_frame(i);
+        vidl_convert_to_view(*imgstream.current_frame(),curr_img);
+        char filename[1024];
+
+        vcl_sprintf(filename,"%s/frame%05d.png",img_dir.c_str(),cnt);
+        vil_save(curr_img,filename);
+        ++cnt;
       }
+    }//end frame iteration
 
-      //save reprojection rms to a file
-      vcl_string rms_file=site_directory()+"/rms_error.txt";
-      vcl_ofstream ofstr(rms_file.c_str());
-      if(ofstr)
+
+    vcl_string cam_dir = site_directory() + "/cameras_KRT";
+    if ( !vul_file::is_directory(cam_dir) )
+    {
+      vul_file::make_directory(cam_dir);
+    }
+    else
+      vul_file::delete_file_glob(vcl_string(cam_dir+"/*.txt"));
+    unsigned cnt2 = 0;
+    vcl_vector<vpgl_perspective_camera<double> > cams2 = cams;
+
+    for (unsigned i = 0; i < num_cams; ++i)
+    {
+      if ( !bad_cams.count(i) )
       {
-          vcl_map<unsigned,double>::iterator ve_itr = view_error_map.begin(), ve_end = view_error_map.end();
-          for(; ve_itr != ve_end; ++ve_itr)
-              ofstr << "View: " << ve_itr->first << "\t RMS Error: " << ve_itr->second << vcl_endl;
+        char filename[1024];
+        vcl_sprintf(filename,"%s/camera%05d.txt",cam_dir.c_str(),cnt2);
+        vcl_ofstream ofile(filename);
+        double u1,v1;
+        cams2[i].project(0,0,0,u1,v1);
+        if (ofile)
+        {
+          ofile<<cams2[i].get_calibration().get_matrix()<<'\n'
+               <<cams2[i].get_rotation().as_matrix()<<'\n'
+               <<cams2[i].get_translation().x()<<' '
+               <<cams2[i].get_translation().y()<<' '
+               <<cams2[i].get_translation().z()<<'\n';
+        }
+        ++cnt2;
       }
-      else
-          vcl_cout << "ERROR SAVING RMS FILE!" << vcl_endl;
-      ofstr.close();
-
-      vcl_string img_dir = site_directory()+"/frames";
-      if( !vul_file::is_directory(img_dir) ){ vul_file::make_directory(img_dir); }
-      unsigned cnt=0;
-      for(unsigned i = 0; i < num_cams; ++i)
-      {
-          if( !bad_cams.count(i) )
-          {
-              vil_image_view<vxl_byte> curr_img;
-              imgstream.seek_frame(i);
-              vidl_convert_to_view(*imgstream.current_frame(),curr_img);
-              char filename[1024];
-
-              vcl_sprintf(filename,"%s/frame%05d.png",img_dir.c_str(),cnt);
-              vil_save(curr_img,filename);
-              ++cnt;
-          }
-      }//end frame iteration
-
-      
-      vcl_string cam_dir = site_directory() + "/cameras_KRT";
-      if( !vul_file::is_directory(cam_dir) )
-      { 
-          vul_file::make_directory(cam_dir); 
-      }
-      else
-          vul_file::delete_file_glob(vcl_string(cam_dir+"/*.txt"));
-      unsigned cnt2 = 0;
-      vcl_vector<vpgl_perspective_camera<double> > cams2 = cams;
-
-      for(unsigned i = 0; i < num_cams; ++i)
-      {
-          if( !bad_cams.count(i) )
-          {
-              char filename[1024];
-              vcl_sprintf(filename,"%s/camera%05d.txt",cam_dir.c_str(),cnt2);
-              vcl_ofstream ofile(filename);
-              double u1,v1;
-              cams2[i].project(0,0,0,u1,v1);
-              if (ofile)
-              {
-                  ofile<<cams2[i].get_calibration().get_matrix()<<'\n'
-                       <<cams2[i].get_rotation().as_matrix()<<'\n'
-                       <<cams2[i].get_translation().x()<<' '<<cams2[i].get_translation().y()<<' '<<cams2[i].get_translation().z()<<'\n';
-              }
-              ++cnt2;
-          }
-      }//end camera iteration
+    }//end camera iteration
   }
-
 
   vcl_vector<vgl_point_3d<double> > pts_3d;
   vgl_box_3d<double> bounding_box;
@@ -614,9 +607,9 @@ int main(int argc, char** argv)
   vnl_vector_fixed<double,3> sigma = stddev(pts_3d);
   vcl_cout<<"Stddev       "<< sigma <<vcl_endl;
 
-  //Define dimensions to be used for a boxm scne
-  //: Note: x-y dimensions are kind of a good approximation
-  //the z-dimension however suffers because most points tend to be on the ground and the average miss represents points of the gound
+  // Define dimensions to be used for a boxm scene
+  // Note: x-y dimensions are kind of a good approximation
+  // the z-dimension however suffers because most points tend to be on the ground and the average miss represents points off the gound
   double minx=-3.0f*sigma[0], miny=-3.0f*sigma[1], minz=-1.0f*sigma[2];
   double maxx=3.0f*sigma[0], maxy=3.0f*sigma[1], maxz=5.0f*sigma[2];
 
@@ -638,8 +631,6 @@ int main(int argc, char** argv)
   bbox_elm->set_attribute("maxz", maxz );
   root->append_data(bbox_elm);
   root->append_text("\n");
-  
-
 
   vcl_cout << "Bounding Box containing points which are [-3,3]sigma about x and y and [-1,5]-z_sigma about the scene center: " <<bounding_box2<<'\n'
            << "min_x = " << bounding_box2.min_x() << '\n'
@@ -671,11 +662,10 @@ int main(int argc, char** argv)
   root->append_data(res_elm);
   root->append_text("\n");
 
-  //write to disk  
+  //write to disk
   vcl_ofstream xml_os(xml_file().c_str());
   bxml_write(xml_os, doc);
   xml_os.close();
-
 
   vcl_ofstream os(vrml_file().c_str());
   if (os)
