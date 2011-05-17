@@ -7,12 +7,14 @@
 
 #include <bapl/bapl_keypoint_set_sptr.h>
 #include <bapl/bapl_connectivity_sptr.h>
+#include <bapl/bapl_dsift_sptr.h>
 
 void bapl_register::register_datatype()
 {
   REGISTER_DATATYPE( bapl_keypoint_set_sptr );
   REGISTER_DATATYPE( bapl_keypoint_match_set_sptr );
   REGISTER_DATATYPE( bapl_conn_table_sptr );
+  REGISTER_DATATYPE( bapl_dsift_sptr );
 }
 
 void bapl_register::register_process()
@@ -29,4 +31,5 @@ void bapl_register::register_process()
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bapl_compute_tracks_process, "baplComputeTracksProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bapl_load_match_process, "baplLoadMatchSetProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bapl_write_match_process, "baplWriteMatchSetProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bapl_dsift_sptr_process, "baplDsiftSptrProcess");
 }

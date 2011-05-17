@@ -17,6 +17,7 @@ DECLARE_FUNC_CONS(bapl_add_image_keys_process);
 DECLARE_FUNC_CONS(bapl_compute_tracks_process);
 DECLARE_FUNC_CONS(bapl_load_match_process);
 DECLARE_FUNC_CONS(bapl_write_match_process);
+DECLARE_FUNC_CONS(bapl_dsift_sptr_process);
 
 #endif  // bapl_processes_h_
 
