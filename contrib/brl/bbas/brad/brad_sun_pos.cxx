@@ -1,7 +1,9 @@
 #include "brad_sun_pos.h"
+//:
+// \file
 #include <vnl/vnl_math.h>
 #include <vcl_cmath.h>
-#include <vcl_cstdlib.h>//vcl_rand
+#include <vcl_cstdlib.h> // for std::rand()
 #include <vcl_iostream.h>
 
 // Declaration of some constants
@@ -10,18 +12,20 @@ static double rad    = vnl_math::pi/180.0;
 static double invrad = 180.0/vnl_math::pi;
 static double dEarthMeanRadius  =  6371.01;   // In km
 static double dAstronomicalUnit =  149597890; // In km
-int rand_minutes( int center, int range){
+
+int rand_minutes( int center, int range)
+{
   double c = center, r = range;
   double low = c-(r/2.0);
   double ret = low + r*(vcl_rand()/(RAND_MAX+1.0));
   return static_cast<int>(ret);
 }
+
 void brad_sun_pos(int year, int month, int day,
                   int hours, int minutes, int seconds,
                   double longitude, double latitude,
                   double& sun_azimuth, double& sun_elevation)
 {
-  
   // Main variables
   double dElapsedJulianDays;
   double dDecimalHours;
@@ -114,16 +118,18 @@ void brad_sun_pos(int year, int month, int day,
     sun_elevation = 90.0-sun_elevation;//angle from local horizon
   }
 }
-//: sample the sun position over the interval (day) and populate the
+
+//:
+// sample the sun position over the interval (day) and populate the
 // spherical histogram. The default bin intervals are 5 degrees in
 // longitude(azimuth) and latitude(elevation)
-void brad_sun_direction_hist(int obs_time_year, int obs_time_hours, 
+void brad_sun_direction_hist(int obs_time_year, int obs_time_hours,
                              int obs_time_minutes, int obs_time_range_minutes,
                              int interval_years,
                              int interval_days,
-                             double longitude, double latitude, 
-                             bsta_spherical_histogram<double>& hist){
-
+                             double longitude, double latitude,
+                             bsta_spherical_histogram<double>& hist)
+{
   bsta_spherical_histogram<double>::ang_units deg = bsta_spherical_histogram<double>::DEG;
   bsta_spherical_histogram<double>::angle_bounds azbr = bsta_spherical_histogram<double>::B_0_360;
   bsta_spherical_histogram<double>::angle_bounds elpole = bsta_spherical_histogram<double>::B_0_180;
@@ -132,48 +138,49 @@ void brad_sun_direction_hist(int obs_time_year, int obs_time_hours,
 
   double sun_azimuth, sun_elevation;
   int y = obs_time_year;
-  for(; y<=obs_time_year+interval_years; ++y){
+  for (; y<=obs_time_year+interval_years; ++y)
+  {
     int month = 1;
-    for(int d = 0; d<=365; ++d){
+    for (int d = 0; d<=365; ++d) {
       int obs_mints = rand_minutes(obs_time_minutes, obs_time_range_minutes);
-      if(obs_mints<0){
+      if (obs_mints<0) {
         obs_time_hours--;
         obs_mints += 60;
-        if(obs_time_hours<0) continue;
+        if (obs_time_hours<0) continue;
       }
-      if(obs_mints>59){
+      if (obs_mints>59) {
         obs_time_hours++;
         obs_mints -= 60;
-        if(obs_time_hours>24) continue;
+        if (obs_time_hours>24) continue;
       }
       brad_sun_pos(y, month, d%30, obs_time_hours, obs_mints, 0,
                    longitude, latitude, sun_azimuth, sun_elevation);
       double sphere_az = 90.0-sun_azimuth+360.0;
       double sphere_el = 90.0-sun_elevation;
       h.upcount(sphere_az, sphere_el);
-      if(d>0&&d%30==0) month++;
-      if(month>12) month = 1;
+      if (d>0&&d%30==0) month++;
+      if (month>12) month = 1;
     }
     month = 1;
-    for(int d = 0; d<=interval_days; ++d){
+    for (int d = 0; d<=interval_days; ++d) {
       int obs_mints = rand_minutes(obs_time_minutes, obs_time_range_minutes);
-      if(obs_mints<0){
+      if (obs_mints<0) {
         obs_time_hours--;
         obs_mints +=60;
-        if(obs_time_hours<0) continue;
+        if (obs_time_hours<0) continue;
       }
-      if(obs_mints>59){
+      if (obs_mints>59) {
         obs_time_hours++;
         obs_mints -=60;
-        if(obs_time_hours>24) continue;
+        if (obs_time_hours>24) continue;
       }
       brad_sun_pos(y, month, d%30, obs_time_hours, obs_mints, 0,
                    longitude, latitude, sun_azimuth, sun_elevation);
       double sphere_az = 90.0-sun_azimuth+360.0;
       double sphere_el = 90.0-sun_elevation;
       h.upcount(sphere_az, sphere_el);
-      if(d>0&&d%30==0) month++;
-      if(month>12) month = 1;
+      if (d>0&&d%30==0) month++;
+      if (month>12) month = 1;
     }
     hist = h;
   }
