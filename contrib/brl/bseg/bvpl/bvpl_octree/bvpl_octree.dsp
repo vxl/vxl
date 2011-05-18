@@ -167,6 +167,9 @@ SOURCE=.\Templates/boxm_block+boct_tree+short.bvpl_pca_basis_sample+10---.cxx
 # Begin Source File
 SOURCE=.\Templates/boxm_block+boct_tree+short.vnl_vector_fixed+double.10---.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\Templates/vbl_smart_ptr+bvpl_global_pca+125--.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"

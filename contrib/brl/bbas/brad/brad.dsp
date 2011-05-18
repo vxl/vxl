@@ -95,6 +95,12 @@ LIB32=link.exe -lib
 # Begin Source File
 SOURCE=.\brad_illum_util.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\brad_sun_dir_index.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\brad_sun_pos.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h"
@@ -103,6 +109,12 @@ SOURCE=.\brad_illum_cost_function.h
 # End Source File
 # Begin Source File
 SOURCE=.\brad_illum_util.h
+# End Source File
+# Begin Source File
+SOURCE=.\brad_sun_pos.h
+# End Source File
+# Begin Source File
+SOURCE=.\brad_sun_dir_index.h
 # End Source File
 # End Group
 # End Target

@@ -99,6 +99,15 @@ SOURCE=.\test_driver.cxx
 SOURCE=.\test_illum.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\test_sun_dir_index.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_sun_hist.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_sun_pos.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\test_include.cxx
 # End Source File
 # End Group

@@ -183,6 +183,9 @@ SOURCE=.\processes/taylor/bvpl_explore_coefficient_scene_process.cxx
 SOURCE=.\processes/taylor/bvpl_compute_taylor_coefficients_process.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\processes/pca/bvpl_load_global_pca_process.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/brdb_value_t+bvpl_pca_error_scenes_sptr-.cxx
 # End Source File
 # Begin Source File
@@ -193,6 +196,9 @@ SOURCE=.\Templates/brdb_value_t+bvpl_discover_pca_kernels_sptr-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/brdb_value_t+boxm_scene_base_sptr-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/brdb_value_t+bvpl_global_pca_125_sptr-.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
