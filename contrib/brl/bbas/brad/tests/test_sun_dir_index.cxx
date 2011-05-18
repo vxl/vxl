@@ -101,19 +101,20 @@ static void test_sun_dir_index()
   double x0 = diridx.cone_axis(0)[0], y0 = diridx.cone_axis(0)[1];
   double er = vcl_fabs(x0-0.302867)+ vcl_fabs(y0 + 0.236176);
   TEST_NEAR("test constructor", er, 0.0, 0.001);
+  vcl_vector<vnl_double_2> ill_angs = illum_angles();
+  int index = diridx.index(ill_angs[2][1], ill_angs[2][0]);
+  TEST("bin index", index, 2);
+#if 0
   vcl_ofstream os("c:/images/BaghdadBoxm2/sun_index.wrl");
   diridx.print_to_vrml(os);
   os.close();
-#if 0
+
   vcl_cout << "Dirs from metadata\n";
   vcl_vector<vnl_double_2> ill_angs = illum_angles();
-  for (unsigned i = 0; i<ill_angs.size(); ++i)
-    diridx.index(ill_angs[i][1], ill_angs[i][0]);
+  for(unsigned i = 0; i<ill_angs.size(); ++i)
+    vcl_cout << "(" << ill_angs[i][1] << ' ' << ill_angs[i][0] << ")->" 
+	<< diridx.index(ill_angs[i][1], ill_angs[i][0])<< '\n'; 
 
-  vcl_cout << "Major Path\n";
-  vcl_vector<vnl_double_3> path =diridx.major_path();
-  for (unsigned i = 0; i<path.size(); ++i)
-    vcl_cout << path[i] << '\n';
 #endif
 }
 
