@@ -199,7 +199,7 @@ bool vgl_conic<T>::is_degenerate() const
 template <class T>
 bool vgl_conic<T>::
 ellipse_geometry(double& xc, double& yc, double& major_axis_length,
-                 double& minor_axis_length, double& angle_in_radians)
+                 double& minor_axis_length, double& angle_in_radians) const
 {
   if (type_!=real_ellipse && type_ != real_circle)
     return false;

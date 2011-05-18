@@ -247,7 +247,7 @@ class vgl_conic
   //  Returns false if the conic is not an ellipse. Double is appropriate
   //  since integer coefficients can produce non-integer ellipse parameters.
   bool ellipse_geometry(double& xc, double& yc, double& major_axis_length,
-                        double& minor_axis_length, double& angle_in_radians);
+                        double& minor_axis_length, double& angle_in_radians) const;
 
   // Functions related to dual space ---------------------------------
 
