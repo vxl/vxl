@@ -7,12 +7,14 @@
 #include <testlib/testlib_root_dir.h>
 #include <vcl_where_root_dir.h>
 
+#include <boxm2/boxm2_scene.h>
+#if 0 // all tests commented out for the time being...
 #include <bocl/bocl_kernel.h>
 #include <bocl/bocl_mem.h>
 #include <boxm2/basic/boxm2_block_id.h>
 #include <boxm2/ocl/boxm2_ocl_util.h>
 #include <boxm2/ocl/boxm2_opencl_cache.h>
-#include <boxm2/ocl/pro/boxm2_opencl_processor.h>
+#include <boxm2/ocl/pro/boxm2_opencl_processor.h> // beware: does not exist anymore
 
 #include <vnl/vnl_vector_fixed.h>
 
@@ -21,12 +23,12 @@
 #include <vcl_vector.h>
 #include <vcl_map.h>
 #include <vcl_algorithm.h>
+#endif
 
 //: Three unit tests for the three main refine kernel functions
 
 void test_refine_trees_kernel()
 {
-#if 0
   //----------------------------------------------------------------------------
   //--- BEGIN BOXM2 API EXAMPLE ------------------------------------------------
   //----------------------------------------------------------------------------
@@ -35,6 +37,7 @@ void test_refine_trees_kernel()
   vcl_string test_file = test_dir + "scene.xml";
   boxm2_scene_sptr scene = new boxm2_scene(test_file);
 
+#if 0
   //initialize a block and data cache
   boxm2_lru_cache::create(scene.ptr());
 
@@ -221,22 +224,13 @@ void test_refine_trees_kernel()
       return;
     }
   }
-  TEST(" Third Pass TREE passes ", true, true);
-
 #endif
+
+  TEST(" Third Pass TREE passes ", true, true);
 }
 
-void test_refine_scan_kernel()
-{
-}
-
-void test_refine_data_kernel()
-{
-}
-
-void test_refine()
-{
-  test_refine_trees_kernel();
-}
+void test_refine_scan_kernel() {}
+void test_refine_data_kernel() {}
+void test_refine() { test_refine_trees_kernel(); test_refine_scan_kernel(); test_refine_data_kernel(); }
 
 TESTMAIN( test_refine );

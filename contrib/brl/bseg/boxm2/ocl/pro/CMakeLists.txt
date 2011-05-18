@@ -5,7 +5,6 @@ INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR} )
 SET(boxm2_ocl_pro_sources
     boxm2_ocl_processes.h
     boxm2_ocl_register.h                     boxm2_ocl_register.cxx
-    #boxm2_opencl_processor.h                 boxm2_opencl_processor.cxx
   )
 
 AUX_SOURCE_DIRECTORY(Templates boxm2_ocl_pro_sources)
@@ -16,4 +15,3 @@ TARGET_LINK_LIBRARIES(boxm2_ocl_pro boxm2_ocl_algo boct brdb vbl_io expatpp vpgl
 
 #tests
 SUBDIRS(tests)
-
