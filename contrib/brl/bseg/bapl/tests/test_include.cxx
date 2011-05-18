@@ -23,4 +23,6 @@
 #include <bapl/bapl_lowe_keypoint_sptr.h>
 #include <bapl/bapl_lowe_pyramid_set_sptr.h>
 
+#include <bapl/io/bapl_io_dsift.h>
+
 int main() { return 0; }
