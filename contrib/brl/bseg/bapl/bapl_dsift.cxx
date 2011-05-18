@@ -5,19 +5,14 @@
 #include <vil/algo/vil_orientations.h>
 #include <vnl/vnl_math.h>
 
-#if 0 // unused: see bapl_dsift::gaussian() instead
-inline float gaussian( float const& x, float const& y )
-{
-  return vcl_exp(-((x*x)+(y*y))/(128.0f));
-}
-#endif // 0
-
-bapl_dsift::bapl_dsift( vil_image_view<float> const& img ):grad_valid_(true)
+bapl_dsift::bapl_dsift( vil_image_view<float> const& img )
+: grad_valid_(true)
 {
   vil_orientations_from_sobel( img, this->grad_orient_, this->grad_mag_ );
 }//end bapl_dsift::bapl_dsift
 
-bapl_dsift::bapl_dsift( vil_image_view<vxl_byte> const& img ):grad_valid_(true)
+bapl_dsift::bapl_dsift( vil_image_view<vxl_byte> const& img )
+: grad_valid_(true)
 {
   vil_orientations_from_sobel( img, this->grad_orient_, this->grad_mag_ );
 }//end bapl_dsift::bapl_dsift
@@ -38,9 +33,8 @@ bool bapl_dsift::set_img( vil_image_view<float> const& img )
 
 vcl_vector<float> bapl_dsift::dsift( unsigned const& key_x, unsigned const& key_y, float const& key_orient )
 {
-  vcl_vector<float> histogram(128,0.0f);
-
   assert(this->grad_valid_);
+  vcl_vector<float> histogram(128,0.0f);
 
   for (int hi=0; hi<4; ++hi)
   {
@@ -75,7 +69,6 @@ vcl_vector<float> bapl_dsift::dsift( unsigned const& key_x, unsigned const& key_
 
               int bin = ((int(orient*15/float(2*vnl_math::pi))+1)/2)%8;
               histogram[hi*32+hj*8+bin] += weight;
-
             }//end boundary check
           }//end c
         }//end j
@@ -113,7 +106,7 @@ vnl_vector<double> bapl_dsift::vnl_dsift( unsigned const& key_x, unsigned const&
             //vcl_cout << "(xc,yc) = " << xc << ", " << yc << ';' << vcl_endl;
 
             if ( xc>=0 && xc<int(this->grad_orient_.ni()) &&
-              yc>=0 && yc<int(this->grad_orient_.nj()) )
+                 yc>=0 && yc<int(this->grad_orient_.nj()) )
             {
               float interp_x = 1.0f - vcl_fabs( key_x + float(x-xc) );
               float interp_y = 1.0f - vcl_fabs( key_y + float(y-yc) );
@@ -132,7 +125,6 @@ vnl_vector<double> bapl_dsift::vnl_dsift( unsigned const& key_x, unsigned const&
 
               int bin = ((int(orient*15/float(2*vnl_math::pi))+1)/2)%8;
               histogram[hi*32+hj*8+bin] += weight;
-
             }//end boundary check
           }//end c
         }//end j
@@ -145,41 +137,36 @@ vnl_vector<double> bapl_dsift::vnl_dsift( unsigned const& key_x, unsigned const&
 
 void bapl_dsift::b_write(vsl_b_ostream& os) const
 {
-	const short version_no = 1;
-	vsl_b_write(os, version_no);
-	vsl_b_write(os, this->grad_valid_);
+  const short version_no = 1;
+  vsl_b_write(os, version_no);
+  vsl_b_write(os, this->grad_valid_);
 
-	if(this->grad_valid_)
-	{
-		vsl_b_write(os, grad_mag_);
-		vsl_b_write(os, grad_orient_);
-	}
-	
+  if (this->grad_valid_)
+  {
+    vsl_b_write(os, grad_mag_);
+    vsl_b_write(os, grad_orient_);
+  }
 }//end bapl_dsift::b_write
 
 void bapl_dsift::b_read(vsl_b_istream& is)
 {
-	if(!is) return;
-	short v;
-	vsl_b_read(is,v);
-	switch(v)
-	{
-	case 1:
-		{
-			vsl_b_read(is,this->grad_valid_);
-			if(this->grad_valid_)
-			{
-				vsl_b_read(is,this->grad_mag_);
-				vsl_b_read(is,this->grad_orient_);
-			}
-		}//end case 1
-		break;
-	default:
-		{
-            vcl_cerr << "----I/O ERROR: bapl_dsift::b_read ----\n"
-				     << "	 UNKNOWN VERSION NUMBER " << v << "\n";
-			is.is().clear(vcl_ios::badbit); //set an unrecoverable IO error on stream
-			return;
-		}//end default
-	}//end switch
+  if (!is) return;
+  short v;
+  vsl_b_read(is,v);
+  switch (v)
+  {
+   case 1:
+    vsl_b_read(is,this->grad_valid_);
+    if (this->grad_valid_)
+    {
+      vsl_b_read(is,this->grad_mag_);
+      vsl_b_read(is,this->grad_orient_);
+    }
+    break;
+   default:
+    vcl_cerr << "----I/O ERROR: bapl_dsift::b_read ----\n"
+             << "   UNKNOWN VERSION NUMBER " << v << '\n';
+    is.is().clear(vcl_ios::badbit); //set an unrecoverable IO error on stream
+    return;
+  }//end switch
 }//end bapl_dsift::b_read
