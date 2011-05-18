@@ -27,7 +27,7 @@ MANPAGE_SOURCES += bapl_connectivity_sptr.h
 MANPAGE_SOURCES += bapl_dense_sift_sptr.h
 MANPAGE_SOURCES += bapl_dsift_sptr.h
 
-SUBDIRS += pro
+SUBDIRS += pro io
 
 #######################################
 include ${VXLROOT}/config/top-params.mk

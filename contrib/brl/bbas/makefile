@@ -65,6 +65,8 @@ SUBDIRS += bocl
 
 SUBDIRS += baio
 
+SUBDIRS += brad
+
 ################################
 include ${VXLROOT}/config/top.mk
 ################################

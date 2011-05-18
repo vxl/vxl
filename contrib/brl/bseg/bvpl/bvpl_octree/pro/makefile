@@ -30,6 +30,7 @@ SOURCES += processes/pca/bvpl_pca_global_statistics_process.cxx
 SOURCES += processes/pca/bvpl_global_pca_process.cxx
 SOURCES += processes/pca/bvpl_normalize_pca_training_error_process.cxx
 SOURCES += processes/pca/bvpl_combine_pairwise_statistics_process.cxx
+SOURCES += processes/pca/bvpl_load_global_pca_process.cxx
 
 SOURCES += processes/taylor/bvpl_add_taylor_errors_process.cxx
 SOURCES += processes/taylor/bvpl_compute_taylor_error_process.cxx

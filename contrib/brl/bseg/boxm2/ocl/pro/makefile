@@ -5,7 +5,6 @@ LIBRARY := boxm2_ocl_pro
 SOURCES += processes/boxm2_ocl_change_detection_process.cxx
 
 SOURCES += boxm2_ocl_register.cxx
-SOURCES += boxm2_opencl_processor.cxx
 MANPAGE_SOURCES += boxm2_ocl_processes.h
 SOURCES += processes/boxm2_ocl_render_expected_image_process.cxx
 SOURCES += processes/boxm2_create_opencl_cache_process.cxx
