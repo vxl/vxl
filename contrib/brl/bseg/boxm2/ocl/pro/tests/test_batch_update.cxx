@@ -7,10 +7,10 @@
 #include <vcl_where_root_dir.h>
 
 #include <bocl/bocl_manager.h>
+#include <bocl/bocl_buffer_mgr.h>
 #include <bocl/bocl_kernel.h>
 #include <bocl/bocl_mem.h>
-#include <boxm2/ocl/boxm2_opencl_processor.h>
-#include <boxm2/ocl/pro/boxm2_opencl_batch_update_process.h>
+#include <boxm2/ocl/pro/boxm2_ocl_processes.h>
 
 #include <boxm2/ocl/boxm2_ocl_util.h>
 #include <boxm2/boxm2_block.h>
@@ -30,6 +30,12 @@
 #include <vil/vil_save.h>
 #include <brdb/brdb_value.h>
 
+class boxm2_process
+{
+ public:
+  bool init_kernel(_cl_context**, _cl_device_id**, vcl_string const&) { return false; }
+};
+
 void test_batch_update_kernels()
 {
   //----------------------------------------------------------------------------
@@ -46,13 +52,14 @@ void test_batch_update_kernels()
   boxm2_lru_cache::create(scene.ptr()); 
   boxm2_cache* cache = boxm2_cache::instance(); 
   
+#if 0 // boxm2_opencl_processor does not exist anymore
   //initialize gpu pro / manager
   boxm2_opencl_processor* gpu_pro = boxm2_opencl_processor::instance();
   gpu_pro->set_scene(scene.ptr());
   gpu_pro->set_cpu_cache(cache);
   gpu_pro->init();
   vcl_string update_opts=" -D MOG_TYPE_8 ";
-  boxm2_opencl_batch_update_process update;
+  boxm2_process update;
   update.init_kernel(&gpu_pro->context(), &gpu_pro->devices()[0],update_opts);
 
   vcl_string cam_dir=test_dir2+"cams24";
@@ -67,7 +74,8 @@ void test_batch_update_kernels()
   input.push_back(brdb_camdir);
   input.push_back(brdb_imgdir);
 
-  gpu_pro->run(&update, input, output);
+  gpu_pro->run(input, output);
+#endif
   vcl_map<boxm2_block_id, boxm2_block_metadata> blk_map=scene->blocks();
 
   vcl_map<boxm2_block_id, boxm2_block_metadata>::iterator iter=blk_map.begin();
@@ -76,7 +84,7 @@ void test_batch_update_kernels()
   typedef vnl_vector_fixed<float , 4> float4;    //defines a bit tree
   typedef vnl_vector_fixed<float , 8> float8;    //defines a bit tree
 
-  for(;iter!=blk_map.end();iter++)
+  for (;iter!=blk_map.end();iter++)
   {
       boxm2_block *     blk     = cache->get_block(iter->first);
       boxm2_array_3d<uchar16> trees=blk->trees();
@@ -96,11 +104,11 @@ void test_batch_update_kernels()
 
       float sumP=0.0;
       int count =0;
-      for(unsigned int ti=0;ti<trees.get_row1_count();ti++)
+      for (unsigned int ti=0;ti<trees.get_row1_count();ti++)
       {
-          for(unsigned int tj=0;tj<trees.get_row2_count();tj++)
+          for (unsigned int tj=0;tj<trees.get_row2_count();tj++)
           {
-              for(unsigned int tk=0;tk<trees.get_row3_count();tk++)
+              for (unsigned int tk=0;tk<trees.get_row3_count();tk++)
               {
                   uchar16 curr_tree=trees[ti][tj][tk];
                   int buff_offset=(int)curr_tree[10];
@@ -113,7 +121,7 @@ void test_batch_update_kernels()
                   if(tk==63)
                   {
                    vcl_cout<<ti<<","<<tj<<","<<tk<<" [";
-                   for(unsigned vecindex=0;vecindex<8;vecindex++)
+                   for (unsigned vecindex=0;vecindex<8;vecindex++)
                        vcl_cout<<hist_data_array[(buff_index*65536+buff_offset)][vecindex]<<",";
                    vcl_cout<<"] ";
 
