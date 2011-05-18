@@ -13,16 +13,18 @@
 //  Modifications
 //   <none yet>
 // \endverbatim
+
 #include<bapl/bapl_dsift.h>
-
-#include<vcl_iostream.h>
-
+#include <vcl_iosfwd.h>
 #include<vsl/vsl_binary_io.h>
 
-//: Binary save parameters to stream.
+//: Binary read parameters from stream.
 void vsl_b_read(vsl_b_istream &is, bapl_dsift &dsift);
+//: Binary save parameters to stream.
 void vsl_b_write(vsl_b_ostream &os, bapl_dsift const& dsift);
+//: Binary read parameters from stream.
 void vsl_b_read(vsl_b_istream &is, bapl_dsift* &p);
+//: Binary save parameters to stream.
 void vsl_b_write(vsl_b_ostream &os, const bapl_dsift* p);
 void vsl_print_summary(vcl_ostream& os, const bapl_dsift *p);
 
