@@ -616,7 +616,7 @@ vil_openjpeg_image
 {
   if ( !this->impl_->is_valid_ )
     return static_cast<unsigned int>(-1);
-  if ( this->impl_->header_.num_reductions_ == -1 )
+  if ( this->impl_->header_.num_reductions_ == static_cast<unsigned int>(-1) )
   {
     vil_openjpeg_decoder decoder(this->impl_->opj_codec_format_);
     // Find out how many reductions are available
