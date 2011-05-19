@@ -1,4 +1,4 @@
-// This is brl/bpro/core/vil_pro/processes/brad_display_sun_index_process.cxx
+// This is brl/bpro/core/bbas_pro/processes/brad_display_sun_index_process.cxx
 #include <bprb/bprb_func_process.h>
 #include <brad/brad_sun_dir_index.h>
 //:
@@ -43,9 +43,8 @@ bool brad_display_sun_index_process(bprb_func_process& pro)
   //output file name
   vcl_string out_file = pro.get_input<vcl_string>(i++);
   vcl_ofstream os(out_file.c_str());
-  if(!os.is_open()){
-    vcl_cout << "in display_sun_index_process, "
-             << "couldn't open output file stream\n";
+  if (!os.is_open()) {
+    vcl_cout << "in display_sun_index_process, couldn't open output file stream\n";
     return false;
   }
   double longitude = pro.get_input<float>(i++);

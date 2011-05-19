@@ -1,11 +1,9 @@
-// This is brl/bpro/core/vil_pro/processes/brad_sun_dir_bin_process.cxx
+// This is brl/bpro/core/bbas_pro/processes/brad_sun_dir_bin_process.cxx
 #include <bprb/bprb_func_process.h>
-#include <brad/brad_sun_dir_index.h>
-#include <vnl/vnl_double_3.h>
-#include <vcl_fstream.h>
 //:
 // \file
-
+#include <brad/brad_sun_dir_index.h>
+#include <vnl/vnl_double_3.h>
 #include <vcl_fstream.h>
 
 //: Constructor
@@ -21,7 +19,7 @@ bool brad_sun_dir_bin_process_cons(bprb_func_process& pro)
   if (!ok) return ok;
 
   //output
-  vcl_vector<vcl_string> output_types; 
+  vcl_vector<vcl_string> output_types;
   output_types.push_back("int");  // the bin index
   ok = pro.set_output_types(output_types);
   if (!ok) return ok;
@@ -43,7 +41,7 @@ bool brad_sun_dir_bin_process(bprb_func_process& pro)
   double sun_el = pro.get_input<float>(i++);
   vcl_string bin_input_path = pro.get_input<vcl_string>(i);
   vcl_ifstream is(bin_input_path.c_str());
-  if(!is.is_open()){
+  if (!is.is_open()) {
     vcl_cout << "In brad_sun_dir_bin_process: can't open sun direction bin file\n";
     return false;
   }
@@ -51,19 +49,19 @@ bool brad_sun_dir_bin_process(bprb_func_process& pro)
   vcl_string temp;
   double longitude=0, latitude=0;
   is >> temp;
-  if(temp != "longitude:"){
+  if (temp != "longitude:") {
     vcl_cout << "In brad_sun_dir_bin_process, input dir file parse error\n";
     return false;
   }
   is >> longitude;
   is >> temp;
-  if(temp != "latitude:"){
+  if (temp != "latitude:") {
     vcl_cout << "In brad_sun_dir_bin_process, input dir file parse error\n";
     return false;
   }
   is >> latitude;
   is >> temp;
-  if(temp != "nbins:"){
+  if (temp != "nbins:") {
     vcl_cout << "In brad_sun_dir_bin_process, input dir file parse error\n";
     return false;
   }
@@ -71,12 +69,12 @@ bool brad_sun_dir_bin_process(bprb_func_process& pro)
   is >> n_bins;
   double x, y, z;
   vcl_vector<vnl_double_3> bins;
-  for(int i = 0; i<n_bins; ++i)
-    {
-      is >> x >> y >> z;
-      vnl_double_3 bc(x, y, z);
-      bins.push_back(bc);
-    }
+  for (int i = 0; i<n_bins; ++i)
+  {
+    is >> x >> y >> z;
+    vnl_double_3 bc(x, y, z);
+    bins.push_back(bc);
+  }
   brad_sun_dir_index bindx(longitude, latitude, bins);
   int bin = bindx.index(sun_az, sun_el);
   pro.set_output_val<int>(0, bin);

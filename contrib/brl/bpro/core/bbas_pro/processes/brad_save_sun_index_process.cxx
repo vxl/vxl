@@ -1,4 +1,4 @@
-// This is brl/bpro/core/vil_pro/processes/brad_save_sun_index_process.cxx
+// This is brl/bpro/core/bbas_pro/processes/brad_save_sun_index_process.cxx
 #include <bprb/bprb_func_process.h>
 #include <brad/brad_sun_dir_index.h>
 //:
@@ -43,9 +43,8 @@ bool brad_save_sun_index_process(bprb_func_process& pro)
   //output file name
   vcl_string out_file = pro.get_input<vcl_string>(i++);
   vcl_ofstream os(out_file.c_str());
-  if(!os.is_open()){
-    vcl_cout << "in save_sun_index_process, "
-             << "couldn't open output file stream\n";
+  if (!os.is_open()) {
+    vcl_cout << "in save_sun_index_process, couldn't open output file stream\n";
     return false;
   }
   double longitude = pro.get_input<float>(i++);
@@ -63,7 +62,7 @@ bool brad_save_sun_index_process(bprb_func_process& pro)
   os << "longitude: " << longitude << " latitude: " << latitude << '\n';
   int nbins = 2*radius + 1;
   os << "nbins: " << nbins << '\n';
-  for(int i = 0; i<nbins; ++i){
+  for (int i = 0; i<nbins; ++i) {
     vnl_double_3 bin_center = bindx.cone_axis(i);
     os << bin_center[0] <<' '<< bin_center[1] <<' '<< bin_center[2] <<'\n';
   }
