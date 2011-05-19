@@ -22,6 +22,7 @@ ADD_EXECUTABLE( vpgl_algo_test_all
   test_camera_homographies.cxx
   test_camera_from_box.cxx
   test_camera_bounds.cxx
+  test_em_compute_5_point.cxx
 )
 
 TARGET_LINK_LIBRARIES( vpgl_algo_test_all vpgl_algo vgl_algo vil vgl vnl vul testlib )
@@ -46,9 +47,10 @@ ADD_TEST( vpgl_algo_test_ba_shared_k_lsqr            ${EXECUTABLE_OUTPUT_PATH}/v
 ADD_TEST( vpgl_algo_test_interpolate                 ${EXECUTABLE_OUTPUT_PATH}/vpgl_algo_test_all test_interpolate )
 ADD_TEST( vpgl_algo_test_camera_homographies         ${EXECUTABLE_OUTPUT_PATH}/vpgl_algo_test_all test_camera_homographies )
 
-ADD_TEST( vpgl_algo_test_camera_from_box         ${EXECUTABLE_OUTPUT_PATH}/vpgl_algo_test_all test_camera_from_box )
+ADD_TEST( vpgl_algo_test_camera_from_box             ${EXECUTABLE_OUTPUT_PATH}/vpgl_algo_test_all test_camera_from_box )
 
-ADD_TEST( vpgl_algo_test_camera_bounds         ${EXECUTABLE_OUTPUT_PATH}/vpgl_algo_test_all test_camera_bounds )
+ADD_TEST( vpgl_algo_test_camera_bounds               ${EXECUTABLE_OUTPUT_PATH}/vpgl_algo_test_all test_camera_bounds )
+ADD_TEST( vpgl_algo_test_em_compute_5_point          ${EXECUTABLE_OUTPUT_PATH}/vpgl_algo_test_all test_em_compute_5_point )
 
 ADD_EXECUTABLE( vpgl_algo_test_include test_include.cxx )
 TARGET_LINK_LIBRARIES( vpgl_algo_test_include vpgl_algo )

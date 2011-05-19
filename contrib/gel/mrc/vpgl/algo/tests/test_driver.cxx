@@ -21,6 +21,7 @@ DECLARE( test_interpolate );
 DECLARE( test_camera_homographies);
 DECLARE( test_camera_from_box );
 DECLARE( test_camera_bounds );
+DECLARE( test_em_compute_5_point );
 
 void register_tests()
 {
@@ -44,6 +45,7 @@ void register_tests()
   REGISTER( test_camera_homographies );
   REGISTER( test_camera_from_box );
   REGISTER( test_camera_bounds );
+  REGISTER( test_em_compute_5_point );
 }
 
 DEFINE_MAIN;

@@ -12,20 +12,21 @@
 #include <vcl_cassert.h>
 
 #include <vnl/vnl_matrix.h>
+#include <vnl/vnl_matrix_fixed.h>
 #include <vnl/vnl_vector_fixed.h>
 #include <vnl/vnl_real_npolynomial.h>
-#include <vnl/vnl_rank.h>
-#include <vnl/algo/vnl_real_eigensystem.h>
+#include <vnl/vnl_inverse.h>
+#include <vnl/algo/vnl_complex_eigensystem.h>
 #include <vnl/algo/vnl_svd.h>
 
 #include <vgl/vgl_point_2d.h>
 
 #include <vpgl/vpgl_essential_matrix.h>
+#include <vpgl/vpgl_calibration_matrix.h>
 
 
 template <class T>
-class vpgl_em_compute_5_point
-{
+class vpgl_em_compute_5_point{
   public:
 
     vpgl_em_compute_5_point(): verbose(false), tolerance(0.0001) { }
@@ -36,14 +37,30 @@ class vpgl_em_compute_5_point
     // Each of right_points and left_points must contain exactly 5 points!
     // This function returns a set of potential solutions, generally 10.
     // Each of these solutions is appropriate to use as RANSAC hypthosis,
-    // and generally done. The points must be normalized.
+    // and generally done. 
+    // 
+    // The points must be normalized!! Use the function below to avoid 
+    // normalizing the points yourself.
+    bool compute( const vcl_vector<vgl_point_2d<T> > &normed_right_points,
+                  const vcl_vector<vgl_point_2d<T> > &normed_left_points,
+                  vcl_vector<vpgl_essential_matrix<T> > &ems);
+
+    //Same as above, but performs the normalization using the two
+    // calibration matrices.
     bool compute( const vcl_vector<vgl_point_2d<T> > &right_points,
+                  const vpgl_calibration_matrix<T> &k_right,
                   const vcl_vector<vgl_point_2d<T> > &left_points,
+                  const vpgl_calibration_matrix<T> &k_left,
                   vcl_vector<vpgl_essential_matrix<T> > &ems);
 
   protected:
     bool verbose;
     double tolerance;
+
+    void normalize(
+        const vcl_vector<vgl_point_2d<T> > &points,
+        const vpgl_calibration_matrix<T> &k,
+        vcl_vector<vgl_point_2d<T> > &normed_points);
 
     void compute_nullspace_basis(
         const vcl_vector<vgl_point_2d<T> > &right_points,
@@ -75,16 +92,32 @@ class vpgl_em_compute_5_point
 /*-----------------------------------------------------------------------*/
 template <class T>
 bool vpgl_em_compute_5_point<T>::compute(
-    const vcl_vector<vgl_point_2d<T> > &right_points,
-    const vcl_vector<vgl_point_2d<T> > &left_points,
-    vcl_vector<vpgl_essential_matrix<T> > &ems)
-{
+        const vcl_vector<vgl_point_2d<T> > &right_points,
+        const vpgl_calibration_matrix<T> &k_right,
+        const vcl_vector<vgl_point_2d<T> > &left_points,
+        const vpgl_calibration_matrix<T> &k_left,
+        vcl_vector<vpgl_essential_matrix<T> > &ems){
+
+    vcl_vector<vgl_point_2d<T> > normed_right_points, normed_left_points;
+
+    normalize(right_points, k_right, normed_right_points);
+    normalize(left_points, k_left, normed_left_points);
+
+    return compute(normed_right_points, normed_left_points, ems);    
+}
+
+
+template <class T>
+bool vpgl_em_compute_5_point<T>::compute( 
+    const vcl_vector<vgl_point_2d<T> > &normed_right_points,
+    const vcl_vector<vgl_point_2d<T> > &normed_left_points,
+    vcl_vector<vpgl_essential_matrix<T> > &ems){
     // Check that we have the right number of points
-    if (right_points.size() != 5 || left_points.size() != 5){
+    if (normed_right_points.size() != 5 || normed_left_points.size() != 5){
         if (verbose){
             vcl_cerr<<"Wrong number of input points!\n" <<
-                "right_points has "<<right_points.size() <<
-                " and left_points has "<<left_points.size() << '\n';
+                "right_points has "<<normed_right_points.size() <<
+                " and left_points has "<<normed_left_points.size() << '\n';
         }
 
         return false;
@@ -93,7 +126,7 @@ bool vpgl_em_compute_5_point<T>::compute(
 
     // Compute the null space basis of the epipolar constraint matrix
     vcl_vector<vnl_vector_fixed<T,9> > basis;
-    compute_nullspace_basis(right_points, left_points, basis);
+    compute_nullspace_basis(normed_right_points, normed_left_points, basis);
 
     // Using this basis, we now can compute the polynomial constraints
     // on the E matrix.
@@ -111,6 +144,35 @@ bool vpgl_em_compute_5_point<T>::compute(
     // Finally, use the action matrix to compute the essential matrices,
     // one possibility for each real eigenvalue of the action matrix
     compute_e_matrices(basis, action_matrix, ems);
+
+    return true;
+}
+
+
+/*------------------------------------------------------------------------*/
+//:
+//Normalization is the process of left-multiplying by the inverse of the
+// calibration matrix.
+template <class T>
+void vpgl_em_compute_5_point<T>::normalize(
+    const vcl_vector<vgl_point_2d<T> > &points,
+    const vpgl_calibration_matrix<T> &k,
+    vcl_vector<vgl_point_2d<T> > &normed_points){
+
+    vnl_matrix_fixed<T, 3, 3> k_inv = vnl_inverse(k.get_matrix());
+    
+    for(int i = 0; i < points.size(); i++){
+
+        vnl_matrix_fixed<T, 3, 1> vec;
+        vec.put(0, 0, points[i].x());
+        vec.put(1, 0, points[i].y());
+        vec.put(2, 0, 1);
+
+        vnl_matrix_fixed<T,3,1> normed = k_inv*vec;
+
+        normed_points.push_back(
+            vgl_point_2d<T>(-normed.get(0,0), -normed.get(1,0)));
+    }
 }
 
 
@@ -122,8 +184,8 @@ template <class T>
 void vpgl_em_compute_5_point<T>::compute_nullspace_basis(
     const vcl_vector<vgl_point_2d<T> > &right_points,
     const vcl_vector<vgl_point_2d<T> > &left_points,
-    vcl_vector<vnl_vector_fixed<T, 9> > &basis)
-{
+    vcl_vector<vnl_vector_fixed<T, 9> > &basis){
+
     // Create the 5x9 epipolar constraint matrix
     vnl_matrix<T> A(5, 9);
 
@@ -171,8 +233,7 @@ void vpgl_em_compute_5_point<T>::compute_nullspace_basis(
 template <class T>
 void vpgl_em_compute_5_point<T>::compute_constraint_polynomials(
     const vcl_vector<vnl_vector_fixed<T,9> > &basis,
-    vcl_vector<vnl_real_npolynomial> &constraints)
-{
+    vcl_vector<vnl_real_npolynomial> &constraints){
     // Create a polynomial for each entry of E.
     //
     // E = [e11 e12 e13] = x * [ X11 ... ...] + ...
@@ -197,29 +258,6 @@ void vpgl_em_compute_5_point<T>::compute_constraint_polynomials(
         entry_polynomials[i].set(coeffs, exps);
     }
 
-    // Now we are going to create a polynomial from the constraint det(E)= 0.
-    // if E = [a b c; d e f; g h i], (E = [0 1 2; 3 4 5; 6 7 8]) then
-    // det(E) = (ai - gc) * e +  (bg - ah) * f + (ch - bi) * d.
-    // We have a through i in terms of the basis vectors from above, so
-    // use those to construct a constraint polynomial, and put it into
-    // constraints.
-
-    // e * (ai-gc) = 4 * (0*8 - 6*2)
-    vnl_real_npolynomial det_term_1 = entry_polynomials[4] *
-        (entry_polynomials[0] * entry_polynomials[8] -
-         entry_polynomials[6] * entry_polynomials[2]);
-
-    // f * (bg - ah) = 5 * (1*6 - 0*7)
-    vnl_real_npolynomial det_term_2 = entry_polynomials[5] *
-        (entry_polynomials[1] * entry_polynomials[6] -
-         entry_polynomials[0] * entry_polynomials[7]);
-
-    // d * (ch - bi) = 3 * (2*7 - 1*8)
-    vnl_real_npolynomial det_term_3 = entry_polynomials[3] *
-        (entry_polynomials[2] * entry_polynomials[7] -
-         entry_polynomials[1] * entry_polynomials[8]);
-
-    constraints.push_back(det_term_1 + det_term_2 + det_term_3);
 
     // Create polynomials for the singular value constraint.
     // These nine equations are from the constraint
@@ -235,25 +273,25 @@ void vpgl_em_compute_5_point<T>::compute_constraint_polynomials(
     //  a(2*a*a+ 2*b*b+ 2*c*c)+ d(2*a*d+ 2*b*e+ 2*c*f)+ g(2*a*g+ 2*b*h+ 2*c*i)
     //  - a(a*a+b*b+c*c+d*d+e*e+f*f+g*g+h*h+i*i)
     // The other polynomials have similar forms.
+    
+    // Define a*a + b*b + c*c + d*d + e*e + f*f + g*g + h*h + i*i, a
+    // term in all other constraint polynomials
+    vnl_real_npolynomial sum_of_squares =
+       entry_polynomials[0] * entry_polynomials[0];
 
-     // Define a*a + b*b + c*c + d*d + e*e + f*f + g*g + h*h + i*i, a
-     // term in all other constraint polynomials
-     vnl_real_npolynomial sum_of_squares =
-        entry_polynomials[0] * entry_polynomials[0];
-
-     for (int i = 1; i < 9; i++){
-        sum_of_squares = sum_of_squares +
-            entry_polynomials[i] * entry_polynomials[i];
-     }
+    for (int i = 1; i < 9; i++){
+       sum_of_squares = sum_of_squares +
+           entry_polynomials[i] * entry_polynomials[i];
+    }
 
     // Create the first two terms in each polynomial and add it to
     // constraints
     for (int i = 0; i < 9; i++){
         constraints.push_back(
-            entry_polynomials[i%3] *
-                (entry_polynomials[0] * entry_polynomials[3*(i%3) + 0]*2 +
-                 entry_polynomials[1] * entry_polynomials[3*(i%3) + 1]*2 +
-                 entry_polynomials[2] * entry_polynomials[3*(i%3) + 2]*2)
+            entry_polynomials[i%3] * 
+                (entry_polynomials[0] * entry_polynomials[3*(i/3) + 0]*2 + 
+                 entry_polynomials[1] * entry_polynomials[3*(i/3) + 1]*2 +  
+                 entry_polynomials[2] * entry_polynomials[3*(i/3) + 2]*2) 
 
             - entry_polynomials[i] * sum_of_squares);
     }
@@ -262,19 +300,46 @@ void vpgl_em_compute_5_point<T>::compute_constraint_polynomials(
     for (int i = 0; i < 9; i++){
         constraints[i] = constraints[i] +
             entry_polynomials[(i%3) + 3] *
-                (entry_polynomials[3] * entry_polynomials[3*(i%3) + 0]*2 +
-                 entry_polynomials[4] * entry_polynomials[3*(i%3) + 1]*2 +
-                 entry_polynomials[5] * entry_polynomials[3*(i%3) + 2]*2);
+                (entry_polynomials[3] * entry_polynomials[3*(i/3) + 0]*2 + 
+                 entry_polynomials[4] * entry_polynomials[3*(i/3) + 1]*2 +  
+                 entry_polynomials[5] * entry_polynomials[3*(i/3) + 2]*2); 
     }
 
     // Last term
     for (int i = 0; i < 9; i++){
-        constraints[i] = constraints[i] +
+        constraints[i] = (constraints[i] +
             entry_polynomials[(i%3) + 6] *
-                (entry_polynomials[6] * entry_polynomials[3*(i%3) + 0]*2 +
-                 entry_polynomials[7] * entry_polynomials[3*(i%3) + 1]*2 +
-                 entry_polynomials[8] * entry_polynomials[3*(i%3) + 2]*2);
+                (entry_polynomials[6] * entry_polynomials[3*(i/3) + 0]*2 + 
+                 entry_polynomials[7] * entry_polynomials[3*(i/3) + 1]*2 +  
+                 entry_polynomials[8] * entry_polynomials[3*(i/3) + 2]*2))
+            * .5; 
     }
+
+
+
+    // Now we are going to create a polynomial from the constraint det(E)= 0.
+    // if E = [a b c; d e f; g h i], (E = [0 1 2; 3 4 5; 6 7 8]) then
+    // det(E) = (ai - gc) * e +  (bg - ah) * f + (ch - bi) * d.
+    // We have a through i in terms of the basis vectors from above, so
+    // use those to construct a constraint polynomial, and put it into
+    // constraints.
+
+    // (bf - ec) * g = (1*5 - 4*2) * 4
+    vnl_real_npolynomial det_term_1 = entry_polynomials[6] *
+        (entry_polynomials[1] * entry_polynomials[5] - 
+         entry_polynomials[2] * entry_polynomials[4]);
+
+    // (cd - fa) * h
+    vnl_real_npolynomial det_term_2 = entry_polynomials[7] *
+        (entry_polynomials[2] * entry_polynomials[3] - 
+         entry_polynomials[0] * entry_polynomials[5]);
+    
+    // (ae - db) * i
+    vnl_real_npolynomial det_term_3 = entry_polynomials[8] *
+        (entry_polynomials[0] * entry_polynomials[4] - 
+         entry_polynomials[1] * entry_polynomials[3]);
+
+    constraints.push_back(det_term_1 + det_term_2 + det_term_3);
 }
 
 
@@ -284,8 +349,7 @@ void vpgl_em_compute_5_point<T>::compute_constraint_polynomials(
 // variables with an x power of x_p, a y power of y_p and a z power of z_p
 template <class T>
 double vpgl_em_compute_5_point<T>::get_coeff(
-    const vnl_real_npolynomial &p, int x_p, int y_p, int z_p)
-{
+    const vnl_real_npolynomial &p, int x_p, int y_p, int z_p){
     for (int i = 0; i < p.polyn().rows(); i++){
         if (x_p == p.polyn().get(i, 0) and
            y_p == p.polyn().get(i, 1) and
@@ -300,8 +364,7 @@ double vpgl_em_compute_5_point<T>::get_coeff(
 template <class T>
 void vpgl_em_compute_5_point<T>::compute_groebner_basis(
     const vcl_vector<vnl_real_npolynomial> &constraints,
-    vnl_matrix<double> &groebner_basis)
-{
+    vnl_matrix<double> &groebner_basis){
     assert(groebner_basis.rows() == 10);
     assert(groebner_basis.cols() == 10);
 
@@ -332,7 +395,34 @@ void vpgl_em_compute_5_point<T>::compute_groebner_basis(
     }
 
     // Do a full Gaussian elimination
-    vnl_matrix<double> rrefed = vnl_rank_row_reduce<double>(A);
+    for(int i = 0; i < 10; i++) {
+
+        // Make the leading coefficient of row i = 1 
+        double leading = A.get(i, i);
+        A.scale_row(i, 1/leading);
+
+        // Subtract from other rows 
+        for(int j = i+1; j < 10; j++) {
+            double leading2 = A.get(j, i);
+            vnl_vector<double> new_row = 
+                A.get_row(j) - A.get_row(i) * leading2;
+
+            A.set_row(j, new_row);
+        }
+    }
+
+    // Now, do the back substitution
+    for (int i = 9; i >= 0; i--) {
+        for (int j = 0; j < i; j++) {
+            double scale = A.get(j, i);
+            
+            vnl_vector<double> new_row = 
+                A.get_row(j) - A.get_row(i) * scale;
+
+            A.set_row(j, new_row);
+        }
+    }
+
 
     // Copy out results. Since the first 10*10 block of A is the
     // identity (due to the row_reduce), we are interested in the
@@ -349,8 +439,7 @@ void vpgl_em_compute_5_point<T>::compute_groebner_basis(
 template <class T>
 void vpgl_em_compute_5_point<T>::compute_action_matrix(
     const vnl_matrix<double> &groebner_basis,
-    vnl_matrix<double> &action_matrix)
-{
+    vnl_matrix<double> &action_matrix){
     action_matrix.fill(0.0);
 
     action_matrix.set_row(0, groebner_basis.get_row(0));
@@ -372,18 +461,21 @@ template <class T>
 void vpgl_em_compute_5_point<T>::compute_e_matrices(
     const vcl_vector<vnl_vector_fixed<T, 9> > &basis,
     const vnl_matrix<double> &action_matrix,
-    vcl_vector<vpgl_essential_matrix<T> > &ems)
-{
-    vnl_real_eigensystem eigs(action_matrix);
+    vcl_vector<vpgl_essential_matrix<T> > &ems){
 
-    for (int i = 0; i < eigs.D.size(); i++) {
-        if (vcl_abs(eigs.D.get(i, i).imag()) <= tolerance){
+    vnl_matrix<double> zeros(action_matrix.rows(), action_matrix.cols(), 0);
+    vnl_complex_eigensystem eigs(action_matrix, zeros); 
+
+
+    for(int i = 0; i < eigs.W.size(); i++) {
+        if(vcl_abs(eigs.W[i].imag()) <= tolerance){
+
             vnl_vector_fixed<T, 9> linear_e;
 
-            double w_inv = 1.0 / eigs.V.get(i, 9).real();
-            double x = eigs.V.get(i, 6).real() * w_inv;
-            double y = eigs.V.get(i, 7).real() * w_inv;
-            double z = eigs.V.get(i, 8).real() * w_inv;
+            double w_inv = 1.0 / eigs.R.get(i, 9).real();
+            double x = eigs.R.get(i, 6).real() * w_inv;
+            double y = eigs.R.get(i, 7).real() * w_inv;
+            double z = eigs.R.get(i, 8).real() * w_inv;
 
             linear_e =
                 x * basis[0] + y * basis[1] + z * basis[2] + basis[3];

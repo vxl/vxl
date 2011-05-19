@@ -1,7 +1,7 @@
 # gel/mrc/vpgl/algo/CMakeLists.txt
 # Photogrammetry Algorithms Library.
 
-set(BUILD_BUNDLER false)
+OPTION(BUILD_BUNDLER "Build Cornell Experimental Bundler Port" NO)
 
 # vpgl/algo requires these other sections of contrib
 IF(BUILD_RPL)
