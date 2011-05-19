@@ -22,6 +22,7 @@ boxm2_scene::boxm2_scene(vcl_string data_path, vgl_point_3d<double> origin)
     data_path_   = data_path;
     xml_path_  = data_path_ + "/scene.xml";
     vcl_cout<<"PATH "<<xml_path_<<vcl_endl;
+    num_illumination_bins_ = -1;
 }
 
 
@@ -58,6 +59,7 @@ boxm2_scene::boxm2_scene(vcl_string filename)
 
     //store list of appearances
     appearances_ = parser.appearances();
+    num_illumination_bins_ = parser.num_illumination_bins();
 }
 
 
@@ -71,15 +73,26 @@ void boxm2_scene::add_block_metadata(boxm2_block_metadata data)
   blocks_[data.id_] = data;
 }
 
-vcl_vector<boxm2_block_id> boxm2_scene::get_block_ids()
+vcl_vector<boxm2_block_id> boxm2_scene::get_block_ids() const
 {
-  vcl_map<boxm2_block_id, boxm2_block_metadata>::iterator iter;
+  vcl_map<boxm2_block_id, boxm2_block_metadata>::const_iterator iter;
   vcl_vector<boxm2_block_id> block_ids;
   for (iter = blocks_.begin(); iter != blocks_.end(); ++iter) {
       block_ids.push_back(iter->first);
   }
   return block_ids;
 }
+
+boxm2_block_metadata boxm2_scene::
+get_block_metadata_const(boxm2_block_id id) const
+{
+  vcl_map<boxm2_block_id, boxm2_block_metadata>::const_iterator iter;
+  for (iter = blocks_.begin(); iter != blocks_.end(); ++iter)
+	  if((*iter).first == id)
+		  return (*iter).second;
+  return boxm2_block_metadata();
+}
+
 
 vcl_vector<boxm2_block_id> boxm2_scene::get_vis_blocks(vpgl_generic_camera<double>* cam)
 {
@@ -167,6 +180,34 @@ vcl_vector<boxm2_block_id> boxm2_scene::get_vis_blocks(vpgl_perspective_camera<d
   //vcl_cout<<"\n-----------------------------------------------"<<vcl_endl;
   return vis_order;
 }
+
+//: find the block containing the specified point, else return false
+//  local coordinates are also returned
+bool boxm2_scene::contains(vgl_point_3d<double> const& p, boxm2_block_id& bid,
+                           vgl_point_3d<double>& local_coords) const
+{
+    vcl_vector<boxm2_block_id> block_ids = this->get_block_ids();
+    for (vcl_vector<boxm2_block_id>::iterator id = block_ids.begin();
+         id != block_ids.end(); ++id)
+      {
+        boxm2_block_metadata md = this->get_block_metadata_const(*id);
+        vgl_vector_3d<double> dims(md.sub_block_dim_.x()*md.sub_block_num_.x(),
+                                   md.sub_block_dim_.y()*md.sub_block_num_.y(),
+                                   md.sub_block_dim_.z()*md.sub_block_num_.z());
+
+        vgl_point_3d<double> lorigin = md.local_origin_;
+        vgl_box_3d<double> bbox(lorigin,lorigin+dims);
+        if(bbox.contains(p.x(), p.y(), p.z())){
+          bid = (*id);
+          double local_x=(p.x()-md.local_origin_.x())/md.sub_block_dim_.x();
+          double local_y=(p.y()-md.local_origin_.y())/md.sub_block_dim_.y();
+          double local_z=(p.z()-md.local_origin_.z())/md.sub_block_dim_.z();
+          local_coords.set(local_x, local_y, local_z);
+          return true;
+        }
+      }
+    return false;
+}
 //: save scene (xml file)
 void boxm2_scene::save_scene()
 {
@@ -209,14 +250,14 @@ boxm2_scene_info* boxm2_scene::get_blk_metadata(boxm2_block_id id)
 }
 
 
-vgl_box_3d<double> boxm2_scene::bounding_box()
+vgl_box_3d<double> boxm2_scene::bounding_box() const
 {
   double xmin=10e10, xmax=-10e10;
   double ymin=10e10, ymax=-10e10;
   double zmin=10e10, zmax=-10e10;
 
   //iterate through each block
-  vcl_map<boxm2_block_id, boxm2_block_metadata>::iterator iter;
+  vcl_map<boxm2_block_id, boxm2_block_metadata>::const_iterator iter;
   for (iter = blocks_.begin(); iter != blocks_.end(); ++iter)
   {
     //determine xmin, ymin, zmin using block_o
@@ -246,7 +287,7 @@ vgl_box_3d<double> boxm2_scene::bounding_box()
                             xmax, ymax, zmax);
 }
 
-vgl_vector_3d<unsigned int>  boxm2_scene::scene_dimensions()
+vgl_vector_3d<unsigned int>  boxm2_scene::scene_dimensions() const
 {
   vcl_vector<boxm2_block_id> ids = this->get_block_ids();
   

@@ -86,27 +86,37 @@ class boxm2_scene : public vbl_ref_count
     
     //: return a heap pointer to a scene info
     boxm2_scene_info* get_blk_metadata(boxm2_block_id id);
-    bool block_exists(boxm2_block_id id) { return blocks_.find(id) != blocks_.end(); }
-    bool block_on_disk(boxm2_block_id id) { return vul_file::exists( data_path_ + id.to_string() + ".bin"); }
+    bool block_exists(boxm2_block_id id) const { return blocks_.find(id) != blocks_.end(); }
+    bool block_on_disk(boxm2_block_id id) const { return vul_file::exists( data_path_ + id.to_string() + ".bin"); }
     bool data_on_disk(boxm2_block_id id, vcl_string data_type) {
       return vul_file::exists(data_path_ + data_type + "_" + id.to_string() + ".bin");
     }
 
     //: a list of block metadata...
     vcl_map<boxm2_block_id, boxm2_block_metadata>& blocks() { return blocks_; }
-    unsigned num_blocks() { return (unsigned) blocks_.size(); }
-    boxm2_block_metadata & get_block_metadata(boxm2_block_id id) { return blocks_[id]; }
-    vcl_vector<boxm2_block_id> get_block_ids();
+    unsigned num_blocks() const { return (unsigned) blocks_.size(); }
+
+    //: mutable reference
+    boxm2_block_metadata& get_block_metadata(boxm2_block_id id)
+      { return blocks_[id]; }
+    //: const so return a copy
+    boxm2_block_metadata get_block_metadata_const(boxm2_block_id id) const;
+
+    vcl_vector<boxm2_block_id> get_block_ids() const;
 
     //: gets a tight bounding box for the scene
-    vgl_box_3d<double>      bounding_box();
+    vgl_box_3d<double>      bounding_box() const;
   
     //: gets the smallest block index in all dimensions
     void min_block_index(vgl_point_3d<int> &idx,
                          vgl_point_3d<double> &local_origin);
 
     // returns the dimesnsion of the scene grid where each grid element is a block
-    vgl_vector_3d<unsigned int>   scene_dimensions();
+    vgl_vector_3d<unsigned int>   scene_dimensions() const;
+
+    //: If a block contains a 3-d point, set the block id, else return false. The local coordinates of the point are also returned
+    bool contains(vgl_point_3d<double> const& p, boxm2_block_id& bid,
+                  vgl_point_3d<double>& local_coords) const;
 
     //: scene dimensions accessors
     vgl_point_3d<double>    local_origin()const { return local_origin_; }
@@ -120,6 +130,7 @@ class boxm2_scene : public vbl_ref_count
     //: appearance model accessor
     vcl_vector<vcl_string> appearances()  const { return appearances_; }
     bool has_data_type(vcl_string data_type);
+    int num_illumination_bins() const {return num_illumination_bins_;}
 
     //: scene version number
     static short version_no() { return 1; }
@@ -151,6 +162,7 @@ class boxm2_scene : public vbl_ref_count
 
     //: list of appearance models/observation models used by this scene
     vcl_vector<vcl_string> appearances_;
+    int num_illumination_bins_;
 };
 
 
