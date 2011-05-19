@@ -153,6 +153,9 @@ SOURCE=.\test_ba_shared_k_lsqr.cxx
 SOURCE=.\test_ba_fixed_k_lsqr.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\test_em_compute_5_point.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\test_include.cxx
 # End Source File
 # Begin Source File
