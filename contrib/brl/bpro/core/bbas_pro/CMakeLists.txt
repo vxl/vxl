@@ -12,7 +12,7 @@ SET(bbas_pro_sources
    )
 
 AUX_SOURCE_DIRECTORY(Templates bbas_pro_sources)
-#AUX_SOURCE_DIRECTORY(processes bbas_pro_sources)
+AUX_SOURCE_DIRECTORY(processes bbas_pro_sources)
 
 ADD_LIBRARY(bbas_pro ${bbas_pro_sources})
-TARGET_LINK_LIBRARIES(bbas_pro bprb brdb  vbl_io vbl vsl)
+TARGET_LINK_LIBRARIES(bbas_pro bprb brdb  brad bsta vbl_io vbl vsl)
