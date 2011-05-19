@@ -119,6 +119,12 @@ SOURCE=.\processes/boxm2_cpp_cast_intensities_process.cxx
 # Begin Source File
 SOURCE=.\processes/boxm2_cpp_mean_intensities_batch_process.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\processes/boxm2_cpp_query_cell_data_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/boxm2_cpp_filter_process.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"

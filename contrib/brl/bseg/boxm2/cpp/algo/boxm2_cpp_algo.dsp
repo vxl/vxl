@@ -101,6 +101,9 @@ SOURCE=.\boxm2_refine_block_function.cxx
 # Begin Source File
 SOURCE=.\boxm2_render_functions.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\boxm2_filter_block_function.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
@@ -142,6 +145,9 @@ SOURCE=.\boxm2_cast_intensities_functor.h
 # End Source File
 # Begin Source File
 SOURCE=.\boxm2_mean_intensities_batch_functor.h
+# End Source File
+# Begin Source File
+SOURCE=.\boxm2_filter_block_function.h
 # End Source File
 # End Group
 # End Target

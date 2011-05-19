@@ -99,6 +99,15 @@ SOURCE=.\bbas_register.cxx
 SOURCE=.\bbas_1d_array_float.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\processes/brad_display_sun_index_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/brad_save_sun_index_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/brad_sun_dir_bin_process.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/vbl_io_smart_ptr+bbas_1d_array_float-.cxx
 # End Source File
 # Begin Source File

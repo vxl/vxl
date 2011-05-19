@@ -128,6 +128,9 @@ SOURCE=.\processes/boxm2_describe_scene_process.cxx
 # Begin Source File
 SOURCE=.\processes/boxm2_create_stream_cache_process.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\processes/boxm2_scene_illumination_info_process.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
