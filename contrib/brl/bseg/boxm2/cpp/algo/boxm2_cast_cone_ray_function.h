@@ -129,9 +129,10 @@ void boxm2_cast_cone_ray_function(vgl_box_3d<double>& block_box,
               //if the tree is a leaf, then update it's contribution
               if ( bit_tree.is_leaf(currBitIndex)) {
                 int data_ptr = bit_tree.get_data_index(currBitIndex);
-                functor.step_cell(intersect_volume, data_ptr, i, j, side_len * linfo->block_len,
+                functor.step_cell(static_cast<float>(intersect_volume), data_ptr, i, j,
+					              static_cast<float>(side_len * linfo->block_len),
                                   intensity_norm, weighted_int, prob_surface);
-                total_volume += intersect_volume;
+                total_volume += static_cast<float>(intersect_volume);
               }
               else { //add children to the visit list
                 unsigned firstChild = 8 * currBitIndex + 1;
@@ -156,7 +157,7 @@ void boxm2_cast_cone_ray_function(vgl_box_3d<double>& block_box,
     }
 
     //calculate the next sphere's R and T
-    float rPrime = sinAlpha * (currR + currT) / (1.0-sinAlpha);
+    float rPrime = static_cast<float>(sinAlpha * (currR + currT) / (1.0-sinAlpha));
     currT += (rPrime + currR);
     currR = rPrime;
   }

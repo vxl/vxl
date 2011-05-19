@@ -8,6 +8,7 @@
 // \date Mar 10, 2011
 
 #include <vcl_fstream.h>
+#include <vcl_sstream.h>
 #include <boxm2/io/boxm2_cache.h>
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/boxm2_block.h>
@@ -41,16 +42,22 @@ bool boxm2_cpp_update_image_process_cons(bprb_func_process& pro)
   // 1) cache
   // 2) camera
   // 3) image
+  // 4) illumination_bin_index
   vcl_vector<vcl_string> input_types_(n_inputs_);
   input_types_[0] = "boxm2_scene_sptr";
   input_types_[1] = "boxm2_cache_sptr";
   input_types_[2] = "vpgl_camera_double_sptr";
   input_types_[3] = "vil_image_view_base_sptr";
+  input_types_[4] = "int";// if index < 0, then only one appearance model
   // process has 1 output:
   // output[0]: scene sptr
   vcl_vector<vcl_string>  output_types_(n_outputs_);
-
-  return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
+  bool good = pro.set_input_types(input_types_) &&
+    pro.set_output_types(output_types_);
+  // in case the 5th input is not set
+  brdb_value_sptr idx = new brdb_value_t<int>(-1);
+  pro.set_input(4, idx);
+  return good;
 }
 
 bool boxm2_cpp_update_image_process(bprb_func_process& pro)
@@ -67,6 +74,8 @@ bool boxm2_cpp_update_image_process(bprb_func_process& pro)
     boxm2_cache_sptr cache= pro.get_input<boxm2_cache_sptr>(i++);
     vpgl_camera_double_sptr cam= pro.get_input<vpgl_camera_double_sptr>(i++);
     vil_image_view_base_sptr in_img=pro.get_input<vil_image_view_base_sptr>(i++);
+    int illumination_bin_index = pro.get_input<int>(i);
+
     vil_image_view_base_sptr float_image=boxm2_util::prepare_input_image(in_img);
     if (vil_image_view<float> * input_image=dynamic_cast<vil_image_view<float> * > (float_image.ptr()))
     {
@@ -97,6 +106,13 @@ bool boxm2_cpp_update_image_process(bprb_func_process& pro)
             vcl_cout<<"BOXM2_OCL_RENDER_PROCESS ERROR: scene doesn't have BOXM2_MOG3_GREY or BOXM2_MOG3_GREY_16 data type"<<vcl_endl;
             return false;
         }
+        if(illumination_bin_index>=0){
+          vcl_stringstream s;
+          s << illumination_bin_index << vcl_ends;
+          vcl_string ident = "_ill_bin_" + s.str();
+          data_type += ident;
+        }
+
         vcl_vector<boxm2_block_id> vis_order=scene->get_vis_blocks(reinterpret_cast<vpgl_generic_camera<double>*>(cam.ptr()));
         if (vis_order.empty())
         {
