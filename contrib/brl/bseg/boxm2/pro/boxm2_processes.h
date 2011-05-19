@@ -17,5 +17,6 @@ DECLARE_FUNC_CONS(boxm2_texture_mesh_process);
 DECLARE_FUNC_CONS(boxm2_describe_scene_process);
 DECLARE_FUNC_CONS(boxm2_create_rw_cache_process);
 DECLARE_FUNC_CONS(boxm2_create_stream_cache_process);
+DECLARE_FUNC_CONS(boxm2_scene_illumination_info_process);
 
 #endif
