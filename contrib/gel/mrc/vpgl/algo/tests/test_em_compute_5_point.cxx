@@ -17,12 +17,12 @@ static const double TOL = .001;
 static void normalize(
     const vcl_vector<vgl_point_2d<double> > &points,
     const vpgl_calibration_matrix<double> &k,
-    vcl_vector<vgl_point_2d<double> > &normed_points){
-
+    vcl_vector<vgl_point_2d<double> > &normed_points)
+{
     vnl_matrix_fixed<double, 3, 3> k_inv = vnl_inverse(k.get_matrix());
-    
-    for(int i = 0; i < points.size(); i++){
 
+    for (unsigned int i = 0; i < points.size(); ++i)
+    {
         vnl_matrix_fixed<double, 3, 1> vec;
         vec.put(0, 0, points[i].x());
         vec.put(1, 0, points[i].y());
@@ -39,34 +39,35 @@ static void eval_e_mats(
     const vcl_vector<vpgl_essential_matrix<double> > &ems,
     const vcl_vector<vgl_point_2d<double> > &corres1,
     const vcl_vector<vgl_point_2d<double> > &corres2,
-    vcl_string test_name){
-
+    vcl_string test_name)
+{
     //Check each essential matrix.
     vcl_vector<vpgl_essential_matrix<double> >::const_iterator i;
-    for(i = ems.begin(); i != ems.end(); i++){
-
+    for (i = ems.begin(); i != ems.end(); ++i)
+    {
         //Check that the determinant of the essential matrix is 0.
         double det = vnl_determinant(i->get_matrix());
         TEST_NEAR(
-         (test_name+vcl_string(": Test det(essential_matrix) = 0")).c_str(), 
+         (test_name+vcl_string(": Test det(essential_matrix) = 0")).c_str(),
          det, 0, TOL);
 
         //Now check that 2*e*e^t*e - tr(e * e^t) * e = 0;
-        vnl_matrix_fixed<double, 3, 3> e_et = 
+        vnl_matrix_fixed<double, 3, 3> e_et =
             i->get_matrix() * i->get_matrix().transpose();
-        
-        double v = 
-            (e_et*i->get_matrix()*2.0 - 
+
+        double v =
+            (e_et*i->get_matrix()*2.0 -
                 vnl_trace(e_et)*i->get_matrix()).get(0,0);
 
         TEST_NEAR(
         (test_name+vcl_string(": Test 2*E*E^t*E - tr(E*E^t)*E = 0")).c_str(),
         v, 0, TOL);
 
-        
+
         //Finally, test that q' * E * q = 0, where (q, q') are point
         // correspondences.
-        for(int j = 0; j < corres1.size(); j++){
+        for (unsigned int j = 0; j < corres1.size(); ++j)
+        {
             //Get the RHS
             vnl_matrix_fixed<double, 3, 1> vec1;
             vec1.put(0, 0, corres1[j].x());
@@ -79,7 +80,7 @@ static void eval_e_mats(
             vec2.put(1, 0, corres2[j].y());
             vec2.put(2, 0, 1);
 
-            double result = 
+            double result =
                 (vec2.transpose() * i->get_matrix() * vec1).get(0,0);
 
             TEST_NEAR(
@@ -90,7 +91,8 @@ static void eval_e_mats(
 }
 
 
-static void test_unnormed(){
+static void test_unnormed()
+{
     //*************Definition of test stuff
     //Define the information in the first camera
     double focal_length1_mm = 5.4; //In mm
@@ -101,7 +103,7 @@ static void test_unnormed(){
     vpgl_calibration_matrix<double> k1
         (focal_length1, vgl_point_2d<double>(width1/2, height1/2));
 
-     
+
     //Define the information in the second camera
     double focal_length2_mm = 5.4; //In mm
     double ccd_width2 = 5.312;
@@ -113,27 +115,27 @@ static void test_unnormed(){
 
 
     //Finally, the point correspondences
-    vgl_point_2d<double> corres1_arr[] = 
+    vgl_point_2d<double> corres1_arr[] =
         {vgl_point_2d<double>(310,263),
          vgl_point_2d<double>(230,246),
          vgl_point_2d<double>(585,321),
          vgl_point_2d<double>(362,119),
-         vgl_point_2d<double>(502,170)}; 
-    vcl_vector<vgl_point_2d<double> > corres1(corres1_arr, 
+         vgl_point_2d<double>(502,170)};
+    vcl_vector<vgl_point_2d<double> > corres1(corres1_arr,
         corres1_arr + sizeof(corres1_arr) / sizeof(vgl_point_2d<double>));
 
-    vgl_point_2d<double> corres2_arr[] = 
+    vgl_point_2d<double> corres2_arr[] =
         {vgl_point_2d<double>(274,268),
          vgl_point_2d<double>(199,240),
          vgl_point_2d<double>(582,377),
          vgl_point_2d<double>(370,114),
-         vgl_point_2d<double>(544,182)}; 
-    vcl_vector<vgl_point_2d<double> > corres2(corres2_arr, 
+         vgl_point_2d<double>(544,182)};
+    vcl_vector<vgl_point_2d<double> > corres2(corres2_arr,
         corres2_arr + sizeof(corres2_arr) / sizeof(vgl_point_2d<double>));
 
     Assert("Un-normed: Testing that the correspondences are the same size.",
-        corres1.size() == corres2.size());
-    //*************End definitions. 
+           corres1.size() == corres2.size());
+    //*************End definitions.
 
     //Now actually do the computation.
     vcl_vector<vpgl_essential_matrix<double> > ems;
@@ -146,7 +148,7 @@ static void test_unnormed(){
     Assert(
         "Un-normed: Testing that we found the right number of solutions.",
         ems.size() <= 10);
-        
+
     vcl_vector<vgl_point_2d<double> > normed1, normed2;
     normalize(corres1, k1, normed1);
     normalize(corres2, k2, normed2);
@@ -154,45 +156,47 @@ static void test_unnormed(){
     eval_e_mats(ems, normed1, normed2, vcl_string("Un-normed"));
 }
 
-static void test_normed(){
+static void test_normed()
+{
     //*****************************
     //Finally, the point correspondences
-    vgl_point_2d<double> corres1_arr[] = 
+    vgl_point_2d<double> corres1_arr[] =
         {vgl_point_2d<double>(-.291040, -.049485),
          vgl_point_2d<double>(-0.341221,0.060139),
          vgl_point_2d<double>(0.138513,0.329644),
          vgl_point_2d<double>(-0.028314,0.155250),
-         vgl_point_2d<double>(0.057233,0.067887)}; 
-    vcl_vector<vgl_point_2d<double> > corres1(corres1_arr, 
+         vgl_point_2d<double>(0.057233,0.067887)};
+    vcl_vector<vgl_point_2d<double> > corres1(corres1_arr,
         corres1_arr + sizeof(corres1_arr) / sizeof(vgl_point_2d<double>));
 
-    vgl_point_2d<double> corres2_arr[] = 
+    vgl_point_2d<double> corres2_arr[] =
         {vgl_point_2d<double>(-0.373122,-0.034761),
          vgl_point_2d<double>(-0.425709,-0.102118),
          vgl_point_2d<double>(0.105493,0.307611),
          vgl_point_2d<double>(-0.065042,0.175362),
-         vgl_point_2d<double>(0.014028,0.086819)}; 
-    vcl_vector<vgl_point_2d<double> > corres2(corres2_arr, 
+         vgl_point_2d<double>(0.014028,0.086819)};
+    vcl_vector<vgl_point_2d<double> > corres2(corres2_arr,
         corres2_arr + sizeof(corres2_arr) / sizeof(vgl_point_2d<double>));
 
     Assert("Normed: Testing that the correspondences are the same size.",
-        corres1.size() == corres2.size());
-    //*************End definitions. 
+           corres1.size() == corres2.size());
+    //*************End definitions.
 
     //Now actually do the computation.
     vcl_vector<vpgl_essential_matrix<double> > ems;
     vpgl_em_compute_5_point<double> em_5_pt;
 
     Assert("Normed: Testing that the 5 point algorithm returns correctly.",
-        em_5_pt.compute(corres1, corres2, ems));
+           em_5_pt.compute(corres1, corres2, ems));
 
     Assert("Normed: Testing that we found the right number of solutions.",
-        ems.size() <= 10);
+           ems.size() <= 10);
 
     eval_e_mats(ems, corres1, corres2, vcl_string("Normed"));
 }
 
-static void test_em_compute_5_point(){
+static void test_em_compute_5_point()
+{
     test_normed();
     test_unnormed();
 }

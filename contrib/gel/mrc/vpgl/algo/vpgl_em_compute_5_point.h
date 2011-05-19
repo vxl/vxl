@@ -26,7 +26,8 @@
 
 
 template <class T>
-class vpgl_em_compute_5_point{
+class vpgl_em_compute_5_point
+{
   public:
 
     vpgl_em_compute_5_point(): verbose(false), tolerance(0.0001) { }
@@ -37,9 +38,9 @@ class vpgl_em_compute_5_point{
     // Each of right_points and left_points must contain exactly 5 points!
     // This function returns a set of potential solutions, generally 10.
     // Each of these solutions is appropriate to use as RANSAC hypthosis,
-    // and generally done. 
-    // 
-    // The points must be normalized!! Use the function below to avoid 
+    // and generally done.
+    //
+    // The points must be normalized!! Use the function below to avoid
     // normalizing the points yourself.
     bool compute( const vcl_vector<vgl_point_2d<T> > &normed_right_points,
                   const vcl_vector<vgl_point_2d<T> > &normed_left_points,
@@ -85,7 +86,7 @@ class vpgl_em_compute_5_point{
         vcl_vector<vpgl_essential_matrix<T> > &ems);
 
     double get_coeff(const vnl_real_npolynomial &p,
-        int x_p, int y_p, int z_p);
+                     unsigned int x_p, unsigned int y_p, unsigned int z_p);
 };
 
 
@@ -96,19 +97,19 @@ bool vpgl_em_compute_5_point<T>::compute(
         const vpgl_calibration_matrix<T> &k_right,
         const vcl_vector<vgl_point_2d<T> > &left_points,
         const vpgl_calibration_matrix<T> &k_left,
-        vcl_vector<vpgl_essential_matrix<T> > &ems){
-
+        vcl_vector<vpgl_essential_matrix<T> > &ems)
+{
     vcl_vector<vgl_point_2d<T> > normed_right_points, normed_left_points;
 
     normalize(right_points, k_right, normed_right_points);
     normalize(left_points, k_left, normed_left_points);
 
-    return compute(normed_right_points, normed_left_points, ems);    
+    return compute(normed_right_points, normed_left_points, ems);
 }
 
 
 template <class T>
-bool vpgl_em_compute_5_point<T>::compute( 
+bool vpgl_em_compute_5_point<T>::compute(
     const vcl_vector<vgl_point_2d<T> > &normed_right_points,
     const vcl_vector<vgl_point_2d<T> > &normed_left_points,
     vcl_vector<vpgl_essential_matrix<T> > &ems){
@@ -122,7 +123,6 @@ bool vpgl_em_compute_5_point<T>::compute(
 
         return false;
     }
-
 
     // Compute the null space basis of the epipolar constraint matrix
     vcl_vector<vnl_vector_fixed<T,9> > basis;
@@ -157,12 +157,12 @@ template <class T>
 void vpgl_em_compute_5_point<T>::normalize(
     const vcl_vector<vgl_point_2d<T> > &points,
     const vpgl_calibration_matrix<T> &k,
-    vcl_vector<vgl_point_2d<T> > &normed_points){
-
+    vcl_vector<vgl_point_2d<T> > &normed_points)
+{
     vnl_matrix_fixed<T, 3, 3> k_inv = vnl_inverse(k.get_matrix());
-    
-    for(int i = 0; i < points.size(); i++){
 
+    for (unsigned int i = 0; i < points.size(); ++i)
+    {
         vnl_matrix_fixed<T, 3, 1> vec;
         vec.put(0, 0, points[i].x());
         vec.put(1, 0, points[i].y());
@@ -184,12 +184,12 @@ template <class T>
 void vpgl_em_compute_5_point<T>::compute_nullspace_basis(
     const vcl_vector<vgl_point_2d<T> > &right_points,
     const vcl_vector<vgl_point_2d<T> > &left_points,
-    vcl_vector<vnl_vector_fixed<T, 9> > &basis){
-
+    vcl_vector<vnl_vector_fixed<T, 9> > &basis)
+{
     // Create the 5x9 epipolar constraint matrix
     vnl_matrix<T> A(5, 9);
 
-    for (int i = 0; i < 5; i++) {
+    for (int i = 0; i < 5; ++i) {
         A.put(i, 0, right_points[i].x() * left_points[i].x());
         A.put(i, 1, right_points[i].y() * left_points[i].x());
         A.put(i, 2, left_points[i].x());
@@ -203,17 +203,16 @@ void vpgl_em_compute_5_point<T>::compute_nullspace_basis(
         A.put(i, 8, 1.0);
     }
 
-
     // Find four vectors that span the right nullspace of the matrix.
     // Do this using SVD.
     vnl_svd<T> svd(A, tolerance);
     vnl_matrix<T> V = svd.V();
 
     // The null space is spanned by the last four columns of V.
-    for (int i = 5; i < 9; i++){
+    for (int i = 5; i < 9; ++i){
         vnl_vector_fixed<T,9> basis_vector;
 
-        for (int j = 0; j < 9; j++){
+        for (int j = 0; j < 9; ++j){
             basis_vector[j] = V.get(j, i);
         }
 
@@ -249,7 +248,7 @@ void vpgl_em_compute_5_point<T>::compute_constraint_polynomials(
     exps.set_identity();
     exps.put(3, 3, 0);
 
-    for (int i = 0; i < 9; i++) {
+    for (int i = 0; i < 9; ++i) {
         coeffs[0] = basis[0][i];
         coeffs[1] = basis[1][i];
         coeffs[2] = basis[2][i];
@@ -257,7 +256,6 @@ void vpgl_em_compute_5_point<T>::compute_constraint_polynomials(
 
         entry_polynomials[i].set(coeffs, exps);
     }
-
 
     // Create polynomials for the singular value constraint.
     // These nine equations are from the constraint
@@ -273,49 +271,47 @@ void vpgl_em_compute_5_point<T>::compute_constraint_polynomials(
     //  a(2*a*a+ 2*b*b+ 2*c*c)+ d(2*a*d+ 2*b*e+ 2*c*f)+ g(2*a*g+ 2*b*h+ 2*c*i)
     //  - a(a*a+b*b+c*c+d*d+e*e+f*f+g*g+h*h+i*i)
     // The other polynomials have similar forms.
-    
+
     // Define a*a + b*b + c*c + d*d + e*e + f*f + g*g + h*h + i*i, a
     // term in all other constraint polynomials
     vnl_real_npolynomial sum_of_squares =
        entry_polynomials[0] * entry_polynomials[0];
 
-    for (int i = 1; i < 9; i++){
+    for (int i = 1; i < 9; ++i){
        sum_of_squares = sum_of_squares +
            entry_polynomials[i] * entry_polynomials[i];
     }
 
     // Create the first two terms in each polynomial and add it to
     // constraints
-    for (int i = 0; i < 9; i++){
+    for (int i = 0; i < 9; ++i){
         constraints.push_back(
-            entry_polynomials[i%3] * 
-                (entry_polynomials[0] * entry_polynomials[3*(i/3) + 0]*2 + 
-                 entry_polynomials[1] * entry_polynomials[3*(i/3) + 1]*2 +  
-                 entry_polynomials[2] * entry_polynomials[3*(i/3) + 2]*2) 
+            entry_polynomials[i%3] *
+                (entry_polynomials[0] * entry_polynomials[3*(i/3) + 0]*2 +
+                 entry_polynomials[1] * entry_polynomials[3*(i/3) + 1]*2 +
+                 entry_polynomials[2] * entry_polynomials[3*(i/3) + 2]*2)
 
             - entry_polynomials[i] * sum_of_squares);
     }
 
     // Now add the next term (there are four terms total)
-    for (int i = 0; i < 9; i++){
+    for (int i = 0; i < 9; ++i){
         constraints[i] = constraints[i] +
             entry_polynomials[(i%3) + 3] *
-                (entry_polynomials[3] * entry_polynomials[3*(i/3) + 0]*2 + 
-                 entry_polynomials[4] * entry_polynomials[3*(i/3) + 1]*2 +  
-                 entry_polynomials[5] * entry_polynomials[3*(i/3) + 2]*2); 
+                (entry_polynomials[3] * entry_polynomials[3*(i/3) + 0]*2 +
+                 entry_polynomials[4] * entry_polynomials[3*(i/3) + 1]*2 +
+                 entry_polynomials[5] * entry_polynomials[3*(i/3) + 2]*2);
     }
 
     // Last term
-    for (int i = 0; i < 9; i++){
+    for (int i = 0; i < 9; ++i){
         constraints[i] = (constraints[i] +
             entry_polynomials[(i%3) + 6] *
-                (entry_polynomials[6] * entry_polynomials[3*(i/3) + 0]*2 + 
-                 entry_polynomials[7] * entry_polynomials[3*(i/3) + 1]*2 +  
+                (entry_polynomials[6] * entry_polynomials[3*(i/3) + 0]*2 +
+                 entry_polynomials[7] * entry_polynomials[3*(i/3) + 1]*2 +
                  entry_polynomials[8] * entry_polynomials[3*(i/3) + 2]*2))
-            * .5; 
+            * .5;
     }
-
-
 
     // Now we are going to create a polynomial from the constraint det(E)= 0.
     // if E = [a b c; d e f; g h i], (E = [0 1 2; 3 4 5; 6 7 8]) then
@@ -326,17 +322,17 @@ void vpgl_em_compute_5_point<T>::compute_constraint_polynomials(
 
     // (bf - ec) * g = (1*5 - 4*2) * 4
     vnl_real_npolynomial det_term_1 = entry_polynomials[6] *
-        (entry_polynomials[1] * entry_polynomials[5] - 
+        (entry_polynomials[1] * entry_polynomials[5] -
          entry_polynomials[2] * entry_polynomials[4]);
 
     // (cd - fa) * h
     vnl_real_npolynomial det_term_2 = entry_polynomials[7] *
-        (entry_polynomials[2] * entry_polynomials[3] - 
+        (entry_polynomials[2] * entry_polynomials[3] -
          entry_polynomials[0] * entry_polynomials[5]);
-    
+
     // (ae - db) * i
     vnl_real_npolynomial det_term_3 = entry_polynomials[8] *
-        (entry_polynomials[0] * entry_polynomials[4] - 
+        (entry_polynomials[0] * entry_polynomials[4] -
          entry_polynomials[1] * entry_polynomials[3]);
 
     constraints.push_back(det_term_1 + det_term_2 + det_term_3);
@@ -349,16 +345,17 @@ void vpgl_em_compute_5_point<T>::compute_constraint_polynomials(
 // variables with an x power of x_p, a y power of y_p and a z power of z_p
 template <class T>
 double vpgl_em_compute_5_point<T>::get_coeff(
-    const vnl_real_npolynomial &p, int x_p, int y_p, int z_p){
-    for (int i = 0; i < p.polyn().rows(); i++){
-        if (x_p == p.polyn().get(i, 0) and
-           y_p == p.polyn().get(i, 1) and
-           z_p == p.polyn().get(i, 2)){
-            return p.coefficients()[i];
-        }
+    const vnl_real_npolynomial &p, unsigned int x_p, unsigned int y_p, unsigned int z_p)
+{
+  for (unsigned int i = 0; i < p.polyn().rows(); ++i) {
+    if (x_p == p.polyn().get(i, 0) &&
+        y_p == p.polyn().get(i, 1) &&
+        z_p == p.polyn().get(i, 2)) {
+      return p.coefficients()[i];
     }
+  }
 
-    return -1;
+  return -1.0;
 }
 
 template <class T>
@@ -370,7 +367,7 @@ void vpgl_em_compute_5_point<T>::compute_groebner_basis(
 
     vnl_matrix<double> A(10, 20);
 
-    for (int i = 0; i < 10; i++) {
+    for (int i = 0; i < 10; ++i) {
         // x3 x2y xy2 y3 x2z xyz y2z xz2 yz2 z3 x2 xy y2 xz yz z2 x  y  z  1
         A.put(i, 0, get_coeff(constraints[i], 3, 0, 0));
         A.put(i, 1, get_coeff(constraints[i], 2, 1, 0));
@@ -395,16 +392,16 @@ void vpgl_em_compute_5_point<T>::compute_groebner_basis(
     }
 
     // Do a full Gaussian elimination
-    for(int i = 0; i < 10; i++) {
-
-        // Make the leading coefficient of row i = 1 
+    for (int i = 0; i < 10; ++i)
+    {
+        // Make the leading coefficient of row i = 1
         double leading = A.get(i, i);
         A.scale_row(i, 1/leading);
 
-        // Subtract from other rows 
-        for(int j = i+1; j < 10; j++) {
+        // Subtract from other rows
+        for (int j = i+1; j < 10; ++j) {
             double leading2 = A.get(j, i);
-            vnl_vector<double> new_row = 
+            vnl_vector<double> new_row =
                 A.get_row(j) - A.get_row(i) * leading2;
 
             A.set_row(j, new_row);
@@ -412,23 +409,22 @@ void vpgl_em_compute_5_point<T>::compute_groebner_basis(
     }
 
     // Now, do the back substitution
-    for (int i = 9; i >= 0; i--) {
-        for (int j = 0; j < i; j++) {
+    for (int i = 9; i >= 0; --i) {
+        for (int j = 0; j < i; ++j) {
             double scale = A.get(j, i);
-            
-            vnl_vector<double> new_row = 
+
+            vnl_vector<double> new_row =
                 A.get_row(j) - A.get_row(i) * scale;
 
             A.set_row(j, new_row);
         }
     }
 
-
     // Copy out results. Since the first 10*10 block of A is the
     // identity (due to the row_reduce), we are interested in the
     // second 10*10 block.
-    for (int i = 0; i < 10; i++) {
-        for (int j = 0; j < 10; j++){
+    for (int i = 0; i < 10; ++i) {
+        for (int j = 0; j < 10; ++j){
             groebner_basis.put(i, j, A.get(i, j+10));
         }
     }
@@ -461,15 +457,14 @@ template <class T>
 void vpgl_em_compute_5_point<T>::compute_e_matrices(
     const vcl_vector<vnl_vector_fixed<T, 9> > &basis,
     const vnl_matrix<double> &action_matrix,
-    vcl_vector<vpgl_essential_matrix<T> > &ems){
-
+    vcl_vector<vpgl_essential_matrix<T> > &ems)
+{
     vnl_matrix<double> zeros(action_matrix.rows(), action_matrix.cols(), 0);
-    vnl_complex_eigensystem eigs(action_matrix, zeros); 
+    vnl_complex_eigensystem eigs(action_matrix, zeros);
 
-
-    for(int i = 0; i < eigs.W.size(); i++) {
-        if(vcl_abs(eigs.W[i].imag()) <= tolerance){
-
+    for (unsigned int i = 0; i < eigs.W.size(); ++i) {
+        if (vcl_abs(eigs.W[i].imag()) <= tolerance)
+        {
             vnl_vector_fixed<T, 9> linear_e;
 
             double w_inv = 1.0 / eigs.R.get(i, 9).real();
