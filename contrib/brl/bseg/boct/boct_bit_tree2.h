@@ -42,7 +42,7 @@ class boct_bit_tree2
   int  get_relative_index(int bit_index) const; 
 
   //: traverse tree to get leaf index that contains point
-  int traverse(const vgl_point_3d<double> p);
+  int traverse(const vgl_point_3d<double> p, int deepest=4);
 
   //: gets the cell center (octree is assumed to be [0,1]x[0,1]x[0,1]
   vgl_point_3d<double> cell_center(int bit_index); 
@@ -61,6 +61,7 @@ class boct_bit_tree2
 
   //: return maximum number of cells in this tree
   int max_num_cells() { return (int) ((vcl_pow(8.0, num_levels_+1) - 1.0) / 7.0); }
+  int max_num_inner_cells() { return (int) ((vcl_pow(8.0, num_levels_) - 1.0) / 7.0); }
 
   //: returns depth (0,1,2,3) at given index
   //  Note that cumulative nodes = (1/7) * (8^(n+1) -1)
@@ -76,12 +77,14 @@ class boct_bit_tree2
   unsigned char* get_bits() {return bits_; }
 
   //: sets and gets pointers stored in bits 10, 11, 12, 13
-  int get_buffer_ptr(); 
-  int set_buffer_ptr(int ptr); 
+  //int get_buffer_ptr(); 
+  //int set_buffer_ptr(int ptr); 
   int get_data_ptr(bool is_random=false); 
   int set_data_ptr(int ptr, bool is_random=false); 
   
-
+  //returns bit indices of leaf nodes under rootBit
+  vcl_vector<int> get_leaf_bits(int rootBit=0); 
+  
   //cached arrays are public - make em const too
   static unsigned char bit_lookup[256]; 
   static float         centerX[585]; 
