@@ -183,18 +183,18 @@ bool boxm2_ocl_render_cone_expected_image_process(bprb_func_process& pro)
                              data_type, kernels[identifier][0], lthreads, cl_ni, cl_nj);  
                         
   // normalize
-  //{
-    //vcl_size_t gThreads[] = {cl_ni,cl_nj};
-    //bocl_kernel* normalize_kern = kernels[identifier][1];
-    //normalize_kern->set_arg( exp_image.ptr() );
-    //normalize_kern->set_arg( vis_image.ptr() );
-    //normalize_kern->set_arg( exp_img_dim.ptr());
-    //normalize_kern->execute( queue, 2, lthreads, gThreads);
-    //clFinish(queue);
+  {
+    vcl_size_t gThreads[] = {cl_ni,cl_nj};
+    bocl_kernel* normalize_kern = kernels[identifier][1];
+    normalize_kern->set_arg( exp_image.ptr() );
+    normalize_kern->set_arg( vis_image.ptr() );
+    normalize_kern->set_arg( exp_img_dim.ptr());
+    normalize_kern->execute( queue, 2, lthreads, gThreads);
+    clFinish(queue);
 
-    ////clear render kernel args so it can reset em on next execution
-    //normalize_kern->clear_args();
-  //}
+    //clear render kernel args so it can reset em on next execution
+    normalize_kern->clear_args();
+  }
                         
   //: read out expected image
   exp_image->read_to_buffer(queue);

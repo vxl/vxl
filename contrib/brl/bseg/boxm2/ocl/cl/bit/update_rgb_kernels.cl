@@ -450,21 +450,21 @@ void update_yuv_appearance(float8* mixture, float* nobs, float4 mean_obs, float 
   float sigma = (*mixture).s4; 
   update_gauss(mean_obs.x, rho, &mu, &sigma, min_sigma);
   (*mixture).s0 = mu; 
-  (*mixture).s4 = .03; 
+  (*mixture).s4 = .06; 
   
   //u channel
   mu = (*mixture).s1;
   sigma = (*mixture).s5; 
   update_gauss(mean_obs.y, rho, &mu, &sigma, min_sigma); 
   (*mixture).s1 = mu; 
-  (*mixture).s5 = .03; 
+  (*mixture).s5 = .06; 
   
   //v channel
   mu = (*mixture).s2;
   sigma = (*mixture).s6; 
   update_gauss(mean_obs.z, rho, &mu, &sigma, min_sigma); 
   (*mixture).s2 = mu; 
-  (*mixture).s6 = .03; 
+  (*mixture).s6 = .06; 
 }
 
 
