@@ -43,7 +43,7 @@ class boxm2_scene_parser : public expatpp
    vcl_string name() { return name_; }
    vcl_map<boxm2_block_id, boxm2_block_metadata> blocks() { return blocks_; }
    vcl_vector<vcl_string> appearances() { return appearances_; }
-   
+   int num_illumination_bins(){return num_illum_bins_;}
  private:
   virtual void startElement(const XML_Char* name, const XML_Char** atts);
   virtual void endElement(const XML_Char* /*name*/) {}
@@ -63,7 +63,7 @@ class boxm2_scene_parser : public expatpp
   double lvcs_local_origin_x_;
   double lvcs_local_origin_y_;
   double lvcs_theta_;
-
+  int num_illum_bins_;
   // world origin
   vgl_point_3d<double> origin_; 
 

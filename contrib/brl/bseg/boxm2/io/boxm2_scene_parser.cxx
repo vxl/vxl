@@ -66,7 +66,7 @@ void boxm2_scene_parser::init_params()
   lvcs_local_origin_x_=0;
   lvcs_local_origin_y_=0;
   lvcs_theta_=0;
-
+  num_illum_bins_ = -1;//indicates not defined
   // world origin
   origin_ = vgl_point_3d<double>(0,0,0);
   path_="";
@@ -154,6 +154,9 @@ boxm2_scene_parser::startElement(const char* name, const char** atts)
       if (vcl_strcmp(atts[i], "apm") == 0) {
         convert(atts[i+1], buff);
         appearances_.push_back(buff); 
+      }
+      if (vcl_strcmp(atts[i], "num_illumination_bins") == 0) {
+        convert(atts[i+1], num_illum_bins_);
       }
     }
   }
