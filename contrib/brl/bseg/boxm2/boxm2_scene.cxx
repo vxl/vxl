@@ -34,7 +34,7 @@ boxm2_scene::boxm2_scene(vcl_string filename)
     boxm2_scene_parser parser;
     if (filename.size() > 0) {
       vcl_FILE* xmlFile = vcl_fopen(filename.c_str(), "r");
-      if (!xmlFile){
+      if (!xmlFile) {
         vcl_cerr << filename.c_str() << " error on opening\n";
         return;
       }
@@ -78,7 +78,7 @@ vcl_vector<boxm2_block_id> boxm2_scene::get_block_ids() const
   vcl_map<boxm2_block_id, boxm2_block_metadata>::const_iterator iter;
   vcl_vector<boxm2_block_id> block_ids;
   for (iter = blocks_.begin(); iter != blocks_.end(); ++iter) {
-      block_ids.push_back(iter->first);
+    block_ids.push_back(iter->first);
   }
   return block_ids;
 }
@@ -88,8 +88,8 @@ get_block_metadata_const(boxm2_block_id id) const
 {
   vcl_map<boxm2_block_id, boxm2_block_metadata>::const_iterator iter;
   for (iter = blocks_.begin(); iter != blocks_.end(); ++iter)
-	  if((*iter).first == id)
-		  return (*iter).second;
+    if ((*iter).first == id)
+      return (*iter).second;
   return boxm2_block_metadata();
 }
 
@@ -97,7 +97,7 @@ get_block_metadata_const(boxm2_block_id id) const
 vcl_vector<boxm2_block_id> boxm2_scene::get_vis_blocks(vpgl_generic_camera<double>* cam)
 {
   vcl_vector<boxm2_block_id> vis_order;
-  if(!cam){
+  if (!cam) {
     vcl_cout << "null camera in boxm2_scene::get_vis_blocks(.)\n";
     return vis_order;
   }
@@ -120,7 +120,6 @@ vcl_vector<boxm2_block_id> boxm2_scene::get_vis_blocks(vpgl_generic_camera<doubl
     vgl_point_3d<double> blk_center = blk_o + length/2.0;
     double dist = vgl_distance( blk_center, cam_center);
 
-
     distances.push_back( boxm2_dist_id_pair(dist, iter->first) );
   }
 
@@ -137,10 +136,11 @@ vcl_vector<boxm2_block_id> boxm2_scene::get_vis_blocks(vpgl_generic_camera<doubl
   //vcl_cout<<"\n-----------------------------------------------"<<vcl_endl;
   return vis_order;
 }
+
 vcl_vector<boxm2_block_id> boxm2_scene::get_vis_blocks(vpgl_perspective_camera<double>* cam)
 {
   vcl_vector<boxm2_block_id> vis_order;
-  if(!cam){
+  if (!cam) {
     vcl_cout << "null camera in boxm2_scene::get_vis_blocks(.)\n";
     return vis_order;
   }
@@ -162,7 +162,6 @@ vcl_vector<boxm2_block_id> boxm2_scene::get_vis_blocks(vpgl_perspective_camera<d
                                    blk_dim.z()*blk_num.z());
     vgl_point_3d<double> blk_center = blk_o + length/2.0;
     double dist = vgl_distance( blk_center, cam_center);
-
 
     distances.push_back( boxm2_dist_id_pair(dist, iter->first) );
   }
@@ -189,25 +188,26 @@ bool boxm2_scene::contains(vgl_point_3d<double> const& p, boxm2_block_id& bid,
     vcl_vector<boxm2_block_id> block_ids = this->get_block_ids();
     for (vcl_vector<boxm2_block_id>::iterator id = block_ids.begin();
          id != block_ids.end(); ++id)
-      {
-        boxm2_block_metadata md = this->get_block_metadata_const(*id);
-        vgl_vector_3d<double> dims(md.sub_block_dim_.x()*md.sub_block_num_.x(),
-                                   md.sub_block_dim_.y()*md.sub_block_num_.y(),
-                                   md.sub_block_dim_.z()*md.sub_block_num_.z());
+    {
+      boxm2_block_metadata md = this->get_block_metadata_const(*id);
+      vgl_vector_3d<double> dims(md.sub_block_dim_.x()*md.sub_block_num_.x(),
+                                 md.sub_block_dim_.y()*md.sub_block_num_.y(),
+                                 md.sub_block_dim_.z()*md.sub_block_num_.z());
 
-        vgl_point_3d<double> lorigin = md.local_origin_;
-        vgl_box_3d<double> bbox(lorigin,lorigin+dims);
-        if(bbox.contains(p.x(), p.y(), p.z())){
-          bid = (*id);
-          double local_x=(p.x()-md.local_origin_.x())/md.sub_block_dim_.x();
-          double local_y=(p.y()-md.local_origin_.y())/md.sub_block_dim_.y();
-          double local_z=(p.z()-md.local_origin_.z())/md.sub_block_dim_.z();
-          local_coords.set(local_x, local_y, local_z);
-          return true;
-        }
+      vgl_point_3d<double> lorigin = md.local_origin_;
+      vgl_box_3d<double> bbox(lorigin,lorigin+dims);
+      if (bbox.contains(p.x(), p.y(), p.z())) {
+        bid = (*id);
+        double local_x=(p.x()-md.local_origin_.x())/md.sub_block_dim_.x();
+        double local_y=(p.y()-md.local_origin_.y())/md.sub_block_dim_.y();
+        double local_z=(p.z()-md.local_origin_.z())/md.sub_block_dim_.z();
+        local_coords.set(local_x, local_y, local_z);
+        return true;
       }
+    }
     return false;
 }
+
 //: save scene (xml file)
 void boxm2_scene::save_scene()
 {
@@ -266,7 +266,6 @@ vgl_box_3d<double> boxm2_scene::bounding_box() const
     if (blk_o.y() < ymin) ymin = blk_o.y();
     if (blk_o.z() < zmin) zmin = blk_o.z();
 
-
     //get block max point
     vgl_vector_3d<double>   blk_dim = (iter->second).sub_block_dim_;
     vgl_vector_3d<unsigned> blk_num = (iter->second).sub_block_num_;
@@ -290,10 +289,10 @@ vgl_box_3d<double> boxm2_scene::bounding_box() const
 vgl_vector_3d<unsigned int>  boxm2_scene::scene_dimensions() const
 {
   vcl_vector<boxm2_block_id> ids = this->get_block_ids();
-  
-  if(ids.empty())
+
+  if (ids.empty())
     return vgl_vector_3d<unsigned int>(0,0,0);
-  
+
   int max_i=ids[0].i(),max_j=ids[0].j(),max_k=ids[0].k();
   int min_i=ids[0].i(),min_j=ids[0].j(),min_k=ids[0].k();
 
@@ -304,7 +303,7 @@ vgl_vector_3d<unsigned int>  boxm2_scene::scene_dimensions() const
       max_j=ids[n].j();
     if (ids[n].k() > max_k)
       max_k=ids[n].k();
-    
+
     if (ids[n].i() < min_i)
       min_i=ids[n].i();
     if (ids[n].j() < min_j)
@@ -313,7 +312,7 @@ vgl_vector_3d<unsigned int>  boxm2_scene::scene_dimensions() const
       min_k=ids[n].k();
   }
   max_i++; max_j++; max_k++;
-  
+
   return vgl_vector_3d<unsigned int>((max_i-min_i),(max_j - min_j),(max_k-min_k));
 }
 
@@ -322,39 +321,34 @@ void boxm2_scene::min_block_index (vgl_point_3d<int> &idx,
                                    vgl_point_3d<double> &local_origin)
 {
   vcl_map<boxm2_block_id, boxm2_block_metadata>::iterator iter= blocks_.begin();
-  
+
   boxm2_block_id id = iter->first;
   boxm2_block_metadata data = iter->second;
 
   int min_i=id.i(),min_j=id.j(),min_k=id.k();
   double min_x = data.local_origin_.x(), min_y= data.local_origin_.y(), min_z= data.local_origin_.z();
-  
+
   for (; iter != blocks_.end(); ++iter) {
-    
     id = iter->first;
     data = iter->second;
-  
-    if (id.i() < min_i){
+
+    if (id.i() < min_i) {
       min_i=id.i();
       min_x = data.local_origin_.x();
     }
-    if (id.j() < min_j){
+    if (id.j() < min_j) {
       min_j=id.j();
       min_y = data.local_origin_.y();
-
     }
-    if (id.k() < min_k){
+    if (id.k() < min_k) {
       min_k=id.k();
       min_z = data.local_origin_.z();
-
     }
   }
-  
+
   idx.set(min_i,min_j,min_k);
   local_origin.set(min_x, min_y, min_z);
 }
-
-
 
 
 //: returns true if the scene has specified data type (simple linear search)
@@ -469,47 +463,60 @@ vcl_ostream& operator <<(vcl_ostream &s, boxm2_scene& scene)
   vgl_point_3d<double> minp = bb.min_point();
   vgl_point_3d<double> maxp = bb.max_point();
   s << "bounds : ( " << minp.x() << ' ' << minp.y() << ' ' << minp.z()
- << " )==>( " << maxp.x() << ' ' << maxp.y() << ' ' << maxp.z() << " )\n";
+    << " )==>( " << maxp.x() << ' ' << maxp.y() << ' ' << maxp.z() << " )\n";
 
   //list of block ids for this scene....
   vgl_vector_3d<unsigned> dims = scene.scene_dimensions();
   s << "block array dims(" << dims.x() << ' ' << dims.y() << ' ' << dims.z() << ")\n";
   vcl_map<boxm2_block_id, boxm2_block_metadata>& blk = scene.blocks();
   s << " blocks:==>\n";
-  for(vcl_map<boxm2_block_id, boxm2_block_metadata>::iterator bit=blk.begin();
-      bit != blk.end(); ++bit){
+  for (vcl_map<boxm2_block_id, boxm2_block_metadata>::iterator bit=blk.begin();
+       bit != blk.end(); ++bit) {
     s << (*bit).second.id_ << ' ';
     vgl_point_3d<double> org = (*bit).second.local_origin_;
     s << ", org( " << org.x() << ' ' << org.y() << ' ' << org.z() << ") ";
     vgl_vector_3d<double> dim = (*bit).second.sub_block_dim_;
     s << ", dim( " << dim.x() << ' ' << dim.y() << ' ' << dim.z() << ") ";
     vgl_vector_3d<unsigned> num = (*bit).second.sub_block_num_;
-    s << ", num( " << num.x() << ' ' << num.y() << ' ' << num.z() << ") \n";
+    s << ", num( " << num.x() << ' ' << num.y() << ' ' << num.z() << ")\n";
   }
   s << "<=====:end blocks\n";
   return s;
 }
 
-//: Binary write boxm2_scene to stream obj/pointer
+//: Binary write boxm2_scene to stream
 void vsl_b_write(vsl_b_ostream& /*os*/, boxm2_scene const& /*bit_scene*/) {}
+//: Binary write boxm2_scene pointer to stream
 void vsl_b_write(vsl_b_ostream& /*os*/, boxm2_scene* const& /*ph*/) {}
+//: Binary write boxm2_scene smart pointer to stream
 void vsl_b_write(vsl_b_ostream& /*os*/, boxm2_scene_sptr&) {}
+//: Binary write boxm2_scene smart pointer to stream
 void vsl_b_write(vsl_b_ostream& /*os*/, boxm2_scene_sptr const&) {}
 
 //: Binary load boxm scene from stream.
 void vsl_b_read(vsl_b_istream& /*is*/, boxm2_scene& /*bit_scene*/) {}
+//: Binary load boxm scene pointer from stream.
 void vsl_b_read(vsl_b_istream& /*is*/, boxm2_scene* /*ph*/) {}
+//: Binary load boxm scene smart pointer from stream.
 void vsl_b_read(vsl_b_istream& /*is*/, boxm2_scene_sptr&) {}
+//: Binary load boxm scene smart pointer from stream.
 void vsl_b_read(vsl_b_istream& /*is*/, boxm2_scene_sptr const&) {}
-//: Binary write boxm2_scene scene to stream
-void vsl_b_write(vsl_b_ostream& /*os*/, boxm2_scene_info_wrapper const&){}
-void vsl_b_write(vsl_b_ostream& /*os*/, const boxm2_scene_info_wrapper* &){}
-void vsl_b_write(vsl_b_ostream& /*os*/, boxm2_scene_info_wrapper_sptr&){}
-void vsl_b_write(vsl_b_ostream& /*os*/, boxm2_scene_info_wrapper_sptr const&){}
 
-//: Binary load boxm2_scene scene from stream.
-void vsl_b_read(vsl_b_istream& /*is*/, boxm2_scene_info_wrapper &){}
-void vsl_b_read(vsl_b_istream& /*is*/, boxm2_scene_info_wrapper*){}
-void vsl_b_read(vsl_b_istream& /*is*/, boxm2_scene_info_wrapper_sptr&){}
-void vsl_b_read(vsl_b_istream& /*is*/, boxm2_scene_info_wrapper_sptr const&){}
+//: Binary write boxm2_scene_info_wrapper to stream
+void vsl_b_write(vsl_b_ostream& /*os*/, boxm2_scene_info_wrapper const&) {}
+//: Binary write boxm2_scene_info_wrapper pointer to stream
+void vsl_b_write(vsl_b_ostream& /*os*/, const boxm2_scene_info_wrapper* &) {}
+//: Binary write boxm2_scene_info_wrapper smart pointer to stream
+void vsl_b_write(vsl_b_ostream& /*os*/, boxm2_scene_info_wrapper_sptr&) {}
+//: Binary write boxm2_scene_info_wrapper smart pointer to stream
+void vsl_b_write(vsl_b_ostream& /*os*/, boxm2_scene_info_wrapper_sptr const&) {}
+
+//: Binary load boxm2_scene_info_wrapper from stream.
+void vsl_b_read(vsl_b_istream& /*is*/, boxm2_scene_info_wrapper &) {}
+//: Binary load boxm2_scene_info_wrapper pointer from stream.
+void vsl_b_read(vsl_b_istream& /*is*/, boxm2_scene_info_wrapper*) {}
+//: Binary load boxm2_scene_info_wrapper smart pointer from stream.
+void vsl_b_read(vsl_b_istream& /*is*/, boxm2_scene_info_wrapper_sptr&) {}
+//: Binary load boxm2_scene_info_wrapper smart pointer from stream.
+void vsl_b_read(vsl_b_istream& /*is*/, boxm2_scene_info_wrapper_sptr const&) {}
 

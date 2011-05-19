@@ -130,7 +130,7 @@ void boxm2_cast_cone_ray_function(vgl_box_3d<double>& block_box,
               if ( bit_tree.is_leaf(currBitIndex)) {
                 int data_ptr = bit_tree.get_data_index(currBitIndex);
                 functor.step_cell(static_cast<float>(intersect_volume), data_ptr, i, j,
-					              static_cast<float>(side_len * linfo->block_len),
+                                  static_cast<float>(side_len * linfo->block_len),
                                   intensity_norm, weighted_int, prob_surface);
                 total_volume += static_cast<float>(intersect_volume);
               }
