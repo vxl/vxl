@@ -30,4 +30,5 @@ DECLARE_FUNC_CONS(vil_filter_image_process);
 DECLARE_FUNC_CONS(vil_blob_detection_process);
 DECLARE_FUNC_CONS(vil_pixelwise_roc_process);
 DECLARE_FUNC_CONS(vil_rgb_to_grey_process);
+DECLARE_FUNC_CONS(vil_nitf_date_time_process);
 #endif
