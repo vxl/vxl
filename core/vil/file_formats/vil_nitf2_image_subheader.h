@@ -92,7 +92,7 @@ class vil_nitf2_image_subheader
   // ratio of cubic polynomials in (lon, lat, ele). All variables
   // are normalized to the range [-1, 1] using scale and offset parameters.
   // For further definition of parameters see
-  // http://www.ismc.nima.mil/ntb/superceded/vimas/vimas.pdf
+  // http://www.gwg.nga.mil/ntb/superseded/vimas/vimas.pdf
   // The returned rpc_data vector is encoded as:
   //  rpc_data[0]-rpc_data[19]         Line Numerator Cubic Coefficients
   //  rpc_data[20]-rpc_data[39]        Line Denominator Cubic Coefficients
@@ -115,6 +115,8 @@ class vil_nitf2_image_subheader
   //  \a sun_az --> sun azimuthal angle
   bool get_sun_params( double& sun_el, double& sun_az);
 
+  //: Extract the date and time
+  bool get_date_time(int& year, int& month, int& day, int& hour, int& min);
 
   bool get_correction_offset(double & u_off, double & v_off);
 
