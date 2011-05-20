@@ -14,6 +14,7 @@
 
 #include <vcl_sstream.h>
 #include <vcl_cassert.h>
+#include <vcl_cstdlib.h>
 
 vil_nitf2_field_definitions* vil_nitf2_image_subheader::s_field_definitions_21 = 0;
 vil_nitf2_field_definitions* vil_nitf2_image_subheader::s_field_definitions_20 = 0;
@@ -373,10 +374,10 @@ get_date_time(int& year, int& month, int& day, int& hour, int& min)
     }
   if(!found)
     return false;
-  day  = atoi(s_day.c_str());
-  hour = atoi(s_hour.c_str());
-  min =  atoi(s_min.c_str());
-  year = atoi(s_year_suff.c_str());
+  day  = vcl_atoi(s_day.c_str());
+  hour = vcl_atoi(s_hour.c_str());
+  min =  vcl_atoi(s_min.c_str());
+  year = vcl_atoi(s_year_suff.c_str());
   year += 2000;//good until the next millenium
   return true;
 }
