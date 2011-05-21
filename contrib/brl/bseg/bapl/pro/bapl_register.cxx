@@ -33,7 +33,7 @@ void bapl_register::register_process()
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bapl_compute_tracks_process, "baplComputeTracksProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bapl_load_match_process, "baplLoadMatchSetProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bapl_write_match_process, "baplWriteMatchSetProcess");
-#if 0 -- process seems to have disappeared from the processes subdirectory???
+#if 0 // process seems to have disappeared from the processes subdirectory???
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bapl_dsift_sptr_process, "baplDsiftSptrProcess");
 #endif
 }
