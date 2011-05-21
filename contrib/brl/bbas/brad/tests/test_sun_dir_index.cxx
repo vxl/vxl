@@ -6,6 +6,7 @@
 #include <vnl/vnl_double_2.h>
 #include <vnl/vnl_double_3.h>
 
+#if 0 // currently unused
 // illumination directions for longitude = 33.331465, latitude =44.376970 deg
 // for images taken over a 7 year period at roughly 07:30Z
 static vcl_vector<vnl_double_3> illum_dirs()
@@ -46,6 +47,7 @@ static vcl_vector<vnl_double_3> illum_dirs()
   vcl_vector<vnl_double_3> illumination_dirs(ill_dirs, ill_dirs+31);
   return illumination_dirs;
 }
+#endif // 0
 
 // azimuth and elevation angles taken directly from IMD files
 static vcl_vector<vnl_double_2> illum_angles()
@@ -95,7 +97,7 @@ static void test_sun_dir_index()
   double longitude = 44.56780378, latitude = 33.34870538;
   bsta_spherical_histogram<double> h;
   brad_sun_dir_index diridx(longitude, latitude,oyear, ohour, omin,
-                       orange, inter_years, 1);
+                            orange, inter_years, 1);
 
   vcl_cout << diridx << '\n';
   double x0 = diridx.cone_axis(0)[0], y0 = diridx.cone_axis(0)[1];
@@ -111,10 +113,9 @@ static void test_sun_dir_index()
 
   vcl_cout << "Dirs from metadata\n";
   vcl_vector<vnl_double_2> ill_angs = illum_angles();
-  for(unsigned i = 0; i<ill_angs.size(); ++i)
-    vcl_cout << "(" << ill_angs[i][1] << ' ' << ill_angs[i][0] << ")->" 
-	<< diridx.index(ill_angs[i][1], ill_angs[i][0])<< '\n'; 
-
+  for (unsigned int i=0; i<ill_angs.size(); ++i)
+    vcl_cout << '(' << ill_angs[i][1] << ' ' << ill_angs[i][0] << ")->"
+             << diridx.index(ill_angs[i][1], ill_angs[i][0])<< '\n';
 #endif
 }
 
