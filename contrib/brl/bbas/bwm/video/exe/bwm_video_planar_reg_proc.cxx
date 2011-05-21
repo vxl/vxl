@@ -52,7 +52,6 @@ static bool planar_reg(vcl_string const& video_input_glob,
 
   vidl_frame_sptr f0 = video_istr->current_frame();
   unsigned input_ni = f0->ni(), input_nj = f0->nj();
-  unsigned output_ni = 0, output_nj = 0;
 
 #if 0
   vgl_point_3d<double> world_point(69.014420,-3.638463, 13.361106);
