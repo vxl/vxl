@@ -20,8 +20,10 @@ SET( BRL_INSTALL_INCLUDE_DIR
   CACHE INTERNAL "Brown University package include files"
 )
 
+# Location of brl's private FindXXX.cmake CMake modules.
+SET( BRL_CMAKE_DIR ${vxl_SOURCE_DIR}/contrib/brl/bmods )
+# This is identical to BRL_CMAKE_DIR.  Perhaps we should eliminate BRL_MODULE_PATH?
 SET( BRL_MODULE_PATH ${vxl_SOURCE_DIR}/contrib/brl/bmods )
-
 
 INCLUDE_DIRECTORIES( ${VXLCORE_INCLUDE_DIR} )
 INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR} )
