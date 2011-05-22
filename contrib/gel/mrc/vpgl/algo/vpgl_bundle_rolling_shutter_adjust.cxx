@@ -17,7 +17,7 @@
 #include <vnl/vnl_double_4.h>
 
 vnl_double_4x4
-vpgl_bundle_rolling_shutter_adj_lsqr::param_to_motion_matrix(int i, const double* data, double r, double v) const
+vpgl_bundle_rolling_shutter_adj_lsqr::param_to_motion_matrix(int /*i*/, const double* data, double r, double v) const
 {
   double t=v/r;
 
@@ -48,12 +48,13 @@ vpgl_bundle_rolling_shutter_adj_lsqr::param_to_motion_matrix(int i, const double
   }
 
   return vnl_double_4x4().set_identity().set_columns(0,Mtopleft).set_column(3,Mtopright);
-  // was:
-  //M(0,0)=Mtopleft(0,0);M(0,1)=Mtopleft(0,1);M(0,2)=Mtopleft(0,2);M(0,3)=Mtopright(0);
-  //M(1,0)=Mtopleft(1,0);M(1,1)=Mtopleft(1,1);M(1,2)=Mtopleft(1,2);M(1,3)=Mtopright(1);
-  //M(2,0)=Mtopleft(2,0);M(2,1)=Mtopleft(2,1);M(2,2)=Mtopleft(2,2);M(2,3)=Mtopright(2);
-  //M(3,0)=0;            M(3,1)=0;            M(3,2)=0;            M(3,3)=1;
-  //return M;
+#if 0 // was:
+  M(0,0)=Mtopleft(0,0);M(0,1)=Mtopleft(0,1);M(0,2)=Mtopleft(0,2);M(0,3)=Mtopright(0);
+  M(1,0)=Mtopleft(1,0);M(1,1)=Mtopleft(1,1);M(1,2)=Mtopleft(1,2);M(1,3)=Mtopright(1);
+  M(2,0)=Mtopleft(2,0);M(2,1)=Mtopleft(2,1);M(2,2)=Mtopleft(2,2);M(2,3)=Mtopright(2);
+  M(3,0)=0;            M(3,1)=0;            M(3,2)=0;            M(3,3)=1;
+  return M;
+#endif
 }
 
 //: Constructor
@@ -138,7 +139,7 @@ vpgl_bundle_rolling_shutter_adj_lsqr::f(vnl_vector<double> const& a,
   typedef vnl_crs_index::sparse_vector::iterator sv_itr;
   for (unsigned int i=0; i<number_of_a(); ++i)
   {
-    //: Construct the ith camera
+    // Construct the ith camera
     vnl_double_3x4 Pi = param_to_cam_matrix(i,a);
 
     vnl_crs_index::sparse_vector row = residual_indices_.sparse_row(i);
@@ -222,7 +223,7 @@ void
 vpgl_bundle_rolling_shutter_adj_lsqr::fij(int i, int j, vnl_vector<double> const& ai,
                                           vnl_vector<double> const& bj, vnl_vector<double>& fij)
 {
-  //: Construct the ith camera
+  // Construct the ith camera
   vnl_double_3x4 Pi = param_to_cam_matrix(i,ai.data_block());
 
   // Construct the jth point
@@ -257,7 +258,7 @@ vpgl_bundle_rolling_shutter_adj_lsqr::jac_blocks(vnl_vector<double> const& a, vn
   typedef vnl_crs_index::sparse_vector::iterator sv_itr;
   for (unsigned int i=0; i<number_of_a(); ++i)
   {
-    //: Construct the ith camera
+    // Construct the ith camera
     vnl_double_3x4 Pi = param_to_cam_matrix(i,a);
 
     // This is semi const incorrect - there is no vnl_vector_ref_const

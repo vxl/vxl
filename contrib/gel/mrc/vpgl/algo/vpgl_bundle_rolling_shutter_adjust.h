@@ -109,7 +109,8 @@ class vpgl_bundle_rolling_shutter_adj_lsqr : public vnl_sparse_lst_sqr_function
   {
     return param_to_motion(i, a.data_block()+index_a(i));
   }
-    vnl_vector<double> param_to_motion(int i, const double* d) const
+
+  vnl_vector<double> param_to_motion(int /*i*/, const double* d) const
   {
     vnl_vector<double> w(6);
     w[0]=d[6];w[1]=d[7];w[2]=d[8];
