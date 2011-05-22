@@ -4,12 +4,12 @@ doxygen_add_library(core/vil
   DEPENDS core/vnl core/vsl
   PACKAGE core
   DESCRIPTION "Core image library"
-  )
+)
 
 # avoid undefined macro in subsequent SETs:
 SET( vil_sources vil_config.h.in )
 
-INCLUDE(${MODULE_PATH}/FindPNG.cmake)
+INCLUDE(${VXL_CMAKE_DIR}/FindPNG.cmake)
 IF(PNG_FOUND)
   INCLUDE_DIRECTORIES( ${PNG_INCLUDE_DIR})
   ADD_DEFINITIONS( ${PNG_DEFINITIONS} )
@@ -21,7 +21,7 @@ ELSE(PNG_FOUND)
   SET( HAS_PNG 0 )
 ENDIF(PNG_FOUND)
 
-INCLUDE(${MODULE_PATH}/FindJPEG.cmake)
+INCLUDE(${VXL_CMAKE_DIR}/FindJPEG.cmake)
 IF(JPEG_FOUND)
   INCLUDE_DIRECTORIES( ${JPEG_INCLUDE_DIR} )
   SET( HAS_JPEG 1 )
@@ -40,15 +40,16 @@ ENDIF(JPEG_FOUND)
 ################################
 # JPEG 2000
 ################################
-INCLUDE( ${MODULE_PATH}/NewCMake/FindECW.cmake )
+INCLUDE( ${VXL_CMAKE_DIR}/NewCMake/FindECW.cmake )
 IF(ECW_FOUND)
   SET( vil_sources ${vil_sources}
     file_formats/vil_j2k_image.h           file_formats/vil_j2k_image.cxx
-    file_formats/NCSJPCVilIOStream.h       file_formats/NCSJPCVilIOStream.cxx 
+    file_formats/NCSJPCVilIOStream.h       file_formats/NCSJPCVilIOStream.cxx
     file_formats/vil_j2k_nitf2_pyramid_image_resource.h
     file_formats/vil_j2k_nitf2_pyramid_image_resource.cxx
     file_formats/vil_j2k_pyramid_image_resource.h
-    file_formats/vil_j2k_pyramid_image_resource.cxx)
+    file_formats/vil_j2k_pyramid_image_resource.cxx
+  )
   INCLUDE_DIRECTORIES(${ECW_INCLUDE_DIR})
   SET( HAS_J2K 1 )
 ELSE(ECW_FOUND)
@@ -58,14 +59,15 @@ ENDIF(ECW_FOUND)
 ##############################
 # JPEG2000 via OpenJPEG
 ##############################
-INCLUDE( ${MODULE_PATH}/FindOpenJPEG2.cmake )
+INCLUDE( ${VXL_CMAKE_DIR}/FindOpenJPEG2.cmake )
 IF(OPENJPEG2_FOUND)
   INCLUDE_DIRECTORIES(${OPENJPEG2_INCLUDE_DIR})
   ADD_DEFINITIONS( ${OPENJPEG2_DEFINITIONS} )
   SET( vil_sources ${vil_sources}
     file_formats/vil_openjpeg.h  file_formats/vil_openjpeg.cxx
     file_formats/vil_openjpeg_pyramid_image_resource.h
-    file_formats/vil_openjpeg_pyramid_image_resource.cxx)
+    file_formats/vil_openjpeg_pyramid_image_resource.cxx
+  )
   ADD_DEFINITIONS( ${OPENJPEG2_DEFINITIONS} )
   SET( HAS_OPENJPEG2 1 )
 ELSE(OPENJPEG2_FOUND)
@@ -74,27 +76,27 @@ ENDIF(OPENJPEG2_FOUND)
 
 SET( HAS_TIFF 0 )
 SET( HAS_GEOTIFF 0 )
-INCLUDE(${MODULE_PATH}/FindTIFF.cmake)
+INCLUDE(${VXL_CMAKE_DIR}/FindTIFF.cmake)
 IF(TIFF_FOUND)
-  INCLUDE_DIRECTORIES(${TIFF_INCLUDE_DIR}) 
+  INCLUDE_DIRECTORIES(${TIFF_INCLUDE_DIR})
   SET( HAS_TIFF 1 )
   SET( vil_sources ${vil_sources}
     file_formats/vil_tiff.cxx file_formats/vil_tiff.h
     file_formats/vil_tiff_header.cxx file_formats/vil_tiff_header.h
-  ) 
+  )
 
-  INCLUDE( ${MODULE_PATH}/FindGEOTIFF.cmake)
+  INCLUDE( ${VXL_CMAKE_DIR}/FindGEOTIFF.cmake)
   IF(GEOTIFF_FOUND)
     #ADD_DEFINITIONS( -DHAS_GEOTIFF )
     SET (HAS_GEOTIFF 1 )
-    INCLUDE_DIRECTORIES(${GEOTIFF_INCLUDE_DIR}) 
+    INCLUDE_DIRECTORIES(${GEOTIFF_INCLUDE_DIR})
     SET( vil_sources ${vil_sources}
       file_formats/vil_geotiff_header.cxx file_formats/vil_geotiff_header.h
     )
   ENDIF(GEOTIFF_FOUND)
 ENDIF(TIFF_FOUND)
 
-INCLUDE(${MODULE_PATH}/FindDCMTK.cmake)
+INCLUDE(${VXL_CMAKE_DIR}/FindDCMTK.cmake)
 IF(DCMTK_FOUND)
   INCLUDE_DIRECTORIES(${DCMTK_INCLUDE_DIR})
   SET( HAS_DCMTK 1 )
@@ -107,10 +109,9 @@ ELSE(DCMTK_FOUND)
   SET( HAS_DCMTK 0 )
 ENDIF(DCMTK_FOUND)
 
-
 OPTION(VIL_CONFIG_ENABLE_SSE2_ROUNDING
-  "Enable Streaming SIMD Extensions 2 implementation of rounding (hardware dependant)."
-  ${VXL_HAS_SSE2_HARDWARE_SUPPORT} )
+       "Enable Streaming SIMD Extensions 2 implementation of rounding (hardware dependant)."
+       ${VXL_HAS_SSE2_HARDWARE_SUPPORT} )
 IF( VIL_CONFIG_ENABLE_SSE2_ROUNDING )
   IF( NOT VXL_HAS_SSE2_HARDWARE_SUPPORT )
     IF( VXL_SSE2_HARDWARE_SUPPORT_POSSIBLE )
@@ -226,7 +227,7 @@ SET( vil_sources ${vil_sources}
   vil_print.cxx                         vil_print.h
   vil_warp.h
   vil_flatten.h
-  
+
   # Bilinear Sampling Operations
   vil_bilin_interp.h
   vil_sample_profile_bilin.txx          vil_sample_profile_bilin.h
@@ -256,7 +257,7 @@ SET( vil_sources ${vil_sources}
   vil_fwd.h
   vil_round.h
   vil_na.cxx                            vil_na.h
-  
+
   # Streams
   vil_stream.cxx                        vil_stream.h
   vil_stream_fstream.cxx                vil_stream_fstream.h
@@ -274,7 +275,8 @@ IF (WIN32 AND VXL_USE_LFS AND NOT CMAKE_CL_64)
 #This is a hack since win32 doesn't have transparent Large File Support.
   ADD_DEFINITIONS( -DVIL_USE_FSTREAM64 )
   SET( vil_sources ${vil_sources}
-    vil_stream_fstream64.cxx        vil_stream_fstream64.h )
+    vil_stream_fstream64.cxx        vil_stream_fstream64.h
+  )
 ENDIF (WIN32 AND VXL_USE_LFS AND NOT CMAKE_CL_64)
 
 AUX_SOURCE_DIRECTORY(Templates vil_sources)
@@ -282,7 +284,6 @@ AUX_SOURCE_DIRECTORY(Templates vil_sources)
 IF(CMAKE_COMPILER_IS_GNUCXX)
   SET_SOURCE_FILES_PROPERTIES(vil_na.cxx PROPERTIES COMPILE_FLAGS -O1)
 ENDIF(CMAKE_COMPILER_IS_GNUCXX)
-
 
 
 # Some versions of Solaris (at least 5.8) has a brain-dead mechanism
@@ -314,10 +315,10 @@ IF(JPEG_FOUND)
   TARGET_LINK_LIBRARIES( vil ${JPEG_LIBRARIES} )
 ENDIF(JPEG_FOUND)
 IF(TIFF_FOUND)
-  TARGET_LINK_LIBRARIES( vil ${TIFF_LIBRARIES}) 
+  TARGET_LINK_LIBRARIES( vil ${TIFF_LIBRARIES})
 ENDIF(TIFF_FOUND)
 IF(HAS_GEOTIFF)
-  TARGET_LINK_LIBRARIES( vil ${GEOTIFF_LIBRARIES}) 
+  TARGET_LINK_LIBRARIES( vil ${GEOTIFF_LIBRARIES})
 ENDIF(HAS_GEOTIFF)
 IF(PNG_FOUND)
   TARGET_LINK_LIBRARIES( vil ${PNG_LIBRARIES} )

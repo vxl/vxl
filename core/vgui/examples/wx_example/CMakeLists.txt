@@ -1,8 +1,6 @@
 PROJECT(wx_example)
 
-#SET(WXWIDGETS_USE_LIBS base core gl)
-#FIND_PACKAGE(wxWidgets)
-#INCLUDE(${MODULE_PATH}/NewCMake/FindwxWidgets.cmake)
+#INCLUDE(FindwxWidgets.cmake)
 FIND_PACKAGE(wxWidgets COMPONENTS base core gl)
 IF(wxWidgets_FOUND)
   IF(wxWidgets_INCLUDE_DIRS)
@@ -44,14 +42,14 @@ IF(wxWidgets_FOUND)
   ENDIF(wxWidgets_LIBRARIES)
 
 
-  # Examples using vgui_wx 
+  # Examples using vgui_wx
   IF(BUILD_VGUI_WX AND wxWidgets_wxrc_EXECUTABLE)
 
     # Example uses the wxWidgets XML resource fi
     SET(wx_xrc_example_sources
       wx_xrc_app.h    wx_xrc_app.cxx
       wx_xrc_frame.h  wx_xrc_frame.cxx
-      )
+    )
     WXWIDGETS_ADD_RESOURCES(wx_xrc_example_sources wx_xrc.xrc)
     ADD_EXECUTABLE(wx_xrc_example WIN32 MACOSX_BUNDLE ${wx_xrc_example_sources})
     TARGET_LINK_LIBRARIES(wx_xrc_example vgui_wx)

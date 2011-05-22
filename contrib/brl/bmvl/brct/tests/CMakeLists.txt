@@ -8,15 +8,15 @@ INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR})
 SET(BUILD_VGUI_TEST "NO")
 IF(BUILD_VGUI_TEST)
 # determines if vgui is built and opengl is available
-INCLUDE( ${MODULE_PATH}/UseVGUI.cmake )
+INCLUDE( ${VXL_CMAKE_DIR}/UseVGUI.cmake )
 
 IF(HAS_VGUI)
 
 SET(brct_test_sources
-  brct_menus.cxx          brct_menus.h
-  brct_windows_frame.cxx  brct_windows_frame.h
-  test_brct_kalman.cxx
-)
+    brct_menus.cxx          brct_menus.h
+    brct_windows_frame.cxx  brct_windows_frame.h
+    test_brct_kalman.cxx
+   )
 
 ADD_EXECUTABLE(brct_test_vgui ${brct_test_sources})
 TARGET_LINK_LIBRARIES(brct_test_vgui vgl_algo vgl vil1 vnl vgui brct bugl bgui)

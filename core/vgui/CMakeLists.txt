@@ -6,7 +6,7 @@ doxygen_add_library(core/vgui
   DEPENDS core/vgl core/vpl core/vbl core/vul core/vnl core/vil core/vil1
   PACKAGE core-L2
   DESCRIPTION "Multi-platform user-interface using OpenGL"
-  )
+)
 
 # Default the dashboard builds to "YES" so that
 # we have some clients that try to compile vgui
@@ -39,7 +39,7 @@ IF (OPENGL_FOUND)
     INCLUDE(${CMAKE_ROOT}/Modules/FindX11.cmake)
   ENDIF(APPLE)
   # Qv needed by vrml only
-  INCLUDE(${MODULE_PATH}/FindQv.cmake)
+  INCLUDE(${VXL_CMAKE_DIR}/FindQv.cmake)
   # glut optionally used by vgui_text and by the glut toolkit
   # implementation
   INCLUDE(${CMAKE_ROOT}/Modules/FindGLUT.cmake)
@@ -48,8 +48,8 @@ IF (OPENGL_FOUND)
   # implementations
   INCLUDE(${CMAKE_ROOT}/Modules/FindQt.cmake)
   INCLUDE(${CMAKE_ROOT}/Modules/FindGTK.cmake)
-  INCLUDE(${MODULE_PATH}/NewCMake/FindGTK2.cmake)
-  INCLUDE(${MODULE_PATH}/NewCMake/FindWin32SDK.cmake)
+  INCLUDE(${VXL_CMAKE_DIR}/NewCMake/FindGTK2.cmake)
+  INCLUDE(${VXL_CMAKE_DIR}/NewCMake/FindWin32SDK.cmake)
   IF(NOT MINGW)
     # MFC is not available in MinGW.
     # This should be fixed in FindMFC.cmake and then this IF can be removed
@@ -58,7 +58,7 @@ IF (OPENGL_FOUND)
 
   #SET(WXWIDGETS_USE_LIBS base core gl)
   #FIND_PACKAGE(wxWidgets)
-  #INCLUDE(${MODULE_PATH}/NewCMake/FindwxWidgets.cmake)
+  #INCLUDE(${VXL_CMAKE_DIR}/NewCMake/FindwxWidgets.cmake)
   FIND_PACKAGE(wxWidgets COMPONENTS base core gl)
 
   INCLUDE_DIRECTORIES(${OPENGL_INCLUDE_DIR})
@@ -220,15 +220,15 @@ ENDIF (QV_FOUND)
 
 IF (MFC_FOUND)
   #SET(vgui_sources ${vgui_sources}
-  #  internals/vgui_accelerate_mfc.cxx internals/vgui_accelerate_mfc.h
-  #)
+  #    internals/vgui_accelerate_mfc.cxx internals/vgui_accelerate_mfc.h
+  #   )
 ENDIF (MFC_FOUND)
 
 IF (X11_FOUND)
   INCLUDE_DIRECTORIES(${X11_INCLUDE_DIR})
   SET(vgui_sources ${vgui_sources}
-    internals/vgui_accelerate_x11.cxx internals/vgui_accelerate_x11.h
-  )
+      internals/vgui_accelerate_x11.cxx internals/vgui_accelerate_x11.h
+     )
 ENDIF (X11_FOUND)
 
 IF (MFC_FOUND)
@@ -307,8 +307,8 @@ IF (QT_FOUND)
   IF(VGUI_USE_QT)
     IF(QT4_INSTALLED AND VGUI_USE_QT4)
     INCLUDE_DIRECTORIES(${QT_INCLUDE_DIR} ${QT_QT_INCLUDE_DIR} ${QT_QTGUI_INCLUDE_DIR} ${QT_QTCORE_INCLUDE_DIR}
-                    ${QT_QTOPENGL_INCLUDE_DIR})
-        ADD_DEFINITIONS(-DQT3_SUPPORT_WARNINGS ${QT_DEFINITIONS} ${QT_USE_QTOPENGL})
+                        ${QT_QTOPENGL_INCLUDE_DIR})
+    ADD_DEFINITIONS(-DQT3_SUPPORT_WARNINGS ${QT_DEFINITIONS} ${QT_USE_QTOPENGL})
     SET(QT_SRCS_DIR impl/qt4)
     ELSE(QT4_INSTALLED AND VGUI_USE_QT4)
     INCLUDE_DIRECTORIES(${QT_INCLUDE_DIR})
@@ -444,7 +444,7 @@ IF (GTK2_FOUND)
 
     IF(VGUI_USE_GTK)
        MESSAGE(SEND_ERROR "You cannot build against both GTK1 and"
-                           "GTK2 at the same time")
+                          " GTK2 at the same time")
     ENDIF(VGUI_USE_GTK)
 
 

@@ -1,9 +1,9 @@
 # executables for segmentation processing
 # brl/bseg/sbin/CMakeLists.txt
 
-INCLUDE( ${MODULE_PATH}/UseVGUI.cmake )
+INCLUDE( ${VXL_CMAKE_DIR}/UseVGUI.cmake )
 INCLUDE( ${vxl_SOURCE_DIR}/contrib/brl/bmods/find_xerces.cmake )
-INCLUDE(${MODULE_PATH}/FindTIFF.cmake)
+INCLUDE(${VXL_CMAKE_DIR}/FindTIFF.cmake)
 
 INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR} )
 INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bseg )
@@ -42,9 +42,9 @@ ADD_EXECUTABLE (gen_tiff_rset_dir gen_tiff_rset_dir.cxx)
 TARGET_LINK_LIBRARIES(gen_tiff_rset_dir vpl vul vil)
 
 #Executable to jpeg2000 compress images in a directory if ermapper is installed
-INCLUDE( ${MODULE_PATH}/NewCMake/FindECW.cmake )
+INCLUDE( ${VXL_CMAKE_DIR}/NewCMake/FindECW.cmake )
 IF(ECW_FOUND)
  INCLUDE_DIRECTORIES(${ECW_INCLUDE_DIR})
-ADD_EXECUTABLE (compress_j2k_dir compress_j2k_dir.cxx)
-TARGET_LINK_LIBRARIES(compress_j2k_dir vpl vul vil)
+ ADD_EXECUTABLE (compress_j2k_dir compress_j2k_dir.cxx)
+ TARGET_LINK_LIBRARIES(compress_j2k_dir vpl vul vil)
 ENDIF(ECW_FOUND)

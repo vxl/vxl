@@ -3,7 +3,7 @@
 PROJECT(vnl_algo)
 
 
-INCLUDE( ${MODULE_PATH}/FindNetlib.cmake )
+INCLUDE( ${VXL_CMAKE_DIR}/FindNetlib.cmake )
 
 # most of vnl_algo is simply a wrapper around netlib, so we must have netlib.
 IF(NETLIB_FOUND)

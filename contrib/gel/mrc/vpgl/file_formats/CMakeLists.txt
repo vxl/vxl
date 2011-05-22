@@ -9,10 +9,10 @@ SET( vpgl_file_formats_sources
   vpgl_nitf_rational_camera.h  vpgl_nitf_rational_camera.cxx
 )
 
-INCLUDE(${MODULE_PATH}/FindTIFF.cmake)
+INCLUDE(${VXL_CMAKE_DIR}/FindTIFF.cmake)
 IF(TIFF_FOUND)
   INCLUDE_DIRECTORIES(${TIFF_INCLUDE_DIR})
-  INCLUDE( ${MODULE_PATH}/FindGEOTIFF.cmake)
+  INCLUDE( ${VXL_CMAKE_DIR}/FindGEOTIFF.cmake)
   IF(GEOTIFF_FOUND)
     INCLUDE_DIRECTORIES(${GEOTIFF_INCLUDE_DIR})
 

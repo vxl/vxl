@@ -10,10 +10,10 @@ IF(EXPAT_FOUND)
   INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bseg )
   INCLUDE_DIRECTORIES( ${GEL_INCLUDE_DIR}/mrc )
   INCLUDE_DIRECTORIES( ${GEL_INCLUDE_DIR})
-  INCLUDE(${MODULE_PATH}/FindTIFF.cmake)
+  INCLUDE(${VXL_CMAKE_DIR}/FindTIFF.cmake)
   IF(TIFF_FOUND)
     INCLUDE_DIRECTORIES(${TIFF_INCLUDE_DIR})
-    INCLUDE( ${MODULE_PATH}/FindGEOTIFF.cmake)
+    INCLUDE( ${VXL_CMAKE_DIR}/FindGEOTIFF.cmake)
     IF(GEOTIFF_FOUND)
       INCLUDE_DIRECTORIES(${GEOTIFF_INCLUDE_DIR})
     ENDIF(GEOTIFF_FOUND)
@@ -75,7 +75,7 @@ IF(EXPAT_FOUND)
     processes/bvxm_estimate_camera_process.h          processes/bvxm_estimate_camera_process.cxx
     processes/bvxm_expected_edge_functor.h            processes/bvxm_expected_edge_functor.cxx
     processes/bvxm_estimate_camera_utils.cxx
-    processes/bvxm_atmospheric_corr_process.cxx 
+    processes/bvxm_atmospheric_corr_process.cxx
     processes/bvxm_atmospheric_corr_process.h
    )
 

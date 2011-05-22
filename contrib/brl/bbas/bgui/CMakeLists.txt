@@ -5,14 +5,14 @@ doxygen_add_library(contrib/brl/bbas/bgui
   DEPENDS contrib/brl/bbas/btol core/vgui
   PACKAGE contrib/brl
   DESCRIPTION "Brown VGUI Augmentation"
-  )
+ )
 
 INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR} )
 INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR}/bbas )
 INCLUDE_DIRECTORIES(${GEL_INCLUDE_DIR} )
 
 # determines if vgui is built and opengl is available
-INCLUDE( ${MODULE_PATH}/UseVGUI.cmake )
+INCLUDE( ${VXL_CMAKE_DIR}/UseVGUI.cmake )
 
 IF(HAS_VGUI)
  SET(bgui_sources
@@ -29,11 +29,11 @@ IF(HAS_VGUI)
      bgui_range_adjuster_tableau.cxx   bgui_range_adjuster_tableau.h  bgui_range_adjuster_tableau_sptr.h
      bgui_graph_tableau.cxx            bgui_graph_tableau.h           bgui_graph_tableau_sptr.h
      bgui_image_utils.cxx              bgui_image_utils.h
- )
+    )
 IF(HAS_BMRF)
  SET(bgui_sources ${bgui_sources}
-   bgui_bmrf_soview2D.cxx            bgui_bmrf_soview2D.h
- )
+     bgui_bmrf_soview2D.cxx            bgui_bmrf_soview2D.h
+    )
 ENDIF(HAS_BMRF)
 
  AUX_SOURCE_DIRECTORY(Templates bgui_sources)

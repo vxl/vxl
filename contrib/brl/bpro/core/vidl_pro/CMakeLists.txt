@@ -4,7 +4,7 @@ INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR} )
 INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bpro )
 INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bpro/core )
 
-INCLUDE( ${MODULE_PATH}/NewCMake/FindDirectShow.cmake )
+INCLUDE( ${VXL_CMAKE_DIR}/NewCMake/FindDirectShow.cmake )
 
 SET (HAS_DIRECTSHOW 0)
 IF(DIRECTSHOW_FOUND)
@@ -18,7 +18,7 @@ SET(vidl_pro_sources
     vidl_pro_utils.h              vidl_pro_utils.cxx
     vidl_register.h               vidl_register.cxx
     vidl_processes.h
-)
+   )
 
 AUX_SOURCE_DIRECTORY(Templates vidl_pro_sources)
 AUX_SOURCE_DIRECTORY(processes vidl_pro_sources)

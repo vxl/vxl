@@ -1,8 +1,8 @@
 # ./oxl/apps/vxl_vrml_viewer/CMakeLists.txt
 
-INCLUDE( ${MODULE_PATH}/UseVGUI.cmake )
+INCLUDE( ${VXL_CMAKE_DIR}/UseVGUI.cmake )
 
-INCLUDE(${MODULE_PATH}/FindQv.cmake)
+INCLUDE(${VXL_CMAKE_DIR}/FindQv.cmake)
 
 IF(HAS_VGUI)
   IF(QV_FOUND)

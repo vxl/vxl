@@ -10,7 +10,7 @@ doxygen_add_library(contrib/gel/vsrl
     contrib/rpl/rsdl
   PACKAGE contrib/gel
   DESCRIPTION "Dense image matcher"
-  )
+)
 
 INCLUDE_DIRECTORIES(${GEL_INCLUDE_DIR})
 
@@ -36,7 +36,7 @@ SET(vsrl_sources
 
 # vsrl_manager depends on vgui, on tbl/vepl1 and on brl/bseg/sdet
 # vsrl_menus and vsrl_point_picker depend on vgui
-INCLUDE( ${MODULE_PATH}/UseVGUI.cmake )
+INCLUDE( ${VXL_CMAKE_DIR}/UseVGUI.cmake )
 
 IF (HAS_VGUI)
  INCLUDE_DIRECTORIES(${VXLCORE_INCLUDE_DIR})

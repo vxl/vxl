@@ -1,6 +1,6 @@
 # This is core/vnl/algo/tests/CMakeLists.txt
 
-INCLUDE( ${MODULE_PATH}/FindNetlib.cmake )
+INCLUDE( ${VXL_CMAKE_DIR}/FindNetlib.cmake )
 
 # MESSAGE( NETLIB_FOUND " is " ${NETLIB_FOUND} )
 IF(NETLIB_FOUND)

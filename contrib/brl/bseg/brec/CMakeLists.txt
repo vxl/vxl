@@ -8,10 +8,10 @@ INCLUDE_DIRECTORIES( ${MUL_INCLUDE_DIR} )
 INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bbas )
 INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bbas/bsta )
 INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bseg/ )
-INCLUDE( ${MODULE_PATH}/FindTIFF.cmake)
+INCLUDE( ${VXL_CMAKE_DIR}/FindTIFF.cmake)
 IF(TIFF_FOUND)
   INCLUDE_DIRECTORIES(${TIFF_INCLUDE_DIR})
-  INCLUDE( ${MODULE_PATH}/FindGEOTIFF.cmake)
+  INCLUDE( ${VXL_CMAKE_DIR}/FindGEOTIFF.cmake)
   IF(GEOTIFF_FOUND)
     INCLUDE_DIRECTORIES(${GEOTIFF_INCLUDE_DIR})
   ENDIF(GEOTIFF_FOUND)
@@ -38,7 +38,7 @@ SET(brec_sources
     brec_glitch.h    brec_glitch.cxx
     brec_part_hierarchy_learner.h    brec_part_hierarchy_learner.cxx
     brec_part_hierarchy_learner_sptr.h
-)
+   )
 
 AUX_SOURCE_DIRECTORY(Templates brec_sources)
 

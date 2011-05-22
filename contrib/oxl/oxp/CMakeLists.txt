@@ -26,7 +26,7 @@ SET(oxp_sources
  MapInverter.h
 )
 
-INCLUDE(${MODULE_PATH}/FindJPEG.cmake)
+INCLUDE(${VXL_CMAKE_DIR}/FindJPEG.cmake)
 IF (JPEG_FOUND)
   INCLUDE_DIRECTORIES(${JPEG_INCLUDE_DIR})
 
@@ -48,7 +48,7 @@ IF (MPEG2_FOUND)
   SET(oxp_sources ${oxp_sources}
       oxp_mpeg_codec.cxx      oxp_mpeg_codec.h
       oxp_vidl_mpeg_codec.cxx oxp_vidl_mpeg_codec.h
-  )
+     )
 ENDIF (MPEG2_FOUND)
 
 AUX_SOURCE_DIRECTORY(Templates oxp_sources)

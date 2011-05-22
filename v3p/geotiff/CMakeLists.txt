@@ -2,45 +2,45 @@
 
 PROJECT( geotiff C )
 
-INCLUDE(${MODULE_PATH}/FindGEOTIFF.cmake)
+INCLUDE(${VXL_CMAKE_DIR}/FindGEOTIFF.cmake)
 
 IF(NOT VXL_USING_NATIVE_GEOTIFF)
-INCLUDE(${MODULE_PATH}/FindTIFF.cmake)
+INCLUDE(${VXL_CMAKE_DIR}/FindTIFF.cmake)
 #IF(TIFF_FOUND)
 #IF (EXISTS ${TIFF_INCLUDE_DIR}/tiffio.h)
 
  INCLUDE_DIRECTORIES(${TIFF_INCLUDE_DIR} )
 
  SET( geotiff_sources
-  cpl_serv.h
-  defs.h
-  geo_config.h
-  geo_keyp.h
-  geo_normalize.h
-  geo_tiffp.h
-  geokeys.h
-  geonames.h
-  geotiff.h
-  geotiffio.h
-  geovalues.h
-  xtiffio.h
+   cpl_serv.h
+   defs.h
+   geo_config.h
+   geo_keyp.h
+   geo_normalize.h
+   geo_tiffp.h
+   geokeys.h
+   geonames.h
+   geotiff.h
+   geotiffio.h
+   geovalues.h
+   xtiffio.h
 
-  ##  source files
-  cpl_csv.c
-  cpl_serv.c
-  geo_extra.c
-  geo_free.c
-  geo_get.c
-  geo_names.c
-  geo_new.c
-  geo_normalize.c
-  geo_print.c
-  geo_set.c
-  geo_tiffp.c
-  geo_trans.c
-  geo_write.c
-  geotiff_proj4.c
-  xtiff.c
+   ##  source files
+   cpl_csv.c
+   cpl_serv.c
+   geo_extra.c
+   geo_free.c
+   geo_get.c
+   geo_names.c
+   geo_new.c
+   geo_normalize.c
+   geo_print.c
+   geo_set.c
+   geo_tiffp.c
+   geo_trans.c
+   geo_write.c
+   geotiff_proj4.c
+   xtiff.c
  )
 
 

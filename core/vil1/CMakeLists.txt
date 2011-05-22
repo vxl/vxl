@@ -123,9 +123,9 @@ IF(NOT APPLE)
 ENDIF(NOT APPLE)
 
 # vil1_file_formats.cxx uses -DTIFF, etc, so we need to do this here.
-INCLUDE(${MODULE_PATH}/FindJPEG.cmake)
-INCLUDE(${MODULE_PATH}/FindPNG.cmake)
-INCLUDE(${MODULE_PATH}/FindTIFF.cmake)
+INCLUDE(${VXL_CMAKE_DIR}/FindJPEG.cmake)
+INCLUDE(${VXL_CMAKE_DIR}/FindPNG.cmake)
+INCLUDE(${VXL_CMAKE_DIR}/FindTIFF.cmake)
 
 IF(PNG_FOUND)
   INCLUDE_DIRECTORIES( ${PNG_INCLUDE_DIR})

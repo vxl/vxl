@@ -18,8 +18,8 @@ IF( PYTHON_FOUND )
     INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bbas)
 
      SET(boxm2_batch_sources
-       reg_boxm2.h   reg_boxm2.cxx
-     )
+         reg_boxm2.h   reg_boxm2.cxx
+        )
 
     ADD_LIBRARY(boxm2_batch SHARED ${boxm2_batch_sources})
 
@@ -55,7 +55,7 @@ IF( PYTHON_FOUND )
   ENDIF( EXPAT_FOUND )
 ENDIF( PYTHON_FOUND )
 
-INCLUDE( ${MODULE_PATH}/NewCMake/FindDirectShow.cmake )
+INCLUDE( ${VXL_CMAKE_DIR}/NewCMake/FindDirectShow.cmake )
 IF(DIRECTSHOW_FOUND)
   ADD_DEFINITIONS(-DHAS_DIRECTSHOW)
 ENDIF(DIRECTSHOW_FOUND)

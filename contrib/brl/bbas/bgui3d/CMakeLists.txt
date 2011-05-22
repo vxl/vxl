@@ -4,13 +4,13 @@ doxygen_add_library(contrib/brl/bbas/bgui3d
   DEPENDS core/vgui contrib/gel/mrc/vpgl core/vnl
   PACKAGE contrib/brl
   DESCRIPTION "Brown 3D VGUI Extention Library (using Coin3D)"
-  )
+ )
 
 INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bbas )
 INCLUDE_DIRECTORIES( ${GEL_INCLUDE_DIR}/mrc )
 
 # determines if vgui is built and opengl is available
-INCLUDE( ${MODULE_PATH}/UseVGUI.cmake )
+INCLUDE( ${VXL_CMAKE_DIR}/UseVGUI.cmake )
 
 IF (HAS_VGUI)
   # Optionally Build this library
@@ -20,7 +20,7 @@ IF (HAS_VGUI)
   IF (BUILD_BGUI3D)
 
     # Find the Coin3D library
-    INCLUDE( ${MODULE_PATH}/NewCMake/FindCoin3D.cmake )
+    INCLUDE( ${VXL_CMAKE_DIR}/NewCMake/FindCoin3D.cmake )
 
     IF (COIN3D_FOUND)
       INCLUDE_DIRECTORIES( ${COIN3D_INCLUDE_DIR} )
@@ -29,7 +29,7 @@ IF (HAS_VGUI)
     ENDIF (COIN3D_FOUND)
 
     # Find the SimVoleon library
-    INCLUDE( ${MODULE_PATH}/NewCMake/FindSIMVoleon.cmake )
+    INCLUDE( ${VXL_CMAKE_DIR}/NewCMake/FindSIMVoleon.cmake )
 
     IF (SIMVOLEON_FOUND)
       INCLUDE_DIRECTORIES( ${SIMVOLEON_INCLUDE_DIR} )
@@ -46,18 +46,18 @@ SET(BGUI3D_FOUND "NO" CACHE INTERNAL "Was bgui3d successfully built?" )
 # If Coin3d was found and building bgui3d
 IF (HAS_BGUI3D)
 SET(bgui3d_sources
-   bgui3d.cxx                      bgui3d.h
-   bgui3d_translate_event.cxx      bgui3d_translate_event.h
-   bgui3d_file_io.cxx              bgui3d_file_io.h
-   bgui3d_algo.cxx                 bgui3d_algo.h
+    bgui3d.cxx                      bgui3d.h
+    bgui3d_translate_event.cxx      bgui3d_translate_event.h
+    bgui3d_file_io.cxx              bgui3d_file_io.h
+    bgui3d_algo.cxx                 bgui3d_algo.h
 
-   bgui3d_tableau.cxx              bgui3d_tableau.h              bgui3d_tableau_sptr.h
-   bgui3d_viewer_tableau.cxx       bgui3d_viewer_tableau.h       bgui3d_viewer_tableau_sptr.h
-   bgui3d_fullviewer_tableau.cxx   bgui3d_fullviewer_tableau.h   bgui3d_fullviewer_tableau_sptr.h
-   bgui3d_examiner_tableau.cxx     bgui3d_examiner_tableau.h     bgui3d_examiner_tableau_sptr.h
-   bgui3d_project2d_tableau.cxx    bgui3d_project2d_tableau.h    bgui3d_project2d_tableau_sptr.h
-   bgui3d_examiner_slider_tableau.cxx    bgui3d_examiner_slider_tableau.h    bgui3d_examiner_slider_tableau_sptr.h
-)
+    bgui3d_tableau.cxx              bgui3d_tableau.h              bgui3d_tableau_sptr.h
+    bgui3d_viewer_tableau.cxx       bgui3d_viewer_tableau.h       bgui3d_viewer_tableau_sptr.h
+    bgui3d_fullviewer_tableau.cxx   bgui3d_fullviewer_tableau.h   bgui3d_fullviewer_tableau_sptr.h
+    bgui3d_examiner_tableau.cxx     bgui3d_examiner_tableau.h     bgui3d_examiner_tableau_sptr.h
+    bgui3d_project2d_tableau.cxx    bgui3d_project2d_tableau.h    bgui3d_project2d_tableau_sptr.h
+    bgui3d_examiner_slider_tableau.cxx    bgui3d_examiner_slider_tableau.h    bgui3d_examiner_slider_tableau_sptr.h
+   )
 
 ADD_LIBRARY(bgui3d  ${bgui3d_sources})
 SET(BGUI3D_FOUND "YES" CACHE INTERNAL "Was bgui3d successfully built?" )

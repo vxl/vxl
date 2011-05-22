@@ -1,7 +1,7 @@
 # core/vidl/gui/CMakeLists.txt
 # This library adds vgui features to vidl
 
-INCLUDE( ${MODULE_PATH}/UseVGUI.cmake )
+INCLUDE( ${VXL_CMAKE_DIR}/UseVGUI.cmake )
 
 IF( HAS_VGUI )
 
@@ -9,7 +9,7 @@ SET(vidl_gui_sources
     vidl_gui_param_dialog.cxx   vidl_gui_param_dialog.h
 
     vidl_capture_tableau.cxx    vidl_capture_tableau.h     vidl_capture_tableau_sptr.h
-)
+   )
 
 ADD_LIBRARY(vidl_gui ${vidl_gui_sources})
 INSTALL_TARGETS(/lib vidl_gui)

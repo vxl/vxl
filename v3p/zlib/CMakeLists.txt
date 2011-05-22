@@ -2,7 +2,7 @@
 
 PROJECT( zlib C )
 
-INCLUDE(${MODULE_PATH}/FindZLIB.cmake)
+INCLUDE(${VXL_CMAKE_DIR}/FindZLIB.cmake)
 
 IF(NOT VXL_USING_NATIVE_ZLIB)
 
@@ -25,7 +25,6 @@ SET( zlib_sources
   infutil.c infutil.h
   inffast.c inffast.h
             inffixed.h
-
 )
 
 

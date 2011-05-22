@@ -4,11 +4,11 @@ PROJECT( png C )
 
 #   This is the png directory of v3p.  Current version is 1.2.8rc5 of November 2004.
 
-INCLUDE(${MODULE_PATH}/FindPNG.cmake)
+INCLUDE(${VXL_CMAKE_DIR}/FindPNG.cmake)
 
 IF(NOT VXL_USING_NATIVE_PNG)
 
-  INCLUDE( ${MODULE_PATH}/FindZLIB.cmake )
+  INCLUDE( ${VXL_CMAKE_DIR}/FindZLIB.cmake )
 
   IF(ZLIB_FOUND)
     INCLUDE_DIRECTORIES( ${ZLIB_INCLUDE_DIR} )

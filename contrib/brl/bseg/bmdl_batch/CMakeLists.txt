@@ -3,11 +3,11 @@ INCLUDE( ${VXL_CMAKE_DIR}/NewCMake/FindPython.cmake )
 IF( PYTHON_FOUND )
   INCLUDE( ${BRL_MODULE_PATH}/FindEXPAT.cmake )
   IF( EXPAT_FOUND )
-    INCLUDE(${MODULE_PATH}/FindTIFF.cmake)
+    INCLUDE(${VXL_CMAKE_DIR}/FindTIFF.cmake)
     IF(TIFF_FOUND)
-      INCLUDE( ${MODULE_PATH}/FindGEOTIFF.cmake)
+      INCLUDE( ${VXL_CMAKE_DIR}/FindGEOTIFF.cmake)
       IF(GEOTIFF_FOUND)
-        INCLUDE( ${MODULE_PATH}/FindZLIB.cmake )
+        INCLUDE( ${VXL_CMAKE_DIR}/FindZLIB.cmake )
         IF(ZLIB_FOUND)
           INCLUDE_DIRECTORIES( ${ZLIB_INCLUDE_DIR} )
           INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/b3p )
@@ -26,8 +26,8 @@ IF( PYTHON_FOUND )
         INCLUDE_DIRECTORIES( ${GEOTIFF_INCLUDE_DIR} )
 
         SET(bmdl_batch_sources
-          reg_bmdl.cxx          reg_bmdl.h
-        )
+            reg_bmdl.cxx          reg_bmdl.h
+           )
 
         ADD_LIBRARY(bmdl_batch SHARED ${bmdl_batch_sources})
 
@@ -36,7 +36,7 @@ IF( PYTHON_FOUND )
           SET_TARGET_PROPERTIES(bmdl_batch PROPERTIES OUTPUT_NAME bmdl_batch DEBUG_POSTFIX _d SUFFIX .pyd)
         ENDIF(WIN32)
         SET_TARGET_PROPERTIES(bmdl_batch PROPERTIES PREFIX "")
-      
+
         TARGET_LINK_LIBRARIES(bmdl_batch bprb brdb bpro_batch bmdl_pro vbl vpgl_io vpgl_pro vil_io vil_pro)
 
         IF (PYTHON_DEBUG_LIBRARIES)

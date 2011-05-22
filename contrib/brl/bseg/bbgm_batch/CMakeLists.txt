@@ -3,11 +3,11 @@ INCLUDE( ${VXL_CMAKE_DIR}/NewCMake/FindPython.cmake )
 IF( PYTHON_FOUND )
   INCLUDE( ${BRL_MODULE_PATH}/FindEXPAT.cmake )
   IF( EXPAT_FOUND )
-    INCLUDE(${MODULE_PATH}/FindTIFF.cmake)
+    INCLUDE(${VXL_CMAKE_DIR}/FindTIFF.cmake)
     IF(TIFF_FOUND)
-      INCLUDE( ${MODULE_PATH}/FindGEOTIFF.cmake)
+      INCLUDE( ${VXL_CMAKE_DIR}/FindGEOTIFF.cmake)
       IF(GEOTIFF_FOUND)
-        INCLUDE( ${MODULE_PATH}/FindZLIB.cmake )
+        INCLUDE( ${VXL_CMAKE_DIR}/FindZLIB.cmake )
         IF(ZLIB_FOUND)
           INCLUDE_DIRECTORIES( ${ZLIB_INCLUDE_DIR} )
           INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/b3p )
@@ -26,8 +26,8 @@ IF( PYTHON_FOUND )
         INCLUDE_DIRECTORIES( ${GEOTIFF_INCLUDE_DIR} )
 
         SET(bbgm_batch_sources
-          reg_bbgm.cxx          reg_bbgm.h
-        )
+            reg_bbgm.cxx          reg_bbgm.h
+           )
 
         ADD_LIBRARY(bbgm_batch SHARED ${bbgm_batch_sources})
 

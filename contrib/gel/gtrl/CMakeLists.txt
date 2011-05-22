@@ -4,7 +4,7 @@ doxygen_add_library(contrib/gel/gtrl
   DEPENDS core/vbl v3p/netlib
   PACKAGE contrib/gel
   DESCRIPTION "Polygon triangulation"
-  )
+)
 
 SET(gtrl_sources
   gtrl_triangle.cxx  gtrl_triangle.h
@@ -14,7 +14,7 @@ SET(gtrl_sources
 
 AUX_SOURCE_DIRECTORY(Templates gtrl_sources)
 
-INCLUDE( ${MODULE_PATH}/FindNetlib.cmake )
+INCLUDE( ${VXL_CMAKE_DIR}/FindNetlib.cmake )
 
 IF(NETLIB_FOUND)
   INCLUDE_DIRECTORIES(${NETLIB_INCLUDE_DIR})

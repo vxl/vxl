@@ -29,7 +29,7 @@ ELSE( ${DCMTK_CONFIG_SERIAL_CURRENT} MATCHES "^${DCMTK_CONFIG_SERIAL_LAST}$" )
   # The configuration has changed, so reset the stored variables to
   # force them to be recomputed
   #
-  FOREACH( VAR
+  FOREACH( var
         DCMTK_DCM_DICT_DEFAULT_PATH
         DCMTK_ENVIRONMENT_PATH_SEPARATOR
         DCMTK_HAVE_ACCESS
@@ -113,8 +113,8 @@ ELSE( ${DCMTK_CONFIG_SERIAL_CURRENT} MATCHES "^${DCMTK_CONFIG_SERIAL_LAST}$" )
         DCMTK_SIZEOF_LONG
         DCMTK_CMAKE_COMPILER_IS_GNUCXX_2XX
         HAVE_DCMTK_SIZEOF_LONG )  # Created indirectly by CHECK_TYPE_SIZE
-    SET( ${VAR} ${VAR} )
-  ENDFOREACH( VAR )
+    SET( ${var} ${var} )
+  ENDFOREACH( var )
 
   # Record that we've done the new config.
   SET( DCMTK_CONFIG_SERIAL_LAST ${DCMTK_CONFIG_SERIAL_CURRENT} CACHE INTERNAL "Serial number of last configuration" )
@@ -134,22 +134,23 @@ INCLUDE( ${VXL_CMAKE_DIR}/CheckPrototypeExistsCXX.cmake )
 IF( DCMTK_HAVE_STD_NAMESPACE MATCHES "DCMTK_HAVE_STD_NAMESPACE" )
   MESSAGE(STATUS "Checking if the compiler has namespace std")
   FILE(WRITE ${CMAKE_BINARY_DIR}/CMakeTmp/test_have_namespace.cxx
-    "#include <string>\n"
-    "using namespace std;\n"
-    "int main() { string a=\"a\"; return 0; }\n" )
+       "#include <string>\n"
+       "using namespace std;\n"
+       "int main() { string a=\"a\"; return 0; }\n" )
   TRY_COMPILE( DCMTK_HAVE_STD_NAMESPACE
     ${CMAKE_BINARY_DIR}
     ${CMAKE_BINARY_DIR}/CMakeTmp/test_have_namespace.cxx
     CMAKE_FLAGS -DCOMPILE_DEFINITIONS:STRING=${CMAKE_REQUIRED_FLAGS}
-    OUTPUT_VARIABLE OUTPUT )
+    OUTPUT_VARIABLE OUTPUT
+  )
   IF( DCMTK_HAVE_STD_NAMESPACE )
     FILE(APPEND ${CMAKE_BINARY_DIR}/CMakeOutput.log
-      "Checking for namespace std passed with the following output:\n"
-      "${OUTPUT}\n\n" )
+         "Checking for namespace std passed with the following output:\n"
+         "${OUTPUT}\n\n" )
   ELSE( DCMTK_HAVE_STD_NAMESPACE )
     FILE(APPEND ${CMAKE_BINARY_DIR}/CMakeOutput.log
-      "Checking for namespace std failed with the following output:\n"
-      "${OUTPUT}\n\n" )
+        "Checking for namespace std failed with the following output:\n"
+        "${OUTPUT}\n\n" )
   ENDIF( DCMTK_HAVE_STD_NAMESPACE )
 ENDIF( DCMTK_HAVE_STD_NAMESPACE MATCHES "DCMTK_HAVE_STD_NAMESPACE" )
 
@@ -256,7 +257,7 @@ ELSE( DCMTK_HAVE_CASSERT )
   SET( DCMTK_HAVE_STD_CXX_INCLUDES )
 ENDIF( DCMTK_HAVE_CASSERT )
 
-INCLUDE( ${MODULE_PATH}/FindZLIB.cmake )
+INCLUDE( ${VXL_CMAKE_DIR}/FindZLIB.cmake )
 IF( ZLIB_FOUND )
   INCLUDE_DIRECTORIES( ${ZLIB_INCLUDE_DIR} )
   SET( DCMTK_HAVE_ZLIB 1 )
@@ -275,7 +276,7 @@ ENDIF( WIN32 )
 
 IF( "DCMTK_INCLUDE_MATH_H_AS_CXX" MATCHES "^${DCMTK_INCLUDE_MATH_H_AS_CXX}$" )
   FILE(WRITE ${CMAKE_BINARY_DIR}/CMakeTmp/CheckIncludeMath.cxx
-    "extern \"C\" { #include <math.h> }" )
+       "extern \"C\" { #include <math.h> }" )
   TRY_COMPILE( DCMTK_INCLUDE_MATH_H_AS_CXX
     ${CMAKE_BINARY_DIR}
     ${CMAKE_BINARY_DIR}/CMakeTmp/CheckIncludeMath.cxx
@@ -284,15 +285,15 @@ IF( "DCMTK_INCLUDE_MATH_H_AS_CXX" MATCHES "^${DCMTK_INCLUDE_MATH_H_AS_CXX}$" )
     OUTPUT_VARIABLE OUTPUT)
   IF( DCMTK_INCLUDE_MATH_H_AS_CXX )
     FILE(APPEND ${CMAKE_BINARY_DIR}/CMakeOutput.log
-      "Determining math.h as cxx"
-      "passed with the following output:\n"
-      "${OUTPUT}\n\n")
+         "Determining math.h as cxx"
+         "passed with the following output:\n"
+         "${OUTPUT}\n\n" )
     SET( DCMTK_INCLUDE_MATH_H_AS_CXX 1 CACHE INTERNAL "Can include math.h with extern C")
   ELSE( DCMTK_INCLUDE_MATH_H_AS_CXX )
     FILE(APPEND ${CMAKE_BINARY_DIR}/CMakeOutput.log
-      "Determining math.h as cxx"
-      "failed with the following output:\n"
-      "${OUTPUT}\n\n")
+         "Determining math.h as cxx"
+         "failed with the following output:\n"
+         "${OUTPUT}\n\n" )
     SET( DCMTK_INCLUDE_MATH_H_AS_CXX "" CACHE INTERNAL "Can include math.h with extern C")
   ENDIF( DCMTK_INCLUDE_MATH_H_AS_CXX )
 ENDIF( "DCMTK_INCLUDE_MATH_H_AS_CXX" MATCHES "^${DCMTK_INCLUDE_MATH_H_AS_CXX}$" )

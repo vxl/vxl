@@ -3,17 +3,16 @@
 
 PROJECT( minizip C )
 
-INCLUDE( ${MODULE_PATH}/FindZLIB.cmake )
+INCLUDE( ${VXL_CMAKE_DIR}/FindZLIB.cmake )
 IF(ZLIB_FOUND)
   INCLUDE_DIRECTORIES( ${ZLIB_INCLUDE_DIR} )
-
 
 
 SET( minizip_sources
   crypt.h
   ioapi.c      ioapi.h
   zip.h        zip.c
-  unzip.c      unzip.h      
+  unzip.c      unzip.h
   mztools.c    mztools.h
 )
 

@@ -1,6 +1,6 @@
 # oxl/VPLAYER/CMakeLists.txt
 
-INCLUDE( ${MODULE_PATH}/UseVGUI.cmake )
+INCLUDE( ${VXL_CMAKE_DIR}/UseVGUI.cmake )
 
 IF (HAS_VGUI)
   IF (WIN32)
@@ -15,7 +15,7 @@ IF (HAS_VGUI)
           vplayer_geometry.cxx vplayer_geometry.h
           vplayer_video.cxx    vplayer_video.h
         )
-    
+
         ADD_EXECUTABLE(VPLAYER ${VPLAYER_sources})
         TARGET_LINK_LIBRARIES(VPLAYER vfw32 oxp vgui vidl_vil1 vul)
 

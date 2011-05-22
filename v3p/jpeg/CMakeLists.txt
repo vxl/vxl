@@ -2,7 +2,7 @@
 
 PROJECT( jpeg C )
 
-INCLUDE( ${MODULE_PATH}/FindJPEG.cmake )
+INCLUDE( ${VXL_CMAKE_DIR}/FindJPEG.cmake )
 
 IF(NOT VXL_USING_NATIVE_JPEG)
 

@@ -1,6 +1,6 @@
 # vxl/vidl_vil1/CMakeLists.txt
 
-INCLUDE( ${MODULE_PATH}/FindMPEG2.cmake )
+INCLUDE( ${VXL_CMAKE_DIR}/FindMPEG2.cmake )
 
 IF( MPEG2_FOUND )
   INCLUDE_DIRECTORIES(${MPEG2_INCLUDE_DIR})

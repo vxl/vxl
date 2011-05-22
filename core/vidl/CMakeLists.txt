@@ -6,11 +6,11 @@ doxygen_add_library(core/vidl
   DEPENDS core/vul core/vil
   PACKAGE core-L2
   DESCRIPTION "Video Sequence Library"
-  )
+)
 
-INCLUDE( ${MODULE_PATH}/NewCMake/FindFFMPEG.cmake )
-INCLUDE( ${MODULE_PATH}/NewCMake/FindDC1394.cmake )
-INCLUDE( ${MODULE_PATH}/NewCMake/FindDirectShow.cmake )
+INCLUDE( ${VXL_CMAKE_DIR}/NewCMake/FindFFMPEG.cmake )
+INCLUDE( ${VXL_CMAKE_DIR}/NewCMake/FindDC1394.cmake )
+INCLUDE( ${VXL_CMAKE_DIR}/NewCMake/FindDirectShow.cmake )
 FIND_FILE (VIDEODEV_FOUND videodev.h /usr/include/linux/)
 FIND_FILE (VIDEODEV2_FOUND videodev2.h /usr/include/linux/)
 
@@ -26,11 +26,11 @@ IF(DIRECTSHOW_FOUND)
 
   # For Euresys Multicam Driver's DirectShow source filter.
   # - should I put this in a Module of its own?
-  #INCLUDE( ${MODULE_PATH}/NewCMake/FindDirectShow_ESF.cmake )
+  #INCLUDE( ${VXL_CMAKE_DIR}/NewCMake/FindDirectShow_ESF.cmake )
   FIND_PATH(DIRECTSHOW_ESF_INCLUDE_DIR ESFilter.h
-    "C:/Program Files/Euresys/MultiCam/Include"
-    DOC "What is the path where the file ESFilter.h can be found"
-  )
+            "C:/Program Files/Euresys/MultiCam/Include"
+            DOC "What is the path where the file ESFilter.h can be found"
+           )
   IF(DIRECTSHOW_ESF_INCLUDE_DIR)
     SET(DIRECTSHOW_ESF_FOUND "YES")
     SET(DIRECTSHOW_ESF_INCLUDE_DIRS "${DIRECTSHOW_ESF_INCLUDE_DIR}")
@@ -57,7 +57,7 @@ SET(vidl_sources
     vidl_iidc1394_params.h        vidl_iidc1394_params.cxx
 
     vidl_istream_image_resource.h vidl_istream_image_resource.cxx
-)
+   )
 
 # These files are compiled unconditionally.  They will automatically
 # compile in stub versions if ffmpeg isn't available.
@@ -65,7 +65,7 @@ SET(vidl_sources ${vidl_sources}
     vidl_ffmpeg_istream.h          vidl_ffmpeg_istream.cxx
     vidl_ffmpeg_ostream.h          vidl_ffmpeg_ostream.cxx
     vidl_ffmpeg_ostream_params.h   vidl_ffmpeg_ostream_params.cxx
-)
+   )
 
 # These are still conditioned on ffmpeg being available. They should
 # also be made unconditional.
@@ -76,19 +76,19 @@ IF( FFMPEG_FOUND )
       vidl_ffmpeg_istream_v1.txx     vidl_ffmpeg_ostream_v1.txx
       vidl_ffmpeg_istream_v2.txx     vidl_ffmpeg_ostream_v2.txx
                                      vidl_ffmpeg_ostream_v3.txx
-  )
+     )
 # Stub implementation, when ffmeg is not available
 ELSE( FFMPEG_FOUND )
   SET(vidl_sources ${vidl_sources}
       vidl_ffmpeg_istream_stub.txx
       vidl_ffmpeg_ostream_stub.txx
-  )
+     )
 ENDIF( FFMPEG_FOUND )
 
 IF( DC1394_FOUND )
   SET(vidl_sources ${vidl_sources}
       vidl_dc1394_istream.h          vidl_dc1394_istream.cxx
-  )
+     )
 ENDIF( DC1394_FOUND )
 
 IF(DIRECTSHOW_FOUND)
@@ -98,11 +98,11 @@ IF(DIRECTSHOW_FOUND)
       vidl_dshow_file_istream.h         vidl_dshow_file_istream.cxx
       vidl_dshow_live_istream.h         vidl_dshow_live_istream.cxx
       vidl_dshow_istream_params.h       vidl_dshow_istream_params.cxx
-  )
+     )
   IF(DIRECTSHOW_ESF_FOUND)
     SET(vidl_sources ${vidl_sources}
         vidl_dshow_istream_params_esf.h vidl_dshow_istream_params_esf.cxx
-    )
+       )
   ENDIF(DIRECTSHOW_ESF_FOUND)
 ENDIF(DIRECTSHOW_FOUND)
 
@@ -111,7 +111,7 @@ IF(VIDEODEV_FOUND)
        vidl_v4l_params.h   vidl_v4l_params.cxx
        vidl_v4l_istream.h  vidl_v4l_istream.cxx
        vidl_v4l_ulong_fix.h
-   )
+      )
 ENDIF(VIDEODEV_FOUND)
 
 IF(VIDEODEV2_FOUND)
@@ -121,7 +121,7 @@ IF(VIDEODEV2_FOUND)
        vidl_v4l2_pixel_format.h  vidl_v4l2_pixel_format.cxx
        vidl_v4l2_istream.h       vidl_v4l2_istream.cxx
        vidl_v4l2_control.h       vidl_v4l2_control.cxx
-   )
+      )
 ENDIF(VIDEODEV2_FOUND)
 
 AUX_SOURCE_DIRECTORY(Templates vidl_sources)

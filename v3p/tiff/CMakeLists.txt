@@ -2,16 +2,16 @@
 
 PROJECT( tiff C )
 
-INCLUDE(${MODULE_PATH}/FindTIFF.cmake)
+INCLUDE(${VXL_CMAKE_DIR}/FindTIFF.cmake)
 
 IF(NOT VXL_USING_NATIVE_TIFF)
 
-INCLUDE( ${MODULE_PATH}/FindZLIB.cmake )
+INCLUDE( ${VXL_CMAKE_DIR}/FindZLIB.cmake )
 
 IF(ZLIB_FOUND)
   INCLUDE_DIRECTORIES( ${ZLIB_INCLUDE_DIR} )
 
-INCLUDE( ${MODULE_PATH}/FindJPEG.cmake )
+INCLUDE( ${VXL_CMAKE_DIR}/FindJPEG.cmake )
 
 IF(JPEG_FOUND)
   INCLUDE_DIRECTORIES( ${JPEG_INCLUDE_DIR} )
@@ -26,7 +26,7 @@ SET( tiff_sources
   tiffio.h
   tiffvers.h
   t4.h
-  tif_dir.h 	
+  tif_dir.h
   tif_predict.h
   tiffiop.h
   uvcode.h
@@ -81,7 +81,7 @@ ELSE(UNIX)
 
   SET( tiff_sources ${tiff_sources}
     tif_win32.c
-  #  fax3sm_winnt.c
+   #fax3sm_winnt.c
   )
 ENDIF(UNIX)
 

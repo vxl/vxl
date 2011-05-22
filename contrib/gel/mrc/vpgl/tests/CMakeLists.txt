@@ -30,7 +30,7 @@ ADD_TEST(vpgl_test_local_rational_camera            ${EXECUTABLE_OUTPUT_PATH}/vp
 ADD_TEST(vpgl_test_segmented_rolling_shutter_camera ${EXECUTABLE_OUTPUT_PATH}/vpgl_test_all test_segmented_rolling_shutter_camera)
 ADD_TEST(vpgl_test_generic_camera                   ${EXECUTABLE_OUTPUT_PATH}/vpgl_test_all test_generic_camera)
 SET( HAS_GEOTIFF 0 )
-INCLUDE( ${MODULE_PATH}/FindGEOTIFF.cmake)
+INCLUDE( ${VXL_CMAKE_DIR}/FindGEOTIFF.cmake)
 IF(GEOTIFF_FOUND)
   SET (HAS_GEOTIFF 1 )
   INCLUDE_DIRECTORIES(${GEOTIFF_INCLUDE_DIR})

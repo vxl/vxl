@@ -1,7 +1,7 @@
 # This is contrib/brl/bseg/bmdl/pro/CMakeLists.txt
 # bmdl's Process Library
 
-INCLUDE( ${MODULE_PATH}/FindZLIB.cmake )
+INCLUDE( ${VXL_CMAKE_DIR}/FindZLIB.cmake )
 IF(ZLIB_FOUND)
   INCLUDE_DIRECTORIES( ${ZLIB_INCLUDE_DIR} )
   INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/b3p )
@@ -11,9 +11,9 @@ ENDIF(ZLIB_FOUND)
 # bprb depends on expat and bmdl_prodepends on bprb primarily
 INCLUDE( ${BRL_MODULE_PATH}/FindEXPAT.cmake )
 IF(EXPAT_FOUND)
-  INCLUDE(${MODULE_PATH}/FindTIFF.cmake)
+  INCLUDE(${VXL_CMAKE_DIR}/FindTIFF.cmake)
   IF(TIFF_FOUND)
-    INCLUDE( ${MODULE_PATH}/FindGEOTIFF.cmake)
+    INCLUDE( ${VXL_CMAKE_DIR}/FindGEOTIFF.cmake)
     IF(GEOTIFF_FOUND)
       INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR} )
       INCLUDE_DIRECTORIES( ${GEL_INCLUDE_DIR}/mrc )
@@ -22,10 +22,10 @@ IF(EXPAT_FOUND)
       INCLUDE_DIRECTORIES( ${GEOTIFF_INCLUDE_DIR} )
 
       SET(bmdl_pro_sources
-        bmdl_processes.h
-        bmdl_defs.h
-        bmdl_register.h                        bmdl_register.cxx
-      )
+          bmdl_processes.h
+          bmdl_defs.h
+          bmdl_register.h                  bmdl_register.cxx
+         )
 
       AUX_SOURCE_DIRECTORY(Templates bmdl_pro_sources)
       AUX_SOURCE_DIRECTORY(processes bmdl_pro_sources)

@@ -16,8 +16,8 @@ IF( PYTHON_FOUND )
     INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bseg/brec )
 
      SET(bvxm_batch_sources
-       reg_bvxm.h   reg_bvxm.cxx
-     )
+         reg_bvxm.h   reg_bvxm.cxx
+        )
 
     ADD_LIBRARY(bvxm_batch SHARED ${bvxm_batch_sources})
 
@@ -44,7 +44,7 @@ IF( PYTHON_FOUND )
   ENDIF( EXPAT_FOUND )
 ENDIF( PYTHON_FOUND )
 
-INCLUDE( ${MODULE_PATH}/NewCMake/FindDirectShow.cmake )
+INCLUDE( ${VXL_CMAKE_DIR}/NewCMake/FindDirectShow.cmake )
 IF(DIRECTSHOW_FOUND)
   ADD_DEFINITIONS(-DHAS_DIRECTSHOW)
 ENDIF(DIRECTSHOW_FOUND)

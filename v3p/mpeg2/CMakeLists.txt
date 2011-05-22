@@ -2,7 +2,7 @@
 
 PROJECT( mpeg2 C )
 
-INCLUDE( ${MODULE_PATH}/FindMPEG2.cmake )
+INCLUDE( ${VXL_CMAKE_DIR}/FindMPEG2.cmake )
 
 IF( NOT VXL_USING_NATIVE_MPEG2 )
 
@@ -67,7 +67,7 @@ ELSE( VXL_MPEG_USE_CONFIGURE )
     SET( MPEG_ARCH_X86 0 )
   ENDIF( CMAKE_SYSTEM_PROCESSOR MATCHES i[56]86 )
   IF(WIN32)
-  # unfortunately MSVC6 (and probably other Windows compilers
+  # unfortunately MSVC6 (and probably other Windows compilers)
   # can't cope with the mmx assembler
     SET( MPEG_ARCH_X86 0 )
   ENDIF(WIN32)

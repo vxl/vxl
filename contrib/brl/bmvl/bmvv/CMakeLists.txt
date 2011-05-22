@@ -7,7 +7,7 @@ doxygen_add_library(contrib/brl/bmvl/bmvv
     contrib/brl/bbas/bgui
     contrib/brl/bbas/bxml
   PACKAGE contrib/brl
-  )
+)
 
 INCLUDE_DIRECTORIES( ${OXL_INCLUDE_DIR} )
 INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR} )
@@ -17,14 +17,14 @@ INCLUDE_DIRECTORIES( ${GEL_INCLUDE_DIR}/mrc )
 INCLUDE_DIRECTORIES( ${RPL_INCLUDE_DIR} )
 
 # determines if vgui is built and opengl is available
-INCLUDE( ${MODULE_PATH}/UseVGUI.cmake )
+INCLUDE( ${VXL_CMAKE_DIR}/UseVGUI.cmake )
 
 IF(HAS_VGUI)
 IF(BUILD_RPL) # bmvv_f_manager.cxx needs rpl/rrel
 
  # sources that depend on xerces and vgui  being present
  SET(bmvv_sources
-    dll.h
+     dll.h
 
     #bmvv_multiview_manager.cxx     bmvv_multiview_manager.h
     #bmvv_tomography_manager.cxx    bmvv_tomography_manager.h  # used btom library

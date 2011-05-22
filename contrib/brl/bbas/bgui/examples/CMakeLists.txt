@@ -1,4 +1,4 @@
-INCLUDE( ${MODULE_PATH}/UseVGUI.cmake )
+INCLUDE( ${VXL_CMAKE_DIR}/UseVGUI.cmake )
 
 IF( HAS_VGUI )
  ADD_EXECUTABLE( basic01_pick_tableau basic01_pick_tableau.cxx)
