@@ -1,6 +1,7 @@
 #include "bwm_corr.h"
 //:
 // \file
+#include "bwm_observer_cam.h"
 #include "io/bwm_io_structs.h"
 #include <vgl/vgl_distance.h>
 #include <vcl_iostream.h>

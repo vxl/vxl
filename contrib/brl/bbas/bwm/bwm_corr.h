@@ -12,6 +12,7 @@
 // modified to make more generic using a correspondence base class - JLM
 //  Modifications
 //   10-sep-2004 Peter Vanroose Added copy ctor with explicit vbl_ref_count init
+//   22-may-2011 Peter Vanroose moved #include bwm_observer_cam.h to .cxx
 // \endverbatim
 //
 //////////////////////////////////////////////////////////////////////
@@ -19,17 +20,22 @@
 #include <vbl/vbl_ref_count.h>
 
 #include <vcl_vector.h>
+#include <vcl_string.h>
+#include <vcl_map.h>
+#include <vcl_utility.h>
 #include <vcl_iosfwd.h>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_point_3d.h>
 
-#include "bwm_observer_cam.h"
+// forward declarations:
+class bwm_observer_cam;
+class vsol_point_2d;
 
 class bwm_corr : public vbl_ref_count
 {
  public:
    bwm_corr() { mode_= true; }
-  
+
    bwm_corr(bwm_corr const& x) : vbl_ref_count(), mode_(x.mode()), world_pt_(x.world_pt()) {}
 
   ~bwm_corr() {}
@@ -44,10 +50,10 @@ class bwm_corr : public vbl_ref_count
   //: returns true, if the observer contributes to the correspondence
   bool obs_in(bwm_observer_cam* obs, vgl_point_2d<double> &corr);
 
-  // returns the match list as tableau name mapped to the 2D points
+  //: returns the match list as tableau name mapped to the 2D points
   vcl_vector<vcl_pair<vcl_string, vsol_point_2d> > match_list();
 
-  //:Mutators
+  //: Mutators
   bool update_match(bwm_observer_cam* obs, vgl_point_2d<double> old_pt, vgl_point_2d<double> new_pt);
   void set_match(bwm_observer_cam* obs, const double x, const double y);
   void set_mode(const bool mode){mode_ = mode;}
@@ -55,17 +61,16 @@ class bwm_corr : public vbl_ref_count
 
   //: Utility functions
   friend vcl_ostream&  operator<<(vcl_ostream& s, bwm_corr const& c);
-  
+
   //: XML write
   void x_write(vcl_ostream &os);
 
  protected:
-  
+
   //members
-  bool mode_; //true if image_to_image
-  vcl_map<bwm_observer_cam*, vgl_point_2d<double> > matches_;//match in each camera
+  bool mode_; //!< true if image_to_image
+  vcl_map<bwm_observer_cam*, vgl_point_2d<double> > matches_;//!< match in each camera
   vgl_point_3d<double> world_pt_;
-  
 };
 
 #endif // bwm_corr_h_
