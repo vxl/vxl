@@ -76,6 +76,22 @@ class vpgl_perspective_camera_compute
                        const vpgl_calibration_matrix<double>& K,
                        vpgl_perspective_camera<double>& camera );
 
+
+  //: Uses the direct linear transform algorithm described in "Multiple 
+  // View Geometry in Computer Vision" to find the projection matrix,
+  // and extracts the parameters of the camera from this projection matrix.
+  // Requires: image_pts and world_pts are correspondences. image_pts is
+  //  the projected form, and world_pts is the unprojected form. There
+  //  need to be at least 6 points.
+  // Returns: true if successful. err is filled with the two-norm of the 
+  //  projection error vector. camera is filled with the perspective
+  //  decomposition of the projection matrix
+  static bool compute_dlt (
+                       const vcl_vector< vgl_point_2d<double> >& image_pts,
+                       const vcl_vector< vgl_point_3d<double> >& world_pts,
+                       vpgl_perspective_camera<double> &camera,
+                       double &err);
+
   //: Compute from two sets of corresponding 2D points (image and ground plane).
   // \param ground_pts are 2D points representing world points with Z=0
   // The calibration matrix of \a camera is enforced

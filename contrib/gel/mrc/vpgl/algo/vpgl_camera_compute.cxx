@@ -598,6 +598,141 @@ compute( const vcl_vector< vgl_point_2d<double> >& image_pts,
 }
 
 
+//: Uses the direct linear transform algorithm described in "Multiple 
+// View Geometry in Computer Vision" to find the projection matrix,
+// and extracts the parameters of the camera from this projection matrix.
+// Requires: image_pts and world_pts are correspondences. image_pts is
+//  the projected form, and world_pts is the unprojected form. There
+//  need to be at least 6 points.
+// Returns: true if successful. err is filled with the two-norm of the 
+//  projection error vector. camera is filled with the perspective
+//  decomposition of the projection matrix
+bool vpgl_perspective_camera_compute::
+compute_dlt (const vcl_vector< vgl_point_2d<double> >& image_pts,
+             const vcl_vector< vgl_point_3d<double> >& world_pts,
+             vpgl_perspective_camera<double> &camera, 
+             double &err)
+{
+
+    if (image_pts.size() < 6) {
+	    vcl_cout<<"vpgl_perspective_camera_compute::compute needs at"
+            << " least 6 points!" << vcl_endl;
+	    return false;
+
+    } else if (image_pts.size() != world_pts.size()) {
+	    vcl_cout<<"vpgl_perspective_camera_compute::compute needs to"
+            << " have input vectors of the same size!" << vcl_endl 
+            << "Currently, image_pts is size " << image_pts.size()  
+            << " and world_pts is size " << world_pts.size() << vcl_endl;
+	    return false;
+    
+    } else { //Everything is good!
+
+
+        // Two equations for each point, one for the x's, the other for
+        // the ys
+        int num_eqns = 2 * image_pts.size();
+
+        // A 3x4 projection matrix has 11 free vars
+        int num_vars = 11; 
+
+
+        //---------------Set up and solve a system of linear eqns----
+        vnl_matrix<double> A(num_eqns, num_vars);
+        vnl_vector<double> b(num_eqns);
+
+        // If the world pt is (x,y,z), and the image pt is (u,v),
+        // A is of the form
+        // [...]
+        // [x, y, z, 1, 0, 0, 0, 0, u*x, u*y, u*z]
+        // [0, 0, 0, 0, x, y, z, 1, v*x, v*y, v*z]
+        // [...]
+        // 
+        // and b is of the form [...; -v; -u; ...]
+        for (int i = 0; i < image_pts.size(); i++) {
+            
+            //Set the first row of A
+            A.put(2*i, 0, world_pts[i].x());
+            A.put(2*i, 1, world_pts[i].y());
+            A.put(2*i, 2, world_pts[i].z());
+            A.put(2*i, 3, 1.0);
+        
+            A.put(2*i, 4, 0.0);
+            A.put(2*i, 5, 0.0);
+            A.put(2*i, 6, 0.0);
+            A.put(2*i, 7, 0.0);
+        
+            A.put(2*i, 8, image_pts[i].x() * world_pts[i].x());
+            A.put(2*i, 9, image_pts[i].x() * world_pts[i].y());
+            A.put(2*i, 10, image_pts[i].x() * world_pts[i].z());
+        
+
+            //Set the second row of A
+            A.put(2*i+1, 0, 0.0);
+            A.put(2*i+1, 1, 0.0);
+            A.put(2*i+1, 2, 0.0);
+            A.put(2*i+1, 3, 0.0);
+        
+            A.put(2*i+1, 4, world_pts[i].x());
+            A.put(2*i+1, 5, world_pts[i].y());
+            A.put(2*i+1, 6, world_pts[i].z());
+            A.put(2*i+1, 7, 1.0);
+
+            A.put(2*i+1, 8, image_pts[i].y() * world_pts[i].x());
+            A.put(2*i+1, 9, image_pts[i].y() * world_pts[i].y());
+            A.put(2*i+1, 10, image_pts[i].y() * world_pts[i].z());
+        
+
+            //Set the current rows of the RHS vector
+            b[2 * i] = -image_pts[i].x(); 
+            b[2 * i + 1] = -image_pts[i].y(); 
+        }
+
+        //Solve the system
+        vnl_svd<double> svd(A);
+        vnl_vector<double> x = svd.solve(b);
+
+        //Transform the linearized version into the matrix form
+        vnl_matrix_fixed<double, 3, 4> proj;
+
+        for(int row = 0; row < 3; row++){
+            for(int col = 0; col < 4; col++){
+                if(row*4 + col < 11){
+                    proj.put(row, col, x[row*4 + col]);
+                }
+            }
+        }
+        
+        proj.set(2, 3, 1.0);
+
+
+
+        //-------------Find the error rate--------------------
+        err = 0;
+        for (int i = 0; i < image_pts.size(); i++) {
+            vnl_vector_fixed<double, 4> world_pt;
+            world_pt[0] = world_pts[i].x();
+            world_pt[1] = world_pts[i].y();
+            world_pt[2] = world_pts[i].z();
+            world_pt[3] = 1.0;
+
+            vnl_vector_fixed<double, 3> projed_pt = proj * world_pt;
+
+            projed_pt[0] /= -projed_pt[2];
+            projed_pt[1] /= -projed_pt[2];
+            
+            double dx = projed_pt[0] - image_pts[i].x();
+            double dy = projed_pt[1] - image_pts[i].y();
+
+            err += dx*dy;
+        }
+        
+
+        //-----Get the camera------------------------------
+        return vpgl_perspective_decomposition(proj, camera);
+    }
+}
+
 //: Compute from two sets of corresponding 2D points (image and ground plane).
 // \param ground_pts are 2D points representing world points with Z=0
 // The calibration matrix of \a camera is enforced

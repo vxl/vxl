@@ -382,6 +382,63 @@ void test_generic_camera_compute(){
     TEST("affine cam to generic", false, true); 
 
 }
+
+//Tests the compute(world_pts, image_pts, camera) method in
+// the vpgl_camera_compute class
+static void test_perspective_compute_direct_linear_transform()
+{
+  //Create the world points
+  vcl_vector< vgl_point_3d<double> > world_pts;
+  world_pts.push_back( vgl_point_3d<double>( 1, 0, -1 ) );
+  world_pts.push_back( vgl_point_3d<double>( 6, 1, 2 ) );
+  world_pts.push_back( vgl_point_3d<double>( -1, -3, -2 ) );
+  world_pts.push_back( vgl_point_3d<double>( 0, 0, 2 ) );
+  world_pts.push_back( vgl_point_3d<double>( 2, -1, -5 ) );
+  world_pts.push_back( vgl_point_3d<double>( 8, 1, -2 ) );
+
+  //Come up with the projection matrix.
+  vnl_matrix_fixed<double, 3, 4> proj;
+  proj.set(0,0,0); proj.set(0,1,1); proj.set(0,2,0);      proj.set(0, 3, 3);
+  proj.set(1,0,-1); proj.set(1,1,0); proj.set(1,2,0);     proj.set(1, 3, 2);
+  proj.set(2,0,0); proj.set(2,1,0); proj.set(2,2,1);      proj.set(2, 3, 0);
+
+  //Do the projection for each of the points
+  vcl_vector< vgl_point_2d<double> > image_pts;
+  for(int i = 0; i < world_pts.size(); i++){
+    vnl_vector_fixed<double, 4> world_pt;
+    world_pt[0] = world_pts[i].x();
+    world_pt[1] = world_pts[i].y();
+    world_pt[2] = world_pts[i].z();
+    world_pt[3] = 1.0;
+
+    vnl_vector_fixed<double, 3> projed_pt = proj * world_pt;
+
+    vcl_cout << projed_pt << vcl_endl;
+
+    image_pts.push_back(vgl_point_2d<double>(
+        projed_pt[0] / -projed_pt[2], 
+        projed_pt[1] / -projed_pt[2]));
+  }
+
+  
+  //Calculate the projected points
+  vpgl_perspective_camera<double> camera;
+  double err;
+  vpgl_perspective_camera_compute::compute_dlt(
+    image_pts, world_pts, camera, err);
+    
+    
+  //Check that it is close.
+  for(int i = 0; i < world_pts.size(); i++){
+    double x,y;
+    camera.project(world_pts[i].x(), world_pts[i].y(), world_pts[i].z(), 
+        x, y);
+
+    TEST_NEAR("Testing that x coord is close", x, -image_pts[i].x(), .001);
+    TEST_NEAR("Testing that y coord is close", y, -image_pts[i].y(), .001);
+  }
+}
+
 static void test_camera_compute(int argc, char* argv[])
 {
   vcl_string dir_base;
@@ -397,6 +454,7 @@ static void test_camera_compute(int argc, char* argv[])
   test_camera_compute_setup();
   test_perspective_compute();
   test_generic_camera_compute();
+  test_perspective_compute_direct_linear_transform();
 #if 0 // commented out till the new code is created for that test
   test_rational_camera_approx(dir_base);
 #endif
