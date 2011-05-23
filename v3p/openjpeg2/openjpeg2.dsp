@@ -90,6 +90,72 @@ LIB32=link.exe -lib
 # Name "openjpeg2 - Win32 Release"
 # Name "openjpeg2 - Win32 Debug"
 
+# Begin Group "Source Files"
+# PROP Default_Filter "c"
+# Begin Source File
+SOURCE=.\pi.c
+# End Source File
+# Begin Source File
+SOURCE=.\event.c
+# End Source File
+# Begin Source File
+SOURCE=.\raw.c
+# End Source File
+# Begin Source File
+SOURCE=.\image.c
+# End Source File
+# Begin Source File
+SOURCE=.\mct.c
+# End Source File
+# Begin Source File
+SOURCE=.\mqc.c
+# End Source File
+# Begin Source File
+SOURCE=.\t1.c
+# End Source File
+# Begin Source File
+SOURCE=.\bio.c
+# End Source File
+# Begin Source File
+SOURCE=.\function_list.c
+# End Source File
+# Begin Source File
+SOURCE=.\j2k_lib.c
+# End Source File
+# Begin Source File
+SOURCE=.\tcd.c
+# End Source File
+# Begin Source File
+SOURCE=.\profile.c
+# End Source File
+# Begin Source File
+SOURCE=.\j2k.c
+# End Source File
+# Begin Source File
+SOURCE=.\tgt.c
+# End Source File
+# Begin Source File
+SOURCE=.\cio.c
+# End Source File
+# Begin Source File
+SOURCE=.\invert.c
+# End Source File
+# Begin Source File
+SOURCE=.\jp2.c
+# End Source File
+# Begin Source File
+SOURCE=.\t2.c
+# End Source File
+# Begin Source File
+SOURCE=.\jpt.c
+# End Source File
+# Begin Source File
+SOURCE=.\dwt.c
+# End Source File
+# Begin Source File
+SOURCE=.\openjpeg.c
+# End Source File
+# End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h"
 # Begin Source File
