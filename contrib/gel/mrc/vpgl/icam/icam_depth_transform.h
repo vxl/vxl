@@ -5,8 +5,32 @@
 // \file
 // \brief An image to image transformation with respect to a depth map
 // The transformation between an image with a depth map
-// and an image with a camera specified by K, R and t.
-// Both images have the same calibration matrix
+// and an image with a camera specified by K, R and t. The "from" image
+// coordinates are transformed by inverse K_from, i.e.,
+//
+// [u'_from]               [u_from]
+// [v'_from] = (K_from)^-1 [v_from]
+// [   1   ]               [   1  ]
+//
+// and then mapped according to
+//
+//             [u'_from]        t0
+//          R0 [v'_from] + --------------
+//             [  1    ]  Z(u_from,v_from)
+// u'_to = -------------------------------
+//             [u'_from]        t2
+//          R2 [v'_from] + --------------
+//             [  1    ]  Z(u_from,v_from)
+//
+//where R0 and R2 are the first and third rows of the to_camera rotation matrix
+//and t0 and t2 are first and third components of the to_camera translation.
+// and similarly for v'_to, with R1 and t1 in the numerator. The transformed
+// coordinates are mapped back to the target image by 
+//
+// [u_to]          [u'_to]
+// [v_to] =   K_to [v'_to]
+// [ 1  ]          [  1  ]
+//
 // \author J.L. Mundy
 // \date Sept 04, 2010
 //
@@ -31,6 +55,7 @@ class icam_depth_transform
   icam_depth_transform(): scale_factors_(vnl_vector<double>()){}
 
   //: Construct with the same calibration matrix
+  // adjust_to_fl determines if the to_focal_length can be varied in a search
   icam_depth_transform(vnl_matrix_fixed<double, 3, 3> const& K,
                        vil_image_view<double> const& depth,
                        vgl_rotation_3d<double> const& rot,
@@ -71,6 +96,7 @@ class icam_depth_transform
   vnl_matrix_fixed<double, 3, 3> to_calibration_matrix()
   { return K_to(); }
 
+  //: the elements of the K_to
   double to_fl() {return to_fl_;}
   double to_pu() {return to_pu_;}
   double to_pv() {return to_pv_;}
@@ -104,28 +130,35 @@ class icam_depth_transform
   void set_k(vnl_matrix_fixed<double, 3, 3> const& K);
   void set_k(vnl_matrix_fixed<double, 3, 3> const& K_from,
              vnl_matrix_fixed<double, 3, 3> const& K_to);
+  //: convert to matrix
   vnl_matrix_fixed<double,3,3> K_to();
+
+  //:compute 1/Z(u,v) for efficiency
   void invert_depth(vil_image_view<double> const& depth);
+
   // members
   bool adjust_to_fl_;
   vnl_matrix_fixed<double,3,3> K_from_inv_;
   vil_image_view<double> depth_;
   vil_image_view<float> inv_depth_;
-  //elements of the 'to' calibration matrix
+  //:elements of the 'to' calibration matrix
   double to_fl_;
   double to_pu_;
   double to_pv_;
   //exterior transform parameters
   vgl_rotation_3d<double> rot_;
   vgl_vector_3d<double> trans_;
+  //equalize the dynamic range of camera parameters (typically all 1.0)
   vnl_vector<double> scale_factors_;
   // caches
   void cache_k();
   void cache_r();
+  //: elements of (K_from)^-1 ( the inverse calibration matrix)
   float k00_, k02_, k11_, k12_;
-  float r00_, r01_, r02_;
-  float r10_, r11_, r12_;
-  float r20_, r21_, r22_;
+  //: elements of the rotation matrix, cached for efficiency
+  float r00_, r01_, r02_; //R0
+  float r10_, r11_, r12_; //R1
+  float r20_, r21_, r22_; //R2
 };
 
 #endif // icam_depth_transform_h_
