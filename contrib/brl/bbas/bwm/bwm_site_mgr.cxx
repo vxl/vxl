@@ -24,7 +24,10 @@
 #include <vnl/vnl_quaternion.h>
 #include <vcl_cstdio.h>
 #include <vcl_sstream.h>
-#include <expatpplib.h> // for accessing methods in parent class of bwm_io_config_parser
+#ifdef WIN32
+ #define _LIB
+#endif
+#include <expatpp.h> // for accessing methods in parent class of bwm_io_config_parser
 
 #include <vul/vul_file.h>
 #include <vul/vul_string.h>
@@ -169,52 +172,52 @@ void bwm_site_mgr::create_site()
     return;
   }
   else
-    {
-      // collect the parameters
-      vcl_cout << "name:" << site_name << '\n'
-               << "dir:" << site_dir << vcl_endl;
+  {
+    // collect the parameters
+    vcl_cout << "name:" << site_name << '\n'
+             << "dir:" << site_dir << vcl_endl;
 
-      // make sure site name is filled
-      while (site_name.size() == 0) {
+    // make sure site name is filled
+    while (site_name.size() == 0) {
+      vgui_dialog error ("Error");
+      error.message ("Please enter a valid SITE NAME!            " );
+      error.ask();
+      if (! site_dialog.ask())
+        return;
+    }
+
+    // make sure site directory is filled and valid
+    while ((site_dir.size() == 0) || !vul_file::is_directory(site_dir)) {
+      vgui_dialog error ("Error");
+      error.message ("Please enter a valid SITE DIRECTORY!            " );
+      error.ask();
+      if (! site_dialog.ask())
+        return;
+    }
+
+    // check if the levels are numbers
+    bool not_int = true;
+    while (not_int) {
+      not_int = false;
+      for (unsigned i=0; i<levels.size(); i++) {
+        int l = vul_string_atoi(levels[i].c_str());
+        if (l == 0) {
+          not_int = true;
+          break;
+        }
+      }
+      if (not_int) {
         vgui_dialog error ("Error");
-        error.message ("Please enter a valid SITE NAME!            " );
+        error.message ("Please enter an integer level value!            " );
         error.ask();
         if (! site_dialog.ask())
           return;
       }
-
-      // make sure site directory is filled and valid
-      while ((site_dir.size() == 0) || !vul_file::is_directory(site_dir)) {
-        vgui_dialog error ("Error");
-        error.message ("Please enter a valid SITE DIRECTORY!            " );
-        error.ask();
-        if (! site_dialog.ask())
-          return;
-      }
-
-      // check if the levels are numbers
-      bool not_int = true;
-      while (not_int) {
+      else {
         not_int = false;
-        for (unsigned i=0; i<levels.size(); i++) {
-          int l = vul_string_atoi(levels[i].c_str());
-          if (l == 0) {
-            not_int = true;
-            break;
-          }
-        }
-        if (not_int) {
-          vgui_dialog error ("Error");
-          error.message ("Please enter an integer level value!            " );
-          error.ask();
-          if (! site_dialog.ask())
-            return;
-        }
-        else {
-          not_int = false;
-        }
       }
     }
+  }
 
   vcl_vector<bool> pyramid;
   vcl_vector<bool> active;
@@ -286,43 +289,43 @@ void bwm_site_mgr::edit_site()
   site->tableaus(tableaus);
   cam.resize(tableaus.size());
   if (tableaus.size() > 0)
-    {
-      site_edit_dialog.message("EXISTING IMAGES:");
-      site_edit_dialog.line_break();
+  {
+    site_edit_dialog.message("EXISTING IMAGES:");
+    site_edit_dialog.line_break();
 
-      for (unsigned i=0; i<tableaus.size(); i++)
-        {
-          bwm_io_tab_config* t = tableaus[i];
-          if (t->type_name.compare(IMAGE_TABLEAU_TAG) == 0)
-            {
-              bwm_io_tab_config_img* img_tab = static_cast<bwm_io_tab_config_img* > (t);
-              bool active = img_tab->status;
-              vcl_string name = img_tab->name;
-              vcl_string path = img_tab->img_path;
-              site_edit_dialog.message((" -- "+path).c_str());
-              tab_remove[i] = false;
-              site_edit_dialog.checkbox("Remove", tab_remove[i]);
-              act_old[i] = active;
-              site_edit_dialog.checkbox("Active", act_old[i]);
+    for (unsigned i=0; i<tableaus.size(); i++)
+    {
+      bwm_io_tab_config* t = tableaus[i];
+      if (t->type_name.compare(IMAGE_TABLEAU_TAG) == 0)
+      {
+        bwm_io_tab_config_img* img_tab = static_cast<bwm_io_tab_config_img* > (t);
+        bool active = img_tab->status;
+        vcl_string name = img_tab->name;
+        vcl_string path = img_tab->img_path;
+        site_edit_dialog.message((" -- "+path).c_str());
+        tab_remove[i] = false;
+        site_edit_dialog.checkbox("Remove", tab_remove[i]);
+        act_old[i] = active;
+        site_edit_dialog.checkbox("Active", act_old[i]);
 #if 0
-              vcl_string ext = "*.RPG";
-              site_edit_dialog.file("Add Camera:", ext, cam[i]);
+        vcl_string ext = "*.RPG";
+        site_edit_dialog.file("Add Camera:", ext, cam[i]);
 #endif // 0
-              site_edit_dialog.line_break();
-            }
-          else if (t->type_name.compare(CAMERA_TABLEAU_TAG) == 0)
-            {
-              bwm_io_tab_config_cam* cam_tab = static_cast<bwm_io_tab_config_cam* > (t);
-              bool active = cam_tab->status;
-              site_edit_dialog.message((" -- "+cam_tab->img_path).c_str());
-              tab_remove[i] = false;
-              site_edit_dialog.checkbox("Remove ", tab_remove[i]);
-              act_old[i] = active;
-              site_edit_dialog.checkbox("Active ", act_old[i]);
-              site_edit_dialog.line_break();
-            }
-        }
+        site_edit_dialog.line_break();
+      }
+      else if (t->type_name.compare(CAMERA_TABLEAU_TAG) == 0)
+      {
+        bwm_io_tab_config_cam* cam_tab = static_cast<bwm_io_tab_config_cam* > (t);
+        bool active = cam_tab->status;
+        site_edit_dialog.message((" -- "+cam_tab->img_path).c_str());
+        tab_remove[i] = false;
+        site_edit_dialog.checkbox("Remove ", tab_remove[i]);
+        act_old[i] = active;
+        site_edit_dialog.checkbox("Active ", act_old[i]);
+        site_edit_dialog.line_break();
+      }
     }
+  }
 
   // add a bunch of images
   site_edit_dialog.message("ADD NEW:");
@@ -386,68 +389,68 @@ void bwm_site_mgr::edit_site()
     return;
   }
   else
-    {
-      // check if the level values are integer
+  {
+    // check if the level values are integer
 
-      // create a removal list for the tableaux that are marked for removal
-      vcl_vector<unsigned> removal;
-      for (unsigned t=0; t<tableaus.size(); t++) {
-        tableaus[t]->status = act_old[t];
-        if (tab_remove[t])
-          removal.push_back(t);
-      }
-      site->remove_ = removal;
+    // create a removal list for the tableaux that are marked for removal
+    vcl_vector<unsigned> removal;
+    for (unsigned t=0; t<tableaus.size(); t++) {
+      tableaus[t]->status = act_old[t];
+      if (tab_remove[t])
+        removal.push_back(t);
+    }
+    site->remove_ = removal;
 
-      // delete objects that are marked for removal
-      vcl_vector<vcl_pair<vcl_string, vcl_string> > undeleted_objs;
-      bool deleted = false;
-      for (unsigned i=0; i<object_paths.size(); i++) {
-        if (!obj_remove[i]) {
-          undeleted_objs.push_back(object_paths[i]);
-        }
-        else
-          deleted = true;
+    // delete objects that are marked for removal
+    vcl_vector<vcl_pair<vcl_string, vcl_string> > undeleted_objs;
+    bool deleted = false;
+    for (unsigned i=0; i<object_paths.size(); i++) {
+      if (!obj_remove[i]) {
+        undeleted_objs.push_back(object_paths[i]);
       }
-      if (deleted) {
-        site->objects_.clear();
-        site->objects_ = undeleted_objs;
-      }
+      else
+        deleted = true;
+    }
+    if (deleted) {
+      site->objects_.clear();
+      site->objects_ = undeleted_objs;
+    }
 
-      // create an updated site
-      vcl_vector<bool> pyramid;
-      vcl_vector<bool> active;
-      for (unsigned j=0; j<files.size(); j++) {
-        pyramid.push_back(pyr[j]);
-        active.push_back(act[j]);
-      }
+    // create an updated site
+    vcl_vector<bool> pyramid;
+    vcl_vector<bool> active;
+    for (unsigned j=0; j<files.size(); j++) {
+      pyramid.push_back(pyr[j]);
+      active.push_back(act[j]);
+    }
 
-      vcl_vector<vcl_pair<vcl_string, vcl_string> > objects;
-      for (unsigned obj=0; obj<objs.size(); obj++) {
-        vcl_pair<vcl_string, vcl_string> pair(objs[obj], object_types_[choices[obj]]);
-        objects.push_back(pair);
-      }
+    vcl_vector<vcl_pair<vcl_string, vcl_string> > objects;
+    for (unsigned obj=0; obj<objs.size(); obj++) {
+      vcl_pair<vcl_string, vcl_string> pair(objs[obj], object_types_[choices[obj]]);
+      objects.push_back(pair);
+    }
 #if 0
-      vcl_vector<vcl_vector<vcl_pair<vcl_string, vsol_point_2d> > > corr = parser->correspondences();
-      for (unsigned i=0; i<corr.size(); i++) {
-        bwm_corr_sptr c = new bwm_corr();
-        if (parser->corresp_mode().compare("IMAGE_TO_IMAGE") == 0)
-          c->set_mode(true);
-        else {
-          c->set_mode(false);
-          c->set_world_point(parser->corresp_world_pts()[i]);
-        }
+    vcl_vector<vcl_vector<vcl_pair<vcl_string, vsol_point_2d> > > corr = parser->correspondences();
+    for (unsigned i=0; i<corr.size(); i++) {
+      bwm_corr_sptr c = new bwm_corr();
+      if (parser->corresp_mode().compare("IMAGE_TO_IMAGE") == 0)
+        c->set_mode(true);
+      else {
+        c->set_mode(false);
+        c->set_world_point(parser->corresp_world_pts()[i]);
       }
-      site->corresp_mode = parser->corresp_mode();
-      site->corr_type_ = parser->corresp_type();
-      // vcl_vector<vsol_point_3d> corresp_world_pts() {return corresp_world_pts_; }
+    }
+    site->corresp_mode = parser->corresp_mode();
+    site->corr_type_ = parser->corresp_type();
+    // vcl_vector<vsol_point_3d> corresp_world_pts() {return corresp_world_pts_; }
 #endif // 0
 
-      site->add(files, pyramid, active, levels, objects, new vsol_point_3d(lat, lon, elev));
+    site->add(files, pyramid, active, levels, objects, new vsol_point_3d(lat, lon, elev));
 #if (HAS_MFC)
-      site_create_process_->set_site(site);
-      site_create_process_->StartBackgroundTask();
+    site_create_process_->set_site(site);
+    site_create_process_->StartBackgroundTask();
 #endif
-    }
+  }
 }
 
 
@@ -456,147 +459,147 @@ void bwm_site_mgr::load_site()
   bwm_io_config_parser* parser = parse_config();
 
   if (parser)
+  {
+    init_site();
+    bwm_site_sptr site = parser->site();
+    vcl_vector<bwm_io_tab_config* > tableaus;
+    site->tableaus(tableaus);
+
+    site_name_ = site->name_;
+    site_dir_ = site->path_;
+    pyr_exe_ = site->pyr_exe_path_;
+
+    // get the lvcs
+    vsol_point_3d_sptr lvcs = site->lvcs_;
+    // if LVCS is not set, do not use it
+    if (!lvcs||*lvcs == vsol_point_3d(0, 0, 0))
+      lvcs = 0;
+    else {
+      double lat = lvcs->x();
+      double lon = lvcs->y();
+      double elev = lvcs->z();
+      bwm_world::instance()->set_lvcs(lat, lon, elev);
+    }
+
+    // create the active tableaux
+    for (unsigned i=0; i<tableaus.size(); i++)
     {
-      init_site();
-      bwm_site_sptr site = parser->site();
-      vcl_vector<bwm_io_tab_config* > tableaus;
-      site->tableaus(tableaus);
+      bwm_io_tab_config* t = tableaus[i];
+      if (t->status) {
+        // create an active tableau
+        bwm_tableau_img* tab = tableau_factory_.create_tableau(t);
+        bwm_tableau_mgr::instance()->add_tableau(tab, t->name);
+        active_tableaus_.push_back(t->clone());
+      }
+      else // inactive tableau
+        inactive_tableaus_.push_back(t->clone());
+    }
 
-      site_name_ = site->name_;
-      site_dir_ = site->path_;
-      pyr_exe_ = site->pyr_exe_path_;
+    // create the correspondences
+    vcl_vector<vcl_vector<vcl_pair<vcl_string, vsol_point_2d> > > corresp;
+    corresp = site->corresp_;
+    if (corresp.size() > 0) {
+      vcl_string mode = site->corr_mode_;
+      vcl_string type = site->corr_type_;
 
-      // get the lvcs
-      vsol_point_3d_sptr lvcs = site->lvcs_;
-      // if LVCS is not set, do not use it
-      if (!lvcs||*lvcs == vsol_point_3d(0, 0, 0))
-        lvcs = 0;
-      else {
-        double lat = lvcs->x();
-        double lon = lvcs->y();
-        double elev = lvcs->z();
-        bwm_world::instance()->set_lvcs(lat, lon, elev);
+      if (type.compare("MULTIPLE") == 0)
+        bwm_observer_mgr::instance()->set_n_corrs(bwm_observer_mgr::MULTIPLE_CORRS);
+      else if (type.compare("SINGLE") == 0)
+        bwm_observer_mgr::instance()->set_n_corrs(bwm_observer_mgr::SINGLE_PT_CORR);
+      else
+        vcl_cerr << "ERROR: Undefined Correspondence type=" << type << '\n';
+
+      if (mode == "WORLD_TO_IMAGE") {
+        if (corresp.size() > 0) {
+          if (site->corresp_world_pts_.size() > 0)
+            bwm_world::instance()->set_world_pt(site->corresp_world_pts_[0].get_p());
+          else
+            vcl_cerr << "There is something wrong, the more is W-to-I but there is no world point\n";
+        }
+        bwm_observer_mgr::instance()->set_corr_mode(bwm_observer_mgr::WORLD_TO_IMAGE);
+      }
+      else if (mode == "IMAGE_TO_IMAGE") {
+        bwm_observer_mgr::instance()->set_corr_mode(bwm_observer_mgr::IMAGE_TO_IMAGE);
       }
 
-      // create the active tableaux
-      for (unsigned i=0; i<tableaus.size(); i++)
-        {
-          bwm_io_tab_config* t = tableaus[i];
-          if (t->status) {
-            // create an active tableau
-            bwm_tableau_img* tab = tableau_factory_.create_tableau(t);
-            bwm_tableau_mgr::instance()->add_tableau(tab, t->name);
-            active_tableaus_.push_back(t->clone());
-          }
-          else // inactive tableau
-            inactive_tableaus_.push_back(t->clone());
-        }
-
-      // create the correspondences
-      vcl_vector<vcl_vector<vcl_pair<vcl_string, vsol_point_2d> > > corresp;
-      corresp = site->corresp_;
-      if (corresp.size() > 0) {
-        vcl_string mode = site->corr_mode_;
-        vcl_string type = site->corr_type_;
-
-        if (type.compare("MULTIPLE") == 0)
-          bwm_observer_mgr::instance()->set_n_corrs(bwm_observer_mgr::MULTIPLE_CORRS);
-        else if (type.compare("SINGLE") == 0)
-          bwm_observer_mgr::instance()->set_n_corrs(bwm_observer_mgr::SINGLE_PT_CORR);
-        else
-          vcl_cerr << "ERROR: Undefined Correspondence type=" << type << '\n';
+      for (unsigned i=0; i<corresp.size(); i++)
+      {
+        bwm_corr_sptr corr = new bwm_corr();
+        vcl_vector<vcl_pair<vcl_string, vsol_point_2d> > elm = corresp[i];
 
         if (mode == "WORLD_TO_IMAGE") {
-          if (corresp.size() > 0) {
-            if (site->corresp_world_pts_.size() > 0)
-              bwm_world::instance()->set_world_pt(site->corresp_world_pts_[0].get_p());
-            else
-              vcl_cerr << "There is something wrong, the more is W-to-I but there is no world point\n";
-          }
-          bwm_observer_mgr::instance()->set_corr_mode(bwm_observer_mgr::WORLD_TO_IMAGE);
+          corr->set_mode(false);
+          corr->set_world_pt(site->corresp_world_pts_[i].get_p());
+          //sets the same pt each time FIXME -JLM
+          //bwm_world::instance()->set_world_pt(corr->world_pt());
         }
         else if (mode == "IMAGE_TO_IMAGE") {
-          bwm_observer_mgr::instance()->set_corr_mode(bwm_observer_mgr::IMAGE_TO_IMAGE);
+          corr->set_mode(true);
         }
 
-        for (unsigned i=0; i<corresp.size(); i++)
-          {
-            bwm_corr_sptr corr = new bwm_corr();
-            vcl_vector<vcl_pair<vcl_string, vsol_point_2d> > elm = corresp[i];
-
-            if (mode == "WORLD_TO_IMAGE") {
-              corr->set_mode(false);
-              corr->set_world_pt(site->corresp_world_pts_[i].get_p());
-              //sets the same pt each time FIXME -JLM
-              //bwm_world::instance()->set_world_pt(corr->world_pt());
-            }
-            else if (mode == "IMAGE_TO_IMAGE") {
-              corr->set_mode(true);
-            }
-
-            vcl_string tab_name;
-            double X, Y;
-            for (unsigned j=0; j<elm.size(); j++) {
-              tab_name = elm[j].first;
-              X = elm[j].second.x();
-              Y = elm[j].second.y();
-              bwm_tableau_mgr::instance()->add_corresp(tab_name, corr, X, Y);
+        vcl_string tab_name;
+        double X, Y;
+        for (unsigned j=0; j<elm.size(); j++) {
+          tab_name = elm[j].first;
+          X = elm[j].second.x();
+          Y = elm[j].second.y();
+          bwm_tableau_mgr::instance()->add_corresp(tab_name, corr, X, Y);
 #if 0 // commented out
-              vgui_tableau_sptr tab = this->find_tableau(tab_name);
-              if (tab) {
-                if ((tab->type_name().compare("bwm_tableau_proj_cam") == 0) ||
-                    (tab->type_name().compare("bwm_tableau_rat_cam") == 0)) {
-                  bwm_tableau_cam* tab_cam = static_cast<bwm_tableau_cam*> (tab.as_pointer());
-                  bwm_observer_cam* obs = tab_cam->observer();
-                  if (obs) {
-                    corr->set_match(obs, X, Y);
-                    obs->add_cross(X, Y, 3);
-                  }
-                }
+          vgui_tableau_sptr tab = this->find_tableau(tab_name);
+          if (tab) {
+            if ((tab->type_name().compare("bwm_tableau_proj_cam") == 0) ||
+                (tab->type_name().compare("bwm_tableau_rat_cam") == 0)) {
+              bwm_tableau_cam* tab_cam = static_cast<bwm_tableau_cam*> (tab.as_pointer());
+              bwm_observer_cam* obs = tab_cam->observer();
+              if (obs) {
+                corr->set_match(obs, X, Y);
+                obs->add_cross(X, Y, 3);
               }
-#endif // 0
             }
-            bwm_observer_mgr::instance()->set_corr(corr);
           }
-      }
-      // create the objects
-      vcl_vector<vcl_pair<vcl_string, vcl_string> > objs;
-      site->objects(objs);
-      for (unsigned i=0; i<objs.size(); i++)
-        {
-          vcl_string path = objs[i].first;
-          vcl_string type = objs[i].second;
-          if (path.size() > 0)
-            {
-              if (!vul_file::exists(path))
-                vcl_cerr << "ERROR: The object file \"" << path << "\" could not be found!\n";
-              else {
-                if (type.compare(object_types_[VSOL]) == 0) {
-                  // will be implemented later!!!
-                }
-                else {
-                  // comes here if it is a mesh
-                  bwm_observable_mesh_sptr mesh = new bwm_observable_mesh();
-                  mesh->load_from(path);
-                  if (mesh) {
-                    bwm_observable_mesh_sptr obj = new bwm_observable_mesh();
-                    bwm_observer_mgr::instance()->attach(obj);
-                    if (type.compare(object_types_[MESH_FEATURE]) == 0)
-                      obj->set_mesh_type(bwm_observable_mesh::BWM_MESH_FEATURE);
-                    else if (type.compare(object_types_[MESH_IMAGE_PROCESSING]) == 0)
-                      obj->set_mesh_type(bwm_observable_mesh::BWM_MESH_IMAGE_PROCESSING);
-                    else if (type.compare(object_types_[MESH_TERRAIN]) == 0)
-                      obj->set_mesh_type(bwm_observable_mesh::BWM_MESH_TERRAIN );
-                    obj->set_object(mesh->get_object()->clone());
-                    bwm_world::instance()->add(obj);
-                  }
-                }
-              }
-            }
+#endif // 0
         }
-      delete parser;
-      bwm_tableau_mgr::instance()->redraw();
+        bwm_observer_mgr::instance()->set_corr(corr);
+      }
     }
+    // create the objects
+    vcl_vector<vcl_pair<vcl_string, vcl_string> > objs;
+    site->objects(objs);
+    for (unsigned i=0; i<objs.size(); i++)
+    {
+      vcl_string path = objs[i].first;
+      vcl_string type = objs[i].second;
+      if (path.size() > 0)
+      {
+        if (!vul_file::exists(path))
+          vcl_cerr << "ERROR: The object file \"" << path << "\" could not be found!\n";
+        else {
+          if (type.compare(object_types_[VSOL]) == 0) {
+            // will be implemented later!!!
+          }
+          else {
+            // comes here if it is a mesh
+            bwm_observable_mesh_sptr mesh = new bwm_observable_mesh();
+            mesh->load_from(path);
+            if (mesh) {
+              bwm_observable_mesh_sptr obj = new bwm_observable_mesh();
+              bwm_observer_mgr::instance()->attach(obj);
+              if (type.compare(object_types_[MESH_FEATURE]) == 0)
+                obj->set_mesh_type(bwm_observable_mesh::BWM_MESH_FEATURE);
+              else if (type.compare(object_types_[MESH_IMAGE_PROCESSING]) == 0)
+                obj->set_mesh_type(bwm_observable_mesh::BWM_MESH_IMAGE_PROCESSING);
+              else if (type.compare(object_types_[MESH_TERRAIN]) == 0)
+                obj->set_mesh_type(bwm_observable_mesh::BWM_MESH_TERRAIN );
+              obj->set_object(mesh->get_object()->clone());
+              bwm_world::instance()->add(obj);
+            }
+          }
+        }
+      }
+    }
+    delete parser;
+    bwm_tableau_mgr::instance()->redraw();
+  }
 }
 
 //: saves the site to an XML file
@@ -607,42 +610,42 @@ void bwm_site_mgr::save_site()
   if ((this->site_name_.size() > 0) &&
       (this->site_dir_.size() > 0) &&
       (vul_file::exists(this->site_dir_)))
-    {
-      vgui_dialog_extensions d("Saving the Site");
-      d.message(("Saving the site " + site_name_).c_str());
-      d.message(("under: " + site_dir_).c_str());
-      d.line_break();
-      if (!d.ask()) {
-        return;
-      }
-      site->name_ = this->site_name_;
-      site->path_ = this->site_dir_;
-      site->pyr_exe_path_ = this->pyr_exe_;
+  {
+    vgui_dialog_extensions d("Saving the Site");
+    d.message(("Saving the site " + site_name_).c_str());
+    d.message(("under: " + site_dir_).c_str());
+    d.line_break();
+    if (!d.ask()) {
+      return;
     }
+    site->name_ = this->site_name_;
+    site->path_ = this->site_dir_;
+    site->pyr_exe_path_ = this->pyr_exe_;
+  }
   else
-    {
-      // ask the path for saving the site
-      vcl_string site_name, site_dir, pyr_exe, ext;
-      vgui_dialog_extensions d("Save the Site!");
-      d.field("Site name:", site_name);
-      d.line_break();
-      d.dir("Site dir:", ext, site_dir);
-      d.line_break();
-      //d.file("Pyramid exe path:" , ext, pyr_exe);
-      //d.line_break();
-      d.line_break();
-      if (!d.ask())
-        return;
+  {
+    // ask the path for saving the site
+    vcl_string site_name, site_dir, pyr_exe, ext;
+    vgui_dialog_extensions d("Save the Site!");
+    d.field("Site name:", site_name);
+    d.line_break();
+    d.dir("Site dir:", ext, site_dir);
+    d.line_break();
+    //d.file("Pyramid exe path:" , ext, pyr_exe);
+    //d.line_break();
+    d.line_break();
+    if (!d.ask())
+      return;
 
-      if (!vul_file::is_directory(site_dir)) {
-        vcl_cerr << "Please enter a directory for the site\n";
-        return;
-      }
-
-      site->name_ = this->site_name_ = site_name;
-      site->path_ = this->site_dir_ = site_dir;
-      site->pyr_exe_path_ = this->pyr_exe_;
+    if (!vul_file::is_directory(site_dir)) {
+      vcl_cerr << "Please enter a directory for the site\n";
+      return;
     }
+
+    site->name_ = this->site_name_ = site_name;
+    site->path_ = this->site_dir_ = site_dir;
+    site->pyr_exe_path_ = this->pyr_exe_;
+  }
 
   long time = timer_.real();
   vcl_stringstream strm;
@@ -680,7 +683,7 @@ void bwm_site_mgr::save_site()
     site->corr_type_ = "SINGLE";
 
   vcl_vector<bwm_corr_sptr> c_list = bwm_observer_mgr::instance()->correspondences();
-  for (unsigned i=0; i<c_list.size(); i++){
+  for (unsigned i=0; i<c_list.size(); i++) {
     site->corresp_.push_back(c_list[i]->match_list());
     site->corresp_world_pts_.push_back(c_list[i]->world_pt());
   }
@@ -708,17 +711,17 @@ void bwm_site_mgr::load_video_site()
 {
   vcl_string site_path = bwm_utils::select_file();
   if (!site_path.size())
-    {
-      vcl_cerr << "In bwm_site_mgr::load_video_site() - no site path specified\n";
-      return;
-    }
+  {
+    vcl_cerr << "In bwm_site_mgr::load_video_site() - no site path specified\n";
+    return;
+  }
 
   bwm_video_site_io cio;
   if (!cio.open(site_path))
-    {
-      vcl_cerr << "In bwm_site_mgr::load_video_site() - load failed in XML parse\n";
-      return;
-    }
+  {
+    vcl_cerr << "In bwm_site_mgr::load_video_site() - load failed in XML parse\n";
+    return;
+  }
   site_name_ = cio.name();
   vcl_string frame_glob = cio.video_path();
   vcl_string camera_glob = cio.camera_path();
@@ -737,10 +740,10 @@ void bwm_site_mgr::load_video_site()
   vcl_vector<vcl_string> obj_types = cio.object_types();
   vcl_vector<vcl_string> obj_paths = cio.object_paths();
   unsigned nobj = obj_types.size();
-  if(!nobj) return;
+  if (!nobj) return;
   bwm_tableau_mgr::instance()->set_draw_mode_face();
-  for(unsigned i = 0; i<nobj; ++i){
-    if(obj_types[i]!="mesh_feature") continue;
+  for (unsigned i = 0; i<nobj; ++i) {
+    if (obj_types[i]!="mesh_feature") continue;
     bwm_observable_mesh_sptr mesh = new bwm_observable_mesh();
     mesh->load_from(obj_paths[i]);
     if (mesh) {
@@ -758,7 +761,7 @@ void bwm_site_mgr::save_video_site()
 {
   //for now - only support one video observer
 
-  //also for now if the site was intialized with just a directory containing
+  //also for now if the site was initialized with just a directory containing
   //mesh objects the saved site file will have a null directory path
   //but with the individual object paths included inside the objects scope.
   //the effect is the same it is just that the file is somewhat more verbose
@@ -772,57 +775,57 @@ void bwm_site_mgr::save_video_site()
   for (vcl_vector<bwm_observer_cam*>::iterator oit = obsvs.begin();
        oit != obsvs.end()&&!found; ++oit)
     if ((*oit)->type_name()=="bwm_observer_video")
-      {
-        obv = static_cast<bwm_observer_video*>(*oit);
-        found =true;
-      }
+    {
+      obv = static_cast<bwm_observer_video*>(*oit);
+      found =true;
+    }
 
   if (!found)
-    {
-      vcl_cerr << "In bwm_site_mgr::save_video_site() - no observer of type video\n";
-      return;
-    }
-    
+  {
+    vcl_cerr << "In bwm_site_mgr::save_video_site() - no observer of type video\n";
+    return;
+  }
+
   bwm_video_site_io vio;
 
   if ((this->site_name_.size() > 0) &&
       (this->site_dir_.size() > 0) &&
       (vul_file::exists(this->site_dir_)))
-    {
-      vgui_dialog_extensions d("Saving the Video Site");
-      d.message(("Saving the site " + site_name_).c_str());
-      d.message(("under: " + site_dir_).c_str());
-      d.line_break();
-      if (!d.ask()) {
-        return;
-      }
-      vio.set_name(this->site_name_);
-      vio.set_site_directory(this->site_dir_);
-      vio.set_video_path(this->video_path_);
-      vio.set_camera_path(this->camera_path_);
+  {
+    vgui_dialog_extensions d("Saving the Video Site");
+    d.message(("Saving the site " + site_name_).c_str());
+    d.message(("under: " + site_dir_).c_str());
+    d.line_break();
+    if (!d.ask()) {
+      return;
     }
+    vio.set_name(this->site_name_);
+    vio.set_site_directory(this->site_dir_);
+    vio.set_video_path(this->video_path_);
+    vio.set_camera_path(this->camera_path_);
+  }
   else
-    {
-      // ask the path for saving the site
-      vcl_string ext = "png";
-      vgui_dialog_extensions d("Save the Video Site!");
-      d.field("Video Site Name:", this->site_name_);
-      d.line_break();
-      d.dir("Video Site Dir:", ext, this->site_dir_);
-      d.line_break();
-      d.line_break();
-      if (!d.ask())
-        return;
-      if (!vul_file::is_directory(this->site_dir_)) {
-        vcl_cerr << "Please enter a directory for the video site\n";
-        return;
-      }
-  
-      vio.set_name(this->site_name_);
-      vio.set_site_directory(this->site_dir_);
-      vio.set_video_path(obv->image_path());
-      vio.set_camera_path(obv->camera_path());
+  {
+    // ask the path for saving the site
+    vcl_string ext = "png";
+    vgui_dialog_extensions d("Save the Video Site!");
+    d.field("Video Site Name:", this->site_name_);
+    d.line_break();
+    d.dir("Video Site Dir:", ext, this->site_dir_);
+    d.line_break();
+    d.line_break();
+    if (!d.ask())
+      return;
+    if (!vul_file::is_directory(this->site_dir_)) {
+      vcl_cerr << "Please enter a directory for the video site\n";
+      return;
     }
+
+    vio.set_name(this->site_name_);
+    vio.set_site_directory(this->site_dir_);
+    vio.set_video_path(obv->image_path());
+    vio.set_camera_path(obv->camera_path());
+  }
 
   vcl_vector<bwm_observable_sptr> objs = bwm_world::instance()->objects();
   vcl_vector<vcl_string> obj_types;
@@ -830,9 +833,9 @@ void bwm_site_mgr::save_video_site()
   vcl_string obj_dir = site_dir_ + "\\" + site_name_ + "_objects\\";
   vul_file::make_directory(obj_dir);
   unsigned iobj = 0;
-  for(vcl_vector<bwm_observable_sptr>::iterator oit = objs.begin();
-      oit != objs.end(); ++oit, ++iobj)
-    if((*oit)->type_name()=="bwm_observable_mesh"){
+  for (vcl_vector<bwm_observable_sptr>::iterator oit = objs.begin();
+       oit != objs.end(); ++oit, ++iobj)
+    if ((*oit)->type_name()=="bwm_observable_mesh") {
       vcl_stringstream strm;
       strm << vcl_fixed << iobj;
       vcl_string str(strm.str());
@@ -840,7 +843,8 @@ void bwm_site_mgr::save_video_site()
       obj_types.push_back("mesh_feature");
       obj_paths.push_back(path);
       (*oit)->save(path.c_str());
-    }else
+    }
+    else
       vcl_cout << "Can't save object of type " << (*oit)->type_name() << '\n';
   vio.set_object_types(obj_types);
   vio.set_object_paths(obj_paths);
@@ -936,22 +940,22 @@ void bwm_site_mgr::load_cam_tableau()
 
   vcl_string cam_str;
   switch (camera_type)
-    {
-    case 0:
-      cam_str = "generic";
-      break;
-    case 1:
-      cam_str = "rational";
-      break;
-    case 2:
-      cam_str = "projective";
-      break;
-    case 3:
-      cam_str = "perspective";
-      break;
-    default:
-      cam_str = "unknown";
-    }
+  {
+   case 0:
+    cam_str = "generic";
+    break;
+   case 1:
+    cam_str = "rational";
+    break;
+   case 2:
+    cam_str = "projective";
+    break;
+   case 3:
+    cam_str = "perspective";
+    break;
+   default:
+    cam_str = "unknown";
+  }
 
   bwm_io_tab_config_cam* cam = new bwm_io_tab_config_cam(name, true, img_file, cam_file, cam_str);
   active_tableaus_.push_back(cam);
@@ -968,7 +972,7 @@ bwm_io_config_parser* bwm_site_mgr::parse_config()
 
   bwm_io_config_parser* parser = new bwm_io_config_parser();
   vcl_FILE* xmlFile = vcl_fopen(fname.c_str(), "r");
-  if (!xmlFile){
+  if (!xmlFile) {
     vcl_cerr << fname.c_str() << " error on opening\n";
     delete parser;
     return 0;
@@ -1125,26 +1129,26 @@ static void save_video_world_points_vrml_impl(vcl_ofstream& os)
   for (vcl_vector<bwm_observer_cam*>::iterator oit = obsvs.begin();
        oit != obsvs.end()&&!found; ++oit)
     if ((*oit)->type_name()=="bwm_observer_video")
-      {
-        obv = static_cast<bwm_observer_video*>(*oit);
-        found =true;
-      }
+    {
+      obv = static_cast<bwm_observer_video*>(*oit);
+      found =true;
+    }
 
   if (!found)
-    {
-      vcl_cerr << "In bwm_site_mgr::save_video_world_points_vrml() - no observer of type video\n";
-      return;
-    }
+  {
+    vcl_cerr << "In bwm_site_mgr::save_video_world_points_vrml() - no observer of type video\n";
+    return;
+  }
   vcl_vector<vgl_point_3d<double> > pts;
   vcl_vector<bwm_video_corr_sptr> corrs = obv->corrs();
   for (vcl_vector<bwm_video_corr_sptr>::iterator cit = corrs.begin();
        cit!= corrs.end(); ++cit)
-    {
-      bwm_video_corr_sptr corr = *cit;
-      if (!corr || !corr->world_pt_valid()) continue;
-      vgl_point_3d<double> pt = corr->world_pt();
-      pts.push_back(pt);
-    }
+  {
+    bwm_video_corr_sptr corr = *cit;
+    if (!corr || !corr->world_pt_valid()) continue;
+    vgl_point_3d<double> pt = corr->world_pt();
+    pts.push_back(pt);
+  }
   if (!pts.size())
     return;
   write_vrml_header(os);
@@ -1161,31 +1165,31 @@ static void save_video_world_points_vrml_impl(vcl_ofstream& os, vgl_box_3d<doubl
   for (vcl_vector<bwm_observer_cam*>::iterator oit = obsvs.begin();
        oit != obsvs.end()&&!found; ++oit)
     if ((*oit)->type_name()=="bwm_observer_video")
-      {
-        obv = static_cast<bwm_observer_video*>(*oit);
-        found =true;
-      }
+    {
+      obv = static_cast<bwm_observer_video*>(*oit);
+      found =true;
+    }
 
   if (!found)
-    {
-      vcl_cerr << "In bwm_site_mgr::save_video_world_points_vrml() - no observer of type video\n";
-      return;
-    }
+  {
+    vcl_cerr << "In bwm_site_mgr::save_video_world_points_vrml() - no observer of type video\n";
+    return;
+  }
   vcl_vector<vgl_point_3d<double> > pts;
   vcl_vector<bwm_video_corr_sptr> corrs = obv->corrs();
   int cnt=0;
   for (vcl_vector<bwm_video_corr_sptr>::iterator cit = corrs.begin();
        cit!= corrs.end(); ++cit)
+  {
+    if ((++cnt)%10==0)
     {
-      if ((++cnt)%10==0)
-        {
-          bwm_video_corr_sptr corr = *cit;
-          if (!corr || !corr->world_pt_valid()) continue;
-          vgl_point_3d<double> pt = corr->world_pt();
-          if (box.contains(pt))
-            pts.push_back(pt);
-        }
+      bwm_video_corr_sptr corr = *cit;
+      if (!corr || !corr->world_pt_valid()) continue;
+      vgl_point_3d<double> pt = corr->world_pt();
+      if (box.contains(pt))
+        pts.push_back(pt);
     }
+  }
   if (!pts.size())
     return;
   write_vrml_header(os);
@@ -1214,16 +1218,16 @@ static void save_video_cameras_vrml_impl(vcl_ofstream& os)
   for (vcl_vector<bwm_observer_cam*>::iterator oit = obsvs.begin();
        oit != obsvs.end()&&!found; ++oit)
     if ((*oit)->type_name()=="bwm_observer_video")
-      {
-        obv = static_cast<bwm_observer_video*>(*oit);
-        found =true;
-      }
+    {
+      obv = static_cast<bwm_observer_video*>(*oit);
+      found =true;
+    }
 
   if (!found)
-    {
-      vcl_cerr << "In bwm_site_mgr::save_video_cameras_vrml() - no observer of type video\n";
-      return;
-    }
+  {
+    vcl_cerr << "In bwm_site_mgr::save_video_cameras_vrml() - no observer of type video\n";
+    return;
+  }
   bwm_video_cam_istream_sptr cam_istr = obv->camera_stream();
   if (!cam_istr||!cam_istr->is_valid()||!cam_istr->is_seekable()) {
     vcl_cerr << "Invalid or non-seekable camera stream\n";
@@ -1256,16 +1260,16 @@ static void save_video_cameras_vrml_impl(vcl_ofstream& os, vgl_box_3d<double> bo
   for (vcl_vector<bwm_observer_cam*>::iterator oit = obsvs.begin();
        oit != obsvs.end()&&!found; ++oit)
     if ((*oit)->type_name()=="bwm_observer_video")
-      {
-        obv = static_cast<bwm_observer_video*>(*oit);
-        found =true;
-      }
+    {
+      obv = static_cast<bwm_observer_video*>(*oit);
+      found =true;
+    }
 
   if (!found)
-    {
-      vcl_cerr << "In bwm_site_mgr::save_video_cameras_vrml() - no observer of type video\n";
-      return;
-    }
+  {
+    vcl_cerr << "In bwm_site_mgr::save_video_cameras_vrml() - no observer of type video\n";
+    return;
+  }
   bwm_video_cam_istream_sptr cam_istr = obv->camera_stream();
   if (!cam_istr||!cam_istr->is_valid()||!cam_istr->is_seekable()) {
     vcl_cerr << "Invalid or non-seekable camera stream\n";
@@ -1327,18 +1331,18 @@ void bwm_site_mgr::save_video_cams_and_world_pts_vrml()
   vcl_ofstream os(path.c_str());
   write_vrml_header(os);
   if (defaultparam_)
-    {
-      save_video_world_points_vrml_impl(os);
-      save_video_cameras_vrml_impl(os);
-    }
+  {
+    save_video_world_points_vrml_impl(os);
+    save_video_cameras_vrml_impl(os);
+  }
   else
-    {
-      save_video_world_points_vrml_impl(os,box,res_);
-      save_video_cameras_vrml_impl(os,box,res_*5);
+  {
+    save_video_world_points_vrml_impl(os,box,res_);
+    save_video_cameras_vrml_impl(os,box,res_*5);
 #ifdef DEBUG
-      write_vrml_box(os, box);
+    write_vrml_box(os, box);
 #endif
-    }
+  }
 }
 
 //: compute 3-d parameters, site bounding box and GSD
@@ -1361,16 +1365,16 @@ void bwm_site_mgr::compute_3d_world_params()
   for (vcl_vector<bwm_observer_cam*>::iterator oit = obsvs.begin();
        oit != obsvs.end()&&!found; ++oit)
     if ((*oit)->type_name()=="bwm_observer_video")
-      {
-        obv = static_cast<bwm_observer_video*>(*oit);
-        found =true;
-      }
+    {
+      obv = static_cast<bwm_observer_video*>(*oit);
+      found =true;
+    }
 
   if (!found)
-    {
-      vcl_cerr << "In bwm_site_mgr::compute_world_params() - no observer of type video\n";
-      return;
-    }
+  {
+    vcl_cerr << "In bwm_site_mgr::compute_world_params() - no observer of type video\n";
+    return;
+  }
   vcl_vector<bwm_video_corr_sptr> corrs = obv->corrs();
   if (!corrs.size()) {
     vcl_cerr << "In bwm_site_mgr::compute_world_params() - no correspondences\n";
@@ -1384,12 +1388,12 @@ void bwm_site_mgr::compute_3d_world_params()
   //Add world points to bounding box
   vcl_vector<bwm_video_corr_sptr>::iterator cit = corrs.begin();
   for (; cit != corrs.end(); ++cit)
-    {
-      bwm_video_corr_sptr c = *cit;
-      if (!c) continue;
-      if (c->world_pt_valid())
-        bb.add(c->world_pt());
-    }
+  {
+    bwm_video_corr_sptr c = *cit;
+    if (!c) continue;
+    if (c->world_pt_valid())
+      bb.add(c->world_pt());
+  }
   //to restore cam stream state
   unsigned cam_number = cam_istr->camera_number();
   cam_istr->seek_camera(0);

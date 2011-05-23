@@ -12,8 +12,12 @@
 #include <vcl_utility.h>
 #include <vcl_fstream.h>
 #include <vcl_cassert.h>
-#include <expatpplib.h>
 #include <vul/vul_file.h>
+#ifdef WIN32
+ #define _LIB
+#endif
+#include <expatpp.h>
+
 // anonymous namespace
 namespace {
 

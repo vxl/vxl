@@ -4,7 +4,10 @@
 #include "bwm_io_structs.h"
 #include <bwm/io/bwm_site_sptr.h>
 
-#include <expatpplib.h>
+#ifdef WIN32
+ #define _LIB
+#endif
+#include <expatpp.h>
 #include <vcl_string.h>
 #include <vcl_vector.h>
 #include <vcl_utility.h>

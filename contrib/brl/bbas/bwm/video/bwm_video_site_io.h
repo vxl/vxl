@@ -3,7 +3,10 @@
 
 #include "bwm_video_site_io_defs.h"
 
-#include <expatpplib.h>
+#ifdef WIN32
+ #define _LIB
+#endif
+#include <expatpp.h>
 #include <vcl_string.h>
 #include <vcl_vector.h>
 #include "bwm_video_corr_sptr.h"

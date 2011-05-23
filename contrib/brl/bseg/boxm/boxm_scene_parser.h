@@ -3,7 +3,10 @@
 
 #include <boxm/boxm_scene.h>
 
-#include <expatpplib.h>
+#ifdef WIN32
+ #define _LIB
+#endif
+#include <expatpp.h>
 #include <vcl_string.h>
 
 #include <vpgl/bgeo/bgeo_lvcs.h>
