@@ -2,6 +2,10 @@
 // \file
 // \brief Local memory implementation of an array list (NEED TO DEFINE LIST TYPE)
 
+//TODO 
+//-make list wrap around when full
+//-make list fail elegantly when overflowing
+
 //List defaults to unsigned char
 #ifndef LIST_TYPE
  #define LIST_TYPE uchar

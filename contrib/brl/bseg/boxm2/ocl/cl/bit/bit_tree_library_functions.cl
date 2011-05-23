@@ -124,6 +124,14 @@ void set_tree_bit_at(__local uchar* tree, int index, bool val)
   tree[byte_index] = (val)? (byte | mask) : (byte & (mask ^ 0xFF));
 }
 
+//returns true if bitindex is a valid leaf cell
+bool is_leaf(__local uchar* tree, int bitIndex)
+{
+  if(bitIndex == 0)
+    return (tree[0] == 0); 
+  int pi = (bitIndex-1)>>3;
+  return (tree_bit_at(tree, pi)==1) && (tree_bit_at(tree, bitIndex)==0); 
+}
 
 //-----------------------------------------------------------------------------
 //TODO: turn all data_index functions into two steps:
@@ -268,6 +276,44 @@ ushort traverse_three(__local uchar* tree,
   (*cell_minx) = floor(pointx) * (*cell_len);
   (*cell_miny) = floor(pointy) * (*cell_len);
   (*cell_minz) = floor(pointz) * (*cell_len);
+  return bit_index;
+}
+
+//Traverses to some deepest levl
+ushort traverse_to(__local uchar* tree, float4 point, int deepest)
+{
+  // vars to replace "tree_bit_at"
+  //force 1 register: curr = (bit, child_offset, depth, c_offset)
+  int curr_bit = convert_int(tree[0]);
+  int child_offset = 0;
+  int depth = 0;  
+  
+  //bit index to be returned
+  ushort bit_index = 0;
+  
+  //clamp point
+  float pointx = clamp(point.x, 0.0001f, 0.9999f);
+  float pointy = clamp(point.y, 0.0001f, 0.9999f);
+  float pointz = clamp(point.z, 0.0001f, 0.9999f);
+  
+  // while the curr node has children
+  while(curr_bit && depth < deepest) {
+    //determine child offset and bit index for given point
+    pointx += pointx;                                             //point = point*2
+    pointy += pointy;
+    pointz += pointz;                                           
+    int4 code =  (int4) (convert_int_rtn(pointx) & 1, 
+                         convert_int_rtn(pointy) & 1,
+                         convert_int_rtn(pointz) & 1, 0);         //code.xyz = lsb of floor(point.xyz)
+    int c_index = code.x + (code.y<<1) + (code.z<<2);             //c_index = binary(zyx)    
+    bit_index = (8*bit_index + 1) + c_index;                      //i = 8i + 1 + c_index
+    
+    //update value of curr_bit and level
+    curr_bit = (1<<c_index) & tree[(depth+1 + child_offset)];      //int curr_byte = (curr.z + 1) + curr.y; 
+    child_offset = c_index;
+    depth++;
+    
+  }
   return bit_index;
 }
 
