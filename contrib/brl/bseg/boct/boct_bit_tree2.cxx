@@ -90,7 +90,6 @@ bool boct_bit_tree2::is_leaf(int bit_index)
 vcl_vector<int> boct_bit_tree2::get_leaf_bits(int rootBit)
 {
   //use num cells to accelerate (cut off for loop)
-  //int total_cells = this->num_cells(); 
   vcl_vector<int> leafBits; 
 
   //special root case
@@ -98,19 +97,24 @@ vcl_vector<int> boct_bit_tree2::get_leaf_bits(int rootBit)
     leafBits.push_back(0); 
     return leafBits; 
   }
-  
-  //(iterate through the max number of inner cells)
-  int max_num = this->max_num_cells(); 
-  for (int i=rootBit; i<max_num; i++)
-  {
-    //if current bit is 0 and parent bit is 1, you're at a leaf
-    int pi = (i-1)>>3;           //Bit_index of parent bit
-    bool validParent = this->bit_at(pi) || (i==0); // special case for root
-    if (validParent && this->bit_at(i)==0) {
-      leafBits.push_back(i); 
+    
+  //otherwise calc list of bit indices in the subtree of rootBIT, and then verify leaves
+  vcl_vector<int> subTree; 
+  vcl_list<unsigned> toVisit;
+  toVisit.push_back(rootBit); 
+  while(!toVisit.empty()) {
+    int currBitIndex = toVisit.front();
+    toVisit.pop_front(); 
+    if ( this->is_leaf(currBitIndex) ) {
+      subTree.push_back(currBitIndex); 
+    }
+    else { //add children to the visit list
+      unsigned firstChild = 8 * currBitIndex + 1;
+      for (int ci = 0; ci < 8; ++ci)
+        toVisit.push_back( firstChild + ci );
     }
   }
-  return leafBits; 
+  return subTree; 
 }
 
 //: Return cell with a particular locational code
