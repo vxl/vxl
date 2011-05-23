@@ -165,6 +165,7 @@ __kernel void filter_block( __constant RenderSceneInfo * linfo,
         //if you've collected a nonzero amount of probs, update it
         int currIdx = data_index_relative(local_tree, i, lookup) + data_index_root(local_tree); 
         float curr_prob= 1-exp(-alphas[currIdx]*side_len * linfo->block_len );
+        probs[numProbs]=curr_prob;
         if(numProbs > 0) {
           sort_vector(probs, numProbs);   
           float median = probs[ (int) (numProbs/2) ]; 
