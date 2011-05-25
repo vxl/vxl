@@ -74,7 +74,7 @@ boxm2_filter_block_function::boxm2_filter_block_function(boxm2_block_metadata da
 #endif
               //grab alpha, calculate probability
               float alpha = alpha_data[idx];
-              float prob = 1.0f - vcl_exp(-alpha * side_len * data.sub_block_dim_.x());
+              float prob = 1.0f - (float)vcl_exp(-alpha * side_len * data.sub_block_dim_.x());
               probs.push_back(prob);
             }
             else //neighbor is smaller, must combine neighborhood
@@ -97,7 +97,7 @@ boxm2_filter_block_function::boxm2_filter_block_function(boxm2_block_metadata da
                 totalProb += (1.0f - vcl_exp(-alpha_data[dataIndex] * nlen * data.sub_block_dim_.x()) );
                 totalLen += nlen*data.sub_block_dim_.x();
 #else
-                totalAlphaL += alpha_data[dataIndex] * nlen * data.sub_block_dim_.x();
+                totalAlphaL += (float)(alpha_data[dataIndex] * nlen * data.sub_block_dim_.x());
 #endif
               }
 #ifdef USE_AVGPROB
@@ -125,7 +125,7 @@ boxm2_filter_block_function::boxm2_filter_block_function(boxm2_block_metadata da
   } // end x for
 
   //3. Replace data in the cache
-  boxm2_cache* cache = boxm2_cache::instance();
+  boxm2_cache_sptr cache = boxm2_cache::instance();
   cache->replace_data_base(id, boxm2_data_traits<BOXM2_ALPHA>::prefix(), newA);
 }
 
