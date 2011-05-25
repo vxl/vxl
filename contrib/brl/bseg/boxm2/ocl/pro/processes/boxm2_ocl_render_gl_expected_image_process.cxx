@@ -31,7 +31,7 @@
 
 namespace boxm2_ocl_render_gl_expected_image_process_globals
 {
-  const unsigned n_inputs_ = 8 ;
+  const unsigned n_inputs_ = 9 ;
   const unsigned n_outputs_ = 1;
   vcl_size_t lthreads[2]={8,8};
 
@@ -99,12 +99,17 @@ bool boxm2_ocl_render_gl_expected_image_process_cons(bprb_func_process& pro)
   input_types_[5] = "unsigned";
   input_types_[6] = "bocl_mem_sptr"; // exp image buffer;
   input_types_[7] = "bocl_mem_sptr"; // exp image dimensions buffer;
-
+  input_types_[8] = "vcl_string"; // identifier string to retrieve corresponding app data buffer;
 
   vcl_vector<vcl_string> output_types_(n_outputs_);
   output_types_[0] = "float";
 
-  return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
+  bool good = pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
+  
+  brdb_value_sptr idx = new brdb_value_t<vcl_string>("");
+  pro.set_input(8, idx); // set default value
+
+  return good;
 }
 
 bool boxm2_ocl_render_gl_expected_image_process(bprb_func_process& pro)
@@ -126,6 +131,7 @@ bool boxm2_ocl_render_gl_expected_image_process(bprb_func_process& pro)
   unsigned nj=pro.get_input<unsigned>(i++);
   bocl_mem_sptr exp_image =pro.get_input<bocl_mem_sptr>(i++);
   bocl_mem_sptr exp_img_dim =pro.get_input<bocl_mem_sptr>(i++);
+  vcl_string app_identifier = pro.get_input<vcl_string>(i++);
 
   bool foundDataType = false;
   vcl_string data_type,options;
@@ -147,6 +153,9 @@ bool boxm2_ocl_render_gl_expected_image_process(bprb_func_process& pro)
   if(!foundDataType) {
     vcl_cout<<"BOXM2_OCL_RENDER_PROCESS ERROR: scene doesn't have BOXM2_MOG3_GREY or BOXM2_MOG3_GREY_16 data type"<<vcl_endl;
     return false;
+  }
+  if (app_identifier.size() > 0) {
+   data_type += "_" + app_identifier;
   }
 
 //: create a command queue.
