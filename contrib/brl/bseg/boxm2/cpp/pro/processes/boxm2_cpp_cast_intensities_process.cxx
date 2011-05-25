@@ -90,7 +90,7 @@ bool boxm2_cpp_cast_intensities_process(bprb_func_process& pro)
           vcl_cout<<"Block id "<<(*id)<<' ';
           boxm2_block *     blk   = cache->get_block(*id);
           // identifier of the image causes a whole new data base to be generated for this image under the scene
-          boxm2_data_base *  alph = cache->get_data_base(*id,boxm2_data_traits<BOXM2_AUX0>::prefix(identifier));
+          boxm2_data_base *  alph = cache->get_data_base(*id,boxm2_data_traits<BOXM2_AUX0>::prefix(identifier), 0, false);
           boxm2_scene_info_wrapper *scene_info_wrapper=new boxm2_scene_info_wrapper();
           scene_info_wrapper->info=scene->get_blk_metadata(*id);
           pass.init_data(alph,input_image);
