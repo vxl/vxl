@@ -29,4 +29,34 @@ class boxm2_cast_intensities_functor
    vil_image_view<float> * input_img_;
 };
 
+class boxm2_data_print_functor
+{
+public:
+  //: "default" constructor
+  boxm2_data_print_functor() {}
+
+  bool init_data(boxm2_data_base* data, vcl_size_t data_size, vcl_string prefix)
+  {
+    buf_ = data;
+    data_size_ = data_size;
+    prefix_ = prefix;
+    return true;
+  }
+  inline bool process_cell(int index)
+  {
+    int byte_ind = index*(int)data_size_;
+    char * arr = buf_->cell_buffer(byte_ind, data_size_);
+    if (index%1000000 == 0) {
+      boxm2_data_info::print_data(prefix_, arr);
+      vcl_cout << "\n";
+    }
+    return true;
+  }
+
+private:
+  boxm2_data_base *buf_;
+  vcl_size_t data_size_;
+  vcl_string prefix_;
+};
+
 #endif
