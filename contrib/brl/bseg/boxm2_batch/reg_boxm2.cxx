@@ -16,6 +16,7 @@
 #include <boxm2/view/pro/boxm2_view_register.h>
 #endif
 #endif
+#include <bbas_pro/bbas_register.h>
 
 
 PyObject *
@@ -32,6 +33,7 @@ register_processes(PyObject *self, PyObject *args)
   boxm2_view_register::register_process();
 #endif
 #endif
+  bbas_register::register_process();
   Py_INCREF(Py_None);
   return Py_None;
 }
@@ -53,6 +55,7 @@ register_datatypes(PyObject *self, PyObject *args)
   boxm2_view_register::register_datatype();
 #endif
 #endif
+  bbas_register::register_datatype();
   Py_INCREF(Py_None);
   return Py_None;
 }
