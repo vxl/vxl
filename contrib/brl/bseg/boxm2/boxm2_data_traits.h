@@ -10,6 +10,7 @@
 #include <vcl_string.h>
 #include <vcl_cstddef.h> // for std::size_t
 #include <vnl/vnl_vector_fixed.h>
+#include <vcl_iostream.h>
 class boxm2_mog3_grey_processor;
 
 enum boxm2_data_type
@@ -223,6 +224,80 @@ class boxm2_data_info
         return boxm2_data_traits<BOXM2_NUM_OBS_SINGLE>::datasize();   
         
       return 0;
+    }
+    static void print_data(vcl_string prefix, char *cell) {
+            
+      if(prefix.find(boxm2_data_traits<BOXM2_ALPHA>::prefix()) != vcl_string::npos) {
+        vcl_cout <<  reinterpret_cast<boxm2_data_traits<BOXM2_ALPHA>::datatype*>(cell)[0]; 
+        return;
+      }
+/*
+      if(prefix.find(boxm2_data_traits<BOXM2_MOG3_GREY_16>::prefix()) != vcl_string::npos) {
+        vcl_cout <<  reinterpret_cast<boxm2_data_traits<BOXM2_MOG3_GREY_16>::datatype*>(cell)[0]; 
+        return;
+      }
+        
+        if(prefix.find(boxm2_data_traits<BOXM2_MOG3_GREY>::prefix()) != vcl_string::npos) {
+          vcl_cout <<  reinterpret_cast<boxm2_data_traits<BOXM2_MOG3_GREY>::datatype*>(cell)[0];
+          return;
+        }
+
+        if(prefix == boxm2_data_traits<BOXM2_BATCH_HISTOGRAM>::prefix()) {
+          vcl_cout <<  reinterpret_cast<boxm2_data_traits<BOXM2_BATCH_HISTOGRAM>::datatype*>(cell)[0];
+          return;
+        }
+
+        if(prefix.find(boxm2_data_traits<BOXM2_MOG2_RGB>::prefix()) != vcl_string::npos) {
+          vcl_cout <<  reinterpret_cast<boxm2_data_traits<BOXM2_MOG2_RGB>::datatype*>(cell)[0];
+          return;
+        }
+        
+        if(prefix == boxm2_data_traits<BOXM2_NUM_OBS>::prefix()) {
+          vcl_cout <<  reinterpret_cast<boxm2_data_traits<BOXM2_NUM_OBS>::datatype*>(cell)[0];
+          return;
+        }
+  */      
+        if(prefix.find(boxm2_data_traits<BOXM2_AUX0>::prefix()) != vcl_string::npos) {
+          vcl_cout <<  reinterpret_cast<boxm2_data_traits<BOXM2_AUX0>::datatype*>(cell)[0];
+          return;
+        }
+        /*
+        if(prefix.find(boxm2_data_traits<BOXM2_AUX1>::prefix()) != vcl_string::npos) {
+          vcl_cout <<  reinterpret_cast<boxm2_data_traits<BOXM2_AUX1>::datatype*>(cell)[0];
+          return;
+        }
+        if(prefix.find(boxm2_data_traits<BOXM2_AUX2>::prefix()) != vcl_string::npos) {
+          vcl_cout <<  reinterpret_cast<boxm2_data_traits<BOXM2_AUX2>::datatype*>(cell)[0];
+          return;
+        }
+        if(prefix.find(boxm2_data_traits<BOXM2_AUX3>::prefix()) != vcl_string::npos) {
+          vcl_cout <<  reinterpret_cast<boxm2_data_traits<BOXM2_AUX3>::datatype*>(cell)[0];
+          return;
+        }
+        */
+        if(prefix.find(boxm2_data_traits<BOXM2_AUX>::prefix()) != vcl_string::npos) {
+          vcl_cout <<  reinterpret_cast<boxm2_data_traits<BOXM2_AUX>::datatype*>(cell)[0];
+          return;
+        }
+     
+        if(prefix.find(boxm2_data_traits<BOXM2_INTENSITY>::prefix()) != vcl_string::npos) {
+          vcl_cout <<  reinterpret_cast<boxm2_data_traits<BOXM2_INTENSITY>::datatype*>(cell)[0];
+          return;
+        }
+     /*
+        if(prefix.find(boxm2_data_traits<BOXM2_GAUSS_RGB>::prefix()) != vcl_string::npos) {
+          vcl_cout <<  reinterpret_cast<boxm2_data_traits<BOXM2_GAUSS_RGB>::datatype*>(cell)[0];
+          return;
+        }
+     
+        if(prefix == boxm2_data_traits<BOXM2_NUM_OBS_SINGLE>::prefix()) {
+          vcl_cout <<  reinterpret_cast<boxm2_data_traits<BOXM2_NUM_OBS_SINGLE>::datatype*>(cell)[0];
+          return;
+        }
+        */
+        
+      vcl_cerr << "In boxm2_data_info::print_data() -- type: " << prefix << " could not be identified!\n";
+      return;
     }
 };
 
