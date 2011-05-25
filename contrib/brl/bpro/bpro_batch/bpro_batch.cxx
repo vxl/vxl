@@ -18,7 +18,9 @@ static PyObject *set_input_int(PyObject *self, PyObject *args);
 static PyObject *set_input_unsigned(PyObject *self, PyObject *args);
 static PyObject *set_input_long(PyObject *self, PyObject *args);
 static PyObject *set_input_float(PyObject *self, PyObject *args);
-static PyObject *set_input_double(PyObject *self, PyObject *args);
+static PyObject *set_input_double(PyObject * self, PyObject *args);
+static PyObject *get_output_string(PyObject *self, PyObject *args);
+static PyObject *get_output_float(PyObject *self, PyObject *args);
 static PyObject *get_output_float(PyObject *self, PyObject *args);
 static PyObject *get_output_double(PyObject *self, PyObject *args);
 static PyObject *get_output_int(PyObject *self, PyObject *args);
@@ -34,6 +36,8 @@ static PyObject *remove_data_obj(PyObject *self, PyObject *args);
 static PyObject *print_db(PyObject *self, PyObject *args);
 static PyObject *clear(PyObject *self, PyObject *args);
 static PyObject *get_bbas_1d_array_float(PyObject *self, PyObject *args);
+static PyObject *set_stdout(PyObject *self, PyObject *args);
+static PyObject *reset_stdout(PyObject *self, PyObject *args);
 
 PyMethodDef batch_methods[] =
   {
@@ -165,6 +169,42 @@ PyObject *set_input_double(PyObject * /*self*/, PyObject *args)
   bool result = bprb_batch_process_manager::instance()->set_input(input, v);
   return Py_BuildValue("b", result);
 }
+
+PyObject *get_output_string(PyObject * /*self*/, PyObject *args)
+{
+  unsigned id;
+  vcl_string value;
+  if (!PyArg_ParseTuple(args, "i:get_output_string", &id))
+    return NULL;
+
+  vcl_string relation_name = "vcl_string_data";
+
+  // query to get the data
+  brdb_query_aptr Q = brdb_query_comp_new("id", brdb_query::EQ, id);
+  brdb_selection_sptr selec = DATABASE->select(relation_name, Q);
+
+  if (selec->size()!=1) {
+    vcl_cout << "in get_output_string() - no relation with type" << relation_name << " id: " << id << vcl_endl;
+    return Py_BuildValue("s", "");
+  }
+
+  brdb_value_sptr brdb_value;
+  if (!selec->get_value(vcl_string("value"), brdb_value)) {
+    vcl_cout << "in get_output_string() didn't get value\n";
+    return Py_BuildValue("s","");
+  }
+
+  if (!brdb_value) {
+    vcl_cout << "in get_output_string() - null value\n";
+    return Py_BuildValue("s","");
+  }
+  brdb_value_t<vcl_string>* result_out = static_cast<brdb_value_t<vcl_string>* >(brdb_value.ptr());
+  value = result_out->value();
+
+  vcl_cout << " In get_output_string, the output string is: "<< value << vcl_endl;
+  return Py_BuildValue("s", value);
+}
+
 
 PyObject *get_output_float(PyObject * /*self*/, PyObject *args)
 {
@@ -460,6 +500,26 @@ PyObject *get_bbas_1d_array_float(PyObject * /*self*/, PyObject *args)
   Py_INCREF(array_1d);
   return array_1d;
 }
+
+PyObject *set_stdout(PyObject * /*self*/, PyObject *args)
+{
+  const char* file;
+  if (!PyArg_ParseTuple(args, "s:set_stdout", &file))
+    return NULL;
+  vcl_string f(file);
+  vcl_cout << f << '\n';
+  bprb_batch_process_manager::instance()->set_stdout(f);
+  Py_INCREF(Py_None);
+  return Py_None;
+}
+
+PyObject *reset_stdout(PyObject *, PyObject *)
+{
+  bprb_batch_process_manager::instance()->reset_stdout();
+  Py_INCREF(Py_None);
+  return Py_None;
+}
+
 void
 register_basic_datatypes()
 {

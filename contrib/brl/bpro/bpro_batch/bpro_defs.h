@@ -13,6 +13,7 @@ py_funcs("set_input_unsigned",set_input_unsigned,METH_VARARGS,"set_input_(i,i) s
 py_funcs("set_input_long",set_input_long,METH_VARARGS,"set_input_(i,l) set input i on current process to a long value"),
 py_funcs("set_input_float",set_input_float,METH_VARARGS,"set_input_(i,f) set input i on current process to a float value"),
 py_funcs("set_input_double",set_input_double,METH_VARARGS,"set_input_(i,d) set input i on current process to a double value"),
+py_funcs("get_output_string", get_output_string, METH_VARARGS, "get_output_string(i) return value of output i in the database"),
 py_funcs("get_output_float",get_output_float,METH_VARARGS,"get_output_float(i) return value of output i in the database"),
 py_funcs("get_output_double",get_output_double,METH_VARARGS,"get_output_double(i) return value of output i in the database"),
 py_funcs("get_output_int",get_output_int,METH_VARARGS,"get_output_int(i) return value of output i in the database"),
@@ -26,6 +27,8 @@ py_funcs("remove_data_obj",remove_data_obj,METH_VARARGS,"remove_data_obj(i) remo
 py_funcs("print_db",print_db,METH_VARARGS,"print_db() print the database"),
 py_funcs("clear",clear,METH_VARARGS,"clear() clear the database tables"),
 py_funcs("get_bbas_1d_array_float",get_bbas_1d_array_float,METH_VARARGS,"get_bbas_1d_array_float(i) set the database 1d array"),
+py_funcs("set_stdout",set_stdout,METH_VARARGS,"set_stdout redirects stdout to a file"),
+py_funcs("reset_stdout",reset_stdout,METH_VARARGS,"reset_stdout resets stdout to the console"),
 
 #undef py_funcs
 
