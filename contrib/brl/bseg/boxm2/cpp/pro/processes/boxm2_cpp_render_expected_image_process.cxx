@@ -25,7 +25,7 @@
 
 namespace boxm2_cpp_render_expected_image_process_globals
 {
-  const unsigned n_inputs_ = 5;
+  const unsigned n_inputs_ = 6;
   const unsigned n_outputs_ = 1;
   vcl_size_t lthreads[2]={8,8};
 }
@@ -41,6 +41,7 @@ bool boxm2_cpp_render_expected_image_process_cons(bprb_func_process& pro)
   input_types_[2] = "vpgl_camera_double_sptr";
   input_types_[3] = "unsigned";
   input_types_[4] = "unsigned";
+  input_types_[5] = "vcl_string";// if identifier string is empty, then only one appearance model
 
 
   // process has 1 output:
@@ -48,7 +49,12 @@ bool boxm2_cpp_render_expected_image_process_cons(bprb_func_process& pro)
   vcl_vector<vcl_string>  output_types_(n_outputs_);
   output_types_[0] = "vil_image_view_base_sptr";
 
-  return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
+  bool good = pro.set_input_types(input_types_) &&
+    pro.set_output_types(output_types_);
+  // in case the 6th input is not set
+  brdb_value_sptr idx = new brdb_value_t<vcl_string>("");
+  pro.set_input(5, idx);
+  return good;
 }
 
 bool boxm2_cpp_render_expected_image_process(bprb_func_process& pro)
@@ -61,11 +67,12 @@ bool boxm2_cpp_render_expected_image_process(bprb_func_process& pro)
   }
   //get the inputs
   unsigned i = 0;
-  boxm2_scene_sptr scene =pro.get_input<boxm2_scene_sptr>(i++);
-  boxm2_cache_sptr cache= pro.get_input<boxm2_cache_sptr>(i++);
+  boxm2_scene_sptr scene = pro.get_input<boxm2_scene_sptr>(i++);
+  boxm2_cache_sptr cache = pro.get_input<boxm2_cache_sptr>(i++);
   vpgl_camera_double_sptr cam= pro.get_input<vpgl_camera_double_sptr>(i++);
   unsigned ni=pro.get_input<unsigned>(i++);
   unsigned nj=pro.get_input<unsigned>(i++);
+  vcl_string identifier = pro.get_input<vcl_string>(i);
 
   bool foundDataType = false;
   vcl_string data_type;
@@ -85,6 +92,10 @@ bool boxm2_cpp_render_expected_image_process(bprb_func_process& pro)
   if (!foundDataType) {
     vcl_cout<<"BOXM2_CPP_RENDER_PROCESS ERROR: scene doesn't have BOXM2_MOG3_GREY or BOXM2_MOG3_GREY_16 data type"<<vcl_endl;
     return false;
+  }
+
+  if (identifier.size() > 0) {
+    data_type += "_" + identifier;
   }
 
   //: function call
