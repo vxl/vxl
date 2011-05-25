@@ -19,8 +19,6 @@
 //  or the specific templated blocks (as is implemented below).
 //  Either way, one of the two will have to cast from generic to templated.
 
-class boxm2_cache_destroyer;
-
 class boxm2_cache: public vbl_ref_count
 {
  public:
@@ -29,14 +27,11 @@ class boxm2_cache: public vbl_ref_count
   static boxm2_cache* instance();
   static bool         exists() { return boxm2_cache::instance_!=0; }
 
-  //: the destroyer instance, to make sure memory is deallocated when the program exits
-  static boxm2_cache_destroyer destroyer_;  // it's not a pointer so C++ will make sure that its destructor will be called
-
   //: returns block pointer to block specified by ID
   virtual boxm2_block* get_block(boxm2_block_id id) = 0;
 
   //: returns data_base pointer (THIS IS NECESSARY BECAUSE TEMPLATED FUNCTIONS CANNOT BE VIRTUAL)
-  virtual boxm2_data_base* get_data_base(boxm2_block_id id, vcl_string type, vcl_size_t num_bytes=0) = 0;
+  virtual boxm2_data_base* get_data_base(boxm2_block_id id, vcl_string type, vcl_size_t num_bytes=0, bool read_only = true) = 0;
 
   //: removes data from this cache (may or may not write to disk first)
   // Note that this function does not delete the memory, just removes it from the cache
@@ -48,14 +43,10 @@ class boxm2_cache: public vbl_ref_count
   template <boxm2_data_type T>
   boxm2_data<T>* get_data(boxm2_block_id id);
 
-  //: switch to read/write mode, data will be saved before removal from cache or when the cache is destroyed
-  void enable_write() { read_only_=false; }
-  void disable_write() { read_only_=true;}
-
  protected:
 
   //: hide constructor
-  boxm2_cache(boxm2_scene_sptr scene) : scene_(scene), read_only_(true) {}
+  boxm2_cache(boxm2_scene_sptr scene) : scene_(scene) {}
 
   //: singleton instance of boxm2_cache
   static boxm2_cache* instance_;
@@ -65,9 +56,6 @@ class boxm2_cache: public vbl_ref_count
 
   //: boxm2_asio_manager handles asio requests
   boxm2_asio_mgr io_mgr_;
-
-  //: by default cache is read-only, i.e. it doesn't save things as they are destroyed
-  bool read_only_;
 };
 
 //: returns a boxm2_data<T>* from the cache
@@ -98,17 +86,5 @@ void vsl_b_read(vsl_b_istream& is, boxm2_cache* p);
 void vsl_b_read(vsl_b_istream& is, boxm2_cache_sptr& sptr);
 //: Binary load boxm2_cache smart pointer from stream.
 void vsl_b_read(vsl_b_istream& is, boxm2_cache_sptr const& sptr);
-
-//: create another class whose sole purpose is to destroy the singleton instance
-class boxm2_cache_destroyer
-{
- public:
-  boxm2_cache_destroyer(boxm2_cache* s = 0);
-  ~boxm2_cache_destroyer();
-
-  void set_singleton(boxm2_cache* s);
- private:
-  boxm2_cache* s_;
-};
 
 #endif //boxm2_cache_h_
