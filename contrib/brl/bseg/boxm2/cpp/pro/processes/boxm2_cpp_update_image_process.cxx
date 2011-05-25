@@ -48,14 +48,14 @@ bool boxm2_cpp_update_image_process_cons(bprb_func_process& pro)
   input_types_[1] = "boxm2_cache_sptr";
   input_types_[2] = "vpgl_camera_double_sptr";
   input_types_[3] = "vil_image_view_base_sptr";
-  input_types_[4] = "int";// if index < 0, then only one appearance model
+  input_types_[4] = "vcl_string";// if identifier is empty, then only one appearance model
   // process has 1 output:
   // output[0]: scene sptr
   vcl_vector<vcl_string>  output_types_(n_outputs_);
   bool good = pro.set_input_types(input_types_) &&
     pro.set_output_types(output_types_);
   // in case the 5th input is not set
-  brdb_value_sptr idx = new brdb_value_t<int>(-1);
+  brdb_value_sptr idx = new brdb_value_t<vcl_string>("");
   pro.set_input(4, idx);
   return good;
 }
@@ -74,7 +74,7 @@ bool boxm2_cpp_update_image_process(bprb_func_process& pro)
     boxm2_cache_sptr cache= pro.get_input<boxm2_cache_sptr>(i++);
     vpgl_camera_double_sptr cam= pro.get_input<vpgl_camera_double_sptr>(i++);
     vil_image_view_base_sptr in_img=pro.get_input<vil_image_view_base_sptr>(i++);
-    int illumination_bin_index = pro.get_input<int>(i);
+    vcl_string identifier = pro.get_input<vcl_string>(i);
 
     vil_image_view_base_sptr float_image=boxm2_util::prepare_input_image(in_img);
     if (vil_image_view<float> * input_image=dynamic_cast<vil_image_view<float> * > (float_image.ptr()))
@@ -85,16 +85,19 @@ bool boxm2_cpp_update_image_process(bprb_func_process& pro)
         vcl_string data_type;
         vcl_string num_obs_type;
         vcl_vector<vcl_string> apps = scene->appearances();
+        int appTypeSize;
         for (unsigned int i=0; i<apps.size(); ++i) {
             if ( apps[i] == boxm2_data_traits<BOXM2_MOG3_GREY>::prefix() )
             {
                 data_type = apps[i];
                 foundDataType = true;
+                appTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_MOG3_GREY>::prefix());
             }
             else if ( apps[i] == boxm2_data_traits<BOXM2_MOG3_GREY_16>::prefix() )
             {
                 data_type = apps[i];
                 foundDataType = true;
+                appTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_MOG3_GREY_16>::prefix());
             }
             else if ( apps[i] == boxm2_data_traits<BOXM2_NUM_OBS>::prefix() )
             {
@@ -106,13 +109,11 @@ bool boxm2_cpp_update_image_process(bprb_func_process& pro)
             vcl_cout<<"BOXM2_OCL_RENDER_PROCESS ERROR: scene doesn't have BOXM2_MOG3_GREY or BOXM2_MOG3_GREY_16 data type"<<vcl_endl;
             return false;
         }
-        if(illumination_bin_index>=0){
-          vcl_stringstream s;
-          s << illumination_bin_index;
-          vcl_string ident = "_ill_bin_" + s.str();
-          data_type += ident;
+        if (identifier.size() > 0) {
+          data_type += "_" + identifier;
+          if (foundNumObsType)
+            num_obs_type += "_" + identifier;
         }
-
         vcl_vector<boxm2_block_id> vis_order=scene->get_vis_blocks(reinterpret_cast<vpgl_generic_camera<double>*>(cam.ptr()));
         if (vis_order.empty())
         {
@@ -132,6 +133,8 @@ bool boxm2_cpp_update_image_process(bprb_func_process& pro)
         vil_image_view<float> proc_norm_img(input_image->ni(),input_image->nj());
 
         proc_norm_img.fill(0.0f);
+        int alphaTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
+        int nobsTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_NUM_OBS>::prefix());
 
         for (unsigned int pass_no=0;pass_no<num_passes;pass_no++)
         {
@@ -144,11 +147,14 @@ bool boxm2_cpp_update_image_process(bprb_func_process& pro)
             {
                 vcl_cout<<"Block id "<<(*id)<<' ';
                 boxm2_block *     blk   = cache->get_block(*id);
-                boxm2_data_base *  alph = cache->get_data_base(*id,boxm2_data_traits<BOXM2_ALPHA>::prefix());
-                boxm2_data_base *  mog  = cache->get_data_base(*id,data_type);
-                boxm2_data_base *  nobs  = cache->get_data_base(*id,num_obs_type);
+                //: initialize this with read_only=false
+                boxm2_data_base *  alph = cache->get_data_base(*id,boxm2_data_traits<BOXM2_ALPHA>::prefix(), 0, false);
+                //: initialize this with read_only=false
+                boxm2_data_base *  mog  = cache->get_data_base(*id,data_type,alph->buffer_length()/alphaTypeSize*appTypeSize,false);
+                boxm2_data_base *  nobs  = cache->get_data_base(*id,num_obs_type,alph->buffer_length()/alphaTypeSize*nobsTypeSize,false);
                 int alphaTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
                 int auxTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_AUX>::prefix());
+                
                 boxm2_data_base *  aux  = cache->get_data_base(*id,boxm2_data_traits<BOXM2_AUX>::prefix(),alph->buffer_length()/alphaTypeSize*auxTypeSize);
 
                 vcl_vector<boxm2_data_base*> datas;
@@ -203,9 +209,8 @@ bool boxm2_cpp_update_image_process(bprb_func_process& pro)
         {
             boxm2_block     *  blk   = cache->get_block(*id);
             boxm2_data_base *  alph  = cache->get_data_base(*id,boxm2_data_traits<BOXM2_ALPHA>::prefix());
-            boxm2_data_base *  mog   = cache->get_data_base(*id,data_type);
+            boxm2_data_base *  mog   = cache->get_data_base(*id,data_type); // already in the cache
             boxm2_data_base *  nobs  = cache->get_data_base(*id,num_obs_type);
-            int alphaTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
             int auxTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_AUX>::prefix());
             boxm2_data_base *  aux  = cache->get_data_base(*id,boxm2_data_traits<BOXM2_AUX>::prefix(),alph->buffer_length()/alphaTypeSize*auxTypeSize);
             vcl_vector<boxm2_data_base*> datas;
@@ -221,5 +226,6 @@ bool boxm2_cpp_update_image_process(bprb_func_process& pro)
         }
         return true;
     }
+    
     return false;
 }
