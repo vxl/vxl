@@ -66,7 +66,7 @@ class boxm2_block : public vbl_ref_count
   vgl_vector_3d<double>&    sub_block_dim()     { return sub_block_dim_; }
   vgl_vector_3d<unsigned>&  sub_block_num()     { return sub_block_num_; }
   int                       num_buffers()       { return 1; }
-  int                       tree_buff_length()  { return trees_.size(); }
+  int                       tree_buff_length()  { return (int)trees_.size(); }
   int                       init_level()        { return init_level_; }
   int                       max_level()         { return max_level_; }
   int                       max_mb()            { return max_mb_; }
