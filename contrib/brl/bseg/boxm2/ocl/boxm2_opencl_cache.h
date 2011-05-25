@@ -39,7 +39,7 @@ class boxm2_opencl_cache: public vbl_ref_count
     
     
     void set_context(cl_context& context); 
-    boxm2_cache* get_cpu_cache() { return cpu_cache_; }
+    boxm2_cache_sptr get_cpu_cache() { return cpu_cache_; }
 
     //: returns block pointer to block specified by ID
     bocl_mem* get_block(boxm2_block_id id);
@@ -68,7 +68,7 @@ class boxm2_opencl_cache: public vbl_ref_count
     boxm2_scene_sptr scene_;
 
     //: keep a pointer to the CPU cache
-    boxm2_cache* cpu_cache_;
+    boxm2_cache_sptr cpu_cache_;
 
     //: maximum number of blocks this cache will allow (eventually this will become smart)
     int maxBlocksInCache;
