@@ -1,6 +1,11 @@
 #ifndef VPGL_BUNDLER_H
 #define VPGL_BUNDLER_H
 
+// TODO:
+//       the lens distortion stuff
+//       visibility matrix
+//       focal length estimation
+
 // Generic includes.
 #include <vcl_vector.h>
 #include <vnl/vnl_sparse_matrix.h>

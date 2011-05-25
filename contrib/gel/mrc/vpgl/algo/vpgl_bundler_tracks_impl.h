@@ -122,7 +122,7 @@ class vpgl_bundler_tracks_default_chain_matches
   //: Performs the track chaining
   void operator() (
       const vcl_vector<vpgl_bundler_inters_match_set> &match_set,
-      vcl_vector<vpgl_bundler_inters_track> &tracks);
+      vcl_vector<vpgl_bundler_inters_track_sptr> &tracks);
 };
 
 

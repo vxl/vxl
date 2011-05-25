@@ -68,7 +68,7 @@ class vpgl_bundler_tracks_chain_matches
   //: Performs the track chaining
   virtual void operator() (
       const vcl_vector<vpgl_bundler_inters_match_set> &match_sets,
-      vcl_vector<vpgl_bundler_inters_track> &tracks) = 0;
+      vcl_vector<vpgl_bundler_inters_track_sptr> &tracks) = 0;
 };
 
 #endif // VPGL_BUNDLER_TRACKS_H

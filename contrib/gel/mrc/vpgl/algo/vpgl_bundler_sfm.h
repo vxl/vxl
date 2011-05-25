@@ -23,7 +23,10 @@ class vpgl_bundler_sfm_select_next_images
 {
  public:
   //: Takes in reconstruction and track_set, fills to_add as a return val.
-  virtual void operator() (
+  // Returns true if at least one image was found that fits whatever the
+  // criteria for a good next image is. If this returns false, the 
+  // reconstruction should be considered to be complete.
+  virtual bool operator() (
       vpgl_bundler_inters_reconstruction &reconstruction,
       vpgl_bundler_inters_track_set &track_set,
 
@@ -39,7 +42,7 @@ class vpgl_bundler_sfm_add_next_images
  public:
   virtual void operator() (
       vpgl_bundler_inters_reconstruction reconstruction,
-      const vcl_vector<vpgl_bundler_inters_feature_set> &to_add) = 0;
+      const vcl_vector<vpgl_bundler_inters_feature_set_sptr> &to_add) = 0;
 };
 
 

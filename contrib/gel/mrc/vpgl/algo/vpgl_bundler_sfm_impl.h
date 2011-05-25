@@ -58,7 +58,9 @@ class vpgl_bundler_sfm_default_select_next_images
       vpgl_bundler_settings_select_next_images s) : settings(s) {}
 
   //: Takes in reconstruction and track_set, fills to_add as a return val
-  void operator() (
+  // Returns true if an image was found that observes the minimum number
+  // of points
+  bool operator() (
       vpgl_bundler_inters_reconstruction &reconstruction,
       vpgl_bundler_inters_track_set &track_set,
 
@@ -84,7 +86,7 @@ class vpgl_bundler_sfm_default_add_next_images
   //: Adds to_the reconstruction
   void operator() (
       vpgl_bundler_inters_reconstruction reconstruction,
-      const vcl_vector<vpgl_bundler_inters_feature_set> &to_add);
+      const vcl_vector<vpgl_bundler_inters_feature_set_sptr> &to_add);
 };
 
 

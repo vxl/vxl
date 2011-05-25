@@ -34,7 +34,7 @@ vpgl_bundler_tracks_impl_detect_sift::operator ()(
 
     // First, extract all the keypoints in the image.
     bapl_keypoint_extractor(image, keypoints,
-                            settings.keypoint_curve_ratio);
+                            settings.keypoint_curve_ratio, false);
 
     // Then we are going to convert from the bapl_lowe_keypoint
     // format to the bundler representation
@@ -61,6 +61,7 @@ vpgl_bundler_tracks_impl_detect_sift::operator ()(
             new vpgl_bundler_inters_feature(row, col));
         f->descriptor = lkp->descriptor().as_vector();
         f->source_image = feature_set->source_image;
+        f->feature_set = feature_set;
 
         // Insert this feature into the feature set.
         feature_set->features.push_back(f);
@@ -280,11 +281,11 @@ void vpgl_bundler_tracks_impl_refine_epipolar::operator ()(
 /*------------------------------------------------------------------------*/
 
 // Use DFS to find all features in this track
-void create_new_track(
+static void create_new_track(
     const vcl_vector<vpgl_bundler_inters_match_set> &matches,
     vpgl_bundler_inters_feature_sptr f1,
     vpgl_bundler_inters_feature_sptr f2,
-    vpgl_bundler_inters_track &new_track)
+    vpgl_bundler_inters_track_sptr &new_track)
 {
     // This stack will hold all the features that have been explored
     // but whose neighbours have not been found.
@@ -305,7 +306,8 @@ void create_new_track(
         feature_stack.pop();
 
         // Add it to the track
-        new_track.points.push_back(curr);
+        new_track->points.push_back(curr);
+        curr->track = new_track;
 
         vcl_vector<vpgl_bundler_inters_match_set>::const_iterator match;
         for (match = matches.begin(); match != matches.end(); match++)
@@ -331,7 +333,7 @@ void create_new_track(
 // Chain matches implementation
 void vpgl_bundler_tracks_default_chain_matches::operator ()(
     const vcl_vector<vpgl_bundler_inters_match_set> &matches,
-    vcl_vector<vpgl_bundler_inters_track> &tracks)
+    vcl_vector<vpgl_bundler_inters_track_sptr> &tracks)
 {
     vcl_vector<vpgl_bundler_inters_match_set>::const_iterator match;
     for (match = matches.begin(); match != matches.end(); match++)
@@ -342,7 +344,8 @@ void vpgl_bundler_tracks_default_chain_matches::operator ()(
             // found a part of a new connected component, so we should
             // start the DFS search here.
             if (! match->side1[i]->visited) {
-                vpgl_bundler_inters_track new_track;
+                vpgl_bundler_inters_track_sptr new_track(
+                    new vpgl_bundler_inters_track);
                 create_new_track(matches, match->side1[i],
                                  match->side2[i], new_track);
 

@@ -57,6 +57,8 @@ IF(BUILD_BUNDLER)
           vpgl_bundler_tracks.h
           vpgl_bundler_tracks_impl.h       vpgl_bundler_tracks_impl.cxx
 
+          vpgl_bundler_utils.h          vpgl_bundler_utils.cxx
+
           vpgl_bundler_settings.h
           vpgl_bundler_inters.h)
 ENDIF(BUILD_BUNDLER)

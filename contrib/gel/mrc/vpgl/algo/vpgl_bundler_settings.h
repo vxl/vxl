@@ -83,14 +83,27 @@ struct vpgl_bundler_settings_create_initial_recon{
 };
 
 struct vpgl_bundler_settings_select_next_images{
-    int dummy;
-};  
+    //The minimum number of points already added that a camera must observe.
+    // If no camera meets this description, the reconstruction is
+    // considered complete.
+    int min_number_observed_points;
 
-struct vpgl_bundler_settings_add_new_points{
-    int dummy;
+    vpgl_bundler_settings_select_next_images():
+        min_number_observed_points(20) { }
 };
 
 struct vpgl_bundler_settings_add_next_images{
+    // The standard two ransac parameters for the 
+    // projection matrix estimation.
+    int number_ransac_rounds;
+    double inlier_thresh;
+
+    vpgl_bundler_settings_add_next_images() :
+        number_ransac_rounds(4096),
+        inlier_thresh(.4){ }
+};
+
+struct vpgl_bundler_settings_add_new_points{
     int dummy;
 };
 
@@ -106,6 +119,7 @@ struct vpgl_bundler_settings_sfm{
     vpgl_bundler_settings_bundle_adjust bundle_adjust_settings;
 };
 
+/*-----------------------------------------------------------------------*/
 /*Highest-level settings struct*/
 struct vpgl_bundler_settings {
     vpgl_bundler_settings_tracks feature_settings;
