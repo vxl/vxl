@@ -185,8 +185,8 @@ bool boxm2_ocl_update_process(bprb_func_process& pro)
   //grab input image, establish cl_ni, cl_nj (so global size is divisible by local size)
   vil_image_view_base_sptr float_img=boxm2_ocl_util::prepare_input_image(img);
   vil_image_view<float>* img_view = static_cast<vil_image_view<float>* >(float_img.ptr());
-  unsigned cl_ni=RoundUp(img_view->ni(),local_threads[0]);
-  unsigned cl_nj=RoundUp(img_view->nj(),local_threads[1]);
+  unsigned cl_ni=(unsigned)RoundUp(img_view->ni(),(int)local_threads[0]);
+  unsigned cl_nj=(unsigned)RoundUp(img_view->nj(),(int)local_threads[1]);
   global_threads[0]=cl_ni;
   global_threads[1]=cl_nj;
   
@@ -290,7 +290,7 @@ bool boxm2_ocl_update_process(bprb_func_process& pro)
         bocl_mem* blk_info  = opencl_cache->loaded_block_info();
         bocl_mem* alpha     = opencl_cache->get_data<BOXM2_ALPHA>(*id);
         boxm2_scene_info* info_buffer = (boxm2_scene_info*) blk_info->cpu_buffer();
-        int alphaTypeSize = boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
+        int alphaTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
         info_buffer->data_buffer_length = (int) (alpha->num_bytes()/alphaTypeSize);
         blk_info->write_to_buffer((queue));
 
@@ -298,9 +298,9 @@ bool boxm2_ocl_update_process(bprb_func_process& pro)
         bocl_mem* num_obs   = opencl_cache->get_data(*id,num_obs_type);//,info_buffer->data_buffer_length*boxm2_data_info::datasize(num_obs_type));
 
         //grab an appropriately sized AUX data buffer
-        int auxTypeSize = boxm2_data_info::datasize(boxm2_data_traits<BOXM2_AUX0>::prefix());
+        int auxTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_AUX0>::prefix());
         bocl_mem *aux0   = opencl_cache->get_data<BOXM2_AUX0>(*id, info_buffer->data_buffer_length*auxTypeSize);
-        auxTypeSize = boxm2_data_info::datasize(boxm2_data_traits<BOXM2_AUX1>::prefix());
+        auxTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_AUX1>::prefix());
         bocl_mem *aux1   = opencl_cache->get_data<BOXM2_AUX1>(*id, info_buffer->data_buffer_length*auxTypeSize);
 
         transfer_time += (float) transfer.all();
@@ -380,7 +380,7 @@ bool boxm2_ocl_update_process(bprb_func_process& pro)
             auxTypeSize = boxm2_data_info::datasize(boxm2_data_traits<BOXM2_AUX2>::prefix());
             bocl_mem *aux2   = opencl_cache->get_data<BOXM2_AUX2>(*id, info_buffer->data_buffer_length*auxTypeSize);
             aux2->zero_gpu_buffer(queue);
-            auxTypeSize = boxm2_data_info::datasize(boxm2_data_traits<BOXM2_AUX3>::prefix());
+            auxTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_AUX3>::prefix());
             bocl_mem *aux3   = opencl_cache->get_data<BOXM2_AUX3>(*id, info_buffer->data_buffer_length*auxTypeSize);
             aux3->zero_gpu_buffer(queue);
 
