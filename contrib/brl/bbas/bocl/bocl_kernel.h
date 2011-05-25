@@ -64,7 +64,7 @@ class bocl_kernel
     vcl_string id() { return id_; }
 
     //: returns the number of arguments that you've given this kernel
-    int arg_cnt() { return args_.size() + local_args_.size(); }
+    int arg_cnt() { return (int)args_.size() + (int)local_args_.size(); }
 
     ////////////////////////////////////////////////////////////////////////////
     // Profiling functions
