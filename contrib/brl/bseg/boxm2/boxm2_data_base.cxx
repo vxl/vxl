@@ -3,8 +3,9 @@
 // \file
 
 //: allocate an empty data diddy
-boxm2_data_base::boxm2_data_base(boxm2_block_metadata data, const vcl_string data_type)
+boxm2_data_base::boxm2_data_base(boxm2_block_metadata data, const vcl_string data_type, bool read_only)
 {
+  read_only_ = read_only;
   id_ = data.id_;
 
   //determine number of cells to allocate - if random, then use the max_mb, otherwise use tree size

@@ -25,11 +25,11 @@ class boxm2_data_base : public vbl_ref_count
 {
  public:
     //: Constructor - beware that the data_buffer becomes OWNED (and will be deleted) by this class!
-    boxm2_data_base(char * data_buffer, vcl_size_t length, boxm2_block_id id)
-    : id_(id), data_buffer_(data_buffer),  buffer_length_(length) {}
+    boxm2_data_base(char * data_buffer, vcl_size_t length, boxm2_block_id id, bool read_only = true)
+    : id_(id), data_buffer_(data_buffer),  buffer_length_(length), read_only_(read_only) {}
 
     //: initializes empty data buffer
-    boxm2_data_base(boxm2_block_metadata data, vcl_string type);
+    boxm2_data_base(boxm2_block_metadata data, vcl_string type, bool read_only = true);
 
     //: This destructor is correct - by our design the original data_buffer becomes OWNED by the data_base class
     virtual ~boxm2_data_base() { if (data_buffer_) delete [] data_buffer_; }
@@ -42,6 +42,9 @@ class boxm2_data_base : public vbl_ref_count
     char *            cell_buffer(int i, vcl_size_t cell_size);  
     
     //: setter for swapping out data buffer
+
+    //: by default data is read-only, i.e. cache doesn't save it before destroying it
+    bool read_only_;
     
 
  protected:
