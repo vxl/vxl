@@ -42,11 +42,13 @@ bool boxm2_ocl_render_tableau::init(bocl_device_sptr device,
                                     boxm2_scene_sptr scene,
                                     unsigned ni,
                                     unsigned nj,
-                                    vpgl_perspective_camera<double> * cam)
+                                    vpgl_perspective_camera<double> * cam, vcl_string identifier)
 {
     //set image dimensions, camera and scene
     ni_ = ni;
     nj_ = nj;
+
+    identifier_ = identifier;
 
     cam_   = (*cam);
     default_cam_ = (*cam);
@@ -153,6 +155,7 @@ float boxm2_ocl_render_tableau::render_frame()
     brdb_value_sptr brdb_nj = new brdb_value_t<unsigned>(nj_);
     brdb_value_sptr exp_img = new brdb_value_t<bocl_mem_sptr>(exp_img_);
     brdb_value_sptr exp_img_dim = new brdb_value_t<bocl_mem_sptr>(exp_img_dim_);
+    brdb_value_sptr ident = new brdb_value_t<vcl_string>(identifier_);
     
     //if scene has RGB data type, use color render process
     bool good = true; 
@@ -170,6 +173,7 @@ float boxm2_ocl_render_tableau::render_frame()
     good = good && bprb_batch_process_manager::instance()->set_input(5, brdb_nj);   // nj for rendered image
     good = good && bprb_batch_process_manager::instance()->set_input(6, exp_img);   // exp image ( gl buffer)
     good = good && bprb_batch_process_manager::instance()->set_input(7, exp_img_dim);   // exp image dimensions
+    good = good && bprb_batch_process_manager::instance()->set_input(8, ident);   // string identifier to specify appearance data 
     good = good && bprb_batch_process_manager::instance()->run_process();
     
     //grab float output from render gl process
