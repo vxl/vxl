@@ -92,7 +92,7 @@ bool bocl_kernel::execute(cl_command_queue& cmd_queue, cl_uint dim, vcl_size_t* 
 
   //set local args
   for (unsigned int i=0; i<local_args_.size(); ++i) {
-    cl_int status = clSetKernelArg(kernel_,args_.size() + i, local_args_[i], 0);
+    cl_int status = (cl_int)clSetKernelArg(kernel_,args_.size() + i, local_args_[i], 0);
     if ( !check_val(status,CL_SUCCESS,"clSetLocal Arg Failed") ) {
       vcl_cout<<"Local argument "<<i<<" failed"<<vcl_endl;
       return false;
@@ -132,7 +132,7 @@ float bocl_kernel::exec_time()
     return false;
 
   //store execution time
-  unsigned long diff = tend - tstart;
+  unsigned long diff = (unsigned long)(tend - tstart);
   return 1.0e-6f*float(diff);
 }
 
