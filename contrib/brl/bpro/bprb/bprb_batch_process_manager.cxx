@@ -11,6 +11,9 @@
 #include <bprb/bprb_null_process.h>
 #include <bprb/bprb_parameters.h>
 
+#include <vcl_cstdio.h>
+#include <vcl_cstdlib.h>
+
 //: Constructor
 bprb_batch_process_manager::bprb_batch_process_manager() : current_process_(0)
 {
@@ -256,6 +259,22 @@ void bprb_batch_process_manager::print_db()
 {
   DATABASE->print();
 }
+
+
+
+void bprb_batch_process_manager::set_stdout(vcl_string file)
+{
+   vcl_freopen (file.c_str(),"a",stdout);
+   
+}
+
+
+void bprb_batch_process_manager::reset_stdout()
+{
+   vcl_fclose (stdout);
+   vcl_freopen ("CON","w",stdout);
+}
+
 
 void bprb_batch_process_manager::b_write_db(const vcl_string& path)
 {

@@ -69,6 +69,12 @@ class bprb_batch_process_manager : public bprb_process_manager<bprb_batch_proces
   //: Debug purposes
   void print_db();
 
+  //: Set stdout
+  void set_stdout(vcl_string file);
+
+    //: Reset stdout back to the console
+  void reset_stdout();
+
   //: Interface to database binary read/write
   void b_write_db(vcl_string const& path);
 
