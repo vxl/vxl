@@ -50,6 +50,7 @@ int main(int argc, char ** argv)
     vul_arg<unsigned> nj("-nj", "Height of output image", 720);
     vul_arg<vcl_string> imgdir("-imgdir", "image directory", ""); 
     vul_arg<vcl_string> camdir("-camdir", "camera directory", ""); 
+    vul_arg<vcl_string> identifier("-ident", "identifier of the appearance data to be displayed, e.g. illum_bin_0", "");
 
     // need this on some toolkit implementations to get the window up.
     vul_arg_parse(argc, argv);
@@ -96,7 +97,7 @@ int main(int argc, char ** argv)
     {
       //create a new ocl_draw_glbuffer_tableau, window, and initialize it
       boxm2_ocl_render_tableau_new bit_tableau;  
-      bit_tableau->init(device, opencl_cache, scene, ni(), nj(), pcam); 
+      bit_tableau->init(device, opencl_cache, scene, ni(), nj(), pcam, identifier()); 
 
       //create window, attach the new tableau and status bar
       vgui_window* win = vgui::produce_window(ni(), nj(), "OpenCl Volume Visualizer");
