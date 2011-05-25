@@ -136,7 +136,7 @@ bool boxm2_refine_block_function::refine_deterministic(vcl_vector<boxm2_data_bas
   vcl_cout<<"Number of new cells: "<<newInitCount<<vcl_endl;
 
   //3. Replace data in the cache
-  boxm2_cache* cache = boxm2_cache::instance();
+  boxm2_cache_sptr cache = boxm2_cache::instance();
   cache->replace_data_base(id, boxm2_data_traits<BOXM2_ALPHA>::prefix(), newA);
   cache->replace_data_base(id, boxm2_data_traits<BOXM2_MOG3_GREY>::prefix(), newM);
   cache->replace_data_base(id, boxm2_data_traits<BOXM2_NUM_OBS>::prefix(), newN);
