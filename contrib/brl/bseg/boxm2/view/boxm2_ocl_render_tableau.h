@@ -48,7 +48,7 @@ class boxm2_ocl_render_tableau : public boxm2_cam_tableau
             boxm2_scene_sptr scene,
             unsigned ni,
             unsigned nj,
-            vpgl_perspective_camera<double>* cam);
+            vpgl_perspective_camera<double>* cam, vcl_string identifier = "");
   
   //: virtual function handles mouse and keyboard actions
   virtual bool handle( vgui_event const& e );
@@ -69,6 +69,7 @@ class boxm2_ocl_render_tableau : public boxm2_cam_tableau
   unsigned ni_;
   unsigned nj_;
   vgui_statusbar* status_;
+  vcl_string identifier_;
   
   //: shared GL_CL image buffer
   GLuint pbuffer_;
