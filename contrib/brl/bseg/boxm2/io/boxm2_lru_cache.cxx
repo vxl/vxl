@@ -11,6 +11,7 @@ void boxm2_lru_cache::create(boxm2_scene_sptr scene)
     vcl_cout << "boxm2_lru_cache:: boxm2_cache singleton already created" << vcl_endl;
   else {
     instance_ = new boxm2_lru_cache(scene); 
+    destroyer_.set_singleton(instance_);
   }
 }
 
@@ -127,9 +128,9 @@ void boxm2_lru_cache::remove_data_base(boxm2_block_id id, vcl_string type)
   { 
     // found the block,
     boxm2_data_base* litter = data_map[id]; 
-   /* if (!litter->read_only_) {// save it
+    if (!litter->read_only_) {// save it
       boxm2_sio_mgr::save_block_data_base(scene_dir_, id, litter, type);
-    }*/ 
+    } 
     // now throw it away
     delete litter; 
     data_map.erase(rem); 
