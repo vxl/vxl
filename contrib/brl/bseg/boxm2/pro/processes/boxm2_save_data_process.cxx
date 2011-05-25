@@ -36,17 +36,18 @@ bool boxm2_save_data_process_cons(bprb_func_process& pro)
 bool boxm2_save_data_process(bprb_func_process& pro)
 {
   using namespace boxm2_save_data_process_globals;
-
+/*
   if ( pro.n_inputs() < n_inputs_ ){
     vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
     return false;
-  }
+  }*/
   //get the inputs
   unsigned i = 0;
-  boxm2_scene_sptr scene    =pro.get_input<boxm2_scene_sptr>(i++);
-  boxm2_cache_sptr cache    =pro.get_input<boxm2_cache_sptr>(i++);
-  vcl_map<boxm2_block_id, boxm2_block_metadata> blocks = scene->blocks();
-  vcl_map<boxm2_block_id, boxm2_block_metadata>::iterator iter;
+  //boxm2_scene_sptr scene    =pro.get_input<boxm2_scene_sptr>(i++);
+  //boxm2_cache_sptr cache    =pro.get_input<boxm2_cache_sptr>(i++);
+  //vcl_map<boxm2_block_id, boxm2_block_metadata> blocks = scene->blocks();
+  //vcl_map<boxm2_block_id, boxm2_block_metadata>::iterator iter;
+  /*
   for (iter = blocks.begin(); iter != blocks.end(); ++iter)
   {
     boxm2_block_id id = iter->first;
@@ -72,5 +73,6 @@ bool boxm2_save_data_process(bprb_func_process& pro)
         }
     }   
   }
+*/
   return true;
 }
