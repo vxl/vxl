@@ -5,6 +5,7 @@ INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR} )
 SET(boxm2_ocl_pro_sources
     boxm2_ocl_processes.h
     boxm2_ocl_register.h                     boxm2_ocl_register.cxx
+    processes/boxm2_ocl_filter_process.h
   )
 
 AUX_SOURCE_DIRECTORY(Templates boxm2_ocl_pro_sources)
