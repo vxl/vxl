@@ -53,7 +53,7 @@ void boxm2_dumb_cache::update_block_cache(boxm2_block* blk)
 }
 
 //: get data by type and id
-boxm2_data_base* boxm2_dumb_cache::get_data_base(boxm2_block_id id, vcl_string type, vcl_size_t num_bytes)
+boxm2_data_base* boxm2_dumb_cache::get_data_base(boxm2_block_id id, vcl_string type, vcl_size_t num_bytes, bool read_only)
 {
   if ( cached_data_.find(type) != cached_data_.end() )
   {
@@ -71,7 +71,7 @@ boxm2_data_base* boxm2_dumb_cache::get_data_base(boxm2_block_id id, vcl_string t
     loaded = new boxm2_data_base(data, type);
   }
 
-  this->update_data_base_cache(loaded, type);
+  if (!read_only) this->update_data_base_cache(loaded, type);
   return loaded;
 }
 
@@ -79,6 +79,7 @@ void boxm2_dumb_cache::remove_data_base(boxm2_block_id, vcl_string type)
 {
   vcl_cout<<"BOXM2_DUMB_CACHE::remove_data_base not implemented"<<vcl_endl;
 }
+
 void boxm2_dumb_cache::replace_data_base(boxm2_block_id, vcl_string type, boxm2_data_base* replacement)
 {
   vcl_cout<<"BOXM2_DUMB_CACHE::replace_data_base not implemented"<<vcl_endl;

@@ -15,7 +15,7 @@ class boxm2_dumb_cache : public boxm2_cache
     virtual boxm2_block* get_block(boxm2_block_id id);
 
     //: returns data_base pointer (THIS IS NECESSARY BECAUSE TEMPLATED FUNCTIONS CANNOT BE VIRTUAL)
-    virtual boxm2_data_base* get_data_base(boxm2_block_id, vcl_string type, vcl_size_t num_bytes=0);
+    virtual boxm2_data_base* get_data_base(boxm2_block_id, vcl_string type, vcl_size_t num_bytes=0, bool read_only = true);
 
     //: deletes data from dumb cache
     virtual void remove_data_base(boxm2_block_id, vcl_string type); 
