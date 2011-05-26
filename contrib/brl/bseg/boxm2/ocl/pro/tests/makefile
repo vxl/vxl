@@ -5,6 +5,7 @@ include $(VXLROOT)/core/testlib/config.mk
 TESTMAIN := test_driver.cxx
 
 TESTS += test_batch_update.cxx
+TESTS += test_filter_kernel.cxx
 
 MINI_PROG_SOURCES += test_include.cxx
 

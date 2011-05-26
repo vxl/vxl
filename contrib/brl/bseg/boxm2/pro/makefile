@@ -18,6 +18,7 @@ SOURCES += processes/boxm2_create_stream_cache_process.cxx
 SOURCES += processes/boxm2_scene_illumination_info_process.cxx
 SOURCES += processes/boxm2_roi_init_process.cxx
 SOURCES += processes/boxm2_persp_cam_from_scene_process.cxx
+SOURCES += processes/boxm2_write_cache_process.cxx
 
 #######################################
 include ${VXLROOT}/config/top-params.mk
