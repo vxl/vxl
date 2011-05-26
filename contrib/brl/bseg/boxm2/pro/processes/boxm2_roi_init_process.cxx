@@ -4,16 +4,15 @@
 //:
 // \file
 // \brief A class for clipping an image based on a 3D bounding box.
-//        -  Inputs:
-//             * Image path (string)
-//             * boxm2_scene_sptr
 //
-//        -  Outputs:
-//             * modified rational camera "vpgl_camera_double_sptr" - local rational camera
-//             * clipped image area (NITF) "vil_image_view_base_sptr"
-//
-//        -  Params:
-//             * geographic uncertainty (error) in meters
+//   -  Inputs:
+//        * Image path (string)
+//        * boxm2_scene_sptr
+//   -  Outputs:
+//        * modified rational camera "vpgl_camera_double_sptr" - local rational camera
+//        * clipped image area (NITF) "vil_image_view_base_sptr"
+//   -  Params:
+//        * geographic uncertainty (error) in meters
 //
 // \author  Gamze D. Tunali
 // \date    Feb 19, 2008
@@ -30,7 +29,6 @@
 #include <vil/file_formats/vil_nitf2_image.h>
 #include <vil/vil_image_view_base.h>
 
-#include <vgl/vgl_box_3d.h>
 #include <vpgl/vpgl_rational_camera.h>
 #include <vpgl/vpgl_local_rational_camera.h>
 
@@ -77,11 +75,11 @@ namespace boxm2_roi_init_process_globals
 
 //: roi_init function
 bool boxm2_roi_init_process_globals::roi_init( vcl_string const& image_path,
-                                              vpgl_rational_camera<double>* camera,
-                                              boxm2_scene_sptr scene,
-                                              float error,
-                                              vil_image_view<unsigned char>* nitf_image_unsigned_char,
-                                              vpgl_local_rational_camera<double>& local_camera)
+                                               vpgl_rational_camera<double>* camera,
+                                               boxm2_scene_sptr scene,
+                                               float error,
+                                               vil_image_view<unsigned char>* nitf_image_unsigned_char,
+                                               vpgl_local_rational_camera<double>& local_camera)
 {
   // read the image and extract the camera
   vil_image_resource_sptr img = vil_load_image_resource(image_path.c_str());
@@ -192,26 +190,26 @@ bool boxm2_roi_init_process_globals::roi_init( vcl_string const& image_path,
 }
 
 
- vcl_vector<vgl_point_3d<double> > boxm2_roi_init_process_globals::corners_of_box_3d(vgl_box_3d<double> box)
- {
-   vcl_vector<vgl_point_3d<double> > corners;
+vcl_vector<vgl_point_3d<double> > boxm2_roi_init_process_globals::corners_of_box_3d(vgl_box_3d<double> box)
+{
+  vcl_vector<vgl_point_3d<double> > corners;
 
-   corners.push_back(box.min_point());
-   corners.push_back(vgl_point_3d<double> (box.min_x()+box.width(), box.min_y(), box.min_z()));
-   corners.push_back(vgl_point_3d<double> (box.min_x()+box.width(), box.min_y()+box.height(), box.min_z()));
-   corners.push_back(vgl_point_3d<double> (box.min_x(), box.min_y()+box.height(), box.min_z()));
-   corners.push_back(vgl_point_3d<double> (box.min_x(), box.min_y(), box.max_z()));
-   corners.push_back(vgl_point_3d<double> (box.min_x()+box.width(), box.min_y(), box.max_z()));
-   corners.push_back(box.max_point());
-   corners.push_back(vgl_point_3d<double> (box.min_x(), box.min_y()+box.height(), box.max_z()));
-   return corners;
- }
+  corners.push_back(box.min_point());
+  corners.push_back(vgl_point_3d<double> (box.min_x()+box.width(), box.min_y(), box.min_z()));
+  corners.push_back(vgl_point_3d<double> (box.min_x()+box.width(), box.min_y()+box.height(), box.min_z()));
+  corners.push_back(vgl_point_3d<double> (box.min_x(), box.min_y()+box.height(), box.min_z()));
+  corners.push_back(vgl_point_3d<double> (box.min_x(), box.min_y(), box.max_z()));
+  corners.push_back(vgl_point_3d<double> (box.min_x()+box.width(), box.min_y(), box.max_z()));
+  corners.push_back(box.max_point());
+  corners.push_back(vgl_point_3d<double> (box.min_x(), box.min_y()+box.height(), box.max_z()));
+  return corners;
+}
 
 //: project_box function
 vgl_box_2d<double>* boxm2_roi_init_process_globals::project_box( vpgl_rational_camera<double>* cam,
-                                                                bgeo_lvcs_sptr lvcs,
-                                                                vgl_box_3d<double> box,
-                                                                float r)
+                                                                 bgeo_lvcs_sptr lvcs,
+                                                                 vgl_box_3d<double> box,
+                                                                 float r)
 {
   double xoff, yoff, zoff;
   xoff = cam->offset(vpgl_rational_camera<double>::X_INDX);
@@ -230,7 +228,7 @@ vgl_box_2d<double>* boxm2_roi_init_process_globals::project_box( vpgl_rational_c
   vgl_box_3d<double> cam_box(center, 2*r, 2*r, 2*r, vgl_box_3d<double>::centre);
   vcl_vector<vgl_point_3d<double> > cam_corners = corners_of_box_3d(cam_box);
   vcl_vector<vgl_point_3d<double> > box_corners = corners_of_box_3d(box);
-  
+
   vgl_box_2d<double>* roi = new vgl_box_2d<double>();
 
   double lon, lat, gz;
@@ -252,10 +250,9 @@ vgl_box_2d<double>* boxm2_roi_init_process_globals::project_box( vpgl_rational_c
       roi->add(p2d);
     }
   }
-  
+
   return roi;
 }
-
 
 
 //: set input and output types
