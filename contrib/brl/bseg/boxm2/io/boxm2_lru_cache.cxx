@@ -91,6 +91,8 @@ boxm2_data_base* boxm2_lru_cache::get_data_base(boxm2_block_id id, vcl_string ty
   if ( iter != data_map.end() )
   {
     //congrats you've found the data block in cache, update cache and return block
+    if( iter->second->read_only_ && !read_only) //enforce write if block is already read_only_
+      iter->second->read_only_ = read_only;
     return iter->second;
   }
 
@@ -140,12 +142,27 @@ void boxm2_lru_cache::remove_data_base(boxm2_block_id id, vcl_string type)
 //: replaces data in the cache with one here
 void boxm2_lru_cache::replace_data_base(boxm2_block_id id, vcl_string type, boxm2_data_base* replacement)
 {
-  this->remove_data_base(id, type); 
-
   //grab a reference to the map of cached_data_
   vcl_map<boxm2_block_id, boxm2_data_base*>& data_map =
     this->cached_data_map(type);
 
+  //find old data base and copy it's read_only/write status
+  vcl_map<boxm2_block_id, boxm2_data_base*>::iterator rem = data_map.find(id);
+  if ( rem != data_map.end() )
+  { 
+    // found the block,
+    boxm2_data_base* litter = data_map[id]; 
+    replacement->read_only_ = litter->read_only_; 
+    vcl_cout<<"Replacement read only ="<<replacement->read_only_; 
+    if (!litter->read_only_) {// save it
+      boxm2_sio_mgr::save_block_data_base(scene_dir_, id, litter, type);
+    } 
+    // now throw it away
+    delete litter; 
+    data_map.erase(rem); 
+  }
+  
+  //this->remove_data_base(id, type); 
   //put the new one in there
   data_map[id] = replacement; 
 }
@@ -199,6 +216,29 @@ vcl_string boxm2_lru_cache::to_string()
     }
   }
   return stream.str();
+}
+
+//: dumps writeable data onto disk
+void boxm2_lru_cache::write_to_disk()
+{
+   //: save the data and delete
+  for (vcl_map<vcl_string, vcl_map<boxm2_block_id, boxm2_data_base*> >::iterator iter = cached_data_.begin(); 
+    iter != cached_data_.end(); iter++) 
+  {
+    for (vcl_map<boxm2_block_id, boxm2_data_base*>::iterator it = iter->second.begin(); it != iter->second.end(); it++) {
+      boxm2_block_id id = it->first;
+      if (!it->second->read_only_) {
+        boxm2_sio_mgr::save_block_data_base(scene_dir_, it->first, it->second, iter->first);
+      }
+    }
+  }
+
+  for (vcl_map<boxm2_block_id, boxm2_block*>::iterator iter = cached_blocks_.begin();
+    iter != cached_blocks_.end(); iter++)
+  {
+    boxm2_block_id id = iter->first;
+    boxm2_sio_mgr::save_block(scene_dir_, iter->second);
+  }
 }
 
 //: shows elements in cache

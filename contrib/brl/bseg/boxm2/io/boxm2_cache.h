@@ -52,6 +52,9 @@ class boxm2_cache: public vbl_ref_count
   template <boxm2_data_type T>
   boxm2_data<T>* get_data(boxm2_block_id id);
 
+  //: dumps writeable data onto disk
+  virtual void write_to_disk() = 0; 
+
   //: disable the write process -- generic method does not do anything; see specialisations
   virtual void disable_write() {}
 
