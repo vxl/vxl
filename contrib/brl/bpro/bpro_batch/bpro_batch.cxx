@@ -202,7 +202,8 @@ PyObject *get_output_string(PyObject * /*self*/, PyObject *args)
   value = result_out->value();
 
   vcl_cout << " In get_output_string, the output string is: "<< value << vcl_endl;
-  return Py_BuildValue("s", value);
+
+  return Py_BuildValue("s", value.c_str());
 }
 
 
