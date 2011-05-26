@@ -12,6 +12,7 @@
 #include <vpgl/algo/vpgl_bundler_sfm_impl.h>
 #include <vpgl/algo/vpgl_bundler_tracks.h>
 #include <vpgl/algo/vpgl_bundler_tracks_impl.h>
+#include <vpgl/algo/vpgl_bundler_utils.h>
 #include <vpgl/algo/vpgl_camera_bounds.h>
 #include <vpgl/algo/vpgl_camera_compute.h>
 #include <vpgl/algo/vpgl_camera_from_box.h>

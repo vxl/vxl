@@ -1,3 +1,4 @@
+#include <boxm2/cpp/algo/boxm2_batch_functors.h>
 #include <boxm2/cpp/algo/boxm2_cast_cone_ray_function.h>
 #include <boxm2/cpp/algo/boxm2_cast_intensities_functor.h>
 #include <boxm2/cpp/algo/boxm2_cast_ray_function.h>
