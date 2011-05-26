@@ -10,9 +10,8 @@ DECLARE_FUNC_CONS(vpgl_load_local_rational_camera_process);
 DECLARE_FUNC_CONS(vpgl_load_rational_camera_process);
 DECLARE_FUNC_CONS(vpgl_load_rational_camera_nitf_process);
 DECLARE_FUNC_CONS(vpgl_load_perspective_camera_process);
-DECLARE_FUNC_CONS(vpgl_save_perspective_camera_process);
-DECLARE_FUNC_CONS(vpgl_scale_perspective_camera_process);
 DECLARE_FUNC_CONS(vpgl_save_rational_camera_process);
+DECLARE_FUNC_CONS(vpgl_save_perspective_camera_process);
 DECLARE_FUNC_CONS(vpgl_nitf_camera_coverage_process);
 DECLARE_FUNC_CONS(vpgl_create_local_rational_camera_process);
 DECLARE_FUNC_CONS(vpgl_create_local_rational_camera_nitf_process);
@@ -26,5 +25,7 @@ DECLARE_FUNC_CONS(vpgl_correct_rational_cameras_mult_corr_refine_process);
 DECLARE_FUNC_CONS(vpgl_project_process);
 DECLARE_FUNC_CONS(vpgl_convert_to_generic_camera_process);
 DECLARE_FUNC_CONS(vpgl_resample_perspective_camera_process);
-
+#if 0 //deprecate scale perspective camera
+DECLARE_FUNC_CONS(vpgl_scale_perspective_camera_process);
+#endif
 #endif

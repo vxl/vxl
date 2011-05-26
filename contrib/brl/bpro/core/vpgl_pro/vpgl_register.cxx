@@ -24,7 +24,9 @@ void vpgl_register::register_process()
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vpgl_create_local_rational_camera_process, "vpglCreateLocalRationalCameraProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vpgl_create_local_rational_camera_nitf_process, "vpglCreateLocalRationalCameraNITFProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vpgl_projective_to_rational_camera_process, "vpglProjectiveToRationalCameraProcess");
+#if 0 //deprecate scale perspective camera
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vpgl_scale_perspective_camera_process, "vpglScalePerspectiveCameraProcess");
+#endif
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vpgl_correct_rational_camera_process, "vpglCorrectRationalCameraProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vpgl_create_perspective_camera_process, "vpglCreatePerspectiveCameraProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vpgl_save_perspective_camera_vrml_process, "vpglSavePerspectiveCameraVrmlProcess");
