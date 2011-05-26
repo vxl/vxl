@@ -1,5 +1,5 @@
-#ifndef boxm2_update_image_functor_h
-#define boxm2_update_image_functor_h
+#ifndef boxm2_update_batch_functor_h_
+#define boxm2_update_batch_functor_h_
 //:
 // \file
 
@@ -7,7 +7,7 @@
 #include <vcl_vector.h>
 #include <vcl_limits.h>
 #include <vcl_cmath.h>
-
+#include <vcl_iostream.h>
 
 class boxm2_mean_intensities_batch_functor
 {
@@ -59,19 +59,20 @@ class boxm2_mean_intensities_print_functor
     id_ = output_alph->block_id();
     return true;
   }
+
   inline bool process_cell(int index)
   {
     datatype & alpha=alpha_data_->data()[index];
     vcl_vector<datatype> out = str_cache_->get_next<BOXM2_AUX0,datatype>(id_, index);
-    
+
     if (index%1000000 == 0) {
-      vcl_cout << alpha << " ";
+      vcl_cout << alpha << ' ';
       for (unsigned j = 0; j < out.size(); j++) {
-        vcl_cout << out[j] << " ";
+        vcl_cout << out[j] << ' ';
       }
-      vcl_cout << "\n";
+      vcl_cout << '\n';
     }
-    
+
     return true;
   }
  private:
@@ -80,4 +81,4 @@ class boxm2_mean_intensities_print_functor
   boxm2_block_id id_;
 };
 
-#endif
+#endif // boxm2_update_batch_functor_h_

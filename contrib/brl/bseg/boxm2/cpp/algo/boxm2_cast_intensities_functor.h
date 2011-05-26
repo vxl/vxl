@@ -2,8 +2,10 @@
 #define boxm2_cast_intensities_functor_h
 //:
 // \file
+
 #include <boxm2/cpp/algo/boxm2_cast_ray_function.h>
 #include <vil/vil_image_view.h>
+#include <vcl_iostream.h>
 
 class boxm2_cast_intensities_functor
 {
@@ -31,7 +33,7 @@ class boxm2_cast_intensities_functor
 
 class boxm2_data_print_functor
 {
-public:
+ public:
   //: "default" constructor
   boxm2_data_print_functor() {}
 
@@ -48,12 +50,12 @@ public:
     char * arr = buf_->cell_buffer(byte_ind, data_size_);
     if (index%1000000 == 0) {
       boxm2_data_info::print_data(prefix_, arr);
-      vcl_cout << "\n";
+      vcl_cout << '\n';
     }
     return true;
   }
 
-private:
+ private:
   boxm2_data_base *buf_;
   vcl_size_t data_size_;
   vcl_string prefix_;
