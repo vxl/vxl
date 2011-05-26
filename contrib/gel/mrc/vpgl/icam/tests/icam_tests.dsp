@@ -105,6 +105,9 @@ SOURCE=.\test_icam_transform.cxx
 SOURCE=.\test_minimizer.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\test_rotation_only.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\test_include.cxx
 # End Source File
 # End Group

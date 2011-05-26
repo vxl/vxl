@@ -149,6 +149,9 @@ SOURCE=.\boxm2_mean_intensities_batch_functor.h
 # Begin Source File
 SOURCE=.\boxm2_filter_block_function.h
 # End Source File
+# Begin Source File
+SOURCE=.\boxm2_batch_functors.h
+# End Source File
 # End Group
 # End Target
 # End Project

@@ -108,6 +108,12 @@ SOURCE=.\processes/brad_save_sun_index_process.cxx
 SOURCE=.\processes/brad_sun_dir_bin_process.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\processes/bbas_sun_angles_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/bbas_atmospheric_corr_process.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/vbl_io_smart_ptr+bbas_1d_array_float-.cxx
 # End Source File
 # Begin Source File

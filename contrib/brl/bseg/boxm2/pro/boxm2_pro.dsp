@@ -114,9 +114,6 @@ SOURCE=.\processes/boxm2_create_scene_process.cxx
 SOURCE=.\processes/boxm2_export_textured_mesh_process.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\processes/boxm2_save_data_process.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\processes/boxm2_texture_mesh_process.cxx
 # End Source File
 # Begin Source File
@@ -130,6 +127,12 @@ SOURCE=.\processes/boxm2_create_stream_cache_process.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\processes/boxm2_scene_illumination_info_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/boxm2_roi_init_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/boxm2_persp_cam_from_scene_process.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"

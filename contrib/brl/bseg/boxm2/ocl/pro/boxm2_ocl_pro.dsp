@@ -152,6 +152,9 @@ SOURCE=.\processes/boxm2_ocl_probability_of_image_gl_process.cxx
 # Begin Source File
 SOURCE=.\processes/boxm2_ocl_render_cone_expected_image_process.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\processes/boxm2_ocl_filter_process.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"

@@ -186,6 +186,9 @@ SOURCE=.\vpgl_bundler_sfm_impl.cxx
 SOURCE=.\vpgl_bundler_tracks_impl.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\vpgl_bundler_utils.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/vpgl_list+vgl_h_matrix_2d+double--.cxx
 # End Source File
 # Begin Source File
@@ -310,6 +313,9 @@ SOURCE=.\vpgl_bundler_tracks_impl.h
 # End Source File
 # Begin Source File
 SOURCE=.\vpgl_bundler_inters.h
+# End Source File
+# Begin Source File
+SOURCE=.\vpgl_bundler_utils.h
 # End Source File
 # End Group
 # End Target
