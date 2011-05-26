@@ -110,13 +110,15 @@ boxm2_filter_block_function::boxm2_filter_block_function(boxm2_block_metadata da
           }
 
           //if you've collected a nonzero amount of probs, update it
+          int currIdx = bit_tree.get_data_index(currBitIndex);
+          float prob = 1.0f - vcl_exp( -alpha_data[currIdx] * side_len * data.sub_block_dim_.x() ); 
+          probs.push_back(prob); 
           if (probs.size() > 0) {
             vcl_sort( probs.begin(), probs.end() );
             float median = probs[ (int) (probs.size()/2) ];
             float medAlpha = -1.0 * vcl_log(1.0f-median) / ( side_len * data.sub_block_dim_.x() );
 
             //store the median value in the new alpha (copy)
-            int currIdx = bit_tree.get_data_index(currBitIndex);
             alpha_cpy[currIdx] = medAlpha;
           }
         } //end leaf for
