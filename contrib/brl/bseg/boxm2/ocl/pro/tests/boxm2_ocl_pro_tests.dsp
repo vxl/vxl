@@ -99,6 +99,9 @@ SOURCE=.\test_driver.cxx
 SOURCE=.\test_batch_update.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\test_filter_kernel.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\test_include.cxx
 # End Source File
 # End Group

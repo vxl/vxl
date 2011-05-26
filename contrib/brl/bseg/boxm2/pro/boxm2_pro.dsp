@@ -134,6 +134,9 @@ SOURCE=.\processes/boxm2_roi_init_process.cxx
 # Begin Source File
 SOURCE=.\processes/boxm2_persp_cam_from_scene_process.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\processes/boxm2_write_cache_process.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
