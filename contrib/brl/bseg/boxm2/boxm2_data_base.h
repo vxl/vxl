@@ -26,7 +26,7 @@ class boxm2_data_base : public vbl_ref_count
  public:
     //: Constructor - beware that the data_buffer becomes OWNED (and will be deleted) by this class!
     boxm2_data_base(char * data_buffer, vcl_size_t length, boxm2_block_id id, bool read_only = true)
-    : id_(id), data_buffer_(data_buffer),  buffer_length_(length), read_only_(read_only) {}
+    : read_only_(read_only), id_(id), data_buffer_(data_buffer), buffer_length_(length) {}
 
     //: initializes empty data buffer
     boxm2_data_base(boxm2_block_metadata data, vcl_string type, bool read_only = true);
@@ -38,14 +38,13 @@ class boxm2_data_base : public vbl_ref_count
     char *            data_buffer()    { return data_buffer_; }
     vcl_size_t        buffer_length()  { return buffer_length_; }
     boxm2_block_id&   block_id()       { return id_; }
-    //: accessor to a portion of the byte buffer 
-    char *            cell_buffer(int i, vcl_size_t cell_size);  
-    
+    //: accessor to a portion of the byte buffer
+    char *            cell_buffer(int i, vcl_size_t cell_size);
+
     //: setter for swapping out data buffer
 
     //: by default data is read-only, i.e. cache doesn't save it before destroying it
     bool read_only_;
-    
 
  protected:
     //: id for this particular block
