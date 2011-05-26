@@ -41,6 +41,7 @@ SOURCES += vpgl_bundle_rolling_shutter_adjust.cxx
 SOURCES += vpgl_bundler.cxx
 SOURCES += vpgl_bundler_sfm_impl.cxx
 SOURCES += vpgl_bundler_tracks_impl.cxx
+SOURCES += vpgl_bundler_utils.cxx
 
 #######################################
 include ${VXLROOT}/config/top-params.mk

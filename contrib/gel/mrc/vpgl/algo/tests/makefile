@@ -26,6 +26,7 @@ TESTS += test_camera_bounds.cxx
 TESTS += test_ba_fixed_k_lsqr.cxx
 TESTS += test_ba_shared_k_lsqr.cxx
 TESTS += test_em_compute_5_point.cxx
+TESTS += test_bundler_utils.cxx
 
 MINI_PROG_SOURCES += test_include.cxx
 MINI_PROG_SOURCES += test_template_include.cxx

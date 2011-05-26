@@ -24,6 +24,7 @@ SOURCES += processes/boxm2_ocl_convert_float_image_to_rgba_process.cxx
 SOURCES += processes/boxm2_ocl_probability_of_image_process.cxx
 SOURCES += processes/boxm2_ocl_probability_of_image_gl_process.cxx
 SOURCES += processes/boxm2_ocl_render_cone_expected_image_process.cxx
+SOURCES += processes/boxm2_ocl_filter_process.cxx
 
 #######################################
 include ${VXLROOT}/config/top-params.mk
