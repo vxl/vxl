@@ -214,7 +214,7 @@ bocl_mem* boxm2_opencl_cache::get_block_info(boxm2_block_id id)
 
 //: Get data generic
 // Possible issue: if \p num_bytes is greater than 0, should it then always initialize a new data object?
-bocl_mem* boxm2_opencl_cache::get_data(boxm2_block_id id, vcl_string type, vcl_size_t num_bytes)
+bocl_mem* boxm2_opencl_cache::get_data(boxm2_block_id id, vcl_string type, vcl_size_t num_bytes, bool read_only)
 {
   // grab a reference to the map of cached_data_
   vcl_map<boxm2_block_id, bocl_mem*>& data_map =
@@ -240,11 +240,14 @@ bocl_mem* boxm2_opencl_cache::get_data(boxm2_block_id id, vcl_string type, vcl_s
       return data;
     }
 #endif // 0
+    
+    //enforce read_only read_write
+    boxm2_data_base* data_base = cpu_cache_->get_data_base(id,type,num_bytes,read_only);
     return iter->second;
   }
 
   // load data into CPU cache and check size to see if GPU cache needs cleaning
-  boxm2_data_base* data_base = cpu_cache_->get_data_base(id,type,num_bytes);
+  boxm2_data_base* data_base = cpu_cache_->get_data_base(id,type,num_bytes,read_only);
   vcl_size_t toLoadSize;
   if (num_bytes > 0 && data_base->buffer_length() != num_bytes )
     toLoadSize = num_bytes;
@@ -292,6 +295,8 @@ void boxm2_opencl_cache::deep_replace_data(boxm2_block_id id, vcl_string type, b
 {
   // instantiate new data block
   vcl_size_t numDataBytes = mem->num_bytes();
+  
+  //TODO: figure out consistent scheme to make this read_only or read_write
   boxm2_data_base* newData = new boxm2_data_base(new char[numDataBytes], numDataBytes, id);
 
   // write bocl_mem data to cpu buffer

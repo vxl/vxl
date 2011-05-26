@@ -50,8 +50,8 @@ class boxm2_opencl_cache: public vbl_ref_count
 
     //: returns data pointer to data block specified by ID
     template<boxm2_data_type T>
-    bocl_mem* get_data(boxm2_block_id, vcl_size_t num_bytes=0);
-    bocl_mem* get_data(boxm2_block_id, vcl_string type, vcl_size_t num_bytes=0);
+    bocl_mem* get_data(boxm2_block_id, vcl_size_t num_bytes=0, bool read_only = true);
+    bocl_mem* get_data(boxm2_block_id, vcl_string type, vcl_size_t num_bytes=0, bool read_only = true);
 
     //: empties out cache, deletes all bocl_mem*s
     bool clear_cache();
@@ -108,9 +108,9 @@ typedef vbl_smart_ptr<boxm2_opencl_cache> boxm2_opencl_cache_sptr;
 
 //: get data by type and id
 template<boxm2_data_type T>
-bocl_mem* boxm2_opencl_cache::get_data(boxm2_block_id id, vcl_size_t num_bytes)
+bocl_mem* boxm2_opencl_cache::get_data(boxm2_block_id id, vcl_size_t num_bytes, bool read_only)
 {
-  return get_data(id, boxm2_data_traits<T>::prefix(), num_bytes);
+  return get_data(id, boxm2_data_traits<T>::prefix(), num_bytes, read_only);
 }
 
 //: Binary write boxm2_cache  to stream
