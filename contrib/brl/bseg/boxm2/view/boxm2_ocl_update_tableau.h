@@ -54,6 +54,7 @@ class boxm2_ocl_update_tableau : public boxm2_ocl_render_tableau
   //func to update frame on GPU (returns gpu time)
   float update_frame(vil_image_view_base_sptr in_im, vpgl_camera_double_sptr in_cam);
   float refine(float thresh); 
+  float filter(); 
   float save();
   vcl_vector<vcl_string> cams_;
   vcl_vector<vcl_string> imgs_;

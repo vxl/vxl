@@ -28,12 +28,14 @@ boxm2_ocl_update_tableau::boxm2_ocl_update_tableau()
   DECLARE_FUNC_CONS(boxm2_ocl_update_color_process);
   DECLARE_FUNC_CONS(boxm2_ocl_update_process);
   DECLARE_FUNC_CONS(boxm2_ocl_refine_process);
-  DECLARE_FUNC_CONS(boxm2_save_data_process); 
+  DECLARE_FUNC_CONS(boxm2_ocl_filter_process);
+  DECLARE_FUNC_CONS(boxm2_write_cache_process); 
 
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_ocl_update_color_process, "boxm2OclUpdateColorProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_ocl_update_process, "boxm2OclUpdateProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_ocl_refine_process, "boxm2OclRefineProcess");
-  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_save_data_process, "boxm2SaveDataProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_ocl_filter_process, "boxm2OclFilterProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_write_cache_process, "boxm2WriteCacheProcess");
 
   REGISTER_DATATYPE(boxm2_cache_sptr);
   REGISTER_DATATYPE(boxm2_opencl_cache_sptr);
@@ -79,6 +81,10 @@ bool boxm2_ocl_update_tableau::handle(vgui_event const &e)
   //handle refine command - keyboard press "d" (for divide)
   else if (e.type == vgui_KEY_PRESS && e.key == vgui_key('s')) {
     this->save();
+  }
+  
+  else if (e.type == vgui_KEY_PRESS && e.key == vgui_key('f')) {
+    this->filter(); 
   }
   
   //HANDLE idle events - do model updating
@@ -170,6 +176,29 @@ float boxm2_ocl_update_tableau::refine(float thresh)
     return -1.0f;
 }
 
+//: filters scene
+float boxm2_ocl_update_tableau::filter()
+{
+  //set up brdb_value_sptr arguments...
+  brdb_value_sptr brdb_device       = new brdb_value_t<bocl_device_sptr>(device_);
+  brdb_value_sptr brdb_scene        = new brdb_value_t<boxm2_scene_sptr>(scene_);
+  brdb_value_sptr brdb_opencl_cache = new brdb_value_t<boxm2_opencl_cache_sptr>(opencl_cache_);
+
+  //if scene has RGB data type, use color render process
+  bool good = bprb_batch_process_manager::instance()->init_process("boxm2OclFilterProcess");
+
+  //set process args
+  good = good
+      && bprb_batch_process_manager::instance()->set_input(0, brdb_device) // device
+      && bprb_batch_process_manager::instance()->set_input(1, brdb_scene)  //  scene
+      && bprb_batch_process_manager::instance()->set_input(2, brdb_opencl_cache)
+      && bprb_batch_process_manager::instance()->run_process();
+  if (good)
+    return 0.0f;
+  else
+    return -1.0f;  
+}
+
 //:save scene
 float boxm2_ocl_update_tableau::save()
 {
@@ -178,12 +207,11 @@ float boxm2_ocl_update_tableau::save()
   brdb_value_sptr brdb_cache = new brdb_value_t<boxm2_cache_sptr>(cache_); 
 
   //if scene has RGB data type, use color render process
-  bool good = bprb_batch_process_manager::instance()->init_process("boxm2SaveDataProcess");
+  bool good = bprb_batch_process_manager::instance()->init_process("boxm2WriteCacheProcess");
 
   //set process args
   good = good
-      && bprb_batch_process_manager::instance()->set_input(0, brdb_scene) // device
-      && bprb_batch_process_manager::instance()->set_input(1, brdb_cache)  //  scene
+      && bprb_batch_process_manager::instance()->set_input(0, brdb_cache)  //  scene
       && bprb_batch_process_manager::instance()->run_process();
 
   if (good)
