@@ -1,5 +1,6 @@
 // This is brl/bseg/boxm2/ocl/pro/processes/boxm2_ocl_filter_process.cxx
 #include <bprb/bprb_func_process.h>
+#include "boxm2_ocl_filter_process.h"
 //:
 // \file
 // \brief  A process for rendering depth map of a scene.
@@ -20,34 +21,7 @@
 
 //directory utility
 #include <vul/vul_timer.h>
-#include <vcl_where_root_dir.h>
-#include <bocl/bocl_device.h>
-#include <bocl/bocl_kernel.h>
 #include <boct/boct_bit_tree2.h>
-
-namespace boxm2_ocl_filter_process_globals
-{
-    const unsigned n_inputs_ = 3;
-    const unsigned n_outputs_ = 0;
-
-    void compile_filter_kernel(bocl_device_sptr device,bocl_kernel * refine_data_kernel)
-    {
-        vcl_vector<vcl_string> src_paths;
-        vcl_string source_dir = vcl_string(VCL_SOURCE_ROOT_DIR) + "/contrib/brl/bseg/boxm2/ocl/cl/";
-        src_paths.push_back(source_dir + "scene_info.cl");
-        src_paths.push_back(source_dir + "bit/bit_tree_library_functions.cl");
-        src_paths.push_back(source_dir + "basic/linked_list.cl");
-        src_paths.push_back(source_dir + "basic/sort_vector.cl");
-        src_paths.push_back(source_dir + "bit/filter_block.cl"); 
-
-        vcl_string options = " -D LIST_TYPE=float4 "; 
-        refine_data_kernel->create_kernel( &device->context(), device->device_id(),
-                                           src_paths, "filter_block", options,
-                                           "boxm2 ocl filter kernel");
-    }
-
-    static vcl_map<vcl_string,bocl_kernel* > kernels;
-}
 
 bool boxm2_ocl_filter_process_cons(bprb_func_process& pro)
 {
@@ -71,12 +45,11 @@ bool boxm2_ocl_filter_process(bprb_func_process& pro)
     using namespace boxm2_ocl_filter_process_globals;
 
     if ( pro.n_inputs() < n_inputs_ ){
-        vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
+        vcl_cout << pro.name() << ": The number of inputs should be " << n_inputs_<< vcl_endl;
         return false;
     }
-    float transfer_time=0.0f;
     float gpu_time=0.0f;
-    
+
     //get the inputs
     unsigned i = 0;
     bocl_device_sptr device= pro.get_input<bocl_device_sptr>(i++);
@@ -89,11 +62,11 @@ bool boxm2_ocl_filter_process(bprb_func_process& pro)
                                                   *(device->device_id()),
                                                   CL_QUEUE_PROFILING_ENABLE,&status);
     if (status!=0) {
-        vcl_cout<<" ERROR in initializing a queue"<<vcl_endl;
+        vcl_cerr<<"ERROR in initializing a queue\n";
         return false;
     }
-    vcl_string identifier = device->device_identifier(); 
-    
+    vcl_string identifier = device->device_identifier();
+
     // compile the kernel
     if (kernels.find(identifier)==kernels.end())
     {
@@ -109,14 +82,14 @@ bool boxm2_ocl_filter_process(bprb_func_process& pro)
     boxm2_ocl_util::set_bit_lookup(lookup_arr);
     bocl_mem_sptr lookup=new bocl_mem(device->context(), lookup_arr, sizeof(cl_uchar)*256, "bit lookup buffer");
     lookup->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
-    
+
     //center buffers
-    bocl_mem_sptr centerX = new bocl_mem(device->context(), boct_bit_tree2::centerX, sizeof(cl_float)*585, "centersX lookup buffer"); 
-    bocl_mem_sptr centerY = new bocl_mem(device->context(), boct_bit_tree2::centerY, sizeof(cl_float)*585, "centersY lookup buffer"); 
-    bocl_mem_sptr centerZ = new bocl_mem(device->context(), boct_bit_tree2::centerZ, sizeof(cl_float)*585, "centersZ lookup buffer"); 
-    centerX->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR); 
-    centerY->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);     
-    centerZ->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR); 
+    bocl_mem_sptr centerX = new bocl_mem(device->context(), boct_bit_tree2::centerX, sizeof(cl_float)*585, "centersX lookup buffer");
+    bocl_mem_sptr centerY = new bocl_mem(device->context(), boct_bit_tree2::centerY, sizeof(cl_float)*585, "centersY lookup buffer");
+    bocl_mem_sptr centerZ = new bocl_mem(device->context(), boct_bit_tree2::centerZ, sizeof(cl_float)*585, "centersZ lookup buffer");
+    centerX->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
+    centerY->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
+    centerZ->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
 
     //2. set workgroup size
     vcl_map<boxm2_block_id, boxm2_block_metadata> blocks = scene->blocks();
@@ -135,12 +108,11 @@ bool boxm2_ocl_filter_process(bprb_func_process& pro)
 
         ////////////////////////////////////////////////////////////////////////////
         // Step One... currently mimics C++ implementation
-        int numTrees = data.sub_block_num_.x() * data.sub_block_num_.y() * data.sub_block_num_.z();
 
         //get current and copy of alpha
         vul_timer transfer;
         bocl_mem* alphas = opencl_cache->get_data<BOXM2_ALPHA>(id);
-        vcl_size_t dataSize = alphas->num_bytes(); 
+        vcl_size_t dataSize = alphas->num_bytes();
 
         bocl_mem* new_alphas = new bocl_mem(device->context(), NULL, dataSize, "new alpha buffer ");
         new_alphas->create_buffer(CL_MEM_READ_WRITE, queue);
@@ -152,7 +124,7 @@ bool boxm2_ocl_filter_process(bprb_func_process& pro)
 
         //set workspace
         vcl_size_t lThreads[] = {4, 4, 4};
-        vcl_size_t gThreads[] = { RoundUp(data.sub_block_num_.x(), lThreads[0]), 
+        vcl_size_t gThreads[] = { RoundUp(data.sub_block_num_.x(), lThreads[0]),
                                   RoundUp(data.sub_block_num_.y(), lThreads[1]),
                                   RoundUp(data.sub_block_num_.z(), lThreads[2]) };
 
@@ -169,7 +141,7 @@ bool boxm2_ocl_filter_process(bprb_func_process& pro)
         kern->set_local_arg( lThreads[0]*lThreads[1]*lThreads[2]*sizeof(cl_uchar16) );  //local trees (uchar16 per local thread)
         kern->set_local_arg( lThreads[0]*lThreads[1]*lThreads[2]*sizeof(cl_uchar16) );  //neighbor trees (uchar16 per local thread)
         kern->set_local_arg( lThreads[0]*lThreads[1]*lThreads[2]*sizeof(cl_float4)*6 );  //local neighbor points 6*float4 per local thread)
-        
+
         //execute kernel
         kern->execute( queue, 3, lThreads, gThreads);
         clFinish( queue);
@@ -178,11 +150,11 @@ bool boxm2_ocl_filter_process(bprb_func_process& pro)
 
         //write the data to buffer
         opencl_cache->deep_replace_data(id, boxm2_data_traits<BOXM2_ALPHA>::prefix(), new_alphas);
-        
+
     }  //end block iter for
 
     vcl_cout<<"Scene median filter time: "<<gpu_time<<" ms"<<vcl_endl;
-    
+
     return true;
 }
 
