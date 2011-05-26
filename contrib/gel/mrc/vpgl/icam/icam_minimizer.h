@@ -3,15 +3,18 @@
 #define icam_minimizer_h_
 //:
 // \file
-// \brief Find a camera using the depth image of known camera and minimizing squared intensity differences
-// The camera is determined by minimizing the
-// sum of squared differences with respect to the image of a known camera.
-// The known camera is assumed to have the form K[I|0], i.e., the world
+// \brief Find a camera using the depth image of known camera and minimizing squared intensity differences or mutual information
+//
+// The camera is determined by minimizing the sum of squared differences or 
+// mutual information between a mapped source image and a destination image.
+// The destination camera is assumed to have the form K[I|0], i.e., the world
 // coordinate system is the same as the camera frame. A depth map, Z(u,v),
 // is given for the known camera. The rotation and translation parameters for
-// the unknown (to) camera with respect to the known (from) camera are
-// adjusted so as to minimize the least squared difference in intensity between
-// the from_image and to_image.
+// the unknown source camera with respect to the destination identity camera 
+// are adjusted so as to minimize the least squared difference in intensity 
+// between the mapped source image and the destination image. The mapping is
+// computed using the depth map as described in icam_depth_transform.h
+
 // \author J.L. Mundy
 // \date Sept. 6, 2010
 //
@@ -57,7 +60,7 @@ class icam_minimizer
   //: number of pyramid levels
   unsigned n_levels() const {return dt_pyramid_.n_levels();}
 
-  //: in the cases where source image is not know at construction, the image is set later
+  //: in the cases where source image is not known at construction, the image is set later
   void set_source_img(const vil_image_view<float>& source_img);
 
   bool verbose() {return verbose_;}
@@ -65,7 +68,7 @@ class icam_minimizer
   //: print parameters
   void print_params();
 
-  //: principal ray iterator for exhaustive search
+  //: principal ray iterator for exhaustive search, scans over a set of principal rays lying inside a cone computed for an image at the specified level
   principal_ray_scan pray_scan(unsigned level, unsigned& n_pts);
 
   //: polar angle increment for exhaustive search, the polar range is typically -pi <= a <= pi
@@ -197,16 +200,17 @@ bool  pyramid_camera_search(vgl_vector_3d<double> const&
                                            unsigned param_index, double pmin,
                                            double pmax, double pinc);
 
-  //:source image mapped to destination camera
+  //:source image mapped to destination by specified source cam
   vil_image_view<float> view(vgl_rotation_3d<double>& rot,
                              vgl_vector_3d<double>& trans,
                              unsigned level);
-  //:mask for source image mapped to destination camera
+  //:mask for source image mapped to destination by specified source cam
   vil_image_view<float> mask(vgl_rotation_3d<double>& rot,
                              vgl_vector_3d<double>& trans,
                              unsigned level);
-  //: destination camera at level
-  vpgl_perspective_camera<double> dest_cam(unsigned level);
+
+  //: source camera relative to desination coordinate system at level
+  vpgl_perspective_camera<double> source_cam(unsigned level);
 
 
   //:source image at level

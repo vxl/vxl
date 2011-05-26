@@ -11,18 +11,35 @@
 //  Modifications
 //   None
 // \endverbatim
-
+// In addition to the least squares cost function, this class also provides
+// a method for computing errors based on mutual information. Recall that
+// mutual information is defined as,
+//     H(mapped_source)+H(dest)-H(mapped_source,dest).
+// Since the destination pixels are always the same, it is computationally
+// more efficient to define an error measure called entropy_diff which is 
+//   H(mapped_source)-H(mapped_source,dest). A maximum of this quantity
+// will also be a maximum of mutual information
+// The error methods are used in exhausitive searches over transform
+// parameters, while the least_squares_function is used in 
+// a Levenberg Marquardt solver, which is applied at the final stage of
+// camera transform refinement. It is noted that least squares is only
+// appropriate when the source and destination images have the same
+// illumination direction, as in a video sequence. Mutual information is 
+// more appropriate when the images have different capture conditions.
+//
+// to do: develop a least_squares_function for differing capture conditions.
+//
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_least_squares_function.h>
 #include <vil/vil_image_view.h>
 #include <icam/icam_depth_transform.h>
 #include <vbl/vbl_array_2d.h>
 
-//: A cost function for registering video frames by minimizing square difference in intensities
+//: A cost function for registering video frames by minimizing square difference in intensities.
 class icam_cost_func : public vnl_least_squares_function
 {
  public:
-  //: Constructor
+  //: Constructor. The source image is mapped to the destination frame by dt. nbins is the number of histogram bins used to compute entropies.
   icam_cost_func( const vil_image_view<float>& source_img,
                   const vil_image_view<float>& dest_img,
                   const icam_depth_transform& dt,
@@ -35,46 +52,50 @@ class icam_cost_func : public vnl_least_squares_function
   virtual void f(vnl_vector<double> const& x, vnl_vector<double>& fx);
 
   //debug purposes
+  //: error based on absolute difference
   double error(vnl_vector_fixed<double, 3> rodrigues,
                vgl_vector_3d<double> trans,
                double min_allowed_overlap = 0.01);
 
+  //: A set of error values for a range of camera parameter values, the parameter index indicates which paramter is being varied.
   vcl_vector<double> error(vnl_vector<double> const& x,
                            unsigned param_index, double pmin,
                            double pmax, double pinc);
-
+  //: The joint probability histogram for source and destination pixel values for a given camera transformation.
   vbl_array_2d<double> joint_probability(vnl_vector_fixed<double, 3> rodrigues,
                                          vgl_vector_3d<double> trans);
-
+  //: Joint probability for a given mapped source image
   vbl_array_2d<double> 
     joint_probability(vil_image_view<float> const& map_dest,
                       vil_image_view<float> const& map_mask);
 
-  double entropy(vnl_vector_fixed<double, 3> rodrigues,
-                 vgl_vector_3d<double> trans,
-                 double min_allowed_overlap = 0.01);
-
+  //: Mutual information between the destination and mapped source image
   double mutual_info(vnl_vector_fixed<double, 3> rodrigues,
                      vgl_vector_3d<double> trans,
                      double min_allowed_overlap = 0.01);
 
+  //: Mutual information leaving out the destination entropy
   double entropy_diff(vnl_vector_fixed<double, 3> rodrigues,
                       vgl_vector_3d<double> trans,
                       double min_allowed_overlap = 0.01);
 
+  //: Mutual information for a source image mapped to the destination frame
   double mutual_info(vil_image_view<float> const& map_dest,
                      vil_image_view<float> const& map_mask,
                      double min_allowed_overlap = 0.01);
+
   //: the fraction of potential number of samples
   double frac_samples()
     {return (1.0*n_samples_)/max_samples_;}
 
+  //: the full set of samples for a given transformation (useful for debug)
   void samples(vnl_vector_fixed<double, 3> rodrigues,
                vgl_vector_3d<double> trans,
                vnl_vector<double>& trans_source,
                vnl_vector<double>& mask,
                vnl_vector<double>& dest);
 
+  //: the source image mapped to the destination frame (useful for debug)
   vil_image_view<float> mapped_dest(vnl_vector_fixed<double, 3> rodrigues,
                                     vgl_vector_3d<double> trans);
  protected:

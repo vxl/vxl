@@ -5,6 +5,7 @@
 #include <vnl/vnl_double_2.h>
 #include <vnl/vnl_double_3.h>
 #include <vnl/vnl_double_4.h>
+#include <vnl/vnl_math.h>
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_vector_3d.h>
 #include <vgl/vgl_plane_3d.h>
@@ -249,4 +250,24 @@ double vpgl_ray::rot_about_ray(vgl_rotation_3d<double> const& r0,
   // get angle difference
   double ang0 = r0_alpha_rod.magnitude(), ang1 = r1_alpha_rod.magnitude();
   return vcl_fabs(ang0-ang1);
+}
+
+vgl_rotation_3d<double> vpgl_ray::
+rot_to_point_ray(vgl_vector_3d<double> const& ray_dir)
+{
+  vnl_vector_fixed<double, 3> za(0.0, 0.0, 1.0),
+    v(ray_dir.x(), ray_dir.y(), ray_dir.z());
+  //rotation from principal axis to z axis
+  vgl_rotation_3d<double> R_axis(v, za);
+  return R_axis;
+}
+
+vgl_rotation_3d<double> vpgl_ray::rot_to_point_ray(double azimuth,
+                                                   double elevation)
+{
+  double el_rad = elevation*vnl_math::pi/180.0;
+  double s = vcl_sin(el_rad), c = vcl_cos(el_rad);
+  double az_rad = azimuth*vnl_math::pi/180.0;
+  double x = s*vcl_cos(az_rad), y = s*vcl_sin(az_rad), z = c;
+  return vpgl_ray::rot_to_point_ray(vgl_vector_3d<double>(x, y, z));
 }

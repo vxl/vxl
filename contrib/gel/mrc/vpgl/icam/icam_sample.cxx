@@ -24,7 +24,9 @@ void icam_sample::sample( unsigned int ni_dest,  unsigned int nj_dest,
   unsigned src_li = ni_source-1, src_lj = nj_source-1;
   unsigned src_istep = source.istep(), src_jstep = source.jstep();
   const float* src_ptr = &source(0,0);
-
+  // scan the set of destination pixel locations (i, j) and determine
+  // their location in the source image (to_u, to_v). The mapping is
+  // provided by the depth transform, dt.
   for (unsigned j = 1; j<dest_lj; j++)
     for (unsigned i = 1; i<dest_li; i++)
     {
@@ -62,6 +64,9 @@ void icam_sample::resample(unsigned int ni_dest,  unsigned int nj_dest,
   mask.set_size(ni_dest, nj_dest);
   dest.fill(0.0f);
   mask.fill(1.0f);
+  // scan the set of destination pixel locations (i, j) and determine
+  // their location in the source image (to_u, to_v). The mapping is
+  // provided by the depth transform, dt.
   n_samples = 0;
   double to_u, to_v;
   for (unsigned j = 1; j<nj_dest-1; ++j)

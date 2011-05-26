@@ -96,12 +96,16 @@ class vpgl_ray
   // ====== operations on rotation matrices with respect to camera rays ======
 
     //: angle between principal ray of one rotation and the principal ray of a second rotation
-  // Rotations \p r0 and \p r1 are expressed as Rodrigues vectors
+  // Rotations \p r0 and \p r1 are expressed as vgl_rotation<T>
   static double angle_between_rays(vgl_rotation_3d<double> const& r0, vgl_rotation_3d<double> const& r1);
 
   //: the rotation about the principal ray required to go from \p r0 to \p r1
   static double rot_about_ray(vgl_rotation_3d<double> const& r0, vgl_rotation_3d<double> const& r1);
 
+  //: the rotation required to point the principal ray in a given direction, starting with the identity camera (principal ray in z direction)
+  static vgl_rotation_3d<double> rot_to_point_ray(vgl_vector_3d<double> const& ray_dir);
+  //: define the principal ray in spherical coordinates (in degrees, azimuth [0 360], elevation [0, 180], x axis = (0, 90), y axis = (90, 90, z axis = (0, 0)).
+  static vgl_rotation_3d<double> rot_to_point_ray(double azimuth, double elevation);
  private:
   //: constructor/destructor private - static methods only
   vpgl_ray();

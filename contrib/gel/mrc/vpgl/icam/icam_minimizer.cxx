@@ -164,7 +164,7 @@ icam_minimizer:: minimize(vgl_rotation_3d<double>& rot,
 
 principal_ray_scan icam_minimizer::pray_scan(unsigned level, unsigned& n_pts)
 {
-  vpgl_perspective_camera<double> dcam = this->dest_cam(level);
+  vpgl_perspective_camera<double> dcam = this->source_cam(level);
   double pixel_cone_ang, pixel_solid_ang;
   vpgl_camera_bounds::pixel_solid_angle(dcam, pixel_cone_ang, pixel_solid_ang);
   double image_cone_ang, image_solid_ang;
@@ -176,7 +176,7 @@ principal_ray_scan icam_minimizer::pray_scan(unsigned level, unsigned& n_pts)
 double icam_minimizer::polar_inc(unsigned level, unsigned& nsteps,
                                  double polar_range)
 {
-  vpgl_perspective_camera<double> dcam = this->dest_cam(level);
+  vpgl_perspective_camera<double> dcam = this->source_cam(level);
   double polar_inc = vpgl_camera_bounds::rotation_angle_interval(dcam);
   unsigned nangle_steps = static_cast<unsigned>(2.0*polar_range/polar_inc );
   // nangle_steps must be even to include ang = 0.0
@@ -246,9 +246,9 @@ initialized_pray_scan(unsigned initial_level, unsigned search_level,
                       unsigned& n_pts)
 {
   vpgl_perspective_camera<double> idcam =
-    this->dest_cam(initial_level);
+    this->source_cam(initial_level);
   vpgl_perspective_camera<double> sdcam =
-    this->dest_cam(search_level);
+    this->source_cam(search_level);
   double initial_pixel_cone_ang, initial_pixel_solid_ang;
   vpgl_camera_bounds::
     pixel_solid_angle(idcam, initial_pixel_cone_ang,
@@ -274,9 +274,9 @@ void icam_minimizer::initialized_polar_inc(unsigned initial_level,
                                            double& polar_inc)
 {
   vpgl_perspective_camera<double> idcam =
-    this->dest_cam(initial_level);
+    this->source_cam(initial_level);
   vpgl_perspective_camera<double> sdcam =
-    this->dest_cam(search_level);
+    this->source_cam(search_level);
 
   double initial_polar_inc = vpgl_camera_bounds::rotation_angle_interval(idcam);
   polar_inc =
@@ -853,7 +853,7 @@ vil_image_view<float> icam_minimizer::mask(vgl_rotation_3d<double>& rot,
   return mask;
 }
 
-vpgl_perspective_camera<double> icam_minimizer::dest_cam(unsigned level)
+vpgl_perspective_camera<double> icam_minimizer::source_cam(unsigned level)
 {
   vgl_rotation_3d<double>& rot = dt_pyramid_.rotation();
   vgl_vector_3d<double>& trans = dt_pyramid_.translation();
@@ -1044,7 +1044,7 @@ void icam_minimizer::print_axis_search_info(unsigned level,
                                             bool top_level)
 {
   vcl_cout << "Axis search info-< ";
-  vpgl_perspective_camera<double> dcam = this->dest_cam(level);
+  vpgl_perspective_camera<double> dcam = this->source_cam(level);
   double image_cone_ang, image_solid_ang;
   vpgl_camera_bounds::image_solid_angle(dcam, image_cone_ang, image_solid_ang);
   double pixel_cone_ang, pixel_solid_ang;
@@ -1064,7 +1064,7 @@ void icam_minimizer::print_polar_search_info(unsigned level, vgl_rotation_3d<dou
 {
   vcl_cout << "Polar search info -< ";
   vpgl_perspective_camera<double> idcam =
-    this->dest_cam(level);
+    this->source_cam(level);
   double polar_inc = vpgl_camera_bounds::rotation_angle_interval(idcam);
   double polar_range = params_.polar_range_multiplier_*polar_inc/2.0;
   // if top level
