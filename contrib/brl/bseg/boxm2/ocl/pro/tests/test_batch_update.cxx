@@ -14,6 +14,7 @@
 
 #include <boxm2/ocl/boxm2_ocl_util.h>
 #include <boxm2/boxm2_block.h>
+#include <boxm2/io/boxm2_cache.h>
 #include <boxm2/io/boxm2_lru_cache.h>
 
 #include <boxm2/basic/boxm2_block_id.h>
@@ -48,10 +49,10 @@ void test_batch_update_kernels()
 
   boxm2_scene_sptr scene = new boxm2_scene(test_file);
 
-  //initialize a block and data cache  
-  boxm2_lru_cache::create(scene.ptr()); 
-  boxm2_cache* cache = boxm2_cache::instance(); 
-  
+  //initialize a block and data cache
+  boxm2_lru_cache::create(scene.ptr());
+  boxm2_cache_sptr cache = boxm2_cache::instance();
+
 #if 0 // boxm2_opencl_processor does not exist anymore
   //initialize gpu pro / manager
   boxm2_opencl_processor* gpu_pro = boxm2_opencl_processor::instance();
@@ -86,57 +87,55 @@ void test_batch_update_kernels()
 
   for (;iter!=blk_map.end();iter++)
   {
-      boxm2_block *     blk     = cache->get_block(iter->first);
-      boxm2_array_3d<uchar16> trees=blk->trees();
+    boxm2_block *     blk     = cache->get_block(iter->first);
+    boxm2_array_3d<uchar16> trees=blk->trees();
 
-      vcl_cout<<" DATA buffers "<< blk->num_buffers()<<vcl_endl;
-      boxm2_data_base * data_base = cache->get_data_base(iter->first,boxm2_data_traits<BOXM2_AUX>::prefix());
-      boxm2_data<BOXM2_AUX> *aux_data=new boxm2_data<BOXM2_AUX>(data_base->data_buffer(),data_base->buffer_length(),data_base->block_id());
-      
-      boxm2_data_base * hist_base = cache->get_data_base(iter->first,boxm2_data_traits<BOXM2_BATCH_HISTOGRAM>::prefix());
-      boxm2_data<BOXM2_BATCH_HISTOGRAM> *hist_data=new boxm2_data<BOXM2_BATCH_HISTOGRAM>(hist_base->data_buffer(),hist_base->buffer_length(),hist_base->block_id());
-      boxm2_data_base * alpha_data_base  = cache->get_data_base(iter->first,boxm2_data_traits<BOXM2_ALPHA>::prefix());
-      boxm2_data<BOXM2_ALPHA> *alpha_data =new boxm2_data<BOXM2_ALPHA>(alpha_data_base->data_buffer(),alpha_data_base->buffer_length(),alpha_data_base->block_id());
+    vcl_cout<<" DATA buffers "<< blk->num_buffers()<<vcl_endl;
+    boxm2_data_base * data_base = cache->get_data_base(iter->first,boxm2_data_traits<BOXM2_AUX>::prefix());
+    boxm2_data<BOXM2_AUX> *aux_data=new boxm2_data<BOXM2_AUX>(data_base->data_buffer(),data_base->buffer_length(),data_base->block_id());
 
-      boxm2_array_1d<float4> data=aux_data->data();
-      boxm2_array_1d<float8> hist_data_array=hist_data->data();
-      boxm2_array_1d<float>  alpha_data_array=alpha_data->data();
+    boxm2_data_base * hist_base = cache->get_data_base(iter->first,boxm2_data_traits<BOXM2_BATCH_HISTOGRAM>::prefix());
+    boxm2_data<BOXM2_BATCH_HISTOGRAM> *hist_data=new boxm2_data<BOXM2_BATCH_HISTOGRAM>(hist_base->data_buffer(),hist_base->buffer_length(),hist_base->block_id());
+    boxm2_data_base * alpha_data_base  = cache->get_data_base(iter->first,boxm2_data_traits<BOXM2_ALPHA>::prefix());
+    boxm2_data<BOXM2_ALPHA> *alpha_data =new boxm2_data<BOXM2_ALPHA>(alpha_data_base->data_buffer(),alpha_data_base->buffer_length(),alpha_data_base->block_id());
 
-      float sumP=0.0;
-      int count =0;
-      for (unsigned int ti=0;ti<trees.get_row1_count();ti++)
+    boxm2_array_1d<float4> data=aux_data->data();
+    boxm2_array_1d<float8> hist_data_array=hist_data->data();
+    boxm2_array_1d<float>  alpha_data_array=alpha_data->data();
+
+    float sumP=0.0;
+    int count =0;
+    for (unsigned int ti=0;ti<trees.get_row1_count();ti++)
+    {
+      for (unsigned int tj=0;tj<trees.get_row2_count();tj++)
       {
-          for (unsigned int tj=0;tj<trees.get_row2_count();tj++)
+        for (unsigned int tk=0;tk<trees.get_row3_count();tk++)
+        {
+          uchar16 curr_tree=trees[ti][tj][tk];
+          int buff_offset=(int)curr_tree[10];
+          buff_offset<<=8;
+          buff_offset+=(int)curr_tree[11];
+
+          int buff_index=(int)curr_tree[12];
+          buff_index<<=8;
+          buff_index+=(int)curr_tree[13];
+          if (tk==63)
           {
-              for (unsigned int tk=0;tk<trees.get_row3_count();tk++)
-              {
-                  uchar16 curr_tree=trees[ti][tj][tk];
-                  int buff_offset=(int)curr_tree[10];
-                  buff_offset<<=8;
-                  buff_offset+=(int)curr_tree[11];
-
-                  int buff_index=(int)curr_tree[12];
-                  buff_index<<=8;
-                  buff_index+=(int)curr_tree[13];
-                  if(tk==63)
-                  {
-                   vcl_cout<<ti<<","<<tj<<","<<tk<<" [";
-                   for (unsigned vecindex=0;vecindex<8;vecindex++)
-                       vcl_cout<<hist_data_array[(buff_index*65536+buff_offset)][vecindex]<<",";
-                   vcl_cout<<"] ";
-
-                  vcl_cout<<data[(buff_index*65536+buff_offset)/4][(buff_index*65536+buff_offset)%4]<<" ";
-                   vcl_cout<<" " <<alpha_data_array[(buff_index*65536+buff_offset)]<<vcl_endl;
-                  }
-                      sumP+=alpha_data_array[(buff_index*65536+buff_offset)];
-                      count++;
-              }
+            vcl_cout<<ti<<','<<tj<<','<<tk<<" [";
+            for (unsigned vecindex=0;vecindex<8;vecindex++)
+              vcl_cout<<hist_data_array[(buff_index*65536+buff_offset)][vecindex]<<',';
+            vcl_cout<<"] "
+                    <<data[(buff_index*65536+buff_offset)/4][(buff_index*65536+buff_offset)%4]
+                    <<"  " <<alpha_data_array[(buff_index*65536+buff_offset)]<<vcl_endl;
           }
+          sumP+=alpha_data_array[(buff_index*65536+buff_offset)];
+          count++;
+        }
       }
-      vcl_cout<<"MEAN P "<<sumP/(float)count<<vcl_endl;
+    }
+    vcl_cout<<"MEAN P "<<sumP/(float)count<<vcl_endl;
   }
 }
-
 
 
 void test_batch_update()
