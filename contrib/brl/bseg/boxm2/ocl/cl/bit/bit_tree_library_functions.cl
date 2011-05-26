@@ -129,8 +129,8 @@ bool is_leaf(__local uchar* tree, int bitIndex)
 {
   if(bitIndex == 0)
     return (tree[0] == 0); 
-  int pi = (bitIndex-1)>>3;
-  return (tree_bit_at(tree, pi)==1) && (tree_bit_at(tree, bitIndex)==0); 
+  int pi = parent_index( bitIndex );
+  return ( tree_bit_at(tree, pi) ) && ( tree_bit_at(tree, bitIndex)==0 ); 
 }
 
 //-----------------------------------------------------------------------------

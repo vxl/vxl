@@ -25,6 +25,6 @@ DECLARE_FUNC_CONS(boxm2_ocl_probability_of_image_gl_process);
 DECLARE_FUNC_CONS(boxm2_ocl_convert_float_image_to_rgba_process);
 DECLARE_FUNC_CONS(boxm2_ocl_render_cone_expected_image_process);
 DECLARE_FUNC_CONS(boxm2_ocl_filter_process);
-
+DECLARE_FUNC_CONS(boxm2_clear_opencl_cache_process); 
 
 #endif
