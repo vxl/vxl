@@ -31,7 +31,7 @@
 
 namespace boxm2_ocl_render_expected_image_process_globals
 {
-  const unsigned n_inputs_ = 6;
+  const unsigned n_inputs_ = 7;
   const unsigned n_outputs_ = 1;
   vcl_size_t lthreads[2]={8,8};
 
@@ -99,14 +99,18 @@ bool boxm2_ocl_render_expected_image_process_cons(bprb_func_process& pro)
   input_types_[3] = "vpgl_camera_double_sptr";
   input_types_[4] = "unsigned";
   input_types_[5] = "unsigned";
-
+  input_types_[6] = "vcl_string";
 
   // process has 1 output:
   // output[0]: scene sptr
   vcl_vector<vcl_string>  output_types_(n_outputs_);
   output_types_[0] = "vil_image_view_base_sptr";
 
-  return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
+  bool good = pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
+  // in case the 7th input is not set
+  brdb_value_sptr idx = new brdb_value_t<vcl_string>("");
+  pro.set_input(6, idx);
+  return good;
 }
 
 bool boxm2_ocl_render_expected_image_process(bprb_func_process& pro)
@@ -126,6 +130,7 @@ bool boxm2_ocl_render_expected_image_process(bprb_func_process& pro)
   vpgl_camera_double_sptr cam= pro.get_input<vpgl_camera_double_sptr>(i++);
   unsigned ni=pro.get_input<unsigned>(i++);
   unsigned nj=pro.get_input<unsigned>(i++);
+  vcl_string ident = pro.get_input<vcl_string>(i++);
 
   bool foundDataType = false;
   vcl_string data_type,options;
@@ -147,6 +152,9 @@ bool boxm2_ocl_render_expected_image_process(bprb_func_process& pro)
   if(!foundDataType) {
     vcl_cout<<"BOXM2_OCL_RENDER_PROCESS ERROR: scene doesn't have BOXM2_MOG3_GREY or BOXM2_MOG3_GREY_16 data type"<<vcl_endl;
     return false;
+  }
+  if (ident.size() > 0) {
+    data_type += "_" + ident;
   }
 
 //: create a command queue.
