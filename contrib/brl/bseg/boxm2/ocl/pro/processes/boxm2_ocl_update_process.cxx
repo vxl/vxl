@@ -29,7 +29,7 @@
 
 namespace boxm2_ocl_update_process_globals
 {
-  const unsigned n_inputs_  = 5;
+  const unsigned n_inputs_  = 6;
   const unsigned n_outputs_ = 0;
   enum {
       UPDATE_SEGLEN = 0,
@@ -104,12 +104,17 @@ bool boxm2_ocl_update_process_cons(bprb_func_process& pro)
   input_types_[2] = "boxm2_opencl_cache_sptr";
   input_types_[3] = "vpgl_camera_double_sptr";
   input_types_[4] = "vil_image_view_base_sptr";
-
+  input_types_[5] = "vcl_string";
 
   // process has 1 output:
   // output[0]: scene sptr
   vcl_vector<vcl_string>  output_types_(n_outputs_);
-  return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
+  
+  bool good = pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
+  // in case the 6th input is not set
+  brdb_value_sptr idx = new brdb_value_t<vcl_string>("");
+  pro.set_input(5, idx);
+  return good;
 }
 
 bool boxm2_ocl_update_process(bprb_func_process& pro)
@@ -131,6 +136,7 @@ bool boxm2_ocl_update_process(bprb_func_process& pro)
   boxm2_opencl_cache_sptr opencl_cache= pro.get_input<boxm2_opencl_cache_sptr>(i++);
   vpgl_camera_double_sptr cam= pro.get_input<vpgl_camera_double_sptr>(i++);
   vil_image_view_base_sptr img =pro.get_input<vil_image_view_base_sptr>(i++);
+  vcl_string ident = pro.get_input<vcl_string>(i++);
 
   long binCache = opencl_cache.ptr()->bytes_in_cache(); 
   vcl_cout<<"Update MBs in cache: "<<binCache/(1024.0*1024.0)<<vcl_endl;
@@ -138,18 +144,21 @@ bool boxm2_ocl_update_process(bprb_func_process& pro)
   bool foundDataType = false, foundNumObsType = false;
   vcl_string data_type,num_obs_type,options;
   vcl_vector<vcl_string> apps = scene->appearances();
+  int appTypeSize;
   for (unsigned int i=0; i<apps.size(); ++i) {
     if ( apps[i] == boxm2_data_traits<BOXM2_MOG3_GREY>::prefix() )
     {
       data_type = apps[i];
       foundDataType = true;
       options=" -D MOG_TYPE_8 ";
+      appTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_MOG3_GREY>::prefix());
     }
     else if ( apps[i] == boxm2_data_traits<BOXM2_MOG3_GREY_16>::prefix() )
     {
       data_type = apps[i];
       foundDataType = true;
       options=" -D MOG_TYPE_16 ";
+      appTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_MOG3_GREY_16>::prefix());
     }
     else if ( apps[i] == boxm2_data_traits<BOXM2_NUM_OBS>::prefix() )
     {
@@ -164,6 +173,10 @@ bool boxm2_ocl_update_process(bprb_func_process& pro)
   if (!foundNumObsType) {
     vcl_cout<<"BOXM2_OPENCL_UPDATE_PROCESS ERROR: scene doesn't have BOXM2_NUM_OBS type"<<vcl_endl;
     return false;
+  }
+  if (ident.size() > 0) {
+    data_type += "_" + ident;
+    num_obs_type += "_" + ident;
   }
 
   //: create a command queue.
@@ -294,8 +307,10 @@ bool boxm2_ocl_update_process(bprb_func_process& pro)
         info_buffer->data_buffer_length = (int) (alpha->num_bytes()/alphaTypeSize);
         blk_info->write_to_buffer((queue));
 
-        bocl_mem* mog       = opencl_cache->get_data(*id,data_type,0,false);    //info_buffer->data_buffer_length*boxm2_data_info::datasize(data_type));
-        bocl_mem* num_obs   = opencl_cache->get_data(*id,num_obs_type,0,false);//,info_buffer->data_buffer_length*boxm2_data_info::datasize(num_obs_type));
+        int nobsTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_NUM_OBS>::prefix());
+        // data type string may contain an identifier so determine the buffer size
+        bocl_mem* mog       = opencl_cache->get_data(*id,data_type,alpha->num_bytes()/alphaTypeSize*appTypeSize,false);    //info_buffer->data_buffer_length*boxm2_data_info::datasize(data_type));
+        bocl_mem* num_obs   = opencl_cache->get_data(*id,num_obs_type,alpha->num_bytes()/alphaTypeSize*nobsTypeSize,false);//,info_buffer->data_buffer_length*boxm2_data_info::datasize(num_obs_type));
 
         //grab an appropriately sized AUX data buffer
         int auxTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_AUX0>::prefix());
@@ -308,7 +323,6 @@ bool boxm2_ocl_update_process(bprb_func_process& pro)
         {
             aux0->zero_gpu_buffer(queue);
             aux1->zero_gpu_buffer(queue);
-            vcl_cout<<"UPDATE_SEGLEN"<<vcl_endl;
             kern->set_arg( blk_info );
             kern->set_arg( blk );
             kern->set_arg( alpha );
@@ -343,7 +357,6 @@ bool boxm2_ocl_update_process(bprb_func_process& pro)
         }
         else if(i==UPDATE_PREINF)
         {
-            vcl_cout<<"UPDATE_PREINF"<<vcl_endl;
             kern->set_arg( blk_info );
             kern->set_arg( blk );
             kern->set_arg( alpha );
@@ -375,8 +388,6 @@ bool boxm2_ocl_update_process(bprb_func_process& pro)
         }
         else if(i==UPDATE_BAYES)
         {
-            vcl_cout<<"UPDATE_BAYES"<<vcl_endl;
-
             auxTypeSize = boxm2_data_info::datasize(boxm2_data_traits<BOXM2_AUX2>::prefix());
             bocl_mem *aux2   = opencl_cache->get_data<BOXM2_AUX2>(*id, info_buffer->data_buffer_length*auxTypeSize);
             aux2->zero_gpu_buffer(queue);
@@ -421,8 +432,6 @@ bool boxm2_ocl_update_process(bprb_func_process& pro)
         }
         else if(i==UPDATE_CELL)
         {
-            vcl_cout<<"UPDATE_CELL"<<vcl_endl;
-
             auxTypeSize = boxm2_data_info::datasize(boxm2_data_traits<BOXM2_AUX2>::prefix());
             bocl_mem *aux2   = opencl_cache->get_data<BOXM2_AUX2>(*id, info_buffer->data_buffer_length*auxTypeSize);
 
