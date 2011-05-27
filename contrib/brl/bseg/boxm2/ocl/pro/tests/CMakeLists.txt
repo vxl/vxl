@@ -1,6 +1,6 @@
 ADD_EXECUTABLE( boxm2_ocl_pro_test_all
   test_driver.cxx
-  test_batch_update.cxx
+  #test_batch_update.cxx
   test_filter_kernel.cxx
  )
 

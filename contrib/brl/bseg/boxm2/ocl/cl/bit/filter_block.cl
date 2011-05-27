@@ -162,7 +162,7 @@ __kernel void filter_block( __constant RenderSceneInfo * linfo,
               
               else if(neighborDepth<2) {
                 int minGC = nci*8+1; 
-                for(int ngi=minGC; ngi<minGC; ++ngi) {
+                for(int ngi=minGC; ngi<minGC+8; ++ngi) {
                       
                   //do leaf calc, otherwise continue to iterate
                   if( is_leaf(neighbor_tree, ngi) ) {
@@ -188,6 +188,7 @@ __kernel void filter_block( __constant RenderSceneInfo * linfo,
             float prob = 1.0f - exp( - totalAlphaL ); 
             probs[numProbs++] = prob; 
 #endif
+
           }
         } //end while over neighbors
 
@@ -198,6 +199,7 @@ __kernel void filter_block( __constant RenderSceneInfo * linfo,
         if(numProbs > 0) {
           sort_vector(probs, numProbs);   
           float median = probs[ convert_int_rtn(numProbs/2.0) ]; 
+          median = max(median, 0.0001f); 
           //if(curr_prob<median)
           //    median=curr_prob;
           float medAlpha = -1.0 * log(1.0f-median) / ( side_len * linfo->block_len ); 

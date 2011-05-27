@@ -111,7 +111,7 @@ bool boxm2_ocl_filter_process(bprb_func_process& pro)
 
         //get current and copy of alpha
         vul_timer transfer;
-        bocl_mem* alphas = opencl_cache->get_data<BOXM2_ALPHA>(id);
+        bocl_mem* alphas = opencl_cache->get_data<BOXM2_ALPHA>(id, 0, false);
         vcl_size_t dataSize = alphas->num_bytes();
 
         bocl_mem* new_alphas = new bocl_mem(device->context(), NULL, dataSize, "new alpha buffer ");
