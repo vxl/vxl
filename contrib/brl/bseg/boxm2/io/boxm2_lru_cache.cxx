@@ -91,8 +91,8 @@ boxm2_data_base* boxm2_lru_cache::get_data_base(boxm2_block_id id, vcl_string ty
   if ( iter != data_map.end() )
   {
     //congrats you've found the data block in cache, update cache and return block
-    if( iter->second->read_only_ && !read_only) //enforce write if block is already read_only_
-      iter->second->read_only_ = read_only;
+    if (!read_only)  // write-enable is enforced
+      iter->second->enable_write();
     return iter->second;
   }
 
