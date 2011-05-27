@@ -31,6 +31,13 @@ class boxm2_nn_cache : public boxm2_cache
     //: to string method returns a string describing the cache's current state
     vcl_string to_string();
 
+    //: dumps writeable data onto disk
+    // TODO - NYI
+    virtual void write_to_disk() { vcl_cerr << "Not yet implemented!!!\n"; }
+
+    //: disable the write process
+    // TODO - NYI
+    virtual void disable_write() { vcl_cerr << "Not yet implemented!!!\n"; }
   private:
 
     //: keep a map of boxm2_block pointers (size will be limited to 9 blocks

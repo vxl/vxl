@@ -3,6 +3,7 @@
 //:
 // \file
 #include <boxm2/io/boxm2_cache.h>
+#include <vcl_iostream.h>
 
 //: boxm2_dumb_cache - example realization of abstract cache class
 class boxm2_dumb_cache : public boxm2_cache
@@ -18,13 +19,20 @@ class boxm2_dumb_cache : public boxm2_cache
     virtual boxm2_data_base* get_data_base(boxm2_block_id, vcl_string type, vcl_size_t num_bytes=0, bool read_only = true);
 
     //: deletes data from dumb cache
-    virtual void remove_data_base(boxm2_block_id, vcl_string type); 
-    virtual void replace_data_base(boxm2_block_id id, vcl_string type, boxm2_data_base* replacement); 
-
+    virtual void remove_data_base(boxm2_block_id, vcl_string type);
+    virtual void replace_data_base(boxm2_block_id id, vcl_string type, boxm2_data_base* replacement);
 
     //: returns data pointer to data block specified by ID
     template <boxm2_data_type T>
     boxm2_data<T>* get_data(boxm2_block_id id);
+
+    //: dumps writeable data onto disk
+    // TODO - NYI
+    virtual void write_to_disk() { vcl_cerr << "Not yet implemented!!!\n"; }
+
+    //: disable the write process
+    // TODO - NYI
+    virtual void disable_write() { vcl_cerr << "Not yet implemented!!!\n"; }
 
   private:
 
