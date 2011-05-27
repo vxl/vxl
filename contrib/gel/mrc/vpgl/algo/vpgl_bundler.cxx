@@ -184,8 +184,10 @@ void vpgl_bundler_sfm::run_sfm_stage(
     //Now do the add images, add points, bundle adjust loop
     vcl_vector<vpgl_bundler_inters_feature_set_sptr> to_add;
     while ( (*select_next_images)(recon, track_set, to_add) ) {
-        (*add_next_images)(recon, to_add);
-        (*add_new_points)(recon, track_set);
+        vcl_vector<vpgl_bundler_inters_camera> added;
+
+        (*add_next_images)(recon, added, to_add);    
+        (*add_new_points)(recon, track_set, added);
         (*bundle_adjust)(recon);
 
         to_add.clear();

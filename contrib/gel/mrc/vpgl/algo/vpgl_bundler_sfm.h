@@ -37,24 +37,29 @@ class vpgl_bundler_sfm_select_next_images
 //:
 // Takes in the current reconstruction and an image, and adds the image to
 // the reconstruction. This calculates the pose of the images' camera.
+// added_cameras is filled with references to the created cameras, for 
+// the next stage.
 class vpgl_bundler_sfm_add_next_images
 {
  public:
   virtual void operator() (
       vpgl_bundler_inters_reconstruction reconstruction,
+      vcl_vector<vpgl_bundler_inters_camera> &added_cameras,
       const vcl_vector<vpgl_bundler_inters_feature_set_sptr> &to_add) = 0;
 };
 
 
 //:
 // Adds points to the reconstruction using the new cameras calculated in the
-// add_next_images stage.
+// add_next_images stage. to_add are the cameras that were added in the 
+// previous stage.
 class vpgl_bundler_sfm_add_new_points
 {
  public:
   virtual void operator() (
       vpgl_bundler_inters_reconstruction &reconstruction,
-      vpgl_bundler_inters_track_set &track_set) = 0;
+      vpgl_bundler_inters_track_set &track_set,
+      const vcl_vector<vpgl_bundler_inters_camera> &added) = 0;
 };
 
 

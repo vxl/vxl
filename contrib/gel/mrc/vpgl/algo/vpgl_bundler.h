@@ -5,6 +5,7 @@
 //       the lens distortion stuff
 //       visibility matrix
 //       focal length estimation
+//       round of bundle adjustment after adding image, new image fixed.
 
 // Generic includes.
 #include <vcl_vector.h>

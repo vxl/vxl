@@ -55,7 +55,7 @@ struct vpgl_bundler_inters_image
 // image of the feature, and a vector of doubles, the feature descriptor.
 struct vpgl_bundler_inters_feature : public vbl_ref_count
 {
-    vgl_point_2d<double> point; // TODO: Template the vpgl_fm_compute.
+    vgl_point_2d<double> point;
     vnl_vector<double> descriptor;
     vpgl_bundler_inters_image source_image;
 
