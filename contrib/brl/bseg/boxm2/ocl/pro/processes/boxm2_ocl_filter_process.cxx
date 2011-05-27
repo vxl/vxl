@@ -1,5 +1,4 @@
 // This is brl/bseg/boxm2/ocl/pro/processes/boxm2_ocl_filter_process.cxx
-#include <bprb/bprb_func_process.h>
 #include "boxm2_ocl_filter_process.h"
 //:
 // \file
