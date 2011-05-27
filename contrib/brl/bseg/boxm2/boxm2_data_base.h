@@ -45,6 +45,8 @@ class boxm2_data_base : public vbl_ref_count
 
     //: by default data is read-only, i.e. cache doesn't save it before destroying it
     bool read_only_;
+    void enable_write() { read_only_ = false; }
+    void disable_write() { read_only_ = true; }
 
  protected:
     //: id for this particular block
