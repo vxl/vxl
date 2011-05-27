@@ -58,7 +58,7 @@ void vpgl_bundler_sfm_impl_create_initial_recon::operator()(
         }
     }
 
-    if (not best_match) {
+    if (!best_match) {
         vcl_cerr<<
             "Unable to create an initial reconstruction!\n" <<
             "There is not a match set that both has an initial guess " <<
