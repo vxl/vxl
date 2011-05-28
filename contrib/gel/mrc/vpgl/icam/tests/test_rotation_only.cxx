@@ -28,6 +28,7 @@
 #include <vpgl/algo/vpgl_camera_bounds.h>
 #include <icam/icam_minimizer.h>
 #include <vpgl/algo/vpgl_ray.h>
+
 template <class T>
 bool load_image(vcl_string const& path, vil_image_view<T>*& image)
 {
@@ -50,7 +51,7 @@ static void test_rotation_only()
   vcl_ifstream is(true_camera_path.c_str());
 
   vpgl_perspective_camera<double> cam;
-  if(is.is_open())
+  if (is.is_open())
     is >> cam;
   else
     return;
@@ -66,7 +67,7 @@ static void test_rotation_only()
   //Save the rotated camera to generate a test expected image
   vcl_string rot_camera_path = "f:/downtown_camera_cal/camera_00142_rotated.txt";
   vcl_ofstream os(rot_camera_path.c_str());
-  if(!os.is_open)
+  if (!os.is_open)
     return;
   os << rcam;
   os.close();
@@ -83,8 +84,8 @@ static void test_rotation_only()
   vcl_string source_image_path = "f:/downtown_camera_cal/f00142_scaled_rotated_exp_image.tiff";
   vil_image_view<float> dest_img = vil_load(dest_image_path.c_str(), true);
   vil_image_view<float> source_img = vil_load(source_image_path.c_str(), true);
-  if(!dest_img||!source_img)
-	  return;
+  if (!dest_img||!source_img)
+    return;
   //the minimizer works on images with intensity range [0, 255]
   vil_math_scale_values(dest_img, 255);
   vil_math_scale_values(source_img, 255);
@@ -93,12 +94,12 @@ static void test_rotation_only()
   vcl_string camera_path = "f:/downtown_camera_cal/resamp_camera_00142.txt";
   vcl_ifstream is(camera_path.c_str());
   vpgl_perspective_camera<double> cam;
-  if(is.is_open())
+  if (is.is_open())
     is >> cam;
   else
     return;
   vnl_matrix_fixed<double, 3, 3> K = cam.get_calibration().get_matrix();
-  //make a uniform depth image since the search is over only rotation 
+  //make a uniform depth image since the search is over only rotation
   vil_image_view<double> depth(dest_img.ni(), dest_img.nj());
   depth.fill(1.0);
   vgl_rotation_3d<double> rot, min_rot;
@@ -110,7 +111,7 @@ static void test_rotation_only()
   icam_minimizer_params icam_params;
   icam_minimizer minimizer(source_img, dest_img, dt, icam_params, true);
 
-  // search over a set of principal axes within the specified cone  
+  // search over a set of principal axes within the specified cone
   double min_cost, min_overlap;
   double polar_range = 0.0;
   unsigned n_axis_steps = 100;
@@ -122,19 +123,19 @@ static void test_rotation_only()
   vgl_rotation_3d<double> prot = vpgl_ray::rot_to_point_ray(0.0, 5.0);
   vgl_rotation_3d<double> Rr = R*prot;
   vgl_rotation_3d<double> Rc = Rr*(R.inverse());
-  vcl_cout << Rc.as_matrix() << '\n';
-  vcl_cout << "angle between principal rays after cone search " 
-	  << vpgl_ray::angle_between_rays(Rc, min_rot)*180.0/vnl_math::pi 
-	  << " degrees. \nEntropy diff = " << min_cost << '\n';
+  vcl_cout << Rc.as_matrix() << '\n'
+           << "angle between principal rays after cone search "
+           << vpgl_ray::angle_between_rays(Rc, min_rot)*180.0/vnl_math::pi
+           << " degrees. \nEntropy diff = " << min_cost << '\n';
 
   // refine the rotation using the Powell algorithm
   minimizer.minimize_rot(min_rot, tr, 0);
   vil_image_view<float> mapped_source = minimizer.view(min_rot, tr, 0);
-  vcl_cout << "angle between principal rays after Powell " 
-	  << vpgl_ray::angle_between_rays(Rc, min_rot)*180.0/vnl_math::pi 
-	  << " degrees. \nEntropy diff = "<< minimizer.end_error() << '\n';
+  vcl_cout << "angle between principal rays after Powell "
+           << vpgl_ray::angle_between_rays(Rc, min_rot)*180.0/vnl_math::pi
+           << " degrees. \nEntropy diff = "<< minimizer.end_error() << '\n';
 
-  // write out the mapped source image using the rotation corresponding 
+  // write out the mapped source image using the rotation corresponding
   // to minimum error
   vcl_string mapped_source_path = "f:/downtown_camera_cal/mapped_00142_min_rot.tiff";
   vil_save(mapped_source, mapped_source_path.c_str());
@@ -143,4 +144,3 @@ static void test_rotation_only()
 
 
 TESTMAIN( test_rotation_only );
-
