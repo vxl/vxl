@@ -159,7 +159,7 @@ void vpgl_em_compute_5_point<T>::normalize(
     const vpgl_calibration_matrix<T> &k,
     vcl_vector<vgl_point_2d<T> > &normed_points)
 {
-    for (int i = 0; i < points.size(); i++)
+    for (unsigned int i = 0; i < points.size(); ++i)
     {
         vnl_matrix_fixed<T, 3, 3> k_inv = vnl_inverse(k.get_matrix());
         vgl_point_2d<T> p = k.map_to_focal_plane(points[i]);
