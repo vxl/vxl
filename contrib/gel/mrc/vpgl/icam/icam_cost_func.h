@@ -16,15 +16,15 @@
 // mutual information is defined as,
 //     H(mapped_source)+H(dest)-H(mapped_source,dest).
 // Since the destination pixels are always the same, it is computationally
-// more efficient to define an error measure called entropy_diff which is 
+// more efficient to define an error measure called entropy_diff which is
 //   H(mapped_source)-H(mapped_source,dest). A maximum of this quantity
 // will also be a maximum of mutual information
 // The error methods are used in exhausitive searches over transform
-// parameters, while the least_squares_function is used in 
+// parameters, while the least_squares_function is used in
 // a Levenberg Marquardt solver, which is applied at the final stage of
 // camera transform refinement. It is noted that least squares is only
 // appropriate when the source and destination images have the same
-// illumination direction, as in a video sequence. Mutual information is 
+// illumination direction, as in a video sequence. Mutual information is
 // more appropriate when the images have different capture conditions.
 //
 // to do: develop a least_squares_function for differing capture conditions.
@@ -46,19 +46,19 @@ class icam_cost_func : public vnl_least_squares_function
                   const icam_depth_transform& dt,
                   unsigned nbins = 16);
 
-
   //: The main function.
   //  Given the parameter vector x, compute the vector of residuals fx.
   //  Fx has been sized appropriately before the call.
   virtual void f(vnl_vector<double> const& x, vnl_vector<double>& fx);
 
-  //debug purposes
+  // === debug purposes ===
+
   //: error based on absolute difference
   double error(vnl_vector_fixed<double, 3> rodrigues,
                vgl_vector_3d<double> trans,
                double min_allowed_overlap = 0.01);
 
-  //: A set of error values for a range of camera parameter values, the parameter index indicates which paramter is being varied.
+  //: A set of error values for a range of camera parameter values; the \p param_index indicates which parameter is being varied.
   vcl_vector<double> error(vnl_vector<double> const& x,
                            unsigned param_index, double pmin,
                            double pmax, double pinc);
@@ -66,7 +66,7 @@ class icam_cost_func : public vnl_least_squares_function
   vbl_array_2d<double> joint_probability(vnl_vector_fixed<double, 3> rodrigues,
                                          vgl_vector_3d<double> trans);
   //: Joint probability for a given mapped source image
-  vbl_array_2d<double> 
+  vbl_array_2d<double>
     joint_probability(vil_image_view<float> const& map_dest,
                       vil_image_view<float> const& map_mask);
 
@@ -86,8 +86,7 @@ class icam_cost_func : public vnl_least_squares_function
                      double min_allowed_overlap = 0.01);
 
   //: the fraction of potential number of samples
-  double frac_samples()
-    {return (1.0*n_samples_)/max_samples_;}
+  double frac_samples() { return (1.0*n_samples_)/max_samples_; }
 
   //: the full set of samples for a given transformation (useful for debug)
   void samples(vnl_vector_fixed<double, 3> rodrigues,
@@ -114,19 +113,19 @@ class icam_cost_func : public vnl_least_squares_function
 };
 
 //: a scalar version of the least squares const function for scalar minimizers
-// currently used in solving for rotation only
+// Currently used in solving for rotation only
 class icam_scalar_cost_func : public vnl_cost_function
 {
-public:
-  icam_scalar_cost_func(icam_cost_func const& cost_func) 
-    : vnl_cost_function(3), cost_func_(cost_func){}
+ public:
+  icam_scalar_cost_func(icam_cost_func const& cost_func)
+    : vnl_cost_function(3), cost_func_(cost_func) {}
   //: translation is currently fixed during solver iterations
   void set_translation(vgl_vector_3d<double> const& trans);
   //: compute f given the rotation parameters (Rodrigues vector)
   virtual double f(vnl_vector<double> const& x);
- protected:  
+ protected:
   icam_cost_func cost_func_;
   vgl_vector_3d<double> trans_;
 };
-#endif // icam_cost_func_h_
 
+#endif // icam_cost_func_h_

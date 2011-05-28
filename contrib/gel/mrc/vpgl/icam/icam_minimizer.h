@@ -5,16 +5,16 @@
 // \file
 // \brief Find a camera using the depth image of known camera and minimizing squared intensity differences or mutual information
 //
-// The camera is determined by minimizing the sum of squared differences or 
+// The camera is determined by minimizing the sum of squared differences or
 // mutual information between a mapped source image and a destination image.
 // The destination camera is assumed to have the form K[I|0], i.e., the world
 // coordinate system is the same as the camera frame. A depth map, Z(u,v),
 // is given for the known camera. The rotation and translation parameters for
-// the unknown source camera with respect to the destination identity camera 
-// are adjusted so as to minimize the least squared difference in intensity 
+// the unknown source camera with respect to the destination identity camera
+// are adjusted so as to minimize the least squared difference in intensity
 // between the mapped source image and the destination image. The mapping is
 // computed using the depth map as described in icam_depth_transform.h
-
+//
 // \author J.L. Mundy
 // \date Sept. 6, 2010
 //
@@ -101,8 +101,7 @@ class icam_minimizer
                     vgl_vector_3d<double> const& trans,
                     unsigned level);
 
-
-  double end_error() {return end_error_;}
+  double end_error() { return end_error_; }
 
   //: current parameter values
   double to_fl() {return dt_pyramid_.to_fl();}
@@ -227,22 +226,20 @@ bool  pyramid_camera_search(vgl_vector_3d<double> const&
                              vgl_vector_3d<double>& trans,
                              unsigned level);
 
-  //: source camera relative to desination coordinate system at level
+  //: source camera relative to destination coordinate system at level
   vpgl_perspective_camera<double> source_cam(unsigned level);
 
-
-  //:source image at level
+  //: source image at level
   vil_image_view<float> source(unsigned level) {return source_pyramid_(level);}
 
-  //:destination image at level
+  //: destination image at level
   vil_image_view<float> dest(unsigned level) {return dest_pyramid_(level);}
 
-  //:depth image at level
+  //: depth image at level
   vil_image_view<double> depth(unsigned level) {return dt_pyramid_.depth(level);}
 
-  //:inverse depth image at level
+  //: inverse depth image at level
   vil_image_view<double> inv_depth(unsigned level);
-
 
   //: the cost function for a given level
   icam_cost_func cost_fn(unsigned level);
