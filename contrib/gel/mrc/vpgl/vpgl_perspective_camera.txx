@@ -383,6 +383,17 @@ vpgl_perspective_camera<T>::postmultiply( const vpgl_perspective_camera<T>& in_c
 
   return vpgl_perspective_camera<T>(K, ccp, Rp);
 }
+template <class T> 
+vpgl_perspective_camera<T> vpgl_perspective_camera<T>::
+postmultiply(const vpgl_perspective_camera<T>& camera,
+            const vgl_rotation_3d<T>& rot, const vgl_vector_3d<T>& trans)
+{
+  vgl_h_matrix_3d<T> H;
+  H.set_identity();
+  H.set_rotation_matrix(rot.as_matrix());
+  H.set_translation(trans.x(), trans.y(), trans.z());
+  return vpgl_perspective_camera<T>::postmultiply(camera, H);
+}
 
 // I/O :------------------------------------------------
 

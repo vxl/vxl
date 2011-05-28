@@ -9,6 +9,7 @@
 #include <vbl/vbl_local_minima.h>
 #include <vil/vil_convert.h>
 #include <vil/algo/vil_gauss_filter.h>
+#include <vnl/algo/vnl_powell.h>
 #include <vnl/algo/vnl_levenberg_marquardt.h>
 #include <vnl/vnl_vector_fixed.h>
 #include <vil/vil_math.h>
@@ -161,7 +162,32 @@ icam_minimizer:: minimize(vgl_rotation_3d<double>& rot,
     dt_pyramid_.set_params(params);
   }
 }
-
+// minimize rotation only using the Powell algorithm. The translation
+// parameters are assumed to be correct
+void icam_minimizer::minimize_rot(vgl_rotation_3d<double>& rot,
+                                  vgl_vector_3d<double> const& trans,
+                                  unsigned level)
+{
+  //Set the initial rotation on the dt pyramid
+  dt_pyramid_.set_rotation(rot);
+  //Set the translation. Not varied during minimization
+  dt_pyramid_.set_translation(trans);
+  icam_cost_func cost_func = cost_fn(level);
+  icam_scalar_cost_func scal_cost_func(cost_func);
+  vnl_powell powell(&scal_cost_func);
+  powell.set_trace(false);
+  powell.set_verbose(false);
+  //set the initial parameters for Powell
+  vnl_vector<double> x = rot.as_rodrigues();
+  vnl_nonlinear_minimizer::ReturnCodes code = powell.minimize(x);
+  if(!(code>0 && code<5)){
+    vcl_cout << "rotation minimization failed code = " << code << '\n';
+    return;
+  }
+  //the params are the Rodrigues vector corresponding to the rotation
+  rot = vgl_rotation_3d<double>(x);
+  end_error_ = powell.get_end_error();
+}
 principal_ray_scan icam_minimizer::pray_scan(unsigned level, unsigned& n_pts)
 {
   vpgl_perspective_camera<double> dcam = this->source_cam(level);
@@ -287,7 +313,69 @@ void icam_minimizer::initialized_polar_inc(unsigned initial_level,
   if (nsteps%2) nsteps++;
   polar_inc = polar_range/(static_cast<double>(nsteps));
 }
+bool icam_minimizer::rot_search(vgl_vector_3d<double> const& trans,
+                                vgl_rotation_3d<double>& initial_rot,
+                                unsigned n_axis_steps,
+                                double axis_cone_half_angle,
+                                unsigned n_polar_steps,
+                                double polar_range,
+                                unsigned search_level,
+                                double min_allowed_overlap,
+                                vgl_rotation_3d<double>& min_rot,
+                                double& min_cost,
+                                double& min_overlap_fraction)
+{
+  double polar_inc = 1.0;
+  if(n_polar_steps)
+    polar_inc = polar_range/n_polar_steps;
 
+  unsigned n_samples = n_axis_steps;
+  principal_ray_scan prs(axis_cone_half_angle, n_samples);
+  
+#if 1
+  unsigned np = n_polar_steps;
+  if(!np) np = 1;
+  if (verbose_)
+    vcl_cout << "Searching over "
+             << static_cast<unsigned>(n_samples*np)
+             << " rotations\n" << vcl_flush;
+#endif
+  unsigned n_succ = 0;
+  min_overlap_fraction = 0.0;
+  min_cost = vnl_numeric_traits<double>::maxval;
+  icam_cost_func cost = this->cost_fn(search_level);
+  vnl_vector_fixed<double,3> min_rod;
+  vul_timer tim;
+  unsigned nc = 0;
+  for (prs.reset(); prs.next();) {
+    for (double ang = -(polar_range/2); ang<=(polar_range/2); ang+=polar_inc)
+    {
+      vgl_rotation_3d<double> rot = prs.rot(ang);
+      // pre or post multiply? Or something else?
+      vgl_rotation_3d<double> comp_rot = initial_rot*rot;
+      vnl_vector_fixed<double, 3> rod = comp_rot.as_rodrigues();
+      //double c = cost.error(rod, trans,min_allowed_overlap);
+      //double c = cost.entropy(rod, trans,min_allowed_overlap);
+      //double c = cost.mutual_info(rod, trans,min_allowed_overlap);
+      double c = cost.entropy_diff(rod, trans,min_allowed_overlap);
+      if((nc++)%10 == 0) vcl_cout << '.';
+      if (c==vnl_numeric_traits<double>::maxval)
+        continue;
+      //c = -c;
+      if (c<min_cost) {
+        min_cost = c;
+        min_rod = rod;
+        min_overlap_fraction = cost.frac_samples();
+        n_succ++;
+      }
+    }
+  }
+  vcl_cout << "\nscan took " << tim.real()/1000.0 << " seconds\n" << vcl_flush;
+
+  if (n_succ==0) return false;
+  min_rot = vgl_rotation_3d<double>(min_rod);
+  return true;
+}
 bool icam_minimizer::
 initialized_rot_search(vgl_vector_3d<double> const& trans,
                        vgl_rotation_3d<double>& initial_rot,

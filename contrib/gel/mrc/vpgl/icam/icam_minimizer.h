@@ -96,6 +96,12 @@ class icam_minimizer
                 vgl_vector_3d<double>& trans,
                 double to_fl);
 
+  //: Run powell minimization on rotation only using entropy diff for a level
+  void minimize_rot(vgl_rotation_3d<double>& rot,
+                    vgl_vector_3d<double> const& trans,
+                    unsigned level);
+
+
   double end_error() {return end_error_;}
 
   //: current parameter values
@@ -103,6 +109,18 @@ class icam_minimizer
   vgl_rotation_3d<double> rotation() {return dt_pyramid_.rotation();}
   vgl_vector_3d<double> translation() {return dt_pyramid_.translation();}
 
+  //: a search over rotations at a given level of the pyramid
+ bool rot_search(vgl_vector_3d<double> const& trans,
+                 vgl_rotation_3d<double>& initial_rot,
+                 unsigned n_axis_steps,
+                 double axis_cone_half_angle,
+                 unsigned n_polar_steps,
+                 double polar_range,
+                 unsigned level,
+                 double min_allowed_overlap,
+                 vgl_rotation_3d<double>& min_rot,
+                 double& min_cost,
+                 double& min_overlap_fraction);
   //: exhaustive search for rotation, given the camera translation
   // This virtual method is implemented in both C++ and in OpenCL
   // setup and finish are particular to OpenCL to signal setup and

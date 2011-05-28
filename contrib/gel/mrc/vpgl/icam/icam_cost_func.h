@@ -31,6 +31,7 @@
 //
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_least_squares_function.h>
+#include <vnl/vnl_cost_function.h>
 #include <vil/vil_image_view.h>
 #include <icam/icam_depth_transform.h>
 #include <vbl/vbl_array_2d.h>
@@ -112,5 +113,20 @@ class icam_cost_func : public vnl_least_squares_function
   double entropy_diff(vbl_array_2d<double>& joint_prob);
 };
 
+//: a scalar version of the least squares const function for scalar minimizers
+// currently used in solving for rotation only
+class icam_scalar_cost_func : public vnl_cost_function
+{
+public:
+  icam_scalar_cost_func(icam_cost_func const& cost_func) 
+    : vnl_cost_function(3), cost_func_(cost_func){}
+  //: translation is currently fixed during solver iterations
+  void set_translation(vgl_vector_3d<double> const& trans);
+  //: compute f given the rotation parameters (Rodrigues vector)
+  virtual double f(vnl_vector<double> const& x);
+ protected:  
+  icam_cost_func cost_func_;
+  vgl_vector_3d<double> trans_;
+};
 #endif // icam_cost_func_h_
 

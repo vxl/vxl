@@ -131,6 +131,10 @@ class vpgl_perspective_camera : public vpgl_proj_camera<T>
   static  vpgl_perspective_camera<T>
    postmultiply( const vpgl_perspective_camera<T>& in_cam,
                  const vgl_h_matrix_3d<T>& euclid_trans);
+  //: Apply a 3-d Euclidean transformation (transform external cam parameters)
+  static vpgl_perspective_camera<T> 
+    postmultiply(const vpgl_perspective_camera<T>& camera,
+                const vgl_rotation_3d<T>& rot, const vgl_vector_3d<T>& trans);
 
   //: Equality test
   inline bool operator==(vpgl_perspective_camera<T> const &that) const

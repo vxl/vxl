@@ -19,6 +19,7 @@
 #include <vnl/algo/vnl_qr.h>
 #include <vgl/algo/vgl_rotation_3d.h>
 #include <vgl/algo/vgl_h_matrix_2d_compute_linear.h>
+#include <vgl/algo/vgl_h_matrix_3d.h>
 #include <vgl/vgl_homg_point_3d.h>
 #include <vpgl/algo/vpgl_ortho_procrustes.h>
 #include <vpgl/algo/vpgl_optimize_camera.h>
@@ -1134,7 +1135,6 @@ static bool interp_ray(vcl_vector<vgl_ray_3d<double> > const& ray_nbrs,
   intrp_ray.set(iorg, idir);
   return true;
 }
-
 // compute tolerances on ray origin and ray direction to test interpolation
 static bool ray_tol(vpgl_local_rational_camera<double> const& rat_cam,
                     double mid_u, double mid_v,

@@ -95,8 +95,8 @@ class vpgl_ray
 
   // ====== operations on rotation matrices with respect to camera rays ======
 
-    //: angle between principal ray of one rotation and the principal ray of a second rotation
-  // Rotations \p r0 and \p r1 are expressed as vgl_rotation<T>
+    //: angle(radians) between principal ray of one rotation and the principal ray of a second rotation
+  // Rotations \p r0 and \p r1 are expressed as vgl_rotation<T> 
   static double angle_between_rays(vgl_rotation_3d<double> const& r0, vgl_rotation_3d<double> const& r1);
 
   //: the rotation about the principal ray required to go from \p r0 to \p r1
