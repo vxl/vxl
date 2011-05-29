@@ -2,11 +2,11 @@
 
 # bprb depends on expat and this process library depends on bprb
 INCLUDE( ${BRL_MODULE_PATH}/FindEXPAT.cmake )
-IF(EXPAT_FOUND)
+IF(EXPATPP_FOUND)
   INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bpro )
   INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bpro/bprb )
   INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bseg )
-  INCLUDE_DIRECTORIES( ${EXPAT_INCLUDE_DIR} )
+  INCLUDE_DIRECTORIES( ${EXPATPP_INCLUDE_DIR} )
 
   SET(bvxm_algo_pro_sources
       bvxm_algo_processes.h
