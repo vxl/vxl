@@ -56,9 +56,9 @@ void insert(boct_tree<T_loc,T_data>*& tree, boct_tree<T_loc,T_data>*& subtree, v
   // find the leaf node in the tree to insert subtree
   boct_tree_cell<T_loc,T_data>* node = tree->locate_point(cell_bb.centroid());
   if (!node)
-    vcl_cout << "The node COULD not be FOUND" << vcl_endl;
+    vcl_cerr << "The node could NOT be FOUND\n";
   if (node->children()) {
-    vcl_cout << "The node is not a leaf node! Cannot insert here" << vcl_endl;
+    vcl_cerr << "The node is not a leaf node! Cannot insert here\n";
     return;   // it should have been a leaf node
   }
 
@@ -164,7 +164,7 @@ void convert_tree(boct_bit_tree2 const& bit_tree, boct_tree<T_loc,T_data>*& tree
   // some of the leaf nodes are still in the queue, fill them with data
   while (!Q.empty()){
     if (data_idx > bit_tree.get_data_index(0,false)+585)
-      vcl_cout << "ERROR! exceeded!" << vcl_endl;
+      vcl_cerr << "ERROR! exceeded!\n";
     boxm2_data_traits<BOXM2_MOG3_GREY>::datatype data = mog3_data->data()[data_idx];
     boxm2_data_traits<BOXM2_NUM_OBS>::datatype nums = num_obs->data()[data_idx];
     boxm2_data<BOXM2_ALPHA>::datatype alpha = alpha_data->data()[data_idx];
@@ -178,7 +178,7 @@ void convert_tree(boct_bit_tree2 const& bit_tree, boct_tree<T_loc,T_data>*& tree
 
 int main(int argc, char** argv)
 {
-  vcl_cout<<"Converting boxm2 scene to boxm Scene"<<vcl_endl;
+  vcl_cout<<"Converting boxm2 scene to boxm scene"<<vcl_endl;
   vul_arg<vcl_string> boxm2_file("-scene", "scene filename", "");
   vul_arg<vcl_string> boxm_dir("-out", "output directory", "");
   vul_arg_parse(argc, argv);
@@ -187,7 +187,7 @@ int main(int argc, char** argv)
 
   //initialize a block and data cache
   boxm2_lru_cache::create(&scene2);
-  boxm2_cache* cache = boxm2_cache::instance();
+  boxm2_cache_sptr cache = boxm2_cache::instance();
 
   bgeo_lvcs lvcs = scene2.lvcs();
   //vgl_point_3d<double> origin = scene2.local_origin();
@@ -262,8 +262,8 @@ int main(int argc, char** argv)
             int n1=bit_tree.num_cells();
             int n2=octree->all_cells().size();
             if (n1 != n2) {
-              vcl_cout << x << ',' << y << ',' << z << '\n'
-                       << "ERROR! The converted tree is not right, should have " << n1 << " nodes instead of " << n2 << vcl_endl;
+              vcl_cerr << x << ',' << y << ',' << z << '\n'
+                       << "ERROR! The converted tree is not right, should have " << n1 << " nodes instead of " << n2 << '\n';
             }
 
             // all three dimensions should be same now, so we can use the one value
