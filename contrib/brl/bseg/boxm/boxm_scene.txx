@@ -783,7 +783,7 @@ void x_write(vcl_ostream &os, boxm_scene<T>& scene, vcl_string name)
   tree.add_attribute("init", (int) scene.init_level());
   tree.x_write(os);
 
-  scene_elm.x_write_close(os);
+  scene_elm.x_write_close(os);  
 }
 
 template <class T>
@@ -1008,7 +1008,7 @@ void boxm_scene<T>::leaves_in_region(vgl_box_3d<double> box, vcl_vector<boct_tre
   vgl_point_3d<int> max_idx;
   get_block_index(max_point, max_idx);
   
-  vcl_cout << "Loading Region beteween blocks: " << max_idx << ", " << min_idx << vcl_endl;
+  //vcl_cout << "Loading Region beteween blocks: " << max_idx << ", " << min_idx << vcl_endl;
 
   if (!load_blocks(min_idx, max_idx))
     return;
