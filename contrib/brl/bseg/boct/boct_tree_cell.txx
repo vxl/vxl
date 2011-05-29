@@ -883,7 +883,7 @@ void vsl_b_read(vsl_b_istream & is, boct_tree_cell<T_loc,T_data>& c, boct_tree_c
     c.set_data(data);
     c.set_parent(parent);
     c.set_vis_node(NULL);
-    bool leaf;
+    bool leaf = true;
     vsl_b_read(is, leaf);
     if (!leaf) {
       c.split();
