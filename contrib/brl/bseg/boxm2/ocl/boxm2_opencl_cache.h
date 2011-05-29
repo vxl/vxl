@@ -34,12 +34,12 @@ class boxm2_opencl_cache: public vbl_ref_count
   public:
     boxm2_opencl_cache(boxm2_scene_sptr scene,
                        bocl_device_sptr device,
-                       int maxBlocks=1);
+                       unsigned int maxBlocks=1);
     ~boxm2_opencl_cache() { if (cpu_cache_) cpu_cache_ = 0;
-                            this->clear_cache(); 
+                            this->clear_cache();
                           }
-    
-    void set_context(cl_context& context); 
+
+    void set_context(cl_context& context);
     boxm2_cache_sptr get_cpu_cache() { return cpu_cache_; }
 
     //: returns block pointer to block specified by ID
@@ -56,9 +56,9 @@ class boxm2_opencl_cache: public vbl_ref_count
 
     //: empties out cache, deletes all bocl_mem*s
     bool clear_cache();
-    
+
     //: returns num bytes in cache
-    long bytes_in_cache(); 
+    long bytes_in_cache();
 
     //: deep_replace data replaces not only the current data on the gpu cached, but pushes a block to the cpu cache
     void deep_replace_data(boxm2_block_id id, vcl_string type, bocl_mem* mem);
@@ -72,9 +72,9 @@ class boxm2_opencl_cache: public vbl_ref_count
     boxm2_cache_sptr cpu_cache_;
 
     //: maximum number of blocks this cache will allow (eventually this will become smart)
-    int maxBlocksInCache;
-    long bytesInCache_; 
-    long maxBytesInCache_; 
+    unsigned int maxBlocksInCache;
+    unsigned long bytesInCache_;
+    unsigned long maxBytesInCache_;
 
     ////////////////////////////////////////////////////////////////////////////
     // bocl_mem objects
@@ -95,11 +95,11 @@ class boxm2_opencl_cache: public vbl_ref_count
     // opencl objects
     ////////////////////////////////////////////////////////////////////////////
     //use this for the context
-    bocl_device_sptr device_; 
-    
+    bocl_device_sptr device_;
+
     //: opencl context to use for writing to buffers
     cl_context*       context_;
-    
+
     //: opencl command queue to use for writing to buffers
     cl_command_queue* queue_;
     cl_command_queue q_;
@@ -126,39 +126,11 @@ void vsl_b_read(vsl_b_istream& is, boxm2_opencl_cache* p);
 void vsl_b_read(vsl_b_istream& is, boxm2_opencl_cache_sptr& sptr);
 void vsl_b_read(vsl_b_istream& is, boxm2_opencl_cache_sptr const& sptr);
 
-#endif // boxm2_opencl_cache_h
-
 //////////////////////////////
 // OLD SINGLE BLOCK CACHE IMPLEMENTATION
 ////////////////////////////////
 #if 0
-#ifndef boxm2_opencl_cache_h
-#define boxm2_opencl_cache_h
-//:
-// \file
-// \brief boxm2_opencl_scene_streamer assists the processor in streaming blocks
-#include <boxm2/boxm2_scene.h>
-#include <boxm2/boxm2_block.h>
-#include <boxm2/boxm2_data.h>
-#include <boxm2/boxm2_data_base.h>
-#include <boxm2/boxm2_data_traits.h>
-#include <boxm2/basic/boxm2_block_id.h>
-#include <boxm2/basic/boxm2_array_3d.h>
-#include <boxm2/io/boxm2_cache.h>
-#include <boxm2/io/boxm2_lru_cache.h>
 #include <boxm2/ocl/boxm2_opencl_cache_base.h>
-#include <brdb/brdb_value_sptr.h>
-#include <vcl_vector.h>
-#ifdef DEBUG
-#include <vcl_iostream.h>
-#endif
-
-//open cl includes
-#include <bocl/bocl_cl.h>
-#include <bocl/bocl_mem.h>
-#include <bocl/bocl_device.h>
-#include <vbl/vbl_ref_count.h>
-#include <vbl/vbl_smart_ptr.h>
 
 class boxm2_opencl_cache: public vbl_ref_count, public boxm2_opencl_cache_base
 {
@@ -173,7 +145,7 @@ class boxm2_opencl_cache: public vbl_ref_count, public boxm2_opencl_cache_base
 
     //: empties out cache, deletes all bocl_mem*s
     bool clear_cache();
-    
+
     //: returns block pointer to block specified by ID
     bocl_mem* get_block(boxm2_block_id id);
 
@@ -196,7 +168,6 @@ class boxm2_opencl_cache: public vbl_ref_count, public boxm2_opencl_cache_base
 
     //: deep_replace data replaces not only the current data on the gpu cached, but pushes a block to the cpu cache
     void deep_replace_data(boxm2_block_id id, vcl_string type, bocl_mem* mem);
-    
 
   private:
 
@@ -262,5 +233,6 @@ void vsl_b_read(vsl_b_istream& is, boxm2_opencl_cache* p);
 void vsl_b_read(vsl_b_istream& is, boxm2_opencl_cache_sptr& sptr);
 void vsl_b_read(vsl_b_istream& is, boxm2_opencl_cache_sptr const& sptr);
 
+#endif // 0 - old implementation
+
 #endif // boxm2_opencl_cache_h
-#endif

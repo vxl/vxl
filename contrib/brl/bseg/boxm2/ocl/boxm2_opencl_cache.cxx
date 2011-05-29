@@ -7,12 +7,12 @@
 //: scene/device constructor
 boxm2_opencl_cache::boxm2_opencl_cache(boxm2_scene_sptr scene,
                                        bocl_device_sptr device,
-                                       int maxBlocks)
+                                       unsigned int maxBlocks)
 : scene_(scene), maxBlocksInCache(maxBlocks), bytesInCache_(0), block_info_(0), device_(device)
 {
   // store max bytes allowed in cache - subtract 15% MB for saftey
-  maxBytesInCache_ = (long) device->info().total_global_memory_;
-  maxBytesInCache_ -= (long) (maxBytesInCache_ * .20);
+  maxBytesInCache_ = (unsigned long) device->info().total_global_memory_;
+  maxBytesInCache_ -= (unsigned long) (maxBytesInCache_ / 5);
 
   // by default try to create an LRU cache
   boxm2_lru_cache::create(scene);
@@ -240,7 +240,7 @@ bocl_mem* boxm2_opencl_cache::get_data(boxm2_block_id id, vcl_string type, vcl_s
       return data;
     }
 #endif // 0
-    
+
     //enforce read_only read_write
     boxm2_data_base* data_base = cpu_cache_->get_data_base(id,type,num_bytes,read_only);
     return iter->second;
@@ -254,7 +254,7 @@ bocl_mem* boxm2_opencl_cache::get_data(boxm2_block_id id, vcl_string type, vcl_s
   else
     toLoadSize = data_base->buffer_length();
 
-  if ( this->bytes_in_cache()+toLoadSize > maxBytesInCache_ && !data_map.empty() ) // was: data_map.size() >= (unsigned int)maxBlocksInCache
+  if ( this->bytes_in_cache()+toLoadSize > maxBytesInCache_ && !data_map.empty() ) // was: data_map.size() >= maxBlocksInCache
   {
     vcl_cout<<"Bytes in cache: "<<bytesInCache_<<" max bytes in cache! "<<maxBytesInCache_<<vcl_endl;
     vnl_random rand;
@@ -295,7 +295,7 @@ void boxm2_opencl_cache::deep_replace_data(boxm2_block_id id, vcl_string type, b
 {
   // instantiate new data block
   vcl_size_t numDataBytes = mem->num_bytes();
-  
+
   //TODO: figure out consistent scheme to make this read_only or read_write
   boxm2_data_base* newData = new boxm2_data_base(new char[numDataBytes], numDataBytes, id);
 

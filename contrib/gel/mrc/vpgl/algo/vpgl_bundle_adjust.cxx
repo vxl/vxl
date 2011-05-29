@@ -215,7 +215,7 @@ vpgl_bundle_adjust::optimize(vcl_vector<vpgl_perspective_camera<double> >& camer
   lm.set_g_tolerance(g_tol_);
   lm.set_epsilon_function(epsilon_);
   if (!lm.minimize(a_,b_,c_,use_gradient_,use_m_estimator_) &&
-      lm.get_num_iterations() < max_iterations_)
+      lm.get_num_iterations() < int(max_iterations_))
   {
     return false;
   }
