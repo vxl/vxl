@@ -23,6 +23,7 @@ ADD_EXECUTABLE( vpgl_algo_test_all
   test_camera_from_box.cxx
   test_camera_bounds.cxx
   test_em_compute_5_point.cxx
+)
 
 IF( BUILD_BUNDLER )
   ADD_DEFINITIONS(-DBUILD_BUNDLER=1)
