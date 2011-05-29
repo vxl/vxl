@@ -114,10 +114,11 @@ static void test_rotation_only()
   // search over a set of principal axes within the specified cone
   double min_cost, min_overlap;
   double polar_range = 0.0;
+  unsigned n_polar_steps = 0;
   unsigned n_axis_steps = 100;
   double cone_half_angle = 0.15;
-  minimizer.rot_search(tr, rot, n_axis_steps, cone_half_angle, 0, 0.0,
-                       0, 0.5, min_rot, min_cost, min_overlap);
+  minimizer.rot_search(tr, rot, n_axis_steps, cone_half_angle, n_polar_steps,
+                       polar_range, 0, 0.5, min_rot, min_cost, min_overlap);
   // check accuracy the result for finite steps in principal ray
   vgl_rotation_3d<double> R = cam.get_rotation();
   vgl_rotation_3d<double> prot = vpgl_ray::rot_to_point_ray(0.0, 5.0);

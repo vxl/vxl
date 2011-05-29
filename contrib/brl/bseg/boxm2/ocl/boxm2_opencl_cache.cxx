@@ -223,6 +223,7 @@ bocl_mem* boxm2_opencl_cache::get_data(boxm2_block_id id, vcl_string type, vcl_s
   // then look for the block you're requesting
   vcl_map<boxm2_block_id, bocl_mem*>::iterator iter = data_map.find(id);
   if ( iter != data_map.end() ) {
+    return iter->second;
 #if 0 // commented out because refine CLEARS CACHE
     // mem currently stored
     bocl_mem* mem = data_map[id];
@@ -239,11 +240,9 @@ bocl_mem* boxm2_opencl_cache::get_data(boxm2_block_id id, vcl_string type, vcl_s
       data_map[id] = data;
       return data;
     }
-#endif // 0
-
     //enforce read_only read_write
     boxm2_data_base* data_base = cpu_cache_->get_data_base(id,type,num_bytes,read_only);
-    return iter->second;
+#endif // 0
   }
 
   // load data into CPU cache and check size to see if GPU cache needs cleaning
