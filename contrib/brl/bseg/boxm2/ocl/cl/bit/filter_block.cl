@@ -51,7 +51,8 @@ inline void sum_alpha(          float* totalAlphaL,
 {
   int ndepth = get_depth(bitIndex); 
   float nlen = 1.0f / (float) (1<<ndepth);
-  int dataIndex = data_index_cached( neighbor_tree, bitIndex, lookup, csum, &cumIndex) + data_index_root(neighbor_tree); 
+  //int dataIndex = data_index_cached( neighbor_tree, bitIndex, lookup, csum, &cumIndex) + data_index_root(neighbor_tree); 
+  int dataIndex = data_index_relative(neighbor_tree, bitIndex, lookup) + data_index_root(neighbor_tree); 
   (*totalAlphaL) += alphas[dataIndex] * nlen * block_len; 
 }
 
@@ -135,7 +136,8 @@ __kernel void filter_block( __constant RenderSceneInfo * linfo,
           if( is_leaf(neighbor_tree, neighborBitIndex) )
           {
             //get data index
-            int idx = data_index_cached( neighbor_tree, neighborBitIndex, lookup, csum, &cumIndex) + data_index_root(neighbor_tree);
+            //int idx = data_index_cached( neighbor_tree, neighborBitIndex, lookup, csum, &cumIndex) + data_index_root(neighbor_tree);
+            int idx = data_index_relative( neighbor_tree, neighborBitIndex, lookup) + data_index_root(neighbor_tree); 
             int deltaDepth = abs( currDepth-get_depth(neighborBitIndex) ); 
 
             //grab alpha, calculate probability
@@ -146,7 +148,6 @@ __kernel void filter_block( __constant RenderSceneInfo * linfo,
           }
           else //neighbor is smaller, must combine neighborhood
           {
-       
 #if 1
             //stateless depth first traversal here.
             //neighbor bit index max minchild and max child
@@ -188,7 +189,6 @@ __kernel void filter_block( __constant RenderSceneInfo * linfo,
             float prob = 1.0f - exp( - totalAlphaL ); 
             probs[numProbs++] = prob; 
 #endif
-
           }
         } //end while over neighbors
 

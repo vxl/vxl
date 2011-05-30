@@ -22,6 +22,22 @@
 #include <vul/vul_timer.h>
 #include <boct/boct_bit_tree2.h>
 
+void boxm2_ocl_filter_process_globals::compile_filter_kernel(bocl_device_sptr device,bocl_kernel * refine_data_kernel)
+{
+  vcl_vector<vcl_string> src_paths;
+  vcl_string source_dir = vcl_string(VCL_SOURCE_ROOT_DIR) + "/contrib/brl/bseg/boxm2/ocl/cl/";
+  src_paths.push_back(source_dir + "scene_info.cl");
+  src_paths.push_back(source_dir + "bit/bit_tree_library_functions.cl");
+  src_paths.push_back(source_dir + "basic/linked_list.cl");
+  src_paths.push_back(source_dir + "basic/sort_vector.cl");
+  src_paths.push_back(source_dir + "bit/filter_block.cl"); 
+
+  vcl_string options = " -D LIST_TYPE=float4 "; 
+  refine_data_kernel->create_kernel( &device->context(), device->device_id(),
+                                     src_paths, "filter_block", options,
+                                     "boxm2 ocl filter kernel");
+}
+
 bool boxm2_ocl_filter_process_cons(bprb_func_process& pro)
 {
     using namespace boxm2_ocl_filter_process_globals;

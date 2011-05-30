@@ -149,14 +149,14 @@ void test_inner_cluster(boxm2_block* blk,
       //make middle one complex
       if (i==1 && j==1) {
         bit_tree.set_data_ptr(count);
-        bit_tree.set_bit_at(0, true);
-        for (int cell=0; cell<9; ++cell)
-          alphas[count+cell] = count/32.0;
+        bit_tree.set_bit_at(0, true); 
+        for(int cell=0; cell<9; ++cell)
+          alphas[count+cell] = 1/32.0; 
         count+=9;
       }
       else
       {
-        alphas[count] = (count+1)/16.0;
+        alphas[count] = (1)/4.0; 
         //alphas[count] = 8.0f;
         bit_tree.set_bit_at(0, false);
         bit_tree.set_data_ptr(count);
@@ -193,7 +193,8 @@ void test_inner_cluster(boxm2_block* blk,
   //grab the block out of the cache as well
   bocl_mem* blk_mem = opencl_cache->get_block(id);
   bocl_mem* blk_info = opencl_cache->loaded_block_info();
-
+  blk_mem->write_to_buffer(queue); 
+  
   //Get helper buffers
   // bit lookup buffer
   cl_uchar lookup_arr[256];
@@ -242,6 +243,10 @@ void test_inner_cluster(boxm2_block* blk,
   vcl_cout<<"New alphas:::"<<vcl_endl;
   print_alphas(blk, new_alpha_buffer, data, dataSize);
 
+  
+  for(int i=0; i<dataSize; ++i)
+    vcl_cout<<"Newalpha: "<<new_alpha_buffer[i]<<vcl_endl;
+  
   delete[] new_alpha_buffer;
   delete[] alphas;
 }

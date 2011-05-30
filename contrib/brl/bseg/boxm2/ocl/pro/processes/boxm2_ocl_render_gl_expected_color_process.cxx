@@ -62,7 +62,7 @@ namespace boxm2_ocl_render_gl_expected_color_process_globals
                                      src_paths,
                                      "render_bit_scene",   //kernel name
                                      options,              //options
-                                     "boxm2 opencl render random blocks"); //kernel identifier (for error checking)
+                                     "boxm2 opencl render gl color"); //kernel identifier (for error checking)
     vec_kernels.push_back(ray_trace_kernel);
     
     //create normalize image kernel
