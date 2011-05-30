@@ -99,7 +99,8 @@ class icam_minimizer
   //: Run powell minimization on rotation only using entropy diff for a level
   void minimize_rot(vgl_rotation_3d<double>& rot,
                     vgl_vector_3d<double> const& trans,
-                    unsigned level);
+                    unsigned level,
+                    double min_allowed_overlap = 0.01);
 
   double end_error() { return end_error_; }
 

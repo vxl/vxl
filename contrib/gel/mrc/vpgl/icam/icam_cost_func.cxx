@@ -301,5 +301,6 @@ icam_cost_func::mapped_dest(vnl_vector_fixed<double, 3> rodrigues,
 double icam_scalar_cost_func::f(vnl_vector<double> const& x)
 {
   vnl_vector_fixed<double, 3> rod = x;
-  return cost_func_.entropy_diff(rod, trans_);
+  vgl_vector_3d<double> trans(0,0,0);
+  return cost_func_.entropy_diff(rod, trans,min_allowed_overlap_);
 }

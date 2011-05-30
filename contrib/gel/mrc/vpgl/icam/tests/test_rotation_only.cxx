@@ -103,6 +103,7 @@ static void test_rotation_only()
   vil_image_view<double> depth(dest_img.ni(), dest_img.nj());
   depth.fill(1.0);
   vgl_rotation_3d<double> rot, min_rot;
+  //solve only for rotation translation = 0
   vgl_vector_3d<double> tr(0, 0, 0);
   //form the depth transform (rotation only)
   icam_depth_transform dt(K, depth, rot, tr);
@@ -130,7 +131,9 @@ static void test_rotation_only()
            << " degrees. \nEntropy diff = " << min_cost << '\n';
 
   // refine the rotation using the Powell algorithm
-  minimizer.minimize_rot(min_rot, tr, 0);
+  double min_allowed_overlap = 0.25;
+  unsigned pyramid_level = 0;
+  minimizer.minimize_rot(min_rot, tr, pyramid_level, min_allowed_overlap);
   vil_image_view<float> mapped_source = minimizer.view(min_rot, tr, 0);
   vcl_cout << "angle between principal rays after Powell "
            << vpgl_ray::angle_between_rays(Rc, min_rot)*180.0/vnl_math::pi

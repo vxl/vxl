@@ -166,7 +166,8 @@ icam_minimizer:: minimize(vgl_rotation_3d<double>& rot,
 // parameters are assumed to be correct
 void icam_minimizer::minimize_rot(vgl_rotation_3d<double>& rot,
                                   vgl_vector_3d<double> const& trans,
-                                  unsigned level)
+                                  unsigned level,
+                                  double min_allowed_overlap)
 {
   //Set the initial rotation on the dt pyramid
   dt_pyramid_.set_rotation(rot);
@@ -174,6 +175,7 @@ void icam_minimizer::minimize_rot(vgl_rotation_3d<double>& rot,
   dt_pyramid_.set_translation(trans);
   icam_cost_func cost_func = cost_fn(level);
   icam_scalar_cost_func scal_cost_func(cost_func);
+  scal_cost_func.set_min_overlap(min_allowed_overlap);
   vnl_powell powell(&scal_cost_func);
   powell.set_trace(false);
   powell.set_verbose(false);
