@@ -101,6 +101,7 @@ boxm2_data_base* boxm2_lru_cache::get_data_base(boxm2_block_id id, vcl_string ty
   if(num_bytes > 0) {
     vcl_cout<<"boxm2_lru_cache::initializing empty data "<<id<<" type: "<<type<<vcl_endl;
     loaded = new boxm2_data_base(new char[num_bytes], num_bytes, id, read_only);
+    loaded->set_default_value(type);
   }
   else {
     //otherwise it's a miss, load sync from disk, update cache
