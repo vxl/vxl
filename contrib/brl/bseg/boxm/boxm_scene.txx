@@ -997,6 +997,12 @@ template <class T>
 void boxm_scene<T>::leaves_in_region(vgl_box_3d<double> box, vcl_vector<boct_tree_cell<typename T::loc_type, typename T::datatype>* > &cells)
 {
   vgl_box_3d<double> valid_box = vgl_intersection(get_world_bbox(),box);
+  cells.clear();
+  
+  if (valid_box.is_empty()) {
+    vcl_cout << "Warning in boxm_scene<T>::leaves_in_region: Region does not intersect scene\n";
+    return;
+  }
   
   vgl_point_3d<double> min_point = valid_box.min_point();
   vgl_point_3d<double> max_point = valid_box.max_point();
