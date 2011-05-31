@@ -93,7 +93,7 @@ bool boxm2_cpp_render_cone_expected_image_process(bprb_func_process& pro)
   {
     vcl_cout<<"Cone Rendering Block Id "<<(*id)<<vcl_endl;
     boxm2_block *      blk  = cache->get_block(*id);
-    boxm2_data_base *  alph = cache->get_data_base(*id,boxm2_data_traits<BOXM2_ALPHA>::prefix());
+    boxm2_data_base *  alph = cache->get_data_base(*id,boxm2_data_traits<BOXM2_GAMMA>::prefix());
     boxm2_data_base *  mog  = cache->get_data_base(*id,data_type);
     vcl_vector<boxm2_data_base*> datas;
     datas.push_back(alph);
@@ -110,7 +110,7 @@ bool boxm2_cpp_render_cone_expected_image_process(bprb_func_process& pro)
   normalize_intensity f;
   vil_transform2<float,float, normalize_intensity>(*vis_img,*exp_img,f);
 
-  vil_save(*vis_img, "vis_img.tiff");
+  vil_save(*vis_img, "f:/vis_img.tiff");
 
   // store scene smaprt pointer
   pro.set_output_val<vil_image_view_base_sptr>(0, exp_img);
