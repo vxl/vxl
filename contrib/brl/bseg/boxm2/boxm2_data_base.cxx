@@ -29,7 +29,27 @@ boxm2_data_base::boxm2_data_base(boxm2_block_metadata data, const vcl_string dat
     int buffer_length = (int)(buffer_length_/sizeof(float));
     for (int i=0; i<buffer_length; ++i) alphas[i] = ALPHA_INIT;
   }
+  else   if (data_type == boxm2_data_traits<BOXM2_GAMMA>::prefix()) {
+    const float GAMMA_INIT = float(-vcl_log(1.0f - data.p_init_) / (data.sub_block_dim_.x()*data.sub_block_dim_.x()*data.sub_block_dim_.x()));
+    float* alphas = (float*) data_buffer_;
+    int buffer_length = (int)(buffer_length_/sizeof(float));
+    for (int i=0; i<buffer_length; ++i) alphas[i] = GAMMA_INIT;
+  }
   else if (data_type == boxm2_data_traits<BOXM2_NUM_OBS>::prefix() ||
+           data_type == boxm2_data_traits<BOXM2_AUX>::prefix() ) {
+    vcl_memset(data_buffer_, 0, buffer_length_);
+  }
+  else if (data_type == boxm2_data_traits<BOXM2_GAUSS_RGB>::prefix()) {
+    vcl_memset(data_buffer_, (vxl_byte) 128, buffer_length_);
+  }
+  else {
+    vcl_memset(data_buffer_, 0, buffer_length_);
+  }
+}
+//: accessor to a portion of the byte buffer
+void boxm2_data_base::set_default_value(vcl_string data_type)
+{
+  if (data_type == boxm2_data_traits<BOXM2_NUM_OBS>::prefix() ||
            data_type == boxm2_data_traits<BOXM2_AUX>::prefix() ) {
     vcl_memset(data_buffer_, 0, buffer_length_);
   }

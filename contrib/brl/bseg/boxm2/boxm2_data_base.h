@@ -31,6 +31,8 @@ class boxm2_data_base : public vbl_ref_count
     //: initializes empty data buffer
     boxm2_data_base(boxm2_block_metadata data, vcl_string type, bool read_only = true);
 
+    void set_default_value(vcl_string data_type);
+
     //: This destructor is correct - by our design the original data_buffer becomes OWNED by the data_base class
     virtual ~boxm2_data_base() { if (data_buffer_) delete [] data_buffer_; }
 

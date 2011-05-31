@@ -16,6 +16,7 @@ class boxm2_mog3_grey_processor;
 enum boxm2_data_type
 {
   BOXM2_ALPHA=0,
+  BOXM2_GAMMA,
   BOXM2_MOG3_GREY,
   BOXM2_MOG3_GREY_16,
   BOXM2_BATCH_HISTOGRAM,
@@ -45,6 +46,15 @@ class boxm2_data_traits<BOXM2_ALPHA>
   static vcl_size_t datasize(){return sizeof(datatype);}
   static vcl_string prefix(const vcl_string& identifier = "")
   { if (!identifier.size()) return "alpha"; else return "alpha_"+identifier; }
+};
+template<>
+class boxm2_data_traits<BOXM2_GAMMA>
+{
+ public:
+  typedef float datatype;
+  static vcl_size_t datasize(){return sizeof(datatype);}
+  static vcl_string prefix(const vcl_string& identifier = "")
+  { if (!identifier.size()) return "gamma"; else return "gamma_"+identifier; }
 };
 
 template<>
@@ -187,6 +197,8 @@ class boxm2_data_info
       // some of them changed to using find method to account for identifiers 
       if(prefix.find(boxm2_data_traits<BOXM2_ALPHA>::prefix()) != vcl_string::npos) 
         return boxm2_data_traits<BOXM2_ALPHA>::datasize(); 
+      if(prefix.find(boxm2_data_traits<BOXM2_GAMMA>::prefix()) != vcl_string::npos) 
+        return boxm2_data_traits<BOXM2_GAMMA>::datasize(); 
 
        if(prefix.find(boxm2_data_traits<BOXM2_MOG3_GREY_16>::prefix()) != vcl_string::npos)
         return boxm2_data_traits<BOXM2_MOG3_GREY_16>::datasize(); 
