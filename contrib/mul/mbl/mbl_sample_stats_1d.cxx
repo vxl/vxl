@@ -88,7 +88,6 @@ double mbl_sample_stats_1d::mean_of_absolutes() const
 //=========================================================================
 double mbl_sample_stats_1d::median() const
 {
-  //     return nth_percentile(50);
   double ret;
 
   if (samples_.size()>0)
@@ -98,12 +97,15 @@ double mbl_sample_stats_1d::median() const
       unsigned index = samples_.size() / 2 - 1;
 
       vcl_vector<double> tmp=samples_;
+
       vcl_vector<double>::iterator index_it0 = tmp.begin() + index;
       vcl_nth_element(tmp.begin(),index_it0,tmp.end(),vcl_less<double>());
+      double v0 = *index_it0;
+
       vcl_vector<double>::iterator index_it1 = tmp.begin() + index + 1;
       vcl_nth_element(tmp.begin(),index_it1,tmp.end(),vcl_less<double>());
-
-      ret = (*index_it0 + *index_it1);
+      double v1 = *index_it1;
+      ret = v0 + v1;
       ret /= 2.0;
     }
     else
@@ -111,6 +113,7 @@ double mbl_sample_stats_1d::median() const
       unsigned index = (samples_.size() - 1) / 2;
 
       vcl_vector<double> tmp=samples_;
+
       vcl_vector<double>::iterator index_it = tmp.begin() + index;
       vcl_nth_element(tmp.begin(),index_it,tmp.end(),vcl_less<double>());
 
@@ -149,14 +152,18 @@ double mbl_sample_stats_1d::quantile(double q) const
 
   // Get the 2 values bracketing the specified quantile position
   vcl_vector<double> tmp = samples_;
+
   vcl_vector<double>::iterator index_it0 = tmp.begin() + i0;
   vcl_nth_element(tmp.begin(), index_it0, tmp.end(), vcl_less<double>());
+  double v0 = *index_it0;
+
   vcl_vector<double>::iterator index_it1 = tmp.begin() + i1;
   vcl_nth_element(tmp.begin(), index_it1, tmp.end(), vcl_less<double>());
+  double v1 = *index_it1;
 
   // Linearly interpolate between the 2 values
   double f = float_index - f0;
-  double ret = (1.0-f)*(*index_it0) + (f)*(*index_it1);
+  double ret = ((1.0-f)*v0) + (f*v1);
   return ret;
 }
 
@@ -170,6 +177,7 @@ double mbl_sample_stats_1d::nth_percentile(int n) const
   double fact = double(n)/100.0;
   int index=int(fact*(samples_.size()-1));
   vcl_vector<double> tmp=samples_;
+
   vcl_vector<double>::iterator index_it = tmp.begin() + index;
   vcl_nth_element(tmp.begin(),index_it,tmp.end(),vcl_less<double>());
   double ret = *index_it;
