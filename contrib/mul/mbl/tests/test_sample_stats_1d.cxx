@@ -1,5 +1,6 @@
 // Test program fpr test_sample_stats_1d
 #include <testlib/testlib_test.h>
+#include <vcl_algorithm.h>
 #include <vcl_iostream.h>
 #include <vcl_cmath.h>
 #include <mbl/mbl_sample_stats_1d.h>
@@ -58,7 +59,37 @@ void test_original()
   TEST_NEAR("sum()",stats.sum(),45,1e-6);
   TEST_NEAR("min()",stats.min(),0,1e-6);
   TEST_NEAR("max()",stats.max(),9,1e-6);
-  TEST_NEAR("median()",stats.median(),4.5,1e-6);
+  {
+    TEST_NEAR("median() - 1",stats.median(),4.5,1e-6);
+
+    vcl_vector<double> data;
+    data.push_back( 4 );
+    data.push_back( 4 );
+    data.push_back( 4 );
+    data.push_back( 4 );
+    data.push_back( 4 );
+    data.push_back( 3.33333 );
+    data.push_back( 3.33333 );
+    data.push_back( 4 );
+    data.push_back( 4 );
+    data.push_back( 3.33333 );
+    data.push_back( 3.33333 );
+    data.push_back( 4 );
+    data.push_back( 4 );
+    data.push_back( 4 );
+    data.push_back( 4 );
+    data.push_back( 4 );
+    data.push_back( 4.66667 );
+    data.push_back( 4.66667 );
+    data.push_back( 4.66667 );
+    data.push_back( 4.66667 );
+
+    mbl_sample_stats_1d stats_med( data );
+    TEST_NEAR("median() - 2",stats_med.median(),4,1e-6);
+
+    TEST_NEAR("nth_percentile()",stats_med.nth_percentile(50),4,1e-6);
+  }
+
   TEST_NEAR("nth_percentile()",stats.nth_percentile(10),0,1e-6);
   TEST_NEAR("nth_percentile()",stats.nth_percentile(20),1,1e-6);
   TEST_NEAR("nth_percentile()",stats.nth_percentile(30),2,1e-6);
@@ -142,7 +173,6 @@ void test_quantile()
     {
       double q = static_cast<double>(j)/static_cast<double>(nq);
       quantiles.push_back(stats.quantile(q));
-      //vcl_cout << "quantile(" << q << ")= " << quantiles[j] << vcl_endl;
     }
 
     TEST("quantile(0.0)==ordered_sample[0]?", quantiles[0], stats.samples()[0]);
@@ -163,13 +193,17 @@ void test_quantile()
     {
       double q = static_cast<double>(j)/static_cast<double>(nq);
       quantiles.push_back(stats.quantile(q));
-      //vcl_cout << "quantile(" << q << ")= " << quantiles[j] << vcl_endl;
     }
 
     TEST("quantile(0.0)==ordered_sample(0)?", quantiles[0]==stats.samples()[0], true);
     TEST("quantile(1.0)==ordered_sample(n-1)?", quantiles[nq]==stats.samples()[ns-1], true);
-    double temp = (stats.samples()[ns/2 -1] + stats.samples()[ns/2])/2.0;
-    TEST("quantile(0.5)==mean of 2 adj samples?", quantiles[nq/2]==temp, true);
+
+    {
+      vcl_vector<double> samples_cpy = stats.samples();
+      vcl_sort( samples_cpy.begin() ,samples_cpy.end() );
+      double temp = (samples_cpy[ns/2 -1] + samples_cpy[ns/2])/2.0;
+      TEST("quantile(0.5)==mean of 2 adj samples?", quantiles[nq/2]==temp, true);
+    }
     TEST("median()==quantile(0.5)?", stats.median()==stats.quantile(0.5), true);
   }
 }
