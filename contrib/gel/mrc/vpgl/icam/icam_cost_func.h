@@ -116,11 +116,10 @@ class icam_cost_func : public vnl_least_squares_function
 // Currently used in solving for rotation only
 class icam_scalar_cost_func : public vnl_cost_function
 {
-
-public:
-  icam_scalar_cost_func(icam_cost_func const& cost_func) 
-    : vnl_cost_function(3), cost_func_(cost_func),min_allowed_overlap_(0.01){}
-  void set_min_overlap(double min_overlap) {min_allowed_overlap_=min_overlap;}
+ public:
+  icam_scalar_cost_func(icam_cost_func const& cost_func)
+    : vnl_cost_function(3), min_allowed_overlap_(0.01), cost_func_(cost_func) {}
+  void set_min_overlap(double min_overlap) { min_allowed_overlap_=min_overlap; }
   //: compute f given the rotation parameters (Rodrigues vector)
   virtual double f(vnl_vector<double> const& x);
  protected:
