@@ -61,59 +61,55 @@ bool boxm2_cpp_cone_update_image_process_cons(bprb_func_process& pro)
 
 bool boxm2_cpp_cone_update_image_process(bprb_func_process& pro)
 {
-    using namespace boxm2_cpp_cone_update_image_process_globals;
+  using namespace boxm2_cpp_cone_update_image_process_globals;
 
-    if ( pro.n_inputs() < n_inputs_ ){
-        vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
-        return false;
-    }
-    //get the inputs
-    unsigned i = 0;
-    boxm2_scene_sptr scene =pro.get_input<boxm2_scene_sptr>(i++);
-    boxm2_cache_sptr cache= pro.get_input<boxm2_cache_sptr>(i++);
-    vpgl_camera_double_sptr cam= pro.get_input<vpgl_camera_double_sptr>(i++);
-    vil_image_view_base_sptr in_img=pro.get_input<vil_image_view_base_sptr>(i++);
-    int illumination_bin_index = pro.get_input<int>(i);
-
-    vil_image_view_base_sptr float_image=boxm2_util::prepare_input_image(in_img);
-    if (vil_image_view<float> * input_image=dynamic_cast<vil_image_view<float> * > (float_image.ptr()))
-    {
-        bool foundDataType = false;
-        bool foundNumObsType = false;
-
-        vcl_string data_type;
-        vcl_string num_obs_type;
-        vcl_vector<vcl_string> apps = scene->appearances();
-        for (unsigned int i=0; i<apps.size(); ++i) {
-            if ( apps[i] == boxm2_data_traits<BOXM2_MOG3_GREY>::prefix() )
-            {
-                data_type = apps[i];
-                foundDataType = true;
-            }
-            else if ( apps[i] == boxm2_data_traits<BOXM2_MOG3_GREY_16>::prefix() )
-            {
-                data_type = apps[i];
-                foundDataType = true;
-            }
-            else if ( apps[i] == boxm2_data_traits<BOXM2_NUM_OBS>::prefix() )
-            {
-                num_obs_type = apps[i];
-                foundNumObsType = true;
-            }
-        }
-        if (!foundDataType) {
-            vcl_cout<<"BOXM2_OCL_RENDER_PROCESS ERROR: scene doesn't have BOXM2_MOG3_GREY or BOXM2_MOG3_GREY_16 data type"<<vcl_endl;
-            return false;
-        }
-        if(illumination_bin_index>=0){
-          vcl_stringstream s;
-          s << illumination_bin_index;
-          vcl_string ident = "_ill_bin_" + s.str();
-          data_type += ident;
-        }
-        return boxm2_update_cone_image(scene,data_type,num_obs_type,cam, input_image,  input_image->ni(), input_image->nj()) ;
-
-    }
-
+  if ( pro.n_inputs() < n_inputs_ ){
+    vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
     return false;
+  }
+  //get the inputs
+  unsigned i = 0;
+  boxm2_scene_sptr scene =pro.get_input<boxm2_scene_sptr>(i++);
+  boxm2_cache_sptr cache= pro.get_input<boxm2_cache_sptr>(i++);
+  vpgl_camera_double_sptr cam= pro.get_input<vpgl_camera_double_sptr>(i++);
+  vil_image_view_base_sptr in_img=pro.get_input<vil_image_view_base_sptr>(i++);
+  int illumination_bin_index = pro.get_input<int>(i);
+
+  vil_image_view_base_sptr float_image=boxm2_util::prepare_input_image(in_img);
+  if (vil_image_view<float> * input_image=dynamic_cast<vil_image_view<float> * > (float_image.ptr()))
+  {
+    bool foundDataType = false;
+    bool foundNumObsType = false;
+
+    vcl_string data_type;
+    vcl_string num_obs_type;
+    vcl_vector<vcl_string> apps = scene->appearances();
+    for (unsigned int i=0; i<apps.size(); ++i) {
+      if ( apps[i] == boxm2_data_traits<BOXM2_MOG3_GREY>::prefix() ) {
+        data_type = apps[i];
+        foundDataType = true;
+      }
+      else if ( apps[i] == boxm2_data_traits<BOXM2_MOG3_GREY_16>::prefix() ) {
+        data_type = apps[i];
+        foundDataType = true;
+      }
+      else if ( apps[i] == boxm2_data_traits<BOXM2_NUM_OBS>::prefix() ) {
+        num_obs_type = apps[i];
+        foundNumObsType = true;
+      }
+    }
+    if (!foundDataType) {
+      vcl_cout<<"BOXM2_OCL_RENDER_PROCESS ERROR: scene doesn't have BOXM2_MOG3_GREY or BOXM2_MOG3_GREY_16 data type"<<vcl_endl;
+      return false;
+    }
+    if (illumination_bin_index>=0) {
+      vcl_stringstream s;
+      s << illumination_bin_index;
+      vcl_string ident = "_ill_bin_" + s.str();
+      data_type += ident;
+    }
+    return boxm2_update_cone_image(scene,data_type,num_obs_type,cam, input_image,  input_image->ni(), input_image->nj()) ;
+  }
+
+  return false;
 }
