@@ -14,6 +14,7 @@
 //   May 08, 2005  Ricardo Fabbri   Added == operator
 //   Feb  8, 2007  Thomas Pollard   Added finite backproject method.
 //   Mar 16, 2007  Matt Leotta      Replaced vgl_h_matrix_3d with vgl_rotation_3d for rotation
+//   May 31, 2011  Peter Vanroose   Added homg-coord. "backproject()" method
 // \endverbatim
 
 #include <vnl/vnl_fwd.h>
@@ -82,6 +83,9 @@ class vpgl_perspective_camera : public vpgl_proj_camera<T>
   virtual vpgl_proj_camera<T>* clone(void) const;
 
   //: Finite backprojection.
+  // This is a virtual function from the parent class vpgl_proj_camera<T>
+  vgl_homg_line_3d_2_points<T> backproject(const vgl_homg_point_2d<T>& image_point ) const;
+  //: Finite backprojection.
   vgl_line_3d_2_points<T> backproject( const vgl_point_2d<T>& image_point ) const;
   //: Finite backprojection.
   vgl_line_3d_2_points<T> backproject(T u, T v) const
@@ -134,7 +138,7 @@ class vpgl_perspective_camera : public vpgl_proj_camera<T>
   //: Apply a 3-d Euclidean transformation (transform external cam parameters)
   static vpgl_perspective_camera<T> 
     postmultiply(const vpgl_perspective_camera<T>& camera,
-                const vgl_rotation_3d<T>& rot, const vgl_vector_3d<T>& trans);
+                 const vgl_rotation_3d<T>& rot, const vgl_vector_3d<T>& trans);
 
   //: Equality test
   inline bool operator==(vpgl_perspective_camera<T> const &that) const

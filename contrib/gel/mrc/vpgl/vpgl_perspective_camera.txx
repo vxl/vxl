@@ -70,6 +70,18 @@ vpgl_proj_camera<T>* vpgl_perspective_camera<T>::clone(void) const
   return new vpgl_perspective_camera<T>(*this);
 }
 
+//------------------------------------
+template <class T>
+vgl_homg_line_3d_2_points<T> vpgl_perspective_camera<T>::backproject(
+  const vgl_homg_point_2d<T>& image_point ) const
+{
+  // First find a point that projects to "image_point".
+  vnl_vector_fixed<T,4> vnl_wp = this->svd()->solve(
+    vnl_vector_fixed<T,3>( image_point.x(), image_point.y(), image_point.w() ).as_ref() );
+  vgl_homg_point_3d<T> wp( vnl_wp[0], vnl_wp[1], vnl_wp[2], vnl_wp[3] );
+  // The ray is then defined by that point and the camera center.
+  return vgl_homg_line_3d_2_points<T>( vgl_homg_point_3d<T>(camera_center_), wp );
+}
 
 //------------------------------------
 template <class T>
@@ -100,6 +112,7 @@ backproject_ray( const vgl_point_2d<T>& image_point ) const
   vgl_line_3d_2_points<T> l2 = this->backproject(image_point);
   return vgl_ray_3d<T>(l2.point1(), l2.direction());
 }
+
 //-------------------------------------------
 template <class T>
 vgl_vector_3d<T> vpgl_perspective_camera<T>::principal_axis() const
@@ -110,7 +123,6 @@ vgl_vector_3d<T> vpgl_perspective_camera<T>::principal_axis() const
   const vnl_matrix_fixed<T,3,4>& P = this->get_matrix();
   return normalized(vgl_vector_3d<T>(P(2,0),P(2,1),P(2,2)));
 }
-
 
 //------------------------------------
 template <class T>
@@ -124,7 +136,6 @@ bool vpgl_perspective_camera<T>::is_behind_camera(
   return dot < 0;
 }
 
-
 //-------------------------------------------
 template <class T>
 void vpgl_perspective_camera<T>::set_calibration( const vpgl_calibration_matrix<T>& K)
@@ -132,7 +143,6 @@ void vpgl_perspective_camera<T>::set_calibration( const vpgl_calibration_matrix<
   K_ = K;
   recompute_matrix();
 }
-
 
 //-------------------------------------------
 template <class T>
@@ -383,10 +393,11 @@ vpgl_perspective_camera<T>::postmultiply( const vpgl_perspective_camera<T>& in_c
 
   return vpgl_perspective_camera<T>(K, ccp, Rp);
 }
-template <class T> 
+
+template <class T>
 vpgl_perspective_camera<T> vpgl_perspective_camera<T>::
 postmultiply(const vpgl_perspective_camera<T>& camera,
-            const vgl_rotation_3d<T>& rot, const vgl_vector_3d<T>& trans)
+             const vgl_rotation_3d<T>& rot, const vgl_vector_3d<T>& trans)
 {
   vgl_h_matrix_3d<T> H;
   H.set_identity();
@@ -430,18 +441,20 @@ vcl_istream&  operator >>(vcl_istream& s,
   p.set_translation(t);
   return s ;
 }
+
 //: Save in ascii format
 template <class Type>
 void vpgl_perspective_camera<Type>::save(vcl_string cam_path)
 {
   vcl_ofstream os(cam_path.c_str());
-  if(!os.is_open()){
+  if (!os.is_open()) {
     vcl_cout << "unable to open output stream in vpgl_proj_camera<T>::save(.)\n";
     return;
   }
   os << *this << '\n';
   os.close();
 }
+
 //: Write vpgl_perspective_camera to a vrml file
 template <class Type>
 void vrml_write(vcl_ostream& str, vpgl_perspective_camera<Type> const& p, double rad)
