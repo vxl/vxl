@@ -39,6 +39,8 @@ void boxm2_cast_cone_ray_function(vgl_box_3d<double>& block_box,
   typedef vnl_vector_fixed<unsigned char, 16> uchar16;    //defines a bit tree
   double sinAlpha = vcl_sin(cone_half_angle);
 
+
+  float volume_scale=linfo->block_len*linfo->block_len*linfo->block_len;
   // If ray origin is inside box then p0==p1
   float ray_dx=(float)ray.direction().x();
   float ray_dy=(float)ray.direction().y();
@@ -74,7 +76,7 @@ void boxm2_cast_cone_ray_function(vgl_box_3d<double>& block_box,
   while (currT < tFar)
   {
     //if this pixel is no longer visible, quit
-    if (functor.vis(i,j) < .01) return;
+//    if (functor.vis(i,j) < .01) return;
 
     //intersect the current sphere with
     vgl_sphere_3d<double> currSphere( ray.origin() + ray.direction() * currT, currR);
@@ -129,10 +131,7 @@ void boxm2_cast_cone_ray_function(vgl_box_3d<double>& block_box,
               //if the tree is a leaf, then update it's contribution
               if ( bit_tree.is_leaf(currBitIndex)) {
                 int data_ptr = bit_tree.get_data_index(currBitIndex);
-                functor.step_cell(static_cast<float>(intersect_volume), data_ptr, i, j,
-                                  static_cast<float>(side_len * linfo->block_len),
-                                  intensity_norm, weighted_int, prob_surface);
-                total_volume += static_cast<float>(intersect_volume);
+                functor.step_cell(static_cast<float>(intersect_volume)*volume_scale,data_ptr, i, j);
               }
               else { //add children to the visit list
                 unsigned firstChild = 8 * currBitIndex + 1;
@@ -145,17 +144,59 @@ void boxm2_cast_cone_ray_function(vgl_box_3d<double>& block_box,
       } //end y for
     } //end x for
 
+    functor.compute_ball_properties(i,j);
     //calculate ray/sphere occupancy prob
-    float sphere_occ_prob = prob_surface/total_volume;
+    for (int x=minCell.x(); x<maxCell.x(); ++x) {
+      for (int y=minCell.y(); y<maxCell.y(); ++y) {
+        for (int z=minCell.z(); z<maxCell.z(); ++z) {
+          //load current block/tree
+          uchar16 tree = blk_sptr->trees()(x,y,z);
+          boct_bit_tree2 bit_tree( (unsigned char*) tree.data_block(), linfo->root_level+1);
 
-    //update intensity
-    if (intensity_norm > 1e-10 && total_volume > 1e-10) {
-      functor.update_expected_int( weighted_int/intensity_norm, sphere_occ_prob, i, j );
+          //determine how deep in each block you'll go
+          unsigned deepest_gen = linfo->root_level;
 
-      //update visibility after all cells have accounted for
-      functor.update_vis( sphere_occ_prob, i, j);
-    }
+          //max cell - go through deepest generation
+          int max_cell = ((1 << (3*(deepest_gen+1))) - 1) / 7;
+          max_cell = vcl_min(585, max_cell);
 
+          //depth first search through the tree
+          vcl_list<unsigned> toVisit;
+          toVisit.push_back( 0 );
+          while ( !toVisit.empty() )
+          {
+            //pop current node off the top of the list
+            unsigned currBitIndex = toVisit.front();
+            toVisit.pop_front();
+
+            //calculate the theoretical radius of this cell
+            int curr_depth = bit_tree.depth_at(currBitIndex);
+            double side_len = 1.0 / (double) (1<<curr_depth);
+            double cellR = UNIT_SPHERE_RADIUS * side_len;
+
+            //intersect the cell,
+            vgl_point_3d<double> localCenter = bit_tree.cell_center(currBitIndex);
+            vgl_point_3d<double> cellCenter(localCenter.x() + x, localCenter.y() + y, localCenter.z() + z);
+            vgl_sphere_3d<double> cellSphere(cellCenter, cellR);
+            double intersect_volume = bvgl_volume_of_intersection(currSphere, cellSphere);
+
+            //if it intersects, do one of two things
+            if ( intersect_volume > 0 ) {
+              //if the tree is a leaf, then update it's contribution
+              if ( bit_tree.is_leaf(currBitIndex)) {
+                int data_ptr = bit_tree.get_data_index(currBitIndex);
+                functor.redistribute(static_cast<float>(intersect_volume)*volume_scale,data_ptr);
+              }
+              else { //add children to the visit list
+                unsigned firstChild = 8 * currBitIndex + 1;
+                for (int ci = 0; ci < 8; ++ci)
+                  toVisit.push_back( firstChild + ci );
+              }
+            }
+          } //end DFS while
+        } //end z for
+      } //end y for
+    } //end x for
     //calculate the next sphere's R and T
     float rPrime = static_cast<float>(sinAlpha * (currR + currT) / (1.0-sinAlpha));
     currT += (rPrime + currR);
@@ -184,7 +225,7 @@ bool cast_cone_ray_per_block( functor_type functor,
         vgl_ray_3d<double> ray_ij; //= cam->ray(i,j);
         double cone_half_angle, solid_angle;
         vpgl_perspective_camera<double>* pcam = (vpgl_perspective_camera<double>*) cam.ptr();
-        vpgl_camera_bounds::pixel_solid_angle(*pcam, i, j, ray_ij, cone_half_angle, solid_angle);
+        vpgl_camera_bounds::pixel_solid_angle(*pcam, ((float)i)+0.5f, ((float)j)+0.5f, ray_ij, cone_half_angle, solid_angle);
 
         //normalize ray such that each block is of unit length
         vgl_point_3d<double> block_origin( (ray_ij.origin().x()-linfo->scene_origin[0])/linfo->block_len,

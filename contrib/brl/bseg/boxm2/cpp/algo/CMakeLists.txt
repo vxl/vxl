@@ -7,6 +7,8 @@ SET(boxm2_cpp_algo_sources
     boxm2_render_exp_depth_functor.h 
     boxm2_render_cone_functor.h
     boxm2_update_image_functor.h
+    boxm2_update_functions.h		  boxm2_update_functions.cxx
+    boxm2_cone_update_image_functor.h
     boxm2_refine_block_function.h     boxm2_refine_block_function.cxx
     boxm2_change_detection_functor.h
     boxm2_mog3_grey_processor.h       boxm2_mog3_grey_processor.cxx

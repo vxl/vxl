@@ -50,8 +50,7 @@ void test_cone_ray_trace()
                            vgl_point_3d<double>(0,0,0),
                            vgl_vector_3d<double>(1.0/8.0, 1.0/8.0, 1.0/8.0),
                            vgl_vector_3d<unsigned>(8,8,1),
-                           1, 1, 100,
-                           0.0); //Pinit starts out at 0 (will create 0 alphas?
+                           1, 1, 100,0.0); //Pinit starts out at 0 (will create 0 alphas?
   blocks[id] = data;
   scene->set_blocks(blocks);
 
