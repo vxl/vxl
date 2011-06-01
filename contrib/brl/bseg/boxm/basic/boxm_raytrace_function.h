@@ -420,7 +420,7 @@ class boxm_raytrace_function
           static_cast<vpgl_perspective_camera<double> const*>(cam_.ptr());
         // backproject image point to a ray
         ray_origin = pcam->camera_center();
-        vgl_line_3d_2_points<double> cam_ray = pcam->backproject(vgl_homg_point_2d<double>((double)i,(double)j));
+        vgl_line_3d_2_points<double> cam_ray = pcam->backproject(vgl_point_2d<double>((double)i,(double)j));
         norm_direction=cam_ray.direction();
         normalize(norm_direction);
         return;

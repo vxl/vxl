@@ -93,7 +93,7 @@ static void test_backproject_ray()
     {
       for (unsigned j=0;j<64;j++)
       {
-        vgl_line_3d_2_points<double> cam_ray = pcam->backproject(vgl_homg_point_2d<double>((double)i,(double)j));
+        vgl_line_3d_2_points<double> cam_ray = pcam->backproject(vgl_point_2d<double>((double)i,(double)j));
         vgl_vector_3d<double> norm_direction = cam_ray.direction();
         normalize(norm_direction);
         float dist=(float)vcl_sqrt((ray_results[inc]  -norm_direction.x())*(ray_results[inc]-norm_direction.x())+
