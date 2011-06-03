@@ -61,7 +61,7 @@ class boxm2_opencl_cache: public vbl_ref_count
     long bytes_in_cache();
 
     //: deep_replace data replaces not only the current data on the gpu cached, but pushes a block to the cpu cache
-    void deep_replace_data(boxm2_block_id id, vcl_string type, bocl_mem* mem);
+    void deep_replace_data(boxm2_block_id id, vcl_string type, bocl_mem* mem, bool read_only=true);
 
   private:
 

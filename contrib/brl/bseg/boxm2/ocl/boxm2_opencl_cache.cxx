@@ -223,6 +223,8 @@ bocl_mem* boxm2_opencl_cache::get_data(boxm2_block_id id, vcl_string type, vcl_s
   // then look for the block you're requesting
   vcl_map<boxm2_block_id, bocl_mem*>::iterator iter = data_map.find(id);
   if ( iter != data_map.end() ) {
+    //enforce read_only read_write
+    boxm2_data_base* data_base = cpu_cache_->get_data_base(id,type,num_bytes,read_only);
     return iter->second;
 #if 0 // commented out because refine CLEARS CACHE
     // mem currently stored
@@ -240,8 +242,6 @@ bocl_mem* boxm2_opencl_cache::get_data(boxm2_block_id id, vcl_string type, vcl_s
       data_map[id] = data;
       return data;
     }
-    //enforce read_only read_write
-    boxm2_data_base* data_base = cpu_cache_->get_data_base(id,type,num_bytes,read_only);
 #endif // 0
   }
 
@@ -253,7 +253,8 @@ bocl_mem* boxm2_opencl_cache::get_data(boxm2_block_id id, vcl_string type, vcl_s
   else
     toLoadSize = data_base->buffer_length();
 
-  if ( this->bytes_in_cache()+toLoadSize > maxBytesInCache_ && !data_map.empty() ) // was: data_map.size() >= maxBlocksInCache
+  // make enough space by kicking out blocks
+  while ( this->bytes_in_cache()+toLoadSize > maxBytesInCache_ && !data_map.empty() ) // was: data_map.size() >= maxBlocksInCache
   {
     vcl_cout<<"Bytes in cache: "<<bytesInCache_<<" max bytes in cache! "<<maxBytesInCache_<<vcl_endl;
     vnl_random rand;
@@ -272,7 +273,7 @@ bocl_mem* boxm2_opencl_cache::get_data(boxm2_block_id id, vcl_string type, vcl_s
   {
     bocl_mem* data = new bocl_mem(*context_, NULL, num_bytes, type);
     data->create_buffer(CL_MEM_READ_WRITE);
-    this->deep_replace_data(id,type,data);
+    this->deep_replace_data(id,type,data,read_only);
     data->zero_gpu_buffer(*queue_);
     data_map[id] = data;
     bytesInCache_ += data->num_bytes();
@@ -290,13 +291,13 @@ bocl_mem* boxm2_opencl_cache::get_data(boxm2_block_id id, vcl_string type, vcl_s
 //: Deep data replace.
 // This replaces not only the data in the GPU cache, but
 // in the cpu cache as well (by creating a new one)
-void boxm2_opencl_cache::deep_replace_data(boxm2_block_id id, vcl_string type, bocl_mem* mem)
+void boxm2_opencl_cache::deep_replace_data(boxm2_block_id id, vcl_string type, bocl_mem* mem, bool read_only)
 {
   // instantiate new data block
   vcl_size_t numDataBytes = mem->num_bytes();
 
   //TODO: figure out consistent scheme to make this read_only or read_write
-  boxm2_data_base* newData = new boxm2_data_base(new char[numDataBytes], numDataBytes, id);
+  boxm2_data_base* newData = new boxm2_data_base(new char[numDataBytes], numDataBytes, id, read_only);
 
   // write bocl_mem data to cpu buffer
   mem->set_cpu_buffer((void*) newData->data_buffer());
@@ -311,9 +312,6 @@ void boxm2_opencl_cache::deep_replace_data(boxm2_block_id id, vcl_string type, b
   if ( iter != data_map.end() ) {
     // release existing memory
     bocl_mem* toDelete = iter->second;
-#if 0
-    bytesInCache_ -= toDelete->num_bytes();
-#endif
     delete toDelete;
     data_map.erase(iter);
   }
