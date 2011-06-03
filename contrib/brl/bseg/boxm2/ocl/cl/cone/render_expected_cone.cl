@@ -22,6 +22,10 @@ typedef struct
   __global MOG_TYPE*  mog;
   float* expint; 
   float* vis; 
+  float* cum_vol; 
+  float* intensity_norm;
+  float* weighted_int;
+  float* prob_surface; 
 } AuxArgs;  
 
 void cast_cone_ray( int i, int j,                                     //pixel information
@@ -97,11 +101,23 @@ render_expected( __constant  RenderSceneInfo    * linfo,
   //----------------------------------------------------------------------------
   float expint  = exp_image[imIndex];
   float vis     = vis_image[imIndex];
+  
+  float cum_vol = 0.0f; 
+  float intensity_norm = 0.0f;;
+  float weighted_int = 0.0f;
+  float prob_surface = 0.0f; 
+  
+  //instantiate aux args
   AuxArgs aux_args; 
   aux_args.alpha  = alpha_array; 
   aux_args.mog    = mixture_array;
   aux_args.expint = &expint;
-  aux_args.vis    = &vis; 
+  aux_args.vis    = &vis;
+  aux_args.cum_vol = &cum_vol; 
+  aux_args.intensity_norm = &intensity_norm;
+  aux_args.weighted_int = &weighted_int;
+  aux_args.prob_surface = &prob_surface;  
+  
   cast_cone_ray( i, j,
                 ray_ox, ray_oy, ray_oz,
                 ray_dx, ray_dy, ray_dz, cone_half_angle,
@@ -117,9 +133,9 @@ render_expected( __constant  RenderSceneInfo    * linfo,
 }
 
 //FUNCTORS used with cone ray
-void step_cell_cone( AuxArgs aux_args, int data_ptr, float volume, float block_len, 
-                     float* intensity_norm, float* weighted_int, float* prob_surface)
+void step_cell_cone( AuxArgs aux_args, int data_ptr, float volume, float block_len)
 {
+/* old method of computing occ probs
   //grab voxel alpha and intensity
   float alpha = aux_args.alpha[data_ptr];
   
@@ -135,28 +151,62 @@ void step_cell_cone( AuxArgs aux_args, int data_ptr, float volume, float block_l
   
   //probability that this voxel is occupied by surface
   float cell_occupancy_prob = (1.0 - exp(-alpha*block_len) );
-  (*prob_surface) += (cell_occupancy_prob * volume);
+  (*aux_args.prob_surface) += (cell_occupancy_prob * volume);
 
   //weighted intensity for this voxel
-  (*weighted_int) += cell_occupancy_prob * volume * exp_intensity;
-  (*intensity_norm) += cell_occupancy_prob * volume;
+  (*aux_args.weighted_int) += cell_occupancy_prob * volume * exp_intensity;
+  (*aux_args.intensity_norm) += cell_occupancy_prob * volume;
+  
+  (*aux_args.cum_vol) += volume; 
+*/
+  //grab voxel alpha and intensity
+  float alpha = aux_args.alpha[data_ptr];
+  
+  //calculate the mean intensity
+  uchar8 data = aux_args.mog[data_ptr];
+  float w2=0.0f;
+  if (data.s2 > 0 && data.s5 > 0)
+    w2=(float)(255-data.s2-data.s5);
+  float exp_intensity=(float)data.s0 * (float)data.s2 +
+                      (float)data.s3 * (float)data.s5 +
+                      (float)data.s6 * w2;
+  exp_intensity /= (255.0f*255.0f);
+  
+  //probability that this voxel is occupied by surface
+  float cell_occupancy_prob = (1.0 - exp(-alpha*volume) );
+  (*aux_args.prob_surface) += (cell_occupancy_prob * volume);
+
+  //weighted intensity for this voxel
+  (*aux_args.weighted_int) += cell_occupancy_prob * volume * exp_intensity;
+  (*aux_args.intensity_norm) += cell_occupancy_prob * volume;
+  
+  (*aux_args.cum_vol) += volume; 
 }
 
-void update_vis( AuxArgs aux_args, float sphere_occ_prob) 
+//once step cell is performed, compute ball properties
+void compute_ball_properties( AuxArgs aux_args )
 {
-  float vis = (*aux_args.vis); 
-  vis *= (1.0 - sphere_occ_prob); 
-  (*aux_args.vis) = vis; 
+  if( *aux_args.intensity_norm > 1e-10 && *aux_args.cum_vol > 1e-10) {
+    
+    //calculate ray/sphere occupancy prob
+    float sphere_occ_prob = (*aux_args.prob_surface) / (*aux_args.cum_vol);
+    
+    //calc expected int = weighted sum / weighted total volume
+    float expected_int = (*aux_args.weighted_int) / (*aux_args.intensity_norm); 
+
+    //expected intensity is Visibility * Weighted Intensity * Occupancy
+    float ei = (*aux_args.expint); 
+    float vis = (*aux_args.vis); 
+    ei += vis * expected_int * sphere_occ_prob;
+    (*aux_args.expint) = ei;      
+    
+    //update visibility after all cells have accounted for
+    vis *= (1.0 - sphere_occ_prob); 
+    (*aux_args.vis) = vis; 
+  }
+  
+  *aux_args.cum_vol = 0.0f; 
+  *aux_args.intensity_norm = 0.0f;
+  *aux_args.weighted_int = 0.0f;
+  *aux_args.prob_surface = 0.0f;  
 }
-
-void update_expected_int(AuxArgs aux_args, float expected_int, float sphere_occ_prob) 
-{
-  float ei = (*aux_args.expint); 
-  float vis = (*aux_args.vis); 
-
-  //expected intensity is Visibility * Weighted Intensity * Occupancy
-  ei += vis * expected_int * sphere_occ_prob;
-  (*aux_args.expint) = ei;  
-}
-
-
