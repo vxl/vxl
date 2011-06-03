@@ -31,22 +31,22 @@ void vpgl_bundler_sfm_impl_create_initial_recon::operator()(
     const vpgl_bundler_inters_match_set *best_match = NULL;
     double lowest_inlier_percentage = 1.0;
 
-    double thresh_sq = settings.inlier_threshold_homography * 
+    double thresh_sq = settings.inlier_threshold_homography *
         settings.inlier_threshold_homography;
 
     vcl_vector<vpgl_bundler_inters_match_set>::const_iterator ii;
     for (ii = track_set.match_sets.begin();
-         ii != track_set.match_sets.end(); ii++){
-
+         ii != track_set.match_sets.end(); ii++)
+    {
         // The pair must have a lot of matches, and have a focal length
         // from EXIF tags...
         if (ii->num_features()>=settings.min_number_of_matches_homography &&
             ii->image1.focal_length != VPGL_BUNDLER_NO_FOCAL_LEN &&
-            ii->image1.focal_length != VPGL_BUNDLER_NO_FOCAL_LEN){
-    
+            ii->image1.focal_length != VPGL_BUNDLER_NO_FOCAL_LEN)
+        {
             double current_inlier_percentage =
                 vpgl_bundler_utils_get_homography_inlier_percentage(
-                    *ii, thresh_sq, 
+                    *ii, thresh_sq,
                     settings.number_ransac_rounds_homography);
 
             // ...but may not be modeled well by a homography, since this
@@ -59,12 +59,10 @@ void vpgl_bundler_sfm_impl_create_initial_recon::operator()(
     }
 
     if (!best_match) {
-        vcl_cerr<<
-            "Unable to create an initial reconstruction!\n" <<
-            "There is not a match set that both has an initial guess " <<
-            "from EXIF tags and at least " <<
-            settings.min_number_of_matches_homography << " matches." <<
-            '\n';
+        vcl_cerr<< "Unable to create an initial reconstruction!\n"
+                << "There is not a match set that both has an initial guess "
+                << "from EXIF tags and at least "
+                << settings.min_number_of_matches_homography << " matches.\n";
 
         vcl_exit(EXIT_FAILURE);
     }
@@ -97,7 +95,7 @@ void vpgl_bundler_sfm_impl_create_initial_recon::operator()(
     vpgl_em_compute_5_point<double> five_point;
 
     int match_idxs[5];
-    for (int r = 0; r < settings.number_ransac_rounds_e_matrix; r++){
+    for (int r = 0; r < settings.number_ransac_rounds_e_matrix; r++) {
         // Choose 5 random points, and use the 5-point algorithm on
         // these points to find the relative pose.
         vcl_vector<vgl_point_2d<double> > right_points, left_points;
@@ -154,7 +152,7 @@ void vpgl_bundler_sfm_impl_create_initial_recon::operator()(
     vpgl_perspective_camera<double> right_camera(
         k1, camera_center_1, rotation_1);
 
-    // Get two normalized (focal plane) coordinates so that we can 
+    // Get two normalized (focal plane) coordinates so that we can
     // choose the direction of the left camera.
     vgl_point_2d<double> pt_left =
         k2.map_to_focal_plane(best_match->side2[0]->point);
@@ -178,7 +176,7 @@ void vpgl_bundler_sfm_impl_create_initial_recon::operator()(
 
     reconstruction.cameras.push_back(right_inters_camera);
     reconstruction.cameras.push_back(left_inters_camera);
-    
+
     //------------------------------------------------------------------
     // Triangulate the points that both observe.
     for (int i = 0; i < best_match->num_features(); i++) {
@@ -188,7 +186,7 @@ void vpgl_bundler_sfm_impl_create_initial_recon::operator()(
         best_match->side1[i]->visited = true;
         best_match->side2[i]->visited = true;
 
-    
+
         //Add these two points to the origins vector.
         new_point.origins.push_back(best_match->side1[i]);
         new_point.origins.push_back(best_match->side2[i]);
@@ -205,8 +203,8 @@ void vpgl_bundler_sfm_impl_create_initial_recon::operator()(
 
         // Make sure the track knows of its corresponding 3d point
         assert(best_match->side1[i]->track == best_match->side2[i]->track);
-        
-        best_match->side1[i]->track->corresponding_point = 
+
+        best_match->side1[i]->track->corresponding_point =
             &reconstruction.points.back();
     }
 
@@ -237,10 +235,10 @@ static int count_observed_points(
     int num_observed_pts = 0;
 
     vcl_vector<vpgl_bundler_inters_feature_sptr>::const_iterator ii;
-    for (ii = to_check->features.begin(); 
+    for (ii = to_check->features.begin();
          ii != to_check->features.end(); ii++)
     {
-        if((*ii)->visited) num_observed_pts++;
+        if ((*ii)->visited) num_observed_pts++;
     }
 
     return num_observed_pts;
@@ -273,12 +271,12 @@ bool vpgl_bundler_sfm_default_select_next_images::operator()(
 
     // Because we wanted this class to be very general, we need to return
     // a vector. Put the next image to add into the vector.
-    if(most_observed_points >= settings.min_number_observed_points){
+    if (most_observed_points >= settings.min_number_observed_points) {
         to_add.push_back(next_image);
         return true;
-    
-    }else{
-        return false; 
+    }
+    else {
+        return false;
     }
 }
 
@@ -287,15 +285,14 @@ bool vpgl_bundler_sfm_default_select_next_images::operator()(
 void vpgl_bundler_sfm_default_add_next_images::operator()(
     vpgl_bundler_inters_reconstruction reconstruction,
     vcl_vector<vpgl_bundler_inters_camera> &added_cameras,
-    const vcl_vector<vpgl_bundler_inters_feature_set_sptr> &to_add_set) 
+    const vcl_vector<vpgl_bundler_inters_feature_set_sptr> &to_add_set)
 {
-
-    const double thresh_sq = 
+    const double thresh_sq =
         settings.inlier_thresh * settings.inlier_thresh;
-    
-    vcl_vector<vpgl_bundler_inters_feature_set_sptr>::const_iterator to_add;
-    for(to_add = to_add_set.begin(); to_add != to_add_set.end(); to_add++){
 
+    vcl_vector<vpgl_bundler_inters_feature_set_sptr>::const_iterator to_add;
+    for (to_add = to_add_set.begin(); to_add != to_add_set.end(); to_add++)
+    {
         //Get a list of all corresponding 3d points
         vcl_vector< vgl_point_2d<double> > image_pts;
         vcl_vector< vgl_point_3d<double> > world_pts;
@@ -305,12 +302,12 @@ void vpgl_bundler_sfm_default_add_next_images::operator()(
 
         //Look at every feature in the set
         vcl_vector<vpgl_bundler_inters_feature_sptr>::const_iterator f;
-        for(f = (*to_add)->features.begin(); 
-            f != (*to_add)->features.end(); f++)
+        for (f = (*to_add)->features.begin();
+             f != (*to_add)->features.end(); f++)
         {
             //This is the image point.
             image_pts.push_back((*f)->point);
-            
+
             //Now get the world point
             world_pts.push_back((*f)->track->corresponding_point->point_3d);
 
@@ -322,9 +319,9 @@ void vpgl_bundler_sfm_default_add_next_images::operator()(
         int best_inliers = 0;
         vpgl_perspective_camera<double> best_camera;
 
-        for(int rnd = 0; rnd < settings.number_ransac_rounds; rnd++){
+        for (int rnd = 0; rnd < settings.number_ransac_rounds; rnd++) {
             vcl_vector< vgl_point_2d<double> > curr_image_pts;
-            vcl_vector< vgl_point_3d<double> > curr_world_pts; 
+            vcl_vector< vgl_point_3d<double> > curr_world_pts;
 
 
             //Get the points to use in this RANSAC round
@@ -349,27 +346,26 @@ void vpgl_bundler_sfm_default_add_next_images::operator()(
             // Find the inlier percentage to evaulate how good this camera
             // is.
             double inlier_count;
-            for(int pt_ind = 0; pt_ind < image_pts.size(); pt_ind++){
-
-                double u,v; 
+            for (int pt_ind = 0; pt_ind < image_pts.size(); pt_ind++)
+            {
+                double u,v;
                 camera.project(world_pts[pt_ind].x(), world_pts[pt_ind].y(),
                     world_pts[pt_ind].z(), u, v);
 
                 double dx = u - image_pts[pt_ind].x();
                 double dy = v - image_pts[pt_ind].y();
 
-                if(dx*dx - dy*dy <= thresh_sq){
+                if (dx*dx - dy*dy <= thresh_sq) {
                     inlier_count++;
                 }
             }
 
             // Now see if this is the best camera so far.
-            if(inlier_count > best_inliers){
+            if (inlier_count > best_inliers) {
                 best_camera = camera;
                 best_inliers = inlier_count;
             }
         }
-
 
         // From this, create the bundler camera
         vpgl_bundler_inters_camera bundler_camera(
@@ -383,39 +379,39 @@ void vpgl_bundler_sfm_default_add_next_images::operator()(
 
 
 /*------------------------------------------------------------------------*/
-//Add points that are observed by at least 
+//Add points that are observed by at least
 void vpgl_bundler_sfm_default_add_new_points::operator()(
     vpgl_bundler_inters_reconstruction &reconstruction,
     vpgl_bundler_inters_track_set &track_set,
-    const vcl_vector<vpgl_bundler_inters_camera> &added) 
+    const vcl_vector<vpgl_bundler_inters_camera> &added)
 {
     //Look at every camera that was added in the last round.
     vcl_vector<vpgl_bundler_inters_camera>::const_iterator cam;
-    for(cam = added.begin(); cam != added.end(); cam++){
-
+    for (cam = added.begin(); cam != added.end(); cam++)
+    {
         //Now look at every track observed by this camera. We find points
         // in the track that have not yet been added, and either create
         // a new point for them, or add them to the existing point, so that
         // the world point will be adjusted in the bundle adjust procedure.
-        // We only add a new point (create a new world point) if it is 
+        // We only add a new point (create a new world point) if it is
         // observed by at least two cameras, and triangulation is well-
         // conditioned.
         vcl_vector<vpgl_bundler_inters_track_sptr>::const_iterator trk;
-        for(trk = cam->observed_tracks.begin(); 
-            trk != cam->observed_tracks.end(); trk++)
+        for (trk = cam->observed_tracks.begin();
+             trk != cam->observed_tracks.end(); trk++)
         {
             //Look at every image point in this track.
             vcl_vector<vpgl_bundler_inters_feature_sptr>::const_iterator pt;
-            for(pt=(*trk)->points.begin(); pt!=(*trk)->points.end(); pt++){
-                //If this point has not been visited and the track has 
+            for (pt=(*trk)->points.begin(); pt!=(*trk)->points.end(); pt++) {
+                //If this point has not been visited and the track has
                 // already been added, then add it to the origins for the
                 // 3d point.
-                if(not (*pt)->visited and (*trk)->corresponding_point){
+                if (! (*pt)->visited && (*trk)->corresponding_point) {
                     (*trk)->corresponding_point->origins.push_back(*pt);
 
                 }//Otherwise, we have to check to see if we should create
                 //a new 3d point for this image point
-                else if(not (*pt)->visited){
+                else if (! (*pt)->visited) {
                     //TODO
                 }
             }
@@ -427,7 +423,7 @@ void vpgl_bundler_sfm_default_add_new_points::operator()(
 /*------------------------------------------------------------------------*/
 // Adjusts the reconstruction using nonlinear least squares
 void vpgl_bundler_sfm_default_bundle_adjust::operator()(
-    vpgl_bundler_inters_reconstruction recon) 
+    vpgl_bundler_inters_reconstruction recon)
 {
     //------------------------------------------------------------------
     // Get the reconstruction into something the bundle adjust routine
@@ -436,7 +432,7 @@ void vpgl_bundler_sfm_default_bundle_adjust::operator()(
     // mask[i*m+j] equals true if point i is visible
     // in image j , false otherwise. m := # of cameras/images
     // mask = [is point 0 visible in cam 0, is point 0 visible in cam 1,
-    //     is point 1 visible in cam 0, is point 1 visible in cam 1...] 
+    //     is point 1 visible in cam 0, is point 1 visible in cam 1...]
     vcl_vector<vpgl_perspective_camera<double> > cameras;
     vcl_vector<vgl_point_3d<double> > world_points;
     vcl_vector<vgl_point_2d<double> > image_points;
@@ -444,7 +440,7 @@ void vpgl_bundler_sfm_default_bundle_adjust::operator()(
 
     // Fill the cameras vector.
     vcl_vector<vpgl_bundler_inters_camera>::const_iterator cam_it;
-    for(cam_it = recon.cameras.begin(); 
+    for (cam_it = recon.cameras.begin();
         cam_it != recon.cameras.end(); cam_it++)
     {
         cameras.push_back(cam_it->camera);
@@ -452,47 +448,45 @@ void vpgl_bundler_sfm_default_bundle_adjust::operator()(
 
     // Fill the world points, image points and mask vectors.
     vcl_vector<vpgl_bundler_inters_3d_point>::const_iterator pt_it;
-    for(pt_it = recon.points.begin(); 
+    for (pt_it = recon.points.begin();
         pt_it != recon.points.end(); pt_it++)
     {
         world_points.push_back(pt_it->point_3d);
         vcl_vector<bool> pt_mask;
 
         // Find all cameras that observe this world point, and fill mask
-        // with true or false for each camera. mask needs to be in the 
+        // with true or false for each camera. mask needs to be in the
         // same order as the cameras. Then, for every true in mask,
         // add the image point to image_points.
-        for(cam_it = recon.cameras.begin(); 
-            cam_it != recon.cameras.end(); cam_it++)
+        for (cam_it = recon.cameras.begin();
+             cam_it != recon.cameras.end(); cam_it++)
         {
-            // Look at every track this camera observes, push true onto 
+            // Look at every track this camera observes, push true onto
             // mask. Otherwise, push false.
             bool observes = false;
 
             vcl_vector<vpgl_bundler_inters_track_sptr>::const_iterator trk;
-            for(trk = cam_it->observed_tracks.begin(); 
-                trk != cam_it->observed_tracks.end(); trk++)
+            for (trk = cam_it->observed_tracks.begin();
+                 trk != cam_it->observed_tracks.end(); trk++)
             {
                 //Check if this is the correct point
-                if((*trk)->corresponding_point != NULL && 
-                    ((*trk)->corresponding_point)->point_3d == 
-                        pt_it->point_3d)
+                if ((*trk)->corresponding_point != NULL &&
+                    (*trk)->corresponding_point->point_3d == pt_it->point_3d)
                 {
                     observes = true;
 
-                    vcl_vector<vpgl_bundler_inters_feature_sptr> &origins = 
+                    vcl_vector<vpgl_bundler_inters_feature_sptr> &origins =
                         (*trk)->corresponding_point->origins;
-    
+
                     // If this is the track for the point, we now need to
-                    // find the image point that is the projection of the 
+                    // find the image point that is the projection of the
                     // world pt.
-                    for(int i = 0; i < origins.size(); i++){
-                        if(origins[i]->source_image == cam_it->image){
+                    for (int i = 0; i < origins.size(); i++) {
+                        if (origins[i]->source_image == cam_it->image) {
                             image_points.push_back(origins[i]->point);
                             break;
                         }
                     }
-                    
                     break;
                 }
             }
@@ -504,24 +498,23 @@ void vpgl_bundler_sfm_default_bundle_adjust::operator()(
     }
 
 
-    #ifdef VPGL_BUNDLER_DEBUG
-        assert(cameras.size() == recon.cameras.size());
-        assert(world_points.size() == recon.points.size());
-    #endif
+#ifdef VPGL_BUNDLER_DEBUG
+    assert(cameras.size() == recon.cameras.size());
+    assert(world_points.size() == recon.points.size());
+#endif
 
     //------------------------------------------------------------------
     // Perform the bundle adjustment
     vpgl_bundle_adjust bundle_adjust;
     bundle_adjust.optimize(cameras, world_points, image_points, mask);
 
-    
     //------------------------------------------------------------------
     // Extract the information from the bundle adjustment process.
-    for(int cam_ind = 0; cam_ind < cameras.size(); cam_ind++){
+    for (int cam_ind = 0; cam_ind < cameras.size(); cam_ind++) {
         recon.cameras[cam_ind].camera = cameras[cam_ind];
     }
 
-    for(int pt_ind = 0; pt_ind < world_points.size(); pt_ind++){
+    for (int pt_ind = 0; pt_ind < world_points.size(); pt_ind++) {
         recon.points[pt_ind].point_3d = world_points[pt_ind];
     }
 }

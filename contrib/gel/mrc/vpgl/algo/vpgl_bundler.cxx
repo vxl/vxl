@@ -50,8 +50,8 @@ vpgl_bundler_tracks::vpgl_bundler_tracks(
 void vpgl_bundler_tracks::run_feature_stage(
     const vcl_vector<vil_image_resource_sptr> &imageset,
     const vcl_vector<double> exif_tags,
-    vpgl_bundler_inters_track_set &track_set) {
-
+    vpgl_bundler_inters_track_set &track_set)
+{
     // First, run the detect stage.
     vcl_vector<vil_image_resource_sptr>::const_iterator img_i;
     vcl_vector<double>::const_iterator exif_i;
@@ -117,13 +117,12 @@ void vpgl_bundler_tracks::run_feature_stage(
         // and we'll use it in SFM
         vcl_vector<vpgl_bundler_inters_feature_set_sptr>::const_iterator fs_it;
         for (fs_it = track_set.feature_sets.begin();
-            fs_it != track_set.feature_sets.end(); fs_it++)
+             fs_it != track_set.feature_sets.end(); fs_it++)
         {
             for (int i = 0; i < (*fs_it)->features.size(); i++) {
-                assert( not (*fs_it)->features[i]->visited );
+                assert(! (*fs_it)->features[i]->visited );
                 assert( (*fs_it)->features[i]->feature_set == *fs_it);
-                assert( (*fs_it)->features[i]->source_image ==
-                    (*fs_it)->source_image);
+                assert( (*fs_it)->features[i]->source_image == (*fs_it)->source_image);
             }
         }
     }
@@ -186,7 +185,7 @@ void vpgl_bundler_sfm::run_sfm_stage(
     while ( (*select_next_images)(recon, track_set, to_add) ) {
         vcl_vector<vpgl_bundler_inters_camera> added;
 
-        (*add_next_images)(recon, added, to_add);    
+        (*add_next_images)(recon, added, to_add);
         (*add_new_points)(recon, track_set, added);
         (*bundle_adjust)(recon);
 
