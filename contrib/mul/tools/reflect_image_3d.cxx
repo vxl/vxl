@@ -1,5 +1,6 @@
 // This is mul/tools/reflect_image_3d.cxx
 
+#include <vcl_exception.h>
 #include <vul/vul_arg.h>
 #include <vul/vul_file.h>
 #include <vil3d/vil3d_reflect.h>
@@ -144,14 +145,9 @@ int main(int argc, char *argv[])
 
     retcode = main2(argc, argv);
   }
-  catch (const vcl_runtime_error &e)
+  catch (const vcl_exception &e)
   {
-    vcl_cout << '\n'
-             << "====================================\n"
-             << "Caught vcl_runtime_error: " << e.what() << '\n'
-             << "Ending program.\n"
-             << "====================================\n" << vcl_endl;
-    MBL_LOG(ERR, logger(), "Caught exception: " << e.what());
+    vcl_cerr << "ERROR: " << e.what() << '\n';
     retcode = 1;
   }
   catch (...)
