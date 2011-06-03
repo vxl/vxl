@@ -65,8 +65,8 @@ void boxm2_ocl_util::set_persp_camera(vpgl_perspective_camera<double> * pcam, cl
   
   //store [focal length, focal length, principal point] (4 floats)
   const vpgl_calibration_matrix<double>& K = pcam->get_calibration(); 
-  persp_cam[cnt++] = K.focal_length(); 
-  persp_cam[cnt++] = K.focal_length(); 
+  persp_cam[cnt++] = K.x_scale()*K.focal_length(); 
+  persp_cam[cnt++] = K.y_scale()*K.focal_length(); 
   persp_cam[cnt++] = K.principal_point().x();
   persp_cam[cnt++] = K.principal_point().y(); 
 }
