@@ -299,9 +299,9 @@ bool boxm2_ocl_update_color_process(bprb_func_process& pro)
         //write the image values to the buffer
         vul_timer transfer;
         bocl_mem* blk       = opencl_cache->get_block(*id);
-        bocl_mem* alpha     = opencl_cache->get_data<BOXM2_ALPHA>(*id);
-        bocl_mem* mog       = opencl_cache->get_data(*id,data_type);
-        bocl_mem* num_obs   = opencl_cache->get_data(*id, num_obs_type);
+        bocl_mem* alpha     = opencl_cache->get_data<BOXM2_ALPHA>(*id, 0, false);
+        bocl_mem* mog       = opencl_cache->get_data(*id,data_type, 0, false);
+        bocl_mem* num_obs   = opencl_cache->get_data(*id, num_obs_type, 0, false);
         bocl_mem * blk_info  = opencl_cache->loaded_block_info();
 
         //make sure the scene info data size reflects the real data size

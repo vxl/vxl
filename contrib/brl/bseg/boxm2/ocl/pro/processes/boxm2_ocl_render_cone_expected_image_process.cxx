@@ -52,8 +52,8 @@ namespace boxm2_ocl_render_cone_expected_image_process_globals
     src_paths.push_back(source_dir + "cone/cast_cone_ray.cl");
 
     //set kernel options
-    //#define STEP_CELL step_cell_render(mixture_array, alpha_array, data_ptr, d, &vis, &expected_int);
-    vcl_string options = ""; //" -D STEP_CELL=step_cell_render(aux_args.mog,aux_args.alpha,data_ptr,d,vis,aux_args.expint)";
+    vcl_string options = " -D STEP_CELL=step_cell_cone(aux_args,data_ptr,intersect_volume,side_len*linfo->block_len) "; 
+    options += " -D COMPUTE_BALL_PROPERTIES=compute_ball_properties(aux_args) "; 
 
     //have kernel construct itself using the context and device
     bocl_kernel * ray_trace_kernel=new bocl_kernel();
@@ -198,7 +198,6 @@ bool boxm2_ocl_render_cone_expected_image_process(bprb_func_process& pro)
                         
   //: read out expected image
   exp_image->read_to_buffer(queue);
-  
   vil_image_view<float>* exp_img_out=new vil_image_view<float>(ni,nj);
   for (unsigned c=0;c<nj;c++)
     for (unsigned r=0;r<ni;r++)
@@ -207,8 +206,9 @@ bool boxm2_ocl_render_cone_expected_image_process(bprb_func_process& pro)
   delete [] buff;
   delete [] vis_buff; 
   clReleaseCommandQueue(queue);
-  i=0;
+  
   // store scene smaprt pointer
+  i=0; 
   pro.set_output_val<vil_image_view_base_sptr>(i++, exp_img_out);
   return true;
 }
