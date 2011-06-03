@@ -11,41 +11,17 @@
 #include <vil/vil_load.h>
 #include <vil/vil_save.h>
 #include <vpgl/vpgl_perspective_camera.h>
+#include <vpgl/vpgl_calibration_matrix.h>
 #include <bsta/bsta_histogram.h>
 
 
 // fills a float buffer (should be 16*3 floats) with a perspective cam to be sent
 void boxm2_ocl_util::set_persp_camera(vpgl_camera_double_sptr& cam, cl_float* persp_cam)
 {
-  if (vpgl_proj_camera<double>* pcam =
-      dynamic_cast<vpgl_proj_camera<double>* >(cam.ptr()))
+  if (vpgl_perspective_camera<double>* pcam =
+      dynamic_cast<vpgl_perspective_camera<double>* >(cam.ptr()))
   {
-    //vcl_cout<<"CAM: "<<(*pcam)<<vcl_endl;
-    vnl_svd<double>* svd=pcam->svd();
-    vnl_matrix<double> Ut=svd->U().conjugate_transpose();
-    vnl_matrix<double> V=svd->V();
-    vnl_vector<double> Winv=svd->Winverse().diagonal();
-
-    int cnt=0;
-    for (unsigned i=0;i<Ut.rows();++i)
-    {
-      for (unsigned j=0;j<Ut.cols();++j)
-        persp_cam[cnt++]=(cl_float)Ut(i,j);
-
-      persp_cam[cnt++]=0;
-    }
-
-    for (unsigned i=0;i<V.rows();++i)
-      for (unsigned j=0;j<V.cols();++j)
-        persp_cam[cnt++]=(cl_float)V(i,j);
-
-    for (unsigned i=0;i<Winv.size();++i)
-      persp_cam[cnt++]=(cl_float)Winv(i);
-
-    vgl_point_3d<double> cam_center=pcam->camera_center();
-    persp_cam[cnt++]=(cl_float)cam_center.x();
-    persp_cam[cnt++]=(cl_float)cam_center.y();
-    persp_cam[cnt++]=(cl_float)cam_center.z();
+    set_persp_camera(pcam, persp_cam); 
   }
   else {
     vcl_cerr << "Error set_persp_camera() : unsupported camera type\n";
@@ -61,6 +37,7 @@ void boxm2_ocl_util::set_persp_camera(vpgl_perspective_camera<double> * pcam, cl
   vnl_matrix<double> V=svd->V();
   vnl_vector<double> Winv=svd->Winverse().diagonal();
 
+  //U matrix stored here (16 floats)
   int cnt=0;
   for (unsigned i=0;i<Ut.rows();++i)
   {
@@ -70,17 +47,28 @@ void boxm2_ocl_util::set_persp_camera(vpgl_perspective_camera<double> * pcam, cl
     persp_cam[cnt++]=0;
   }
 
+  //store V matrix (16 floats)
   for (unsigned i=0;i<V.rows();++i)
     for (unsigned j=0;j<V.cols();++j)
       persp_cam[cnt++]=(cl_float)V(i,j);
 
+  //store W matrix (4 floats)
   for (unsigned i=0;i<Winv.size();++i)
     persp_cam[cnt++]=(cl_float)Winv(i);
 
+  //store cam center (4 floats)
   vgl_point_3d<double> cam_center=pcam->camera_center();
   persp_cam[cnt++]=(cl_float)cam_center.x();
   persp_cam[cnt++]=(cl_float)cam_center.y();
   persp_cam[cnt++]=(cl_float)cam_center.z();
+  persp_cam[cnt++]=(cl_float) 0.0f; 
+  
+  //store [focal length, focal length, principal point] (4 floats)
+  const vpgl_calibration_matrix<double>& K = pcam->get_calibration(); 
+  persp_cam[cnt++] = K.focal_length(); 
+  persp_cam[cnt++] = K.focal_length(); 
+  persp_cam[cnt++] = K.principal_point().x();
+  persp_cam[cnt++] = K.principal_point().y(); 
 }
 
 void boxm2_ocl_util::set_generic_camera(vpgl_camera_double_sptr& cam, cl_float* ray_origins, cl_float* ray_directions, unsigned cl_ni, unsigned cl_nj)

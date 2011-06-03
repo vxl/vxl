@@ -107,7 +107,7 @@ float boxm2_ocl_camera_converter::convert_persp_to_generic(bocl_device_sptr & de
 
 void boxm2_ocl_camera_converter::compile_persp_to_generic_kernel(bocl_device_sptr device)
 {
-  //gather all render sources... seems like a lot for rendering...
+  //gather all cam convert sources
   vcl_vector<vcl_string> src_paths;
   vcl_string source_dir = vcl_string(VCL_SOURCE_ROOT_DIR) + "/contrib/brl/bseg/boxm2/ocl/cl/";
   src_paths.push_back(source_dir + "scene_info.cl"); 

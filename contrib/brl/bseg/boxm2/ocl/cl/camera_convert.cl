@@ -22,27 +22,16 @@ persp_to_generic( __global    float16            * persp_camera,         // came
     ray_d.w = 0.0f; 
     
     //also make sure to write cone half angle
-    float4 cone_d = backproject_corner(i, j, persp_camera[0], persp_camera[1], persp_camera[2], ray_o);
-    cone_d.w = 0.0f; 
+    float4 K = persp_camera[2].s89ab; //calibration matrix [f, f, principle U, principle V]; 
+    float4 ref_d = backproject_corner(K.z, K.w, persp_camera[0], persp_camera[1], persp_camera[2], ray_o);
+    ref_d.w = 0.0f; 
     
-    //calculate hte half angle stuff here
-    
-    
-    //float half_angle = dot_product(rij.direction(), corner.direction()); 
-    float half_angle; 
-    float ca = dot(ray_d, cone_d); 
-    if (ca>=-1.0)
-    {
-      if (ca<=1.0)
-        half_angle = acos(ca);
-      else
-        half_angle = 0;
-    }
-    else
-      half_angle = acos(-1.0); // pi
+    //store half angle in ray_d.w
+    float focal_length = K.x; 
+    float ca1 = dot(ray_d, ref_d); 
+    ray_d.w = (float) fabs(ca1*ca1/focal_length) * .7071; 
 
     //store half angle in ray_d.w
-    ray_d.w = half_angle; 
     ray_origins[imIndex] = ray_o;
     ray_directions[imIndex] = ray_d; 
   }
