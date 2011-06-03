@@ -139,7 +139,7 @@ reduced_proj_rad_jacobian( vnl_matrix<double>                            & base_
 
   // 1. get projection matrix jacobian
   vnl_matrix_fixed<double, Tdim, (Tdim+1)*(Fdim+1)-1> dP_dp;
-  reduced_proj_jacobian( dP_dp, proj, from );
+  base_type::reduced_proj_jacobian( dP_dp, proj, from );
 
   // 2. gradient w.r.t to mapped location
   vnl_matrix_fixed<double, Tdim, Tdim >  dD_dx;
@@ -220,7 +220,7 @@ full_proj_rad_jacobian( vnl_matrix<double>                            & base_jac
 
   // 1. get projection matrix jacobian
   vnl_matrix_fixed<double, Tdim, (Tdim+1)*(Fdim+1)> dP_dp;
-  full_proj_jacobian( dP_dp, proj, from );
+  base_type::full_proj_jacobian( dP_dp, proj, from );
 
   // 2. gradient w.r.t to mapped location
   vnl_matrix_fixed<double, Tdim, Tdim >  dD_dx;
@@ -358,7 +358,7 @@ f(vnl_vector<double> const& x, vnl_vector<double>& fx)
 
   // retrieve the projection matrix
   vnl_matrix_fixed<double, Tdim+1, Fdim+1> proj;
-  restored_centered_proj( proj, x );
+  base_type::restored_centered_proj( proj, x );
 
   // retrieve the radial distortion parameters
   transfer_radial_params_into_temp_storage( x );
@@ -407,7 +407,7 @@ gradf(vnl_vector<double> const& x, vnl_matrix<double>& jacobian)
 
   // retrieve the projection matrix
   vnl_matrix_fixed<double, Tdim+1, Fdim+1> proj;
-  restored_centered_proj( proj, x );
+  base_type::restored_centered_proj( proj, x );
 
   // retrieve the radial distortion parameters
   transfer_radial_params_into_temp_storage( x );

@@ -18,6 +18,8 @@ class rgrl_est_proj_rad_func
 : public rgrl_est_proj_func<Tdim, Fdim>
 {
  public:
+  typedef rgrl_est_proj_func<Tdim, Fdim> base_type;
+ public:
   //: ctor
   rgrl_est_proj_rad_func( rgrl_set_of<rgrl_match_set_sptr> const& matches,
                           unsigned int camera_dof,
