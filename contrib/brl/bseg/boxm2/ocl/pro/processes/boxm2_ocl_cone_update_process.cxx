@@ -45,8 +45,8 @@ namespace boxm2_ocl_cone_update_process_globals
       vcl_string source_dir = vcl_string(VCL_SOURCE_ROOT_DIR) + "/contrib/brl/bseg/boxm2/ocl/cl/";
       src_paths.push_back(source_dir + "scene_info.cl");
       src_paths.push_back(source_dir + "backproject.cl");
-      src_paths.push_back(source_dir + "basic/linked_list.cl"); 
-      src_paths.push_back(source_dir + "ogl/intersect.cl"); 
+      src_paths.push_back(source_dir + "basic/linked_list.cl");
+      src_paths.push_back(source_dir + "ogl/intersect.cl");
       src_paths.push_back(source_dir + "bit/bit_tree_library_functions.cl");
       src_paths.push_back(source_dir + "statistics_library_functions.cl");
       src_paths.push_back(source_dir + "cone/update_cone_kernels.cl");
@@ -59,17 +59,17 @@ namespace boxm2_ocl_cone_update_process_globals
       //proc norm pass computes the proc_norm image, mean_obs for each cell
       bocl_kernel* pass_one = new bocl_kernel();
       vcl_string one_opts = options + " -D PASSONE ";
-      one_opts += " -D STEP_CELL=step_cell(aux_args,data_ptr,intersect_volume) "; 
-      one_opts += " -D COMPUTE_BALL_PROPERTIES=compute_ball_properties(aux_args)  "; 
+      one_opts += " -D STEP_CELL=step_cell(aux_args,data_ptr,intersect_volume) ";
+      one_opts += " -D COMPUTE_BALL_PROPERTIES=compute_ball_properties(aux_args)  ";
       pass_one->create_kernel(&device->context(),device->device_id(), src_paths, "pass_one", one_opts, "cone_update::pass_one");
       vec_kernels.push_back(pass_one);
 
       //computes bayes ratio for each cell
       bocl_kernel* bayes_main = new bocl_kernel();
-      vcl_string bayes_opt = options + " -D BAYES "; 
-      bayes_opt += " -D STEP_CELL=step_cell(aux_args,data_ptr,intersect_volume)  "; 
-      bayes_opt += " -D COMPUTE_BALL_PROPERTIES=compute_ball_properties(aux_args)  "; 
-      bayes_opt += " -D REDISTRIBUTE=redistribute(aux_args,data_ptr,intersect_volume)  "; 
+      vcl_string bayes_opt = options + " -D BAYES ";
+      bayes_opt += " -D STEP_CELL=step_cell(aux_args,data_ptr,intersect_volume)  ";
+      bayes_opt += " -D COMPUTE_BALL_PROPERTIES=compute_ball_properties(aux_args)  ";
+      bayes_opt += " -D REDISTRIBUTE=redistribute(aux_args,data_ptr,intersect_volume)  ";
       bayes_main->create_kernel(&device->context(),device->device_id(), src_paths, "bayes_main", bayes_opt, "cone_update::bayes_main");
       vec_kernels.push_back(bayes_main);
 
@@ -89,7 +89,7 @@ bool boxm2_ocl_cone_update_process_cons(bprb_func_process& pro)
 {
   using namespace boxm2_ocl_cone_update_process_globals;
 
-  //process takes 1 input
+  //process takes 6 inputs
   vcl_vector<vcl_string> input_types_(n_inputs_);
   input_types_[0] = "bocl_device_sptr";
   input_types_[1] = "boxm2_scene_sptr";
@@ -97,11 +97,10 @@ bool boxm2_ocl_cone_update_process_cons(bprb_func_process& pro)
   input_types_[3] = "vpgl_camera_double_sptr";
   input_types_[4] = "vil_image_view_base_sptr";
   input_types_[5] = "vcl_string";
+  bool good = pro.set_input_types(input_types_);
 
-  // process has 1 output:
+  // process has no outputs:
   // output[0]: scene sptr
-  vcl_vector<vcl_string>  output_types_(n_outputs_);
-  bool good = pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 
   // in case the 6th input is not set
   brdb_value_sptr idx = new brdb_value_t<vcl_string>("");
@@ -112,15 +111,13 @@ bool boxm2_ocl_cone_update_process_cons(bprb_func_process& pro)
 bool boxm2_ocl_cone_update_process(bprb_func_process& pro)
 {
   using namespace boxm2_ocl_cone_update_process_globals;
-  vcl_size_t local_threads[2]={8,8};
-  vcl_size_t global_threads[2]={8,8};
 
-  if ( pro.n_inputs() < n_inputs_ ){
-    vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
+  if ( pro.n_inputs() < n_inputs_-1 ) {
+    vcl_cout << pro.name() << ": The number of inputsshould be 5 or " << n_inputs_<< vcl_endl;
     return false;
   }
   float transfer_time=0.0f;
-  
+
   //get the inputs
   unsigned i = 0;
   bocl_device_sptr device= pro.get_input<bocl_device_sptr>(i++);
@@ -130,7 +127,7 @@ bool boxm2_ocl_cone_update_process(bprb_func_process& pro)
   vil_image_view_base_sptr img =pro.get_input<vil_image_view_base_sptr>(i++);
   vcl_string ident = pro.get_input<vcl_string>(i++);
 
-  long binCache = opencl_cache.ptr()->bytes_in_cache(); 
+  long binCache = opencl_cache.ptr()->bytes_in_cache();
   vcl_cout<<"Update MBs in cache: "<<binCache/(1024.0*1024.0)<<vcl_endl;
 
   //find scene types
@@ -192,12 +189,12 @@ bool boxm2_ocl_cone_update_process(bprb_func_process& pro)
   float gpu_time = boxm2_ocl_cone_update( scene,
                                           device,
                                           opencl_cache,
-                                          kernels[identifier], 
+                                          kernels[identifier],
                                           queue,
                                           data_type,
                                           num_obs_type,
                                           cam ,
-                                          img ); 
+                                          img );
 
   vcl_cout<<"Gpu time "<<gpu_time<<" transfer time "<<transfer_time<<vcl_endl;
   clReleaseCommandQueue(queue);
