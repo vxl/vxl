@@ -104,6 +104,9 @@ SOURCE=.\boxm2_render_functions.cxx
 # Begin Source File
 SOURCE=.\boxm2_filter_block_function.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\boxm2_update_functions.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
@@ -151,6 +154,15 @@ SOURCE=.\boxm2_filter_block_function.h
 # End Source File
 # Begin Source File
 SOURCE=.\boxm2_batch_functors.h
+# End Source File
+# Begin Source File
+SOURCE=.\boxm2_update_functions.h
+# End Source File
+# Begin Source File
+SOURCE=.\boxm2_ray_probe_functor.h
+# End Source File
+# Begin Source File
+SOURCE=.\boxm2_cone_update_image_functor.h
 # End Source File
 # End Group
 # End Target

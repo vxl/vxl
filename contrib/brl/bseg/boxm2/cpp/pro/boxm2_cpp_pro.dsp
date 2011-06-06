@@ -125,6 +125,15 @@ SOURCE=.\processes/boxm2_cpp_query_cell_data_process.cxx
 # Begin Source File
 SOURCE=.\processes/boxm2_cpp_filter_process.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\processes/boxm2_cpp_ray_app_density_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/boxm2_cpp_ray_probe_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/boxm2_cpp_cone_update_image_process.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
