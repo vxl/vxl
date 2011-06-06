@@ -93,18 +93,15 @@ vifa_histogram::vifa_histogram(float* uvals, float* ucounts, int xres)
 vifa_histogram::vifa_histogram(const vifa_histogram& h)
   : vul_timestamp(), vbl_ref_count()
 {
-  // We know we really aren't changing h, but the array access to h isn't
-  // strictly speaking const. JLM -Oct 2000
   stats_consistent = 0;
-  vifa_histogram& his = (vifa_histogram&)h; // casting away const !!!
 
-  num = his.GetRes();
+  num = h.GetRes();
 
   vals = new float[num];
-  float* his_vals = his.GetVals();
+  float const* his_vals = h.GetVals();
 
   counts = new float[num];
-  float* his_counts = his.GetCounts();
+  float const* his_counts = h.GetCounts();
 
   if (vals == NULL || counts == NULL)
   {
@@ -119,8 +116,8 @@ vifa_histogram::vifa_histogram(const vifa_histogram& h)
     return;
   }
 
-  mean = his.GetMean();
-  standard_dev = his.GetStandardDev();
+  mean = h.GetMean();
+  standard_dev = h.GetStandardDev();
 
   for (int i = 0; i < num; i++)
   {
@@ -131,10 +128,10 @@ vifa_histogram::vifa_histogram(const vifa_histogram& h)
   // MPP 7/1/2002
   // Jim G. found an issue with this code if original histogram had
   // zero counts in end buckets.  See Cumulative() for fix.
-  vmax = his.GetMaxVal();
-  vmin = his.GetMinVal();
+  vmax = h.GetMaxVal();
+  vmin = h.GetMinVal();
 
-  delta = his.GetBucketSize();
+  delta = h.GetBucketSize();
   stats_consistent |= (MEAN_FLAG | SD_FLAG);
   delimiter = h.delimiter;
 }
