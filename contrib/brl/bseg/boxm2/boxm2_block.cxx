@@ -8,12 +8,14 @@ boxm2_block::boxm2_block(boxm2_block_id id, char* buff)
   block_id_ = id;
   buffer_ = buff;
   this->b_read(buff);
+  read_only_ = true;
 }
 
 boxm2_block::boxm2_block(boxm2_block_metadata data)
 {
   block_id_ = data.id_;
   this->init_empty_block(data);
+  read_only_ = false;  // make sure that it is written back to disc
 }
 
 bool boxm2_block::b_read(char* buff)
