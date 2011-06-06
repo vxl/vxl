@@ -10,12 +10,12 @@
 #include <vcl_cmath.h>
 
 class boxm2_cone_update_pass0_functor
-{   
+{
  public:
   //: "default" constructor
   boxm2_cone_update_pass0_functor() {}
 
-  bool init_data(vcl_vector<boxm2_data_base*> & datas, 
+  bool init_data(vcl_vector<boxm2_data_base*> & datas,
                  vil_image_view<float> * pre_img,
                  vil_image_view<float> * vis_img,
                  vil_image_view<float> * input_img)
@@ -35,24 +35,25 @@ class boxm2_cone_update_pass0_functor
 
   inline bool step_cell(float ray_vol,int index,unsigned i,unsigned j)
   {
-      boxm2_data<BOXM2_AUX>::datatype & aux=aux_data_->data()[index];
-      aux[0]+=ray_vol;
-      aux[1]+=ray_vol*(*input_img_)(i,j);
-      float PI=boxm2_data_traits<BOXM2_MOG3_GREY>::processor::prob_density(mog3_data_->data()[index],(*input_img_)(i,j));
-      boxm2_data<BOXM2_GAMMA>::datatype gamma=alpha_data_->data()[index];
-      float temp=vcl_exp(-ray_vol*gamma);
-      PI_cum+=PI*ray_vol;
-      vol_cum+=ray_vol;
-      vis_cum*=temp;
-      return true;
+    boxm2_data<BOXM2_AUX>::datatype & aux=aux_data_->data()[index];
+    aux[0]+=ray_vol;
+    aux[1]+=ray_vol*(*input_img_)(i,j);
+    float PI=boxm2_data_traits<BOXM2_MOG3_GREY>::processor::prob_density(mog3_data_->data()[index],(*input_img_)(i,j));
+    boxm2_data<BOXM2_GAMMA>::datatype gamma=alpha_data_->data()[index];
+    float temp=vcl_exp(-ray_vol*gamma);
+    PI_cum+=PI*ray_vol;
+    vol_cum+=ray_vol;
+    vis_cum*=temp;
+    return true;
   }
+
   inline bool compute_ball_properties(unsigned i,unsigned j)
   {
           float vis=(*vis_img_)(i,j);
     float pre=(*pre_img_)(i,j);
 
     float PI=0.0;
-    if(vol_cum>1e-12f) PI=PI_cum/vol_cum;
+    if (vol_cum>1e-12f) PI=PI_cum/vol_cum;
 
     pre+=vis*(1-vis_cum)*PI;
     vis*=vis_cum;
@@ -65,17 +66,19 @@ class boxm2_cone_update_pass0_functor
     vol_cum=0.0f;
     return true;
   }
-inline bool redistribute(float vol, int index){return true;}
+
+  inline bool redistribute(float vol, int index){return true;}
+
  private:
-     boxm2_data<BOXM2_AUX> * aux_data_;
-     vil_image_view<float> * input_img_;
-     boxm2_data<BOXM2_GAMMA> * alpha_data_;
-     boxm2_data<BOXM2_MOG3_GREY> * mog3_data_;
-     vil_image_view<float> * pre_img_;
-     vil_image_view<float> * vis_img_;
-    float PI_cum;
-    float vol_cum;
-    float vis_cum;
+  boxm2_data<BOXM2_AUX> * aux_data_;
+  vil_image_view<float> * input_img_;
+  boxm2_data<BOXM2_GAMMA> * alpha_data_;
+  boxm2_data<BOXM2_MOG3_GREY> * mog3_data_;
+  vil_image_view<float> * pre_img_;
+  vil_image_view<float> * vis_img_;
+  float PI_cum;
+  float vol_cum;
+  float vis_cum;
 };
 
 class boxm2_cone_update_pass1_functor
@@ -84,7 +87,7 @@ class boxm2_cone_update_pass1_functor
   //: "default" constructor
   boxm2_cone_update_pass1_functor() {}
 
-  bool init_data(vcl_vector<boxm2_data_base*> & datas, 
+  bool init_data(vcl_vector<boxm2_data_base*> & datas,
                  vil_image_view<float> * pre_img,
                  vil_image_view<float> * vis_img,
                  vil_image_view<float> * input_img)
@@ -112,17 +115,17 @@ class boxm2_cone_update_pass1_functor
     PI_cum+=PI*ray_vol;
     vol_cum+=ray_vol;
     vis_cum*=temp;
-    
+
     return true;
   }
+
   inline bool compute_ball_properties(unsigned i,unsigned j)
   {
-
     float vis=(*vis_img_)(i,j);
     float pre=(*pre_img_)(i,j);
 
     float PI=0.0;
-    if(vol_cum>1e-12f) PI=PI_cum/vol_cum;
+    if (vol_cum>1e-12f) PI=PI_cum/vol_cum;
 
     pre+=vis*(1-vis_cum)*PI;
     vis*=vis_cum;
@@ -135,20 +138,20 @@ class boxm2_cone_update_pass1_functor
     vol_cum=0.0f;
     return true;
   }
-  inline bool redistribute(float vol, int index)
-  {return true;}
-private:
 
-    float PI_cum;
-    float vol_cum;
-    float vis_cum;
-    float pre_cum;
-    boxm2_data<BOXM2_AUX> * aux_data_;
-    boxm2_data<BOXM2_GAMMA> * alpha_data_;
-    boxm2_data<BOXM2_MOG3_GREY> * mog3_data_;
-    vil_image_view<float> * pre_img_;
-    vil_image_view<float> * vis_img_;
-    vil_image_view<float> * input_img_;
+  inline bool redistribute(float vol, int index) {return true;}
+
+ private:
+  float PI_cum;
+  float vol_cum;
+  float vis_cum;
+  float pre_cum;
+  boxm2_data<BOXM2_AUX> * aux_data_;
+  boxm2_data<BOXM2_GAMMA> * alpha_data_;
+  boxm2_data<BOXM2_MOG3_GREY> * mog3_data_;
+  vil_image_view<float> * pre_img_;
+  vil_image_view<float> * vis_img_;
+  vil_image_view<float> * input_img_;
 };
 
 
@@ -162,7 +165,7 @@ class boxm2_cone_update_pass2_functor
                  vil_image_view<float> * pre_img,
                  vil_image_view<float> * vis_img,
                  vil_image_view<float> * norm_img,
-                                  vil_image_view<float> * input_img)
+                 vil_image_view<float> * input_img)
   {
     aux_data_=new boxm2_data<BOXM2_AUX>(datas[0]->data_buffer(),datas[0]->buffer_length(),datas[0]->block_id());
     alpha_data_=new boxm2_data<BOXM2_GAMMA>(datas[1]->data_buffer(),datas[1]->buffer_length(),datas[1]->block_id());
@@ -184,8 +187,7 @@ class boxm2_cone_update_pass2_functor
   inline bool step_cell(float ray_vol,int index,unsigned i,unsigned j)
   {
     boxm2_data<BOXM2_AUX>::datatype & aux=aux_data_->data()[index];
-    if (aux[0]<1e-10f)return true;
-    float mean_obs=aux[1]/aux[0];
+    if (aux[0]<1e-10f) return true;
     float PI=boxm2_data_traits<BOXM2_MOG3_GREY>::processor::prob_density(mog3_data_->data()[index], (*input_img_)(i,j));
     float vis=(*vis_img_)(i,j);
     boxm2_data<BOXM2_GAMMA>::datatype gamma=alpha_data_->data()[index];
@@ -196,13 +198,14 @@ class boxm2_cone_update_pass2_functor
     vis_cum*=temp;
     return true;
   }
+
   inline bool compute_ball_properties(unsigned i,unsigned j)
   {
     float vis=(*vis_img_)(i,j);
     float pre=(*pre_img_)(i,j);
 
     float PI=0.0;
-    if(vol_cum>1e-12f) PI=PI_cum/vol_cum;
+    if (vol_cum>1e-12f) PI=PI_cum/vol_cum;
 
     beta_ = (pre+vis*PI)/(*norm_img_)(i,j);
     pre+=vis*(1-vis_cum)*PI;
@@ -217,26 +220,28 @@ class boxm2_cone_update_pass2_functor
 
     return true;
   }
+
   inline bool redistribute(float vol, int index)
   {
       boxm2_data<BOXM2_AUX>::datatype & aux=aux_data_->data()[index];
       aux[2]+=beta_*vol;
       return true;
   }
- private:
-     float vis_cum;
-     float pre_cum;
 
-     float beta_;
-     float PI_cum;
-     float vol_cum;
-     boxm2_data<BOXM2_AUX> * aux_data_;
-     boxm2_data<BOXM2_GAMMA> * alpha_data_;
-     boxm2_data<BOXM2_MOG3_GREY> * mog3_data_;
-     vil_image_view<float> * input_img_;
-     vil_image_view<float> * pre_img_;
-     vil_image_view<float> * vis_img_;
-     vil_image_view<float> * norm_img_;
+ private:
+  float vis_cum;
+  float pre_cum;
+
+  float beta_;
+  float PI_cum;
+  float vol_cum;
+  boxm2_data<BOXM2_AUX> * aux_data_;
+  boxm2_data<BOXM2_GAMMA> * alpha_data_;
+  boxm2_data<BOXM2_MOG3_GREY> * mog3_data_;
+  vil_image_view<float> * input_img_;
+  vil_image_view<float> * pre_img_;
+  vil_image_view<float> * vis_img_;
+  vil_image_view<float> * norm_img_;
 };
 
 class boxm2_cone_update_data_functor
@@ -252,9 +257,9 @@ class boxm2_cone_update_data_functor
     mog3_data_=new boxm2_data<BOXM2_MOG3_GREY>(datas[2]->data_buffer(),datas[2]->buffer_length(),datas[2]->block_id());
     nobs_data_=new boxm2_data<BOXM2_NUM_OBS>(datas[3]->data_buffer(),datas[3]->buffer_length(),datas[3]->block_id());
     alpha_min_ = -vcl_log(1.f-0.0001f)/float(vcl_pow(block_len/max_levels,3));
-
     return true;
   }
+
   inline bool process_cell(int index)
   {
     boxm2_data<BOXM2_AUX>::datatype & aux=aux_data_->data()[index];
@@ -290,6 +295,7 @@ class boxm2_cone_update_data_functor
     }
     return true;
   }
+
  private:
   boxm2_data<BOXM2_AUX>       * aux_data_;
   boxm2_data<BOXM2_GAMMA>     * alpha_data_;
