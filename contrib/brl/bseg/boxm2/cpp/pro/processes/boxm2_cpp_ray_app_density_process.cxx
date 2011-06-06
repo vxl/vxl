@@ -1,0 +1,134 @@
+// This is brl/bseg/boxm2/cpp/pro/processes/boxm2_cpp_ray_app_density_process.cxx
+#include <bprb/bprb_func_process.h>
+//:
+// \file
+// \brief  A process for probing along a ray in the scene.
+//
+// \author Vishal Jain
+// \date June 3, 2011
+
+#include <vcl_fstream.h>
+#include <boxm2/io/boxm2_cache.h>
+#include <boxm2/boxm2_scene.h>
+#include <boxm2/boxm2_block.h>
+#include <boxm2/boxm2_data_base.h>
+#include <vil/vil_save.h>
+#include <vil/vil_image_view.h>
+#include <vil/vil_transform.h>
+//brdb stuff
+#include <brdb/brdb_value.h>
+#include <boxm2/cpp/algo/boxm2_ray_probe_functor.h>
+#include <bpro/core/bbas_pro/bbas_1d_array_float.h>
+#include <boxm2/cpp/algo/boxm2_cast_ray_function.h>
+
+//directory utility
+#include <vul/vul_timer.h>
+#include <vcl_where_root_dir.h>
+
+namespace boxm2_cpp_ray_app_density_process_globals
+{
+    const unsigned n_inputs_ = 7;
+    const unsigned n_outputs_ = 1;
+    vcl_size_t lthreads[2]={8,8};
+}
+
+bool boxm2_cpp_ray_app_density_process_cons(bprb_func_process& pro)
+{
+    using namespace boxm2_cpp_ray_app_density_process_globals;
+
+    //process takes 1 input
+    vcl_vector<vcl_string> input_types_(n_inputs_);
+    input_types_[0] = "boxm2_scene_sptr";
+    input_types_[1] = "boxm2_cache_sptr";
+    input_types_[2] = "vpgl_camera_double_sptr";
+    input_types_[3] = "unsigned";
+    input_types_[4] = "unsigned";
+    input_types_[5] = "float";
+    input_types_[6] = "vcl_string";// if identifier string is empty, then only one appearance model
+
+
+    // process has 1 output:
+    // output[0]: scene sptr
+    vcl_vector<vcl_string>  output_types_(n_outputs_);
+    output_types_[0] = "bbas_1d_array_float_sptr"; //seg_len
+
+    bool good = pro.set_input_types(input_types_) &&
+        pro.set_output_types(output_types_);
+    // in case the 6th input is not set
+    brdb_value_sptr idx = new brdb_value_t<vcl_string>("");
+    pro.set_input(5, idx);
+    return good;
+}
+
+bool boxm2_cpp_ray_app_density_process(bprb_func_process& pro)
+{
+    using namespace boxm2_cpp_ray_app_density_process_globals;
+
+    if ( pro.n_inputs() < n_inputs_ ){
+        vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
+        return false;
+    }
+    //get the inputs
+    unsigned i = 0;
+    boxm2_scene_sptr scene = pro.get_input<boxm2_scene_sptr>(i++);
+    boxm2_cache_sptr cache = pro.get_input<boxm2_cache_sptr>(i++);
+    vpgl_camera_double_sptr cam= pro.get_input<vpgl_camera_double_sptr>(i++);
+    unsigned pi=pro.get_input<unsigned>(i++);
+    unsigned pj=pro.get_input<unsigned>(i++);
+    float intensity=pro.get_input<float>(i++);
+    vcl_string identifier = pro.get_input<vcl_string>(i);
+
+    bool foundDataType = false;
+    vcl_string data_type;
+    vcl_vector<vcl_string> apps = scene->appearances();
+    for (unsigned int i=0; i<apps.size(); ++i) {
+        if ( apps[i] == boxm2_data_traits<BOXM2_MOG3_GREY>::prefix() )
+        {
+            data_type = apps[i];
+            foundDataType = true;
+        }
+        else if ( apps[i] == boxm2_data_traits<BOXM2_MOG3_GREY_16>::prefix() )
+        {
+            data_type = apps[i];
+            foundDataType = true;
+        }
+    }
+    if (!foundDataType) {
+        vcl_cout<<"BOXM2_CPP_RENDER_PROCESS ERROR: scene doesn't have BOXM2_MOG3_GREY or BOXM2_MOG3_GREY_16 data type"<<vcl_endl;
+        return false;
+    }
+
+    if (identifier.size() > 0) {
+        data_type += "_" + identifier;
+    }
+
+    vcl_vector<boxm2_block_id> vis_order=scene->get_vis_blocks((vpgl_generic_camera<double>*)(cam.ptr()));
+    vcl_vector<boxm2_block_id>::iterator id;
+
+    vcl_vector<float> app_density;
+    for (id = vis_order.begin(); id != vis_order.end(); ++id)
+    {
+        vcl_cout<<"Block Id "<<(*id)<<vcl_endl;
+        boxm2_block *     blk  =  cache->get_block(*id);
+        boxm2_data_base *  mog  = cache->get_data_base(*id,data_type);
+        vcl_vector<boxm2_data_base*> datas;
+        datas.push_back(mog);
+
+        boxm2_scene_info_wrapper *scene_info_wrapper=new boxm2_scene_info_wrapper();
+        scene_info_wrapper->info=scene->get_blk_metadata(*id);
+        boxm2_ray_app_density_functor ray_app_density_functor;
+        ray_app_density_functor.init_data(datas,app_density,intensity);
+
+        cast_ray_per_block<boxm2_ray_app_density_functor>(ray_app_density_functor,scene_info_wrapper->info,blk,cam,pi+1,pj+1,pi,pj);
+    }
+
+    bbas_1d_array_float_sptr app_density_array  =new bbas_1d_array_float(app_density.size());
+
+    for(unsigned i=0;i<app_density.size();i++)
+    {
+        app_density_array->data_array[i]=app_density[i];
+    }
+    // store scene smaprt pointer
+    pro.set_output_val<bbas_1d_array_float_sptr>(0, app_density_array);
+    return true;
+}

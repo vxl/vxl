@@ -17,6 +17,7 @@ SET(boxm2_cpp_algo_sources
     boxm2_mean_intensities_batch_functor.h
     boxm2_filter_block_function.h     boxm2_filter_block_function.cxx
     boxm2_batch_functors.h
+    boxm2_ray_probe_functor.h
    )
 
 ADD_LIBRARY(boxm2_cpp_algo  ${boxm2_cpp_algo_sources})

@@ -17,4 +17,7 @@ DECLARE_FUNC_CONS(boxm2_cpp_cast_intensities_process);
 DECLARE_FUNC_CONS(boxm2_cpp_mean_intensities_batch_process);
 DECLARE_FUNC_CONS(boxm2_cpp_mean_intensities_print_process);
 DECLARE_FUNC_CONS(boxm2_cpp_filter_process);
+DECLARE_FUNC_CONS(boxm2_cpp_ray_probe_process);
+DECLARE_FUNC_CONS(boxm2_cpp_ray_app_density_process);
+
 #endif

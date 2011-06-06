@@ -106,7 +106,6 @@ class boxm2_cone_update_pass1_functor
     boxm2_data<BOXM2_AUX>::datatype aux=aux_data_->data()[index];
     if (aux[0]<1e-10f)return true;
 
-    float mean_obs=aux[1]/aux[0];
     float PI=boxm2_data_traits<BOXM2_MOG3_GREY>::processor::prob_density(mog3_data_->data()[index],(*input_img_)(i,j));
     boxm2_data<BOXM2_GAMMA>::datatype gamma=alpha_data_->data()[index];
     float temp=vcl_exp(-ray_vol*gamma);
