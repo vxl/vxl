@@ -44,7 +44,6 @@ class boxm2_block : public vbl_ref_count
   
   //: creates empty block from metadata
   boxm2_block(boxm2_block_metadata data); 
-  boxm2_block();
 
   //: initializes empty block from metadata
   bool init_empty_block(boxm2_block_metadata data);
@@ -82,6 +81,10 @@ class boxm2_block : public vbl_ref_count
   //: calculate the number of bytes a block will be given three parameters
   long calc_byte_count(int num_buffers, int trees_per_buffer, int num_trees); 
 
+  //: regardless of the way the instance is constructed, enable write
+  void enable_write() { read_only_ = false; } 
+  bool read_only() { return read_only_; }
+
  private:
 
   //: unique block id (currently 3D address)
@@ -104,6 +107,8 @@ class boxm2_block : public vbl_ref_count
   int init_level_;   //each sub_blocks's init level (default 1)
   int max_level_;    //each sub_blocks's max_level (default 4)
   int max_mb_;       //each total block mb
+
+  bool read_only_;   // if the block existed already on the disc, do not write it back
 };
 
 
