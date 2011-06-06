@@ -439,7 +439,6 @@ bool clsfy_binary_tree_builder::isNodePure(const vcl_set<unsigned >& subIndices,
     vcl_set<unsigned >::const_iterator indIter=subIndices.begin();
     vcl_set<unsigned >::const_iterator indIterEnd=subIndices.end();
 
-    unsigned i0=*indIter; // FIXME - unused!
     unsigned class0=outputs[*indIter];
     while (indIter != indIterEnd)
     {
