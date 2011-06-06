@@ -5,6 +5,7 @@
 #include <boxm2/cpp/algo/boxm2_update_image_functor.h>
 #include <vil/vil_math.h>
 #include <vul/vul_timer.h>
+
 bool boxm2_update_cone_image(boxm2_scene_sptr & scene,
                              vcl_string data_type,
                              vcl_string num_obs_type,
@@ -15,7 +16,7 @@ bool boxm2_update_cone_image(boxm2_scene_sptr & scene,
                              unsigned int roi_ni0,
                              unsigned int roi_nj0)
 {
-    boxm2_cache_sptr cache=boxm2_cache::instance();   
+    boxm2_cache_sptr cache=boxm2_cache::instance();
     vcl_vector<boxm2_block_id> vis_order=scene->get_vis_blocks(reinterpret_cast<vpgl_perspective_camera<double>*>(cam.ptr()));
     if (vis_order.empty())
     {
@@ -23,7 +24,7 @@ bool boxm2_update_cone_image(boxm2_scene_sptr & scene,
         return true;
     }
 
-    int num_passes=2;
+    unsigned int num_passes=2;
 
     vil_image_view<float> pre_img(input_image->ni(),input_image->nj());
     vil_image_view<float> vis_img(input_image->ni(),input_image->nj());
@@ -31,7 +32,7 @@ bool boxm2_update_cone_image(boxm2_scene_sptr & scene,
     proc_norm_img.fill(0.0);
 
     bool success = true;
-    for (unsigned int pass_no=0;pass_no<num_passes;pass_no++)
+    for (unsigned int pass_no=0;pass_no<num_passes;++pass_no)
     {
         vcl_vector<boxm2_block_id>::iterator id;
         pre_img.fill(0.0f);
@@ -56,47 +57,52 @@ bool boxm2_update_cone_image(boxm2_scene_sptr & scene,
             datas.push_back(nobs);
             boxm2_scene_info_wrapper *scene_info_wrapper=new boxm2_scene_info_wrapper();
             scene_info_wrapper->info=scene->get_blk_metadata(*id);
-            //pass 0
-            //if (pass_no==0)
-            //{
-            //    boxm2_cone_update_pass0_functor pass0;
-            //    pass0.init_data(datas,input_image);
-            //    success=success && cast_cone_ray_per_block<boxm2_cone_update_pass0_functor>(pass0,
-            //                                                scene_info_wrapper->info,
-            //                                                blk,
-            //                                                cam,
-            //                                                input_image->ni(),
-            //                                                input_image->nj());
-            //}
-            //pass 1
+#if 0
+            // pass 0
             if (pass_no==0)
             {
-                boxm2_cone_update_pass1_functor pass1;
-                pass1.init_data(datas,&pre_img,&vis_img,input_image);
-                success=success && cast_cone_ray_per_block<boxm2_cone_update_pass1_functor>(pass1,
+                boxm2_cone_update_pass0_functor pass0;
+                pass0.init_data(datas,input_image);
+                success=success && cast_cone_ray_per_block<boxm2_cone_update_pass0_functor>
+                                       (pass0,
                                         scene_info_wrapper->info,
                                         blk,
                                         cam,
                                         input_image->ni(),
                                         input_image->nj());
             }
+#endif
+            // pass 1
+            if (pass_no==0)
+            {
+                boxm2_cone_update_pass1_functor pass1;
+                pass1.init_data(datas,&pre_img,&vis_img,input_image);
+                success=success && cast_cone_ray_per_block<boxm2_cone_update_pass1_functor>
+                                       (pass1,
+                                        scene_info_wrapper->info,
+                                        blk,
+                                        cam,
+                                        input_image->ni(),
+                                        input_image->nj());
+            }
+            // pass 2
             else if (pass_no==1)
             {
                 boxm2_cone_update_pass2_functor pass2;
                 pass2.init_data(datas,&pre_img,&vis_img, & proc_norm_img, input_image);
-                success=success &&
-                    cast_cone_ray_per_block<boxm2_cone_update_pass2_functor>(pass2,
-                    scene_info_wrapper->info,
-                    blk,
-                    cam,
-                    input_image->ni(),
-                    input_image->nj());
+                success=success && cast_cone_ray_per_block<boxm2_cone_update_pass2_functor>
+                                       (pass2,
+                                        scene_info_wrapper->info,
+                                        blk,
+                                        cam,
+                                        input_image->ni(),
+                                        input_image->nj());
             }
         }
         if (pass_no==0)
             vil_math_image_sum<float,float,float>(pre_img,vis_img,proc_norm_img);
-
     }
+
     vcl_vector<boxm2_block_id>::iterator id;
     for (id = vis_order.begin(); id != vis_order.end(); ++id)
     {
@@ -120,17 +126,18 @@ bool boxm2_update_cone_image(boxm2_scene_sptr & scene,
     }
     return true;
 }
+
 bool boxm2_update_image(boxm2_scene_sptr & scene,
-                             vcl_string data_type,
-                             vcl_string num_obs_type,
-                             vpgl_camera_double_sptr cam ,
-                             vil_image_view<float> * input_image,
-                             unsigned int roi_ni,
-                             unsigned int roi_nj,
-                             unsigned int roi_ni0,
-                             unsigned int roi_nj0)
+                        vcl_string data_type,
+                        vcl_string num_obs_type,
+                        vpgl_camera_double_sptr cam ,
+                        vil_image_view<float> * input_image,
+                        unsigned int roi_ni,
+                        unsigned int roi_nj,
+                        unsigned int roi_ni0,
+                        unsigned int roi_nj0)
 {
-    boxm2_cache_sptr cache=boxm2_cache::instance();   
+    boxm2_cache_sptr cache=boxm2_cache::instance();
     vcl_vector<boxm2_block_id> vis_order=scene->get_vis_blocks(reinterpret_cast<vpgl_generic_camera<double>*>(cam.ptr()));
     if (vis_order.empty())
     {
@@ -138,7 +145,7 @@ bool boxm2_update_image(boxm2_scene_sptr & scene,
         return true;
     }
 
-    int num_passes=3;
+    unsigned int num_passes=3;
 
     vil_image_view<float> pre_img(input_image->ni(),input_image->nj());
     vil_image_view<float> vis_img(input_image->ni(),input_image->nj());
@@ -146,7 +153,7 @@ bool boxm2_update_image(boxm2_scene_sptr & scene,
     proc_norm_img.fill(0.0);
 
     bool success = true;
-    for (unsigned int pass_no=0;pass_no<num_passes;pass_no++)
+    for (unsigned int pass_no=0;pass_no<num_passes;++pass_no)
     {
         vcl_vector<boxm2_block_id>::iterator id;
         pre_img.fill(0.0f);
@@ -171,56 +178,58 @@ bool boxm2_update_image(boxm2_scene_sptr & scene,
             datas.push_back(nobs);
             boxm2_scene_info_wrapper *scene_info_wrapper=new boxm2_scene_info_wrapper();
             scene_info_wrapper->info=scene->get_blk_metadata(*id);
-            //pass 0
+            // pass 0
             if (pass_no==0)
             {
                 boxm2_update_pass0_functor pass0;
                 pass0.init_data(datas,input_image);
-                success=success && 
-                    cast_ray_per_block<boxm2_update_pass0_functor>(pass0,
-                    scene_info_wrapper->info,
-                    blk,
-                    cam,
-                    input_image->ni(),
-                    input_image->nj());
+                success=success && cast_ray_per_block<boxm2_update_pass0_functor>
+                                       (pass0,
+                                        scene_info_wrapper->info,
+                                        blk,
+                                        cam,
+                                        input_image->ni(),
+                                        input_image->nj());
             }
-            //pass 1
+            // pass 1
             else if (pass_no==1)
             {
                 boxm2_update_pass1_functor pass1;
                 pass1.init_data(datas,&pre_img,&vis_img);
                 success=success &&
-                    cast_ray_per_block<boxm2_update_pass1_functor>(pass1,
-                                                        scene_info_wrapper->info,
-                                                        blk,
-                                                        cam,
-                                                        input_image->ni(),
-                                                        input_image->nj());
+                    cast_ray_per_block<boxm2_update_pass1_functor>
+                                       (pass1,
+                                        scene_info_wrapper->info,
+                                        blk,
+                                        cam,
+                                        input_image->ni(),
+                                        input_image->nj());
             }
+            // pass 2
             else if (pass_no==2)
             {
                 boxm2_update_pass2_functor pass2;
                 pass2.init_data(datas,&pre_img,&vis_img, & proc_norm_img);
-                success=success &&
-                    cast_ray_per_block<boxm2_update_pass2_functor>(pass2,
-                    scene_info_wrapper->info,
-                    blk,
-                    cam,
-                    input_image->ni(),
-                    input_image->nj());
+                success=success && cast_ray_per_block<boxm2_update_pass2_functor>
+                                       (pass2,
+                                        scene_info_wrapper->info,
+                                        blk,
+                                        cam,
+                                        input_image->ni(),
+                                        input_image->nj());
             }
         }
         if (pass_no==1)
             vil_math_image_sum<float,float,float>(pre_img,vis_img,proc_norm_img);
-#if 0
-        for(unsigned i=0;i<vis_img.ni();i++)
+#ifdef DEBUG
+        for (unsigned i=0;i<vis_img.ni();i++)
         {
-            for(unsigned j=0;j<vis_img.nj();j++)
-                vcl_cout<<proc_norm_img(i,j)<<" ";
+            for (unsigned j=0;j<vis_img.nj();j++)
+                vcl_cout<<proc_norm_img(i,j)<<' ';
 
             vcl_cout<<vcl_endl;
         }
-#endif 
+#endif
     }
     vcl_vector<boxm2_block_id>::iterator id;
     for (id = vis_order.begin(); id != vis_order.end(); ++id)
