@@ -18,6 +18,9 @@ MANPAGE_SOURCES += boxm2_cast_intensities_functor.h
 MANPAGE_SOURCES += boxm2_mean_intensities_batch_functor.h
 SOURCES += boxm2_filter_block_function.cxx
 MANPAGE_SOURCES += boxm2_batch_functors.h
+SOURCES += boxm2_update_functions.cxx
+MANPAGE_SOURCES += boxm2_ray_probe_functor.h
+MANPAGE_SOURCES += boxm2_cone_update_image_functor.h
 
 #######################################
 include ${VXLROOT}/config/top-params.mk

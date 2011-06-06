@@ -6,6 +6,7 @@ TESTMAIN := test_driver.cxx
 
 TESTS += test_merge_mixtures.cxx
 TESTS += test_cone_ray_trace.cxx
+TESTS += test_cone_update.cxx
 
 MINI_PROG_SOURCES += test_include.cxx
 
