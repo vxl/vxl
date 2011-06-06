@@ -97,6 +97,7 @@ bool boxm2_cpp_refine_process2(bprb_func_process& pro)
     //refine block and datas
     boxm2_block_metadata data = blk_iter->second;
     boxm2_refine_block(blk,datas, thresh, false);
+    blk->enable_write(); // now cache will make sure that it is written to disc
   }
 
   return true;
