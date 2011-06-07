@@ -20,7 +20,6 @@
 
 
 #ifdef PASSONE
-
 //: Define aux_args (like a functor struct)
 // TODO Begin passing around AuxArgs* instead of the struct to save on registers
 typedef struct
@@ -33,13 +32,16 @@ typedef struct
   __global int* cell_vol;
   __global int* cell_obs;
 
+           //vis/pre along hte ray
            float* ray_vis;
            float* ray_pre;
 
+           //per ball statistics
            float* pi_cum;
            float* vol_cum;
            float* vis_cum;
 
+           //constants used by stepcell functions
            float obs;
            float volume_scale;
 } AuxArgs;
@@ -139,12 +141,13 @@ pass_one(__constant  RenderSceneInfo    * linfo,
   aux_args.obs = in_image[imIndex];
   aux_args.volume_scale = linfo->block_len*linfo->block_len*linfo->block_len;
 
+  float vis0=1.0f;
   cast_cone_ray(i, j,
                 ray_ox, ray_oy, ray_oz,
                 ray_dx, ray_dy, ray_dz, cone_half_angle,
                 linfo, tree_array,                      //scene info
                 local_tree, bit_lookup, centerX, centerY, centerZ,
-                cumsum, to_visit, &vis, aux_args);      //utility info
+                cumsum, to_visit, &vis0, aux_args);      //utility info
 
   //store vis/pre/norm
   vis_image[imIndex] = vis;
@@ -153,63 +156,57 @@ pass_one(__constant  RenderSceneInfo    * linfo,
 }
 
 
-bool step_cell(AuxArgs aux_args, int data_ptr, float intersect_volume)
+void step_cell_one(AuxArgs aux_args, int data_ptr, float intersect_volume)
 {
   //make sure intersect volume reflects real world scale
   intersect_volume *= aux_args.volume_scale;
 
-  //increment cell volume and cell mean obs
+  //increment cell volume and cell mean obs, used later
   int vol_int = convert_int_rte(intersect_volume * SEGLEN_FACTOR);
   atom_add( &aux_args.cell_vol[data_ptr], vol_int );
   int cum_obs = convert_int_rte(intersect_volume * aux_args.obs * SEGLEN_FACTOR);
   atom_add( &aux_args.cell_obs[data_ptr], cum_obs );
 
-
   // if total length of rays is too small, do nothing
   float8 mixture = convert_float8(aux_args.mog[data_ptr]) / NORM;
-  float PI = 0.0f;
-  //if (cum_len>1.0e-10f)
-  {
-      PI = gauss_3_mixture_prob_density( aux_args.obs,
-                                         mixture.s0,
-                                         mixture.s1,
-                                         mixture.s2,
-                                         mixture.s3,
-                                         mixture.s4,
-                                         mixture.s5,
-                                         mixture.s6,
-                                         mixture.s7,
-                                         (1.0f-mixture.s2-mixture.s5)
-                                        );
-  }
-
-  //float PI=boxm2_data_traits<BOXM2_MOG3_GREY>::processor::prob_density(mog3_data_->data()[index],(*input_img_)(i,j));
+  float PI = gauss_3_mixture_prob_density( aux_args.obs,
+                                           mixture.s0,
+                                           mixture.s1,
+                                           mixture.s2,
+                                           mixture.s3,
+                                           mixture.s4,
+                                           mixture.s5,
+                                           mixture.s6,
+                                           mixture.s7,
+                                           (1.0f-mixture.s2-mixture.s5)
+                                          );
   float gamma = aux_args.alphas[data_ptr];
-  float temp = exp(-intersect_volume*gamma);
+  float temp = exp(-intersect_volume*gamma);  //visibility of intersection of this cell and ball
 
-  *aux_args.pi_cum += PI*intersect_volume;
-  *aux_args.vol_cum += intersect_volume;
-  *aux_args.vis_cum *= temp;
-  return true;
+  //accumulate ball statistics
+  (*aux_args.pi_cum) += PI*intersect_volume;
+  (*aux_args.vol_cum) += intersect_volume;
+  (*aux_args.vis_cum) *= temp;
 }
 
-bool compute_ball_properties(AuxArgs aux_args)
+void compute_ball_properties(AuxArgs aux_args)
 {
-  float vis = *aux_args.ray_vis; //(*vis_img_)(i,j);
-  float pre = *aux_args.ray_pre; //(*pre_img_)(i,j);
+  float vis = (*aux_args.ray_vis); //(*vis_img_)(i,j);
+  float pre = (*aux_args.ray_pre); //(*pre_img_)(i,j);
   float PI=0.0;
   if ( *aux_args.vol_cum>1e-12f) PI = (*aux_args.pi_cum) / (*aux_args.vol_cum);
 
   //incrememnt pre and vis;
-  float vis_cum = *aux_args.vis_cum;
-  (*aux_args.ray_pre) += vis*(1-vis_cum)*PI;
-  (*aux_args.ray_vis) *= vis_cum;
+  float vis_cum = (*aux_args.vis_cum);
+  pre += vis*(1.0-vis_cum)*PI; 
+  vis *= vis_cum; 
+  (*aux_args.ray_pre) = pre;
+  (*aux_args.ray_vis) = vis;
 
   //reset ball values
   (*aux_args.vis_cum) = 1.0f;
   (*aux_args.pi_cum) = 0.0f;
   (*aux_args.vol_cum) = 0.0f;
-  return true;
 }
 #endif
 
@@ -300,8 +297,8 @@ bayes_main(__constant  RenderSceneInfo    * linfo,
   if (i>=(*imgdims).z || j>=(*imgdims).w || i<(*imgdims).x || j<(*imgdims).y)
     return;
   float norm = norm_image[j*get_global_size(0) + i];
-  float vis = vis_image[j*get_global_size(0) + i];
-  float pre = pre_image[j*get_global_size(0) + i];
+  float vis = 1.0f; //vis_image[j*get_global_size(0) + i];
+  float pre = 0.0f; //pre_image[j*get_global_size(0) + i];
   float obs = in_image[j*get_global_size(0) + i];
   barrier(CLK_LOCAL_MEM_FENCE);
 
@@ -348,7 +345,7 @@ bayes_main(__constant  RenderSceneInfo    * linfo,
                 ray_dx, ray_dy, ray_dz, cone_half_angle,
                 linfo, tree_array,                                    //scene info
                 local_tree, bit_lookup, centerX, centerY, centerZ,
-                cumsum, to_visit, &vis, aux_args);      //utility info
+                cumsum, to_visit, &vis0, aux_args);      //utility info
 
   //write out vis and pre
   vis_image[j*get_global_size(0)+i] = vis;
@@ -358,14 +355,10 @@ bayes_main(__constant  RenderSceneInfo    * linfo,
 
 bool step_cell(AuxArgs aux_args, int data_ptr, float intersect_volume)
 {
-  float cell_vol = aux_args.cell_vol[data_ptr];
-  if (cell_vol<1e-10f) return true;
-
   //rescale intersect volume
   intersect_volume *= aux_args.volume_scale;
 
-  //calculate mean_obs from cell vol and cell obs
-  float mean_obs = aux_args.cell_obs[data_ptr]/cell_vol;
+  //rescale aux args, calculate mean obs
   float8 mixture = convert_float8(aux_args.mog[data_ptr]) / NORM;
   float PI = gauss_3_mixture_prob_density( aux_args.obs,
                                            mixture.s0,
@@ -378,7 +371,7 @@ bool step_cell(AuxArgs aux_args, int data_ptr, float intersect_volume)
                                            mixture.s7,
                                            (1.0f-mixture.s2-mixture.s5)
                                           );
-  float vis = *aux_args.ray_vis;
+  float vis = (*aux_args.ray_vis);
   float gamma = aux_args.alphas[data_ptr];
 
   //sum cumulative vis
@@ -395,16 +388,17 @@ bool step_cell(AuxArgs aux_args, int data_ptr, float intersect_volume)
 
 bool compute_ball_properties(AuxArgs aux_args)
 {
+  float vis = (*aux_args.ray_vis);
+  float pre = (*aux_args.ray_pre);
   float PI=0.0;
   if ( *aux_args.vol_cum>1e-12f ) PI = (*aux_args.pi_cum) / (*aux_args.vol_cum);
 
-  //incrememnt pre and vis;
-  float vis = (*aux_args.ray_vis);
-  float pre = (*aux_args.ray_pre);
-
+  //incrememnt beta pre and vis along the ray
   (*aux_args.beta_cum) = (pre+vis*PI)/aux_args.norm;
-  (*aux_args.ray_pre) += vis*(1.0f - (*aux_args.vis_cum) )*PI;
-  (*aux_args.ray_vis) *= (*aux_args.vis_cum);
+  pre += vis*(1.0f - (*aux_args.vis_cum) )*PI; 
+  vis *= (*aux_args.vis_cum); 
+  (*aux_args.ray_pre) = pre; 
+  (*aux_args.ray_vis) = vis; 
 
   //reset ball values
   (*aux_args.vis_cum) = 1.0f;
@@ -416,7 +410,7 @@ bool compute_ball_properties(AuxArgs aux_args)
 bool redistribute(AuxArgs aux_args, int data_ptr, float intersect_volume)
 {
   intersect_volume *= aux_args.volume_scale;
-  int beta_int = convert_int_rte( intersect_volume* (*aux_args.beta_cum) * SEGLEN_FACTOR );
+  int beta_int = convert_int_rte( intersect_volume * (*aux_args.beta_cum) * SEGLEN_FACTOR );
   atom_add( &aux_args.cell_beta[data_ptr], beta_int );
   return true;
 }
@@ -443,15 +437,17 @@ update_cone_data( __global RenderSceneInfo  * info,
   int datasize = info->data_len * info->num_buffer;
   if (gid<datasize)
   {
-    float cell_vol = aux_vol[gid];
+    
+    float cell_vol = convert_float(aux_vol[gid]) / SEGLEN_FACTOR;
     if (cell_vol>1e-10f)
     {
-      float beta = aux_beta[gid]/cell_vol;
-      float vis  = aux_vis[gid]/cell_vol;
-      float mean_obs = aux_obs[gid]/cell_vol;
+      float beta = convert_float(aux_beta[gid])/(cell_vol*SEGLEN_FACTOR);
+      float vis  = convert_float(aux_vis[gid])/(cell_vol*SEGLEN_FACTOR);
+      float mean_obs = convert_float(aux_obs[gid])/(cell_vol*SEGLEN_FACTOR);
 
       float alpha = alpha_array[gid];
-      MOG_TYPE mog = mixture_array[gid];
+      MOG_TYPE mog_bytes = mixture_array[gid];
+      float8 mog = convert_float8(mog_bytes) / (float) NORM; 
       ushort4 num_obs = nobs_array[gid];
 
       //update alpha

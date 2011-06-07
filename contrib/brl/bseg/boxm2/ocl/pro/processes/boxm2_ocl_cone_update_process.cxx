@@ -59,7 +59,7 @@ namespace boxm2_ocl_cone_update_process_globals
       //proc norm pass computes the proc_norm image, mean_obs for each cell
       bocl_kernel* pass_one = new bocl_kernel();
       vcl_string one_opts = options + " -D PASSONE ";
-      one_opts += " -D STEP_CELL=step_cell(aux_args,data_ptr,intersect_volume) ";
+      one_opts += " -D STEP_CELL=step_cell_one(aux_args,data_ptr,intersect_volume) ";
       one_opts += " -D COMPUTE_BALL_PROPERTIES=compute_ball_properties(aux_args)  ";
       pass_one->create_kernel(&device->context(),device->device_id(), src_paths, "pass_one", one_opts, "cone_update::pass_one");
       vec_kernels.push_back(pass_one);

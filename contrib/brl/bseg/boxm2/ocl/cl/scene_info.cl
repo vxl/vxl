@@ -5,7 +5,7 @@
 // blocks per buffer (info needed for update)
 //------------------------------------------------------------------------------
 
-#define SEGLEN_FACTOR 93206.7555f   //Hack representation of int32.maxvalue/(ni*nj*block_length)
+#define SEGLEN_FACTOR 64000000.0f   //Hack representation of int32.maxvalue/(ni*nj*block_length)
 
 typedef struct
 {
