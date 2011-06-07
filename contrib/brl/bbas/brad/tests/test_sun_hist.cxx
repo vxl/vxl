@@ -7,6 +7,7 @@
 #include <vcl_cstdlib.h> // for rand()
 #include <vcl_fstream.h>
 
+#ifdef DEBUG
 // illumination directions for longitude = 33.331465, latitude =44.376970 deg
 // for images taken over a 7 year period at roughly 07:30Z
 static vcl_vector<vnl_double_3> illum_dirs()
@@ -47,6 +48,7 @@ static vcl_vector<vnl_double_3> illum_dirs()
   vcl_vector<vnl_double_3> illumination_dirs(ill_dirs, ill_dirs+31);
   return illumination_dirs;
 }
+#endif
 
 static void test_sun_hist()
 {
@@ -75,7 +77,7 @@ static void test_sun_hist()
         vcl_fabs(vcl_sqrt(es.get_eigenvalue(1))-20.9745);
   TEST_NEAR("sun eigensystem " , er, 0.0, 0.01);
 
-#if 0 //for debugging
+#ifdef DEBUG //for debugging
   vcl_cout << h << '\n'
            << "az  el counts\n";
   h.print_to_text(vcl_cout);
