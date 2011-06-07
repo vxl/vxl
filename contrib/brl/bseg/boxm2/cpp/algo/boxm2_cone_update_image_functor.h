@@ -106,8 +106,9 @@ class boxm2_cone_update_pass1_functor
 
   inline bool step_cell(float ray_vol,int index,unsigned i,unsigned j)
   {
-    boxm2_data<BOXM2_AUX>::datatype aux=aux_data_->data()[index];
-    if (aux[0]<1e-10f)return true;
+    boxm2_data<BOXM2_AUX>::datatype & aux=aux_data_->data()[index];
+    aux[0]+=ray_vol;
+    aux[1]+=ray_vol*(*input_img_)(i,j);
 
     float PI=boxm2_data_traits<BOXM2_MOG3_GREY>::processor::prob_density(mog3_data_->data()[index],(*input_img_)(i,j));
     boxm2_data<BOXM2_GAMMA>::datatype gamma=alpha_data_->data()[index];
@@ -187,7 +188,7 @@ class boxm2_cone_update_pass2_functor
   inline bool step_cell(float ray_vol,int index,unsigned i,unsigned j)
   {
     boxm2_data<BOXM2_AUX>::datatype & aux=aux_data_->data()[index];
-    if (aux[0]<1e-10f) return true;
+    //if (aux[0]<1e-10f) return true;
     float PI=boxm2_data_traits<BOXM2_MOG3_GREY>::processor::prob_density(mog3_data_->data()[index], (*input_img_)(i,j));
     float vis=(*vis_img_)(i,j);
     boxm2_data<BOXM2_GAMMA>::datatype gamma=alpha_data_->data()[index];
@@ -283,6 +284,7 @@ class boxm2_cone_update_data_functor
       //: converting flot to short
       nobs_float[3]=((float)nobs[3])/100.0f;
       boxm2_data_traits<BOXM2_MOG3_GREY>::processor::update_gauss_mixture_3(mog3,nobs_float, mean_obs,vis,0.09f, 0.03f);
+
       nobs[0]=(unsigned short)nobs_float[0];
       nobs[1]=(unsigned short)nobs_float[1];
       nobs[2]=(unsigned short)nobs_float[2];
