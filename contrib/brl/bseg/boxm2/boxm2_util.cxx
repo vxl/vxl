@@ -99,10 +99,10 @@ vpgl_camera_double_sptr boxm2_util::camera_from_file(vcl_string camfile)
     vcl_cerr << "Failed to open file " << camfile << '\n';
     return vpgl_camera_double_sptr(pcam);
   }
-  else  {
+  else {
     ifs >> *pcam;
   }
-  return vpgl_camera_double_sptr(pcam); 
+  return vpgl_camera_double_sptr(pcam);
 }
 
 //: returns a list of image strings from directory
@@ -412,7 +412,7 @@ vil_image_view_base_sptr boxm2_util::prepare_input_image(vil_image_view_base_spt
       else if (vil_image_view<unsigned short> *img_byte = dynamic_cast<vil_image_view<unsigned short>*>(loaded_image.ptr()))
           vil_convert_stretch_range_limited(*img_byte, *floatimg,(unsigned short)28000,(unsigned short)33000,  0.0f, 1.0f); // hardcoded to be fixed.
       //vil_convert_stretch_range(*img_byte, *floatimg,  0.0f, 1.0f); // hardcoded to be fixed.
-      else if (vil_image_view<float> *img_float = dynamic_cast<vil_image_view<float>*>(loaded_image.ptr()))
+      else if (dynamic_cast<vil_image_view<float>*>(loaded_image.ptr()))
           return loaded_image;
       else {
           vcl_cerr << "Failed to load image "  << '\n';
