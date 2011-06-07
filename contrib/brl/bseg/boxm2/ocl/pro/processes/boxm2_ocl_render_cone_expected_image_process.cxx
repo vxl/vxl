@@ -52,7 +52,7 @@ namespace boxm2_ocl_render_cone_expected_image_process_globals
     src_paths.push_back(source_dir + "cone/cast_cone_ray.cl");
 
     //set kernel options
-    vcl_string options = " -D STEP_CELL=step_cell_cone(aux_args,data_ptr,intersect_volume,side_len*linfo->block_len) "; 
+    vcl_string options = " -D STEP_CELL=step_cell_cone(aux_args,data_ptr,intersect_volume) "; 
     options += " -D COMPUTE_BALL_PROPERTIES=compute_ball_properties(aux_args) "; 
 
     //have kernel construct itself using the context and device

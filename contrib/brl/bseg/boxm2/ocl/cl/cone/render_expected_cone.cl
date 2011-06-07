@@ -26,6 +26,7 @@ typedef struct
   float* intensity_norm;
   float* weighted_int;
   float* prob_surface; 
+  float  volume_scale; 
 } AuxArgs;  
 
 void cast_cone_ray( int i, int j,                                     //pixel information
@@ -117,6 +118,7 @@ render_expected( __constant  RenderSceneInfo    * linfo,
   aux_args.intensity_norm = &intensity_norm;
   aux_args.weighted_int = &weighted_int;
   aux_args.prob_surface = &prob_surface;  
+  aux_args.volume_scale = linfo->block_len*linfo->block_len*linfo->block_len;
   
   cast_cone_ray( i, j,
                 ray_ox, ray_oy, ray_oz,
@@ -133,32 +135,10 @@ render_expected( __constant  RenderSceneInfo    * linfo,
 }
 
 //FUNCTORS used with cone ray
-void step_cell_cone( AuxArgs aux_args, int data_ptr, float volume, float block_len)
+void step_cell_cone(AuxArgs aux_args, int data_ptr, float volume)
 {
-/* old method of computing occ probs
-  //grab voxel alpha and intensity
-  float alpha = aux_args.alpha[data_ptr];
-  
-  //calculate the mean intensity
-  uchar8 data = aux_args.mog[data_ptr];
-  float w2=0.0f;
-  if (data.s2 > 0 && data.s5 > 0)
-    w2=(float)(255-data.s2-data.s5);
-  float exp_intensity=(float)data.s0 * (float)data.s2 +
-                      (float)data.s3 * (float)data.s5 +
-                      (float)data.s6 * w2;
-  exp_intensity /= (255.0f*255.0f);
-  
-  //probability that this voxel is occupied by surface
-  float cell_occupancy_prob = (1.0 - exp(-alpha*block_len) );
-  (*aux_args.prob_surface) += (cell_occupancy_prob * volume);
+  volume *= aux_args.volume_scale;
 
-  //weighted intensity for this voxel
-  (*aux_args.weighted_int) += cell_occupancy_prob * volume * exp_intensity;
-  (*aux_args.intensity_norm) += cell_occupancy_prob * volume;
-  
-  (*aux_args.cum_vol) += volume; 
-*/
   //grab voxel alpha and intensity
   float alpha = aux_args.alpha[data_ptr];
   

@@ -161,7 +161,6 @@ float render_cone_expected_image( boxm2_scene_sptr & scene,
     ////////////////////////////////////////////////////////////////////////////////
      
     
-   
     // Output Array
     float output_arr[100];
     for (int i=0; i<100; ++i) output_arr[i] = 0.0f;
@@ -198,7 +197,7 @@ float render_cone_expected_image( boxm2_scene_sptr & scene,
         vul_timer transfer;
         bocl_mem* blk       = opencl_cache->get_block(*id);
         bocl_mem* blk_info  = opencl_cache->loaded_block_info();
-        bocl_mem* alpha     = opencl_cache->get_data<BOXM2_ALPHA>(*id);
+        bocl_mem* alpha     = opencl_cache->get_data<BOXM2_GAMMA>(*id);
         bocl_mem* mog       = opencl_cache->get_data(*id,data_type);
         transfer_time += (float) transfer.all();
 

@@ -261,6 +261,7 @@ bool boxm2_ocl_refine_process(bprb_func_process& pro)
         tree_sizes->write_to_buffer((queue));
         vcl_cout<<"New data size: "<<newDataSize<<'\n'
                 <<"Scan data sizes time: "<<scan_time.all()<<vcl_endl;
+        transfer_time += scan_time.all(); 
         /////////////////////////////////////////////////////////////////////////
         
         /////////////////////////////////////////////////////////////////////////
@@ -354,10 +355,7 @@ bool boxm2_ocl_refine_process(bprb_func_process& pro)
             }
         }
     }
-#if 0
-    //record total time
-    float total_time = (float) total.all();
-#endif
+    vcl_cout<<" Refine GPU Time: "<<gpu_time<<", transfer time: "<<transfer_time<<vcl_endl;
     return true;
 }
 

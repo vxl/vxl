@@ -7,6 +7,7 @@
 #include <vgl/vgl_ray_3d.h>
 #include <boct/boct_bit_tree2.h>
 #include <vil/vil_image_view.h>
+#include <vil/vil_save.h>
 
 //render_cone_expected_image - pretty much the same as above but one of the local
 //memory arguments is expanded
@@ -143,9 +144,9 @@ float boxm2_ocl_cone_update( boxm2_scene_sptr & scene,
         vul_timer transfer;
         bocl_mem* blk       = opencl_cache->get_block(*id);
         bocl_mem* blk_info  = opencl_cache->loaded_block_info();
-        bocl_mem* alpha     = opencl_cache->get_data<BOXM2_ALPHA>(*id,0,false);
+        bocl_mem* alpha     = opencl_cache->get_data<BOXM2_GAMMA>(*id,0,false);
         boxm2_scene_info* info_buffer = (boxm2_scene_info*) blk_info->cpu_buffer();
-        int alphaTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
+        int alphaTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_GAMMA>::prefix());
         info_buffer->data_buffer_length = (int) (alpha->num_bytes()/alphaTypeSize);
         blk_info->write_to_buffer((queue));
 
@@ -306,6 +307,23 @@ float boxm2_ocl_cone_update( boxm2_scene_sptr & scene,
     }
   }
 
+
+  ///debugging save vis, pre, norm images
+  int idx = 0; 
+  vil_image_view<float> vis_view(cl_ni,cl_nj);
+  vil_image_view<float> norm_view(cl_ni,cl_nj);
+  vil_image_view<float> pre_view(cl_ni,cl_nj);
+  for (unsigned c=0;c<cl_nj;++c) {
+    for (unsigned r=0;r<cl_ni;++r) {
+      vis_view(r,c) = vis_buff[idx];
+      norm_view(r,c) = norm_buff[idx]; 
+      pre_view(r,c) = pre_buff[idx]; 
+      idx++; 
+    }
+  }
+  vil_save( vis_view, "vis_debug.tiff"); 
+  vil_save( norm_view, "norm_debug.tiff");
+  vil_save( pre_view, "pre_debug.tiff"); 
 
   delete [] vis_buff;
   delete [] pre_buff;
