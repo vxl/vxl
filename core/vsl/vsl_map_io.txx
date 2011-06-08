@@ -14,6 +14,7 @@
 #include "vsl_map_io.h"
 #include <vsl/vsl_binary_io.h>
 #include <vsl/vsl_indent.h>
+#include <vsl/vsl_pair_io.h>
 
 //====================================================================================
 //: Write map to binary stream
