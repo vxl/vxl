@@ -20,7 +20,7 @@ bool boxm2_update_cone_image(boxm2_scene_sptr & scene,
     vcl_vector<boxm2_block_id> vis_order=scene->get_vis_blocks(reinterpret_cast<vpgl_perspective_camera<double>*>(cam.ptr()));
     if (vis_order.empty())
     {
-        vcl_cout<<" None of the blocks are visible from this viewpoint"<<vcl_endl;
+        vcl_cout<<"None of the blocks are visible from this viewpoint"<<vcl_endl;
         return true;
     }
 
@@ -128,14 +128,14 @@ bool boxm2_update_cone_image(boxm2_scene_sptr & scene,
 }
 
 bool boxm2_update_image(boxm2_scene_sptr & scene,
-                             vcl_string data_type,int appTypeSize,
-                             vcl_string num_obs_type,
-                             vpgl_camera_double_sptr cam ,
-                             vil_image_view<float> * input_image,
-                             unsigned int roi_ni,
-                             unsigned int roi_nj,
-                             unsigned int roi_ni0,
-                             unsigned int roi_nj0)
+                        vcl_string data_type,int appTypeSize,
+                        vcl_string num_obs_type,
+                        vpgl_camera_double_sptr cam ,
+                        vil_image_view<float> * input_image,
+                        unsigned int roi_ni,
+                        unsigned int roi_nj,
+                        unsigned int roi_ni0,
+                        unsigned int roi_nj0)
 {
     boxm2_cache_sptr cache=boxm2_cache::instance();
     vcl_vector<boxm2_block_id> vis_order=scene->get_vis_blocks(reinterpret_cast<vpgl_generic_camera<double>*>(cam.ptr()));
@@ -151,8 +151,8 @@ bool boxm2_update_image(boxm2_scene_sptr & scene,
     vil_image_view<float> vis_img(input_image->ni(),input_image->nj());
     vil_image_view<float> proc_norm_img(input_image->ni(),input_image->nj());
     proc_norm_img.fill(0.0);
-    int alphaTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());	 
-    int nobsTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_NUM_OBS>::prefix());	 
+    int alphaTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
+    int nobsTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_NUM_OBS>::prefix());
 
     bool success = true;
     for (unsigned int pass_no=0;pass_no<num_passes;++pass_no)
