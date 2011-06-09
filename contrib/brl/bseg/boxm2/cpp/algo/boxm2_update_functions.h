@@ -20,7 +20,7 @@ bool boxm2_update_cone_image(boxm2_scene_sptr & scene,
 
 
 bool boxm2_update_image(boxm2_scene_sptr & scene,
-                             vcl_string data_type,
+                             vcl_string data_type,int appTypeSize,
                              vcl_string num_obs_type,
                              vpgl_camera_double_sptr cam ,
                              vil_image_view<float>  * input_img,
