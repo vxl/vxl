@@ -116,7 +116,7 @@ bool boxm2_cpp_update_image_process(bprb_func_process& pro)
 
         vcl_cout<<"Update "<<vcl_endl;
         return boxm2_update_image(scene,
-                                  data_type,
+                                  data_type,appTypeSize,
                                   num_obs_type,
                                   cam, 
                                   input_image,
