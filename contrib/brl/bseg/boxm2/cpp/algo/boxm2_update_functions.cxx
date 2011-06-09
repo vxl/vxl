@@ -128,14 +128,14 @@ bool boxm2_update_cone_image(boxm2_scene_sptr & scene,
 }
 
 bool boxm2_update_image(boxm2_scene_sptr & scene,
-                        vcl_string data_type,
-                        vcl_string num_obs_type,
-                        vpgl_camera_double_sptr cam ,
-                        vil_image_view<float> * input_image,
-                        unsigned int roi_ni,
-                        unsigned int roi_nj,
-                        unsigned int roi_ni0,
-                        unsigned int roi_nj0)
+                             vcl_string data_type,int appTypeSize,
+                             vcl_string num_obs_type,
+                             vpgl_camera_double_sptr cam ,
+                             vil_image_view<float> * input_image,
+                             unsigned int roi_ni,
+                             unsigned int roi_nj,
+                             unsigned int roi_ni0,
+                             unsigned int roi_nj0)
 {
     boxm2_cache_sptr cache=boxm2_cache::instance();
     vcl_vector<boxm2_block_id> vis_order=scene->get_vis_blocks(reinterpret_cast<vpgl_generic_camera<double>*>(cam.ptr()));
@@ -151,6 +151,8 @@ bool boxm2_update_image(boxm2_scene_sptr & scene,
     vil_image_view<float> vis_img(input_image->ni(),input_image->nj());
     vil_image_view<float> proc_norm_img(input_image->ni(),input_image->nj());
     proc_norm_img.fill(0.0);
+    int alphaTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());	 
+    int nobsTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_NUM_OBS>::prefix());	 
 
     bool success = true;
     for (unsigned int pass_no=0;pass_no<num_passes;++pass_no)
@@ -164,10 +166,9 @@ bool boxm2_update_image(boxm2_scene_sptr & scene,
         {
             vcl_cout<<"Block id "<<(*id)<<' ';
             boxm2_block *     blk   = cache->get_block(*id);
-            boxm2_data_base *  alph = cache->get_data_base(*id,boxm2_data_traits<BOXM2_GAMMA>::prefix(),0,false);
-            boxm2_data_base *  mog  = cache->get_data_base(*id,data_type,0,false);
-            boxm2_data_base *  nobs  = cache->get_data_base(*id,num_obs_type,0,false);
-            int alphaTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_GAMMA>::prefix());
+            boxm2_data_base *  alph = cache->get_data_base(*id,boxm2_data_traits<BOXM2_ALPHA>::prefix(),0,false);
+            boxm2_data_base *  mog  = cache->get_data_base(*id,data_type,alph->buffer_length()/alphaTypeSize*appTypeSize,false);
+            boxm2_data_base *  nobs  = cache->get_data_base(*id,num_obs_type,alph->buffer_length()/alphaTypeSize*nobsTypeSize,false);
             int auxTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_AUX>::prefix());
             boxm2_data_base *  aux  = cache->get_data_base(*id,boxm2_data_traits<BOXM2_AUX>::prefix(),alph->buffer_length()/alphaTypeSize*auxTypeSize);
 
@@ -235,10 +236,10 @@ bool boxm2_update_image(boxm2_scene_sptr & scene,
     for (id = vis_order.begin(); id != vis_order.end(); ++id)
     {
         boxm2_block     *  blk   = cache->get_block(*id);
-        boxm2_data_base *  alph  = cache->get_data_base(*id,boxm2_data_traits<BOXM2_GAMMA>::prefix(),0,false);
+        boxm2_data_base *  alph  = cache->get_data_base(*id,boxm2_data_traits<BOXM2_ALPHA>::prefix(),0,false);
         boxm2_data_base *  mog   = cache->get_data_base(*id,data_type,0,false);
         boxm2_data_base *  nobs  = cache->get_data_base(*id,num_obs_type,0,false);
-        int alphaTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_GAMMA>::prefix());
+        int alphaTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
         int auxTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_AUX>::prefix());
         boxm2_data_base *  aux  = cache->get_data_base(*id,boxm2_data_traits<BOXM2_AUX>::prefix(),alph->buffer_length()/alphaTypeSize*auxTypeSize);
         vcl_vector<boxm2_data_base*> datas;
@@ -254,3 +255,5 @@ bool boxm2_update_image(boxm2_scene_sptr & scene,
     }
     return true;
 }
+
+
