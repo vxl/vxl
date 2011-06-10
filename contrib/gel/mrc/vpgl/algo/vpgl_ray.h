@@ -82,16 +82,31 @@ class vpgl_ray
                         const vgl_point_2d<double> image_point1,
                         const vgl_point_2d<double> image_point2,
                         vgl_plane_3d<double>& plane);
+  // ====== projective camera =====
+  static bool ray(vpgl_proj_camera<double> const& cam,
+                  vgl_point_3d<double> const& world_pt,
+                  vgl_ray_3d<double>& ray);
+
+  static bool principal_ray(vpgl_proj_camera<double> const& cam,
+                            vgl_ray_3d<double>& pray);
 
   // ====== perspective camera =====
   static bool ray(vpgl_perspective_camera<double> const& cam,
                   vgl_point_3d<double> const& world_pt,
                   vgl_ray_3d<double>& ray);
 
+  static bool principal_ray(vpgl_perspective_camera<double> const& cam,
+                            vgl_ray_3d<double>& pray){
+    vpgl_proj_camera<double> const* procam = 
+      static_cast<vpgl_proj_camera<double> const* >(&cam);
+    return  vpgl_ray::principal_ray(*procam, pray);
+  }
+
   // ====== generic camera =====
   static bool ray(vpgl_generic_camera<double> const& cam,
                   vgl_point_3d<double> const& world_pt,
                   vgl_ray_3d<double>& ray);
+
 
   // ====== operations on rotation matrices with respect to camera rays ======
 

@@ -6,6 +6,8 @@
 #include <vnl/vnl_double_3.h>
 #include <vnl/vnl_double_4.h>
 #include <vnl/vnl_math.h>
+#include <vgl/vgl_tolerance.h>
+#include <vgl/vgl_distance.h>
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_vector_3d.h>
 #include <vgl/vgl_plane_3d.h>
@@ -202,6 +204,30 @@ bool vpgl_ray::plane_ray(vpgl_local_rational_camera<double> const& lrcam,
 
   plane=vgl_plane_3d<double>(point1,point2,mid_point1);
 
+  return true;
+}
+
+bool vpgl_ray::ray(vpgl_proj_camera<double> const& cam,
+                   vgl_point_3d<double> const& world_pt,
+                   vgl_ray_3d<double>& ray)
+{
+  vgl_point_3d<double> cc = cam.camera_center();
+  if(vgl_distance(cc, world_pt)<vgl_tolerance<double>::position)
+    return false;
+  ray = vgl_ray_3d<double>(cc, world_pt);
+  return true;
+}
+
+bool vpgl_ray::principal_ray(vpgl_proj_camera<double> const& cam, 
+                        vgl_ray_3d<double>& pray)
+{
+  vnl_matrix_fixed<double, 3, 4> C = cam.get_matrix();
+  vgl_vector_3d<double> dir(C[2][0], C[2][1], C[2][2]);
+  //check if camera is affine. if so, the principal ray is not defined
+  if(dir.length()<vgl_tolerance<double>::position)
+    return false;
+  dir = normalize(dir);
+  vgl_point_3d<double> cent = cam.camera_center();
   return true;
 }
 
