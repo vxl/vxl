@@ -11,6 +11,8 @@
 #include <vcl_vector.h>
 #include <vgui/vgui_dialog.h>
 #include <vgui/vgui_dialog_extensions.h>
+
+#include <vpgl/vpgl_perspective_camera.h>
 #include <vul/vul_timer.h>
 
 class bwm_site_mgr
@@ -74,5 +76,4 @@ class bwm_site_mgr
 
   bwm_io_config_parser* parse_config();
 };
-
 #endif // bwm_site_mgr_h_

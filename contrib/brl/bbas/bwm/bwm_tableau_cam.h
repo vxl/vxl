@@ -86,6 +86,8 @@ class bwm_tableau_cam : public bwm_tableau_img
   void create_terrain();
 
   void create_circular_polygon();
+
+  void project_shadow();
   //------------ save methods
 
   //: saves the observables with their save method specific to the object

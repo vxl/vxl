@@ -316,7 +316,10 @@ void bwm_tableau_cam::scan_regions()
 {
   my_observer_->scan_regions();
 }
-
+void bwm_tableau_cam::project_shadow()
+{
+  my_observer_->project_shadow();
+}
 void bwm_tableau_cam::show_geo_position()
 {
   my_observer_->show_geo_position();
@@ -389,6 +392,10 @@ bool bwm_tableau_cam::handle(const vgui_event& e)
   }
   else if ( e.key == 's' && e.modifier==vgui_SHIFT && e.type==vgui_KEY_PRESS) {
     this->save();
+    return true;
+  }
+  else if ( e.key == '1' && e.modifier==vgui_SHIFT && e.type==vgui_KEY_PRESS) {
+    this->project_shadow();
     return true;
   }
 #if 0 //flakey behavior --needs work

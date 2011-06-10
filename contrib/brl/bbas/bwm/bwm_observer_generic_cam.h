@@ -39,7 +39,7 @@ class bwm_observer_generic_cam : public bwm_observer_cam
                                        vgl_plane_3d<double> plane,
                                        vgl_point_3d<double> &world_point);
   
-  vil_image_resource_sptr ray_image(int component) const;
+  vil_image_resource_sptr ray_image(int component, int level) const;
 
 
  protected:

@@ -26,13 +26,15 @@ vcl_string bwm_tableau_generic_cam::save_camera()
 void bwm_tableau_generic_cam::ray_image()
 {
   static int component = 0;
+  static int level=0;
   vgui_dialog ray_dlg("Save ray image");
   static vcl_string ext, file_path;
   ray_dlg.file("Ray Filename", ext, file_path);
+  ray_dlg.field("Ray Level ",  level);
   ray_dlg.choice("Ray component", "origin", "direction", component);
   if (!ray_dlg.ask())
     return;
-  vil_image_resource_sptr res = my_observer_->ray_image(component);
+  vil_image_resource_sptr res = my_observer_->ray_image(component,level);
   if(!res){
     vcl_cout << "In bwm_observer_generic_cam:: null ray image returned\n";
     return;

@@ -20,9 +20,12 @@
 #include <vsol/vsol_point_3d_sptr.h>
 #include <vsol/vsol_polygon_2d_sptr.h>
 #include <vsol/vsol_polygon_3d_sptr.h>
+#include <vnl/vnl_math.h>
 
 #include <vpgl/vpgl_camera.h>
-
+void bwm_project_meshes(vcl_vector<vcl_string> paths,
+                                      vpgl_camera<double>* cam,
+                                      vcl_vector<vgl_polygon<double> > &poly_2d_list);
 class bwm_observer_cam : public bwm_observer_vgui
 {
  public:
@@ -31,13 +34,14 @@ class bwm_observer_cam : public bwm_observer_vgui
 
   bwm_observer_cam(bgui_image_tableau_sptr const& img, vpgl_camera<double> *camera, vcl_string cam_path)
     : bwm_observer_vgui(img), camera_(camera), cam_path_(cam_path), cam_adjusted_(false),
-      proj_plane_(vgl_plane_3d<double>(0, 0, 1, 0)), extrude_mode_(false),show_geo_position_(false)
+      proj_plane_(vgl_plane_3d<double>(0, 0, 1, 0)), extrude_mode_(false),show_geo_position_(false),
+      sun_elev_angle_(vnl_math::pi_over_4),sun_azim_angle_(vnl_math::pi_over_4)
     {}
 
   // set the initial projection plane to z=0
   bwm_observer_cam(bgui_image_tableau_sptr const& img, const char* /*n*/="unnamed")
     : bwm_observer_vgui(img), cam_adjusted_(false), proj_plane_(vgl_plane_3d<double>(0, 0, 1, 0)),
-      extrude_mode_(false), show_geo_position_(false)
+      extrude_mode_(false), show_geo_position_(false),sun_elev_angle_(vnl_math::pi_over_4),sun_azim_angle_(vnl_math::pi_over_4)
     {}
 
   virtual ~bwm_observer_cam(){ delete camera_;}
@@ -56,6 +60,9 @@ class bwm_observer_cam : public bwm_observer_vgui
   { camera_ = camera; cam_path_ = cam_path; cam_adjusted_ = false;}
 
   vpgl_camera<double> * camera() { return camera_; }
+
+  //: function to project shadow
+  void project_shadow();
 
   bool camera_adjusted() const { return cam_adjusted_; }
 
@@ -191,6 +198,14 @@ class bwm_observer_cam : public bwm_observer_vgui
   void load_boxm_scene();
 
  protected:
+
+
+  //: to compute direciton of sun.
+  double sun_elev_angle_;
+  double sun_azim_angle_;
+  bool shadow_mode_;
+
+  vcl_vector<bgui_vsol_soview2D_line_seg*> shadow_line_segs_;
 
   vpgl_camera<double> *camera_;
 

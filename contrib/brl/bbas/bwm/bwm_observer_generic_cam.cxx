@@ -86,15 +86,16 @@ bool bwm_observer_generic_cam::intersect_ray_and_plane(vgl_point_2d<double> img_
 
 
 vil_image_resource_sptr 
-bwm_observer_generic_cam::ray_image(int component) const
+bwm_observer_generic_cam::ray_image(int component, int level=0) const
 {
   bool orgt = (component == 0);
   bool dirt = (component == 1);
   vpgl_generic_camera<double>* gcam = 
     static_cast<vpgl_generic_camera<double> *> (camera_);
   if(!gcam) return 0;
-  int nc = gcam->cols(), nr = gcam->rows();
-  vbl_array_2d<vgl_ray_3d<double> >& rays = gcam->rays(0);
+  vbl_array_2d<vgl_ray_3d<double> >& rays = gcam->rays(level);
+  int nc = rays.cols(), nr = rays.rows();
+
   vil_image_view<float> view(nc, nr, 3);
   for(int r = 0; r<nr; ++r)
     for(int c = 0; c<nc; ++c){
