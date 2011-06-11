@@ -5,7 +5,6 @@
 // \author Ian Scott, Kevin de Souza
 // \note Adapted from vimt3d_save
 
-#include <vnl/vnl_matrix.h>
 #include <vil/vil_image_resource.h>
 #include <vil/vil_new.h>
 #include <vil/vil_save.h>
@@ -13,7 +12,6 @@
 #include <vimt/vimt_image_2d.h>
 #include <vimt/vimt_vil_v2i.h>
 #include <mbl/mbl_log.h>
-
 
 static mbl_logger& logger()
 {
@@ -30,16 +28,12 @@ void vimt_save_transform(vil_image_resource_sptr &ir,
 {
   if (dynamic_cast<vimt_vil_v2i_image *>(ir.ptr()))
   {
-    vgl_vector_2d<double> pix_per_mm = trans.delta(vgl_point_2d<double>(0,0), 
+    vgl_vector_2d<double> pix_per_mm = trans.delta(vgl_point_2d<double>(0,0),
                                                    vgl_vector_2d<double>(1.0, 1.0));
-
-    // get the translation component
-    double tx =  trans.matrix()(0,2);
-    double ty =  trans.matrix()(1,2);
 
     vimt_transform_2d tr;
     //const double units_scaling = use_millimetres ? 1000.0 : 1.0;
-    tr.set_zoom_only(1000.0*pix_per_mm.x(), 1000.0*pix_per_mm.y(), tx, ty);
+    tr.set_zoom_only(1000.0*pix_per_mm.x(), 1000.0*pix_per_mm.y());
 
     static_cast<vimt_vil_v2i_image &>(*ir).set_world2im(tr);
   }
@@ -49,11 +43,11 @@ void vimt_save_transform(vil_image_resource_sptr &ir,
     vgl_vector_2d<double> dp = i2w.delta(vgl_point_2d<double> (0,0),
                                          vgl_vector_2d<double> (1.0, 1.0));
     MBL_LOG(WARN, logger(), "vimt_save_transform(): function set_pixel_size()"
-      " is not yet defined for vil_image_resource base class,"
-      " only for vimt_vil_v2i_image derived class.");
+            " is not yet defined for vil_image_resource base class,"
+            " only for vimt_vil_v2i_image derived class.");
     //if (!ir->set_pixel_size(float(dp.x()),float(dp.y())))
     MBL_LOG(WARN, logger(), "vimt_save_transform(): Unable to include pixel sizes:"
-              <<dp.x()<<','<<dp.y());
+            <<dp.x()<<','<<dp.y());
   }
 }
 

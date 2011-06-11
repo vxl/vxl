@@ -3,10 +3,8 @@
 // \brief Tool to write eps files showing modes of model
 // \author Tim Cootes
 
-#include <mbl/mbl_parse_block.h>
 #include <mbl/mbl_read_props.h>
 #include <mbl/mbl_exception.h>
-#include <mbl/mbl_parse_colon_pairs_list.h>
 #include <vul/vul_arg.h>
 #include <vul/vul_string.h>
 #include <vcl_sstream.h>
@@ -19,11 +17,9 @@
 #include <msm/msm_shape_instance.h>
 #include <msm/msm_curve.h>
 
-#include <mbl/mbl_cloneables_factory.h>
 #include <msm/msm_add_all_loaders.h>
 #include <msm/utils/msm_draw_shape_to_eps.h>
 #include <msm/utils/msm_shape_mode_view.h>
-
 
 /*
 Parameter file format:
@@ -117,7 +113,6 @@ struct tool_params
   //: Optional path to text files containing a variance vector
   vcl_string subspace_var_path;
 
-
   //: Base name for output
   vcl_string base_name;
 
@@ -177,8 +172,6 @@ void tool_params::read_from_file(const vcl_string& path)
 
   subspace_var_path = props["subspace_var_path"];
   if (subspace_var_path=="-") subspace_var_path="";
-
-
 
   // Don't look for unused props so can use a single common parameter file.
 }
@@ -278,7 +271,7 @@ msm_shape_model create_subspace_model(
 
   if (!Q.read_ascii(Qs))
   {
-    vcl_cerr<<"Failed to read matrix from "<<mode_path<<vcl_endl;
+    vcl_cerr<<"Failed to read matrix from "<<mode_path<<'\n';
     vcl_abort();
   }
   Qs.close();
@@ -292,25 +285,25 @@ msm_shape_model create_subspace_model(
   }
   if (!new_var.read_ascii(Vs))
   {
-    vcl_cerr<<"Failed to read vector from "<<var_path<<vcl_endl;
+    vcl_cerr<<"Failed to read vector from "<<var_path<<'\n';
     vcl_abort();
   }
   Vs.close();
 
 vcl_cout<<"new_var: "<<new_var<<vcl_endl;
 
-  vcl_cerr<<"Number of subspace modes = "<<Q.columns()<<vcl_endl;
+  vcl_cerr<<"Number of subspace modes = "<<Q.columns()<<'\n';
 
   if (Q.columns()!=new_var.size())
   {
-    vcl_cerr<<"Number of variances = "<<new_var.size()<<vcl_endl;
-    vcl_cerr<<"Numbers differ."<<vcl_endl;
+    vcl_cerr<<"Number of variances = "<<new_var.size()<<'\n'
+            <<"Numbers differ."<<'\n';
     vcl_abort();
   }
 
   if (Q.rows()>shape_model.n_modes())
   {
-    vcl_cerr<<"More rows in matrix than number of modes available."<<vcl_endl;
+    vcl_cerr<<"More rows in matrix than number of modes available."<<'\n';
     vcl_abort();
   }
 
@@ -364,14 +357,14 @@ int main(int argc, char** argv)
   vcl_cout<<"Model: "<<shape_model<<vcl_endl;
   vcl_cerr<<"First mode variances are ";
   for (unsigned i=0;i<8;++i)
-    if (i<shape_model.n_modes()) 
-      vcl_cout<<shape_model.mode_var()[i]<<" ";
+    if (i<shape_model.n_modes())
+      vcl_cout<<shape_model.mode_var()[i]<<' ';
   vcl_cout<<vcl_endl;
 
   if (params.subspace_mode_path!="")
     shape_model = create_subspace_model(shape_model,
-                                      params.subspace_mode_path,
-                                      params.subspace_var_path);
+                                        params.subspace_mode_path,
+                                        params.subspace_var_path);
 
   msm_curves curves;
   if (!curves.read_text_file(params.curves_path))

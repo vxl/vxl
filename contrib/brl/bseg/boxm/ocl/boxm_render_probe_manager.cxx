@@ -4,7 +4,6 @@
 #include <vcl_where_root_dir.h>
 #include <boxm/ocl/boxm_ocl_utils.h>
 #include <vcl_cstdio.h>
-#include <vil/vil_save.h>
 
 //: Initializes CPU side input buffers
 //put tree structure and data into arrays
@@ -290,7 +289,7 @@ bool boxm_render_probe_manager::run_scene()
   // release the command Queue
   this->release_kernel();
   this->release_commandqueue();
-  if (program_){
+  if (program_) {
     vcl_cout<<"release: program"<<vcl_endl;
     clReleaseProgram(program_);
   }

@@ -5,8 +5,6 @@
 #include <vcl_ios.h>
 #include <vcl_string.h>
 #include <vcl_vector.h>
-#include <vul/vul_file.h>
-#include <vul/vul_timer.h>
 
 #include <vgl/vgl_vector_3d.h>
 #include <vgl/algo/vgl_rotation_3d.h>
@@ -16,11 +14,9 @@
 #include <vil/vil_image_view_base.h>
 #include <vil/vil_save.h>
 #include <vil/vil_load.h>
-#include <vil/vil_convert.h>
 #include <vil/vil_math.h>
 
 #include <vnl/vnl_math.h>
-#include <vnl/vnl_double_3.h>
 #include <vnl/vnl_double_3x3.h>
 #include <vnl/vnl_numeric_traits.h>
 #include <vpgl/vpgl_camera.h>
@@ -98,7 +94,7 @@ static void test_rotation_only()
     is >> cam;
   else
     return;
-  vnl_matrix_fixed<double, 3, 3> K = cam.get_calibration().get_matrix();
+  vnl_double_3x3 K = cam.get_calibration().get_matrix();
   //make a uniform depth image since the search is over only rotation
   vil_image_view<double> depth(dest_img.ni(), dest_img.nj());
   depth.fill(1.0);

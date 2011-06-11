@@ -7,7 +7,6 @@
 
 #include <vpgl/vpgl_calibration_matrix.h>
 #include <vgui/internals/trackball.h>
-#include <vgl/vgl_distance.h>
 
 //image load
 #include <vil/vil_convert.h>
@@ -195,7 +194,7 @@ bool boxm_ocl_update_tableau::update_model()
   vcl_ifstream ifs(cam_files_[curr_frame_].c_str());
   vpgl_perspective_camera<double>* pcam = new vpgl_perspective_camera<double>;
   if (!ifs.is_open()) {
-      vcl_cerr << "Failed to open file " << cam_files_[curr_frame_] << vcl_endl;
+      vcl_cerr << "Failed to open file " << cam_files_[curr_frame_] << '\n';
       return -1;
   }
   ifs >> *pcam;
@@ -208,7 +207,7 @@ bool boxm_ocl_update_tableau::update_model()
     vil_convert_stretch_range_limited(*img_byte ,floatimg, vxl_byte(0), vxl_byte(255), 0.0f, 1.0f);
   }
   else {
-    vcl_cerr << "Failed to load image " << img_files_[curr_frame_] << vcl_endl;
+    vcl_cerr << "Failed to load image " << img_files_[curr_frame_] << '\n';
     return -1;
   }
 

@@ -4,7 +4,7 @@
 // \file
 // \brief  A process for rendering the depth image of the scene.
 //
-// \author Ozge C. Ozcanli 
+// \author Ozge C. Ozcanli
 // \date May 3, 2011
 
 #include <vcl_fstream.h>
@@ -12,16 +12,13 @@
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/boxm2_block.h>
 #include <boxm2/boxm2_data_base.h>
-#include <vil/vil_save.h>
 #include <vil/vil_image_view.h>
-#include <vil/vil_transform.h>
 #include <vil/vil_math.h>
 //brdb stuff
 #include <brdb/brdb_value.h>
 #include <boxm2/cpp/algo/boxm2_render_functions.h>
 
 //directory utility
-#include <vul/vul_timer.h>
 #include <vcl_where_root_dir.h>
 
 namespace boxm2_cpp_render_expected_depth_process_globals
@@ -56,7 +53,7 @@ bool boxm2_cpp_render_expected_depth_process(bprb_func_process& pro)
 {
   using namespace boxm2_cpp_render_expected_depth_process_globals;
 
-  if ( pro.n_inputs() < n_inputs_ ){
+  if ( pro.n_inputs() < n_inputs_ ) {
     vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
     return false;
   }
@@ -68,7 +65,7 @@ bool boxm2_cpp_render_expected_depth_process(bprb_func_process& pro)
   unsigned ni=pro.get_input<unsigned>(i++);
   unsigned nj=pro.get_input<unsigned>(i++);
 
-  //: function call
+  // function call
   vil_image_view<float> * exp_img=new vil_image_view<float>(ni,nj);
   vil_image_view<float> * vis_img=new vil_image_view<float>(ni,nj);
   vil_image_view<float> * len_img=new vil_image_view<float>(ni,nj);
@@ -94,7 +91,7 @@ bool boxm2_cpp_render_expected_depth_process(bprb_func_process& pro)
   vil_math_value_range(*exp_img, min_val, max_val);
   vil_math_scale_values(*exp_img, 1/max_val);
   vil_math_value_range(*exp_img, min_val, max_val);
-  
+
   // store scene smaprt pointer
   pro.set_output_val<vil_image_view_base_sptr>(0, exp_img);
   return true;

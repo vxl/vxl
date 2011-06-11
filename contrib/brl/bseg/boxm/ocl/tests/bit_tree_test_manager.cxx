@@ -8,7 +8,6 @@
 #include <bocl/bocl_utils.h>
 #include <vcl_cstdio.h>
 #include <vcl_string.h>
-#include <vul/vul_timer.h>
 
 
 bool bit_tree_test_manager::init_arrays()
@@ -171,10 +170,10 @@ bool bit_tree_test_manager::set_buffers()
                                16*sizeof(cl_int4), NULL , &status);
   if (!check_val(status,CL_SUCCESS,"clCreateBuffer (output_buf) failed."))
     return false;
-    
+
   //output_buf_
   bbox_output_buf_ = clCreateBuffer(this->context_,CL_MEM_READ_WRITE,
-                                  16*sizeof(cl_float4), NULL , &status);
+                                    16*sizeof(cl_float4), NULL , &status);
   if (!check_val(status,CL_SUCCESS,"clCreateBuffer (bbox_output_buf) failed."))
     return false;
   return true;

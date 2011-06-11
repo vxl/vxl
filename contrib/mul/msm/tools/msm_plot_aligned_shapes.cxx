@@ -3,7 +3,6 @@
 // \brief Tool to generate EPS file containing aligned shape points
 // \author Tim Cootes
 
-#include <mbl/mbl_parse_block.h>
 #include <mbl/mbl_read_props.h>
 #include <mbl/mbl_exception.h>
 #include <mbl/mbl_parse_colon_pairs_list.h>
@@ -16,7 +15,6 @@
 
 #include <msm/msm_aligner.h>
 
-#include <mbl/mbl_cloneables_factory.h>
 #include <msm/msm_add_all_loaders.h>
 #include <msm/utils/msm_draw_shape_to_eps.h>
 
@@ -186,8 +184,7 @@ int main(int argc, char** argv)
   if (params.curves_path!="")
   {
     if (!curves.read_text_file(params.curves_path))
-      vcl_cerr<<"Failed to read in curves from "
-              <<params.curves_path<<'\n';
+      vcl_cerr<<"Failed to read in curves from " <<params.curves_path<<'\n';
   }
 
   // Load in all the shapes

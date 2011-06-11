@@ -13,7 +13,6 @@
 #include <vcl_cassert.h>
 
 #include <vnl/vnl_matrix.h>
-#include <vnl/vnl_transpose.h>
 #include <vnl/vnl_matlab_print.h>
 #include <vnl/algo/vnl_svd.h>
 #include <vnl/algo/vnl_determinant.h>
@@ -252,13 +251,13 @@ PMatrix PMatrix::read(const char* filename)
 {
   vcl_ifstream f(filename);
   if (!ok(f)) {
-    vcl_cerr << "PMatrix::read: Failed to open P matrix file " << filename << vcl_endl;
+    vcl_cerr << "PMatrix::read: Failed to open P matrix file " << filename << '\n';
     return PMatrix();
   }
 
   PMatrix P;
   if (!P.read_ascii(f))
-    vcl_cerr << "PMatrix::read: Failed to read P matrix file " << filename << vcl_endl;
+    vcl_cerr << "PMatrix::read: Failed to read P matrix file " << filename << '\n';
 
   return P;
 }
@@ -569,7 +568,7 @@ PMatrix::fix_cheirality()
   double scale = 1;
 #if 0  // Used to scale by 1/det, but it's a bad idea if det is small
   if (vcl_fabs(det - 1) > 1e-8)
-    vcl_cerr << "PMatrix::fix_cheirality: Flipping, determinant is " << det << vcl_endl;
+    vcl_cerr << "PMatrix::fix_cheirality: Flipping, determinant is " << det << '\n';
     scale = 1/det;
 #else
   if (det < 0)
@@ -622,7 +621,7 @@ bool
 PMatrix::looks_conditioned()
 {
   double cond = svd()->W(0) / svd()->W(2);
-  // vcl_cerr << "PMatrix::looks_conditioned: cond = " << cond << vcl_endl;
+  // vcl_cerr << "PMatrix::looks_conditioned: cond = " << cond << '\n';
   return cond < 100;
 }
 

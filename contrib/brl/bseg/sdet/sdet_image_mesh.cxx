@@ -28,8 +28,6 @@
 #include <bvgl/bvgl_triangle_interpolation_iterator.h>
 #include <imesh/algo/imesh_generate_mesh.h>
 
-#include <vnl/vnl_random.h>
-
 //note: this method is somewhat of a hack and should be replaced by
 // a computed step function transition width, e.g. by a 2nd derivative
 // operator

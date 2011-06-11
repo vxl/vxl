@@ -10,9 +10,7 @@
 #include <vimt/vimt_add_all_binary_loaders.h>
 #include <vimt/vimt_load.h>
 #include <vimt/vimt_save.h>
-#include <vil/vil_save.h>
 #include <vil/vil_new.h>
-#include <vil/vil_crop.h>
 #include <vul/vul_file.h>
 #include <vul/vul_string.h>
 #include <vgl/vgl_point_2d.h>
@@ -74,7 +72,7 @@ int main2(int argc, char*argv[])
   if (bbw.set()) nbb++;
   if (nbb!=1)
   {
-    vcl_cerr << "ERROR: specify exactly 1 of the -bbi, -bbf or -bbw options." << vcl_endl;
+    vcl_cerr << "ERROR: specify exactly 1 of the -bbi, -bbf or -bbw options.\n";
     return 1;
   }
 
@@ -97,7 +95,7 @@ int main2(int argc, char*argv[])
     i0 = bbi()[0]; j0 = bbi()[1];
     ni = bbi()[2]-i0+1; nj = bbi()[3]-j0+1;
   }
-  
+
   // Validate the bbf argument - should be 4 doubles, specifying
   // lower corner fraction (fx0,fy0) and upper corner (fx1,fy1) of included voxels
   if (bbf.set())
@@ -132,7 +130,7 @@ int main2(int argc, char*argv[])
       vcl_cerr << "ERROR: -bbw argument should indicate the lower and upper corners of a 2D box with strictly positive width and height.\n";
       return 1;
     }
-    x0 = bbw()[0]; y0 = bbw()[1];   
+    x0 = bbw()[0]; y0 = bbw()[1];
     x1 = bbw()[2]; y1 = bbw()[3];
   }
 
@@ -159,10 +157,10 @@ int main2(int argc, char*argv[])
   const float unit_scaling = use_mm() ? 1000.0f : 1.0f;
   vimt_transform_2d w2i = vimt_load_transform(ir, unit_scaling);
   MBL_LOG(INFO, logger(), "Loaded input image transform");
-  
+
   if (bbf.set())
   {
-    // Convert image fraction values to voxel numbers 
+    // Convert image fraction values to voxel numbers
 
     // Round lower bounds down
     i0 = static_cast<unsigned>(vcl_floor((ir->ni()-1)*fx0));
@@ -175,7 +173,7 @@ int main2(int argc, char*argv[])
   }
   if (bbw.set())
   {
-    // Convert world coords values to voxel numbers 
+    // Convert world coords values to voxel numbers
     vgl_point_2d<double> imlo = w2i(vgl_point_2d<double>(x0,y0));
     vgl_point_2d<double> imhi = w2i(vgl_point_2d<double>(x1,y1));
     // Round lower bounds down
@@ -232,7 +230,7 @@ int main2(int argc, char*argv[])
   transl.set_translation(-double(i0), -double(j0));
   w2i = transl*w2i;
   vimt_save_transform(ir2, w2i, use_mm());
-  
+
   if (logger().level()>=mbl_logger::DEBUG)
   {
     vgl_point_2d<double> img_orig_wc = w2i.inverse()(vgl_point_2d<double>(0,0));
@@ -276,7 +274,7 @@ int main(int argc, char*argv[])
   }
   catch (...)
   {
-    vcl_cout << "Caught unknown exception " << vcl_endl;
+    vcl_cout << "Caught unknown exception" << vcl_endl;
     return 3;
   }
 

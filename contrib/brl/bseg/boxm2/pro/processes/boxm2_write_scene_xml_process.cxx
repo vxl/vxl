@@ -9,7 +9,6 @@
 
 #include <vcl_fstream.h>
 #include <boxm2/boxm2_scene.h>
-#include <vul/vul_file.h>
 
 namespace boxm2_write_scene_xml_process_globals
 {
@@ -35,7 +34,7 @@ bool boxm2_write_scene_xml_process(bprb_func_process& pro)
 {
   using namespace boxm2_write_scene_xml_process_globals;
 
-  if ( pro.n_inputs() < n_inputs_ ){
+  if ( pro.n_inputs() < n_inputs_ ) {
     vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
     return false;
   }

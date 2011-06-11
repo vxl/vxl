@@ -1,5 +1,5 @@
 // This is brl/bseg/bapl/pro/processes/bapl_connectivity_processes.cxx
-
+#include <bapl/bapl_connectivity.h>
 //:
 // \file
 // \brief Processes to find tracks from a connectivity graph of an image set
@@ -15,13 +15,8 @@
 #include <bprb/bprb_func_process.h>
 #include <bprb/bprb_parameters.h>
 
-#include <bapl/bapl_connectivity.h>
 #include <bapl/bapl_connectivity_sptr.h>
 #include <bapl/bapl_keypoint_set.h>
-
-#include <vil/vil_new.h>
-#include <vil/vil_convert.h>
-#include <vnl/vnl_random.h>
 
 //: Constructor
 //  sets up an empty table instance
@@ -152,12 +147,12 @@ bool bapl_compute_tracks_process(bprb_func_process& pro)
   unsigned i=0;
   bapl_conn_table_sptr tab = pro.get_input<bapl_conn_table_sptr>(i++);
   vcl_string out_file = pro.get_input<vcl_string>(i++);
-  vcl_cout << "match table (should be symmetric): " << vcl_endl;
+  vcl_cout << "match table (should be symmetric):" << vcl_endl;
   tab->print_table();
   vcl_vector<bapl_track_data> tracks;
   tab->compute_tracks(tracks);
 
-  //: Print tracks as correspondences in BWM_VIDEO_SITE format for visualization
+  // Print tracks as correspondences in BWM_VIDEO_SITE format for visualization
   vcl_ofstream os(out_file.c_str());
   print_tracks(os, tracks);
   os.close();

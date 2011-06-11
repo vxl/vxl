@@ -6,7 +6,6 @@
 #include "boxm_ocl_utils.h"
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_vector_3d.h>
-#include <vgl/vgl_box_3d.h>
 #include <vpgl/bgeo/bgeo_lvcs.h>
 #include <vcl_cstdlib.h> // for std::malloc()
 
@@ -425,7 +424,7 @@ void boxm_ocl_convert<T>::convert_bit_scene(boxm_scene<boct_tree<short, T> >* sc
   const int SMALL_BLK_INIT_LEVEL = 1, SMALL_BLK_MAX_LEVEL = 4;
   const int MAX_BYTES = max_mb*1024*1024;
   const int BUFF_LENGTH = buff_length;
-  
+
   vcl_cout<<"Buffer LENGTH::::::: "<<buff_length<<vcl_endl;
 
   // report some current scene stats
@@ -513,7 +512,7 @@ void boxm_ocl_convert<T>::convert_bit_scene(boxm_scene<boct_tree<short, T> >* sc
             <<"*** Max scene size not large enough to accommodate input scene\n"
             <<"*** cells allocated:   "<<num_buffers * BUFF_LENGTH<<'\n'
             <<"*** total scene cells: "<<total_tree_cells<<'\n'
-            <<"**************************************************"<<vcl_endl;
+            <<"**************************************************\n";
     return;
   }
 
@@ -549,7 +548,7 @@ void boxm_ocl_convert<T>::convert_bit_scene(boxm_scene<boct_tree<short, T> >* sc
     vcl_vector<boct_tree_cell<short,T>*> blk_roots = tree->cells_at_level(small_blk_root_level);
     vcl_cout<<"  number small blocks: "<<blk_roots.size()<<vcl_endl;
     int tot_alloc = 0;
-    
+
     for (unsigned int blk_i=0; blk_i<blk_roots.size(); ++blk_i)
     {
       //figure out which small_block i,j,k this root corresponds to
@@ -573,7 +572,7 @@ void boxm_ocl_convert<T>::convert_bit_scene(boxm_scene<boct_tree<short, T> >* sc
       if (cell_array.size()+1 != data_array.size()) {
         vcl_cerr<<"Data array and cell array do not match size: "
                 <<" cell: "<<cell_array.size()
-                <<" data: "<<data_array.size();
+                <<" data: "<<data_array.size() << '\n';
         return;
       }
       tot_alloc += cell_array.size();

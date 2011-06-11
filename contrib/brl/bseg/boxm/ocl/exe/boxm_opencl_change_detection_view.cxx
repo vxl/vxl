@@ -10,13 +10,11 @@
 
 //camera image includes
 #include <vpgl/vpgl_perspective_camera.h>
-#include <vil/vil_image_view.h>
 
 //vul includes
 #include <vul/vul_arg.h>
 #include <vul/vul_file.h>
 #include <vul/vul_file_iterator.h>
-#include <vul/vul_timer.h>
 
 //vgui includes
 #include <vgui/vgui.h>
@@ -36,7 +34,7 @@ int main(int argc, char ** argv)
   vgui::init(argc, argv);
 
   // handle arguments
-  vcl_cout<<"OCL Change Detection "<<vcl_endl;
+  vcl_cout<<"OCL Change Detection"<<vcl_endl;
   vul_arg<vcl_string> cam_dir("-camdir", "camera directory", "");
   vul_arg<vcl_string> img_dir("-imgdir", "Image directory", "");
   vul_arg<vcl_string> scene_file("-scene", "scene filename", ""); //ocl_scene xml file
@@ -79,10 +77,10 @@ int main(int argc, char ** argv)
 
   vcl_ifstream ifile(hist_file().c_str());
   vcl_vector<float> pdf;
-  if(!ifile)
+  if (!ifile)
   {
       vcl_cout<<"Failed to open a histogram: will assume uniform distriubtion"<<vcl_endl;
-      for(unsigned i=0;i<hist.nbins();i++)
+      for (unsigned i=0;i<hist.nbins();i++)
           pdf.push_back(1.0f);
   }
   else
@@ -91,10 +89,10 @@ int main(int argc, char ** argv)
       float area=hist.area();
       vcl_cout<<"Area = "<<area<<vcl_endl;
       pdf=hist.count_array();
-      for(unsigned i=0;i<hist.nbins();i++)
+      for (unsigned i=0;i<hist.nbins();i++)
       {
           pdf[i]=pdf[i]/area*20;
-          vcl_cout<<pdf[i]<<" ";
+          vcl_cout<<pdf[i]<<' ';
       }
       ifile.close();
   }

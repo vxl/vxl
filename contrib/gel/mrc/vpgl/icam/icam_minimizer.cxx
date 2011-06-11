@@ -7,12 +7,11 @@
 #include <vcl_sstream.h>
 #include <vnl/vnl_inverse.h>
 #include <vbl/vbl_local_minima.h>
-#include <vil/vil_convert.h>
+#include <vbl/vbl_array_3d.h>
 #include <vil/algo/vil_gauss_filter.h>
 #include <vnl/algo/vnl_powell.h>
 #include <vnl/algo/vnl_levenberg_marquardt.h>
 #include <vnl/vnl_vector_fixed.h>
-#include <vil/vil_math.h>
 #include <vcl_cstdlib.h>
 #include <vul/vul_timer.h>
 #include <icam/icam_depth_trans_pyramid.h>
@@ -24,16 +23,14 @@ static bool smallest_local_minima(vbl_array_3d<double> const& in,
                                   int & ix_min, int & iy_min,
                                   int & iz_min, double& min_s)
 {
-  int nz = in.get_row1_count(), ny = in.get_row2_count(),
-    nx = in.get_row3_count();
-  vbl_array_3d<double> minima(nz, ny, nx);
-  bool found_minima = local_minima(in, minima, min_thresh);
+  vbl_array_3d<double> minima = vbl_local_minima(in, min_thresh);
+  bool found_minima = minima.get_row1_count() > 0;
   // find minimum with lowest score
   min_s = vnl_numeric_traits<double>::maxval;
   double global_min_s = vnl_numeric_traits<double>::maxval;
-  for (int iz = 0; iz<nz; ++iz)
-    for (int iy = 0; iy<ny; ++iy)
-      for (int ix = 0; ix<nx; ++ix) {
+  for (unsigned int iz = 0; iz<minima.get_row1_count(); ++iz)
+    for (unsigned int iy = 0; iy<minima.get_row2_count(); ++iy)
+      for (unsigned int ix = 0; ix<minima.get_row3_count(); ++ix) {
         double s = in[iz][iy][ix];
         if (s<global_min_s)
           global_min_s = s;
@@ -162,6 +159,7 @@ icam_minimizer:: minimize(vgl_rotation_3d<double>& rot,
     dt_pyramid_.set_params(params);
   }
 }
+
 // minimize rotation only using the Powell algorithm. The translation
 // parameters are assumed to be correct
 void icam_minimizer::minimize_rot(vgl_rotation_3d<double>& rot,
@@ -182,7 +180,7 @@ void icam_minimizer::minimize_rot(vgl_rotation_3d<double>& rot,
   //set the initial parameters for Powell
   vnl_vector<double> x = rot.as_rodrigues();
   vnl_nonlinear_minimizer::ReturnCodes code = powell.minimize(x);
-  if(!(code>0 && code<5)){
+  if (!(code>0 && code<5)) {
     vcl_cout << "rotation minimization failed code = " << code << '\n';
     return;
   }
@@ -190,6 +188,7 @@ void icam_minimizer::minimize_rot(vgl_rotation_3d<double>& rot,
   rot = vgl_rotation_3d<double>(x);
   end_error_ = powell.get_end_error();
 }
+
 principal_ray_scan icam_minimizer::pray_scan(unsigned level, unsigned& n_pts)
 {
   vpgl_perspective_camera<double> dcam = this->source_cam(level);
@@ -315,6 +314,7 @@ void icam_minimizer::initialized_polar_inc(unsigned initial_level,
   if (nsteps%2) nsteps++;
   polar_inc = polar_range/(static_cast<double>(nsteps));
 }
+
 bool icam_minimizer::rot_search(vgl_vector_3d<double> const& trans,
                                 vgl_rotation_3d<double>& initial_rot,
                                 unsigned n_axis_steps,
@@ -328,15 +328,15 @@ bool icam_minimizer::rot_search(vgl_vector_3d<double> const& trans,
                                 double& min_overlap_fraction)
 {
   double polar_inc = 1.0;
-  if(n_polar_steps)
+  if (n_polar_steps)
     polar_inc = polar_range/n_polar_steps;
 
   unsigned n_samples = n_axis_steps;
   principal_ray_scan prs(axis_cone_half_angle, n_samples);
-  
+
 #if 1
   unsigned np = n_polar_steps;
-  if(!np) np = 1;
+  if (!np) np = 1;
   if (verbose_)
     vcl_cout << "Searching over "
              << static_cast<unsigned>(n_samples*np)
@@ -360,7 +360,7 @@ bool icam_minimizer::rot_search(vgl_vector_3d<double> const& trans,
       //double c = cost.entropy(rod, trans,min_allowed_overlap);
       //double c = cost.mutual_info(rod, trans,min_allowed_overlap);
       double c = cost.entropy_diff(rod, trans,min_allowed_overlap);
-      if((nc++)%10 == 0) vcl_cout << '.';
+      if ((nc++)%10 == 0) vcl_cout << '.';
       if (c==vnl_numeric_traits<double>::maxval)
         continue;
       //c = -c;
@@ -378,6 +378,7 @@ bool icam_minimizer::rot_search(vgl_vector_3d<double> const& trans,
   min_rot = vgl_rotation_3d<double>(min_rod);
   return true;
 }
+
 bool icam_minimizer::
 initialized_rot_search(vgl_vector_3d<double> const& trans,
                        vgl_rotation_3d<double>& initial_rot,
@@ -554,7 +555,7 @@ exhaustive_camera_search(vgl_box_3d<double> const& trans_box,
           min_trans_overlap = overlap;
           mx = ix; my = iy; mz = iz;
         }
-        if (verbose_){
+        if (verbose_) {
         double t_dist = (t-actual_trans_).length();
         double r_dist = (rotr - (actual_rot_.as_rodrigues())).magnitude();
         vcl_cout << "t(" << x << ' ' << y << ' ' << z << ")["
@@ -638,7 +639,7 @@ pyramid_camera_search(vgl_vector_3d<double> const&
   vgl_vector_3d<double> stepd = start_step_delta;
   for (unsigned lev = start_level-1; lev>=final_level; --lev)
   {
-    if (verbose_){
+    if (verbose_) {
       print_axis_search_info(lev+1, actual_rot_, init_rot);
       print_polar_search_info(lev+1, actual_rot_, init_rot);
     }
@@ -675,7 +676,7 @@ pyramid_camera_search(vgl_vector_3d<double> const&
             min_trans_rod = rotr;
             min_trans_overlap = overlap;
           }
-          if (verbose_){
+          if (verbose_) {
             double t_dist = (t-actual_trans_).length();
             double r_dist = (rotr - (actual_rot_.as_rodrigues())).magnitude();
 
@@ -788,7 +789,7 @@ camera_search( vgl_box_3d<double> const& trans_box,
                double& min_overlap)
 {
   unsigned top_level = dt_pyramid_.n_levels()-1;
-  if (verbose_){
+  if (verbose_) {
     print_axis_search_info(top_level, actual_rot_,
                            vgl_rotation_3d<double>(),true);
     print_polar_search_info(top_level, actual_rot_,

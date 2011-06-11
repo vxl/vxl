@@ -4,7 +4,6 @@
 
 #include <vcl_iostream.h>
 #include <vul/vul_arg.h>
-#include <vgl/vgl_vector_3d.h>
 #include <vgl/algo/vgl_rotation_3d.h>
 #include <mbl/mbl_log.h>
 
@@ -28,9 +27,9 @@ int main(int argc, char* argv[])
   vul_arg_parse(argc, argv);
 
   // Log the input arguments
-  if (quat.set()) MBL_LOG(INFO, logger, "quat: " << quat()[0] << "," << quat()[1] << "," << quat()[2] << "," << quat()[3]);
-  if (mat.set()) MBL_LOG(INFO, logger, "mat: " << mat()[0] << "," << mat()[1] << "," << mat()[2]);
-  if (eul.set()) MBL_LOG(INFO, logger, "eul: " << eul()[0] << "," << eul()[1] << "," << eul()[2]);
+  if (quat.set()) MBL_LOG(INFO, logger, "quat: " << quat()[0] << ',' << quat()[1] << ',' << quat()[2] << ',' << quat()[3]);
+  if (mat.set()) MBL_LOG(INFO, logger, "mat: " << mat()[0] << ',' << mat()[1] << ',' << mat()[2]);
+  if (eul.set()) MBL_LOG(INFO, logger, "eul: " << eul()[0] << ',' << eul()[1] << ',' << eul()[2]);
   if (out_rep.set()) MBL_LOG(INFO, logger, "out_rep: " << out_rep());
 
   // Check consistency of parsed arguments
@@ -41,31 +40,31 @@ int main(int argc, char* argv[])
   if (eul.set()) nrot++;
   if (nrot>1)
   {
-    vcl_cerr << "ERROR: Please provide input as a rotation matrix OR a quaternion OR euler angles." << vcl_endl;
+    vcl_cerr << "ERROR: Please provide input as a rotation matrix OR a quaternion OR euler angles.\n";
     return 1;
   }
 
-  if( quat.set() && quat().size() != 4 )
+  if ( quat.set() && quat().size() != 4 )
   {
-    vcl_cerr << "ERROR: Invalid quaternion. Please provide a 4-vector." << vcl_endl;
+    vcl_cerr << "ERROR: Invalid quaternion. Please provide a 4-vector.\n";
     return 1;
   }
 
-  if( mat.set() && mat().size() != 9 )
+  if ( mat.set() && mat().size() != 9 )
   {
-    vcl_cerr << "ERROR: Invalid rotation matrix. Please provide a 9-vector." << vcl_endl;
+    vcl_cerr << "ERROR: Invalid rotation matrix. Please provide a 9-vector.\n";
     return 1;
   }
 
-  if( eul.set() && eul().size() != 3 )
+  if ( eul.set() && eul().size() != 3 )
   {
-    vcl_cerr << "ERROR: Invalid euler. Please provide a 3-vector." << vcl_endl;
+    vcl_cerr << "ERROR: Invalid euler. Please provide a 3-vector.\n";
     return 1;
   }
 
   if (!out_rep.set())
   {
-    vcl_cerr << "ERROR: output representation not specified" << vcl_endl;
+    vcl_cerr << "ERROR: output representation not specified\n";
     return 2;
   }
 
@@ -96,7 +95,7 @@ int main(int argc, char* argv[])
   }
   else
   {
-    vcl_cerr << "ERROR: no input data specified" << vcl_endl;
+    vcl_cerr << "ERROR: no input data specified\n";
     return 3;
   }
 
@@ -104,16 +103,16 @@ int main(int argc, char* argv[])
   if (out_rep()=="q")
   {
     vnl_quaternion<double> q = rot.as_quaternion();
-    MBL_LOG(DEBUG, logger, "Converted to quaternion: " 
-      << q[0] << " " << q[1] << " " << q[2] << " " << q[3]);
-    vcl_cout << q[0] << " " << q[1] << " " << q[2] << " " << q[3] << vcl_endl;
+    MBL_LOG(DEBUG, logger, "Converted to quaternion: "
+            << q[0] << ' ' << q[1] << ' ' << q[2] << ' ' << q[3]);
+    vcl_cout << q[0] << ' ' << q[1] << ' ' << q[2] << ' ' << q[3] << vcl_endl;
   }
   else if (out_rep()=="e")
   {
     vnl_vector_fixed<double,3> e = rot.as_euler_angles();
-    MBL_LOG(DEBUG, logger, "Converted to euler: " 
-      << e[0] << " " << e[1] << " " << e[2]);
-    vcl_cout << e[0] << " " << e[1] << " " << e[2] << vcl_endl;
+    MBL_LOG(DEBUG, logger, "Converted to euler: "
+            << e[0] << ' ' << e[1] << ' ' << e[2]);
+    vcl_cout << e[0] << ' ' << e[1] << ' ' << e[2] << vcl_endl;
   }
   else if (out_rep()=="m")
   {
@@ -124,7 +123,7 @@ int main(int argc, char* argv[])
   }
   else
   {
-    vcl_cerr << "ERROR: invalid output representation" << vcl_endl;
+    vcl_cerr << "ERROR: invalid output representation\n";
     return 4;
   }
 

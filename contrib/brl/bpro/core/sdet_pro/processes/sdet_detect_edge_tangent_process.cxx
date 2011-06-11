@@ -21,7 +21,6 @@
 #include <vsol/vsol_line_2d.h>
 #include <vsol/vsol_point_2d.h>
 #include <vtol/vtol_edge_2d.h>
-#include <vgl/vgl_line_2d.h>
 
 //: initialize input and output types
 bool sdet_detect_edge_tangent_process_cons(bprb_func_process& pro)
@@ -64,7 +63,7 @@ bool sdet_detect_edge_tangent_process(bprb_func_process& pro)
 
   if (!pro.verify_inputs())
   {
-    vcl_cout << pro.name() << " Invalid inputs " << vcl_endl;
+    vcl_cout << pro.name() << " Invalid inputs" << vcl_endl;
     return false;
   }
 
@@ -97,11 +96,11 @@ bool sdet_detect_edge_tangent_process(bprb_func_process& pro)
 #endif
   vil_image_view<float> edge_image =
     sdet_img_edge::detect_edge_tangent(input_image,
-                                        noise_multiplier,
-                                        smooth,
-                                        automatic_threshold,
-                                        junctionp,
-                                        aggressive_junction_closure);
+                                       noise_multiplier,
+                                       smooth,
+                                       automatic_threshold,
+                                       junctionp,
+                                       aggressive_junction_closure);
 
   // return the output edge image in pos_dir format
   if (out_type=="pos_dir") {

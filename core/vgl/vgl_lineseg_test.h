@@ -15,7 +15,6 @@
 #include <vgl/vgl_line_segment_2d.h>
 #include <vgl/vgl_line_2d.h>
 #include <vgl/vgl_point_2d.h>
-#include <vgl/vgl_tolerance.h>
 #include <vcl_cmath.h> // for std::sqrt()
 
 // The old signature vgl_lineseg_test() was incorrectly documented. Its

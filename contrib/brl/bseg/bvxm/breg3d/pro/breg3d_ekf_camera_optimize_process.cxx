@@ -7,9 +7,6 @@
 #include <vil/vil_image_view.h>
 #include <vpgl/vpgl_camera.h>
 
-#include <vnl/vnl_matrix.h>
-
-
 #include <bvxm/bvxm_voxel_world.h>
 #include <bvxm/bvxm_image_metadata.h>
 #include <breg3d/breg3d_ekf_camera_optimizer.h>
@@ -47,27 +44,27 @@ breg3d_ekf_camera_optimize_process::breg3d_ekf_camera_optimize_process()
   // parameters
   // default corresponds to roughly 1 degree std deviation
   if (!parameters()->add("Rotation Prediction Variance", "rotation_prediction_variance", 0.2))
-    vcl_cerr << "ERROR: Adding parameters in " << __FILE__ << vcl_endl;
+    vcl_cerr << "ERROR: Adding parameters in " << __FILE__ << '\n';
 
   // default corresponds to roughly 1.4 meter std deviation
   if (!parameters()->add("Position Prediction Variance", "position_prediction_variance", 3.0))
-    vcl_cerr << "ERROR: Adding parameters in " << __FILE__ << vcl_endl;
+    vcl_cerr << "ERROR: Adding parameters in " << __FILE__ << '\n';
 
     // default corresponds to roughly 1 degree std deviation
   if (!parameters()->add("Rotation Measurement Variance", "rotation_measurement_variance", 3e-4))
-    vcl_cerr << "ERROR: Adding parameters in " << __FILE__ << vcl_endl;
+    vcl_cerr << "ERROR: Adding parameters in " << __FILE__ << '\n';
 
   // default corresponds to roughly 1.0 meter std deviation
   if (!parameters()->add("Position Measurement Variance", "position_measurement_variance", 1.0))
-    vcl_cerr << "ERROR: Adding parameters in " << __FILE__ << vcl_endl;
+    vcl_cerr << "ERROR: Adding parameters in " << __FILE__ << '\n';
 
   //
   if (!parameters()->add("Homography terms Variance", "homography_term_variance", 0.08))
-    vcl_cerr << "ERROR: Adding parameters in " << __FILE__ << vcl_endl;
+    vcl_cerr << "ERROR: Adding parameters in " << __FILE__ << '\n';
 
   //
   if (!parameters()->add("Homography translation terms Variance", "homography_translation_term_variance", 0.08))
-    vcl_cerr << "ERROR: Adding parameters in " << __FILE__ << vcl_endl;
+    vcl_cerr << "ERROR: Adding parameters in " << __FILE__ << '\n';
 }
 
 

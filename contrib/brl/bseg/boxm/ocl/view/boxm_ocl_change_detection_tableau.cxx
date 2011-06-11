@@ -7,7 +7,6 @@
 
 #include <vpgl/vpgl_calibration_matrix.h>
 #include <vgui/internals/trackball.h>
-#include <vgl/vgl_distance.h>
 #include <vgui/vgui_event_condition.h>
 
 //image load
@@ -52,7 +51,7 @@ bool boxm_ocl_change_detection_tableau::init(boxm_ocl_scene * scene,
     vcl_ifstream ifs(cam_files_[0].c_str());
     cam_ = new vpgl_perspective_camera<double>;
     if (!ifs.is_open()) {
-      vcl_cerr << "Failed to open file " << cam_files_[0] << vcl_endl;
+      vcl_cerr << "Failed to open file " << cam_files_[0] << '\n';
       return -1;
     }
     ifs >> *cam_;
@@ -67,7 +66,7 @@ bool boxm_ocl_change_detection_tableau::init(boxm_ocl_scene * scene,
       vil_convert_stretch_range_limited(*img_byte ,obs_img_, vxl_byte(0), vxl_byte(255), 0.0f, 1.0f);
     }
     else {
-      vcl_cerr << "Failed to load image " << img_files_[curr_frame_] << vcl_endl;
+      vcl_cerr << "Failed to load image " << img_files_[curr_frame_] << '\n';
       return -1;
     }
   }
@@ -210,7 +209,7 @@ bool boxm_ocl_change_detection_tableau::change_detection()
     vcl_ifstream ifs(cam_files_[curr_frame_].c_str());
     vpgl_perspective_camera<double>* pcam = new vpgl_perspective_camera<double>;
     if (!ifs.is_open()) {
-        vcl_cerr << "Failed to open file " << cam_files_[curr_frame_] << vcl_endl;
+        vcl_cerr << "Failed to open file " << cam_files_[curr_frame_] << '\n';
         return -1;
     }
     ifs >> *pcam;
@@ -223,7 +222,7 @@ bool boxm_ocl_change_detection_tableau::change_detection()
         vil_convert_stretch_range_limited(*img_byte ,floatimg, vxl_byte(0), vxl_byte(255), 0.0f, 1.0f);
     }
     else {
-        vcl_cerr << "Failed to load image " << img_files_[curr_frame_] << vcl_endl;
+        vcl_cerr << "Failed to load image " << img_files_[curr_frame_] << '\n';
         return -1;
     }
 

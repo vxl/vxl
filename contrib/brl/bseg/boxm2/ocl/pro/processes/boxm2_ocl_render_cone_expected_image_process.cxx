@@ -15,19 +15,16 @@
 #include <boxm2/boxm2_block.h>
 #include <boxm2/boxm2_data_base.h>
 #include <boxm2/ocl/boxm2_ocl_util.h>
-#include <vil/vil_save.h>
 #include <vil/vil_image_view.h>
 
 //brdb stuff
 #include <brdb/brdb_value.h>
 
 //directory utility
-#include <vul/vul_timer.h>
 #include <vcl_where_root_dir.h>
 #include <bocl/bocl_device.h>
 #include <bocl/bocl_kernel.h>
 #include <boxm2/ocl/algo/boxm2_ocl_render_expected_image_function.h>
-
 
 
 namespace boxm2_ocl_render_cone_expected_image_process_globals
@@ -44,16 +41,16 @@ namespace boxm2_ocl_render_cone_expected_image_process_globals
     vcl_vector<vcl_string> src_paths;
     vcl_string source_dir = vcl_string(VCL_SOURCE_ROOT_DIR) + "/contrib/brl/bseg/boxm2/ocl/cl/";
     src_paths.push_back(source_dir + "scene_info.cl");
-    src_paths.push_back(source_dir + "basic/linked_list.cl"); 
+    src_paths.push_back(source_dir + "basic/linked_list.cl");
     src_paths.push_back(source_dir + "bit/bit_tree_library_functions.cl");
-    src_paths.push_back(source_dir + "ogl/intersect.cl"); 
+    src_paths.push_back(source_dir + "ogl/intersect.cl");
     src_paths.push_back(source_dir + "backproject.cl");
     src_paths.push_back(source_dir + "cone/render_expected_cone.cl");
     src_paths.push_back(source_dir + "cone/cast_cone_ray.cl");
 
     //set kernel options
-    vcl_string options = " -D STEP_CELL=step_cell_cone(aux_args,data_ptr,intersect_volume) "; 
-    options += " -D COMPUTE_BALL_PROPERTIES=compute_ball_properties(aux_args) "; 
+    vcl_string options = " -D STEP_CELL=step_cell_cone(aux_args,data_ptr,intersect_volume) ";
+    options += " -D COMPUTE_BALL_PROPERTIES=compute_ball_properties(aux_args) ";
 
     //have kernel construct itself using the context and device
     bocl_kernel * ray_trace_kernel=new bocl_kernel();
@@ -65,7 +62,7 @@ namespace boxm2_ocl_render_cone_expected_image_process_globals
                                      options,              //options
                                      "boxm2 opencl render expected cone"); //kernel identifier (for error checking)
     vec_kernels.push_back(ray_trace_kernel);
-   
+
     //create normalize image kernel
     vcl_vector<vcl_string> norm_src_paths;
     norm_src_paths.push_back(source_dir + "pixel_conversion.cl");
@@ -79,7 +76,6 @@ namespace boxm2_ocl_render_cone_expected_image_process_globals
                                             "normalize render kernel"); //kernel identifier (for error checking)
     vec_kernels.push_back(normalize_render_kernel);
   }
-
 }
 
 bool boxm2_ocl_render_cone_expected_image_process_cons(bprb_func_process& pro)
@@ -106,7 +102,7 @@ bool boxm2_ocl_render_cone_expected_image_process(bprb_func_process& pro)
 {
   using namespace boxm2_ocl_render_cone_expected_image_process_globals;
 
-  if ( pro.n_inputs() < n_inputs_ ){
+  if ( pro.n_inputs() < n_inputs_ ) {
     vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
     return false;
   }
@@ -137,19 +133,19 @@ bool boxm2_ocl_render_cone_expected_image_process(bprb_func_process& pro)
       options=" -D MOG_TYPE_16 ";
     }
   }
-  if(!foundDataType) {
+  if (!foundDataType) {
     vcl_cout<<"BOXM2_OCL_RENDER_PROCESS ERROR: scene doesn't have BOXM2_MOG3_GREY or BOXM2_MOG3_GREY_16 data type"<<vcl_endl;
     return false;
   }
 
-  //: create a command queue.
+  // create a command queue.
   int status=0;
   cl_command_queue queue = clCreateCommandQueue(device->context(),*(device->device_id()),
                                                 CL_QUEUE_PROFILING_ENABLE,&status);
   if (status!=0) return false;
   vcl_string identifier=device->device_identifier()+options;
 
-  //: compile the kernel
+  // compile the kernel
   if (kernels.find(identifier)==kernels.end())
   {
     vcl_cout<<"===========Compiling kernels==========="<<vcl_endl;
@@ -162,7 +158,7 @@ bool boxm2_ocl_render_cone_expected_image_process(bprb_func_process& pro)
   unsigned cl_ni=RoundUp(ni,lthreads[0]);
   unsigned cl_nj=RoundUp(nj,lthreads[1]);
   float* buff = new float[cl_ni*cl_nj];
-  vcl_fill(buff, buff+cl_ni*cl_nj, 0.0f); 
+  vcl_fill(buff, buff+cl_ni*cl_nj, 0.0f);
   bocl_mem_sptr exp_image=new bocl_mem(device->context(),buff,cl_ni*cl_nj*sizeof(float),"exp cone image buffer");
   exp_image->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
@@ -173,15 +169,15 @@ bool boxm2_ocl_render_cone_expected_image_process(bprb_func_process& pro)
 
   // visibility image
   float* vis_buff = new float[cl_ni*cl_nj];
-  vcl_fill(vis_buff, vis_buff + cl_ni*cl_nj, 1.0f); 
+  vcl_fill(vis_buff, vis_buff + cl_ni*cl_nj, 1.0f);
   bocl_mem_sptr vis_image = new bocl_mem(device->context(), vis_buff, cl_ni*cl_nj*sizeof(float), "vis image buffer");
   vis_image->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
   ////: run expected image function
   render_cone_expected_image(scene, device, opencl_cache, queue,
                              cam, exp_image, vis_image, exp_img_dim,
-                             data_type, kernels[identifier][0], lthreads, cl_ni, cl_nj);  
-                        
+                             data_type, kernels[identifier][0], lthreads, cl_ni, cl_nj);
+
   // normalize
   {
     vcl_size_t gThreads[] = {cl_ni,cl_nj};
@@ -195,8 +191,8 @@ bool boxm2_ocl_render_cone_expected_image_process(bprb_func_process& pro)
     //clear render kernel args so it can reset em on next execution
     normalize_kern->clear_args();
   }
-                        
-  //: read out expected image
+
+  // read out expected image
   exp_image->read_to_buffer(queue);
   vil_image_view<float>* exp_img_out=new vil_image_view<float>(ni,nj);
   for (unsigned c=0;c<nj;c++)
@@ -204,11 +200,11 @@ bool boxm2_ocl_render_cone_expected_image_process(bprb_func_process& pro)
       (*exp_img_out)(r,c)=buff[c*cl_ni+r];
 
   delete [] buff;
-  delete [] vis_buff; 
+  delete [] vis_buff;
   clReleaseCommandQueue(queue);
-  
+
   // store scene smaprt pointer
-  i=0; 
+  i=0;
   pro.set_output_val<vil_image_view_base_sptr>(i++, exp_img_out);
   return true;
 }

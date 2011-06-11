@@ -21,8 +21,7 @@
 #include <bapl/bapl_keypoint_set.h>
 #include <bapl/bapl_keypoint_set_sptr.h>
 
-#include <vil/vil_new.h>
-#include <vil/vil_convert.h>
+#include <vil/vil_plane.h>
 #include <vnl/vnl_random.h>
 
 #include <ipts/ipts_draw.h>
@@ -167,7 +166,7 @@ bool bapl_match_display_process(bprb_func_process& pro)
   vcl_vector<bapl_key_match>& matches = match_set->matches_;
 
   vnl_random rng;
-  for (unsigned i=0;i<matches.size();++i){
+  for (unsigned i=0;i<matches.size();++i) {
     bapl_key_match m = matches[i];
     bapl_lowe_keypoint_sptr kp1;
     kp1.vertical_cast(m.first);

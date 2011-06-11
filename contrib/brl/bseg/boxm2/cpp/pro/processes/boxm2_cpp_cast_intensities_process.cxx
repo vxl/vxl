@@ -12,17 +12,13 @@
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/boxm2_block.h>
 #include <boxm2/boxm2_data_base.h>
-#include <vil/vil_save.h>
 #include <vil/vil_image_view.h>
-#include <vil/vil_transform.h>
-#include <vil/vil_math.h>
 //brdb stuff
 #include <brdb/brdb_value.h>
 #include <boxm2/boxm2_util.h>
 #include <boxm2/cpp/algo/boxm2_cast_intensities_functor.h>
 
 //directory utility
-#include <vul/vul_timer.h>
 #include <vcl_where_root_dir.h>
 
 namespace boxm2_cpp_cast_intensities_process_globals
@@ -58,7 +54,7 @@ bool boxm2_cpp_cast_intensities_process(bprb_func_process& pro)
 {
     using namespace boxm2_cpp_cast_intensities_process_globals;
 
-    if ( pro.n_inputs() < n_inputs_ ){
+    if ( pro.n_inputs() < n_inputs_ ) {
         vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
         return false;
     }
@@ -73,7 +69,6 @@ bool boxm2_cpp_cast_intensities_process(bprb_func_process& pro)
 
     if (vil_image_view<float> * input_image=dynamic_cast<vil_image_view<float> * > (float_image.ptr()))
     {
-        
         vcl_vector<boxm2_block_id> vis_order=scene->get_vis_blocks(reinterpret_cast<vpgl_generic_camera<double>*>(cam.ptr()));
         if (vis_order.empty())
         {

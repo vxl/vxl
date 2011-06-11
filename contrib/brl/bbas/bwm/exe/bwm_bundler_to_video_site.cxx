@@ -12,8 +12,6 @@
 #include <vcl_string.h>
 #include <vul/vul_arg.h>
 #include <vul/vul_file.h>
-#include <vgl/vgl_polygon.h>
-#include <vgl/vgl_polygon_scan_iterator.h>
 #include <vgl/algo/vgl_fit_plane_3d.h>
 #include <vgl/vgl_distance.h>
 #include <vgl/vgl_point_3d.h>
@@ -35,15 +33,10 @@
 #include <vidl/vidl_image_list_istream.h>
 #include <vidl/vidl_convert.h>
 
-#include <vnl/vnl_transpose.h>
-
-#include <vil/vil_load.h>
-#include <vil/vil_image_view_base.h>
 #include <vil/vil_image_view.h>
 #include <vil/vil_save.h>
 #include <vcl_cstdlib.h> // for rand()
 #include <bwm/bwm_site_mgr.h>
-
 
 #include <bxml/bxml_write.h>
 

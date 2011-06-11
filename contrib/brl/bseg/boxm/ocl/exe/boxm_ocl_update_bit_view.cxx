@@ -10,13 +10,11 @@
 
 //camera image includes
 #include <vpgl/vpgl_perspective_camera.h>
-#include <vil/vil_image_view.h>
 
 //vul includes
 #include <vul/vul_arg.h>
 #include <vul/vul_file.h>
 #include <vul/vul_file_iterator.h>
-#include <vul/vul_timer.h>
 
 //vgui includes
 #include <vgui/vgui.h>
@@ -92,7 +90,7 @@ int main(int argc, char ** argv)
   update_tableau->init(&ocl_scene, ni(), nj(), pcam, cam_files, img_files, prob_thresh());
 
   vgui_window* win = vgui::produce_window(ni(), nj(), "OpenCl Volume Visualizer");
-  win->get_adaptor()->set_tableau( update_tableau  ); 
+  win->get_adaptor()->set_tableau( update_tableau  );
   update_tableau->set_statusbar(win->get_statusbar());
   win->show();
 

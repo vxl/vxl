@@ -6,8 +6,6 @@
 #include <boct/boct_tree.h>
 #include <boct/boct_tree_cell.h>
 #include <boct/boct_loc_code.h>
-#include <vul/vul_timer.h>
-#include <vbl/vbl_array_2d.h>
 
 vpgl_perspective_camera<double>* init_camera()
 {

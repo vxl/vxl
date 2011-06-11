@@ -4,7 +4,6 @@
 #include <boxm2/cpp/algo/boxm2_data_serial_iterator.h>
 #include <boxm2/cpp/algo/boxm2_update_image_functor.h>
 #include <vil/vil_math.h>
-#include <vul/vul_timer.h>
 
 bool boxm2_update_cone_image(boxm2_scene_sptr & scene,
                              vcl_string data_type,

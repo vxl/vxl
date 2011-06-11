@@ -4,8 +4,8 @@
 #include <boxm/algo/rt/boxm_shadow_appearance_estimator.h>
 #include <boct/boct_tree.h>
 #include <vpl/vpl.h>
-#include <vul/vul_file.h>
 #include <boxm/algo/rt/boxm_shadow_app_initializer.h>
+
 namespace test_shadow_appearance_globals
 {
   typedef boxm_apm_traits<BOXM_APM_SIMPLE_GREY>::obs_datatype obs_type;
@@ -25,7 +25,7 @@ static void test_shadow_appearance()
                       0.065,0.095,0.0866665,0.58611,0.665555};
   vcl_vector<obs_type> obs;
   vcl_vector<float> pre, vis;
-  for(unsigned i = 0; i<32; ++i){
+  for (unsigned i = 0; i<32; ++i) {
     obs.push_back(static_cast<obs_type>(obs_arr[i]));
     pre.push_back(0.0f);
     vis.push_back(1.0f);
@@ -55,7 +55,7 @@ double dark_obs_arr[] ={0.0477778,0.0666665,0.0072222,0.175,0.12,
                         0.005,0.0122222,0.1,0.1166665,0.03166665,
                         0.015,0.01,0.1016665,0.167222};
   vcl_vector<obs_type> dark_obs;
-  for(unsigned i = 0; i<32; ++i)
+  for (unsigned i = 0; i<32; ++i)
     dark_obs.push_back(static_cast<obs_type>(dark_obs_arr[i]));
   app_type dark_model;
   boxm_compute_shadow_appearance<BOXM_APM_SIMPLE_GREY>(dark_obs, pre, vis,
@@ -65,10 +65,9 @@ double dark_obs_arr[] ={0.0477778,0.0666665,0.0072222,0.175,0.12,
                                                        shadow_mean,
                                                        shadow_sigma,
                                                        verbose);
-   double dark_er = vcl_fabs(0.14765342-dark_model.color())+
-    vcl_fabs(dark_model.sigma()- 1.0/16.097824);
-   TEST_NEAR("test dark surface shadow appearance EM", dark_er, 0.0, 1e-6);
-
+  double dark_er = vcl_fabs(0.14765342-dark_model.color())
+                 + vcl_fabs(dark_model.sigma()- 1.0/16.097824);
+  TEST_NEAR("test dark surface shadow appearance EM", dark_er, 0.0, 1e-6);
 }
 
 TESTMAIN(test_shadow_appearance);

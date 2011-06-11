@@ -10,13 +10,11 @@
 
 //camera image includes
 #include <vpgl/vpgl_perspective_camera.h>
-#include <vil/vil_image_view.h>
 
 //vul includes
 #include <vul/vul_arg.h>
 #include <vul/vul_file.h>
 #include <vul/vul_file_iterator.h>
-#include <vul/vul_timer.h>
 
 //vgui includes
 #include <vgui/vgui.h>
@@ -50,8 +48,6 @@ int main(int argc, char ** argv)
   boxm_ocl_bit_scene ocl_scene(scene_file());
   vcl_cout<<ocl_scene<<vcl_endl;
 
-
-
   //get all of the cam and image files, sort them
   vcl_string camglob=cam_dir()+"/*.txt";
   vcl_string imgglob=img_dir()+"/*.*g";
@@ -79,7 +75,6 @@ int main(int argc, char ** argv)
     return -1;
   }
 
-
   //create and initialize update_tableau
   boxm_change_detection_bit_tableau_new update_tableau;
   GLboolean bGLEW = glewIsSupported("GL_VERSION_2_0  GL_ARB_pixel_buffer_object");
@@ -87,7 +82,7 @@ int main(int argc, char ** argv)
   update_tableau->init(&ocl_scene, ni(), nj(),  cam_files, img_files,exp_img_files);
 
   vgui_window* win = vgui::produce_window(ni(), nj(), "OpenCl Volume Visualizer");
-  win->get_adaptor()->set_tableau( update_tableau  ); 
+  win->get_adaptor()->set_tableau( update_tableau  );
   update_tableau->set_statusbar(win->get_statusbar());
   win->show();
 

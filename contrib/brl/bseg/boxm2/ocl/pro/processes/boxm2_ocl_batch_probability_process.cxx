@@ -13,8 +13,6 @@
 #include <boxm2/boxm2_block.h>
 #include <boxm2/boxm2_data_base.h>
 #include <boxm2/ocl/boxm2_ocl_util.h>
-#include <vil/vil_save.h>
-#include <vil/vil_image_view.h>
 //brdb stuff
 #include <brdb/brdb_value.h>
 
@@ -70,7 +68,7 @@ bool boxm2_ocl_batch_probability_process(bprb_func_process& pro)
 {
   using namespace boxm2_ocl_batch_probability_process_globals;
 
-  if ( pro.n_inputs() < n_inputs_ ){
+  if ( pro.n_inputs() < n_inputs_ ) {
     vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
     return false;
   }

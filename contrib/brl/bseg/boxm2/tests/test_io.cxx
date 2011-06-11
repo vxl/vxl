@@ -12,7 +12,6 @@
 
 #include <vcl_vector.h>
 #include <vcl_map.h>
-#include <vnl/vnl_random.h>
 
 void test_asio_data()
 {
@@ -37,7 +36,7 @@ void test_asio_data()
   vcl_vector<boxm2_data<BOXM2_MOG3_GREY>* > mog_list;
   vcl_vector<boxm2_data<BOXM2_ALPHA>* > alpha_list;
   int flopCount = 0;
-  while (mog_list.size() < 8 || alpha_list.size() < 8) 
+  while (mog_list.size() < 8 || alpha_list.size() < 8)
   {
     //find out the loaded alphas
     alphamap_t lmap = mgr.get_loaded_data<BOXM2_ALPHA>();
@@ -133,9 +132,9 @@ void test_io()
   // run some aio tests on blocks
   test_asio_blocks();
   test_asio_data();
-  
+
   //delete those blocks
-  boxm2_test_utils::delete_test_scene_from_disk(); 
+  boxm2_test_utils::delete_test_scene_from_disk();
 }
 
 

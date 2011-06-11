@@ -6,17 +6,13 @@
 #include <bapl/bapl_keypoint_set.h>
 #include <bapl/bapl_keypoint_set_sptr.h>
 
-#include <vil/vil_load.h>
-#include <vil/vil_save.h>
 #include <vil/vil_plane.h>
 #include <vil/vil_image_view.h>
 #include <ipts/ipts_draw.h>
 
 #include <vul/vul_timer.h>
-#include <vgl/vgl_point_2d.h>
 #include <vpgl/vpgl_fundamental_matrix.h>
 #include <vpgl/algo/vpgl_fm_compute_ransac.h>
-#include <vgl/algo/vgl_h_matrix_2d_optimize_lmq.h>
 
 void draw_keypoint(vil_image_view<vxl_byte>& img, bapl_keypoint_sptr k)
 {

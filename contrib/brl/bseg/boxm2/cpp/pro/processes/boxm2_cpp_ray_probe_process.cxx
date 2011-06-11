@@ -12,9 +12,6 @@
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/boxm2_block.h>
 #include <boxm2/boxm2_data_base.h>
-#include <vil/vil_save.h>
-#include <vil/vil_image_view.h>
-#include <vil/vil_transform.h>
 //brdb stuff
 #include <brdb/brdb_value.h>
 #include <boxm2/cpp/algo/boxm2_ray_probe_functor.h>
@@ -22,7 +19,6 @@
 #include <boxm2/cpp/algo/boxm2_cast_ray_function.h>
 
 //directory utility
-#include <vul/vul_timer.h>
 #include <vcl_where_root_dir.h>
 
 namespace boxm2_cpp_ray_probe_process_globals
@@ -45,7 +41,6 @@ bool boxm2_cpp_ray_probe_process_cons(bprb_func_process& pro)
     input_types_[4] = "unsigned";
     input_types_[5] = "vcl_string";// if identifier string is empty, then only one appearance model
 
-
     // process has 1 output:
     // output[0]: scene sptr
     vcl_vector<vcl_string>  output_types_(n_outputs_);
@@ -64,7 +59,7 @@ bool boxm2_cpp_ray_probe_process(bprb_func_process& pro)
 {
     using namespace boxm2_cpp_ray_probe_process_globals;
 
-    if ( pro.n_inputs() < n_inputs_ ){
+    if ( pro.n_inputs() < n_inputs_ ) {
         vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
         return false;
     }
@@ -127,13 +122,11 @@ bool boxm2_cpp_ray_probe_process(bprb_func_process& pro)
     bbas_1d_array_float_sptr seg_array  =new bbas_1d_array_float(seg_lengths.size());
     bbas_1d_array_float_sptr alpha_array=new bbas_1d_array_float(alphas.size());
 
-    for(unsigned i=0;i<seg_lengths.size();i++)
+    for (unsigned i=0;i<seg_lengths.size();i++)
     {
         seg_array->data_array[i]=seg_lengths[i];
         alpha_array->data_array[i]=alphas[i];
     }
-
-
 
     // store scene smaprt pointer
     pro.set_output_val<bbas_1d_array_float_sptr>(0, seg_array);

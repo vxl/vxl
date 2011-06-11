@@ -15,18 +15,15 @@
 #include <boxm2/boxm2_block.h>
 #include <boxm2/boxm2_data_base.h>
 #include <boxm2/ocl/boxm2_ocl_util.h>
-#include <vil/vil_save.h>
 #include <vil/vil_image_view.h>
 //brdb stuff
 #include <brdb/brdb_value.h>
 
 //directory utility
-#include <vul/vul_timer.h>
 #include <vcl_where_root_dir.h>
 #include <bocl/bocl_device.h>
 #include <bocl/bocl_kernel.h>
 #include <boxm2/ocl/algo/boxm2_ocl_render_expected_image_function.h>
-
 
 
 namespace boxm2_ocl_render_expected_image_process_globals
@@ -81,10 +78,8 @@ namespace boxm2_ocl_render_expected_image_process_globals
                                             options,              //options
                                             "normalize render kernel"); //kernel identifier (for error checking)
 
-
     vec_kernels.push_back(normalize_render_kernel);
   }
-
 }
 
 bool boxm2_ocl_render_expected_image_process_cons(bprb_func_process& pro)
@@ -117,7 +112,7 @@ bool boxm2_ocl_render_expected_image_process(bprb_func_process& pro)
 {
   using namespace boxm2_ocl_render_expected_image_process_globals;
 
-  if ( pro.n_inputs() < n_inputs_ ){
+  if ( pro.n_inputs() < n_inputs_ ) {
     vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
     return false;
   }
@@ -149,7 +144,7 @@ bool boxm2_ocl_render_expected_image_process(bprb_func_process& pro)
       options=" -D MOG_TYPE_16 ";
     }
   }
-  if(!foundDataType) {
+  if (!foundDataType) {
     vcl_cout<<"BOXM2_OCL_RENDER_PROCESS ERROR: scene doesn't have BOXM2_MOG3_GREY or BOXM2_MOG3_GREY_16 data type"<<vcl_endl;
     return false;
   }
@@ -164,7 +159,7 @@ bool boxm2_ocl_render_expected_image_process(bprb_func_process& pro)
   if (status!=0) return false;
   vcl_string identifier=device->device_identifier()+options;
 
-  //: compile the kernel
+  // compile the kernel
   if (kernels.find(identifier)==kernels.end())
   {
     vcl_cout<<"===========Compiling kernels==========="<<vcl_endl;
@@ -189,15 +184,15 @@ bool boxm2_ocl_render_expected_image_process(bprb_func_process& pro)
 
   // visibility image
   float* vis_buff = new float[cl_ni*cl_nj];
-  vcl_fill(vis_buff, vis_buff + cl_ni*cl_nj, 1.0f); 
+  vcl_fill(vis_buff, vis_buff + cl_ni*cl_nj, 1.0f);
   bocl_mem_sptr vis_image = new bocl_mem(device->context(), vis_buff, cl_ni*cl_nj*sizeof(float), "exp image buffer");
   vis_image->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
-  //: run expected image function
+  // run expected image function
   render_expected_image(scene, device, opencl_cache, queue,
                         cam, exp_image, vis_image, exp_img_dim,
-                        data_type, kernels[identifier][0], lthreads, cl_ni, cl_nj);  
-                        
+                        data_type, kernels[identifier][0], lthreads, cl_ni, cl_nj);
+
   // normalize
   {
     vcl_size_t gThreads[] = {cl_ni,cl_nj};
@@ -211,10 +206,10 @@ bool boxm2_ocl_render_expected_image_process(bprb_func_process& pro)
     //clear render kernel args so it can reset em on next execution
     normalize_kern->clear_args();
   }
-                        
-  //: read out expected image
+
+  // read out expected image
   exp_image->read_to_buffer(queue);
-  
+
   vil_image_view<float>* exp_img_out=new vil_image_view<float>(ni,nj);
   for (unsigned c=0;c<nj;c++)
     for (unsigned r=0;r<ni;r++)

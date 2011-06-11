@@ -16,7 +16,6 @@
 #include <vcl_iterator.h>
 #include <vcl_cassert.h>
 #include <vsl/vsl_binary_loader.h>
-#include <vnl/vnl_math.h>
 #include <mbl/mbl_stl.h>
 #include <mbl/mbl_data_array_wrapper.h>
 #include <clsfy/clsfy_binary_tree_builder.h>

@@ -6,7 +6,6 @@
 #include <boxm/ocl/boxm_ocl_utils.h>
 #include <vpgl/vpgl_calibration_matrix.h>
 #include <vgui/internals/trackball.h>
-#include <vgl/vgl_distance.h>
 
 //image load
 #include <vil/vil_convert.h>
@@ -14,7 +13,6 @@
 #include <vil/vil_image_view.h>
 #include <vil/vil_load.h>
 #include <vgui/vgui_dialog.h>
-#include <vil/vil_save.h>
 
 #include <vcl_sstream.h>
 
@@ -72,7 +70,7 @@ bool boxm_change_detection_bit_tableau::init_ocl()
   boxm_update_bit_scene_manager* updt_mgr
       = boxm_update_bit_scene_manager::instance();
   cl_device_id device = updt_mgr->devices()[0];
-  cl_platform_id platform_id[1]; 
+  cl_platform_id platform_id[1];
   int status = clGetDeviceInfo(device,CL_DEVICE_PLATFORM,sizeof(platform_id),(void*) platform_id,NULL);
   if (!check_val(status, CL_SUCCESS, "boxm2_render Tableau::create_cl_gl_context CL_DEVICE_PLATFORM failed."))
     return 0;

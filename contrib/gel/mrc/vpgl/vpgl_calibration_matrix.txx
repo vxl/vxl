@@ -49,8 +49,8 @@ vpgl_calibration_matrix<T>::vpgl_calibration_matrix( const vnl_matrix_fixed<T,3,
   // Put the supplied matrix into canonical form and check that it could be a
   // calibration matrix.
   assert( K(2,2) != (T)0 && K(1,0) == (T)0 && K(2,0) == (T)0 && K(2,1) == (T)0 );
-  double scale_factor = (T)1;
-  if ( K(2,2) != (T)1 ) scale_factor = ((T)1)/K(2,2);
+  double scale_factor = 1.0;
+  if ( K(2,2) != (T)1 ) scale_factor /= (double)K(2,2);
 
   focal_length_ = (T)1;
   x_scale_ = T(scale_factor*K(0,0));

@@ -3,7 +3,6 @@
 // \brief Tool to build a shape model from data in files.
 // \author Tim Cootes
 
-#include <mbl/mbl_parse_block.h>
 #include <mbl/mbl_read_props.h>
 #include <mbl/mbl_exception.h>
 #include <mbl/mbl_parse_colon_pairs_list.h>
@@ -16,9 +15,7 @@
 
 #include <msm/msm_shape_model_builder.h>
 
-#include <mbl/mbl_cloneables_factory.h>
 #include <msm/msm_add_all_loaders.h>
-
 
 /*
 Parameter file format:
@@ -105,25 +102,24 @@ void tool_params::read_from_file(const vcl_string& path)
 
   mbl_read_props_type props = mbl_read_props_ws(ifs);
 
-
   max_modes=vul_string_atoi(props.get_optional_property("max_modes","99"));
   var_prop=vul_string_atof(props.get_optional_property("var_prop","0.95"));
   image_dir=props.get_optional_property("image_dir","./");
   points_dir=props.get_optional_property("points_dir","./");
   shape_model_path=props.get_optional_property("shape_model_path",
-                                       "shape_aam.bfs");
+                                               "shape_aam.bfs");
 
   {
-    vcl_string aligner_str 
+    vcl_string aligner_str
        = props.get_required_property("aligner");
     vcl_stringstream ss(aligner_str);
     aligner = msm_aligner::create_from_stream(ss);
   }
 
   {
-    vcl_string limiter_str 
+    vcl_string limiter_str
        = props.get_optional_property("param_limiter",
-                "msm_ellipsoid_limiter { accept_prop: 0.98 }");
+                                     "msm_ellipsoid_limiter { accept_prop: 0.98 }");
     vcl_stringstream ss(limiter_str);
     limiter = msm_param_limiter::create_from_stream(ss);
   }
@@ -133,7 +129,6 @@ void tool_params::read_from_file(const vcl_string& path)
 
   // Don't look for unused props so can use a single common parameter file.
 }
-
 
 int main(int argc, char** argv)
 {
@@ -150,13 +145,13 @@ int main(int argc, char** argv)
   }
 
   tool_params params;
-  try 
-  { 
-    params.read_from_file(param_path()); 
+  try
+  {
+    params.read_from_file(param_path());
   }
   catch (mbl_exception_parse_error& e)
   {
-    vcl_cerr<<"Error: "<<e.what()<<vcl_endl;
+    vcl_cerr<<"Error: "<<e.what()<<'\n';
     return 1;
   }
 
@@ -179,7 +174,7 @@ int main(int argc, char** argv)
   }
   else
   {
-    vcl_cerr<<"Failed to save to "<<params.shape_model_path<<vcl_endl;
+    vcl_cerr<<"Failed to save to "<<params.shape_model_path<<'\n';
     return 3;
   }
 
@@ -188,7 +183,7 @@ int main(int argc, char** argv)
     vcl_ofstream ofs(mode_var_path().c_str());
     if (!ofs)
     {
-      vcl_cerr<<"Failed to open "<<mode_var_path()<<" for output."<<vcl_endl;
+      vcl_cerr<<"Failed to open "<<mode_var_path()<<" for output.\n";
       return 4;
     }
     for (unsigned i=0;i<shape_model.n_modes();++i)

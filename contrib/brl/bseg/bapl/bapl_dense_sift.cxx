@@ -1,7 +1,6 @@
 #include "bapl_dense_sift.h"
 
-#include<vil/algo/vil_orientations.h>
-#include<vnl/vnl_math.h>
+#include <vil/algo/vil_orientations.h>
 
 unsigned bapl_dense_sift::keypoint_id_ = 0;
 

@@ -2,8 +2,6 @@
 
 #include <boxm/boxm_scene.h>
 #include <boct/boct_tree.h>
-#include <vul/vul_file.h>
-#include <vpl/vpl.h>
 
 #include "test_utils.h"
 
@@ -19,15 +17,14 @@ static void test_block_iter()
   block->split();
   block->print();
   delete block;
-  
-  
+
   bgeo_lvcs lvcs(33.33,44.44,10.0, bgeo_lvcs::wgs84, bgeo_lvcs::DEG, bgeo_lvcs::METERS);
   vgl_point_3d<double> origin(10,10,20);
   vgl_vector_3d<double> block_dim(10,10,10);
   vgl_vector_3d<unsigned> world_dim(3,3,3);
   boxm_scene<tree_type> scene(lvcs, origin, block_dim, world_dim);
   scene.set_paths("./boxm_scene", "block");
- 
+
   boxm_block_iterator<tree_type> iter = scene.iterator();
   int num_blocks=0;
   for (; !iter.end(); ++iter) {
@@ -42,7 +39,7 @@ static void test_block_iter()
   scene.block_num(x,y,z);
   TEST("Number of blocks iterator visits", num_blocks, x*y*z);
 #ifdef DEBUG_LEAKS
-  vcl_cerr << "Leaks in test_block_iter: " << boct_tree_cell<short,vgl_point_3d<double> >::nleaks() << vcl_endl;
+  vcl_cerr << "Leaks in test_block_iter: " << boct_tree_cell<short,vgl_point_3d<double> >::nleaks() << '\n';
 #endif
   clean_up();
 }

@@ -6,9 +6,6 @@
 #include <boct/boct_tree_cell.h>
 #include <boct/boct_loc_code.h>
 #include <boxm/boxm_apm_traits.h>
-#include <vul/vul_timer.h>
-#include <vbl/vbl_array_2d.h>
-#include <vil/vil_convert.h>
 #include <boxm/algo/rt/boxm_update_image_functor.h>
 #include <boxm/ocl/boxm_ocl_utils.h>
 #include <boxm/algo/boxm_init_scene.h>

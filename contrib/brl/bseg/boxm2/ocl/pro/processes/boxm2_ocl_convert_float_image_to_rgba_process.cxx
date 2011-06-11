@@ -15,18 +15,14 @@
 #include <boxm2/boxm2_block.h>
 #include <boxm2/boxm2_data_base.h>
 #include <boxm2/ocl/boxm2_ocl_util.h>
-#include <vil/vil_save.h>
-#include <vil/vil_image_view.h>
 //brdb stuff
 #include <brdb/brdb_value.h>
 
 //directory utility
-#include <vul/vul_timer.h>
 #include <vcl_where_root_dir.h>
 #include <bocl/bocl_device.h>
 #include <bocl/bocl_kernel.h>
 #include <boxm2/ocl/algo/boxm2_ocl_render_expected_image_function.h>
-
 
 
 namespace boxm2_ocl_convert_float_image_to_rgba_process_globals
@@ -47,24 +43,22 @@ namespace boxm2_ocl_convert_float_image_to_rgba_process_globals
     bocl_kernel * convert_float_to_rgba=new bocl_kernel();
 
     convert_float_to_rgba->create_kernel( &device->context(),
-                                            device->device_id(),
-                                            norm_src_paths,
-                                            "convert_float_to_rgba","",   //kernel name
-                                            "convert float to rgba"); //kernel identifier (for error checking)
+                                          device->device_id(),
+                                          norm_src_paths,
+                                          "convert_float_to_rgba","",   //kernel name
+                                          "convert float to rgba"); //kernel identifier (for error checking)
 
     vec_kernels.push_back(convert_float_to_rgba);
     bocl_kernel * convert_float4_to_rgba=new bocl_kernel();
 
     convert_float4_to_rgba->create_kernel( &device->context(),
-                                            device->device_id(),
-                                            norm_src_paths,
-                                            "convert_float4_to_rgba","",   //kernel name
-                                            "convert float4 to rgba"); //kernel identifier (for error checking)
+                                           device->device_id(),
+                                           norm_src_paths,
+                                           "convert_float4_to_rgba","",   //kernel name
+                                           "convert float4 to rgba"); //kernel identifier (for error checking)
 
     vec_kernels.push_back(convert_float4_to_rgba);
-
   }
-
 }
 
 bool boxm2_ocl_convert_float_image_to_rgba_process_cons(bprb_func_process& pro)
@@ -75,12 +69,11 @@ bool boxm2_ocl_convert_float_image_to_rgba_process_cons(bprb_func_process& pro)
   vcl_vector<vcl_string> input_types_(n_inputs_);
   input_types_[0] = "bocl_device_sptr";
   input_types_[1] = "boxm2_scene_sptr";
-  input_types_[2] = "bocl_mem_sptr"; // float image 
+  input_types_[2] = "bocl_mem_sptr"; // float image
   input_types_[3] = "bocl_mem_sptr"; // float image dims
   input_types_[4] = "bocl_mem_sptr"; // gl image (rgba)
   input_types_[5] = "unsigned"; // gl image (rgba)
   input_types_[6] = "unsigned"; // gl image (rgba)
-
 
   vcl_vector<vcl_string> output_types_(n_outputs_);
 
@@ -91,7 +84,7 @@ bool boxm2_ocl_convert_float_image_to_rgba_process(bprb_func_process& pro)
 {
   using namespace boxm2_ocl_convert_float_image_to_rgba_process_globals;
 
-  if ( pro.n_inputs() < n_inputs_ ){
+  if ( pro.n_inputs() < n_inputs_ ) {
     vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
     return false;
   }
@@ -120,7 +113,7 @@ bool boxm2_ocl_convert_float_image_to_rgba_process(bprb_func_process& pro)
           foundDataType = true;
       }
   }
-  if(!foundDataType) {
+  if (!foundDataType) {
       vcl_cout<<"BOXM2_OCL_RENDER_PROCESS ERROR: scene doesn't have BOXM2_MOG3_GREY or BOXM2_MOG3_GREY_16 data type"<<vcl_endl;
       return false;
   }
@@ -132,7 +125,7 @@ bool boxm2_ocl_convert_float_image_to_rgba_process(bprb_func_process& pro)
   if (status!=0) return false;
   vcl_string identifier=device->device_identifier();
 
-  //: compile the kernel
+  // compile the kernel
   if (kernels.find(identifier)==kernels.end())
   {
     vcl_cout<<"===========Compiling kernels==========="<<vcl_endl;
@@ -145,8 +138,8 @@ bool boxm2_ocl_convert_float_image_to_rgba_process(bprb_func_process& pro)
   unsigned cl_nj=RoundUp(nj,lthreads[1]);
 
   float time =0.0f;
-                       
-  if(data_type=="boxm2_gauss_rgb")
+
+  if (data_type=="boxm2_gauss_rgb")
   {
     vcl_size_t gThreads[] = {cl_ni,cl_nj};
     bocl_kernel* convert_to_rgba_kern= kernels[identifier][1];
@@ -158,8 +151,8 @@ bool boxm2_ocl_convert_float_image_to_rgba_process(bprb_func_process& pro)
 
     //clear render kernel args so it can reset em on next execution
     convert_to_rgba_kern->clear_args();
-    time += convert_to_rgba_kern->exec_time(); 
-  }                     
+    time += convert_to_rgba_kern->exec_time();
+  }
   else  if (data_type=="boxm2_mog3_grey" || data_type=="boxm2_mog3_grey_16")
   {
     vcl_size_t gThreads[] = {cl_ni,cl_nj};
@@ -172,15 +165,15 @@ bool boxm2_ocl_convert_float_image_to_rgba_process(bprb_func_process& pro)
 
     //clear render kernel args so it can reset em on next execution
     convert_to_rgba_kern->clear_args();
-    time += convert_to_rgba_kern->exec_time(); 
-  }               
+    time += convert_to_rgba_kern->exec_time();
+  }
   else
   {
-    vcl_cout<<" Unable to know data type of the image "<<vcl_endl;
+    vcl_cout<<" Unable to know data type of the image"<<vcl_endl;
     return false;
   }
-                        
-  //: read out expected image
+
+  // read out expected image
   clReleaseCommandQueue(queue);
 
  return true;

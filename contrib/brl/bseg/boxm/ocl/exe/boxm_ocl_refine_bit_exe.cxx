@@ -3,16 +3,9 @@
 #include <boxm/ocl/boxm_update_bit_scene_manager.h>
 
 #include <vpgl/vpgl_perspective_camera.h>
-#include <vil/vil_convert.h>
-#include <vil/vil_image_view_base.h>
 #include <vil/vil_image_view.h>
-#include <vil/vil_load.h>
 
 #include <vul/vul_arg.h>
-#include <vul/vul_file.h>
-#include <vul/vul_file_iterator.h>
-#include <vul/vul_timer.h>
-
 
 int main(int argc,  char** argv)
 {

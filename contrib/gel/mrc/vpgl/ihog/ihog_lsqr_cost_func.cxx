@@ -1,12 +1,9 @@
 // This is vpgl/ihog/ihog_lsqr_cost_func.cxx
+#include "ihog_lsqr_cost_func.h"
 //:
 // \file
 
-#include "ihog_lsqr_cost_func.h"
-
-#include <vil/vil_convert.h>
 #include <vil/algo/vil_gauss_filter.h>
-
 
 //: Constructor
 ihog_lsqr_cost_func::ihog_lsqr_cost_func( const ihog_image<float>& image1,

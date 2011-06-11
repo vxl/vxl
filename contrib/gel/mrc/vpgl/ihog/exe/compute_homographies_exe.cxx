@@ -1,18 +1,13 @@
 #include <vcl_string.h>
 #include <vcl_vector.h>
 #include <vcl_cstdio.h>
-#include <vbl/vbl_bounding_box.h>
-#include <vul/vul_sprintf.h>
 #include <vul/vul_file.h>
-#include <vul/vul_sequence_filename_map.h>
 #include <vul/vul_file_iterator.h>
 #include <vul/vul_timer.h>
 #include <vnl/vnl_double_3x3.h>
 #include <vnl/vnl_double_2x3.h>
 #include <vil/vil_load.h>
-#include <vil/vil_save.h>
 #include <vil/vil_image_resource.h>
-#include <vil/vil_new.h>
 #include <vil/vil_convert.h>
 #include <vil/vil_image_view.h>
 #include <ihog/ihog_minimizer.h>
@@ -127,7 +122,7 @@ register_image(vil_image_view<float> & curr_view,
   ihog_image<float> curr_img(curr_view, init_xform);
   ihog_minimizer minimizer(last_img, curr_img, roi);
   minimizer.minimize(init_xform);
-  vcl_cout << "Registration in  " << time.real() << " msecs\n";
+  vcl_cout << "Registration in " << time.real() << " msecs\n";
   return init_xform;
 }
 
@@ -155,8 +150,7 @@ static bool compute_homogs(vcl_string const& image_indir,
       return false;
   }
   vcl_cout << "Initialized\n";
-  vil_image_view<float> float_last_view =
-     *vil_convert_cast(float(), imgr->get_view());
+  vil_image_view<float> float_last_view = *vil_convert_cast(float(), imgr->get_view());
 
   infile_counter = 0;//return to first frame
   total_xform.set_identity();

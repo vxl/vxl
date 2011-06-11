@@ -16,10 +16,7 @@
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_point_3d.h>
 
-#include <vnl/vnl_matrix.h>
-#include <vnl/vnl_vector.h>
-#include <vnl/vnl_double_3x3.h>
-#include <vnl/vnl_inverse.h>
+#include <vnl/vnl_double_3x1.h>
 #include <vnl/algo/vnl_svd.h>
 
 // Chooses two images from the set to create the initial reconstruction
@@ -117,7 +114,7 @@ void vpgl_bundler_sfm_impl_create_initial_recon::operator()(
         for (i = ems.begin(); i != ems.end(); i++) {
             vpgl_fundamental_matrix<double> f(k1, k2, *i);
 
-            vnl_matrix_fixed<double, 3, 1> point_r, point_l;
+            vnl_double_3x1 point_r, point_l;
 
             // Count the number of inliers
             int inlier_count = 0;
@@ -350,7 +347,7 @@ void vpgl_bundler_sfm_default_add_next_images::operator()(
             {
                 double u,v;
                 camera.project(world_pts[pt_ind].x(), world_pts[pt_ind].y(),
-                    world_pts[pt_ind].z(), u, v);
+                               world_pts[pt_ind].z(), u, v);
 
                 double dx = u - image_pts[pt_ind].x();
                 double dy = v - image_pts[pt_ind].y();
@@ -441,7 +438,7 @@ void vpgl_bundler_sfm_default_bundle_adjust::operator()(
     // Fill the cameras vector.
     vcl_vector<vpgl_bundler_inters_camera>::const_iterator cam_it;
     for (cam_it = recon.cameras.begin();
-        cam_it != recon.cameras.end(); cam_it++)
+         cam_it != recon.cameras.end(); cam_it++)
     {
         cameras.push_back(cam_it->camera);
     }
@@ -449,7 +446,7 @@ void vpgl_bundler_sfm_default_bundle_adjust::operator()(
     // Fill the world points, image points and mask vectors.
     vcl_vector<vpgl_bundler_inters_3d_point>::const_iterator pt_it;
     for (pt_it = recon.points.begin();
-        pt_it != recon.points.end(); pt_it++)
+         pt_it != recon.points.end(); pt_it++)
     {
         world_points.push_back(pt_it->point_3d);
         vcl_vector<bool> pt_mask;

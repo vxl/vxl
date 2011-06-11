@@ -14,8 +14,6 @@
 #include <bvpl/kernels/bvpl_create_directions.h>
 
 #include <boct/boct_loc_code.h>
-#include <vul/vul_file.h>
-#include <vul/vul_file_iterator.h>
 #include <vpl/vpl.h>
 
 static bool debug = false;

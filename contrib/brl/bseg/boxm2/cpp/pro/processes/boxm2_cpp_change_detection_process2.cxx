@@ -12,15 +12,12 @@
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/boxm2_block.h>
 #include <boxm2/boxm2_data_base.h>
-#include <vil/vil_save.h>
 #include <vil/vil_image_view.h>
-#include <vil/vil_transform.h>
 //brdb stuff
 #include <brdb/brdb_value.h>
 #include <boxm2/cpp/algo/boxm2_change_detection_functor.h>
 
 //directory utility
-#include <vul/vul_timer.h>
 #include <vcl_where_root_dir.h>
 
 namespace boxm2_cpp_change_detection_process2_globals
@@ -54,7 +51,7 @@ bool boxm2_cpp_change_detection_process2(bprb_func_process& pro)
 {
   using namespace boxm2_cpp_change_detection_process2_globals;
 
-  if ( pro.n_inputs() < n_inputs_ ){
+  if ( pro.n_inputs() < n_inputs_ ) {
     vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
     return false;
   }
@@ -90,7 +87,7 @@ bool boxm2_cpp_change_detection_process2(bprb_func_process& pro)
   if (vil_image_view<float> * in_img=dynamic_cast<vil_image_view<float> *> ( in_float_img.ptr()))
       if (vil_image_view<float> * exp_img=dynamic_cast<vil_image_view<float> *> ( exp_in_img.ptr()))
       {
-          //: function call
+          // function call
           vil_image_view<float> * vis_img=new vil_image_view<float>(in_img->ni(),in_img->nj());
           vis_img->fill(1.0f);
           vcl_vector<boxm2_block_id> vis_order=scene->get_vis_blocks(reinterpret_cast<vpgl_generic_camera<double>*>(cam.ptr()));

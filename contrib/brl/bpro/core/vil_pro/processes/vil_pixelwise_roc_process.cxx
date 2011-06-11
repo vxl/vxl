@@ -4,7 +4,6 @@
 // \file
 
 #include <bprb/bprb_parameters.h>
-#include <vil/vil_load.h>
 #include <vil/vil_image_view.h>
 #include <vil/vil_convert.h>
 #include <bbas_pro/bbas_1d_array_float.h>

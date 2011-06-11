@@ -14,7 +14,6 @@
 #include <vil/vil_image_view_base.h>
 #include <vil/vil_load.h>
 #include <vil/vil_save.h>
-#include <vil/vil_convert.h>
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_cross.h>
 #include <vpgl/vpgl_camera.h>

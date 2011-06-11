@@ -11,7 +11,10 @@
 #include <bvpl/bvpl_octree/bvpl_global_pca.h>
 #include "test_utils.h"
 
-#include <vnl/vnl_math.h>
+#include <vnl/vnl_vector.h>
+#include <vnl/vnl_vector_fixed.h>
+#include <vnl/vnl_matrix.h>
+#include <vnl/vnl_matrix_fixed.h>
 
 void test_kernel_set_up()
 {

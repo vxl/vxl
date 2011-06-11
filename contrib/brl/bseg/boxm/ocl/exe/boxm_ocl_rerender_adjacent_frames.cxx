@@ -1,29 +1,18 @@
-// Main to run opencl implentation of onlineupdate
+// Main to run opencl implementation of onlineupdate
 #include <bocl/bocl_cl.h>
 #include <boxm/ocl/boxm_ocl_utils.h>
 #include <boxm/ocl/boxm_render_ocl_scene_manager.h>
 #include <boxm/ocl/boxm_ocl_render_expected.h>
 
-
 #include <vpgl/vpgl_perspective_camera.h>
-#include <vil/vil_convert.h>
-#include <vil/vil_image_view_base.h>
-#include <vil/vil_image_view.h>
-#include <vil/vil_load.h>
 
 #include <vul/vul_arg.h>
-#include <vul/vul_file.h>
 #include <vul/vul_file_iterator.h>
-#include <vul/vul_timer.h>
-
-
-
-
 
 
 int main(int argc,  char** argv)
 {
-  vcl_cout<<"RENDER "<<vcl_endl;
+  vcl_cout<<"RENDER"<<vcl_endl;
   vul_arg<vcl_string> cam_dir("-camdir", "camera filename", "");
   vul_arg<vcl_string> img_dir("-imgdir", "image filename", "");
   vul_arg<vcl_string> out_dir("-outdir", "Output directory", "");
@@ -48,7 +37,7 @@ int main(int argc,  char** argv)
   if (cam_files.size() != img_files.size()) {
       vcl_cerr<<"Image files and cam files not one to one\n";
       return -1;
-  } 
+  }
   boxm_ocl_scene ocl_scene(scene_file());
   boxm_ocl_scene_rerender(ocl_scene,cam_files,img_files,out_dir());
   return 0;

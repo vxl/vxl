@@ -4,18 +4,12 @@
 #include <vpgl/vpgl_perspective_camera.h>
 #include <vpgl/vsph/vsph_view_sphere.h>
 #include <vpgl/vsph/vsph_view_point.h>
-#include <vil/vil_convert.h>
 #include <vil/vil_image_view_base.h>
 #include <vil/vil_image_view.h>
-#include <vil/vil_math.h>
-#include <vil/vil_load.h>
 #include <vil/vil_save.h>
 
 //executable args
 #include <vul/vul_arg.h>
-#include <vul/vul_file.h>
-#include <vul/vul_file_iterator.h>
-#include <vul/vul_timer.h>
 
 //vbl
 #include <vbl/vbl_array_2d.h>

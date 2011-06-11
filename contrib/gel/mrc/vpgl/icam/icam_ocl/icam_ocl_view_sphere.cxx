@@ -2,10 +2,9 @@
 #include "icam_ocl_view_metadata.h"
 //:
 // \file
+
 #include <vpgl/vpgl_perspective_camera.h>
 #include <vpgl/algo/vpgl_camera_bounds.h>
-#include <vil/vil_save.h>
-
 
 //: sets the images and depth images, associated with the view point id
 void icam_ocl_view_sphere::set_images(vcl_map<unsigned, vcl_string>& images,

@@ -13,7 +13,6 @@
 #include <brip/brip_vil_ops.h>
 #include <bapl/bapl_lowe_keypoint.h>
 
-#include <vil/vil_save.h>
 #include <vil/vil_copy.h>
 #include <vcl_sstream.h>
 #include <vcl_cassert.h>
@@ -42,8 +41,8 @@ bapl_lowe_pyramid_set::bapl_lowe_pyramid_set( const vil_image_resource_sptr& ima
     grad_orient_pyramid_.resize(num_octaves_);
     grad_mag_pyramid_.resize(num_octaves_);
   }
-  
-  if(verbose){
+
+  if (verbose) {
     vcl_cout << " number of octaves: " << num_octaves_ << vcl_endl;
   }
 

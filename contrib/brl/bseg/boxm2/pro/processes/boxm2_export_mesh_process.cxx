@@ -14,14 +14,10 @@
 
 //vil includes
 #include <vil/vil_image_view.h>
-#include <vil/vil_save.h>
 #include <vil/vil_new.h>
 #include <vil/vil_math.h>
 
 //vgl
-#include <vgl/vgl_ray_3d.h>
-#include <vgl/vgl_box_2d.h>
-#include <vgl/vgl_box_3d.h>
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_vector_3d.h>
 #include <bvgl/bvgl_triangle_interpolation_iterator.h>
@@ -64,7 +60,7 @@ bool boxm2_export_mesh_process_cons(bprb_func_process& pro)
 bool boxm2_export_mesh_process(bprb_func_process& pro)
 {
   using namespace boxm2_export_mesh_process_globals;
-  if ( pro.n_inputs() < n_inputs_ ){
+  if ( pro.n_inputs() < n_inputs_ ) {
     vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
     return false;
   }
@@ -77,7 +73,7 @@ bool boxm2_export_mesh_process(bprb_func_process& pro)
   vcl_string out_dir           = pro.get_input<vcl_string>(argIdx++);
 
   //create the mesh directory
-  if(out_dir != "") {
+  if (out_dir != "") {
     if (!vul_file::make_directory_path(out_dir.c_str())) {
       vcl_cout<<"Couldn't make directory path "<<out_dir<<vcl_endl;
       return false;
@@ -151,16 +147,15 @@ bool boxm2_export_mesh_process(bprb_func_process& pro)
       verts[iv][2] = (*z_img)(i,j);
     }
   }
-  
+
   ////////////////////////////////////////////////////////////////////////////////
-  //// cut tall triangles into quarters (find midpoints of each 
+  //// cut tall triangles into quarters (find midpoints of each
   ////////////////////////////////////////////////////////////////////////////////
-  bool did_divide = true; 
-  //while(did_divide) 
+//bool did_divide = true;
+  //while (did_divide)
   {
-    
-    vcl_set<unsigned int> sel_faces; 
-    double maxLen = (maxz-minz) / 3.0; 
+    vcl_set<unsigned int> sel_faces;
+    double maxLen = (maxz-minz) / 3.0;
     imesh_regular_face_array<3>& faces = (imesh_regular_face_array<3>&) mesh.faces();
     imesh_vertex_array<3>&       verts = mesh.vertices<3>();
 
@@ -168,44 +163,43 @@ bool boxm2_export_mesh_process(bprb_func_process& pro)
     for (unsigned iface = 0; iface<nfaces; ++iface)
     {
       //store three 3d points
-      vcl_vector<vgl_point_3d<double> > points; 
-      unsigned originalVertIdx[3]; 
+      vcl_vector<vgl_point_3d<double> > points;
+      unsigned originalVertIdx[3];
       for (int i=0; i<3; ++i) {
         unsigned vertexId = faces[iface][i];
-        originalVertIdx[i] = vertexId; 
+        originalVertIdx[i] = vertexId;
         double x = verts[vertexId][0];
         double y = verts[vertexId][1];
         double z = verts[vertexId][2];
         points.push_back( vgl_point_3d<double>(x,y,z) );
       }
-      
-      //if any one side of the triangle is too long, cut it
-      double lenA = (points[0]-points[1]).length();
-      double lenB = (points[1]-points[2]).length(); 
-      double lenC = (points[0]-points[2]).length(); 
-      if(lenA > maxLen || lenB > maxLen || lenC > maxLen) {
-        sel_faces.insert(iface); 
+
+      // if any one side of the triangle is too long, cut it
+      double lenA = (points[0]-points[1]).sqr_length(); // vgl_vector length == distance
+      double lenB = (points[1]-points[2]).sqr_length();
+      double lenC = (points[0]-points[2]).sqr_length();
+      maxLen *= maxLen; // sqr
+      if (lenA > maxLen || lenB > maxLen || lenC > maxLen) {
+        sel_faces.insert(iface);
       }
-    }  
-    
+    }
+
     //if the divide face set is not empty, divide the faces
-    if( !sel_faces.empty() ) {
-      did_divide = true; 
-    
+    if ( !sel_faces.empty() ) {
+//    did_divide = true;
+
       vcl_cout<<"Subdividing mesh"<<vcl_endl;
       imesh_quad_subdivide(mesh, sel_faces);
-      
+
       vcl_cout<<"Re triangulating mesh"<<vcl_endl;
       imesh_triangulate(mesh);
     }
-    else {
-      did_divide = false;
-    }
+//  else {
+//    did_divide = false;
+//  }
   }
-  
-  //i donno why i have to flip faces...
-  //imesh_flip_faces(mesh );
-  imesh_mesh_sptr mesh_sptr = new imesh_mesh(mesh); 
+
+  imesh_mesh_sptr mesh_sptr = new imesh_mesh(mesh);
 
   ////////////////////////////////////////////////////////////////////////////////
   //// Write out in VRML format

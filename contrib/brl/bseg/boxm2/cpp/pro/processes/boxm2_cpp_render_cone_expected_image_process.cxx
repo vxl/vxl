@@ -23,7 +23,6 @@
 #include <brdb/brdb_value.h>
 
 //directory utility
-#include <vul/vul_timer.h>
 #include <vcl_where_root_dir.h>
 
 namespace boxm2_cpp_render_cone_expected_image_process_globals
@@ -58,7 +57,7 @@ bool boxm2_cpp_render_cone_expected_image_process(bprb_func_process& pro)
 {
   using namespace boxm2_cpp_render_cone_expected_image_process_globals;
 
-  if ( pro.n_inputs() < n_inputs_ ){
+  if ( pro.n_inputs() < n_inputs_ ) {
     vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
     return false;
   }
@@ -82,7 +81,7 @@ bool boxm2_cpp_render_cone_expected_image_process(bprb_func_process& pro)
     return false;
   }
 
-  //: function call
+  // function call
   vil_image_view<float> * exp_img = new vil_image_view<float>(ni,nj);
   vil_image_view<float> * vis_img = new vil_image_view<float>(ni,nj);
   exp_img->fill(0.0f);
@@ -106,7 +105,7 @@ bool boxm2_cpp_render_cone_expected_image_process(bprb_func_process& pro)
                                 blk,datas,cam,exp_img,vis_img,ni,nj);
   }
 
-  //normalize the expected image... 
+  //normalize the expected image...
   normalize_intensity f;
   vil_transform2<float,float, normalize_intensity>(*vis_img,*exp_img,f);
 

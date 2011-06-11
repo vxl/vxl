@@ -16,8 +16,6 @@
 #include <boxm2/ocl/boxm2_opencl_cache.h>
 #include <boxm2/ocl/pro/boxm2_opencl_processor.h> // beware: does not exist anymore
 
-#include <vnl/vnl_vector_fixed.h>
-
 #include <vcl_iostream.h>
 #include <vcl_string.h>
 #include <vcl_vector.h>

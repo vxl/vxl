@@ -12,12 +12,7 @@
 #include <testlib/testlib_root_dir.h>
 #include "test_utils.h"
 
-//: file manip includes
-#include <vul/vul_file.h>
-#include <vul/vul_file_iterator.h>
-#include <sys/stat.h>
-
-//: for stats
+// for stats
 #include <vul/vul_timer.h>
 #include <vcl_sys/time.h>
 #include <vcl_cstdio.h>
@@ -67,7 +62,7 @@ void test_dumb_cache()
   // check a few block values
   vgl_vector_3d<unsigned> nums;
   boxm2_block_sptr blk(dcache.get_block(boxm2_block_id(0,0,0)) );
- 
+
   /*boxm2_data<BOXM2_ALPHA>*/  boxm2_data_base_sptr alph = dcache.get_data<BOXM2_ALPHA>(boxm2_block_id(0,0,0));
   boxm2_data_base_sptr mog = dcache.get_data<BOXM2_MOG3_GREY>(boxm2_block_id(0,0,0));
   nums = blk->sub_block_num();

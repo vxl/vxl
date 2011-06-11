@@ -4,7 +4,6 @@
 #include <vcl_iomanip.h>
 #include <vcl_string.h>
 #include <vcl_vector.h>
-#include <vul/vul_file.h>
 
 #include <vgl/vgl_vector_3d.h>
 #include <vgl/vgl_point_3d.h>
@@ -12,11 +11,8 @@
 
 #include <vil/vil_image_view.h>
 #include <vil/vil_image_view_base.h>
-#include <vil/vil_load.h>
 #include <vil/vil_save.h>
 #include <vil/vil_convert.h>
-#include <vnl/vnl_math.h>
-#include <vnl/vnl_cross.h>
 #include <vpgl/vpgl_camera.h>
 #include <vpgl/vpgl_perspective_camera.h>
 

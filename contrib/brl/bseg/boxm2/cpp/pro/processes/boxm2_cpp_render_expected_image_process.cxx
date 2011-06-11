@@ -12,7 +12,6 @@
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/boxm2_block.h>
 #include <boxm2/boxm2_data_base.h>
-#include <vil/vil_save.h>
 #include <vil/vil_image_view.h>
 #include <vil/vil_transform.h>
 //brdb stuff
@@ -20,7 +19,6 @@
 #include <boxm2/cpp/algo/boxm2_render_functions.h>
 
 //directory utility
-#include <vul/vul_timer.h>
 #include <vcl_where_root_dir.h>
 
 namespace boxm2_cpp_render_expected_image_process_globals
@@ -61,7 +59,7 @@ bool boxm2_cpp_render_expected_image_process(bprb_func_process& pro)
 {
   using namespace boxm2_cpp_render_expected_image_process_globals;
 
-  if ( pro.n_inputs() < n_inputs_ ){
+  if ( pro.n_inputs() < n_inputs_ ) {
     vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
     return false;
   }
@@ -98,7 +96,7 @@ bool boxm2_cpp_render_expected_image_process(bprb_func_process& pro)
     data_type += "_" + identifier;
   }
 
-  //: function call
+  // function call
   vil_image_view<float> * exp_img=new vil_image_view<float>(ni,nj);
   vil_image_view<float> * vis_img=new vil_image_view<float>(ni,nj);
   exp_img->fill(0.0f);
@@ -127,7 +125,7 @@ bool boxm2_cpp_render_expected_image_process(bprb_func_process& pro)
 
   normalize_intensity f;
   vil_transform2<float,float, normalize_intensity>(*vis_img,*exp_img,f);
-  
+
   // store scene smaprt pointer
   pro.set_output_val<vil_image_view_base_sptr>(0, exp_img);
   return true;

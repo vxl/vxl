@@ -8,7 +8,6 @@
 #include <vpgl/vpgl_calibration_matrix.h>
 #include <vgui/internals/trackball.h>
 #include <vgui/vgui_modifier.h>
-#include <vgl/vgl_distance.h>
 #include <vcl_sstream.h>
 
 

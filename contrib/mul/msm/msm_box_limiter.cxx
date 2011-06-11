@@ -8,7 +8,6 @@
 #include <vsl/vsl_binary_loader.h>
 #include <mbl/mbl_parse_block.h>
 #include <mbl/mbl_read_props.h>
-#include <mbl/mbl_exception.h>
 #include <vul/vul_string.h>
 #include <vcl_sstream.h>
 #include <vcl_cassert.h>
@@ -99,7 +98,7 @@ void msm_box_limiter::b_read(vsl_b_istream& bfs)
       break;
     default:
       vcl_cerr << "msm_box_limiter::b_read() :\n"
-               << "Unexpected version number " << version << vcl_endl;
+               << "Unexpected version number " << version << '\n';
       bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
       return;
   }

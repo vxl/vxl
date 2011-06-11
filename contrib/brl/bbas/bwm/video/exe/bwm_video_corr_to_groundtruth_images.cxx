@@ -1,7 +1,6 @@
 #include <vcl_iostream.h>
 #include <vcl_iomanip.h>
 #include <vcl_sstream.h>
-#include <vnl/vnl_random.h>
 #include <vcl_string.h>
 #include <vcl_algorithm.h>
 #include <vul/vul_file.h>

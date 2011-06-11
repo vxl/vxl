@@ -17,15 +17,11 @@
 //vil includes
 #include <vil/vil_image_view.h>
 #include <vil/vil_save.h>
-#include <vil/vil_new.h>
-#include <vil/vil_math.h>
 #include <vil/algo/vil_gauss_filter.h>
 
 //vgl
 #include <vgl/vgl_distance.h>
-#include <vgl/vgl_polygon.h>
-#include <vgl/vgl_polygon_scan_iterator.h>
-#include <vgl/vgl_triangle_3d.h>
+#include <vgl/vgl_triangle_scan_iterator.h>
 #include <bvgl/bvgl_triangle_interpolation_iterator.h>
 
 //vpgl camera stuff
@@ -127,7 +123,7 @@ bool boxm2_texture_mesh_process_cons(bprb_func_process& pro)
 bool boxm2_texture_mesh_process(bprb_func_process& pro)
 {
   using namespace boxm2_texture_mesh_process_globals;
-  if ( pro.n_inputs() < n_inputs_ ){
+  if ( pro.n_inputs() < n_inputs_ ) {
     vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
     return false;
   }
@@ -525,10 +521,12 @@ int boxm2_texture_mesh_process_globals::get_best_view(vcl_vector<vpgl_perspectiv
 
     double dotProd = dot_product( normal, -1*cams[i]->principal_axis());
     double ang = vcl_acos(dotProd);
-    //if ( vcl_fabs(normal.z()) > .8 ) {
-      //vcl_cout<<"Face normal: "<<normal<<"  principal axis: "<<cams[i]->principal_axis()<<vcl_endl
-              //<<" and angle: " <<ang * 180/vnl_math::pi<<vcl_endl;
-    //}
+#ifdef DEBUG
+    if ( vcl_fabs(normal.z()) > .8 ) {
+      vcl_cout<<"Face normal: "<<normal<<"  principal axis: "<<cams[i]->principal_axis()<<'\n'
+              <<" and angle: " <<ang * 180/vnl_math::pi<<vcl_endl;
+    }
+#endif
     if (ang < minAngle && ang < vnl_math::pi/2.0) {
       minAngle = ang;
       minCam = i;

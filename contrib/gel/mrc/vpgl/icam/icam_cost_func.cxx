@@ -3,7 +3,6 @@
 //:
 // \file
 
-#include <vil/vil_math.h>
 #include <vbl/vbl_array_1d.h>
 #include <icam/icam_sample.h>
 #include <vnl/vnl_numeric_traits.h>
@@ -123,7 +122,7 @@ joint_probability(vnl_vector<double> const& samples, vnl_vector<double> const& m
 
   //compute the intensity histogram
   for (unsigned i = 0; i<samples.size(); ++i)
-    if (mask[i]>0.0){
+    if (mask[i]>0.0) {
 
 #if 0
       unsigned id = static_cast<unsigned>(dest_samples_[i]*scl + 0.5),
@@ -182,7 +181,7 @@ icam_cost_func::joint_probability(vil_image_view<float> const& map_dest,
   vcl_cout << "GPU produced ";
   vcl_cout << "mapped/dest/mask samples\n";
   int cent = dest_samples_.size()/2-(dest_image_.ni()-2)/2;
-  for (int i = -10; i<=10; ++i){
+  for (int i = -10; i<=10; ++i) {
     vcl_cout << from_samples[i+cent] << ' '
              << dest_samples_[i+cent] << ' '
              << 50.0f*from_mask[i+cent] << '\n';

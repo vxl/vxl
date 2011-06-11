@@ -18,7 +18,6 @@
 
 #include <vcl_functional.h>
 #include <vcl_vector.h>
-// not used? #include <vcl_iterator.h>
 #include <vcl_ostream.h>
 
 //: Fill an output sequence with incrementing values.

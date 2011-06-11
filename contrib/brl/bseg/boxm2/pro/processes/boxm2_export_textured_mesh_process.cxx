@@ -17,15 +17,11 @@
 #include <vil/vil_image_view.h>
 #include <vil/vil_save.h>
 #include <vil/vil_new.h>
-#include <vil/vil_math.h>
 
 //vgl
 #include <vgl/vgl_distance.h>
 #include <vgl/vgl_ray_3d.h>
-#include <vgl/vgl_box_2d.h>
-#include <vgl/vgl_box_3d.h>
-#include <vgl/vgl_polygon.h>
-#include <vgl/vgl_polygon_scan_iterator.h>
+#include <vgl/vgl_point_3d.h>
 #include <bvgl/bvgl_triangle_interpolation_iterator.h>
 
 //vpgl camera stuff
@@ -87,7 +83,7 @@ bool boxm2_export_textured_mesh_process_cons(bprb_func_process& pro)
 bool boxm2_export_textured_mesh_process(bprb_func_process& pro)
 {
   using namespace boxm2_export_textured_mesh_process_globals;
-  if ( pro.n_inputs() < n_inputs_ ){
+  if ( pro.n_inputs() < n_inputs_ ) {
     vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
     return false;
   }

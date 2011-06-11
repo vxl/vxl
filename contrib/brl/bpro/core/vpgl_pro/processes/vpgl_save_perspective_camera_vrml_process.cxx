@@ -10,7 +10,6 @@
 #include <vpgl/vpgl_perspective_camera.h>
 #include <vpgl/vpgl_calibration_matrix.h>
 #include <vsl/vsl_binary_io.h>
-#include <vul/vul_file.h>
 
 //: initialization
 bool vpgl_save_perspective_camera_vrml_process_cons(bprb_func_process& pro)

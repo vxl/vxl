@@ -13,10 +13,8 @@
 #include <brip/brip_vil_float_ops.h>
 
 #include <vnl/algo/vnl_amoeba.h>
-#include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_vector_3d.h>
-#include <vgl/vgl_plane_3d.h>
 #include <bvxm/bvxm_edge_ray_processor.h>
 
 #include <vpgl/vpgl_perspective_camera.h>
@@ -25,10 +23,6 @@
 
 #include <vcl_cstdio.h>
 #include <vcl_cassert.h>
-
-#include <vul/vul_timer.h>
-
-#include <vgl/vgl_distance.h>
 
 #include "bvxm_expected_edge_functor.h"
 

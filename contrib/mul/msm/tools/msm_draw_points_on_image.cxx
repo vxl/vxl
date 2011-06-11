@@ -11,17 +11,16 @@
 #include <vgl/vgl_point_2d.h>
 #include <vul/vul_arg.h>
 #include <vil/vil_load.h>
-#include <vil/vil_crop.h>
 
 // Note: Currently doesn't quite deal with images correctly - need a
 // half pixel offset so (0,0) is the centre of the pixel.
 
 void print_usage()
 {
-  vcl_cout << "msm_draw_points_on_image  -p points.pts -c curves.crvs -i image.jpg -o image+pts.eps" << vcl_endl;
-  vcl_cout << "Load in points and curves."<<vcl_endl;
-  vcl_cout << "Writes out eps file displaying the curves."<<vcl_endl;
-  vcl_cout << "If image supplied, then includes that too."<<vcl_endl;
+  vcl_cout << "msm_draw_points_on_image  -p points.pts -c curves.crvs -i image.jpg -o image+pts.eps\n"
+           << "Load in points and curves.\n"
+           << "Writes out eps file displaying the curves.\n"
+           << "If image supplied, then includes that too."<<vcl_endl;
   vul_arg_display_usage_and_exit();
 }
 
@@ -47,12 +46,12 @@ int main( int argc, char* argv[] )
 
   msm_curves curves;
   if (curves_path()!="" && !curves.read_text_file(curves_path()))
-    vcl_cerr<<"Failed to read in curves from "<<curves_path()<<vcl_endl;
+    vcl_cerr<<"Failed to read in curves from "<<curves_path()<<'\n';
 
   msm_points points;
   if (!points.read_text_file(pts_path()))
   {
-    vcl_cerr<<"Failed to read points from "<<pts_path()<<vcl_endl;
+    vcl_cerr<<"Failed to read points from "<<pts_path()<<'\n';
     return 2;
   }
   vcl_vector< vgl_point_2d<double> > pts;

@@ -10,9 +10,6 @@
 #include <vpgl/vpgl_camera.h>
 #include <vpgl/vpgl_perspective_camera.h>
 #include <vpgl/algo/vpgl_interpolate.h>
-#include <vgl/vgl_homg_point_3d.h>
-#include <vgl/vgl_point_3d.h>
-#include <vgl/vgl_vector_3d.h>
 #include <vgl/vgl_plane_3d.h>
 
 #include <bvxm/bvxm_voxel_world.h>

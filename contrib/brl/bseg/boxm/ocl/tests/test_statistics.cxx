@@ -6,10 +6,10 @@
 #include <boct/boct_tree.h>
 #include <boct/boct_tree_cell.h>
 #include <boct/boct_loc_code.h>
-#include <vul/vul_timer.h>
 #include <bsta/bsta_mixture.h>
 #include <bsta/algo/bsta_gaussian_updater.h>
 #include <bsta/algo/bsta_adaptive_updater.h>
+
 static bool near_eq(float x, float y, float tol)
 { return vcl_fabs(x - y) <= tol;}
 

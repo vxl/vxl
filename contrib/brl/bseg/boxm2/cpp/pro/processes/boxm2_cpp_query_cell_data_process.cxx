@@ -13,13 +13,10 @@
 #include <boxm2/boxm2_block.h>
 #include <boxm2/boxm2_data_base.h>
 #include <boxm2/boxm2_util.h>
-#include <vil/vil_save.h>
-#include <vil/vil_image_view.h>
 //brdb stuff
 #include <brdb/brdb_value.h>
 
 //directory utility
-#include <vul/vul_timer.h>
 #include <vcl_where_root_dir.h>
 #if 0
 #include <bocl/bocl_device.h>
@@ -57,7 +54,7 @@ bool  boxm2_cpp_query_cell_data_process(bprb_func_process& pro)
 {
   using namespace boxm2_cpp_query_cell_data_process_globals;
 
-  if ( pro.n_inputs() < n_inputs_ ){
+  if ( pro.n_inputs() < n_inputs_ ) {
     vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
     return false;
   }
@@ -71,10 +68,10 @@ bool  boxm2_cpp_query_cell_data_process(bprb_func_process& pro)
   float z =pro.get_input<float>(i++);
   float p=0.0f;
   float intensity=0.0f;
-  //: set arguments
+  // set arguments
   vgl_point_3d<double> local;
   boxm2_block_id id;
-  if(!scene->contains(vgl_point_3d<double>(x, y, z), id, local))
+  if (!scene->contains(vgl_point_3d<double>(x, y, z), id, local))
     return false;
 
   int index_x=(int)vcl_floor(local.x());

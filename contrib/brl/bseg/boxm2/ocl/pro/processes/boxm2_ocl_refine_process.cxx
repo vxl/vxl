@@ -13,8 +13,6 @@
 #include <boxm2/boxm2_block.h>
 #include <boxm2/boxm2_data_base.h>
 #include <boxm2/ocl/boxm2_ocl_util.h>
-#include <vil/vil_save.h>
-#include <vil/vil_image_view.h>
 //brdb stuff
 #include <brdb/brdb_value.h>
 
@@ -104,7 +102,7 @@ bool boxm2_ocl_refine_process(bprb_func_process& pro)
 {
     using namespace boxm2_ocl_refine_process_globals;
 
-    if ( pro.n_inputs() < n_inputs_ ){
+    if ( pro.n_inputs() < n_inputs_ ) {
         vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
         return false;
     }
@@ -220,7 +218,7 @@ bool boxm2_ocl_refine_process(bprb_func_process& pro)
         vcl_size_t gThreads[] = {RoundUp(numTrees,lThreads[0]), 1};
 
         float alphasize=(float)alpha->num_bytes()/1024/1024;
-        if (alphasize >= (float)blk_iter->second.max_mb_/10.0){
+        if (alphasize >= (float)blk_iter->second.max_mb_/10.0) {
             vcl_cout<<"Refine STOP !!!"<<vcl_endl;
             continue;
         }
@@ -236,7 +234,7 @@ bool boxm2_ocl_refine_process(bprb_func_process& pro)
         kern->set_local_arg( 16*sizeof(cl_uchar) );
         kern->set_local_arg( lThreads[0]*sizeof(cl_uchar16) );
         kern->set_local_arg( lThreads[0]*sizeof(cl_uchar16) );
-        
+
         //execute kernel
         kern->execute( queue, 2, lThreads, gThreads);
         clFinish(queue);
@@ -261,9 +259,9 @@ bool boxm2_ocl_refine_process(bprb_func_process& pro)
         tree_sizes->write_to_buffer((queue));
         vcl_cout<<"New data size: "<<newDataSize<<'\n'
                 <<"Scan data sizes time: "<<scan_time.all()<<vcl_endl;
-        transfer_time += scan_time.all(); 
+        transfer_time += scan_time.all();
         /////////////////////////////////////////////////////////////////////////
-        
+
         /////////////////////////////////////////////////////////////////////////
         //STEP Three
         //  - Swap data into new buffers: For each data type
@@ -290,7 +288,7 @@ bool boxm2_ocl_refine_process(bprb_func_process& pro)
                 return false;
             }
             bocl_kernel * kern=kernels[data_identifier];
-            
+
             //get bocl_mem data independent of CPU pointer
             bocl_mem* dat = opencl_cache->get_data(id, data_types[i]);
 
@@ -305,8 +303,7 @@ bool boxm2_ocl_refine_process(bprb_func_process& pro)
             bocl_mem* blk_info = opencl_cache->loaded_block_info();
 
             //is alpha buffer
-            bool is_alpha_buffer[1] = 
-              { (data_types[i] == boxm2_data_traits<BOXM2_ALPHA>::prefix()) }; 
+            bool is_alpha_buffer[1] = { (data_types[i] == boxm2_data_traits<BOXM2_ALPHA>::prefix()) };
             bocl_mem is_alpha(device->context(), is_alpha_buffer, sizeof(cl_bool), "is_alpha buffer");
             is_alpha.create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 

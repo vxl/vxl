@@ -1,14 +1,11 @@
 // This is brl/bseg/sdet/sdet_nms.cxx
-
+#include "sdet_nms.h"
 //:
 // \file
 
-#include "sdet_nms.h"
 #include <vcl_cstdio.h>
 #include <vcl_cstdlib.h>   // for vcl_abs(int) and vcl_sqrt()
-#include <vnl/vnl_math.h>
 #include <vnl/vnl_matrix.h>
-#include <vnl/algo/vnl_matrix_inverse.h>
 #include <vnl/algo/vnl_svd.h>
 #include <vgl/vgl_homg_point_2d.h>
 #include <vgl/vgl_homg_line_2d.h>
@@ -93,7 +90,7 @@ void sdet_nms::apply(bool collect_tokens,
   double f[3], s_list[3];
 
   // run non-maximum suppression at every point inside the margins
-  for (unsigned x = margin_; x < grad_mag_.ni()-margin_; x++){
+  for (unsigned x = margin_; x < grad_mag_.ni()-margin_; x++) {
     for (unsigned y = margin_; y < grad_mag_.nj()-margin_; y++)
     {
       if (grad_mag_(x,y) < thresh_) //threshold by gradient magnitude
@@ -141,7 +138,7 @@ void sdet_nms::apply(bool collect_tokens,
   }
 
   //post-process the NMS edgel map to reduce the occurrence of duplicate edgels
-  for (unsigned x = margin_; x < grad_mag_.ni()-margin_; x++){
+  for (unsigned x = margin_; x < grad_mag_.ni()-margin_; x++) {
     for (unsigned y = margin_; y < grad_mag_.nj()-margin_; y++)
     {
       if (mag_(y,x)==0.0)
@@ -150,17 +147,17 @@ void sdet_nms::apply(bool collect_tokens,
       //use the orientation of the edgel to determine the closest neighbors that could produce a duplicate edgel
 
       //Hack: for now just look over all the 8-neighbors
-      for (int ii=-1; ii<2; ii++){
-        for (int jj=-1; jj<2; jj++){
+      for (int ii=-1; ii<2; ii++) {
+        for (int jj=-1; jj<2; jj++) {
 
           if (ii==0 && jj==0) continue;
 
           //if there is an edgel at this location, compute the distance to the current edgel
-          if (mag_(y+jj,x+ii)>0.0){
+          if (mag_(y+jj,x+ii)>0.0) {
             double dx = x_(y+jj,x+ii) - x_(y,x);
             double dy = y_(y+jj,x+ii) - y_(y,x);
 
-            if ((dx*dx+dy*dy)<0.1){ //closeness threshold, may be made into a parameter if anyone cares
+            if ((dx*dx+dy*dy)<0.1) { //closeness threshold, may be made into a parameter if anyone cares
               mag_(y,x)=0.0; //kill the current edgel
               continue;
             }
@@ -171,8 +168,8 @@ void sdet_nms::apply(bool collect_tokens,
   }
 
   //if seeking tokens, form tokens from the remaining edgels
-  if (collect_tokens){
-    for (unsigned x = margin_; x < grad_mag_.ni()-margin_; x++){
+  if (collect_tokens) {
+    for (unsigned x = margin_; x < grad_mag_.ni()-margin_; x++) {
       for (unsigned y = margin_; y < grad_mag_.nj()-margin_; y++)
       {
         if (mag_(y,x)==0.0)
@@ -345,8 +342,8 @@ double sdet_nms::subpixel_s(double *s, double *f, double &max_f, double &max_d)
   double d2f = 2*A;
   max_d = d2f;
 
-  if (A<0){ //make sure this is a maximum
-    if (use_adaptive_thresh_){
+  if (A<0) { //make sure this is a maximum
+    if (use_adaptive_thresh_) {
 #if 0 // no longer used...
       //derivatives at f+ and f-
       double d2fp = 2*A*s[2] + B;

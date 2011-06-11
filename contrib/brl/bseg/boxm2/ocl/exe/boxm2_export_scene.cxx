@@ -7,18 +7,13 @@
 #include <vpgl/vpgl_perspective_camera.h>
 #include <vpgl/vsph/vsph_view_sphere.h>
 #include <vpgl/vsph/vsph_view_point.h>
-#include <vil/vil_convert.h>
 #include <vil/vil_image_view_base.h>
 #include <vil/vil_image_view.h>
-#include <vil/vil_math.h>
-#include <vil/vil_load.h>
 #include <vil/vil_save.h>
 
 //vul args
 #include <vul/vul_arg.h>
 #include <vul/vul_file.h>
-#include <vul/vul_file_iterator.h>
-#include <vul/vul_timer.h>
 
 //vbl
 #include <vbl/vbl_array_2d.h>
@@ -85,7 +80,7 @@ int main(int argc,  char** argv)
 
     //see if img folder exists
     vcl_string imgdir = dir() + "/img/";
-    if ( vul_file::exists(imgdir) && vul_file::is_directory(imgdir) ){
+    if ( vul_file::exists(imgdir) && vul_file::is_directory(imgdir) ) {
         vul_file::delete_file_glob(imgdir+"*");
     }
     else {
@@ -98,7 +93,7 @@ int main(int argc,  char** argv)
 
     //see if JS folder exists
     vcl_string jsdir = dir() + "/js/";
-    if ( vul_file::exists(jsdir) && vul_file::is_directory(jsdir) ){
+    if ( vul_file::exists(jsdir) && vul_file::is_directory(jsdir) ) {
         vul_file::delete_file_glob(jsdir+"*");
     }
     else {
@@ -111,7 +106,7 @@ int main(int argc,  char** argv)
 
     //see if CSS folder exists
     vcl_string cssdir = dir() + "/css/";
-    if ( vul_file::exists(cssdir) && vul_file::is_directory(cssdir) ){
+    if ( vul_file::exists(cssdir) && vul_file::is_directory(cssdir) ) {
         vul_file::delete_file_glob(cssdir+"*");
     }
     else {
@@ -244,7 +239,7 @@ int main(int argc,  char** argv)
                 good = good && bprb_batch_process_manager::instance()->commit_output(0, img_id);
                 brdb_query_aptr Q = brdb_query_comp_new("id", brdb_query::EQ, img_id);
                 brdb_selection_sptr S = DATABASE->select("vil_image_view_base_sptr_data", Q);
-                if (S->size()!=1){
+                if (S->size()!=1) {
                   vcl_cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
                            << " no selections\n";
                 }

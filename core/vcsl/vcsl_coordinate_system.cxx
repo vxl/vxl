@@ -2,7 +2,7 @@
 #include "vcsl_coordinate_system.h"
 #include <vcl_cassert.h>
 #include <vcsl/vcsl_axis.h>
-#include <vcsl/vcsl_unit.h>
+#include <vcsl/vcsl_unit.h> // for method vcsl_axis::unit()
 
 //---------------------------------------------------------------------------
 // Return the axis `i'
@@ -28,7 +28,7 @@ vcsl_coordinate_system::from_cs_to_standard_units(const vnl_vector<double> &v) c
   int j=0;
   vcl_vector<vcsl_axis_sptr>::const_iterator i;
   for (i=axes_.begin();i!=axes_.end();++i,++j)
-    result.put(j,v.get(j)/(*i)->unit()->units_per_standard_unit());
+    result.put(j,v.get(j)/(*i)->unit()->units_per_standard_unit()); // a vcsl_unit
 
   return result;
 }

@@ -8,9 +8,6 @@
 #include <vbl/vbl_array_2d.h>
 #include <vbl/vbl_array_1d.h>
 
-//include for timing
-#include <vul/vul_timer.h>
-
 
 //: Initializes CPU side input buffers
 // Put tree structure and data into arrays

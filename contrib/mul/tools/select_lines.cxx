@@ -9,7 +9,6 @@
 #include <vcl_iterator.h>
 #include <vcl_limits.h>
 #include <vul/vul_arg.h>
-#include <vul/vul_file.h>
 #include <mbl/mbl_exception.h>
 #include <mbl/mbl_index_sort.h>
 #include <mbl/mbl_load_text_file.h>
@@ -133,7 +132,7 @@ int main(int argc, char*argv[])
   }
   catch (vcl_exception& e)
   {
-    vcl_cerr << "ERROR: " << e.what() << vcl_endl;
+    vcl_cerr << "ERROR: " << e.what() << '\n';
     return -1;
   }
   catch (...)

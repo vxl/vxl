@@ -10,8 +10,8 @@
 #include <vnl/vnl_vector_fixed.h>
 #include <vnl/vnl_matrix.h>
 #include <vnl/vnl_vector.h>
+#include <vnl/vnl_double_3.h>
 #include <vnl/vnl_double_3x3.h>
-#include <vnl/vnl_inverse.h>
 #include <vnl/algo/vnl_svd.h>
 
 // Generally useful function used for RANSAC.
@@ -59,24 +59,17 @@ double vpgl_bundler_utils_triangulate_points(
         const vgl_vector_3d<double> &trans =
             cameras[i].camera.get_translation();
 
-        const vnl_matrix_fixed<double, 3, 3> rot =
-            cameras[i].camera.get_rotation().as_matrix();
+        const vnl_double_3x3 rot = cameras[i].camera.get_rotation().as_matrix();
 
         // Set the row fo x for this point
-        A.put(2 * i, 0,
-            rot.get(0, 0) - point.origins[i]->x() * rot.get(2, 0) );
-        A.put(2 * i, 1,
-            rot.get(0, 1) - point.origins[i]->x() * rot.get(2, 1) );
-        A.put(2 * i, 2,
-            rot.get(0, 2) - point.origins[i]->x() * rot.get(2, 2) );
+        A.put(2 * i, 0, rot.get(0, 0) - point.origins[i]->x() * rot.get(2, 0) );
+        A.put(2 * i, 1, rot.get(0, 1) - point.origins[i]->x() * rot.get(2, 1) );
+        A.put(2 * i, 2, rot.get(0, 2) - point.origins[i]->x() * rot.get(2, 2) );
 
         // Set the row for y for this point
-        A.put(2*i+1, 0,
-            rot.get(1, 0) - point.origins[i]->y() * rot.get(2, 0) );
-        A.put(2*i+1, 1,
-            rot.get(1, 1) - point.origins[i]->y() * rot.get(2, 1) );
-        A.put(2*i+1, 2,
-            rot.get(1, 2) - point.origins[i]->y() * rot.get(2, 2) );
+        A.put(2*i+1, 0, rot.get(1, 0) - point.origins[i]->y() * rot.get(2, 0) );
+        A.put(2*i+1, 1, rot.get(1, 1) - point.origins[i]->y() * rot.get(2, 1) );
+        A.put(2*i+1, 2, rot.get(1, 2) - point.origins[i]->y() * rot.get(2, 2) );
 
         // Set the RHS row.
         b[2*i + 0] = trans.z() * point.origins[i]->x() - trans.x();
@@ -85,7 +78,7 @@ double vpgl_bundler_utils_triangulate_points(
 
     // Find the least squares result
     vnl_svd<double> svd(A);
-    vnl_vector_fixed<double, 3> x = svd.solve(b);
+    vnl_double_3 x = svd.solve(b);
 
     point.point_3d.set(x.begin());
 
@@ -93,8 +86,7 @@ double vpgl_bundler_utils_triangulate_points(
     double error = 0.0;
     for (int i = 0; i < point.origins.size(); i++) {
         // Compute projection error
-        vnl_vector_fixed<double, 3> pp =
-            cameras[i].camera.get_rotation().as_matrix() * x;
+        vnl_double_3 pp = cameras[i].camera.get_rotation().as_matrix() * x;
 
         pp[0] += cameras[i].camera.get_translation().x();
         pp[1] += cameras[i].camera.get_translation().y();
@@ -194,7 +186,7 @@ double vpgl_bundler_utils_get_homography_inlier_percentage(
         vpgl_bundler_utils_get_homography(rhs, lhs, homography);
 
         // Count the number of inliers
-        vnl_vector_fixed<double, 3> lhs_pt, rhs_pt;
+        vnl_double_3 lhs_pt, rhs_pt;
         lhs_pt[2] = 1.0;
 
         int current_num_inliers = 0;

@@ -13,13 +13,10 @@
 #include <boxm2/boxm2_block.h>
 #include <boxm2/boxm2_data_base.h>
 #include <boxm2/ocl/boxm2_ocl_util.h>
-#include <vil/vil_save.h>
-#include <vil/vil_image_view.h>
 //brdb stuff
 #include <brdb/brdb_value.h>
 
 //directory utility
-#include <vul/vul_timer.h>
 #include <vcl_where_root_dir.h>
 #include <bocl/bocl_device.h>
 #include <bocl/bocl_kernel.h>
@@ -56,7 +53,7 @@ bool boxm2_ocl_query_cell_data_process(bprb_func_process& pro)
 {
   using namespace boxm2_ocl_query_cell_data_process_globals;
 
-  if ( pro.n_inputs() < n_inputs_ ){
+  if ( pro.n_inputs() < n_inputs_ ) {
     vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
     return false;
   }
@@ -69,7 +66,7 @@ bool boxm2_ocl_query_cell_data_process(bprb_func_process& pro)
   float z =pro.get_input<float>(i++);
   float p=0.0f;
   float intensity=0.0f;
-  //: set arguments
+  // set arguments
   vcl_vector<boxm2_block_id> block_ids = scene->get_block_ids();
   for (vcl_vector<boxm2_block_id>::iterator id = block_ids.begin(); id != block_ids.end(); ++id)
   {
@@ -83,7 +80,7 @@ bool boxm2_ocl_query_cell_data_process(bprb_func_process& pro)
 
     if (!bbox.contains(x,y,z)) continue;
 
-    //: get the data pointer of the cell containin the given point.
+    // get the data pointer of the cell containin the given point.
     double local_x=(x-mdata.local_origin_.x())/mdata.sub_block_dim_.x();
     double local_y=(y-mdata.local_origin_.y())/mdata.sub_block_dim_.y();
     double local_z=(z-mdata.local_origin_.z())/mdata.sub_block_dim_.z();

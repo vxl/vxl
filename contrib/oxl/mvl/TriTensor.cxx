@@ -19,7 +19,6 @@
 #include <vnl/vnl_double_3.h>
 #include <vnl/vnl_double_3x3.h>
 #include <vnl/vnl_identity_3x3.h>
-#include <vnl/vnl_transpose.h>
 #include <vnl/vnl_cross_product_matrix.h>
 #include <vnl/algo/vnl_svd.h>
 #include <vnl/vnl_inverse.h>
@@ -857,7 +856,7 @@ void TriTensor::get_constraint_lines_image3(vgl_homg_point_2d<double> const& p1,
   assert(lines.size() == 9);
   if (tt_verbose)
     for (int i = 0; i < 9; ++i)
-      vcl_cerr << lines[i]<< vcl_endl;
+      vcl_cerr << lines[i]<< '\n';
 
   return;
 }
@@ -1040,7 +1039,7 @@ void TriTensor::get_constraint_lines_image3(HomgPoint2D const& p1,
   assert(lines->size() == 9);
   if (tt_verbose)
     for (int i = 0; i < 9; ++i)
-      vcl_cerr << (*lines)[i]<< vcl_endl;
+      vcl_cerr << (*lines)[i]<< '\n';
 
   return;
 
@@ -2043,7 +2042,7 @@ void TriTensor::compute_P_matrices(const vnl_double_3& x, double alpha, double b
   vnl_double_3x3 DIFF = B0 + TTe2 - OuterProduct3x3(e3, TTe2.transpose()*e3);
   double diffmag = DIFF.fro_norm();
   if (diffmag > 1e-12) {
-    vcl_cerr << "TriTensor::compute_P_matrices: DIFF = " << DIFF << vcl_endl;
+    vcl_cerr << "TriTensor::compute_P_matrices: DIFF = " << DIFF << '\n';
   }
 
   vnl_double_3x3& A0 = Te3;
@@ -2055,8 +2054,8 @@ void TriTensor::compute_P_matrices(const vnl_double_3& x, double alpha, double b
   P2->set(A0 + OuterProduct3x3(e2, x), beta*e2);
   P3->set(B0 + OuterProduct3x3(e3, x), alpha*e3);
 
-  vcl_cerr << *P2 << vcl_endl
-           << *P3 << vcl_endl;
+  vcl_cerr << *P2 << '\n'
+           << *P3 << '\n';
 
   // Check
   this->check_equal_up_to_scale(TriTensor(*P2, *P3));

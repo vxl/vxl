@@ -1,8 +1,5 @@
 //executable args
 #include <vul/vul_arg.h>
-#include <vul/vul_file.h>
-#include <vul/vul_file_iterator.h>
-#include <vul/vul_timer.h>
 
 //boxm2 scene stuff
 #include <boxm2/boxm2_scene.h>
@@ -10,11 +7,8 @@
 #include <boxm2/io/boxm2_sio_mgr.h>
 #include <boxm2/io/boxm2_dumb_cache.h>
 
-//vnl and vbl array stuff
+//vnl stuff
 #include <vnl/vnl_vector_fixed.h>
-#include <vbl/vbl_array_1d.h>
-#include <vbl/vbl_array_2d.h>
-#include <vbl/vbl_array_3d.h>
 
 //brdb stuff
 #include <brdb/brdb_value.h>

@@ -18,7 +18,6 @@
 #include <boxm/sample/boxm_sample_multi_bin.h>
 #include <boxm/sample/boxm_inf_line_sample.h>
 #include <bvrml/bvrml_write.h>
-#include <vil/vil_image_view.h>
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_intersection.h>
 #include <vcl_fstream.h>

@@ -5,9 +5,6 @@
 
 //executable args
 #include <vul/vul_arg.h>
-#include <vul/vul_file.h>
-#include <vul/vul_file_iterator.h>
-#include <vul/vul_timer.h>
 
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_box_3d.h>

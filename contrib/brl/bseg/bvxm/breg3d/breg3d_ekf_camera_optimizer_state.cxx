@@ -2,11 +2,8 @@
 //:
 // \file
 
-#include <vnl/vnl_matrix_fixed.h>
-#include <vnl/vnl_vector_fixed.h>
 #include <vnl/io/vnl_io_matrix_fixed.h>
 #include <vnl/io/vnl_io_vector_fixed.h>
-#include <vgl/vgl_point_3d.h>
 #include <vgl/algo/vgl_rotation_3d.h>
 #include <vpgl/algo/vpgl_interpolate.h>
 #include <vsl/vsl_binary_io.h>

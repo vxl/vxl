@@ -11,8 +11,6 @@
 
 #include <bvpl/bvpl_octree/bvpl_global_taylor.h>
 
-#include <vul/vul_file.h>
-
 //:global variables
 namespace bvpl_explore_coefficient_scene_process_globals
 {

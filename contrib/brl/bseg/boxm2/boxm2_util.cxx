@@ -12,7 +12,6 @@
 #include <vil/vil_convert.h>
 
 //vnl includes
-#include <vnl/vnl_vector.h>
 #include <vnl/vnl_random.h>
 #include <vnl/algo/vnl_svd.h>
 
@@ -231,7 +230,7 @@ int boxm2_util::find_nearest_cam(vgl_vector_3d<double>& normal,
     double ang = vcl_acos(dotProd);
 #ifdef DEBUG
     if ( vcl_fabs(normal.z()) > .8 ) {
-      vcl_cout<<"Face normal: "<<normal<<"  principal axis: "<<cams[i]->principal_axis()<<vcl_endl
+      vcl_cout<<"Face normal: "<<normal<<"  principal axis: "<<cams[i]->principal_axis()<<'\n'
               <<" and angle: " <<ang * 180/vnl_math::pi<<vcl_endl;
     }
 #endif // DEBUG
@@ -307,7 +306,7 @@ bool boxm2_util::generate_html(int height, int width, int nrows, int ncols, vcl_
     <img id='image' src='img/scene_0_0.jpg' width='%dpx' height=%dpx' />\n \
   </div>\n \
   <script type='text/javascript'>\n \
-    $(document).ready(function(){\n \
+    $(document).ready(function() {\n \
       $('#image').reel({\n \
         frame: 1,\n \
         footage: %d,\n \
@@ -352,7 +351,7 @@ bool boxm2_util::generate_html(int height, int width, int nrows, int ncols, vcl_
 
 bool boxm2_util::generate_jsfunc(vbl_array_2d<vcl_string> img_files, vcl_string dest)
 {
-  vcl_string js = "function scene_frames(frames){\n var stack = [ ";
+  vcl_string js = "function scene_frames(frames) {\n var stack = [ ";
 
   //go through the array in img_files
   for (unsigned int row=0; row<img_files.rows(); ++row) {

@@ -3,10 +3,9 @@
 #include <vcl_iostream.h>
 #include <vcl_string.h>
 #include <vcl_vector.h>
-#include <vul/vul_file.h>
 
-#include <vgl/vgl_vector_3d.h>
-#include <vgl/vgl_point_3d.h>
+#include <vgl/vgl_vector_2d.h>
+#include <vgl/vgl_point_2d.h>
 
 #include <vil/vil_image_view.h>
 #include <vil/vil_image_view_base.h>
@@ -14,7 +13,7 @@
 #include <vil/vil_load.h>
 #include <vil/vil_convert.h>
 
-#include <vnl/vnl_math.h>
+#include <vnl/vnl_double_2x3.h>
 #include <vpgl/vpgl_camera.h>
 #include <vpgl/vpgl_perspective_camera.h>
 
@@ -44,7 +43,7 @@ static void test_minimizer()
   mask0.fill(1.0f);
 
   // construct arbitrary homography
-  vnl_matrix_fixed<double,2,3> HA;
+  vnl_double_2x3 HA;
   double rot_angle = 0.15;
   double tx = -20.0, ty = 30.0;
   HA(0,0) = vcl_cos(rot_angle);   HA(0,1) = vcl_sin(rot_angle);  HA(0,2) = tx;
@@ -92,7 +91,7 @@ static void test_minimizer()
   vcl_cout << "end_error = " << error << '\n'
 
            << "original homography:\n"
-           << xform_in.get_matrix() << vcl_endl << vcl_endl
+           << xform_in.get_matrix() << vcl_endl << '\n'
 
            << "lm generated homography:\n"
            << init_xform.get_matrix() << vcl_endl << vcl_endl;

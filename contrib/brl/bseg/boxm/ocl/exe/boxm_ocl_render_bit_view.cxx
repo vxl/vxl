@@ -22,9 +22,6 @@
 #include <vpgl/vpgl_perspective_camera.h>
 
 #include <vul/vul_arg.h>
-#include <vul/vul_file.h>
-#include <vul/vul_file_iterator.h>
-#include <vul/vul_timer.h>
 
 #include <vgui/vgui.h>
 #include <vgui/vgui_adaptor.h>
@@ -35,9 +32,6 @@
 #include <vgui/vgui_viewer3D_tableau.h>
 #include <vgui/vgui_shell_tableau.h>
 #include <vgui/vgui_viewer2D_tableau.h>
-#include <vil/vil_image_view.h>
-#include <vil/vil_load.h>
-#include <vil/vil_convert.h>
 
 int main(int argc, char ** argv)
 {
@@ -52,16 +46,16 @@ int main(int argc, char ** argv)
     //// need this on some toolkit implementations to get the window up.
     vul_arg_parse(argc, argv);
 
-    //create ocl_scene from xml file 
+    //create ocl_scene from xml file
     boxm_ocl_bit_scene ocl_scene(scene_file());
-    vcl_cout<<"Scene Initialized... "<<vcl_endl
+    vcl_cout<<"Scene Initialized...\n"
             <<ocl_scene<<vcl_endl;
 
     //load camera from file
     vcl_ifstream ifs(camfile().c_str());
     vpgl_perspective_camera<double>* pcam =new vpgl_perspective_camera<double>;
     if (!ifs.is_open()) {
-        vcl_cerr << "Failed to open file " << camfile() << vcl_endl;
+        vcl_cerr << "Failed to open file " << camfile() << '\n';
         return -1;
     }
     else  {
@@ -69,15 +63,15 @@ int main(int argc, char ** argv)
     }
 
     //create a new ocl_draw_glbuffer_tableau, window, and initialize it
-    boxm_ocl_render_bit_tableau_new bit_tableau;  
+    boxm_ocl_render_bit_tableau_new bit_tableau;
     bit_tableau->init(&ocl_scene,ni(),nj(),pcam);
 
     //create window, attach the new tableau and status bar
     vgui_window* win = vgui::produce_window(ni(), nj(), "OpenCl Volume Visualizer");
-    win->get_adaptor()->set_tableau(bit_tableau); 
+    win->get_adaptor()->set_tableau(bit_tableau);
     bit_tableau->set_statusbar(win->get_statusbar());
     win->show();
-   
+
     GLboolean bGLEW = glewIsSupported("GL_VERSION_2_0  GL_ARB_pixel_buffer_object");
     vcl_cout << "GLEW is supported= " << bGLEW << vcl_endl;
     return vgui::run();

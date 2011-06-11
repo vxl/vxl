@@ -13,7 +13,6 @@
 #include <boxm2/boxm2_block.h>
 #include <boxm2/boxm2_data_base.h>
 #include <boxm2/ocl/boxm2_ocl_util.h>
-#include <vil/vil_save.h>
 #include <vil/vil_image_view.h>
 //brdb stuff
 #include <brdb/brdb_value.h>
@@ -91,7 +90,7 @@ bool boxm2_ocl_update_histogram_process(bprb_func_process& pro)
 {
   using namespace boxm2_ocl_update_histogram_process_globals;
 
-  if ( pro.n_inputs() < n_inputs_ ){
+  if ( pro.n_inputs() < n_inputs_ ) {
     vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
     return false;
   }
@@ -115,7 +114,7 @@ bool boxm2_ocl_update_histogram_process(bprb_func_process& pro)
   if (status!=0)
     return false;
 
-  //: compile the kernel
+  // compile the kernel
   if (kernels.find((device->device_id()))==kernels.end())
   {
     vcl_cout<<"===========Compiling kernels==========="<<vcl_endl;
@@ -123,7 +122,7 @@ bool boxm2_ocl_update_histogram_process(bprb_func_process& pro)
     compile_kernel(device,ks);
     kernels[(device->device_id())]=ks;
   }
-  //: create all buffers
+  // create all buffers
   cl_float cam_buffer[48];
   boxm2_ocl_util::set_persp_camera(cam, cam_buffer);
   bocl_mem_sptr persp_cam=new bocl_mem(device->context(), cam_buffer, 3*sizeof(cl_float16), "persp cam buffer");
@@ -161,7 +160,7 @@ bool boxm2_ocl_update_histogram_process(bprb_func_process& pro)
   bocl_mem_sptr vis_image=new bocl_mem(device->context(),vis_buff,cl_ni*cl_nj*sizeof(float),"exp image buffer");
   vis_image->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
-  //: Image Dimensions
+  // Image Dimensions
   int img_dim_buff[4];
   img_dim_buff[0] = 0;
   img_dim_buff[1] = 0;
@@ -170,13 +169,13 @@ bool boxm2_ocl_update_histogram_process(bprb_func_process& pro)
   bocl_mem_sptr exp_img_dim=new bocl_mem(device->context(), img_dim_buff, sizeof(int)*4, "image dims");
   exp_img_dim->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
-  //: Output Array
+  // Output Array
   float output_arr[100];
   for (int i=0; i<100; ++i) output_arr[i] = 0.0f;
   bocl_mem_sptr  cl_output=new bocl_mem(device->context(), output_arr, sizeof(float)*100, "output buffer");
   cl_output->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
-  //: bit lookup buffer
+  // bit lookup buffer
   cl_uchar lookup_arr[256];
   boxm2_ocl_util::set_bit_lookup(lookup_arr);
   bocl_mem_sptr lookup=new bocl_mem(device->context(), lookup_arr, sizeof(cl_uchar)*256, "bit lookup buffer");

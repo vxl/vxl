@@ -5,9 +5,6 @@
 
 //executable args
 #include <vul/vul_arg.h>
-#include <vul/vul_file.h>
-#include <vul/vul_file_iterator.h>
-#include <vul/vul_timer.h>
 
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_box_3d.h>
@@ -36,7 +33,7 @@ int mylog2(unsigned x, bool& power_of_2)
 {
   unsigned orig_x = x;
   int l = -1; // mylog2(0) will return -1
-  while (x != 0u){
+  while (x != 0u) {
     x >>= 1u;
     ++l;
   }
@@ -162,7 +159,7 @@ void convert_tree(boct_bit_tree2 const& bit_tree, boct_tree<T_loc,T_data>*& tree
   }
 
   // some of the leaf nodes are still in the queue, fill them with data
-  while (!Q.empty()){
+  while (!Q.empty()) {
     if (data_idx > bit_tree.get_data_index(0,false)+585)
       vcl_cerr << "ERROR! exceeded!\n";
     boxm2_data_traits<BOXM2_MOG3_GREY>::datatype data = mog3_data->data()[data_idx];

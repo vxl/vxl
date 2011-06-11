@@ -14,7 +14,7 @@
 #include <vsl/vsl_binary_io.h>
 #include <vsl/vsl_vector_io.h>
 #include <vnl/io/vnl_io_vector.h>
-#include <mbl/mbl_stl.h>
+#include <mbl/mbl_cloneable_ptr.h>
 
 
 clsfy_random_forest::clsfy_random_forest()

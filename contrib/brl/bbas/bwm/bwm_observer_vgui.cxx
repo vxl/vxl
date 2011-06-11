@@ -10,7 +10,6 @@
 #include "bwm_tableau_mgr.h"
 
 #include <vgl/vgl_point_2d.h>
-#include <vgl/vgl_homg_point_2d.h>
 #include <vgl/vgl_vector_3d.h>
 
 #include <vsol/vsol_point_2d.h>
@@ -100,7 +99,7 @@ void bwm_observer_vgui::corr_image_pt(float& x, float& y)
 //: the current location of the correspondence point, if corr is valid
 bool bwm_observer_vgui::corr_image_pt(vgl_point_2d<double>& pt)
 {
-  if (corr_valid_){
+  if (corr_valid_) {
     pt = corr_[corr_.size()-1].first;
     return true;
   }

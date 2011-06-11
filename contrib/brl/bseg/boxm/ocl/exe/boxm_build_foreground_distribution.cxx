@@ -1,22 +1,18 @@
 // Main to run opencl implementation of onlineupdate
 #include <vcl_fstream.h>
 #include <vul/vul_arg.h>
-#include <vul/vul_file.h>
-#include <vul/vul_file_iterator.h>
-#include <vul/vul_timer.h>
 #include <bsta/bsta_histogram.h>
-
 
 int main(int argc,  char** argv)
 {
   vul_arg<vcl_string> neighborhoodfile("-file", "neighborhoods filename", "");
-
   vul_arg<vcl_string> outfile("-ofile", "output filename", "");
   vul_arg_parse(argc, argv);
+
   // load the camera;
   vcl_ifstream ifs(neighborhoodfile().c_str());
   if (!ifs.is_open()) {
-    vcl_cerr << "Failed to open file " << neighborhoodfile() << vcl_endl;
+    vcl_cerr << "Failed to open file " << neighborhoodfile() << '\n';
     return -1;
   }
 
@@ -60,7 +56,7 @@ int main(int argc,  char** argv)
 
   if (!ofile)
   {
-    vcl_cerr << "Failed to open file " << outfile() << vcl_endl;
+    vcl_cerr << "Failed to open file " << outfile() << '\n';
     return -1;
   }
   hist.write(ofile);

@@ -14,8 +14,6 @@
 #include <bwm/io/bwm_site.h>
 #include <bwm/io/bwm_io_config_parser.h>
 
-#include <vul/vul_file.h>
-
 //: sets input and output types
 bool bwm_create_corr_file_process_cons(bprb_func_process& pro)
 {
@@ -51,7 +49,7 @@ bool bwm_create_corr_file_process(bprb_func_process& pro)
   //parse the site file
   bwm_io_config_parser* parser = new bwm_io_config_parser();
   vcl_FILE* xmlFile = vcl_fopen(site_file.c_str(), "r");
-  if (!xmlFile){
+  if (!xmlFile) {
     vcl_cerr << site_file.c_str() << " error on opening\n";
     delete parser;
     return false;
@@ -74,7 +72,7 @@ bool bwm_create_corr_file_process(bprb_func_process& pro)
 
   corr_cnt = corr_cnt > (int)site_correspondences.size() ? (int)site_correspondences.size() : corr_cnt;
 
-  //: first open corr_file in read mode, see if it already contains any corrs
+  // first open corr_file in read mode, see if it already contains any corrs
   vcl_ifstream corr_file_r(file_name.c_str(), vcl_ios::in);
   if (!corr_file_r) {
     vcl_ofstream corr_file(file_name.c_str(), vcl_ios::out);
@@ -92,7 +90,7 @@ bool bwm_create_corr_file_process(bprb_func_process& pro)
     return false;
   }
 
-  //: now turn the corrs into the format: <cam name> corr1 x corr1 y corr2x corr2y ...
+  // now turn the corrs into the format: <cam name> corr1 x corr1 y corr2x corr2y ...
   int cam_size = site_correspondences[0].size();
   for (int j = 0; j < cam_size; j++) {
     corr_file << site->path_ << "\\cameras\\" << site_correspondences[0][j].first << ".RPB ";

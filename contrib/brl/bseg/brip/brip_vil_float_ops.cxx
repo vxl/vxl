@@ -15,7 +15,6 @@
 #include <vbl/vbl_bounding_box.h>
 #include <vnl/vnl_numeric_traits.h>
 #include <vnl/vnl_math.h>
-#include <vnl/vnl_inverse.h>
 #include <vnl/vnl_double_2x3.h>
 #include <vnl/algo/vnl_fft_prime_factors.h>
 #include <vnl/algo/vnl_svd.h>
@@ -2338,7 +2337,7 @@ fourier_transform(vil_image_view<float> const& input,
                   vil_image_view<float>& phase)
 {
   unsigned w = input.ni(), h = input.nj();
-  
+
   vnl_fft_prime_factors<float> pfx (w);
   vnl_fft_prime_factors<float> pfy (h);
   if (!pfx.pqr()[0]||!pfy.pqr()[0])
@@ -2804,14 +2803,15 @@ bool brip_vil_float_ops::chip(vil_image_resource_sptr const& image,
   }
   return false;
 }
+
 bool brip_vil_float_ops::
 chip(vcl_vector<vil_image_resource_sptr> const& images,
      brip_roi_sptr const& roi,
      vcl_vector<vil_image_resource_sptr>& chips)
 {
-  for(vcl_vector<vil_image_resource_sptr>::const_iterator iit = images.begin(); iit != images.end(); ++iit){
+  for (vcl_vector<vil_image_resource_sptr>::const_iterator iit = images.begin(); iit != images.end(); ++iit) {
     vil_image_resource_sptr chip;
-    if(!brip_vil_float_ops::chip(*iit, roi, chip))
+    if (!brip_vil_float_ops::chip(*iit, roi, chip))
       return false;
     chips.push_back(chip);
   }
@@ -3972,8 +3972,8 @@ vil_image_view<float> brip_vil_float_ops::extrema_rotational(vil_image_view<floa
     return output;
   }
 
-  //: the kernel generator does not treat the x and y axis symmetrically, the method works correctly only when lambda0 > lambda1
-  //  theoretically one can always call this method by switching the lambdas but the caller of the method should make this switch if needed hence the assertion
+  // The kernel generator does not treat the x and y axis symmetrically, the method works correctly only when lambda0 > lambda1
+  // Theoretically one can always call this method by switching the lambdas but the caller of the method should make this switch if needed hence the assertion
   if (lambda0 < lambda1) {
     vcl_cout << "In brip_vil_float_ops::extrema_rotational() - ERROR! rotational extrema operator requires lambda0 to be larger than lambda1! switch the lambdas and use the output angle map accordingly!\n";
     throw 0;
@@ -3993,11 +3993,11 @@ vil_image_view<float> brip_vil_float_ops::extrema_rotational(vil_image_view<floa
 
   vcl_vector<vbl_array_2d<bool> > mask_vect(angles.size(), vbl_array_2d<bool>());
   int max_rji = 0;
-  //: elliptical operator has 180 degree rotational symmetry, so only the angles in the range [0,180] matter
+  // elliptical operator has 180 degree rotational symmetry, so only the angles in the range [0,180] matter
   float theta = 0; unsigned theta_i = 1;
   for ( ; theta < 180; theta += theta_interval, theta_i++)
   {
-    //: compute the response
+    // compute the response
     vbl_array_2d<float> fa; vbl_array_2d<bool> mask;
     brip_vil_float_ops::extrema_kernel_mask(lambda0, lambda1, theta, fa, mask);
     mask_vect[theta_i] = mask;
@@ -4029,7 +4029,7 @@ vil_image_view<float> brip_vil_float_ops::extrema_rotational(vil_image_view<floa
       }
   }
 
-  //: now we have pixel-wise best angle, run the non-max suppression around each non-zero pixel using the angles mask
+  // now we have pixel-wise best angle, run the non-max suppression around each non-zero pixel using the angles mask
   vil_image_view<float> res(res_img);
 
   for (unsigned j = max_rji; j<(nj-max_rji); j++)
@@ -4072,7 +4072,7 @@ vil_image_view<float> brip_vil_float_ops::extrema_rotational(vil_image_view<floa
       if (!rv)
         continue;
       int theta_i = res_angle(i,j);
-      //: get the mask for this angle
+      // get the mask for this angle
       vbl_array_2d<bool> mask = mask_vect[theta_i];
       unsigned nrows = mask.rows(), ncols = mask.cols();
       int rj = (nrows-1)/2, ri = (ncols-1)/2;
@@ -4084,7 +4084,7 @@ vil_image_view<float> brip_vil_float_ops::extrema_rotational(vil_image_view<floa
               res_mask(i+ii,j+jj) = rv;
     }
 
-  //: now prepare the output accordingly
+  // now prepare the output accordingly
   for (unsigned j = max_rji; j<(nj-max_rji); j++)
     for (unsigned i = max_rji; i<(ni-max_rji); i++)
     {

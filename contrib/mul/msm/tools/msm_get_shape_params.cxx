@@ -3,19 +3,16 @@
 // \brief Tool to compute shape parameters for each set of points
 // \author Tim Cootes
 
-#include <mbl/mbl_parse_block.h>
 #include <mbl/mbl_read_props.h>
 #include <mbl/mbl_exception.h>
 #include <mbl/mbl_parse_colon_pairs_list.h>
 #include <vul/vul_arg.h>
-#include <vul/vul_string.h>
 #include <vcl_sstream.h>
 #include <vcl_fstream.h>
 #include <vcl_string.h>
 #include <vsl/vsl_quick_file.h>
 #include <msm/msm_shape_model.h>
 #include <msm/msm_shape_instance.h>
-#include <mbl/mbl_cloneables_factory.h>
 #include <msm/msm_add_all_loaders.h>
 
 /*
@@ -57,7 +54,6 @@ struct tool_params
   //: File containing the shape model
   vcl_string shape_model_path;
 
-
   //: File to save parameters to
   vcl_string output_path;
 
@@ -96,8 +92,7 @@ void tool_params::read_from_file(const vcl_string& path)
   image_dir=props.get_optional_property("image_dir","./");
   points_dir=props.get_optional_property("points_dir","./");
   output_path=props.get_optional_property("output_path",
-                                       "shape_params.txt");
-
+                                          "shape_params.txt");
 
   mbl_parse_colon_pairs_list(props.get_required_property("images"),
                              points_names,image_names);
@@ -141,13 +136,13 @@ int main(int argc, char** argv)
   }
 
   tool_params params;
-  try 
+  try
   {
-    params.read_from_file(param_path()); 
+    params.read_from_file(param_path());
   }
   catch (mbl_exception_parse_error& e)
   {
-    vcl_cerr<<"Error: "<<e.what()<<vcl_endl;
+    vcl_cerr<<"Error: "<<e.what()<<'\n';
     return 1;
   }
 
@@ -172,8 +167,7 @@ int main(int argc, char** argv)
   vcl_ofstream ofs(params.output_path.c_str());
   if (!ofs)
   {
-    vcl_cerr<<"Failed to open "<<params.output_path
-            <<" for output."<<vcl_endl;
+    vcl_cerr<<"Failed to open "<<params.output_path <<" for output.\n";
     return 1;
   }
 
@@ -181,18 +175,18 @@ int main(int argc, char** argv)
   {
     sm_instance.fit_to_points(shapes[i]);
 
-    if (use_pts_name()) ofs<<params.points_names[i]<<" ";
+    if (use_pts_name()) ofs<<params.points_names[i]<<' ';
 
     if (!no_pose())
     {
       // Write pose parameters
       for (unsigned j=0;j<sm_instance.pose().size();++j)
-        ofs<<sm_instance.pose()[j]<<" ";
+        ofs<<sm_instance.pose()[j]<<' ';
     }
 
     // Write shape parameters
     for (unsigned j=0;j<sm_instance.params().size();++j)
-      ofs<<sm_instance.params()[j]<<" ";
+      ofs<<sm_instance.params()[j]<<' ';
 
     ofs<<vcl_endl;
   }

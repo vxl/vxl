@@ -10,7 +10,6 @@
 #include <vcl_cstdio.h>
 #include <vcl_cassert.h>
 #include <vbl/io/vbl_io_array_2d.h>
-#include <vul/vul_timer.h>
 #include "boxm_ocl_utils.h"
 
 bool boxm_ocl_camera_manager::run()

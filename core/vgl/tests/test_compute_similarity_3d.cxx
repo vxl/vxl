@@ -1,7 +1,6 @@
 #include <testlib/testlib_test.h>
 #include <vgl/algo/vgl_compute_similarity_3d.h>
 #include <vgl/vgl_vector_3d.h>
-#include <vgl/vgl_distance.h>
 #include <vcl_iostream.h>
 #include <vnl/vnl_random.h>
 
@@ -26,7 +25,7 @@ transform_points(const vcl_vector<vgl_point_3d<double> >& points,
 void add_noise(vcl_vector<vgl_point_3d<double> >& points, double sigma)
 {
   vnl_random r;
-  for( unsigned i=0; i<points.size(); ++i )
+  for ( unsigned i=0; i<points.size(); ++i )
   {
     vgl_vector_3d<double> e(r.normal(),r.normal(),r.normal());
     points[i] += e*sigma;
@@ -38,7 +37,7 @@ double alignment_error(const vcl_vector<vgl_point_3d<double> >& points1,
                        const vcl_vector<vgl_point_3d<double> >& points2)
 {
   double error = 0.0;
-  for( unsigned i=0; i<points1.size(); ++i )
+  for ( unsigned i=0; i<points1.size(); ++i )
   {
     error += (points1[i] - points2[i]).sqr_length();
   }
@@ -69,7 +68,7 @@ static void test_compute_similarity_3d()
   TEST_NEAR("translation estimate",(est_sim.translation()-t).length(),0.0,1e-8);
   TEST_NEAR("rotation estimate",
             (est_sim.rotation().as_matrix()-R.as_matrix()).array_inf_norm(),0.0,1e-8);
-  TEST_NEAR("RMS alignment error", 
+  TEST_NEAR("RMS alignment error",
             alignment_error(transform_points(points1,
                                              est_sim.scale(),
                                              est_sim.rotation(),
@@ -88,7 +87,7 @@ static void test_compute_similarity_3d()
   TEST_NEAR("noisy translation estimate",(est_sim2.translation()-t).length(),0.0,100*sigma);
   TEST_NEAR("noisy rotation estimate",
             (est_sim2.rotation().as_matrix()-R.as_matrix()).array_inf_norm(),0.0,sigma);
-  TEST_NEAR("RMS alignment error", 
+  TEST_NEAR("RMS alignment error",
             alignment_error(transform_points(points1,
                                              est_sim2.scale(),
                                              est_sim2.rotation(),

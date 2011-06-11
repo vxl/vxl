@@ -20,13 +20,8 @@
 #include <boxm/boxm_apm_traits.h>
 
 #include <vpgl/vpgl_perspective_camera.h>
-#include <vil/vil_image_view.h>
 
 #include <vul/vul_arg.h>
-#include <vul/vul_file.h>
-#include <vul/vul_file_iterator.h>
-#include <vul/vul_timer.h>
-
 
 #include <vgui/vgui.h>
 #include <vgui/vgui_adaptor.h>
@@ -40,7 +35,6 @@
 
 int main(int argc, char ** argv)
 {
-
     //init vgui (should choose/determine toolkit)
     vgui::init(argc, argv);
 
@@ -52,13 +46,13 @@ int main(int argc, char ** argv)
     //// need this on some toolkit implementations to get the window up.
     vul_arg_parse(argc, argv);
 
-    //create ocl_scene from xml file 
+    //create ocl_scene from xml file
     boxm_ocl_scene ocl_scene(scene_file());
 
     vcl_ifstream ifs(camfile().c_str());
     vpgl_perspective_camera<double>* pcam =new vpgl_perspective_camera<double>;
     if (!ifs.is_open()) {
-        vcl_cerr << "Failed to open file " << camfile() << vcl_endl;
+        vcl_cerr << "Failed to open file " << camfile() << '\n';
         return -1;
     }
     else  {
@@ -66,16 +60,15 @@ int main(int argc, char ** argv)
     }
 
     //create a new ocl_draw_glbuffer_tableau, window, and initialize it
-    boxm_ocl_draw_glbuffer_tableau_new glbuffer_tableau;  
+    boxm_ocl_draw_glbuffer_tableau_new glbuffer_tableau;
     glbuffer_tableau->init(&ocl_scene,ni(),nj(),pcam);
 
     vgui_window* win = vgui::produce_window(ni(), nj(), "OpenCl Volume Visualizer");
-    win->get_adaptor()->set_tableau( glbuffer_tableau  ); 
+    win->get_adaptor()->set_tableau( glbuffer_tableau  );
     glbuffer_tableau->set_statusbar(win->get_statusbar());
     win->show();
-   
-    GLboolean bGLEW = glewIsSupported("GL_VERSION_2_0  GL_ARB_pixel_buffer_object");
-      
-    return vgui::run();
 
+    GLboolean bGLEW = glewIsSupported("GL_VERSION_2_0  GL_ARB_pixel_buffer_object");
+
+    return vgui::run();
 }

@@ -12,9 +12,6 @@
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/boxm2_block.h>
 #include <boxm2/boxm2_data_base.h>
-#include <vil/vil_save.h>
-#include <vil/vil_image_view.h>
-#include <vil/vil_transform.h>
 //brdb stuff
 #include <brdb/brdb_value.h>
 #include <boxm2/cpp/algo/boxm2_ray_probe_functor.h>
@@ -22,7 +19,6 @@
 #include <boxm2/cpp/algo/boxm2_cast_ray_function.h>
 
 //directory utility
-#include <vul/vul_timer.h>
 #include <vcl_where_root_dir.h>
 
 namespace boxm2_cpp_ray_app_density_process_globals
@@ -64,7 +60,7 @@ bool boxm2_cpp_ray_app_density_process(bprb_func_process& pro)
 {
     using namespace boxm2_cpp_ray_app_density_process_globals;
 
-    if ( pro.n_inputs() < n_inputs_ ){
+    if ( pro.n_inputs() < n_inputs_ ) {
         vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
         return false;
     }
@@ -124,7 +120,7 @@ bool boxm2_cpp_ray_app_density_process(bprb_func_process& pro)
 
     bbas_1d_array_float_sptr app_density_array  =new bbas_1d_array_float(app_density.size());
 
-    for(unsigned i=0;i<app_density.size();i++)
+    for (unsigned i=0;i<app_density.size();i++)
     {
         app_density_array->data_array[i]=app_density[i];
     }

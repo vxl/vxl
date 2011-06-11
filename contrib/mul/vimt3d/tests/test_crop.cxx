@@ -1,9 +1,8 @@
 // This is mul/vimt3d/tests/test_crop.cxx
 
 #include <vcl_iostream.h>
-#include <vnl/vnl_vector.h>
 #include <vgl/vgl_point_3d.h>
-#include <vgl/vgl_vector_3d.h>
+#include <vgl/vgl_box_3d.h>
 #include <vimt3d/vimt3d_image_3d_of.h>
 #include <vimt3d/vimt3d_crop.h>
 #include <testlib/testlib_test.h>
@@ -69,7 +68,6 @@ static void test_crop()
         }
         TEST_NEAR("Part image crop  Difference between images is 0",diff,0,1e-6);
   }
-
 }
 
 TESTMAIN(test_crop);

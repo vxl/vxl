@@ -20,7 +20,6 @@
 #include <vcl_vector.h>
 #include <vil/vil_image_view.h>
 #include <vil/vil_image_view_base.h>
-#include <vil/vil_smart_ptr.h>
 #include <vil/vil_pyramid_image_resource.h>
 
 template <class T>

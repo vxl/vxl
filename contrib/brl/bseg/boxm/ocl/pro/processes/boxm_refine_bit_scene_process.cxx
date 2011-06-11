@@ -16,7 +16,6 @@
 #include <boxm/ocl/boxm_update_bit_scene_manager.h>
 #include <boxm/ocl/boxm_update_bit_scene_manager_sptr.h>
 #include <boxm/basic/boxm_util_data_types.h>
-#include <vil/vil_convert.h>
 
 namespace boxm_refine_bit_scene_process_globals
 {

@@ -15,13 +15,10 @@
 #include <boxm2/boxm2_block.h>
 #include <boxm2/boxm2_data_base.h>
 #include <boxm2/ocl/boxm2_ocl_util.h>
-#include <vil/vil_save.h>
-#include <vil/vil_image_view.h>
 //brdb stuff
 #include <brdb/brdb_value.h>
 
 //directory utility
-#include <vul/vul_timer.h>
 #include <vcl_where_root_dir.h>
 #include <bocl/bocl_device.h>
 #include <bocl/bocl_kernel.h>
@@ -64,7 +61,7 @@ namespace boxm2_ocl_render_gl_expected_color_process_globals
                                      options,              //options
                                      "boxm2 opencl render gl color"); //kernel identifier (for error checking)
     vec_kernels.push_back(ray_trace_kernel);
-    
+
     //create normalize image kernel
     vcl_vector<vcl_string> norm_src_paths;
     norm_src_paths.push_back(source_dir + "pixel_conversion.cl");
@@ -79,7 +76,6 @@ namespace boxm2_ocl_render_gl_expected_color_process_globals
 
     vec_kernels.push_back(normalize_render_kernel);
   }
-
 }
 
 bool boxm2_ocl_render_gl_expected_color_process_cons(bprb_func_process& pro)
@@ -98,7 +94,7 @@ bool boxm2_ocl_render_gl_expected_color_process_cons(bprb_func_process& pro)
   input_types_[7] = "bocl_mem_sptr"; // exp image dimensions buffer;
 
   vcl_vector<vcl_string> output_types_(n_outputs_);
-  output_types_[0] = "float"; 
+  output_types_[0] = "float";
 
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 }
@@ -107,7 +103,7 @@ bool boxm2_ocl_render_gl_expected_color_process(bprb_func_process& pro)
 {
   using namespace boxm2_ocl_render_gl_expected_color_process_globals;
 
-  if ( pro.n_inputs() < n_inputs_ ){
+  if ( pro.n_inputs() < n_inputs_ ) {
     vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
     return false;
   }
@@ -125,24 +121,24 @@ bool boxm2_ocl_render_gl_expected_color_process(bprb_func_process& pro)
 
   bool foundDataType = false;
   vcl_string data_type,options;
-  if( scene->has_data_type(boxm2_data_traits<BOXM2_GAUSS_RGB>::prefix()) ) {
-    data_type = boxm2_data_traits<BOXM2_GAUSS_RGB>::prefix(); 
-    foundDataType = true; 
+  if ( scene->has_data_type(boxm2_data_traits<BOXM2_GAUSS_RGB>::prefix()) ) {
+    data_type = boxm2_data_traits<BOXM2_GAUSS_RGB>::prefix();
+    foundDataType = true;
     options=" -D MOG_TYPE_8 ";
   }
-  if(!foundDataType) {
+  if (!foundDataType) {
     vcl_cout<<"boxm2_ocl_render_gl_expected_color_process ERROR: scene doesn't have BOXM2_GAUSS_RGB data type"<<vcl_endl;
     return false;
   }
 
-  //: create a command queue.
+  // create a command queue.
   int status=0;
   cl_command_queue queue = clCreateCommandQueue(device->context(),*(device->device_id()),
                                                 CL_QUEUE_PROFILING_ENABLE,&status);
   if (status!=0) return false;
   vcl_string identifier=device->device_identifier()+options;
 
-  //: compile the kernel
+  // compile the kernel
   if (kernels.find(identifier)==kernels.end())
   {
     vcl_cout<<"===========Compiling kernels==========="<<vcl_endl;
@@ -153,45 +149,45 @@ bool boxm2_ocl_render_gl_expected_color_process(bprb_func_process& pro)
 
   unsigned cl_ni=RoundUp(ni,lthreads[0]);
   unsigned cl_nj=RoundUp(nj,lthreads[1]);
-  
-  //create float4 image here 
+
+  //create float4 image here
   float* buff = new float[4*cl_ni*cl_nj];
-  vcl_fill(buff, buff + 4*cl_ni*cl_nj, 0.0f); 
+  vcl_fill(buff, buff + 4*cl_ni*cl_nj, 0.0f);
   bocl_mem_sptr exp_color = new bocl_mem(device->context(), buff, 4*cl_ni*cl_nj*sizeof(float), "color im buffer (float4) buffer");
   exp_color->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
   // visibility image
   float* vis_buff = new float[cl_ni*cl_nj];
-  vcl_fill(vis_buff, vis_buff + cl_ni*cl_nj, 1.0f); 
+  vcl_fill(vis_buff, vis_buff + cl_ni*cl_nj, 1.0f);
   bocl_mem_sptr vis_image = new bocl_mem(device->context(), vis_buff, cl_ni*cl_nj*sizeof(float), "vis image (single float) buffer");
   vis_image->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
-  //: run expected image function
+  // run expected image function
   float time = render_expected_image(scene, device, opencl_cache, queue,
                                      cam, exp_color, vis_image, exp_img_dim,
-                                     data_type, kernels[identifier][0], lthreads, cl_ni, cl_nj);  
+                                     data_type, kernels[identifier][0], lthreads, cl_ni, cl_nj);
 
-  //: normalize and write image to GL buffer
+  // normalize and write image to GL buffer
   {
     vcl_size_t gThreads[] = {cl_ni,cl_nj};
-    bocl_kernel* norm_rgb_gl = kernels[identifier][1]; 
+    bocl_kernel* norm_rgb_gl = kernels[identifier][1];
     norm_rgb_gl->set_arg( exp_color.ptr() );
     norm_rgb_gl->set_arg( vis_image.ptr() );
     norm_rgb_gl->set_arg( exp_img_dim.ptr());
-    norm_rgb_gl->set_arg( exp_image.ptr() ); 
+    norm_rgb_gl->set_arg( exp_image.ptr() );
     norm_rgb_gl->execute( queue, 2, lthreads, gThreads);
     clFinish(queue);
     norm_rgb_gl->clear_args();
-    time += norm_rgb_gl->exec_time(); 
+    time += norm_rgb_gl->exec_time();
   }
-  
+
   //delete visibilty image
-  delete[] vis_buff; 
-  delete[] buff; 
-  
-  //: read out expected image
+  delete[] vis_buff;
+  delete[] buff;
+
+  // read out expected image
   clReleaseCommandQueue(queue);
-  
+
   // store scene smart pointer
   int argIdx = 0;
   pro.set_output_val<float>(argIdx, time);

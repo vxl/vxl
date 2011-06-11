@@ -5,22 +5,13 @@
 #include <vcl_ios.h>
 #include <vcl_string.h>
 #include <vcl_vector.h>
-#include <vul/vul_file.h>
-#include <vul/vul_timer.h>
 
-#include <vgl/vgl_vector_3d.h>
-#include <vgl/algo/vgl_rotation_3d.h>
-#include <vgl/vgl_point_3d.h>
+#include <vgl/vgl_box_3d.h>
 
 #include <vil/vil_image_view.h>
 #include <vil/vil_image_view_base.h>
-#include <vil/vil_save.h>
 #include <vil/vil_load.h>
-#include <vil/vil_convert.h>
 
-#include <vnl/vnl_math.h>
-#include <vnl/vnl_double_3.h>
-#include <vnl/vnl_double_3x3.h>
 #include <vnl/vnl_numeric_traits.h>
 #include <vpgl/vpgl_camera.h>
 #include <vpgl/vpgl_perspective_camera.h>
@@ -66,7 +57,7 @@ static void test_minimizer()
   vcl_map<unsigned int, vcl_string> images, depth_images;
   vcl_vector<vcl_string> camera_f;
 
-  // view 0 
+  // view 0
   images[0]="C:/images/Calibration/expected142.tiff";
   depth_images[0]="C:/images/Calibration/depth_142.tif";
   camera_f.push_back("C:/images/Calibration/camera_00142.txt");
@@ -93,7 +84,7 @@ static void test_minimizer()
   create_view_sphere(view_sphere);
   // set cameras
   vcl_map<unsigned, vpgl_camera_double_sptr> cam_map;
-  for (unsigned i=0; i<camera_f.size(); i++) { 
+  for (unsigned i=0; i<camera_f.size(); i++) {
     vcl_ifstream ifs(camera_f[i].c_str());
     vpgl_perspective_camera<double>* cam=new vpgl_perspective_camera<double>();
     ifs >> *cam;

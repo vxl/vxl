@@ -13,8 +13,6 @@
 #include <boxm2/boxm2_block.h>
 #include <boxm2/boxm2_data_base.h>
 #include <boxm2/ocl/boxm2_ocl_util.h>
-#include <vil/vil_save.h>
-#include <vil/vil_image_view.h>
 //brdb stuff
 #include <brdb/brdb_value.h>
 
@@ -30,9 +28,9 @@ void boxm2_ocl_filter_process_globals::compile_filter_kernel(bocl_device_sptr de
   src_paths.push_back(source_dir + "bit/bit_tree_library_functions.cl");
   src_paths.push_back(source_dir + "basic/linked_list.cl");
   src_paths.push_back(source_dir + "basic/sort_vector.cl");
-  src_paths.push_back(source_dir + "bit/filter_block.cl"); 
+  src_paths.push_back(source_dir + "bit/filter_block.cl");
 
-  vcl_string options = " -D LIST_TYPE=float4 "; 
+  vcl_string options = " -D LIST_TYPE=float4 ";
   refine_data_kernel->create_kernel( &device->context(), device->device_id(),
                                      src_paths, "filter_block", options,
                                      "boxm2 ocl filter kernel");
@@ -59,7 +57,7 @@ bool boxm2_ocl_filter_process(bprb_func_process& pro)
 {
     using namespace boxm2_ocl_filter_process_globals;
 
-    if ( pro.n_inputs() < n_inputs_ ){
+    if ( pro.n_inputs() < n_inputs_ ) {
         vcl_cout << pro.name() << ": The number of inputs should be " << n_inputs_<< vcl_endl;
         return false;
     }

@@ -4,13 +4,11 @@
 #include <vbl/vbl_bounding_box.h>
 #include <vul/vul_sprintf.h>
 #include <vul/vul_file.h>
-#include <vul/vul_sequence_filename_map.h>
 #include <vul/vul_file_iterator.h>
 #include <vnl/vnl_matrix.h>
 #include <vil/vil_load.h>
 #include <vil/vil_save.h>
 #include <vil/vil_image_resource.h>
-#include <vil/vil_new.h>
 #include <vil/vil_image_view.h>
 #include <vil/vil_convert.h>
 #include <ihog/ihog_minimizer.h>

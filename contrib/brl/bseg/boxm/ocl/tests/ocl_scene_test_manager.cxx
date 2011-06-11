@@ -8,7 +8,6 @@
 #include <bocl/bocl_utils.h>
 #include <vcl_cstdio.h>
 #include <vcl_string.h>
-#include <vul/vul_timer.h>
 
 
 bool ocl_scene_test_manager::init_arrays()

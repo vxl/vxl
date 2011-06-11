@@ -7,7 +7,6 @@
 #include <vsl/vsl_indent.h>
 #include <vsl/vsl_binary_loader.h>
 #include <mbl/mbl_cloneables_factory.h>
-#include <mbl/mbl_read_props.h>
 #include <mbl/mbl_parse_block.h>
 #include <mbl/mbl_exception.h>
 

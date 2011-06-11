@@ -1,19 +1,16 @@
 // This is gel/mrc/vpgl/ihog/ihog_minimizer.cxx
+#include "ihog_minimizer.h"
 //:
 // \file
 
-#include "ihog_minimizer.h"
 #include <ihog/ihog_lsqr_cost_func.h>
-#include <vil/vil_convert.h>
 #include <vil/algo/vil_gauss_filter.h>
 #include <vnl/algo/vnl_amoeba.h>
 #include <vnl/algo/vnl_levenberg_marquardt.h>
-#include <vil/vil_math.h>
 #include <vcl_cstdlib.h>
 
-#include <vnl/vnl_matlab_filewrite.h>
 // generate a pyramid of transforms corresponding to the vil_image_pyramid
-static  vcl_vector<ihog_transform_2d> 
+static  vcl_vector<ihog_transform_2d>
 w2img_pyramid(ihog_transform_2d const& w2img, int n_levels)
 {
   ihog_transform_2d temp = w2img;
@@ -21,11 +18,11 @@ w2img_pyramid(ihog_transform_2d const& w2img, int n_levels)
   ret.push_back(w2img);
   ihog_transform_2d scaling;
   scaling.set_zoom_only(0.5,0,0);
-  for(int i = 1; i<n_levels; ++i)
-    {
-      temp = scaling*temp;
-      ret.push_back(temp);
-    }
+  for (int i = 1; i<n_levels; ++i)
+  {
+    temp = scaling*temp;
+    ret.push_back(temp);
+  }
   return ret;
 }
 //: Constructor
@@ -37,7 +34,7 @@ ihog_minimizer::ihog_minimizer( const ihog_image<float>& image1,
   ihog_world_roi roi_L(roi);
   int levels = 0;
 
-  while (roi_L.size_in_u() > min_level_size_ && roi_L.size_in_v() > min_level_size_){
+  while (roi_L.size_in_u() > min_level_size_ && roi_L.size_in_v() > min_level_size_) {
     roi_pyramid_.push_back(roi_L);
     roi_L.set_size_in_u((roi_L.size_in_u()+1)/2);
     roi_L.set_size_in_v((roi_L.size_in_v()+1)/2);
@@ -54,7 +51,7 @@ ihog_minimizer::ihog_minimizer( const ihog_image<float>& image1,
 
   w2img1_ = w2img_pyramid(image1.world2im(), levels);
   w2img2_ = w2img_pyramid(image2.world2im(), levels);
-    vil_image_view_base_sptr i1sptr = 
+    vil_image_view_base_sptr i1sptr =
       new vil_image_view<float>(image1.image());
   from_pyramid_=vil_pyramid_image_view<float>(i1sptr,levels);
   vil_image_view_base_sptr i2sptr = new vil_image_view<float>(image2.image());
@@ -71,7 +68,7 @@ ihog_minimizer::ihog_minimizer( const ihog_image<float>& image1,
   ihog_world_roi roi_L(roi);
   int levels = 0;
 
-  while (roi_L.size_in_u() > min_level_size_ && roi_L.size_in_v() > min_level_size_){
+  while (roi_L.size_in_u() > min_level_size_ && roi_L.size_in_v() > min_level_size_) {
     roi_pyramid_.push_back(roi_L);
     roi_L.set_size_in_u((roi_L.size_in_u()+1)/2);
     roi_L.set_size_in_v((roi_L.size_in_v()+1)/2);
@@ -80,7 +77,7 @@ ihog_minimizer::ihog_minimizer( const ihog_image<float>& image1,
     ++levels;
   }
 
-  if (levels == 0){
+  if (levels == 0) {
     levels = 1;
     roi_pyramid_.push_back(roi_L);
   }
@@ -88,21 +85,21 @@ ihog_minimizer::ihog_minimizer( const ihog_image<float>& image1,
   w2img1_ = w2img_pyramid(image1.world2im(), levels);
   w2img2_ = w2img_pyramid(image2.world2im(), levels);
 
-    vil_image_view_base_sptr i1sptr = 
+    vil_image_view_base_sptr i1sptr =
       new vil_image_view<float>(image1.image());
   from_pyramid_=vil_pyramid_image_view<float>(i1sptr,levels);
-    vil_image_view_base_sptr i2sptr = 
+    vil_image_view_base_sptr i2sptr =
       new vil_image_view<float>(image2.image());
   to_pyramid_=vil_pyramid_image_view<float>(i2sptr,levels);
-  
+
   if (from_mask_) {
-    vil_image_view_base_sptr m1sptr = 
+    vil_image_view_base_sptr m1sptr =
       new vil_image_view<float>(image_mask.image());
     from_mask_pyramid_=vil_pyramid_image_view<float>(m1sptr,levels);
     w2mask_img1_ = w2img_pyramid(image_mask.world2im(), levels);
   }
   else {
-    vil_image_view_base_sptr m2sptr = 
+    vil_image_view_base_sptr m2sptr =
       new vil_image_view<float>(image_mask.image());
     from_mask_pyramid_=vil_pyramid_image_view<float>(m2sptr,levels);
     to_mask_pyramid_=vil_pyramid_image_view<float>(m2sptr,levels);
@@ -121,7 +118,7 @@ ihog_minimizer::ihog_minimizer( const ihog_image<float>& image1,
   ihog_world_roi roi_L(roi);
   int levels = 0;
 
-  while (roi_L.size_in_u() > min_level_size_ && roi_L.size_in_v() > min_level_size_){
+  while (roi_L.size_in_u() > min_level_size_ && roi_L.size_in_v() > min_level_size_) {
     roi_pyramid_.push_back(roi_L);
     roi_L.set_size_in_u((roi_L.size_in_u()+1)/2);
     roi_L.set_size_in_v((roi_L.size_in_v()+1)/2);
@@ -130,7 +127,7 @@ ihog_minimizer::ihog_minimizer( const ihog_image<float>& image1,
     ++levels;
   }
 
-  if (levels == 0){
+  if (levels == 0) {
     levels = 1;
     roi_pyramid_.push_back(roi_L);
   }
@@ -138,17 +135,17 @@ ihog_minimizer::ihog_minimizer( const ihog_image<float>& image1,
   w2img2_ = w2img_pyramid(image2.world2im(), levels);
   w2mask_img1_ = w2img_pyramid(image1_mask.world2im(), levels);
   w2mask_img2_ = w2img_pyramid(image2_mask.world2im(), levels);
-    vil_image_view_base_sptr i1sptr = 
+    vil_image_view_base_sptr i1sptr =
       new vil_image_view<float>(image1.image());
   from_pyramid_=vil_pyramid_image_view<float>(i1sptr,levels);
-    vil_image_view_base_sptr i2sptr = 
+    vil_image_view_base_sptr i2sptr =
       new vil_image_view<float>(image2.image());
   to_pyramid_=vil_pyramid_image_view<float>(i2sptr,levels);
 
-    vil_image_view_base_sptr m1sptr = 
+    vil_image_view_base_sptr m1sptr =
       new vil_image_view<float>(image1_mask.image());
     from_mask_pyramid_=vil_pyramid_image_view<float>(m1sptr,levels);
-    vil_image_view_base_sptr m2sptr = 
+    vil_image_view_base_sptr m2sptr =
       new vil_image_view<float>(image2_mask.image());
     to_mask_pyramid_=vil_pyramid_image_view<float>(m2sptr,levels);
 }
@@ -156,7 +153,7 @@ ihog_minimizer::ihog_minimizer( const ihog_image<float>& image1,
 void ihog_minimizer::set_image1_mask(ihog_image<float>& mask)
 {
   int levels = from_pyramid_.nlevels();
-  vil_image_view_base_sptr msptr = 
+  vil_image_view_base_sptr msptr =
     new vil_image_view<float>(mask.image());
 
   from_mask_pyramid_=vil_pyramid_image_view<float>(msptr,levels);
@@ -167,7 +164,7 @@ void ihog_minimizer::set_image1_mask(ihog_image<float>& mask)
 void ihog_minimizer::set_image2_mask(ihog_image<float>& mask)
 {
   int levels = to_pyramid_.nlevels();
-  vil_image_view_base_sptr msptr = 
+  vil_image_view_base_sptr msptr =
     new vil_image_view<float>(mask.image());
   to_mask_pyramid_=vil_pyramid_image_view<float>(msptr,levels);
   w2mask_img2_ = w2img_pyramid(mask.world2im(), levels);

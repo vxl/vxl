@@ -1,8 +1,5 @@
 //executable args
 #include <vul/vul_arg.h>
-#include <vul/vul_file.h>
-#include <vul/vul_file_iterator.h>
-#include <vul/vul_timer.h>
 
 //boxm2 scene stuff
 #include <boxm2/boxm2_scene.h>

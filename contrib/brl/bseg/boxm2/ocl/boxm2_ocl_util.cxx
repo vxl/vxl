@@ -3,13 +3,12 @@
 // \file
 #include <vgl/vgl_point_3d.h>
 #include <vnl/vnl_vector.h>
-#include <vnl/vnl_random.h>
+#include <vnl/vnl_matrix.h>
 #include <vnl/algo/vnl_svd.h>
 #include <vil/vil_convert.h>
 #include <vil/vil_image_view.h>
 #include <vil/vil_math.h>
 #include <vil/vil_load.h>
-#include <vil/vil_save.h>
 #include <vpgl/vpgl_perspective_camera.h>
 #include <vpgl/vpgl_calibration_matrix.h>
 #include <bsta/bsta_histogram.h>
@@ -21,7 +20,7 @@ void boxm2_ocl_util::set_persp_camera(vpgl_camera_double_sptr& cam, cl_float* pe
   if (vpgl_perspective_camera<double>* pcam =
       dynamic_cast<vpgl_perspective_camera<double>* >(cam.ptr()))
   {
-    set_persp_camera(pcam, persp_cam); 
+    set_persp_camera(pcam, persp_cam);
   }
   else {
     vcl_cerr << "Error set_persp_camera() : unsupported camera type\n";
@@ -61,14 +60,14 @@ void boxm2_ocl_util::set_persp_camera(vpgl_perspective_camera<double> * pcam, cl
   persp_cam[cnt++]=(cl_float)cam_center.x();
   persp_cam[cnt++]=(cl_float)cam_center.y();
   persp_cam[cnt++]=(cl_float)cam_center.z();
-  persp_cam[cnt++]=(cl_float) 0.0f; 
-  
+  persp_cam[cnt++]=(cl_float) 0.0f;
+
   //store [focal length, focal length, principal point] (4 floats)
-  const vpgl_calibration_matrix<double>& K = pcam->get_calibration(); 
-  persp_cam[cnt++] = K.x_scale()*K.focal_length(); 
-  persp_cam[cnt++] = K.y_scale()*K.focal_length(); 
+  const vpgl_calibration_matrix<double>& K = pcam->get_calibration();
+  persp_cam[cnt++] = K.x_scale()*K.focal_length();
+  persp_cam[cnt++] = K.y_scale()*K.focal_length();
   persp_cam[cnt++] = K.principal_point().x();
-  persp_cam[cnt++] = K.principal_point().y(); 
+  persp_cam[cnt++] = K.principal_point().y();
 }
 
 void boxm2_ocl_util::set_generic_camera(vpgl_camera_double_sptr& cam, cl_float* ray_origins, cl_float* ray_directions, unsigned cl_ni, unsigned cl_nj)

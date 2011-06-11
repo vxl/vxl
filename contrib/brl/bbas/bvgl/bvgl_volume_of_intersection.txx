@@ -12,10 +12,7 @@
 #include <vcl_cmath.h>
 #include <vcl_algorithm.h>
 #include <vnl/vnl_math.h>
-#include <vgl/vgl_ray_3d.h>
-#include <vgl/vgl_vector_3d.h>
-#include <vgl/vgl_plane_3d.h>
-#include <vgl/vgl_distance.h>
+#include <vgl/vgl_sphere_3d.h>
 #include <vcl_vector.h>
 
 //tolerance constants/functions

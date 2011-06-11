@@ -3,7 +3,6 @@
 #include "bwm_observer_proj_cam.h"
 #include "bwm_observer_generic_cam.h"
 #include "algo/bwm_utils.h"
-#include <vul/vul_file.h>
 #include <vsl/vsl_binary_io.h>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_point_3d.h>
@@ -18,15 +17,15 @@
 #define DEBUG
 
 bwm_observer_generic_cam::bwm_observer_generic_cam(bgui_image_tableau_sptr img,
-                                             vcl_string name,
-                                             vcl_string& image_path,
-                                             vcl_string& cam_path,
-                                             vcl_string& subtype,
-                                             bool display_image_path)
+                                                   vcl_string name,
+                                                   vcl_string& image_path,
+                                                   vcl_string& cam_path,
+                                                   vcl_string& subtype,
+                                                   bool display_image_path)
 : bwm_observer_cam(img)
 {
   img->show_image_path(display_image_path);
-  
+
   // LOAD IMAGE
   vgui_range_map_params_sptr params;
   vil_image_resource_sptr img_res = bwm_utils::load_image(image_path, params);
@@ -46,15 +45,15 @@ bwm_observer_generic_cam::bwm_observer_generic_cam(bgui_image_tableau_sptr img,
     bwm_utils::show_error("Camera tableaus need a valid camera path!");
     return;
   }
-  this->set_camera_path(cam_path);  
+  this->set_camera_path(cam_path);
   bool local = false;
-  vpgl_camera<double>* cam = 
+  vpgl_camera<double>* cam =
     bwm_observer_proj_cam::read_camera(cam_path, "perspective");
-  if(!cam)
+  if (!cam)
     cam = bwm_observer_proj_cam::read_camera(cam_path, "projective");
-  if(!cam)
+  if (!cam)
     cam = bwm_observer_rat_cam::read_camera(cam_path, local);
-  if(!cam||!local)
+  if (!cam||!local)
     camera_ = 0;
   else{
       vpgl_generic_camera<double> gcam;
@@ -62,9 +61,9 @@ bwm_observer_generic_cam::bwm_observer_generic_cam(bgui_image_tableau_sptr img,
       vpgl_generic_camera_compute::compute(cam, ni, nj, gcam);
       camera_ = new vpgl_generic_camera<double>(gcam);
   }
-    
+
   //generate a unique tab name if null
-  if(name=="")
+  if (name=="")
     {name = cam_path;}
   set_tab_name(name);
   // add the observer to the observer pool
@@ -72,44 +71,46 @@ bwm_observer_generic_cam::bwm_observer_generic_cam(bgui_image_tableau_sptr img,
 }
 
 bool bwm_observer_generic_cam::intersect_ray_and_plane(vgl_point_2d<double> img_point,
-                                                    vgl_plane_3d<double> plane,
-                                                    vgl_point_3d<double> &world_point)
+                                                       vgl_plane_3d<double> plane,
+                                                       vgl_point_3d<double> &world_point)
 {
   vpgl_generic_camera<double>* generic_cam = static_cast<vpgl_generic_camera<double> *> (camera_);
   double ni = generic_cam->cols(), nj = generic_cam->rows();
-  if(img_point.x()<0.0 ||img_point.y()<0.0||
-     img_point.x()>=ni||img_point.y()>=nj)
+  if (img_point.x()<0.0 ||img_point.y()<0.0||
+      img_point.x()>=ni||img_point.y()>=nj)
     return false;
   vgl_ray_3d<double> ray = generic_cam->ray(img_point.x(), img_point.y());
   return vgl_intersection(ray, plane, world_point);
 }
 
 
-vil_image_resource_sptr 
+vil_image_resource_sptr
 bwm_observer_generic_cam::ray_image(int component, int level=0) const
 {
   bool orgt = (component == 0);
   bool dirt = (component == 1);
-  vpgl_generic_camera<double>* gcam = 
+  vpgl_generic_camera<double>* gcam =
     static_cast<vpgl_generic_camera<double> *> (camera_);
-  if(!gcam) return 0;
+  if (!gcam) return 0;
   vbl_array_2d<vgl_ray_3d<double> >& rays = gcam->rays(level);
   int nc = rays.cols(), nr = rays.rows();
 
   vil_image_view<float> view(nc, nr, 3);
-  for(int r = 0; r<nr; ++r)
-    for(int c = 0; c<nc; ++c){
-      if(orgt){
+  for (int r = 0; r<nr; ++r)
+    for (int c = 0; c<nc; ++c) {
+      if (orgt) {
         vgl_point_3d<double> org = rays[r][c].origin();
         view(c,r,0) = static_cast<float>(org.x());
         view(c,r,1) = static_cast<float>(org.y());
         view(c,r,2) = static_cast<float>(org.z());
-      }else if(dirt){
-         vgl_vector_3d<double> dir = rays[r][c].direction();
-         view(c,r,0) = static_cast<float>(dir.x());
-         view(c,r,1) = static_cast<float>(dir.y());
-         view(c,r,2) = static_cast<float>(dir.z());
-      }else return 0;
+      }
+      else if (dirt) {
+        vgl_vector_3d<double> dir = rays[r][c].direction();
+        view(c,r,0) = static_cast<float>(dir.x());
+        view(c,r,1) = static_cast<float>(dir.y());
+        view(c,r,2) = static_cast<float>(dir.z());
+      }
+      else return 0;
     }
   return vil_new_image_resource_of_view(view);
 }

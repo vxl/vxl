@@ -12,7 +12,6 @@
 
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_matrix.h>
-#include <vnl/vnl_transpose.h>
 #include <vnl/vnl_matops.h> // use vnl_matlab_print.h for pretty printing
 
 #include <vnl/vnl_cross_product_matrix.h>
@@ -108,7 +107,7 @@ bool FMPlanarNonLinFun::compute(FMatrixPlanar* F)
           << lm.get_start_error() / vcl_sqrt(double(data_size_))
           <<" end error "
           << lm.get_end_error() / vcl_sqrt(double(data_size_))
-          <<vcl_endl;
+          <<'\n';
 
   norm_F = params_to_fmatrix (f_params);
 
@@ -116,7 +115,7 @@ bool FMPlanarNonLinFun::compute(FMatrixPlanar* F)
 
   vcl_cerr << "fm_fmatrix_nagmin: accepted " << data_size_ << '/' << data_size_
            << " rms point-epipolar error " << lm.get_end_error() / vcl_sqrt(double(data_size_))
-           << vcl_endl;
+           << '\n';
 
   return true;
 }
@@ -142,7 +141,7 @@ void FMPlanarNonLinFun::f(vnl_vector<double> const& f_params, vnl_vector<double>
 
           fx[i] = vcl_sqrt((r1 + r2) / 2.0);
      }
-     // vcl_cerr << "Err = " << vcl_sqrt (distance_squared / (data_size_ * 2)) << vcl_endl;
+     // vcl_cerr << "Err = " << vcl_sqrt (distance_squared / (data_size_ * 2)) << '\n';
 
 //   return vcl_sqrt (distance_squared / (data_size_ * 2)); // void function cannot return
 }
@@ -182,12 +181,12 @@ void FMPlanarNonLinFun::fmatrix_to_params_mna(const FMatrixPlanar& F,
   double eig1 = symm_eig.D(2,2);
 
   if (eig0 > 0 || eig1 < 0) {
-    vcl_cerr << "ERROR in FMPlanarNonLinFun: vnl_symmetric_eigensystem<double>  is unsorted: " << symm_eig.D << vcl_endl;
+    vcl_cerr << "ERROR in FMPlanarNonLinFun: vnl_symmetric_eigensystem<double>  is unsorted: " << symm_eig.D << '\n';
     vcl_abort();
   }
 
   if (vcl_fabs(symm_eig.D(1,1)) > 1e-12)
-    vcl_cerr << "FMPlanarNonLinFun: WARNING: middle eigenvalue not 0: " << symm_eig.D << vcl_endl;
+    vcl_cerr << "FMPlanarNonLinFun: WARNING: middle eigenvalue not 0: " << symm_eig.D << '\n';
 
   vnl_vector<double> v0(symm_eig.get_eigenvector(0));
   vnl_vector<double> v1(symm_eig.get_eigenvector(2));
@@ -226,7 +225,7 @@ void FMPlanarNonLinFun::fmatrix_to_params_mna(const FMatrixPlanar& F,
     FMatrixPlanar back = params_to_fmatrix_mna(params);
     double norm = vnl_matops::homg_diff(back.get_matrix(), F.get_matrix());
     if (norm > 1e-12) {
-      vcl_cerr << "FMPlanarNonLinFun: WARNING! deparameterization diff = " << norm << vcl_endl
+      vcl_cerr << "FMPlanarNonLinFun: WARNING! deparameterization diff = " << norm << '\n'
                << "b = [" << back << "];\n"
                << "n = [" << F << "];\n";
     }
@@ -271,12 +270,12 @@ void FMPlanarNonLinFun::fmatrix_to_params_awf(const FMatrixPlanar& F, vnl_vector
   double eig1 = symm_eig.D(2,2);
 
   if (eig0 > 0 || eig1 < 0) {
-    vcl_cerr << "ERROR in FMPlanarNonLinFun: vnl_symmetric_eigensystem<double>  is unsorted: " << symm_eig.D << vcl_endl;
+    vcl_cerr << "ERROR in FMPlanarNonLinFun: vnl_symmetric_eigensystem<double>  is unsorted: " << symm_eig.D << '\n';
     vcl_abort();
   }
 
   if (vcl_fabs(symm_eig.D(1,1)) > 1e-12)
-    vcl_cerr << "FMPlanarNonLinFun: WARNING: middle eigenvalue not 0: " << symm_eig.D << vcl_endl;
+    vcl_cerr << "FMPlanarNonLinFun: WARNING: middle eigenvalue not 0: " << symm_eig.D << '\n';
 
   vnl_vector<double> v0(symm_eig.get_eigenvector(0));
   vnl_vector<double> v1(symm_eig.get_eigenvector(2));
@@ -310,7 +309,7 @@ void FMPlanarNonLinFun::fmatrix_to_params_awf(const FMatrixPlanar& F, vnl_vector
     FMatrixPlanar back = params_to_fmatrix_awf(params);
     double norm = vnl_matops::homg_diff(back.get_matrix().as_ref(), F.get_matrix().as_ref());
     if (norm > 1e-12) {
-      vcl_cerr << "FMPlanarNonLinFun: WARNING! deparameterization diff = " << norm << vcl_endl
+      vcl_cerr << "FMPlanarNonLinFun: WARNING! deparameterization diff = " << norm << '\n'
                << "b = [" << back << "];\n"
                << "n = [" << F << "];\n";
     }

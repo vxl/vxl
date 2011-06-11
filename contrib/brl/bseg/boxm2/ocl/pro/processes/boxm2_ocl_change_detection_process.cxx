@@ -15,7 +15,6 @@
 #include <boxm2/boxm2_block.h>
 #include <boxm2/boxm2_data_base.h>
 #include <boxm2/ocl/boxm2_ocl_util.h>
-#include <vil/vil_save.h>
 #include <vil/vil_image_view.h>
 //brdb stuff
 #include <brdb/brdb_value.h>
@@ -26,7 +25,6 @@
 #include <bocl/bocl_device.h>
 #include <bocl/bocl_kernel.h>
 #include <boxm2/ocl/algo/boxm2_ocl_render_expected_image_function.h>
-
 
 
 namespace boxm2_ocl_change_detection_process_globals
@@ -53,12 +51,11 @@ namespace boxm2_ocl_change_detection_process_globals
   src_paths.push_back(source_dir + "bit/change_detection.cl");
   src_paths.push_back(source_dir + "bit/cast_ray_bit.cl");
 
-
   //set kernel options
   opts += " -D CHANGE -D DETERMINISTIC ";
   vcl_string options=opts;
 
-  opts += " -D STEP_CELL=step_cell_change_detection_uchar8_w_expected(aux_args.mog,aux_args.alpha,data_ptr,d,vis,aux_args.change,aux_args.change_exp,aux_args.intensity,aux_args.intensity_exp) "; 
+  opts += " -D STEP_CELL=step_cell_change_detection_uchar8_w_expected(aux_args.mog,aux_args.alpha,data_ptr,d,vis,aux_args.change,aux_args.change_exp,aux_args.intensity,aux_args.intensity_exp) ";
 
     //have kernel construct itself using the context and device
     bocl_kernel * ray_trace_kernel=new bocl_kernel();
@@ -83,10 +80,8 @@ namespace boxm2_ocl_change_detection_process_globals
                                             options,              //options
                                             "normalize change detection kernel"); //kernel identifier (for error checking)
 
-
     vec_kernels.push_back(normalize_render_kernel);
   }
-
 }
 
 bool boxm2_ocl_change_detection_process_cons(bprb_func_process& pro)
@@ -100,7 +95,6 @@ bool boxm2_ocl_change_detection_process_cons(bprb_func_process& pro)
   input_types_[2] = "boxm2_opencl_cache_sptr";
   input_types_[3] = "vpgl_camera_double_sptr";
   input_types_[4] = "vil_image_view_base_sptr";
-
 
   // process has 1 output:
   // output[0]: scene sptr
@@ -116,7 +110,7 @@ bool boxm2_ocl_change_detection_process(bprb_func_process& pro)
   vcl_size_t local_threads[2]={8,8};
   vcl_size_t global_threads[2]={8,8};
 
-  if ( pro.n_inputs() < n_inputs_ ){
+  if ( pro.n_inputs() < n_inputs_ ) {
     vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
     return false;
   }
@@ -130,7 +124,6 @@ bool boxm2_ocl_change_detection_process(bprb_func_process& pro)
   vpgl_camera_double_sptr cam= pro.get_input<vpgl_camera_double_sptr>(i++);
   vil_image_view_base_sptr img =pro.get_input<vil_image_view_base_sptr>(i++);
   vil_image_view_base_sptr exp_img =pro.get_input<vil_image_view_base_sptr>(i++);
-
 
   unsigned ni=img->ni();
   unsigned nj=img->nj();
@@ -172,7 +165,7 @@ bool boxm2_ocl_change_detection_process(bprb_func_process& pro)
   if (status!=0) return false;
 
   vcl_string identifier=device->device_identifier()+options;
-  //: compile the kernel
+  // compile the kernel
   if (kernels.find(identifier)==kernels.end())
   {
     vcl_cout<<"===========Compiling kernels==========="<<vcl_endl;
@@ -180,8 +173,8 @@ bool boxm2_ocl_change_detection_process(bprb_func_process& pro)
     compile_kernel(device,ks,options);
     kernels[identifier]=ks;
   }
-  
-  //: create all buffers
+
+  // create all buffers
   cl_float cam_buffer[48];
   boxm2_ocl_util::set_persp_camera(cam, cam_buffer);
   bocl_mem_sptr persp_cam=new bocl_mem(device->context(), cam_buffer, 3*sizeof(cl_float16), "persp cam buffer");
@@ -237,8 +230,7 @@ bool boxm2_ocl_change_detection_process(bprb_func_process& pro)
   bocl_mem_sptr vis_image=new bocl_mem(device->context(),vis_buff,cl_ni*cl_nj*sizeof(float),"vis image buffer");
   vis_image->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
-
-  //: Image Dimensions
+  // Image Dimensions
   int img_dim_buff[4];
   img_dim_buff[0] = 0;
   img_dim_buff[1] = 0;
@@ -247,13 +239,13 @@ bool boxm2_ocl_change_detection_process(bprb_func_process& pro)
   bocl_mem_sptr img_dim=new bocl_mem(device->context(), img_dim_buff, sizeof(int)*4, "image dims");
   img_dim->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
-  //: Output Array
+  // Output Array
   float output_arr[100];
   for (int i=0; i<100; ++i) output_arr[i] = 0.0f;
   bocl_mem_sptr  cl_output=new bocl_mem(device->context(), output_arr, sizeof(float)*100, "output buffer");
   cl_output->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
-  //: bit lookup buffer
+  // bit lookup buffer
   cl_uchar lookup_arr[256];
   boxm2_ocl_util::set_bit_lookup(lookup_arr);
   bocl_mem_sptr lookup=new bocl_mem(device->context(), lookup_arr, sizeof(cl_uchar)*256, "bit lookup buffer");
@@ -318,8 +310,7 @@ bool boxm2_ocl_change_detection_process(bprb_func_process& pro)
       normalize_change_kernel->clear_args();
   }
 
-                        
-  //: read out expected image
+  // read out expected image
   change_image->read_to_buffer(queue);
   vil_image_view<float>* change_img_out=new vil_image_view<float>(ni,nj);
 

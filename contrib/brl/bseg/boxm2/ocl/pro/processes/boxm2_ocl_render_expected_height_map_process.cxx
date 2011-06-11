@@ -14,7 +14,6 @@
 #include <boxm2/boxm2_block.h>
 #include <boxm2/boxm2_data_base.h>
 #include <boxm2/ocl/boxm2_ocl_util.h>
-#include <vil/vil_save.h>
 #include <vil/vil_image_view.h>
 //brdb stuff
 #include <brdb/brdb_value.h>
@@ -105,7 +104,7 @@ bool boxm2_ocl_render_expected_height_map_process(bprb_func_process& pro)
 {
   using namespace boxm2_ocl_render_expected_height_map_process_globals;
 
-  if ( pro.n_inputs() < n_inputs_ ){
+  if ( pro.n_inputs() < n_inputs_ ) {
     vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
     return false;
   }
@@ -143,7 +142,7 @@ bool boxm2_ocl_render_expected_height_map_process(bprb_func_process& pro)
                                                 CL_QUEUE_PROFILING_ENABLE,&status);
   if (status!=0)return false;
 
-  //: compile the kernel
+  // compile the kernel
   if (kernels.find(identifier)==kernels.end())
   {
     vcl_cout<<"===========Compiling kernels==========="<<vcl_endl;
@@ -190,7 +189,7 @@ bool boxm2_ocl_render_expected_height_map_process(bprb_func_process& pro)
   bocl_mem_sptr prob_image=new bocl_mem(device->context(),prob_buff,cl_ni*cl_nj*sizeof(float),"vis x omega image buffer");
   prob_image->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
-  //: Image Dimensions
+  // Image Dimensions
   int img_dim_buff[4];
   img_dim_buff[0] = 0;
   img_dim_buff[1] = 0;
@@ -199,13 +198,13 @@ bool boxm2_ocl_render_expected_height_map_process(bprb_func_process& pro)
   bocl_mem_sptr exp_img_dim=new bocl_mem(device->context(), img_dim_buff, sizeof(int)*4, "image dims");
   exp_img_dim->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
-  //: Output Array
+  // Output Array
   float output_arr[100];
   for (int i=0; i<100; ++i) output_arr[i] = 0.0f;
   bocl_mem_sptr  cl_output=new bocl_mem(device->context(), output_arr, sizeof(float)*100, "output buffer");
   cl_output->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
-  //: bit lookup buffer
+  // bit lookup buffer
   cl_uchar lookup_arr[256];
   boxm2_ocl_util::set_bit_lookup(lookup_arr);
   bocl_mem_sptr lookup=new bocl_mem(device->context(), lookup_arr, sizeof(cl_uchar)*256, "bit lookup buffer");
@@ -215,7 +214,7 @@ bool boxm2_ocl_render_expected_height_map_process(bprb_func_process& pro)
   vcl_size_t lThreads[] = {8, 8};
   vcl_size_t gThreads[] = {cl_ni,cl_nj};
 
-  //: set arguments
+  // set arguments
   for (id = vis_order.begin(); id != vis_order.end(); ++id)
   {
     //choose correct render kernel

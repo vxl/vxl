@@ -4,8 +4,6 @@
 #include "bvpgl_camera_estimator.h"
 #include <vnl/vnl_double_3.h>
 #include <vnl/vnl_double_3x3.h>
-#include <vbl/vbl_array_3d.h>
-#include <vul/vul_file.h>
 #include <vil/vil_math.h>
 #include <vcl_cassert.h>
 
@@ -170,7 +168,7 @@ template <class exp_edge_func>
 void bvpgl_camera_estimator<exp_edge_func>::estimate_rotation_iterative(const vil_image_view<float>& img_e,
                                                                         vpgl_perspective_camera<double> *cam)
 {
-  if (!estimation_params_set_){
+  if (!estimation_params_set_) {
     vcl_cerr << "Error: estimation parameters are not set\n";
     return;
   }

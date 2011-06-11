@@ -27,8 +27,7 @@
 
 #include <vil/vil_image_view.h>
 #include <vil/vil_load.h>
-#include <vil/vil_convert.h>
-#include <vil/vil_save.h>
+
 // global variables
 namespace icam_register_image_process_globals
 {
@@ -81,7 +80,7 @@ bool icam_register_image_process(bprb_func_process& pro)
   vil_image_view_base_sptr dest_image = pro.get_input<vil_image_view_base_sptr>(i++);
 
   // get the parameters
-  double local_min_thresh,smooth_sigma, 
+  double local_min_thresh,smooth_sigma,
     axis_search_cone_multiplier, polar_range_multiplier;
   unsigned nbins, min_pyramid_image_size, box_reduction_k;
   vcl_string base_path="";
@@ -96,7 +95,7 @@ bool icam_register_image_process(bprb_func_process& pro)
 
   // create the parameters object
   icam_minimizer_params params(nbins,min_pyramid_image_size,box_reduction_k,axis_search_cone_multiplier,
-    polar_range_multiplier,local_min_thresh,smooth_sigma,base_path);
+                               polar_range_multiplier,local_min_thresh,smooth_sigma,base_path);
 
   // set the images to view points
   vcl_map<unsigned, vcl_string> images;

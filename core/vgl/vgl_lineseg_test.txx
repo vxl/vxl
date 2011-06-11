@@ -6,6 +6,7 @@
 // \author fsm
 
 #include "vgl_lineseg_test.h"
+#include <vgl/vgl_tolerance.h>
 #include <vgl/vgl_triangle_test.h>
 #include <vcl_cmath.h>
 

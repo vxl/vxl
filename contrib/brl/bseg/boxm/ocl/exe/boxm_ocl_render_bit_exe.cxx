@@ -4,16 +4,9 @@
 #include <boxm/ocl/boxm_ocl_render_expected.h>
 
 #include <vpgl/vpgl_perspective_camera.h>
-#include <vil/vil_convert.h>
-#include <vil/vil_image_view_base.h>
 #include <vil/vil_image_view.h>
-#include <vil/vil_load.h>
 
 #include <vul/vul_arg.h>
-#include <vul/vul_file.h>
-#include <vul/vul_file_iterator.h>
-#include <vul/vul_timer.h>
-
 
 int main(int argc,  char** argv)
 {
@@ -36,7 +29,7 @@ int main(int argc,  char** argv)
   vcl_ifstream ifs(camfile().c_str());
   vpgl_perspective_camera<double>* pcam =new vpgl_perspective_camera<double>;
   if (!ifs.is_open()) {
-    vcl_cerr << "Failed to open file " << camfile() << vcl_endl;
+    vcl_cerr << "Failed to open file " << camfile() << '\n';
     return -1;
   }
   else  {

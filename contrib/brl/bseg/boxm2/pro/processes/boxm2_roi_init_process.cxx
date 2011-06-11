@@ -37,7 +37,7 @@
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_box_2d.h>
 #include <vgl/vgl_box_3d.h>
-#include <vgl/vgl_vector_3d.h>
+#include <vgl/vgl_point_3d.h>
 
 #include <vsol/vsol_box_2d_sptr.h>
 #include <vsol/vsol_box_2d.h>
@@ -54,7 +54,7 @@ namespace boxm2_roi_init_process_globals
   const unsigned n_inputs_ = 3;
   const unsigned n_outputs_ = 3;
 
-  // functions
+  // === functions ===
 
   //: roi_init function
   bool roi_init(vcl_string const& image_path,
@@ -81,7 +81,7 @@ bool boxm2_roi_init_process_globals::roi_init( vcl_string const& image_path,
                                                vil_image_view<unsigned char>* nitf_image_unsigned_char,
                                                vpgl_local_rational_camera<double>& local_camera)
 {
-  // read the image and extract the camera
+  //: read the image and extract the camera
   vil_image_resource_sptr img = vil_load_image_resource(image_path.c_str());
   vcl_string format = img->file_format();
   vcl_string prefix = format.substr(0,4);

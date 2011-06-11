@@ -16,7 +16,7 @@
 #include <boxm/ocl/boxm_update_bit_scene_manager.h>
 #include <boxm/ocl/boxm_update_bit_scene_manager_sptr.h>
 #include <boxm/basic/boxm_util_data_types.h>
-#include <vil/vil_convert.h>
+
 namespace boxm_clean_aux_data_scene_process_globals
 {
   const unsigned n_inputs_ = 1;
@@ -32,20 +32,15 @@ bool boxm_clean_aux_data_scene_process_cons(bprb_func_process& pro)
   // input[2]: input image to update
   vcl_vector<vcl_string> input_types_(n_inputs_);
   input_types_[0] = "boxm_update_bit_scene_manager_sptr";
- 
-  if (!pro.set_input_types(input_types_))
-    return false;
-  
 
-  return true;
-
+  return pro.set_input_types(input_types_);
 }
 
 bool boxm_clean_aux_data_scene_process(bprb_func_process& pro)
 {
   using namespace boxm_clean_aux_data_scene_process_globals;
 
-  if ( pro.n_inputs() < n_inputs_ ){
+  if ( pro.n_inputs() < n_inputs_ ) {
     vcl_cout << pro.name() << ": The number of inputs should be " << n_inputs_<< vcl_endl;
     return false;
   }

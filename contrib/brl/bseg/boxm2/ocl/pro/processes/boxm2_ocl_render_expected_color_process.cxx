@@ -15,13 +15,11 @@
 #include <boxm2/boxm2_block.h>
 #include <boxm2/boxm2_data_base.h>
 #include <boxm2/ocl/boxm2_ocl_util.h>
-#include <vil/vil_save.h>
 #include <vil/vil_image_view.h>
 //brdb stuff
 #include <brdb/brdb_value.h>
 
 //directory utility
-#include <vul/vul_timer.h>
 #include <vcl_where_root_dir.h>
 #include <bocl/bocl_device.h>
 #include <bocl/bocl_kernel.h>
@@ -107,7 +105,7 @@ bool boxm2_ocl_render_expected_color_process(bprb_func_process& pro)
 {
   using namespace boxm2_ocl_render_expected_color_process_globals;
 
-  if ( pro.n_inputs() < n_inputs_ ){
+  if ( pro.n_inputs() < n_inputs_ ) {
     vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
     return false;
   }
@@ -137,14 +135,14 @@ bool boxm2_ocl_render_expected_color_process(bprb_func_process& pro)
     return false;
   }
 
-  //: create a command queue.
+  // create a command queue.
   int status=0;
   cl_command_queue queue = clCreateCommandQueue(device->context(),*(device->device_id()),
                                                 CL_QUEUE_PROFILING_ENABLE,&status);
   if (status!=0) return false;
   vcl_string identifier=device->device_identifier()+options;
 
-  //: compile the kernel
+  // compile the kernel
   if (kernels.find(identifier)==kernels.end())
   {
     vcl_cout<<"====boxm2_ocl_render_color_process::Compiling kernels on "<<identifier<<vcl_endl;
@@ -174,12 +172,12 @@ bool boxm2_ocl_render_expected_color_process(bprb_func_process& pro)
   bocl_mem_sptr exp_img_dim=new bocl_mem(device->context(), img_dim_buff, sizeof(int)*4, "image dims");
   exp_img_dim->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
-  //: run expected image function
+  // run expected image function
   render_expected_image(scene, device, opencl_cache, queue,
                         cam, exp_image, vis_image, exp_img_dim,
                         data_type, kernels[identifier][0], lthreads, cl_ni, cl_nj);
 
-  //: read out expected image
+  // read out expected image
   exp_image->read_to_buffer(queue);
   vil_image_view<vil_rgba<vxl_byte> >* exp_img_out = new vil_image_view<vil_rgba<vxl_byte> >(ni,nj);
 

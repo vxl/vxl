@@ -2,7 +2,6 @@
 
 #include <vnl/vnl_double_3x3.h>
 #include <vnl/vnl_double_2x3.h>
-#include <vil/vil_image_view.h>
 
 #include <vpgl/ihog/ihog_transform_2d.h>
 #include <vpgl/ihog/ihog_image.h>

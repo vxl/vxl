@@ -3,7 +3,6 @@
 #include <bvxm/bvxm_voxel_world.h>
 #include <bvxm/bvxm_image_metadata.h>
 #include <vgl/vgl_point_3d.h>
-#include <vgl/vgl_vector_3d.h>
 #include <vgl/vgl_plane_3d.h>
 #include <vgl/algo/vgl_rotation_3d.h>
 
@@ -14,7 +13,6 @@
 #include <vnl/vnl_matrix_exp.h>
 #include <vnl/algo/vnl_matrix_inverse.h>
 
-#include <vil/vil_image_resource.h>
 #include <vil/vil_image_view.h>
 #include <vil/vil_convert.h>
 

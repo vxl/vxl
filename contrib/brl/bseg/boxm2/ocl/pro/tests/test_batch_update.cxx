@@ -27,8 +27,6 @@
 #include <vcl_map.h>
 #include <vcl_algorithm.h>
 
-#include <vil/vil_image_view.h>
-#include <vil/vil_save.h>
 #include <brdb/brdb_value.h>
 
 class boxm2_process

@@ -14,7 +14,6 @@
 #include <boxm2/boxm2_block.h>
 #include <boxm2/boxm2_data_base.h>
 #include <boxm2/ocl/boxm2_ocl_util.h>
-#include <vil/vil_save.h>
 #include <vil/vil_image_view.h>
 //brdb stuff
 #include <brdb/brdb_value.h>
@@ -60,11 +59,11 @@ namespace boxm2_ocl_probability_of_image_gl_process_globals
         bocl_kernel * ray_trace_kernel=new bocl_kernel();
 
         ray_trace_kernel->create_kernel( &device->context(),
-            device->device_id(),
-            src_paths,
-            "compute_probability_of_image",   //kernel name
-            opts,              //options
-            "boxm2 ocl probability computation"); //kernel identifier (for error checking)
+                                         device->device_id(),
+                                         src_paths,
+                                         "compute_probability_of_image",   //kernel name
+                                         opts,              //options
+                                         "boxm2 ocl probability computation"); //kernel identifier (for error checking)
         vec_kernels.push_back(ray_trace_kernel);
         //create normalize image kernel
         vcl_vector<vcl_string> norm_src_paths;
@@ -87,11 +86,11 @@ namespace boxm2_ocl_probability_of_image_gl_process_globals
         bocl_kernel * convert_kernel=new bocl_kernel();
 
         convert_kernel->create_kernel( &device->context(),
-                                        device->device_id(),
-                                        convert_src_paths,
-                                        "convert_float_to_rgba",   //kernel name
-                                        "",              //options
-                                        "convert float to rgba"); //kernel identifier (for error checking)
+                                       device->device_id(),
+                                       convert_src_paths,
+                                       "convert_float_to_rgba",   //kernel name
+                                       "",              //options
+                                       "convert float to rgba"); //kernel identifier (for error checking)
         vec_kernels.push_back(convert_kernel);
     }
 }
@@ -123,7 +122,7 @@ bool boxm2_ocl_probability_of_image_gl_process(bprb_func_process& pro)
   vcl_size_t local_threads[2]={8,8};
   vcl_size_t global_threads[2]={8,8};
 
-  if ( pro.n_inputs() < n_inputs_ ){
+  if ( pro.n_inputs() < n_inputs_ ) {
     vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
     return false;
   }

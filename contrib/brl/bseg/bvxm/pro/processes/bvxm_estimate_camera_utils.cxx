@@ -2,7 +2,6 @@
 #include <vgl/algo/vgl_convex_hull_2d.h>
 #include <vgl/algo/vgl_homg_operators_3d.h>
 #include <vnl/vnl_double_3.h>
-#include <vul/vul_file.h>
 #include <vcl_cassert.h>
 
 // Default constructor
@@ -267,7 +266,7 @@ void bvxm_camera_estimator::estimate_rotation_iterative(const bvxm_voxel_slab<fl
                                                         const vil_image_view<float>& img_e,
                                                         vpgl_perspective_camera<double> *cam)
 {
-  if ((!estimation_params_set_) || (!world_params_set_)){
+  if ((!estimation_params_set_) || (!world_params_set_)) {
     vcl_cerr << "Error: world and estimation parameters are not set\n";
     return;
   }

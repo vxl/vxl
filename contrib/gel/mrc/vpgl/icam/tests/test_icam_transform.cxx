@@ -3,10 +3,9 @@
 #include <vcl_iostream.h>
 #include <vcl_string.h>
 #include <vcl_vector.h>
-#include <vul/vul_file.h>
 
 #include <vgl/vgl_vector_3d.h>
-#include <vgl/vgl_point_3d.h>
+#include <vgl/vgl_point_2d.h>
 #include <vgl/algo/vgl_rotation_3d.h>
 
 #include <vil/vil_image_view.h>

@@ -8,7 +8,6 @@
 // \date Mar 15, 2011
 
 #include <vcl_fstream.h>
-#include <vul/vul_file.h>
 #include <boxm2/boxm2_scene.h>
 
 namespace boxm2_add_block_process_globals
@@ -48,7 +47,7 @@ bool boxm2_add_block_process(bprb_func_process& pro)
 {
   using namespace boxm2_add_block_process_globals;
 
-  if ( pro.n_inputs() < n_inputs_ ){
+  if ( pro.n_inputs() < n_inputs_ ) {
     vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
     return false;
   }

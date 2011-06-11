@@ -10,7 +10,6 @@
 #include <vil/vil_save.h>
 #include <vil/vil_math.h>
 #include <vil/vil_new.h>
-#include <vnl/vnl_matrix_fixed.h>
 #include <vgl/vgl_vector_3d.h>
 #include <vgl/vgl_homg_point_2d.h>
 #include <vgl/vgl_homg_point_3d.h>
@@ -658,8 +657,8 @@ void flip_camera(vpgl_perspective_camera<double> &camera,
 {
   vgl_vector_3d<double> centroid(0.0, 0.0, 0.0);
   unsigned int num_behind = 0;
-  for (unsigned i = 0; i<world_hpts.size(); ++i){
-    if (camera.is_behind_camera(world_hpts[i])){
+  for (unsigned i = 0; i<world_hpts.size(); ++i) {
+    if (camera.is_behind_camera(world_hpts[i])) {
       vgl_point_3d<double> p(world_hpts[i]);
       centroid += vgl_vector_3d<double>(p.x(),p.y(),p.z());
       ++num_behind;
@@ -748,15 +747,15 @@ void bmvv_cal_manager::solve_camera()
     cam_ = vgl_p_matrix<double>(camera.get_matrix());
 
     vpgl_perspective_camera<double> p_camera;
-    if (optimize && vpgl_perspective_decomposition(camera.get_matrix(),p_camera)){
+    if (optimize && vpgl_perspective_decomposition(camera.get_matrix(),p_camera)) {
       vcl_vector< vgl_point_2d<double> > image_pts;
       unsigned int num_behind = 0;
-      for (unsigned i = 0; i<image_hpts.size(); i++){
+      for (unsigned i = 0; i<image_hpts.size(); i++) {
         if (p_camera.is_behind_camera(world_hpts[i]))
           ++num_behind;
         image_pts.push_back(image_hpts[i]);
       }
-      if (num_behind > world_hpts.size()/2){
+      if (num_behind > world_hpts.size()/2) {
         vcl_cout << "Majority of points behind camera, flipping" << vcl_endl;
         flip_camera(p_camera, world_hpts);
       }

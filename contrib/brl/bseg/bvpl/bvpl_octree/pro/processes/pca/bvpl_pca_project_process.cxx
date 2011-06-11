@@ -11,8 +11,6 @@
 
 #include <bvpl/bvpl_octree/bvpl_global_pca.h>
 
-#include <vul/vul_file.h>
-
 //:global variables
 namespace bvpl_pca_project_process_globals
 {
@@ -30,7 +28,7 @@ bool bvpl_pca_project_process_cons(bprb_func_process& pro)
   unsigned i = 0;
   input_types_[i++] = "bvpl_global_pca_125_sptr" ; //global pca class
   input_types_[i++] = "int"; //scene id
-  input_types_[i++] = "int";  //block Indeces
+  input_types_[i++] = "int";  //block Indices
   input_types_[i++] = "int";
   input_types_[i++] = "int";
 
@@ -53,12 +51,12 @@ bool bvpl_pca_project_process(bprb_func_process& pro)
   int block_j = pro.get_input<int>(i++);
   int block_k = pro.get_input<int>(i++);
 
-  if(!global_pca)
+  if (!global_pca)
   {
-    vcl_cerr << "Global PCA is NULL \n";
+    vcl_cerr << "Global PCA is NULL\n";
     return false;
   }
-  
+
   global_pca->project(scene_id, block_i, block_j, block_k);
 
   return true;
