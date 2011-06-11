@@ -14,18 +14,17 @@
 //
 // \verbatim
 //  Modifications
-//   13-JUL-00   Marko Bacic, Oxford RRG -- Added support for menu shortcuts
-//   21-SEP-00   capes@robots -- Changed destructor to actually destroy the widgets
-//                              Facilitates the post_destroy() adaptor method.
-//   13-SEP-2002 K.Y.McGaul - Changed to Doxygen style comments.
-//   07-JAN-2011 Lianqing Yu - Move member function init() from show() to the
-//                             constructors so that client may call show() 
+//   13-Jul-2000 Marko Bacic, Oxford RRG - Added support for menu shortcuts
+//   21-Sep-2000 capes@robots- Changed destructor to actually destroy the widgets
+//                             Facilitates the post_destroy() adaptor method.
+//   13-Sep-2002 K.Y.McGaul  - Changed to Doxygen style comments.
+//   07-Jan-2011 Lianqing Yu - Move member function init() from show() to the
+//                             constructors so that client may call show()
 //                             multiple times without triggering GTK+ warning
-//                             that a child widget (indeed it's member box) is
-//                             inserted into a GtkBin widget (actually it's
+//                             that a child widget (indeed its member box) is
+//                             inserted into a GtkBin widget (actually its
 //                             member window) that already has a child.
 // \endverbatim
-
 
 #ifdef __SUNPRO_CC
 // <string> breaks if NULL is defined to "(void*)0".

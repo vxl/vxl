@@ -6,7 +6,7 @@
 // \author  K.Y.McGaul
 // \brief Passes events to a tableau and a xcv_mview_manager.
 //
-//  Events sent to this tableau are passed on to both its child tableau
+//  Events sent to this tableau are passed on to both its child tableaux
 //  and to the xcv_mview_manager registered in the constructor.
 //
 // \verbatim
@@ -20,7 +20,7 @@
 #include "xcv_mview_manager.h"
 
 //:
-//  Events sent to this tableau are passed on to both its child tableau
+//  Events sent to this tableau are passed on to both its child tableaux
 //  and to the xcv_mview_manager registered in the constructor.
 
 class xcv_tjunction : public vgui_tableau

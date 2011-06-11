@@ -6,8 +6,8 @@
 #define ONE_THIRD_PI 1.04719755119659775f
 
 //: calculate the volume of intersection between these two spheres
-// A sphere is represented by a float4, where (x,y,z) is it's 3d center, and
-// w is it's radius
+// A sphere is represented by a float4, where (x,y,z) is its 3d center, and
+// w is its radius
 float sphere_intersection_volume(float4 A, float4 B)
 {
   //distance between two spheres and radius

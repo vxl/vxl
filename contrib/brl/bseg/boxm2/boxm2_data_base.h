@@ -54,7 +54,7 @@ class boxm2_data_base : public vbl_ref_count
     //: id for this particular block
     boxm2_block_id id_;
 
-    //: byte buffer and it's size
+    //: byte buffer and its size
     char * data_buffer_;
     vcl_size_t buffer_length_;
 };
