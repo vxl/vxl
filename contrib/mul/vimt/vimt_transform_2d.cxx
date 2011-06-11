@@ -34,18 +34,20 @@ void vimt_transform_2d::matrix(vnl_matrix<double>& M) const
 
 //=======================================================================
 // Define the transform in terms of a 3x3 homogeneous matrix.
-void vimt_transform_2d::set_matrix(const vnl_matrix<double>& M) 
+vimt_transform_2d& vimt_transform_2d::set_matrix(const vnl_matrix<double>& M)
 {
-  if (M.rows()!=3 || M.cols()!=3)
-  {
-    vcl_cerr<<"vimt_transform_2d::set_matrix(mat): mat not 3x3\n";
-    vcl_abort(); 
-  }
+    if (M.rows()!=3 || M.cols()!=3)
+    {
+        vcl_cerr<<"vimt_transform_2d::set_matrix(mat): mat not 3x3\n";
+        vcl_abort();
+    }
 
-  form_=Affine;
-  xx_=M[0][0]; xy_=M[0][1]; xt_=M[0][2];
-  yx_=M[1][0]; yy_=M[1][1]; yt_=M[1][2];
-  tx_=M[2][0]; ty_=M[2][1]; tt_=M[2][2];
+    form_=Affine;
+    xx_=M[0][0]; xy_=M[0][1]; xt_=M[0][2];
+    yx_=M[1][0]; yy_=M[1][1]; yt_=M[1][2];
+    tx_=M[2][0]; ty_=M[2][1]; tt_=M[2][2];
+
+    return *this;
 }
 
 
@@ -97,95 +99,94 @@ void vimt_transform_2d::params_of(vnl_vector<double>& v, Form form) const
             v_data[6]=tx_; v_data[7]=ty_; v_data[8]=tt_;
             break;
         default:
-            vcl_cerr<<"vimt_transform_2d::params() Unexpected form: "<<int(form)<<vcl_endl;
+            vcl_cerr<<"vimt_transform_2d::params() Unexpected form: "<<int(form)<<'\n';
             vcl_abort();
     }
 }
+
 //=======================================================================
-void vimt_transform_2d::simplify(double tol /*=1e-10*/)
+vimt_transform_2d& vimt_transform_2d::simplify(double tol /*=1e-10*/)
 {
-  double r;
-  double sx, sy;
-  double det;
-  switch (form_)
-  {
-   case Affine:
+    double r;
+    double sx, sy;
+    double det;
+    switch (form_)
     {
-      r = vcl_atan2(-xy_,xx_);
-      double matrix_form[]= {xx_, yx_, xy_, yy_};
-      vnl_matrix_fixed<double, 2, 2> X(matrix_form);
-      vnl_matrix_fixed<double, 2, 2> S2 = X.transpose() * X;
-      // if X=R*S then X'X = S'*R'*R*S
-      // if R is a rotation matrix then R'*R=I and so X'X = S'*S = [s_x^2 0 0; 0 s_y^2 0]
-      if (S2(0,1)*S2(0,1) + S2(1,0)*S2(1,0) >= tol*tol*6)
-        return;
+        case Affine:
+        {
+            r = vcl_atan2(-xy_,xx_);
+            double matrix_form[]= {xx_, yx_, xy_, yy_};
+            vnl_matrix_fixed<double, 2, 2> X(matrix_form);
+            vnl_matrix_fixed<double, 2, 2> S2 = X.transpose() * X;
+            // if X=R*S then X'X = S'*R'*R*S
+            // if R is a rotation matrix then R'*R=I and so X'X = S'*S = [s_x^2 0 0; 0 s_y^2 0]
+            if (S2(0,1)*S2(0,1) + S2(1,0)*S2(1,0) >= tol*tol*6)
+                return *this;
 
-      // mirroring if det is negative;
-      double mirror=vnl_math_sgn(vnl_det(X[0], X[1]));
+            // mirroring if det is negative;
+            double mirror=vnl_math_sgn(vnl_det(X[0], X[1]));
 
-      sx = vcl_sqrt(vcl_abs(S2(0,0))) * mirror;
-      sy = vcl_sqrt(vcl_abs(S2(1,1))) * mirror;
-      if (vnl_math_sqr(sx-sy) < tol*tol)
-        this->set_similarity(sx, r, xt_, yt_ );
-      else if (r*r < tol*tol)
-        this->set_zoom_only(sx, sy, xt_, yt_);
-      else if (vnl_math_sqr(vcl_abs(r) - vnl_math::pi)< tol)
-        this->set_zoom_only(-sx, -sy, xt_, yt_);
-      else
-        return;
-      simplify();
-      return;
+            sx = vcl_sqrt(vcl_abs(S2(0,0))) * mirror;
+            sy = vcl_sqrt(vcl_abs(S2(1,1))) * mirror;
+            if (vnl_math_sqr(sx-sy) < tol*tol)
+                return this->set_similarity(sx, r, xt_, yt_ ).simplify();
+            else if (r*r < tol*tol)
+                return this->set_zoom_only(sx, sy, xt_, yt_).simplify();
+            else if (vnl_math_sqr(vcl_abs(r) - vnl_math::pi)< tol)
+                return this->set_zoom_only(-sx, -sy, xt_, yt_).simplify();
+            else
+                return *this;
+        }
+        case Similarity:
+            r = vcl_atan2(-xy_,xx_);
+
+            det=+xx_*yy_-yx_*xy_;
+            sx=vcl_sqrt(xx_*xx_ + yx_*yx_)* vnl_math_sgn(det);
+
+            if (r*r < tol*tol)
+                return this->set_zoom_only(sx, xt_, yt_).simplify();
+            else if (vnl_math_sqr(vcl_abs(r) - vnl_math::pi)< tol)
+                return this->set_zoom_only(-sx, xt_, yt_).simplify();
+            else if (vnl_math_sqr(sx-1.0) < tol*tol)
+                return this->set_rigid_body(r, xt_, yt_).simplify();
+            else
+                return *this;
+
+        case RigidBody:
+            r = vcl_atan2(-xy_,xx_);
+
+            if (r*r < tol*tol)
+                return this->set_translation(xt_, yt_).simplify();
+            else
+                return *this;
+        case ZoomOnly:
+            if (vnl_math_sqr(xx_-1.0) + vnl_math_sqr(yy_-1.0) < tol*tol)
+                return set_translation(xt_, yt_);
+            else
+                return *this;
+        case Translation:
+            if (xt_*xt_+yt_*yt_<tol*tol)
+                return set_identity();
+            else
+                return *this;
+        case Identity:
+            return *this;
+        default:
+            vcl_cerr << "vimt3d_transform_3d::simplify() Unexpected form:" <<  form_ << '\n';
+            vcl_abort();
     }
-   case Similarity:
-    r = vcl_atan2(-xy_,xx_);
-
-    det=+xx_*yy_-yx_*xy_;
-    sx=vcl_sqrt(xx_*xx_ + yx_*yx_)* vnl_math_sgn(det);
-    
-    if (r*r < tol*tol)
-      this->set_zoom_only(sx, xt_, yt_);
-    else if (vnl_math_sqr(vcl_abs(r) - vnl_math::pi)< tol)
-      this->set_zoom_only(-sx, xt_, yt_);
-    else if (vnl_math_sqr(sx-1.0) < tol*tol)
-      this->set_rigid_body(r, xt_, yt_);
-    else
-      return;
-    simplify();
-    return;
-
-   case RigidBody:
-    r = vcl_atan2(-xy_,xx_);
-
-    if (r*r >= tol*tol)
-      return;
-    this->set_translation(xt_, yt_);
-    simplify();
-    return;
-   case ZoomOnly:
-    if (vnl_math_sqr(xx_-1.0) + vnl_math_sqr(yy_-1.0) >= tol*tol)
-      return;
-    set_translation(xt_, yt_);
-   case Translation:
-    if (xt_*xt_+yt_*yt_<tol*tol)
-      set_identity();
-    return;
-   case Identity:
-    return;
-   default:
-    vcl_cerr << "vimt3d_transform_3d::simplify() Unexpected form:" <<  form_ << vcl_endl;
-    vcl_abort();
-  }
+    return *this;
 }
 
 void vimt_transform_2d::setCheck(int n1,int n2,const char* str) const
 {
     if (n1==n2) return;
     vcl_cerr<<"vimt_transform_2d::set() "<<n1<<" parameters required for "
-            <<str<<". Passed "<<n2<<vcl_endl;
+            <<str<<". Passed "<<n2<<'\n';
     vcl_abort();
 }
 
-void vimt_transform_2d::set(const vnl_vector<double>& v, Form form)
+vimt_transform_2d& vimt_transform_2d::set(const vnl_vector<double>& v, Form form)
 {
     int n=v.size();
     const double* v_data = v.begin();
@@ -193,111 +194,104 @@ void vimt_transform_2d::set(const vnl_vector<double>& v, Form form)
     switch (form)
     {
         case (Identity):
-            set_identity();
-            break;
+            return set_identity();
         case (Translation):
             setCheck(2,n,"Translation");
-            set_translation(v_data[0],v_data[1]);
-            break;
+            return set_translation(v_data[0],v_data[1]);
         case (ZoomOnly):
             setCheck(4,n,"ZoomOnly");
-            set_zoom_only(v_data[0],v_data[1],v_data[2],v_data[3]);
-            break;
+            return set_zoom_only(v_data[0],v_data[1],v_data[2],v_data[3]);
         case (RigidBody):
             setCheck(3,n,"RigidBody");
-            set_rigid_body(v_data[0],v_data[1],v_data[2]);
-            break;
+            return set_rigid_body(v_data[0],v_data[1],v_data[2]);
         case (Reflection):
             setCheck(4,n,"Reflection");
+            form_ = Reflection;
+            inv_uptodate_=false;
             xx_ = v_data[0]; xy_ = v_data[1];
             yx_ = xy_; yy_ = -xx_;
             xt_ = v_data[2]; yt_ = v_data[3];
-            form_ = Reflection;
-            inv_uptodate_=false;
-            break;
+            return *this;
         case (Similarity):
             setCheck(4,n,"Similarity");
+            form_ = Similarity;
+            inv_uptodate_=false;
             xx_ = v_data[0]; xy_ = v_data[1];
             yx_ = -xy_; yy_=xx_;
             xt_ = v_data[2]; yt_ = v_data[3];
-            form_ = Similarity;
-            inv_uptodate_=false;
-            break;
+            return *this;
         case (Affine):
             setCheck(6,n,"Affine");
-            xx_ = v_data[0]; xy_ = v_data[1]; xt_ = v_data[2];
-            yx_ = v_data[3]; yy_ = v_data[4]; yt_ = v_data[5];
             form_ = Affine;
             inv_uptodate_=false;
-            break;
+            xx_ = v_data[0]; xy_ = v_data[1]; xt_ = v_data[2];
+            yx_ = v_data[3]; yy_ = v_data[4]; yt_ = v_data[5];
+            return *this;
         case (Projective):
             setCheck(9,n,"Projective");
+            form_ = Projective;
+            inv_uptodate_=false;
             xx_ = v_data[0]; xy_ = v_data[1]; xt_ = v_data[2];
             yx_ = v_data[3]; yy_ = v_data[4]; yt_ = v_data[5];
             tx_ = v_data[6]; ty_ = v_data[7]; tt_ = v_data[8];
-            form_ = Projective;
-            inv_uptodate_=false;
-            break;
+            return *this;
         default:
-            vcl_cerr<<"vimt_transform_2d::set() Unexpected form: "<<int(form)<<vcl_endl;
+            vcl_cerr<<"vimt_transform_2d::set() Unexpected form: "<<int(form)<<'\n';
             vcl_abort();
     }
+    return *this;
 }
 
 
-void vimt_transform_2d::set_identity()
+vimt_transform_2d& vimt_transform_2d::set_identity()
 {
-    if (form_==Identity) return;
+    if (form_==Identity) return *this;
     form_=Identity;
-    xx_=yy_=tt_=1.0;
-    xy_=xt_=0.0;
-    yx_=yt_=0.0;
-    tx_=ty_=0.0;
-
     inv_uptodate_=false;
+    xx_=yy_=tt_=1.0;
+    xy_=xt_=yx_=yt_=tx_=ty_=0.0;
+    return *this;
 }
 
-void vimt_transform_2d::set_translation(double t_x, double t_y)
+vimt_transform_2d& vimt_transform_2d::set_translation(double t_x, double t_y)
 {
     if (t_x==0 && t_y==0)
-        set_identity();
+        return set_identity();
     else
     {
         form_=Translation;
+        inv_uptodate_=false;
         xx_=yy_=tt_=1.0;
         xy_=0.0;
         yx_=0.0;
         tx_=ty_=0.0;
         xt_=t_x;
         yt_=t_y;
+        return *this;
     }
-
-    inv_uptodate_=false;
 }
 
-void vimt_transform_2d::set_origin( const vgl_point_2d<double> & p )
+vimt_transform_2d& vimt_transform_2d::set_origin( const vgl_point_2d<double> & p )
 {
+    if (form_ == Identity) form_=Translation;
+    inv_uptodate_=false;
     xt_ = p.x()*tt_;
     yt_ = p.y()*tt_;
-
-    if (form_ == Identity) form_=Translation;
-
-    inv_uptodate_=false;
+    return *this;
 }
 
-void vimt_transform_2d::set_zoom_only(double s_x, double s_y, double t_x, double t_y)
+vimt_transform_2d& vimt_transform_2d::set_zoom_only(double s_x, double s_y, double t_x, double t_y)
 {
     form_=ZoomOnly;
+    inv_uptodate_=false;
     xx_=s_x;   yy_=s_y;   tt_=1.0;
     xt_=t_x;   yt_=t_y;
     xy_=yx_=tx_=ty_=0.0;
-
-    inv_uptodate_=false;
+    return *this;
 }
 
-
-    //: reflect about a line though the points m1, and m2
-void vimt_transform_2d::set_reflection( const vgl_point_2d<double> & m1, const vgl_point_2d<double> & m2)
+//: reflect about a line though the points m1, and m2
+vimt_transform_2d& vimt_transform_2d::set_reflection( const vgl_point_2d<double> & m1, const vgl_point_2d<double> & m2)
 {
     form_=Reflection;
 
@@ -327,74 +321,74 @@ void vimt_transform_2d::set_reflection( const vgl_point_2d<double> & m1, const v
 
     tx_ = ty_ = 0.0;
     tt_ = 1.0;
+
+    return *this;
 }
 
-void vimt_transform_2d::set_rigid_body(double theta, double t_x, double t_y)
+vimt_transform_2d& vimt_transform_2d::set_rigid_body(double theta, double t_x, double t_y)
 {
     if (theta==0.0)
-        set_translation(t_x,t_y);
+        return set_translation(t_x,t_y);
     else
     {
         form_=RigidBody;
+        inv_uptodate_=false;
         double a=vcl_cos(theta);
         double b=vcl_sin(theta);
-        xx_=a;  xy_=-b;
-        yx_=b;  yy_=a;
-        xt_=t_x;   yt_=t_y;
-        tx_=ty_=0.0;   tt_=1.0;
+        xx_=a;   yx_=b;   tx_=0.0;
+        xy_=-b;  yy_=a;   ty_=0.0;
+        xt_=t_x; yt_=t_y; tt_=1.0;
+        return *this;
     }
-
-    inv_uptodate_=false;
 }
 
-void vimt_transform_2d::set_similarity(double s, double theta, double t_x, double t_y)
+vimt_transform_2d& vimt_transform_2d::set_similarity(double s, double theta, double t_x, double t_y)
 {
     if (s==1.0)
-        set_rigid_body(theta,t_x,t_y);
+        return set_rigid_body(theta,t_x,t_y);
     else
     {
         form_=Similarity;
+        inv_uptodate_=false;
         double a=s*vcl_cos(theta);
         double b=s*vcl_sin(theta);
-        xx_=a;  xy_=-b;
-        yx_=b;  yy_=a;
-        xt_=t_x;   yt_=t_y;
-        tx_=ty_=0.0;   tt_=1.0;
+        xx_=a;   yx_=b;   tx_=0.0;
+        xy_=-b;  yy_=a;   ty_=0.0;
+        xt_=t_x; yt_=t_y; tt_=1.0;
+        return *this;
     }
-
-    inv_uptodate_=false;
 }
 
 //: Sets Euclidean transformation.
-void vimt_transform_2d::set_similarity(const vgl_point_2d<double> & dx,
-                                       const vgl_point_2d<double> & t)
+vimt_transform_2d& vimt_transform_2d::set_similarity(const vgl_point_2d<double> & dx,
+                                                     const vgl_point_2d<double> & t)
 {
     form_=Similarity;
-    xx_ = dx.x(); xy_ = -dx.y();
-    yx_ = dx.y(); yy_ = dx.x();
-    xt_ = t.x();  yt_ = t.y();
-    tx_=ty_=0.0;   tt_=1.0;
     inv_uptodate_=false;
+    xx_ = dx.x();  yx_ = dx.y(); tx_=0.0;
+    xy_ = -dx.y(); yy_ = dx.x(); ty_=0.0;
+    xt_ = t.x();   yt_ = t.y();  tt_=1.0;
+    return *this;
 }
 
 //: Sets Euclidean transformation.
-void vimt_transform_2d::set_similarity(const vgl_vector_2d<double> & dx,
-                                       const vgl_point_2d<double> & t)
+vimt_transform_2d& vimt_transform_2d::set_similarity(const vgl_vector_2d<double> & dx,
+                                                     const vgl_point_2d<double> & t)
 {
     form_=Similarity;
-    xx_ = dx.x(); xy_ = -dx.y();
-    yx_ = dx.y(); yy_ = dx.x();
-    xt_ = t.x();  yt_ = t.y();
-    tx_=ty_=0.0;   tt_=1.0;
     inv_uptodate_=false;
+    xx_ = dx.x();  yx_ = dx.y(); tx_=0.0;
+    xy_ = -dx.y(); yy_ = dx.x(); ty_=0.0;
+    xt_ = t.x();   yt_ = t.y();  tt_=1.0;
+    return *this;
 }
 
 
-void vimt_transform_2d::set_affine(const vnl_matrix<double>& M23)  // 2x3 matrix
+vimt_transform_2d& vimt_transform_2d::set_affine(const vnl_matrix<double>& M23)  // 2x3 matrix
 {
     if ((M23.rows()!=2) || (M23.columns()!=3))
     {
-        vcl_cerr<<"vimt_transform_2d::affine : Expect 2x3 matrix, got "<<M23.rows()<<" x "<<M23.columns()<<vcl_endl;
+        vcl_cerr<<"vimt_transform_2d::affine : Expect 2x3 matrix, got "<<M23.rows()<<" x "<<M23.columns()<<'\n';
         vcl_abort();
     }
 
@@ -407,46 +401,45 @@ void vimt_transform_2d::set_affine(const vnl_matrix<double>& M23)  // 2x3 matrix
         vcl_abort();
     }
 
+    form_=Affine;
+    inv_uptodate_=false;
     xx_=m_data[0][0];   xy_=m_data[0][1]; xt_=m_data[0][2];
     yx_=m_data[1][0];   yy_=m_data[1][1]; yt_=m_data[1][2];
-    tx_=ty_=0.0;   tt_=1.0;
-
-    form_=Affine;
-
-    inv_uptodate_=false;
+    tx_=0.0;            ty_=0.0;          tt_=1.0;
+    return *this;
 }
 
 //: Sets to be 2D affine transformation T(x,y)=p+x.u+y.v
-void vimt_transform_2d::set_affine(const vgl_point_2d<double> & p,
-                                   const vgl_vector_2d<double> & u,
-                                   const vgl_vector_2d<double> & v)
+vimt_transform_2d& vimt_transform_2d::set_affine(const vgl_point_2d<double> & p,
+                                                 const vgl_vector_2d<double> & u,
+                                                 const vgl_vector_2d<double> & v)
 {
-  xt_ = p.x();
-  yt_ = p.y();
-  xx_ = u.x();
-  yx_ = u.y();
-  xy_ = v.x();
-  yy_ = v.y();
-  form_=Affine;
-  inv_uptodate_=false;
+    form_=Affine;
+    inv_uptodate_=false;
+    xt_ = p.x();
+    yt_ = p.y();
+    xx_ = u.x();
+    yx_ = u.y();
+    xy_ = v.x();
+    yy_ = v.y();
+    return *this;
 }
 
-void vimt_transform_2d::set_projective(const vnl_matrix<double>& M33)   // 3x3 matrix
+vimt_transform_2d& vimt_transform_2d::set_projective(const vnl_matrix<double>& M33)   // 3x3 matrix
 {
-     if ((M33.rows()!=3) || (M33.columns()!=3))
+    if ((M33.rows()!=3) || (M33.columns()!=3))
     {
-        vcl_cerr<<"vimt_transform_2d::projective : Expect 3x3 matrix, got "<<M33.rows()<<" x "<<M33.columns()<<vcl_endl;
+        vcl_cerr<<"vimt_transform_2d::projective : Expect 3x3 matrix, got "<<M33.rows()<<" x "<<M33.columns()<<'\n';
         vcl_abort();
     }
 
+    form_=Projective;
+    inv_uptodate_=false;
     const double *const *m_data=M33.data_array();
     xx_=m_data[0][0];   xy_=m_data[0][1]; xt_=m_data[0][2];
     yx_=m_data[1][0];   yy_=m_data[1][1]; yt_=m_data[1][2];
     tx_=m_data[2][0];   ty_=m_data[2][1]; tt_=m_data[2][2];
-
-    form_=Projective;
-
-    inv_uptodate_=false;
+    return *this;
 }
 
 vgl_point_2d<double>  vimt_transform_2d::operator()(double x, double y) const
@@ -468,9 +461,9 @@ vgl_point_2d<double>  vimt_transform_2d::operator()(double x, double y) const
         case Projective :
             z=x*tx_+y*ty_+tt_;
             if (z==0) return vgl_point_2d<double> (0,0);   // Or should it be inf,inf?
-           else  return vgl_point_2d<double> ((x*xx_+y*xy_+xt_)/z,(x*yx_+y*yy_+yt_)/z);
+            else      return vgl_point_2d<double> ((x*xx_+y*xy_+xt_)/z,(x*yx_+y*yy_+yt_)/z);
         default:
-            vcl_cerr<<"vimt_transform_2d::operator() : Unrecognised form:"<<int(form_)<<vcl_endl;
+            vcl_cerr<<"vimt_transform_2d::operator() : Unrecognised form:"<<int(form_)<<'\n';
             vcl_abort();
     }
 
@@ -494,7 +487,7 @@ vgl_vector_2d<double>  vimt_transform_2d::delta(const vgl_point_2d<double>& p, c
         case Projective :
             return operator()(p+dp)-operator()(p);
         default:
-            vcl_cerr<<"vimt_transform_2d::delta() : Unrecognised form:"<<int(form_)<<vcl_endl;
+            vcl_cerr<<"vimt_transform_2d::delta() : Unrecognised form:"<<int(form_)<<'\n';
             vcl_abort();
     }
 
@@ -554,8 +547,8 @@ void vimt_transform_2d::calcInverse()  const
             double det = xx_*yy_-xy_*yx_;
             if (det==0)
             {
-              vcl_cerr<<"vimt_transform_2d::calcInverse() : No inverse exists for this affine transform (det==0)\n";
-              vcl_abort();
+                vcl_cerr<<"vimt_transform_2d::calcInverse() : No inverse exists for this affine transform (det==0)\n";
+                vcl_abort();
             }
             xx2_=yy_/det;   xy2_=-xy_/det;
             yx2_=-yx_/det;   yy2_=xx_/det;
@@ -575,7 +568,7 @@ void vimt_transform_2d::calcInverse()  const
             break;
         }
         default:
-            vcl_cerr<<"vimt_transform_2d::calcInverse() : Unrecognised form:"<<int(form_)<<vcl_endl;
+            vcl_cerr<<"vimt_transform_2d::calcInverse() : Unrecognised form:"<<int(form_)<<'\n';
             vcl_abort();
     }
 
@@ -727,7 +720,6 @@ vimt_transform_2d operator*(const vimt_transform_2d& L, const vimt_transform_2d&
     }
 
     T.inv_uptodate_ = false;
-
     return T;
 }
 
@@ -820,6 +812,7 @@ void vimt_transform_2d::b_read(vsl_b_istream& bfs)
     int f;
     switch (version) {
     case 1:
+        inv_uptodate_ = false;
         vsl_b_read(bfs,f); form_=Form(f);
         vsl_b_read(bfs,xx_); vsl_b_read(bfs,xy_); vsl_b_read(bfs,xt_);
         vsl_b_read(bfs,yx_); vsl_b_read(bfs,yy_); vsl_b_read(bfs,yt_);
@@ -829,10 +822,7 @@ void vimt_transform_2d::b_read(vsl_b_istream& bfs)
         vcl_cerr << "I/O ERROR: vimt_transform_2d::b_read(vsl_b_istream&)\n"
                  << "           Unknown version number "<< version << '\n';
         bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
-        return;
     }
-
-    inv_uptodate_ = false;
 }
 
 void vsl_b_read(vsl_b_istream& bfs,vimt_transform_2d& t)
@@ -847,8 +837,8 @@ void vsl_b_write(vsl_b_ostream& bfs,const vimt_transform_2d& t)
 
 void vsl_print_summary(vcl_ostream& os,const vimt_transform_2d& t)
 {
-  //os << t.is_a() << ": ";
-  vsl_indent_inc(os);
-  t.print_summary(os);
-  vsl_indent_dec(os);
+    //os << t.is_a() << ": ";
+    vsl_indent_inc(os);
+    t.print_summary(os);
+    vsl_indent_dec(os);
 }

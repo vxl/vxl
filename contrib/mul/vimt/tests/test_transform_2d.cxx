@@ -83,13 +83,12 @@ static void test_the_transform(vimt_transform_2d& t)
 static void test_simplify(const vimt_transform_2d& input, const vimt_transform_2d& expected)
 {
   vcl_cout << "Testing Simplify\n";
-  
+
   vimt_transform_2d copy(input);
   copy.simplify();
 
   TEST("Expected form", copy.form(), expected.form());
   TEST_NEAR("Expected matrix", (copy.matrix()-expected.matrix()).fro_norm(), 0, 1e-12);
-
 }
 
 //=========================================================================
@@ -107,49 +106,36 @@ static void test_set_matrix()
   // rigid_body
   form = vimt_transform_2d::RigidBody;
   vimt_transform_2d R;
-  R.set_rigid_body(r, tx, ty);
-  R.matrix(M);
-  T.set_matrix(M);
-  T.simplify();
-  T.matrix(N);
+  R.set_rigid_body(r, tx, ty).matrix(M);
+  T.set_matrix(M).simplify().matrix(N);
   TEST_NEAR("set_matrix and simplify of RigidBody", (M-N).fro_norm(), 0, 1e-12);
   TEST("set_matrix and simplify of RigidBody", T.form(), form);
 
   // zoom_only
   form = vimt_transform_2d::ZoomOnly;
   vimt_transform_2d Z;
-  Z.set_zoom_only(sx, sy, tx, ty);
-  Z.matrix(M);
-  T.set_matrix(M);
-  T.simplify();
-  T.matrix(N);
+  Z.set_zoom_only(sx, sy, tx, ty).matrix(M);
+  T.set_matrix(M).simplify().matrix(N);
   TEST_NEAR("set_matrix and simplify of ZoomOnly", (M-N).fro_norm(), 0, 1e-12);
   TEST("set_matrix and simplify of ZoomOnly", T.form(), form);
 
-  // similarity  
+  // similarity
   form = vimt_transform_2d::Similarity;
   vimt_transform_2d S;
-  S.set_similarity(sx, r, tx, ty);
-  S.matrix(M);
-  T.set_matrix(M);
-  T.simplify();
-  T.matrix(N);
+  S.set_similarity(sx, r, tx, ty).matrix(M);
+  T.set_matrix(M).simplify().matrix(N);
   TEST_NEAR("set_matrix and simplify of Similarity", (M-N).fro_norm(), 0, 1e-12);
   TEST("set_matrix and simplify of Similarity", T.form(), form);
 
-  // affine  
+  // affine
   form = vimt_transform_2d::Affine;
   vimt_transform_2d A;
   A.set_affine(vgl_point_2d<double>(tx, ty),
-    sx*vgl_vector_2d<double>(vcl_cos(r), vcl_cos(r)),
-    sy*vgl_vector_2d<double>(-vcl_sin(r), vcl_cos(r)) );
-  A.matrix(M);
-  T.set_matrix(M);
-  T.simplify();
-  T.matrix(N);
+               sx*vgl_vector_2d<double>(vcl_cos(r), vcl_cos(r)),
+               sy*vgl_vector_2d<double>(-vcl_sin(r), vcl_cos(r)) ).matrix(M);
+  T.set_matrix(M).simplify().matrix(N);
   TEST_NEAR("set_matrix and simplify of Affine", (M-N).fro_norm(), 0, 1e-12);
   TEST("set_matrix and simplify of Affine", T.form(), form);
-
 }
 
 
@@ -229,30 +215,33 @@ static void test_transform_2d()
   trans0.set_affine(A);
   test_the_transform(trans0);
 
-  trans1.set_affine(vgl_point_2d<double>(-30, -40), vgl_vector_2d<double>(-1.0, 0),
-    vgl_vector_2d<double>(0, -2.0));
+  trans1.set_affine(vgl_point_2d<double>(-30, -40),
+                    vgl_vector_2d<double>(-1.0, 0),
+                    vgl_vector_2d<double>(0, -2.0));
   trans2.set_zoom_only(-1.0, -2.0, -30, -40);
   test_simplify(trans1, trans2);
-  trans1.set_affine(vgl_point_2d<double>(-30, -40), 
-    2.0 * vgl_vector_2d<double>(vcl_sqrt(0.5), vcl_sqrt(0.5)),
-    2.0 * vgl_vector_2d<double>(-vcl_sqrt(0.5), vcl_sqrt(0.5)) );
+  trans1.set_affine(vgl_point_2d<double>(-30, -40),
+                    2.0 * vgl_vector_2d<double>(vcl_sqrt(0.5), vcl_sqrt(0.5)),
+                    2.0 * vgl_vector_2d<double>(-vcl_sqrt(0.5), vcl_sqrt(0.5)) );
   trans2.set_similarity(2.0, vnl_math::pi/4.0, -30, -40);
   test_simplify(trans1, trans2);
-  trans1.set_affine(vgl_point_2d<double>(-30, -40), 
-    2.0 * vgl_vector_2d<double>(vcl_sqrt(0.5), vcl_sqrt(0.5)),
-    3.0 * vgl_vector_2d<double>(-vcl_sqrt(0.5), vcl_sqrt(0.5)) );
+  trans1.set_affine(vgl_point_2d<double>(-30, -40),
+                    2.0 * vgl_vector_2d<double>(vcl_sqrt(0.5), vcl_sqrt(0.5)),
+                    3.0 * vgl_vector_2d<double>(-vcl_sqrt(0.5), vcl_sqrt(0.5)) );
   test_simplify(trans1, trans1);
-  trans1.set_affine(vgl_point_2d<double>(-30, -40), 
-    vgl_vector_2d<double>(vcl_sqrt(0.75), 0.5),
-    vgl_vector_2d<double>(-0.5, vcl_sqrt(0.75)) );
-//  trans1.set_affine(1.0, 1.0, 1.0, vnl_math::pi/4.0, vnl_math::pi/4.0, 0, -30, -40, -50);
+  trans1.set_affine(vgl_point_2d<double>(-30, -40),
+                    vgl_vector_2d<double>(vcl_sqrt(0.75), 0.5),
+                    vgl_vector_2d<double>(-0.5, vcl_sqrt(0.75)) );
+#if 0
+  trans1.set_affine(1.0, 1.0, 1.0, vnl_math::pi/4.0, vnl_math::pi/4.0, 0, -30, -40, -50);
+#endif
   trans2.set_rigid_body(vnl_math::pi/6.0, -30, -40);
   test_simplify(trans1, trans2);
-  trans1.set_affine(vgl_point_2d<double>(0,0), vgl_vector_2d<double>(1.0, 0.0),
-    vgl_vector_2d<double>(0.0, 1.0));
+  trans1.set_affine(vgl_point_2d<double>(0,0),
+                    vgl_vector_2d<double>(1.0, 0.0),
+                    vgl_vector_2d<double>(0.0, 1.0));
   trans2.set_identity();
   test_simplify(trans1, trans2);
-
 
   vcl_cout<<"== Testing Projective ==\n";
   vnl_matrix<double> P(3,3);
@@ -262,10 +251,7 @@ static void test_transform_2d()
   trans0.set_projective(P);
   test_the_transform(trans0);
 
-
-
   test_set_matrix();
-
 
   // -------- Test the binary I/O --------
 

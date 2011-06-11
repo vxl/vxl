@@ -8,6 +8,10 @@
 // \file
 // \author Tim Cootes
 // \brief 2D transform, which can be up to a projective transformation
+// \verbatim
+//  Modifications
+//   2011-06-10 Peter Vanroose - modified signature of set_*() to return *this
+// \endverbatim
 
 #include <vnl/vnl_fwd.h>
 #include <vgl/vgl_vector_2d.h>
@@ -75,85 +79,91 @@ class vimt_transform_2d
     Form form() const { return form_; }
     vnl_matrix<double> matrix() const;
     void matrix(vnl_matrix<double>&) const;
+
     //: Define the transform in terms of a 3x3 homogeneous matrix.
     // \param M 3x3 homogeneous matrix defining the transform.
     // \note Client must ensure that \a M is a valid representation of an affine (or simpler) transform.
     // \note The form will be set to Affine - call simplify() if you need the simplest form.
-    void set_matrix(const vnl_matrix<double>& M);
-
+    vimt_transform_2d& set_matrix(const vnl_matrix<double>& M);
 
     //: Fills v with parameters
     void params(vnl_vector<double>& v) const { params_of(v,form_); }
     //: Fills v with parameters of transform of type Form
     void params_of(vnl_vector<double>& v, Form) const;
     //: Sets transform using v (converse of params(v))
-    void set(const vnl_vector<double>& v, Form); // Sets transform using v
+    vimt_transform_2d& set(const vnl_vector<double>& v, Form); // Sets transform using v
     //: Set to identity transformation
-    void set_identity();
+    vimt_transform_2d& set_identity();
     //: Sets the transformation to be separable affine.
     // x' = s_x.x + t_x,  y' = s_y.y + t_y
     // s_x: Scaling in x
     // s_y: Scaling in y
     // t_x: Translation in x
     // t_y: Translation in y
-    void set_zoom_only(double s_x, double s_y, double t_x, double t_y);
+    vimt_transform_2d& set_zoom_only(double s_x, double s_y, double t_x, double t_y);
     //: Sets the transformation to be a zoom.
     // x' = s.x + t_x,  y' = s.y + t_y
     //   s: Scaling
     // t_x: Translation in x
     // t_y: Translation in y
-    void set_zoom_only(double s, double t_x, double t_y) { set_zoom_only(s,s,t_x,t_y); }
+    vimt_transform_2d& set_zoom_only(double s, double t_x, double t_y) { return set_zoom_only(s,s,t_x,t_y); }
+    //: Sets the transformation to be separable affine.
+    // x' = s_x.x + xt_,  y' = s_y.y + yt_
+    // s_x: Scaling in x
+    // s_y: Scaling in y
+    // Translation in x and y kept as it was
+    vimt_transform_2d& set_zoom_only(double s_x, double s_y) { return set_zoom_only(s_x,s_y,xt_,yt_); }
+    //: Sets the transformation to be a zoom.
+    // x' = s.x + xt_,  y' = s.y + yt_
+    //   s: Scaling
+    // Translation in x and y kept as it was
+    vimt_transform_2d& set_zoom_only(double s) { return set_zoom_only(s,s,xt_,yt_); }
     //: Sets the transformation to be a translation.
     // t_x: Translation in x
     // t_y: Translation in y
-    void set_translation(double t_x, double t_y);
+    vimt_transform_2d& set_translation(double t_x, double t_y);
     //: Sets the transformation to rotation then translation.
     // theta: rotation
     // t_x: Translation in x
     // t_y: Translation in y
-    void set_rigid_body(double theta, double t_x, double t_y);
+    vimt_transform_2d& set_rigid_body(double theta, double t_x, double t_y);
     //: Sets the transformation to apply scaling, rotation then translation.
     // s: Scaling
     // theta: rotation
     // t_x: Translation in x
     // t_y: Translation in y
-    void set_similarity(double s, double theta, double t_x, double t_y);
-
+    vimt_transform_2d& set_similarity(double s, double theta, double t_x, double t_y);
     //: Sets Euclidean transformation.
     // \param dx  Rotation and scaling of x axis
     // \param t  Translation
-    void set_similarity(const vgl_point_2d<double> & dx,
-                        const vgl_point_2d<double> & t);
-
+    vimt_transform_2d& set_similarity(const vgl_point_2d<double> & dx,
+                                      const vgl_point_2d<double> & t);
     //: Sets Euclidean transformation.
     // \param dx  Rotation and scaling of x axis
     // \param t  Translation
-    void set_similarity(const vgl_vector_2d<double> & dx,
-                        const vgl_point_2d<double> & t);
-
+    vimt_transform_2d& set_similarity(const vgl_vector_2d<double> & dx,
+                                      const vgl_point_2d<double> & t);
     //: reflect about a line though the points m1, and m2
-    void set_reflection( const vgl_point_2d<double> & m1, const vgl_point_2d<double> & m2);
-
+    vimt_transform_2d& set_reflection( const vgl_point_2d<double> & m1,
+                                       const vgl_point_2d<double> & m2);
     //: Sets to be 2D affine transformation using 2x3 matrix
-    void set_affine(const vnl_matrix<double>&);
-
+    vimt_transform_2d& set_affine(const vnl_matrix<double>&);
     //: Sets to be 2D affine transformation T(x,y)=p+x.u+y.v
-    void set_affine(const vgl_point_2d<double> & p,
-                    const vgl_vector_2d<double> & u,
-                    const vgl_vector_2d<double> & v);
-
+    vimt_transform_2d& set_affine(const vgl_point_2d<double> & p,
+                                  const vgl_vector_2d<double> & u,
+                                  const vgl_vector_2d<double> & v);
     //: Sets to be 2D projective transformation
-    void set_projective(const vnl_matrix<double>&);   // 3x3 matrix
+    vimt_transform_2d& set_projective(const vnl_matrix<double>&);   // 3x3 matrix
 
     //: Returns the coordinates of the origin.
     // I.e. operator()(vgl_point_2d<double> (0,0))
-    vgl_point_2d<double>  origin() const
-        { return vgl_point_2d<double> (tt_==1?xt_:xt_/tt_,tt_==1?yt_:yt_/tt_); }
+    vgl_point_2d<double>  origin() const { return vgl_point_2d<double>(xt_/tt_,yt_/tt_); }
+
     //: Modifies the transformation so that operator()(vgl_point_2d<double> (0,0)) == p.
     // The rest of the transformation is unaffected.
     // If the transformation was previously the identity,
     // it becomes a translation.
-    void set_origin( const vgl_point_2d<double> & );
+    vimt_transform_2d& set_origin( const vgl_point_2d<double> & );
 
     //: Applies transformation to (x,y)
     vgl_point_2d<double>  operator()(double x, double y) const;
@@ -179,7 +189,7 @@ class vimt_transform_2d
     bool operator==(const vimt_transform_2d& t) const;
 
     //: Reduce to the simplest form possible.
-    void simplify(double tol =1e-10);
+    vimt_transform_2d& simplify(double tol =1e-10);
 
  private:
 
