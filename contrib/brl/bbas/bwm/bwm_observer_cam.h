@@ -23,9 +23,11 @@
 #include <vnl/vnl_math.h>
 
 #include <vpgl/vpgl_camera.h>
+
 void bwm_project_meshes(vcl_vector<vcl_string> paths,
-                                      vpgl_camera<double>* cam,
-                                      vcl_vector<vgl_polygon<double> > &poly_2d_list);
+                        vpgl_camera<double>* cam,
+                        vcl_vector<vgl_polygon<double> > &poly_2d_list);
+
 class bwm_observer_cam : public bwm_observer_vgui
 {
  public:
@@ -33,18 +35,19 @@ class bwm_observer_cam : public bwm_observer_vgui
   typedef bwm_observer_vgui base;
 
   bwm_observer_cam(bgui_image_tableau_sptr const& img, vpgl_camera<double> *camera, vcl_string cam_path)
-    : bwm_observer_vgui(img), camera_(camera), cam_path_(cam_path), cam_adjusted_(false),
-      proj_plane_(vgl_plane_3d<double>(0, 0, 1, 0)), extrude_mode_(false),show_geo_position_(false),
-      sun_elev_angle_(vnl_math::pi_over_4),sun_azim_angle_(vnl_math::pi_over_4)
+    : bwm_observer_vgui(img), sun_elev_angle_(vnl_math::pi_over_4), sun_azim_angle_(vnl_math::pi_over_4),
+      camera_(camera), cam_path_(cam_path), cam_adjusted_(false),
+      proj_plane_(vgl_plane_3d<double>(0, 0, 1, 0)), extrude_mode_(false), show_geo_position_(false)
     {}
 
   // set the initial projection plane to z=0
   bwm_observer_cam(bgui_image_tableau_sptr const& img, const char* /*n*/="unnamed")
-    : bwm_observer_vgui(img), cam_adjusted_(false), proj_plane_(vgl_plane_3d<double>(0, 0, 1, 0)),
-      extrude_mode_(false), show_geo_position_(false),sun_elev_angle_(vnl_math::pi_over_4),sun_azim_angle_(vnl_math::pi_over_4)
+    : bwm_observer_vgui(img), sun_elev_angle_(vnl_math::pi_over_4), sun_azim_angle_(vnl_math::pi_over_4),
+      cam_adjusted_(false),
+      proj_plane_(vgl_plane_3d<double>(0, 0, 1, 0)), extrude_mode_(false), show_geo_position_(false)
     {}
 
-  virtual ~bwm_observer_cam(){ delete camera_;}
+  virtual ~bwm_observer_cam() { delete camera_; }
 
   bgui_image_tableau_sptr image_tableau() { return img_tab_; }
 
@@ -57,7 +60,7 @@ class bwm_observer_cam : public bwm_observer_vgui
   virtual vcl_string type_name() const { return "bwm_observer_cam"; }
 
   void set_camera(vpgl_camera<double> *camera, vcl_string cam_path)
-  { camera_ = camera; cam_path_ = cam_path; cam_adjusted_ = false;}
+  { camera_ = camera; cam_path_ = cam_path; cam_adjusted_ = false; }
 
   vpgl_camera<double> * camera() { return camera_; }
 
@@ -182,13 +185,13 @@ class bwm_observer_cam : public bwm_observer_vgui
                                vsol_polygon_3d_sptr &circle,
                                int num_sect, double &r, vgl_point_2d<double> &c);
 
-  void set_draw_mode(BWM_DRAW_MODE mode) {mode_=mode; update_all();}
-  void set_mesh_mode() { mode_ = bwm_observer_vgui::MODE_MESH; update_all();}
-  void set_face_mode() { mode_ = bwm_observer_vgui::MODE_POLY; update_all();}
-  void set_edge_mode() { mode_ = bwm_observer_vgui::MODE_EDGE; update_all();}
-  void set_vertex_mode() { mode_ = bwm_observer_vgui::MODE_VERTEX; update_all();}
+  void set_draw_mode(BWM_DRAW_MODE mode) { mode_=mode; update_all(); }
+  void set_mesh_mode() { mode_ = bwm_observer_vgui::MODE_MESH; update_all(); }
+  void set_face_mode() { mode_ = bwm_observer_vgui::MODE_POLY; update_all(); }
+  void set_edge_mode() { mode_ = bwm_observer_vgui::MODE_EDGE; update_all(); }
+  void set_vertex_mode() { mode_ = bwm_observer_vgui::MODE_VERTEX; update_all(); }
 
-  virtual vcl_ostream& print_camera(vcl_ostream& s) {return s;}
+  virtual vcl_ostream& print_camera(vcl_ostream& s) { return s; }
 
   static void project_meshes(vcl_vector<vcl_string> paths,
                              vpgl_camera<double>* cam,
@@ -198,7 +201,6 @@ class bwm_observer_cam : public bwm_observer_vgui
   void load_boxm_scene();
 
  protected:
-
 
   //: to compute direciton of sun.
   double sun_elev_angle_;
@@ -234,7 +236,7 @@ class bwm_observer_cam : public bwm_observer_vgui
   virtual bool intersect_ray_and_plane(vgl_point_2d<double> /*img_point*/,
                                        vgl_plane_3d<double> /*plane*/,
                                        vgl_point_3d<double>& /*world_point*/)
-  {vcl_cout << "ERROR!  USING CAM OBSERVER's intersect_ray_and_plane"; return false; }
+  { vcl_cout << "ERROR!  USING CAM OBSERVER's intersect_ray_and_plane"; return false; }
 
   bool intersect_ray_and_box(vgl_box_3d<double> box,
                              vgl_point_2d<double> img_point,
