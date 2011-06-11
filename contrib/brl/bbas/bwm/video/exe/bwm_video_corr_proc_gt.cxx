@@ -2,7 +2,8 @@
 #include <vul/vul_arg.h>
 #include <vcl_fstream.h>
 #include <vcl_string.h>
-#include <vnl/vnl_double_4.h>
+#include <vnl/vnl_double_3.h>
+#include <vnl/vnl_double_3x3.h>
 #include <vpl/vpl.h> // vpl_unlink()
 #include <vpgl/vpgl_calibration_matrix.h>
 #include <vpgl/vpgl_perspective_camera.h>
@@ -13,7 +14,6 @@
 #include <bwm/video/bwm_video_cam_ostream.h>
 
 #include <vpgl/bgeo/bgeo_lvcs.h>
-#include <vnl/vnl_inverse.h>
 #include <vgl/algo/vgl_h_matrix_3d_compute_linear.h>
 
 static bool process_camera_from_photo_overlay(vcl_string const& params_path, vcl_string const& output_cam_path)
@@ -64,7 +64,7 @@ static bool process_camera_from_photo_overlay(vcl_string const& params_path, vcl
  normalize(x_vector);
 
  // now rotate up_vector by tilt around x vector
- vnl_vector_fixed<double, 3> x_vector_fixed(x_vector.x(), x_vector.y(), x_vector.z());
+ vnl_double_3 x_vector_fixed(x_vector.x(), x_vector.y(), x_vector.z());
  vnl_quaternion<double> q_t(x_vector_fixed, tilt*deg2rad);
  vgl_rotation_3d<double> R_t(q_t);
  vgl_vector_3d<double> look_vector = R_t*up_vector;
