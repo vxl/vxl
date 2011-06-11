@@ -20,7 +20,7 @@
 
 //: using jpeg decompressor objects :
 // -# supply an error manager, e.g. with jpeg_std_err().
-//    this *must* be done before initializing the object.
+//    this \e must be done before initializing the object.
 // -# initialize with jpeg_create_decompress().
 // -# supply a data stream, e.g. with jpeg_std_source().
 // -# call jpeg_read_header() to start reading the data stream. this will read
@@ -46,8 +46,8 @@ vil_jpeg_decompressor::vil_jpeg_decompressor(vil_stream *s)
   // construct the decompression object :
   jpeg_create_decompress(&jobj);
 
-  // Increase the amount of memory that can be used. 
-  // Default (1Mb) was too small.  
+  // Increase the amount of memory that can be used.
+  // Default (1Mb) was too small.
 #if defined(VXL_ADDRESS_BITS) && VXL_ADDRESS_BITS == 32
   jobj.mem->max_memory_to_use = 300 * 1024 * 1024;
 #elif defined(VXL_ADDRESS_BITS) && VXL_ADDRESS_BITS == 64

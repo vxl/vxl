@@ -215,6 +215,7 @@ brec_part_instance_sptr brec_part_hierarchy::get_node_instance(unsigned layer, u
 }
 
 //: draw the nodes of the given layer side by side to the output image
+// \todo not implemented yet
 bool brec_part_hierarchy::draw_to_image(unsigned /*N*/, unsigned layer_id, float /*drawing_radius*/, vcl_string /*output_img*/)
 {
   vcl_vector<brec_part_instance_sptr> ins_to_draw;

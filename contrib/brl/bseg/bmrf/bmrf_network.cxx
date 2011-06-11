@@ -247,16 +247,18 @@ bmrf_network::prune_directed()
       seg_node_map::const_iterator next_itr = itr; ++next_itr;
       this->remove_node(itr->second);
       itr = next_itr;
-    }else
+    }
+    else
       ++itr;
   }
 }
 
 
 //: Set the epipole for frame \p frame
+// \todo
 // For now we assume that there is only one epipole for the
 // entire sequence.  This function should be update if this
-// assumption changes.  TODO
+// assumption changes.
 void
 bmrf_network::set_epipole(const bmrf_epipole& epipole, int /*frame*/)
 {
@@ -267,9 +269,10 @@ bmrf_network::set_epipole(const bmrf_epipole& epipole, int /*frame*/)
 
 
 //: Access the epipole for frame \p frame
+// \todo
 // For now we assume that there is only one epipole for the
 // entire sequence.  This function should be update if this
-// assumption changes.  TODO
+// assumption changes.
 const bmrf_epipole&
 bmrf_network::epipole(int /*frame*/) const
 {
@@ -323,7 +326,7 @@ bmrf_network::b_write( vsl_b_ostream& os ) const
   vsl_b_write(os, (unsigned int)epipoles_.size());
   // write all the epipoles
   for ( vcl_vector<bmrf_epipole>::const_iterator itr = epipoles_.begin();
-       itr != epipoles_.end(); ++itr ) {
+        itr != epipoles_.end(); ++itr ) {
     vsl_b_write(os, itr->location().x());
     vsl_b_write(os, itr->location().y());
   }

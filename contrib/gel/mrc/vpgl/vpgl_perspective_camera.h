@@ -130,7 +130,7 @@ class vpgl_perspective_camera : public vpgl_proj_camera<T>
   // static public functions -----------------------------------------------
 
   //: Post-multiply this perspective camera with a 3-d Euclidean transformation
-  // TODO: decide whether this needs to be either a static method or a stand-alone function.
+  // \todo decide whether this needs to be either a static method or a stand-alone function.
   // (Now both are present.)
   static  vpgl_perspective_camera<T>
    postmultiply( const vpgl_perspective_camera<T>& in_cam,

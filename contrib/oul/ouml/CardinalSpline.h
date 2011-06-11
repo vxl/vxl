@@ -26,7 +26,7 @@
 // Actually, at the moment, these are Catmull-Rom splines (t=0.5)
 //
 // \author Brendan McCane
-// \status Under Development
+// \todo   Under Development
 
 class CardinalSpline
 {

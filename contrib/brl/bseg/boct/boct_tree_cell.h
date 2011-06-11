@@ -137,12 +137,13 @@ class boct_tree_cell
   const boct_loc_code<T_loc> get_code();
 
   //: currently this function just goes down the tree
-  //  TODO: make it flexible and go from one node to another.
+  //  \todo make it flexible and go from one node to another.
   boct_tree_cell<T_loc,T_data>* traverse(boct_loc_code<T_loc> &code);
   boct_tree_cell<T_loc,T_data>* traverse_to_level(boct_loc_code<T_loc> *code, short level);
   boct_tree_cell<T_loc,T_data>* traverse_force(boct_loc_code<T_loc> & code);
 #if 0
-  // TODO: not yet implemented -- currently just returns false
+  //:
+  // \todo not yet implemented -- currently just returns false
   bool traverse_and_split(boct_loc_code<T_loc> & /*code*/) { return false; }
 #endif
   short level() const { return code_.level; }

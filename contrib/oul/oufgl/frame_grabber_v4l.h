@@ -32,7 +32,7 @@
 // difficult questions are raised when hardware issues become
 // involved.
 //
-// \status under development
+// \todo   under development
 // \author Brendan McCane
 //----------------------------------------------------------------------
 

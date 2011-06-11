@@ -1060,7 +1060,7 @@ bool bmsh3d_save_m(bmsh3d_mesh* M, const char* file)
   return true;
 }
 
-//: For the input "abc\def\prefix-ghi-jkl-mno.txt"
+//: For the input "abc/def/prefix-ghi-jkl-mno.txt"
 //  Return the file suffix ".txt"
 vcl_string get_suffix(const vcl_string& filename)
 {

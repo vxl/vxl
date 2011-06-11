@@ -11,7 +11,7 @@
 
 //: A cache that keeps the most recently used blocks and data, while kicking out the least recently used blocks and data to make more room.
 //  Currently just stores blocks in a map, not caring about space
-//  TODO: implement with timestamped maps.
+//  \todo implement with timestamped maps.
 class boxm2_lru_cache : public boxm2_cache
 {
   public:
@@ -27,12 +27,12 @@ class boxm2_lru_cache : public boxm2_cache
 
     //: removes data from this cache (may or may not write to disk first)
     virtual void remove_data_base(boxm2_block_id id, vcl_string type);
-    
+
     //: replaces a database in the cache, deletes it
-    virtual void replace_data_base(boxm2_block_id id, vcl_string type, boxm2_data_base* replacement); 
+    virtual void replace_data_base(boxm2_block_id id, vcl_string type, boxm2_data_base* replacement);
 
     //: dumps writeable data to disk
-    virtual void write_to_disk(); 
+    virtual void write_to_disk();
 
     //: to string method returns a string describing the cache's current state
     vcl_string to_string();

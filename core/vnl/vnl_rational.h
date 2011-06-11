@@ -90,7 +90,7 @@ class vnl_rational
     : num_((long)num), den_((long)den) { assert(num!=0||den!=0); normalize(); }
   //: Creates a rational from a double.
   //  This is done by computing the continued fraction approximation for d.
-  //  Note that this is explicitly *not* an automatic type conversion.
+  //  Note that this is explicitly \e not an automatic type conversion.
   explicit vnl_rational(double d);
   //  Copy constructor
   inline vnl_rational(vnl_rational const& from)

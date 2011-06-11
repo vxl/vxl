@@ -19,7 +19,7 @@
 #include <vxl_config.h>
 
 //: Now we define a bunch of pixel-type structs
-// These are *empty* templates. only the specializations make sense.
+// These are \e empty templates. only the specializations make sense.
 template <int r, int g, int b> struct vgui_pixel_rgb;
 template <int b, int g, int r> struct vgui_pixel_bgr;
 template <int r, int g, int b, int a> struct vgui_pixel_rgba;

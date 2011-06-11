@@ -300,7 +300,7 @@ class vgl_rtree
 #endif
 
   //: erase the element pointed to by the iterator.
-  // may invalidate *all* iterators into the rtree.
+  // may invalidate \e all iterators into the rtree.
   void erase(iterator i) {
     i.current->erase(i.i);
     if (root->total_vts == 0) {

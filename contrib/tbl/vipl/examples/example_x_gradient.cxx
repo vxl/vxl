@@ -5,7 +5,7 @@
 //  that case its X gradient is written to argv[2] which is always a PPM file.
 //  Uses vipl_x_gradient<section<rgbcell,2>,section<rgbcell,2>,rgbcell,rgbcell>.
 //  Note that this requires operator-() on the vil_rgb<ubyte> data type.
-//  But this indeed produces a *colour* gradient!
+//  But this indeed produces a \e colour gradient!
 //
 // \author Peter Vanroose, K.U.Leuven, ESAT/PSI
 // \date   29 may 1998.

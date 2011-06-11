@@ -21,7 +21,7 @@
 
 #ifdef PASSONE
 //: Define aux_args (like a functor struct)
-// TODO Begin passing around AuxArgs* instead of the struct to save on registers
+// \todo Begin passing around AuxArgs* instead of the struct to save on registers
 typedef struct
 {
   //scene data
@@ -198,8 +198,8 @@ void compute_ball_properties(AuxArgs aux_args)
 
   //incrememnt pre and vis;
   float vis_cum = (*aux_args.vis_cum);
-  pre += vis*(1.0-vis_cum)*PI; 
-  vis *= vis_cum; 
+  pre += vis*(1.0-vis_cum)*PI;
+  vis *= vis_cum;
   (*aux_args.ray_pre) = pre;
   (*aux_args.ray_vis) = vis;
 
@@ -395,10 +395,10 @@ bool compute_ball_properties(AuxArgs aux_args)
 
   //incrememnt beta pre and vis along the ray
   (*aux_args.beta_cum) = (pre+vis*PI)/aux_args.norm;
-  pre += vis*(1.0f - (*aux_args.vis_cum) )*PI; 
-  vis *= (*aux_args.vis_cum); 
-  (*aux_args.ray_pre) = pre; 
-  (*aux_args.ray_vis) = vis; 
+  pre += vis*(1.0f - (*aux_args.vis_cum) )*PI;
+  vis *= (*aux_args.vis_cum);
+  (*aux_args.ray_pre) = pre;
+  (*aux_args.ray_vis) = vis;
 
   //reset ball values
   (*aux_args.vis_cum) = 1.0f;
@@ -437,7 +437,6 @@ update_cone_data( __global RenderSceneInfo  * info,
   int datasize = info->data_len * info->num_buffer;
   if (gid<datasize)
   {
-    
     float cell_vol = convert_float(aux_vol[gid]) / SEGLEN_FACTOR;
     if (cell_vol>1e-10f)
     {
@@ -447,7 +446,7 @@ update_cone_data( __global RenderSceneInfo  * info,
 
       float alpha = alpha_array[gid];
       MOG_TYPE mog_bytes = mixture_array[gid];
-      float8 mog = convert_float8(mog_bytes) / (float) NORM; 
+      float8 mog = convert_float8(mog_bytes) / (float) NORM;
       ushort4 num_obs = nobs_array[gid];
 
       //update alpha

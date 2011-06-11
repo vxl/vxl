@@ -110,10 +110,10 @@ bool vsol_polyhedron::is_convex(void) const
 
 //---------------------------------------------------------------------------
 //: Is `p' in `this' ?
+// \todo not yet implemented
 //---------------------------------------------------------------------------
 bool vsol_polyhedron::in(vsol_point_3d_sptr const& ) const
 {
-  // TODO
   vcl_cerr << "Warning: vsol_polyhedron::in() has not been implemented yet\n";
   return false;
 }

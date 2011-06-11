@@ -156,10 +156,10 @@ void vsol_triangle_3d::set_p2(vsol_point_3d_sptr const& new_p2)
 
 //---------------------------------------------------------------------------
 //: Is `p' in `this' ?
+// \todo not yet implemented
 //---------------------------------------------------------------------------
 bool vsol_triangle_3d::in(vsol_point_3d_sptr const& ) const
 {
-  // TODO
   vcl_cerr << "Warning: vsol_triangle_3d::in() has not been implemented yet\n";
   return true;
 }

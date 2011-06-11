@@ -11,7 +11,7 @@
 // HomgInterestPointSet holds a set of corners (or points of interest) computed
 // from an image.  The current implementation provides a moderately
 // abstract interface, but assumes that it is efficient to associate
-// an index with each corner.  I *know* this ought to be elsewhere.
+// an index with each corner.  I \e know this ought to be elsewhere.
 //
 // \author
 //     Andrew W. Fitzgibbon, Oxford RRG, 17 Aug 96

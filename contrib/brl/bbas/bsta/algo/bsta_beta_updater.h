@@ -7,13 +7,13 @@
 // \author Gamze Tunali (gtunali@brown.edu)
 // \date   Nov 17, 2009
 //
-// In this implementation \alpha>=1 and \beta>=1.
+// In this implementation $\alpha>=1$ and $\beta>=1$.
 // In order to ensure this
 // $ \mu(\mu(1-\mu)/var-1)>1 $ and
 // $ (1-\mu)(\mu(1-\mu)/var-1)>1 $
 //
 // The distance of beta distribution is given as
-// $$  -(\alpha-1)log(x/\mu)-(\beta-1)log((1-x)/(1-\mu))>3  $$
+// $$  -(\alpha-1)log(x/\mu)-(\beta-1)\log((1-x)/(1-\mu)) > 3  $$
 //
 // \verbatim
 //  Modifications

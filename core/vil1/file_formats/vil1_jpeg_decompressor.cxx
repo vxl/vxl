@@ -15,7 +15,7 @@
 
 //: using jpeg decompressor objects :
 // -# supply an error manager, e.g. with jpeg_std_err().
-//    this *must* be done before initializing the object.
+//    this \e must be done before initializing the object.
 // -# initialize with jpeg_create_decompress().
 // -# supply a data stream, e.g. with jpeg_std_source().
 // -# call jpeg_read_header() to start reading the data stream. this will read
@@ -64,7 +64,8 @@ vil1_jpeg_decompressor::vil1_jpeg_decompressor(vil1_stream *s)
 }
 
 // read the given scanline, skipping/rewinding as required.
-JSAMPLE const *vil1_jpeg_decompressor::read_scanline(unsigned line) {
+JSAMPLE const *vil1_jpeg_decompressor::read_scanline(unsigned line)
+{
   // if the client tries to read the same scanline again, it should be free.
   if (valid && line == jobj.output_scanline-1)
     return biffer;
@@ -133,7 +134,8 @@ JSAMPLE const *vil1_jpeg_decompressor::read_scanline(unsigned line) {
 }
 
 
-vil1_jpeg_decompressor::~vil1_jpeg_decompressor() {
+vil1_jpeg_decompressor::~vil1_jpeg_decompressor()
+{
   // destroy the pool associated with jobj
   (*jobj.mem->free_pool) ((j_common_ptr) &jobj, JPOOL_IMAGE);
 

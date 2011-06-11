@@ -1,4 +1,7 @@
-// BeginLatex
+//:
+// \file
+//
+// \latexonly
 //
 // It is a good practice to monitor the progress of the registration
 // process. There are two ways of doing it. The first is the use of
@@ -44,7 +47,7 @@
 // \code{rgrl\_command} and provides a specific implementation of the
 // \code{execute()} methods.
 //
-// EndLatex
+// \endlatexonly
 
 #include <vcl_fstream.h>
 #include <vcl_iostream.h>
@@ -178,14 +181,14 @@ main( int argc, char* argv[] )
 
   // Monitoring the registration process
   //
-  // BeginLatex
+  // \latexonly
   //
   // Before the registration process begins, the
   // \code{command\_iteration\_update} is added to the observer list
   // of the engine and specifies its interest in catching
   // \code{rgrl\_event\_iteration}.
   //
-  // EndLatex
+  // \endlatexonly
 
   // BeginCodeSnippet
   reg.add_observer( new rgrl_event_iteration(), new command_iteration_update());
@@ -203,13 +206,13 @@ main( int argc, char* argv[] )
             <<"Final alignment error = "<<reg.final_status()->error()<<vcl_endl;
   }
 
-  // BeginLatex
+  // \latexonly
   //
   // One may try running this example with the feature files
   // \verb+rgrl/examples/IMG0002.pgm.txt+ and
   // \verb+rgrl/examples/IMG0003.pgm.txt+.
   //
-  // EndLatex
+  // \endlatexonly
 
   // Perform testing
   //

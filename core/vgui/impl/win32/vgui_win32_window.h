@@ -49,7 +49,7 @@ class vgui_win32_window : public vgui_window, public vgui_win32_cmdtarget
   virtual vgui_adaptor *get_adaptor() { return adaptor_; }
 
   //: Get the status bar (if it exists).
-  // TODO: This function is not called yet.
+  // \todo This function is not called yet.
   virtual vgui_statusbar *get_statusbar() { return statusbar_; }
 
 
@@ -57,11 +57,11 @@ class vgui_win32_window : public vgui_window, public vgui_win32_cmdtarget
   virtual void show();
 
   //: Hide the window from view.
-  // TODO: This function is not called yet.
+  // \todo This function is not called yet.
   virtual void hide() { ShowWindow(hwnd_, SW_HIDE); }
 
   //: Turn the window into an icon.
-  // TODO: This function is not called yet.
+  // \todo This function is not called yet.
   virtual void iconify() { ShowWindow(hwnd_, SW_MINIMIZE); }
 
   //: If true, activate horizontal scrollbar (if it exists).
@@ -77,7 +77,7 @@ class vgui_win32_window : public vgui_window, public vgui_win32_cmdtarget
   virtual void reposition(int, int);
 
   //: Use the given text as the window title (if the window has a title).
-  // TODO: This function is not called yet.
+  // \todo This function is not called yet.
   virtual void set_title(vcl_string const &t) { SetWindowText(hwnd_, t.c_str()); }
 
   //: Set the position of the horizontal scrollbar, returns old position

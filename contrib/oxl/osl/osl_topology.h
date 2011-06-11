@@ -42,13 +42,13 @@ struct osl_topology_base : public vbl_ref_count
   void SetId(int );
   int GetId() const;
 
-  // add another stash under that name.
+  //: add another stash under that name.
   void  stash_add     (char const *name, void const *data, void (*dtor)(void *) = 0);
-  // replace first stash ith given name. the old dtor is *not* called.
+  //: replace first stash ith given name. the old dtor is \e not called.
   void  stash_replace (char const *name, void const *data, void (*dtor)(void *) = 0);
-  // return first stash with given name, 0 if none.
+  //: return first stash with given name, 0 if none.
   void *stash_retrieve(char const *name) const;
-  // remove first stash with given name. the dtor is *not* called.
+  //: remove first stash with given name. the dtor is \e not called.
   void *stash_remove  (char const *name);
  private:
   osl_stash_link *stash_head;

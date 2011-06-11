@@ -21,7 +21,7 @@
 // Features detect implementation. Uses SIFT to find the features and
 // descriptors.
 //
-// TODO: Need to correctly allow for rgb images. Possibly involves
+// \todo Need to correctly allow for rgb images. Possibly involves
 //   modifying bapl instead of this routine.
 vpgl_bundler_inters_feature_set_sptr
 vpgl_bundler_tracks_impl_detect_sift::operator ()(

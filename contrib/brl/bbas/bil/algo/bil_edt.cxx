@@ -80,7 +80,7 @@ bil_edt_saito(vil_image_view<vxl_uint_32> &im, unsigned plane_idx)
 
 //: Exact EDT
 //
-// \remarks The returned distances are *squared*
+// \remarks The returned distances are \e squared
 // \remarks See comment on bil_edt_saito for the reference paper.
 //
 // \remarks it would be easy to return the "labels" or indexes of the closest

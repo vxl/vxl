@@ -7,7 +7,7 @@
 // \author Lianqing Yu
 // \date July 30, 2009              Initial version
 //
-// TODO issues:
+// \todo TODO issues:
 // 1. dir_bsr, line_br are not implemented.
 // 2. Dialog font is not set.
 // 3. get_current_tab

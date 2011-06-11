@@ -371,7 +371,7 @@ brdb_relation::check_timestamp(const unsigned& time_stamp_check) const
 }
 
 //: clear the relation
-// \keep the names and types, but remove all the tuples
+// Keep the names and types, but remove all the tuples
 void
 brdb_relation::clear()
 {

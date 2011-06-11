@@ -1,4 +1,7 @@
-// BeginLatex
+//:
+// \file
+//
+// \latexonly
 //
 // This example is the "Hello World" example for correspondence-based
 // registration. The goal of the example is to show steps needed to
@@ -38,7 +41,7 @@
 // The following header files provide declarations for the basic types
 // needed to perform the registration.
 //
-// EndLatex
+// \endlatexonly
 //
 
 #include <vcl_iostream.h>
@@ -88,7 +91,8 @@ class command_iteration_update: public rgrl_command
   }
 };
 
-// BeginLatex
+//:
+// \latexonly
 //
 // We start with features. A \emph{feature} is the basic element for
 // correspondence-based registration.  It can be as simple as a point
@@ -137,7 +141,7 @@ class command_iteration_update: public rgrl_command
 // curve. The feature type is \code{rgrl\_feature\_trace\_pt} and the
 // code below illustrates the construction of such a feature.
 //
-// EndLatex
+// \endlatexonly
 
 void
 generate_data( feature_vector& feature_points )
@@ -209,7 +213,8 @@ generate_data( feature_vector& feature_points )
   }
 }
 
-// BeginLatex
+//:
+// \latexonly
 //
 // Since we're dealing with 2D images, both \code{pt} for the location
 // of the point and \code{tangent\_dir} for the direction of the
@@ -227,7 +232,7 @@ generate_data( feature_vector& feature_points )
 // assigned to \code{rgrl\_feature\_sptr}, which is stored in a
 // vector, \code{feature\_points}.
 //
-// EndLatex
+// \endlatexonly
 
 void
 add_outliers( feature_vector& feature_points )
@@ -263,7 +268,7 @@ main()
 
   // Set up the feature sets
   //
-  // BeginLatex
+  // \latexonly
   //
   // All features of the same type from one image are stored in a
   // \emph{feature set}.  Fundamentally, feature sets answer queries
@@ -280,7 +285,7 @@ main()
   // takes a vector of smart pointers to features, which we previously
   // constructed.
   //
-  // EndLatex
+  // \endlatexonly
 
   // BeginCodeSnippet
   const unsigned int  dimension = 2;
@@ -296,14 +301,14 @@ main()
   // transformation
   //
 
-  // BeginLatex
+  // \latexonly
   //
   // Next, we initialize the registration process with a prior affine
   // transformation, and define the affine estimator. More detailed
   // discussion on other common initialization schemes will be
   // discussed in section~\ref{sec:init}.
   //
-  // EndLatex
+  // \endlatexonly
 
   // BeginCodeSnippet
   vnl_matrix<double> A(2,2);
@@ -318,7 +323,7 @@ main()
   // box of registration are set to the common default techniques for
   // robustness.
   //
-  // BeginLatex
+  // \latexonly
   //
   // All the components required for registration are stored in a data
   // structure, \code{rgrl\_data\_manager}. This is useful for
@@ -330,7 +335,7 @@ main()
   // registration engine, \code{rgrl\_feature\_based\_registration}
   // during construction.
   //
-  // EndLatex
+  // \endlatexonly
 
   // BeginCodeSnippet
   rgrl_data_manager_sptr data = new rgrl_data_manager();
@@ -346,7 +351,7 @@ main()
   // Run ...
   //
 
-  // BeginLatex
+  // \latexonly
   //
   // Now, we're ready to perform the registration. With the same sets
   // of features, we may obtain different results depending on the
@@ -357,7 +362,7 @@ main()
   // can belong to a model different from that of the transformation
   // estimator.
   //
-  // EndLatex
+  // \endlatexonly
 
   // BeginCodeSnippet
   reg.run( moving_image_roi, fixed_image_roi, estimator, init_transform );

@@ -21,7 +21,7 @@
 
 #ifdef PASSONE
 //: Define aux_args (like a functor struct)
-// TODO Begin passing around AuxArgs* instead of the struct to save on registers
+// \todo Begin passing around AuxArgs* instead of the struct to save on registers
 typedef struct
 {
   //scene data
@@ -163,8 +163,8 @@ pass_one(__constant  RenderSceneInfo    * linfo,
   aux_args.volume_scale = linfo->block_len*linfo->block_len*linfo->block_len;
 
   cast_adaptive_cone_ray( i, j,
-                         (float4) (ray_ox, ray_oy, ray_oz, 0.0f),
-                         (float4) (ray_dx, ray_dy, ray_dz, cone_half_angle),
+                          (float4) (ray_ox, ray_oy, ray_oz, 0.0f),
+                          (float4) (ray_dx, ray_dy, ray_dz, cone_half_angle),
                           linfo, tree_array,                      //scene info
                           local_tree, bit_lookup, centerX, centerY, centerZ,
                           cumsum, to_visit, aux_args);      //utility info

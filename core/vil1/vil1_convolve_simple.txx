@@ -20,8 +20,9 @@
 
 //--------------------------------------------------------------------------------
 
+//:
 // fsm: With 2.7 the assembler complains that this symbol is defined
-// twice. Moreover, it *is* defined twice (both .weak), even if we don't
+// twice. Moreover, it \e is defined twice (both .weak), even if we don't
 // explicitly instantiate it. If explicitly instantiated, it is defined once
 // .global and once .weak. Presumably, the compiler incorrectly thinks it needs
 // to instantiate it twice just because it is called twice.

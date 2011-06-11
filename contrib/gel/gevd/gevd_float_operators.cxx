@@ -1656,6 +1656,7 @@ gevd_float_operators::SurfaceNormalD(const gevd_bufferxy& range,
     }
 }
 
+//:
 //  Approximate the curvature at pixel x,y along a given direction by
 //  looking at neighboring pixels low_x,low_y and high_x,high_y taken
 //  from along that direction.  If no normal is recorded at x,y or no normal
@@ -1671,7 +1672,7 @@ gevd_float_operators::SurfaceNormalD(const gevd_bufferxy& range,
 //  curvature at point p is sampled (along whatever direction) at
 //  points p-1 and p+1, and then assigned to point p, at the
 //  boundaries it's sampled at p and p+1 (or p and p-1) and then
-//  assigned to p when it *should* be assigned to some point
+//  assigned to p when it \e should be assigned to some point
 //  between the two.
 static bool
 _CurvatureInDir(const gevd_bufferxy& normal,

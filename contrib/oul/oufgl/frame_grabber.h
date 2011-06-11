@@ -19,7 +19,7 @@
 // methods for acquiring new frames both synchronously and
 // asynchronously.
 //
-// \status Complete
+// Status: Complete
 // \author Brendan McCane
 //----------------------------------------------------------------------
 class FrameGrabber

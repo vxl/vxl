@@ -43,7 +43,7 @@ class mvl_multi_view_matches
   void set_views(int start, int end, int step = 1);
   void set_views(int N);
 
-  //: Merge-in single match tracks. The view indices are *real* (i.e on-disk) indices.
+  //: Merge-in single match tracks. The view indices are \e real (i.e on-disk) indices.
   void add_pair(int view1, int corner1, int view2, int corner2);
   void add_triplet(int view1, int corner1, int view2, int corner2, int view3, int corner3);
   void add_track(vcl_vector<int> const& views, vcl_vector<int> const& corners);

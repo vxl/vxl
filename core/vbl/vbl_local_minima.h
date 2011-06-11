@@ -20,7 +20,7 @@
 
 //: Find the local minima in arrays
 //  The result is an array with non-zero elements where local minima
-//  exist. A local minimum must be smaller than *all* neighboring elements
+//  exist. A local minimum must be smaller than \e all neighboring elements
 //  by a threshold.
 //  The result is an array with non-zero elements at minima.
 //  The value of non-zero element indicates the smallest difference
@@ -35,7 +35,7 @@ vbl_array_1d<T> vbl_local_minima(vbl_array_1d<T> const& in, T thresh = T(0))
 
 //: Find the local minima in arrays
 //  The result is an array with non-zero elements where local minima
-//  exist. A local minimum must be smaller than *all* neighboring elements
+//  exist. A local minimum must be smaller than \e all neighboring elements
 //  by a threshold. The neighborhoods are 4-connected.
 //  The result is an array with non-zero elements at minima.
 //  The value of non-zero element indicates the smallest difference
@@ -50,7 +50,7 @@ vbl_array_2d<T> vbl_local_minima(vbl_array_2d<T> const& in, T thresh = T(0))
 
 //: Find the local minima in arrays
 //  The result is an array with non-zero elements where local minima
-//  exist. A local minimum must be smaller than *all* neighboring elements
+//  exist. A local minimum must be smaller than \e all neighboring elements
 //  by a threshold. The neighborhoods are 8-connected.
 //  The result is an array with non-zero elements at minima.
 //  The value of non-zero element indicates the smallest difference

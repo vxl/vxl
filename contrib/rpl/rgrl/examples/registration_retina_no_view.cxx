@@ -1,4 +1,7 @@
-// BeginLatex
+//:
+// \file
+//
+// \latexonly
 //
 // With the same set of images as in section~\ref{sec:init:ransac}, we
 // now align the images using both the landmarks and vessel center
@@ -45,7 +48,7 @@
 // type. The derived class for a landmark invariant feature is
 // \code{rgrl\_invariant\_single\_landmark}.
 //
-// EndLatex
+// \endlatexonly
 //
 // An input landmark file contains a landmark entry in the format:
 //
@@ -252,7 +255,7 @@ main( int argc, char* argv[] )
 
   // Create the initializer
   //
-  // BeginLatex
+  // \latexonly
   //
   // Having all landmark invariant features stored in two lists, one
   // for each image, we are ready to construct the initializer, which
@@ -265,7 +268,7 @@ main( int argc, char* argv[] )
   // initial estimate. Each call to the initializer for the next
   // initial estimate takes the next unexplored match from the list.
   //
-  // EndLatex
+  // \endlatexonly
 
   // BeginCodeSnippet
   rgrl_initializer_inv_indexing* inv_initializer =
@@ -312,7 +315,7 @@ main( int argc, char* argv[] )
             <<"Final alignment error = "<<reg.final_status()->error()<<vcl_endl;
   }
 
-  // BeginLatex
+  // \latexonly
   //
   // Let's execute this example with the following feature files.
   // \verb+rgrl/examples/IMG0002.pgm.txt+ contains traces and
@@ -344,7 +347,7 @@ main( int argc, char* argv[] )
   // the use of vesel center points for refinement of the
   // transformation.
   //
-  // EndLatex
+  // \endlatexonly
 
   // Perform testing
   //

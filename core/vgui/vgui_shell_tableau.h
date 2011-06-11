@@ -32,8 +32,8 @@
 // - close (Alt-W), which closes the window (and exits the application
 //   if there is only one window)
 //
-// The set_default_* member functions can be used to change the
-// default bindings for all *future* shell tableaux. It will not
+// The \p set_default_* member functions can be used to change the
+// default bindings for all \e future shell tableaux. It will not
 // change the bindings of already created tableaux.
 //
 class vgui_shell_tableau_bindings

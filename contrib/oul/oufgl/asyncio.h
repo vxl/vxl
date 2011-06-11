@@ -41,8 +41,8 @@
 //   13-Dec-00  SJB  Use SIGIO as default completion signal
 //                   Fix up wait_for_completion, add suspend flag
 // \endverbatim
+// Status: Complete
 // \author Simon Brady
-// \status Complete
 //----------------------------------------------------------------------
 
 #include <unistd.h>

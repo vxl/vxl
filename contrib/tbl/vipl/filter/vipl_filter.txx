@@ -694,7 +694,7 @@ bool vipl_filter< ImgIn, ImgOut, DataIn, DataOut, Arity, PixelItr >
 }
 
 //:
-// Called by \usemethod {filter()} and checks additional parameters required
+// Called by method \p filter() and checks additional parameters required
 // before the filtering operation can proceed. Default is empty_func
 // returning true, but subclasses can define as then need.  check_parms_1
 template < class ImgIn, class ImgOut, class DataIn, class DataOut, int Arity, class PixelItr>

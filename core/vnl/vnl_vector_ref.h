@@ -29,7 +29,7 @@ class vnl_vector_ref : public vnl_vector<T>
   typedef vnl_vector<T> Base;
 
   //: Constructor
-  // Do *not* call anything else than the default constructor of vnl_vector<T>
+  // Do \e not call anything else than the default constructor of vnl_vector<T>
   vnl_vector_ref(unsigned n, T *space) : vnl_vector<T>() {
     Base::data = space;
     Base::num_elmts = n;
@@ -39,8 +39,8 @@ class vnl_vector_ref : public vnl_vector<T>
   }
 
   //: Copy constructor
-  // Do *not* call anything else than the default constructor of vnl_vector<T>
-  // (That is why the default copy constructor is *not* good.)
+  // Do \e not call anything else than the default constructor of vnl_vector<T>
+  // (That is why the default copy constructor is \e not good.)
   vnl_vector_ref(vnl_vector_ref<T> const& v) : vnl_vector<T>() {
     Base::data = const_cast<T*>(v.data_block()); // const incorrect!
     Base::num_elmts = v.size();

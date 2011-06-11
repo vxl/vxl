@@ -115,7 +115,7 @@ bool vvid_command_line_player::play_video()
 }
 
 //: write status block to file
-// TODO: each video process should be able to have its own status_block type
+// \todo each video process should be able to have its own status_block type
 void vvid_command_line_player::write_status(vcl_string output_file, int iframe)
 {
   float percent_done = 0;
@@ -179,6 +179,7 @@ bool vvid_command_line_player::print_performance_output(vcl_string video_name,
   outstream.close();
   return true;
 }
+
 bool vvid_command_line_player::print_xml_params(vul_arg_info_list& arg_list,
                                                 vcl_string param_block_name)
 {

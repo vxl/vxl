@@ -20,10 +20,10 @@
 //  pointer, or else the program will halt.
 //
 // Example of usage:
-// \example
+// \code
 //    rgrl_transformation_sptr trans = new rgrl_trans_affine(...);
 //    rgrl_trans_affine* aff = rgrl_cast<rgrl_trans_affine*>(trans);
-// \endexample
+// \endcode
 //
 template<typename ToType>
 class rgrl_cast
@@ -95,10 +95,10 @@ class rgrl_cast
 //  pointer, or else the program will halt.
 //
 // Example of usage:
-// \example
+// \code
 //    rgrl_transformation_sptr trans = new rgrl_trans_affine(...);
 //    const rgrl_trans_affine* aff = rgrl_const_cast<rgrl_trans_affine*>(trans);
-// \endexample
+// \endcode
 //
 template<typename ToType>
 class rgrl_const_cast

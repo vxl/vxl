@@ -95,8 +95,8 @@ vnl_quaternion<T>::vnl_quaternion(vnl_vector_fixed<T,4> const& vec)
 
 //: Creates a quaternion from a rotation matrix.
 // Its orthonormal basis vectors are the matrix rows.
-// NOTE: this matrix *must* have determinant +1; this is not verified!
-// WARNING: Takes the transpose of the rotation matrix, i.e.,
+// \note this matrix \e must have determinant +1; this is not verified!
+// \warning Takes the transpose of the rotation matrix, i.e.,
 // the orthonormal vectors must be the rows of the matrix, not the columns.
 template <class T>
 vnl_quaternion<T>::vnl_quaternion(vnl_matrix_fixed<T,3,3> const& rot)

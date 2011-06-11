@@ -5,7 +5,7 @@
 // \author Ming-Ching Chang
 // \date Nov 28, 2006.
 //  To debug in Visual studio, put argument
-//  all D:\Projects\BrownEyes\lemsvxlsrc\brcv\shp\bmsh3d\tests\data
+//  all D:/Projects/BrownEyes/lemsvxlsrc/brcv/shp/bmsh3d/tests/data
 
 #include <bmsh3d/bmsh3d_mesh.h>
 #include <bmsh3d/bmsh3d_mesh_mc.h>

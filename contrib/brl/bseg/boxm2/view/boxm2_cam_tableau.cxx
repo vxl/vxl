@@ -195,7 +195,8 @@ bool boxm2_cam_tableau::mouse_drag(int x, int y, vgui_button button, vgui_modifi
   return false;
 }
 
-//TODO i don't think this really does anything.
+//:
+// \todo i don't think this really does anything.
 bool boxm2_cam_tableau::mouse_up(int x, int y, vgui_button button, vgui_modifier modifier)
 {
   // SPINNING

@@ -119,7 +119,7 @@ class vnl_vector_fixed
   explicit vnl_vector_fixed( const T& v ) { fill( v ); }
 
   //: Construct a fixed-n-vector initialized from \a datablck
-  //  The data *must* have enough data. No checks performed.
+  //  The data \e must have enough data. No checks performed.
   explicit vnl_vector_fixed( const T* datablck )
   {
     vcl_memcpy( data_, datablck, sizeof data_ );

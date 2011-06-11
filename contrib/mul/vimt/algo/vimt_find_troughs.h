@@ -9,8 +9,8 @@
 #include <vimt/vimt_image_2d_of.h>
 #include <vgl/vgl_point_2d.h>
 
-//: True if pixel at *im is strictly below its 8 neighbours
-//  The image pixel (first argument) should *not* be a border pixel!
+//: True if pixel at \p *im is strictly below its 8 neighbours
+//  The image pixel (first argument) should \e not be a border pixel!
 template <class T>
 inline bool vimt_is_trough_3x3(const T* im, vcl_ptrdiff_t i_step, vcl_ptrdiff_t j_step)
 {

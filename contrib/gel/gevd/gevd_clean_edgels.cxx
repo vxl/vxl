@@ -21,6 +21,8 @@
 
 static bool verbose = false;
 
+//:
+// \todo not yet implemented
 static bool near_equal(vdgl_digital_curve_sptr /*dc1*/, vdgl_digital_curve_sptr /*dc2*/, float /*tolerance*/)
 {
   vcl_cerr << __FILE__ << ": near_equal(dc1,dc2) not yet implemented\n";

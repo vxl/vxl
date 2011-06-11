@@ -31,7 +31,7 @@ vtol_face::~vtol_face()
 
 //:
 // Returns an ordered list of vertices of the outside boundary of the
-// face.  All vertices on any holes of the face are *not* included.
+// face.  All vertices on any holes of the face are \e not included.
 // This vertex list is ordered such that a positive normal is
 // computing using the Right Hand rule in the direction of the vertex
 // list.
@@ -67,7 +67,7 @@ vcl_vector<vtol_vertex*> *vtol_face::compute_vertices(void)
 
 //:
 // Returns a list of the zero_chains on the outside boundary of the face.
-// All zero_chains on any hole boundaries of the face are *not* included.
+// All zero_chains on any hole boundaries of the face are \e not included.
 
 vcl_vector<vtol_zero_chain*> *vtol_face::outside_boundary_compute_zero_chains(void)
 {
@@ -77,7 +77,7 @@ vcl_vector<vtol_zero_chain*> *vtol_face::outside_boundary_compute_zero_chains(vo
 
 //:
 // Returns a list of the zero_chains on the outside boundary of the face.
-// All zero_chains on any hole boundaries of the face are *not* included.
+// All zero_chains on any hole boundaries of the face are \e not included.
 
 zero_chain_list *vtol_face::outside_boundary_zero_chains(void)
 {
@@ -103,7 +103,7 @@ vcl_vector<vtol_zero_chain*> *vtol_face::compute_zero_chains(void)
 
 //:
 // Returns a list of edges that make up the outside boundary of the
-// face. All edges on any hole boundaries are *not* included.
+// face. All edges on any hole boundaries are \e not included.
 
 vcl_vector<vtol_edge*> *vtol_face::outside_boundary_compute_edges(void)
 {

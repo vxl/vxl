@@ -184,7 +184,7 @@ vgl_point_2d<T> vgl_closest_point(vgl_point_2d<T> const& point,
 //
 // \author Paul Bourke, modified for use in VXL by Brendan McCane
 //
-// \notes This routine is adapted from code written by Paul Bourke and
+// \note This routine is adapted from code written by Paul Bourke and
 // available online at
 // http://astronomy.swin.edu.au/~pbourke/geometry/lineline3d/
 

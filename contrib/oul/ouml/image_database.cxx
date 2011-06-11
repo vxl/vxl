@@ -33,7 +33,7 @@
 //
 // Iterate through all images in the database and delete them.
 //
-// \side Memory is actually deallocated
+// \remark Memory is actually deallocated
 //
 // \author Brendan McCane
 //----------------------------------------------------------------------

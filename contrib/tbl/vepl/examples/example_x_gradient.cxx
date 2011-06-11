@@ -4,7 +4,7 @@
 //  a colour image.  The input image (argv[1]) must be 24 bit (colour), and in
 //  that case its X gradient is written to argv[2] which is always a PPM file.
 //  Note that this requires operator-() on the vil_rgb<ubyte> data type.
-//  But this indeed produces a *colour* gradient!
+//  But this indeed produces a \e colour gradient!
 //
 // \author Peter Vanroose, K.U.Leuven, ESAT/PSI
 // \date   7 October 2002, from vepl1/examples
@@ -21,7 +21,8 @@
 typedef vil_rgb<vxl_byte> rgbcell;
 
 int
-main(int argc, char** argv) {
+main(int argc, char** argv)
+{
   if (argc < 3)
   {
     vcl_cerr << "Syntax: example_x_gradient file_in file_out\n";

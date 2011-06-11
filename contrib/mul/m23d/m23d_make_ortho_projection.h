@@ -19,8 +19,8 @@ vnl_matrix<double> m23d_make_ortho_projection(double Ax, double Ay, double Az);
 //  where P_i is a projection matrix for shape i, and w_ij is the
 //  weight for the j-th shape basis.
 //
-// \params first_is_identity  When true, projection for first shape is scaled identity
-// \params basis_true When true, w_ij=(i==j) if i<=nm (ie first shapes define a basis)
+// \param first_is_identity  When true, projection for first shape is scaled identity
+// \param basis_true         When true, w_ij=(i==j) if i<=nm (ie first shapes define a basis)
 vnl_matrix<double> m23d_make_ortho_projection(vnl_random& r,
                                               unsigned ns, unsigned nm=0,
                                               bool first_is_identity=false,

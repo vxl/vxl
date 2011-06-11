@@ -652,7 +652,8 @@ void sdet_edgel_regions::GrowEquivalenceClasses()
 }
 
 //------------------------------------------------------------
-//: Check if the vtol_edge list sg (spatial group) contains edge(s) - NYI
+//: Check if the vtol_edge list sg (spatial group) contains edge(s)
+// \todo not yet implemented
 bool sdet_edgel_regions::GroupContainsEdges(vcl_vector<vtol_edge_2d_sptr>& /* sg */)
 {
 #if 0

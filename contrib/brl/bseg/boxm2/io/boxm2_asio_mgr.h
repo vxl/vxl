@@ -66,7 +66,7 @@ class boxm2_asio_mgr
 
     //: list of asynchronous io loads
     // NEED TO KEEP TRACK OF DATA LOAD AND SAVES
-    // TODO: Make a map to data_types as well
+    // \todo Make a map to data_types as well
     block_list_t load_list_;
 
     //: data list, first index by data_type string, then by block_id

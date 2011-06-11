@@ -125,7 +125,7 @@ class vidl_dshow_live_istream : public vidl_istream
   virtual vidl_pixel_format format() const { return buffer_pixel_format_; }
 
   //: Return the frame rate (FPS, 0.0 if unspecified)
-  // TODO return a framerate if it is constant for a live video
+  // \todo return a framerate if it is constant for a live video
   virtual double frame_rate() const { return 0.0; }
 
   //: Return the duration in seconds (0.0 if unknown)

@@ -30,10 +30,11 @@ class boxm2_ocl_camera_converter
                                            unsigned cl_ni,
                                            unsigned cl_nj );
 
-    //compile helper kernel, should only occur once
+    //: compile helper kernel, should only occur once
     static void compile_persp_to_generic_kernel(bocl_device_sptr device);
 
-    //TODO: make this a map of kernels (by device)
+    //:
+    // \todo make this a map of kernels (by device)
     static bocl_kernel* persp_to_generic_kernel;
 };
 

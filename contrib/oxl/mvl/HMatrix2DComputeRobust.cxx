@@ -208,7 +208,8 @@ vcl_vector<double> HMatrix2DComputeRobust::calculate_residuals(vcl_vector<HomgPo
   return ret;
 }
 
-// TODO
+//:
+// \todo not yet implemented
 double HMatrix2DComputeRobust::calculate_term(vcl_vector<double>& /*residuals*/,
                                               vcl_vector<bool>& /*inlier_list*/,
                                               int& /*count*/)
@@ -217,7 +218,8 @@ double HMatrix2DComputeRobust::calculate_term(vcl_vector<double>& /*residuals*/,
   return 10000.0;
 }
 
-// TODO
+//:
+// \todo not yet implemented
 double HMatrix2DComputeRobust::calculate_residual(vgl_homg_point_2d<double>& /*one*/,
                                                   vgl_homg_point_2d<double>& /*two*/,
                                                   HMatrix2D* /*H*/)
@@ -226,7 +228,8 @@ double HMatrix2DComputeRobust::calculate_residual(vgl_homg_point_2d<double>& /*o
   return -1.0;
 }
 
-// TODO
+//:
+// \todo not yet implemented
 double HMatrix2DComputeRobust::calculate_residual(HomgPoint2D& /*one*/,
                                                   HomgPoint2D& /*two*/,
                                                   HMatrix2D* /*H*/)

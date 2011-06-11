@@ -212,7 +212,7 @@ class bsta_mixture_fixed : public bsta_distribution<typename dist_::math_type,
 
   //: sample from the mixture
   //  randomly selects a component wrt normalized component weights, then for now returns the mean of the selected component
-  //  TODO: write a method to sample from the distribution and use it instead of the mean
+  //  \todo write a method to sample from the distribution and use it instead of the mean
   vector_ sample(vnl_random& rng) const
   {
     //: first normalize the weights (this is const methods so we cannot call the class-method normalize_weights()

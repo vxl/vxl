@@ -386,7 +386,8 @@ vnl_matrix <T> vnl_svd<T>::left_nullspace()  const
   return U_.extract(U_.rows(), n_-k, 0, k);
 }
 
-//: Implementation to be done yet; currently returns left_nullspace(). - PVr. // TODO
+//:
+// \todo Implementation to be done yet; currently returns left_nullspace(). - PVr.
 template <class T>
 vnl_matrix<T> vnl_svd<T>::left_nullspace(int /*required_nullspace_dimension*/) const
 {

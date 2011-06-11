@@ -4,7 +4,7 @@
 //  \file
 //  \author Chuck Stewart
 //  \date   Summer 2001
-//  \modified May 2004 to store the values in a map
+//  \date   Modufied May 2004 to store the values in a map
 //  \brief  Look-up table for the normalization terms used in the MUSE objective function.
 //
 

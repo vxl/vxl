@@ -599,6 +599,7 @@ void gevd_edgel_regions::GrowEquivalenceClasses()
 
 //------------------------------------------------------------
 //: Check if the SpatialGroup contains Edge(s)
+// \todo not yet implemented
 //
 bool gevd_edgel_regions::GroupContainsEdges(vcl_vector<vtol_edge_2d_sptr>& /*sg*/)
 {

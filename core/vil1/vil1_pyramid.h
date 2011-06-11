@@ -12,7 +12,7 @@
 #include <vcl_vector.h>
 
 //:
-// vil1_pyramid is *not* an image. It is like an array of images, with
+// vil1_pyramid is \e not an image. It is like an array of images, with
 // the 0th element as the given image and the ith element a subsampled
 // version of the (i-1)th element. The subsampled images are computed
 // on demand and cached for later use.

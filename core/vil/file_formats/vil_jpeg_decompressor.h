@@ -24,10 +24,12 @@ class vil_jpeg_decompressor
 
   vil_jpeg_decompressor(vil_stream *s);
 
+  //:
   // NB. does not delete the stream.
   ~vil_jpeg_decompressor();
 
-  // Do *not* delete the return value. Leave it alone.
+  //:
+  // Do \e not delete the return value. Leave it alone.
   // The return value is zero on failure.
   // It should cost nothing to read the same scanline twice in succession.
   JSAMPLE const *read_scanline(unsigned line);

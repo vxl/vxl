@@ -32,11 +32,11 @@ class boxm2_nn_cache : public boxm2_cache
     vcl_string to_string();
 
     //: dumps writeable data onto disk
-    // TODO - NYI
+    // \todo not yet implemented
     virtual void write_to_disk() { vcl_cerr << "Not yet implemented!!!\n"; }
 
     //: disable the write process
-    // TODO - NYI
+    // \todo not yet implemented
     virtual void disable_write() { vcl_cerr << "Not yet implemented!!!\n"; }
   private:
 

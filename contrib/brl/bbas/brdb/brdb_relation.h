@@ -84,7 +84,7 @@ class brdb_relation : public vbl_ref_count
   bool order_by(unsigned int index, bool ascending=true);
 
   //: clear the relation
-  // \keep the names and types, but remove all the tuples
+  // Keep the names and types, but remove all the tuples
   void clear();
 
   //: Add one tuple to relation

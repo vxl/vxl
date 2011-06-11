@@ -196,7 +196,7 @@ class vgl_conic
   bool is_central() const;
 
   //: Returns true if the point pt belongs to the conic.
-  //  I.e., if it *exactly* satisfies the conic equation.
+  //  I.e., if it \e exactly satisfies the conic equation.
   bool contains(vgl_homg_point_2d<T> const& pt) const;
 
   //: Returns the list of component lines, when degenerate and real components.

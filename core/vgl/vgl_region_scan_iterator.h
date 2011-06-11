@@ -31,7 +31,7 @@ class vgl_region_scan_iterator
   virtual bool next() =0;
 
   //: y-coordinate of the current scan line.
-  //  The next scan line is *not* guaranteed to have scany()+1; use next() instead.
+  //  The next scan line is \e not guaranteed to have scany()+1; use next() instead.
   virtual int  scany() const =0;
 
   //: Returns starting x-value of the current scan line.

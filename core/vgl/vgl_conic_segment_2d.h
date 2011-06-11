@@ -198,7 +198,7 @@ class vgl_conic_segment_2d
   //  share no other points than the two end points.
   //  Use the swap_direction or the swap_endpoints() method on one of the two
   //  segments to turn complementary segments into identical ones.
-  //  Note that two conic segments *are* equal if both the direction and the
+  //  Note that two conic segments \e are equal if both the direction and the
   //  two end points are swapped. To normalize a conic segment such that its
   //  direction becomes counterclockwise, use the normalize() method.
   inline bool operator==(vgl_conic_segment_2d<Type> const& l) const {
@@ -247,14 +247,16 @@ class vgl_conic_segment_2d
   //  Note that the methods swap_endpoints() and swap_direction() always swaps
   //  finiteness of a parabolic segment (unless the endpoints coincide). For
   //  hyperbolic segments this is not necessarily the case: both can be infinite.
-  bool is_finite() const { assert(!"Not yet implemented"); return true; } // TODO: NYI
+  //  \todo not yet implemented
+  bool is_finite() const { assert(!"Not yet implemented"); return true; }
 
   //: Finds out whether the given point lies on the conic segment.
   //  More specifically, lying on the segment implies lying on the conic.
   //  Moreover, the two endpoints (if effectively on the conic) will always
   //  lie on the segment. All other points of the conic lie either on this
   //  segment, or on the "swapped" segment, but never on both.
-  bool contains(vgl_homg_point_2d<Type> const& /*pt*/) const { assert(!"Not yet implemented"); return false; } // TODO: NYI
+  //  \todo not yet implemented
+  bool contains(vgl_homg_point_2d<Type> const& /*pt*/) const { assert(!"Not yet implemented"); return false; }
 };
 
 //: Write to stream

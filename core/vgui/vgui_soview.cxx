@@ -5,10 +5,10 @@
 //:
 // \file
 // \author Philip C. Pritchett, RRG, University of Oxford
-// \date   24 Mar 99
+// \date   24 Mar 1999
 // \brief  See vgui_soview.h for a description of this file.
 //
-// \modified 14 Nov 2006, by B. McCane. Set AWF_USE_MAP to 1 so the
+// \date Modified 14 Nov 2006, by B. McCane. Set AWF_USE_MAP to 1 so the
 // map is used by default and added a destructor that removes the id
 // from the map and therefore prevents a memory leak.
 

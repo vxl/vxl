@@ -251,10 +251,10 @@ bool vsol_polygon_3d::valid_vertices(const vcl_vector<vsol_point_3d_sptr> new_ve
 
 //---------------------------------------------------------------------------
 //: Is `p' in `this' ?
+// \todo not yet implemented
 //---------------------------------------------------------------------------
 bool vsol_polygon_3d::in(vsol_point_3d_sptr const& ) const
 {
-  // TODO
   vcl_cerr << "Warning: vsol_polygon_3d::in() has not been implemented yet\n";
   return false;
 }

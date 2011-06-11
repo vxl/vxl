@@ -1,4 +1,7 @@
-// BeginLatex
+//:
+// \file
+//
+// \latexonly
 //
 // The registration problem is to align the retinal images using the
 // pre-computed landmarks. A landmark feature is defined as a
@@ -32,7 +35,7 @@
 // engine is quadratic, which is the final model of the application.
 // \end{enumerate}
 //
-// EndLatex
+// \endlatexonly
 
 
 #include <vcl_fstream.h>
@@ -186,7 +189,7 @@ main( int argc, char* argv[] )
   rgrl_mask_sptr moving_image_region = new rgrl_mask_box( moving_feature_set->bounding_box() );
   rgrl_mask_sptr fixed_image_region  = new rgrl_mask_box( fixed_feature_set->bounding_box() );
 
-  // BeginLatex
+  // \latexonly
   //
   // Landmarks are first imported from files. With the initial
   // translation estimate (\code{init\_translation}), we generate 2
@@ -197,7 +200,7 @@ main( int argc, char* argv[] )
   // outside the engine. The \code{pruned\_match\_set}, returned by
   // the matcher, contains matches for random sampling.
   //
-  // EndLatex
+  // \endlatexonly
 
 
   double shift_x = -286;
@@ -220,7 +223,7 @@ main( int argc, char* argv[] )
 
   vcl_cout<<"pruned match set = "<<pruned_match_set->from_size()<<vcl_endl;
 
-  // BeginLatex
+  // \latexonly
   //
   // Random sampling \cite{stewart:pami95} is performed by
   // \code{rgrl\_initializer\_ran\_sam} . It is crucial to provide the
@@ -233,7 +236,7 @@ main( int argc, char* argv[] )
   // via a function call \code{set\_data}. The current implementation
   // only handles a pre-computed match set.
   //
-  // EndLatex
+  // \endlatexonly
 
   // BeginCodeSnippet
   int dim = 2;
@@ -253,7 +256,7 @@ main( int argc, char* argv[] )
   rgrl_initializer_sptr initializer = ran_sam;
   // EndCodeSnippet
 
-  // BeginLatex
+  // \latexonly
   //
   // The estimation of the best affine transformation is triggered
   // when the registration engine asks for an initial
@@ -261,7 +264,7 @@ main( int argc, char* argv[] )
   // sampling initializer, since the estimation can only be triggered
   // once.
   //
-  // EndLatex
+  // \endlatexonly
 
   // To allow the similarity weight to be part of the final match
   // weight, we have to be careful when defining
@@ -315,7 +318,7 @@ main( int argc, char* argv[] )
 
   // Run ...
   //
-  // BeginLatex
+  // \latexonly
   //
   // We skip the part on the setting of the registration engine for
   // robust estimation of the final quadratic
@@ -323,7 +326,7 @@ main( int argc, char* argv[] )
   // initializer, instead of the initial estimate, initiates the
   // registration process.
   //
-  // EndLatex
+  // \endlatexonly
 
   // BeginCodeSnippet
   reg.run( initializer );
@@ -339,7 +342,7 @@ main( int argc, char* argv[] )
             <<"Final alignment error = "<<reg.final_status()->error()<<vcl_endl;
   }
 
-  // BeginLatex
+  // \latexonly
   //
   // Since the initial translation prior to random sampling was
   // specified manually, this example only works with specific feature
@@ -360,7 +363,7 @@ main( int argc, char* argv[] )
   // Final alignment error = 1.00458
   // \end{verbatim}
   //
-  // EndLatex
+  // \endlatexonly
 
   // Perform testing
   //

@@ -132,7 +132,7 @@ void vgui_shell_tableau::get_popup(vgui_popup_params const &params, vgui_menu &m
 
 // mimic the old behaviour. The old behaviour is: the graph condition
 // is checked iff enable_key_bindings==true; close and quit conditions
-// are checked iff enable_key_bindings==true *and* do_quit==true.
+// are checked iff enable_key_bindings==true \b and do_quit==true.
 //
 void vgui_shell_tableau::set_quit(bool on)
 {
@@ -140,7 +140,8 @@ void vgui_shell_tableau::set_quit(bool on)
   if ( do_quit ) {
     bindings.set_quit( key_bindings_type::default_quit );
     bindings.set_close( key_bindings_type::default_close );
-  } else {
+  }
+  else {
     bindings.set_quit( vgui_event_condition() );
     bindings.set_close( vgui_event_condition() );
   }
@@ -154,7 +155,8 @@ void vgui_shell_tableau::set_enable_key_bindings(bool on)
     bindings.set_graph( key_bindings_type::default_graph );
     // enable quit and close bindings depending on current value of do_quit.
     this->set_quit( do_quit );
-  } else {
+  }
+  else {
     // disable all bindings
     bindings.set_quit( vgui_event_condition() );
     bindings.set_close( vgui_event_condition() );

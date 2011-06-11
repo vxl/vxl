@@ -5,7 +5,7 @@
 // \author Ming-Ching Chang
 // \date Nov 28, 2006.
 //  To debug in Visual studio, put argument
-//  all D:\Projects\vxl\brl\bbas\bmsh3d\tests\data
+//  all D:/Projects/vxl/brl/bbas/bmsh3d/tests/data
 
 #include <vnl/vnl_math.h>
 #include <vgl/vgl_distance.h>

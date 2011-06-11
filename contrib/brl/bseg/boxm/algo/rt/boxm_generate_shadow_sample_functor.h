@@ -191,10 +191,10 @@ void boxm_generate_shadow_sample_rt(boxm_scene<boct_tree<T_loc, T_data > > &scen
       }
 
 #if 0
-    vil_save(vis_inf, "e:\\ShadowSite\\vis_inf.tiff");
-    vil_save(pre_inf, "e:\\ShadowSite\\pre_inf.tiff");
-    vil_save(Beta_denom_img, "e:\\ShadowSite\\Beta_denom_img.tiff");
-    //    vil_save(pass_1_functor.alpha_integral_, "e:\\tests\\capitol\\alpha_integr.tiff");
+    vil_save(vis_inf, "E:/ShadowSite/vis_inf.tiff");
+    vil_save(pre_inf, "E:/ShadowSite/pre_inf.tiff");
+    vil_save(Beta_denom_img, "E:/ShadowSite/Beta_denom_img.tiff");
+    vil_save(pass_1_functor.alpha_integral_, "E:/tests/capitol/alpha_integr.tiff");
 #endif
     vcl_cout<<"PASS 2"<<vcl_endl;
     typedef boxm_generate_shadow_sample_functor_pass_2<T_data::apm_type, sample_datatype> pass_2;

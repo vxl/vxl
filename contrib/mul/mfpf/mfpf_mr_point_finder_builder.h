@@ -72,7 +72,7 @@ class mfpf_mr_point_finder_builder
   //  and levels so that region is covered and at any given
   //  level the model width (in number of samples) is in the range
   //  [min_n_samples,max_n_samples].
-  //  \params base_pixel_width Pixel width in base image
+  //  \param base_pixel_width Pixel width in base image
   void set_size_and_levels(
                 const mfpf_point_finder_builder& builder0,
                 double wi, double wj,

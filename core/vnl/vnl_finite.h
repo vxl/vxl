@@ -197,7 +197,7 @@ class vnl_finite_int
   //: Return the smallest multiplicative generator of the units in this ring.
   //  This is only possible if the units form a cyclic group for multiplication.
   //  If not, smallest_generator() returns 1 to indicate this fact.
-  //  Note that the multiplication group of a finite *field* is always cyclic.
+  //  Note that the multiplication group of a finite \e field is always cyclic.
   static Base smallest_generator() {
     static Base gen_ = 0; // cached value
     if (gen_ != 0) return gen_;
@@ -556,7 +556,7 @@ class vnl_finite_int_poly
   //: Return the smallest multiplicative generator of the units in this ring.
   //  This is only possible if the units form a cyclic group for multiplication.
   //  If not, smallest_generator() returns 1 to indicate this fact.
-  //  Note that the multiplication group of a finite *field* is always cyclic.
+  //  Note that the multiplication group of a finite \e field is always cyclic.
   static Base smallest_generator() {
     if (!Base::is_field()) return Scalar(1);
     vcl_vector<Scalar> mod_p = Base::modulo_polynomial();

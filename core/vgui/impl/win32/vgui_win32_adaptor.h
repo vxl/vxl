@@ -7,7 +7,7 @@
 // \author Lianqing Yu
 // \date July 29, 2009              Initial version
 //
-// TODO issues:
+// \todo TODO issues:
 // 1. idle_slot.
 // 2. Should the timer be created in the constructor, in case post_timer is
 //    never called? Qt impl. does this but MFC impl. does not.

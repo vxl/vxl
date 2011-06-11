@@ -30,7 +30,8 @@ class pop_vertex
   //: A list of edges that can lead to other vertex
   void add_edge(pop_edge*);
 
-  //: find a path to another vertex - should be protected and accessed by friend edge TODO
+  //: find a path to another vertex
+  // \todo should be protected and accessed by friend edge
   bool search(pop_vertex *destination, vcl_list<pop_edge*> &path);
 
   //: set all vertex to untouched

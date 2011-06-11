@@ -27,11 +27,11 @@ class boxm2_dumb_cache : public boxm2_cache
     boxm2_data<T>* get_data(boxm2_block_id id);
 
     //: dumps writeable data onto disk
-    // TODO - NYI
+    // \todo not yet implemented
     virtual void write_to_disk() { vcl_cerr << "Not yet implemented!!!\n"; }
 
     //: disable the write process
-    // TODO - NYI
+    // \todo not yet implemented
     virtual void disable_write() { vcl_cerr << "Not yet implemented!!!\n"; }
 
   private:

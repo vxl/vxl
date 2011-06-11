@@ -57,7 +57,7 @@ class vgui_image_renderer
 
  public:
   //: Set this to true to use texture mapping for image rendering.
-  //  To succeed, it must be set *before* the first get_section() is
+  //  To succeed, it must be set \e before the first \p get_section() is
   //  done on the image, i.e. before the first call to render() is made.
   bool use_texture_mapping;
 
@@ -87,7 +87,6 @@ class vgui_image_renderer
 
   //: Not yet implemented - for future use.
   void need_resection() const;
-
 };
 
 #endif // vgui_image_renderer_h_

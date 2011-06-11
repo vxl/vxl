@@ -27,9 +27,7 @@
 //                matrix                  matrix     signal
 // \endverbatim
 //
-// Typical usage:
-//
-// \status Completed
+// Status: Completed
 // \author Brendan McCane
 //----------------------------------------------------------------------
 

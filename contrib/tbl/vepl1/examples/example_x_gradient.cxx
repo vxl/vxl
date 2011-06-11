@@ -4,7 +4,7 @@
 //  a colour image.  The input image (argv[1]) must be 24 bit (colour), and in
 //  that case its X gradient is written to argv[2] which is always a PPM file.
 //  Note that this requires operator-() on the vil1_rgb<ubyte> data type.
-//  But this indeed produces a *colour* gradient!
+//  But this indeed produces a \e colour gradient!
 //
 // \author Peter Vanroose, K.U.Leuven, ESAT/PSI
 // \date   15 May 2001, from vipl/examples

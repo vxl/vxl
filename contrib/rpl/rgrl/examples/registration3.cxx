@@ -1,4 +1,7 @@
-// BeginLatex
+//:
+// \file
+//
+// \latexonly
 //
 // Multi-resolution approach is widely used to improve the domain of
 // convergence, since there are fewer local minima present at the
@@ -39,7 +42,7 @@
 // transform.  In this section, we'll only discuss steps that are
 // relevant to multi-resolution registration.
 //
-// EndLatex
+// \endlatexonly
 
 
 #include <vcl_fstream.h>
@@ -164,7 +167,7 @@ main( int argc, char* argv[] )
   int dim = 2;
   rgrl_transformation_sptr initial_transformation = new rgrl_trans_affine(dim);
 
-  // BeginLatex
+  // \latexonly
   //
   // We add data to each stage the same way as before. However, a few
   // extra operations on the data manager are required for
@@ -184,7 +187,7 @@ main( int argc, char* argv[] )
   // provided by the initialization is the default for the lowest
   // resolution, which in turn passes the estimator to the next stage.
   //
-  // EndLatex
+  // \endlatexonly
 
   // BeginCodeSnippet
   bool multi_resol = true;
@@ -212,7 +215,7 @@ main( int argc, char* argv[] )
 
   reg.add_observer( new rgrl_event_iteration(), new command_iteration_update());
 
-  // BeginLatex
+  // \latexonly
   //
   // To run the registration engine, the starting resolution has to be
   // specified. If an \code{rgrl\_initializer} handles initialization,
@@ -223,7 +226,7 @@ main( int argc, char* argv[] )
   // it is the opposite. The highest index represents the finest
   // resolution.}.
   //
-  //EndLatex
+  //\endlatexonly
 
   int starting_resolution = 1;
   reg.run( moving_image_roi, fixed_image_roi, affine_model, initial_transformation, 0,
@@ -240,7 +243,7 @@ main( int argc, char* argv[] )
             <<"Final alignment error = "<<reg.final_status()->error()<<vcl_endl;
   }
 
-  // BeginLatex
+  // \latexonly
   //
   // Let's execute this example with the feature files
   // \verb+rgrl/examples/IMG0002.pgm.txt+ and
@@ -270,7 +273,7 @@ main( int argc, char* argv[] )
   //
   // \end{verbatim}
   //
-  // EndLatex
+  // \endlatexonly
 
   // Perform testing
   //

@@ -49,7 +49,7 @@
 // \param p_initial  the initial error variance vector.
 //        P = p_initial.transpose()*p_initial.
 //
-// \status under development
+// \todo   under development
 // \author Brendan McCane
 //----------------------------------------------------------------------
 
@@ -128,7 +128,7 @@ KalmanFilter::KalmanFilter(
 // \param p_initial  the initial error variance vector.
 //        P = p_initial.transpose()*p_initial.
 //
-// \status under development
+// \todo   under development
 // \author Brendan McCane
 //----------------------------------------------------------------------
 KalmanFilter::KalmanFilter(
@@ -189,7 +189,7 @@ KalmanFilter::KalmanFilter(
 // \param zk the new measurement
 // \param Rk the measurement error covariance matrix
 //
-// \status under development
+// \todo   under development
 // \author Brendan McCane
 //----------------------------------------------------------------------
 
@@ -245,7 +245,7 @@ void KalmanFilter::measurement_update(const vnl_matrix<double> &zk,
 //
 // \param Qk  the process error covariance matrix
 //
-// \status under development
+// \todo   under development
 // \author Brendan McCane
 //----------------------------------------------------------------------
 
@@ -279,7 +279,7 @@ KalmanFilter::predict(const vnl_matrix<double> &Qk)
 // \param Qk  the process error covariance matrix
 // \param uk  the control input
 //
-// \status under development
+// \todo   under development
 // \author Brendan McCane
 //----------------------------------------------------------------------
 
@@ -323,7 +323,7 @@ KalmanFilter::predict(const vnl_matrix<double> &Qk,
 // \param Rk  the measurement error covariance matrix
 // \param Qk  the process error covariance matrix
 //
-// \status under development
+// \todo   under development
 // \author Brendan McCane
 //----------------------------------------------------------------------
 
@@ -343,7 +343,7 @@ vnl_matrix<double> KalmanFilter::update_predict
 //
 // \param kf   the Kalman filter to output
 //
-// \status under development
+// \todo   under development
 // \author Brendan McCane
 //----------------------------------------------------------------------
 

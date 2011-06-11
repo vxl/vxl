@@ -319,40 +319,39 @@ int boct_bit_tree::traverse_opt(const vgl_point_3d<double> p)
   //force 1 register: curr = (bit, child_offset, depth, c_offset)
   int curr_bit = (int)(bits_[0]);
   int child_offset = 0;
-  int depth = 0;  
-  
+  int depth = 0;
+
   //bit index to be returned
   int bit_index = 0;
-  
+
   //clamp point
   double pointx = p.x();//clamp(p.x(), 0.0001f, 0.9999f);
   double pointy = p.y();//clamp(p.y(), 0.0001f, 0.9999f);
   double pointz = p.z();//clamp(p.z(), 0.0001f, 0.9999f);
-  
+
   // while the curr node has children
-  while(curr_bit && depth < 3) {
+  while (curr_bit && depth < 3) {
     //determine child offset and bit index for given point
     pointx += pointx;                                             //point = point*2
     pointy += pointy;
-    pointz += pointz; 
+    pointz += pointz;
     int codex=((int)vcl_floor(pointx)) & 1;
     int codey=((int)vcl_floor(pointy)) & 1;
     int codez=((int)vcl_floor(pointz)) & 1;
 
-    int c_index = codex + (codey<<1) + (codez<<2);             //c_index = binary(zyx)    
+    int c_index = codex + (codey<<1) + (codez<<2);             //c_index = binary(zyx)
     bit_index = (8*bit_index + 1) + c_index;                      //i = 8i + 1 + c_index
-    
+
     //update value of curr_bit and level
-    curr_bit = (1<<c_index) & bits_[(depth+1 + child_offset)];      //int curr_byte = (curr.z + 1) + curr.y; 
+    curr_bit = (1<<c_index) & bits_[(depth+1 + child_offset)];      //int curr_byte = (curr.z + 1) + curr.y;
     child_offset = c_index;
     depth++;
-    
   }
   return bit_index;
 }
 
-
-//TODO This isn't debugged
+//:
+// \todo This isn't debugged
 unsigned short
 boct_bit_tree::loc_code_to_gen_offset(boct_loc_code<short> loc_code, int depth)
 {
@@ -408,9 +407,7 @@ int boct_bit_tree::loc_code_to_index(boct_loc_code<short> loc_code, int root_lev
 //: Return cell with a particular locational code
 int boct_bit_tree::get_data_index(int bit_index)
 {
-
-
-    //count bits for each byte
+  //count bits for each byte
   int count = 0 ;
   for (int i=0; i<10; i++) {
     unsigned char n = bits_[i];

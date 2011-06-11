@@ -13,7 +13,8 @@
 #include <vbl/vbl_smart_ptr.h>
 //: top level storage (abstract) class
 // - handles all block io, from both the cache/marshaller and the disk
-// TODO: needs some notion of scene size (number of blocks in each dimension ...)
+//
+// \todo needs some notion of scene size (number of blocks in each dimension ...)
 //
 //  SOMETHING to discuss is whether generic blocks should be passed from cache
 //  or the specific templated blocks (as is implemented below).

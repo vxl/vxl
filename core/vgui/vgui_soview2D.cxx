@@ -329,10 +329,11 @@ void vgui_soview2D_ellipse::draw() const
   glEnd();
 }
 
+//:
+// \todo not correctly implemented (assumes a circle)
 float vgui_soview2D_ellipse::distance_squared(float vx, float vy) const
 {
   return (vx - x)*(vx - x) + (vy - y)*(vy - y);
-  // not implemented - TODO
 }
 
 void vgui_soview2D_ellipse::get_centroid(float* vx, float* vy) const

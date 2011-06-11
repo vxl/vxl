@@ -188,7 +188,7 @@ class vpgl_proj_camera : public vpgl_camera<T>
 
   //: Return `this' if `this' is a vpgl_perspective_camera, 0 otherwise
   // This is used by e.g. the storage class
-  // TODO: code for affine camera and other children
+  // \todo code for affine camera and other children
   virtual vpgl_perspective_camera<T> *cast_to_perspective_camera() {return 0;}
   virtual const vpgl_perspective_camera<T> *cast_to_perspective_camera() const {return 0;}
 

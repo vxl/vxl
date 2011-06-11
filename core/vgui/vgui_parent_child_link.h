@@ -78,14 +78,14 @@ struct vgui_parent_child_link
 
   //: Constructor - takes the parent tableau.
   //  The 'parent' parameter is the self pointer ('this') of the tableau
-  //  which intends to hold the parent_child_link. It may *not* be a null
+  //  which intends to hold the parent_child_link. It may \e not be a null
   //  pointer.
   //  To make an uninitialized parent_child_link, use the default constructor.
   vgui_parent_child_link(vgui_tableau * parent /* child is zero */);
 
   //: Constructor - takes the parent and child tableaux.
   //  The 'parent' parameter is the self pointer ('this') of the tableau
-  //  which intends to hold the parent_child_link. It may *not* be a null
+  //  which intends to hold the parent_child_link. It may \e not be a null
   //  pointer.
   //  To make an uninitialized parent_child_link, use the default constructor.
   vgui_parent_child_link(vgui_tableau * parent, vgui_tableau_sptr const &child);

@@ -240,7 +240,7 @@ bool vul_reg_exp::deep_equal (vul_reg_exp const& rxp) const
 // because of operator precedence.)  The operand of some types of node is
 // a literal string; for others, it is a node leading into a sub-FSM.  In
 // particular, the operand of a BRANCH node is the first node of the branch.
-// (NB this is *not* a tree structure:  the tail of the branch connects
+// (NB this is \e not a tree structure:  the tail of the branch connects
 // to the thing following the set of BRANCHes.)  The opcodes are:
 //
 

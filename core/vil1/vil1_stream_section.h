@@ -17,7 +17,7 @@
 // underlying stream simultaneously. This is accomplished by keeping
 // a note of the current position and seeking a lot.
 //
-// Note however that this is *not* threadsafe.
+// Note however that this is \e not threadsafe.
 struct vil1_stream_section : public vil1_stream
 {
   //:

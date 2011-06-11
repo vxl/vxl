@@ -316,10 +316,12 @@ void bwm_tableau_cam::scan_regions()
 {
   my_observer_->scan_regions();
 }
+
 void bwm_tableau_cam::project_shadow()
 {
   my_observer_->project_shadow();
 }
+
 void bwm_tableau_cam::show_geo_position()
 {
   my_observer_->show_geo_position();
@@ -359,8 +361,9 @@ void bwm_tableau_cam::create_terrain()
 void bwm_tableau_cam::help_pop()
 {
   bwm_tableau_text* text_tab = new bwm_tableau_text(500, 500);
-
-  //  text->set_text("C:\\lems\\lemsvxlsrc\\lemsvxlsrc\\contrib\\bwm\\doc\\doc\\HELP_cam.txt");
+#if 0
+  text->set_text("C:/lems/lemsvxlsrc/lemsvxlsrc/contrib/bwm/doc/doc/HELP_cam.txt");
+#endif
   vcl_string h("SHIFT p = create 3-d polygon\nSHIFT t = triangulate_mesh\nSHIFT m = move object by vertex\nSHIFT e = extrude face\nSHIFT s = save a selected 3-d polygon\nSHIFT h = key help documentation\n");
   text_tab->set_string(h);
   vgui_tableau_sptr v = vgui_viewer2D_tableau_new(text_tab);

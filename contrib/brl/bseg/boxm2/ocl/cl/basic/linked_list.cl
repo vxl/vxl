@@ -1,10 +1,10 @@
 //:
 // \file
 // \brief Local memory implementation of an array list (NEED TO DEFINE LIST TYPE)
-
-//TODO 
-//-make list wrap around when full
-//-make list fail elegantly when overflowing
+//
+// \todo
+// -make list wrap around when full
+// -make list fail elegantly when overflowing
 
 //List defaults to unsigned char
 #ifndef LIST_TYPE
@@ -12,7 +12,7 @@
 #endif
 
 //struct that maintains the start and total length of the array buffer,
-// as well as pointers to the start and end of the list (and it's size)
+// as well as pointers to the start and end of the list (and its size)
 typedef struct
 {
     //pointer to head of list
