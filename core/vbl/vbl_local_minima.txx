@@ -735,6 +735,9 @@ bool local_minima(vbl_array_3d<T> const& in, vbl_array_3d<T>& minima, T thresh)
 }
 
 #define VBL_LOCAL_MINIMA_INSTANTIATE(T) \
+template vbl_array_1d<T > vbl_local_minima(vbl_array_1d<T >const&, T); \
+template vbl_array_2d<T > vbl_local_minima(vbl_array_2d<T >const&, T); \
+template vbl_array_3d<T > vbl_local_minima(vbl_array_3d<T >const&, T); \
 template bool local_minima(vbl_array_1d<T >const&, vbl_array_1d<T >&, T); \
 template bool local_minima(vbl_array_2d<T >const&, vbl_array_2d<T >&, T); \
 template bool local_minima(vbl_array_3d<T >const&, vbl_array_3d<T >&, T)
