@@ -51,7 +51,7 @@ mbl_lda::~mbl_lda()
 //=======================================================================
 //: Classify a new data point.
 // Projects into discriminant space and picks closest mean class vector
-int mbl_lda::classify( const vnl_vector<double>& x )
+int mbl_lda::classify(const vnl_vector<double>& x) const
 {
   vnl_vector<double> d;
   x_to_d(d, x);
@@ -301,9 +301,11 @@ void mbl_lda::build(const vnl_vector<double>* v, const int * label, int n,
   // Normalize the basis vectors
   MBL_LOG(DEBUG, logger(), "basis matrix before normalization:");
   basis_.print(logger().log(mbl_logger::DEBUG));
+  //MBL_LOG(NOTICE, logger(), "normalization turned OFF");
   basis_.normalize_columns();
   MBL_LOG(DEBUG, logger(), "basis matrix after normalization:");
   basis_.print(logger().log(mbl_logger::DEBUG));
+  logger().log(mbl_logger::DEBUG) << vcl_flush;
 
   // Copy first t eigenvalues
   evals_.set_size(t);
@@ -525,3 +527,11 @@ vcl_ostream& operator<<(vcl_ostream& os,const mbl_lda& b)
   vsl_indent_dec(os);
   return os;
 }
+
+//=======================================================================
+void vsl_print_summary(vcl_ostream& os, const mbl_lda& b)
+{
+  b.print_summary(os);
+}
+
+

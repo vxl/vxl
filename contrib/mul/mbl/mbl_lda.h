@@ -60,7 +60,7 @@ class mbl_lda
 
   //: Classify a new data point
   // projects into discriminant space and picks closest mean class vector
-  int classify( const vnl_vector<double>& x );
+  int classify(const vnl_vector<double>& x) const;
 
   //: Perform LDA on data
   // \param n  Number of examples
@@ -201,6 +201,9 @@ void vsl_b_write(vsl_b_ostream& bfs, const mbl_lda& b);
 
 //: Binary file stream input operator for class reference
 void vsl_b_read(vsl_b_istream& bfs, mbl_lda& b);
+
+//: Print summary for class reference
+void vsl_print_summary(vcl_ostream& os, const mbl_lda& b);
 
 //: Stream output operator for class reference
 vcl_ostream& operator<<(vcl_ostream& os,const mbl_lda& b);
