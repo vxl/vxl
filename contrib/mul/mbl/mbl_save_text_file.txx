@@ -30,9 +30,22 @@ bool mbl_save_text_file(const vcl_vector<T >& v, const vcl_string& path)
   return true;
 }
 
+//: Save vector to stream with format  { n v1 v2 .. vn }
+template <class T>
+bool mbl_save_text_file(const vcl_vector<T >& v, vcl_ostream &os, const vcl_string& delim)
+{
+  for (typename vcl_vector<T >::const_iterator it=v.begin(), end=v.end(); it!=end; ++it)
+    os << *it << delim;
 
-#undef MBL_SAVE_TEXT_FILE_INSTANTIATE
-#define MBL_SAVE_TEXT_FILE_INSTANTIATE(T ) \
+  return true;
+}
+
+
+#undef MBL_SAVE_TEXT_FILE_INSTANTIATE_PATH
+#define MBL_SAVE_TEXT_FILE_INSTANTIATE_PATH(T ) \
 template bool mbl_save_text_file(const vcl_vector<T >& v, const vcl_string& path)
+#undef MBL_SAVE_TEXT_FILE_INSTANTIATE_STREAM
+#define MBL_SAVE_TEXT_FILE_INSTANTIATE_STREAM(T ) \
+template bool mbl_save_text_file(const vcl_vector<T >& v, vcl_ostream &os, const vcl_string &delim)
 
 #endif // mbl_save_text_file_txx_
