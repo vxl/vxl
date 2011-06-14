@@ -377,6 +377,9 @@ SOURCE=.\Templates/mbl_stochastic_data_collector+uint-.cxx
 # Begin Source File
 SOURCE=.\Templates/mbl_load_text_file+uint-.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\Templates/mbl_save_text_file+unsigned-.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx;in"

@@ -254,6 +254,12 @@ SOURCE=.\Templates/vsl_set_io+uint-.cxx
 # Begin Source File
 SOURCE=.\Templates/vsl_map_io+uint.bool-.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\Templates/vsl_map_io+vcl_pair+int.int-.uint-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vsl_pair_io+vcl_pair+int.int-.uint-.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"

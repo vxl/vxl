@@ -96,6 +96,12 @@ LIB32=link.exe -lib
 SOURCE=.\bsta_register.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\processes/bsta_sigma_normalization_table_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/brdb_value_t+bsta_sigma_normalizer_sptr-.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/brdb_value_t+bsta_histogram_sptr-.cxx
 # End Source File
 # End Group

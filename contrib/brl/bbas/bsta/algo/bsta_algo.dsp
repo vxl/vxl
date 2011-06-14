@@ -94,6 +94,9 @@ LIB32=link.exe -lib
 SOURCE=.\bsta_fit_weibull.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\bsta_sigma_normalizer.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/bsta_adaptive_updater+bsta_mixture+bsta_num_obs+bsta_gauss_sf1---.cxx
 # End Source File
 # Begin Source File
@@ -174,6 +177,9 @@ SOURCE=.\Templates/bsta_von_mises_updater+bsta_von_mises+double.3--.cxx
 # Begin Source File
 SOURCE=.\Templates/bsta_von_mises_updater+bsta_von_mises+double.2--.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\Templates/vbl_smart_ptr+bsta_sigma_normalizer-.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
@@ -236,6 +242,9 @@ SOURCE=.\bsta_von_mises_updater.txx
 # End Source File
 # Begin Source File
 SOURCE=.\bsta_fit_gaussian.h
+# End Source File
+# Begin Source File
+SOURCE=.\bsta_sigma_normalizer.h
 # End Source File
 # End Group
 # End Target
