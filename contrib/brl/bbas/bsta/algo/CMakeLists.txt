@@ -15,6 +15,7 @@ SET( bsta_algo_sources
    bsta_sample_set.txx        bsta_sample_set.h
    bsta_beta_updater.txx      bsta_beta_updater.h
    bsta_fit_gaussian.h
+   bsta_sigma_normalizer.h    bsta_sigma_normalizer.cxx
 )
 
 AUX_SOURCE_DIRECTORY(Templates bsta_algo_sources)
