@@ -5,13 +5,14 @@
 
 #include <boxm2/cpp/algo/boxm2_cast_ray_function.h>
 #include <boxm2/cpp/algo/boxm2_mog3_grey_processor.h>
+#include <boxm2/io/boxm2_stream_cache.h>
 #include <bsta/algo/bsta_sigma_normalizer.h>
 
-//: accumulate seg_lens and intensities over all rays that pass through a cell to compute normalized intensity later
+//: accumulate seg_lengths and intensities over all rays that pass through a cell to compute normalized intensity later
 class boxm2_batch_update_pass0_functor
 {
  public:
-  //: "default" constructor
+  //: "default" constructor (does nothing)
   boxm2_batch_update_pass0_functor() {}
 
   bool init_data(vcl_vector<boxm2_data_base*> & datas, vil_image_view<float> * input_img)
@@ -41,6 +42,7 @@ class boxm2_batch_update_pass0_functor
   vil_image_view<float> * input_img_;
 };
 
+
 //: compute pre_inf, vis_inf
 class boxm2_batch_update_pass1_functor
 {
@@ -61,7 +63,7 @@ class boxm2_batch_update_pass1_functor
     vis_img_ = vis_img;
     pre_img_->fill(0.0f);
     vis_img_->fill(1.0f);
-    
+
     return true;
   }
 
@@ -75,7 +77,7 @@ class boxm2_batch_update_pass1_functor
 
     // compute appearance probability of observation
     float PI=boxm2_data_traits<BOXM2_MOG3_GREY>::processor::prob_density(mog3_data_->data()[index], mean_obs);
-    
+
     float vis=(*vis_img_)(i,j);
     boxm2_data<BOXM2_ALPHA>::datatype alpha=alpha_data_->data()[index];
 
@@ -97,12 +99,12 @@ class boxm2_batch_update_pass1_functor
   boxm2_data<BOXM2_AUX1> * aux1_data_;
   boxm2_data<BOXM2_ALPHA> * alpha_data_;
   boxm2_data<BOXM2_MOG3_GREY> * mog3_data_;
-    
+
   vil_image_view<float> alpha_integral_;
   vil_image_view<float> * pre_img_;
   vil_image_view<float> * vis_img_;
-
 };
+
 
 //: compute average pre_i, vis_i and post_i for each cell, save the values in aux
 class boxm2_batch_update_pass2_functor
@@ -126,7 +128,7 @@ class boxm2_batch_update_pass2_functor
     vis_img_.set_size(pre_inf->ni(), pre_inf->nj(),1);
     vis_img_.fill(1.0f);
     pre_inf_ = pre_inf;
-    
+
     return true;
   }
 
@@ -154,7 +156,7 @@ class boxm2_batch_update_pass2_functor
 
     // compute weight for this cell
     float Omega = vis - vis_prob_end;
-    
+
     float cell_value = PI*Omega;
     float post = (*pre_inf_)(i,j)-pre-cell_value;
     //: now correct post
@@ -178,13 +180,13 @@ class boxm2_batch_update_pass2_functor
   boxm2_data<BOXM2_ALPHA> * alpha_data_;
   boxm2_data<BOXM2_MOG3_GREY> * mog3_data_;
   boxm2_data<BOXM2_AUX> * aux_data_;
-    
+
   vil_image_view<float> alpha_integral_;
   vil_image_view<float> pre_img_;  // these 2 can be local for this functor
   vil_image_view<float> vis_img_;
   vil_image_view<float> * pre_inf_;
-
 };
+
 
 class boxm2_batch_update_functor
 {
@@ -225,13 +227,13 @@ class boxm2_batch_update_functor
     unsigned nimgs = (unsigned)out0.size();
     for (unsigned m = 0; m < nimgs; m++) {
       float mean_obs = out0[m]/out1[m];
-      obs.push_back(mean_obs);  
+      obs.push_back(mean_obs);
       float PI = boxm2_data_traits<BOXM2_MOG3_GREY>::processor::prob_density(mog3, mean_obs);
       float pre_i = out[m][0]/out1[m]; // mean pre
       float vis_i = out[m][1]/out1[m]; // mean vis
       vis.push_back(vis_i);
       float post_i = out[m][2]/out1[m]; // mean post
-   
+
       term1 *= pre_i + vis_i*PI;
       term2 *= pre_i + post_i;    // no infinity term for now
     }
@@ -240,7 +242,7 @@ class boxm2_batch_update_functor
     for (unsigned m = 0; m < nimgs; m++)
       sum_len += out1[m]/nrays[m];
     float mean_len = sum_len/nimgs;
-    
+
     //: compute new alpha value
     float p_q = 1.0f-vcl_exp(-alpha*mean_len);
     float p_q_new = p_q*term1 / (p_q*term1 + (1.0f-p_q)*term2);
@@ -262,8 +264,6 @@ class boxm2_batch_update_functor
   float alpha_min_;
   bsta_sigma_normalizer_sptr n_table_;
 };
-
-
 
 
 #endif // boxm2_batch_functors_h_
