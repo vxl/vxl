@@ -110,6 +110,18 @@ boxm2_stream_cache::~boxm2_stream_cache()
   data_streams_.clear();
 }
 
+//: in iterative mode, the files need to be closed and re-opened
+void boxm2_stream_cache::close_streams()
+{
+  for (vcl_map<vcl_string, vcl_vector<boxm2_stream_cache_helper_sptr> >::iterator it = data_streams_.begin();
+    it != data_streams_.end(); it++) {
+      vcl_vector<boxm2_stream_cache_helper_sptr>& strs = it->second;
+      for (unsigned i = 0; i < strs.size(); i++) {
+        strs[i]->close_file();
+      }
+  }
+}
+
 //: PUBLIC create method, for creating singleton instance of boxm2_cache
 void boxm2_stream_cache::create(boxm2_scene_sptr scene,
                                 const vcl_vector<vcl_string>& data_types,
