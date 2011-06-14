@@ -175,11 +175,11 @@ bool boxm2_cpp_data_print_process(bprb_func_process& pro)
   boxm2_cache_sptr cache =pro.get_input<boxm2_cache_sptr>(i++);
   vcl_string data_type = pro.get_input<vcl_string>(i++);
   vcl_string identifier = pro.get_input<vcl_string>(i++);
-    
+
   vcl_size_t TypeSize = boxm2_data_info::datasize(data_type);
   vcl_string prefix = data_type + "_" + identifier;
 
-/*
+#if 0
   //: iterate the scene block by block and write to output
   vcl_vector<boxm2_block_id> blk_ids = scene->get_block_ids();
   for (vcl_vector<boxm2_block_id>::iterator id = blk_ids.begin(); id != blk_ids.end(); ++id)
@@ -193,7 +193,7 @@ bool boxm2_cpp_data_print_process(bprb_func_process& pro)
     boxm2_data_serial_iterator<boxm2_data_print_functor>(data_buff_length,data_functor);
     cache->remove_data_base(*id,prefix);
   }
-  */
+#endif // 0
   return true;
 }
 
