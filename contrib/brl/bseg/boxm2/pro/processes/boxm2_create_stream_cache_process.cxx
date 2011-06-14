@@ -91,3 +91,40 @@ bool boxm2_create_stream_cache_process(bprb_func_process& pro)
   pro.set_output_val<boxm2_stream_cache_sptr>(0, boxm2_stream_cache::instance());
   return true;
 }
+
+
+namespace boxm2_stream_cache_close_files_process_globals
+{
+  const unsigned n_inputs_ = 1;
+  const unsigned n_outputs_ = 0;
+}
+
+bool boxm2_stream_cache_close_files_process_cons(bprb_func_process& pro)
+{
+  using namespace boxm2_stream_cache_close_files_process_globals;
+
+  //process takes 1 input
+  vcl_vector<vcl_string> input_types_(n_inputs_);
+  input_types_[0] = "boxm2_stream_cache_sptr";
+  
+  // process has 0 output:
+  vcl_vector<vcl_string>  output_types_(n_outputs_);
+
+  return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
+}
+
+bool boxm2_stream_cache_close_files_process(bprb_func_process& pro)
+{
+  using namespace boxm2_stream_cache_close_files_process_globals;
+
+  if ( pro.n_inputs() < n_inputs_ ){
+    vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
+    return false;
+  }
+  //get the inputs
+  unsigned i = 0;
+  boxm2_stream_cache_sptr cache = pro.get_input<boxm2_stream_cache_sptr>(i++);
+  cache->close_streams();
+  return true;
+}
+
