@@ -24,9 +24,14 @@ void boxm2_cpp_register::register_process()
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_cpp_cast_intensities_process, "boxm2CppCastIntensitiesProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_cpp_mean_intensities_batch_process, "boxm2CppMeanIntensitiesBatchProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_cpp_mean_intensities_print_process, "boxm2CppMeanIntensitiesPrintProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_cpp_create_norm_intensities_process, "boxm2CppCreateNormIntensitiesProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_cpp_data_print_process, "boxm2CppDataPrintProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_cpp_filter_process, "boxm2CppFilterProcess");
+
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_cpp_ray_probe_process, "boxm2CppRayProbeProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_cpp_ray_app_density_process, "boxm2CppRayAppDensityProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_cpp_create_aux_data_process, "boxm2CppCreateAuxDataProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_cpp_batch_update_process, "boxm2CppBatchUpdateProcess");
 
   
 }
