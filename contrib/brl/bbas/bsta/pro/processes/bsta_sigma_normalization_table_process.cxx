@@ -1,10 +1,10 @@
 //This is brl/bbas/bsta/pro/processes/bsta_sigma_normalization_table_process.cxx
 //:
-//   Precompute normalization values for possible sample set sizes, 
-//   made into a separate process for fast access and also to avoid optimization routines on GPU 
+// \file
+//   Precompute normalization values for possible sample set sizes,
+//   made into a separate process for fast access and also to avoid optimization routines on GPU
 //   if later processes are run on GPU
 //
-// \file
 #include <bprb/bprb_func_process.h>
 #include <bprb/bprb_parameters.h>
 #include <bsta/algo/bsta_sigma_normalizer.h>
@@ -16,12 +16,12 @@
 
 #include <brdb/brdb_value.h>
 
-//:sets input and output types
+//: sets input and output types
 bool bsta_sigma_normalization_table_process_cons(bprb_func_process& pro)
 {
   //inputs
   //0: under_estimation_probability
-  //1: N_PRECOMPUTED if available
+  //1: N_PRECOMPUTED if available; default value: 40
 
   vcl_vector<vcl_string> input_types_(2);
   input_types_[0] = "float";
@@ -29,11 +29,11 @@ bool bsta_sigma_normalization_table_process_cons(bprb_func_process& pro)
 
   //output
   vcl_vector<vcl_string> output_types_(1);
-  output_types_[0]= "bsta_sigma_normalizer_sptr"; 
+  output_types_[0]= "bsta_sigma_normalizer_sptr";
 
   bool good = pro.set_input_types(input_types_) &&
-    pro.set_output_types(output_types_);
-  
+              pro.set_output_types(output_types_);
+
   // in case the 1st input is not set
   brdb_value_sptr idx = new brdb_value_t<unsigned>(40);
   pro.set_input(1, idx);
@@ -43,11 +43,10 @@ bool bsta_sigma_normalization_table_process_cons(bprb_func_process& pro)
 
 bool bsta_sigma_normalization_table_process(bprb_func_process& pro)
 {
-
- //check number of inputs
-  if(!pro.verify_inputs())
+  // check number of inputs
+  if (!pro.verify_inputs())
   {
-    vcl_cout << pro.name() << " Invalid inputs " << vcl_endl;
+    vcl_cout << pro.name() << ": Invalid inputs" << vcl_endl;
     return false;
   }
 
