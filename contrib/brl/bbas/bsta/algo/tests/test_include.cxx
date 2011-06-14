@@ -9,6 +9,7 @@
 #include <bsta/algo/bsta_mixture_functors.h>
 #include <bsta/algo/bsta_parzen_updater.h>
 #include <bsta/algo/bsta_sample_set.h>
+#include <bsta/algo/bsta_sigma_normalizer.h>
 #include <bsta/algo/bsta_truth_updater.h>
 #include <bsta/algo/bsta_von_mises_updater.h>
 
