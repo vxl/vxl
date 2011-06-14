@@ -19,5 +19,6 @@ DECLARE_FUNC_CONS(boxm2_roi_init_process);
 DECLARE_FUNC_CONS(boxm2_scene_illumination_info_process);
 DECLARE_FUNC_CONS(boxm2_persp_cam_from_scene_process);
 DECLARE_FUNC_CONS(boxm2_write_cache_process);
+DECLARE_FUNC_CONS(boxm2_stream_cache_close_files_process);
 
 #endif
