@@ -5,5 +5,6 @@
 #include <bprb/bprb_macros.h>
 
 //the init functions
+DECLARE_FUNC_CONS(bsta_sigma_normalization_table_process);
 
 #endif
