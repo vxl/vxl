@@ -30,7 +30,7 @@ boxm2_lru_cache::~boxm2_lru_cache()
   {
     for (vcl_map<boxm2_block_id, boxm2_data_base*>::iterator it = iter->second.begin(); it != iter->second.end(); it++) {
       boxm2_block_id id = it->first;
-      if (!it->second->read_only_) {
+      if (!it->second->read_only_) { 
         boxm2_sio_mgr::save_block_data_base(scene_dir_, it->first, it->second, iter->first);
       }
       // now throw it away
@@ -43,7 +43,8 @@ boxm2_lru_cache::~boxm2_lru_cache()
     iter != cached_blocks_.end(); iter++)
   {
     boxm2_block_id id = iter->first;
-    boxm2_sio_mgr::save_block(scene_dir_, iter->second);
+    if (!iter->second->read_only()) 
+      boxm2_sio_mgr::save_block(scene_dir_, iter->second);
     delete iter->second;
   }
 }
@@ -238,7 +239,8 @@ void boxm2_lru_cache::write_to_disk()
     iter != cached_blocks_.end(); iter++)
   {
     boxm2_block_id id = iter->first;
-    boxm2_sio_mgr::save_block(scene_dir_, iter->second);
+    if (!iter->second->read_only())
+      boxm2_sio_mgr::save_block(scene_dir_, iter->second);
   }
 }
 
