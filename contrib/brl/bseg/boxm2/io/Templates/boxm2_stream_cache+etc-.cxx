@@ -18,12 +18,14 @@ template vcl_vector<boxm2_data_traits<BOXM2_AUX0>::datatype> boxm2_stream_cache:
 template vcl_vector<boxm2_data_traits<BOXM2_AUX1>::datatype> boxm2_stream_cache::get_next<BOXM2_AUX1,boxm2_data_traits<BOXM2_AUX1>::datatype>(boxm2_block_id id, int index);
 template vcl_vector<boxm2_data_traits<BOXM2_AUX2>::datatype> boxm2_stream_cache::get_next<BOXM2_AUX2,boxm2_data_traits<BOXM2_AUX2>::datatype>(boxm2_block_id id, int index);
 template vcl_vector<boxm2_data_traits<BOXM2_AUX3>::datatype> boxm2_stream_cache::get_next<BOXM2_AUX3,boxm2_data_traits<BOXM2_AUX3>::datatype>(boxm2_block_id id, int index);
+template vcl_vector<boxm2_data_traits<BOXM2_NUM_OBS_SINGLE>::datatype> boxm2_stream_cache::get_next<BOXM2_NUM_OBS_SINGLE,boxm2_data_traits<BOXM2_NUM_OBS_SINGLE>::datatype>(boxm2_block_id id, int index);
 
 template bool boxm2_stream_cache::open_streams<BOXM2_AUX>(vcl_string data_type, boxm2_stream_cache_datatype_helper_sptr h);
 template bool boxm2_stream_cache::open_streams<BOXM2_AUX0>(vcl_string data_type, boxm2_stream_cache_datatype_helper_sptr h);
 template bool boxm2_stream_cache::open_streams<BOXM2_AUX1>(vcl_string data_type, boxm2_stream_cache_datatype_helper_sptr h);
 template bool boxm2_stream_cache::open_streams<BOXM2_AUX2>(vcl_string data_type, boxm2_stream_cache_datatype_helper_sptr h);
 template bool boxm2_stream_cache::open_streams<BOXM2_AUX3>(vcl_string data_type, boxm2_stream_cache_datatype_helper_sptr h);
+template bool boxm2_stream_cache::open_streams<BOXM2_NUM_OBS_SINGLE>(vcl_string data_type, boxm2_stream_cache_datatype_helper_sptr h);
 
 
 
