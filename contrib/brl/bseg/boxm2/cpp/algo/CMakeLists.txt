@@ -23,7 +23,7 @@ SET(boxm2_cpp_algo_sources
 ADD_LIBRARY(boxm2_cpp_algo  ${boxm2_cpp_algo_sources})
 
 TARGET_LINK_LIBRARIES(boxm2_cpp_algo
-                      boxm2_cpp boct brdb vbl_io expatpp vpgl vil_algo vil bvgl vgl vgl_xio vnl_algo vbl vsl vcl)
+                      boxm2_cpp boct brdb vbl_io expatpp vpgl vil_algo vil bvgl vgl vgl_xio vnl_algo bsta_algo vbl vsl vcl)
 
 SUBDIRS(tests)
 
