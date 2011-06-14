@@ -75,6 +75,9 @@ class boxm2_stream_cache: public vbl_ref_count
     //: return the next cells in the streams of each data block given by the identifier list for this datatype, pass index if available to check synchronization
     template <boxm2_data_type T, class datatype> vcl_vector<datatype> get_next(boxm2_block_id id, int index = -1);
 
+    //: in iterative mode, the files need to be closed and re-opened
+    void close_streams();
+
   protected:
 
     //: hidden constructor (singleton class)
