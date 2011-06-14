@@ -186,30 +186,4 @@ class boxm2_update_data_functor
   float alpha_min_;
 };
 
-class boxm2_mean_data_functor
-{
- public:
-  //: "default" constructor
-  boxm2_mean_data_functor() {}
-
-  bool init_data(vcl_vector<boxm2_data_base*> & datas)
-  {
-    aux_data_=new boxm2_data<BOXM2_AUX>(datas[0]->data_buffer(),datas[0]->buffer_length(),datas[0]->block_id());
-    aux0_data_=new boxm2_data<BOXM2_AUX0>(datas[1]->data_buffer(),datas[1]->buffer_length(),datas[1]->block_id());
-    return true;
-  }
-  inline bool process_cell(int index)
-  {
-    boxm2_data<BOXM2_AUX>::datatype & aux=aux_data_->data()[index];
-    boxm2_data<BOXM2_AUX0>::datatype & aux0=aux0_data_->data()[index];
-    if (aux[0]<1e-10f)return true;
-    float mean_obs=aux[1]/aux[0];
-    aux0 = mean_obs;
-    return true;
-  }
- private:
-  boxm2_data<BOXM2_AUX>       * aux_data_;
-  boxm2_data<BOXM2_AUX0>       * aux0_data_;
-};
-
 #endif
