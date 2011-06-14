@@ -13,6 +13,10 @@
 // \endverbatim
 
 #include <vnl/vnl_vector_fixed.h>
+#include <vcl_vector.h>
+
+#include <bsta/algo/bsta_sigma_normalizer.h>
+
 bool sort_components (vnl_vector_fixed<float,3> i,vnl_vector_fixed<float,3> j) ;
 
 
@@ -42,6 +46,12 @@ class  boxm2_mog3_grey_processor
      static void  merge_mixtures(vnl_vector_fixed<unsigned char, 8> & mog3_1, float w1,
                                  vnl_vector_fixed<unsigned char, 8> & mog3_2, float w2,
                                  vnl_vector_fixed<unsigned char, 8> & mog3_3);
+
+     static void compute_gauss_mixture_3(vnl_vector_fixed<unsigned char, 8> & mog3,
+                                         vcl_vector<float> const& obs, 
+                                         vcl_vector<float> const& obs_weights, 
+                                         bsta_sigma_normalizer_sptr n_table, 
+                                         float min_sigma = 0.01f);
 };
 
 #endif // boxm2_mog3_grey_processor_h_

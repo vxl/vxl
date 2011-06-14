@@ -7,6 +7,15 @@
 #include <vcl_cmath.h> // for std::exp() && std::sqrt()
 #include <vcl_algorithm.h>
 
+#include <bsta/bsta_distribution.h>
+#include <bsta/bsta_gauss_sf1.h>
+
+#include <bsta/bsta_attributes.h>
+#include <bsta/bsta_mixture_fixed.h>
+#include <bsta/bsta_gaussian_indep.h>
+#include <bsta/algo/bsta_fit_gaussian.h>
+
+
 bool sort_components (vnl_vector_fixed<float,3> i,vnl_vector_fixed<float,3> j)
 {
   float ratio1=i[2]/i[1];
@@ -323,7 +332,7 @@ void  boxm2_mog3_grey_processor::merge_mixtures(vnl_vector_fixed<unsigned char, 
   while (merged.size()>3)
   {
     vcl_sort(merged.begin(),merged.end(),sort_components);
-    int compindex=merged.size()-1;
+    int compindex=(int)merged.size()-1;
     vnl_vector_fixed<float,3> new_component(0.0f);
     if (merge_gauss(merged[compindex][0],merged[compindex][1],merged[compindex][2],
                     merged[compindex-1][0],merged[compindex-1][1],merged[compindex-1][2],
@@ -348,3 +357,171 @@ void  boxm2_mog3_grey_processor::merge_mixtures(vnl_vector_fixed<unsigned char, 
       mog3_3[++count]=(unsigned char)vcl_floor(merged[i][2]/sum*255.0f);
   }
 }
+
+//: Most of The following piece of code is copied from boxm_mog_grey_processor::compute_appearance 
+void boxm2_mog3_grey_processor::compute_gauss_mixture_3(vnl_vector_fixed<unsigned char, 8> & mog3,
+                                                        vcl_vector<float> const& obs, 
+                                                        vcl_vector<float> const& vis, 
+                                                        bsta_sigma_normalizer_sptr n_table, 
+                                                        float min_sigma)
+{
+  const int nmodes = 3;
+  const float min_var = min_sigma*min_sigma;
+  const float big_sigma = (float)vnl_math::sqrt1_2; // maximum possible std. dev for set of samples drawn from [0 1]
+  const float big_var = big_sigma * big_sigma;
+
+  unsigned int nobs = (int)obs.size();
+  if (nobs == 0) {
+    // nothing to do.
+    return;
+  }
+
+  bsta_num_obs<bsta_mixture_fixed<bsta_num_obs<bsta_gauss_sf1>, nmodes> > model;
+
+  if (nobs == 1) {
+    //: just make the sample the mean and the mixture a single mode distribution
+    mog3[0]=(unsigned char)vcl_floor(boxm2_mog3_grey_processor::clamp(obs[0],0,1)*255.0f);
+    mog3[1]=(unsigned char)vcl_floor(boxm2_mog3_grey_processor::clamp(big_sigma,0,1)*255.0f);
+    mog3[2]=(unsigned char)vcl_floor(boxm2_mog3_grey_processor::clamp(1.0f,0,1)*255.0f);
+    mog3[3]=(unsigned char)vcl_floor(boxm2_mog3_grey_processor::clamp(obs[0],0,1)*255.0f);
+    mog3[4]=(unsigned char)vcl_floor(boxm2_mog3_grey_processor::clamp(big_sigma,0,1)*255.0f);
+    mog3[5]=(unsigned char)vcl_floor(boxm2_mog3_grey_processor::clamp(0.0f,0,1)*255.0f);
+    mog3[6]=(unsigned char)vcl_floor(boxm2_mog3_grey_processor::clamp(obs[0],0,1)*255.0f);
+    mog3[7]=(unsigned char)vcl_floor(boxm2_mog3_grey_processor::clamp(big_sigma,0,1)*255.0f);
+    return;
+  }
+
+  // initialize parameters
+  for (unsigned int m=0; m<nmodes; ++m) {
+    float mean = (float(m) + 0.5f) / float(nmodes);
+    float sigma = 0.3f;
+    float mode_weight = 1.0f / float(nmodes);
+    bsta_gauss_sf1 mode(mean, sigma*sigma);
+    model.insert(bsta_num_obs<bsta_gauss_sf1>(mode), mode_weight);
+  }
+
+  vcl_vector<vcl_vector<float> > mode_probs(nobs);
+  for (unsigned int n=0; n<nobs; ++n) {
+    for (unsigned int m=0; m<nmodes; ++m) {
+      mode_probs[n].push_back(0.0f);
+    }
+  }
+  vcl_vector<float> mode_weight_sum(nmodes,0.0f);
+
+  // run EM algorithm to maximize expected probability of observations
+  const unsigned int max_its = 50;
+  const float max_converged_weight_change = 1e-3f;
+
+  for (unsigned int i=0; i<max_its; ++i) {
+    float max_weight_change = 0.0f;
+    // EXPECTATION
+    for (unsigned int n=0; n<nobs; ++n) {
+      // for each observation, assign probabilities to each mode of appearance model (and to a "previous cell")
+      float total_prob = 0.0f;
+      vcl_vector<float> new_mode_probs(nmodes);
+      for (unsigned int m=0; m<nmodes; ++m) {
+        // compute probability that nth data point was produced by mth mode
+        const float new_mode_prob = vis[n] * model.distribution(m).prob_density(obs[n]) * model.weight(m);
+        new_mode_probs[m] = new_mode_prob;
+        total_prob += new_mode_prob;
+      }
+      // compute the probability the observation came from an occluding cell
+      //const float prev_prob = pre[n];
+      //total_prob += prev_prob;
+      if (total_prob > 1e-6) {
+        for (unsigned int m=0; m<nmodes; ++m) {
+          new_mode_probs[m] /= total_prob;
+          const float weight_change = vcl_fabs(new_mode_probs[m] - mode_probs[n][m]);
+          if (weight_change > max_weight_change) {
+            max_weight_change = weight_change;
+          }
+          mode_probs[n][m] = new_mode_probs[m];
+        }
+      }
+    }
+    // check for convergence
+    if (max_weight_change < max_converged_weight_change) {
+      break;
+    }
+    // MAXIMIZATION
+    // computed the weighted means and variances for each mode based on the probabilities
+    float total_weight_sum = 0.0f;
+
+    // update the mode parameters
+    for (unsigned int m=0; m<nmodes; ++m) {
+      mode_weight_sum[m] = 0.0f;
+      vcl_vector<float> obs_weights(nobs);
+      for (unsigned int n=0; n<nobs; ++n) {
+        obs_weights[n] = mode_probs[n][m];
+        mode_weight_sum[m] += obs_weights[n];
+      }
+      total_weight_sum += mode_weight_sum[m];
+      float mode_mean(0.5f);
+      float mode_var(1.0f);
+      bsta_gauss_sf1 single_gauss(mode_mean,mode_var);
+      bsta_fit_gaussian(obs, obs_weights, single_gauss);
+      mode_mean = single_gauss.mean();
+      mode_var = single_gauss.var();
+
+      // unbias variance based on number of observations
+      //float unbias_factor = sigma_norm_factor(mode_weight_sum[m]);
+      // mode_var *= (unbias_factor*unbias_factor);
+
+      // make sure variance does not get too big
+      if (!(mode_var < big_var)) {
+        mode_var = big_var;
+      }
+      // or too small
+      if (!(mode_var > min_var)) {
+        mode_var = min_var;
+      }
+
+      // update mode parameters
+      model.distribution(m).set_mean(mode_mean);
+      model.distribution(m).set_var(mode_var);
+    }
+    // update mode probabilities
+    if (total_weight_sum > 1e-6) {
+      for (unsigned int m=0; m<nmodes; ++m) {
+        const float mode_weight = mode_weight_sum[m] / total_weight_sum;
+        // update mode weight
+        model.set_weight(m, mode_weight);
+      }
+    }
+  }
+
+  // unbias variance based on number of observations
+  //bsta_sigma_normalizer sigma_norm(0.20f);
+  for (unsigned int m=0; m<nmodes; ++m) {
+    //float unbias_factor = sigma_norm.normalization_factor(mode_weight_sum[m]);
+    float unbias_factor = n_table->normalization_factor(mode_weight_sum[m]);
+
+    float mode_var = model.distribution(m).var();
+    mode_var *= (unbias_factor*unbias_factor);
+
+    // make sure variance does not get too big
+    if (!(mode_var < big_var)) {
+      mode_var = big_var;
+    }
+    // or too small
+    if (!(mode_var > min_var)) {
+      mode_var = min_var;
+    }
+    model.distribution(m).set_var(mode_var);
+  }
+
+  // sort the modes based on weight
+  model.sort();
+
+  mog3[0]=(unsigned char)vcl_floor(boxm2_mog3_grey_processor::clamp(model.distribution(0).mean(),0,1)*255.0f);
+  mog3[1]=(unsigned char)vcl_floor(boxm2_mog3_grey_processor::clamp(vcl_sqrt(model.distribution(0).var()),0,1)*255.0f);
+  mog3[2]=(unsigned char)vcl_floor(boxm2_mog3_grey_processor::clamp(model.weight(0),0,1)*255.0f);
+  mog3[3]=(unsigned char)vcl_floor(boxm2_mog3_grey_processor::clamp(model.distribution(1).mean(),0,1)*255.0f);
+  mog3[4]=(unsigned char)vcl_floor(boxm2_mog3_grey_processor::clamp(vcl_sqrt(model.distribution(1).var()),0,1)*255.0f);
+  mog3[5]=(unsigned char)vcl_floor(boxm2_mog3_grey_processor::clamp(model.weight(1),0,1)*255.0f);
+  mog3[6]=(unsigned char)vcl_floor(boxm2_mog3_grey_processor::clamp(model.distribution(2).mean(),0,1)*255.0f);
+  mog3[7]=(unsigned char)vcl_floor(boxm2_mog3_grey_processor::clamp(vcl_sqrt(model.distribution(2).var()),0,1)*255.0f);
+
+  return;
+}
+
