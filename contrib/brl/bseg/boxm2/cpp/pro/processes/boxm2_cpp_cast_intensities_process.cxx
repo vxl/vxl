@@ -79,13 +79,22 @@ bool boxm2_cpp_cast_intensities_process(bprb_func_process& pro)
         bool success=true;
         boxm2_cast_intensities_functor pass;
 
+        int aux0TypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_AUX0>::prefix());
+
         vcl_vector<boxm2_block_id>::iterator id;
         for (id = vis_order.begin(); id != vis_order.end(); ++id)
         {
           vcl_cout<<"Block id "<<(*id)<<' ';
           boxm2_block *     blk   = cache->get_block(*id);
-          // identifier of the image causes a whole new data base to be generated for this image under the scene
-          boxm2_data_base *  alph = cache->get_data_base(*id,boxm2_data_traits<BOXM2_AUX0>::prefix(identifier), 0, false);
+
+          boxm2_block_metadata mdata = scene->get_block_metadata(*id);
+          long num_cells = mdata.sub_block_num_.x() * mdata.sub_block_num_.y() * mdata.sub_block_num_.z();
+
+          //: first make sure that the database is removed from memory if it already exists
+          cache->remove_data_base(*id,boxm2_data_traits<BOXM2_AUX0>::prefix(identifier));
+          //: now retrieve it with num_bytes > 0 so that even if it exists on disc, a fresh one will be created
+          boxm2_data_base *  alph = cache->get_data_base(*id,boxm2_data_traits<BOXM2_AUX0>::prefix(identifier), num_cells*aux0TypeSize, false);
+          
           boxm2_scene_info_wrapper *scene_info_wrapper=new boxm2_scene_info_wrapper();
           scene_info_wrapper->info=scene->get_blk_metadata(*id);
           pass.init_data(alph,input_image);
