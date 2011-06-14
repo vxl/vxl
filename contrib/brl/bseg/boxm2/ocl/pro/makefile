@@ -27,6 +27,7 @@ SOURCES += processes/boxm2_ocl_render_cone_expected_image_process.cxx
 SOURCES += processes/boxm2_ocl_filter_process.cxx
 SOURCES += processes/boxm2_clear_opencl_cache_process.cxx
 SOURCES += processes/boxm2_ocl_cone_update_process.cxx
+SOURCES += processes/boxm2_ocl_update_aux_per_view_process.cxx
 
 #######################################
 include ${VXLROOT}/config/top-params.mk

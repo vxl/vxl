@@ -18,6 +18,7 @@ SOURCES += processes/boxm2_cpp_filter_process.cxx
 SOURCES += processes/boxm2_cpp_ray_app_density_process.cxx
 SOURCES += processes/boxm2_cpp_ray_probe_process.cxx
 SOURCES += processes/boxm2_cpp_cone_update_image_process.cxx
+SOURCES += processes/boxm2_cpp_batch_update_processes.cxx
 
 #######################################
 include ${VXLROOT}/config/top-params.mk
