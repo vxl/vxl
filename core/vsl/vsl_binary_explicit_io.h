@@ -75,9 +75,9 @@
 // Really should check anything that #includes this file.
 
 #if VXL_LITTLE_ENDIAN
-inline void vsl_swap_bytes(char*, int, int = 1) { return; }
+inline void vsl_swap_bytes(char*, unsigned, vcl_size_t = 1) { return; }
 #else
-inline void vsl_swap_bytes( char * ptr, int nbyte, int nelem = 1)
+inline void vsl_swap_bytes( char * ptr, unsigned nbyte, vcl_size_t nelem = 1)
 {
   // If the byte order of the file
   // does not match the intel byte order
@@ -85,11 +85,11 @@ inline void vsl_swap_bytes( char * ptr, int nbyte, int nelem = 1)
   char temp;
   char *ptr1, *ptr2;
 
-  int nbyte2 = nbyte/2;
-  for (int n = 0; n < nelem; n++ ) {
+  unsigned nbyte2 = nbyte/2;
+  for (vcl_size_t n = 0; n < nelem; n++ ) {
     ptr1 = ptr;
     ptr2 = ptr1 + nbyte - 1;
-    for (int i = 0; i < nbyte2; i++ ) {
+    for (unsigned i = 0; i < nbyte2; i++ ) {
       temp = *ptr1;
       *ptr1++ = *ptr2;
       *ptr2-- = temp;
@@ -102,7 +102,7 @@ inline void vsl_swap_bytes( char * ptr, int nbyte, int nelem = 1)
 //: Perform byte swapping to a buffer
 // Same as vsl_swap_bytes, but saves the results in a buffer.
 // In general use vsl_swap_bytes where possible, because it is faster.
-inline void vsl_swap_bytes_to_buffer( const char * source, char * dest, int nbyte, int nelem = 1)
+inline void vsl_swap_bytes_to_buffer( const char * source, char * dest, unsigned nbyte, vcl_size_t nelem = 1)
 {
 #if VXL_LITTLE_ENDIAN
   vcl_memcpy(dest, source, nbyte * nelem);
@@ -114,12 +114,12 @@ inline void vsl_swap_bytes_to_buffer( const char * source, char * dest, int nbyt
   // does not match the intel byte order
   // then the bytes should be swapped
 
-  const int nbyte_x_2 = nbyte*2;
+  const unsigned nbyte_x_2 = nbyte*2;
   dest += nbyte - 1;
 
-  for (int n = 0; n < nelem; n++ )
+  for (vcl_size_t n = 0; n < nelem; n++ )
   {
-    for (int i = 0; i < nbyte; i++ )
+    for (unsigned i = 0; i < nbyte; i++ )
       *dest-- = *source++;
 
     dest += nbyte_x_2;

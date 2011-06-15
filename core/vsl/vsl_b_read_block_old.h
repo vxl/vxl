@@ -39,7 +39,7 @@
 // then just #include <vsl_binary_explicit_io.h>
 // \deprecated in favour of vsl_block_binary_read
 template <class T>
-VCL_VC_6_STATIC inline void vsl_b_read_block_old(vsl_b_istream &is, T* begin, unsigned nelems)
+VCL_VC_6_STATIC inline void vsl_b_read_block_old(vsl_b_istream &is, T* begin, vcl_size_t nelems)
 {
   VXL_DEPRECATED( "vsl_b_read_block_old()" );
   while (nelems--)
@@ -52,7 +52,7 @@ VCL_VC_6_STATIC inline void vsl_b_read_block_old(vsl_b_istream &is, T* begin, un
 // This function is very speed efficient.
 // \deprecated in favour of vsl_block_binary_read
 VCL_DEFINE_SPECIALIZATION
-VCL_VC_6_STATIC inline void vsl_b_read_block_old(vsl_b_istream &is, double* begin, unsigned nelems)
+VCL_VC_6_STATIC inline void vsl_b_read_block_old(vsl_b_istream &is, double* begin, vcl_size_t nelems)
 {
   VXL_DEPRECATED( "vsl_b_read_block_old()" );
   is.is().read((char*) begin, (unsigned long)(nelems*sizeof(double)));
@@ -65,7 +65,7 @@ VCL_VC_6_STATIC inline void vsl_b_read_block_old(vsl_b_istream &is, double* begi
 // This function is very speed efficient.
 // \deprecated in favour of vsl_block_binary_read
 VCL_DEFINE_SPECIALIZATION
-VCL_VC_6_STATIC inline void vsl_b_read_block_old(vsl_b_istream &is, float* begin, unsigned nelems)
+VCL_VC_6_STATIC inline void vsl_b_read_block_old(vsl_b_istream &is, float* begin, vcl_size_t nelems)
 {
   VXL_DEPRECATED( "vsl_b_read_block_old()" );
   is.is().read((char*) begin, (unsigned long)(nelems*sizeof(float)));
@@ -80,17 +80,17 @@ VCL_VC_6_STATIC inline void vsl_b_read_block_old(vsl_b_istream &is, float* begin
 // size of the block being read.
 // \deprecated in favour of vsl_block_binary_read
 VCL_DEFINE_SPECIALIZATION
-VCL_VC_6_STATIC inline void vsl_b_read_block_old(vsl_b_istream &is, int* begin, unsigned nelems)
+VCL_VC_6_STATIC inline void vsl_b_read_block_old(vsl_b_istream &is, int* begin, vcl_size_t nelems)
 {
   VXL_DEPRECATED( "vsl_b_read_block_old()" );
   if (!is) return;
-  unsigned long nbytes;
+  vcl_size_t nbytes;
   vsl_b_read(is, nbytes);
   if (nbytes)
   {
     char *block = new char[VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(int)) * nelems];
     is.is().read(block, nbytes);
-    unsigned long n_bytes_converted =
+    vcl_size_t n_bytes_converted =
     vsl_convert_from_arbitrary_length((unsigned char *)block, begin, nelems);
     delete [] block;
     if (n_bytes_converted != nbytes)
@@ -111,16 +111,16 @@ VCL_VC_6_STATIC inline void vsl_b_read_block_old(vsl_b_istream &is, int* begin, 
 // size of the block being read.
 // \deprecated in favour of vsl_block_binary_read
 VCL_DEFINE_SPECIALIZATION
-VCL_VC_6_STATIC inline void vsl_b_read_block_old(vsl_b_istream &is, unsigned int* begin, unsigned nelems)
+VCL_VC_6_STATIC inline void vsl_b_read_block_old(vsl_b_istream &is, unsigned int* begin, vcl_size_t nelems)
 {
   VXL_DEPRECATED( "vsl_b_read_block_old()" );
-  unsigned long nbytes;
+  vcl_size_t nbytes;
   vsl_b_read(is, nbytes);
   if (nbytes)
   {
     char *block = new char[VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(unsigned int)) * nelems];
     is.is().read(block, nbytes);
-    unsigned long n_bytes_converted =
+    vcl_size_t n_bytes_converted =
     vsl_convert_from_arbitrary_length((unsigned char *)block, begin, nelems);
     delete [] block;
     if (n_bytes_converted != nbytes)
@@ -142,16 +142,16 @@ VCL_VC_6_STATIC inline void vsl_b_read_block_old(vsl_b_istream &is, unsigned int
 // size of the block being read.
 // \deprecated in favour of vsl_block_binary_read
 VCL_DEFINE_SPECIALIZATION
-VCL_VC_6_STATIC inline void vsl_b_read_block_old(vsl_b_istream &is, short* begin, unsigned nelems)
+VCL_VC_6_STATIC inline void vsl_b_read_block_old(vsl_b_istream &is, short* begin, vcl_size_t nelems)
 {
   VXL_DEPRECATED( "vsl_b_read_block_old()" );
-  unsigned long nbytes;
+  vcl_size_t nbytes;
   vsl_b_read(is, nbytes);
   if (nbytes)
   {
     char *block = new char[VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(short)) * nelems];
     is.is().read(block, nbytes);
-    unsigned long n_bytes_converted =
+    vcl_size_t n_bytes_converted =
     vsl_convert_from_arbitrary_length((unsigned char *)block, begin, nelems);
     delete [] block;
     if (n_bytes_converted != nbytes)
@@ -173,16 +173,16 @@ VCL_VC_6_STATIC inline void vsl_b_read_block_old(vsl_b_istream &is, short* begin
 // size of the block being read.
 // \deprecated in favour of vsl_block_binary_read
 VCL_DEFINE_SPECIALIZATION
-VCL_VC_6_STATIC inline void vsl_b_read_block_old(vsl_b_istream &is, unsigned short* begin, unsigned nelems)
+VCL_VC_6_STATIC inline void vsl_b_read_block_old(vsl_b_istream &is, unsigned short* begin, vcl_size_t nelems)
 {
   VXL_DEPRECATED( "vsl_b_read_block_old()" );
-  unsigned long nbytes;
+  vcl_size_t nbytes;
   vsl_b_read(is, nbytes);
   if (nbytes)
   {
     char *block = new char[VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(unsigned short)) * nelems];
     is.is().read(block, nbytes);
-    unsigned long n_bytes_converted =
+    vcl_size_t n_bytes_converted =
     vsl_convert_from_arbitrary_length((unsigned char *)block, begin, nelems);
     delete [] block;
     if (n_bytes_converted != nbytes)
@@ -204,16 +204,16 @@ VCL_VC_6_STATIC inline void vsl_b_read_block_old(vsl_b_istream &is, unsigned sho
 // size of the block being read.
 // \deprecated in favour of vsl_block_binary_read
 VCL_DEFINE_SPECIALIZATION
-VCL_VC_6_STATIC inline void vsl_b_read_block_old(vsl_b_istream &is, long* begin, unsigned nelems)
+VCL_VC_6_STATIC inline void vsl_b_read_block_old(vsl_b_istream &is, long* begin, vcl_size_t nelems)
 {
   VXL_DEPRECATED( "vsl_b_read_block_old()" );
-  unsigned long nbytes;
+  vcl_size_t nbytes;
   vsl_b_read(is, nbytes);
   if (nbytes)
   {
     char *block = new char[VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(long)) * nelems];
     is.is().read(block, nbytes);
-    unsigned long n_bytes_converted =
+    vcl_size_t n_bytes_converted =
     vsl_convert_from_arbitrary_length((unsigned char *)block, begin, nelems);
     delete [] block;
     if (n_bytes_converted != nbytes)
@@ -235,16 +235,16 @@ VCL_VC_6_STATIC inline void vsl_b_read_block_old(vsl_b_istream &is, long* begin,
 // size of the block being read.
 // \deprecated in favour of vsl_block_binary_read
 VCL_DEFINE_SPECIALIZATION
-VCL_VC_6_STATIC inline void vsl_b_read_block_old(vsl_b_istream &is, unsigned long* begin, unsigned nelems)
+VCL_VC_6_STATIC inline void vsl_b_read_block_old(vsl_b_istream &is, unsigned long* begin, vcl_size_t nelems)
 {
   VXL_DEPRECATED( "vsl_b_read_block_old()" );
-  unsigned long nbytes;
+  vcl_size_t nbytes;
   vsl_b_read(is, nbytes);
   if (nbytes)
   {
     char *block = new char[VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(unsigned long)) * nelems];
     is.is().read(block, nbytes);
-    unsigned long n_bytes_converted =
+    vcl_size_t n_bytes_converted =
     vsl_convert_from_arbitrary_length((unsigned char *)block, begin, nelems);
     delete [] block;
     if (n_bytes_converted != nbytes)
