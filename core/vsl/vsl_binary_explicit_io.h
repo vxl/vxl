@@ -236,8 +236,9 @@ inline vcl_size_t vsl_convert_from_arbitrary_length_signed_impl(
     {
       if (bitsLeft <= 0 ||
           b & 64 ?
-              (((signed char)b >> (bitsLeft-1)) != -1) :
-              (((b & 127) >> (bitsLeft-1)) != 0) )
+          (((signed char)b >> (bitsLeft-1)) != -1) :
+          (((b & 127) >> (bitsLeft-1)) != 0)
+         )
       {
         vcl_cerr << "\nI/O ERROR: vsl_convert_from_arbitrary_length(.., "
                  << vsl_type_string(T()) << "*,..)\n"
@@ -689,7 +690,7 @@ inline void vsl_b_read_int_16(vsl_b_istream& is, long& n )
 // function.
 inline void vsl_b_write_uint_64(vsl_b_ostream& os, vcl_size_t n )
 {
-  assert(sizeof(vcl_size_t) <= 8 || (n >> 32) >> 32 == 0);
+  assert(sizeof(vcl_size_t) <= 8 || n >> 16 >> 16 >> 16 >> 16 == 0);
   vsl_swap_bytes(( char* )&n, sizeof(long) );
   os.os().write( ( char* )&n, 8 );
 }
@@ -707,7 +708,6 @@ inline void vsl_b_read_uint_64(vsl_b_istream& is, vcl_size_t& n )
   is.is().read( ( char* )&n, 8 );
   vsl_swap_bytes(( char* )&n, sizeof(long) );
 }
-
 
 
 #endif // vsl_binary_explicit_io_h_
