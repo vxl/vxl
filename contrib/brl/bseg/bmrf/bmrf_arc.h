@@ -13,6 +13,7 @@
 #include <vsl/vsl_binary_io.h>
 #include <bmrf/bmrf_node_sptr.h>
 #include <bmrf/bmrf_gamma_func_sptr.h>
+#include <vcl_iosfwd.h> // for std::ostream
 
 #include "bmrf_arc_sptr.h"
 

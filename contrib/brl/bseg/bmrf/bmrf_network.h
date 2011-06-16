@@ -13,15 +13,16 @@
 // iterators to iterate through the nodes along arcs using search
 // algorithms such as depth-first or breadth-first.
 
-#include <vcl_deque.h>
-#include <vcl_set.h>
-#include <vsl/vsl_binary_io.h>
-#include <vbl/vbl_ref_count.h>
 #include "bmrf_node_sptr.h"
 #include "bmrf_node.h"
 #include "bmrf_network_sptr.h"
 #include "bmrf_epi_seg_sptr.h"
 #include "bmrf_epipole.h"
+#include <vsl/vsl_binary_io.h>
+#include <vbl/vbl_ref_count.h>
+#include <vcl_deque.h>
+#include <vcl_set.h>
+#include <vcl_iosfwd.h> // for std::ostream
 
 //: The MRF network
 class bmrf_network : public vbl_ref_count
@@ -171,7 +172,7 @@ class bmrf_network : public vbl_ref_count
   {
    public:
     //: Constructor
-    depth_iterator( bmrf_network* network, bmrf_node_sptr node ) : iterator(network, node){ visited_.insert(node); }
+    depth_iterator( bmrf_network* network, bmrf_node_sptr node ) : iterator(network, node) { visited_.insert(node); }
 
    protected:
     //: Increment the current node
@@ -186,7 +187,7 @@ class bmrf_network : public vbl_ref_count
   {
    public:
     //: Constructor
-    breadth_iterator( bmrf_network* network, bmrf_node_sptr node ) : iterator(network, node){ visited_.insert(node); }
+    breadth_iterator( bmrf_network* network, bmrf_node_sptr node ) : iterator(network, node) { visited_.insert(node); }
 
    protected:
     //: Increment the current node

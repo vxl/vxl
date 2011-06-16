@@ -16,9 +16,9 @@
 #include <vnl/vnl_vector_fixed.h>
 #include <vil/vil_rgb.h>
 #include <vsl/vsl_binary_io.h>
-#include <vcl_ostream.h>
 #include <boxm/sample/boxm_edge_sample.h>
 #include <boxm/sample/boxm_inf_line_sample.h>
+#include <vcl_iosfwd.h> // for std::ostream
 
 class boxm_mog_grey_processor;
 class boxm_mog_rgb_processor;
@@ -110,10 +110,10 @@ class boxm_simple_grey
   boxm_simple_grey(float colour, float std_dev, float gauss_wght=1.0f) : color_(colour), one_over_sigma_(1/std_dev), gauss_weight_(gauss_wght)  { check_vals(); }
   boxm_simple_grey(vnl_vector_fixed<float,3> const& params) : color_(params[0]), one_over_sigma_(1.0f/params[1])  { check_vals(); }
   static short version_no() { return 1; }
-  inline float color() const {return color_;}
-  inline float sigma() const {return 1.0f/one_over_sigma_;}
-  inline float gauss_weight() const {return gauss_weight_;}
-  inline float one_over_sigma() const {return one_over_sigma_;}
+  inline float color() const { return color_; }
+  inline float sigma() const { return 1.0f/one_over_sigma_; }
+  inline float gauss_weight() const { return gauss_weight_; }
+  inline float one_over_sigma() const { return one_over_sigma_; }
 
  protected:
   inline void check_vals()
@@ -173,7 +173,9 @@ class boxm_apm_traits<BOXM_EDGE_FLOAT>
   typedef boxm_edge_sample<float> apm_datatype;
   typedef float obs_datatype;
   typedef float obs_mathtype;
-  //typedef boxm_edge_processor apm_processor;
+#if 0
+  typedef boxm_edge_processor apm_processor;
+#endif
 };
 
 template<>

@@ -17,6 +17,7 @@
 #include <vcl_vector.h>
 #include <vcl_map.h>
 #include <vcl_utility.h>
+#include <vcl_iosfwd.h> // for std::ostream
 
 #include "bmrf_curvel_3d_sptr.h"
 

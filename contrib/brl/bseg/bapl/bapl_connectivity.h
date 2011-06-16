@@ -16,6 +16,7 @@
 #include <bapl/bapl_keypoint_sptr.h>
 #include <vcl_vector.h>
 #include <vsl/vsl_binary_io.h>
+#include <vcl_iosfwd.h> // for std::ostream
 
 typedef vcl_pair< int, bapl_keypoint_sptr > bapl_image_key;
 typedef vcl_vector< bapl_image_key > bapl_image_key_vector;

@@ -14,6 +14,7 @@
 #include <vcl_list.h>
 #include <vcl_set.h>
 #include <vcl_map.h>
+#include <vcl_iosfwd.h> // for std::ostream
 
 //: A 3D curve
 class bmrf_curve_3d : public vcl_list<bmrf_curvel_3d_sptr>, public vbl_ref_count

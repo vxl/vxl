@@ -19,38 +19,38 @@
 // \endverbatim
 //
 //-----------------------------------------------------------------------------
-#include <vcl_vector.h>
-#include <vcl_ostream.h>
-#include <vbl/vbl_ref_count.h>
 #include <vsol/vsol_box_2d_sptr.h>
+#include <vbl/vbl_ref_count.h>
+#include <vcl_vector.h>
+#include <vcl_iosfwd.h> // for std::ostream
 
 class brip_roi : public vbl_ref_count
 {
  public:
-  //:should initialize with image bounds on construction
+  //: should initialize with image bounds on construction
   brip_roi(const unsigned n_image_cols = 0, const unsigned n_image_rows = 0);
   brip_roi(brip_roi const& r)
     : vbl_ref_count(), n_image_cols_(r.n_image_cols_),
       n_image_rows_(r.n_image_rows_), regions_(r.regions_) {}
 
-  //:expand (or contract) each region of the roi by delta, creating a new roi
+  //: expand (or contract) each region of the roi by delta, creating a new roi
   brip_roi(brip_roi const& roi, const float delta);
 
   ~brip_roi() {}
-  //:replace existing image bounds
+  //: replace existing image bounds
   void set_image_bounds(const int n_image_cols,
                         const int n_image_rows);
 
-  //:roi from origin and size
+  //: roi from origin and size
   void add_region(const int x0, const int y0, const int xs, const int ys);
-  //roi from center and radius
+  //: roi from center and radius
   void add_region(const int xc, const int yc, const int radius);
-  //roi from box
+  //: roi from box
   void add_region(vsol_box_2d_sptr const & box);
 
-  //:useful for inserting a new region, doesn't affect existing image bounds
+  //: useful for inserting a new region, doesn't affect existing image bounds
   vsol_box_2d_sptr clip_to_image_bounds(vsol_box_2d_sptr box);
-  //:clips all existing regions, doesn't affect existing image bounds
+  //: clips all existing regions, doesn't affect existing image bounds
   void clip_to_image_bounds();
   bool empty() const;
   unsigned int n_regions() const { return regions_.size(); }
@@ -61,11 +61,11 @@ class brip_roi : public vbl_ref_count
   unsigned csize(const unsigned i) const; //!< number of cols for region_i
   unsigned rsize(const unsigned i) const; //!< number of rows for region_i
 
-  //:image column and row coordinates from local roi coordinates for region i
+  //: image column and row coordinates from local roi coordinates for region i
   unsigned ic(int local_col, unsigned i = 0) const;
   unsigned ir(int local_row, unsigned i = 0) const;
 
-  //:local roi column and row coordinates from global image coordinates for region i
+  //: local roi column and row coordinates from global image coordinates for region i
   unsigned lc(unsigned global_col, unsigned i = 0) const;
   unsigned lr(unsigned global_row, unsigned i = 0) const;
 
