@@ -16,7 +16,7 @@
 #include <vgl/vgl_distance.h>
 
 
-boxm2_scene::boxm2_scene(vcl_string data_path, vgl_point_3d<double> origin)
+boxm2_scene::boxm2_scene(vcl_string data_path, vgl_point_3d<double> const& origin)
 {
     local_origin_=origin;
     data_path_   = data_path;
@@ -150,37 +150,40 @@ vcl_vector<boxm2_block_id> boxm2_scene::get_vis_blocks(vpgl_perspective_camera<d
   vgl_point_3d<double> cam_center = cam->camera_center();
   //Map of distance, id
   return get_vis_order_from_pt(cam_center);
-  //vcl_vector<boxm2_dist_id_pair> distances;
+#if 0
+  vcl_vector<boxm2_dist_id_pair> distances;
 
-  ////iterate through each block
-  //vcl_map<boxm2_block_id, boxm2_block_metadata>::iterator iter;
-  //for (iter = blocks_.begin(); iter != blocks_.end(); ++iter) {
-  //  vgl_point_3d<double>    blk_o   = (iter->second).local_origin_;
-  //  vgl_vector_3d<double>   blk_dim = (iter->second).sub_block_dim_;
-  //  vgl_vector_3d<unsigned> blk_num = (iter->second).sub_block_num_;
-  //  vgl_vector_3d<double>   length(blk_dim.x()*blk_num.x(),
-  //                                 blk_dim.y()*blk_num.y(),
-  //                                 blk_dim.z()*blk_num.z());
-  //  vgl_point_3d<double> blk_center = blk_o + length/2.0;
-  //  double dist = vgl_distance( blk_center, cam_center);
+  //iterate through each block
+  vcl_map<boxm2_block_id, boxm2_block_metadata>::iterator iter;
+  for (iter = blocks_.begin(); iter != blocks_.end(); ++iter) {
+    vgl_point_3d<double>    blk_o   = (iter->second).local_origin_;
+    vgl_vector_3d<double>   blk_dim = (iter->second).sub_block_dim_;
+    vgl_vector_3d<unsigned> blk_num = (iter->second).sub_block_num_;
+    vgl_vector_3d<double>   length(blk_dim.x()*blk_num.x(),
+                                   blk_dim.y()*blk_num.y(),
+                                   blk_dim.z()*blk_num.z());
+    vgl_point_3d<double> blk_center = blk_o + length/2.0;
+    double dist = vgl_distance( blk_center, cam_center);
 
-  //  distances.push_back( boxm2_dist_id_pair(dist, iter->first) );
-  //}
+    distances.push_back( boxm2_dist_id_pair(dist, iter->first) );
+  }
 
-  ////sort distances
-  //vcl_sort(distances.begin(), distances.end());
+  //sort distances
+  vcl_sort(distances.begin(), distances.end());
 
-  ////put blocks in "vis_order"
-  ////vcl_cout<<"CAM ORDER----------------------------------------"<<vcl_endl;
-  //vcl_vector<boxm2_dist_id_pair>::iterator di;
-  //for (di = distances.begin(); di != distances.end(); ++di) {
-  //  vis_order.push_back(di->id_);
-  //  //vcl_cout<<di->id_<<'('<<di->dist_<<")    ";
-  //}
-  ////vcl_cout<<"\n-----------------------------------------------"<<vcl_endl;
-  //return vis_order;
+  //put blocks in "vis_order"
+  //vcl_cout<<"CAM ORDER----------------------------------------"<<vcl_endl;
+  vcl_vector<boxm2_dist_id_pair>::iterator di;
+  for (di = distances.begin(); di != distances.end(); ++di) {
+    vis_order.push_back(di->id_);
+    //vcl_cout<<di->id_<<'('<<di->dist_<<")    ";
+  }
+  //vcl_cout<<"\n-----------------------------------------------"<<vcl_endl;
+  return vis_order;
+#endif // 0
 }
-vcl_vector<boxm2_block_id> boxm2_scene::get_vis_order_from_pt(vgl_point_3d<double> & pt)
+
+vcl_vector<boxm2_block_id> boxm2_scene::get_vis_order_from_pt(vgl_point_3d<double> const& pt)
 {
     //Map of distance, id
     vcl_vector<boxm2_block_id> vis_order;
@@ -213,8 +216,9 @@ vcl_vector<boxm2_block_id> boxm2_scene::get_vis_order_from_pt(vgl_point_3d<doubl
   }
   return vis_order;
 }
+
 //: find the block containing the specified point, else return false
-//  local coordinates are also returned
+//  Local coordinates are also returned
 bool boxm2_scene::contains(vgl_point_3d<double> const& p, boxm2_block_id& bid,
                            vgl_point_3d<double>& local_coords) const
 {
@@ -351,9 +355,9 @@ vgl_vector_3d<unsigned int>  boxm2_scene::scene_dimensions() const
 
 //: gets the smallest block index
 void boxm2_scene::min_block_index (vgl_point_3d<int> &idx,
-                                   vgl_point_3d<double> &local_origin)
+                                   vgl_point_3d<double> &local_origin) const
 {
-  vcl_map<boxm2_block_id, boxm2_block_metadata>::iterator iter= blocks_.begin();
+  vcl_map<boxm2_block_id, boxm2_block_metadata>::const_iterator iter= blocks_.begin();
 
   boxm2_block_id id = iter->first;
   boxm2_block_metadata data = iter->second;

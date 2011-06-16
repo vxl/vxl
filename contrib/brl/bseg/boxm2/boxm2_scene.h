@@ -57,7 +57,7 @@ class boxm2_scene : public vbl_ref_count
     //: empty scene, needs to be initialized manually
     boxm2_scene() {}
 
-    boxm2_scene(vcl_string data_path, vgl_point_3d<double> origin);
+    boxm2_scene(vcl_string data_path, vgl_point_3d<double> const& origin);
 
     //: initializes scene from xmlFile
     boxm2_scene(vcl_string filename);
@@ -71,20 +71,20 @@ class boxm2_scene : public vbl_ref_count
     //: return a vector of block ids in visibility order
     vcl_vector<boxm2_block_id> get_vis_blocks(vpgl_generic_camera<double>* cam);
     vcl_vector<boxm2_block_id> get_vis_blocks(vpgl_perspective_camera<double>* cam);
-    vcl_vector<boxm2_block_id> get_vis_order_from_pt(vgl_point_3d<double> & pt);
+    vcl_vector<boxm2_block_id> get_vis_order_from_pt(vgl_point_3d<double> const& pt);
     vcl_vector<boxm2_block_id> get_vis_blocks(vpgl_camera_double_sptr & cam) {
-      if( cam->type_name() == "vpgl_generic_camera" ) 
-        return this->get_vis_blocks( (vpgl_generic_camera<double>*) cam.ptr() ); 
-      else if( cam->type_name() == "vpgl_perspective_camera" )
-        return this->get_vis_blocks( (vpgl_perspective_camera<double>*) cam.ptr() ); 
-      else 
+      if ( cam->type_name() == "vpgl_generic_camera" )
+        return this->get_vis_blocks( (vpgl_generic_camera<double>*) cam.ptr() );
+      else if ( cam->type_name() == "vpgl_perspective_camera" )
+        return this->get_vis_blocks( (vpgl_perspective_camera<double>*) cam.ptr() );
+      else
         vcl_cout<<"boxm2_scene::get_vis_blocks doesn't support camera type "<<cam->type_name()<<vcl_endl;
-      
+
       //else return empty
-      vcl_vector<boxm2_block_id> empty; 
-      return empty; 
+      vcl_vector<boxm2_block_id> empty;
+      return empty;
     }
-    
+
     //: return a heap pointer to a scene info
     boxm2_scene_info* get_blk_metadata(boxm2_block_id id);
     bool block_exists(boxm2_block_id id) const { return blocks_.find(id) != blocks_.end(); }
@@ -107,10 +107,10 @@ class boxm2_scene : public vbl_ref_count
 
     //: gets a tight bounding box for the scene
     vgl_box_3d<double>      bounding_box() const;
-  
+
     //: gets the smallest block index in all dimensions
     void min_block_index(vgl_point_3d<int> &idx,
-                         vgl_point_3d<double> &local_origin);
+                         vgl_point_3d<double> &local_origin) const;
 
     // returns the dimesnsion of the scene grid where each grid element is a block
     vgl_vector_3d<unsigned int>   scene_dimensions() const;
