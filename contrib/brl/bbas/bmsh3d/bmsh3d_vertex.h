@@ -204,6 +204,10 @@ class bmsh3d_vertex : public vispt_elm
   {return "bmsh3d_vertex"; }
 
   //###### Handle the incident edges ######
+  unsigned int get_incident_Es(vcl_set<void const*>& incident_Es) const {
+    return get_all_ptrs(E_list_, incident_Es);
+  }
+  // DEPRECATED!
   unsigned int get_incident_Es(vcl_set<void*>& incident_Es) const {
     return get_all_ptrs(E_list_, incident_Es);
   }
