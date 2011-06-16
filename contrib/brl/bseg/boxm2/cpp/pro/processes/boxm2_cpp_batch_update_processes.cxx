@@ -173,7 +173,6 @@ bool boxm2_cpp_create_aux_data_process(bprb_func_process& pro)
     }
 
     bool foundDataType = false;
-    bool foundNumObsType = false;
 
     vcl_string data_type;
     vcl_string num_obs_type;
@@ -206,7 +205,6 @@ bool boxm2_cpp_create_aux_data_process(bprb_func_process& pro)
     vcl_vector<boxm2_block_id>::iterator id;
 
     int aux0TypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_AUX0>::prefix());
-    int aux1TypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_AUX1>::prefix());
     for (id = vis_order.begin(); id != vis_order.end(); ++id)
     {
       vcl_cout<<"Block id "<<(*id)<<' ';
@@ -215,7 +213,6 @@ bool boxm2_cpp_create_aux_data_process(bprb_func_process& pro)
       boxm2_data_base *  mog   = cache->get_data_base(*id,data_type,0,false);
 
       boxm2_block_metadata mdata = scene->get_block_metadata(*id);
-      long num_cells = mdata.sub_block_num_.x() * mdata.sub_block_num_.y() * mdata.sub_block_num_.z();
 
       //: call get_data_base method with num_bytes = 0 to read from disc
       boxm2_data_base *aux0 = cache->get_data_base(*id,boxm2_data_traits<BOXM2_AUX0>::prefix(identifier));
@@ -248,7 +245,6 @@ bool boxm2_cpp_create_aux_data_process(bprb_func_process& pro)
       boxm2_data_base *  mog   = cache->get_data_base(*id,data_type,0,false);
 
       boxm2_block_metadata mdata = scene->get_block_metadata(*id);
-      long num_cells = mdata.sub_block_num_.x() * mdata.sub_block_num_.y() * mdata.sub_block_num_.z();
 
       //: call get_data_base method with num_bytes = 0 to read from disc
       boxm2_data_base *aux0 = cache->get_data_base(*id,boxm2_data_traits<BOXM2_AUX0>::prefix(identifier));
