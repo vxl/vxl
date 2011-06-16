@@ -1,33 +1,15 @@
 #include <boxm2/io/boxm2_stream_cache.txx>
 #include <vcl_vector.h>
+#include <boxm2/boxm2_data_traits.h>
 
-template vcl_vector<boxm2_data_traits<BOXM2_ALPHA>::datatype> boxm2_stream_cache::get_next<BOXM2_ALPHA,boxm2_data_traits<BOXM2_ALPHA>::datatype>(boxm2_block_id id, int index);
-
-template vcl_vector<boxm2_data_traits<BOXM2_MOG2_RGB>::datatype> boxm2_stream_cache::get_next<BOXM2_MOG2_RGB,boxm2_data_traits<BOXM2_MOG2_RGB>::datatype>(boxm2_block_id id, int index);
-template vcl_vector<boxm2_data_traits<BOXM2_MOG3_GREY_16>::datatype> boxm2_stream_cache::get_next<BOXM2_MOG3_GREY_16,boxm2_data_traits<BOXM2_MOG3_GREY_16>::datatype>(boxm2_block_id id, int index);
-template vcl_vector<boxm2_data_traits<BOXM2_MOG3_GREY>::datatype> boxm2_stream_cache::get_next<BOXM2_MOG3_GREY,boxm2_data_traits<BOXM2_MOG3_GREY>::datatype>(boxm2_block_id id, int index);
-
-template bool boxm2_stream_cache::open_streams<BOXM2_ALPHA>(vcl_string data_type, boxm2_stream_cache_datatype_helper_sptr h);
-
-template bool boxm2_stream_cache::open_streams<BOXM2_MOG3_GREY>(vcl_string data_type, boxm2_stream_cache_datatype_helper_sptr h);
-template bool boxm2_stream_cache::open_streams<BOXM2_MOG3_GREY_16>(vcl_string data_type, boxm2_stream_cache_datatype_helper_sptr h);
-template bool boxm2_stream_cache::open_streams<BOXM2_MOG2_RGB>(vcl_string data_type, boxm2_stream_cache_datatype_helper_sptr h);
-
-template vcl_vector<boxm2_data_traits<BOXM2_AUX>::datatype> boxm2_stream_cache::get_next<BOXM2_AUX,boxm2_data_traits<BOXM2_AUX>::datatype>(boxm2_block_id id, int index);
-template vcl_vector<boxm2_data_traits<BOXM2_AUX0>::datatype> boxm2_stream_cache::get_next<BOXM2_AUX0,boxm2_data_traits<BOXM2_AUX0>::datatype>(boxm2_block_id id, int index);
-template vcl_vector<boxm2_data_traits<BOXM2_AUX1>::datatype> boxm2_stream_cache::get_next<BOXM2_AUX1,boxm2_data_traits<BOXM2_AUX1>::datatype>(boxm2_block_id id, int index);
-template vcl_vector<boxm2_data_traits<BOXM2_AUX2>::datatype> boxm2_stream_cache::get_next<BOXM2_AUX2,boxm2_data_traits<BOXM2_AUX2>::datatype>(boxm2_block_id id, int index);
-template vcl_vector<boxm2_data_traits<BOXM2_AUX3>::datatype> boxm2_stream_cache::get_next<BOXM2_AUX3,boxm2_data_traits<BOXM2_AUX3>::datatype>(boxm2_block_id id, int index);
-template vcl_vector<boxm2_data_traits<BOXM2_NUM_OBS_SINGLE>::datatype> boxm2_stream_cache::get_next<BOXM2_NUM_OBS_SINGLE,boxm2_data_traits<BOXM2_NUM_OBS_SINGLE>::datatype>(boxm2_block_id id, int index);
-
-template bool boxm2_stream_cache::open_streams<BOXM2_AUX>(vcl_string data_type, boxm2_stream_cache_datatype_helper_sptr h);
-template bool boxm2_stream_cache::open_streams<BOXM2_AUX0>(vcl_string data_type, boxm2_stream_cache_datatype_helper_sptr h);
-template bool boxm2_stream_cache::open_streams<BOXM2_AUX1>(vcl_string data_type, boxm2_stream_cache_datatype_helper_sptr h);
-template bool boxm2_stream_cache::open_streams<BOXM2_AUX2>(vcl_string data_type, boxm2_stream_cache_datatype_helper_sptr h);
-template bool boxm2_stream_cache::open_streams<BOXM2_AUX3>(vcl_string data_type, boxm2_stream_cache_datatype_helper_sptr h);
-template bool boxm2_stream_cache::open_streams<BOXM2_NUM_OBS_SINGLE>(vcl_string data_type, boxm2_stream_cache_datatype_helper_sptr h);
-
-
-
-
+BOXM2_STREAM_CACHE_INSTANTIATE(BOXM2_ALPHA);
+BOXM2_STREAM_CACHE_INSTANTIATE(BOXM2_MOG2_RGB);
+BOXM2_STREAM_CACHE_INSTANTIATE(BOXM2_MOG3_GREY_16);
+BOXM2_STREAM_CACHE_INSTANTIATE(BOXM2_MOG3_GREY);
+BOXM2_STREAM_CACHE_INSTANTIATE(BOXM2_AUX);
+BOXM2_STREAM_CACHE_INSTANTIATE(BOXM2_AUX0);
+BOXM2_STREAM_CACHE_INSTANTIATE(BOXM2_AUX1);
+BOXM2_STREAM_CACHE_INSTANTIATE(BOXM2_AUX2);
+BOXM2_STREAM_CACHE_INSTANTIATE(BOXM2_AUX3);
+BOXM2_STREAM_CACHE_INSTANTIATE(BOXM2_NUM_OBS_SINGLE);
 

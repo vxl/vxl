@@ -73,8 +73,10 @@ class boxm2_stream_cache: public vbl_ref_count
     friend class boxm2_stream_cache_destroyer;
 
     //: return the next cells in the streams of each data block given by the identifier list for this datatype, pass index if available to check synchronization
-    template <boxm2_data_type T, class datatype> vcl_vector<datatype> get_next(boxm2_block_id id, int index = -1);
+    template <boxm2_data_type T> vcl_vector<typename boxm2_data_traits<T>::datatype> get_next(boxm2_block_id id, int index = -1);
 
+    //: random access in the stream
+    template <boxm2_data_type T> vcl_vector<typename boxm2_data_traits<T>::datatype> get_random_i(boxm2_block_id id, int index);
     //: in iterative mode, the files need to be closed and re-opened
     void close_streams();
 
@@ -89,7 +91,7 @@ class boxm2_stream_cache: public vbl_ref_count
 
     boxm2_stream_cache_datatype_helper_sptr get_helper(vcl_string& data_type);
 
-    template <boxm2_data_type T> bool open_streams(vcl_string data_type, boxm2_stream_cache_datatype_helper_sptr h);
+    template <boxm2_data_type T> bool open_streams( boxm2_stream_cache_datatype_helper_sptr h);
     
     //: singleton instance of boxm2_stream_cache
     static boxm2_stream_cache* instance_; 
