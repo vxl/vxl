@@ -50,9 +50,9 @@ ifneq (,$(strip $(wildcard $(DCMTK_INC_DIR)/../../../v3p_tag)))
 SUBDIRS += dcmtk
 endif
 
-ifneq (,$(strip $(wildcard $(J2K_INC_DIR)/../../../v3p_tag)))
-SUBDIRS += j2k
-endif
+#ifneq (,$(strip $(wildcard $(J2K_INC_DIR)/../../../v3p_tag)))
+#SUBDIRS += j2k
+#endif
 
 ######################################
 include ${VXLROOT}/config/top-rules.mk
