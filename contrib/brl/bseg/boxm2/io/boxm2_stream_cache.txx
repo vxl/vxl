@@ -103,7 +103,7 @@ vcl_vector<typename boxm2_data_traits<T>::datatype> boxm2_stream_cache::get_next
 
 //: returns the data points pointed by the current_index_ and then advances the current_index_ by 1
 template <boxm2_data_type T>
-vcl_vector<typename boxm2_data_traits<T>::datatype> boxm2_stream_cache::get_random_i(boxm2_block_id id, int index)
+vcl_vector<typename boxm2_data_traits<T>::datatype> boxm2_stream_cache::get_random_i(boxm2_block_id id, unsigned int index)
 {
   //: get the data of this data type
   vcl_string data_type = boxm2_data_traits<T>::prefix();
@@ -117,7 +117,7 @@ vcl_vector<typename boxm2_data_traits<T>::datatype> boxm2_stream_cache::get_rand
   //: open up all the streams
   if (!open_streams<T>(h)) { vcl_cout << "Error opening streams!\n"; throw 0; }
   vcl_vector<typename boxm2_data_traits<T>::datatype> output;
-  if (index < 0 || index > h->buf_size_/h->cell_size_)
+  if (index > h->buf_size_/h->cell_size_)
     return output;
   //: read the next cell
   for (unsigned i = 0; i < streams.size(); i++) {
@@ -142,6 +142,6 @@ vcl_vector<typename boxm2_data_traits<T>::datatype> boxm2_stream_cache::get_rand
 #define BOXM2_STREAM_CACHE_INSTANTIATE(T) \
 template vcl_vector<boxm2_data_traits<T >::datatype> boxm2_stream_cache::get_next<T >(boxm2_block_id id, int index);\
 template bool boxm2_stream_cache::open_streams<T >( boxm2_stream_cache_datatype_helper_sptr h);\
-template vcl_vector<boxm2_data_traits<T >::datatype> boxm2_stream_cache::get_random_i<T >(boxm2_block_id id, int index)
+template vcl_vector<boxm2_data_traits<T >::datatype> boxm2_stream_cache::get_random_i<T >(boxm2_block_id id, unsigned int index)
 
 #endif // boxm2_stream_cache_txx_
