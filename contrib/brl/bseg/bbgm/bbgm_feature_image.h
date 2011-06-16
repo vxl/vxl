@@ -12,30 +12,30 @@
 //  Modifications
 // \endverbatim
 
-
 #include <vbl/vbl_array_2d.h>
 #include <vbl/vbl_ref_count.h>
 #include <vsl/vsl_binary_io.h>
 #include <vsl/vsl_binary_loader.h>
+#include <vcl_iostream.h>
 
 //: base class for images of features
 class bbgm_feature_image_base : public vbl_ref_count
 {
-  public:
-    virtual ~bbgm_feature_image_base(){}
+ public:
+  virtual ~bbgm_feature_image_base(){}
 
-    //: Binary save self to stream.
-    virtual void b_write(vsl_b_ostream &os) const=0;
+  //: Binary save self to stream.
+  virtual void b_write(vsl_b_ostream &os) const=0;
 
-    //: Binary load self from stream.
-    virtual void b_read(vsl_b_istream &is)=0;
+  //: Binary load self from stream.
+  virtual void b_read(vsl_b_istream &is)=0;
 
-    virtual vcl_string is_a() const=0;
+  virtual vcl_string is_a() const=0;
 
-    virtual bbgm_feature_image_base* clone() const = 0;
+  virtual bbgm_feature_image_base* clone() const = 0;
 
-    virtual unsigned int ni() const = 0;
-    virtual unsigned int nj() const = 0;
+  virtual unsigned int ni() const = 0;
+  virtual unsigned int nj() const = 0;
 };
 
 

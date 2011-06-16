@@ -4,25 +4,29 @@
 // \author Isabel Restrepo
 // \date 15-Aug-2010
 
+#include <vul/vul_file.h>
+#include <vul/vul_file_iterator.h>
+#include <vpl/vpl.h>
+
 void init_tree(boct_tree<short,float> *tree, unsigned i, float init_val)
 {
   tree-> split(); //now we have 8 cells
   vcl_vector<boct_tree_cell<short,float>*> leaves = tree->leaf_cells();
   leaves[i]->set_data(init_val);
   leaves[i]->split();
-  
+
   boct_loc_code<short> code = leaves[i]->get_code() ;
   vcl_cerr<< "Create Scene Code: " << code << vcl_endl;
 }
 
-boxm_scene<boct_tree<short, float> >* create_scene(unsigned world_dimx,unsigned world_dimy,unsigned world_dimz, 
+boxm_scene<boct_tree<short, float> >* create_scene(unsigned world_dimx,unsigned world_dimy,unsigned world_dimz,
                                                    bool uniform, float val, vcl_string scene_prefix)
 {
   float init_val = 0.5f;
-  
-  if(uniform)
-     init_val = val;
-  
+
+  if (uniform)
+    init_val = val;
+
   //crete the input scene
   unsigned int max_tree_level = 3;
   unsigned int init_level = 1;
@@ -48,7 +52,7 @@ boxm_scene<boct_tree<short, float> >* create_scene(unsigned world_dimx,unsigned 
     // Construct an empty tree with 3 maximum levels 1 levele initialized to 0.0
     boct_tree<short,float> *tree = new boct_tree<short,float>(init_val, 3, 1);
     //tree->print();
-    if(uniform)
+    if (uniform)
       init_tree(tree, cell_index, init_val);
     else
       init_tree(tree, cell_index);

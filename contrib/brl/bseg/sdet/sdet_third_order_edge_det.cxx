@@ -5,6 +5,7 @@
 #include <vul/vul_timer.h>
 #include <vsol/vsol_point_2d.h>
 #include <vsol/vsol_line_2d.h>
+#include <vil/vil_convert.h>
 
 #include <bil/algo/bil_color_conversions.h>
 

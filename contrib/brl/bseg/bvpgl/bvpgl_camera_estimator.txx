@@ -6,6 +6,7 @@
 #include <vnl/vnl_double_3x3.h>
 #include <vil/vil_math.h>
 #include <vcl_cassert.h>
+#include <vcl_limits.h>
 
 // Default constructor
 template <class exp_edge_func>
@@ -131,7 +132,6 @@ double bvpgl_camera_estimator<exp_edge_func>::estimate_rotation_angle(const vil_
 
   int rot_size = vnl_math_ceil(rot_range_/rot_step_);
 
-  //double best_score = 0.0;
   double best_score = vcl_numeric_limits<double>::min();
   double best_rot = 0.0;
 

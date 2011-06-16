@@ -4,6 +4,9 @@
 // \author Isabel Restrepo
 // \date 15-Aug-2010
 
+#include <vul/vul_file.h>
+#include <vul/vul_file_iterator.h>
+#include <vpl/vpl.h>
 
 void init_tree(boct_tree<short,float> *tree, unsigned i)
 {
@@ -26,9 +29,9 @@ boxm_scene<boct_tree<short, float> >* create_scene(unsigned world_dimx,unsigned 
   boxm_scene<boct_tree<short, float> > *scene = new boxm_scene<boct_tree<short, float> >(lvcs, origin, block_dim, world_dim);
   vcl_string scene_path("./");
   scene->set_paths(scene_path, "test_scene");
-  
-  //vcl_cerr << "Leaks Created - scene contructor: " << boct_tree_cell<short,float>::nleaks() << vcl_endl;
-
+ #ifdef DEBUG
+  vcl_cerr << "Leaks Created - scene constructor: " << boct_tree_cell<short,float>::nleaks() << '\n';
+#endif
   unsigned cell_index = 7;
   boxm_block_iterator<boct_tree<short, float> > iter=scene->iterator();
   iter.begin();
@@ -49,9 +52,9 @@ boxm_scene<boct_tree<short, float> >* create_scene(unsigned world_dimx,unsigned 
     ++iter;
   }
   //scene->unload_active_blocks();
-  
+
 #ifdef DEBUG_LEAKS
-  vcl_cerr << "Leaks Created by create_scene() : " << boct_tree_cell<short,float>::nleaks() << vcl_endl;
+  vcl_cerr << "Leaks Created by create_scene() : " << boct_tree_cell<short,float>::nleaks() << '\n';
 #endif
 
   return scene;

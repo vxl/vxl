@@ -5,7 +5,6 @@
 // \date 17-Nov-2010
 
 #include <testlib/testlib_test.h>
-#include <vpl/vpl.h>
 
 #include <bvpl/bvpl_octree/bvpl_discover_pca_kernels.h>
 #include <bvpl/bvpl_octree/bvpl_global_pca.h>
@@ -15,6 +14,9 @@
 #include <vnl/vnl_vector_fixed.h>
 #include <vnl/vnl_matrix.h>
 #include <vnl/vnl_matrix_fixed.h>
+
+#include <vul/vul_file.h>
+#include <vpl/vpl.h>
 
 void test_kernel_set_up()
 {

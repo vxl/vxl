@@ -1,6 +1,7 @@
 #include "boxm_ocl_render_expected.h"
 //
 #include <vil/vil_load.h>
+#include <vil/vil_save.h>
 #include <vul/vul_file.h>
 #include <vil/vil_convert.h>
 
@@ -159,7 +160,7 @@ void boxm_opencl_bit_scene_expected(boxm_ocl_bit_scene &scene,
     }
   }
 
-#if 1 //images for debuggin
+#if 1 // images for debugging
   vil_save(img0,"/media/VXL/img0.tiff");
   vil_save(img1,"/media/VXL/img1.tiff");
   vil_save(expected,"/media/VXL/expected.tiff");

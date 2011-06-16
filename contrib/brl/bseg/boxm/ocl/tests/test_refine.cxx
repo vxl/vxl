@@ -14,7 +14,7 @@
 #include <vcl_cstring.h> //(memcpy)
 #include <boxm/ocl/boxm_ocl_utils.h>
 #include <boxm/algo/boxm_refine.h>
-
+#include <vul/vul_file.h>
 
 bool test_refine_apl()
 {

@@ -4,6 +4,9 @@
 // \author Isabel Restrepo
 // \date 15-Aug-2010
 
+#include <vul/vul_file.h>
+#include <vul/vul_file_iterator.h>
+#include <vpl/vpl.h>
 
 void init_tree(boct_tree<short,float> *tree, unsigned i)
 {
@@ -35,10 +38,10 @@ boxm_scene<boct_tree<short, float> >* create_scene(unsigned world_dimx,unsigned 
     scene->load_block(iter.index());
     boxm_block<boct_tree<short, float> > *block = scene->get_active_block();
     // Construct an empty tree with 3 maximum levels 1 levele initialized to 0.0
-    
-    float init_val = 0.5;
-    if(uniform)
-      init_val = 0.8;
+
+    float init_val = 0.5f;
+    if (uniform)
+      init_val = 0.8f;
 
     boct_tree<short,float> *tree = new boct_tree<short,float>(init_val, 3, 1);
     //tree->print();

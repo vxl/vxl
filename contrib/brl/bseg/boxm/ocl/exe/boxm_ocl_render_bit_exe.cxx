@@ -5,6 +5,7 @@
 
 #include <vpgl/vpgl_perspective_camera.h>
 #include <vil/vil_image_view.h>
+#include <vil/vil_save.h>
 
 #include <vul/vul_arg.h>
 

@@ -19,6 +19,7 @@
 #include <vsl/vsl_set_io.h>
 #include <vcl_vector.h>
 #include <vcl_set.h>
+#include <vcl_iosfwd.h> // for std::ostream
 
 //================================================================
 //=======================  mask feature ===========================

@@ -13,12 +13,11 @@
 //   <none yet>
 // \endverbatim
 
-#include <vnl/vnl_vector_fixed.h>
 #include <vgl/vgl_point_3d.h>
-#include <vgl/vgl_box_3d.h>
 #include <vcl_bitset.h>
 #include <vcl_iosfwd.h>
 #include <vcl_vector.h>
+#include <vcl_cmath.h> // for std::pow()
 
 class boct_bit_tree2
 {
@@ -54,14 +53,14 @@ class boct_bit_tree2
   bool is_leaf(int bit_index);
 
   //: Return the maximum number of levels, which is root_level+1
-  short number_levels() const { return num_levels_; }
+  unsigned short number_levels() const { return num_levels_; }
 
   //: Return number of cells in this tree
   int num_cells() const;
 
   //: return maximum number of cells in this tree
-  int max_num_cells() { return (int) ((vcl_pow(8.0, num_levels_+1) - 1.0) / 7.0); }
-  int max_num_inner_cells() { return (int) ((vcl_pow(8.0, num_levels_) - 1.0) / 7.0); }
+  int max_num_cells();
+  int max_num_inner_cells();
 
   //: returns depth (0,1,2,3) at given index
   //  Note that cumulative nodes = (1/7) * (8^(n+1) -1)
@@ -74,7 +73,7 @@ class boct_bit_tree2
   void set_bit_at(int index, bool val);
 
   //get bits and data
-  unsigned char* get_bits() {return bits_; }
+  unsigned char* get_bits() { return bits_; }
 
   //: gets pointers stored in bits 10, 11, 12, 13
   int get_data_ptr(bool is_random=false);
@@ -99,7 +98,7 @@ class boct_bit_tree2
   //: Tree structure stored as "bits" = really a char array
   unsigned char* bits_;
   //: Maximum number of levels in the octree
-  short num_levels_;
+  unsigned short num_levels_;
 };
 
 vcl_ostream& operator <<(vcl_ostream &s, boct_bit_tree2 &t);

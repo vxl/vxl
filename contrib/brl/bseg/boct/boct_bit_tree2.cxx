@@ -5,6 +5,7 @@
 #include <vcl_iostream.h>
 #include <vcl_list.h>
 #include <vcl_algorithm.h>
+#include <vcl_cstring.h> // for std::memcpy()
 
 //: default constructor
 boct_bit_tree2::boct_bit_tree2()
@@ -19,10 +20,10 @@ boct_bit_tree2::boct_bit_tree2(unsigned char* bits, int num_levels)
 
     //initialize num levels, bits
     num_levels_ = vcl_min(4,num_levels);
-    
+
     //copy 16 bytes
-    vcl_memcpy(bits_, bits, 16); 
-    
+    vcl_memcpy(bits_, bits, 16);
+
     ////zero out bits to start
     //for (int i=0;i<16; i++)
         //bits_[i] = bits[i];
@@ -32,7 +33,7 @@ int boct_bit_tree2::traverse(const vgl_point_3d<double> p, int deepest)
 {
   //deepest level to traverse is either
   deepest = vcl_max(deepest-1, num_levels_-1);
-  
+
   //force 1 register: curr = (bit, child_offset, depth, c_offset)
   int curr_bit = (int)(bits_[0]);
   int child_offset = 0;
@@ -70,10 +71,10 @@ int boct_bit_tree2::traverse(const vgl_point_3d<double> p, int deepest)
 vgl_point_3d<double> boct_bit_tree2::cell_center(int bit_index)
 {
   //Indexes into precomputed cell_center matrix
-  return vgl_point_3d<double>(centerX[bit_index], 
-                              centerY[bit_index], 
-                              centerZ[bit_index]); 
-} 
+  return vgl_point_3d<double>(centerX[bit_index],
+                              centerY[bit_index],
+                              centerZ[bit_index]);
+}
 
 bool boct_bit_tree2::valid_cell(int bit_index)
 {
@@ -82,31 +83,30 @@ bool boct_bit_tree2::valid_cell(int bit_index)
 
 bool boct_bit_tree2::is_leaf(int bit_index)
 {
-  
-  return this->valid_cell(bit_index) && (this->bit_at(bit_index)==0 ); 
+  return this->valid_cell(bit_index) && (this->bit_at(bit_index)==0 );
 }
 
 //returns bit indices of leaf nodes under rootBit
 vcl_vector<int> boct_bit_tree2::get_leaf_bits(int rootBit)
 {
   //use num cells to accelerate (cut off for loop)
-  vcl_vector<int> leafBits; 
+  vcl_vector<int> leafBits;
 
   //special root case
-  if( bits_[0] == 0 && rootBit == 0 ) {
-    leafBits.push_back(0); 
-    return leafBits; 
+  if ( bits_[0] == 0 && rootBit == 0 ) {
+    leafBits.push_back(0);
+    return leafBits;
   }
-    
+
   //otherwise calc list of bit indices in the subtree of rootBIT, and then verify leaves
-  vcl_vector<int> subTree; 
+  vcl_vector<int> subTree;
   vcl_list<unsigned> toVisit;
-  toVisit.push_back(rootBit); 
-  while(!toVisit.empty()) {
+  toVisit.push_back(rootBit);
+  while (!toVisit.empty()) {
     int currBitIndex = toVisit.front();
-    toVisit.pop_front(); 
+    toVisit.pop_front();
     if ( this->is_leaf(currBitIndex) ) {
-      subTree.push_back(currBitIndex); 
+      subTree.push_back(currBitIndex);
     }
     else { //add children to the visit list
       unsigned firstChild = 8 * currBitIndex + 1;
@@ -114,7 +114,7 @@ vcl_vector<int> boct_bit_tree2::get_leaf_bits(int rootBit)
         toVisit.push_back( firstChild + ci );
     }
   }
-  return subTree; 
+  return subTree;
 }
 
 //: Return cell with a particular locational code
@@ -123,21 +123,21 @@ int boct_bit_tree2::get_data_index(int bit_index, bool is_random) const
   ////Unpack data offset (offset to root data)
   //tree[10] and [11] should form the short that refers to data offset
   //root and first gen are special case, return just the root offset + bit_index
-  
-  int count_offset; 
-  if(is_random) 
+
+  int count_offset;
+  if (is_random)
     count_offset = (int)bits_[10]*256+(int)bits_[11];
-  else 
-    count_offset = (int) (bits_[13]<<24) | (bits_[12]<<16) | (bits_[11]<<8) | (bits_[10]); 
-  
-  return count_offset + this->get_relative_index(bit_index); 
+  else
+    count_offset = (int) (bits_[13]<<24) | (bits_[12]<<16) | (bits_[11]<<8) | (bits_[10]);
+
+  return count_offset + this->get_relative_index(bit_index);
 }
 
 //: returns bit index assuming root data is located at 0
 int  boct_bit_tree2::get_relative_index(int bit_index) const
 {
   if (bit_index < 9)
-    return (bit_index);
+    return bit_index;
 
   //otherwise get parent index, parent byte index and relative bit index
   unsigned char oneuplevel = (bit_index-1)>>3;          //bit index of parent
@@ -148,15 +148,15 @@ int  boct_bit_tree2::get_relative_index(int bit_index) const
   for (int i=0; i<byte_index; ++i)
     count += bit_lookup[bits_[i]];
 
-  //dont forget parent bits occuring the parent BYTE
+  //dont forget parent bits occurring the parent BYTE
   unsigned char sub_bit_index = 8-((oneuplevel-1)&(8-1));
   unsigned char temp = bits_[byte_index]<<sub_bit_index;
-  
+
   count = count + bit_lookup[temp];
   unsigned char finestleveloffset=(bit_index-1)&(8-1);
   count = 8*count+1 +finestleveloffset;
 
-  return (count);
+  return count;
 }
 
 //: return number of cells in this tree (size of data chunk)
@@ -240,56 +240,67 @@ inline static int int_pow(int a, unsigned int b)
 }
 
 
+int boct_bit_tree2::max_num_cells()
+{
+  return int((int_pow(8.0, num_levels_+1) - 1.0) / 7.0);
+}
+
+int boct_bit_tree2::max_num_inner_cells()
+{
+  return int((int_pow(8.0, num_levels_) - 1.0) / 7.0);
+}
 
 int boct_bit_tree2::depth_at(int index) const
 {
   return int_log8(7*index+1);
 }
 
+#if 0
+//: gets and sets buffer pointers (located at bytes 12 and 13
+int boct_bit_tree2::get_buffer_ptr()
+{
+  unsigned char hi = this->bits_[12];
+  unsigned char lo = this->bits_[13];
+  unsigned short value = (unsigned short) ((hi << 8) | lo);
+  return int(value);
+}
 
-////: gets and sets buffer pointers (located at bytes 12 and 13
-//int boct_bit_tree2::get_buffer_ptr() 
-//{
-  //unsigned char hi = this->bits_[12]; 
-  //unsigned char lo = this->bits_[13]; 
-  //unsigned short value = (unsigned short) ((hi << 8) | lo);
-  //return (int) value; 
-//}
-//int boct_bit_tree2::set_buffer_ptr(int ptr)
-//{
-  //unsigned char hi = (unsigned char)(ptr >> 8);
-  //unsigned char lo = (unsigned char)(ptr & 255);
-  //this->bits_[12] = hi; 
-  //this->bits_[13] = lo; 
-  //return  0;
-//}
+int boct_bit_tree2::set_buffer_ptr(int ptr)
+{
+  unsigned char hi = (unsigned char)(ptr >> 8);
+  unsigned char lo = (unsigned char)(ptr & 255);
+  this->bits_[12] = hi;
+  this->bits_[13] = lo;
+  return  0;
+}
+#endif // 0
 
 int boct_bit_tree2::get_data_ptr(bool is_random)
 {
-  if(is_random)
+  if (is_random)
   {
-    unsigned char hi = this->bits_[10]; 
-    unsigned char lo = this->bits_[11]; 
+    unsigned char hi = this->bits_[10];
+    unsigned char lo = this->bits_[11];
     unsigned short value = (unsigned short) ((hi << 8) | lo);
-    return (int) value;
-  } 
+    return int(value);
+  }
   else
   {
-    return (int) (bits_[13]<<24) | (bits_[12]<<16) | (bits_[11]<<8) | (bits_[10]); 
+    return int((bits_[13]<<24) | (bits_[12]<<16) | (bits_[11]<<8) | (bits_[10]));
   }
 }
 
 int boct_bit_tree2::set_data_ptr(int ptr, bool is_random)
 {
-  if(is_random)
+  if (is_random)
   {
     unsigned char hi = (unsigned char)(ptr >> 8);
     unsigned char lo = (unsigned char)(ptr & 255);
-    this->bits_[10] = hi; 
-    this->bits_[11] = lo; 
+    this->bits_[10] = hi;
+    this->bits_[11] = lo;
   }
   else
-  {     
+  {
     this->bits_[10] = (ptr) & 0xff;
     this->bits_[11] = (ptr>>8)  & 0xff;
     this->bits_[12] = (ptr>>16) & 0xff;
@@ -318,7 +329,7 @@ unsigned char boct_bit_tree2::bit_lookup[] =
   4,   5,   5,   6,   5,   6,   6,   7,   5,   6,   6,   7,   6,   7,   7,   8
 };
 
-float boct_bit_tree2::centerX[] = 
+float boct_bit_tree2::centerX[] =
 { 0.5,
   0.25,0.75,0.25,0.75,0.25,0.75,0.25,0.75,0.125,0.375,
   0.125,0.375,0.125,0.375,0.125,0.375,0.625,0.875,0.625,0.875,
