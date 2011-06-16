@@ -125,7 +125,34 @@ SOURCE=.\Templates/brdb_value_t+boxm2_cache_sptr-.cxx
 SOURCE=.\Templates/vbl_smart_ptr+boxm2_cache-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/boxm2_stream_cache+etc-.cxx
+SOURCE=.\Templates/boxm2_stream_cache+BOXM2_AUX1-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/boxm2_stream_cache+BOXM2_MOG3_GREY-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/boxm2_stream_cache+BOXM2_ALPHA-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/boxm2_stream_cache+BOXM2_AUX2-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/boxm2_stream_cache+BOXM2_MOG2_RGB-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/boxm2_stream_cache+BOXM2_AUX-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/boxm2_stream_cache+BOXM2_MOG3_GREY_16-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/boxm2_stream_cache+BOXM2_AUX0-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/boxm2_stream_cache+BOXM2_AUX3-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/boxm2_stream_cache+BOXM2_NUM_OBS_SINGLE-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/vbl_smart_ptr+boxm2_stream_cache_datatype_helper-.cxx
