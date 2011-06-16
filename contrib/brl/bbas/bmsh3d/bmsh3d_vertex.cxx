@@ -191,12 +191,12 @@ void bmsh3d_vertex::getInfo(vcl_ostringstream& ostrm)
   }
 
   //: the incident edges
-  vcl_set<void*> incident_Es;
+  vcl_set<void const*> incident_Es;
   get_incident_Es(incident_Es);
   ostrm << "\n " << incident_Es.size() << " incident edges (unordered): ";
-  vcl_set<void*>::iterator it = incident_Es.begin();
+  vcl_set<void const*>::iterator it = incident_Es.begin();
   for (; it != incident_Es.end(); it++) {
-    bmsh3d_edge* E = (bmsh3d_edge*)(*it);
+    bmsh3d_edge const* E = (bmsh3d_edge const*)(*it);
     ostrm << E->id() << ' ';
   }
 
