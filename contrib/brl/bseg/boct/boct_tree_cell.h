@@ -12,11 +12,12 @@
 //   <none yet>
 // \endverbatim
 
-#include <vsl/vsl_binary_io.h>
 #include "boct_loc_code.h"
 #include <vgl/vgl_box_3d.h>
+#include <vsl/vsl_binary_io.h>
+#include <vcl_iostream.h>
 
-//#define DEBUG_LEAKS
+#undef DEBUG_LEAKS
 
 enum boct_cell_face {NONE = 0x00,
                      Z_LOW = 0x01,
@@ -111,8 +112,8 @@ class boct_tree_cell
   }
 
 
-  void set_parent(boct_tree_cell<T_loc,T_data>* p) {parent_ = p; }
-  void set_children(unsigned i, boct_tree_cell<T_loc,T_data>* p) {if (children_) children_[i] = *p; else vcl_cout << "Children should be allocated first" << vcl_endl;}
+  void set_parent(boct_tree_cell<T_loc,T_data>* p) { parent_ = p; }
+  void set_children(unsigned i, boct_tree_cell<T_loc,T_data>* p) { if (children_) children_[i] = *p; else vcl_cout << "Children should be allocated first" << vcl_endl; }
   void set_children_null() { children_=0; }
   bool is_leaf();
 
@@ -157,16 +158,16 @@ class boct_tree_cell
 
   boct_tree_cell<T_loc,T_data>* get_common_ancestor(short binarydiff);
 
-  void set_data(T_data const& data) {data_=data; }
-  T_data data() {return data_; }
+  void set_data(T_data const& data) { data_=data; }
+  T_data data() { return data_; }
 
   //: given the parent node's location code, updates the location code of a child
   // This is used for nodes inserted (insert_subtree) later, after the main tree is
   // already constructed
   void update_code(unsigned i, boct_tree_cell<T_loc,T_data>& parent);
 
-  void set_vis_node(boct_cell_vis_graph_node<T_loc,T_data> * node) {vis_node_=node; }
-  boct_cell_vis_graph_node<T_loc,T_data> * vis_node() {return vis_node_; }
+  void set_vis_node(boct_cell_vis_graph_node<T_loc,T_data> * node) { vis_node_=node; }
+  boct_cell_vis_graph_node<T_loc,T_data> * vis_node() { return vis_node_; }
 
   //: splits the cell and puts the parent's data into the newly created cells
   bool split();

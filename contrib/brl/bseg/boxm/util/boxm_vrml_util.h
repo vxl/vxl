@@ -14,14 +14,15 @@
 
 #include <boxm/boxm_scene.h>
 #include "boxm_cell_data_traits.h"
-#include <vcl_fstream.h>
 #include <bvrml/bvrml_write.h>
+#include <vcl_fstream.h>
+#include <vcl_iostream.h>
 
 class boxm_vrml_util
 {
  public:
 
-  //Writes the values in the scene above the threshold as vrml dots
+  // Writes the values in the scene above the threshold as vrml dots
   template <class T_data>
   static void write_vrml_scene(vcl_ofstream& str, boxm_scene<boct_tree<short,T_data> > *scene,
                                const float threshold= 0.0f);
@@ -49,8 +50,8 @@ void boxm_vrml_util::write_vrml_scene(vcl_ofstream& str, boxm_scene<boct_tree<sh
       << "    geometry PointSet {\n"
       << "      color Color{\n"
       << "        color[\n";
-  //write the colors
-  //iterate through the scene
+  // write the colors
+  // iterate through the scene
   boxm_block_iterator<tree_type > iter= scene->iterator();
   iter.begin();
 
@@ -106,9 +107,9 @@ void bvxm_vrml_voxel_grid::write_vrml_grid(vcl_ofstream& str, bvxm_voxel_grid<bs
       << "    geometry PointSet {\n"
       << "      color Color{\n"
       << "        color[\n";
-  //write the colors
+  // write the colors
   for (unsigned k=0; grid_it != grid->end(); ++grid_it, ++k) {
-    for (unsigned i=0; i<(*grid_it).nx(); ++i){
+    for (unsigned i=0; i<(*grid_it).nx(); ++i) {
       for (unsigned j=0; j < (*grid_it).ny(); ++j) {
         if ((((*grid_it)(i,j)).mean() > threshold))
           str <<"        " << ((*grid_it)(i,j)).mean() << ' '<< ((*grid_it)(i,j)).mean() << ' '<< ((*grid_it)(i,j)).mean() << '\n';
@@ -119,7 +120,7 @@ void bvxm_vrml_voxel_grid::write_vrml_grid(vcl_ofstream& str, bvxm_voxel_grid<bs
       << "      coord Coordinate{\n"
       << "        point[\n";
 
-  //write the coordinates
+  // write the coordinates
   grid_it = grid->begin();
   for (unsigned k=0; grid_it != grid->end(); ++grid_it, ++k) {
     vcl_cout << '.';
@@ -139,11 +140,11 @@ void bvxm_vrml_voxel_grid::write_vrml_grid_as_spheres(vcl_ofstream& str, bvxm_vo
   bvxm_voxel_grid<float>::iterator grid_it = grid->begin();
   vgl_vector_3d<unsigned> dim=grid->grid_size();
   unsigned s=3;
-  //write the colors
+  // write the colors
   for (unsigned k=dim.z()-1; grid_it != grid->end(); ++grid_it, --k) {
     if (k%1==0)
     {
-      for (unsigned i=0; i<(*grid_it).nx(); i+=s){
+      for (unsigned i=0; i<(*grid_it).nx(); i+=s) {
         for (unsigned j=0; j < (*grid_it).ny(); j+=s) {
           if (((*grid_it)(i,j) > threshold)) {
 #ifdef DEBUG
@@ -162,9 +163,9 @@ void bvxm_vrml_voxel_grid::write_vrml_grid_as_spheres(vcl_ofstream& str, bvxm_vo
 void bvxm_vrml_voxel_grid::write_vrml_grid_as_spheres(vcl_ofstream& str, bvxm_voxel_grid<vnl_float_4> *grid, float threshold, int s)
 {
   bvxm_voxel_grid<vnl_float_4>::iterator grid_it = grid->begin();
-  //write the colors
+  // write the colors
   for (unsigned k=0; grid_it != grid->end(); ++grid_it, ++k) {
-    for (unsigned i=0; i<(*grid_it).nx(); ){
+    for (unsigned i=0; i<(*grid_it).nx(); ) {
       for (unsigned j=0; j < (*grid_it).ny(); ) {
         if ((*grid_it)(i,j)[3]/255.0f > threshold) {
           vgl_sphere_3d<float> sphere((float)i/s,(float)j/s,(float)k/s,0.5f);
@@ -188,13 +189,13 @@ void bvxm_vrml_voxel_grid::write_vrml_grid_as_pointers(vcl_ofstream& str, bvxm_v
   bvrml_write::write_vrml_line(str,origin,dirz,1,0,0,1);
 
   vgl_vector_3d<unsigned> dim=grid->grid_size();
-  //write the colors
+  // write the colors
   for (unsigned k=dim.z()-1; grid_it != grid->end(); ++grid_it, --k) {
     if (k%s==0)
     {
       for (unsigned i=0; i<(*grid_it).nx(); i=i+s) {
         for (unsigned j=0; j < (*grid_it).ny(); j=j+s) {
-          if (((*grid_it)(i,j)[3] > threshold)){
+          if (((*grid_it)(i,j)[3] > threshold)) {
             vgl_vector_3d<double> dir((*grid_it)(i,j)[0],(*grid_it)(i,j)[1],(*grid_it)(i,j)[2]);
             vgl_point_3d<double> pt((double)i/s,(double)j/s,(double)k/s);
             bvrml_write::write_vrml_line(str, pt,dir,4*((*grid_it)(i,j)[3]-0.5f),1,0,0);

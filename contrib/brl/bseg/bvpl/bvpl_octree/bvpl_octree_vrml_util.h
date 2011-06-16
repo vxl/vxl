@@ -17,8 +17,8 @@
 #include <bvpl/bvpl_octree/bvpl_cell_data_traits.h>
 
 #include <boxm/boxm_scene.h>
-#include <vcl_fstream.h>
 #include <bvrml/bvrml_write.h>
+#include <vcl_iostream.h>
 
 class bvpl_octree_vrml_util
 {
@@ -66,7 +66,7 @@ void bvpl_octree_vrml_util::write_scene_as_disks(vcl_ofstream &vrml_os,
       vcl_cout << "response " << response << vcl_endl;
       vgl_vector_3d<double> dir((kernel->axis())[0],(kernel->axis())[1],(kernel->axis())[2]);
       vgl_point_3d<double> coord = tree->global_origin(cells[i]);
-      if (response > 3.5f){
+      if (response > 3.5f) {
         bvrml_write::write_vrml_line(vrml_os, coord, dir, .1f*response, 1, 0, 0);
         lines++;
       }
