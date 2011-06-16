@@ -149,7 +149,43 @@ vcl_vector<boxm2_block_id> boxm2_scene::get_vis_blocks(vpgl_perspective_camera<d
   //so instead get the ray origin farthest from the scene origin.
   vgl_point_3d<double> cam_center = cam->camera_center();
   //Map of distance, id
-  vcl_vector<boxm2_dist_id_pair> distances;
+  return get_vis_order_from_pt(cam_center);
+  //vcl_vector<boxm2_dist_id_pair> distances;
+
+  ////iterate through each block
+  //vcl_map<boxm2_block_id, boxm2_block_metadata>::iterator iter;
+  //for (iter = blocks_.begin(); iter != blocks_.end(); ++iter) {
+  //  vgl_point_3d<double>    blk_o   = (iter->second).local_origin_;
+  //  vgl_vector_3d<double>   blk_dim = (iter->second).sub_block_dim_;
+  //  vgl_vector_3d<unsigned> blk_num = (iter->second).sub_block_num_;
+  //  vgl_vector_3d<double>   length(blk_dim.x()*blk_num.x(),
+  //                                 blk_dim.y()*blk_num.y(),
+  //                                 blk_dim.z()*blk_num.z());
+  //  vgl_point_3d<double> blk_center = blk_o + length/2.0;
+  //  double dist = vgl_distance( blk_center, cam_center);
+
+  //  distances.push_back( boxm2_dist_id_pair(dist, iter->first) );
+  //}
+
+  ////sort distances
+  //vcl_sort(distances.begin(), distances.end());
+
+  ////put blocks in "vis_order"
+  ////vcl_cout<<"CAM ORDER----------------------------------------"<<vcl_endl;
+  //vcl_vector<boxm2_dist_id_pair>::iterator di;
+  //for (di = distances.begin(); di != distances.end(); ++di) {
+  //  vis_order.push_back(di->id_);
+  //  //vcl_cout<<di->id_<<'('<<di->dist_<<")    ";
+  //}
+  ////vcl_cout<<"\n-----------------------------------------------"<<vcl_endl;
+  //return vis_order;
+}
+vcl_vector<boxm2_block_id> boxm2_scene::get_vis_order_from_pt(vgl_point_3d<double> & pt)
+{
+    //Map of distance, id
+    vcl_vector<boxm2_block_id> vis_order;
+
+    vcl_vector<boxm2_dist_id_pair> distances;
 
   //iterate through each block
   vcl_map<boxm2_block_id, boxm2_block_metadata>::iterator iter;
@@ -161,7 +197,7 @@ vcl_vector<boxm2_block_id> boxm2_scene::get_vis_blocks(vpgl_perspective_camera<d
                                    blk_dim.y()*blk_num.y(),
                                    blk_dim.z()*blk_num.z());
     vgl_point_3d<double> blk_center = blk_o + length/2.0;
-    double dist = vgl_distance( blk_center, cam_center);
+    double dist = vgl_distance( blk_center, pt);
 
     distances.push_back( boxm2_dist_id_pair(dist, iter->first) );
   }
@@ -174,12 +210,9 @@ vcl_vector<boxm2_block_id> boxm2_scene::get_vis_blocks(vpgl_perspective_camera<d
   vcl_vector<boxm2_dist_id_pair>::iterator di;
   for (di = distances.begin(); di != distances.end(); ++di) {
     vis_order.push_back(di->id_);
-    //vcl_cout<<di->id_<<'('<<di->dist_<<")    ";
   }
-  //vcl_cout<<"\n-----------------------------------------------"<<vcl_endl;
   return vis_order;
 }
-
 //: find the block containing the specified point, else return false
 //  local coordinates are also returned
 bool boxm2_scene::contains(vgl_point_3d<double> const& p, boxm2_block_id& bid,

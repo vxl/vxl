@@ -71,6 +71,7 @@ class boxm2_scene : public vbl_ref_count
     //: return a vector of block ids in visibility order
     vcl_vector<boxm2_block_id> get_vis_blocks(vpgl_generic_camera<double>* cam);
     vcl_vector<boxm2_block_id> get_vis_blocks(vpgl_perspective_camera<double>* cam);
+    vcl_vector<boxm2_block_id> get_vis_order_from_pt(vgl_point_3d<double> & pt);
     vcl_vector<boxm2_block_id> get_vis_blocks(vpgl_camera_double_sptr & cam) {
       if( cam->type_name() == "vpgl_generic_camera" ) 
         return this->get_vis_blocks( (vpgl_generic_camera<double>*) cam.ptr() ); 
