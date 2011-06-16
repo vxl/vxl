@@ -99,6 +99,8 @@ class bwm_observer_img : public bgui_vsol2D_tableau
 
   void recover_lines();
 
+  bool crop_image(vil_image_resource_sptr& chip);
+
   //:moves to a specified position
   void move_to_point(float x, float y);
 

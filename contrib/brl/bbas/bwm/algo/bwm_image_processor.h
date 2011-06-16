@@ -41,6 +41,11 @@ class bwm_image_processor
 
   static void scan_regions(bgui_image_tableau_sptr const& img,
                            vcl_vector<vgl_polygon<double> > const& regions);
+
+  static bool crop_to_box(bgui_image_tableau_sptr const& img,
+                          vsol_box_2d_sptr const& roi,
+                          vil_image_resource_sptr& chip);
+
 };
 
 #endif

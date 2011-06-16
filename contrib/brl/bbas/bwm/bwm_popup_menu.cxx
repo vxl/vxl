@@ -110,6 +110,8 @@ void bwm_popup_menu::get_menu(vgui_menu &menu)
   image_submenu.add( "Clear Segmentation Display",
                      new vgui_command_simple<bwm_tableau_img>(img_tab,&bwm_tableau_img::clear_box));
 
+  image_submenu.add( "Crop Image",
+                     new vgui_command_simple<bwm_tableau_img>(img_tab,&bwm_tableau_img::crop_image));
 
   if (bwm_tableau_mgr::is_registered("bwm_tableau_video"))
   {

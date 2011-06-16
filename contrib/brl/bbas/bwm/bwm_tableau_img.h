@@ -73,7 +73,7 @@ class bwm_tableau_img : public bwm_tableau, public bgui_picker_tableau
   void lines_vd();
   void recover_edges();
   void recover_lines();
-
+  void crop_image();
   //: mask operations
   void init_mask();
   void set_change_type() { my_observer_->set_change_type(); }

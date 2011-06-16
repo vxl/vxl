@@ -335,3 +335,22 @@ scan_regions(  bgui_image_tableau_sptr const& img,
   }
   delete ip_dialog;
 }
+bool bwm_image_processor::crop_to_box(bgui_image_tableau_sptr const& img,
+                                      vsol_box_2d_sptr const& roi,
+                                      vil_image_resource_sptr& chip)
+{
+  vil_image_resource_sptr image = img->get_image_resource();
+  if (!image||!image->ni()||!image->nj())
+  {
+    vcl_cerr << "In bwm_observer_img::step_edges_vd() - no image\n";
+    return false;
+  }
+  brip_roi_sptr roi_ptr = new brip_roi(image->ni(), image->nj());
+  roi_ptr->add_region(roi);
+  if(!brip_vil_float_ops::chip(image, roi_ptr, chip))
+    {
+      vcl_cout << "Crop operation failed\n";
+      return false;
+    }
+  return true;
+}

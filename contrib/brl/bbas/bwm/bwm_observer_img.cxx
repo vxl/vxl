@@ -695,6 +695,20 @@ void bwm_observer_img::lines_vd()
   this->post_redraw();
 }
 
+bool bwm_observer_img::crop_image(vil_image_resource_sptr& chip)
+{
+  bgui_vsol_soview2D_polygon* p = 0;
+  if (!this->get_selected_box(p))
+  {
+    vcl_cerr << "In bwm_observer_img::crop_image() - no box selected\n";
+    return false;
+  }
+  vsol_polygon_2d_sptr poly = p->sptr();
+  vsol_box_2d_sptr box = poly->get_bounding_box();
+  if (!bwm_image_processor::crop_to_box(img_tab_, box, chip))
+    return false;
+}
+
 //: (x, y) is the target point to be positioned at the center of the grid cell containing this observer
 //
 void bwm_observer_img::move_to_point(float x, float y)
