@@ -48,10 +48,6 @@ class boxm2_data_print_functor
   {
     int byte_ind = index*(int)data_size_;
     char * arr = buf_->cell_buffer(byte_ind, data_size_);
-    if (index%1000000 == 0) {
-      boxm2_data_info::print_data(prefix_, arr);
-      vcl_cout << '\n';
-    }
     return true;
   }
 

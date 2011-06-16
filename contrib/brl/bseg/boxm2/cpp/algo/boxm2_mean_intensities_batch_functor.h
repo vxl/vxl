@@ -29,7 +29,7 @@ class boxm2_mean_intensities_batch_functor
   inline bool process_cell(int index)
   {
     datatype & alpha=alpha_data_->data()[index];
-    vcl_vector<datatype> out = str_cache_->get_next<BOXM2_AUX0,datatype>(id_, index);
+    vcl_vector<datatype> out = str_cache_->get_next<BOXM2_AUX0>(id_, index);
 
     alpha = datatype(0.0);
     for (unsigned j = 0; j < out.size(); j++) {
@@ -65,7 +65,7 @@ class boxm2_mean_intensities_print_functor
   inline bool process_cell(int index)
   {
     datatype & alpha=alpha_data_->data()[index];
-    vcl_vector<datatype> out = str_cache_->get_next<BOXM2_AUX0,datatype>(id_, index);
+    vcl_vector<datatype> out = str_cache_->get_next<BOXM2_AUX0>(id_, index);
 
     if (index%1000000 == 0) {
       vcl_cout << alpha;

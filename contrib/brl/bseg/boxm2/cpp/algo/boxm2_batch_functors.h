@@ -215,10 +215,10 @@ class boxm2_batch_update_functor
     boxm2_data<BOXM2_ALPHA>::datatype & alpha=alpha_data_->data()[index];
     boxm2_data<BOXM2_MOG3_GREY>::datatype & mog3=mog3_data_->data()[index];
 
-    vcl_vector<aux0_datatype> out0 = str_cache_->get_next<BOXM2_AUX0,aux0_datatype>(id_, index);
-    vcl_vector<aux1_datatype> out1 = str_cache_->get_next<BOXM2_AUX1,aux1_datatype>(id_, index);
-    vcl_vector<aux_datatype> out = str_cache_->get_next<BOXM2_AUX,aux_datatype>(id_, index);
-    vcl_vector<nrays_datatype> nrays = str_cache_->get_next<BOXM2_NUM_OBS_SINGLE, nrays_datatype>(id_, index);
+    vcl_vector<aux0_datatype>  out0   = str_cache_->get_next<BOXM2_AUX0>(id_, index);
+    vcl_vector<aux1_datatype>  out1   = str_cache_->get_next<BOXM2_AUX1>(id_, index);
+    vcl_vector<aux_datatype>   out    = str_cache_->get_next<BOXM2_AUX>(id_, index);
+    vcl_vector<nrays_datatype> nrays  = str_cache_->get_next<BOXM2_NUM_OBS_SINGLE>(id_, index);
 
     vcl_vector<aux0_datatype> obs;
     vcl_vector<float> vis;

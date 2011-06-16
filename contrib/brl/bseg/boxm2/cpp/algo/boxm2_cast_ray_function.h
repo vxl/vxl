@@ -73,7 +73,6 @@ void boxm2_cast_ray_function(vgl_ray_3d<double> & ray_ij,
   if (tfar <= tblock || tfar < 0) {
     return;
   }
-        vcl_cout<<tfar<<","<<tblock<<" ";
   //make sure tnear is at least 0...
   tblock = (tblock > 0.0f) ? tblock : 0.0f;
   //make sure tfar is within the last block so texit surpasses it (and breaks from the outer loop)
