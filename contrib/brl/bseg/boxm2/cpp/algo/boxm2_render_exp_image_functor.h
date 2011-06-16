@@ -7,7 +7,31 @@
 #include <boxm2/cpp/algo/boxm2_cast_ray_function.h>
 #include <boxm2/cpp/algo/boxm2_mog3_grey_processor.h>
 #include <vil/vil_image_view.h>
+class boxm2_render_vis_image_functor
+{
+ public:
+  //: "default" constructor
+  boxm2_render_vis_image_functor() {}
 
+  bool init_data(vcl_vector<boxm2_data_base*> & datas,  vil_image_view<float>* vis_img)
+  {
+    alpha_data_=new boxm2_data<BOXM2_ALPHA>(datas[0]->data_buffer(),datas[0]->buffer_length(),datas[0]->block_id());
+    vis_img_     =vis_img;
+    return true;
+  }
+
+  inline bool step_cell(float seg_len,int index,unsigned i, unsigned j)
+  {
+    boxm2_data<BOXM2_ALPHA>::datatype alpha=alpha_data_->data()[index];
+    float vis=(*vis_img_)(i,j);
+    vis*=vcl_exp(-alpha*seg_len);
+    (*vis_img_)(i,j)=vis;
+    return true;
+  }
+ private:
+  boxm2_data<BOXM2_ALPHA> * alpha_data_;
+  vil_image_view<float> *vis_img_;
+};
 class boxm2_render_exp_image_functor
 {
  public:

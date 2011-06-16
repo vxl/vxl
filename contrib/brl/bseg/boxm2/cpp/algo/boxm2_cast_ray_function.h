@@ -25,21 +25,39 @@
 
 
 template<class F>
-void boxm2_cast_ray_function(vgl_ray_3d<float> & ray,
+void boxm2_cast_ray_function(vgl_ray_3d<double> & ray_ij,
                              boxm2_scene_info * linfo,
                              boxm2_block * blk_sptr,
                              unsigned i, unsigned j,
                              F functor)
 {
-  typedef vnl_vector_fixed<unsigned char, 16> uchar16;    //defines a bit tree
+    vgl_point_3d<float> block_origin(float(ray_ij.origin().x()-linfo->scene_origin[0])/linfo->block_len,
+                                            float(ray_ij.origin().y()-linfo->scene_origin[1])/linfo->block_len,
+                                            float(ray_ij.origin().z()-linfo->scene_origin[2])/linfo->block_len);
 
-  float ray_dx=ray.direction().x();
-  float ray_dy=ray.direction().y();
-  float ray_dz=ray.direction().z();
+    float dray_ij_x=float(ray_ij.direction().x()),
+        dray_ij_y=float(ray_ij.direction().y()),
+        dray_ij_z=float(ray_ij.direction().z());
 
-  float ray_ox=ray.origin().x();
-  float ray_oy=ray.origin().y();
-  float ray_oz=ray.origin().z();
+    //thresh ray direction components - too small a treshhold causes axis aligned
+    //viewpoints to hang in infinite loop (block loop)
+    float thresh = vcl_exp(-12.0f);
+    if (vcl_fabs(dray_ij_x) < thresh) dray_ij_x = (dray_ij_x>0)?thresh:-thresh;
+    if (vcl_fabs(dray_ij_y) < thresh) dray_ij_y = (dray_ij_y>0)?thresh:-thresh;
+    if (vcl_fabs(dray_ij_z) < thresh) dray_ij_z = (dray_ij_z>0)?thresh:-thresh;
+
+    vgl_vector_3d<float> direction(dray_ij_x,dray_ij_y,dray_ij_z);
+    vgl_ray_3d<float> ray(block_origin,direction);
+
+    typedef vnl_vector_fixed<unsigned char, 16> uchar16;    //defines a bit tree
+
+    float ray_dx=ray.direction().x();
+    float ray_dy=ray.direction().y();
+    float ray_dz=ray.direction().z();
+
+    float ray_ox=ray.origin().x();
+    float ray_oy=ray.origin().y();
+    float ray_oz=ray.origin().z();
 
   //determine the minimum face:
   //get parameters tnear and tfar for the scene
@@ -52,12 +70,12 @@ void boxm2_cast_ray_function(vgl_ray_3d<float> & ray,
   float min_facez = (ray_dz < 0.0f) ? (linfo->scene_dims[2]) : 0.0f;
   float tblock = vcl_max(vcl_max( (min_facex-ray_ox)*(1.0f/ray_dx), (min_facey-ray_oy)*(1.0f/ray_dy)), (min_facez-ray_oz)*(1.0f/ray_dz));
 
-  if (tfar <= tblock) {
+  if (tfar <= tblock || tfar < 0) {
     return;
   }
+        vcl_cout<<tfar<<","<<tblock<<" ";
   //make sure tnear is at least 0...
   tblock = (tblock > 0.0f) ? tblock : 0.0f;
-
   //make sure tfar is within the last block so texit surpasses it (and breaks from the outer loop)
   tfar -= BLOCK_EPSILON;
 
@@ -67,6 +85,8 @@ void boxm2_cast_ray_function(vgl_ray_3d<float> & ray,
   //----------------------------------------------------------------------------
   while (tblock < tfar)
   {
+
+
     //-------------------------------------------------------------------------
     // get small block and necessary information
     // Note: Can probably eliminate posx,posy,posz and replace with just a calc
@@ -166,24 +186,8 @@ bool cast_ray_per_block(functor_type functor,
       for (unsigned j=roi_nj0;j<roi_nj;++j)
       {
         vgl_ray_3d<double> ray_ij = gcam->ray(i,j);//gcam->backproject(i,j);
-        vgl_point_3d<float> block_origin(float(ray_ij.origin().x()-linfo->scene_origin[0])/linfo->block_len,
-                                         float(ray_ij.origin().y()-linfo->scene_origin[1])/linfo->block_len,
-                                         float(ray_ij.origin().z()-linfo->scene_origin[2])/linfo->block_len);
 
-        float dray_ij_x=float(ray_ij.direction().x()),
-              dray_ij_y=float(ray_ij.direction().y()),
-              dray_ij_z=float(ray_ij.direction().z());
-
-        //thresh ray direction components - too small a treshhold causes axis aligned
-        //viewpoints to hang in infinite loop (block loop)
-        float thresh = vcl_exp(-12.0f);
-        if (vcl_fabs(dray_ij_x) < thresh) dray_ij_x = (dray_ij_x>0)?thresh:-thresh;
-        if (vcl_fabs(dray_ij_y) < thresh) dray_ij_y = (dray_ij_y>0)?thresh:-thresh;
-        if (vcl_fabs(dray_ij_z) < thresh) dray_ij_z = (dray_ij_z>0)?thresh:-thresh;
-
-        vgl_vector_3d<float> direction(dray_ij_x,dray_ij_y,dray_ij_z);
-        vgl_ray_3d<float> norm_ray_ij(block_origin,direction);
-        boxm2_cast_ray_function<functor_type>(norm_ray_ij,linfo,blk_sptr,i,j,functor);
+        boxm2_cast_ray_function<functor_type>(ray_ij,linfo,blk_sptr,i,j,functor);
       }
     }
     return true;

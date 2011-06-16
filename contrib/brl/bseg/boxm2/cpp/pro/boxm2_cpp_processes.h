@@ -20,6 +20,7 @@ DECLARE_FUNC_CONS(boxm2_cpp_create_norm_intensities_process);
 DECLARE_FUNC_CONS(boxm2_cpp_data_print_process);
 DECLARE_FUNC_CONS(boxm2_cpp_filter_process);
 
+DECLARE_FUNC_CONS(boxm2_cpp_vis_of_point_process);
 DECLARE_FUNC_CONS(boxm2_cpp_ray_probe_process);
 DECLARE_FUNC_CONS(boxm2_cpp_ray_app_density_process);
 DECLARE_FUNC_CONS(boxm2_cpp_create_aux_data_process);
