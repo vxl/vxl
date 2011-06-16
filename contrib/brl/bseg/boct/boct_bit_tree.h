@@ -18,7 +18,6 @@
 
 #include <vnl/vnl_vector_fixed.h>
 #include <vgl/vgl_point_3d.h>
-#include <vgl/vgl_box_3d.h>
 #include <vcl_bitset.h>
 #include <vcl_iosfwd.h>
 #include <vcl_vector.h>
@@ -86,8 +85,8 @@ class boct_bit_tree
   void set_bit_at(int index, bool val);
 
   //get bits and data
-  unsigned char* get_bits() {return bits_; }
-  float* get_data() {return data_; }
+  unsigned char* get_bits() { return bits_; }
+  float* get_data() { return data_; }
 
  private:
 

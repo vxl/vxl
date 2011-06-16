@@ -2,18 +2,16 @@
 #define boxm_stat_manager_h_
 //:
 // \file
+
 #include <vcl_string.h>
 #include <vcl_iostream.h>
 #include <vcl_vector.h>
 #include <bocl/bocl_cl.h>
-#include <vnl/vnl_vector_fixed.h>
-#include <vbl/vbl_array_2d.h>
 #include <bocl/bocl_manager.h>
 #include <bocl/bocl_utils.h>
 #include <boxm/sample/boxm_sample.h>
 #include <boxm/boxm_apm_traits.h>
 #include "boxm_ocl_utils.h"
-
 
 template <class T_data>
 class boxm_stat_manager : public bocl_manager<boxm_stat_manager<T_data> >
@@ -29,23 +27,22 @@ class boxm_stat_manager : public bocl_manager<boxm_stat_manager<T_data> >
     stat_results_(0)
   {}
 
-  ~boxm_stat_manager(){  if (program_)
-    clReleaseProgram(program_);}
+  ~boxm_stat_manager() { if (program_) clReleaseProgram(program_); }
 
-  unsigned input_size(){return input_size_;}
-  void set_input_size(unsigned isize){input_size_=isize;}
+  unsigned input_size() const { return input_size_; }
+  void set_input_size(unsigned isize) { input_size_=isize; }
 
-  unsigned data_size(){return data_size_;}
-  void set_data_size(unsigned dsize){data_size_=dsize;}
+  unsigned data_size() const { return data_size_; }
+  void set_data_size(unsigned dsize) { data_size_=dsize; }
 
-  unsigned result_size(){return result_size_;}
-  void set_result_size(unsigned rsize){result_size_=rsize;}
+  unsigned result_size() const { return result_size_; }
+  void set_result_size(unsigned rsize) { result_size_=rsize; }
 
-  cl_float* stat_results() {return stat_results_;}
+  cl_float* stat_results() { return stat_results_; }
 
-  cl_mem& input_buf() {return stat_input_buf_;}
-  cl_mem& data_buf() {return stat_data_buf_;}
-  cl_mem& results_buf() {return stat_results_buf_;}
+  cl_mem& input_buf() { return stat_input_buf_; }
+  cl_mem& data_buf() { return stat_data_buf_; }
+  cl_mem& results_buf() { return stat_results_buf_; }
 
   void clear_stat_input();
   bool setup_stat_input();
@@ -59,7 +56,7 @@ class boxm_stat_manager : public bocl_manager<boxm_stat_manager<T_data> >
   bool setup_stat_results();
   bool clean_stat_results();
 
-  cl_program program() {return program_;}
+  cl_program program() { return program_; }
 
   int setup_stat_input_buffer();
   int clean_stat_input_buffer();
@@ -76,7 +73,7 @@ class boxm_stat_manager : public bocl_manager<boxm_stat_manager<T_data> >
   int create_kernel(vcl_string const& name);
   int release_kernel();
 
-  cl_kernel kernel() {return kernel_;}
+  cl_kernel kernel() { return kernel_; }
 
   void set_gauss_1d(float mean, float sigma);
   void set_init_gauss_1d(float mean, float sigma, float min_sigma, float rho);

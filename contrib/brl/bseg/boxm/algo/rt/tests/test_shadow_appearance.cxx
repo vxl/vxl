@@ -3,7 +3,6 @@
 #include <boxm/boxm_apm_traits.h>
 #include <boxm/algo/rt/boxm_shadow_appearance_estimator.h>
 #include <boct/boct_tree.h>
-#include <vpl/vpl.h>
 #include <boxm/algo/rt/boxm_shadow_app_initializer.h>
 
 namespace test_shadow_appearance_globals

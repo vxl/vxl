@@ -5,7 +5,6 @@
 #include <boxm/sample/boxm_rt_sample.h>
 #include <boxm/algo/rt/boxm_opt_rt_bayesian_optimizer.h>
 #include <boct/boct_tree.h>
-#include <vpl/vpl.h>
 #include <vul/vul_file.h>
 
 static void test_bayesian_optimizer()

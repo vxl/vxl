@@ -6,14 +6,11 @@
 //
 // \author Vishal Jain
 // \date nov 17, 2010
+
 #include <boxm2/boxm2_data_base.h>
 #include <boxm2/basic/boxm2_array_1d.h>
 #include <boxm2/boxm2_data_traits.h>
 #include <vcl_cstring.h>
-
-//smart ptr includes
-#include <vbl/vbl_ref_count.h>
-#include <vbl/vbl_smart_ptr.h>
 
 //: Specific, templated derived class for data blocks
 template <boxm2_data_type T>
@@ -30,7 +27,7 @@ class boxm2_data: public boxm2_data_base
     virtual ~boxm2_data();
 
     //: data array accessor
-    boxm2_array_1d<datatype>& data() {return data_array_;}
+    boxm2_array_1d<datatype>& data() { return data_array_; }
 
  protected:
     boxm2_array_1d<datatype> data_array_;

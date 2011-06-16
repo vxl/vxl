@@ -7,7 +7,7 @@
 #include <boxm/sample/boxm_rt_sample.h>
 #include <boxm/sample/algo/boxm_simple_grey_processor.h>
 #include <boxm/sample/algo/boxm_mob_grey_processor.h>
-#include <vil/vil_transform.h>
+#include <vil/vil_image_view.h>
 
 template <boxm_apm_type APM, class T_aux>
 class boxm_change_probability_functor

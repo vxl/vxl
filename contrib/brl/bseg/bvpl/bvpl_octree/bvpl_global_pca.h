@@ -1,10 +1,9 @@
-// This is bvpl_global_pca.h
+// This is brl/bseg/bvpl/bvpl_octree/bvpl_global_pca.h
 #ifndef bvpl_global_pca_h
 #define bvpl_global_pca_h
-
 //:
 // \file
-// \brief A class to compute and learn pca features accross different boxm_scenes
+// \brief A class to compute and learn pca features across different boxm_scenes
 // \author Isabel Restrepo mir@lems.brown.edu
 // \date  14-Mar-2011.
 //
@@ -15,18 +14,16 @@
 
 #include <vnl/vnl_matrix_fixed.h>
 #include <vnl/vnl_vector_fixed.h>
-#include <vnl/vnl_random.h>
 
 #include <boxm/boxm_scene.h>
 
 template <unsigned feature_dim>
 class bvpl_global_pca: public vbl_ref_count
 {
-  
-public:
+ public:
   //: Constructor
   bvpl_global_pca(vcl_vector<vcl_string> const &scenes, vcl_vector<vcl_string> const &aux_dirs, vcl_vector<double> const &finest_cell_length,
-                  vgl_box_3d<int> nbbox,  double training_fraction = 0.1, vcl_string path_out = "./"): 
+                  vgl_box_3d<int> nbbox,  double training_fraction = 0.1, vcl_string path_out = "./"):
   scenes_(scenes), aux_dirs_(aux_dirs), finest_cell_length_(finest_cell_length), nbbox_(nbbox), training_fraction_(training_fraction),path_out_(path_out)
   {
     training_scenes_ = vcl_vector<bool>(scenes_.size(), true);
@@ -38,82 +35,79 @@ public:
     scatter_.fill(0.0);
     this->xml_write();
   }
-  
+
   //:Create from xml file
   bvpl_global_pca(const vcl_string &path);
-  
+
   //: Init auxiliary scenes and smallest cell length values
   void init();
-  
+
   //: Computes the scatter matrix and mean vector of a portion of random samples from a block
   bool sample_statistics( int scene_id, int block_i, int block_j, int block_k,
                           vnl_matrix_fixed<double, feature_dim, feature_dim> &S,
                           vnl_vector_fixed<double, feature_dim> &mean,
                           unsigned long &nfeature);
-  
+
   //: Update mean and scatter, given the mean and scatter of two sets.
   //  Calculation is done according to Chan et al. Updating Formulae and a Pairwise Algorithm for Computing Sample Variances
    static void combine_pairwise_statistics( const vnl_vector_fixed<double,feature_dim>  &mean1,
-                                    const vnl_matrix_fixed<double,feature_dim,feature_dim>  &scatter1,
-                                    double const n1,
-                                    const vnl_vector_fixed<double,feature_dim>  &mean2,
-                                    const vnl_matrix_fixed<double,feature_dim,feature_dim>  &scatter2,
-                                    double const n2,
-                                    vnl_vector_fixed<double,feature_dim> & mean_out,
-                                    vnl_matrix_fixed<double,feature_dim,feature_dim> & scatter_out,
-                                    double &n_out );
-  
+                                            const vnl_matrix_fixed<double,feature_dim,feature_dim>  &scatter1,
+                                            double const n1,
+                                            const vnl_vector_fixed<double,feature_dim>  &mean2,
+                                            const vnl_matrix_fixed<double,feature_dim,feature_dim>  &scatter2,
+                                            double const n2,
+                                            vnl_vector_fixed<double,feature_dim> & mean_out,
+                                            vnl_matrix_fixed<double,feature_dim,feature_dim> & scatter_out,
+                                            double &n_out );
+
   //: Set total scatter matrix, mean, sample, principal components and weights for this class
   void set_up_pca_evd(const vnl_matrix_fixed<double, feature_dim, feature_dim> &S,
                       const vnl_vector_fixed<double, feature_dim> &mean,
                       const double total_nsamples);
-  
-  
+
   //: Access the principal components
   const vnl_matrix_fixed<double, feature_dim, feature_dim>& principal_comps() { return pc_; }
-  
+
   //: Access the coefficients
   const vnl_vector_fixed<double, feature_dim>& weights() { return weights_; }
-  
+
   //: Access the mean of samples
   const vnl_vector_fixed<double, feature_dim>& mean()  { return training_mean_; }
-   
+
   bool register_scene(vcl_string scene_path, vcl_string aux_path)
   {
-    if(scenes_.size()!=aux_dirs_.size())
+    if (scenes_.size()!=aux_dirs_.size())
       return false;
     scenes_.push_back(scene_path);
     aux_dirs_.push_back(aux_path);
     return true;
   }
-  
+
   void xml_write();
-  
+
   //: Computes 10-dimensional pca projection at each voxel on the block and saves it
   void project(int scene_id, int block_i, int block_j, int block_k);
-  
-  vcl_string path_out() {return path_out_;}  
-  
-  vcl_vector<vcl_string> scenes() { return scenes_; }
-  vcl_vector<vcl_string> aux_dirs() { return aux_dirs_; }
-  vcl_vector<double> cell_lenghts() { return finest_cell_length_; }
-  vcl_vector<bool> training_scenes() { return training_scenes_; }
-  
-protected:
-  
+
+  vcl_string path_out() const { return path_out_; }
+
+  vcl_vector<vcl_string> scenes() const { return scenes_; }
+  vcl_vector<vcl_string> aux_dirs() const { return aux_dirs_; }
+  vcl_vector<double> cell_lengths() const { return finest_cell_length_; }
+  vcl_vector<bool> training_scenes() const { return training_scenes_; }
+
+ protected:
+
   //: A vector to hold scene paths
   vcl_vector<vcl_string> scenes_;
   //: A vector to hold paths to keep any kind of auxiliary scene or info(must be in the same order as scenes_)
   vcl_vector<vcl_string> aux_dirs_;
-  //: A vector to hold the finest cell lenght of the corresponding scene scene
+  //: A vector to hold the finest cell length of the corresponding scene scene
   vcl_vector<double> finest_cell_length_;
   //: A vector that indicates whether a scene should be used as train (True) or test(False). Order is equivalent to scenes_
   vcl_vector<bool> training_scenes_;
   //: A vector to keep the size of each scene
   vcl_vector<unsigned long> nleaves_;
 
-
-  
   //: The size around the central feature to include in PCA vectors
   vgl_box_3d<int> nbbox_;
   //: Number of total samples(leaves) to be drawn
@@ -130,30 +124,22 @@ protected:
   //: Fraction of cells used for learning
   double training_fraction_;
 
-
-  
-  
   //: Paths for i/o of matrices and vectors
   vcl_string path_out_;
-  vcl_string pc_path() { return path_out_ + "/pc.txt" ; }
-  vcl_string weights_path() { return path_out_ + "/weights.txt"; }
-  vcl_string mean_path() { return  path_out_ + "/mean.txt"; }
-  vcl_string scatter_path() { return  path_out_ + "/scatter.txt"; }
-  vcl_string xml_path() { return path_out_ + "/pca_global_info.xml"; }
-  
-  
+  vcl_string pc_path() const { return path_out_ + "/pc.txt" ; }
+  vcl_string weights_path() const { return path_out_ + "/weights.txt"; }
+  vcl_string mean_path() const { return  path_out_ + "/mean.txt"; }
+  vcl_string scatter_path() const { return  path_out_ + "/scatter.txt"; }
+  vcl_string xml_path() const { return path_out_ + "/pca_global_info.xml"; }
+
   void write_pca_matrices();
-  
+
   boxm_scene_base_sptr load_scene (int scene_id);
   boxm_scene_base_sptr load_train_scene (int scene_id);
   boxm_scene_base_sptr load_valid_scene (int scene_id);
   boxm_scene_base_sptr load_projection_scene (int scene_id);
-
-  
 };
 
 typedef vbl_smart_ptr<bvpl_global_pca<125> > bvpl_global_pca_125_sptr;
 
 #endif
-
-

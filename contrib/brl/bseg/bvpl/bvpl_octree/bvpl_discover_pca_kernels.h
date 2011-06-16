@@ -17,9 +17,8 @@
 #include <boxm/boxm_scene.h>
 #include <bxml/bxml_document.h>
 
-
 #include <vnl/vnl_matrix.h>
-#include <vnl/vnl_random.h>
+#include <vnl/vnl_vector.h>
 #include <vnl/algo/vnl_svd.h>
 
 #include <vcl_list.h>
@@ -85,7 +84,7 @@ class bvpl_discover_pca_kernels: public vbl_ref_count
 
   //: Project training samples onto pca space and return error as a function of number of components used
   void compute_training_error(vnl_vector<double> &proj_error);
-  
+
   //: Project training samples onto pca space and return error as a function of number of components used
   void compute_normalized_training_error(vnl_vector<double> &proj_error);
 
@@ -115,22 +114,22 @@ class bvpl_discover_pca_kernels: public vbl_ref_count
   //: Computes pca projection at each voxel on the block and it save the specified number of dimensions (dim)
   template <unsigned DIM>
   void project(boxm_scene<boct_tree<short, bvpl_pca_basis_sample<DIM> > > *proj_scene,
-                int block_i, int block_j, int block_k);
+               int block_i, int block_j, int block_k);
 
   //: Compute the mean feature of all "leaf" samples in the data scene associated with this class
   void compute_mean_feature(boxm_scene<boct_tree<short,float> > *scene);
 
   //: Return the number of samples used
-  unsigned long long nsamples() { return nsamples_; }
+  unsigned long long nsamples() const { return nsamples_; }
 
   //: Return dimension of the features
-  unsigned feature_dim() { return feature_dim_; }
+  unsigned feature_dim() const { return feature_dim_; }
 
   //: Return scene path
-  const vcl_string scene_path() { return scene_path_; }
+  vcl_string scene_path() const { return scene_path_; }
 
   //: Return number of blocks in the data scene
-  const vgl_vector_3d<unsigned> data_scene_dim() {return data_scene_base_->world_dim();}
+  vgl_vector_3d<unsigned> data_scene_dim() const { return data_scene_base_->world_dim(); }
 
   bool load_all_scene_blocks()
   {
@@ -146,10 +145,10 @@ class bvpl_discover_pca_kernels: public vbl_ref_count
 
   //: Compute deviations i.e. zero-mean feature matrix
   vnl_matrix<double> compute_deviation_matrix(boxm_scene<boct_tree<short,float> > *scene);
-  
+
   //: Compute the scatter matrix.
   vnl_matrix<double> compute_scatter_matrix(boxm_scene<boct_tree<short,float> > *scene);
-  
+
   void xml_write();
 
  protected:
@@ -163,7 +162,6 @@ class bvpl_discover_pca_kernels: public vbl_ref_count
   //  This method performs eigen value decomposition on the covariance matrix
   //  Use this method when number of samples >> number of dimensions
   void set_up_pca_evd(boxm_scene<boct_tree<short,float> > *scene);
-
 
   //: Write a PCA file
   bool write_pca_matrices();
@@ -190,21 +188,20 @@ class bvpl_discover_pca_kernels: public vbl_ref_count
   //: Paths for i/o of matrices and vectors
   vcl_string path_out_;
   vcl_string scene_path_;
-  vcl_string pc_path() { return path_out_ + "/pc.txt" ; }
-  vcl_string data_path() { return path_out_ + "/data.txt"; }
-  vcl_string weights_path() { return path_out_ + "/weights.txt"; }
-  vcl_string pos_path() { return path_out_ + "/positions.txt"; }
-  vcl_string sample_mean_path() { return  path_out_ + "/sample_mean.txt"; }
-  vcl_string data_mean_path() { return  path_out_ + "/data_mean.txt"; }
-  vcl_string xml_path() { return path_out_ + "/pca_info.xml"; }
+  vcl_string pc_path() const { return path_out_ + "/pc.txt" ; }
+  vcl_string data_path() const { return path_out_ + "/data.txt"; }
+  vcl_string weights_path() const { return path_out_ + "/weights.txt"; }
+  vcl_string pos_path() const { return path_out_ + "/positions.txt"; }
+  vcl_string sample_mean_path() const { return  path_out_ + "/sample_mean.txt"; }
+  vcl_string data_mean_path() const { return  path_out_ + "/data_mean.txt"; }
+  vcl_string xml_path() const { return path_out_ + "/pca_info.xml"; }
 
   //: Tolerance, retain eigenvalues above max(eigenVals)*tol
   double tol_;
 };
 
 
-
-//: Computes pca projection at each voxel on the block and it saves the specified number of coefficientes 
+//: Computes pca projection at each voxel on the block and it saves the specified number of coefficientes
 template <unsigned DIM>
 void bvpl_discover_pca_kernels::project(boxm_scene<boct_tree<short, bvpl_pca_basis_sample<DIM> > > *proj_scene,
                                         int block_i, int block_j, int block_k)
@@ -213,99 +210,96 @@ void bvpl_discover_pca_kernels::project(boxm_scene<boct_tree<short, bvpl_pca_bas
   typedef boct_tree_cell<short,float> float_cell_type;
   typedef boct_tree<short,bvpl_pca_basis_sample<DIM> > pca_tree_type;
   typedef boct_tree_cell<short,bvpl_pca_basis_sample<DIM> > pca_cell_type;
-  
-  //cast the scenes 
+
+  //cast the scenes
   boxm_scene<float_tree_type>* data_scene = dynamic_cast<boxm_scene<float_tree_type>* > (data_scene_base_.as_pointer());
-  
-  if(!(data_scene &&proj_scene)){
-    vcl_cerr << "Error in bvpl_discover_pca_kernels::compute_testing_error: Faild to cast scene" << vcl_endl;
+
+  if (!(data_scene &&proj_scene)) {
+    vcl_cerr << "Error in bvpl_discover_pca_kernels::compute_testing_error: Faild to cast scene\n";
     return;
   }
-  
+
   double cell_length = data_scene->finest_cell_length();
-  
+
   //get the cells for this block
-  if(!(data_scene->valid_index(block_i, block_j, block_k) && proj_scene->valid_index(block_i, block_j, block_k))){
-    vcl_cerr << "In compute_testing_error: Invalid block" << vcl_endl;
+  if (!(data_scene->valid_index(block_i, block_j, block_k) && proj_scene->valid_index(block_i, block_j, block_k))) {
+    vcl_cerr << "In compute_testing_error: Invalid block\n";
     return;
   }
-  
+
   data_scene->load_block_and_neighbors(block_i, block_j, block_k);
-  proj_scene->load_block(block_i, block_j, block_k); 
-  
+  proj_scene->load_block(block_i, block_j, block_k);
+
   //get the trees
   float_tree_type* data_tree = data_scene->get_block(block_i, block_j, block_k)->get_tree();
   pca_tree_type* proj_tree = data_tree->template clone_to_type<bvpl_pca_basis_sample<DIM> >();
-  
+
   //get the leaves
   vcl_vector<float_cell_type*> data_leaves = data_tree->leaf_cells();
   vcl_vector<pca_cell_type*> proj_leaves = proj_tree->leaf_cells();
-  
-  //CAUTION: the neigborhood box was suppossed to be defined as number of regular neigbors
+
+  //CAUTION: the neighborhood box was supposed to be defined as number of regular neighbors
   //convert neighborhood box to scene coordinates
   vgl_point_3d<int> min_point = nbbox_.min_point();
   vgl_point_3d<int> max_point = nbbox_.max_point();
-  
-  for(unsigned i =0; i<data_leaves.size(); i++)
+
+  for (unsigned i =0; i<data_leaves.size(); i++)
   {
     float_cell_type* data_cell = data_leaves[i];
-    
+
     //create a region around the center cell
     vgl_point_3d<double> centroid = data_tree->global_centroid(data_cell);
-    
+
     //change the coordinates of enpoints to be in global coordinates abd test if they are contained in the scene
     vgl_point_3d<double> min_point_global(centroid.x() + (double)min_point.x()*cell_length, centroid.y() + (double)min_point.y()*cell_length, centroid.z() + (double)min_point.z()*cell_length);
     vgl_point_3d<double> max_point_global(centroid.x() + (double)max_point.x()*cell_length, centroid.y() + (double)max_point.y()*cell_length, centroid.z() + (double)max_point.z()*cell_length);
-    if(!(data_scene->locate_point_in_memory(min_point_global) && data_scene->locate_point_in_memory(max_point_global))){
+    if (!(data_scene->locate_point_in_memory(min_point_global) && data_scene->locate_point_in_memory(max_point_global))) {
       proj_leaves[i]->set_data(bvpl_pca_basis_sample<DIM>());
       continue;
     }
-    
-    //3. Assemble neighbohood as a feature-vector
+
+    //3. Assemble neighborhood as a feature-vector
     vnl_vector<double> this_feature(feature_dim_, 0.0f);
-    
+
     unsigned curr_dim = 0;
-    for(int z = nbbox_.min_z(); z<=nbbox_.max_z(); z++)
-      for(int y = nbbox_.min_y(); y<=nbbox_.max_y(); y++)
-        for(int x = nbbox_.min_x(); x<=nbbox_.max_x(); x++)
+    for (int z = nbbox_.min_z(); z<=nbbox_.max_z(); z++)
+      for (int y = nbbox_.min_y(); y<=nbbox_.max_y(); y++)
+        for (int x = nbbox_.min_x(); x<=nbbox_.max_x(); x++)
         {
           vgl_point_3d<double> neighbor_centroid(centroid.x() + (double)x*cell_length,
                                                  centroid.y() + (double)y*cell_length,
                                                  centroid.z() + (double)z*cell_length);
-          
+
           boct_tree_cell<short,float> *neighbor_cell = data_scene->locate_point_in_memory(neighbor_centroid);
-          
-          
-          if(!neighbor_cell){
-            vcl_cerr << "Error in compute_testing_error" <<vcl_endl;
+
+          if (!neighbor_cell) {
+            vcl_cerr << "Error in compute_testing_error\n";
             return;
           }
-          
+
           this_feature[curr_dim] = (double)neighbor_cell->data();
           curr_dim++;
         }
-    
-    if(curr_dim != feature_dim_){
-      vcl_cerr << "Error in compute_testing_error" <<vcl_endl;
+
+    if (curr_dim != feature_dim_) {
+      vcl_cerr << "Error in compute_testing_error\n";
       return;
-    }    
+    }
     this_feature-=data_mean_feature_;
-    
+
     //solve for the coefficients
     vnl_vector<double> a(feature_dim_, 0.0);
     a = pc_.transpose() * (this_feature);
-    
-    
+
     //compute error
     bvpl_pca_basis_sample<DIM> sample(a.extract(DIM), 0);
     proj_leaves[i]->set_data(sample);
   }
-  
+
   // write and release memory
   proj_scene->get_block(block_i, block_j, block_k)->init_tree(proj_tree);
   proj_scene->write_active_block();
   data_scene->unload_active_blocks();
-  
 }
 
 #endif

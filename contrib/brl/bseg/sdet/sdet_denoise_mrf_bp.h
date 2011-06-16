@@ -39,12 +39,13 @@
 // \endverbatim
 //
 //-------------------------------------------------------------------------
+
 #include <vcl_vector.h>
-#include <vnl/vnl_vector.h>
 #include <sdet/sdet_denoise_mrf_bp_params.h>
 #include <sdet/sdet_mrf_bp.h>
 #include <vil/vil_image_resource.h>
 #include <vil/vil_pyramid_image_view.h>
+
 class sdet_denoise_mrf_bp : public sdet_denoise_mrf_bp_params
 {
  public:
@@ -60,11 +61,11 @@ class sdet_denoise_mrf_bp : public sdet_denoise_mrf_bp_params
   bool denoise();
 
   //: Accessors
-  vil_image_resource_sptr output(){return out_resc_;}
-  bool ouput_valid() {return output_valid_;}
+  vil_image_resource_sptr output() { return out_resc_; }
+  bool output_valid() const { return output_valid_; }
 
   //: Internals (for debug purposes)
-  sdet_mrf_bp_sptr mrf() {return mrf_;}
+  sdet_mrf_bp_sptr mrf() { return mrf_; }
 
  protected:
   // === protected methods ===

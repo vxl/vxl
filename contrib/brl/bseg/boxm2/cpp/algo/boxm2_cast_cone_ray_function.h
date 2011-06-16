@@ -3,12 +3,14 @@
 //:
 // \file
 
+#include <vgl/vgl_point_3d.h>
+#include <vgl/vgl_vector_3d.h>
+#include <vgl/vgl_box_3d.h>
+#include <vgl/vgl_sphere_3d.h>
 #include <vgl/vgl_ray_3d.h>
-#include <vgl/vgl_intersection.h>
 
 #include <bvgl/bvgl_volume_of_intersection.h>
 
-#include <vul/vul_timer.h>
 #include <vcl_cassert.h>
 #include <vcl_iostream.h>
 #include <boxm2/boxm2_scene.h>

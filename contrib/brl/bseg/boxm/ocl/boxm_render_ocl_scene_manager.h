@@ -6,14 +6,12 @@
 #include <vcl_iostream.h>
 #include <vcl_vector.h>
 #include <vnl/vnl_vector_fixed.h>
-#include <vbl/vbl_array_2d.h>
 #include <bocl/bocl_manager.h>
 #include <bocl/bocl_utils.h>
 #include <boxm/ocl/boxm_ocl_scene.h>
 
 #include <vil/vil_image_view.h>
 #include <vpgl/vpgl_perspective_camera.h>
-#include <vul/vul_file_iterator.h>
 
 class boxm_render_ocl_scene_manager : public bocl_manager<boxm_render_ocl_scene_manager >
 {
@@ -56,9 +54,8 @@ class boxm_render_ocl_scene_manager : public bocl_manager<boxm_render_ocl_scene_
                       vil_image_view<obs_type> &obs,
                       bool render_depth=false);
   //: 2d workgroup
-  void set_bundle_ni(unsigned bundle_x) {bni_=bundle_x;}
-  void set_bundle_nj(unsigned bundle_y) {bnj_=bundle_y;}
-
+  void set_bundle_ni(unsigned bundle_x) { bni_=bundle_x; }
+  void set_bundle_nj(unsigned bundle_y) { bnj_=bundle_y; }
   //: run update
   bool run_scene();
   bool set_args(unsigned kernel_index);
@@ -90,10 +87,10 @@ class boxm_render_ocl_scene_manager : public bocl_manager<boxm_render_ocl_scene_
   //: load all blocks in an array and store the tree pointers in block_ptrs;
   bool set_all_blocks();
 
-  unsigned wni() {return wni_;}
-  unsigned wnj() {return wnj_;}
+  unsigned wni() const { return wni_; }
+  unsigned wnj() const { return wnj_; }
 
-  float gpu_time() {return gpu_time_; }
+  float gpu_time() const { return gpu_time_; }
 
   bool read_output_image();
   bool read_rerendered_image();
@@ -104,7 +101,7 @@ class boxm_render_ocl_scene_manager : public bocl_manager<boxm_render_ocl_scene_
   //: cleanup
   bool clean_update();
 
-  cl_float * output_image() {return image_;}
+  cl_float * output_image() { return image_; }
   // image
   cl_float * image_;
   cl_float * ext_image_;
@@ -172,7 +169,7 @@ class boxm_render_ocl_scene_manager : public bocl_manager<boxm_render_ocl_scene_
   bool release_offset_buffers();
   //open cl side helper functions
   int build_kernel_program(cl_program & program, bool render_depth=false);
-  cl_kernel kernel(int kernelindex) {return kernels_[kernelindex];}
+  cl_kernel kernel(int kernelindex) { return kernels_[kernelindex]; }
 
   //necessary CL items
   // for pass0 to compute seg len

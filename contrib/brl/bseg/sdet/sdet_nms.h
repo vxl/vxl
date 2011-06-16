@@ -42,7 +42,6 @@
 //-------------------------------------------------------------------------
 #include <vcl_vector.h>
 #include <vbl/vbl_array_2d.h>
-#include <vil/vil_image_resource.h>
 #include <vil/vil_image_view.h>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_vector_2d.h>
@@ -61,8 +60,8 @@ class sdet_nms_params
   bool use_adaptive_thresh_;
 
   sdet_nms_params(double thresh=1.0, PFIT_TYPE pfit_type=PFIT_3_POINTS, unsigned margin=1, double rel_thresh=2.5, bool adaptive_thresh=false):
-    thresh_(thresh), pfit_type_(pfit_type), margin_(margin), rel_thresh_(rel_thresh), use_adaptive_thresh_(adaptive_thresh){}
-  ~sdet_nms_params(){}
+    thresh_(thresh), pfit_type_(pfit_type), margin_(margin), rel_thresh_(rel_thresh), use_adaptive_thresh_(adaptive_thresh) {}
+  ~sdet_nms_params() {}
 };
 
 class sdet_nms
@@ -100,20 +99,20 @@ class sdet_nms
            const vil_image_view<double>& grad_mag);
 
   //: Destructor
-  ~sdet_nms(){}
+  ~sdet_nms() {}
 
   //Accessors
-  unsigned width() { return mag_.cols(); }
-  unsigned height() { return mag_.rows(); }
+  unsigned width() const { return mag_.cols(); }
+  unsigned height() const { return mag_.rows(); }
 
   //: return the array containing the suppressed non maxima (i.e., only maxima remain)
-  vbl_array_2d<double>& mag(){ return mag_; }
+  vbl_array_2d<double>& mag() { return mag_; }
 
   //: return the array containing the second deriv map
-  vbl_array_2d<double>& deriv(){ return deriv_; }
+  vbl_array_2d<double>& deriv() { return deriv_; }
 
   //: apply NMS to the given data (do not collect any edgel tokens)
-  void apply(){} //FIX ME
+  void apply() {} //FIX ME
 
   //: apply NMS to the given data (also collect edgel tokens)
   void apply( bool collect_tokens,

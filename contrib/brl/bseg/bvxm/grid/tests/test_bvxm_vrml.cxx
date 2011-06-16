@@ -7,7 +7,6 @@
 //  \date   September 22, 2009
 
 #include <bvxm/grid/io/bvxm_vrml_voxel_grid.h>
-#include <vpl/vpl.h>
 
 bool grid_to_vrml()
 {

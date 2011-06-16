@@ -6,21 +6,17 @@
 #include <vcl_iostream.h>
 #include <vcl_vector.h>
 #include <vnl/vnl_vector_fixed.h>
-#include <vbl/vbl_array_2d.h>
 #include <bocl/bocl_manager.h>
 #include <bocl/bocl_utils.h>
 #include <boxm/boxm_scene.h>
 #include <boxm/boxm_apm_traits.h>
-#include <vil/vil_image_view.h>
 
 class ocl_scene_test_manager : public bocl_manager<ocl_scene_test_manager>
 {
- 
-  
  public:
 
   //(data_type and tree_type)
-  typedef vnl_vector_fixed<int,2> int2; 
+  typedef vnl_vector_fixed<int,2> int2;
   typedef vnl_vector_fixed<int,4> int4;
   typedef vnl_vector_fixed<float,16> float16;
 
@@ -48,7 +44,7 @@ class ocl_scene_test_manager : public bocl_manager<ocl_scene_test_manager>
   cl_int* get_output();
 
   //: set the tree
-  bool set_tree(vcl_vector<int4> ocl_tree);  
+  bool set_tree(vcl_vector<int4> ocl_tree);
 
   //: profiling information...
   double gpu_time_;
@@ -64,7 +60,7 @@ class ocl_scene_test_manager : public bocl_manager<ocl_scene_test_manager>
   // CPU/GPU side buffers
   //-------------------------------------------------------------------
   cl_int*   ocl_tree_;
-  cl_int*   output_; 
+  cl_int*   output_;
 
   //cl_mem buffers
   cl_mem ocl_tree_buf_;

@@ -3,7 +3,6 @@
 #include <bsta/bsta_histogram.h>
 #include <bsta/io/bsta_io_histogram.h>
 #include <vsl/vsl_binary_io.h>
-#include <vpl/vpl.h>
 #include <vcl_cstdlib.h> // for rand()
 
 static void test_illum()

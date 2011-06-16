@@ -16,20 +16,13 @@
 #include <vcl_vector.h>
 #include <vcl_cassert.h>
 #include <vcl_cmath.h>
-
-#include <vgl/vgl_box_3d.h>
-#include <vgl/vgl_point_2d.h>
-#include <vgl/vgl_point_3d.h>
-#include <vgl/vgl_vector_3d.h>
+#include <vcl_limits.h>
 
 #include <vpgl/vpgl_perspective_camera.h>
-
-#include <vnl/vnl_inverse.h>
 
 #include <brip/brip_vil_float_ops.h>
 
 #include <vil/vil_flip.h>
-#include <vil/vil_convert.h>
 
 template <class exp_edge_func>
 class bvpgl_camera_estimator

@@ -17,7 +17,6 @@
 #include <vpgl/vpgl_perspective_camera.h>
 #include <bocl/bocl_utils.h>
 #include <vgui/vgui_statusbar.h>
-#include <vil/vil_image_view.h>
 
 class boxm_ocl_render_bit_tableau : public boxm_vid_tableau
 {
@@ -27,11 +26,11 @@ class boxm_ocl_render_bit_tableau : public boxm_vid_tableau
 
   virtual bool handle( vgui_event const& e );
 
-  bool init(boxm_ocl_bit_scene * scene, unsigned ni, unsigned nj, 
+  bool init(boxm_ocl_bit_scene * scene, unsigned ni, unsigned nj,
             vpgl_perspective_camera<double> * cam);
 
   //;  set the GL buffer which needs to be displayed.
-  void set_glbuffer(GLuint  pbuffer){ pbuffer_=pbuffer; }
+  void set_glbuffer(GLuint  pbuffer) { pbuffer_=pbuffer; }
   void set_statusbar(vgui_statusbar* status) { status_ = status; }
 
  protected:

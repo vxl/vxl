@@ -1,6 +1,5 @@
 #include <testlib/testlib_test.h>
 #include <brad/brad_sun_dir_index.h>
-#include <vpl/vpl.h>
 #include <vcl_cstdlib.h> // for rand()
 #include <vcl_fstream.h>
 #include <vnl/vnl_double_2.h>

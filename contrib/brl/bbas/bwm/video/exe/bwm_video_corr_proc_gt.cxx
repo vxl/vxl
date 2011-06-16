@@ -4,7 +4,6 @@
 #include <vcl_string.h>
 #include <vnl/vnl_double_3.h>
 #include <vnl/vnl_double_3x3.h>
-#include <vpl/vpl.h> // vpl_unlink()
 #include <vpgl/vpgl_calibration_matrix.h>
 #include <vpgl/vpgl_perspective_camera.h>
 #include <vpgl/algo/vpgl_camera_homographies.h>

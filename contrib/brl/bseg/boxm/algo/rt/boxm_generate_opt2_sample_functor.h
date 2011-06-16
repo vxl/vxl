@@ -9,8 +9,8 @@
 #include <boxm/sample/algo/boxm_mog_grey_processor.h>
 #include <boxm/basic/boxm_seg_length_functor.h>
 #include <boxm/sample/algo/boxm_simple_grey_processor.h>
+#include <vil/vil_image_view.h>
 #include <vil/vil_math.h>
-#include <vil/vil_save.h>
 #include <vcl_iostream.h>
 
 

@@ -3,7 +3,6 @@
 #include <brad/brad_sun_pos.h>
 #include <bsta/bsta_spherical_histogram.h>
 #include <vnl/algo/vnl_symmetric_eigensystem.h>
-#include <vpl/vpl.h>
 #include <vcl_cstdlib.h> // for rand()
 #include <vcl_fstream.h>
 

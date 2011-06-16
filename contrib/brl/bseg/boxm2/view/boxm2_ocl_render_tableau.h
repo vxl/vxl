@@ -19,13 +19,6 @@
 //utilities
 #include <vpgl/vpgl_perspective_camera.h>
 #include <bocl/bocl_utils.h>
-#include <vil/vil_convert.h>
-#include <vil/vil_image_view_base.h>
-#include <vil/vil_image_view.h>
-#include <vil/vil_math.h>
-#include <vil/vil_load.h>
-#include <vil/vil_save.h>
-#include <vnl/vnl_random.h>
 
 //boxm2 includes
 #include <boxm2/boxm2_scene.h>
@@ -41,15 +34,15 @@ class boxm2_ocl_render_tableau : public boxm2_cam_tableau
  public:
   boxm2_ocl_render_tableau();
   virtual ~boxm2_ocl_render_tableau() {}
-  
-  //: initialize tableau with scene_file, viewport size, initial cam,  
+
+  //: initialize tableau with scene_file, viewport size, initial cam,
   bool init(bocl_device_sptr device,
             boxm2_opencl_cache_sptr opencl_cache,
             boxm2_scene_sptr scene,
             unsigned ni,
             unsigned nj,
             vpgl_perspective_camera<double>* cam, vcl_string identifier = "");
-  
+
   //: virtual function handles mouse and keyboard actions
   virtual bool handle( vgui_event const& e );
 
@@ -59,7 +52,7 @@ class boxm2_ocl_render_tableau : public boxm2_cam_tableau
 
  protected:
 
-  //vector of image files, vector of 
+  //vector of image files, vector of
   bocl_manager_child_sptr mgr_;
   bocl_device_sptr device_;
   cl_command_queue queue_;
@@ -70,15 +63,15 @@ class boxm2_ocl_render_tableau : public boxm2_cam_tableau
   unsigned nj_;
   vgui_statusbar* status_;
   vcl_string identifier_;
-  
+
   //: shared GL_CL image buffer
   GLuint pbuffer_;
   cl_mem clgl_buffer_;
   bocl_mem_sptr exp_img_;
-  bocl_mem_sptr exp_img_dim_; 
-  
+  bocl_mem_sptr exp_img_dim_;
+
   //: trajectory for idle rendering
-  bool render_trajectory_; 
+  bool render_trajectory_;
   boxm2_trajectory* trajectory_;
   boxm2_trajectory::iterator cam_iter_;
 
@@ -88,7 +81,6 @@ class boxm2_ocl_render_tableau : public boxm2_cam_tableau
 
   bool init_clgl();
   bool do_init_ocl;
-  
 };
 
 //: declare smart pointer

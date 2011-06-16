@@ -10,8 +10,7 @@
 #include <boxm/sample/algo/boxm_mog_grey_processor.h>
 #include <boxm/sample/algo/boxm_simple_grey_processor.h>
 #include <vgl/vgl_homg_plane_3d.h>
-#include <vil/vil_math.h>
-#include <vil/vil_save.h>
+#include <vil/vil_image_view.h>
 #include <vcl_iostream.h>
 
 template <class T, class T_aux>
@@ -40,7 +39,7 @@ class boxm_generate_edge_tangent_sample_functor
     float c = obs_(i,j,2);
     float d = obs_(i,j,3);
 
-    if (a||b||c||d){
+    if (a||b||c||d) {
       vgl_homg_plane_3d<float> p(a,b,c,d);
       boxm_plane_obs<float> observation(p,seg_len);
       aux_val.insert(observation);

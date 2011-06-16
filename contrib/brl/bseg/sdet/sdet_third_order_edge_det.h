@@ -5,16 +5,13 @@
 //\file
 //\brief An edge detector that first computes edge locations and then optimizes the orientations using the third order operator
 //\author Amir Tamrakar
-//\date 09/09/06
+//\date 09 Sept 2006
 //
 //\verbatim
 //  Modifications
 //\endverbatim
 
-#include <vil/vil_image_resource.h>
-#include <vil/vil_new.h>
 #include <vil/vil_image_view.h>
-#include <vil/vil_convert.h>
 #include <vdgl/vdgl_edgel.h>
 #include <brip/brip_gaussian_kernel.h>
 #include <brip/brip_interp_kernel.h>
@@ -28,12 +25,12 @@ class sdet_third_order_edge_det : public sdet_third_order_edge_det_params
 {
  public:
   sdet_third_order_edge_det()
-    : sdet_third_order_edge_det_params(){}
+    : sdet_third_order_edge_det_params() {}
   sdet_third_order_edge_det(sdet_third_order_edge_det_params const& params)
-    : sdet_third_order_edge_det_params(params){}
+    : sdet_third_order_edge_det_params(params) {}
   void apply(vil_image_view<vxl_byte> const& image);
   bool apply_color(vil_image_view<vxl_byte> const& image);
-  vcl_vector<vdgl_edgel>& edgels(){return edgels_;}
+  vcl_vector<vdgl_edgel>& edgels() { return edgels_; }
   void line_segs(vcl_vector<vsol_line_2d_sptr>& lines);
 
   //: save edgels in the edge map file FORMAT, output files have .edg extension

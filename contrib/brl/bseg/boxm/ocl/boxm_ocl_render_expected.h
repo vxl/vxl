@@ -6,9 +6,7 @@
 #include <boxm/sample/boxm_rt_sample.h>
 #include <boxm/sample/algo/boxm_simple_grey_processor.h>
 #include <boxm/sample/algo/boxm_mog_grey_processor.h>
-#include <vil/vil_transform.h>
-#include <vil/vil_math.h>
-#include <vil/vil_save.h>
+#include <vil/vil_image_view.h>
 
 #include <bocl/bocl_cl.h>
 #include "boxm_ray_trace_manager.h"

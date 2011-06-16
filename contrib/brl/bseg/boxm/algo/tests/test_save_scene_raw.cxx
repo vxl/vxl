@@ -9,7 +9,6 @@
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_vector_3d.h>
 #include <vgl/vgl_box_3d.h>
-#include <vpl/vpl.h>
 #include <vul/vul_file.h>
 #include <vpgl/vpgl_camera.h>
 #include <vpgl/vpgl_perspective_camera.h>

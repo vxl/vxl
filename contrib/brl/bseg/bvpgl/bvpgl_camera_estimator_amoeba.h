@@ -6,17 +6,16 @@
 #include <vpgl/vpgl_perspective_camera.h>
 
 #include <vil/vil_image_view.h>
+#include <vil/vil_save.h>
 
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_vector_3d.h>
-
-#include <vbl/vbl_array_3d.h>
 
 #include <vnl/vnl_cost_function.h>
 
 #include <vcl_iostream.h>
 #include <vcl_sstream.h>
-#include <vil/vil_save.h>
+#include <vcl_limits.h>
 
 template <class func_>
 class bvpgl_camera_estimator_amoeba : public vnl_cost_function

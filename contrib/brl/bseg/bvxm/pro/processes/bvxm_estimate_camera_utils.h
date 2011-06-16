@@ -24,15 +24,12 @@
 
 #include <vpgl/vpgl_perspective_camera.h>
 
-#include <vnl/vnl_inverse.h>
-//#include <vgl/algo/vgl_convex_hull_2d.h>
-
 #include <bvxm/bvxm_util.h>
 #include <bvxm/grid/bvxm_voxel_grid.h>
 #include <bvxm/grid/bvxm_voxel_slab.h>
 
+#include <vnl/vnl_vector.h>
 #include <vnl/vnl_cost_function.h>
-//#include <vnl/algo/vnl_amoeba.h>
 
 #include <brip/brip_vil_float_ops.h>
 

@@ -6,7 +6,6 @@
 #include <vcl_iostream.h>
 #include <vcl_vector.h>
 #include <vnl/vnl_vector_fixed.h>
-#include <vbl/vbl_array_2d.h>
 #include <bocl/bocl_manager.h>
 #include <bocl/bocl_utils.h>
 #include <boxm/boxm_scene.h>
@@ -55,8 +54,8 @@ class online_update_test_manager : public bocl_manager<online_update_test_manage
                        vpgl_camera_double_sptr cam,
                        vil_image_view<obs_type> &obs);
   //: 2d workgroup
-  void set_bundle_ni(unsigned bundle_x) {bni_=bundle_x;}
-  void set_bundle_nj(unsigned bundle_y) {bnj_=bundle_y;}
+  void set_bundle_ni(unsigned bundle_x) { bni_=bundle_x; }
+  void set_bundle_nj(unsigned bundle_y) { bnj_=bundle_y; }
   bool process_block(int numpass=5);
   //: set input image and image dimensions and camera
   bool set_input_view();
@@ -71,18 +70,18 @@ class online_update_test_manager : public bocl_manager<online_update_test_manage
   bool clean_tree();
   bool setup_norm_data(bool use_uniform=true,
                        float mean = 0.0f, float sigma = 0.0f);
-  unsigned wni() {return wni_;}
-  unsigned wnj() {return wnj_;}
+  unsigned wni() const { return wni_; }
+  unsigned wnj() const { return wnj_; }
 
   bool read_output_image();
   bool read_trees();
-  vcl_vector<vnl_vector_fixed<float, 16> > tree_data(){return tree_data_;}
-  vcl_vector<vnl_vector_fixed<float, 4> > aux_data(){return tree_aux_data_;}
+  vcl_vector<vnl_vector_fixed<float, 16> > tree_data() const { return tree_data_; }
+  vcl_vector<vnl_vector_fixed<float, 4> > aux_data() const { return tree_aux_data_; }
   void print_tree();
   void print_leaves();
   void print_image();
   void save_image();
-  cl_float * output_image() {return image_;}
+  cl_float * output_image() { return image_; }
 
  protected:
   void clear_tree_data();
@@ -125,7 +124,7 @@ class online_update_test_manager : public bocl_manager<online_update_test_manage
   int setup_app_density_buffer();
   bool clean_app_density();
   int clean_app_density_buffer();
-  cl_mem& app_density(){return app_density_buf_;}
+  cl_mem& app_density() { return app_density_buf_; }
 
   bool clean_norm_data();
 

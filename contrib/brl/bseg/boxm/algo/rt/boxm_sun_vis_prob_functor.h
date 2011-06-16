@@ -10,9 +10,10 @@
 #include "boxm_pre_infinity_functor.h"
 #include <boxm/sample/algo/boxm_simple_grey_processor.h>
 #include <vpgl/algo/vpgl_camera_from_box.h>
-#include <vgl/vgl_homg_line_3d_2_points.h>
-#include <vil/vil_math.h>
-#include <vil/vil_save.h>
+#include <vgl/vgl_point_3d.h>
+#include <vgl/vgl_box_3d.h>
+#include <vgl/vgl_vector_3d.h>
+#include <vil/vil_image_view.h>
 #include <vcl_iostream.h>
 
 

@@ -2,11 +2,10 @@
 #define boxm_refine_scene_manager_h_
 //:
 // \file
+
 #include <vcl_string.h>
 #include <vcl_iostream.h>
 #include <vcl_vector.h>
-#include <vnl/vnl_vector_fixed.h>
-#include <vbl/vbl_array_2d.h>
 #include <bocl/bocl_manager.h>
 #include <bocl/bocl_utils.h>
 #include <boxm/ocl/boxm_ocl_scene.h>

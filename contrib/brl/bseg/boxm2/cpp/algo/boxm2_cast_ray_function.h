@@ -5,8 +5,6 @@
 
 #include <vgl/vgl_ray_3d.h>
 
-#include <vul/vul_timer.h>
-
 #include <vcl_cassert.h>
 #include <vcl_iostream.h>
 
@@ -84,8 +82,6 @@ void boxm2_cast_ray_function(vgl_ray_3d<double> & ray_ij,
   //----------------------------------------------------------------------------
   while (tblock < tfar)
   {
-
-
     //-------------------------------------------------------------------------
     // get small block and necessary information
     // Note: Can probably eliminate posx,posy,posz and replace with just a calc
@@ -176,7 +172,7 @@ bool cast_ray_per_block(functor_type functor,
                         unsigned int roi_ni0=0,
                         unsigned int roi_nj0=0)
 {
-  if (vpgl_generic_camera<double>* gcam = 
+  if (vpgl_generic_camera<double>* gcam =
       dynamic_cast<vpgl_generic_camera<double> *>(cam.ptr()))
   {
     for (unsigned i=roi_ni0;i<roi_ni;++i)
@@ -191,7 +187,7 @@ bool cast_ray_per_block(functor_type functor,
     }
     return true;
   }
-  
+
   vcl_cout<<"boxm2_cast_ray_function cannot dynamic cast camera"<<vcl_endl;
   return false;
 }

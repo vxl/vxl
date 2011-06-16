@@ -19,7 +19,6 @@
 #include <bapl/bapl_keypoint_sptr.h>
 #include <bapl/bapl_lowe_keypoint.h>
 #include <bapl/bapl_lowe_pyramid_set_sptr.h>
-#include <vnl/vnl_vector_fixed.h>
 #include <vgl/vgl_point_3d.h>
 
 

@@ -3,7 +3,6 @@
 #include <bsta/bsta_histogram.h>
 #include <bsta/io/bsta_io_histogram.h>
 #include <vsl/vsl_binary_io.h>
-#include <vpl/vpl.h>
 #include <vcl_cstdlib.h> // for rand()
 #include <vcl_fstream.h>
 
@@ -86,26 +85,25 @@ static void test_illum()
 
   double er = 0.0;
   unsigned m = fitting_error.size();
-  for(unsigned i = 0; i<m; ++i)
+  for (unsigned i = 0; i<m; ++i)
     er += fitting_error[i];
   er /= m;
   er = vcl_sqrt(er);
-  vcl_cout << "Model Params: " << model_params << '\n';
-  vcl_cout << "Fitting Error: " << er << '\n';
+  vcl_cout << "Model Params: " << model_params << '\n'
+           << "Fitting Error: " << er << vcl_endl;
   TEST_NEAR("test lambertian model", er , 0.072795, 1.0e-6);
 #if 0
-  for(unsigned i = 0; i<m ; ++i)
-    vcl_cout << vcl_sqrt(fitting_error[i]) << '\n';
+  for (unsigned i = 0; i<m ; ++i)
+    vcl_cout << vcl_sqrt(fitting_error[i]) << vcl_endl;
 
-  vcl_cout << "Predicted Intensity \n";
-  for(unsigned i = 0; i<m; ++i)
-    vcl_cout << brad_expected_intensity(illumination_dirs[i], model_params)
-             << '\n';
+  vcl_cout << "Predicted Intensity\n";
+  for (unsigned i = 0; i<m; ++i)
+    vcl_cout << brad_expected_intensity(illumination_dirs[i], model_params) << vcl_endl;
   vcl_vector<double> fitting_errors;
   brad_solution_error(illumination_dirs, intensities, fitting_errors);
-  vcl_cout << "Interpolated intensity \n";
-  for(unsigned i = 0; i<m; ++i)
-    vcl_cout << fitting_errors[i] << '\n';
+  vcl_cout << "Interpolated intensity\n";
+  for (unsigned i = 0; i<m; ++i)
+    vcl_cout << fitting_errors[i] << vcl_endl;
 #endif
 }
 

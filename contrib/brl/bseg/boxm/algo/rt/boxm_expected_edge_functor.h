@@ -5,10 +5,6 @@
 #include <boxm/boxm_scene.h>
 #include <boxm/algo/rt/boxm_render_expected_edge_tangent_image_functor.h>
 
-#include <vgl/vgl_box_3d.h>
-#include <vgl/vgl_point_3d.h>
-#include <vgl/vgl_vector_3d.h>
-#include <vgl/vgl_polygon.h>
 #include <vpgl/vpgl_camera_sptr.h>
 #include <vpgl/vpgl_perspective_camera.h>
 #include <vil/vil_image_view.h>
@@ -34,16 +30,16 @@ class boxm_expected_edge_functor
  public:
   boxm_expected_edge_functor(boxm_scene<boct_tree<T_loc, T_data > > &scene)
     : scene_(scene) {}
-  ~boxm_expected_edge_functor(){}
+  ~boxm_expected_edge_functor() {}
 
   bool apply(const vpgl_camera_double_sptr& cam, vil_image_view<float> *img_eei)
   {
     boxm_render_edge_tangent_image_rt(scene_,cam,*img_eei);
-    //: now take the inverse of this image, pixels which contain edges will have values closer to 1 and others will be zero
+    // now take the inverse of this image, pixels which contain edges will have values closer to 1 and others will be zero
     boxm_exp_edge_vil_not_functor nt;
     vil_transform(*img_eei, nt);
 
-    //: now blur this image
+    // now blur this image
     *img_eei = brip_vil_float_ops::gaussian(*img_eei, 1.0f);
 
     return true;

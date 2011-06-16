@@ -13,7 +13,6 @@
 #include <vcl_vector.h>
 #include <vcl_string.h>
 #include <vcl_iostream.h>
-#include <vul/vul_file.h>
 
 #include <boxm/ocl/boxm_ray_trace_manager.h>
 class open_cl_test_data

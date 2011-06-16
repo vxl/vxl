@@ -14,7 +14,6 @@
 #include <bvpl/kernels/bvpl_create_directions.h>
 
 #include <boct/boct_loc_code.h>
-#include <vpl/vpl.h>
 
 static bool debug = false;
 typedef boct_tree<short, float> tree_type;

@@ -6,14 +6,12 @@
 #include <vcl_iostream.h>
 #include <vcl_vector.h>
 #include <vnl/vnl_vector_fixed.h>
-#include <vbl/vbl_array_2d.h>
 #include <bocl/bocl_manager.h>
 #include <bocl/bocl_utils.h>
 #include <boxm/ocl/boxm_ocl_scene.h>
 
 #include <vil/vil_image_view.h>
 #include <vpgl/vpgl_perspective_camera.h>
-#include <vul/vul_file_iterator.h>
 
 class boxm_re_render_ocl_scene_manager : public bocl_manager<boxm_re_render_ocl_scene_manager>
 {
@@ -66,8 +64,8 @@ class boxm_re_render_ocl_scene_manager : public bocl_manager<boxm_re_render_ocl_
   bool finish_online_processing();
 
   //: 2d workgroup
-  void set_bundle_ni(unsigned bundle_x) {bni_=bundle_x;}
-  void set_bundle_nj(unsigned bundle_y) {bnj_=bundle_y;}
+  void set_bundle_ni(unsigned bundle_x) { bni_=bundle_x; }
+  void set_bundle_nj(unsigned bundle_y) { bnj_=bundle_y; }
 
   //: run update
   bool run_scene();
@@ -101,8 +99,8 @@ class boxm_re_render_ocl_scene_manager : public bocl_manager<boxm_re_render_ocl_
   //: load all blocks in an array and store the tree pointers in block_ptrs;
   bool set_all_blocks();
 
-  unsigned wni() const {return wni_;}
-  unsigned wnj() const {return wnj_;}
+  unsigned wni() const { return wni_; }
+  unsigned wnj() const { return wnj_; }
 
   bool read_output_image();
   bool read_trees();
@@ -113,7 +111,7 @@ class boxm_re_render_ocl_scene_manager : public bocl_manager<boxm_re_render_ocl_
   //: cleanup
   bool clean_update();
 
-  cl_float * output_image() {return image_;}
+  cl_float * output_image() { return image_; }
   // image
   cl_float * image_;
   cl_uint * image_gl_;
@@ -150,7 +148,7 @@ class boxm_re_render_ocl_scene_manager : public bocl_manager<boxm_re_render_ocl_
   int setup_app_density_buffer();
   bool clean_app_density();
   int clean_app_density_buffer();
-  cl_mem& app_density(){return app_density_buf_;}
+  cl_mem& app_density() { return app_density_buf_; }
   bool setup_norm_data(bool use_uniform=true,float mean = 0.0f, float sigma = 0.0f);
 
   bool clean_norm_data();

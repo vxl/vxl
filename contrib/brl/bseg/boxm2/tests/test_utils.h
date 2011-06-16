@@ -2,13 +2,12 @@
 #define boxm2_test_utils_h_
 //:
 // \file
+
 #include <vcl_iostream.h>
 #include <boxm2/boxm2_block.h>
 #include <boxm2/boxm2_data.h>
 #include <testlib/testlib_test.h>
-#include <vnl/vnl_vector_fixed.h>
 #include <vpgl/vpgl_camera_sptr.h>
-
 
 class boxm2_test_utils
 {

@@ -10,8 +10,7 @@
 #include <boxm/sample/boxm_edge_tangent_sample.h>
 #include <boxm/sample/boxm_inf_line_sample.h>
 #include <vnl/vnl_math.h>
-#include <vil/vil_transform.h>
-#include <vbl/vbl_array_2d.h>
+#include <vil/vil_image_view.h>
 #include <sdet/sdet_img_edge.h>
 #include <vgl/vgl_distance.h>
 #ifdef DEBUG

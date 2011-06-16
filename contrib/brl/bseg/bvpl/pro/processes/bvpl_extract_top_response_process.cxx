@@ -21,8 +21,6 @@
 #include <bsta/bsta_attributes.h>
 #include <bsta/bsta_gauss_sf1.h>
 
-#include <vpl/vpl.h>
-
 namespace bvpl_extract_top_response_process_globals
 {
   const unsigned n_inputs_ = 5;

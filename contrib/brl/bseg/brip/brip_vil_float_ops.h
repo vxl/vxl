@@ -29,8 +29,8 @@
 #include <vgl/algo/vgl_h_matrix_2d.h>
 #include <vil/vil_image_resource.h>
 #include <vil/vil_image_view.h>
+#include <vil/vil_math.h>
 #include <vil/vil_rgb.h>
-#include <vil/vil_convert.h>
 #include <vsol/vsol_box_2d_sptr.h>
 #include <brip/brip_roi_sptr.h>
 
@@ -585,27 +585,27 @@ void brip_vil_float_ops::normalize_to_interval(const vil_image_view<T_inp>& img_
                                                float max)
 {
   assert(min<max);
-  
-  T_inp min_inp, max_inp;
+  T_inp min_inp;
+  T_inp max_inp;
   vil_math_value_range<T_inp>(img_inp,min_inp,max_inp);
 
   if (min_inp >= max_inp) {
     img_out.fill(T_out(0));
     return;
-  } 
+  }
 
   float min_inp_f = (float)min_inp;
   float max_inp_f = (float)max_inp;
   float scale = (max-min)/(max_inp_f-min_inp_f);
 
   img_out.set_size(img_inp.ni(),img_inp.nj(),1);
-  for(unsigned i=0; i<img_out.ni(); i++){
-    for(unsigned j=0; j<img_out.nj(); j++){
+  for (unsigned i=0; i<img_out.ni(); i++) {
+    for (unsigned j=0; j<img_out.nj(); j++) {
       float inp_val = (float)img_inp(i,j);
       float out_val = (inp_val-min_inp_f)*scale;
       img_out(i,j) = T_out(out_val);
     }
-  }    
+  }
 }
 
 #endif // brip_vil_float_ops_h_

@@ -6,14 +6,13 @@
 #include <vcl_iostream.h>
 #include <vcl_vector.h>
 #include <vnl/vnl_vector_fixed.h>
-#include <vbl/vbl_array_2d.h>
+#include <vbl/vbl_ref_count.h>
 #include <bocl/bocl_manager.h>
 #include <bocl/bocl_utils.h>
 #include <boxm/ocl/boxm_ocl_bit_scene.h>
 
 #include <vil/vil_image_view.h>
 #include <vpgl/vpgl_perspective_camera.h>
-#include <vul/vul_file_iterator.h>
 
 //PASS ENUM
 enum {
@@ -21,9 +20,9 @@ enum {
   UPDATE_PREINF = 1,
   UPDATE_DIVIDE = 2,
   UPDATE_PROC   = 3,
-  UPDATE_BAYES  = 4, 
-  UPDATE_CELL   = 5, 
-  RENDER_PASS   = 6, 
+  UPDATE_BAYES  = 4,
+  UPDATE_CELL   = 5,
+  RENDER_PASS   = 6,
   REFINE_PASS   = 7,
   QUERY_POINT   = 8,
   RAY_PROBE     = 9,
@@ -31,7 +30,7 @@ enum {
   CLEAN_AUX     = 11,
   MERGE_PASS    = 12,
   CHANGE_DETECT_OLD = 13
-}; 
+};
 
 class boxm_update_bit_scene_manager : public bocl_manager<boxm_update_bit_scene_manager>, public vbl_ref_count
 {
@@ -65,15 +64,15 @@ class boxm_update_bit_scene_manager : public bocl_manager<boxm_update_bit_scene_
   bool init_scene(boxm_ocl_bit_scene * scene,
                   vpgl_camera_double_sptr cam,
                   vil_image_view<float> &obs,
-                  float prob_thresh=0.3, 
-                  bool use_gl=true, 
+                  float prob_thresh=0.3,
+                  bool use_gl=true,
                   bool use_atomic=true);
   bool init_scene(boxm_ocl_bit_scene *scene,
                   unsigned ni,
                   unsigned nj,
                   float prob_thresh=0.3);
-  
-  bool init_scene_buffers(boxm_ocl_bit_scene *scene); 
+
+  bool init_scene_buffers(boxm_ocl_bit_scene *scene);
 
   bool uninit_scene();
   bool setup_online_processing();
@@ -108,8 +107,8 @@ class boxm_update_bit_scene_manager : public bocl_manager<boxm_update_bit_scene_
   void set_use_gl(bool use) { use_gl_ = use; }
 
   //: set 2d workgroup size
-  void set_bundle_ni(unsigned bundle_x) {bni_=bundle_x;}
-  void set_bundle_nj(unsigned bundle_y) {bnj_=bundle_y;}
+  void set_bundle_ni(unsigned bundle_x) { bni_=bundle_x; }
+  void set_bundle_nj(unsigned bundle_y) { bnj_=bundle_y; }
 
   //Enqueues a read command for output image and scene.  saves image/scene
   bool read_output_image();
@@ -122,9 +121,9 @@ class boxm_update_bit_scene_manager : public bocl_manager<boxm_update_bit_scene_
   //----------------------------------------------------------------------------
   // Get methods (unsure if when these are used)
   //----------------------------------------------------------------------------
-  unsigned wni() const {return wni_;}
-  unsigned wnj() const {return wnj_;}
-  cl_float * output_image() {return image_;}
+  unsigned wni() const { return wni_; }
+  unsigned wnj() const { return wnj_; }
+  cl_float * output_image() { return image_; }
 
   //---------------------------------------------------------------------------
   // Appearance density setup - this can be factored out of public and done
@@ -135,7 +134,7 @@ class boxm_update_bit_scene_manager : public bocl_manager<boxm_update_bit_scene_
   int setup_app_density_buffer();
   bool clean_app_density();
   int clean_app_density_buffer();
-  cl_mem& app_density(){return app_density_buf_;}
+  cl_mem& app_density() { return app_density_buf_; }
   bool setup_norm_data(bool use_uniform=true,float mean = 0.0f, float sigma = 0.0f);
   bool clean_norm_data();
 
@@ -178,7 +177,7 @@ class boxm_update_bit_scene_manager : public bocl_manager<boxm_update_bit_scene_
   bool clean_rayoutput();
   bool read_output_array();
   void getoutputarray(vcl_vector< vcl_vector<float> >& out);
-  vpgl_camera_double_sptr get_camera(){return cam_;}
+  vpgl_camera_double_sptr get_camera() { return cam_; }
  protected:
   //----------------------------------------------------------------------------
   // PROTECTED helper methods (no need for these to be public, makes api simpler)
@@ -248,12 +247,12 @@ class boxm_update_bit_scene_manager : public bocl_manager<boxm_update_bit_scene_
   //cl_int          * cell_lock_;
   //cl_uchar        * cell_mean_vis_;   //mean obs and visibility aux data
   //cl_float        * cell_cum_beta_;   //cum_length, beta aux data
-  
-  //integer auxiliary data... 
-  cl_int          * cell_seg_len_; 
+
+  //integer auxiliary data...
+  cl_int          * cell_seg_len_;
   cl_int          * cell_mean_obs_;
   cl_int          * cell_beta_;
-  cl_int          * cell_vis_; 
+  cl_int          * cell_vis_;
 
   /* other */
   cl_uchar        * bit_lookup_;
@@ -311,12 +310,12 @@ class boxm_update_bit_scene_manager : public bocl_manager<boxm_update_bit_scene_
   //cl_mem    cell_mean_vis_buf_;
   //cl_mem    cell_lock_buf_;
   cl_mem    bit_lookup_buf_;
-  
+
   //new integer aux data
-  cl_mem    cell_seg_len_buf_; 
+  cl_mem    cell_seg_len_buf_;
   cl_mem    cell_mean_obs_buf_;
   cl_mem    cell_beta_buf_;
-  cl_mem    cell_vis_buf_; 
+  cl_mem    cell_vis_buf_;
 
   /* update buffers */
   cl_mem    tree_bbox_buf_;
@@ -347,7 +346,7 @@ class boxm_update_bit_scene_manager : public bocl_manager<boxm_update_bit_scene_
   vcl_size_t globalThreads[2];
   vcl_size_t localThreads[2];
   bool use_gl_;
-  bool use_atomic_; 
+  bool use_atomic_;
 };
 
 //: Binary write boxm_update_bit_scene_manager scene to stream

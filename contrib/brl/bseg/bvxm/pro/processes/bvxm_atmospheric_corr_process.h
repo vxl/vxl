@@ -13,8 +13,6 @@
 #include <bprb/bprb_func_process.h>
 #include <vcl_string.h>
 
-#include <vil/vil_image_view_base.h>
-#include <vil/vil_image_view.h>
 #include <bvxm/bvxm_voxel_traits.h>
 #include <bvxm/grid/bvxm_voxel_slab_base.h>
 
@@ -24,7 +22,7 @@ namespace bvxm_atmospheric_corr_process_globals
   const unsigned n_inputs_ = 2;
   const unsigned n_outputs_ = 1;
 
-  // other gloabal variables
+  // other global variables
   unsigned ni_= 0;
   unsigned nj_= 0;
   unsigned nplanes_=0;

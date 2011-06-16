@@ -2,19 +2,17 @@
 #define boxm_ocl_camera_manager_h_
 //:
 // \file
+
 #include <vcl_string.h>
 #include <vcl_iostream.h>
 #include <vcl_vector.h>
 #include <bocl/bocl_cl.h>
-#include <vnl/vnl_vector_fixed.h>
-#include <vbl/vbl_array_2d.h>
 #include <bocl/bocl_manager.h>
 #include <bocl/bocl_utils.h>
 #include <boxm/sample/boxm_sample.h>
 #include <boxm/boxm_apm_traits.h>
 #include "boxm_ocl_utils.h"
 #include <vpgl/vpgl_perspective_camera.h>
-
 
 class boxm_ocl_camera_manager : public bocl_manager<boxm_ocl_camera_manager>
 {
@@ -26,7 +24,7 @@ class boxm_ocl_camera_manager : public bocl_manager<boxm_ocl_camera_manager>
                              point_3d_(0)
   {}
 
-  ~boxm_ocl_camera_manager(){if (program_)clReleaseProgram(program_);}
+  ~boxm_ocl_camera_manager() { if (program_)clReleaseProgram(program_); }
 
   bool set_input_cam(vpgl_perspective_camera<double> * cam);
   bool clean_cam();
@@ -38,10 +36,10 @@ class boxm_ocl_camera_manager : public bocl_manager<boxm_ocl_camera_manager>
   bool run();
   void set_point2d(float u, float v);
   void set_point3d(float x, float y,float z);
-  cl_float* point2d(){return point_2d_;}
-  cl_float* point3d(){return point_3d_;}
+  cl_float* point2d() { return point_2d_; }
+  cl_float* point3d() { return point_3d_; }
 
-  cl_program program() {return program_;}
+  cl_program program() { return program_; }
 
   int setup_cam_buffer();
   int release_cam_buffer();
@@ -55,7 +53,7 @@ class boxm_ocl_camera_manager : public bocl_manager<boxm_ocl_camera_manager>
   int create_kernel(vcl_string const& name);
   int release_kernel();
 
-  cl_kernel kernel() {return kernel_;}
+  cl_kernel kernel() { return kernel_; }
  protected:
   cl_program program_;
   cl_command_queue command_queue_;

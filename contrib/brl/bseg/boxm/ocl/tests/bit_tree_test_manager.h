@@ -6,14 +6,11 @@
 #include <vcl_iostream.h>
 #include <vcl_vector.h>
 #include <vnl/vnl_vector_fixed.h>
-#include <vbl/vbl_array_2d.h>
 #include <bocl/bocl_manager.h>
 #include <bocl/bocl_utils.h>
 #include <boxm/boxm_scene.h>
 #include <boxm/ocl/boxm_ocl_bit_scene.h>
 #include <boxm/boxm_apm_traits.h>
-
-#include <vil/vil_image_view.h>
 
 class bit_tree_test_manager : public bocl_manager<bit_tree_test_manager>
 {

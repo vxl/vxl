@@ -5,7 +5,6 @@
 
 #include <vcl_vector.h>
 #include <vcl_iostream.h>
-#include <vil/vil_rgb.h>
 #include <vsl/vsl_binary_io.h>
 #include <boxm/boxm_apm_traits.h>
 #include <boxm/boxm_aux_traits.h>
