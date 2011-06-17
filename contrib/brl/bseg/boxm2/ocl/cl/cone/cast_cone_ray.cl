@@ -17,49 +17,6 @@
 #define MIN_T 1.0f
 #define UNIT_SPHERE_RADIUS 0.6203504908994f // = 1/vcl_cbrt(vnl_math::pi*4/3);
 
-////////////////////////////////////////////////////////////////////////////////
-//Helper methods (that will hopefully, one day, become vector ops)
-////////////////////////////////////////////////////////////////////////////////
-
-inline float calc_tfar( float ray_ox, float ray_oy, float ray_oz,
-                        float ray_dx, float ray_dy, float ray_dz,
-                        float max_facex, float max_facey, float max_facez)
-{
-  return min(min( (max_facex-ray_ox)*(1.0f/ray_dx), (max_facey-ray_oy)*(1.0f/ray_dy)), (max_facez-ray_oz)*(1.0f/ray_dz));
-}
-
-inline float calc_tnear(float ray_ox, float ray_oy, float ray_oz,
-                        float ray_dx, float ray_dy, float ray_dz,
-                        float min_facex, float min_facey, float min_facez)
-{
-  return max(max( (min_facex-ray_ox)*(1.0f/ray_dx), (min_facey-ray_oy)*(1.0f/ray_dy)), (min_facez-ray_oz)*(1.0f/ray_dz));
-}
-
-//requires cell_minx
-inline int calc_blkI(float cell_minx, float cell_miny, float cell_minz, int4 dims)
-{
-  return convert_int(cell_minz + (cell_miny + cell_minx*dims.y)*dims.z);
-}
-
-//requires cell_minx
-inline int calc_blkInt(int cell_minx, int cell_miny, int cell_minz, int4 dims)
-{
-  return (cell_minz + (cell_miny + cell_minx*dims.y)*dims.z);
-}
-
-//requires float position
-inline void calc_cell_min( float* cell_minx, float* cell_miny, float* cell_minz,
-                           float posx, float posy, float posz, int4 dims)
-{
-  (*cell_minx) = clamp(floor(posx), 0.0f, dims.x-1.0f);
-  (*cell_miny) = clamp(floor(posy), 0.0f, dims.y-1.0f);
-  (*cell_minz) = clamp(floor(posz), 0.0f, dims.z-1.0f);
-}
-
-////////////////////////////////////////////////////////////////////////////////
-// END Helper methods
-////////////////////////////////////////////////////////////////////////////////
-
 void cast_cone_ray(
                     //---- RAY ARGUMENTS -------------------------------------------------
                     int i, int j,                                     //pixel information

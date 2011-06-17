@@ -35,8 +35,6 @@ void cast_adaptive_cone_ray(
                             __local     uchar              * cumsum,          //cumulative sum helper for data pointer
                             __local     uchar              * visit_list,      //visit list for BFS, uses 10 chars per thread
                             
-                            __local     float4             * ray_one,         //top level ray pyramid
-
                             //----aux arguments defined by host at compile time-------------------
                             AuxArgs aux_args )
 {

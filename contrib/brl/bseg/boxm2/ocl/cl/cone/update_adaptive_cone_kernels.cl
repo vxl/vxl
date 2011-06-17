@@ -1,12 +1,10 @@
-// This is brl/bseg/boxm2/ocl/cl/cone/update_adaptive_cone_kernels.cl
+//:
+// \file
+// This is brl/bseg/boxm2/ocl/cl/cone/update_cone_kernels.cl
 #pragma OPENCL EXTENSION cl_khr_global_int32_base_atomics: enable
 #if NVIDIA
  #pragma OPENCL EXTENSION cl_khr_gl_sharing : enable
 #endif
-//:
-// \file
-// Created Sept 30, 2010,
-// Implements the parallel work group segmentation algorithm.
 #ifdef MOG_TYPE_16
     #define CONVERT_FUNC_SAT_RTE(lhs,data) lhs=convert_ushort8_sat_rte(data);
     #define MOG_TYPE ushort8
@@ -17,7 +15,6 @@
    #define MOG_TYPE uchar8
    #define NORM 255;
 #endif
-
 
 #ifdef PASSONE
 //: Define aux_args (like a functor struct)
@@ -54,19 +51,17 @@ void cast_adaptive_cone_ray(
 
                             //---- SCENE ARGUMENTS------------------------------------------------
                             __constant  RenderSceneInfo    * linfo,           //scene info (origin, block size, etc)
-                            __global    int4               * tree_array,      //tree buffers (loaded as int4, but read as uchar16
+                            __global    int4               * tree_array,      //tree buffers (loaded as int4, but read as uchar16           
 
                             //---- UTILITY ARGUMENTS----------------------------------------------
                             __local     uchar16            * local_tree,      //local tree for traversing (8x8 matrix)
                             __constant  uchar              * bit_lookup,      //0-255 num bits lookup table
-
                             __constant  float              * centerX,         // center points for ...
                             __constant  float              * centerY,         // each of the 585 possible cells ...
                             __constant  float              * centerZ,         // indexed by bit index
-
                             __local     uchar              * cumsum,          //cumulative sum helper for data pointer
                             __local     uchar              * visit_list,      //visit list for BFS, uses 10 chars per thread
-
+                            
                             //----aux arguments defined by host at compile time-------------------
                             AuxArgs aux_args );
 
@@ -106,25 +101,38 @@ pass_one(__constant  RenderSceneInfo    * linfo,
   if (i>=(*imgdims).z || j>=(*imgdims).w || i<(*imgdims).x || j<(*imgdims).y)
     return;
 
-
   //INITIALIZE RAY PYRAMID
-  __local float4* ray_pyramid_mem[4];
-  __local float4 ray0[1];
-  __local float4 ray1[4];
-  __local float4 ray2[16];
-  __local float4 ray3[64];
-  ray3[llid] = ray_directions[imIndex];
+  __local float4* ray_pyramid_mem[4]; 
+  __local float4 ray0[1]; 
+  __local float4 ray1[4]; 
+  __local float4 ray2[16]; 
+  __local float4 ray3[64]; 
+  ray_pyramid_mem[0] = ray0; 
+  ray_pyramid_mem[1] = ray1; 
+  ray_pyramid_mem[2] = ray2; 
+  ray_pyramid_mem[3] = ray3; 
+  ray3[llid] = ray_directions[imIndex]; 
   barrier(CLK_LOCAL_MEM_FENCE);
-  ray_pyramid pyramid = new_ray_pyramid(ray_pyramid_mem, 4);
-
-  //
-
-
+  ray_pyramid pyramid = new_ray_pyramid(ray_pyramid_mem, 4, 8); 
+  
   //INITIALIZE OBSERVED PYRAMID
-  __local float obs0[1];
-  __local float obs1[4];
-  __local float obs3[64];
-  __local float obs2[16];
+  __local float* obs_mem[4]; 
+  __local float obs0[1]; 
+  __local float obs1[4]; 
+  __local float obs2[16]; 
+  __local float obs3[64]; 
+  obs_mem[0] = obs0; 
+  obs_mem[1] = obs1; 
+  obs_mem[2] = obs2; 
+  obs_mem[3] = obs3; 
+  obs3[llid] = in_image[imIndex]; 
+  barrier(CLK_LOCAL_MEM_FENCE); 
+  image_pyramid obs_pyramid = new_image_pyramid(obs_mem, 4, 8); 
+  
+  //init active ray matrix
+  __local uchar active_rays[64]; 
+  active_rays[llid] = (llid==0) ? 1 : 0; 
+  barrier(CLK_LOCAL_MEM_FENCE); 
 
 /*
   //----------------------------------------------------------------------------
@@ -219,8 +227,8 @@ void compute_ball_properties(AuxArgs aux_args)
 
   //incrememnt pre and vis;
   float vis_cum = (*aux_args.vis_cum);
-  pre += vis*(1.0-vis_cum)*PI;
-  vis *= vis_cum;
+  pre += vis*(1.0-vis_cum)*PI; 
+  vis *= vis_cum; 
   (*aux_args.ray_pre) = pre;
   (*aux_args.ray_vis) = vis;
 
@@ -416,10 +424,10 @@ bool compute_ball_properties(AuxArgs aux_args)
 
   //incrememnt beta pre and vis along the ray
   (*aux_args.beta_cum) = (pre+vis*PI)/aux_args.norm;
-  pre += vis*(1.0f - (*aux_args.vis_cum) )*PI;
-  vis *= (*aux_args.vis_cum);
-  (*aux_args.ray_pre) = pre;
-  (*aux_args.ray_vis) = vis;
+  pre += vis*(1.0f - (*aux_args.vis_cum) )*PI; 
+  vis *= (*aux_args.vis_cum); 
+  (*aux_args.ray_pre) = pre; 
+  (*aux_args.ray_vis) = vis; 
 
   //reset ball values
   (*aux_args.vis_cum) = 1.0f;
@@ -458,6 +466,7 @@ update_cone_data( __global RenderSceneInfo  * info,
   int datasize = info->data_len * info->num_buffer;
   if (gid<datasize)
   {
+    
     float cell_vol = convert_float(aux_vol[gid]) / SEGLEN_FACTOR;
     if (cell_vol>1e-10f)
     {
@@ -467,7 +476,7 @@ update_cone_data( __global RenderSceneInfo  * info,
 
       float alpha = alpha_array[gid];
       MOG_TYPE mog_bytes = mixture_array[gid];
-      float8 mog = convert_float8(mog_bytes) / (float) NORM;
+      float8 mog = convert_float8(mog_bytes) / (float) NORM; 
       ushort4 num_obs = nobs_array[gid];
 
       //update alpha

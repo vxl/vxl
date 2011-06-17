@@ -73,7 +73,7 @@ void calc_cone_split(float r, float t, float alpha, int quadrant,
                      float* new_r, float* tprime)
 {
   float denom = cos(alpha)+1.0f; 
-  float first = r*sin(alpha/2.0f) + 2.0f*t*cos(alpha.2.0f); 
+  float first = r*sin(alpha/2.0f) + 2.0f*t*cos(alpha/2.0f); 
   float second = 2.0f*sqrt( r*(r+sin(alpha)) ); 
   (*tprime) = 2.0f * (first + second) / denom; 
   
