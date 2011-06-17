@@ -46,7 +46,9 @@ namespace boxm2_ocl_render_cone_expected_image_process_globals
     src_paths.push_back(source_dir + "ogl/intersect.cl");
     src_paths.push_back(source_dir + "backproject.cl");
     src_paths.push_back(source_dir + "cone/render_expected_cone.cl");
+    src_paths.push_back(source_dir + "cone/cone_util.cl");
     src_paths.push_back(source_dir + "cone/cast_cone_ray.cl");
+    
 
     //set kernel options
     vcl_string options = " -D STEP_CELL=step_cell_cone(aux_args,data_ptr,intersect_volume) ";

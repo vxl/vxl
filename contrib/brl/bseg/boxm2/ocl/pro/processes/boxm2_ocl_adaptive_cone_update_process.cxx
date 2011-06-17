@@ -1,4 +1,4 @@
-// This is brl/bseg/boxm2/ocl/pro/processes/boxm2_ocl_cone_update_process.cxx
+// This is brl/bseg/boxm2/ocl/pro/processes/boxm2_ocl_adaptive_cone_update_process.cxx
 //:
 // \file
 // \brief  OpenCL accelerated Cone Update process
@@ -7,13 +7,13 @@
 // \date June 1, 2011
 
 #include <bprb/bprb_func_process.h>
-
 #include <vcl_fstream.h>
 #include <boxm2/ocl/boxm2_opencl_cache.h>
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/boxm2_block.h>
 #include <boxm2/boxm2_data_base.h>
 #include <boxm2/ocl/boxm2_ocl_util.h>
+#include <vil/vil_save.h>
 #include <vil/vil_image_view.h>
 #include <boxm2/ocl/algo/boxm2_ocl_camera_converter.h>
 #include <boxm2/ocl/algo/boxm2_ocl_cone_update_function.h>
@@ -22,11 +22,12 @@
 #include <brdb/brdb_value.h>
 
 //directory utility
+#include <vul/vul_timer.h>
 #include <vcl_where_root_dir.h>
 #include <bocl/bocl_device.h>
 #include <bocl/bocl_kernel.h>
 
-namespace boxm2_ocl_cone_update_process_globals
+namespace boxm2_ocl_adaptive_cone_update_process_globals
 {
   const unsigned n_inputs_  = 6;
   const unsigned n_outputs_ = 0;
@@ -44,13 +45,15 @@ namespace boxm2_ocl_cone_update_process_globals
       src_paths.push_back(source_dir + "scene_info.cl");
       src_paths.push_back(source_dir + "backproject.cl");
       src_paths.push_back(source_dir + "basic/linked_list.cl");
+      src_paths.push_back(source_dir + "basic/ray_pyramid.cl"); 
+      src_paths.push_back(source_dir + "basic/image_pyramid.cl"); 
       src_paths.push_back(source_dir + "ogl/intersect.cl");
       src_paths.push_back(source_dir + "bit/bit_tree_library_functions.cl");
       src_paths.push_back(source_dir + "statistics_library_functions.cl");
-      src_paths.push_back(source_dir + "cone/update_cone_kernels.cl");
+      src_paths.push_back(source_dir + "cone/update_adaptive_cone_kernels.cl");
       vcl_vector<vcl_string> non_ray_src = vcl_vector<vcl_string>(src_paths);
       src_paths.push_back(source_dir + "cone/cone_util.cl"); 
-      src_paths.push_back(source_dir + "cone/cast_cone_ray.cl");
+      src_paths.push_back(source_dir + "cone/cast_adaptive_cone_ray.cl");
 
       //compilation options
       vcl_string options = opts;
@@ -58,24 +61,24 @@ namespace boxm2_ocl_cone_update_process_globals
       //proc norm pass computes the proc_norm image, mean_obs for each cell
       bocl_kernel* pass_one = new bocl_kernel();
       vcl_string one_opts = options + " -D PASSONE ";
-      one_opts += " -D STEP_CELL=step_cell_one(aux_args,data_ptr,intersect_volume) ";
+      one_opts += " -D STEP_CELL=step_cell(aux_args,data_ptr,intersect_volume) ";
       one_opts += " -D COMPUTE_BALL_PROPERTIES=compute_ball_properties(aux_args)  ";
       pass_one->create_kernel(&device->context(),device->device_id(), src_paths, "pass_one", one_opts, "cone_update::pass_one");
       vec_kernels.push_back(pass_one);
 
-      //computes bayes ratio for each cell
-      bocl_kernel* bayes_main = new bocl_kernel();
-      vcl_string bayes_opt = options + " -D BAYES ";
-      bayes_opt += " -D STEP_CELL=step_cell(aux_args,data_ptr,intersect_volume)  ";
-      bayes_opt += " -D COMPUTE_BALL_PROPERTIES=compute_ball_properties(aux_args)  ";
-      bayes_opt += " -D REDISTRIBUTE=redistribute(aux_args,data_ptr,intersect_volume)  ";
-      bayes_main->create_kernel(&device->context(),device->device_id(), src_paths, "bayes_main", bayes_opt, "cone_update::bayes_main");
-      vec_kernels.push_back(bayes_main);
+      ////computes bayes ratio for each cell
+      //bocl_kernel* bayes_main = new bocl_kernel();
+      //vcl_string bayes_opt = options + " -D BAYES ";
+      //bayes_opt += " -D STEP_CELL=step_cell(aux_args,data_ptr,intersect_volume)  ";
+      //bayes_opt += " -D COMPUTE_BALL_PROPERTIES=compute_ball_properties(aux_args)  ";
+      //bayes_opt += " -D REDISTRIBUTE=redistribute(aux_args,data_ptr,intersect_volume)  ";
+      //bayes_main->create_kernel(&device->context(),device->device_id(), src_paths, "bayes_main", bayes_opt, "cone_update::bayes_main");
+      //vec_kernels.push_back(bayes_main);
 
-      //may need
-      bocl_kernel* update = new bocl_kernel();
-      update->create_kernel(&device->context(),device->device_id(), non_ray_src, "update_cone_data", options, "cone_update::update_data");
-      vec_kernels.push_back(update);
+      ////may need
+      //bocl_kernel* update = new bocl_kernel();
+      //update->create_kernel(&device->context(),device->device_id(), non_ray_src, "update_cone_data", options, "cone_update::update_data");
+      //vec_kernels.push_back(update);
 
       return ;
   }
@@ -84,9 +87,9 @@ namespace boxm2_ocl_cone_update_process_globals
   static vcl_map<vcl_string,vcl_vector<bocl_kernel*> > kernels;
 }
 
-bool boxm2_ocl_cone_update_process_cons(bprb_func_process& pro)
+bool boxm2_ocl_adaptive_cone_update_process_cons(bprb_func_process& pro)
 {
-  using namespace boxm2_ocl_cone_update_process_globals;
+  using namespace boxm2_ocl_adaptive_cone_update_process_globals;
 
   //process takes 6 inputs
   vcl_vector<vcl_string> input_types_(n_inputs_);
@@ -107,9 +110,9 @@ bool boxm2_ocl_cone_update_process_cons(bprb_func_process& pro)
   return good;
 }
 
-bool boxm2_ocl_cone_update_process(bprb_func_process& pro)
+bool boxm2_ocl_adaptive_cone_update_process(bprb_func_process& pro)
 {
-  using namespace boxm2_ocl_cone_update_process_globals;
+  using namespace boxm2_ocl_adaptive_cone_update_process_globals;
 
   if ( pro.n_inputs() < n_inputs_-1 ) {
     vcl_cout << pro.name() << ": The number of inputsshould be 5 or " << n_inputs_<< vcl_endl;
@@ -168,13 +171,13 @@ bool boxm2_ocl_cone_update_process(bprb_func_process& pro)
     num_obs_type += "_" + ident;
   }
 
-  // create a command queue.
+  //: create a command queue.
   int status=0;
   cl_command_queue queue = clCreateCommandQueue(device->context(),*(device->device_id()),
                                                 CL_QUEUE_PROFILING_ENABLE,&status);
   if (status!=0) return false;
 
-  // compile the kernel if not already compiled
+  //: compile the kernel if not already compiled
   vcl_string identifier=device->device_identifier()+options;
   if (kernels.find(identifier)==kernels.end())
   {
@@ -184,18 +187,18 @@ bool boxm2_ocl_cone_update_process(bprb_func_process& pro)
     kernels[identifier]=ks;
   }
 
-  ////run ocl cone update function
-  float gpu_time = boxm2_ocl_cone_update( scene,
-                                          device,
-                                          opencl_cache,
-                                          kernels[identifier],
-                                          queue,
-                                          data_type,
-                                          num_obs_type,
-                                          cam ,
-                                          img );
+  //////run ocl cone update function
+  //float gpu_time = boxm2_ocl_cone_update( scene,
+                                          //device,
+                                          //opencl_cache,
+                                          //kernels[identifier],
+                                          //queue,
+                                          //data_type,
+                                          //num_obs_type,
+                                          //cam ,
+                                          //img );
 
-  vcl_cout<<"Gpu time "<<gpu_time<<" transfer time "<<transfer_time<<vcl_endl;
+  //vcl_cout<<"Gpu time "<<gpu_time<<" transfer time "<<transfer_time<<vcl_endl;
   clReleaseCommandQueue(queue);
   return true;
 }
