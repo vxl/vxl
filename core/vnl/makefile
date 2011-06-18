@@ -127,7 +127,7 @@ SOURCES += vnl_least_squares_cost_function.cxx
 SOURCES += vnl_sparse_lst_sqr_function.cxx
 SOURCES += vnl_nonlinear_minimizer.cxx
 
-SOURCES += vnl_hungarian_algorithm.cxx
+SOURCES += vnl_hungarian_algorithm.txx
 
 # linear systems
 SOURCES += vnl_linear_system.cxx
