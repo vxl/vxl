@@ -105,9 +105,6 @@ SOURCE=.\vnl_erf.cxx
 SOURCE=.\vnl_gamma.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\vnl_hungarian_algorithm.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\vnl_definite_integral.cxx
 # End Source File
 # Begin Source File
@@ -833,6 +830,12 @@ SOURCE=.\Templates/vnl_sparse_matrix+vcl_complex+float--.cxx
 # Begin Source File
 SOURCE=.\Templates/vnl_vector_fixed+double.10-.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\Templates/vnl_hungarian_algorithm+double-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vnl_hungarian_algorithm+int-.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
@@ -1225,6 +1228,9 @@ SOURCE=.\vnl_float_2x1.h
 # End Source File
 # Begin Source File
 SOURCE=.\vnl_hungarian_algorithm.h
+# End Source File
+# Begin Source File
+SOURCE=.\vnl_hungarian_algorithm.txx
 # End Source File
 # Begin Source File
 SOURCE=.\vnl_analytic_integrant.h
