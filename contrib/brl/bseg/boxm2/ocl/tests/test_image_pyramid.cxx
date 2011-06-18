@@ -16,22 +16,23 @@
 #include <vcl_vector.h>
 #include <vcl_map.h>
 #include <vcl_algorithm.h>
+#include <vcl_cmath.h>
 #include <vgl/vgl_vector_3d.h>
 
 
 //Helper print method for 2d column major buffers
 void print_column_major( float* buffer, int nrows, int ncols, int elementSize=4)
 {
-  for(int i=0; i<nrows; ++i) {
-    for(int j=0; j<ncols; ++j) {
-      int idx = elementSize*(nrows*j + i); 
-      vcl_cout<<"["; 
-      for(int el=0; el<elementSize; ++el) 
-        vcl_cout<<buffer[idx+el]<<","; 
-      vcl_cout<<"]"; 
+  for (int i=0; i<nrows; ++i) {
+    for (int j=0; j<ncols; ++j) {
+      int idx = elementSize*(nrows*j + i);
+      vcl_cout<<'[';
+      for (int el=0; el<elementSize; ++el)
+        vcl_cout<<buffer[idx+el]<<',';
+      vcl_cout<<']';
     }
-    vcl_cout<<"\n";
-  } 
+    vcl_cout<<vcl_endl;
+  }
 }
 
 void test_image()
@@ -41,7 +42,7 @@ void test_image()
   if (mgr->gpus_.size()==0)
     return;
   bocl_device* device = mgr->gpus_[0];
-  
+
   //compile pyramid test
   vcl_vector<vcl_string> src_paths;
   vcl_string source_dir = vcl_string(VCL_SOURCE_ROOT_DIR) + "/contrib/brl/bseg/boxm2/ocl/cl/";
@@ -56,28 +57,28 @@ void test_image()
                                                 CL_QUEUE_PROFILING_ENABLE,&status);
 
   //create all the arguments
-  float in_img[8*8]; 
-  int count = 0; 
-  for(int j=0; j<8; ++j) {
-    for(int i=0; i<8; ++i) {
+  float in_img[8*8];
+  int count = 0;
+  for (int j=0; j<8; ++j) {
+    for (int i=0; i<8; ++i) {
       in_img[count+0] = (float) i+j;
     }
   }
-  cl_uint imgdims[4] = {0, 0, 8, 8}; 
-  float out1[4*4]; 
-  float out2[2*2]; 
-  float out3[1*1]; 
-  bocl_mem_sptr obuff = new bocl_mem( device->context(), in_img, sizeof(in_img), "input image"); 
-  obuff->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR); 
-  bocl_mem_sptr dimsbuff = new bocl_mem( device->context(), imgdims, sizeof(imgdims), "dims buff"); 
-  dimsbuff->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR); 
-  bocl_mem_sptr o1buff = new bocl_mem( device->context(), out1, sizeof(out1), "out1"); 
-  o1buff->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR); 
-  bocl_mem_sptr o2buff = new bocl_mem( device->context(), out2, sizeof(out2), "out2"); 
-  o2buff->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);   
-  bocl_mem_sptr o3buff = new bocl_mem( device->context(), out3, sizeof(out3), "out3"); 
-  o3buff->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);   
-  
+  cl_uint imgdims[4] = {0, 0, 8, 8};
+  float out1[4*4];
+  float out2[2*2];
+  float out3[1*1];
+  bocl_mem_sptr obuff = new bocl_mem( device->context(), in_img, sizeof(in_img), "input image");
+  obuff->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
+  bocl_mem_sptr dimsbuff = new bocl_mem( device->context(), imgdims, sizeof(imgdims), "dims buff");
+  dimsbuff->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
+  bocl_mem_sptr o1buff = new bocl_mem( device->context(), out1, sizeof(out1), "out1");
+  o1buff->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
+  bocl_mem_sptr o2buff = new bocl_mem( device->context(), out2, sizeof(out2), "out2");
+  o2buff->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
+  bocl_mem_sptr o3buff = new bocl_mem( device->context(), out3, sizeof(out3), "out3");
+  o3buff->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
+
   //set first kernel args
   pyramid_test.set_arg( obuff.ptr() );
   pyramid_test.set_arg( dimsbuff.ptr() );
@@ -92,52 +93,52 @@ void test_image()
   //execute kernel
   pyramid_test.execute( queue, 2, lThreads, gThreads);
   clFinish( queue );
-  o1buff->read_to_buffer(queue); 
-  o2buff->read_to_buffer(queue); 
-  o3buff->read_to_buffer(queue); 
+  o1buff->read_to_buffer(queue);
+  o2buff->read_to_buffer(queue);
+  o3buff->read_to_buffer(queue);
 
-  //calcluate ground truth values
-  float out1GT[4*4*4]; 
+  //calculate ground truth values
+  float out1GT[4*4*4];
   int oc=0;
-  for(int j=0; j<8; j+=2) {
-    for(int i=0; i<8; i+=2) {
+  for (int j=0; j<8; j+=2) {
+    for (int i=0; i<8; i+=2) {
       //upper left idx
-      int idx = (8*j + i); 
-      int idx1 = (8*(j+1) + i); 
-      int idx2 = (8*j + i+1); 
+      int idx = (8*j + i);
+      int idx1 = (8*(j+1) + i);
+      int idx2 = (8*j + i+1);
       int idx3 = (8*(j+1) + i+1);
-      out1GT[oc++] = (in_img[idx] + in_img[idx1] + in_img[idx2] + in_img[idx3])/4.0f; 
+      out1GT[oc++] = (in_img[idx] + in_img[idx1] + in_img[idx2] + in_img[idx3])/4.0f;
     }
   }
-  
+
   float out2GT[4*2*2];
-  oc=0; 
-  for(int j=0; j<4; j+=2) {
-    for(int i=0; i<4; i+=2) {
+  oc=0;
+  for (int j=0; j<4; j+=2) {
+    for (int i=0; i<4; i+=2) {
       //upper left idx
-      int idx = (4*j + i); 
-      int idx1 = (4*(j+1) + i); 
-      int idx2 = (4*j + i+1); 
+      int idx = (4*j + i);
+      int idx1 = (4*(j+1) + i);
+      int idx2 = (4*j + i+1);
       int idx3 = (4*(j+1) + i+1);
-      out2GT[oc++] = (out1GT[idx] + out1GT[idx1] + out1GT[idx2] + out1GT[idx3])/4.0f; 
+      out2GT[oc++] = (out1GT[idx] + out1GT[idx1] + out1GT[idx2] + out1GT[idx3])/4.0f;
     }
   }
-  float out3GT = (out2GT[0] + out2GT[1] + out2GT[2] + out2GT[3]) / 4.0f; 
+  float out3GT = (out2GT[0] + out2GT[1] + out2GT[2] + out2GT[3]) / 4.0f;
 
   //test 4x4 image
-  for(int i=0; i<4*4; ++i) {
-    if( fabs(out1GT[i] - out1[i]) > 1e-6f ) 
+  for (int i=0; i<4*4; ++i) {
+    if ( vcl_fabs(out1GT[i] - out1[i]) > 1e-6f )
       vcl_cout<<" img1 No match at "<<i<<vcl_endl;
   }
 
   //test 2x2 image
-  for(int i=0; i<2*2; ++i) {
-    if( fabs(out2GT[i] - out2[i]) > 1e-6f ) 
-      vcl_cout<<" img2 No match at "<<i<<":"<<out2GT[i]<<" != "<<out2[i]<<vcl_endl;
-  } 
-  
+  for (int i=0; i<2*2; ++i) {
+    if ( vcl_fabs(out2GT[i] - out2[i]) > 1e-6f )
+      vcl_cout<<" img2 No match at "<<i<<':'<<out2GT[i]<<" != "<<out2[i]<<vcl_endl;
+  }
+
   //test 1x1 image
-  if( fabs(out3GT - out3[0]) > 1e-6f ) 
+  if ( vcl_fabs(out3GT - out3[0]) > 1e-6f )
       vcl_cout<<" img3 No match at :"<<out3GT<<" != "<<out3[0]<<vcl_endl;
 }
 
@@ -149,7 +150,7 @@ void test_ray_pyramid()
   if (mgr->gpus_.size()==0)
     return;
   bocl_device* device = mgr->gpus_[0];
-  
+
   //compile pyramid test
   vcl_vector<vcl_string> src_paths;
   vcl_string source_dir = vcl_string(VCL_SOURCE_ROOT_DIR) + "/contrib/brl/bseg/boxm2/ocl/cl/";
@@ -164,35 +165,35 @@ void test_ray_pyramid()
                                                 CL_QUEUE_PROFILING_ENABLE,&status);
 
   //create all the arguments
-  float ray_o[8*8*4]; 
-  float ray_d[8*8*4]; 
-  int count = 0; 
-  for(int j=0; j<8; ++j) {
-    for(int i=0; i<8; ++i) {
+  float ray_o[8*8*4];
+  float ray_d[8*8*4];
+  int count = 0;
+  for (int j=0; j<8; ++j) {
+    for (int i=0; i<8; ++i) {
       ray_d[count+0] = (float)i;
-      ray_d[count+1] = (float)j; 
-      ray_d[count+2] = (float)0.0f; 
-      ray_d[count+3] = .5f; 
-      count+=4; 
+      ray_d[count+1] = (float)j;
+      ray_d[count+2] = (float)0.0f;
+      ray_d[count+3] = .5f;
+      count+=4;
     }
   }
-  cl_uint imgdims[4] = {0, 0, 8, 8}; 
-  float out1[4*4*4]; 
-  float out2[2*2*4]; 
-  float out3[1*1*4]; 
-  bocl_mem_sptr obuff = new bocl_mem( device->context(), ray_o, sizeof(ray_o), "input ray origins"); 
-  obuff->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR); 
-  bocl_mem_sptr dbuff = new bocl_mem( device->context(), ray_d, sizeof(ray_d), "input ray dirs"); 
-  dbuff->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR); 
-  bocl_mem_sptr dimsbuff = new bocl_mem( device->context(), imgdims, sizeof(imgdims), "dims buff"); 
-  dimsbuff->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR); 
-  bocl_mem_sptr o1buff = new bocl_mem( device->context(), out1, sizeof(out1), "out1"); 
-  o1buff->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR); 
-  bocl_mem_sptr o2buff = new bocl_mem( device->context(), out2, sizeof(out2), "out2"); 
-  o2buff->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);   
-  bocl_mem_sptr o3buff = new bocl_mem( device->context(), out3, sizeof(out3), "out3"); 
-  o3buff->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);   
-  
+  cl_uint imgdims[4] = {0, 0, 8, 8};
+  float out1[4*4*4];
+  float out2[2*2*4];
+  float out3[1*1*4];
+  bocl_mem_sptr obuff = new bocl_mem( device->context(), ray_o, sizeof(ray_o), "input ray origins");
+  obuff->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
+  bocl_mem_sptr dbuff = new bocl_mem( device->context(), ray_d, sizeof(ray_d), "input ray dirs");
+  dbuff->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
+  bocl_mem_sptr dimsbuff = new bocl_mem( device->context(), imgdims, sizeof(imgdims), "dims buff");
+  dimsbuff->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
+  bocl_mem_sptr o1buff = new bocl_mem( device->context(), out1, sizeof(out1), "out1");
+  o1buff->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
+  bocl_mem_sptr o2buff = new bocl_mem( device->context(), out2, sizeof(out2), "out2");
+  o2buff->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
+  bocl_mem_sptr o3buff = new bocl_mem( device->context(), out3, sizeof(out3), "out3");
+  o3buff->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
+
   //set first kernel args
   pyramid_test.set_arg( obuff.ptr() );
   pyramid_test.set_arg( dbuff.ptr() );
@@ -208,101 +209,103 @@ void test_ray_pyramid()
   //execute kernel
   pyramid_test.execute( queue, 2, lThreads, gThreads);
   clFinish( queue );
-  o1buff->read_to_buffer(queue); 
-  o2buff->read_to_buffer(queue); 
-  o3buff->read_to_buffer(queue); 
-  clReleaseCommandQueue(queue); 
+  o1buff->read_to_buffer(queue);
+  o2buff->read_to_buffer(queue);
+  o3buff->read_to_buffer(queue);
+  clReleaseCommandQueue(queue);
 
-  //calcluate ground truth values
-  float out1GT[4*4*4]; 
+  //calculate ground truth values
+  float out1GT[4*4*4];
   int oc=0;
-  for(int j=0; j<8; j+=2) {
-    for(int i=0; i<8; i+=2) {
+  for (int j=0; j<8; j+=2) {
+    for (int i=0; i<8; i+=2) {
       //upper left idx
-      int idx = 4*(8*j + i); 
-      int idx1 = 4*(8*(j+1) + i); 
-      int idx2 = 4*(8*j + i+1); 
+      int idx = 4*(8*j + i);
+      int idx1 = 4*(8*(j+1) + i);
+      int idx2 = 4*(8*j + i+1);
       int idx3 = 4*(8*(j+1) + i+1);
-      vgl_vector_3d<float> r(ray_d[idx] + ray_d[idx1] + ray_d[idx2] + ray_d[idx3], 
-                             ray_d[idx+1] + ray_d[idx1+1] + ray_d[idx2+1] + ray_d[idx3+1], 
-                             ray_d[idx+2] + ray_d[idx1+2] + ray_d[idx2+2] + ray_d[idx3+2] ); 
-      normalize(r); 
-      out1GT[oc++] = r.x(); 
-      out1GT[oc++] = r.y(); 
-      out1GT[oc++] = r.z(); 
-      out1GT[oc++] = 1.0f; 
+      vgl_vector_3d<float> r(ray_d[idx] + ray_d[idx1] + ray_d[idx2] + ray_d[idx3],
+                             ray_d[idx+1] + ray_d[idx1+1] + ray_d[idx2+1] + ray_d[idx3+1],
+                             ray_d[idx+2] + ray_d[idx1+2] + ray_d[idx2+2] + ray_d[idx3+2] );
+      normalize(r);
+      out1GT[oc++] = r.x();
+      out1GT[oc++] = r.y();
+      out1GT[oc++] = r.z();
+      out1GT[oc++] = 1.0f;
     }
   }
-  
-  float out2GT[4*2*2];
-  oc=0; 
-  for(int j=0; j<4; j+=2) {
-    for(int i=0; i<4; i+=2) {
-      //upper left idx
-      int idx = 4*(4*j + i); 
-      int idx1 = 4*(4*(j+1) + i); 
-      int idx2 = 4*(4*j + i+1); 
-      int idx3 = 4*(4*(j+1) + i+1);
-      vgl_vector_3d<float> r(out1GT[idx] + out1GT[idx1] + out1GT[idx2] + out1GT[idx3], 
-                             out1GT[idx+1] + out1GT[idx1+1] + out1GT[idx2+1] + out1GT[idx3+1], 
-                             out1GT[idx+2] + out1GT[idx1+2] + out1GT[idx2+2] + out1GT[idx3+2] ); 
-      normalize(r); 
-      out2GT[oc++] = r.x(); 
-      out2GT[oc++] = r.y(); 
-      out2GT[oc++] = r.z(); 
-      out2GT[oc++] = 2.0f; 
-    }
-  }
-  
-  float out3GT[4*1*1] = {0}; 
-  for(int i=0; i<4*2*2; i+=4) {
-    out3GT[0] += out2GT[i+0]; 
-    out3GT[1] += out2GT[i+1];     
-    out3GT[2] += out2GT[i+2]; 
-    out3GT[3] += out2GT[i+3]; 
-  }
-  vgl_vector_3d<float> r(out3GT[0],out3GT[1],out3GT[2]); 
-  normalize(r); 
-  out3GT[0] = r.x(); 
-  out3GT[1] = r.y(); 
-  out3GT[2] = r.z(); 
-  out3GT[3] = 4.0f;  
 
-  
-  //vcl_cout<<"Out1GT.. "<<vcl_endl;
-  //print_column_major(out1GT, 4, 4, 4); 
-  
-  //vcl_cout<<"Out2GT.. "<<vcl_endl;
-  //print_column_major(out2GT, 2, 2, 4); 
-  //vcl_cout<<"Out2.. "<<vcl_endl;
-  //print_column_major(out2, 2, 2, 4); 
-  
-  //vcl_cout<<"Out3GT.. "<<vcl_endl;
-  //print_column_major(out3GT,1,1,4);
-  //vcl_cout<<"Out3..."<<vcl_endl;
-  //print_column_major(out3, 1,1,4); 
-  
+  float out2GT[4*2*2];
+  oc=0;
+  for (int j=0; j<4; j+=2) {
+    for (int i=0; i<4; i+=2) {
+      //upper left idx
+      int idx = 4*(4*j + i);
+      int idx1 = 4*(4*(j+1) + i);
+      int idx2 = 4*(4*j + i+1);
+      int idx3 = 4*(4*(j+1) + i+1);
+      vgl_vector_3d<float> r(out1GT[idx] + out1GT[idx1] + out1GT[idx2] + out1GT[idx3],
+                             out1GT[idx+1] + out1GT[idx1+1] + out1GT[idx2+1] + out1GT[idx3+1],
+                             out1GT[idx+2] + out1GT[idx1+2] + out1GT[idx2+2] + out1GT[idx3+2] );
+      normalize(r);
+      out2GT[oc++] = r.x();
+      out2GT[oc++] = r.y();
+      out2GT[oc++] = r.z();
+      out2GT[oc++] = 2.0f;
+    }
+  }
+
+  float out3GT[4*1*1] = {0};
+  for (int i=0; i<4*2*2; i+=4) {
+    out3GT[0] += out2GT[i+0];
+    out3GT[1] += out2GT[i+1];
+    out3GT[2] += out2GT[i+2];
+    out3GT[3] += out2GT[i+3];
+  }
+  vgl_vector_3d<float> r(out3GT[0],out3GT[1],out3GT[2]);
+  normalize(r);
+  out3GT[0] = r.x();
+  out3GT[1] = r.y();
+  out3GT[2] = r.z();
+  out3GT[3] = 4.0f;
+
+#if 0
+  vcl_cout<<"Out1GT.."<<vcl_endl;
+  print_column_major(out1GT, 4, 4, 4);
+
+  vcl_cout<<"Out2GT.."<<vcl_endl;
+  print_column_major(out2GT, 2, 2, 4);
+  vcl_cout<<"Out2.."<<vcl_endl;
+  print_column_major(out2, 2, 2, 4);
+
+  vcl_cout<<"Out3GT.."<<vcl_endl;
+  print_column_major(out3GT,1,1,4);
+  vcl_cout<<"Out3..."<<vcl_endl;
+  print_column_major(out3, 1,1,4);
+#endif
+
   //test 4x4 image
-  for(int i=0; i<4*4*4; ++i) {
-    if( fabs(out1GT[i] - out1[i]) > 1e-6f ) 
+  for (int i=0; i<4*4*4; ++i) {
+    if ( vcl_fabs(out1GT[i] - out1[i]) > 1e-6f )
       vcl_cout<<" img1 No match at "<<i<<vcl_endl;
   }
 
   //test 2x2 image
-  for(int i=0; i<4*2*2; ++i) {
-    if( fabs(out2GT[i] - out2[i]) > 1e-6f ) 
-      vcl_cout<<" img2 No match at "<<i<<":"<<out2GT[i]<<" != "<<out2[i]<<vcl_endl;
-  } 
-  
+  for (int i=0; i<4*2*2; ++i) {
+    if ( vcl_fabs(out2GT[i] - out2[i]) > 1e-6f )
+      vcl_cout<<" img2 No match at "<<i<<':'<<out2GT[i]<<" != "<<out2[i]<<vcl_endl;
+  }
+
   //test 1x1 image
-  for(int i=0; i<4*1*1; ++i) {
-    if( fabs(out3GT[i] - out3[i]) > 1e-6f ) 
-      vcl_cout<<" img3 No match at "<<i<<":"<<out3GT[i]<<" != "<<out3[i]<<vcl_endl;
+  for (int i=0; i<4*1*1; ++i) {
+    if ( vcl_fabs(out3GT[i] - out3[i]) > 1e-6f )
+      vcl_cout<<" img3 No match at "<<i<<':'<<out3GT[i]<<" != "<<out3[i]<<vcl_endl;
   }
 }
 
-void test_image_pyramid() { 
-  test_ray_pyramid(); 
+void test_image_pyramid()
+{
+  test_ray_pyramid();
   test_image();
 }
 
