@@ -176,9 +176,14 @@ foreach $f (@FILES)
 
   if ($check_includes)
   {
-    @class_list = map {s!^\s*\#\s*include\s*[<\"](.*?)[>\"].*!$1!; $_} grep {m!^\s*\#\s*include!} split /\n/,$file;
+    @class_list = map {s!^\s*\#\s*include\s*[<\"](.*?)[>\"].*!$1!; s/\bvpl\.h/vpl_.h/; $_} grep {m!^\s*\#\s*include!} split /\n/,$file;
     $file =~ s!\#\s*include\s*[<\"].*?[>\"]\s*!!g;
     $file =~ s!\bvnl_huge_val\b!vnl_math_huge!g;
+    $file =~ s!\bVIL_PIXEL_FORMAT_\w+!vil_pixel_format!g;
+    $file =~ s!\b(VNL_)?MATLAB_?PRINT\w*!vnl_matlab_print!g;
+    $file =~ s!\bvnl_log_beta!vnl_beta!g;
+    $file =~ s!\b(vnl_log_gamma|vnl_digamma|vnl_cum_prob_chi2)!vnl_gamma!g;
+    $file =~ s!\bmbl_erf\b!mbl_gamma!g;
     foreach $pref (qw(vul vbl vpl vil vnl vgl vidl vidl1 vcsl vpdl mbl))
     {
       foreach $class (map {s!^$pref/(${pref}_[^/]+)\.h$!$1!; s!(vul_get_time)stamp!$1!; s!(mbl_matrix_product)s!$1!; s!(vnl_matlab_print)2!$1!; $_}
