@@ -134,8 +134,8 @@ class bmsh3d_vertex : public vispt_elm
   unsigned int get_Fs(vcl_set<const void*>& ptrs) {
     return get_all_ptrs(F_list_, ptrs);
   }
-#if 0
-  // DEPRECATED: calls deprecated get_all_ptrs() version
+#if 0 // DEPRECATED: calls the deprecated non-const get_all_ptrs() version
+  //  \deprecated
   unsigned int get_Fs(vcl_set<void*>& ptrs) {
     return get_all_ptrs(F_list_, ptrs);
   }
@@ -207,10 +207,12 @@ class bmsh3d_vertex : public vispt_elm
   unsigned int get_incident_Es(vcl_set<void const*>& incident_Es) const {
     return get_all_ptrs(E_list_, incident_Es);
   }
-  // DEPRECATED!
+#if 0 // DEPRECATED! -- use the above "const" version instead
+  //  \deprecated
   unsigned int get_incident_Es(vcl_set<void*>& incident_Es) const {
     return get_all_ptrs(E_list_, incident_Es);
   }
+#endif // 0
   unsigned int n_incident_Es() const {
     return count_all_ptrs(E_list_);
   }

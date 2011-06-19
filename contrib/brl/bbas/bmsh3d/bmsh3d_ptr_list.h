@@ -59,8 +59,9 @@ inline unsigned int get_all_ptrs(const bmsh3d_ptr_node* head, vcl_set<const void
   return count;
 }
 
+#if 0 // DEPRECATED! -- use the above "const" version instead
 //: return size of the list.
-//  DEPRECATED!
+//  \deprecated
 inline unsigned int get_all_ptrs(const bmsh3d_ptr_node* head, vcl_set<void*>& ptrs)
 {
   unsigned int count = 0;
@@ -74,6 +75,7 @@ inline unsigned int get_all_ptrs(const bmsh3d_ptr_node* head, vcl_set<void*>& pt
 #endif
   return count;
 }
+#endif // 0
 
 inline unsigned int count_all_ptrs (const bmsh3d_ptr_node* head)
 {
