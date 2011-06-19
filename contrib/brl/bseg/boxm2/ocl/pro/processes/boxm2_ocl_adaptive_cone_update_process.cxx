@@ -1,4 +1,5 @@
 // This is brl/bseg/boxm2/ocl/pro/processes/boxm2_ocl_adaptive_cone_update_process.cxx
+#include <bprb/bprb_func_process.h>
 //:
 // \file
 // \brief  OpenCL accelerated Cone Update process
@@ -6,7 +7,6 @@
 // \author Andrew Miller
 // \date June 1, 2011
 
-#include <bprb/bprb_func_process.h>
 #include <vcl_fstream.h>
 #include <boxm2/ocl/boxm2_opencl_cache.h>
 #include <boxm2/boxm2_scene.h>
@@ -32,57 +32,56 @@ namespace boxm2_ocl_adaptive_cone_update_process_globals
   const unsigned n_inputs_  = 6;
   const unsigned n_outputs_ = 0;
   enum {
-      UPDATE_PROC = 0,
-      UPDATE_BAYES= 1,
-      UPDATE_CELL = 2,
+    UPDATE_PROC = 0,
+    UPDATE_BAYES= 1,
+    UPDATE_CELL = 2,
   };
 
   void compile_kernel(bocl_device_sptr device,vcl_vector<bocl_kernel*> & vec_kernels,vcl_string opts)
   {
-      //gather all render sources... seems like a lot for rendering...
-      vcl_vector<vcl_string> src_paths;
-      vcl_string source_dir = vcl_string(VCL_SOURCE_ROOT_DIR) + "/contrib/brl/bseg/boxm2/ocl/cl/";
-      src_paths.push_back(source_dir + "scene_info.cl");
-      src_paths.push_back(source_dir + "backproject.cl");
-      src_paths.push_back(source_dir + "basic/linked_list.cl");
-      src_paths.push_back(source_dir + "basic/ray_pyramid.cl"); 
-      src_paths.push_back(source_dir + "basic/image_pyramid.cl"); 
-      src_paths.push_back(source_dir + "ogl/intersect.cl");
-      src_paths.push_back(source_dir + "bit/bit_tree_library_functions.cl");
-      src_paths.push_back(source_dir + "statistics_library_functions.cl");
-      src_paths.push_back(source_dir + "cone/update_adaptive_cone_kernels.cl");
-      vcl_vector<vcl_string> non_ray_src = vcl_vector<vcl_string>(src_paths);
-      src_paths.push_back(source_dir + "cone/cone_util.cl"); 
-      src_paths.push_back(source_dir + "cone/cast_adaptive_cone_ray.cl");
+    //gather all render sources... seems like a lot for rendering...
+    vcl_vector<vcl_string> src_paths;
+    vcl_string source_dir = vcl_string(VCL_SOURCE_ROOT_DIR) + "/contrib/brl/bseg/boxm2/ocl/cl/";
+    src_paths.push_back(source_dir + "scene_info.cl");
+    src_paths.push_back(source_dir + "backproject.cl");
+    src_paths.push_back(source_dir + "basic/linked_list.cl");
+    src_paths.push_back(source_dir + "basic/ray_pyramid.cl");
+    src_paths.push_back(source_dir + "basic/image_pyramid.cl");
+    src_paths.push_back(source_dir + "ogl/intersect.cl");
+    src_paths.push_back(source_dir + "bit/bit_tree_library_functions.cl");
+    src_paths.push_back(source_dir + "statistics_library_functions.cl");
+    src_paths.push_back(source_dir + "cone/update_adaptive_cone_kernels.cl");
+    vcl_vector<vcl_string> non_ray_src = vcl_vector<vcl_string>(src_paths);
+    src_paths.push_back(source_dir + "cone/cone_util.cl");
+    src_paths.push_back(source_dir + "cone/cast_adaptive_cone_ray.cl");
 
-      //compilation options
-      vcl_string options = opts;
+    //compilation options
+    vcl_string options = opts;
 
-      //proc norm pass computes the proc_norm image, mean_obs for each cell
-      bocl_kernel* pass_one = new bocl_kernel();
-      vcl_string one_opts = options + " -D PASSONE ";
-      one_opts += " -D STEP_CELL=step_cell(aux_args,data_ptr,intersect_volume) ";
-      one_opts += " -D COMPUTE_BALL_PROPERTIES=compute_ball_properties(aux_args)  ";
-      pass_one->create_kernel(&device->context(),device->device_id(), src_paths, "pass_one", one_opts, "cone_update::pass_one");
-      vec_kernels.push_back(pass_one);
+    //proc norm pass computes the proc_norm image, mean_obs for each cell
+    bocl_kernel* pass_one = new bocl_kernel();
+    vcl_string one_opts = options + " -D PASSONE ";
+    one_opts += " -D STEP_CELL=step_cell(aux_args,data_ptr,intersect_volume) ";
+    one_opts += " -D COMPUTE_BALL_PROPERTIES=compute_ball_properties(aux_args)  ";
+    pass_one->create_kernel(&device->context(),device->device_id(), src_paths, "pass_one", one_opts, "cone_update::pass_one");
+    vec_kernels.push_back(pass_one);
+#if 0
+    //computes bayes ratio for each cell
+    bocl_kernel* bayes_main = new bocl_kernel();
+    vcl_string bayes_opt = options + " -D BAYES ";
+    bayes_opt += " -D STEP_CELL=step_cell(aux_args,data_ptr,intersect_volume)  ";
+    bayes_opt += " -D COMPUTE_BALL_PROPERTIES=compute_ball_properties(aux_args)  ";
+    bayes_opt += " -D REDISTRIBUTE=redistribute(aux_args,data_ptr,intersect_volume)  ";
+    bayes_main->create_kernel(&device->context(),device->device_id(), src_paths, "bayes_main", bayes_opt, "cone_update::bayes_main");
+    vec_kernels.push_back(bayes_main);
 
-      ////computes bayes ratio for each cell
-      //bocl_kernel* bayes_main = new bocl_kernel();
-      //vcl_string bayes_opt = options + " -D BAYES ";
-      //bayes_opt += " -D STEP_CELL=step_cell(aux_args,data_ptr,intersect_volume)  ";
-      //bayes_opt += " -D COMPUTE_BALL_PROPERTIES=compute_ball_properties(aux_args)  ";
-      //bayes_opt += " -D REDISTRIBUTE=redistribute(aux_args,data_ptr,intersect_volume)  ";
-      //bayes_main->create_kernel(&device->context(),device->device_id(), src_paths, "bayes_main", bayes_opt, "cone_update::bayes_main");
-      //vec_kernels.push_back(bayes_main);
-
-      ////may need
-      //bocl_kernel* update = new bocl_kernel();
-      //update->create_kernel(&device->context(),device->device_id(), non_ray_src, "update_cone_data", options, "cone_update::update_data");
-      //vec_kernels.push_back(update);
-
-      return ;
+    //may need
+    bocl_kernel* update = new bocl_kernel();
+    update->create_kernel(&device->context(),device->device_id(), non_ray_src, "update_cone_data", options, "cone_update::update_data");
+    vec_kernels.push_back(update);
+#endif // 0
+    return ;
   }
-
 
   static vcl_map<vcl_string,vcl_vector<bocl_kernel*> > kernels;
 }
@@ -118,7 +117,6 @@ bool boxm2_ocl_adaptive_cone_update_process(bprb_func_process& pro)
     vcl_cout << pro.name() << ": The number of inputsshould be 5 or " << n_inputs_<< vcl_endl;
     return false;
   }
-  float transfer_time=0.0f;
 
   //get the inputs
   unsigned i = 0;
@@ -186,19 +184,19 @@ bool boxm2_ocl_adaptive_cone_update_process(bprb_func_process& pro)
     compile_kernel(device,ks,options);
     kernels[identifier]=ks;
   }
-
-  //////run ocl cone update function
-  //float gpu_time = boxm2_ocl_cone_update( scene,
-                                          //device,
-                                          //opencl_cache,
-                                          //kernels[identifier],
-                                          //queue,
-                                          //data_type,
-                                          //num_obs_type,
-                                          //cam ,
-                                          //img );
-
-  //vcl_cout<<"Gpu time "<<gpu_time<<" transfer time "<<transfer_time<<vcl_endl;
+#ifdef DEBUG
+  //run ocl cone update function
+  float gpu_time = boxm2_ocl_cone_update( scene,
+                                          device,
+                                          opencl_cache,
+                                          kernels[identifier],
+                                          queue,
+                                          data_type,
+                                          num_obs_type,
+                                          cam ,
+                                          img );
+  vcl_cout<<"Gpu time "<<gpu_time<<vcl_endl;
+#endif // DEBUG
   clReleaseCommandQueue(queue);
   return true;
 }
