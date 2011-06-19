@@ -70,13 +70,13 @@ class bvpl_pair
 
   // === Accessors ===
 
-  bvpl_feature f1() const {return f1_;}
-  bvpl_feature f2() const {return f2_;}
-  vnl_float_3 axis() const {return axis_;}
-  float angle() const {return angle_;}
-  float response() const {return response_;}
-  int id() const {return id_;}
-  vgl_point_3d<int> this_location() const {return this_location_;}
+  bvpl_feature f1() const { return f1_; }
+  bvpl_feature f2() const { return f2_; }
+  vnl_float_3 axis() const { return axis_; }
+  float angle() const { return angle_; }
+  float response() const { return response_; }
+  int id() const { return id_; }
+  vgl_point_3d<int> this_location() const { return this_location_; }
 
  private:
   bvpl_feature f1_;
@@ -96,7 +96,7 @@ class bvpl_corner_pairs: public vbl_ref_count
   bvpl_corner_pairs() {}
 
   //: Constructor from a vector
-  bvpl_corner_pairs(vcl_vector<vcl_vector<vgl_line_segment_3d<int> > >& all_lines) { pairs_ = all_lines;}
+  bvpl_corner_pairs(vcl_vector<vcl_vector<vgl_line_segment_3d<int> > >& all_lines) { pairs_ = all_lines; }
 
   //: Constructor from  2 vectors
   bvpl_corner_pairs(vcl_vector<vcl_vector<vgl_line_segment_3d<int> > >& all_lines,
@@ -106,7 +106,7 @@ class bvpl_corner_pairs: public vbl_ref_count
     boxes_ =all_boxes;
   }
 
-  int size() { return pairs_.size(); }
+  int size() const { return pairs_.size(); }
 
   //: vector of pairs
   vcl_vector<vcl_vector<vgl_line_segment_3d<int> > > pairs_;

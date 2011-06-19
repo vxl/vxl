@@ -64,7 +64,7 @@ class vpro_vil_video_process : public vbl_ref_count
   vil_image_resource_sptr get_input_image(unsigned int i);
   vil_image_resource_sptr get_output_image() { return output_image_; }
 
-  int get_N_input_spat_objs() { return input_spat_objs_.size(); }
+  int get_N_input_spat_objs() const { return input_spat_objs_.size(); }
   vcl_vector<vsol_spatial_object_2d_sptr> const& get_input_spatial_objects()
   { return input_spat_objs_; }
 
@@ -81,14 +81,14 @@ class vpro_vil_video_process : public vbl_ref_count
   { return output_topo_objs_; }
 
   //graph output for data display
-  void set_graph_flag(){graph_flag_ = true;}
-  void clear_graph_flag(){graph_flag_ = false;}
-  bool graph_flag() const {return graph_flag_;}
-  void  set_graph(vcl_vector<float> const& graph){graph_=graph;}
-  vcl_vector<float> graph() const {return graph_;}
+  void set_graph_flag() { graph_flag_ = true; }
+  void clear_graph_flag() { graph_flag_ = false; }
+  bool graph_flag() const { return graph_flag_; }
+  void  set_graph(vcl_vector<float> const& graph) { graph_=graph; }
+  vcl_vector<float> graph() const { return graph_; }
   //start and end of processed sequence
-  unsigned int start_frame() const {return start_frame_;}
-  unsigned int end_frame() const {return end_frame_;}
+  unsigned int start_frame() const { return start_frame_; }
+  unsigned int end_frame() const { return end_frame_; }
 
   virtual process_data_type get_input_type() const { return NOTYPE; }
   virtual process_data_type get_output_type() const { return NOTYPE; }

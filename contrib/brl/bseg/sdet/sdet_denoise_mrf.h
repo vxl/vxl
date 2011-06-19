@@ -48,9 +48,9 @@ class sdet_denoise_mrf : public sdet_denoise_mrf_params
 
   // === Process methods ===
 
-  void set_image(vil_image_resource_sptr const& resource){in_resc_ = resource;}
+  void set_image(vil_image_resource_sptr const& resource) { in_resc_ = resource; }
   void set_variance(vil_image_resource_sptr const& var_resc)
-    {var_resc_ = var_resc;}
+    { var_resc_ = var_resc; }
 
   //: construct the mrf graph incidence matrix (no output image)
   // W and D are valid after construction
@@ -61,14 +61,14 @@ class sdet_denoise_mrf : public sdet_denoise_mrf_params
 
   // === Accessors ===
 
-  vil_image_resource_sptr output(){return out_resc_;}
-  bool output_valid() {return output_valid_;}
-  vnl_sparse_matrix<double>& incidence_matrix()  {return W_mat_;}
-  vnl_sparse_matrix<double>& diag_matrix()  {return D_mat_;}
+  vil_image_resource_sptr output() { return out_resc_; }
+  bool output_valid() const { return output_valid_; }
+  vnl_sparse_matrix<double>& incidence_matrix()  { return W_mat_; }
+  vnl_sparse_matrix<double>& diag_matrix()  { return D_mat_; }
   vil_image_resource_sptr Dimgr();
-  vnl_sparse_matrix<double>& diag_inv_sqrt()  {return D_inv_sqrt_;}
-  vnl_sparse_matrix<double>& L() {return L_mat_;}
-  vnl_vector<double>& F()  {return F_;}
+  vnl_sparse_matrix<double>& diag_inv_sqrt()  { return D_inv_sqrt_; }
+  vnl_sparse_matrix<double>& L() { return L_mat_; }
+  vnl_vector<double>& F()  { return F_; }
 
  protected:
   // === protected methods ===

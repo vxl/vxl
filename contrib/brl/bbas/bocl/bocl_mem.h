@@ -29,78 +29,78 @@
 //  a bocl_mem object is responsible for freeing the cl_mem buffer but NOT THE CPU buffer.
 class bocl_mem : public vbl_ref_count
 {
-  public:
+ public:
 
-    //: constructor that takes the context to start with
-    bocl_mem(const cl_context& context, void* buffer, unsigned num_bytes, vcl_string id);
-    ~bocl_mem();
+  //: constructor that takes the context to start with
+  bocl_mem(const cl_context& context, void* buffer, unsigned num_bytes, vcl_string id);
+  ~bocl_mem();
 
-    //: creates the memory for buffer (create from command queue as welll)
-    bool create_buffer(const cl_mem_flags& flags);
-    bool create_buffer(const cl_mem_flags& flags, cl_command_queue& queue);
+  //: creates the memory for buffer (create from command queue as welll)
+  bool create_buffer(const cl_mem_flags& flags);
+  bool create_buffer(const cl_mem_flags& flags, cl_command_queue& queue);
 
-    //: create an image buffer
-    bool create_image_buffer(const cl_mem_flags& flags, const cl_image_format* format,
-                             vcl_size_t width, vcl_size_t height);
+  //: create an image buffer
+  bool create_image_buffer(const cl_mem_flags& flags, const cl_image_format* format,
+                           vcl_size_t width, vcl_size_t height);
 
-    //: releases buffer memory
-    bool release_memory();
+  //: releases buffer memory
+  bool release_memory();
 
-    //: read/write to buffer (copies memory from cpu_buf to gpu buf)
-    bool write_to_buffer(const cl_command_queue& cmd_queue);
-    bool read_to_buffer(const cl_command_queue& cmd_queue);
+  //: read/write to buffer (copies memory from cpu_buf to gpu buf)
+  bool write_to_buffer(const cl_command_queue& cmd_queue);
+  bool read_to_buffer(const cl_command_queue& cmd_queue);
 
-    //: write to buffer asynchronously
-    bool write_to_buffer_async(const cl_command_queue& cmd_queue);
-    bool finish_write_to_buffer(const cl_command_queue& cmd_queue);
+  //: write to buffer asynchronously
+  bool write_to_buffer_async(const cl_command_queue& cmd_queue);
+  bool finish_write_to_buffer(const cl_command_queue& cmd_queue);
 
-    //: zeros out GPU buffer
-    bool zero_gpu_buffer(const cl_command_queue& cmd_queue);
+  //: zeros out GPU buffer
+  bool zero_gpu_buffer(const cl_command_queue& cmd_queue);
 
-    //: returns a reference to the buffer
-    cl_mem& buffer()        { return buffer_; }
+  //: returns a reference to the buffer
+  cl_mem& buffer()        { return buffer_; }
 
-    //: returns a reference to the cpu buffer
-    void* cpu_buffer()      { return cpu_buf_; }
-    void set_cpu_buffer(void* buff) { cpu_buf_ = buff; }
+  //: returns a reference to the cpu buffer
+  void* cpu_buffer()      { return cpu_buf_; }
+  void set_cpu_buffer(void* buff) { cpu_buf_ = buff; }
 
-    //: returns number of bytes in buffer
-    vcl_size_t num_bytes()  { return num_bytes_; }
+  //: returns number of bytes in buffer
+  vcl_size_t num_bytes()  const { return num_bytes_; }
 
-    //: returns id
-    vcl_string id()         { return id_; }
+  //: returns id
+  vcl_string id()         const { return id_; }
 
-    //: set buffer used when a clCreateGLBuffer is called..
-    bool set_gl_buffer(cl_mem buff) { buffer_ = buff; is_gl_=true; return true; }
+  //: set buffer used when a clCreateGLBuffer is called..
+  bool set_gl_buffer(cl_mem buff) { buffer_ = buff; is_gl_=true; return true; }
 
-    //: time spend writing or reading
-    float exec_time();
+  //: time spend writing or reading
+  float exec_time();
 
-  private:
+ private:
 
-    //: OpenCL buffer
-    cl_mem buffer_;
+  //: OpenCL buffer
+  cl_mem buffer_;
 
-    //: pointer to the corresponding CPU buffer
-    void* cpu_buf_;
+  //: pointer to the corresponding CPU buffer
+  void* cpu_buf_;
 
-    //: number of bytes this buffer points to
-    vcl_size_t num_bytes_;
+  //: number of bytes this buffer points to
+  vcl_size_t num_bytes_;
 
-    //: OpenCL context (reference)
-    const cl_context& context_;
+  //: OpenCL context (reference)
+  const cl_context& context_;
 
-    //: cl event object identifies read/write with this particular buffer
-    cl_event event_;
+  //: cl event object identifies read/write with this particular buffer
+  cl_event event_;
 
-    //: string identifier for error messages
-    vcl_string id_;
+  //: string identifier for error messages
+  vcl_string id_;
 
-    //: event for profiling info
-    cl_event ceEvent_;
+  //: event for profiling info
+  cl_event ceEvent_;
 
-    //: signifies if this object wraps a GL object
-    bool is_gl_;
+  //: signifies if this object wraps a GL object
+  bool is_gl_;
 };
 
 //: Smart_Pointer typedef for boxm2_block

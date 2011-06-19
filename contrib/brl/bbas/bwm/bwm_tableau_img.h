@@ -31,7 +31,7 @@ class bwm_tableau_img : public bwm_tableau, public bgui_picker_tableau
 
   bool handle(const vgui_event& e);
 
-  vcl_string img_path() { return my_observer_->image_tableau()->file_name(); }
+  vcl_string img_path() const { return my_observer_->image_tableau()->file_name(); }
 
   virtual void create_box();
   virtual void create_polygon();
@@ -80,8 +80,8 @@ class bwm_tableau_img : public bwm_tableau, public bgui_picker_tableau
   void add_poly_to_mask();
   void remove_poly_from_mask();
   void save_mask();
-  void save_changes_binary(){ my_observer_->save_changes_binary();}
-  void load_changes_binary(){ my_observer_->load_changes_binary();}
+  void save_changes_binary() { my_observer_->save_changes_binary(); }
+  void load_changes_binary() { my_observer_->load_changes_binary(); }
 
   //: utilities
   void save_spatial_objects_2d();

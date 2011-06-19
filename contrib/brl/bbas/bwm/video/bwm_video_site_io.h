@@ -18,22 +18,22 @@ class bwm_video_site_io : public expatpp
   ~bwm_video_site_io(void) {}
   bool open(vcl_string const& xml_path);
   void clear();
-  void set_name(vcl_string name){name_ = name;}
+  void set_name(vcl_string name) { name_ = name; }
   void set_corrs(vcl_vector<bwm_video_corr_sptr>const& corrs);
-  void set_site_directory(vcl_string const& directory){site_dir_=directory;}
+  void set_site_directory(vcl_string const& directory) { site_dir_=directory; }
   void set_video_path(vcl_string const& video_path);
   void set_camera_path(vcl_string const& video_path);
-  vcl_string name() const {return name_;}
-  vcl_string site_directory() const {return site_dir_;}
-  vcl_string video_path() const {return video_path_;}
-  vcl_string camera_path() const {return camera_path_;}
-  vcl_vector<bwm_video_corr_sptr> corrs(){return corrs_;}
-  vcl_vector<vcl_string> object_types(){return obj_types_;}
-  vcl_vector<vcl_string> object_paths(){return obj_paths_;}
-  void set_object_types(vcl_vector<vcl_string> object_types){
-    obj_types_=object_types;}
-  void set_object_paths(vcl_vector<vcl_string> object_paths){
-    obj_paths_=object_paths;}
+  vcl_string name() const { return name_; }
+  vcl_string site_directory() const { return site_dir_; }
+  vcl_string video_path() const { return video_path_; }
+  vcl_string camera_path() const { return camera_path_; }
+  vcl_vector<bwm_video_corr_sptr> corrs() { return corrs_; }
+  vcl_vector<vcl_string> object_types() const { return obj_types_; }
+  vcl_vector<vcl_string> object_paths() const { return obj_paths_; }
+  void set_object_types(vcl_vector<vcl_string> object_types) {
+    obj_types_=object_types; }
+  void set_object_paths(vcl_vector<vcl_string> object_paths) {
+    obj_paths_=object_paths; }
   void x_write(vcl_string const& xml_path);
 
  private:

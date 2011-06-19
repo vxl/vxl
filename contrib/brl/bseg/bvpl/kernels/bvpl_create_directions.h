@@ -22,7 +22,7 @@
 class bvpl_create_directions_base
 {
  public:
- bvpl_create_directions_base(){}
+ bvpl_create_directions_base() {}
 
 #if 0
  //:Destructor
@@ -30,8 +30,8 @@ class bvpl_create_directions_base
 #endif
 
  //:Accessor methods
- vcl_vector<vnl_float_3> get_axes(){ return axes_;}
- vcl_vector<float> get_angles(){ return angles_;}
+ vcl_vector<vnl_float_3> get_axes() const { return axes_; }
+ vcl_vector<float> get_angles() const { return angles_; }
 
  //:Print to file
  void save_directions_map(vcl_string outfile);

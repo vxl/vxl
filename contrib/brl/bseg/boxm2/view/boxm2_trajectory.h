@@ -33,7 +33,7 @@ class boxm2_trajectory : public vbl_ref_count
     virtual ~boxm2_trajectory() {}
 
     //: number of cameras in the trajectory
-    unsigned size() { return cams_.size(); }
+    unsigned size() const { return cams_.size(); }
 
     //: Iterator
     typedef vcl_vector<vpgl_camera_double_sptr>::iterator iterator;

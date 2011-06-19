@@ -36,20 +36,20 @@ class boxm_scene_parser : public expatpp
   ~boxm_scene_parser(void) {}
 
    bool lvcs(bgeo_lvcs& lvcs);
-   vgl_point_3d<double> origin() const { return vgl_point_3d<double>(local_orig_x_,local_orig_y_,local_orig_z_);}
-   vgl_vector_3d<double> block_dim() const { return vgl_vector_3d<double>(block_dim_x_,block_dim_y_,block_dim_z_);}
-   vgl_vector_3d<unsigned> block_nums() const { return vgl_vector_3d<unsigned>(block_num_x_,block_num_y_,block_num_z_);}
-   void paths(vcl_string& scene_path, vcl_string& block_pref) {scene_path=path_; block_pref=block_pref_;}
+   vgl_point_3d<double> origin() const { return vgl_point_3d<double>(local_orig_x_,local_orig_y_,local_orig_z_); }
+   vgl_vector_3d<double> block_dim() const { return vgl_vector_3d<double>(block_dim_x_,block_dim_y_,block_dim_z_); }
+   vgl_vector_3d<unsigned> block_nums() const { return vgl_vector_3d<unsigned>(block_num_x_,block_num_y_,block_num_z_); }
+   void paths(vcl_string& scene_path, vcl_string& block_pref) { scene_path=path_; block_pref=block_pref_; }
    vcl_string app_model() const { return app_model_; }
    bool multi_bin() const { return multi_bin_; }
    void levels(unsigned& max, unsigned& init) { max = max_tree_level_; init=init_tree_level_; }
-   bool save_internal_nodes() {return save_internal_nodes_;}
-   bool save_platform_independent() {return save_platform_independent_;}
-   bool load_all_blocks() {return load_all_blocks_;}
-   void tree_buffer_shape(int &num_buffers, int &buff_size) {num_buffers = num_buffers_init_; buff_size = size_buffer_init_;}
-   int max_mb() { return max_mb_; }
+   bool save_internal_nodes() const { return save_internal_nodes_; }
+   bool save_platform_independent() const { return save_platform_independent_; }
+   bool load_all_blocks() const { return load_all_blocks_; }
+   void tree_buffer_shape(int &num_buffers, int &buff_size) { num_buffers = num_buffers_init_; buff_size = size_buffer_init_; }
+   int max_mb() const { return max_mb_; }
 
-   float p_init(){return p_init_;}
+   float p_init() const { return p_init_; }
 
  private:
   virtual void startElement(const XML_Char* name, const XML_Char** atts);

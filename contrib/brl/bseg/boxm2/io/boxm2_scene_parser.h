@@ -27,7 +27,6 @@
 #define TREE_MAX_LEVEL_TAG "tree_max_level"
 #define P_INIT_TAG "p_init"
 #define MAX_MB_TAG "max_mb"
- 
 
 
 class boxm2_scene_parser : public expatpp
@@ -38,12 +37,12 @@ class boxm2_scene_parser : public expatpp
 
    // ACCESSORS for parser info
    bool lvcs(bgeo_lvcs& lvcs);
-   vgl_point_3d<double> origin() { return origin_; }
-   vcl_string path() { return path_; }
-   vcl_string name() { return name_; }
+   vgl_point_3d<double> origin() const { return origin_; }
+   vcl_string path() const { return path_; }
+   vcl_string name() const { return name_; }
    vcl_map<boxm2_block_id, boxm2_block_metadata> blocks() { return blocks_; }
-   vcl_vector<vcl_string> appearances() { return appearances_; }
-   int num_illumination_bins(){return num_illum_bins_;}
+   vcl_vector<vcl_string> appearances() const { return appearances_; }
+   int num_illumination_bins() const { return num_illum_bins_; }
  private:
   virtual void startElement(const XML_Char* name, const XML_Char** atts);
   virtual void endElement(const XML_Char* /*name*/) {}
@@ -65,20 +64,19 @@ class boxm2_scene_parser : public expatpp
   double lvcs_theta_;
   int num_illum_bins_;
   // world origin
-  vgl_point_3d<double> origin_; 
+  vgl_point_3d<double> origin_;
 
   // scene directory (path)
-  vcl_string path_; 
-  
+  vcl_string path_;
+
   // scene name (string)
-  vcl_string name_; 
-  
+  vcl_string name_;
+
   // block list
-  vcl_map<boxm2_block_id, boxm2_block_metadata> blocks_; 
+  vcl_map<boxm2_block_id, boxm2_block_metadata> blocks_;
 
-  // list of apperances
-  vcl_vector<vcl_string> appearances_; 
-
+  // list of appearances
+  vcl_vector<vcl_string> appearances_;
 };
 
 #endif

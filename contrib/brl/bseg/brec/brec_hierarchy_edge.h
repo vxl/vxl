@@ -44,11 +44,11 @@ class brec_hierarchy_edge : public bgrl2_edge<brec_part_base>
   double prob_density(const float dist, const float angle);  //vnl_vector_fixed<float,2>& pt);
   double prob_density_dist(const float dist);
   double prob_density_angle(const float angle);
-  //vnl_vector_fixed<float,2> mean() { return loc_model_.mean(); }
-  double mean_dist() { return dist_model_.mean(); }
-  double mean_angle() { return angle_model_.mean(); }
-  double var_dist() { return dist_model_.var(); }
-  double var_angle() { return angle_model_.var(); }
+  //vnl_vector_fixed<float,2> mean() const { return loc_model_.mean(); }
+  double mean_dist() const { return dist_model_.mean(); }
+  double mean_angle() const { return angle_model_.mean(); }
+  double var_dist() const { return dist_model_.var(); }
+  double var_angle() const { return angle_model_.var(); }
 
   static void calculate_dist_angle(brec_part_instance_sptr pi, vnl_vector_fixed<float,2>& dif_to_center, float& dist, float& angle);
 

@@ -25,7 +25,7 @@ class boxm_sample_multi_bin
   static short version_no() { return 1; }
 
   //: returns a basic value that represents this sample (mostly for raw file creation purposes)
-  float basic_val() { return alpha; }
+  float basic_val() const { return alpha; }
 
   //: the occlusion density at the sample point
   float alpha;

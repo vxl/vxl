@@ -28,7 +28,7 @@ class bwm_world
   vgl_plane_3d<double> world_plane() const { return world_plane_; }
 
   //: the number of observable objects in the world such as feature meshes
-  unsigned n_objects() { return objects_.size(); }
+  unsigned n_objects() const { return objects_.size(); }
 
   //: the set of observable objects in the world such as feature meshes
   vcl_vector<bwm_observable_sptr> objects() { return objects_; }
@@ -47,7 +47,7 @@ class bwm_world
   // are consistent - leave for now
   void set_world_plane(vgl_plane_3d<double> const& plane) { world_plane_=plane; }
 
-  bool lvcs_valid() const {return lvcs_valid_;}
+  bool lvcs_valid() const { return lvcs_valid_; }
 
   void set_lvcs(double lat, double lon, double elev);
 

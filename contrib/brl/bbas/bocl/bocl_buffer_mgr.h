@@ -40,11 +40,11 @@ class bocl_buffer_mgr
 
   bool release_buffers();
 
-  int buffer_cnt() { return buffers_.size();}
+  int buffer_cnt() const { return buffers_.size(); }
 
  private:
   static bocl_buffer_mgr* instance_;
-  bocl_buffer_mgr(){}
+  bocl_buffer_mgr() {}
   vcl_map<vcl_string, bocl_buffer*> buffers_;
 };
 

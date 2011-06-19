@@ -19,15 +19,15 @@
 #include <bmsh3d/bmsh3d_face_mc.h>
 #include <vpgl/vpgl_camera.h>
 
-typedef enum {RoofSurface, WallSurface, None} BWM_FACE_LABEL;
+typedef enum { RoofSurface, WallSurface, None } BWM_FACE_LABEL;
 
 class bwm_observable_mesh : public bwm_observable
 {
  public:
 
-  typedef enum {BWM_MESH_IMAGE_PROCESSING, BWM_MESH_FEATURE, BWM_MESH_TERRAIN } BWM_MESH_TYPES;
+  typedef enum { BWM_MESH_IMAGE_PROCESSING, BWM_MESH_FEATURE, BWM_MESH_TERRAIN } BWM_MESH_TYPES;
 
-  virtual vcl_string type_name() const {return "bwm_observable_mesh"; }
+  virtual vcl_string type_name() const { return "bwm_observable_mesh"; }
 
   //: constructors
   bwm_observable_mesh();
@@ -43,15 +43,15 @@ class bwm_observable_mesh : public bwm_observable
 
   void set_mesh_type(BWM_MESH_TYPES type) { mesh_type_ = type; }
 
-  int obj_type() { return mesh_type_; }
+  int obj_type() const { return mesh_type_; }
 
   void remove();
 
   vgl_box_3d<double> bounding_box();
 
-  unsigned num_faces()  { return object_->facemap().size(); }
-  unsigned num_edges() { return object_->edgemap().size(); }
-  unsigned num_vertices() { return object_->vertexmap().size(); }
+  unsigned num_faces() const  { return object_->facemap().size(); }
+  unsigned num_edges() const { return object_->edgemap().size(); }
+  unsigned num_vertices() const { return object_->vertexmap().size(); }
 
   void translate(vgl_vector_3d<double> T);
 
@@ -107,9 +107,9 @@ class bwm_observable_mesh : public bwm_observable
 
   bool is_poly_in(unsigned id, unsigned& index);
 
-  void label_roof(unsigned face_id){ labels_[face_id] = RoofSurface; }
+  void label_roof(unsigned face_id) { labels_[face_id] = RoofSurface; }
 
-  void label_wall(unsigned face_id){ labels_[face_id] = WallSurface; }
+  void label_wall(unsigned face_id) { labels_[face_id] = WallSurface; }
 
   BWM_FACE_LABEL get_face_label(unsigned face_id);
 
@@ -133,8 +133,6 @@ class bwm_observable_mesh : public bwm_observable
   void save(const char* filename, bgeo_lvcs* lvcs);
 
   void save(const char* filename);
-
-
 
  protected:
   void notify_observers(vcl_string message_type);
@@ -160,7 +158,6 @@ class bwm_observable_mesh : public bwm_observable
   bmsh3d_face_mc* create_face(vsol_polygon_3d_sptr polygon);
 
   bmsh3d_face_mc* extrude_face(bmsh3d_mesh_mc* M, bmsh3d_face_mc* F);
-
 
   void move_points_to_plane(bmsh3d_face_mc* face);
 

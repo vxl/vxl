@@ -34,7 +34,7 @@ class vvid_live_video_tableau : public vgui_image_tableau
   //:video camera properties
   void set_camera_params(const cmu_1394_camera_params& cp);
   cmu_1394_camera_params get_camera_params() { return (cmu_1394_camera_params)cam_; }
-  bool video_capabilities(int format, int mode, int frame_rate) { return cam_.m_videoFlags[format][mode][frame_rate]; }
+  bool video_capabilities(int format, int mode, int frame_rate) const { return cam_.m_videoFlags[format][mode][frame_rate]; }
 
   int get_current() const { return cam_.get_current(); }
   void set_current(int current) { cam_.set_current(current); }
@@ -62,8 +62,8 @@ class vvid_live_video_tableau : public vgui_image_tableau
                              int pix_sample_interval = 1);
 
   // return current cached images with no resampling
-  vil1_memory_image_of< vil1_rgb<unsigned char> > get_rgb_frame(){ return rgb_frame_; }
-  vil1_memory_image_of<unsigned char> get_mono_frame(){ return mono_frame_; }
+  vil1_memory_image_of< vil1_rgb<unsigned char> > get_rgb_frame() { return rgb_frame_; }
+  vil1_memory_image_of<unsigned char> get_mono_frame() { return mono_frame_; }
 
   //: Access to current cached camera frames
   // Both styles of image access are supported

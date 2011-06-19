@@ -50,36 +50,35 @@ class sdet_mrf_bp : public vbl_ref_count
 
   //: limit cost at a discontinuity
   void set_discontinuity_cost(float discontinuity_cost)
-    { discontinuity_cost_ = discontinuity_cost;}
+    { discontinuity_cost_ = discontinuity_cost; }
 
   //: truncation of data cost
   void set_truncation_cost(float truncation_cost)
-    { truncation_cost_ =truncation_cost;}
+    { truncation_cost_ =truncation_cost; }
 
   //: contribution of data to cost
-  void set_lambda(float lambda){ lambda_ = lambda;}
+  void set_lambda(float lambda) { lambda_ = lambda; }
 
   //: the contribution of neighbor label difference to cost
-  void set_kappa(float kappa){ kappa_ = kappa;}
+  void set_kappa(float kappa) { kappa_ = kappa; }
 
   //: transform from image coordinates to node indices
-  unsigned image_to_index(unsigned i, unsigned j){return i + ni_*j;}
+  unsigned image_to_index(unsigned i, unsigned j) { return i + ni_*j; }
 
-  //: transform from node indices to image coordinates 
+  //: transform from node indices to image coordinates
   void index_to_image(unsigned p, unsigned& i, unsigned& j)
-    { j = p/ni_; i = p-j*ni_;}
+    { j = p/ni_; i = p-j*ni_; }
 
   //: mrf dimension (columns)
-  unsigned ni(){return ni_;}
+  unsigned ni() const { return ni_; }
   //: mrf dimension (rows)
-  unsigned nj(){return nj_;}
+  unsigned nj() const { return nj_; }
 
   //: retrieve a site by image index
-  sdet_mrf_site_bp_sptr site(unsigned i, unsigned j){return sites_[j][i];}
+  sdet_mrf_site_bp_sptr site(unsigned i, unsigned j) { return sites_[j][i]; }
 
   //: retrieve a site by linear index
-  sdet_mrf_site_bp_sptr site(unsigned p)
-    {unsigned i, j; index_to_image(p,i,j); return sites_[j][i];}
+  sdet_mrf_site_bp_sptr site(unsigned p) { unsigned i, j; index_to_image(p,i,j); return sites_[j][i]; }
 
   //: get the contents of a prior message buffer
   vcl_vector<float> prior_message(unsigned i, unsigned j, unsigned n);

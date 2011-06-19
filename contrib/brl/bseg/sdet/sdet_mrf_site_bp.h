@@ -36,11 +36,11 @@ class sdet_mrf_site_bp : public vbl_ref_count
  public:
 
   sdet_mrf_site_bp(unsigned n_labels, float lambda, float truncation_cost);
-  void switch_buffers(){ prior_ = 1-prior_;}
-  int prior() {return prior_;}
-  int current() {return 1-prior_;}
+  void switch_buffers() { prior_ = 1-prior_; }
+  int prior() const { return prior_; }
+  int current() const { return 1-prior_; }
   //: set the observed label
-  void set_label(float obs_label){obs_label_ = obs_label;}
+  void set_label(float obs_label) { obs_label_ = obs_label; }
 
   // === cost functions ===
 
@@ -51,7 +51,7 @@ class sdet_mrf_site_bp : public vbl_ref_count
   float M(unsigned nq, unsigned fp);
 
   //:total of D and M
-  float h(unsigned nq, unsigned fp){ return D(fp) + M(nq, fp);}
+  float h(unsigned nq, unsigned fp) { return D(fp) + M(nq, fp); }
 
   //:belief, sum of data cost and sum of all four prior messages
   float b(unsigned fp);
@@ -63,12 +63,10 @@ class sdet_mrf_site_bp : public vbl_ref_count
   void set_cur_message(unsigned nq, unsigned fp, float msg);
 
   //:the current message value
-  float cur_message(unsigned nq, unsigned fp)
-    {return msg_[1-prior_][nq][fp];}
+  float cur_message(unsigned nq, unsigned fp) const { return msg_[1-prior_][nq][fp]; }
 
   //:the prior message value
-  float prior_message(unsigned nq, unsigned fp)
-    {return msg_[prior_][nq][fp];}
+  float prior_message(unsigned nq, unsigned fp) const { return msg_[prior_][nq][fp]; }
 
   //:entire prior message
   vcl_vector<float> prior_message(unsigned nq);

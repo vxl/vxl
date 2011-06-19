@@ -76,7 +76,7 @@ class boxm_scene :public boxm_scene_base
   //: Destructor
   ~boxm_scene();
 
-  bool discover_block(vgl_point_3d<unsigned> index){ return discover_block(index.x(),index.y(),index.z()); }
+  bool discover_block(vgl_point_3d<unsigned> index) { return discover_block(index.x(),index.y(),index.z()); }
 
   bool discover_block(unsigned i, unsigned j, unsigned k);
 
@@ -94,7 +94,7 @@ class boxm_scene :public boxm_scene_base
   bool load_block_and_neighbors(unsigned i, unsigned j, unsigned k);
 
   //: Loads a block and all its neighboring(adjacent) blocks
-  bool load_block_and_neighbors(vgl_point_3d<int> i){ return load_block_and_neighbors(i.x(), i.y(), i.z()); }
+  bool load_block_and_neighbors(vgl_point_3d<int> i) { return load_block_and_neighbors(i.x(), i.y(), i.z()); }
 
   //: Reads and loads all blocks into memorty
   bool read_all_blocks();
@@ -118,10 +118,10 @@ class boxm_scene :public boxm_scene_base
   boxm_block<T>* get_active_block();
 
   //: Returns the index of active block
-  vgl_point_3d<int> active_block() { return active_block_; }
+  vgl_point_3d<int> active_block() const { return active_block_; }
 
   //: Returns the indices of active neighbors;
-  vcl_set<vgl_point_3d<int>, bvgl_point_3d_cmp<int> >& active_blocks(){ return active_blocks_;}
+  vcl_set<vgl_point_3d<int>, bvgl_point_3d_cmp<int> >& active_blocks() { return active_blocks_; }
 
   bgeo_lvcs lvcs() const { return lvcs_; }
 
@@ -131,11 +131,11 @@ class boxm_scene :public boxm_scene_base
 
   vgl_vector_3d<double> block_dim() const { return block_dim_; }
 
-  bool save_internal_nodes() const {return save_internal_nodes_;}
+  bool save_internal_nodes() const { return save_internal_nodes_; }
 
-  bool save_platform_independent() const {return save_platform_independent_;}
+  bool save_platform_independent() const { return save_platform_independent_; }
 
-  bool load_all_blocks() const {return load_all_blocks_;}
+  bool load_all_blocks() const { return load_all_blocks_; }
 
   void block_num(int &x, int &y, int &z) const {
     x=(int) blocks_.get_row1_count();
@@ -196,7 +196,7 @@ class boxm_scene :public boxm_scene_base
     blocks_(idx.x(),idx.y(),idx.z()) = block; active_block_=idx;
   }
 
-  void set_block(int i, int j, int k , boxm_block<T>* block) { set_block(vgl_point_3d<int>(i,j,k), block);}
+  void set_block(int i, int j, int k , boxm_block<T>* block) { set_block(vgl_point_3d<int>(i,j,k), block); }
 
   void write_scene(vcl_string filename = "scene.xml");
 
@@ -245,7 +245,7 @@ class boxm_scene :public boxm_scene_base
 
   float pinit() const { return pinit_; }
 
-  vgl_box_3d<double> get_block_bbox(vgl_point_3d<int>& idx) const {return get_block_bbox(idx.x(), idx.y(), idx.z());}
+  vgl_box_3d<double> get_block_bbox(vgl_point_3d<int>& idx) const { return get_block_bbox(idx.x(), idx.y(), idx.z()); }
 
   vgl_box_3d<double> get_block_bbox(int x, int y, int z) const;
 

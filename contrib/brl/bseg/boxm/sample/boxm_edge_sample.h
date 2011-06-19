@@ -12,13 +12,13 @@ template<class OBS_T>
 class boxm_edge_sample
 {
  public:
-  boxm_edge_sample(): edge_prob_(0), num_obs_(0.0f){  }
+  boxm_edge_sample(): edge_prob_(0), num_obs_(0.0f) {}
   ~boxm_edge_sample() {}
   static short version_no() { return 1; }
   void print(vcl_ostream& os) const;
 
   //: returns a basic value that represents this sample (mostly for raw file creation purposes)
-  float basic_val() { return edge_prob_; }
+  float basic_val() const { return edge_prob_; }
   OBS_T edge_prob_;
   float num_obs_;
 };

@@ -96,7 +96,7 @@ class bsol_intrinsic_curve_2d : public vsol_curve_2d
   //***************************************************************************
   // Access
 
-  bool isOpen(void) { return isOpen_; }
+  bool isOpen(void) const { return isOpen_; }
   //: Return the first point of `this';  pure virtual of vsol_curve_2d
   virtual vsol_point_2d_sptr p0() const { return p0_; }
   //: Return the last point of `this';   pure virtual of vsol_curve_2d
@@ -150,9 +150,9 @@ class bsol_intrinsic_curve_2d : public vsol_curve_2d
   double angle (const int i) const;
 
   //: Return the total curvature of the intrinsic curve
-  double totalCurvature (void) { return totalCurvature_; }
+  double totalCurvature (void) const { return totalCurvature_; }
   //: Return the total angle change of the intrinsic curve
-  double totalAngleChange (void) { return totalAngleChange_; }
+  double totalAngleChange (void) const { return totalAngleChange_; }
 
   //***************************************************************************
   // Comparison
@@ -161,7 +161,7 @@ class bsol_intrinsic_curve_2d : public vsol_curve_2d
   virtual bool operator==(const bsol_intrinsic_curve_2d &other) const;
   virtual bool operator==(const vsol_spatial_object_2d& obj) const; // virtual of vsol_spatial_object_2d
   //: Has `this' the same points than `other' in the same order ?
-  inline bool operator!=(const bsol_intrinsic_curve_2d &o) const {return !operator==(o);}
+  inline bool operator!=(const bsol_intrinsic_curve_2d &o) const { return !operator==(o); }
 
  protected:
 

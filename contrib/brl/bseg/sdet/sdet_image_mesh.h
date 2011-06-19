@@ -38,8 +38,8 @@ class sdet_image_mesh : public sdet_image_mesh_params
   bool compute_mesh();
 
   // === Accessors ===
-  imesh_mesh& get_mesh(){return mesh_;}
-  bool mesh_valid() {return mesh_valid_;}
+  imesh_mesh& get_mesh() { return mesh_; }
+  bool mesh_valid() const { return mesh_valid_; }
 
  protected:
   // === protected methods ===

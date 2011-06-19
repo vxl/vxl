@@ -21,9 +21,9 @@ class bapl_keypoint : public vbl_ref_count
 {
  public:
   //: Constructor
-  bapl_keypoint(){}
+  bapl_keypoint() {}
   //: Destructor
-  ~bapl_keypoint(){}
+  ~bapl_keypoint() {}
 
   //: Accessor for the descriptor vector
   virtual const vnl_vector_fixed<double,128>& descriptor() const = 0;
@@ -32,7 +32,7 @@ class bapl_keypoint : public vbl_ref_count
   virtual void print_summary( vcl_ostream& os) const = 0;
 
   void set_id(unsigned id) { id_ = id; }
-  unsigned id() { return id_; }
+  unsigned id() const { return id_; }
 
  protected:
   unsigned id_;

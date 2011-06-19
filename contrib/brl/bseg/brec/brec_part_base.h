@@ -121,7 +121,7 @@ class brec_part_instance : public brec_part_base
 
   //: return a simple box with diagonal 2*radius centered on this instance
   vgl_box_2d<float> get_probe_box(float radius);
-  vnl_vector_fixed<float,2> location() { return vnl_vector_fixed<float,2>(x_, y_); }
+  vnl_vector_fixed<float,2> location() const { return vnl_vector_fixed<float,2>(x_, y_); }
 
   float x_, y_;  // location
   float strength_;

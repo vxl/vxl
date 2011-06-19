@@ -30,7 +30,7 @@ class octree_test_driver
   double gpu_time_;
 
  public:
-  octree_test_driver() { cl_manager_ = boxm_ray_trace_manager<T>::instance(); gpu_time_=0.0;}
+  octree_test_driver() { cl_manager_ = boxm_ray_trace_manager<T>::instance(); gpu_time_=0.0; }
 
   ~octree_test_driver();
 
@@ -74,9 +74,9 @@ class octree_test_driver
 
   int cleanup_ray_test();
 
-  double gpu_time(){return gpu_time_;}
+  double gpu_time() const { return gpu_time_; }
 
-  vcl_size_t n_rays() const {return cl_manager_->n_rays();}
+  vcl_size_t n_rays() const { return cl_manager_->n_rays(); }
 
   void print_kernel_usage_info();
  private:

@@ -24,7 +24,7 @@ class bvxm_opinion
   bvxm_opinion(float u, float b) : u_(u), b_(b) {}
 
   //: constructor where uncertainty is assumed to go away when a belief value is set
-  bvxm_opinion(float b) {b_=b; u_=1.0f-b; }
+  bvxm_opinion(float b) { b_=b; u_=1.0f-b; }
 
   //: copy constructor
   bvxm_opinion(bvxm_opinion const& o) : u_(o.u()), b_(o.b()) {}
@@ -32,13 +32,13 @@ class bvxm_opinion
   //: destructor
   ~bvxm_opinion() {}
 
-  float u() const {return u_; }
+  float u() const { return u_; }
 
-  float b() const {return b_; }
+  float b() const { return b_; }
 
-  float expectation(){return b_+u_*0.5f;}
+  float expectation() const { return b_+u_*0.5f; }
 
-  void set(float u, float b) { u_=u; b_=b;}
+  void set(float u, float b) { u_=u; b_=b; }
 
   void set_u(float u) { u_=u; }
 
@@ -74,21 +74,21 @@ class bvxm_opinion
   float b_;  // probability as a belief value [0.0,1.0]
 };
 
-inline bool operator>(bvxm_opinion lhs, bvxm_opinion rhs) { return lhs.b() > rhs.b(); }
-inline bool operator>=(bvxm_opinion lhs, bvxm_opinion rhs) { return lhs.b() >= rhs.b(); }
+inline bool operator>(bvxm_opinion const& lhs, bvxm_opinion const& rhs) { return lhs.b() > rhs.b(); }
+inline bool operator>=(bvxm_opinion const& lhs, bvxm_opinion const& rhs) { return lhs.b() >= rhs.b(); }
 
-inline bool operator<(bvxm_opinion lhs, bvxm_opinion rhs) { return lhs.b() < rhs.b(); }
+inline bool operator<(bvxm_opinion const& lhs, bvxm_opinion const& rhs) { return lhs.b() < rhs.b(); }
 
-inline bvxm_opinion operator+(bvxm_opinion lhs, bvxm_opinion rhs) { return bvxm_opinion(lhs.b()+rhs.b()); }
+inline bvxm_opinion operator+(bvxm_opinion const& lhs, bvxm_opinion const& rhs) { return bvxm_opinion(lhs.b()+rhs.b()); }
 
-inline float operator+(bvxm_opinion lhs, float rhs) { return lhs.b() + rhs; }
+inline float operator+(bvxm_opinion const& lhs, float rhs) { return lhs.b() + rhs; }
 
-inline float operator*(bvxm_opinion lhs, bvxm_opinion rhs) { return lhs.b() * rhs.b(); }
+inline float operator*(bvxm_opinion const& lhs, bvxm_opinion const& rhs) { return lhs.b() * rhs.b(); }
 
-inline bvxm_opinion operator/(float o1, bvxm_opinion const& o2) { return bvxm_opinion(o1/o2.b()); }
+inline bvxm_opinion operator/(float const& o1, bvxm_opinion const& o2) { return bvxm_opinion(o1/o2.b()); }
 
 inline bvxm_opinion operator/(bvxm_opinion const& o1, bvxm_opinion const& o2) { return bvxm_opinion(o1.b()/o2.b()); }
 
-inline vcl_ostream& operator<< (vcl_ostream& s, bvxm_opinion& o) { s << "bvxm_opinion [b=" << o.b() << " u=" << o.u() << ']' << vcl_endl; return s;}
+inline vcl_ostream& operator<< (vcl_ostream& s, bvxm_opinion const& o) { s << "bvxm_opinion [b=" << o.b() << " u=" << o.u() << ']' << vcl_endl; return s; }
 
 #endif

@@ -35,13 +35,13 @@ struct strk_correlated_face
   strk_correlated_face ();
   ~strk_correlated_face();
   void set_face(vtol_intensity_face_sptr const& f);
-  void set_correlation(const float c) {c_ = c;}
-  vtol_intensity_face_sptr face() {return f_;}
-  float correlation() const {return c_;}
-  float Ix(int i){return Ix_[i];}
-  float Iy(int i){return Iy_[i];}
-  void set_Ix(int i, const float Ix){Ix_[i] = Ix;}
-  void set_Iy(int i, const float Iy){Iy_[i] = Iy;}
+  void set_correlation(const float c) { c_ = c; }
+  vtol_intensity_face_sptr face() { return f_; }
+  float correlation() const { return c_; }
+  float Ix(int i) const { return Ix_[i]; }
+  float Iy(int i) const { return Iy_[i]; }
+  void set_Ix(int i, const float Ix) { Ix_[i] = Ix; }
+  void set_Iy(int i, const float Iy) { Iy_[i] = Iy; }
  private:
   float c_;
   vtol_intensity_face_sptr f_;
