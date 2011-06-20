@@ -75,6 +75,35 @@ class msm_shape_model_builder
                    const vcl_vector<vcl_vector<unsigned> >& pts_used,
                    msm_shape_model& shape_model);
 
+  //: Builds shape model from within-class variation
+  //  shape[i] belongs to class id[i].  
+  //  Aligns all shapes to a common mean.
+  //  Computes the average covariance about each class mean,
+  //  and builds shape modes from this.
+  //
+  //  If id[i]<0, then shape is
+  //  used for building global mean, but not for within class model.
+  //
+  //  pts_used[i] indicates which points will be controlled by mode i.
+  void build_within_class_model(
+                   const vcl_vector<msm_points>& shapes,
+                   const vcl_vector<int>& id,
+                   const vcl_vector<vcl_vector<unsigned> >& pts_used,
+                   msm_shape_model& shape_model);
+
+  //: Builds shape model from within-class variation
+  //  shape[i] belongs to class id[i].  
+  //  Aligns all shapes to a common mean.
+  //  Computes the average covariance about each class mean,
+  //  and builds shape modes from this.
+  //
+  //  If id[i]<0, then shape is
+  //  used for building global mean, but not for within class model.
+  void build_within_class_model(
+                   const vcl_vector<msm_points>& shapes,
+                   const vcl_vector<int>& id,
+                   msm_shape_model& shape_model);
+
   //: Builds the model from the points loaded from given files
   //  Loads from points_dir/filenames[i].
   //  throws a mbl_exception_parse_error if fails to load in
