@@ -101,7 +101,7 @@ inline void msm_elements_from_pts_used(
   used.resize(pts_used.size());
   for (unsigned i=0;i<pts_used.size();++i)
   {
-    used[i].empty(); 
+    used[i].empty();
     used[i].reserve(2*pts_used[i].size());
     for (unsigned j=0;j<pts_used[i].size();++j)
     {
@@ -116,10 +116,10 @@ inline void msm_elements_from_pts_used(
 //  be varied in some of the modes.  This allows construction
 //  of models where some groups of points are semi-independent
 //  of the others.
-//  pts_used[i] indicates the set of elements to be used for
-//  mode i (or all if pts_used[i] is empty).
-//  Modes beyond pts_used.size() will use all elements.
-//  Builds at least pts_used.size() modes. Number defined by
+//  \param pts_used[i] indicates the set of elements to be used for
+//  mode i (or all if \p pts_used[i] is empty).
+//  Modes beyond \p pts_used.size() will use all elements.
+//  Builds at least \p pts_used.size() modes. Number defined by
 //  max_modes and var_prop.
 void msm_shape_model_builder::build_model(
                   const vcl_vector<msm_points>& shapes,
@@ -172,12 +172,12 @@ void msm_shape_model_builder::build_from_files(
 }
 
 //: Counts number of examples with each class ID
-//  Assumes IDs run from 0.  Ignores any elements with id[i]<0.
+//  Assumes IDs run from 0.  Ignores any elements with \p id[i]<0.
 //  On exit n_per_class[j] indicates number of class j
 //  It is resized to cope with the largest ID number. Some elements
 //  may be zero.
 static void msm_count_classes(const vcl_vector<int>& id,
-                        vcl_vector<unsigned>& n_per_class)
+                              vcl_vector<unsigned>& n_per_class)
 {
   int max_id = 0;
   for (unsigned i=0;i<id.size();++i)
@@ -191,12 +191,12 @@ static void msm_count_classes(const vcl_vector<int>& id,
 
 
 //: Builds shape model from within-class variation
-//  shape[i] belongs to class id[i].  
+//  \param shape[i] belongs to class \p id[i].
 //  Aligns all shapes to a common mean.
 //  Computes the average covariance about each class mean,
 //  and builds shape modes from this.
 //
-//  If id[i]<0, then shape is
+//  If \p id[i]<0, then shape is
 //  used for building global mean, but not for within class model.
 void msm_shape_model_builder::build_within_class_model(
                    const vcl_vector<msm_points>& shapes,
@@ -215,7 +215,7 @@ void msm_shape_model_builder::build_within_class_model(
 
   // Initialise sums for class means
   for (unsigned j=0;j<n_per_class.size();++j)
-    if (n_per_class[j]>0) 
+    if (n_per_class[j]>0)
     {
       class_mean[j].set_size(2*ref_mean_shape.size());
       class_mean[j].fill(0.0);
@@ -267,15 +267,15 @@ void msm_shape_model_builder::build_within_class_model(
 }
 
 //: Builds shape model from within-class variation
-//  shape[i] belongs to class id[i].  
+//  \param shape[i] belongs to class \p id[i].
 //  Aligns all shapes to a common mean.
 //  Computes the average covariance about each class mean,
 //  and builds shape modes from this.
 //
-//  If id[i]<0, then shape is
+//  If \p id[i]<0, then shape is
 //  used for building global mean, but not for within class model.
 //
-//  pts_used[i] indicates which points will be controlled by mode i.
+//  \param pts_used[i] indicates which points will be controlled by mode i.
 void msm_shape_model_builder::build_within_class_model(
                    const vcl_vector<msm_points>& shapes,
                    const vcl_vector<int>& id,
@@ -294,7 +294,7 @@ void msm_shape_model_builder::build_within_class_model(
 
   // Initialise sums for class means
   for (unsigned j=0;j<n_per_class.size();++j)
-    if (n_per_class[j]>0) 
+    if (n_per_class[j]>0)
     {
       class_mean[j].set_size(2*ref_mean_shape.size());
       class_mean[j].fill(0.0);
@@ -345,8 +345,7 @@ void msm_shape_model_builder::build_within_class_model(
 }
 
 
-
-//: Loads all shapes from points_dir/filenames[i].
+//: Loads all shapes from \p points_dir/filenames[i].
 //  Throws mbl_exception_parse_error if fails.
 void msm_load_shapes(const vcl_string& points_dir,
                      const vcl_vector<vcl_string>& filenames,

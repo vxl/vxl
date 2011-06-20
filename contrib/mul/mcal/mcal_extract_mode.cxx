@@ -11,15 +11,15 @@
 #include <mbl/mbl_data_array_wrapper.h>
 #include <mcal/mcal_pca.h>
 
-//: Computes one mode from used elements of each dv
+//: Computes one mode from used elements of each \p dv
 //  Effectives computes the first eigenvector of the
 //  covariance matrix formed from selecting the used elements
-//  of each dv[i], ie dv[i][used[j]].
-//  Resulting vector is returned as a full length vector 
-//  (the same size as dv[i]).
-//  
-//  The contribution of this vector is removed from each dv,
-//  dv[i]-=mode*b, where b=dv[i].mode
+//  of each \p dv[i], ie \p dv[i][used[j]].
+//  Resulting vector is returned as a full length vector
+//  (the same size as \p dv[i]).
+//
+//  The contribution of this vector is removed from each \p dv,
+//  \p dv[i]-=mode*b, where \p b=dv[i].mode
 void mcal_extract_mode(vcl_vector<vnl_vector<double> >& dv,
                        const vcl_vector<unsigned>& used,
                        vnl_vector<double>& mode,
@@ -40,7 +40,7 @@ void mcal_extract_mode(vcl_vector<vnl_vector<double> >& dv,
   for (unsigned i=0;i<ns;++i)
   {
     v[i].set_size(used.size());
-    for (unsigned j=0;j<used.size();++j) 
+    for (unsigned j=0;j<used.size();++j)
       v[i][j]=dv[i][used[j]];
   }
 
@@ -69,11 +69,11 @@ void mcal_extract_mode(vcl_vector<vnl_vector<double> >& dv,
   }
 }
 
-//: Computes one mode by applying PCA to dv
+//: Computes one mode by applying PCA to \p dv
 //  Effectives computes the first eigenvector of the
 //  covariance matrix.
-//  The contribution of this vector is removed from each dv,
-//  dv[i]-=mode*b, where b=dv[i].mode
+//  The contribution of this vector is removed from each \p dv,
+//  \p dv[i]-=mode*b, where \p b=dv[i].mode
 void mcal_extract_mode(vcl_vector<vnl_vector<double> >& dv,
                        vnl_vector<double>& mode,
                        double& var)
@@ -104,13 +104,13 @@ void mcal_extract_mode(vcl_vector<vnl_vector<double> >& dv,
 
 
 //: Compute modes and associated variance of supplied data
-//  used[i] indicates the set of elements to be used for
-//  mode i.  Modes beyond used.size() will use all elements.
+//  \param used[i] indicates the set of elements to be used for
+//  mode i.  Modes beyond \p used.size() will use all elements.
 void mcal_extract_modes(vcl_vector<vnl_vector<double> >& dv,
-                       const vcl_vector<vcl_vector<unsigned> >& used,
-                       unsigned max_modes, double var_prop,
-                       vnl_matrix<double>& modes,
-                       vnl_vector<double>& mode_var)
+                        const vcl_vector<vcl_vector<unsigned> >& used,
+                        unsigned max_modes, double var_prop,
+                        vnl_matrix<double>& modes,
+                        vnl_vector<double>& mode_var)
 {
   unsigned ns=dv.size();
 
@@ -151,7 +151,7 @@ void mcal_extract_modes(vcl_vector<vnl_vector<double> >& dv,
 
     // Add modes until we pass threshold on variance or n.modes.
     unsigned m=0;
-    while (mode_set.size()<max_modes && 
+    while (mode_set.size()<max_modes &&
            var_sum<var_thresh && m<mode_var0.size())
     {
       // Add mode m

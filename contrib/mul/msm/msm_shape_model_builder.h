@@ -45,16 +45,16 @@ class msm_shape_model_builder
   //: Define parameter limiter.
   void set_param_limiter(const msm_param_limiter&);
 
-    //: Define limits on number of parameters to use in model
-    // \param var_proportion  Proportion of variance in data to explain
-  void set_mode_choice(unsigned min, unsigned max, 
+  //: Define limits on number of parameters to use in model
+  // \param var_proportion  Proportion of variance in data to explain
+  void set_mode_choice(unsigned min, unsigned max,
                        double var_proportion);
 
   //: Object used to deal with global transformations
   const msm_aligner& aligner() const { return aligner_; }
 
   //: Current object which limits parameters
-  const msm_param_limiter& param_limiter() const 
+  const msm_param_limiter& param_limiter() const
   { return param_limiter_; }
 
   //: Builds the model from the supplied examples
@@ -66,25 +66,25 @@ class msm_shape_model_builder
   //  be varied in some of the modes.  This allows construction
   //  of models where some groups of points are semi-independent
   //  of the others.
-  //  pts_used[i] indicates the set of points to be used for
-  //  mode i (or all if pts_used[i] is empty).
-  //  Modes beyond pts_used.size() will use all elements.
-  //  Builds at least pts_used.size() modes. Number defined by
+  //  \param pts_used[i] indicates the set of points to be used for
+  //  mode i (or all if \p pts_used[i] is empty).
+  //  Modes beyond \p pts_used.size() will use all elements.
+  //  Builds at least \p pts_used.size() modes. Number defined by
   //  max_modes and var_prop.
   void build_model(const vcl_vector<msm_points>& shapes,
                    const vcl_vector<vcl_vector<unsigned> >& pts_used,
                    msm_shape_model& shape_model);
 
   //: Builds shape model from within-class variation
-  //  shape[i] belongs to class id[i].  
+  //  \param shapes[i] belongs to class \p id[i].
   //  Aligns all shapes to a common mean.
   //  Computes the average covariance about each class mean,
   //  and builds shape modes from this.
   //
-  //  If id[i]<0, then shape is
+  //  If \p id[i]<0, then shape is
   //  used for building global mean, but not for within class model.
   //
-  //  pts_used[i] indicates which points will be controlled by mode i.
+  //  \param pts_used[i] indicates which points will be controlled by mode i.
   void build_within_class_model(
                    const vcl_vector<msm_points>& shapes,
                    const vcl_vector<int>& id,
@@ -92,12 +92,12 @@ class msm_shape_model_builder
                    msm_shape_model& shape_model);
 
   //: Builds shape model from within-class variation
-  //  shape[i] belongs to class id[i].  
+  //  \param shapes[i] belongs to class \p id[i].
   //  Aligns all shapes to a common mean.
   //  Computes the average covariance about each class mean,
   //  and builds shape modes from this.
   //
-  //  If id[i]<0, then shape is
+  //  If \p id[i]<0, then shape is
   //  used for building global mean, but not for within class model.
   void build_within_class_model(
                    const vcl_vector<msm_points>& shapes,
@@ -105,12 +105,12 @@ class msm_shape_model_builder
                    msm_shape_model& shape_model);
 
   //: Builds the model from the points loaded from given files
-  //  Loads from points_dir/filenames[i].
+  //  Loads from \p points_dir/filenames[i].
   //  throws a mbl_exception_parse_error if fails to load in
   //  any of the files.
   void build_from_files(const vcl_string& points_dir,
-                   const vcl_vector<vcl_string>& filenames,
-                   msm_shape_model& shape_model);
+                        const vcl_vector<vcl_string>& filenames,
+                        msm_shape_model& shape_model);
 
   //: Version number for I/O
   short version_no() const;
@@ -128,7 +128,7 @@ class msm_shape_model_builder
   void b_read(vsl_b_istream& bfs);
 };
 
-//: Loads all shapes from points_dir/filenames[i].
+//: Loads all shapes from \p points_dir/filenames[i].
 //  Throws mbl_exception_parse_error if fails.
 void msm_load_shapes(const vcl_string& points_dir,
                      const vcl_vector<vcl_string>& filenames,
