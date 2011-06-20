@@ -1494,8 +1494,8 @@ void bwm_observer_cam::project_shadow()
       int min_z_index=mesh_pts[index_min1]->z()<mesh_pts[index_min2]->z()?index_min1:index_min2;
       double len=mesh_pts[index_min1]->distance(mesh_pts[index_min2]);
       vsol_point_3d_sptr base_point= mesh_pts[min_z_index];
-      vsol_point_3d_sptr pnew=new vsol_point_3d(base_point->x()+len*vcl_tan(sun_elev_angle_)*vcl_cos(sun_azim_angle_),
-                                                base_point->y()+len*vcl_tan(sun_elev_angle_)*vcl_sin(sun_azim_angle_),
+      vsol_point_3d_sptr pnew=new vsol_point_3d(base_point->x()-len*vcl_tan(sun_elev_angle_)*vcl_cos(sun_azim_angle_),
+                                                base_point->y()-len*vcl_tan(sun_elev_angle_)*vcl_sin(sun_azim_angle_),
                                                 base_point->z());
 
       double u0,v0,u1,v1;
