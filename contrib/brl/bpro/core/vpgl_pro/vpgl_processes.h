@@ -25,7 +25,11 @@ DECLARE_FUNC_CONS(vpgl_correct_rational_cameras_mult_corr_refine_process);
 DECLARE_FUNC_CONS(vpgl_project_process);
 DECLARE_FUNC_CONS(vpgl_convert_to_generic_camera_process);
 DECLARE_FUNC_CONS(vpgl_resample_perspective_camera_process);
+DECLARE_FUNC_CONS(vpgl_generate_3d_point_from_depth_process);
+DECLARE_FUNC_CONS(vpgl_get_view_direction_at_point_process);
+    
 #if 0 //deprecate scale perspective camera
 DECLARE_FUNC_CONS(vpgl_scale_perspective_camera_process);
 #endif
+
 #endif
