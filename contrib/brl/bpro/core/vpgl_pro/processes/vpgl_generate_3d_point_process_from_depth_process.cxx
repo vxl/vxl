@@ -1,4 +1,4 @@
-// This is brl/bpro/core/vpgl_pro/processes/vpgl_generate_3d_point_from_depth_process.cxx
+// This is brl/bpro/core/vpgl_pro/processes/vpgl_generate_3d_point_process_from_depth_process.cxx
 #include <bprb/bprb_func_process.h>
 //:
 // \file
