@@ -46,13 +46,12 @@ void mcal_extract_mode(vcl_vector<vnl_vector<double> >& dv,
 
   // Perform PCA
   // We assume data to be zero mean
-  vnl_vector<double> mean0(dv[0].size()),mode_var0;
-  mean0.fill(0.0);  // Zero mean
+  vnl_vector<double> zero_mean(v[0].size(),0.0),mode_var0;
   vnl_matrix<double> modes0;
   mcal_pca pca;
   pca.set_mode_choice(1,1,1.0);
-  mbl_data_array_wrapper<vnl_vector<double> > data(dv);
-  pca.build_about_mean(data,mean0,modes0,mode_var0);
+  mbl_data_array_wrapper<vnl_vector<double> > data(v);
+  pca.build_about_mean(data,zero_mean,modes0,mode_var0);
 
   // Reconstruct mode from first mode of PCA
   var = mode_var0[0];
@@ -84,13 +83,12 @@ void mcal_extract_mode(vcl_vector<vnl_vector<double> >& dv,
 
   // Perform PCA
   // We assume data to be zero mean
-  vnl_vector<double> mean0(dv[0].size()),mode_var0;
-  mean0.fill(0.0);  // Zero mean
+  vnl_vector<double> zero_mean(dv[0].size(),0.0),mode_var0;
   vnl_matrix<double> modes0;
   mcal_pca pca;
   pca.set_mode_choice(1,1,1.0);
   mbl_data_array_wrapper<vnl_vector<double> > data(dv);
-  pca.build_about_mean(data,mean0,modes0,mode_var0);
+  pca.build_about_mean(data,zero_mean,modes0,mode_var0);
 
   // Reconstruct mode from first mode of PCA
   var = mode_var0[0];
