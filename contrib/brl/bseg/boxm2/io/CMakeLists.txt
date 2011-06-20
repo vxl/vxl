@@ -12,7 +12,6 @@ SET(boxm2_io_sources
     boxm2_dumb_cache.h     boxm2_dumb_cache.cxx
     boxm2_nn_cache.h       boxm2_nn_cache.cxx
     boxm2_lru_cache.h      boxm2_lru_cache.cxx
-    boxm2_scene_parser.h   boxm2_scene_parser.cxx
     boxm2_stream_cache.h   boxm2_stream_cache.cxx boxm2_stream_cache.txx
    )
 AUX_SOURCE_DIRECTORY(Templates boxm2_io_sources)

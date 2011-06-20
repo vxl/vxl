@@ -9,7 +9,7 @@
 #include <vsl/vsl_basic_xml_element.h>
 #include <vgl/xio/vgl_xio_point_3d.h>
 #include <vgl/xio/vgl_xio_vector_3d.h>
-#include <boxm2/io/boxm2_scene_parser.h>
+#include <boxm2/boxm2_scene_parser.h>
 
 //vgl includes
 #include <vgl/vgl_vector_3d.h>

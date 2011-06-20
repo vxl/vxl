@@ -19,12 +19,13 @@ IF(EXPAT_FOUND)
         boxm2_data.h                  boxm2_data.txx
         boxm2_data_traits.h
         boxm2_util.h                  boxm2_util.cxx
+        boxm2_scene_parser.h          boxm2_scene_parser.cxx
        )
 
     AUX_SOURCE_DIRECTORY(Templates boxm2_sources)
 
     ADD_LIBRARY(boxm2  ${boxm2_sources})
-    TARGET_LINK_LIBRARIES(boxm2 boxm2_basic boxm2_io boct brdb vbl_io expatpp vpgl_algo vpgl vgl vgl_xio vbl vsl vcl)
+    TARGET_LINK_LIBRARIES(boxm2 boxm2_basic boct brdb vbl_io expatpp vpgl_algo vpgl vgl vgl_xio vbl vsl vcl)
 
     #basic
     subdirs(basic)
