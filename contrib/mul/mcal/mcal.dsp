@@ -118,6 +118,9 @@ SOURCE=.\mcal_trivial_ca.cxx
 SOURCE=.\mcal_var_basis_cost.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\mcal_extract_mode.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/mbl_cloneables_factory+mcal_component_analyzer-.cxx
 # End Source File
 # Begin Source File
@@ -155,6 +158,9 @@ SOURCE=.\mcal_trivial_ca.h
 # End Source File
 # Begin Source File
 SOURCE=.\mcal_var_basis_cost.h
+# End Source File
+# Begin Source File
+SOURCE=.\mcal_extract_mode.h
 # End Source File
 # End Group
 # End Target
