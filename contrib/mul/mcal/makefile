@@ -11,6 +11,7 @@ SOURCES += mcal_sparse_basis_cost.cxx
 SOURCES += mcal_general_ca.cxx
 SOURCES += mcal_trivial_ca.cxx
 SOURCES += mcal_var_basis_cost.cxx
+SOURCES += mcal_extract_mode.cxx
 
 #######################################
 include ${VXLROOT}/config/top-params.mk
