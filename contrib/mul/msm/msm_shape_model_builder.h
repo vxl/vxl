@@ -61,6 +61,20 @@ class msm_shape_model_builder
   void build_model(const vcl_vector<msm_points>& shapes,
                    msm_shape_model& shape_model);
 
+  //: Builds the model, using subsets of elements for some modes
+  //  Builds a shape model, allowing control of which elements may
+  //  be varied in some of the modes.  This allows construction
+  //  of models where some groups of points are semi-independent
+  //  of the others.
+  //  pts_used[i] indicates the set of points to be used for
+  //  mode i (or all if pts_used[i] is empty).
+  //  Modes beyond pts_used.size() will use all elements.
+  //  Builds at least pts_used.size() modes. Number defined by
+  //  max_modes and var_prop.
+  void build_model(const vcl_vector<msm_points>& shapes,
+                   const vcl_vector<vcl_vector<unsigned> >& pts_used,
+                   msm_shape_model& shape_model);
+
   //: Builds the model from the points loaded from given files
   //  Loads from points_dir/filenames[i].
   //  throws a mbl_exception_parse_error if fails to load in
@@ -85,6 +99,11 @@ class msm_shape_model_builder
   void b_read(vsl_b_istream& bfs);
 };
 
+//: Loads all shapes from points_dir/filenames[i].
+//  Throws mbl_exception_parse_error if fails.
+void msm_load_shapes(const vcl_string& points_dir,
+                     const vcl_vector<vcl_string>& filenames,
+                     vcl_vector<msm_points>& shapes);
 
 //: Binary file stream output operator for class reference
 void vsl_b_write(vsl_b_ostream& bfs, const msm_shape_model_builder& pts);

@@ -12,6 +12,7 @@
 #include <vcl_cstdlib.h>  // for vcl_atoi() & vcl_abort()
 #include <mbl/mbl_data_array_wrapper.h>
 #include <mcal/mcal_pca.h>
+#include <mcal/mcal_extract_mode.h>
 #include <mbl/mbl_exception.h>
 
 //=======================================================================
@@ -92,14 +93,81 @@ void msm_shape_model_builder::build_model(
                   aligner(),param_limiter());
 }
 
+//: Builds the model, using subsets of elements for some modes
+//  Builds a shape model, allowing control of which elements may
+//  be varied in some of the modes.  This allows construction
+//  of models where some groups of points are semi-independent
+//  of the others.
+//  pts_used[i] indicates the set of elements to be used for
+//  mode i (or all if pts_used[i] is empty).
+//  Modes beyond pts_used.size() will use all elements.
+//  Builds at least pts_used.size() modes. Number defined by
+//  max_modes and var_prop.
+void msm_shape_model_builder::build_model(
+                  const vcl_vector<msm_points>& shapes,
+                  const vcl_vector<vcl_vector<unsigned> >& pts_used,
+                  msm_shape_model& shape_model)
+{
+  // Align shapes and estimate mean pose
+  msm_points ref_mean_shape;
+  vcl_vector<vnl_vector<double> > pose_to_ref;
+  vnl_vector<double> average_pose;
+  aligner().align_set(shapes,ref_mean_shape,pose_to_ref,average_pose);
+
+  // Generate vectors corresponding to aligned shapes
+  unsigned n = shapes.size();
+  vcl_vector<vnl_vector<double> > dshape_vec(n);
+  msm_points aligned_shape;
+  for (unsigned i=0;i<n;++i)
+  {
+    aligner().apply_transform(shapes[i],pose_to_ref[i],aligned_shape);
+    dshape_vec[i]=aligned_shape.vector()-ref_mean_shape.vector();
+  }
+
+  // Set up indication for which elements to be used
+  // pt i corresponds to elements 2i,2i+1
+  vcl_vector<vcl_vector<unsigned> > used(pts_used.size());
+  for (unsigned i=0;i<pts_used.size();++i)
+  {
+    for (unsigned j=0;j<pts_used[i].size();++j)
+    {
+      used[i].push_back(2*pts_used[i][j]);
+      used[i].push_back(2*pts_used[i][j]+1);
+    }
+  }
+
+  vnl_matrix<double> modes;
+  vnl_vector<double> mode_var;
+
+  mcal_extract_modes(dshape_vec,used,
+                     max_modes_,var_prop_,
+                     modes,mode_var);
+
+  param_limiter_->set_param_var(mode_var);
+
+  shape_model.set(ref_mean_shape,modes,mode_var,average_pose,
+                  aligner(),param_limiter());
+}
+
 //: Builds the model from the points loaded from given files
 void msm_shape_model_builder::build_from_files(
                    const vcl_string& points_dir,
                    const vcl_vector<vcl_string>& filenames,
                    msm_shape_model& shape_model)
 {
+  vcl_vector<msm_points> shapes(filenames.size());
+  msm_load_shapes(points_dir,filenames,shapes);
+  build_model(shapes,shape_model);
+}
+
+//: Loads all shapes from points_dir/filenames[i].
+//  Throws mbl_exception_parse_error if fails.
+void msm_load_shapes(const vcl_string& points_dir,
+                     const vcl_vector<vcl_string>& filenames,
+                     vcl_vector<msm_points>& shapes)
+{
   unsigned n=filenames.size();
-  vcl_vector<msm_points> shapes(n);
+  shapes.resize(n);
   for (unsigned i=0;i<n;++i)
   {
     vcl_string path = points_dir+"/"+filenames[i];
@@ -109,9 +177,7 @@ void msm_shape_model_builder::build_from_files(
       mbl_exception_error(x);
     }
   }
-  build_model(shapes,shape_model);
 }
-
 
 //=======================================================================
 // Method: version_no
