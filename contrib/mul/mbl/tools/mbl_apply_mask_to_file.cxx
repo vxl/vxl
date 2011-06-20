@@ -12,75 +12,9 @@
 #include <vul/vul_arg.h>
 #include <vcl_exception.h>
 #include <mbl/mbl_mask.h>
-
-// IO helpers - see below for definition
-bool load_vals(vcl_vector<vcl_string> & values, const vcl_string & filename);
-bool load_vals(vcl_vector<vcl_string> & values, const vcl_string & filename, const vcl_string & delim);
-void write_vals(const vcl_vector<vcl_string> & values, vcl_ostream & os);
+#include <mbl/mbl_exception.h>
 
 
-int main(int argc, char **argv)
-{
-  vul_arg<vcl_string> mask_filename(0, "Input mask file");
-  vul_arg<vcl_string> values_filename(0, "Input values file");
-  vul_arg<vcl_string> output_filename("-out", "Output values file - write to standard out if not set");
-  vul_arg<vcl_string> delim("-delim", "Delimiter character for values file - one entry per line if not set");
-  vul_arg_parse(argc, argv);
-
-  if (delim.set() && delim().length() != 1)
-  {
-    vcl_cout << "User-defined delimiter should be one character" << vcl_endl;
-    return 1;
-  }
-
-  mbl_mask mask;
-  mbl_load_mask(mask, mask_filename().c_str());
-
-  vcl_vector<vcl_string> values;
-  bool loaded_vals;
-  if (delim.set())
-    loaded_vals = load_vals(values, values_filename(), delim());
-  else
-    loaded_vals = load_vals(values, values_filename());
-
-  if (!loaded_vals)
-  {
-    vcl_cout << "Unable to load input data from " << values_filename() << vcl_endl;
-    return 1;
-  }
-
-  try { mbl_apply_mask(mask, values); }
-  catch (vcl_exception & e)
-  {
-    vcl_cout << "An error occurred while applying the mask.\n" << e.what() << vcl_endl;
-    return 1;
-  }
-  catch (...)
-  {
-    vcl_cout << "An unknown error occurred while applying the mask." << vcl_endl;
-    return 1;
-  }
-
-  if (output_filename.set())
-  {
-    vcl_ofstream val_out(output_filename().c_str());
-    if (!val_out)
-    {
-      vcl_cout << "Unable to save output data to " << output_filename() << vcl_endl;
-      return 1;
-    }
-    write_vals(values, val_out);
-    val_out.close();
-  }
-  else write_vals(values, vcl_cout);
-}
-
-
-
-
-
-
-// io helpers below this point
 
 vcl_string trim(const vcl_string & s)
 {
@@ -143,3 +77,74 @@ void write_vals(const vcl_vector<vcl_string> & values, vcl_ostream & os)
 {
   vcl_copy(values.begin(), values.end(), vcl_ostream_iterator<vcl_string>(os, "\n"));
 }
+
+
+
+int main(int argc, char **argv)
+{
+  try
+  {
+    vul_arg<vcl_string> mask_filename(0, "Input mask file");
+    vul_arg<vcl_string> values_filename(0, "Input values file");
+    vul_arg<vcl_string> output_filename("-out", "Output values file - write to standard out if not set");
+    vul_arg<vcl_string> delim("-delim", "Delimiter character for values file - one entry per line if not set");
+    vul_arg_parse(argc, argv);
+
+    if (delim.set() && delim().length() != 1)
+    {
+      vcl_cerr << "ERROR: User-defined delimiter should be one character" << vcl_endl;
+      return 1;
+    }
+
+    mbl_mask mask;
+    mbl_load_mask(mask, mask_filename().c_str());
+
+    vcl_vector<vcl_string> values;
+    bool loaded_vals;
+    if (delim.set())
+      loaded_vals = load_vals(values, values_filename(), delim());
+    else
+      loaded_vals = load_vals(values, values_filename());
+
+    if (!loaded_vals)
+    {
+      vcl_cerr << "ERROR: Unable to load input data from " << values_filename() << vcl_endl;
+      return 1;
+    }
+
+    mbl_apply_mask(mask, values);
+
+    if (output_filename.set())
+    {
+      vcl_ofstream val_out(output_filename().c_str());
+      if (!val_out)
+      {
+        mbl_exception_throw_os_error(output_filename(),
+        "while trying to open for writing");
+        return 1;
+      }
+      write_vals(values, val_out);
+      val_out.close();
+    }
+    else write_vals(values, vcl_cout);
+
+  }
+  catch (vcl_exception & e)
+  {
+    vcl_cerr << "ERROR: " << e.what() << vcl_endl;
+    return 1;
+  }
+  catch (...)
+  {
+    vcl_cerr << "ERROR: An unknown error occurred while applying the mask." << vcl_endl;
+    return 1;
+  }
+
+
+}
+
+
+
+
+
+
