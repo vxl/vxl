@@ -120,6 +120,9 @@ class msm_curves : public vcl_vector<msm_curve>
   msm_curves(unsigned lo, unsigned hi,
              bool open=true, vcl_string name="");
 
+  //: Return index of first curve with given name, or -1
+  int which_curve(const vcl_string& name) const;
+
   //: Parse parameters in stream
   //  Expects
   // \verbatim

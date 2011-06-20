@@ -185,6 +185,14 @@ msm_curves::msm_curves(unsigned lo, unsigned hi,
   operator[](0)=msm_curve(lo,hi,open,name);
 }
 
+//: Return index of first curve with given name, or -1
+int msm_curves::which_curve(const vcl_string& name) const
+{
+  for (unsigned i=0;i<size();++i)
+    if (operator[](i).name()==name) return i;
+  return -1;
+}
+
 //: Parse parameters in stream
 //  Expects
 // \verbatim
