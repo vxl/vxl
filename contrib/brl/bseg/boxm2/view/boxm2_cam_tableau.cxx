@@ -73,12 +73,40 @@ bool boxm2_cam_tableau::handle(vgui_event const &e)
       this->setup_gl_matrices();
       this->post_redraw();
   }
+  if (e.type == vgui_KEY_PRESS && e.key == vgui_key('t')) {
+    vcl_cout<<"rendering trajectory..."<<vcl_endl;
+    render_trajectory_ = true; 
+    this->post_idle_request();
+  }
 
+  //Handles Idle events - should render trajectory
+  else if (e.type == vgui_IDLE)
+  {
+    if(render_trajectory_) {
+      vpgl_camera_double_sptr& camSptr = *cam_iter_; 
+      vpgl_perspective_camera<double>* camPtr = (vpgl_perspective_camera<double>*) camSptr.ptr(); 
+      cam_ = *camPtr;
+    
+      //increment cam iter
+      ++cam_iter_; 
+      if(cam_iter_ == trajectory_->end())
+        cam_iter_ = trajectory_->begin(); 
+      
+      //rerender
+      this->post_redraw();
+      return true; 
+    }
+    else {
+      return false; 
+    }
+  }
   //see if drag should handle it
   event = e;
   if (vgui_drag_mixin::handle(e))
-    return true;
-
+  {
+      render_trajectory_ = false; 
+      return true;
+  }
   if (vgui_tableau::handle(e))
     return true;
 
@@ -135,7 +163,6 @@ bool boxm2_cam_tableau::mouse_drag(int x, int y, vgui_button button, vgui_modifi
     vcl_cout<<"New center"<<newCenter<<" old center "<<cam_center<<vcl_endl;
     cam_.look_at(stare_point_);
 
-    //vcl_cout<<cam_;
     this->post_redraw();
     return true;
   }
@@ -192,6 +219,7 @@ bool boxm2_cam_tableau::mouse_drag(int x, int y, vgui_button button, vgui_modifi
     this->post_redraw();
     return true;
   }
+
   return false;
 }
 

@@ -13,6 +13,7 @@
 #include <vgui/vgui_event_condition.h>
 #include <vgui/vgui_tableau_sptr.h>
 #include <vgui/vgui_grid_tableau.h>
+#include <boxm2/view/boxm2_trajectory.h>
 
 class boxm2_cam_tableau:  public vgui_tableau, public vgui_drag_mixin
 {
@@ -47,6 +48,10 @@ class boxm2_cam_tableau:  public vgui_tableau, public vgui_drag_mixin
     vgl_homg_point_3d<double> default_stare_point_;
 
     double scale_;
+  //: trajectory for idle rendering
+  bool render_trajectory_; 
+  boxm2_trajectory* trajectory_;
+  boxm2_trajectory::iterator cam_iter_;
 
     //keep track of events
     vgui_event event;
