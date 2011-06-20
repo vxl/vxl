@@ -95,8 +95,12 @@ bool vul_file::make_directory_path(char const* filename)
 #else
   if (is_directory(filename)) return true;
 #endif
+  // You can get a race condition here if there are multiple
+  // process/threads trying to make the same dir at the same time
+  // So if the make_directory fails, just check that someone else
+  // didn't make it in the intervening time.
   return make_directory_path(dirname(filename))
-      && make_directory(filename);
+      && (make_directory(filename) || is_directory(filename));
 }
 
 
