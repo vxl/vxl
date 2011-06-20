@@ -15,6 +15,8 @@ SET(mcal_sources
   mcal_sparse_basis_cost.cxx        mcal_sparse_basis_cost.h
   mcal_var_basis_cost.cxx           mcal_var_basis_cost.h
   mcal_add_all_loaders.cxx          mcal_add_all_loaders.h
+
+  mcal_extract_mode.cxx             mcal_extract_mode.h
 )
 AUX_SOURCE_DIRECTORY(Templates mcal_sources)
 
