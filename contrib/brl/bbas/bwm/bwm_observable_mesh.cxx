@@ -1169,7 +1169,7 @@ vgl_plane_3d<double> bwm_observable_mesh::get_plane(unsigned face_id)
   if (face->vertices().size()==0)
     return plane;
 #endif
-  if (fitter.fit(0.0001)) {
+  if (fitter.fit(0.0001, &vcl_cerr)) {
     plane = fitter.get_plane();
   }
   else {

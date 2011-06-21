@@ -91,7 +91,7 @@ vsol_polygon_3d_sptr bwm_algo::move_points_to_plane(vsol_polygon_3d_sptr polygon
 
   vgl_homg_plane_3d<double> plane;
 
-  if (fitter.fit(0.1)) {
+  if (fitter.fit(0.1, &vcl_cerr)) {
   //fitter.fit();
 
   plane = fitter.get_plane();
@@ -128,7 +128,7 @@ vsol_polygon_3d_sptr bwm_algo::move_points_to_plane(vcl_vector<vsol_point_3d_spt
 
   vgl_homg_plane_3d<double> plane;
 
-  if (fitter.fit(1.0)) {
+  if (fitter.fit(1.0, &vcl_cerr)) {
   // fitter.fit();
   plane = fitter.get_plane();
   }

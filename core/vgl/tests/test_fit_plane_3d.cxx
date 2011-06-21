@@ -21,7 +21,7 @@ static void test_fit_plane_z()
     }
   }
    double tol = 1e-3;
-bool success =   fit_plane.fit(tol);
+bool success =   fit_plane.fit(tol, &vcl_cerr);
 TEST("exact fit", success, true);
   vgl_homg_plane_3d<double> plane = fit_plane.get_plane();
 
@@ -58,7 +58,7 @@ static void test_fit_plane_xyz()
     }
   }
   double tol = 1e-3;
-  bool success = fit_plane.fit(tol);
+  bool success = fit_plane.fit(tol, &vcl_cerr);
   TEST("test fit", success, true);
   vgl_homg_plane_3d<double> plane = fit_plane.get_plane();
 
@@ -85,7 +85,7 @@ static void test_fit_plane_random()
     fit_plane.add_point(p);
   }
   double tol = 1e-3;
-  bool success = fit_plane.fit(tol);
+  bool success = fit_plane.fit(tol, &vcl_cerr);
   TEST("random fit", success, false);
   vgl_homg_plane_3d<double> plane = fit_plane.get_plane();
 

@@ -175,7 +175,7 @@ bool fit_plane_ransac(vcl_vector<vgl_homg_point_3d<double> > & points, vgl_homg_
       subset.push_back(points[vcl_rand()%nsize]);
     vcl_cout<<subset.size();vcl_cout.flush();
     vgl_fit_plane_3d<double> fit_plane(subset);
-    if (fit_plane.fit(err))
+    if (fit_plane.fit(err, &vcl_cerr))
     {
       vgl_homg_plane_3d<double> plane=fit_plane.get_plane();
       for (unsigned j=0;j<nsize;++j)
@@ -197,7 +197,7 @@ bool fit_plane_ransac(vcl_vector<vgl_homg_point_3d<double> > & points, vgl_homg_
     fit_plane_inliers.add_point(points[best_inliers[i]]);
   }
   vcl_cout<<"Inliers "<<best_inliers.size()<<vcl_endl;
-  if (fit_plane_inliers.fit(23.0))
+  if (fit_plane_inliers.fit(23.0, &vcl_cerr))
   {
     plane=fit_plane_inliers.get_plane();
     return true;
@@ -218,7 +218,7 @@ bool axis_align_scene(vcl_vector<bwm_video_corr_sptr> & corrs,
 
   // fit the plane
   vgl_fit_plane_3d<double> fit_plane(points);
-  if (!fit_plane.fit(1e6))
+  if (!fit_plane.fit(1e6, &vcl_cerr))
     return false;
 
   vgl_homg_plane_3d<double> plane=fit_plane.get_plane();
@@ -287,7 +287,7 @@ bool axis_align_scene(vcl_vector<bwm_video_corr_sptr> & corrs,
     cams[i]=new_cams[i];
 
   vgl_fit_plane_3d<double> fit_plane1(xformed_points);
-  if (!fit_plane1.fit(1e6))
+  if (!fit_plane1.fit(1e6, &vcl_cerr))
       return false;
 
   vgl_homg_plane_3d<double> plane1=fit_plane1.get_plane();

@@ -50,7 +50,8 @@ class vgl_fit_plane_3d
   void clear();
 
   //:fits a plane to the stored points
-  bool fit(const T error_marg);
+  // report issues over an ostream if declared
+  bool fit(const T error_marg, vcl_ostream* outstream=0);
 
   // Data Access---------------------------------------------------------------
 
