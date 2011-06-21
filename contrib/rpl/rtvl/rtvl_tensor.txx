@@ -116,6 +116,13 @@ void rtvl_tensor<N>::next_scale(double scale_multiplier, double max_saliency)
 }
 
 //----------------------------------------------------------------------------
+template <unsigned int N>
+void rtvl_tensor<N>::remove_ballness(unsigned int d)
+{
+  this->lambda_[d] = 0;
+}
+
+//----------------------------------------------------------------------------
 #define RTVL_TENSOR_INSTANTIATE(N) \
   template class rtvl_tensor<N >
 

@@ -45,6 +45,9 @@ public:
   double saliency(unsigned int d) const
     { return this->lambda_[d] - this->lambda_[d+1]; }
 
+  /** Remove the ballness from the tensor.  */
+  void remove_ballness(unsigned int d);
+
   typedef vnl_vector_fixed<double, N> basis_type[N];
   basis_type const& basis() const
     { return this->basis_; }
