@@ -21,6 +21,7 @@
 #include <vcl_vector.h>
 #include <vgl/vgl_homg_point_3d.h>
 #include <vgl/vgl_homg_plane_3d.h>
+#include <vcl_iosfwd.h>
 
 template <class T>
 class vgl_fit_plane_3d
