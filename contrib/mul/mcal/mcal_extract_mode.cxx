@@ -79,7 +79,6 @@ void mcal_extract_mode(vcl_vector<vnl_vector<double> >& dv,
                        double& var)
 {
   unsigned ns=dv.size();
-  unsigned nd=dv[0].size();
 
   // Perform PCA
   // We assume data to be zero mean
