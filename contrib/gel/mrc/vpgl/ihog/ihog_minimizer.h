@@ -16,8 +16,6 @@
 //   <none>
 // \endverbatim
 
-#include <vnl/vnl_vector.h>
-#include <vil/vil_image_view.h>
 #include <ihog/ihog_world_roi.h>
 #include <ihog/ihog_transform_2d.h>
 #include <ihog/ihog_image.h>

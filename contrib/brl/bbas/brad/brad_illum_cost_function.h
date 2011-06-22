@@ -9,8 +9,8 @@
 // \verbatim
 // \endverbatim
 #include <vnl/vnl_cost_function.h>
-#include <vnl/vnl_math.h>
 #include <vcl_cmath.h>
+
 class brad_illum_cost_function : public vnl_cost_function
 {
  public:
@@ -19,8 +19,8 @@ class brad_illum_cost_function : public vnl_cost_function
                            double a_uu, double a_uv, double a_vv,
                            double a_uh, double a_vh, double a_hh)
     : vnl_cost_function(1), theta_min_(theta_min),  theta_max_(theta_max),
-    u_(u), v_(v), a_uu_(a_uu), a_uv_(a_uv), a_vv_(a_vv),
-    a_uh_(a_uh), a_vh_(a_vh), a_hh_(a_hh){}
+      u_(u), v_(v), a_uu_(a_uu), a_uv_(a_uv), a_vv_(a_vv),
+      a_uh_(a_uh), a_vh_(a_vh), a_hh_(a_hh){}
 
   virtual ~brad_illum_cost_function() {}
 
@@ -34,6 +34,7 @@ class brad_illum_cost_function : public vnl_cost_function
     temp += a_hh_;
     return temp;
   }
+
   //:setup for brent minimizer
   void determine_brackets(double& a, double& b, double& c, double interval = 0.1)
   {
@@ -52,9 +53,11 @@ class brad_illum_cost_function : public vnl_cost_function
     b = vmin;
     c = vmin+interval;
   }
+
  private:
   double theta_min_, theta_max_;
   vnl_vector<double> u_, v_;
   double a_uu_, a_uv_, a_vv_, a_uh_, a_vh_, a_hh_;
 };
+
 #endif // brad_illum_cost_function_h_

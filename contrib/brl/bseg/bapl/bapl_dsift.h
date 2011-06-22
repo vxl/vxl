@@ -16,18 +16,17 @@
 //  Modifications
 // \endverbatim
 
-#include <vbl/vbl_ref_count.h>
-
-#include <vcl_cmath.h>
-
-#include <vgl/vgl_point_2d.h>
-
 #include <vil/vil_image_view.h>
 #include <vil/io/vil_io_image_view.h>
 
 #include <vnl/vnl_vector.h>
 
+#include <vbl/vbl_ref_count.h>
+
 #include <vsl/vsl_binary_io.h>
+
+#include <vcl_cmath.h>
+#include <vcl_vector.h>
 
 //:
 // Ignores Scale and Orientation computations and produces a sift descriptor at the scale of the image,
@@ -42,7 +41,7 @@ class bapl_dsift: public vbl_ref_count
 
   bool set_img( vil_image_view<float> const& img );
   bool set_img( vil_image_view<vxl_byte> const& img );
- 
+
   vcl_vector<float> dsift( unsigned const& key_x, unsigned const& key_y, float const& key_orient = 0.0f );
 
   vnl_vector<double> vnl_dsift( unsigned const& key_x, unsigned const& key_y, float const& key_orient = 0.0f );

@@ -12,8 +12,6 @@
 //   None
 // \endverbatim
 
-#include <vnl/vnl_vector.h>
-#include <vnl/vnl_least_squares_function.h>
 #include <vil/vil_image_view.h>
 #include <icam/icam_depth_transform.h>
 #include "icam_ocl_minimizer.h"
@@ -33,12 +31,13 @@ class icam_ocl_view_metadata : public icam_view_metadata
 
   // ~icam_ocl_view_metadata() { if (minimizer_) delete minimizer_; }
 
-   virtual void register_image(vil_image_view<float> const& source_img, 
-     vpgl_camera_double_sptr camera, icam_minimizer_params const& params);
+   virtual void register_image(vil_image_view<float> const& source_img,
+                               vpgl_camera_double_sptr camera,
+                               icam_minimizer_params const& params);
 
-   virtual void refine_camera(vil_image_view<float> const& source_img, 
-     vpgl_camera_double_sptr camera, 
-     icam_minimizer_params const& params);
+   virtual void refine_camera(vil_image_view<float> const& source_img,
+                              vpgl_camera_double_sptr camera,
+                              icam_minimizer_params const& params);
 
    void print(vcl_ostream& os) const { os << "icam_ocl_view_metadata:" << vcl_endl; }
 

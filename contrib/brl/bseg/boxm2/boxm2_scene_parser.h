@@ -8,7 +8,6 @@
 #include <boxm2/boxm2_block_metadata.h>
 #include <vpgl/bgeo/bgeo_lvcs.h>
 #include <vgl/vgl_point_3d.h>
-#include <vgl/vgl_vector_3d.h>
 #include <vcl_map.h>
 
 //scene level metadata

@@ -10,7 +10,7 @@
 #include <vcl_vector.h>
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_vector_3d.h>
-#include <vgl/vgl_box_2d.h>
+#include <vgl/vgl_ray_3d.h>
 #include <vgl/vgl_box_3d.h>
 #include <vgl/algo/vgl_rotation_3d.h>
 #include <vpgl/vpgl_generic_camera.h>

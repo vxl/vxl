@@ -5,7 +5,6 @@
 #include <vbl/vbl_ref_count.h>
 #include <vbl/vbl_smart_ptr.h>
 #include <vbl/vbl_array_1d.h>
-#include <vbl/vbl_array_2d.h>
 #include <vsl/vsl_binary_io.h>
 
 class bbas_1d_array_float: public vbl_ref_count
@@ -27,6 +26,5 @@ void vsl_b_read(vsl_b_istream& is, bbas_1d_array_float* b);
 
 //: Binary write  scene pointer to stream
 void vsl_b_write(vsl_b_ostream& os, const bbas_1d_array_float* &b);
-
 
 #endif

@@ -13,7 +13,6 @@
 // turned into a video (for instance with mencoder)
 // %% mencoder "mf://*.png" -mf type=png:fps=18 -ovc lavc -o output.avi
 //
-#include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_box_3d.h>
 #include <vpgl/vpgl_perspective_camera.h>
 

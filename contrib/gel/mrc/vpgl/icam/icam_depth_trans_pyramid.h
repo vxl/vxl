@@ -13,10 +13,8 @@
 // \endverbatim
 #include <vcl_vector.h>
 #include <vsl/vsl_binary_io.h>
-#include <vbl/vbl_ref_count.h>
 #include <vgl/algo/vgl_rotation_3d.h>
 #include <vgl/vgl_vector_3d.h>
-#include <vgl/vgl_point_2d.h>
 #include <vpgl/vpgl_perspective_camera.h>
 #include <vnl/vnl_matrix_fixed.h>
 #include <vnl/vnl_vector.h>
@@ -29,7 +27,7 @@ class icam_depth_trans_pyramid
   icam_depth_trans_pyramid(): n_levels_(0) {}
   icam_depth_trans_pyramid(icam_depth_transform & base_transform,
                            unsigned n_levels);
-  icam_depth_trans_pyramid(vnl_matrix_fixed<double, 3, 3> const& K, 
+  icam_depth_trans_pyramid(vnl_matrix_fixed<double, 3, 3> const& K,
                            vil_image_view<double> const& depth,
                            vgl_rotation_3d<double> const& rot,
                            vgl_vector_3d<double> const& trans,
@@ -80,7 +78,7 @@ class icam_depth_trans_pyramid
   unsigned n_params(){return n_params_;}
   void set_params(vnl_vector<double> const& params);
   vnl_vector<double> params();
-  vil_image_view<double> depth(unsigned level) 
+  vil_image_view<double> depth(unsigned level)
     {return depth_pyramid_(level);}
  private:
   void init(icam_depth_transform& base_transform,

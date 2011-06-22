@@ -5,31 +5,25 @@
 #include <vcl_string.h>
 #include <vcl_iostream.h>
 #include <vcl_vector.h>
-#include <vnl/vnl_vector_fixed.h>
-#include <vbl/vbl_array_2d.h>
 #include <bocl/bocl_manager.h>
 #include <bocl/bocl_utils.h>
 #include <bocl/bocl_mem.h>
 #include <bocl/bocl_kernel.h>
-
 
 class bocl_global_memory_bandwidth_manager : public bocl_manager<bocl_global_memory_bandwidth_manager>
 {
  public:
 
   bocl_global_memory_bandwidth_manager()
-    : program_(0),time_in_secs_(0.0f)
-  {}
+    : program_(0),time_in_secs_(0.0f) {}
 
   ~bocl_global_memory_bandwidth_manager();
-
 
   unsigned array_size() const { return len_; }
   bocl_mem* array_buf() { return array_buf_; }
 
   vcl_string program_source() const { return prog_; }
   cl_program program() { return program_; }
-
 
   bool setup_array(unsigned len);
   void clean_array();
@@ -38,7 +32,6 @@ class bocl_global_memory_bandwidth_manager : public bocl_manager<bocl_global_mem
   void create_buffers();
   void release_buffers();
   bool run_kernel();
-
 
   bool run_kernel_using_image();
 

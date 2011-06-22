@@ -10,7 +10,7 @@
 // \author Chris Wolstenholme - Imorphics
 
 #include <vil3d/vil3d_file_format.h>
-#include <vil/vil_stream.h>
+#include <vil/vil_pixel_format.h>
 #include <vcl_iosfwd.h>
 #include <vcl_string.h>
 

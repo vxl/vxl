@@ -5,8 +5,6 @@
 #include <vcl_string.h>
 #include <vcl_iostream.h>
 #include <vcl_vector.h>
-#include <vnl/vnl_vector_fixed.h>
-#include <vbl/vbl_array_2d.h>
 #include <icam_ocl/icam_ocl_manager.h>
 #include <icam_ocl/icam_ocl_utils.h>
 #include <icam_ocl/icam_ocl_mem.h>
@@ -178,7 +176,6 @@ class icam_ocl_search_manager : public icam_ocl_manager<icam_ocl_search_manager>
 
   icam_ocl_kernel* kernel_;
   vcl_map<void*, int> buffer_map_;
-
 };
 
 #endif // icam_ocl_search_manager_h_

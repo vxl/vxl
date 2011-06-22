@@ -12,8 +12,6 @@
 //   None
 // \endverbatim
 
-#include <vnl/vnl_vector.h>
-#include <vnl/vnl_least_squares_function.h>
 #include <vil/vil_image_view.h>
 #include <vil/vil_convert.h>
 #include "icam_depth_transform.h"
@@ -34,12 +32,13 @@ class icam_view_metadata
 
    ~icam_view_metadata(){}
 
-   virtual void register_image(vil_image_view<float> const& source_img, 
-     vpgl_camera_double_sptr camera, icam_minimizer_params const& params);
+   virtual void register_image(vil_image_view<float> const& source_img,
+                               vpgl_camera_double_sptr camera,
+                               icam_minimizer_params const& params);
 
-   virtual void refine_camera(vil_image_view<float> const& source_img, 
-     vpgl_camera_double_sptr camera, 
-     icam_minimizer_params const& params);
+   virtual void refine_camera(vil_image_view<float> const& source_img,
+                              vpgl_camera_double_sptr camera,
+                              icam_minimizer_params const& params);
 
    double cost() { return cost_; }
 

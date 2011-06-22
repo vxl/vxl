@@ -24,12 +24,12 @@
 // \endverbatim
 //
 #include <vcl_string.h>
-#include <vnl/vnl_vector.h>
+#include <vnl/vnl_matrix_fixed.h>
 #include <vnl/vnl_math.h>
 #include <vil/vil_image_view.h>
 #include <vil/vil_pyramid_image_view.h>
 #include <vgl/algo/vgl_rotation_3d.h>
-#include <vgl/vgl_point_3d.h>
+#include <vgl/vgl_box_3d.h>
 #include <vgl/vgl_vector_3d.h>
 #include <vbl/vbl_array_3d.h>
 #include <vpgl/algo/vpgl_camera_bounds.h>

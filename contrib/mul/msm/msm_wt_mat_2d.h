@@ -9,17 +9,15 @@
 #include <vcl_iosfwd.h>
 #include <vcl_string.h>
 #include <vsl/vsl_fwd.h>
-#include <vnl/vnl_vector.h>
-#include <vgl/vgl_point_2d.h>
 #include <vimt/vimt_transform_2d.h>
 
 //: Represents 2x2 symmetric matrix, used as weight matrix
-//  Stores the 3 unique elements and contains various utility 
+//  Stores the 3 unique elements and contains various utility
 //  functions.
 class msm_wt_mat_2d
 {
  private:
-   double m11_, m12_, m22_;
+  double m11_, m12_, m22_;
  public:
 
   // Default Constructor - set to identity
@@ -28,7 +26,7 @@ class msm_wt_mat_2d
 
   // Constructor (requires m11_>=0 and m22_>=0)
   msm_wt_mat_2d(double m11, double m12, double m22)
-    : m11_(m11),m12_(m12),m22_(m22) 
+    : m11_(m11),m12_(m12),m22_(m22)
   { assert(m11_>=0); assert(m22_>=0);}
 
   // Destructor
@@ -87,7 +85,6 @@ class msm_wt_mat_2d
 
 //: Binary file stream output operator for class reference
 void vsl_b_write(vsl_b_ostream& bfs, const msm_wt_mat_2d& pts);
-
 
 //: Binary file stream input operator for class reference
 void vsl_b_read(vsl_b_istream& bfs, msm_wt_mat_2d& pts);

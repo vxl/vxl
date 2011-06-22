@@ -7,15 +7,12 @@
 // \author Vishal Jain
 // \date Feb 08, 2011
 //
-//
-// 
 #include <vgl/vgl_fwd.h>
 #include <vcl_iostream.h>
 #include <vsl/vsl_binary_io.h>
 #include <vcl_vector.h>
 #include <vcl_string.h>
-#include <vnl/vnl_vector_fixed.h>
-#include <vnl/vnl_matrix_fixed.h>
+#include <vnl/vnl_fwd.h>
 #include <vpgl/vpgl_camera.h>
 
 template <class T>
@@ -44,16 +41,13 @@ class vpgl_rolling_shutter_camera : public vpgl_camera<T>
 
   virtual bool save(vcl_string cam_path)=0;
 
- // --- binary IO ---
+  // --- binary IO ---
 
   //: Binary save self to stream.
   virtual void b_write(vsl_b_ostream &os) const=0;
 
   //: Binary load self from stream.
   virtual void b_read(vsl_b_istream &is)=0;
-
- protected:
-
 };
 
 

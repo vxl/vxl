@@ -14,8 +14,6 @@
 
 #include <vcl_vector.h>
 #include <vsl/vsl_binary_io.h>
-#include <vbl/vbl_ref_count.h>
-#include <vgl/vgl_point_2d.h>
 #include "ihog_image.h"
 #include "ihog_transform_2d.h"
 

@@ -23,7 +23,6 @@
 // \endverbatim
 
 #include <vcl_string.h>
-#include <vbl/vbl_ref_count.h>
 #include <vbl/vbl_array_2d.h>
 #include <vgl/vgl_ray_3d.h>
 #include <vgl/vgl_point_3d.h>
@@ -84,7 +83,7 @@ class vpgl_generic_camera : public vpgl_camera<T>
   void refine_projection(int nearest_c, int nearest_r,
                          vgl_point_3d<T> const& p, T& u, T& v) const;
 
-  //: refine ray 
+  //: refine ray
   void refine_ray_at_point(int nearest_c, int nearest_r,
                            vgl_point_3d<T> const& p,
                            vgl_ray_3d<T>& ray) const;
