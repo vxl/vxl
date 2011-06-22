@@ -4,9 +4,10 @@
 // \brief Represents 2x2 symmetric matrix, used as weight matrix
 // \author Tim Cootes
 
-#include <vcl_iostream.h>
 #include <vsl/vsl_indent.h>
 #include <vsl/vsl_binary_io.h>
+#include <vcl_iostream.h>
+#include <vcl_cmath.h>
 
 //: Sets axis (eigenvector) of matrix and var along each
 //  Sets to s1*u*u' + s2*v*v', where u is the unit vector
@@ -97,7 +98,7 @@ bool msm_wt_mat_2d::operator==(const msm_wt_mat_2d& W)
 
 void msm_wt_mat_2d::print_summary(vcl_ostream& os) const
 {
-  os << "{ "<<m11_<<" "<<m12_<<" ; "<<m12_<<" "<<m22_<<" } ";
+  os << "{ "<<m11_<<' '<<m12_<<" ; "<<m12_<<' '<<m22_<<" } ";
 }
 
 //=======================================================================

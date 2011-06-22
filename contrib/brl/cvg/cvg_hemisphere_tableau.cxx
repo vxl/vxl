@@ -10,7 +10,7 @@
 
 #include <vil/vil_crop.h>
 #include <vil/vil_resample_bilin.h>
-
+#include <vil/vil_load.h>
 
 //: Constructor
 cvg_hemisphere_tableau::cvg_hemisphere_tableau(vil_image_view_base const& img)
