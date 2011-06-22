@@ -48,6 +48,17 @@ void msm_curve::set(unsigned lo, unsigned hi,
   name_=name;
 }
 
+//: Return the largest index value
+unsigned msm_curve::max_index() const
+{
+  if (index_.size()==0) return 0u;
+  unsigned m=index_[0];
+  for (unsigned i=1;i<index_.size();++i)
+    if (index_[i]>m) m=index_[i];
+  return m;
+}
+
+
 //: Adds offset to index of every point
 //  Useful when concatenating models
 void msm_curve::add_index_offset(int offset)
@@ -191,6 +202,16 @@ int msm_curves::which_curve(const vcl_string& name) const
   for (unsigned i=0;i<size();++i)
     if (operator[](i).name()==name) return i;
   return -1;
+}
+
+//: Return the largest index value in any curve
+unsigned msm_curves::max_index() const
+{
+  if (size()==0) return 0;
+  unsigned m = operator[](0).max_index();
+  for (unsigned j=1;j<size();++j)
+    if (operator[](j).max_index()>m) m=operator[](j).max_index();
+  return m;
 }
 
 //: Parse parameters in stream

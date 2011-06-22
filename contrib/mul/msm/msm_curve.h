@@ -69,6 +69,9 @@ class msm_curve
   unsigned operator[](unsigned i) const
   { assert(i<index_.size()); return index_[i]; }
 
+  //: Return the largest index value
+  unsigned max_index() const;
+
   //: Adds offset to index of every point
   //  Useful when concatenating models
   void add_index_offset(int offset);
@@ -122,6 +125,9 @@ class msm_curves : public vcl_vector<msm_curve>
 
   //: Return index of first curve with given name, or -1
   int which_curve(const vcl_string& name) const;
+
+  //: Return the largest index value in any curve
+  unsigned max_index() const;
 
   //: Parse parameters in stream
   //  Expects
