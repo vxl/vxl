@@ -31,6 +31,8 @@ SET(msm_sources
   msm_no_limiter.h            msm_no_limiter.cxx
   msm_box_limiter.h           msm_box_limiter.cxx
   msm_ellipsoid_limiter.h     msm_ellipsoid_limiter.cxx
+
+  msm_reflect_shape.h         msm_reflect_shape.cxx
 )
 
 AUX_SOURCE_DIRECTORY(Templates msm_sources)
