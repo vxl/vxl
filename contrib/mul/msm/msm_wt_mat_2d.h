@@ -9,7 +9,6 @@
 #include <vcl_iosfwd.h>
 #include <vcl_string.h>
 #include <vsl/vsl_fwd.h>
-#include <vimt/vimt_transform_2d.h>
 
 //: Represents 2x2 symmetric matrix, used as weight matrix
 //  Stores the 3 unique elements and contains various utility
