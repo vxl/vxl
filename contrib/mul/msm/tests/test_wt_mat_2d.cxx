@@ -12,6 +12,7 @@
 
 #include <msm/msm_wt_mat_2d.h>
 #include <vnl/vnl_matrix.h>
+#include <vcl_iostream.h>
 
 //=======================================================================
 
