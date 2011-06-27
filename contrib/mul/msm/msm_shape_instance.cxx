@@ -128,7 +128,8 @@ void msm_shape_instance::fit_to_points(const msm_points& pts,
   model().aligner().calc_transform(model_points(),pts,pose_);
 
   double dp=1.0;
-  while (dp>1e-6)
+  int n_its=0;
+  while (dp>1e-6 && n_its<10)
   {
     // Transform pts into model frame with these parameters
     vnl_vector<double> pose_inv = model().aligner().inverse(pose_);
@@ -144,6 +145,8 @@ void msm_shape_instance::fit_to_points(const msm_points& pts,
     pose0 = pose_;
     model().aligner().calc_transform(model_points(),pts,pose_);
     dp = (pose_-pose0).magnitude();
+
+    n_its++;
   }
 }
 
@@ -162,7 +165,8 @@ void msm_shape_instance::fit_to_points_wt(const msm_points& pts,
   model().aligner().calc_transform_wt(model_points(),pts,wts,pose_);
 
   double dp=1.0;
-  while (dp>1e-6)
+  int n_its=0;
+  while (dp>1e-6 && n_its<10)
   {
     // Transform pts into model frame with these parameters
     vnl_vector<double> pose_inv = model().aligner().inverse(pose_);
@@ -188,6 +192,8 @@ void msm_shape_instance::fit_to_points_wt(const msm_points& pts,
     pose0 = pose_;
     model().aligner().calc_transform_wt(model_points(),pts,wts,pose_);
     dp = (pose_-pose0).magnitude();
+
+    n_its++;
   }
 }
 
@@ -209,7 +215,8 @@ void msm_shape_instance::fit_to_points_wt_mat(const msm_points& pts,
                                           wt_mat,pose_);
 
   double dp=1.0;
-  while (dp>1e-6)
+  int n_its=0;
+  while (dp>1e-6 && n_its<10)
   {
     // Transform pts into model frame with these parameters
     vnl_vector<double> pose_inv = model().aligner().inverse(pose_);
@@ -230,6 +237,7 @@ void msm_shape_instance::fit_to_points_wt_mat(const msm_points& pts,
     model().aligner().calc_transform_wt_mat(model_points(),pts,
                                             wt_mat,pose_);
     dp = (pose_-pose0).magnitude();
+    n_its++;
   }
 }
 
