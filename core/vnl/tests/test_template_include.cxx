@@ -8,6 +8,7 @@
 #include <vnl/vnl_file_vector.txx>
 #include <vnl/vnl_fortran_copy_fixed.txx>
 #include <vnl/vnl_fortran_copy.txx>
+#include <vnl/vnl_hungarian_algorithm.txx>
 #include <vnl/vnl_matlab_print.txx>
 #include <vnl/vnl_matrix_exp.txx>
 #include <vnl/vnl_matrix_fixed_ref.txx>

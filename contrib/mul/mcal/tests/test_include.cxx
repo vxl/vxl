@@ -1,5 +1,6 @@
 #include <mcal/mcal_add_all_loaders.h>
 #include <mcal/mcal_component_analyzer.h>
+#include <mcal/mcal_extract_mode.h>
 #include <mcal/mcal_general_ca.h>
 #include <mcal/mcal_pca.h>
 #include <mcal/mcal_single_basis_cost.h>
