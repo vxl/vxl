@@ -110,9 +110,6 @@ SOURCE=.\boxm2_sio_mgr.cxx
 SOURCE=.\boxm2_nn_cache.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\boxm2_scene_parser.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\boxm2_lru_cache.cxx
 # End Source File
 # Begin Source File
@@ -183,9 +180,6 @@ SOURCE=.\boxm2_nn_cache.h
 # End Source File
 # Begin Source File
 SOURCE=.\boxm2_dumb_cache.h
-# End Source File
-# Begin Source File
-SOURCE=.\boxm2_scene_parser.h
 # End Source File
 # Begin Source File
 SOURCE=.\boxm2_lru_cache.h

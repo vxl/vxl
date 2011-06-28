@@ -150,6 +150,12 @@ SOURCE=.\processes/vpgl_convert_to_generic_camera_process.cxx
 SOURCE=.\processes/vpgl_resample_perspective_camera_process.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\processes/vpgl_get_view_direction_at_point_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/vpgl_generate_3d_point_process_from_depth_process.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/brdb_value_t+vpgl_camera_double_sptr-.cxx
 # End Source File
 # End Group
