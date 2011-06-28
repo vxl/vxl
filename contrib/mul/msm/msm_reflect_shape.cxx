@@ -7,7 +7,7 @@
 // \author Tim Cootes
 
 #include "msm_reflect_shape.h"
-
+#include <vcl_cassert.h>
 
 //: Reflect points in the line x=ax, then re-number
 //  On exit, new_points[i] = points[relabel[i]] reflected in x=ax
