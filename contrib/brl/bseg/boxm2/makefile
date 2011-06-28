@@ -9,6 +9,7 @@ MANPAGE_SOURCES += boxm2_data_traits.h
 SOURCES += boxm2_data_base.cxx
 SOURCES += boxm2_util.cxx
 SOURCES += boxm2_block_metadata.cxx
+SOURCES += boxm2_scene_parser.cxx
 
 #######################################
 include ${VXLROOT}/config/top-params.mk

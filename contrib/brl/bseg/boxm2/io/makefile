@@ -7,7 +7,6 @@ SOURCES += boxm2_dumb_cache.cxx
 SOURCES += boxm2_asio_mgr.cxx
 SOURCES += boxm2_sio_mgr.cxx
 SOURCES += boxm2_nn_cache.cxx
-SOURCES += boxm2_scene_parser.cxx
 SOURCES += boxm2_lru_cache.cxx
 SOURCES += boxm2_stream_cache.cxx
 MANPAGE_SOURCES += boxm2_stream_cache.txx
