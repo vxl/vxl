@@ -64,6 +64,7 @@ int main2(int argc, char *argv[])
   vul_arg<bool> mean_of_absolutes("-moa", "Specify this to record the mean_of_absolutes", false);
   vul_arg<bool> skewness("-skew", "Specify this to record the skewness", false);
   vul_arg<bool> kurtosis("-kurt", "Specify this to record the kurtosis", false);
+  vul_arg<bool> absolute("-absolute", "Calculate statistics of absolute sample values", false);
   vul_arg<vcl_string> label("-label","Adds this label to each line outputting a statistic - useful for later grep");
   vul_arg_parse(argc, argv);
 
@@ -87,6 +88,12 @@ int main2(int argc, char *argv[])
   if (data_vec.empty())
     do_error("Could not parse data file.");
   MBL_LOG(DEBUG, logger(), "data file contained " << data_vec.size() << " values.");
+  
+  if (absolute())
+  {
+    for (unsigned i=0;i<data_vec.size();++i) data_vec[i]=vcl_abs(data_vec[i]);
+  }
+
 
   // Close the input filestream
   if (!in_file().empty()) (dynamic_cast<vcl_ifstream*>(is))->close();
