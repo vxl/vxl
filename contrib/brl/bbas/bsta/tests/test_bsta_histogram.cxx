@@ -217,13 +217,14 @@ void test_bsta_histogram()
   float err3d = pbin+bval+volume - 5.0f;
   TEST_NEAR("3-d histogram", err3d, 0.0f, 0.00001f);
   bsta_joint_histogram_3d<float> hist_3d(1.0, 10, 1.0, 10, 1.0, 10);
-  vcl_string hpath = "e:/images/Context/test_hist_plot.wrl";
+  vcl_string hpath = "./test_3d_hist_plot.wrl";
   hist_3d.upcount(0.5,1.0, 0.5,1.0, 0.5,1.0);
   hist_3d.upcount(0.25,1.0, 0.25, 1.0, 0.25, 1.0);
   vcl_ofstream os_3d(hpath.c_str());
   if(os_3d.is_open()){
     hist_3d.print_to_vrml(os_3d);
     os_3d.close();
+    vpl_unlink("./test_3d_hist_plot.wrl");
   }
   // test binary io
   vsl_b_ofstream os_3do("./temp_3d.bin");
@@ -242,6 +243,7 @@ void test_bsta_histogram()
   float pin = hd.p(0.5f,1.5f,2.5f);
   float er_3d = vcl_fabs(pin-pw);
   TEST_NEAR("test 3d hist binary io", er_3d, 0.0f, 0.0001f);
+  vpl_unlink("./temp_3d.bin");
 }
 
 TESTMAIN(test_bsta_histogram);
