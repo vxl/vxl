@@ -4,10 +4,12 @@
 #include <vcl_cmath.h>
 #include <bsta/bsta_histogram.h>
 #include <bsta/bsta_joint_histogram.h>
+#include <bsta/bsta_joint_histogram_3d.h>
 #include <bsta/bsta_int_histogram_1d.h>
 #include <bsta/bsta_int_histogram_2d.h>
 #include <vpl/vpl.h>
 #include <vcl_iostream.h>
+#include <vcl_fstream.h>
 #include <bsta/io/bsta_io_histogram.h>
 #include <vsl/vsl_binary_io.h>
 
@@ -197,6 +199,49 @@ void test_bsta_histogram()
   joint_histogram_mi.upcount(2,4,2,4);
   double mutual_information_error = joint_histogram_mi.mutual_information() - double(0.005802149014346);
   TEST_NEAR("Mutual Information",mutual_information_error,0.0,0.0001);
+
+  // ---- test bsta_joint_histogram_3d
+  bsta_joint_histogram_3d<float> hist_default;
+  bsta_joint_histogram_3d<float> hist_cons1(1.0, 10);
+  bsta_joint_histogram_3d<float> hist_cons2(1.0, 10,
+                                      2.0, 20,
+                                      3.0, 30);
+  bsta_joint_histogram_3d<float> hist_cons3(0.0, 1.0, 10,
+                                      1.0, 2.0, 20,
+                                      2.0, 3.0, 30);
+  hist_cons3.upcount(0.5f, 1.0f, 1.5f,1.0f, 2.5f, 1.0f);
+  unsigned bina = 4, binb = 9, binc =14;
+  float pbin = hist_cons3.p(bina, binb, binc);
+  float bval = hist_cons3.p(0.5f, 1.5f, 2.5f);
+  float volume = hist_cons3.volume();
+  float err3d = pbin+bval+volume - 5.0f;
+  TEST_NEAR("3-d histogram", err3d, 0.0f, 0.00001f);
+  bsta_joint_histogram_3d<float> hist_3d(1.0, 10, 1.0, 10, 1.0, 10);
+  vcl_string hpath = "e:/images/Context/test_hist_plot.wrl";
+  hist_3d.upcount(0.5,1.0, 0.5,1.0, 0.5,1.0);
+  hist_3d.upcount(0.25,1.0, 0.25, 1.0, 0.25, 1.0);
+  vcl_ofstream os_3d(hpath.c_str());
+  if(os_3d.is_open()){
+    hist_3d.print_to_vrml(os_3d);
+    os_3d.close();
+  }
+  // test binary io
+  vsl_b_ofstream os_3do("./temp_3d.bin");
+  if(!os_3do)
+    return;
+  hist_cons2.upcount(0.5f, 1.0f, 1.5f, 1.0f, 2.5f, 1.0f);
+  float pw = hist_cons2.p(0.5f,1.5f,2.5f);
+  vsl_b_write(os_3do , hist_cons2);
+  os_3do.close();
+
+  vsl_b_ifstream is_3d("./temp_3d.bin");
+  if(!is_3d)
+    return;
+  bsta_joint_histogram_3d<float> hd;
+  vsl_b_read(is_3d, hd);
+  float pin = hd.p(0.5f,1.5f,2.5f);
+  float er_3d = vcl_fabs(pin-pw);
+  TEST_NEAR("test 3d hist binary io", er_3d, 0.0f, 0.0001f);
 }
 
 TESTMAIN(test_bsta_histogram);

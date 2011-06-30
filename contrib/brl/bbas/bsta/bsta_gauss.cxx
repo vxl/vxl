@@ -113,3 +113,44 @@ void bsta_gauss::bsta_2d_gaussian(const double sigma,
       out_buf[row][col]=temp[row];
   }
 }
+void bsta_gauss::bsta_3d_gaussian(const double sigma,
+                                  vbl_array_3d<double> const& in_buf,
+                                  vbl_array_3d<double>& out_buf)
+{
+  int ni = in_buf.get_row1_count(),
+    nj = in_buf.get_row2_count(), nk = in_buf.get_row3_count();
+  out_buf.resize(ni, nj, nk);
+  //convolve along i
+  for (int j = 0; j<nj; j++)
+    for (int k = 0; k<nk; k++)
+  {
+    vcl_vector<double> ibuf(ni), temp;
+    for (int i = 0; i<ni; i++)
+      ibuf[i]=in_buf[i][j][k];
+    bsta_1d_gaussian(sigma, ibuf, temp);
+    for (int i = 0; i<ni; i++)
+      out_buf[i][j][k]=temp[i];
+  }
+  //convolve along j
+  for (int i = 0; i<ni; i++)
+    for (int k = 0; k<nk; k++)
+  {
+    vcl_vector<double> jbuf(nj), temp;
+    for (int j = 0; j<nj; j++)
+      jbuf[j]=in_buf[i][j][k];
+    bsta_1d_gaussian(sigma, jbuf, temp);
+    for (int j = 0; j<nj; j++)
+      out_buf[i][j][k]=temp[j];
+  }
+  //convolve along k
+  for (int i = 0; i<ni; i++)
+    for (int j = 0; j<nj; j++)
+  {
+    vcl_vector<double> kbuf(nk), temp;
+    for (int k = 0; k<nk; k++)
+      kbuf[k]=in_buf[i][j][k];
+    bsta_1d_gaussian(sigma, kbuf, temp);
+    for (int k = 0; k<nk; k++)
+      out_buf[i][j][k]=temp[k];
+  }
+}

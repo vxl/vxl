@@ -15,6 +15,7 @@
 // \endverbatim
 #include <vcl_vector.h>
 #include <vbl/vbl_array_2d.h>
+#include <vbl/vbl_array_3d.h>
 class bsta_gauss
 {
  public:
@@ -32,6 +33,10 @@ class bsta_gauss
   static void bsta_2d_gaussian(const double sigma,
                                vbl_array_2d<double> const& in_buf,
                                vbl_array_2d<double>& out_buf);
+
+  static void bsta_3d_gaussian(const double sigma,
+                               vbl_array_3d<double> const& in_buf,
+                               vbl_array_3d<double>& out_buf);
  private:
   //only static methods
   bsta_gauss();

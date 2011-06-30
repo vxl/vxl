@@ -95,7 +95,7 @@ template <class T> class bsta_histogram : public bsta_histogram_base
   //: Variance of distribution between bin indices
   T variance(const unsigned int lowbin, const unsigned int highbin) const;
 
-  //: Mean of distribution between values
+  //: Variance of distribution between values
   T variance_vals(const T low, const T high) const;
 
   //: First non-zero bin from below
@@ -130,7 +130,7 @@ template <class T> class bsta_histogram : public bsta_histogram_base
 
   //: set the count for a given bin
   void set_count(const unsigned bin, const T count)
-  { if (bin<nbins_) counts_[bin]=count; }
+  { if (bin<nbins_){ counts_[bin]=count; area_valid_ = false;}}
 
   //: array of bin values
   vcl_vector<T> value_array() const {

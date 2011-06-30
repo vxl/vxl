@@ -91,7 +91,7 @@ void bsta_joint_histogram<T>::upcount(T a, T mag_a,
     return;
   if (b<min_b_||b>max_b_)
     return;
-  int bin_a =0, bin_b = 0;
+  int bin_a =-1, bin_b = -1;
   for (unsigned int i = 0; i<nbins_a_; i++)
     if ((i+1)*delta_a_>=(a-min_a_))
     {
@@ -104,6 +104,7 @@ void bsta_joint_histogram<T>::upcount(T a, T mag_a,
       bin_b = i;
       break;
     }
+  if(bin_a<0||bin_b<0) return;
   T v = counts_[bin_a][bin_b]+ mag_a + mag_b;
   counts_.put(bin_a, bin_b, v);
   volume_valid_ = false;
