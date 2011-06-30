@@ -7,9 +7,9 @@
 // \date  7-Aug-2007
 // \brief Load an int_list of PODs/objects from a config file.
 
+#include <mbl/mbl_exception.h>
 #include <vcl_istream.h>
 #include <vcl_cctype.h>
-#include <mbl/mbl_exception.h>
 
 //: Read a list of integers from a stream.
 // This integer list should be space-separated.
@@ -128,13 +128,12 @@ inline void mbl_parse_int_list(vcl_istream &afs, ITER insert_iter, T)
           *insert_iter++ = current--;
 
         *insert_iter++ = last;
-
-/*
+#if 0
         afs.clear(vcl_ios::failbit);
         mbl_exception_warning(mbl_exception_parse_error(
           vcl_string("mbl_parse_int_list: unbounded sequence") ));
         return;
-*/
+#endif
       }
       else
       {
