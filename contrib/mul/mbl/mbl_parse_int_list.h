@@ -122,13 +122,26 @@ inline void mbl_parse_int_list(vcl_istream &afs, ITER insert_iter, T)
 
       if (current > last)
       {
+        // Count down to last
+        // Note: Do in two steps to avoid -- problems when last==0
+        while (current > last)
+          *insert_iter++ = current--;
+
+        *insert_iter++ = last;
+
+/*
         afs.clear(vcl_ios::failbit);
         mbl_exception_warning(mbl_exception_parse_error(
           vcl_string("mbl_parse_int_list: unbounded sequence") ));
         return;
+*/
       }
-      while (current <= last)
-        *insert_iter++ = current++;
+      else
+      {
+        // Count up to last
+        while (current <= last)
+          *insert_iter++ = current++;
+      }
     }
   }
 }
