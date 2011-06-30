@@ -16,7 +16,7 @@ INCLUDE_DIRECTORIES( ${VXL_MUL_INCLUDE_DIR} )
 
 
 SUBDIRS(mbl vpdfl pdf1d clsfy vimt ipts vil3d vimt3d mvl2 m23d mmn mcal)
-SUBDIRS(mipa msm mfpf fhs)
+SUBDIRS(mipa msm msdi mfpf fhs)
 
 IF (BUILD_UNMAINTAINED_LIBRARIES)
   SUBDIRS(mil mil3d)
