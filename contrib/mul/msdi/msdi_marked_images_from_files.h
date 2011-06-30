@@ -1,6 +1,5 @@
 #ifndef msdi_marked_images_from_files_h_
 #define msdi_marked_images_from_files_h_
-
 //:
 // \file
 // \author Tim Cootes
@@ -13,8 +12,9 @@
 
 //: Iterator for images and points stored in files
 //  Loads in points and images on demand.
-class msdi_marked_images_from_files : public msdi_marked_images {
-private:
+class msdi_marked_images_from_files : public msdi_marked_images
+{
+ private:
   //: Current points
   msm_points points_;
 
@@ -60,39 +60,37 @@ private:
   //: Pyramid builder
   vimt_gaussian_pyramid_builder_2d<vxl_byte> pyr_builder_;
 
-
   // Private copy operator to prevent copying
   msdi_marked_images_from_files& operator=(const msdi_marked_images_from_files&);
-public:
-    //: Default constructor
+ public:
+  //: Default constructor
   msdi_marked_images_from_files();
 
-    //: Construct with directories and filenames
+  //: Construct with directories and filenames
   msdi_marked_images_from_files(const vcl_string& image_dir,
-                     const vcl_vector<vcl_string>& image_names,
-                     const vcl_string& points_dir,
-                     const vcl_vector<vcl_string>& points_names);
+                                const vcl_vector<vcl_string>& image_names,
+                                const vcl_string& points_dir,
+                                const vcl_vector<vcl_string>& points_names);
 
-    //: Initialise with directories and filenames
+  //: Initialise with directories and filenames
   void set(const vcl_string& image_dir,
-                     const vcl_vector<vcl_string>& image_names,
-                     const vcl_string& points_dir,
-                     const vcl_vector<vcl_string>& points_names);
+           const vcl_vector<vcl_string>& image_names,
+           const vcl_string& points_dir,
+           const vcl_vector<vcl_string>& points_names);
 
-    //: Initialise with directories and filenames
-    //  points_names[i] is set to image_names[i]+".pts"
+  //: Initialise with directories and filenames
+  //  \a points_names[i] is set to \a image_names[i]+".pts"
   void set(const vcl_string& image_dir,
-                     const vcl_vector<vcl_string>& image_names,
-                     const vcl_string& points_dir);
+           const vcl_vector<vcl_string>& image_names,
+           const vcl_string& points_dir);
 
-    //: Destructor
+  // Destructor
   virtual ~msdi_marked_images_from_files();
 
   //: Pyramid builder to be used
   vimt_gaussian_pyramid_builder_2d<vxl_byte>& pyr_builder()
   { return pyr_builder_; }
 
-  
   //: Move to start of data
   virtual void reset();
 
@@ -111,14 +109,11 @@ public:
   //: points for the current image
   virtual const msm_points& points();
 
-    //: Return current image file name
+  //: Return current image file name
   virtual vcl_string image_name() const;
 
-    //: Return current points file name
+  //: Return current points file name
   virtual vcl_string points_name() const;
 };
 
 #endif // msdi_marked_images_from_files_h_
-
-
-
