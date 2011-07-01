@@ -35,6 +35,9 @@
 #include <bsta/bsta_int_histogram_1d.h>
 #include <bsta/bsta_int_histogram_2d.h>
 #include <bsta/bsta_joint_histogram.h>
+#include <bsta/bsta_joint_histogram_3d.h>
+#include <bsta/bsta_joint_histogram_3d_base.h>
+#include <bsta/bsta_joint_histogram_3d_sptr.h>
 #include <bsta/bsta_joint_histogram_base.h>
 #include <bsta/bsta_joint_histogram_sptr.h>
 #include <bsta/bsta_k_medoid.h>

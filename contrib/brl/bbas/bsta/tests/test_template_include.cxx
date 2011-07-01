@@ -4,6 +4,7 @@
 #include <bsta/bsta_gaussian_sphere.txx>
 #include <bsta/bsta_histogram.txx>
 #include <bsta/bsta_joint_histogram.txx>
+#include <bsta/bsta_joint_histogram_3d.txx>
 #include <bsta/bsta_kent.txx>
 #include <bsta/bsta_otsu_threshold.txx>
 #include <bsta/bsta_parzen_sphere.txx>
