@@ -13,6 +13,6 @@ void boxm_algo_sp_register::register_datatype()
 void boxm_algo_sp_register::register_process()
 {
     REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm_update_process,"boxmUpdateRTProcess");
-    REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm_render_expected_process, "boxmRenderExpectedEdgeProcess");
+    REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm_render_expected_process, "boxmRenderExpectedProcess");
     REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm_volume_visibility_process, "boxmVolumeVisibilityProcess");
 }
