@@ -230,6 +230,15 @@ SOURCE=.\Templates/bsta_spherical_histogram+double-.cxx
 # Begin Source File
 SOURCE=.\Templates/bsta_spherical_histogram+float-.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\Templates/bsta_joint_histogram_3d+float-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vbl_smart_ptr+bsta_joint_histogram_3d_base-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/bsta_joint_histogram_3d+double-.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
@@ -430,6 +439,18 @@ SOURCE=.\bsta_spherical_histogram.h
 # End Source File
 # Begin Source File
 SOURCE=.\bsta_spherical_histogram.txx
+# End Source File
+# Begin Source File
+SOURCE=.\bsta_joint_histogram_3d.h
+# End Source File
+# Begin Source File
+SOURCE=.\bsta_joint_histogram_3d.txx
+# End Source File
+# Begin Source File
+SOURCE=.\bsta_joint_histogram_3d_sptr.h
+# End Source File
+# Begin Source File
+SOURCE=.\bsta_joint_histogram_3d_base.h
 # End Source File
 # End Group
 # End Target
