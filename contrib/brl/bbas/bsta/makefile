@@ -62,6 +62,9 @@ MANPAGE_SOURCES += bsta_von_mises.txx
 MANPAGE_SOURCES += bsta_beta_f1.h
 MANPAGE_SOURCES += bsta_kent.txx
 MANPAGE_SOURCES += bsta_spherical_histogram.txx
+MANPAGE_SOURCES += bsta_joint_histogram_3d.txx
+MANPAGE_SOURCES += bsta_joint_histogram_3d_sptr.h
+MANPAGE_SOURCES += bsta_joint_histogram_3d_base.h
 
 SUBDIRS += algo pro io vis
 
