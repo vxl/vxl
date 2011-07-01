@@ -70,8 +70,7 @@ PyMethodDef batch_methods[] =
     {pdb, print_db, METH_VARARGS,pdb_com },
     {clr, clear, METH_VARARGS, clr_com},
 #endif
-    {NULL, NULL, 0, NULL},
-    {NULL, NULL, 0, NULL}
+    {NULL, NULL, 0, NULL} // trailing "NULL process" to indicate end of list
   };
 
 PyObject *init_process(PyObject * /*self*/, PyObject *args)
