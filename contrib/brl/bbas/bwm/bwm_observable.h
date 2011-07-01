@@ -37,7 +37,7 @@ class bwm_observable : public vgui_observable, public vbl_ref_count
 
   virtual vcl_string type_name() const { return "bwm_observable"; }
 
-  virtual int obj_type()=0;
+  virtual int obj_type() const=0;
 
   // removes the object from 3D scene by notifying the observers of deletion
   virtual void remove()=0;
@@ -46,7 +46,7 @@ class bwm_observable : public vgui_observable, public vbl_ref_count
 
   virtual vgl_box_3d<double> bounding_box()=0;
 
-  virtual unsigned num_faces()=0;
+  virtual unsigned num_faces() const=0;
 
   virtual void translate(vgl_vector_3d<double> T)=0;
 
