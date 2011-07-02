@@ -8,7 +8,7 @@
     #define CONVERT_FUNC(lhs,data) ushort8 lhs = as_ushort8(data);
     #define NORM 65535;
 #endif
-#ifdef RENDER
+#ifdef RENDER 
 void step_cell_render(__global MOG_TYPE   * cell_data, 
                       __global float  * alpha_data, 
                                int      data_ptr, 
@@ -23,7 +23,6 @@ void step_cell_render(__global MOG_TYPE   * cell_data,
   if(diff_omega<0.995f)
   {
       CONVERT_FUNC(udata,cell_data[data_ptr])
-      //uchar8 udata = as_uchar8(cell_data[data_ptr]);
       float8  data=convert_float8(udata)/NORM;
       expected_int_cell = ((data.s0) * (data.s2)
                           +(data.s3) * (data.s5)
