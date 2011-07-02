@@ -10,12 +10,44 @@
 //  Modifications
 // \endverbatim
 #include <vbl/vbl_ref_count.h>
+#include <vcl_compiler.h>
 class bsta_joint_histogram_base : public vbl_ref_count
 {
  public:
-
- bsta_joint_histogram_base() {}
- virtual  ~bsta_joint_histogram_base() {}
+  enum bsta_joint_hist_type
+    {
+      HIST_TYPE_UNKNOWN = 0,
+      HIST_TYPE_FLOAT = 1,
+      HIST_TYPE_DOUBLE = 2,
+      HIST_TYPE_END = 3
+    };
+  //: Default constructor
+  bsta_joint_histogram_base() : type_(HIST_TYPE_UNKNOWN){}
+  virtual  ~bsta_joint_histogram_base() {}
+  bsta_joint_hist_type type_;
 };
 
+template <class T>
+class bsta_joint_histogram_traits
+{
+ public:
+  static bsta_joint_histogram_base::bsta_joint_hist_type type(){
+    return bsta_joint_histogram_base::HIST_TYPE_UNKNOWN;}
+};
+
+VCL_DEFINE_SPECIALIZATION
+class bsta_joint_histogram_traits<float>
+{
+ public:
+  static bsta_joint_histogram_base::bsta_joint_hist_type type(){
+    return bsta_joint_histogram_base::HIST_TYPE_FLOAT;}
+};
+
+VCL_DEFINE_SPECIALIZATION
+class bsta_joint_histogram_traits<double>
+{
+ public:
+  static bsta_joint_histogram_base::bsta_joint_hist_type type(){
+    return bsta_joint_histogram_base::HIST_TYPE_DOUBLE;}
+};
 #endif // bsta_joint_histogram_base_h_

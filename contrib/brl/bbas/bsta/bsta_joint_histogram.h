@@ -39,30 +39,30 @@ template <class T> class bsta_joint_histogram : public bsta_joint_histogram_base
                        const unsigned int nbins_b,
                        const T min_prob = 0.0);
 
- ~bsta_joint_histogram() {}
+  ~bsta_joint_histogram() {}
 
- //: legacy use where a and b have the same bin granularity
+  //: legacy use where a and b have the same bin granularity
   unsigned int nbins() const { return nbins_a_; }
 
- //: number of bins for variable a
+  //: number of bins for variable a
   unsigned int nbins_a() const {return nbins_a_;}
- //: number of bins for variable b
+  //: number of bins for variable b
   unsigned int nbins_b() const {return nbins_b_;}
 
- //: legacy use where a and b have the same range
+  //: legacy use where a and b have the same range
   T range() const {return range_a_;}
 
-   //: range for variable a
+  //: range for variable a
   T range_a() const {return range_a_;}  
- //: range for variable b
+  //: range for variable b
   T range_b() const {return range_b_;}
- //: min value for variable a
+  //: min value for variable a
   T min_a() const {return min_a_;}
- //: max value for variable a
+  //: max value for variable a
   T max_a() const {return max_a_;}
- //: min value for variable b
+  //: min value for variable b
   T min_b() const {return min_b_;}
- //: max value for variable b
+  //: max value for variable b
   T max_b() const {return max_b_;}
   //: delta value for variable a
   T delta_a() const { return delta_a_; }
@@ -95,19 +95,19 @@ template <class T> class bsta_joint_histogram : public bsta_joint_histogram_base
   bool avg_and_variance_bin_for_row_a(const unsigned int a, T & avg, T & var) const;
 
   void set_count(unsigned r, unsigned c, T cnt)
-  { if (r<static_cast<unsigned>(counts_.rows())&&
-        c<static_cast<unsigned>(counts_.cols()))
+    { if (r<static_cast<unsigned>(counts_.rows())&&
+          c<static_cast<unsigned>(counts_.cols()))
       counts_[r][c]=cnt;
-  }
+    }
 
   //:access by index
   T get_count(unsigned r, unsigned c) const
-  { if (r<static_cast<unsigned>(counts_.rows())&&
-        c<static_cast<unsigned>(counts_.cols()))
+    { if (r<static_cast<unsigned>(counts_.rows())&&
+          c<static_cast<unsigned>(counts_.cols()))
       return counts_[r][c];
-  else
-    return T(0);
-  }
+    else
+      return T(0);
+    }
   //:access by value
   T get_count(T a, T b) const;
 

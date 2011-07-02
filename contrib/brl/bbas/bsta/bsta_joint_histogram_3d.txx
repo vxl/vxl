@@ -20,6 +20,8 @@ bsta_joint_histogram_3d<T>::bsta_joint_histogram_3d()
     min_prob_(0),
     counts_(1, 1, 1, T(0))
 {
+  bsta_joint_histogram_3d_base::type_ = 
+	bsta_joint_histogram_3d_traits<T>::type();
 }
 
 template <class T>
@@ -35,6 +37,9 @@ bsta_joint_histogram_3d<T>::bsta_joint_histogram_3d(const T range,
     min_prob_(min_prob),
     counts_(nbins, nbins, nbins, T(0))
 {
+  bsta_joint_histogram_3d_base::type_ = 
+	bsta_joint_histogram_3d_traits<T>::type();
+
   if (nbins_a_>0&&nbins_b_>0&&nbins_c_>0)
     {
       delta_a_ = range_a_/nbins_a_;
@@ -59,6 +64,9 @@ bsta_joint_histogram_3d<T>::bsta_joint_histogram_3d(const T range_a,
     min_c_(0), max_c_(range_c), min_prob_(min_prob),
     counts_(nbins_a, nbins_b, nbins_c, T(0))
 {
+  bsta_joint_histogram_3d_base::type_ = 
+	bsta_joint_histogram_3d_traits<T>::type();
+
   if (nbins_a_>0&&nbins_b_>0&&nbins_c_>0)
     {
       delta_a_ = range_a_/nbins_a_;
@@ -76,6 +84,9 @@ bsta_joint_histogram_3d<T>::bsta_joint_histogram_3d(const T min, const T max,
     min_c_(min), max_c_(max), min_prob_(min_prob),
     counts_(nbins, nbins, nbins, T(0))
 {
+  bsta_joint_histogram_3d_base::type_ = 
+	bsta_joint_histogram_3d_traits<T>::type();
+
   if (nbins>0) {
     range_a_ = max-min;
     delta_a_ = range_a_/nbins;
@@ -108,6 +119,9 @@ bsta_joint_histogram_3d<T>::bsta_joint_histogram_3d(const T min_a, const T max_a
     min_prob_(min_prob),
     counts_(nbins_a, nbins_b, nbins_c, T(0))
 {
+  bsta_joint_histogram_3d_base::type_ =
+	bsta_joint_histogram_3d_traits<T>::type();
+
   if (nbins_a>0) {
     range_a_ = max_a-min_a;
     delta_a_ = range_a_/nbins_a;

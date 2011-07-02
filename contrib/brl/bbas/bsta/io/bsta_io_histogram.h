@@ -56,10 +56,10 @@ vsl_b_read(vsl_b_istream &is, bsta_histogram<T>& h, bool skip = false)
   short ver;
   int itype = 0;
   if (!skip){
-  vsl_b_read(is, ver);
-  if (ver != 1)
-    return;
-  vsl_b_read(is, itype);
+    vsl_b_read(is, ver);
+    if (ver != 1)
+      return;
+    vsl_b_read(is, itype);
   }
   int nbins;
   T min, max, min_prob;
@@ -108,19 +108,19 @@ void vsl_b_read(vsl_b_istream &is, bsta_histogram_sptr& hptr)
     static_cast<bsta_histogram_base::bsta_hist_type>(itype);
   if (type == bsta_histogram_base::HIST_TYPE_UNKNOWN) return;
   if (type == bsta_histogram_base::HIST_TYPE_FLOAT)
-  {
-    bsta_histogram<float> h;
-    vsl_b_read(is, h, true);
-    hptr = new bsta_histogram<float>(h);
-    return;
-  }
+    {
+      bsta_histogram<float> h;
+      vsl_b_read(is, h, true);
+      hptr = new bsta_histogram<float>(h);
+      return;
+    }
   if (type == bsta_histogram_base::HIST_TYPE_DOUBLE)
-  {
-    bsta_histogram<double> h;
-    vsl_b_read(is, h, true);
-    hptr = new bsta_histogram<double>(h);
-    return;
-  }
+    {
+      bsta_histogram<double> h;
+      vsl_b_read(is, h, true);
+      hptr = new bsta_histogram<double>(h);
+      return;
+    }
 }
 
 //: Binary save bsta_joint_histogram to stream.
@@ -128,6 +128,11 @@ template <class T>
 void
 vsl_b_write(vsl_b_ostream &os, const bsta_joint_histogram<T>& h)
 {
+  const short io_version_no = 1;
+  vsl_b_write(os, io_version_no);
+  bsta_joint_histogram_base::bsta_joint_hist_type type = h.type_;
+  int itype = static_cast<int>(type);
+  vsl_b_write(os, itype);
   int nbins_a = h.nbins_a();
   int nbins_b = h.nbins_b();
   T min_a = h.min_a();
@@ -136,8 +141,6 @@ vsl_b_write(vsl_b_ostream &os, const bsta_joint_histogram<T>& h)
   T max_b = h.max_b();
   T min_prob = h.min_prob();
   vbl_array_2d<T> counts = h.counts();
-  const short io_version_no = 1;
-  vsl_b_write(os, io_version_no);
   vsl_b_write(os, nbins_a);
   vsl_b_write(os, min_a);
   vsl_b_write(os, max_a);
@@ -151,30 +154,36 @@ vsl_b_write(vsl_b_ostream &os, const bsta_joint_histogram<T>& h)
 //: Binary load bsta_joint_histogram from stream.
 template <class T>
 void
-vsl_b_read(vsl_b_istream &is, bsta_joint_histogram<T>& h)
+vsl_b_read(vsl_b_istream &is, bsta_joint_histogram<T>& h,
+           bool skip = false)
 {
   short ver;
-  vsl_b_read(is, ver);
-  if (ver != 1)
-    return;
-  int nbins_a, nbins_b;
-  T min_a, max_a, min_b, max_b, min_prob;
-  vbl_array_2d<T> counts;
-  vsl_b_read(is, nbins_a);
-  vsl_b_read(is, min_a);
-  vsl_b_read(is, max_a);
-  vsl_b_read(is, nbins_b);
-  vsl_b_read(is, min_b);
-  vsl_b_read(is, max_b);
-  vsl_b_read(is, min_prob);
-  vsl_b_read(is, counts);
-  bsta_joint_histogram<T> temp(min_a, max_a, nbins_a, min_b, max_b, nbins_b, min_prob);
-  unsigned nr = counts.rows(), nc = counts.cols();
-  for (unsigned r = 0; r<nr; ++r)
-    for (unsigned c = 0; c<nc; ++c)
-      temp.set_count(r, c, counts[r][c]);
-  h = temp;
+  int itype = 0;
+  if (!skip){
+    vsl_b_read(is, ver);
+    if (ver != 1)
+      return;
+    vsl_b_read(is, itype);
+  }
+    int nbins_a, nbins_b;
+    T min_a, max_a, min_b, max_b, min_prob;
+    vbl_array_2d<T> counts;
+    vsl_b_read(is, nbins_a);
+    vsl_b_read(is, min_a);
+    vsl_b_read(is, max_a);
+    vsl_b_read(is, nbins_b);
+    vsl_b_read(is, min_b);
+    vsl_b_read(is, max_b);
+    vsl_b_read(is, min_prob);
+    vsl_b_read(is, counts);
+    bsta_joint_histogram<T> temp(min_a, max_a, nbins_a, min_b, max_b, nbins_b, min_prob);
+    unsigned nr = counts.rows(), nc = counts.cols();
+    for (unsigned r = 0; r<nr; ++r)
+      for (unsigned c = 0; c<nc; ++c)
+        temp.set_count(r, c, counts[r][c]);
+    h = temp;
 }
+
 
 //: Print summary
 template <class T>
@@ -185,15 +194,51 @@ vsl_print_summary(vcl_ostream &os, const bsta_joint_histogram<T>& h)
   h.print(os);
 }
 
-void vsl_b_write(vsl_b_ostream &os, const bsta_joint_histogram_sptr& /*hptr*/);
+void vsl_b_write(vsl_b_ostream &os, const bsta_joint_histogram_sptr& hptr){
+  bsta_joint_histogram<float>* hf = dynamic_cast<bsta_joint_histogram<float>*>(hptr.ptr());
+  if (hf) { vsl_b_write(os, *hf); return; }
+  bsta_joint_histogram<double>* hd=dynamic_cast<bsta_joint_histogram<double>*>(hptr.ptr());
+  if (hd) { vsl_b_write(os, *hd); return; }
+}
 
-void vsl_b_read(vsl_b_istream &is, bsta_joint_histogram_sptr& /*hptr*/);
+void vsl_b_read(vsl_b_istream &is, bsta_joint_histogram_sptr& hptr){
+  short ver;
+  vsl_b_read(is, ver);
+  if (ver != 1)
+    return;
+  hptr = 0;
+  int itype = 0;
+  vsl_b_read(is, itype);
+  bsta_joint_histogram_base::bsta_joint_hist_type type =
+    static_cast<bsta_joint_histogram_base::bsta_joint_hist_type>(itype);
+  if (type == bsta_joint_histogram_base::HIST_TYPE_UNKNOWN) return;
+  if (type == bsta_joint_histogram_base::HIST_TYPE_FLOAT)
+    {
+      bsta_joint_histogram<float> h;
+      vsl_b_read(is, h, true);
+      hptr = new bsta_joint_histogram<float>(h);
+      return;
+    }
+  if (type == bsta_joint_histogram_base::HIST_TYPE_DOUBLE)
+    {
+      bsta_joint_histogram<double> h;
+      vsl_b_read(is, h, true);
+      hptr = new bsta_joint_histogram<double>(h);
+      return;
+    }
+}
+
 
 //: Binary save bsta_joint_histogram_3d to stream.
 template <class T>
 void
 vsl_b_write(vsl_b_ostream &os, const bsta_joint_histogram_3d<T>& h)
 {
+  const short io_version_no = 1;
+  vsl_b_write(os, io_version_no);
+  bsta_joint_histogram_3d_base::bsta_joint_hist_3d_type type = h.type_;
+  int itype = static_cast<int>(type);
+  vsl_b_write(os, itype);
   int nbins_a = h.nbins_a();
   int nbins_b = h.nbins_b();
   int nbins_c = h.nbins_c();
@@ -205,8 +250,6 @@ vsl_b_write(vsl_b_ostream &os, const bsta_joint_histogram_3d<T>& h)
   T max_c = h.max_c();
   T min_prob = h.min_prob();
   vbl_array_3d<T> counts = h.counts();
-  const short io_version_no = 1;
-  vsl_b_write(os, io_version_no);
   vsl_b_write(os, nbins_a);
   vsl_b_write(os, min_a);
   vsl_b_write(os, max_a);
@@ -223,12 +266,17 @@ vsl_b_write(vsl_b_ostream &os, const bsta_joint_histogram_3d<T>& h)
 //: Binary load bsta_joint_histogram_3d from stream.
 template <class T>
 void
-vsl_b_read(vsl_b_istream &is,  bsta_joint_histogram_3d<T>& h)
+vsl_b_read(vsl_b_istream &is,  bsta_joint_histogram_3d<T>& h,
+           bool skip = false)
 {
   short ver;
-  vsl_b_read(is, ver);
-  if (ver != 1)
-    return;
+  int itype = 0;
+  if (!skip){
+    vsl_b_read(is, ver);
+    if (ver != 1)
+      return;
+    vsl_b_read(is, itype);
+  }
   int nbins_a, nbins_b, nbins_c;
   T min_a, max_a, min_b, max_b, min_c, max_c, min_prob;
   vbl_array_3d<T> counts;
@@ -263,9 +311,41 @@ vsl_print_summary(vcl_ostream &os, const bsta_joint_histogram_3d<T>& h)
   h.print(os);
 }
 
-void vsl_b_write(vsl_b_ostream &os, const bsta_joint_histogram_3d_sptr& /*hptr*/);
+void vsl_b_write(vsl_b_ostream &os, const bsta_joint_histogram_3d_sptr& hptr)
+{
+  bsta_joint_histogram_3d<float>* hf = 
+    dynamic_cast<bsta_joint_histogram_3d<float>*>(hptr.ptr());
+  if (hf) { vsl_b_write(os, *hf); return; }
+  bsta_joint_histogram_3d<double>* hd=
+    dynamic_cast<bsta_joint_histogram_3d<double>*>(hptr.ptr());
+  if (hd) { vsl_b_write(os, *hd); return; }
+}
 
-void vsl_b_read(vsl_b_istream &is, bsta_joint_histogram_3d_sptr& /*hptr*/);
-
-
+void vsl_b_read(vsl_b_istream &is, bsta_joint_histogram_3d_sptr& hptr)
+{
+  hptr = 0;
+  short ver = 0;
+  int itype = 0;
+  vsl_b_read(is, ver);
+  if (ver != 1)
+    return;
+  vsl_b_read(is, itype);
+  bsta_joint_histogram_3d_base::bsta_joint_hist_3d_type type =
+    static_cast<bsta_joint_histogram_3d_base::bsta_joint_hist_3d_type>(itype);
+  if (type == bsta_joint_histogram_3d_base::HIST_TYPE_UNKNOWN) return;
+  if (type == bsta_joint_histogram_3d_base::HIST_TYPE_FLOAT)
+    {
+      bsta_joint_histogram_3d<float> h;
+      vsl_b_read(is, h, true);
+      hptr = new bsta_joint_histogram_3d<float>(h);
+      return;
+    }
+  if (type == bsta_joint_histogram_3d_base::HIST_TYPE_DOUBLE)
+    {
+      bsta_joint_histogram_3d<double> h;
+      vsl_b_read(is, h, true);
+      hptr = new bsta_joint_histogram_3d<double>(h);
+      return;
+    }
+}
 #endif // bsta_io_histogram_h_
