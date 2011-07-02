@@ -1,12 +1,5 @@
-## this is an executable to run a process for profiling purposes
-#ADD_EXECUTABLE( boxm2_render_expected_exe boxm2_render_expected_exe.cxx )
-#TARGET_LINK_LIBRARIES( boxm2_render_expected_exe boxm2 boxm2_basic boxm2_io boxm2_ocl_pro boxm2_ocl bocl vil_pro vpgl_pro vul )
 
-#ADD_EXECUTABLE( boxm2_update_exe boxm2_update_exe.cxx )
-#TARGET_LINK_LIBRARIES( boxm2_update_exe boxm2_ocl_pro vil_pro vpgl_pro vul )
 
-#ADD_EXECUTABLE( boxm2_update_rgb_exe boxm2_update_rgb_exe.cxx )
-#TARGET_LINK_LIBRARIES( boxm2_update_rgb_exe boxm2_ocl_pro vil_pro vpgl_pro vul )
 
 ADD_EXECUTABLE( boxm2_render_hemisphere boxm2_render_hemisphere.cxx )
 TARGET_LINK_LIBRARIES( boxm2_render_hemisphere boxm2 boxm2_basic boxm2_io boxm2_ocl_pro boxm2_ocl bocl vil_pro vpgl_pro vsph vul )
@@ -21,27 +14,12 @@ IF(GLEW_FOUND)
  IF(VGUI_FOUND)
   INCLUDE_DIRECTORIES(${GLEW_INCLUDE_DIR} )
   LINK_DIRECTORIES(${OPENGL_LIBRARY_DIR})
-
-  #ADD_EXECUTABLE( boxm2_refine_exe boxm2_refine_exe.cxx )
-  #TARGET_LINK_LIBRARIES( boxm2_refine_exe boxm2_cpp_pro boxm2_ocl_pro boxm2_view vil_pro vpgl_pro vul )
-
-  #ADD_EXECUTABLE( boxm2_export_trajectory boxm2_export_trajectory.cxx )
-  #TARGET_LINK_LIBRARIES( boxm2_export_trajectory boxm2 boxm2_basic boxm2_view boxm2_io sdet boxm2_ocl_pro boxm2_ocl vil_pro vpgl_pro vul )
-
-  #ADD_EXECUTABLE( boxm2_update_trajectory boxm2_update_trajectory.cxx )
-  #TARGET_LINK_LIBRARIES( boxm2_update_trajectory boxm2 boxm2_basic boxm2_view boxm2_io sdet boxm2_ocl_pro boxm2_ocl vil_pro vpgl_pro vul )
-
-  #ADD_EXECUTABLE( boxm2_render_view boxm2_render_view.cxx )
-  #TARGET_LINK_LIBRARIES( boxm2_render_view boxm2 boxm2_view vul vgui vil_pro vpgl_pro ${GLEW_LIBRARY} )
   
   ADD_EXECUTABLE( boxm2_ocl_render_view boxm2_ocl_render_view.cxx )
   TARGET_LINK_LIBRARIES( boxm2_ocl_render_view boxm2 boxm2_view vul vgui vil_pro vpgl_pro ${GLEW_LIBRARY} )
 
-  #ADD_EXECUTABLE( boxm2_batch_update_view boxm2_batch_update_view.cxx )
-  #TARGET_LINK_LIBRARIES( boxm2_batch_update_view boxm2 boxm2_view vul vgui vil_pro vpgl_pro ${GLEW_LIBRARY} )
 
-  #ADD_EXECUTABLE( boxm2_change_detection_view boxm2_change_detection_view.cxx )
-  #TARGET_LINK_LIBRARIES( boxm2_change_detection_view boxm2 boxm2_view vul vgui vil_pro vpgl_pro ${GLEW_LIBRARY} )
+
 
  ENDIF(VGUI_FOUND)
 ENDIF(GLEW_FOUND)
