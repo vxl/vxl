@@ -89,9 +89,7 @@ render_bit_scene( __constant  RenderSceneInfo    * linfo,
             local_tree, bit_lookup, cumsum, &vis, aux_args);      //utility info
             
   //store the expected intensity (as UINT)
-  exp_image[imIndex[llid]] =  expint;//rgbaFloatToInt((float4) expint); 
-  //exp_image[imIndex[llid]] =  rgbaFloatToInt_tf((float4) expint, *mini,*maxi,tf); 
-
+  exp_image[imIndex[llid]] =  expint;
   //store visibility at the end of this block
   vis_image[imIndex[llid]] = vis;
 }
