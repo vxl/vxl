@@ -36,7 +36,7 @@ while (@ARGV && $ARGV[0] =~ m!^-!)
   elsif (m/^-e$/) { $emacs = 1; }
   elsif (m/^-v$/) { $vim = 1; }
   elsif (m/^-i$/) { $check_includes = 1; }
-  else { warn "Unrecognised command line option $_ ignored"; }
+  else { warn "Unrecognised command line option $_ ignored\n"; }
 }
 
 if (@ARGV)
@@ -54,7 +54,7 @@ else
   }
   else
   {
-    die "VXLROOT is not defined, and no command line arguments were given";
+    die "VXLROOT is not defined, and no command line arguments were given\n";
   }
   $FILES = qx(find $DIRS -type f \\\( -name \\\*.cxx -o -name \\\*.txx -o -name \\\*.cc -o -name \\\*.cpp -o -name \\\*.c -o -name \\\*.h -o -name \\\*.cl \\\) -print);
   @FILES = grep { ! m!/b3p/(minizip|shapelib|expatp*)/! } split /\s+/, $FILES;
@@ -66,12 +66,12 @@ foreach $f (@FILES)
   $f =~ s!\\!/!g; # directory delimiter
   if (-d $f)
   {
-    warn "File $f is actually a directory";
+    warn "File $f is actually a directory\n";
     next;
   }
   unless (open(FILE, $f))
   {
-    warn "File $f does not exist or cannot be opened for reading";
+    warn "File $f does not exist or cannot be opened for reading\n";
     next;
   }
   $file=<FILE>;
@@ -578,7 +578,7 @@ foreach $f (@FILES)
     next if ($j eq 'vsol/vsol_point_2d.h' && $f =~ m'Templates/vbl_smart_ptr\+vtol_edge_2d-\.cxx$');
     next if ($j eq 'vsol/vsol_region_2d.h' && $f =~ m'Templates/vbl_smart_ptr\+vtol_face_2d-\.cxx$');
     # FINALLY PRINT MESSAGE, IF APPLICABLE
-#   warn "\$j=$j\t\$i=$i\t\$ii=$ii";
+#   warn "\$j=$j\t\$i=$i\t\$ii=$ii\n";
     &msg(1, "should not have #include <$j>", 1)
       unless ($fl =~ m!$j\>[^\003]*\b$i\b! ||
               $f =~ m!/$ii\.! ||
