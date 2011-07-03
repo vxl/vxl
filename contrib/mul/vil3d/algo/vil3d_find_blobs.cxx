@@ -11,7 +11,6 @@
 
 #include <vil3d/vil3d_image_view.h>
 
-
 namespace
 {
   //: Manages the relabelling structure.
@@ -48,10 +47,10 @@ namespace
     }
 
     //: Merge two sets containing labels left and right.
-    void merge_labels(LABEL left, LABEL right)
+    void merge_labels(LABEL left_label, LABEL right_label)
     {
-      LABEL left_root = root(left);
-      LABEL right_root = root(right);
+      LABEL left_root = root(left_label);
+      LABEL right_root = root(right_label);
       if (left_root == right_root) return; // already merged.
       node& left_root_node = store_[left_root];
       node& right_root_node = store_[right_root];

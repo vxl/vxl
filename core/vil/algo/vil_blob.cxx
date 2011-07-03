@@ -7,8 +7,6 @@
 #include <vcl_algorithm.h>
 #include <vcl_cassert.h>
 
-
-
 namespace
 {
   //: Manages the relabelling structure.
@@ -45,10 +43,10 @@ namespace
     }
 
     //: Merge two sets containing labels left and right.
-    void merge_labels(LABEL left, LABEL right)
+    void merge_labels(LABEL left_label, LABEL right_label)
     {
-      LABEL left_root = root(left);
-      LABEL right_root = root(right);
+      LABEL left_root = root(left_label);
+      LABEL right_root = root(right_label);
       if (left_root == right_root) return; // already merged.
       node& left_root_node = store_[left_root];
       node& right_root_node = store_[right_root];
@@ -169,7 +167,6 @@ void vil_blob_labels(const vil_image_view<bool>& src_binary,
       renumbering[l]=renumbering[root_label];
   }
 
-
   // Now due to the renumbering, the set of labels may not compactly occupy
   // the number line. So renumber the renumbering array.
   vcl_vector<unsigned> labels(renumbering.begin(), renumbering.end());
@@ -186,7 +183,7 @@ void vil_blob_labels(const vil_image_view<bool>& src_binary,
 
   // Check than no DODGY values got into the renumbering.
   assert(vcl_find(renumbering.begin(), renumbering.end(), dodgy)
-    == renumbering.end() );
+         == renumbering.end() );
 
   // Renumber the labels, to merge connected blobs, with a compact set of labels.
 
