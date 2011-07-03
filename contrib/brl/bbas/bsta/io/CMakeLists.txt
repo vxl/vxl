@@ -12,6 +12,7 @@ SET(bsta_io_sources
   bsta_io_von_mises.h
   bsta_io_histogram.h
   bsta_io_beta.h
+  dummy.cxx  # remove when other source files are added
 )
 
 # This directory currently contains only headers with template code
@@ -19,8 +20,8 @@ SET(bsta_io_sources
 # instantiations are added then the library targets below
 # should be uncommented
 
-#ADD_LIBRARY(bsta_io  ${bsta_io_sources})
-#TARGET_LINK_LIBRARIES(bsta_io bsta vnl_io vbl_io vbl)
+ADD_LIBRARY(bsta_io  ${bsta_io_sources})
+TARGET_LINK_LIBRARIES(bsta_io bsta vnl_io vbl_io vbl)
 
 IF( BUILD_TESTING )
   SUBDIRS(tests)
