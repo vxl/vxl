@@ -56,10 +56,7 @@ template< class T >
 void
 brdb_value_t<T>::b_read_value(vsl_b_istream& is)
 {
-  T temp = 0;
-  T& v = temp;
-  vsl_b_read(is, v);
-  this->value_ = v;
+  vsl_b_read(is, this->value_);
 }
 
 
