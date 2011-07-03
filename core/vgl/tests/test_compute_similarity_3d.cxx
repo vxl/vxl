@@ -84,7 +84,7 @@ static void test_compute_similarity_3d()
   est_sim2.estimate();
 
   TEST_NEAR("noisy scale estimate",est_sim2.scale(),s,sigma);
-  TEST_NEAR("noisy translation estimate",(est_sim2.translation()-t).length(),0.0,100*sigma);
+  TEST_NEAR("noisy translation estimate",(est_sim2.translation()-t).length(),0.0,150*sigma);
   TEST_NEAR("noisy rotation estimate",
             (est_sim2.rotation().as_matrix()-R.as_matrix()).array_inf_norm(),0.0,sigma);
   TEST_NEAR("RMS alignment error",
