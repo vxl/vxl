@@ -254,3 +254,6 @@ SOURCE=.\vbl_io_triple.txx
 # End Group
 # End Target
 # End Project
+# Begin Source File
+SOURCE=.\Templates/vbl_io_array_1d+vcl_string-.cxx
+# End Source File
