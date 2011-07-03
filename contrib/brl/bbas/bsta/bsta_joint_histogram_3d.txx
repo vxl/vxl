@@ -20,14 +20,13 @@ bsta_joint_histogram_3d<T>::bsta_joint_histogram_3d()
     min_prob_(0),
     counts_(1, 1, 1, T(0))
 {
-  bsta_joint_histogram_3d_base::type_ = 
-	bsta_joint_histogram_3d_traits<T>::type();
+  bsta_joint_histogram_3d_base::type_ = bsta_joint_histogram_3d_traits<T>::type();
 }
 
 template <class T>
 bsta_joint_histogram_3d<T>::bsta_joint_histogram_3d(const T range,
-                                        const unsigned nbins,
-                                        const T min_prob)
+                                                    const unsigned nbins,
+                                                    const T min_prob)
   : volume_valid_(false), volume_(0), nbins_a_(nbins), nbins_b_(nbins),
     nbins_c_(nbins), range_a_(range), range_b_(range), range_c_(range),
     delta_a_(0),delta_b_(0), delta_c_(0),
@@ -37,26 +36,25 @@ bsta_joint_histogram_3d<T>::bsta_joint_histogram_3d(const T range,
     min_prob_(min_prob),
     counts_(nbins, nbins, nbins, T(0))
 {
-  bsta_joint_histogram_3d_base::type_ = 
-	bsta_joint_histogram_3d_traits<T>::type();
+  bsta_joint_histogram_3d_base::type_ = bsta_joint_histogram_3d_traits<T>::type();
 
   if (nbins_a_>0&&nbins_b_>0&&nbins_c_>0)
-    {
-      delta_a_ = range_a_/nbins_a_;
-      delta_b_ = range_b_/nbins_b_;
-      delta_c_ = range_c_/nbins_c_;
-    }
+  {
+    delta_a_ = range_a_/nbins_a_;
+    delta_b_ = range_b_/nbins_b_;
+    delta_c_ = range_c_/nbins_c_;
+  }
 }
 
 
 template <class T>
-bsta_joint_histogram_3d<T>::bsta_joint_histogram_3d(const T range_a, 
-                                        const unsigned nbins_a,
-                                        const T range_b, 
-                                        const unsigned nbins_b, 
-                                        const T range_c,
-                                        const unsigned nbins_c, 
-                                        const T min_prob)
+bsta_joint_histogram_3d<T>::bsta_joint_histogram_3d(const T range_a,
+                                                    const unsigned nbins_a,
+                                                    const T range_b,
+                                                    const unsigned nbins_b,
+                                                    const T range_c,
+                                                    const unsigned nbins_c,
+                                                    const T min_prob)
   : volume_valid_(false), volume_(0), nbins_a_(nbins_a), nbins_b_(nbins_b),
     nbins_c_(nbins_c), range_a_(range_a), range_b_(range_b),range_c_(range_c),
     delta_a_(0),delta_b_(0),delta_c_(0),
@@ -64,28 +62,26 @@ bsta_joint_histogram_3d<T>::bsta_joint_histogram_3d(const T range_a,
     min_c_(0), max_c_(range_c), min_prob_(min_prob),
     counts_(nbins_a, nbins_b, nbins_c, T(0))
 {
-  bsta_joint_histogram_3d_base::type_ = 
-	bsta_joint_histogram_3d_traits<T>::type();
+  bsta_joint_histogram_3d_base::type_ = bsta_joint_histogram_3d_traits<T>::type();
 
   if (nbins_a_>0&&nbins_b_>0&&nbins_c_>0)
-    {
-      delta_a_ = range_a_/nbins_a_;
-      delta_b_ = range_b_/nbins_b_;
-      delta_c_ = range_c_/nbins_c_;
-    }
+  {
+    delta_a_ = range_a_/nbins_a_;
+    delta_b_ = range_b_/nbins_b_;
+    delta_c_ = range_c_/nbins_c_;
+  }
 }
 
 template <class T>
 bsta_joint_histogram_3d<T>::bsta_joint_histogram_3d(const T min, const T max,
-                                        const unsigned nbins,
-                                        const T min_prob)
+                                                    const unsigned nbins,
+                                                    const T min_prob)
  : volume_valid_(false), volume_(0), nbins_a_(nbins), nbins_b_(nbins),
     nbins_c_(nbins), min_a_(min), max_a_(max), min_b_(min), max_b_(max),
     min_c_(min), max_c_(max), min_prob_(min_prob),
     counts_(nbins, nbins, nbins, T(0))
 {
-  bsta_joint_histogram_3d_base::type_ = 
-	bsta_joint_histogram_3d_traits<T>::type();
+  bsta_joint_histogram_3d_base::type_ = bsta_joint_histogram_3d_traits<T>::type();
 
   if (nbins>0) {
     range_a_ = max-min;
@@ -94,7 +90,8 @@ bsta_joint_histogram_3d<T>::bsta_joint_histogram_3d(const T min, const T max,
     delta_b_ = delta_a_;
     range_c_ = range_a_;
     delta_c_ = delta_a_;
-  }else {
+  }
+  else {
     range_a_ = 0;
     delta_a_ = 0;
     range_b_ = 0;
@@ -106,21 +103,20 @@ bsta_joint_histogram_3d<T>::bsta_joint_histogram_3d(const T min, const T max,
 
 template <class T>
 bsta_joint_histogram_3d<T>::bsta_joint_histogram_3d(const T min_a, const T max_a,
-                                        const unsigned nbins_a,
-                                        const T min_b, const T max_b,
-                                        const unsigned nbins_b,
-                                        const T min_c, const T max_c,
-                                        const unsigned nbins_c,
-                                        const T min_prob)
+                                                    const unsigned nbins_a,
+                                                    const T min_b, const T max_b,
+                                                    const unsigned nbins_b,
+                                                    const T min_c, const T max_c,
+                                                    const unsigned nbins_c,
+                                                    const T min_prob)
   : volume_valid_(false), volume_(0), nbins_a_(nbins_a), nbins_b_(nbins_b),
-    nbins_c_(nbins_c), min_a_(min_a), max_a_(max_a), 
+    nbins_c_(nbins_c), min_a_(min_a), max_a_(max_a),
     min_b_(min_b), max_b_(max_b),
     min_c_(min_c), max_c_(max_c),
     min_prob_(min_prob),
     counts_(nbins_a, nbins_b, nbins_c, T(0))
 {
-  bsta_joint_histogram_3d_base::type_ =
-	bsta_joint_histogram_3d_traits<T>::type();
+  bsta_joint_histogram_3d_base::type_ = bsta_joint_histogram_3d_traits<T>::type();
 
   if (nbins_a>0) {
     range_a_ = max_a-min_a;
@@ -150,8 +146,8 @@ bsta_joint_histogram_3d<T>::bsta_joint_histogram_3d(const T min_a, const T max_a
 
 template <class T>
 void bsta_joint_histogram_3d<T>::upcount(T a, T mag_a,
-                                   T b, T mag_b,
-                                   T c, T mag_c)
+                                         T b, T mag_b,
+                                         T c, T mag_c)
 {
   if (a<min_a_||a>max_a_)
     return;
@@ -162,23 +158,23 @@ void bsta_joint_histogram_3d<T>::upcount(T a, T mag_a,
   int bin_a =-1, bin_b = -1, bin_c = -1;
   for (unsigned i = 0; i<nbins_a_; i++)
     if ((i+1)*delta_a_>=(a-min_a_))
-      {
-        bin_a = i;
-        break;
-      }
+    {
+      bin_a = i;
+      break;
+    }
   for (unsigned i = 0; i<nbins_b_; i++)
     if ((i+1)*delta_b_>=(b-min_b_))
-      {
-        bin_b = i;
-        break;
-      }
+    {
+      bin_b = i;
+      break;
+    }
   for (unsigned i = 0; i<nbins_c_; i++)
     if ((i+1)*delta_c_>=(c-min_c_))
-      {
-        bin_c = i;
-        break;
-      }
-  if(bin_a<0||bin_b<0||bin_c<0) return;
+    {
+      bin_c = i;
+      break;
+    }
+  if (bin_a<0||bin_b<0||bin_c<0) return;
   T v = counts_[bin_a][bin_b][bin_c] + mag_a + mag_b + mag_c;
   counts_[bin_a][bin_b][bin_c]=v;
   volume_valid_ = false;
@@ -317,11 +313,11 @@ T bsta_joint_histogram_3d<T>::entropy() const
   for (unsigned i = 0; i<nbins_a_; ++i)
     for (unsigned j = 0; j<nbins_b_; ++j)
       for (unsigned k = 0; k<nbins_c_; ++k)
-        {
-          T pijk = this->p(i,j,k);
-          if (pijk>min_prob_)
-            ent -= pijk*T(vcl_log(pijk));
-        }
+      {
+        T pijk = this->p(i,j,k);
+        if (pijk>min_prob_)
+          ent -= pijk*T(vcl_log(pijk));
+      }
   ent *= (T)vnl_math::log2e;
   return ent;
 }
@@ -375,18 +371,18 @@ void bsta_joint_histogram_3d<T>::print(vcl_ostream& os) const
 
 template <class T>
 void bsta_joint_histogram_3d<T>::print_to_vrml(vcl_ostream& os,
-                                         bool relative_prob_scale,
-                                         T red, T green, T blue) const
+                                               bool relative_prob_scale,
+                                               T red, T green, T blue) const
 {
   // we need to scale the display, find magnitude of largest value
   T max = (T)0;
   T min_delta = delta_a_;
-  if(delta_b_<min_delta)
+  if (delta_b_<min_delta)
     min_delta = delta_b_;
-  if(delta_c_<min_delta)
+  if (delta_c_<min_delta)
     min_delta = delta_c_;
   float rad_scale = 0.5*min_delta;
-  if(relative_prob_scale){
+  if (relative_prob_scale){
   for (unsigned a = 0; a<nbins_a_; a++)
     for (unsigned b = 0; b<nbins_b_; b++)
       for (unsigned c = 0; c<nbins_c_; c++){
@@ -394,104 +390,103 @@ void bsta_joint_histogram_3d<T>::print_to_vrml(vcl_ostream& os,
         if (v > max)
           max = v;
       }
-  if(max <= T(0)) return;
+  if (max <= T(0)) return;
   rad_scale = 0.5*min_delta/max;
   }
   os << "#VRML V2.0 utf8\n"
      << "Group { children [\n";
 
   for (unsigned a = 0; a<nbins_a_; a++)
+  {
+    for (unsigned b = 0; b<nbins_b_; b++)
     {
-      for (unsigned b = 0; b<nbins_b_; b++)
-        {
-          for (unsigned c = 0; c<nbins_c_; c++)
-            {
-              T v = p(a,b,c);
-              if(!(v>min_prob_)) 
-                continue;
-              os << "Transform {\n"
-                 << "  translation " << a*delta_a_ << ' ' << b*delta_b_ 
-                 << ' ' << c*delta_c_ << '\n'
-                 << "  children Shape {\n"
-                 << "    geometry Sphere { radius " <<  rad_scale*v << "}\n"
-                 << "    appearance DEF A1 Appearance {"
-                 << "      material Material {\n"
-                 << "        diffuseColor " << red << ' '
-                 << green << ' ' << blue << '\n'
-                 << "        emissiveColor .3 0 0\n"
-                 << "      }\n"
-                 << "    }\n"
-                 << "  }\n"
-                 << "}\n";
-            }
-        }
+      for (unsigned c = 0; c<nbins_c_; c++)
+      {
+        T v = p(a,b,c);
+        if (v>min_prob_)
+          os << "Transform {\n"
+             << "  translation " << a*delta_a_ << ' ' << b*delta_b_
+             << ' ' << c*delta_c_ << '\n'
+             << "  children Shape {\n"
+             << "    geometry Sphere { radius " <<  rad_scale*v << "}\n"
+             << "    appearance DEF A1 Appearance {"
+             << "      material Material {\n"
+             << "        diffuseColor " << red << ' '
+             << green << ' ' << blue << '\n'
+             << "        emissiveColor .3 0 0\n"
+             << "      }\n"
+             << "    }\n"
+             << "  }\n"
+             << "}\n";
+      }
     }
+  }
   // The bounding box for the 3-d grid
   os << "Transform {\n"
-     << "  translation " << delta_a_*(nbins_a_-1)/2.0f << ' ' 
-     << delta_b_*(nbins_b_-1)/2.0f << ' ' << delta_c_*(nbins_c_-1)/2.0f << "\n"
+     << "  translation " << delta_a_*(nbins_a_-1)/2.0f << ' '
+     << delta_b_*(nbins_b_-1)/2.0f << ' ' << delta_c_*(nbins_c_-1)/2.0f << '\n'
      << "  children Shape {\n"
-     << "    geometry Box { size " << delta_a_*(nbins_a_-1) 
-     << ' ' << delta_b_*(nbins_b_-1) 
+     << "    geometry Box { size " << delta_a_*(nbins_a_-1)
+     << ' ' << delta_b_*(nbins_b_-1)
      << ' ' << delta_c_*(nbins_c_-1) << " }\n"
      << "    appearance Appearance {\n"
-     << "      material Material { \n"
-     << "       diffuseColor 1 1 1 \n"
-     << "       transparency 0.8 \n"
+     << "      material Material {\n"
+     << "       diffuseColor 1 1 1\n"
+     << "       transparency 0.8\n"
      << "    }\n"
      << "  }\n"
-     << "}\n";
+     << "}\n"
   // the "a" axis
-  os << "Transform {\n"
-     << "  translation " << 0.0 << ' ' 
-     << -delta_b_*(nbins_b_-1)/2.0f <<' '<<-delta_c_*(nbins_c_-1)/2.0f << "\n"
+     << "Transform {\n"
+     << "  translation " << 0.0 << ' '
+     << -delta_b_*(nbins_b_-1)/2.0f <<' '<<-delta_c_*(nbins_c_-1)/2.0f << '\n'
      << "  children Shape {\n"
-     << "    geometry Box { size " << delta_a_*(nbins_a_-1) 
-     << ' ' << 0.05*min_delta 
+     << "    geometry Box { size " << delta_a_*(nbins_a_-1)
+     << ' ' << 0.05*min_delta
      << ' ' << 0.05*min_delta << " }\n"
      << "    appearance Appearance {\n"
-     << "      material Material { \n"
-     << "       emissiveColor 1 0 0 \n"
-     << "       transparency 0.0 \n"
+     << "      material Material {\n"
+     << "       emissiveColor 1 0 0\n"
+     << "       transparency 0.0\n"
      << "    }\n"
      << "  }\n"
-     << "}\n";
+     << "}\n"
   // the "b" axis
-  os << "Transform {\n"
-     << "  translation " << -delta_a_*(nbins_a_-1)/2.0f << ' ' 
-     << delta_b_*(nbins_b_-1)/2.0f <<' '<< 0.0 << "\n"
+     << "Transform {\n"
+     << "  translation " << -delta_a_*(nbins_a_-1)/2.0f << ' '
+     << delta_b_*(nbins_b_-1)/2.0f <<' '<< 0.0 << '\n'
      << "  children Shape {\n"
      << "    geometry Box { size " << 0.05*min_delta
-     << ' ' << delta_b_*(nbins_b_-1) 
+     << ' ' << delta_b_*(nbins_b_-1)
      << ' ' << 0.05*min_delta << " }\n"
      << "    appearance Appearance {\n"
-     << "      material Material { \n"
-     << "       emissiveColor 0 1 0 \n"
-     << "       transparency 0.0 \n"
+     << "      material Material {\n"
+     << "       emissiveColor 0 1 0\n"
+     << "       transparency 0.0\n"
      << "    }\n"
      << "  }\n"
-     << "}\n";
-
+     << "}\n"
   // the "c" axis
-  os << "Transform {\n"
-     << "  translation " << 0.0 << ' ' 
-     << -delta_b_*(nbins_b_-1)/2.0f <<' '<< delta_c_*(nbins_c_-1)/2.0f << "\n"
+     << "Transform {\n"
+     << "  translation " << 0.0 << ' '
+     << -delta_b_*(nbins_b_-1)/2.0f <<' '<< delta_c_*(nbins_c_-1)/2.0f << '\n'
      << "  children Shape {\n"
      << "    geometry Box { size " << 0.05*min_delta
      << ' ' << 0.05*min_delta
      << ' ' << delta_c_*(nbins_c_-1)  << " }\n"
      << "    appearance Appearance {\n"
-     << "      material Material { \n"
-     << "       emissiveColor 0 0 1 \n"
-     << "       transparency 0.0 \n"
+     << "      material Material {\n"
+     << "       emissiveColor 0 0 1\n"
+     << "       transparency 0.0\n"
      << "    }\n"
      << "  }\n"
-     << "}\n";
-
-  os << "Background { skyColor 1 1 1 }\n"
+     << "}\n"
+  // the background
+     << "Background { skyColor 1 1 1 }\n"
      << "NavigationInfo { type \"EXAMINE\" }\n"
      << "] }\n";
 }
+
 #if 0
 template <class T>
 void bsta_joint_histogram_3d<T>::print_to_m(vcl_ostream& os) const
@@ -508,40 +503,40 @@ void bsta_joint_histogram_3d<T>::print_to_m(vcl_ostream& os) const
   }
   //os << '\n';
   os << "bar3(y,'detached');\n";
-
 }
-#endif
+#endif // 0
+
 template <class T>
 void bsta_joint_histogram_3d<T>::print_to_text(vcl_ostream& os) const
 {
-  os << "nbins_a \t nbins_b \t nbins_c\n";
-  os << nbins_a_ << '\t' << nbins_b_ << '\t' << nbins_c_ << '\n';
-  
+  os << "nbins_a \t nbins_b \t nbins_c\n"
+     << nbins_a_ << '\t' << nbins_b_ << '\t' << nbins_c_ << '\n';
+
   for (unsigned a = 0; a<nbins_a_; a++)
+  {
+    for (unsigned b = 0; b<nbins_b_; b++)
     {
-      for (unsigned b = 0; b<nbins_b_; b++)
-        {
-          for (unsigned c = 0; c<nbins_c_; c++)
-            {
-              os << get_count(a,b,c) << '\t';
-            }
-          os << '\n';
-        }
+      for (unsigned c = 0; c<nbins_c_; c++)
+      {
+        os << get_count(a,b,c) << '\t';
+      }
       os << '\n';
     }
+    os << '\n';
+  }
   os << "\n probs:\n";
   for (unsigned a = 0; a<nbins_a_; a++)
+  {
+    for (unsigned b = 0; b<nbins_b_; b++)
     {
-      for (unsigned b = 0; b<nbins_b_; b++)
-        {
-          for (unsigned c = 0; c<nbins_c_; c++)
-            {
-              os << p(a,b,c) << '\t';
-            }
-          os << '\n';
-        }
+      for (unsigned c = 0; c<nbins_c_; c++)
+      {
+        os << p(a,b,c) << '\t';
+      }
       os << '\n';
     }
+    os << '\n';
+  }
 }
 
 #undef BSTA_JOINT_HISTOGRAM_3D_INSTANTIATE

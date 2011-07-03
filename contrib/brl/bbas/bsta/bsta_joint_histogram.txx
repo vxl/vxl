@@ -19,7 +19,7 @@ bsta_joint_histogram<T>::bsta_joint_histogram()
     min_prob_(0),
     counts_(1, 1, T(0))
 {
-  bsta_joint_histogram_base::type_ = bsta_joint_histogram_traits<T>::type();	
+  bsta_joint_histogram_base::type_ = bsta_joint_histogram_traits<T>::type();
 }
 
 template <class T>
@@ -31,12 +31,12 @@ bsta_joint_histogram<T>::bsta_joint_histogram(const T range,
     max_a_(range), min_b_(0), max_b_(range), min_prob_(min_prob),
     counts_(nbins, nbins, T(0))
 {
-  bsta_joint_histogram_base::type_ = bsta_joint_histogram_traits<T>::type();	
+  bsta_joint_histogram_base::type_ = bsta_joint_histogram_traits<T>::type();
   if (nbins_a_>0&&nbins_b_>0)
-    {
-      delta_a_ = range_a_/nbins_a_;
-      delta_b_ = range_b_/nbins_b_;
-    }
+  {
+    delta_a_ = range_a_/nbins_a_;
+    delta_b_ = range_b_/nbins_b_;
+  }
 }
 
 template <class T>
@@ -50,12 +50,12 @@ bsta_joint_histogram<T>::bsta_joint_histogram(const T range_a,
     max_a_(range_a), min_b_(0), max_b_(range_b), min_prob_(min_prob),
     counts_(nbins_a, nbins_b, T(0))
 {
-  bsta_joint_histogram_base::type_ = bsta_joint_histogram_traits<T>::type();	
+  bsta_joint_histogram_base::type_ = bsta_joint_histogram_traits<T>::type();
   if (nbins_a_>0&&nbins_b_>0)
-    {
-      delta_a_ = range_a_/nbins_a_;
-      delta_b_ = range_b_/nbins_b_;
-    }
+  {
+    delta_a_ = range_a_/nbins_a_;
+    delta_b_ = range_b_/nbins_b_;
+  }
 }
 
 template <class T>
@@ -68,7 +68,7 @@ bsta_joint_histogram<T>::bsta_joint_histogram(const T min_a, const T max_a,
     min_a_(min_a), max_a_(max_a), min_b_(min_b), max_b_(max_b),
     min_prob_(min_prob), counts_(nbins_a, nbins_b, T(0))
 {
-  bsta_joint_histogram_base::type_ = bsta_joint_histogram_traits<T>::type();	
+  bsta_joint_histogram_base::type_ = bsta_joint_histogram_traits<T>::type();
   if (nbins_a>0) {
     range_a_ = max_a-min_a;
     delta_a_ = range_a_/nbins_a;
@@ -98,17 +98,17 @@ void bsta_joint_histogram<T>::upcount(T a, T mag_a,
   int bin_a =-1, bin_b = -1;
   for (unsigned int i = 0; i<nbins_a_; i++)
     if ((i+1)*delta_a_>=(a-min_a_))
-      {
-        bin_a = i;
-        break;
-      }
+    {
+      bin_a = i;
+      break;
+    }
   for (unsigned int i = 0; i<nbins_b_; i++)
     if ((i+1)*delta_b_>=(b-min_b_))
-      {
-        bin_b = i;
-        break;
-      }
-  if(bin_a<0||bin_b<0) return;
+    {
+      bin_b = i;
+      break;
+    }
+  if (bin_a<0||bin_b<0) return;
   T v = counts_[bin_a][bin_b]+ mag_a + mag_b;
   counts_.put(bin_a, bin_b, v);
   volume_valid_ = false;
@@ -212,11 +212,11 @@ T bsta_joint_histogram<T>::entropy() const
   T ent = 0;
   for (unsigned int i = 0; i<nbins_a_; ++i)
     for (unsigned int j = 0; j<nbins_b_; ++j)
-      {
-        T pij = this->p(i,j);
-        if (pij>min_prob_)
-          ent -= pij*T(vcl_log(pij));
-      }
+    {
+      T pij = this->p(i,j);
+      if (pij>min_prob_)
+        ent -= pij*T(vcl_log(pij));
+    }
   ent *= (T)vnl_math::log2e;
   return ent;
 }
@@ -230,10 +230,10 @@ T bsta_joint_histogram<T>::mutual_information() const
   vcl_vector<T> pa(nbins_a_,T(0)),pb(nbins_b_,T(0));
   for (unsigned a = 0; a < nbins_a_; ++a)
     for (unsigned b = 0; b < nbins_b_; ++b)
-      {
-        pa[a] += this->p(a,b);
-        pb[b] += this->p(a,b);
-      }
+    {
+      pa[a] += this->p(a,b);
+      pb[b] += this->p(a,b);
+    }
 
   //calculate mutual information in base 10
   for (unsigned a = 0; a < nbins_a_; ++a)
@@ -253,10 +253,10 @@ T bsta_joint_histogram<T>::renyi_entropy() const
   T ent = 0, sum = 0;
   for (unsigned int i = 0; i<nbins_a_; ++i)
     for (unsigned int j = 0; j<nbins_b_; ++j)
-      {
-        T pij = this->p(i,j);
-        sum += pij*pij;
-      }
+    {
+      T pij = this->p(i,j);
+      sum += pij*pij;
+    }
   if (sum>min_prob_)
     ent = - T(vcl_log(sum))*(T)vnl_math::log2e;
   return ent;
@@ -270,10 +270,10 @@ T bsta_joint_histogram<T>::entropy_marginal_a() const
   T count_a_sum = T(0);
   for (unsigned int i = 0; i<nbins_a_; ++i)
     for (unsigned int j = 0; j <nbins_b_; ++j)
-      {
-        counts_a[i] += this->get_count(i,j);
-        count_a_sum += this->get_count(i,j);
-      }
+    {
+      counts_a[i] += this->get_count(i,j);
+      count_a_sum += this->get_count(i,j);
+    }
 
   for (unsigned int i = 0; i <nbins_a_; ++i) {
     T pi = counts_a[i]/count_a_sum;
@@ -342,33 +342,32 @@ void bsta_joint_histogram<T>::print_to_vrml(vcl_ostream& os) const
      << "Group { children [\n";
 
   for (unsigned int a = 0; a<nbins_a_; a++)
+  {
+    for (unsigned int b = 0; b<nbins_b_; b++)
     {
-      for (unsigned int b = 0; b<nbins_b_; b++)
-        {
-          float height = (max > 0) ? float((p(a,b)/max)*avg) : 0.0f;
-          os << "Transform {\n"
-             << "  translation " << a << ' ' << b << ' ' << height << '\n'
-             << "  children Shape {\n"
-             << "    geometry Sphere { radius 0.2 }\n"
-             << "    appearance DEF A1 Appearance {"
-             << "      material Material {\n"
-             << "        diffuseColor 1 0 0\n"
-             << "        emissiveColor .3 0 0\n"
-             << "      }\n"
-             << "    }\n"
-             << "  }\n"
-             << "}\n"
-             << "Transform {\n"
-             << "  translation " << a << ' ' << b << ' ' << height/2.0 << '\n'
-             << "  rotation 1 0 0 " << vnl_math::pi/2.0 << '\n'
-             << "  children Shape {\n"
-             << "    appearance USE A1\n"
-             << "    geometry Cylinder { radius 0.05 height " << height << " }\n"
-             << "  }\n"
-             << "}\n";
-        }
+      float height = (max > 0) ? float((p(a,b)/max)*avg) : 0.0f;
+      os << "Transform {\n"
+         << "  translation " << a << ' ' << b << ' ' << height << '\n'
+         << "  children Shape {\n"
+         << "    geometry Sphere { radius 0.2 }\n"
+         << "    appearance DEF A1 Appearance {"
+         << "      material Material {\n"
+         << "        diffuseColor 1 0 0\n"
+         << "        emissiveColor .3 0 0\n"
+         << "      }\n"
+         << "    }\n"
+         << "  }\n"
+         << "}\n"
+         << "Transform {\n"
+         << "  translation " << a << ' ' << b << ' ' << height/2.0 << '\n'
+         << "  rotation 1 0 0 " << vnl_math::pi/2.0 << '\n'
+         << "  children Shape {\n"
+         << "    appearance USE A1\n"
+         << "    geometry Cylinder { radius 0.05 height " << height << " }\n"
+         << "  }\n"
+         << "}\n";
     }
-
+  }
   os << "Transform {\n"
      << "  translation " << (nbins_a_-1)/2.0f << ' ' << (nbins_b_-1)/2.0f << " 0\n"
      << "  children Shape {\n"
@@ -377,33 +376,30 @@ void bsta_joint_histogram<T>::print_to_vrml(vcl_ostream& os) const
      << "      material Material { diffuseColor 0.8 0.8 0.8 }\n"
      << "    }\n"
      << "  }\n"
-     << "}\n";
-
+     << "}\n"
   // draw a green box to designate the origin of the histogram
-  os << "Transform {\n"
-     << "  translation 0.0 0.0 0.0 \n"
+     << "Transform {\n"
+     << "  translation 0.0 0.0 0.0\n"
      << "  children Shape {\n"
      << "    geometry Box { size " << "1.0 1.0 1.0 }\n"
      << "    appearance Appearance {\n"
      << "      material Material { diffuseColor 0.0 1.0 0.0 }\n"
      << "    }\n"
      << "  }\n"
-     << "}\n";
-
+     << "}\n"
   // draw a red box to designate the "a" axis  of the histogram
-  os << "Transform {\n"
-     << "  translation " << (nbins_a_-1)/2.0f << " 0 0 \n"
+     << "Transform {\n"
+     << "  translation " << (nbins_a_-1)/2.0f << " 0 0\n"
      << "  children Shape {\n"
      << "    geometry Box { size " << (nbins_a_-1) << " 0.5 0.5 }\n"
      << "    appearance Appearance {\n"
      << "      material Material { diffuseColor 1.0 0.0 0.0 }\n"
      << "    }\n"
      << "  }\n"
-     << "}\n";
-
+     << "}\n"
   // draw a cyan box to designate the "b" axis  of the histogram
-  os << "Transform {\n"
-     << "  translation 0 " << (nbins_b_-1)/2.0f << " 0 \n"
+     << "Transform {\n"
+     << "  translation 0 " << (nbins_b_-1)/2.0f << " 0\n"
      << "  children Shape {\n"
      << "    geometry Box { size " << 0.5 << ' ' << (nbins_b_-1) << " 0.5 }\n"
      << "    appearance Appearance {\n"
@@ -411,7 +407,7 @@ void bsta_joint_histogram<T>::print_to_vrml(vcl_ostream& os) const
      << "    }\n"
      << "  }\n"
      << "}\n"
-
+  // draw background
      << "Background { skyColor 1 1 1 }\n"
      << "NavigationInfo { type \"EXAMINE\" }\n"
      << "] }\n";
@@ -425,7 +421,7 @@ void bsta_joint_histogram<T>::print_to_m(vcl_ostream& os) const
     for (unsigned int b = 0; b<nbins_b_; b++) {
       if (p(a,b) > 0) {
         os << "y(" << a+1 << ", " << b+1 << ") = " << p(a,b) << "; ";
-        //os << "y(" << a+1 << ", " << b+1 << ") = " << counts_[a][b] << "; ";
+      //os << "y(" << a+1 << ", " << b+1 << ") = " << counts_[a][b] << "; ";
       }
     }
     //os << '\n';
@@ -439,22 +435,22 @@ void bsta_joint_histogram<T>::print_to_text(vcl_ostream& os) const
 {
   os << nbins_a_ << '\t' << nbins_b_ << '\n';
   for (unsigned int a = 0; a<nbins_a_; a++)
+  {
+    for (unsigned int b = 0; b<nbins_b_; b++)
     {
-      for (unsigned int b = 0; b<nbins_b_; b++)
-        {
-          os << get_count(a,b) << '\t';
-        }
-      os << '\n';
+      os << get_count(a,b) << '\t';
     }
+    os << '\n';
+  }
   os << "\n probs:\n";
   for (unsigned int a = 0; a<nbins_a_; a++)
+  {
+    for (unsigned int b = 0; b<nbins_b_; b++)
     {
-      for (unsigned int b = 0; b<nbins_b_; b++)
-        {
-          os << p(a,b) << '\t';
-        }
-      os << '\n';
+      os << p(a,b) << '\t';
     }
+    os << '\n';
+  }
 }
 
 #undef BSTA_JOINT_HISTOGRAM_INSTANTIATE
