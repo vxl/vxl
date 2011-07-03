@@ -7,7 +7,7 @@ SET( brad_test_sources
   )
 
 ADD_EXECUTABLE(brad_test_all ${brad_test_sources})
-TARGET_LINK_LIBRARIES( brad_test_all brad testlib)
+TARGET_LINK_LIBRARIES( brad_test_all brad bsta_io testlib)
 
 ADD_TEST( brad_test_all ${EXECUTABLE_OUTPUT_PATH}/brad_test_all test_illum)
 ADD_TEST( brad_test_all ${EXECUTABLE_OUTPUT_PATH}/brad_test_all test_sun_pos)
