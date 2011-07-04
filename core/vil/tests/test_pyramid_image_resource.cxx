@@ -392,14 +392,14 @@ static void test_pyramid_image_resource( int argc, char* argv[] )
   //
 #if HAS_OPENJPEG2
   good = true;
-  vcl_string filepath = image_base+"jpeg2000/file1.jp2";
-  vil_image_resource_sptr resc = vil_load_image_resource(filepath.c_str());
-  if (resc)
+  vcl_string filepath_open_jpg2 = image_base+"jpeg2000/file1.jp2";
+  vil_image_resource_sptr resc_open_jpeg2 = vil_load_image_resource(filepath.c_str());
+  if (resc_open_jpeg2)
   {
     vil_openjpeg_image* j2k = static_cast<vil_openjpeg_image*>(resc.ptr());
     good = j2k && j2k->is_valid();
     vil_openjpeg_pyramid_image_resource* j2k_pyr =
-      new vil_openjpeg_pyramid_image_resource(resc);
+      new vil_openjpeg_pyramid_image_resource(resc_open_jpeg2);
     unsigned n_i = j2k_pyr->ni(), n_j = j2k_pyr->nj();
     unsigned nlevels = j2k_pyr->nlevels();
     good = good && n_i == 768 && n_j == 512 && nlevels == 6;
