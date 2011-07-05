@@ -168,7 +168,7 @@ public bsta_joint_histogram_3d_base
   T min_prob_;
   vbl_array_3d<T> counts_;
 };
-
+#include <bsta/bsta_joint_histogram_3d_sptr.h>
 #define BSTA_JOINT_HISTOGRAM_3D_INSTANTIATE(T) extern "Please #include <bsta/bsta_joint_histogram_3d.txx>"
 
 #endif // bsta_joint_histogram_3d_h_

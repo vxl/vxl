@@ -193,7 +193,7 @@ vcl_istream&  operator>>(vcl_istream& is,  bsta_histogram<T>& h);
 //: Forward declaration of specialization
 template <>
 void bsta_histogram<char>::pretty_print(vcl_ostream& os) const;
-
+#include <bsta/bsta_histogram_sptr.h>
 #define BSTA_HISTOGRAM_INSTANTIATE(T) extern "Please #include <bsta/bsta_histogram.txx>"
 
 #endif // bsta_histogram_h_

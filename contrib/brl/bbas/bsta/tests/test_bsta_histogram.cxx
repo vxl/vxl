@@ -119,98 +119,9 @@ void test_bsta_histogram()
   double pv = jh_m.p(0.0, 0.0);
   double pb = jh_m.p(r0, c0);
   TEST_NEAR("test min, max joint histogram ", (vol-1.0)+(pv-pb), 0.0, 0.0001);
- //=================================================
-  // test binary io for histogram classes
-  // 1-d histogram
-  double nbinsd = h.nbins();
-  double cn = h.counts(3);
-  double max = h.max();
-  vsl_b_ofstream os("./temp.bin");
-  vsl_b_write(os, h);
-  os.close();
-  vsl_b_ifstream is("./temp.bin");
-  bsta_histogram<double> h_in;
-  vsl_b_read(is, h_in);
-  double nbins_in = h_in.nbins();
-  double max_in = h_in.max();
-  double cn_in = h_in.counts(3);
-  double error = vcl_fabs(nbins_in-nbinsd)+
-    vcl_fabs(max-max_in)+vcl_fabs(cn-cn_in);
-  TEST_NEAR("histogram binary io", error, 0.0, 0.001);
-  vpl_unlink("./temp.bin");
-  // smart pointer read write
-  vsl_b_ofstream sos("./sptr_temp.bin");
-  bsta_histogram_sptr hptr = new bsta_histogram<double>(h);
-  vsl_b_write(sos, hptr);
-  sos.close();
-  vsl_b_ifstream sis("./sptr_temp.bin");
-  bsta_histogram_sptr hptr_in = 0;
-  vsl_b_read(sis, hptr_in);
-  TEST("histogram sptr read", hptr_in!=0, true);
-  if (hptr_in!=0) {
-    bsta_histogram<double>* hp =
-      static_cast<bsta_histogram<double>*>(hptr_in.ptr());
-    nbins_in = hp->nbins();
-    max_in = hp->max();
-    cn_in = hp->counts(3);
-    error = vcl_fabs(nbins_in-nbinsd)+
-      vcl_fabs(max-max_in)+vcl_fabs(cn-cn_in);
-    TEST_NEAR("histogram pointer binary io", error, 0.0, 0.001);
-  }
-  vpl_unlink("./sptr_temp.bin");
-  // joint histogram
-  double nbinsjd = jh.nbins();
-  unsigned ia= 1, ib = 1;
-  double pj = jh.p(ia,ib);
-  double rangej = jh.range();
-  vsl_b_ofstream jos("./temp.bin");
-  vsl_b_write(jos, jh);
-  jos.close();
-
-  vsl_b_ifstream jis("./temp.bin");
-  bsta_joint_histogram<double> jh_in;
-  vsl_b_read(jis, jh_in);
-  double nbinsj_in = jh_in.nbins();
-  double rangej_in = jh_in.range();
-  double pj_in = jh_in.p(ia,ib);
-  double jerror = vcl_fabs(nbinsj_in-nbinsjd)+
-    vcl_fabs(rangej-rangej_in)+vcl_fabs(pj-pj_in);
-
-  TEST_NEAR("joint_histogram binary io", jerror, 0.0, 0.001);
-  vpl_unlink("./temp.bin");
-  // smart pointer read write
-  vsl_b_ofstream jsos("./sptr_temp.bin");
-  bsta_joint_histogram_sptr jhptr = new bsta_joint_histogram<double>(jh);
-  vsl_b_write(jsos, jhptr);
-  jsos.close();
-  vsl_b_ifstream jsis("./sptr_temp.bin");
-  bsta_joint_histogram_sptr jhptr_in = 0;
-  vsl_b_read(jsis, jhptr_in);
-  jsis.close();
-  TEST("joint histogram sptr read", !jhptr_in, false);
-  if (jhptr_in) {
-    if (jhptr_in->type_ == bsta_joint_histogram_base::HIST_TYPE_DOUBLE) {
-      bsta_joint_histogram<double>* hdbl =
-        dynamic_cast<bsta_joint_histogram<double>*>(jhptr_in.ptr());
-      nbinsj_in = hdbl->nbins();
-      rangej_in = hdbl->range();
-      pj_in = hdbl->p(ia,ib);
-      jerror = vcl_fabs(nbinsj_in-nbinsjd)+
-        vcl_fabs(rangej-rangej_in)+vcl_fabs(pj-pj_in);
-      TEST_NEAR("joint_histogram sptr binary io", jerror, 0.0, 0.001);
-    }
-    else
-      TEST("joint_histogram sptr binary io", false, true);
-  }
-  vpl_unlink("./sptr_temp.bin");
-  //: test vrml
-  vcl_ofstream jos_vrml("./temp.wrl");
-  jh.print_to_vrml(jos_vrml);
-  jos_vrml.close();
-  vpl_unlink("./temp.wrl");
 
   //Test smart pointer
-  hptr = new bsta_histogram<double>(10.0, 10);
+  bsta_histogram_sptr hptr = new bsta_histogram<double>(10.0, 10);
   bsta_histogram<double>* dcast = dynamic_cast<bsta_histogram<double>*>(hptr.ptr());
   bsta_histogram<float>* fcast = dynamic_cast<bsta_histogram<float>*>(hptr.ptr());
   TEST("dynamic cast histogram", dcast&&!fcast, true);
@@ -250,48 +161,6 @@ void test_bsta_histogram()
     os_3d.close();
     vpl_unlink("./test_3d_hist_plot.wrl");
   }
-  // test binary io
-  vsl_b_ofstream os_3do("./temp_3d.bin");
-  if (!os_3do)
-    return;
-  hist_cons2.upcount(0.5f, 1.0f, 1.5f, 1.0f, 2.5f, 1.0f);
-  float pw = hist_cons2.p(0.5f,1.5f,2.5f);
-  vsl_b_write(os_3do , hist_cons2);
-  os_3do.close();
-
-  vsl_b_ifstream is_3d("./temp_3d.bin");
-  if (!is_3d)
-    return;
-  bsta_joint_histogram_3d<float> hd;
-  vsl_b_read(is_3d, hd);
-  float pin = hd.p(0.5f,1.5f,2.5f);
-  float er_3d = vcl_fabs(pin-pw);
-  TEST_NEAR("test 3d hist binary io", er_3d, 0.0f, 0.0001f);
-  vpl_unlink("./temp_3d.bin");
-
-  // smart pointer read write
-  vsl_b_ofstream j3dsos("./sptr_temp.bin");
-  bsta_joint_histogram_3d_sptr jh3dptr =
-    new bsta_joint_histogram_3d<float>(hist_cons2);
-  vsl_b_write(j3dsos, jh3dptr);
-  j3dsos.close();
-  vsl_b_ifstream j3dsis("./sptr_temp.bin");
-  bsta_joint_histogram_3d_sptr j3dhptr_in = 0;
-  vsl_b_read(j3dsis, j3dhptr_in);
-  j3dsis.close();
-  TEST("joint histogram sptr read", !j3dhptr_in, false);
-  if (j3dhptr_in) {
-    if (j3dhptr_in->type_ == bsta_joint_histogram_3d_base::HIST_TYPE_FLOAT){
-      bsta_joint_histogram_3d<float>* h3ddbl =
-        dynamic_cast<bsta_joint_histogram_3d<float>*>(j3dhptr_in.ptr());
-      float p3dj_in = h3ddbl->p(0.5f,1.5f,2.5f);
-      jerror = vcl_fabs(p3dj_in-pin);
-      TEST_NEAR("joint_histogram_3d sptr binary io", jerror, 0.0, 0.001);
-    }
-    else
-      TEST("joint_histogram_3d_sptr binary io", false, true);
-  }
-  vpl_unlink("./sptr_temp.bin");
 }
 
 TESTMAIN(test_bsta_histogram);

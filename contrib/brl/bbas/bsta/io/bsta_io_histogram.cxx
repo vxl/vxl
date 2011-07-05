@@ -1,0 +1,202 @@
+#include "bsta_io_histogram.h"
+//
+//==============  histogram ==========================
+//
+void vsl_b_write(vsl_b_ostream& os, const bsta_histogram_base* hptr){
+  if(hptr ==0)
+    vsl_b_write(os, false);
+  else
+    vsl_b_write(os, true);
+  if(hptr->type_ == bsta_histogram_base::HIST_TYPE_FLOAT){
+   const bsta_histogram<float>* hf = 
+     static_cast<const bsta_histogram<float>*>(hptr);
+    vsl_b_write(os, *hf);
+    return; }
+  if(hptr->type_ == bsta_histogram_base::HIST_TYPE_DOUBLE){
+    const bsta_histogram<double>* hf = 
+      static_cast<const bsta_histogram<double>*>(hptr);
+    vsl_b_write(os, *hf);
+    return; }
+}
+
+void vsl_b_read(vsl_b_istream &is, bsta_histogram_base*& hptr){
+  delete hptr;
+  bool not_null_ptr;
+  vsl_b_read(is, not_null_ptr);
+  if (not_null_ptr)
+    {
+      short ver;
+      vsl_b_read(is, ver);
+      if (ver != 1)
+        return;
+      hptr = 0;
+      int itype = 0;
+      vsl_b_read(is, itype);
+      bsta_histogram_base::bsta_hist_type type =
+        static_cast<bsta_histogram_base::bsta_hist_type>(itype);
+      if (type == bsta_histogram_base::HIST_TYPE_UNKNOWN) return;
+      if (type == bsta_histogram_base::HIST_TYPE_FLOAT)
+        {
+          bsta_histogram<float> h;
+          vsl_b_read(is, h, true);
+          hptr = new bsta_histogram<float>(h);
+          return;
+        }
+      if (type == bsta_histogram_base::HIST_TYPE_DOUBLE)
+        {
+          bsta_histogram<double> h;
+          vsl_b_read(is, h, true);
+          hptr = new bsta_histogram<double>(h);
+          return;
+        }
+      hptr = 0;
+      return;
+    } else hptr = 0;
+}
+
+void vsl_b_write(vsl_b_ostream& os, const bsta_histogram_base_sptr& hptr){
+  vsl_b_write(os, hptr.ptr());
+}
+
+void vsl_b_read(vsl_b_istream &is, bsta_histogram_base_sptr& hptr){
+  bsta_histogram_base* ptr = 0;
+  vsl_b_read(is, ptr);
+  hptr = ptr;
+}
+
+//
+//============== joint_histogram ==========================
+//
+
+void vsl_b_write(vsl_b_ostream &os, const bsta_joint_histogram_base* hptr){
+  if(hptr==0)
+    vsl_b_write(os, false);
+  else
+    vsl_b_write(os, true);
+  if(hptr->type_ == bsta_joint_histogram_base::HIST_TYPE_FLOAT){
+   const bsta_joint_histogram<float>* hf = 
+     static_cast<const bsta_joint_histogram<float>*>(hptr);
+    vsl_b_write(os, *hf);
+    return; }
+  if(hptr->type_ == bsta_joint_histogram_base::HIST_TYPE_DOUBLE){
+    const bsta_joint_histogram<double>* hf = 
+      static_cast<const bsta_joint_histogram<double>*>(hptr);
+    vsl_b_write(os, *hf);
+    return; }
+}
+
+void vsl_b_read(vsl_b_istream &is, bsta_joint_histogram_base*& hptr){
+  delete hptr;
+  bool not_null_ptr;
+  vsl_b_read(is, not_null_ptr);
+  if (not_null_ptr)
+    {
+      short ver;
+      vsl_b_read(is, ver);
+      if (ver != 1)
+        return;
+      hptr = 0;
+      int itype = 0;
+      vsl_b_read(is, itype);
+      bsta_joint_histogram_base::bsta_joint_hist_type type =
+        static_cast<bsta_joint_histogram_base::bsta_joint_hist_type>(itype);
+      if (type == bsta_joint_histogram_base::HIST_TYPE_UNKNOWN) return;
+      if (type == bsta_joint_histogram_base::HIST_TYPE_FLOAT)
+        {
+          bsta_joint_histogram<float> h;
+          vsl_b_read(is, h, true);
+          hptr = new bsta_joint_histogram<float>(h);
+          return;
+        }
+      if (type == bsta_joint_histogram_base::HIST_TYPE_DOUBLE)
+        {
+          bsta_joint_histogram<double> h;
+          vsl_b_read(is, h, true);
+          hptr = new bsta_joint_histogram<double>(h);
+          return;
+        }
+      hptr = 0;
+    }
+  else hptr = 0;
+}
+
+void vsl_b_write(vsl_b_ostream& os, 
+                 const bsta_joint_histogram_base_sptr& hptr){
+  vsl_b_write(os, hptr.ptr());
+}
+
+void vsl_b_read(vsl_b_istream &is, bsta_joint_histogram_base_sptr& hptr){
+  bsta_joint_histogram_base* ptr = 0;
+  vsl_b_read(is, ptr);
+  hptr = ptr;
+}
+
+//
+//============== joint_histogram_3d ==========================
+//
+
+void vsl_b_write(vsl_b_ostream &os, const bsta_joint_histogram_3d_base* hptr)
+{
+  if(hptr==0)
+    vsl_b_write(os, false);
+  else
+    vsl_b_write(os, true);
+  if(hptr->type_ == bsta_joint_histogram_3d_base::HIST_TYPE_FLOAT){
+   const bsta_joint_histogram_3d<float>* hf = 
+     static_cast<const bsta_joint_histogram_3d<float>*>(hptr);
+    vsl_b_write(os, *hf);
+    return; }
+  if(hptr->type_ == bsta_joint_histogram_3d_base::HIST_TYPE_DOUBLE){
+    const bsta_joint_histogram_3d<double>* hf = 
+      static_cast<const bsta_joint_histogram_3d<double>*>(hptr);
+    vsl_b_write(os, *hf);
+    return; }
+}
+
+void vsl_b_read(vsl_b_istream &is, bsta_joint_histogram_3d_base*& hptr)
+{
+  delete hptr;
+  bool not_null_ptr;
+  vsl_b_read(is, not_null_ptr);
+  if (not_null_ptr)
+    {
+      hptr = 0;
+      short ver = 0;
+      int itype = 0;
+      vsl_b_read(is, ver);
+      if (ver != 1)
+        return;
+      vsl_b_read(is, itype);
+      bsta_joint_histogram_3d_base::bsta_joint_hist_3d_type type =
+        static_cast<bsta_joint_histogram_3d_base::bsta_joint_hist_3d_type>(itype);
+      if (type == bsta_joint_histogram_3d_base::HIST_TYPE_UNKNOWN) return;
+      if (type == bsta_joint_histogram_3d_base::HIST_TYPE_FLOAT)
+        {
+          bsta_joint_histogram_3d<float> h;
+          vsl_b_read(is, h, true);
+          hptr = new bsta_joint_histogram_3d<float>(h);
+          return;
+        }
+      if (type == bsta_joint_histogram_3d_base::HIST_TYPE_DOUBLE)
+        {
+          bsta_joint_histogram_3d<double> h;
+          vsl_b_read(is, h, true);
+          hptr = new bsta_joint_histogram_3d<double>(h);
+          return;
+        }
+      hptr = 0;
+    }
+  else  hptr = 0;
+}
+
+void vsl_b_write(vsl_b_ostream& os, const bsta_joint_histogram_3d_base_sptr& hptr)
+{
+  vsl_b_write(os, hptr.ptr());
+}
+
+void vsl_b_read(vsl_b_istream &is, bsta_joint_histogram_3d_base_sptr& hptr)
+{
+  bsta_joint_histogram_3d_base* ptr=0;
+  vsl_b_read(is, ptr);
+  hptr = ptr;
+}
