@@ -191,6 +191,9 @@ SOURCE=.\Templates/vbl_io_array_3d+double-.cxx
 # Begin Source File
 SOURCE=.\Templates/vbl_io_array_3d+float-.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\Templates/vbl_io_array_1d+vcl_string-.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
@@ -254,6 +257,3 @@ SOURCE=.\vbl_io_triple.txx
 # End Group
 # End Target
 # End Project
-# Begin Source File
-SOURCE=.\Templates/vbl_io_array_1d+vcl_string-.cxx
-# End Source File
