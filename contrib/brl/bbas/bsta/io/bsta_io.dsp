@@ -88,6 +88,12 @@ LIB32=link.exe -lib
 # Begin Target
 # Name "bsta_io - Win32 Release"
 # Name "bsta_io - Win32 Debug"
+# Begin Group "Source Files"
+# PROP Default_Filter "cxx"
+# Begin Source File
+SOURCE=.\bsta_io_histogram.cxx
+# End Source File
+# End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
 # Begin Source File
