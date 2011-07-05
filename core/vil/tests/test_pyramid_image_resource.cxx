@@ -393,10 +393,10 @@ static void test_pyramid_image_resource( int argc, char* argv[] )
 #if HAS_OPENJPEG2
   good = true;
   vcl_string filepath_open_jpg2 = image_base+"jpeg2000/file1.jp2";
-  vil_image_resource_sptr resc_open_jpeg2 = vil_load_image_resource(filepath.c_str());
+  vil_image_resource_sptr resc_open_jpeg2 = vil_load_image_resource(filepath_open_jpg2.c_str());
   if (resc_open_jpeg2)
   {
-    vil_openjpeg_image* j2k = static_cast<vil_openjpeg_image*>(resc.ptr());
+    vil_openjpeg_image* j2k = static_cast<vil_openjpeg_image*>(resc_open_jpeg2.ptr());
     good = j2k && j2k->is_valid();
     vil_openjpeg_pyramid_image_resource* j2k_pyr =
       new vil_openjpeg_pyramid_image_resource(resc_open_jpeg2);
@@ -418,7 +418,7 @@ static void test_pyramid_image_resource( int argc, char* argv[] )
     TEST("OpenJPEG pyramid resource", good, true);
   }
   else
-  { 
+  {
     TEST("OpenJPEG pyramid resource", false, true);
   }
 #endif //HAS_OPENJPEG
