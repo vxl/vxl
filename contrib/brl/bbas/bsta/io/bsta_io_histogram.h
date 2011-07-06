@@ -21,6 +21,8 @@
 #include <vbl/io/vbl_io_array_2d.h>
 #include <vbl/vbl_array_3d.h>
 #include <vbl/io/vbl_io_array_3d.h>
+#include <vcl_iostream.h>
+
 //: Binary save bsta_histogram to stream.
 template <class T>
 void
@@ -83,14 +85,22 @@ vsl_print_summary(vcl_ostream &os, const bsta_histogram<T>& h)
 }
 
 
-
 void vsl_b_write(vsl_b_ostream& os, const bsta_histogram_base* hptr);
 
 void vsl_b_read(vsl_b_istream &is, bsta_histogram_base*& hptr);
 
-void vsl_b_write(vsl_b_ostream& os, const bsta_histogram_base_sptr& hptr);
+void vsl_b_write(vsl_b_ostream& os, const bsta_histogram_base_sptr& hptr)
+{
+  vsl_b_write(os, hptr.ptr());
+}
 
-void vsl_b_read(vsl_b_istream &is, bsta_histogram_base_sptr& hptr);
+void vsl_b_read(vsl_b_istream &is, bsta_histogram_base_sptr& hptr)
+{
+  bsta_histogram_base* ptr = 0;
+  vsl_b_read(is, ptr);
+  hptr = ptr;
+}
+
 
 //: Binary save bsta_joint_histogram to stream.
 template <class T>
@@ -167,9 +177,17 @@ void vsl_b_write(vsl_b_ostream &os, const bsta_joint_histogram_base* hptr);
 
 void vsl_b_read(vsl_b_istream &is, bsta_joint_histogram_base*& hptr);
 
-void vsl_b_write(vsl_b_ostream& os, const bsta_joint_histogram_base_sptr& hptr);
+void vsl_b_write(vsl_b_ostream& os, const bsta_joint_histogram_base_sptr& hptr)
+{
+  vsl_b_write(os, hptr.ptr());
+}
 
-void vsl_b_read(vsl_b_istream &is, bsta_joint_histogram_base_sptr& hptr);
+void vsl_b_read(vsl_b_istream &is, bsta_joint_histogram_base_sptr& hptr)
+{
+  bsta_joint_histogram_base* ptr = 0;
+  vsl_b_read(is, ptr);
+  hptr = ptr;
+}
 
 //: Binary save bsta_joint_histogram_3d to stream.
 template <class T>
@@ -257,7 +275,16 @@ void vsl_b_write(vsl_b_ostream &os, const bsta_joint_histogram_3d_base* hptr);
 
 void vsl_b_read(vsl_b_istream &is, bsta_joint_histogram_3d_base*& hptr);
 
-void vsl_b_write(vsl_b_ostream& os, const bsta_joint_histogram_3d_base_sptr& hptr);
+void vsl_b_write(vsl_b_ostream& os, const bsta_joint_histogram_3d_base_sptr& hptr)
+{
+  vsl_b_write(os, hptr.ptr());
+}
 
-void vsl_b_read(vsl_b_istream &is, bsta_joint_histogram_3d_base_sptr& hptr);
+void vsl_b_read(vsl_b_istream &is, bsta_joint_histogram_3d_base_sptr& hptr)
+{
+  bsta_joint_histogram_3d_base* ptr=0;
+  vsl_b_read(is, ptr);
+  hptr = ptr;
+}
+
 #endif // bsta_io_histogram_h_
