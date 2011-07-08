@@ -31,11 +31,6 @@ namespace boxm2_ocl_adaptive_cone_update_process_globals
 {
   const unsigned n_inputs_  = 6;
   const unsigned n_outputs_ = 0;
-  enum {
-    UPDATE_PROC = 0,
-    UPDATE_BAYES= 1,
-    UPDATE_CELL = 2,
-  };
 
   void compile_kernel(bocl_device_sptr device,vcl_vector<bocl_kernel*> & vec_kernels,vcl_string opts)
   {
@@ -60,7 +55,8 @@ namespace boxm2_ocl_adaptive_cone_update_process_globals
 
     //proc norm pass computes the proc_norm image, mean_obs for each cell
     bocl_kernel* pass_one = new bocl_kernel();
-    vcl_string one_opts = options + " -D PASSONE ";
+    vcl_string one_opts = options + " -D PASSONE "; 
+    one_opts += "-D IMG_TYPE=float ";
     one_opts += " -D STEP_CELL=step_cell(aux_args,data_ptr,intersect_volume) ";
     one_opts += " -D COMPUTE_BALL_PROPERTIES=compute_ball_properties(aux_args)  ";
     pass_one->create_kernel(&device->context(),device->device_id(), src_paths, "pass_one", one_opts, "cone_update::pass_one");
@@ -184,19 +180,19 @@ bool boxm2_ocl_adaptive_cone_update_process(bprb_func_process& pro)
     compile_kernel(device,ks,options);
     kernels[identifier]=ks;
   }
-#ifdef DEBUG
+
   //run ocl cone update function
-  float gpu_time = boxm2_ocl_cone_update( scene,
-                                          device,
-                                          opencl_cache,
-                                          kernels[identifier],
-                                          queue,
-                                          data_type,
-                                          num_obs_type,
-                                          cam ,
-                                          img );
-  vcl_cout<<"Gpu time "<<gpu_time<<vcl_endl;
-#endif // DEBUG
+  float gpu_time = boxm2_ocl_adaptive_cone_update( scene,
+                                                  device,
+                                                  opencl_cache,
+                                                  kernels[identifier],
+                                                  queue,
+                                                  data_type,
+                                                  num_obs_type,
+                                                  cam ,
+                                                  img );
+
+  vcl_cout<<"Gpu time "<<gpu_time<<vcl_endl; //<<" transfer time "<<transfer_time<<vcl_endl;
   clReleaseCommandQueue(queue);
   return true;
 }
