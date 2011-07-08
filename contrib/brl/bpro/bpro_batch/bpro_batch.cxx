@@ -21,7 +21,6 @@ static PyObject *set_input_float(PyObject *self, PyObject *args);
 static PyObject *set_input_double(PyObject * self, PyObject *args);
 static PyObject *get_output_string(PyObject *self, PyObject *args);
 static PyObject *get_output_float(PyObject *self, PyObject *args);
-static PyObject *get_output_float(PyObject *self, PyObject *args);
 static PyObject *get_output_double(PyObject *self, PyObject *args);
 static PyObject *get_output_int(PyObject *self, PyObject *args);
 static PyObject *get_output_unsigned(PyObject *self, PyObject *args);
@@ -278,7 +277,7 @@ PyObject *get_output_int(PyObject * /*self*/, PyObject *args)
 {
   unsigned id;
   unsigned value;
-  if (!PyArg_ParseTuple(args, "i:get_output_unsigned", &id))
+  if (!PyArg_ParseTuple(args, "i:get_output_int", &id))
     return NULL;
   
   vcl_string relation_name = "int_data";
@@ -289,23 +288,23 @@ PyObject *get_output_int(PyObject * /*self*/, PyObject *args)
   
   if (selec->size()!=1) {
     vcl_cout << "in get_output_int() - no relation with type" << relation_name << " id: " << id << vcl_endl;
-    return Py_BuildValue("b",1000);
+    return Py_BuildValue("i",1000);
   }
   
   brdb_value_sptr brdb_value;
   if (!selec->get_value(vcl_string("value"), brdb_value)) {
     vcl_cout << "in get_output_int() didn't get value\n";
-    return Py_BuildValue("b",1000);
+    return Py_BuildValue("i",1000);
   }
   
   if (!brdb_value) {
     vcl_cout << "in get_output_int() - null value\n";
-    return Py_BuildValue("b",1000);
+    return Py_BuildValue("i",1000);
   }
   brdb_value_t<int>* result_out = static_cast<brdb_value_t<int>* >(brdb_value.ptr());
   value = result_out->value();
   
-  return Py_BuildValue("b", value);
+  return Py_BuildValue("i", value);
 }
 
 PyObject *get_output_unsigned(PyObject * /*self*/, PyObject *args)
@@ -323,23 +322,23 @@ PyObject *get_output_unsigned(PyObject * /*self*/, PyObject *args)
 
   if (selec->size()!=1) {
     vcl_cout << "in get_output_unsigned() - no relation with type" << relation_name << " id: " << id << vcl_endl;
-    return Py_BuildValue("b",1000);
+    return Py_BuildValue("I",1000);
   }
 
   brdb_value_sptr brdb_value;
   if (!selec->get_value(vcl_string("value"), brdb_value)) {
     vcl_cout << "in get_output_unsigned() didn't get value\n";
-    return Py_BuildValue("b",1000);
+    return Py_BuildValue("I",1000);
   }
 
   if (!brdb_value) {
     vcl_cout << "in get_output_unsigned() - null value\n";
-    return Py_BuildValue("b",1000);
+    return Py_BuildValue("I",1000);
   }
   brdb_value_t<unsigned>* result_out = static_cast<brdb_value_t<unsigned>* >(brdb_value.ptr());
   value = result_out->value();
 
-  return Py_BuildValue("b", value);
+  return Py_BuildValue("I", value);
 }
 
 PyObject *process_print_default_params(PyObject * /*self*/, PyObject *args)
