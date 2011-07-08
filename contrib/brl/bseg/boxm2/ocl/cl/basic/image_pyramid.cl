@@ -1,5 +1,9 @@
 //Image pyramid, requires that you define IMG_TYPE 
-
+// It is assumed that:
+//    level 0 is a 1x1
+//    level 1 is a 2x2
+//    level 2 is a 4x4
+//    level 3 is a 8x8
 #ifdef IMG_TYPE
 typedef struct
 {
@@ -12,6 +16,37 @@ typedef struct
   //max side length of biggest element of pyramid
   int max_side_len; 
 } image_pyramid; 
+
+// Accesses a level and i,j offset within an image pyramid.  
+// Assumes that i and j are legal (not greater than level's size), eg
+// level[0] only has one value, (0,0)
+// level[1] has 4 values...
+IMG_TYPE image_pyramid_access(image_pyramid* pyramid, int level, int i, int j)
+{
+  int sideLen = 1<<level; 
+  int fullID = i + sideLen*j;
+  return pyramid->pyramid[level][fullID];   
+}
+
+//safely accesses by level based on this thread's id
+IMG_TYPE image_pyramid_access_safe(image_pyramid* pyramid, int level)
+{
+  uchar llid = (uchar)(get_local_id(0) + get_local_size(0)*get_local_id(1));
+  uchar localI = (uchar)get_local_id(0); 
+  uchar localJ = (uchar)get_local_id(1); 
+  
+  //offset (the amount to divide localI and localJ to get correctly indexed pyramid i,j)
+  uchar offset = 1<<(3-level); 
+  return image_pyramid_access(pyramid, level, localI/offset, localJ/offset); 
+}
+
+//image pyramid set
+void image_pyramid_set(image_pyramid* pyramid, int level, int i, int j, IMG_TYPE val)
+{
+  int sideLen = 1<<level; 
+  int fullID = i + sideLen*j; 
+  pyramid->pyramid[level][fullID] = val; 
+}
 
 
 // "Constructor for image_pyramid"

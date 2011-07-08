@@ -17,6 +17,24 @@
 #endif
 
 #ifdef PASSONE
+//Helper method handles local pyramid declaration
+inline image_pyramid declare_local_pyramid(float in_val) 
+{
+  uchar llid = (uchar)(get_local_id(0) + get_local_size(0)*get_local_id(1));
+  __local float* obs_mem[4];
+  __local float obs0[1];
+  __local float obs1[4];
+  __local float obs2[16];
+  __local float obs3[64];
+  obs_mem[0] = obs0;
+  obs_mem[1] = obs1;
+  obs_mem[2] = obs2;
+  obs_mem[3] = obs3;
+  obs3[llid] = in_val;
+  barrier(CLK_LOCAL_MEM_FENCE);
+  return new_image_pyramid(obs_mem, 4, 8);
+}
+
 //: Define aux_args (like a functor struct)
 // \todo Begin passing around AuxArgs* instead of the struct to save on registers
 typedef struct
@@ -41,6 +59,17 @@ typedef struct
            //constants used by stepcell functions
            float obs;
            float volume_scale;
+  
+  
+  //store active ray pointer, image/ray pyramids
+  __local uchar* active_rays;
+  __local uchar* master_threads; 
+    ray_pyramid* rays; 
+  image_pyramid* image; 
+  image_pyramid* tfar; 
+  image_pyramid* tnear; 
+  
+  __local float* single; 
 } AuxArgs;
 
 void cast_adaptive_cone_ray(
@@ -100,7 +129,19 @@ pass_one(__constant  RenderSceneInfo    * linfo,
   int imIndex = j*get_global_size(0) + i;
   if (i>=(*imgdims).z || j>=(*imgdims).w || i<(*imgdims).x || j<(*imgdims).y)
     return;
+    
+  //----------------------------------------------------------------------------
+  // transform rays from world to normalized block world space
+  //----------------------------------------------------------------------------
+  float4 ray_o = ray_origins[ imIndex ];
+  float4 ray_d = ray_directions[ imIndex ];
+  float cone_half_angle = ray_d.w; ray_d.w = 0.0f;
+  float ray_ox, ray_oy, ray_oz, ray_dx, ray_dy, ray_dz;
+  calc_scene_ray_generic_cam(linfo, ray_o, ray_d, &ray_ox, &ray_oy, &ray_oz, &ray_dx, &ray_dy, &ray_dz);
 
+  //----------------------------------------------------------------------------
+  //create local memory for ray/image/t pyramids
+  //----------------------------------------------------------------------------
   //INITIALIZE RAY PYRAMID
   __local float4* ray_pyramid_mem[4];
   __local float4 ray0[1];
@@ -111,7 +152,7 @@ pass_one(__constant  RenderSceneInfo    * linfo,
   ray_pyramid_mem[1] = ray1;
   ray_pyramid_mem[2] = ray2;
   ray_pyramid_mem[3] = ray3;
-  ray3[llid] = ray_directions[imIndex];
+  ray3[llid] = (float4) (ray_dx, ray_dy, ray_dz, cone_half_angle);
   barrier(CLK_LOCAL_MEM_FENCE);
   ray_pyramid pyramid = new_ray_pyramid(ray_pyramid_mem, 4, 8);
 
@@ -127,30 +168,59 @@ pass_one(__constant  RenderSceneInfo    * linfo,
   obs_mem[3] = obs3;
   obs3[llid] = in_image[imIndex];
   barrier(CLK_LOCAL_MEM_FENCE);
-  image_pyramid obs_pyramid = new_image_pyramid(obs_mem, 4, 8);
+  image_pyramid obs_pyramid  = new_image_pyramid(obs_mem, 4, 8);
+  
+  //initalize T pyramids (tfar)
+  __local float* tfar_mem[4];
+  __local float tfar0[1];
+  __local float tfar1[4];
+  __local float tfar2[16];
+  __local float tfar3[64];
+  tfar_mem[0] = tfar0;
+  tfar_mem[1] = tfar1;
+  tfar_mem[2] = tfar2;
+  tfar_mem[3] = tfar3;
+  tfar3[llid] = 0.0f; 
+  barrier(CLK_LOCAL_MEM_FENCE);
+  image_pyramid tfar_pyramid = new_image_pyramid(tfar_mem, 4, 8);
+
+  //tnear
+  __local float* tnear_mem[4];
+  __local float tnear0[1];
+  __local float tnear1[4];
+  __local float tnear2[16];
+  __local float tnear3[64];
+  tnear_mem[0] = tnear0;
+  tnear_mem[1] = tnear1;
+  tnear_mem[2] = tnear2;
+  tnear_mem[3] = tnear3;
+  tnear3[llid] = 0.0f; 
+  barrier(CLK_LOCAL_MEM_FENCE);
+  image_pyramid tnear_pyramid = new_image_pyramid(tnear_mem, 4, 8);
 
   //init active ray matrix
   __local uchar active_rays[64];
   active_rays[llid] = (llid==0) ? 1 : 0;
   barrier(CLK_LOCAL_MEM_FENCE);
-
-/*
-  //----------------------------------------------------------------------------
-  // we know i,j map to a point on the image,
-  // BEGIN RAY TRACE
-  //----------------------------------------------------------------------------
-  float4 ray_o = ray_origins[ imIndex ];
-  float4 ray_d = ray_directions[ imIndex ];
-  float cone_half_angle = ray_d.w; ray_d.w = 0.0f;
-  float ray_ox, ray_oy, ray_oz, ray_dx, ray_dy, ray_dz;
-  calc_scene_ray_generic_cam(linfo, ray_o, ray_d, &ray_ox, &ray_oy, &ray_oz, &ray_dx, &ray_dy, &ray_dz);
-
-  //----------------------------------------------------------------------------
-  // we know i,j map to a point on the image, have calculated ray
-  // BEGIN RAY TRACE
-  //----------------------------------------------------------------------------
+  
+  //init master thread matrix
+  __local uchar master_threads[64]; 
+  master_threads[llid] = 0; 
+  barrier(CLK_LOCAL_MEM_FENCE); 
+  
+  //store in aux_arg struct
   AuxArgs aux_args;
-  aux_args.alphas = alpha_array;
+  aux_args.active_rays = active_rays; 
+  aux_args.master_threads = master_threads; 
+  aux_args.tnear = &tnear_pyramid; 
+  aux_args.tfar = &tfar_pyramid; 
+  aux_args.image = &obs_pyramid; 
+  aux_args.rays  = &pyramid; 
+
+  //----------------------------------------------------------------------------
+  //store other aux args
+  //----------------------------------------------------------------------------
+  aux_args.alphas = alpha_array;    //store data buffers (and aux buffers)
   aux_args.mog = mixture_array;
   aux_args.cell_vol = aux_volume;
   aux_args.cell_obs = aux_mean_obs; //&aux_array[linfo->num_buffer * linfo->data_len];
@@ -162,14 +232,17 @@ pass_one(__constant  RenderSceneInfo    * linfo,
   float pi_cum = 0.0f;
   float vol_cum = 0.0f;
   float vis_cum = 1.0f;
-  aux_args.ray_vis = &vis;
-  aux_args.ray_pre = &pre;
-  aux_args.pi_cum = &pi_cum;
-  aux_args.vol_cum = &vol_cum;
-  aux_args.vis_cum = &vis_cum;
-  aux_args.obs = in_image[imIndex];
-  aux_args.volume_scale = linfo->block_len*linfo->block_len*linfo->block_len;
+  aux_args.ray_vis = &vis;          //visibility along ray
+  aux_args.ray_pre = &pre;          //pre valu
+  aux_args.pi_cum = &pi_cum;        //sphere-scope prob(intensity) var
+  aux_args.vol_cum = &vol_cum;      //sphere-scope intersected volume var
+  aux_args.vis_cum = &vis_cum;      //sphere-scope visibility var
+  aux_args.obs = in_image[imIndex]; //observed intensity in image
+  aux_args.volume_scale = linfo->block_len*linfo->block_len*linfo->block_len; //volume factor
 
+  //----------------------------------------------------------------------------
+  // cast adaptive cone ray call
+  //----------------------------------------------------------------------------
   cast_adaptive_cone_ray( i, j,
                           (float4) (ray_ox, ray_oy, ray_oz, 0.0f),
                           (float4) (ray_dx, ray_dy, ray_dz, cone_half_angle),
@@ -181,10 +254,17 @@ pass_one(__constant  RenderSceneInfo    * linfo,
   vis_image[imIndex] = vis;
   pre_image[imIndex] = pre;
   norm_image[imIndex] = vis + pre;
-*/
+  
+  //----------DEBUG norm_image write
+  norm_image[imIndex] = image_pyramid_access(aux_args.image, 3, get_local_id(0), get_local_id(1)); 
+  //----------END DEBUG
+
 }
 
 
+//----------------------------------------------------------------------------
+// Pass one step cell function
+//----------------------------------------------------------------------------
 void step_cell(AuxArgs aux_args, int data_ptr, float intersect_volume)
 {
   //make sure intersect volume reflects real world scale
@@ -218,6 +298,9 @@ void step_cell(AuxArgs aux_args, int data_ptr, float intersect_volume)
   (*aux_args.vis_cum) *= temp;
 }
 
+//----------------------------------------------------------------------------
+// Pass one compute ball properties function
+//----------------------------------------------------------------------------
 void compute_ball_properties(AuxArgs aux_args)
 {
   float vis = (*aux_args.ray_vis); //(*vis_img_)(i,j);
