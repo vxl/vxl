@@ -23,6 +23,9 @@ SET( bil_algo_sources
      bil_scale_image.txx                bil_scale_image.h
      bil_compass_edge_detector.cxx      bil_compass_edge_detector.h
      bil_nms.cxx                        bil_nms.h
+     bil_blob_finder.cxx                bil_blob_finder.h
+     bil_trace_4con_boundary.cxx        bil_trace_4con_boundary.h
+     bil_trace_8con_boundary.cxx        bil_trace_8con_boundary.h
    )
 
 AUX_SOURCE_DIRECTORY(Templates bil_algo_sources)
