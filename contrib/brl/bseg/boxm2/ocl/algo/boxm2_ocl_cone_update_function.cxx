@@ -310,7 +310,7 @@ float boxm2_ocl_adaptive_cone_update( boxm2_scene_sptr & scene,
 
 
   ///debugging save vis, pre, norm images
-#if 0
+#if 1
   int idx = 0; 
   vil_image_view<float> vis_view(cl_ni,cl_nj);
   vil_image_view<float> norm_view(cl_ni,cl_nj);
