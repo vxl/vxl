@@ -89,17 +89,9 @@ void vsl_b_write(vsl_b_ostream& os, const bsta_histogram_base* hptr);
 
 void vsl_b_read(vsl_b_istream &is, bsta_histogram_base*& hptr);
 
-void vsl_b_write(vsl_b_ostream& os, const bsta_histogram_base_sptr& hptr)
-{
-  vsl_b_write(os, hptr.ptr());
-}
+void vsl_b_write(vsl_b_ostream& os, const bsta_histogram_base_sptr& hptr);
 
-void vsl_b_read(vsl_b_istream &is, bsta_histogram_base_sptr& hptr)
-{
-  bsta_histogram_base* ptr = 0;
-  vsl_b_read(is, ptr);
-  hptr = ptr;
-}
+void vsl_b_read(vsl_b_istream &is, bsta_histogram_base_sptr& hptr);
 
 
 //: Binary save bsta_joint_histogram to stream.
@@ -177,17 +169,9 @@ void vsl_b_write(vsl_b_ostream &os, const bsta_joint_histogram_base* hptr);
 
 void vsl_b_read(vsl_b_istream &is, bsta_joint_histogram_base*& hptr);
 
-void vsl_b_write(vsl_b_ostream& os, const bsta_joint_histogram_base_sptr& hptr)
-{
-  vsl_b_write(os, hptr.ptr());
-}
+void vsl_b_write(vsl_b_ostream& os, const bsta_joint_histogram_base_sptr& hptr);
+void vsl_b_read(vsl_b_istream &is, bsta_joint_histogram_base_sptr& hptr);
 
-void vsl_b_read(vsl_b_istream &is, bsta_joint_histogram_base_sptr& hptr)
-{
-  bsta_joint_histogram_base* ptr = 0;
-  vsl_b_read(is, ptr);
-  hptr = ptr;
-}
 
 //: Binary save bsta_joint_histogram_3d to stream.
 template <class T>
@@ -275,16 +259,10 @@ void vsl_b_write(vsl_b_ostream &os, const bsta_joint_histogram_3d_base* hptr);
 
 void vsl_b_read(vsl_b_istream &is, bsta_joint_histogram_3d_base*& hptr);
 
-void vsl_b_write(vsl_b_ostream& os, const bsta_joint_histogram_3d_base_sptr& hptr)
-{
-  vsl_b_write(os, hptr.ptr());
-}
+void vsl_b_write(vsl_b_ostream& os, const bsta_joint_histogram_3d_base_sptr& hptr);
 
-void vsl_b_read(vsl_b_istream &is, bsta_joint_histogram_3d_base_sptr& hptr)
-{
-  bsta_joint_histogram_3d_base* ptr=0;
-  vsl_b_read(is, ptr);
-  hptr = ptr;
-}
+
+void vsl_b_read(vsl_b_istream &is, bsta_joint_histogram_3d_base_sptr& hptr);
+
 
 #endif // bsta_io_histogram_h_

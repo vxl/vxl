@@ -51,6 +51,18 @@ void vsl_b_read(vsl_b_istream &is, bsta_histogram_base*& hptr)
   }
 }
 
+void vsl_b_write(vsl_b_ostream& os, const bsta_histogram_base_sptr& hptr)
+{
+  vsl_b_write(os, hptr.ptr());
+}
+
+void vsl_b_read(vsl_b_istream &is, bsta_histogram_base_sptr& hptr)
+{
+  bsta_histogram_base* ptr = 0;
+  vsl_b_read(is, ptr);
+  hptr = ptr;
+}
+
 //
 //============== joint_histogram ==========================
 //
@@ -103,7 +115,17 @@ void vsl_b_read(vsl_b_istream &is, bsta_joint_histogram_base*& hptr)
 //  else if (type == bsta_joint_histogram_base::HIST_TYPE_UNKNOWN) ;// do nothing
   }
 }
+void vsl_b_write(vsl_b_ostream& os, const bsta_joint_histogram_base_sptr& hptr)
+{
+  vsl_b_write(os, hptr.ptr());
+}
 
+void vsl_b_read(vsl_b_istream &is, bsta_joint_histogram_base_sptr& hptr)
+{
+  bsta_joint_histogram_base* ptr = 0;
+  vsl_b_read(is, ptr);
+  hptr = ptr;
+}
 //
 //============== joint_histogram_3d ==========================
 //
@@ -155,4 +177,16 @@ void vsl_b_read(vsl_b_istream &is, bsta_joint_histogram_3d_base*& hptr)
     }
 //  else if (type == bsta_joint_histogram_3d_base::HIST_TYPE_UNKNOWN) ; // do nothing
   }
+}
+
+void vsl_b_write(vsl_b_ostream& os, const bsta_joint_histogram_3d_base_sptr& hptr)
+{
+  vsl_b_write(os, hptr.ptr());
+}
+
+void vsl_b_read(vsl_b_istream &is, bsta_joint_histogram_3d_base_sptr& hptr)
+{
+  bsta_joint_histogram_3d_base* ptr=0;
+  vsl_b_read(is, ptr);
+  hptr = ptr;
 }
