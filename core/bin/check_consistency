@@ -640,7 +640,7 @@ foreach $f (@FILES)
         $f !~ m!\bvidl1/vidl1_mpegcodec\.cxx$! && $f !~ m!\bvidl_vil1/vidl_vil1_mpegcodec\.cxx$! &&
         $f !~ m!\bmsm/tools/msm_draw_shape_modes.cxx$! && $f !~ m!\bmsm/tools/msm_build_shape_model.cxx$! &&
         $f !~ m!\bvul/vul_url\.cxx$! && $f !~ m!\bvcl/gtkgl/! && $f !~ m!\bcontrib/rpl/rtvl/! &&
-        $f !~ m!\bvul/tests/test_file_iterator\.cxx$!);
+        $f !~ m!\bvul/tests/test_file_iterator\.cxx$! && $f !~ m!\bmsm/tools/msm_(plot_aligned_shapes|get_shape_params).cxx$!);
   if ($file =~ m!\n\s*//\s*vcl_c(out|err)\s*\<\<.*(\n\s*//.*){5,}! && $file !~ m!//\s*\\code!)
   {
     $tmp=$file; $tmp =~ s!\n\s*//\s*vcl_c(out|err)\s*\<\<.*(\n\s*//.*){5,}[^\000]*!!; $tmp =~ s![^\n]*!!g; $tmp=length($tmp)+2;
