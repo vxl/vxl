@@ -13,7 +13,7 @@
 #include <vil/vil_convert.h>
 
 msdi_array_of_marked_images::msdi_array_of_marked_images()
-  : image_pyr_ok_(false),index_(0),grey_only_(true)
+  : grey_only_(true),image_pyr_ok_(false),index_(0)
 {
   pyr_builder_.set_min_size(24,24);
 }
@@ -23,7 +23,7 @@ msdi_array_of_marked_images::msdi_array_of_marked_images(
                  const vcl_vector<vil_image_view<vxl_byte> >& images,
                  const vcl_vector<msm_points>& points,
                  bool grey_only)
-  : index_(0),images_(0),points_(0)
+  : images_(0),points_(0),index_(0)
 {
   set(images,points,grey_only);
 }
@@ -36,9 +36,9 @@ void msdi_array_of_marked_images::set(
 {
   assert(images.size()==points.size());
 
+  grey_only_=grey_only;
   images_=&images;
   points_=&points;
-  grey_only_=grey_only;
 
   index_ = 0;
   image_ok_=false;
@@ -63,7 +63,7 @@ unsigned msdi_array_of_marked_images::size() const
 const vimt_image_2d& msdi_array_of_marked_images::image()
 {
   assert(images_!=0);
-  assert(index_ < size());
+  assert(index_ < (int)size());
   if (!image_ok_) get_image();
   return image_;
 }
@@ -73,7 +73,7 @@ const vimt_image_2d& msdi_array_of_marked_images::image()
 const vimt_image_pyramid& msdi_array_of_marked_images::image_pyr()
 {
   assert(images_!=0);
-  assert(index_ < size());
+  assert(index_ < (int)size());
   if (!image_ok_) get_image();
   if (!image_pyr_ok_)
   {
@@ -87,7 +87,7 @@ const vimt_image_pyramid& msdi_array_of_marked_images::image_pyr()
 const msm_points& msdi_array_of_marked_images::points()
 {
   assert(points_!=0);
-  assert(index_ < size());
+  assert(index_ < (int)size());
   return points_->operator[](index_);
 }
 
@@ -107,7 +107,7 @@ void msdi_array_of_marked_images::reset()
 //=======================================================================
 bool msdi_array_of_marked_images::next()
 {
-  if (index_>=(size()-1)) return false;
+  if (index_+1>=(int)size()) return false;
   index_++;
   image_ok_=false;
   image_pyr_ok_=false;
@@ -136,7 +136,7 @@ void msdi_array_of_marked_images::get_image()
 //: Return current image file name
 vcl_string msdi_array_of_marked_images::image_name() const
 {
-  assert(index_ < size());
+  assert(index_ < (int)size());
   vcl_stringstream ss;
   ss<<"image"<<index_<<".png";
   return ss.str();
@@ -145,7 +145,7 @@ vcl_string msdi_array_of_marked_images::image_name() const
 //: Return current points file name
 vcl_string msdi_array_of_marked_images::points_name() const
 {
-  assert(index_ < size());
+  assert(index_ < (int)size());
   vcl_stringstream ss;
   ss<<"points"<<index_<<".pts";
   return ss.str();
