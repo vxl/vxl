@@ -19,6 +19,9 @@ MANPAGE_SOURCES += bil_roi_mask.h
 MANPAGE_SOURCES += bil_scale_image.txx
 SOURCES += bil_compass_edge_detector.cxx
 SOURCES += bil_nms.cxx
+SOURCES += bil_blob_finder.cxx
+SOURCES += bil_trace_4con_boundary.cxx
+SOURCES += bil_trace_8con_boundary.cxx
 
 #######################################
 include ${VXLROOT}/config/top-params.mk
