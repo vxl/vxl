@@ -161,6 +161,9 @@ SOURCE=.\bocl_global_memory_bandwidth_manager.cxx
 SOURCE=.\bocl_command_queue_mgr.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\test_local_mem_access.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\test_include.cxx
 # End Source File
 # Begin Source File
