@@ -138,6 +138,12 @@ SOURCE=.\processes/boxm2_persp_cam_from_scene_process.cxx
 SOURCE=.\processes/boxm2_write_cache_process.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\processes/boxm2_mask_sift_features_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/boxm2_compute_sun_affine_camera_process.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/brdb_value_t+vil_image_view_base_sptr-.cxx
 # End Source File
 # End Group
