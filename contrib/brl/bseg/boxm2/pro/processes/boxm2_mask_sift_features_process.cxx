@@ -50,18 +50,16 @@ bool boxm2_mask_sift_features_process(bprb_func_process& pro)
     vcl_ifstream ifile(in_filename.c_str());
     if (vil_image_view<unsigned char> * mask_image=dynamic_cast<vil_image_view<unsigned char> * > (mask_img.ptr()))
     {
-
-        if(!ifile)
+        if (!ifile)
         {
-            vcl_cout<<"Unable to open the input file "<<vcl_endl;
-            vcl_cout.flush();
+            vcl_cout<<"Unable to open the input file"<<vcl_endl;
             return false;
         }
 
-        int num_features=0;
-        int length_features=0;
+        unsigned int num_features=0;
+        unsigned int length_features=0;
         ifile>>num_features>>length_features;
-        vcl_cout<<"File Info "<<num_features<<" "<<length_features<<vcl_endl;
+        vcl_cout<<"File Info "<<num_features<<' '<<length_features<<vcl_endl;
 
         vcl_vector<float> r;
         vcl_vector<float> c;
@@ -72,42 +70,41 @@ bool boxm2_mask_sift_features_process(bprb_func_process& pro)
         float feature[128];
         vcl_stringstream ss;
         int cnt=0;
-        for(unsigned k=0;k<num_features;k++)
+        for (unsigned k=0;k<num_features;++k)
         {
             ifile>>v>>u>>s>>o;
             unsigned int pi=vcl_floor(u);
             unsigned int pj=vcl_floor(v);
-            if((*mask_image)(pi,pj)>0)
+            if ((*mask_image)(pi,pj)>0)
             {
-                for(unsigned j=0;j<length_features;j++)
+                for (unsigned j=0;j<length_features;++j)
                     ifile>>feature[j];
-                vcl_cout<<"("<<pi<<","<<pj<<") ";
+                vcl_cout<<'('<<pi<<','<<pj<<") ";
             }
             else
             {
-                ss<<v<<" "<<u<<" "<<s<<" "<<o;
-                for(unsigned j=0;j<length_features;j++)
+                ss<<v<<' '<<u<<' '<<s<<' '<<o;
+                for (unsigned j=0;j<length_features;++j)
                 {
                     ifile>>feature[j];
-                    if(j%20==0) 
-                        ss<<"\n";
-                    ss<<" "<<feature[j];
+                    if (j%20==0)
+                        ss<<'\n';
+                    ss<<' '<<feature[j];
                 }
-                ss<<"\n";
+                ss<<'\n';
                 cnt++;
             }
         }
         ifile.close();
         vcl_ofstream ofile(in_filename.c_str());
 
-        if(!ofile)
+        if (!ofile)
         {
-            vcl_cout<<"Unable to open the output file "<<vcl_endl;
+            vcl_cout<<"Unable to open the output file"<<vcl_endl;
             return false;
-            vcl_cout.flush();
         }
-        ofile<<cnt<<" "<<128<<"\n";
-        ofile<<ss.str();
+        ofile<<cnt<<' '<<128<<'\n'
+             <<ss.str();
         ofile.close();
     }
     return true;
