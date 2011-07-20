@@ -60,6 +60,9 @@ typedef struct
            float obs;
            float volume_scale;
   
+  //store ray vis and pre locally
+  __local float* vis_p; 
+  __local float* pre_p;
   
   //store active ray pointer, image/ray pyramids
   __local uchar* active_rays;
@@ -68,7 +71,6 @@ typedef struct
   image_pyramid* image; 
   image_pyramid* tfar; 
   image_pyramid* tnear; 
-  
   __local float* single; 
 } AuxArgs;
 
@@ -201,11 +203,19 @@ pass_one(__constant  RenderSceneInfo    * linfo,
   //init active ray matrix
   __local uchar active_rays[64];
   active_rays[llid] = (llid==0) ? 1 : 0;
+  //active_rays[llid] = 4; 
   barrier(CLK_LOCAL_MEM_FENCE);
   
   //init master thread matrix
   __local uchar master_threads[64]; 
-  master_threads[llid] = 0; 
+  master_threads[llid] = 0; //llid; 
+  barrier(CLK_LOCAL_MEM_FENCE); 
+  
+  //init local pre and vis
+  __local float pre_p[64]; 
+  __local float vis_p[64]; 
+  pre_p[llid] = 0.0f; 
+  vis_p[llid] = 1.0f; 
   barrier(CLK_LOCAL_MEM_FENCE); 
   
   //store in aux_arg struct
@@ -213,7 +223,7 @@ pass_one(__constant  RenderSceneInfo    * linfo,
   aux_args.active_rays = active_rays; 
   aux_args.master_threads = master_threads; 
   aux_args.tnear = &tnear_pyramid; 
-  aux_args.tfar = &tfar_pyramid; 
+  aux_args.tfar  = &tfar_pyramid; 
   aux_args.image = &obs_pyramid; 
   aux_args.rays  = &pyramid; 
 
@@ -256,7 +266,7 @@ pass_one(__constant  RenderSceneInfo    * linfo,
   norm_image[imIndex] = vis + pre;
   
   //----------DEBUG norm_image write
-  norm_image[imIndex] = image_pyramid_access(aux_args.image, 3, get_local_id(0), get_local_id(1)); 
+  //norm_image[imIndex] = image_pyramid_access(aux_args.image, 3, get_local_id(0), get_local_id(1)); 
   //----------END DEBUG
 
 }

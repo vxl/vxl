@@ -56,6 +56,7 @@ float boxm2_ocl_adaptive_cone_update( boxm2_scene_sptr & scene,
        
   ////////////////////////////////////////////////////////////////////////////////
   //gotta do this the old fashion way for debuggin....
+  vcl_cout<<"  DEBUG: COMPUTING CONE HALF ANGLES ON CPU"<<vcl_endl;
   int cnt = 0; 
   for (unsigned j=0;j<cl_nj;++j) {
     for (unsigned i=0;i<cl_ni;++i) {
@@ -74,6 +75,7 @@ float boxm2_ocl_adaptive_cone_update( boxm2_scene_sptr & scene,
       <<ray_directions[1]<<','
       <<ray_directions[2]<<','
       <<ray_directions[3]<<vcl_endl;
+  vcl_cout<<"  DEBUG: FINISHED CONE HALF ANGLES ON CPU"<<vcl_endl;
   ////////////////////////////////////////////////////////////////////////////////
 
   //Visibility, Preinf, Norm, and input image buffers

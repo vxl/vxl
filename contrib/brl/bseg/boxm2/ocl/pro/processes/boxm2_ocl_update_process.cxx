@@ -15,6 +15,7 @@
 #include <boxm2/boxm2_data_base.h>
 #include <boxm2/ocl/boxm2_ocl_util.h>
 #include <vil/vil_image_view.h>
+#include <vil/vil_save.h>
 #include <boxm2/ocl/algo/boxm2_ocl_camera_converter.h>
 
 //brdb stuff
@@ -475,6 +476,26 @@ bool boxm2_ocl_update_process(bprb_func_process& pro)
         clFinish(queue);
     }
   }
+  
+  
+  ///debugging save vis, pre, norm images
+#if 1
+  int idx = 0; 
+  vil_image_view<float> vis_view(cl_ni,cl_nj);
+  vil_image_view<float> norm_view(cl_ni,cl_nj);
+  vil_image_view<float> pre_view(cl_ni,cl_nj);
+  for (unsigned c=0;c<cl_nj;++c) {
+    for (unsigned r=0;r<cl_ni;++r) {
+      vis_view(r,c) = vis_buff[idx];
+      norm_view(r,c) = norm_buff[idx]; 
+      pre_view(r,c) = pre_buff[idx]; 
+      idx++; 
+    }
+  }
+  vil_save( vis_view, "vis_debug.tiff"); 
+  vil_save( norm_view, "norm_debug.tiff");
+  vil_save( pre_view, "pre_debug.tiff"); 
+#endif
 
 
    delete [] vis_buff;

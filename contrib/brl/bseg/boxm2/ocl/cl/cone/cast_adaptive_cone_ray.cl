@@ -15,7 +15,6 @@
 #define MIN_T 1.0f
 #define UNIT_SPHERE_RADIUS 0.6203504908994f // = 1/vcl_cbrt(vnl_math::pi*4/3);
 
-
 ////////////////////////////////////////////////////////////////////////////////
 //Given Ray pyramid and scene bounding box, fills out T value pyramids
 ////////////////////////////////////////////////////////////////////////////////
@@ -33,7 +32,7 @@ inline void intersect_block_pyramid(AuxArgs* aux_args, __constant RenderSceneInf
       float tFar, tblock; 
       float4 ray_d = ray_pyramid_access( aux_args->rays, curr_level, localI/offset, localJ/offset); 
       intersect_block(ray_o, ray_d, linfo, &tFar, &tblock); 
-      tblock = (tblock > 0.0f) ? tblock : 0.0f;    //make sure tnear is at least 0...
+      tblock = max(tblock, MIN_T); //(tblock > 0.0f) ? tblock : 0.0f;    //make sure tnear is at least 0...
       tFar -= BLOCK_EPSILON;                       //xit surpasses it (and breaks from the outer loop)
      
       //set the tnear/tfar pyramid
@@ -43,6 +42,19 @@ inline void intersect_block_pyramid(AuxArgs* aux_args, __constant RenderSceneInf
     offset+=offset; //offset = offset*2
     barrier(CLK_LOCAL_MEM_FENCE);
   }
+  
+  //----RAY PYRAMID and T PYRAMID DEBUG CODE------------------------------------
+  //set lowest level
+  // The goal here is to have a single thread (id 0) intersect the scene with 
+  // the fattest ray.  
+  float tFar, currT;
+  float4 ray_d = ray_pyramid_access(aux_args->rays, 0, 0, 0);  //gets the fattest ray
+  intersect_block(ray_o, ray_d, linfo, &tFar, &currT); 
+  currT = max(currT, MIN_T);  //make sure tnear is at least MIN_T...
+  tFar -= BLOCK_EPSILON;     
+  aux_args->tnear->pyramid[0][0] = currT; 
+  aux_args->tfar->pyramid[0][0] = tFar; 
+  barrier(CLK_LOCAL_MEM_FENCE);
 }
 
 //helper returns correct tnear/tfar values in a float2
@@ -63,6 +75,7 @@ inline float2 active_t_values( AuxArgs* aux_args )
   float tfar = image_pyramid_access( aux_args->tfar, level, localI/offset, localJ/offset); 
   return (float2) (tnear, tfar); 
 } 
+
 
 //helper method that computes local index + positive offset
 inline uchar localIndex( uchar i_offset, uchar j_offset )
@@ -108,61 +121,35 @@ void cast_adaptive_cone_ray(
   //////////////////////////////////////////////////////////////////////////////
   // Compute pyramid values for tnear/tfar
   //////////////////////////////////////////////////////////////////////////////
-/*
   //calc tnear tfar for tpyramids
   intersect_block_pyramid( &aux_args, linfo, ray_o ); 
-  float currT, tFar, sinAlpha, currR; 
-  //float2 tvals = active_t_values( &aux_args );
-  //currT = tvals.x; 
-  //tFar = tvals.y; 
-  
-  //currT = image_pyramid_access(aux_args.tnear, 3, localI, localJ); 
-  //tFar = image_pyramid_access(aux_args.tfar, 3, localI, localJ); 
-  currT = aux_args.tnear->pyramid[0][0]; 
-  tFar = aux_args.tfar->pyramid[0][0]; 
-  //currT = image_pyramid_access_safe(aux_args.tnear, 0); 
-  //tFar = image_pyramid_access_safe(aux_args.tfar, 0); 
-*/
+  float currT, currR, tFar, sinAlpha; 
+  float2 tvals = active_t_values( &aux_args );
+  currT = tvals.x; 
+  tFar = tvals.y; 
+
+  float curr_vis = 1.0f; 
+  float curr_pre = 0.0f; 
 
   //----RAY PYRAMID and T PYRAMID DEBUG CODE------------------------------------
-  // The goal here is to have a single thread (id 0) intersect the scene with 
-  // the fattest ray.  
-  float currT=0.0f, tFar=0.0f; 
-  if(llid==0) {
-    ray_d = ray_pyramid_access(aux_args.rays, 0, 0, 0);  //gets the fattest ray
-    intersect_block(ray_o, ray_d, linfo, &tFar, &currT); 
-    currT = (currT > 0.0f) ? currT : 0.0f;    //make sure tnear is at least 0...
-    tFar -= BLOCK_EPSILON;     
-    
-    //store intersect T values in pyramid
-    aux_args.tnear->pyramid[0][0] = currT; 
-    aux_args.tfar->pyramid[0][0] = tFar; 
-  }
-  barrier(CLK_LOCAL_MEM_FENCE); 
-  mem_fence(CLK_LOCAL_MEM_FENCE); 
-  
-  //all threads read t values into currT
-  currT = aux_args.tnear->pyramid[0][0]; 
-  tFar = aux_args.tfar->pyramid[0][0]; 
-  barrier(CLK_LOCAL_MEM_FENCE);
-  
   //debug store in ray_vis and ray_pre for vil_saved images
-  *aux_args.ray_vis = currT;
-  *aux_args.ray_pre = tFar; 
+  *aux_args.ray_vis = 1; //currT;
+  *aux_args.ray_pre = 0; //tFar; 
   barrier(CLK_LOCAL_MEM_FENCE); 
   //----END RAY PYRAMID and T PYRAMID DEBUG CODE--------------------------------
 
-#if 0
-  //iterate over spheres
-  float count = 0;
-  while (currT < tFar)
+  //////////////////////////////////////////////////////////////////////////////
+  // Begin block ray trace
+  //////////////////////////////////////////////////////////////////////////////
+  float count=0.0f; //debug counter
+  int safety=0;
+  while ( currT < tFar && ++safety < 1000 )
   {
-    
     ///////////////////////////////////////////////////////////////////////////
     // 0. grab currently activated rays, and compute their spheres
     ///////////////////////////////////////////////////////////////////////////
-    int ray_level = aux_args.active_rays[llid]; 
-    if(ray_level > 0) {
+    int ray_level = aux_args.active_rays[llid]-1;  //0=fatest, 1=next, .., 3=finest
+    if(ray_level >= 0) {
       
       //intersect the current sphere with
       float4 currRayD = ray_pyramid_access_safe(aux_args.rays, ray_level); 
@@ -180,15 +167,71 @@ void cast_adaptive_cone_ray(
       int4 maxCell = (int4) ( convert_int( clamp(currSphere.x + currR+1, 0.0f, linfo->dims.x-1.0f) ),
                               convert_int( clamp(currSphere.y + currR+1, 0.0f, linfo->dims.y-1.0f) ),
                               convert_int( clamp(currSphere.z + currR+1, 0.0f, linfo->dims.z-1.0f) ), 0 );
-                            
+      //count = (1+maxCell.x-minCell.x)*(1+maxCell.y-minCell.y)*(1+maxCell.z-minCell.z); 
                             
       //-----------------------------------------------------------------------
       //update active ray matrix
       //-----------------------------------------------------------------------
+      bool split=false;  //split ray?
       for (int x=minCell.x; x<maxCell.x; ++x) {
         for (int y=minCell.y; y<maxCell.y; ++y) {
           for (int z=minCell.z; z<maxCell.z; ++z) {
+            
+            //only split once for now
+            if(currR > UNIT_SPHERE_RADIUS && ray_level<3) {
+              split=true; 
+            }
+            
+          }
+        }
+      }
+      
+      //if split was triggered....
+      int side_len = 1<<(3-ray_level); //sqrt of number of threads this current active ray controls
+      if(split) {
+        count=ray_level+1;
+        
+        //calc prev sphere, then split that sphere
+        float prevR, prevT, splitR, splitT; 
+        prev_sphere(currT, currR, &prevT, &prevR); 
+        calc_cone_split(prevR, prevT, currRayD.w, &splitR, &splitT); 
+        currR = splitR; 
+        currT = splitT; 
 
+        //turn on the four neighboring threads
+        int next_level = ray_level+1; 
+        for(int ioff=0; ioff<2; ++ioff) {
+          for(int joff=0; joff<2; ++joff) {
+
+            //"neighbor" threads are not necessarily neighboring in workspace (only at finest level they are)
+            int di = ioff * (side_len/2); 
+            int dj = joff * (side_len/2); 
+            
+            //calc local thread ID (in 8x8 workspace)
+            uchar id = (localI+di) + (localJ+dj)*get_local_size(0); 
+            aux_args.active_rays[id] = next_level + 1; //ray level is stored+1, then add one more for increase in level 
+            aux_args.master_threads[id] = id; 
+            
+            //set the vis and pre for new threads
+            aux_args.vis_p[id] = aux_args.vis_p[llid] * exp(0.25f);  
+            aux_args.pre_p[id] = aux_args.pre_p[llid] * exp(0.25f);
+            
+            //set master thread matrix
+            for(int ii=0; ii<side_len/2; ++ii) {
+              for(int jj=0; jj<side_len/2; ++jj) {
+                uchar slid= (localI+di+ii) + (localJ+dj+jj)*get_local_size(0);
+                aux_args.master_threads[slid] = id; 
+              }
+            }
+            
+            //store in pyramid 4 times
+            aux_args.tnear->pyramid[next_level][id] = splitT; //hack to see if this will speed up trace//tprime; 
+          }
+        }
+        
+      }
+
+#if 0 //octree cell traversal - not part of first iteration
             //load current block/tree, initialize cumsum buffer and cumIndex
             int blkIndex = calc_blkInt(x, y, z, linfo->dims);
             (*ltree) = as_uchar16(tree_array[blkIndex]);
@@ -197,7 +240,6 @@ void cast_adaptive_cone_ray(
             
             //visit list for BFS through tree (denotes parents of cells that ought to be visited)
             linked_list toVisit = new_linked_list(listMem, 73); 
-            
             /////////////////////////////////////////////////////////////////////
             //do an intersection with the root outside the loop 
             //calculate the theoretical radius of this cell
@@ -273,109 +315,138 @@ void cast_adaptive_cone_ray(
             } //end BFS while
             // end step CELL portion of cone ray trace
             ////////////////////////////////////////////////////////////////////
+          } //end z foranyway, 
+        } //end y for
+      } //end x for
+#endif
+    
+    } //end ray_level if
+    barrier(CLK_LOCAL_MEM_FENCE); 
+
+    ///////////////////////////////////////////////////////////////////////////
+    // 1. With new Active Ray Matrix, 
+    // pass over all cells intersecting this ball, compute step_CELL
+    ///////////////////////////////////////////////////////////////////////////
+    ray_level = aux_args.active_rays[llid]-1;  //0=fatest, 1=next, .., 3=finest
+    if(ray_level >= 0) {
+      
+      //recompute sphere (as this may have become active)
+      float4 currRayD = ray_pyramid_access_safe(aux_args.rays, ray_level); 
+      float4 currSphere = (float4) ( ray_o + currT * currRayD ); 
+      
+      //calc and store the sphere's radius
+      sinAlpha = fabs( sin(currRayD.w) );
+      currR = currT * sinAlpha;
+      currSphere.w = currR; 
+
+      //minimum/maximum subblock eclipsed
+      int4 minCell = (int4) ( convert_int( clamp(currSphere.x - currR, 0.0f, linfo->dims.x-1.0f) ),
+                              convert_int( clamp(currSphere.y - currR, 0.0f, linfo->dims.y-1.0f) ),
+                              convert_int( clamp(currSphere.z - currR, 0.0f, linfo->dims.z-1.0f) ), 0 );
+      int4 maxCell = (int4) ( convert_int( clamp(currSphere.x + currR+1, 0.0f, linfo->dims.x-1.0f) ),
+                              convert_int( clamp(currSphere.y + currR+1, 0.0f, linfo->dims.y-1.0f) ),
+                              convert_int( clamp(currSphere.z + currR+1, 0.0f, linfo->dims.z-1.0f) ), 0 );
+      
+      for (int x=minCell.x; x<maxCell.x; ++x) {
+        for (int y=minCell.y; y<maxCell.y; ++y) {
+          for (int z=minCell.z; z<maxCell.z; ++z) {
+
+            //--------------------------------------------------------------------
+            //Fixed Grid Implementation
+            int blkIndex = calc_blkInt(x, y, z, linfo->dims);
+            (*ltree) = as_uchar16(tree_array[blkIndex]);
+            
+            float4 cellSphere = (float4) ( (float) x+.5f, (float) y+.5f, (float) z+.5f, UNIT_SPHERE_RADIUS ); 
+            float intersect_volume =  sphere_intersection_volume(currSphere, cellSphere);
+
+            //if it intersects, do one of two things
+            if ( intersect_volume > 0.0f ) {
+              //data index is relative data (data_index_cached) plus data_index_root
+              int data_ptr = data_index_root(ltree);
+              // replaced by:step_cell_cone(aux_args, data_ptr, intersect_volume, side_len * linfo->block_len);
+              STEP_CELL; 
+            }
+            //--------------------------------------------------------------------
+            
+  #if 0  //octree cell stuff not in this iteration
+            //load current block/tree, initialize cumsum buffer and cumIndex
+            int blkIndex = calc_blkInt(x, y, z, linfo->dims);
+            (*ltree) = as_uchar16(tree_array[blkIndex]);
+            csum[0] = (*ltree).s0;
+            int cumIndex = 1;
+            
+            //visit list for BFS through tree (denotes parents of cells that ought to be visited)
+            linked_list toVisit = new_linked_list(listMem, 73); 
+            
+            /////////////////////////////////////////////////////////////////////
+            //do an intersection with the root outside the loop 
+            //calculate the theoretical radius of this cell
+            float side_len = 1.0f;  
+            float4 cellSphere = (float4) ( (float) x+.5f, (float) y+.5f, (float) z+.5f, UNIT_SPHERE_RADIUS ); 
+            float  intersect_volume = sphere_intersection_volume(currSphere, cellSphere);
+            
+            //if it intersects, do one of two things
+            if( intersect_volume > 0.0f ) {
+              if( (*ltree).s0 == 0) {
+                int data_ptr = data_index_root(ltree); 
+                STEP_CELL; //step_cell_cone(aux_args, data_ptr, intersect_volume, side_len * linfo->block_len,&intensity_norm, &weighted_int, &prob_surface);
+              }
+              else { //push back root
+                push_back( &toVisit, 0 ); 
+              }
+            }
+            // done with first intersection - if nonzero volume, try children
+            /////////////////////////////////////////////////////////////////////
+    
+            /////////////////////////////////////////////////////////////////////
+            //list keeps track of parents whose children need to be intersected 
+            //saves 8xSpace in local memory
+            unsigned deepest_gen = linfo->root_level; 
+            int max_cell = ((1 << (3*(deepest_gen+1))) - 1) / 7;
+            max_cell = min(585, max_cell);
+
+            //iterate through tree if there are children to get to
+            while ( !empty(&toVisit) )
+            {
+              //get front node off the top of the list, do an intersection for all 8 children
+              int pindex = (int) pop_front( &toVisit );
+              for(int currBitIndex=8*pindex + 1; currBitIndex < 8*pindex + 9; ++currBitIndex) {
+            
+                //calculate the theoretical radius of this cell
+                int curr_depth = get_depth(currBitIndex);
+                float side_len = 1.0f / (float) (1<<curr_depth);
+
+                //intersect the cell,
+                float4 cellSphere = (float4) ( (float) x + centerX[currBitIndex], 
+                                               (float) y + centerY[currBitIndex], 
+                                               (float) z + centerZ[currBitIndex], 
+                                               UNIT_SPHERE_RADIUS * side_len ); 
+                float intersect_volume =  sphere_intersection_volume(currSphere, cellSphere);
+
+                //if it intersects, do one of two things
+                if ( intersect_volume > 0.0f ) {
+                  //if the tree is a leaf, then update it's contribution
+                  if ( tree_bit_at(ltree, currBitIndex) == 0 ) {
+                    //data index is relative data (data_index_cached) plus data_index_root
+                    int data_ptr = data_index_cached(ltree, currBitIndex, bit_lookup, csum, &cumIndex) + data_index_root(ltree);
+                    // replaced by:step_cell_cone(aux_args, data_ptr, intersect_volume, side_len * linfo->block_len);
+                    STEP_CELL; 
+                  }
+                  else { 
+                    push_back( &toVisit, currBitIndex );  //add children to the visit list
+                  }
+                }
+              
+              } //end child for loop
+            } //end BFS while
+            // end step CELL portion of cone ray trace
+            ////////////////////////////////////////////////////////////////////
+  #endif 
+
           } //end z for
         } //end y for
       } //end x for
-
-    }
-
-    
-    ///////////////////////////////////////////////////////////////////////////
-    // 0. set active ray matrix.  computes ray splits
-    ///////////////////////////////////////////////////////////////////////////
-    //compute_ray_splits( &aux_args ); 
-/*
-    if(aux_args->active_rays[llid]) {
-      
-    }
-*/
-
-
-    ///////////////////////////////////////////////////////////////////////////
-    // 1. pass over all cells intersecting this ball
-    ///////////////////////////////////////////////////////////////////////////
-/*
-    for (int x=minCell.x; x<maxCell.x; ++x) {
-      for (int y=minCell.y; y<maxCell.y; ++y) {
-        for (int z=minCell.z; z<maxCell.z; ++z) {
-
-          //load current block/tree, initialize cumsum buffer and cumIndex
-          int blkIndex = calc_blkInt(x, y, z, linfo->dims);
-          (*ltree) = as_uchar16(tree_array[blkIndex]);
-          csum[0] = (*ltree).s0;
-          int cumIndex = 1;
-          
-          //visit list for BFS through tree (denotes parents of cells that ought to be visited)
-          linked_list toVisit = new_linked_list(listMem, 73); 
-          
-          /////////////////////////////////////////////////////////////////////
-          //do an intersection with the root outside the loop 
-          //calculate the theoretical radius of this cell
-          float side_len = 1.0f;  
-          float4 cellSphere = (float4) ( (float) x+.5f, (float) y+.5f, (float) z+.5f, UNIT_SPHERE_RADIUS ); 
-          float  intersect_volume = sphere_intersection_volume(currSphere, cellSphere);
-          
-          //if it intersects, do one of two things
-          if( intersect_volume > 0.0f ) {
-            if( (*ltree).s0 == 0) {
-              int data_ptr = data_index_root(ltree); 
-              STEP_CELL; //step_cell_cone(aux_args, data_ptr, intersect_volume, side_len * linfo->block_len,&intensity_norm, &weighted_int, &prob_surface);
-            }
-            else { //push back root
-              push_back( &toVisit, 0 ); 
-            }
-          }
-          // done with first intersection - if nonzero volume, try children
-          /////////////////////////////////////////////////////////////////////
-  
-          /////////////////////////////////////////////////////////////////////
-          //list keeps track of parents whose children need to be intersected 
-          //saves 8xSpace in local memory
-          unsigned deepest_gen = linfo->root_level; 
-          int max_cell = ((1 << (3*(deepest_gen+1))) - 1) / 7;
-          max_cell = min(585, max_cell);
-
-          //iterate through tree if there are children to get to
-          while ( !empty(&toVisit) )
-          {
-            //get front node off the top of the list, do an intersection for all 8 children
-            int pindex = (int) pop_front( &toVisit );
-            for(int currBitIndex=8*pindex + 1; currBitIndex < 8*pindex + 9; ++currBitIndex) {
-          
-              //calculate the theoretical radius of this cell
-              int curr_depth = get_depth(currBitIndex);
-              float side_len = 1.0f / (float) (1<<curr_depth);
-
-              //intersect the cell,
-              float4 cellSphere = (float4) ( (float) x + centerX[currBitIndex], 
-                                             (float) y + centerY[currBitIndex], 
-                                             (float) z + centerZ[currBitIndex], 
-                                             UNIT_SPHERE_RADIUS * side_len ); 
-              float intersect_volume =  sphere_intersection_volume(currSphere, cellSphere);
-
-              //if it intersects, do one of two things
-              if ( intersect_volume > 0.0f ) {
-                //if the tree is a leaf, then update it's contribution
-                if ( tree_bit_at(ltree, currBitIndex) == 0 ) {
-                  //data index is relative data (data_index_cached) plus data_index_root
-                  int data_ptr = data_index_cached(ltree, currBitIndex, bit_lookup, csum, &cumIndex) + data_index_root(ltree);
-                  // replaced by:step_cell_cone(aux_args, data_ptr, intersect_volume, side_len * linfo->block_len);
-                  STEP_CELL; 
-                }
-                else { 
-                  push_back( &toVisit, currBitIndex );  //add children to the visit list
-                }
-              }
-            
-            } //end child for loop
-          } //end BFS while
-          // end step CELL portion of cone ray trace
-          ////////////////////////////////////////////////////////////////////
-          
-        } //end z for
-      } //end y for
-    } //end x for
-*/
+    } //
 
     ///////////////////////////////////////////////////////////////////////////
     // 2. calculate ball properties
@@ -471,13 +542,49 @@ void cast_adaptive_cone_ray(
 
 
     ////////////////////////////////////////////////////////////////////////////
-    // 4. Continue iterating over the cone ray
+    // 4. Update active T values
     ////////////////////////////////////////////////////////////////////////////
-    //calculate the next sphere's R and T
+    ray_level = aux_args.active_rays[llid]-1;  //0=fatest, 1=next, .., 3=finest
+    if(ray_level >= 0) {
+      //intersect the current sphere with
+      float4 currRayD = ray_pyramid_access_safe(aux_args.rays, ray_level); 
+      sinAlpha = fabs( sin(currRayD.w) );
+      currR = currT * sinAlpha;
+      
+      //calculate the next sphere's R and T
+      float rPrime = sinAlpha * (currR + currT) / (1.0-sinAlpha);
+      currT += (rPrime + currR);
+      currR = rPrime;
+        
+      //set t value in local memory for all threads to grab...
+      uchar offset = 1<<(3-ray_level); 
+      image_pyramid_set( aux_args.tnear, ray_level, localI/offset, localJ/offset, currT);
+      
+      //make sure thread_level vis pre agrees with shared vis pre
+      aux_args.vis_p[llid] = *aux_args.ray_vis; 
+      aux_args.pre_p[llid] = *aux_args.ray_pre; 
+    }
+    barrier(CLK_LOCAL_MEM_FENCE);
     
-    float rPrime = sinAlpha * (currR + currT) / (1.0-sinAlpha);
-    currT += (rPrime + currR);
-    currR = rPrime;
-  }
-#endif
+    //each thread needs to get a new T value
+    tvals = active_t_values( &aux_args );
+    currT = tvals.x; 
+    tFar = tvals.y; 
+    
+  } //end ray trace while loop
+  
+  //debug images
+  barrier(CLK_LOCAL_MEM_FENCE);
+  int ray_level = aux_args.active_rays[llid]-1;  //0=fatest, 1=next, .., 3=finest
+  //if( ! (ray_level >= 0) ) {
+/*
+  uchar master = aux_args.master_threads[llid];
+  *aux_args.ray_vis = aux_args.vis_p[master]; 
+  *aux_args.ray_pre = aux_args.pre_p[master]; 
+*/
+  //*aux_args.ray_vis = master;
+  //}
+  barrier(CLK_LOCAL_MEM_FENCE);
+
+  
 }

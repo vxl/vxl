@@ -69,8 +69,7 @@ inline void intersect_block(float4 ray_o, float4 ray_d,
 //    | 2  | 3  |
 //    |____|____|
 ////////////////////////////////////////////////////////////
-void calc_cone_split(float r, float t, float alpha, int quadrant, 
-                     float* new_r, float* tprime)
+void calc_cone_split(float r, float t, float alpha, float* new_r, float* tprime)
 {
   float denom = cos(alpha)+1.0f; 
   float first = r*sin(alpha/2.0f) + 2.0f*t*cos(alpha/2.0f); 
@@ -79,6 +78,21 @@ void calc_cone_split(float r, float t, float alpha, int quadrant,
   
   //calc new radius  
   (*new_r) = (*tprime) * sin(alpha/2.0f); 
+}
+
+
+//calculates the t and radius for a previous sphere, 
+void prev_sphere(float currT, float currR, float* prevT, float* prevR)
+{
+  (*prevR) = currR * (currT-currR) / (currT+currR); 
+  (*prevT) = currT-currR-(*prevR); 
+}
+
+//calculates the t and radius value for next sphere
+void next_sphere(float currT, float currR, float* nextT, float* nextR)
+{
+  (*nextR) = currR * (currR + currT) / (currT - currR); 
+  (*nextT) = currT + currR + (*nextR); 
 }
 
 
