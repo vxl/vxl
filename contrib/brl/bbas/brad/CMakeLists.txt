@@ -6,11 +6,15 @@
       brad_illum_util.h        brad_illum_util.cxx brad_illum_cost_function.h
       brad_sun_pos.h           brad_sun_pos.cxx
       brad_sun_dir_index.h     brad_sun_dir_index.cxx
+      brad_phongs_model_est.h  brad_phongs_model_est.cxx
   )
   AUX_SOURCE_DIRECTORY(Templates brad_sources)
   ADD_LIBRARY(brad ${brad_sources} )
 
   TARGET_LINK_LIBRARIES(brad bsta vnl vnl_algo vgl vil vbl vul )
+
+#pro
+SUBDIRS(pro)
 
 #tests
 SUBDIRS(tests)
