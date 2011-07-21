@@ -226,3 +226,8 @@ void bwm_tableau_video::save_as_image_list()
   if (!my_observer_->save_as_image_list(path))
     vcl_cerr << " Unable to save video as image list\n";
 }
+
+void bwm_tableau_video::clear_all_frames()
+{
+	this->my_observer_->delete_all_frames();
+}

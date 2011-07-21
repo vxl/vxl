@@ -12,6 +12,7 @@
 #include <vidl/vidl_istream_sptr.h>
 #include <bwm/video/bwm_video_cam_istream_sptr.h>
 #include <bsta/bsta_histogram.h>
+
 class vgui_soview2D_point;
 class bwm_soview2D_cross;
 
@@ -131,6 +132,39 @@ class bwm_observer_video : public bwm_observer_cam
   //: extract histograms of each frame
   bool extract_histograms(vcl_vector<bsta_histogram<float> >& hists);
 
+  vcl_map<unsigned, vcl_vector<vsol_polygon_2d_sptr> > frame_polygon_map()
+	{ return this->frame_polygon_map_; }
+
+  virtual unsigned create_polygon(vsol_polygon_2d_sptr);
+
+  //: display the polygons mapped to a specific frame
+  void display_polygons_frame();
+
+  virtual void delete_polygon( vgui_soview* obj );
+
+  virtual void delete_all();
+
+  virtual void delete_all_frames();
+
+  // mask operations
+
+  //: initialize frame/change type/polygon map
+  virtual void init_mask();
+
+  //: associate a polygon with a change type
+  virtual void add_poly_to_mask();
+
+  //: remove the polygon's associated change type
+  virtual void remove_poly_from_mask();
+
+  //: save the frame/change type/polygon relation to a binary file
+  virtual bool save_changes_binary();
+
+  //: read /frame/change type/polygon relation binary file
+  virtual bool load_changes_binary();
+
+
+
 
   //Internals --------------------------------------- -------------------------
  protected:
@@ -208,6 +242,15 @@ class bwm_observer_video : public bwm_observer_cam
 
   //: relation between 3-d point display and corr id
   vcl_map<unsigned, vgui_soview2D_point*> world_pt_map_;
+
+  //: relation frames/polygons
+  vcl_map<unsigned, vcl_vector<vsol_polygon_2d_sptr> > frame_polygon_map_;
+
+  //: relation frames/change type
+  vcl_map<unsigned, vcl_vector< vcl_string > > frame_change_map_;
+
+  //: relation soviewID and vector position
+  vcl_map<unsigned, unsigned> id_pos_map_;
 };
 
 #endif

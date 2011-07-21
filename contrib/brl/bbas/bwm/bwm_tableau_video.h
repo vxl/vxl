@@ -20,6 +20,8 @@ class bwm_tableau_video : public bwm_tableau_cam
 
   bool handle(const vgui_event &);
 
+  virtual void clear_all_frames();
+
   //video actions
   void get_popup(vgui_popup_params const &params, vgui_menu &menu);
   void next_frame();

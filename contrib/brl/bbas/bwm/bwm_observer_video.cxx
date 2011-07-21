@@ -1,6 +1,8 @@
 #include "bwm_observer_video.h"
 //:
 // \file
+#include <bwm/algo/bwm_algo.h>
+#include <bwm/algo/bwm_utils.h>
 #include "bwm_observer_mgr.h"
 #include "video/bwm_video_corr.h"
 #include "algo/bwm_soview2D_cross.h"
@@ -27,6 +29,7 @@
 #include <bwm/bwm_world.h>
 #include <vidl/vidl_frame.h>
 #include <vidl/vidl_convert.h>
+#include <vsol/vsol_polygon_2d.h>
 bool bwm_observer_video::handle(const vgui_event &e)
 {
   if (!video_istr_) return bwm_observer_cam::handle(e);
@@ -204,6 +207,7 @@ void bwm_observer_video::display_current_frame()
     }
   this->display_corr_index();
   this->display_3d_objects();
+  this->display_polygons_frame();
   img_tab_->post_redraw();
   vgui::run_till_idle();
 }
@@ -981,4 +985,279 @@ intersect_ray_and_plane(vgl_point_2d<double> img_point,
   vgl_homg_point_3d<double> p = oper.intersect_line_and_plane(ray,plane);
   world_point = p;
   return true;
+}
+
+unsigned bwm_observer_video::create_polygon(vsol_polygon_2d_sptr poly2d)
+{
+
+	unsigned frame = this->video_istr_->frame_number();
+	
+
+	float *x, *y;
+	bwm_algo::get_vertices_xy(poly2d, &x, &y);
+	unsigned nverts = poly2d->size();
+
+	this->set_foreground(1,1,0);
+	bgui_vsol_soview2D_polygon* polygon = this->add_vsol_polygon_2d(poly2d);
+	obj_list[polygon->get_id()] = polygon;
+	if (draw_mode_ == 1)
+		polygon->set_selectable(false);
+
+	vcl_vector<bwm_soview2D_vertex*> verts;
+	this->set_foreground(0,1,0);
+	for (unsigned i = 0; i<nverts; ++i) {
+		bwm_soview2D_vertex* vertex = new bwm_soview2D_vertex(x[i],y[i],0.5f, polygon, i);
+		if (draw_mode_ == 0)
+			vertex->set_selectable(false);
+		this->add(vertex);
+		verts.push_back(vertex);
+	}
+	vert_list[polygon->get_id()] = verts;
+
+	poly2d->set_id(polygon->get_id());
+	this->frame_polygon_map_[frame].push_back(poly2d);
+	this->frame_change_map_[frame].push_back("no change");
+	this->id_pos_map_[polygon->get_id()] = this->frame_polygon_map_[frame].size()-1;
+	return polygon->get_id();
+}
+
+void bwm_observer_video::display_polygons_frame()
+{
+	unsigned frame = this->video_istr_->frame_number();
+
+	vcl_map<unsigned, vcl_vector<vsol_polygon_2d_sptr> >::iterator f_itr = this->frame_polygon_map_.find(frame);
+	
+
+	//clear the objects
+	this->id_pos_map_.clear();
+
+	this->clear_objects();
+
+	if( f_itr != this->frame_polygon_map_.end() )
+	{
+		for( unsigned i = 0; i < f_itr->second.size(); ++i )
+		{
+			float *x, *y;
+			bwm_algo::get_vertices_xy(f_itr->second[i], &x, &y);
+			unsigned nverts = f_itr->second[i]->size();
+
+			this->set_foreground(1,1,0);
+			bgui_vsol_soview2D_polygon* polygon = this->add_vsol_polygon_2d(f_itr->second[i]);
+			obj_list[polygon->get_id()] = polygon;
+			if (draw_mode_ == 1)
+				polygon->set_selectable(false);
+
+			vcl_vector<bwm_soview2D_vertex*> verts;
+			this->set_foreground(0,1,0);
+			for (unsigned j = 0; j<nverts; ++j) {
+				bwm_soview2D_vertex* vertex = new bwm_soview2D_vertex(x[j],y[j],0.5f, polygon, j);
+				if (draw_mode_ == 0)
+					vertex->set_selectable(false);
+				this->add(vertex);
+				verts.push_back(vertex);
+			}
+			vert_list[polygon->get_id()] = verts;
+
+			f_itr->second[i]->set_id(polygon->get_id());
+
+			this->id_pos_map_[polygon->get_id()] = i;
+			//return polygon->get_id();
+		}//end polygon iteration
+	}
+
+}
+
+void bwm_observer_video::delete_polygon( vgui_soview* obj )
+{
+  // remove the polygon
+  unsigned poly_id = obj->get_id();
+  this->remove(obj);
+  obj_list.erase(poly_id);
+
+  // remove the vertices
+  vcl_vector<bwm_soview2D_vertex*>  v = vert_list[poly_id];
+  for (unsigned i=0; i<v.size(); i++) {
+    this->remove(v[i]);
+  }
+  vert_list.erase(poly_id);
+
+  unsigned frame = this->video_istr_->frame_number();
+
+  unsigned poly_idx = this->id_pos_map_[poly_id];
+
+  this->frame_polygon_map_[frame].erase(this->frame_polygon_map_[frame].begin()+poly_idx);
+
+  this->frame_change_map_[frame].erase(this->frame_change_map_[frame].begin()+poly_idx);
+
+  this->id_pos_map_.clear();
+
+  for(unsigned i = 0; i < this->frame_polygon_map_[frame].size(); ++i )
+	  this->id_pos_map_[this->frame_polygon_map_[frame][i]->get_id()] = i;
+
+  this->post_redraw();
+}
+
+void bwm_observer_video::delete_all()
+{
+	unsigned frame = this->video_istr_->frame_number();
+	this->clear_objects();
+	this->frame_polygon_map_[frame].clear();
+	this->frame_change_map_[frame].clear();
+	this->id_pos_map_.clear();
+	this->display_current_frame();
+}
+
+void bwm_observer_video::delete_all_frames()
+{
+	this->clear_objects();
+	this->frame_polygon_map_.clear();
+	this->frame_change_map_.clear();
+	this->id_pos_map_.clear();
+	this->display_current_frame();
+}
+
+void bwm_observer_video::init_mask()
+{
+	vcl_map<unsigned, vcl_vector< vcl_string> >::iterator 
+		frame_itr, frame_end = this->frame_change_map_.end();
+
+	for( frame_itr = this->frame_change_map_.begin(); frame_itr != frame_end; ++frame_itr )
+	{
+		vcl_vector<vcl_string>::iterator string_itr, string_end = frame_itr->second.end();
+
+		for( string_itr = frame_itr->second.begin(); string_itr != string_end; ++string_itr )
+			*string_itr = "no change";
+	}//end frame iteration
+}
+
+void bwm_observer_video::add_poly_to_mask()
+{
+	unsigned frame = this->video_istr_->frame_number();
+	vcl_vector<vgui_soview2D*> polys = get_selected_objects(POLYGON_TYPE);
+	for( unsigned i = 0; i < polys.size(); ++i )
+	{
+		unsigned poly_idx = this->id_pos_map_[polys[i]->get_id()];
+		this->frame_change_map_[frame][poly_idx] = this->change_type_;
+	}
+}
+
+void bwm_observer_video::remove_poly_from_mask()
+{
+	unsigned frame = this->video_istr_->frame_number();
+	vcl_vector<vgui_soview2D*> polys = get_selected_objects(POLYGON_TYPE);
+	for( unsigned i = 0; i < polys.size(); ++i )
+	{
+		unsigned poly_idx = this->id_pos_map_[polys[i]->get_id()];
+		this->frame_change_map_[frame][poly_idx] = "no change";
+	}
+}
+
+bool bwm_observer_video::save_changes_binary()
+{
+	vcl_string fname = bwm_utils::select_file();
+	vsl_b_ofstream os(fname);
+
+	// total number of frames but there may not be a change polygon at a frame
+
+	vcl_map<unsigned, unsigned> frame_num_changes;
+
+	vcl_map<unsigned, vcl_vector< vcl_string> >::const_iterator 
+		frame_change_itr, frame_change_end = this->frame_change_map_.end();
+
+	for( frame_change_itr = this->frame_change_map_.begin(); frame_change_itr != frame_change_end; ++frame_change_itr )
+	{
+		vcl_vector< vcl_string >::const_iterator string_itr, string_end = frame_change_itr->second.end();
+
+		unsigned nchanges = 0;
+		for( string_itr = frame_change_itr->second.begin(); string_itr != string_end; ++string_itr )
+		{
+			if( string_itr->compare("no change") != 0 )
+				++nchanges;
+		}//end string vector iteration
+
+		if( nchanges > 0 )
+			frame_num_changes[frame_change_itr->first] = nchanges;
+	}//end frame iteration
+
+	
+	if( frame_num_changes.size() > 0 )
+	{
+		//write the number of frames that have a change
+		vsl_b_write(os,frame_num_changes.size());
+
+		vcl_map<unsigned, unsigned>::const_iterator frame_itr, frame_end = frame_num_changes.end();
+
+		for( frame_itr = frame_num_changes.begin(); frame_itr != frame_end; ++frame_itr )
+		{
+			//write the frame number
+			vsl_b_write(os,frame_itr->first);
+
+			//write the number of changes
+			vsl_b_write(os,frame_itr->second);
+
+			for( unsigned i = 0; i < this->frame_change_map_[frame_itr->first].size(); ++i )
+			{
+				if( this->frame_change_map_[frame_itr->first][i].compare("no change") != 0 )
+				{
+					//write the polygon
+					vsl_b_write(os,this->frame_polygon_map_[frame_itr->first][i].as_pointer());
+					//write the change type
+					vsl_b_write(os,this->frame_change_map_[frame_itr->first][i]);
+				}
+			}//end string iteration
+		}//end frame iteration
+			
+		
+	} //end if( nframes > 0 )
+
+	return true;
+}
+
+bool bwm_observer_video::load_changes_binary()
+{
+	vcl_string fname = bwm_utils::select_file();
+	vsl_b_ifstream is(fname);
+
+	// total number of frames but there may not be a change polygon at a frame
+	unsigned nframes = 0;
+
+	vsl_b_read(is, nframes);
+
+	if( nframes > 0 )
+	{
+		for( unsigned frame_idx = 0; frame_idx < nframes; ++frame_idx )
+		{
+			//read frame number
+			unsigned frame;
+			vsl_b_read(is, frame);
+
+			//read number of changes
+			unsigned nchanges;
+			vsl_b_read(is, nchanges);
+
+			for( unsigned i = 0; i < nchanges; ++i )
+			{
+				//read the polygon
+				vsol_polygon_2d* polygon_ptr = new vsol_polygon_2d;
+				vsl_b_read(is, polygon_ptr);
+				vsol_polygon_2d_sptr polygon_sptr(polygon_ptr);
+				
+				this->frame_polygon_map_[frame].push_back(polygon_sptr);
+
+				//read the change type
+				vcl_string change_type;
+				vsl_b_read(is,change_type);
+				this->frame_change_map_[frame].push_back(change_type);
+
+			}//end change iteration
+
+
+		}//end frame iteration
+		
+	} //end if( nframes > 0 )
+
+	this->display_current_frame();
+
+	return true;
+
 }

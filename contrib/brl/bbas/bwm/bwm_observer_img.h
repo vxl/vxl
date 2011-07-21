@@ -63,7 +63,7 @@ class bwm_observer_img : public bgui_vsol2D_tableau
 
   unsigned create_box(vsol_box_2d_sptr);
 
-  unsigned create_polygon(vsol_polygon_2d_sptr);
+  virtual unsigned create_polygon(vsol_polygon_2d_sptr);
 
   unsigned create_polyline(vsol_polyline_2d_sptr);
 
@@ -82,7 +82,7 @@ class bwm_observer_img : public bgui_vsol2D_tableau
 
   void delete_selected();
 
-  void delete_all();
+  virtual void delete_all();
 
   void hist_plot();
 
@@ -125,16 +125,16 @@ class bwm_observer_img : public bgui_vsol2D_tableau
 
   vcl_string image_path() const {return img_tab_->file_name();}
 
-  void init_mask();
+  virtual void init_mask();
   //: sets the change type for ground truth areas
   void set_change_type();
-  void add_poly_to_mask();
+  virtual void add_poly_to_mask();
   //void add_dontcare_poly_to_mask();
-  void remove_poly_from_mask();
+  virtual void remove_poly_from_mask();
   //void create_mask();
   vil_image_view_base_sptr mask();
-  bool save_changes_binary();
-  bool load_changes_binary();
+  virtual bool save_changes_binary();
+  virtual bool load_changes_binary();
 
   //: lock/unlock the status display
   void lock_vgui_status(bool lock){lock_vgui_status_ = lock;}
@@ -205,7 +205,7 @@ class bwm_observer_img : public bgui_vsol2D_tableau
   //: polygon selected to copy
   vgui_soview2D* copy_obj_;
 
-  void delete_polygon(vgui_soview* obj);
+  virtual void delete_polygon(vgui_soview* obj);
   void delete_vertex(vgui_soview* vertex);
 
   //: returns the type of selected object iff there is one object. If warn is true, then issue a warning if the object is not found.
@@ -215,6 +215,8 @@ class bwm_observer_img : public bgui_vsol2D_tableau
   vcl_vector<vgui_soview2D*> get_selected_objects(vcl_string type);
 
   vcl_string tab_name_;
+
+  vcl_vector<vcl_string> change_choices_;
 
   unsigned row_; //location of observer in grid
   unsigned col_;

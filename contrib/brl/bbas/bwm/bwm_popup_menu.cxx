@@ -86,6 +86,14 @@ void bwm_popup_menu::get_menu(vgui_menu &menu)
   selmenu.add( "Delete All",
                new vgui_command_simple<bwm_tableau_img>(img_tab,&bwm_tableau_img::clear_all),
                vgui_key('a'), vgui_modifier(vgui_SHIFT));
+
+  selmenu.separator();
+
+  selmenu.add( "Delete objects on all frames",
+			   new vgui_command_simple<bwm_tableau_img>(img_tab,&bwm_tableau_img::clear_all_frames) );
+
+  selmenu.separator();
+
   submenu.add( "Delete ", selmenu);
 
   menu.add( "2D Objects", submenu);
@@ -299,6 +307,7 @@ void bwm_popup_menu::get_menu(vgui_menu &menu)
 
     del_menu.add( "Delete All",
                   new vgui_command_simple<bwm_tableau_cam>(cam_tab,&bwm_tableau_cam::delete_all));
+
     mesh_submenu.separator();
     mesh_submenu.add("Delete", del_menu);
     menu.separator();

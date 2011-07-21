@@ -62,6 +62,8 @@ class bwm_tableau_img : public bwm_tableau, public bgui_picker_tableau
   //: Deletes all the objects created so far
   void clear_all();
 
+  virtual void clear_all_frames();
+
   //: deselects all the selected objects on the tableau
   void deselect_all();
 

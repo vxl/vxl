@@ -144,6 +144,13 @@ void bwm_tableau_img::clear_all()
   my_observer_->delete_all();
 }
 
+//if only an image tableau is loaded this will effectively
+//be the same command. Only to be overridden when a video tableau is loaded.
+void bwm_tableau_img::clear_all_frames()
+{
+	my_observer_->delete_all();
+}
+
 void bwm_tableau_img::intensity_profile()
 {
   float x1, y1, x2, y2;
