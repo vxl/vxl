@@ -1,8 +1,6 @@
 #include <testlib/testlib_test.h>
 #include <brad/brad_illum_util.h>
 #include <bsta/bsta_histogram.h>
-#include <bsta/io/bsta_io_histogram.h>
-#include <vsl/vsl_binary_io.h>
 #include <vcl_cstdlib.h> // for rand()
 #include <vcl_fstream.h>
 
