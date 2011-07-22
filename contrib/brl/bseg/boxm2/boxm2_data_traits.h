@@ -12,6 +12,7 @@
 #include <vnl/vnl_vector_fixed.h>
 #include <vcl_iostream.h>
 class boxm2_mog3_grey_processor;
+class boxm2_gauss_grey_processor;
 
 enum boxm2_data_type
 {
@@ -30,6 +31,7 @@ enum boxm2_data_type
   BOXM2_AUX1,
   BOXM2_AUX2,
   BOXM2_AUX3,
+  BOXM2_GAUSS_GREY,
   BOXM2_UNKNOWN
 };
 
@@ -88,6 +90,18 @@ class boxm2_data_traits<BOXM2_GAUSS_RGB>
   static vcl_size_t datasize() { return sizeof(datatype); }
   static vcl_string prefix(const vcl_string& identifier = "")
   { if (!identifier.size()) return "boxm2_gauss_rgb"; else return "boxm2_gauss_rgb_"+identifier; }
+};
+
+//: simple gaussian with a sigma and std dev
+template<>
+class boxm2_data_traits<BOXM2_GAUSS_GREY>
+{
+ public:
+  typedef boxm2_gauss_grey_processor processor;
+  typedef vnl_vector_fixed<unsigned char, 2> datatype;
+  static vcl_size_t datasize() { return sizeof(datatype); }
+  static vcl_string prefix(const vcl_string& identifier = "")
+  { if (!identifier.size()) return "boxm2_gauss_grey"; else return "boxm2_gauss_grey_"+identifier; }
 };
 
 template<>
@@ -238,6 +252,9 @@ class boxm2_data_info
 
     if (prefix.find(boxm2_data_traits<BOXM2_GAUSS_RGB>::prefix()) != vcl_string::npos)
       return boxm2_data_traits<BOXM2_GAUSS_RGB>::datasize();
+
+    if (prefix.find(boxm2_data_traits<BOXM2_GAUSS_GREY>::prefix()) != vcl_string::npos)
+      return boxm2_data_traits<BOXM2_GAUSS_GREY>::datasize();
 
     if (prefix == boxm2_data_traits<BOXM2_NUM_OBS_SINGLE>::prefix())
       return boxm2_data_traits<BOXM2_NUM_OBS_SINGLE>::datasize();
