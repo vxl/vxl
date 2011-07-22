@@ -100,10 +100,10 @@ int main2(int argc, char*argv[])
     }
     ++line_no;
   }
-  if (ii != n) vcl_cerr << "WARNING: input was shorted than requested line numbers\n";
+  if (ii != n) vcl_cerr << "WARNING: input was shorter than requested line numbers\n";
 
 
-// write data to output
+  // write data to output
   vcl_ostream *out_stream=0;
   vcl_ofstream out_file;
   if (out_fname() == "-")
@@ -128,7 +128,7 @@ int main(int argc, char*argv[])
 {
   try
   {
-    main2(argc, argv);
+    return main2(argc, argv);
   }
   catch (vcl_exception& e)
   {
