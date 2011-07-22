@@ -16,15 +16,17 @@ class bbas_1d_array_float: public vbl_ref_count
 
 typedef vbl_smart_ptr<bbas_1d_array_float> bbas_1d_array_float_sptr;
 
-//: Binary write boxm_render_probe_manager scene to stream
+//: Binary write array float to stream
 void vsl_b_write(vsl_b_ostream & os, bbas_1d_array_float const& a);
 
-//: Binary load boxm_render_probe_manager scene from stream.
+//: Binary write  array float pointer to stream
+void vsl_b_write(vsl_b_ostream& os, const bbas_1d_array_float* &b);
+
+//: Binary load array float pointer from stream.
 void vsl_b_read(vsl_b_istream & is, bbas_1d_array_float &a);
 
+//: Binary load array float pointer from stream.
 void vsl_b_read(vsl_b_istream& is, bbas_1d_array_float* b);
 
-//: Binary write  scene pointer to stream
-void vsl_b_write(vsl_b_ostream& os, const bbas_1d_array_float* &b);
 
 #endif
