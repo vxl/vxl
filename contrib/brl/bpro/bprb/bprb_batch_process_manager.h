@@ -66,6 +66,15 @@ class bprb_batch_process_manager : public bprb_process_manager<bprb_batch_proces
   //: Run the current process
   bool run_process();
 
+  //: finish the current process
+  bool finish_process();
+
+  //: set verbose on
+  bool verbose(){verbose_ = true; return verbose_;}
+
+  //: set verbose off
+  bool not_verbose(){verbose_ = false; return verbose_;}
+
   //: Debug purposes
   void print_db();
 
@@ -88,6 +97,8 @@ class bprb_batch_process_manager : public bprb_process_manager<bprb_batch_proces
 
   // Members
   bprb_process_sptr current_process_;
+
+  bool verbose_;
 };
 
 #endif // bprb_batch_process_manager_h_

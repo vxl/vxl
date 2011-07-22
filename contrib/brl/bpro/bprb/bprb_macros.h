@@ -33,7 +33,8 @@
 
 #define REG_PROCESS_FUNC_CONS_INIT(proc, T, func, nm) \
  T ::register_process( bprb_process_sptr( new proc(func, nm, func##_cons, func##_init, 0) ) ) 
-
+#define REG_PROCESS_FUNC_CONS_FIN(proc, T, func, nm) \
+ T ::register_process( bprb_process_sptr( new proc(func, nm, func##_cons, 0, func##_finish) ) ) 
 #define REG_PROCESS_FUNC_CONS_INIT_FIN(proc, T, func, nm) \
  T ::register_process( bprb_process_sptr( new proc(func, nm, func##_cons, func##_init, func##_finish) ) ) 
 
@@ -62,6 +63,11 @@ bool func##_cons(bprb_func_process& pro)
 bool func(bprb_func_process& pro); \
 bool func##_cons(bprb_func_process& pro); \
 bool func##_init(bprb_func_process& pro)
+
+#define DECLARE_FUNC_CONS_FIN(func) \
+bool func(bprb_func_process& pro); \
+bool func##_cons(bprb_func_process& pro); \
+bool func##_finish(bprb_func_process& pro)
 
 #define DECLARE_FUNC_CONS_INIT_FIN(func) \
 bool func(bprb_func_process& pro); \

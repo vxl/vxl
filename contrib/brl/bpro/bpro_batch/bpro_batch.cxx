@@ -10,6 +10,7 @@
 #include <brdb/brdb_selection.h>
 #include <brdb/brdb_database_manager.h>
 #include <bpro/core/bbas_pro/bbas_1d_array_float.h>
+#include <bpro/core/bbas_pro/bbas_1d_array_string.h>
 
 static PyObject *init_process(PyObject *self, PyObject *args);
 static PyObject *set_input_bool(PyObject *self, PyObject *args);
@@ -28,6 +29,9 @@ static PyObject *process_print_default_params(PyObject *self, PyObject *args);
 static PyObject *process_init(PyObject *self, PyObject *args);
 static PyObject *set_params_process(PyObject *self, PyObject *args);
 static PyObject *run_process(PyObject *self, PyObject *args);
+static PyObject *finish_process(PyObject *self, PyObject *args);
+static PyObject *verbose(PyObject *self, PyObject *args);
+static PyObject *not_verbose(PyObject *self, PyObject *args);
 static PyObject *commit_output(PyObject *self, PyObject *args);
 static PyObject *set_input_from_db(PyObject* self, PyObject *args);
 static PyObject *remove_data(PyObject *self, PyObject *args);
@@ -35,8 +39,12 @@ static PyObject *remove_data_obj(PyObject *self, PyObject *args);
 static PyObject *print_db(PyObject *self, PyObject *args);
 static PyObject *clear(PyObject *self, PyObject *args);
 static PyObject *get_bbas_1d_array_float(PyObject *self, PyObject *args);
+static PyObject *get_bbas_1d_array_string(PyObject *self, PyObject *args);
 static PyObject *set_stdout(PyObject *self, PyObject *args);
 static PyObject *reset_stdout(PyObject *self, PyObject *args);
+
+// a flag to stop informative printout of arguments
+static bool verbose_state = true;
 
 PyMethodDef batch_methods[] =
   {
@@ -62,6 +70,9 @@ PyMethodDef batch_methods[] =
     {get_in_unsigned, get_input_unsigned, METH_VARARGS,get_in_unsigned_com},
     {proc_init, process_init, METH_VARARGS,proc_init_com},
     {run_proc, run_process, METH_VARARGS,run_proc_com},
+    {fin_proc, finish_process, METH_VARARGS,fin_proc_com},
+    {verb, verbose, METH_VARARGS,verb_com},
+    {not_verb, not_verbose, METH_VARARGS,not_verb_com},
     {comt_out, commit_output, METH_VARARGS,comt_out_com},
     {set_idb, set_input_from_db, METH_VARARGS,set_idb_com},
     {rm_dat, remove_data, METH_VARARGS,rm_dat_com},
@@ -78,7 +89,8 @@ PyObject *init_process(PyObject * /*self*/, PyObject *args)
   if (!PyArg_ParseTuple(args, "s:init_process", &name))
     return NULL;
   vcl_string n(name);
-  vcl_cout << n << '\n';
+  if(verbose_state)
+    vcl_cout << n << '\n';
   bool result = bprb_batch_process_manager::instance()->init_process(n);
   return Py_BuildValue("b", result);
 }
@@ -90,7 +102,8 @@ PyObject *set_input_bool(PyObject * /*self*/, PyObject *args)
   if (!PyArg_ParseTuple(args, "ib:set_input_bool", &input, &value))
     return NULL;
   brdb_value_sptr v = new brdb_value_t<bool>(value);
-  vcl_cout << "input[" << input << "](bool): " << value << '\n';
+  if(verbose_state)
+    vcl_cout << "input[" << input << "](bool): " << value << '\n';
   bool result = bprb_batch_process_manager::instance()->set_input(input, v);
   return Py_BuildValue("b", result);
 }
@@ -103,7 +116,8 @@ set_input_string(PyObject * /*self*/, PyObject *args)
   if (!PyArg_ParseTuple(args, "is:set_input_string", &input, &value))
     return NULL;
   brdb_value_sptr v = new brdb_value_t<vcl_string>(value);
-  vcl_cout << "input[" << input << "](string): " << value << '\n';
+  if(verbose_state)
+    vcl_cout << "input[" << input << "](string): " << value << '\n';
   bool result = bprb_batch_process_manager::instance()->set_input(input, v);
   return Py_BuildValue("b", result);
 }
@@ -115,7 +129,8 @@ PyObject *set_input_unsigned(PyObject * /*self*/, PyObject *args)
   if (!PyArg_ParseTuple(args, "ii:set_input_unsigned", &input, &ivalue))
     return NULL;
   brdb_value_sptr iv = new brdb_value_t<unsigned>(ivalue);
-  vcl_cout << "input[" << input << "](unsigned): " << ivalue << '\n';
+  if(verbose_state)
+    vcl_cout << "input[" << input << "](unsigned): " << ivalue << '\n';
   bool result = bprb_batch_process_manager::instance()->set_input(input, iv);
   return Py_BuildValue("b", result);
 }
@@ -127,7 +142,8 @@ PyObject *set_input_int(PyObject * /*self*/, PyObject *args)
   if (!PyArg_ParseTuple(args, "ii:set_input_int", &input, &ivalue))
     return NULL;
   brdb_value_sptr iv = new brdb_value_t<int>(ivalue);
-  vcl_cout << "input[" << input << "](int): " << ivalue << '\n';
+  if(verbose_state)
+    vcl_cout << "input[" << input << "](int): " << ivalue << '\n';
   bool result = bprb_batch_process_manager::instance()->set_input(input, iv);
   return Py_BuildValue("b", result);
 }
@@ -139,7 +155,8 @@ PyObject *set_input_long(PyObject * /*self*/, PyObject *args)
   if (!PyArg_ParseTuple(args, "il:set_input_long", &input, &value))
     return NULL;
   brdb_value_sptr v = new brdb_value_t<long>(value);
-  vcl_cout << "input[" << input << "](long): " << value << '\n';
+  if(verbose_state)
+    vcl_cout << "input[" << input << "](long): " << value << '\n';
   bool result = bprb_batch_process_manager::instance()->set_input(input, v);
   return Py_BuildValue("b", result);
 }
@@ -151,7 +168,8 @@ PyObject *set_input_float(PyObject * /*self*/, PyObject *args)
   if (!PyArg_ParseTuple(args, "if:set_input_float", &input, &value))
     return NULL;
   brdb_value_sptr v = new brdb_value_t<float>(value);
-  vcl_cout << "input[" << input << "](float): " << value << '\n';
+  if(verbose_state)
+    vcl_cout << "input[" << input << "](float): " << value << '\n';
   bool result = bprb_batch_process_manager::instance()->set_input(input, v);
   return Py_BuildValue("b", result);
 }
@@ -163,7 +181,8 @@ PyObject *set_input_double(PyObject * /*self*/, PyObject *args)
   if (!PyArg_ParseTuple(args, "id:set_input_double", &input, &value))
     return NULL;
   brdb_value_sptr v = new brdb_value_t<double>(value);
-  vcl_cout << "input[" << input << "](double): " << value << '\n';
+  if(verbose_state)
+    vcl_cout << "input[" << input << "](double): " << value << '\n';
   bool result = bprb_batch_process_manager::instance()->set_input(input, v);
   return Py_BuildValue("b", result);
 }
@@ -379,6 +398,26 @@ PyObject *run_process(PyObject * /*self*/, PyObject * /*args*/)
   return Py_BuildValue("b", result);
 }
 
+PyObject *finish_process(PyObject * /*self*/, PyObject * /*args*/)
+{
+  bool result = bprb_batch_process_manager::instance()->finish_process();
+  return Py_BuildValue("b", result);
+}
+
+PyObject *verbose(PyObject * /*self*/, PyObject * /*args*/)
+{
+  bool result = bprb_batch_process_manager::instance()->verbose();
+  verbose_state = result;
+  return Py_BuildValue("b", result);
+}
+
+PyObject *not_verbose(PyObject * /*self*/, PyObject * /*args*/)
+{
+  bool result = bprb_batch_process_manager::instance()->not_verbose();
+  verbose_state = result;
+  return Py_BuildValue("b", result);
+}
+
 PyObject *commit_output(PyObject * /*self*/, PyObject *args)
 {
   unsigned id;
@@ -500,6 +539,7 @@ PyObject *get_bbas_1d_array_float(PyObject * /*self*/, PyObject *args)
   return array_1d;
 }
 
+
 PyObject *set_stdout(PyObject * /*self*/, PyObject *args)
 {
   const char* file;
@@ -530,5 +570,6 @@ register_basic_datatypes()
   REGISTER_DATATYPE(float);
   REGISTER_DATATYPE(double);
   REGISTER_DATATYPE(bbas_1d_array_float_sptr);
+  REGISTER_DATATYPE(bbas_1d_array_string_sptr);
 }
 
