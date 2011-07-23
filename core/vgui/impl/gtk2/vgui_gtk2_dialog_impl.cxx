@@ -628,6 +628,12 @@ bool vgui_gtk2_dialog_impl::ask()
     for (vcl_vector<element>::iterator e_iter = elements.begin();
          e_iter != elements.end(); ++e_iter, ++w_iter) {
       element l = *e_iter;
+
+      if ( l.type == line_br ) { // skip line break
+        --w_iter;
+        continue;
+      }
+
       if (l.type == int_elem ||
           l.type == long_elem ||
           l.type == float_elem ||
