@@ -12,7 +12,7 @@
 #include <boxm2/ocl/boxm2_ocl_util.h>
 #include <boxm2/ocl/boxm2_opencl_cache.h>
 #include <boxm2/ocl/boxm2_ocl_util.h>
-#include <boxm2/view/boxm2_view_utils.h>
+
 #include <bocl/bocl_device.h>
 #include <bocl/bocl_kernel.h>
 #include <brdb/brdb_value.h>
