@@ -6,6 +6,7 @@ TESTMAIN := test_driver.cxx
 
 TESTS += test_refine.cxx
 TESTS += test_image_pyramid.cxx
+TESTS += test_process_mains.cxx
 
 MINI_PROG_SOURCES += test_include.cxx
 

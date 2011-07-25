@@ -208,3 +208,4 @@ endif
 
 $(VXLROOT)/core/vnl/vnl_config.h: vnl_config.h.in
 	perl -p -e 's/\@VNL_CONFIG_CHECK_BOUNDS\@/1/;s/\@VNL_CONFIG_LEGACY_METHODS\@/0/;s/\@VNL_CONFIG_THREAD_SAFE\@/1/;' $^ > $@
+
