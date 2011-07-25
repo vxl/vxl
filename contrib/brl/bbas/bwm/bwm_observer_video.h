@@ -22,13 +22,13 @@ class bwm_observer_video : public bwm_observer_cam
 
   bwm_observer_video(bgui_image_tableau_sptr const& img,
                      vpgl_camera<double> *camera, vcl_string cam_path)
-    : bwm_observer_cam(img, camera, cam_path), display_corrs_(false),
-    display_world_pts_(false), play_video_(false), time_interval_(0.0f), 
+  : bwm_observer_cam(img, camera, cam_path), display_corrs_(false),
+    display_world_pts_(false), play_video_(false), time_interval_(0.0f),
     video_istr_(0), cam_istr_(0), tracked_corr_(0)
     {init();}
 
   bwm_observer_video(bgui_image_tableau_sptr const& img)
-    : bwm_observer_cam(img), display_corrs_(false),
+  : bwm_observer_cam(img), display_corrs_(false),
     display_world_pts_(false), play_video_(false),
     time_interval_(0.0f), video_istr_(0), cam_istr_(0), tracked_corr_(0)
     {init();}
@@ -109,7 +109,7 @@ class bwm_observer_video : public bwm_observer_cam
 
   //: turn on/off world point display
   void toggle_corr_display(){display_corrs_ = !display_corrs_;
-  if(!display_corrs_) this->clear_video_corrs_display();}
+  if (!display_corrs_) this->clear_video_corrs_display();}
 
   //: turn on/off world point display
   void toggle_world_pt_display(){display_world_pts_ = !display_world_pts_;}
@@ -133,7 +133,7 @@ class bwm_observer_video : public bwm_observer_cam
   bool extract_histograms(vcl_vector<bsta_histogram<float> >& hists);
 
   vcl_map<unsigned, vcl_vector<vsol_polygon_2d_sptr> > frame_polygon_map()
-	{ return this->frame_polygon_map_; }
+  { return this->frame_polygon_map_; }
 
   virtual unsigned create_polygon(vsol_polygon_2d_sptr);
 
@@ -163,10 +163,8 @@ class bwm_observer_video : public bwm_observer_cam
   //: read /frame/change type/polygon relation binary file
   virtual bool load_changes_binary();
 
-
-
-
   //Internals --------------------------------------- -------------------------
+
  protected:
   vgui_style_sptr EDIT_STYLE;
   vgui_style_sptr CORR_STYLE;

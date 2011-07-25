@@ -294,14 +294,14 @@ void bwm_observer_img::paste(float x, float y)
 void bwm_observer_img::clear_objects()
 {
   vcl_map<unsigned, bgui_vsol_soview2D*>::iterator oit = obj_list.begin();
-  for(; oit!=obj_list.end(); ++oit)
+  for (; oit!=obj_list.end(); ++oit)
     this->remove((*oit).second);
   obj_list.clear();
   vcl_map<unsigned, vcl_vector<bwm_soview2D_vertex* > >::iterator vsit =
     vert_list.begin();
-  for(; vsit != vert_list.end(); ++vsit){
+  for (; vsit != vert_list.end(); ++vsit){
     vcl_vector<bwm_soview2D_vertex* >::iterator vit = (*vsit).second.begin();
-    for(; vit != (*vsit).second.end(); ++vit)
+    for (; vit != (*vsit).second.end(); ++vit)
       this->remove(*vit);
   }
   vert_list.clear();
@@ -347,7 +347,7 @@ vgui_soview2D* bwm_observer_img::get_selected_object(vcl_string type,
     return obj;
   }
 
-  if(warn)
+  if (warn)
     vcl_cerr << "\nThe number of selected " << type << " is "
              << objs.size() << ". Please select only one!!!\n";
   return 0;
@@ -857,25 +857,24 @@ void bwm_observer_img::init_mask()
 
 void bwm_observer_img::set_change_type()
 {
-
   unsigned int type = 0;
   vgui_dialog type_dialog("Change Type");
 
-  if(this->change_choices_.empty())
+  if (this->change_choices_.empty())
   {
-	  this->change_choices_.push_back("change");
-	  this->change_choices_.push_back("don't care");
-	  this->change_choices_.push_back("vehicle");
-	  this->change_choices_.push_back("building");
-	  this->change_choices_.push_back("shadow");
-	  this->change_choices_.push_back("sewage");
-	  this->change_choices_.push_back("car");
-	  this->change_choices_.push_back("pick-up truck");
-	  this->change_choices_.push_back("utility");
-	  this->change_choices_.push_back("van");
-	  this->change_choices_.push_back("suv");
-	  this->change_choices_.push_back("minivan");
-	  this->change_choices_.push_back("New Change Type");
+    this->change_choices_.push_back("change");
+    this->change_choices_.push_back("don't care");
+    this->change_choices_.push_back("vehicle");
+    this->change_choices_.push_back("building");
+    this->change_choices_.push_back("shadow");
+    this->change_choices_.push_back("sewage");
+    this->change_choices_.push_back("car");
+    this->change_choices_.push_back("pick-up truck");
+    this->change_choices_.push_back("utility");
+    this->change_choices_.push_back("van");
+    this->change_choices_.push_back("suv");
+    this->change_choices_.push_back("minivan");
+    this->change_choices_.push_back("New Change Type");
   }
   type_dialog.choice("Change Type", this->change_choices_, type);
   if (!type_dialog.ask())
@@ -888,28 +887,28 @@ void bwm_observer_img::set_change_type()
 
   if (this->change_choices_[type] == "New Change Type")
   {
-	  vgui_dialog new_change_dialog("New Change Type");
-	  vcl_string new_change_type;
-	  new_change_dialog.field("New Change Type", new_change_type);
-	  new_change_dialog.ask();
+    vgui_dialog new_change_dialog("New Change Type");
+    vcl_string new_change_type;
+    new_change_dialog.field("New Change Type", new_change_type);
+    new_change_dialog.ask();
 
-	  bool already_listed = false;
-	  for( unsigned i = 0; i < this->change_choices_.size(); ++i )
-	  {
-		  if( this->change_choices_[i] == new_change_type )
-			  already_listed = true;
-	  }
-	  if( !already_listed )
-	  {
-		  this->change_choices_.pop_back();
-		  this->change_choices_.push_back(new_change_type);
-		  this->change_choices_.push_back("New Change Type");
-	  }
+    bool already_listed = false;
+    for ( unsigned i = 0; i < this->change_choices_.size(); ++i )
+    {
+      if ( this->change_choices_[i] == new_change_type )
+        already_listed = true;
+    }
+    if ( !already_listed )
+    {
+      this->change_choices_.pop_back();
+      this->change_choices_.push_back(new_change_type);
+      this->change_choices_.push_back("New Change Type");
+    }
 
-	  this->change_type_ = new_change_type;
+    this->change_type_ = new_change_type;
   }
   else
-	change_type_ = this->change_choices_[type];
+    change_type_ = this->change_choices_[type];
 }
 
 

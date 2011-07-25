@@ -30,38 +30,39 @@
 #include <vidl/vidl_frame.h>
 #include <vidl/vidl_convert.h>
 #include <vsol/vsol_polygon_2d.h>
+
 bool bwm_observer_video::handle(const vgui_event &e)
 {
   if (!video_istr_) return bwm_observer_cam::handle(e);
   if (e.type==vgui_KEY_PRESS && e.key == vgui_CURSOR_LEFT)
-    {
-      unsigned cur_frame =  video_istr_->frame_number();
-      if (e.modifier == vgui_SHIFT) {
-        if (cur_frame<5)
-          this->seek(0);
-        else
-          this->seek(cur_frame-5);
-      }
+  {
+    unsigned cur_frame =  video_istr_->frame_number();
+    if (e.modifier == vgui_SHIFT) {
+      if (cur_frame<5)
+        this->seek(0);
       else
-        if (cur_frame > 0)
-          this->seek(cur_frame-1);
-        else seek(0);
-      return true;
+        this->seek(cur_frame-5);
     }
+    else
+      if (cur_frame > 0)
+        this->seek(cur_frame-1);
+      else seek(0);
+    return true;
+  }
   if (e.type==vgui_KEY_PRESS && e.key == vgui_CURSOR_RIGHT)
-    {
-      unsigned cur_frame =  video_istr_->frame_number();
-      if (e.modifier == vgui_SHIFT)
-        this->seek(cur_frame+5);
-      else
-        this->seek(cur_frame+1);
-      return true;
-    }
+  {
+    unsigned cur_frame =  video_istr_->frame_number();
+    if (e.modifier == vgui_SHIFT)
+      this->seek(cur_frame+5);
+    else
+      this->seek(cur_frame+1);
+    return true;
+  }
   if (e.type==vgui_KEY_PRESS && e.key == 'a')
-    {
-      this->add_match();
-      return true;
-    }
+  {
+    this->add_match();
+    return true;
+  }
   return bwm_observer_cam::handle(e);
 }
 
@@ -134,77 +135,79 @@ void bwm_observer_video::display_corr_index()
   tt->clear();
   unsigned cur_frame = video_istr_->frame_number();
   vcl_map<unsigned, bwm_video_corr_sptr>::iterator cit = video_corrs_.begin();
-  for (;cit != video_corrs_.end(); ++cit)
-    {
-      bwm_video_corr_sptr c = (*cit).second;
-      vgl_point_2d<double> pt;
-      if (!c->match(cur_frame, pt)) continue;
-      unsigned index = (*cit).first;
-      vcl_stringstream ind_str;
-      ind_str << index;
-      float x = static_cast<float>(pt.x()+2.0);
-      float y = static_cast<float>(pt.y()-2.0);
-      tt->add(x, y, ind_str.str());
-    }
+  for (; cit != video_corrs_.end(); ++cit)
+  {
+    bwm_video_corr_sptr c = (*cit).second;
+    vgl_point_2d<double> pt;
+    if (!c->match(cur_frame, pt)) continue;
+    unsigned index = (*cit).first;
+    vcl_stringstream ind_str;
+    ind_str << index;
+    float x = static_cast<float>(pt.x()+2.0);
+    float y = static_cast<float>(pt.y()-2.0);
+    tt->add(x, y, ind_str.str());
+  }
   tt->post_redraw();
 }
 
 void bwm_observer_video::display_current_frame()
 {
   if (video_istr_)
-    {
-      unsigned int frame_num = video_istr_->frame_number();
-      if (bwm_observer_mgr::instance()->in_corr_picking()) {
-        img_tab_->lock_linenum(true);
-        bwm_observer_img::lock_vgui_status(true);
-        display_corrs_ = false;
-      }
-      else {
-        if (!bwm_observer_img::vgui_status_on())
-          img_tab_->lock_linenum(false);
-        bwm_observer_img::lock_vgui_status(false);
-      }
-      if (frame_num == unsigned(-1))
-        vgui::out << "invalid frame\n";
-      else
-        vgui::out << "frame["<< frame_num <<"]\n";
+  {
+    unsigned int frame_num = video_istr_->frame_number();
+    if (bwm_observer_mgr::instance()->in_corr_picking()) {
+      img_tab_->lock_linenum(true);
+      bwm_observer_img::lock_vgui_status(true);
+      display_corrs_ = false;
+    }
+    else {
+      if (!bwm_observer_img::vgui_status_on())
+        img_tab_->lock_linenum(false);
+      bwm_observer_img::lock_vgui_status(false);
+    }
+    if (frame_num == unsigned(-1))
+      vgui::out << "invalid frame\n";
+    else
+      vgui::out << "frame["<< frame_num <<"]\n";
 
-      vidl_frame_sptr frame = video_istr_->current_frame();
-      if (!frame)
-        img_tab_->set_image_resource(NULL);
-      else {
+    vidl_frame_sptr frame = video_istr_->current_frame();
+    if (!frame)
+      img_tab_->set_image_resource(NULL);
 #if 0  // Now not needed since vidl handles these types
- else if (frame->pixel_format() == VIDL_PIXEL_FORMAT_MONO_16) {
-   static vil_image_view<vxl_uint_16> img;
-   if (vidl_convert_to_view(*frame,img))
-     img_tab_->set_image_view(img);
-   else
-     img_tab_->set_image_resource(NULL);
- }
- else {
-   static vil_image_view<vxl_byte> img;
-   if (vidl_convert_to_view(*frame,img,VIDL_PIXEL_COLOR_RGB))
-     img_tab_->set_image_view(img);
-   else
-     img_tab_->set_image_resource(NULL);
- }
+    else if (frame->pixel_format() == VIDL_PIXEL_FORMAT_MONO_16) {
+      static vil_image_view<vxl_uint_16> img;
+      if (vidl_convert_to_view(*frame,img))
+        img_tab_->set_image_view(img);
+      else
+        img_tab_->set_image_resource(NULL);
+    }
+    else if (frame->pixel_format() == VIDL_PIXEL_FORMAT_COLOR_RGB) {
+      static vil_image_view<vxl_byte> img;
+      if (vidl_convert_to_view(*frame,img,VIDL_PIXEL_COLOR_RGB))
+        img_tab_->set_image_view(img);
+      else
+        img_tab_->set_image_resource(NULL);
+    }
 #endif
- vil_image_view_base_sptr vb = vidl_convert_wrap_in_view(*frame);
- if (vb)
-   img_tab_->set_image_view(*vb);
-      }
+    else {
+      vil_image_view_base_sptr vb = vidl_convert_wrap_in_view(*frame);
+      if (vb)
+        img_tab_->set_image_view(*vb);
     }
+  }
   if (bwm_observer_mgr::instance()->in_corr_picking())
-    {
-      this->clear_video_corrs_display();
-      this->display_corr_track();
-    }else if(display_corrs_){
-      this->clear_video_corrs_display();
-      this->display_current_video_corrs();
-    }else{//haven't explicitly asked to display correpondences and are 
-      // not explicitly picking new ones.
-      this->clear_video_corrs_display();
-    }
+  {
+    this->clear_video_corrs_display();
+    this->display_corr_track();
+  }
+  else if (display_corrs_) {
+    this->clear_video_corrs_display();
+    this->display_current_video_corrs();
+  }
+  else {//haven't explicitly asked to display correspondences and are
+        // not explicitly picking new ones.
+    this->clear_video_corrs_display();
+  }
   this->display_corr_index();
   this->display_3d_objects();
   this->display_polygons_frame();
@@ -262,15 +265,15 @@ void bwm_observer_video::play()
   int count = 0;
 
   while (play_video_ && video_istr_->is_valid() && video_istr_->advance())
-    {
-      if (cam_istr_ && cam_istr_->is_valid())
-        cam_istr_->advance();
-      this->display_current_frame();
-      // Delay until the time interval has passed
-      while (t.all()<time_interval_) ;
-      t.mark();
-      ++count;
-    }
+  {
+    if (cam_istr_ && cam_istr_->is_valid())
+      cam_istr_->advance();
+    this->display_current_frame();
+    // Delay until the time interval has passed
+    while (t.all()<time_interval_) ;
+    t.mark();
+    ++count;
+  }
   long time = t2.all();
   vcl_cout << "average play time " << double(time)/count << vcl_endl;
 
@@ -312,11 +315,11 @@ bool bwm_observer_video::find_selected_video_corr(unsigned& frame,
     for (vcl_map<unsigned, bwm_soview2D_cross*>::iterator mit = (*fit).second.begin();
          mit != (*fit).second.end()&&!found; ++mit)
       if ((*mit).second == cross)
-        {
-          found = true;
-          frame = (*fit).first;
-          corr_index = (*mit).first;
-        }
+      {
+        found = true;
+        frame = (*fit).first;
+        corr_index = (*mit).first;
+      }
 
   return found;
 }
@@ -371,15 +374,15 @@ void bwm_observer_video::remove_selected_corr()
   vcl_map<unsigned, vcl_map<unsigned, bwm_soview2D_cross*> >::iterator cit;
   cit = corr_soview_map_.begin();
   for (; cit != corr_soview_map_.end(); ++cit)
-    {
-      vcl_map<unsigned, bwm_soview2D_cross*>& cm = (*cit).second;
-      vcl_map<unsigned, bwm_soview2D_cross*>::iterator  fit;
-      fit = cm.find(corr_index);
-      if (fit == cm.end())
-        continue;
-      this->remove((*fit).second);
-      cm.erase(fit);
-    }
+  {
+    vcl_map<unsigned, bwm_soview2D_cross*>& cm = (*cit).second;
+    vcl_map<unsigned, bwm_soview2D_cross*>::iterator  fit;
+    fit = cm.find(corr_index);
+    if (fit == cm.end())
+      continue;
+    this->remove((*fit).second);
+    cm.erase(fit);
+  }
   video_corrs_.erase(corr_index);
   // redisplay
   this->post_redraw();
@@ -403,24 +406,24 @@ void bwm_observer_video::select_closest_match()
   bool found_closest = false;
   vcl_map<unsigned, bwm_video_corr_sptr>::iterator cit = video_corrs_.begin();
   for (; cit != video_corrs_.end(); ++cit)
+  {
+    unsigned nframe=0;
+    if (!(*cit).second->nearest_frame(cur_frame, nframe))
+      continue;
+    if (nframe == cur_frame)
+      continue;
+    vgl_point_2d<double> ppt;
+    if (!(*cit).second->match(nframe, ppt))
+      continue;
+    double d = vgl_distance(pt, ppt);
+    if (d<min_dist)
     {
-      unsigned nframe=0;
-      if (!(*cit).second->nearest_frame(cur_frame, nframe))
-        continue;
-      if (nframe == cur_frame)
-        continue;
-      vgl_point_2d<double> ppt;
-      if (!(*cit).second->match(nframe, ppt))
-        continue;
-      double d = vgl_distance(pt, ppt);
-      if (d<min_dist)
-        {
-          min_dist = d;
-          corr_index = (*cit).second->id();
-          frame = nframe;
-          found_closest = true;
-        }
+      min_dist = d;
+      corr_index = (*cit).second->id();
+      frame = nframe;
+      found_closest = true;
     }
+  }
   if (!found_closest)
     return;
   // now find the associated soview and select it
@@ -474,36 +477,36 @@ bool bwm_observer_video::add_match()
   unsigned cur_frame =  video_istr_->frame_number();
   vgl_point_2d<double> pt;
   if (!tracked_corr_)
+  {
+    unsigned frame = 0, corr_index = 0;
+    bwm_soview2D_cross* cross =0;
+    if (!this->find_selected_video_corr(frame, corr_index, cross))
     {
-      unsigned frame = 0, corr_index = 0;
-      bwm_soview2D_cross* cross =0;
-      if (!this->find_selected_video_corr(frame, corr_index, cross))
-        {
-          // no corr exists or no previous corr selected
-          return this->add_video_corr();
-        }
-      // if the correspondence is in *this* frame then the match already exists
-      // and there is nothing to do
-      if (frame == cur_frame)
-        return true;
-
-      bool valid = this->corr_image_pt(pt);
-      if (!valid)
-        return false;
-      this->remove_corr_pt();
-      bwm_video_corr_sptr c = video_corrs_[corr_index];
-      if (!c) return false;
-      // if the frame match already exists do nothing
-      if (!c->add(cur_frame, pt))
-        return true;
-      // display the new match
-      this->display_video_corr(c, cur_frame, CORR_STYLE);
-      // display the fact that the match to the previous frame soview is successful
-      this->remove(cross);
-      corr_soview_map_[frame].erase(corr_index);
-      this->display_video_corr(c, frame, MATCHED_STYLE);
-      return true;
+      // no corr exists or no previous corr selected
+      return this->add_video_corr();
     }
+    // if the correspondence is in *this* frame then the match already exists
+    // and there is nothing to do
+    if (frame == cur_frame)
+      return true;
+
+    bool valid = this->corr_image_pt(pt);
+    if (!valid)
+      return false;
+    this->remove_corr_pt();
+    bwm_video_corr_sptr c = video_corrs_[corr_index];
+    if (!c) return false;
+    // if the frame match already exists do nothing
+    if (!c->add(cur_frame, pt))
+      return true;
+    // display the new match
+    this->display_video_corr(c, cur_frame, CORR_STYLE);
+    // display the fact that the match to the previous frame soview is successful
+    this->remove(cross);
+    corr_soview_map_[frame].erase(corr_index);
+    this->display_video_corr(c, frame, MATCHED_STYLE);
+    return true;
+  }
   bool valid = this->corr_image_pt(pt);
   if (!valid)
     return false;
@@ -526,7 +529,8 @@ bwm_soview2D_cross* bwm_observer_video::corr_soview(unsigned corr_index)
 }
 
   //: add video corr at a selected vertex
-bool bwm_observer_video::add_match_at_vertex(){
+bool bwm_observer_video::add_match_at_vertex()
+{
   if (!video_istr_)
     return false;
     // get the currently selected vertex
@@ -541,10 +545,10 @@ bool bwm_observer_video::add_match_at_vertex(){
   }
   this->add_cross(sov->x, sov->y, 2.0f);
   corr_valid_ = true;
-  if(!this->add_match()) return false;
-  if(!tracked_corr_){
+  if (!this->add_match()) return false;
+  if (!tracked_corr_) {
     vcl_map<unsigned, bwm_video_corr_sptr>::iterator cit = video_corrs_.end();
-    //get the last match added 
+    //get the last match added
     cit--;
     unsigned corr_id = (*cit).first;
     bwm_soview2D_cross* soview = this->corr_soview(corr_id);
@@ -553,6 +557,7 @@ bool bwm_observer_video::add_match_at_vertex(){
   }
   return true;
 }
+
 bool bwm_observer_video::is_displayed(bwm_video_corr_sptr const& corr,
                                       unsigned frame_index)
 {
@@ -615,12 +620,12 @@ void bwm_observer_video::display_video_corrs(unsigned frame_index)
   }
   vcl_map<unsigned, bwm_video_corr_sptr>::iterator cit = video_corrs_.begin();
   for (;cit != video_corrs_.end(); ++cit)
-    {
-      bwm_video_corr_sptr c = (*cit).second;
-      this->display_video_corr(c, frame_index, style);
-      if(display_world_pts_)
-        this->display_projected_3d_point(c);
-    }
+  {
+    bwm_video_corr_sptr c = (*cit).second;
+    this->display_video_corr(c, frame_index, style);
+    if (display_world_pts_)
+      this->display_projected_3d_point(c);
+  }
 }
 
 // display correspondences defined for current frame
@@ -641,18 +646,18 @@ void bwm_observer_video::display_corr_track()
   // display the closest match to the current frame
   vcl_map<unsigned, bwm_video_corr_sptr>::iterator cit = video_corrs_.begin();
   for (; cit != video_corrs_.end(); ++cit)
-    {
-      bwm_video_corr_sptr c = (*cit).second;
-      unsigned nframe=0;
-      if (!c->nearest_frame(cur_frame, nframe))
-        continue;
-      this->display_video_corr(c, nframe, PREV_STYLE);
-      if (nframe!=cur_frame)
-        this->display_video_corr(c, cur_frame, CORR_STYLE);
+  {
+    bwm_video_corr_sptr c = (*cit).second;
+    unsigned nframe=0;
+    if (!c->nearest_frame(cur_frame, nframe))
+      continue;
+    this->display_video_corr(c, nframe, PREV_STYLE);
+    if (nframe!=cur_frame)
+      this->display_video_corr(c, cur_frame, CORR_STYLE);
 
-      if (cam_istr_&&c->world_pt_valid()&&display_world_pts_)
-        this->display_projected_3d_point(c);
-    }
+    if (cam_istr_&&c->world_pt_valid()&&display_world_pts_)
+      this->display_projected_3d_point(c);
+  }
 }
 
 void bwm_observer_video::display_selected_world_pt()
@@ -668,28 +673,28 @@ void bwm_observer_video::display_selected_world_pt()
   unsigned corr_index;
   for (vcl_vector<vgui_soview2D*>::iterator cit = selected.begin();
        cit != selected.end(); ++cit)
-    {
-      bwm_soview2D_cross* cross = static_cast<bwm_soview2D_cross*>(*cit);
-      if (!cross) return ;
-      vcl_map<unsigned, vcl_map<unsigned, bwm_soview2D_cross*> >::iterator fit=
-        corr_soview_map_.begin();
-      bool found = false;
-      for (; fit != corr_soview_map_.end()&&!found; ++fit)
-        for (vcl_map<unsigned, bwm_soview2D_cross*>::iterator mit = (*fit).second.begin();
-             mit != (*fit).second.end()&&!found; ++mit)
-          if ((*mit).second == cross)
-            {
-              found = true;
-              frame = (*fit).first;
-              corr_index = (*mit).first;
-            }
-      if (!found)
-        return ;
-      bwm_video_corr_sptr corr = video_corrs_[corr_index];
-      if (!corr)
-        return ;
-      this->display_projected_3d_point(corr);
-    }
+  {
+    bwm_soview2D_cross* cross = static_cast<bwm_soview2D_cross*>(*cit);
+    if (!cross) return ;
+    vcl_map<unsigned, vcl_map<unsigned, bwm_soview2D_cross*> >::iterator fit=
+      corr_soview_map_.begin();
+    bool found = false;
+    for (; fit != corr_soview_map_.end()&&!found; ++fit)
+      for (vcl_map<unsigned, bwm_soview2D_cross*>::iterator mit = (*fit).second.begin();
+           mit != (*fit).second.end()&&!found; ++mit)
+        if ((*mit).second == cross)
+        {
+          found = true;
+          frame = (*fit).first;
+          corr_index = (*mit).first;
+        }
+    if (!found)
+      return ;
+    bwm_video_corr_sptr corr = video_corrs_[corr_index];
+    if (!corr)
+      return ;
+    this->display_projected_3d_point(corr);
+  }
 }
 
 // clear the entire corr display map
@@ -697,13 +702,13 @@ void bwm_observer_video::clear_corr_display_map()
 {
   vcl_map<unsigned, vcl_map<unsigned, bwm_soview2D_cross*> >::iterator fit =
     corr_soview_map_.begin();
-  for (; fit != corr_soview_map_.end(); ++fit){
-    vcl_map<unsigned, bwm_soview2D_cross*>::iterator cit = 
+  for (; fit != corr_soview_map_.end(); ++fit) {
+    vcl_map<unsigned, bwm_soview2D_cross*>::iterator cit =
       (*fit).second.begin();
-    for(; cit != (*fit).second.end(); ++cit)
-      if((*cit).second) remove((*cit).second);
+    for (; cit != (*fit).second.end(); ++cit)
+      if ((*cit).second) remove((*cit).second);
     (*fit).second.clear();
-  }        
+  }
   corr_soview_map_.clear();
 }
 
@@ -711,7 +716,7 @@ void bwm_observer_video::clear_world_pt_display_map()
 {
   vcl_map<unsigned, vgui_soview2D_point*>::iterator wit =
     world_pt_map_.begin();
-  for(; wit != world_pt_map_.end(); ++wit)
+  for (; wit != world_pt_map_.end(); ++wit)
     this->remove((*wit).second);
   this->world_pt_map_.clear();
 }
@@ -754,28 +759,28 @@ bool bwm_observer_video::extract_world_plane(vgl_plane_3d<double>&  plane)
   unsigned corr_index;
   for (vcl_vector<vgui_soview2D*>::iterator cit = selected.begin();
        cit != selected.end(); ++cit)
-    {
-      bwm_soview2D_cross* cross = static_cast<bwm_soview2D_cross*>(*cit);
-      if (!cross) return false;
-      vcl_map<unsigned, vcl_map<unsigned, bwm_soview2D_cross*> >::iterator fit=
-        corr_soview_map_.begin();
-      bool found = false;
-      for (; fit != corr_soview_map_.end()&&!found; ++fit)
-        for (vcl_map<unsigned, bwm_soview2D_cross*>::iterator mit = (*fit).second.begin();
-             mit != (*fit).second.end()&&!found; ++mit)
-          if ((*mit).second == cross)
-            {
-              found = true;
-              frame = (*fit).first;
-              corr_index = (*mit).first;
-            }
-      if (!found)
-        return false;
-      bwm_video_corr_sptr corr = video_corrs_[corr_index];
-      if (!corr)
-        return false;
-      corrs.push_back(corr);
-    }
+  {
+    bwm_soview2D_cross* cross = static_cast<bwm_soview2D_cross*>(*cit);
+    if (!cross) return false;
+    vcl_map<unsigned, vcl_map<unsigned, bwm_soview2D_cross*> >::iterator fit=
+      corr_soview_map_.begin();
+    bool found = false;
+    for (; fit != corr_soview_map_.end()&&!found; ++fit)
+      for (vcl_map<unsigned, bwm_soview2D_cross*>::iterator mit = (*fit).second.begin();
+           mit != (*fit).second.end()&&!found; ++mit)
+        if ((*mit).second == cross)
+        {
+          found = true;
+          frame = (*fit).first;
+          corr_index = (*mit).first;
+        }
+    if (!found)
+      return false;
+    bwm_video_corr_sptr corr = video_corrs_[corr_index];
+    if (!corr)
+      return false;
+    corrs.push_back(corr);
+  }
   vgl_point_3d<double> pt0 = corrs[0]->world_pt();
   vgl_point_3d<double> pt1 = corrs[1]->world_pt();
   vgl_point_3d<double> pt2 = corrs[2]->world_pt();
@@ -807,28 +812,28 @@ extract_neighborhoods(unsigned nhd_radius_x,unsigned nhd_radius_y,
   unsigned corr_index;
   for (vcl_vector<vgui_soview2D*>::iterator cit = selected.begin();
        cit != selected.end(); ++cit)
-    {
-      bwm_soview2D_cross* cross = static_cast<bwm_soview2D_cross*>(*cit);
-      if (!cross) return false;
-      vcl_map<unsigned, vcl_map<unsigned, bwm_soview2D_cross*> >::iterator fit=
-        corr_soview_map_.begin();
-      bool found = false;
-      for (; fit != corr_soview_map_.end()&&!found; ++fit)
-        for (vcl_map<unsigned, bwm_soview2D_cross*>::iterator mit = (*fit).second.begin();
-             mit != (*fit).second.end()&&!found; ++mit)
-          if ((*mit).second == cross)
-            {
-              found = true;
-              frame = (*fit).first;
-              corr_index = (*mit).first;
-            }
-      if (!found)
-        return false;
-      bwm_video_corr_sptr corr = video_corrs_[corr_index];
-      if (!corr)
-        return false;
-      corrs.push_back(corr);
-    }
+  {
+    bwm_soview2D_cross* cross = static_cast<bwm_soview2D_cross*>(*cit);
+    if (!cross) return false;
+    vcl_map<unsigned, vcl_map<unsigned, bwm_soview2D_cross*> >::iterator fit=
+      corr_soview_map_.begin();
+    bool found = false;
+    for (; fit != corr_soview_map_.end()&&!found; ++fit)
+      for (vcl_map<unsigned, bwm_soview2D_cross*>::iterator mit = (*fit).second.begin();
+           mit != (*fit).second.end()&&!found; ++mit)
+        if ((*mit).second == cross)
+        {
+          found = true;
+          frame = (*fit).first;
+          corr_index = (*mit).first;
+        }
+    if (!found)
+      return false;
+    bwm_video_corr_sptr corr = video_corrs_[corr_index];
+    if (!corr)
+      return false;
+    corrs.push_back(corr);
+  }
   if (corrs.size()==0)
     return false;
   if (!video_istr_||!video_istr_->is_open()||!video_istr_->is_seekable())
@@ -837,38 +842,38 @@ extract_neighborhoods(unsigned nhd_radius_x,unsigned nhd_radius_y,
   unsigned dim_y = 2*nhd_radius_y +1;
 
   for (unsigned i = 0; i<corrs.size(); ++i)
-    {
-      vcl_vector<vnl_matrix<float> > temp;
-      bwm_video_corr_sptr corr = corrs[i];
-      video_istr_->seek_frame(0);
-      unsigned index = 0;
-      while (true) {
-        vidl_frame_sptr frame = video_istr_->current_frame();
-        if (!frame)
-          return false;
-        vil_image_view_base_sptr fb = vidl_convert_wrap_in_view(*frame);
-        vil_image_view<float> fimg = *vil_convert_cast(float(), fb);
-        // assume for now there are no problems with image boundaries
-        vgl_point_2d<double> pt;
-        if (corr->match(index, pt)) {
-          int u = static_cast<unsigned>(pt.x()),
-            v = static_cast<unsigned>(pt.y());
-          vnl_matrix<float> nb(dim_y, dim_x);
-          for (int ir = -rd_y; ir<= rd_y; ++ir)
-            for (int ic = -rd_x; ic<= rd_x; ++ic)
-              {
-                int r = nhd_radius_y+ir, c = nhd_radius_x+ic;
-                nb[r][c]=fimg(u+ic, v+ir);
-              }
+  {
+    vcl_vector<vnl_matrix<float> > temp;
+    bwm_video_corr_sptr corr = corrs[i];
+    video_istr_->seek_frame(0);
+    unsigned index = 0;
+    while (true) {
+      vidl_frame_sptr frame = video_istr_->current_frame();
+      if (!frame)
+        return false;
+      vil_image_view_base_sptr fb = vidl_convert_wrap_in_view(*frame);
+      vil_image_view<float> fimg = *vil_convert_cast(float(), fb);
+      // assume for now there are no problems with image boundaries
+      vgl_point_2d<double> pt;
+      if (corr->match(index, pt)) {
+        int u = static_cast<unsigned>(pt.x()),
+          v = static_cast<unsigned>(pt.y());
+        vnl_matrix<float> nb(dim_y, dim_x);
+        for (int ir = -rd_y; ir<= rd_y; ++ir)
+          for (int ic = -rd_x; ic<= rd_x; ++ic)
+          {
+            int r = nhd_radius_y+ir, c = nhd_radius_x+ic;
+            nb[r][c]=fimg(u+ic, v+ir);
+          }
 
-          temp.push_back(nb);
-        }
-        if (!video_istr_->advance())
-          break;
-        index++;
+        temp.push_back(nb);
       }
-      nhds.push_back(temp);
+      if (!video_istr_->advance())
+        break;
+      index++;
     }
+    nhds.push_back(temp);
+  }
   return true;
 }
 
@@ -886,10 +891,10 @@ extract_histograms(vcl_vector<bsta_histogram<float> >& hists)
     unsigned ni = fimg.ni(), nj = fimg.nj();
     for (unsigned j = 0; j<nj; ++j)
       for (unsigned i = 0; i<ni; ++i)
-        {
-          float v = fimg(i, j);
-          h.upcount(v, 1.0f);
-        }
+      {
+        float v = fimg(i, j);
+        h.upcount(v, 1.0f);
+      }
     hists.push_back(h);
     if (!video_istr_->advance())
       break;
@@ -924,7 +929,7 @@ void bwm_observer_video::proj_point(vgl_point_3d<double> world_pt,
                                     vgl_point_2d<double> &image_pt)
 {
   vpgl_perspective_camera<double>* cam = cam_istr_->current_camera();
-  if(!cam){
+  if (!cam) {
     vcl_cout << "ERROR: null camera in ::proj_point(..)\n";
     image_pt.set(0.0, 0.0);
     return;
@@ -934,9 +939,9 @@ void bwm_observer_video::proj_point(vgl_point_3d<double> world_pt,
 }
 
 void bwm_observer_video::proj_line(vsol_line_3d_sptr line_3d,
-                                   vsol_line_2d_sptr &line_2d){
+                                   vsol_line_2d_sptr &line_2d) {
   vpgl_perspective_camera<double>* cam = cam_istr_->current_camera();
-  if(!cam){
+  if (!cam) {
     vcl_cout << "ERROR: null camera in ::proj_line(..)\n";
     line_2d = 0;
     return;
@@ -944,11 +949,12 @@ void bwm_observer_video::proj_line(vsol_line_3d_sptr line_3d,
   bwm_observer_cam::camera_ = cam;
   bwm_observer_cam::proj_line(line_3d, line_2d);
 }
+
 void bwm_observer_video::proj_poly(vsol_polygon_3d_sptr poly3d,
                                    vsol_polygon_2d_sptr& poly2d)
 {
   vpgl_perspective_camera<double>* cam = cam_istr_->current_camera();
-  if(!cam){
+  if (!cam) {
     vcl_cout << "ERROR: null camera in ::proj_poly(..)\n";
     poly2d = 0;
     return;
@@ -961,11 +967,11 @@ void bwm_observer_video::display_3d_objects()
 {
   //check if there are any to display
   unsigned nobj = bwm_world::instance()->n_objects();
-  if(!nobj) return;
+  if (!nobj) return;
   //tell each observable object to notify observers
   vcl_vector<bwm_observable_sptr> objs = bwm_world::instance()->objects();
-  for(vcl_vector<bwm_observable_sptr>::iterator oit = objs.begin();
-      oit != objs.end(); ++oit){
+  for (vcl_vector<bwm_observable_sptr>::iterator oit = objs.begin();
+       oit != objs.end(); ++oit) {
     (*oit)->send_update();
   }
 }
@@ -975,9 +981,9 @@ intersect_ray_and_plane(vgl_point_2d<double> img_point,
                         vgl_plane_3d<double> plane,
                         vgl_point_3d<double> &world_point)
 {
-  if(!camera_)
+  if (!camera_)
     return false;
-  vpgl_proj_camera<double>* proj_cam = 
+  vpgl_proj_camera<double>* proj_cam =
     static_cast<vpgl_proj_camera<double> *> (cam_istr_->current_camera());//camera_);
   vgl_homg_point_2d<double> img_point_h(img_point);
   vgl_homg_line_3d_2_points<double> ray = proj_cam->backproject(img_point_h);
@@ -989,82 +995,79 @@ intersect_ray_and_plane(vgl_point_2d<double> img_point,
 
 unsigned bwm_observer_video::create_polygon(vsol_polygon_2d_sptr poly2d)
 {
+  unsigned frame = this->video_istr_->frame_number();
 
-	unsigned frame = this->video_istr_->frame_number();
-	
+  float *x, *y;
+  bwm_algo::get_vertices_xy(poly2d, &x, &y);
+  unsigned nverts = poly2d->size();
 
-	float *x, *y;
-	bwm_algo::get_vertices_xy(poly2d, &x, &y);
-	unsigned nverts = poly2d->size();
+  this->set_foreground(1,1,0);
+  bgui_vsol_soview2D_polygon* polygon = this->add_vsol_polygon_2d(poly2d);
+  obj_list[polygon->get_id()] = polygon;
+  if (draw_mode_ == 1)
+    polygon->set_selectable(false);
 
-	this->set_foreground(1,1,0);
-	bgui_vsol_soview2D_polygon* polygon = this->add_vsol_polygon_2d(poly2d);
-	obj_list[polygon->get_id()] = polygon;
-	if (draw_mode_ == 1)
-		polygon->set_selectable(false);
+  vcl_vector<bwm_soview2D_vertex*> verts;
+  this->set_foreground(0,1,0);
+  for (unsigned i = 0; i<nverts; ++i) {
+    bwm_soview2D_vertex* vertex = new bwm_soview2D_vertex(x[i],y[i],0.5f, polygon, i);
+    if (draw_mode_ == 0)
+      vertex->set_selectable(false);
+    this->add(vertex);
+    verts.push_back(vertex);
+  }
+  vert_list[polygon->get_id()] = verts;
 
-	vcl_vector<bwm_soview2D_vertex*> verts;
-	this->set_foreground(0,1,0);
-	for (unsigned i = 0; i<nverts; ++i) {
-		bwm_soview2D_vertex* vertex = new bwm_soview2D_vertex(x[i],y[i],0.5f, polygon, i);
-		if (draw_mode_ == 0)
-			vertex->set_selectable(false);
-		this->add(vertex);
-		verts.push_back(vertex);
-	}
-	vert_list[polygon->get_id()] = verts;
-
-	poly2d->set_id(polygon->get_id());
-	this->frame_polygon_map_[frame].push_back(poly2d);
-	this->frame_change_map_[frame].push_back("no change");
-	this->id_pos_map_[polygon->get_id()] = this->frame_polygon_map_[frame].size()-1;
-	return polygon->get_id();
+  poly2d->set_id(polygon->get_id());
+  this->frame_polygon_map_[frame].push_back(poly2d);
+  this->frame_change_map_[frame].push_back("no change");
+  this->id_pos_map_[polygon->get_id()] = this->frame_polygon_map_[frame].size()-1;
+  return polygon->get_id();
 }
 
 void bwm_observer_video::display_polygons_frame()
 {
-	unsigned frame = this->video_istr_->frame_number();
+  unsigned frame = this->video_istr_->frame_number();
 
-	vcl_map<unsigned, vcl_vector<vsol_polygon_2d_sptr> >::iterator f_itr = this->frame_polygon_map_.find(frame);
-	
+  vcl_map<unsigned, vcl_vector<vsol_polygon_2d_sptr> >::iterator f_itr = this->frame_polygon_map_.find(frame);
 
-	//clear the objects
-	this->id_pos_map_.clear();
 
-	this->clear_objects();
+  //clear the objects
+  this->id_pos_map_.clear();
 
-	if( f_itr != this->frame_polygon_map_.end() )
-	{
-		for( unsigned i = 0; i < f_itr->second.size(); ++i )
-		{
-			float *x, *y;
-			bwm_algo::get_vertices_xy(f_itr->second[i], &x, &y);
-			unsigned nverts = f_itr->second[i]->size();
+  this->clear_objects();
 
-			this->set_foreground(1,1,0);
-			bgui_vsol_soview2D_polygon* polygon = this->add_vsol_polygon_2d(f_itr->second[i]);
-			obj_list[polygon->get_id()] = polygon;
-			if (draw_mode_ == 1)
-				polygon->set_selectable(false);
+  if ( f_itr != this->frame_polygon_map_.end() )
+  {
+    for ( unsigned i = 0; i < f_itr->second.size(); ++i )
+    {
+      float *x, *y;
+      bwm_algo::get_vertices_xy(f_itr->second[i], &x, &y);
+      unsigned nverts = f_itr->second[i]->size();
 
-			vcl_vector<bwm_soview2D_vertex*> verts;
-			this->set_foreground(0,1,0);
-			for (unsigned j = 0; j<nverts; ++j) {
-				bwm_soview2D_vertex* vertex = new bwm_soview2D_vertex(x[j],y[j],0.5f, polygon, j);
-				if (draw_mode_ == 0)
-					vertex->set_selectable(false);
-				this->add(vertex);
-				verts.push_back(vertex);
-			}
-			vert_list[polygon->get_id()] = verts;
+      this->set_foreground(1,1,0);
+      bgui_vsol_soview2D_polygon* polygon = this->add_vsol_polygon_2d(f_itr->second[i]);
+      obj_list[polygon->get_id()] = polygon;
+      if (draw_mode_ == 1)
+        polygon->set_selectable(false);
 
-			f_itr->second[i]->set_id(polygon->get_id());
+      vcl_vector<bwm_soview2D_vertex*> verts;
+      this->set_foreground(0,1,0);
+      for (unsigned j = 0; j<nverts; ++j) {
+        bwm_soview2D_vertex* vertex = new bwm_soview2D_vertex(x[j],y[j],0.5f, polygon, j);
+        if (draw_mode_ == 0)
+          vertex->set_selectable(false);
+        this->add(vertex);
+        verts.push_back(vertex);
+      }
+      vert_list[polygon->get_id()] = verts;
 
-			this->id_pos_map_[polygon->get_id()] = i;
-			//return polygon->get_id();
-		}//end polygon iteration
-	}
+      f_itr->second[i]->set_id(polygon->get_id());
 
+      this->id_pos_map_[polygon->get_id()] = i;
+      //return polygon->get_id();
+    }//end polygon iteration
+  }
 }
 
 void bwm_observer_video::delete_polygon( vgui_soview* obj )
@@ -1091,173 +1094,166 @@ void bwm_observer_video::delete_polygon( vgui_soview* obj )
 
   this->id_pos_map_.clear();
 
-  for(unsigned i = 0; i < this->frame_polygon_map_[frame].size(); ++i )
-	  this->id_pos_map_[this->frame_polygon_map_[frame][i]->get_id()] = i;
+  for (unsigned i = 0; i < this->frame_polygon_map_[frame].size(); ++i )
+    this->id_pos_map_[this->frame_polygon_map_[frame][i]->get_id()] = i;
 
   this->post_redraw();
 }
 
 void bwm_observer_video::delete_all()
 {
-	unsigned frame = this->video_istr_->frame_number();
-	this->clear_objects();
-	this->frame_polygon_map_[frame].clear();
-	this->frame_change_map_[frame].clear();
-	this->id_pos_map_.clear();
-	this->display_current_frame();
+  unsigned frame = this->video_istr_->frame_number();
+  this->clear_objects();
+  this->frame_polygon_map_[frame].clear();
+  this->frame_change_map_[frame].clear();
+  this->id_pos_map_.clear();
+  this->display_current_frame();
 }
 
 void bwm_observer_video::delete_all_frames()
 {
-	this->clear_objects();
-	this->frame_polygon_map_.clear();
-	this->frame_change_map_.clear();
-	this->id_pos_map_.clear();
-	this->display_current_frame();
+  this->clear_objects();
+  this->frame_polygon_map_.clear();
+  this->frame_change_map_.clear();
+  this->id_pos_map_.clear();
+  this->display_current_frame();
 }
 
 void bwm_observer_video::init_mask()
 {
-	vcl_map<unsigned, vcl_vector< vcl_string> >::iterator 
-		frame_itr, frame_end = this->frame_change_map_.end();
+  vcl_map<unsigned, vcl_vector< vcl_string> >::iterator
+    frame_itr, frame_end = this->frame_change_map_.end();
 
-	for( frame_itr = this->frame_change_map_.begin(); frame_itr != frame_end; ++frame_itr )
-	{
-		vcl_vector<vcl_string>::iterator string_itr, string_end = frame_itr->second.end();
+  for ( frame_itr = this->frame_change_map_.begin(); frame_itr != frame_end; ++frame_itr )
+  {
+    vcl_vector<vcl_string>::iterator string_itr, string_end = frame_itr->second.end();
 
-		for( string_itr = frame_itr->second.begin(); string_itr != string_end; ++string_itr )
-			*string_itr = "no change";
-	}//end frame iteration
+    for ( string_itr = frame_itr->second.begin(); string_itr != string_end; ++string_itr )
+      *string_itr = "no change";
+  }//end frame iteration
 }
 
 void bwm_observer_video::add_poly_to_mask()
 {
-	unsigned frame = this->video_istr_->frame_number();
-	vcl_vector<vgui_soview2D*> polys = get_selected_objects(POLYGON_TYPE);
-	for( unsigned i = 0; i < polys.size(); ++i )
-	{
-		unsigned poly_idx = this->id_pos_map_[polys[i]->get_id()];
-		this->frame_change_map_[frame][poly_idx] = this->change_type_;
-	}
+  unsigned frame = this->video_istr_->frame_number();
+  vcl_vector<vgui_soview2D*> polys = get_selected_objects(POLYGON_TYPE);
+  for ( unsigned i = 0; i < polys.size(); ++i )
+  {
+    unsigned poly_idx = this->id_pos_map_[polys[i]->get_id()];
+    this->frame_change_map_[frame][poly_idx] = this->change_type_;
+  }
 }
 
 void bwm_observer_video::remove_poly_from_mask()
 {
-	unsigned frame = this->video_istr_->frame_number();
-	vcl_vector<vgui_soview2D*> polys = get_selected_objects(POLYGON_TYPE);
-	for( unsigned i = 0; i < polys.size(); ++i )
-	{
-		unsigned poly_idx = this->id_pos_map_[polys[i]->get_id()];
-		this->frame_change_map_[frame][poly_idx] = "no change";
-	}
+  unsigned frame = this->video_istr_->frame_number();
+  vcl_vector<vgui_soview2D*> polys = get_selected_objects(POLYGON_TYPE);
+  for ( unsigned i = 0; i < polys.size(); ++i )
+  {
+    unsigned poly_idx = this->id_pos_map_[polys[i]->get_id()];
+    this->frame_change_map_[frame][poly_idx] = "no change";
+  }
 }
 
 bool bwm_observer_video::save_changes_binary()
 {
-	vcl_string fname = bwm_utils::select_file();
-	vsl_b_ofstream os(fname);
+  vcl_string fname = bwm_utils::select_file();
+  vsl_b_ofstream os(fname);
 
-	// total number of frames but there may not be a change polygon at a frame
+  // total number of frames but there may not be a change polygon at a frame
 
-	vcl_map<unsigned, unsigned> frame_num_changes;
+  vcl_map<unsigned, unsigned> frame_num_changes;
 
-	vcl_map<unsigned, vcl_vector< vcl_string> >::const_iterator 
-		frame_change_itr, frame_change_end = this->frame_change_map_.end();
+  vcl_map<unsigned, vcl_vector< vcl_string> >::const_iterator
+    frame_change_itr, frame_change_end = this->frame_change_map_.end();
 
-	for( frame_change_itr = this->frame_change_map_.begin(); frame_change_itr != frame_change_end; ++frame_change_itr )
-	{
-		vcl_vector< vcl_string >::const_iterator string_itr, string_end = frame_change_itr->second.end();
+  for ( frame_change_itr = this->frame_change_map_.begin(); frame_change_itr != frame_change_end; ++frame_change_itr )
+  {
+    vcl_vector< vcl_string >::const_iterator string_itr, string_end = frame_change_itr->second.end();
 
-		unsigned nchanges = 0;
-		for( string_itr = frame_change_itr->second.begin(); string_itr != string_end; ++string_itr )
-		{
-			if( string_itr->compare("no change") != 0 )
-				++nchanges;
-		}//end string vector iteration
+    unsigned nchanges = 0;
+    for ( string_itr = frame_change_itr->second.begin(); string_itr != string_end; ++string_itr )
+    {
+      if ( string_itr->compare("no change") != 0 )
+        ++nchanges;
+    }//end string vector iteration
 
-		if( nchanges > 0 )
-			frame_num_changes[frame_change_itr->first] = nchanges;
-	}//end frame iteration
+    if ( nchanges > 0 )
+      frame_num_changes[frame_change_itr->first] = nchanges;
+  }//end frame iteration
 
-	
-	if( frame_num_changes.size() > 0 )
-	{
-		//write the number of frames that have a change
-		vsl_b_write(os,frame_num_changes.size());
 
-		vcl_map<unsigned, unsigned>::const_iterator frame_itr, frame_end = frame_num_changes.end();
+  if ( frame_num_changes.size() > 0 )
+  {
+    //write the number of frames that have a change
+    vsl_b_write(os,frame_num_changes.size());
 
-		for( frame_itr = frame_num_changes.begin(); frame_itr != frame_end; ++frame_itr )
-		{
-			//write the frame number
-			vsl_b_write(os,frame_itr->first);
+    vcl_map<unsigned, unsigned>::const_iterator frame_itr, frame_end = frame_num_changes.end();
 
-			//write the number of changes
-			vsl_b_write(os,frame_itr->second);
+    for ( frame_itr = frame_num_changes.begin(); frame_itr != frame_end; ++frame_itr )
+    {
+      //write the frame number
+      vsl_b_write(os,frame_itr->first);
 
-			for( unsigned i = 0; i < this->frame_change_map_[frame_itr->first].size(); ++i )
-			{
-				if( this->frame_change_map_[frame_itr->first][i].compare("no change") != 0 )
-				{
-					//write the polygon
-					vsl_b_write(os,this->frame_polygon_map_[frame_itr->first][i].as_pointer());
-					//write the change type
-					vsl_b_write(os,this->frame_change_map_[frame_itr->first][i]);
-				}
-			}//end string iteration
-		}//end frame iteration
-			
-		
-	} //end if( nframes > 0 )
+      //write the number of changes
+      vsl_b_write(os,frame_itr->second);
 
-	return true;
+      for ( unsigned i = 0; i < this->frame_change_map_[frame_itr->first].size(); ++i )
+      {
+        if ( this->frame_change_map_[frame_itr->first][i].compare("no change") != 0 )
+        {
+          //write the polygon
+          vsl_b_write(os,this->frame_polygon_map_[frame_itr->first][i].as_pointer());
+          //write the change type
+          vsl_b_write(os,this->frame_change_map_[frame_itr->first][i]);
+        }
+      }//end string iteration
+    }//end frame iteration
+  } //end if ( nframes > 0 )
+
+  return true;
 }
 
 bool bwm_observer_video::load_changes_binary()
 {
-	vcl_string fname = bwm_utils::select_file();
-	vsl_b_ifstream is(fname);
+  vcl_string fname = bwm_utils::select_file();
+  vsl_b_ifstream is(fname);
 
-	// total number of frames but there may not be a change polygon at a frame
-	unsigned nframes = 0;
+  // total number of frames but there may not be a change polygon at a frame
+  unsigned nframes = 0;
 
-	vsl_b_read(is, nframes);
+  vsl_b_read(is, nframes);
 
-	if( nframes > 0 )
-	{
-		for( unsigned frame_idx = 0; frame_idx < nframes; ++frame_idx )
-		{
-			//read frame number
-			unsigned frame;
-			vsl_b_read(is, frame);
+  if ( nframes > 0 )
+  {
+    for ( unsigned frame_idx = 0; frame_idx < nframes; ++frame_idx )
+    {
+      //read frame number
+      unsigned frame;
+      vsl_b_read(is, frame);
 
-			//read number of changes
-			unsigned nchanges;
-			vsl_b_read(is, nchanges);
+      //read number of changes
+      unsigned nchanges;
+      vsl_b_read(is, nchanges);
 
-			for( unsigned i = 0; i < nchanges; ++i )
-			{
-				//read the polygon
-				vsol_polygon_2d* polygon_ptr = new vsol_polygon_2d;
-				vsl_b_read(is, polygon_ptr);
-				vsol_polygon_2d_sptr polygon_sptr(polygon_ptr);
-				
-				this->frame_polygon_map_[frame].push_back(polygon_sptr);
+      for ( unsigned i = 0; i < nchanges; ++i )
+      {
+        //read the polygon
+        vsol_polygon_2d* polygon_ptr = new vsol_polygon_2d;
+        vsl_b_read(is, polygon_ptr);
+        vsol_polygon_2d_sptr polygon_sptr(polygon_ptr);
 
-				//read the change type
-				vcl_string change_type;
-				vsl_b_read(is,change_type);
-				this->frame_change_map_[frame].push_back(change_type);
+        this->frame_polygon_map_[frame].push_back(polygon_sptr);
 
-			}//end change iteration
+        //read the change type
+        vcl_string change_type;
+        vsl_b_read(is,change_type);
+        this->frame_change_map_[frame].push_back(change_type);
+      }//end change iteration
+    }//end frame iteration
+  } //end if ( nframes > 0 )
 
+  this->display_current_frame();
 
-		}//end frame iteration
-		
-	} //end if( nframes > 0 )
-
-	this->display_current_frame();
-
-	return true;
-
+  return true;
 }

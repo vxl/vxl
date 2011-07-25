@@ -90,7 +90,7 @@ void bwm_popup_menu::get_menu(vgui_menu &menu)
   selmenu.separator();
 
   selmenu.add( "Delete objects on all frames",
-			   new vgui_command_simple<bwm_tableau_img>(img_tab,&bwm_tableau_img::clear_all_frames) );
+               new vgui_command_simple<bwm_tableau_img>(img_tab,&bwm_tableau_img::clear_all_frames) );
 
   selmenu.separator();
 
@@ -192,7 +192,7 @@ void bwm_popup_menu::get_menu(vgui_menu &menu)
     bwm_tableau_cam* cam_tab = static_cast<bwm_tableau_cam* > (tab_.as_pointer());
     //might be a generic camera tableau
     bwm_tableau_generic_cam* gen_tab = 0;
-    if(cam_tab->type_name()=="bwm_tableau_generic_cam")
+    if (cam_tab->type_name()=="bwm_tableau_generic_cam")
       gen_tab = static_cast<bwm_tableau_generic_cam* > (tab_.as_pointer());
 
     vgui_menu mesh_submenu;
@@ -319,7 +319,7 @@ void bwm_popup_menu::get_menu(vgui_menu &menu)
 
     menu.add( "Set as Master", new vgui_command_simple<bwm_tableau_cam>(cam_tab,&bwm_tableau_cam::set_master));
 
-    if(gen_tab){
+    if (gen_tab) {
       menu.separator();
       menu.add( "Ray image", new vgui_command_simple<bwm_tableau_generic_cam>(gen_tab,&bwm_tableau_generic_cam::ray_image));
     }

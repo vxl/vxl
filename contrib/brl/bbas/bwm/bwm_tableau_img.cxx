@@ -148,7 +148,7 @@ void bwm_tableau_img::clear_all()
 //be the same command. Only to be overridden when a video tableau is loaded.
 void bwm_tableau_img::clear_all_frames()
 {
-	my_observer_->delete_all();
+  my_observer_->delete_all();
 }
 
 void bwm_tableau_img::intensity_profile()
@@ -284,13 +284,13 @@ void bwm_tableau_img::recover_lines()
 void  bwm_tableau_img::crop_image()
 {
   vgui_dialog crop_dlg("Crop Image Path");
-  vcl_string ext = "tiff"; 
+  vcl_string ext = "tiff";
   vcl_string filename;
   crop_dlg.file("Point Filename", ext, filename);
   if (!crop_dlg.ask())
     return;
   vil_image_resource_sptr chip;
-  if(!my_observer_->crop_image(chip))
+  if (!my_observer_->crop_image(chip))
     return;
   vil_save_image_resource(chip, filename.c_str());
 }

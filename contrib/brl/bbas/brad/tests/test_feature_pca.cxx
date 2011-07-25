@@ -3,7 +3,6 @@
 #include <vpl/vpl.h>
 #include <vsl/vsl_binary_io.h>
 #include <vcl_string.h>
-#include <vil/vil_image_resource.h>
 #include <vil/vil_image_view.h>
 #include <brad/brad_hist_prob_feature_vector.h>
 #include <brad/brad_eigenspace.h>
@@ -11,13 +10,10 @@
 #include <vcl_iostream.h>
 #include <vcl_fstream.h>
 #include <vcl_iomanip.h>
-#include <vil/vil_load.h>
-#include <vil/vil_save.h>
-#include <vgl/vgl_point_2d.h>
+
 static void test_feature_pca()
 {
-
-	//Test feature vector functor
+  //Test feature vector functor
   vil_image_view<float> view(10, 10);
   view.fill(300.0f);
   brad_hist_prob_feature_vector fv(0.0f, 1000.0f, 5);
@@ -26,12 +22,12 @@ static void test_feature_pca()
   TEST("feature vector", vec[1], 1.0f);
   // test binary io
   vsl_b_ofstream bos("./temp.bin");
-  if(!bos)
+  if (!bos)
     return;
   vsl_b_write(bos , fv);
   bos.close();
   vsl_b_ifstream bis("./temp.bin");
-  if(!bis)
+  if (!bis)
     return;
   brad_hist_prob_feature_vector fv_in;
   vsl_b_read(bis, fv_in);
@@ -43,13 +39,13 @@ static void test_feature_pca()
   //Test eigenspace binary io
   brad_eigenspace<brad_hist_prob_feature_vector> tproc(3, 3, fv);
   vsl_b_ofstream eos("./etemp.bin");
-  if(!eos)
+  if (!eos)
     return;
   vsl_b_write(eos , tproc);
   eos.close();
   brad_eigenspace<brad_hist_prob_feature_vector> epin;
   vsl_b_ifstream eis("./etemp.bin");
-  if(!eis)
+  if (!eis)
     return;
   vsl_b_read(eis, epin);
   eis.close();
@@ -59,4 +55,5 @@ static void test_feature_pca()
   TEST_NEAR("eigenspace", eper, 0, 0.0001);
   vpl_unlink("./etemp.bin");
 }
+
 TESTMAIN(test_feature_pca);
