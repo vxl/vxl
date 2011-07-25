@@ -12,7 +12,7 @@
 //#define STEP_CELL step_cell_render(aux_args.mixture_array,aux_args.alpha_array,data_ptr,d,vis,aux_args.expected_int);
 #define BLOCK_EPSILON .006125f
 #define TREE_EPSILON  .005f
-#define MIN_T 1.0f
+#define MIN_T .1f
 #define UNIT_SPHERE_RADIUS 0.6203504908994f // = 1/vcl_cbrt(vnl_math::pi*4/3);
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -34,9 +34,8 @@ inline void intersect_block_pyramid(AuxArgs* aux_args, __constant RenderSceneInf
       intersect_block(ray_o, ray_d, linfo, &tFar, &tblock); 
       tblock = max(tblock, MIN_T); //(tblock > 0.0f) ? tblock : 0.0f;    //make sure tnear is at least 0...
       tFar -= BLOCK_EPSILON;                       //xit surpasses it (and breaks from the outer loop)
-     
+
       //set the tnear/tfar pyramid
-      image_pyramid_set( aux_args->tnear, curr_level, localI/offset, localJ/offset, tblock);
       image_pyramid_set( aux_args->tfar, curr_level, localI/offset, localJ/offset, tFar);
     }
     offset+=offset; //offset = offset*2
@@ -50,15 +49,23 @@ inline void intersect_block_pyramid(AuxArgs* aux_args, __constant RenderSceneInf
   float tFar, currT;
   float4 ray_d = ray_pyramid_access(aux_args->rays, 0, 0, 0);  //gets the fattest ray
   intersect_block(ray_o, ray_d, linfo, &tFar, &currT); 
-  currT = max(currT, MIN_T);  //make sure tnear is at least MIN_T...
   tFar -= BLOCK_EPSILON;     
-  aux_args->tnear->pyramid[0][0] = currT; 
   aux_args->tfar->pyramid[0][0] = tFar; 
   barrier(CLK_LOCAL_MEM_FENCE);
+  
+  //intersect block for t-near - just need to do lowest level one first
+  int ray_level = aux_args->active_rays[llid]-1; 
+  if(ray_level >= 0) {
+    float tFar, currT;
+    float4 ray_d = ray_pyramid_access(aux_args->rays, 0, 0, 0);  //gets the fattest ray
+    intersect_block(ray_o, ray_d, linfo, &tFar, &currT); 
+    aux_args->currT[llid] = max(currT, MIN_T);
+  }
+  barrier(CLK_LOCAL_MEM_FENCE); 
 }
 
-//helper returns correct tnear/tfar values in a float2
-inline float2 active_t_values( AuxArgs* aux_args ) 
+//tfar
+inline float active_t_far( AuxArgs* aux_args ) 
 {
   //get local id (0-63 for an 8x8) of this patch
   uchar llid = (uchar)(get_local_id(0) + get_local_size(0)*get_local_id(1));
@@ -71,9 +78,8 @@ inline float2 active_t_values( AuxArgs* aux_args )
   
   //offset (the amount to divide localI and localJ to get correctly indexed pyramid i,j)
   uchar offset = 1<<(3-level); 
-  float tnear = image_pyramid_access( aux_args->tnear, level, localI/offset, localJ/offset); 
   float tfar = image_pyramid_access( aux_args->tfar, level, localI/offset, localJ/offset); 
-  return (float2) (tnear, tfar); 
+  return tfar; 
 } 
 
 //helper method that computes local index + positive offset
@@ -82,6 +88,45 @@ inline uchar localIndex( uchar i_offset, uchar j_offset )
   return (uchar) ( (get_local_id(0)+i_offset) +
                     get_local_size(0)* (get_local_id(1)+j_offset) );
 }
+
+//helper computes pixel level visibility
+inline float compute_pixel_vis(__local uchar* masters, __local uchar* active_rays, __local float* vis) 
+{
+  uchar llid = (uchar)(get_local_id(0) + get_local_size(0)*get_local_id(1));
+
+  //get thread leader and the leader's level
+  uchar thread_leader = masters[llid]; 
+  int ray_level = active_rays[thread_leader]-1; 
+  
+  //choose exponent factor = .25 ^ (3-level)
+  float exp_factor = 1.0f; 
+  if(ray_level==0)
+    exp_factor = .25f*.25f*.25f; 
+  else if(ray_level==1)
+    exp_factor = .25f*.25f;
+  else if(ray_level==2)
+    exp_factor = .25f; 
+
+  //calc active ones first
+  ray_level = active_rays[llid] - 1; 
+  if(ray_level >= 0 && ray_level < 3) {   //don't need to operate on finest rays
+    float tempVis = vis[llid]; 
+    vis[llid] = pow(tempVis, exp_factor); 
+  }
+  barrier(CLK_LOCAL_MEM_FENCE);
+  
+  //store all rays now
+  vis[llid] = vis[thread_leader]; 
+  barrier(CLK_LOCAL_MEM_FENCE);
+}
+
+//reads current T based on master thread
+inline float read_currT(__local float* t, __local uchar* master_threads) 
+{
+  uchar llid = (uchar)(get_local_id(0) + get_local_size(0)*get_local_id(1));
+  uchar thread_leader = master_threads[llid]; 
+  return t[thread_leader]; 
+} 
 
 void cast_adaptive_cone_ray(
                             //---- RAY ARGUMENTS -------------------------------------------------
@@ -123,9 +168,8 @@ void cast_adaptive_cone_ray(
   //calc tnear tfar for tpyramids
   intersect_block_pyramid( &aux_args, linfo, ray_o ); 
   float currT, currR, tFar, sinAlpha; 
-  float2 tvals = active_t_values( &aux_args );
-  currT = tvals.x; 
-  tFar = tvals.y; 
+  tFar = active_t_far( &aux_args );  
+  currT = read_currT(aux_args.currT, aux_args.master_threads);
 
   //////////////////////////////////////////////////////////////////////////////
   // Begin block ray trace
@@ -167,7 +211,7 @@ void cast_adaptive_cone_ray(
           for (int z=minCell.z; z<maxCell.z; ++z) {
             
             //only split once for now
-            if(currR > UNIT_SPHERE_RADIUS && ray_level<3) {
+            if(currR > UNIT_SPHERE_RADIUS && ray_level<2) {
               split=true; 
             }
             
@@ -189,6 +233,7 @@ void cast_adaptive_cone_ray(
 
         //turn on the four neighboring threads
         int next_level = ray_level+1; 
+        float nextVis = pow(aux_args.vis[llid], 0.25f); 
         for(int ioff=0; ioff<2; ++ioff) {
           for(int joff=0; joff<2; ++joff) {
 
@@ -202,7 +247,7 @@ void cast_adaptive_cone_ray(
             aux_args.master_threads[id] = id; 
             
             //set the vis and pre for new threads
-            aux_args.vis[id] = pow(aux_args.vis[llid], 0.25f); 
+            aux_args.vis[id] = nextVis; //pow(aux_args.vis[llid], 0.25f); 
             
             //set master thread matrix
             for(int ii=0; ii<side_len/2; ++ii) {
@@ -212,8 +257,8 @@ void cast_adaptive_cone_ray(
               }
             }
             
-            //store in pyramid 4 times
-            aux_args.tnear->pyramid[next_level][(localI+di)/2 + (localJ+dj)/2*get_local_size(0)/2] = splitT; 
+            //store splitT
+            aux_args.currT[id] = splitT; 
           }
         }
         
@@ -306,7 +351,6 @@ void cast_adaptive_cone_ray(
             
 #endif
 
-    
     } //end ray_level if
     barrier(CLK_LOCAL_MEM_FENCE); 
 
@@ -318,11 +362,8 @@ void cast_adaptive_cone_ray(
     float gamma_integral=0.0f;
     if(ray_level >= 0) {
       
-      ///////// ******** /////////
-      uchar offset = 1<<(3-ray_level);
-      currT = aux_args.tnear->pyramid[ray_level][localI/offset + localJ/offset*get_local_size(0)/offset];
-      
       //recompute sphere (as this may have become active)
+      currT = read_currT(aux_args.currT,aux_args.master_threads);
       float4 currRayD = ray_pyramid_access_safe(aux_args.rays, ray_level); 
       float4 currSphere = (float4) ( ray_o + currT * currRayD ); 
       
@@ -450,7 +491,6 @@ void cast_adaptive_cone_ray(
     //COMPUTE_BALL_PROPERTIES; 
     aux_args.vis[llid] *= exp(-gamma_integral); 
     barrier(CLK_LOCAL_MEM_FENCE); 
-
     
     ///////////////////////////////////////////////////////////////////////////
     // 3. redistribute data loop - used to redistribute information 
@@ -544,7 +584,9 @@ void cast_adaptive_cone_ray(
     ////////////////////////////////////////////////////////////////////////////
     ray_level = aux_args.active_rays[llid]-1;  //0=fatest, 1=next, .., 3=finest
     if(ray_level >= 0) {
+      
       //intersect the current sphere with
+      currT = read_currT(aux_args.currT,aux_args.master_threads);
       float4 currRayD = ray_pyramid_access_safe(aux_args.rays, ray_level); 
       sinAlpha = fabs( sin(currRayD.w) );
       currR = currT * sinAlpha;
@@ -555,21 +597,15 @@ void cast_adaptive_cone_ray(
       currR = rPrime;
         
       //set t value in local memory for all threads to grab...
-      uchar offset = 1<<(3-ray_level); 
-      image_pyramid_set( aux_args.tnear, ray_level, localI/offset, localJ/offset, currT);
+      aux_args.currT[llid] = currT; 
     }
     barrier(CLK_LOCAL_MEM_FENCE);
     
-    //each thread needs to get a new T value
-    tvals = active_t_values( &aux_args );
-    currT = tvals.x; 
-    tFar = tvals.y; 
-    
+    //each thread needs to read their new T value
+    tFar = active_t_far( &aux_args );  
+    currT = read_currT(aux_args.currT,aux_args.master_threads);
   } //end ray trace while loop
 
-
-  //set all non master thread's visibility
-  uchar thread_leader = aux_args.master_threads[llid]; 
-  aux_args.vis[llid] = aux_args.vis[thread_leader]; 
-  barrier(CLK_LOCAL_MEM_FENCE);
+  //stores pixel vis across all pixels
+  compute_pixel_vis(aux_args.master_threads,aux_args.active_rays,aux_args.vis);
 }

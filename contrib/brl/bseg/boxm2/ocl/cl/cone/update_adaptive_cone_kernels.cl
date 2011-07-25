@@ -47,7 +47,7 @@ typedef struct
   __global int* cell_vol;
   __global int* cell_obs;
 
-           //per ball statistics
+           //per ball statistics, used in compute ball properties
            float* pi_cum;
            float* vol_cum;
            float* vis_cum;
@@ -60,13 +60,17 @@ typedef struct
   __local float* vis; 
   __local float* pre;
   
+  //curr t, 8x8 matrix
+  __local float* currT; 
+  
   //store active ray pointer, image/ray pyramids
   __local uchar* active_rays;
   __local uchar* master_threads; 
     ray_pyramid* rays; 
   image_pyramid* image; 
   image_pyramid* tfar; 
-  image_pyramid* tnear; 
+  
+  //debug value
   __local float* single; 
 } AuxArgs;
 
@@ -182,24 +186,9 @@ pass_one(__constant  RenderSceneInfo    * linfo,
   barrier(CLK_LOCAL_MEM_FENCE);
   image_pyramid tfar_pyramid = new_image_pyramid(tfar_mem, 4, 8);
 
-  //tnear
-  __local float* tnear_mem[4];
-  __local float tnear0[1];
-  __local float tnear1[4];
-  __local float tnear2[16];
-  __local float tnear3[64];
-  tnear_mem[0] = tnear0;
-  tnear_mem[1] = tnear1;
-  tnear_mem[2] = tnear2;
-  tnear_mem[3] = tnear3;
-  tnear3[llid] = 0.0f; 
-  barrier(CLK_LOCAL_MEM_FENCE);
-  image_pyramid tnear_pyramid = new_image_pyramid(tnear_mem, 4, 8);
-
   //init active ray matrix
   __local uchar active_rays[64];
   active_rays[llid] = (llid==0) ? 1 : 0;
-  //active_rays[llid] = 4; 
   barrier(CLK_LOCAL_MEM_FENCE);
   
   //init master thread matrix
@@ -214,16 +203,21 @@ pass_one(__constant  RenderSceneInfo    * linfo,
   vis[llid] = vis_image[imIndex]; 
   barrier(CLK_LOCAL_MEM_FENCE); 
   
+  //8x8 currT
+  __local float currT[64]; 
+  currT[llid] = 0.0f; 
+  barrier(CLK_LOCAL_MEM_FENCE); 
+  
   //store in aux_arg struct
   AuxArgs aux_args;
   aux_args.active_rays = active_rays; 
   aux_args.master_threads = master_threads; 
-  aux_args.tnear = &tnear_pyramid; 
   aux_args.tfar  = &tfar_pyramid; 
   aux_args.image = &obs_pyramid; 
   aux_args.rays  = &pyramid; 
   aux_args.vis = vis; 
-  aux_args.pre = pre; 
+  aux_args.pre = pre;   
+  aux_args.currT = currT; 
 
   //----------------------------------------------------------------------------
   //store other aux args
