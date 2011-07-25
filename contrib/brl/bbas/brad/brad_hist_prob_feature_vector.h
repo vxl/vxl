@@ -1,4 +1,4 @@
-// This is brl/bbas/brad/brad_hist_prob_hist_prob_feature_vector.h
+// This is brl/bbas/brad/brad_hist_prob_feature_vector.h
 #ifndef brad_hist_prob_feature_vector_h
 #define brad_hist_prob_feature_vector_h
 //:
@@ -7,26 +7,26 @@
 // \author J.L. Mundy
 // \date June 30, 2011
 //
+//  This class acts as a functor to be used in eigenvector and
+//  classifier processes
+//
 // \verbatim
 //  Modifications
 //   <none yet>
 // \endverbatim
-// 
-//
-//  This class acts as a functor to be used in eigenvector and 
-//  classifier processes
-//
+
 #include <vcl_iostream.h>
 #include <vnl/vnl_vector.h>
 #include <vil/vil_image_view.h>
 #include <vsl/vsl_binary_io.h>
-class brad_hist_prob_feature_vector 
+
+class brad_hist_prob_feature_vector
 {
  public:
   brad_hist_prob_feature_vector(){}
 
-  brad_hist_prob_feature_vector(float min, float max, unsigned nbins)
-    : min_(min), max_(max), nbins_(nbins) {};
+  brad_hist_prob_feature_vector(float minval, float maxval, unsigned nbins)
+    : min_(minval), max_(maxval), nbins_(nbins) {};
 
   ~brad_hist_prob_feature_vector(){};
 
@@ -44,11 +44,11 @@ class brad_hist_prob_feature_vector
   float min() const {return min_;}
   float max() const {return max_;}
   void set_nbins(unsigned nbins) {nbins_ = nbins;}
-  void set_min(float min) {min_ = min;}
-  void set_max(float max) {max_ = max;}
+  void set_min(float minval) {min_ = minval;}
+  void set_max(float maxval) {max_ = maxval;}
   //: print
   void print(vcl_ostream& os = vcl_cout) const {
-    os << "nbins = " << nbins_ << " min = " 
+    os << "nbins = " << nbins_ << " min = "
        << min_ << " max = " << max_ << '\n';
   }
 

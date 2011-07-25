@@ -1,4 +1,4 @@
-// This is brl/bbas/bsta/brad_eigenspace_base.h
+// This is brl/bbas/brad/brad_eigenspace_base.h
 #ifndef brad_eigenspace_base_h_
 #define brad_eigenspace_base_h_
 //:
@@ -22,7 +22,7 @@ class brad_eigenspace_base : public vbl_ref_count
   brad_eigenspace_base(){}
 
   virtual ~brad_eigenspace_base() {}
-  
+
   virtual vcl_string feature_vector_type(){return "unknown\n";}
 };
 
