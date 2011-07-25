@@ -101,6 +101,21 @@ SOURCE=.\brad_sun_dir_index.cxx
 # Begin Source File
 SOURCE=.\brad_sun_pos.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\brad_hist_prob_feature_vector.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\brad_eigenspace_base.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\brad_phongs_model_est.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/brad_eigenspace+brad_hist_prob_feature_vector-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vbl_smart_ptr+brad_eigenspace_base-.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h"
@@ -115,6 +130,24 @@ SOURCE=.\brad_sun_pos.h
 # End Source File
 # Begin Source File
 SOURCE=.\brad_sun_dir_index.h
+# End Source File
+# Begin Source File
+SOURCE=.\brad_eigenspace_base.h
+# End Source File
+# Begin Source File
+SOURCE=.\brad_hist_prob_feature_vector.h
+# End Source File
+# Begin Source File
+SOURCE=.\brad_eigenspace.txx
+# End Source File
+# Begin Source File
+SOURCE=.\brad_eigenspace_sptr.h
+# End Source File
+# Begin Source File
+SOURCE=.\brad_phongs_model_est.h
+# End Source File
+# Begin Source File
+SOURCE=.\brad_eigenspace.h
 # End Source File
 # End Group
 # End Target

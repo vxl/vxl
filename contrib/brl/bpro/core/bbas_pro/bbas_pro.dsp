@@ -99,6 +99,9 @@ SOURCE=.\bbas_register.cxx
 SOURCE=.\bbas_1d_array_float.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\bbas_1d_array_string.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\processes/brad_display_sun_index_process.cxx
 # End Source File
 # Begin Source File
@@ -112,6 +115,60 @@ SOURCE=.\processes/bbas_sun_angles_process.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\processes/bbas_atmospheric_corr_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/brad_compute_eigenspace_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/brad_load_eigenspace_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/brad_update_joint_hist_3d_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/brad_describe_eigenspace_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/bbas_string_array_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/brad_save_eigenspace_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/bsta_clone_joint_hist_3d_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/bsta_joint_hist_3d_vrml_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/bsta_load_joint_hist_3d_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/brad_create_eigenspace_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/bsta_save_joint_hist_3d_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/brad_train_histograms_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/bbas_merge_string_array_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/brdb_value_t+brad_eigenspace_sptr-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vbl_smart_ptr+bbas_1d_array_string-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/brdb_value_t+bsta_joint_histogram_3d_base_sptr-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vbl_io_smart_ptr+bbas_1d_array_string-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/brdb_value_t+bbas_1d_array_string_sptr-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/vbl_io_smart_ptr+bbas_1d_array_float-.cxx
@@ -136,6 +193,12 @@ SOURCE=.\bbas_register.h
 # End Source File
 # Begin Source File
 SOURCE=.\bbas_processes.h
+# End Source File
+# Begin Source File
+SOURCE=.\bbas_1d_array_string.h
+# End Source File
+# Begin Source File
+SOURCE=.\bbas_1d_array_string_sptr.h
 # End Source File
 # End Group
 # End Target
