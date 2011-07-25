@@ -47,10 +47,6 @@ typedef struct
   __global int* cell_vol;
   __global int* cell_obs;
 
-           //vis/pre along hte ray
-           float* ray_vis;
-           float* ray_pre;
-
            //per ball statistics
            float* pi_cum;
            float* vol_cum;
@@ -61,8 +57,8 @@ typedef struct
            float volume_scale;
   
   //store ray vis and pre locally
-  __local float* vis_p; 
-  __local float* pre_p;
+  __local float* vis; 
+  __local float* pre;
   
   //store active ray pointer, image/ray pyramids
   __local uchar* active_rays;
@@ -212,10 +208,10 @@ pass_one(__constant  RenderSceneInfo    * linfo,
   barrier(CLK_LOCAL_MEM_FENCE); 
   
   //init local pre and vis
-  __local float pre_p[64]; 
-  __local float vis_p[64]; 
-  pre_p[llid] = 0.0f; 
-  vis_p[llid] = 1.0f; 
+  __local float vis[64]; 
+  __local float pre[64]; 
+  pre[llid] = pre_image[imIndex]; 
+  vis[llid] = vis_image[imIndex]; 
   barrier(CLK_LOCAL_MEM_FENCE); 
   
   //store in aux_arg struct
@@ -226,6 +222,8 @@ pass_one(__constant  RenderSceneInfo    * linfo,
   aux_args.tfar  = &tfar_pyramid; 
   aux_args.image = &obs_pyramid; 
   aux_args.rays  = &pyramid; 
+  aux_args.vis = vis; 
+  aux_args.pre = pre; 
 
   //----------------------------------------------------------------------------
   //store other aux args
@@ -236,14 +234,10 @@ pass_one(__constant  RenderSceneInfo    * linfo,
   aux_args.cell_obs = aux_mean_obs; //&aux_array[linfo->num_buffer * linfo->data_len];
 
   float4 obs = in_image[imIndex];
-  float vis = vis_image[imIndex];
-  float pre = pre_image[imIndex];
   float norm = norm_image[imIndex];
   float pi_cum = 0.0f;
   float vol_cum = 0.0f;
   float vis_cum = 1.0f;
-  aux_args.ray_vis = &vis;          //visibility along ray
-  aux_args.ray_pre = &pre;          //pre valu
   aux_args.pi_cum = &pi_cum;        //sphere-scope prob(intensity) var
   aux_args.vol_cum = &vol_cum;      //sphere-scope intersected volume var
   aux_args.vis_cum = &vis_cum;      //sphere-scope visibility var
@@ -261,14 +255,13 @@ pass_one(__constant  RenderSceneInfo    * linfo,
                           cumsum, to_visit, aux_args);      //utility info
 
   //store vis/pre/norm
-  vis_image[imIndex] = vis;
-  pre_image[imIndex] = pre;
-  norm_image[imIndex] = vis + pre;
+  vis_image[imIndex] = vis[llid]; //vis;
+  pre_image[imIndex] = pre[llid];
+  norm_image[imIndex] = vis[llid] + pre[llid];
   
   //----------DEBUG norm_image write
   //norm_image[imIndex] = image_pyramid_access(aux_args.image, 3, get_local_id(0), get_local_id(1)); 
   //----------END DEBUG
-
 }
 
 
@@ -277,6 +270,7 @@ pass_one(__constant  RenderSceneInfo    * linfo,
 //----------------------------------------------------------------------------
 void step_cell(AuxArgs aux_args, int data_ptr, float intersect_volume)
 {
+#if 0
   //make sure intersect volume reflects real world scale
   intersect_volume *= aux_args.volume_scale;
 
@@ -306,6 +300,7 @@ void step_cell(AuxArgs aux_args, int data_ptr, float intersect_volume)
   (*aux_args.pi_cum) += PI*intersect_volume;
   (*aux_args.vol_cum) += intersect_volume;
   (*aux_args.vis_cum) *= temp;
+#endif
 }
 
 //----------------------------------------------------------------------------
@@ -313,6 +308,7 @@ void step_cell(AuxArgs aux_args, int data_ptr, float intersect_volume)
 //----------------------------------------------------------------------------
 void compute_ball_properties(AuxArgs aux_args)
 {
+#if 0
   float vis = (*aux_args.ray_vis); //(*vis_img_)(i,j);
   float pre = (*aux_args.ray_pre); //(*pre_img_)(i,j);
   float PI=0.0;
@@ -329,6 +325,7 @@ void compute_ball_properties(AuxArgs aux_args)
   (*aux_args.vis_cum) = 1.0f;
   (*aux_args.pi_cum) = 0.0f;
   (*aux_args.vol_cum) = 0.0f;
+#endif
 }
 #endif
 

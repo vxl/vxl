@@ -76,7 +76,6 @@ inline float2 active_t_values( AuxArgs* aux_args )
   return (float2) (tnear, tfar); 
 } 
 
-
 //helper method that computes local index + positive offset
 inline uchar localIndex( uchar i_offset, uchar j_offset )
 {
@@ -128,16 +127,6 @@ void cast_adaptive_cone_ray(
   currT = tvals.x; 
   tFar = tvals.y; 
 
-  float curr_vis = 1.0f; 
-  float curr_pre = 0.0f; 
-
-  //----RAY PYRAMID and T PYRAMID DEBUG CODE------------------------------------
-  //debug store in ray_vis and ray_pre for vil_saved images
-  *aux_args.ray_vis = 1; //currT;
-  *aux_args.ray_pre = 0; //tFar; 
-  barrier(CLK_LOCAL_MEM_FENCE); 
-  //----END RAY PYRAMID and T PYRAMID DEBUG CODE--------------------------------
-
   //////////////////////////////////////////////////////////////////////////////
   // Begin block ray trace
   //////////////////////////////////////////////////////////////////////////////
@@ -182,9 +171,9 @@ void cast_adaptive_cone_ray(
               split=true; 
             }
             
-          }
-        }
-      }
+          } //end z foranyway, 
+        } //end y for
+      } //end x for
       
       //if split was triggered....
       int side_len = 1<<(3-ray_level); //sqrt of number of threads this current active ray controls
@@ -213,8 +202,7 @@ void cast_adaptive_cone_ray(
             aux_args.master_threads[id] = id; 
             
             //set the vis and pre for new threads
-            aux_args.vis_p[id] = aux_args.vis_p[llid] * exp(0.25f);  
-            aux_args.pre_p[id] = aux_args.pre_p[llid] * exp(0.25f);
+            aux_args.vis[id] = pow(aux_args.vis[llid], 0.25f); 
             
             //set master thread matrix
             for(int ii=0; ii<side_len/2; ++ii) {
@@ -225,7 +213,7 @@ void cast_adaptive_cone_ray(
             }
             
             //store in pyramid 4 times
-            aux_args.tnear->pyramid[next_level][id] = splitT; //hack to see if this will speed up trace//tprime; 
+            aux_args.tnear->pyramid[next_level][(localI+di)/2 + (localJ+dj)/2*get_local_size(0)/2] = splitT; 
           }
         }
         
@@ -315,10 +303,9 @@ void cast_adaptive_cone_ray(
             } //end BFS while
             // end step CELL portion of cone ray trace
             ////////////////////////////////////////////////////////////////////
-          } //end z foranyway, 
-        } //end y for
-      } //end x for
+            
 #endif
+
     
     } //end ray_level if
     barrier(CLK_LOCAL_MEM_FENCE); 
@@ -328,7 +315,12 @@ void cast_adaptive_cone_ray(
     // pass over all cells intersecting this ball, compute step_CELL
     ///////////////////////////////////////////////////////////////////////////
     ray_level = aux_args.active_rays[llid]-1;  //0=fatest, 1=next, .., 3=finest
+    float gamma_integral=0.0f;
     if(ray_level >= 0) {
+      
+      ///////// ******** /////////
+      uchar offset = 1<<(3-ray_level);
+      currT = aux_args.tnear->pyramid[ray_level][localI/offset + localJ/offset*get_local_size(0)/offset];
       
       //recompute sphere (as this may have become active)
       float4 currRayD = ray_pyramid_access_safe(aux_args.rays, ray_level); 
@@ -364,7 +356,10 @@ void cast_adaptive_cone_ray(
               //data index is relative data (data_index_cached) plus data_index_root
               int data_ptr = data_index_root(ltree);
               // replaced by:step_cell_cone(aux_args, data_ptr, intersect_volume, side_len * linfo->block_len);
-              STEP_CELL; 
+              //STEP_CELL; 
+              
+              gamma_integral +=  aux_args.alphas[data_ptr]*intersect_volume* volume_scale;
+              //STEP_CELL;
             }
             //--------------------------------------------------------------------
             
@@ -452,7 +447,10 @@ void cast_adaptive_cone_ray(
     // 2. calculate ball properties
     ///////////////////////////////////////////////////////////////////////////
     //replaced by something like: compute_ball_properties(aux_args);
-    COMPUTE_BALL_PROPERTIES; 
+    //COMPUTE_BALL_PROPERTIES; 
+    aux_args.vis[llid] *= exp(-gamma_integral); 
+    barrier(CLK_LOCAL_MEM_FENCE); 
+
     
     ///////////////////////////////////////////////////////////////////////////
     // 3. redistribute data loop - used to redistribute information 
@@ -559,10 +557,6 @@ void cast_adaptive_cone_ray(
       //set t value in local memory for all threads to grab...
       uchar offset = 1<<(3-ray_level); 
       image_pyramid_set( aux_args.tnear, ray_level, localI/offset, localJ/offset, currT);
-      
-      //make sure thread_level vis pre agrees with shared vis pre
-      aux_args.vis_p[llid] = *aux_args.ray_vis; 
-      aux_args.pre_p[llid] = *aux_args.ray_pre; 
     }
     barrier(CLK_LOCAL_MEM_FENCE);
     
@@ -572,19 +566,10 @@ void cast_adaptive_cone_ray(
     tFar = tvals.y; 
     
   } //end ray trace while loop
-  
-  //debug images
-  barrier(CLK_LOCAL_MEM_FENCE);
-  int ray_level = aux_args.active_rays[llid]-1;  //0=fatest, 1=next, .., 3=finest
-  //if( ! (ray_level >= 0) ) {
-/*
-  uchar master = aux_args.master_threads[llid];
-  *aux_args.ray_vis = aux_args.vis_p[master]; 
-  *aux_args.ray_pre = aux_args.pre_p[master]; 
-*/
-  //*aux_args.ray_vis = master;
-  //}
-  barrier(CLK_LOCAL_MEM_FENCE);
 
-  
+
+  //set all non master thread's visibility
+  uchar thread_leader = aux_args.master_threads[llid]; 
+  aux_args.vis[llid] = aux_args.vis[thread_leader]; 
+  barrier(CLK_LOCAL_MEM_FENCE);
 }
