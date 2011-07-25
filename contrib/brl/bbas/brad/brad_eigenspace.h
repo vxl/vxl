@@ -11,25 +11,25 @@
 //  Modifications
 //   <none yet>
 // \endverbatim
-// 
+//
 //
 //
 // Each input resource is decomposed into a grid of blocks. A feature
 // vector is extracted from the block, such as a histogram. A covariance
 // matrix of the feature vectors is computed as well as the associated
-// eigensystem. This class can be stored as binary to retain the 
+// eigensystem. This class can be stored as binary to retain the
 // eigenvector projection needed for classifying new images. The current
 // implementation assumes that only the top three eigenvectors are needed
 // by classifiers. This choice is convenient for display as color images
-// and 3-d histograms. 
+// and 3-d histograms.
 //
-//   nib - number of columns in a block
-//   njb - number of rows in a block
-//   funct - a functor class that computes the feature vector
-//           the functor must return a vnl_vector<float> from 
+// * nib - number of columns in a block
+// * njb - number of rows in a block
+// * funct - a functor class that computes the feature vector
+//           the functor must return a vnl_vector<float> from
 //           its (vil_image_view<float> const&) operator
 //           and has a size() method to indicate the number of vector elements
-// 
+//
 #include <vsl/vsl_binary_io.h>
 #include <vcl_vector.h>
 #include <vcl_iostream.h>
@@ -44,17 +44,16 @@ template <class T>
 class brad_eigenspace : public brad_eigenspace_base
 {
  public:
-  brad_eigenspace():
-    nib_(0), njb_(0), covar_valid_(false),eigensystem_valid_(false){}
+  brad_eigenspace()
+  : nib_(0), njb_(0), covar_valid_(false), eigensystem_valid_(false) {}
 
   //: constructor with block size and functor
   brad_eigenspace(unsigned nib, unsigned njb, T funct)
-    : nib_(nib), njb_(njb), funct_(funct), covar_valid_(false),
-    eigensystem_valid_(false){}
+  : funct_(funct), nib_(nib), njb_(njb), covar_valid_(false), eigensystem_valid_(false) {}
 
-  virtual ~brad_eigenspace(){};  
+  virtual ~brad_eigenspace() {}
 
-  virtual vcl_string feature_vector_type(){return funct_.type();}
+  virtual vcl_string feature_vector_type() {return funct_.type();}
 
   //: compute the covariance matrix from image resources
   bool compute_covariance_matrix(vcl_vector<vil_image_resource_sptr> const& rescs);
@@ -65,7 +64,7 @@ class brad_eigenspace : public brad_eigenspace_base
 
   //: projection of image blocks onto the top three eigenvectors
   bool compute_eigenimage(vil_image_resource_sptr const& resc,
-                           vcl_string const& output_path);
+                          vcl_string const& output_path);
 
   //: create and update an initial histogram of feature vectors projected onto the first three eigenvectors.Defines the min, max range of the histogram cells.
   // note, does not update the histogram counts
@@ -97,8 +96,6 @@ class brad_eigenspace : public brad_eigenspace_base
                              double frac = 1.0, unsigned nit=256,
                              unsigned njt=256);
 
-  
-
   //: print sizes and other info
   void print(vcl_ostream& os = vcl_cout) const;
 
@@ -110,16 +107,16 @@ class brad_eigenspace : public brad_eigenspace_base
   vnl_vector<double> eigenvalues() const {return eigenvalues_;}
   vnl_matrix<double> eigenvectors() const {return eigenvectors_;}
   T functor() const {return funct_;}
-  void set_nib(unsigned nib){nib_=nib;}
-  void set_njb(unsigned njb){njb_=njb;}
+  void set_nib(unsigned nib) {nib_=nib;}
+  void set_njb(unsigned njb) {njb_=njb;}
   void set_mean_covar(vnl_vector<double> const& mean,
                       vnl_matrix<double> const& covar)
-    {mean_ = mean; covar_ = covar; covar_valid_ = true;}
+  { mean_ = mean; covar_ = covar; covar_valid_ = true; }
   void set_eigensystem(vnl_vector<double> const& eigv,
                        vnl_matrix<double> const& evecs)
-    {eigenvalues_=eigv; eigenvectors_=evecs; eigensystem_valid_ = true;}
-  void set_functor(T funct){funct_ = funct;}
-  
+  { eigenvalues_=eigv; eigenvectors_=evecs; eigensystem_valid_ = true; }
+  void set_functor(T funct) {funct_ = funct;}
+
  private:
   //: An instance of the functor
   T funct_;
@@ -152,9 +149,9 @@ void vsl_b_read(vsl_b_istream &is, brad_eigenspace<T>& fv);
 
 //: Print summary
 template <class T>
-void 
+void
 vsl_print_summary(vcl_ostream &os, const brad_eigenspace<T>& fv);
 
 #include <brad/brad_eigenspace_sptr.h>
 
-#endif //brad_eigenspace
+#endif // brad_eigenspace_h
