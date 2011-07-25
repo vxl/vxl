@@ -14,7 +14,7 @@ AUX_SOURCE_DIRECTORY(processes brad_pro_sources)
 
 ADD_LIBRARY(brad_pro ${brad_pro_sources})
 
-TARGET_LINK_LIBRARIES(brad_pro bprb brdb brad )
+TARGET_LINK_LIBRARIES(brad_pro bbas_pro bprb brdb brad )
 
 IF( BUILD_TESTING )
   SUBDIRS(tests)
