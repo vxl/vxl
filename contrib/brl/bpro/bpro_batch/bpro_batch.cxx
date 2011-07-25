@@ -540,6 +540,50 @@ PyObject *get_bbas_1d_array_float(PyObject * /*self*/, PyObject *args)
 }
 
 
+PyObject *get_bbas_1d_array_string(PyObject * /*self*/, PyObject *args)
+{
+  unsigned id;
+  bbas_1d_array_string_sptr value;
+  if (!PyArg_ParseTuple(args, "i:get_bbas_1d_array_string", &id))
+    return NULL;
+
+  vcl_string relation_name = "bbas_1d_array_string_sptr_data";
+
+  // query to get the data
+  brdb_query_aptr Q = brdb_query_comp_new("id", brdb_query::EQ, id);
+  brdb_selection_sptr selec = DATABASE->select(relation_name, Q);
+  PyObject *array_1d=0;
+  if (selec->size()!=1) {
+    vcl_cout << "in get_bbas_1d_array_string() - no relation with type" << relation_name << " id: " << id << vcl_endl;
+
+    return array_1d;
+  }
+
+  brdb_value_sptr brdb_value;
+  if (!selec->get_value(vcl_string("value"), brdb_value)) {
+    vcl_cout << "in get_bbas_1d_array_string() didn't get value\n";
+    return array_1d;
+  }
+
+  if (!brdb_value) {
+    vcl_cout << "in get_bbas_1d_array_string() - null value\n";
+    return array_1d;
+  }
+
+  brdb_value_t<bbas_1d_array_string_sptr>* result_out = static_cast<brdb_value_t<bbas_1d_array_string_sptr>* >(brdb_value.ptr());
+  value = result_out->value();
+
+  array_1d = PyList_New(value->data_array.size());
+  for(unsigned i=0;i<value->data_array.size();i++)
+  {
+    PyObject *x = Py_BuildValue("s", value->data_array[i].c_str());
+    PyList_SetItem(array_1d, i,x);
+  }
+  Py_INCREF(array_1d);
+  return array_1d;
+}
+
+
 PyObject *set_stdout(PyObject * /*self*/, PyObject *args)
 {
   const char* file;
