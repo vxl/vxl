@@ -211,7 +211,7 @@ void cast_adaptive_cone_ray(
           for (int z=minCell.z; z<maxCell.z; ++z) {
             
             //only split once for now
-            if(currR > UNIT_SPHERE_RADIUS && ray_level<2) {
+            if(currR > UNIT_SPHERE_RADIUS && ray_level<3) {
               split=true; 
             }
             
@@ -398,9 +398,7 @@ void cast_adaptive_cone_ray(
               int data_ptr = data_index_root(ltree);
               // replaced by:step_cell_cone(aux_args, data_ptr, intersect_volume, side_len * linfo->block_len);
               //STEP_CELL; 
-              
               gamma_integral +=  aux_args.alphas[data_ptr]*intersect_volume* volume_scale;
-              //STEP_CELL;
             }
             //--------------------------------------------------------------------
             
@@ -585,19 +583,13 @@ void cast_adaptive_cone_ray(
     ray_level = aux_args.active_rays[llid]-1;  //0=fatest, 1=next, .., 3=finest
     if(ray_level >= 0) {
       
-      //intersect the current sphere with
+      //read in currT, currR was previously set in the last loop
       currT = read_currT(aux_args.currT,aux_args.master_threads);
-      float4 currRayD = ray_pyramid_access_safe(aux_args.rays, ray_level); 
-      sinAlpha = fabs( sin(currRayD.w) );
-      currR = currT * sinAlpha;
-      
-      //calculate the next sphere's R and T
-      float rPrime = sinAlpha * (currR + currT) / (1.0-sinAlpha);
-      currT += (rPrime + currR);
-      currR = rPrime;
+      float nextT, nextR;  
+      next_sphere(currT, currR, &nextT, &nextR); 
         
       //set t value in local memory for all threads to grab...
-      aux_args.currT[llid] = currT; 
+      aux_args.currT[llid] = nextT; 
     }
     barrier(CLK_LOCAL_MEM_FENCE);
     
