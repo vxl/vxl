@@ -100,7 +100,9 @@ boxm2_data_base* boxm2_lru_cache::get_data_base(boxm2_block_id id, vcl_string ty
   //if num_bytes is greater than zero, then you're initializing a new block
   boxm2_data_base* loaded; 
   if(num_bytes > 0) {
-    vcl_cout<<"boxm2_lru_cache::initializing empty data "<<id<<" type: "<<type<<vcl_endl;
+    vcl_cout<<"boxm2_lru_cache::initializing empty data "<<id
+            <<" type: "<<type
+            <<" to size: "<<num_bytes<<" bytes"<<vcl_endl;
     loaded = new boxm2_data_base(new char[num_bytes], num_bytes, id, read_only);
     loaded->set_default_value(type);
   }
@@ -155,7 +157,6 @@ void boxm2_lru_cache::replace_data_base(boxm2_block_id id, vcl_string type, boxm
     // found the block,
     boxm2_data_base* litter = data_map[id]; 
     replacement->read_only_ = litter->read_only_; 
-    vcl_cout<<"Replacement read only ="<<replacement->read_only_; 
     if (!litter->read_only_) {// save it
       boxm2_sio_mgr::save_block_data_base(scene_dir_, id, litter, type);
     } 
