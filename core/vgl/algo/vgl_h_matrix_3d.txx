@@ -168,23 +168,22 @@ T vgl_h_matrix_3d<T>::get (unsigned int row_index, unsigned int col_index) const
 }
 
 template <class T>
-void vgl_h_matrix_3d<T>::get (T* t_matrix) const
+void vgl_h_matrix_3d<T>::get (T* H) const
 {
-  T const* data = t12_matrix_.data_block();
-  for (int index = 0; index < 16; ++index)
-    *t_matrix++ = data[index];
+  for (T const* iter = t12_matrix_.begin(); iter < t12_matrix_.end(); ++iter)
+    *H++ = *iter;
 }
 
 template <class T>
-void vgl_h_matrix_3d<T>::get (vnl_matrix_fixed<T, 4, 4>* t_matrix) const
+void vgl_h_matrix_3d<T>::get (vnl_matrix_fixed<T, 4, 4>* H) const
 {
-  *t_matrix = t12_matrix_;
+  *H = t12_matrix_;
 }
 
 template <class T>
-void vgl_h_matrix_3d<T>::get (vnl_matrix<T>* t_matrix) const
+void vgl_h_matrix_3d<T>::get (vnl_matrix<T>* H) const
 {
-  *t_matrix = t12_matrix_.as_ref(); // size 4x4
+  *H = t12_matrix_.as_ref(); // size 4x4
 }
 
 template <class T>
@@ -196,9 +195,8 @@ vgl_h_matrix_3d<T> vgl_h_matrix_3d<T>::get_inverse() const
 template <class T>
 vgl_h_matrix_3d<T>& vgl_h_matrix_3d<T>::set (T const* H)
 {
-  T* data = t12_matrix_.data_block();
-  for (int index = 0; index < 16; ++index)
-    data[index] = *H++;
+  for (T* iter = t12_matrix_.begin(); iter < t12_matrix_.end(); ++iter)
+    *iter = *H++;
   return *this;
 }
 
