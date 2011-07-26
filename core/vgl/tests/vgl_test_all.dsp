@@ -96,16 +96,10 @@ SOURCE=.\test_cartesian.cxx
 SOURCE=.\test_clip.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\test_conic.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\test_distance.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\test_ellipse_scan_iterator.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\test_homg.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\test_polygon.cxx
@@ -114,22 +108,7 @@ SOURCE=.\test_polygon.cxx
 SOURCE=.\test_polygon_scan_iterator.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\test_h_matrix_1d.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\test_h_matrix_2d.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\test_h_matrix_3d.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\test_p_matrix.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\test_triangle_scan_iterator.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\test_fit_lines_2d.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\test_closest_point.cxx
@@ -141,12 +120,6 @@ SOURCE=.\test_window_scan_iterator.cxx
 SOURCE=.\test_convex.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\test_convex_hull_2d.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\test_fit_conics_2d.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\test_line_3d_2_points.cxx
 # End Source File
 # Begin Source File
@@ -156,37 +129,16 @@ SOURCE=.\test_sphere.cxx
 SOURCE=.\test_line_segment_3d.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\test_orient_box_3d.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\test_fit_plane_3d.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\test_intersection.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\test_rotation_3d.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\test_triangle_3d.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\test_triangle_3d_line_intersection.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\test_rtree.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\test_ellipsoid.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\test_infinite_line_3d.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\test_ray_3d.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\test_compute_similarity_3d.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\test_include.cxx

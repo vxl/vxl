@@ -240,6 +240,57 @@ LINK32=link.exe
 # Begin Group "Source Files"
 # PROP Default_Filter "cxx"
 # Begin Source File
+SOURCE=.\test_driver.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_ellipsoid.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_fit_conics_2d.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_homg.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_compute_similarity_3d.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_h_matrix_1d.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_orient_box_3d.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_fit_lines_2d.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_h_matrix_2d.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_rtree.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_rotation_3d.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_conic.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_h_matrix_3d.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_convex_hull_2d.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_intersection.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_p_matrix.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_fit_plane_3d.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\test_include.cxx
 # End Source File
 # Begin Source File
