@@ -42,7 +42,7 @@ vgl_h_matrix_2d<T>::vgl_h_matrix_2d(vcl_vector<vgl_homg_point_2d<T> > const& poi
 
   W.set_size(2*numpoints, 9);
 
-  for (unsigned int i = 0; i < numpoints; i++)
+  for (unsigned int i = 0; i < numpoints; ++i)
   {
     T x1 = points1[i].x(), y1 = points1[i].y(), w1 = points1[i].w();
     T x2 = points2[i].x(), y2 = points2[i].y(), w2 = points2[i].w();
@@ -191,9 +191,8 @@ T vgl_h_matrix_2d<T>::get(unsigned int row_index, unsigned int col_index) const
 template <class T>
 void vgl_h_matrix_2d<T>::get(T* H) const
 {
-  T const* data = t12_matrix_.data_block();
-  for (int index = 0; index < 9; ++index)
-    *H++ = data[index];
+  for (T const* iter = t12_matrix_.begin(); iter < t12_matrix_.end(); ++iter)
+    *H++ = *iter;
 }
 
 template <class T>
@@ -218,9 +217,8 @@ vgl_h_matrix_2d<T>& vgl_h_matrix_2d<T>::set_identity()
 template <class T>
 vgl_h_matrix_2d<T>& vgl_h_matrix_2d<T>::set(const T* H)
 {
-  T* data = t12_matrix_.data_block();
-  for (int index = 0; index < 9; ++index)
-    data[index] = *H++;
+  for (T* iter = t12_matrix_.begin(); iter < t12_matrix_.end(); ++iter)
+    *iter = *H++;
   return *this;
 }
 
@@ -299,7 +297,7 @@ bool vgl_h_matrix_2d<T>::is_euclidean() const
 {
   if ( t12_matrix_.get(2,0) != (T)0 ||
        t12_matrix_.get(2,1) != (T)0 ||
-       t12_matrix_.get(2,3) != (T)1 )
+       t12_matrix_.get(2,2) != (T)1 )
     return false; // should not have a translation part
 
   // use an error tolerance on the orthonormality constraint
@@ -456,8 +454,8 @@ vgl_h_matrix_2d<T>::get_upper_2x2() const
   T d = t12_matrix_[2][2];
   assert(d<-1e-9 || d>1e-9);
   vnl_matrix_fixed<T,3,3> m(0.0);
-  for (unsigned r = 0; r<2; r++)
-    for (unsigned c = 0; c<2; c++)
+  for (unsigned r = 0; r<2; ++r)
+    for (unsigned c = 0; c<2; ++c)
       m[r][c] = t12_matrix_[r][c]/d;
   m[2][2]=1.0;
   return vgl_h_matrix_2d<T>(m);
@@ -468,8 +466,8 @@ vnl_matrix_fixed<T, 2,2> vgl_h_matrix_2d<T>::get_upper_2x2_matrix() const
 {
   vnl_matrix_fixed<T,2,2> R;
   vgl_h_matrix_2d<T> m = this->get_upper_2x2();
-  for (unsigned r = 0; r<3; r++)
-    for (unsigned c = 0; c<3; c++)
+  for (unsigned r = 0; r<3; ++r)
+    for (unsigned c = 0; c<3; ++c)
       R[r][c] = m.get(r,c);
   return R;
 }
