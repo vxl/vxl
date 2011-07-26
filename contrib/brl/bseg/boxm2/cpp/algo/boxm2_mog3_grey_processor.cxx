@@ -358,14 +358,14 @@ void  boxm2_mog3_grey_processor::merge_mixtures(vnl_vector_fixed<unsigned char, 
   }
 }
 
-//: Most of The following piece of code is copied from boxm_mog_grey_processor::compute_appearance 
+//: Most of The following piece of code is copied from boxm_mog_grey_processor::compute_appearance
 void boxm2_mog3_grey_processor::compute_gauss_mixture_3(vnl_vector_fixed<unsigned char, 8> & mog3,
-                                                        vcl_vector<float> const& obs, 
-                                                        vcl_vector<float> const& vis, 
-                                                        bsta_sigma_normalizer_sptr n_table, 
+                                                        vcl_vector<float> const& obs,
+                                                        vcl_vector<float> const& vis,
+                                                        bsta_sigma_normalizer_sptr n_table,
                                                         float min_sigma)
 {
-  const int nmodes = 3;
+  const unsigned int nmodes = 3;
   const float min_var = min_sigma*min_sigma;
   const float big_sigma = (float)vnl_math::sqrt1_2; // maximum possible std. dev for set of samples drawn from [0 1]
   const float big_var = big_sigma * big_sigma;
