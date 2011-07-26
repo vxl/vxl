@@ -185,18 +185,25 @@ bool boxm2_ocl_adaptive_cone_render_expected_process(bprb_func_process& pro)
                              data_type, kernels[identifier][0], lthreads, cl_ni, cl_nj);
 
   // normalize
-  {
-    vcl_size_t gThreads[] = {cl_ni,cl_nj};
-    bocl_kernel* normalize_kern = kernels[identifier][1];
-    normalize_kern->set_arg( exp_image.ptr() );
-    normalize_kern->set_arg( vis_image.ptr() );
-    normalize_kern->set_arg( exp_img_dim.ptr());
-    normalize_kern->execute( queue, 2, lthreads, gThreads);
-    clFinish(queue);
+  //{
+    //vcl_size_t gThreads[] = {cl_ni,cl_nj};
+    //bocl_kernel* normalize_kern = kernels[identifier][1];
+    //normalize_kern->set_arg( exp_image.ptr() );
+    //normalize_kern->set_arg( vis_image.ptr() );
+    //normalize_kern->set_arg( exp_img_dim.ptr());
+    //normalize_kern->execute( queue, 2, lthreads, gThreads);
+    //clFinish(queue);
 
-    //clear render kernel args so it can reset em on next execution
-    normalize_kern->clear_args();
-  }
+    ////clear render kernel args so it can reset em on next execution
+    //normalize_kern->clear_args();
+  //}
+
+  // read out expected image
+  exp_image->read_to_buffer(queue);
+  vil_image_view<float>* exp_img_out=new vil_image_view<float>(ni,nj);
+  for (unsigned c=0;c<nj;c++)
+    for (unsigned r=0;r<ni;r++)
+      (*exp_img_out)(r,c)=buff[c*cl_ni+r];
 
   ///debugging save vis, pre, norm images
 #if 1
@@ -210,14 +217,8 @@ bool boxm2_ocl_adaptive_cone_render_expected_process(bprb_func_process& pro)
     }
   }
   vil_save( vis_view, "vis_debug.tiff"); 
+  vil_save( *exp_img_out, "exp_debug.tiff");
 #endif
-
-  // read out expected image
-  exp_image->read_to_buffer(queue);
-  vil_image_view<float>* exp_img_out=new vil_image_view<float>(ni,nj);
-  for (unsigned c=0;c<nj;c++)
-    for (unsigned r=0;r<ni;r++)
-      (*exp_img_out)(r,c)=buff[c*cl_ni+r];
 
   delete [] buff;
   delete [] vis_buff;

@@ -160,7 +160,7 @@ void cast_adaptive_cone_ray(
   __local uchar*   listMem = &visit_list[llid*73]; 
 
   //cell spheres have the same volume as blocks
-  float volume_scale = linfo->block_len*linfo->block_len*linfo->block_len;
+  float volume_scale = linfo->block_len; //*linfo->block_len*linfo->block_len;
 
   //////////////////////////////////////////////////////////////////////////////
   // Compute pyramid values for tnear/tfar
@@ -175,7 +175,7 @@ void cast_adaptive_cone_ray(
   // Begin block ray trace
   //////////////////////////////////////////////////////////////////////////////
   float count=0.0f; //debug counter
-  int safety=0;
+  int safety=0; int cnt=0;
   while ( currT < tFar && ++safety < 100000 )
   {
     ///////////////////////////////////////////////////////////////////////////
@@ -233,7 +233,7 @@ void cast_adaptive_cone_ray(
               if( (*ltree).s0 == 0){
                 //If ray sphere is larger than the cell sphere, 
                 //split the ray! change +(1,0), +(0,1), and +(1,1)
-                if(currR > cellSphere.w && ray_level<1) {
+                if(currR > .75*UNIT_SPHERE_RADIUS && ray_level<3) {
                   split=true; 
                 }
               }
@@ -262,10 +262,25 @@ void cast_adaptive_cone_ray(
                 int curr_depth = get_depth(currBitIndex);
                 float side_len = 1.0f / (float) (1<<curr_depth);
                             
-                //only split once for now
-                if(currR > UNIT_SPHERE_RADIUS*side_len && ray_level<1) {
-                  split=true; 
+                 //intersect the cell,
+                float4 cellSphere = (float4) ( (float) x + centerX[currBitIndex], 
+                                               (float) y + centerY[currBitIndex], 
+                                               (float) z + centerZ[currBitIndex], 
+                                               UNIT_SPHERE_RADIUS * side_len ); 
+                float intersect_volume =  sphere_intersection_volume(currSphere, cellSphere);
+
+                //if it intersects, do one of two things
+                if ( intersect_volume > 0.0f ) {
+                  //if the tree is a leaf, then update it's contribution
+                  if ( tree_bit_at(ltree, currBitIndex) == 0 ) {
+                    if(currR > .75*UNIT_SPHERE_RADIUS*side_len && ray_level<3) 
+                      split=true; 
+                  }
+                  else { 
+                    push_back( &toVisit, currBitIndex );  //add children to the visit list
+                  }
                 }
+                
               } //end child for loop
             } //end BFS while
             // end Octree traversal portion of cone ray trace
@@ -290,6 +305,7 @@ void cast_adaptive_cone_ray(
         //turn on the four neighboring threads
         int next_level = ray_level+1; 
         float nextVis = pow(aux_args.vis[llid], 0.25f); 
+        float nextExp = aux_args.expint[llid]; 
         for(int ioff=0; ioff<2; ++ioff) {
           for(int joff=0; joff<2; ++joff) {
 
@@ -304,6 +320,7 @@ void cast_adaptive_cone_ray(
             
             //set the vis and pre for new threads
             aux_args.vis[id] = nextVis; //pow(aux_args.vis[llid], 0.25f); 
+            aux_args.expint[id] = nextExp; 
             
             //set master thread matrix
             for(int ii=0; ii<side_len/2; ++ii) {
@@ -352,26 +369,6 @@ void cast_adaptive_cone_ray(
         for (int y=minCell.y; y<maxCell.y; ++y) {
           for (int z=minCell.z; z<maxCell.z; ++z) {
 
-/*
-            //--------------------------------------------------------------------
-            //Fixed Grid Implementation
-            int blkIndex = calc_blkInt(x, y, z, linfo->dims);
-            (*ltree) = as_uchar16(tree_array[blkIndex]);
-            
-            float4 cellSphere = (float4) ( (float) x+.5f, (float) y+.5f, (float) z+.5f, UNIT_SPHERE_RADIUS ); 
-            float intersect_volume =  sphere_intersection_volume(currSphere, cellSphere);
-
-            //if it intersects, do one of two things
-            if ( intersect_volume > 0.0f ) {
-              //data index is relative data (data_index_cached) plus data_index_root
-              int data_ptr = data_index_root(ltree);
-              // replaced by:step_cell_cone(aux_args, data_ptr, intersect_volume, side_len * linfo->block_len);
-              //STEP_CELL; 
-              gamma_integral +=  aux_args.alphas[data_ptr]*intersect_volume* volume_scale;
-            }
-            //--------------------------------------------------------------------
-*/
-
             //load current block/tree, initialize cumsum buffer and cumIndex
             int blkIndex = calc_blkInt(x, y, z, linfo->dims);
             (*ltree) = as_uchar16(tree_array[blkIndex]);
@@ -392,8 +389,9 @@ void cast_adaptive_cone_ray(
             if( intersect_volume > 0.0f ) {
               if( (*ltree).s0 == 0) {
                 int data_ptr = data_index_root(ltree); 
-                //STEP_CELL; //step_cell_cone(aux_args, data_ptr, intersect_volume, side_len * linfo->block_len,&intensity_norm, &weighted_int, &prob_surface);
-                gamma_integral +=  aux_args.alphas[data_ptr]*intersect_volume*volume_scale/side_len/side_len;
+                intersect_volume = intersect_volume*volume_scale/side_len/side_len;
+                STEP_CELL; //step_cell_cone(aux_args, data_ptr, intersect_volume, side_len * linfo->block_len,&intensity_norm, &weighted_int, &prob_surface);
+                //gamma_integral +=  aux_args.alphas[data_ptr]*intersect_volume*volume_scale/side_len/side_len;
               }
               else { //push back root
                 push_back( &toVisit, 0 ); 
@@ -410,8 +408,10 @@ void cast_adaptive_cone_ray(
             max_cell = min(585, max_cell);
 
             //iterate through tree if there are children to get to
+            cnt=0;
             while ( !empty(&toVisit) )
             {
+              ++cnt; 
               //get front node off the top of the list, do an intersection for all 8 children
               int pindex = (int) pop_front( &toVisit );
               for(int currBitIndex=8*pindex + 1; currBitIndex < 8*pindex + 9; ++currBitIndex) {
@@ -433,8 +433,9 @@ void cast_adaptive_cone_ray(
                   if ( tree_bit_at(ltree, currBitIndex) == 0 ) {
                     //data index is relative data (data_index_cached) plus data_index_root
                     int data_ptr = data_index_cached(ltree, currBitIndex, bit_lookup, csum, &cumIndex) + data_index_root(ltree);
-                    //STEP_CELL; // replaced by:step_cell_cone(aux_args, data_ptr, intersect_volume, side_len * linfo->block_len);
-                    gamma_integral +=  aux_args.alphas[data_ptr]*intersect_volume*volume_scale/side_len/side_len;
+                    intersect_volume = intersect_volume*volume_scale/side_len/side_len;
+                    STEP_CELL; // replaced by:step_cell_cone(aux_args, data_ptr, intersect_volume, side_len * linfo->block_len);
+                    //gamma_integral +=  aux_args.alphas[data_ptr]*intersect_volume*volume_scale/side_len/side_len;;
                   }
                   else { 
                     push_back( &toVisit, currBitIndex );  //add children to the visit list
@@ -446,7 +447,6 @@ void cast_adaptive_cone_ray(
             // end step CELL portion of cone ray trace
             ////////////////////////////////////////////////////////////////////
 
-
           } //end z for
         } //end y for
       } //end x for
@@ -456,8 +456,8 @@ void cast_adaptive_cone_ray(
     // 2. calculate ball properties
     ///////////////////////////////////////////////////////////////////////////
     //replaced by something like: compute_ball_properties(aux_args);
-    //COMPUTE_BALL_PROPERTIES; 
-    aux_args.vis[llid] *= exp(-gamma_integral); 
+    COMPUTE_BALL_PROPERTIES; 
+    //aux_args.vis[llid] *= exp(-gamma_integral); 
     barrier(CLK_LOCAL_MEM_FENCE); 
     
     
@@ -570,7 +570,7 @@ void cast_adaptive_cone_ray(
   } //end ray trace while loop
 
   //stores pixel vis across all pixels
-  //compute_pixel_vis(aux_args.master_threads,aux_args.active_rays,aux_args.vis);
+  compute_pixel_vis(aux_args.master_threads,aux_args.active_rays,aux_args.vis);
   aux_args.vis[llid] = safety; 
 
 }
