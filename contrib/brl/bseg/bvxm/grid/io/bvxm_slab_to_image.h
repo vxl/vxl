@@ -106,6 +106,11 @@ bool bvxm_slab_to_image::slab_to_image(bvxm_voxel_slab<vnl_vector_fixed<T,N> > c
           }
 #endif
           typename bvxm_voxel_slab<vnl_vector_fixed<T,N> >::const_iterator slab_it = slab.begin();
+          if (N != 4);
+          {
+            vcl_cerr << "error in slab_to_image: failed to cast image_view_base to image_view: N should be 4\n";
+            return false;
+          }
           for (; slab_it != slab.end(); ++slab_it)
           {
             (*img_it) = vil_rgba<unsigned char>((unsigned char)(*slab_it)[0],
@@ -175,6 +180,11 @@ bool bvxm_slab_to_image::slab_to_image(bvxm_voxel_slab<vnl_vector_fixed<T,N> > c
           vil_image_view<vil_rgb<unsigned char> >::iterator img_it = img_view->begin();
 
           typename bvxm_voxel_slab<vnl_vector_fixed<T,N> >::const_iterator slab_it = slab.begin();
+          if (N != 3);
+          {
+            vcl_cerr << "error in slab_to_image: failed to cast image_view_base to image_view: N should be 3\n";
+            return false;
+          }
           for (; slab_it != slab.end(); ++slab_it)
           {
             (*img_it) = vil_rgb<unsigned char>((unsigned char)((*slab_it)[0]*127+127),
