@@ -297,8 +297,7 @@ void msm_ref_shape_instance::fit_to_points_wt_mat(const msm_points& pts,
   if (&pts == &points_) return;
   if (b_.size()==0) return;
 
-  unsigned n=model().size();
-  assert(wt_mat.size()==n);
+  assert(wt_mat.size()==model().size());
 
   tmp_points_.vector()=pts.vector();
   tmp_points_.vector()-=model().mean();
