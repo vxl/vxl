@@ -146,9 +146,8 @@ T vgl_h_matrix_1d<T>::get(unsigned int row_index, unsigned int col_index) const
 template <class T>
 void vgl_h_matrix_1d<T>::get(T *H) const
 {
-  T const* data = t12_matrix_.data_block();
-  for (int index = 0; index < 4; ++index)
-    *H++ = data[index];
+  for (T const* iter = t12_matrix_.begin(); iter < t12_matrix_.end(); ++iter)
+    *H++ = *iter;
 }
 
 template <class T>
@@ -167,9 +166,8 @@ template <class T>
 vgl_h_matrix_1d<T>&
 vgl_h_matrix_1d<T>::set(const T* H)
 {
-  T* data = t12_matrix_.data_block();
-  for (int index = 0; index < 4; ++index)
-    data[index] = *H++;
+  for (T* iter = t12_matrix_.begin(); iter < t12_matrix_.end(); ++iter)
+    *iter = *H++;
   return *this;
 }
 
@@ -238,6 +236,29 @@ projective_basis(vcl_vector<vgl_homg_point_1d<T> > const& points)
   }
   this->set(vnl_inverse(back_matrix));
   return true;
+}
+
+template <class T>
+bool vgl_h_matrix_1d<T>::is_identity() const
+{
+  return t12_matrix_.is_identity();
+}
+
+template <class T>
+bool vgl_h_matrix_1d<T>::is_rotation() const
+{
+  // the only 1-D rotation is the identity transformation:
+  return t12_matrix_.is_identity();
+}
+
+
+template <class T>
+bool vgl_h_matrix_1d<T>::is_euclidean() const
+{
+  // no translational part, and scale 1:
+  return t12_matrix_.get(0,0) == (T)1 &&
+         t12_matrix_.get(1,0) == (T)0 &&
+         t12_matrix_.get(1,1) == (T)1 ;
 }
 
 

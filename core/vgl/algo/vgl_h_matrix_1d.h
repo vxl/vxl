@@ -20,6 +20,7 @@
 //   31 Jul 2010 - Peter Vanroose - made more similar to 2d and 3d variants
 //   24 Oct 2010 - Peter Vanroose - mutators and setters now return *this
 //   27 Oct 2010 - Peter Vanroose - moved Doxygen docs from .txx to .h
+//   26 Jul 2011 - Peter Vanroose - added is_identity(), is_rotation(), is_euclidean()
 // \endverbatim
 
 #include <vcl_vector.h>
@@ -86,6 +87,10 @@ class vgl_h_matrix_1d
   T get (unsigned int row_index, unsigned int col_index) const;
   //: Return the inverse homography
   vgl_h_matrix_1d get_inverse() const;
+
+  bool is_rotation() const;
+  bool is_euclidean() const;
+  bool is_identity() const;
 
   //: transformation to projective basis (canonical frame)
   // Compute the homography that takes the input set of points to the
