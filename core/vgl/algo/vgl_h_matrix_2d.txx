@@ -10,6 +10,7 @@
 #include <vcl_cstdlib.h> // for exit()
 #include <vcl_fstream.h>
 #include <vcl_cassert.h>
+# include <vcl_deprecated.h>
 
 template <class T>
 vgl_h_matrix_2d<T>::vgl_h_matrix_2d(vcl_istream& s)
@@ -81,26 +82,23 @@ template <class T>
 vgl_homg_point_2d<T>
 vgl_h_matrix_2d<T>::operator()(vgl_homg_point_2d<T> const& p) const
 {
-  vnl_vector_fixed<T, 3> v(p.x(), p.y(), p.w());
-  vnl_vector_fixed<T,3> v2 = t12_matrix_ * v;
+  vnl_vector_fixed<T,3> v2 = t12_matrix_ * vnl_vector_fixed<T,3>(p.x(), p.y(), p.w());
   return vgl_homg_point_2d<T>(v2[0], v2[1], v2[2]);
-}
-
-template <class T>
-vgl_homg_line_2d<T>
-vgl_h_matrix_2d<T>::preimage(vgl_homg_line_2d<T> const& l) const
-{
-  vnl_vector_fixed<T,3> v(l.a(), l.b(), l.c());
-  vnl_vector_fixed<T,3> v2 = t12_matrix_.transpose() * v;
-  return vgl_homg_line_2d<T>(v2[0], v2[1], v2[2]);
 }
 
 template <class T>
 vgl_homg_line_2d<T>
 vgl_h_matrix_2d<T>::correlation(vgl_homg_point_2d<T> const& p) const
 {
-  vnl_vector_fixed<T, 3> v(p.x(), p.y(), p.w());
-  vnl_vector_fixed<T,3> v2 = t12_matrix_ * v;
+  vnl_vector_fixed<T,3> v2 = t12_matrix_ * vnl_vector_fixed<T,3>(p.x(), p.y(), p.w());
+  return vgl_homg_line_2d<T>(v2[0], v2[1], v2[2]);
+}
+
+template <class T>
+vgl_homg_line_2d<T>
+vgl_h_matrix_2d<T>::preimage(vgl_homg_line_2d<T> const& l) const
+{
+  vnl_vector_fixed<T,3> v2 = t12_matrix_.transpose() * vnl_vector_fixed<T,3>(l.a(), l.b(), l.c());
   return vgl_homg_line_2d<T>(v2[0], v2[1], v2[2]);
 }
 
@@ -108,16 +106,16 @@ template <class T>
 vgl_homg_point_2d<T>
 vgl_h_matrix_2d<T>::correlation(vgl_homg_line_2d<T> const& l) const
 {
-  vnl_vector_fixed<T,3> v(l.a(), l.b(), l.c());
-  vnl_vector_fixed<T,3> v2 = t12_matrix_ * v;
+  vnl_vector_fixed<T,3> v2 = t12_matrix_ * vnl_vector_fixed<T,3>(l.a(), l.b(), l.c());
   return vgl_homg_point_2d<T>(v2[0], v2[1], v2[2]);
 }
 
 template <class T>
-vgl_conic<T> vgl_h_matrix_2d<T>::operator() (vgl_conic<T> const& C) const
+vgl_conic<T>
+vgl_h_matrix_2d<T>::operator() (vgl_conic<T> const& C) const
 {
   T a=C.a(), b=C.b()/2, c = C.c(), d = C.d()/2, e = C.e()/2, f = C.f();
-  vnl_matrix_fixed<T, 3, 3> M, Mp;
+  vnl_matrix_fixed<T,3,3> M, Mp;
   M(0,0) = a;  M(0,1) = b;  M(0,2) = d;
   M(1,0) = b;  M(1,1) = c;  M(1,2) = e;
   M(2,0) = d;  M(2,1) = e;  M(2,2) = f;
@@ -127,10 +125,11 @@ vgl_conic<T> vgl_h_matrix_2d<T>::operator() (vgl_conic<T> const& C) const
 }
 
 template <class T>
-vgl_conic<T> vgl_h_matrix_2d<T>::preimage(vgl_conic<T> const& C) const
+vgl_conic<T>
+vgl_h_matrix_2d<T>::preimage(vgl_conic<T> const& C) const
 {
   T a=C.a(), b=C.b()/2, c = C.c(), d = C.d()/2, e = C.e()/2, f = C.f();
-  vnl_matrix_fixed<T, 3, 3> M, Mp;
+  vnl_matrix_fixed<T,3,3> M, Mp;
   M(0,0) = a;  M(0,1) = b;  M(0,2) = d;
   M(1,0) = b;  M(1,1) = c;  M(1,2) = e;
   M(2,0) = d;  M(2,1) = e;  M(2,2) = f;
@@ -144,8 +143,7 @@ template <class T>
 vgl_homg_point_2d<T>
 vgl_h_matrix_2d<T>::preimage(vgl_homg_point_2d<T> const& p) const
 {
-  vnl_vector_fixed<T,3> v(p.x(), p.y(), p.w());
-  v = vnl_inverse(t12_matrix_) * v;
+  vnl_vector_fixed<T,3> v = vnl_inverse(t12_matrix_) * vnl_vector_fixed<T,3>(p.x(), p.y(), p.w());
   return vgl_homg_point_2d<T>(v[0], v[1], v[2]);
 }
 
@@ -153,13 +151,12 @@ template <class T>
 vgl_homg_line_2d<T>
 vgl_h_matrix_2d<T>::operator()(vgl_homg_line_2d<T> const& l) const
 {
-  vnl_vector_fixed<T,3> v(l.a(), l.b(), l.c());
-  v = vnl_inverse_transpose(t12_matrix_) * v;
+  vnl_vector_fixed<T,3> v = vnl_inverse_transpose(t12_matrix_) * vnl_vector_fixed<T,3>(l.a(), l.b(), l.c());
   return vgl_homg_line_2d<T>(v[0], v[1], v[2]);
 }
 
 template <class T>
-vcl_ostream& operator<<(vcl_ostream& s, const vgl_h_matrix_2d<T>& h)
+vcl_ostream& operator<<(vcl_ostream& s, vgl_h_matrix_2d<T> const& h)
 {
   return s << h.get_matrix();
 }
@@ -204,18 +201,21 @@ void vgl_h_matrix_2d<T>::get(vnl_matrix_fixed<T,3,3>* H) const
 template <class T>
 void vgl_h_matrix_2d<T>::get(vnl_matrix<T>* H) const
 {
+  VXL_DEPRECATED("vgl_h_matrix_2d<T>::get(vnl_matrix<T>*) const"); 
   *H = t12_matrix_.as_ref(); // size 3x3
 }
 
 template <class T>
-vgl_h_matrix_2d<T>& vgl_h_matrix_2d<T>::set_identity()
+vgl_h_matrix_2d<T>&
+vgl_h_matrix_2d<T>::set_identity()
 {
   t12_matrix_.set_identity();
   return *this;
 }
 
 template <class T>
-vgl_h_matrix_2d<T>& vgl_h_matrix_2d<T>::set(const T* H)
+vgl_h_matrix_2d<T>&
+vgl_h_matrix_2d<T>::set(const T* H)
 {
   for (T* iter = t12_matrix_.begin(); iter < t12_matrix_.end(); ++iter)
     *iter = *H++;
@@ -223,7 +223,8 @@ vgl_h_matrix_2d<T>& vgl_h_matrix_2d<T>::set(const T* H)
 }
 
 template <class T>
-vgl_h_matrix_2d<T>& vgl_h_matrix_2d<T>::set(vnl_matrix_fixed<T,3,3> const& H)
+vgl_h_matrix_2d<T>&
+vgl_h_matrix_2d<T>::set(vnl_matrix_fixed<T,3,3> const& H)
 {
   t12_matrix_ = H;
   return *this;
@@ -236,11 +237,11 @@ projective_basis(vcl_vector<vgl_homg_point_2d<T> > const& points)
 {
   if (points.size()!=4)
     return false;
-  vnl_vector_fixed<T, 3> p0(points[0].x(), points[0].y(), points[0].w());
-  vnl_vector_fixed<T, 3> p1(points[1].x(), points[1].y(), points[1].w());
-  vnl_vector_fixed<T, 3> p2(points[2].x(), points[2].y(), points[2].w());
-  vnl_vector_fixed<T, 3> p3(points[3].x(), points[3].y(), points[3].w());
-  vnl_matrix_fixed<T, 3, 4> point_matrix;
+  vnl_vector_fixed<T,3> p0(points[0].x(), points[0].y(), points[0].w());
+  vnl_vector_fixed<T,3> p1(points[1].x(), points[1].y(), points[1].w());
+  vnl_vector_fixed<T,3> p2(points[2].x(), points[2].y(), points[2].w());
+  vnl_vector_fixed<T,3> p3(points[3].x(), points[3].y(), points[3].w());
+  vnl_matrix_fixed<T,3,4> point_matrix;
   point_matrix.set_column(0, p0);
   point_matrix.set_column(1, p1);
   point_matrix.set_column(2, p2);
@@ -262,12 +263,12 @@ projective_basis(vcl_vector<vgl_homg_point_2d<T> > const& points)
     return false;
   }
 
-  vnl_matrix_fixed<T, 3, 3> back_matrix;
+  vnl_matrix_fixed<T,3,3> back_matrix;
   back_matrix.set_column(0, p0);
   back_matrix.set_column(1, p1);
   back_matrix.set_column(2, p2);
 
-  vnl_vector_fixed<T, 3> scales_vector = vnl_inverse(back_matrix) * p3;
+  vnl_vector_fixed<T,3> scales_vector = vnl_inverse(back_matrix) * p3;
 
   back_matrix.set_column(0, scales_vector[0] * p0);
   back_matrix.set_column(1, scales_vector[1] * p1);
@@ -301,7 +302,7 @@ bool vgl_h_matrix_2d<T>::is_euclidean() const
     return false; // should not have a translation part
 
   // use an error tolerance on the orthonormality constraint
-  vnl_matrix_fixed<T, 2,2> R = get_upper_2x2_matrix();
+  vnl_matrix_fixed<T,2,2> R = get_upper_2x2_matrix();
   R *= R.transpose();
   R(0,0) -= T(1);
   R(1,1) -= T(1);
@@ -316,12 +317,11 @@ bool vgl_h_matrix_2d<T>::is_identity() const
 
 //-------------------------------------------------------------------
 template <class T>
-bool vgl_h_matrix_2d<T>::
-projective_basis(vcl_vector<vgl_homg_line_2d<T> > const& lines
+bool vgl_h_matrix_2d<T>::projective_basis(vcl_vector<vgl_homg_line_2d<T> > const& lines
 #ifdef VCL_VC_6
-                ,int dummy // parameter to help useless compiler disambiguate different functions
+                                         ,int dummy // parameter to help useless compiler disambiguate different functions
 #endif
-                )
+                                         )
 {
   if (lines.size()!=4)
     return false;
@@ -372,21 +372,24 @@ projective_basis(vcl_vector<vgl_homg_line_2d<T> > const& lines
 }
 
 template <class T>
-vgl_h_matrix_2d<T> vgl_h_matrix_2d<T>::get_inverse() const
+vgl_h_matrix_2d<T>
+vgl_h_matrix_2d<T>::get_inverse() const
 {
   return vgl_h_matrix_2d<T>(vnl_inverse(t12_matrix_));
 }
 
 
 template <class T>
-vgl_h_matrix_2d<T>& vgl_h_matrix_2d<T>::set_translation(const T tx, const T ty)
+vgl_h_matrix_2d<T>&
+vgl_h_matrix_2d<T>::set_translation(T tx, T ty)
 {
   t12_matrix_[0][2] = tx;   t12_matrix_[1][2] = ty;
   return *this;
 }
 
 template <class T>
-vgl_h_matrix_2d<T>& vgl_h_matrix_2d<T>::set_rotation(const T theta)
+vgl_h_matrix_2d<T>&
+vgl_h_matrix_2d<T>::set_rotation(T theta)
 {
   double theta_d = (double)theta;
   double c = vcl_cos(theta_d), s = vcl_sin(theta_d);
@@ -396,7 +399,8 @@ vgl_h_matrix_2d<T>& vgl_h_matrix_2d<T>::set_rotation(const T theta)
 }
 
 template <class T>
-vgl_h_matrix_2d<T>& vgl_h_matrix_2d<T>::set_scale(const T scale)
+vgl_h_matrix_2d<T>&
+vgl_h_matrix_2d<T>::set_scale(T scale)
 {
   for (unsigned r = 0; r<2; ++r)
     for (unsigned c = 0; c<3; ++c)
@@ -405,8 +409,9 @@ vgl_h_matrix_2d<T>& vgl_h_matrix_2d<T>::set_scale(const T scale)
 }
 
 template <class T>
-vgl_h_matrix_2d<T>& vgl_h_matrix_2d<T>::set_similarity(const T s, const T theta,
-                                                       const T tx, const T ty)
+vgl_h_matrix_2d<T>&
+vgl_h_matrix_2d<T>::set_similarity(T s, T theta,
+                                   T tx, T ty)
 {
   T a=s*vcl_cos(theta);
   T b=s*vcl_sin(theta);
@@ -417,7 +422,8 @@ vgl_h_matrix_2d<T>& vgl_h_matrix_2d<T>::set_similarity(const T s, const T theta,
 }
 
 template <class T>
-vgl_h_matrix_2d<T>& vgl_h_matrix_2d<T>::set_aspect_ratio(const T aspect_ratio)
+vgl_h_matrix_2d<T>&
+vgl_h_matrix_2d<T>::set_aspect_ratio(T aspect_ratio)
 {
   for (unsigned c = 0; c<3; ++c)
     t12_matrix_[1][c]*=aspect_ratio;
@@ -426,7 +432,8 @@ vgl_h_matrix_2d<T>& vgl_h_matrix_2d<T>::set_aspect_ratio(const T aspect_ratio)
 
 
 template <class T>
-vgl_h_matrix_2d<T>& vgl_h_matrix_2d<T>::set_affine(vnl_matrix_fixed<T,2,3> const& M23)
+vgl_h_matrix_2d<T>&
+vgl_h_matrix_2d<T>::set_affine(vnl_matrix_fixed<T,2,3> const& M23)
 {
   for (unsigned r = 0; r<2; ++r)
     for (unsigned c = 0; c<3; ++c)
@@ -436,8 +443,10 @@ vgl_h_matrix_2d<T>& vgl_h_matrix_2d<T>::set_affine(vnl_matrix_fixed<T,2,3> const
 }
 
 template <class T>
-vgl_h_matrix_2d<T>& vgl_h_matrix_2d<T>::set_affine(const vnl_matrix<T>& M23)
+vgl_h_matrix_2d<T>&
+vgl_h_matrix_2d<T>::set_affine(vnl_matrix<T> const& M23)
 {
+  VXL_DEPRECATED("vgl_h_matrix_2d<T>::set_affine(vnl_matrix<T> const&)"); 
   assert (M23.rows()==2 && M23.columns()==3);
   for (unsigned r = 0; r<2; ++r)
     for (unsigned c = 0; c<3; ++c)
@@ -462,7 +471,8 @@ vgl_h_matrix_2d<T>::get_upper_2x2() const
 }
 
 template <class T>
-vnl_matrix_fixed<T, 2,2> vgl_h_matrix_2d<T>::get_upper_2x2_matrix() const
+vnl_matrix_fixed<T,2,2>
+vgl_h_matrix_2d<T>::get_upper_2x2_matrix() const
 {
   vnl_matrix_fixed<T,2,2> R;
   vgl_h_matrix_2d<T> m = this->get_upper_2x2();
@@ -485,7 +495,7 @@ vgl_h_matrix_2d<T>::get_translation() const
 }
 
 template <class T>
-vnl_vector_fixed<T, 2>
+vnl_vector_fixed<T,2>
 vgl_h_matrix_2d<T>::get_translation_vector() const
 {
   vgl_homg_point_2d<T> p = this->get_translation();
@@ -496,7 +506,7 @@ vgl_h_matrix_2d<T>::get_translation_vector() const
 #undef VGL_H_MATRIX_2D_INSTANTIATE
 #define VGL_H_MATRIX_2D_INSTANTIATE(T) \
 template class vgl_h_matrix_2d<T >; \
-template vcl_ostream& operator << (vcl_ostream& s, const vgl_h_matrix_2d<T >& h); \
+template vcl_ostream& operator << (vcl_ostream& s, vgl_h_matrix_2d<T > const& h); \
 template vcl_istream& operator >> (vcl_istream& s, vgl_h_matrix_2d<T >& h)
 
 #endif // vgl_h_matrix_2d_txx_

@@ -20,11 +20,12 @@
 //   27 Oct 2010 - Peter Vanroose - moved Doxygen docs from .txx to .h
 // \endverbatim
 
-#include <vcl_vector.h>
+#include <vnl/vnl_fwd.h> // for vnl_vector_fixed<T,2>
 #include <vnl/vnl_matrix_fixed.h>
 #include <vgl/vgl_homg_point_2d.h>
 #include <vgl/vgl_homg_line_2d.h>
 #include <vgl/vgl_conic.h>
+#include <vcl_vector.h>
 #include <vcl_iosfwd.h>
 
 //:
@@ -65,7 +66,7 @@ class vgl_h_matrix_2d
   //: Return the transformed point given by $q = {\tt H} p$
   vgl_homg_point_2d<T> operator()(vgl_homg_point_2d<T> const& p) const;
   //: Return the transformed point given by $q = {\tt H} p$
-  vgl_homg_point_2d<T> operator*(vgl_homg_point_2d<T> const& q) const { return (*this)(q);}
+  vgl_homg_point_2d<T> operator*(vgl_homg_point_2d<T> const& p) const { return (*this)(p);}
 
   bool operator==(vgl_h_matrix_2d<T> const& M) const { return t12_matrix_ == M.get_matrix(); }
 
@@ -98,7 +99,8 @@ class vgl_h_matrix_2d
   vnl_matrix_fixed<T,3,3> const& get_matrix() const { return t12_matrix_; }
   //: Fill M with contents of the 3x3 homography matrix
   void get(vnl_matrix_fixed<T,3,3>* M) const;
-  //: Deprecated; use the vnl_matrix_fixed variant instead
+  //:
+  // \deprecated; use the vnl_matrix_fixed variant instead
   void get(vnl_matrix<T>* M) const;
   //: Fill M with contents of the 3x3 homography matrix
   void get(T *M) const;
@@ -108,11 +110,11 @@ class vgl_h_matrix_2d
   vgl_h_matrix_2d get_inverse() const;
 
   //: Set an element of the 3x3 homography matrix
-  vgl_h_matrix_2d& set (unsigned int row_index, unsigned int col_index, const T value)
+  vgl_h_matrix_2d& set (unsigned int row_index, unsigned int col_index, T value)
   { t12_matrix_[row_index][col_index]=value; return *this; }
 
   //: Set to 3x3 row-stored matrix
-  vgl_h_matrix_2d& set(const T *M);
+  vgl_h_matrix_2d& set(T const* M);
   //: Set to given 3x3 matrix
   vgl_h_matrix_2d& set(vnl_matrix_fixed<T,3,3> const& M);
 
@@ -122,11 +124,11 @@ class vgl_h_matrix_2d
   vgl_h_matrix_2d& set_identity();
 
   //: set H[0][2] = tx and H[1][2] = ty, other elements unaltered
-  vgl_h_matrix_2d& set_translation(const T tx, const T ty);
+  vgl_h_matrix_2d& set_translation(T tx, T ty);
 
   //: the upper 2x2 part of the matrix is replaced by a rotation matrix.
   //  rotation angle theta is in radians
-  vgl_h_matrix_2d& set_rotation(const T theta);
+  vgl_h_matrix_2d& set_rotation(T theta);
 
   //: compose the current transform with a uniform scaling transformation, S.
   // $S = \left[ \begin{array}{ccc}
@@ -134,7 +136,7 @@ class vgl_h_matrix_2d
   //                                0 & s & 0 \\%
   //                                0 & 0 & 1
   // \end{array}\right]$                         , Ts = S*T.
-  vgl_h_matrix_2d& set_scale(const T scale);
+  vgl_h_matrix_2d& set_scale(T scale);
 
   //: set the transform to a similarity mapping
   // Sim $ = \left[\begin{array}{ccc}
@@ -142,7 +144,7 @@ class vgl_h_matrix_2d
   //         \sin(\theta) &  \cos(\theta) & ty \\%
   //         0            &  0            & 1
   // \end{array}\right]$
-  vgl_h_matrix_2d& set_similarity(const T s, const T theta, const T tx, const T ty);
+  vgl_h_matrix_2d& set_similarity(T s, T theta, T tx, T ty);
 
   //: compose the transform with diagonal aspect ratio transform.
   // $A = \left[ \begin{array}{ccc}
@@ -150,7 +152,7 @@ class vgl_h_matrix_2d
   //                                 0 & a & 0 \\%
   //                                 0 & 0 & 1
   // \end{array}\right]$                         , Ta = A*T.
-  vgl_h_matrix_2d& set_aspect_ratio(const T aspect_ratio);
+  vgl_h_matrix_2d& set_aspect_ratio(T aspect_ratio);
 
 
   //: set the transform to a general affine transform matrix
@@ -160,7 +162,8 @@ class vgl_h_matrix_2d
   //                           0   & 0   & 1
   // \end{array}\right]$
   vgl_h_matrix_2d& set_affine(vnl_matrix_fixed<T,2,3> const& M23);
-  //: Deprecated; use the vnl_matrix_fixed variant instead
+  //:
+  // \deprecated; use the vnl_matrix_fixed variant instead
   vgl_h_matrix_2d& set_affine(vnl_matrix<T> const& M23);
 
   bool is_rotation() const;
@@ -196,12 +199,12 @@ class vgl_h_matrix_2d
   //: corresponds to rotation for Euclidean transformations
   vgl_h_matrix_2d<T> get_upper_2x2() const;
   //: corresponds to rotation for Euclidean transformations
-  vnl_matrix_fixed<T, 2,2> get_upper_2x2_matrix() const;
+  vnl_matrix_fixed<T,2,2> get_upper_2x2_matrix() const;
 
   //: corresponds to translation for affine transformations
   vgl_homg_point_2d<T> get_translation() const;
   //: corresponds to translation for affine transformations
-  vnl_vector_fixed<T, 2> get_translation_vector() const;
+  vnl_vector_fixed<T,2> get_translation_vector() const;
 
   //: Read H from vcl_istream
   bool read(vcl_istream& s);
