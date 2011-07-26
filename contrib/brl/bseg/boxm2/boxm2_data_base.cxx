@@ -56,6 +56,16 @@ void boxm2_data_base::set_default_value(vcl_string data_type)
   else if (data_type == boxm2_data_traits<BOXM2_GAUSS_RGB>::prefix()) {
     vcl_memset(data_buffer_, (vxl_byte) 128, buffer_length_);
   }
+  //default GAMMA value (not influenced by scene size or XML pinit)
+  if (data_type == boxm2_data_traits<BOXM2_GAMMA>::prefix()) {
+    float p_init = .01f; 
+    vcl_cout<<"initializing data to "<<p_init<<vcl_endl;
+    const float GAMMA_INIT = float(-vcl_log(1.0f - p_init) / (.025*.025*.025) );
+    float* alphas = (float*) data_buffer_;
+    int buffer_length = (int)(buffer_length_/sizeof(float));
+    for (int i=0; i<buffer_length; ++i) 
+      alphas[i] = GAMMA_INIT;
+  }
   else {
     vcl_memset(data_buffer_, 0, buffer_length_);
   }
