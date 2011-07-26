@@ -1,4 +1,4 @@
-// This is brl/bseg/boxm2/ocl/cl/cone/update_adaptive_cone_kernels.cl
+// This is brl/bseg/boxm2/ocl/cl/cone/render_adaptive_cone_kernels.cl
 #pragma OPENCL EXTENSION cl_khr_global_int32_base_atomics: enable
 #if NVIDIA
  #pragma OPENCL EXTENSION cl_khr_gl_sharing : enable
@@ -36,19 +36,19 @@ typedef struct
 
            //constants used by stepcell functions
            float volume_scale;
-  
+
   //store ray vis and pre locally
-  __local float* vis; 
+  __local float* vis;
   __local float* pre;
-  
+
   //curr t, 8x8 matrix
-  __local float* currT; 
-  
+  __local float* currT;
+
   //store active ray pointer, image/ray pyramids
   __local uchar* active_rays;
-  __local uchar* master_threads; 
-    ray_pyramid* rays; 
-  image_pyramid* tfar; 
+  __local uchar* master_threads;
+    ray_pyramid* rays;
+  image_pyramid* tfar;
 } AuxArgs;
 
 void cast_adaptive_cone_ray(
@@ -86,11 +86,11 @@ render_adaptive_cone(__constant  RenderSceneInfo    * linfo,
                      __global    float              * output,
                      __constant  uchar              * bit_lookup,       // used to get data_index
                      __global    float              * vis_image,        // visibility image (for keeping vis across blocks)
-                     
+
                      __constant  float              * centerX,          //cached lookup tables for center of cells
                      __constant  float              * centerY,
                      __constant  float              * centerZ,
-                     
+
                      __local     uchar16            * local_tree,       // cache current tree into local memory
                      __local     uchar              * cumsum,           // cumulative sum for calculating data pointer
                      __local     uchar              * to_visit )        //local mem space for BFS on trees
@@ -105,7 +105,7 @@ render_adaptive_cone(__constant  RenderSceneInfo    * linfo,
   int imIndex = j*get_global_size(0) + i;
   if (i>=(*imgdims).z || j>=(*imgdims).w || i<(*imgdims).x || j<(*imgdims).y)
     return;
-    
+
   //----------------------------------------------------------------------------
   // transform rays from world to normalized block world space
   //----------------------------------------------------------------------------
@@ -132,7 +132,7 @@ render_adaptive_cone(__constant  RenderSceneInfo    * linfo,
   barrier(CLK_LOCAL_MEM_FENCE);
   ray_pyramid pyramid = new_ray_pyramid(ray_pyramid_mem, 4, 8);
 
-  //initalize T pyramids (tfar)
+  //initialize T pyramids (tfar)
   __local float* tfar_mem[4];
   __local float tfar0[1];
   __local float tfar1[4];
@@ -142,7 +142,7 @@ render_adaptive_cone(__constant  RenderSceneInfo    * linfo,
   tfar_mem[1] = tfar1;
   tfar_mem[2] = tfar2;
   tfar_mem[3] = tfar3;
-  tfar3[llid] = 0.0f; 
+  tfar3[llid] = 0.0f;
   barrier(CLK_LOCAL_MEM_FENCE);
   image_pyramid tfar_pyramid = new_image_pyramid(tfar_mem, 4, 8);
 
@@ -150,33 +150,33 @@ render_adaptive_cone(__constant  RenderSceneInfo    * linfo,
   __local uchar active_rays[64];
   active_rays[llid] = (llid==0) ? 1 : 0;
   barrier(CLK_LOCAL_MEM_FENCE);
-  
+
   //init master thread matrix
-  __local uchar master_threads[64]; 
-  master_threads[llid] = 0; //llid; 
-  barrier(CLK_LOCAL_MEM_FENCE); 
-  
+  __local uchar master_threads[64];
+  master_threads[llid] = 0; //llid;
+  barrier(CLK_LOCAL_MEM_FENCE);
+
   //init local pre and vis
-  __local float vis[64]; 
-  __local float pre[64]; 
-  pre[llid] = 0.0f; //pre_image[imIndex]; 
-  vis[llid] = vis_image[imIndex]; 
-  barrier(CLK_LOCAL_MEM_FENCE); 
-  
+  __local float vis[64];
+  __local float pre[64];
+  pre[llid] = 0.0f; //pre_image[imIndex];
+  vis[llid] = vis_image[imIndex];
+  barrier(CLK_LOCAL_MEM_FENCE);
+
   //8x8 currT
-  __local float currT[64]; 
-  currT[llid] = 0.0f; 
-  barrier(CLK_LOCAL_MEM_FENCE); 
-  
+  __local float currT[64];
+  currT[llid] = 0.0f;
+  barrier(CLK_LOCAL_MEM_FENCE);
+
   //store in aux_arg struct
   AuxArgs aux_args;
-  aux_args.active_rays = active_rays; 
-  aux_args.master_threads = master_threads; 
-  aux_args.tfar  = &tfar_pyramid; 
-  aux_args.rays  = &pyramid; 
-  aux_args.vis = vis; 
-  aux_args.pre = pre;   
-  aux_args.currT = currT; 
+  aux_args.active_rays = active_rays;
+  aux_args.master_threads = master_threads;
+  aux_args.tfar  = &tfar_pyramid;
+  aux_args.rays  = &pyramid;
+  aux_args.vis = vis;
+  aux_args.pre = pre;
+  aux_args.currT = currT;
 
   //----------------------------------------------------------------------------
   //store other aux args
@@ -269,4 +269,5 @@ void compute_ball_properties(AuxArgs aux_args)
   (*aux_args.vol_cum) = 0.0f;
 #endif
 }
-#endif
+
+#endif // RENDER
