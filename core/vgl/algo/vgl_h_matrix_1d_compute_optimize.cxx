@@ -117,7 +117,7 @@ compute_cool_homg(const vcl_vector<vgl_homg_point_1d<double> >&p1,
 
   vgl_h_matrix_1d<double>  K;
   do_compute(z1,z2,K);
-  M=vgl_h_matrix_1d<double> (K,M);      // refine M using the correction K.
+  M= K * M;      // refine M using the correction K.
   return true;
 }
 
