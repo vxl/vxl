@@ -176,7 +176,7 @@ void cast_adaptive_cone_ray(
   //////////////////////////////////////////////////////////////////////////////
   float count=0.0f; //debug counter
   int safety=0;
-  while ( currT < tFar && ++safety < 1000 )
+  while ( currT < tFar && ++safety < 100000 )
   {
     ///////////////////////////////////////////////////////////////////////////
     // 0. grab currently activated rays, and compute their spheres
@@ -210,16 +210,72 @@ void cast_adaptive_cone_ray(
         for (int y=minCell.y; y<maxCell.y; ++y) {
           for (int z=minCell.z; z<maxCell.z; ++z) {
             
-            //only split once for now
-            if(currR > UNIT_SPHERE_RADIUS && ray_level<3) {
-              split=true; 
-            }
+            ////////////////////////////////////////////////////////////////////
+            // Begin octree traversal 
+            //load current block/tree, initialize cumsum buffer and cumIndex
+            int blkIndex = calc_blkInt(x, y, z, linfo->dims);
+            (*ltree) = as_uchar16(tree_array[blkIndex]);
+            csum[0] = (*ltree).s0;
+            int cumIndex = 1;
             
-          } //end z foranyway, 
+            //visit list for BFS through tree (denotes parents of cells that ought to be visited)
+            linked_list toVisit = new_linked_list(listMem, 73); 
+            
+            /////////////////////////////////////////////////////////////////////
+            //do an intersection with the root outside the loop 
+            //calculate the theoretical radius of this cell
+            float side_len = 1.0f;  
+            float4 cellSphere = (float4) ( (float) x+.5f, (float) y+.5f, (float) z+.5f, UNIT_SPHERE_RADIUS ); 
+            float  intersect_volume = sphere_intersection_volume(currSphere, cellSphere);
+            
+            //if it intersects, do one of two things
+            if( intersect_volume > 0.0f ) {
+              if( (*ltree).s0 == 0){
+                //If ray sphere is larger than the cell sphere, 
+                //split the ray! change +(1,0), +(0,1), and +(1,1)
+                if(currR > cellSphere.w && ray_level<1) {
+                  split=true; 
+                }
+              }
+              else { //push back root
+                push_back( &toVisit, 0 ); 
+              }
+            }
+            // done with first intersection - if nonzero volume, try children
+            /////////////////////////////////////////////////////////////////////
+    
+            /////////////////////////////////////////////////////////////////////
+            //list keeps track of parents whose children need to be intersected 
+            //saves 8xSpace in local memory
+            unsigned deepest_gen = linfo->root_level; 
+            int max_cell = ((1 << (3*(deepest_gen+1))) - 1) / 7;
+            max_cell = min(585, max_cell);
+
+            //iterate through tree if there are children to get to
+            while ( !empty(&toVisit) )
+            {
+              //get front node off the top of the list, do an intersection for all 8 children
+              int pindex = (int) pop_front( &toVisit );
+              for(int currBitIndex=8*pindex + 1; currBitIndex < 8*pindex + 9; ++currBitIndex) {
+            
+                //calculate the theoretical radius of this cell
+                int curr_depth = get_depth(currBitIndex);
+                float side_len = 1.0f / (float) (1<<curr_depth);
+                            
+                //only split once for now
+                if(currR > UNIT_SPHERE_RADIUS*side_len && ray_level<1) {
+                  split=true; 
+                }
+              } //end child for loop
+            } //end BFS while
+            // end Octree traversal portion of cone ray trace
+            ////////////////////////////////////////////////////////////////////
+            
+          } //end z for
         } //end y for
       } //end x for
       
-      //if split was triggered....
+      //----SPLIT-----//
       int side_len = 1<<(3-ray_level); //sqrt of number of threads this current active ray controls
       if(split) {
         count=ray_level+1;
@@ -261,97 +317,9 @@ void cast_adaptive_cone_ray(
             aux_args.currT[id] = splitT; 
           }
         }
-        
-      }
-
-#if 0 //octree cell traversal - not part of first iteration
-            //load current block/tree, initialize cumsum buffer and cumIndex
-            int blkIndex = calc_blkInt(x, y, z, linfo->dims);
-            (*ltree) = as_uchar16(tree_array[blkIndex]);
-            csum[0] = (*ltree).s0;
-            int cumIndex = 1;
-            
-            //visit list for BFS through tree (denotes parents of cells that ought to be visited)
-            linked_list toVisit = new_linked_list(listMem, 73); 
-            /////////////////////////////////////////////////////////////////////
-            //do an intersection with the root outside the loop 
-            //calculate the theoretical radius of this cell
-            float side_len = 1.0f;  
-            float4 cellSphere = (float4) ( (float) x+.5f, (float) y+.5f, (float) z+.5f, UNIT_SPHERE_RADIUS ); 
-            float  intersect_volume = sphere_intersection_volume(currSphere, cellSphere);
-            
-            //if it intersects, do one of two things
-            if( intersect_volume > 0.0f ) {
-              if( (*ltree).s0 == 0){
-                
-                //If ray sphere is larger than the cell sphere, 
-                //split the ray! change +(1,0), +(0,1), and +(1,1)
-                if(currSphere.w > cellSphere.w) {
-                  for(int ioff=0; ioff<2; ++ioff) {
-                    for(int joff=0; joff<2; ++joff) {
-                      uchar id = (localI+ioff) + (localJ+joff)*get_local_size(0); 
-                      aux_args.active_rays[id] = ray_level+1; 
-                      aux_args.master_threads[id] = id; 
-                    }
-                  }
-                
-                }
-                
-              }
-              else { //push back root
-                push_back( &toVisit, 0 ); 
-              }
-            }
-            // done with first intersection - if nonzero volume, try children
-            /////////////////////////////////////////////////////////////////////
-    
-            /////////////////////////////////////////////////////////////////////
-            //list keeps track of parents whose children need to be intersected 
-            //saves 8xSpace in local memory
-            unsigned deepest_gen = linfo->root_level; 
-            int max_cell = ((1 << (3*(deepest_gen+1))) - 1) / 7;
-            max_cell = min(585, max_cell);
-
-            //iterate through tree if there are children to get to
-            while ( !empty(&toVisit) )
-            {
-              //get front node off the top of the list, do an intersection for all 8 children
-              int pindex = (int) pop_front( &toVisit );
-              for(int currBitIndex=8*pindex + 1; currBitIndex < 8*pindex + 9; ++currBitIndex) {
-            
-                //calculate the theoretical radius of this cell
-                int curr_depth = get_depth(currBitIndex);
-                float side_len = 1.0f / (float) (1<<curr_depth);
-
-                //intersect the cell,
-                float4 cellSphere = (float4) ( (float) x + centerX[currBitIndex], 
-                                               (float) y + centerY[currBitIndex], 
-                                               (float) z + centerZ[currBitIndex], 
-                                               UNIT_SPHERE_RADIUS * side_len ); 
-                float intersect_volume =  sphere_intersection_volume(currSphere, cellSphere);
-
-                //if it intersects, do one of two things
-                if ( intersect_volume > 0.0f ) {
-                  //if the tree is a leaf, then update it's contribution
-                  if ( tree_bit_at(ltree, currBitIndex) == 0 ) {
-                    //data index is relative data (data_index_cached) plus data_index_root
-                    int data_ptr = data_index_cached(ltree, currBitIndex, bit_lookup, csum, &cumIndex) + data_index_root(ltree);
-                    // replaced by:step_cell_cone(aux_args, data_ptr, intersect_volume, side_len * linfo->block_len);
-                    STEP_CELL; 
-                  }
-                  else { 
-                    push_back( &toVisit, currBitIndex );  //add children to the visit list
-                  }
-                }
-              
-              } //end child for loop
-            } //end BFS while
-            // end step CELL portion of cone ray trace
-            ////////////////////////////////////////////////////////////////////
-            
-#endif
-
-    } //end ray_level if
+      } // END SPLIT IF
+      
+    } //end ray_level if (is_active)
     barrier(CLK_LOCAL_MEM_FENCE); 
 
     ///////////////////////////////////////////////////////////////////////////
@@ -384,6 +352,7 @@ void cast_adaptive_cone_ray(
         for (int y=minCell.y; y<maxCell.y; ++y) {
           for (int z=minCell.z; z<maxCell.z; ++z) {
 
+/*
             //--------------------------------------------------------------------
             //Fixed Grid Implementation
             int blkIndex = calc_blkInt(x, y, z, linfo->dims);
@@ -401,8 +370,8 @@ void cast_adaptive_cone_ray(
               gamma_integral +=  aux_args.alphas[data_ptr]*intersect_volume* volume_scale;
             }
             //--------------------------------------------------------------------
-            
-  #if 0  //octree cell stuff not in this iteration
+*/
+
             //load current block/tree, initialize cumsum buffer and cumIndex
             int blkIndex = calc_blkInt(x, y, z, linfo->dims);
             (*ltree) = as_uchar16(tree_array[blkIndex]);
@@ -423,7 +392,8 @@ void cast_adaptive_cone_ray(
             if( intersect_volume > 0.0f ) {
               if( (*ltree).s0 == 0) {
                 int data_ptr = data_index_root(ltree); 
-                STEP_CELL; //step_cell_cone(aux_args, data_ptr, intersect_volume, side_len * linfo->block_len,&intensity_norm, &weighted_int, &prob_surface);
+                //STEP_CELL; //step_cell_cone(aux_args, data_ptr, intersect_volume, side_len * linfo->block_len,&intensity_norm, &weighted_int, &prob_surface);
+                gamma_integral +=  aux_args.alphas[data_ptr]*intersect_volume*volume_scale/side_len/side_len;
               }
               else { //push back root
                 push_back( &toVisit, 0 ); 
@@ -463,8 +433,8 @@ void cast_adaptive_cone_ray(
                   if ( tree_bit_at(ltree, currBitIndex) == 0 ) {
                     //data index is relative data (data_index_cached) plus data_index_root
                     int data_ptr = data_index_cached(ltree, currBitIndex, bit_lookup, csum, &cumIndex) + data_index_root(ltree);
-                    // replaced by:step_cell_cone(aux_args, data_ptr, intersect_volume, side_len * linfo->block_len);
-                    STEP_CELL; 
+                    //STEP_CELL; // replaced by:step_cell_cone(aux_args, data_ptr, intersect_volume, side_len * linfo->block_len);
+                    gamma_integral +=  aux_args.alphas[data_ptr]*intersect_volume*volume_scale/side_len/side_len;
                   }
                   else { 
                     push_back( &toVisit, currBitIndex );  //add children to the visit list
@@ -475,12 +445,12 @@ void cast_adaptive_cone_ray(
             } //end BFS while
             // end step CELL portion of cone ray trace
             ////////////////////////////////////////////////////////////////////
-  #endif 
+
 
           } //end z for
         } //end y for
       } //end x for
-    } //
+    } //end ray_level if (is_active)
 
     ///////////////////////////////////////////////////////////////////////////
     // 2. calculate ball properties
@@ -489,6 +459,7 @@ void cast_adaptive_cone_ray(
     //COMPUTE_BALL_PROPERTIES; 
     aux_args.vis[llid] *= exp(-gamma_integral); 
     barrier(CLK_LOCAL_MEM_FENCE); 
+    
     
     ///////////////////////////////////////////////////////////////////////////
     // 3. redistribute data loop - used to redistribute information 
@@ -599,5 +570,7 @@ void cast_adaptive_cone_ray(
   } //end ray trace while loop
 
   //stores pixel vis across all pixels
-  compute_pixel_vis(aux_args.master_threads,aux_args.active_rays,aux_args.vis);
+  //compute_pixel_vis(aux_args.master_threads,aux_args.active_rays,aux_args.vis);
+  aux_args.vis[llid] = safety; 
+
 }

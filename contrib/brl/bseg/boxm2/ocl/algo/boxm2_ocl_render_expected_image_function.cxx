@@ -140,6 +140,7 @@ float render_cone_expected_image( boxm2_scene_sptr & scene,
          
     ////////////////////////////////////////////////////////////////////////////////
     //gotta do this the old fashion way for debuggin....
+    vcl_cout<<"  DEBUG: COMPUTING CONE HALF ANGLES ON CPU"<<vcl_endl;
     int cnt = 0; 
     for (unsigned j=0;j<cl_nj;++j) {
       for (unsigned i=0;i<cl_ni;++i) {
@@ -158,8 +159,9 @@ float render_cone_expected_image( boxm2_scene_sptr & scene,
         <<ray_directions[1]<<','
         <<ray_directions[2]<<','
         <<ray_directions[3]<<vcl_endl;
+    vcl_cout<<"  DEBUG: FINISHED CONE HALF ANGLES ON CPU"<<vcl_endl;
     ////////////////////////////////////////////////////////////////////////////////
-     
+       
     
     // Output Array
     float output_arr[100];
@@ -193,11 +195,19 @@ float render_cone_expected_image( boxm2_scene_sptr & scene,
         boxm2_block_metadata mdata = scene->get_block_metadata(*id);
         bocl_kernel* kern =  kernel;
 
+        ///********************************////
+        //DEBUG hack - grab alpha from existing scene for length and set gamma
+        bocl_mem* real_alpha     = opencl_cache->get_data<BOXM2_ALPHA>(*id);
+        int alphaTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
+        int numCells = (int) (real_alpha->num_bytes()/alphaTypeSize);
+        int gammaTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_GAMMA>::prefix());
+        ///********************************////
+        
         //write the image values to the buffer
         vul_timer transfer;
         bocl_mem* blk       = opencl_cache->get_block(*id);
         bocl_mem* blk_info  = opencl_cache->loaded_block_info();
-        bocl_mem* alpha     = opencl_cache->get_data<BOXM2_GAMMA>(*id);
+        bocl_mem* alpha     = opencl_cache->get_data<BOXM2_ALPHA>(*id); //, numCells*gammaTypeSize); //opencl_cache->get_data<BOXM2_GAMMA>(*id);
         bocl_mem* mog       = opencl_cache->get_data(*id,data_type);
         transfer_time += (float) transfer.all();
 
