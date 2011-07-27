@@ -491,6 +491,38 @@ bayes_main(__constant  RenderSceneInfo    * linfo,
 }
 
 
+
+//----------------------------------------------------------------------------
+// Split ray function
+//----------------------------------------------------------------------------
+void split_ray(AuxArgs aux_args, int side_len) 
+{
+  uchar llid = (uchar)(get_local_id(0) + get_local_size(0)*get_local_id(1));
+  uchar localI = (uchar)get_local_id(0); 
+  uchar localJ = (uchar)get_local_id(1); 
+
+  //turn on the four neighboring threads
+  float nextVis = pow(aux_args.vis[llid], 0.25f); 
+  float nextPre = aux_args.pre[llid]; 
+  for(int ioff=0; ioff<2; ++ioff) {
+    for(int joff=0; joff<2; ++joff) {
+
+      //"neighbor" threads are not necessarily neighboring in workspace (only at finest level they are)
+      int di = ioff * (side_len/2); 
+      int dj = joff * (side_len/2); 
+      
+      //calc local thread ID (in 8x8 workspace)
+      uchar id = (localI+di) + (localJ+dj)*get_local_size(0); 
+      
+      //set the vis and pre for new threads
+      aux_args.vis[id] = nextVis;
+      aux_args.pre[id] = nextPre; 
+      
+    } //end i for
+  } //end j for  
+}
+
+
 bool step_cell(AuxArgs aux_args, int data_ptr, float intersect_volume)
 {
   //rescale intersect volume
