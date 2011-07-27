@@ -51,7 +51,7 @@ void test_block_rle_io()
   double ratio = ((double) compressed_length) / uncompressed_length;
 
   vcl_cout << "Uncompressed size: " << uncompressed_length << " Compressed size: " << compressed_length
-    << " Ratio: " << ratio << vcl_endl;
+           << " Ratio: " << ratio << vcl_endl;
   TEST("Significant compression achieved", uncompressed_length > 100 && ratio < 0.3, true);
 
   {
@@ -74,7 +74,7 @@ void test_block_rle_io()
 
 
     TEST("vcl_vector<bool> out == vcl_vector<bool> in",
-      vcl_equal(v_bool_out, v_bool_out+n, v_bool_in), true);
+         vcl_equal(v_bool_out, v_bool_out+n, v_bool_in), true);
     TEST("vcl_vector<int> out == vcl_vector<int> in", v_int_out, v_int_in);
     TEST("vcl_vector<float> out == vcl_vector<float> in", v_float_out,v_float_in);
     TEST("vcl_vector<uchar> out == vcl_vector<uchar> in", v_uchar_out,v_uchar_in);
@@ -105,9 +105,8 @@ void test_block_rle_io()
     TEST("Finished reading file successfully", (!bfs_in_compressed), false);
     bfs_in_compressed.close();
 
-
     TEST("vcl_vector<bool> out == vcl_vector<bool> in",
-      vcl_equal(v_bool_out, v_bool_out+n, v_bool_in), true);
+         vcl_equal(v_bool_out, v_bool_out+n, v_bool_in), true);
     TEST("vcl_vector<int> out == vcl_vector<int> in", v_int_out, v_int_in);
     TEST("vcl_vector<float> out == vcl_vector<float> in", v_float_out,v_float_in);
     TEST("vcl_vector<uchar> out == vcl_vector<uchar> in", v_uchar_out,v_uchar_in);
@@ -142,13 +141,13 @@ void test_block_rle_io()
       vsl_block_binary_rle_read(bfs_in2, &v_int64_in.front(), n);
       TEST("Read file correctly", (!bfs_in2), false);
       TEST("vcl_vector<bool> out == vcl_vector<bool> in",
-        vcl_equal(v_bool_out, v_bool_out+n, v_bool_in), true);
+           vcl_equal(v_bool_out, v_bool_out+n, v_bool_in), true);
       TEST("vcl_vector<int> out == vcl_vector<int> in", v_int_out, v_int_in);
       TEST("vcl_vector<float> out == vcl_vector<float> in", v_float_out, v_float_in);
       TEST("vcl_vector<uchar> out == vcl_vector<uchar> in", v_uchar_out, v_uchar_in);
       TEST("vcl_vector<int64> out == vcl_vector<int64> in", v_int64_out, v_int64_in);
 
-  //    vsl_print_summary(vcl_cout, v_bool_in);
+  //  vsl_print_summary(vcl_cout, v_bool_in);
       vsl_print_summary(vcl_cout, v_int_in);
       vsl_print_summary(vcl_cout, v_float_in);
       vsl_print_summary(vcl_cout, v_uchar_in);

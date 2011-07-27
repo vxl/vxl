@@ -6,19 +6,21 @@
 #include <windows.h>
 #include <vgui/vgui_menu.h>
 
-// The definitions of MENUEX_TEMPLATE_HEADER and MENUEX_TEMPLATE_ITEM 
+// The definitions of MENUEX_TEMPLATE_HEADER and MENUEX_TEMPLATE_ITEM
 // are not present in any standard header file. They are copied here
 // from MSDN documentation.
 // We use MENUEX_TEMPLATE_HEADER and MENUEX_TEMPLATE_ITEM instead of
 // MENUITEMTEMPLATEHEADER and MENUITEMTEMPLATE because a separator is
 // not defined in the latter.
-typedef struct {
+typedef struct
+{
   WORD  wVersion; // typedef unsigned short WORD;
   WORD  wOffset;
   DWORD dwHelpId; // typedef unsigned long DWORD;
 } MENUEX_TEMPLATE_HEADER;
 
-typedef struct {
+typedef struct
+{
   DWORD dwType;
   DWORD dwState;
   DWORD menuId;
@@ -32,26 +34,25 @@ typedef struct {
 
 class vgui_win32_utils
 {
-public:
+ public:
   // (Create if necessary and) return singleton instance of this class.
   static vgui_win32_utils *instance();
 
-  // Convert a vgui_menu to a Win32 menu 
-  HMENU vgui_menu_to_win32(vgui_menu const &vguimenu, 
-    vcl_vector<vgui_command_sptr> &callbacks, HACCEL *hAccel, 
-    bool isPopup = false);
+  // Convert a vgui_menu to a Win32 menu
+  HMENU vgui_menu_to_win32(vgui_menu const &vguimenu,
+                           vcl_vector<vgui_command_sptr> &callbacks, HACCEL *hAccel,
+                           bool isPopup = false);
 
   // Convert a vgui_menu to an extended Win32 menu
-  HMENU vgui_menu_to_win32ex(vgui_menu const &vguimenu, 
-    vcl_vector<vgui_command_sptr> &callbacks, HACCEL *hAccel,
-    bool isPopup = false);
+  HMENU vgui_menu_to_win32ex(vgui_menu const &vguimenu,
+                             vcl_vector<vgui_command_sptr> &callbacks, HACCEL *hAccel,
+                             bool isPopup = false);
 
-
-protected:
+ protected:
   vgui_win32_utils() {}
   ~vgui_win32_utils() {}
 
-private:
+ private:
   int addMenuItems(vgui_menu const &vguimenu, int offset, bool is_popup);
   int addMenuItemsEx(vgui_menu const &vguimenu, int offset, bool is_popup);
   void addAccelerator(vcl_string&, vgui_menu_item const&, int);

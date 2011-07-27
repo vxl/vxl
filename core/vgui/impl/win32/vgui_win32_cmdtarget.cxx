@@ -4,14 +4,16 @@
 
 BOOL vgui_win32_cmdtarget::OnCmdMsg(UINT message, WPARAM wParam, LPARAM lParam)
 {
-  //cout << "vgui_win32_cmdtarget::OnCmdMsg()" << endl;
-  
+#ifdef DEBUG
+  vcl_cout << "vgui_win32_cmdtarget::OnCmdMsg()" << vcl_endl;
+#endif
+
   // Look through message map to see if it applies to us
   const AFX_MSGMAP* pMessageMap;
   const AFX_MSGMAP_ENTRY* lpEntry;
   for ( pMessageMap = GetMessageMap(); pMessageMap != NULL;
-         pMessageMap = pMessageMap->pBaseMessageMap ) {
-    lpEntry = pMessageMap->lpEntries; 
+        pMessageMap = pMessageMap->pBaseMessageMap ) {
+    lpEntry = pMessageMap->lpEntries;
     while ( lpEntry->nSig != AfxSig_end ) {
       if ( lpEntry->nMessage == message ) {
         (this->*lpEntry->pfn)();

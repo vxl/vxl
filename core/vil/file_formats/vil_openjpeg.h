@@ -157,7 +157,7 @@ class vil_openjpeg_image : public vil_image_resource
     unsigned reduction) const;
 
   virtual bool put_view(const vil_image_view_base& im,
-    unsigned int i0, unsigned int j0);
+                        unsigned int i0, unsigned int j0);
 
   virtual bool get_property(char const* tag, void* property_value = 0) const;
 

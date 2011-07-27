@@ -73,7 +73,7 @@ inline void vsl_b_read(vsl_b_istream &is, vil_image_view<T>& image)
       const T* data = reinterpret_cast<const T*>(chunk->data());
 
       if (chunk->size() < np*ni*nj*sizeof(T) ||
-        offset < 0 || offset*sizeof(T) >= chunk->size())
+          offset < 0 || offset*sizeof(T) >= chunk->size())
       {
         vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vil_image_view<T>&)\n"
                  << "           Image details not compatible with chunk data.\n";

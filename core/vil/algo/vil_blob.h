@@ -59,7 +59,6 @@ typedef vcl_vector<vcl_pair<unsigned, unsigned> > vil_blob_pixel_list;
 //: Convert a label image into a list of pixel lists.
 // A blob label value of n will be returned in dest_pixels_lists[n-1].
 void vil_blob_labels_to_pixel_lists(const vil_image_view<unsigned>& src_label,
-                                vcl_vector<vil_blob_pixel_list>& dest_pixel_lists);
-
+                                    vcl_vector<vil_blob_pixel_list>& dest_pixel_lists);
 
 #endif
