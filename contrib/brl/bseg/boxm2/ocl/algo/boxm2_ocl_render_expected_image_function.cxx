@@ -195,15 +195,15 @@ float render_cone_expected_image( boxm2_scene_sptr & scene,
         boxm2_block_metadata mdata = scene->get_block_metadata(*id);
         bocl_kernel* kern =  kernel;
 
+#if 0 // unused
         ///********************************////
         //DEBUG hack - grab alpha from existing scene for length and set gamma
         bocl_mem* real_alpha     = opencl_cache->get_data<BOXM2_ALPHA>(*id);
         int alphaTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
-#if 0 // unused
         int numCells = (int) (real_alpha->num_bytes()/alphaTypeSize);
         int gammaTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_GAMMA>::prefix());
-#endif
         ///********************************////
+#endif
 
         //write the image values to the buffer
         vul_timer transfer;
