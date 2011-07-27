@@ -89,12 +89,15 @@ const double vnl_math::ln10             VCL_STATIC_CONST_INIT_FLOAT_DEFN( 2.3025
 const double vnl_math::pi               VCL_STATIC_CONST_INIT_FLOAT_DEFN( 3.14159265358979323846 );
 const double vnl_math::pi_over_2        VCL_STATIC_CONST_INIT_FLOAT_DEFN( 1.57079632679489661923 );
 const double vnl_math::pi_over_4        VCL_STATIC_CONST_INIT_FLOAT_DEFN( 0.78539816339744830962 );
+const double vnl_math::pi_over_180      VCL_STATIC_CONST_INIT_FLOAT_DEFN( 0.01745329251994329577 );
 const double vnl_math::one_over_pi      VCL_STATIC_CONST_INIT_FLOAT_DEFN( 0.31830988618379067154 );
 const double vnl_math::two_over_pi      VCL_STATIC_CONST_INIT_FLOAT_DEFN( 0.63661977236758134308 );
+const double vnl_math::deg_per_rad      VCL_STATIC_CONST_INIT_FLOAT_DEFN( 57.2957795130823208772 );
 const double vnl_math::two_over_sqrtpi  VCL_STATIC_CONST_INIT_FLOAT_DEFN( 1.12837916709551257390 );
 const double vnl_math::one_over_sqrt2pi VCL_STATIC_CONST_INIT_FLOAT_DEFN( 0.39894228040143267794 );
 const double vnl_math::sqrt2            VCL_STATIC_CONST_INIT_FLOAT_DEFN( 1.41421356237309504880 );
 const double vnl_math::sqrt1_2          VCL_STATIC_CONST_INIT_FLOAT_DEFN( 0.70710678118654752440 );
+const double vnl_math::sqrt1_3          VCL_STATIC_CONST_INIT_FLOAT_DEFN( 0.57735026918962573106 );
 const double vnl_math::euler            VCL_STATIC_CONST_INIT_FLOAT_DEFN( 0.57721566490153286061 );
 
 //: IEEE double machine precision
