@@ -8,7 +8,7 @@
 
 //List defaults to unsigned char
 #ifndef LIST_TYPE
- #define LIST_TYPE uchar
+ #define LIST_TYPE char
 #endif
 
 //struct that maintains the start and total length of the array buffer,

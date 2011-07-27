@@ -220,30 +220,8 @@ void cast_adaptive_cone_ray(
             
             //visit list for BFS through tree (denotes parents of cells that ought to be visited)
             linked_list toVisit = new_linked_list(listMem, 73); 
-            
-            /////////////////////////////////////////////////////////////////////
-            //do an intersection with the root outside the loop 
-            //calculate the theoretical radius of this cell
-            float side_len = 1.0f;  
-            float4 cellSphere = (float4) ( (float) x+.5f, (float) y+.5f, (float) z+.5f, UNIT_SPHERE_RADIUS ); 
-            float  intersect_volume = sphere_intersection_volume(currSphere, cellSphere);
-            
-            //if it intersects, do one of two things
-            if( intersect_volume > 0.0f ) {
-              if( (*ltree).s0 == 0){
-                //If ray sphere is larger than the cell sphere, 
-                //split the ray! change +(1,0), +(0,1), and +(1,1)
-                if(currR > .75*UNIT_SPHERE_RADIUS && ray_level<3) {
-                  split=true; 
-                }
-              }
-              else { //push back root
-                push_back( &toVisit, 0 ); 
-              }
-            }
-            // done with first intersection - if nonzero volume, try children
-            /////////////////////////////////////////////////////////////////////
-    
+            push_back( &toVisit, -1 ); 
+
             /////////////////////////////////////////////////////////////////////
             //list keeps track of parents whose children need to be intersected 
             //saves 8xSpace in local memory
@@ -257,7 +235,8 @@ void cast_adaptive_cone_ray(
               //get front node off the top of the list, do an intersection for all 8 children
               int pindex = (int) pop_front( &toVisit );
               for(int currBitIndex=8*pindex + 1; currBitIndex < 8*pindex + 9; ++currBitIndex) {
-            
+                if(currBitIndex < 0) continue; //don't opeerate on pre root children
+                
                 //calculate the theoretical radius of this cell
                 int curr_depth = get_depth(currBitIndex);
                 float side_len = 1.0f / (float) (1<<curr_depth);
@@ -377,29 +356,8 @@ void cast_adaptive_cone_ray(
             
             //visit list for BFS through tree (denotes parents of cells that ought to be visited)
             linked_list toVisit = new_linked_list(listMem, 73); 
+            push_back( &toVisit, -1 ); 
             
-            /////////////////////////////////////////////////////////////////////
-            //do an intersection with the root outside the loop 
-            //calculate the theoretical radius of this cell
-            float side_len = 1.0f;  
-            float4 cellSphere = (float4) ( (float) x+.5f, (float) y+.5f, (float) z+.5f, UNIT_SPHERE_RADIUS ); 
-            float  intersect_volume = sphere_intersection_volume(currSphere, cellSphere);
-            
-            //if it intersects, do one of two things
-            if( intersect_volume > 0.0f ) {
-              if( (*ltree).s0 == 0) {
-                int data_ptr = data_index_root(ltree); 
-                intersect_volume = intersect_volume*volume_scale/side_len/side_len;
-                STEP_CELL; //step_cell_cone(aux_args, data_ptr, intersect_volume, side_len * linfo->block_len,&intensity_norm, &weighted_int, &prob_surface);
-                //gamma_integral +=  aux_args.alphas[data_ptr]*intersect_volume*volume_scale/side_len/side_len;
-              }
-              else { //push back root
-                push_back( &toVisit, 0 ); 
-              }
-            }
-            // done with first intersection - if nonzero volume, try children
-            /////////////////////////////////////////////////////////////////////
-    
             /////////////////////////////////////////////////////////////////////
             //list keeps track of parents whose children need to be intersected 
             //saves 8xSpace in local memory
@@ -415,7 +373,8 @@ void cast_adaptive_cone_ray(
               //get front node off the top of the list, do an intersection for all 8 children
               int pindex = (int) pop_front( &toVisit );
               for(int currBitIndex=8*pindex + 1; currBitIndex < 8*pindex + 9; ++currBitIndex) {
-            
+                if(currBitIndex < 0) continue; 
+                
                 //calculate the theoretical radius of this cell
                 int curr_depth = get_depth(currBitIndex);
                 float side_len = 1.0f / (float) (1<<curr_depth);
@@ -546,7 +505,6 @@ void cast_adaptive_cone_ray(
       } //end y for
     } //end x for
 #endif //REDISTRIBUTE
-
 
     ////////////////////////////////////////////////////////////////////////////
     // 4. Update active T values
