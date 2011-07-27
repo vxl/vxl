@@ -66,6 +66,8 @@ typedef struct
   //store active ray pointer, image/ray pyramids
   __local uchar* active_rays;
   __local uchar* master_threads; 
+  
+  //multi res ray, image and tfar pyramids
     ray_pyramid* rays; 
   image_pyramid* image; 
   image_pyramid* tfar; 
@@ -252,19 +254,44 @@ pass_one(__constant  RenderSceneInfo    * linfo,
   vis_image[imIndex] = vis[llid]; //vis;
   pre_image[imIndex] = pre[llid];
   norm_image[imIndex] = vis[llid] + pre[llid];
-  
-  //----------DEBUG norm_image write
-  //norm_image[imIndex] = image_pyramid_access(aux_args.image, 3, get_local_id(0), get_local_id(1)); 
-  //----------END DEBUG
 }
 
+
+//----------------------------------------------------------------------------
+// Split ray function
+//----------------------------------------------------------------------------
+void split_ray(AuxArgs aux_args, int side_len) 
+{
+  uchar llid = (uchar)(get_local_id(0) + get_local_size(0)*get_local_id(1));
+  uchar localI = (uchar)get_local_id(0); 
+  uchar localJ = (uchar)get_local_id(1); 
+
+  //turn on the four neighboring threads
+  float nextVis = pow(aux_args.vis[llid], 0.25f); 
+  float nextPre = aux_args.pre[llid]; 
+  for(int ioff=0; ioff<2; ++ioff) {
+    for(int joff=0; joff<2; ++joff) {
+
+      //"neighbor" threads are not necessarily neighboring in workspace (only at finest level they are)
+      int di = ioff * (side_len/2); 
+      int dj = joff * (side_len/2); 
+      
+      //calc local thread ID (in 8x8 workspace)
+      uchar id = (localI+di) + (localJ+dj)*get_local_size(0); 
+      
+      //set the vis and pre for new threads
+      aux_args.vis[id] = nextVis;
+      aux_args.pre[id] = nextPre; 
+      
+    } //end i for
+  } //end j for  
+}
 
 //----------------------------------------------------------------------------
 // Pass one step cell function
 //----------------------------------------------------------------------------
 void step_cell(AuxArgs aux_args, int data_ptr, float intersect_volume)
 {
-#if 0
   //make sure intersect volume reflects real world scale
   intersect_volume *= aux_args.volume_scale;
 
@@ -294,7 +321,6 @@ void step_cell(AuxArgs aux_args, int data_ptr, float intersect_volume)
   (*aux_args.pi_cum) += PI*intersect_volume;
   (*aux_args.vol_cum) += intersect_volume;
   (*aux_args.vis_cum) *= temp;
-#endif
 }
 
 //----------------------------------------------------------------------------
@@ -302,9 +328,9 @@ void step_cell(AuxArgs aux_args, int data_ptr, float intersect_volume)
 //----------------------------------------------------------------------------
 void compute_ball_properties(AuxArgs aux_args)
 {
-#if 0
-  float vis = (*aux_args.ray_vis); //(*vis_img_)(i,j);
-  float pre = (*aux_args.ray_pre); //(*pre_img_)(i,j);
+  uchar llid = (uchar)(get_local_id(0) + get_local_size(0)*get_local_id(1));
+  float vis = aux_args.vis[llid]; //(*aux_args.ray_vis); //(*vis_img_)(i,j);
+  float pre = aux_args.pre[llid]; //(*aux_args.ray_pre); //(*pre_img_)(i,j);
   float PI=0.0;
   if ( *aux_args.vol_cum>1e-12f) PI = (*aux_args.pi_cum) / (*aux_args.vol_cum);
 
@@ -312,14 +338,13 @@ void compute_ball_properties(AuxArgs aux_args)
   float vis_cum = (*aux_args.vis_cum);
   pre += vis*(1.0-vis_cum)*PI;
   vis *= vis_cum;
-  (*aux_args.ray_pre) = pre;
-  (*aux_args.ray_vis) = vis;
+  aux_args.vis[llid] = vis; 
+  aux_args.pre[llid] = pre; 
 
   //reset ball values
   (*aux_args.vis_cum) = 1.0f;
   (*aux_args.pi_cum) = 0.0f;
   (*aux_args.vol_cum) = 0.0f;
-#endif
 }
 #endif
 
@@ -501,8 +526,9 @@ bool step_cell(AuxArgs aux_args, int data_ptr, float intersect_volume)
 
 bool compute_ball_properties(AuxArgs aux_args)
 {
-  float vis = (*aux_args.ray_vis);
-  float pre = (*aux_args.ray_pre);
+  uchar llid = (uchar)(get_local_id(0) + get_local_size(0)*get_local_id(1));
+  float vis = aux_args.vis[llid]; //(*aux_args.ray_vis);
+  float pre = aux_args.pre[llid]; //(*aux_args.ray_pre);
   float PI=0.0;
   if ( *aux_args.vol_cum>1e-12f ) PI = (*aux_args.pi_cum) / (*aux_args.vol_cum);
 
@@ -510,8 +536,8 @@ bool compute_ball_properties(AuxArgs aux_args)
   (*aux_args.beta_cum) = (pre+vis*PI)/aux_args.norm;
   pre += vis*(1.0f - (*aux_args.vis_cum) )*PI;
   vis *= (*aux_args.vis_cum);
-  (*aux_args.ray_pre) = pre;
-  (*aux_args.ray_vis) = vis;
+  aux_args.pre[llid] = pre; //(*aux_args.ray_pre) = pre;
+  aux_args.vis[llid] = vis; //(*aux_args.ray_vis) = vis;
 
   //reset ball values
   (*aux_args.vis_cum) = 1.0f;

@@ -182,7 +182,7 @@ void cast_adaptive_cone_ray(
     // 0. grab currently activated rays, and compute their spheres
     ///////////////////////////////////////////////////////////////////////////
     int ray_level = aux_args.active_rays[llid]-1;  //0=fatest, 1=next, .., 3=finest
-    if(ray_level >= 0) {
+    if(ray_level >= 0 && ray_level < 3) {
       
       //intersect the current sphere with
       float4 currRayD = ray_pyramid_access_safe(aux_args.rays, ray_level); 
@@ -281,10 +281,8 @@ void cast_adaptive_cone_ray(
         currR = splitR; 
         currT = splitT; 
 
-        //turn on the four neighboring threads
+        //turn on the four neighboring threads, split ray matrix information
         int next_level = ray_level+1; 
-        float nextVis = pow(aux_args.vis[llid], 0.25f); 
-        float nextExp = aux_args.expint[llid]; 
         for(int ioff=0; ioff<2; ++ioff) {
           for(int joff=0; joff<2; ++joff) {
 
@@ -297,24 +295,24 @@ void cast_adaptive_cone_ray(
             aux_args.active_rays[id] = next_level + 1; //ray level is stored+1, then add one more for increase in level 
             aux_args.master_threads[id] = id; 
             
-            //set the vis and pre for new threads
-            aux_args.vis[id] = nextVis; //pow(aux_args.vis[llid], 0.25f); 
-            aux_args.expint[id] = nextExp; 
+            //store splitT
+            aux_args.currT[id] = splitT; 
             
-            //set master thread matrix
+            //---- maybe can do this with all threads, set master thread matrix
             for(int ii=0; ii<side_len/2; ++ii) {
               for(int jj=0; jj<side_len/2; ++jj) {
                 uchar slid= (localI+di+ii) + (localJ+dj+jj)*get_local_size(0);
                 aux_args.master_threads[slid] = id; 
               }
             }
-            
-            //store splitT
-            aux_args.currT[id] = splitT; 
-          }
-        }
+            //------------------------------------------------------------------
+          } //end i for
+        } //end j for
+        
+        //Must split some aux args as well
+        split_ray(aux_args, side_len); 
+        
       } // END SPLIT IF
-      
     } //end ray_level if (is_active)
     barrier(CLK_LOCAL_MEM_FENCE); 
 
@@ -416,7 +414,6 @@ void cast_adaptive_cone_ray(
     ///////////////////////////////////////////////////////////////////////////
     //replaced by something like: compute_ball_properties(aux_args);
     COMPUTE_BALL_PROPERTIES; 
-    //aux_args.vis[llid] *= exp(-gamma_integral); 
     barrier(CLK_LOCAL_MEM_FENCE); 
     
     
@@ -437,8 +434,9 @@ void cast_adaptive_cone_ray(
           
           //visit list for BFS through tree (denotes parents of cells that ought to be visited)
           linked_list toVisit = new_linked_list(listMem, 73); 
-          
+          push_back( &toVisit, -1 ); 
           /////////////////////////////////////////////////////////////////////
+/*
           //do an intersection with the root outside the loop 
           //calculate the theoretical radius of this cell
           float side_len = 1.0f;  
@@ -456,6 +454,7 @@ void cast_adaptive_cone_ray(
             }
           }
           // done with first intersection - if nonzero volume, try children
+*/
           /////////////////////////////////////////////////////////////////////
   
           /////////////////////////////////////////////////////////////////////
@@ -471,7 +470,8 @@ void cast_adaptive_cone_ray(
             //get front node off the top of the list, do an intersection for all 8 children
             int pindex = (int) pop_front( &toVisit );
             for(int currBitIndex=8*pindex + 1; currBitIndex < 8*pindex + 9; ++currBitIndex) {
-          
+              if(currBitIndex < 0) continue; 
+              
               //calculate the theoretical radius of this cell
               int curr_depth = get_depth(currBitIndex);
               float side_len = 1.0f / (float) (1<<curr_depth);
