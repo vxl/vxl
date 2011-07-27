@@ -40,8 +40,8 @@ btom_gauss_cylinder::~btom_gauss_cylinder()
 float btom_gauss_cylinder::cylinder_intensity(float x, float y)
 {
   //  cout << *this << endl;
-  double theta = (90-elevation_)*vnl_math::pi/180.;
-  double phi = azimuth_*vnl_math::pi/180.;
+  double theta = (90-elevation_)*vnl_math::pi_over_180;
+  double phi = azimuth_*vnl_math::pi_over_180;
   double cth = vcl_cos(theta);
   double cths = cth*cth;
   double tth = vcl_tan(theta);
@@ -81,7 +81,7 @@ float btom_gauss_cylinder::cylinder_intensity(float x, float y)
 //
 float btom_gauss_cylinder::radon_transform(float theta, float t)
 {
-  double th_rad = theta*vnl_math::pi/180.;
+  double th_rad = theta*vnl_math::pi_over_180;
   double neu = vcl_sin(th_rad)*x_origin_ +vcl_cos(th_rad)*y_origin_ -t;
   double neusq = neu*neu;
   double arg = neusq/(xy_sigma_*xy_sigma_);

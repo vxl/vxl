@@ -733,7 +733,7 @@ bool bwm_observer_cam::find_intersection_points(vgl_point_2d<double> const img_p
 
   vgl_point_3d<double> p1,p2;
   if (!intersect_ray_and_plane(img_point1, poly_plane, p1)||
-     !intersect_ray_and_plane(img_point2, poly_plane, p2))
+      !intersect_ray_and_plane(img_point2, poly_plane, p2))
     return false;
   ;
 
@@ -1119,7 +1119,7 @@ void bwm_observer_cam::extrude_face(vsol_point_2d_sptr pt)
     double ninety_deg = vnl_math::pi/2.0;
 
 #ifdef CAM_DEBUG
-    vcl_cout << "angle " << a*180/vnl_math::pi << '\n';
+    vcl_cout << "angle " << a*vnl_math::deg_per_rad << '\n';
 #endif
 
   //magnitude of the distance from the selected vertex to the target point
@@ -1443,13 +1443,14 @@ void bwm_observer_cam::scan_regions()
   }
   bwm_image_processor::scan_regions(img_tab_, polygons);
 }
+
 void bwm_observer_cam::project_shadow()
 {
   // get the selected objects
   shadow_mode_=true;
     vcl_vector<vgui_soview*> select_list = this->get_selected_soviews();
-  vcl_vector<vgl_polygon<double> > polygons;                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             
-  for(unsigned i=0;i<shadow_line_segs_.size();i++)
+  vcl_vector<vgl_polygon<double> > polygons;
+  for (unsigned i=0;i<shadow_line_segs_.size();i++)
       this->remove(shadow_line_segs_[i]);
   shadow_line_segs_.clear();
   for (unsigned s=0; s<select_list.size();s++)
@@ -1472,24 +1473,24 @@ void bwm_observer_cam::project_shadow()
       bwm_observable_sptr obs = this->find_object(lineseg->get_id(), edge_id);
 
       vcl_vector<vsol_point_3d_sptr> mesh_pts=obs->extract_vertices();
-      for(unsigned i=0;i<mesh_pts.size();i++)
+      for (unsigned i=0;i<mesh_pts.size();i++)
       {
-          double u,v;
-          camera_->project(mesh_pts[i]->x(),
-                           mesh_pts[i]->y(),
-                           mesh_pts[i]->z(),u,v);
-          double dist1=(x0-u)*(x0-u)+(y0-v)*(y0-v);
-          double dist2=(x1-u)*(x1-u)+(y1-v)*(y1-v);
-          if(dist_min1>dist1) 
-          {
-              dist_min1=dist1;
-              index_min1=i;
-          }
-          if(dist_min2>dist2) 
-          {
-              dist_min2=dist2;
-              index_min2=i;
-          }
+        double u,v;
+        camera_->project(mesh_pts[i]->x(),
+                         mesh_pts[i]->y(),
+                         mesh_pts[i]->z(),u,v);
+        double dist1=(x0-u)*(x0-u)+(y0-v)*(y0-v);
+        double dist2=(x1-u)*(x1-u)+(y1-v)*(y1-v);
+        if (dist_min1>dist1)
+        {
+          dist_min1=dist1;
+          index_min1=i;
+        }
+        if (dist_min2>dist2)
+        {
+          dist_min2=dist2;
+          index_min2=i;
+        }
       }
       int min_z_index=mesh_pts[index_min1]->z()<mesh_pts[index_min2]->z()?index_min1:index_min2;
       double len=mesh_pts[index_min1]->distance(mesh_pts[index_min2]);
@@ -1511,9 +1512,8 @@ void bwm_observer_cam::project_shadow()
       shadow_line_segs_.push_back(this->add_vsol_line_2d(shadow_line));
     }
   }
-  vcl_cout<<"(\theta,\phi) = ("<<sun_elev_angle_<<","<<sun_azim_angle_<<")"<<vcl_endl;
+  vcl_cout<<"(\theta,\phi) = ("<<sun_elev_angle_<<','<<sun_azim_angle_<<')'<<vcl_endl;
   this->post_redraw();
-
 }
 
 void bwm_observer_cam::make_object_selectable(bwm_observable_sptr obj, bool status)
@@ -1694,9 +1694,10 @@ void bwm_observer_cam::project_meshes(vcl_vector<vcl_string> paths,
     }
   }
 }
+
 void bwm_project_meshes(vcl_vector<vcl_string> paths,
-                                      vpgl_camera<double>* cam,
-                                      vcl_vector<vgl_polygon<double> > &poly_2d_list)
+                        vpgl_camera<double>* cam,
+                        vcl_vector<vgl_polygon<double> > &poly_2d_list)
 {
   for (unsigned i=0; i<paths.size(); i++) {
     bwm_observable_mesh_sptr mesh = new bwm_observable_mesh();
@@ -1718,6 +1719,7 @@ void bwm_project_meshes(vcl_vector<vcl_string> paths,
     }
   }
 }
+
 void bwm_observer_cam::create_boxm_scene()
 {
   vgui_soview2D* obj =  bwm_observer_img::get_selected_object(POLYGON_TYPE);

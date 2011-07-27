@@ -40,7 +40,7 @@ void KLTWriteFeatureListToPPM(
   int nrows,
   char *filename)
 {
-  int nbytes = ncols * nrows * sizeof(char);
+  unsigned int nbytes = (unsigned)(ncols * nrows) * sizeof(char);
   uchar *redimg, *grnimg, *bluimg;
   int offset;
   int x, y, xx, yy;
@@ -197,13 +197,16 @@ static int _findStringWidth(
                      "of string '%s'", str);
         }
         i++;
-      } else if (str[i+1] == 'c')  {
+      }
+      else if (str[i+1] == 'c')  {
         width++;
         i += 2;
-      } else
+      }
+      else
         KLTError("(_findStringWidth) Can't determine length "
                  "of string '%s'", str);
-    } else  {
+    }
+    else {
       i++;
       width++;
     }
@@ -281,8 +284,8 @@ static void _printFeatureTxt(
     /* Round x & y to nearest integer, unless negative */
     float x = feat->x;
     float y = feat->y;
-    if (x >= 0.0) x += 0.5;
-    if (y >= 0.0) y += 0.5;
+    if (x >= 0.0f) x += 0.5f;
+    if (y >= 0.0f) y += 0.5f;
     fprintf(fp, format,
             (int) x, (int) y, feat->val);
   }
@@ -347,7 +350,8 @@ void KLTWriteFeatureList(
       fprintf(fp, "\n");
     }
     _printShutdown(fp);
-  } else {  /* binary file */
+  }
+  else {  /* binary file */
     fp = _printSetupBin(fname);
     fwrite(binheader_fl, sizeof(char), BINHEADERLENGTH, fp);
     fwrite(&(fl->nFeatures), sizeof(int), 1, fp);
@@ -385,7 +389,8 @@ void KLTWriteFeatureHistory(
       fprintf(fp, "\n");
     }
     _printShutdown(fp);
-  } else {  /* binary file */
+  }
+  else {  /* binary file */
     fp = _printSetupBin(fname);
     fwrite(binheader_fh, sizeof(char), BINHEADERLENGTH, fp);
     fwrite(&(fh->nFrames), sizeof(int), 1, fp);
@@ -424,7 +429,8 @@ void KLTWriteFeatureTable(
       fprintf(fp, "\n");
     }
     _printShutdown(fp);
-  } else {  /* binary file */
+  }
+  else {  /* binary file */
     fp = _printSetupBin(fname);
     fwrite(binheader_ft, sizeof(char), BINHEADERLENGTH, fp);
     fwrite(&(ft->nFrames), sizeof(int), 1, fp);
@@ -457,12 +463,14 @@ static structureType _readHeader(
     fread(nFeatures, sizeof(int), 1, fp);
     *binary = TRUE;
     return FEATURE_LIST;
-  } else if (strcmp(line, binheader_fh) == 0)  {
+  }
+  else if (strcmp(line, binheader_fh) == 0)  {
     assert(nFrames != NULL);
     fread(nFrames, sizeof(int), 1, fp);
     *binary = TRUE;
     return FEATURE_HISTORY;
-  } else if (strcmp(line, binheader_ft) == 0)  {
+  }
+  else if (strcmp(line, binheader_ft) == 0)  {
     assert(nFrames != NULL);
     assert(nFeatures != NULL);
     fread(nFrames, sizeof(int), 1, fp);
@@ -471,7 +479,8 @@ static structureType _readHeader(
     return FEATURE_TABLE;
 
     /* If file is NOT binary, then continue.*/
-  } else {
+  }
+  else {
     rewind(fp);
     *binary = FALSE;
   }
@@ -512,7 +521,8 @@ static structureType _readHeader(
     if (strcmp(line, "nFeatures") != 0)
       KLTError("(_readFeatures) File is corrupted -- "
                "(Expected 'nFeatures', found '%s' instead)", line);
-  } else if (strcmp(line, "nFrames") != 0)
+  }
+  else if (strcmp(line, "nFrames") != 0)
     KLTError("(_readFeatures) File is corrupted -- "
              "(Expected 'nFrames', found '%s' instead)", line);
   fscanf(fp, "%s", line);
@@ -617,7 +627,8 @@ KLT_FeatureList KLTReadFeatureList(
                               "-- %d", i, indx);
       _readFeatureTxt(fp, fl->feature[i]);
     }
-  } else {  /* binary file */
+  }
+  else {  /* binary file */
     for (i = 0 ; i < fl->nFeatures ; i++)  {
       _readFeatureBin(fp, fl->feature[i]);
     }
@@ -669,7 +680,8 @@ KLT_FeatureHistory KLTReadFeatureHistory(
                  "-- %d", i, indx);
       _readFeatureTxt(fp, fh->feature[i]);
     }
-  } else {  /* binary file */
+  }
+  else {  /* binary file */
     for (i = 0 ; i < fh->nFrames ; i++)  {
       _readFeatureBin(fp, fh->feature[i]);
     }
@@ -725,7 +737,8 @@ KLT_FeatureTable KLTReadFeatureTable(
       for (i = 0 ; i < ft->nFrames ; i++)
         _readFeatureTxt(fp, ft->feature[j][i]);
     }
-  } else {  /* binary file */
+  }
+  else {  /* binary file */
     for (j = 0 ; j < ft->nFeatures ; j++)  {
       for (i = 0 ; i < ft->nFrames ; i++)
         _readFeatureBin(fp, ft->feature[j][i]);

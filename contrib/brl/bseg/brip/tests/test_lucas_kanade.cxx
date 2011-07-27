@@ -10,7 +10,7 @@ static void test_lucas_kanade()
 {
   vil1_memory_image_of<float> cur, prev, vx, vy, ang;
   int w = 32, h =32;
-  double D_R = 180*vnl_math::one_over_pi;
+  double D_R = vnl_math::deg_per_rad;
   cur.resize(w,h);
   prev.resize(w,h);
   vx.resize(w,h);
@@ -38,9 +38,8 @@ static void test_lucas_kanade()
            << vx(9,10)<< ' '<< vx(9,14)<< ' '<< vx(10,19)<<' '<< vx(11,24)<<'\n'
            << vy(9,10)<< ' '<< vy(9,14)<< ' '<< vy(10,19)<<' '<< vy(11,24)<<'\n'
            << ang(11,10)<<' '<< ang(12,16)<<' '<< ang(10,21)<<' '<< ang(9,26) << '\n'
-           << ang(9,10) <<' '<< ang(9,14) <<' '<< ang(10,19)<<' '<< ang(11,24)<< '\n';
-
-  vcl_cout << "Angle Image:\n";
+           << ang(9,10) <<' '<< ang(9,14) <<' '<< ang(10,19)<<' '<< ang(11,24)<< '\n'
+           << "Angle Image:\n";
   for (int y =0; y<h; y++)
   {
     for (int x = 0; x<w; x++)

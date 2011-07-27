@@ -49,7 +49,7 @@ static bool process_camera_from_photo_overlay(vcl_string const& params_path, vcl
  vgl_point_3d<double> cam_cent_up(x,y,z);
  vgl_vector_3d<double> up_vector = cam_cent_up-cam_cent; // y axis of google
 
- double deg2rad = vnl_math::pi/180.0;
+ double deg2rad = vnl_math::pi_over_180;
 
  // now rotate up_vector by heading around Z axis
  // heading is a rotation about Z axis

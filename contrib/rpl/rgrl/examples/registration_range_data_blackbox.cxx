@@ -173,19 +173,19 @@ main( int argc, char* argv[] )
 
   //y_dir
   vnl_matrix<double> Ay(3,3,vnl_matrix_identity);
-  double y_angle = 5*vnl_math::pi/180;
+  double y_angle = 5*vnl_math::pi_over_180;
   Ay(0,0) = vcl_cos(y_angle); Ay(0,2) = vcl_sin(y_angle);
   Ay(2,0) = -vcl_sin(y_angle); Ay(2,2) = vcl_cos(y_angle);
 
   //x_dir
   vnl_matrix<double> Ax(3,3,vnl_matrix_identity);
-  double x_angle = 0*vnl_math::pi/180;
+  double x_angle = 0*vnl_math::pi_over_180;
   Ax(1,1) = vcl_cos(x_angle); Ax(1,2) = -vcl_sin(x_angle);
   Ax(2,1) = vcl_sin(x_angle); Ax(2,2) = vcl_cos(x_angle);
 
   //z_dir
   vnl_matrix<double> Az(3,3,vnl_matrix_identity);
-  double z_angle = 10*vnl_math::pi/180;
+  double z_angle = 10*vnl_math::pi_over_180;
   Az(0,0) = vcl_cos(z_angle); Az(0,1) = -vcl_sin(z_angle);
   Az(1,0) = vcl_sin(z_angle); Az(1,1) =  vcl_cos(z_angle);
 

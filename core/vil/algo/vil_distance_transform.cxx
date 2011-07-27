@@ -6,6 +6,7 @@
 
 #include <vil/vil_fill.h>
 #include <vcl_algorithm.h>
+#include <vcl_cmath.h>
 #include <vcl_cassert.h>
 
 //: Compute distance function from zeros in original image
@@ -44,7 +45,7 @@ void vil_distance_transform_one_way(vil_image_view<float>& image)
   vcl_ptrdiff_t o1 = -istep, o2 = -jstep-istep, o3 = -jstep, o4 = istep-jstep;
   float* row0 = image.top_left_ptr();
 
-  const float sqrt2 = 1.4142135f;
+  const float sqrt2 = vcl_sqrt(2.0f);
 
   // Process the first row
   float* p0 = row0+istep;
@@ -115,8 +116,8 @@ void vil_distance_transform_r2_one_way(vil_image_view<float>& image)
 
   float* row0 = image.top_left_ptr();
 
-  const float sqrt2 = 1.4142135f;
-  const float sqrt5 = 2.236068f;
+  const float sqrt2 = vcl_sqrt(2.0f);
+  const float sqrt5 = vcl_sqrt(5.0f);
 
   // Process the first row
   float* p0 = row0+istep;

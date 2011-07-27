@@ -12,8 +12,8 @@
 #include <vnl/vnl_math.h>
 
 /* MATH CONSTANTS */
-#define DEGREES_TO_RADIANS (vnl_math::pi/180.0)
-#define RADIANS_TO_DEGREES (180.0/vnl_math::pi)
+#define DEGREES_TO_RADIANS (vnl_math::pi_over_180)
+#define RADIANS_TO_DEGREES (vnl_math::deg_per_rad)
 
 /* EARTH CONSTANTS */
 /* GRS-80 */

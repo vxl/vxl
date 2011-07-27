@@ -67,7 +67,7 @@ write_points_vrml(vcl_ofstream& str,
 
 static void test_camera_bounds()
 {
-  const double rad_to_deg = 180.0*vnl_math::one_over_pi;
+  const double rad_to_deg = vnl_math::deg_per_rad;
   vnl_matrix_fixed<double, 3, 3> Km(0.0);
   Km[0][0] = 1871.2; Km[1][1] = 1871.2;
   Km[0][2] = 640.0;   Km[1][2] = 360.0;

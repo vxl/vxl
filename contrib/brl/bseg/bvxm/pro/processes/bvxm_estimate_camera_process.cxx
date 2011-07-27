@@ -94,7 +94,7 @@ bool bvxm_estimate_camera_process(bprb_func_process& pro)
   // scale of image
   unsigned scale = pro.get_input<unsigned>(i++);
 
-  double deg2rad = vnl_math::pi/180.0;
+  double deg2rad = vnl_math::pi_over_180;
 
   double theta_range = 12.0*deg2rad, theta_step = 0.05*deg2rad, phi_range = 12.0*deg2rad, phi_step = 0.05*deg2rad, rot_range = 10.0*deg2rad, rot_step = 1.0*deg2rad;
   int max_iter_rot_angle = 5, max_iter_cam_center = 50;

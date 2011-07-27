@@ -235,15 +235,15 @@ static bool intersect_line_helper(vdgl_edgel_chain const& ec,
                                   vcl_vector<vgl_point_2d<double> >& pts)
 {
   int di = (index2 - index1);
-  if (di<1){
+  if (di<1) {
     vcl_cout << "In bdgl_curve_algs::intersect_line_helper -"
              << " invalid curve segment\n";
     return false;
   }
 
-  if (vcl_fabs(dist2)<bdgl_curve_algs::tol || dist1*dist2<0.0){
+  if (vcl_fabs(dist2)<bdgl_curve_algs::tol || dist1*dist2<0.0) {
     // base case: compute the intersection
-    if (di==1){
+    if (di==1) {
       // the first and last edgels
       vdgl_edgel const& e1 = ec[index1];
       vdgl_edgel const& e2 = ec[index2];
@@ -251,7 +251,7 @@ static bool intersect_line_helper(vdgl_edgel_chain const& ec,
       vnl_double_3 p2(e2.get_x(), e2.get_y(), 1.0);
 
       vnl_double_3 inter;
-      if (intersect_crossing(lv, p1, p2, inter)){
+      if (intersect_crossing(lv, p1, p2, inter)) {
         vgl_point_2d<double> p(inter[0]/inter[2], inter[1]/inter[2]);
         pts.push_back(p);
         return true;
@@ -308,11 +308,11 @@ bool bdgl_curve_algs::intersect_line_fast(vdgl_digital_curve_sptr const& dc,
   bool intersection = false;
   // This case (the first edgel is on the line)
   // is not covered by the recursion
-  if (vcl_fabs(dist1)<bdgl_curve_algs::tol){
+  if (vcl_fabs(dist1)<bdgl_curve_algs::tol) {
     vdgl_edgel const& e = (*ec)[1];
     vnl_double_3 p(e.get_x(), e.get_y(), 1.0);
     vnl_double_3 inter;
-    if (intersect_crossing(lv, p1, p, inter)){
+    if (intersect_crossing(lv, p1, p, inter)) {
       vgl_point_2d<double> p(inter[0]/inter[2], inter[1]/inter[2]);
       pts.push_back(p);
       intersection = true;
@@ -406,15 +406,15 @@ static bool intersect_line_helper(vdgl_edgel_chain const& ec,
                                   vcl_vector<double>& indices)
 {
   int di = (index2 - index1);
-  if (di<1){
+  if (di<1) {
     vcl_cout << "In bdgl_curve_algs::intersect_line_helper -"
              << " invalid curve segment\n";
     return false;
   }
 
-  if (vcl_fabs(dist2)<bdgl_curve_algs::tol || dist1*dist2<0.0){
+  if (vcl_fabs(dist2)<bdgl_curve_algs::tol || dist1*dist2<0.0) {
     // base case: compute the intersection
-    if (di==1){
+    if (di==1) {
       // the first and last edgels
       vdgl_edgel const& e1 = ec[index1];
       vdgl_edgel const& e2 = ec[index2];
@@ -422,7 +422,7 @@ static bool intersect_line_helper(vdgl_edgel_chain const& ec,
       vnl_double_3 p2(e2.get_x(), e2.get_y(), 1.0);
 
       vnl_double_3 inter;
-      if (intersect_crossing(lv, p1, p2, inter)){
+      if (intersect_crossing(lv, p1, p2, inter)) {
         double param_step = 1.0/(ec.size()-1);
         double ti = interpolate_parameter(index1*param_step, index2*param_step,
                                           p1, p2, inter);
@@ -483,11 +483,11 @@ bool bdgl_curve_algs::intersect_line_fast(vdgl_digital_curve_sptr const& dc,
   bool intersection = false;
   // This case (the first edgel is on the line)
   // is not covered by the recursion
-  if (vcl_fabs(dist1)<bdgl_curve_algs::tol){
+  if (vcl_fabs(dist1)<bdgl_curve_algs::tol) {
     vdgl_edgel const& e = (*ec)[1];
     vnl_double_3 p(e.get_x(), e.get_y(), 1.0);
     vnl_double_3 inter;
-    if (intersect_crossing(lv, p1, p, inter)){
+    if (intersect_crossing(lv, p1, p, inter)) {
       double param_step = 1.0/(ec->size()-1);
       double ti = interpolate_parameter(0.0, param_step, p1, p, inter);
       indices.push_back(ti);
@@ -579,7 +579,7 @@ bdgl_curve_algs::match_intersection(vdgl_digital_curve_sptr const& dc,
     double ca = dc->get_tangent_angle(*iit);
     if (ca<0)
       ca+=180;
-    double delt = vcl_fabs(180*vcl_sin(vcl_fabs(vnl_math::pi*(ca-la)/180.0))/vnl_math::pi);
+    double delt = vcl_fabs(vcl_sin(vcl_fabs(vnl_math::pi_over_180*(ca-la)))*vnl_math::deg_per_rad);
     if (delt<angle_thresh)
       continue;
     vgl_homg_point_2d<double> ph(dc->get_x(*iit), dc->get_y(*iit));

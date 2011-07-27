@@ -58,7 +58,7 @@ bool boxm_camera_viewing_scene_process_cons(bprb_func_process& pro)
 //:creates a scene from parameters
 bool boxm_camera_viewing_scene_process(bprb_func_process& pro)
 {
-  if ( !pro.verify_inputs()){
+  if ( !pro.verify_inputs()) {
     vcl_cout << pro.name() << "boxm_camera_viewing_scene_process: invalid inputs" << vcl_endl;
     return false;
   }
@@ -92,7 +92,7 @@ bool boxm_camera_viewing_scene_process(bprb_func_process& pro)
   //double w = bb.width(), h = bb.height(), d = bb.depth();
   double r = radius;//vcl_sqrt(w*w + h*h + d*d);
   //r *=10;
-  double deg_to_rad = vnl_math::pi/180.0;
+  double deg_to_rad = vnl_math::pi_over_180;
   double el = elevation*deg_to_rad, az = azimuth*deg_to_rad;
   double cx = r*vcl_sin(el)*vcl_cos(az);
   double cy = r*vcl_sin(el)*vcl_sin(az);

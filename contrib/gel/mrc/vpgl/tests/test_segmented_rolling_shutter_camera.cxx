@@ -61,7 +61,7 @@ static void test_segmented_rolling_shutter_camera()
   TEST_NEAR("test y projection of arbitrary point", hpa_2d.y()/hpa_2d.w(), 2384, 1e-06);
 
   //rotation angle in radians
-  double theta = vnl_math::pi/4; //45 degrees
+  double theta = vnl_math::pi_over_4; // 45 degrees
   //y axis is the rotation axis
   vnl_double_3 axis(0.0, 1.0, 0.0);
   vgl_h_matrix_3d<double> tr;

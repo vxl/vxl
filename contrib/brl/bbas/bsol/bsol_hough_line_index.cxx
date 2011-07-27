@@ -19,7 +19,7 @@
 #include <vsol/vsol_point_2d.h>
 #include <vsol/vsol_point_2d_sptr.h>
 #undef DEGTORAD
-#define DEGTORAD 0.017453293f // = float(vnl_math::pi/180)
+#define DEGTORAD 0.017453293f // = float(vnl_math::pi_over_180)
 
 class nlines
 {

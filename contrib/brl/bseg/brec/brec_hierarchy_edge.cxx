@@ -69,8 +69,8 @@ void
 brec_hierarchy_edge::update_angle_model(const float angle)
 {
   to_central_ = false;
-  //float min_stad_dev = (float)(vnl_math::pi*(10.0f/180.0f));  // min stad_dev = 10 degrees
-  float min_stad_dev = (float)(vnl_math::pi*(min_stad_dev_angle_/180.0f));  // min stad_dev = 10 degrees
+  //float min_stad_dev = float(vnl_math::pi_over_180)*10.0f;  // min stad_dev = 10 degrees
+  float min_stad_dev = float(vnl_math::pi_over_180*min_stad_dev_angle_);  // min stad_dev = 10 degrees
   bsta_update_gaussian(angle_model_, 1.0f, angle, min_stad_dev*min_stad_dev);
 }
 
@@ -164,12 +164,12 @@ vnl_vector_fixed<float,2> brec_hierarchy_edge::sample_position(brec_part_instanc
   brec_part_instance_sptr pp = central_p;
   while (pp->kind_ == brec_part_instance_kind::COMPOSED) {
     pp = pp->central_part()->cast_to_instance();
-  } 
+  }
   vnl_vector_fixed<float, 2> v = pp->direction_vector();  // get orientation vector of central part
 
   //: define a rotation about z axis (in the image plane)
   vnl_quaternion<float> q(0.0f, 0.0f, float(angle_model_.sample(rng)));
-  
+
   vnl_vector_fixed<float,3> v3d(v[0], v[1], 0.0f);
   vnl_vector_fixed<float,3> out = q.rotate(v3d);
   vnl_vector_fixed<float,3> out_dist = out*float(dist_model_.sample(rng));
@@ -179,18 +179,19 @@ vnl_vector_fixed<float,2> brec_hierarchy_edge::sample_position(brec_part_instanc
   vnl_vector_fixed<float, 2> out_v(mx, my);
   return out_v;
 }
+
 vnl_vector_fixed<float,2> brec_hierarchy_edge::mean_position(brec_part_instance_sptr central_p, float x, float y)
 {
   // if central_p is a composed part we need to get its central part
   brec_part_instance_sptr pp = central_p;
   while (pp->kind_ == brec_part_instance_kind::COMPOSED) {
     pp = pp->central_part()->cast_to_instance();
-  } 
+  }
   vnl_vector_fixed<float, 2> v = pp->direction_vector();  // get orientation vector of central part
 
   //: define a rotation about z axis (in the image plane)
   vnl_quaternion<float> q(0.0f, 0.0f, float(angle_model_.mean()));
-  
+
   vnl_vector_fixed<float,3> v3d(v[0], v[1], 0.0f);
   vnl_vector_fixed<float,3> out = q.rotate(v3d);
   vnl_vector_fixed<float,3> out_dist = out*float(dist_model_.mean());

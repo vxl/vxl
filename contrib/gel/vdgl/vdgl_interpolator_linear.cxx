@@ -126,7 +126,7 @@ double vdgl_interpolator_linear::get_tangent_angle( const double index)
   assert(a>=0 && a<N-1); // just in case... this should not happen.
   double xi = (*chain_)[a].x(), yi = (*chain_)[a].y();
   double xip = (*chain_)[a+1].x(), yip = (*chain_)[a+1].y();
-  double angle = 180.0*vnl_math::one_over_pi*vcl_atan2((yip-yi), (xip-xi));
+  double angle = vnl_math::deg_per_rad*vcl_atan2((yip-yi), (xip-xi));
   return angle;
 }
 

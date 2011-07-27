@@ -19,7 +19,7 @@
 float _KLTComputeSmoothSigma(
   KLT_TrackingContext tc)
 {
-  return (tc->smooth_sigma_fact * max(tc->window_width, tc->window_height));
+  return (float)tc->smooth_sigma_fact * (float)(max(tc->window_width, tc->window_height));
 }
 
 
@@ -32,8 +32,8 @@ _KLT_FloatImage _KLTCreateFloatImage(
   int nrows)
 {
   _KLT_FloatImage floatimg;
-  int nbytes = sizeof(_KLT_FloatImageRec) +
-    ncols * nrows * sizeof(float);
+  unsigned int nbytes = sizeof(_KLT_FloatImageRec) +
+                        (unsigned)(ncols * nrows) * sizeof(float);
 
   floatimg = (_KLT_FloatImage)  malloc(nbytes);
   if (floatimg == NULL)
@@ -42,7 +42,7 @@ _KLT_FloatImage _KLTCreateFloatImage(
   floatimg->nrows = nrows;
   floatimg->data = (float *)  (floatimg + 1);
 
-  return(floatimg);
+  return floatimg;
 }
 
 
@@ -111,7 +111,7 @@ void _KLTWriteFloatImageToPGM(
   }
 
   /* Allocate memory to hold converted image */
-  byteimg = (uchar *) malloc(npixs * sizeof(uchar));
+  byteimg = (uchar *) malloc((unsigned)npixs * sizeof(uchar));
 
   /* Convert image from float to uchar */
   fact = 255.0f / (mmax-mmin);

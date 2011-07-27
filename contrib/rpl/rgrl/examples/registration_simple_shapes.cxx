@@ -80,7 +80,7 @@ class command_iteration_update: public rgrl_command
       rgrl_match_set_sptr match_set = match_sets[ms];
       //  for each from image feature being matched
       for ( from_iter fitr = match_set->from_begin();
-            fitr != match_set->from_end(); ++fitr ){
+            fitr != match_set->from_end(); ++fitr ) {
         if ( fitr.size() == 0 )  continue;
 
         rgrl_feature_sptr from_feature = fitr.from_feature();
@@ -154,7 +154,7 @@ generate_data(feature_vector& feature_set)
   double center_y = 115;
   for ( unsigned int ci = 0; ci<360; ci++ ) {
     vector_2d pt;
-    double angle = ci*2*vnl_math::pi/180;
+    double angle = ci*2*vnl_math::pi_over_180;
     pt[0] = center_x + radius*vcl_cos(angle);
     pt[1] = center_y + radius*vcl_sin(angle);
     feature_set.push_back( new rgrl_feature_point(pt.as_ref()) );

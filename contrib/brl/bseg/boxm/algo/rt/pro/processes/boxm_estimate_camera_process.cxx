@@ -97,7 +97,7 @@ bool boxm_estimate_camera_process(bprb_func_process& pro)
   unsigned ni = img_e.ni();
   unsigned nj = img_e.nj();
 
-  double deg2rad = vnl_math::pi/180.0;
+  double deg2rad = vnl_math::pi_over_180;
 
   // parameters are in degrees
   double theta_range = 12.0, theta_step = 0.05, phi_range = 12.0, phi_step = 0.05, rot_range = 10.0, rot_step = 1.0;

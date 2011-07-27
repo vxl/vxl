@@ -170,7 +170,7 @@ static void test_compute_linear_points()
   points1.push_back(p19);
 
   //: setup an initial homography
-  vgl_h_matrix_3d<double> H1; H1.set_identity().set_rotation_roll_pitch_yaw(45.0*(vnl_math::pi/180.0), 15.0*(vnl_math::pi/180.0), 10.0*(vnl_math::pi/180.0));
+  vgl_h_matrix_3d<double> H1; H1.set_identity().set_rotation_roll_pitch_yaw(45.0*vnl_math::pi_over_180, 15.0*vnl_math::pi_over_180, 10.0*vnl_math::pi_over_180);
   vgl_h_matrix_3d<double> H2; H2.set_identity().set_translation(5.0, 50.0, 150.0);
   vgl_h_matrix_3d<double> gt_H = H1*H2;
 

@@ -150,7 +150,7 @@ double vsol_line_2d::length() const
 //---------------------------------------------------------------------------
 double vsol_line_2d::tangent_angle() const
 {
-  static const double deg_per_rad = 180.0/vnl_math::pi;
+  static const double deg_per_rad = vnl_math::deg_per_rad;
   double dy = p1_->y()-p0_->y();
   double dx = p1_->x()-p0_->x();
 

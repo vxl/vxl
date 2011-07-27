@@ -125,7 +125,7 @@ class command_iteration_update: public rgrl_command
       rgrl_match_set_sptr match_set = match_sets[ms];
       //  for each from image feature being matched
       for ( from_iter fitr = match_set->from_begin();
-            fitr != match_set->from_end(); ++fitr ){
+            fitr != match_set->from_end(); ++fitr ) {
         if ( fitr.size() == 0 )  continue;
 
         rgrl_feature_sptr from_feature = fitr.from_feature();
@@ -195,12 +195,12 @@ main( int argc, char* argv[] )
   //
   rgrl_transformation_sptr init_trans;
   vnl_matrix<double> A(3,3,vnl_matrix_identity);
-  double angle = 35*vnl_math::pi/180; //35 degree rotation around y-axis
-  //double angle = 27*vnl_math::pi/180; //35 degree rotation around y-axis
+  double angle = 35*vnl_math::pi_over_180; //35 degree rotation around y-axis
+//double angle = 27*vnl_math::pi_over_180; //27 degree rotation around y-axis
   A(0,0) = vcl_cos(angle); A(0,2) = vcl_sin(angle);
   A(2,0) = -vcl_sin(angle); A(2,2) = vcl_cos(angle);
-  //vector_3d t(-0.06, -0.01, -0.02);
-  //vector_3d t(-0.0520211, -0.000383981, -0.0109223);
+//vector_3d t(-0.06, -0.01, -0.02);
+//vector_3d t(-0.0520211, -0.000383981, -0.0109223);
   vector_3d t(-0.065, -0.015, -0.02);
 
   init_trans = new rgrl_trans_affine(A, t.as_ref());

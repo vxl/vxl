@@ -8,8 +8,8 @@
 
 // Declaration of some constants
 static double twopi  = 2.0*vnl_math::pi;
-static double rad    = vnl_math::pi/180.0;
-static double invrad = 180.0/vnl_math::pi;
+static double rad    = vnl_math::pi_over_180;
+static double invrad = vnl_math::deg_per_rad;
 static double dEarthMeanRadius  =  6371.01;   // In km
 static double dAstronomicalUnit =  149597890; // In km
 

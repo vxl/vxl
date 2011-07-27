@@ -306,7 +306,7 @@ void vnl_vector_test_float()
              << "v1 - v2 = " << v1 - v2 << vcl_endl;
     double ang = angle(v1,v2);
     vcl_cout << "angle(v1,v2) = " << ang << vcl_endl;
-    ang *= 180*vnl_math::one_over_pi;
+    ang *= vnl_math::deg_per_rad; // == 180/pi
     vcl_cout << "angle(v1,v2) in degrees = " << ang << vcl_endl
              << "v1.size()=" << v1.size() << vcl_endl
              << "v2.size()=" << v2.size() << vcl_endl
@@ -315,7 +315,7 @@ void vnl_vector_test_float()
     TEST_NEAR("angle(v1,v2)", ang, 90.0, 1e-15);
     double ang2 = angle(v1,v3);
     vcl_cout << "angle(v1,v3) = " << ang << vcl_endl;
-    ang2 *= 180*vnl_math::one_over_pi;
+    ang2 *= vnl_math::deg_per_rad; // == 180/pi
     vcl_cout << "angle(v1,v3) in degrees = " << ang2 << vcl_endl;
     TEST_NEAR("angle(v1,v3)", ang2, 135.0, 1e-6);
 #if 0

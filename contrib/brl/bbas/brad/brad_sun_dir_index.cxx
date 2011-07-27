@@ -47,10 +47,10 @@ int brad_sun_dir_index::index(double geo_sun_azimuth,
   double sphere_az = 90.0 - geo_sun_azimuth + 360.0;
   if (sphere_az>=360.0) sphere_az -= 360.0;
   double sphere_el = 90.0 - geo_sun_elevation;
-  double az_rad = vnl_math::pi*sphere_az/180.0;
-  double el_rad = vnl_math::pi*sphere_el/180.0;
+  double az_rad = vnl_math::pi_over_180*sphere_az;
+  double el_rad = vnl_math::pi_over_180*sphere_el;
 #if 0 // unused
-  double half_ang = vnl_math::pi*cone_half_angle_/180.0;
+  double half_ang = vnl_math::pi_over_180*cone_half_angle_;
 #endif
   // convert to Cartesian
   double s = vcl_sin(el_rad);
@@ -68,7 +68,7 @@ int brad_sun_dir_index::index(double geo_sun_azimuth,
     }
   }
 #ifdef DEBUG
-  vcl_cout << "min dir angle["<< min_i << "]: " << 180.0*min_ang/vnl_math::pi
+  vcl_cout << "min dir angle["<< min_i << "]: " << min_ang*vnl_math::deg_per_rad
            << " (" << x << ' ' << y << ' ' << z << ")\n";
 #endif
   return min_i;
@@ -87,7 +87,7 @@ int brad_sun_dir_index::index(double x, double y, double z) const
     }
   }
 #ifdef DEBUG
-  vcl_cout << "min dir angle["<< min_i << "]: " << 180.0*min_ang/vnl_math::pi << '\n';
+  vcl_cout << "min dir angle["<< min_i << "]: " << min_ang*vnl_math::deg_per_rad << '\n';
 #endif
   return min_i;
 }

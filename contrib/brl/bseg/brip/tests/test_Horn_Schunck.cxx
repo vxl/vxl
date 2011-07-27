@@ -10,7 +10,7 @@ static void test_Horn_Schunck()
 {
   vil_image_view<float> cur, prev, vx, vy, ang;
   int w = 16, h =16;
-  double D_R = 180*vnl_math::one_over_pi;
+  double D_R = vnl_math::deg_per_rad;
   cur.set_size(w,h);
   prev.set_size(w,h);
   vx.set_size(w,h);
@@ -31,21 +31,20 @@ static void test_Horn_Schunck()
 
   vil_image_view<float> gauss_cur = brip_vil_float_ops::gaussian(cur, 1.0);
   vil_image_view<float> gauss_prev = brip_vil_float_ops::gaussian(prev,1.0);
-  
+
   brip_vil_float_ops::Horn_SchunckMotion(gauss_cur, gauss_prev,vx, vy,10000.0f,20 );
-  
+
   for (int y =0; y<h; y++)
     for (int x = 0; x<w; x++)
       ang(x,y) = float(D_R*vcl_atan2(vy(x,y), vx(x,y)));
-  
+
   vcl_cout << vx(5,5)<<' '<< vx(4,5)<<' '<< vx(5,10)<<' '<< vx(6,11)<< '\n'
            << vy(5,5)<<' '<< vy(4,5)<<' '<< vy(5,10)<<' '<< vy(6,11)<< '\n'
            << vx(10,10)<< ' '<< vx(10,11)<< ' '<< vx(10,5)<<' '<< vx(9,4)<<'\n'
            << vy(10,10)<< ' '<< vy(10,11)<< ' '<< vy(10,5)<<' '<< vy(9,4)<<'\n'
            << ang(5,5)<<' '<< ang(4,5)<<' '<< ang(5,10)<<' '<< ang(6,11) << '\n'
-           << ang(10,10) <<' '<< ang(10,11) <<' '<< ang(10,5)<<' '<< ang(9,4)<< '\n';
-
-  vcl_cout << "Angle Image:\n";
+           << ang(10,10) <<' '<< ang(10,11) <<' '<< ang(10,5)<<' '<< ang(9,4)<< '\n'
+           << "Angle Image:\n";
   for (int y =0; y<h; y++)
   {
     for (int x = 0; x<w; x++)

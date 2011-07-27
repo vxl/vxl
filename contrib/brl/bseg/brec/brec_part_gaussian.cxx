@@ -232,7 +232,7 @@ vnl_vector_fixed<float,2>
 brec_part_gaussian::direction_vector(void)  // return a unit vector that gives direction of this instance in the image
 {
   vnl_vector_fixed<float,2> v;
-  double theta_rad = theta_*vnl_math::pi/180.0;
+  double theta_rad = theta_*vnl_math::pi_over_180;
   v(0) = (float)vcl_cos(theta_rad);
   v(1) = (float)vcl_sin(theta_rad);
   return v;

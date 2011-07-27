@@ -22,6 +22,7 @@
 #include <vxl_config.h> // for vxl_byte
 
 #include <vul/vul_psfile.h>
+#include <vnl/vnl_math.h>
 
 #include <vil1/vil1_image.h>
 #include <vil1/vil1_pixel.h>
@@ -432,11 +433,11 @@ void vgui_easy2D_tableau::print_psfile(vcl_string filename, int reduction_factor
     else if (sv->type_name() == "vgui_soview2D_ellipse")
     {
       vgui_soview2D_ellipse* ellip = (vgui_soview2D_ellipse*)sv;
-      psfile.ellipse(ellip->x, ellip->y, ellip->w, ellip->h, int(57.2957795 * ellip->phi + 0.5)); // convert radians to degrees
+      psfile.ellipse(ellip->x, ellip->y, ellip->w, ellip->h, int(vnl_math::deg_per_rad * ellip->phi + 0.5)); // convert radians to degrees
       if (debug)
         vcl_cerr << "  vgui_easy2D_tableau: Adding ellipse, center " << ellip->x << ", "
                  << ellip->y << " width " << ellip->w << " height " << ellip->h
-                 << " angle " << ellip->phi << " (" << int(57.2957795 * ellip->phi + 0.5) << " deg)\n";
+                 << " angle " << ellip->phi << " (" << int(vnl_math::deg_per_rad * ellip->phi + 0.5) << " deg)\n";
     }
     else
       vgui_macro_warning << "unknown soview typename = " << sv->type_name() << vcl_endl;

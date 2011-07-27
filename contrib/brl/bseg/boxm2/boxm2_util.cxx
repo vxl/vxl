@@ -167,7 +167,7 @@ boxm2_util::construct_camera( double elevation,
   // the viewsphere radius is set to 10x the bounding box diameter
   double r = radius; // = vcl_sqrt(w*w + h*h + d*d); // where w=bb.width() etc.
   //r *= 10;
-  double deg_to_rad = vnl_math::pi/180.0;
+  double deg_to_rad = vnl_math::pi_over_180;
   double el = elevation*deg_to_rad, az = azimuth*deg_to_rad;
   double cx = r*vcl_sin(el)*vcl_cos(az);
   double cy = r*vcl_sin(el)*vcl_sin(az);
@@ -231,7 +231,7 @@ int boxm2_util::find_nearest_cam(vgl_vector_3d<double>& normal,
 #ifdef DEBUG
     if ( vcl_fabs(normal.z()) > .8 ) {
       vcl_cout<<"Face normal: "<<normal<<"  principal axis: "<<cams[i]->principal_axis()<<'\n'
-              <<" and angle: " <<ang * 180/vnl_math::pi<<vcl_endl;
+              <<" and angle: " <<ang * vnl_math::deg_per_rad<<vcl_endl;
     }
 #endif // DEBUG
     if (ang < minAngle && ang < vnl_math::pi/3.0) {

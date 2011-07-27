@@ -1487,7 +1487,7 @@ gevd_float_operators::SupportAngle(const gevd_bufferxy& dirx, const gevd_bufferx
       if (floatPixel(magnitude, i, j) > 0) {
         theta = (float)vcl_atan2(floatPixel(diry, i, j), floatPixel(dirx, i, j));
         if (theta < 0) theta += (float)vnl_math::pi;
-        floatPixel(*angLe, i, j) = theta * 180 * (float)vnl_math::one_over_pi;
+        floatPixel(*angLe, i, j) = theta * float(vnl_math::deg_per_rad);
       }
 }
 

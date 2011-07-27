@@ -27,9 +27,9 @@
 //         elev(NAD27) = elev(WGS84)-d_H
 //
 
-#define degree_to_rad   (vnl_math::pi/180.0)      // Degree to rad conv.
-#define dcos(x)         vcl_cos((x)*vnl_math::pi/180.0)
-#define dsin(x)         vcl_sin((x)*vnl_math::pi/180.0)
+#define degree_to_rad   (vnl_math::pi_over_180)      // Degree to rad conv.
+#define dcos(x)         vcl_cos((x)*vnl_math::pi_over_180)
+#define dsin(x)         vcl_sin((x)*vnl_math::pi_over_180)
 #define EPSILON         1.0e-12
 
 

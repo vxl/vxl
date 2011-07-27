@@ -99,7 +99,8 @@ static void test_tangent_update()
 
   world->set_params(params);
   world->clean_grids();
-  vgl_point_3d<double> p0(2.5,2.5,0.0), p1(3.0774, 3.0774, 0.57735);
+  const double sq3 = vnl_math::sqrt1_3;
+  vgl_point_3d<double> p0(2.5,2.5,0.0), p1(2.5+sq3, 2.5+sq3, sq3);
   vgl_infinite_line_3d<double> l3d(p0, p1);
   vgl_point_3d<double> org(2.5, 2.5, 0);
   if (l3d.contains(org))
@@ -363,7 +364,7 @@ static void test_tangent_update()
     vgl_point_3d<double> cp = vgl_closest_point((*pit), pline);
     vgl_vector_3d<double> dv = cp-pline;
     vgl_vector_3d<double> d0 = dv-dot_product(dir,dv)*dir;
-    vcl_cout << vcl_acos(dp)*180.0*vnl_math::one_over_pi << ' ' << vsum.length()/cnt
+    vcl_cout << vcl_acos(dp)*vnl_math::deg_per_rad << ' ' << vsum.length()/cnt
              << ' ' << d0.length() << '\n';
   }
   double final = vsum.length()/cnt;

@@ -151,7 +151,7 @@ gevd_step::DetectEdgels(const gevd_bufferxy& image,
 
   grad_mag = gevd_float_operators::SimilarBuffer(image);
   angle = gevd_float_operators::SimilarBuffer(image);
-  const double kdeg = 180*vnl_math::one_over_pi;
+  const double kdeg = vnl_math::deg_per_rad;
   for (int j = 0; j < image.GetSizeY(); j++)
     for (int i = 0; i < image.GetSizeX(); i++)
       if ((floatPixel(*grad_mag, i, j) = floatPixel(*slope, i, j)))

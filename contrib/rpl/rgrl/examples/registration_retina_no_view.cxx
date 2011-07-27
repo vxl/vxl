@@ -163,8 +163,8 @@ read_landmark_file( const char* filename,
     return;
   }
 
-  double angular_std = 5.5*vnl_math::pi/180;
-  double width_ratio_std = 4.5*vnl_math::pi/180;
+  double angular_std = 5.5*vnl_math::pi_over_180;
+  double width_ratio_std = 4.5*vnl_math::pi_over_180;
 
   vector_2d location;
   vector_2d direction1;
@@ -274,7 +274,7 @@ main( int argc, char* argv[] )
   rgrl_initializer_inv_indexing* inv_initializer =
     new rgrl_initializer_inv_indexing( moving_image_region,
                                        fixed_image_region );
-  double angular_std = 5.5*vnl_math::pi/180;
+  double angular_std = 5.5*vnl_math::pi_over_180;
   double nn_radius = angular_std * vcl_sqrt(11.0704);//95% chi-sqr uncertainty bound
   inv_initializer->add_data( fixed_landmark_set,
                              moving_landmark_set,

@@ -16,7 +16,8 @@
 #define MAX_KERNEL_WIDTH 71
 
 
-typedef struct  {
+typedef struct
+{
   int width;
   float data[MAX_KERNEL_WIDTH];
 }  ConvolutionKernel;
@@ -66,7 +67,7 @@ static void _computeKernels(
   int i;
 
   assert(MAX_KERNEL_WIDTH % 2 == 1);
-  assert(sigma >= 0.0);
+  assert(sigma >= 0.0f);
 
   /* Compute kernels, and automatically determine widths */
   {
@@ -75,8 +76,8 @@ static void _computeKernels(
 
     /* Compute gauss and deriv */
     for (i = -hw ; i <= hw ; i++)  {
-      gauss->data[i+hw]      = (float)exp(-i*i / (2*sigma*sigma));
-      gaussderiv->data[i+hw] = -i * gauss->data[i+hw];
+      gauss->data[i+hw]      = (float)exp(-(double)(i*i) / (2.0*sigma*sigma));
+      gaussderiv->data[i+hw] = -(float)i * gauss->data[i+hw];
     }
 
     /* Compute widths */
@@ -102,11 +103,11 @@ static void _computeKernels(
     const int hw = gaussderiv->width / 2;
     float den;
 
-    den = 0.0;
+    den = 0.0f;
     for (i = 0 ; i < gauss->width ; i++)  den += gauss->data[i];
     for (i = 0 ; i < gauss->width ; i++)  gauss->data[i] /= den;
-    den = 0.0;
-    for (i = -hw ; i <= hw ; i++)  den -= i*gaussderiv->data[i+hw];
+    den = 0.0f;
+    for (i = -hw ; i <= hw ; i++)  den -= (float)i*gaussderiv->data[i+hw];
     for (i = -hw ; i <= hw ; i++)  gaussderiv->data[i+hw] /= den;
   }
 

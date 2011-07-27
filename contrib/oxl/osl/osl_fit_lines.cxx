@@ -70,7 +70,7 @@ void osl_fit_lines::simple_fit_to_list(vcl_list<osl_edge *> *myedges,
         {
           if (dc->GetTheta(ii) > 3.2 || dc->GetTheta(ii) < -3.2)
           {
-            using_degrees = vnl_math::pi / 180;
+            using_degrees = vnl_math::pi_over_180;
             break;
           }
         }

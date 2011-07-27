@@ -239,7 +239,7 @@ static void test_conic()
   cc = vgl_conic<double>(0.492577, -0.591093, 0.492577, 0.197032, -1.37921, 0.492813);
   good = cc.ellipse_geometry(xc, yc, major_axis, minor_axis, angle);
   vcl_cout << "ellipse(" << xc << ' ' << yc << ' ' << major_axis
-           << ' ' << minor_axis << ' ' << angle*180.0/vnl_math::pi << ")\n";
+           << ' ' << minor_axis << ' ' << angle*vnl_math::deg_per_rad << ")\n";
   TEST("ellipse geometry", good, true);
   TEST_NEAR("ellipse geometry: centre x", xc, 1, 1e-5);
   TEST_NEAR("ellipse geometry: centre y", yc, 2, 1e-5);
@@ -256,7 +256,7 @@ static void test_conic()
   cc = vgl_conic<double>(-0.492577, -0.591093, -0.492577, 0.197032, 1.37921, -0.492813);
   good = cc.ellipse_geometry(xc, yc, major_axis, minor_axis, angle);
   vcl_cout << "ellipse(" << xc << ' ' << yc << ' ' << major_axis
-           << ' ' << minor_axis << ' ' << angle*180.0/vnl_math::pi << ")\n";
+           << ' ' << minor_axis << ' ' << angle*vnl_math::deg_per_rad << ")\n";
   TEST("ellipse geometry", good, true);
   TEST_NEAR("ellipse geometry: centre x", xc, -1, 1e-5);
   TEST_NEAR("ellipse geometry: centre y", yc, 2, 1e-5);

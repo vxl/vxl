@@ -964,7 +964,7 @@ display_IHS_as_RGB(vil1_memory_image_of<float> const& I,
   const int w = I.width(), h = I.height();
   image.resize(w,h);
 
-  const float deg_to_rad = float(vnl_math::pi/180);
+  const float deg_to_rad = float(vnl_math::pi_over_180);
   for (int r = 0; r < h; r++)
     for (int c = 0; c < w; c++)
     {
@@ -1716,7 +1716,7 @@ brip_vil1_float_ops::rotate(vil1_memory_image_of<float> const & input,
   while (ang<0)
     ang+=360;
   //convert to radians
-  double deg_to_rad = vnl_math::pi/180.0;
+  double deg_to_rad = vnl_math::pi_over_180;
   double rang = deg_to_rad*ang;
   double c = vcl_cos(rang), s = vcl_sin(rang);
   vnl_matrix_fixed<double,3, 3> M;

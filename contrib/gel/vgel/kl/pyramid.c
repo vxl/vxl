@@ -27,10 +27,10 @@ _KLT_Pyramid _KLTCreatePyramid(
   int nlevels)
 {
   _KLT_Pyramid pyramid;
-  int nbytes = sizeof(_KLT_PyramidRec) +
-    nlevels * sizeof(_KLT_FloatImage *) +
-    nlevels * sizeof(int) +
-    nlevels * sizeof(int);
+  unsigned int nbytes = sizeof(_KLT_PyramidRec) +
+                        (unsigned)nlevels * sizeof(_KLT_FloatImage *) +
+                        (unsigned)nlevels * sizeof(int) +
+                        (unsigned)nlevels * sizeof(int);
   int i;
 
   if (subsampling != 2 && subsampling != 4 &&
@@ -93,7 +93,7 @@ void _KLTComputePyramid(
   int ncols = img->ncols, nrows = img->nrows;
   int subsampling = pyramid->subsampling;
   int subhalf = subsampling / 2;
-  float sigma = subsampling * sigma_fact;  /* empirically determined */
+  float sigma = (float)subsampling * sigma_fact;  /* empirically determined */
   int oldncols;
   int i, x, y;
 
@@ -106,7 +106,7 @@ void _KLTComputePyramid(
   assert(pyramid->nrows[0] == img->nrows);
 
   /* Copy original image to level 0 of pyramid */
-  memcpy(pyramid->img[0]->data, img->data, ncols*nrows*sizeof(float));
+  memcpy(pyramid->img[0]->data, img->data, (unsigned)(ncols*nrows)*sizeof(float));
 
   currimg = img;
   for (i = 1 ; i < pyramid->nLevels ; i++)  {

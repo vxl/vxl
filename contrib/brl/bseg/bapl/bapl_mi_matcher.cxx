@@ -50,7 +50,7 @@ bapl_mi_matcher::generate()
   double mi;
   vcl_vector<bapl_match> hypotheses;
   // if this is the first iteration, initialize with the initial transformation
-  if (matches_.empty()){
+  if (matches_.empty()) {
     mi = mutual_info(init_xform_);
     matches_.push_back(bapl_mi_matcher::bapl_match(mi,init_xform_));
   }
@@ -60,7 +60,7 @@ bapl_mi_matcher::generate()
     // hypothesize that the transformation remains unchanged
     hypotheses.push_back(*m_itr);
     // make other random hypotheses
-    for (unsigned i=0; i<params_.num_samples_; ++i){
+    for (unsigned i=0; i<params_.num_samples_; ++i) {
       bapl_affine_transform T = this->rand_transform();
       double mi = mutual_info(T);
       hypotheses.push_back(bapl_mi_matcher::bapl_match(mi,T));
@@ -97,10 +97,10 @@ inline double rand_double() { return 2.0*rand()/(double(RAND_MAX)) -1.0; }
 bapl_affine_transform
 bapl_mi_matcher::rand_transform()
 {
-  double angle = params_.max_rotation_ang_*rand_double()*vnl_math::pi/180.0;
+  double angle = params_.max_rotation_ang_*rand_double()*vnl_math::pi_over_180;
   double sin_ang = vcl_sin(angle);
   double cos_ang = vcl_cos(angle);
-  double shear = vcl_tan(params_.max_shear_ang_*rand_double()*vnl_math::pi/180.0);
+  double shear = vcl_tan(params_.max_shear_ang_*rand_double()*vnl_math::pi_over_180);
   double scale_x = vcl_pow(params_.max_sx_,rand_double());
   double scale_y = vcl_pow(params_.max_sy_,rand_double());
 

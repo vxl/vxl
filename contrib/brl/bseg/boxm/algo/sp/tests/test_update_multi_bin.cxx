@@ -28,7 +28,7 @@ vcl_vector<vpgl_camera_double_sptr > generate_cameras_z_multi_bin(vgl_box_3d<dou
 
   vgl_point_3d<double> centroid = world.centroid();
   double x,z;
-  double alpha = (vnl_math::pi/180.)*65; // was: (vnl_math::pi/8.) * 3;
+  double alpha = (vnl_math::pi_over_180)*65; // was: (vnl_math::pi/8.) * 3;
   double delta_alpha = vnl_math::pi/36.;
   vcl_vector<vgl_point_3d<double> > centers;
   for (unsigned i=0; i<11; i++) {

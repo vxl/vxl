@@ -372,7 +372,7 @@ init_gradient_info(vil1_memory_image_of<float> const& Ix,
   bsta_histogram<float> model_gradient_dir_hist(360, gradient_dir_hist_bins_);
   gradient_dir_hist_bins_ = model_gradient_dir_hist.nbins();
   int i = 0;
-  double deg_rad = 180.0/vnl_math::pi;
+  double deg_rad = vnl_math::deg_per_rad;
   for (intf_->reset(); intf_->next(); ++i)
   {
     int x = int(intf_->X()), y = int(intf_->Y());
@@ -445,7 +445,7 @@ void strk_tracking_face_2d::set_color_mutual_info(float mi)
 // rotate gradients and recompute gradient mutual information
 void strk_tracking_face_2d::transform_gradients(double theta)
 {
-  double deg_rad = 180.0/vnl_math::pi;
+  double deg_rad = vnl_math::deg_per_rad;
   double c = vcl_cos(theta), s = vcl_sin(theta);
 
   bsta_histogram<float> model_gradient_dir_hist(360, gradient_dir_hist_bins_);
@@ -700,7 +700,7 @@ compute_gradient_mutual_information(vil1_memory_image_of<float> const& Ix,
   unsigned int npix = intf_->Npix();
   if (npix == 0)
     return 0;
-  double deg_rad = 180.0/vnl_math::pi;
+  double deg_rad = vnl_math::deg_per_rad;
   unsigned int n = 0;
   for (intf_->reset(); intf_->next(); ++n)
   {
@@ -763,7 +763,7 @@ compute_gradient_mutual_information(vcl_vector <vcl_vector< vgl_point_2d<int> > 
   unsigned int npix = intf_->Npix();
   if (npix == 0)
     return 0;
-  double deg_rad = 180.0/vnl_math::pi;
+  double deg_rad = vnl_math::deg_per_rad;
   unsigned int n = 0;
   for (intf_->reset(); intf_->next(); ++n)
   {
@@ -1409,7 +1409,7 @@ print_gradient_histograms(vil1_memory_image_of<float> const& Ix,
   bsta_histogram<float> obs_image_dir_hist(360, gradient_dir_hist_bins_);
   if (intf_->Npix() == 0)
     return;
-  double deg_rad = 180.0/vnl_math::pi;
+  double deg_rad = vnl_math::deg_per_rad;
   int n = 0;
   for (intf_->reset(); intf_->next(); ++n)
   {
@@ -1497,7 +1497,7 @@ gradient_histogram(vil1_memory_image_of<float> const& Ix,
   int width = Ix.width(), height = Iy.height();
   if (intf_->Npix() == 0)
     return grad_dir_hist;
-  double deg_rad = 180.0/vnl_math::pi;
+  double deg_rad = vnl_math::deg_per_rad;
   for (intf_->reset(); intf_->next();)
   {
     int x = int(intf_->X()), y = int(intf_->Y());

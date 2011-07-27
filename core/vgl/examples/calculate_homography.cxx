@@ -54,7 +54,7 @@ int main(int argc, char **argv)
   easy2D->add_line(0,0,float(centre_pointA.x()),float(centre_pointA.y()));
 
   // rotation and translation
-  double angle = -vnl_math::pi*20/180;
+  double angle = -vnl_math::pi_over_180*20;
   vgl_h_matrix_2d<double> H; H.set_identity().set_translation(100.0,20.0).set_rotation(angle);
 
   // apply the rotation and translation to set A, obtain set B

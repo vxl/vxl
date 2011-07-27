@@ -84,7 +84,7 @@ vsol_rectangle_2d::vsol_rectangle_2d(const vsol_point_2d_sptr &center,
   assert(half_width>0&&half_height>0);
   double ang = angle;
   if (deg)
-    ang = (vnl_math::pi*angle)/180.0;
+    ang = vnl_math::pi_over_180*angle;
   double c = vcl_cos(ang), s = vcl_sin(ang);
   vgl_vector_2d<double> a(half_width*c, half_width*s);
   vgl_vector_2d<double> b(-half_height*s, half_height*c);
@@ -250,7 +250,7 @@ void vsol_rectangle_2d::b_read(vsl_b_istream &is)
   {
    case 1:
     vsol_polygon_2d::b_read(is);
-    if (storage_->size()!=4){
+    if (storage_->size()!=4) {
       vcl_cerr << "I/O ERROR: vsol_rectangle_2d::b_read(vsl_b_istream&)\n"
                << "           Incorrect number of vertices: "<< storage_->size() << '\n';
       is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream

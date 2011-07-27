@@ -524,7 +524,7 @@ int boxm2_texture_mesh_process_globals::get_best_view(vcl_vector<vpgl_perspectiv
 #ifdef DEBUG
     if ( vcl_fabs(normal.z()) > .8 ) {
       vcl_cout<<"Face normal: "<<normal<<"  principal axis: "<<cams[i]->principal_axis()<<'\n'
-              <<" and angle: " <<ang * 180/vnl_math::pi<<vcl_endl;
+              <<" and angle: " <<ang * vnl_math::deg_per_rad<<vcl_endl;
     }
 #endif
     if (ang < minAngle && ang < vnl_math::pi/2.0) {

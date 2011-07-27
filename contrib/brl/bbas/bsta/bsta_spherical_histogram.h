@@ -8,26 +8,26 @@
 // \date May 3, 2011
 //
 // A histogram on the sphere. There are a number of popular choices for
-// spherical coordinates and units that are handled. The units for angle 
+// spherical coordinates and units that are handled. The units for angle
 // can be either degrees or radians. Also there are many choices for
 // coordinate systems on the sphere. For example in geographic coordinates
 // the North and South poles are at +-90 degrees. Also the azimuthal angle
-// can exhibit the range 0 -> 360 or -180 -> 180, with discontinuities in 
+// can exhibit the range 0 -> 360 or -180 -> 180, with discontinuities in
 // the angle coordinate (a branch cut). The latter choice of branch cut is used
 // for geographic coordinates where positive azimuths are East of Greenwich,
 // England. More typically for physics applications the elevation is 0 at the
-// North pole of the sphere and increases to 180 degrees at the South pole, with// the azimuthal range 0 -> 360. Note that azimuth is undefined at the 
+// North pole of the sphere and increases to 180 degrees at the South pole, with// the azimuthal range 0 -> 360. Note that azimuth is undefined at the
 // North and South poles and a special elevation bin centered at the poles
 // is needed. The current implementation does not include such a pole bin.
-// 
-// The histogram is implemented as a map on the linear coordinate derived 
-// from azimuth and elevation indices. Bins with zero count are not 
+//
+// The histogram is implemented as a map on the linear coordinate derived
+// from azimuth and elevation indices. Bins with zero count are not
 // present in the map.
 //
 // Methods are provided for the mean and covariance matrix of the histogram
 // distribution. The mean is derived from the mean Cartesian vector
 // of points on the unit sphere corresponding to the populated bin centers.
-// Covariance is computed on angle differences and so is valid only in the 
+// Covariance is computed on angle differences and so is valid only in the
 // tangent plane to the unit sphere at the mean.
 //
 // \verbatim
@@ -57,7 +57,7 @@ class bsta_spherical_histogram
                            angle_bounds az_branch_cut = B_180_180,
                            angle_bounds el_poles = B_90_90);
 
-  ~bsta_spherical_histogram(){}
+  ~bsta_spherical_histogram() {}
 
   //: angle units e.g. RADIANS, DEG
   ang_units units() const {return units_;}
@@ -90,14 +90,14 @@ class bsta_spherical_histogram
 
   void azimuth_interval(int azimuth_index, T& azimuth_start, T& azimuth_range) const;
   void azimuth_interval(T azimuth, T& azimuth_start, T& azimuth_range) const {
-    int az_ind = azimuth_index(azimuth); 
+    int az_ind = azimuth_index(azimuth);
     azimuth_interval(az_ind, azimuth_start, azimuth_range);}
 
-  void elevation_interval(int  elevation_index, 
+  void elevation_interval(int  elevation_index,
                           T& elevation_start, T& elevation_range) const;
 
   void elevation_interval(T elevation, T& elevation_start, T& elevation_range) const{
-  int el_ind = elevation_index(elevation); 
+  int el_ind = elevation_index(elevation);
   elevation_interval(el_ind, elevation_start, elevation_range);}
 
   T azimuth_center(int azimuth_index) const;
@@ -112,17 +112,17 @@ class bsta_spherical_histogram
 
   //: counts in a specified bin
   T counts (int azimuth_index, int elevation_index) {
-    if(azimuth_index>=0&&azimuth_index<=static_cast<int>(n_azimuth())&&
-       elevation_index>=0&&elevation_index<=static_cast<int>(n_elevation())){
+    if (azimuth_index>=0&&azimuth_index<=static_cast<int>(n_azimuth())&&
+       elevation_index>=0&&elevation_index<=static_cast<int>(n_elevation())) {
       int lidx = linear_index(azimuth_index,elevation_index);
-      if(counts_[lidx])
+      if (counts_[lidx])
         return counts_[lidx];
     }
  return T(0);
   }
   T counts(T azimuth, T elevation)  {
-    int az_ind = azimuth_index(azimuth); 
-    int el_ind = elevation_index(elevation); 
+    int az_ind = azimuth_index(azimuth);
+    int el_ind = elevation_index(elevation);
     return counts(az_ind, el_ind);
   }
 
@@ -131,13 +131,13 @@ class bsta_spherical_histogram
   //:total number of counts, cached so non-const
   T total_counts();
 
-  //:probabilty of a bin 
+  //: probability of a bin
   T p(int azimuth_index, int elevation_index) ;
   T p(T azimuth, T elevation)
-    {
-      int az_ind = azimuth_index(azimuth),el_ind = elevation_index(elevation); 
-      return p(az_ind, el_ind);
-    }
+  {
+    int az_ind = azimuth_index(azimuth),el_ind = elevation_index(elevation);
+    return p(az_ind, el_ind);
+  }
 
   //: mean of histogram distribution
   void mean(T& mean_az, T& mean_el);
@@ -155,15 +155,15 @@ class bsta_spherical_histogram
 
 
   //:unit conversions
-  static T deg_to_rad(T ang){return static_cast<T>(vnl_math::pi*ang/180.0);}
-  static T rad_to_deg(T ang){return static_cast<T>(180.0*ang/vnl_math::pi);}
+  static T deg_to_rad(T ang) {return static_cast<T>(vnl_math::pi_over_180*ang);}
+  static T rad_to_deg(T ang) {return static_cast<T>(vnl_math::deg_per_rad*ang);}
 
   //:output of bin ranges and counts (zero counts not output)
   void write_counts_with_interval(vcl_ostream& os, int azimuth_index,
-                                int elevation_index);
+                                  int elevation_index);
   //:output of bin center and counts (zero counts not output)
   void write_counts_with_center(vcl_ostream& os, int azimuth_index,
-                                 int elevation_index);
+                                int elevation_index);
   //: write bin centers (azimuth elevation) and non_zero counts to stream
   void print_to_text(vcl_ostream& os);
 
@@ -181,8 +181,8 @@ class bsta_spherical_histogram
   T azimuth_range_;
   T elevation_start_;
   T elevation_range_;
-  T delta_az_; 
-  T delta_el_; 
+  T delta_az_;
+  T delta_el_;
   angle_bounds az_branch_cut_;
   angle_bounds el_poles_;
   ang_units units_;
@@ -190,6 +190,7 @@ class bsta_spherical_histogram
   T total_counts_;
   vcl_map<int, T> counts_;
 };
+
 //: Write histogram to stream
 // \relatesalso bsta_spherical_histogram
 template <class T>

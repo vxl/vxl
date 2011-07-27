@@ -76,16 +76,16 @@ static void** _createArray2D(int ncols, int nrows, int nbytes)
   char **tt;
   int i;
 
-  tt = (char **) malloc(nrows * sizeof(void *) +
-                        ncols * nrows * nbytes);
+  tt = (char **) malloc((unsigned)nrows * sizeof(void *) +
+                        (unsigned)(ncols * nrows * nbytes));
   if (tt == NULL)
     KLTError("(createArray2D) Out of memory");
 
   for (i = 0 ; i < nrows ; i++)
-    tt[i] = ((char *) tt) + (nrows * sizeof(void *) +
-                             i * ncols * nbytes);
+    tt[i] = ((char *) tt) + ((unsigned)nrows * sizeof(void *) +
+                             (unsigned)(i * ncols * nbytes));
 
-  return((void **) tt);
+  return (void **)tt;
 }
 
 
@@ -128,7 +128,7 @@ KLT_TrackingContext KLTCreateTrackingContext()
   /* smooth_sigma_fact, pyramid_sigma_fact, window_size, and subsampling */
   KLTUpdateTCBorder(tc);
 
-  return(tc);
+  return tc;
 }
 
 
@@ -142,9 +142,9 @@ KLT_FeatureList KLTCreateFeatureList(
 {
   KLT_FeatureList fl;
   KLT_Feature first;
-  int nbytes = sizeof(KLT_FeatureListRec) +
-    nFeatures * sizeof(KLT_Feature) +
-    nFeatures * sizeof(KLT_FeatureRec);
+  unsigned int nbytes = sizeof(KLT_FeatureListRec) +
+                        (unsigned)nFeatures * sizeof(KLT_Feature) +
+                        (unsigned)nFeatures * sizeof(KLT_FeatureRec);
   int i;
 
   /* Allocate memory for feature list */
@@ -160,7 +160,7 @@ KLT_FeatureList KLTCreateFeatureList(
     fl->feature[i] = first + i;
 
   /* Return feature list */
-  return(fl);
+  return fl;
 }
 
 
@@ -174,9 +174,9 @@ KLT_FeatureHistory KLTCreateFeatureHistory(
 {
   KLT_FeatureHistory fh;
   KLT_Feature first;
-  int nbytes = sizeof(KLT_FeatureHistoryRec) +
-    nFrames * sizeof(KLT_Feature) +
-    nFrames * sizeof(KLT_FeatureRec);
+  unsigned int nbytes = sizeof(KLT_FeatureHistoryRec) +
+                        (unsigned)nFrames * sizeof(KLT_Feature) +
+                        (unsigned)nFrames * sizeof(KLT_FeatureRec);
   int i;
 
   /* Allocate memory for feature history */
@@ -192,7 +192,7 @@ KLT_FeatureHistory KLTCreateFeatureHistory(
     fh->feature[i] = first + i;
 
   /* Return feature history */
-  return(fh);
+  return fh;
 }
 
 
@@ -207,7 +207,7 @@ KLT_FeatureTable KLTCreateFeatureTable(
 {
   KLT_FeatureTable ft;
   KLT_Feature first;
-  int nbytes = sizeof(KLT_FeatureTableRec);
+  unsigned int nbytes = sizeof(KLT_FeatureTableRec);
   int i, j;
 
   /* Allocate memory for feature history */
@@ -220,13 +220,13 @@ KLT_FeatureTable KLTCreateFeatureTable(
   /* Set pointers */
   ft->feature = (KLT_Feature **)
     _createArray2D(nFrames, nFeatures, sizeof(KLT_Feature));
-  first = (KLT_Feature) malloc(nFrames * nFeatures * sizeof(KLT_FeatureRec));
+  first = (KLT_Feature) malloc((unsigned)(nFrames * nFeatures) * sizeof(KLT_FeatureRec));
   for (j = 0 ; j < nFeatures ; j++)
     for (i = 0 ; i < nFrames ; i++)
       ft->feature[j][i] = first + j*nFrames + i;
 
   /* Return feature table */
-  return(ft);
+  return ft;
 }
 
 
@@ -307,22 +307,26 @@ void KLTChangeTCPyramid(
     KLTWarning("(KLTChangeTCPyramid) Window height must be at least three.\n"
                "Changing to %d.\n", tc->window_height);
   }
-  window_halfwidth = 0.5f*min(tc->window_width,tc->window_height);
+  window_halfwidth = 0.5f*(float)min(tc->window_width,tc->window_height);
 
   subsampling = ((float) search_range) / window_halfwidth;
 
   if (subsampling < 1.0)  {             /* 1.0 = 0+1 */
     tc->nPyramidLevels = 1;
-  } else if (subsampling <= 3.0)  {     /* 3.0 = 2+1 */
+  }
+  else if (subsampling <= 3.0)  {     /* 3.0 = 2+1 */
     tc->nPyramidLevels = 2;
     tc->subsampling = 2;
-  } else if (subsampling <= 5.0)  {     /* 5.0 = 4+1 */
+  }
+  else if (subsampling <= 5.0)  {     /* 5.0 = 4+1 */
     tc->nPyramidLevels = 2;
     tc->subsampling = 4;
-  } else if (subsampling <= 9.0)  {     /* 9.0 = 8+1 */
+  }
+  else if (subsampling <= 9.0)  {     /* 9.0 = 8+1 */
     tc->nPyramidLevels = 2;
     tc->subsampling = 8;
-  } else {
+  }
+  else {
     /* The following lines are derived from the formula:
        search_range =
        window_halfwidth * \sum_{i=0}^{nPyramidLevels-1} 8^i,
@@ -344,7 +348,7 @@ void KLTChangeTCPyramid(
 static float _pyramidSigma(
   KLT_TrackingContext tc)
 {
-  return (tc->pyramid_sigma_fact * tc->subsampling);
+  return (float)(tc->pyramid_sigma_fact) * (float)(tc->subsampling);
 }
 
 
@@ -407,7 +411,7 @@ void KLTUpdateTCBorder(
      in the original level 0. */
   n_invalid_pixels = smooth_gauss_hw;
   for (i = 1 ; i < num_levels ; i++)  {
-    val = ((float) n_invalid_pixels + pyramid_gauss_hw) / ss;
+    val = (float)(n_invalid_pixels + pyramid_gauss_hw) / (float)ss;
     n_invalid_pixels = (int) (val + 0.99);  /* Round up */
   }
 

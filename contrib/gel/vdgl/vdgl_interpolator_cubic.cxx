@@ -192,7 +192,7 @@ double vdgl_interpolator_cubic::get_tangent_angle(double index)
          xp = x0*index*index + x1*index + x2/3, // derived point at index
          yp = y0*index*index + y1*index + y2/3;
 
-  return 180.0*vnl_math::one_over_pi*vcl_atan2(yp, xp);
+  return vnl_math::deg_per_rad*vcl_atan2(yp, xp);
 }
 
 

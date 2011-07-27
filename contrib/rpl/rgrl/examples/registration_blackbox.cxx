@@ -202,8 +202,8 @@ generate_data( feature_vector& feature_points )
   double center_y = 115;
   for ( unsigned int ci = 0; ci<360; ++ci ) {
     vector_2d pt,tangent_dir;
-    double angle = ci*2*vnl_math::pi/180;
-    double next_angle = (ci+1)*2*vnl_math::pi/180;
+    double angle = ci*2*vnl_math::pi_over_180;
+    double next_angle = (ci+1)*2*vnl_math::pi_over_180;
     pt[0] = center_x + radius*vcl_cos(angle);
     pt[1] = center_y + radius*vcl_sin(angle);
     tangent_dir[0] = vcl_cos(next_angle) - vcl_cos(angle) ;

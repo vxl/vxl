@@ -4,8 +4,8 @@
 #include <vcl_iostream.h>
 // Declaration of some constants
 static double twopi  = 2.0*vnl_math::pi;
-static double rad    = vnl_math::pi/180.0;
-static double invrad = 180.0/vnl_math::pi;
+static double rad    = vnl_math::pi_over_180;
+static double invrad = vnl_math::deg_per_rad;
 static double dEarthMeanRadius  =  6371.01;   // In km
 static double dAstronomicalUnit =  149597890; // In km
 
@@ -14,8 +14,8 @@ void bgeo_sun_pos(int year, int month, int day,
                   double longitude, double latitude,
                   double& sun_azimuth, double& sun_elevation)
 {
-  vcl_cout << "This class is deprecated! Moved to brl/bbas/brad/brad_sun_pos."
-           << " code will be removed shortly\n";
+  vcl_cout << "This class is deprecated! Moved to brl/bbas/brad/brad_sun_pos.\n"
+           << "Code will be removed shortly\n";
 // Main variables
   double dElapsedJulianDays;
   double dDecimalHours;

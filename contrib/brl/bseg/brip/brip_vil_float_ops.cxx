@@ -1841,7 +1841,7 @@ display_IHS_as_RGB(vil_image_view<float> const& I,
   unsigned w = I.ni(), h = I.nj();
   image.set_size(w,h);
 
-  const float deg_to_rad = float(vnl_math::pi/180);
+  const float deg_to_rad = float(vnl_math::pi_over_180);
   for (unsigned r = 0; r < h; r++)
     for (unsigned c = 0; c < w; c++)
     {
@@ -2707,7 +2707,7 @@ brip_vil_float_ops::rotate(vil_image_view<float> const& input,
   while (ang<0)
     ang+=360;
   //convert to radians
-  double deg_to_rad = vnl_math::pi/180.0;
+  double deg_to_rad = vnl_math::pi_over_180;
   double rang = deg_to_rad*ang;
   vgl_h_matrix_2d<double> H;
   H.set_identity().set_rotation(rang);
@@ -3166,7 +3166,7 @@ float brip_vil_float_ops::entropy_g(const unsigned i, const unsigned j,
                                     const float range, const unsigned bins)
 {
   bsta_histogram<float> hg(range, bins);
-  static const float deg_rad = (float)(180.0/vnl_math::pi);
+  static const float deg_rad = (float)(vnl_math::deg_per_rad);
   int ir = static_cast<int>(i_radius), jr = static_cast<int>(j_radius);
   for (int dj = -jr; dj<=jr; ++dj)
     for (int di = -ir; di<=ir; ++di)
@@ -3300,7 +3300,7 @@ float brip_vil_float_ops::minfo_g(const unsigned i0, const unsigned j0,
   bsta_histogram<float> hg0(range, bins);
   bsta_histogram<float> hg1(range, bins);
   bsta_joint_histogram<float> hjg(range, bins);
-  static const float deg_rad = (float)(180.0/vnl_math::pi);
+  static const float deg_rad = (float)(vnl_math::deg_per_rad);
   int ir = static_cast<int>(i_radius), jr = static_cast<int>(j_radius);
   for (int dj = -jr; dj<=jr; ++dj)
     for (int di = -ir; di<=ir; ++di)
@@ -3679,7 +3679,7 @@ static double zs(double x)
 static double brip_vil_rot_gauss(double x, double y,
                                  double sigma_x, double sigma_y, double theta)
 {
-  double theta_rad = theta*vnl_math::pi/180.0;
+  double theta_rad = theta*vnl_math::pi_over_180;
   double s = vcl_sin(theta_rad), c = vcl_cos(theta_rad);
   double sxr = 1.0/sigma_x, syr = 1.0/sigma_y;
   double ax = (c*x + s*y)*sxr, ay = (-s*x + c*y)*syr;
@@ -3712,7 +3712,7 @@ void brip_vil_float_ops::extrema_kernel_mask(float lambda0, float lambda1,
 {
   theta = extrema_revert_angle(theta);//in range [-90, 90]
   //convert theta to radians
-  double theta_rad = theta*vnl_math::pi/180.0;
+  double theta_rad = theta*vnl_math::pi_over_180;
   double s = vcl_sin(theta_rad), c = vcl_cos(theta_rad);
   double s0 = lambda0, s1 = lambda1;
   double s1sq = 1.0/(s1*s1);
@@ -4123,7 +4123,7 @@ max_inscribed_rect(float lambda0, float lambda1, float theta,
 {
   float sign = -1.0f;
   if (theta<0) sign = 1.0f;
-  float th_rad = static_cast<float>(theta*vnl_math::pi/180.0);
+  float th_rad = static_cast<float>(theta*vnl_math::pi_over_180);
   float maxa = 0.0f, max_phi = 0.0f;
   for (float phi = -float(vnl_math::pi); phi<=float(vnl_math::pi); phi+=0.01f)
   {
@@ -4225,7 +4225,7 @@ static void rotation_offset(int ni, int nj, float theta_deg,
                             int i, int j, int& ti, int& tj)
 {
   ti= 0; tj = 0;
-  double deg_to_rad = vnl_math::pi/180.0;
+  double deg_to_rad = vnl_math::pi_over_180;
   double rang = deg_to_rad*theta_deg;
   vgl_h_matrix_2d<double> H;
   H.set_identity().set_rotation(rang);

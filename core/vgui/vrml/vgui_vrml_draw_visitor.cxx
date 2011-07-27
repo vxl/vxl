@@ -417,7 +417,7 @@ bool vgui_vrml_draw_visitor::Visit(QvAsciiText* /*node*/)
 
 static void GlRotate(double angle_rad, const float* axis)
 {
-  static const float RAD2DEG = 180.0f / float(vnl_math::pi);
+  static const float RAD2DEG = float(vnl_math::deg_per_rad);
   glRotatef(static_cast<float>(angle_rad) * RAD2DEG, axis[0], axis[1], axis[2]);
 }
 
@@ -528,7 +528,8 @@ bool vgui_vrml_draw_visitor::Visit(QvTexture2* node)
                    0,
                    GL_RGB, GL_UNSIGNED_BYTE, tm->rgb.get_buffer());
       remake_texture = false;
-    } else {
+    }
+    else {
       glDisable(GL_TEXTURE_2D);
     }
   }

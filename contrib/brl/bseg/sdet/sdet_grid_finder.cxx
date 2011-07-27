@@ -781,7 +781,7 @@ bool sdet_grid_finder::compute_affine_homography()
   }
   // Get the orientation of roughly vertical and horizontal lines
   // ang0 is the horizontal direction and ang1 is the vertical direction
-  double deg_to_rad = vnl_math::pi/180.0;
+  double deg_to_rad = vnl_math::pi_over_180;
   double ang0 =0, ang90=0;
   bool zero_is_zero=true;;
   if (vcl_fabs(vcl_fabs(avg_angle0)-90)>vcl_fabs(vcl_fabs(avg_angle1)-90))

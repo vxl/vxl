@@ -8,7 +8,7 @@
 //---------------------------------------------------------------------------
 double vcsl_degree::units_per_standard_unit() const
 {
-  static double u = 180*vnl_math::one_over_pi; // = 57.29577951
+  static double u = vnl_math::deg_per_rad; // = 57.29577951
   return u;
 }
 

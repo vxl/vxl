@@ -91,7 +91,7 @@ void bmrf_epi_seg::compute_limits()
   max_tan_ang_ = -360;
   //average angle is found by averaging the equivalent vectors
   double sin_sum = 0, cos_sum = 0;
-  double deg_to_rad = vnl_math::pi/180.0;
+  double deg_to_rad = vnl_math::pi_over_180;
   for (int i= 0; i<n; i++)
   {
     double s = seg_[i]->s();
@@ -714,7 +714,7 @@ vcl_ostream&  operator<<(vcl_ostream& s, bmrf_epi_seg const& epi_seg)
 void
 vsl_b_write(vsl_b_ostream &os, bmrf_epi_seg_sptr const& eps)
 {
-  if (!eps){
+  if (!eps) {
     vsl_b_write(os, false); // Indicate null pointer stored
   }
   else{
@@ -730,7 +730,7 @@ vsl_b_read(vsl_b_istream &is, bmrf_epi_seg_sptr& eps)
 {
   bool not_null_ptr;
   vsl_b_read(is, not_null_ptr);
-  if (not_null_ptr){
+  if (not_null_ptr) {
     eps = new bmrf_epi_seg();
     eps->b_read(is);
   }

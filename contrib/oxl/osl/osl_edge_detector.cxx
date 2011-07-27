@@ -184,7 +184,7 @@ void osl_edge_detector::detect_edges(vil1_image const &image,
 void osl_edge_detector::Sub_pixel_interpolation()
 {
   float h1=0.0,h2=0.0; // dummy initialisation values
-  float k = 180.0f/float(vnl_math::pi);
+  float k = float(vnl_math::deg_per_rad);
   int orient;
   float theta,grad;
   float fraction,dnewx=0.0,dnewy=0.0; // dummy initialisation values
@@ -698,7 +698,7 @@ void osl_edge_detector::Follow_curves(vcl_list<osl_edge*> *edges)
           *(pg++) = 0.0f;   // Mark the gradient as zero at a junction
         }
         if (theta_[tmpx][tmpy] == DUMMYTHETA) {
-          const float k = 180.0f/float(vnl_math::pi);
+          const float k = float(vnl_math::deg_per_rad);
           theta_[tmpx][tmpy]  = k*(float)vcl_atan2(dy_[tmpx][y],dx_[tmpx][y]);
         }
 

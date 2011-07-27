@@ -172,7 +172,7 @@ int main(int argc,  char** argv)
 
     // Uncomment the below for non-grid representation
 #if 0
-    sphere.add_uniform_views(vnl_math::pi/2, vnl_math::pi/18.0, ni(), nj());
+    sphere.add_uniform_views(vnl_math::pi_over_2, vnl_math::pi/18.0, ni(), nj());
     vcl_cout<<"Number of views on sphere: "<<sphere.size()<<vcl_endl;
 #endif
     //map of ID's that have been rendered
@@ -187,13 +187,13 @@ int main(int argc,  char** argv)
     // determine increment along azimuth and elevation (incline)
     double az_incr = 2.0*vnl_math::pi/num_az();
     double el_incr = (incline_0() - incline_1()) / (num_in()-1); //degrees (to include both start and end)
-    el_incr = (el_incr/360.0) * 2.0 * vnl_math::pi;  // radians
+    el_incr = el_incr * vnl_math::pi_over_180;  // radians
     for (unsigned int az_i = 0; az_i < num_az(); ++az_i)
     {
         double az = 2.0*vnl_math::pi - az_i * az_incr;
         for (unsigned int el_i = 0.0; el_i < num_in(); ++el_i)
         {
-            double el = (2.0*vnl_math::pi) * (incline_0()/360.0) - el_i * el_incr;
+            double el = vnl_math::pi_over_180 * incline_0() - el_i * el_incr;
 
             //convert to cartesian (as method is only in cartesian for some reason)
             vsph_sph_point_3d curr_point(radius(), el, az);

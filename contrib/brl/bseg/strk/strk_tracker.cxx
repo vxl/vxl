@@ -335,7 +335,7 @@ double strk_tracker::compute_gradient_angle(strk_correlated_face* cf)
            << IxIy << ' ' << IyIy << "\n\n";
 #endif // DEBUG
   double theta_rad = 0.5*vcl_atan2(2*IxIy,(IyIy-IxIx));
-  double theta_deg = (180*theta_rad)/vnl_math::pi;
+  double theta_deg = vnl_math::deg_per_rad*theta_rad;
   return theta_deg;
 }
 
@@ -361,7 +361,7 @@ double strk_tracker::compute_angle_motion(strk_correlated_face* cf)
     sn += dI*Ith;
     sd += Ith*Ith;
   }
-  double theta = 180*sn/(sd*vnl_math::pi);
+  double theta = vnl_math::deg_per_rad*sn/sd;
   return theta;
 }
 

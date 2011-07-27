@@ -56,7 +56,7 @@ static void test_interpolate()
   vnl_double_3x3 Rintrp = Rintrps[0];
   vcl_cout << "Interpolated R\n" << Rintrp << '\n';
   double interp_angle = vcl_acos(Rintrp[0][0]);
-  vcl_cout << "Interpolated angle = " << 180*interp_angle/vnl_math::pi << '\n';
+  vcl_cout << "Interpolated angle = " << vnl_math::deg_per_rad*interp_angle << '\n';
   TEST_NEAR("Interpolated rotation",interp_angle, 0.392699082,1e-8);
 
   //====test with real camera rotations computed from a video sequence====

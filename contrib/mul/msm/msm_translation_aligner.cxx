@@ -109,9 +109,8 @@ void msm_translation_aligner::calc_transform_wt_mat(const msm_points& pts1,
                                                     const vcl_vector<msm_wt_mat_2d>& wt_mat,
                                                     vnl_vector<double>& trans) const
 {
-  unsigned n=pts1.size();
-  assert(pts2.size()==n);
-  assert(wt_mat.size()==n);
+  assert(pts2.size()==pts1.size());
+  assert(wt_mat.size()==pts1.size());
   // Compute weighted CoGs
   msm_wt_mat_2d w_sum(0,0,0);
   double x1=0.0,y1=0.0;

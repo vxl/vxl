@@ -153,11 +153,11 @@ bwm_utm_lat_lon::~bwm_utm_lat_lon()
 
 // Applies the transform to the instance of 3d point representing a location in the from_coordinate_system (UTM_coordinate_system) and creates a point represented the transformed location in the to_coordinate_system(geodetic_coordinate_system).
 void bwm_utm_lat_lon::transform(int utm_zone, double x, double y, double z,
-               double& lat, double& lon , double& elev,
-               bool south_flag,
-               double utm_central_meridian)
+                                double& lat, double& lon , double& elev,
+                                bool south_flag,
+                                double utm_central_meridian)
 {
-  //double D2R = vnl_math::pi/180.0;
+  //double D2R = vnl_math::pi_over_180;
   double e = vcl_sqrt((sqr(a_) - sqr(b_))/sqr(a_));
 
   if (utm_zone != 0)
@@ -247,14 +247,14 @@ void bwm_utm_lat_lon::transform(int utm_zone, double x, double y, double z,
         temp_phi - (n * tan_phi * ds / r) *
         (0.5 - ds / 24.0 * (5.0 + 3.0 * t + 10.0 * c - 4.0 * cs - 9.0 *
                 esp2 - ds / 30.0 * (61.0 + 90.0 * t + 298.0 *
-                            c + 45.0 * ts - 252.0 *
-                            esp2 - 3.0 * cs)));
+                                    c + 45.0 * ts - 252.0 *
+                                    esp2 - 3.0 * cs)));
       lambda =
         adjust_lon2(lon_center2 +
-            (d * (1.0 - ds / 6.0 * (1.0 + 2.0 * t + c - ds / 20.0
-                        * (5.0 - 2.0 * c + 28.0 * t -
-                           3.0 * cs + 8.0 * esp2 +
-                           24.0 * ts))) / cos_phi));
+                    (d * (1.0 - ds / 6.0 * (1.0 + 2.0 * t + c - ds / 20.0
+                                            * (5.0 - 2.0 * c + 28.0 * t -
+                                               3.0 * cs + 8.0 * esp2 +
+                                               24.0 * ts))) / cos_phi));
     }
     else
     {
@@ -281,7 +281,7 @@ void bwm_utm_lat_lon::transform(int utm_zone, double x, double y,
 void bwm_utm_lat_lon::transform(double lat, double lon,
                                 double& x, double& y, int& utm_zone)
 {
-  // double D2R = vnl_math::pi/180.0;
+  // double D2R = vnl_math::pi_over_180;
   utm_zone = int((lon+180)/6.0) + 1;
   double e = vcl_sqrt(1.0 - b_*b_/(a_*a_));
   // This value must eventually set by user. lon_zone stands for
@@ -318,16 +318,17 @@ void bwm_utm_lat_lon::transform(double lat, double lon,
   double ml = a_ * mlfn2(e02, e12, e22, e32, phi);
 
   x = scale_factor2 * n * al * (1.0 + (als / 6.0) *
-                (1.0 - t + c + (als / 20.0) *
-                 (5.0 - (18.0 * t) + sqr(t) + (72.0 * c) - (58.0 * esp2)))) + false_easting2;
+                                (1.0 - t + c + (als / 20.0) *
+                                 (5.0 - (18.0 * t) + sqr(t) + (72.0 * c)
+                                  - (58.0 * esp2)))) + false_easting2;
 
   y = scale_factor2 * (ml - ml02 + n * tq * (als * (0.5 + (als / 24.0) *
-                            (5.0 - t + (9.0 * c)
-                             + (4.0 * sqr(c))
-                             + (als / 30.0) *
-                             (61.0 - (58.0 * t) +
-                              sqr(t) +
-                              (600.0 * c) -
-                              330.0 * esp2))))) +
-    false_northing2;
+                                                    (5.0 - t + (9.0 * c)
+                                                     + (4.0 * sqr(c))
+                                                     + (als / 30.0) *
+                                                     (61.0 - (58.0 * t) +
+                                                      sqr(t) +
+                                                      (600.0 * c) -
+                                                      330.0 * esp2)))))
+      + false_northing2;
 }

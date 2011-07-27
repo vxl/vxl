@@ -18,7 +18,7 @@ vifa_coll_lines::vifa_coll_lines(vtol_edge_2d_sptr  e,
 
   hypothesized_line_ = new imp_line(p1->get_p(), p2->get_p());
   contributors_.push_back(e);
-  projected_length_cutoff_ = vcl_cos(cutoff_angle_deg * vnl_math::pi / 180.0);
+  projected_length_cutoff_ = vcl_cos(cutoff_angle_deg * vnl_math::pi_over_180);
   endpt_distance_ = endpt_distance;
   id_ = vifa_coll_lines::serial_num_++;
   discard_flag_ = discard_flag;
@@ -65,7 +65,7 @@ face_list* vifa_coll_lines::get_contributor_faces(void)
   face_list*  ret = new face_list;
 
   for (edge_2d_iterator e = contributors_.begin();
-      e != contributors_.end(); ++e)
+       e != contributors_.end(); ++e)
   {
     face_list faces; (*e)->faces(faces);
 
@@ -330,7 +330,7 @@ void vifa_coll_lines::fit_line(void)
   double              C;
 
   for (edge_2d_iterator e = contributors_.begin();
-      e != contributors_.end(); ++e)
+       e != contributors_.end(); ++e)
   {
     vsol_point_2d_sptr v1 = (*e)->curve()->p0();
     vsol_point_2d_sptr v2 = (*e)->curve()->p1();

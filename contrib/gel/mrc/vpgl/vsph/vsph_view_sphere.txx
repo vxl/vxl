@@ -328,7 +328,7 @@ print_relative_cams(vpgl_camera_double_sptr const& target_cam,
     if (vv.length() < distance_thresh) {
       (it->second).relative_transf(target_cam, rel_rot, rel_trans);
       vnl_vector_fixed<double, 3> rod = rel_rot.as_rodrigues();
-      const double deg_per_rad = 180.0/vnl_math::pi;
+      const double deg_per_rad = vnl_math::deg_per_rad;
       vcl_cout <<"***************************************\n"
                << "Viewpoint " << vp_id << '\n'
                << vp.theta_*deg_per_rad << ' ' << vp.phi_*deg_per_rad<< '\n'
@@ -423,7 +423,7 @@ void vsph_view_sphere<T>::b_read(vsl_b_istream& is)
   switch (version) {
    case 1:
     {
-      if(!coord_sys_) coord_sys_ = new vsph_spherical_coord();
+      if (!coord_sys_) coord_sys_ = new vsph_spherical_coord();
       coord_sys_->b_read(is);
       unsigned size, uid;
       T view;

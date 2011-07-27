@@ -104,7 +104,7 @@ gevd_fold::DetectEdgels(const gevd_bufferxy& image,
   {
     mag = gevd_float_operators::SimilarBuffer(image);
     angle = gevd_float_operators::SimilarBuffer(image);
-    const float kdeg = 180.f*float(vnl_math::one_over_pi);
+    const float kdeg = float(vnl_math::deg_per_rad);
     for (int j = 0; j < image.GetSizeY(); j++)
       for (int i = 0; i < image.GetSizeX(); i++)
         if ((floatPixel(*mag, i, j) = floatPixel(*curvature, i, j)))

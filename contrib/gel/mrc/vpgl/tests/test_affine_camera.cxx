@@ -3,10 +3,14 @@
 #include <vpgl/vpgl_affine_camera.h>
 #include <vgl/vgl_vector_3d.h>
 #include <vgl/vgl_point_3d.h>
+#include <vnl/vnl_math.h>
+
 static void test_affine_camera()
 {
   //Test construction from ray and point
-  vgl_vector_3d<double> ray(-0.577350, -0.577350, -0.577350);
+  const double sq2 = vnl_math::sqrt1_2;
+  const double sq3 = vnl_math::sqrt1_3;
+  vgl_vector_3d<double> ray(-sq3, -sq3, -sq3);
   vgl_vector_3d<double> up(0,0,1);
   vgl_point_3d<double> p(0.5, 0.5, 0.0);
   double u0 = 50.0, v0 = 50.0;
@@ -22,21 +26,21 @@ static void test_affine_camera()
   C.project(x1, y1, z1, u1, v1);
   C.project(x2, y2, z2, u2, v2);
   C.project(x3, y3, z3, u3, v3);
-  TEST_NEAR("test du, dv", v1+u2+u3,49.5917517+ 49.2928932+ 50.70710678,1e-5); 
+  TEST_NEAR("test du, dv", v1+u2+u3, 49.591751709536 + 50-sq2 + 50+sq2, 1e-9);
   vgl_homg_point_2d<double> p0(u0, v0);
   C.set_viewing_distance(1000);
   vgl_homg_point_3d<double> cam_center = C.camera_center();
   vgl_vector_3d<double> cc_dir(cam_center.x(), cam_center.y(), cam_center.z());
   double len = (ray-cc_dir).length();
-  TEST_NEAR("Camera center", len, 0.0, 1e-3);
+  TEST_NEAR("Camera center", len, 0.0, 1e-8);
   vgl_homg_line_3d_2_points<double> l3d = C.backproject(p0);
   vgl_homg_point_3d<double> hpf = l3d.point_finite();
   vgl_point_3d<double> pf(hpf);
-  len = (pf-vgl_point_3d<double>(577.35,577.35,577.35)).length();
+  len = (pf-vgl_point_3d<double>(1000*sq3,1000*sq3,1000*sq3)).length();
   TEST_NEAR("Backproject", len, 0.0, 1.0);
   vgl_homg_plane_3d<double> pp = C.principal_plane();
-  double algd = pp.a()*577.350+pp.b()*577.350+pp.c()*577.350+pp.d();
-  TEST_NEAR("principal plane", algd, 0.0, 1e-03);
+  double algd = (pp.a()+pp.b()+pp.c())*1000*sq3+pp.d();
+  TEST_NEAR("principal plane", algd, 0.0, 1e-08);
 }
 
 TESTMAIN(test_affine_camera);

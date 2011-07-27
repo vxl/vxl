@@ -162,7 +162,7 @@ void bgui_vsol_soview2D_conic_seg::draw() const
     return;
 
   // Increments of 1 degree should be adequate
-  double one_degree = vnl_math::pi/180;
+  double one_degree = vnl_math::pi_over_180;
 
   double px, py;
   glBegin(GL_LINE_STRIP);

@@ -258,8 +258,8 @@ sdet_img_edge::detect_edge_tangent_interpolated(vil_image_view<vxl_byte> img,
 
       unsigned xc = static_cast<unsigned>(cex);
       unsigned yc = static_cast<unsigned>(cey);
-      double angle = angle_0_360((vnl_math::pi/180.0)*cubic_intp->get_theta(j)+vnl_math::pi/2.0);
-      //double angle = angle_0_360((vnl_math::pi/180.0)*cubic_intp->get_tangent_angle(j));
+      double angle = angle_0_360((vnl_math::pi_over_180)*cubic_intp->get_theta(j)+vnl_math::pi_over_2);
+      //double angle = angle_0_360((vnl_math::pi_over_180)*cubic_intp->get_tangent_angle(j));
 
       edge_img(xc, yc, 0) = static_cast<float>(cex);
       edge_img(xc, yc, 1) = static_cast<float>(cey);
@@ -331,7 +331,7 @@ sdet_img_edge::detect_edge_line_fitted(vil_image_view<vxl_byte> img,
   for (unsigned i = 0; i < lines.size(); i++) {
     vsol_line_2d_sptr l = lines[i];
     int length = (int)vcl_ceil(l->length());
-    double angle = angle_0_360(vnl_math::pi/180*l->tangent_angle());
+    double angle = angle_0_360(vnl_math::pi_over_180*l->tangent_angle());
 #if 0
     vcl_cout << " line: " << i << " length: " << l->length()
              << " p0: (" << l->p0()->x() << ", " << l->p0()->y() << ')'

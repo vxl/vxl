@@ -114,7 +114,7 @@ void write_svg_angle_distance(const bsta_joint_histogram<T>& h, const vcl_string
   }
 
   for (float vala = (float)mina; vala < maxa; vala += delta_a) {
-    vcl_stringstream rs; rs << (int)(vala*180.0*vnl_math::one_over_pi);
+    vcl_stringstream rs; rs << (int)(vala*vnl_math::deg_per_rad);
     bsvg_text* t = new bsvg_text(rs.str());
     float radius = maxb*factor+font_size;
     t->set_location((float)(300.0f+(radius)*vcl_cos(vala+vnl_math::pi*0.01)), (float)(300.0f+(radius)*-vcl_sin(vala+vnl_math::pi*0.01)));

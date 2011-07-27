@@ -5,19 +5,19 @@
 #include <vcl_algorithm.h>
 #include <boxm2/boxm2_util.h>
 
-#define RAD_FACTOR (vnl_math::pi/180.0) //radians per one degree
-#define AZ_STEP (vnl_math::pi/180.0) //step around the volume is 1 degree
+#define RAD_FACTOR (vnl_math::pi_over_180) //radians per one degree
+#define AZ_STEP (vnl_math::pi_over_180) //step around the volume is 1 degree
 
 
 //: Initializes cameras given an incline0, incline1, radius and bounding box/volume
 // Remember that an incline of 0 is straight up, and pi/2 is ground level
 void boxm2_trajectory::init_cameras(double incline0, double incline1, double radius, vgl_box_3d<double> bb, unsigned ni, unsigned nj)
 {
-  //choose a sensible radius if defualt is turned on. 
-  if(radius < 0.0) {
-    radius = bb.width(); 
+  //choose a sensible radius if defualt is turned on.
+  if (radius < 0.0) {
+    radius = bb.width();
   }
-  
+
   //generate a trajectory by varying the incline, azimuth and radius
   double currInc = incline0;
   double currRadius = radius;
@@ -68,9 +68,9 @@ void boxm2_trajectory::init_cameras(double incline0, double incline1, double rad
 
     currInc+=.5;
   }
-  
+
   //initialize iterator for list
-  iter_ = cams_.begin(); 
+  iter_ = cams_.begin();
 }
 
 //: Binary write boxm2_data_base to stream

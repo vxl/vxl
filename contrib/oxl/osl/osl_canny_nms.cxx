@@ -15,7 +15,7 @@ unsigned int osl_canny_nms(int xsize_, int ysize_,
                            float * const * dx_, float * const * dy_, float const * const * grad_,
                            float * const *thick_, float * const * theta_)
 {
-  const float k = float(180.0/vnl_math::pi);
+  const float k = float(vnl_math::deg_per_rad);
   unsigned int n_edgels_NMS = 0; // return value for this function
 
   for (int y=ysize_-2; y>0; --y) {

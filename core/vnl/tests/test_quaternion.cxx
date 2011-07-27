@@ -61,9 +61,9 @@ static void test_random_euler_near_zero()
   for (unsigned i=0;i<1000;++i)
   {
     // Need to be careful abount wrap around - don't test with angles that are too big
-    vnl_vector_fixed<double,3> euler(rng.normal()*vnl_math::pi/180.0,
-                                     rng.normal()*vnl_math::pi/180.0,
-                                     rng.normal()*vnl_math::pi/180.0);
+    vnl_vector_fixed<double,3> euler(rng.normal()*vnl_math::pi_over_180,
+                                     rng.normal()*vnl_math::pi_over_180,
+                                     rng.normal()*vnl_math::pi_over_180);
     vnl_quaternion<double> quat(euler(0), euler(1), euler(2));
     if (quat.angle() > vnl_math::pi/36.0)
     {

@@ -197,7 +197,7 @@ void osl_canny_rothwell::detect_edges(vil1_image const &image, vcl_list<osl_edge
 void osl_canny_rothwell::Non_maximal_suppression()
 {
   float h1=0,h2=0;
-  float k = 180.0f/float(vnl_math::pi);
+  float k = float(vnl_math::deg_per_rad);
 
   // Add 1 to get rid of border effects
   for (unsigned int x=w0_; x+2+w0_<xsize_; ++x)  {
@@ -436,7 +436,7 @@ void osl_canny_rothwell::Final_hysteresis(vcl_list<osl_edge*> *edges)
             *(pg++) = 0.0f;   // Mark the gradient as zero at a junction
           }
           if (theta_[tmpx][tmpy] == DUMMYTHETA) {
-            const float k = 180.0f/float(vnl_math::pi);
+            const float k = float(vnl_math::deg_per_rad);
             float *dx = dx_[tmpx];
             float *dy = dy_[tmpx];
 

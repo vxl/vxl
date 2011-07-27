@@ -10,7 +10,7 @@
 #include <vgl/vgl_clip.h>
 
 #ifndef DEGTORAD
-#define DEGTORAD  (vnl_math::pi / 180.0)
+#define DEGTORAD  (vnl_math::pi_over_180)
 #endif
 
 

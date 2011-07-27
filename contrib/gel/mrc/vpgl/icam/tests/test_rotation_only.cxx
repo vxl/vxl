@@ -123,7 +123,7 @@ static void test_rotation_only()
   vgl_rotation_3d<double> Rc = Rr*(R.inverse());
   vcl_cout << Rc.as_matrix() << '\n'
            << "angle between principal rays after cone search "
-           << vpgl_ray::angle_between_rays(Rc, min_rot)*180.0/vnl_math::pi
+           << vpgl_ray::angle_between_rays(Rc, min_rot)*vnl_math::deg_per_rad
            << " degrees. \nEntropy diff = " << min_cost << '\n';
 
   // refine the rotation using the Powell algorithm
@@ -132,7 +132,7 @@ static void test_rotation_only()
   minimizer.minimize_rot(min_rot, tr, pyramid_level, min_allowed_overlap);
   vil_image_view<float> mapped_source = minimizer.view(min_rot, tr, 0);
   vcl_cout << "angle between principal rays after Powell "
-           << vpgl_ray::angle_between_rays(Rc, min_rot)*180.0/vnl_math::pi
+           << vpgl_ray::angle_between_rays(Rc, min_rot)*vnl_math::deg_per_rad
            << " degrees. \nEntropy diff = "<< minimizer.end_error() << '\n';
 
   // write out the mapped source image using the rotation corresponding

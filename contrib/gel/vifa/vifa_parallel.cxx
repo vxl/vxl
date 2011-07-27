@@ -55,7 +55,7 @@ vifa_parallel(iface_list&   faces,
                    * vcl_fabs((*ifi)->Io() - other_f->Io());
         }
 
-        double  orientation = vcl_atan2(dy, dx) * 180.0 / vnl_math::pi;
+        double  orientation = vcl_atan2(dy, dx) * vnl_math::deg_per_rad;
         if (orientation < 0)
           orientation += 180.0;
 

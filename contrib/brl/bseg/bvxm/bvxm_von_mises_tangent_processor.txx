@@ -198,7 +198,7 @@ update(bvxm_voxel_slab<dir_dist_t> & dir_dist,
       pos_t diff = mean_pos-(*pos_dist_it).mean();
       double dist = diff.magnitude();
       if (von_mises_debug)
-        vcl_cout  << vcl_fabs(angle(updt_mean_dirv, mean_dirv))*180*vnl_math::one_over_pi
+        vcl_cout  << vcl_fabs(angle(updt_mean_dirv, mean_dirv))*vnl_math::deg_per_rad
                   << ' ' << dir_prob << ' ' << pdist << ' ' <<  pos_prob <<'\n'
                   << "Distance: " << dist << '\n';
     }
