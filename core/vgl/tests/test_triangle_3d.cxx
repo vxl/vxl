@@ -543,7 +543,7 @@ inline void test_distance()
   {
     vgl_point_3d<double> q(-1.0, 0.0, 1.0);
     double d = vgl_triangle_3d_distance(q, p1, p2, p3);
-    double true_d = 1.414213562;
+    double true_d = 1.4142135623730950488; // sqrt2
     TEST_NEAR("Point outside and different plane", d, true_d, 1e-6);
   }
 }
