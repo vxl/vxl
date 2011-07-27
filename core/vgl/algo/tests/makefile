@@ -1,5 +1,5 @@
 USES += core
-include ../algo/config.mk
+include ../config.mk
 include ${VXLROOT}/core/testlib/config.mk
 
 TESTMAIN := test_driver.cxx
