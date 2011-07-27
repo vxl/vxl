@@ -160,7 +160,7 @@ void cast_adaptive_cone_ray(
   __local uchar*   listMem = &visit_list[llid*73]; 
 
   //cell spheres have the same volume as blocks
-  float volume_scale = linfo->block_len; //*linfo->block_len*linfo->block_len;
+  //float volume_scale = linfo->block_len; //*linfo->block_len*linfo->block_len;
 
   //////////////////////////////////////////////////////////////////////////////
   // Compute pyramid values for tnear/tfar
@@ -390,7 +390,7 @@ void cast_adaptive_cone_ray(
                   if ( tree_bit_at(ltree, currBitIndex) == 0 ) {
                     //data index is relative data (data_index_cached) plus data_index_root
                     int data_ptr = data_index_cached(ltree, currBitIndex, bit_lookup, csum, &cumIndex) + data_index_root(ltree);
-                    intersect_volume = intersect_volume*volume_scale/side_len/side_len;
+                    //intersect_volume = intersect_volume*volume_scale/side_len/side_len;
                     STEP_CELL; // replaced by:step_cell_cone(aux_args, data_ptr, intersect_volume, side_len * linfo->block_len);
                     //gamma_integral +=  aux_args.alphas[data_ptr]*intersect_volume*volume_scale/side_len/side_len;;
                   }
@@ -421,7 +421,7 @@ void cast_adaptive_cone_ray(
     // 3. redistribute data loop - used to redistribute information 
     // gleaned from ball/cell back to the cells 
     ///////////////////////////////////////////////////////////////////////////
-#ifdef REDISTRIBUTE
+#if 0// #ifdef REDISTRIBUTE
     for (int x=minCell.x; x<maxCell.x; ++x) {
       for (int y=minCell.y; y<maxCell.y; ++y) {
         for (int z=minCell.z; z<maxCell.z; ++z) {
@@ -435,28 +435,7 @@ void cast_adaptive_cone_ray(
           //visit list for BFS through tree (denotes parents of cells that ought to be visited)
           linked_list toVisit = new_linked_list(listMem, 73); 
           push_back( &toVisit, -1 ); 
-          /////////////////////////////////////////////////////////////////////
-/*
-          //do an intersection with the root outside the loop 
-          //calculate the theoretical radius of this cell
-          float side_len = 1.0f;  
-          float4 cellSphere = (float4) ( (float) x+.5f, (float) y+.5f, (float) z+.5f, UNIT_SPHERE_RADIUS ); 
-          float  intersect_volume = sphere_intersection_volume(currSphere, cellSphere);
-          
-          //if it intersects, do one of two things
-          if( intersect_volume > 0.0f ) {
-            if( (*ltree).s0 == 0){
-              int data_ptr = data_index_root(ltree); 
-              REDISTRIBUTE; //step_cell_cone(aux_args, data_ptr, intersect_volume, side_len * linfo->block_len,&intensity_norm, &weighted_int, &prob_surface);
-            }
-            else { //push back root
-              push_back( &toVisit, 0 ); 
-            }
-          }
-          // done with first intersection - if nonzero volume, try children
-*/
-          /////////////////////////////////////////////////////////////////////
-  
+
           /////////////////////////////////////////////////////////////////////
           //list keeps track of parents whose children need to be intersected 
           //saves 8xSpace in local memory
@@ -529,6 +508,5 @@ void cast_adaptive_cone_ray(
 
   //stores pixel vis across all pixels
   compute_pixel_vis(aux_args.master_threads,aux_args.active_rays,aux_args.vis);
-  aux_args.vis[llid] = safety; 
-
+  //aux_args.vis[llid] = safety; 
 }

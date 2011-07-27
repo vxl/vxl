@@ -56,15 +56,16 @@ namespace boxm2_ocl_adaptive_cone_update_process_globals
     //proc norm pass computes the proc_norm image, mean_obs for each cell
     bocl_kernel* pass_one = new bocl_kernel();
     vcl_string one_opts = options + " -D PASSONE "; 
-    one_opts += "-D IMG_TYPE=float ";
+    one_opts += " -D IMG_TYPE=float ";
     one_opts += " -D STEP_CELL=step_cell(aux_args,data_ptr,intersect_volume) ";
     one_opts += " -D COMPUTE_BALL_PROPERTIES=compute_ball_properties(aux_args)  ";
     pass_one->create_kernel(&device->context(),device->device_id(), src_paths, "pass_one", one_opts, "cone_update::pass_one");
     vec_kernels.push_back(pass_one);
-#if 0
+
     //computes bayes ratio for each cell
     bocl_kernel* bayes_main = new bocl_kernel();
     vcl_string bayes_opt = options + " -D BAYES ";
+    bayes_opt += " -D IMG_TYPE=float "; 
     bayes_opt += " -D STEP_CELL=step_cell(aux_args,data_ptr,intersect_volume)  ";
     bayes_opt += " -D COMPUTE_BALL_PROPERTIES=compute_ball_properties(aux_args)  ";
     bayes_opt += " -D REDISTRIBUTE=redistribute(aux_args,data_ptr,intersect_volume)  ";
@@ -75,7 +76,6 @@ namespace boxm2_ocl_adaptive_cone_update_process_globals
     bocl_kernel* update = new bocl_kernel();
     update->create_kernel(&device->context(),device->device_id(), non_ray_src, "update_cone_data", options, "cone_update::update_data");
     vec_kernels.push_back(update);
-#endif // 0
     return ;
   }
 

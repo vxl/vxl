@@ -348,49 +348,76 @@ void compute_ball_properties(AuxArgs aux_args)
 }
 #endif
 
+
+
 #ifdef BAYES
+//: Define aux_args (like a functor struct)
+// \todo Begin passing around AuxArgs* instead of the struct to save on registers
 typedef struct
 {
-  __global float*   alphas;
-  __global MOG_TYPE * mog;
+  //scene data
+  __global float* alphas;
+  __global MOG_TYPE* mog;
 
   //aux data
   __global int* cell_vol;
   __global int* cell_obs;
   __global int* cell_vis;
-  __global int* cell_beta;
+  __global int* cell_beta;;
 
-           float   norm;
-           float*  ray_vis;
-           float*  ray_pre;
-           float   obs;
-
-           //ball level members
+           //per ball statistics, used in compute ball properties
            float* pi_cum;
            float* vol_cum;
            float* vis_cum;
-           float* beta_cum;
+           float* beta_cum; 
 
+           //constants used by stepcell functions
            float volume_scale;
+  
+  //store ray vis and pre locally
+  __local float* vis; 
+  __local float* pre;
+  
+  //curr t, 8x8 matrix
+  __local float* currT; 
+  
+  //current obs - this will be reset when split
+          float norm; 
+  
+  //store active ray pointer, image/ray pyramids
+  __local uchar* active_rays;
+  __local uchar* master_threads; 
+  
+  //multi res ray, image and tfar pyramids
+    ray_pyramid* rays; 
+  image_pyramid* image; 
+  image_pyramid* tfar; 
+  
+  //debug value
+  __local float* single; 
 } AuxArgs;
 
-void cast_cone_ray( int i, int j,                                     //pixel information
-                    float ray_ox, float ray_oy, float ray_oz,         //ray origin
-                    float ray_dx, float ray_dy, float ray_dz,         //ray direction
-                    float cone_half_angle,
-                    __constant  RenderSceneInfo    * linfo,           //scene info (origin, block size, etc)
-                    __global    int4               * tree_array,      //tree buffers (loaded as int4, but read as uchar16
-                    __local     uchar16            * local_tree,      //local tree for traversing
-                    __constant  uchar              * bit_lookup,      //0-255 num bits lookup table
+void cast_adaptive_cone_ray(
+                            //---- RAY ARGUMENTS -------------------------------------------------
+                            int i, int j,                                     //pixel information
+                            float4 ray_o,                                     //ray origin
+                            float4 ray_d,                                     //ray direction + half angle in the w
 
-                    __constant  float              * centerX,
-                    __constant  float              * centerY,
-                    __constant  float              * centerZ,
+                            //---- SCENE ARGUMENTS------------------------------------------------
+                            __constant  RenderSceneInfo    * linfo,           //scene info (origin, block size, etc)
+                            __global    int4               * tree_array,      //tree buffers (loaded as int4, but read as uchar16
 
-                    __local     uchar              * cumsum,          //cumulative sum helper for data pointer
-                    __local     uchar              * visit_list,      //visit list for BFS, uses 10 chars per thread
-                                float              * vis,             //passed in as starting visibility
-                                AuxArgs            aux_args );
+                            //---- UTILITY ARGUMENTS----------------------------------------------
+                            __local     uchar16            * local_tree,      //local tree for traversing (8x8 matrix)
+                            __constant  uchar              * bit_lookup,      //0-255 num bits lookup table
+                            __constant  float              * centerX,         // center points for ...
+                            __constant  float              * centerY,         // each of the 585 possible cells ...
+                            __constant  float              * centerZ,         // indexed by bit index
+                            __local     uchar              * cumsum,          //cumulative sum helper for data pointer
+                            __local     uchar              * visit_list,      //visit list for BFS, uses 10 chars per thread
+
+                            //----aux arguments defined by host at compile time-------------------
+                            AuxArgs aux_args );
 
 __kernel
 void
@@ -429,15 +456,13 @@ bayes_main(__constant  RenderSceneInfo    * linfo,
   int i=0,j=0;
   i=get_global_id(0);
   j=get_global_id(1);
+  int imIndex = j*get_global_size(0) + i;
 
   // check to see if the thread corresponds to an actual pixel as in some
   // cases #of threads will be more than the pixels.
   if (i>=(*imgdims).z || j>=(*imgdims).w || i<(*imgdims).x || j<(*imgdims).y)
     return;
   float norm = norm_image[j*get_global_size(0) + i];
-  float vis = 1.0f; //vis_image[j*get_global_size(0) + i];
-  float pre = 0.0f; //pre_image[j*get_global_size(0) + i];
-  float obs = in_image[j*get_global_size(0) + i];
   barrier(CLK_LOCAL_MEM_FENCE);
 
   //----------------------------------------------------------------------------
@@ -451,10 +476,87 @@ bayes_main(__constant  RenderSceneInfo    * linfo,
   calc_scene_ray_generic_cam(linfo, ray_o, ray_d, &ray_ox, &ray_oy, &ray_oz, &ray_dx, &ray_dy, &ray_dz);
 
   //----------------------------------------------------------------------------
+  //create local memory for ray/image/t pyramids
+  //----------------------------------------------------------------------------
+  //INITIALIZE RAY PYRAMID
+  __local float4* ray_pyramid_mem[4];
+  __local float4 ray0[1];
+  __local float4 ray1[4];
+  __local float4 ray2[16];
+  __local float4 ray3[64];
+  ray_pyramid_mem[0] = ray0;
+  ray_pyramid_mem[1] = ray1;
+  ray_pyramid_mem[2] = ray2;
+  ray_pyramid_mem[3] = ray3;
+  ray3[llid] = (float4) (ray_dx, ray_dy, ray_dz, cone_half_angle);
+  barrier(CLK_LOCAL_MEM_FENCE);
+  ray_pyramid pyramid = new_ray_pyramid(ray_pyramid_mem, 4, 8);
+
+  //INITIALIZE OBSERVED PYRAMID
+  __local float* obs_mem[4];
+  __local float obs0[1];
+  __local float obs1[4];
+  __local float obs2[16];
+  __local float obs3[64];
+  obs_mem[0] = obs0;
+  obs_mem[1] = obs1;
+  obs_mem[2] = obs2;
+  obs_mem[3] = obs3;
+  obs3[llid] = in_image[imIndex];
+  barrier(CLK_LOCAL_MEM_FENCE);
+  image_pyramid obs_pyramid  = new_image_pyramid(obs_mem, 4, 8);
+  
+  //initalize T pyramids (tfar)
+  __local float* tfar_mem[4];
+  __local float tfar0[1];
+  __local float tfar1[4];
+  __local float tfar2[16];
+  __local float tfar3[64];
+  tfar_mem[0] = tfar0;
+  tfar_mem[1] = tfar1;
+  tfar_mem[2] = tfar2;
+  tfar_mem[3] = tfar3;
+  tfar3[llid] = 0.0f; 
+  barrier(CLK_LOCAL_MEM_FENCE);
+  image_pyramid tfar_pyramid = new_image_pyramid(tfar_mem, 4, 8);
+
+  //init active ray matrix
+  __local uchar active_rays[64];
+  active_rays[llid] = (llid==0) ? 1 : 0;
+  barrier(CLK_LOCAL_MEM_FENCE);
+  
+  //init master thread matrix
+  __local uchar master_threads[64]; 
+  master_threads[llid] = 0; //llid; 
+  barrier(CLK_LOCAL_MEM_FENCE); 
+  
+  //init local pre and vis
+  __local float vis[64]; 
+  __local float pre[64]; 
+  pre[llid] = pre_image[imIndex]; 
+  vis[llid] = vis_image[imIndex]; 
+  barrier(CLK_LOCAL_MEM_FENCE); 
+  
+  //8x8 currT
+  __local float currT[64]; 
+  currT[llid] = 0.0f; 
+  barrier(CLK_LOCAL_MEM_FENCE); 
+  
+  //store in aux_arg struct
+  AuxArgs aux_args;
+  aux_args.active_rays = active_rays; 
+  aux_args.master_threads = master_threads; 
+  aux_args.tfar  = &tfar_pyramid; 
+  aux_args.image = &obs_pyramid; 
+  aux_args.rays  = &pyramid; 
+  aux_args.vis = vis; 
+  aux_args.pre = pre;   
+  aux_args.currT = currT; 
+
+  //----------------------------------------------------------------------------
   // we know i,j map to a point on the image, have calculated ray
   // BEGIN RAY TRACE
   //----------------------------------------------------------------------------
-  AuxArgs aux_args;
   aux_args.alphas   = alpha_array;
   aux_args.mog     = mixture_array;
 
@@ -464,9 +566,6 @@ bayes_main(__constant  RenderSceneInfo    * linfo,
   aux_args.cell_vis  = aux_vis; //&aux_array[2 * linfo->num_buffer * linfo->data_len];
   aux_args.cell_beta = aux_beta; //&aux_array[3 * linfo->num_buffer * linfo->data_len];
   aux_args.norm = norm;
-  aux_args.obs = obs;
-  aux_args.ray_vis = &vis;
-  aux_args.ray_pre = &pre;
   float pi_cum=0.0f;
   float vol_cum = 0.0f;
   float vis_cum = 1.0f;
@@ -477,17 +576,22 @@ bayes_main(__constant  RenderSceneInfo    * linfo,
   aux_args.beta_cum = &beta_cum;
   aux_args.volume_scale = linfo->block_len*linfo->block_len*linfo->block_len;
 
-  float vis0 = 1.0f;
-  cast_cone_ray(i, j,
-                ray_ox, ray_oy, ray_oz,
-                ray_dx, ray_dy, ray_dz, cone_half_angle,
-                linfo, tree_array,                                    //scene info
-                local_tree, bit_lookup, centerX, centerY, centerZ,
-                cumsum, to_visit, &vis0, aux_args);      //utility info
+  //----------------------------------------------------------------------------
+  // cast adaptive cone ray call
+  //----------------------------------------------------------------------------
+  cast_adaptive_cone_ray( i, j,
+                          (float4) (ray_ox, ray_oy, ray_oz, 0.0f),
+                          (float4) (ray_dx, ray_dy, ray_dz, cone_half_angle),
+                          linfo, tree_array,                      //scene info
+                          local_tree, bit_lookup, centerX, centerY, centerZ,
+                          cumsum, to_visit, aux_args);      //utility info
 
   //write out vis and pre
-  vis_image[j*get_global_size(0)+i] = vis;
-  pre_image[j*get_global_size(0)+i] = pre;
+  vis_image[imIndex] = vis[llid];
+  
+  //store exp int for non active rays
+  uchar thread_leader = master_threads[llid]; 
+  pre_image[imIndex] = pre[thread_leader];
 }
 
 
@@ -525,12 +629,17 @@ void split_ray(AuxArgs aux_args, int side_len)
 
 bool step_cell(AuxArgs aux_args, int data_ptr, float intersect_volume)
 {
+  uchar llid = (uchar)(get_local_id(0) + get_local_size(0)*get_local_id(1));
+
   //rescale intersect volume
   intersect_volume *= aux_args.volume_scale;
 
+  //be sure to grab the correct obs (at the correct level)
+  float obs = image_pyramid_access_safe(aux_args.image, aux_args.active_rays[llid]-1); 
+
   //rescale aux args, calculate mean obs
   float8 mixture = convert_float8(aux_args.mog[data_ptr]) / NORM;
-  float PI = gauss_3_mixture_prob_density( aux_args.obs,
+  float PI = gauss_3_mixture_prob_density( obs,
                                            mixture.s0,
                                            mixture.s1,
                                            mixture.s2,
@@ -541,7 +650,7 @@ bool step_cell(AuxArgs aux_args, int data_ptr, float intersect_volume)
                                            mixture.s7,
                                            (1.0f-mixture.s2-mixture.s5)
                                           );
-  float vis = (*aux_args.ray_vis);
+  float vis = aux_args.vis[llid]; //(*aux_args.ray_vis);
   float gamma = aux_args.alphas[data_ptr];
 
   //sum cumulative vis
@@ -600,7 +709,7 @@ update_cone_data( __global RenderSceneInfo  * info,
                   __global int              * aux_beta)     // mean obs r aux array
 {
   float  cell_min = info->block_len/(float)(1<<info->root_level);
-  float  alphamin = -log(1.0-0.0001)/cell_min;
+  float  alphamin = -log(1.0-0.01)/ (cell_min*cell_min*cell_min);
   float t_match = 2.5f;
   float init_sigma = 0.09f;
   float min_sigma = 0.03f;
