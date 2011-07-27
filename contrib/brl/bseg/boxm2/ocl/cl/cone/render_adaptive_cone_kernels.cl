@@ -1,4 +1,4 @@
-// This is brl/bseg/boxm2/ocl/cl/cone/update_adaptive_cone_kernels.cl
+// This is brl/bseg/boxm2/ocl/cl/cone/render_adaptive_cone_kernels.cl
 #pragma OPENCL EXTENSION cl_khr_global_int32_base_atomics: enable
 #if NVIDIA
  #pragma OPENCL EXTENSION cl_khr_gl_sharing : enable
@@ -34,24 +34,24 @@ typedef struct
            float* pi_cum;
            float* vol_cum;
            float* vis_cum;
-           float* weighted_int; 
-           float* intensity_norm; 
-           
+           float* weighted_int;
+           float* intensity_norm;
+
            //constants used by stepcell functions
            float volume_scale;
-  
+
   //store ray vis and pre locally
-  __local float* vis; 
-  __local float* expint; 
-  
+  __local float* vis;
+  __local float* expint;
+
   //curr t, 8x8 matrix
-  __local float* currT; 
-  
+  __local float* currT;
+
   //store active ray pointer, image/ray pyramids
   __local uchar* active_rays;
-  __local uchar* master_threads; 
-    ray_pyramid* rays; 
-  image_pyramid* tfar; 
+  __local uchar* master_threads;
+    ray_pyramid* rays;
+  image_pyramid* tfar;
 } AuxArgs;
 
 void cast_adaptive_cone_ray(
@@ -89,11 +89,11 @@ render_adaptive_cone(__constant  RenderSceneInfo    * linfo,
                      __global    float              * output,
                      __constant  uchar              * bit_lookup,       // used to get data_index
                      __global    float              * vis_image,        // visibility image (for keeping vis across blocks)
-                     
+
                      __constant  float              * centerX,          //cached lookup tables for center of cells
                      __constant  float              * centerY,
                      __constant  float              * centerZ,
-                     
+
                      __local     uchar16            * local_tree,       // cache current tree into local memory
                      __local     uchar              * cumsum,           // cumulative sum for calculating data pointer
                      __local     uchar              * to_visit )        //local mem space for BFS on trees
@@ -108,7 +108,7 @@ render_adaptive_cone(__constant  RenderSceneInfo    * linfo,
   int imIndex = j*get_global_size(0) + i;
   if (i>=(*imgdims).z || j>=(*imgdims).w || i<(*imgdims).x || j<(*imgdims).y)
     return;
-    
+
   //----------------------------------------------------------------------------
   // transform rays from world to normalized block world space
   //----------------------------------------------------------------------------
@@ -135,7 +135,7 @@ render_adaptive_cone(__constant  RenderSceneInfo    * linfo,
   barrier(CLK_LOCAL_MEM_FENCE);
   ray_pyramid pyramid = new_ray_pyramid(ray_pyramid_mem, 4, 8);
 
-  //initalize T pyramids (tfar)
+  //initialize T pyramids (tfar)
   __local float* tfar_mem[4];
   __local float tfar0[1];
   __local float tfar1[4];
@@ -145,7 +145,7 @@ render_adaptive_cone(__constant  RenderSceneInfo    * linfo,
   tfar_mem[1] = tfar1;
   tfar_mem[2] = tfar2;
   tfar_mem[3] = tfar3;
-  tfar3[llid] = 0.0f; 
+  tfar3[llid] = 0.0f;
   barrier(CLK_LOCAL_MEM_FENCE);
   image_pyramid tfar_pyramid = new_image_pyramid(tfar_mem, 4, 8);
 
@@ -153,33 +153,33 @@ render_adaptive_cone(__constant  RenderSceneInfo    * linfo,
   __local uchar active_rays[64];
   active_rays[llid] = (llid==0) ? 1 : 0;
   barrier(CLK_LOCAL_MEM_FENCE);
-  
+
   //init master thread matrix
-  __local uchar master_threads[64]; 
-  master_threads[llid] = 0; //llid; 
-  barrier(CLK_LOCAL_MEM_FENCE); 
-  
+  __local uchar master_threads[64];
+  master_threads[llid] = 0; //llid;
+  barrier(CLK_LOCAL_MEM_FENCE);
+
   //init local pre and vis
-  __local float vis[64]; 
-  __local float expint[64]; 
-  expint[llid] = 0.0f; //pre_image[imIndex]; 
-  vis[llid] = vis_image[imIndex]; 
-  barrier(CLK_LOCAL_MEM_FENCE); 
-  
+  __local float vis[64];
+  __local float expint[64];
+  expint[llid] = 0.0f; //pre_image[imIndex];
+  vis[llid] = vis_image[imIndex];
+  barrier(CLK_LOCAL_MEM_FENCE);
+
   //8x8 currT
-  __local float currT[64]; 
-  currT[llid] = 0.0f; 
-  barrier(CLK_LOCAL_MEM_FENCE); 
-  
+  __local float currT[64];
+  currT[llid] = 0.0f;
+  barrier(CLK_LOCAL_MEM_FENCE);
+
   //store in aux_arg struct
   AuxArgs aux_args;
-  aux_args.active_rays = active_rays; 
-  aux_args.master_threads = master_threads; 
-  aux_args.tfar  = &tfar_pyramid; 
-  aux_args.rays  = &pyramid; 
-  aux_args.vis = vis; 
-  aux_args.currT = currT; 
-  aux_args.expint = expint; 
+  aux_args.active_rays = active_rays;
+  aux_args.master_threads = master_threads;
+  aux_args.tfar  = &tfar_pyramid;
+  aux_args.rays  = &pyramid;
+  aux_args.vis = vis;
+  aux_args.currT = currT;
+  aux_args.expint = expint;
 
   //----------------------------------------------------------------------------
   //store other aux args
@@ -190,12 +190,12 @@ render_adaptive_cone(__constant  RenderSceneInfo    * linfo,
   float pi_cum = 0.0f;
   float vol_cum = 0.0f;
   float vis_cum = 1.0f;
-  float weighted_int = 0.0f; 
+  float weighted_int = 0.0f;
   float intensity_norm = 0.0f;
   aux_args.pi_cum = &pi_cum;        //sphere-scope prob(intensity) var
   aux_args.vol_cum = &vol_cum;      //sphere-scope intersected volume var
   aux_args.vis_cum = &vis_cum;      //sphere-scope visibility var
-  aux_args.weighted_int = &weighted_int; 
+  aux_args.weighted_int = &weighted_int;
   aux_args.intensity_norm = &intensity_norm;
   aux_args.volume_scale = linfo->block_len*linfo->block_len*linfo->block_len; //volume factor
 
@@ -211,9 +211,9 @@ render_adaptive_cone(__constant  RenderSceneInfo    * linfo,
 
   //store vis/pre/norm
   vis_image[imIndex] = vis[llid]; //vis;
-  
+
   //store exp int for non active rays
-  uchar thread_leader = master_threads[llid]; 
+  uchar thread_leader = master_threads[llid];
   in_image[imIndex] = expint[thread_leader];
 }
 
@@ -221,29 +221,29 @@ render_adaptive_cone(__constant  RenderSceneInfo    * linfo,
 //----------------------------------------------------------------------------
 // Split ray function
 //----------------------------------------------------------------------------
-void split_ray(AuxArgs aux_args, int side_len) 
+void split_ray(AuxArgs aux_args, int side_len)
 {
   uchar llid = (uchar)(get_local_id(0) + get_local_size(0)*get_local_id(1));
-  uchar localI = (uchar)get_local_id(0); 
-  uchar localJ = (uchar)get_local_id(1); 
+  uchar localI = (uchar)get_local_id(0);
+  uchar localJ = (uchar)get_local_id(1);
 
   //turn on the four neighboring threads
-  float nextVis = pow(aux_args.vis[llid], 0.25f); 
-  float nextExp = aux_args.expint[llid]; 
-  for(int ioff=0; ioff<2; ++ioff) {
-    for(int joff=0; joff<2; ++joff) {
+  float nextVis = pow(aux_args.vis[llid], 0.25f);
+  float nextExp = aux_args.expint[llid];
+  for (int ioff=0; ioff<2; ++ioff) {
+    for (int joff=0; joff<2; ++joff) {
       //"neighbor" threads are not necessarily neighboring in workspace (only at finest level they are)
-      int di = ioff * (side_len/2); 
-      int dj = joff * (side_len/2); 
-      
+      int di = ioff * (side_len/2);
+      int dj = joff * (side_len/2);
+
       //calc local thread ID (in 8x8 workspace)
-      uchar id = (localI+di) + (localJ+dj)*get_local_size(0); 
-      
+      uchar id = (localI+di) + (localJ+dj)*get_local_size(0);
+
       //set the vis and pre for new threads
       aux_args.vis[id] = nextVis;
-      aux_args.expint[id] = nextExp; 
+      aux_args.expint[id] = nextExp;
     } //end i for
-  } //end j for  
+  } //end j for
 }
 
 //FUNCTORS used with cone ray
@@ -254,18 +254,16 @@ void step_cell_cone(AuxArgs aux_args, int data_ptr, float volume)
 
   //grab voxel alpha and intensity
   float alpha = aux_args.alphas[data_ptr];
-  
+
   //calculate the mean intensity
   uchar8 data = aux_args.mog[data_ptr];
-  //uchar8 data = (uchar8) 128; 
-  float w2=0.0f;
-  if (data.s2 > 0 && data.s5 > 0)
-    w2=(float)(255-data.s2-data.s5);
+  //uchar8 data = (uchar8) 128;
+  float w2 = (data.s2 > 0 && data.s5 > 0) ? (float)(255-data.s2-data.s5) : 0.0f;
   float exp_intensity=(float)data.s0 * (float)data.s2 +
                       (float)data.s3 * (float)data.s5 +
                       (float)data.s6 * w2;
   exp_intensity /= (255.0f*255.0f);
-  
+
   //probability that this voxel is occupied by surface
   float cell_occupancy_prob = (1.0 - exp(-alpha*volume) );
   (*aux_args.pi_cum) += (cell_occupancy_prob * volume);      //sum over ball's Prob Surface
@@ -273,37 +271,37 @@ void step_cell_cone(AuxArgs aux_args, int data_ptr, float volume)
   //weighted intensity for this voxel
   (*aux_args.weighted_int) += cell_occupancy_prob * volume * exp_intensity;
   (*aux_args.intensity_norm) += cell_occupancy_prob * volume;
-  (*aux_args.vol_cum) += volume; 
+  (*aux_args.vol_cum) += volume;
 }
 
 //once step cell is performed, compute ball properties
 void compute_ball_properties( AuxArgs aux_args )
 {
   uchar llid = (uchar)(get_local_id(0) + get_local_size(0)*get_local_id(1));
-  if( *aux_args.intensity_norm > 1e-10 && *aux_args.vol_cum > 1e-10) {
-    
+  if (*aux_args.intensity_norm > 1e-10 && *aux_args.vol_cum > 1e-10)
+  {
     //calculate ray/sphere occupancy prob
     float sphere_occ_prob = (*aux_args.pi_cum) / (*aux_args.vol_cum);
-    
+
     //calc expected int = weighted sum / weighted total volume
-    float expected_int = (*aux_args.weighted_int) / (*aux_args.intensity_norm); 
+    float expected_int = (*aux_args.weighted_int) / (*aux_args.intensity_norm);
 
     //expected intensity is Visibility * Weighted Intensity * Occupancy
-    float ei = aux_args.expint[llid]; //(*aux_args.expint); 
-    float vis = aux_args.vis[llid]; 
+    float ei = aux_args.expint[llid]; //(*aux_args.expint);
+    float vis = aux_args.vis[llid];
     ei += vis * expected_int * sphere_occ_prob;
-    aux_args.expint[llid] = ei;      
-    
+    aux_args.expint[llid] = ei;
+
     //update visibility after all cells have accounted for
-    vis *= (1.0 - sphere_occ_prob); 
-    aux_args.vis[llid] = vis; 
-
+    vis *= (1.0 - sphere_occ_prob);
+    aux_args.vis[llid] = vis;
   }
-  barrier(CLK_LOCAL_MEM_FENCE); 
+  barrier(CLK_LOCAL_MEM_FENCE);
 
-  *aux_args.vol_cum = 0.0f; 
+  *aux_args.vol_cum = 0.0f;
   *aux_args.intensity_norm = 0.0f;
   *aux_args.weighted_int = 0.0f;
-  *aux_args.pi_cum = 0.0f;  
+  *aux_args.pi_cum = 0.0f;
 }
-#endif
+
+#endif // RENDER
