@@ -12,6 +12,7 @@
 #include <vnl/vnl_random.h>
 #include <vnl/vnl_rational.h>
 #include <vnl/vnl_rational_traits.h>
+#include <vnl/vnl_math.h> // for sqrt2 and pi/2
 
 static const double epsilon = 1e-11;
 
@@ -146,7 +147,7 @@ void test_rotation_3d()
 
   vcl_cout << "\n2. Rotation about the x axis over 90 degrees.\n";
 
-  vgl_rotation_3d<double> rot_x90(1.57079632679489661923, 0.0, 0.0);
+  vgl_rotation_3d<double> rot_x90(vnl_math::pi_over_2, 0.0, 0.0);
   test_conversions(rot_x90);
   test_inverse(rot_x90);
   test_transpose(rot_x90);
@@ -161,7 +162,7 @@ void test_rotation_3d()
   test_application(rot_rand);
   //test constructor from two vectors
   vnl_double_3 b(0.0, 0.0, 1.0),
-               ap(0.7071067811865475244, 0.0, 0.7071067811865475244), // vector of magnitude 1
+               ap(vnl_math::sqrt1_2, 0.0, vnl_math::sqrt1_2), // vector of magnitude 1
                am(-1.0,  0.0, -1.0), // magnitude > 1, to test robustified constructor
                a1(0.5773502692, -0.5773502692, 0.5773502692); // magnitude 1
   vgl_rotation_3d<double> r_abp(ap, b);
@@ -170,11 +171,11 @@ void test_rotation_3d()
   vnl_double_3 ap_to_b = r_abp*ap, am_to_b = r_abm*am, a1_to_b = r_ab1*a1;
   double errorp = (b - ap_to_b).squared_magnitude();
   TEST_NEAR("constructor from 2 vectors: rotate 45d around Y axis", errorp, 0.0, epsilon);
-  double errorm = (b*1.414213562373095 - am_to_b).squared_magnitude();
+  double errorm = (b*vnl_math::sqrt2 - am_to_b).squared_magnitude();
   TEST_NEAR("constructor from 2 vectors: rotate 225d around Y axis", errorm, 0.0, epsilon);
   double error1 = (b - a1_to_b).squared_magnitude();
   TEST_NEAR("constructor from 2 vectors: from arbitrary point", error1, 0.0, epsilon);
-  vgl_vector_3d<float> ag(1.0f, 1.0f, 0.0f), bg(0.0f, 0.0f, 1.414213562f);
+  vgl_vector_3d<float> ag(1.0f, 1.0f, 0.0f), bg(0.0f, 0.0f, float(vnl_math::sqrt2));
   vgl_rotation_3d<float> r_abg(ag, bg);
   vgl_vector_3d<float> ag_to_bg = r_abg*ag;
   float errorf = (bg - ag_to_bg).sqr_length();
@@ -184,8 +185,8 @@ void test_rotation_3d()
 #define sqr(x) (x)*(x)
   error1 = sqr(double(r_abi.as_quaternion()[0]))
          + sqr(double(r_abi.as_quaternion()[1]))
-         + sqr(double(r_abi.as_quaternion()[2]) + 0.7071067811865475244) 
-         + sqr(double(r_abi.as_quaternion()[3]) - 0.7071067811865475244);
+         + sqr(double(r_abi.as_quaternion()[2]) + vnl_math::sqrt1_2) 
+         + sqr(double(r_abi.as_quaternion()[3]) - vnl_math::sqrt1_2);
   TEST_NEAR("rotation is 90 deg in XY plane", error1, 0.0, epsilon);
 #if VXL_INT_64_IS_LONG
   // temporary fix for a "bug" (actually just integer overflow) in vnl_rational:
