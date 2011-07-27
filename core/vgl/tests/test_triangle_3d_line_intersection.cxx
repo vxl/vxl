@@ -5,7 +5,6 @@
 #include <vgl/vgl_triangle_3d.h>
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_line_segment_3d.h>
-#include <vnl/vnl_math.h>
 
 static const double tol=1e-9;
 
@@ -108,7 +107,7 @@ static void test_line_intersection()
   }
   {
     bool outside_fail = false, inside_fail = false;
-    const double rad = vnl_math::pi / 180.0;
+    const double rad = 0.01745329251994329577; // radians per degree, i.e., pi/180
     vgl_point_3d<double> i_pnt;
     for (double e=1e-12; e<0.0002; e *= 9.0) // height above/below triangle edge p1-p2
     {
