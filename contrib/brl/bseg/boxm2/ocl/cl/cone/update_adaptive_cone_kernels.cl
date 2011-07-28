@@ -370,11 +370,7 @@ void compute_ball_properties(AuxArgs aux_args)
 
     //incrememnt pre and vis;
     float vis_cum = (*aux_args.vis_cum);  //1-vis_cum = prob(ball \in surface)
-    pre += vis*(1.0-vis_cum)*PI;
-    vis *= vis_cum;
-    aux_args.vis[llid] = vis; 
-    aux_args.pre[llid] = pre; 
-    
+
     //pre contribution for all resolutions finer than this one
     float pow_val = .25f; 
     for(int curr_level=ray_level+1; curr_level < 4; ++curr_level, pow_val*=.25f)
@@ -384,6 +380,12 @@ void compute_ball_properties(AuxArgs aux_args)
       float pre_contr = vis_level*(1-vis_cum_level)*PI;     
       image_pyramid_incr_safe(aux_args.pre_pyramid, curr_level, pre_contr); 
     }
+    
+    //update vis after the fact
+    pre += vis*(1.0-vis_cum)*PI;
+    vis *= vis_cum;
+    aux_args.vis[llid] = vis; 
+    aux_args.pre[llid] = pre; 
   }
   
   //reset ball values
@@ -749,10 +751,6 @@ bool compute_ball_properties(AuxArgs aux_args)
     //incrememnt beta pre and vis along the ray
     (*aux_args.beta_cum) = (pre+vis*PI)/aux_args.norm;  //update current beta value w/ pre/vis
     float vis_cum = (*aux_args.vis_cum);  //1-vis_cum = prob(ball \in surface)
-    pre += vis*(1.0f-vis_cum )*PI; 
-    vis *= vis_cum;
-    aux_args.pre[llid] = pre; //(*aux_args.ray_pre) = pre;
-    aux_args.vis[llid] = vis; //(*aux_args.ray_vis) = vis;
   
     //pre contribution for all resolutions finer than this one
     float pow_val = .25f; 
@@ -763,6 +761,12 @@ bool compute_ball_properties(AuxArgs aux_args)
       float pre_contr = vis_level*(1-vis_cum_level)*PI;     
       image_pyramid_incr_safe(aux_args.pre_pyramid, curr_level, pre_contr); 
     }
+    
+    //be sure to update vis after the fact
+    pre += vis*(1.0f-vis_cum )*PI; 
+    vis *= vis_cum;
+    aux_args.pre[llid] = pre; //(*aux_args.ray_pre) = pre;
+    aux_args.vis[llid] = vis; //(*aux_args.ray_vis) = vis;
   }
 
   //reset ball values
@@ -815,7 +819,7 @@ update_cone_data( __global RenderSceneInfo  * info,
       ushort4 num_obs = nobs_array[gid];
 
       //update alpha
-      alpha = alpha*beta;
+      alpha = alpha*beta; 
 
       //update gauss 3 mixture with mean-obs
       float mu0 = mog.s0, sigma0 = mog.s1, w0 = mog.s2;
