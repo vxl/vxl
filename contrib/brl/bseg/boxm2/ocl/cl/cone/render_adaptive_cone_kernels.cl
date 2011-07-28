@@ -215,6 +215,8 @@ render_adaptive_cone(__constant  RenderSceneInfo    * linfo,
   //store exp int for non active rays
   uchar thread_leader = master_threads[llid];
   in_image[imIndex] = expint[thread_leader];
+  vis_image[imIndex] = vis[thread_leader]; 
+
 }
 
 
@@ -272,29 +274,37 @@ void step_cell_cone(AuxArgs aux_args, int data_ptr, float volume)
   (*aux_args.weighted_int) += cell_occupancy_prob * volume * exp_intensity;
   (*aux_args.intensity_norm) += cell_occupancy_prob * volume;
   (*aux_args.vol_cum) += volume;
+  
+  //update vis...
+  float temp = exp(-volume*alpha);  //visibility of intersection of this cell and ball
+  (*aux_args.vis_cum) *= temp;               //
 }
 
 //once step cell is performed, compute ball properties
 void compute_ball_properties( AuxArgs aux_args )
 {
   uchar llid = (uchar)(get_local_id(0) + get_local_size(0)*get_local_id(1));
-  if (*aux_args.intensity_norm > 1e-10 && *aux_args.vol_cum > 1e-10)
-  {
-    //calculate ray/sphere occupancy prob
-    float sphere_occ_prob = (*aux_args.pi_cum) / (*aux_args.vol_cum);
+  int ray_level = aux_args.active_rays[llid]-1; 
+  if(ray_level >= 0) {
+    if (*aux_args.intensity_norm > 1e-10 && *aux_args.vol_cum > 1e-10)
+    {
+      //calculate ray/sphere occupancy prob
+      float sphere_occ_prob = (*aux_args.pi_cum) / (*aux_args.vol_cum);
 
-    //calc expected int = weighted sum / weighted total volume
-    float expected_int = (*aux_args.weighted_int) / (*aux_args.intensity_norm);
+      //calc expected int = weighted sum / weighted total volume
+      float expected_int = (*aux_args.weighted_int) / (*aux_args.intensity_norm);
 
-    //expected intensity is Visibility * Weighted Intensity * Occupancy
-    float ei = aux_args.expint[llid]; //(*aux_args.expint);
-    float vis = aux_args.vis[llid];
-    ei += vis * expected_int * sphere_occ_prob;
-    aux_args.expint[llid] = ei;
+      //expected intensity is Visibility * Weighted Intensity * Occupancy
+      float ei = aux_args.expint[llid]; //(*aux_args.expint);
+      float vis = aux_args.vis[llid];
+      ei += vis * expected_int * sphere_occ_prob;
+      aux_args.expint[llid] = ei;
 
-    //update visibility after all cells have accounted for
-    vis *= (1.0 - sphere_occ_prob);
-    aux_args.vis[llid] = vis;
+      //update visibility after all cells have accounted for
+      //vis *= (1.0 - sphere_occ_prob);
+      vis *= (*aux_args.vis_cum); 
+      aux_args.vis[llid] = vis;
+    }
   }
   barrier(CLK_LOCAL_MEM_FENCE);
 
@@ -302,6 +312,7 @@ void compute_ball_properties( AuxArgs aux_args )
   *aux_args.intensity_norm = 0.0f;
   *aux_args.weighted_int = 0.0f;
   *aux_args.pi_cum = 0.0f;
+  *aux_args.vis_cum = 1.0f; 
 }
 
 #endif // RENDER
