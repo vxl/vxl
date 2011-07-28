@@ -17,6 +17,7 @@
 #include <vgl/vgl_vector_2d.h>
 #include <vgl/vgl_point_2d.h>
 #include <vsl/vsl_binary_io.h>
+#include <vcl_iosfwd.h>
 
 //: 2D transform, which can be up to a projective transformation.
 // In order of complexity the transform can be

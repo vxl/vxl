@@ -6,10 +6,11 @@
 //  \brief Build difference of gaussian pyramids of vimt_image_2d_of<T>
 //  \author Tim Cootes
 
-#include <vsl/vsl_binary_io.h>
-#include <vcl_string.h>
 #include <vimt/vimt_image_2d_of.h>
 #include <vimt/vimt_image_pyramid_builder.h>
+#include <vsl/vsl_binary_io.h>
+#include <vcl_string.h>
+#include <vcl_iosfwd.h>
 
 //: Build difference of gaussian pyramids of vimt_image_2d_of<T>
 //  Computes each layer of a pyramid by smoothing

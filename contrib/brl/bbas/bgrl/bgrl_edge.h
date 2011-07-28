@@ -17,8 +17,8 @@
 #include <vbl/vbl_ref_count.h>
 #include <bgrl/bgrl_vertex_sptr.h>
 #include <vsl/vsl_binary_io.h>
-
-#include "bgrl_edge_sptr.h"
+#include <vcl_string.h>
+#include <vcl_iosfwd.h>
 
 //: Directed edge from one vertex to another
 class bgrl_edge : public vbl_ref_count
@@ -87,5 +87,7 @@ void vsl_add_to_binary_loader(const bgrl_edge& e);
 //: Print an ASCII summary to the stream
 // \relatesalso bgrl_edge
 void vsl_print_summary(vcl_ostream &os, const bgrl_edge* e);
+
+#include "bgrl_edge_sptr.h"
 
 #endif // bgrl_edge_h_

@@ -11,6 +11,7 @@
 
 #include <vsl/vsl_binary_io.h>
 #include <vcl_string.h>
+#include <vcl_iosfwd.h>
 
 //: Non-templated base class for mbl_data_collector<T>
 // Provided mainly because the Visual C++ compiler can't cope with

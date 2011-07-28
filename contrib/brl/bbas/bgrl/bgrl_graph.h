@@ -19,14 +19,16 @@
 // \endverbatim
 
 
-#include <vcl_set.h>
-#include <vsl/vsl_binary_io.h>
-#include <vbl/vbl_ref_count.h>
 #include "bgrl_vertex_sptr.h"
 #include "bgrl_edge_sptr.h"
 #include "bgrl_graph_sptr.h"
 #include "bgrl_search_func_sptr.h"
 #include "bgrl_search_func.h"
+#include <vbl/vbl_ref_count.h>
+#include <vsl/vsl_binary_io.h>
+#include <vcl_set.h>
+#include <vcl_string.h>
+#include <vcl_iosfwd.h>
 
 //: The graph
 class bgrl_graph : public vbl_ref_count

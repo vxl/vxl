@@ -15,6 +15,8 @@
 #include <vsol/vsol_point_3d_sptr.h>
 #include <vsol/vsol_digital_curve_3d_sptr.h>
 #include <vcl_vector.h>
+#include <vcl_string.h>
+#include <vcl_iosfwd.h>
 
 //: Digital curve class, part of the vsol_curve_3d hierarchy
 // The curve is made up of vsol points and has no addition data members

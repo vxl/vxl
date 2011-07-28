@@ -10,9 +10,10 @@
 // \author Tim Cootes
 // \date 12-Apr-2001
 
-#include <vsl/vsl_binary_io.h>
 #include <vnl/io/vnl_io_vector.h>
+#include <vsl/vsl_binary_io.h>
 #include <vcl_string.h>
+#include <vcl_iosfwd.h>
 
 //=======================================================================
 

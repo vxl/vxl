@@ -21,6 +21,8 @@
 #include <vsol/vsol_spatial_object_3d.h>
 #include <vsol/vsol_cylinder_sptr.h>
 #include <vsl/vsl_binary_io.h>
+#include <vcl_string.h>
+#include <vcl_iosfwd.h>
 
 class vsol_cylinder : public  vsol_spatial_object_3d
 {

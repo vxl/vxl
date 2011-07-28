@@ -11,6 +11,7 @@
 
 #include <vsl/vsl_binary_io.h>
 #include <vcl_string.h>
+#include <vcl_iosfwd.h>
 class mil_image;
 
 //: Class to load and save images from named files

@@ -6,13 +6,13 @@
 // \brief Compute the parameters of a second order autoregressive process.
 // \author Franck Bettinger
 
-#include <vcl_string.h>
-#include <vsl/vsl_binary_io.h>
-
 #include <vnl/vnl_matrix.h>
 #include <vnl/vnl_vector.h>
-#include <vcl_vector.h>
+#include <vsl/vsl_binary_io.h>
 
+#include <vcl_vector.h>
+#include <vcl_string.h>
+#include <vcl_iosfwd.h>
 
 class vnl_random;
 

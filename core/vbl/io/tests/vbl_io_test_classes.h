@@ -4,6 +4,7 @@
 #include <vbl/vbl_ref_count.h>
 #include <vbl/io/vbl_io_smart_ptr.h>
 #include <vsl/vsl_binary_io.h>
+#include <vcl_iosfwd.h>
 
 class impl : public vbl_ref_count
 {

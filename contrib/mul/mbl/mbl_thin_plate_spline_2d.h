@@ -7,10 +7,11 @@
 // \author Tim Cootes
 
 #include <vgl/vgl_point_2d.h>
-#include <vcl_vector.h>
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>
 #include <vsl/vsl_binary_io.h>
+#include <vcl_vector.h>
+#include <vcl_iosfwd.h>
 
 //=======================================================================
 //: Construct thin plate spline to map 2D to 2D.

@@ -16,11 +16,12 @@
 //  The classifiers are trained to distinguish the examples mis-classified
 //  by the currently selected classifiers.
 
-#include <vcl_string.h>
 #include <vsl/vsl_binary_io.h>
 #include <clsfy/clsfy_simple_adaboost.h>
 #include <clsfy/clsfy_builder_1d.h>
 #include <mbl/mbl_data_wrapper.h>
+#include <vcl_string.h>
+#include <vcl_iosfwd.h>
 
 //=======================================================================
 

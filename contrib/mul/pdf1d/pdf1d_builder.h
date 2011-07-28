@@ -7,11 +7,11 @@
 // \author Tim Cootes
 // \brief Base for classes to build pdf1d_pdf objects.
 
-
+#include <mbl/mbl_data_wrapper.h>
+#include <vsl/vsl_binary_io.h>
 #include <vcl_vector.h>
 #include <vcl_string.h>
-#include <vsl/vsl_binary_io.h>
-#include <mbl/mbl_data_wrapper.h>
+#include <vcl_iosfwd.h>
 
 //=======================================================================
 

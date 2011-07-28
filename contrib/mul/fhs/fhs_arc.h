@@ -8,6 +8,7 @@
 
 #include <vsl/vsl_binary_io.h>
 #include <vcl_vector.h>
+#include <vcl_iosfwd.h>
 
 //: Link between one node and another
 //  Indicates that position of node j, p(j) = p(i) + (N(dx,var_x),N(dy,var_y))

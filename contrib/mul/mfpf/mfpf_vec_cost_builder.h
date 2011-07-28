@@ -5,11 +5,12 @@
 // \brief Base for classes which build mfpf_vec_cost objects.
 // \author Tim Cootes
 
-#include <vcl_string.h>
-#include <vsl/vsl_binary_io.h>
-#include <vcl_memory.h>
-
 #include <mfpf/mfpf_vec_cost.h>
+
+#include <vsl/vsl_binary_io.h>
+#include <vcl_string.h>
+#include <vcl_memory.h>
+#include <vcl_iosfwd.h>
 
 //: Base for classes which build mfpf_vec_cost objects.
 class mfpf_vec_cost_builder

@@ -27,8 +27,10 @@
 //*****************************************************************************
 #include <vsol/vsol_region_2d.h>
 #include <vsol/vsol_point_2d_sptr.h>
-#include <vcl_vector.h>
 #include <vsl/vsl_binary_io.h>
+#include <vcl_vector.h>
+#include <vcl_string.h>
+#include <vcl_iosfwd.h>
 class vsol_triangle_2d;
 class vsol_rectangle_2d;
 

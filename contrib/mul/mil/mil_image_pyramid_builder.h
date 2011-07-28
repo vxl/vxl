@@ -11,6 +11,7 @@
 
 #include <vsl/vsl_binary_io.h>
 #include <vcl_string.h>
+#include <vcl_iosfwd.h>
 
 class mil_image;
 class mil_image_pyramid;

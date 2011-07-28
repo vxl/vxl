@@ -17,10 +17,12 @@
 // \endverbatim
 //*****************************************************************************
 
-#include <vsl/vsl_binary_io.h>
 #include <vsol/vsol_curve_3d.h>
 #include <vsol/vsol_point_3d_sptr.h>
+#include <vsl/vsl_binary_io.h>
 #include <vcl_vector.h>
+#include <vcl_string.h>
+#include <vcl_iosfwd.h>
 
 //: General Polyline class, part of the vsol_curve_3d hierarchy
 

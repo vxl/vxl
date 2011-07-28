@@ -5,15 +5,16 @@
 // \brief Base for classes which locate feature points
 // \author Tim Cootes
 
-#include <vcl_string.h>
-#include <vsl/vsl_binary_io.h>
-
 #include <vimt/vimt_image_2d_of.h>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_vector_2d.h>
 
 #include <mfpf/mfpf_pose.h>
 #include <vxl_config.h>  // For vxl_byte
+
+#include <vsl/vsl_binary_io.h>
+#include <vcl_string.h>
+#include <vcl_iosfwd.h>
 
 class vimt_image_pyramid;
 

@@ -6,11 +6,11 @@
 // \brief Collect data objects and store them in a file.
 // \author dac
 
-#include <vsl/vsl_binary_io.h>
-#include <vcl_string.h>
 #include <mbl/mbl_data_collector.h>
 #include <mbl/mbl_file_data_wrapper.h>
-
+#include <vsl/vsl_binary_io.h>
+#include <vcl_string.h>
+#include <vcl_iosfwd.h>
 
 //: Collect data objects and store them in a file.
 template<class T>

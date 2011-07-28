@@ -19,11 +19,13 @@
 //*****************************************************************************
 
 #include <vgl/vgl_fwd.h>
-#include <vsl/vsl_binary_io.h>
 #include <vsol/vsol_region_2d.h>
 #include <vsol/vsol_point_2d_sptr.h>
 #include <vsol/vsol_polygon_2d_sptr.h>
+#include <vsl/vsl_binary_io.h>
 #include <vcl_vector.h>
+#include <vcl_string.h>
+#include <vcl_iosfwd.h>
 
 //: General poly_set class, part of the vsol_curve_2d hierarchy
 

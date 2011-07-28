@@ -11,12 +11,13 @@
 //   2 May 2001 IMS Converted to VXL
 // \endverbatim
 
+#include <mbl/mbl_data_wrapper.h>
+#include <vnl/vnl_vector.h>
 #include <vsl/vsl_binary_io.h>
 #include <vcl_vector.h>
 #include <vcl_string.h>
 #include <vcl_memory.h>
-#include <mbl/mbl_data_wrapper.h>
-#include <vnl/vnl_vector.h>
+#include <vcl_iosfwd.h>
 
 class clsfy_classifier_base;
 

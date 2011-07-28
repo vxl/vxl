@@ -1,19 +1,19 @@
 #ifndef  mmn_solver_h_
 #define mmn_solver_h_
-
 //:
 // \file
 // \brief Base for classes which solve Markov Random Field problems
 // \author Tim Cootes
 
-#include <vcl_vector.h>
-#include <vcl_string.h>
-#include <vsl/vsl_binary_io.h>
-#include <vcl_cassert.h>
-#include <vcl_memory.h>
-
 #include <mmn/mmn_arc.h>
 #include <vnl/vnl_fwd.h>
+
+#include <vsl/vsl_binary_io.h>
+#include <vcl_vector.h>
+#include <vcl_string.h>
+#include <vcl_cassert.h>
+#include <vcl_memory.h>
+#include <vcl_iosfwd.h>
 
 //: Base for classes which solve Markov Random Field problems.
 class mmn_solver

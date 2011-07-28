@@ -6,10 +6,11 @@
 // \brief Build Gaussian pyramids of mil3d_image_3d_of<T>
 // \author Tim Cootes
 
-#include <vsl/vsl_binary_io.h>
-#include <vcl_string.h>
 #include <mil3d/mil3d_image_3d_of.h>
 #include <mil/mil_image_pyramid_builder.h>
+#include <vsl/vsl_binary_io.h>
+#include <vcl_string.h>
+#include <vcl_iosfwd.h>
 
 //: Build Gaussian pyramids of mil3d_image_3d_of<T>
 //  Smooth with a Gaussian filter (1-5-8-5-1 by default)

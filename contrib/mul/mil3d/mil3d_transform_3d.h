@@ -36,7 +36,7 @@
 #include <vgl/vgl_vector_3d.h>
 #include <vnl/io/vnl_io_matrix.h>
 #include <vcl_string.h>
-
+#include <vcl_iosfwd.h>
 
 //=======================================================================
 

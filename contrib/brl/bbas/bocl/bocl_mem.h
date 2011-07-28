@@ -15,6 +15,7 @@
 #include "bocl_utils.h"
 #include <vcl_string.h>
 #include <vcl_cstddef.h>
+#include <vcl_iosfwd.h>
 
 //makes a bocl_mem a sptr
 #include <vbl/vbl_ref_count.h>
