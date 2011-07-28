@@ -11,6 +11,7 @@
 
 #include <vsl/vsl_binary_io.h>
 #include <vil1/vil1_image_impl.h>
+#include <vcl_string.h>
 
 //: Base for objects which provide IO for classes derived from vil1_image_impl
 class vil1_io_image_impl

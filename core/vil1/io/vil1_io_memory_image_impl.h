@@ -11,6 +11,7 @@
 
 #include <vsl/vsl_binary_io.h>
 #include <vil1/io/vil1_io_image_impl.h>
+#include <vcl_string.h>
 
 class vil1_memory_image_impl;
 
