@@ -7,7 +7,6 @@
 #include <vnl/algo/vnl_symmetric_eigensystem.h>
 #include <vcl_algorithm.h>
 #include <vcl_iostream.h>
-#include <mbl/mbl_matxvec.h>
 #include <mbl/mbl_data_array_wrapper.h>
 #include <mcal/mcal_pca.h>
 

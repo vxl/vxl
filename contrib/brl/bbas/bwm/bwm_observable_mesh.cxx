@@ -20,7 +20,6 @@
 #include <vgl/vgl_homg_point_3d.h>
 #include <vgl/algo/vgl_fit_plane_3d.h>
 #include <vgl/vgl_distance.h>
-#include <vgl/vgl_polygon.h>
 #include <vgl/vgl_intersection.h>
 
 #include <vpgl/algo/vpgl_ray.h>

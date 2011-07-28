@@ -11,7 +11,6 @@
 #include <vil/vil_load.h>
 #include <vil/vil_convert.h>
 #include <vimt/vimt_image_2d_of.h>
-#include <vul/vul_file.h>
 
 msdi_marked_images_from_files::msdi_marked_images_from_files()
   : grey_only_(true),image_ok_(false),image_pyr_ok_(false),
