@@ -306,6 +306,13 @@ void split_ray(AuxArgs aux_args, int side_len)
       aux_args.vis[id] = nextVis;
       aux_args.pre[id] = nextPre; 
       
+      //pre contribution for all resolutions finer than this one
+      for(int curr_level=next_level+1; curr_level < 4; ++curr_level)
+      {
+        float val = image_pyramid_access_safe(aux_args.pre_pyramid, curr_level); 
+        image_pyramid_set_level(aux_args.pre_pyramid, curr_level, localI+di, localJ+dj, val); 
+      }
+        
     } //end i for
   } //end j for  
 }
@@ -353,8 +360,7 @@ void compute_ball_properties(AuxArgs aux_args)
 {
   uchar llid = (uchar)(get_local_id(0) + get_local_size(0)*get_local_id(1));
   int ray_level = aux_args.active_rays[llid]-1;
-
-  if(ray_level >= 0 ) {
+  if(ray_level >= 0) {
     float vis = aux_args.vis[llid]; //(*aux_args.ray_vis); //(*vis_img_)(i,j);
     float pre = aux_args.pre[llid]; //(*aux_args.ray_pre); //(*pre_img_)(i,j);
     
@@ -376,10 +382,6 @@ void compute_ball_properties(AuxArgs aux_args)
       float vis_level = pow(vis, pow_val); 
       float vis_cum_level = pow(vis_cum, pow_val); 
       float pre_contr = vis_level*(1-vis_cum_level)*PI;     
-      //****^^^^^^^^^^^^^^^^^^**********************
-      //NOTE FIGURE OUT THE MATH BEHIND PI HERE - DOES IT NEED TO BE SCALE AS WELL
-      //****^^^^^^^^^^^^^^^^^^**********************
-      
       image_pyramid_incr_safe(aux_args.pre_pyramid, curr_level, pre_contr); 
     }
   }
@@ -682,6 +684,13 @@ void split_ray(AuxArgs aux_args, int side_len)
       aux_args.vis[id] = nextVis;
       aux_args.pre[id] = nextPre; 
       
+      //pre contribution for all resolutions finer than this one
+      for(int curr_level=next_level+1; curr_level < 4; ++curr_level)
+      {
+        float val = image_pyramid_access_safe(aux_args.pre_pyramid, curr_level); 
+        image_pyramid_set_level(aux_args.pre_pyramid, curr_level, localI+di, localJ+dj, val); 
+      }
+        
     } //end i for
   } //end j for  
 }
@@ -752,9 +761,6 @@ bool compute_ball_properties(AuxArgs aux_args)
       float vis_level = pow(vis, pow_val); 
       float vis_cum_level = pow(vis_cum, pow_val); 
       float pre_contr = vis_level*(1-vis_cum_level)*PI;     
-      //****^^^^^^^^^^^^^^^^^^**********************
-      //NOTE FIGURE OUT THE MATH BEHIND PI HERE - DOES IT NEED TO BE SCALE AS WELL
-      //****^^^^^^^^^^^^^^^^^^**********************
       image_pyramid_incr_safe(aux_args.pre_pyramid, curr_level, pre_contr); 
     }
   }
@@ -788,7 +794,7 @@ update_cone_data( __global RenderSceneInfo  * info,
                   __global int              * aux_beta)     // mean obs r aux array
 {
   float  cell_min = info->block_len/(float)(1<<info->root_level);
-  float  alphamin = -log(1.0-0.01)/ (cell_min*cell_min*cell_min);
+  float  alphamin = -log(1.0-0.0001) / (cell_min*cell_min*cell_min);
   float t_match = 2.5f;
   float init_sigma = 0.09f;
   float min_sigma = 0.03f;
@@ -830,7 +836,7 @@ update_cone_data( __global RenderSceneInfo  * info,
                               &Nobs_mix );
 
       //reset the cells in memory
-      alpha_array[gid]      = max(alphamin, alpha);
+      alpha_array[gid]      = alpha; //max(alphamin, alpha);
       float8 post_mix       = (float8) (mu0, sigma0, w0,
                                         mu1, sigma1, w1,
                                         mu2, sigma2) * (float) NORM;

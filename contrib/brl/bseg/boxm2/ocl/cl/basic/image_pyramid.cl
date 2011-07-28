@@ -40,12 +40,41 @@ IMG_TYPE image_pyramid_access_safe(image_pyramid* pyramid, int level)
   return image_pyramid_access(pyramid, level, localI/offset, localJ/offset); 
 }
 
+// sets the image based on finest i and j, much like safe, except localI and localJ are passed in
+IMG_TYPE image_pyramid_access_level(image_pyramid* pyramid, int level, int localI, int localJ) 
+{
+  //offset (the amount to divide localI and localJ to get correctly indexed pyramid i,j)
+  uchar offset = 1<<(3-level); 
+  return image_pyramid_access(pyramid, level, localI/offset, localJ/offset); 
+}
+
+
 //image pyramid set
 void image_pyramid_set(image_pyramid* pyramid, int level, int i, int j, IMG_TYPE val)
 {
   int sideLen = 1<<level; 
   int fullID = i + sideLen*j; 
   pyramid->pyramid[level][fullID] = val; 
+}
+
+//image pyramid set safe
+void image_pyramid_set_safe(image_pyramid* pyramid, int level, IMG_TYPE val)
+{
+  uchar llid = (uchar)(get_local_id(0) + get_local_size(0)*get_local_id(1));
+  uchar localI = (uchar)get_local_id(0); 
+  uchar localJ = (uchar)get_local_id(1); 
+  
+  //offset (the amount to divide localI and localJ to get correctly indexed pyramid i,j)
+  uchar offset = 1<<(3-level); 
+  image_pyramid_set(pyramid, level, localI/offset, localJ/offset, val); 
+}
+
+// sets the image based on finest i and j, much like safe, except localI and localJ are passed in
+void image_pyramid_set_level(image_pyramid* pyramid, int level, int localI, int localJ, IMG_TYPE val) 
+{
+  //offset (the amount to divide localI and localJ to get correctly indexed pyramid i,j)
+  uchar offset = 1<<(3-level); 
+  image_pyramid_set(pyramid, level, localI/offset, localJ/offset, val); 
 }
 
 //Increment value at level,i,j by val
