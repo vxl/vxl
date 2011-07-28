@@ -14,6 +14,7 @@
 
 #include <bsta/bsta_mixture_fixed.h>
 #include <vsl/vsl_binary_io.h>
+#include <vcl_iostream.h>
 
 //: Binary save bsta_mixture_fixed to stream.
 template <class comp_, unsigned s>

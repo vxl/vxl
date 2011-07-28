@@ -16,6 +16,7 @@
 #include <vsl/vsl_binary_io.h>
 #include <vnl/io/vnl_io_vector_fixed.h>
 #include <vnl/io/vnl_io_matrix_fixed.h>
+#include <vcl_iostream.h>
 
 //: Binary save bsta_beta to stream.
 template <class T>

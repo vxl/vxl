@@ -22,6 +22,7 @@
 #include <vnl/vnl_matrix_fixed.h>
 #include <vcl_fstream.h>
 #include <vcl_utility.h>
+#include <vcl_iostream.h>
 
 #define MIN_VAR_  0.0001
 

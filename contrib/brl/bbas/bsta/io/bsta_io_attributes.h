@@ -14,6 +14,7 @@
 
 #include <bsta/bsta_attributes.h>
 #include <vsl/vsl_binary_io.h>
+#include <vcl_iostream.h>
 
 //: Binary save bsta_attributes to stream.
 template <class comp_>

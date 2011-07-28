@@ -9,7 +9,7 @@
 #include <vcl_algorithm.h>
 #include <vsl/vsl_binary_io.h>
 #include <vsl/vsl_binary_explicit_io.h>
-
+#include <vcl_iostream.h>
 
 //: Write a block of values to a vsl_b_ostream, as (value count) pairs.
 template <class T>

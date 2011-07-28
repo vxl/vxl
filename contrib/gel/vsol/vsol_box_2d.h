@@ -24,6 +24,7 @@
 #include <vbl/vbl_ref_count.h>
 #include <vbl/vbl_bounding_box.h>
 #include "vsol_box_2d_sptr.h"
+#include <vcl_iostream.h>
 
 //: A bounding box for 2d spatial objects
 

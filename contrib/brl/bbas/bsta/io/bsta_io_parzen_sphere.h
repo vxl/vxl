@@ -18,6 +18,8 @@
 #include <vsl/vsl_binary_io.h>
 #include <vnl/io/vnl_io_vector_fixed.h>
 #include <vsl/vsl_vector_io.h>
+#include <vcl_iostream.h>
+
 //: Binary save bsta_parzen_sphere to stream.
 template <class T, unsigned n>
 void

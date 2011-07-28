@@ -7,6 +7,7 @@
 // \brief Horizontal line used in 3D images, with integer co-ordinates
 
 #include <vsl/vsl_binary_io.h>
+#include <vcl_iostream.h>
 
 //: Horizontal line used in 3D images, with integer co-ordinates
 class mbl_chord_3d

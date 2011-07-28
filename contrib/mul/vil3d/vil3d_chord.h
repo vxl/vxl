@@ -8,6 +8,7 @@
 
 #include <vsl/vsl_binary_io.h>
 #include <vcl_vector.h>
+#include <vcl_iostream.h>
 
 //: Horizontal line used in 3D images, with integer co-ordinates
 class vil3d_chord

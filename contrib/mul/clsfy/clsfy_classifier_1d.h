@@ -10,6 +10,7 @@
 #include <vnl/vnl_vector.h>
 #include <mbl/mbl_data_wrapper.h>
 #include <vsl/vsl_binary_io.h>
+#include <vcl_iostream.h>
 
 //:  A common interface for 1-out-of-N classifiers of 1D data
 // This class takes a scalar and classifies into one of N classes.

@@ -7,6 +7,7 @@
 // \author Tim Cootes
 
 #include <vsl/vsl_binary_io.h>
+#include <vcl_iostream.h>
 
 //: Value to indicate no valid arc
 const unsigned mmn_no_arc=99999;

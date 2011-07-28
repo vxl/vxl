@@ -17,6 +17,7 @@
 #include <bsta/bsta_parzen.h>
 #include <vsl/vsl_binary_io.h>
 #include <vnl/io/vnl_io_vector_fixed.h>
+#include <vcl_iostream.h>
 
 //: Binary save bsta_von_mises to stream.
 template <class T, unsigned n>
