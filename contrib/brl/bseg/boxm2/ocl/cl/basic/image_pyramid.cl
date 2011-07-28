@@ -48,6 +48,26 @@ void image_pyramid_set(image_pyramid* pyramid, int level, int i, int j, IMG_TYPE
   pyramid->pyramid[level][fullID] = val; 
 }
 
+//Increment value at level,i,j by val
+void image_pyramid_incr(image_pyramid* pyramid, int level, int i, int j, IMG_TYPE val)
+{
+  int sideLen = 1<<level; 
+  int fullID = i + sideLen*j;
+  pyramid->pyramid[level][fullID] += val; 
+}
+
+//safe pyramid increment (automatically calucaltes based on local id
+void image_pyramid_incr_safe(image_pyramid* pyramid, int level, IMG_TYPE val)
+{
+  uchar llid = (uchar)(get_local_id(0) + get_local_size(0)*get_local_id(1));
+  uchar localI = (uchar)get_local_id(0); 
+  uchar localJ = (uchar)get_local_id(1); 
+  
+  //offset (the amount to divide localI and localJ to get correctly indexed pyramid i,j)
+  uchar offset = 1<<(3-level); 
+  image_pyramid_incr(pyramid, level, localI/offset, localJ/offset, val); 
+}
+
 
 // "Constructor for image_pyramid"
 // Method assumes that pyramid[num_levels-1] has been filled out (with 

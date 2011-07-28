@@ -18,7 +18,7 @@
 
 #ifdef PASSONE
 //Helper method handles local pyramid declaration
-inline image_pyramid declare_local_pyramid(float in_val)
+inline image_pyramid declare_local_pyramid(float in_val) 
 {
   uchar llid = (uchar)(get_local_id(0) + get_local_size(0)*get_local_id(1));
   __local float* obs_mem[4];
@@ -47,33 +47,34 @@ typedef struct
   __global int* cell_vol;
   __global int* cell_obs;
 
-  //per ball statistics, used in compute ball properties
-  float* pi_cum;
-  float* vol_cum;
-  float* vis_cum;
+           //per ball statistics, used in compute ball properties
+           float* pi_cum;
+           float* vol_cum;
+           float* vis_cum;
 
-  //constants used by stepcell functions
-  float obs;
-  float volume_scale;
-
+           //constants used by stepcell functions
+           float obs;
+           float volume_scale;
+  
   //store ray vis and pre locally
-  __local float* vis;
+  __local float* vis; 
   __local float* pre;
-
+  image_pyramid* pre_pyramid; 
+  
   //curr t, 8x8 matrix
-  __local float* currT;
-
+  __local float* currT; 
+  
   //store active ray pointer, image/ray pyramids
   __local uchar* active_rays;
-  __local uchar* master_threads;
-
+  __local uchar* master_threads; 
+  
   //multi res ray, image and tfar pyramids
-    ray_pyramid* rays;
-  image_pyramid* image;
-  image_pyramid* tfar;
-
+    ray_pyramid* rays; 
+  image_pyramid* image; 
+  image_pyramid* tfar; 
+  
   //debug value
-  __local float* single;
+  __local float* single; 
 } AuxArgs;
 
 void cast_adaptive_cone_ray(
@@ -133,7 +134,7 @@ pass_one(__constant  RenderSceneInfo    * linfo,
   int imIndex = j*get_global_size(0) + i;
   if (i>=(*imgdims).z || j>=(*imgdims).w || i<(*imgdims).x || j<(*imgdims).y)
     return;
-
+    
   //----------------------------------------------------------------------------
   // transform rays from world to normalized block world space
   //----------------------------------------------------------------------------
@@ -173,8 +174,22 @@ pass_one(__constant  RenderSceneInfo    * linfo,
   obs3[llid] = in_image[imIndex];
   barrier(CLK_LOCAL_MEM_FENCE);
   image_pyramid obs_pyramid  = new_image_pyramid(obs_mem, 4, 8);
-
-  //initialize T pyramids (tfar)
+  
+  //keep multi res pre pyramid...
+  __local float* pre_mem[4];
+  __local float pre0[1];
+  __local float pre1[4];
+  __local float pre2[16];
+  __local float pre3[64];
+  pre_mem[0] = pre0;
+  pre_mem[1] = pre1;
+  pre_mem[2] = pre2;
+  pre_mem[3] = pre3;
+  pre3[llid] = 0.0f;
+  barrier(CLK_LOCAL_MEM_FENCE);
+  image_pyramid pre_pyramid  = new_image_pyramid(pre_mem, 4, 8);
+  
+  //initalize T pyramids (tfar)
   __local float* tfar_mem[4];
   __local float tfar0[1];
   __local float tfar1[4];
@@ -184,7 +199,7 @@ pass_one(__constant  RenderSceneInfo    * linfo,
   tfar_mem[1] = tfar1;
   tfar_mem[2] = tfar2;
   tfar_mem[3] = tfar3;
-  tfar3[llid] = 0.0f;
+  tfar3[llid] = 0.0f; 
   barrier(CLK_LOCAL_MEM_FENCE);
   image_pyramid tfar_pyramid = new_image_pyramid(tfar_mem, 4, 8);
 
@@ -192,34 +207,35 @@ pass_one(__constant  RenderSceneInfo    * linfo,
   __local uchar active_rays[64];
   active_rays[llid] = (llid==0) ? 1 : 0;
   barrier(CLK_LOCAL_MEM_FENCE);
-
+  
   //init master thread matrix
-  __local uchar master_threads[64];
-  master_threads[llid] = 0; //llid;
-  barrier(CLK_LOCAL_MEM_FENCE);
-
+  __local uchar master_threads[64]; 
+  master_threads[llid] = 0; //llid; 
+  barrier(CLK_LOCAL_MEM_FENCE); 
+  
   //init local pre and vis
-  __local float vis[64];
-  __local float pre[64];
-  pre[llid] = pre_image[imIndex];
-  vis[llid] = vis_image[imIndex];
-  barrier(CLK_LOCAL_MEM_FENCE);
-
+  __local float vis[64]; 
+  __local float pre[64]; 
+  pre[llid] = pre_image[imIndex]; 
+  vis[llid] = vis_image[imIndex]; 
+  barrier(CLK_LOCAL_MEM_FENCE); 
+  
   //8x8 currT
-  __local float currT[64];
-  currT[llid] = 0.0f;
-  barrier(CLK_LOCAL_MEM_FENCE);
-
+  __local float currT[64]; 
+  currT[llid] = 0.0f; 
+  barrier(CLK_LOCAL_MEM_FENCE); 
+  
   //store in aux_arg struct
   AuxArgs aux_args;
-  aux_args.active_rays = active_rays;
-  aux_args.master_threads = master_threads;
-  aux_args.tfar  = &tfar_pyramid;
-  aux_args.image = &obs_pyramid;
-  aux_args.rays  = &pyramid;
-  aux_args.vis = vis;
-  aux_args.pre = pre;
-  aux_args.currT = currT;
+  aux_args.active_rays = active_rays; 
+  aux_args.master_threads = master_threads; 
+  aux_args.tfar  = &tfar_pyramid; 
+  aux_args.image = &obs_pyramid; 
+  aux_args.rays  = &pyramid; 
+  aux_args.vis = vis; 
+  aux_args.pre = pre;   
+  aux_args.pre_pyramid = &pre_pyramid; 
+  aux_args.currT = currT; 
 
   //----------------------------------------------------------------------------
   //store other aux args
@@ -252,37 +268,46 @@ pass_one(__constant  RenderSceneInfo    * linfo,
 
   //store vis/pre/norm
   vis_image[imIndex] = vis[llid]; //vis;
-  pre_image[imIndex] = pre[llid];
-  norm_image[imIndex] = vis[llid] + pre[llid];
+  
+  //store pre value for all
+  uchar thread_leader = master_threads[llid]; 
+  pre_image[imIndex] = pre[thread_leader];
+  vis_image[imIndex] = vis[thread_leader]; 
+  
+  //store norm image
+  norm_image[imIndex] = vis[thread_leader] + pre[thread_leader];
 }
 
 
 //----------------------------------------------------------------------------
 // Split ray function
 //----------------------------------------------------------------------------
-void split_ray(AuxArgs aux_args, int side_len)
+void split_ray(AuxArgs aux_args, int side_len) 
 {
   uchar llid = (uchar)(get_local_id(0) + get_local_size(0)*get_local_id(1));
-  uchar localI = (uchar)get_local_id(0);
-  uchar localJ = (uchar)get_local_id(1);
+  uchar localI = (uchar)get_local_id(0); 
+  uchar localJ = (uchar)get_local_id(1); 
+  int next_level = aux_args.active_rays[llid]-1; 
 
   //turn on the four neighboring threads
-  float nextVis = pow(aux_args.vis[llid], 0.25f);
-  float nextPre = aux_args.pre[llid];
-  for (int ioff=0; ioff<2; ++ioff) {
-    for (int joff=0; joff<2; ++joff) {
+  float nextVis = pow(aux_args.vis[llid], 0.25f); 
+  float nextPre = image_pyramid_access_safe(aux_args.pre_pyramid, next_level); //aux_args.pre[llid]; 
+  for(int ioff=0; ioff<2; ++ioff) {
+    for(int joff=0; joff<2; ++joff) {
+
       //"neighbor" threads are not necessarily neighboring in workspace (only at finest level they are)
-      int di = ioff * (side_len/2);
-      int dj = joff * (side_len/2);
-
+      int di = ioff * (side_len/2); 
+      int dj = joff * (side_len/2); 
+      
       //calc local thread ID (in 8x8 workspace)
-      uchar id = (localI+di) + (localJ+dj)*get_local_size(0);
-
+      uchar id = (localI+di) + (localJ+dj)*get_local_size(0); 
+      
       //set the vis and pre for new threads
       aux_args.vis[id] = nextVis;
-      aux_args.pre[id] = nextPre;
+      aux_args.pre[id] = nextPre; 
+      
     } //end i for
-  } //end j for
+  } //end j for  
 }
 
 //----------------------------------------------------------------------------
@@ -317,8 +342,8 @@ void step_cell(AuxArgs aux_args, int data_ptr, float intersect_volume)
 
   //accumulate ball statistics
   (*aux_args.pi_cum) += PI*intersect_volume;
-  (*aux_args.vol_cum) += intersect_volume;
-  (*aux_args.vis_cum) *= temp;
+  (*aux_args.vol_cum) += intersect_volume;   //total ball volume intersected
+  (*aux_args.vis_cum) *= temp;               //
 }
 
 //----------------------------------------------------------------------------
@@ -327,24 +352,45 @@ void step_cell(AuxArgs aux_args, int data_ptr, float intersect_volume)
 void compute_ball_properties(AuxArgs aux_args)
 {
   uchar llid = (uchar)(get_local_id(0) + get_local_size(0)*get_local_id(1));
-  float vis = aux_args.vis[llid]; //(*aux_args.ray_vis); //(*vis_img_)(i,j);
-  float pre = aux_args.pre[llid]; //(*aux_args.ray_pre); //(*pre_img_)(i,j);
-  float PI=0.0;
-  if ( *aux_args.vol_cum>1e-12f) PI = (*aux_args.pi_cum) / (*aux_args.vol_cum);
+  int ray_level = aux_args.active_rays[llid]-1;
 
-  //incrememnt pre and vis;
-  float vis_cum = (*aux_args.vis_cum);
-  pre += vis*(1.0-vis_cum)*PI;
-  vis *= vis_cum;
-  aux_args.vis[llid] = vis;
-  aux_args.pre[llid] = pre;
+  if(ray_level >= 0 ) {
+    float vis = aux_args.vis[llid]; //(*aux_args.ray_vis); //(*vis_img_)(i,j);
+    float pre = aux_args.pre[llid]; //(*aux_args.ray_pre); //(*pre_img_)(i,j);
+    
+    float PI=0.0;
+    if ( *aux_args.vol_cum>1e-12f) 
+      PI = (*aux_args.pi_cum) / (*aux_args.vol_cum);
 
+    //incrememnt pre and vis;
+    float vis_cum = (*aux_args.vis_cum);  //1-vis_cum = prob(ball \in surface)
+    pre += vis*(1.0-vis_cum)*PI;
+    vis *= vis_cum;
+    aux_args.vis[llid] = vis; 
+    aux_args.pre[llid] = pre; 
+    
+    //pre contribution for all resolutions finer than this one
+    float pow_val = .25f; 
+    for(int curr_level=ray_level+1; curr_level < 4; ++curr_level, pow_val*=.25f)
+    {
+      float vis_level = pow(vis, pow_val); 
+      float vis_cum_level = pow(vis_cum, pow_val); 
+      float pre_contr = vis_level*(1-vis_cum_level)*PI;     
+      //****^^^^^^^^^^^^^^^^^^**********************
+      //NOTE FIGURE OUT THE MATH BEHIND PI HERE - DOES IT NEED TO BE SCALE AS WELL
+      //****^^^^^^^^^^^^^^^^^^**********************
+      
+      image_pyramid_incr_safe(aux_args.pre_pyramid, curr_level, pre_contr); 
+    }
+  }
+  
   //reset ball values
   (*aux_args.vis_cum) = 1.0f;
   (*aux_args.pi_cum) = 0.0f;
   (*aux_args.vol_cum) = 0.0f;
 }
-#endif // PASSONE
+#endif
+
 
 
 #ifdef BAYES
@@ -366,32 +412,33 @@ typedef struct
            float* pi_cum;
            float* vol_cum;
            float* vis_cum;
-           float* beta_cum;
+           float* beta_cum; 
 
            //constants used by stepcell functions
            float volume_scale;
-
+  
   //store ray vis and pre locally
-  __local float* vis;
+  __local float* vis; 
   __local float* pre;
-
+  image_pyramid* pre_pyramid; 
+  
   //curr t, 8x8 matrix
-  __local float* currT;
-
+  __local float* currT; 
+  
   //current obs - this will be reset when split
-          float norm;
-
+          float norm; 
+  
   //store active ray pointer, image/ray pyramids
   __local uchar* active_rays;
-  __local uchar* master_threads;
-
+  __local uchar* master_threads; 
+  
   //multi res ray, image and tfar pyramids
-    ray_pyramid* rays;
-  image_pyramid* image;
-  image_pyramid* tfar;
-
+    ray_pyramid* rays; 
+  image_pyramid* image; 
+  image_pyramid* tfar; 
+  
   //debug value
-  __local float* single;
+  __local float* single; 
 } AuxArgs;
 
 void cast_adaptive_cone_ray(
@@ -502,8 +549,8 @@ bayes_main(__constant  RenderSceneInfo    * linfo,
   obs3[llid] = in_image[imIndex];
   barrier(CLK_LOCAL_MEM_FENCE);
   image_pyramid obs_pyramid  = new_image_pyramid(obs_mem, 4, 8);
-
-  //initialize T pyramids (tfar)
+  
+  //initalize T pyramids (tfar)
   __local float* tfar_mem[4];
   __local float tfar0[1];
   __local float tfar1[4];
@@ -513,42 +560,57 @@ bayes_main(__constant  RenderSceneInfo    * linfo,
   tfar_mem[1] = tfar1;
   tfar_mem[2] = tfar2;
   tfar_mem[3] = tfar3;
-  tfar3[llid] = 0.0f;
+  tfar3[llid] = 0.0f; 
   barrier(CLK_LOCAL_MEM_FENCE);
   image_pyramid tfar_pyramid = new_image_pyramid(tfar_mem, 4, 8);
+
+  //keep multi res pre pyramid...
+  __local float* pre_mem[4];
+  __local float pre0[1];
+  __local float pre1[4];
+  __local float pre2[16];
+  __local float pre3[64];
+  pre_mem[0] = pre0;
+  pre_mem[1] = pre1;
+  pre_mem[2] = pre2;
+  pre_mem[3] = pre3;
+  pre3[llid] = 0.0f;
+  barrier(CLK_LOCAL_MEM_FENCE);
+  image_pyramid pre_pyramid  = new_image_pyramid(pre_mem, 4, 8);
 
   //init active ray matrix
   __local uchar active_rays[64];
   active_rays[llid] = (llid==0) ? 1 : 0;
   barrier(CLK_LOCAL_MEM_FENCE);
-
+  
   //init master thread matrix
-  __local uchar master_threads[64];
-  master_threads[llid] = 0; //llid;
-  barrier(CLK_LOCAL_MEM_FENCE);
-
+  __local uchar master_threads[64]; 
+  master_threads[llid] = 0; //llid; 
+  barrier(CLK_LOCAL_MEM_FENCE); 
+  
   //init local pre and vis
-  __local float vis[64];
-  __local float pre[64];
-  pre[llid] = pre_image[imIndex];
-  vis[llid] = vis_image[imIndex];
-  barrier(CLK_LOCAL_MEM_FENCE);
-
+  __local float vis[64]; 
+  __local float pre[64]; 
+  pre[llid] = pre_image[imIndex]; 
+  vis[llid] = vis_image[imIndex]; 
+  barrier(CLK_LOCAL_MEM_FENCE); 
+  
   //8x8 currT
-  __local float currT[64];
-  currT[llid] = 0.0f;
-  barrier(CLK_LOCAL_MEM_FENCE);
-
+  __local float currT[64]; 
+  currT[llid] = 0.0f; 
+  barrier(CLK_LOCAL_MEM_FENCE); 
+  
   //store in aux_arg struct
   AuxArgs aux_args;
-  aux_args.active_rays = active_rays;
-  aux_args.master_threads = master_threads;
-  aux_args.tfar  = &tfar_pyramid;
-  aux_args.image = &obs_pyramid;
-  aux_args.rays  = &pyramid;
-  aux_args.vis = vis;
-  aux_args.pre = pre;
-  aux_args.currT = currT;
+  aux_args.active_rays = active_rays; 
+  aux_args.master_threads = master_threads; 
+  aux_args.tfar  = &tfar_pyramid; 
+  aux_args.image = &obs_pyramid; 
+  aux_args.rays  = &pyramid; 
+  aux_args.vis = vis; 
+  aux_args.pre = pre;   
+  aux_args.pre_pyramid = &pre_pyramid; 
+  aux_args.currT = currT; 
 
   //----------------------------------------------------------------------------
   // we know i,j map to a point on the image, have calculated ray
@@ -585,39 +647,43 @@ bayes_main(__constant  RenderSceneInfo    * linfo,
 
   //write out vis and pre
   vis_image[imIndex] = vis[llid];
-
+  
   //store exp int for non active rays
-  uchar thread_leader = master_threads[llid];
+  uchar thread_leader = master_threads[llid]; 
   pre_image[imIndex] = pre[thread_leader];
 }
+
 
 
 //----------------------------------------------------------------------------
 // Split ray function
 //----------------------------------------------------------------------------
-void split_ray(AuxArgs aux_args, int side_len)
+void split_ray(AuxArgs aux_args, int side_len) 
 {
   uchar llid = (uchar)(get_local_id(0) + get_local_size(0)*get_local_id(1));
-  uchar localI = (uchar)get_local_id(0);
-  uchar localJ = (uchar)get_local_id(1);
+  uchar localI = (uchar)get_local_id(0); 
+  uchar localJ = (uchar)get_local_id(1); 
+  int next_level = aux_args.active_rays[llid]-1; 
 
   //turn on the four neighboring threads
-  float nextVis = pow(aux_args.vis[llid], 0.25f);
-  float nextPre = aux_args.pre[llid];
-  for (int ioff=0; ioff<2; ++ioff) {
-    for (int joff=0; joff<2; ++joff) {
+  float nextVis = pow(aux_args.vis[llid], 0.25f); 
+  float nextPre = image_pyramid_access_safe(aux_args.pre_pyramid, next_level); //aux_args.pre[llid]; 
+  for(int ioff=0; ioff<2; ++ioff) {
+    for(int joff=0; joff<2; ++joff) {
+
       //"neighbor" threads are not necessarily neighboring in workspace (only at finest level they are)
-      int di = ioff * (side_len/2);
-      int dj = joff * (side_len/2);
-
+      int di = ioff * (side_len/2); 
+      int dj = joff * (side_len/2); 
+      
       //calc local thread ID (in 8x8 workspace)
-      uchar id = (localI+di) + (localJ+dj)*get_local_size(0);
-
+      uchar id = (localI+di) + (localJ+dj)*get_local_size(0); 
+      
       //set the vis and pre for new threads
       aux_args.vis[id] = nextVis;
-      aux_args.pre[id] = nextPre;
+      aux_args.pre[id] = nextPre; 
+      
     } //end i for
-  } //end j for
+  } //end j for  
 }
 
 
@@ -629,7 +695,7 @@ bool step_cell(AuxArgs aux_args, int data_ptr, float intersect_volume)
   intersect_volume *= aux_args.volume_scale;
 
   //be sure to grab the correct obs (at the correct level)
-  float obs = image_pyramid_access_safe(aux_args.image, aux_args.active_rays[llid]-1);
+  float obs = image_pyramid_access_safe(aux_args.image, aux_args.active_rays[llid]-1); 
 
   //rescale aux args, calculate mean obs
   float8 mixture = convert_float8(aux_args.mog[data_ptr]) / NORM;
@@ -662,17 +728,36 @@ bool step_cell(AuxArgs aux_args, int data_ptr, float intersect_volume)
 bool compute_ball_properties(AuxArgs aux_args)
 {
   uchar llid = (uchar)(get_local_id(0) + get_local_size(0)*get_local_id(1));
-  float vis = aux_args.vis[llid]; //(*aux_args.ray_vis);
-  float pre = aux_args.pre[llid]; //(*aux_args.ray_pre);
-  float PI=0.0;
-  if ( *aux_args.vol_cum>1e-12f ) PI = (*aux_args.pi_cum) / (*aux_args.vol_cum);
+  int ray_level = aux_args.active_rays[llid]-1;
+  if(ray_level >= 0 ) {
+    float vis = aux_args.vis[llid]; //(*aux_args.ray_vis);
+    float pre = aux_args.pre[llid]; //(*aux_args.ray_pre);
+  
+    float PI=0.0;
+    if ( *aux_args.vol_cum>1e-12f ) 
+      PI = (*aux_args.pi_cum) / (*aux_args.vol_cum);
 
-  //incrememnt beta pre and vis along the ray
-  (*aux_args.beta_cum) = (pre+vis*PI)/aux_args.norm;
-  pre += vis*(1.0f - (*aux_args.vis_cum) )*PI;
-  vis *= (*aux_args.vis_cum);
-  aux_args.pre[llid] = pre; //(*aux_args.ray_pre) = pre;
-  aux_args.vis[llid] = vis; //(*aux_args.ray_vis) = vis;
+    //incrememnt beta pre and vis along the ray
+    (*aux_args.beta_cum) = (pre+vis*PI)/aux_args.norm;  //update current beta value w/ pre/vis
+    float vis_cum = (*aux_args.vis_cum);  //1-vis_cum = prob(ball \in surface)
+    pre += vis*(1.0f-vis_cum )*PI; 
+    vis *= vis_cum;
+    aux_args.pre[llid] = pre; //(*aux_args.ray_pre) = pre;
+    aux_args.vis[llid] = vis; //(*aux_args.ray_vis) = vis;
+  
+    //pre contribution for all resolutions finer than this one
+    float pow_val = .25f; 
+    for(int curr_level=ray_level+1; curr_level < 4; ++curr_level, pow_val*=.25f)
+    {
+      float vis_level = pow(vis, pow_val); 
+      float vis_cum_level = pow(vis_cum, pow_val); 
+      float pre_contr = vis_level*(1-vis_cum_level)*PI;     
+      //****^^^^^^^^^^^^^^^^^^**********************
+      //NOTE FIGURE OUT THE MATH BEHIND PI HERE - DOES IT NEED TO BE SCALE AS WELL
+      //****^^^^^^^^^^^^^^^^^^**********************
+      image_pyramid_incr_safe(aux_args.pre_pyramid, curr_level, pre_contr); 
+    }
+  }
 
   //reset ball values
   (*aux_args.vis_cum) = 1.0f;
@@ -689,7 +774,7 @@ bool redistribute(AuxArgs aux_args, int data_ptr, float intersect_volume)
   return true;
 }
 
-#endif // BAYES
+#endif
 
 __kernel
 void
@@ -711,12 +796,12 @@ update_cone_data( __global RenderSceneInfo  * info,
   int datasize = info->data_len * info->num_buffer;
   if (gid<datasize)
   {
-    float cell_vol = convert_float(aux_vol[gid]) / SEGLEN_FACTOR;
-    if (cell_vol>1e-10f)
+    float cell_vol = convert_float(aux_vol[gid]); // / SEGLEN_FACTOR;
+    if (cell_vol/SEGLEN_FACTOR>1e-10f)
     {
-      float beta = convert_float(aux_beta[gid])/(cell_vol*SEGLEN_FACTOR);
-      float vis  = convert_float(aux_vis[gid])/(cell_vol*SEGLEN_FACTOR);
-      float mean_obs = convert_float(aux_obs[gid])/(cell_vol*SEGLEN_FACTOR);
+      float beta = convert_float(aux_beta[gid])/cell_vol;  //(cell_vol*SEGLEN_FACTOR);
+      float vis  = convert_float(aux_vis[gid])/cell_vol; //(cell_vol*SEGLEN_FACTOR);
+      float mean_obs = convert_float(aux_obs[gid])/cell_vol; //(cell_vol*SEGLEN_FACTOR);
 
       float alpha = alpha_array[gid];
       MOG_TYPE mog_bytes = mixture_array[gid];
@@ -761,4 +846,5 @@ update_cone_data( __global RenderSceneInfo  * info,
     aux_beta[gid] = 0;
   }
 }
+
 

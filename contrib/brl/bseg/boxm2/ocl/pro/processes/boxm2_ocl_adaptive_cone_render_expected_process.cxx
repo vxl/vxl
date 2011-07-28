@@ -216,8 +216,8 @@ bool boxm2_ocl_adaptive_cone_render_expected_process(bprb_func_process& pro)
       idx++; 
     }
   }
-  vil_save( vis_view, "vis_debug.tiff"); 
-  vil_save( *exp_img_out, "exp_debug.tiff");
+  vil_save( vis_view, "vis_render_debug.tiff"); 
+  vil_save( *exp_img_out, "exp_render_debug.tiff");
 #endif
 
   delete [] buff;

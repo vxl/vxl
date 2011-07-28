@@ -14,6 +14,7 @@
 #define TREE_EPSILON  .005f
 #define MIN_T .1f
 #define UNIT_SPHERE_RADIUS 0.6203504908994f // = 1/vcl_cbrt(vnl_math::pi*4/3);
+#define MAX_RAY_LEVEL 4
 
 ////////////////////////////////////////////////////////////////////////////////
 //Given Ray pyramid and scene bounding box, fills out T value pyramids
@@ -252,7 +253,7 @@ void cast_adaptive_cone_ray(
                 if ( intersect_volume > 0.0f ) {
                   //if the tree is a leaf, then update it's contribution
                   if ( tree_bit_at(ltree, currBitIndex) == 0 ) {
-                    if(currR > .75*UNIT_SPHERE_RADIUS*side_len && ray_level<3) 
+                    if(currR > .75*UNIT_SPHERE_RADIUS*side_len && ray_level < MAX_RAY_LEVEL-1) 
                       split=true; 
                   }
                   else { 
@@ -308,6 +309,7 @@ void cast_adaptive_cone_ray(
             //------------------------------------------------------------------
           } //end i for
         } //end j for
+        barrier(CLK_LOCAL_MEM_FENCE);
         
         //Must split some aux args as well
         split_ray(aux_args, side_len); 
@@ -413,9 +415,9 @@ void cast_adaptive_cone_ray(
     // 2. calculate ball properties
     ///////////////////////////////////////////////////////////////////////////
     //replaced by something like: compute_ball_properties(aux_args);
+    //THIS IS ACTIVE FOR ALL RAYS
     COMPUTE_BALL_PROPERTIES; 
     barrier(CLK_LOCAL_MEM_FENCE); 
-    
     
     ///////////////////////////////////////////////////////////////////////////
     // 3. redistribute data loop - used to redistribute information 
@@ -507,6 +509,6 @@ void cast_adaptive_cone_ray(
   } //end ray trace while loop
 
   //stores pixel vis across all pixels
-  compute_pixel_vis(aux_args.master_threads,aux_args.active_rays,aux_args.vis);
+  //compute_pixel_vis(aux_args.master_threads,aux_args.active_rays,aux_args.vis);
   //aux_args.vis[llid] = safety; 
 }

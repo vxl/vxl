@@ -208,6 +208,29 @@ float boxm2_ocl_adaptive_cone_update( boxm2_scene_sptr & scene,
             kern->clear_args();
             aux0->read_to_buffer(queue);
             aux1->read_to_buffer(queue);
+            
+            ///debugging save vis, pre, norm images
+            #if 1
+              vis_image->read_to_buffer(queue);
+              pre_image->read_to_buffer(queue);
+              norm_image->read_to_buffer(queue); 
+              int idx = 0; 
+              vil_image_view<float> vis_view(cl_ni,cl_nj);
+              vil_image_view<float> norm_view(cl_ni,cl_nj);
+              vil_image_view<float> pre_view(cl_ni,cl_nj);
+              for (unsigned c=0;c<cl_nj;++c) {
+                for (unsigned r=0;r<cl_ni;++r) {
+                  vis_view(r,c) = vis_buff[idx];
+                  norm_view(r,c) = norm_buff[idx]; 
+                  pre_view(r,c) = pre_buff[idx]; 
+                  idx++; 
+                }
+              }
+              vil_save( vis_view, "vis_debug.tiff"); 
+              vil_save( norm_view, "norm_debug.tiff");
+              vil_save( pre_view, "pre_debug.tiff"); 
+            #endif
+                        
         }
         else if (i==UPDATE_BAYES)
         {
@@ -309,26 +332,6 @@ float boxm2_ocl_adaptive_cone_update( boxm2_scene_sptr & scene,
         clFinish(queue);
     }
   }
-
-
-  ///debugging save vis, pre, norm images
-#if 1
-  int idx = 0; 
-  vil_image_view<float> vis_view(cl_ni,cl_nj);
-  vil_image_view<float> norm_view(cl_ni,cl_nj);
-  vil_image_view<float> pre_view(cl_ni,cl_nj);
-  for (unsigned c=0;c<cl_nj;++c) {
-    for (unsigned r=0;r<cl_ni;++r) {
-      vis_view(r,c) = vis_buff[idx];
-      norm_view(r,c) = norm_buff[idx]; 
-      pre_view(r,c) = pre_buff[idx]; 
-      idx++; 
-    }
-  }
-  vil_save( vis_view, "vis_debug.tiff"); 
-  vil_save( norm_view, "norm_debug.tiff");
-  vil_save( pre_view, "pre_debug.tiff"); 
-#endif
 
   delete [] vis_buff;
   delete [] pre_buff;
