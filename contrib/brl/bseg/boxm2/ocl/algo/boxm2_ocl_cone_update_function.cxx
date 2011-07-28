@@ -155,7 +155,6 @@ float boxm2_ocl_adaptive_cone_update( boxm2_scene_sptr & scene,
 
         // data type string may contain an identifier so determine the buffer size
         int nobsTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_NUM_OBS>::prefix());
-        int appTypeSize = (int)boxm2_data_info::datasize(data_type);
         bocl_mem* mog       = opencl_cache->get_data(*id,data_type);
         bocl_mem* num_obs   = opencl_cache->get_data(*id,num_obs_type,alpha->num_bytes()/alphaTypeSize*nobsTypeSize,false);//,info_buffer->data_buffer_length*boxm2_data_info::datasize(num_obs_type));
 
