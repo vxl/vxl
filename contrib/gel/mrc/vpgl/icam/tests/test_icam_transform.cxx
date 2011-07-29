@@ -48,29 +48,31 @@ static void test_icam_transform()
   TEST_NEAR("icam_transform point", to.y(), 4.5638907328248, 1e-12);
   //--------------------  test with actual case ------------------
 
-  vcl_string dest_file =   "C:/images/calibration/frame_142.png";
-  vcl_string source_file = "C:/images/calibration/frame_145.png";
-  vcl_string depth_file =  "C:/images/calibration/depth_142.tif";
+  vcl_string root_dir = testlib_root_dir();
+  vcl_string dest_file = root_dir + "/contrib/gel/mrc/vpgl/tests/images/calibration/frame_142.png";
+  vcl_string source_file = root_dir + "/contrib/gel/mrc/vpgl/tests/images/calibration/frame_145.png";
+  vcl_string depth_file = root_dir + "/contrib/gel/mrc/vpgl/tests/images/calibration/depth_142.tif";
 
   vil_image_view_base_sptr dest_img_base = vil_load(dest_file.c_str());
-  if (!dest_img_base) {
-    vcl_cerr << "error loading image.\n";
-    return;
-  }
+  TEST("loading dest image", !dest_img_base, false);
+  if (!dest_img_base) { return; }
   vil_image_view_base_sptr source_img_base = vil_load(source_file.c_str());
-  if (!source_img_base) {
-    vcl_cerr << "error loading image.\n";
-    return;
-  }
-
+  TEST("loading source image", !source_img_base, false);
+  if (!source_img_base) { return; }
   vil_image_view_base_sptr depth_img_base = vil_load(depth_file.c_str());
-  if (!depth_img_base) {
-    vcl_cerr << "error loading image.\n";
-    return;
-  }
+  TEST("loading depth image", !depth_img_base, false);
+  if (!depth_img_base) { return; }
+
   vil_image_view<vxl_byte> *dest_img_byte   = dynamic_cast<vil_image_view<vxl_byte>*>(dest_img_base.ptr());
+  TEST("casting dest image", !dest_img_byte, false);
+  if (!dest_img_byte) { return; }
   vil_image_view<vxl_byte> *source_img_byte = dynamic_cast<vil_image_view<vxl_byte>*>(source_img_base.ptr());
+  TEST("casting source image", !source_img_byte, false);
+  if (!source_img_byte) { return; }
   vil_image_view<float>    *depth_img_flt   = dynamic_cast<vil_image_view<float>*>(depth_img_base.ptr());
+  TEST("casting depth image", !depth_img_flt, false);
+  if (!depth_img_flt) { return; }
+
   unsigned ni = dest_img_byte->ni(), nj = dest_img_byte->nj();
   vil_image_view<float> dest_img_flt(ni,nj);
   vil_convert_cast(*dest_img_byte,dest_img_flt);
@@ -91,8 +93,8 @@ static void test_icam_transform()
   unsigned n_samples;
   icam_sample::resample(ni, nj, source_img_flt, dt2, resmp, mask, n_samples);
   vcl_cout<< "found " << n_samples << " samples or " << (1.0*n_samples)/(ni*nj) << " fraction\n";
-  vil_save(resmp, "C:/images/calibration/resmp_145_to_142.tif");
-  vil_save(mask,  "C:/images/calibration/resmp_145_to_142_mask.tif");
+  vil_save(resmp, (root_dir + "/contrib/gel/mrc/vpgl/tests/images/calibration/resmp_145_to_142.tif").c_str());
+  vil_save(mask,  (root_dir + "/contrib/gel/mrc/vpgl/tests/images/calibration/resmp_145_to_142_mask.tif").c_str());
 }
 
 TESTMAIN( test_icam_transform );

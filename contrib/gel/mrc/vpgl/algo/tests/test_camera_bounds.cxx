@@ -1,4 +1,7 @@
 #include <testlib/testlib_test.h>
+#ifdef DEBUG
+#include <testlib/testlib_root_dir.h>
+#endif
 #include <vcl_iostream.h>
 #include <vcl_fstream.h>
 #include <vgl/vgl_point_3d.h>
@@ -12,7 +15,8 @@
 #include <vpgl/algo/vpgl_project.h>
 #include <vpgl/algo/vpgl_backproject.h>
 #include <vpgl/algo/vpgl_camera_bounds.h>
-#if 0 //debug
+
+#ifdef DEBUG
 static void
 write_points_vrml(vcl_ofstream& str,
                   vcl_vector<vgl_point_3d<double> > const& pts3d)
@@ -136,7 +140,7 @@ static void test_camera_bounds()
   // test sphere samples
   unsigned npts = 400;
   principal_ray_scan prs(0.785, npts);
-#if 0 //debug
+#ifdef DEBUG
   vcl_vector<vgl_point_3d<double> > pts;
   for (prs.reset(); prs.next();)
   {
@@ -144,7 +148,7 @@ static void test_camera_bounds()
              << " phi = " << prs.phi()*rad_to_deg << '\n';
     pts.push_back(prs.pt_on_unit_sphere());
   }
-  vcl_ofstream os("C:/images/calibration/sphere.wrl");
+  vcl_ofstream os(testlib_root_dir() + "/contrib/gel/mrc/vpgl/tests/images/calibration/sphere.wrl");
   write_points_vrml(os, pts);
   os.close();
 #endif

@@ -18,33 +18,35 @@ bool test_image_parallel_search()
 {
 //====================== Setup Minimizer ====================
   vcl_string root_dir = testlib_root_dir();
-  vcl_string dest_file = "C:/images/Calibration/frame_142.png";
-  vcl_string source_file = "C:/images/Calibration/frame_145.png";
-  vcl_string depth_file = "C:/images/Calibration/depth_142.tif";
-  vcl_string result_file = "C:/images/Calibration/gpu_result.tif";
-  vcl_string mask_file = "C:/images/Calibration/gpu_mask.tif";
-  vcl_string cpp_src_file = "C:/images/Calibration/cpp_src.tif";
-  vcl_string cpp_result_file = "C:/images/Calibration/cpp_result.tif";
-  vcl_string cpp_mask_file = "C:/images/Calibration/cpp_mask.tif";
-  vil_image_view_base_sptr dest_img_base = vil_load(dest_file.c_str());
-  if (!dest_img_base) {
-    vcl_cerr << "error loading image.\n";
-    return false;
-  }
-  vil_image_view_base_sptr source_img_base = vil_load(source_file.c_str());
-  if (!source_img_base) {
-    vcl_cerr << "error loading image.\n";
-    return false;
-  }
+  vcl_string dest_file = root_dir + "/contrib/gel/mrc/vpgl/tests/images/calibration/frame_142.png";
+  vcl_string source_file = root_dir + "/contrib/gel/mrc/vpgl/tests/images/calibration/frame_145.png";
+  vcl_string depth_file = root_dir + "/contrib/gel/mrc/vpgl/tests/images/calibration/depth_142.tif";
+  vcl_string result_file = root_dir + "/contrib/gel/mrc/vpgl/tests/images/calibration/gpu_result.tif";
+  vcl_string mask_file = root_dir + "/contrib/gel/mrc/vpgl/tests/images/calibration/gpu_mask.tif";
+  vcl_string cpp_src_file = root_dir + "/contrib/gel/mrc/vpgl/tests/images/calibration/cpp_src.tif";
+  vcl_string cpp_result_file = root_dir + "/contrib/gel/mrc/vpgl/tests/images/calibration/cpp_result.tif";
+  vcl_string cpp_mask_file = root_dir + "/contrib/gel/mrc/vpgl/tests/images/calibration/cpp_mask.tif";
 
+  vil_image_view_base_sptr dest_img_base = vil_load(dest_file.c_str());
+  TEST("loading dest image", !dest_img_base, false);
+  if (!dest_img_base) { return false; }
+  vil_image_view_base_sptr source_img_base = vil_load(source_file.c_str());
+  TEST("loading source image", !source_img_base, false);
+  if (!source_img_base) { return false; }
   vil_image_view_base_sptr depth_img_base = vil_load(depth_file.c_str());
-  if (!depth_img_base) {
-    vcl_cerr << "error loading image.\n";
-    return false;
-  }
+  TEST("loading depth image", !depth_img_base, false);
+  if (!depth_img_base) { return false; }
+
   vil_image_view<vxl_byte> *dest_img_byte = dynamic_cast<vil_image_view<vxl_byte>*>(dest_img_base.ptr());
+  TEST("casting dest image", !dest_img_byte, false);
+  if (!dest_img_byte) { return false; }
   vil_image_view<vxl_byte> *source_img_byte = dynamic_cast<vil_image_view<vxl_byte>*>(source_img_base.ptr());
+  TEST("casting source image", !source_img_byte, false);
+  if (!source_img_byte) { return false; }
   vil_image_view<float> *depth_img_flt = dynamic_cast<vil_image_view<float>*>(depth_img_base.ptr());
+  TEST("casting depth image", !depth_img_flt, false);
+  if (!depth_img_flt) { return false; }
+
   unsigned ni = dest_img_byte->ni(), nj = dest_img_byte->nj();
   vil_image_view<float> dest_img_flt(ni,nj);
   vil_convert_cast(*dest_img_byte,dest_img_flt);
@@ -170,34 +172,36 @@ bool test_icam_ocl_minimizer()
 {
 //====================== Setup Minimizer ====================
   vcl_string root_dir = testlib_root_dir();
-  vcl_string dest_file = "C:/images/Calibration/frame_142.png";
-  vcl_string source_file = "C:/images/Calibration/frame_145.png";
-  vcl_string depth_file = "C:/images/Calibration/depth_142.tif";
-  vcl_string gpu_mdest_file = "C:/images/Calibration/gpu_mdest.tif";
-  vcl_string cpu_mdest_file = "C:/images/Calibration/cpu_mdest.tif";
-  vcl_string mask_file = "C:/images/Calibration/gpu_mask.tif";
-  vcl_string cpp_src_file = "C:/images/Calibration/cpp_src.tif";
-  vcl_string cpp_result_file = "C:/images/Calibration/cpp_result.tif";
-  vcl_string cpp_mask_file = "C:/images/Calibration/cpp_mask.tif";
+  vcl_string dest_file = root_dir + "/contrib/gel/mrc/vpgl/tests/images/calibration/frame_142.png";
+  vcl_string source_file = root_dir + "/contrib/gel/mrc/vpgl/tests/images/calibration/frame_145.png";
+  vcl_string depth_file = root_dir + "/contrib/gel/mrc/vpgl/tests/images/calibration/depth_142.tif";
+  vcl_string gpu_mdest_file = root_dir + "/contrib/gel/mrc/vpgl/tests/images/calibration/gpu_mdest.tif";
+  vcl_string cpu_mdest_file = root_dir + "/contrib/gel/mrc/vpgl/tests/images/calibration/cpu_mdest.tif";
+  vcl_string mask_file = root_dir + "/contrib/gel/mrc/vpgl/tests/images/calibration/gpu_mask.tif";
+  vcl_string cpp_src_file = root_dir + "/contrib/gel/mrc/vpgl/tests/images/calibration/cpp_src.tif";
+  vcl_string cpp_result_file = root_dir + "/contrib/gel/mrc/vpgl/tests/images/calibration/cpp_result.tif";
+  vcl_string cpp_mask_file = root_dir + "/contrib/gel/mrc/vpgl/tests/images/calibration/cpp_mask.tif";
   vil_image_view_base_sptr dest_img_base = vil_load(dest_file.c_str());
-  if (!dest_img_base) {
-    vcl_cerr << "error loading image.\n";
-    return false;
-  }
-  vil_image_view_base_sptr source_img_base = vil_load(source_file.c_str());
-  if (!source_img_base) {
-    vcl_cerr << "error loading image.\n";
-    return false;
-  }
 
+  TEST("loading dest image", !dest_img_base, false);
+  if (!dest_img_base) { return false; }
+  vil_image_view_base_sptr source_img_base = vil_load(source_file.c_str());
+  TEST("loading source image", !source_img_base, false);
+  if (!source_img_base) { return false; }
   vil_image_view_base_sptr depth_img_base = vil_load(depth_file.c_str());
-  if (!depth_img_base) {
-    vcl_cerr << "error loading image.\n";
-    return false;
-  }
+  TEST("loading depth image", !depth_img_base, false);
+  if (!depth_img_base) { return false; }
+
   vil_image_view<vxl_byte> *dest_img_byte = dynamic_cast<vil_image_view<vxl_byte>*>(dest_img_base.ptr());
+  TEST("casting dest image", !dest_img_byte, false);
+  if (!dest_img_byte) { return false; }
   vil_image_view<vxl_byte> *source_img_byte = dynamic_cast<vil_image_view<vxl_byte>*>(source_img_base.ptr());
+  TEST("casting source image", !source_img_byte, false);
+  if (!source_img_byte) { return false; }
   vil_image_view<float> *depth_img_flt = dynamic_cast<vil_image_view<float>*>(depth_img_base.ptr());
+  TEST("casting depth image", !depth_img_flt, false);
+  if (!depth_img_flt) { return false; }
+
   unsigned ni = dest_img_byte->ni(), nj = dest_img_byte->nj();
   vil_image_view<float> dest_img_flt(ni,nj);
   vil_convert_cast(*dest_img_byte,dest_img_flt);
@@ -320,7 +324,7 @@ bool test_icam_ocl_minimizer()
 
 static void test_depth_trans()
 {
-  //test_image_parallel_search();
+  test_image_parallel_search();
   test_icam_ocl_minimizer();
 }
 

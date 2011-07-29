@@ -103,8 +103,8 @@ static void test_minimizer()
   double err_trans = (vcl_fabs(p0.x()-tx) + vcl_fabs(p0.y()-ty))/100;
   TEST_NEAR("rigid_body trans",err_ang+err_trans,0.0, 0.01);
 #if 0
-  vcl_string dest_file = "C:/images/calibration/frame_142.png";
-  vcl_string source_file = "C:/images/calibration/frame_145.png";
+  vcl_string dest_file = root_dir + "/contrib/gel/mrc/vpgl/icam/tests/images/calibration/frame_142.png";
+  vcl_string source_file = root_dir + "/contrib/gel/mrc/vpgl/icam/tests/images/calibration/frame_145.png";
   vil_image_view_base_sptr dest_img_base = vil_load(dest_file.c_str());
   if (!dest_img_base) {
     vcl_cerr << "error loading image.\n";
@@ -140,8 +140,7 @@ static void test_minimizer()
   // create mapped image
   ihog_image<float> mapped_source;
   ihog_resample_bilin(from_img_d, mapped_source, init_xform_d.inverse());
-  vil_save(mapped_source.image(),
-           "C:/images/calibration/hog_mapped_f145.tif");
+  vil_save(mapped_source.image(), (root_dir + "/contrib/gel/mrc/vpgl/icam/tests/images/calibration/hog_mapped_f145.tif").c_str());
 #endif
 }
 

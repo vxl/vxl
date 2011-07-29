@@ -1,4 +1,7 @@
 #include <testlib/testlib_test.h>
+#if 0
+#include <testlib/testlib_root_dir.h>
+#endif
 #include <vcl_iostream.h>
 #include <vnl/vnl_fwd.h>
 #include <vnl/vnl_vector_fixed.h>
@@ -146,15 +149,6 @@ vpgl_local_rational_camera<double> construct_local_rational_camera()
   vpgl_local_rational_camera<double> loc_rat_cam(lvcs, rat_cam);
   return loc_rat_cam;
 }
-
-#if 0
-vpgl_rational_camera<double> read_rational_camera()
-{
-  vcl_string path = "C:/images/calibration/rational_camera/06MAR27155829-S2AS-005580823020_01_P001.RPB";
-  vpgl_rational_camera<double> rat_cam(path);
-  return rat_cam;
-}
-#endif
 
 void test_perspective_compute()
 {
@@ -449,23 +443,30 @@ static void test_perspective_compute_direct_linear_transform()
 
 static void test_camera_compute(int argc, char* argv[])
 {
-  vcl_string dir_base;
-
-  if ( argc >= 2 ) {
-    dir_base = argv[1];
-#ifdef VCL_WIN32
-    dir_base += "\\";
-#else
-    dir_base += "/";
-#endif
-  }
   test_camera_compute_setup();
   test_perspective_compute();
   test_generic_camera_compute();
   test_perspective_compute_direct_linear_transform();
 #if 0 // commented out till the new code is created for that test
+  vcl_string dir_base;
+  if ( argc >= 2 ) {
+    dir_base = argv[1];
+    dir_base += "/";
+  }
+  else {
+    dir_base = testlib_root_dir() + "/contrib/gel/mrc/vpgl/tests/images/calibration/rational_camera/";
+  }
   test_rational_camera_approx(dir_base);
 #endif
 }
+
+#if 0
+vpgl_rational_camera<double> test_read_rational_camera(vcl_string dir_base)
+{
+  vcl_string path = dir_base + "06MAR27155829-S2AS-005580823020_01_P001.RPB";
+  vpgl_rational_camera<double> rat_cam(path);
+  return rat_cam;
+}
+#endif
 
 TESTMAIN_ARGS(test_camera_compute)

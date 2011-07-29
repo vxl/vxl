@@ -86,27 +86,27 @@ static void test_minimizer()
   vcl_vector<vcl_string> camera_f;
 
   // view 0 (the closest one)
-  images[0]="C:/images/Calibration/expected88.tiff";
-  depth_images[0]="C:/images/Calibration/depth88.tiff";
-  camera_f.push_back("C:/images/Calibration/camera_00088.txt");
+  images[0] = root_dir + "/contrib/gel/mrc/vpgl/tests/images/calibration/expected88.tiff";
+  depth_images[0] = root_dir + "/contrib/gel/mrc/vpgl/tests/images/calibration/depth88.tiff";
+  camera_f.push_back(root_dir + "/contrib/gel/mrc/vpgl/tests/images/calibration/camera_00088.txt");
 
   // view 1
-  images[1]="C:/images/Calibration/frame_142.png";
-  depth_images[1]="C:/images/Calibration/depth_142.tif";
-  camera_f.push_back("C:/images/Calibration/camera_00142.txt");
+  images[1] = root_dir + "/contrib/gel/mrc/vpgl/tests/images/calibration/frame_142.png";
+  depth_images[1] = root_dir + "/contrib/gel/mrc/vpgl/tests/images/calibration/depth_142.tif";
+  camera_f.push_back(root_dir + "/contrib/gel/mrc/vpgl/tests/images/calibration/camera_00142.txt");
 
   // view 2
-  images[2]="C:/images/Calibration/expected142.tiff";
-  depth_images[2]="C:/images/Calibration/depth_142.tif";
-  camera_f.push_back("C:/images/Calibration/camera_00142.txt");
+  images[2] = root_dir + "/contrib/gel/mrc/vpgl/tests/images/calibration/expected142.tiff";
+  depth_images[2] = root_dir + "/contrib/gel/mrc/vpgl/tests/images/calibration/depth_142.tif";
+  camera_f.push_back(root_dir + "/contrib/gel/mrc/vpgl/tests/images/calibration/camera_00142.txt");
 
   //view 3
-  images[3]="C:/images/Calibration/frame_142.png";
-  depth_images[3]="C:/images/Calibration/depth_142.tif";
-  camera_f.push_back("C:/images/Calibration/camera_00142.txt");
+  images[3] = root_dir + "/contrib/gel/mrc/vpgl/tests/images/calibration/frame_142.png";
+  depth_images[3] = root_dir + "/contrib/gel/mrc/vpgl/tests/images/calibration/depth_142.tif";
+  camera_f.push_back(root_dir + "/contrib/gel/mrc/vpgl/tests/images/calibration/camera_00142.txt");
 
   // source image
-  vcl_string source_file = "C:/images/Calibration/gray00089.png";
+  vcl_string source_file = root_dir + "/contrib/gel/mrc/vpgl/tests/images/calibration/gray00089.png";
 
   icam_ocl_view_sphere_sptr view_sphere;
   create_view_sphere(view_sphere);
