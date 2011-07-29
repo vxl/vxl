@@ -77,8 +77,10 @@ seg_len_main(__constant  RenderSceneInfo    * linfo,
   float vis = 1.0f;  //no visibility in this pass
   barrier(CLK_LOCAL_MEM_FENCE);
 
+  if(obs.x <0.0)
+      return;
   // cases #of threads will be more than the pixels.
-  if (i>=(*imgdims).z || j>=(*imgdims).w || i<(*imgdims).x || j<(*imgdims).y) 
+  if (i>=(*imgdims).z || j>=(*imgdims).w || i<(*imgdims).x || j<(*imgdims).y ) 
     return;
 
   //----------------------------------------------------------------------------
@@ -218,6 +220,8 @@ pre_inf_main(__constant  RenderSceneInfo    * linfo,
   float vis_inf = vis_image[j*get_global_size(0) + i]; 
   float pre_inf = pre_image[j*get_global_size(0) + i]; 
 
+  if(vis_inf<0.0)
+      return;
   //vis for cast_ray, never gets decremented so no cutoff occurs
   float vis = 1.0f; 
   barrier(CLK_LOCAL_MEM_FENCE);
@@ -326,7 +330,9 @@ bayes_main(__constant  RenderSceneInfo    * linfo,
   float norm = norm_image[j*get_global_size(0) + i]; 
   float vis = vis_image[j*get_global_size(0) + i]; 
   float pre = pre_image[j*get_global_size(0) + i]; 
-  
+  if(vis<0.0f)
+      return;
+
   barrier(CLK_LOCAL_MEM_FENCE);
 
   //----------------------------------------------------------------------------
@@ -389,7 +395,9 @@ proc_norm_image (  __global float* norm_image,
   
   float vis = vis_image[j*get_global_size(0) + i]; 
   float pre = pre_image[j*get_global_size(0) + i]; 
-  float norm = pre * (1.0f-vis); 
+
+  if(vis<0.0)  return;
+  float norm = (pre + vis); 
   norm_image[j*get_global_size(0) + i] = norm; 
 
   // the following  quantities have to be re-initialized before
@@ -450,21 +458,21 @@ void update_yuv_appearance(float8* mixture, float* nobs, float4 mean_obs, float 
   float sigma = (*mixture).s4; 
   update_gauss(mean_obs.x, rho, &mu, &sigma, min_sigma);
   (*mixture).s0 = mu; 
-  (*mixture).s4 = .06; 
+  (*mixture).s4 = 0.1; 
   
   //u channel
   mu = (*mixture).s1;
   sigma = (*mixture).s5; 
   update_gauss(mean_obs.y, rho, &mu, &sigma, min_sigma); 
   (*mixture).s1 = mu; 
-  (*mixture).s5 = .06; 
+  (*mixture).s5 = 0.1; 
   
   //v channel
   mu = (*mixture).s2;
   sigma = (*mixture).s6; 
   update_gauss(mean_obs.z, rho, &mu, &sigma, min_sigma); 
   (*mixture).s2 = mu; 
-  (*mixture).s6 = .06; 
+  (*mixture).s6 = 0.1; 
 }
 
 
@@ -537,7 +545,7 @@ update_bit_scene_main(__global RenderSceneInfo  * info,
       nobs_array[gid] = nob_single * 100.0f; 
       
       //update alpha
-      clamp(cell_beta,0.5f,2.0f);
+      clamp(cell_beta,0.125f,8.0f);
       alpha *= cell_beta; 
       
       //reset the cells in memory

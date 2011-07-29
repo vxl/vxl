@@ -75,7 +75,7 @@ seg_len_main(__constant  RenderSceneInfo    * linfo,
   barrier(CLK_LOCAL_MEM_FENCE);
 
   // cases #of threads will be more than the pixels.
-  if (i>=(*imgdims).z || j>=(*imgdims).w || i<(*imgdims).x || j<(*imgdims).y) 
+  if (i>=(*imgdims).z || j>=(*imgdims).w || i<(*imgdims).x || j<(*imgdims).y || obs < 0.0f) 
     return;
 
   //----------------------------------------------------------------------------
@@ -163,6 +163,8 @@ pre_inf_main(__constant  RenderSceneInfo    * linfo,
   float vis_inf = vis_image[j*get_global_size(0) + i]; 
   float pre_inf = pre_image[j*get_global_size(0) + i]; 
 
+  if(vis_inf <0.0)
+      return;
   //vis for cast_ray, never gets decremented so no cutoff occurs
   float vis = 1.0f; 
   barrier(CLK_LOCAL_MEM_FENCE);
@@ -271,7 +273,9 @@ bayes_main(__constant  RenderSceneInfo    * linfo,
   float norm = norm_image[j*get_global_size(0) + i]; 
   float vis = vis_image[j*get_global_size(0) + i]; 
   float pre = pre_image[j*get_global_size(0) + i]; 
-  
+  if(vis <0.0)
+      return;
+
   barrier(CLK_LOCAL_MEM_FENCE);
 
   //----------------------------------------------------------------------------
@@ -328,13 +332,13 @@ proc_norm_image (  __global float* norm_image,
   int j=0;
   i=get_global_id(0);
   j=get_global_id(1);
+  float vis = vis_image[j*get_global_size(0) + i]; 
 
-  if (i>=(*imgdims).z && j>=(*imgdims).w)
+  if (i>=(*imgdims).z && j>=(*imgdims).w && vis<0.0f)
     return;
   
-  float vis = vis_image[j*get_global_size(0) + i]; 
   float pre = pre_image[j*get_global_size(0) + i]; 
-  float norm = pre +vis;//* (1.0f-vis); 
+  float norm = (pre+vis);
   norm_image[j*get_global_size(0) + i] = norm; 
 
   // the following  quantities have to be re-initialized before
@@ -394,7 +398,7 @@ update_bit_scene_main(__global RenderSceneInfo  * info,
                                  0.0, 0.0, 0.0);
 
       //use aux data to update cells
-      update_cell(&data, aux_data, 2.5f, 0.03f, 0.02);
+      update_cell(&data, aux_data, 2.5f, 0.06f, 0.02);
 
       //reset the cells in memory
       alpha_array[gid]      = max(alphamin,data.s0);
