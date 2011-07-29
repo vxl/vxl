@@ -16,6 +16,7 @@
 #include <boxm2/ocl/boxm2_ocl_util.h>
 #include <vil/vil_image_view.h>
 #include <vil/vil_save.h>
+#include <vil/vil_load.h>
 #include <boxm2/ocl/algo/boxm2_ocl_camera_converter.h>
 
 //brdb stuff
@@ -29,7 +30,7 @@
 
 namespace boxm2_ocl_update_process_globals
 {
-  const unsigned n_inputs_  = 6;
+  const unsigned n_inputs_  = 7;
   const unsigned n_outputs_ = 0;
   enum {
       UPDATE_SEGLEN = 0,
@@ -105,6 +106,7 @@ bool boxm2_ocl_update_process_cons(bprb_func_process& pro)
   input_types_[3] = "vpgl_camera_double_sptr";
   input_types_[4] = "vil_image_view_base_sptr";
   input_types_[5] = "vcl_string";
+  input_types_[6] = "vcl_string";
 
   // process has 1 output:
   // output[0]: scene sptr
@@ -114,6 +116,7 @@ bool boxm2_ocl_update_process_cons(bprb_func_process& pro)
   // in case the 6th input is not set
   brdb_value_sptr idx = new brdb_value_t<vcl_string>("");
   pro.set_input(5, idx);
+  pro.set_input(6, idx);
   return good;
 }
 
@@ -137,6 +140,7 @@ bool boxm2_ocl_update_process(bprb_func_process& pro)
   vpgl_camera_double_sptr cam= pro.get_input<vpgl_camera_double_sptr>(i++);
   vil_image_view_base_sptr img =pro.get_input<vil_image_view_base_sptr>(i++);
   vcl_string ident = pro.get_input<vcl_string>(i++);
+  vcl_string mask_filename = pro.get_input<vcl_string>(i++);
 
   long binCache = opencl_cache.ptr()->bytes_in_cache();
   vcl_cout<<"Update MBs in cache: "<<binCache/(1024.0*1024.0)<<vcl_endl;
@@ -222,6 +226,32 @@ bool boxm2_ocl_update_process(bprb_func_process& pro)
       pre_buff[i]=0.0f;
       norm_buff[i]=0.0f;
   }
+
+  int min_i=1e6; int max_i=0;
+  int min_j=1e6; int max_j=0;
+  
+  
+  if(mask_filename!="")
+  {
+      vil_image_view_base_sptr mask_img=vil_load(mask_filename.c_str());
+      if(vil_image_view<unsigned char> * mask_char
+          =dynamic_cast<vil_image_view<unsigned char> * >(mask_img.ptr()))
+      {
+          int count = 0;
+          for (unsigned int j=0;j<mask_char->nj();++j)
+              for (unsigned int i=0;i<mask_char->ni();++i)
+              {
+                  if((*mask_char)(i,j)==0)
+                  {
+                    if(min_i > i) min_i =i;
+                    if(min_j > j) min_j =j;
+                    if(max_i < i) max_i =i;
+                    if(max_j < j) max_j =j;
+                  }
+                      
+              }
+      }
+  }
   int count=0;
   for (unsigned int j=0;j<cl_nj;++j)
     for (unsigned int i=0;i<cl_ni;++i)
@@ -249,6 +279,15 @@ bool boxm2_ocl_update_process(bprb_func_process& pro)
   img_dim_buff[1] = 0;
   img_dim_buff[2] = img_view->ni();
   img_dim_buff[3] = img_view->nj();
+  //if(min_i<max_i && min_j<max_j)
+  //{
+  //  img_dim_buff[0] = min_i;
+  //  img_dim_buff[1] = min_j;
+  //  img_dim_buff[2] = max_i;
+  //  img_dim_buff[3] = max_j;
+  //  vcl_cout<<"ROI "<<min_i<<" "<<min_j<<" "<<max_i<<" "<<max_j<<vcl_endl;
+  //}
+
   bocl_mem_sptr img_dim=new bocl_mem(device->context(), img_dim_buff, sizeof(int)*4, "image dims");
   img_dim->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
@@ -288,8 +327,36 @@ bool boxm2_ocl_update_process(bprb_func_process& pro)
       check_val(status, MEM_FAILURE, "UPDATE EXECUTE FAILED: " + error_to_string(status));
       proc_kern->clear_args();
       norm_image->read_to_buffer(queue);
-      continue;
+
+     continue;
     }
+    vis_image->read_to_buffer(queue);
+    if(mask_filename!="")
+    {
+        vil_image_view_base_sptr mask_img=vil_load(mask_filename.c_str());
+        if(vil_image_view<unsigned char> * mask_char
+            =dynamic_cast<vil_image_view<unsigned char> * >(mask_img.ptr()))
+        {
+            int count = 0;
+            for (unsigned int j=0;j<cl_nj;++j)
+                for (unsigned int i=0;i<cl_ni;++i)
+                {
+                    if (i<mask_char->ni() && j<mask_char->nj()  ) 
+                    {
+                        if( (*mask_char)(i,j)>0 )
+                        {
+                            input_buff[count]=-1.0f;
+                            vis_buff[count] =-1.0f;
+                        }
+                    }
+                    ++count;
+                }
+        }
+            in_image->write_to_buffer(queue);
+    vis_image->write_to_buffer(queue);
+    clFinish(queue);
+    }
+
     for (id = vis_order.begin(); id != vis_order.end(); ++id)
     {
         //choose correct render kernel
@@ -404,7 +471,6 @@ bool boxm2_ocl_update_process(bprb_func_process& pro)
             kern->set_arg( aux2 );
             kern->set_arg( aux3 );
             kern->set_arg( lookup.ptr() );
-            // kern->set_arg( persp_cam.ptr() );
             kern->set_arg( ray_o_buff.ptr() );
             kern->set_arg( ray_d_buff.ptr() );
 

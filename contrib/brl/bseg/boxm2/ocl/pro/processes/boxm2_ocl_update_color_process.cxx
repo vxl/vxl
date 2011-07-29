@@ -17,6 +17,7 @@
 #include <boxm2/ocl/boxm2_ocl_util.h>
 #include <boxm2/ocl/algo/boxm2_ocl_camera_converter.h>
 #include <vil/vil_image_view.h>
+#include <vil/vil_load.h>
 //brdb stuff
 #include <brdb/brdb_value.h>
 
@@ -28,7 +29,7 @@
 
 namespace boxm2_ocl_update_color_process_globals
 {
-  const unsigned n_inputs_  = 5;
+  const unsigned n_inputs_  = 7;
   const unsigned n_outputs_ = 0;
   vcl_size_t local_threads[2]={8,8};
   vcl_size_t global_threads[2]={8,8};
@@ -112,11 +113,19 @@ bool boxm2_ocl_update_color_process_cons(bprb_func_process& pro)
   input_types_[2] = "boxm2_opencl_cache_sptr";
   input_types_[3] = "vpgl_camera_double_sptr";
   input_types_[4] = "vil_image_view_base_sptr";
+  input_types_[5] = "vcl_string";
+  input_types_[6] = "vcl_string";
 
   // process has 1 output:
   // output[0]: scene sptr
   vcl_vector<vcl_string>  output_types_(n_outputs_);
-  return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
+
+  bool good = pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
+  // in case the 6th input is not set
+  brdb_value_sptr idx = new brdb_value_t<vcl_string>("");
+  pro.set_input(5, idx);
+
+  pro.set_input(6, idx);
 }
 
 bool boxm2_ocl_update_color_process(bprb_func_process& pro)
@@ -137,6 +146,8 @@ bool boxm2_ocl_update_color_process(bprb_func_process& pro)
   boxm2_opencl_cache_sptr   opencl_cache = pro.get_input<boxm2_opencl_cache_sptr>(argIdx++);
   vpgl_camera_double_sptr   cam = pro.get_input<vpgl_camera_double_sptr>(argIdx++);
   vil_image_view_base_sptr  img = pro.get_input<vil_image_view_base_sptr>(argIdx++);
+  vcl_string in_identifier = pro.get_input<vcl_string>(argIdx++);
+  vcl_string mask_filename = pro.get_input<vcl_string>(argIdx++);
 
   //make sure the scene corresponds to this datatype
   bool foundDataType = false, foundNumObsType = false;
@@ -289,6 +300,33 @@ bool boxm2_ocl_update_color_process(bprb_func_process& pro)
       norm_image->read_to_buffer(queue);
       continue;
     }
+    vis_image->read_to_buffer(queue);
+    if(mask_filename!="")
+    {
+        vcl_cout<<"MASK FOUND "<<vcl_endl;
+        vil_image_view_base_sptr mask_img=vil_load(mask_filename.c_str());
+        if(vil_image_view<unsigned char> * mask_char
+            =dynamic_cast<vil_image_view<unsigned char> * >(mask_img.ptr()))
+        {
+            int count = 0;
+            for (unsigned int j=0;j<cl_nj;++j)
+                for (unsigned int i=0;i<cl_ni;++i)
+                {
+                    if (i<mask_char->ni() && j<mask_char->nj()  ) 
+                    {
+                        if( (*mask_char)(i,j)>0 )
+                        {
+                            input_buff[numFloats*count+0]=-1.0f;
+                            vis_buff[count] =-1.0f;
+                        }
+                    }
+                    ++count;
+                }
+        }
+    }
+    in_image->write_to_buffer(queue);
+    vis_image->write_to_buffer(queue);
+    clFinish(queue);
     for (id = vis_order.begin(); id != vis_order.end(); ++id)
     {
         //choose correct render kernel
