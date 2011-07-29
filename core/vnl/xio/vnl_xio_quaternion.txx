@@ -1,27 +1,38 @@
 // This is core/vnl/xio/vnl_xio_quaternion.txx
 #ifndef vnl_xio_quaternion_txx_
 #define vnl_xio_quaternion_txx_
-//:
-// \file
 
 #include "vnl_xio_quaternion.h"
 #include <vnl/vnl_quaternion.h>
 #include <vsl/vsl_basic_xml_element.h>
 
 //=================================================================================
-//: Binary save self to stream.
 template<class T>
-void x_write(vcl_ostream & os, const vnl_quaternion<T> & p, vcl_string name)
+void x_write(vcl_ostream & os, vnl_quaternion<T> const& q, vcl_string name)
 {
   vsl_basic_xml_element element(name);
-  element.add_attribute("x", p.x());
-  element.add_attribute("y", p.y());
-  element.add_attribute("z", p.z());
-  element.add_attribute("r", p.r());
+  element.add_attribute("x", q.x());
+  element.add_attribute("y", q.y());
+  element.add_attribute("z", q.z());
+  element.add_attribute("r", q.r());
   element.x_write(os);
 }
 
+//=================================================================================
+template<class T>
+void x_write_tree(vcl_ostream & os, vnl_quaternion<T> const& q, vcl_string name)
+{
+  vsl_basic_xml_element element(name);
+  element.append_cdata("<x>"); element.append_cdata(q.x()); element.append_cdata("</x>");
+  element.append_cdata("<y>"); element.append_cdata(q.y()); element.append_cdata("</y>");
+  element.append_cdata("<z>"); element.append_cdata(q.z()); element.append_cdata("</z>");
+  element.append_cdata("<r>"); element.append_cdata(q.r()); element.append_cdata("</r>");
+  element.x_write(os);
+}
+
+#undef VNL_XIO_QUATERNION_INSTANTIATE
 #define VNL_XIO_QUATERNION_INSTANTIATE(T) \
-template void x_write(vcl_ostream &, const vnl_quaternion<T > &, vcl_string name)
+template void x_write(vcl_ostream &, vnl_quaternion<T > const&, vcl_string); \
+template void x_write_tree(vcl_ostream &, vnl_quaternion<T > const&, vcl_string)
 
 #endif // vnl_xio_quaternion_txx_

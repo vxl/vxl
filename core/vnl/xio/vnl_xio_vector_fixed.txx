@@ -1,25 +1,38 @@
 // This is core/vnl/xio/vnl_xio_vector_fixed.txx
 #ifndef vnl_xio_vector_fixed_txx_
 #define vnl_xio_vector_fixed_txx_
-//:
-// \file
 
 #include "vnl_xio_vector_fixed.h"
 #include <vsl/vsl_basic_xml_element.h>
 
 //=================================================================================
-//: XML save self to stream.
 template<class T, unsigned int n>
-void x_write(vcl_ostream & os, const vnl_vector_fixed<T,n> & p, vcl_string name)
+void x_write(vcl_ostream & os, vnl_vector_fixed<T,n> const& v, vcl_string name)
 {
   vsl_basic_xml_element element(name);
-  element.add_attribute("size", (int) p.size());
-  for (unsigned i=0; i<p.size(); i++)
-    element.append_cdata(p.get(i));
-  element.x_write(os);  
+  element.add_attribute("size", (int) n);
+  for (unsigned i=0; i<n; i++)
+    element.append_cdata(v.get(i));
+  element.x_write(os);
 }
 
+//=================================================================================
+template<class T, unsigned int n>
+void x_write_tree(vcl_ostream & os, vnl_vector_fixed<T,n> const& v, vcl_string name)
+{
+  vsl_basic_xml_element element(name);
+  element.add_attribute("size", (int) n);
+  for (unsigned i=0; i<n; i++) {
+    element.append_cdata("<element>");
+    element.append_cdata(v.get(i));
+    element.append_cdata("</element>");
+  }
+  element.x_write(os);
+}
+
+#undef VNL_XIO_VECTOR_FIXED_INSTANTIATE
 #define VNL_XIO_VECTOR_FIXED_INSTANTIATE(T,n) \
-template void x_write(vcl_ostream &, const vnl_vector_fixed<T,n > &, vcl_string)
+template void x_write(vcl_ostream &, vnl_vector_fixed<T,n > const&, vcl_string); \
+template void x_write_tree(vcl_ostream &, vnl_vector_fixed<T,n > const&, vcl_string)
 
 #endif // vnl_xio_vector_fixed_txx_
