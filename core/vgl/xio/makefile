@@ -8,6 +8,14 @@ MANPAGE_SOURCES += vgl_xio_point_2d.txx
 MANPAGE_SOURCES += vgl_xio_point_3d.txx
 MANPAGE_SOURCES += vgl_xio_vector_3d.txx
 
-################################
-include ${VXLROOT}/config/top.mk
-################################
+#######################################
+include ${VXLROOT}/config/top-params.mk
+#######################################
+
+ifndef NOTEST
+SUBDIRS += tests
+endif
+
+######################################
+include ${VXLROOT}/config/top-rules.mk
+######################################

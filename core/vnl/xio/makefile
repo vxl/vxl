@@ -8,6 +8,14 @@ MANPAGE_SOURCES += vnl_xio_quaternion.txx
 MANPAGE_SOURCES += vnl_xio_vector.txx
 MANPAGE_SOURCES += vnl_xio_vector_fixed.txx
 
-################################
-include ${VXLROOT}/config/top.mk
-################################
+#######################################
+include ${VXLROOT}/config/top-params.mk
+#######################################
+
+ifndef NOTEST
+SUBDIRS += tests
+endif
+
+######################################
+include ${VXLROOT}/config/top-rules.mk
+######################################
