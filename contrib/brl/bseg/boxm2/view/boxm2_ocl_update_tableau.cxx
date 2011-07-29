@@ -126,8 +126,10 @@ float boxm2_ocl_update_tableau::update_frame(vil_image_view_base_sptr in_im, vpg
   brdb_value_sptr brdb_device       = new brdb_value_t<bocl_device_sptr>(device_);
   brdb_value_sptr brdb_scene        = new brdb_value_t<boxm2_scene_sptr>(scene_);
   brdb_value_sptr brdb_opencl_cache = new brdb_value_t<boxm2_opencl_cache_sptr>(opencl_cache_);
-  brdb_value_sptr brdb_cam    = new brdb_value_t<vpgl_camera_double_sptr>(in_cam);
-  brdb_value_sptr brdb_img    = new brdb_value_t<vil_image_view_base_sptr>(in_im);
+  brdb_value_sptr brdb_cam          = new brdb_value_t<vpgl_camera_double_sptr>(in_cam);
+  brdb_value_sptr brdb_img          = new brdb_value_t<vil_image_view_base_sptr>(in_im);
+  brdb_value_sptr identifier        = new brdb_value_t<vcl_string>("");
+  brdb_value_sptr brdb_mask_img     = new brdb_value_t<vcl_string>("");//f:/Tailwind/Towerorbit/mask3.png");
 
   //if scene has RGB data type, use color render process
   bool good =
@@ -142,6 +144,8 @@ float boxm2_ocl_update_tableau::update_frame(vil_image_view_base_sptr in_im, vpg
       && bprb_batch_process_manager::instance()->set_input(2, brdb_opencl_cache)
       && bprb_batch_process_manager::instance()->set_input(3, brdb_cam)    // camera
       && bprb_batch_process_manager::instance()->set_input(4, brdb_img)    // input image
+      && bprb_batch_process_manager::instance()->set_input(5, identifier)    // input image
+      && bprb_batch_process_manager::instance()->set_input(6, brdb_mask_img)    // input image
       && bprb_batch_process_manager::instance()->run_process();
 
   if (good)
