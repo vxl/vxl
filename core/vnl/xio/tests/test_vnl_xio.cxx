@@ -1,7 +1,8 @@
 #include <vnl/xio/vnl_xio_matrix_fixed.h>
-#include <vnl/xio/vnl_xio_quaternion.h>
-#include <vnl/xio/vnl_xio_vector.h>
+#include <vnl/xio/vnl_xio_matrix.h>
 #include <vnl/xio/vnl_xio_vector_fixed.h>
+#include <vnl/xio/vnl_xio_vector.h>
+#include <vnl/xio/vnl_xio_quaternion.h>
 
 #include <testlib/testlib_test.h>
 #include <vcl_sstream.h>
@@ -15,6 +16,17 @@ static void test_xtreeio_matrix_fixed()
   x_write_tree(s, m);
   TEST("XML I/O for vnl_matrix_fixed<double,2,4>", s.str(),
        "<vnl_matrix_fixed rows=\"2\" cols=\"4\">\n<row> <cell> 1.000000 </cell> <cell> 2.000000 </cell> <cell> 3.000000 </cell> <cell> 4.000000 </cell> </row> <row> <cell> 5.000000 </cell> <cell> 6.000000 </cell> <cell> 7.000000 </cell> <cell> 8.000000 </cell> </row>\n</vnl_matrix_fixed>\n");
+}
+
+static void test_xtreeio_matrix()
+{
+  vcl_stringstream s;
+
+  double data_m[8] = { 1, 2, 3, 4, 5, 6, 7, 8 };
+  vnl_matrix<double> m(data_m,2,4);
+  x_write_tree(s, m);
+  TEST("XML I/O for vnl_matrix<double>", s.str(),
+       "<vnl_matrix rows=\"2\" cols=\"4\">\n<row> <cell> 1.000000 </cell> <cell> 2.000000 </cell> <cell> 3.000000 </cell> <cell> 4.000000 </cell> </row> <row> <cell> 5.000000 </cell> <cell> 6.000000 </cell> <cell> 7.000000 </cell> <cell> 8.000000 </cell> </row>\n</vnl_matrix>\n");
 }
 
 static void test_xtreeio_vector_fixed()
@@ -59,6 +71,17 @@ static void test_xio_matrix_fixed()
        "<vnl_matrix_fixed rows=\"2\" cols=\"4\">\n1.000000 2.000000 3.000000 4.000000 5.000000 6.000000 7.000000 8.000000\n</vnl_matrix_fixed>\n");
 }
 
+static void test_xio_matrix()
+{
+  vcl_stringstream s;
+
+  double data_m[8] = { 1, 2, 3, 4, 5, 6, 7, 8 };
+  vnl_matrix<double> m(data_m,2,4);
+  x_write(s, m);
+  TEST("XML I/O for vnl_matrix<double>", s.str(),
+       "<vnl_matrix rows=\"2\" cols=\"4\">\n1.000000 2.000000 3.000000 4.000000 5.000000 6.000000 7.000000 8.000000\n</vnl_matrix>\n");
+}
+
 static void test_xio_vector_fixed()
 {
   vcl_stringstream s;
@@ -93,10 +116,12 @@ static void test_xio_quaternion()
 static void test_vnl_xio()
 {
   test_xtreeio_matrix_fixed();
+  test_xtreeio_matrix();
   test_xtreeio_vector_fixed();
   test_xtreeio_vector();
   test_xtreeio_quaternion();
   test_xio_matrix_fixed();
+  test_xio_matrix();
   test_xio_vector_fixed();
   test_xio_vector();
   test_xio_quaternion();

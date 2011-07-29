@@ -1,10 +1,11 @@
 # vxl/vnl/xio/CMakeLists.txt
 
 SET(vnl_xio_sources
-  vnl_xio_matrix_fixed.txx         vnl_xio_matrix_fixed.h
-  vnl_xio_vector_fixed.txx         vnl_xio_vector_fixed.h
-  vnl_xio_quaternion.txx           vnl_xio_quaternion.h  
-  vnl_xio_vector.txx               vnl_xio_vector.h 
+  vnl_xio_matrix_fixed.txx   vnl_xio_matrix_fixed.h
+  vnl_xio_matrix.txx         vnl_xio_matrix.h
+  vnl_xio_vector_fixed.txx   vnl_xio_vector_fixed.h
+  vnl_xio_vector.txx         vnl_xio_vector.h
+  vnl_xio_quaternion.txx     vnl_xio_quaternion.h
 )
 
 AUX_SOURCE_DIRECTORY(Templates vnl_xio_sources)
