@@ -15,6 +15,7 @@
 #define MIN_T .1f
 #define UNIT_SPHERE_RADIUS 0.6203504908994f // = 1/vcl_cbrt(vnl_math::pi*4/3);
 #define MAX_RAY_LEVEL 4
+#define SPLIT_FACTOR 1.0f
 
 ////////////////////////////////////////////////////////////////////////////////
 //Given Ray pyramid and scene bounding box, fills out T value pyramids
@@ -253,7 +254,7 @@ void cast_adaptive_cone_ray(
                 if ( intersect_volume > 0.0f ) {
                   //if the tree is a leaf, then update it's contribution
                   if ( tree_bit_at(ltree, currBitIndex) == 0 ) {
-                    if(currR > .75*UNIT_SPHERE_RADIUS*side_len && ray_level < MAX_RAY_LEVEL-1) 
+                    if(currR > SPLIT_FACTOR*UNIT_SPHERE_RADIUS*side_len && ray_level < 3 /*MAX_RAY_LEVEL-1*/) 
                       split=true; 
                   }
                   else { 
@@ -423,68 +424,89 @@ void cast_adaptive_cone_ray(
     // 3. redistribute data loop - used to redistribute information 
     // gleaned from ball/cell back to the cells 
     ///////////////////////////////////////////////////////////////////////////
-#if 0// #ifdef REDISTRIBUTE
-    for (int x=minCell.x; x<maxCell.x; ++x) {
-      for (int y=minCell.y; y<maxCell.y; ++y) {
-        for (int z=minCell.z; z<maxCell.z; ++z) {
+#ifdef REDISTRIBUTE
+    ray_level = aux_args.active_rays[llid]-1;  //0=fatest, 1=next, .., 3=finest
+    if(ray_level >= 0) {
+      
+      //recompute sphere (as this may have become active)
+      currT = read_currT(aux_args.currT,aux_args.master_threads);
+      float4 currRayD = ray_pyramid_access_safe(aux_args.rays, ray_level); 
+      float4 currSphere = (float4) ( ray_o + currT * currRayD ); 
+      
+      //calc and store the sphere's radius
+      sinAlpha = fabs( sin(currRayD.w) );
+      currR = currT * sinAlpha;
+      currSphere.w = currR; 
 
-          //load current block/tree, initialize cumsum buffer and cumIndex
-          int blkIndex = calc_blkInt(x, y, z, linfo->dims);
-          (*ltree) = as_uchar16(tree_array[blkIndex]);
-          csum[0] = (*ltree).s0;
-          int cumIndex = 1;
-          
-          //visit list for BFS through tree (denotes parents of cells that ought to be visited)
-          linked_list toVisit = new_linked_list(listMem, 73); 
-          push_back( &toVisit, -1 ); 
+      //minimum/maximum subblock eclipsed
+      int4 minCell = (int4) ( convert_int( clamp(currSphere.x - currR, 0.0f, linfo->dims.x-1.0f) ),
+                              convert_int( clamp(currSphere.y - currR, 0.0f, linfo->dims.y-1.0f) ),
+                              convert_int( clamp(currSphere.z - currR, 0.0f, linfo->dims.z-1.0f) ), 0 );
+      int4 maxCell = (int4) ( convert_int( clamp(currSphere.x + currR+1, 0.0f, linfo->dims.x-1.0f) ),
+                              convert_int( clamp(currSphere.y + currR+1, 0.0f, linfo->dims.y-1.0f) ),
+                              convert_int( clamp(currSphere.z + currR+1, 0.0f, linfo->dims.z-1.0f) ), 0 );
+      for (int x=minCell.x; x<maxCell.x; ++x) {
+        for (int y=minCell.y; y<maxCell.y; ++y) {
+          for (int z=minCell.z; z<maxCell.z; ++z) {
 
-          /////////////////////////////////////////////////////////////////////
-          //list keeps track of parents whose children need to be intersected 
-          //saves 8xSpace in local memory
-          unsigned deepest_gen = linfo->root_level; 
-          int max_cell = ((1 << (3*(deepest_gen+1))) - 1) / 7;
-          max_cell = min(585, max_cell);
-
-          //iterate through tree if there are children to get to
-          while ( !empty(&toVisit) )
-          {
-            //get front node off the top of the list, do an intersection for all 8 children
-            int pindex = (int) pop_front( &toVisit );
-            for(int currBitIndex=8*pindex + 1; currBitIndex < 8*pindex + 9; ++currBitIndex) {
-              if(currBitIndex < 0) continue; 
-              
-              //calculate the theoretical radius of this cell
-              int curr_depth = get_depth(currBitIndex);
-              float side_len = 1.0f / (float) (1<<curr_depth);
-
-              //intersect the cell,
-              float4 cellSphere = (float4) ( (float) x + centerX[currBitIndex], 
-                                             (float) y + centerY[currBitIndex], 
-                                             (float) z + centerZ[currBitIndex], 
-                                             UNIT_SPHERE_RADIUS * side_len ); 
-              float intersect_volume =  sphere_intersection_volume(currSphere, cellSphere);
-
-              //if it intersects, do one of two things
-              if ( intersect_volume > 0.0f ) {
-                //if the tree is a leaf, then update it's contribution
-                if ( tree_bit_at(ltree, currBitIndex) == 0 ) {
-                  //data index is relative data (data_index_cached) plus data_index_root
-                  int data_ptr = data_index_cached(ltree, currBitIndex, bit_lookup, csum, &cumIndex) + data_index_root(ltree);
-                  REDISTRIBUTE; // step_cell_cone(aux_args, data_ptr, intersect_volume, side_len * linfo->block_len,&intensity_norm, &weighted_int, &prob_surface);
-                }
-                else { 
-                  push_back( &toVisit, currBitIndex );  //add children to the visit list
-                }
-              }
+            //load current block/tree, initialize cumsum buffer and cumIndex
+            int blkIndex = calc_blkInt(x, y, z, linfo->dims);
+            (*ltree) = as_uchar16(tree_array[blkIndex]);
+            csum[0] = (*ltree).s0;
+            int cumIndex = 1;
             
-            } //end child for loop
-          } //end BFS while
-          // end step CELL portion of cone ray trace
-          ////////////////////////////////////////////////////////////////////
+            //visit list for BFS through tree (denotes parents of cells that ought to be visited)
+            linked_list toVisit = new_linked_list(listMem, 73); 
+            push_back( &toVisit, -1 ); 
+
+            /////////////////////////////////////////////////////////////////////
+            //list keeps track of parents whose children need to be intersected 
+            //saves 8xSpace in local memory
+            unsigned deepest_gen = linfo->root_level; 
+            int max_cell = ((1 << (3*(deepest_gen+1))) - 1) / 7;
+            max_cell = min(585, max_cell);
+
+            //iterate through tree if there are children to get to
+            while ( !empty(&toVisit) )
+            {
+              //get front node off the top of the list, do an intersection for all 8 children
+              int pindex = (int) pop_front( &toVisit );
+              for(int currBitIndex=8*pindex + 1; currBitIndex < 8*pindex + 9; ++currBitIndex) {
+                if(currBitIndex < 0) continue; 
+                
+                //calculate the theoretical radius of this cell
+                int curr_depth = get_depth(currBitIndex);
+                float side_len = 1.0f / (float) (1<<curr_depth);
+
+                //intersect the cell,
+                float4 cellSphere = (float4) ( (float) x + centerX[currBitIndex], 
+                                               (float) y + centerY[currBitIndex], 
+                                               (float) z + centerZ[currBitIndex], 
+                                               UNIT_SPHERE_RADIUS * side_len ); 
+                float intersect_volume =  sphere_intersection_volume(currSphere, cellSphere);
+
+                //if it intersects, do one of two things
+                if ( intersect_volume > 0.0f ) {
+                  //if the tree is a leaf, then update it's contribution
+                  if ( tree_bit_at(ltree, currBitIndex) == 0 ) {
+                    //data index is relative data (data_index_cached) plus data_index_root
+                    int data_ptr = data_index_cached(ltree, currBitIndex, bit_lookup, csum, &cumIndex) + data_index_root(ltree);
+                    REDISTRIBUTE; // step_cell_cone(aux_args, data_ptr, intersect_volume, side_len * linfo->block_len,&intensity_norm, &weighted_int, &prob_surface);
+                  }
+                  else { 
+                    push_back( &toVisit, currBitIndex );  //add children to the visit list
+                  }
+                }
+              
+              } //end child for loop
+            } //end BFS while
+            // end step CELL portion of cone ray trace
+            ////////////////////////////////////////////////////////////////////
           
         } //end z for
       } //end y for
     } //end x for
+  } // end active if
 #endif //REDISTRIBUTE
 
     ////////////////////////////////////////////////////////////////////////////

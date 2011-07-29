@@ -798,7 +798,7 @@ update_cone_data( __global RenderSceneInfo  * info,
                   __global int              * aux_beta)     // mean obs r aux array
 {
   float  cell_min = info->block_len/(float)(1<<info->root_level);
-  float  alphamin = -log(1.0-0.0001) / (cell_min*cell_min*cell_min);
+  float  alphamin = -log(1.0-0.00001) / (cell_min*cell_min*cell_min);
   float t_match = 2.5f;
   float init_sigma = 0.09f;
   float min_sigma = 0.03f;
@@ -840,7 +840,7 @@ update_cone_data( __global RenderSceneInfo  * info,
                               &Nobs_mix );
 
       //reset the cells in memory
-      alpha_array[gid]      = alpha; //max(alphamin, alpha);
+      alpha_array[gid]      = max(alphamin, alpha);
       float8 post_mix       = (float8) (mu0, sigma0, w0,
                                         mu1, sigma1, w1,
                                         mu2, sigma2) * (float) NORM;
