@@ -70,13 +70,13 @@ static void test_vector()
 
 static void test_cosine()
 {
-  int seed = 12345;
+  int seed = 1234567;
   for (int i=0; i<20; ++i)
   {
-    seed = (seed*16807)%2147483647L;
+    seed = (seed*1664525+1)&0xffffffff;
     double u = double(seed)/1367130552L;
     if (u<0) u = -u; // between 0 and pi/2
-    seed = (seed*16807)%2147483647L;
+    seed = (seed*1664525+1)&0xffffffff;
     double v = double(seed)/1000000000L;
     vcl_complex<double> c(u,v);
     vcl_complex<double> d = vcl_cos(c);
