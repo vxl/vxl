@@ -70,7 +70,7 @@ static void test_vector()
 
 static void test_cosine()
 {
-  int seed = 1234567;
+  unsigned int seed = 1234567;
   for (int i=0; i<20; ++i)
   {
     seed = (seed*1664525+1)&0xffffffff;
