@@ -20,7 +20,7 @@ bool vipl_median <ImgIn,ImgOut,DataIn,DataOut,PixelItr> :: section_applyop()
   int stopy  = vipl_filter<ImgIn,ImgOut,DataIn,DataOut,2,PixelItr>::stop(this->Y_Axis());
   for (int j = starty; j < stopy; ++j)
     for (int i = startx; i < stopx; ++i) {
-      register int count = 0;
+      register unsigned int count = 0;
       v[count++] = fgetpixel(in, i, j, DataIn(0));
       for (int x=0; x<=size; ++x) for (int y=0; y<=size; ++y) if (mask()[x][y]) {
         v[count++] = getpixel(in, i+x, j+y, DataIn(0));
@@ -29,8 +29,8 @@ bool vipl_median <ImgIn,ImgOut,DataIn,DataOut,PixelItr> :: section_applyop()
         v[count++] = getpixel(in, i-x, j-y, DataIn(0));
       }
       // qsort:
-      for (int d=count/2; d>0; d=d/2)
-        for (int ii=d; ii<count; ii++)
+      for (unsigned int d=count/2; d>0; d/=2)
+        for (unsigned int ii=d; ii<count; ++ii)
           for (int jj=ii-d; jj>=0 && v[jj]>v[jj+d]; jj-=d) {
             DataIn t = v[jj]; v[jj] = v[jj+d]; v[jj+d] = t;
           }
