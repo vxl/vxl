@@ -337,8 +337,6 @@ bool boxm2_ocl_update_color_process(bprb_func_process& pro)
         vul_timer transfer;
         bocl_mem* blk       = opencl_cache->get_block(*id);
         bocl_mem* alpha     = opencl_cache->get_data<BOXM2_ALPHA>(*id, 0, false);
-        bocl_mem* mog       = opencl_cache->get_data(*id,data_type, 0, false);
-        bocl_mem* num_obs   = opencl_cache->get_data(*id, num_obs_type, 0, false);
         bocl_mem * blk_info  = opencl_cache->loaded_block_info();
 
         //make sure the scene info data size reflects the real data size
@@ -346,6 +344,12 @@ bool boxm2_ocl_update_color_process(bprb_func_process& pro)
         int alphaTypeSize = boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
         info_buffer->data_buffer_length = (int) (alpha->num_bytes()/alphaTypeSize);
         blk_info->write_to_buffer((queue));
+
+        // data type string may contain an identifier so determine the buffer size
+        int nobsTypeSize = (int)boxm2_data_info::datasize(num_obs_type);
+        int appTypeSize = (int) boxm2_data_info::datasize(data_type); 
+        bocl_mem* mog       = opencl_cache->get_data(*id, data_type, info_buffer->data_buffer_length*appTypeSize, false);    
+        bocl_mem* num_obs   = opencl_cache->get_data(*id, num_obs_type, info_buffer->data_buffer_length*nobsTypeSize, false);
 
         //grab an appropriately sized AUX data buffer
         int auxTypeSize = boxm2_data_info::datasize(boxm2_data_traits<BOXM2_AUX0>::prefix());
