@@ -458,7 +458,7 @@ void update_yuv_appearance(float8* mixture, float* nobs, float4 mean_obs, float 
   float sigma = (*mixture).s4; 
   update_gauss(mean_obs.x, rho, &mu, &sigma, min_sigma);
   (*mixture).s0 = mu; 
-  (*mixture).s4 = 0.1; 
+  (*mixture).s4 = 0.07; 
   
   //u channel
   mu = (*mixture).s1;
@@ -549,7 +549,7 @@ update_bit_scene_main(__global RenderSceneInfo  * info,
       alpha *= cell_beta; 
       
       //reset the cells in memory
-      alpha_array[gid]      = max(alphamin, alpha);
+      alpha_array[gid]      = max(alphamin, alpha);  //TODO COMMENTED OUT FOR PAINTING
       float8 post_mix       = mixture * (float) NORM;
       CONVERT_FUNC_SAT_RTE(mixture_array[gid],post_mix)
     }
