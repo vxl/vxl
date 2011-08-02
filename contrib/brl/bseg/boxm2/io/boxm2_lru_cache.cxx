@@ -30,9 +30,11 @@ boxm2_lru_cache::~boxm2_lru_cache()
   {
     for (vcl_map<boxm2_block_id, boxm2_data_base*>::iterator it = iter->second.begin(); it != iter->second.end(); it++) {
       boxm2_block_id id = it->first;
+#if 0 //Currently causing some blocks to not save
       if (!it->second->read_only_) { 
         boxm2_sio_mgr::save_block_data_base(scene_dir_, it->first, it->second, iter->first);
       }
+#endif
       // now throw it away
       delete it->second;  
     }
@@ -43,8 +45,10 @@ boxm2_lru_cache::~boxm2_lru_cache()
     iter != cached_blocks_.end(); iter++)
   {
     boxm2_block_id id = iter->first;
+#if 0 //Currently causing some blocks to not save
     if (!iter->second->read_only()) 
       boxm2_sio_mgr::save_block(scene_dir_, iter->second);
+#endif 
     delete iter->second;
   }
 }
@@ -79,7 +83,6 @@ boxm2_block* boxm2_lru_cache::get_block(boxm2_block_id id)
   return loaded;
 }
 
-
 //: get data by type and id
 boxm2_data_base* boxm2_lru_cache::get_data_base(boxm2_block_id id, vcl_string type, vcl_size_t num_bytes, bool read_only)
 {
@@ -96,10 +99,20 @@ boxm2_data_base* boxm2_lru_cache::get_data_base(boxm2_block_id id, vcl_string ty
       iter->second->enable_write();
     return iter->second;
   }
+  
+  //grab from disk
+  boxm2_data_base* loaded = boxm2_sio_mgr::load_block_data_generic(scene_dir_, id, type);
 
-  //if num_bytes is greater than zero, then you're initializing a new block
-  boxm2_data_base* loaded; 
+  //if num_bytes is greater than zero, then you're guaranteed to return a data size with that many bytes
   if(num_bytes > 0) {
+    //if loaded from disk is good and it matches size, you found it, return
+    if(loaded && loaded->buffer_length()==num_bytes) {
+      //update data map
+      data_map[id] = loaded;
+      return loaded;
+    }
+    
+    //requesting a specific number of bytes, and not found it on disk
     vcl_cout<<"boxm2_lru_cache::initializing empty data "<<id
             <<" type: "<<type
             <<" to size: "<<num_bytes<<" bytes"<<vcl_endl;
@@ -108,7 +121,7 @@ boxm2_data_base* boxm2_lru_cache::get_data_base(boxm2_block_id id, vcl_string ty
   }
   else {
     //otherwise it's a miss, load sync from disk, update cache
-    loaded = boxm2_sio_mgr::load_block_data_generic(scene_dir_, id, type);
+    //loaded = boxm2_sio_mgr::load_block_data_generic(scene_dir_, id, type);
     if (!loaded && scene_->block_exists(id)) {
       vcl_cout<<"boxm2_lru_cache::initializing empty data "<<id<<" type: "<<type<<vcl_endl;
       boxm2_block_metadata data = scene_->get_block_metadata(id);
@@ -134,7 +147,9 @@ void boxm2_lru_cache::remove_data_base(boxm2_block_id id, vcl_string type)
   { 
     // found the block,
     boxm2_data_base* litter = data_map[id]; 
-    if (!litter->read_only_) {// save it
+    if (!litter->read_only_) {
+      // save it
+      vcl_cout<<"boxm2_lru_cache::remove_data_base of type "<<type<<"; saving to disk"<<vcl_endl;
       boxm2_sio_mgr::save_block_data_base(scene_dir_, id, litter, type);
     } 
     // now throw it away
@@ -157,9 +172,11 @@ void boxm2_lru_cache::replace_data_base(boxm2_block_id id, vcl_string type, boxm
     // found the block,
     boxm2_data_base* litter = data_map[id]; 
     replacement->read_only_ = litter->read_only_; 
-    if (!litter->read_only_) {// save it
+#if 0 // don't need to write on a replace data...
+    if (!litter->read_only_) {
       boxm2_sio_mgr::save_block_data_base(scene_dir_, id, litter, type);
-    } 
+    }
+#endif 
     // now throw it away
     delete litter; 
     data_map.erase(rem); 
@@ -221,7 +238,7 @@ vcl_string boxm2_lru_cache::to_string()
   return stream.str();
 }
 
-//: dumps writeable data onto disk
+//: dumps all data onto disk
 void boxm2_lru_cache::write_to_disk()
 {
    //: save the data and delete
@@ -230,9 +247,8 @@ void boxm2_lru_cache::write_to_disk()
   {
     for (vcl_map<boxm2_block_id, boxm2_data_base*>::iterator it = iter->second.begin(); it != iter->second.end(); it++) {
       boxm2_block_id id = it->first;
-      if (!it->second->read_only_) {
+      //if (!it->second->read_only_) 
         boxm2_sio_mgr::save_block_data_base(scene_dir_, it->first, it->second, iter->first);
-      }
     }
   }
 
@@ -240,8 +256,8 @@ void boxm2_lru_cache::write_to_disk()
     iter != cached_blocks_.end(); iter++)
   {
     boxm2_block_id id = iter->first;
-    if (!iter->second->read_only())
-      boxm2_sio_mgr::save_block(scene_dir_, iter->second);
+    //if (!iter->second->read_only())
+    boxm2_sio_mgr::save_block(scene_dir_, iter->second);
   }
 }
 
