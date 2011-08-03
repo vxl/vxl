@@ -7,6 +7,7 @@ MANPAGE_SOURCES += vnl_xio_matrix_fixed.txx
 MANPAGE_SOURCES += vnl_xio_quaternion.txx
 MANPAGE_SOURCES += vnl_xio_vector.txx
 MANPAGE_SOURCES += vnl_xio_vector_fixed.txx
+MANPAGE_SOURCES += vnl_xio_matrix.txx
 
 #######################################
 include ${VXLROOT}/config/top-params.mk

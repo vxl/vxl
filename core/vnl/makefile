@@ -65,6 +65,7 @@ MANPAGE_SOURCES += vnl_quaternion.txx
 SOURCES += vnl_rational.cxx
 # Arbitrary precision integers
 SOURCES += vnl_bignum.cxx
+SOURCES += vnl_decnum.cxx
 # Finite field and finite ring numbers and arithmetic
 MANPAGE_SOURCES += vnl_finite.h
 # p-adic numbers are actually a limit case in n of GF(p^n): cannot implement
