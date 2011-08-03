@@ -21,11 +21,12 @@ void boxm2_trajectory::init_cameras(double incline0, double incline1, double rad
   //generate a trajectory by varying the incline, azimuth and radius
   double currInc = incline0;
   double currRadius = radius;
-  double currAz = 0.0;
+  double currAz = -90.0;
 
   //Generate a spiraling view around the volume
   double dInc = (incline1-incline0)/360.0;
-  for (currAz=0.0; currAz<360.0; currAz++, currInc+=dInc)
+  double maxAx = currAz + 360.0;
+  for ( ; currAz<maxAx; currAz++, currInc+=dInc)
   {
     vpgl_perspective_camera<double>* cam =
         boxm2_util::construct_camera(currInc, currAz, currRadius, ni, nj, bb, false);
@@ -35,7 +36,7 @@ void boxm2_trajectory::init_cameras(double incline0, double incline1, double rad
   //now generate a smooth incline view
   //factor to smoothly slow down azimuth delta
   double slowdownAz = 1.0;
-  currAz = 0.0f;
+  //currAz = 0.0f;
   for ( ;currInc>15.0; currInc-=.5, currAz += slowdownAz)
   {
     vpgl_perspective_camera<double>* cam =
