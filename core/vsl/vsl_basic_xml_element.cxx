@@ -10,6 +10,12 @@ void vsl_basic_xml_element::add_attribute_list(vcl_vector<vcl_pair<vcl_string, v
   }
 }
 
+void vsl_basic_xml_element::add_attribute(vcl_string attr_name, vcl_string value)
+{
+  vcl_pair<vcl_string, vcl_string> attr(attr_name, value);
+  attrs_.push_back(attr);
+}
+
 void vsl_basic_xml_element::add_attribute(vcl_string attr_name, double value)
 {
   vcl_string value_str = toString(value);
@@ -17,23 +23,10 @@ void vsl_basic_xml_element::add_attribute(vcl_string attr_name, double value)
   attrs_.push_back(attr);
 }
 
-void vsl_basic_xml_element::add_attribute(vcl_string attr_name, int value)
+void vsl_basic_xml_element::add_attribute(vcl_string attr_name, long value)
 {
   vcl_string value_str = toString(value); 
   vcl_pair<vcl_string, vcl_string> attr(attr_name, value_str);
-  attrs_.push_back(attr);
-}
-
-void vsl_basic_xml_element::add_attribute(vcl_string attr_name, unsigned long value)
-{
-  vcl_string value_str = toString(value);
-  vcl_pair<vcl_string, vcl_string> attr(attr_name, value_str);
-  attrs_.push_back(attr);
-}
-
-void vsl_basic_xml_element::add_attribute(vcl_string attr_name, vcl_string value)
-{
-  vcl_pair<vcl_string, vcl_string> attr(attr_name, value);
   attrs_.push_back(attr);
 }
 
@@ -58,11 +51,13 @@ void vsl_basic_xml_element::append_cdata(int cdata)
   cdata_.append(toString(cdata));
 }
 
+#if 0
 bool vsl_basic_xml_element::delete_attribute(vcl_string /*attr_name*/)
 {
   vcl_cerr << "vsl_basic_xml_element::delete_attribute() not yet implemented\n";
   return false;
 }
+#endif
 
 void vsl_basic_xml_element::x_write(vcl_ostream& ostr)
 {
