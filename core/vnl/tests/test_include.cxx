@@ -18,6 +18,7 @@
 #include <vnl/vnl_crs_index.h>
 #include <vnl/vnl_cost_function.h>
 #include <vnl/vnl_cross_product_matrix.h>
+#include <vnl/vnl_decnum.h>
 #include <vnl/vnl_definite_integral.h>
 #include <vnl/vnl_det.h>
 #include <vnl/vnl_diag_matrix.h>

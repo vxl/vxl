@@ -1,6 +1,7 @@
 #include <testlib/testlib_register.h>
 
 DECLARE( test_bignum );
+DECLARE( test_decnum );
 DECLARE( test_complex );
 DECLARE( test_inverse );
 DECLARE( test_diag_matrix );
@@ -45,6 +46,7 @@ void
 register_tests()
 {
   REGISTER( test_bignum );
+  REGISTER( test_decnum );
   REGISTER( test_complex );
   REGISTER( test_inverse );
   REGISTER( test_diag_matrix );

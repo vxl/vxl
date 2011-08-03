@@ -138,6 +138,8 @@ SET( vnl_sources
   vnl_rational.cxx             vnl_rational.h
   # Arbitrary precision integers
   vnl_bignum.cxx               vnl_bignum.h
+  # Arbitrary precision decimal integers
+  vnl_decnum.cxx               vnl_decnum.h
   # Finite field and finite ring numbers and arithmetic
   vnl_finite.h
 
