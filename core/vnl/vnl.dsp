@@ -201,6 +201,9 @@ SOURCE=.\vnl_random.cxx
 SOURCE=.\vnl_sparse_matrix_linear_system.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\vnl_decnum.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/vnl_rank+double-.cxx
 # End Source File
 # Begin Source File
@@ -1282,6 +1285,9 @@ SOURCE=.\vnl_c_na_vector.h
 # End Source File
 # Begin Source File
 SOURCE=.\vnl_c_na_vector.txx
+# End Source File
+# Begin Source File
+SOURCE=.\vnl_decnum.h
 # End Source File
 # End Group
 # End Target

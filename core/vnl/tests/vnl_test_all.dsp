@@ -208,6 +208,9 @@ SOURCE=.\test_sparse_matrix.cxx
 SOURCE=.\test_pow_log.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\test_decnum.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\test_include.cxx
 # End Source File
 # Begin Source File
