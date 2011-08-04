@@ -29,7 +29,7 @@ static void test_operators()
   c = a + b; TEST("sum", c, vcl_complex<double>(2,-1));
   c = a - b; TEST("difference", c, vcl_complex<double>(-12,1));
   c = a * b; TEST("product", c, vcl_complex<double>(-35,5));
-  c = a / b; TEST("quotient", c, vcl_complex<double>(-0.7,-0.1));
+  c = a / b; TEST_NEAR("quotient", c, vcl_complex<double>(-0.7,-0.1), 1e-12);
   a += b; TEST("+=", a, vcl_complex<double>(2,-1));
   a -= b; TEST("-=", a, vcl_complex<double>(-5));
   a *= b; TEST("*=", a, vcl_complex<double>(-35,5));
