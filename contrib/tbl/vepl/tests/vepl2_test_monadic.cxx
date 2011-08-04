@@ -37,7 +37,7 @@ int vepl2_test_monadic()
 
   ONE_TEST(vepl2_monadic_sqr,byte_img,byte_ori,vxl_byte,82410,m+"_sqr_byte",args);
   ONE_TEST(vepl2_monadic_sqr,shrt_img,shrt_ori,vxl_uint_16,21755370,m+"_sqr_short",args);
-  ONE_TEST(vepl2_monadic_sqr,int__img,int__ori,vxl_uint_32,202896874,m+"_sqr_int",args);
+  ONE_TEST(vepl2_monadic_sqr,int__img,int__ori,vxl_uint_32,4092085098U,m+"_sqr_int",args);
   ONE_TEST(vepl2_monadic_sqr,flot_img,flot_ori,float,282,m+"_sqr_float",args);
   ONE_TEST(vepl2_monadic_sqr,dble_img,dble_ori,double,282,m+"_sqr_double",args);
 

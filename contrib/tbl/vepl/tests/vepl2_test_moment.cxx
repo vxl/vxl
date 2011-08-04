@@ -13,7 +13,8 @@
 #include "test_driver.h"
 #include <vxl_config.h> // for vxl_byte
 
-int vepl2_test_moment() {
+int vepl2_test_moment()
+{
   vcl_cout << "Starting vepl2_moment tests\n"
            << "Creating test and output images ...";
   vil_image_resource_sptr byte_img = CreateTest8bitImage(32,32),  byte_ori = CreateTest8bitImage(32,32);
@@ -27,7 +28,7 @@ int vepl2_test_moment() {
 #define args ,2
   FUZ_TEST(vepl2_moment,byte_img,byte_ori,vxl_byte,59985,m+"_byte",args);
   FUZ_TEST(vepl2_moment,shrt_img,shrt_ori,vxl_uint_16,23424263,m+"_short",args);
-  ONE_TEST(vepl2_moment,int__img,int__ori,vxl_uint_32,199867707,m+"_int",args);
+  ONE_TEST(vepl2_moment,int__img,int__ori,vxl_uint_32,2658594499U,m+"_int",args);
   ONE_TEST(vepl2_moment,flot_img,flot_ori,float,283,m+"_float",args);
   ONE_TEST(vepl2_moment,dble_img,dble_ori,double,283,m+"_double",args);
 

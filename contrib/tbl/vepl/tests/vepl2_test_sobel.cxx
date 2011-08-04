@@ -29,7 +29,7 @@ int vepl2_test_sobel()
 #define args
   ONE_TEST(vepl2_sobel,byte_img,byte_ori,vxl_byte,95634,m+"_byte",args);
   ONE_TEST(vepl2_sobel,shrt_img,shrt_ori,vxl_uint_16,24640914,m+"_short",args);
-  ONE_TEST(vepl2_sobel,int__img,int__ori,vxl_uint_32,26738762,m+"_int",args);
+  ONE_TEST(vepl2_sobel,int__img,int__ori,vxl_uint_32,4193710,m+"_int",args);
   ONE_TEST(vepl2_sobel,flot_img,flot_ori,float,301,m+"_float",args);
   ONE_TEST(vepl2_sobel,dble_img,dble_ori,double,301,m+"_double",args);
   ONE_TEST(vepl2_sobel,colr_img,colr_ori,vil_rgb<vxl_byte>,186894,m+"_colour",args);

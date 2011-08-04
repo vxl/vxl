@@ -139,7 +139,7 @@ vil_image_resource_sptr CreateTestdoubleImage(int wd, int ht)
 // Compare two images and return true if their difference is not v
 bool difference(vil_image_resource_sptr a,
                 vil_image_resource_sptr b,
-                vxl_int_32 v, vcl_string const& m, bool exact)
+                vxl_uint_32 v, vcl_string const& m, bool exact)
 {
   unsigned int sx = a->ni(),  sy = a->nj(), sp = a->nplanes();
   TEST("# rows match", sx, b->ni());
@@ -149,10 +149,8 @@ bool difference(vil_image_resource_sptr a,
 
   if (!exact) return false;
 
-  vxl_int_32 ret = 0;
+  vxl_uint_32 ret = 0;
   // run over all pixels except for an outer border of 1 pixel:
-  // The ABSX parameter is used to suppress compiler warnings by not computing
-  // the absolute value of unsigned types.
 #define DIFF(T) /* for non-integral types like float and double */ {\
   T r = (T)0; \
   vil_image_view<T > v1 = a->get_view(); \
@@ -162,11 +160,14 @@ bool difference(vil_image_resource_sptr a,
   for (unsigned int p=0; p<sp; ++p) \
     for (unsigned int j=1; j+1<sy; ++j) \
       for (unsigned int i=1; i+1<sx; ++i) { \
-        T x = (*(it1+i*v1.istep()+j*v1.jstep()+p*v1.planestep())) \
-             -(*(it2+i*v2.istep()+j*v2.jstep()+p*v2.planestep())); \
-        r += x<0?-x:x; \
+        r += (*(it1+i*v1.istep()+j*v1.jstep()+p*v1.planestep()) > \
+              *(it2+i*v2.istep()+j*v2.jstep()+p*v2.planestep())) ? \
+             (*(it1+i*v1.istep()+j*v1.jstep()+p*v1.planestep()) - \
+              *(it2+i*v2.istep()+j*v2.jstep()+p*v2.planestep())) : \
+             (*(it2+i*v2.istep()+j*v2.jstep()+p*v2.planestep()) - \
+              *(it1+i*v1.istep()+j*v1.jstep()+p*v1.planestep())); \
       } \
-  ret = (vxl_int_32)(r+0.5); \
+  ret = (vxl_uint_32)(r+0.5); \
 }
 #define DIFI(T) /* for integral and for very short types like e.g. bool */ {\
   ret = 0; \
@@ -177,9 +178,12 @@ bool difference(vil_image_resource_sptr a,
   for (unsigned int p=0; p<sp; ++p) \
     for (unsigned int j=1; j+1<sy; ++j) \
       for (unsigned int i=1; i+1<sx; ++i) { \
-        vxl_int_32 x = (vxl_int_32)(*(it1+i*v1.istep()+j*v1.jstep()+p*v1.planestep())) \
-                      -(vxl_int_32)(*(it2+i*v2.istep()+j*v2.jstep()+p*v2.planestep())); \
-        ret += x<0?-x:x; \
+        ret += (*(it1+i*v1.istep()+j*v1.jstep()+p*v1.planestep()) > \
+                *(it2+i*v2.istep()+j*v2.jstep()+p*v2.planestep())) ? \
+               (*(it1+i*v1.istep()+j*v1.jstep()+p*v1.planestep()) - \
+                *(it2+i*v2.istep()+j*v2.jstep()+p*v2.planestep())) : \
+               (*(it2+i*v2.istep()+j*v2.jstep()+p*v2.planestep()) - \
+                *(it1+i*v1.istep()+j*v1.jstep()+p*v1.planestep())); \
       } \
 }
   if (a->pixel_format() == VIL_PIXEL_FORMAT_FLOAT) { DIFF(float); }

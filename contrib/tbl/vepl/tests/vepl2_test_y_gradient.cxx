@@ -29,7 +29,7 @@ int vepl2_test_y_gradient()
 #define args
   ONE_TEST(vepl2_y_gradient,byte_img,byte_ori,vxl_byte,90104,m+"_byte",args);
   ONE_TEST(vepl2_y_gradient,shrt_img,shrt_ori,vxl_uint_16,23199224,m+"_short",args);
-  ONE_TEST(vepl2_y_gradient,int__img,int__ori,vxl_uint_32,21757994,m+"_int",args);
+  ONE_TEST(vepl2_y_gradient,int__img,int__ori,vxl_uint_32,8912376,m+"_int",args);
   ONE_TEST(vepl2_y_gradient,flot_img,flot_ori,float,282,m+"_float",args);
   ONE_TEST(vepl2_y_gradient,dble_img,dble_ori,double,282,m+"_double",args);
   ONE_TEST(vepl2_y_gradient,colr_img,colr_ori,vil_rgb<vxl_byte>,108104,m+"_colour",args);

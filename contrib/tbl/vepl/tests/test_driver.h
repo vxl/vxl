@@ -33,7 +33,7 @@ vil_image_resource_sptr CreateTestdoubleImage(int wd, int ht);
 // Compare two images and return true if their difference is not v
 bool difference(vil_image_resource_sptr a,
                 vil_image_resource_sptr b,
-                vxl_int_32 v, vcl_string const& m, bool exact=true);
+                vxl_uint_32 v, vcl_string const& m, bool exact=true);
 
 #define ONE_TEST(x,i,r,T,v,m,a) { vcl_cout << "Starting "<<m<<" test\n"; i = x(r a); difference(i,r,v,m); }
 #define FUZ_TEST(x,i,r,T,v,m,a) { vcl_cout << "Starting "<<m<<" test\n"; i = x(r a); difference(i,r,v,m,false); }
