@@ -246,7 +246,7 @@ class vnl_decnum
 
 //: decimal output
 // \relatesalso vnl_decnum
-vcl_ostream& operator<<(vcl_ostream& s, vnl_decnum const& r)
+inline vcl_ostream& operator<<(vcl_ostream& s, vnl_decnum const& r)
 { return s << vcl_string(r); }
 
 //: decimal input
