@@ -46,8 +46,10 @@ static void test_int_pow()
   TEST("Even exponent of -1", int_pow(-1, 12346U), 1);
   TEST("Odd exponent of -1", int_pow(-1, 12345U), -1);
   TEST("Large power of 2", int_pow(2, 30U), 0x40000000);
+#ifdef TEST_SIGNED_OVERFLOW // "signed overflow" might give compiler warnings or even worse ...
   TEST("Power of 2 with overflow", int_pow(2, 31U), (int)(-0x80000000L));
   TEST("Power of 2 with even more overflow", int_pow(2, 32U), 0);
+#endif // TEST_SIGNED_OVERFLOW
   TEST("Just a \"random\" case...", int_pow(-19, 7U), -893871739);
 }
 
