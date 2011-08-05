@@ -35,5 +35,6 @@ void boxm2_cpp_register::register_process()
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_cpp_create_aux_data_process, "boxm2CppCreateAuxDataProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_cpp_batch_update_process, "boxm2CppBatchUpdateProcess");
 
-  
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_cpp_merge_process, "boxm2CppMergeProcess");
+
 }

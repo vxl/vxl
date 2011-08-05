@@ -26,4 +26,5 @@ DECLARE_FUNC_CONS(boxm2_cpp_ray_app_density_process);
 DECLARE_FUNC_CONS(boxm2_cpp_create_aux_data_process);
 DECLARE_FUNC_CONS(boxm2_cpp_batch_update_process);
 
+DECLARE_FUNC_CONS(boxm2_cpp_merge_process);
 #endif
