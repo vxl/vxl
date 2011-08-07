@@ -161,8 +161,14 @@ bool boxm2_ocl_render_cone_expected_image_process(bprb_func_process& pro)
   unsigned cl_nj=RoundUp(nj,lthreads[1]);
   float* buff = new float[cl_ni*cl_nj];
   vcl_fill(buff, buff+cl_ni*cl_nj, 0.0f);
+  unsigned char* ray_level_buff = new unsigned char[cl_ni*cl_nj];
+  vcl_fill(ray_level_buff, ray_level_buff+cl_ni*cl_nj, 0);
+
   bocl_mem_sptr exp_image=new bocl_mem(device->context(),buff,cl_ni*cl_nj*sizeof(float),"exp cone image buffer");
   exp_image->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
+
+  bocl_mem_sptr ray_level_image=new bocl_mem(device->context(),ray_level_buff,cl_ni*cl_nj*sizeof(unsigned char),"exp cone image buffer");
+  ray_level_image->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
   //write image dims (real img dims, not ni, nj)
   int img_dim_buff[] = {0, 0, ni, nj};
@@ -177,7 +183,7 @@ bool boxm2_ocl_render_cone_expected_image_process(bprb_func_process& pro)
 
   ////: run expected image function
   render_cone_expected_image(scene, device, opencl_cache, queue,
-                             cam, exp_image, vis_image, exp_img_dim,
+                             cam, exp_image, vis_image,ray_level_image, exp_img_dim,
                              data_type, kernels[identifier][0], lthreads, cl_ni, cl_nj);
 
   // normalize
