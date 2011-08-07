@@ -60,19 +60,13 @@ bool vil_block_cache::remove_block()
 {
   if (queue_.size()==0)
     return false;
-
-  //force the queue to reorder
-  bcell* temp = queue_.top();
-  queue_.pop();
-  //
-  queue_.push(temp);
   bcell* top_cell = queue_.top();
   vcl_vector<bcell*>::iterator bit;
   bit = vcl_find(blocks_.begin(), blocks_.end(), top_cell);
   if (bit == blocks_.end())
     return false;
   blocks_.erase(bit);
-  queue_.pop();//finally remove the top cell from the queue
+  queue_.pop();//remove the top cell from the queue
   delete top_cell;
   return true;
 }

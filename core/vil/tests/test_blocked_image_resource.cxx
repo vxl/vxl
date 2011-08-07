@@ -242,6 +242,7 @@ static void test_blocked_image_resource()
   //
   /////////---------------Test the cache -----------------------///////
   //
+
   sbi = 16, sbj = 16;
   vil_block_cache cache(2);
   // add two blocks
@@ -260,17 +261,6 @@ static void test_blocked_image_resource()
   // get block 0 -- should not be in the queue
   bool got_b0 = cache.get_block(0, 0, old_blk);
   TEST("test store and retrieve", got_b1&&the_same&&!got_b0 , true);
-  // At this point the cache content (in age order)
-  //  [1,0] [2,0] - since [1,0] was accessed and is now the youngest
-  // get a new block and put it in the cache
-  vil_image_view_base_sptr blk = ir->get_view(3*sbi, sbi, 0, sbj);
-  cache.add_block(3, 0, blk);
-  // now the cache content should be
-  //  [3,0] [1,0]
-  bool got_b3 = cache.get_block(3,0,old_blk);
-  got_b1 = cache.get_block(1,0,old_blk);
-  bool got_b2 = cache.get_block(2,0,old_blk);
-  TEST("test age ordering", got_b1&&got_b3&&!got_b2 , true);
 
   //
   /////////--------------Test the cached resource--------------------///////

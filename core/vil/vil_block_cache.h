@@ -60,7 +60,7 @@ class vil_block_cache
     { if (c1&&c2)return c1->birthdate_ > c2->birthdate_; else return false; }
   };
   //:block queue member
-  vcl_priority_queue<compare, vcl_vector<bcell*> > queue_;
+  vcl_priority_queue<bcell*, vcl_vector<bcell*>, compare > queue_;
   //:block index member
   vcl_vector<bcell*> blocks_;
   //:capacity in blocks
