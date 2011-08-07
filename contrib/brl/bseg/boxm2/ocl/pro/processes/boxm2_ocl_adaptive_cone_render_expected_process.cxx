@@ -31,7 +31,7 @@
 namespace boxm2_ocl_adaptive_cone_render_expected_process_globals
 {
   const unsigned n_inputs_ = 6;
-  const unsigned n_outputs_ = 1;
+  const unsigned n_outputs_ = 2;
   vcl_size_t lthreads[2]={8,8};
 
   static vcl_map<vcl_string,vcl_vector<bocl_kernel*> > kernels;
@@ -100,6 +100,7 @@ bool boxm2_ocl_adaptive_cone_render_expected_process_cons(bprb_func_process& pro
   // process has 1 output:
   vcl_vector<vcl_string>  output_types_(n_outputs_);
   output_types_[0] = "vil_image_view_base_sptr";
+  output_types_[1] = "vil_image_view_base_sptr";
 
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 }
@@ -165,8 +166,14 @@ bool boxm2_ocl_adaptive_cone_render_expected_process(bprb_func_process& pro)
   unsigned cl_nj=RoundUp(nj,lthreads[1]);
   float* buff = new float[cl_ni*cl_nj];
   vcl_fill(buff, buff+cl_ni*cl_nj, 0.0f);
+  unsigned char* ray_level_buff = new unsigned char[cl_ni*cl_nj];
+  vcl_fill(ray_level_buff, ray_level_buff+cl_ni*cl_nj, 0);
+
   bocl_mem_sptr exp_image=new bocl_mem(device->context(),buff,cl_ni*cl_nj*sizeof(float),"exp cone image buffer");
   exp_image->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
+
+  bocl_mem_sptr ray_level_image=new bocl_mem(device->context(),ray_level_buff,cl_ni*cl_nj*sizeof(unsigned char),"exp cone image buffer");
+  ray_level_image->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
   //write image dims (real img dims, not ni, nj)
   int img_dim_buff[] = {0, 0, ni, nj};
@@ -181,24 +188,9 @@ bool boxm2_ocl_adaptive_cone_render_expected_process(bprb_func_process& pro)
 
   ////: run expected image function
   render_cone_expected_image(scene, device, opencl_cache, queue,
-                             cam, exp_image, vis_image, exp_img_dim,
+                             cam, exp_image, vis_image,ray_level_image, exp_img_dim,
                              data_type, kernels[identifier][0], lthreads, cl_ni, cl_nj);
 
-  // normalize
-  //{
-    //vcl_size_t gThreads[] = {cl_ni,cl_nj};
-    //bocl_kernel* normalize_kern = kernels[identifier][1];
-    //normalize_kern->set_arg( exp_image.ptr() );
-    //normalize_kern->set_arg( vis_image.ptr() );
-    //normalize_kern->set_arg( exp_img_dim.ptr());
-    //normalize_kern->execute( queue, 2, lthreads, gThreads);
-    //clFinish(queue);
-
-    ////clear render kernel args so it can reset em on next execution
-    //normalize_kern->clear_args();
-  //}
-
-  // read out expected image
   exp_image->read_to_buffer(queue);
   vil_image_view<float>* exp_img_out=new vil_image_view<float>(ni,nj);
   for (unsigned c=0;c<nj;c++)
@@ -208,16 +200,25 @@ bool boxm2_ocl_adaptive_cone_render_expected_process(bprb_func_process& pro)
   ///debugging save vis, pre, norm images
 #if 1
   vis_image->read_to_buffer(queue);
+  ray_level_image->read_to_buffer(queue);
+  clFinish(queue);
   int idx = 0; 
-  vil_image_view<float> vis_view(cl_ni,cl_nj);
+  vil_image_view<float> * vis_view=new vil_image_view<float>(cl_ni,cl_nj);
+
   for (unsigned c=0;c<cl_nj;++c) {
-    for (unsigned r=0;r<cl_ni;++r) {
-      vis_view(r,c) = vis_buff[idx];
-      idx++; 
-    }
+      for (unsigned r=0;r<cl_ni;++r) {
+          float vis = vis_buff[idx];
+          if(ray_level_buff[idx] < 4) 
+          {
+              float pow_factor =vcl_pow(0.25f,(float) (4-ray_level_buff[idx]));
+              vis =vcl_pow(vis,pow_factor);
+          }
+          (*vis_view)(r,c) = vis;
+          idx++; 
+      }
   }
-  vil_save( vis_view, "vis_render_debug.tiff"); 
-  vil_save( *exp_img_out, "exp_render_debug.tiff");
+  //vil_save( vis_view, "vis_render_debug.tiff"); 
+  //vil_save( *exp_img_out, "exp_render_debug.tiff");
 #endif
 
   delete [] buff;
@@ -227,5 +228,6 @@ bool boxm2_ocl_adaptive_cone_render_expected_process(bprb_func_process& pro)
   // store scene smaprt pointer
   i=0;
   pro.set_output_val<vil_image_view_base_sptr>(i++, exp_img_out);
+  pro.set_output_val<vil_image_view_base_sptr>(i++, vis_view);
   return true;
 }
