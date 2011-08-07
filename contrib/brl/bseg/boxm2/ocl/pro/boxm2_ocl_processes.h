@@ -30,5 +30,7 @@ DECLARE_FUNC_CONS(boxm2_ocl_cone_update_process);
 DECLARE_FUNC_CONS(boxm2_ocl_adaptive_cone_update_process); 
 DECLARE_FUNC_CONS(boxm2_ocl_adaptive_cone_render_expected_process); 
 DECLARE_FUNC_CONS(boxm2_ocl_update_aux_per_view_process); 
+DECLARE_FUNC_CONS(boxm2_ocl_update_sun_visibilities_process); 
+DECLARE_FUNC_CONS(boxm2_ocl_render_expected_shadow_map_process); 
 
 #endif
