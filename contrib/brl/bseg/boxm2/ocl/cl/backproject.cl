@@ -16,9 +16,8 @@ float4 backproject(unsigned i,unsigned j,float16 Ut,float16 V,float16 w, float4 
              dot((float4)(V.s89ab),X),
              dot((float4)(V.scdef),X));
 
-  X= X / X.w;
 
-  X=normalize(X-(float4)(origin.xyzw));
+  X=normalize(X-(float4)(origin.xyzw)*X.w);
 
   return X;
 }
