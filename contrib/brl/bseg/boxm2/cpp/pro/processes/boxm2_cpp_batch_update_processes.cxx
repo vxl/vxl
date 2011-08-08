@@ -191,13 +191,17 @@ bool boxm2_cpp_create_aux_data_process(bprb_func_process& pro)
           foundDataType = true;
           appTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_MOG3_GREY_16>::prefix());
       }
+      else if ( apps[i] == boxm2_data_traits<BOXM2_GAUSS_GREY>::prefix() )
+      {
+          data_type = apps[i];
+          foundDataType = true;
+          appTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_GAUSS_GREY>::prefix());
+      }
     }
     if (!foundDataType) {
       vcl_cout<<"boxm2_cpp_create_aux_data_process ERROR: scene doesn't have BOXM2_MOG3_GREY or BOXM2_MOG3_GREY_16 data type"<<vcl_endl;
       return false;
     }
-
-    boxm2_batch_update_pass1_functor pass1;
 
     vil_image_view<float> pre_inf_img(input_image->ni(),input_image->nj());
     vil_image_view<float> vis_inf_img(input_image->ni(),input_image->nj());
@@ -211,9 +215,6 @@ bool boxm2_cpp_create_aux_data_process(bprb_func_process& pro)
       boxm2_block *     blk   = cache->get_block(*id);
       boxm2_data_base *  alph  = cache->get_data_base(*id,boxm2_data_traits<BOXM2_ALPHA>::prefix(),0,false);
       boxm2_data_base *  mog   = cache->get_data_base(*id,data_type,0,false);
-
-      boxm2_block_metadata mdata = scene->get_block_metadata(*id);
-
       //: call get_data_base method with num_bytes = 0 to read from disc
       boxm2_data_base *aux0 = cache->get_data_base(*id,boxm2_data_traits<BOXM2_AUX0>::prefix(identifier));
       boxm2_data_base *aux1 = cache->get_data_base(*id,boxm2_data_traits<BOXM2_AUX1>::prefix(identifier));
@@ -226,16 +227,31 @@ bool boxm2_cpp_create_aux_data_process(bprb_func_process& pro)
       boxm2_scene_info_wrapper *scene_info_wrapper=new boxm2_scene_info_wrapper();
       scene_info_wrapper->info=scene->get_blk_metadata(*id);
 
-      pass1.init_data(datas,&pre_inf_img,&vis_inf_img);
-      cast_ray_per_block<boxm2_batch_update_pass1_functor>(pass1,
-                                                           scene_info_wrapper->info,
-                                                           blk,
-                                                           cam,
-                                                           input_image->ni(),
-                                                           input_image->nj());
+      if ( data_type == boxm2_data_traits<BOXM2_MOG3_GREY>::prefix() )
+      {
+        boxm2_batch_update_pass1_functor<BOXM2_MOG3_GREY> pass1;
+        pass1.init_data(datas,&pre_inf_img,&vis_inf_img);
+        cast_ray_per_block<boxm2_batch_update_pass1_functor<BOXM2_MOG3_GREY> >(pass1,
+                                                                               scene_info_wrapper->info,
+                                                                               blk,
+                                                                               cam,
+                                                                               input_image->ni(),
+                                                                               input_image->nj());
+      }
+      else if ( data_type == boxm2_data_traits<BOXM2_GAUSS_GREY>::prefix() )
+      {
+        boxm2_batch_update_pass1_functor<BOXM2_GAUSS_GREY> pass1;
+        pass1.init_data(datas,&pre_inf_img,&vis_inf_img);
+        cast_ray_per_block<boxm2_batch_update_pass1_functor<BOXM2_GAUSS_GREY> >(pass1,
+                                                                                scene_info_wrapper->info,
+                                                                                blk,
+                                                                                cam,
+                                                                                input_image->ni(),
+                                                                                input_image->nj());
+      }
+      
     }
     //: now run pass 2 to compute cell averages of pre, post, and vis
-    boxm2_batch_update_pass2_functor pass2;
     int auxTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_AUX>::prefix());
     for (id = vis_order.begin(); id != vis_order.end(); ++id)
     {
@@ -262,13 +278,29 @@ bool boxm2_cpp_create_aux_data_process(bprb_func_process& pro)
       boxm2_scene_info_wrapper *scene_info_wrapper=new boxm2_scene_info_wrapper();
       scene_info_wrapper->info=scene->get_blk_metadata(*id);
 
-      pass2.init_data(datas,&pre_inf_img);
-      cast_ray_per_block<boxm2_batch_update_pass2_functor>(pass2,
-                                                           scene_info_wrapper->info,
-                                                           blk,
-                                                           cam,
-                                                           input_image->ni(),
-                                                           input_image->nj());
+      if ( data_type == boxm2_data_traits<BOXM2_MOG3_GREY>::prefix() )
+      {
+        boxm2_batch_update_pass2_functor<BOXM2_MOG3_GREY> pass2; 
+        pass2.init_data(datas,&pre_inf_img);
+        cast_ray_per_block<boxm2_batch_update_pass2_functor<BOXM2_MOG3_GREY> >(pass2,
+                                                                               scene_info_wrapper->info,
+                                                                               blk,
+                                                                               cam,
+                                                                               input_image->ni(),
+                                                                               input_image->nj());
+      }
+      else if ( data_type == boxm2_data_traits<BOXM2_GAUSS_GREY>::prefix() )
+      {
+        boxm2_batch_update_pass2_functor<BOXM2_GAUSS_GREY> pass2; 
+        pass2.init_data(datas,&pre_inf_img);
+        cast_ray_per_block<boxm2_batch_update_pass2_functor<BOXM2_GAUSS_GREY> >(pass2,
+                                                                                scene_info_wrapper->info,
+                                                                                blk,
+                                                                                cam,
+                                                                                input_image->ni(),
+                                                                                input_image->nj());
+      }
+      
     }
   }
 
@@ -338,17 +370,17 @@ bool boxm2_cpp_batch_update_process(bprb_func_process& pro)
       vcl_cout << "In boxm2_cpp_batch_update_process ERROR: datatype BOXM2_MOG3_GREY_16 not implemented!\n";
       return false;
     }
+    else if ( apps[i] == boxm2_data_traits<BOXM2_GAUSS_GREY>::prefix() )
+    {
+      data_type = apps[i];
+      foundDataType = true;
+      appTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_GAUSS_GREY>::prefix());
+    }
   }
   if (!foundDataType) {
     vcl_cout<<"boxm2_cpp_batch_update_process ERROR: scene doesn't have BOXM2_MOG3_GREY or BOXM2_MOG3_GREY_16 data type"<<vcl_endl;
     return false;
   }
-  vcl_cout << "Normalization factor for 0: " << n_table->normalization_factor_int(0) << '\n'
-           << "Normalization factor for 1: " << n_table->normalization_factor_int(1) << '\n'
-           << "Normalization factor for 20: " << n_table->normalization_factor_int(20) << '\n'
-           << "Normalization factor for 40: " << n_table->normalization_factor_int(40) << '\n'
-           << "Normalization factor for 60: " << n_table->normalization_factor_int(60) << '\n'
-           << "Normalization factor for 80: " << n_table->normalization_factor_int(80) << vcl_endl;
 
   // assumes that the data of each image has been created in the data models previously
   int alphaTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
@@ -362,18 +394,239 @@ bool boxm2_cpp_batch_update_process(bprb_func_process& pro)
     boxm2_data_base *  alph  = cache->get_data_base(*id,boxm2_data_traits<BOXM2_ALPHA>::prefix(),0,false);
     boxm2_data_base *  mog  = cache->get_data_base(*id,data_type,0,false);
 
-    vcl_cout << "buffer length of alpha: " << alph->buffer_length() << '\n'
-             << "buffer length of mog: " << mog->buffer_length() << vcl_endl;
-
-    boxm2_batch_update_functor data_functor;
-    data_functor.init_data(alph, mog, str_cache, n_table, float(blk->sub_block_dim().x()), blk->max_level());
-    int data_buff_length = (int) (alph->buffer_length()/alphaTypeSize);
-    vcl_cout << "data_buff_length: " << data_buff_length << '\n'
-             << "data_buff_length from mog: " << (int) (mog->buffer_length()/appTypeSize) << vcl_endl;
-
-    boxm2_data_serial_iterator<boxm2_batch_update_functor>(data_buff_length,data_functor);
+    if ( data_type.find(boxm2_data_traits<BOXM2_MOG3_GREY>::prefix()) != vcl_string::npos )
+    {
+      boxm2_batch_update_functor<BOXM2_MOG3_GREY> data_functor;
+      data_functor.init_data(alph, mog, str_cache, n_table);
+      int data_buff_length = (int) (alph->buffer_length()/alphaTypeSize);
+      boxm2_data_serial_iterator<boxm2_batch_update_functor<BOXM2_MOG3_GREY> >(data_buff_length,data_functor);
+    } 
+    if (data_type.find(boxm2_data_traits<BOXM2_GAUSS_GREY>::prefix()) != vcl_string::npos )
+    {
+      boxm2_batch_update_functor<BOXM2_GAUSS_GREY> data_functor;
+      data_functor.init_data(alph, mog, str_cache, n_table);
+      int data_buff_length = (int) (alph->buffer_length()/alphaTypeSize);
+      boxm2_data_serial_iterator<boxm2_batch_update_functor<BOXM2_GAUSS_GREY> >(data_buff_length,data_functor);
+    }
   }
-
+  
   return true;
 }
+
+//: run batch update
+namespace boxm2_cpp_batch_update_app_process_globals
+{
+  const unsigned n_inputs_ = 4;
+  const unsigned n_outputs_ = 0;
+}
+
+bool boxm2_cpp_batch_update_app_process_cons(bprb_func_process& pro)
+{
+  using namespace boxm2_cpp_batch_update_app_process_globals;
+
+  //process takes 4 inputs
+  // 0) scene
+  // 1) cache
+  // 2) stream cache
+  // 3) the pre-computed sigma normalizer table, for fast access to normalizer values given number of images
+  vcl_vector<vcl_string> input_types_(n_inputs_);
+  input_types_[0] = "boxm2_scene_sptr";
+  input_types_[1] = "boxm2_cache_sptr";
+  input_types_[2] = "boxm2_stream_cache_sptr";
+  input_types_[3] = "bsta_sigma_normalizer_sptr";
+  // process has 0 output:
+  vcl_vector<vcl_string>  output_types_(n_outputs_);
+
+  return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
+}
+
+bool boxm2_cpp_batch_update_app_process(bprb_func_process& pro)
+{
+  using namespace boxm2_cpp_batch_update_app_process_globals;
+
+  if ( pro.n_inputs() < n_inputs_ ){
+      vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
+      return false;
+  }
+  //get the inputs
+  unsigned i = 0;
+  boxm2_scene_sptr scene =pro.get_input<boxm2_scene_sptr>(i++);
+  boxm2_cache_sptr cache= pro.get_input<boxm2_cache_sptr>(i++);
+  boxm2_stream_cache_sptr str_cache = pro.get_input<boxm2_stream_cache_sptr>(i++);
+  bsta_sigma_normalizer_sptr n_table = pro.get_input<bsta_sigma_normalizer_sptr>(i++);
+
+  vcl_string data_type;
+  bool foundDataType = false;
+  vcl_vector<vcl_string> apps = scene->appearances();
+  int appTypeSize;
+  for (unsigned int i=0; i<apps.size(); ++i) {
+    if ( apps[i] == boxm2_data_traits<BOXM2_MOG3_GREY>::prefix() )
+    {
+      data_type = apps[i];
+      foundDataType = true;
+      appTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_MOG3_GREY>::prefix());
+    }
+    else if ( apps[i] == boxm2_data_traits<BOXM2_MOG3_GREY_16>::prefix() )
+    {
+      /*data_type = apps[i];
+      foundDataType = true;
+      appTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_MOG3_GREY_16>::prefix());*/
+      vcl_cout << "In boxm2_cpp_batch_update_process ERROR: datatype BOXM2_MOG3_GREY_16 not implemented!\n";
+      return false;
+    }
+    else if ( apps[i] == boxm2_data_traits<BOXM2_GAUSS_GREY>::prefix() )
+    {
+      data_type = apps[i];
+      foundDataType = true;
+      appTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_GAUSS_GREY>::prefix());
+    }
+  }
+  if (!foundDataType) {
+    vcl_cout<<"boxm2_cpp_batch_update_process ERROR: scene doesn't have BOXM2_MOG3_GREY or BOXM2_MOG3_GREY_16 data type"<<vcl_endl;
+    return false;
+  }
+
+  // assumes that the data of each image has been created in the data models previously
+  int alphaTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
+  // iterate the scene block by block and write to output
+  vcl_vector<boxm2_block_id> blk_ids = scene->get_block_ids();
+  vcl_vector<boxm2_block_id>::iterator id;
+  id = blk_ids.begin();
+  for (id = blk_ids.begin(); id != blk_ids.end(); ++id) {
+    boxm2_block     *  blk   = cache->get_block(*id);
+    // pass num_bytes = 0 to make sure disc is read if not already in memory
+    boxm2_data_base *  alph  = cache->get_data_base(*id,boxm2_data_traits<BOXM2_ALPHA>::prefix(),0,false);
+    boxm2_data_base *  mog  = cache->get_data_base(*id,data_type,0,false);
+
+    if ( data_type.find(boxm2_data_traits<BOXM2_MOG3_GREY>::prefix()) != vcl_string::npos )
+    {
+      boxm2_batch_update_app_functor<BOXM2_MOG3_GREY> data_functor;
+      data_functor.init_data(alph, mog, str_cache, n_table);
+      int data_buff_length = (int) (alph->buffer_length()/alphaTypeSize);
+      boxm2_data_serial_iterator<boxm2_batch_update_app_functor<BOXM2_MOG3_GREY> >(data_buff_length,data_functor);
+    } 
+    if (data_type.find(boxm2_data_traits<BOXM2_GAUSS_GREY>::prefix()) != vcl_string::npos )
+    {
+      boxm2_batch_update_app_functor<BOXM2_GAUSS_GREY> data_functor;
+      data_functor.init_data(alph, mog, str_cache, n_table);
+      int data_buff_length = (int) (alph->buffer_length()/alphaTypeSize);
+      boxm2_data_serial_iterator<boxm2_batch_update_app_functor<BOXM2_GAUSS_GREY> >(data_buff_length,data_functor);
+    }
+  }
+  
+  return true;
+}
+
+
+
+//: run batch update
+namespace boxm2_cpp_batch_update_alpha_process_globals
+{
+  const unsigned n_inputs_ = 4;
+  const unsigned n_outputs_ = 0;
+}
+
+bool boxm2_cpp_batch_update_alpha_process_cons(bprb_func_process& pro)
+{
+  using namespace boxm2_cpp_batch_update_alpha_process_globals;
+
+  //process takes 4 inputs
+  // 0) scene
+  // 1) cache
+  // 2) stream cache
+  // 3) the pre-computed sigma normalizer table, for fast access to normalizer values given number of images
+  vcl_vector<vcl_string> input_types_(n_inputs_);
+  input_types_[0] = "boxm2_scene_sptr";
+  input_types_[1] = "boxm2_cache_sptr";
+  input_types_[2] = "boxm2_stream_cache_sptr";
+  input_types_[3] = "bsta_sigma_normalizer_sptr";
+  // process has 0 output:
+  vcl_vector<vcl_string>  output_types_(n_outputs_);
+
+  return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
+}
+
+bool boxm2_cpp_batch_update_alpha_process(bprb_func_process& pro)
+{
+  using namespace boxm2_cpp_batch_update_alpha_process_globals;
+
+  if ( pro.n_inputs() < n_inputs_ ){
+      vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
+      return false;
+  }
+  //get the inputs
+  unsigned i = 0;
+  boxm2_scene_sptr scene =pro.get_input<boxm2_scene_sptr>(i++);
+  boxm2_cache_sptr cache= pro.get_input<boxm2_cache_sptr>(i++);
+  boxm2_stream_cache_sptr str_cache = pro.get_input<boxm2_stream_cache_sptr>(i++);
+  bsta_sigma_normalizer_sptr n_table = pro.get_input<bsta_sigma_normalizer_sptr>(i++);
+
+  vcl_string data_type;
+  bool foundDataType = false;
+  vcl_vector<vcl_string> apps = scene->appearances();
+  int appTypeSize;
+  for (unsigned int i=0; i<apps.size(); ++i) {
+    if ( apps[i] == boxm2_data_traits<BOXM2_MOG3_GREY>::prefix() )
+    {
+      data_type = apps[i];
+      foundDataType = true;
+      appTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_MOG3_GREY>::prefix());
+    }
+    else if ( apps[i] == boxm2_data_traits<BOXM2_MOG3_GREY_16>::prefix() )
+    {
+      /*data_type = apps[i];
+      foundDataType = true;
+      appTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_MOG3_GREY_16>::prefix());*/
+      vcl_cout << "In boxm2_cpp_batch_update_process ERROR: datatype BOXM2_MOG3_GREY_16 not implemented!\n";
+      return false;
+    }
+    else if ( apps[i] == boxm2_data_traits<BOXM2_GAUSS_GREY>::prefix() )
+    {
+      data_type = apps[i];
+      foundDataType = true;
+      appTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_GAUSS_GREY>::prefix());
+    }
+  }
+  if (!foundDataType) {
+    vcl_cout<<"boxm2_cpp_batch_update_process ERROR: scene doesn't have BOXM2_MOG3_GREY or BOXM2_MOG3_GREY_16 data type"<<vcl_endl;
+    return false;
+  }
+
+  // assumes that the data of each image has been created in the data models previously
+  int alphaTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
+  // iterate the scene block by block and write to output
+  vcl_vector<boxm2_block_id> blk_ids = scene->get_block_ids();
+  vcl_vector<boxm2_block_id>::iterator id;
+  id = blk_ids.begin();
+  for (id = blk_ids.begin(); id != blk_ids.end(); ++id) {
+    boxm2_block     *  blk   = cache->get_block(*id);
+    // pass num_bytes = 0 to make sure disc is read if not already in memory
+    boxm2_data_base *  alph  = cache->get_data_base(*id,boxm2_data_traits<BOXM2_ALPHA>::prefix(),0,false);
+    boxm2_data_base *  mog  = cache->get_data_base(*id,data_type,0,false);
+
+    if ( data_type.find(boxm2_data_traits<BOXM2_MOG3_GREY>::prefix()) != vcl_string::npos )
+    {
+      boxm2_batch_update_alpha_functor<BOXM2_MOG3_GREY> data_functor;
+      data_functor.init_data(alph, mog, str_cache, n_table);
+      int data_buff_length = (int) (alph->buffer_length()/alphaTypeSize);
+      boxm2_data_serial_iterator<boxm2_batch_update_alpha_functor<BOXM2_MOG3_GREY> >(data_buff_length,data_functor);
+    } 
+    if (data_type.find(boxm2_data_traits<BOXM2_GAUSS_GREY>::prefix()) != vcl_string::npos )
+    {
+      boxm2_batch_update_alpha_functor<BOXM2_GAUSS_GREY> data_functor;
+      data_functor.init_data(alph, mog, str_cache, n_table);
+      int data_buff_length = (int) (alph->buffer_length()/alphaTypeSize);
+      boxm2_data_serial_iterator<boxm2_batch_update_alpha_functor<BOXM2_GAUSS_GREY> >(data_buff_length,data_functor);
+    }
+  }
+  
+  return true;
+}
+
+
+
+
+
+
+
 
