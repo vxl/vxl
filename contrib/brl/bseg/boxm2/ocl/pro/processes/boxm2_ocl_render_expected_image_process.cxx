@@ -29,7 +29,7 @@
 namespace boxm2_ocl_render_expected_image_process_globals
 {
   const unsigned n_inputs_ = 7;
-  const unsigned n_outputs_ = 1;
+  const unsigned n_outputs_ = 2;
   vcl_size_t lthreads[2]={8,8};
 
   static vcl_map<vcl_string,vcl_vector<bocl_kernel*> > kernels;
@@ -100,6 +100,7 @@ bool boxm2_ocl_render_expected_image_process_cons(bprb_func_process& pro)
   // output[0]: scene sptr
   vcl_vector<vcl_string>  output_types_(n_outputs_);
   output_types_[0] = "vil_image_view_base_sptr";
+  output_types_[1] = "vil_image_view_base_sptr";
 
   bool good = pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
   // in case the 7th input is not set
@@ -209,12 +210,17 @@ bool boxm2_ocl_render_expected_image_process(bprb_func_process& pro)
 
   // read out expected image
   exp_image->read_to_buffer(queue);
+  vis_image->read_to_buffer(queue);
 
 #if 1 //output a float image by default
   vil_image_view<float>* exp_img_out=new vil_image_view<float>(ni,nj);
   for (unsigned c=0;c<nj;c++)
     for (unsigned r=0;r<ni;r++)
       (*exp_img_out)(r,c)=buff[c*cl_ni+r];
+  vil_image_view<float>* vis_img_out=new vil_image_view<float>(ni,nj);
+  for (unsigned c=0;c<nj;c++)
+    for (unsigned r=0;r<ni;r++)
+      (*vis_img_out)(r,c)=vis_buff[c*cl_ni+r];
 #else //option to output a byte image (For easier saving)
   vil_image_view<vxl_byte>* exp_img_out=new vil_image_view<vxl_byte>(ni,nj);
     for (unsigned c=0;c<nj;c++)
@@ -228,5 +234,6 @@ bool boxm2_ocl_render_expected_image_process(bprb_func_process& pro)
   i=0;
   // store scene smaprt pointer
   pro.set_output_val<vil_image_view_base_sptr>(i++, exp_img_out);
+  pro.set_output_val<vil_image_view_base_sptr>(i++, vis_img_out);
   return true;
 }
