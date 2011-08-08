@@ -64,20 +64,6 @@ namespace boxm2_ocl_render_expected_shadow_map_process_globals
                                      options,              //options
                                      "boxm2 opencl render random blocks"); //kernel identifier (for error checking)
     vec_kernels.push_back(ray_trace_kernel);
-    //create normalize image kernel
-    vcl_vector<vcl_string> norm_src_paths;
-    norm_src_paths.push_back(source_dir + "pixel_conversion.cl");
-    norm_src_paths.push_back(source_dir + "bit/normalize_kernels.cl");
-    bocl_kernel * normalize_render_kernel=new bocl_kernel();
-
-    normalize_render_kernel->create_kernel( &device->context(),
-                                            device->device_id(),
-                                            norm_src_paths,
-                                            "normalize_render_kernel",   //kernel name
-                                            options,              //options
-                                            "normalize render kernel"); //kernel identifier (for error checking)
-
-    vec_kernels.push_back(normalize_render_kernel);
   }
 }
 
