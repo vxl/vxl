@@ -149,13 +149,10 @@ bool boxm2_merge_block_function::merge(vcl_vector<boxm2_data_base*>& datas)
       //4. store old tree in new tree, swap data out
       vcl_memcpy(blk_iter, refined_tree.get_bits(), 16);
   }
-
   vcl_cout<<"Number of merged cells: "<<merge_count_<<vcl_endl;
   vcl_cout<<"  New Alpha Size: "<<newA->buffer_length() / 1024.0/1024.0<<" mb"<<vcl_endl;
   vcl_cout<<"  New MOG   Size: "<<newM->buffer_length() / 1024.0/1024.0<<" mb"<<vcl_endl;
-  vcl_cout<<"  New NOBS  Size: "<<newNew
-  ->buffer_length() / 1024.0/1024.0<<" mb"<<vcl_endl;
-
+  vcl_cout<<"  New NOBS  Size: "<<newN->buffer_length() / 1024.0/1024.0<<" mb"<<vcl_endl;
 
   //3. Replace data in the cache
   boxm2_cache_sptr cache = boxm2_cache::instance();

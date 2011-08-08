@@ -18,6 +18,7 @@
 
 //directory utility
 #include <vcl_where_root_dir.h>
+#include <vul/vul_timer.h>
 
 namespace boxm2_cpp_merge_process_globals
 {
@@ -42,6 +43,7 @@ bool boxm2_cpp_merge_process_cons(bprb_func_process& pro)
 
 bool boxm2_cpp_merge_process(bprb_func_process& pro)
 {
+  vul_timer t; 
   using namespace boxm2_cpp_merge_process_globals;
   if ( pro.n_inputs() < n_inputs_ ) {
     vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
@@ -98,5 +100,7 @@ bool boxm2_cpp_merge_process(bprb_func_process& pro)
     boxm2_merge_block(blk,datas, thresh, false);
     blk->enable_write(); // now cache will make sure that it is written to disc
   }
+  
+  vcl_cout<<"  merge time: "<<t.all()/1000.0f<<" sec"<<vcl_endl;
   return true;
 }
