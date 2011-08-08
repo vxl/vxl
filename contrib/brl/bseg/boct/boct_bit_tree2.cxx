@@ -11,6 +11,7 @@
 boct_bit_tree2::boct_bit_tree2()
 {
   bits_ = new unsigned char[16];
+  vcl_memset(bits_, 0, 16); 
 }
 
 //: constructor from an array of char bits
@@ -83,7 +84,7 @@ bool boct_bit_tree2::valid_cell(int bit_index)
 
 bool boct_bit_tree2::is_leaf(int bit_index)
 {
-  return this->valid_cell(bit_index) && (this->bit_at(bit_index)==0 );
+  return this->valid_cell(bit_index) && (this->bit_at(bit_index)==0);
 }
 
 //returns bit indices of leaf nodes under rootBit
@@ -525,15 +526,19 @@ vcl_ostream& operator <<(vcl_ostream &s, boct_bit_tree2 &t)
   s << "boct_bit_tree2:\n"
     << "Tree bits:\n"
     << "depth 0: "<< (int) (t.bit_at(0))
-    << "\n\n";
+    << '\n'; 
 
   //one
-  if (t.bit_at(0)) {
-    s << "depth 1:";
-    for (int i=1; i<9; i++)
-      s << "  " << (int) t.bit_at(i);
-    s << '\n';
-  }
+  s << "depth 1:";
+  for (int i=1; i<9; i++)
+    s << "  " << (int) t.bit_at(i);
+  s << '\n'; 
+  
+  //two 
+  s << "depth 2:";
+  for (int i=9; i<73; i++)
+    s << "  " << (int) t.bit_at(i);
+  s << '\n'; 
 
   return s;
 }
