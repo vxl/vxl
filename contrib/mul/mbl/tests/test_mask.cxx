@@ -265,6 +265,23 @@ void test_mask()
   mbl_mask mask;
   mbl_indices_to_mask(inds_true, n, mask);
   TEST("mbl_indices_to_mask()", mask==mask_true, true);
+
+  // Test mbl_replace_using_mask(mask,src1,src2,dst)
+  {
+    mbl_mask mask(2);
+    mask[0] = false;
+    mask[1] = true;
+    vcl_vector<unsigned> src1(2,1);
+    vcl_vector<unsigned> src2(1,2);
+    vcl_vector<unsigned> dst;
+    mbl_replace_using_mask( mask, src1, src2, dst );
+
+    bool replace_ok = ( dst.size() == 2 );
+    replace_ok = replace_ok && ( dst[0] == 1 );
+    replace_ok = replace_ok && ( dst[1] == 2 );
+
+    TEST("mbl_replace_using_mask", replace_ok, true);
+  }
 }
 
 TESTMAIN(test_mask);
