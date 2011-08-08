@@ -64,7 +64,7 @@ void mbl_mask_logic_and(const mbl_mask & A, mbl_mask & B)
   mbl_mask_logic(A, B, "0001");
 }
 
-    //: Apply an "OR" (rule 0111) logical operation between two masks
+//: Apply an "OR" (rule 0111) logical operation between two masks
 void mbl_mask_logic_or(const mbl_mask & A, mbl_mask & B)
 {
   mbl_mask_logic(A, B, "0111");
@@ -161,7 +161,7 @@ void mbl_load_mask(mbl_mask & mask, vcl_istream & stream)
     else
     {
       mask.clear();
-      throw mbl_exception_parse_file_error(vcl_string("Unable to parse mask value " + 
+      throw mbl_exception_parse_file_error(vcl_string("Unable to parse mask value " +
         vul_string_escape_ctrl_chars(vcl_string(1,c)) ), "" );
     }
   }
@@ -202,8 +202,8 @@ void mbl_mask_to_indices(const mbl_mask& mask, vcl_vector<unsigned>& inds)
 
 
 //: Convert a list of indices to a mask.
-void mbl_indices_to_mask(const vcl_vector<unsigned>& inds, 
-                         const unsigned n, 
+void mbl_indices_to_mask(const vcl_vector<unsigned>& inds,
+                         const unsigned n,
                          mbl_mask& mask)
 {
   mask.resize(n, false);

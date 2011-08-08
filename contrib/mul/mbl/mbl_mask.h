@@ -6,6 +6,7 @@
 // \author Barry Skellern
 // \brief Class representing a binary mask, and related functions
 
+#include <vcl_algorithm.h>
 #include <vcl_vector.h>
 #include <vcl_stdexcept.h>
 #include <vcl_iterator.h>
@@ -111,6 +112,39 @@ void mbl_apply_mask(const mbl_mask & mask, const vcl_vector<T> & src, vcl_vector
   }
 }
 
+//: Use a mask to replace some values in a vector
+// \param mask The mask to apply.
+// \param src1 The source vector to be updated.
+// \param src2 The source vector to be updated with.
+// \retval dst The destination vector (existing contents will be lost).
+template <typename T>
+void mbl_replace_using_mask(const mbl_mask & mask, const vcl_vector<T> & src1, const vcl_vector<T> & src2, vcl_vector<T> & dst)
+{
+  const unsigned n_in = src1.size();
+  if (mask.size() != n_in)
+    throw vcl_runtime_error("src1 and mask lengths differ");
+
+  unsigned n_true = vcl_count( mask.begin(), mask.end(), true );
+  if ( n_true != src2.size() )
+    throw vcl_runtime_error("src2 and mask are not compatible");
+
+  vcl_vector<T> dst_tmp;
+  dst_tmp.clear();
+  dst_tmp.reserve(n_in); // this is the maximum size we might need
+  unsigned j = 0;
+  for (unsigned i=0; i<n_in; ++i)
+  {
+    if (mask[i])
+    {
+      dst_tmp.push_back(src2[j]);
+      ++j;
+    }
+    else
+      dst_tmp.push_back(src1[i]);
+  }
+  dst = dst_tmp;
+}
+
 //: Apply a mask to a vector in-place
 template <typename T>
 void mbl_apply_mask(const mbl_mask & mask, vcl_vector<T> & values)
@@ -158,8 +192,8 @@ void mbl_mask_to_indices(const mbl_mask& mask, vcl_vector<unsigned>& inds);
 // \param inds List of (zero-based) indices.
 // \param n The length of the output mask.
 // \retval mask Output mask. mask[i]==true for all i in \a inds
-void mbl_indices_to_mask(const vcl_vector<unsigned>& inds, 
-                         const unsigned n, 
+void mbl_indices_to_mask(const vcl_vector<unsigned>& inds,
+                         const unsigned n,
                          mbl_mask& mask);
 
 
