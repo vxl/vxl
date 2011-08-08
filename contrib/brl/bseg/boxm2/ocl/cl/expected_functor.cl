@@ -33,6 +33,21 @@ void step_cell_render(__global MOG_TYPE   * cell_data,
   (*expected_i)+=expected_int_cell*omega;
 }
 #endif
+#ifdef RENDER_SUN_VIS
+void step_cell_render_sun_vis(__global float   * auxsun, 
+                      __global float  * alpha_data, 
+                               int      data_ptr, 
+                               float    d, 
+                               float  * vis,
+                               float  * expected_i)
+{
+  float alpha = alpha_data[data_ptr];
+  float diff_omega=exp(-alpha*d);
+  float omega=(*vis) * (1.0f - diff_omega);
+  (*vis) *= diff_omega;
+  (*expected_i)+=auxsun[data_ptr]*omega;
+}
+#endif
 void step_cell_change_detection_uchar8(__global uchar8* cell_data, __global float* alpha_data,int data_ptr,
                                 float d, float * vis,float * change_density, float img_intensity)
 {
