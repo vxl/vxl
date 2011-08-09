@@ -6,6 +6,7 @@
 #include <boxm2/boxm2_data_traits.h>
 #include <boxm2/cpp/algo/boxm2_cast_ray_function.h>
 #include <boxm2/cpp/algo/boxm2_mog3_grey_processor.h>
+#include <boxm2/cpp/algo/boxm2_gauss_grey_processor.h>
 #include <vil/vil_image_view.h>
 class boxm2_render_vis_image_functor
 {
@@ -32,6 +33,8 @@ class boxm2_render_vis_image_functor
   boxm2_data<BOXM2_ALPHA> * alpha_data_;
   vil_image_view<float> *vis_img_;
 };
+
+template <boxm2_data_type APM_TYPE>
 class boxm2_render_exp_image_functor
 {
  public:
@@ -41,7 +44,7 @@ class boxm2_render_exp_image_functor
   bool init_data(vcl_vector<boxm2_data_base*> & datas, vil_image_view<float> * expected, vil_image_view<float>* vis_img)
   {
     alpha_data_=new boxm2_data<BOXM2_ALPHA>(datas[0]->data_buffer(),datas[0]->buffer_length(),datas[0]->block_id());
-    mog3_data_=new boxm2_data<BOXM2_MOG3_GREY>(datas[1]->data_buffer(),datas[1]->buffer_length(),datas[1]->block_id());
+    mog3_data_=new boxm2_data<APM_TYPE>(datas[1]->data_buffer(),datas[1]->buffer_length(),datas[1]->block_id());
     expected_img_=expected;
     vis_img_     =vis_img;
     return true;
@@ -53,7 +56,8 @@ class boxm2_render_exp_image_functor
     float vis=(*vis_img_)(i,j);
     float exp_int=(*expected_img_)(i,j);
     float curr_p=(1-vcl_exp(-alpha*seg_len))*vis;
-    exp_int+=curr_p*boxm2_data_traits<BOXM2_MOG3_GREY>::processor::expected_color(mog3_data_->data()[index]);
+    float exp_color = boxm2_data_traits<APM_TYPE>::processor::expected_color(mog3_data_->data()[index]);
+    exp_int+=curr_p*boxm2_data_traits<APM_TYPE>::processor::expected_color(mog3_data_->data()[index]);
     (*expected_img_)(i,j)=exp_int;
     vis*=vcl_exp(-alpha*seg_len);
     (*vis_img_)(i,j)=vis;
@@ -61,7 +65,7 @@ class boxm2_render_exp_image_functor
   }
  private:
   boxm2_data<BOXM2_ALPHA> * alpha_data_;
-  boxm2_data<BOXM2_MOG3_GREY> * mog3_data_;
+  boxm2_data<APM_TYPE> * mog3_data_;
   vil_image_view<float> *expected_img_;
   vil_image_view<float> *vis_img_;
 };
