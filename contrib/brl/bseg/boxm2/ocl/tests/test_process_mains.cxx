@@ -25,6 +25,72 @@
 #include <vpgl/vpgl_perspective_camera.h>
 #include <vnl/vnl_random.h>
 
+
+//: Example c++ calls
+void test_render_height_main(boxm2_scene_sptr& scene, bocl_device_sptr& device, boxm2_opencl_cache_sptr& opencl_cache)
+{
+  //////////////////////////////////////////////////////////////////////////////
+  //Only has to be done once
+  //
+  //register data types and process functions
+  DECLARE_FUNC_CONS(boxm2_ocl_render_expected_height_map_process);
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_ocl_render_expected_height_map_process, "boxm2OclRenderExpectedHeightMapProcess");
+  REGISTER_DATATYPE(boxm2_opencl_cache_sptr);
+  REGISTER_DATATYPE(boxm2_scene_sptr);
+  REGISTER_DATATYPE(vil_image_view_base_sptr);
+  REGISTER_DATATYPE(float);
+  //////////////////////////////////////////////////////////////////////////////
+
+  //////////////////////////////////////////////////////////////////////////////
+  // Has to be done on each render
+  //
+  //set up brdb_value_sptr arguments... (for generic passing)
+  brdb_value_sptr brdb_device = new brdb_value_t<bocl_device_sptr>(device);
+  brdb_value_sptr brdb_scene = new brdb_value_t<boxm2_scene_sptr>(scene);
+  brdb_value_sptr brdb_opencl_cache = new brdb_value_t<boxm2_opencl_cache_sptr>(opencl_cache);
+
+  //if scene has RGB data type, use color render process
+  bool good = bprb_batch_process_manager::instance()->init_process("boxm2OclRenderExpectedHeightMapProcess");
+
+  //set process args
+  good = good && bprb_batch_process_manager::instance()->set_input(0, brdb_device) // device
+              && bprb_batch_process_manager::instance()->set_input(1, brdb_scene)  //  scene
+              && bprb_batch_process_manager::instance()->set_input(2, brdb_opencl_cache) 
+              && bprb_batch_process_manager::instance()->run_process();
+
+  //The Height Map Process has 5 outputs - 
+  // 1. expected height (z image)
+  // 2. variance in expected height
+  // 3. x coord image
+  // 4. y coord image
+  // 5. prob image (likelihood depth is within the volume)
+  vcl_vector< vil_image_view<float>* > out_imgs; 
+  for(int i=0; i<5; ++i) {
+    unsigned int out_img = 0;
+    good = good && bprb_batch_process_manager::instance()->commit_output(i, out_img);
+    brdb_query_aptr Q = brdb_query_comp_new("id", brdb_query::EQ, out_img);
+    brdb_selection_sptr S = DATABASE->select("vil_image_view_base_sptr_data", Q);
+    if (S->size()!=1) {
+      vcl_cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
+               << " no selections\n";
+    }
+    brdb_value_sptr value;
+    if (!S->get_value(vcl_string("value"), value)) {
+      vcl_cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
+               << " didn't get value\n";
+    }
+    vil_image_view_base_sptr out_img_sptr = value->val<vil_image_view_base_sptr>();
+    vil_image_view<float>* flt_ptr = (vil_image_view<float>*) out_img_sptr.ptr(); 
+    out_imgs.push_back(flt_ptr); 
+  }
+  
+  vil_save(*out_imgs[0], "height.tiff");
+  vil_save(*out_imgs[1], "var.tiff");
+  vil_save(*out_imgs[2], "x_img.tiff");
+  vil_save(*out_imgs[3], "y_img.tiff");
+  vil_save(*out_imgs[4], "prob_img.tiff");
+}
+
 //: Example c++ calls
 void test_render_main(boxm2_scene_sptr& scene, bocl_device_sptr& device, boxm2_opencl_cache_sptr& opencl_cache)
 {
@@ -196,6 +262,7 @@ void test_process_mains()
   //run render and update mains
   test_render_main(scene, device, opencl_cache);
   test_update_main(scene, device, opencl_cache);
+  test_render_height_main(scene, device, opencl_cache); 
 }
 
 TESTMAIN( test_process_mains );
