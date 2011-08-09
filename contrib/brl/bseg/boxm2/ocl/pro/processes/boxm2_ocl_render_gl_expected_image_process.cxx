@@ -143,10 +143,15 @@ bool boxm2_ocl_render_gl_expected_image_process(bprb_func_process& pro)
       data_type = apps[i];
       foundDataType = true;
       options=" -D MOG_TYPE_16 ";
+    } else if ( apps[i] == boxm2_data_traits<BOXM2_GAUSS_GREY>::prefix() )
+    {
+      data_type = apps[i];
+      foundDataType = true;
+      options=" -D GAUSS_TYPE_2 ";
     }
   }
   if (!foundDataType) {
-    vcl_cout<<"BOXM2_OCL_RENDER_PROCESS ERROR: scene doesn't have BOXM2_MOG3_GREY or BOXM2_MOG3_GREY_16 data type"<<vcl_endl;
+    vcl_cout<<"BOXM2_OCL_RENDER_PROCESS ERROR: scene doesn't have BOXM2_MOG3_GREY or BOXM2_MOG3_GREY_16 or BOXM2_GAUSS_GREY data type"<<vcl_endl;
     return false;
   }
   if (app_identifier.size() > 0) {
