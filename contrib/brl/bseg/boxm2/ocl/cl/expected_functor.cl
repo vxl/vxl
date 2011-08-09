@@ -8,7 +8,12 @@
     #define CONVERT_FUNC(lhs,data) ushort8 lhs = as_ushort8(data);
     #define NORM 65535;
 #endif
-#ifdef RENDER 
+#if GAUSS_TYPE_2
+    #define MOG_TYPE uchar2
+    #define CONVERT_FUNC(lhs,data) uchar2 lhs1 = as_uchar2(data); uchar8 lhs = as_uchar8(0.0); lhs.s0 = lhs1.s0; lhs.s1 = lhs1.s1; lhs.s2 = 255; 
+    #define NORM 255;
+#endif
+#ifdef RENDER
 void step_cell_render(__global MOG_TYPE   * cell_data, 
                       __global float  * alpha_data, 
                                int      data_ptr, 
