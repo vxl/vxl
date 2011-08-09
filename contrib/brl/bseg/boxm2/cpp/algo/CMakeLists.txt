@@ -18,8 +18,13 @@ SET(boxm2_cpp_algo_sources
     boxm2_filter_block_function.h     boxm2_filter_block_function.cxx
     boxm2_batch_functors.h
     boxm2_ray_probe_functor.h
+    boxm2_gauss_grey_processor.h       boxm2_gauss_grey_processor.cxx
+    boxm2_batch_opt2_functors.h
+    boxm2_image_density_functor.h
+    boxm2_update_with_shadow_functor.h
     boxm2_merge_block_function.h     boxm2_merge_block_function.cxx
    )
+AUX_SOURCE_DIRECTORY(Templates boxm2_cpp_algo_sources)
 
 ADD_LIBRARY(boxm2_cpp_algo  ${boxm2_cpp_algo_sources})
 
