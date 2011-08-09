@@ -25,6 +25,14 @@ DECLARE_FUNC_CONS(boxm2_cpp_ray_probe_process);
 DECLARE_FUNC_CONS(boxm2_cpp_ray_app_density_process);
 DECLARE_FUNC_CONS(boxm2_cpp_create_aux_data_process);
 DECLARE_FUNC_CONS(boxm2_cpp_batch_update_process);
+DECLARE_FUNC_CONS(boxm2_cpp_create_aux_data_opt2_process);
+DECLARE_FUNC_CONS(boxm2_cpp_batch_update_opt2_process);
+DECLARE_FUNC_CONS(boxm2_cpp_image_density_process);
+DECLARE_FUNC_CONS(boxm2_cpp_batch_update_app_process);
+DECLARE_FUNC_CONS(boxm2_cpp_batch_update_alpha_process);
 
 DECLARE_FUNC_CONS(boxm2_cpp_merge_process);
+
+DECLARE_FUNC_CONS(boxm2_cpp_update_with_shadow_process);
+DECLARE_FUNC_CONS(boxm2_cpp_image_density_masked_process);
 #endif

@@ -21,7 +21,7 @@
 
 namespace boxm2_cpp_refine_process2_globals
 {
-  const unsigned n_inputs_ =  3;
+  const unsigned n_inputs_ =  4;
   const unsigned n_outputs_ = 0;
 }
 
@@ -34,13 +34,17 @@ bool boxm2_cpp_refine_process2_cons(bprb_func_process& pro)
   input_types_[0] = "boxm2_scene_sptr";
   input_types_[1] = "boxm2_cache_sptr";
   input_types_[2] = "float";
-
+  input_types_[3] = "vcl_string";// if identifier is empty, then only one appearance model
 
   // process has 1 output:
   // output[0]: scene sptr
   vcl_vector<vcl_string>  output_types_(n_outputs_);
 
-  return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
+  bool good = pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
+  // in case the 4th input is not set
+  brdb_value_sptr id = new brdb_value_t<vcl_string>("");
+  pro.set_input(3, id);
+  return good;
 }
 
 bool boxm2_cpp_refine_process2(bprb_func_process& pro)
@@ -56,6 +60,7 @@ bool boxm2_cpp_refine_process2(bprb_func_process& pro)
   boxm2_scene_sptr scene =pro.get_input<boxm2_scene_sptr>(i++);
   boxm2_cache_sptr cache= pro.get_input<boxm2_cache_sptr>(i++);
   float  thresh=pro.get_input<float>(i++);
+  vcl_string identifier = pro.get_input<vcl_string>(i++);
 
   bool foundDataType = false;
   vcl_string data_type;
@@ -76,6 +81,12 @@ bool boxm2_cpp_refine_process2(bprb_func_process& pro)
     vcl_cout<<"BOXM2_OCL_RENDER_PROCESS ERROR: scene doesn't have BOXM2_MOG3_GREY or BOXM2_MOG3_GREY_16 data type"<<vcl_endl;
     return false;
   }
+  vcl_string num_obs_type = boxm2_data_traits<BOXM2_NUM_OBS>::prefix(); 
+  if (identifier.size() > 0) {
+    data_type += "_" + identifier;
+    num_obs_type += "_" + identifier;
+  }
+
   vcl_map<boxm2_block_id, boxm2_block_metadata> blocks = scene->blocks();
   vcl_map<boxm2_block_id, boxm2_block_metadata>::iterator blk_iter;
   for (blk_iter = blocks.begin(); blk_iter != blocks.end(); ++blk_iter)
@@ -86,7 +97,7 @@ bool boxm2_cpp_refine_process2(bprb_func_process& pro)
     boxm2_block *     blk     = cache->get_block(id);
     boxm2_data_base * alph    = cache->get_data_base(id,boxm2_data_traits<BOXM2_ALPHA>::prefix());
     boxm2_data_base * mog     = cache->get_data_base(id,data_type);
-    boxm2_data_base * num_obs = cache->get_data_base(id,boxm2_data_traits<BOXM2_NUM_OBS>::prefix());
+    boxm2_data_base * num_obs = cache->get_data_base(id,num_obs_type);
 
     vcl_vector<boxm2_data_base*> datas;
     datas.push_back(alph);

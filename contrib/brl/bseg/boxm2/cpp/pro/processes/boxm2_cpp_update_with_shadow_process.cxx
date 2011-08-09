@@ -2,10 +2,10 @@
 #include <bprb/bprb_func_process.h>
 //:
 // \file
-// \brief  A process for updating the scene.
+// \brief  A process for updating the scene also considering an alternative shadow appearance model for each pixel.
 //
-// \author Vishal Jain
-// \date Mar 10, 2011
+// \author Ozge C. Ozcanli
+// \date Aug 04, 2011
 
 #include <vcl_fstream.h>
 #include <vcl_sstream.h>
@@ -22,42 +22,47 @@
 //directory utility
 #include <vcl_where_root_dir.h>
 
-namespace boxm2_cpp_update_image_process_globals
+namespace boxm2_cpp_update_with_shadow_process_globals
 {
-  const unsigned n_inputs_ = 5;
+  const unsigned n_inputs_ = 7;
   const unsigned n_outputs_ = 0;
 }
 
-bool boxm2_cpp_update_image_process_cons(bprb_func_process& pro)
+bool boxm2_cpp_update_with_shadow_process_cons(bprb_func_process& pro)
 {
-  using namespace boxm2_cpp_update_image_process_globals;
+  using namespace boxm2_cpp_update_with_shadow_process_globals;
 
-  //process takes 4 inputs
+  //process takes 7 inputs
   // 0) scene
   // 1) cache
   // 2) camera
   // 3) image
-  // 4) illumination_bin_index
+  // 4) shadow prior, e.g. 0.1
+  // 5) shadow standard deviation (mean is always assumed to be 0), e.g. 0.2
+  // 6) illumination_bin_index
   vcl_vector<vcl_string> input_types_(n_inputs_);
   input_types_[0] = "boxm2_scene_sptr";
   input_types_[1] = "boxm2_cache_sptr";
   input_types_[2] = "vpgl_camera_double_sptr";
   input_types_[3] = "vil_image_view_base_sptr";
-  input_types_[4] = "vcl_string";// if identifier is empty, then only one appearance model
+  input_types_[4] = "float"; 
+  input_types_[5] = "float";
+  input_types_[6] = "vcl_string";// if identifier is empty, then only one appearance model
+
   // process has 1 output:
   // output[0]: scene sptr
   vcl_vector<vcl_string>  output_types_(n_outputs_);
   bool good = pro.set_input_types(input_types_) &&
     pro.set_output_types(output_types_);
-  // in case the 5th input is not set
+  // in case the 7th input is not set
   brdb_value_sptr idx = new brdb_value_t<vcl_string>("");
-  pro.set_input(4, idx);
+  pro.set_input(6, idx);
   return good;
 }
 
-bool boxm2_cpp_update_image_process(bprb_func_process& pro)
+bool boxm2_cpp_update_with_shadow_process(bprb_func_process& pro)
 {
-    using namespace boxm2_cpp_update_image_process_globals;
+    using namespace boxm2_cpp_update_with_shadow_process_globals;
 
     if ( pro.n_inputs() < n_inputs_ ) {
         vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
@@ -69,6 +74,8 @@ bool boxm2_cpp_update_image_process(bprb_func_process& pro)
     boxm2_cache_sptr cache= pro.get_input<boxm2_cache_sptr>(i++);
     vpgl_camera_double_sptr cam= pro.get_input<vpgl_camera_double_sptr>(i++);
     vil_image_view_base_sptr in_img=pro.get_input<vil_image_view_base_sptr>(i++);
+    float shadow_prior = pro.get_input<float>(i++); 
+    float shadow_sigma = pro.get_input<float>(i++); 
     vcl_string identifier = pro.get_input<vcl_string>(i);
 
     vil_image_view_base_sptr float_image=boxm2_util::prepare_input_image(in_img);
@@ -117,13 +124,15 @@ bool boxm2_cpp_update_image_process(bprb_func_process& pro)
         }
 
         vcl_cout<<"Update"<<vcl_endl;
-        return boxm2_update_image(scene,
-                                  data_type,appTypeSize,
-                                  num_obs_type,
-                                  cam,
-                                  input_image,
-                                  input_image->ni(),
-                                  input_image->nj());
+        return boxm2_update_with_shadow(scene,
+                                        data_type,appTypeSize,
+                                        num_obs_type,
+                                        cam,
+                                        shadow_prior,
+                                        shadow_sigma,
+                                        input_image,
+                                        input_image->ni(),
+                                        input_image->nj());
     }
 
     return false;

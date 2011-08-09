@@ -86,6 +86,11 @@ bool boxm2_cpp_render_expected_image_process(bprb_func_process& pro)
       data_type = apps[i];
       foundDataType = true;
     }
+    else if ( apps[i] == boxm2_data_traits<BOXM2_GAUSS_GREY>::prefix() )
+    {
+      data_type = apps[i];
+      foundDataType = true;
+    }
   }
   if (!foundDataType) {
     vcl_cout<<"BOXM2_CPP_RENDER_PROCESS ERROR: scene doesn't have BOXM2_MOG3_GREY or BOXM2_MOG3_GREY_16 data type"<<vcl_endl;
@@ -120,7 +125,7 @@ bool boxm2_cpp_render_expected_image_process(bprb_func_process& pro)
     //scene_info_wrapper->info->num_buffer = blk->num_buffers();
 
     boxm2_render_expected_image(scene_info_wrapper->info,
-                                blk,datas,cam,exp_img,vis_img,ni,nj);
+                                blk,datas,cam,exp_img,vis_img,ni,nj,0,0,data_type);
   }
 
   normalize_intensity f;
