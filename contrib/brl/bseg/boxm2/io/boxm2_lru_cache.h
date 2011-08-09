@@ -37,6 +37,9 @@ class boxm2_lru_cache : public boxm2_cache
     //: to string method returns a string describing the cache's current state
     vcl_string to_string();
 
+    //: delete all the memory, caution: make sure to call write to disc methods not to loose writable data
+    virtual void clear_cache();
+
   private:
 
     //: hidden constructor (private so it cannot be called -- forces the class to be singleton)
