@@ -358,14 +358,27 @@ void  boxm2_mog3_grey_processor::merge_mixtures(vnl_vector_fixed<unsigned char, 
   }
 }
 
-//: Most of The following piece of code is copied from boxm_mog_grey_processor::compute_appearance
-void boxm2_mog3_grey_processor::compute_gauss_mixture_3(vnl_vector_fixed<unsigned char, 8> & mog3,
-                                                        vcl_vector<float> const& obs,
-                                                        vcl_vector<float> const& vis,
-                                                        bsta_sigma_normalizer_sptr n_table,
-                                                        float min_sigma)
+//: Most of The following piece of code is copied over from boxm_mog_grey_processor::compute_appearance 
+
+void boxm2_mog3_grey_processor::compute_app_model(vnl_vector_fixed<unsigned char, 8> & apm,
+                                         vcl_vector<float> const& obs, 
+                                         vcl_vector<float> const& obs_weights, 
+                                         bsta_sigma_normalizer_sptr n_table, 
+                                         float min_sigma)
 {
-  const unsigned int nmodes = 3;
+   //compute_gauss_mixture_3(apm,obs,obs_weights,n_table,min_sigma);
+  vcl_vector<float> pre(obs.size(),0.0f);
+  compute_app_model(apm,obs,pre,obs_weights,n_table,min_sigma);
+}
+
+void boxm2_mog3_grey_processor::compute_app_model(vnl_vector_fixed<unsigned char, 8> & mog3,
+                                                  vcl_vector<float> const& obs, 
+                                                  vcl_vector<float> const& pre, 
+                                                  vcl_vector<float> const& vis, 
+                                                  bsta_sigma_normalizer_sptr n_table,
+                                                 float min_sigma)
+{
+  const int nmodes = 3;
   const float min_var = min_sigma*min_sigma;
   const float big_sigma = (float)vnl_math::sqrt1_2; // maximum possible std. dev for set of samples drawn from [0 1]
   const float big_var = big_sigma * big_sigma;
@@ -375,9 +388,6 @@ void boxm2_mog3_grey_processor::compute_gauss_mixture_3(vnl_vector_fixed<unsigne
     // nothing to do.
     return;
   }
-
-  bsta_num_obs<bsta_mixture_fixed<bsta_num_obs<bsta_gauss_sf1>, nmodes> > model;
-
   if (nobs == 1) {
     //: just make the sample the mean and the mixture a single mode distribution
     mog3[0]=(unsigned char)vcl_floor(boxm2_mog3_grey_processor::clamp(obs[0],0,1)*255.0f);
@@ -391,7 +401,9 @@ void boxm2_mog3_grey_processor::compute_gauss_mixture_3(vnl_vector_fixed<unsigne
     return;
   }
 
-  // initialize parameters
+  bsta_num_obs<bsta_mixture_fixed<bsta_num_obs<bsta_gauss_sf1>, nmodes> > model;
+
+  // we always initialize parameters at the beginning of each iteration
   for (unsigned int m=0; m<nmodes; ++m) {
     float mean = (float(m) + 0.5f) / float(nmodes);
     float sigma = 0.3f;
@@ -426,8 +438,8 @@ void boxm2_mog3_grey_processor::compute_gauss_mixture_3(vnl_vector_fixed<unsigne
         total_prob += new_mode_prob;
       }
       // compute the probability the observation came from an occluding cell
-      //const float prev_prob = pre[n];
-      //total_prob += prev_prob;
+      const float prev_prob = pre[n];
+      total_prob += prev_prob;
       if (total_prob > 1e-6) {
         for (unsigned int m=0; m<nmodes; ++m) {
           new_mode_probs[m] /= total_prob;
@@ -491,9 +503,7 @@ void boxm2_mog3_grey_processor::compute_gauss_mixture_3(vnl_vector_fixed<unsigne
   }
 
   // unbias variance based on number of observations
-  //bsta_sigma_normalizer sigma_norm(0.20f);
   for (unsigned int m=0; m<nmodes; ++m) {
-    //float unbias_factor = sigma_norm.normalization_factor(mode_weight_sum[m]);
     float unbias_factor = n_table->normalization_factor(mode_weight_sum[m]);
 
     float mode_var = model.distribution(m).var();
