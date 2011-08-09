@@ -4,6 +4,7 @@
 // \file
 #include <boxm2/cpp/algo/boxm2_cast_ray_function.h>
 #include <boxm2/cpp/algo/boxm2_mog3_grey_processor.h>
+#include <boxm2/cpp/algo/boxm2_gauss_grey_processor.h>
 #include <vil/vil_image_view.h>
 #include <vcl_vector.h>
 #include <vcl_limits.h>
@@ -35,6 +36,7 @@ class boxm2_update_pass0_functor
   vil_image_view<float> * input_img_;
 };
 
+template <boxm2_data_type APM_TYPE>
 class boxm2_update_pass1_functor
 {
  public:
@@ -45,7 +47,7 @@ class boxm2_update_pass1_functor
   {
     aux_data_=new boxm2_data<BOXM2_AUX>(datas[0]->data_buffer(),datas[0]->buffer_length(),datas[0]->block_id());
     alpha_data_=new boxm2_data<BOXM2_ALPHA>(datas[1]->data_buffer(),datas[1]->buffer_length(),datas[1]->block_id());
-    mog3_data_=new boxm2_data<BOXM2_MOG3_GREY>(datas[2]->data_buffer(),datas[2]->buffer_length(),datas[2]->block_id());
+    mog3_data_=new boxm2_data<APM_TYPE>(datas[2]->data_buffer(),datas[2]->buffer_length(),datas[2]->block_id());
     pre_img_=pre_img;
     vis_img_=vis_img;
     return true;
@@ -57,7 +59,7 @@ class boxm2_update_pass1_functor
     if (aux[0]<1e-10f)return true;
 
     float mean_obs=aux[1]/aux[0];
-    float PI=boxm2_data_traits<BOXM2_MOG3_GREY>::processor::prob_density(mog3_data_->data()[index], mean_obs);
+    float PI=boxm2_data_traits<APM_TYPE>::processor::prob_density(mog3_data_->data()[index], mean_obs);
 
     float vis=(*vis_img_)(i,j);
     float pre=(*pre_img_)(i,j);
@@ -72,12 +74,12 @@ class boxm2_update_pass1_functor
  private:
   boxm2_data<BOXM2_AUX> * aux_data_;
   boxm2_data<BOXM2_ALPHA> * alpha_data_;
-  boxm2_data<BOXM2_MOG3_GREY> * mog3_data_;
+  boxm2_data<APM_TYPE> * mog3_data_;
   vil_image_view<float> * pre_img_;
   vil_image_view<float> * vis_img_;
 };
 
-
+template <boxm2_data_type APM_TYPE>
 class boxm2_update_pass2_functor
 {
  public:
@@ -90,7 +92,7 @@ class boxm2_update_pass2_functor
   {
     aux_data_=new boxm2_data<BOXM2_AUX>(datas[0]->data_buffer(),datas[0]->buffer_length(),datas[0]->block_id());
     alpha_data_=new boxm2_data<BOXM2_ALPHA>(datas[1]->data_buffer(),datas[1]->buffer_length(),datas[1]->block_id());
-    mog3_data_=new boxm2_data<BOXM2_MOG3_GREY>(datas[2]->data_buffer(),datas[2]->buffer_length(),datas[2]->block_id());
+    mog3_data_=new boxm2_data<APM_TYPE>(datas[2]->data_buffer(),datas[2]->buffer_length(),datas[2]->block_id());
     pre_img_=pre_img;
     vis_img_=vis_img;
     norm_img_=norm_img;
@@ -102,7 +104,7 @@ class boxm2_update_pass2_functor
     boxm2_data<BOXM2_AUX>::datatype & aux=aux_data_->data()[index];
     if (aux[0]<1e-10f)return true;
     float mean_obs=aux[1]/aux[0];
-    float PI=boxm2_data_traits<BOXM2_MOG3_GREY>::processor::prob_density(mog3_data_->data()[index], mean_obs);
+    float PI=boxm2_data_traits<APM_TYPE>::processor::prob_density(mog3_data_->data()[index], mean_obs);
 
     //if (PI==vcl_numeric_limits<float>::infinity())
     float vis=(*vis_img_)(i,j);
@@ -123,12 +125,13 @@ class boxm2_update_pass2_functor
  private:
   boxm2_data<BOXM2_AUX> * aux_data_;
   boxm2_data<BOXM2_ALPHA> * alpha_data_;
-  boxm2_data<BOXM2_MOG3_GREY> * mog3_data_;
+  boxm2_data<APM_TYPE> * mog3_data_;
   vil_image_view<float> * pre_img_;
   vil_image_view<float> * vis_img_;
   vil_image_view<float> * norm_img_;
 };
 
+template <boxm2_data_type APM_TYPE>
 class boxm2_update_data_functor
 {
  public:
@@ -139,7 +142,7 @@ class boxm2_update_data_functor
   {
     aux_data_=new boxm2_data<BOXM2_AUX>(datas[0]->data_buffer(),datas[0]->buffer_length(),datas[0]->block_id());
     alpha_data_=new boxm2_data<BOXM2_ALPHA>(datas[1]->data_buffer(),datas[1]->buffer_length(),datas[1]->block_id());
-    mog3_data_=new boxm2_data<BOXM2_MOG3_GREY>(datas[2]->data_buffer(),datas[2]->buffer_length(),datas[2]->block_id());
+    mog3_data_=new boxm2_data<APM_TYPE>(datas[2]->data_buffer(),datas[2]->buffer_length(),datas[2]->block_id());
     nobs_data_=new boxm2_data<BOXM2_NUM_OBS>(datas[3]->data_buffer(),datas[3]->buffer_length(),datas[3]->block_id());
     alpha_min_ = -vcl_log(1.f-0.0001f)/float(block_len/max_levels);
 
@@ -158,7 +161,7 @@ class boxm2_update_data_functor
       boxm2_data<BOXM2_ALPHA>::datatype & alpha=alpha_data_->data()[index];
 
       alpha=vcl_max(alpha_min_,alpha*beta);
-      boxm2_data<BOXM2_MOG3_GREY>::datatype & mog3=mog3_data_->data()[index];
+      boxm2_data<APM_TYPE>::datatype & mog3=mog3_data_->data()[index];
       boxm2_data<BOXM2_NUM_OBS>::datatype & nobs=nobs_data_->data()[index];
       vnl_vector_fixed<float,4> nobs_float;
       nobs_float[0]=(float)nobs[0];
@@ -166,7 +169,7 @@ class boxm2_update_data_functor
       nobs_float[2]=(float)nobs[2];
       //: converting flot to short
       nobs_float[3]=((float)nobs[3])/100.0f;
-      boxm2_data_traits<BOXM2_MOG3_GREY>::processor::update_gauss_mixture_3(mog3,nobs_float, mean_obs,vis,0.09f, 0.03f);
+      boxm2_data_traits<APM_TYPE>::processor::update_app_model(mog3,nobs_float, mean_obs,vis,0.09f, 0.03f);
       nobs[0]=(unsigned short)nobs_float[0];
       nobs[1]=(unsigned short)nobs_float[1];
       nobs[2]=(unsigned short)nobs_float[2];
@@ -181,7 +184,7 @@ class boxm2_update_data_functor
  private:
   boxm2_data<BOXM2_AUX>       * aux_data_;
   boxm2_data<BOXM2_ALPHA>     * alpha_data_;
-  boxm2_data<BOXM2_MOG3_GREY> * mog3_data_;
+  boxm2_data<APM_TYPE> * mog3_data_;
   boxm2_data<BOXM2_NUM_OBS>   * nobs_data_;
   float alpha_min_;
 };
