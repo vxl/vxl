@@ -17,6 +17,7 @@
 #endif
 #endif
 #include <bbas_pro/bbas_register.h>
+#include <bsta/pro/bsta_register.h>
 
 
 PyObject *
@@ -34,6 +35,7 @@ register_processes(PyObject *self, PyObject *args)
 #endif
 #endif
   bbas_register::register_process();
+  bsta_register::register_process();
   Py_INCREF(Py_None);
   return Py_None;
 }
@@ -56,6 +58,7 @@ register_datatypes(PyObject *self, PyObject *args)
 #endif
 #endif
   bbas_register::register_datatype();
+  bsta_register::register_datatype();
   Py_INCREF(Py_None);
   return Py_None;
 }
