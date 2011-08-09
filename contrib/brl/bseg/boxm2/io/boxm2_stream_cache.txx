@@ -86,7 +86,7 @@ vcl_vector<typename boxm2_data_traits<T>::datatype> boxm2_stream_cache::get_next
       vcl_cout<<(int)cell[0]<<' ';
       if (!cell) { vcl_cerr << "problem in reading from files!\n"; throw 0; }
     }
-    datatype val = reinterpret_cast<datatype*>(cell)[0]; 
+    boxm2_data_traits<T>::datatype val = reinterpret_cast<typename boxm2_data_traits<T>::datatype *>(cell)[0]; 
     output.push_back(val);
     delete [] cell;
   }
