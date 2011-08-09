@@ -59,6 +59,9 @@ class boxm2_cache: public vbl_ref_count
   //: disable the write process -- generic method does not do anything; see specialisations
   virtual void disable_write() {}
 
+  //: delete all the memory, caution: make sure to call write to disc methods not to loose writable data 
+  virtual void clear_cache() = 0;
+
  protected:
 
   //: hide constructor
