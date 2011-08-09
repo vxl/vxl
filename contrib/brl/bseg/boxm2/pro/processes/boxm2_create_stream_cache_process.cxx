@@ -81,7 +81,7 @@ bool boxm2_create_stream_cache_process(bprb_func_process& pro)
     vcl_string type_name;
     ifst >> type_name;
     type_names.push_back(type_name);
-    vcl_cout << "adding: " << type_name << vcl_endl;
+    vcl_cout << "adding type: " << type_name << vcl_endl;
   }
   ifst.close();
 
