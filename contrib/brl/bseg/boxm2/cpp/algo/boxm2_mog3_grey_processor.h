@@ -29,6 +29,12 @@ class  boxm2_mog3_grey_processor
      static void  update_gauss_mixture_3(vnl_vector_fixed<unsigned char, 8> & mog3,
                                         vnl_vector_fixed<float, 4> & nobs,
                                         float x, float w, float init_sigma,float min_sigma);
+     static void update_app_model(vnl_vector_fixed<unsigned char, 8> & mog3,
+                                        vnl_vector_fixed<float, 4> & nobs,
+                                        float x, float w, float init_sigma,float min_sigma)
+     { 
+       update_gauss_mixture_3(mog3,nobs,x,w,init_sigma,min_sigma);
+     }
      static void  sort_mix_3(float & mu0, float& sigma0, float& w0, float& Nobs0,
                             float & mu1, float& sigma1, float& w1, float& Nobs1,
                             float & mu2, float& sigma2, float& w2, float& Nobs2);
@@ -47,11 +53,17 @@ class  boxm2_mog3_grey_processor
                                  vnl_vector_fixed<unsigned char, 8> & mog3_2, float w2,
                                  vnl_vector_fixed<unsigned char, 8> & mog3_3);
 
-     static void compute_gauss_mixture_3(vnl_vector_fixed<unsigned char, 8> & mog3,
+     static void compute_app_model(vnl_vector_fixed<unsigned char, 8> & apm,
                                          vcl_vector<float> const& obs, 
                                          vcl_vector<float> const& obs_weights, 
                                          bsta_sigma_normalizer_sptr n_table, 
-                                         float min_sigma = 0.01f);
+                                         float min_sigma = 0.01f); 
+     static void compute_app_model(vnl_vector_fixed<unsigned char, 8> & apm,
+                                   vcl_vector<float> const& obs, 
+                                   vcl_vector<float> const& pre, 
+                                   vcl_vector<float> const& vis, 
+                                   bsta_sigma_normalizer_sptr n_table,
+                                   float min_sigma=0.01f);
 };
 
 #endif // boxm2_mog3_grey_processor_h_
