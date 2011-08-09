@@ -53,6 +53,25 @@ boxm2_lru_cache::~boxm2_lru_cache()
   }
 }
 
+//: delete all the memory, caution: make sure to call write to disc methods not to loose writable data
+void boxm2_lru_cache::clear_cache()
+{
+  //: delete
+  for (vcl_map<vcl_string, vcl_map<boxm2_block_id, boxm2_data_base*> >::iterator iter = cached_data_.begin(); 
+    iter != cached_data_.end(); iter++) 
+  {
+    for (vcl_map<boxm2_block_id, boxm2_data_base*>::iterator it = iter->second.begin(); it != iter->second.end(); it++) 
+      delete it->second;  
+    iter->second.clear();
+  }
+  cached_data_.clear();
+
+  for (vcl_map<boxm2_block_id, boxm2_block*>::iterator iter = cached_blocks_.begin();
+    iter != cached_blocks_.end(); iter++)
+    delete iter->second;
+  cached_blocks_.clear();
+}
+
 //: realization of abstract "get_block(block_id)"
 boxm2_block* boxm2_lru_cache::get_block(boxm2_block_id id)
 {
