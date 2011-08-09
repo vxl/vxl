@@ -38,6 +38,11 @@ class boxm2_nn_cache : public boxm2_cache
     //: disable the write process
     // \todo not yet implemented
     virtual void disable_write() { vcl_cerr << "Not yet implemented!!!\n"; }
+
+     //: delete all the memory, caution: make sure to call write to disc methods not to loose writable data
+    // \todo not yet implemented
+    virtual void clear_cache() { vcl_cerr << "Not yet implemented!!!\n"; }
+
   private:
 
     //: keep a map of boxm2_block pointers (size will be limited to 9 blocks
