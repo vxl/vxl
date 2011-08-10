@@ -14,11 +14,17 @@
 
 #include <boxm/boxm_scene.h>
 #include <bvpl/kernels/bvpl_kernel.h>
+#include <vbl/vbl_ref_count.h>
 
-class bvpl_global_taylor
+//Forward declaration
+class bvpl_global_corners;
+
+
+class bvpl_global_taylor : public vbl_ref_count
 {
- public:
-
+  
+public:
+  
   //: Constructor  from xml file
   bvpl_global_taylor(const vcl_string &path);
 
@@ -31,6 +37,9 @@ class bvpl_global_taylor
   //: Extract a particular coefficient scene
   void extract_coefficient_scene(int scene_id, int coefficient_id, boxm_scene<boct_tree<short, float > > *coeff_scene);
 
+  //: Threshold non-salient features according to Harris' measure
+  void threshold_corners(int scene_id, int block_i, int block_j, int block_k, double k);
+  
   //: Write to taylor_global_info.xml
   void xml_write();
 
@@ -46,11 +55,13 @@ class bvpl_global_taylor
   //boxm_scene_base_sptr load_train_scene (int scene_id);
   boxm_scene_base_sptr load_valid_scene (int scene_id);
   boxm_scene_base_sptr load_projection_scene (int scene_id);
-
-  vcl_string xml_path() const { return path_out_ + "/taylor_global_info.xml"; }
-
- protected:
-
+  
+  vcl_string xml_path() { return path_out_ + "/taylor_global_info.xml"; }
+  
+  friend class bvpl_global_corners;
+  
+protected:
+  
   //: A vector to hold scene paths
   vcl_vector<vcl_string> scenes_;
   //: A vector to hold paths to keep any kind of auxiliary scene or info(must be in the same order as scenes_)
@@ -68,6 +79,10 @@ class bvpl_global_taylor
   vcl_string kernels_path_;
   //: Path to xml info file
   vcl_string path_out_;
+
 };
+
+typedef vbl_smart_ptr<bvpl_global_taylor > bvpl_global_taylor_sptr;
+
 
 #endif
