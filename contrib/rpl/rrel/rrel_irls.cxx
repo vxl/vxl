@@ -226,6 +226,19 @@ rrel_irls::estimate( const rrel_estimation_problem* problem,
       allow_convergence_test = true;
 
     // Step 5.  Weighted least-squares
+    // Test to see if the sum of the weights is less or equal to zero.
+    double sum_wgt = 0;
+
+    for (int i = 0; i < weights.size(); ++i ) {
+      sum_wgt += weights[i];
+    }
+
+    if (sum_wgt <= 0)
+    {
+      failed = true;
+      break;
+    }
+
     if ( !problem->weighted_least_squares_fit( params_, cofact_, &weights ) ) {
       failed = true;
       break;
