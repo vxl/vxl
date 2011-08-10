@@ -16,6 +16,7 @@ AUX_SOURCE_DIRECTORY(Templates bvpl_octree_pro_sources)
 AUX_SOURCE_DIRECTORY(processes bvpl_octree_pro_sources)
 AUX_SOURCE_DIRECTORY(processes/pca bvpl_octree_pro_sources)
 AUX_SOURCE_DIRECTORY(processes/taylor bvpl_octree_pro_sources)
+AUX_SOURCE_DIRECTORY(processes/corners bvpl_octree_pro_sources)
 
 ADD_LIBRARY(bvpl_octree_pro ${bvpl_octree_pro_sources})
 
