@@ -198,7 +198,11 @@ class boxm_scene :public boxm_scene_base
 
   void set_block(int i, int j, int k , boxm_block<T>* block) { set_block(vgl_point_3d<int>(i,j,k), block); }
 
+  //: Write scene xml file at the scenes' path
   void write_scene(vcl_string filename = "scene.xml");
+  
+  //: Write scene xml file at the location indicated by path
+  void write_scene(vcl_string path, vcl_string filename);
 
   void load_scene(vcl_string filename);
 

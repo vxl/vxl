@@ -184,7 +184,6 @@ void boxm_scene<T>::clone_blocks(boxm_scene<T> &scene_out)
 template <class T>
 void boxm_scene<T>::write_active_block(bool unload_block)
 {
-  vcl_cout << active_block_ <<vcl_endl;
   if (valid_index(active_block_)&& (!load_all_blocks_))
   {
     int x=active_block_.x(), y=active_block_.y(), z=active_block_.z();
@@ -755,6 +754,16 @@ template <class T>
 void boxm_scene<T>::write_scene(vcl_string filename)
 {
   vcl_string fullpath=scene_path_+ "/" + filename;
+  vcl_ofstream os(fullpath.c_str());
+  x_write(os, *this, "boxm_scene");
+  this->filename_ = fullpath;
+  os.close();
+}
+
+template <class T>
+void boxm_scene<T>::write_scene(vcl_string path, vcl_string filename)
+{
+  vcl_string fullpath= path+ "/" + filename;
   vcl_ofstream os(fullpath.c_str());
   x_write(os, *this, "boxm_scene");
   this->filename_ = fullpath;
