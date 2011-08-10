@@ -9,6 +9,8 @@
 #include <bvpl_octree/bvpl_pca_error_scenes.h>
 #include <bvpl_octree/bvpl_discover_pca_kernels.h>
 #include <bvpl_octree/bvpl_global_pca.h>
+#include <bvpl_octree/bvpl_global_taylor.h>
+#include <bvpl_octree/bvpl_global_corners.h>
 
 void bvpl_octree_register::register_datatype()
 {
@@ -16,6 +18,8 @@ void bvpl_octree_register::register_datatype()
   REGISTER_DATATYPE(bvpl_pca_error_scenes_sptr);
   REGISTER_DATATYPE(bvpl_discover_pca_kernels_sptr);
   REGISTER_DATATYPE(bvpl_global_pca_125_sptr);
+  REGISTER_DATATYPE(bvpl_global_taylor_sptr);
+  REGISTER_DATATYPE(bvpl_global_corners_sptr);
   
 }
 
@@ -31,7 +35,7 @@ void bvpl_octree_register::register_process()
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvpl_compute_gauss_gradients, "bvplComputeGaussGradients");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvpl_compute_pca_test_error_process, "bvplComputeTestErrorProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvpl_scene_histogram_process, "bvplSceneHistorgramProcess");
-
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvpl_grad_scene_to_bin_process, "bvplGradSceneToBinProcess");
   
   //PCA related
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvpl_discover_pca_features_process, "bvplDiscoverPCAFeaturesProcess");
@@ -56,4 +60,12 @@ void bvpl_octree_register::register_process()
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvpl_init_global_taylor_process, "bvplInitGlobalTaylorProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvpl_compute_taylor_coefficients_process, "bvplComputeTaylorCoefficients");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvpl_explore_coefficient_scene_process, "bvplExploreCoefficientSceneProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvpl_load_global_taylor_process, "bvplLoadGlobalTaylorProcess");  
+  
+  //Corner related
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvpl_threshold_corners_process, "bvplThresholdCornersProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvpl_compute_harris_measure_process, "bvplComputeHarrisMeasureProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvpl_load_global_corners_process, "bvplLoadGlobalCornersProcess");  
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvpl_corner_statistics_process, "bvplCornerStatisticsProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvpl_compute_beaudet_measure_process, "bvplComputeBeaudetMeasureProcess");
 }

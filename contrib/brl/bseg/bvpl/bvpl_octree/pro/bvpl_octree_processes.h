@@ -14,6 +14,7 @@ DECLARE_FUNC_CONS(bvpl_nonmax_supp_process);
 DECLARE_FUNC_CONS(bvpl_compute_gauss_gradients);
 DECLARE_FUNC_CONS(bvpl_scene_histogram_process);
 DECLARE_FUNC_CONS(bvpl_block_avg_value_process);
+DECLARE_FUNC_CONS(bvpl_grad_scene_to_bin_process);
 
 
 //PCA related
@@ -39,5 +40,14 @@ DECLARE_FUNC_CONS(bvpl_add_taylor_errors_process);
 DECLARE_FUNC_CONS(bvpl_init_global_taylor_process);
 DECLARE_FUNC_CONS(bvpl_compute_taylor_coefficients_process);
 DECLARE_FUNC_CONS(bvpl_explore_coefficient_scene_process);
+DECLARE_FUNC_CONS(bvpl_load_global_taylor_process);
+
+//Corner related
+DECLARE_FUNC_CONS(bvpl_compute_harris_measure_process);
+DECLARE_FUNC_CONS(bvpl_load_global_corners_process);
+DECLARE_FUNC_CONS(bvpl_corner_statistics_process);
+DECLARE_FUNC_CONS(bvpl_threshold_corners_process);
+DECLARE_FUNC_CONS(bvpl_compute_beaudet_measure_process);
+
 
 #endif
