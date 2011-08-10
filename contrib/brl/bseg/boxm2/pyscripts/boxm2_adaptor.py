@@ -154,6 +154,26 @@ def refine(scene, cache, thresh=0.3, device=None) :
   else : 
     print "ERROR: Cache type unrecognized: ", cache.type; 
     
+#generic merge method 
+def merge(scene, cache, thresh=0.01, device=None) :
+  if cache.type == "boxm2_cache_sptr" :
+    print "boxm2_batch CPU merge"; 
+    boxm2_batch.init_process("boxm2CppMergeProcess");
+    boxm2_batch.set_input_from_db(0,scene);
+    boxm2_batch.set_input_from_db(1,cache);
+    boxm2_batch.set_input_float(2,thresh);
+    boxm2_batch.run_process();
+  elif cache.type == "boxm2_opencl_cache_sptr" and device : 
+    print "boxm2_batch GPU refine"; 
+    boxm2_batch.init_process("boxm2OclMergeProcess");
+    boxm2_batch.set_input_from_db(0,device);
+    boxm2_batch.set_input_from_db(1,scene);
+    boxm2_batch.set_input_from_db(2,cache);    
+    boxm2_batch.set_input_float(3,thresh);
+    boxm2_batch.run_process();
+  else : 
+    print "ERROR: Cache type unrecognized: ", cache.type; 
+    
 #generic filter scene, should work with color and grey scenes
 def median_filter(scene, cache, device=None) : 
   if cache.type == "boxm2_cache_sptr" : 
