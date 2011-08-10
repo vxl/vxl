@@ -78,7 +78,7 @@ bool boxm_save_scene_raw_process(bprb_func_process& pro)
         return false;
       }
       else { // write the whole scene
-        boxm_save_scene_raw_general_to_byte<short,float>(*scene, filepath + ".raw", resolution);
+        boxm_save_scene_raw_general<short,float>(*scene, filepath + ".raw", resolution);
       }
     }
   }
@@ -105,6 +105,29 @@ bool boxm_save_scene_raw_process(bprb_func_process& pro)
       }
     }
   }
+  // check the scene's app model
+  else if (scene_ptr->appearence_model() == BOXM_BOOL)
+  {
+    if (scene_ptr->multi_bin())
+    {
+      vcl_cout << "boxm_save_scene_raw_process: Multibin scenes not implemented" << vcl_endl;
+      return false;
+    }
+    else
+    {
+      typedef boct_tree<short, bool > type;
+      boxm_scene<type>* scene = dynamic_cast<boxm_scene<type>*>(scene_ptr.as_pointer());
+      if(!scene)
+        return false;
+      if (!whole) {
+        vcl_cout << "boxm_save_scene_raw_process: Save by block not implemented" << vcl_endl;
+        return false;
+      }
+      else { // write the whole scene
+        boxm_save_scene_raw_general<short>(*scene, filepath + ".raw", resolution);
+      }
+    }
+  }  
   else {
     vcl_cout << "boxm_save_scene_raw_process: undefined APM type" << vcl_endl;
     return false;
