@@ -38,7 +38,9 @@ bool bocl_mem::create_buffer(const cl_mem_flags& flags, cl_command_queue& queue)
   
   //if memory was allocated and a null pointer was passed in, store it
   if ( (flags & CL_MEM_ALLOC_HOST_PTR) && !cpu_buf_) {
+#ifdef DEBUG    
     vcl_cout<<"bocl_mem is allocating host pointer"<<vcl_endl;
+#endif
     cpu_buf_ = clEnqueueMapBuffer(queue, 
                                   buffer_, 
                                   CL_TRUE, 

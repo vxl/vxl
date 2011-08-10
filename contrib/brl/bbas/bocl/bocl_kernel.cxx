@@ -55,8 +55,9 @@ bool bocl_kernel::create_kernel(cl_context* context,
     vcl_cerr<<"bocl_kernel:: couldn't build program "<<id_<<'\n';
     return false;
   }
-  else
-    return true;
+  //else
+  vcl_cout<<this->build_log()<<vcl_endl;  
+  return true;
 }
 
 bocl_kernel::~bocl_kernel()
