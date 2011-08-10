@@ -242,7 +242,7 @@ class boct_tree
   //: Returns bounding box of the tree
   vgl_box_3d<double> bounding_box() const { return global_bbox_; }
 
-  //: Returns the length of a cell, assuming cell is cubical
+  //: Returns the length of a cell in local tree coordinates, assuming cell is cubical
   double cell_length(boct_tree_cell<T_loc,T_data>* const cell) const
   {
     return 1.0/(double)(1<<(root_level_-cell->level()));
