@@ -270,6 +270,7 @@ int boxm2_merge_block_function::move_data( boct_bit_tree2& old_tree,
 
   //place to get data and place to put it in new buffer
   int oldDataIndex=0, newDataIndex=0; 
+  float max_alpha = -vcl_log(1.0f - init_prob_);
   
   //push back root
   vcl_list<int> toVisit;
@@ -294,7 +295,10 @@ int boxm2_merge_block_function::move_data( boct_bit_tree2& old_tree,
     //second case: found a merged cell in new tree, copy init vals
     else if(merged_tree.is_leaf(currBit) && !old_tree.is_leaf(currBit)) 
     {
-      alpha_cpy[newDataIndex]  = init_prob_; 
+      int currLevel = merged_tree.depth_at(currBit);
+      float side_len = block_len_ / (float) (1<<currLevel);
+      float newAlpha = (max_alpha / side_len); 
+      alpha_cpy[newDataIndex]  = newAlpha; 
       mog_cpy[newDataIndex]    = uchar8((uchar) 0);
       num_obs_cpy[newDataIndex]= ushort4((ushort) 0);
       newDataIndex++; 
