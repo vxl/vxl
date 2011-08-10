@@ -15,6 +15,8 @@
 #include <bvpl/bvpl_octree/bvpl_block_vector_operator.h>
 #include <bvpl/functors/bvpl_algebraic_functor.h>
 #include <bvpl/kernels/bvpl_taylor_basis_factory.h>
+#include <bvpl_octree/bvpl_corner_detector.h>
+#include <bvpl_octree/bvpl_corner_functors.h>
 
 #include <vul/vul_file.h>
 
@@ -133,6 +135,55 @@ void bvpl_global_taylor::compute_taylor_coefficients(int scene_id, int block_i, 
   data_scene->unload_active_blocks();
   proj_scene->unload_active_blocks();
   valid_scene->unload_active_blocks();
+}
+
+
+
+//: Threshold non-salient features according to Harris' measure
+void bvpl_global_taylor::threshold_corners(int scene_id, int block_i, int block_j, int block_k, double harris_k)
+{
+  
+  typedef boct_tree<short,vnl_vector_fixed<double,10> > taylor_tree_type;
+  typedef boct_tree_cell<short,vnl_vector_fixed<double,10> > taylor_cell_type;
+  
+  boxm_scene_base_sptr data_scene_base =load_scene(scene_id);
+  boxm_scene_base_sptr proj_scene_base =load_projection_scene(scene_id);
+  boxm_scene_base_sptr valid_scene_base = load_valid_scene(scene_id);
+  
+  boxm_scene<taylor_tree_type>* proj_scene = dynamic_cast<boxm_scene<taylor_tree_type>*>(proj_scene_base.as_pointer());
+  boxm_scene<boct_tree<short, bool> >* valid_scene = dynamic_cast<boxm_scene<boct_tree<short, bool> >*> (valid_scene_base.as_pointer());
+  boxm_scene<boct_tree<short, float> >* corner_scene = 
+  new boxm_scene<boct_tree<short, float> >(valid_scene->lvcs(), valid_scene->origin(), valid_scene->block_dim(), valid_scene->world_dim(), valid_scene->max_level(), valid_scene->init_level());
+  corner_scene->set_appearance_model(BOXM_FLOAT);
+  corner_scene->set_paths(valid_scene->path(), "harris_scene");
+  corner_scene->write_scene("/harris_scene.xml");
+  
+  if (!( proj_scene && valid_scene && corner_scene ))
+  {
+    vcl_cerr << "Error in bvpl_global_taylor::threshold_corners: Could not cast input scenes\n";
+    return;
+  }
+  
+  //init variables
+  proj_scene->unload_active_blocks();
+  valid_scene->unload_active_blocks();
+  
+  //operate on scene
+  bvpl_corner_detector corner_detector;
+  bvpl_harris_laptev_functor harris_functor(harris_k);
+  
+  vgl_point_3d<int> max_neigborhood_idx = kernel_vector_->max();
+  vgl_point_3d<int> min_neigborhood_idx = kernel_vector_->min();
+  
+  vcl_cout << "Neigborhood for harris threshhold: " << min_neigborhood_idx << " , " << max_neigborhood_idx << vcl_endl;
+  
+  corner_detector.detect_and_threshold(proj_scene, harris_functor, min_neigborhood_idx, max_neigborhood_idx,
+                                       block_i, block_j, block_k, valid_scene, corner_scene, finest_cell_length_[scene_id]);
+  
+  //clean memory
+  proj_scene->unload_active_blocks();
+  valid_scene->unload_active_blocks();
+  corner_scene->unload_active_blocks();
 }
 
 //: Init auxiliary scenes and smallest cell length values
