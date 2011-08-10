@@ -25,6 +25,13 @@ float boxm_cell_to_float(boct_tree_cell<T_loc, float >* cell,  double /*step_len
   return cell->data();
 }
 
+//: bool to float
+template <class T_loc>
+float boxm_cell_to_float(boct_tree_cell<T_loc, bool >* cell,  double /*step_len*/)
+{
+  return (float)cell->data();
+}
+
 //: Mixture of gaussians to float; return the mean
 template <class T_loc>
 float boxm_cell_to_float(boct_tree_cell<T_loc, bsta_num_obs<bsta_gauss_sf1> >* cell, double /*step_len*/)
