@@ -133,6 +133,12 @@ bool is_leaf(__local uchar* tree, int bitIndex)
   return ( tree_bit_at(tree, pi) ) && ( tree_bit_at(tree, bitIndex)==0 ); 
 }
 
+bool valid_cell(__local uchar* tree, int bit_index)
+{
+  return (bit_index==0) || tree_bit_at(tree, parent_index(bit_index)); 
+}
+
+
 //-----------------------------------------------------------------------------
 //TODO: turn all data_index functions into two steps:
 //      1. Unpack root pointer

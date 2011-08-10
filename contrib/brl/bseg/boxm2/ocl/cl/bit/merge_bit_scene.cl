@@ -1,25 +1,37 @@
 //------------------------------------------------------------------------------
-// Merge bit scene
-// NOTE: relies on preprocessor macro "MAXINNER" to be defined 
-// in the host "build_refine_program" function.  
-// Also macro "MAXCELLS" must be defined for moving refined data
+// Merge bit scene 
 //------------------------------------------------------------------------------
+#pragma OPENCL EXTENSION cl_khr_global_int32_base_atomics : enable
+#ifdef MOG_TYPE_16 
+    #define MOG_TYPE ushort8
+#endif
+#ifdef MOG_TYPE_8 
+   #define MOG_TYPE uchar8
+#endif
+#ifdef MOG_TYPE_4
+   #define MOG_TYPE uchar4
+#endif
+#ifdef MOG_TYPE_2
+   #define MOG_TYPE uchar2
+#endif
+
+#define ALPHA_BEHAVIOR 0
+#define COPY_PARENT_BEHAVIOR 1
+#define COPY_INIT_BEHAVIOR 2
+#define ZERO_BEHAVIOR 3 
+
 
 /////////////////////////////////////////////////////////////////
-////Refine Tree (refines local tree)
-////Depth first search iteration of the tree (keeping track of node level)
-////1) parent pointer, 2) child pointer 3) data pointer 4) nothing right now
-// Kind of a wierd mix of functions - the tree structure is modified locally, 
-// so no tree_buffer information is needed, whereas the data is modified 
-// on the global level, so buffers, offsets are used
+// Given zero based alpha array, merges tree
 /////////////////////////////////////////////////////////////////
 int merge_tree( __constant RenderSceneInfo * linfo, 
                 __local    uchar16         * unrefined_tree,
-                __local    uchar16         * refined_tree,
-                           int               tree_size, 
-                           int               blockIndex,
-                __global   float           * alpha_array,
+                __local    uchar16         * merged_tree,
+                __global   float           * alpha_array,        
                            float             prob_thresh, 
+                __local    char            * listMem,            
+                
+                // Args used for indexing
                 __local    uchar           * cumsum, 
                 __constant uchar           * bit_lookup,       // used to get data_index
                 __global   float           * output)
@@ -27,279 +39,287 @@ int merge_tree( __constant RenderSceneInfo * linfo,
   unsigned gid = get_group_id(0);
   unsigned lid = get_local_id(0);
 
-  //minimum alpha needed
-  float min_alpha = (-1.0f)*log(1.0f - prob_thresh);
-  
-  //initialize cumsum buffer and cumIndex
-  cumsum[0] = (*unrefined_tree).s0;
+  //cast local pointers to uchar arrays
+  __local uchar* unmerged = (__local uchar*) unrefined_tree; 
+  __local uchar* merged   = (__local uchar*) merged_tree; 
+  cumsum[0] = unmerged[0];
   int cumIndex = 1;
-  int numMerged = 0;
+  int numSplit = 0;
+
+  //it can't be merged if it's just a root tree
+  if(tree_bit_at(unmerged,0)==0) 
+    return 0; 
+
+  //create float array to keep track of probs
+  float probs[8];  //one float for each generation
   
-  //no need to do depth first search, just iterate and check each node along the way
-  //(iterate through the max number of inner cells)
-  for(int i=0; i<MAXINNER; i++) {
-    
-    //if bit i is a parent bit (set to 1), zip through 8 children and make sure...
-    //  - all of them are leaves
-    //  - all of them are below the alpha threshold
-    if(tree_bit_at(unrefined_tree, i)==1 && children_are_leaves(unrefined_tree, i)) {
+  ////////////////////////////////////////////////////////////////////
+  // Begin octree traversal 
+  //load current block/tree, initialize cumsum buffer and cumIndex
+  linked_list toVisit = new_linked_list(listMem, 73);
+  push_back( &toVisit, 0 ); 
+
+  //iterate through tree if there are children to get to
+  while ( !empty(&toVisit) )
+  {
+    //get front node off the top of the list, do an intersection for all 8 children
+    int genCounter = 0; 
+    bool allLeaves = true; 
+    int pindex = (int) pop_front( &toVisit );
+    for(int currBitIndex=8*pindex + 1; currBitIndex < 8*pindex + 9; ++currBitIndex) {
       
-      // see if all children are below threshold alpha value
-      int ci = (i<<3)+1;
-      int currDepth   = get_depth(ci);
-      float side_len  = linfo->block_len/(float) (1<<currDepth);
-      int dataIndex   = data_index_cached(unrefined_tree, ci, bit_lookup, cumsum, &cumIndex, linfo->data_len);
-      float max_alpha_int = 0.0;
-      for(int c=0; c<8; c++) {
-        //alpha for this data index
-        float alpha     = alpha_array[ (dataIndex+c)%linfo->data_len + gid*linfo->data_len];
-        float alpha_int = alpha * side_len; 
-        if(alpha_int > max_alpha_int)
-          max_alpha_int = alpha;
+      //get alpha value for this cell;
+      int dataIndex = data_index_cached(unmerged, currBitIndex, bit_lookup, cumsum, &cumIndex) + data_index_root(unmerged); //gets absolute position
+      float alpha   = alpha_array[dataIndex];
+      
+      //calculate the theoretical radius of this cell
+      int curr_depth = get_depth(currBitIndex);
+      float side_len = linfo->block_len / (float) (1<<curr_depth);
+      float prob = 1.0 - exp(-alpha * side_len); 
+      probs[genCounter++] = prob; 
+      
+      //if currBitIndex is not a leaf
+      if( tree_bit_at(unmerged, currBitIndex) ) {
+        push_back( &toVisit, currBitIndex); 
+        allLeaves = false; 
       }
-      if(max_alpha_int < min_alpha && max_alpha_int > 0.0f) {
-                
-        ////////////////////////////////////////////////
-        // MERGE CODE
-        numMerged++;
-        
-        //Set the alpha at the parent
-        int pDepth      = get_depth(i);
-        float pSide     = linfo->block_len/(float) (1<<pDepth);
-        int parentData  = data_index_cached(unrefined_tree, i, bit_lookup, cumsum, &cumIndex, linfo->data_len);
-        alpha_array[parentData + gid*linfo->data_len] = (max_alpha_int / pSide);
-        
-        //change value of bit_at(i) to 0;
-        set_tree_bit_at(refined_tree, i, false);
-                
-        // END MERGE CODE
-        ////////////////////////////////////////////////
-      }
+    } //end child for loop
+    
+    //take a look to see if this parent should be merged
+    bool allBelow = true; 
+    for(int i=0; i<8; ++i) 
+      allBelow = allBelow && (probs[i] < prob_thresh); 
+      
+    //if all are leaves and all below, then reset the parent index to 0 (merge)
+    if(allLeaves && allBelow) {
+      set_tree_bit_at(merged, pindex, false);  
+      numSplit++;        
     }
-  }
-  
-  //tree and data size output
-  tree_size -= numMerged * 8;
-  return tree_size;
+  } //end BFS while
+  // end Octree traversal portion of cone ray trace
+  ////////////////////////////////////////////////////////////////////
+          
+  return numSplit;
 }
 
- 
-///////////////////////////////////////////
-//REFINE MAIN
-//TODO include CELL LEVEL SOMEHOW to make sure cells don't over split
-//TODO include a debug print string at the end to know what the hell is going on.
-///////////////////////////////////////////
-__kernel
-void
-merge_bit_scene( __constant  RenderSceneInfo    * linfo,
-                 __global    ushort2            * mem_ptrs,         // denotes occupied space in each data buffer
-                 __global    ushort             * blocks_in_buffers,// number of blocks in each buffers
-                
-                 __global    int4               * tree_array,       // tree structure for each block
-                 __global    float              * alpha_array,      // alpha for each block
-                 __global    uchar8             * mixture_array,    // mixture for each block
-                 //__global    uchar              * last_weight_array,// last weight for mixture 
-                 __global    ushort4            * num_obs_array,    // num obs for each block
-                 
-                 __constant  uchar              * bit_lookup,       // used to get data_index
-                 __local     uchar              * cumsum,
-                 __local     uchar16            * local_tree,       // cache current tree into local memory
-                 __local     uchar16            * refined_tree,     // refined tree (need old tree to move data over)
-                  
-                 __private   float                prob_thresh,    //refinement threshold
-                 __global    float              * output)        //TODO delete me later
+//////////////////////////////////////////////////////////////////
+// Moves data into dest from src
+// Moves data with certain "behavior"
+// behavior 1
+int move_data(__constant RenderSceneInfo * linfo,
+              __global   MOG_TYPE        * src, 
+              __global   MOG_TYPE        * dest, 
+              __local    uchar16         * old_tree,
+              __local    uchar16         * merged_tree,
+              __local    char            * listMem,     //buffer of 73 chars
+              __constant uchar           * bit_lookup,
+                         float             prob_thresh,
+                         int     behavior)
 {
+  //place to get data and place to put it in new buffer
+  int oldDataIndex=0, newDataIndex=0; 
+  float max_alpha = -log(1.0f - prob_thresh);
 
-  //global id will be the tree buffer
-  unsigned gid = get_group_id(0);
-  unsigned lid = get_local_id(0);
+  ////////////////////////////////////////////////////////////////////
+  // Begin octree traversal 
+  //load current block/tree, initialize cumsum buffer and cumIndex
+  linked_list toVisit = new_linked_list(listMem, 73);
+  push_back( &toVisit, -1 ); 
+  while ( !empty(&toVisit) )
+  {
+    //get front node off the top of the list, do an intersection for all 8 children
+    int genCounter = 0; 
+    bool allLeaves = true; 
+    int pindex = (int) pop_front( &toVisit );
+    
+    for(int currBitIndex=8*pindex + 1; currBitIndex < 8*pindex + 9; ++currBitIndex) {
+      if(currBitIndex < 0) continue; 
+    
+      //branch on OLD TREE
+      if(tree_bit_at(old_tree, currBitIndex)==1) 
+        push_back(&toVisit, currBitIndex); 
+      
+      //first case: gone to leave that doesn't exist in merged, incrememnt old, not new
+      if(valid_cell(old_tree, currBitIndex) && !valid_cell(merged_tree, currBitIndex)) {
+        oldDataIndex++; 
+      }
+      //second case: found a merged cell in new tree, copy init vals
+      else if(is_leaf(merged_tree, currBitIndex) && !is_leaf(old_tree, currBitIndex)) 
+      {
+        //different copy behaviors
+        if(behavior==ALPHA_BEHAVIOR) {
+          int currLevel = get_depth(currBitIndex);
+          float side_len = linfo->block_len / (float) (1<<currLevel);
+          float newAlpha = (max_alpha / side_len); 
+          
+          //cast as float 
+          __global float* dest_f = (__global float*) dest; 
+          dest_f[newDataIndex] = newAlpha;  
+        }
+        else if(behavior==COPY_PARENT_BEHAVIOR && pindex >= 0) {
+          int pDataPtr = data_index_relative(old_tree, pindex, bit_lookup);
+          dest[newDataIndex] = src[pDataPtr]; 
+        }
+        else if(behavior==ZERO_BEHAVIOR) {
+          dest[newDataIndex] = (MOG_TYPE) 0;
+        }
+        
+        //increment both pointers
+        newDataIndex++; 
+        oldDataIndex++;
+      }
+      //last case: they are both valid and unchanged, just copy over old
+      else
+      {
+        dest[newDataIndex] = src[oldDataIndex]; 
+        newDataIndex++;
+        oldDataIndex++; 
+      }
+    }//end child for
+  
+  } //end BFS while
+  return (oldDataIndex - newDataIndex); 
+}
+
+////////////////////////////////////////////////////////////////////////////////
+// Merge KERNELS
+////////////////////////////////////////////////////////////////////////////////
+ 
+// New merge
+__kernel void merge_trees(__constant RenderSceneInfo  * linfo,
+                           __global   int4            * trees,
+                           __global   int4            * trees_cpy,        // refined trees
+                           __global   float           * alpha_array,      // alpha for each block
+                           __global   int             * tree_sizes,       // tree size for each block
+                           __global   float           * prob_thresh_t,    //refinement threshold
+                           __constant uchar           * bit_lookup,       // used to get data_index                  
+                           __global   float           * output, 
+                           __local    uchar           * all_cumsum,       //10 bytes * workspace size, for cacheing tree indices
+                           __local    uchar16         * all_old_tree,     //16 bytes * workspace size, cache current tree into local memory
+                           __local    uchar16         * all_merged_tree,  //16 bytes * workspace size, cache next tree into local memory
+                           __local    uchar           * all_list_mem )    //73 bytes * workspace size, caches list for BFS
+{
+  //make sure local_tree points to the right one in shared memory
   uchar llid = (uchar)(get_local_id(0) + get_local_size(0)*get_local_id(1));
   
-  //go through the tree array and refine it...
-  if(gid < linfo->num_buffer) 
-  {
-    output[gid] = 0.0f;
+  //setup pointers
+  __local uchar*   cumsum      = &all_cumsum[10*llid]; 
+  __local uchar16* old_tree    = &all_old_tree[llid]; 
+  __local uchar16* merged_tree = &all_merged_tree[llid]; 
+  __local uchar*   list_mem    = &all_list_mem[73*llid]; 
+
+  //global id should be the same as treeIndex
+  unsigned gid = get_global_id(0);
+  int numTrees = linfo->dims.x * linfo->dims.y * linfo->dims.z; 
+  if(gid < numTrees) {
+
+    //locally cache prob_thresh
+    float prob_thresh = *prob_thresh_t;
+
+    //1. get current tree information
+    uchar16 currTree = as_uchar16(trees[gid]);
+    (*old_tree)     = currTree; 
+    (*merged_tree)  = currTree;
+    int currTreeSize = num_cells(old_tree);
     
-    //cache some buffer variables in registers:
-    int numBlocks = convert_int(blocks_in_buffers[gid]); //number of blocks in this buffer;
-    int startPtr  = convert_int(mem_ptrs[gid].x);         //points to first element in data buffer
-    int endPtr    = convert_int(mem_ptrs[gid].y);         //points to TWO after the last element in data buffer
-
-    //get the (absolute) index of the start and end pointers
-    int preRefineStart = startPtr;
-    int preRefineEnd   = endPtr;
-
-    //Iterate over each tree in buffer=gid      
-    for(int subIndex=0; subIndex<numBlocks; subIndex++) {
-      
-      //1. get current tree information
-      uchar16 currTree = as_uchar16(tree_array[gid*linfo->tree_len + subIndex]);
-      (*local_tree)    = currTree; 
-      (*refined_tree)  = currTree;
-      int currTreeSize = num_cells(local_tree);
-
-      //2. determine number of data cells used, datasize = occupied space
-      int dataSize = (endPtr > startPtr)? (endPtr-1)-startPtr: linfo->data_len - (startPtr-endPtr)-1;
-
-      //3. refine tree locally (only updates refined_tree and returns new tree size)
-      int newSize = merge_tree( linfo, 
-                                local_tree,
-                                refined_tree, 
-                                currTreeSize, 
-                                subIndex,
+    //3. merge tree locally (only updates refined_tree and returns new tree size)
+    int numMerged = merge_tree( linfo, 
+                                old_tree,
+                                merged_tree, 
                                 alpha_array,
                                 prob_thresh, 
+                                list_mem, 
                                 cumsum,
                                 bit_lookup,
-                                output);
+                                output );
                                 
-      //!!! assert that the refined tree matches the newsize !!!
-      if(newSize != num_cells(refined_tree)) {
-        output[gid] = -663; 
-        return;
-      }
-      //!!!! assert that the refined tree is smaller or equal tot he old one
-      if(newSize > currTreeSize) {
-        output[gid] = -661; 
-        return;
-      }
-  
-      //number of merged leaves...
-      output[gid] += (currTreeSize-newSize);
-
-      //4. update start pointer (as data will be moved up to the end)
-      startPtr = (startPtr+currTreeSize)%linfo->data_len;
-      
-      //5. if there's enough space, move tree
-      int freeSpace = (startPtr >= endPtr)? startPtr-endPtr : linfo->data_len - (endPtr-startPtr);
-
-      //6. if the tree was actually merged : 
-      if(newSize < currTreeSize && newSize <= freeSpace) {
-
-        //6a. update local tree's data pointer (store it back tree buffer)
-        ushort buffOffset = convert_ushort((endPtr-1 + linfo->data_len)%linfo->data_len);
-        uchar hi = (uchar)(buffOffset >> 8);
-        uchar lo = (uchar)(buffOffset & 255);
-        (*refined_tree).sa = hi; 
-        (*refined_tree).sb = lo;
-        tree_array[gid*linfo->tree_len + subIndex] = as_int4((*refined_tree));
-                        
-        //cache old data pointer and new data pointer
-        int oldDataPtr = data_index(0, local_tree, 0, bit_lookup);
-        int newDataPtr = convert_int(buffOffset);                                       //new root offset within buffer
-        
-        //next start moving cells, must zip through max number of cells
-        //float max_alpha_int = (-1)*log(1.0 - prob_thresh);  //used for new leaves...
-        int offset = gid*linfo->data_len;                   //absolute buffer offset
-        int mergedCount = 0; int oldCount = 0;             //counts used for assertions
-        for(int j=0; j<MAXCELLS; j++) {
-
-          //--------------------------------------------------------------------
-          //4 Cases: 
-          // Need to find out if 'j' represents:
-          //  - a merged leaf (parent is 0 in new, 1 in old)
-          //  - a valid cell (parent is 1 in new and 1 in old)
-          //  - an invalid cell (parent is 0 in both)
-          //--------------------------------------------------------------------
-          //if parent bit is 1, then you're a valid cell
-          int pj = (j-1)>>3;           //Bit_index of parent bit    
-          bool validCellOld = (j==0) || tree_bit_at(local_tree, pj); 
-          bool validCellNew = (j==0) || tree_bit_at(refined_tree, pj); 
-
-          if(validCellOld && validCellNew)   //case where cell exists in both trees
-          {   
-            oldCount++;
-          
-            //move root data to new location
-            alpha_array[offset + newDataPtr]   = alpha_array[offset + oldDataPtr];
-            mixture_array[offset + newDataPtr] = mixture_array[offset + oldDataPtr];
-            //last_weight_array[offset + newDataPtr] = last_weight_array[offset + oldDataPtr];
-            num_obs_array[offset + newDataPtr] = num_obs_array[offset + oldDataPtr];
-
-            //increment 
-            oldDataPtr = (oldDataPtr+1)%linfo->data_len;
-            newDataPtr = (newDataPtr+1)%linfo->data_len;
-          } 
-          else if(validCellOld)            //case where it's a merged leaf
-          {
-            mergedCount++; 
-  
-            //calc new alpha
-            alpha_array[offset+newDataPtr] = alpha_array[offset + oldDataPtr];
-           
-            //store parent's data in child cells
-            mixture_array[offset+newDataPtr] = (uchar8) 0;
-            //last_weight_array[offset+newDataPtr] = (uchar) 0;
-            num_obs_array[offset+newDataPtr] = (ushort4) 0;
-
-            //update new data pointer
-            oldDataPtr = (oldDataPtr+1)%linfo->data_len;
-          }       
-        }
-        
-        //!!! Assert that the number of new cells matches the difference in tree sizes !!!
-        if( (currTreeSize-newSize) != mergedCount) {
-          output[gid] = -662; 
-          return;
-        }
-        //!!! assert that newSize is equal to oldCells + newCells
-        if( currTreeSize != oldCount+mergedCount) {
-          output[gid] = -661; 
-          return;
-        }
-        
-        //6c. update endPtr
-        endPtr = (newDataPtr+1)%linfo->data_len;
-        
-      }
-      //otherwise just move the unrefined tree quickly
-      else if(currTreeSize <= freeSpace) {
-
-        //6a. update local tree's data pointer (store it back tree buffer)
-        ushort buffOffset = convert_ushort((endPtr-1 + linfo->data_len)%linfo->data_len);
-        int oldDataPtr = data_index(0, local_tree, 0, bit_lookup);
-        uchar hi = (uchar)(buffOffset >> 8);
-        uchar lo = (uchar)(buffOffset & 255);
-        (*local_tree).sa = hi; 
-        (*local_tree).sb = lo;
-        tree_array[gid*linfo->tree_len + subIndex] = as_int4((*local_tree));
-
-        //6b. move data up to end pointer
-        int newDataPtr = buffOffset;   
-        int offset = gid*linfo->data_len;                   //absolute buffer offset
-        for(int j=0; j<currTreeSize; j++) {
-
-            alpha_array[offset + newDataPtr]   = alpha_array[offset + oldDataPtr];
-            mixture_array[offset + newDataPtr] = mixture_array[offset + oldDataPtr];
-            //last_weight_array[offset + newDataPtr] = last_weight_array[offset + oldDataPtr];
-            num_obs_array[offset + newDataPtr] = num_obs_array[offset + oldDataPtr];
-
-            //increment 
-            oldDataPtr = (oldDataPtr+1)%linfo->data_len;
-            newDataPtr = (newDataPtr+1)%linfo->data_len;
-        }
-      
-
-        //6c. update endPtr
-        endPtr = (endPtr+currTreeSize)%linfo->data_len;
-        
-        //!!! assert that end pointer+newsize = newDataPtr+1...
-        if(endPtr != (newDataPtr+1)%linfo->data_len) {
-          output[gid] = -559;
-          return;
-        }
-      }
-      
-    } //end for loop
-
-    //update mem pointers before returning
-    mem_ptrs[gid].x = startPtr;
-    mem_ptrs[gid].y = endPtr; 
-    
-  } //end if(gid < num_buffer)
-  
+    //4. store merged tree and size
+    tree_sizes[gid] = num_cells(merged_tree); //currTreeSize - 8*numMerged; 
+    trees_cpy[gid] = as_int4(*merged_tree); 
+  }
 }
 
- 
- 
+
+// merge data
+__kernel void merge_data(__constant RenderSceneInfo * linfo,
+                         __global   uchar16         * trees,
+                         __global   uchar16         * trees_merged,    // merged trees
+                         __global   int             * tree_sizes,       // tree size for each block
+                         __global   MOG_TYPE        * data,             // Data array to be copied
+                         __global   MOG_TYPE        * data_cpy,         // data array to be copied into, size(data_cpy) = tree_sizes[last] + sizeof(last_tree); 
+                         
+                         __global   float           * prob_thresh_ptr,    // threshold for the merge
+                         __global   int             * int_ptr,//this is true if you're refining alpha, otherwise it should be false
+                         
+                         //local mem and aux data
+                         __constant uchar           * bit_lookup,       // used to get data_index                  
+                         __global   float           * output, 
+                         __local    uchar           * cumsum,
+                         __local    char            * all_list_mem,         //73*worksapce sized local mem chunk
+                         __local    uchar16         * all_old_tree,      // cache current tree into local memory
+                         __local    uchar16         * all_merged_tree )
+{
+  //make sure local_tree points to the right one in shared memory
+  uchar llid = (uchar)(get_local_id(0) + get_local_size(0)*get_local_id(1));
+  
+  __local uchar16* old_tree    = &all_old_tree[llid]; 
+  __local uchar16* merged_tree = &all_merged_tree[llid]; 
+  __local char*    list_mem    = &all_list_mem[73*llid]; 
+
+  //global id should be the same as treeIndex
+  unsigned gid = get_global_id(0);
+  
+  //tree Index is global id 
+  unsigned treeIndex = gid; 
+  int numTrees = linfo->dims.x * linfo->dims.y * linfo->dims.z; 
+  if(gid < numTrees) {
+    
+    //1. get current tree information
+    uchar16 currTree = as_uchar16(trees[treeIndex]);
+    (*old_tree)    = currTree; 
+    int currTreeSize = num_cells(old_tree);
+    
+    uchar16 newTree  = as_uchar16(trees_merged[treeIndex]); 
+    (*merged_tree)  = newTree;
+    int newTreeSize  = num_cells(merged_tree); //this should also equal to tree_sizes[treeIndex+1]-tree_sizes[treeIndex]; 
+     
+    //2a. update local tree's data pointer (store it back tree buffer)
+    int data_ptr = tree_sizes[treeIndex]; 
+    set_data_index_root(merged_tree, data_ptr); 
+    
+    //3a.  figure out move behavior
+    int move = (*int_ptr); 
+    
+    //if this is updating the ALPHA pass and is therefore the last one, write to new block
+    if( move == ALPHA_BEHAVIOR ) 
+      trees[treeIndex] = (*merged_tree);
+    
+    //6b. get old data pointer
+    //int old_data_ptr = as_int((uchar4) ((*old_tree).sa,(*old_tree).sb,(*old_tree).sc, (*old_tree).sd)); 
+    int old_data_ptr = data_index_root(old_tree); 
+  
+    //6. if the tree was not refined (simple case) just move it on into the right slot
+    if(newTreeSize == currTreeSize) {
+      for(int j=0; j<newTreeSize; ++j) 
+        data_cpy[data_ptr + j] = data[old_data_ptr + j]; 
+    }
+    //otherwise if it was merged, then you got some work to do...
+    else {
+      
+      //locally cache prob_thresh
+      float prob_thresh = *prob_thresh_ptr;
+
+      //do some Pointer arithmetic to pass in aligned data
+      int numNew = move_data(linfo, 
+                             &data[old_data_ptr], 
+                             &data_cpy[data_ptr], 
+                             old_tree, 
+                             merged_tree,
+                             list_mem, 
+                             bit_lookup, 
+                             prob_thresh,
+                             move); 
+    }
+  }
+}
  

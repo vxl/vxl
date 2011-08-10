@@ -338,6 +338,7 @@ void update_cell(float16 * data, float4 aux_data,float t_match, float init_sigma
     (*data).sc=(float)Nobs_mix;
 }
 
+#if 0
 /* Aux Data = [cell_len, mean_obs*cell_len, beta, cum_vis]  */
 void update_cell2(float * alpha, float8 * mixture, float * weight3,
                   float4 aux_data, float t_match, float init_sigma, float min_sigma)
@@ -371,5 +372,5 @@ void update_cell2(float * alpha, float8 * mixture, float * weight3,
     (*nobs).s0 = Nobs_mix;
 */
 }
-
+#endif
 

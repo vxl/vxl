@@ -433,7 +433,6 @@ void update_gauss_2_mixture_rgb(float4 x, float w, float t_match,
 }
 
 
-#if 0
 /*
  * insert a new component in the mixture. The mixture is assumed
  * to be sorted so that if w2>0 the third component is the one replaced.
@@ -472,6 +471,7 @@ void insert_gauss_32(float x, float init_weight, float init_sigma, int* match,
       *match = 0;
     }
 }
+
 void update_gauss_3_mixture2(float x, float w, float t_match,
                             float init_sigma, float min_sigma,
                             float* mu0, float* sigma0, float* w0, short* Nobs0,
@@ -547,4 +547,3 @@ void update_gauss_3_mixture2(float x, float w, float t_match,
   }
 }
 
-#endif
