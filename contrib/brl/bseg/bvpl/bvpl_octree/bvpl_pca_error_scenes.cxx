@@ -13,14 +13,14 @@
 bvpl_pca_error_scenes::bvpl_pca_error_scenes(boxm_scene_base_sptr data_scene_base, vcl_string pca_path, unsigned dim)
 {
   typedef boct_tree<short,float> tree_type;
-  for (unsigned i =0; i<dim; i++)
+  for (unsigned i =0; i<dim+1; i++)
     scenes_.push_back(new boxm_scene_base());
 
   boxm_scene<tree_type>* data_scene= dynamic_cast<boxm_scene<tree_type>* > (data_scene_base.as_pointer());
   if (!data_scene)
     vcl_cerr << "In bvpl_pca_error_scenes: Null Scene\n";
 
-  for (unsigned i = 0; i<dim; i++)
+  for (unsigned i = 0; i<dim+1; i++)
   {
     //path to error scenes
     vcl_stringstream error_path_ss;
