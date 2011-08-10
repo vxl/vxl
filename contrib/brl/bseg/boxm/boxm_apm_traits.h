@@ -37,6 +37,7 @@ enum boxm_apm_type
   BOXM_CHAR,
   BOXM_BOOL,
   VNL_DOUBLE_10,
+  VNL_FLOAT_3,
   BSTA_MOG_F1,
   BSTA_GAUSS_F1,
   BVPL_SAMPLE_FLOAT,
