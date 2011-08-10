@@ -38,7 +38,10 @@ SET(bvpl_octree_sources
     bvpl_taylor_scenes_map.h              bvpl_taylor_scenes_map.cxx
     bvpl_taylor_basis.h                   bvpl_taylor_basis.cxx
     bvpl_global_taylor.h                  bvpl_global_taylor.cxx
-   )
+    bvpl_global_corners.h                 bvpl_global_corners.cxx
+    bvpl_corner_detector.h
+    bvpl_corner_functors.h
+)
 
 AUX_SOURCE_DIRECTORY(Templates bvpl_octree_sources)
 ADD_LIBRARY(bvpl_octree ${bvpl_octree_sources})
