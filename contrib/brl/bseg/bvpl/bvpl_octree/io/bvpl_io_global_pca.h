@@ -1,6 +1,6 @@
 // This is bvpl_io_global_pcas.h
-#ifndef bvpl_io_global_pcas_h
-#define bvpl_io_global_pcas_h
+#ifndef bvpl_io_global_pca_h
+#define bvpl_io_global_pca_h
 
 //:
 // \file
