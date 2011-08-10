@@ -93,7 +93,7 @@ void bvpl_scene_vector_operator::operate(boxm_scene<boct_tree<short, T_data_in> 
       continue;
     }
 
-    vgl_point_3d<double> center_cell_origin = iterator.global_origin();
+    vgl_point_3d<double> center_cell_centroid = iterator.global_centroid();
 
     //(2) Run vector of kernels
 
@@ -108,11 +108,11 @@ void bvpl_scene_vector_operator::operate(boxm_scene<boct_tree<short, T_data_in> 
       {
         vgl_point_3d<int> kernel_idx = kernel_iter.index();
 
-        vgl_point_3d<double> kernel_cell_origin(center_cell_origin.x() + (double)kernel_idx.x()*cell_length + 1.0e-7,
-                                                center_cell_origin.y() + (double)kernel_idx.y()*cell_length + 1.0e-7,
-                                                center_cell_origin.z() + (double)kernel_idx.z()*cell_length + 1.0e-7);
+        vgl_point_3d<double> kernel_cell_centroid(center_cell_centroid.x() + (double)kernel_idx.x()*cell_length,
+                                                  center_cell_centroid.y() + (double)kernel_idx.y()*cell_length,
+                                                  center_cell_centroid.z() + (double)kernel_idx.z()*cell_length);
 
-        boct_tree_cell<short,T_data_in> *this_cell = scene_in.locate_point_in_memory(kernel_cell_origin);
+        boct_tree_cell<short,T_data_in> *this_cell = scene_in.locate_point_in_memory(kernel_cell_centroid);
 
         if (this_cell) {
           bvpl_kernel_dispatch d = *kernel_iter;
