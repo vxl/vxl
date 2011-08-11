@@ -223,7 +223,7 @@ class boxm2_batch_update_functor
   {
     boxm2_data<BOXM2_ALPHA>::datatype & alpha=alpha_data_->data()[index];
     //boxm2_data<BOXM2_MOG3_GREY>::datatype & mog3=mog3_data_->data()[index];
-    boxm2_data<APM_TYPE>::datatype & mog=mog_data_->data()[index];
+    typename boxm2_data<APM_TYPE>::datatype & mog=mog_data_->data()[index];
 
     
     vcl_vector<aux0_datatype> out0 = str_cache_->get_next<BOXM2_AUX0>(id_, index);
@@ -342,7 +342,7 @@ class boxm2_batch_update_app_functor
   inline bool process_cell(int index)
   {
     boxm2_data<BOXM2_ALPHA>::datatype & alpha=alpha_data_->data()[index];
-    boxm2_data<APM_TYPE>::datatype & mog=mog_data_->data()[index];
+    typename boxm2_data<APM_TYPE>::datatype & mog=mog_data_->data()[index];
     
     vcl_vector<aux0_datatype> out0 = str_cache_->get_next<BOXM2_AUX0>(id_, index);
     vcl_vector<aux1_datatype> out1 = str_cache_->get_next<BOXM2_AUX1>(id_, index);
@@ -420,7 +420,7 @@ class boxm2_batch_update_alpha_functor
   inline bool process_cell(int index)
   {
     boxm2_data<BOXM2_ALPHA>::datatype & alpha=alpha_data_->data()[index];
-    boxm2_data<APM_TYPE>::datatype & mog=mog_data_->data()[index];
+    typename boxm2_data<APM_TYPE>::datatype & mog=mog_data_->data()[index];
     
     vcl_vector<aux0_datatype> out0 = str_cache_->get_next<BOXM2_AUX0>(id_, index);
     vcl_vector<aux1_datatype> out1 = str_cache_->get_next<BOXM2_AUX1>(id_, index);

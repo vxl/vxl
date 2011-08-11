@@ -143,7 +143,7 @@ class boxm2_batch_update_opt2_functor
   inline bool process_cell(int index)
   {
     boxm2_data<BOXM2_ALPHA>::datatype & alpha=alpha_data_->data()[index];
-    boxm2_data<APM_TYPE>::datatype & mog=mog_data_->data()[index];
+    typename boxm2_data<APM_TYPE>::datatype & mog=mog_data_->data()[index];
 
     vcl_vector<aux0_datatype> aux0 = str_cache_->get_next<BOXM2_AUX0>(id_, index);
     vcl_vector<aux1_datatype> aux1 = str_cache_->get_next<BOXM2_AUX1>(id_, index);

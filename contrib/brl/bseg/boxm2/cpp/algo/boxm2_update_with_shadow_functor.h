@@ -102,7 +102,7 @@ class boxm2_update_with_shadow_functor
       boxm2_data<BOXM2_ALPHA>::datatype & alpha=alpha_data_->data()[index];
 
       alpha=vcl_max(alpha_min_,alpha*beta);
-      boxm2_data<APM_TYPE>::datatype & mog3=mog3_data_->data()[index];
+      typename boxm2_data<APM_TYPE>::datatype & mog3=mog3_data_->data()[index];
       boxm2_data<BOXM2_NUM_OBS>::datatype & nobs=nobs_data_->data()[index];
       vnl_vector_fixed<float,4> nobs_float;
       nobs_float[0]=(float)nobs[0];
