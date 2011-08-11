@@ -5,19 +5,6 @@
 // Also macro "MAXCELLS" must be defined for moving refined data
 //------------------------------------------------------------------------------
 #pragma OPENCL EXTENSION cl_khr_global_int32_base_atomics : enable
-#ifdef MOG_TYPE_16 
-    #define MOG_TYPE ushort8
-#endif
-#ifdef MOG_TYPE_8 
-   #define MOG_TYPE uchar8
-#endif
-#ifdef MOG_TYPE_4
-   #define MOG_TYPE uchar4
-#endif
-#ifdef MOG_TYPE_2
-   #define MOG_TYPE uchar2
-#endif
-
 
 /////////////////////////////////////////////////////////////////
 ////Refine Tree (refines local tree)
@@ -97,13 +84,14 @@ int refine_tree(__constant RenderSceneInfo * linfo,
  
 //////////////////////////////////////////////////////////////////
 // Moves data into dest from src
+// Move data now uses a BFS (was faster than traversing bits)
 ////////////////////////////////////////////////////////////////// 
 int move_data(__constant RenderSceneInfo * linfo,
               __global   MOG_TYPE        * src, 
               __global   MOG_TYPE        * dest, 
               __local    uchar16         * unrefined_tree,
               __local    uchar16         * refined_tree,
-                         int               MAX_CELLS, 
+              __local    char            * list_mem, 
               __constant uchar           * bit_lookup,
                          float             prob_thresh,
                          bool              is_alpha,
@@ -113,57 +101,66 @@ int move_data(__constant RenderSceneInfo * linfo,
   float max_alpha_int = (-1)*log(1.0 - prob_thresh);      
 
   //zip through each leaf cell and 
-  int oldDataPtr = 0; int newDataPtr = 0; 
-  int newInitCount = 0; int oldCount = 0;       
-  int newTreeSize = num_cells(refined_tree); 
-  for(int j=0; j<MAX_CELLS && newDataPtr<newTreeSize; ++j) {
+  int oldDataPtr = 0, newDataPtr = 0; 
+  int newTreeSize = num_cells(refined_tree);
+  
+  ////////////////////////////////////////////////////////////////////
+  // Begin octree traversal 
+  //load current block/tree, initialize cumsum buffer and cumIndex
+  linked_list toVisit = new_linked_list(list_mem, 73);
+  push_back( &toVisit, -1 ); 
 
-    //--------------------------------------------------------------------
-    //4 Cases:
-    // - Old cell and new cell exist - transfer data over
-    // - new cell exists, old cell doesn't - create new occupancy based on depth
-    // - old cell exists, new cell doesn't - uh oh this is bad news
-    // - neither cell exists - do nothing and carry on
-    //--------------------------------------------------------------------
-    //if parent bit is 1, then you're a valid cell
-    int pj = (j-1)>>3;           //Bit_index of parent bit    
-    bool validCellOld = (j==0) || tree_bit_at(unrefined_tree, pj); 
-    bool validCellNew = (j==0) || tree_bit_at(refined_tree, pj); 
-    if(validCellOld && validCellNew) {
-      //move root data to new location
-      dest[newDataPtr]   = src[oldDataPtr];
-
-      //increment 
-      oldDataPtr++; 
-      newDataPtr++; 
-    } 
-    //case where it's a new leaf...
-    else if(validCellNew) {
-      newInitCount++; 
-
-      //calc new alpha
-      MOG_TYPE new_value;
-      if(is_alpha) {
-        int currLevel = get_depth(j);
-        float side_len = linfo->block_len / (float) (1<<currLevel);
-        float newAlpha = (max_alpha_int / side_len); 
+  //iterate through tree if there are children to get to
+  while ( !empty(&toVisit) ) {
+    
+    //get front node off the top of the list, do an intersection for all 8 children
+    int pindex = (int) pop_front( &toVisit );
+    for(int j=8*pindex + 1; j < 8*pindex + 9; ++j) {
+      if(j < 0) continue; 
+      if(tree_bit_at(refined_tree, j))
+        push_back(&toVisit, j); 
         
-        //cast as float 
-        __global float* dest_f = (__global float*) dest; 
-        dest_f[newDataPtr] = newAlpha;  
-      }
-      else if(copy_parent && pj >= 0) {
-        int pDataPtr = data_index_relative(unrefined_tree, pj, bit_lookup);
-        dest[newDataPtr] = src[pDataPtr]; 
-      }
-      else {
-        dest[newDataPtr] = (MOG_TYPE) 0;
-      }
+      //--- SWAP CODE ----------------------
+      //if parent bit is 1, then you're a valid cell
+      bool validCellOld = (j==0) || tree_bit_at(unrefined_tree, pindex); 
+      bool validCellNew = (j==0) || tree_bit_at(refined_tree, pindex); 
+      if(validCellOld && validCellNew) {
+        //move root data to new location
+        dest[newDataPtr]   = src[oldDataPtr];
 
-      //update new data pointer
-      newDataPtr++; 
+        //increment 
+        oldDataPtr++; 
+        newDataPtr++; 
+      } 
+      //case where it's a new leaf...
+      else if(validCellNew) {
+        //calc new alpha
+        MOG_TYPE new_value;
+        if(is_alpha) {
+          int currLevel = get_depth(j);
+          float side_len = linfo->block_len / (float) (1<<currLevel);
+          float newAlpha = (max_alpha_int / side_len); 
+          
+          //cast as float 
+          __global float* dest_f = (__global float*) dest; 
+          dest_f[newDataPtr] = newAlpha;  
+        }
+        else if(copy_parent && pindex >= 0) {
+          int pDataPtr = data_index_relative(unrefined_tree, pindex, bit_lookup);
+          dest[newDataPtr] = src[pDataPtr]; 
+        }
+        else {
+          dest[newDataPtr] = (MOG_TYPE) 0;
+        }
+
+        //update new data pointer
+        newDataPtr++; 
+      }
+      //--- END SWAP CODE ----------------------
+
     }
-  }       
+  }
+  return newDataPtr;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -189,8 +186,9 @@ __kernel void refine_trees(__constant RenderSceneInfo * linfo,
 {
   //make sure local_tree points to the right one in shared memory
   uchar llid = (uchar)(get_local_id(0) + get_local_size(0)*get_local_id(1));
-  __local uchar16* local_tree = &all_local_tree[llid]; 
+  __local uchar16* local_tree   = &all_local_tree[llid]; 
   __local uchar16* refined_tree = &all_refined_tree[llid]; 
+  __local uchar*   csum         = &cumsum[10*llid]; 
 
   //global id should be the same as treeIndex
   unsigned gid = get_global_id(0);
@@ -224,7 +222,7 @@ __kernel void refine_trees(__constant RenderSceneInfo * linfo,
                               0,
                               alpha_array,
                               prob_thresh, 
-                              cumsum,
+                              csum,
                               bit_lookup,
                               MAX_INNER_CELLS,
                               output);
@@ -235,28 +233,14 @@ __kernel void refine_trees(__constant RenderSceneInfo * linfo,
 }
  
 ////////////////////////////////////////////
-// New Refine, pass two, refines scan to copy
-/////////////////////////////////////////// 
-__kernel void refine_scan( __constant RenderSceneInfo * linfo,
-                           __global   int             * tree_sizes)
-{
-  //global id will be the tree buffer
-  unsigned gid = get_group_id(0);
-  
-  //implement scan sum here....
-  
-  
-}
-
-////////////////////////////////////////////
 // New Refine, pass one, refines trees to copy
 // SPECIAL CASE: if the argument "prob_thresh_t" is less than 0, then 
 // this kernel is refining an appearance data, not alpha
 // if it is refining alpha, ste the init_cell to the correct alpha each time
 /////////////////////////////////////////// 
 __kernel void refine_data( __constant RenderSceneInfo * linfo,
-                           __global   uchar16            * trees,
-                           __global   uchar16            * trees_refined,        // refined trees
+                           __global   uchar16         * trees,
+                           __global   uchar16         * trees_refined,        // refined trees
                            __global   int             * tree_sizes,       // tree size for each block
                            __global   MOG_TYPE        * data,             // Data array to be copied
                            __global   MOG_TYPE        * data_cpy,         // data array to be copied into, size(data_cpy) = tree_sizes[last] + sizeof(last_tree); 
@@ -265,14 +249,16 @@ __kernel void refine_data( __constant RenderSceneInfo * linfo,
                            __global   bool            * copy_parent_t,    //if this is true, then new cells should copy parent values
                            __constant uchar           * bit_lookup,       // used to get data_index                  
                            __global   float           * output, 
-                           __local    uchar           * cumsum,
                            __local    uchar16         * all_local_tree,      // cache current tree into local memory
-                           __local    uchar16         * all_refined_tree )
+                           __local    uchar16         * all_refined_tree,
+                           __local    char            * all_list_mem )
 {
   //make sure local_tree points to the right one in shared memory
   uchar llid = (uchar)(get_local_id(0) + get_local_size(0)*get_local_id(1));
+  
   __local uchar16* local_tree = &all_local_tree[llid]; 
   __local uchar16* refined_tree = &all_refined_tree[llid]; 
+  __local char*    list_mem = &all_list_mem[73*llid]; 
 
   //global id should be the same as treeIndex
   unsigned gid = get_global_id(0);
@@ -283,14 +269,6 @@ __kernel void refine_data( __constant RenderSceneInfo * linfo,
   if(gid < numTrees) {
     
     //USE rootlevel to determine MAX_INNER and MAX_CELLS
-    int MAX_INNER_CELLS, MAX_CELLS;
-    if(linfo->root_level == 1) 
-      MAX_INNER_CELLS=1, MAX_CELLS=9; 
-    else if (linfo->root_level == 2) 
-      MAX_INNER_CELLS=9, MAX_CELLS=73; 
-    else if (linfo->root_level == 3) 
-      MAX_INNER_CELLS=73, MAX_CELLS=585; 
-        
     //1. get current tree information
     uchar16 currTree = as_uchar16(trees[treeIndex]);
     (*local_tree)    = currTree; 
@@ -310,8 +288,7 @@ __kernel void refine_data( __constant RenderSceneInfo * linfo,
     }
     
     //6b. get old data pointer
-    //as_int((uchar4) (tree[10], tree[11], tree[12], tree[13]));
-    int old_data_ptr = as_int((uchar4) ((*local_tree).sa,(*local_tree).sb,(*local_tree).sc, (*local_tree).sd)); 
+    int old_data_ptr = data_index_root(local_tree); 
   
     //6. if the tree was not refined (simple case) just move it on into the right slot
     if(newTreeSize == currTreeSize) {
@@ -335,7 +312,7 @@ __kernel void refine_data( __constant RenderSceneInfo * linfo,
                              &data_cpy[data_ptr], 
                              local_tree, 
                              refined_tree, 
-                             MAX_CELLS,  
+                             list_mem,  
                              bit_lookup, 
                              prob_thresh,
                              is_alpha,

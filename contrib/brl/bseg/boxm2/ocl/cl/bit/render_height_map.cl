@@ -1,12 +1,17 @@
+//Render height map kernel, step cell fucntor is in "expected_functor"
+//choose the correct MOG type/size
 #ifdef RENDER_HEIGHT_MAP
 //need to define a struct of type AuxArgs with auxiliary arguments
 // to supplement cast ray args
 typedef struct
 {
   __global float* alpha;
+  __global MOG_TYPE* mog;
   float* expdepth;
   float* expdepthsqr;
   float* probsum;
+  float* expint; 
+  float* vis; 
 } AuxArgs;
 
 //forward declare cast ray (so you can use it)
@@ -23,6 +28,8 @@ render_height_map(__constant  RenderSceneInfo    * linfo,
                   __global    float              * scene_origin,
                   __global    int4               * tree_array,
                   __global    float              * alpha_array,
+                  __global    MOG_TYPE           * mixture_array,
+                  __global    float              * exp_image,
                   __global    float              * height_map,    // input image and store vis_inf and pre_inf
                   __global    float              * height_var_map,// sum of squares.
                   __global    uint4              * exp_image_dims,
@@ -79,13 +86,18 @@ render_height_map(__constant  RenderSceneInfo    * linfo,
 
   float expdepth   = 0.0f;
   float expdepthsqr= 0.0f;
+  float expint  = exp_image[imIndex[llid]];
   float probsum =prob_image[imIndex[llid]];
   float vis     = vis_image[imIndex[llid]];
+  float vis1 = vis; 
   AuxArgs aux_args;
   aux_args.alpha  = alpha_array;
+  aux_args.mog = mixture_array;
   aux_args.expdepth = &expdepth;
   aux_args.expdepthsqr = &expdepthsqr;
   aux_args.probsum = &probsum;
+  aux_args.expint = &expint; 
+  aux_args.vis = &vis1; 
   cast_ray( i, j,
             ray_ox, ray_oy, ray_oz,
             ray_dx, ray_dy, ray_dz,
@@ -98,5 +110,6 @@ render_height_map(__constant  RenderSceneInfo    * linfo,
   prob_image[imIndex[llid]] = (* aux_args.probsum);
   //store visibility at the end of this block
   vis_image[imIndex[llid]]  = vis;
+  exp_image[imIndex[llid]]  = expint; 
 }
 #endif // RENDER_HEIGHT_MAP

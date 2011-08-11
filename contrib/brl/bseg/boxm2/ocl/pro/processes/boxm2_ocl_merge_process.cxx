@@ -300,7 +300,6 @@ bool boxm2_ocl_merge_process(bprb_func_process& pro)
                 return false;
             }
             bocl_kernel* kern=kernels[data_identifier];
-            vcl_cout<<"Kern id: "<<kern->id()<<vcl_endl;
 
             //get bocl_mem data independent of CPU pointer
             bocl_mem* dat = opencl_cache->get_data(id, data_types[i]);

@@ -65,7 +65,7 @@ void test_render_height_main(boxm2_scene_sptr& scene, bocl_device_sptr& device, 
   // 4. y coord image
   // 5. prob image (likelihood depth is within the volume)
   vcl_vector< vil_image_view<float>* > out_imgs; 
-  for(int i=0; i<5; ++i) {
+  for(int i=0; i<6; ++i) {
     unsigned int out_img = 0;
     good = good && bprb_batch_process_manager::instance()->commit_output(i, out_img);
     brdb_query_aptr Q = brdb_query_comp_new("id", brdb_query::EQ, out_img);
@@ -89,6 +89,7 @@ void test_render_height_main(boxm2_scene_sptr& scene, bocl_device_sptr& device, 
   vil_save(*out_imgs[2], "x_img.tiff");
   vil_save(*out_imgs[3], "y_img.tiff");
   vil_save(*out_imgs[4], "prob_img.tiff");
+  vil_save(*out_imgs[5], "app_img.tiff");
 }
 
 //: Example c++ calls
@@ -248,7 +249,7 @@ void test_update_main(boxm2_scene_sptr& scene, bocl_device_sptr& device, boxm2_o
 void test_process_mains()
 {
   // Create scene from file
-  vcl_string scene_file = "/media/VXL/data/boxm2/downtown/model_color/scene.xml";
+  vcl_string scene_file = "/media/VXL/data/boxm2/downtown/model_smooth/scene.xml";
   boxm2_scene_sptr scene = new boxm2_scene(scene_file);
 
   //make bocl manager (handles a lot of OpenCL stuff)
@@ -260,8 +261,8 @@ void test_process_mains()
   boxm2_opencl_cache_sptr opencl_cache = new boxm2_opencl_cache(scene, device, 4);
 
   //run render and update mains
-  test_render_main(scene, device, opencl_cache);
-  test_update_main(scene, device, opencl_cache);
+  //test_render_main(scene, device, opencl_cache);
+  //test_update_main(scene, device, opencl_cache);
   test_render_height_main(scene, device, opencl_cache); 
 }
 

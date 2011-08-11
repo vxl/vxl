@@ -27,9 +27,9 @@
 namespace boxm2_ocl_render_expected_height_map_process_globals
 {
   const unsigned n_inputs_  = 3;
-  const unsigned n_outputs_ = 5;
+  const unsigned n_outputs_ = 6;
   vcl_size_t local_threads[2]={8,8};
-  void compile_kernel(bocl_device_sptr device,vcl_vector<bocl_kernel*> & vec_kernels)
+  void compile_kernel(bocl_device_sptr device,vcl_vector<bocl_kernel*> & vec_kernels, vcl_string options)
   {
     //gather all render sources... seems like a lot for rendering...
     vcl_vector<vcl_string> src_paths;
@@ -45,9 +45,9 @@ namespace boxm2_ocl_render_expected_height_map_process_globals
     src_paths.push_back(source_dir + "bit/cast_ray_bit.cl");
 
     //set kernel options
-    vcl_string options = " -D RENDER_HEIGHT_MAP ";
-    options +=  "-D DETERMINISTIC";
-    options += " -D STEP_CELL=step_cell_render_depth2(tblock,aux_args.alpha,data_ptr,d,vis,aux_args.expdepth,aux_args.expdepthsqr,aux_args.probsum)";
+    options += " -D RENDER_HEIGHT_MAP ";
+    options +=  "-D DETERMINISTIC ";
+    options += " -D STEP_CELL=step_cell_render_depth2(tblock,aux_args.alpha,aux_args.mog,data_ptr,d,vis,aux_args.expdepth,aux_args.expdepthsqr,aux_args.probsum,aux_args.expint)";//step_cell_render(aux_args.mog,aux_args.alpha,data_ptr,d,aux_args.vis,aux_args.expint)";
 
     //have kernel construct itself using the context and device
     bocl_kernel * ray_trace_kernel=new bocl_kernel();
@@ -96,6 +96,7 @@ bool boxm2_ocl_render_expected_height_map_process_cons(bprb_func_process& pro)
   output_types_[2] = "vil_image_view_base_sptr";
   output_types_[3] = "vil_image_view_base_sptr";
   output_types_[4] = "vil_image_view_base_sptr";
+  output_types_[5] = "vil_image_view_base_sptr"; 
 
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 }
@@ -114,11 +115,37 @@ bool boxm2_ocl_render_expected_height_map_process(bprb_func_process& pro)
   unsigned i = 0;
   bocl_device_sptr device= pro.get_input<bocl_device_sptr>(i++);
   boxm2_scene_sptr scene =pro.get_input<boxm2_scene_sptr>(i++);
-
   boxm2_opencl_cache_sptr opencl_cache= pro.get_input<boxm2_opencl_cache_sptr>(i++);
   vgl_box_3d<double> bbox=scene->bounding_box();
-  vcl_vector<boxm2_block_id> vis_order = scene->get_block_ids();// (vpgl_perspective_camera<double>*) cam.ptr());
 
+  //find data type for rendering appearance model
+  bool foundDataType = false;
+  vcl_string mog_type,options;
+  vcl_vector<vcl_string> apps = scene->appearances();
+  for (unsigned int i=0; i<apps.size(); ++i) {
+    if ( apps[i] == boxm2_data_traits<BOXM2_MOG3_GREY>::prefix() ) {
+      mog_type = apps[i];
+      foundDataType = true;
+      options=" -D MOG_TYPE_8 ";
+    }
+    else if ( apps[i] == boxm2_data_traits<BOXM2_MOG3_GREY_16>::prefix() ) {
+      mog_type = apps[i];
+      foundDataType = true;
+      options=" -D MOG_TYPE_16 ";
+    }
+    else if ( apps[i] == boxm2_data_traits<BOXM2_GAUSS_RGB>::prefix() )  {
+      mog_type = apps[i];
+      foundDataType = true;
+      options=" -D MOG_TYPE_8 ";
+    }
+  }
+  if (!foundDataType) {
+    vcl_cout<<"BOXM2_OCL_RENDER_PROCESS ERROR: scene doesn't have BOXM2_MOG3_GREY or BOXM2_MOG3_GREY_16 data type"<<vcl_endl;
+    return false;
+  }
+  
+  //get x and y size from scene
+  vcl_vector<boxm2_block_id> vis_order = scene->get_block_ids();// (vpgl_perspective_camera<double>*) cam.ptr());
   vcl_vector<boxm2_block_id>::iterator id;
   float xint=0.0f;
   float yint=0.0f;
@@ -131,12 +158,11 @@ bool boxm2_ocl_render_expected_height_map_process(bprb_func_process& pro)
   }
   unsigned int ni=(unsigned int)vcl_ceil(bbox.width()/xint);
   unsigned int nj=(unsigned int)vcl_ceil(bbox.height()/yint);
-
   vcl_cout<<"Size of the image "<<ni<<','<<nj<<vcl_endl;
   float z= bbox.max_z();
   vcl_string identifier=device->device_identifier();
 
-//: create a command queue.
+  //: create a command queue.
   int status=0;
   cl_command_queue queue = clCreateCommandQueue(device->context(),*(device->device_id()),
                                                 CL_QUEUE_PROFILING_ENABLE,&status);
@@ -147,7 +173,7 @@ bool boxm2_ocl_render_expected_height_map_process(bprb_func_process& pro)
   {
     vcl_cout<<"===========Compiling kernels==========="<<vcl_endl;
     vcl_vector<bocl_kernel*> ks;
-    compile_kernel(device,ks);
+    compile_kernel(device,ks,options);
     kernels[identifier]=ks;
   }
   bocl_mem_sptr z_mem=new bocl_mem(device->context(),&z,sizeof(float),"constant ray_oz");
@@ -176,8 +202,10 @@ bool boxm2_ocl_render_expected_height_map_process(bprb_func_process& pro)
   for (unsigned i=0;i<cl_ni*cl_nj;i++) vis_buff[i]=1.0f;
   float* prob_buff = new float[cl_ni*cl_nj];
   for (unsigned i=0;i<cl_ni*cl_nj;i++) prob_buff[i]=0.0f;
+  float* app_buff = new float[cl_ni*cl_nj]; 
+  for (unsigned i=0;i<cl_ni*cl_nj;i++) app_buff[i]=0.0f;
 
-  bocl_mem_sptr exp_image=new bocl_mem(device->context(),buff,cl_ni*cl_nj*sizeof(float),"exp image buffer");
+  bocl_mem_sptr exp_image=new bocl_mem(device->context(),buff,cl_ni*cl_nj*sizeof(float),"height (z) buffer ");
   exp_image->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
   bocl_mem_sptr var_image=new bocl_mem(device->context(),var_buff,cl_ni*cl_nj*sizeof(float),"var image buffer");
@@ -188,6 +216,9 @@ bool boxm2_ocl_render_expected_height_map_process(bprb_func_process& pro)
 
   bocl_mem_sptr prob_image=new bocl_mem(device->context(),prob_buff,cl_ni*cl_nj*sizeof(float),"vis x omega image buffer");
   prob_image->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
+
+  bocl_mem_sptr app_image=new bocl_mem(device->context(),app_buff,cl_ni*cl_nj*sizeof(float),"exp image buffer");
+  app_image->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
   // Image Dimensions
   int img_dim_buff[4];
@@ -225,6 +256,7 @@ bool boxm2_ocl_render_expected_height_map_process(bprb_func_process& pro)
     vul_timer transfer;
     bocl_mem* blk           = opencl_cache->get_block(*id);
     bocl_mem* alpha         = opencl_cache->get_data<BOXM2_ALPHA>(*id);
+    bocl_mem* mog           = opencl_cache->get_data(*id, mog_type); 
     bocl_mem * blk_info     = opencl_cache->loaded_block_info();
     transfer_time          += (float) transfer.all();
 
@@ -236,6 +268,8 @@ bool boxm2_ocl_render_expected_height_map_process(bprb_func_process& pro)
     kern->set_arg( scene_origin_mem.ptr());
     kern->set_arg( blk );
     kern->set_arg( alpha );
+    kern->set_arg( mog ); 
+    kern->set_arg( app_image.ptr() ); 
     kern->set_arg( exp_image.ptr() );
     kern->set_arg( var_image.ptr() );
     kern->set_arg( exp_img_dim.ptr());
@@ -276,6 +310,7 @@ bool boxm2_ocl_render_expected_height_map_process(bprb_func_process& pro)
     var_image->read_to_buffer(queue);
     vis_image->read_to_buffer(queue);
     prob_image->read_to_buffer(queue);
+    app_image->read_to_buffer(queue); 
   }
 
   clReleaseCommandQueue(queue);
@@ -286,6 +321,8 @@ bool boxm2_ocl_render_expected_height_map_process(bprb_func_process& pro)
   vil_image_view<float>* xcoord_img=new vil_image_view<float>(ni,nj);
   vil_image_view<float>* ycoord_img=new vil_image_view<float>(ni,nj);
   vil_image_view<float>* prob_img=new vil_image_view<float>(ni,nj);
+  vil_image_view<float>* app_img=new vil_image_view<float>(ni,nj);
+
 
   for (unsigned c=0;c<nj;++c)
     for (unsigned r=0;r<ni;++r)
@@ -295,6 +332,7 @@ bool boxm2_ocl_render_expected_height_map_process(bprb_func_process& pro)
         (*xcoord_img)(r,c)=r*xint+scene_origin[0];
         (*ycoord_img)(r,c)=c*yint+scene_origin[1];
         (*prob_img)(r,c)=prob_buff[c*cl_ni+r];
+        (*app_img)(r,c)=app_buff[c*cl_ni+r]; 
     }
   // store scene smaprt pointer
   pro.set_output_val<vil_image_view_base_sptr>(i++, exp_img_out);
@@ -302,5 +340,6 @@ bool boxm2_ocl_render_expected_height_map_process(bprb_func_process& pro)
   pro.set_output_val<vil_image_view_base_sptr>(i++, xcoord_img);
   pro.set_output_val<vil_image_view_base_sptr>(i++, ycoord_img);
   pro.set_output_val<vil_image_view_base_sptr>(i++, prob_img);
+  pro.set_output_val<vil_image_view_base_sptr>(i++, app_img);
   return true;
 }

@@ -1,13 +1,5 @@
-#ifdef MOG_TYPE_8 
-    #define MOG_TYPE int2
-    #define CONVERT_FUNC(lhs,data) uchar8 lhs = as_uchar8(data);
-    #define NORM 255;
-#endif
-#if MOG_TYPE_16 
-    #define MOG_TYPE int4
-    #define CONVERT_FUNC(lhs,data) ushort8 lhs = as_ushort8(data);
-    #define NORM 65535;
-#endif
+//step_cell functors for various render functions
+
 #if GAUSS_TYPE_2
     #define MOG_TYPE uchar2
     #define CONVERT_FUNC(lhs,data) uchar2 lhs1 = as_uchar2(data); uchar8 lhs = as_uchar8(0.0); lhs.s0 = lhs1.s0; lhs.s1 = lhs1.s1; lhs.s2 = 255; 
@@ -224,21 +216,36 @@ void step_cell_render_depth2(float depth,
 #ifdef  RENDER_HEIGHT_MAP
 void step_cell_render_depth2(float depth, 
                              __global float  * alpha_data, 
+                             __global uchar8 * cell_data,
                              int      data_ptr, 
                              float    d, 
                              float  * vis,
                              float  * expected_depth,
                              float  * expected_depth_square,
-                             float  * probsum)
+                             float  * probsum, 
+                             float  * expected_i)
 {
   float alpha = alpha_data[data_ptr];
   float diff_omega=exp(-alpha*d);
+  
+  //for rendering only
+  float expected_int_cell=0.0f;
+  if(diff_omega<0.995f)
+  {
+      CONVERT_FUNC(udata,cell_data[data_ptr]);
+      float8  data=convert_float8(udata)/NORM;
+      expected_int_cell = ((data.s0) * (data.s2)
+                          +(data.s3) * (data.s5)
+                          +(data.s6) * (1 - data.s2 - data.s5)); 
+  }
   float omega=(*vis) * (1.0f - diff_omega);
+  (*expected_i)+=expected_int_cell*omega;
+  
+  //depth
   (*probsum)+=omega;
   (*vis) *= diff_omega;
   (*expected_depth)+=depth*omega;
   (*expected_depth_square)+=depth*depth*omega;
-  
 }
 
 #endif

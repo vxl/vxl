@@ -32,6 +32,7 @@ namespace boxm2_ocl_refine_process_globals
         vcl_vector<vcl_string> src_paths;
         vcl_string source_dir = vcl_string(VCL_SOURCE_ROOT_DIR) + "/contrib/brl/bseg/boxm2/ocl/cl/";
         src_paths.push_back(source_dir + "scene_info.cl");
+        src_paths.push_back(source_dir + "basic/linked_list.cl"); 
         src_paths.push_back(source_dir + "bit/bit_tree_library_functions.cl");
         src_paths.push_back(source_dir + "bit/refine_bit_scene.cl");
 
@@ -47,6 +48,7 @@ namespace boxm2_ocl_refine_process_globals
         vcl_vector<vcl_string> src_paths;
         vcl_string source_dir = vcl_string(VCL_SOURCE_ROOT_DIR) + "/contrib/brl/bseg/boxm2/ocl/cl/";
         src_paths.push_back(source_dir + "scene_info.cl");
+        src_paths.push_back(source_dir + "basic/linked_list.cl"); 
         src_paths.push_back(source_dir + "bit/bit_tree_library_functions.cl");
         src_paths.push_back(source_dir + "bit/refine_bit_scene.cl");
 
@@ -73,7 +75,6 @@ namespace boxm2_ocl_refine_process_globals
           default:
             break;
         }
-
         return options;
     }
 
@@ -94,7 +95,6 @@ bool boxm2_ocl_refine_process_cons(bprb_func_process& pro)
     // process has 1 output:
     // output[0]: scene sptr
     vcl_vector<vcl_string>  output_types_(n_outputs_);
-
     return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 }
 
@@ -182,26 +182,26 @@ bool boxm2_ocl_refine_process(bprb_func_process& pro)
         //    - get a new data pointer (with newSize), will create CPU buffer and GPU buffer
         //    - Run refine_data_kernel with the two buffers
         //    - delete the old BOCL_MEM*, and that's it...
-
         //clear cache
         opencl_cache->clear_cache();
         boxm2_block_metadata data = blk_iter->second;
-        vcl_cout<<"Doing non random refine:"<<vcl_endl;
+        boxm2_block_id id = blk_iter->first;
+        vcl_cout<<"Refining Block "<< id << vcl_endl;
 
         bocl_kernel* kern=kernels[tree_identifier];
+        
         ////////////////////////////////////////////////////////////////////////////
         // Step One... currently mimics C++ implementation
         //get id and refine block into tree copy, and calc vector of new tree sizes
-        boxm2_block_id id = blk_iter->first;
         int numTrees = data.sub_block_num_.x() * data.sub_block_num_.y() * data.sub_block_num_.z();
 
         //set up tree copy
-        vcl_cout<<"creating tree copy"<<vcl_endl;
+        vcl_cout<<"  creating tree copy"<<vcl_endl;
         bocl_mem_sptr blk_copy = new bocl_mem(device->context(), NULL, numTrees*sizeof(cl_uchar16), "refine trees block copy buffer");
         blk_copy->create_buffer(CL_MEM_READ_WRITE| CL_MEM_ALLOC_HOST_PTR, (queue));
 
         //set up tree size (first find num trees)
-        vcl_cout<<"creating tree sizes buff"<<vcl_endl;
+        vcl_cout<<"  creating tree sizes buff"<<vcl_endl;
         bocl_mem_sptr tree_sizes = new bocl_mem(device->context(), NULL, sizeof(cl_int)*numTrees, "refine tree sizes buffer");
         tree_sizes->create_buffer(CL_MEM_READ_WRITE | CL_MEM_ALLOC_HOST_PTR, (queue));
         clFinish((queue));
@@ -219,7 +219,7 @@ bool boxm2_ocl_refine_process(bprb_func_process& pro)
 
         float alphasize=(float)alpha->num_bytes()/1024/1024;
         if (alphasize >= (float)blk_iter->second.max_mb_/10.0) {
-            vcl_cout<<"Refine STOP !!!"<<vcl_endl;
+            vcl_cout<<"  Refine STOP !!!"<<vcl_endl;
             continue;
         }
         //set first kernel args
@@ -231,7 +231,8 @@ bool boxm2_ocl_refine_process(bprb_func_process& pro)
         kern->set_arg( prob_thresh.ptr() );
         kern->set_arg( lookup.ptr() );
         kern->set_arg( cl_output.ptr() );
-        kern->set_local_arg( 16*sizeof(cl_uchar) );
+        kern->set_local_arg( lThreads[0]*10*sizeof(cl_uchar) );
+        //kern->set_local_arg( lThreads[0]*73*sizeof(cl_uchar) );
         kern->set_local_arg( lThreads[0]*sizeof(cl_uchar16) );
         kern->set_local_arg( lThreads[0]*sizeof(cl_uchar16) );
 
@@ -257,8 +258,11 @@ bool boxm2_ocl_refine_process(bprb_func_process& pro)
             sizebuff[i] = sizebuff[i-1];
         sizebuff[0] = 0;
         tree_sizes->write_to_buffer((queue));
-        vcl_cout<<"New data size: "<<newDataSize<<'\n'
-                <<"Scan data sizes time: "<<scan_time.all()<<vcl_endl;
+        
+        int dataLen = alpha->num_bytes()/sizeof(float); 
+        vcl_cout<<"  New data size: "<<newDataSize<<", old data: "<<dataLen<<'\n'
+                <<"  Num Refined: "<<(newDataSize-dataLen)/8<<'\n'
+                <<"  Scan data sizes time: "<<scan_time.all()<<vcl_endl;
         transfer_time += scan_time.all();
         /////////////////////////////////////////////////////////////////////////
 
@@ -277,12 +281,12 @@ bool boxm2_ocl_refine_process(bprb_func_process& pro)
         data_types.push_back(boxm2_data_traits<BOXM2_ALPHA>::prefix());
         for (unsigned int i=0; i<data_types.size(); ++i)
         {
-            vcl_cout<<"Swapping data of type: "<<data_types[i]<<vcl_endl;
+            vcl_cout<<"  Swapping data of type: "<<data_types[i]<<vcl_endl;
             vcl_string options=get_option_string(boxm2_data_info::datasize(data_types[i]));
             vcl_string data_identifier= identifier+options;
             if (kernels.find(data_identifier)==kernels.end())
             {
-                vcl_cout<<"boxm2_opencl_refine::Kernel for swapping datatype: "
+                vcl_cout<<"  boxm2_opencl_refine::Kernel for swapping datatype: "
                         <<data_types[i]<<" and size "<<boxm2_data_info::datasize(data_types[i])
                         <<" is not compiled."<<vcl_endl;
                 return false;
@@ -293,7 +297,7 @@ bool boxm2_ocl_refine_process(bprb_func_process& pro)
             bocl_mem* dat = opencl_cache->get_data(id, data_types[i]);
 
             //get a new data pointer (with newSize), will create CPU buffer and GPU buffer
-            vcl_cout<<data_types[i]<<" new data size is: "<<newDataSize<<vcl_endl;
+            vcl_cout<<"  Data_type "<<data_types[i]<<" new size is: "<<newDataSize<<vcl_endl;
             int dataBytes = boxm2_data_info::datasize(data_types[i]) * newDataSize;
             bocl_mem* new_dat = new bocl_mem(device->context(), NULL, dataBytes, "new data buffer " + data_types[i]);
             new_dat->create_buffer(CL_MEM_READ_WRITE, queue);
@@ -330,9 +334,9 @@ bool boxm2_ocl_refine_process(bprb_func_process& pro)
             kern->set_arg( &copy_parent );
             kern->set_arg( lookup.ptr() );
             kern->set_arg( cl_output.ptr() );
-            kern->set_local_arg( 16*sizeof(cl_uchar) );
             kern->set_local_arg( lThreads[0]*sizeof(cl_uchar16) );
             kern->set_local_arg( lThreads[0]*sizeof(cl_uchar16) );
+            kern->set_local_arg( lThreads[0]*73*sizeof(cl_uchar) );
 
             //set workspace
             vcl_size_t lThreads[] = {64, 1};
@@ -347,7 +351,7 @@ bool boxm2_ocl_refine_process(bprb_func_process& pro)
             ////write the data to buffer
             opencl_cache->deep_replace_data(id, data_types[i], new_dat);
             if (data_types[i] == boxm2_data_traits<BOXM2_ALPHA>::prefix()) {
-                vcl_cout<<"Writing refined trees."<<vcl_endl;
+                vcl_cout<<"  Writing refined trees."<<vcl_endl;
                 blk->read_to_buffer(queue);
             }
         }

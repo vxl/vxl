@@ -2,24 +2,12 @@
 // Merge bit scene 
 //------------------------------------------------------------------------------
 #pragma OPENCL EXTENSION cl_khr_global_int32_base_atomics : enable
-#ifdef MOG_TYPE_16 
-    #define MOG_TYPE ushort8
-#endif
-#ifdef MOG_TYPE_8 
-   #define MOG_TYPE uchar8
-#endif
-#ifdef MOG_TYPE_4
-   #define MOG_TYPE uchar4
-#endif
-#ifdef MOG_TYPE_2
-   #define MOG_TYPE uchar2
-#endif
 
+//move behaviors
 #define ALPHA_BEHAVIOR 0
 #define COPY_PARENT_BEHAVIOR 1
 #define COPY_INIT_BEHAVIOR 2
 #define ZERO_BEHAVIOR 3 
-
 
 /////////////////////////////////////////////////////////////////
 // Given zero based alpha array, merges tree
@@ -51,7 +39,8 @@ int merge_tree( __constant RenderSceneInfo * linfo,
     return 0; 
 
   //create float array to keep track of probs
-  float probs[8];  //one float for each generation
+  float max_alpha = -log(1.0f - prob_thresh);
+  float probs[8];  //one float for each generation (probs are really alphas)
   
   ////////////////////////////////////////////////////////////////////
   // Begin octree traversal 
@@ -75,8 +64,7 @@ int merge_tree( __constant RenderSceneInfo * linfo,
       //calculate the theoretical radius of this cell
       int curr_depth = get_depth(currBitIndex);
       float side_len = linfo->block_len / (float) (1<<curr_depth);
-      float prob = 1.0 - exp(-alpha * side_len); 
-      probs[genCounter++] = prob; 
+      probs[genCounter++] = alpha*side_len; 
       
       //if currBitIndex is not a leaf
       if( tree_bit_at(unmerged, currBitIndex) ) {
@@ -88,7 +76,7 @@ int merge_tree( __constant RenderSceneInfo * linfo,
     //take a look to see if this parent should be merged
     bool allBelow = true; 
     for(int i=0; i<8; ++i) 
-      allBelow = allBelow && (probs[i] < prob_thresh); 
+      allBelow = allBelow && (probs[i] < max_alpha); 
       
     //if all are leaves and all below, then reset the parent index to 0 (merge)
     if(allLeaves && allBelow) {
@@ -114,7 +102,7 @@ int move_data(__constant RenderSceneInfo * linfo,
               __local    char            * listMem,     //buffer of 73 chars
               __constant uchar           * bit_lookup,
                          float             prob_thresh,
-                         int     behavior)
+                         int               behavior)
 {
   //place to get data and place to put it in new buffer
   int oldDataIndex=0, newDataIndex=0; 
