@@ -378,7 +378,7 @@ update_bit_scene_main(__global RenderSceneInfo  * info,
       float cell_beta = convert_float(beta_int)/SEGLEN_FACTOR;
       float4 aux_data = (float4) (cum_len, mean_obs, cell_beta, cell_vis/cum_len);
       float4 nobs     = convert_float4(nobs_array[gid]);
-      float8 mixture  = convert_float8(mixture_array[gid])/NORM;
+      CONVERT_FUNC_FLOAT8(mixture,mixture_array[gid])/NORM;
       float16 data = (float16) (alpha,
                                  (mixture.s0), (mixture.s1), (mixture.s2), (nobs.s0),
                                  (mixture.s3), (mixture.s4), (mixture.s5), (nobs.s1),
@@ -394,7 +394,7 @@ update_bit_scene_main(__global RenderSceneInfo  * info,
                                         data.s5, data.s6, data.s7,
                                         data.s9, data.sa)*(float) NORM;
       float4 post_nobs      = (float4) (data.s4, data.s8, data.sb, data.sc*100.0);
-      CONVERT_FUNC_SAT_RTE(mixture_array[gid],post_mix)
+      CONVERT_FUNC_SAT_RTE(mixture_array[gid],post_mix);
       nobs_array[gid]       = convert_ushort4_sat_rte(post_nobs);
 
     }

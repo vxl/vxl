@@ -19,7 +19,7 @@ void step_cell_render(__global MOG_TYPE   * cell_data,
   // for rendering only
   if(diff_omega<0.995f)
   {
-      CONVERT_FUNC(udata,cell_data[data_ptr])
+      CONVERT_FUNC(udata,cell_data[data_ptr]);
       float8  data=convert_float8(udata)/NORM;
       expected_int_cell = ((data.s0) * (data.s2)
                           +(data.s3) * (data.s5)
@@ -78,7 +78,7 @@ void step_cell_change_detection_uchar8_w_expected(__global MOG_TYPE * cell_data,
                                                   float e_img_intensity)
 {
   //uchar8 uchar_data = cell_data[data_ptr];
-  CONVERT_FUNC(uchar_data,cell_data[data_ptr])
+  CONVERT_FUNC(uchar_data,cell_data[data_ptr]);
   float8 data= convert_float8(uchar_data)/NORM;
 
   float prob_den=gauss_3_mixture_prob_density(img_intensity,
@@ -113,7 +113,7 @@ void step_cell_compute_probability_of_intensity(__global MOG_TYPE * cell_data,
                                                   float * prob_image,
                                                   float img_intensity)
 {
-  CONVERT_FUNC(uchar_data,cell_data[data_ptr])
+  CONVERT_FUNC(uchar_data,cell_data[data_ptr]);
   float8 data= convert_float8(uchar_data)/NORM;
 
   float prob_den=gauss_3_mixture_prob_density(img_intensity,

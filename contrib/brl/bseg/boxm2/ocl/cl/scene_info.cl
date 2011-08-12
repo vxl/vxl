@@ -10,23 +10,33 @@
 //note that merge and refine use this for both numobs and alpha
 #ifdef MOG_TYPE_16 
     #define MOG_TYPE int4
-    #define CONVERT_FUNC(lhs,data) ushort8 lhs = as_ushort8(data);
-    #define NORM 65535;
+    #define CONVERT_FUNC(lhs,data) ushort8 lhs = as_ushort8(data)
+    #define CONVERT_FUNC_SAT_RTE(lhs,data) lhs = as_int4( convert_ushort8_sat_rte(data) )
+    #define NORM 65535
 #endif
 #ifdef MOG_TYPE_8 
     #define MOG_TYPE int2
-    #define CONVERT_FUNC(lhs,data) uchar8 lhs = as_uchar8(data);
-    #define NORM 255;
+    #define CONVERT_FUNC(lhs,data) uchar8 lhs = as_uchar8(data)
+    #define CONVERT_FUNC_FLOAT8(lhs,data) float8 lhs = convert_float8( as_uchar8(data) )
+    #define CONVERT_FUNC_SAT_RTE(lhs,data) lhs = as_int2( convert_uchar8_sat_rte(data) )
+    #define NORM 255
 #endif
 #ifdef MOG_TYPE_4
     #define MOG_TYPE uchar4
-    #define CONVERT_FUNC(lhs,data) ushort8 lhs = as_ushort8(data);
-    #define NORM 65535;
+    #define CONVERT_FUNC(lhs,data) uchar4 lhs = as_uchar4(data)
+    #define CONVERT_FUNC_SAT_RTE(lhs,data) lhs = convert_uchar4_sat_rte(data)
+    #define NORM 65535
 #endif
 #ifdef MOG_TYPE_2
     #define MOG_TYPE uchar2
-    #define CONVERT_FUNC(lhs,data) ushort8 lhs = as_ushort8(data);
-    #define NORM 65535;
+    #define CONVERT_FUNC(lhs,data) ushort8 lhs = as_ushort8(data)
+    #define NORM 65535
+#endif
+#ifndef MOG_TYPE
+    #define MOG_TYPE int2
+    #define CONVERT_FUNC(lhs,data) uchar8 lhs = as_uchar8(data)
+    #define CONVERT_FUNC_SAT_RTE(lhs,data) lhs = convert_uchar8_sat_rte(data)
+    #define NORM 255
 #endif
 
 //pixel type (RGB or GREY)
