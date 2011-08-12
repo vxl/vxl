@@ -92,5 +92,38 @@ inline void vimt_find_world_troughs_3x3(vcl_vector<vgl_point_2d<double> >& troug
   }
 }
 
+//: Return image co-ordinates of minimum value in image
+//  (Or first one found if multiple equivalent minima)
+template <class T>
+inline
+vgl_point_2d<unsigned> vimt_find_min(const vil_image_view<T>& im, unsigned plane=0)
+{
+  vgl_point_2d<unsigned> p(0,0);
+  T min_val = im(0,0,plane);
+  unsigned ni=im.ni(),nj=im.nj();
+  vcl_ptrdiff_t istep = im.istep(),jstep=im.jstep();
+  const T* row = im.top_left_ptr()+plane*im.planestep();
+  for (unsigned j=0;j<nj;++j,row+=jstep)
+  {
+    const T* pixel = row;
+    for (unsigned i=0;i<ni;++i,pixel+=istep)
+      if (*pixel<min_val)
+      {
+        min_val = *pixel;
+        p = vgl_point_2d<unsigned>(i,j);
+      }
+  }
+  return p;
+}
+
+//: Return world co-ordinates of minimum value in image
+//  (Or first one found if multiple equivalent minima)
+template <class T>
+inline
+vgl_point_2d<double> vimt_find_min(const vimt_image_2d_of<T>& image,unsigned plane=0)
+{
+  vgl_point_2d<unsigned> im_p = vimt_find_min(image.image(),plane);
+  return image.world2im().inverse()(im_p.x(),im_p.y());
+}
 
 #endif // vimt_find_troughs_h_
