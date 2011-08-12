@@ -205,7 +205,9 @@ bool boxm2_ocl_render_gl_expected_image_process(bprb_func_process& pro)
 
   // read out expected image
   clReleaseCommandQueue(queue);
-
+  
+  delete[] vis_buff; 
+  
   //store render time
   int argIdx = 0;
   pro.set_output_val<float>(argIdx, time);
