@@ -145,22 +145,42 @@ bool boxm2_block::init_empty_block(boxm2_block_metadata data)
   //6. initialize blocks in order
   int tree_index = 0;
   boxm2_array_3d<uchar16>::iterator iter;
-  for (iter = trees_.begin(); iter != trees_.end(); ++iter, ++tree_index)
+  for (iter = trees_.begin(); iter != trees_.end(); ++iter)
   {
-    //data index is tree index at this point
-    //store data index in bits [10, 11, 12, 13] ;
+    //initialize empty tree
     uchar16 treeBlk( (unsigned char) 0 );
-    for (int i=0; i<16; i++)
-        treeBlk[i]=0;
-
+    
+    //store root data index in bits [10, 11, 12, 13] ;
     treeBlk[10] = (tree_index) & 0xff;
     treeBlk[11] = (tree_index>>8)  & 0xff;
     treeBlk[12] = (tree_index>>16) & 0xff;
     treeBlk[13] = (tree_index>>24) & 0xff;
+    
+    //Set Init_Level, 1=just root, 2=2 generations, 3=3 generations, 4=all four
+    if(init_level_== 1) {
+      treeBlk[0] = 0; 
+      ++tree_index;
+    }
+    else if(init_level_ == 2){
+      treeBlk[0] = 1; 
+      tree_index += 9;                //root + 1st
+    }
+    else if(init_level_ == 3) {
+      treeBlk[0] = 1;
+      treeBlk[1] = 0xff;  
+      tree_index += 1 + 8 + 64;       //root + 1st + 2nd
+    }
+    else if(init_level_ == 4) {
+      treeBlk[0] = 1; 
+      for(int i=1; i<1+8; ++i)
+        treeBlk[i] = 0xff; 
+      tree_index += 1 + 8 + 64 + 512; // root + 1st + 2nd + 3rd...
+    }
+
+    //store this tree in block bytes
     for (int i=0; i<16; i++)
       (*iter)[i] = treeBlk[i];
   }
-
   return true;
 }
 

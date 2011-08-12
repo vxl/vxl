@@ -1,4 +1,5 @@
 #include "boxm2_data_base.h"
+#include <vcl_algorithm.h>
 //:
 // \file
 
@@ -8,12 +9,32 @@ boxm2_data_base::boxm2_data_base(boxm2_block_metadata data, const vcl_string dat
   read_only_ = read_only;
   id_ = data.id_;
 
-  //determine number of cells to allocate - if random, then use the max_mb, otherwise use tree size
-  // MAY want to create an initialize data that caters to size of trees, and doesn't assume only root
+  //determine number of cells to allocate - based on init_level
+  long init_cells_per_tree; 
+  double side_len = data.sub_block_dim_.x();      //side length for initialized cell
+  if( data.init_level_ == 1) {
+    init_cells_per_tree = 1; 
+  }
+  else if( data.init_level_ == 2) {
+    init_cells_per_tree = 1 + 8; 
+    side_len = side_len/2.0; 
+  }
+  else if( data.init_level_ == 3) { 
+    init_cells_per_tree = 1 + 8 + 64;
+    side_len = side_len/4.0; 
+  } 
+  else if( data.init_level_ == 4) {
+    init_cells_per_tree = 1 + 8 + 64 + 512; 
+    side_len = side_len/8.0; 
+  }
+
+  //total number of cells = numTrees * init_cells_per_tree
   long num_cells = data.sub_block_num_.x() *
                    data.sub_block_num_.y() *
-                   data.sub_block_num_.z();
+                   data.sub_block_num_.z() * init_cells_per_tree;
   vcl_size_t cell_size = boxm2_data_info::datasize(data_type);
+  
+  //total buffer length
   buffer_length_ = num_cells * cell_size;
   vcl_cout<<"boxm2_data_base::empty "<<data_type<<" num cells: "
           <<num_cells<<'\n'
@@ -24,13 +45,12 @@ boxm2_data_base::boxm2_data_base(boxm2_block_metadata data, const vcl_string dat
 
   //initialize the data to the correct value
   if (data_type == boxm2_data_traits<BOXM2_ALPHA>::prefix()) {
-    const float ALPHA_INIT = float(-vcl_log(1.0f - data.p_init_) / (data.sub_block_dim_.x()));
+    const float ALPHA_INIT = float(-vcl_log(1.0f - data.p_init_) / side_len);
     float* alphas = (float*) data_buffer_;
-    int buffer_length = (int)(buffer_length_/sizeof(float));
-    for (int i=0; i<buffer_length; ++i) alphas[i] = ALPHA_INIT;
+    vcl_fill(alphas, alphas+num_cells, ALPHA_INIT); 
   }
   else   if (data_type == boxm2_data_traits<BOXM2_GAMMA>::prefix()) {
-    const float GAMMA_INIT = float(-vcl_log(1.0f - data.p_init_) / (data.sub_block_dim_.x()*data.sub_block_dim_.x()*data.sub_block_dim_.x()));
+    const float GAMMA_INIT = float(-vcl_log(1.0f - data.p_init_) / (side_len*side_len*side_len));
     float* alphas = (float*) data_buffer_;
     int buffer_length = (int)(buffer_length_/sizeof(float));
     for (int i=0; i<buffer_length; ++i) alphas[i] = GAMMA_INIT;
