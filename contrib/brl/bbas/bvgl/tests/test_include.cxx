@@ -6,6 +6,7 @@
 #include <bvgl/bvgl_change_obj.h>
 #include <bvgl/bvgl_changes.h>
 #include <bvgl/bvgl_point_3d_cmp.h>
+#include <bvgl/bvgl_ray_pyramid.h>
 #include <bvgl/bvgl_triangle_interpolation_iterator.h>
 #include <bvgl/bvgl_volume_of_intersection.h>
 
