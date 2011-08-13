@@ -55,7 +55,7 @@ class boxm2_update_pass1_functor
 
   inline bool step_cell(float seg_len,int index,unsigned i,unsigned j)
   {
-    boxm2_data<BOXM2_AUX>::datatype aux=aux_data_->data()[index];
+    typename boxm2_data<BOXM2_AUX>::datatype aux=aux_data_->data()[index];
     if (aux[0]<1e-10f)return true;
 
     float mean_obs=aux[1]/aux[0];
@@ -63,7 +63,7 @@ class boxm2_update_pass1_functor
 
     float vis=(*vis_img_)(i,j);
     float pre=(*pre_img_)(i,j);
-    boxm2_data<BOXM2_ALPHA>::datatype alpha=alpha_data_->data()[index];
+    typename boxm2_data<BOXM2_ALPHA>::datatype alpha=alpha_data_->data()[index];
     float temp=vcl_exp(-seg_len*alpha);
     pre+=vis*(1-temp)*PI;
     vis*=temp;
@@ -101,7 +101,7 @@ class boxm2_update_pass2_functor
 
   inline bool step_cell(float seg_len,int index,unsigned i,unsigned j)
   {
-    boxm2_data<BOXM2_AUX>::datatype & aux=aux_data_->data()[index];
+    typename boxm2_data<BOXM2_AUX>::datatype & aux=aux_data_->data()[index];
     if (aux[0]<1e-10f)return true;
     float mean_obs=aux[1]/aux[0];
     float PI=boxm2_data_traits<APM_TYPE>::processor::prob_density(mog3_data_->data()[index], mean_obs);
@@ -109,7 +109,7 @@ class boxm2_update_pass2_functor
     //if (PI==vcl_numeric_limits<float>::infinity())
     float vis=(*vis_img_)(i,j);
     float pre=(*pre_img_)(i,j);
-    boxm2_data<BOXM2_ALPHA>::datatype alpha=alpha_data_->data()[index];
+    typename boxm2_data<BOXM2_ALPHA>::datatype alpha=alpha_data_->data()[index];
     float omega=(1-vcl_exp(-seg_len*alpha));
     if ((*norm_img_)(i,j)>1e-10f)
     {
@@ -150,7 +150,7 @@ class boxm2_update_data_functor
   }
   inline bool process_cell(int index)
   {
-    boxm2_data<BOXM2_AUX>::datatype & aux=aux_data_->data()[index];
+    typename boxm2_data<BOXM2_AUX>::datatype & aux=aux_data_->data()[index];
 
     if (aux[0]>1e-8f)
     {
@@ -158,11 +158,10 @@ class boxm2_update_data_functor
       float vis =aux[3]/aux[0];
       float mean_obs=aux[1]/aux[0];
 
-      boxm2_data<BOXM2_ALPHA>::datatype & alpha=alpha_data_->data()[index];
-
+      typename boxm2_data<BOXM2_ALPHA>::datatype & alpha=alpha_data_->data()[index];
       alpha=vcl_max(alpha_min_,alpha*beta);
-      boxm2_data<APM_TYPE>::datatype & mog3=mog3_data_->data()[index];
-      boxm2_data<BOXM2_NUM_OBS>::datatype & nobs=nobs_data_->data()[index];
+      typename boxm2_data<APM_TYPE>::datatype & mog3=mog3_data_->data()[index];
+      typename boxm2_data<BOXM2_NUM_OBS>::datatype & nobs=nobs_data_->data()[index];
       vnl_vector_fixed<float,4> nobs_float;
       nobs_float[0]=(float)nobs[0];
       nobs_float[1]=(float)nobs[1];
