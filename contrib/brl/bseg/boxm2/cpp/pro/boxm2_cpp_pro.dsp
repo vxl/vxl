@@ -140,6 +140,18 @@ SOURCE=.\processes/boxm2_cpp_batch_update_processes.cxx
 # Begin Source File
 SOURCE=.\processes/boxm2_cpp_vis_of_point_process.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\processes/boxm2_cpp_batch_update_opt2_processes.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/boxm2_cpp_merge_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/boxm2_cpp_image_density_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/boxm2_cpp_update_with_shadow_process.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"

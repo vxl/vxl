@@ -107,6 +107,15 @@ SOURCE=.\boxm2_filter_block_function.cxx
 # Begin Source File
 SOURCE=.\boxm2_update_functions.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\boxm2_gauss_grey_processor.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\boxm2_merge_block_function.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/boxm2_batch_functors+BOXM2_APMs-.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
@@ -163,6 +172,21 @@ SOURCE=.\boxm2_ray_probe_functor.h
 # End Source File
 # Begin Source File
 SOURCE=.\boxm2_cone_update_image_functor.h
+# End Source File
+# Begin Source File
+SOURCE=.\boxm2_merge_block_function.h
+# End Source File
+# Begin Source File
+SOURCE=.\boxm2_batch_opt2_functors.h
+# End Source File
+# Begin Source File
+SOURCE=.\boxm2_update_with_shadow_functor.h
+# End Source File
+# Begin Source File
+SOURCE=.\boxm2_gauss_grey_processor.h
+# End Source File
+# Begin Source File
+SOURCE=.\boxm2_image_density_functor.h
 # End Source File
 # End Group
 # End Target

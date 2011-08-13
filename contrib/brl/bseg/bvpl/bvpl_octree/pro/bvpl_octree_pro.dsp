@@ -186,6 +186,27 @@ SOURCE=.\processes/taylor/bvpl_compute_taylor_coefficients_process.cxx
 SOURCE=.\processes/pca/bvpl_load_global_pca_process.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\processes/corners/bvpl_threshold_corners_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/taylor/bvpl_load_global_taylor_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/corners/bvpl_compute_beaudet_measure_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/bvpl_grad_scene_to_bin_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/corners/bvpl_compute_harris_measure_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/corners/bvpl_load_global_corners_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/corners/bvpl_corner_statistics_process.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/brdb_value_t+bvpl_pca_error_scenes_sptr-.cxx
 # End Source File
 # Begin Source File
@@ -199,6 +220,12 @@ SOURCE=.\Templates/brdb_value_t+boxm_scene_base_sptr-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/brdb_value_t+bvpl_global_pca_125_sptr-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/brdb_value_t+bvpl_global_taylor_sptr-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/brdb_value_t+bvpl_global_corners_sptr-.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"

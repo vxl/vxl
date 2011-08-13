@@ -105,6 +105,12 @@ SOURCE=.\bvpl_io_taylor_scenes_map.cxx
 SOURCE=.\bvpl_io_global_pca.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\bvpl_io_global_corners.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\bvpl_io_global_taylor.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/vbl_io_smart_ptr+bvpl_discover_pca_kernels-.cxx
 # End Source File
 # Begin Source File
@@ -115,6 +121,12 @@ SOURCE=.\Templates/vbl_io_smart_ptr+bvpl_pca_error_scenes-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/vbl_io_smart_ptr+bvpl_global_pca+125--.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vbl_io_smart_ptr+bvpl_global_taylor-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vbl_io_smart_ptr+bvpl_global_corners-.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
@@ -130,6 +142,12 @@ SOURCE=.\bvpl_io_taylor_scenes_map.h
 # End Source File
 # Begin Source File
 SOURCE=.\bvpl_io_global_pca.h
+# End Source File
+# Begin Source File
+SOURCE=.\bvpl_io_global_taylor.h
+# End Source File
+# Begin Source File
+SOURCE=.\bvpl_io_global_corners.h
 # End Source File
 # End Group
 # End Target

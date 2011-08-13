@@ -114,6 +114,9 @@ SOURCE=.\bvpl_taylor_scenes_map.cxx
 SOURCE=.\bvpl_global_taylor.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\bvpl_global_corners.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/boxm_block+boct_tree+short.bvpl_octree_sample+bsta_num_obs+bsta_gauss_sf1----.cxx
 # End Source File
 # Begin Source File
@@ -169,6 +172,12 @@ SOURCE=.\Templates/boxm_block+boct_tree+short.vnl_vector_fixed+double.10---.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/vbl_smart_ptr+bvpl_global_pca+125--.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vbl_smart_ptr+bvpl_global_corners-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vbl_smart_ptr+bvpl_global_taylor-.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
@@ -229,6 +238,15 @@ SOURCE=.\bvpl_global_taylor.h
 # End Source File
 # Begin Source File
 SOURCE=.\bvpl_block_vector_operator.h
+# End Source File
+# Begin Source File
+SOURCE=.\bvpl_global_corners.h
+# End Source File
+# Begin Source File
+SOURCE=.\bvpl_corner_detector.h
+# End Source File
+# Begin Source File
+SOURCE=.\bvpl_corner_functors.h
 # End Source File
 # End Group
 # End Target

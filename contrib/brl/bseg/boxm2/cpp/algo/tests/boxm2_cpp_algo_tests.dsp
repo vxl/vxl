@@ -105,6 +105,9 @@ SOURCE=.\test_cone_ray_trace.cxx
 SOURCE=.\test_cone_update.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\test_merge_function.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\test_include.cxx
 # End Source File
 # End Group

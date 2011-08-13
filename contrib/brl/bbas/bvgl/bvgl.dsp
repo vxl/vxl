@@ -102,6 +102,9 @@ SOURCE=.\bvgl_change_obj.cxx
 SOURCE=.\bvgl_changes.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\bvgl_ray_pyramid.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/vbl_smart_ptr+bvgl_articulated_poly-.cxx
 # End Source File
 # Begin Source File
@@ -154,6 +157,9 @@ SOURCE=.\bvgl_volume_of_intersection.txx
 # End Source File
 # Begin Source File
 SOURCE=.\bvgl_volume_of_intersection.h
+# End Source File
+# Begin Source File
+SOURCE=.\bvgl_ray_pyramid.h
 # End Source File
 # End Group
 # End Target

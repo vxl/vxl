@@ -243,13 +243,16 @@ LINK32=link.exe
 SOURCE=.\test_driver.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\test_include.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\test_bvgl_changes.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\test_bvgl_volume_of_intersection.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_bvgl_ray_pyramid.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_include.cxx
 # End Source File
 # End Group
 # End Target

@@ -239,6 +239,9 @@ SOURCE=.\Templates/vbl_smart_ptr+bsta_joint_histogram_3d_base-.cxx
 # Begin Source File
 SOURCE=.\Templates/bsta_joint_histogram_3d+double-.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\Templates/bsta_gaussian_full+double.4-.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
