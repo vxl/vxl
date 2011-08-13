@@ -21,6 +21,11 @@ MANPAGE_SOURCES += boxm2_batch_functors.h
 SOURCES += boxm2_update_functions.cxx
 MANPAGE_SOURCES += boxm2_ray_probe_functor.h
 MANPAGE_SOURCES += boxm2_cone_update_image_functor.h
+SOURCES += boxm2_gauss_grey_processor.cxx
+SOURCES += boxm2_merge_block_function.cxx
+MANPAGE_SOURCES += boxm2_batch_opt2_functors.h
+MANPAGE_SOURCES += boxm2_update_with_shadow_functor.h
+MANPAGE_SOURCES += boxm2_image_density_functor.h
 
 #######################################
 include ${VXLROOT}/config/top-params.mk

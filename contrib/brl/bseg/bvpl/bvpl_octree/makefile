@@ -20,6 +20,9 @@ SOURCES += bvpl_taylor_scenes_map.cxx
 MANPAGE_SOURCES += bvpl_global_pca.txx
 SOURCES += bvpl_global_taylor.cxx
 MANPAGE_SOURCES += bvpl_block_vector_operator.h
+SOURCES += bvpl_global_corners.cxx
+MANPAGE_SOURCES += bvpl_corner_detector.h
+MANPAGE_SOURCES += bvpl_corner_functors.h
 
 SUBDIRS += pro sample io
 

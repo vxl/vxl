@@ -20,6 +20,10 @@ SOURCES += processes/boxm2_cpp_ray_probe_process.cxx
 SOURCES += processes/boxm2_cpp_cone_update_image_process.cxx
 SOURCES += processes/boxm2_cpp_batch_update_processes.cxx
 SOURCES += processes/boxm2_cpp_vis_of_point_process.cxx
+SOURCES += processes/boxm2_cpp_batch_update_opt2_processes.cxx
+SOURCES += processes/boxm2_cpp_merge_process.cxx
+SOURCES += processes/boxm2_cpp_image_density_process.cxx
+SOURCES += processes/boxm2_cpp_update_with_shadow_process.cxx
 
 #######################################
 include ${VXLROOT}/config/top-params.mk

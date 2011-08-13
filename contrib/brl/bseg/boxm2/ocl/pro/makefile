@@ -30,6 +30,9 @@ SOURCES += processes/boxm2_ocl_cone_update_process.cxx
 SOURCES += processes/boxm2_ocl_update_aux_per_view_process.cxx
 SOURCES += processes/boxm2_ocl_adaptive_cone_update_process.cxx
 SOURCES += processes/boxm2_ocl_adaptive_cone_render_expected_process.cxx
+SOURCES += processes/boxm2_ocl_merge_process.cxx
+SOURCES += processes/boxm2_ocl_render_expected_shadow_map_process.cxx
+SOURCES += processes/boxm2_ocl_update_sun_visibilities_process.cxx
 
 #######################################
 include ${VXLROOT}/config/top-params.mk
