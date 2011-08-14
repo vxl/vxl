@@ -46,14 +46,9 @@ class boxm2_update_with_shadow_pass2_functor
     float omega=(1-vcl_exp(-seg_len*alpha));
     if ((*norm_img_)(i,j)>1e-10f)
     {
-        aux[2]+=( ((pre+vis*PI)*model_prior_ + (*alt_prob_img_)(i,j)) / ((*norm_img_)(i,j)*model_prior_ + (*alt_prob_img_)(i,j)) * seg_len);
-        //aux[3]+=vis*model_prior_*seg_len;
-        float val = vis*model_prior_*seg_len;
-        float img_val = (*alt_prob_img_)(i,j);
-        float denom = (pre+vis*PI)*model_prior_ + (*alt_prob_img_)(i,j);
-        float nume = (pre+vis*PI)*model_prior_;
-        float new_val = ( (pre+vis*PI)*model_prior_ / ( (pre+vis*PI)*model_prior_ + (*alt_prob_img_)(i,j) ) )*seg_len;
-        aux[3] += ( (pre+vis*PI)*model_prior_ / ( (pre+vis*PI)*model_prior_ + (*alt_prob_img_)(i,j) ) )*seg_len;
+      aux[2]+=( ((pre+vis*PI)*model_prior_ + (*alt_prob_img_)(i,j)) / ((*norm_img_)(i,j)*model_prior_ + (*alt_prob_img_)(i,j)) * seg_len);
+      //aux[3]+=vis*model_prior_*seg_len;
+      aux[3] += ( (pre+vis*PI)*model_prior_ / ( (pre+vis*PI)*model_prior_ + (*alt_prob_img_)(i,j) ) )*seg_len;
     }
     pre+=vis*omega*PI;
     vis=vis*(1-omega);
@@ -112,12 +107,12 @@ class boxm2_update_with_shadow_functor
       nobs_float[3]=((float)nobs[3])/100.0f;
       //boxm2_data_traits<BOXM2_MOG3_GREY>::processor::update_gauss_mixture_3(mog3,nobs_float, mean_obs,vis,0.09f, 0.03f);
       //boxm2_data_traits<APM_TYPE>::processor::update_gauss_mixture_3(mog3,nobs_float, mean_obs,vis,0.09f, 0.03f);
-      
+
       //update only if not classified as shadow
       //float TMATCH = 2.5f;
       //float tsq = TMATCH*TMATCH;
-      //if ((mean_obs*mean_obs)/(shadow_sigma_*shadow_sigma_) >= tsq) {  // shadow mean is always zero
-        boxm2_data_traits<APM_TYPE>::processor::update_app_model(mog3,nobs_float, mean_obs,vis,0.09f, 0.03f);    
+      //if (mean_obs*mean_obs >= shadow_sigma_*shadow_sigma_*tsq) {  // shadow mean is always zero
+        boxm2_data_traits<APM_TYPE>::processor::update_app_model(mog3,nobs_float, mean_obs,vis,0.09f, 0.03f);
       //}
       nobs[0]=(unsigned short)nobs_float[0];
       nobs[1]=(unsigned short)nobs_float[1];
