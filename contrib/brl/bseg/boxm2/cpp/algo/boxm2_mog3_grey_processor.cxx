@@ -1,6 +1,5 @@
 #include "boxm2_mog3_grey_processor.h"
-//:
-// \file
+//
 #define TMATCH 2.5f
 
 #include <boxm2/boxm2_util.h>
@@ -228,7 +227,7 @@ boxm2_mog3_grey_processor::update_gauss_mixture_3(vnl_vector_fixed<unsigned char
     // test for a match of component 1
     if (w1>0.0f && sigma1>0.0f) {
       weight = (1.0f-alpha)*(w1);
-      if (match<0 && ((x-mu1)*(x-mu1)/(sigma1*sigma1)) < tsq) {
+      if (match<0 && (x-mu1)*(x-mu1) < sigma1*sigma1*tsq) {
         weight += alpha;
         nobs[1]++;
         rho = (1.0f-alpha)/nobs[1] + alpha;
@@ -240,7 +239,7 @@ boxm2_mog3_grey_processor::update_gauss_mixture_3(vnl_vector_fixed<unsigned char
     // test for a match of component 2
     if (w2>0.0f &&  sigma2>0.0f) {
       weight = (1.0f-alpha)*w2;
-      if (match<0 && ((x-mu2)*(x-mu2)/(sigma2*sigma2)) < tsq) {
+      if (match<0 && (x-mu2)*(x-mu2) < sigma2*sigma2*tsq) {
         weight += alpha;
         nobs[2]++;
         rho = (1.0f-alpha)/nobs[2] + alpha;
@@ -358,27 +357,27 @@ void  boxm2_mog3_grey_processor::merge_mixtures(vnl_vector_fixed<unsigned char, 
   }
 }
 
-//: Most of The following piece of code is copied over from boxm_mog_grey_processor::compute_appearance 
+// Most of the following code is copied over from boxm_mog_grey_processor::compute_appearance
 
 void boxm2_mog3_grey_processor::compute_app_model(vnl_vector_fixed<unsigned char, 8> & apm,
-                                         vcl_vector<float> const& obs, 
-                                         vcl_vector<float> const& obs_weights, 
-                                         bsta_sigma_normalizer_sptr n_table, 
-                                         float min_sigma)
+                                                  vcl_vector<float> const& obs,
+                                                  vcl_vector<float> const& obs_weights,
+                                                  bsta_sigma_normalizer_sptr n_table,
+                                                  float min_sigma)
 {
-   //compute_gauss_mixture_3(apm,obs,obs_weights,n_table,min_sigma);
+  //compute_gauss_mixture_3(apm,obs,obs_weights,n_table,min_sigma);
   vcl_vector<float> pre(obs.size(),0.0f);
   compute_app_model(apm,obs,pre,obs_weights,n_table,min_sigma);
 }
 
 void boxm2_mog3_grey_processor::compute_app_model(vnl_vector_fixed<unsigned char, 8> & mog3,
-                                                  vcl_vector<float> const& obs, 
-                                                  vcl_vector<float> const& pre, 
-                                                  vcl_vector<float> const& vis, 
+                                                  vcl_vector<float> const& obs,
+                                                  vcl_vector<float> const& pre,
+                                                  vcl_vector<float> const& vis,
                                                   bsta_sigma_normalizer_sptr n_table,
-                                                 float min_sigma)
+                                                  float min_sigma)
 {
-  const int nmodes = 3;
+  const unsigned int nmodes = 3;
   const float min_var = min_sigma*min_sigma;
   const float big_sigma = (float)vnl_math::sqrt1_2; // maximum possible std. dev for set of samples drawn from [0 1]
   const float big_var = big_sigma * big_sigma;
@@ -389,7 +388,7 @@ void boxm2_mog3_grey_processor::compute_app_model(vnl_vector_fixed<unsigned char
     return;
   }
   if (nobs == 1) {
-    //: just make the sample the mean and the mixture a single mode distribution
+    // just make the sample the mean and the mixture a single mode distribution
     mog3[0]=(unsigned char)vcl_floor(boxm2_mog3_grey_processor::clamp(obs[0],0,1)*255.0f);
     mog3[1]=(unsigned char)vcl_floor(boxm2_mog3_grey_processor::clamp(big_sigma,0,1)*255.0f);
     mog3[2]=(unsigned char)vcl_floor(boxm2_mog3_grey_processor::clamp(1.0f,0,1)*255.0f);
