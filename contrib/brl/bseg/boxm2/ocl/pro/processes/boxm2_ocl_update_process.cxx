@@ -234,7 +234,6 @@ bool boxm2_ocl_update_process(bprb_func_process& pro)
     if (vil_image_view<unsigned char> * mask_char
         =dynamic_cast<vil_image_view<unsigned char> * >(mask_img.ptr()))
     {
-      int count = 0;
       for (unsigned int j=0;j<mask_char->nj();++j)
         for (unsigned int i=0;i<mask_char->ni();++i)
         {

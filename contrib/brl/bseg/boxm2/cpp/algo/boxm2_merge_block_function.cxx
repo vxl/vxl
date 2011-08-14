@@ -11,16 +11,16 @@ bool boxm2_merge_block_function::init_data(boxm2_block* blk, vcl_vector<boxm2_da
     blk_   = blk;
     trees_ = blk_->trees().data_block();
 
-    //store data buffers  
-    if(datas.size() < 3) {
+    //store data buffers
+    if (datas.size() < 3) {
       vcl_cout<<"boxm2_merge_block_function:: too few data buffers passed in"<<vcl_endl;
-      return false; 
+      return false;
     }
     int i=0;
-    boxm2_data_base* alph = datas[i++]; 
-    boxm2_data_base* mog = datas[i++]; 
-    boxm2_data_base* nobs = datas[i++]; 
-    
+    boxm2_data_base* alph = datas[i++];
+    boxm2_data_base* mog = datas[i++];
+    boxm2_data_base* nobs = datas[i++];
+
     //Data length now is constant
     int alphaTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
     data_len_ = (int) (alph->buffer_length()/alphaTypeSize);
@@ -33,7 +33,7 @@ bool boxm2_merge_block_function::init_data(boxm2_block* blk, vcl_vector<boxm2_da
 
     //max alpha integrated
     //max_alpha_int_ = -vcl_log(1.f - prob_thresh);
-    prob_thresh_ = prob_thresh; 
+    prob_thresh_ = prob_thresh;
 
     //length of one side of a sub block
     block_len_ = blk_->sub_block_dim().x();
@@ -80,7 +80,7 @@ bool boxm2_merge_block_function::init_data(boxm2_block* blk, vcl_vector<boxm2_da
 bool boxm2_merge_block_function::merge(vcl_vector<boxm2_data_base*>& datas)
 {
   vcl_cout<<"CPU merge:"<<vcl_endl;
-  
+
   //1. loop over each tree, refine it in place (keep a vector of locations for
   boxm2_array_3d<uchar16>&  trees = blk_->trees();  //trees to refine
   uchar16* trees_copy = new uchar16[trees.size()];  //copy of those trees
@@ -98,7 +98,7 @@ bool boxm2_merge_block_function::merge(vcl_vector<boxm2_data_base*>& datas)
       boct_bit_tree2 curr_tree( (unsigned char*) tree.data_block(), max_level_);
 
       //3. merge tree locally (only updates refined_tree and returns new tree size)
-      boct_bit_tree2 refined_tree = this->merge_bit_tree(curr_tree, alpha_, prob_thresh_);  
+      boct_bit_tree2 refined_tree = this->merge_bit_tree(curr_tree, alpha_, prob_thresh_);
       int newSize = refined_tree.num_cells();
 
       //cache refined tree
@@ -115,7 +115,7 @@ bool boxm2_merge_block_function::merge(vcl_vector<boxm2_data_base*>& datas)
   float*   alpha_cpy = (float*) newA->data_buffer();
   uchar8*  mog_cpy   = (uchar8*) newM->data_buffer();
   ushort4* num_obs_cpy = (ushort4*) newN->data_buffer();
-  
+
   //3. loop through tree again, putting the data in the right place
   vcl_cout<<"Swapping data into new blocks..."<<vcl_endl;
   int newInitCount = 0;
@@ -133,26 +133,26 @@ bool boxm2_merge_block_function::merge(vcl_vector<boxm2_data_base*>& datas)
       //store data index in bits [10, 11, 12, 13] ;
       int root_index = dataIndex[currIndex];
       refined_tree.set_data_ptr(root_index, false); //is not random
-  
-      int old_root_index = old_tree.get_data_ptr(); 
+
+      int old_root_index = old_tree.get_data_ptr();
 
       //3. swap data from old location to new location, pass in shifted buffers
-      newInitCount += this->move_data(old_tree, 
-                                      refined_tree, 
-                                      alpha_ + old_root_index,  
+      newInitCount += this->move_data(old_tree,
+                                      refined_tree,
+                                      alpha_ + old_root_index,
                                       mog_ + old_root_index,
                                       num_obs_ + old_root_index,
-                                      alpha_cpy+root_index, 
-                                      mog_cpy+root_index, 
+                                      alpha_cpy+root_index,
+                                      mog_cpy+root_index,
                                       num_obs_cpy+root_index);
 
       //4. store old tree in new tree, swap data out
       vcl_memcpy(blk_iter, refined_tree.get_bits(), 16);
   }
-  vcl_cout<<"Number of merged cells: "<<merge_count_<<vcl_endl;
-  vcl_cout<<"  New Alpha Size: "<<newA->buffer_length() / 1024.0/1024.0<<" mb"<<vcl_endl;
-  vcl_cout<<"  New MOG   Size: "<<newM->buffer_length() / 1024.0/1024.0<<" mb"<<vcl_endl;
-  vcl_cout<<"  New NOBS  Size: "<<newN->buffer_length() / 1024.0/1024.0<<" mb"<<vcl_endl;
+  vcl_cout<<"Number of merged cells: "<<merge_count_ << '\n'
+          <<"  New Alpha Size: "<<newA->buffer_length() / 1024.0/1024.0<<" mb" << '\n'
+          <<"  New MOG   Size: "<<newM->buffer_length() / 1024.0/1024.0<<" mb" << '\n'
+          <<"  New NOBS  Size: "<<newN->buffer_length() / 1024.0/1024.0<<" mb" << vcl_endl;
 
   //3. Replace data in the cache
   boxm2_cache_sptr cache = boxm2_cache::instance();
@@ -160,7 +160,7 @@ bool boxm2_merge_block_function::merge(vcl_vector<boxm2_data_base*>& datas)
   cache->replace_data_base(id, boxm2_data_traits<BOXM2_MOG3_GREY>::prefix(), newM);
   cache->replace_data_base(id, boxm2_data_traits<BOXM2_NUM_OBS>::prefix(), newN);
 
-  delete [] dataIndex; 
+  delete [] dataIndex;
   return true;
 }
 
@@ -176,69 +176,64 @@ boct_bit_tree2 boxm2_merge_block_function::merge_bit_tree(boct_bit_tree2& unrefi
 {
   //initialize tree to return
   boct_bit_tree2 merged_tree(unrefined_tree.get_bits(), max_level_);
-  
+
   //it can't be merged if it's a root
-  if(merged_tree.bit_at(0) == 0)
-    return merged_tree; 
-    
+  if (merged_tree.bit_at(0) == 0)
+    return merged_tree;
+
   //create float array to keep track of probs
-  float probs[8]; 
-  bool isLeaf[8] = {true}; 
-    
+  float probs[8];
+
   //push back first generation
   vcl_list<int> toVisit;
-  for(int i=1; i<9; ++i) 
-    toVisit.push_back(i); 
+  for (int i=1; i<9; ++i)
+    toVisit.push_back(i);
 
   //iterate through tree if there are children to get to
   int genCounter = 0;    //when this hits 8, a full generation should have been reached
-  bool allLeaves = true; //true until a leave gets hit
+  bool allLeaves = true; //true until a non-leaf gets hit
   while ( !toVisit.empty() )
   {
     //get front node off the top of the list, do an intersection for all 8 children
-    int currBit = toVisit.front(); 
-    toVisit.pop_front(); 
-    
+    int currBit = toVisit.front();
+    toVisit.pop_front();
+
     //get alpha value for this cell;
     int dataIndex = unrefined_tree.get_data_index(currBit);
     float alpha   = alphas[dataIndex];
-      
+
     //calculate the theoretical radius of this cell
     int curr_depth = unrefined_tree.depth_at(currBit);
     float side_len = block_len_ / (float) (1<<curr_depth);
-    float prob = 1.0 - vcl_exp(-alpha * side_len); 
-    probs[genCounter++] = prob; 
-    
+    float prob = 1.0 - vcl_exp(-alpha * side_len);
+    probs[genCounter++] = prob;
+
     //track current generation's leaf status, and push back children if not
-    if(unrefined_tree.is_leaf(currBit)) {
-      allLeaves = allLeaves&&true; 
+    if (! unrefined_tree.is_leaf(currBit)) {
+      allLeaves = false;
+      for (int i=0; i<8; ++i)
+        toVisit.push_back( currBit*8+1+i );
     }
-    else {
-      allLeaves = allLeaves&&false; 
-      for(int i=0; i<8; ++i)
-        toVisit.push_back( currBit*8+1+i ); 
-    }
-  
+
     //if we've finished up a set of siblings, check to see if we can merge em
-    if(genCounter >= 8) {
+    if (genCounter >= 8) {
       //calculate if all cells fall below threshold
-      bool allBelow = true; 
-      for(int i=0; i<8; ++i) {
-        allBelow = allBelow && (probs[i] < prob_thresh); 
+      bool allBelow = true;
+      for (int i=0; i<8; ++i) {
+        allBelow = allBelow && (probs[i] < prob_thresh);
       }
-        
+
       //if all are leaves and all below, then reset the parent index to 0 (merge)
-      if(allLeaves && allBelow) 
+      if (allLeaves && allBelow)
       {
         int pi = (currBit-1)>>3; //Bit_index of parent bit
-        merged_tree.set_bit_at(pi, false);  
-        merge_count_++;        
+        merged_tree.set_bit_at(pi, false);
+        merge_count_++;
       }
       //reset gen and allLeaves to default
-      genCounter = 0; 
+      genCounter = 0;
       allLeaves = true;
     }
-    
   } //end BFS while
   return merged_tree;
 }
@@ -247,7 +242,7 @@ boct_bit_tree2 boxm2_merge_block_function::merge_bit_tree(boct_bit_tree2& unrefi
 //Deterministic move data
 //moves data from src to destination
 //returns the number of split nodes for this tree (for assertions)
-// Algo: 
+// Algo:
 // dataIndex = 0
 // For each bit
 //   if merged_tree(bit) == 0 && unrefined_tree(bit)==1
@@ -255,75 +250,75 @@ boct_bit_tree2 boxm2_merge_block_function::merge_bit_tree(boct_bit_tree2& unrefi
 //     data[dataIndex++] = mean
 //   else if merged_tree(bit)==1 && unrefined_tree(bit)==1
 //     for i=1:8
-//       data[dataIndex++] = old_data[unrefined_tree.data_ptr(bit)]; 
+//       data[dataIndex++] = old_data[unrefined_tree.data_ptr(bit)];
 int boxm2_merge_block_function::move_data( boct_bit_tree2& old_tree,
                                            boct_bit_tree2& merged_tree,
-                                           float*  alpha, 
-                                           uchar8* mog, 
+                                           float*  alpha,
+                                           uchar8* mog,
                                            ushort4* num_obs,
                                            float*  alpha_cpy,
                                            uchar8*  mog_cpy,
                                            ushort4* num_obs_cpy )
 {
-  //do a traversal over all the old_tree nodes, 
+  //do a traversal over all the old_tree nodes,
   //compressing the refined bits
 
   //place to get data and place to put it in new buffer
-  int oldDataIndex=0, newDataIndex=0; 
+  int oldDataIndex=0, newDataIndex=0;
   float max_alpha = -vcl_log(1.0f - init_prob_);
-  
+
   //push back root
   vcl_list<int> toVisit;
-  toVisit.push_back(0); 
+  toVisit.push_back(0);
   while ( !toVisit.empty() )
   {
     //get front node off the top of the list, do an intersection for all 8 children
-    int currBit = toVisit.front(); 
-    toVisit.pop_front(); 
-    
+    int currBit = toVisit.front();
+    toVisit.pop_front();
+
     //we're traversing merged and old at the same time, but don't branch on old tree
-    if(old_tree.bit_at(currBit)==1) {
-      for(int i=0; i<8; ++i)
-        toVisit.push_back( currBit*8+1+i ); 
+    if (old_tree.bit_at(currBit)==1) {
+      for (int i=0; i<8; ++i)
+        toVisit.push_back( currBit*8+1+i );
     }
-    
+
     //first case: gone to leave that doesn't exist in merged, incrememnt old, not new
-    if(old_tree.valid_cell(currBit) && !merged_tree.valid_cell(currBit))
+    if (old_tree.valid_cell(currBit) && !merged_tree.valid_cell(currBit))
     {
-      oldDataIndex++; 
+      oldDataIndex++;
     }
     //second case: found a merged cell in new tree, copy init vals
-    else if(merged_tree.is_leaf(currBit) && !old_tree.is_leaf(currBit)) 
+    else if (merged_tree.is_leaf(currBit) && !old_tree.is_leaf(currBit))
     {
       int currLevel = merged_tree.depth_at(currBit);
       float side_len = block_len_ / (float) (1<<currLevel);
-      float newAlpha = (max_alpha / side_len); 
-      alpha_cpy[newDataIndex]  = newAlpha; 
+      float newAlpha = (max_alpha / side_len);
+      alpha_cpy[newDataIndex]  = newAlpha;
       mog_cpy[newDataIndex]    = uchar8((uchar) 0);
       num_obs_cpy[newDataIndex]= ushort4((ushort) 0);
-      newDataIndex++; 
+      newDataIndex++;
       oldDataIndex++;
     }
     //last case: they are both valid and unchanged, just copy over old
     else
     {
-      alpha_cpy[newDataIndex]   = alpha[oldDataIndex]; 
-      mog_cpy[newDataIndex]     = mog[oldDataIndex]; 
-      num_obs_cpy[newDataIndex] = num_obs[oldDataIndex]; 
+      alpha_cpy[newDataIndex]   = alpha[oldDataIndex];
+      mog_cpy[newDataIndex]     = mog[oldDataIndex];
+      num_obs_cpy[newDataIndex] = num_obs[oldDataIndex];
       newDataIndex++;
-      oldDataIndex++; 
+      oldDataIndex++;
     }
   } //end BFS while
-  return 0; 
+  return 0;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 //MAIN REFINE FUNCTION
 ////////////////////////////////////////////////////////////////////////////////
 void boxm2_merge_block( boxm2_block* blk,
-                         vcl_vector<boxm2_data_base*> & datas,
-                         float prob_thresh,
-                         bool is_random)
+                        vcl_vector<boxm2_data_base*> & datas,
+                        float prob_thresh,
+                        bool is_random)
 {
   boxm2_merge_block_function merge_block;
   merge_block.init_data(blk, datas, prob_thresh);

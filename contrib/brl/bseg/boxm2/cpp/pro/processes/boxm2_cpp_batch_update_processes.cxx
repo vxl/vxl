@@ -89,11 +89,11 @@ bool boxm2_cpp_create_norm_intensities_process(bprb_func_process& pro)
       boxm2_block *     blk   = cache->get_block(*id);
       boxm2_block_metadata mdata = scene->get_block_metadata(*id);
       long num_cells = mdata.sub_block_num_.x() * mdata.sub_block_num_.y() * mdata.sub_block_num_.z();
-      //: first remove from memory just in case to ensure proper initialization
+      // first remove from memory just in case to ensure proper initialization
       cache->remove_data_base(*id,boxm2_data_traits<BOXM2_AUX0>::prefix(identifier));
       cache->remove_data_base(*id,boxm2_data_traits<BOXM2_AUX1>::prefix(identifier));
       cache->remove_data_base(*id,boxm2_data_traits<BOXM2_NUM_OBS_SINGLE>::prefix(identifier));
-      //: call get_data_base method with num_bytes > 0 to avoid reading from disc, we want initialized data
+      // call get_data_base method with num_bytes > 0 to avoid reading from disc, we want initialized data
       boxm2_data_base *aux0 = cache->get_data_base(*id,boxm2_data_traits<BOXM2_AUX0>::prefix(identifier),num_cells*aux0TypeSize,false);
       boxm2_data_base *aux1 = cache->get_data_base(*id,boxm2_data_traits<BOXM2_AUX1>::prefix(identifier),num_cells*aux1TypeSize,false);
       boxm2_data_base *aux2 = cache->get_data_base(*id,boxm2_data_traits<BOXM2_NUM_OBS_SINGLE>::prefix(identifier),num_cells*numObsTypeSize,false);
@@ -215,7 +215,7 @@ bool boxm2_cpp_create_aux_data_process(bprb_func_process& pro)
       boxm2_block *     blk   = cache->get_block(*id);
       boxm2_data_base *  alph  = cache->get_data_base(*id,boxm2_data_traits<BOXM2_ALPHA>::prefix(),0,false);
       boxm2_data_base *  mog   = cache->get_data_base(*id,data_type,0,false);
-      //: call get_data_base method with num_bytes = 0 to read from disc
+      // call get_data_base method with num_bytes = 0 to read from disc
       boxm2_data_base *aux0 = cache->get_data_base(*id,boxm2_data_traits<BOXM2_AUX0>::prefix(identifier));
       boxm2_data_base *aux1 = cache->get_data_base(*id,boxm2_data_traits<BOXM2_AUX1>::prefix(identifier));
 
@@ -249,9 +249,8 @@ bool boxm2_cpp_create_aux_data_process(bprb_func_process& pro)
                                                                                 input_image->ni(),
                                                                                 input_image->nj());
       }
-      
     }
-    //: now run pass 2 to compute cell averages of pre, post, and vis
+    // now run pass 2 to compute cell averages of pre, post, and vis
     int auxTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_AUX>::prefix());
     for (id = vis_order.begin(); id != vis_order.end(); ++id)
     {
@@ -262,11 +261,11 @@ bool boxm2_cpp_create_aux_data_process(bprb_func_process& pro)
 
       boxm2_block_metadata mdata = scene->get_block_metadata(*id);
 
-      //: call get_data_base method with num_bytes = 0 to read from disc
+      // call get_data_base method with num_bytes = 0 to read from disc
       boxm2_data_base *aux0 = cache->get_data_base(*id,boxm2_data_traits<BOXM2_AUX0>::prefix(identifier));
       boxm2_data_base *aux1 = cache->get_data_base(*id,boxm2_data_traits<BOXM2_AUX1>::prefix(identifier));
 
-      //: generate aux in a writable mode
+      // generate aux in a writable mode
       boxm2_data_base *aux = cache->get_data_base(*id, boxm2_data_traits<BOXM2_AUX>::prefix(identifier),aux0->buffer_length()/aux0TypeSize*auxTypeSize,false);
 
       vcl_vector<boxm2_data_base*> datas;
@@ -280,7 +279,7 @@ bool boxm2_cpp_create_aux_data_process(bprb_func_process& pro)
 
       if ( data_type == boxm2_data_traits<BOXM2_MOG3_GREY>::prefix() )
       {
-        boxm2_batch_update_pass2_functor<BOXM2_MOG3_GREY> pass2; 
+        boxm2_batch_update_pass2_functor<BOXM2_MOG3_GREY> pass2;
         pass2.init_data(datas,&pre_inf_img);
         cast_ray_per_block<boxm2_batch_update_pass2_functor<BOXM2_MOG3_GREY> >(pass2,
                                                                                scene_info_wrapper->info,
@@ -291,7 +290,7 @@ bool boxm2_cpp_create_aux_data_process(bprb_func_process& pro)
       }
       else if ( data_type == boxm2_data_traits<BOXM2_GAUSS_GREY>::prefix() )
       {
-        boxm2_batch_update_pass2_functor<BOXM2_GAUSS_GREY> pass2; 
+        boxm2_batch_update_pass2_functor<BOXM2_GAUSS_GREY> pass2;
         pass2.init_data(datas,&pre_inf_img);
         cast_ray_per_block<boxm2_batch_update_pass2_functor<BOXM2_GAUSS_GREY> >(pass2,
                                                                                 scene_info_wrapper->info,
@@ -300,7 +299,6 @@ bool boxm2_cpp_create_aux_data_process(bprb_func_process& pro)
                                                                                 input_image->ni(),
                                                                                 input_image->nj());
       }
-      
     }
   }
 
@@ -389,7 +387,6 @@ bool boxm2_cpp_batch_update_process(bprb_func_process& pro)
   vcl_vector<boxm2_block_id>::iterator id;
   id = blk_ids.begin();
   for (id = blk_ids.begin(); id != blk_ids.end(); ++id) {
-    boxm2_block     *  blk   = cache->get_block(*id);
     // pass num_bytes = 0 to make sure disc is read if not already in memory
     boxm2_data_base *  alph  = cache->get_data_base(*id,boxm2_data_traits<BOXM2_ALPHA>::prefix(),0,false);
     boxm2_data_base *  mog  = cache->get_data_base(*id,data_type,0,false);
@@ -400,7 +397,7 @@ bool boxm2_cpp_batch_update_process(bprb_func_process& pro)
       data_functor.init_data(alph, mog, str_cache, n_table);
       int data_buff_length = (int) (alph->buffer_length()/alphaTypeSize);
       boxm2_data_serial_iterator<boxm2_batch_update_functor<BOXM2_MOG3_GREY> >(data_buff_length,data_functor);
-    } 
+    }
     if (data_type.find(boxm2_data_traits<BOXM2_GAUSS_GREY>::prefix()) != vcl_string::npos )
     {
       boxm2_batch_update_functor<BOXM2_GAUSS_GREY> data_functor;
@@ -409,7 +406,7 @@ bool boxm2_cpp_batch_update_process(bprb_func_process& pro)
       boxm2_data_serial_iterator<boxm2_batch_update_functor<BOXM2_GAUSS_GREY> >(data_buff_length,data_functor);
     }
   }
-  
+
   return true;
 }
 
@@ -468,9 +465,11 @@ bool boxm2_cpp_batch_update_app_process(bprb_func_process& pro)
     }
     else if ( apps[i] == boxm2_data_traits<BOXM2_MOG3_GREY_16>::prefix() )
     {
-      /*data_type = apps[i];
+#if 0
+      data_type = apps[i];
       foundDataType = true;
-      appTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_MOG3_GREY_16>::prefix());*/
+      appTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_MOG3_GREY_16>::prefix());
+#endif
       vcl_cout << "In boxm2_cpp_batch_update_process ERROR: datatype BOXM2_MOG3_GREY_16 not implemented!\n";
       return false;
     }
@@ -493,7 +492,6 @@ bool boxm2_cpp_batch_update_app_process(bprb_func_process& pro)
   vcl_vector<boxm2_block_id>::iterator id;
   id = blk_ids.begin();
   for (id = blk_ids.begin(); id != blk_ids.end(); ++id) {
-    boxm2_block     *  blk   = cache->get_block(*id);
     // pass num_bytes = 0 to make sure disc is read if not already in memory
     boxm2_data_base *  alph  = cache->get_data_base(*id,boxm2_data_traits<BOXM2_ALPHA>::prefix(),0,false);
     boxm2_data_base *  mog  = cache->get_data_base(*id,data_type,0,false);
@@ -504,7 +502,7 @@ bool boxm2_cpp_batch_update_app_process(bprb_func_process& pro)
       data_functor.init_data(alph, mog, str_cache, n_table);
       int data_buff_length = (int) (alph->buffer_length()/alphaTypeSize);
       boxm2_data_serial_iterator<boxm2_batch_update_app_functor<BOXM2_MOG3_GREY> >(data_buff_length,data_functor);
-    } 
+    }
     if (data_type.find(boxm2_data_traits<BOXM2_GAUSS_GREY>::prefix()) != vcl_string::npos )
     {
       boxm2_batch_update_app_functor<BOXM2_GAUSS_GREY> data_functor;
@@ -513,10 +511,9 @@ bool boxm2_cpp_batch_update_app_process(bprb_func_process& pro)
       boxm2_data_serial_iterator<boxm2_batch_update_app_functor<BOXM2_GAUSS_GREY> >(data_buff_length,data_functor);
     }
   }
-  
+
   return true;
 }
-
 
 
 //: run batch update
@@ -574,9 +571,11 @@ bool boxm2_cpp_batch_update_alpha_process(bprb_func_process& pro)
     }
     else if ( apps[i] == boxm2_data_traits<BOXM2_MOG3_GREY_16>::prefix() )
     {
-      /*data_type = apps[i];
+#if 0
+      data_type = apps[i];
       foundDataType = true;
-      appTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_MOG3_GREY_16>::prefix());*/
+      appTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_MOG3_GREY_16>::prefix());
+#endif
       vcl_cout << "In boxm2_cpp_batch_update_process ERROR: datatype BOXM2_MOG3_GREY_16 not implemented!\n";
       return false;
     }
@@ -599,7 +598,6 @@ bool boxm2_cpp_batch_update_alpha_process(bprb_func_process& pro)
   vcl_vector<boxm2_block_id>::iterator id;
   id = blk_ids.begin();
   for (id = blk_ids.begin(); id != blk_ids.end(); ++id) {
-    boxm2_block     *  blk   = cache->get_block(*id);
     // pass num_bytes = 0 to make sure disc is read if not already in memory
     boxm2_data_base *  alph  = cache->get_data_base(*id,boxm2_data_traits<BOXM2_ALPHA>::prefix(),0,false);
     boxm2_data_base *  mog  = cache->get_data_base(*id,data_type,0,false);
@@ -610,7 +608,7 @@ bool boxm2_cpp_batch_update_alpha_process(bprb_func_process& pro)
       data_functor.init_data(alph, mog, str_cache, n_table);
       int data_buff_length = (int) (alph->buffer_length()/alphaTypeSize);
       boxm2_data_serial_iterator<boxm2_batch_update_alpha_functor<BOXM2_MOG3_GREY> >(data_buff_length,data_functor);
-    } 
+    }
     if (data_type.find(boxm2_data_traits<BOXM2_GAUSS_GREY>::prefix()) != vcl_string::npos )
     {
       boxm2_batch_update_alpha_functor<BOXM2_GAUSS_GREY> data_functor;
@@ -619,14 +617,7 @@ bool boxm2_cpp_batch_update_alpha_process(bprb_func_process& pro)
       boxm2_data_serial_iterator<boxm2_batch_update_alpha_functor<BOXM2_GAUSS_GREY> >(data_buff_length,data_functor);
     }
   }
-  
+
   return true;
 }
-
-
-
-
-
-
-
 
