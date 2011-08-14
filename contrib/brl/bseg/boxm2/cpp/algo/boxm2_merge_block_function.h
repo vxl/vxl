@@ -19,10 +19,10 @@ class boxm2_merge_block_function
   typedef vnl_vector_fixed<ushort, 4> ushort4;
 
   //: "default" constructor
-  boxm2_merge_block_function() : merge_count_(0), 
-                                 block_len_(1.0), 
-                                 prob_thresh_(.05), 
-                                 init_prob_(.001) {}
+  boxm2_merge_block_function() : merge_count_(0),
+                                 prob_thresh_(.05),
+                                 init_prob_(.001),
+                                 block_len_(1.0) {}
 
   //: initialize generic data base pointers as their data type
   bool init_data(boxm2_block* blk, vcl_vector<boxm2_data_base*> & datas, float prob_thresh);
@@ -41,10 +41,10 @@ class boxm2_merge_block_function
                  ushort4* num_obs,
                  float*   alpha_cpy,
                  uchar8*  mog_cpy,
-                 ushort4* num_obs_cpy); 
-  int merge_count_;
-  
+                 ushort4* num_obs_cpy);
+
  private:
+  int          merge_count_;
   boxm2_block* blk_;
   uchar16*     trees_;
 
@@ -58,23 +58,22 @@ class boxm2_merge_block_function
   int MAX_CELLS_;
 
   //probability threshold
-  float prob_thresh_; 
-  float init_prob_; 
+  float prob_thresh_;
+  float init_prob_;
 
   //length of data buffer
   int data_len_;
 
   //length of one side of a sub block
   double block_len_;
-
 };
 
 ////////////////////////////////////////////////////////////////////////////////
 //MAIN REFINE FUNCTION
 ////////////////////////////////////////////////////////////////////////////////
 void boxm2_merge_block( boxm2_block* blk,
-                         vcl_vector<boxm2_data_base*> & datas,
-                         float prob_thresh,
-                         bool is_random = true);
+                        vcl_vector<boxm2_data_base*> & datas,
+                        float prob_thresh,
+                        bool is_random = true);
 
-#endif
+#endif // boxm2_merge_block_function_h
