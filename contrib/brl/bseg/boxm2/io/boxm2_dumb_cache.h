@@ -28,12 +28,14 @@ class boxm2_dumb_cache : public boxm2_cache
 
     //: dumps writeable data onto disk
     // \todo not yet implemented
-    virtual void write_to_disk() { vcl_cerr << "Not yet implemented!!!\n"; }
+    virtual void write_to_disk() { vcl_cerr << "write_to_disk() not yet implemented!!!\n"; }
 
     //: disable the write process
     // \todo not yet implemented
-    virtual void disable_write() { vcl_cerr << "Not yet implemented!!!\n"; }
+    virtual void disable_write() { vcl_cerr << "disable_write() not yet implemented!!!\n"; }
 
+    //: delete all the memory
+    virtual void clear_cache() { vcl_cerr << "clear_cache() not yet implemented!!!\n"; }
   private:
 
     //: private update cache method (very simple)
