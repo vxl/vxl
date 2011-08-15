@@ -41,7 +41,7 @@ bool bocl_get_device_process(bprb_func_process& pro)
   vcl_string device_type = pro.get_input<vcl_string>(i++);
   bocl_manager_child_sptr mgr = pro.get_input<bocl_manager_child_sptr>(i++);
 
-  if (device_type=="gpu")
+  if (device_type=="gpu" || device_type=="gpu0")
   {
     if (mgr->gpus_.size()==0) return false;
     bocl_device_sptr device = mgr->gpus_[0];
@@ -49,7 +49,7 @@ bool bocl_get_device_process(bprb_func_process& pro)
     vcl_cout<<*(device.ptr());
     return true;
   }
-  else if (device_type=="cpu")
+  else if (device_type=="cpu" || device_type=="cpu0")
   {
     if (mgr->cpus_.size()==0) return false;
     bocl_device_sptr device = mgr->cpus_[0];
