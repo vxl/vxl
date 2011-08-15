@@ -13,7 +13,7 @@ class dbvalue:
     self.type = type   # string
 
 #does the opencl prep work on an input scene
-def load_opencl(scene_str):
+def load_opencl(scene_str, device_string="gpu"):
   print("Loading a Scene from file: ", scene_str);
   boxm2_batch.init_process("boxm2LoadSceneProcess");
   boxm2_batch.set_input_string(0, scene_str);
@@ -40,7 +40,7 @@ def load_opencl(scene_str):
 
   print("Get Gpu Device");
   boxm2_batch.init_process("boclGetDeviceProcess");
-  boxm2_batch.set_input_string(0,"gpu")
+  boxm2_batch.set_input_string(0,device_string)
   boxm2_batch.set_input_from_db(1,mgr)
   boxm2_batch.run_process();
   (id, type) = boxm2_batch.commit_output(0);
