@@ -8,7 +8,8 @@ effect.  If you change something in VXL, please document it here.
 
       - Added transpose and conjugate_transpose methods to vnl_sparse_matrix
 
-      - Added class vnl_decnum: decimally represented "large" integers
+      - Added vnl_decnum: decimally represented arbitrary precision numbers;
+        See vnl/examples/calculate.cxx for a useful application with vnl_decnum.
 
       - Removed broken vil_blob_finder, and replaced it with
         vil_blob, a collection of blob manipulation functions.
