@@ -2,6 +2,8 @@
 #include <bprb/bprb_func_process.h>
 #include <bpro/core/bbas_pro/bbas_1d_array_float.h>
 #include <brad/brad_phongs_model_est.h>
+#include <brad/brad_lambertian_model_est.h>
+#include <vcl_algorithm.h>
 #include <vnl/algo/vnl_levenberg_marquardt.h>
 #include <vnl/vnl_math.h>
 //:
@@ -63,61 +65,50 @@ bool brad_estimate_phongs_model_process(bprb_func_process& pro)
   vnl_vector<double> camera_elev(num_samples);
   vnl_vector<double> camera_azim(num_samples);
 
+  float mean_intensities = 0.0f ;
+  float sum_weights = 0.0f ;
   for (unsigned i=0;i<num_samples;i++)
   {
     camera_elev[i]    =camera_elev_array->data_array[i];
     camera_azim[i]    =camera_azim_array->data_array[i];
+        
     samples[i]        =intensities->data_array[i];
     samples_weights[i]=visibilities->data_array[i];
-    vcl_cout<<samples[i]<<' ';
+    if(samples[i] <0.0 || samples[i] > 1.0 )
+        samples_weights[i] = 0.0;
+    mean_intensities += (samples_weights[i]* samples[i]);
+    sum_weights      +=  samples_weights[i];
+
+
   }
-  brad_phongs_model_est f(sun_elev,sun_azim,camera_elev,camera_azim,samples,samples_weights,true);
-  vnl_vector<double> x(5);
+  brad_phongs_model_est f(sun_elev,sun_azim,
+                          camera_elev,camera_azim,
+                          samples,samples_weights,true);
   vnl_levenberg_marquardt lm(f);
   lm.set_verbose(true);
-  double min_error=1e5;
-  vnl_vector<double> argminx;
-  for (float theta=0;theta<vnl_math::pi/2;theta+=0.1)
-  {
-    for (float k1=0.0;k1<1;k1+=0.05)
-    {
-      for (float k2=0.0;k2<1;k2+=0.05)
-      {
-        x[2]=4.0;
-        x[4]=0.5;
+  //: initialize diffusion component to be mean of the intensities
+  vnl_vector<double> x(5);
+  x[0] = mean_intensities/sum_weights;
+  x[1] = 0.0;
+  x[2] = 5.0;
+  x[3] = 0.0;
+  x[4] = 0.0;
+  lm.minimize(x);
 
-        x[0]=k1;
-        x[1]=k2;
-        x[3]=theta;
-        lm.minimize(x);
-        if (lm.get_end_error() < min_error)
-        {
-          min_error=lm.get_end_error();
-          argminx=x;
-          vcl_cout<<':'<<theta;
-        }
-      }
-    }
-  }
-  vnl_matrix<double> cv=lm.get_JtJ();
-  vcl_cout<<"\n Solution: "
-          <<argminx[0]<<','
-          <<argminx[1]<<','
-          <<argminx[2]<<','
-          <<argminx[3]<<','
-          <<argminx[4]<<'\n'
-          <<"St Error "<<min_error<<'\n'
-          <<cv;
+  vcl_cout<<"\n Phong's Model : "<<vcl_fabs(x[0])<<','
+                                 <<vcl_fabs(x[1])<<','
+                                 <<x[2]<<','<<x[3]<<','<<x[4]<<'\n'
+                                 <<"St Error "<<f.error_var(x)<<'\n';
 
-  brad_phongs_model pm(argminx[0],argminx[1],argminx[2],argminx[3],argminx[4]);
+  brad_phongs_model pm(vcl_fabs(x[0]),vcl_fabs(x[1]),x[2],x[3],x[4]);
   bbas_1d_array_float_sptr new_obs = new bbas_1d_array_float(num_samples);
   for (unsigned i=0;i<num_samples;++i)
     new_obs->data_array[i]=pm.val(camera_elev[i],camera_azim[i],sun_elev,sun_azim);
 
   i=0;
   pro.set_output_val<bbas_1d_array_float_sptr>(i++, new_obs);
-  pro.set_output_val<float>(i++, x[0]*x[0]);
-  pro.set_output_val<float>(i++, x[1]*x[1]);
+  pro.set_output_val<float>(i++, x[0]);
+  pro.set_output_val<float>(i++, x[1]);
   pro.set_output_val<float>(i++, x[2]);
   pro.set_output_val<float>(i++, x[3]);
   pro.set_output_val<float>(i++, x[4]);

@@ -3,7 +3,7 @@
 
 #include <vnl/vnl_least_squares_function.h>
 #include <vnl/vnl_double_3.h>
-
+#include <vcl_vector.h>
 class brad_phongs_model
 {
  public:
@@ -11,6 +11,7 @@ class brad_phongs_model
   ~brad_phongs_model(){}
 
   float val(float view_elev, float view_azim, float sun_elev, float sun_azim);
+  float val(vnl_double_3 view_dir, float sun_elev, float sun_azim);
  protected:
 
   float kd_;
@@ -29,14 +30,22 @@ class brad_phongs_model_est : public vnl_least_squares_function
                         vnl_vector<double> & obs,
                         vnl_vector<double> & obs_weights,
                         bool with_grad);
+  brad_phongs_model_est(double sun_elev,
+                        double sun_azim,
+                        vcl_vector<vnl_double_3> & viewing_dir,
+                        vnl_vector<double> & obs,
+                        vnl_vector<double> & obs_weights,
+                        bool with_grad);
 
   void f(vnl_vector<double> const& x, vnl_vector<double>& y);
+  float error_var(vnl_vector<double> const& x);
 
   void gradf(vnl_vector<double> const& x, vnl_matrix<double> &J);
 
  protected:
   double sun_elev_;
   double sun_azim_;
+  vcl_vector<vnl_double_3> viewing_dirs_;
   vnl_vector<double>  camera_elev_;
   vnl_vector<double>  camera_azim_;
   vnl_vector<double>  obs_;
