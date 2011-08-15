@@ -3,6 +3,8 @@
 //:
 // \file
 #include <brad/brad_hist_prob_feature_vector.h>
+#include <brad/brad_grad_hist_feature_vector.h>
+#include <brad/brad_grad_int_feature_vector.h>
 #include <brad/brad_eigenspace.h>
 #include <bpro/core/bbas_pro/bbas_1d_array_string.h>
 #include <vsl/vsl_binary_io.h>
@@ -27,12 +29,10 @@ namespace bbas_core_brad_update_hist
       if (!temp) return false;
       resources.push_back(temp);
     }
-
-    if (frac==1.0)
-      espace.update_histogram(resources, hist);
+    if(frac==1.0)
+      espace.update_histogram_blocked(resources, hist, nit, njt);
     else
       espace.update_histogram_rand(resources, hist, frac, nit, njt);
-
     return true;
   }
 }
@@ -97,6 +97,27 @@ bool brad_update_joint_hist_3d_process(bprb_func_process& pro)
       vcl_cout << "in update_histogram_process - update function failed\n";
       return false;
     }
+  }else if(es_ptr->feature_vector_type() == "brad_grad_hist_feature_vector"){
+    brad_eigenspace<brad_grad_hist_feature_vector>* hp =
+      dynamic_cast<brad_eigenspace<brad_grad_hist_feature_vector>* >(es_ptr.ptr());
+    if(!hist_update_process(*paths, *hp,
+                            frac, nit, njt,
+                            *hist)){
+      vcl_cout << "in update_histogram_process - update function failed\n";
+      return false;
+    }
+  }else if(es_ptr->feature_vector_type() == "brad_grad_int_feature_vector"){
+     brad_eigenspace<brad_grad_int_feature_vector>* hp =
+      dynamic_cast<brad_eigenspace<brad_grad_int_feature_vector>* >(es_ptr.ptr());
+    if(!hist_update_process(*paths, *hp,
+                            frac, nit, njt,
+                            *hist)){
+      vcl_cout << "in update_histogram_process - update function failed\n";
+      return false;
+    }
+  }else{
+      vcl_cout << "in update_histogram_process-unknown feature vector type\n";
+      return false;
   }
   bsta_joint_histogram_3d_base_sptr out_ptr =
     new bsta_joint_histogram_3d<float>(*hist);
