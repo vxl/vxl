@@ -14,7 +14,7 @@ static vnl_decnum factorial(unsigned long n)
 }
 
 // Combinations (n choose k)
-static vnl_decnum Combinations(unsigned long n, unsigned long k)
+static vnl_decnum binom(unsigned long n, unsigned long k)
 { 
   vnl_decnum r(1L);
   if (k >= n || k == 0) return r;
@@ -46,14 +46,13 @@ static void run_constructor_tests()
   {vnl_decnum b("+1"); TEST("vnl_decnum b(\"+1\");", b, 1L);}
   {vnl_decnum b("1"); TEST("vnl_decnum b(\"1\");", b, 1L);}
   {vnl_decnum b("123"); TEST("vnl_decnum b(\"123\");", b, 123L);}
-  {vnl_decnum b("12300000"); TEST("vnl_decnum b(\"12300000\");", b, 12300000L);}
-  {vnl_decnum b("-1230000"); TEST("vnl_decnum b(\"-1230000\");", b, -1230000L);}
-  {vnl_decnum b("-1000000000000000000000000000000");
-   vcl_stringstream s; s << b << ' ';
-   // verify that b outputs as  "-1000...00" (30 zeros)
-   bool t = s.str()[0] == '-' && s.str()[1] == '1' && s.str()[32] == ' ';
-   for (int i=0; i<30; ++i) t = t && s.str()[i+2] == '0';
-   TEST("vnl_decnum b(\"-100...00\") outputs as \"-100...00\"", t, true);
+  {vnl_decnum b("123e5"); TEST("vnl_decnum b(\"123e5\");", b, 12300000L);}
+  {vnl_decnum b("-123e+4"); TEST("vnl_decnum b(\"-123e+4\");", b, -1230000L);}
+  {vnl_decnum b("-1e120"); vcl_stringstream s; s << b << ' ';
+   // verify that b outputs as  "-1e120"
+   bool t = s.str()[0] == '-' && s.str()[1] == '1' && s.str()[2] == 'e'
+         && s.str()[3] == '1' && s.str()[4] == '2' && s.str()[5] == '0' && s.str()[6] == ' ';
+   TEST("vnl_decnum b(\"-1e120\") outputs as \"-1e120\"", t, true);
   }
   {vnl_decnum b("0"); TEST("vnl_decnum b(\"0\");", b, 0L);}
   {vnl_decnum b("00"); TEST("vnl_decnum b(\"00\");", b, 0L);}
@@ -69,9 +68,9 @@ static void run_constructor_tests()
   {vcl_stringstream is(vcl_ios_in | vcl_ios_out); vnl_decnum b;
    is << "123"; is >> b; TEST("\"123\" >> b;", b, 123L);}
   {vcl_stringstream is(vcl_ios_in | vcl_ios_out); vnl_decnum b;
-   is << "12300000"; is >> b; TEST("\"12300000\" >> b;", b, 12300000L);}
+   is << "123e5"; is >> b; TEST("\"123e5\" >> b;", b, 12300000L);}
   {vcl_stringstream is(vcl_ios_in | vcl_ios_out); vnl_decnum b;
-   is << "-1230000"; is >> b; TEST("\"-1230000\" >> b;", b, -1230000L);}
+   is << "-123e+4"; is >> b; TEST("\"-123e+4\" >> b;", b, -1230000L);}
   {vcl_stringstream is(vcl_ios_in | vcl_ios_out); vnl_decnum b;
    is << " 9"; is >> b; TEST("\" 9\" >> b;", b, 9L);}
 
@@ -223,40 +222,40 @@ static void run_large_division_tests()
   vcl_cout << b << " / 98789 = " << c << ", must be 98789\n";
   TEST("9759266521 / 98789", c, a);
 
-  a = "10000000000000000000000000"; b = "100000000000000000000000000000000000000000000000000"; c = b/a;
-  vcl_cout << "100000000000000000000000000000000000000000000000000 / 10000000000000000000000000 = "
-           << c << ", must be 10000000000000000000000000\n";
-  TEST("100000000000000000000000000000000000000000000000000 / 10000000000000000000000000", c, a);
+  a = "1e100"; b = "1e200"; c = b/a;
+  vcl_cout << "1e200 / 1e100 = "
+           << c << ", must be 1e100\n";
+  TEST("1e200 / 1e100", c, a);
 
-  a = "-10000000000000000000000000"; b = "100000000000000000000000000000000000000000000000000"; c = b/a;
-  vcl_cout << "100000000000000000000000000000000000000000000000000 / -10000000000000000000000000 = "
-           << c << ", must be -10000000000000000000000000\n";
-  TEST("100000000000000000000000000000000000000000000000000 / -10000000000000000000000000", c, a);
+  a = "-1e100"; b = "1e200"; c = b/a;
+  vcl_cout << "1e200 / -1e100 = "
+           << c << ", must be -1e100\n";
+  TEST("1e200 / -1e100", c, a);
 
-  a = "10000000000000000000000000"; b = "-100000000000000000000000000000000000000000000000000"; c = b/a;
-  vcl_cout << "-100000000000000000000000000000000000000000000000000 / 10000000000000000000000000 = "
-           << c << ", must be -10000000000000000000000000\n";
-  TEST("-100000000000000000000000000000000000000000000000000 / 10000000000000000000000000", c, -a);
+  a = "1e100"; b = "-1e200"; c = b/a;
+  vcl_cout << "-1e200 / 1e100 = "
+           << c << ", must be -1e100\n";
+  TEST("-1e200 / 1e100", c, -a);
 
-  a = "-10000000000000000000000000"; b = "-100000000000000000000000000000000000000000000000000"; c = b/a;
-  vcl_cout << "-100000000000000000000000000000000000000000000000000 / -10000000000000000000000000 = "
-           << c << ", must be 10000000000000000000000000\n";
-  TEST("-100000000000000000000000000000000000000000000000000 / -10000000000000000000000000", c, -a);
+  a = "-1e100"; b = "-1e200"; c = b/a;
+  vcl_cout << "-1e200 / -1e100 = "
+           << c << ", must be 1e100\n";
+  TEST("-1e200 / -1e100", c, -a);
 
-  a = "10000000000000000000000000"; b = "100000000000000000000000000000000000000000000000000"; c = b%a;
-  vcl_cout << "100000000000000000000000000000000000000000000000000 % 10000000000000000000000000 = "
+  a = "1e100"; b = "1e200"; c = b%a;
+  vcl_cout << "1e200 % 1e100 = "
            << c << ", must be 0\n";
-  TEST("10000000000000000000000000^2 % 10000000000000000000000000", c, 0);
+  TEST("1e200 % 1e100", c, 0);
 
-  vcl_cout << "C(16,8) = " << Combinations(16,8) << vcl_endl;
-  TEST("16 choose 8 = 12870", Combinations(16,8), 12870);
-  vcl_cout << "C(18,9) = " << Combinations(18,9) << vcl_endl;
-  TEST("18 choose 9 = 48620", Combinations(18,9), 48620);
-  vcl_cout << "C(20,10) = " << Combinations(20,10) << vcl_endl;
-  TEST("20 choose 10 = 184756", Combinations(20,10), 184756);
-  vcl_cout << "C(100,44) = " << Combinations(100,44) << vcl_endl;
+  vcl_cout << "C(16,8) = " << binom(16,8) << vcl_endl;
+  TEST("16 choose 8 = 12870", binom(16,8), 12870);
+  vcl_cout << "C(18,9) = " << binom(18,9) << vcl_endl;
+  TEST("18 choose 9 = 48620", binom(18,9), 48620);
+  vcl_cout << "C(20,10) = " << binom(20,10) << vcl_endl;
+  TEST("20 choose 10 = 184756", binom(20,10), 184756);
+  vcl_cout << "C(100,44) = " << binom(100,44) << vcl_endl;
   TEST("100 choose 44 = 49378235797073715747364762200",
-       Combinations(100,44), "49378235797073715747364762200");
+       binom(100,44), "49378235797073715747364762200");
 }
 
 static void run_multiplication_division_tests()
@@ -264,14 +263,17 @@ static void run_multiplication_division_tests()
   vcl_cout << "\nCheck example in book:\n";
 
   vnl_decnum b2 = "4294967295"; // == 0xffffffff         // Create vnl_decnum object
-  vnl_decnum b3 = "12345000000000000000000000000000000"; // Create vnl_decnum object
+  vnl_decnum b3 = "12345e30";   // Create vnl_decnum object
 
   vcl_cout << "b2 = " << b2 << vcl_endl
            << "b3 = " << b3 << vcl_endl;
 
-  TEST("(b2*b3) / b3 = b2", ((b2*b3) / b3 == b2), 1);
-  TEST("(b2*b3) / b2 = b3", ((b2*b3) / b2 == b3), 1);
-  TEST("((b3/b2) * b2) + (b3%b2) = b3", (((b3/b2) * b2) + (b3%b2) == b3), 1);
+  TEST("(b2*b3) / b3 = b2", (b2*b3) / b3, b2);
+  vcl_cout << "(b2*b3) / b3 = " << (b2*b3) / b3 << vcl_endl;
+  TEST("(b2*b3) / b2 = b3", (b2*b3) / b2, b3);
+  vcl_cout << "(b2*b3) / b2 = " << (b2*b3) / b2 << vcl_endl;
+  TEST("((b3/b2) * b2) + (b3%b2) = b3", ((b3/b2) * b2) + (b3%b2), b3);
+  vcl_cout << "((b3/b2) * b2) + (b3%b2) = " << ((b3/b2) * b2) + (b3%b2) << vcl_endl;
 }
 
 static void run_addition_subtraction_tests()
@@ -339,7 +341,7 @@ static void run_addition_subtraction_tests()
 
   // example in book
   vnl_decnum b2 = "4294967295"; // == 0xffffffff         // Create vnl_decnum object
-  vnl_decnum b3 = "12345000000000000000000000000000000"; // Create vnl_decnum object
+  vnl_decnum b3 = "12345e30";   // Create vnl_decnum object
   TEST("(b2+b3) - b2 = b3", (b2+b3) - b2 == b3, 1);
   TEST("(b2+b3) - b3 = b2", (b2+b3) - b3 == b2, 1);
   vcl_cout << b3 << '\n';
@@ -423,6 +425,82 @@ static void run_multiplication_tests()
        "2658271574788448768043625811014615890319638528000000000");
 }
 
+static void run_left_shift_tests()
+{
+  vnl_decnum b1(1L);
+
+  // left shift
+  TEST("int(b1) == 1",int(b1), 1);
+  TEST("long(b1 << 1) == 10",long(b1 << 1), 10);
+  TEST("long(b1 << 2) == 100",long(b1 << 2), 100);
+  TEST("long(b1 << 3) == 1000",long(b1 << 3), 1000);
+  TEST("long(b1 << 4) == 10000",long(b1 << 4), 10000);
+  TEST("long(b1 << 5) == 100000",long(b1 << 5), 100000);
+  TEST("long(b1 << 6) == 1000000",long(b1 << 6), 1000000);
+  TEST("(b1 << 78) == vnl_decnum(\"1e78\")", (b1 << 78), vnl_decnum("1e78"));
+
+  TEST("long(-b1 << 1) == -10",long(-b1 << 1), -10);
+  TEST("long(-b1 << 2) == -100",long(-b1 << 2), -100);
+  TEST("long(-b1 << 3) == -1000",long(-b1 << 3), -1000);
+  TEST("long(-b1 << 4) == -10000",long(-b1 << 4), -10000);
+  TEST("long(-b1 << 5) == -100000",long(-b1 << 5), -100000);
+  TEST("long(-b1 << 6) == -1000000",long(-b1 << 6), -1000000);
+  TEST("(-b1 << 78) == vnl_decnum(\"-1e78\")", (-b1 << 78), vnl_decnum("-1e78"));
+
+  TEST("long(b1 << -16) == 0",long(b1 << -16), 0);
+  TEST("long(-b1 << -16) == 0",long(-b1 << -16), 0);
+}
+
+static void run_right_shift_tests()
+{
+  vnl_decnum b2("1e78");
+
+  // right shift
+  TEST("b2 == vnl_decnum(\"1e78\")",b2, vnl_decnum("1e78"));
+  TEST("(b2 >> 1) == vnl_decnum(\"1e77\")", (b2 >> 1), vnl_decnum("1e77"));
+  TEST("long(b2 >> 70) == 100000000",long(b2 >> 70), 100000000);
+  TEST("long(b2 >> 78) == 1",long(b2 >> 78), 1L);
+  TEST("long(b2 >> 79) == 0",long(b2 >> 79), 0L);
+  TEST("long(b2 >> 99) == 0",long(b2 >> 99), 0L);
+
+  TEST("-b2 == vnl_decnum(\"-1e78\")",-b2, vnl_decnum("-1e78"));
+  TEST("(-b2 >> 1) == vnl_decnum(\"-1e77\")", (-b2 >> 1), vnl_decnum("-1e77"));
+  TEST("long(-b2 >> 70) == -100000000",long(-b2 >> 70), -100000000);
+  TEST("long(-b2 >> 78) == -1",long(-b2 >> 78), -1L);
+  TEST("long(-b2 >> 79) == 0",long(-b2 >> 79), 0L);
+  TEST("long(-b2 >> 99) == 0",long(-b2 >> 99), 0L);
+}
+
+static void run_shift_tests()
+{
+  vcl_cout << "\nStarting shift tests:\n";
+
+  run_left_shift_tests();
+  run_right_shift_tests();
+}
+
+static void run_normalisation_tests()
+{
+  vcl_cout << "\nStarting normalisation tests:\n";
+
+  vnl_decnum a("-1e10"), b=a;
+  TEST("a stored as -1e10", a.data(), "1");
+  TEST("b stored as -1e10", b.data(), "1");
+  a += 1L; a -= 1L;
+  TEST("a stored as -10000000000", a.data(), "10000000000");
+  TEST("a equals b", a, b);
+  b = a;
+  TEST("b stored as -10000000000", b.data(), "10000000000");
+  a.compactify();
+  TEST("a stored as -1e10", a.data(), "1");
+  TEST("a equals b", a, b);
+  b = a;
+  TEST("b stored as -1e10", b.data(), "1");
+  a.expand();
+  TEST("a stored as -10000000000", a.data(), "10000000000");
+  TEST("a equals b", a, b);
+}
+
 void test_decnum()
 {
   run_constructor_tests();
@@ -435,6 +513,8 @@ void test_decnum()
   run_division_tests();
   run_multiplication_division_tests();
   run_large_division_tests();
+  run_shift_tests();
+  run_normalisation_tests();
 }
 
 TESTMAIN(test_decnum);
