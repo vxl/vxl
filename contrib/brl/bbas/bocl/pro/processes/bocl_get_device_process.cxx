@@ -56,8 +56,39 @@ bool bocl_get_device_process(bprb_func_process& pro)
     pro.set_output_val<bocl_device_sptr>(0,device);
     return true;
   }
+  
+  //for multi-gpu setups
+  else if(device_type=="gpu1")
+  {
+      if(mgr->gpus_.size()<2) return false;
+      bocl_device_sptr device = mgr->gpus_[1];
+      pro.set_output_val<bocl_device_sptr>(0,device);
+      return true;
+  }  
+  else if(device_type=="gpu2")
+  {
+      if(mgr->gpus_.size()<3) return false;
+      bocl_device_sptr device = mgr->gpus_[2];
+      pro.set_output_val<bocl_device_sptr>(0,device);
+      return true;
+  }  
+
   else
   {
+     vcl_cout<<"Cannot recognize device string.  Available devices: \n"; 
+
+     //list gpu options
+     vcl_cout<<"  GPUs: ";
+     for(int i=0; i<mgr->gpus_.size(); ++i)
+        vcl_cout<<"gpu"<<i<<", "; 
+     vcl_cout<<'\n';
+    
+     //list CPU options 
+     vcl_cout<<"  CPUs: ";
+     for(int i=0; i<mgr->cpus_.size(); ++i)
+        vcl_cout<<"cpu"<<i <<", ";
+     
+     vcl_cout<<vcl_endl; 
      return false;
   }
 }
