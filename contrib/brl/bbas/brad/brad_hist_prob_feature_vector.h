@@ -30,7 +30,7 @@ class brad_hist_prob_feature_vector
 
   ~brad_hist_prob_feature_vector(){};
 
-  //: vector of histogram probabilities computed from the input view
+  //: vector of histogram probabilities computed from the input view, plus entropy
   vnl_vector<double> operator() (vil_image_view<float> const& view) const;
 
   //: the number of elements in the vector

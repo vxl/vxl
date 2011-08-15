@@ -59,6 +59,8 @@ class brad_eigenspace : public brad_eigenspace_base
   bool compute_covariance_matrix(vcl_vector<vil_image_resource_sptr> const& rescs);
     //: compute the covariance matrix from a random fraction of image resources
   bool compute_covariance_matrix_rand(vcl_vector<vil_image_resource_sptr> const& rescs, double frac = 1.0, unsigned nit=256, unsigned njt=256);
+  //: compute the covariance matrix using blocked image cache
+  bool compute_covariance_matrix_blocked(vcl_vector<vil_image_resource_sptr> const& rescs, unsigned nit=256, unsigned njt=256);
   //: compute the eigensystem from the covariance matrix
   bool compute_eigensystem();
 
@@ -95,6 +97,23 @@ class brad_eigenspace : public brad_eigenspace_base
                              bsta_joint_histogram_3d<float>& hist,
                              double frac = 1.0, unsigned nit=256,
                              unsigned njt=256);
+    //: init from a set of images, using a blocked cache
+  bool init_histogram_blocked(vcl_vector<vil_image_resource_sptr> const& rescs,
+                              unsigned nbins,
+                              bsta_joint_histogram_3d<float>& hist,
+                              unsigned nit=256, unsigned njt=256);
+
+  
+  //: update from a set of images, using a blocked cache
+  bool update_histogram_blocked(vcl_vector<vil_image_resource_sptr> const& rescs,
+                             bsta_joint_histogram_3d<float>& hist,
+                             unsigned nit=256, unsigned njt=256);
+  //: classify an image as to atmospheric content, nit, njt are block size
+  bool classify_image(vil_image_resource_sptr const& resc,
+                      bsta_joint_histogram_3d<float> const& no_atmos,
+                      bsta_joint_histogram_3d<float> const& atmos,
+                      unsigned nit, unsigned njt,
+                      vcl_string const& output_path);
 
   //: print sizes and other info
   void print(vcl_ostream& os = vcl_cout) const;
