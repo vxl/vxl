@@ -28,4 +28,9 @@ DECLARE_FUNC_CONS(bsta_clone_joint_hist_3d_process);
 DECLARE_FUNC_CONS(brad_update_joint_hist_3d_process);
 DECLARE_FUNC_CONS(brad_classify_image_process);
 
+
+DECLARE_FUNC_CONS(brad_estimate_phongs_model_process);
+DECLARE_FUNC_CONS(brad_estimate_shadow_model_process);
+
+
 #endif // bbas_processes_h_

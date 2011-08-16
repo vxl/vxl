@@ -34,4 +34,8 @@ void bbas_register::register_process()
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager,bsta_clone_joint_hist_3d_process , "bstaCloneJointHist3dProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager,brad_update_joint_hist_3d_process , "bradUpdateJointHist3dProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager,brad_classify_image_process , "bradClassifyImageProcess");
+  
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, brad_estimate_phongs_model_process, "bradEstimatePhongsModelProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, brad_estimate_shadow_model_process, "bradEstimateShadowModelProcess");
+
 }
