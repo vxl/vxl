@@ -41,6 +41,17 @@ static void run_constructor_tests()
   {vnl_decnum b(-0x7fffffffL); TEST("vnl_decnum b(-0x7fffffffL);", b, -0x7fffffffL);}
   {vnl_decnum b(0xf00000L); TEST("vnl_decnum b(0xf00000L);", b, 0xf00000);}
 
+  vcl_cout << "double constructor:\n";
+  {vnl_decnum b(0.0); TEST("vnl_decnum b(0.0);", b, 0L);}
+  {vnl_decnum b(1.0); TEST("vnl_decnum b(1.0);", b, 1L);}
+  {vnl_decnum b(-1.0); TEST("vnl_decnum b(-1.0);", b, -1L);}
+  {vnl_decnum b(1234.0); TEST("vnl_decnum(1234.0)", b, 1234L);}
+  {vnl_decnum b(-1234.); TEST("vnl_decnum(-1234.)", b, -1234L);}
+  {vnl_decnum b(1234e3); TEST("vnl_decnum(1234e3)", b, 1234000L);}
+  {vnl_decnum b(-1234e3); TEST("vnl_decnum(-1234e3)", b, -1234000L);}
+  {vnl_decnum b(1234e-3); TEST("vnl_decnum(1234e-3)", long(b*"1000"), 1234L);}
+  {vnl_decnum b(1.234); TEST("vnl_decnum(1.234)", long(b*"1000"), 1234L);}
+
   vcl_cout << "char* constructor:\n";
   {vnl_decnum b("-1"); TEST("vnl_decnum b(\"-1\");", b, -1L);}
   {vnl_decnum b("+1"); TEST("vnl_decnum b(\"+1\");", b, 1L);}
@@ -59,6 +70,18 @@ static void run_constructor_tests()
   {vnl_decnum b("012334567"); TEST("vnl_decnum b(\"012334567\");", b, 12334567L);}
   {vnl_decnum b("9"); TEST("vnl_decnum b(\"9\");", b, 9L);}
   {vnl_decnum b(" 9"); TEST("vnl_decnum b(\" 9\");", b, 9L);}
+
+  // infinity and NaN:
+  {vnl_decnum b("-123"); TEST("isfinite(-123)", vnl_math_isfinite(b), true);}
+  {vnl_decnum b("0"); TEST("isfinite(0)", vnl_math_isfinite(b), true);}
+  {vnl_decnum b("1e999"); TEST("isfinite(1e999)", vnl_math_isfinite(b), true);}
+  {vnl_decnum b("NaN"); TEST("isfinite(NaN)", vnl_math_isfinite(b), false);}
+  {vnl_decnum b("NaN"); TEST("isnan(NaN)", vnl_math_isnan(b), true);}
+  {vnl_decnum b("1e999"); TEST("isnan(1e999)", vnl_math_isnan(b), false);}
+  {vnl_decnum b("+Inf"); TEST("vnl_decnum(\"+Inf\")", vnl_math_isfinite(b), false);}
+  {vnl_decnum b("Infinity"); TEST("vnl_decnum(\"Infinity\")", vnl_math_isfinite(b), false);}
+  {vnl_decnum b("-Infin"); TEST("vnl_decnum(\"-Infin\")", vnl_math_isfinite(b), false);}
+  {vnl_decnum b("Inf"); TEST("isnan(Inf)", vnl_math_isnan(b), false);}
 
   vcl_cout << "reading from istream:\n";
   {vcl_stringstream is(vcl_ios_in | vcl_ios_out); vnl_decnum b;
@@ -125,6 +148,8 @@ static void run_logical_comparison_tests()
   vnl_decnum b1(1L);
   vnl_decnum b2(0x7fffL);
   vnl_decnum b3(-0x7fffL);
+  vnl_decnum p_inf("+Inf");
+  vnl_decnum m_inf("-Inf");
 
   TEST("b0 == b0", b0 == b0, true);
   TEST("b0 == b1", b0 == b1, false);
@@ -136,6 +161,17 @@ static void run_logical_comparison_tests()
   TEST("b2 == b2", b2 == b2, true);
   TEST("b2 == b3", b2 == b3, false);
   TEST("b3 == b3", b3 == b3, true);
+  TEST("p_inf == p_inf", p_inf == p_inf, true);
+  TEST("p_inf == m_inf", p_inf == m_inf, false);
+  TEST("m_inf == m_inf", m_inf == m_inf, true);
+  TEST("b0 == p_inf", b0 == p_inf, false);
+  TEST("b1 == p_inf", b1 == p_inf, false);
+  TEST("b2 == p_inf", b2 == p_inf, false);
+  TEST("b3 == p_inf", b3 == p_inf, false);
+  TEST("b0 == m_inf", b0 == m_inf, false);
+  TEST("b1 == m_inf", b1 == m_inf, false);
+  TEST("b2 == m_inf", b2 == m_inf, false);
+  TEST("b3 == m_inf", b3 == m_inf, false);
 
   TEST("b0 != b0", b0 != b0, false);
   TEST("b0 != b1", b0 != b1, true);
@@ -158,6 +194,18 @@ static void run_logical_comparison_tests()
   TEST("b2 < b2", b2 < b2, false);
   TEST("b2 < b3", b2 < b3, false);
   TEST("b3 < b3", b3 < b3, false);
+  TEST("p_inf < p_inf", p_inf < p_inf, false);
+  TEST("p_inf < m_inf", p_inf < m_inf, false);
+  TEST("m_inf < p_inf", m_inf < p_inf, true);
+  TEST("m_inf < m_inf", m_inf < m_inf, false);
+  TEST("b0 < p_inf", b0 < p_inf, true);
+  TEST("b1 < p_inf", b1 < p_inf, true);
+  TEST("b2 < p_inf", b2 < p_inf, true);
+  TEST("b3 < p_inf", b3 < p_inf, true);
+  TEST("b0 < m_inf", b0 < m_inf, false);
+  TEST("b1 < m_inf", b1 < m_inf, false);
+  TEST("b2 < m_inf", b2 < m_inf, false);
+  TEST("b3 < m_inf", b3 < m_inf, false);
 
   TEST("b0 > b0", b0 > b0, false);
   TEST("b0 > b1", b0 > b1, false);
@@ -169,6 +217,18 @@ static void run_logical_comparison_tests()
   TEST("b2 > b2", b2 > b2, false);
   TEST("b2 > b3", b2 > b3, true);
   TEST("b3 > b3", b3 > b3, false);
+  TEST("p_inf > p_inf", p_inf > p_inf, false);
+  TEST("p_inf > m_inf", p_inf > m_inf, true);
+  TEST("m_inf > p_inf", m_inf > p_inf, false);
+  TEST("m_inf > m_inf", m_inf > m_inf, false);
+  TEST("b0 > p_inf", b0 > p_inf, false);
+  TEST("b1 > p_inf", b1 > p_inf, false);
+  TEST("b2 > p_inf", b2 > p_inf, false);
+  TEST("b3 > p_inf", b3 > p_inf, false);
+  TEST("b0 > m_inf", b0 > m_inf, true);
+  TEST("b1 > m_inf", b1 > m_inf, true);
+  TEST("b2 > m_inf", b2 > m_inf, true);
+  TEST("b3 > m_inf", b3 > m_inf, true);
 
   TEST("b3 != b2", b3 != b2, true);
   TEST("b3 != b3", b3 != b3, false);
@@ -188,6 +248,10 @@ static void run_division_tests()
 
   TEST("long(vnl_decnum(0L)/vnl_decnum(1L))", long(vnl_decnum(0L)/vnl_decnum(1L)), 0L);
   TEST("long(vnl_decnum(-1L)/vnl_decnum(1L))", long(vnl_decnum(-1L)/vnl_decnum(1L)), -1L);
+  TEST("long(vnl_decnum(-1L)/vnl_decnum(\"+Inf\"))", long(vnl_decnum(-1L)/vnl_decnum("+Inf")), 0L);
+  TEST("vnl_decnum(\"+Inf\")/(-1L)", vnl_decnum("+Inf")/(-1L), vnl_decnum("-Inf"));
+  TEST("vnl_decnum(-1L)/0L", vnl_decnum(-1L)/0L, vnl_decnum("-Inf"));
+  TEST("vnl_decnum(-0L)/0L", vnl_math_isnan(vnl_decnum(-0L)/0L), true);
 
   for (long i = 0xffff; i!=0; i /= -16) {
    for (long k = -6; k < 9; k+=3) {
@@ -299,7 +363,10 @@ static void run_addition_subtraction_tests()
   vnl_decnum b0(0L);
   vnl_decnum zillion("1000000000000000000000000000000000000");
   vnl_decnum b1000000(1000000L), b1000000000000("1000000000000");
+  vnl_decnum p_inf("+Inf"), m_inf("-Inf");
 
+  TEST("-p_inf == m_inf", -p_inf, m_inf);
+  TEST("-m_inf == p_inf", -m_inf, p_inf);
   TEST("-b0 == b0", -b0, b0);
   TEST("-b1000000 == vnl_decnum(-1L)*b1000000", -b1000000, vnl_decnum(-1L)*b1000000);
   TEST("-(-b1000000000000) == b1000000000000", -(-b1000000000000), b1000000000000);
@@ -317,6 +384,10 @@ static void run_addition_subtraction_tests()
   TEST("zillion + (-zillion) == b0", zillion + (-zillion), b0);
   TEST("zillion + b1000000 == b1000000000000*b1000000000000*b1000000000000 + b1000000",
         zillion + b1000000,   b1000000000000*b1000000000000*b1000000000000 + b1000000);
+  TEST("zillion + p_inf == p_inf", zillion + p_inf, p_inf);
+  TEST("zillion + m_inf == m_inf", zillion + m_inf, m_inf);
+  TEST("p_inf + zillion == p_inf", p_inf + zillion, p_inf);
+  TEST("m_inf + zillion == m_inf", m_inf + zillion, m_inf);
 
   TEST("b0 - b1000000 == -b1000000", b0 - b1000000, -b1000000);
   TEST("b0 - b1000000000000 == -b1000000000000", b0 -b1000000000000, -b1000000000000);
@@ -338,6 +409,10 @@ static void run_addition_subtraction_tests()
         zillion - b1000000,   b1000000000000*b1000000000000*b1000000000000 - b1000000);
   TEST("-zillion - b1000000 == -b1000000000000*b1000000000000*b1000000000000 - b1000000",
         -zillion - b1000000,   -b1000000000000*b1000000000000*b1000000000000 - b1000000);
+  TEST("zillion - p_inf == m_inf", zillion - p_inf, m_inf);
+  TEST("zillion - m_inf == p_inf", zillion - m_inf, p_inf);
+  TEST("p_inf - zillion == p_inf", p_inf - zillion, p_inf);
+  TEST("m_inf - zillion == m_inf", m_inf - zillion, m_inf);
 
   // example in book
   vnl_decnum b2 = "4294967295"; // == 0xffffffff         // Create vnl_decnum object
@@ -410,6 +485,7 @@ static void run_multiplication_tests()
 
   vnl_decnum b0(0L), b1000(1000L), b1000000(1000000L),
   zillion("1000000000000000000");
+  vnl_decnum p_inf("+Inf"), m_inf("-Inf");
 
   TEST("b0*b0 == b0", b0*b0, b0);
   TEST("b0*b1000 == b0", b0*b1000, b0);
@@ -418,6 +494,8 @@ static void run_multiplication_tests()
   TEST("b1000*b1000000 == b1000000*b1000", b1000*b1000000, b1000000*b1000);
   TEST("-b1000000*b1000000*b1000000 == -zillion", -b1000000*b1000000*b1000000, -zillion);
   TEST("zillion*-b1000 == b1000*-zillion", zillion*-b1000, b1000*-zillion);
+  TEST("p_inf*b1000 == p_inf", p_inf*b1000, p_inf);
+  TEST("m_inf*b1000 == m_inf", m_inf*b1000, m_inf);
 
   TEST("10! = 3628800", factorial(10), 3628800);
   TEST("15! = 1307674368000", factorial(15), "1307674368000");
@@ -428,6 +506,7 @@ static void run_multiplication_tests()
 static void run_left_shift_tests()
 {
   vnl_decnum b1(1L);
+  vnl_decnum p_inf("+Inf"), m_inf("-Inf");
 
   // left shift
   TEST("int(b1) == 1",int(b1), 1);
@@ -438,6 +517,7 @@ static void run_left_shift_tests()
   TEST("long(b1 << 5) == 100000",long(b1 << 5), 100000);
   TEST("long(b1 << 6) == 1000000",long(b1 << 6), 1000000);
   TEST("(b1 << 78) == vnl_decnum(\"1e78\")", (b1 << 78), vnl_decnum("1e78"));
+  TEST("p_inf << 16 == p_inf",p_inf << 16, p_inf);
 
   TEST("long(-b1 << 1) == -10",long(-b1 << 1), -10);
   TEST("long(-b1 << 2) == -100",long(-b1 << 2), -100);
@@ -446,6 +526,7 @@ static void run_left_shift_tests()
   TEST("long(-b1 << 5) == -100000",long(-b1 << 5), -100000);
   TEST("long(-b1 << 6) == -1000000",long(-b1 << 6), -1000000);
   TEST("(-b1 << 78) == vnl_decnum(\"-1e78\")", (-b1 << 78), vnl_decnum("-1e78"));
+  TEST("m_inf << 16 == m_inf",m_inf << 16, m_inf);
 
   TEST("long(b1 << -16) == 0",long(b1 << -16), 0);
   TEST("long(-b1 << -16) == 0",long(-b1 << -16), 0);
@@ -454,6 +535,7 @@ static void run_left_shift_tests()
 static void run_right_shift_tests()
 {
   vnl_decnum b2("1e78");
+  vnl_decnum p_inf("+Inf"), m_inf("-Inf");
 
   // right shift
   TEST("b2 == vnl_decnum(\"1e78\")",b2, vnl_decnum("1e78"));
@@ -462,6 +544,7 @@ static void run_right_shift_tests()
   TEST("long(b2 >> 78) == 1",long(b2 >> 78), 1L);
   TEST("long(b2 >> 79) == 0",long(b2 >> 79), 0L);
   TEST("long(b2 >> 99) == 0",long(b2 >> 99), 0L);
+  TEST("p_inf >> 16 == p_inf",p_inf >> 16, p_inf);
 
   TEST("-b2 == vnl_decnum(\"-1e78\")",-b2, vnl_decnum("-1e78"));
   TEST("(-b2 >> 1) == vnl_decnum(\"-1e77\")", (-b2 >> 1), vnl_decnum("-1e77"));
@@ -469,6 +552,7 @@ static void run_right_shift_tests()
   TEST("long(-b2 >> 78) == -1",long(-b2 >> 78), -1L);
   TEST("long(-b2 >> 79) == 0",long(-b2 >> 79), 0L);
   TEST("long(-b2 >> 99) == 0",long(-b2 >> 99), 0L);
+  TEST("m_inf >> 16 == m_inf",m_inf >> 16, m_inf);
 }
 
 static void run_shift_tests()

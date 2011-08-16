@@ -1,6 +1,7 @@
 // This is core/vnl/vnl_decnum.cxx
 #include "vnl_decnum.h"
 #include <vcl_cassert.h>
+#include <vcl_sstream.h>
 
 // constructor from (decimal) string.
 // Parses the input into (in that order)
@@ -8,25 +9,42 @@
 // * the sign (could be "+" or "-" or nothing at all),
 // * the mantissa, consisting of just decimal digits (at least one),
 // * and the exponent (optional, starts with "e", then optionally "+" or "-", then an integer)
+// * If the mantissa contains a decimal point, it is ignored (but the exponent is adapted accordingly).
+// Alternatively, the input might also be "NaN", "Inf", "+Inf", or "-Inf".
+// See also operator>>(vcl_istream& s, vnl_decnum& r).
 vnl_decnum::vnl_decnum(vcl_string const& r)
 : sign_('+'), data_(""), exp_(0L)
 {
+  long exp = 0L;
   char const* p = r.c_str();
   while (*p == ' ' || *p == '\t' || *p == '\n' || *p == '\r') ++p;
   if (*p == '-') sign_ = '-', ++p;
   else if (*p == '+') ++p;
-  while (*p == '0') ++p;
-  while (*p >= '0' && *p <= '9') data_.push_back(*p++);
-  if (data_ == "") sign_ = ' ';
-  if (*p == 'e') {
-    ++p;
-    char sign = '+';
-    if (*p == '-') sign = '-', ++p;
-    else if (*p == '+') ++p;
+  if (*p == 'I' && *++p == 'n' && *++p == 'f') { data_ = "Inf"; }
+  else if (*p == 'N' && *++p == 'a' && *++p == 'N') { data_ = "NaN"; }
+  else {
     while (*p == '0') ++p;
-    while (*p >= '0' && *p <= '9') exp_ *= 10, exp_ += (*p-'0'), ++p;
-    if (sign == '-') exp_ = -exp_;
+    while (*p >= '0' && *p <= '9') data_.push_back(*p++);
+    if (*p == '.') {
+      ++p;
+      while (*p >= '0' && *p <= '9') { data_.push_back(*p++); --exp; }
+    }
+    if (data_ == "") sign_ = ' ';
+    else if (*p == 'e') {
+      ++p;
+      char sign = '+';
+      if (*p == '-') sign = '-', ++p;
+      else if (*p == '+') ++p;
+      while (*p == '0') ++p;
+      while (*p >= '0' && *p <= '9') exp_ *= 10L, exp_ += (*p-'0'), ++p;
+      if (sign == '-') exp_ = -exp_;
+    }
+    exp_ += exp;
+    if (sign_ == ' ') exp_ = 0L;
   }
+#ifdef DEBUG
+  vcl_cerr << "Leaving vnl_decnum::vnl_decnum(\"" << r << "\") with " << sign_ << data_ << 'e' << exp_ << '\n';
+#endif
 }
 
 // constructor from an unsigned long
@@ -39,10 +57,22 @@ vnl_decnum::vnl_decnum(unsigned long r)
   }
 }
 
+// constructor from a double
+vnl_decnum::vnl_decnum(double r)
+{
+#ifdef DEBUG
+  vcl_cerr << "vnl_decnum::vnl_decnum(double " << r << ")\n";
+#endif
+  vcl_ostringstream os; os << r;
+  *this = vnl_decnum(os.str());
+}
+
 // Implicit type conversion to a decimal string
+// Also used for ostream output
 vnl_decnum::operator vcl_string() const {
+  if (data_=="NaN") return "NaN";
   if (sign_==' ') return "0"; // even if the exponent would be nonzero
-  vcl_string r=data_; r.insert(r.begin(), sign_);
+  vcl_string r=data_; if (sign_=='-') r.insert(r.begin(), sign_);
   if (exp_ == 0) return r;
   // if not a plain integer: also print out the exponent:
   r.push_back('e');
@@ -54,6 +84,8 @@ vnl_decnum::operator vcl_string() const {
 
 vnl_decnum::operator unsigned long() const
 {
+  if (data_ == "NaN") return 0L;
+  if (data_ == "Inf") return 0xffffffffu;
   unsigned long l = 0L;
   for (long i=0; i<long(data_.length())+exp_; ++i) { l *= 10; if (i<long(data_.length())) l += (data_.c_str()[i]-'0'); } // might overflow!!!
   return l; // forget the sign
@@ -61,6 +93,9 @@ vnl_decnum::operator unsigned long() const
 
 vnl_decnum::operator long() const
 {
+  if (data_ == "NaN") return 0L;
+  if (data_ == "Inf" && sign_ == '+') return 0x7fffffff;
+  else if (data_ == "Inf") return -0x7fffffff - 1;
   long l = 0L;
   for (long i=0; i<long(data_.length())+exp_; ++i) { l *= 10; if (i<long(data_.length())) l += (data_.c_str()[i]-'0'); } // might overflow!!!
   return sign_=='-' ? -l : l;
@@ -68,6 +103,8 @@ vnl_decnum::operator long() const
 
 vnl_decnum::operator unsigned int() const
 {
+  if (data_ == "NaN") return 0L;
+  if (data_ == "Inf") return 0xffffffffu;
   unsigned int l = 0;
   for (long i=0; i<long(data_.length())+exp_; ++i) { l *= 10; if (i<long(data_.length())) l += (data_.c_str()[i]-'0'); } // might overflow!!!
   return l; // forget the sign
@@ -75,6 +112,9 @@ vnl_decnum::operator unsigned int() const
 
 vnl_decnum::operator int() const
 {
+  if (data_ == "NaN") return 0L;
+  if (data_ == "Inf" && sign_ == '+') return 0x7fffffff;
+  else if (data_ == "Inf") return -0x7fffffff - 1;
   int l = 0;
   for (long i=0; i<long(data_.length())+exp_; ++i) { l *= 10; if (i<long(data_.length())) l += (data_.c_str()[i]-'0'); } // might overflow!!!
   return sign_=='-' ? -l : l;
@@ -84,7 +124,9 @@ bool vnl_decnum::operator==(vnl_decnum const& r) const
 {
   // quick return if exponents are identical or signs are different:
   if (sign_!=r.sign()) return false;
-  else if (sign_==' ') return true; // both are zero
+  else if (data_ == "NaN" || r.data() == "NaN") return false; // NaN equals nothing!
+  else if (data_ == "Inf" && r.data() == "Inf") return true; // of the same sign, of course
+  else if (sign_ == ' ') return true; // both are zero
   else if (exp_ == r.exp()) return data_==r.data();
   else if (exp_ > r.exp()) {
     // by adding zeros to data_ while decreasing exp_ until it equals r.exp(),
@@ -121,8 +163,12 @@ bool vnl_decnum::operator< (vnl_decnum const& r) const
 #ifdef DEBUG
   vcl_cerr << "Entering vnl_decnum::operator< with " << data_ << " and " << r.data() << '\n';
 #endif
-  if (operator==(r)) return false;
   vcl_string rs = r.data();
+  if (data_ == "NaN" || rs == "NaN") return false; // NaN compares to nothing!
+  else if (operator==(r)) return false;
+  else if (data_ == "Inf") return sign_ == '-';
+  else if (rs == "Inf") return r.sign() == '+';
+
   if (sign_=='-' && r.sign() == '-') return -r < operator-();
   else if (sign_=='-') return true;
   else if (r.sign() == '-') return false;
@@ -193,6 +239,17 @@ vnl_decnum vnl_decnum::minus(vcl_string const& a, vcl_string const& b, long exp)
 
 vnl_decnum vnl_decnum::operator+(vnl_decnum const& r) const
 {
+#ifdef DEBUG
+  vcl_cerr << "Entering vnl_decnum::operator+ with "
+           << sign_ << data_ << 'e' << exp_ << " and "
+           << r.sign() << r.data() << 'e' << r.exp() << '\n';
+#endif
+  if (data_ == "NaN") return *this;
+  else if (r.data() == "NaN") return r;
+  else if (data_ == "Inf" && r.data() == "Inf") return sign_ == r.sign() ? *this : vnl_decnum("NaN");
+  else if (data_ == "Inf") return *this;
+  else if (r.data() == "Inf") return r;
+  
   if (sign_ == ' ') return r;
   else if (r.sign() == ' ') return *this;
   else if (operator==(-r)) return vnl_decnum(0L);
@@ -231,8 +288,17 @@ vcl_string vnl_decnum::mult(vcl_string const& a, char b)
 vnl_decnum vnl_decnum::operator*(vnl_decnum const& r) const
 {
 #ifdef DEBUG
-  vcl_cerr << "Entering vnl_decnum::operator* with " << sign_ << data_ << " and " << r.sign() << r.data() << '\n';
+  vcl_cerr << "Entering vnl_decnum::operator* with "
+           << sign_ << data_ << 'e' << exp_ << " and "
+           << r.sign() << r.data() << 'e' << r.exp() << '\n';
 #endif
+  if (data_ == "NaN") return *this;
+  else if (r.data() == "NaN") return r;
+  else if (data_ == "Inf" || r.data() == "Inf")
+    return sign_ == r.sign()             ? vnl_decnum("+Inf")
+         : (sign_==' ' || r.sign()==' ') ? vnl_decnum("NaN")
+         :                                 vnl_decnum("-Inf");
+  
   int sign = (sign_==' '?0:sign_=='-'?-1:1) * (r.sign()==' '?0:r.sign()=='-'?-1:1);
   vnl_decnum result(0L);
   if (sign == 0) return result;
@@ -274,9 +340,22 @@ vcl_string vnl_decnum::div(vcl_string const& a, vcl_string& b)
 vnl_decnum vnl_decnum::operator/(vnl_decnum const& r) const
 {
 #ifdef DEBUG
-  vcl_cerr << "Entering vnl_decnum::operator/ with " << sign_ << data_ << " and " << r.sign() << r.data() << '\n';
+  vcl_cerr << "Entering vnl_decnum::operator/ with "
+           << sign_ << data_ << 'e' << exp_ << " and "
+           << r.sign() << r.data() << 'e' << r.exp() << '\n';
 #endif
-  assert (r != 0L);
+  if (data_ == "NaN") return *this;
+  else if (r.data() == "NaN") return r;
+  else if (data_ == "Inf" && r.data() == "Inf") return vnl_decnum("NaN");
+  else if (r.data() == "Inf")                   return vnl_decnum(0L);
+  else if (data_ == "Inf")
+    return sign_ == r.sign() ? vnl_decnum("+Inf")
+         :                     vnl_decnum("-Inf");
+  else if (r == 0L)
+    return sign_==' ' ? vnl_decnum("NaN")
+         : sign_=='+' ? vnl_decnum("+Inf")
+         :              vnl_decnum("-Inf");
+
   if (r == 1L) return *this;
   if (operator==(r)) return vnl_decnum('+',"1",0L);
   vcl_string a = data_, b = r.data();
@@ -300,11 +379,18 @@ vnl_decnum vnl_decnum::operator/(vnl_decnum const& r) const
 vnl_decnum vnl_decnum::operator%(vnl_decnum const& r) const
 {
 #ifdef DEBUG
-  vcl_cerr << "Entering vnl_decnum::operator% with " << sign_ << data_ << " and " << r.sign() << r.data() << '\n';
+  vcl_cerr << "Entering vnl_decnum::operator% with "
+           << sign_ << data_ << 'e' << exp_ << " and "
+           << r.sign() << r.data() << 'e' << r.exp() << '\n';
 #endif
-  assert (r != 0L);
-  if (r == 1L) return 0L;
-  if (operator==(r)) return 0L;
+  if (r == 0L) return *this;
+  else if (data_ == "NaN") return *this;
+  else if (r.data() == "NaN") return r;
+  else if (r.data() == "Inf") return vnl_decnum("NaN");
+  else if (data_ == "Inf")    return *this;
+
+  if (r == vnl_decnum("1")) return vnl_decnum("0");
+  if (operator==(r)) return vnl_decnum("0");
   vcl_string a = data_, b = r.data();
   int na=a.length(), nb=b.length();
   while (na > nb || (na == nb && !comp(a,b))) {
@@ -320,10 +406,11 @@ vnl_decnum vnl_decnum::operator%(vnl_decnum const& r) const
   else       return vnl_decnum(sign_,a,exp_);
 }
 
+// See also the constructor from vcl_string.
 vcl_istream& operator>>(vcl_istream& s, vnl_decnum& r)
 {
 #ifdef DEBUG
-  vcl_cerr << "Entering operator>>(istream,vnl_decnum)\n";
+  vcl_cerr << "Entering operator>>(istream,vnl_decnum) with " << r << '\n';
 #endif
   vcl_string data = "";
   int c = ' ';
@@ -331,12 +418,16 @@ vcl_istream& operator>>(vcl_istream& s, vnl_decnum& r)
   if (c == -1 || c == '\n') { r = vnl_decnum(0L); return s; } // stop parsing at EOLN or EOF
   if (c == '-') { data = "-"; c=s.get(); }
   else if (c == '+') c=s.get();
-  while (c == '0') c=s.get();
-  while (c >= '0' && c <= '9') { data.push_back(c); c=s.get(); }
-  if (c == 'e') {
-    data.push_back(c); c=s.get();
-    if (c == '-' || c == '+') { data.push_back(c); c=s.get(); }
-    while (c >= '0' && c <= '9') { data.push_back(c); c=s.get(); }
+  if (c == 'I' && s.get() == 'n' && s.get() == 'f') { data += "Inf"; }
+  else if (c == 'N' && s.get() == 'a' && s.get() == 'N') { data = "NaN"; }
+  else {
+    while (c == '0') c=s.get();
+    while ((c >= '0' && c <= '9') || c == '.') { data.push_back(c); c=s.get(); }
+    if (c == 'e') {
+      data.push_back(c); c=s.get();
+      if (c == '-' || c == '+') { data.push_back(c); c=s.get(); }
+      while (c >= '0' && c <= '9') { data.push_back(c); c=s.get(); }
+    }
   }
   r = vnl_decnum(data);
   if (c > 0) s.putback(c);
@@ -348,6 +439,7 @@ vcl_istream& operator>>(vcl_istream& s, vnl_decnum& r)
 // Return the (thus modified) *this.
 vnl_decnum& vnl_decnum::compactify()
 {
+  if (sign_ == ' ' || data_ == "Inf") { exp_ = 0L; return *this; }
   unsigned long n = data_.find_last_not_of('0') + 1;
   unsigned long l = data_.length();
   if (n < l) { // at least one trailing zero is found
