@@ -26,10 +26,16 @@ computations (see @code{vnl_matrix_fixed<T,n,m>} and example subclasses
 Classes @code{vnl_svd<T>}, @code{vnl_symmetric_eigensystem<T> },
 @code{vnl_generalized_eigensystem}.
 
-@item Real polynomials.
+@item Polynomials.
 Class @code{vnl_real_polynomial} stores the coefficients
 of a real polynomial, and provides methods of evaluation of the polynomial
 at any @emph{x}, while class @code{vnl_rpoly_roots} provides a root finder.
+
+Class @code{vnl_real_npolynomial} also stores the coefficients of a
+real polynomial, but possibly in more than one unknown.
+
+Class @code{vnl_poly} is a templated class which allows to work with e.g.
+integer-coefficient (but just single-variable) polynomials.
 
 @item Optimization.
 Classes @code{vnl_levenberg_marquardt}, @code{vnl_amoeba},
