@@ -1473,9 +1473,11 @@ foreach $f (@FILES)
   %math_cst = ('3\.141[56]' => 'pi',
                '1\.570[78]' => 'pi_over_2',
                '0\.785[34]' => 'pi_over_4',
+               '0\.01745'   => 'pi_over_180',
                '0\.3183'    => 'one_over_pi',
                '6\.283[12]' => '2*pi',
                '0\.6366'    => 'two_over_pi',
+               '57\.29[56]' => 'deg_per_rad',
                '1\.128[34]' => 'two_over_sqrtpi',
                '0\.3989'    => 'one_over_sqrt2pi',
                '0\.5772'    => 'euler',
@@ -1485,6 +1487,8 @@ foreach $f (@FILES)
                '0\.6931'    => 'ln2',
                '2\.302[56]' => 'ln10',
                '1\.4142'    => 'sqrt2',
+               '2\.4142'    => '1+sqrt2',
+               '0\.577[34]' => 'sqrt1_3',
                '0\.7071'    => 'sqrt1_2');
   foreach $cst (keys %math_cst) {
     $name = $math_cst{$cst};
