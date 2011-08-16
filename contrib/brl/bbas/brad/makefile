@@ -12,8 +12,8 @@ SOURCES += brad_eigenspace_base.cxx
 SOURCES += brad_phongs_model_est.cxx
 MANPAGE_SOURCES += brad_eigenspace.txx
 MANPAGE_SOURCES += brad_eigenspace_sptr.h
-
-SUBDIRS += pro
+SOURCES += brad_grad_int_feature_vector.cxx
+SOURCES += brad_grad_hist_feature_vector.cxx
 
 #######################################
 include ${VXLROOT}/config/top-params.mk

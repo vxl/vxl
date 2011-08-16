@@ -45,6 +45,7 @@ TESTS += test_na.cxx
 TESTS += test_sparse_matrix.cxx
 TESTS += test_pow_log.cxx
 TESTS += test_decnum.cxx
+TESTS += test_polynomial.cxx
 
 MANPAGE_SOURCES += test_arithmetic_body.h
 

@@ -54,6 +54,7 @@ SOURCES += vnl_matlab_write.cxx
 SOURCES += vnl_matlab_read.cxx
 SOURCES += vnl_matlab_filewrite.cxx
 SOURCES += vnl_matops.cxx
+MANPAGE_SOURCES += vnl_polynomial.txx
 SOURCES += vnl_real_polynomial.cxx
 SOURCES += vnl_real_npolynomial.cxx
 
@@ -81,6 +82,7 @@ MANPAGE_SOURCES += vnl_complex_ops.txx vnl_complexify.h vnl_imag.h vnl_real.h
 SOURCES += vnl_numeric_traits.cxx
 MANPAGE_SOURCES += vnl_complex_traits.h
 SOURCES += vnl_bignum_traits.cxx
+SOURCES += vnl_decnum_traits.cxx
 SOURCES += vnl_rational_traits.cxx
 
 # matrix and vector specialisations

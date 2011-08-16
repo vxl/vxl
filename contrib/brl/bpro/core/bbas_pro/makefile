@@ -27,6 +27,9 @@ SOURCES += processes/brad_train_histograms_process.cxx
 SOURCES += processes/bbas_merge_string_array_process.cxx
 SOURCES += processes/brad_compute_eigenspace_process.cxx
 SOURCES += processes/brad_load_eigenspace_process.cxx
+SOURCES += processes/brad_classify_image_process.cxx
+SOURCES += processes/brad_estimate_shadow_model_process.cxx
+SOURCES += processes/brad_estimate_phongs_model_process.cxx
 
 ################################
 include ${VXLROOT}/config/top.mk
