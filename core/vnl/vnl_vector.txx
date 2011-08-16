@@ -875,8 +875,8 @@ void vnl_vector<T>::inline_function_tickler()
 
 //--------------------------------------------------------------------------------
 
-// The instantiation macros are split because some functions
-// (vnl_angle) shouldn't be instantiated for complex types.
+// The instantiation macros are split because some functions (angle, cos_angle)
+// shouldn't be instantiated for complex and/or integral types.
 
 #define VNL_VECTOR_INSTANTIATE_COMMON(T) \
 template class vnl_vector<T >; \
@@ -891,7 +891,6 @@ template vnl_vector<T > element_quotient(vnl_vector<T > const &, vnl_vector<T > 
 /* dot products, angles etc */ \
 template T inner_product(vnl_vector<T > const &, vnl_vector<T > const &); \
 template T dot_product(vnl_vector<T > const &, vnl_vector<T > const &); \
-template T cos_angle(vnl_vector<T > const & , vnl_vector<T > const &); \
 template T bracket(vnl_vector<T > const &, vnl_matrix<T > const &, vnl_vector<T > const &); \
 template vnl_matrix<T > outer_product(vnl_vector<T > const &,vnl_vector<T > const &); \
 /* I/O */ \
@@ -900,9 +899,11 @@ template vcl_istream & operator>>(vcl_istream &, vnl_vector<T >       &)
 
 #define VNL_VECTOR_INSTANTIATE(T) \
 VNL_VECTOR_INSTANTIATE_COMMON(T); \
+template T cos_angle(vnl_vector<T > const & , vnl_vector<T > const &); \
 template double angle(vnl_vector<T > const & , vnl_vector<T > const &)
 
 #define VNL_VECTOR_INSTANTIATE_COMPLEX(T) \
-VNL_VECTOR_INSTANTIATE_COMMON(T)
+VNL_VECTOR_INSTANTIATE_COMMON(T); \
+template T cos_angle(vnl_vector<T > const & , vnl_vector<T > const &)
 
 #endif // vnl_vector_txx_
