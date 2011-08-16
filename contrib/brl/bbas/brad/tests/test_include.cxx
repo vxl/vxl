@@ -1,6 +1,8 @@
 #include <brad/brad_eigenspace.h>
 #include <brad/brad_eigenspace_base.h>
 #include <brad/brad_eigenspace_sptr.h>
+#include <brad/brad_grad_hist_feature_vector.h>
+#include <brad/brad_grad_int_feature_vector.h>
 #include <brad/brad_hist_prob_feature_vector.h>
 #include <brad/brad_illum_cost_function.h>
 #include <brad/brad_illum_util.h>

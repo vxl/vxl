@@ -19,6 +19,7 @@
 #include <vnl/vnl_cost_function.h>
 #include <vnl/vnl_cross_product_matrix.h>
 #include <vnl/vnl_decnum.h>
+#include <vnl/vnl_decnum_traits.h>
 #include <vnl/vnl_definite_integral.h>
 #include <vnl/vnl_det.h>
 #include <vnl/vnl_diag_matrix.h>
@@ -95,6 +96,7 @@
 #include <vnl/vnl_nonlinear_minimizer.h>
 #include <vnl/vnl_numeric_traits.h>
 #include <vnl/vnl_operators.h>
+#include <vnl/vnl_polynomial.h>
 #include <vnl/vnl_power.h>
 #include <vnl/vnl_quaternion.h>
 #include <vnl/vnl_rank.h>

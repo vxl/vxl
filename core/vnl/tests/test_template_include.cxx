@@ -14,6 +14,7 @@
 #include <vnl/vnl_matrix_fixed_ref.txx>
 #include <vnl/vnl_matrix_fixed.txx>
 #include <vnl/vnl_matrix.txx>
+#include <vnl/vnl_polynomial.txx>
 #include <vnl/vnl_quaternion.txx>
 #include <vnl/vnl_rank.txx>
 #include <vnl/vnl_scalar_join_iterator.txx>
