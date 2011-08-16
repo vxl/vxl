@@ -1,4 +1,4 @@
-// This is brl/bbas/brad/brad_grad_int_grad_int_feature_vector.h
+// This is brl/bbas/brad/brad_grad_int_feature_vector.h
 #ifndef brad_grad_int_feature_vector_h
 #define brad_grad_int_feature_vector_h
 //:
@@ -11,27 +11,27 @@
 //  Modifications
 //   <none yet>
 // \endverbatim
-// 
 //
-//  This class acts as a functor to be used in eigenvector and 
+//
+//  This class acts as a functor to be used in eigenvector and
 //  classifier processes
 //
 #include <vcl_iostream.h>
 #include <vnl/vnl_vector.h>
 #include <vil/vil_image_view.h>
 #include <vsl/vsl_binary_io.h>
-class brad_grad_int_feature_vector 
+class brad_grad_int_feature_vector
 {
  public:
   brad_grad_int_feature_vector(){}
 
   brad_grad_int_feature_vector(float min_int, float max_int, float min_grad,
                                float max_grad, unsigned nbins)
-    : min_int_(min_int), max_int_(max_int), 
+    : min_int_(min_int), max_int_(max_int),
     min_grad_(min_grad), max_grad_(max_grad),
-    nbins_(nbins) {};
+    nbins_(nbins) {}
 
-  ~brad_grad_int_feature_vector(){};
+  ~brad_grad_int_feature_vector() {}
 
   //: vector of histogram probabilities computed from the input view, plus entropy
   vnl_vector<double> operator() (vil_image_view<float> const& view) const;
@@ -55,8 +55,8 @@ class brad_grad_int_feature_vector
   void set_max_grad(float max_grad) {max_grad_ = max_grad;}
   //: print
   void print(vcl_ostream& os = vcl_cout) const {
-    os << "nbins = " << nbins_ 
-       << " min_int = "  << min_int_ 
+    os << "nbins = " << nbins_
+       << " min_int = "  << min_int_
        << " max_int = "  << max_int_
        << " min_grad = " << min_grad_
        << " max_grad = " << max_grad_

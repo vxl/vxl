@@ -1,4 +1,4 @@
-// This is brl/bbas/brad/pro/processes/brad_estimate_phongs_model_process.cxx
+// This is brl/bpro/core/bbas_pro/processes/brad_estimate_phongs_model_process.cxx
 #include <bprb/bprb_func_process.h>
 #include <bpro/core/bbas_pro/bbas_1d_array_float.h>
 #include <brad/brad_phongs_model_est.h>
@@ -70,15 +70,13 @@ bool brad_estimate_phongs_model_process(bprb_func_process& pro)
   {
     camera_elev[i]    =camera_elev_array->data_array[i];
     camera_azim[i]    =camera_azim_array->data_array[i];
-        
+
     samples[i]        =intensities->data_array[i];
     samples_weights[i]=visibilities->data_array[i];
-    if(samples[i] <0.0 || samples[i] > 1.0 )
-        samples_weights[i] = 0.0;
+    if (samples[i] <0.0 || samples[i] > 1.0 )
+      samples_weights[i] = 0.0;
     mean_intensities += (samples_weights[i]* samples[i]);
     sum_weights      +=  samples_weights[i];
-
-
   }
   brad_phongs_model_est f(sun_elev,sun_azim,
                           camera_elev,camera_azim,
@@ -94,10 +92,11 @@ bool brad_estimate_phongs_model_process(bprb_func_process& pro)
   x[4] = 0.0;
   lm.minimize(x);
 
-  vcl_cout<<"\n Phong's Model : "<<vcl_fabs(x[0])<<','
-                                 <<vcl_fabs(x[1])<<','
-                                 <<x[2]<<','<<x[3]<<','<<x[4]<<'\n'
-                                 <<"St Error "<<f.error_var(x)<<'\n';
+  vcl_cout<<"\n Phong's Model : "
+          <<vcl_fabs(x[0])<<','
+          <<vcl_fabs(x[1])<<','
+          <<x[2]<<','<<x[3]<<','<<x[4]<<'\n'
+          <<"St Error "<<f.error_var(x)<<'\n';
 
   brad_phongs_model pm(vcl_fabs(x[0]),vcl_fabs(x[1]),x[2],x[3],x[4]);
   bbas_1d_array_float_sptr new_obs = new bbas_1d_array_float(num_samples);
