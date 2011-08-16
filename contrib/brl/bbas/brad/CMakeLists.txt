@@ -19,9 +19,6 @@
 
   TARGET_LINK_LIBRARIES(brad  bsta vnl_io vnl vnl_algo vgl vil vbl_io vbl vpl vul )
 
-#pro
-SUBDIRS(pro)
-
 #tests
 SUBDIRS(tests)
 
