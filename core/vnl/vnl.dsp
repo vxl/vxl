@@ -204,6 +204,9 @@ SOURCE=.\vnl_sparse_matrix_linear_system.cxx
 SOURCE=.\vnl_decnum.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\vnl_decnum_traits.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/vnl_rank+double-.cxx
 # End Source File
 # Begin Source File
@@ -839,6 +842,21 @@ SOURCE=.\Templates/vnl_hungarian_algorithm+double-.cxx
 # Begin Source File
 SOURCE=.\Templates/vnl_hungarian_algorithm+int-.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\Templates/vnl_polynomial+vnl_rational-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vnl_polynomial+vnl_decnum-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vnl_polynomial+double-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vcl_vector+vnl_decnum-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vcl_vector+vnl_rational-.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
@@ -1288,6 +1306,15 @@ SOURCE=.\vnl_c_na_vector.txx
 # End Source File
 # Begin Source File
 SOURCE=.\vnl_decnum.h
+# End Source File
+# Begin Source File
+SOURCE=.\vnl_polynomial.txx
+# End Source File
+# Begin Source File
+SOURCE=.\vnl_polynomial.h
+# End Source File
+# Begin Source File
+SOURCE=.\vnl_decnum_traits.h
 # End Source File
 # End Group
 # End Target

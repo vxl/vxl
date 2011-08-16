@@ -156,6 +156,15 @@ SOURCE=.\processes/brad_train_histograms_process.cxx
 SOURCE=.\processes/bbas_merge_string_array_process.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\processes/brad_classify_image_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/brad_estimate_shadow_model_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/brad_estimate_phongs_model_process.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/brdb_value_t+brad_eigenspace_sptr-.cxx
 # End Source File
 # Begin Source File

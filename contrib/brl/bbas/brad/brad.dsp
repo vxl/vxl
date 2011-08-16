@@ -111,10 +111,22 @@ SOURCE=.\brad_eigenspace_base.cxx
 SOURCE=.\brad_phongs_model_est.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\brad_grad_int_feature_vector.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\brad_grad_hist_feature_vector.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/brad_eigenspace+brad_hist_prob_feature_vector-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/vbl_smart_ptr+brad_eigenspace_base-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/brad_eigenspace+brad_grad_hist_feature_vector-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/brad_eigenspace+brad_grad_int_feature_vector-.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
@@ -148,6 +160,12 @@ SOURCE=.\brad_phongs_model_est.h
 # End Source File
 # Begin Source File
 SOURCE=.\brad_eigenspace.h
+# End Source File
+# Begin Source File
+SOURCE=.\brad_grad_hist_feature_vector.h
+# End Source File
+# Begin Source File
+SOURCE=.\brad_grad_int_feature_vector.h
 # End Source File
 # End Group
 # End Target

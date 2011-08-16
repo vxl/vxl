@@ -211,6 +211,9 @@ SOURCE=.\test_pow_log.cxx
 SOURCE=.\test_decnum.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\test_polynomial.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\test_include.cxx
 # End Source File
 # Begin Source File
