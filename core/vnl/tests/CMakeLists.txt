@@ -25,6 +25,7 @@ ADD_EXECUTABLE( vnl_test_all
   test_power.cxx
   test_quaternion.cxx
   test_rational.cxx
+  test_polynomial.cxx
   test_real_polynomial.cxx
   test_real_npolynomial.cxx
   test_resize.cxx
@@ -77,6 +78,7 @@ ADD_TEST( vnl_test_numeric_traits         ${EXECUTABLE_OUTPUT_PATH}/vnl_test_all
 ADD_TEST( vnl_test_na                     ${EXECUTABLE_OUTPUT_PATH}/vnl_test_all test_na                     )
 ADD_TEST( vnl_test_random                 ${EXECUTABLE_OUTPUT_PATH}/vnl_test_all test_random                 )
 ADD_TEST( vnl_test_rational               ${EXECUTABLE_OUTPUT_PATH}/vnl_test_all test_rational               )
+ADD_TEST( vnl_test_polynomial             ${EXECUTABLE_OUTPUT_PATH}/vnl_test_all test_polynomial             )
 ADD_TEST( vnl_test_real_polynomial        ${EXECUTABLE_OUTPUT_PATH}/vnl_test_all test_real_polynomial        )
 ADD_TEST( vnl_test_real_npolynomial       ${EXECUTABLE_OUTPUT_PATH}/vnl_test_all test_real_npolynomial       )
 ADD_TEST( vnl_test_resize                 ${EXECUTABLE_OUTPUT_PATH}/vnl_test_all test_resize                 )

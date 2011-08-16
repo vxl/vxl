@@ -127,6 +127,8 @@ SET( vnl_sources
   vnl_matlab_read.cxx          vnl_matlab_read.h
   vnl_matlab_filewrite.cxx     vnl_matlab_filewrite.h
   vnl_matops.cxx               vnl_matops.h
+  # Polyniomial representations
+  vnl_polynomial.txx           vnl_polynomial.h
   vnl_real_polynomial.cxx      vnl_real_polynomial.h
   vnl_real_npolynomial.cxx     vnl_real_npolynomial.h
 
@@ -138,7 +140,7 @@ SET( vnl_sources
   vnl_rational.cxx             vnl_rational.h
   # Arbitrary precision integers
   vnl_bignum.cxx               vnl_bignum.h
-  # Arbitrary precision decimal integers
+  # Arbitrary precision decimal numbers
   vnl_decnum.cxx               vnl_decnum.h
   # Finite field and finite ring numbers and arithmetic
   vnl_finite.h
@@ -153,6 +155,7 @@ SET( vnl_sources
   vnl_numeric_traits.cxx       vnl_numeric_traits.h
                                vnl_complex_traits.h
   vnl_bignum_traits.cxx        vnl_bignum_traits.h
+  vnl_decnum_traits.cxx        vnl_decnum_traits.h
   vnl_rational_traits.cxx      vnl_rational_traits.h
 
   # matrix and vector specialisations
