@@ -1,4 +1,4 @@
-// This is brl/bbas/brad/pro/processes/brad_estimate_shadow_model_process.cxx
+// This is brl/bpro/core/bbas_pro/processes/brad_estimate_shadow_model_process.cxx
 #include <bprb/bprb_func_process.h>
 //:
 // \file
