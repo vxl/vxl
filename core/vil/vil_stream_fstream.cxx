@@ -15,7 +15,7 @@ static vcl_ios_openmode modeflags(char const* mode)
     return vcl_ios_openmode(0);
 
   if (*mode == 'r') {
-    if (mode[1] == '+')
+    if (mode[1] == '+' || mode[1] == 'w')
       return vcl_ios_in | vcl_ios_out | modeflags(mode+2);
     else
       return vcl_ios_in | modeflags(mode+1);
