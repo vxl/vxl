@@ -47,8 +47,8 @@
     #define PIXEL_TYPE float4
 #endif
 
-
-#define SEGLEN_FACTOR 64000000.0f   //Hack representation of int32.maxvalue/(ni*nj*block_length)
+//SEG_LEN FACTOR used for at
+#define SEGLEN_FACTOR 100000.0f   //Hack representation of int32.maxvalue/(root(3)*ni*nj)
 
 typedef struct
 {

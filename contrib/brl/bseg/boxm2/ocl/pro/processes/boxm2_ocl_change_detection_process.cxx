@@ -55,7 +55,7 @@ namespace boxm2_ocl_change_detection_process_globals
   opts += " -D CHANGE -D DETERMINISTIC ";
   vcl_string options=opts;
 
-  opts += " -D STEP_CELL=step_cell_change_detection_uchar8_w_expected(aux_args.mog,aux_args.alpha,data_ptr,d,vis,aux_args.change,aux_args.change_exp,aux_args.intensity,aux_args.intensity_exp) ";
+  opts += " -D STEP_CELL=step_cell_change_detection_uchar8_w_expected(aux_args.mog,aux_args.alpha,data_ptr,d*linfo->block_len,vis,aux_args.change,aux_args.change_exp,aux_args.intensity,aux_args.intensity_exp) ";
 
     //have kernel construct itself using the context and device
     bocl_kernel * ray_trace_kernel=new bocl_kernel();

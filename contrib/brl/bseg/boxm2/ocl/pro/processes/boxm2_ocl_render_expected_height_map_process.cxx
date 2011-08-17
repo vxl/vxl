@@ -47,7 +47,7 @@ namespace boxm2_ocl_render_expected_height_map_process_globals
     //set kernel options
     options += " -D RENDER_HEIGHT_MAP ";
     options +=  "-D DETERMINISTIC ";
-    options += " -D STEP_CELL=step_cell_render_depth2(tblock,aux_args.alpha,aux_args.mog,data_ptr,d,vis,aux_args.expdepth,aux_args.expdepthsqr,aux_args.probsum,aux_args.expint)";//step_cell_render(aux_args.mog,aux_args.alpha,data_ptr,d,aux_args.vis,aux_args.expint)";
+    options += " -D STEP_CELL=step_cell_render_depth2(tblock,aux_args.alpha,aux_args.mog,data_ptr,d*linfo->block_len,vis,aux_args.expdepth,aux_args.expdepthsqr,aux_args.probsum,aux_args.expint)";//step_cell_render(aux_args.mog,aux_args.alpha,data_ptr,d,aux_args.vis,aux_args.expint)";
 
     //have kernel construct itself using the context and device
     bocl_kernel * ray_trace_kernel=new bocl_kernel();

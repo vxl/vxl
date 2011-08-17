@@ -48,7 +48,6 @@ void step_cell_preinf(AuxArgs aux_args, int data_ptr, uchar llid, float d)
     //keep track of cells being hit
     //cell data, i.e., alpha and app model is needed for some passes
     float  alpha    = aux_args.alpha[data_ptr];
-    //float8 mixture  = convert_float8(aux_args.mog[data_ptr])/(float)NORM;
     CONVERT_FUNC_FLOAT8(mixture,aux_args.mog[data_ptr])/NORM;
     float  weight3  = (1.0f-mixture.s2-mixture.s5);
 
@@ -57,7 +56,14 @@ void step_cell_preinf(AuxArgs aux_args, int data_ptr, uchar llid, float d)
     mean_obs = mean_obs/cum_len;
 
     //calculate pre_infinity denomanator (shape of image)
-    pre_infinity_opt(d, cum_len, mean_obs, aux_args.vis_inf, aux_args.pre_inf, alpha, mixture, weight3);
+    pre_infinity_opt( d*aux_args.linfo->block_len, 
+                      cum_len, 
+                      mean_obs, 
+                      aux_args.vis_inf, 
+                      aux_args.pre_inf, 
+                      alpha, 
+                      mixture, 
+                      weight3);
 }
 #endif // PREINF
 
@@ -82,12 +88,13 @@ void step_cell_bayes(AuxArgs aux_args, int data_ptr, uchar llid, float d)
     float cum_len  = convert_float(aux_args.seg_len[data_ptr])/SEGLEN_FACTOR;
     float mean_obs = convert_float(aux_args.mean_obs[data_ptr])/SEGLEN_FACTOR;
     mean_obs = mean_obs/cum_len;
+    aux_args.linfo->block_len;
     float cell_beta = 0.0f;
     float cell_vis  = 0.0f;
     barrier(CLK_LOCAL_MEM_FENCE);
 
     //calculate bayes ratio
-    bayes_ratio_functor(d,
+    bayes_ratio_functor(d*aux_args.linfo->block_len,
                         mean_obs,
                         aux_args.ray_pre,
                         aux_args.ray_vis,
@@ -112,7 +119,6 @@ void step_cell_bayes(AuxArgs aux_args, int data_ptr, uchar llid, float d)
 #else
     //slow beta calculation ----------------------------------------------------
     float  alpha    = aux_args.alpha[data_ptr];
-    //float8 mixture  = convert_float8(aux_args.mog[data_ptr])/(float)NORM;
     CONVERT_FUNC_FLOAT8(mixture,aux_args.mog[data_ptr])/NORM;
     float weight3   = (1.0f-mixture.s2-mixture.s5);
 
@@ -122,7 +128,7 @@ void step_cell_bayes(AuxArgs aux_args, int data_ptr, uchar llid, float d)
     mean_obs = mean_obs/cum_len;
 
     float ray_beta, vis_cont;
-    bayes_ratio_ind( d,
+    bayes_ratio_ind( d*aux_args.linfo->block_len,
                      alpha,
                      mixture,
                      weight3,
@@ -169,7 +175,7 @@ void step_cell_update_hist(AuxArgs aux_args, int data_ptr, uchar llid, float d)
     atom_add(&aux_args.hist[8*data_ptr+index1], upcount_int);
 
     int index2=(int)floor((obs-0.125)*3);
-    vis=vis*exp(-alpha*d);
+    vis=vis*exp(-alpha*d*aux_args.linfo->block_len);
     *(aux_args.vis)=vis;
 
     if (index2>=0 && index2<=2)

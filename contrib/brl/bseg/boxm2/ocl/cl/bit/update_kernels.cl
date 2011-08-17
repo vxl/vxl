@@ -17,6 +17,7 @@ typedef struct
   __local  float4* cached_aux; 
            float   obs; 
   __global float * output;
+  __constant RenderSceneInfo * linfo; 
 } AuxArgs;  
 
 //forward declare cast ray (so you can use it)
@@ -32,7 +33,6 @@ seg_len_main(__constant  RenderSceneInfo    * linfo,
              __constant  uchar              * bit_lookup,       // used to get data_index
              __global    float4             * ray_origins,
              __global    float4             * ray_directions,
-             //__global    float16            * camera,           // camera orign and SVD of inverse of camera matrix
              __global    uint4              * imgdims,          // dimensions of the input image
              __global    float              * in_image,         // the input image
              __global    float              * output,
@@ -44,6 +44,7 @@ seg_len_main(__constant  RenderSceneInfo    * linfo,
 {
   //get local id (0-63 for an 8x8) of this patch
   uchar llid = (uchar)(get_local_id(0) + get_local_size(0)*get_local_id(1));
+  
   //initialize pre-broken ray information (non broken rays will be re initialized)
   ray_bundle_array[llid] = (short2) (-1, 0);
   cell_ptrs[llid] = -1;
@@ -73,7 +74,6 @@ seg_len_main(__constant  RenderSceneInfo    * linfo,
   float4 ray_o = ray_origins[ imIndex ]; 
   float4 ray_d = ray_directions[ imIndex ]; 
   float ray_ox, ray_oy, ray_oz, ray_dx, ray_dy, ray_dz;
-  //calc_scene_ray(linfo, camera, i, j, &ray_ox, &ray_oy, &ray_oz, &ray_dx, &ray_dy, &ray_dz);  
   calc_scene_ray_generic_cam(linfo, ray_o, ray_d, &ray_ox, &ray_oy, &ray_oz, &ray_dx, &ray_dy, &ray_dz);  
 
   //----------------------------------------------------------------------------
@@ -81,6 +81,7 @@ seg_len_main(__constant  RenderSceneInfo    * linfo,
   // BEGIN RAY TRACE
   //----------------------------------------------------------------------------
   AuxArgs aux_args; 
+  aux_args.linfo    = linfo; 
   aux_args.seg_len  = aux_array0;
   aux_args.mean_obs = aux_array1;
   aux_args.ray_bundle_array = ray_bundle_array;
@@ -106,6 +107,7 @@ typedef struct
   __global int* mean_obs; 
            float* vis_inf; 
            float* pre_inf; 
+  __constant RenderSceneInfo * linfo; 
 } AuxArgs;  
 
 //forward declare cast ray (so you can use it)
@@ -124,7 +126,6 @@ pre_inf_main(__constant  RenderSceneInfo    * linfo,
              __constant  uchar              * bit_lookup,       // used to get data_index
              __global    float4             * ray_origins,
              __global    float4             * ray_directions,
-             //__global    float16            * camera,           // camera orign and SVD of inverse of camera matrix
              __global    uint4              * imgdims,          // dimensions of the input image
              __global    float              * vis_image,        // visibility image 
              __global    float              * pre_image,        // preinf image 
@@ -164,7 +165,6 @@ pre_inf_main(__constant  RenderSceneInfo    * linfo,
   float4 ray_o = ray_origins[ j*get_global_size(0) + i ]; 
   float4 ray_d = ray_directions[ j*get_global_size(0) + i ]; 
   float ray_ox, ray_oy, ray_oz, ray_dx, ray_dy, ray_dz;
-  //calc_scene_ray(linfo, camera, i, j, &ray_ox, &ray_oy, &ray_oz, &ray_dx, &ray_dy, &ray_dz);  
   calc_scene_ray_generic_cam(linfo, ray_o, ray_d, &ray_ox, &ray_oy, &ray_oz, &ray_dx, &ray_dy, &ray_dz);  
 
   //----------------------------------------------------------------------------
@@ -172,6 +172,7 @@ pre_inf_main(__constant  RenderSceneInfo    * linfo,
   // BEGIN RAY TRACE
   //----------------------------------------------------------------------------
   AuxArgs aux_args; 
+  aux_args.linfo   = linfo; 
   aux_args.alpha   = alpha_array; 
   aux_args.mog     = mixture_array; 
   aux_args.seg_len   = aux_array0;
@@ -206,6 +207,8 @@ typedef struct
            float   norm; 
            float*  ray_vis; 
            float*  ray_pre; 
+           
+  __constant RenderSceneInfo * linfo; 
 } AuxArgs;  
 
 //forward declare cast ray (so you can use it)
@@ -226,7 +229,6 @@ bayes_main(__constant  RenderSceneInfo    * linfo,
            __constant  uchar              * bit_lookup,        // used to get data_index
            __global    float4             * ray_origins,
            __global    float4             * ray_directions,           
-           //__global    float16            * camera,            // camera orign and SVD of inverse of camera matrix
            __global    uint4              * imgdims,           // dimensions of the input image
            __global    float              * vis_image,         // visibility image (for keeping vis accross blocks)
            __global    float              * pre_image,         // preinf image (for keeping pre accross blocks)
@@ -281,6 +283,7 @@ bayes_main(__constant  RenderSceneInfo    * linfo,
   // BEGIN RAY TRACE
   //----------------------------------------------------------------------------
   AuxArgs aux_args; 
+  aux_args.linfo      = linfo; 
   aux_args.alpha      = alpha_array; 
   aux_args.mog        = mixture_array; 
   aux_args.seg_len    = aux_array0;
@@ -374,6 +377,7 @@ update_bit_scene_main(__global RenderSceneInfo  * info,
 
       float mean_obs = convert_float(obs_int)/SEGLEN_FACTOR;
       mean_obs = mean_obs / cum_len;  
+      cum_len *= info->block_len;
       float cell_vis  = convert_float(vis_int)/SEGLEN_FACTOR;
       float cell_beta = convert_float(beta_int)/SEGLEN_FACTOR;
       float4 aux_data = (float4) (cum_len, mean_obs, cell_beta, cell_vis/cum_len);

@@ -52,7 +52,7 @@ namespace boxm2_ocl_render_expected_color_process_globals
     //#define STEP_CELL step_cell_render(mixture_array, alpha_array, data_ptr, d, &vis, &expected_int);
     vcl_string options = opts + " -D RENDER ";
     options += " -D DETERMINISTIC ";
-    options += " -D STEP_CELL=step_cell_render(aux_args,data_ptr,llid,d)";
+    options += " -D STEP_CELL=step_cell_render(aux_args,data_ptr,llid,d*linfo->block_len)";
 
     //have kernel construct itself using the context and device
     bocl_kernel * ray_trace_kernel=new bocl_kernel();

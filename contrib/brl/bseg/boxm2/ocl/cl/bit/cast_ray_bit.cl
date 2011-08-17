@@ -173,7 +173,7 @@ void cast_ray(
     if (t_vox_exit <= tblock) break;
 
     //// distance must be multiplied by the dimension of the bounding box
-    float d = (t_vox_exit - tblock) * linfo->block_len;
+    float d = (t_vox_exit - tblock); // * linfo->block_len;
     tblock = t_vox_exit;
 
     ////////////////////////////////////////////////////////////////////////////////

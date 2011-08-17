@@ -48,7 +48,7 @@ namespace boxm2_ocl_render_expected_depth_process_globals
     //set kernel options
     vcl_string options = " -D RENDER_DEPTH ";
     options +=  "-D DETERMINISTIC";
-    options += " -D STEP_CELL=step_cell_render_depth2(tblock,aux_args.alpha,data_ptr,d,vis,aux_args.expdepth,aux_args.expdepthsqr,aux_args.probsum)";
+    options += " -D STEP_CELL=step_cell_render_depth2(tblock,aux_args.alpha,data_ptr,d*linfo->block_len,vis,aux_args.expdepth,aux_args.expdepthsqr,aux_args.probsum)";
 
     //have kernel construct itself using the context and device
     bocl_kernel * ray_trace_kernel=new bocl_kernel();

@@ -54,7 +54,7 @@ namespace boxm2_ocl_probability_of_image_process_globals
   opts += " -D PROB_IMAGE -D DETERMINISTIC ";
   vcl_string options=opts;
 
-  opts += " -D STEP_CELL=step_cell_compute_probability_of_intensity(aux_args.mog,aux_args.alpha,data_ptr,d,vis,aux_args.prob_image,aux_args.intensity) ";
+  opts += " -D STEP_CELL=step_cell_compute_probability_of_intensity(aux_args.mog,aux_args.alpha,data_ptr,d*linfo->block_len,vis,aux_args.prob_image,aux_args.intensity) ";
 
     //have kernel construct itself using the context and device
     bocl_kernel * ray_trace_kernel=new bocl_kernel();
