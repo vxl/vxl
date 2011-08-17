@@ -36,7 +36,6 @@ seg_len_main(__constant  RenderSceneInfo    * linfo,
              __constant  uchar              * bit_lookup,       // used to get data_index
              __global    float4             * ray_origins,
              __global    float4             * ray_directions,
-             //__global    float16            * camera,           // camera orign and SVD of inverse of camera matrix
              __global    uint4              * imgdims,          // dimensions of the input image
              __global    float4             * in_image,         // the input image
              __global    float              * output,
@@ -48,6 +47,7 @@ seg_len_main(__constant  RenderSceneInfo    * linfo,
 {
   //get local id (0-63 for an 8x8) of this patch
   uchar llid = (uchar)(get_local_id(0) + get_local_size(0)*get_local_id(1));
+  
   //initialize pre-broken ray information (non broken rays will be re initialized)
   ray_bundle_array[llid] = (short2) (-1, 0);
   cell_ptrs[llid] = -1;
@@ -79,7 +79,6 @@ seg_len_main(__constant  RenderSceneInfo    * linfo,
   float4 ray_o = ray_origins[ imIndex ]; 
   float4 ray_d = ray_directions[ imIndex ]; 
   float ray_ox, ray_oy, ray_oz, ray_dx, ray_dy, ray_dz;
-  //calc_scene_ray(linfo, camera, i, j, &ray_ox, &ray_oy, &ray_oz, &ray_dx, &ray_dy, &ray_dz);  
   calc_scene_ray_generic_cam(linfo, ray_o, ray_d, &ray_ox, &ray_oy, &ray_oz, &ray_dx, &ray_dy, &ray_dz);  
 
   //----------------------------------------------------------------------------
@@ -182,7 +181,6 @@ pre_inf_main(__constant  RenderSceneInfo    * linfo,
              __constant  uchar              * bit_lookup,       // used to get data_index
              __global    float4             * ray_origins,
              __global    float4             * ray_directions,
-             //__global    float16            * camera,           // camera orign and SVD of inverse of camera matrix
              __global    uint4              * imgdims,          // dimensions of the input image
              __global    float              * vis_image,        // visibility image 
              __global    float              * pre_image,        // preinf image 
@@ -284,7 +282,6 @@ bayes_main(__constant  RenderSceneInfo    * linfo,
            __constant  uchar              * bit_lookup,       // used to get data_index
            __global    float4             * ray_origins,
            __global    float4             * ray_directions,
-           //__global    float16            * camera,           // camera orign and SVD of inverse of camera matrix
            __global    uint4              * imgdims,          // dimensions of the input image
            __global    float              * vis_image,        // visibility image (for keeping vis accross blocks)
            __global    float              * pre_image,        // preinf image (for keeping pre accross blocks)
@@ -522,7 +519,7 @@ update_bit_scene_main(__global RenderSceneInfo  * info,
       float cell_vis  = convert_float(vis_int) / (SEGLEN_FACTOR*cum_len);
       float cell_beta = convert_float(beta_int) / (SEGLEN_FACTOR*cum_len);
       float4 aux_data = (float4) (cum_len, mean_obs, cell_beta, cell_vis/cum_len);
-      float8 mixture  = convert_float8(mixture_array[gid])/NORM;
+      CONVERT_FUNC_FLOAT8(mixture,mixture_array[gid])/NORM;
       
       //single gauss appearance update
       float nob_single = convert_float(nobs_array[gid])/100.0f; 
@@ -540,7 +537,7 @@ update_bit_scene_main(__global RenderSceneInfo  * info,
       //reset the cells in memory
       alpha_array[gid]      = max(alphamin, alpha);  //TODO COMMENTED OUT FOR PAINTING
       float8 post_mix       = mixture * (float) NORM;
-      CONVERT_FUNC_SAT_RTE(mixture_array[gid],post_mix)
+      CONVERT_FUNC_SAT_RTE(mixture_array[gid],post_mix); 
     }
     
     //clear out aux data

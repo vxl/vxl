@@ -64,7 +64,7 @@ namespace boxm2_ocl_update_color_process_globals
 
     //seg len pass
     bocl_kernel* seg_len = new bocl_kernel();
-    vcl_string seg_opts = options + " -D SEGLEN -D STEP_CELL=step_cell_seglen(aux_args,data_ptr,llid,d) ";
+    vcl_string seg_opts = options + " -D SEGLEN -D STEP_CELL=step_cell_seglen(aux_args,data_ptr,llid,d*linfo->block_len) ";
     seg_len->create_kernel(&device->context(), device->device_id(), src_paths, "seg_len_main", seg_opts, "update_color::seg_len");
     vec_kernels.push_back(seg_len);
 
@@ -75,7 +75,7 @@ namespace boxm2_ocl_update_color_process_globals
     vec_kernels.push_back(comp);
 
     bocl_kernel* pre_inf = new bocl_kernel();
-    vcl_string pre_opts = options + " -D PREINF -D STEP_CELL=step_cell_preinf(aux_args,data_ptr,llid,d) ";
+    vcl_string pre_opts = options + " -D PREINF -D STEP_CELL=step_cell_preinf(aux_args,data_ptr,llid,d*linfo->block_len) ";
     pre_inf->create_kernel(&device->context(), device->device_id(), src_paths, "pre_inf_main", pre_opts, "update_color::pre_inf");
     vec_kernels.push_back(pre_inf);
 
@@ -86,7 +86,7 @@ namespace boxm2_ocl_update_color_process_globals
 
     //push back cast_ray_bit
     bocl_kernel* bayes_main = new bocl_kernel();
-    vcl_string bayes_opt = options + " -D BAYES -D STEP_CELL=step_cell_bayes(aux_args,data_ptr,llid,d) ";
+    vcl_string bayes_opt = options + " -D BAYES -D STEP_CELL=step_cell_bayes(aux_args,data_ptr,llid,d*linfo->block_len) ";
     bayes_main->create_kernel(&device->context(), device->device_id(), src_paths, "bayes_main", bayes_opt, "update_color::bayes_main");
     vec_kernels.push_back(bayes_main);
 

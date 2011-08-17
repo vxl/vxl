@@ -104,7 +104,7 @@ void step_cell_preinf(AuxArgs aux_args, int data_ptr, uchar llid, float d)
     //keep track of cells being hit
     //cell data, i.e., alpha and app model is needed for some passes
     float  alpha    = aux_args.alpha[data_ptr];
-    float8 mixture  = convert_float8(aux_args.mog[data_ptr])/(float)NORM;
+    CONVERT_FUNC_FLOAT8(mixture,aux_args.mog[data_ptr])/NORM;
 
     float cum_len  = convert_float(aux_args.seg_len[data_ptr])/SEGLEN_FACTOR;
     float4 meanObs = convert_float4(as_uchar4(aux_args.mean_obs[data_ptr]))/255.0f; 
@@ -245,7 +245,7 @@ void step_cell_bayes(AuxArgs aux_args, int data_ptr, uchar llid, float d)
     //if this current thread is a segment leader...
     //cell data, i.e., alpha and app model is needed for some passes
     float  alpha    = aux_args.alpha[data_ptr];
-    float8 mixture  = convert_float8(aux_args.mog[data_ptr])/(float)NORM;
+    CONVERT_FUNC_FLOAT8(mixture,aux_args.mog[data_ptr])/NORM;
     float weight3   = (1.0f-mixture.s2-mixture.s5);
 
     //load aux data

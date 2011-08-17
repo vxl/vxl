@@ -375,12 +375,12 @@ update_bit_scene_main(__global RenderSceneInfo  * info,
       int vis_int = aux_array2[gid]; 
       int beta_int= aux_array3[gid];
 
-      float mean_obs = convert_float(obs_int)/SEGLEN_FACTOR;
-      mean_obs = mean_obs / cum_len;  
+      float mean_obs = convert_float(obs_int) / convert_float(len_int);
+      //mean_obs = mean_obs / cum_len;  
       cum_len *= info->block_len;
-      float cell_vis  = convert_float(vis_int)/SEGLEN_FACTOR;
-      float cell_beta = convert_float(beta_int)/SEGLEN_FACTOR;
-      float4 aux_data = (float4) (cum_len, mean_obs, cell_beta, cell_vis/cum_len);
+      float cell_vis  = convert_float(vis_int) / convert_float(len_int);
+      float cell_beta = convert_float(beta_int) / (convert_float(len_int)*info->block_len);
+      float4 aux_data = (float4) (cum_len, mean_obs, cell_beta, cell_vis);
       float4 nobs     = convert_float4(nobs_array[gid]);
       CONVERT_FUNC_FLOAT8(mixture,mixture_array[gid])/NORM;
       float16 data = (float16) (alpha,
@@ -400,7 +400,6 @@ update_bit_scene_main(__global RenderSceneInfo  * info,
       float4 post_nobs      = (float4) (data.s4, data.s8, data.sb, data.sc*100.0);
       CONVERT_FUNC_SAT_RTE(mixture_array[gid],post_mix);
       nobs_array[gid]       = convert_ushort4_sat_rte(post_nobs);
-
     }
     
     //clear out aux data

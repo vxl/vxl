@@ -328,10 +328,10 @@ void update_cell(float16 * data, float4 aux_data,float t_match, float init_sigma
                            &mu1,&sigma1,&w1,&Nobs1,
                            &mu2,&sigma2,&w2,&Nobs2,
                            &Nobs_mix);
-    float beta=aux_data.z/aux_data.x;
-    
+                           
+    float beta = aux_data.z; //aux_data.z/aux_data.x;
     clamp(beta,0.5f,2.0f);
-    (*data).s0 *= beta;//aux_data.z/aux_data.x;
+    (*data).s0 *= beta; 
     (*data).s1=mu0; (*data).s2=sigma0, (*data).s3=w0;(*data).s4=(float)Nobs0;
     (*data).s5=mu1; (*data).s6=sigma1, (*data).s7=w1;(*data).s8=(float)Nobs1;
     (*data).s9=mu2; (*data).sa=sigma2, (*data).sb=(float)Nobs2;

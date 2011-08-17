@@ -51,9 +51,15 @@ void step_cell_preinf(AuxArgs aux_args, int data_ptr, uchar llid, float d)
     CONVERT_FUNC_FLOAT8(mixture,aux_args.mog[data_ptr])/NORM;
     float  weight3  = (1.0f-mixture.s2-mixture.s5);
 
+    int cum_int = aux_args.seg_len[data_ptr]; 
+    int mean_int = aux_args.mean_obs[data_ptr]; 
+    float mean_obs = convert_float(mean_int) / convert_float(cum_int); 
+    float cum_len = convert_float(cum_int) / SEGLEN_FACTOR; 
+/*
     float cum_len  = convert_float(aux_args.seg_len[data_ptr])/SEGLEN_FACTOR;
     float mean_obs = convert_float(aux_args.mean_obs[data_ptr])/SEGLEN_FACTOR;
     mean_obs = mean_obs/cum_len;
+*/
 
     //calculate pre_infinity denomanator (shape of image)
     pre_infinity_opt( d*aux_args.linfo->block_len, 
@@ -123,9 +129,17 @@ void step_cell_bayes(AuxArgs aux_args, int data_ptr, uchar llid, float d)
     float weight3   = (1.0f-mixture.s2-mixture.s5);
 
     //load aux data
+/*
     float cum_len  = convert_float(aux_args.seg_len[data_ptr])/SEGLEN_FACTOR;
     float mean_obs = convert_float(aux_args.mean_obs[data_ptr])/SEGLEN_FACTOR;
     mean_obs = mean_obs/cum_len;
+    
+*/
+    int cum_int = aux_args.seg_len[data_ptr]; 
+    int mean_int = aux_args.mean_obs[data_ptr]; 
+    float mean_obs = convert_float(mean_int) / convert_float(cum_int); 
+    float cum_len = convert_float(cum_int) / SEGLEN_FACTOR; 
+    
 
     float ray_beta, vis_cont;
     bayes_ratio_ind( d*aux_args.linfo->block_len,
