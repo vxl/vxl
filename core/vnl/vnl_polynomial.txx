@@ -98,7 +98,7 @@ vnl_polynomial<T> vnl_polynomial<T>::operator%(vnl_polynomial<T> const& f) const
   prod.erase(prod.begin(), prod.begin()+m);
   vcl_vector<T> diff = coeffs_;
   diff.erase(diff.begin(), diff.begin()+m);
-  for (int i=0; i<=n; ++i) diff[i] -= prod[i];
+  for (int i=0; i<n; ++i) diff[i] -= prod[i];
   while (diff.size() > 0 && diff[0] == T(0)) diff.erase(diff.begin());
   return vnl_polynomial<T>(diff);
 }
