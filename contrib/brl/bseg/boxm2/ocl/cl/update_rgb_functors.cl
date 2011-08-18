@@ -108,7 +108,6 @@ void step_cell_preinf(AuxArgs aux_args, int data_ptr, uchar llid, float d)
 
     float cum_len  = convert_float(aux_args.seg_len[data_ptr])/SEGLEN_FACTOR;
     float4 meanObs = convert_float4(as_uchar4(aux_args.mean_obs[data_ptr]))/255.0f; 
-    float mean_obs = meanObs.x; 
 
     //calculate pre_infinity denomanator (shape of image)
     // if total length of rays is too small, do nothing 
@@ -121,7 +120,7 @@ void step_cell_preinf(AuxArgs aux_args, int data_ptr, uchar llid, float d)
     }
 
     // calc vis and pre infinity 
-    float diff_omega = exp(-alpha * d);
+    float diff_omega = exp(-alpha * d * aux_args.linfo->block_len);
     float vis_prob_end = (*aux_args.vis_inf) * diff_omega; 
 
     // updated pre                      Omega         *   PI  
@@ -156,14 +155,7 @@ void bayes_ratio_rgb_functor(         float   seg_len,          // segment lengt
     float PI = 0.0f;
     if (seg_len>1.0e-10f)
     {
-        /* The mean intensity for the cell */
-/*
-        PI = gauss_prob_density_rgb( mean_obs,
-                                     mixture.s0123, //MEAN RGB
-                                     mixture.s4567);  //SIGMA RGB
-*/
-        /* The mean intensity for the cell */
-        //PI = gauss_prob_density(mean_obs, mixture.s0, mixture.s4); 
+        // The mean intensity for the cell 
         PI = gauss_prob_density_rgb( mean_obs, mixture.s0123, mixture.s4567);  
     }
 
@@ -249,7 +241,6 @@ void step_cell_bayes(AuxArgs aux_args, int data_ptr, uchar llid, float d)
     float weight3   = (1.0f-mixture.s2-mixture.s5);
 
     //load aux data
-    float cum_len  = convert_float(aux_args.seg_len[data_ptr])/SEGLEN_FACTOR;
     float4 meanObs = convert_float4(as_uchar4(aux_args.mean_obs[data_ptr]))/255.0f; 
   
 #ifdef ATOMIC_OPT
@@ -263,7 +254,7 @@ void step_cell_bayes(AuxArgs aux_args, int data_ptr, uchar llid, float d)
     barrier(CLK_LOCAL_MEM_FENCE);
 
     //calculate bayes ratio
-    bayes_ratio_rgb_functor(d,
+    bayes_ratio_rgb_functor(d * aux_args.linfo->block_len,
                             meanObs,
                             aux_args.ray_pre,
                             aux_args.ray_vis,
@@ -289,7 +280,7 @@ void step_cell_bayes(AuxArgs aux_args, int data_ptr, uchar llid, float d)
     //slow beta calculation ----------------------------------------------------
     float cell_beta = 0.0f;
     float cell_vis = 0.0f;
-    bayes_ratio_rgb_ind( d,
+    bayes_ratio_rgb_ind( d * aux_args.linfo->block_len,
                          meanObs,
                          aux_args.ray_pre,
                          aux_args.ray_vis,

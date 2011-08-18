@@ -123,8 +123,7 @@ compress_rgb(__global RenderSceneInfo * info,
   if (gid<datasize)
   {
     //get the segment length
-    int len_int = aux_seg_len[gid]; 
-    float cum_len  = convert_float(len_int)/SEGLEN_FACTOR; 
+    int len_int = aux_seg_len[gid]; //this is cum_len * SEG_LEN
 
     //get cumulative observation values for r g and b
     int r_int = aux_mean_obsY[gid]; //aux_array[datasize + gid];   //Y int
@@ -133,8 +132,7 @@ compress_rgb(__global RenderSceneInfo * info,
     
     //normalize mean obs by CUM_LEN and SEGLEN_FACTOR
     int4 rgbs = (int4) (r_int, g_int, b_int, 0); 
-    float4 mean_obs = (float4) convert_float4(rgbs) / SEGLEN_FACTOR;
-    mean_obs = mean_obs / cum_len; 
+    float4 mean_obs = (float4) convert_float4(rgbs) / (convert_float(len_int)); 
     
     //------------- YUV EDIT ---------------
     //now mean_obs should have Y, U, V where U in [-.436, .436] and V in [-.615, .615]
@@ -163,6 +161,7 @@ typedef struct
   __global int* mean_obs; 
            float* vis_inf; 
            float* pre_inf; 
+  __constant  RenderSceneInfo    * linfo;
 } AuxArgs;  
 
 //forward declare cast ray (so you can use it)
@@ -220,7 +219,6 @@ pre_inf_main(__constant  RenderSceneInfo    * linfo,
   float4 ray_o = ray_origins[ j*get_global_size(0) + i ]; 
   float4 ray_d = ray_directions[ j*get_global_size(0) + i ]; 
   float ray_ox, ray_oy, ray_oz, ray_dx, ray_dy, ray_dz;
-  //calc_scene_ray(linfo, camera, i, j, &ray_ox, &ray_oy, &ray_oz, &ray_dx, &ray_dy, &ray_dz);  
   calc_scene_ray_generic_cam(linfo, ray_o, ray_d, &ray_ox, &ray_oy, &ray_oz, &ray_dx, &ray_dy, &ray_dz);  
 
   //----------------------------------------------------------------------------
@@ -228,6 +226,7 @@ pre_inf_main(__constant  RenderSceneInfo    * linfo,
   // BEGIN RAY TRACE
   //----------------------------------------------------------------------------
   AuxArgs aux_args; 
+  aux_args.linfo   = linfo; 
   aux_args.alpha   = alpha_array; 
   aux_args.mog     = mixture_array; 
   aux_args.seg_len   = aux_seg_len;
@@ -262,6 +261,7 @@ typedef struct
            float   norm; 
            float*  ray_vis; 
            float*  ray_pre; 
+  __constant RenderSceneInfo *linfo;
 } AuxArgs;  
 
 //forward declare cast ray (so you can use it)
@@ -328,7 +328,6 @@ bayes_main(__constant  RenderSceneInfo    * linfo,
   float4 ray_o = ray_origins[ j*get_global_size(0) + i ]; 
   float4 ray_d = ray_directions[ j*get_global_size(0) + i ]; 
   float ray_ox, ray_oy, ray_oz, ray_dx, ray_dy, ray_dz;
-  //calc_scene_ray(linfo, camera, i, j, &ray_ox, &ray_oy, &ray_oz, &ray_dx, &ray_dy, &ray_dz);  
   calc_scene_ray_generic_cam(linfo, ray_o, ray_d, &ray_ox, &ray_oy, &ray_oz, &ray_dx, &ray_dy, &ray_dz);  
   
   //----------------------------------------------------------------------------
@@ -336,6 +335,7 @@ bayes_main(__constant  RenderSceneInfo    * linfo,
   // BEGIN RAY TRACE
   //----------------------------------------------------------------------------
   AuxArgs aux_args; 
+  aux_args.linfo   = linfo; 
   aux_args.alpha   = alpha_array; 
   aux_args.mog     = mixture_array; 
   aux_args.seg_len = aux_seg_len;
@@ -499,7 +499,7 @@ update_bit_scene_main(__global RenderSceneInfo  * info,
 
     //get cell cumulative length and make sure it isn't 0
     int len_int = aux_seg_len[gid]; 
-    float cum_len  = convert_float(len_int)/SEGLEN_FACTOR; 
+    float cum_len  = info->block_len * convert_float(len_int)/SEGLEN_FACTOR; 
 
     //minimum alpha value, don't let blocks get below this
     float  alphamin = -log(1.0-0.0001)/cell_min;
@@ -511,14 +511,11 @@ update_bit_scene_main(__global RenderSceneInfo  * info,
       int vis_int = aux_vis[gid]; 
       int beta_int= aux_beta[gid];
       
-      //float mean_obs = convert_float(obs_int)/SEGLEN_FACTOR;
-      //mean_obs = mean_obs / cum_len;  
+      //mean obs is already normalized
       float4 meanObs = convert_float4(as_uchar4(obs_int))/255.0f; 
       float mean_obs = meanObs.x; 
-      
-      float cell_vis  = convert_float(vis_int) / (SEGLEN_FACTOR*cum_len);
-      float cell_beta = convert_float(beta_int) / (SEGLEN_FACTOR*cum_len);
-      float4 aux_data = (float4) (cum_len, mean_obs, cell_beta, cell_vis/cum_len);
+      float cell_vis  = convert_float(vis_int) / (convert_float(len_int) * info->block_len); //(SEGLEN_FACTOR*cum_len);
+      float cell_beta = convert_float(beta_int) / (convert_float(len_int) * info->block_len); //(SEGLEN_FACTOR*cum_len);
       CONVERT_FUNC_FLOAT8(mixture,mixture_array[gid])/NORM;
       
       //single gauss appearance update
