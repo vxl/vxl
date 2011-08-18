@@ -1,6 +1,10 @@
 #############################################################################
 # PROVIDES higher level python functions to make boxm2_batch 
 # code more readable/refactored
+#
+# to use our boxm2 python binding, be sure to add: 
+#   <vxl_build_root>/lib/:<vxl_src_root>/contrib/brl/bseg/boxm2/pyscripts/ 
+# to your PYTHONPATH environment variable.  
 #############################################################################
 import boxm2_batch,os;
 boxm2_batch.register_processes();
@@ -11,6 +15,96 @@ class dbvalue:
   def __init__(self, index, type):
     self.id = index    # unsigned integer
     self.type = type   # string
+    
+    
+# boxm2_adaptor class offers super simple model manipulation syntax
+# you can always force the process to use CPP by just passing in "cpp" as the last
+# arg to any function in this class
+class boxm2_adaptor: 
+
+  #scene adaptor init
+  def __init__(self, scene_str, rgb=False, device_string="gpu"):
+    
+    #init (list) self vars
+    self.rgb = rgb; 
+    self.scene = None; 
+    self.active_cache = None; 
+    self.device_string = None; 
+    self.cpu_cache = None;
+    self.device = None; 
+    self.opencl_cache = None; 
+    self.ocl_mgr = None; 
+   
+    #if device_string is gpu, load up opencl
+    if device_string[0:3]=="gpu" :  
+      self.scene, self.cpu_cache, self.ocl_mgr, self.device, self.opencl_cache = load_opencl(scene_str); 
+      self.active_cache = self.opencl_cache; 
+    elif device_string[0:3]=="cpp" : 
+      scene.scene, self.cpu_cache = load_cpp(scene_str);     
+      self.active_cache = self.cpu_cache; 
+  
+  #update wrapper, can pass in a Null device to use 
+  def update(self, cam, img, mask_path="", device_string="") :
+    cache = self.active_cache; 
+    dev = self.device; 
+    
+    #check if force gpu or cpu
+    if device_string=="gpu" : 
+      cache = self.opencl_cache; 
+    elif device_string=="cpp" : 
+      cache = self.cpu_cache; 
+      dev = None; 
+      
+    #run update grey or RGB
+    if self.rgb :
+      update_rgb(self.scene, cache, cam, img, dev); 
+    else :
+      update_grey(self.scene, cache, cam, img, dev); 
+      
+  #render wrapper, same as above
+  def render(self, cam, ni=1280, nj=720, device_string="") : 
+    cache = self.active_cache; 
+    dev = self.device; 
+    #check if force gpu or cpu
+    if device_string=="gpu" : 
+      cache = self.opencl_cache; 
+    elif device_string=="cpp" : 
+      cache = self.cpu_cache; 
+      dev = None; 
+    if self.rgb : 
+      expimg = render_rgb(self.scene, cache, cam, ni, nj, dev); 
+    else : 
+      expimg = render_grey(self.scene, cache, cam, ni, nj, dev); 
+    return expimg; 
+  
+  def refine(self, thresh=0.3, device_string="") :
+    if device_string=="":
+      refine(self.scene, self.active_cache, thresh, self.device); 
+    elif device_string=="gpu" :
+      refine(self.scene, self.opencl_cache, thresh, self.device); 
+    elif device_string=="cpp" :
+      refine(self.scene, self.cpu_cache, thresh, None); 
+
+  def merge(self, thresh=0.3, device_string="") :
+    if device_string=="":
+      merge(self.scene, self.active_cache, thresh, self.device); 
+    elif device_string=="gpu" :
+      merge(self.scene, self.opencl_cache, thresh, self.device); 
+    elif device_string=="cpp" :
+      merge(self.scene, self.cpu_cache, thresh, None); 
+
+  def median_filter(self, device_string="") : 
+    if device_string=="":
+      median_filter(self.scene, self.active_cache, self.device); 
+    elif device_string=="gpu" : 
+      median_filter(self.scene, self.opencl_cache, self.device); 
+    elif device_string=="cpp" :
+      median_filter(self.scene, self.cpu_cache, None); 
+
+  #only write the cpu_cache to disk
+  def write_cache(self): 
+    write_cache(self.cpu_cache); 
+       
 
 #does the opencl prep work on an input scene
 def load_opencl(scene_str, device_string="gpu"):
@@ -104,6 +198,24 @@ def update_grey(scene, cache, cam, img, device=None, mask="") :
     boxm2_batch.run_process();
   else : 
     print "ERROR: Cache type not recognized: ", cache.type; 
+    
+# Generic update - will use GPU if device/openclcache are passed in
+def update_rgb(scene, cache, cam, img, device=None, mask="") :
+  #If no device is passed in, do cpu update
+  if cache.type == "boxm2_cache_sptr" :
+    print "boxm2_batch rgb CPU update not implemented";
+  elif cache.type == "boxm2_opencl_cache_sptr" and device : 
+    print("boxm2_batch GPU update");
+    boxm2_batch.init_process("boxm2OclUpdateColorProcess");
+    boxm2_batch.set_input_from_db(0,device);
+    boxm2_batch.set_input_from_db(1,scene);
+    boxm2_batch.set_input_from_db(2,cache);
+    boxm2_batch.set_input_from_db(3,cam);
+    boxm2_batch.set_input_from_db(4,img);
+    boxm2_batch.run_process();
+  else : 
+    print "ERROR: Cache type not recognized: ", cache.type; 
+
  
 # Generic render, returns a dbvalue expected image
 # Cache can be either an OPENCL cache or a CPU cache
@@ -121,6 +233,25 @@ def render_grey(scene, cache, cam, ni=1280, nj=720, device=None) :
     return exp_image; 
   elif cache.type == "boxm2_opencl_cache_sptr" and device : 
     boxm2_batch.init_process("boxm2OclRenderExpectedImageProcess");
+    boxm2_batch.set_input_from_db(0,device);
+    boxm2_batch.set_input_from_db(1,scene);
+    boxm2_batch.set_input_from_db(2,cache);
+    boxm2_batch.set_input_from_db(3,cam);
+    boxm2_batch.set_input_unsigned(4,ni);
+    boxm2_batch.set_input_unsigned(5,nj);
+    boxm2_batch.run_process();
+    (id,type) = boxm2_batch.commit_output(0);
+    exp_image = dbvalue(id,type);
+    return exp_image; 
+  else : 
+    print "ERROR: Cache type not recognized: ", cache.type; 
+    
+# Generic render, returns a dbvalue expected image
+def render_rgb(scene, cache, cam, ni=1280, nj=720, device=None) :
+  if cache.type == "boxm2_cache_sptr" :
+    print "boxm2_batch CPU render rgb not yet implemented";
+  elif cache.type == "boxm2_opencl_cache_sptr" and device : 
+    boxm2_batch.init_process("boxm2OclRenderExpectedColorProcess");
     boxm2_batch.set_input_from_db(0,device);
     boxm2_batch.set_input_from_db(1,scene);
     boxm2_batch.set_input_from_db(2,cache);
@@ -200,6 +331,7 @@ def write_cache(cache) :
     boxm2_batch.run_process();
   else : 
     print "ERROR: Cache type needs to be boxm2_cache_sptr, not ", cache.type; 
+
 
 ###################################################
 # Camera/Image loading and saving
