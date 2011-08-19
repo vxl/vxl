@@ -1,5 +1,6 @@
 #include "boxm2_opencl_cache.h"
 #include "vnl/vnl_random.h"
+#include "vcl_sstream.h"
 //:
 // \file
 
@@ -10,9 +11,8 @@ boxm2_opencl_cache::boxm2_opencl_cache(boxm2_scene_sptr scene,
                                        unsigned int maxBlocks)
 : scene_(scene), maxBlocksInCache(maxBlocks), bytesInCache_(0), block_info_(0), device_(device)
 {
-  // store max bytes allowed in cache - subtract 15% MB for saftey
-  maxBytesInCache_ = (unsigned long) device->info().total_global_memory_;
-  maxBytesInCache_ -= (unsigned long) (maxBytesInCache_ / 5);
+  // store max bytes allowed in cache - use only 80 percent of the memory
+  maxBytesInCache_ = (unsigned long) (device->info().total_global_memory_ * .85);
 
   // by default try to create an LRU cache
   boxm2_lru_cache::create(scene);
@@ -93,6 +93,9 @@ bool boxm2_opencl_cache::clear_cache()
   }
   cached_data_.clear();
 
+  //clear LRU list
+  lru_order_.clear(); 
+
   // notify exceptional case
   return true;
 }
@@ -127,6 +130,9 @@ long boxm2_opencl_cache::bytes_in_cache()
 //: realization of abstract "get_block(block_id)"
 bocl_mem* boxm2_opencl_cache::get_block(boxm2_block_id id)
 {
+  //requesting block pushes it to the front of the list
+  this->lru_push_front(id); 
+  
   // then look for the block you're requesting
   if ( cached_blocks_.find(id) != cached_blocks_.end() ) {
     // load block info
@@ -150,20 +156,11 @@ bocl_mem* boxm2_opencl_cache::get_block(boxm2_block_id id)
   boxm2_block* loaded = cpu_cache_->get_block(id);
   boxm2_array_3d<uchar16>& trees = loaded->trees();
   vcl_size_t toLoadSize = trees.size()*sizeof(uchar16);
-
-  if ( this->bytes_in_cache()+toLoadSize > maxBytesInCache_ && !cached_blocks_.empty() )
+  while ( this->bytes_in_cache()+toLoadSize > maxBytesInCache_ && !cached_blocks_.empty() )
   {
-    // grab random block
-    vnl_random rand;
-    unsigned rIdx = rand.lrand32(0, cached_blocks_.size()-1);
-    vcl_map<boxm2_block_id, bocl_mem*>::iterator iter = cached_blocks_.begin();
-    for (unsigned int i=0; i<rIdx; ++i) ++iter;
-
-    // subtract size and delete
-    bocl_mem* toDelete = iter->second;
-    bytesInCache_ -= toDelete->num_bytes();
-    delete toDelete;
-    cached_blocks_.erase(iter);
+    vcl_cout<<"Bytes in cache: "<<bytesInCache_<<" max bytes in cache! "<<maxBytesInCache_<<vcl_endl;
+    boxm2_block_id lru_id = this->lru_remove_last(); 
+    if(lru_id == id) vcl_cout<<"boxm2_opencl_cache:: Single Block Size is too big for GPU RAM "<<vcl_endl;
   }
 
   // otherwise load it from disk with blocking
@@ -216,6 +213,9 @@ bocl_mem* boxm2_opencl_cache::get_block_info(boxm2_block_id id)
 // Possible issue: if \p num_bytes is greater than 0, should it then always initialize a new data object?
 bocl_mem* boxm2_opencl_cache::get_data(boxm2_block_id id, vcl_string type, vcl_size_t num_bytes, bool read_only)
 {
+  //push id to front of LRU list
+  this->lru_push_front(id); 
+  
   // grab a reference to the map of cached_data_
   vcl_map<boxm2_block_id, bocl_mem*>& data_map =
     this->cached_data_map(type);
@@ -224,23 +224,6 @@ bocl_mem* boxm2_opencl_cache::get_data(boxm2_block_id id, vcl_string type, vcl_s
   vcl_map<boxm2_block_id, bocl_mem*>::iterator iter = data_map.find(id);
   if ( iter != data_map.end() ) {
     return iter->second;
-#if 0 // commented out because refine CLEARS CACHE
-    // mem currently stored
-    bocl_mem* mem = data_map[id];
-    if ( num_bytes > 0 && mem->num_bytes() != num_bytes )
-    {
-      // if the data size doesn't match, match it.
-      bocl_mem* data = new bocl_mem(*context_, NULL, num_bytes, type);
-      data->create_buffer(CL_MEM_READ_WRITE);
-      this->deep_replace_data(id,type,data);
-      data->zero_gpu_buffer(*queue_);
-
-      delete mem;
-      data_map.erase(iter);
-      data_map[id] = data;
-      return data;
-    }
-#endif // 0
   }
 
   // load data into CPU cache and check size to see if GPU cache needs cleaning
@@ -255,14 +238,8 @@ bocl_mem* boxm2_opencl_cache::get_data(boxm2_block_id id, vcl_string type, vcl_s
   while ( this->bytes_in_cache()+toLoadSize > maxBytesInCache_ && !data_map.empty() ) // was: data_map.size() >= maxBlocksInCache
   {
     vcl_cout<<"Bytes in cache: "<<bytesInCache_<<" max bytes in cache! "<<maxBytesInCache_<<vcl_endl;
-    vnl_random rand;
-    unsigned rIdx = rand.lrand32(0, data_map.size()-1);
-    vcl_map<boxm2_block_id, bocl_mem*>::iterator riter = data_map.begin();
-    for (unsigned int i=0; i<rIdx; ++i) ++riter;
-    bocl_mem* toDelete = riter->second;
-    bytesInCache_ -= toDelete->num_bytes();
-    delete toDelete;
-    data_map.erase(riter);
+    boxm2_block_id lru_id = this->lru_remove_last(); 
+    if(lru_id == id) vcl_cout<<"boxm2_opencl_cache:: Single Block Size is too big for GPU RAM "<<vcl_endl;
   }
 
   // data block isn't found...
@@ -330,6 +307,75 @@ vcl_map<boxm2_block_id, bocl_mem*>& boxm2_opencl_cache::cached_data_map(vcl_stri
   // grab a reference to the map of cached_data_ and return it
   vcl_map<boxm2_block_id, bocl_mem*>& data_map = cached_data_[prefix];
   return data_map;
+}
+
+//: helper method to insert into LRU list
+void boxm2_opencl_cache::lru_push_front( boxm2_block_id id )
+{
+  //serach for it in the list, if it's there, delete it
+  vcl_list<boxm2_block_id>::iterator iter;
+  for(iter=lru_order_.begin(); iter!=lru_order_.end(); ++iter) {
+    if( *iter == id ) {
+      lru_order_.erase(iter); 
+      break;
+    }
+  }
+  
+  //push to front of list
+  lru_order_.push_front(id); 
+}
+
+//: helper to remove all data and block memory by ID
+boxm2_block_id boxm2_opencl_cache::lru_remove_last() 
+{
+  vcl_cout<<"LRU CACHE STATE: \n"<<this->to_string()<<vcl_endl;
+  
+  //grab and remove last element
+  boxm2_block_id lru_id = lru_order_.back();
+  lru_order_.pop_back(); 
+   
+  // then look for the block to delete
+  vcl_map<boxm2_block_id, bocl_mem*>::iterator blk = cached_blocks_.find(lru_id);
+  if ( blk != cached_blocks_.end() ) {
+    bocl_mem* toDelete = blk->second;
+    bytesInCache_ -= toDelete->num_bytes();
+    cached_blocks_.erase(blk);
+    delete toDelete;
+  }
+  else {
+    vcl_cout<<"boxm2_opencl_cache::lru_remove_last failed to find last element of list"<<vcl_endl;
+  }
+  
+  //now look for data to delete
+  vcl_map<vcl_string, vcl_map<boxm2_block_id, bocl_mem*> >::iterator datas;
+  for (datas=cached_data_.begin(); datas!=cached_data_.end(); ++datas)
+  {
+    vcl_string data_type = datas->first; 
+    vcl_map<boxm2_block_id, bocl_mem*>& data_map = datas->second;
+    vcl_map<boxm2_block_id, bocl_mem*>::iterator dat = data_map.find(lru_id);
+    if ( dat != data_map.end() ) {
+      bocl_mem* toDelete = dat->second;
+      bytesInCache_ -= toDelete->num_bytes();
+      data_map.erase(dat); 
+      delete toDelete; 
+    }
+  }
+  
+  return lru_id; 
+}
+
+
+vcl_string boxm2_opencl_cache::to_string() {
+  vcl_stringstream s; 
+  s << "boxm2_opencl_cache::order: "; 
+  vcl_list<boxm2_block_id>::iterator iter; 
+  for(iter=lru_order_.begin(); iter!=lru_order_.end(); ++iter)
+  {
+    boxm2_block_id id = (*iter); 
+    s << id << " ";
+  }
+  s << vcl_endl;
+  return s.str(); 
 }
 
 // === Dummy (empty) instantiations for binary I/O

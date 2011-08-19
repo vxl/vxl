@@ -14,6 +14,7 @@
 #include <boxm2/io/boxm2_lru_cache.h>
 #include <brdb/brdb_value_sptr.h>
 #include <vcl_vector.h>
+#include <vcl_list.h>
 #ifdef DEBUG
 #include <vcl_iostream.h>
 #endif
@@ -63,6 +64,9 @@ class boxm2_opencl_cache: public vbl_ref_count
     //: deep_replace data replaces not only the current data on the gpu cached, but pushes a block to the cpu cache
     void deep_replace_data(boxm2_block_id id, vcl_string type, bocl_mem* mem, bool read_only=true);
 
+    //: to string method prints out LRU order
+    vcl_string to_string(); 
+
   private:
 
     //: scene this cache is operating on
@@ -72,6 +76,9 @@ class boxm2_opencl_cache: public vbl_ref_count
     boxm2_cache_sptr cpu_cache_;
 
     //: maximum number of blocks this cache will allow (eventually this will become smart)
+    void lru_push_front( boxm2_block_id id ); 
+    boxm2_block_id lru_remove_last(); //removes all data and block with this ID
+    vcl_list<boxm2_block_id> lru_order_; 
     unsigned int maxBlocksInCache;
     unsigned long bytesInCache_;
     unsigned long maxBytesInCache_;

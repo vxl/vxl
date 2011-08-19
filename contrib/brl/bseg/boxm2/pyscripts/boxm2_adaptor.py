@@ -390,4 +390,85 @@ def trajectory_next(trajectory) :
   return cam; 
 
 
-      
+
+# Create multi block scene - params is a hash of scene parameters
+def save_multi_block_scene(params) : 
+
+  #load params
+  scene_dir = params['scene_dir'] if 'scene_dir' in params else os.getcwd(); 
+  app_model = params['app_model'] if 'app_model' in params else "boxm2_mog3_grey";
+  obs_model = params['obs_model'] if 'obs_model' in params else "boxm2_num_obs";
+  orig_x = params['orig_x'] if 'orig_x' in params else 0.0; 
+  orig_y = params['orig_y'] if 'orig_y' in params else 0.0; 
+  orig_z = params['orig_z'] if 'orig_z' in params else 0.0; 
+  n_x = params['num_block_x'] if 'num_block_x' in params else 8; 
+  n_y = params['num_block_y'] if 'num_block_y' in params else 8; 
+  n_z = params['num_block_z'] if 'num_block_z' in params else 1; 
+  num_vox_x = params['num_vox_x'] if 'num_vox_x' in params else 1536
+  num_vox_y = params['num_vox_y'] if 'num_vox_y' in params else 1536
+  num_vox_z = params['num_vox_z'] if 'num_vox_z' in params else 512
+
+  #max mb per block, init level, and init prob
+  max_data_mb = params['max_block_mb'] if 'max_block_mb' in params else 1000.0; 
+  p_init = params['p_init'] if 'p_init' in params else .01; 
+  max_level = params['max_tree_level'] if 'max_tree_level' in params else 4; 
+  vox_length = params['vox_length'] if 'vox_length' in params else 1.0; 
+  sb_length = params['sub_block_length'] if 'sub_block_length' in params else .125; 
+  fname = params['filename'] if 'filename' in params else "scene"; 
+  
+  #reconcile sub block length vs voxel length
+  if 'sub_block_length' in params : 
+    vox_length = sb_length / 8.0; 
+  elif 'vox_length' in params  : 
+    sb_length = vox_length * 8 ; 
+
+  #run create scene process
+  boxm2_batch.init_process("boxm2CreateSceneProcess");
+  boxm2_batch.set_input_string(0,scene_dir);
+  boxm2_batch.set_input_string(1,app_model);
+  boxm2_batch.set_input_string(2,obs_model);
+  boxm2_batch.set_input_float(3,orig_x);
+  boxm2_batch.set_input_float(4,orig_y);
+  boxm2_batch.set_input_float(5,orig_z);
+  boxm2_batch.run_process();
+  (scene_id, scene_type) = boxm2_batch.commit_output(0);
+  scene = dbvalue(scene_id, scene_type);
+
+  #calc number of sub blocks in each block
+  num_sb_x = num_vox_x / 8; 
+  num_sb_y = num_vox_y / 8; 
+  num_sb_z = num_vox_z / 8; 
+  num_x = num_sb_x / n_x; 
+  num_y = num_sb_y / n_y; 
+  num_z = num_sb_z / n_z; 
+
+  for k in range(0,n_z):
+   for i in range(0,n_x):
+    for j in range(0,n_y):
+     local_origin_z = k*num_z*sb_length + orig_z;
+     local_origin_y = j*num_y*sb_length + orig_y;
+     local_origin_x = i*num_x*sb_length + orig_x;
+     
+     print("Adding block: ", i," ",j," ",k);
+     boxm2_batch.init_process("boxm2AddBlockProcess");
+     boxm2_batch.set_input_from_db(0,scene);
+     boxm2_batch.set_input_unsigned(1,i);
+     boxm2_batch.set_input_unsigned(2,j);
+     boxm2_batch.set_input_unsigned(3,k);
+     boxm2_batch.set_input_unsigned(4,num_x);
+     boxm2_batch.set_input_unsigned(5,num_y);
+     boxm2_batch.set_input_unsigned(6,num_z);
+     boxm2_batch.set_input_unsigned(7,max_level);
+     boxm2_batch.set_input_float(8,local_origin_x);
+     boxm2_batch.set_input_float(9,local_origin_y);
+     boxm2_batch.set_input_float(10,local_origin_z);
+     boxm2_batch.set_input_float(11,sb_length);
+     boxm2_batch.set_input_float(12,max_data_mb);
+     boxm2_batch.set_input_float(13,p_init);
+     boxm2_batch.run_process();
+       
+  print("Write Scene");
+  boxm2_batch.init_process("boxm2WriteSceneXMLProcess");
+  boxm2_batch.set_input_from_db(0,scene);
+  boxm2_batch.set_input_string(1, fname); 
+  boxm2_batch.run_process();
