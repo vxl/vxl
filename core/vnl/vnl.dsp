@@ -857,6 +857,9 @@ SOURCE=.\Templates/vcl_vector+vnl_decnum-.cxx
 # Begin Source File
 SOURCE=.\Templates/vcl_vector+vnl_rational-.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\Templates/vnl_polynomial+long-.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
