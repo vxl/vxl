@@ -2,11 +2,12 @@ USES += core
 include ${VXLROOT}/core/vnl/algo/config.mk
 include ${VXLROOT}/core/vul/config.mk
 
-MINI_PROG_SOURCES += time_fastops.cxx
 MINI_PROG_SOURCES += vnl_amoeba.cxx
 MINI_PROG_SOURCES += vnl_complex_svd.cxx
 MINI_PROG_SOURCES += vnl_planefit.cxx
 MINI_PROG_SOURCES += vnl_polyroots.cxx
+MINI_PROG_SOURCES += vnl_polynomial_factoring.cxx
+MINI_PROG_SOURCES += vnl_polynomial_RPN.cxx
 MINI_PROG_SOURCES += vnl_rosenbrock.cxx
 MINI_PROG_SOURCES += vnl_svd.cxx
 MINI_PROG_SOURCES += vnl_lsqr_test.cxx
@@ -14,6 +15,8 @@ MINI_PROG_SOURCES += vnl_svd_economy.cxx
 MINI_PROG_SOURCES += vnl_sample_beta.cxx
 MINI_PROG_SOURCES += vnl_sparse_matrix_example.cxx
 MINI_PROG_SOURCES += vnl_complex_squareroot.cxx
+
+MINI_PROG_SOURCES += time_fastops.cxx
 MINI_PROG_SOURCES += calculate.cxx
 
 ################################
