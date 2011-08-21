@@ -10,10 +10,27 @@
 // Templated class (on the data type of the coefficients),
 // further very similar to the vnl_real_polynomial class,
 // except that it uses std::vector instead of vnl_vector as data container,
-// and that the zero polynomial is represented by an empty vector.
+// that the zero polynomial is represented by an empty vector,
+// and that the coefficients go in the other direction.
+//
+// Important note on the implementation choice (reversed coefficient vector
+// as opposed to the class vnl_real_npolynomial):
+// The choice made here is definitely the more natural one, since it makes
+// polynomials of different degrees much more naturally comparable, and hence
+// simplifies the implementation of e.g. operator+(). Indeed: even if the
+// degrees are different, the coefficients [i] of two polynomials are the ones
+// to be considered together since they both refer to $X^i$. Also, normalizing
+// the internal representation (in case the highest order coefficient is zero)
+// now just needs to pop_back() instead of shifting the coefficients vector.
+// In summary, the choice made here is both more natural and more performant.
 //
 // \author Peter Vanroose, ABIS Leuven.
 // \date  August 2011
+//
+// \verbatim
+//  Modifications
+//   20 Aug 2011 - Peter Vanroose - internal repr change: coeff vector reversed
+// \endverbatim
 
 #include <vcl_vector.h>
 #include <vcl_iosfwd.h>
@@ -22,35 +39,44 @@
 //: Evaluation of polynomials.
 //  vnl_polynomial<T> represents a univariate polynomial with
 //  coefficients of datatype T, stored as a vector of values.
-//  This allows evaluation of the polynomial $p(x)$ at given values of $x$,
-//  and of its derivative $p'(x)$ or primitive function $\int p$.
+//  This allows evaluation of the polynomial $p(X)$ at given values of $X$,
+//  and of its derivative $p'(X)$ or primitive function $\int p$.
 //
 //  The class also provides the common polynomial arithmetic, i.e.,
 //  + - *, and even long division (through operators / and %).
 //
 //  The coefficients (coeffs_) are stored as a vector, starting with
-//  the highest degree term. Hence coeffs_[n] is the coefficient of x^(d-n),
-//  where d is the degree of the polynomial.
+//  the constant term. Hence coeffs_[n] is the coefficient of $X^n$,
 
 template <class T>
 class vnl_polynomial
 {
  public:
-  //: Initialize polynomial.
-  // The polynomial is $ a[0] x^d + a[1] x^{d-1} + \cdots + a[d] = 0 $.
-  vnl_polynomial(vcl_vector<T> const& a): coeffs_(a) {}
+  //: Initialize the polynomial from its coefficients, lowest order first.
+  // The polynomial is $ a[d] X^d + a[d-1] X^{d-1} + \cdots + a[0] = 0 $.
+  // Note that this constructor expects the constant term coefficient first,
+  // as opposed to the C array constructor!
+  // An assertion makes sure that the input vector is in normalised form, i.e.,
+  // that it is either empty or that the highest order coefficient is nonzero.
+  vnl_polynomial(vcl_vector<T> const& a): coeffs_(a) { assert(a.begin()==a.end() || a.back() != T(0)); }
 
-  //: Initialize polynomial from C vector.
-  // The parameter \p len is the number of coefficients,
+  //: Initialize polynomial from C array, highest order first.
+  // The parameter \p len is the number of coefficients passed in,
   // which equals the degree plus one.
-  vnl_polynomial(T const* a, unsigned len) { for (unsigned i=0;i<len;++i) coeffs_.push_back(a[i]); }
+  // Note that this constructor expects the highest order coefficients first,
+  // as opposed to the std::vector constructor!
+  vnl_polynomial(T const* a, unsigned len) { assert(len==0 || *a != T(0)); while (len--) coeffs_.push_back(a[len]); }
 
   //: Initialize polynomial from single value, thus creating a monomial.
-  // Useful when adding or multiplying a polynomial with a number.
+  // This is effectively an implicit cast from type T to class vnl_polynomial,
+  // useful when adding or multiplying a polynomial with a number.
   vnl_polynomial(T const& a): coeffs_(1u, a) { if (a==T(0)) coeffs_.clear(); }
 
   //: Initialize polynomial of a given degree.
   // The default constructor initializes to the zero polynomial (which has degree -1).
+  // but even with an explicit argument, the polynomial is the zero polynomial
+  // (with non-compact storage) so it should always be used in conjunction with
+  // operator[] for setting individual coefficients, at least coefficient [d].
   vnl_polynomial(int d=-1): coeffs_(d+1) { assert (d>=-1); }
 
   //: comparison operator
@@ -84,13 +110,13 @@ class vnl_polynomial
   vnl_polynomial<T>& operator/=(vnl_polynomial<T> const& f) { return *this = operator/(f); }
   vnl_polynomial<T>& operator%=(vnl_polynomial<T> const& f) { return *this = operator%(f); }
 
-  //: Evaluate polynomial at value x
+  //: Evaluate polynomial at value \p x
   T evaluate(T const& x) const;
 
   //: Return derivative of this polynomial
   vnl_polynomial<T> derivative() const;
 
-  //: Evaluate derivative at value x
+  //: Evaluate derivative at value \p x
   T devaluate(T const& x) const { return derivative().evaluate(x); }
 
   //: Return primitive function (inverse derivative) of this polynomial
@@ -98,24 +124,27 @@ class vnl_polynomial
   // Beware that this operation might not make sense for integral types T!
   vnl_polynomial<T> primitive() const;
 
-  //: Evaluate integral at x (assuming constant of integration is zero)
+  //: Evaluate integral at \p x (assuming constant of integration is zero)
   // Beware that this operation might not make sense for integral types T!
   T evaluate_integral(T const& x) const { return primitive().evaluate(x); }
 
-  //: Evaluate integral between x1 and x2
+  //: Evaluate integral between \p x1 and \p x2
   // Beware that this operation might not make sense for integral types T!
   T evaluate_integral(T const& x1, T const& x2) const { return evaluate_integral(x2)-evaluate_integral(x1); }
 
   // Data Access---------------------------------------------------------------
 
-  //: Return the degree (highest power of x) of the polynomial.
+  //: Return the degree (highest power of X) of the polynomial.
   // If the polynomial is zero, the degree is effectively -1.
+  // Note that this method assumes a compactified representation, i.e., one
+  // where the highest order coefficient is non-zero. Otherwise, the value
+  // returned by degree() will be larger than the degree.
   int     degree() const { return int(coeffs_.size()) - 1; }
 
-  //: Access to the polynomial coefficients
-  T& operator [] (int i)       { assert(i<=degree()); return coeffs_[i]; }
-  //: Access to the polynomial coefficients
-  T  operator [] (int i) const { assert(i<=degree()); return coeffs_[i]; }
+  //: Access to the polynomial coefficient of $X^i$
+  T& operator [] (unsigned int i)       { assert(int(i)<=degree()); return coeffs_[i]; }
+  //: Access to the polynomial coefficient of $X^i$
+  T  operator [] (unsigned int i) const { assert(int(i)<=degree()); return coeffs_[i]; }
 
   //: Return the vector of coefficients
   const vcl_vector<T>& coefficients() const { return coeffs_; }
@@ -129,9 +158,8 @@ class vnl_polynomial
 
  protected:
   //: The coefficients of the polynomial.
-  // coeffs_.back() is the const term.
-  // coeffs_[n] is the coefficient of the x^(d-n) term,
-  //    where d=coeffs_.size()-1
+  // coeffs_.front() is the const term.
+  // coeffs_[n] is the coefficient of the $X^n$ term
   vcl_vector<T> coeffs_;
 };
 

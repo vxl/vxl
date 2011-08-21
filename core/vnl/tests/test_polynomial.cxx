@@ -11,7 +11,7 @@ void test_polynomial_double()
 {
   vnl_polynomial<double> f1(3),f2(4);
 
-  for (int i=0;i<=f1.degree();++i) f1[i]=i+1; // f1 = X^3 +2 X^2 +3 X + 4
+  for (int i=0;i<=f1.degree();++i) f1[i]=4.0-i; // f1 = X^3 +2 X^2 +3 X + 4
   vcl_cout << "f1 =" << f1 << vcl_endl;
   { vcl_stringstream testStream; testStream << f1;
     vcl_string expected = " X^3 +2 X^2 +3 X +4";
@@ -22,34 +22,34 @@ void test_polynomial_double()
 #endif
   }
 
-  for (int i=0;i<=f2.degree();++i) f2[i]=2*i+1; // f2 = X^4 +3 X^3 +5 X^2 +7 X +9
+  for (int i=0;i<=f2.degree();++i) f2[i]=9.0-2*i; // f2 = X^4 +3 X^3 +5 X^2 +7 X +9
   vcl_cout << "f2 =" << f2 << vcl_endl;
 
   vnl_polynomial<double> f3 = -f1;
   vcl_cout << "-f1 =" << f3 << vcl_endl;
   TEST("-f1(x)", -f1.evaluate(2.5), f3.evaluate(2.5));
   // Evaluating in 2.5 is exact, since 2.5 is exactly representable (binary 10.1)
-  TEST("-f1", f3.degree()==3 && f3[0]==-1 && f3[1]==-2 && f3[2]==-3 && f3[3]==-4, true);
+  TEST("-f1", f3.degree()==3 && f3[3]==-1 && f3[2]==-2 && f3[1]==-3 && f3[0]==-4, true);
 
   f3 = f1+f2;
   vcl_cout << "f1+f2 =" << f3 << vcl_endl;
   TEST("f1(x)+f2(x)",f1.evaluate(2.5)+f2.evaluate(2.5), f3.evaluate(2.5));
-  TEST("f1+f2", f3.degree()==4 && f3[0]==1 && f3[1]==4 && f3[2]==7 && f3[3]==10 && f3[4]==13, true);
+  TEST("f1+f2", f3.degree()==4 && f3[4]==1 && f3[3]==4 && f3[2]==7 && f3[1]==10 && f3[0]==13, true);
 
   f3 = f2+f1;
   vcl_cout << "f2+f1 =" << f3 << vcl_endl;
   TEST("f2(x)+f1(x)",f2.evaluate(2.5)+f1.evaluate(2.5), f3.evaluate(2.5));
-  TEST("f2+f1", f3.degree()==4 && f3[0]==1 && f3[1]==4 && f3[2]==7 && f3[3]==10 && f3[4]==13, true);
+  TEST("f2+f1", f3.degree()==4 && f3[4]==1 && f3[3]==4 && f3[2]==7 && f3[1]==10 && f3[0]==13, true);
 
   f3 = f1-f2;
   vcl_cout << "f1-f2 =" << f3 << vcl_endl;
   TEST("f1(x)-f2(x)",f1.evaluate(2.5)-f2.evaluate(2.5), f3.evaluate(2.5));
-  TEST("f1-f2", f3.degree()==4 && f3[0]==-1 && f3[1]==-2 && f3[2]==-3 && f3[3]==-4 && f3[4]==-5, true);
+  TEST("f1-f2", f3.degree()==4 && f3[4]==-1 && f3[3]==-2 && f3[2]==-3 && f3[1]==-4 && f3[0]==-5, true);
 
   f3 = f2-f1;
   vcl_cout << "f2-f1 =" << f3 << vcl_endl;
   TEST("f2(x)-f1(x)",f2.evaluate(2.5)-f1.evaluate(2.5), f3.evaluate(2.5));
-  TEST("f2-f1", f3.degree()==4 && f3[0]==1 && f3[1]==2 && f3[2]==3 && f3[3]==4 && f3[4]==5, true);
+  TEST("f2-f1", f3.degree()==4 && f3[4]==1 && f3[3]==2 && f3[2]==3 && f3[1]==4 && f3[0]==5, true);
 
   f3 = f2/f1;
   vcl_cout << "f2/f1 =" << f3 << vcl_endl; // should be X+1
@@ -90,7 +90,7 @@ void test_polynomial_double()
 
   TEST("Polynomial of degree 0", vnl_polynomial<double>(1.0).evaluate(0.5),1.0);
   TEST("Polynomial of degree -1", vnl_polynomial<double>().evaluate(0.5),0.0);
-  vcl_vector<double> v; v.push_back(3.0); v.push_back(2.0); v.push_back(1.0);
+  vcl_vector<double> v; v.push_back(1.0); v.push_back(2.0); v.push_back(3.0);
   vnl_polynomial<double> f4(v);
   TEST("Vector initialisation", f4.evaluate(2.0),17.0);
   TEST("Degree", f4.degree(),2);
@@ -133,7 +133,7 @@ void test_polynomial_double()
              << "Expected:\t\"" << expected << '"' << vcl_endl;
 #endif
   }
-  f4[0] = 1; // f4 = X - 2
+  f4[1] = 1; // f4 = X - 2
   { vcl_stringstream testStream; testStream << f4;
     vcl_string expected = " X -2";
     TEST("f4 prints as X -2", testStream.str(), expected);
@@ -142,7 +142,7 @@ void test_polynomial_double()
              << "Expected:\t\"" << expected << '"' << vcl_endl;
 #endif
   }
-  f4[1] = 0; // f4 = X
+  f4[0] = 0; // f4 = X
   { vcl_stringstream testStream; testStream << f4;
     vcl_string expected = " X";
     TEST("f4 prints as X", testStream.str(), expected);
@@ -151,7 +151,7 @@ void test_polynomial_double()
              << "Expected:\t\"" << expected << '"' << vcl_endl;
 #endif
   }
-  f4[0] = 0; // f4 = 0
+  f4[1] = 0; // f4 = 0
   { vcl_stringstream testStream; testStream << f4;
     vcl_string expected = " 0";
     TEST("f4 prints as 0", testStream.str(), expected);
@@ -166,7 +166,7 @@ void test_polynomial_rational()
 {
   vnl_polynomial<vnl_rational> f1(3),f2(4);
 
-  for (int i=0;i<=f1.degree();++i) f1[i]=vnl_rational(1,i+1); // f1 = X^3 +1/2 X^2 +1/3 X + 1/4
+  for (int i=0;i<=f1.degree();++i) f1[i]=vnl_rational(1,4-i); // f1 = X^3 +1/2 X^2 +1/3 X + 1/4
   vcl_cout << "f1 =" << f1 << vcl_endl;
   { vcl_stringstream testStream; testStream << f1;
     vcl_string expected = " X^3 +1/2 X^2 +1/3 X +1/4";
@@ -177,43 +177,43 @@ void test_polynomial_rational()
 #endif
   }
 
-  for (int i=0;i<=f2.degree();++i) f2[i]=2*i+1; // f2 = X^4 +3 X^3 +5 X^2 +7 X +9
+  for (int i=0;i<=f2.degree();++i) f2[i]=9-2*i; // f2 = X^4 +3 X^3 +5 X^2 +7 X +9
   vcl_cout << "f2 =" << f2 << vcl_endl;
 
   vnl_polynomial<vnl_rational> f3 = -f1;
   vcl_cout << "-f1 =" << f3 << vcl_endl;
   TEST("-f1(x)", -f1.evaluate(vnl_rational(7,9)), f3.evaluate(vnl_rational(7,9)));
-  TEST("-f1", f3.degree()==3 && f3[0]==-1 && f3[1]==vnl_rational(-1,2) && f3[2]==vnl_rational(-1,3) && f3[3]==vnl_rational(-1,4), true);
+  TEST("-f1", f3.degree()==3 && f3[3]==-1 && f3[2]==vnl_rational(-1,2) && f3[1]==vnl_rational(-1,3) && f3[0]==vnl_rational(-1,4), true);
 
   f3 = f1+f2;
   vcl_cout << "f1+f2 =" << f3 << vcl_endl;
   TEST("f1(x)+f2(x)",f1.evaluate(vnl_rational(7,9))+f2.evaluate(vnl_rational(7,9)), f3.evaluate(vnl_rational(7,9)));
-  TEST("f1+f2", f3.degree()==4 && f3[0]==1 && f3[1]==4 && f3[2]==vnl_rational(11,2) && f3[3]==vnl_rational(22,3) && f3[4]==vnl_rational(37,4), true);
+  TEST("f1+f2", f3.degree()==4 && f3[4]==1 && f3[3]==4 && f3[2]==vnl_rational(11,2) && f3[1]==vnl_rational(22,3) && f3[0]==vnl_rational(37,4), true);
 
   f3 = f2+f1;
   vcl_cout << "f2+f1 =" << f3 << vcl_endl;
   TEST("f2(x)+f1(x)",f2.evaluate(vnl_rational(7,9))+f1.evaluate(vnl_rational(7,9)), f3.evaluate(vnl_rational(7,9)));
-  TEST("f2+f1", f3.degree()==4 && f3[0]==1 && f3[1]==4 && f3[2]==vnl_rational(11,2) && f3[3]==vnl_rational(22,3) && f3[4]==vnl_rational(37,4), true);
+  TEST("f2+f1", f3.degree()==4 && f3[4]==1 && f3[3]==4 && f3[2]==vnl_rational(11,2) && f3[1]==vnl_rational(22,3) && f3[0]==vnl_rational(37,4), true);
 
   f3 = f1-f2;
   vcl_cout << "f1-f2 =" << f3 << vcl_endl;
   TEST("f1(x)-f2(x)",f1.evaluate(vnl_rational(7,9))-f2.evaluate(vnl_rational(7,9)), f3.evaluate(vnl_rational(7,9)));
-  TEST("f1-f2", f3.degree()==4 && f3[0]==-1 && f3[1]==-2 && f3[2]==vnl_rational(-9,2) && f3[3]==vnl_rational(-20,3) && f3[4]==vnl_rational(-35,4), true);
+  TEST("f1-f2", f3.degree()==4 && f3[4]==-1 && f3[3]==-2 && f3[2]==vnl_rational(-9,2) && f3[1]==vnl_rational(-20,3) && f3[0]==vnl_rational(-35,4), true);
 
   f3 = f2-f1;
   vcl_cout << "f2-f1 =" << f3 << vcl_endl;
   TEST("f2(x)-f1(x)",f2.evaluate(vnl_rational(7,9))-f1.evaluate(vnl_rational(7,9)), f3.evaluate(vnl_rational(7,9)));
-  TEST("f2-f1", f3.degree()==4 && f3[0]==1 && f3[1]==2 && f3[2]==vnl_rational(9,2) && f3[3]==vnl_rational(20,3) && f3[4]==vnl_rational(35,4), true);
+  TEST("f2-f1", f3.degree()==4 && f3[4]==1 && f3[3]==2 && f3[2]==vnl_rational(9,2) && f3[1]==vnl_rational(20,3) && f3[0]==vnl_rational(35,4), true);
 
   f3 = f2/f1;
   vcl_cout << "f2/f1 =" << f3 << vcl_endl; // should be X+5/2
   TEST("f2(x)/f1(x)", f3.evaluate(vnl_rational(7,9)), vnl_rational(59,18));
-  TEST("f2/f1", f3.degree()==1 && f3[0]==1 && f3[1]==vnl_rational(5,2), true);
+  TEST("f2/f1", f3.degree()==1 && f3[1]==1 && f3[0]==vnl_rational(5,2), true);
 
   f3 = f2%f1;
   vcl_cout << "f2%f1 =" << f3 << vcl_endl; // should be 41/12 X^2 +71/12 X +67/8
   TEST("f2(x)%f1(x)", f3.evaluate(vnl_rational(7,9)), vnl_rational(29245,1944));
-  TEST("f2%f1", f3.degree()==2 && f3[0]==vnl_rational(41,12), true);
+  TEST("f2%f1", f3.degree()==2 && f3[2]==vnl_rational(41,12) && f3[1]==vnl_rational(71,12) && f3[0]==vnl_rational(67,8), true);
 
   f3 = f1/f2;
   vcl_cout << "f1/f2 =" << f3 << vcl_endl;
@@ -244,7 +244,7 @@ void test_polynomial_rational()
 
   TEST("Polynomial of degree 0", vnl_polynomial<vnl_rational>(vnl_rational(1)).evaluate(vnl_rational(7,9)),1);
   TEST("Polynomial of degree -1", vnl_polynomial<vnl_rational>().evaluate(vnl_rational(7,9)),0);
-  vcl_vector<vnl_rational> v; v.push_back(3); v.push_back(2); v.push_back(1);
+  vcl_vector<vnl_rational> v; v.push_back(1); v.push_back(2); v.push_back(3);
   vnl_polynomial<vnl_rational> f4(v);
   TEST("Vector initialisation", f4.evaluate(vnl_rational(7,9)),vnl_rational(354,81));
   TEST("Degree", f4.degree(),2);
@@ -287,7 +287,7 @@ void test_polynomial_rational()
              << "Expected:\t\"" << expected << '"' << vcl_endl;
 #endif
   }
-  f4[0] = 1; // f4 = X - 2
+  f4[1] = 1; // f4 = X - 2
   { vcl_stringstream testStream; testStream << f4;
     vcl_string expected = " X -2/1";
     TEST("f4 prints as X -2/1", testStream.str(), expected);
@@ -296,7 +296,7 @@ void test_polynomial_rational()
              << "Expected:\t\"" << expected << '"' << vcl_endl;
 #endif
   }
-  f4[1] = 0; // f4 = X
+  f4[0] = 0; // f4 = X
   { vcl_stringstream testStream; testStream << f4;
     vcl_string expected = " X";
     TEST("f4 prints as X", testStream.str(), expected);
@@ -305,7 +305,7 @@ void test_polynomial_rational()
              << "Expected:\t\"" << expected << '"' << vcl_endl;
 #endif
   }
-  f4[0] = 0; // f4 = 0
+  f4[1] = 0; // f4 = 0
   { vcl_stringstream testStream; testStream << f4;
     vcl_string expected = " 0";
     TEST("f4 prints as 0", testStream.str(), expected);
@@ -320,7 +320,7 @@ void test_polynomial_decnum()
 {
   vnl_polynomial<vnl_decnum> f1(3),f2(4);
 
-  for (int i=0;i<=f1.degree();++i) f1[i]=i+1; // f1 = X^3 +2 X^2 +3 X + 4
+  for (int i=0;i<=f1.degree();++i) f1[i]=4-i; // f1 = X^3 +2 X^2 +3 X + 4
   vcl_cout << "f1 =" << f1 << vcl_endl;
   { vcl_stringstream testStream; testStream << f1;
     vcl_string expected = " X^3 +2 X^2 +3 X +4";
@@ -331,33 +331,33 @@ void test_polynomial_decnum()
 #endif
   }
 
-  for (int i=0;i<=f2.degree();++i) f2[i]=2*i+1; // f2 = X^4 +3 X^3 +5 X^2 +7 X +9
+  for (int i=0;i<=f2.degree();++i) f2[i]=9-2*i; // f2 = X^4 +3 X^3 +5 X^2 +7 X +9
   vcl_cout << "f2 =" << f2 << vcl_endl;
 
   vnl_polynomial<vnl_decnum> f3 = -f1;
   vcl_cout << "-f1 =" << f3 << vcl_endl;
   TEST("-f1(x)", -f1.evaluate("35e19"), f3.evaluate("35e19"));
-  TEST("-f1", f3.degree()==3 && f3[0]==-1 && f3[1]==-2 && f3[2]==-3 && f3[3]==-4, true);
+  TEST("-f1", f3.degree()==3 && f3[3]==-1 && f3[2]==-2 && f3[1]==-3 && f3[0]==-4, true);
 
   f3 = f1+f2;
   vcl_cout << "f1+f2 =" << f3 << vcl_endl;
   TEST("f1(x)+f2(x)",f1.evaluate("35e19")+f2.evaluate("35e19"), f3.evaluate("35e19"));
-  TEST("f1+f2", f3.degree()==4 && f3[0]==1 && f3[1]==4 && f3[2]==7 && f3[3]==10 && f3[4]==13, true);
+  TEST("f1+f2", f3.degree()==4 && f3[4]==1 && f3[3]==4 && f3[2]==7 && f3[1]==10 && f3[0]==13, true);
 
   f3 = f2+f1;
   vcl_cout << "f2+f1 =" << f3 << vcl_endl;
   TEST("f2(x)+f1(x)",f2.evaluate("35e19")+f1.evaluate("35e19"), f3.evaluate("35e19"));
-  TEST("f2+f1", f3.degree()==4 && f3[0]==1 && f3[1]==4 && f3[2]==7 && f3[3]==10 && f3[4]==13, true);
+  TEST("f2+f1", f3.degree()==4 && f3[4]==1 && f3[3]==4 && f3[2]==7 && f3[1]==10 && f3[0]==13, true);
 
   f3 = f1-f2;
   vcl_cout << "f1-f2 =" << f3 << vcl_endl;
   TEST("f1(x)-f2(x)",f1.evaluate("35e19")-f2.evaluate("35e19"), f3.evaluate("35e19"));
-  TEST("f1-f2", f3.degree()==4 && f3[0]==-1 && f3[1]==-2 && f3[2]==-3 && f3[3]==-4 && f3[4]==-5, true);
+  TEST("f1-f2", f3.degree()==4 && f3[4]==-1 && f3[3]==-2 && f3[2]==-3 && f3[1]==-4 && f3[0]==-5, true);
 
   f3 = f2-f1;
   vcl_cout << "f2-f1 =" << f3 << vcl_endl;
   TEST("f2(x)-f1(x)",f2.evaluate("35e19")-f1.evaluate("35e19"), f3.evaluate("35e19"));
-  TEST("f2-f1", f3.degree()==4 && f3[0]==1 && f3[1]==2 && f3[2]==3 && f3[3]==4 && f3[4]==5, true);
+  TEST("f2-f1", f3.degree()==4 && f3[4]==1 && f3[3]==2 && f3[2]==3 && f3[1]==4 && f3[0]==5, true);
 
   vnl_polynomial<vnl_decnum> f1d = f1.derivative();
   vcl_cout << "f1d =" << f1d << vcl_endl;
@@ -377,7 +377,7 @@ void test_polynomial_decnum()
 
   TEST("Polynomial of degree 0", vnl_polynomial<vnl_decnum>("12").evaluate("35e19"),vnl_decnum("12"));
   TEST("Polynomial of degree -1", vnl_polynomial<vnl_decnum>().evaluate("35e19"),0L);
-  vcl_vector<vnl_decnum> v; v.push_back(3); v.push_back(2); v.push_back(1);
+  vcl_vector<vnl_decnum> v; v.push_back(1L); v.push_back(2L); v.push_back(3L);
   vnl_polynomial<vnl_decnum> f4(v);
   TEST("Vector initialisation", f4.evaluate(2),17.0);
   TEST("Degree", f4.degree(),2);
@@ -412,7 +412,7 @@ void test_polynomial_decnum()
              << "Expected:\t\"" << expected << '"' << vcl_endl;
 #endif
   }
-  f4[0] = 1L; // f4 = X - 2
+  f4[1] = 1L; // f4 = X - 2
   { vcl_stringstream testStream; testStream << f4;
     vcl_string expected = " X -2";
     TEST("f4 prints as X -2", testStream.str(), expected);
@@ -421,7 +421,7 @@ void test_polynomial_decnum()
              << "Expected:\t\"" << expected << '"' << vcl_endl;
 #endif
   }
-  f4[1] = 0L; // f4 = X
+  f4[0] = 0L; // f4 = X
   { vcl_stringstream testStream; testStream << f4;
     vcl_string expected = " X";
     TEST("f4 prints as X", testStream.str(), expected);
@@ -430,7 +430,7 @@ void test_polynomial_decnum()
              << "Expected:\t\"" << expected << '"' << vcl_endl;
 #endif
   }
-  f4[0] = 0L; // f4 = 0
+  f4[1] = 0L; // f4 = 0
   { vcl_stringstream testStream; testStream << f4;
     vcl_string expected = " 0";
     TEST("f4 prints as 0", testStream.str(), expected);

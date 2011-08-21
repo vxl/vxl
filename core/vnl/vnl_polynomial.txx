@@ -1,4 +1,4 @@
-// This is core/vnl/vnl_polynomial.cxx
+// This is core/vnl/vnl_polynomial.txx
 #ifndef vnl_polynomial_txx_
 #define vnl_polynomial_txx_
 
@@ -12,18 +12,19 @@
 // \date  August 2011
 
 #include <vcl_iostream.h>
+#include <vcl_cassert.h>
 
 //: Evaluate polynomial at value x
 template <class T>
 T vnl_polynomial<T>::evaluate(T const& x) const
 {
-  unsigned n = coeffs_.size();
-  if (n==0) return T(0);
-  T acc = coeffs_[--n];
-  T xn = x; // x^n
-  while (n--) {
-    acc += coeffs_[n] * xn;
-    xn *= x;
+  typename vcl_vector<T>::const_iterator i = coeffs_.begin();
+  if (i == coeffs_.end()) return T(0);
+  T acc = *i;
+  T xi = x; // will be x^i
+  for (++i; i!=coeffs_.end(); ++i) {
+    acc += *i * xi;
+    xi *= x;
   }
   return acc;
 }
@@ -32,9 +33,9 @@ T vnl_polynomial<T>::evaluate(T const& x) const
 template <class T>
 vnl_polynomial<T> vnl_polynomial<T>::operator-() const
 {
-  int n=coeffs_.size();
-  vcl_vector<T> neg; neg.reserve(n);
-  for (int i=0;i<n;++i) neg.push_back(-coeffs_[i]);
+  vcl_vector<T> neg = coeffs_;
+  typename vcl_vector<T>::iterator i = neg.begin();
+  for (; i!=neg.end(); ++i) *i = - *i;
   return vnl_polynomial<T>(neg);
 }
 
@@ -42,14 +43,13 @@ vnl_polynomial<T> vnl_polynomial<T>::operator-() const
 template <class T>
 vnl_polynomial<T> vnl_polynomial<T>::operator+(vnl_polynomial<T> const& f) const
 {
-  // Degree of result is at most the maximum of the two input degrees
-  int d=degree(), d2=f.degree(); // might be -1 !
+  // Degree of result is (at most) the maximum of the two input degrees:
+  int d=degree(), d2=f.degree(); // any or both of these might be -1 !
   vcl_vector<T> sum = coeffs_;
-  // Coefficient of x^(d-i) is f(i)
-  if (d < d2) { sum.insert(sum.begin(), d2-d, T(0)); d=d2; }
-  for (int i=d,j=d2;j>=0;--i,--j) sum[i]+=f[j];
-  // The higher order coefficients could now be zero, which effectively reduces the degree:
-  while (sum.size() > 0 && sum[0] == T(0)) sum.erase(sum.begin());
+  for (int i=0;i<=d&&i<=d2;++i) sum[i]+=f[i];
+  for (int i=d+1;i<=d2;++i) sum.push_back(f[i]);
+  // normalise the result, viz. such that the highest order coefficient is zero:
+  while (sum.end() != sum.begin() && sum.back() == T(0)) sum.pop_back();
   return vnl_polynomial<T>(sum);
 }
 
@@ -62,7 +62,7 @@ vnl_polynomial<T> vnl_polynomial<T>::operator*(vnl_polynomial<T> const& f) const
   vcl_vector<T> prod(d+1, T(0));
   for (int i=0;i<=d1;++i)
     for (int j=0;j<=d2;++j)
-      prod[d-(i+j)] += coeffs_[d1-i]*f[d2-j];
+      prod[i+j] += coeffs_[i]*f[j];
   return vnl_polynomial<T>(prod);
 }
 
@@ -72,15 +72,14 @@ vnl_polynomial<T> vnl_polynomial<T>::operator*(vnl_polynomial<T> const& f) const
 template <class T>
 vnl_polynomial<T> vnl_polynomial<T>::operator/(vnl_polynomial<T> const& f) const
 {
-  int d1=degree(), d2=f.degree(), d = d1-d2;
-  assert (d2 >= 0 && f[0] != T(0)); // denominator should not be zero
-  if (d<0) return vnl_polynomial<T>(); // nominator is zero, or degree of denominator is larger
-  vcl_vector<T> quot(d+1, T(0));
+  int d1=degree(), d2=f.degree(), d=d1-d2; // d will be the degree of the quotient
+  assert (d2 >= 0 && f[d2] != T(0)); // denominator should not be zero
+  if (d<0) return vnl_polynomial<T>(); // nominator is zero, or denominator has higher degree than nominator
+  vcl_vector<T> quot;
   for (int i=0;i<=d;++i) {
-    quot[i] = coeffs_[i];
-    int j=i-d2; if (j<0) j=0;
-    for (;j<i;++j) quot[i] -= f[i-j] * quot[j];
-    quot[i] /= f[0];
+    T acc = coeffs_[d1-i];
+    for (int j=0;j<d2&&j<i;++j) acc -= quot[j] * f[d2-j-1];
+    quot.insert(quot.begin(), 1, acc/f[d2]);
   }
   return vnl_polynomial<T>(quot);
 }
@@ -91,15 +90,14 @@ vnl_polynomial<T> vnl_polynomial<T>::operator/(vnl_polynomial<T> const& f) const
 template <class T>
 vnl_polynomial<T> vnl_polynomial<T>::operator%(vnl_polynomial<T> const& f) const
 {
-  int n=f.degree(), m=coeffs_.size()-n;
   vnl_polynomial<T> quot = operator/(f);
   if (quot.degree() < 0) return *this;
-  vcl_vector<T> prod = (f * quot).coefficients();
-  prod.erase(prod.begin(), prod.begin()+m);
-  vcl_vector<T> diff = coeffs_;
-  diff.erase(diff.begin(), diff.begin()+m);
-  for (int i=0; i<n; ++i) diff[i] -= prod[i];
-  while (diff.size() > 0 && diff[0] == T(0)) diff.erase(diff.begin());
+  vnl_polynomial<T> prod = f * quot;
+  int n=f.degree(); // size of the result, i.e., one more than degree of the result
+  vcl_vector<T> diff;
+  for (int i=0; i<n; ++i) diff.push_back(coeffs_[i] - prod[i]);
+  // normalise the result, viz. such that the highest order coefficient is zero:
+  while (diff.end() != diff.begin() && diff.back() == T(0)) diff.pop_back();
   return vnl_polynomial<T>(diff);
 }
 
@@ -107,10 +105,11 @@ vnl_polynomial<T> vnl_polynomial<T>::operator%(vnl_polynomial<T> const& f) const
 template <class T>
 vnl_polynomial<T> vnl_polynomial<T>::derivative() const
 {
-  int d = coeffs_.size()-1; // degree of source polynomial
-  vcl_vector<T> cd(d);
-  for (int i=d-1,di=1; i>=0; --i,++di)
-    cd[i] = coeffs_[i] * di;
+  vcl_vector<T> cd; // will be one shorter than coeffs_
+  typename vcl_vector<T>::const_iterator i = coeffs_.begin();
+  T n = T(1);
+  for (++i; i!=coeffs_.end(); ++i,++n)
+    cd.push_back(*i * n);
   return vnl_polynomial<T>(cd);
 }
 
@@ -120,29 +119,29 @@ vnl_polynomial<T> vnl_polynomial<T>::derivative() const
 template <class T>
 vnl_polynomial<T> vnl_polynomial<T>::primitive() const
 {
-  int d = coeffs_.size(); // degree+1
-  vcl_vector<T> cd(d+1);
-  cd[d] = T(0);
-  for (int i=d-1,di=1; i>=0; --i,++di)
-    cd[i] = coeffs_[i] / di;
+  vcl_vector<T> cd; // will be one longer than coeffs_
+  T n = T(0);
+  cd.push_back(n);
+  typename vcl_vector<T>::const_iterator i = coeffs_.begin();
+  for (++n; i!=coeffs_.end(); ++i,++n)
+    cd.push_back(*i / n);
   return vnl_polynomial<T>(cd);
 }
 
 template <class T>
 void vnl_polynomial<T>::print(vcl_ostream& os) const
 {
-  int d = degree();
   bool first_coeff = true;
 
-  for (int i=0; i <= d; ++i) {
+  for (int i=degree(); i >= 0; --i) {
     if (coeffs_[i] == T(0)) continue;
     os << ' ';
     if (coeffs_[i] > T(0) && !first_coeff) os << '+';
-    if (i==d)                     os << coeffs_[i];
+    if (i==0)                     os << coeffs_[i];
     else if (coeffs_[i] == -T(1)) os << '-';
     else if (coeffs_[i] != T(1))  os << coeffs_[i] << ' ';
-    if (i < d-1)                  os << "X^" << d-i;
-    else if (i == d-1)            os << 'X';
+    if (i == 1)                   os << 'X';
+    else if (i != 0)              os << "X^" << i;
     first_coeff = false;
   }
   if (first_coeff) os << " 0";
