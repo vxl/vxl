@@ -182,27 +182,27 @@ void test_polynomial_long()
 
   vnl_polynomial<long> f3 = -f1;
   vcl_cout << "-f1 =" << f3 << vcl_endl;
-  TEST("-f1(x)", -f1.evaluate(35987642L), f3.evaluate(35987642L));
+  TEST("-f1(x)", -f1.evaluate(1302L), f3.evaluate(1302L));
   TEST("-f1", f3.degree()==3 && f3[3]==-1 && f3[2]==-2 && f3[1]==-3 && f3[0]==-4, true);
 
   f3 = f1+f2;
   vcl_cout << "f1+f2 =" << f3 << vcl_endl;
-  TEST("f1(x)+f2(x)",f1.evaluate(35987642L)+f2.evaluate(35987642L), f3.evaluate(35987642L));
+  TEST("f1(x)+f2(x)",f1.evaluate(1302L)+f2.evaluate(1302L), f3.evaluate(1302L));
   TEST("f1+f2", f3.degree()==4 && f3[4]==1 && f3[3]==4 && f3[2]==7 && f3[1]==10 && f3[0]==13, true);
 
   f3 = f2+f1;
   vcl_cout << "f2+f1 =" << f3 << vcl_endl;
-  TEST("f2(x)+f1(x)",f2.evaluate(35987642L)+f1.evaluate(35987642L), f3.evaluate(35987642L));
+  TEST("f2(x)+f1(x)",f2.evaluate(1302L)+f1.evaluate(1302L), f3.evaluate(1302L));
   TEST("f2+f1", f3.degree()==4 && f3[4]==1 && f3[3]==4 && f3[2]==7 && f3[1]==10 && f3[0]==13, true);
 
   f3 = f1-f2;
   vcl_cout << "f1-f2 =" << f3 << vcl_endl;
-  TEST("f1(x)-f2(x)",f1.evaluate(35987642L)-f2.evaluate(35987642L), f3.evaluate(35987642L));
+  TEST("f1(x)-f2(x)",f1.evaluate(1302L)-f2.evaluate(1302L), f3.evaluate(1302L));
   TEST("f1-f2", f3.degree()==4 && f3[4]==-1 && f3[3]==-2 && f3[2]==-3 && f3[1]==-4 && f3[0]==-5, true);
 
   f3 = f2-f1;
   vcl_cout << "f2-f1 =" << f3 << vcl_endl;
-  TEST("f2(x)-f1(x)",f2.evaluate(35987642L)-f1.evaluate(35987642L), f3.evaluate(35987642L));
+  TEST("f2(x)-f1(x)",f2.evaluate(1302L)-f1.evaluate(1302L), f3.evaluate(1302L));
   TEST("f2-f1", f3.degree()==4 && f3[4]==1 && f3[3]==2 && f3[2]==3 && f3[1]==4 && f3[0]==5, true);
 
   vnl_polynomial<long> f1d = f1.derivative();
@@ -213,7 +213,7 @@ void test_polynomial_long()
   f3 = f1*f2;
   vcl_cout << "f1*f2 =" << f3 << vcl_endl;
   TEST("f1*f2 has correct degree", f3.degree(), f1.degree()+f2.degree());
-  TEST("f1(x)*f2(x)",f1.evaluate(35987642L)*f2.evaluate(35987642L), f3.evaluate(35987642L));
+  TEST("f1(x)*f2(x)",f1.evaluate(1302L)*f2.evaluate(1302L), f3.evaluate(1302L));
 
   vcl_cout << "f3d =" << f3.derivative() << vcl_endl;
   TEST("Derivative", f3.derivative(), f1d*f2+f2d*f1);
@@ -221,8 +221,8 @@ void test_polynomial_long()
   vnl_polynomial<long> f3p = (f1d*f2+f2d*f1).primitive();
   vcl_cout << "f3p =" << f3p << vcl_endl;
 
-  TEST("Polynomial of degree 0", vnl_polynomial<long>(12L).evaluate(35987642L),12L);
-  TEST("Polynomial of degree -1", vnl_polynomial<long>().evaluate(35987642L),0L);
+  TEST("Polynomial of degree 0", vnl_polynomial<long>(12L).evaluate(1302L),12L);
+  TEST("Polynomial of degree -1", vnl_polynomial<long>().evaluate(1302L),0L);
   vcl_vector<long> v; v.push_back(1L); v.push_back(2L); v.push_back(3L);
   vnl_polynomial<long> f4(v);
   TEST("Vector initialisation", f4.evaluate(2L),17L);
