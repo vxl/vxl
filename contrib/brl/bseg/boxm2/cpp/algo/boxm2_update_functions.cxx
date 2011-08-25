@@ -197,35 +197,37 @@ bool boxm2_update_image(boxm2_scene_sptr & scene,
             // pass 1
             else if (pass_no==1)
             {
-               if (data_type.find(boxm2_data_traits<BOXM2_GAUSS_GREY>::prefix()) != vcl_string::npos)
-               {  
+              if (data_type.find(boxm2_data_traits<BOXM2_GAUSS_GREY>::prefix()) != vcl_string::npos)
+              {
                 boxm2_update_pass1_functor<BOXM2_GAUSS_GREY> pass1;
                 pass1.init_data(datas,&pre_img,&vis_img);
                 success=success&&cast_ray_per_block<boxm2_update_pass1_functor<BOXM2_GAUSS_GREY> >
                   (pass1,scene_info_wrapper->info,blk,cam,input_image->ni(),input_image->nj());
-               } else if (data_type.find(boxm2_data_traits<BOXM2_MOG3_GREY>::prefix()) != vcl_string::npos)
-               {
-                 boxm2_update_pass1_functor<BOXM2_MOG3_GREY> pass1;
-                 pass1.init_data(datas,&pre_img,&vis_img);
-                 success=success&&cast_ray_per_block<boxm2_update_pass1_functor<BOXM2_MOG3_GREY> >
+              }
+              else if (data_type.find(boxm2_data_traits<BOXM2_MOG3_GREY>::prefix()) != vcl_string::npos)
+              {
+                boxm2_update_pass1_functor<BOXM2_MOG3_GREY> pass1;
+                pass1.init_data(datas,&pre_img,&vis_img);
+                success=success&&cast_ray_per_block<boxm2_update_pass1_functor<BOXM2_MOG3_GREY> >
                   (pass1,scene_info_wrapper->info,blk,cam,input_image->ni(),input_image->nj());
-               }
+              }
             }
             // pass 2
             else if (pass_no==2)
             {
               if (data_type.find(boxm2_data_traits<BOXM2_GAUSS_GREY>::prefix()) != vcl_string::npos)
-              { 
+              {
                 boxm2_update_pass2_functor<BOXM2_GAUSS_GREY> pass2;
                 pass2.init_data(datas,&pre_img,&vis_img, & proc_norm_img);
                 success=success&&cast_ray_per_block<boxm2_update_pass2_functor<BOXM2_GAUSS_GREY> >
-                 (pass2,scene_info_wrapper->info,blk,cam,input_image->ni(),input_image->nj());
-              } else if (data_type.find(boxm2_data_traits<BOXM2_MOG3_GREY>::prefix()) != vcl_string::npos)
+                  (pass2,scene_info_wrapper->info,blk,cam,input_image->ni(),input_image->nj());
+              }
+              else if (data_type.find(boxm2_data_traits<BOXM2_MOG3_GREY>::prefix()) != vcl_string::npos)
               {
                 boxm2_update_pass2_functor<BOXM2_MOG3_GREY> pass2;
                 pass2.init_data(datas,&pre_img,&vis_img, & proc_norm_img);
                 success=success&&cast_ray_per_block<boxm2_update_pass2_functor<BOXM2_MOG3_GREY> >
-                 (pass2,scene_info_wrapper->info,blk,cam,input_image->ni(),input_image->nj());
+                  (pass2,scene_info_wrapper->info,blk,cam,input_image->ni(),input_image->nj());
               }
             }
         }
@@ -262,7 +264,8 @@ bool boxm2_update_image(boxm2_scene_sptr & scene,
           boxm2_update_data_functor<BOXM2_GAUSS_GREY> data_functor;
           data_functor.init_data(datas, float(blk->sub_block_dim().x()), blk->max_level());
           boxm2_data_serial_iterator<boxm2_update_data_functor<BOXM2_GAUSS_GREY> >(data_buff_length,data_functor);
-        } else if (data_type.find(boxm2_data_traits<BOXM2_MOG3_GREY>::prefix()) != vcl_string::npos)
+        }
+        else if (data_type.find(boxm2_data_traits<BOXM2_MOG3_GREY>::prefix()) != vcl_string::npos)
         {
           boxm2_update_data_functor<BOXM2_MOG3_GREY> data_functor;
           data_functor.init_data(datas, float(blk->sub_block_dim().x()), blk->max_level());
@@ -273,7 +276,6 @@ bool boxm2_update_image(boxm2_scene_sptr & scene,
     }
     return true;
 }
-
 
 
 bool boxm2_update_with_shadow(boxm2_scene_sptr & scene,
@@ -296,7 +298,7 @@ bool boxm2_update_with_shadow(boxm2_scene_sptr & scene,
         return true;
     }
 
-    //: compute alternate appearance probability for each pixel in the image
+    // compute alternate appearance probability for each pixel in the image
     vil_image_view<float> alt_prob_img(input_image->ni(), input_image->nj());
     alt_prob_img.fill(0.0f);
     if (shadow_prior > 0.0f) {
@@ -361,35 +363,37 @@ bool boxm2_update_with_shadow(boxm2_scene_sptr & scene,
             // pass 1
             else if (pass_no==1)
             {
-               if (data_type.find(boxm2_data_traits<BOXM2_GAUSS_GREY>::prefix()) != vcl_string::npos)
-               {  
+              if (data_type.find(boxm2_data_traits<BOXM2_GAUSS_GREY>::prefix()) != vcl_string::npos)
+              {
                 boxm2_update_pass1_functor<BOXM2_GAUSS_GREY> pass1;
                 pass1.init_data(datas,&pre_img,&vis_img);
                 success=success&&cast_ray_per_block<boxm2_update_pass1_functor<BOXM2_GAUSS_GREY> >
                   (pass1,scene_info_wrapper->info,blk,cam,input_image->ni(),input_image->nj());
-               } else if (data_type.find(boxm2_data_traits<BOXM2_MOG3_GREY>::prefix()) != vcl_string::npos)
-               {
-                 boxm2_update_pass1_functor<BOXM2_MOG3_GREY> pass1;
-                 pass1.init_data(datas,&pre_img,&vis_img);
-                 success=success&&cast_ray_per_block<boxm2_update_pass1_functor<BOXM2_MOG3_GREY> >
+              }
+              else if (data_type.find(boxm2_data_traits<BOXM2_MOG3_GREY>::prefix()) != vcl_string::npos)
+              {
+                boxm2_update_pass1_functor<BOXM2_MOG3_GREY> pass1;
+                pass1.init_data(datas,&pre_img,&vis_img);
+                success=success&&cast_ray_per_block<boxm2_update_pass1_functor<BOXM2_MOG3_GREY> >
                   (pass1,scene_info_wrapper->info,blk,cam,input_image->ni(),input_image->nj());
-               }
+              }
             }
             // pass 2
             else if (pass_no==2)
             {
               if (data_type.find(boxm2_data_traits<BOXM2_GAUSS_GREY>::prefix()) != vcl_string::npos)
-              { 
+              {
                 boxm2_update_with_shadow_pass2_functor<BOXM2_GAUSS_GREY> pass2;
                 pass2.init_data(datas,&pre_img,&vis_img, &proc_norm_img, &alt_prob_img, model_prior);
                 success=success&&cast_ray_per_block<boxm2_update_with_shadow_pass2_functor<BOXM2_GAUSS_GREY> >
-                 (pass2,scene_info_wrapper->info,blk,cam,input_image->ni(),input_image->nj());
-              } else if (data_type.find(boxm2_data_traits<BOXM2_MOG3_GREY>::prefix()) != vcl_string::npos)
+                  (pass2,scene_info_wrapper->info,blk,cam,input_image->ni(),input_image->nj());
+              }
+              else if (data_type.find(boxm2_data_traits<BOXM2_MOG3_GREY>::prefix()) != vcl_string::npos)
               {
                 boxm2_update_with_shadow_pass2_functor<BOXM2_MOG3_GREY> pass2;
                 pass2.init_data(datas,&pre_img,&vis_img, &proc_norm_img, &alt_prob_img, model_prior);
                 success=success&&cast_ray_per_block<boxm2_update_with_shadow_pass2_functor<BOXM2_MOG3_GREY> >
-                 (pass2,scene_info_wrapper->info,blk,cam,input_image->ni(),input_image->nj());
+                  (pass2,scene_info_wrapper->info,blk,cam,input_image->ni(),input_image->nj());
               }
             }
         }
@@ -426,7 +430,8 @@ bool boxm2_update_with_shadow(boxm2_scene_sptr & scene,
           boxm2_update_with_shadow_functor<BOXM2_GAUSS_GREY> data_functor;
           data_functor.init_data(datas, shadow_sigma, float(blk->sub_block_dim().x()), blk->max_level());
           boxm2_data_serial_iterator<boxm2_update_with_shadow_functor<BOXM2_GAUSS_GREY> >(data_buff_length,data_functor);
-        } else if (data_type.find(boxm2_data_traits<BOXM2_MOG3_GREY>::prefix()) != vcl_string::npos)
+        }
+        else if (data_type.find(boxm2_data_traits<BOXM2_MOG3_GREY>::prefix()) != vcl_string::npos)
         {
           boxm2_update_with_shadow_functor<BOXM2_MOG3_GREY> data_functor;
           data_functor.init_data(datas, shadow_sigma, float(blk->sub_block_dim().x()), blk->max_level());
@@ -437,6 +442,4 @@ bool boxm2_update_with_shadow(boxm2_scene_sptr & scene,
     }
     return true;
 }
-
-
 

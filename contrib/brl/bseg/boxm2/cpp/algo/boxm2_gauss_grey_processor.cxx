@@ -82,12 +82,14 @@ void compute_gaussian_params(vcl_vector<float> const& obs, vcl_vector<float> con
   sigma = (float)vcl_sqrt(var);
 }
 
-//: Most of The following piece of code is copied from boxm_mog_grey_processor::compute_appearance 
+//:
+// Most of The following piece of code is copied from boxm_mog_grey_processor::compute_appearance
+//
 void boxm2_gauss_grey_processor::compute_app_model(vnl_vector_fixed<unsigned char, 2> & app,
-                                                        vcl_vector<float> const& obs, 
-                                                        vcl_vector<float> const& vis, 
-                                                        bsta_sigma_normalizer_sptr n_table, 
-                                                        float min_sigma)
+                                                   vcl_vector<float> const& obs,
+                                                   vcl_vector<float> const& vis,
+                                                   bsta_sigma_normalizer_sptr n_table,
+                                                   float min_sigma)
 {
   const float big_sigma = (float)vnl_math::sqrt1_2; // maximum possible std. dev for set of samples drawn from [0 1]
 
@@ -98,7 +100,7 @@ void boxm2_gauss_grey_processor::compute_app_model(vnl_vector_fixed<unsigned cha
     app[1]=(unsigned char)vcl_floor(1.0f*255.0f);
     return;
   }
-    
+
   if (nobs == 1) {
     // one observation: Just return the value as the mean, and a big sigma.
     app[0]=(unsigned char)vcl_floor(obs[0]*255.0f);
@@ -129,20 +131,20 @@ void boxm2_gauss_grey_processor::compute_app_model(vnl_vector_fixed<unsigned cha
     app[0]=(unsigned char)vcl_floor(mean_est*255.0f);
     app[1]=(unsigned char)vcl_floor(sigma_est*255.0f);
   }
-  
+
   return;
 }
 
 void boxm2_gauss_grey_processor::compute_app_model(vnl_vector_fixed<unsigned char, 2> & apm,
-                                                   vcl_vector<float> const& obs, 
-                                                   vcl_vector<float> const& pre, 
+                                                   vcl_vector<float> const& obs,
+                                                   vcl_vector<float> const& pre,
                                                    vcl_vector<float> const& vis,
                                                    bsta_sigma_normalizer_sptr n_table,
                                                    float min_sigma)
 {
   bsta_gauss_sf1 model_bsta(apm[0]/255.0f,(apm[1]/255.0f)*(apm[1]/255.0f));
-  
-  //: initialize from scratch in every iteration
+
+  // initialize from scratch in every iteration
   //bsta_gauss_sf1 model_bsta(0.5f,(0.3f)*(0.3f));
   const float big_sigma = (float)vnl_math::sqrt1_2; // maximum possible std. dev for set of samples drawn from [0 1]
   unsigned int nobs = obs.size();
@@ -186,11 +188,12 @@ void boxm2_gauss_grey_processor::compute_app_model(vnl_vector_fixed<unsigned cha
     vcl_cerr << "error: sigma = " << sigma << " model_bsta.var() = " << model_bsta.var() << vcl_endl;
     sigma = big_sigma;
   }
-  // convert back 
+  // convert back
   if (model_bsta.mean() <= 1.0f && model_bsta.mean() >= 0.0f) {
     apm[0]=(unsigned char)vcl_floor(model_bsta.mean()*255.0f);
     apm[1]=(unsigned char)vcl_floor(sigma*255.0f);
-  } else {
+  }
+  else {
     apm[0]=(unsigned char)vcl_floor(0.5f*255.0f);
     apm[1]=(unsigned char)vcl_floor(big_sigma*255.0f);
   }
@@ -217,6 +220,4 @@ void boxm2_gauss_grey_processor::update_app_model(vnl_vector_fixed<unsigned char
   apm[1] = (unsigned char)vcl_floor(sigma*255.0f);
   nobs[0] += 1;
 }
-
-
 
