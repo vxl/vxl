@@ -22,34 +22,35 @@ class brad_eigenspace_base : public vbl_ref_count
 {
  public:
   //: Default constructor
-  brad_eigenspace_base(){}
+  brad_eigenspace_base() {}
 
   virtual ~brad_eigenspace_base() {}
 
-  virtual vcl_string feature_vector_type(){return "unknown\n";}
+  virtual vcl_string feature_vector_type() {return "unknown\n";}
 };
 
 void vsl_b_write(vsl_b_ostream &os, const brad_eigenspace_sptr& /*eptr*/);
 
 void vsl_b_read(vsl_b_istream &is, brad_eigenspace_sptr& /*eptr*/);
 
-//: this macro executes the function f that returns a bool, which if false
+//:
+//  This macro executes the function f that returns a bool, which if false
 //  prints the string m. The generic eigenspace pointer es_ptr is specialized
 //  to a templated eigenspace pointer named ep. If es_ptr cannot be cast,
 //  an error message is printed and f is not called
 #define CAST_CALL_EIGENSPACE(es_ptr, f, m) \
-if(es_ptr->feature_vector_type()=="brad_hist_prob_feature_vector"){ \
-brad_eigenspace<brad_hist_prob_feature_vector>* ep = \
-dynamic_cast<brad_eigenspace<brad_hist_prob_feature_vector>* >(es_ptr.ptr());\
-if(!f){ vcl_cout << m << '\n'; return false;} \
-}else if(es_ptr->feature_vector_type()=="brad_grad_hist_feature_vector"){ \
-brad_eigenspace<brad_grad_hist_feature_vector>* ep = \
-dynamic_cast<brad_eigenspace<brad_grad_hist_feature_vector>* >(es_ptr.ptr());\
-if(!f){ vcl_cout << m << '\n'; return false;} \
-}else if(es_ptr->feature_vector_type() == "brad_grad_int_feature_vector"){ \
-brad_eigenspace<brad_grad_int_feature_vector>* ep = \
-dynamic_cast<brad_eigenspace<brad_grad_int_feature_vector>* >(es_ptr.ptr());\
-if(!f){ vcl_cout << m << '\n'; return false;} \
+if (es_ptr->feature_vector_type()=="brad_hist_prob_feature_vector") { \
+  brad_eigenspace<brad_hist_prob_feature_vector>* ep = \
+    dynamic_cast<brad_eigenspace<brad_hist_prob_feature_vector>* >(es_ptr.ptr());\
+  if (!f) { vcl_cout << m << '\n'; return false;} \
+}else if (es_ptr->feature_vector_type()=="brad_grad_hist_feature_vector") { \
+  brad_eigenspace<brad_grad_hist_feature_vector>* ep = \
+    dynamic_cast<brad_eigenspace<brad_grad_hist_feature_vector>* >(es_ptr.ptr());\
+  if (!f) { vcl_cout << m << '\n'; return false;} \
+}else if (es_ptr->feature_vector_type() == "brad_grad_int_feature_vector") { \
+  brad_eigenspace<brad_grad_int_feature_vector>* ep = \
+    dynamic_cast<brad_eigenspace<brad_grad_int_feature_vector>* >(es_ptr.ptr());\
+  if (!f) { vcl_cout << m << '\n'; return false;} \
 }else{ \
   vcl_cout << "unknown feature vector type\n"; \
   return false; \
@@ -57,17 +58,17 @@ if(!f){ vcl_cout << m << '\n'; return false;} \
 
 //: this macro produces a generic pointer to the specialized eigenspace defined by the feature vector type defined by string name t.
 #define CAST_CREATE_EIGENSPACE(t, nbins, max_int, max_grad) \
-if(t=="brad_hist_prob_feature_vector"){ \
- brad_hist_prob_feature_vector func(0.0f, max_int, nbins); \
- eptr = new brad_eigenspace<brad_hist_prob_feature_vector>(nib,njb,func);\
- }else if(t =="brad_grad_hist_feature_vector"){ \
+if (t=="brad_hist_prob_feature_vector") { \
+  brad_hist_prob_feature_vector func(0.0f, max_int, nbins); \
+  eptr = new brad_eigenspace<brad_hist_prob_feature_vector>(nib,njb,func);\
+}else if (t =="brad_grad_hist_feature_vector") { \
   brad_grad_hist_feature_vector func(0.0f, max_grad, nbins); \
   eptr = new brad_eigenspace<brad_grad_hist_feature_vector>(nib,njb,func); \
- }else if(t == "brad_grad_int_feature_vector"){ \
+}else if (t == "brad_grad_int_feature_vector") { \
   brad_grad_int_feature_vector func(0.0f, max_int, 0.0f, max_grad, nbins); \
   eptr = new brad_eigenspace<brad_grad_int_feature_vector>(nib,njb,func); \
- }else{ \
-   vcl_cout << "unknown feature vector type\n"; \
-   return false; \
+}else{ \
+  vcl_cout << "unknown feature vector type\n"; \
+  return false; \
 }
 #endif // brad_eigenspace_base_h_
