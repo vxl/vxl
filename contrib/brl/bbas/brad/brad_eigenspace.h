@@ -115,8 +115,8 @@ class brad_eigenspace : public brad_eigenspace_base
                       unsigned nit, unsigned njt,
                       vcl_string const& output_path);
 
-  //: print sizes and other info
-  void print(vcl_ostream& os = vcl_cout) const;
+  //: print sizes and other info (bool for calling consistency)
+  bool print(vcl_ostream& os = vcl_cout) const;
 
   //: accessors, setters
   unsigned nib() const {return nib_;}

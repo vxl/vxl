@@ -1,4 +1,4 @@
-// This is brl/bbas/brad/brad_eigenspace.txx
+// Thisx is brl/bbas/brad/brad_eigenspace.txx
 #ifndef brad_eigenspace_txx_
 #define brad_eigenspace_txx_
 #include "brad_eigenspace.h"
@@ -858,7 +858,7 @@ void vsl_b_read(vsl_b_istream &is, brad_eigenspace<T>& ep)
 }
 
 template <class T>
-void brad_eigenspace<T>::print(vcl_ostream& os) const{
+bool brad_eigenspace<T>::print(vcl_ostream& os) const{
   os << "image block size(" << nib_ << ' ' << njb_ << ")\n";
   os << "feature vector size " << funct_.size() << '\n';
   os << "feature vector type [" << funct_.type() << "]\n";
@@ -884,6 +884,7 @@ void brad_eigenspace<T>::print(vcl_ostream& os) const{
     vnl_vector<double> v0 = eigenvectors_.get_column(n-1);
     os << v0 << '\n';
   }
+  return true;
 }
 //: Print summary
 template <class T>
