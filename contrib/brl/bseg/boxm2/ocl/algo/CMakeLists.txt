@@ -3,13 +3,13 @@ INCLUDE_DIRECTORIES( ${OPENCL_INCLUDE_PATH} )
 INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bbas )
 INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR} )
 SET(boxm2_ocl_algo_sources
-    boxm2_ocl_render_expected_image_function.h  boxm2_ocl_render_expected_image_function.cxx  
+    boxm2_ocl_render_expected_image_function.h  boxm2_ocl_render_expected_image_function.cxx
     boxm2_ocl_camera_converter.h                boxm2_ocl_camera_converter.cxx
     boxm2_ocl_cone_update_function.h            boxm2_ocl_cone_update_function.cxx
-  )
+   )
 
 ADD_LIBRARY(boxm2_ocl_algo  ${boxm2_ocl_algo_sources})
-TARGET_LINK_LIBRARIES(boxm2_ocl_algo boxm2_ocl)
+TARGET_LINK_LIBRARIES(boxm2_ocl_algo boxm2_ocl vgl vil vul)
 
 #tests
 SUBDIRS(tests)

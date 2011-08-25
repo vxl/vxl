@@ -27,8 +27,7 @@ SET(bvpl_kernels_sources
 AUX_SOURCE_DIRECTORY(Templates bvpl_kernels_sources)
 
 ADD_LIBRARY(bvpl_kernels ${bvpl_kernels_sources})
-
-TARGET_LINK_LIBRARIES(bvpl_kernels bxml bsvg bsta vgl vnl)
+TARGET_LINK_LIBRARIES(bvpl_kernels bxml bsvg bsta vgl_algo vgl vnl vbl)
 
 #Directory with python/c++ processes
 SUBDIRS( io )

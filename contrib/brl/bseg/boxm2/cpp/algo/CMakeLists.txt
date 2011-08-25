@@ -29,7 +29,7 @@ AUX_SOURCE_DIRECTORY(Templates boxm2_cpp_algo_sources)
 ADD_LIBRARY(boxm2_cpp_algo  ${boxm2_cpp_algo_sources})
 
 TARGET_LINK_LIBRARIES(boxm2_cpp_algo
-                      boxm2_cpp boct brdb vbl_io expatpp vpgl vil_algo vil bvgl vgl vgl_xio vnl_algo bsta_algo bsta vbl vsl vcl)
+                      boxm2_cpp boct brdb expatpp vpgl bvgl bsta_algo bsta vil_algo vil vgl_xio vgl vnl_algo vnl vul vbl_io vbl vsl vcl)
 
 SUBDIRS(tests)
 

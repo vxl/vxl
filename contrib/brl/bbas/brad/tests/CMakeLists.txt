@@ -1,15 +1,15 @@
 SET( brad_test_sources
-  test_driver.cxx
-  test_illum.cxx
-  test_sun_pos.cxx
-  test_sun_hist.cxx
-  test_sun_dir_index.cxx
-  test_feature_pca.cxx
-  test_phongs_model_est.cxx
-  )
+   test_driver.cxx
+   test_illum.cxx
+   test_sun_pos.cxx
+   test_sun_hist.cxx
+   test_sun_dir_index.cxx
+   test_feature_pca.cxx
+   test_phongs_model_est.cxx
+   )
 
 ADD_EXECUTABLE(brad_test_all ${brad_test_sources})
-TARGET_LINK_LIBRARIES( brad_test_all brad bsta_io testlib)
+TARGET_LINK_LIBRARIES( brad_test_all brad bsta_io vnl_algo vnl vil testlib)
 
 ADD_TEST( brad_test_all ${EXECUTABLE_OUTPUT_PATH}/brad_test_all test_illum)
 ADD_TEST( brad_test_all ${EXECUTABLE_OUTPUT_PATH}/brad_test_all test_sun_pos)

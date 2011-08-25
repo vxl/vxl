@@ -15,12 +15,10 @@ SET(bapl_pro_sources
    )
 
 AUX_SOURCE_DIRECTORY(Templates bapl_pro_sources)
-
 AUX_SOURCE_DIRECTORY(processes bapl_pro_sources)
 
 ADD_LIBRARY(bapl_pro ${bapl_pro_sources})
-
-TARGET_LINK_LIBRARIES(bapl_pro bapl bapl_io bprb brdb vil_pro)
+TARGET_LINK_LIBRARIES(bapl_pro bapl bapl_io bprb brdb vil_pro vil_io vil vnl vul)
 
 IF( BUILD_TESTING )
   SUBDIRS(tests)

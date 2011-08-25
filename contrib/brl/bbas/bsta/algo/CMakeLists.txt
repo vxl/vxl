@@ -16,12 +16,12 @@ SET( bsta_algo_sources
    bsta_beta_updater.txx      bsta_beta_updater.h
    bsta_fit_gaussian.h
    bsta_sigma_normalizer.h    bsta_sigma_normalizer.cxx
-)
+   )
 
 AUX_SOURCE_DIRECTORY(Templates bsta_algo_sources)
 
 ADD_LIBRARY( bsta_algo ${bsta_algo_sources} )
-TARGET_LINK_LIBRARIES( bsta_algo bsta vnl_algo vnl )
+TARGET_LINK_LIBRARIES(bsta_algo bsta vnl_algo vnl vbl)
 
 IF( BUILD_TESTING )
   SUBDIRS(tests)

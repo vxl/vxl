@@ -15,7 +15,7 @@ ADD_EXECUTABLE( brec_test_all
   test_brec_hierarchy_detector2.cxx
 )
 
-TARGET_LINK_LIBRARIES( brec_test_all brec testlib vpgl vil_pro vnl vil vul vbl )
+TARGET_LINK_LIBRARIES( brec_test_all brec testlib vpgl vil_pro vil_io vnl vil vul vbl )
 
 CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/digits_small.png    ${CMAKE_CURRENT_BINARY_DIR}/digits_small.png COPYONLY )
 CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/normalized0_cropped.png    ${CMAKE_CURRENT_BINARY_DIR}/normalized0_cropped.png COPYONLY )

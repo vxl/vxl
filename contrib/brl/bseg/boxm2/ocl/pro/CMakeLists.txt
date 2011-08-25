@@ -6,13 +6,13 @@ SET(boxm2_ocl_pro_sources
     boxm2_ocl_processes.h
     boxm2_ocl_register.h                     boxm2_ocl_register.cxx
     processes/boxm2_ocl_filter_process.h
-  )
+   )
 
 AUX_SOURCE_DIRECTORY(Templates boxm2_ocl_pro_sources)
 AUX_SOURCE_DIRECTORY(processes boxm2_ocl_pro_sources)
 
 ADD_LIBRARY(boxm2_ocl_pro  ${boxm2_ocl_pro_sources})
-TARGET_LINK_LIBRARIES(boxm2_ocl_pro boxm2_ocl_algo boct brdb vbl_io expatpp vpgl vgl vgl_xio vbl vsl vcl)
+TARGET_LINK_LIBRARIES(boxm2_ocl_pro boxm2_ocl_algo boct brdb vbl_io expatpp vpgl vgl vgl_xio vil vul vbl vsl vcl)
 
 #tests
 SUBDIRS(tests)

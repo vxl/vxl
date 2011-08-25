@@ -12,7 +12,7 @@ FIND_PACKAGE( Threads )
 
 #CONFIGURE_FILE( ${CMAKE_CURRENT_SOURCE_DIR}/bvpl_octree_config.h.in
 #                ${CMAKE_CURRENT_BINARY_DIR}/bvpl_octree_config.h )
-                
+
 INCLUDE_DIRECTORIES( ${EXPAT_INCLUDE_DIR} )
 INCLUDE_DIRECTORIES( ${VXLCORE_INCLUDE_DIR} )
 INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bseg/boct )
@@ -41,12 +41,11 @@ SET(bvpl_octree_sources
     bvpl_global_corners.h                 bvpl_global_corners.cxx
     bvpl_corner_detector.h
     bvpl_corner_functors.h
-)
-
+   )
 AUX_SOURCE_DIRECTORY(Templates bvpl_octree_sources)
-ADD_LIBRARY(bvpl_octree ${bvpl_octree_sources})
 
-TARGET_LINK_LIBRARIES(bvpl_octree bvpl_kernels bvpl_functors bvpl_octree_sample bvrml boxm boct)
+ADD_LIBRARY(bvpl_octree ${bvpl_octree_sources})
+TARGET_LINK_LIBRARIES(bvpl_octree bvpl_kernels bvpl_functors bvpl_octree_sample bvrml boxm boct vnl_algo vnl_io vnl vgl vul vbl)
 
 #Binary io
 SUBDIRS(io)

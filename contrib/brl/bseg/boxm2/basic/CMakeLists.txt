@@ -15,7 +15,7 @@ SET(boxm2_basic_sources
 AUX_SOURCE_DIRECTORY(Templates boxm2_basic_sources)
 
 ADD_LIBRARY(boxm2_basic  ${boxm2_basic_sources})
-TARGET_LINK_LIBRARIES(boxm2_basic brdb expatpp vpgl vgl vgl_xio vbl vsl vcl baio)
+TARGET_LINK_LIBRARIES(boxm2_basic brdb baio expatpp vpgl vgl_xio vgl vnl vbl vsl vcl)
 
 #tests
 SUBDIRS(tests)

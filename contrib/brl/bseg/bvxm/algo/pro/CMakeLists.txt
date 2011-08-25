@@ -12,13 +12,11 @@ IF(EXPATPP_FOUND)
   SET(bvxm_algo_pro_sources
       bvxm_algo_processes.h
       bvxm_algo_register.h   bvxm_algo_register.cxx
-  )
-
+     )
   AUX_SOURCE_DIRECTORY(processes bvxm_algo_pro_sources)
 
   ADD_LIBRARY(bvxm_algo_pro ${bvxm_algo_pro_sources} )
-
-  TARGET_LINK_LIBRARIES(bvxm_algo_pro bvxm_algo bvxm_grid_pro boxm boct bprb brdb vul)
+  TARGET_LINK_LIBRARIES(bvxm_algo_pro bvxm_algo bvxm_grid_pro boxm boct bprb brdb vul vbl)
 
   IF( BUILD_TESTING )
     SUBDIRS(tests)

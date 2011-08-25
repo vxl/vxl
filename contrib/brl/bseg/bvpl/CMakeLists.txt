@@ -19,7 +19,7 @@ AUX_SOURCE_DIRECTORY(Templates bvpl_sources)
 
 ADD_LIBRARY(bvpl ${bvpl_sources})
 
-TARGET_LINK_LIBRARIES(bvpl bvpl_kernels bvpl_functors bvxm_grid bdgl bsta vnl vnl_io vgl vpl vul vbl_io vsl vbl)
+TARGET_LINK_LIBRARIES(bvpl bvpl_kernels bvpl_functors bvxm_grid bdgl bsta vnl vnl_io vil_algo vgl vpl vul vbl_io vsl vbl)
 
 SUBDIRS( pro )
 SUBDIRS( util )

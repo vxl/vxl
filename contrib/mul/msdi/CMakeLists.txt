@@ -16,8 +16,7 @@ SET(msdi_sources
 #AUX_SOURCE_DIRECTORY(Templates msdi_sources)
 
 ADD_LIBRARY(msdi ${msdi_sources})
-TARGET_LINK_LIBRARIES(msdi msm vimt)
-
+TARGET_LINK_LIBRARIES(msdi msm vimt vil)
 
 IF (BUILD_TESTING)
   SUBDIRS(tests)

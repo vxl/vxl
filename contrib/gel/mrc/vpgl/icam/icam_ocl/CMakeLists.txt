@@ -16,12 +16,12 @@ IF(OPENCL_FOUND)
       icam_ocl_kernel.h         icam_ocl_kernel.cxx
       icam_ocl_minimizer.h      icam_ocl_minimizer.cxx
       icam_ocl_view_metadata.h  icam_ocl_view_metadata.cxx
-      icam_ocl_view_sphere.h	icam_ocl_view_sphere.cxx	
-  )
+      icam_ocl_view_sphere.h    icam_ocl_view_sphere.cxx
+     )
   AUX_SOURCE_DIRECTORY(Templates icam_ocl_sources)
-  ADD_LIBRARY(icam_ocl ${icam_ocl_sources} )
 
-  TARGET_LINK_LIBRARIES(icam_ocl vpgl vpgl_algo icam  vgl vil vbl vul ${OPENCL_LIBRARIES})
+  ADD_LIBRARY(icam_ocl ${icam_ocl_sources} )
+  TARGET_LINK_LIBRARIES(icam_ocl vpgl vpgl_algo icam vgl vil_algo vil vnl vbl vul ${OPENCL_LIBRARIES})
 
 #tests
 SUBDIRS(tests)

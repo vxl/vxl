@@ -15,12 +15,10 @@ SET(icam_sources
     icam_transform_2d.h        icam_transform_2d.cxx
     icam_image.h
    )
-
 AUX_SOURCE_DIRECTORY(Templates icam_sources)
 
 ADD_LIBRARY(icam  ${icam_sources})
-
-TARGET_LINK_LIBRARIES(icam vsph vcl vnl vil vbl vgl_io vgl_algo vil_algo vsl vul vpgl vpgl_algo vsl vbl)
+TARGET_LINK_LIBRARIES(icam vsph vpgl_algo vpgl vgl_algo vil_algo vnl_algo vgl_io vgl vnl vil vul vsl vbl_io vbl vcl)
 
 IF(BUILD_TESTING)
   SUBDIRS(tests)

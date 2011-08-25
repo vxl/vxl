@@ -15,7 +15,7 @@ ADD_EXECUTABLE( vpgl_test_all
   test_generic_camera.cxx
 )
 
-TARGET_LINK_LIBRARIES( vpgl_test_all bgeo vpgl vgl_algo vgl vnl vpl testlib )
+TARGET_LINK_LIBRARIES( vpgl_test_all bgeo vpgl vgl_algo vgl vnl vbl vpl testlib )
 
 ADD_TEST(vpgl_test_proj_camera                      ${EXECUTABLE_OUTPUT_PATH}/vpgl_test_all test_proj_camera)
 ADD_TEST(vpgl_test_perspective_camera               ${EXECUTABLE_OUTPUT_PATH}/vpgl_test_all test_perspective_camera)

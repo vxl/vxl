@@ -16,14 +16,13 @@ SET(imesh_sources
   imesh_fileio.cxx             imesh_fileio.h
   imesh_operations.cxx         imesh_operations.h
   imesh_detection.cxx          imesh_detection.h
-
 )
 
 AUX_SOURCE_DIRECTORY(Templates imesh_sources)
 
 ADD_LIBRARY(imesh  ${imesh_sources})
 
-TARGET_LINK_LIBRARIES(imesh vgl vul brdb vbl_io )
+TARGET_LINK_LIBRARIES(imesh vgl vul brdb vbl_io vbl)
 
 # Algorithms
 SUBDIRS( algo )
@@ -31,6 +30,4 @@ SUBDIRS( algo )
 IF( BUILD_TESTING )
   SUBDIRS(tests)
 ENDIF( BUILD_TESTING )
-
-
 

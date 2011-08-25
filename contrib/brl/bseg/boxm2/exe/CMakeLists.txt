@@ -13,6 +13,6 @@ TARGET_LINK_LIBRARIES( boxm2_convert_bit_scene_exe boxm2 boxm2_io boxm_ocl vbl v
 ADD_EXECUTABLE( boxm2_rep_scene
   boxm2_rep_scene.cxx
 )
-TARGET_LINK_LIBRARIES( boxm2_rep_scene boxm2 boxm2_io boxm_ocl vbl vnl vcl)
+TARGET_LINK_LIBRARIES( boxm2_rep_scene boxm2 boxm2_io boxm_ocl vbl vnl vul vcl)
 
 ENDIF(OPENCL_FOUND)

@@ -30,7 +30,7 @@ IF( BUILD_BUNDLER )
   ADD_EXECUTABLE( vpgl_algo_test_all test_bundler_utils.cxx )
 ENDIF( BUILD_BUNDLER )
 
-TARGET_LINK_LIBRARIES( vpgl_algo_test_all vpgl_algo vgl_algo vil vgl vnl vul testlib )
+TARGET_LINK_LIBRARIES( vpgl_algo_test_all vpgl_algo vgl_algo vgl vnl_algo vnl vil vul testlib )
 
 CONFIGURE_FILE (${CMAKE_CURRENT_SOURCE_DIR}/07JAN27.RPB ${CMAKE_CURRENT_BINARY_DIR}/07JAN27.RPB )
 

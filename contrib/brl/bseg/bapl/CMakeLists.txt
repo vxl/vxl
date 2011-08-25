@@ -1,4 +1,4 @@
-# Brown affine patch library 
+# Brown affine patch library
 # contrib/brl/bseg/bapl/CMakeLists.txt
 
 INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bseg )
@@ -24,13 +24,11 @@ SET(bapl_sources
    bapl_connectivity.h          bapl_connectivity.cxx           bapl_connectivity_sptr.h
    bapl_dense_sift.h            bapl_dense_sift.cxx             bapl_dense_sift_sptr.h
    bapl_dsift.h                 bapl_dsift.cxx                  bapl_dsift_sptr.h
-)
-
+   )
 AUX_SOURCE_DIRECTORY(Templates bapl_sources)
 
 ADD_LIBRARY(bapl  ${bapl_sources})
-
-TARGET_LINK_LIBRARIES(bapl vpgl_algo vnl vbl vil ipts vimt brip rrel)
+TARGET_LINK_LIBRARIES(bapl vpgl_algo ipts vimt brip rrel vnl_algo vnl vil_algo vil_io vil vgl_algo vgl vbl_io vbl)
 
 #IF( BUILD_EXAMPLES )
   SUBDIRS( examples )
