@@ -1,10 +1,10 @@
-// This is brl/bseg/boxm2/cpp/pro/processes/boxm2_cpp_render_expected_image_process.cxx
+// This is brl/bseg/boxm2/cpp/pro/processes/boxm2_cpp_image_density_process.cxx
 #include <bprb/bprb_func_process.h>
 //:
 // \file
 // \brief  A process to compute the density for each pixel in an image given a scene model
 //
-// \author Ozge C. Ozcanli 
+// \author Ozge C. Ozcanli
 // \date July 07, 2011
 
 #include <vcl_fstream.h>
@@ -138,7 +138,7 @@ bool boxm2_cpp_image_density_process(bprb_func_process& pro)
         render_functor.init_data(datas, input_image, density_img, vis_img);
         cast_ray_per_block<boxm2_image_density_functor<BOXM2_MOG3_GREY> >
           (render_functor,scene_info_wrapper->info,blk,cam,input_image->ni(),input_image->nj());
-      } 
+      }
       else if (data_type.find(boxm2_data_traits<BOXM2_GAUSS_GREY>::prefix()) != vcl_string::npos )
       {
         vcl_cout << "Rendering using gauss grey!\n";
@@ -154,13 +154,13 @@ bool boxm2_cpp_image_density_process(bprb_func_process& pro)
     //: use vis_inf to leave pixels with rays that do not intersect the model
     float sum = 0.0f;
     for (unsigned i = 0; i < input_image->ni(); i++)
-      for (unsigned j = 0; j < input_image->nj(); j++) 
+      for (unsigned j = 0; j < input_image->nj(); j++)
         if ((*vis_img)(i,j) < 0.9999) // if it is 1.0 then the ray didn't intersect the world
           sum += (*density_img)(i,j);
     float image_mean = sum/(input_image->ni()*input_image->nj());
     pro.set_output_val<float>(1,image_mean);
   }
-  
+
   return true;
 }
 
@@ -182,7 +182,7 @@ bool boxm2_cpp_image_density_masked_process_cons(bprb_func_process& pro)
   input_types_[1] = "boxm2_cache_sptr";
   input_types_[2] = "vil_image_view_base_sptr";
   input_types_[3] = "vpgl_camera_double_sptr";
-  input_types_[4] = "float"; 
+  input_types_[4] = "float";
   input_types_[5] = "float";
   input_types_[6] = "float"; //threshold
   input_types_[7] = "vcl_string";// if identifier string is empty, then only one appearance model
@@ -216,7 +216,7 @@ bool boxm2_cpp_image_density_masked_process(bprb_func_process& pro)
   vil_image_view_base_sptr img = pro.get_input<vil_image_view_base_sptr>(i++);
   vil_image_view_base_sptr float_image=boxm2_util::prepare_input_image(img);
   vpgl_camera_double_sptr cam= pro.get_input<vpgl_camera_double_sptr>(i++);
-  float shadow_prior = pro.get_input<float>(i++); 
+  float shadow_prior = pro.get_input<float>(i++);
   float shadow_sigma = pro.get_input<float>(i++);
   float shadow_thres = pro.get_input<float>(i++);
   vcl_string identifier = pro.get_input<vcl_string>(i);
@@ -283,7 +283,7 @@ bool boxm2_cpp_image_density_masked_process(bprb_func_process& pro)
         render_functor.init_data(datas, input_image, density_img, vis_img);
         cast_ray_per_block<boxm2_image_density_functor<BOXM2_MOG3_GREY> >
           (render_functor,scene_info_wrapper->info,blk,cam,input_image->ni(),input_image->nj());
-      } 
+      }
       else if (data_type.find(boxm2_data_traits<BOXM2_GAUSS_GREY>::prefix()) != vcl_string::npos )
       {
         vcl_cout << "Rendering using gauss grey!\n";
@@ -295,7 +295,7 @@ bool boxm2_cpp_image_density_masked_process(bprb_func_process& pro)
       }
     }
     // now mask the density image
-    
+
     //: compute alternate appearance probability for each pixel in the image
     vil_image_view<float> alt_prob_img(input_image->ni(), input_image->nj());
     alt_prob_img.fill(0.0f);
@@ -310,29 +310,28 @@ bool boxm2_cpp_image_density_masked_process(bprb_func_process& pro)
     }
     //: now threshold the density to generate a mask image
     for (unsigned i = 0; i < input_image->ni(); i++)
-      for (unsigned j = 0; j < input_image->nj(); j++) 
-        if (alt_prob_img(i,j) < shadow_thres)  // shadow regions have high density values, 
+      for (unsigned j = 0; j < input_image->nj(); j++)
+        if (alt_prob_img(i,j) < shadow_thres)  // shadow regions have high density values,
           alt_prob_img(i,j) = 1.0f;
-        else 
+        else
           alt_prob_img(i,j) = 0.0f;
 
     vcl_cout << "saving shadow density mask image\n";
     vil_save(alt_prob_img, "shadow_density_mask_img.tiff");
-    
+
     // store scene smart pointer
     pro.set_output_val<vil_image_view_base_sptr>(0, density_img);
- 
+
     //: use vis_inf to leave pixels with rays that do not intersect the model
     float sum = 0.0f;
     for (unsigned i = 0; i < input_image->ni(); i++)
-      for (unsigned j = 0; j < input_image->nj(); j++) 
+      for (unsigned j = 0; j < input_image->nj(); j++)
         if ((*vis_img)(i,j) < 0.9999 && alt_prob_img(i,j) > 0.9) // if it is 1.0 then the ray didn't intersect the world
           sum += (*density_img)(i,j);
     float image_mean = sum/(input_image->ni()*input_image->nj());
     pro.set_output_val<float>(1,image_mean);
   }
-  
+
   return true;
 }
-
 
