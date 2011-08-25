@@ -8,6 +8,7 @@
 #include <boxm2/cpp/algo/boxm2_gauss_grey_processor.h>
 #include <bsta/algo/bsta_sigma_normalizer.h>
 #include <boxm2/io/boxm2_stream_cache.h>
+#include <vcl_iostream.h>
 
 //: compute average pre_i, vis_i and post_i for each cell, save the values in aux
 template <boxm2_data_type APM_TYPE>
@@ -18,8 +19,8 @@ class boxm2_batch_update_opt2_pass2_functor
   boxm2_batch_update_opt2_pass2_functor() {}
 
   bool init_data(vcl_vector<boxm2_data_base*> & datas, vil_image_view<float> * beta_denom,
-                                           float model_prior,
-                                           vil_image_view<float> * alt_prob_img)
+                 float model_prior,
+                 vil_image_view<float> * alt_prob_img)
   {
     aux0_data_=new boxm2_data<BOXM2_AUX0>(datas[0]->data_buffer(),datas[0]->buffer_length(),datas[0]->block_id());
     aux1_data_=new boxm2_data<BOXM2_AUX1>(datas[1]->data_buffer(),datas[1]->buffer_length(),datas[1]->block_id());
@@ -37,7 +38,7 @@ class boxm2_batch_update_opt2_pass2_functor
     beta_denom_ = beta_denom;
     alt_prob_img_ = alt_prob_img;
     model_prior_ = model_prior;
-    
+
     return true;
   }
 
@@ -52,7 +53,7 @@ class boxm2_batch_update_opt2_pass2_functor
     // compute appearance probability of observation
     float mean_obs =aux0/aux1;
     float PI=boxm2_data_traits<APM_TYPE>::processor::prob_density(mog3_data_->data()[index], mean_obs);
-    
+
     boxm2_data<BOXM2_ALPHA>::datatype alpha=alpha_data_->data()[index];
     // update alpha integral
     alpha_integral_(i,j) += alpha * seg_len;
@@ -96,8 +97,8 @@ class boxm2_batch_update_opt2_pass2_functor
     if (pass_prob < 1e-5f) {
       pass_prob = 1e-5f;
     }
-    aux[2] += vcl_log(pass_prob) * weight/seg_len; //aux_val.log_pass_prob_sum_ += 
-    aux[3] += weight; // aux_val.weighted_seg_len_sum_ 
+    aux[2] += vcl_log(pass_prob) * weight/seg_len; //aux_val.log_pass_prob_sum_ +=
+    aux[3] += weight; // aux_val.weighted_seg_len_sum_
 
     return true;
   }
@@ -107,14 +108,13 @@ class boxm2_batch_update_opt2_pass2_functor
   boxm2_data<BOXM2_ALPHA> * alpha_data_;
   boxm2_data<APM_TYPE> * mog3_data_;
   boxm2_data<BOXM2_AUX> * aux_data_;
-    
+
   vil_image_view<float> alpha_integral_;
   vil_image_view<float> pre_img_;  // these 2 can be local for this functor
   vil_image_view<float> vis_img_;
   vil_image_view<float> * beta_denom_;
   vil_image_view<float> * alt_prob_img_;
   float model_prior_;
-
 };
 
 
@@ -178,13 +178,13 @@ class boxm2_batch_update_opt2_functor
       if (index == cell_no) {
         float mean_obs = aux0[s]/obs_seg_len;
         float PI = boxm2_data_traits<APM_TYPE>::processor::prob_density(mog, mean_obs);
-        vcl_cout << "\t m: " << s << " pre_i: " << aux[s][0]/obs_seg_len << " vis_i: " << aux[s][1]/obs_seg_len << vcl_endl;
-        vcl_cout << "obs_seg_len: " << obs_seg_len << " PI: " << PI << " mean_obs: " << mean_obs << "\n";
+        vcl_cout << "\t m: " << s << " pre_i: " << aux[s][0]/obs_seg_len << " vis_i: " << aux[s][1]/obs_seg_len << vcl_endl
+                 << "obs_seg_len: " << obs_seg_len << " PI: " << PI << " mean_obs: " << mean_obs << vcl_endl;
       }
     }
     if (index == cell_no) {
       float p_q = 1.0f-vcl_exp(-alpha*max_obs_seg_len);
-      vcl_cout << "current alpha: " << alpha << " p_q: " << p_q << "\n";
+      vcl_cout << "current alpha: " << alpha << " p_q: " << p_q << vcl_endl;
     }
 
     // update the occlusion density
@@ -193,25 +193,25 @@ class boxm2_batch_update_opt2_functor
     }
     if (index == cell_no) {
       float p_q_new = 1.0f-vcl_exp(-alpha*max_obs_seg_len);
-      vcl_cout << "after update alpha: " << alpha << " p_q_new: " << p_q_new << "\n";
+      vcl_cout << "after update alpha: " << alpha << " p_q_new: " << p_q_new << vcl_endl;
     }
 
     float alpha_min = -vcl_log(1.f-0.0001f)/max_obs_seg_len;
     float alpha_max = -vcl_log(1.f-0.995f)/max_obs_seg_len;
-    
+
     if (alpha > alpha_max) {
       alpha = alpha_max;
     }
     if (alpha < alpha_min) {
       alpha = alpha_min;
     }
-  
+
     // update with new appearance
     const float min_sigma = 0.02f;
     //boxm_apm_traits<APM>::apm_processor::compute_appearance(obs_vector, pre_vector, vis_vector, data.appearance_, min_sigma);
     //boxm2_data_traits<APM_TYPE>::processor::compute_app_model(mog,obs_vector, vis_vector,n_table_,min_sigma);
     boxm2_data_traits<APM_TYPE>::processor::compute_app_model(mog,obs_vector, pre_vector,vis_vector,n_table_,min_sigma);
-   
+
     return true;
   }
 
@@ -222,9 +222,6 @@ class boxm2_batch_update_opt2_functor
   boxm2_block_id id_;
   bsta_sigma_normalizer_sptr n_table_;
 };
-
-
-
 
 
 #endif // boxm2_batch_opt2_functors_h_
