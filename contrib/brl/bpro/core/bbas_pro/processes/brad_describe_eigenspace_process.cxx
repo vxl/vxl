@@ -1,8 +1,5 @@
 // This is brl/bpro/core/bbas_pro/processes/brad_describe_eigenspace_process.cxx
 #include <bprb/bprb_func_process.h>
-#include <brad/brad_hist_prob_feature_vector.h>
-#include <brad/brad_grad_hist_feature_vector.h>
-#include <brad/brad_grad_int_feature_vector.h>
 #include <brad/brad_eigenspace.h>
 #include <vsl/vsl_binary_io.h>
 //:
@@ -41,25 +38,8 @@ bool brad_describe_eigenspace_process(bprb_func_process& pro)
     return false;
   }
   vcl_cout << "\n>>>>brad_eigenspace description<<<<\n" << vcl_flush;
-  if(es_ptr->feature_vector_type() == "brad_hist_prob_feature_vector"){
-    brad_eigenspace<brad_hist_prob_feature_vector>* hp =
-      dynamic_cast<brad_eigenspace<brad_hist_prob_feature_vector>* >(es_ptr.ptr());
-    hp->print();
-    vcl_cout << '\n' << vcl_flush;
-  }else if(es_ptr->feature_vector_type() == "brad_grad_hist_feature_vector"){
-    brad_eigenspace<brad_grad_hist_feature_vector>* hp =
-      dynamic_cast<brad_eigenspace<brad_grad_hist_feature_vector>* >(es_ptr.ptr());
-    hp->print();
-    vcl_cout << '\n' << vcl_flush;
-  }else if(es_ptr->feature_vector_type() == "brad_grad_int_feature_vector"){
-    brad_eigenspace<brad_grad_int_feature_vector>* hp =
-      dynamic_cast<brad_eigenspace<brad_grad_int_feature_vector>* >(es_ptr.ptr());
-    hp->print();
-    vcl_cout << '\n' << vcl_flush;
-  }else{
-    vcl_cout << "Unknown feature vector type\n";
-    return false;
-  }
+  CAST_CALL_EIGENSPACE(es_ptr, ep->print(), "");
+  vcl_cout << '\n';
   return true;
 }
 

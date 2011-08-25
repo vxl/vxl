@@ -1,8 +1,5 @@
 // This is brl/bpro/core/bbas_pro/processes/brad_compute_eigenspace_process.cxx
 #include <bprb/bprb_func_process.h>
-#include <brad/brad_hist_prob_feature_vector.h>
-#include <brad/brad_grad_hist_feature_vector.h>
-#include <brad/brad_grad_int_feature_vector.h>
 #include <brad/brad_eigenspace.h>
 #include <bpro/core/bbas_pro/bbas_1d_array_string.h>
 #include <vcl_vector.h>
@@ -86,30 +83,8 @@ bool brad_compute_eigenspace_process(bprb_func_process& pro)
   //tile dimensions
   unsigned nit = pro.get_input<unsigned>(3);
   unsigned njt = pro.get_input<unsigned>(4);
-
-  if(es_ptr->feature_vector_type() == "brad_hist_prob_feature_vector"){
-    brad_eigenspace<brad_hist_prob_feature_vector>* hp =
-      dynamic_cast<brad_eigenspace<brad_hist_prob_feature_vector>* >(es_ptr.ptr());
-    if(!eigen_training_process(*paths, frac, nit, njt, *hp)){
-      vcl_cout << "in compute_eigenspace_process-creating eigenspace failed\n";
-      return false;
-    }else return true;
-  }else if(es_ptr->feature_vector_type() == "brad_grad_hist_feature_vector"){
-    brad_eigenspace<brad_grad_hist_feature_vector>* hp =
-      dynamic_cast<brad_eigenspace<brad_grad_hist_feature_vector>* >(es_ptr.ptr());
-    if(!eigen_training_process(*paths, frac, nit, njt, *hp)){
-      vcl_cout << "in compute_eigenspace_process-creating eigenspace failed\n";
-      return false;
-    }else return true;
-  }else if(es_ptr->feature_vector_type() == "brad_grad_int_feature_vector"){
-    brad_eigenspace<brad_grad_int_feature_vector>* hp =
-      dynamic_cast<brad_eigenspace<brad_grad_int_feature_vector>* >(es_ptr.ptr());
-    if(!eigen_training_process(*paths, frac, nit, njt, *hp)){
-      vcl_cout << "in compute_eigenspace_process-creating eigenspace failed\n";
-      return false;
-    }else return true;
-  }
+  CAST_CALL_EIGENSPACE(es_ptr, eigen_training_process(*paths, frac, nit, njt, *ep), "in compute_eigenspace_process-creating eigenspace failed")
   vcl_cout << "in compute_eigenspace_process - unknown eigenspace type\n";
-  return false;
+  return true;
 }
 

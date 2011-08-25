@@ -1,8 +1,5 @@
 // This is brl/bpro/core/bbas_pro/processes/brad_classify_image_process.cxx
 #include <bprb/bprb_func_process.h>
-#include <brad/brad_hist_prob_feature_vector.h>
-#include <brad/brad_grad_hist_feature_vector.h>
-#include <brad/brad_grad_int_feature_vector.h>
 #include <brad/brad_eigenspace.h>
 #include <vil/vil_load.h>
 //:
@@ -80,31 +77,8 @@ bool brad_classify_image_process(bprb_func_process& pro)
   unsigned nit = pro.get_input<unsigned>(5);
   unsigned njt = pro.get_input<unsigned>(6);
 
-  if(es_ptr->feature_vector_type() == "brad_hist_prob_feature_vector"){
-    brad_eigenspace<brad_hist_prob_feature_vector>* hp =
-      dynamic_cast<brad_eigenspace<brad_hist_prob_feature_vector>* >(es_ptr.ptr());
-    if(!hp->classify_image(input, *hist_no, *hist_atmos, nit, njt, output_path)){
-      vcl_cout << "in classify_image_process -classify function failed\n";
-      return false;
-    }
-  }else if(es_ptr->feature_vector_type() == "brad_grad_hist_feature_vector"){
-    brad_eigenspace<brad_grad_hist_feature_vector>* hp =
-      dynamic_cast<brad_eigenspace<brad_grad_hist_feature_vector>* >(es_ptr.ptr());
-    if(!hp->classify_image(input, *hist_no, *hist_atmos, nit, njt, output_path)){
-      vcl_cout << "in classify_image_process - classify function failed\n";
-      return false;
-    }
-  }else if(es_ptr->feature_vector_type() == "brad_grad_int_feature_vector"){
-     brad_eigenspace<brad_grad_int_feature_vector>* hp =
-      dynamic_cast<brad_eigenspace<brad_grad_int_feature_vector>* >(es_ptr.ptr());
-    if(!hp->classify_image(input, *hist_no, *hist_atmos, nit, njt, output_path)){
-      vcl_cout << "in classify_image_process - classify function failed\n";
-      return false;
-    }
-  }else{
-      vcl_cout << "in classify_image_process-unknown feature vector type\n";
-      return false;
-  }
+  CAST_CALL_EIGENSPACE(es_ptr, ep->classify_image(input, *hist_no, *hist_atmos, nit, njt, output_path), "in classify_image_process - classify function failed\n")
+
   return true;
 }
 

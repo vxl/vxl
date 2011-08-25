@@ -1,6 +1,5 @@
 // This is brl/bpro/core/bbas_pro/processes/brad_load_eigenspace_process.cxx
 #include <bprb/bprb_func_process.h>
-#include <brad/brad_hist_prob_feature_vector.h>
 #include <brad/brad_eigenspace.h>
 #include <vsl/vsl_binary_io.h>
 //:

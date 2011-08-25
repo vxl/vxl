@@ -1,6 +1,5 @@
 // This is brl/bpro/core/bbas_pro/processes/bsta_clone_joint_hist_3d_process.cxx
 #include <bprb/bprb_func_process.h>
-#include <brad/brad_hist_prob_feature_vector.h>
 #include <bsta/bsta_joint_histogram_3d.h>
 #include <bsta/io/bsta_io_histogram.h>
 #include <vsl/vsl_binary_io.h>

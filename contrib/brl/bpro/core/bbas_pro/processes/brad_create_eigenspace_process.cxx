@@ -1,8 +1,5 @@
 // This is brl/bpro/core/bbas_pro/processes/brad_create_eigenspace_process.cxx
 #include <bprb/bprb_func_process.h>
-#include <brad/brad_hist_prob_feature_vector.h>
-#include <brad/brad_grad_hist_feature_vector.h>
-#include <brad/brad_grad_int_feature_vector.h>
 #include <brad/brad_eigenspace.h>
 //:
 // \file
@@ -50,21 +47,9 @@ bool brad_create_eigenspace_process(bprb_func_process& pro)
   unsigned nib = pro.get_input<unsigned>(i++);
   unsigned njb = pro.get_input<unsigned>(i++);
 
-  brad_eigenspace_sptr espace = 0;
-  if(feature_vector_type == "brad_hist_prob_feature_vector"){
-    brad_hist_prob_feature_vector func(0.0f, max_int, nbins);
-    espace = new brad_eigenspace<brad_hist_prob_feature_vector>(nib,njb,func);
-  }else if(feature_vector_type == "brad_grad_hist_feature_vector"){
-    brad_grad_hist_feature_vector func(0.0f, max_grad, nbins);
-    espace = new brad_eigenspace<brad_grad_hist_feature_vector>(nib,njb,func);
-  }else if(feature_vector_type == "brad_grad_int_feature_vector"){
-    brad_grad_int_feature_vector func(0.0f, max_int, 0.0f, max_grad, nbins);
-    espace = new brad_eigenspace<brad_grad_int_feature_vector>(nib,njb,func);
-  }else{
-    vcl_cout << "brad_create_eigenspace_process: unknown feature vector type" << vcl_endl;
-    return false;
-  } 
-  pro.set_output_val<brad_eigenspace_sptr>(0, espace);
+  brad_eigenspace_sptr eptr = 0;
+  CAST_CREATE_EIGENSPACE(feature_vector_type, nbins, max_int, max_grad)
+  pro.set_output_val<brad_eigenspace_sptr>(0, eptr);
   return true;
 }
 

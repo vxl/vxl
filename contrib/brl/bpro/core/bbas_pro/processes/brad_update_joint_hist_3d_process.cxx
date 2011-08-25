@@ -2,9 +2,6 @@
 #include <bprb/bprb_func_process.h>
 //:
 // \file
-#include <brad/brad_hist_prob_feature_vector.h>
-#include <brad/brad_grad_hist_feature_vector.h>
-#include <brad/brad_grad_int_feature_vector.h>
 #include <brad/brad_eigenspace.h>
 #include <bpro/core/bbas_pro/bbas_1d_array_string.h>
 #include <vsl/vsl_binary_io.h>
@@ -87,38 +84,8 @@ bool brad_update_joint_hist_3d_process(bprb_func_process& pro)
   unsigned nit = pro.get_input<unsigned>(4);
   unsigned njt = pro.get_input<unsigned>(5);
 
-  if (es_ptr->feature_vector_type() == "brad_hist_prob_feature_vector") {
-    vcl_string t = "brad_hist_prob_feature_vector";
-    brad_eigenspace<brad_hist_prob_feature_vector>* hp =
-      dynamic_cast<brad_eigenspace<brad_hist_prob_feature_vector>* >(es_ptr.ptr());
-    if (!hist_update_process(*paths, *hp,
-                             frac, nit, njt,
-                             *hist)) {
-      vcl_cout << "in update_histogram_process - update function failed\n";
-      return false;
-    }
-  }else if(es_ptr->feature_vector_type() == "brad_grad_hist_feature_vector"){
-    brad_eigenspace<brad_grad_hist_feature_vector>* hp =
-      dynamic_cast<brad_eigenspace<brad_grad_hist_feature_vector>* >(es_ptr.ptr());
-    if(!hist_update_process(*paths, *hp,
-                            frac, nit, njt,
-                            *hist)){
-      vcl_cout << "in update_histogram_process - update function failed\n";
-      return false;
-    }
-  }else if(es_ptr->feature_vector_type() == "brad_grad_int_feature_vector"){
-     brad_eigenspace<brad_grad_int_feature_vector>* hp =
-      dynamic_cast<brad_eigenspace<brad_grad_int_feature_vector>* >(es_ptr.ptr());
-    if(!hist_update_process(*paths, *hp,
-                            frac, nit, njt,
-                            *hist)){
-      vcl_cout << "in update_histogram_process - update function failed\n";
-      return false;
-    }
-  }else{
-      vcl_cout << "in update_histogram_process-unknown feature vector type\n";
-      return false;
-  }
+  CAST_CALL_EIGENSPACE(es_ptr, hist_update_process(*paths, *ep, frac, nit, njt,*hist), "in update_histogram_process - update function failed")
+
   bsta_joint_histogram_3d_base_sptr out_ptr =
     new bsta_joint_histogram_3d<float>(*hist);
   pro.set_output_val<bsta_joint_histogram_3d_base_sptr>(0, out_ptr);
