@@ -77,6 +77,30 @@ class boxm2_adaptor:
       expimg = render_grey(self.scene, cache, cam, ni, nj, dev); 
     return expimg; 
   
+  #render heigh map render
+  def render_height_map(self, device_string="") : 
+    cache = self.active_cache; 
+    dev = self.device;
+    if device_string=="gpu" : 
+      cache = self.opencl_cache; 
+    elif device_string=="cpp" : 
+      cache = self.cpu_cache; 
+      dev = None; 
+    z_image, var_image, x_image, y_image, prob_image, app_image = render_height_map(self.scene, cache, dev); 
+    return z_image, var_image, x_image, y_image, prob_image, app_image; 
+
+  # detect change wrapper, 
+  def change_detect(self, cam, img, exp_img, device_string="") : 
+    cache = self.active_cache; 
+    dev = self.device; 
+    if device_string=="gpu" : 
+      cache = self.opencel_cache; 
+    elif device_string=="cpp" : 
+      cache = self.cpu_cache;
+      dev = None;
+    cd_img = change_detect(self.scene,cache,cam,img,exp_img,dev); 
+    return cd_img; 
+  
   def refine(self, thresh=0.3, device_string="") :
     if device_string=="":
       refine(self.scene, self.active_cache, thresh, self.device); 
@@ -216,6 +240,46 @@ def update_rgb(scene, cache, cam, img, device=None, mask="") :
   else : 
     print "ERROR: Cache type not recognized: ", cache.type; 
 
+ # Generic render, returns a dbvalue expected image
+# Cache can be either an OPENCL cache or a CPU cache
+def render_height_map(scene, cache, device=None) :
+  if cache.type == "boxm2_cache_sptr" :
+    print "boxm2_adaptor, render height map cpp process not implemented"; 
+
+  elif cache.type == "boxm2_opencl_cache_sptr" and device : 
+    boxm2_batch.init_process("boxm2OclRenderExpectedHeightMapProcess");
+    boxm2_batch.set_input_from_db(0,device);
+    boxm2_batch.set_input_from_db(1,scene);
+    boxm2_batch.set_input_from_db(2,cache);
+    boxm2_batch.run_process();
+    
+    #z_img
+    (id,type) = boxm2_batch.commit_output(0);
+    z_image = dbvalue(id,type);
+    
+    #var image
+    (id,type) = boxm2_batch.commit_output(1);
+    var_image = dbvalue(id,type);
+    
+    #x_img
+    (id,type) = boxm2_batch.commit_output(2);
+    x_image = dbvalue(id,type);
+    
+    #y_img
+    (id,type) = boxm2_batch.commit_output(3);
+    y_image = dbvalue(id,type);
+    
+    #prob_img
+    (id,type) = boxm2_batch.commit_output(4);
+    prob_image = dbvalue(id,type);
+    
+    #appearance_img
+    (id,type) = boxm2_batch.commit_output(5);
+    app_image = dbvalue(id,type);
+
+    return z_image, var_image, x_image, y_image, prob_image, app_image; 
+  else : 
+    print "ERROR: Cache type not recognized: ", cache.type; 
  
 # Generic render, returns a dbvalue expected image
 # Cache can be either an OPENCL cache or a CPU cache
@@ -264,6 +328,35 @@ def render_rgb(scene, cache, cam, ni=1280, nj=720, device=None) :
     return exp_image; 
   else : 
     print "ERROR: Cache type not recognized: ", cache.type; 
+    
+def change_detect(scene, cache, cam, img, exp_img, device=None) : 
+  if cache.type == "boxm2_cache_sptr" : 
+    print "boxm2_batch CPU change detection"; 
+    boxm2_batch.init_process("boxm2CppChangeDetectionProcess"); 
+    boxm2_batch.set_input_from_db(0,scene); 
+    boxm2_batch.set_input_from_db(1,cache); 
+    boxm2_batch.set_input_from_db(2,cam);
+    boxm2_batch.set_input_from_db(3,img); 
+    boxm2_batch.set_input_from_db(4,exp_img); 
+    boxm2_batch.run_process(); 
+    (id,type) = boxm2_batch.commit_output(0); 
+    cd_img = dbvalue(id,type); 
+    return cd_img; 
+  elif cache.type == "boxm2_opencl_cache_sptr" and device : 
+    print "boxm2_batch GPU change detection"; 
+    boxm2_batch.init_process("boxm2OclChangeDetectionProcess"); 
+    boxm2_batch.set_input_from_db(0,device); 
+    boxm2_batch.set_input_from_db(1,scene); 
+    boxm2_batch.set_input_from_db(2,cache); 
+    boxm2_batch.set_input_from_db(3,cam);
+    boxm2_batch.set_input_from_db(4,img); 
+    boxm2_batch.set_input_from_db(5,exp_img); 
+    boxm2_batch.run_process(); 
+    (id,type) = boxm2_batch.commit_output(0); 
+    cd_img = dbvalue(id,type); 
+    return cd_img; 
+  else : 
+    print "ERROR: Cache type not recognized: ", cache.type;
     
 #generic refine (will work on color and grey scenes)
 def refine(scene, cache, thresh=0.3, device=None) :
@@ -359,8 +452,12 @@ def load_image(file_path) :
   boxm2_batch.set_input_string(0, file_path);
   boxm2_batch.run_process();
   (id,type) = boxm2_batch.commit_output(0);
+  (ni_id, ni_type) = boxm2_batch.commit_output(1); 
+  (nj_id, nj_type) = boxm2_batch.commit_output(2); 
+  ni = boxm2_batch.get_output_unsigned(ni_id); 
+  nj = boxm2_batch.get_output_unsigned(nj_id); 
   img = dbvalue(id,type);
-  return img; 
+  return img, ni, nj; 
   
 def save_image(img, file_path) : 
   boxm2_batch.init_process("vilSaveImageViewProcess");
