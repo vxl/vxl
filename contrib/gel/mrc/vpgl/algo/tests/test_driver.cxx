@@ -23,10 +23,6 @@ DECLARE( test_camera_from_box );
 DECLARE( test_camera_bounds );
 DECLARE( test_em_compute_5_point );
 
-#ifdef BUILD_BUNDLER
-DECLARE( test_bundler_utils );
-#endif
-
 void register_tests()
 {
   //  REGISTER( test_construct_cameras );
@@ -50,9 +46,6 @@ void register_tests()
   REGISTER( test_camera_from_box );
   REGISTER( test_camera_bounds );
   REGISTER( test_em_compute_5_point );
-#ifdef BUILD_BUNDLER
-  REGISTER( test_bundler_utils );
-#endif
 }
 
 DEFINE_MAIN;

@@ -25,11 +25,6 @@ ADD_EXECUTABLE( vpgl_algo_test_all
   test_em_compute_5_point.cxx
 )
 
-IF( BUILD_BUNDLER )
-  ADD_DEFINITIONS(-DBUILD_BUNDLER=1)
-  ADD_EXECUTABLE( vpgl_algo_test_all test_bundler_utils.cxx )
-ENDIF( BUILD_BUNDLER )
-
 TARGET_LINK_LIBRARIES( vpgl_algo_test_all vpgl_algo vgl_algo vgl vnl_algo vnl vil vul testlib )
 
 CONFIGURE_FILE (${CMAKE_CURRENT_SOURCE_DIR}/07JAN27.RPB ${CMAKE_CURRENT_BINARY_DIR}/07JAN27.RPB )
@@ -56,10 +51,6 @@ ADD_TEST( vpgl_algo_test_camera_from_box             ${EXECUTABLE_OUTPUT_PATH}/v
 
 ADD_TEST( vpgl_algo_test_camera_bounds               ${EXECUTABLE_OUTPUT_PATH}/vpgl_algo_test_all test_camera_bounds )
 ADD_TEST( vpgl_algo_test_em_compute_5_point          ${EXECUTABLE_OUTPUT_PATH}/vpgl_algo_test_all test_em_compute_5_point )
-
-IF( BUILD_BUNDLER )
-ADD_TEST( vpgl_algo_test_bundler_utils               ${EXECUTABLE_OUTPUT_PATH}/vpgl_algo_test_all test_bundler_utils )
-ENDIF( BUILD_BUNDLER )
 
 ADD_EXECUTABLE( vpgl_algo_test_include test_include.cxx )
 TARGET_LINK_LIBRARIES( vpgl_algo_test_include vpgl_algo )

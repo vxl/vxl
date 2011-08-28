@@ -1,8 +1,6 @@
 # gel/mrc/vpgl/algo/CMakeLists.txt
 # Photogrammetry Algorithms Library.
 
-OPTION(BUILD_BUNDLER "Build Cornell Experimental Bundler Port" NO)
-
 INCLUDE_DIRECTORIES(${VXLCORE_INCLUDE_DIR})
 INCLUDE_DIRECTORIES(${GEL_INCLUDE_DIR})
 INCLUDE_DIRECTORIES(${GEL_INCLUDE_DIR}/mrc)
@@ -36,6 +34,7 @@ SET( vpgl_algo_sources
   vpgl_camera_from_box.h           vpgl_camera_from_box.cxx
   vpgl_camera_bounds.h             vpgl_camera_bounds.cxx
   vpgl_bundle_rolling_shutter_adjust.h  vpgl_bundle_rolling_shutter_adjust.cxx
+  vpgl_triangulate_points.h        vpgl_triangulate_points.cxx
 )
 
 # the ransac implementations use rpl/rrel
@@ -46,25 +45,6 @@ IF(BUILD_RPL)
       vpgl_fm_compute_reg_ransac.h     vpgl_fm_compute_reg_ransac.cxx
       vpgl_fm_compute_affine_ransac.h  vpgl_fm_compute_affine_ransac.cxx
      )
-
-  IF(BUILD_BUNDLER)
-    INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR})
-
-    SET(vpgl_algo_sources ${vpgl_algo_sources}
-        vpgl_bundler.h                   vpgl_bundler.cxx
-
-        vpgl_bundler_sfm.h
-        vpgl_bundler_sfm_impl.h       vpgl_bundler_sfm_impl.cxx
-
-        vpgl_bundler_tracks.h
-        vpgl_bundler_tracks_impl.h       vpgl_bundler_tracks_impl.cxx
-
-        vpgl_bundler_utils.h          vpgl_bundler_utils.cxx
-
-        vpgl_bundler_settings.h
-        vpgl_bundler_inters.h
-       )
-  ENDIF(BUILD_BUNDLER)
 ENDIF(BUILD_RPL)
 
 
@@ -76,9 +56,6 @@ TARGET_LINK_LIBRARIES(vpgl_algo vpgl vpgl_file_formats vsol bgeo vgl_algo vnl_al
 
 IF(BUILD_RPL)
   TARGET_LINK_LIBRARIES(vpgl_algo rrel)
-  IF( BUILD_BUNDLER )
-    TARGET_LINK_LIBRARIES(vpgl_algo bapl rsdl)
-  ENDIF( BUILD_BUNDLER)
 ENDIF(BUILD_RPL)
 
 IF( BUILD_TESTING )
