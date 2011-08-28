@@ -34,7 +34,6 @@ SET( vpgl_algo_sources
   vpgl_camera_from_box.h           vpgl_camera_from_box.cxx
   vpgl_camera_bounds.h             vpgl_camera_bounds.cxx
   vpgl_bundle_rolling_shutter_adjust.h  vpgl_bundle_rolling_shutter_adjust.cxx
-  vpgl_triangulate_points.h        vpgl_triangulate_points.cxx
 )
 
 # the ransac implementations use rpl/rrel
