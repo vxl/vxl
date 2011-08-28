@@ -22,6 +22,7 @@ DECLARE( test_camera_homographies);
 DECLARE( test_camera_from_box );
 DECLARE( test_camera_bounds );
 DECLARE( test_em_compute_5_point );
+DECLARE( test_triangulate );
 
 void register_tests()
 {
@@ -46,6 +47,7 @@ void register_tests()
   REGISTER( test_camera_from_box );
   REGISTER( test_camera_bounds );
   REGISTER( test_em_compute_5_point );
+  REGISTER( test_triangulate );
 }
 
 DEFINE_MAIN;
