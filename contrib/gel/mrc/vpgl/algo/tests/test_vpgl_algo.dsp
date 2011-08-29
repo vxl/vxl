@@ -156,13 +156,13 @@ SOURCE=.\test_ba_fixed_k_lsqr.cxx
 SOURCE=.\test_em_compute_5_point.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\test_triangulate.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\test_include.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\test_template_include.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\test_bundler_utils.cxx
 # End Source File
 # End Group
 # End Target

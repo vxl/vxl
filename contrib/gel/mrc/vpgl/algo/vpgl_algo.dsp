@@ -177,16 +177,7 @@ SOURCE=.\vpgl_ba_fixed_k_lsqr.cxx
 SOURCE=.\vpgl_bundle_rolling_shutter_adjust.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\vpgl_bundler.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\vpgl_bundler_sfm_impl.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\vpgl_bundler_tracks_impl.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\vpgl_bundler_utils.cxx
+SOURCE=.\vpgl_triangulate_points.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/vpgl_list+vgl_h_matrix_2d+double--.cxx
@@ -294,28 +285,7 @@ SOURCE=.\vpgl_bundle_rolling_shutter_adjust.h
 SOURCE=.\vpgl_em_compute_5_point.h
 # End Source File
 # Begin Source File
-SOURCE=.\vpgl_bundler.h
-# End Source File
-# Begin Source File
-SOURCE=.\vpgl_bundler_sfm_impl.h
-# End Source File
-# Begin Source File
-SOURCE=.\vpgl_bundler_sfm.h
-# End Source File
-# Begin Source File
-SOURCE=.\vpgl_bundler_settings.h
-# End Source File
-# Begin Source File
-SOURCE=.\vpgl_bundler_tracks.h
-# End Source File
-# Begin Source File
-SOURCE=.\vpgl_bundler_tracks_impl.h
-# End Source File
-# Begin Source File
-SOURCE=.\vpgl_bundler_inters.h
-# End Source File
-# Begin Source File
-SOURCE=.\vpgl_bundler_utils.h
+SOURCE=.\vpgl_triangulate_points.h
 # End Source File
 # End Group
 # End Target
