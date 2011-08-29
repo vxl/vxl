@@ -1,0 +1,78 @@
+#include <testlib/testlib_test.h>
+#include <bundler/bundler_tracks_impl.h>
+
+#include <vcl_string.h>
+#include <vil/vil_load.h>
+
+#include <vcl_iostream.h>
+
+static void test_tracks_detect(int argc, char* argv[])
+{ 
+
+    vil_image_resource_sptr img; 
+
+    if(argc < 2){
+        vcl_cerr<<"Supply a filename for the first argument!" << vcl_endl;
+        TEST("test_tracks_detect", true, false);
+
+        return;
+
+        // TODO Get an argument into this test!
+        img = vil_load_image_resource(
+        "/home/anjruu/vxl/contrib/cul/bundler/tests/test_data/checkers.png",
+        false);
+        
+    } else {
+        // Load the image
+        img = vil_load_image_resource(argv[1], false);
+    }
+
+    // Create and run the implementation of the detect stage
+    bundler_tracks_impl_detect_sift detect;
+
+    bundler_inters_feature_set_sptr feature_set = 
+        detect(img, BUNDLER_NO_FOCAL_LEN); 
+
+    // Perform consistency checks 
+    TEST_EQUAL("The focal length is correct.",
+        feature_set->source_image.focal_length, 
+        BUNDLER_NO_FOCAL_LEN);
+
+    TEST("Check that the vil_image_resource is correct.",
+        feature_set->source_image.source,
+        img);
+
+    // Now look at all the features individually.
+    TEST_FAR("Make sure there are some features.",
+        feature_set->features.size(), 0, .5);
+
+    vcl_vector<bundler_inters_feature_sptr>::iterator i;
+    for(i = feature_set->features.begin(); 
+        i != feature_set->features.end(); i++){
+        
+        // Make sure all the values are expected.
+        Assert("Visited is always false at this point.",
+            !(*i)->visited);
+
+        TEST("The feature set cross-reference is set properly.",
+            (*i)->feature_set,
+            feature_set);
+
+        TEST("The track is not yet set.",
+            (*i)->track,
+            NULL);
+
+        TEST("The feature knows its source image.",
+            (*i)->source_image,
+            feature_set->source_image);
+
+        // I can't think of a good test for the descriptor or the 
+        // 2D location. I'm just going to print out the 2d point 
+        // for a manual check. If anyone can think of a better idea...
+        vcl_cout << "Location of feature: " << (*i)->point << vcl_endl;
+    }
+}
+
+
+
+TESTMAIN_ARGS(test_tracks_detect);

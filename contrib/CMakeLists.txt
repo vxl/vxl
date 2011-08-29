@@ -37,6 +37,10 @@ IF( EXISTS ${vxl_SOURCE_DIR}/contrib/tbl/CMakeLists.txt )
   OPTION(BUILD_TBL "Build the TB library package?" YES)
 ENDIF( EXISTS ${vxl_SOURCE_DIR}/contrib/tbl/CMakeLists.txt )
 
+IF( EXISTS ${vxl_SOURCE_DIR}/contrib/cul/CMakeLists.txt )
+    OPTION(BUILD_CUL "Build the Cornell University library package?" NO)
+ENDIF( EXISTS ${vxl_SOURCE_DIR}/contrib/cul/CMakeLists.txt )
+
 
 IF(BUILD_MUL)
   SUBDIRS(mul)
@@ -84,3 +88,7 @@ ENDIF(BUILD_PRIP)
 IF(BUILD_CONVERSIONS)
   SUBDIRS(conversions)
 ENDIF(BUILD_CONVERSIONS)
+
+IF(BUILD_CUL)
+  SUBDIRS(cul)
+ENDIF(BUILD_CUL)
