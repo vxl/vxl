@@ -1538,7 +1538,7 @@ static  vnl_random random;
     H(0,0) = 2*vcl_cos(pi/3);
     H(0,1) = -5; H(1,1) = -1.5;
     H(1,0) = -H(0,1);
-    H(2,0) = 0.5; H(2,1) = -2;
+    H(2,0) = 0.05; H(2,1) = -.2;
 
     for (int i=0;i<3;i++)
       for (int j=0;j<3;j++)
