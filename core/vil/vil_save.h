@@ -9,6 +9,7 @@
 // \author    Ian Scott
 
 #include <vil/vil_fwd.h>
+#include <vcl_compiler.h>
 #include <vxl_config.h>
 
 //: Send a vil_image_view to disk, deducing format from filename
