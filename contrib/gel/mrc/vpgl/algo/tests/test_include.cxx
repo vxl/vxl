@@ -28,6 +28,7 @@
 #include <vpgl/algo/vpgl_rational_geo_adjust.h>
 #include <vpgl/algo/vpgl_ray.h>
 #include <vpgl/algo/vpgl_ray_intersect.h>
+#include <vpgl/algo/vpgl_triangulate_points.h>
 #include <vpgl/algo/vpgl_vsol_lens_warp.h>
 
 int main() { return 0; }
