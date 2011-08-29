@@ -33,15 +33,8 @@ SOURCES += vpgl_bundle_adjust_lsqr.cxx
 SOURCES += vpgl_ba_shared_k_lsqr.cxx
 SOURCES += vpgl_ba_fixed_k_lsqr.cxx
 MANPAGE_SOURCES += vpgl_em_compute_5_point.h
-MANPAGE_SOURCES += vpgl_bundler_inters.h
-MANPAGE_SOURCES += vpgl_bundler_settings.h
-MANPAGE_SOURCES += vpgl_bundler_sfm.h
-MANPAGE_SOURCES += vpgl_bundler_tracks.h
 SOURCES += vpgl_bundle_rolling_shutter_adjust.cxx
-SOURCES += vpgl_bundler.cxx
-SOURCES += vpgl_bundler_sfm_impl.cxx
-SOURCES += vpgl_bundler_tracks_impl.cxx
-SOURCES += vpgl_bundler_utils.cxx
+SOURCES += vpgl_triangulate_points.cxx
 
 #######################################
 include ${VXLROOT}/config/top-params.mk
