@@ -24,7 +24,7 @@ bool bapl_keypoint_extractor( const vil_image_resource_sptr & image,
                               float curve_ratio, bool verbose)
 {
   // Create the group of image pyramids
-  bapl_lowe_pyramid_set_sptr pyramid_set = new bapl_lowe_pyramid_set(image,3,6);
+  bapl_lowe_pyramid_set_sptr pyramid_set = new bapl_lowe_pyramid_set(image,3,6,verbose);
 
   if(verbose){
     vcl_cout << "Detecting Peaks" << vcl_endl;
