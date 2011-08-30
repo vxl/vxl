@@ -15,8 +15,8 @@ bool boxm2_stream_cache::open_streams(boxm2_stream_cache_datatype_helper_sptr h)
     vcl_string key = boxm2_data_traits<T>::prefix(identifier_list_[i]);
     vcl_string filename = scene_->data_path() + key + "_" + h->current_block_.to_string() + ".bin";
     unsigned long numBytes = vul_file::size(filename);
+
     int cnt = int(numBytes/(float)h->cell_size_);
-    
     if (h->cell_cnt_ < 0) h->cell_cnt_ = cnt;
     else if (h->cell_cnt_ != cnt)
     {
@@ -95,6 +95,7 @@ vcl_vector<typename boxm2_data_traits<T>::datatype> boxm2_stream_cache::get_next
     typename boxm2_data_traits<T>::datatype val = reinterpret_cast<typename boxm2_data_traits<T>::datatype *>(cell)[0]; 
     output.push_back(val);
     delete [] cell;
+
   }
   h->current_index_++;
 
@@ -123,10 +124,13 @@ vcl_vector<typename boxm2_data_traits<T>::datatype> boxm2_stream_cache::get_rand
       streams[i]->close_file();
   }
   //: open up all the streams
-  if (!open_streams<T>(h)) { vcl_cout << "3 Error opening streams!\n"; throw 0; }
+  if (!open_streams<T>(h)) { vcl_cout << "Error opening streams!\n"; throw 0; }
+    //vcl_cout<<"No of streams  "<<h->cell_size_<<" "<<h->buf_size_<<vcl_endl;
+
   vcl_vector<typename boxm2_data_traits<T>::datatype> output;
-  if (index > h->buf_size_/h->cell_size_)
+  if (index > h->buf_size_)
     return output;
+
   //: read the next cell
   for (unsigned i = 0; i < streams.size(); i++) {
     streams[i]->ifs_.seekg(index*h->cell_size_);
@@ -135,6 +139,7 @@ vcl_vector<typename boxm2_data_traits<T>::datatype> boxm2_stream_cache::get_rand
     char * cell = streams[i]->get_cell(h->current_index_, h->cell_size_, h->current_block_);
     if (!cell) { vcl_cerr << "problem in reading from files!\n"; throw 0; }
     output.push_back(reinterpret_cast<typename boxm2_data_traits<T>::datatype*>(cell)[0]);
+
     delete [] cell;
   }
 

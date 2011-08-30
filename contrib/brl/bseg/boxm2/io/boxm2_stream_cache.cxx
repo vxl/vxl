@@ -50,11 +50,6 @@ int boxm2_stream_cache_helper::num_cells(vcl_size_t cell_size)
   return (int)(buf_->buffer_length()/cell_size);
 }
 
-//: global initialization for singleton instance_
-boxm2_stream_cache* boxm2_stream_cache::instance_ = 0;
-
-//: global initialization for singleton destroyer instance
-boxm2_stream_cache_destroyer boxm2_stream_cache::destroyer_;
 
 boxm2_stream_cache::boxm2_stream_cache(boxm2_scene_sptr scene,
                                        const vcl_vector<vcl_string>& data_types,
@@ -85,18 +80,11 @@ boxm2_stream_cache::boxm2_stream_cache(boxm2_scene_sptr scene,
   unsigned long k = (unsigned long)vcl_floor(float(mem_size_)/(identifier_list_.size()*tot_size));
 
   //: set buffer size in bytes for each data type
-  for (vcl_map<vcl_string, boxm2_stream_cache_datatype_helper_sptr>::iterator it = data_types_.begin(); it != data_types_.end(); it++) {
+  vcl_map<vcl_string, boxm2_stream_cache_datatype_helper_sptr>::iterator it;
+  for ( it = data_types_.begin(); it != data_types_.end(); it++) {
     it->second->buf_size_  = (unsigned long)it->second->cell_size_*k;
     vcl_cout << it->first << " will have " << it->second->buf_size_/vcl_pow(2.0, 20.0) << " MB buffers per identifier.\n";
   }
-}
-
-//: Only one instance should be created
-boxm2_stream_cache* boxm2_stream_cache::instance()
-{
-  if (!instance_)
-    vcl_cerr<<"warning: boxm2_stream_cache:: instance has not been created\n";
-  return instance_;
 }
 
 //: hidden destructor (private so it cannot be called -- forces the class to be singleton)
@@ -122,18 +110,6 @@ void boxm2_stream_cache::close_streams()
   }
 }
 
-//: PUBLIC create method, for creating singleton instance of boxm2_cache
-void boxm2_stream_cache::create(boxm2_scene_sptr scene,
-                                const vcl_vector<vcl_string>& data_types,
-                                const vcl_vector<vcl_string>& identifier_list, float num_giga)
-{
-  if (boxm2_stream_cache::exists())
-    vcl_cout << "boxm2_lru_cache:: boxm2_cache singleton already created" << vcl_endl;
-  else {
-    instance_ = new boxm2_stream_cache(scene, data_types, identifier_list, num_giga);
-    destroyer_.set_singleton(instance_);
-  }
-}
 
 boxm2_stream_cache_datatype_helper_sptr boxm2_stream_cache::get_helper(vcl_string& data_type)
 {
@@ -157,19 +133,3 @@ void vsl_b_read(vsl_b_istream& is, boxm2_stream_cache* p) {}
 void vsl_b_read(vsl_b_istream& is, boxm2_stream_cache_sptr& sptr) {}
 void vsl_b_read(vsl_b_istream& is, boxm2_stream_cache_sptr const& sptr) {}
 
-boxm2_stream_cache_destroyer::boxm2_stream_cache_destroyer(boxm2_stream_cache* s)
-{
-  s_ = s;
-}
-
-//: the destructor deletes the instance
-boxm2_stream_cache_destroyer::~boxm2_stream_cache_destroyer()
-{
-  if (s_ != 0)
-    delete s_;
-}
-
-void boxm2_stream_cache_destroyer::set_singleton(boxm2_stream_cache *s)
-{
-  s_ = s;
-}

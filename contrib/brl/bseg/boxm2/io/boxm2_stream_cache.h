@@ -60,17 +60,11 @@ class boxm2_stream_cache_destroyer;
 class boxm2_stream_cache: public vbl_ref_count
 {
   public:
-
-    //: Use this instead of constructor
-    static boxm2_stream_cache* instance();
-    static bool         exists() { return (boxm2_stream_cache::instance_!=0); }
-
-    //: create function used instead of constructor
-    static void create(boxm2_scene_sptr scene, const vcl_vector<vcl_string>& data_types, const vcl_vector<vcl_string>& identifier_list, float num_giga);
-
-    //: the destroyer instance to make sure memory is deallocated when the program exits
-    static boxm2_stream_cache_destroyer destroyer_;  // its not a pointer so C++ will make sure that it's descructor will be called
-    friend class boxm2_stream_cache_destroyer;
+    //: hidden constructor (singleton class)
+    boxm2_stream_cache(boxm2_scene_sptr scene,
+                       const vcl_vector<vcl_string>& data_types,
+                       const vcl_vector<vcl_string>& identifier_list,
+                       float num_giga = 1.0f);
 
     //: return the next cells in the streams of each data block given by the identifier list for this datatype, pass index if available to check synchronization
     template <boxm2_data_type T> vcl_vector<typename boxm2_data_traits<T>::datatype> get_next(boxm2_block_id id, int index = -1);
@@ -82,11 +76,6 @@ class boxm2_stream_cache: public vbl_ref_count
 
   protected:
 
-    //: hidden constructor (singleton class)
-    boxm2_stream_cache(boxm2_scene_sptr scene,
-                       const vcl_vector<vcl_string>& data_types,
-                       const vcl_vector<vcl_string>& identifier_list,
-                       float num_giga = 1.0f);
 
     //: hidden destructor (singleton class)
     ~boxm2_stream_cache();
@@ -96,7 +85,7 @@ class boxm2_stream_cache: public vbl_ref_count
     template <boxm2_data_type T> bool open_streams( boxm2_stream_cache_datatype_helper_sptr h);
 
     //: singleton instance of boxm2_stream_cache
-    static boxm2_stream_cache* instance_;
+    //static boxm2_stream_cache* instance_;
 
     //: boxm2_scene needs to be around to get path of the files
     boxm2_scene_sptr scene_;
@@ -128,15 +117,6 @@ void vsl_b_read(vsl_b_istream& is, boxm2_stream_cache* p);
 void vsl_b_read(vsl_b_istream& is, boxm2_stream_cache_sptr& sptr);
 void vsl_b_read(vsl_b_istream& is, boxm2_stream_cache_sptr const& sptr);
 
-//: create another class whose sole purpose is to destroy the singleton instance
-class boxm2_stream_cache_destroyer {
-public:
-  boxm2_stream_cache_destroyer(boxm2_stream_cache* s = 0);
-  ~boxm2_stream_cache_destroyer();
 
-  void set_singleton(boxm2_stream_cache* s);
-private:
-  boxm2_stream_cache* s_;
-};
 
 #endif //boxm2_stream_cache_h_
