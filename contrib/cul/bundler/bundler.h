@@ -177,9 +177,9 @@ class bundler_sfm
         // pipeline. Alternatively, you can directly call functors
         // yourself.
         virtual void run_sfm_stage(bundler_inters_track_set &track_set,
-                                   vcl_vector<vpgl_perspective_camera<double> > &cameras,
-                                   vcl_vector<vgl_point_3d<double> > &points,
-                                   vnl_sparse_matrix<bool> visibility_graph);
+            vcl_vector<vpgl_perspective_camera<double> > &cameras,
+            vcl_vector<vgl_point_3d<double> > &points,
+            vnl_sparse_matrix<bool> visibility_graph);
 };
 
 

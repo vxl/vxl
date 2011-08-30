@@ -6,6 +6,8 @@
 
 #include <vcl_iostream.h>
 
+// TODO: Save an image with the location of all the features.
+
 static void test_tracks_detect(int argc, char* argv[])
 { 
 
@@ -15,11 +17,9 @@ static void test_tracks_detect(int argc, char* argv[])
         vcl_cerr<<"Supply a filename for the first argument!" << vcl_endl;
         TEST("test_tracks_detect", true, false);
 
-        return;
-
         // TODO Get an argument into this test!
         img = vil_load_image_resource(
-        "/home/anjruu/vxl/contrib/cul/bundler/tests/test_data/checkers.png",
+        "/home/anjruu/vxl/contrib/cul/bundler/tests/test_data/kermit000.jpg",
         false);
         
     } else {
@@ -65,6 +65,10 @@ static void test_tracks_detect(int argc, char* argv[])
         TEST("The feature knows its source image.",
             (*i)->source_image,
             feature_set->source_image);
+
+        TEST_EQUAL("Descriptors are the same size.",
+            (*i)->descriptor.size(),
+            (*feature_set->features.begin())->descriptor.size());
 
         // I can't think of a good test for the descriptor or the 
         // 2D location. I'm just going to print out the 2d point 
