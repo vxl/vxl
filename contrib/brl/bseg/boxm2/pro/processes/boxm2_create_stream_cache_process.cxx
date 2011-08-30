@@ -85,10 +85,10 @@ bool boxm2_create_stream_cache_process(bprb_func_process& pro)
   }
   ifst.close();
 
-  boxm2_stream_cache::create(scene, type_names, image_ids, num_giga);
+  boxm2_stream_cache * str_cache = new boxm2_stream_cache(scene, type_names, image_ids, num_giga);
 
   // store cache pointer
-  pro.set_output_val<boxm2_stream_cache_sptr>(0, boxm2_stream_cache::instance());
+  pro.set_output_val<boxm2_stream_cache_sptr>(0, str_cache);
   return true;
 }
 
