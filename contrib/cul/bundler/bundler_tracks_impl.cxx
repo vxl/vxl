@@ -184,7 +184,7 @@ void bundler_tracks_impl_match_ann::operator ()(
 // This templated class takes in a vector of bools, and a vector of Ts.
 // It deleted every element in the Ts vector whose corresponding element
 // in the bool vector is true. Checks that the vectors are the same size.
-static void remove_if_true(
+static inline void remove_if_true(
     vcl_vector<bool> &checks,
     bundler_inters_match_set &to_prune)
 {
@@ -267,7 +267,7 @@ void bundler_tracks_impl_refine_epipolar::operator ()(
     vpgl_fundamental_matrix<double> fm;
     ransac.compute(rhs, lhs, fm);
 
-    // We'll ignore the fundemental matrix, and just look at the outliers.
+    // We'll ignore the fundamental matrix, and just look at the outliers.
     remove_if_true(ransac.outliers, matches);
 
     // Finally, remove everything if there are fewer than the minimum number

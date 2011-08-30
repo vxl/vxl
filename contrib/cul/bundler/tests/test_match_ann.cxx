@@ -33,7 +33,7 @@ static void test_match_ann(int argc, char** argv)
 
     if (argc < 3) {
         vcl_cerr<<"Supply a filename for the first two args!\n";
-        TEST("test_tracks_detect", true, false);
+        TEST("test_match_ann", true, false);
 
         // TODO Get an argument into this test!
         img1 = vil_load_image_resource(IMG1_PATH, false);

@@ -38,7 +38,7 @@ struct bundler_routines;
 // of 3D points from the images included in imageset. These values
 // are placed in cameras and points, respectively. Also includes a matrix
 // which holds which points are available from which cameras.
-// The exif_tags should hold information extracted from the EXIF tags for
+// The focal_length should hold information extracted from the EXIF tags for
 // each image. It either holds the focal length in pixels, or
 // BUNDLER_NO_FOCAL_LEN for images that either don't have an exif tag
 // or whose exif tag is missing the focal length.
@@ -113,7 +113,7 @@ class bundler_tracks
         // yourself.
         virtual void run_feature_stage(
             const vcl_vector<vil_image_resource_sptr> &imageset,
-            const vcl_vector<double> &exif_tags,
+            const vcl_vector<double> &focal_lengths,
 
             bundler_inters_track_set &track_set);
 };

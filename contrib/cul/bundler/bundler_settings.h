@@ -42,7 +42,7 @@ struct bundler_settings_refine_epipolar{
     // iterations to run.
     double max_outlier_frac;
 
-    //The minimum number of inliers in order for two images to be mathched.
+    //The minimum number of inliers in order for two images to be matched.
     int min_inliers;
 
     bundler_settings_refine_epipolar():

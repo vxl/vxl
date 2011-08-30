@@ -49,13 +49,13 @@ bundler_tracks::bundler_tracks(
 
 void bundler_tracks::run_feature_stage(
     const vcl_vector<vil_image_resource_sptr> &imageset,
-    const vcl_vector<double> &exif_tags,
+    const vcl_vector<double> &focal_lengths,
     bundler_inters_track_set &track_set)
 {
     // First, run the detect stage.
     vcl_vector<vil_image_resource_sptr>::const_iterator img_i;
     vcl_vector<double>::const_iterator exif_i;
-    for (img_i = imageset.begin(), exif_i = exif_tags.begin();
+    for (img_i = imageset.begin(), exif_i = focal_lengths.begin();
          img_i != imageset.end(); img_i++, exif_i++)
     {
         track_set.feature_sets.push_back(
@@ -92,41 +92,6 @@ void bundler_tracks::run_feature_stage(
             (*j)->visited = false;
         }
     }
-
-    #ifdef BUNDLER_DEBUG
-    //Check the cross-references in the track set
-    {
-        vcl_cout<<"Checking!!"<<vcl_endl;
-
-        //Test that the tracks don't have a corresponding point yet, and
-        // that the tracks' points refer back to the correct track.
-        vcl_vector<bundler_inters_track_sptr>::iterator trk_it;
-        for (trk_it = track_set.tracks.begin();
-            trk_it != track_set.tracks.end(); trk_it++)
-        {
-            assert((*trk_it)->corresponding_point == NULL);
-
-            for (int i = 0; i < (*trk_it)->points.size(); i++) {
-                assert( (*trk_it)->points[i]->track == *trk_it);
-            }
-        }
-
-        //Test that the features refer to the correct feature sets and that
-        // the images pointers are consistent. Also test that visited is set
-        // to false in all cases, since we are done with it for this loop,
-        // and we'll use it in SFM
-        vcl_vector<bundler_inters_feature_set_sptr>::const_iterator fs_it;
-        for (fs_it = track_set.feature_sets.begin();
-             fs_it != track_set.feature_sets.end(); fs_it++)
-        {
-            for (int i = 0; i < (*fs_it)->features.size(); i++) {
-                assert(! (*fs_it)->features[i]->visited );
-                assert( (*fs_it)->features[i]->feature_set == *fs_it);
-                assert( (*fs_it)->features[i]->source_image == (*fs_it)->source_image);
-            }
-        }
-    }
-    #endif //BUNDLER_DEBUG
 }
 
 
