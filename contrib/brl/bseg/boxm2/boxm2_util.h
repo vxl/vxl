@@ -8,7 +8,7 @@
 #include <vbl/vbl_array_2d.h>
 #include <vil/vil_image_view.h>
 #include <vil/vil_load.h>
-
+#include <bsta/bsta_histogram.h>
 //: Utility class with static methods
 class boxm2_util
 {
@@ -56,6 +56,9 @@ class boxm2_util
     //Will be used to specify rows and cols for JavaScript App
     static bool generate_html(int width, int height, int nrows, int ncols, vcl_string dest); 
     static bool generate_jsfunc(vbl_array_2d<vcl_string> img_files, vcl_string dest); 
+
+    //: function to obtain an image histogram
+    static bsta_histogram_sptr generate_image_histogram(vil_image_view_base_sptr float_img, unsigned int numbins);
 
 };
 

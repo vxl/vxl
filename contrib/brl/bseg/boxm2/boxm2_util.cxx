@@ -112,7 +112,7 @@ vcl_vector<vcl_string> boxm2_util::images_from_directory(vcl_string dir)
     vcl_cout<<"img dir is not a directory"<<vcl_endl;
     return img_files;
   }
-  vcl_string imgglob=dir+"/*.png";
+  vcl_string imgglob=dir+"/*.???";
   vul_file_iterator img_file_it(imgglob.c_str());
   while (img_file_it) {
     vcl_string imgName(img_file_it());
@@ -167,7 +167,7 @@ boxm2_util::construct_camera( double elevation,
   // the viewsphere radius is set to 10x the bounding box diameter
   double r = radius; // = vcl_sqrt(w*w + h*h + d*d); // where w=bb.width() etc.
   //r *= 10;
-  double deg_to_rad = vnl_math::pi_over_180;
+  double deg_to_rad = vnl_math::pi/180;
   double el = elevation*deg_to_rad, az = azimuth*deg_to_rad;
   double cx = r*vcl_sin(el)*vcl_cos(az);
   double cy = r*vcl_sin(el)*vcl_sin(az);
@@ -410,7 +410,6 @@ vil_image_view_base_sptr boxm2_util::prepare_input_image(vil_image_view_base_spt
           vil_convert_stretch_range_limited(*img_byte, *floatimg, vxl_byte(0), vxl_byte(255), 0.0f, 1.0f);
       else if (vil_image_view<unsigned short> *img_byte = dynamic_cast<vil_image_view<unsigned short>*>(loaded_image.ptr()))
           vil_convert_stretch_range_limited(*img_byte, *floatimg,(unsigned short)28000,(unsigned short)33000,  0.0f, 1.0f); // hardcoded to be fixed.
-      //vil_convert_stretch_range(*img_byte, *floatimg,  0.0f, 1.0f); // hardcoded to be fixed.
       else if (dynamic_cast<vil_image_view<float>*>(loaded_image.ptr()))
           return loaded_image;
       else {
@@ -443,4 +442,19 @@ vil_rgba<vxl_byte> boxm2_util::mean_pixel(vil_image_view<vil_rgba<vxl_byte> >& i
                              (vxl_byte) (mean[1]/count),
                              (vxl_byte) (mean[2]/count),
                              255 );
+}
+bsta_histogram_sptr 
+boxm2_util::generate_image_histogram(vil_image_view_base_sptr  img, unsigned int numbins)
+{
+    bsta_histogram<float> * hist= new bsta_histogram<float>(0.0,1.0,numbins);
+    if(vil_image_view<float> * float_img = dynamic_cast<vil_image_view<float> *> (img.ptr()))
+    {
+        for(unsigned i =0;i<float_img->ni();i++)
+            for(unsigned j =0;j<float_img->nj();j++)
+                hist->upcount((*float_img)(i,j) ,1 );
+
+    }
+
+    
+    return hist;
 }
