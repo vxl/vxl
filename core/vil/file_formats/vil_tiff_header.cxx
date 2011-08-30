@@ -361,27 +361,6 @@ bool vil_tiff_header::compute_pixel_format()
     //handle sample formats (unsigned, signed, float, double)
     switch (sample_format.val)
     {
-      case 1: //unsigned values
-        if (b==1){
-          pix_fmt = VIL_PIXEL_FORMAT_BOOL;
-          return true;}
-        else
-          switch (bbs)
-          {
-           case 1:
-            pix_fmt = VIL_PIXEL_FORMAT_BYTE;
-            return true;
-           case 2:
-            pix_fmt = VIL_PIXEL_FORMAT_UINT_16;
-            return true;
-           case 3:
-           case 4:
-            pix_fmt = VIL_PIXEL_FORMAT_UINT_32;
-            return true;
-           default:
-            pix_fmt = VIL_PIXEL_FORMAT_UNKNOWN;
-            return true;
-          }
       case 2: //2s complement signed
         switch (b)
         {
@@ -412,9 +391,28 @@ bool vil_tiff_header::compute_pixel_format()
             return false;
         }
       case 4: //undefined format
+      case 1: //unsigned values
       default:
-        pix_fmt = VIL_PIXEL_FORMAT_UNKNOWN;
-        return false;
+        if (b==1){
+          pix_fmt = VIL_PIXEL_FORMAT_BOOL;
+          return true;}
+        else
+          switch (bbs)
+          {
+           case 1:
+            pix_fmt = VIL_PIXEL_FORMAT_BYTE;
+            return true;
+           case 2:
+            pix_fmt = VIL_PIXEL_FORMAT_UINT_16;
+            return true;
+           case 3:
+           case 4:
+            pix_fmt = VIL_PIXEL_FORMAT_UINT_32;
+            return true;
+           default:
+            pix_fmt = VIL_PIXEL_FORMAT_UNKNOWN;
+            return true;
+          }
     }
   }
 
