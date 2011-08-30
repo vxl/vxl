@@ -76,17 +76,16 @@ class boxm2_stream_cache: public vbl_ref_count
 
   protected:
 
-
     //: hidden destructor (singleton class)
     ~boxm2_stream_cache();
 
     boxm2_stream_cache_datatype_helper_sptr get_helper(vcl_string& data_type);
 
     template <boxm2_data_type T> bool open_streams( boxm2_stream_cache_datatype_helper_sptr h);
-
+#if 0
     //: singleton instance of boxm2_stream_cache
-    //static boxm2_stream_cache* instance_;
-
+    static boxm2_stream_cache* instance_;
+#endif
     //: boxm2_scene needs to be around to get path of the files
     boxm2_scene_sptr scene_;
 
@@ -116,7 +115,6 @@ void vsl_b_read(vsl_b_istream& is, boxm2_stream_cache &scene);
 void vsl_b_read(vsl_b_istream& is, boxm2_stream_cache* p);
 void vsl_b_read(vsl_b_istream& is, boxm2_stream_cache_sptr& sptr);
 void vsl_b_read(vsl_b_istream& is, boxm2_stream_cache_sptr const& sptr);
-
 
 
 #endif //boxm2_stream_cache_h_
