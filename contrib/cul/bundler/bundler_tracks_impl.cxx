@@ -82,8 +82,8 @@ void bundler_tracks_impl_propose_matches_all::operator ()(
     // (a, b) in the set, there is not (b, a).
     vcl_vector<bundler_inters_feature_set_sptr>::const_iterator i, j;
 
-    for (i = features.begin(); i != features.end(); i++) {
-        for (j = i; j != features.end(); j++) {
+    for (i = features.begin(); i != features.end(); ++i) {
+        for (j = i; j != features.end(); ++j) {
             if (i != j) {
                 bundler_inters_feature_set_pair pair;
 
@@ -124,7 +124,7 @@ static double squared_distance(const rsdl_point &v1,
 
     double dist = 0.0f;
 
-    for (int i = 0; i < v1.num_cartesian(); i++) {
+    for (unsigned int i = 0; i < v1.num_cartesian(); ++i) {
         double tmp = (v1.cartesian(i) - v2.cartesian(i));
         dist += tmp*tmp;
     }
@@ -188,14 +188,14 @@ static inline void remove_if_true(
     vcl_vector<bool> &checks,
     bundler_inters_match_set &to_prune)
 {
-    assert(checks.size() == to_prune.num_features());
+    assert(int(checks.size()) == to_prune.num_features());
 
     int num_removed = 0;
-    for (int i = 0; i < checks.size(); i++) {
+    for (unsigned int i = 0; i < checks.size(); ++i) {
         // If this is an outlier, remove it.
         if (checks[i]) {
             to_prune.remove_feature(i + num_removed);
-            num_removed++;
+            ++num_removed;
         }
     }
 }
@@ -207,10 +207,10 @@ static inline void remove_all_duplicates(
 {
     vcl_vector<bool> checks;
 
-    for (int i = 0; i < matches.num_features(); i++)
+    for (int i = 0; i < matches.num_features(); ++i)
     {
         bool to_kill = false;
-        for (int j = 0; j < matches.num_features(); j++)
+        for (int j = 0; j < matches.num_features(); ++j)
         {
             // If we are not looking at the same feature pair,
             // then say we have (a,b) and (c,d). If a is the same
@@ -259,7 +259,7 @@ void bundler_tracks_impl_refine_epipolar::operator ()(
 
     // Run the ransac
     vcl_vector<vgl_point_2d<double> > rhs, lhs;
-    for (int i = 0; i < matches.num_features(); i++) {
+    for (int i = 0; i < matches.num_features(); ++i) {
         rhs.push_back(matches.side1[i]->point);
         lhs.push_back(matches.side2[i]->point);
     }
@@ -310,9 +310,9 @@ static void create_new_track(
         curr->track = new_track;
 
         vcl_vector<bundler_inters_match_set>::const_iterator match;
-        for (match = matches.begin(); match != matches.end(); match++)
+        for (match = matches.begin(); match != matches.end(); ++match)
         {
-            for (int i = 0; i < match->num_features(); i++) {
+            for (int i = 0; i < match->num_features(); ++i) {
                 if (match->side1[i] == curr &&
                     ! match->side2[i]->visited)
                 {
@@ -336,9 +336,9 @@ void bundler_tracks_default_chain_matches::operator ()(
     vcl_vector<bundler_inters_track_sptr> &tracks)
 {
     vcl_vector<bundler_inters_match_set>::const_iterator match;
-    for (match = matches.begin(); match != matches.end(); match++)
+    for (match = matches.begin(); match != matches.end(); ++match)
     {
-        for (int i = 0; i < match->num_features(); i++)
+        for (int i = 0; i < match->num_features(); ++i)
         {
             // If we have not visited one of the sides, then we have
             // found a part of a new connected component, so we should

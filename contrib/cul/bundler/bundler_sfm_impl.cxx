@@ -343,7 +343,7 @@ void bundler_sfm_default_add_next_images::operator()(
             // Find the inlier percentage to evaulate how good this camera
             // is.
             double inlier_count;
-            for (int pt_ind = 0; pt_ind < image_pts.size(); pt_ind++)
+            for (unsigned int pt_ind = 0; pt_ind < image_pts.size(); pt_ind++)
             {
                 double u,v;
                 camera.project(world_pts[pt_ind].x(), world_pts[pt_ind].y(),
@@ -478,7 +478,7 @@ void bundler_sfm_default_bundle_adjust::operator()(
                     // If this is the track for the point, we now need to
                     // find the image point that is the projection of the
                     // world pt.
-                    for (int i = 0; i < origins.size(); i++) {
+                    for (unsigned int i = 0; i < origins.size(); i++) {
                         if (origins[i]->source_image == cam_it->image) {
                             image_points.push_back(origins[i]->point);
                             break;
@@ -507,11 +507,11 @@ void bundler_sfm_default_bundle_adjust::operator()(
 
     //------------------------------------------------------------------
     // Extract the information from the bundle adjustment process.
-    for (int cam_ind = 0; cam_ind < cameras.size(); cam_ind++) {
+    for (unsigned int cam_ind = 0; cam_ind < cameras.size(); cam_ind++) {
         recon.cameras[cam_ind].camera = cameras[cam_ind];
     }
 
-    for (int pt_ind = 0; pt_ind < world_points.size(); pt_ind++) {
+    for (unsigned int pt_ind = 0; pt_ind < world_points.size(); pt_ind++) {
         recon.points[pt_ind].point_3d = world_points[pt_ind];
     }
 }
