@@ -13,7 +13,7 @@ SET( vpgl_algo_sources
   vpgl_fm_compute_7_point.h        vpgl_fm_compute_7_point.cxx
   vpgl_fm_compute_8_point.h        vpgl_fm_compute_8_point.cxx
   vpgl_fm_compute_2_point.h        vpgl_fm_compute_2_point.cxx
-  vpgl_em_compute_5_point.h
+  vpgl_em_compute_5_point.h        vpgl_em_compute_5_point.txx
   vpgl_lens_warp_mapper.h
   vpgl_vsol_lens_warp.h            vpgl_vsol_lens_warp.cxx
   vpgl_list.h                      vpgl_list.txx
