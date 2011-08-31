@@ -1590,9 +1590,9 @@ foreach $f (@FILES)
           "$f.$wd" !~ m!\bvnl/tests/test_complex\.cxx\.acos$! &&
           "$f.$wd" !~ m!\bmbl_arb_length_int\.h\.abs$! &&
           "$f.$wd" !~ m!\bmbl_log\.h\.log$! &&
-          "$f.$wd" !~ m!\bvnl_(bignum|rational)\.h\.abs$! &&
-          "$f.$wd" !~ m!\bvnl/(vnl_rational\.h|tests/test_rational\.cxx)\.(ceil|floor)$! &&
-          "$f.$wd" !~ m!\bvnl_finite\.h\.(exp|log|pow)$! &&
+          "$f.$wd" !~ m!\bvnl_(bignum|rational|decnum)\.h\.abs$! &&
+          "$f.$wd" !~ m!\bvnl/(vnl_rational\.h|vnl_decnum\.h|tests/test_rational\.cxx)\.(ceil|floor)$! &&
+          "$f.$wd" !~ m!\bvnl_(finite|decnum)\.h\.(exp|log|pow)$! &&
           "$f.$wd" !~ m!\bvil1?_rgb\.(h|txx)\.(min|max)$! &&
           "$f.$wd" !~ m!\bvbl_bounding_box\.(h|txx)\.(min|max)$! &&
           "$f.$wd" !~ m!\bvnl_sse\.h\.(min|max)$! &&
