@@ -5,16 +5,11 @@
 #include <vcl_cmath.h>
 #include <vcl_cstdlib.h>
 #include <vcl_cassert.h>
+#include <vcl_vector.h>
 
-#include <vgl/vgl_vector_3d.h>
-
-#include <vnl/vnl_matrix_fixed.h>
-#include <vnl/vnl_vector_fixed.h>
-#include <vnl/vnl_matrix.h>
-#include <vnl/vnl_vector.h>
-#include <vnl/vnl_double_3.h>
-#include <vnl/vnl_double_3x3.h>
-#include <vnl/algo/vnl_svd.h>
+#include <vgl/vgl_point_2d.h>
+#include <vgl/vgl_homg_point_2d.h>
+#include <vgl/algo/vgl_h_matrix_2d.h>
 
 // Generally useful function used for RANSAC.
 // Randomly chooses n distinct indices into the set
@@ -48,24 +43,23 @@ double bundler_utils_triangulate_points(
     bundler_inters_3d_point &point,
     const vcl_vector<bundler_inters_camera> &cameras)
 {
-    // Get the cameras into a vector of perspective cameras 
+    // Get the cameras into a vector of perspective cameras
     // for the triangulation function.
     vcl_vector<vpgl_perspective_camera<double> > persp_cameras;
     vcl_vector<bundler_inters_camera>::const_iterator i;
-    for(i = cameras.begin(); i != cameras.end(); i++){
+    for (i = cameras.begin(); i != cameras.end(); i++) {
         persp_cameras.push_back(i->camera);
     }
-
 
     // Get the 2d points into a vector of vgl_points.
     vcl_vector<vgl_point_2d<double> > vgl_points;
     vcl_vector<bundler_inters_feature_sptr>::iterator j;
-    for(j = point.origins.begin(); j != point.origins.end(); j++){
+    for (j = point.origins.begin(); j != point.origins.end(); j++) {
         vgl_points.push_back((*j)->point);
     }
 
-
     // Actually do the triangulation.
+    return
     vpgl_triangulate_points::triangulate(
         vgl_points, persp_cameras, point.point_3d);
 }
