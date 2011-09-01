@@ -77,6 +77,19 @@ class boxm2_adaptor:
       expimg = render_grey(self.scene, cache, cam, ni, nj, dev); 
     return expimg; 
   
+  #render depth image wrapper
+  def render_depth(self, cam, ni=1280, nj=720, device_string="") :
+    cache = self.active_cache; 
+    dev = self.device; 
+    #check if force gpu or cpu
+    if device_string=="gpu" : 
+      cache = self.opencl_cache; 
+    elif device_string=="cpp" : 
+      cache = self.cpu_cache; 
+      dev = None; 
+    expimg = render_depth(self.scene, cache, cam, ni, nj, dev); 
+    return expimg; 
+  
   #render heigh map render
   def render_height_map(self, device_string="") : 
     cache = self.active_cache; 
@@ -328,6 +341,25 @@ def render_rgb(scene, cache, cam, ni=1280, nj=720, device=None) :
     return exp_image; 
   else : 
     print "ERROR: Cache type not recognized: ", cache.type; 
+    
+def render_depth(scene, cache, cam, ni=1280, nj=720, device=None) : 
+  if cache.type == "boxm2_cache_sptr" :
+    print "boxm2_batch CPU render depth not yet implemented";
+  elif cache.type == "boxm2_opencl_cache_sptr" and device : 
+    boxm2_batch.init_process("boxm2OclRenderExpectedDepthProcess");
+    boxm2_batch.set_input_from_db(0,device);
+    boxm2_batch.set_input_from_db(1,scene);
+    boxm2_batch.set_input_from_db(2,cache);
+    boxm2_batch.set_input_from_db(3,cam);
+    boxm2_batch.set_input_unsigned(4,ni);
+    boxm2_batch.set_input_unsigned(5,nj);
+    boxm2_batch.run_process();
+    (id,type) = boxm2_batch.commit_output(0);
+    exp_image = dbvalue(id,type);
+    return exp_image; 
+  else : 
+    print "ERROR: Cache type not recognized: ", cache.type; 
+   
     
 def change_detect(scene, cache, cam, img, exp_img, device=None) : 
   if cache.type == "boxm2_cache_sptr" : 
