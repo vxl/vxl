@@ -1,7 +1,6 @@
-// This is gel/mrc/vpgl/algo/vpgl_.txx
+// This is gel/mrc/vpgl/algo/vpgl_em_compute_5_point.txx
 #ifndef vpgl_em_compute_5_point_txx_
 #define vpgl_em_compute_5_point_txx_
-
 //:
 // \file
 #include "vpgl_em_compute_5_point.h"
@@ -40,13 +39,12 @@ bool vpgl_em_compute_5_point<T>::compute(
     vcl_vector<vpgl_essential_matrix<T> > &ems) const
 {
     // Check that we have the right number of points
-    if (normed_right_points.size() != 5 || normed_left_points.size() != 5){
-        if (verbose){
+    if (normed_right_points.size() != 5 || normed_left_points.size() != 5) {
+        if (verbose) {
             vcl_cerr<<"Wrong number of input points!\n" <<
                 "right_points has "<<normed_right_points.size() <<
                 " and left_points has "<<normed_left_points.size() << '\n';
         }
-
         return false;
     }
 
@@ -73,6 +71,7 @@ bool vpgl_em_compute_5_point<T>::compute(
 
     return true;
 }
+
 
 //-------------------------------------------------------------------------
 //:
@@ -126,16 +125,17 @@ void vpgl_em_compute_5_point<T>::compute_nullspace_basis(
     vnl_matrix<T> V = svd.V();
 
     // The null space is spanned by the last four columns of V.
-    for (int i = 5; i < 9; ++i){
+    for (int i = 5; i < 9; ++i) {
         vnl_vector_fixed<T,9> basis_vector;
 
-        for (int j = 0; j < 9; ++j){
+        for (int j = 0; j < 9; ++j) {
             basis_vector[j] = V.get(j, i);
         }
 
         basis.push_back(basis_vector);
     }
 }
+
 
 //:
 // Finds 10 constraint polynomials, based on the following criteria:
@@ -193,16 +193,16 @@ void vpgl_em_compute_5_point<T>::compute_constraint_polynomials(
     // Define a*a + b*b + c*c + d*d + e*e + f*f + g*g + h*h + i*i, a
     // term in all other constraint polynomials
     vnl_real_npolynomial sum_of_squares =
-       entry_polynomials[0] * entry_polynomials[0];
+        entry_polynomials[0] * entry_polynomials[0];
 
-    for (int i = 1; i < 9; ++i){
-       sum_of_squares = sum_of_squares +
-           entry_polynomials[i] * entry_polynomials[i];
+    for (int i = 1; i < 9; ++i) {
+        sum_of_squares = sum_of_squares +
+            entry_polynomials[i] * entry_polynomials[i];
     }
 
     // Create the first two terms in each polynomial and add it to
     // constraints
-    for (int i = 0; i < 9; ++i){
+    for (int i = 0; i < 9; ++i) {
         constraints.push_back(
             entry_polynomials[i%3] *
                 (entry_polynomials[0] * entry_polynomials[3*(i/3) + 0]*2 +
@@ -213,7 +213,7 @@ void vpgl_em_compute_5_point<T>::compute_constraint_polynomials(
     }
 
     // Now add the next term (there are four terms total)
-    for (int i = 0; i < 9; ++i){
+    for (int i = 0; i < 9; ++i) {
         constraints[i] = constraints[i] +
             entry_polynomials[(i%3) + 3] *
                 (entry_polynomials[3] * entry_polynomials[3*(i/3) + 0]*2 +
@@ -222,7 +222,7 @@ void vpgl_em_compute_5_point<T>::compute_constraint_polynomials(
     }
 
     // Last term
-    for (int i = 0; i < 9; ++i){
+    for (int i = 0; i < 9; ++i) {
         constraints[i] = (constraints[i] +
             entry_polynomials[(i%3) + 6] *
                 (entry_polynomials[6] * entry_polynomials[3*(i/3) + 0]*2 +
@@ -263,26 +263,25 @@ void vpgl_em_compute_5_point<T>::compute_constraint_polynomials(
 // variables with an x power of x_p, a y power of y_p and a z power of z_p
 template <class T>
 double vpgl_em_compute_5_point<T>::get_coeff(
-    const vnl_real_npolynomial &p, 
-    unsigned int x_p, 
-    unsigned int y_p, 
+    const vnl_real_npolynomial &p,
+    unsigned int x_p,
+    unsigned int y_p,
     unsigned int z_p) const
 {
-  for (unsigned int i = 0; i < p.polyn().rows(); ++i) {
-    if (x_p == p.polyn().get(i, 0) &&
-        y_p == p.polyn().get(i, 1) &&
-        z_p == p.polyn().get(i, 2)) {
-      return p.coefficients()[i];
+    for (unsigned int i = 0; i < p.polyn().rows(); ++i) {
+        if (x_p == p.polyn().get(i, 0) &&
+            y_p == p.polyn().get(i, 1) &&
+            z_p == p.polyn().get(i, 2)) {
+            return p.coefficients()[i];
+        }
     }
-  }
-
-  return -1.0;
+    return -1.0;
 }
 
 template <class T>
 void vpgl_em_compute_5_point<T>::compute_groebner_basis(
     const vcl_vector<vnl_real_npolynomial> &constraints,
-    vnl_matrix<double> &groebner_basis) const 
+    vnl_matrix<double> &groebner_basis) const
 {
     assert(groebner_basis.rows() == 10);
     assert(groebner_basis.cols() == 10);
@@ -346,7 +345,7 @@ void vpgl_em_compute_5_point<T>::compute_groebner_basis(
     // identity (due to the row_reduce), we are interested in the
     // second 10*10 block.
     for (int i = 0; i < 10; ++i) {
-        for (int j = 0; j < 10; ++j){
+        for (int j = 0; j < 10; ++j) {
             groebner_basis.put(i, j, A.get(i, j+10));
         }
     }
@@ -357,7 +356,7 @@ void vpgl_em_compute_5_point<T>::compute_groebner_basis(
 template <class T>
 void vpgl_em_compute_5_point<T>::compute_action_matrix(
     const vnl_matrix<double> &groebner_basis,
-    vnl_matrix<double> &action_matrix) const 
+    vnl_matrix<double> &action_matrix) const
 {
     action_matrix.fill(0.0);
 
@@ -374,6 +373,7 @@ void vpgl_em_compute_5_point<T>::compute_action_matrix(
     action_matrix.put(8, 3, 1.0);
     action_matrix.put(9, 6, 1.0);
 }
+
 
 /*------------------------------------------------------------------------*/
 template <class T>
@@ -410,25 +410,25 @@ void vpgl_em_compute_5_point<T>::compute_e_matrices(
 static void get_distinct_indices(
     int n, int *idxs, int number_entries)
 {
-    for (int i = 0; i < n; i++) {
-        bool found;
+    for (int i = 0; i < n; ++i) {
+        bool found = false;
         int idx;
 
-        do {
+        while (!found) {
             found = true;
             idx = vcl_rand() % number_entries;
 
-            for (int j = 0; j < i; j++) {
+            for (int j = 0; j < i; ++j) {
                 if (idxs[j] == idx) {
                     found = false;
                     break;
                 }
             }
-        } while (!found);
+        }
 
         idxs[i] = idx;
     }
-} 
+}
 
 
 template <class T>
@@ -441,32 +441,27 @@ bool vpgl_em_compute_5_point_ransac<T>::compute(
 
     vpgl_essential_matrix<T> &best_em) const
 {
-
     // ----- Test the input
-    if ( right_points.size() != left_points.size()){
-        if(verbose){
-            vcl_cerr 
-                << "The two vectors of points must be the same size!" 
-                << vcl_endl 
-                << "right_points is size " << right_points.size() 
+    if ( right_points.size() != left_points.size()) {
+        if (verbose) {
+            vcl_cerr
+                << "The two vectors of points must be the same size!\n"
+                << "right_points is size " << right_points.size()
                 << " while left_points is size " << left_points.size()
-                << "." << vcl_endl;
+                << ".\n";
         }
-
-        return false;
-
-    } else if (right_points.size() < 5){
-        if(verbose){
-            vcl_cerr 
-                << "There need to be at least 5 points to run the "
-                << "five-point algorithm!" << vcl_endl 
-                << "Input only contained " << right_points.size()
-                << "." << vcl_endl;
-        }
-
         return false;
     }
-
+    else if (right_points.size() < 5) {
+        if (verbose) {
+            vcl_cerr
+                << "There need to be at least 5 points to run the "
+                << "five-point algorithm!\n"
+                << "Input only contained " << right_points.size()
+                << " points.\n";
+        }
+        return false;
+    }
 
     // ----- Good input! Do the ransac
     const unsigned num_points = right_points.size();
@@ -476,8 +471,8 @@ bool vpgl_em_compute_5_point_ransac<T>::compute(
     vpgl_em_compute_5_point<T> five_point;
 
     int match_idxs[5];
-    for (int r = 0; r < num_rounds; r++) {
-
+    for (unsigned int r = 0; r < num_rounds; ++r)
+    {
         // Choose 5 random points, and use the 5-point algorithm on
         // these points to find the relative pose.
         vcl_vector<vgl_point_2d<T> > right_points_to_use;
@@ -485,28 +480,27 @@ bool vpgl_em_compute_5_point_ransac<T>::compute(
 
         get_distinct_indices(5, match_idxs, num_points);
 
-        for (int idx = 0; idx < 5; idx++) {
+        for (int idx = 0; idx < 5; ++idx) {
             right_points_to_use.push_back(right_points[idx]);
             left_points_to_use.push_back(left_points[idx]);
         }
-
         vcl_vector<vpgl_essential_matrix<T> > ems;
         five_point.compute(
-            right_points_to_use, right_k, 
-            left_points_to_use, left_k, 
+            right_points_to_use, right_k,
+            left_points_to_use, left_k,
             ems);
 
         // Now test all the essential matrices we've found, using them as
         // RANSAC hypotheses.
         typename vcl_vector<vpgl_essential_matrix<T> >::const_iterator i;
-        for (i = ems.begin(); i != ems.end(); i++) {
+        for (i = ems.begin(); i != ems.end(); ++i) {
             vpgl_fundamental_matrix<T> f(right_k, left_k, *i);
 
             vnl_double_3x1 point_r, point_l;
 
             // Count the number of inliers
             unsigned inlier_count = 0;
-            for (unsigned j = 0; j < num_points; j++) {
+            for (unsigned j = 0; j < num_points; ++j) {
                 point_r.put(0, 0, right_points[j].x());
                 point_r.put(1, 0, right_points[j].y());
                 point_r.put(2, 0, 1.0);
@@ -517,25 +511,21 @@ bool vpgl_em_compute_5_point_ransac<T>::compute(
 
                 if ( (point_l.transpose()*f.get_matrix()*point_r).get(0,0)
                     <= inlier_threshold) {
-                    inlier_count++;
+                    ++inlier_count;
                 }
             }
-
             if (best_inlier_count < inlier_count) {
                 best_em = *i;
                 best_inlier_count = inlier_count;
             }
         }
     }
-
     return true;
 }
 
 
-
-
 #define VPGL_EM_COMPUTE_5_POINT_INSTANTIATE(T) \
-template class vpgl_em_compute_5_point<T>; \
-template class vpgl_em_compute_5_point_ransac<T>;
+template class vpgl_em_compute_5_point<T >; \
+template class vpgl_em_compute_5_point_ransac<T >
 
 #endif // vpgl_em_compute_5_point_txx_
