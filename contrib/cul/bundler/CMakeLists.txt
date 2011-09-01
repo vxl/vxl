@@ -16,18 +16,18 @@ INCLUDE_DIRECTORIES(${RPL_INCLUDE_DIR})
 INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR})
 
 SET(bundler_sources
-    bundler.h                   bundler.cxx
+    bundler.h               bundler.cxx
 
     bundler_sfm.h
-    bundler_sfm_impl.h       bundler_sfm_impl.cxx
+    bundler_sfm_impl.h      bundler_sfm_impl.cxx
 
     bundler_tracks.h
-    bundler_tracks_impl.h       bundler_tracks_impl.cxx
+    bundler_tracks_impl.h   bundler_tracks_impl.cxx
 
-    bundler_utils.h          bundler_utils.cxx
+    bundler_utils.h         bundler_utils.cxx
 
-    bundler_settings.h
-    bundler_inters.h
+    bundler_settings.h      
+    bundler_inters.h        bundler_inters.cxx
    )
 
 ADD_LIBRARY(bundler ${bundler_sources})

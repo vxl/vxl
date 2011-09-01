@@ -6,12 +6,14 @@
 #include <bundler/bundler_inters.h>
 #include <vcl_vector.h>
 
-//: An abstract functor. Takes in the track set, and returns the initial reconstruction.
+//: 
+// An abstract functor. Takes in the track set, and fills the 
+// initial reconstruction. Returns true if it was successful, 
+// false otherwise.
 class bundler_sfm_create_initial_recon
 {
  public:
-  virtual void operator() (
-      bundler_inters_track_set &track_set,
+  virtual bool operator() (
       bundler_inters_reconstruction &reconstruction) = 0;
 };
 
@@ -28,9 +30,8 @@ class bundler_sfm_select_next_images
   // reconstruction should be considered to be complete.
   virtual bool operator() (
       bundler_inters_reconstruction &reconstruction,
-      bundler_inters_track_set &track_set,
 
-      vcl_vector<bundler_inters_feature_set_sptr> &to_add) = 0;
+      vcl_vector<bundler_inters_image_sptr> &to_add) = 0;
 };
 
 
@@ -43,9 +44,10 @@ class bundler_sfm_add_next_images
 {
  public:
   virtual void operator() (
-      bundler_inters_reconstruction reconstruction,
-      vcl_vector<bundler_inters_camera> &added_cameras,
-      const vcl_vector<bundler_inters_feature_set_sptr> &to_add) = 0;
+      const vcl_vector<bundler_inters_image_sptr> &to_add,
+
+      bundler_inters_reconstruction &reconstruction,
+      vcl_vector<bundler_inters_image_sptr> &added_images) = 0;
 };
 
 
@@ -58,8 +60,7 @@ class bundler_sfm_add_new_points
  public:
   virtual void operator() (
       bundler_inters_reconstruction &reconstruction,
-      bundler_inters_track_set &track_set,
-      const vcl_vector<bundler_inters_camera> &added) = 0;
+      const vcl_vector<bundler_inters_image_sptr> &added) = 0;
 };
 
 
@@ -69,7 +70,7 @@ class bundler_sfm_bundle_adjust
 {
  public:
   virtual void operator() (
-      bundler_inters_reconstruction reconstruction) = 0;
+      bundler_inters_reconstruction &reconstruction) = 0;
 };
 
 #endif // BUNDLER_SFM_H

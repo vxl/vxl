@@ -6,6 +6,7 @@ DECLARE( test_propose_matches );
 DECLARE( test_match_ann );
 DECLARE( test_refine );
 DECLARE( test_tracks );
+DECLARE( test_initial_recon );
 
 void register_tests()
 {
@@ -15,6 +16,7 @@ void register_tests()
   REGISTER( test_match_ann );
   REGISTER( test_refine );
   REGISTER( test_tracks );
+  REGISTER( test_initial_recon );
 }
 
 DEFINE_MAIN;

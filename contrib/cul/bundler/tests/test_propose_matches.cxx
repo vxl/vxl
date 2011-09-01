@@ -17,28 +17,25 @@ static int combination(int n, int k){
     return factorial(n) / (factorial(k) * factorial(n-k));
 }
 
-static bundler_inters_feature_set_sptr create_dummy_fs(int fl){
-    bundler_inters_feature_set_sptr fs(new bundler_inters_feature_set);
+static bundler_inters_image_sptr create_dummy_fs(int fl){
+    bundler_inters_image_sptr fs(new bundler_inters_image);
 
-    fs->source_image.focal_length = fl;
+    fs->focal_length = fl;
 
     return fs;
 }
 
-static bool paired(int i, int j, bundler_inters_feature_set_pair const& p){
-    const bundler_inters_image &img1 = p.f1->source_image;
-    const bundler_inters_image &img2 = p.f2->source_image;
-
+static bool paired(int i, int j, bundler_inters_image_pair const& p){
     return 
-        (img1.focal_length == i && img2.focal_length == j) || 
-        (img1.focal_length == j && img2.focal_length == i);
+        (p.f1->focal_length == i && p.f2->focal_length == j) || 
+        (p.f1->focal_length == j && p.f2->focal_length == i);
 }
 
 static bool check_for_match(
-    const vcl_vector<bundler_inters_feature_set_pair> &matches,
+    const vcl_vector<bundler_inters_image_pair> &matches,
     int fl1, int fl2){
 
-    vcl_vector<bundler_inters_feature_set_pair>::const_iterator i;
+    vcl_vector<bundler_inters_image_pair>::const_iterator i;
     for(i = matches.begin(); i != matches.end(); i++){
         if(paired(fl1, fl2, *i)){
             return true;
@@ -49,10 +46,10 @@ static bool check_for_match(
 }
 
 static bool check_no_self_match(
-    const vcl_vector<bundler_inters_feature_set_pair> &matches, 
+    const vcl_vector<bundler_inters_image_pair> &matches, 
     int fl){
 
-    vcl_vector<bundler_inters_feature_set_pair>::const_iterator i;
+    vcl_vector<bundler_inters_image_pair>::const_iterator i;
     for(i = matches.begin(); i != matches.end(); i++){
         if(paired(fl, fl, *i)){
             return false;
@@ -65,14 +62,14 @@ static bool check_no_self_match(
 static void test_propose_matches(){
     //------------------ Create the "feature set" list. Use the focal 
     // length as an identifier.
-    vcl_vector<bundler_inters_feature_set_sptr> feature_sets;
+    vcl_vector<bundler_inters_image_sptr> feature_sets;
 
     for(int i = 1; i <= NUM_FS; i++){
         feature_sets.push_back(create_dummy_fs(i));
     }
 
     //------------------ Do the matching.
-    vcl_vector<bundler_inters_feature_set_pair> matches;
+    vcl_vector<bundler_inters_image_pair> matches;
     
     bundler_tracks_impl_propose_matches_all propose;
     propose(feature_sets, matches);

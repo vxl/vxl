@@ -16,7 +16,7 @@ class bundler_tracks_detect
 {
  public:
   //: Performs the feature matching
-  virtual bundler_inters_feature_set_sptr operator() (
+  virtual bundler_inters_image_sptr operator() (
       const vil_image_resource_sptr &image,
       const double exif_focal_len) = 0;
 };
@@ -30,8 +30,8 @@ class bundler_tracks_propose_matches
  public:
   //: Performs the match list creation
   virtual void operator() (
-      const vcl_vector<bundler_inters_feature_set_sptr> &features,
-      vcl_vector<bundler_inters_feature_set_pair> &matches) = 0;
+      const vcl_vector<bundler_inters_image_sptr> &features,
+      vcl_vector<bundler_inters_image_pair> &matches) = 0;
 };
 
 
@@ -43,7 +43,7 @@ class bundler_tracks_match
  public:
   //: Performs the feature matching
   virtual void operator() (
-      const bundler_inters_feature_set_pair &to_match,
+      const bundler_inters_image_pair &to_match,
       bundler_inters_match_set &matches) = 0;
 }; 
 

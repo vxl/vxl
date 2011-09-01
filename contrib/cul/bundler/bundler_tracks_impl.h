@@ -30,7 +30,7 @@ class bundler_tracks_impl_detect_sift
       bundler_settings_sift s) : settings(s) {}
 
   //: Performs the feature matching
-  bundler_inters_feature_set_sptr operator() (
+  bundler_inters_image_sptr operator() (
       const vil_image_resource_sptr &image,
       const double exif_focal_len);
 };
@@ -54,8 +54,8 @@ class bundler_tracks_impl_propose_matches_all
 
     //: Performs the match list creation
   void operator() (
-      const vcl_vector<bundler_inters_feature_set_sptr> &features,
-      vcl_vector<bundler_inters_feature_set_pair> &proposed_matches);
+      const vcl_vector<bundler_inters_image_sptr> &features,
+      vcl_vector<bundler_inters_image_pair> &proposed_matches);
 };
 
 
@@ -77,7 +77,7 @@ class bundler_tracks_impl_match_ann
 
   //: Performs the feature matching
   void operator() (
-    const bundler_inters_feature_set_pair &to_match,
+    const bundler_inters_image_pair &to_match,
     bundler_inters_match_set &matches);
 };
 

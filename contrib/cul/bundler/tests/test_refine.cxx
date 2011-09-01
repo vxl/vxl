@@ -48,7 +48,7 @@ static void test_refine(int argc, char** argv)
     }
 
     // ------------------Set up the intermediate types for the refinement.
-    bundler_inters_feature_set_pair to_match;
+    bundler_inters_image_pair to_match;
 
     bundler_tracks_impl_detect_sift detect;
     to_match.f1 = detect(img1, -1);

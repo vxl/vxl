@@ -39,10 +39,10 @@ static void test_tracks(int argc, char** argv)
     }
 
     //-------------------- Run the tracks stage.
-    bundler_inters_track_set track_set;
+    bundler_inters_reconstruction recon;
 
     bundler_tracks tracks_stage;
-    tracks_stage.run_feature_stage(imgs, exif_tags, track_set);
+    tracks_stage.run_feature_stage(imgs, exif_tags, recon);
     
 
     //-------------------- Consistency checks
@@ -51,17 +51,28 @@ static void test_tracks(int argc, char** argv)
     //Test that the tracks don't have a corresponding point yet, and
     // that the tracks' points refer back to the correct track.
     vcl_vector<bundler_inters_track_sptr>::iterator trk_it;
-    for (trk_it = track_set.tracks.begin();
-        trk_it != track_set.tracks.end(); trk_it++){
+    for (trk_it = recon.tracks.begin();
+        trk_it != recon.tracks.end(); trk_it++){
 
-        TEST( "The corresponding point is NULL",
-            (*trk_it)->corresponding_point,
-            NULL);
+        TEST_EQUAL("Equal number of points as contributing pts",
+            (*trk_it)->points.size(),
+            (*trk_it)->contributing_points.size());
 
         for (int i = 0; i < (*trk_it)->points.size(); i++) {
+    
+            //TODO: Test that all the points in a track
+            // come from different images.
+
             TEST("The tracks' points refer to the correct track.",
                 (*trk_it)->points[i]->track,
                 *trk_it);
+
+            Assert("There are no contributing points yet",
+                !(*trk_it)->contributing_points[i]);
+
+            TEST("The features know where they are in their tracks",
+                (*trk_it)->points[(*trk_it)->points[i]->index_in_track],
+                (*trk_it)->points[i]);
         }
     }
 
@@ -69,25 +80,30 @@ static void test_tracks(int argc, char** argv)
     // the images pointers are consistent. Also test that visited is set
     // to false in all cases, since we are done with it for this loop,
     // and we'll use it in SFM
-    vcl_vector<bundler_inters_feature_set_sptr>::const_iterator fs_it;
-    for (fs_it = track_set.feature_sets.begin();
-         fs_it != track_set.feature_sets.end(); fs_it++){
+    vcl_vector<bundler_inters_image_sptr>::const_iterator fs_it;
+    for (fs_it = recon.feature_sets.begin();
+         fs_it != recon.feature_sets.end(); fs_it++){
 
         for (int i = 0; i < (*fs_it)->features.size(); i++) {
+
             Assert("Visited is false",
                 !(*fs_it)->features[i]->visited );
 
-            TEST("The features know their feature set.",
-                (*fs_it)->features[i]->feature_set,
+            TEST("The features know their image set.",
+                (*fs_it)->features[i]->image,
                  *fs_it);
-
-            TEST("The features know their source image.",
-                (*fs_it)->features[i]->source_image,
-                (*fs_it)->source_image);
         }
     }
 
-    //TODO: Test stuff like "all tracks are cliques in the graph".
+    vcl_vector<bundler_inters_match_set>::const_iterator m;
+    for(m = recon.match_sets.begin(); 
+        m != recon.match_sets.end(); m++){
+
+        for(int i = 0; i < m->num_features(); i++){
+            TEST("A pair of matched features is always in the same track.",
+                m->side1[i]->track, m->side2[i]->track);
+        }
+    }
 }
 
 TESTMAIN_ARGS(test_tracks);

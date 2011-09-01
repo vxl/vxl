@@ -23,11 +23,13 @@
 //
 // \todo Need to correctly allow for rgb images. Possibly involves
 //   modifying bapl instead of this routine.
-bundler_inters_feature_set_sptr
-bundler_tracks_impl_detect_sift::operator ()(
+bundler_inters_image_sptr bundler_tracks_impl_detect_sift::operator ()(
     const vil_image_resource_sptr &image,
     const double exif_focal_len)
 {
+
+    vcl_cout<<"Getting features!"<<vcl_endl;
+
     // We are going to be using the Lowe keypoint and SIFT implementation
     // in brl/bseg/babl.
     vcl_vector<bapl_keypoint_sptr> keypoints;
@@ -38,11 +40,11 @@ bundler_tracks_impl_detect_sift::operator ()(
 
     // Then we are going to convert from the bapl_lowe_keypoint
     // format to the bundler representation
-    bundler_inters_feature_set_sptr feature_set(
-        new bundler_inters_feature_set);
+    bundler_inters_image_sptr feature_set(
+        new bundler_inters_image);
 
-    feature_set->source_image.source = image;
-    feature_set->source_image.focal_length = exif_focal_len;
+    feature_set->source = image;
+    feature_set->focal_length = exif_focal_len;
 
     vcl_vector<bapl_keypoint_sptr>::const_iterator kp;
     for (kp = keypoints.begin(); kp != keypoints.end(); ++kp)
@@ -60,11 +62,11 @@ bundler_tracks_impl_detect_sift::operator ()(
         bundler_inters_feature_sptr f(
             new bundler_inters_feature(row, col));
         f->descriptor = lkp->descriptor().as_vector();
-        f->source_image = feature_set->source_image;
-        f->feature_set = feature_set;
+        f->image = feature_set;
 
         // Insert this feature into the feature set.
         feature_set->features.push_back(f);
+        f->index_in_image = kp - keypoints.begin();
     }
 
     return feature_set;
@@ -74,18 +76,21 @@ bundler_tracks_impl_detect_sift::operator ()(
 /*------------------------Match List Implementation-----------------------*/
 // Match list implementation. Proposes all possible pairings.
 void bundler_tracks_impl_propose_matches_all::operator ()(
-    const vcl_vector<bundler_inters_feature_set_sptr> &features,
-    vcl_vector<bundler_inters_feature_set_pair> &matches)
+    const vcl_vector<bundler_inters_image_sptr> &features,
+    vcl_vector<bundler_inters_image_pair> &matches)
 {
+
+    vcl_cout<<"Getting the match list!"<<vcl_endl;
+
     // Add every possible pairing to the match list. Make sure an image is
     // not paired with itself, and also make sure that if there is
     // (a, b) in the set, there is not (b, a).
-    vcl_vector<bundler_inters_feature_set_sptr>::const_iterator i, j;
+    vcl_vector<bundler_inters_image_sptr>::const_iterator i, j;
 
     for (i = features.begin(); i != features.end(); ++i) {
         for (j = i; j != features.end(); ++j) {
             if (i != j) {
-                bundler_inters_feature_set_pair pair;
+                bundler_inters_image_pair pair;
 
                 pair.f1 = *i;
                 pair.f2 = *j;
@@ -136,12 +141,15 @@ static double squared_distance(const rsdl_point &v1,
 // Match implementation. Uses approximate nearest neighbours
 // implementation (kd tree) in rpl/rsdl.
 void bundler_tracks_impl_match_ann::operator ()(
-    const bundler_inters_feature_set_pair &to_match,
+    const bundler_inters_image_pair &to_match,
     bundler_inters_match_set &matches)
 {
+
+    vcl_cout<<"Doing the matching!"<<vcl_endl;
+
     // Add the image information to the match set.
-    matches.image1 = to_match.f1->source_image;
-    matches.image2 = to_match.f2->source_image;
+    matches.image1 = to_match.f1;
+    matches.image2 = to_match.f2;
 
     // Create the KD-tree
     vcl_vector<rsdl_point> desc_f2;
@@ -237,6 +245,9 @@ static inline void remove_all_duplicates(
 void bundler_tracks_impl_refine_epipolar::operator ()(
     bundler_inters_match_set &matches)
 {
+
+    vcl_cout<<"Refining!"<<vcl_endl;
+
     // First, remove any matches where feature a in image 1 matches to
     // both feature b and c in image 2. In other words, a feature
     // may only appear once in this list.
@@ -306,22 +317,19 @@ static void create_new_track(
         feature_stack.pop();
 
         // Add it to the track
-        new_track->points.push_back(curr);
+        curr->index_in_track = new_track->add_feature(curr);
         curr->track = new_track;
 
         vcl_vector<bundler_inters_match_set>::const_iterator match;
         for (match = matches.begin(); match != matches.end(); ++match)
         {
             for (int i = 0; i < match->num_features(); ++i) {
-                if (match->side1[i] == curr &&
-                    ! match->side2[i]->visited)
-                {
+                if (match->side1[i] == curr && !match->side2[i]->visited){
                     match->side2[i]->visited = true;
                     feature_stack.push(match->side2[i]);
-                }
-                else if (match->side2[i] == curr &&
-                         ! match->side1[i]->visited)
-                {
+
+                } else if (match->side2[i] == curr &&
+                         ! match->side1[i]->visited) {
                     match->side1[i]->visited = true;
                     feature_stack.push(match->side1[i]);
                 }
@@ -335,6 +343,9 @@ void bundler_tracks_default_chain_matches::operator ()(
     const vcl_vector<bundler_inters_match_set> &matches,
     vcl_vector<bundler_inters_track_sptr> &tracks)
 {
+
+    vcl_cout<<"Chaining!"<<vcl_endl;
+
     vcl_vector<bundler_inters_match_set>::const_iterator match;
     for (match = matches.begin(); match != matches.end(); ++match)
     {
@@ -343,7 +354,7 @@ void bundler_tracks_default_chain_matches::operator ()(
             // If we have not visited one of the sides, then we have
             // found a part of a new connected component, so we should
             // start the DFS search here.
-            if (! match->side1[i]->visited) {
+            if (!match->side1[i]->visited) {
                 bundler_inters_track_sptr new_track(
                     new bundler_inters_track);
                 create_new_track(matches, match->side1[i],

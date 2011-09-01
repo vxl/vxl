@@ -46,7 +46,7 @@ static void test_match_ann(int argc, char** argv)
     }
 
     // Set up the intermediate types for the matching.
-    bundler_inters_feature_set_pair to_match;
+    bundler_inters_image_pair to_match;
 
     bundler_tracks_impl_detect_sift detect;
     to_match.f1 = detect(img1, -1);
@@ -60,10 +60,10 @@ static void test_match_ann(int argc, char** argv)
 
     // Consistency checks
     const bool correct_images =
-        (matches.image1 == to_match.f1->source_image &&
-         matches.image2 == to_match.f2->source_image) ||
-        (matches.image1 == to_match.f2->source_image &&
-         matches.image2 == to_match.f1->source_image);
+        (matches.image1 == to_match.f1 &&
+         matches.image2 == to_match.f2) ||
+        (matches.image1 == to_match.f2 &&
+         matches.image2 == to_match.f1);
     Assert("Images match up.", correct_images);
 
     Assert("Sizes are the same.",
@@ -71,10 +71,10 @@ static void test_match_ann(int argc, char** argv)
 
     for (int i = 0; i < matches.num_features(); ++i) {
         Assert("First stored image matches feature image.",
-               matches.image1 == matches.side1[i]->source_image);
+               matches.image1 == matches.side1[i]->image);
 
         Assert("Second stored image matches feature image.",
-               matches.image2 == matches.side2[i]->source_image);
+               matches.image2 == matches.side2[i]->image);
 
         const double desc_dist = dist_sq(
             matches.side1[i]->descriptor,

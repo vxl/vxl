@@ -50,7 +50,7 @@ bundler_tracks::bundler_tracks(
 void bundler_tracks::run_feature_stage(
     const vcl_vector<vil_image_resource_sptr> &imageset,
     const vcl_vector<double> &focal_lengths,
-    bundler_inters_track_set &track_set)
+    bundler_inters_reconstruction &empty_recon)
 {
     // First, run the detect stage.
     vcl_vector<vil_image_resource_sptr>::const_iterator img_i;
@@ -58,34 +58,35 @@ void bundler_tracks::run_feature_stage(
     for (img_i = imageset.begin(), exif_i = focal_lengths.begin();
          img_i != imageset.end(); img_i++, exif_i++)
     {
-        track_set.feature_sets.push_back(
+        empty_recon.feature_sets.push_back(
             (*detect_features)(*img_i, *exif_i));
     }
 
     // Now get the match lists.
-    vcl_vector<bundler_inters_feature_set_pair> matches;
+    vcl_vector<bundler_inters_image_pair> matches;
 
-    (*propose_matches)(track_set.feature_sets, matches);
+    (*propose_matches)(empty_recon.feature_sets, matches);
 
     // For every proposed match, run the match stage.
-    vcl_vector<bundler_inters_feature_set_pair>::const_iterator j;
+    vcl_vector<bundler_inters_image_pair>::const_iterator j;
     for (j = matches.begin(); j != matches.end(); j++) {
         bundler_inters_match_set match_set;
+            
         (*match)(*j, match_set);
         (*refine)(match_set);
 
         if (match_set.num_features() > 0) {
-            track_set.match_sets.push_back(match_set);
+            empty_recon.match_sets.push_back(match_set);
         }
     }
 
     // Finally, chain everything into a track
-    (*chain_matches)(track_set.match_sets, track_set.tracks);
+    (*chain_matches)(empty_recon.match_sets, empty_recon.tracks);
 
     // Clear the visited tags for every feature.
-    vcl_vector<bundler_inters_feature_set_sptr>::const_iterator i;
-    for (i = track_set.feature_sets.begin();
-         i != track_set.feature_sets.end(); i++)
+    vcl_vector<bundler_inters_image_sptr>::const_iterator i;
+    for (i = empty_recon.feature_sets.begin();
+         i != empty_recon.feature_sets.end(); i++)
     {
         vcl_vector<bundler_inters_feature_sptr>::iterator j;
         for (j = (*i)->features.begin(); j != (*i)->features.end(); j++) {
@@ -135,37 +136,39 @@ bundler_sfm::bundler_sfm(bundler_settings_sfm s)
 
 
 void bundler_sfm::run_sfm_stage(
-        bundler_inters_track_set &track_set,
+        bundler_inters_reconstruction &recon,
+
         vcl_vector<vpgl_perspective_camera<double> > &cameras,
         vcl_vector<vgl_point_3d<double> > &points,
         vnl_sparse_matrix<bool> visibility_matrix)
 {
-    bundler_inters_reconstruction recon;
-
     //Create the initial reconstruction
-    (*create_initial_recon)(track_set, recon);
+    (*create_initial_recon)(recon);
 
     //Now do the add images, add points, bundle adjust loop
-    vcl_vector<bundler_inters_feature_set_sptr> to_add;
-    while ( (*select_next_images)(recon, track_set, to_add) ) {
-        vcl_vector<bundler_inters_camera> added;
+    vcl_vector<bundler_inters_image_sptr> to_add;
+    while ( (*select_next_images)(recon, to_add) ) {
+        vcl_vector<bundler_inters_image_sptr> added;
 
-        (*add_next_images)(recon, added, to_add);
-        (*add_new_points)(recon, track_set, added);
+        (*add_next_images)(to_add, recon, added);
+        (*add_new_points)(recon, added);
         (*bundle_adjust)(recon);
 
         to_add.clear();
     }
 
     //Now get the information from the reconstruction struct.
-    vcl_vector<bundler_inters_camera>::const_iterator cam;
-    for (cam = recon.cameras.begin(); cam != recon.cameras.end(); cam++) {
-        cameras.push_back(cam->camera);
+    vcl_vector<bundler_inters_image_sptr>::const_iterator cam;
+    for (cam = recon.feature_sets.begin(); 
+        cam != recon.feature_sets.end(); 
+        cam++) {
+
+        cameras.push_back((*cam)->camera);
     }
 
-    vcl_vector<bundler_inters_3d_point>::const_iterator pt;
-    for (pt = recon.points.begin(); pt != recon.points.end(); pt++) {
-        points.push_back(pt->point_3d);
+    vcl_vector<bundler_inters_track_sptr>::const_iterator pt;
+    for (pt = recon.tracks.begin(); pt != recon.tracks.end(); pt++) {
+        points.push_back((*pt)->world_point);
     }
 
     visibility_matrix = recon.visibility_matrix;

@@ -11,64 +11,65 @@
 static void test_tracks_detect(int argc, char* argv[])
 { 
 
-    vil_image_resource_sptr img; 
+    vil_image_resource_sptr source_img; 
 
     if(argc < 2){
         vcl_cerr<<"Supply a filename for the first argument!" << vcl_endl;
+
         TEST("test_tracks_detect", true, false);
 
         // TODO Get an argument into this test!
-        img = vil_load_image_resource(
+        source_img = vil_load_image_resource(
         "/home/anjruu/vxl/contrib/cul/bundler/tests/test_data/kermit000.jpg",
         false);
         
     } else {
         // Load the image
-        img = vil_load_image_resource(argv[1], false);
+        source_img = vil_load_image_resource(argv[1], false);
     }
 
     // Create and run the implementation of the detect stage
     bundler_tracks_impl_detect_sift detect;
 
-    bundler_inters_feature_set_sptr feature_set = 
-        detect(img, BUNDLER_NO_FOCAL_LEN); 
+    bundler_inters_image_sptr image = 
+        detect(source_img, BUNDLER_NO_FOCAL_LEN); 
 
     // Perform consistency checks 
     TEST_EQUAL("The focal length is correct.",
-        feature_set->source_image.focal_length, 
+        image->focal_length, 
         BUNDLER_NO_FOCAL_LEN);
 
     TEST("Check that the vil_image_resource is correct.",
-        feature_set->source_image.source,
-        img);
+        image->source,
+        source_img);
 
     // Now look at all the features individually.
     TEST_FAR("Make sure there are some features.",
-        feature_set->features.size(), 0, .5);
+        image->features.size(), 0, .5);
 
     vcl_vector<bundler_inters_feature_sptr>::iterator i;
-    for(i = feature_set->features.begin(); 
-        i != feature_set->features.end(); i++){
+    for(i = image->features.begin(); 
+        i != image->features.end(); i++){
         
         // Make sure all the values are expected.
         Assert("Visited is always false at this point.",
             !(*i)->visited);
 
         TEST("The feature set cross-reference is set properly.",
-            (*i)->feature_set,
-            feature_set);
+            (*i)->image,
+            image);
 
         TEST("The track is not yet set.",
             (*i)->track,
             NULL);
 
-        TEST("The feature knows its source image.",
-            (*i)->source_image,
-            feature_set->source_image);
-
         TEST_EQUAL("Descriptors are the same size.",
             (*i)->descriptor.size(),
-            (*feature_set->features.begin())->descriptor.size());
+            (*image->features.begin())->descriptor.size());
+
+        TEST("The feature knows where it is in the image list.",
+            image->features[(*i)->index_in_image],
+            *i);
 
         // I can't think of a good test for the descriptor or the 
         // 2D location. I'm just going to print out the 2d point 

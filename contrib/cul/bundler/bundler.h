@@ -115,7 +115,7 @@ class bundler_tracks
             const vcl_vector<vil_image_resource_sptr> &imageset,
             const vcl_vector<double> &focal_lengths,
 
-            bundler_inters_track_set &track_set);
+            bundler_inters_reconstruction &empty_recon);
 };
 
 
@@ -176,7 +176,9 @@ class bundler_sfm
         // A convenience method that runs the entire sfm matching
         // pipeline. Alternatively, you can directly call functors
         // yourself.
-        virtual void run_sfm_stage(bundler_inters_track_set &track_set,
+        virtual void run_sfm_stage(
+            bundler_inters_reconstruction &empty_recon,
+
             vcl_vector<vpgl_perspective_camera<double> > &cameras,
             vcl_vector<vgl_point_3d<double> > &points,
             vnl_sparse_matrix<bool> visibility_graph);
