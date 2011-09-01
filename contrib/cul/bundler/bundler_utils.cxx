@@ -17,7 +17,7 @@
 void bundler_utils_get_distinct_indices(
     int n, int *idxs, int number_entries)
 {
-    for (int i = 0; i < n; i++) {
+    for (int i = 0; i < n; ++i) {
         bool found;
         int idx;
 
@@ -25,7 +25,7 @@ void bundler_utils_get_distinct_indices(
             found = true;
             idx = vcl_rand() % number_entries;
 
-            for (int j = 0; j < i; j++) {
+            for (int j = 0; j < i; ++j) {
                 if (idxs[j] == idx) {
                     found = false;
                     break;
@@ -46,9 +46,8 @@ double bundler_utils_triangulate_points(
     vcl_vector<vpgl_perspective_camera<double> > persp_cameras;
     vcl_vector<vgl_point_2d<double> > vgl_points;
 
-    
-    for(int i = 0; i < track->points.size(); i++){
-        if(track->contributing_points[i]){
+    for (unsigned int i = 0; i < track->points.size(); ++i) {
+        if (track->contributing_points[i]){
             vgl_points.push_back(track->points[i]->point);
             persp_cameras.push_back(track->points[i]->image->camera);
         }
@@ -70,7 +69,7 @@ double bundler_utils_get_homography_inlier_percentage(
     int inlier_count = 0;
 
     // RANSAC!
-    for (int round = 0; round < num_rounds; round++) {
+    for (int round = 0; round < num_rounds; ++round) {
         int match_idxs[4];
         bundler_utils_get_distinct_indices(
             4, match_idxs, match.num_features());
@@ -79,7 +78,7 @@ double bundler_utils_get_homography_inlier_percentage(
         vcl_vector<vgl_homg_point_2d<double> > rhs;
         vcl_vector<vgl_homg_point_2d<double> > lhs;
 
-        for (int i = 0; i < 4; i++) {
+        for (int i = 0; i < 4; ++i) {
             lhs.push_back(vgl_homg_point_2d<double>(match.side1[match_idxs[i]]->point));
             rhs.push_back(vgl_homg_point_2d<double>(match.side2[match_idxs[i]]->point));
         }
@@ -94,7 +93,7 @@ double bundler_utils_get_homography_inlier_percentage(
 
         vcl_vector<bundler_inters_feature_sptr>::const_iterator s1, s2;
         for (s1 = match.side1.begin(), s2 = match.side2.begin();
-             s1 != match.side1.end(); s1++, s2++)
+             s1 != match.side1.end(); ++s1, ++s2)
         {
             lhs_pt.set((*s1)->point.x(), (*s1)->point.y());
 
@@ -104,7 +103,7 @@ double bundler_utils_get_homography_inlier_percentage(
             double dy = (rhs_pt.y() / rhs_pt.w()) - (*s2)->point.y();
 
             if (dx*dx + dy*dy <= threshold_squared) {
-                current_num_inliers++;
+                ++current_num_inliers;
             }
         }
 
@@ -125,14 +124,14 @@ unsigned bundler_utils_fill_persp_camera_ransac(
 {
     const double thresh_sq = inlier_threshold * inlier_threshold;
 
-    //Get a list of all corresponding 3d points
+    // Get a list of all corresponding 3d points
     vcl_vector< vgl_point_2d<double> > image_pts;
     vcl_vector< vgl_point_3d<double> > world_pts;
 
-    //Look at every feature in the set
+    // Look at every feature in the set
     vcl_vector<bundler_inters_feature_sptr>::const_iterator f;
-    for (f = image->features.begin(); f != image->features.end(); f++) {
-        if((*f)->track->observed){
+    for (f = image->features.begin(); f != image->features.end(); ++f) {
+        if ((*f)->track->observed){
             //This is the image point.
             image_pts.push_back((*f)->point);
 
@@ -143,17 +142,16 @@ unsigned bundler_utils_fill_persp_camera_ransac(
 
     int best_inliers = 0;
 
-    for (int rnd = 0; rnd < ransac_rounds; rnd++) {
+    for (unsigned int rnd = 0; rnd < ransac_rounds; ++rnd) {
         vcl_vector< vgl_point_2d<double> > curr_image_pts;
         vcl_vector< vgl_point_3d<double> > curr_world_pts;
 
-
-        //Get the points to use in this RANSAC round
+        // Get the points to use in this RANSAC round
         int match_idxs[6];
         bundler_utils_get_distinct_indices(
             6, match_idxs, image_pts.size());
 
-        for (int idx = 0; idx < 5; idx++) {
+        for (int idx = 0; idx < 5; ++idx) {
             curr_image_pts.push_back(image_pts[idx]);
             curr_world_pts.push_back(world_pts[idx]);
         }
@@ -170,7 +168,7 @@ unsigned bundler_utils_fill_persp_camera_ransac(
         // Find the inlier percentage to evaulate how good this camera
         // is.
         double inlier_count;
-        for (unsigned int pt_ind = 0; pt_ind < image_pts.size(); pt_ind++)
+        for (unsigned int pt_ind = 0; pt_ind < image_pts.size(); ++pt_ind)
         {
             double u,v;
             camera.project(world_pts[pt_ind].x(), world_pts[pt_ind].y(),
@@ -180,7 +178,7 @@ unsigned bundler_utils_fill_persp_camera_ransac(
             double dy = v - image_pts[pt_ind].y();
 
             if (dx*dx - dy*dy <= thresh_sq) {
-                inlier_count++;
+                ++inlier_count;
             }
         }
 
