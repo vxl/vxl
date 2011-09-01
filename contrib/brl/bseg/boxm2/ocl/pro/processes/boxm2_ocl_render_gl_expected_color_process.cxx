@@ -26,9 +26,9 @@
 
 namespace boxm2_ocl_render_gl_expected_color_process_globals
 {
-  const unsigned n_inputs_ = 8 ;
-  const unsigned n_outputs_ = 1;
-  vcl_size_t lthreads[2]={8,8};
+  const unsigned n_inputs_   = 10;
+  const unsigned n_outputs_  = 1;
+  vcl_size_t     lthreads[2] = {8,8};
 
   static vcl_map<vcl_string,vcl_vector<bocl_kernel*> > kernels;
 
@@ -92,7 +92,16 @@ bool boxm2_ocl_render_gl_expected_color_process_cons(bprb_func_process& pro)
   input_types_[5] = "unsigned";
   input_types_[6] = "bocl_mem_sptr"; // exp image buffer;
   input_types_[7] = "bocl_mem_sptr"; // exp image dimensions buffer;
+  input_types_[8] = "vcl_string";  //identifier
+  input_types_[9] = "bool"; // exp image dimensions buffer;
+  
+  //default last two args
+  brdb_value_sptr idx = new brdb_value_t<vcl_string>("");
+  pro.set_input(8, idx); 
+  brdb_value_sptr brdb_is_bw = new brdb_value_t<bool>(false); 
+  pro.set_input(9, brdb_is_bw);  
 
+  //set output types
   vcl_vector<vcl_string> output_types_(n_outputs_);
   output_types_[0] = "float";
 
@@ -102,22 +111,22 @@ bool boxm2_ocl_render_gl_expected_color_process_cons(bprb_func_process& pro)
 bool boxm2_ocl_render_gl_expected_color_process(bprb_func_process& pro)
 {
   using namespace boxm2_ocl_render_gl_expected_color_process_globals;
-
   if ( pro.n_inputs() < n_inputs_ ) {
     vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
     return false;
   }
   //get the inputs
   unsigned i = 0;
-  bocl_device_sptr device= pro.get_input<bocl_device_sptr>(i++);
-  boxm2_scene_sptr scene =pro.get_input<boxm2_scene_sptr>(i++);
-
-  boxm2_opencl_cache_sptr opencl_cache= pro.get_input<boxm2_opencl_cache_sptr>(i++);
-  vpgl_camera_double_sptr cam= pro.get_input<vpgl_camera_double_sptr>(i++);
-  unsigned ni=pro.get_input<unsigned>(i++);
-  unsigned nj=pro.get_input<unsigned>(i++);
-  bocl_mem_sptr exp_image =pro.get_input<bocl_mem_sptr>(i++);
-  bocl_mem_sptr exp_img_dim =pro.get_input<bocl_mem_sptr>(i++);
+  bocl_device_sptr        device       = pro.get_input<bocl_device_sptr>(i++);
+  boxm2_scene_sptr        scene        = pro.get_input<boxm2_scene_sptr>(i++);
+  boxm2_opencl_cache_sptr opencl_cache = pro.get_input<boxm2_opencl_cache_sptr>(i++);
+  vpgl_camera_double_sptr cam          = pro.get_input<vpgl_camera_double_sptr>(i++);
+  unsigned                ni           = pro.get_input<unsigned>(i++);
+  unsigned                nj           = pro.get_input<unsigned>(i++);
+  bocl_mem_sptr           exp_image    = pro.get_input<bocl_mem_sptr>(i++);
+  bocl_mem_sptr           exp_img_dim  = pro.get_input<bocl_mem_sptr>(i++);
+  vcl_string              ident        = pro.get_input<vcl_string>(i++); 
+  bool                    is_bw        = pro.get_input<bool>(i++); 
 
   bool foundDataType = false;
   vcl_string data_type,options;
@@ -167,14 +176,21 @@ bool boxm2_ocl_render_gl_expected_color_process(bprb_func_process& pro)
                                      cam, exp_color, vis_image, exp_img_dim,
                                      data_type, kernels[identifier][0], lthreads, cl_ni, cl_nj);
 
+
+
   // normalize and write image to GL buffer
   {
+    cl_bool isbw[1] = { is_bw }; 
+    bocl_mem_sptr is_bw_sptr = new bocl_mem(device->context(), isbw, sizeof(cl_bool), "is bw hack buffer");
+    is_bw_sptr->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
+      
     vcl_size_t gThreads[] = {cl_ni,cl_nj};
     bocl_kernel* norm_rgb_gl = kernels[identifier][1];
     norm_rgb_gl->set_arg( exp_color.ptr() );
     norm_rgb_gl->set_arg( vis_image.ptr() );
     norm_rgb_gl->set_arg( exp_img_dim.ptr());
     norm_rgb_gl->set_arg( exp_image.ptr() );
+    norm_rgb_gl->set_arg( is_bw_sptr.ptr() ) ; 
     norm_rgb_gl->execute( queue, 2, lthreads, gThreads);
     clFinish(queue);
     norm_rgb_gl->clear_args();

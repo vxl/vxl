@@ -93,7 +93,8 @@ __kernel void normalize_render_kernel_gl(__global uint * exp_img,
 __kernel void normalize_render_kernel_rgb_gl( __global float4* exp_img, 
                                               __global float* vis_img, 
                                               __global uint4* imgdims,
-                                              __global uint*  gl_im)
+                                              __global uint*  gl_im, 
+                                              __global bool*  is_bw)
 {
     int i=0,j=0;
     i=get_global_id(0);
@@ -107,7 +108,11 @@ __kernel void normalize_render_kernel_rgb_gl( __global float4* exp_img,
 
     float vis = vis_img[imindex];
     float4 intensity = exp_img[imindex] + (vis*0.5f);
-    gl_im[imindex]   = (rgbaFloatToInt(intensity));//(intensity-*min_i)/range) ;
+
+    if( *is_bw ) 
+      gl_im[imindex]   = rgbaFloatToInt(intensity);//(intensity-*min_i)/range) ;
+    else 
+      gl_im[imindex]   = rgbaFloatToInt( (float4) intensity.x );//(intensity-*min_i)/range) ;
 }
 #endif
 
@@ -198,9 +203,9 @@ __kernel void normalize_change_kernel(__global float * exp_img /* background pro
     float prob_exp_int = prob_exp_img[imindex];
     prob_exp_int+=vis;
 
-    float fgbelief=1.0f/(1.0f+prob_int)-0.5f*min(prob_int,1/prob_int);
+    float fgbelief=1.0f/(1.0f+prob_int); // - 0.5f*min(prob_int,1/prob_int);
     float raybelief=prob_exp_int/(1.0f+prob_exp_int)-0.5*min(prob_exp_int,1/prob_exp_int);
-    exp_img[imindex]=fgbelief;
+    exp_img[imindex]=fgbelief; //* raybelief;
 }
 #endif
 #ifdef PROB_IMAGE

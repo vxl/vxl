@@ -74,6 +74,9 @@ class boxm2_ocl_render_tableau : public boxm2_cam_tableau
 
   bool init_clgl();
   bool do_init_ocl;
+  
+  //hack to toggle RGB to B&W
+  bool is_bw_;
 };
 
 //: declare smart pointer

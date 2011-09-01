@@ -22,6 +22,7 @@
 //: Constructor
 boxm2_ocl_render_tableau::boxm2_ocl_render_tableau()
 {
+  is_bw_ = false; 
   pbuffer_=0;
   ni_=640;
   nj_=480;
@@ -97,8 +98,15 @@ bool boxm2_ocl_render_tableau::handle(vgui_event const &e)
 
     return true;
   }
-
-
+  
+  
+  //toggle color - this is a hack to get color models to show as grey
+  if (e.type == vgui_KEY_PRESS) {
+    if (e.key == vgui_key('c')) {
+      vcl_cout<<"Toggling b and w"<<vcl_endl;
+      is_bw_ = true; 
+    } 
+  }
   
   if (boxm2_cam_tableau::handle(e)) {
     return true;
@@ -146,6 +154,13 @@ float boxm2_ocl_render_tableau::render_frame()
     good = good && bprb_batch_process_manager::instance()->set_input(6, exp_img);   // exp image ( gl buffer)
     good = good && bprb_batch_process_manager::instance()->set_input(7, exp_img_dim);   // exp image dimensions
     good = good && bprb_batch_process_manager::instance()->set_input(8, ident);   // string identifier to specify appearance data 
+    
+    //hack for toggling
+    if(is_bw_) {
+      brdb_value_sptr brdb_is_bw = new brdb_value_t<bool>(true); 
+      good = good && bprb_batch_process_manager::instance()->set_input(9, brdb_is_bw); 
+    }
+    
     good = good && bprb_batch_process_manager::instance()->run_process();
     
     //grab float output from render gl process
