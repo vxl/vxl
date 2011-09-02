@@ -74,13 +74,18 @@ double bundler_utils_get_homography_inlier_percentage(
         bundler_utils_get_distinct_indices(
             4, match_idxs, match.num_features());
 
-        // Fill these vectors with the points stored at the indices`
+        // Fill these vectors with the points stored at the indices
         vcl_vector<vgl_homg_point_2d<double> > rhs;
         vcl_vector<vgl_homg_point_2d<double> > lhs;
 
         for (int i = 0; i < 4; ++i) {
-            lhs.push_back(vgl_homg_point_2d<double>(match.side1[match_idxs[i]]->point));
-            rhs.push_back(vgl_homg_point_2d<double>(match.side2[match_idxs[i]]->point));
+            lhs.push_back(
+                vgl_homg_point_2d<double>(
+                    match.matches[match_idxs[i]].first->point));
+
+            rhs.push_back(
+                vgl_homg_point_2d<double>(
+                    match.matches[match_idxs[i]].second->point));
         }
 
         // Get the homography for the points
@@ -91,16 +96,15 @@ double bundler_utils_get_homography_inlier_percentage(
 
         int current_num_inliers = 0;
 
-        vcl_vector<bundler_inters_feature_sptr>::const_iterator s1, s2;
-        for (s1 = match.side1.begin(), s2 = match.side2.begin();
-             s1 != match.side1.end(); ++s1, ++s2)
-        {
-            lhs_pt.set((*s1)->point.x(), (*s1)->point.y());
+        vcl_vector<bundler_inters_feature_pair>::const_iterator m;
+        for (m = match.matches.begin(); m != match.matches.end(); m++) {
+
+            lhs_pt.set(m->first->point.x(), m->first->point.y());
 
             rhs_pt = homography(lhs_pt);
 
-            double dx = (rhs_pt.x() / rhs_pt.w()) - (*s2)->point.x();
-            double dy = (rhs_pt.y() / rhs_pt.w()) - (*s2)->point.y();
+            double dx = (rhs_pt.x() / rhs_pt.w()) - m->second->point.x();
+            double dy = (rhs_pt.y() / rhs_pt.w()) - m->second->point.y();
 
             if (dx*dx + dy*dy <= threshold_squared) {
                 ++current_num_inliers;
@@ -112,7 +116,7 @@ double bundler_utils_get_homography_inlier_percentage(
         }
     }
 
-    return ((double) inlier_count) / match.side1.size();
+    return ((double) inlier_count) / match.matches.size();
 }
 
 

@@ -22,7 +22,6 @@ static void test_initial_recon(int argc, char** argv)
         vcl_cerr<<"Supply a filename for the first two args!\n";
         TEST("test_tracks", true, false);
 
-        // TODO Get an argument into this test!
         filepath = IMG_PATH;
 
     } else {
@@ -56,7 +55,17 @@ static void test_initial_recon(int argc, char** argv)
 
     
 
-    //-------------------- Consistency checks
+    //-------------------- Consistency checks TODO
+    // Check that only tracks with contributing points are observed
+    vcl_vector<bundler_inters_track_sptr>::const_iterator i;
+    for(i = recon.tracks.begin(); i != recon.tracks.end(); i++){
+        
+    }
+
+    // Check that there are only two cameras in the reconstruction
+
+    // Check that the projection of every contributing point 
+    // is close its 3d point.
 
 }
 

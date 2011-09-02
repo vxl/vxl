@@ -10,6 +10,8 @@
 static const char* IMG_PATH =
     "/home/anjruu/vxl/contrib/cul/bundler/tests/test_data";
 
+static const int NUM_IMGS = 11;
+
 static void test_tracks(int argc, char** argv)
 {
     vcl_string filepath;
@@ -18,7 +20,6 @@ static void test_tracks(int argc, char** argv)
         vcl_cerr<<"Supply a filename for the first two args!\n";
         TEST("test_tracks", true, false);
 
-        // TODO Get an argument into this test!
         filepath = IMG_PATH;
 
     } else {
@@ -26,10 +27,10 @@ static void test_tracks(int argc, char** argv)
     }
 
     //-------------------- Load all the images.
-    vcl_vector<vil_image_resource_sptr> imgs(11);
-    vcl_vector<double> exif_tags(11);
+    vcl_vector<vil_image_resource_sptr> imgs(NUM_IMGS);
+    vcl_vector<double> exif_tags(NUM_IMGS);
 
-    for(int i = 0; i <= 10; i++){
+    for(int i = 0; i < NUM_IMGS; i++){
         vcl_stringstream str;
         str << filepath << "/kermit" 
             << vcl_setw(3) << vcl_setfill('0') << i << ".jpg";
@@ -59,10 +60,6 @@ static void test_tracks(int argc, char** argv)
             (*trk_it)->contributing_points.size());
 
         for (int i = 0; i < (*trk_it)->points.size(); i++) {
-    
-            //TODO: Test that all the points in a track
-            // come from different images.
-
             TEST("The tracks' points refer to the correct track.",
                 (*trk_it)->points[i]->track,
                 *trk_it);
@@ -73,6 +70,17 @@ static void test_tracks(int argc, char** argv)
             TEST("The features know where they are in their tracks",
                 (*trk_it)->points[(*trk_it)->points[i]->index_in_track],
                 (*trk_it)->points[i]);
+
+            //Test that all features in a track come from different images.
+            for(int j = i+1; j < (*trk_it)->points.size(); j++){
+                const bool images_match = 
+                    (*trk_it)->points[i]->image == 
+                    (*trk_it)->points[j]->image;
+
+                Assert(
+                    "Features in a track come from different images.",  
+                    !images_match);
+            }
         }
     }
 
@@ -92,6 +100,14 @@ static void test_tracks(int argc, char** argv)
             TEST("The features know their image set.",
                 (*fs_it)->features[i]->image,
                  *fs_it);
+        
+            //Test that all features in an image come from different tracks.
+            /*for(int j = i+1; j < (*fs_it)->features.size(); j++){
+                Assert(
+                    "Features in an image come from different tracks.", 
+                    (*fs_it)->features[i]->track != 
+                        (*fs_it)->features[j]->track);
+            }*/
         }
     }
 
@@ -101,7 +117,7 @@ static void test_tracks(int argc, char** argv)
 
         for(int i = 0; i < m->num_features(); i++){
             TEST("A pair of matched features is always in the same track.",
-                m->side1[i]->track, m->side2[i]->track);
+                m->matches[i].first->track, m->matches[i].second->track);
         }
     }
 }

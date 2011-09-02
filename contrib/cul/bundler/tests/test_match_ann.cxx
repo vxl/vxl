@@ -35,7 +35,6 @@ static void test_match_ann(int argc, char** argv)
         vcl_cerr<<"Supply a filename for the first two args!\n";
         TEST("test_match_ann", true, false);
 
-        // TODO Get an argument into this test!
         img1 = vil_load_image_resource(IMG1_PATH, false);
         img2 = vil_load_image_resource(IMG2_PATH, false);
     }
@@ -66,19 +65,16 @@ static void test_match_ann(int argc, char** argv)
          matches.image2 == to_match.f1);
     Assert("Images match up.", correct_images);
 
-    Assert("Sizes are the same.",
-           matches.side1.size() == matches.side2.size());
-
     for (int i = 0; i < matches.num_features(); ++i) {
         Assert("First stored image matches feature image.",
-               matches.image1 == matches.side1[i]->image);
+               matches.image1 == matches.matches[i].first->image);
 
         Assert("Second stored image matches feature image.",
-               matches.image2 == matches.side2[i]->image);
+               matches.image2 == matches.matches[i].second->image);
 
         const double desc_dist = dist_sq(
-            matches.side1[i]->descriptor,
-            matches.side2[i]->descriptor);
+            matches.matches[i].first->descriptor,
+            matches.matches[i].second->descriptor);
 
         Assert("Matched distances are small.", desc_dist < TOL*TOL);
     }

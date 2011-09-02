@@ -14,13 +14,13 @@ static const char* IMG2_PATH =
 
 static int num_matches(
     bundler_inters_feature_sptr f,
-    vcl_vector< bundler_inters_feature_sptr > const& side){
+    vcl_vector< bundler_inters_feature_pair > const& m){
 
     int num = 0;
 
-    vcl_vector<bundler_inters_feature_sptr>::const_iterator i;
-    for(i = side.begin(); i != side.end(); i++){
-        if(*i == f){
+    vcl_vector<bundler_inters_feature_pair>::const_iterator i;
+    for(i = m.begin(); i != m.end(); i++){
+        if(i->first == f || i->second == f){
             num++;
         }
     }
@@ -37,7 +37,6 @@ static void test_refine(int argc, char** argv)
         vcl_cerr<<"Supply a filename for the first two args!\n";
         TEST("test_refine", true, false);
 
-        // TODO Get an argument into this test!
         img1 = vil_load_image_resource(IMG1_PATH, false);
         img2 = vil_load_image_resource(IMG2_PATH, false);
 
@@ -69,20 +68,20 @@ static void test_refine(int argc, char** argv)
     // ------------------Consistency checks
 
     // Check that a feature in side1 is only matched with 
-    // one feature one side2, and vice versa. We check this by 
+    // one feature in side2, and vice versa. We check this by 
     // seeing if each feature is unique in its list.
-    vcl_vector<bundler_inters_feature_sptr>::const_iterator i;
-    for(i = matches.side1.begin(); i != matches.side1.end(); i++){
-        int n = num_matches(*i, matches.side1);
+    vcl_vector<bundler_inters_feature_pair>::const_iterator i;
+    for(i = matches.matches.begin(); i != matches.matches.end(); i++){
+
+        int n = num_matches(i->first, matches.matches);
         TEST_EQUAL("Feature is unique", n, 1);
-    }
-    
-    for(i = matches.side2.begin(); i != matches.side2.end(); i++){
-        int n = num_matches(*i, matches.side2);
+
+        n = num_matches(i->second, matches.matches);
         TEST_EQUAL("Feature is unique", n, 1);
     }
 
     // TODO: Check the epipolar aspect of the refinement.
 }
+
 
 TESTMAIN_ARGS(test_refine);

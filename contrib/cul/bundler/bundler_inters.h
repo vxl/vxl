@@ -81,13 +81,16 @@ struct bundler_inters_image : public vbl_ref_count
 
     bundler_inters_image() : 
         in_recon(false) { }
+
+    void remove_if_present(bundler_inters_feature_sptr const& f);
 };
 
 
 /*-----------------------------------------------------------------------*/
-// A pair of images of images, and the features for
+// A pair of images, and the features for
 // those images. An instance of this type represents a container that
 // holds two images whose features should be matched.
+// TODO: kill this.
 struct bundler_inters_image_pair
 {
     bundler_inters_image_sptr f1;
@@ -96,12 +99,16 @@ struct bundler_inters_image_pair
 
 
 /*-----------------------------------------------------------------------*/
+typedef
+    vcl_pair<bundler_inters_feature_sptr, bundler_inters_feature_sptr> 
+    bundler_inters_feature_pair;
+
 // A set of matched features between two images.
 struct bundler_inters_match_set
 {
     //--------------Public Fields
     bundler_inters_image_sptr image1, image2;
-    vcl_vector< bundler_inters_feature_sptr > side1, side2;
+    vcl_vector< bundler_inters_feature_pair > matches;
 
 
     //--------------Public Functions
@@ -109,7 +116,7 @@ struct bundler_inters_match_set
 
 
     // Returns the number of features in the match.
-    int num_features() const;
+    unsigned num_features() const;
 
 
     // Adds a new match to the list
@@ -118,6 +125,7 @@ struct bundler_inters_match_set
 
     // Deletes a match from the list
     void remove_feature(int index);
+    void remove_if_present(bundler_inters_feature_sptr const& f);
 
     // Removes all matches from the list
     void clear();
@@ -160,9 +168,12 @@ struct bundler_inters_track : public vbl_ref_count
 
         return points.size() - 1;
     }
+
+    void remove_if_present(bundler_inters_feature_sptr const& f);
 };
 
 
+/*-----------------------------------------------------------------------*/
 // A list of feature sets, match sets, and tracks
 struct bundler_inters_reconstruction
 {

@@ -121,7 +121,8 @@ class bundler_tracks_default_chain_matches
 
   //: Performs the track chaining
   void operator() (
-      const vcl_vector<bundler_inters_match_set> &match_set,
+      vcl_vector<bundler_inters_match_set> &match_set,
+      vcl_vector<bundler_inters_image_sptr> &images,
       vcl_vector<bundler_inters_track_sptr> &tracks);
 };
 

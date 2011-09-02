@@ -81,7 +81,10 @@ void bundler_tracks::run_feature_stage(
     }
 
     // Finally, chain everything into a track
-    (*chain_matches)(empty_recon.match_sets, empty_recon.tracks);
+    (*chain_matches)(
+        empty_recon.match_sets, 
+        empty_recon.feature_sets, 
+        empty_recon.tracks);
 
     // Clear the visited tags for every feature.
     vcl_vector<bundler_inters_image_sptr>::const_iterator i;

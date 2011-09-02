@@ -67,7 +67,8 @@ class bundler_tracks_chain_matches
  public:
   //: Performs the track chaining
   virtual void operator() (
-      const vcl_vector<bundler_inters_match_set> &match_sets,
+      vcl_vector<bundler_inters_match_set> &match_sets,
+      vcl_vector<bundler_inters_image_sptr> &images,
       vcl_vector<bundler_inters_track_sptr> &tracks) = 0;
 };
 

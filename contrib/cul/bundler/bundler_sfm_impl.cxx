@@ -159,8 +159,8 @@ bool bundler_sfm_impl_create_initial_recon::operator()(
         best_match->num_features());
 
     for (int i = 0; i < best_match->num_features(); ++i) {
-        right_points[i] = best_match->side1[i]->point;
-        left_points[i] = best_match->side2[i]->point;
+        right_points[i] = best_match->matches[i].first->point;
+        left_points[i] = best_match->matches[i].second->point;
     }
 
     vpgl_essential_matrix<double> best_em;
@@ -184,10 +184,10 @@ bool bundler_sfm_impl_create_initial_recon::operator()(
     // Get two normalized (focal plane) coordinates so that we can
     // choose the direction of the left camera.
     vgl_point_2d<double> pt_left =
-        k2.map_to_focal_plane(best_match->side2[0]->point);
+        k2.map_to_focal_plane(best_match->matches[0].second->point);
 
     vgl_point_2d<double> pt_right =
-        k1.map_to_focal_plane(best_match->side1[0]->point);
+        k1.map_to_focal_plane(best_match->matches[0].first->point);
 
 
     // Extract the left camera from the essential matrix
@@ -201,23 +201,28 @@ bool bundler_sfm_impl_create_initial_recon::operator()(
 
     //------------------------------------------------------------------
     // Triangulate the points that both observe.
-    for (int i = 0; i < best_match->num_features(); ++i)
+    for (int i = 0; i < best_match->num_features(); i++) 
     {
+        
+        bundler_inters_feature_sptr f1 = best_match->matches[i].first;
+        bundler_inters_feature_sptr f2 = best_match->matches[i].second;
+
         // Get the track these both belong to.
-        bundler_inters_track_sptr &track = best_match->side1[i]->track;
+        bundler_inters_track_sptr &track = 
+            best_match->matches[i].first->track;
 
         // Set that we have visited these features.
-        best_match->side1[i]->visited = true;
-        best_match->side2[i]->visited = true;
+        f1->visited = true;
+        f2->visited = true;
 
         // Tell the images that they have a feature used to triangulate
         // a world point.
-        best_match->side1[i]->image->in_recon = true;
-        best_match->side2[i]->image->in_recon = true;
+        f1->image->in_recon = true;
+        f2->image->in_recon = true;
 
         // Tell the track to use these two features as contributing pts.
-        const unsigned side1_ind = best_match->side1[i]->index_in_track;
-        const unsigned side2_ind = best_match->side2[i]->index_in_track;
+        const unsigned side1_ind = f1->index_in_track;
+        const unsigned side2_ind = f2->index_in_track;
 
         track->contributing_points[side1_ind] = true;
         track->contributing_points[side2_ind] = true;
