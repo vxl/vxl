@@ -104,7 +104,7 @@ bool boxm2_ocl_render_tableau::handle(vgui_event const &e)
   if (e.type == vgui_KEY_PRESS) {
     if (e.key == vgui_key('c')) {
       vcl_cout<<"Toggling b and w"<<vcl_endl;
-      is_bw_ = true; 
+      is_bw_ = !is_bw_;  
     } 
   }
   
