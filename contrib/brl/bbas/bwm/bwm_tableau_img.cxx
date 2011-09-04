@@ -105,6 +105,7 @@ void bwm_tableau_img::create_pointset()
   vcl_vector<vsol_point_2d_sptr> pts;
 
   bool picked = this->pick_point_set(pts, 1000);
+  if (!picked) return; // failed!
 
   for (vcl_vector<vsol_point_2d_sptr>::iterator pit = pts.begin();
        pit != pts.end(); ++pit)
