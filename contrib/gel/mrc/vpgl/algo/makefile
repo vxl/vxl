@@ -32,7 +32,7 @@ SOURCES += vpgl_camera_bounds.cxx
 SOURCES += vpgl_bundle_adjust_lsqr.cxx
 SOURCES += vpgl_ba_shared_k_lsqr.cxx
 SOURCES += vpgl_ba_fixed_k_lsqr.cxx
-MANPAGE_SOURCES += vpgl_em_compute_5_point.h
+MANPAGE_SOURCES += vpgl_em_compute_5_point.txx
 SOURCES += vpgl_bundle_rolling_shutter_adjust.cxx
 SOURCES += vpgl_triangulate_points.cxx
 

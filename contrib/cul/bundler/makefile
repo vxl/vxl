@@ -11,6 +11,7 @@ MANPAGE_SOURCES += bundler_inters.h
 MANPAGE_SOURCES += bundler_sfm.h
 MANPAGE_SOURCES += bundler_settings.h
 MANPAGE_SOURCES += bundler_tracks.h
+SOURCES += bundler_inters.cxx
 
 #######################################
 include ${VXLROOT}/config/top-params.mk
