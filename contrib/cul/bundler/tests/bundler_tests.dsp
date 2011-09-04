@@ -114,6 +114,9 @@ SOURCE=.\test_tracks.cxx
 SOURCE=.\test_match_ann.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\test_initial_recon.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\test_include.cxx
 # End Source File
 # End Group

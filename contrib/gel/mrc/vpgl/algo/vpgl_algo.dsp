@@ -185,6 +185,9 @@ SOURCE=.\Templates/vpgl_list+vgl_h_matrix_2d+double--.cxx
 # Begin Source File
 SOURCE=.\Templates/vpgl_list+vpgl_proj_camera+double--.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\Templates/vpgl_em_compute_5_point+double-.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;hpp;hxx;hm;inl"
@@ -286,6 +289,9 @@ SOURCE=.\vpgl_em_compute_5_point.h
 # End Source File
 # Begin Source File
 SOURCE=.\vpgl_triangulate_points.h
+# End Source File
+# Begin Source File
+SOURCE=.\vpgl_em_compute_5_point.txx
 # End Source File
 # End Group
 # End Target

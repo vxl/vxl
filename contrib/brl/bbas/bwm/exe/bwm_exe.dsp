@@ -106,6 +106,9 @@ SOURCE=.\bwm_batch_project_meshes_to_perspective_video.cxx
 # Begin Source File
 SOURCE=.\bwm_bundler_to_video_site.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\bwm_bundler4_to_video_site.cxx
+# End Source File
 # End Group
 # End Target
 # End Project

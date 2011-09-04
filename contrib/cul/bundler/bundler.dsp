@@ -104,6 +104,9 @@ SOURCE=.\bundler_sfm_impl.cxx
 # Begin Source File
 SOURCE=.\bundler_utils.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\bundler_inters.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;hpp;hxx;hm;inl"
@@ -134,6 +137,3 @@ SOURCE=.\bundler_tracks.h
 # End Group
 # End Target
 # End Project
-# Begin Source File
-SOURCE=.\bundler.cxx
-# End Source File
