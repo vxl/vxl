@@ -705,8 +705,7 @@ bool bwm_observer_img::crop_image(vil_image_resource_sptr& chip)
   }
   vsol_polygon_2d_sptr poly = p->sptr();
   vsol_box_2d_sptr box = poly->get_bounding_box();
-  if (!bwm_image_processor::crop_to_box(img_tab_, box, chip))
-    return false;
+  return bwm_image_processor::crop_to_box(img_tab_, box, chip);
 }
 
 //: (x, y) is the target point to be positioned at the center of the grid cell containing this observer
