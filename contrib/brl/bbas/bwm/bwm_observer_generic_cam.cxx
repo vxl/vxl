@@ -92,7 +92,7 @@ bwm_observer_generic_cam::ray_image(int component, int level=0) const
   vpgl_generic_camera<double>* gcam =
     static_cast<vpgl_generic_camera<double> *> (camera_);
   if (!gcam) return 0;
-  vbl_array_2d<vgl_ray_3d<double> >& rays = gcam->rays(level);
+  vbl_array_2d<vgl_ray_3d<double> > rays = gcam->rays(level);
   int nc = rays.cols(), nr = rays.rows();
 
   vil_image_view<float> view(nc, nr, 3);
