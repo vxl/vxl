@@ -19,9 +19,9 @@ bool vil_pixelwise_roc_process_cons(bprb_func_process& pro)
   if (! pro.set_input_types(input_types))
     return false;
 
-  //default arguments  
-  brdb_value_sptr empty_mask = new brdb_value_t<vil_image_view_base_sptr>(new vil_image_view<unsigned char>(1,1)); 
-  pro.set_input(2, empty_mask); 
+  //default arguments
+  brdb_value_sptr empty_mask = new brdb_value_t<vil_image_view_base_sptr>(new vil_image_view<unsigned char>(1,1));
+  pro.set_input(2, empty_mask);
 
   //this process takes 4 outputs:
   vcl_vector<vcl_string> output_types;
@@ -40,22 +40,20 @@ bool vil_pixelwise_roc_process(bprb_func_process& pro)
     vcl_cerr << "vil_pixelwise_roc_process: The number of inputs should be 2 (with optional 3rd (num thresh) and 4th (mask image))\n";
     return false;
   }
-  
+
   // get the inputs
   unsigned i=0;
   vil_image_view_base_sptr detection_map_sptr    = pro.get_input<vil_image_view_base_sptr>(i++);
   vil_image_view_base_sptr ground_truth_map_sptr = pro.get_input<vil_image_view_base_sptr>(i++);
   vil_image_view_base_sptr mask_map_sptr         = pro.get_input<vil_image_view_base_sptr>(i++);
-  unsigned ni = ground_truth_map_sptr->ni(); 
-  unsigned nj = ground_truth_map_sptr->nj(); 
-  
-  //catch a "null" mask (not really null becuase that throws an error)
-  bool use_mask = true; 
-  if(mask_map_sptr->ni()==1 && mask_map_sptr->nj()==1) {
+
+  //catch a "null" mask (not really null because that throws an error)
+  bool use_mask = true;
+  if (mask_map_sptr->ni()==1 && mask_map_sptr->nj()==1) {
     vcl_cout<<"USE mask = false"<<vcl_endl;
-    use_mask = false; 
+    use_mask = false;
   }
-  
+
   //true positive, true negative, false positive, false negative
   bbas_1d_array_float * tp=new bbas_1d_array_float(10);
   bbas_1d_array_float * tn=new bbas_1d_array_float(10);
@@ -64,16 +62,16 @@ bool vil_pixelwise_roc_process(bprb_func_process& pro)
   vil_image_view<float> * detection_map;
 
   //check bounds to make sure they match
-  if(detection_map_sptr->ni() != ground_truth_map_sptr->ni() || 
+  if (detection_map_sptr->ni() != ground_truth_map_sptr->ni() ||
       detection_map_sptr->nj() != ground_truth_map_sptr->nj() ) {
     vcl_cout<<"vil_pixelwise_roc_process:: detection map doesn't match ground truth map"<<vcl_endl;
-    return false; 
+    return false;
   }
-  if(use_mask) {
-    if(detection_map_sptr->ni()!=mask_map_sptr->ni() ||
-         detection_map_sptr->nj()!=mask_map_sptr->nj() ) {
+  if (use_mask) {
+    if (detection_map_sptr->ni()!=mask_map_sptr->ni() ||
+        detection_map_sptr->nj()!=mask_map_sptr->nj() ) {
       vcl_cout<<"vil_pixelwise_roc_process:: detection map doesn't match mask map"<<vcl_endl;
-      return false; 
+      return false;
     }
   }
 
@@ -88,17 +86,17 @@ bool vil_pixelwise_roc_process(bprb_func_process& pro)
     detection_map=dynamic_cast<vil_image_view<float>*>(detection_map_sptr.ptr());
   }
   else
-  { 
+  {
     vcl_cout<<"Detection Map cannot be converted to float image"<<vcl_endl;
     return false;
   }
-  
+
   //cast to usable image views
   vil_image_view<unsigned char> * ground_truth_map = dynamic_cast<vil_image_view<unsigned char> *>(ground_truth_map_sptr.ptr());
-  if( !ground_truth_map ) 
+  if ( !ground_truth_map )
   {
     vcl_cout<<"vil_pixelwise_roc_process:: gt map is not an unsigned char map"<<vcl_endl;
-    return false; 
+    return false;
   }
   vil_image_view<unsigned char> * mask_map=dynamic_cast<vil_image_view<unsigned char> *>(mask_map_sptr.ptr());
   if (!mask_map)
@@ -106,7 +104,7 @@ bool vil_pixelwise_roc_process(bprb_func_process& pro)
     vcl_cout<<"vil_pixelwise_roc_process:: mask map is not an unsigned char map"<<vcl_endl;
     return false;
   }
-  
+
   //count true positves, false positves, true negatives, false negatives
   int cnt=0;
   for (float t=0.1f;t<1.05f;++cnt,t+=0.1f)
@@ -123,8 +121,8 @@ bool vil_pixelwise_roc_process(bprb_func_process& pro)
         if (use_mask && (*mask_map)(i,j)!=0) {
           vcl_cout<<"NOT DOING WORK!!!"<<vcl_endl;
           continue;
-        }  
-          
+        }
+
         bool pos   = (* detection_map)(i,j)>=t;
         bool truth = (*ground_truth_map)(i,j)>0;
         if (pos && truth)   tp->data_array[cnt]++;
@@ -134,7 +132,7 @@ bool vil_pixelwise_roc_process(bprb_func_process& pro)
       }
     }
   }
-  
+
   //set outputs
   if (pro.n_outputs() < 4) {
     vcl_cerr << "vil_pixelwise_roc_process: The number of outputs should be 4\n";
