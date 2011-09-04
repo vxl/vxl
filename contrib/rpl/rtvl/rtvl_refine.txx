@@ -1,8 +1,8 @@
-/* Copyright 2007-2010 Brad King
-   Copyright 2007-2008 Chuck Stewart
-   Distributed under the Boost Software License, Version 1.0.
-   (See accompanying file rtvl_license_1_0.txt or copy at
-   http://www.boost.org/LICENSE_1_0.txt) */
+// Copyright 2007-2010 Brad King
+// Copyright 2007-2008 Chuck Stewart
+// Distributed under the Boost Software License, Version 1.0.
+// (See accompanying file rtvl_license_1_0.txt or copy at
+// http://www.boost.org/LICENSE_1_0.txt)
 #ifndef rtvl_refine_txx
 #define rtvl_refine_txx
 
@@ -98,7 +98,7 @@ void rtvl_refine_internal<N>::set_mask_size(double f)
   }
   if (f > 1)
   {
-    f = 1;
+    f = 1.0;
   }
   this->mask_size = f;
 }
@@ -173,7 +173,7 @@ void rtvl_refine_internal<N>::refine_level()
     vnl_vector_fixed<double, N> votee_location;
     for (int vi=0; vi < num_votees; ++vi)
     {
-      int j = votee_ids[vi];
+      unsigned int j = votee_ids[vi];
       if (j == i) { continue; }
       level->points.get_point(j, votee_location.data_block());
       rtvl_votee<N> votee(votee_location, tensors[j]);
