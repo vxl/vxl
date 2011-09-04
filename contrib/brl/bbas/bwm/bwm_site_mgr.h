@@ -52,8 +52,10 @@ class bwm_site_mgr
   //: object files are mapped to the file paths
   vcl_map<vcl_string, vcl_vector<vcl_string> > site_objs_;
   vcl_vector<vcl_string> object_types_;
-#if (HAS_MFC)
+#ifdef HAS_MFC
+#if HAS_MFC
   bwm_site_process* site_create_process_;
+#endif
 #endif
   vcl_string site_name_, site_dir_, pyr_exe_ ;
   vcl_string camera_path_, video_path_;
