@@ -28,9 +28,11 @@ int main(int argc, char** argv)
   char** my_argv = new char*[argc+1];
   for (int i=0; i<argc; i++)
     my_argv[i] = argv[i];
-  my_argv[argc] = "--mfc-use-gl";
+  my_argv[argc] = new char[13];
+  vcl_strcpy(my_argv[argc], "--mfc-use-gl");
   vgui::init(my_argc, my_argv);
-  delete []my_argv;
+  delete[] my_argv[argc];
+  delete[] my_argv;
 
   // tableau types registering
   REG_TABLEAU(bwm_load_img_command);
