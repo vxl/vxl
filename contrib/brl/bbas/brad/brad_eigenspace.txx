@@ -12,7 +12,7 @@
 #include <vnl/io/vnl_io_matrix.h>
 #include <vnl/io/vnl_io_vector.h>
 #include <vnl/vnl_numeric_traits.h>
-#include <vil/vil_blocked_image_facade.h>
+#include <vil/vil_blocked_image_resource.h>
 
 static float bayes(float eig0, float eig1, float eig2,
                    bsta_joint_histogram_3d<float> const& no_atmos,
@@ -23,14 +23,15 @@ static float bayes(float eig0, float eig1, float eig2,
   float p_no_atmos = no_atmos.p(eig0, eig1, eig2);
   float p_atmos = atmos.p(eig0, eig1, eig2);
   float sum = p_no_atmos + p_atmos;
-  if(sum <t)
+  if (sum <t)
     return 0.5f;
   float res = p_no_atmos/(p_no_atmos + prob_ratio*p_atmos);
   return res;
 }
-static void 
-print_resource_stats(vcl_vector<vil_image_resource_sptr> const& rescs){
 
+static void
+print_resource_stats(vcl_vector<vil_image_resource_sptr> const& rescs)
+{
   vcl_cout << "processing " << rescs.size() << " resources\n";
   vcl_vector<vil_image_resource_sptr>::const_iterator rit = rescs.begin();
   for (unsigned i = 0; rit!= rescs.end(); ++rit, ++i) {
@@ -62,15 +63,15 @@ compute_covariance_matrix(vcl_vector<vil_image_resource_sptr> const& rescs)
     for (unsigned r = 0; r<nbj; ++r, j0+=njb_) {
       i0 = 0;
       for (unsigned c = 0; c<nbi; ++c, i0+=nib_)
-        {
-          vil_image_view_base_sptr view_ptr =
-            (*rit)->get_view(i0, nib_, j0, njb_);
-          vil_image_view<float> fview = vil_convert_cast(float(), view_ptr);
-          vnl_vector<double> v = funct_(fview);
-          mean_ += v;
-          var += outer_product(v, v);
-          ++n_samples;
-        }
+      {
+        vil_image_view_base_sptr view_ptr =
+          (*rit)->get_view(i0, nib_, j0, njb_);
+        vil_image_view<float> fview = vil_convert_cast(float(), view_ptr);
+        vnl_vector<double> v = funct_(fview);
+        mean_ += v;
+        var += outer_product(v, v);
+        ++n_samples;
+      }
       vcl_cout << '.' << vcl_flush;
     }
     vcl_cout << '\n' << vcl_flush;
@@ -159,11 +160,13 @@ compute_covariance_matrix_rand(vcl_vector<vil_image_resource_sptr> const& rescs,
   vcl_cout << '\n' << vcl_flush;
   return true;
 }
+
 template <class T>
 bool brad_eigenspace<T>::
-compute_covariance_matrix_blocked(vcl_vector<vil_image_resource_sptr> const& rescs, unsigned nit, unsigned njt){
+compute_covariance_matrix_blocked(vcl_vector<vil_image_resource_sptr> const& rescs, unsigned nit, unsigned njt)
+{
   unsigned n = funct_.size();
-  if(!n) return false;
+  if (!n) return false;
   vcl_cout << "computing covariance matrix (blocked cache)\n" << vcl_flush;
   covar_valid_ = false;
   print_resource_stats(rescs);
@@ -173,32 +176,32 @@ compute_covariance_matrix_blocked(vcl_vector<vil_image_resource_sptr> const& res
   var.fill(0.0);
   unsigned n_samples = 0;
   vcl_vector<vil_image_resource_sptr>::const_iterator rit = rescs.begin();
-  for(; rit!= rescs.end(); ++rit){
+  for (; rit!= rescs.end(); ++rit) {
     unsigned ni = (*rit)->ni(), nj = (*rit)->nj();
-    if(ni==0||nj==0||ni<nib_||nj<njb_) return false;
+    if (ni==0||nj==0||ni<nib_||nj<njb_) return false;
     unsigned nbi = ni/nib_, nbj = nj/njb_;
-    vil_blocked_image_resource_sptr bresc = 
+    vil_blocked_image_resource_sptr bresc =
       vil_new_blocked_image_facade(*rit, nit, njt);
-    vil_blocked_image_resource_sptr cbresc = 
+    vil_blocked_image_resource_sptr cbresc =
       vil_new_cached_image_resource(bresc);
     unsigned i0 = 0, j0 = 0;
-    for(unsigned r = 0; r<nbj; ++r, j0+=njb_){
+    for (unsigned r = 0; r<nbj; ++r, j0+=njb_) {
       i0 = 0;
-      for(unsigned c = 0; c<nbi; ++c, i0+=nib_)
-        {
-          vil_image_view_base_sptr view_ptr = 
-            cbresc->get_view(i0, nib_, j0, njb_);
-          vil_image_view<float> fview = vil_convert_cast(float(), view_ptr);
-          vnl_vector<double> v = funct_(fview);
-          mean_ += v;
-          var += outer_product(v, v);
-          n_samples++;
-        }
+      for (unsigned c = 0; c<nbi; ++c, i0+=nib_)
+      {
+        vil_image_view_base_sptr view_ptr =
+          cbresc->get_view(i0, nib_, j0, njb_);
+        vil_image_view<float> fview = vil_convert_cast(float(), view_ptr);
+        vnl_vector<double> v = funct_(fview);
+        mean_ += v;
+        var += outer_product(v, v);
+        n_samples++;
+      }
       vcl_cout << '.'<< vcl_flush;
     }
     vcl_cout << '\n' << vcl_flush;
   }
-  if(!n_samples) return false;
+  if (!n_samples) return false;
   double ninv = 1.0/static_cast<double>(n_samples);
   mean_ *= ninv;
   covar_ = ninv*var - outer_product(mean_, mean_);
@@ -249,16 +252,16 @@ compute_eigenimage(vil_image_resource_sptr const& resc,
     i0 = 0;
     vil_image_view<float> row(nbi, 1, 3);
     for (unsigned c = 0; c<nbi; ++c, i0+=nib_)
-      {
-        vil_image_view_base_sptr view_ptr =
-          resc->get_view(i0, nib_, j0, njb_);
-        vil_image_view<float> fview = vil_convert_cast(float(), view_ptr);
-        vnl_vector<double> v = funct_(fview);
-        float eig0 = static_cast<float>(dot_product(v, v0));
-        float eig1 = static_cast<float>(dot_product(v, v1));
-        float eig2 = static_cast<float>(dot_product(v, v2));
-        row(c, 0, 0) = eig0; row(c, 0, 1) = eig1; row(c, 0, 2) = eig2;
-      }
+    {
+      vil_image_view_base_sptr view_ptr =
+        resc->get_view(i0, nib_, j0, njb_);
+      vil_image_view<float> fview = vil_convert_cast(float(), view_ptr);
+      vnl_vector<double> v = funct_(fview);
+      float eig0 = static_cast<float>(dot_product(v, v0));
+      float eig1 = static_cast<float>(dot_product(v, v1));
+      float eig2 = static_cast<float>(dot_product(v, v2));
+      row(c, 0, 0) = eig0; row(c, 0, 1) = eig1; row(c, 0, 2) = eig2;
+    }
     out_resc->put_view(row, 0, r);
     vcl_cout << '.'<< vcl_flush;
   }
@@ -269,8 +272,9 @@ compute_eigenimage(vil_image_resource_sptr const& resc,
 template <class T>
 bool brad_eigenspace<T>::
 compute_eigenimage_pixel(vil_image_view<float> const& input,
-                         vil_image_view<float>& eignimage){
-  if(!eigensystem_valid_)
+                         vil_image_view<float>& eignimage)
+{
+  if (!eigensystem_valid_)
     return false;
   unsigned n = funct_.size();
   vnl_vector<double> v(n);
@@ -281,26 +285,26 @@ compute_eigenimage_pixel(vil_image_view<float> const& input,
   float l1 = static_cast<float>(eigenvalues_[n-2]);
   float l2 = static_cast<float>(eigenvalues_[n-3]);
   unsigned ni = input.ni(), nj = input.nj();
-  if(ni==0||nj==0||ni<nib_||nj<njb_) return false;
+  if (ni==0||nj==0||ni<nib_||nj<njb_) return false;
   eignimage.set_size(ni, nj, 3);
   vil_image_resource_sptr resc = vil_new_image_resource_of_view(input);
   unsigned left_half = nib_/2, top_half = njb_/2;
   unsigned right_half = nib_-left_half;
   unsigned bottom_half = njb_-top_half;
-  for(unsigned r = top_half; r<nj-bottom_half; ++r){
-    for(unsigned c = left_half; c<ni-bottom_half; ++c)
-      {
-        vil_image_view_base_sptr view_ptr = 
-          resc->get_view(c-left_half, nib_, r-top_half, njb_);
-        vil_image_view<float> fview = vil_convert_cast(float(), view_ptr);
-        vnl_vector<double> v = funct_(fview); 
-        float eig0 = static_cast<float>(dot_product(v, v0));
-        float eig1 = static_cast<float>(dot_product(v, v1));
-        float eig2 = static_cast<float>(dot_product(v, v2));
-        eignimage(c, r, 1)=eig0/l0;  eignimage(c, r, 0)=eig1/l1;
-        eignimage(c, r, 2)=eig2/l2;
-      }
-    if(r%10==0)
+  for (unsigned r = top_half; r<nj-bottom_half; ++r) {
+    for (unsigned c = left_half; c<ni-right_half; ++c)
+    {
+      vil_image_view_base_sptr view_ptr =
+        resc->get_view(c-left_half, nib_, r-top_half, njb_);
+      vil_image_view<float> fview = vil_convert_cast(float(), view_ptr);
+      vnl_vector<double> v = funct_(fview);
+      float eig0 = static_cast<float>(dot_product(v, v0));
+      float eig1 = static_cast<float>(dot_product(v, v1));
+      float eig2 = static_cast<float>(dot_product(v, v2));
+      eignimage(c, r, 1)=eig0/l0;  eignimage(c, r, 0)=eig1/l1;
+      eignimage(c, r, 2)=eig2/l2;
+    }
+    if (r%10==0)
       vcl_cout << '.'<< vcl_flush;
   }
   vcl_cout << '\n' << vcl_flush;
@@ -315,7 +319,7 @@ classify_image(vil_image_resource_sptr const& resc,
                unsigned nit, unsigned njt,
                vcl_string const& output_path)
 {
-  if(!eigensystem_valid_)
+  if (!eigensystem_valid_)
     return false;
   unsigned n = funct_.size();
   vnl_vector<double> v(n);
@@ -323,38 +327,39 @@ classify_image(vil_image_resource_sptr const& resc,
   vnl_vector<double> v1 = eigenvectors_.get_column(n-2);
   vnl_vector<double> v2 = eigenvectors_.get_column(n-3);
   unsigned ni = resc->ni(), nj = resc->nj();
-  if(ni==0||nj==0||ni<nib_||nj<njb_) return false;
+  if (ni==0||nj==0||ni<nib_||nj<njb_) return false;
   unsigned nbi = ni/nib_, nbj = nj/njb_;
   vil_image_resource_sptr out_resc =
     vil_new_image_resource(output_path.c_str(), nbi, nbj,1,
                            VIL_PIXEL_FORMAT_FLOAT,
                            "tiff");
-  vil_blocked_image_resource_sptr bresc = 
+  vil_blocked_image_resource_sptr bresc =
     vil_new_blocked_image_facade(resc, nit, njt);
-  vil_blocked_image_resource_sptr cbresc = 
+  vil_blocked_image_resource_sptr cbresc =
     vil_new_cached_image_resource(bresc);
   unsigned i0 = 0, j0 = 0;
-  for(unsigned r = 0; r<nbj; ++r, j0+=njb_){
+  for (unsigned r = 0; r<nbj; ++r, j0+=njb_) {
     i0 = 0;
     vil_image_view<float> row(nbi, 1, 1);
-    for(unsigned c = 0; c<nbi; ++c, i0+=nib_)
-      {
-        vil_image_view_base_sptr view_ptr = 
-          cbresc->get_view(i0, nib_, j0, njb_);
-        vil_image_view<float> fview = vil_convert_cast(float(), view_ptr);
-        vnl_vector<double> v = funct_(fview); 
-        float eig0 = static_cast<float>(dot_product(v, v0));
-        float eig1 = static_cast<float>(dot_product(v, v1));
-        float eig2 = static_cast<float>(dot_product(v, v2));
-        float q = bayes(eig0, eig1, eig2, no_atmos, atmos);
-        row(c, 0)=q;
-      }
+    for (unsigned c = 0; c<nbi; ++c, i0+=nib_)
+    {
+      vil_image_view_base_sptr view_ptr =
+        cbresc->get_view(i0, nib_, j0, njb_);
+      vil_image_view<float> fview = vil_convert_cast(float(), view_ptr);
+      vnl_vector<double> v = funct_(fview);
+      float eig0 = static_cast<float>(dot_product(v, v0));
+      float eig1 = static_cast<float>(dot_product(v, v1));
+      float eig2 = static_cast<float>(dot_product(v, v2));
+      float q = bayes(eig0, eig1, eig2, no_atmos, atmos);
+      row(c, 0)=q;
+    }
     out_resc->put_view(row, 0, r);
     vcl_cout << '.'<< vcl_flush;
   }
   vcl_cout << '\n' << vcl_flush;
   return true;
 }
+
 template <class T>
 bool brad_eigenspace<T>::
 classify_image_pixel(vil_image_view<float> const& image,
@@ -363,7 +368,7 @@ classify_image_pixel(vil_image_view<float> const& image,
                      float prob_ratio,
                      vil_image_view<float>& class_image)
 {
-  if(!eigensystem_valid_)
+  if (!eigensystem_valid_)
     return false;
   unsigned n = funct_.size();
   vnl_vector<double> v(n);
@@ -371,26 +376,26 @@ classify_image_pixel(vil_image_view<float> const& image,
   vnl_vector<double> v1 = eigenvectors_.get_column(n-2);
   vnl_vector<double> v2 = eigenvectors_.get_column(n-3);
   unsigned ni = image.ni(), nj = image.nj();
-  if(ni==0||nj==0||ni<nib_||nj<njb_) return false;
+  if (ni==0||nj==0||ni<nib_||nj<njb_) return false;
   class_image.set_size(ni, nj);
   vil_image_resource_sptr resc = vil_new_image_resource_of_view(image);
   unsigned left_half = nib_/2, top_half = njb_/2;
   unsigned right_half = nib_-left_half;
   unsigned bottom_half = njb_-top_half;
-  for(unsigned r = top_half; r<nj-bottom_half; ++r){
-    for(unsigned c = left_half; c<ni-bottom_half; ++c)
-      {
-        vil_image_view_base_sptr view_ptr = 
-          resc->get_view(c-left_half, nib_, r-top_half, njb_);
-        vil_image_view<float> fview = vil_convert_cast(float(), view_ptr);
-        vnl_vector<double> v = funct_(fview); 
-        float eig0 = static_cast<float>(dot_product(v, v0));
-        float eig1 = static_cast<float>(dot_product(v, v1));
-        float eig2 = static_cast<float>(dot_product(v, v2));
-        float q = bayes(eig0, eig1, eig2, no_atmos, atmos, prob_ratio);
-        class_image(c, r) = q;
-      }
-    if(r%10==0)
+  for (unsigned r = top_half; r<nj-bottom_half; ++r) {
+    for (unsigned c = left_half; c<ni-right_half; ++c)
+    {
+      vil_image_view_base_sptr view_ptr =
+        resc->get_view(c-left_half, nib_, r-top_half, njb_);
+      vil_image_view<float> fview = vil_convert_cast(float(), view_ptr);
+      vnl_vector<double> v = funct_(fview);
+      float eig0 = static_cast<float>(dot_product(v, v0));
+      float eig1 = static_cast<float>(dot_product(v, v1));
+      float eig2 = static_cast<float>(dot_product(v, v2));
+      float q = bayes(eig0, eig1, eig2, no_atmos, atmos, prob_ratio);
+      class_image(c, r) = q;
+    }
+    if (r%10==0)
       vcl_cout << '.'<< vcl_flush;
   }
   vcl_cout << '\n' << vcl_flush;
@@ -419,19 +424,19 @@ init_histogram(vil_image_resource_sptr const& resc, unsigned nbins,
   for (unsigned r = 0; r<nbj; ++r, j0+=njb_) {
     i0 = 0;
     for (unsigned c = 0; c<nbi; ++c, i0+=nib_)
-      {
-        vil_image_view_base_sptr view_ptr =
-          resc->get_view(i0, nib_, j0, njb_);
-        vil_image_view<float> fview = vil_convert_cast(float(), view_ptr);
-        vnl_vector<double> v = funct_(fview);
-        float eig0 = static_cast<float>(dot_product(v, v0));
-        float eig1 = static_cast<float>(dot_product(v, v1));
-        float eig2 = static_cast<float>(dot_product(v, v2));
-        if (eig0<minv[0]) minv[0]=eig0; if (eig1<minv[1]) minv[1]=eig1;
-        if (eig2<minv[2]) minv[2]=eig2;
-        if (eig0>maxv[0]) maxv[0]=eig0; if (eig1>maxv[1]) maxv[1]=eig1;
-        if (eig2>maxv[2]) maxv[2]=eig2;
-      }
+    {
+      vil_image_view_base_sptr view_ptr =
+        resc->get_view(i0, nib_, j0, njb_);
+      vil_image_view<float> fview = vil_convert_cast(float(), view_ptr);
+      vnl_vector<double> v = funct_(fview);
+      float eig0 = static_cast<float>(dot_product(v, v0));
+      float eig1 = static_cast<float>(dot_product(v, v1));
+      float eig2 = static_cast<float>(dot_product(v, v2));
+      if (eig0<minv[0]) minv[0]=eig0; if (eig1<minv[1]) minv[1]=eig1;
+      if (eig2<minv[2]) minv[2]=eig2;
+      if (eig0>maxv[0]) maxv[0]=eig0; if (eig1>maxv[1]) maxv[1]=eig1;
+      if (eig2>maxv[2]) maxv[2]=eig2;
+    }
     vcl_cout << '.'<< vcl_flush;
   }
   vcl_cout << '\n' << vcl_flush;
@@ -531,20 +536,20 @@ update_histogram(vil_image_resource_sptr const& resc,
   bool done = false;
   vil_image_view<float> fview;
   while (!done)
-    {
-      if (!get_view(resc, nib_, njb_, fview, done))
-        return false;
-      vnl_vector<double> v = funct_(fview);
-      float eig0 = static_cast<float>(dot_product(v, v0));
-      float eig1 = static_cast<float>(dot_product(v, v1));
-      float eig2 = static_cast<float>(dot_product(v, v2));
-      hist.upcount(eig0, 0.333f, eig1, 0.333f, eig2, 0.333f);
-    }
+  {
+    if (!get_view(resc, nib_, njb_, fview, done))
+      return false;
+    vnl_vector<double> v = funct_(fview);
+    float eig0 = static_cast<float>(dot_product(v, v0));
+    float eig1 = static_cast<float>(dot_product(v, v1));
+    float eig2 = static_cast<float>(dot_product(v, v2));
+    hist.upcount(eig0, 0.333f, eig1, 0.333f, eig2, 0.333f);
+  }
   vcl_cout << '\n' << vcl_flush;
   return true;
 }
 
-#if 0//old implementation
+#if 0 // old implementation
 template <class T>
 bool brad_eigenspace<T>::
 update_histogram(vil_image_resource_sptr const& resc,
@@ -566,16 +571,16 @@ update_histogram(vil_image_resource_sptr const& resc,
   for (unsigned r = 0; r<nbj; ++r, j0+=njb_) {
     i0 = 0;
     for (unsigned c = 0; c<nbi; ++c, i0+=nib_)
-      {
-        vil_image_view_base_sptr view_ptr =
-          bif->get_view(i0, nib_, j0, njb_);
-        vil_image_view<float> fview = vil_convert_cast(float(), view_ptr);
-        vnl_vector<double> v = funct_(fview);
-        float eig0 = static_cast<float>(dot_product(v, v0));
-        float eig1 = static_cast<float>(dot_product(v, v1));
-        float eig2 = static_cast<float>(dot_product(v, v2));
-        hist.upcount(eig0, 0.333f, eig1, 0.333f, eig2, 0.333f);
-      }
+    {
+      vil_image_view_base_sptr view_ptr =
+        bif->get_view(i0, nib_, j0, njb_);
+      vil_image_view<float> fview = vil_convert_cast(float(), view_ptr);
+      vnl_vector<double> v = funct_(fview);
+      float eig0 = static_cast<float>(dot_product(v, v0));
+      float eig1 = static_cast<float>(dot_product(v, v1));
+      float eig2 = static_cast<float>(dot_product(v, v2));
+      hist.upcount(eig0, 0.333f, eig1, 0.333f, eig2, 0.333f);
+    }
     vcl_cout << '.'<< vcl_flush;
   }
   vcl_cout << '\n' << vcl_flush;
@@ -607,19 +612,19 @@ init_histogram(vcl_vector<vil_image_resource_sptr> const& rescs,
     for (unsigned r = 0; r<nbj; ++r, j0+=njb_) {
       i0 = 0;
       for (unsigned c = 0; c<nbi; ++c, i0+=nib_)
-        {
-          vil_image_view_base_sptr view_ptr =
-            (*rit)->get_view(i0, nib_, j0, njb_);
-          vil_image_view<float> fview = vil_convert_cast(float(), view_ptr);
-          vnl_vector<double> v = funct_(fview);
-          float eig0 = static_cast<float>(dot_product(v, v0));
-          float eig1 = static_cast<float>(dot_product(v, v1));
-          float eig2 = static_cast<float>(dot_product(v, v2));
-          if (eig0<minv[0]) minv[0]=eig0; if (eig1<minv[1]) minv[1]=eig1;
-          if (eig2<minv[2]) minv[2]=eig2;
-          if (eig0>maxv[0]) maxv[0]=eig0; if (eig1>maxv[1]) maxv[1]=eig1;
-          if (eig2>maxv[2]) maxv[2]=eig2;
-        }
+      {
+        vil_image_view_base_sptr view_ptr =
+          (*rit)->get_view(i0, nib_, j0, njb_);
+        vil_image_view<float> fview = vil_convert_cast(float(), view_ptr);
+        vnl_vector<double> v = funct_(fview);
+        float eig0 = static_cast<float>(dot_product(v, v0));
+        float eig1 = static_cast<float>(dot_product(v, v1));
+        float eig2 = static_cast<float>(dot_product(v, v2));
+        if (eig0<minv[0]) minv[0]=eig0; if (eig1<minv[1]) minv[1]=eig1;
+        if (eig2<minv[2]) minv[2]=eig2;
+        if (eig0>maxv[0]) maxv[0]=eig0; if (eig1>maxv[1]) maxv[1]=eig1;
+        if (eig2>maxv[2]) maxv[2]=eig2;
+      }
       vcl_cout << '.'<< vcl_flush;
     }
     vcl_cout << '\n' << vcl_flush;
@@ -742,8 +747,8 @@ bool brad_eigenspace<T>::
 init_histogram_blocked(vcl_vector<vil_image_resource_sptr> const& rescs,
                        unsigned nbins,
                        bsta_joint_histogram_3d<float>& hist,
-                       unsigned nit, unsigned njt){
-  if(!eigensystem_valid_)
+                       unsigned nit, unsigned njt) {
+  if (!eigensystem_valid_)
     return false;
   vcl_cout << "intializing eigenvalue histogram(blocked)\n";
   unsigned n = funct_.size();
@@ -753,32 +758,31 @@ init_histogram_blocked(vcl_vector<vil_image_resource_sptr> const& rescs,
   vnl_vector<double> v0 = eigenvectors_.get_column(n-1);
   vnl_vector<double> v1 = eigenvectors_.get_column(n-2);
   vnl_vector<double> v2 = eigenvectors_.get_column(n-3);
-  for(vcl_vector<vil_image_resource_sptr>::const_iterator rit = rescs.begin();
-      rit != rescs.end(); ++rit){
+  for (vcl_vector<vil_image_resource_sptr>::const_iterator rit = rescs.begin();
+       rit != rescs.end(); ++rit) {
     unsigned ni = (*rit)->ni(), nj = (*rit)->nj();
-    if(ni==0||nj==0||ni<nib_||nj<njb_) return false;
+    if (ni==0||nj==0||ni<nib_||nj<njb_) return false;
     unsigned nbi = ni/nib_, nbj = nj/njb_;
-    vil_blocked_image_resource_sptr bresc = 
+    vil_blocked_image_resource_sptr bresc =
       vil_new_blocked_image_facade(*rit, nit, njt);
-    vil_blocked_image_resource_sptr cbresc = 
+    vil_blocked_image_resource_sptr cbresc =
       vil_new_cached_image_resource(bresc);
     unsigned i0 = 0, j0 = 0;
-    for(unsigned r = 0; r<nbj; ++r, j0+=njb_){
+    for (unsigned r = 0; r<nbj; ++r, j0+=njb_) {
       i0 = 0;
-      for(unsigned c = 0; c<nbi; ++c, i0+=nib_)
-        {
-          vil_image_view_base_sptr view_ptr = 
-            cbresc->get_view(i0, nib_, j0, njb_);
-          vil_image_view<float> fview = vil_convert_cast(float(), view_ptr);
-          vnl_vector<double> v = funct_(fview); 
-          float eig0 = static_cast<float>(dot_product(v, v0));
-          float eig1 = static_cast<float>(dot_product(v, v1));
-          float eig2 = static_cast<float>(dot_product(v, v2));
-          if(eig0<minv[0]) minv[0]=eig0; if(eig1<minv[1]) minv[1]=eig1;
-          if(eig2<minv[2]) minv[2]=eig2;
-          if(eig0>maxv[0]) maxv[0]=eig0; if(eig1>maxv[1]) maxv[1]=eig1;
-          if(eig2>maxv[2]) maxv[2]=eig2;
-        }
+      for (unsigned c = 0; c<nbi; ++c, i0+=nib_)
+      {
+        vil_image_view_base_sptr view_ptr =
+          cbresc->get_view(i0, nib_, j0, njb_);
+        vil_image_view<float> fview = vil_convert_cast(float(), view_ptr);
+        vnl_vector<double> v = funct_(fview);
+        float eig0 = static_cast<float>(dot_product(v, v0));
+        float eig1 = static_cast<float>(dot_product(v, v1));
+        float eig2 = static_cast<float>(dot_product(v, v2));
+        if (eig0<minv[0]) minv[0]=eig0; if (eig0>maxv[0]) maxv[0]=eig0;
+        if (eig1<minv[1]) minv[1]=eig1; if (eig1>maxv[1]) maxv[1]=eig1;
+        if (eig2<minv[2]) minv[2]=eig2; if (eig2>maxv[2]) maxv[2]=eig2;
+      }
       vcl_cout << '.'<< vcl_flush;
     }
     vcl_cout << '\n' << vcl_flush;
@@ -795,6 +799,7 @@ init_histogram_blocked(vcl_vector<vil_image_resource_sptr> const& rescs,
                                         min2, max2, nbins);
   return true;
 }
+
 template <class T>
 bool brad_eigenspace<T>::
 update_histogram_rand(vcl_vector<vil_image_resource_sptr> const& rescs,
@@ -863,18 +868,19 @@ update_histogram_rand(vcl_vector<vil_image_resource_sptr> const& rescs,
   vcl_cout << '\n' << vcl_flush;
   return true;
 }
+
 template <class T>
 bool brad_eigenspace<T>::
 update_histogram_blocked(vcl_vector<vil_image_resource_sptr> const& rescs,
                          bsta_joint_histogram_3d<float>& hist,
-                         unsigned nit, unsigned njt){
-  for(vcl_vector<vil_image_resource_sptr>::const_iterator rit = rescs.begin();
-      rit != rescs.end(); ++rit){
-    vil_blocked_image_resource_sptr bresc = 
+                         unsigned nit, unsigned njt) {
+  for (vcl_vector<vil_image_resource_sptr>::const_iterator rit = rescs.begin();
+       rit != rescs.end(); ++rit) {
+    vil_blocked_image_resource_sptr bresc =
       vil_new_blocked_image_facade(*rit, nit, njt);
-    vil_blocked_image_resource_sptr cbresc = 
+    vil_blocked_image_resource_sptr cbresc =
       vil_new_cached_image_resource(bresc);
-    if(!eigensystem_valid_)
+    if (!eigensystem_valid_)
       return false;
     vcl_cout << "updating eigenvalue histogram(blocked)\n";
 
@@ -884,22 +890,22 @@ update_histogram_blocked(vcl_vector<vil_image_resource_sptr> const& rescs,
     vnl_vector<double> v1 = eigenvectors_.get_column(n-2);
     vnl_vector<double> v2 = eigenvectors_.get_column(n-3);
     unsigned ni = (*rit)->ni(), nj = (*rit)->nj();
-    if(ni==0||nj==0||ni<nib_||nj<njb_) return false;
+    if (ni==0||nj==0||ni<nib_||nj<njb_) return false;
     unsigned nbi = ni/nib_, nbj = nj/njb_;
     unsigned i0 = 0, j0 = 0;
-    for(unsigned r = 0; r<nbj; ++r, j0+=njb_){
+    for (unsigned r = 0; r<nbj; ++r, j0+=njb_) {
       i0 = 0;
-      for(unsigned c = 0; c<nbi; ++c, i0+=nib_)
-        {
-          vil_image_view_base_sptr view_ptr = 
-            cbresc->get_view(i0, nib_, j0, njb_);
-          vil_image_view<float> fview = vil_convert_cast(float(), view_ptr);
-          vnl_vector<double> v = funct_(fview); 
-          float eig0 = static_cast<float>(dot_product(v, v0));
-          float eig1 = static_cast<float>(dot_product(v, v1));
-          float eig2 = static_cast<float>(dot_product(v, v2));
-          hist.upcount(eig0, 0.333f, eig1, 0.333f, eig2, 0.333f);
-        }
+      for (unsigned c = 0; c<nbi; ++c, i0+=nib_)
+      {
+        vil_image_view_base_sptr view_ptr =
+          cbresc->get_view(i0, nib_, j0, njb_);
+        vil_image_view<float> fview = vil_convert_cast(float(), view_ptr);
+        vnl_vector<double> v = funct_(fview);
+        float eig0 = static_cast<float>(dot_product(v, v0));
+        float eig1 = static_cast<float>(dot_product(v, v1));
+        float eig2 = static_cast<float>(dot_product(v, v2));
+        hist.upcount(eig0, 0.333f, eig1, 0.333f, eig2, 0.333f);
+      }
       vcl_cout << '.' << vcl_flush;
     }
     vcl_cout << '\n' << vcl_flush;
@@ -942,23 +948,24 @@ void vsl_b_read(vsl_b_istream &is, brad_eigenspace<T>& ep)
 }
 
 template <class T>
-bool brad_eigenspace<T>::print(vcl_ostream& os) const{
-  os << "image block size(" << nib_ << ' ' << njb_ << ")\n";
-  os << "feature vector size " << funct_.size() << '\n';
-  os << "feature vector type [" << funct_.type() << "]\n";
-  if(eigensystem_valid_){
+bool brad_eigenspace<T>::print(vcl_ostream& os) const
+{
+  os << "image block size(" << nib_ << ' ' << njb_ << ")\n"
+     << "feature vector size " << funct_.size() << '\n'
+     << "feature vector type [" << funct_.type() << "]\n";
+  if (eigensystem_valid_) {
     os << "eigenvalues==>\n";
     unsigned nv = eigenvalues_.size();
     unsigned nrows = nv/5;
     unsigned rem = nv%5;
-    for(unsigned r = 0, i = 0; r<nrows; ++r, i+=5)
+    for (unsigned r = 0, i = 0; r<nrows; ++r, i+=5)
       os << eigenvalues_[i] << ' '
          << eigenvalues_[i+1] << ' '
          << eigenvalues_[i+2] << ' '
          << eigenvalues_[i+3] << ' '
          << eigenvalues_[i+4] << '\n';
-    if(rem){
-      for(unsigned i = 5*nrows; i<5*nrows+rem; ++i)
+    if (rem) {
+      for (unsigned i = 5*nrows; i<5*nrows+rem; ++i)
         os << eigenvalues_[i] << ' ';
       os << '\n';
     }
@@ -970,9 +977,10 @@ bool brad_eigenspace<T>::print(vcl_ostream& os) const{
   }
   return true;
 }
+
 //: Print summary
 template <class T>
-void 
+void
 vsl_print_summary(vcl_ostream &os, const brad_eigenspace<T>& ep)
 {
   ep.print(os);
