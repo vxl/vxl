@@ -40,7 +40,8 @@ ADD_TEST(
 ADD_TEST( 
     bundler_test_tracks 
     ${EXECUTABLE_OUTPUT_PATH}/bundler_test_all 
-    test_tracks )
+    test_tracks
+    ${cul_SOURCE_DIR}/bundler/tests/test_data)
 
 ADD_TEST( 
     bundler_test_initial_recon 
