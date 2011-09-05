@@ -31,6 +31,8 @@ DECLARE_FUNC_CONS(brad_classify_image_process);
 
 DECLARE_FUNC_CONS(brad_estimate_phongs_model_process);
 DECLARE_FUNC_CONS(brad_estimate_shadow_model_process);
+DECLARE_FUNC_CONS(brad_classify_image_pixel_process);
+DECLARE_FUNC_CONS(brad_eigenimage_pixel_process);
 
 
 #endif // bbas_processes_h_
