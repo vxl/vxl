@@ -165,6 +165,12 @@ SOURCE=.\processes/brad_estimate_shadow_model_process.cxx
 SOURCE=.\processes/brad_estimate_phongs_model_process.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\processes/brad_classify_image_pixel_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/brad_eigenimage_pixel_process.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/brdb_value_t+brad_eigenspace_sptr-.cxx
 # End Source File
 # Begin Source File
