@@ -1,2 +1,4 @@
 ADD_EXECUTABLE( bvpl_octree_sample_test_include test_include.cxx )
 TARGET_LINK_LIBRARIES( bvpl_octree_sample_test_include bvpl_octree_sample)
+ADD_EXECUTABLE( bvpl_octree_sample_test_template_include test_template_include.cxx )
+TARGET_LINK_LIBRARIES( bvpl_octree_sample_test_template_include bvpl_octree_sample)

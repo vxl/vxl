@@ -1,2 +1,4 @@
 ADD_EXECUTABLE( boxm2_io_test_include test_include.cxx )
 TARGET_LINK_LIBRARIES( boxm2_io_test_include boxm2_io)
+ADD_EXECUTABLE( boxm2_io_test_template_include test_template_include.cxx )
+TARGET_LINK_LIBRARIES( boxm2_io_test_template_include boxm2_io)
