@@ -1,0 +1,4 @@
+ADD_EXECUTABLE( bvpl_functors_test_include test_include.cxx )
+TARGET_LINK_LIBRARIES( bvpl_functors_test_include bvpl_functors)
+ADD_EXECUTABLE( bvpl_functors_test_template_include test_template_include.cxx )
+TARGET_LINK_LIBRARIES( bvpl_functors_test_template_include bvpl_functors)

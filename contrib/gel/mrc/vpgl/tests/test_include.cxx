@@ -19,6 +19,4 @@
 #include <vpgl/vpgl_rolling_shutter_camera.h>
 #include <vpgl/vpgl_segmented_rolling_shutter_camera.h>
 
-#include <vpgl/xio/vpgl_xio_calibration_matrix.h>
-
 int main() { return 0; }

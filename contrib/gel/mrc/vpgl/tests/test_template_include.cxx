@@ -15,6 +15,4 @@
 #include <vpgl/vpgl_reg_fundamental_matrix.txx>
 #include <vpgl/vpgl_segmented_rolling_shutter_camera.txx>
 
-#include <vpgl/xio/vpgl_xio_calibration_matrix.txx>
-
 int main() { return 0; }

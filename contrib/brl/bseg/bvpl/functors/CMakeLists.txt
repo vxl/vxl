@@ -20,7 +20,6 @@ SET(bvpl_functors_sources
     bvpl_edge2d_functor.h              	bvpl_edge2d_functor.txx
     bvpl_opinion_functor.h             	bvpl_opinion_functor.cxx
     bvpl_algebraic_functor.h           	bvpl_algebraic_functor.cxx
-
    )
 
 AUX_SOURCE_DIRECTORY(Templates bvpl_functors_sources)
@@ -32,8 +31,8 @@ TARGET_LINK_LIBRARIES(bvpl_functors bvpl_kernels)
 #Directory with python/c++ processes
 #SUBDIRS(pro)
 
-#IF( BUILD_TESTING )
-#  SUBDIRS(tests)
-#ENDIF( BUILD_TESTING )
+IF( BUILD_TESTING )
+  SUBDIRS(tests)
+ENDIF( BUILD_TESTING )
 
 ENDIF(EXPAT_FOUND)
