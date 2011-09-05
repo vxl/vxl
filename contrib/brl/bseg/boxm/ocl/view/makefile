@@ -24,6 +24,14 @@ MANPAGE_SOURCES += boxm_update_bit_tableau_sptr.h
 MANPAGE_SOURCES += boxm_vid_tableau_sptr.h
 MANPAGE_SOURCES += boxm_change_detection_bit_tableau_sptr.h
 
-################################
-include ${VXLROOT}/config/top.mk
-################################
+#######################################
+include ${VXLROOT}/config/top-params.mk
+#######################################
+
+ifndef NOTEST
+SUBDIRS += tests
+endif
+
+######################################
+include ${VXLROOT}/config/top-rules.mk
+######################################

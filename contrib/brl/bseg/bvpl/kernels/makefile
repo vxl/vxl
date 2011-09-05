@@ -17,6 +17,14 @@ MANPAGE_SOURCES += bvpl_kernel_iterator.h
 
 SUBDIRS += pro io
 
-################################
-include ${VXLROOT}/config/top.mk
-################################
+#######################################
+include ${VXLROOT}/config/top-params.mk
+#######################################
+
+ifndef NOTEST
+SUBDIRS += tests
+endif
+
+######################################
+include ${VXLROOT}/config/top-rules.mk
+######################################

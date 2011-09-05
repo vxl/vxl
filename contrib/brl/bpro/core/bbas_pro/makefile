@@ -33,6 +33,14 @@ SOURCES += processes/brad_estimate_phongs_model_process.cxx
 SOURCES += processes/brad_classify_image_pixel_process.cxx
 SOURCES += processes/brad_eigenimage_pixel_process.cxx
 
-################################
-include ${VXLROOT}/config/top.mk
-################################
+#######################################
+include ${VXLROOT}/config/top-params.mk
+#######################################
+
+ifndef NOTEST
+SUBDIRS += tests
+endif
+
+######################################
+include ${VXLROOT}/config/top-rules.mk
+######################################

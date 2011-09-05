@@ -14,6 +14,14 @@ SOURCES += storeFeatures.c
 SOURCES += writeFeatures.c
 MANPAGE_SOURCES += base.h
 
-################################
-include ${VXLROOT}/config/top.mk
-################################
+#######################################
+include ${VXLROOT}/config/top-params.mk
+#######################################
+
+ifndef NOTEST
+SUBDIRS += tests
+endif
+
+######################################
+include ${VXLROOT}/config/top-rules.mk
+######################################
