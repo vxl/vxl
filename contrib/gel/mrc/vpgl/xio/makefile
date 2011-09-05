@@ -10,7 +10,7 @@ include ${VXLROOT}/config/top-params.mk
 #######################################
 
 ifndef NOTEST
-#SUBDIRS += tests
+ SUBDIRS += tests
 endif
 
 ######################################

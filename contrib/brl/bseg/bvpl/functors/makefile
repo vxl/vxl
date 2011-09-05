@@ -13,6 +13,14 @@ MANPAGE_SOURCES += bvpl_edge_geometric_mean_functor.txx
 MANPAGE_SOURCES += bvpl_edge2d_functor.txx
 MANPAGE_SOURCES += bvpl_edge_algebraic_mean_functor.txx
 
-################################
-include ${VXLROOT}/config/top.mk
-################################
+#######################################
+include ${VXLROOT}/config/top-params.mk
+#######################################
+
+ifndef NOTEST
+ SUBDIRS += tests
+endif
+
+######################################
+include ${VXLROOT}/config/top-rules.mk
+######################################
