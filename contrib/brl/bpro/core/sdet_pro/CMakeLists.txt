@@ -19,3 +19,7 @@ AUX_SOURCE_DIRECTORY(processes sdet_pro_sources)
 
 ADD_LIBRARY(sdet_pro ${sdet_pro_sources})
 TARGET_LINK_LIBRARIES(sdet_pro bprb brdb sdet vil_pro vil vgl vsl)
+
+IF( BUILD_TESTING )
+  SUBDIRS(tests)
+ENDIF( BUILD_TESTING )

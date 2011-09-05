@@ -19,9 +19,12 @@ SET(vidl_pro_sources
     vidl_register.h               vidl_register.cxx
     vidl_processes.h
    )
-
 AUX_SOURCE_DIRECTORY(Templates vidl_pro_sources)
 AUX_SOURCE_DIRECTORY(processes vidl_pro_sources)
 
 ADD_LIBRARY(vidl_pro ${vidl_pro_sources})
 TARGET_LINK_LIBRARIES(vidl_pro bprb brdb vidl vsl vul)
+
+IF( BUILD_TESTING )
+  SUBDIRS(tests)
+ENDIF( BUILD_TESTING )

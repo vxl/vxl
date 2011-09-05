@@ -20,3 +20,6 @@ ADD_LIBRARY(icam_pro ${icam_pro_sources})
 
 TARGET_LINK_LIBRARIES(icam_pro bprb icam vpgl vpgl_algo vnl vil vbl vsl)
 
+IF( BUILD_TESTING )
+  SUBDIRS(tests)
+ENDIF( BUILD_TESTING )

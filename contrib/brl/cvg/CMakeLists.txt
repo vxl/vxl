@@ -12,9 +12,11 @@ IF( HAS_VGUI )
   ADD_LIBRARY(cvg_view ${cvg_view_sources})
   TARGET_LINK_LIBRARIES(cvg_view bgeo vnl vnl_algo vbl_io vpgl vgl vil vbl vul vsph)
 
+  IF( BUILD_TESTING )
+    SUBDIRS(tests)
+  ENDIF( BUILD_TESTING )
 
   #Create Executables
-  #LINK_LIBRARIES( vgui )
   ADD_EXECUTABLE( cvg_hemisphere_view cvg_hemisphere_view.cxx )
   TARGET_LINK_LIBRARIES( cvg_hemisphere_view cvg_view vul vgui vil_pro vpgl_pro vsph)
 

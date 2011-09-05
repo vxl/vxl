@@ -33,4 +33,8 @@ TARGET_LINK_LIBRARIES(bvpl_kernels bxml bsvg bsta vgl_algo vgl vnl vbl)
 SUBDIRS( io )
 SUBDIRS(pro)
 
+IF( BUILD_TESTING )
+  SUBDIRS(tests)
+ENDIF( BUILD_TESTING )
+
 ENDIF(EXPAT_FOUND)

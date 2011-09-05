@@ -21,3 +21,7 @@ INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/gel/vgel/kl ${vgel_kl_sources})
 IF(UNIX)
   TARGET_LINK_LIBRARIES(vgel_kl m)
 ENDIF(UNIX)
+
+IF( BUILD_TESTING )
+  SUBDIRS(tests)
+ENDIF( BUILD_TESTING )
