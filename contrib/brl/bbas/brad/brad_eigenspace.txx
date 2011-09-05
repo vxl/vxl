@@ -16,7 +16,8 @@
 
 static float bayes(float eig0, float eig1, float eig2,
                    bsta_joint_histogram_3d<float> const& no_atmos,
-                   bsta_joint_histogram_3d<float> const& atmos)
+                   bsta_joint_histogram_3d<float> const& atmos,
+                   float prob_ratio = 1.0f)
 {
   float t = 1.0e-13f;
   float p_no_atmos = no_atmos.p(eig0, eig1, eig2);
@@ -24,7 +25,7 @@ static float bayes(float eig0, float eig1, float eig2,
   float sum = p_no_atmos + p_atmos;
   if(sum <t)
     return 0.5f;
-  float res = p_no_atmos/sum;
+  float res = p_no_atmos/(p_no_atmos + prob_ratio*p_atmos);
   return res;
 }
 static void 
@@ -115,7 +116,7 @@ compute_covariance_matrix_rand(vcl_vector<vil_image_resource_sptr> const& rescs,
   unsigned n_samples = 0;
 
   // process the tiles
-  double nd = rescs.size();
+  double nd = static_cast<double>(rescs.size());
   for (unsigned t = 0; t<ntiles; ++t) {
     //randomly select a resource
     unsigned ires =
@@ -267,6 +268,47 @@ compute_eigenimage(vil_image_resource_sptr const& resc,
 
 template <class T>
 bool brad_eigenspace<T>::
+compute_eigenimage_pixel(vil_image_view<float> const& input,
+                         vil_image_view<float>& eignimage){
+  if(!eigensystem_valid_)
+    return false;
+  unsigned n = funct_.size();
+  vnl_vector<double> v(n);
+  vnl_vector<double> v0 = eigenvectors_.get_column(n-1);
+  vnl_vector<double> v1 = eigenvectors_.get_column(n-2);
+  vnl_vector<double> v2 = eigenvectors_.get_column(n-3);
+  float l0 = static_cast<float>(eigenvalues_[n-1]);
+  float l1 = static_cast<float>(eigenvalues_[n-2]);
+  float l2 = static_cast<float>(eigenvalues_[n-3]);
+  unsigned ni = input.ni(), nj = input.nj();
+  if(ni==0||nj==0||ni<nib_||nj<njb_) return false;
+  eignimage.set_size(ni, nj, 3);
+  vil_image_resource_sptr resc = vil_new_image_resource_of_view(input);
+  unsigned left_half = nib_/2, top_half = njb_/2;
+  unsigned right_half = nib_-left_half;
+  unsigned bottom_half = njb_-top_half;
+  for(unsigned r = top_half; r<nj-bottom_half; ++r){
+    for(unsigned c = left_half; c<ni-bottom_half; ++c)
+      {
+        vil_image_view_base_sptr view_ptr = 
+          resc->get_view(c-left_half, nib_, r-top_half, njb_);
+        vil_image_view<float> fview = vil_convert_cast(float(), view_ptr);
+        vnl_vector<double> v = funct_(fview); 
+        float eig0 = static_cast<float>(dot_product(v, v0));
+        float eig1 = static_cast<float>(dot_product(v, v1));
+        float eig2 = static_cast<float>(dot_product(v, v2));
+        eignimage(c, r, 1)=eig0/l0;  eignimage(c, r, 0)=eig1/l1;
+        eignimage(c, r, 2)=eig2/l2;
+      }
+    if(r%10==0)
+      vcl_cout << '.'<< vcl_flush;
+  }
+  vcl_cout << '\n' << vcl_flush;
+  return true;
+}
+
+template <class T>
+bool brad_eigenspace<T>::
 classify_image(vil_image_resource_sptr const& resc,
                bsta_joint_histogram_3d<float> const& no_atmos,
                bsta_joint_histogram_3d<float> const& atmos,
@@ -313,6 +355,48 @@ classify_image(vil_image_resource_sptr const& resc,
   vcl_cout << '\n' << vcl_flush;
   return true;
 }
+template <class T>
+bool brad_eigenspace<T>::
+classify_image_pixel(vil_image_view<float> const& image,
+                     bsta_joint_histogram_3d<float> const& no_atmos,
+                     bsta_joint_histogram_3d<float> const& atmos,
+                     float prob_ratio,
+                     vil_image_view<float>& class_image)
+{
+  if(!eigensystem_valid_)
+    return false;
+  unsigned n = funct_.size();
+  vnl_vector<double> v(n);
+  vnl_vector<double> v0 = eigenvectors_.get_column(n-1);
+  vnl_vector<double> v1 = eigenvectors_.get_column(n-2);
+  vnl_vector<double> v2 = eigenvectors_.get_column(n-3);
+  unsigned ni = image.ni(), nj = image.nj();
+  if(ni==0||nj==0||ni<nib_||nj<njb_) return false;
+  class_image.set_size(ni, nj);
+  vil_image_resource_sptr resc = vil_new_image_resource_of_view(image);
+  unsigned left_half = nib_/2, top_half = njb_/2;
+  unsigned right_half = nib_-left_half;
+  unsigned bottom_half = njb_-top_half;
+  for(unsigned r = top_half; r<nj-bottom_half; ++r){
+    for(unsigned c = left_half; c<ni-bottom_half; ++c)
+      {
+        vil_image_view_base_sptr view_ptr = 
+          resc->get_view(c-left_half, nib_, r-top_half, njb_);
+        vil_image_view<float> fview = vil_convert_cast(float(), view_ptr);
+        vnl_vector<double> v = funct_(fview); 
+        float eig0 = static_cast<float>(dot_product(v, v0));
+        float eig1 = static_cast<float>(dot_product(v, v1));
+        float eig2 = static_cast<float>(dot_product(v, v2));
+        float q = bayes(eig0, eig1, eig2, no_atmos, atmos, prob_ratio);
+        class_image(c, r) = q;
+      }
+    if(r%10==0)
+      vcl_cout << '.'<< vcl_flush;
+  }
+  vcl_cout << '\n' << vcl_flush;
+  return true;
+}
+
 template <class T>
 bool brad_eigenspace<T>::
 init_histogram(vil_image_resource_sptr const& resc, unsigned nbins,
@@ -601,7 +685,7 @@ init_histogram_rand(vcl_vector<vil_image_resource_sptr> const& rescs,
   vnl_vector<double> v1 = eigenvectors_.get_column(n-2);
   vnl_vector<double> v2 = eigenvectors_.get_column(n-3);
   // process the tiles
-  double nd = rescs.size();
+  double nd = static_cast<double>(rescs.size());
   for (unsigned t = 0; t<ntiles; ++t) {
     //randomly select a resource
     unsigned ires =
@@ -744,7 +828,7 @@ update_histogram_rand(vcl_vector<vil_image_resource_sptr> const& rescs,
   vnl_vector<double> v1 = eigenvectors_.get_column(n-2);
   vnl_vector<double> v2 = eigenvectors_.get_column(n-3);
   // process the tiles
-  double nd = rescs.size();
+  double nd = static_cast<double>(rescs.size());
   for (unsigned t = 0; t<ntiles; ++t) {
     //randomly select a resource
     unsigned ires =

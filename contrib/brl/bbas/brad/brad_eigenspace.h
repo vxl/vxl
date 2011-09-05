@@ -68,6 +68,10 @@ class brad_eigenspace : public brad_eigenspace_base
   bool compute_eigenimage(vil_image_resource_sptr const& resc,
                           vcl_string const& output_path);
 
+  //: projection of image blocks onto the top three eigenvectors, per pixel. assumes input and output can fit in memory
+  bool compute_eigenimage_pixel(vil_image_view<float> const& input,
+                                vil_image_view<float>& eignimage);
+
   //: create and update an initial histogram of feature vectors projected onto the first three eigenvectors.Defines the min, max range of the histogram cells.
   // note, does not update the histogram counts
   bool init_histogram(vil_image_resource_sptr const& resc, unsigned nbins,
@@ -114,6 +118,13 @@ class brad_eigenspace : public brad_eigenspace_base
                       bsta_joint_histogram_3d<float> const& atmos,
                       unsigned nit, unsigned njt,
                       vcl_string const& output_path);
+
+  //: classify an image as to atmospheric content, nit, njt are block size, assumes the resulting image can fit in memory. uses a sliding window to classify each pixel.
+  bool classify_image_pixel(vil_image_view<float> const& image,
+                            bsta_joint_histogram_3d<float> const& no_atmos,
+                            bsta_joint_histogram_3d<float> const& atmos,
+                            float prob_ratio,
+                            vil_image_view<float>& class_image);
 
   //: print sizes and other info (bool for calling consistency)
   bool print(vcl_ostream& os = vcl_cout) const;
