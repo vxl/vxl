@@ -11,6 +11,7 @@ TESTS += test_feature_pca.cxx
 TESTS += test_phongs_model_est.cxx
 
 MINI_PROG_SOURCES += test_include.cxx
+MINI_PROG_SOURCES += test_template_include.cxx
 
 #########################################
 include ${VXLROOT}/config/static-tests.mk

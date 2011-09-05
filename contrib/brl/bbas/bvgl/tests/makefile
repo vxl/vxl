@@ -8,6 +8,7 @@ TESTS += test_bvgl_volume_of_intersection.cxx
 TESTS += test_bvgl_ray_pyramid.cxx
 
 MINI_PROG_SOURCES += test_include.cxx
+MINI_PROG_SOURCES += test_template_include.cxx
 
 #########################################
 include ${VXLROOT}/config/static-tests.mk

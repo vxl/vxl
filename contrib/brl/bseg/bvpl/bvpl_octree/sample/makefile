@@ -7,6 +7,14 @@ SOURCES += bvpl_taylor_basis_sample.cxx
 MANPAGE_SOURCES += bvpl_octree_sample.txx
 MANPAGE_SOURCES += bvpl_pca_basis_sample.txx
 
-################################
-include ${VXLROOT}/config/top.mk
-################################
+#######################################
+include ${VXLROOT}/config/top-params.mk
+#######################################
+
+ifndef NOTEST
+ SUBDIRS += tests
+endif
+
+######################################
+include ${VXLROOT}/config/top-rules.mk
+######################################
