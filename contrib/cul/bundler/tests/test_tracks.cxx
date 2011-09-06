@@ -30,7 +30,7 @@ static void test_tracks(int argc, char** argv)
     vcl_vector<vil_image_resource_sptr> imgs(NUM_IMGS);
     vcl_vector<double> exif_tags(NUM_IMGS);
 
-    for (int i = 0; i < NUM_IMGS; i++) {
+    for (int i = 0; i < NUM_IMGS; ++i) {
         vcl_stringstream str;
         str << filepath << "/kermit"
             << vcl_setw(3) << vcl_setfill('0') << i << ".jpg";
@@ -53,13 +53,13 @@ static void test_tracks(int argc, char** argv)
     // that the tracks' points refer back to the correct track.
     vcl_vector<bundler_inters_track_sptr>::iterator trk_it;
     for (trk_it = recon.tracks.begin();
-         trk_it != recon.tracks.end(); trk_it++)
+         trk_it != recon.tracks.end(); ++trk_it)
     {
         TEST_EQUAL("Equal number of points as contributing pts",
                    (*trk_it)->points.size(),
                    (*trk_it)->contributing_points.size());
 
-        for (int i = 0; i < (*trk_it)->points.size(); i++) {
+        for (unsigned int i = 0; i < (*trk_it)->points.size(); ++i) {
             TEST("The tracks' points refer to the correct track.",
                  (*trk_it)->points[i]->track,
                  *trk_it);
@@ -72,7 +72,7 @@ static void test_tracks(int argc, char** argv)
                  (*trk_it)->points[i]);
 
             //Test that all features in a track come from different images.
-            for (int j = i+1; j < (*trk_it)->points.size(); j++) {
+            for (unsigned int j = i+1; j < (*trk_it)->points.size(); ++j) {
                 const bool images_match =
                     (*trk_it)->points[i]->image ==
                     (*trk_it)->points[j]->image;
@@ -89,9 +89,9 @@ static void test_tracks(int argc, char** argv)
     // and we'll use it in SFM
     vcl_vector<bundler_inters_image_sptr>::const_iterator fs_it;
     for (fs_it = recon.feature_sets.begin();
-         fs_it != recon.feature_sets.end(); fs_it++)
+         fs_it != recon.feature_sets.end(); ++fs_it)
     {
-        for (int i = 0; i < (*fs_it)->features.size(); i++)
+        for (unsigned int i = 0; i < (*fs_it)->features.size(); ++i)
         {
             Assert("Visited is false",
                    !(*fs_it)->features[i]->visited );
@@ -100,7 +100,7 @@ static void test_tracks(int argc, char** argv)
                  (*fs_it)->features[i]->image, *fs_it);
 #if 0
             //Test that all features in an image come from different tracks.
-            for (int j = i+1; j < (*fs_it)->features.size(); j++) {
+            for (int j = i+1; j < (*fs_it)->features.size(); ++j) {
                 Assert(
                     "Features in an image come from different tracks.",
                     (*fs_it)->features[i]->track !=
@@ -112,9 +112,9 @@ static void test_tracks(int argc, char** argv)
 
     vcl_vector<bundler_inters_match_set>::const_iterator m;
     for (m = recon.match_sets.begin();
-         m != recon.match_sets.end(); m++)
+         m != recon.match_sets.end(); ++m)
     {
-        for (int i = 0; i < m->num_features(); i++) {
+        for (unsigned int i = 0; i < m->num_features(); ++i) {
             TEST("A pair of matched features is always in the same track.",
                  m->matches[i].first->track, m->matches[i].second->track);
         }
