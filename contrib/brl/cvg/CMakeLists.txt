@@ -10,7 +10,7 @@ IF( HAS_VGUI )
   AUX_SOURCE_DIRECTORY(Templates cvg_view_sources)
 
   ADD_LIBRARY(cvg_view ${cvg_view_sources})
-  TARGET_LINK_LIBRARIES(cvg_view bgeo vnl vnl_algo vbl_io vpgl vgl vil vbl vul vsph)
+  TARGET_LINK_LIBRARIES(cvg_view bgeo vnl vnl_algo vbl_io vgui vpgl vgl vil vbl vul vsph)
 
   IF( BUILD_TESTING )
     SUBDIRS(tests)
