@@ -19,6 +19,7 @@
 //vgui stuff
 #include <boxm2/view/boxm2_ocl_render_tableau.h>
 #include <boxm2/view/boxm2_ocl_update_tableau.h>
+#include <boxm2/view/boxm2_ocl_change_tableau.h>
 #include <boxm2/view/boxm2_view_utils.h>
 #include <boxm2/boxm2_util.h>
 #include <vgui/vgui.h>
@@ -37,11 +38,12 @@ int main(int argc, char ** argv)
     //init vgui (should choose/determine toolkit)
     vgui::init(argc, argv);
     vul_arg<vcl_string> scene_file("-scene", "scene filename", "");
-    vul_arg<unsigned> ni("-ni", "Width of output image", 1280);
-    vul_arg<unsigned> nj("-nj", "Height of output image", 720);
+    vul_arg<unsigned>   ni("-ni", "Width of output image", 1280);
+    vul_arg<unsigned>   nj("-nj", "Height of output image", 720);
     vul_arg<vcl_string> imgdir("-imgdir", "image directory", "");
     vul_arg<vcl_string> camdir("-camdir", "camera directory", "");
     vul_arg<vcl_string> identifier("-ident", "identifier of the appearance data to be displayed, e.g. illum_bin_0", "");
+    vul_arg<bool>       change("-change", "makes gui go into change detection mode - press n for next and p for previous", false); 
 
     // need this on some toolkit implementations to get the window up.
     vul_arg_parse(argc, argv);
@@ -63,7 +65,7 @@ int main(int argc, char ** argv)
     boxm2_lru_cache::create(scene);
     boxm2_opencl_cache_sptr opencl_cache=new boxm2_opencl_cache(scene, device, 4); //allow 4 blocks inthe cache
 
-    //choose the update tableau or the render tableau....
+    //if image and camdir are valid and one to one, choose update or change
     if ( vul_file::is_directory(imgdir()) && vul_file::is_directory(camdir()) )
     {
       //populate the list of cams/ims
@@ -73,17 +75,32 @@ int main(int argc, char ** argv)
         vcl_cout<<"num(cams) != num(imgs), returning!"<<vcl_endl;
         return -1;
       }
+      
+      //either in change detection or update mode
+      if(change()) {
+        //create a new ocl_draw_glbuffer_tableau, window, and initialize it
+        boxm2_ocl_change_tableau_new bit_tableau;
+        bit_tableau->init_change(device, opencl_cache, scene, ni(), nj(), pcam, imgs, cams);
 
-      //create a new ocl_draw_glbuffer_tableau, window, and initialize it
-      boxm2_ocl_update_tableau_new bit_tableau;
-      bit_tableau->init_update(device, opencl_cache, scene, ni(), nj(), pcam, imgs, cams);
+        //create window, attach the new tableau and status bar
+        vgui_window* win = vgui::produce_window(ni(), nj(), "OpenCl Volume Visualizer (Change Detection)");
+        win->get_adaptor()->set_tableau(bit_tableau);
+        bit_tableau->set_statusbar(win->get_statusbar());
+        win->show();
+      }
+      else { //update mode
+        //create a new ocl_draw_glbuffer_tableau, window, and initialize it
+        boxm2_ocl_update_tableau_new bit_tableau;
+        bit_tableau->init_update(device, opencl_cache, scene, ni(), nj(), pcam, imgs, cams);
 
-      //create window, attach the new tableau and status bar
-      vgui_window* win = vgui::produce_window(ni(), nj(), "OpenCl Volume Visualizer");
-      win->get_adaptor()->set_tableau(bit_tableau);
-      bit_tableau->set_statusbar(win->get_statusbar());
-      win->show();
+        //create window, attach the new tableau and status bar
+        vgui_window* win = vgui::produce_window(ni(), nj(), "OpenCl Volume Visualizer (Update)");
+        win->get_adaptor()->set_tableau(bit_tableau);
+        bit_tableau->set_statusbar(win->get_statusbar());
+        win->show();
+      }
     }
+    //just render tableau
     else
     {
       //create a new ocl_draw_glbuffer_tableau, window, and initialize it
@@ -91,7 +108,7 @@ int main(int argc, char ** argv)
       bit_tableau->init(device, opencl_cache, scene, ni(), nj(), pcam, identifier());
 
       //create window, attach the new tableau and status bar
-      vgui_window* win = vgui::produce_window(ni(), nj(), "OpenCl Volume Visualizer");
+      vgui_window* win = vgui::produce_window(ni(), nj(), "OpenCl Volume Visualizer (Render)");
       win->get_adaptor()->set_tableau(bit_tableau);
       bit_tableau->set_statusbar(win->get_statusbar());
       win->show();

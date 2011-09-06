@@ -35,12 +35,10 @@ namespace boxm2_ocl_render_expected_height_map_process_globals
     vcl_vector<vcl_string> src_paths;
     vcl_string source_dir = vcl_string(VCL_SOURCE_ROOT_DIR) + "/contrib/brl/bseg/boxm2/ocl/cl/";
     src_paths.push_back(source_dir + "scene_info.cl");
-    src_paths.push_back(source_dir + "pixel_conversion.cl");
     src_paths.push_back(source_dir + "bit/bit_tree_library_functions.cl");
     src_paths.push_back(source_dir + "backproject.cl");
     src_paths.push_back(source_dir + "statistics_library_functions.cl");
     src_paths.push_back(source_dir + "expected_functor.cl");
-    src_paths.push_back(source_dir + "ray_bundle_library_opt.cl");
     src_paths.push_back(source_dir + "bit/render_height_map.cl");
     src_paths.push_back(source_dir + "bit/cast_ray_bit.cl");
 

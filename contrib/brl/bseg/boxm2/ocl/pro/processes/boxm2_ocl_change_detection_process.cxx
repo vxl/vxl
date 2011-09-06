@@ -29,7 +29,7 @@
 
 namespace boxm2_ocl_change_detection_process_globals
 {
-  const unsigned n_inputs_ = 5;
+  const unsigned n_inputs_ = 6;
   const unsigned n_outputs_ = 1;
   vcl_size_t lthreads[2]={8,8};
 
@@ -38,24 +38,24 @@ namespace boxm2_ocl_change_detection_process_globals
   void compile_kernel(bocl_device_sptr device,vcl_vector<bocl_kernel*> & vec_kernels, vcl_string opts)
   {
     //gather all render sources... seems like a lot for rendering...
-  //gather all render sources... seems like a lot for rendering...
-  vcl_vector<vcl_string> src_paths;
-  vcl_string source_dir = vcl_string(VCL_SOURCE_ROOT_DIR) + "/contrib/brl/bseg/boxm2/ocl/cl/";
-  src_paths.push_back(source_dir + "scene_info.cl");
-  src_paths.push_back(source_dir + "cell_utils.cl");
-  src_paths.push_back(source_dir + "bit/bit_tree_library_functions.cl");
-  src_paths.push_back(source_dir + "backproject.cl");
-  src_paths.push_back(source_dir + "statistics_library_functions.cl");
-  src_paths.push_back(source_dir + "expected_functor.cl");
-  src_paths.push_back(source_dir + "ray_bundle_library_opt.cl");
-  src_paths.push_back(source_dir + "bit/change_detection.cl");
-  src_paths.push_back(source_dir + "bit/cast_ray_bit.cl");
+    //gather all render sources... seems like a lot for rendering...
+    vcl_vector<vcl_string> src_paths;
+    vcl_string source_dir = vcl_string(VCL_SOURCE_ROOT_DIR) + "/contrib/brl/bseg/boxm2/ocl/cl/";
+    src_paths.push_back(source_dir + "scene_info.cl");
+    src_paths.push_back(source_dir + "cell_utils.cl");
+    src_paths.push_back(source_dir + "bit/bit_tree_library_functions.cl");
+    src_paths.push_back(source_dir + "backproject.cl");
+    src_paths.push_back(source_dir + "statistics_library_functions.cl");
+    src_paths.push_back(source_dir + "expected_functor.cl");
+    src_paths.push_back(source_dir + "ray_bundle_library_opt.cl");
+    src_paths.push_back(source_dir + "bit/change_detection.cl");
+    src_paths.push_back(source_dir + "bit/cast_ray_bit.cl");
 
-  //set kernel options
-  opts += " -D CHANGE -D DETERMINISTIC ";
-  vcl_string options=opts;
+    //set kernel options
+    opts += " -D CHANGE -D DETERMINISTIC ";
+    vcl_string options=opts;
 
-  opts += " -D STEP_CELL=step_cell_change_detection_uchar8_w_expected(aux_args.mog,aux_args.alpha,data_ptr,d*linfo->block_len,vis,aux_args.change,aux_args.change_exp,aux_args.intensity,aux_args.intensity_exp) ";
+    opts += " -D STEP_CELL=step_cell_change_detection_uchar8_w_expected(aux_args.mog,aux_args.alpha,data_ptr,d*linfo->block_len,vis,aux_args.change,aux_args.change_exp,aux_args.intensity,aux_args.intensity_exp) ";
 
     //have kernel construct itself using the context and device
     bocl_kernel * ray_trace_kernel=new bocl_kernel();
@@ -95,6 +95,7 @@ bool boxm2_ocl_change_detection_process_cons(bprb_func_process& pro)
   input_types_[2] = "boxm2_opencl_cache_sptr";
   input_types_[3] = "vpgl_camera_double_sptr";
   input_types_[4] = "vil_image_view_base_sptr";
+  input_types_[5] = "vil_image_view_base_sptr";
 
   // process has 1 output:
   // output[0]: scene sptr
@@ -313,6 +314,8 @@ bool boxm2_ocl_change_detection_process(bprb_func_process& pro)
   // read out expected image
   change_image->read_to_buffer(queue);
   vil_image_view<float>* change_img_out=new vil_image_view<float>(ni,nj);
+
+  vcl_cout<<"Change Detection GPU Time: " << gpu_time << " ms" << vcl_endl;
 
   for (unsigned c=0;c<nj;c++)
     for (unsigned r=0;r<ni;r++)
