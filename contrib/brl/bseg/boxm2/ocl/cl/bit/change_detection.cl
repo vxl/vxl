@@ -2,14 +2,6 @@
  #pragma OPENCL EXTENSION cl_khr_gl_sharing : enable
 #endif
 
-
-#ifdef MOG_TYPE_16
-    #define MOG_TYPE int4
-#endif
-#ifdef MOG_TYPE_8
-    #define MOG_TYPE int2
-#endif
-
 #ifdef CHANGE
 //need to define a struct of type AuxArgs with auxiliary arguments
 // to supplement cast ray args
@@ -62,24 +54,120 @@ change_detection_bit_scene( __constant  RenderSceneInfo    * linfo,
     return;
   }
 
-  //----------------------------------------------------------------------------
-  // Calculate ray origin, and direction
-  // (make sure ray direction is never axis aligned)
-  //----------------------------------------------------------------------------
-  float ray_ox, ray_oy, ray_oz, ray_dx, ray_dy, ray_dz;
-  calc_scene_ray(linfo, camera, i, j, &ray_ox, &ray_oy, &ray_oz, &ray_dx, &ray_dy, &ray_dz);
-
-  //----------------------------------------------------------------------------
-  // we know i,j map to a point on the image, have calculated ray
-  // BEGIN RAY TRACE
-  //----------------------------------------------------------------------------
-  //initial expected intensity from this camera angle
+  //change, change_exp
   float change          = change_image[imIndex[llid]];
   float change_exp      = change_exp_image[imIndex[llid]];
   float intensity_exp   = exp_image[imIndex[llid]];
   float intensity       = in_image[imIndex[llid]];
-
   float vis             = vis_image[imIndex[llid]];
+
+  //-----------------------------
+  // Do two pass change detection
+  //-----------------------------
+  //first pass is just one loop
+/*
+  { 
+    //find neighbor pixel
+    int currI = i; 
+    int currJ = j; 
+      
+    //calc scene ray
+    float ray_ox, ray_oy, ray_oz, ray_dx, ray_dy, ray_dz;
+    calc_scene_ray(linfo, camera, currI, currJ, &ray_ox, &ray_oy, &ray_oz, &ray_dx, &ray_dy, &ray_dz);
+
+    AuxArgs aux_args;
+    aux_args.alpha        = alpha_array;
+    aux_args.mog          = mixture_array;
+    aux_args.intensity    = intensity;
+    aux_args.intensity_exp= intensity_exp;
+    aux_args.change       = &change;
+    aux_args.change_exp   = &change_exp;
+
+    cast_ray( currI, currJ,
+              ray_ox, ray_oy, ray_oz,
+              ray_dx, ray_dy, ray_dz,
+
+              //scene info
+              linfo, tree_array,
+
+              //utility info
+              local_tree, bit_lookup, cumsum, &vis,
+
+              //RENDER SPECIFIC ARGS
+              aux_args);
+              
+    //expected image gets rendered
+    change_image[imIndex[llid]]     = change;  //expected_int;
+    change_exp_image[imIndex[llid]] = change_exp; //expected_int;
+    vis_image[imIndex[llid]]        = vis;
+  }
+  
+*/
+  //Second pass, do 3 loops on those who's change thresholds are hight enough
+  float prob_change = 1.0f / (1.0f + change+vis); 
+  //if( prob_change > 0.1f ) 
+  {
+    //change max and change exp max
+    float change_sum = 0.0f; 
+    float change_exp_sum = 0.0f; 
+    float vis_out = 0.0f; 
+
+    //cast a ray for each pixel in a 3x3 neighborhood
+    for(int oi=-0; oi<=0; ++oi) 
+    {
+      for(int oj=-0; oj<=0; ++oj) 
+      {
+        //find neighbor pixel
+        int currI = i + oi; 
+        int currJ = j + oj; 
+        if (currI>=(*exp_image_dims).z || currJ>=(*exp_image_dims).w) 
+          continue;
+          
+        //calc scene ray
+        float ray_ox, ray_oy, ray_oz, ray_dx, ray_dy, ray_dz;
+        calc_scene_ray(linfo, camera, currI, currJ, &ray_ox, &ray_oy, &ray_oz, &ray_dx, &ray_dy, &ray_dz);
+      
+        change          = change_image[imIndex[llid]];
+        change_exp      = change_exp_image[imIndex[llid]];
+        intensity_exp   = exp_image[imIndex[llid]];
+        intensity       = in_image[imIndex[llid]];
+        vis             = vis_image[imIndex[llid]];
+        
+        AuxArgs aux_args;
+        aux_args.alpha        = alpha_array;
+        aux_args.mog          = mixture_array;
+        aux_args.intensity    = intensity;
+        aux_args.intensity_exp= intensity_exp;
+        aux_args.change       = &change;
+        aux_args.change_exp   = &change_exp;
+
+        cast_ray( currI, currJ,
+                  ray_ox, ray_oy, ray_oz,
+                  ray_dx, ray_dy, ray_dz,
+
+                  //scene info
+                  linfo, tree_array,
+
+                  //utility info
+                  local_tree, bit_lookup, cumsum, &vis,
+
+                  //RENDER SPECIFIC ARGS
+                  aux_args);
+                  
+         //change_sum += change; 
+         //change_exp_sum += change_exp; 
+         if( oi==0 && oj==0 ) vis_out = vis; 
+         change_sum = max(change, change_sum); 
+         change_exp_sum = max(change_exp, change_exp_sum); 
+      }       
+    }
+    //expected image gets rendered
+    change_image[imIndex[llid]]     = change_sum;  //expected_int;
+    change_exp_image[imIndex[llid]] = change_exp_sum; //expected_int;
+    vis_image[imIndex[llid]]        = vis_out;
+  }
+
+/*
   AuxArgs aux_args;
   aux_args.alpha        = alpha_array;
   aux_args.mog          = mixture_array;
@@ -105,6 +193,7 @@ change_detection_bit_scene( __constant  RenderSceneInfo    * linfo,
   change_image[imIndex[llid]]     =  change; //expected_int;
   change_exp_image[imIndex[llid]] =  change_exp; //expected_int;
   vis_image[imIndex[llid]]        = vis;
+*/
 }
 
 #endif
