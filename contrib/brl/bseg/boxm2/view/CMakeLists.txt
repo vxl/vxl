@@ -21,6 +21,7 @@ IF(VGUI_FOUND)
       boxm2_cam_tableau.h               boxm2_cam_tableau.cxx
       boxm2_ocl_render_tableau.h        boxm2_ocl_render_tableau.cxx
       boxm2_ocl_update_tableau.h        boxm2_ocl_update_tableau.cxx
+      boxm2_ocl_change_tableau.h        boxm2_ocl_change_tableau.cxx
       boxm2_trajectory.h
       boxm2_trajectory.cxx
       boxm2_include_glew.h
