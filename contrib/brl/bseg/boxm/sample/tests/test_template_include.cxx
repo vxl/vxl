@@ -9,4 +9,4 @@
 #include <boxm/sample/boxm_sample_multi_bin.txx>
 #include <boxm/sample/boxm_scalar_sample.txx>
 
-main() { return 0; }
+int main() { return 0; }
