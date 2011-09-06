@@ -1,2 +1,2 @@
-ADD_EXECUTABLE( ocl_view_test_include test_include.cxx )
-TARGET_LINK_LIBRARIES( ocl_view_test_include ocl_view)
+ADD_EXECUTABLE( boxm_ocl_view_test_include test_include.cxx )
+TARGET_LINK_LIBRARIES( boxm_ocl_view_test_include boxm_ocl_view)
