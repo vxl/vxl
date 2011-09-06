@@ -62,7 +62,7 @@ bool homog_inlier_comparator::can_be_initial_recon(
     const bundler_inters_match_set &a) const
 {
     return
-        a.num_features() >= int(settings.min_number_of_matches_homography) &&
+        a.num_features() >= settings.min_number_of_matches_homography &&
         a.image1->focal_length != BUNDLER_NO_FOCAL_LEN &&
         a.image2->focal_length != BUNDLER_NO_FOCAL_LEN;
 }
@@ -158,7 +158,7 @@ bool bundler_sfm_impl_create_initial_recon::operator()(
     vcl_vector<vgl_point_2d<double> > left_points(
         best_match->num_features());
 
-    for (int i = 0; i < best_match->num_features(); ++i) {
+    for (unsigned int i = 0; i < best_match->num_features(); ++i) {
         right_points[i] = best_match->matches[i].first->point;
         left_points[i] = best_match->matches[i].second->point;
     }
@@ -201,14 +201,13 @@ bool bundler_sfm_impl_create_initial_recon::operator()(
 
     //------------------------------------------------------------------
     // Triangulate the points that both observe.
-    for (int i = 0; i < best_match->num_features(); i++) 
+    for (unsigned int i = 0; i < best_match->num_features(); ++i)
     {
-        
         bundler_inters_feature_sptr f1 = best_match->matches[i].first;
         bundler_inters_feature_sptr f2 = best_match->matches[i].second;
 
         // Get the track these both belong to.
-        bundler_inters_track_sptr &track = 
+        bundler_inters_track_sptr &track =
             best_match->matches[i].first->track;
 
         // Set that we have visited these features.
