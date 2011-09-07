@@ -46,7 +46,7 @@ double bundler_utils_triangulate_points(
     vcl_vector<vpgl_perspective_camera<double> > persp_cameras;
     vcl_vector<vgl_point_2d<double> > vgl_points;
 
-    for (unsigned int i = 0; i < track->points.size(); ++i) {
+    for (int i = 0; i < track->points.size(); ++i) {
         if (track->contributing_points[i]){
             vgl_points.push_back(track->points[i]->point);
             persp_cameras.push_back(track->points[i]->image->camera);
@@ -121,9 +121,9 @@ double bundler_utils_get_homography_inlier_percentage(
 
 
 //----------------------------------------------------------------------
-unsigned bundler_utils_fill_persp_camera_ransac(
+int bundler_utils_fill_persp_camera_ransac(
     bundler_inters_image_sptr &image,
-    unsigned ransac_rounds,
+    int ransac_rounds,
     double inlier_threshold)
 {
     const double thresh_sq = inlier_threshold * inlier_threshold;
@@ -146,7 +146,7 @@ unsigned bundler_utils_fill_persp_camera_ransac(
 
     int best_inliers = 0;
 
-    for (unsigned int rnd = 0; rnd < ransac_rounds; ++rnd) {
+    for (int rnd = 0; rnd < ransac_rounds; ++rnd) {
         vcl_vector< vgl_point_2d<double> > curr_image_pts;
         vcl_vector< vgl_point_3d<double> > curr_world_pts;
 
@@ -172,7 +172,7 @@ unsigned bundler_utils_fill_persp_camera_ransac(
         // Find the inlier percentage to evaulate how good this camera
         // is.
         double inlier_count;
-        for (unsigned int pt_ind = 0; pt_ind < image_pts.size(); ++pt_ind)
+        for (int pt_ind = 0; pt_ind < image_pts.size(); ++pt_ind)
         {
             double u,v;
             camera.project(world_pts[pt_ind].x(), world_pts[pt_ind].y(),

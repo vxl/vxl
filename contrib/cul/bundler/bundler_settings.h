@@ -6,12 +6,12 @@
 //Settings for the feature detection.
 struct bundler_settings_sift{
     float keypoint_curve_ratio; //Used in bapl_keypoint_extractor.
-    unsigned sift_octave_size; //Used in bapl_dense_sift
-    unsigned sift_num_octaves; //Used in bapl_dense_sift
+    int sift_octave_size; //Used in bapl_dense_sift
+    int sift_num_octaves; //Used in bapl_dense_sift
 
     bundler_settings_sift() : 
-        keypoint_curve_ratio(10.0f), sift_octave_size(6u), 
-        sift_num_octaves(1u) {}
+        keypoint_curve_ratio(10.0f), sift_octave_size(6), 
+        sift_num_octaves(1) {}
 };
 
 //Settings for the propose stage. This stage doesn't actually use any
@@ -43,11 +43,11 @@ struct bundler_settings_refine_epipolar{
     double max_outlier_frac;
 
     //The minimum number of inliers in order for two images to be matched.
-    unsigned min_inliers;
+    int min_inliers;
 
     bundler_settings_refine_epipolar():
         probability_good_f_mat(.95), outlier_threshold(9.0),
-        max_outlier_frac(.5), min_inliers(16u) { }
+        max_outlier_frac(.5), min_inliers(16) { }
 };
 
 /*Same deal as _settings_propose_match_all*/
@@ -66,19 +66,19 @@ struct bundler_settings_tracks{
 struct bundler_settings_create_initial_recon{
     
     /*Settings for estimating homographies using RANSAC*/
-    unsigned min_number_of_matches_homography;
-    unsigned number_ransac_rounds_homography;
+    int min_number_of_matches_homography;
+    int number_ransac_rounds_homography;
     double inlier_threshold_homography; 
     
     /*Pretty much the same settings for estimating essential matrices*/
-    unsigned number_ransac_rounds_e_matrix;
+    int number_ransac_rounds_e_matrix;
     double inlier_threshold_e_matrix;
     
     bundler_settings_create_initial_recon() :
-        min_number_of_matches_homography(50u),
-        number_ransac_rounds_homography(128u),
+        min_number_of_matches_homography(50),
+        number_ransac_rounds_homography(128),
         inlier_threshold_homography(6.0),
-        number_ransac_rounds_e_matrix(512u),
+        number_ransac_rounds_e_matrix(512),
         inlier_threshold_e_matrix(2.25){ }
 };
 
@@ -86,25 +86,30 @@ struct bundler_settings_select_next_images{
     //The minimum number of points already added that a camera must observe.
     // If no camera meets this description, the reconstruction is
     // considered complete.
-    unsigned min_number_observed_points;
+    int min_number_observed_points;
 
     bundler_settings_select_next_images():
-        min_number_observed_points(20u) { }
+        min_number_observed_points(20) { }
 };
 
 struct bundler_settings_add_next_images{
     // The standard two ransac parameters for the 
     // projection matrix estimation.
-    unsigned number_ransac_rounds;
+    int number_ransac_rounds;
     double inlier_thresh;
 
     bundler_settings_add_next_images() :
-        number_ransac_rounds(4096u),
+        number_ransac_rounds(4096),
         inlier_thresh(.4){ }
 };
 
 struct bundler_settings_add_new_points{
-    int dummy;
+    int min_observing_images;
+    double min_ray_angle;
+
+    bundler_settings_add_new_points() :
+        min_observing_images(2),
+        min_ray_angle(2.0) { }
 };
 
 struct bundler_settings_bundle_adjust{

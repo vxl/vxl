@@ -6,6 +6,19 @@
 
 const double INLIER_PERCENT_NOT_SET = -1.0;
 
+//----------Bundler Feature Impls -------------------------
+void bundler_inters_feature::mark_as_contributing()
+{
+    assert(track);
+
+    track->contributing_points[index_in_track] = true;   
+}
+
+bool bundler_inters_feature::is_contributing() const
+{
+    return track && track->contributing_points[index_in_track];
+}
+
 //----------Bundler Inters Image Impls---------------------
 void bundler_inters_image::remove_if_present(
     bundler_inters_feature_sptr const& f)
@@ -21,7 +34,7 @@ bundler_inters_match_set::bundler_inters_match_set()
     inlier_percentage = INLIER_PERCENT_NOT_SET;
 }
 
-unsigned bundler_inters_match_set::num_features() const
+int bundler_inters_match_set::num_features() const
 {
     return matches.size();
 }
@@ -56,7 +69,7 @@ void bundler_inters_match_set::clear()
 
 
 double bundler_inters_match_set::get_homography_inlier_percentage(
-    unsigned num_rounds, double thresh_sq) const
+    int num_rounds, double thresh_sq) const
 {
     if (inlier_percentage == INLIER_PERCENT_NOT_SET)
     {

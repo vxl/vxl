@@ -39,10 +39,10 @@ struct bundler_inters_feature : public vbl_ref_count
 
     // Pointers to other classes that hold this feature.
     bundler_inters_track_sptr track; // Other views of same 3D pt
-    unsigned index_in_track;
+    int index_in_track;
 
     bundler_inters_image_sptr image; // Others features from same image
-    unsigned index_in_image;
+    int index_in_image;
 
     // General purpose boolean marking this feature as seen. 
     // Useful in a variety of situations, such as depth-first search.
@@ -53,6 +53,9 @@ struct bundler_inters_feature : public vbl_ref_count
     bundler_inters_feature() : visited(false){}
     bundler_inters_feature(int row, int col):
         point(col, row), visited(false) { }
+
+    void mark_as_contributing();
+    bool is_contributing() const;
 };
 
 
@@ -116,7 +119,7 @@ struct bundler_inters_match_set
 
 
     // Returns the number of features in the match.
-    unsigned num_features() const;
+    int num_features() const;
 
 
     // Adds a new match to the list
@@ -135,7 +138,7 @@ struct bundler_inters_match_set
     // for the estimated homograpy. This is cached until the match set
     // is changed by adding or removing a match.
     double get_homography_inlier_percentage(
-        unsigned num_ransac_rounds, double thresh_sq) const;
+        int num_ransac_rounds, double thresh_sq) const;
 
 
 private:
@@ -162,7 +165,7 @@ struct bundler_inters_track : public vbl_ref_count
         observed(false) { }
 
     // Returns the place the feature was added.
-    unsigned add_feature(bundler_inters_feature_sptr const& f){
+    int add_feature(bundler_inters_feature_sptr const& f){
         points.push_back(f);
         contributing_points.push_back(false);
 

@@ -18,13 +18,46 @@
 #include <vcl_iostream.h>
 
 /*-----------------------Detect Implementation----------------------------*/
+
+class feature_adder{
+
+public:
+    feature_adder(bundler_inters_image_sptr const& image) : 
+        image(image) { }
+
+    void operator()(bapl_keypoint_sptr const& kp){
+
+        // Cast the key point to a bapl_lowe_keypoint. Normal keypoints
+        // don't have a way of getting the location of the feature, and
+        // what comes out of the extractors are all lowe kps anyway.
+        bapl_lowe_keypoint_sptr lkp;
+        lkp.vertical_cast(kp);
+
+        // Create our feature
+        int row = int(lkp->location_i()+0.5);
+        int col = int(lkp->location_j()+0.5);
+
+        bundler_inters_feature_sptr f( new bundler_inters_feature(row, col) ); 
+        f->descriptor = lkp->descriptor().as_vector();
+        f->image = image;
+
+        // Insert this feature into the feature set.
+        image->features.push_back(f);
+        f->index_in_image = image->features.size() - 1;
+    }
+
+private:
+    bundler_inters_image_sptr image;
+};
+
+
 // Features detect implementation. Uses SIFT to find the features and
 // descriptors.
 //
 // \todo Need to correctly allow for rgb images. Possibly involves
 //   modifying bapl instead of this routine.
 bundler_inters_image_sptr bundler_tracks_impl_detect_sift::operator ()(
-    const vil_image_resource_sptr &image,
+    const vil_image_resource_sptr &source_image,
     const double exif_focal_len)
 {
 
@@ -35,41 +68,24 @@ bundler_inters_image_sptr bundler_tracks_impl_detect_sift::operator ()(
     vcl_vector<bapl_keypoint_sptr> keypoints;
 
     // First, extract all the keypoints in the image.
-    bapl_keypoint_extractor(image, keypoints,
-                            settings.keypoint_curve_ratio, false);
+    bapl_keypoint_extractor(
+        source_image, 
+        keypoints,
+        settings.keypoint_curve_ratio,
+        false);
 
     // Then we are going to convert from the bapl_lowe_keypoint
     // format to the bundler representation
-    bundler_inters_image_sptr feature_set(
-        new bundler_inters_image);
+    bundler_inters_image_sptr image(new bundler_inters_image);
 
-    feature_set->source = image;
-    feature_set->focal_length = exif_focal_len;
+    image->source = source_image;
+    image->focal_length = exif_focal_len;
 
-    vcl_vector<bapl_keypoint_sptr>::const_iterator kp;
-    for (kp = keypoints.begin(); kp != keypoints.end(); ++kp)
-    {
-        // Cast the key point to a bapl_lowe_keypoint. Normal keypoints
-        // don't have a way of getting the location of the feature, and
-        // what comes out of the extractors are all lowe kps anyway.
-        bapl_lowe_keypoint_sptr lkp;
-        lkp.vertical_cast(*kp);
+    // Add all the features to the image.
+    feature_adder adder(image);
+    vcl_for_each(keypoints.begin(), keypoints.end(), adder);
 
-        // Create our feature
-        int row = int(lkp->location_i()+0.5);
-        int col = int(lkp->location_j()+0.5);
-
-        bundler_inters_feature_sptr f(
-            new bundler_inters_feature(row, col));
-        f->descriptor = lkp->descriptor().as_vector();
-        f->image = feature_set;
-
-        // Insert this feature into the feature set.
-        feature_set->features.push_back(f);
-        f->index_in_image = kp - keypoints.begin();
-    }
-
-    return feature_set;
+    return image;
 }
 
 
@@ -129,7 +145,7 @@ static double squared_distance(const rsdl_point &v1,
 
     double dist = 0.0f;
 
-    for (unsigned int i = 0; i < v1.num_cartesian(); ++i) {
+    for (int i = 0; i < v1.num_cartesian(); ++i) {
         double tmp = (v1.cartesian(i) - v2.cartesian(i));
         dist += tmp*tmp;
     }
@@ -199,7 +215,7 @@ static inline void remove_if_true(
     assert(checks.size() == to_prune.num_features());
 
     int num_removed = 0;
-    for (unsigned int i = 0; i < checks.size(); ++i) {
+    for (int i = 0; i < checks.size(); ++i) {
         // If this is an outlier, remove it.
         if (checks[i]) {
             to_prune.remove_feature(i + num_removed);
@@ -450,8 +466,8 @@ void bundler_tracks_default_chain_matches::operator ()(
 
     // Make sure that the indices from the features into the tracks
     // are consistent.
-    for (t = tracks.begin(); t != tracks.end(); ++t) {
-        for (unsigned i = 0; i < (*t)->points.size(); ++i) {
+    for(t = tracks.begin(); t != tracks.end(); t++) {
+        for(int i = 0; i < (*t)->points.size(); i++) {
             (*t)->points[i]->index_in_track = i;
         }
     }
@@ -459,8 +475,8 @@ void bundler_tracks_default_chain_matches::operator ()(
     // Make sure that the indices from the features into the images
     // are consistent.
     vcl_vector<bundler_inters_image_sptr>::iterator img;
-    for (img = images.begin(); img != images.end(); ++img) {
-        for (unsigned i = 0; i < (*img)->features.size(); ++i) {
+    for(img = images.begin(); img != images.end(); img++ ){
+        for(int i = 0; i < (*img)->features.size(); i++) {
             (*img)->features[i]->index_in_image = i;
         }
     }

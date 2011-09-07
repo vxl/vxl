@@ -21,8 +21,7 @@ static void test_tracks(int argc, char** argv)
         TEST("test_tracks", true, false);
 
         filepath = IMG_PATH;
-    }
-    else {
+    } else {
         filepath = argv[1];
     }
 
@@ -47,11 +46,30 @@ static void test_tracks(int argc, char** argv)
 
 
     //-------------------- Consistency checks
+
+    vcl_vector<bundler_inters_image_sptr>::const_iterator fs_it;
+    vcl_vector<bundler_inters_track_sptr>::iterator trk_it;
+
+    // Every point is in a track.
+    int num_in_tracks = 0;
+    for (trk_it = recon.tracks.begin();
+        trk_it != recon.tracks.end(); trk_it++){ 
+        num_in_tracks += (*trk_it)->points.size(); 
+    }
+
+    int num_in_images = 0;
+    for (fs_it = recon.feature_sets.begin();
+         fs_it != recon.feature_sets.end(); fs_it++){
+        num_in_images += (*fs_it)->features.size();
+    }
+
+    TEST_EQUAL("Every point is in a track.",
+        num_in_tracks, num_in_images);
+
     //Check the cross-references in the track set
 
     //Test that the tracks don't have a corresponding point yet, and
     // that the tracks' points refer back to the correct track.
-    vcl_vector<bundler_inters_track_sptr>::iterator trk_it;
     for (trk_it = recon.tracks.begin();
          trk_it != recon.tracks.end(); ++trk_it)
     {
@@ -59,7 +77,7 @@ static void test_tracks(int argc, char** argv)
                    (*trk_it)->points.size(),
                    (*trk_it)->contributing_points.size());
 
-        for (unsigned int i = 0; i < (*trk_it)->points.size(); ++i) {
+        for (int i = 0; i < (*trk_it)->points.size(); ++i) {
             TEST("The tracks' points refer to the correct track.",
                  (*trk_it)->points[i]->track,
                  *trk_it);
@@ -72,7 +90,7 @@ static void test_tracks(int argc, char** argv)
                  (*trk_it)->points[i]);
 
             //Test that all features in a track come from different images.
-            for (unsigned int j = i+1; j < (*trk_it)->points.size(); ++j) {
+            for (int j = i+1; j < (*trk_it)->points.size(); ++j) {
                 const bool images_match =
                     (*trk_it)->points[i]->image ==
                     (*trk_it)->points[j]->image;
@@ -87,7 +105,6 @@ static void test_tracks(int argc, char** argv)
     // the images pointers are consistent. Also test that visited is set
     // to false in all cases, since we are done with it for this loop,
     // and we'll use it in SFM
-    vcl_vector<bundler_inters_image_sptr>::const_iterator fs_it;
     for (fs_it = recon.feature_sets.begin();
          fs_it != recon.feature_sets.end(); ++fs_it)
     {
@@ -97,8 +114,14 @@ static void test_tracks(int argc, char** argv)
                    !(*fs_it)->features[i]->visited );
 
             TEST("The features know their image set.",
-                 (*fs_it)->features[i]->image, *fs_it);
-#if 0
+                (*fs_it)->features[i]->image,
+                 *fs_it);
+
+            TEST("The features know where they are in their images",
+                (*fs_it)->features[(*fs_it)->features[i]->index_in_image],
+                (*fs_it)->features[i]);
+        
+            #if 0
             //Test that all features in an image come from different tracks.
             for (int j = i+1; j < (*fs_it)->features.size(); ++j) {
                 Assert(
@@ -106,7 +129,7 @@ static void test_tracks(int argc, char** argv)
                     (*fs_it)->features[i]->track !=
                         (*fs_it)->features[j]->track);
             }
-#endif
+            #endif
         }
     }
 
