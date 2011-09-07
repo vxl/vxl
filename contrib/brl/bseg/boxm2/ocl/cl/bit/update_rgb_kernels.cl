@@ -437,28 +437,30 @@ void update_yuv_appearance(float8* mixture, float* nobs, float4 mean_obs, float 
 {
   //update NOBS and calculate rho
   (*nobs) += cell_vis; 
-  float rho = cell_vis / (*nobs); 
+  if( *nobs > 0.001f ) {
+    float rho = cell_vis / (*nobs); 
 
-  //update y channel
-  float mu = (*mixture).s0; 
-  float sigma = (*mixture).s4; 
-  update_gauss(mean_obs.x, rho, &mu, &sigma, min_sigma);
-  (*mixture).s0 = mu; 
-  (*mixture).s4 = 0.07; 
-  
-  //u channel
-  mu = (*mixture).s1;
-  sigma = (*mixture).s5; 
-  update_gauss(mean_obs.y, rho, &mu, &sigma, min_sigma); 
-  (*mixture).s1 = mu; 
-  (*mixture).s5 = 0.1; 
-  
-  //v channel
-  mu = (*mixture).s2;
-  sigma = (*mixture).s6; 
-  update_gauss(mean_obs.z, rho, &mu, &sigma, min_sigma); 
-  (*mixture).s2 = mu; 
-  (*mixture).s6 = 0.1; 
+    //update y channel
+    float mu = (*mixture).s0; 
+    float sigma = (*mixture).s4; 
+    update_gauss(mean_obs.x, rho, &mu, &sigma, min_sigma);
+    (*mixture).s0 = mu; 
+    (*mixture).s4 = 0.07; 
+    
+    //u channel
+    mu = (*mixture).s1;
+    sigma = (*mixture).s5; 
+    update_gauss(mean_obs.y, rho, &mu, &sigma, min_sigma); 
+    (*mixture).s1 = mu; 
+    (*mixture).s5 = 0.1; 
+    
+    //v channel
+    mu = (*mixture).s2;
+    sigma = (*mixture).s6; 
+    update_gauss(mean_obs.z, rho, &mu, &sigma, min_sigma); 
+    (*mixture).s2 = mu; 
+    (*mixture).s6 = 0.1;
+  } 
 }
 
 
