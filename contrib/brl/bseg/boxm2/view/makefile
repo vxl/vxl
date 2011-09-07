@@ -8,6 +8,7 @@ SOURCES += boxm2_trajectory.cxx
 SOURCES += boxm2_view_utils.cxx
 SOURCES += boxm2_ocl_render_tableau.cxx
 SOURCES += boxm2_ocl_update_tableau.cxx
+SOURCES += boxm2_ocl_change_tableau.cxx
 
 SUBDIRS += pro
 
