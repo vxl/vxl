@@ -46,7 +46,7 @@ double bundler_utils_triangulate_points(
     vcl_vector<vpgl_perspective_camera<double> > persp_cameras;
     vcl_vector<vgl_point_2d<double> > vgl_points;
 
-    for (int i = 0; i < track->points.size(); ++i) {
+    for (unsigned int i = 0; i < track->points.size(); ++i) {
         if (track->contributing_points[i]){
             vgl_points.push_back(track->points[i]->point);
             persp_cameras.push_back(track->points[i]->image->camera);
@@ -97,8 +97,8 @@ double bundler_utils_get_homography_inlier_percentage(
         int current_num_inliers = 0;
 
         vcl_vector<bundler_inters_feature_pair>::const_iterator m;
-        for (m = match.matches.begin(); m != match.matches.end(); m++) {
-
+        for (m = match.matches.begin(); m != match.matches.end(); ++m)
+        {
             lhs_pt.set(m->first->point.x(), m->first->point.y());
 
             rhs_pt = homography(lhs_pt);
@@ -172,7 +172,7 @@ int bundler_utils_fill_persp_camera_ransac(
         // Find the inlier percentage to evaulate how good this camera
         // is.
         double inlier_count;
-        for (int pt_ind = 0; pt_ind < image_pts.size(); ++pt_ind)
+        for (unsigned int pt_ind = 0; pt_ind < image_pts.size(); ++pt_ind)
         {
             double u,v;
             camera.project(world_pts[pt_ind].x(), world_pts[pt_ind].y(),

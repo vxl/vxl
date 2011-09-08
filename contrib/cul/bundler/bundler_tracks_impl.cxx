@@ -19,14 +19,14 @@
 
 /*-----------------------Detect Implementation----------------------------*/
 
-class feature_adder{
-
-public:
-    feature_adder(bundler_inters_image_sptr const& image) : 
+class feature_adder
+{
+  public:
+    feature_adder(bundler_inters_image_sptr const& image) :
         image(image) { }
 
-    void operator()(bapl_keypoint_sptr const& kp){
-
+    void operator()(bapl_keypoint_sptr const& kp)
+    {
         // Cast the key point to a bapl_lowe_keypoint. Normal keypoints
         // don't have a way of getting the location of the feature, and
         // what comes out of the extractors are all lowe kps anyway.
@@ -37,7 +37,7 @@ public:
         int row = int(lkp->location_i()+0.5);
         int col = int(lkp->location_j()+0.5);
 
-        bundler_inters_feature_sptr f( new bundler_inters_feature(row, col) ); 
+        bundler_inters_feature_sptr f( new bundler_inters_feature(row, col) );
         f->descriptor = lkp->descriptor().as_vector();
         f->image = image;
 
@@ -46,7 +46,7 @@ public:
         f->index_in_image = image->features.size() - 1;
     }
 
-private:
+  private:
     bundler_inters_image_sptr image;
 };
 
@@ -60,7 +60,6 @@ bundler_inters_image_sptr bundler_tracks_impl_detect_sift::operator ()(
     const vil_image_resource_sptr &source_image,
     const double exif_focal_len)
 {
-
     vcl_cout<<"Getting features!"<<vcl_endl;
 
     // We are going to be using the Lowe keypoint and SIFT implementation
@@ -69,7 +68,7 @@ bundler_inters_image_sptr bundler_tracks_impl_detect_sift::operator ()(
 
     // First, extract all the keypoints in the image.
     bapl_keypoint_extractor(
-        source_image, 
+        source_image,
         keypoints,
         settings.keypoint_curve_ratio,
         false);
@@ -95,7 +94,6 @@ void bundler_tracks_impl_propose_matches_all::operator ()(
     const vcl_vector<bundler_inters_image_sptr> &features,
     vcl_vector<bundler_inters_image_pair> &matches)
 {
-
     vcl_cout<<"Getting the match list!"<<vcl_endl;
 
     // Add every possible pairing to the match list. Make sure an image is
@@ -145,7 +143,7 @@ static double squared_distance(const rsdl_point &v1,
 
     double dist = 0.0f;
 
-    for (int i = 0; i < v1.num_cartesian(); ++i) {
+    for (unsigned int i = 0; i < v1.num_cartesian(); ++i) {
         double tmp = (v1.cartesian(i) - v2.cartesian(i));
         dist += tmp*tmp;
     }
@@ -160,7 +158,6 @@ void bundler_tracks_impl_match_ann::operator ()(
     const bundler_inters_image_pair &to_match,
     bundler_inters_match_set &matches)
 {
-
     vcl_cout<<"Doing the matching!"<<vcl_endl;
 
     // Add the image information to the match set.
@@ -212,10 +209,10 @@ static inline void remove_if_true(
     vcl_vector<bool> &checks,
     bundler_inters_match_set &to_prune)
 {
-    assert(checks.size() == to_prune.num_features());
+    assert(checks.size() == (unsigned int)to_prune.num_features());
 
-    int num_removed = 0;
-    for (int i = 0; i < checks.size(); ++i) {
+    unsigned int num_removed = 0;
+    for (unsigned int i = 0; i < checks.size(); ++i) {
         // If this is an outlier, remove it.
         if (checks[i]) {
             to_prune.remove_feature(i + num_removed);
@@ -231,10 +228,10 @@ static inline void remove_all_duplicates(
 {
     vcl_vector<bool> checks;
 
-    for (unsigned int i = 0; i < matches.num_features(); ++i) {
+    for (int i = 0; i < matches.num_features(); ++i) {
         bool to_kill = false;
 
-        for (unsigned int j = 0; j < matches.num_features(); ++j) {
+        for (int j = 0; j < matches.num_features(); ++j) {
             // If we are not looking at the same feature pair,
             // then say we have (a,b) and (c,d). If a is the same
             // as either c or d, or b is the same as either c or d,
@@ -260,7 +257,6 @@ static inline void remove_all_duplicates(
 void bundler_tracks_impl_refine_epipolar::operator ()(
     bundler_inters_match_set &matches)
 {
-
     vcl_cout<<"Refining!"<<vcl_endl;
 
     // First, remove any matches where feature a in image 1 matches to
@@ -285,7 +281,7 @@ void bundler_tracks_impl_refine_epipolar::operator ()(
 
     // Run the ransac
     vcl_vector<vgl_point_2d<double> > rhs, lhs;
-    for (unsigned int i = 0; i < matches.num_features(); ++i) {
+    for (int i = 0; i < matches.num_features(); ++i) {
         rhs.push_back(matches.matches[i].first->point);
         lhs.push_back(matches.matches[i].second->point);
     }
@@ -313,7 +309,6 @@ static void create_new_track(
     bundler_inters_feature_sptr f2,
     bundler_inters_track_sptr &new_track)
 {
-
     assert(!f1->visited);
     assert(!f2->visited);
 
@@ -343,17 +338,17 @@ static void create_new_track(
         // Find neighbours with this match.
         vcl_vector<bundler_inters_match_set>::const_iterator match;
         for (match = matches.begin(); match != matches.end(); ++match) {
-            for (unsigned int i = 0; i < match->num_features(); ++i)
+            for (int i = 0; i < match->num_features(); ++i)
             {
                 if (match->matches[i].first == curr &&
-                        !match->matches[i].second->visited){
-
+                    !match->matches[i].second->visited)
+                {
                     match->matches[i].second->visited = true;
                     feature_stack.push(match->matches[i].second);
-
-                } else if (match->matches[i].second == curr &&
-                         !match->matches[i].first->visited) {
-
+                }
+                else if (match->matches[i].second == curr &&
+                         !match->matches[i].first->visited)
+                {
                     match->matches[i].first->visited = true;
                     feature_stack.push(match->matches[i].first);
                 }
@@ -368,7 +363,6 @@ static void remove_all(
     vcl_vector<bundler_inters_image_sptr> &images,
     vcl_vector<bundler_inters_track_sptr> &tracks)
 {
-
     vcl_vector<bundler_inters_feature_sptr>::const_iterator i;
     for (i = to_remove.begin(); i != to_remove.end(); ++i)
     {
@@ -398,24 +392,23 @@ void bundler_tracks_default_chain_matches::operator ()(
     vcl_vector<bundler_inters_image_sptr> &images,
     vcl_vector<bundler_inters_track_sptr> &tracks)
 {
-
     vcl_cout<<"Chaining!"<<vcl_endl;
 
     vcl_vector<bundler_inters_match_set>::const_iterator match;
     for (match = matches.begin(); match != matches.end(); ++match) {
-        for (unsigned int i = 0; i < match->num_features(); ++i)
+        for (int i = 0; i < match->num_features(); ++i)
         {
             assert(match->matches[i].first->visited ==
-                match->matches[i].second->visited);
+                   match->matches[i].second->visited);
 
-            assert(match->matches[i].first->image
-                != match->matches[i].second->image);
+            assert(match->matches[i].first->image !=
+                   match->matches[i].second->image);
 
             // If we have not visited one of the sides, then we have
             // found a part of a new connected component, so we should
             // start the DFS search here.
-            if (!match->matches[i].first->visited) {
-
+            if (!match->matches[i].first->visited)
+            {
                 bundler_inters_track_sptr new_track(
                     new bundler_inters_track);
 
@@ -444,8 +437,8 @@ void bundler_tracks_default_chain_matches::operator ()(
     {
         // Look at every pair of points.
         for (unsigned int i = 0; i < (*t)->points.size(); ++i) {
-            for (unsigned int j = i+1; j < (*t)->points.size(); ++j) {
-
+            for (unsigned int j = i+1; j < (*t)->points.size(); ++j)
+            {
                 // If we find a pair in a track that comes from the same
                 // image, remove them both.
                 if ((*t)->points[i]->image == (*t)->points[j]->image) {
@@ -455,7 +448,7 @@ void bundler_tracks_default_chain_matches::operator ()(
 
             // This means we've found at least one other bad feature,
             // so remove the current feature too.
-            if(to_remove.size() > 0){
+            if (to_remove.size() > 0) {
                 to_remove.push_back((*t)->points[i]);
             }
         }
@@ -466,8 +459,8 @@ void bundler_tracks_default_chain_matches::operator ()(
 
     // Make sure that the indices from the features into the tracks
     // are consistent.
-    for(t = tracks.begin(); t != tracks.end(); t++) {
-        for(int i = 0; i < (*t)->points.size(); i++) {
+    for (t = tracks.begin(); t != tracks.end(); t++) {
+        for (unsigned int i = 0; i < (*t)->points.size(); i++) {
             (*t)->points[i]->index_in_track = i;
         }
     }
@@ -475,8 +468,8 @@ void bundler_tracks_default_chain_matches::operator ()(
     // Make sure that the indices from the features into the images
     // are consistent.
     vcl_vector<bundler_inters_image_sptr>::iterator img;
-    for(img = images.begin(); img != images.end(); img++ ){
-        for(int i = 0; i < (*img)->features.size(); i++) {
+    for (img = images.begin(); img != images.end(); ++img ) {
+        for (unsigned int i = 0; i < (*img)->features.size(); ++i) {
             (*img)->features[i]->index_in_image = i;
         }
     }
