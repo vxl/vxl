@@ -29,7 +29,7 @@ double bundler_utils_get_homography_inlier_percentage(
 
 
 int bundler_utils_fill_persp_camera_ransac(
-    bundler_inters_image_sptr &image,
+    const bundler_inters_image_sptr &image,
     int ransac_rounds,
     double inlier_threshold);
 

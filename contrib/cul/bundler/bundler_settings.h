@@ -89,7 +89,7 @@ struct bundler_settings_select_next_images{
     int min_number_observed_points;
 
     bundler_settings_select_next_images():
-        min_number_observed_points(20) { }
+        min_number_observed_points(10) { }
 };
 
 struct bundler_settings_add_next_images{

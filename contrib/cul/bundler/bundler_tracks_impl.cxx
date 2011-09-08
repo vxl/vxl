@@ -34,16 +34,21 @@ class feature_adder
         lkp.vertical_cast(kp);
 
         // Create our feature
-        int row = int(lkp->location_i()+0.5);
-        int col = int(lkp->location_j()+0.5);
+        int row = static_cast<int>( lkp->location_i() + 0.5 );
+        int col = static_cast<int>( lkp->location_j() + 0.5 );
 
-        bundler_inters_feature_sptr f( new bundler_inters_feature(row, col) );
-        f->descriptor = lkp->descriptor().as_vector();
-        f->image = image;
+        bundler_inters_feature_sptr f(
+            new bundler_inters_feature(
+                row, 
+                col, 
+                lkp->descriptor().as_vector(),
+                image, 
+                image->features.size()
+            )
+        ); 
 
         // Insert this feature into the feature set.
         image->features.push_back(f);
-        f->index_in_image = image->features.size() - 1;
     }
 
   private:
@@ -60,8 +65,6 @@ bundler_inters_image_sptr bundler_tracks_impl_detect_sift::operator ()(
     const vil_image_resource_sptr &source_image,
     const double exif_focal_len)
 {
-    vcl_cout<<"Getting features!"<<vcl_endl;
-
     // We are going to be using the Lowe keypoint and SIFT implementation
     // in brl/bseg/babl.
     vcl_vector<bapl_keypoint_sptr> keypoints;
@@ -94,8 +97,6 @@ void bundler_tracks_impl_propose_matches_all::operator ()(
     const vcl_vector<bundler_inters_image_sptr> &features,
     vcl_vector<bundler_inters_image_pair> &matches)
 {
-    vcl_cout<<"Getting the match list!"<<vcl_endl;
-
     // Add every possible pairing to the match list. Make sure an image is
     // not paired with itself, and also make sure that if there is
     // (a, b) in the set, there is not (b, a).
@@ -158,8 +159,6 @@ void bundler_tracks_impl_match_ann::operator ()(
     const bundler_inters_image_pair &to_match,
     bundler_inters_match_set &matches)
 {
-    vcl_cout<<"Doing the matching!"<<vcl_endl;
-
     // Add the image information to the match set.
     matches.image1 = to_match.f1;
     matches.image2 = to_match.f2;
@@ -257,8 +256,6 @@ static inline void remove_all_duplicates(
 void bundler_tracks_impl_refine_epipolar::operator ()(
     bundler_inters_match_set &matches)
 {
-    vcl_cout<<"Refining!"<<vcl_endl;
-
     // First, remove any matches where feature a in image 1 matches to
     // both feature b and c in image 2. In other words, a feature
     // may only appear once in this list.
@@ -305,10 +302,11 @@ void bundler_tracks_impl_refine_epipolar::operator ()(
 // Use DFS to find all features in this track
 static void create_new_track(
     const vcl_vector<bundler_inters_match_set> &matches,
-    bundler_inters_feature_sptr f1,
-    bundler_inters_feature_sptr f2,
+    const bundler_inters_feature_sptr &f1,
+    const bundler_inters_feature_sptr &f2,
     bundler_inters_track_sptr &new_track)
 {
+    assert(new_track != NULL);
     assert(!f1->visited);
     assert(!f2->visited);
 
@@ -337,18 +335,18 @@ static void create_new_track(
 
         // Find neighbours with this match.
         vcl_vector<bundler_inters_match_set>::const_iterator match;
-        for (match = matches.begin(); match != matches.end(); ++match) {
-            for (int i = 0; i < match->num_features(); ++i)
-            {
+        for (match = matches.begin(); match != matches.end(); match++) {
+            for (int i = 0; i < match->num_features(); i++) {
+
                 if (match->matches[i].first == curr &&
-                    !match->matches[i].second->visited)
-                {
+                    !match->matches[i].second->visited){
+
                     match->matches[i].second->visited = true;
                     feature_stack.push(match->matches[i].second);
-                }
-                else if (match->matches[i].second == curr &&
-                         !match->matches[i].first->visited)
-                {
+
+                } else if (match->matches[i].second == curr &&
+                         !match->matches[i].first->visited) {
+
                     match->matches[i].first->visited = true;
                     feature_stack.push(match->matches[i].first);
                 }
@@ -387,17 +385,15 @@ static void remove_all(
 }
 
 // Chain matches implementation
-void bundler_tracks_default_chain_matches::operator ()(
+void bundler_tracks_impl_chain_matches::operator ()(
     vcl_vector<bundler_inters_match_set> &matches,
     vcl_vector<bundler_inters_image_sptr> &images,
     vcl_vector<bundler_inters_track_sptr> &tracks)
 {
-    vcl_cout<<"Chaining!"<<vcl_endl;
-
     vcl_vector<bundler_inters_match_set>::const_iterator match;
-    for (match = matches.begin(); match != matches.end(); ++match) {
-        for (int i = 0; i < match->num_features(); ++i)
-        {
+    for (match = matches.begin(); match != matches.end(); match++) {
+        for (int i = 0; i < match->num_features(); i++) {
+
             assert(match->matches[i].first->visited ==
                    match->matches[i].second->visited);
 
@@ -407,8 +403,8 @@ void bundler_tracks_default_chain_matches::operator ()(
             // If we have not visited one of the sides, then we have
             // found a part of a new connected component, so we should
             // start the DFS search here.
-            if (!match->matches[i].first->visited)
-            {
+            if ( ! match->matches[i].first->visited ) {
+
                 bundler_inters_track_sptr new_track(
                     new bundler_inters_track);
 
@@ -446,8 +442,8 @@ void bundler_tracks_default_chain_matches::operator ()(
                 }
             }
 
-            // This means we've found at least one other bad feature,
-            // so remove the current feature too.
+            // If we've found at least one other bad feature,
+            // remove the current feature too.
             if (to_remove.size() > 0) {
                 to_remove.push_back((*t)->points[i]);
             }

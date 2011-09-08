@@ -2,11 +2,17 @@
 #define BUNDLER_H
 
 // TODO:
-//       the lens distortion stuff
-//       visibility matrix
-//       focal length estimation
+//       visibility matrix.
+//       check angle for adding new points.
+//       focal length estimation.
+//       get rid of bundler_inters_match_pair, or whatever.
+//       the lens distortion stuff.
 //       round of bundle adjustment after adding image, new image fixed.
-//       arguments in tests
+//       deal with color images.
+//
+//       more complete test suite
+//       arguments in tests.
+
 
 // Generic includes.
 #include <vcl_vector.h>
@@ -43,14 +49,14 @@ struct bundler_routines;
 // each image. It either holds the focal length in pixels, or
 // BUNDLER_NO_FOCAL_LEN for images that either don't have an exif tag
 // or whose exif tag is missing the focal length.
-void bundler_driver(
+bool bundler_driver(
     const bundler_routines &routines,
     const vcl_vector<vil_image_resource_sptr> &imageset,
     const vcl_vector<double> &exif_tags,
 
     vcl_vector<vpgl_perspective_camera<double> > &cameras,
     vcl_vector<vgl_point_3d<double> > &points,
-    vnl_sparse_matrix<bool> visibility_graph);
+    vnl_sparse_matrix<bool> &visibility_graph);
 
 
 // A collection of routines that provide the feature phase of
@@ -116,7 +122,7 @@ class bundler_tracks
             const vcl_vector<vil_image_resource_sptr> &imageset,
             const vcl_vector<double> &focal_lengths,
 
-            bundler_inters_reconstruction &empty_recon);
+            bundler_inters_reconstruction &empty_recon) const;
 };
 
 
@@ -177,12 +183,12 @@ class bundler_sfm
         // A convenience method that runs the entire sfm matching
         // pipeline. Alternatively, you can directly call functors
         // yourself.
-        virtual void run_sfm_stage(
+        virtual bool run_sfm_stage(
             bundler_inters_reconstruction &empty_recon,
 
             vcl_vector<vpgl_perspective_camera<double> > &cameras,
             vcl_vector<vgl_point_3d<double> > &points,
-            vnl_sparse_matrix<bool> visibility_graph);
+            vnl_sparse_matrix<bool> visibility_graph) const;
 };
 
 

@@ -2,6 +2,26 @@
 #include <bundler/bundler_inters.h>
 #include <vcl_cassert.h>
 
+bool bundler_driver(
+    const bundler_routines &routines,
+    const vcl_vector<vil_image_resource_sptr> &imageset,
+    const vcl_vector<double> &exif_tags,
+
+    vcl_vector<vpgl_perspective_camera<double> > &cameras,
+    vcl_vector<vgl_point_3d<double> > &points,
+    vnl_sparse_matrix<bool> &visibility_graph) {
+
+    bundler_inters_reconstruction recon;
+
+    routines.features_phase.run_feature_stage(
+        imageset, exif_tags, recon);
+
+    return routines.sfm_phase.run_sfm_stage(
+        recon, cameras, points, visibility_graph);
+}
+
+
+
 
 //----------------------------------------------------------------------
 bundler_tracks::bundler_tracks():manage_pointers(true) {
@@ -18,7 +38,7 @@ bundler_tracks::bundler_tracks():manage_pointers(true) {
         new bundler_tracks_impl_refine_epipolar;
 
     chain_matches =
-        new bundler_tracks_default_chain_matches;
+        new bundler_tracks_impl_chain_matches;
 };
 
 
@@ -42,7 +62,7 @@ bundler_tracks::bundler_tracks(
             s.refine_settings);
 
     chain_matches =
-        new bundler_tracks_default_chain_matches(
+        new bundler_tracks_impl_chain_matches(
             s.chain_matches_settings);
 };
 
@@ -50,7 +70,7 @@ bundler_tracks::bundler_tracks(
 void bundler_tracks::run_feature_stage(
     const vcl_vector<vil_image_resource_sptr> &imageset,
     const vcl_vector<double> &focal_lengths,
-    bundler_inters_reconstruction &empty_recon)
+    bundler_inters_reconstruction &empty_recon) const
 {
     // First, run the detect stage.
     vcl_vector<vil_image_resource_sptr>::const_iterator img_i;
@@ -58,6 +78,9 @@ void bundler_tracks::run_feature_stage(
     for (img_i = imageset.begin(), exif_i = focal_lengths.begin();
          img_i != imageset.end(); img_i++, exif_i++)
     {
+        vcl_cout<<"Detecting features " << (img_i - imageset.begin()) + 1 
+                << "/" << imageset.size() << vcl_endl; 
+
         empty_recon.feature_sets.push_back(
             (*detect_features)(*img_i, *exif_i));
     }
@@ -71,7 +94,10 @@ void bundler_tracks::run_feature_stage(
     vcl_vector<bundler_inters_image_pair>::const_iterator j;
     for (j = matches.begin(); j != matches.end(); j++) {
         bundler_inters_match_set match_set;
-            
+
+        vcl_cout<<"Matching features " << (j - matches.begin()) + 1
+            << "/" << matches.size() << vcl_endl; 
+
         (*match)(*j, match_set);
         (*refine)(match_set);
 
@@ -107,13 +133,16 @@ bundler_sfm::bundler_sfm()
         new bundler_sfm_impl_create_initial_recon();
 
     select_next_images = new
-        bundler_sfm_default_select_next_images();
+        bundler_sfm_impl_select_next_images();
 
     add_next_images =
-        new bundler_sfm_default_add_next_images();
+        new bundler_sfm_impl_add_next_images();
+
+    add_new_points = 
+        new bundler_sfm_impl_add_new_points();
 
     bundle_adjust =
-        new bundler_sfm_default_bundle_adjust();
+        new bundler_sfm_impl_bundle_adjust();
 }
 
 
@@ -125,28 +154,34 @@ bundler_sfm::bundler_sfm(bundler_settings_sfm s)
             s.initial_recon_settings);
 
     select_next_images =
-        new bundler_sfm_default_select_next_images(
+        new bundler_sfm_impl_select_next_images(
             s.select_next_images_settings);
 
     add_next_images =
-        new bundler_sfm_default_add_next_images(
+        new bundler_sfm_impl_add_next_images(
             s.add_next_images_settings);
 
+    add_new_points = 
+        new bundler_sfm_impl_add_new_points(
+            s.add_new_points_settings);
+
     bundle_adjust =
-        new bundler_sfm_default_bundle_adjust(
+        new bundler_sfm_impl_bundle_adjust(
             s.bundle_adjust_settings);
 }
 
 
-void bundler_sfm::run_sfm_stage(
+bool bundler_sfm::run_sfm_stage(
         bundler_inters_reconstruction &recon,
 
         vcl_vector<vpgl_perspective_camera<double> > &cameras,
         vcl_vector<vgl_point_3d<double> > &points,
-        vnl_sparse_matrix<bool> visibility_matrix)
+        vnl_sparse_matrix<bool> visibility_matrix) const
 {
     //Create the initial reconstruction
-    (*create_initial_recon)(recon);
+    if( ! (*create_initial_recon)(recon) ){
+        return false;
+    }
 
     //Now do the add images, add points, bundle adjust loop
     vcl_vector<bundler_inters_image_sptr> to_add;
@@ -154,6 +189,9 @@ void bundler_sfm::run_sfm_stage(
         vcl_vector<bundler_inters_image_sptr> added;
 
         (*add_next_images)(to_add, recon, added);
+
+        assert(to_add.size() > 0);
+
         (*add_new_points)(recon, added);
         (*bundle_adjust)(recon);
 
@@ -175,5 +213,8 @@ void bundler_sfm::run_sfm_stage(
     }
 
     visibility_matrix = recon.visibility_matrix;
+
+
+    return true;
 }
 

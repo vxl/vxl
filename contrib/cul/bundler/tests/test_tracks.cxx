@@ -51,22 +51,6 @@ static void test_tracks(int argc, char** argv)
     vcl_vector<bundler_inters_image_sptr>::const_iterator fs_it;
     vcl_vector<bundler_inters_track_sptr>::iterator trk_it;
 
-    // Every point is in a track.
-    int num_in_tracks = 0;
-    for (trk_it = recon.tracks.begin();
-         trk_it != recon.tracks.end(); ++trk_it) {
-        num_in_tracks += (*trk_it)->points.size();
-    }
-
-    int num_in_images = 0;
-    for (fs_it = recon.feature_sets.begin();
-         fs_it != recon.feature_sets.end(); ++fs_it) {
-        num_in_images += (*fs_it)->features.size();
-    }
-
-    TEST_EQUAL("Every point is in a track.",
-               num_in_tracks, num_in_images);
-
     //Check the cross-references in the track set
 
     //Test that the tracks don't have a corresponding point yet, and
@@ -78,7 +62,9 @@ static void test_tracks(int argc, char** argv)
                    (*trk_it)->points.size(),
                    (*trk_it)->contributing_points.size());
 
-        for (unsigned int i = 0; i < (*trk_it)->points.size(); ++i) {
+        Assert("Observed is false", !(*trk_it)->observed);
+
+        for (int i = 0; i < (*trk_it)->points.size(); ++i) {
             TEST("The tracks' points refer to the correct track.",
                  (*trk_it)->points[i]->track,
                  *trk_it);
@@ -139,6 +125,13 @@ static void test_tracks(int argc, char** argv)
          m != recon.match_sets.end(); ++m)
     {
         for (int i = 0; i < m->num_features(); ++i) {
+
+            Assert("Anything in a matched pair has a track (first).",
+                m->matches[i].first->track != NULL);
+
+            Assert("Anything in a matched pair has a track (second).",
+                m->matches[i].second->track != NULL);
+
             TEST("A pair of matched features is always in the same track.",
                  m->matches[i].first->track, m->matches[i].second->track);
         }

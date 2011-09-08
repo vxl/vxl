@@ -33,32 +33,12 @@ static inline vpgl_calibration_matrix<double> create_k(
 }
 
 //-------------------------------------------------------------------------
-
-// A functor used to find the match set to base the
-// initial reconstruction on.
-class homog_inlier_comparator
-{
-  public:
-    homog_inlier_comparator(
-        bundler_settings_create_initial_recon const& s) : settings(s) { }
-
-    bool can_be_initial_recon(const bundler_inters_match_set &a) const;
-
-    bool operator()(
-        const bundler_inters_match_set &a,
-        const bundler_inters_match_set &b) const;
-
-  private:
-    const bundler_settings_create_initial_recon settings;
-};
-
-
 // Returns true if a matches the criteria for being in the
 // initial reconstruction. a must have a focal length from exif
 // tags for both images, and have more than the minimum number of
 // features.
-bool homog_inlier_comparator::can_be_initial_recon(
-    const bundler_inters_match_set &a) const
+bool bundler_sfm_impl_create_initial_recon::can_be_initial_recon(
+    const bundler_inters_match_set &a) 
 {
     return
         a.num_features() >= settings.min_number_of_matches_homography &&
@@ -66,73 +46,43 @@ bool homog_inlier_comparator::can_be_initial_recon(
         a.image2->focal_length != BUNDLER_NO_FOCAL_LEN;
 }
 
-
-// Returns true if a has fewer inliers after estimating the
-// homography than b does. If a does not have enough matches, or
-// doesn't have any focal lengths, but b does, then b is considered
-// less. If neither fit the criteria, a and b are equal.
-bool homog_inlier_comparator::operator()(
-        const bundler_inters_match_set &a,
-        const bundler_inters_match_set &b) const
-{
-    const bool a_can_be_initial_recon = can_be_initial_recon(a);
-    const bool b_can_be_initial_recon = can_be_initial_recon(b);
-
-    // There are several cases, depending on whether a and b can and
-    // cannot be in the initial reconstruction.
-    if (a_can_be_initial_recon != b_can_be_initial_recon)
-    {
-        // If one can be in the initial reconstruction, and the other
-        // cannot b, then a is less than be b only if a can be in the
-        // initial recon.
-        return a_can_be_initial_recon;
-    }
-    else if (!a_can_be_initial_recon) // Means !b_can_be_initial_recon
-    {
-        // Neither can be in the initial recon, so a is not less than b.
-        return false;
-    }
-    else {
-        // Both can be in the initial recon, so figure out
-        // which is least well modeled by a homography.
-
-        const double thresh_sq =
-            settings.inlier_threshold_homography *
-            settings.inlier_threshold_homography;
-
-        const int rnds = settings.number_ransac_rounds_homography;
-
-        return
-            a.get_homography_inlier_percentage(rnds, thresh_sq) <
-            b.get_homography_inlier_percentage(rnds, thresh_sq);
-    }
-}
-
-//-------------------------------------------------------------------------
-
 // Chooses two images from the set to create the initial reconstruction
 bool bundler_sfm_impl_create_initial_recon::operator()(
     bundler_inters_reconstruction &recon)
-{
+{ 
+   const double t =
+        settings.inlier_threshold_homography *
+        settings.inlier_threshold_homography;
+
+    const int r = settings.number_ransac_rounds_homography;
+
     // First step: Find the two images to base the reconstruction on.
     // We do this by selecting the match in the set that is modeled the
     // worst by a homography (i.e. has the fewest number of inliers).
-    homog_inlier_comparator comp(settings);
+    bundler_inters_match_set *best_match = NULL;
+    double best_inlier_p = 1.0;
 
-    vcl_vector<bundler_inters_match_set>::const_iterator best_match =
-        vcl_min_element(
-            recon.match_sets.begin(),
-            recon.match_sets.end(),
-            comp);
+    vcl_vector<bundler_inters_match_set>::iterator i;
+    for(i = recon.match_sets.begin(); i != recon.match_sets.end(); i++){
+
+        const bool replace_best = can_be_initial_recon(*i) && 
+            best_inlier_p > i->get_homography_inlier_percentage(t, r);
+
+        if( replace_best ){       
+            best_match = &(*i);
+            best_inlier_p = 
+                best_match->get_homography_inlier_percentage(t,r);
+        }
+    }
 
     // If we didn't find anything that can be in the initial reconstruction,
     // panic.
-    if (!comp.can_be_initial_recon(*best_match)) {
+    if ( ! best_match) {
         vcl_cerr<< "Unable to create an initial reconstruction!\n"
                 << "There is not a match set that both has an initial guess"
                 << " from EXIF tags and at least "
                 << settings.min_number_of_matches_homography
-                << " matches.\n";
+                << " matches." << vcl_endl;
         return false;
     }
 
@@ -244,7 +194,8 @@ static int count_observed_points(
     vcl_vector<bundler_inters_feature_sptr>::const_iterator ii;
     for (ii = to_check->features.begin();
          ii != to_check->features.end(); ++ii) {
-        if ((*ii)->track->observed) {
+
+        if ((*ii)->track && (*ii)->track->observed) {
             ++num_observed_pts;
         }
     }
@@ -253,19 +204,22 @@ static int count_observed_points(
 }
 
 // Takes in reconstruction and track_set, fills to_add as a return val.
-bool bundler_sfm_default_select_next_images::operator()(
+bool bundler_sfm_impl_select_next_images::operator()(
     bundler_inters_reconstruction &recon,
     vcl_vector<bundler_inters_image_sptr> &to_add)
 {
+
+    vcl_cout<<"Getting next images!"<<vcl_endl;    
+
     // Look at every image
     int most_observed_points = 0;
     bundler_inters_image_sptr next_image;
 
     vcl_vector<bundler_inters_image_sptr>::iterator i;
-    for (i = recon.feature_sets.begin(); i != recon.feature_sets.end(); ++i)
+    for (i = recon.feature_sets.begin(); i != recon.feature_sets.end(); i++)
     {
         // Only look at images not in the reconstruction.
-        if (!(*i)->in_recon) {
+        if (! (*i)->in_recon ) {
             // Find the number of points that this camera views,
             // which are also viewed by a camera already added.
             const int num_observed_points =
@@ -301,7 +255,7 @@ class image_adder
         rounds(r),
         thresh(t) { }
 
-    void operator()(bundler_inters_image_sptr &img) {
+    void operator()(const bundler_inters_image_sptr &img) {
         // Get the associated vpgl camera using RANSAC
         bundler_utils_fill_persp_camera_ransac(
             img, rounds, thresh);
@@ -319,12 +273,14 @@ class image_adder
 
 
 // Adds to_add_set to the reconstruction.
-void bundler_sfm_default_add_next_images::operator()(
+void bundler_sfm_impl_add_next_images::operator()(
     const vcl_vector<bundler_inters_image_sptr> &to_add,
 
     bundler_inters_reconstruction &reconstruction,
     vcl_vector<bundler_inters_image_sptr> &added_cameras)
 {
+    vcl_cout<<"Adding next images!"<<vcl_endl;    
+
     // Create an image adder
     image_adder adder(
         &added_cameras,
@@ -333,9 +289,11 @@ void bundler_sfm_default_add_next_images::operator()(
 
     // Add every image in the set.
     vcl_for_each(
-        added_cameras.begin(),
-        added_cameras.end(),
+        to_add.begin(),
+        to_add.end(),
         adder);
+
+    assert(added_cameras.size() == to_add.size());
 }
 
 
@@ -386,13 +344,15 @@ static void add_new_track(
 }
 
 
-void bundler_sfm_default_add_new_points::operator()(
+void bundler_sfm_impl_add_new_points::operator()(
     bundler_inters_reconstruction &reconstruction,
     const vcl_vector<bundler_inters_image_sptr> &added)
 {
+    vcl_cout<<"Adding next points!"<<vcl_endl;    
+
     //Look at every image that was added in the last round.
     vcl_vector<bundler_inters_image_sptr>::const_iterator i;
-    for (i = added.begin(); i != added.end(); ++i)
+    for (i = added.begin(); i != added.end(); i++)
     {
         // Look at every feature in this image. If the track that
         // it is part of is already observed, mark the point as
@@ -402,12 +362,18 @@ void bundler_sfm_default_add_new_points::operator()(
         // has at least two features that are part of an added image, and
         // if the triangulation is well-defined.
         vcl_vector<bundler_inters_feature_sptr>::iterator f;
-        for (f = (*i)->features.begin(); f != (*i)->features.end(); ++f)
-        {
-            if ( (*f)->track->observed ) {
+        for(f = (*i)->features.begin(); f != (*i)->features.end(); f++){
+
+            if( ! (*f)->track ) {
+                // Some points aren't in tracks (for instance, a view of a
+                // 3D point that is only visible in a single image). Skip 
+                // these, since single point can't be triangulated.
+                continue;
+
+            } else if( (*f)->track->observed ) {
                 (*f)->mark_as_contributing();
-            }
-            else if (can_be_added(
+
+            } else if (can_be_added(
                         (*f)->track,
                         settings.min_observing_images,
                         settings.min_ray_angle)) {
@@ -419,36 +385,66 @@ void bundler_sfm_default_add_new_points::operator()(
 
 
 //------------------------------------------------------------------------
+
+class track_membership_tester {
+public:
+    track_membership_tester(const bundler_inters_track_sptr &t) : 
+        track(t) { }
+
+    bool operator()(const bundler_inters_feature_sptr &f){
+        return f->track == track;
+    }
+
+private:
+   bundler_inters_track_sptr track; 
+};
+
+// Returns true if img contains a feature which is the projection 
+// of world_point, false otherwise. If such a feature exists, pt 
+// is filled with the feature's location in the image.
+static bool find_point_in_image(
+    const bundler_inters_image_sptr &img,
+    const bundler_inters_track_sptr &world_point,
+    vgl_point_2d<double> &pt)
+{
+
+    // Try and find the world_point in img.
+    track_membership_tester pred(world_point);
+
+    vcl_vector<bundler_inters_feature_sptr>::iterator found = 
+        vcl_find_if(img->features.begin(), img->features.end(), pred);
+
+
+    // If we found a feature, fill pt with its location in the image.
+    if( found != img->features.end()){
+        pt = (*found)->point;
+    }
+
+
+    return (found != img->features.end());
+}
+
+
 // Adjusts the reconstruction using nonlinear least squares
-void bundler_sfm_default_bundle_adjust::operator()(
+void bundler_sfm_impl_bundle_adjust::operator()(
     bundler_inters_reconstruction &recon)
 {
+    vcl_cout<<"Bundle adjusting!"<<vcl_endl;    
+
     //------------------------------------------------------------------
     // Get the reconstruction into something the bundle adjust routine
+
     // will use.
 
-    // Get a list of the perspective cameras currently in the reconstruction.
-    // At the same time, get a list of every 2D feature point.
+    // Get a list of the perspective cameras currently in 
+    // the reconstruction
     vcl_vector<vpgl_perspective_camera<double> > cameras;
-    vcl_vector<vgl_point_2d<double> > image_points;
 
-    vcl_vector<bundler_inters_image_sptr>::const_iterator img;
-    for (img = recon.feature_sets.begin();
-         img != recon.feature_sets.end(); ++img)
+    vcl_vector<bundler_inters_image_sptr>::const_iterator i;
+    for(i = recon.feature_sets.begin(); i != recon.feature_sets.end(); i++)
     {
-        if ((*img)->in_recon) {
-            cameras.push_back((*img)->camera);
-
-            // Find every contributing point that this image observes.
-            // Add it to the image_points list
-            vcl_vector<bundler_inters_feature_sptr>::const_iterator f;
-            for (f = (*img)->features.begin();
-                 f != (*img)->features.end(); ++f)
-            {
-                if ( (*f)->is_contributing() ) {
-                    image_points.push_back( (*f)->point );
-                }
-            }
+        if( (*i)->in_recon ){
+            cameras.push_back( (*i)->camera );
         }
     }
 
@@ -457,26 +453,56 @@ void bundler_sfm_default_bundle_adjust::operator()(
     vcl_vector<vgl_point_3d<double> > world_points;
 
     vcl_vector<bundler_inters_track_sptr>::const_iterator t;
-    for (t = recon.tracks.begin(); t != recon.tracks.end(); ++t) {
-        if ( (*t)->observed ) {
+    for (t = recon.tracks.begin(); t != recon.tracks.end(); t++)
+    {
+        if( (*t)->observed ) { 
             world_points.push_back( (*t)->world_point );
         }
     }
 
 
-    // Finally, get a mask which holds visibility information.
+    // Get a mask which holds visibility information and the 2d points
     //
     // mask[i][j] is true if world point j is visible in image i, false o.w.
     //
-    // mask = [[is point 0 visible in cam 0, is point 0 visible in cam 1 ...],
-    //     is point 1 visible in cam 0, is point 1 visible in cam 1...]]
-    vcl_vector<vcl_vector<bool> > mask( cameras.size() );
+    // mask= [[is point 0 visible in cam 0, is point 0 visible in cam 1],
+    //     is point 1 visible in cam 0, is point 1 visible in cam 1]]
+    vcl_vector<vgl_point_2d<double> > image_points;
 
-    vcl_vector<vgl_point_2d<double> >::const_iterator i;
-    for (i = image_points.begin(); i != image_points.end(); ++i) {
-        vcl_vector<bool> camera_mask(world_points.size(), false);
+    vcl_vector<vcl_vector<bool> > mask( 
+        cameras.size(), vcl_vector<bool>(world_points.size(), false) );
+
+    int camera_ind = 0; // Which entry in cameras are we on.
+    for(i = recon.feature_sets.begin(); i != recon.feature_sets.end(); i++)
+    {
+        // If this image is not in the reconstruction, then its
+        // camera is not in the cameras list. If this is the case,
+        // skip this camera.
+        if( ! (*i)->in_recon) { continue; }
+
+        int point_ind = 0; // Which entry in world_points are we on.
+        for(t = recon.tracks.begin(); t != recon.tracks.end(); t++)
+        {
+            // If this track is not observed, then it is not in 
+            // world_points, so skip it.
+            if( ! (*t)->observed){ continue; }
+
+            vgl_point_2d<double> image_pt;
+            if( find_point_in_image(*i, *t, image_pt) ) {
+
+                mask[camera_ind][point_ind] = true;
+                image_points.push_back(image_pt);
+            }
+
+            // If we skipped the image, this won't get updated, since
+            // we're still looking for the bundler_track that holds
+            // world_points[point_ind]. But, since we're at this point in
+            // the code, we've found that point, so move on.
+            point_ind++;
+        }
+
+        camera_ind++;
     }
-
 
     //------------------------------------------------------------------
     // Perform the bundle adjustment

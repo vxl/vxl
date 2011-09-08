@@ -4,10 +4,10 @@
 #include <vil/vil_load.h>
 
 static const char* IMG1_PATH =
-    "/home/anjruu/vxl/contrib/cul/bundler/tests/test_data/kermit000.jpg";
+    "contrib/cul/bundler/tests/test_data/kermit000.jpg";
 
 static const char* IMG2_PATH =
-    "/home/anjruu/vxl/contrib/cul/bundler/tests/test_data/kermit001.jpg";
+    "contrib/cul/bundler/tests/test_data/kermit001.jpg";
 
 static const double TOL = .6;
 

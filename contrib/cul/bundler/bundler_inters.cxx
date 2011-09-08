@@ -7,6 +7,28 @@
 const double INLIER_PERCENT_NOT_SET = -1.0;
 
 //----------Bundler Feature Impls -------------------------
+bundler_inters_feature::bundler_inters_feature():
+    track(NULL), 
+    index_in_track(-1), 
+    image(NULL), 
+    index_in_image(-1),
+    visited(false) { }
+
+bundler_inters_feature::bundler_inters_feature(
+    int row, 
+    int col,
+    const vnl_vector<double> &d,
+    const bundler_inters_image_sptr &img,
+    int ind_in_img):
+
+    point(row, col),
+    descriptor(d),
+    track(NULL), 
+    index_in_track(-1), 
+    image(img), 
+    index_in_image(ind_in_img),
+    visited(false) { }
+
 void bundler_inters_feature::mark_as_contributing()
 {
     assert(track);

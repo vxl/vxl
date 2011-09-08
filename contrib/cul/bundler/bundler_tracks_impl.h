@@ -106,17 +106,17 @@ class bundler_tracks_impl_refine_epipolar
 //:
 // An functor that takes in all matched features between pairs
 // of images, and chains them together into tracks
-class bundler_tracks_default_chain_matches
+class bundler_tracks_impl_chain_matches
   : public bundler_tracks_chain_matches
 {
  protected:
   bundler_settings_chain_matches settings;
 
  public:
-  bundler_tracks_default_chain_matches()
+  bundler_tracks_impl_chain_matches()
     : settings(bundler_settings_chain_matches()) {}
 
-  bundler_tracks_default_chain_matches(
+  bundler_tracks_impl_chain_matches(
       bundler_settings_chain_matches s) : settings(s) {}
 
   //: Performs the track chaining

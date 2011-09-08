@@ -38,6 +38,10 @@ struct bundler_inters_feature : public vbl_ref_count
     vnl_vector<double> descriptor;
 
     // Pointers to other classes that hold this feature.
+
+    // Not all features are in tracks (for example, if 3D point
+    // is only visible in one image, or there is a unmatched feature).
+    // Be sure to check if track is valid.
     bundler_inters_track_sptr track; // Other views of same 3D pt
     int index_in_track;
 
@@ -50,9 +54,13 @@ struct bundler_inters_feature : public vbl_ref_count
 
 
     // Constructors
-    bundler_inters_feature() : visited(false){}
-    bundler_inters_feature(int row, int col):
-        point(col, row), visited(false) { }
+    bundler_inters_feature();
+    bundler_inters_feature(
+        int row, 
+        int col, 
+        const vnl_vector<double> &d,
+        const bundler_inters_image_sptr &img,
+        int index_in_image);
 
     void mark_as_contributing();
     bool is_contributing() const;

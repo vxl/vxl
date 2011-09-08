@@ -122,7 +122,7 @@ double bundler_utils_get_homography_inlier_percentage(
 
 //----------------------------------------------------------------------
 int bundler_utils_fill_persp_camera_ransac(
-    bundler_inters_image_sptr &image,
+    const bundler_inters_image_sptr &image,
     int ransac_rounds,
     double inlier_threshold)
 {
@@ -135,7 +135,7 @@ int bundler_utils_fill_persp_camera_ransac(
     // Look at every feature in the set
     vcl_vector<bundler_inters_feature_sptr>::const_iterator f;
     for (f = image->features.begin(); f != image->features.end(); ++f) {
-        if ((*f)->track->observed){
+        if ((*f)->track && (*f)->track->observed){
             //This is the image point.
             image_pts.push_back((*f)->point);
 
@@ -155,7 +155,7 @@ int bundler_utils_fill_persp_camera_ransac(
         bundler_utils_get_distinct_indices(
             6, match_idxs, image_pts.size());
 
-        for (int idx = 0; idx < 5; ++idx) {
+        for (int idx = 0; idx < 6; idx++) {
             curr_image_pts.push_back(image_pts[idx]);
             curr_world_pts.push_back(world_pts[idx]);
         }
