@@ -201,10 +201,10 @@ float boxm2_ocl_change_tableau::change_detect(int frame)
     for(int i=0; i<out->ni(); ++i) {
       vxl_byte pix_in = (*in)(i,j); 
       float pchange = (*out)(i,j); 
-      cpbuffer[c] =   ((uint) (255) << 24)  
-                    | ((uint) (0  ) << 16) 
-                    | ((uint) (pix_in) << 8 ) 
-                    | ((uint) (pchange*255.0f)); 
+      cpbuffer[c] =   ((unsigned int) (255) << 24)  
+                    | ((unsigned int) (0  ) << 16) 
+                    | ((unsigned int) (pix_in) << 8 ) 
+                    | ((unsigned int) (pchange*255.0f)); 
       ++c; 
     }
   }
