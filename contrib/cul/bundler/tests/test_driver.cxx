@@ -8,6 +8,7 @@ DECLARE( test_refine );
 DECLARE( test_tracks );
 DECLARE( test_initial_recon );
 DECLARE( test_pipeline );
+DECLARE( test_ply );
 
 void register_tests()
 {
@@ -19,6 +20,7 @@ void register_tests()
   REGISTER( test_tracks );
   REGISTER( test_initial_recon );
   REGISTER( test_pipeline );
+  REGISTER( test_ply );
 }
 
 DEFINE_MAIN;

@@ -59,6 +59,14 @@ bool bundler_driver(
     vnl_sparse_matrix<bool> &visibility_graph);
 
 
+// Creates a file according to the PLY specifications, containing
+// the point data held in points.
+bool bundler_write_ply_file(
+    const char *filename,
+    const vcl_vector<vgl_point_3d<double> > &points);
+    
+
+
 // A collection of routines that provide the feature phase of
 // the bundler pipeline. There are three constructors, one for the default,
 // which will use the routines for the standard feature matching as well as

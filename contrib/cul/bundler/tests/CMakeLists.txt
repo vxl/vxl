@@ -7,7 +7,8 @@ ADD_EXECUTABLE( bundler_test_all test_driver.cxx
   test_refine.cxx 
   test_tracks.cxx
   test_initial_recon.cxx
-  test_pipeline.cxx )
+  test_pipeline.cxx
+  test_ply.cxx )
 
 
 TARGET_LINK_LIBRARIES(bundler_test_all bundler vpgl_algo vpgl vpgl_file_formats vsol bgeo vgl_algo vnl_algo vnl vgl vil vul vbl rrel bapl rsdl testlib)
@@ -53,6 +54,11 @@ ADD_TEST(
     bundler_test_pipeline 
     ${EXECUTABLE_OUTPUT_PATH}/bundler_test_all 
     test_pipeline )
+
+ADD_TEST( 
+    bundler_test_ply 
+    ${EXECUTABLE_OUTPUT_PATH}/bundler_test_all 
+    test_ply )
 
 ADD_EXECUTABLE( bundler_test_include test_include.cxx )
 TARGET_LINK_LIBRARIES( bundler_test_include bundler )

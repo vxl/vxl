@@ -177,7 +177,6 @@ bool bundler_sfm_impl_create_initial_recon::operator()(
         bundler_utils_triangulate_points(track);
     }
 
-    vcl_cout<<"Finished with the initial reconstruction!"<<vcl_endl;
     return true;
 }
 
@@ -208,8 +207,6 @@ bool bundler_sfm_impl_select_next_images::operator()(
     bundler_inters_reconstruction &recon,
     vcl_vector<bundler_inters_image_sptr> &to_add)
 {
-
-    vcl_cout<<"Getting next images!"<<vcl_endl;    
 
     // Look at every image
     int most_observed_points = 0;
@@ -279,8 +276,6 @@ void bundler_sfm_impl_add_next_images::operator()(
     bundler_inters_reconstruction &reconstruction,
     vcl_vector<bundler_inters_image_sptr> &added_cameras)
 {
-    vcl_cout<<"Adding next images!"<<vcl_endl;    
-
     // Create an image adder
     image_adder adder(
         &added_cameras,
@@ -348,8 +343,6 @@ void bundler_sfm_impl_add_new_points::operator()(
     bundler_inters_reconstruction &reconstruction,
     const vcl_vector<bundler_inters_image_sptr> &added)
 {
-    vcl_cout<<"Adding next points!"<<vcl_endl;    
-
     //Look at every image that was added in the last round.
     vcl_vector<bundler_inters_image_sptr>::const_iterator i;
     for (i = added.begin(); i != added.end(); i++)
@@ -429,8 +422,6 @@ static bool find_point_in_image(
 void bundler_sfm_impl_bundle_adjust::operator()(
     bundler_inters_reconstruction &recon)
 {
-    vcl_cout<<"Bundle adjusting!"<<vcl_endl;    
-
     //------------------------------------------------------------------
     // Get the reconstruction into something the bundle adjust routine
 

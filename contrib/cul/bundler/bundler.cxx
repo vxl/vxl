@@ -2,6 +2,9 @@
 #include <bundler/bundler_inters.h>
 #include <vcl_cassert.h>
 
+#include <vcl_iostream.h>
+#include <vcl_fstream.h>
+
 bool bundler_driver(
     const bundler_routines &routines,
     const vcl_vector<vil_image_resource_sptr> &imageset,
@@ -20,7 +23,39 @@ bool bundler_driver(
         recon, cameras, points, visibility_graph);
 }
 
+//----------------------------------------------------------------------
 
+bool bundler_write_ply_file(
+    const char* filename,
+    const vcl_vector<vgl_point_3d<double> > &points)
+{
+    vcl_ofstream ply;
+    ply.open(filename);
+
+    if( !ply.is_open() ){
+        return false;
+    }
+
+    // Write the header. According to the standard, the endline 
+    // carachter is \n, not anything else, so use \n, not vcl_endl
+    ply << "ply\n"
+        << "format ascii 1.0\n"
+        << "element face 0\n"
+        << "property list uchar int vertex_indices\n"
+        << "element vertex " << points.size() << "\n"
+        << "property float x\n"
+        << "property float y\n"
+        << "property float z\n"
+        << "end_header\n";
+
+    vcl_vector<vgl_point_3d<double> >::const_iterator i;
+    for(i = points.begin(); i != points.end(); i++){
+        ply << i->x() << " "
+            << i->y() << " "
+            << i->z() << "\n";
+    }
+}
+    
 
 
 //----------------------------------------------------------------------
@@ -72,6 +107,9 @@ void bundler_tracks::run_feature_stage(
     const vcl_vector<double> &focal_lengths,
     bundler_inters_reconstruction &empty_recon) const
 {
+
+    assert(imageset.size() == focal_lengths.size());
+
     // First, run the detect stage.
     vcl_vector<vil_image_resource_sptr>::const_iterator img_i;
     vcl_vector<double>::const_iterator exif_i;
@@ -179,6 +217,8 @@ bool bundler_sfm::run_sfm_stage(
         vnl_sparse_matrix<bool> visibility_matrix) const
 {
     //Create the initial reconstruction
+    vcl_cout << "Creating the initial reconstruction..." << vcl_endl;
+
     if( ! (*create_initial_recon)(recon) ){
         return false;
     }
@@ -186,13 +226,19 @@ bool bundler_sfm::run_sfm_stage(
     //Now do the add images, add points, bundle adjust loop
     vcl_vector<bundler_inters_image_sptr> to_add;
     while ( (*select_next_images)(recon, to_add) ) {
+        vcl_cout << vcl_endl;
+
         vcl_vector<bundler_inters_image_sptr> added;
 
+        vcl_cout << "Adding the next images..." << vcl_endl;
         (*add_next_images)(to_add, recon, added);
 
         assert(to_add.size() > 0);
 
+        vcl_cout << "Adding the new points..." << vcl_endl;
         (*add_new_points)(recon, added);
+
+        vcl_cout << "Bundle adjusting..." << vcl_endl;
         (*bundle_adjust)(recon);
 
         to_add.clear();

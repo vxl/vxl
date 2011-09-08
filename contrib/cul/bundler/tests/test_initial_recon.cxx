@@ -9,7 +9,7 @@
 #include <vcl_iomanip.h>
 
 static const char* IMG_PATH =
-    "/home/anjruu/vxl/contrib/cul/bundler/tests/test_data";
+    "contrib/cul/bundler/tests/test_data";
 
 static const double FOCAL_LENGTH_MM = 5.4;
 static const double SENSOR_WIDTH_MM = 5.312;

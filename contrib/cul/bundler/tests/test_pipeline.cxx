@@ -51,6 +51,10 @@ static void test_pipeline(int argc, char** argv)
     bundler_driver(
         routines, imgs, exif_tags,
         cameras, points, visibility_graph);
+
+    bundler_write_ply_file(
+        "points.ply", 
+        points);
 }
 
 

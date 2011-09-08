@@ -19,7 +19,7 @@ static void test_tracks_detect(int argc, char* argv[])
         TEST("test_tracks_detect", true, false);
 
         source_img = vil_load_image_resource(
-        "/home/anjruu/vxl/contrib/cul/bundler/tests/test_data/kermit000.jpg",
+        "contrib/cul/bundler/tests/test_data/kermit000.jpg",
         false);
         
     } else {

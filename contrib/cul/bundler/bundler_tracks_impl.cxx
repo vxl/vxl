@@ -429,22 +429,25 @@ void bundler_tracks_impl_chain_matches::operator ()(
     vcl_vector<bundler_inters_feature_sptr> to_remove;
 
     vcl_vector<bundler_inters_track_sptr>::iterator t;
-    for (t = tracks.begin(); t != tracks.end(); ++t)
-    {
+    for (t = tracks.begin(); t != tracks.end(); ++t) {
+
         // Look at every pair of points.
-        for (unsigned int i = 0; i < (*t)->points.size(); ++i) {
-            for (unsigned int j = i+1; j < (*t)->points.size(); ++j)
-            {
+        for (int i = 0; i < (*t)->points.size(); ++i) {
+            bool remove_i = false;
+    
+            for (int j = i+1; j < (*t)->points.size(); ++j) {
+
                 // If we find a pair in a track that comes from the same
                 // image, remove them both.
                 if ((*t)->points[i]->image == (*t)->points[j]->image) {
-                    to_remove.push_back((*t)->points[j]);
+                    to_remove.push_back( (*t)->points[j] );
+                    remove_i = true;
                 }
             }
 
             // If we've found at least one other bad feature,
             // remove the current feature too.
-            if (to_remove.size() > 0) {
+            if( remove_i ) {
                 to_remove.push_back((*t)->points[i]);
             }
         }
