@@ -117,6 +117,12 @@ SOURCE=.\test_match_ann.cxx
 SOURCE=.\test_initial_recon.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\test_ply.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_pipeline.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\test_include.cxx
 # End Source File
 # End Group
