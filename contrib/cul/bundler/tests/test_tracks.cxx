@@ -21,7 +21,8 @@ static void test_tracks(int argc, char** argv)
         TEST("test_tracks", true, false);
 
         filepath = IMG_PATH;
-    } else {
+    }
+    else {
         filepath = argv[1];
     }
 
@@ -53,18 +54,18 @@ static void test_tracks(int argc, char** argv)
     // Every point is in a track.
     int num_in_tracks = 0;
     for (trk_it = recon.tracks.begin();
-        trk_it != recon.tracks.end(); trk_it++){ 
-        num_in_tracks += (*trk_it)->points.size(); 
+         trk_it != recon.tracks.end(); ++trk_it) {
+        num_in_tracks += (*trk_it)->points.size();
     }
 
     int num_in_images = 0;
     for (fs_it = recon.feature_sets.begin();
-         fs_it != recon.feature_sets.end(); fs_it++){
+         fs_it != recon.feature_sets.end(); ++fs_it) {
         num_in_images += (*fs_it)->features.size();
     }
 
     TEST_EQUAL("Every point is in a track.",
-        num_in_tracks, num_in_images);
+               num_in_tracks, num_in_images);
 
     //Check the cross-references in the track set
 
@@ -77,7 +78,7 @@ static void test_tracks(int argc, char** argv)
                    (*trk_it)->points.size(),
                    (*trk_it)->contributing_points.size());
 
-        for (int i = 0; i < (*trk_it)->points.size(); ++i) {
+        for (unsigned int i = 0; i < (*trk_it)->points.size(); ++i) {
             TEST("The tracks' points refer to the correct track.",
                  (*trk_it)->points[i]->track,
                  *trk_it);
@@ -90,7 +91,7 @@ static void test_tracks(int argc, char** argv)
                  (*trk_it)->points[i]);
 
             //Test that all features in a track come from different images.
-            for (int j = i+1; j < (*trk_it)->points.size(); ++j) {
+            for (unsigned int j = i+1; j < (*trk_it)->points.size(); ++j) {
                 const bool images_match =
                     (*trk_it)->points[i]->image ==
                     (*trk_it)->points[j]->image;
@@ -114,13 +115,13 @@ static void test_tracks(int argc, char** argv)
                    !(*fs_it)->features[i]->visited );
 
             TEST("The features know their image set.",
-                (*fs_it)->features[i]->image,
+                 (*fs_it)->features[i]->image,
                  *fs_it);
 
             TEST("The features know where they are in their images",
-                (*fs_it)->features[(*fs_it)->features[i]->index_in_image],
-                (*fs_it)->features[i]);
-        
+                 (*fs_it)->features[(*fs_it)->features[i]->index_in_image],
+                 (*fs_it)->features[i]);
+
             #if 0
             //Test that all features in an image come from different tracks.
             for (int j = i+1; j < (*fs_it)->features.size(); ++j) {
@@ -137,7 +138,7 @@ static void test_tracks(int argc, char** argv)
     for (m = recon.match_sets.begin();
          m != recon.match_sets.end(); ++m)
     {
-        for (unsigned int i = 0; i < m->num_features(); ++i) {
+        for (int i = 0; i < m->num_features(); ++i) {
             TEST("A pair of matched features is always in the same track.",
                  m->matches[i].first->track, m->matches[i].second->track);
         }

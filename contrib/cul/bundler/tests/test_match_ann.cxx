@@ -65,7 +65,7 @@ static void test_match_ann(int argc, char** argv)
          matches.image2 == to_match.f1);
     Assert("Images match up.", correct_images);
 
-    for (unsigned int i = 0; i < matches.num_features(); ++i) {
+    for (int i = 0; i < matches.num_features(); ++i) {
         Assert("First stored image matches feature image.",
                matches.image1 == matches.matches[i].first->image);
 
