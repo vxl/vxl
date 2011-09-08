@@ -12,6 +12,8 @@ TESTS += test_match_ann.cxx
 TESTS += test_refine.cxx
 TESTS += test_tracks_detect.cxx
 TESTS += test_initial_recon.cxx
+TESTS += test_pipeline.cxx
+TESTS += test_ply.cxx
 
 MINI_PROG_SOURCES += test_include.cxx
 
