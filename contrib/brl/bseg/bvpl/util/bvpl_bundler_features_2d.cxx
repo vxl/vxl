@@ -1,11 +1,12 @@
 //this is /contrib/dbrec3d/bof/bof_bundler_features_2d.h
-#include<bvpl/util/bvpl_bundler_features_2d.h>
-#include<vgl/io/vgl_io_point_3d.h>
-#include<vnl/io/vnl_io_vector.h>
+#include <bvpl/util/bvpl_bundler_features_2d.h>
+#include <vgl/io/vgl_io_point_3d.h>
+#include <vnl/io/vnl_io_vector.h>
+#include <vcl_cstdlib.h> // for std::exit()
 
 void bvpl_bundler_features_2d::write_txt( vcl_string const& filename ) const
 {
-  vcl_ofstream feature_file(filename);
+  vcl_ofstream feature_file(filename.c_str());
 
   if (!feature_file)
   {
