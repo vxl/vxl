@@ -34,4 +34,6 @@ DECLARE_FUNC_CONS(bvpl_convert_pair_to_hue_process);
 DECLARE_FUNC_CONS(bvpl_load_pair_grid_process);
 DECLARE_FUNC_CONS(bvpl_find_pairs_process_process);
 DECLARE_FUNC_CONS(bvpl_pair_to_float_process);
+DECLARE_FUNC_CONS(bvpl_compute_bundler_features_2d_process);
+
 #endif

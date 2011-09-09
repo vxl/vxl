@@ -6,12 +6,14 @@
 #include "bvpl_processes.h"
 #include <bvpl/kernels/bvpl_kernel.h>
 #include <bvpl/util/bvpl_corner_pair_finder.h>
+#include <bvpl/util/bvpl_bundler_features_2d.h>
 
 void bvpl_register::register_datatype()
 {
   REGISTER_DATATYPE( bvpl_kernel_sptr );
   REGISTER_DATATYPE( bvpl_kernel_vector_sptr );
   REGISTER_DATATYPE( bvpl_corner_pairs_sptr );
+  REGISTER_DATATYPE( bvpl_bundler_features_2d_sptr );
 }
 
 void bvpl_register::register_process()
@@ -46,4 +48,5 @@ void bvpl_register::register_process()
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvpl_load_pair_grid_process, "bvplLoadPairGridProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvpl_find_pairs_process_process, "bvplFindPairsProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvpl_pair_to_float_process, "bvplPairToFloatProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvpl_compute_bundler_features_2d_process, "bvplComputeBundlerFeatures2dProcess");
 }
