@@ -12,8 +12,8 @@ bool bundler_driver(
 
     vcl_vector<vpgl_perspective_camera<double> > &cameras,
     vcl_vector<vgl_point_3d<double> > &points,
-    vnl_sparse_matrix<bool> &visibility_graph) {
-
+    vnl_sparse_matrix<bool> &visibility_graph)
+{
     bundler_inters_reconstruction recon;
 
     routines.features_phase.run_feature_stage(
@@ -32,34 +32,36 @@ bool bundler_write_ply_file(
     vcl_ofstream ply;
     ply.open(filename);
 
-    if( !ply.is_open() ){
+    if ( !ply.is_open() ) {
         return false;
     }
 
-    // Write the header. According to the standard, the endline 
-    // carachter is \n, not anything else, so use \n, not vcl_endl
+    // Write the header. According to the standard, the endline
+    // character is "\n", not anything else, so use "\n", not vcl_endl
     ply << "ply\n"
         << "format ascii 1.0\n"
         << "element face 0\n"
         << "property list uchar int vertex_indices\n"
-        << "element vertex " << points.size() << "\n"
+        << "element vertex " << points.size() << '\n'
         << "property float x\n"
         << "property float y\n"
         << "property float z\n"
         << "end_header\n";
 
     vcl_vector<vgl_point_3d<double> >::const_iterator i;
-    for(i = points.begin(); i != points.end(); i++){
-        ply << i->x() << " "
-            << i->y() << " "
-            << i->z() << "\n";
+    for (i = points.begin(); i != points.end(); i++) {
+        ply << i->x() << ' '
+            << i->y() << ' '
+            << i->z() << '\n';
     }
+    ply.close();
+    return true;
 }
-    
 
 
 //----------------------------------------------------------------------
-bundler_tracks::bundler_tracks():manage_pointers(true) {
+bundler_tracks::bundler_tracks():manage_pointers(true)
+{
     detect_features =
         new bundler_tracks_impl_detect_sift;
 
@@ -74,7 +76,7 @@ bundler_tracks::bundler_tracks():manage_pointers(true) {
 
     chain_matches =
         new bundler_tracks_impl_chain_matches;
-};
+}
 
 
 bundler_tracks::bundler_tracks(
@@ -99,7 +101,7 @@ bundler_tracks::bundler_tracks(
     chain_matches =
         new bundler_tracks_impl_chain_matches(
             s.chain_matches_settings);
-};
+}
 
 
 void bundler_tracks::run_feature_stage(
@@ -107,7 +109,6 @@ void bundler_tracks::run_feature_stage(
     const vcl_vector<double> &focal_lengths,
     bundler_inters_reconstruction &empty_recon) const
 {
-
     assert(imageset.size() == focal_lengths.size());
 
     // First, run the detect stage.
@@ -116,8 +117,8 @@ void bundler_tracks::run_feature_stage(
     for (img_i = imageset.begin(), exif_i = focal_lengths.begin();
          img_i != imageset.end(); img_i++, exif_i++)
     {
-        vcl_cout<<"Detecting features " << (img_i - imageset.begin()) + 1 
-                << "/" << imageset.size() << vcl_endl; 
+        vcl_cout<<"Detecting features " << (img_i - imageset.begin()) + 1
+                << '/' << imageset.size() << vcl_endl;
 
         empty_recon.feature_sets.push_back(
             (*detect_features)(*img_i, *exif_i));
@@ -134,7 +135,7 @@ void bundler_tracks::run_feature_stage(
         bundler_inters_match_set match_set;
 
         vcl_cout<<"Matching features " << (j - matches.begin()) + 1
-            << "/" << matches.size() << vcl_endl; 
+                << '/' << matches.size() << vcl_endl;
 
         (*match)(*j, match_set);
         (*refine)(match_set);
@@ -146,8 +147,8 @@ void bundler_tracks::run_feature_stage(
 
     // Finally, chain everything into a track
     (*chain_matches)(
-        empty_recon.match_sets, 
-        empty_recon.feature_sets, 
+        empty_recon.match_sets,
+        empty_recon.feature_sets,
         empty_recon.tracks);
 
     // Clear the visited tags for every feature.
@@ -176,7 +177,7 @@ bundler_sfm::bundler_sfm()
     add_next_images =
         new bundler_sfm_impl_add_next_images();
 
-    add_new_points = 
+    add_new_points =
         new bundler_sfm_impl_add_new_points();
 
     bundle_adjust =
@@ -199,7 +200,7 @@ bundler_sfm::bundler_sfm(bundler_settings_sfm s)
         new bundler_sfm_impl_add_next_images(
             s.add_next_images_settings);
 
-    add_new_points = 
+    add_new_points =
         new bundler_sfm_impl_add_new_points(
             s.add_new_points_settings);
 
@@ -211,7 +212,6 @@ bundler_sfm::bundler_sfm(bundler_settings_sfm s)
 
 bool bundler_sfm::run_sfm_stage(
         bundler_inters_reconstruction &recon,
-
         vcl_vector<vpgl_perspective_camera<double> > &cameras,
         vcl_vector<vgl_point_3d<double> > &points,
         vnl_sparse_matrix<bool> visibility_matrix) const
@@ -219,7 +219,7 @@ bool bundler_sfm::run_sfm_stage(
     //Create the initial reconstruction
     vcl_cout << "Creating the initial reconstruction..." << vcl_endl;
 
-    if( ! (*create_initial_recon)(recon) ){
+    if ( ! (*create_initial_recon)(recon) ){
         return false;
     }
 
@@ -246,10 +246,10 @@ bool bundler_sfm::run_sfm_stage(
 
     //Now get the information from the reconstruction struct.
     vcl_vector<bundler_inters_image_sptr>::const_iterator cam;
-    for (cam = recon.feature_sets.begin(); 
-        cam != recon.feature_sets.end(); 
-        cam++) {
-
+    for (cam = recon.feature_sets.begin();
+         cam != recon.feature_sets.end();
+         ++cam)
+    {
         cameras.push_back((*cam)->camera);
     }
 
@@ -259,7 +259,6 @@ bool bundler_sfm::run_sfm_stage(
     }
 
     visibility_matrix = recon.visibility_matrix;
-
 
     return true;
 }
