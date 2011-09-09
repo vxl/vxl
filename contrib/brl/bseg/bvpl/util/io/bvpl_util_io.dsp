@@ -92,16 +92,25 @@ LIB32=link.exe -lib
 # Begin Group "Source Files"
 # PROP Default_Filter "cxx"
 # Begin Source File
+SOURCE=.\bvpl_corner_pairs_io.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\bvpl_bundler_features_2d_io.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/vbl_io_smart_ptr+bvpl_corner_pairs-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\bvpl_corner_pairs_io.cxx
+SOURCE=.\Templates/vbl_io_smart_ptr+bvpl_bundler_feature_2d-.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
 # Begin Source File
 SOURCE=.\bvpl_corner_pairs_io.h
+# End Source File
+# Begin Source File
+SOURCE=.\bvpl_bundler_features_2d_io.h
 # End Source File
 # End Group
 # End Target

@@ -99,10 +99,16 @@ SOURCE=.\bvpl_corner_pair_finder.cxx
 SOURCE=.\bvpl_corner_search_functor.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\bvpl_bundler_features_2d.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/vbl_smart_ptr+bvpl_corner_pairs-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/bvxm_voxel_x+bvpl_pair-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vbl_smart_ptr+bvpl_bundler_features_2d-.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
@@ -112,6 +118,9 @@ SOURCE=.\bvpl_corner_pair_finder.h
 # End Source File
 # Begin Source File
 SOURCE=.\bvpl_corner_search_functor.h
+# End Source File
+# Begin Source File
+SOURCE=.\bvpl_bundler_features_2d.h
 # End Source File
 # End Group
 # End Target
