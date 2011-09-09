@@ -1,4 +1,5 @@
 # This is contrib/brl/bseg/bvpl/CMakeLists.txt
+PROJECT(bvpl)
 
 INCLUDE_DIRECTORIES( ${VXLCORE_INCLUDE_DIR} )
 INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bseg )
