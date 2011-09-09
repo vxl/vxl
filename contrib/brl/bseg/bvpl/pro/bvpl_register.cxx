@@ -48,5 +48,6 @@ void bvpl_register::register_process()
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvpl_load_pair_grid_process, "bvplLoadPairGridProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvpl_find_pairs_process_process, "bvplFindPairsProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvpl_pair_to_float_process, "bvplPairToFloatProcess");
-  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvpl_compute_bundler_features_2d_process, "bvplComputeBundlerFeatures2dProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvpl_bundler_features_2d_compute_process, "bvplBundlerFeatures2dComputeProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvpl_bundler_features_2d_write_txt_process, "bvplBundlerFeatures2dWriteTxtProcess");
 }
