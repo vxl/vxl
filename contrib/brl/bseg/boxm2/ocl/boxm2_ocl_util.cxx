@@ -170,7 +170,7 @@ vil_image_view_base_sptr boxm2_ocl_util::prepare_input_image(vil_image_view_base
     vcl_cout<<"Preparing grey scale image"<<vcl_endl;
     
     //preapre floatimg for stretched img
-    vil_image_view<float>* floatimg
+    vil_image_view<float>* floatimg;
     if (vil_image_view<vxl_byte> *img_byte = dynamic_cast<vil_image_view<vxl_byte>*>(loaded_image.ptr())) 
     {
         floatimg = new vil_image_view<float>(loaded_image->ni(), loaded_image->nj(), 1);
