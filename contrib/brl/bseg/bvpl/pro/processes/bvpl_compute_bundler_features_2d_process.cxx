@@ -5,7 +5,7 @@
 // \brief A process for computing 2d features from 3d bundler points.
 //
 // \author Brandon A. Mayer
-// \date Sept  8, 2011
+// \date Sept 8, 2011
 // \verbatim
 //  Modifications
 //
@@ -45,342 +45,342 @@
 
 struct kernel
 {
-	vgl_point_2d<unsigned> min_pt;
-	vgl_point_2d<unsigned> max_pt;
-	vnl_vector<double> w;
-	vcl_vector<vgl_point_2d<unsigned> > locs;
+  vgl_point_2d<unsigned> min_pt;
+  vgl_point_2d<unsigned> max_pt;
+  vnl_vector<double> w;
+  vcl_vector<vgl_point_2d<unsigned> > locs;
 };
 
 namespace bvpl_compute_bundler_features_2d_globals
 {
-	const unsigned n_inputs_ = 4;
-	const unsigned n_outputs_ = 1;
+  const unsigned n_inputs_ = 4;
+  const unsigned n_outputs_ = 1;
 }//end bvpl_compute_bundler_features_2d_process_globals
 
 bool bvpl_compute_bundler_features_2d_process_cons( bprb_func_process& pro )
 {
-	using namespace bvpl_compute_bundler_features_2d_globals;
+  using namespace bvpl_compute_bundler_features_2d_globals;
 
-	vcl_vector<vcl_string> input_types_(n_inputs_);
-	vcl_vector<vcl_string> output_types_(n_outputs_);
+  vcl_vector<vcl_string> input_types_(n_inputs_);
+  vcl_vector<vcl_string> output_types_(n_outputs_);
 
-	unsigned i = 0;
-	input_types_[i++] = "vcl_string";//bundler output file
-	input_types_[i++] = "vcl_string";//original image glob
-	input_types_[i++] = "vcl_string";//bad camera file
-	input_types_[i++] = "vcl_string";//kernel directory
-	
-	output_types_[0] = "bvpl_bundler_features_2d_sptr";
+  unsigned i = 0;
+  input_types_[i++] = "vcl_string";//bundler output file
+  input_types_[i++] = "vcl_string";//original image glob
+  input_types_[i++] = "vcl_string";//bad camera file
+  input_types_[i++] = "vcl_string";//kernel directory
 
-	if(!pro.set_input_types(input_types_))
-	{
-		vcl_cerr << "----ERROR---- bvpl_compute_bundler_features_2d_process_cons\n"
-			     << "\tCOULD NOT SET INPUT TYPES.\n"
-				 << __FILE__ << '\n'
-				 << __LINE__ << '\n' << vcl_flush;
-		return false;
-	}
+  output_types_[0] = "bvpl_bundler_features_2d_sptr";
 
-	if(!pro.set_output_types(output_types_))
-	{
-		vcl_cerr << "----ERROR---- bvpl_compute_bundler_features_2d_process_cons\n"
-				 << "\tCOULD NOT SET OUTPUT TYPES.\n"
-				 << __FILE__ << '\n'
-				 << __LINE__ << '\n' << vcl_flush;
-		return false;
-	}
+  if (!pro.set_input_types(input_types_))
+  {
+    vcl_cerr << "----ERROR---- bvpl_compute_bundler_features_2d_process_cons\n"
+             << "\tCOULD NOT SET INPUT TYPES.\n"
+             << __FILE__ << '\n'
+             << __LINE__ << '\n' << vcl_flush;
+    return false;
+  }
 
-	return true;
+  if (!pro.set_output_types(output_types_))
+  {
+    vcl_cerr << "----ERROR---- bvpl_compute_bundler_features_2d_process_cons\n"
+             << "\tCOULD NOT SET OUTPUT TYPES.\n"
+             << __FILE__ << '\n'
+             << __LINE__ << '\n' << vcl_flush;
+    return false;
+  }
+
+  return true;
 }//end bvpl_compute_bundler_features_2d_process_cons
 
 bool bvpl_compute_bundler_features_2d_process( bprb_func_process& pro )
 {
-	using namespace  bvpl_compute_bundler_features_2d_globals;
+  using namespace bvpl_compute_bundler_features_2d_globals;
 
-	if( pro.n_inputs() != n_inputs_ )
-	{
-		vcl_cerr << pro.name()
-			     << " bvpl_compute_bundler_features_2d_process: NUMBER OF INPUTS SHOULD BE: "
-				 << n_inputs_ << vcl_endl;
-		return false;
-	}
+  if ( pro.n_inputs() != n_inputs_ )
+  {
+    vcl_cerr << pro.name()
+             << " bvpl_compute_bundler_features_2d_process: NUMBER OF INPUTS SHOULD BE: "
+             << n_inputs_ << vcl_endl;
+    return false;
+  }
 
-	//get inputs
-	unsigned i = 0;
-	vcl_string bundlerfile		= pro.get_input<vcl_string>(i++);
-	vcl_string img_glob			= pro.get_input<vcl_string>(i++);
-	vcl_string bad_cam_file		= pro.get_input<vcl_string>(i++);
-	vcl_string kernel_dir		= pro.get_input<vcl_string>(i++);
+  //get inputs
+  unsigned i = 0;
+  vcl_string bundlerfile   = pro.get_input<vcl_string>(i++);
+  vcl_string img_glob      = pro.get_input<vcl_string>(i++);
+  vcl_string bad_cam_file  = pro.get_input<vcl_string>(i++);
+  vcl_string kernel_dir    = pro.get_input<vcl_string>(i++);
 
-	//------ PARSE BAD CAMERAS --------
-	vcl_ifstream bcfile( bad_cam_file );
+  //------ PARSE BAD CAMERAS --------
+  vcl_ifstream bcfile( bad_cam_file );
 
-	if( !bcfile )
-	{
-		vcl_cerr << "---ERROR---- bvpl_compute_bundler_features_2d_process\n"
-				 << "\tERROR OPENING BAD CAMERA FILE.\n"
-				 << __FILE__ <<'\n'
-				 << __LINE__ << '\n' << vcl_flush;
-		return false;
-	}
+  if ( !bcfile )
+  {
+    vcl_cerr << "---ERROR---- bvpl_compute_bundler_features_2d_process\n"
+             << "\tERROR OPENING BAD CAMERA FILE.\n"
+             << __FILE__ <<'\n'
+             << __LINE__ << '\n' << vcl_flush;
+    return false;
+  }
 
-	vcl_set<unsigned> bad_cams;
+  vcl_set<unsigned> bad_cams;
 
-	while( !bcfile.eof() )
-	{
-		unsigned c;
-		bcfile >> c;
-		bad_cams.insert(c);
-	}//end bad camera file iteration
+  while ( !bcfile.eof() )
+  {
+    unsigned c;
+    bcfile >> c;
+    bad_cams.insert(c);
+  }//end bad camera file iteration
 
-	
-	//------ READING KERNEL FILES--------
 
-	if( !vul_file::is_directory(kernel_dir) )
-	{
-		vcl_cerr << "---ERROR---- bvpl_compute_bundler_features_2d_process\n"
-			<< "\t KERNEL DIRECTORY NOT VALID.\n"
-			<< __FILE__ << '\n'
-			<< __LINE__ << '\n' << vcl_flush;
-		return false;
-	}
+  //------ READING KERNEL FILES--------
 
-	vcl_vector<vcl_string> filenames;
-	filenames.push_back("I0");
-    filenames.push_back("Ix");
-    filenames.push_back("Iy");
-	filenames.push_back("Ixx");
-	filenames.push_back("Iyy");
-	filenames.push_back("Ixy");
+  if ( !vul_file::is_directory(kernel_dir) )
+  {
+    vcl_cerr << "---ERROR---- bvpl_compute_bundler_features_2d_process\n"
+             << "\t KERNEL DIRECTORY NOT VALID.\n"
+             << __FILE__ << '\n'
+             << __LINE__ << '\n' << vcl_flush;
+    return false;
+  }
 
-	vcl_map<vcl_string, kernel > kernel_map;
+  vcl_vector<vcl_string> filenames;
+  filenames.push_back("I0");
+  filenames.push_back("Ix");
+  filenames.push_back("Iy");
+  filenames.push_back("Ixx");
+  filenames.push_back("Iyy");
+  filenames.push_back("Ixy");
 
-	vcl_vector<vcl_string>::const_iterator
-		k_itr, k_end = filenames.end();
+  vcl_map<vcl_string, kernel > kernel_map;
 
-	for( k_itr = filenames.begin();
-			k_itr != k_end; ++k_itr )
-	{
-		vcl_ifstream kernel_file(kernel_dir + "/" + *k_itr + ".txt");
+  vcl_vector<vcl_string>::const_iterator
+    k_itr, k_end = filenames.end();
 
-		if( !kernel_file.good() )
-		{
-			vcl_cerr << "---ERROR---- bvpl_compute_bundler_features_2d_process\n"
-				 << "\t COULD NOT OPEN KERNEL: " << *k_itr << "\n"
-				 << __FILE__ << '\n'
-			     << __LINE__ << '\n' << vcl_flush;
-		return false;
-		}
+  for ( k_itr = filenames.begin();
+        k_itr != k_end; ++k_itr )
+  {
+    vcl_ifstream kernel_file(kernel_dir + "/" + *k_itr + ".txt");
 
-		vgl_point_2d<unsigned> min_pt, max_pt;
+    if ( !kernel_file.good() )
+    {
+      vcl_cerr << "---ERROR---- bvpl_compute_bundler_features_2d_process\n"
+               << "\t COULD NOT OPEN KERNEL: " << *k_itr << '\n'
+               << __FILE__ << '\n'
+               << __LINE__ << '\n' << vcl_flush;
+    return false;
+    }
 
-		kernel_file >> min_pt;
-		kernel_file >> max_pt;
+    vgl_point_2d<unsigned> min_pt, max_pt;
 
-		unsigned nx = max_pt.x() - min_pt.y() + 1;
-		unsigned ny = max_pt.y() - min_pt.y() + 1;
+    kernel_file >> min_pt;
+    kernel_file >> max_pt;
 
-		vnl_vector<double> w(nx*ny);
+    unsigned nx = max_pt.x() - min_pt.y() + 1;
+    unsigned ny = max_pt.y() - min_pt.y() + 1;
 
-		kernel k;
-		k.min_pt = min_pt;
-		k.max_pt = max_pt;
+    vnl_vector<double> w(nx*ny);
 
-		for(unsigned i = 0; !kernel_file.eof(); )
-		{
-			vgl_point_2d<unsigned> loc;
-			kernel_file >> loc;
-			k.locs.push_back(loc);
-			double weight;
-			kernel_file >> weight;
-			w[i++] = weight;
-		}//end kernel weight iteration
+    kernel k;
+    k.min_pt = min_pt;
+    k.max_pt = max_pt;
 
-		k.w = w;
+    for (unsigned i = 0; !kernel_file.eof(); )
+    {
+      vgl_point_2d<unsigned> loc;
+      kernel_file >> loc;
+      k.locs.push_back(loc);
+      double weight;
+      kernel_file >> weight;
+      w[i++] = weight;
+    }//end kernel weight iteration
 
-		kernel_map.insert(vcl_make_pair(*k_itr,k));
-	}//end kernel file iteration
+    k.w = w;
 
-	//------ READING & PROCESSING BUNDLER FILE --------
-	vcl_ifstream bfile(bundlerfile);
+    kernel_map.insert(vcl_make_pair(*k_itr,k));
+  }//end kernel file iteration
 
-	if(!bfile)
-	{
-		vcl_cerr << "---ERROR---- bvpl_compute_bundler_features_2d_process\n"
-				 << "\tERROR OPENING BUNDLER OUTPUT FILE.\n"
-				 << __FILE__ <<'\n'
-				 << __LINE__ << vcl_flush;
-		return false;
-	}
+  //------ READING & PROCESSING BUNDLER FILE --------
+  vcl_ifstream bfile(bundlerfile);
 
-	vidl_image_list_istream video_stream(img_glob);
-	
-	if(!video_stream.is_open())
-	{
-		vcl_cerr << "---ERROR---- bvpl_compute_bundler_features_2d_process\n"
-			     << "\tINVALID VIDEO STREAM.\n"
-				 << __FILE__ << '\n'
-				 << __LINE__ << vcl_flush;
-		return false;
-	}
+  if (!bfile)
+  {
+    vcl_cerr << "---ERROR---- bvpl_compute_bundler_features_2d_process\n"
+             << "\tERROR OPENING BUNDLER OUTPUT FILE.\n"
+             << __FILE__ <<'\n'
+             << __LINE__ << vcl_flush;
+    return false;
+  }
 
-	//get image size
-	unsigned ni = video_stream.width();
-	unsigned nj = video_stream.height();
+  vidl_image_list_istream video_stream(img_glob);
 
-	//central point of image
-	vgl_point_2d<double> principal_point((double)ni/2,(double)nj/2);
+  if (!video_stream.is_open())
+  {
+    vcl_cerr << "---ERROR---- bvpl_compute_bundler_features_2d_process\n"
+             << "\tINVALID VIDEO STREAM.\n"
+             << __FILE__ << '\n'
+             << __LINE__ << vcl_flush;
+    return false;
+  }
 
-	char buffer[1024];
-	bfile.getline(buffer,1024); // read the header line
+  //get image size
+  unsigned ni = video_stream.width();
+  unsigned nj = video_stream.height();
 
-	if (bfile.eof())
-	{
-		vcl_cerr << "---ERROR---- bvpl_compute_bundler_features_2d_process\n"
-				 << "\tMISSING BUNDLER FILE DATA.\n"
-				 << __FILE__ << '\n'
-				 << __LINE__ << '\n' << vcl_flush;
-		return false;
-	}
+  //central point of image
+  vgl_point_2d<double> principal_point((double)ni/2,(double)nj/2);
 
-	unsigned num_cams=0, num_pts=0;
-	bfile>>num_cams>>num_pts; // reading number of cameras and number of 3-d pts
+  char buffer[1024];
+  bfile.getline(buffer,1024); // read the header line
 
-	for( unsigned  i = 0; i < num_cams; ++i)
-	{
-		double f, k1, k2;
-		vnl_matrix_fixed<double,3,3> R;
-		vnl_vector_fixed<double,3> T;
+  if (bfile.eof())
+  {
+    vcl_cerr << "---ERROR---- bvpl_compute_bundler_features_2d_process\n"
+             << "\tMISSING BUNDLER FILE DATA.\n"
+             << __FILE__ << '\n'
+             << __LINE__ << '\n' << vcl_flush;
+    return false;
+  }
 
-		//reading camera matrices
-		//don't need them but need to move file pointer
-		bfile>>f>>k1>>k2;
-		bfile>>R>>T;
-	}//end num_cams iteration
+  unsigned num_cams=0, num_pts=0;
+  bfile>>num_cams>>num_pts; // reading number of cameras and number of 3-d pts
 
-	vcl_vector<bwm_video_corr_sptr> corrs;
+  for ( unsigned i = 0; i < num_cams; ++i)
+  {
+    double f, k1, k2;
+    vnl_matrix_fixed<double,3,3> R;
+    vnl_vector_fixed<double,3> T;
 
-	bvpl_bundler_features_2d_sptr bundler_features_sptr =
-		new bvpl_bundler_features_2d();
+    //reading camera matrices
+    //don't need them but need to move file pointer
+    bfile>>f>>k1>>k2;
+    bfile>>R>>T;
+  }//end num_cams iteration
 
-	for( unsigned  i = 0; i < num_pts; ++i )
-	{
-		double x,y,z;
-		
-		//read the 3d point
-		bfile >> x >> y >> z;
+  vcl_vector<bwm_video_corr_sptr> corrs;
 
-		vgl_point_3d<double> bundler_pt(x,y,z);	
+  bvpl_bundler_features_2d_sptr bundler_features_sptr =
+    new bvpl_bundler_features_2d();
 
-		//read the color value
-		//don't need it just move the file ptr
-		unsigned r,g,b;
-		bfile >> r >> g >> b;
+  for ( unsigned i = 0; i < num_pts; ++i )
+  {
+    double x,y,z;
 
-		//read the number of views this 3d pt
-		//is associated with
+    //read the 3d point
+    bfile >> x >> y >> z;
 
-		unsigned num_views;
-		bfile >> num_views;
+    vgl_point_3d<double> bundler_pt(x,y,z);
 
-		vcl_map<unsigned, vnl_vector<double> > view_feature_map;
+    //read the color value
+    //don't need it just move the file ptr
+    unsigned r,g,b;
+    bfile >> r >> g >> b;
 
-		for( unsigned j = 0; j < num_views; ++j )
-		{
-			unsigned view_number, key_number;
-			double img_x, img_y;
+    //read the number of views this 3d pt
+    //is associated with
 
-			bfile >> view_number
-				  >> key_number
-				  >> img_x
-				  >> img_y;
+    unsigned num_views;
+    bfile >> num_views;
 
-			img_x = img_x + principal_point.x();
-			img_y = nj - (img_y + principal_point.y());
+    vcl_map<unsigned, vnl_vector<double> > view_feature_map;
 
-			if( !bad_cams.count(view_number) )
-			{
-				if( !video_stream.seek_frame(view_number) )
-				{
-					vcl_cerr << "---ERROR---- bvpl_compute_bundler_features_2d_process\n"
-						<< "\tCOULD NOT FIND FRAME: " << view_number << "\n"
-						<< __FILE__ << '\n'
-						<< __LINE__ << '\n' << vcl_flush;
-					return false;
-				}
+    for ( unsigned j = 0; j < num_views; ++j )
+    {
+      unsigned view_number, key_number;
+      double img_x, img_y;
 
-				vil_image_view<vxl_byte> curr_img;
-				vidl_convert_to_view(*video_stream.current_frame(),
-										curr_img);
+      bfile >> view_number
+          >> key_number
+          >> img_x
+          >> img_y;
 
-				if( curr_img.nplanes() != 1 ||
-					curr_img.pixel_format() == VIL_PIXEL_FORMAT_RGB_BYTE )
-				{
-					vil_image_view<vxl_byte> grey_img;
-					vil_convert_planes_to_grey(curr_img, grey_img);
-					curr_img = grey_img;
-				}
+      img_x = img_x + principal_point.x();
+      img_y = nj - (img_y + principal_point.y());
 
-				//iterate through the kernels and buld the feature
-				//vector for this 3d point and view
+      if ( !bad_cams.count(view_number) )
+      {
+        if ( !video_stream.seek_frame(view_number) )
+        {
+          vcl_cerr << "---ERROR---- bvpl_compute_bundler_features_2d_process\n"
+                   << "\tCOULD NOT FIND FRAME: " << view_number << '\n'
+                   << __FILE__ << '\n'
+                   << __LINE__ << '\n' << vcl_flush;
+          return false;
+        }
 
-				vnl_vector<double> feature_vector(filenames.size());
+        vil_image_view<vxl_byte> curr_img;
+        vidl_convert_to_view(*video_stream.current_frame(),
+                             curr_img);
 
-				for( k_itr = filenames.begin(); 
-						k_itr != k_end; ++k_itr )
-				{
-					kernel k = kernel_map[*k_itr];
+        if ( curr_img.nplanes() != 1 ||
+             curr_img.pixel_format() == VIL_PIXEL_FORMAT_RGB_BYTE )
+        {
+          vil_image_view<vxl_byte> grey_img;
+          vil_convert_planes_to_grey(curr_img, grey_img);
+          curr_img = grey_img;
+        }
 
-					unsigned nx = k.max_pt.x() - k.min_pt.y() + 1;
-					unsigned ny = k.max_pt.y() - k.min_pt.y() + 1;
-					vnl_vector<double> neighborhood(nx*ny);
+        //iterate through the kernels and buld the feature
+        //vector for this 3d point and view
 
-					//build this neighborhood for this kernel
-					for( unsigned i = 0;
-							i < k.locs.size(); ++i )
-					{
-						int x = img_x + k.locs[i].x();
-						int y = img_y + k.locs[i].y();
+        vnl_vector<double> feature_vector(filenames.size());
 
-						//check if pixel index is within bounds
-						//else pad with zeros
-						if( x > int(0) && y > int(0) )
-							if( unsigned(x) < ni && unsigned(y) < nj )
-								neighborhood[i] = curr_img(x,y);
-						else
-							neighborhood[i] = double(0.0);
+        for ( k_itr = filenames.begin();
+              k_itr != k_end; ++k_itr )
+        {
+          kernel k = kernel_map[*k_itr];
 
-						double f = dot_product(k.w,neighborhood);
+          unsigned nx = k.max_pt.x() - k.min_pt.y() + 1;
+          unsigned ny = k.max_pt.y() - k.min_pt.y() + 1;
+          vnl_vector<double> neighborhood(nx*ny);
 
-						if(*k_itr == "I0")
-							feature_vector[0] = f;
-						else if(*k_itr == "Ix")
-							feature_vector[1] = f;
-						else if(*k_itr == "Iy")
-							feature_vector[2] = f;
-						else if(*k_itr == "Ixx")
-							feature_vector[3] = f;
-						else if(*k_itr == "Iyy")
-							feature_vector[4] = f;
-						else if(*k_itr == "Ixy")
-							feature_vector[5] = f;
+          //build this neighborhood for this kernel
+          for ( unsigned i = 0;
+                i < k.locs.size(); ++i )
+          {
+            int x = img_x + k.locs[i].x();
+            int y = img_y + k.locs[i].y();
 
-					}//end kernel loc iteration
-				}//end filename iteration
+            //check if pixel index is within bounds
+            //else pad with zeros
+            if ( x > int(0) && y > int(0) )
+              if ( unsigned(x) < ni && unsigned(y) < nj )
+                neighborhood[i] = curr_img(x,y);
+            else
+              neighborhood[i] = double(0.0);
 
-				view_feature_map.insert(vcl_make_pair(view_number,feature_vector));
+            double f = dot_product(k.w,neighborhood);
 
-			}//end if !bad_cams.count(view_number)
+            if (*k_itr == "I0")
+              feature_vector[0] = f;
+            else if (*k_itr == "Ix")
+              feature_vector[1] = f;
+            else if (*k_itr == "Iy")
+              feature_vector[2] = f;
+            else if (*k_itr == "Ixx")
+              feature_vector[3] = f;
+            else if (*k_itr == "Iyy")
+              feature_vector[4] = f;
+            else if (*k_itr == "Ixy")
+              feature_vector[5] = f;
 
-		}//end num_views iteration
+          }//end kernel loc iteration
+        }//end filename iteration
 
-		bundler_features_sptr->pt_view_feature_map.insert(
-			vcl_make_pair(bundler_pt, view_feature_map) );
+        view_feature_map.insert(vcl_make_pair(view_number,feature_vector));
 
-	}//end num_pts iteration
+      }//end if !bad_cams.count(view_number)
 
-	pro.set_output_val(0, bundler_features_sptr);
+    }//end num_views iteration
 
-	return true;
+    bundler_features_sptr->pt_view_feature_map.insert(
+      vcl_make_pair(bundler_pt, view_feature_map) );
+
+  }//end num_pts iteration
+
+  pro.set_output_val(0, bundler_features_sptr);
+
+  return true;
 
 }//end bvpl_compute_bundler_features_2d_process
