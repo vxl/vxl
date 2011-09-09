@@ -5,6 +5,7 @@ VERSION := 1.0
 
 SOURCES += bvpl_corner_pair_finder.cxx
 SOURCES += bvpl_corner_search_functor.cxx
+SOURCES += bvpl_bundler_features_2d.cxx
 
 SUBDIRS += io
 
