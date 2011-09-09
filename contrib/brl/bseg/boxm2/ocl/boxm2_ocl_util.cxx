@@ -168,12 +168,19 @@ vil_image_view_base_sptr boxm2_ocl_util::prepare_input_image(vil_image_view_base
   if (loaded_image->nplanes() == 1)
   {
     vcl_cout<<"Preparing grey scale image"<<vcl_endl;
-    vil_image_view<float>* floatimg = new vil_image_view<float>(loaded_image->ni(), loaded_image->nj(), 1);
-    if (vil_image_view<vxl_byte> *img_byte = dynamic_cast<vil_image_view<vxl_byte>*>(loaded_image.ptr()))
+    
+    //preapre floatimg for stretched img
+    vil_image_view<float>* floatimg
+    if (vil_image_view<vxl_byte> *img_byte = dynamic_cast<vil_image_view<vxl_byte>*>(loaded_image.ptr())) 
+    {
+        floatimg = new vil_image_view<float>(loaded_image->ni(), loaded_image->nj(), 1);
         vil_convert_stretch_range_limited(*img_byte, *floatimg, vxl_byte(0), vxl_byte(255), 0.0f, 1.0f);
-    else if (vil_image_view<unsigned short> *img_byte = dynamic_cast<vil_image_view<unsigned short>*>(loaded_image.ptr()))
+    }
+    else if (vil_image_view<unsigned short> *img_byte = dynamic_cast<vil_image_view<unsigned short>*>(loaded_image.ptr())) 
+    {
+        floatimg = new vil_image_view<float>(loaded_image->ni(), loaded_image->nj(), 1);
         vil_convert_stretch_range_limited(*img_byte, *floatimg,(unsigned short)30500,(unsigned short)32500,  0.0f, 1.0f); // hardcoded to be fixed.
-        //vil_convert_stretch_range(*img_byte, *floatimg,  0.0f, 1.0f); // hardcoded to be fixed.
+    }
     else if (vil_image_view<float> *img_float = dynamic_cast<vil_image_view<float>*>(loaded_image.ptr()))
     {
         return vil_image_view_base_sptr(img_float);
