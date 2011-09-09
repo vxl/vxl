@@ -30,7 +30,7 @@
 namespace boxm2_ocl_change_detection_process_globals
 {
   const unsigned n_inputs_ = 6;
-  const unsigned n_outputs_ = 1;
+  const unsigned n_outputs_ = 2;
   vcl_size_t lthreads[2]={8,8};
 
   static vcl_map<vcl_string,vcl_vector<bocl_kernel*> > kernels;
@@ -100,7 +100,8 @@ bool boxm2_ocl_change_detection_process_cons(bprb_func_process& pro)
   // process has 1 output:
   // output[0]: scene sptr
   vcl_vector<vcl_string>  output_types_(n_outputs_);
-  output_types_[0] = "vil_image_view_base_sptr";
+  output_types_[0] = "vil_image_view_base_sptr";  //prob of change image
+  output_types_[1] = "vil_image_view_base_sptr";  //Red Green change image
 
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 }
@@ -159,7 +160,7 @@ bool boxm2_ocl_change_detection_process(bprb_func_process& pro)
     return false;
   }
 
-//: create a command queue.
+  //: create a command queue.
   int status=0;
   cl_command_queue queue = clCreateCommandQueue(device->context(),*(device->device_id()),
                                                 CL_QUEUE_PROFILING_ENABLE,&status);
@@ -251,6 +252,7 @@ bool boxm2_ocl_change_detection_process(bprb_func_process& pro)
   boxm2_ocl_util::set_bit_lookup(lookup_arr);
   bocl_mem_sptr lookup=new bocl_mem(device->context(), lookup_arr, sizeof(cl_uchar)*256, "bit lookup buffer");
   lookup->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
+  
   //For each ID in the visibility order, grab that block
   vcl_vector<boxm2_block_id> vis_order = scene->get_vis_blocks(  (vpgl_perspective_camera<double>*) cam.ptr());
   vcl_vector<boxm2_block_id>::iterator id;
@@ -313,14 +315,29 @@ bool boxm2_ocl_change_detection_process(bprb_func_process& pro)
 
   // read out expected image
   change_image->read_to_buffer(queue);
-  vil_image_view<float>* change_img_out=new vil_image_view<float>(ni,nj);
 
   vcl_cout<<"Change Detection GPU Time: " << gpu_time << " ms" << vcl_endl;
+  
 
+  //store change image
+  vil_image_view<float>* change_img_out=new vil_image_view<float>(ni,nj);
   for (unsigned c=0;c<nj;c++)
     for (unsigned r=0;r<ni;r++)
       (*change_img_out)(r,c)=change_image_buff[c*cl_ni+r];
+      
+  //store rgb change image
+  vil_image_view_base_sptr rgb_sptr =  new vil_image_view<vxl_byte>(ni,nj, 4); 
+  vil_image_view<vxl_byte>* change_rgb_out = (vil_image_view<vxl_byte>*) rgb_sptr.ptr(); 
+  for (unsigned c=0; c<nj; c++) {
+    for (unsigned r=0; r<ni; r++) {
+      (*change_rgb_out)(r,c,0) = (vxl_byte) (change_image_buff[c*cl_ni+r] * 255.0f); 
+      (*change_rgb_out)(r,c,1) = (vxl_byte) ((*img_view)(r,c) * 255.0f); 
+      (*change_rgb_out)(r,c,2) = (vxl_byte) 0; 
+      (*change_rgb_out)(r,c,3) = (vxl_byte) 255; 
+    }
+  }
 
+  //cleanup
   delete [] change_image_buff;
   delete [] change_exp_image_buff;
   delete [] vis_buff;
@@ -331,5 +348,6 @@ bool boxm2_ocl_change_detection_process(bprb_func_process& pro)
   i=0;
   // store scene smaprt pointer
   pro.set_output_val<vil_image_view_base_sptr>(i++, change_img_out);
+  pro.set_output_val<vil_image_view_base_sptr>(i++, rgb_sptr);
   return true;
 }
