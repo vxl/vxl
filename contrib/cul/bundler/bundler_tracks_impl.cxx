@@ -39,13 +39,13 @@ class feature_adder
 
         bundler_inters_feature_sptr f(
             new bundler_inters_feature(
-                row, 
-                col, 
+                row,
+                col,
                 lkp->descriptor().as_vector(),
-                image, 
+                image,
                 image->features.size()
             )
-        ); 
+        );
 
         // Insert this feature into the feature set.
         image->features.push_back(f);
@@ -337,16 +337,15 @@ static void create_new_track(
         vcl_vector<bundler_inters_match_set>::const_iterator match;
         for (match = matches.begin(); match != matches.end(); match++) {
             for (int i = 0; i < match->num_features(); i++) {
-
                 if (match->matches[i].first == curr &&
-                    !match->matches[i].second->visited){
-
+                    !match->matches[i].second->visited)
+                {
                     match->matches[i].second->visited = true;
                     feature_stack.push(match->matches[i].second);
-
-                } else if (match->matches[i].second == curr &&
-                         !match->matches[i].first->visited) {
-
+                }
+                else if (match->matches[i].second == curr &&
+                         !match->matches[i].first->visited)
+                {
                     match->matches[i].first->visited = true;
                     feature_stack.push(match->matches[i].first);
                 }
@@ -392,8 +391,8 @@ void bundler_tracks_impl_chain_matches::operator ()(
 {
     vcl_vector<bundler_inters_match_set>::const_iterator match;
     for (match = matches.begin(); match != matches.end(); match++) {
-        for (int i = 0; i < match->num_features(); i++) {
-
+        for (int i = 0; i < match->num_features(); i++)
+        {
             assert(match->matches[i].first->visited ==
                    match->matches[i].second->visited);
 
@@ -403,8 +402,8 @@ void bundler_tracks_impl_chain_matches::operator ()(
             // If we have not visited one of the sides, then we have
             // found a part of a new connected component, so we should
             // start the DFS search here.
-            if ( ! match->matches[i].first->visited ) {
-
+            if ( ! match->matches[i].first->visited )
+            {
                 bundler_inters_track_sptr new_track(
                     new bundler_inters_track);
 
@@ -429,14 +428,13 @@ void bundler_tracks_impl_chain_matches::operator ()(
     vcl_vector<bundler_inters_feature_sptr> to_remove;
 
     vcl_vector<bundler_inters_track_sptr>::iterator t;
-    for (t = tracks.begin(); t != tracks.end(); ++t) {
-
+    for (t = tracks.begin(); t != tracks.end(); ++t)
+    {
         // Look at every pair of points.
-        for (int i = 0; i < (*t)->points.size(); ++i) {
+        for (unsigned int i = 0; i < (*t)->points.size(); ++i) {
             bool remove_i = false;
-    
-            for (int j = i+1; j < (*t)->points.size(); ++j) {
 
+            for (unsigned int j = i+1; j < (*t)->points.size(); ++j) {
                 // If we find a pair in a track that comes from the same
                 // image, remove them both.
                 if ((*t)->points[i]->image == (*t)->points[j]->image) {
@@ -447,7 +445,7 @@ void bundler_tracks_impl_chain_matches::operator ()(
 
             // If we've found at least one other bad feature,
             // remove the current feature too.
-            if( remove_i ) {
+            if ( remove_i ) {
                 to_remove.push_back((*t)->points[i]);
             }
         }

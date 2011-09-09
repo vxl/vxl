@@ -64,7 +64,7 @@ static void test_tracks(int argc, char** argv)
 
         Assert("Observed is false", !(*trk_it)->observed);
 
-        for (int i = 0; i < (*trk_it)->points.size(); ++i) {
+        for (unsigned int i = 0; i < (*trk_it)->points.size(); ++i) {
             TEST("The tracks' points refer to the correct track.",
                  (*trk_it)->points[i]->track,
                  *trk_it);
@@ -124,13 +124,13 @@ static void test_tracks(int argc, char** argv)
     for (m = recon.match_sets.begin();
          m != recon.match_sets.end(); ++m)
     {
-        for (int i = 0; i < m->num_features(); ++i) {
-
+        for (int i = 0; i < m->num_features(); ++i)
+        {
             Assert("Anything in a matched pair has a track (first).",
-                m->matches[i].first->track != NULL);
+                   m->matches[i].first->track != NULL);
 
             Assert("Anything in a matched pair has a track (second).",
-                m->matches[i].second->track != NULL);
+                   m->matches[i].second->track != NULL);
 
             TEST("A pair of matched features is always in the same track.",
                  m->matches[i].first->track, m->matches[i].second->track);
