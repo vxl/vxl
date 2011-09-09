@@ -113,7 +113,7 @@ bool bvpl_compute_bundler_features_2d_process( bprb_func_process& pro )
   vcl_string kernel_dir    = pro.get_input<vcl_string>(i++);
 
   //------ PARSE BAD CAMERAS --------
-  vcl_ifstream bcfile( bad_cam_file );
+  vcl_ifstream bcfile( bad_cam_file.c_str() );
 
   if ( !bcfile )
   {
@@ -161,7 +161,7 @@ bool bvpl_compute_bundler_features_2d_process( bprb_func_process& pro )
   for ( k_itr = filenames.begin();
         k_itr != k_end; ++k_itr )
   {
-    vcl_ifstream kernel_file(kernel_dir + "/" + *k_itr + ".txt");
+    vcl_ifstream kernel_file((kernel_dir + "/" + *k_itr + ".txt").c_str());
 
     if ( !kernel_file.good() )
     {
@@ -202,7 +202,7 @@ bool bvpl_compute_bundler_features_2d_process( bprb_func_process& pro )
   }//end kernel file iteration
 
   //------ READING & PROCESSING BUNDLER FILE --------
-  vcl_ifstream bfile(bundlerfile);
+  vcl_ifstream bfile(bundlerfile.c_str());
 
   if (!bfile)
   {
@@ -344,9 +344,9 @@ bool bvpl_compute_bundler_features_2d_process( bprb_func_process& pro )
 
             //check if pixel index is within bounds
             //else pad with zeros
-            if ( x > int(0) && y > int(0) )
-              if ( unsigned(x) < ni && unsigned(y) < nj )
-                neighborhood[i] = curr_img(x,y);
+            if ( x > 0 && y > 0 &&
+                 (unsigned int)x < ni && (unsigned int)y < nj )
+              neighborhood[i] = curr_img(x,y);
             else
               neighborhood[i] = double(0.0);
 
