@@ -23,7 +23,8 @@ SOURCES += processes/util/bvpl_pair_to_float_process.cxx
 SOURCES += processes/util/bvpl_find_pairs_process.cxx
 SOURCES += processes/util/bvpl_convert_pair_to_hue_process.cxx
 SOURCES += processes/util/bvpl_load_pair_grid_process.cxx
-SOURCES += processes/bvpl_compute_bundler_features_2d_process.cxx
+SOURCES += processes/bvpl_bundler_features_2d_write_txt_process.cxx
+SOURCES += processes/bvpl_bundler_features_2d_compute_process.cxx
 
 #######################################
 include ${VXLROOT}/config/top-params.mk
