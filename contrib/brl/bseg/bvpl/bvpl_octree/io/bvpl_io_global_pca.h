@@ -1,7 +1,6 @@
-// This is bvpl_io_global_pcas.h
+// This is brl/bseg/bvpl/bvpl_octree/io/bvpl_io_global_pca.h
 #ifndef bvpl_io_global_pca_h
 #define bvpl_io_global_pca_h
-
 //:
 // \file
 // \brief Binary IO for bvpl_global_pca_125. Not implemented, only declared so it can be stored in the database

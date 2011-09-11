@@ -1,7 +1,6 @@
-// This is bvpl_io_global_cornerss.h
+// This is brl/bseg/bvpl/bvpl_octree/io/bvpl_io_global_corners.h
 #ifndef bvpl_io_global_cornerss_h
 #define bvpl_io_global_cornerss_h
-
 //:
 // \file
 // \brief Binary IO for bvpl_global_corners_125. Not implemented, only declared so it can be stored in the database
