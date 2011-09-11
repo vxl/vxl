@@ -150,7 +150,13 @@ SOURCE=.\processes/util/bvpl_convert_pair_to_hue_process.cxx
 SOURCE=.\processes/util/bvpl_load_pair_grid_process.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\processes/bvpl_compute_bundler_features_2d_process.cxx
+SOURCE=.\processes/bvpl_bundler_features_2d_write_txt_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/bvpl_bundler_features_2d_compute_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/brdb_value_t+bvpl_bundler_features_2d_sptr-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/brdb_value_t+bvpl_corner_pairs_sptr-.cxx
