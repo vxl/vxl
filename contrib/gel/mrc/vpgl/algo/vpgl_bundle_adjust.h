@@ -64,6 +64,23 @@ class vpgl_bundle_adjust
                      vcl_vector<vgl_point_3d<double> >& world_points);
 
   //: Bundle Adjust
+  //
+  // \param mask should have the same number of entries as \param cameras, 
+  // and each entry of \param mask should be the same size as 
+  // \param world_points. mask[i][j] is true if point j is visible from 
+  // camera i
+  //
+  // \param image_points and is a linear list of the 2D locations of the 
+  // 3D points as seen by the cameras. There is one image point for every 
+  // true in \param mask. The following piece of code shows the structure 
+  // of \param image_points
+  // 
+  // for( int c = 0; c < num_cameras; c++ ){
+  //   for( int dp = 0; dp < num_world_points; dp++ ){
+  //     if( mask[c][dp] )
+  //       img_points.push_back( all_image_points[c*num_world_points+dp] );
+  //   }
+  // }
   bool optimize(vcl_vector<vpgl_perspective_camera<double> >& cameras,
                 vcl_vector<vgl_point_3d<double> >& world_points,
                 const vcl_vector<vgl_point_2d<double> >& image_points,
