@@ -101,7 +101,6 @@ struct bundler_inters_image : public vbl_ref_count
 // A pair of images, and the features for
 // those images. An instance of this type represents a container that
 // holds two images whose features should be matched.
-// TODO: kill this.
 struct bundler_inters_image_pair
 {
     bundler_inters_image_sptr f1;

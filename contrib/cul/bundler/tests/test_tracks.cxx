@@ -7,9 +7,26 @@
 #include <vcl_string.h>
 #include <vcl_iomanip.h>
 
+
+static double dist_sq(
+    vnl_vector<double> const& side1,
+    vnl_vector<double> const& side2)
+{
+    double d = 0;
+
+    for (unsigned int i = 0; i < side1.size(); ++i) {
+        const double diff = side1[i] - side2[i];
+        d += diff*diff;
+    }
+
+    return d;
+}
+
 static const char* IMG_PATH = "contrib/cul/bundler/tests/test_data";
 
 static const int NUM_IMGS = 11;
+
+static const double TOL_SQ = 1.0;
 
 static void test_tracks(int argc, char** argv)
 {
@@ -83,7 +100,13 @@ static void test_tracks(int argc, char** argv)
                     (*trk_it)->points[j]->image;
 
                 Assert("Features in a track come from different images.",
-                       !images_match);
+                    !images_match);
+
+                TEST_NEAR("Features in a track are 'close' to each other.",
+                    dist_sq( 
+                        (*trk_it)->points[i]->descriptor, 
+                        (*trk_it)->points[j]->descriptor), 0, 
+                    TOL_SQ);
             }
         }
     }
@@ -95,7 +118,11 @@ static void test_tracks(int argc, char** argv)
     for (fs_it = recon.feature_sets.begin();
          fs_it != recon.feature_sets.end(); ++fs_it)
     {
-        for (unsigned int i = 0; i < (*fs_it)->features.size(); ++i)
+
+        Assert("Nothing thinks it is in the reconstruction yet.",
+            ! (*fs_it)->in_recon);
+
+        for (int i = 0; i < (*fs_it)->features.size(); ++i)
         {
             Assert("Visited is false",
                    !(*fs_it)->features[i]->visited );
@@ -108,15 +135,19 @@ static void test_tracks(int argc, char** argv)
                  (*fs_it)->features[(*fs_it)->features[i]->index_in_image],
                  (*fs_it)->features[i]);
 
-            #if 0
-            //Test that all features in an image come from different tracks.
-            for (int j = i+1; j < (*fs_it)->features.size(); ++j) {
-                Assert(
-                    "Features in an image come from different tracks.",
-                    (*fs_it)->features[i]->track !=
-                        (*fs_it)->features[j]->track);
+
+            // Test that all features in an image come from different 
+            // tracks, unless this feature doesn't have a track. A feature
+            // wouldn't have a track if it is unmatched, so it views a 
+            // 3D point that no other image contains.
+            if( (*fs_it)->features[i]->track != NULL) {
+                for (int j = i+1; j < (*fs_it)->features.size(); ++j) {
+                    Assert(
+                        "Features in an image come from different tracks.",
+                        (*fs_it)->features[i]->track !=
+                            (*fs_it)->features[j]->track);
+                }
             }
-            #endif
         }
     }
 

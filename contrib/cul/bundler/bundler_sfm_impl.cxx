@@ -28,7 +28,7 @@ static inline vpgl_calibration_matrix<double> create_k(
     principal_point.x() = img->source->ni() / 2.0;
     principal_point.y() = img->source->nj() / 2.0;
 
-    return
+    return 
         vpgl_calibration_matrix<double>(img->focal_length, principal_point);
 }
 
@@ -50,7 +50,7 @@ bool bundler_sfm_impl_create_initial_recon::can_be_initial_recon(
 bool bundler_sfm_impl_create_initial_recon::operator()(
     bundler_inters_reconstruction &recon)
 { 
-   const double t =
+    const double t =
         settings.inlier_threshold_homography *
         settings.inlier_threshold_homography;
 
@@ -86,6 +86,7 @@ bool bundler_sfm_impl_create_initial_recon::operator()(
         return false;
     }
 
+    assert(can_be_initial_recon(*best_match));
 
     //------------------------------------------------------------------
     // We have the best match, so create two calibration matrices for
@@ -123,11 +124,10 @@ bool bundler_sfm_impl_create_initial_recon::operator()(
     // Get the two cameras.
 
     // Set the right camera to be have no translation or rotation.
-    vgl_point_3d<double> camera_center_1(0, 0, 0);
-    vgl_rotation_3d<double> rotation_1(0, 0, 0);
-
     best_match->image1->camera =
-        vpgl_perspective_camera<double>(k1, camera_center_1, rotation_1);
+        vpgl_perspective_camera<double>();
+
+    best_match->image1->camera.set_calibration(k1);
 
 
     // Get two normalized (focal plane) coordinates so that we can
@@ -155,6 +155,8 @@ bool bundler_sfm_impl_create_initial_recon::operator()(
         bundler_inters_feature_sptr f1 = best_match->matches[i].first;
         bundler_inters_feature_sptr f2 = best_match->matches[i].second;
 
+        assert(f1->image != f2->image);
+
         // Get the track these both belong to.
         bundler_inters_track_sptr &track =
             best_match->matches[i].first->track;
@@ -174,7 +176,11 @@ bool bundler_sfm_impl_create_initial_recon::operator()(
         track->observed = true;
 
         // Find the world point given these two image points
-        bundler_utils_triangulate_points(track);
+        track->world_point = triangulate_3d_point<double>(
+            f1->image->camera,
+            f1->point,
+            f2->image->camera,
+            f2->point);
     }
 
     return true;

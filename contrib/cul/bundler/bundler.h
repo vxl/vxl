@@ -5,8 +5,8 @@
 //       visibility matrix.
 //       check angle for adding new points.
 //       focal length estimation.
-//       get rid of bundler_inters_match_pair, or whatever.
 //       the lens distortion stuff.
+//
 //       round of bundle adjustment after adding image, new image fixed.
 //       deal with color images.
 //

@@ -58,9 +58,6 @@ class feature_adder
 
 // Features detect implementation. Uses SIFT to find the features and
 // descriptors.
-//
-// \todo Need to correctly allow for rgb images. Possibly involves
-//   modifying bapl instead of this routine.
 bundler_inters_image_sptr bundler_tracks_impl_detect_sift::operator ()(
     const vil_image_resource_sptr &source_image,
     const double exif_focal_len)
