@@ -31,6 +31,7 @@ enum boxm2_data_type
   BOXM2_AUX1,
   BOXM2_AUX2,
   BOXM2_AUX3,
+  BOXM2_FLOAT8,
   BOXM2_GAUSS_GREY,
   BOXM2_UNKNOWN
 };
@@ -149,6 +150,15 @@ class boxm2_data_traits<BOXM2_AUX>
   static vcl_string prefix(const vcl_string& identifier = "")
   { if (!identifier.size()) return "aux"; else return "aux_"+identifier; }
 };
+template<>
+class boxm2_data_traits<BOXM2_FLOAT8>
+{
+ public:
+  typedef vnl_vector_fixed<float, 8> datatype;
+  static vcl_size_t datasize() { return sizeof(datatype); }
+  static vcl_string prefix(const vcl_string& identifier = "")
+  { if (!identifier.size()) return "float8"; else return "float8_"+identifier; }
+};
 
 template<>
 class boxm2_data_traits<BOXM2_AUX0>
@@ -246,6 +256,8 @@ class boxm2_data_info
       return boxm2_data_traits<BOXM2_AUX3>::datasize();
     if (prefix.find(boxm2_data_traits<BOXM2_AUX>::prefix()) != vcl_string::npos)
       return boxm2_data_traits<BOXM2_AUX>::datasize();
+    if (prefix == boxm2_data_traits<BOXM2_FLOAT8>::prefix())
+      return boxm2_data_traits<BOXM2_FLOAT8>::datasize();
 
     if (prefix.find(boxm2_data_traits<BOXM2_INTENSITY>::prefix()) != vcl_string::npos)
       return boxm2_data_traits<BOXM2_INTENSITY>::datasize();
