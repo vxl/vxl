@@ -1,6 +1,7 @@
 #include <testlib/testlib_test.h>
 
 #include <vpgl/algo/vpgl_triangulate_points.h>
+#include <vpgl/vpgl_calibration_matrix.h>
 
 static const vgl_point_3d<double> GOAL(1.0, 1.0, 1.0);
 static const double TOL = .001;
@@ -13,7 +14,12 @@ static void add_pt_and_cam(
     vcl_vector<vgl_point_2d<double> > &points,
     vcl_vector<vpgl_perspective_camera<double> > &cameras)
 {
+    vpgl_calibration_matrix<double> k;
+    k.set_focal_length(640);
+    k.set_principal_point(vgl_point_2d<double>(20,20));
+
     vpgl_perspective_camera<double> cam;
+    cam.set_calibration(k);
     cam.look_at(pt);
     cam.set_translation(trans);
 

@@ -38,19 +38,22 @@ double vpgl_triangulate_points::triangulate(
         const vnl_double_3x3 &rot =
             cameras[i].get_rotation().as_matrix();
 
+        const vgl_point_2d<double> pt = 
+            cameras[i].get_calibration().map_to_focal_plane(points[i]);
+
         // Set the row for x for this point
-        A.put(2 * i, 0, rot.get(0, 0) - points[i].x() * rot.get(2, 0) );
-        A.put(2 * i, 1, rot.get(0, 1) - points[i].x() * rot.get(2, 1) );
-        A.put(2 * i, 2, rot.get(0, 2) - points[i].x() * rot.get(2, 2) );
+        A.put(2 * i, 0, rot.get(0, 0) - pt.x() * rot.get(2, 0) );
+        A.put(2 * i, 1, rot.get(0, 1) - pt.x() * rot.get(2, 1) );
+        A.put(2 * i, 2, rot.get(0, 2) - pt.x() * rot.get(2, 2) );
 
         // Set the row for y for this point
-        A.put(2*i+1, 0, rot.get(1, 0) - points[i].y() * rot.get(2, 0) );
-        A.put(2*i+1, 1, rot.get(1, 1) - points[i].y() * rot.get(2, 1) );
-        A.put(2*i+1, 2, rot.get(1, 2) - points[i].y() * rot.get(2, 2) );
+        A.put(2*i+1, 0, rot.get(1, 0) - pt.y() * rot.get(2, 0) );
+        A.put(2*i+1, 1, rot.get(1, 1) - pt.y() * rot.get(2, 1) );
+        A.put(2*i+1, 2, rot.get(1, 2) - pt.y() * rot.get(2, 2) );
 
         // Set the RHS row.
-        b[2*i + 0] = trans.z() * points[i].x() - trans.x();
-        b[2*i + 1] = trans.z() * points[i].y() - trans.y();
+        b[2*i + 0] = trans.z() * pt.x() - trans.x();
+        b[2*i + 1] = trans.z() * pt.y() - trans.y();
     }
 
     // Find the least squares result
