@@ -101,7 +101,7 @@ SOURCE=.\bvpl_bundler_features_2d_io.cxx
 SOURCE=.\Templates/vbl_io_smart_ptr+bvpl_corner_pairs-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vbl_io_smart_ptr+bvpl_bundler_feature_2d-.cxx
+SOURCE=.\Templates/vbl_io_smart_ptr+bvpl_bundler_features_2d-.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
