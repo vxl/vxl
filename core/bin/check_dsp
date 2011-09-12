@@ -187,7 +187,6 @@ foreach my $dir (@DIRS)
   {
     next if ($dir =~ m!\bvcl/generic$ !x);
     next if ($fx  =~ m/\b(Resource|StdAfx)\.h$/i);
-    next if ($dir =~ m/\bvbl$/ && $fx =~ m/^vbl_(basic_relation|br_default|br_impl|hash_map)\.(h|txx)$/);
     ++ $hfiles{$fx};
   }
   my %source = ();
