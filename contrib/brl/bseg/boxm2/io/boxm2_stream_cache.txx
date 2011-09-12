@@ -19,10 +19,7 @@ bool boxm2_stream_cache::open_streams(boxm2_stream_cache_datatype_helper_sptr h)
     int cnt = int(numBytes/(float)h->cell_size_);
     if (h->cell_cnt_ < 0) h->cell_cnt_ = cnt;
     else if (h->cell_cnt_ != cnt)
-    {
-        vcl_cout<<i<<" "<<h->cell_cnt_<<" "<<cnt<<vcl_endl;
-        return false;
-    }
+      h->cell_cnt_ = cnt;  // to make it work after a possible refinement of blocks
     if (!strs[i]->open_file(filename.c_str())) {
       vcl_cerr<<"boxm2_stream_cache::get_next cannot open file "<<filename<<'\n';
       throw 0;
