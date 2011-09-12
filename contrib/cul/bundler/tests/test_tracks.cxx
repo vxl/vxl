@@ -103,10 +103,10 @@ static void test_tracks(int argc, char** argv)
                     !images_match);
 
                 TEST_NEAR("Features in a track are 'close' to each other.",
-                    dist_sq( 
-                        (*trk_it)->points[i]->descriptor, 
-                        (*trk_it)->points[j]->descriptor), 0, 
-                    TOL_SQ);
+                          dist_sq(
+                              (*trk_it)->points[i]->descriptor,
+                              (*trk_it)->points[j]->descriptor), 0,
+                          TOL_SQ);
             }
         }
     }
@@ -118,11 +118,10 @@ static void test_tracks(int argc, char** argv)
     for (fs_it = recon.feature_sets.begin();
          fs_it != recon.feature_sets.end(); ++fs_it)
     {
-
         Assert("Nothing thinks it is in the reconstruction yet.",
-            ! (*fs_it)->in_recon);
+               ! (*fs_it)->in_recon);
 
-        for (int i = 0; i < (*fs_it)->features.size(); ++i)
+        for (unsigned int i = 0; i < (*fs_it)->features.size(); ++i)
         {
             Assert("Visited is false",
                    !(*fs_it)->features[i]->visited );
@@ -136,12 +135,12 @@ static void test_tracks(int argc, char** argv)
                  (*fs_it)->features[i]);
 
 
-            // Test that all features in an image come from different 
+            // Test that all features in an image come from different
             // tracks, unless this feature doesn't have a track. A feature
-            // wouldn't have a track if it is unmatched, so it views a 
+            // wouldn't have a track if it is unmatched, so it views a
             // 3D point that no other image contains.
-            if( (*fs_it)->features[i]->track != NULL) {
-                for (int j = i+1; j < (*fs_it)->features.size(); ++j) {
+            if ( (*fs_it)->features[i]->track != NULL) {
+                for (unsigned int j = i+1; j < (*fs_it)->features.size(); ++j) {
                     Assert(
                         "Features in an image come from different tracks.",
                         (*fs_it)->features[i]->track !=

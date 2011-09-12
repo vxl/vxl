@@ -46,7 +46,7 @@ double bundler_utils_triangulate_points(
     vcl_vector<vpgl_perspective_camera<double> > persp_cameras;
     vcl_vector<vgl_point_2d<double> > vgl_points;
 
-    for (int i = 0; i < track->points.size(); ++i) {
+    for (unsigned int i = 0; i < track->points.size(); ++i) {
         if (track->contributing_points[i]){
             vgl_points.push_back(track->points[i]->point);
             persp_cameras.push_back(track->points[i]->image->camera);
