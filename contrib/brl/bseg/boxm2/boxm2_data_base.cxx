@@ -32,8 +32,8 @@ boxm2_data_base::boxm2_data_base(boxm2_block_metadata data, const vcl_string dat
   long num_cells = data.sub_block_num_.x() *
                    data.sub_block_num_.y() *
                    data.sub_block_num_.z() * init_cells_per_tree;
+ 
   vcl_size_t cell_size = boxm2_data_info::datasize(data_type);
-  
   //total buffer length
   buffer_length_ = num_cells * cell_size;
   vcl_cout<<"boxm2_data_base::empty "<<data_type<<" num cells: "
@@ -61,6 +61,13 @@ boxm2_data_base::boxm2_data_base(boxm2_block_metadata data, const vcl_string dat
   }
   else if (data_type == boxm2_data_traits<BOXM2_GAUSS_RGB>::prefix()) {
     vcl_memset(data_buffer_, (vxl_byte) 128, buffer_length_);
+  }
+  else if (data_type == boxm2_data_traits<BOXM2_FLOAT8>::prefix()) {
+      float* floats = (float*) data_buffer_;
+      int buffer_length = (int)(buffer_length_/sizeof(float));
+      for (int i=0; i<buffer_length; ++i) floats[i] = 0.0;
+
+
   }
   else {
     vcl_memset(data_buffer_, 0, buffer_length_);
