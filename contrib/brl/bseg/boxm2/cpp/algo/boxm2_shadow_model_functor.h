@@ -13,7 +13,7 @@ class boxm2_compute_ambient_functor
 public:
     typedef boxm2_data_traits<BOXM2_AUX0>::datatype aux0_datatype;
     typedef boxm2_data_traits<BOXM2_AUX1>::datatype aux1_datatype;
-    typedef boxm2_data_traits<BOXM2_AUX2>::datatype aux1_datatype;
+    typedef boxm2_data_traits<BOXM2_AUX2>::datatype aux2_datatype;
 
     //: "default" constructor
     boxm2_compute_ambient_functor() {}
