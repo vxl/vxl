@@ -13,7 +13,7 @@ SET(boxm2_cpp_algo_sources
     boxm2_change_detection_functor.h
     boxm2_mog3_grey_processor.h       boxm2_mog3_grey_processor.cxx
     boxm2_gauss_grey_processor.h      boxm2_gauss_grey_processor.cxx
-    boxm2_phongs_model_processor.h	  boxm2_phongs_model_processor.cxx
+    boxm2_phongs_model_processor.h    boxm2_phongs_model_processor.cxx
 
     boxm2_data_serial_iterator.h
     boxm2_cast_intensities_functor.h
@@ -23,7 +23,7 @@ SET(boxm2_cpp_algo_sources
     boxm2_ray_probe_functor.h
     boxm2_shadow_model_functor.h
     boxm2_compute_nonsurface_histogram_functor.h
-    boxm2_compute_phongs_model_functor.h 
+    boxm2_compute_phongs_model_functor.h
     boxm2_gauss_grey_processor.h       boxm2_gauss_grey_processor.cxx
     boxm2_batch_opt2_functors.h
     boxm2_batch_opt2_phongs_functors.h
@@ -34,9 +34,9 @@ SET(boxm2_cpp_algo_sources
 AUX_SOURCE_DIRECTORY(Templates boxm2_cpp_algo_sources)
 
 ADD_LIBRARY(boxm2_cpp_algo  ${boxm2_cpp_algo_sources})
-
 TARGET_LINK_LIBRARIES(boxm2_cpp_algo
                       boxm2_cpp boct brdb expatpp vpgl bvgl bsta_algo bsta vil_algo vil vgl_xio vgl vnl_algo vnl vul vbl_io vbl vsl vcl)
 
-SUBDIRS(tests)
-
+IF(BUILD_TESTING)
+  SUBDIRS(tests)
+ENDIF(BUILD_TESTING)
