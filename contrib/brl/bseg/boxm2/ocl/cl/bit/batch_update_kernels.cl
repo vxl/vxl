@@ -31,6 +31,8 @@ typedef struct
   __local  float*  cached_vis;
            float*  ray_vis;
            float*  ray_pre;
+  __constant RenderSceneInfo * linfo; 
+
 } AuxArgs;
 
 //forward declare cast ray (so you can use it)
@@ -99,6 +101,8 @@ aux_previs_main(__constant  RenderSceneInfo    * linfo,
   // BEGIN RAY TRACE
   //----------------------------------------------------------------------------
   AuxArgs aux_args;
+  aux_args.linfo    = linfo; 
+
   aux_args.alpha      = alpha_array;
   aux_args.mog        = mixture_array;
   aux_args.seg_len    = aux_array0;
@@ -123,6 +127,101 @@ aux_previs_main(__constant  RenderSceneInfo    * linfo,
 }
 #endif
 
+#ifdef UPDATE_AUX_DIRECTION
+typedef struct
+{
+  __global int* len;
+  __global int* X;
+  __global int* Y;
+  __global int* Z;
+
+  float xdir;
+  float ydir;
+  float zdir;
+
+  __local  short2* ray_bundle_array;
+  __local  int*    cell_ptrs;
+} AuxArgs;
+
+//forward declare cast ray (so you can use it)
+void cast_ray(int,int,float,float,float,float,float,float,__constant RenderSceneInfo*,
+              __global int4*,local uchar16*,constant uchar *,local uchar *,float*,AuxArgs);
+
+__kernel
+void
+aux_directions_main(__constant  RenderSceneInfo    * linfo,
+                    __global    int4               * tree_array,        // tree structure for each block
+                    __global    int                * aux_array0,        // four aux arrays strung together
+                    __global    int                * aux_array1,        // four aux arrays strung together
+                    __global    int                * aux_array2,        // four aux arrays strung together
+                    __global    int                * aux_array3,        // four aux arrays strung together
+                    __constant  uchar              * bit_lookup,        // used to get data_index
+                    __global    float4             * ray_origins,
+                    __global    float4             * ray_directions,
+                    __global    uint4              * imgdims,           // dimensions of the input image
+                    __global    float              * output,
+                    __local     uchar16            * local_tree,        // cache current tree into local memory
+                    __local     short2             * ray_bundle_array,  // gives information for which ray takes over in the workgroup
+                    __local     int                * cell_ptrs,         // local list of cell_ptrs (cells that are hit by this workgroup
+                    __local     float              * cached_vis,        // cached vis used to sum up vis contribution locally
+                    __local     uchar              * cumsum)            // cumulative sum for calculating data pointer
+{
+  // get local id (0-63 for an 8x8) of this patch
+  uchar llid = (uchar)(get_local_id(0) + get_local_size(0)*get_local_id(1));
+
+  // initialize pre-broken ray information (non broken rays will be re initialized)
+  ray_bundle_array[llid] = (short2) (-1, 0);
+  cell_ptrs[llid] = -1;
+
+  //----------------------------------------------------------------------------
+  // get image coordinates and camera,
+  // check for validity before proceeding
+  //----------------------------------------------------------------------------
+  int i=0,j=0;
+  i=get_global_id(0);
+  j=get_global_id(1);
+
+  // check to see if the thread corresponds to an actual pixel as in some
+  // cases #of threads will be more than the pixels.
+  if (i>=(*imgdims).z || j>=(*imgdims).w || i<(*imgdims).x || j<(*imgdims).y)
+    return;
+
+  barrier(CLK_LOCAL_MEM_FENCE);
+
+  //----------------------------------------------------------------------------
+  // we know i,j map to a point on the image,
+  // BEGIN RAY TRACE
+  //----------------------------------------------------------------------------
+  float4 ray_o = ray_origins[ j*get_global_size(0) + i ];
+  float4 ray_d = ray_directions[ j*get_global_size(0) + i ];
+  float ray_ox, ray_oy, ray_oz, ray_dx, ray_dy, ray_dz;
+  calc_scene_ray_generic_cam(linfo, ray_o, ray_d, &ray_ox, &ray_oy, &ray_oz, &ray_dx, &ray_dy, &ray_dz);
+
+  //----------------------------------------------------------------------------
+  // we know i,j map to a point on the image, have calculated ray
+  // BEGIN RAY TRACE
+  //----------------------------------------------------------------------------
+  AuxArgs aux_args;
+  aux_args.len    = aux_array0;
+  aux_args.X      = aux_array1;
+  aux_args.Y      = aux_array2;
+  aux_args.Z      = aux_array3;
+
+  aux_args.xdir = ray_dx;
+  aux_args.ydir = ray_dy;
+  aux_args.zdir = ray_dz;
+
+  float vis =1.0;
+  aux_args.ray_bundle_array = ray_bundle_array;
+  aux_args.cell_ptrs = cell_ptrs;
+  cast_ray( i, j,
+            ray_ox, ray_oy, ray_oz,
+            ray_dx, ray_dy, ray_dz,
+            linfo, tree_array,                                  //scene info
+            local_tree, bit_lookup, cumsum, &vis, aux_args);    //utility info
+
+}
+#endif
 
 #ifdef CONVERT_AUX
 __kernel void

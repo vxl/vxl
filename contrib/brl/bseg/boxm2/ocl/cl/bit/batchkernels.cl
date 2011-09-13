@@ -19,6 +19,8 @@ typedef struct
 {
   __global int* seg_len;
   __global float * output;
+  __constant RenderSceneInfo * linfo; 
+
 } AuxArgs;
 
 //forward declare cast ray (so you can use it)
@@ -67,6 +69,7 @@ cum_len_main(__constant  RenderSceneInfo    * linfo,
   // BEGIN RAY TRACE
   //----------------------------------------------------------------------------
   AuxArgs aux_args;
+  aux_args.linfo    = linfo; 
   aux_args.seg_len  = aux_array;
   aux_args.output = output;
   cast_ray( i, j,
