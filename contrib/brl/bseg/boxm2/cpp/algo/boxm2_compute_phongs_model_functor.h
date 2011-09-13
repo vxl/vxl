@@ -11,7 +11,7 @@
 #include <bsta/bsta_histogram.h>
 class boxm2_compute_phongs_model_functor
 {
-public:
+  public:
     typedef boxm2_data_traits<BOXM2_FLOAT8>::datatype float8_datatype;
     typedef boxm2_data_traits<BOXM2_AUX0>::datatype aux0_datatype;
     typedef boxm2_data_traits<BOXM2_AUX1>::datatype aux1_datatype;
@@ -21,8 +21,8 @@ public:
     //: "default" constructor
     boxm2_compute_phongs_model_functor() {}
 
-    bool init_data(float sun_elev, 
-                   float sun_azim, 
+    bool init_data(float sun_elev,
+                   float sun_azim,
                    boxm2_stream_cache_sptr str_cache,
                    boxm2_data_base * phongs_model)
     {
@@ -38,14 +38,13 @@ public:
 
     inline bool process_cell(int index)
     {
-
         boxm2_data<BOXM2_FLOAT8>::datatype & phongs_model=phongs_model_data_->data()[index];
         vcl_vector<aux0_datatype>  aux0_raw   = str_cache_->get_next<BOXM2_AUX0>(id_, index);
         vcl_vector<aux1_datatype>  aux1_raw   = str_cache_->get_next<BOXM2_AUX1>(id_, index);
         vcl_vector<aux2_datatype>  aux2_raw   = str_cache_->get_next<BOXM2_AUX2>(id_, index);
         vcl_vector<aux3_datatype>  aux3_raw   = str_cache_->get_next<BOXM2_AUX3>(id_, index);
         for (unsigned m = 0; m < aux0_raw.size(); m++) {
-            if(aux0_raw[m]>1e-10f)
+            if (aux0_raw[m]>1e-10f)
             {
                 aux1_raw[m] /=aux0_raw[m];
                 aux2_raw[m] /=aux0_raw[m];
@@ -75,7 +74,7 @@ public:
         vcl_vector<vnl_double_3>  viewing_dirs;
         for (unsigned i=0;i<Iobs.size();i++)
         {
-            if(Iobs[i] < 0.0 || Iobs[i] > 1.0 )
+            if (Iobs[i] < 0.0 || Iobs[i] > 1.0 )
                 vis[i] = 0.0;
             vnl_double_3 vec(xdir[i],ydir[i],zdir[i]);
             vec = vec.normalize();
@@ -88,7 +87,7 @@ public:
         float sum_prob_densities = 0.0f;
         float sum_weights = 0.0f ;
 
-        for(unsigned i = 0; i < Iobs.size(); i++)
+        for (unsigned i = 0; i < Iobs.size(); i++)
         {
             float val = boxm2_phongs_model_processor::expected_color(pmodel,viewing_dirs[i],sun_elev_,sun_azim_);
             sum_prob_densities += boxm2_phongs_model_processor::prob_density(Iobs[i],val,var) * vis[i];
@@ -100,7 +99,7 @@ public:
         phongs_model[3] = pmodel.normal_elev();
         phongs_model[4] = pmodel.normal_azim();
         phongs_model[5] = var;
-        if(sum_weights > 0.0f)
+        if (sum_weights > 0.0f)
             phongs_model[6] = sum_prob_densities/sum_weights;
         else
             phongs_model[6] = 0.0f;
@@ -108,7 +107,7 @@ public:
         return true;
     }
 
-private:
+  private:
     boxm2_data<BOXM2_FLOAT8>* phongs_model_data_;
     boxm2_stream_cache_sptr str_cache_;
     boxm2_block_id id_;
@@ -116,4 +115,4 @@ private:
     float sun_azim_;
 };
 
-#endif // boxm2_shadow_model_functor_h_
+#endif // boxm2_compute_phongs_model_functor_h_

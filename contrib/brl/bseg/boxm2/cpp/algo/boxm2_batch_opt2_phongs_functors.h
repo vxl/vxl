@@ -6,16 +6,16 @@
 #include <boxm2/cpp/algo/boxm2_cast_ray_function.h>
 #include <boxm2/cpp/algo/boxm2_phongs_model_processor.h>
 #include <boxm2/io/boxm2_stream_cache.h>
-//: compute pre_inf, vis_inf
 
+//: compute pre_inf, vis_inf
 class boxm2_batch_update_phongs_pass1_functor
 {
-public:
+  public:
     //: "default" constructor
     boxm2_batch_update_phongs_pass1_functor() {}
 
-    bool init_data(vcl_vector<boxm2_data_base*> & datas, 
-                   vil_image_view<float>* pre_img, 
+    bool init_data(vcl_vector<boxm2_data_base*> & datas,
+                   vil_image_view<float>* pre_img,
                    vil_image_view<float>* vis_img,
                    float sun_elev,
                    float sun_azim)
@@ -78,7 +78,7 @@ public:
 
         return true;
     }
-private:
+  private:
     boxm2_data<BOXM2_AUX0> * aux0_data_;
     boxm2_data<BOXM2_AUX1> * aux1_data_;
     boxm2_data<BOXM2_ALPHA> * alpha_data_;
@@ -95,15 +95,17 @@ private:
     vil_image_view<float> * pre_img_;
     vil_image_view<float> * vis_img_;
 };
+
+
 //: compute average pre_i, vis_i and post_i for each cell, save the values in aux
 class boxm2_batch_update_opt2_phongs_pass2_functor
 {
-public:
+  public:
     //: "default" constructor
     boxm2_batch_update_opt2_phongs_pass2_functor() {}
 
-    bool init_data(vcl_vector<boxm2_data_base*> & datas, 
-                   vil_image_view<float>* pre_img, 
+    bool init_data(vcl_vector<boxm2_data_base*> & datas,
+                   vil_image_view<float>* pre_img,
                    vil_image_view<float>* vis_img,
                    float sun_elev,
                    float sun_azim,
@@ -119,7 +121,6 @@ public:
         phongs_data_     =new boxm2_data<BOXM2_FLOAT8>(datas[7]->data_buffer(),datas[7]->buffer_length(),datas[7]->block_id());
         aux_data_        =new boxm2_data<BOXM2_AUX>(datas[8]->data_buffer(),datas[8]->buffer_length(),datas[8]->block_id());
 
-        
         pre_img_ = pre_img;
         vis_img_ = vis_img;
 
@@ -143,17 +144,17 @@ public:
         boxm2_data<BOXM2_FLOAT8>::datatype & phongs_model_data = phongs_data_->data()[index];
 
         // compute average intensity for the cell
-        if(aux0 <1e-10f) return true;
+        if (aux0 <1e-10f) return true;
         float mean_obs =aux0/aux1;
         vnl_double_3 view_dir(aux1_view/aux0_view,aux2_view/aux0_view,aux3_view/aux0_view);
         float PI =1.0;
         if (phongs_model_data[5] >0.0)
         {
             brad_phongs_model model(phongs_model_data[0],
-                phongs_model_data[1],
-                phongs_model_data[2],
-                phongs_model_data[3],
-                phongs_model_data[4]);
+                                    phongs_model_data[1],
+                                    phongs_model_data[2],
+                                    phongs_model_data[3],
+                                    phongs_model_data[4]);
             float expI=boxm2_phongs_model_processor::expected_color(model,view_dir,sun_elev_,sun_azim_);
             // compute appearance probability of observation
             float PI=boxm2_phongs_model_processor::prob_density(mean_obs,expI,phongs_model_data[5]);
@@ -163,7 +164,6 @@ public:
         float pre=(*pre_img_)(i,j);
 
         boxm2_data<BOXM2_ALPHA>::datatype alpha=alpha_data_->data()[index];
-
 
         boxm2_data<BOXM2_AUX>::datatype & aux = aux_data_->data()[index];
 
@@ -190,7 +190,7 @@ public:
             pass_prob = 1e-5f;
         }
         aux[2] += vcl_log(pass_prob) * weight/seg_len;
-        aux[3] += weight; 
+        aux[3] += weight;
 
         float temp = vcl_exp(-alpha * seg_len);
         pre += vis*(1-temp)*PI;
@@ -203,7 +203,7 @@ public:
 
         return true;
     }
-private:
+  private:
     boxm2_data<BOXM2_AUX0>  * aux0_data_;
     boxm2_data<BOXM2_AUX1>  * aux1_data_;
     boxm2_data<BOXM2_ALPHA> * alpha_data_;
@@ -220,13 +220,12 @@ private:
     vil_image_view<float> * pre_img_;
     vil_image_view<float> * vis_img_;
     vil_image_view<float> * beta_denom_;
-
 };
 
 
 class boxm2_batch_update_opt2_phongs_functor
 {
-public:
+  public:
     typedef boxm2_data_traits<BOXM2_AUX0>::datatype aux0_datatype;
     typedef boxm2_data_traits<BOXM2_AUX1>::datatype aux1_datatype;
     typedef boxm2_data_traits<BOXM2_AUX>::datatype aux_datatype;
@@ -234,8 +233,8 @@ public:
     //: "default" constructor
     boxm2_batch_update_opt2_phongs_functor() {}
 
-    bool init_data(boxm2_data_base *alph, 
-                   boxm2_data_base *phongs, 
+    bool init_data(boxm2_data_base *alph,
+                   boxm2_data_base *phongs,
                    boxm2_stream_cache_sptr str_cache1,
                    boxm2_stream_cache_sptr str_cache2,
                    float sun_elev,
@@ -262,11 +261,10 @@ public:
         vcl_vector<aux0_datatype> aux2_raw = str_cache1_->get_next<BOXM2_AUX2>(id_, index);
         vcl_vector<aux1_datatype> aux3_raw = str_cache1_->get_next<BOXM2_AUX3>(id_, index);
 
-
         vcl_vector<aux_datatype>  aux  = str_cache2_->get_next<BOXM2_AUX> (id_, index);
 
         for (unsigned m = 0; m < aux0_raw.size(); m++) {
-            if(aux0_raw[m]>1e-10f)
+            if (aux0_raw[m]>1e-10f)
             {
                 aux1_raw[m] /=aux0_raw[m];
                 aux2_raw[m] /=aux0_raw[m];
@@ -296,7 +294,7 @@ public:
         vcl_vector<vnl_double_3>  viewing_dirs;
         for (unsigned i=0;i<Iobs.size();i++)
         {
-            if(Iobs[i] < 0.0 || Iobs[i] > 1.0 ) vis[i] = 0.0;
+            if (Iobs[i] < 0.0 || Iobs[i] > 1.0 ) vis[i] = 0.0;
             vnl_double_3 vec(xdir[i],ydir[i],zdir[i]);
             vec = vec.normalize();
             viewing_dirs.push_back(vec);
@@ -336,7 +334,7 @@ public:
         return true;
     }
 
-private:
+  private:
     boxm2_data<BOXM2_ALPHA> * alpha_data_;
     boxm2_data<BOXM2_FLOAT8>* phongs_data_;
     boxm2_stream_cache_sptr str_cache1_;
@@ -350,13 +348,13 @@ private:
 
 class boxm2_batch_update_nonray_phongs_functor
 {
-public:
+  public:
     typedef boxm2_data_traits<BOXM2_AUX0>::datatype aux0_datatype;
 
     //: "default" constructor
     boxm2_batch_update_nonray_phongs_functor() {}
 
-    bool init_data(boxm2_data_base *alph, 
+    bool init_data(boxm2_data_base *alph,
                    boxm2_data_base *phongs,
                    boxm2_data_base *air,
                    boxm2_data_base *uncertain)
@@ -379,33 +377,30 @@ public:
         float sigma = 0.75;
         float air_model = vcl_exp(entropy_air);
         float ratio = 0.0f;
-        if(air_model> 0.0)
+        if (air_model> 0.0)
            ratio = phongs_model[6]/air_model;
         else
            ratio = phongs_model[6]/1.0;
 
         alpha *= ratio;
-        
-        if(alpha> 2000)
+
+        if (alpha> 2000)
             alpha =2000;
-        else if(alpha<0.01)
+        else if (alpha<0.01)
             alpha =0.01;
 
-        
         uncertain_model = 1/vcl_max(ratio,1/ratio);
-
 
         return true;
     }
 
-private:
+  private:
     boxm2_data<BOXM2_ALPHA> * alpha_data_;
     boxm2_data<BOXM2_FLOAT8>* phongs_data_;
     boxm2_data<BOXM2_AUX0>* air_data_;
     boxm2_data<BOXM2_AUX1>* uncertain_data_;
 
     boxm2_block_id id_;
-
 };
 
-#endif // boxm2_batch_opt2_functors_h_
+#endif // boxm2_batch_opt2_phongs_functors_h_
