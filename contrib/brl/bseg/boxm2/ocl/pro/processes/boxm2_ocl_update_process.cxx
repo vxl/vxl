@@ -102,20 +102,21 @@ bool boxm2_ocl_update_process_cons(bprb_func_process& pro)
   input_types_[0] = "bocl_device_sptr";
   input_types_[1] = "boxm2_scene_sptr";
   input_types_[2] = "boxm2_opencl_cache_sptr";
-  input_types_[3] = "vpgl_camera_double_sptr";
-  input_types_[4] = "vil_image_view_base_sptr";
-  input_types_[5] = "vcl_string";
-  input_types_[6] = "vcl_string";
+  input_types_[3] = "vpgl_camera_double_sptr";      //input camera
+  input_types_[4] = "vil_image_view_base_sptr";     //input image
+  input_types_[5] = "vcl_string";                   //illumination identifier
+  input_types_[6] = "vil_image_view_base_sptr";     //mask image view
 
   // process has 1 output:
   // output[0]: scene sptr
   vcl_vector<vcl_string>  output_types_(n_outputs_);
-
   bool good = pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
-  // in case the 6th input is not set
-  brdb_value_sptr idx = new brdb_value_t<vcl_string>("");
+  
+  // default 6 and 7 inputs
+  brdb_value_sptr idx        = new brdb_value_t<vcl_string>("");
+  brdb_value_sptr empty_mask = new brdb_value_t<vil_image_view_base_sptr>(new vil_image_view<unsigned char>(1,1));
   pro.set_input(5, idx);
-  pro.set_input(6, idx);
+  pro.set_input(6, empty_mask);
   return good;
 }
 
@@ -125,25 +126,44 @@ bool boxm2_ocl_update_process(bprb_func_process& pro)
   vcl_size_t local_threads[2]={8,8};
   vcl_size_t global_threads[2]={8,8};
 
+  //sanity check inputs
   if ( pro.n_inputs() < n_inputs_ ) {
     vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
     return false;
   }
   float transfer_time=0.0f;
   float gpu_time=0.0f;
+  
   //get the inputs
   unsigned i = 0;
-  bocl_device_sptr device= pro.get_input<bocl_device_sptr>(i++);
-  boxm2_scene_sptr scene =pro.get_input<boxm2_scene_sptr>(i++);
-  boxm2_opencl_cache_sptr opencl_cache= pro.get_input<boxm2_opencl_cache_sptr>(i++);
-  vpgl_camera_double_sptr cam= pro.get_input<vpgl_camera_double_sptr>(i++);
-  vil_image_view_base_sptr img =pro.get_input<vil_image_view_base_sptr>(i++);
-  vcl_string ident = pro.get_input<vcl_string>(i++);
-  vcl_string mask_filename = pro.get_input<vcl_string>(i++);
+  bocl_device_sptr         device       = pro.get_input<bocl_device_sptr>(i++);
+  boxm2_scene_sptr         scene        = pro.get_input<boxm2_scene_sptr>(i++);
+  boxm2_opencl_cache_sptr  opencl_cache = pro.get_input<boxm2_opencl_cache_sptr>(i++);
+  vpgl_camera_double_sptr  cam          = pro.get_input<vpgl_camera_double_sptr>(i++);
+  vil_image_view_base_sptr img          = pro.get_input<vil_image_view_base_sptr>(i++);
+  vcl_string               ident        = pro.get_input<vcl_string>(i++);
+  vil_image_view_base_sptr mask_sptr    = pro.get_input<vil_image_view_base_sptr>(i++);
 
+  //catch a "null" mask (not really null because that throws an error)
+  bool use_mask = false;
+  if( mask_sptr->ni() == img->ni() && mask_sptr->nj() == img->nj() ) {
+    vcl_cout<<"Update using mask."<<vcl_endl;
+    use_mask = true;
+  }
+  vil_image_view<unsigned char>* mask_map = 0; 
+  if(use_mask) {
+    mask_map = dynamic_cast<vil_image_view<unsigned char> *>(mask_sptr.ptr());
+    if (!mask_map) {
+      vcl_cout<<"boxm2_update_process:: mask map is not an unsigned char map"<<vcl_endl;
+      return false;
+    } 
+  }
+
+  //cache size sanity check
   long binCache = opencl_cache.ptr()->bytes_in_cache();
   vcl_cout<<"Update MBs in cache: "<<binCache/(1024.0*1024.0)<<vcl_endl;
 
+  //make correct data types are here
   bool foundDataType = false, foundNumObsType = false;
   vcl_string data_type,num_obs_type,options;
   vcl_vector<vcl_string> apps = scene->appearances();
@@ -184,14 +204,16 @@ bool boxm2_ocl_update_process(bprb_func_process& pro)
 
   // create a command queue.
   int status=0;
-  cl_command_queue queue = clCreateCommandQueue(device->context(),*(device->device_id()),
-                                                CL_QUEUE_PROFILING_ENABLE,&status);
-  if (status!=0) return false;
+  cl_command_queue queue = clCreateCommandQueue( device->context(),
+                                                 *(device->device_id()),
+                                                 CL_QUEUE_PROFILING_ENABLE,
+                                                 &status);
+  if (status!=0) 
+    return false;
 
-  vcl_string identifier=device->device_identifier()+options;
   // compile the kernel if not already compiled
-  if (kernels.find(identifier)==kernels.end())
-  {
+  vcl_string identifier=device->device_identifier()+options;
+  if (kernels.find(identifier)==kernels.end()) {
     vcl_cout<<"===========Compiling kernels==========="<<vcl_endl;
     vcl_vector<bocl_kernel*> ks;
     compile_kernel(device,ks,options);
@@ -207,10 +229,10 @@ bool boxm2_ocl_update_process(bprb_func_process& pro)
   global_threads[1]=cl_nj;
 
   //set generic cam
-  cl_float* ray_origins = new cl_float[4*cl_ni*cl_nj];
+  cl_float* ray_origins    = new cl_float[4*cl_ni*cl_nj];
   cl_float* ray_directions = new cl_float[4*cl_ni*cl_nj];
-  bocl_mem_sptr ray_o_buff = new bocl_mem(device->context(), ray_origins, cl_ni*cl_nj * sizeof(cl_float4) , "ray_origins buffer");
-  bocl_mem_sptr ray_d_buff = new bocl_mem(device->context(), ray_directions,  cl_ni*cl_nj * sizeof(cl_float4), "ray_directions buffer");
+  bocl_mem_sptr ray_o_buff = new bocl_mem(device->context(), ray_origins,   cl_ni*cl_nj * sizeof(cl_float4), "ray_origins buffer");
+  bocl_mem_sptr ray_d_buff = new bocl_mem(device->context(), ray_directions,cl_ni*cl_nj * sizeof(cl_float4), "ray_directions buffer");
   boxm2_ocl_camera_converter::compute_ray_image( device, queue, cam, cl_ni, cl_nj, ray_o_buff, ray_d_buff);
 
   //Visibility, Preinf, Norm, and input image buffers
@@ -224,37 +246,36 @@ bool boxm2_ocl_update_process(bprb_func_process& pro)
     pre_buff[i]=0.0f;
     norm_buff[i]=0.0f;
   }
-
+  
+  //determine min/max i and j
   unsigned int min_i=1000000000, max_i=0;
   unsigned int min_j=1000000000, max_j=0;
-
-  if (mask_filename!="")
+  if (use_mask)
   {
-    vil_image_view_base_sptr mask_img=vil_load(mask_filename.c_str());
-    if (vil_image_view<unsigned char> * mask_char
-        =dynamic_cast<vil_image_view<unsigned char> * >(mask_img.ptr()))
-    {
-      for (unsigned int j=0;j<mask_char->nj();++j)
-        for (unsigned int i=0;i<mask_char->ni();++i)
+    for (unsigned int j=0;j<mask_map->nj();++j) {
+      for (unsigned int i=0;i<mask_map->ni();++i)
+      {
+        if ( (*mask_map)(i,j)==0 )
         {
-          if ((*mask_char)(i,j)==0)
-          {
-            if (min_i > i) min_i =i;
-            if (min_j > j) min_j =j;
-            if (max_i < i) max_i =i;
-            if (max_j < j) max_j =j;
-          }
+          if (min_i > i) min_i = i;
+          if (min_j > j) min_j = j;
+          if (max_i < i) max_i = i;
+          if (max_j < j) max_j = j;
         }
+      }
     }
   }
+  
+  //copy input vals into image
   int count=0;
-  for (unsigned int j=0;j<cl_nj;++j)
-    for (unsigned int i=0;i<cl_ni;++i)
-    {
+  for (unsigned int j=0;j<cl_nj;++j) {
+    for (unsigned int i=0;i<cl_ni;++i) {
       input_buff[count] = 0.0f;
-      if (i<img_view->ni() && j< img_view->nj()) input_buff[count]=(*img_view)(i,j);
+      if ( i<img_view->ni() && j< img_view->nj() ) 
+        input_buff[count] = (*img_view)(i,j);
       ++count;
     }
+  }
 
   bocl_mem_sptr in_image=new bocl_mem(device->context(),input_buff,cl_ni*cl_nj*sizeof(float),"input image buffer");
   in_image->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
@@ -274,6 +295,7 @@ bool boxm2_ocl_update_process(bprb_func_process& pro)
   img_dim_buff[1] = 0;
   img_dim_buff[2] = img_view->ni();
   img_dim_buff[3] = img_view->nj();
+  
 #if 0
   if (min_i<max_i && min_j<max_j)
   {
@@ -284,6 +306,7 @@ bool boxm2_ocl_update_process(bprb_func_process& pro)
     vcl_cout<<"ROI "<<min_i<<' '<<min_j<<' '<<max_i<<' '<<max_j<<vcl_endl;
   }
 #endif // 0
+  
   bocl_mem_sptr img_dim=new bocl_mem(device->context(), img_dim_buff, sizeof(int)*4, "image dims");
   img_dim->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
@@ -326,27 +349,22 @@ bool boxm2_ocl_update_process(bprb_func_process& pro)
 
      continue;
     }
+    
+    //set masked values
     vis_image->read_to_buffer(queue);
-    if (mask_filename!="")
+    if (use_mask)
     {
-      vil_image_view_base_sptr mask_img=vil_load(mask_filename.c_str());
-      if (vil_image_view<unsigned char> * mask_char
-          =dynamic_cast<vil_image_view<unsigned char> * >(mask_img.ptr()))
-      {
-        int count = 0;
-        for (unsigned int j=0;j<cl_nj;++j)
-          for (unsigned int i=0;i<cl_ni;++i)
-          {
-            if (i<mask_char->ni() && j<mask_char->nj()  )
-            {
-              if ( (*mask_char)(i,j)>0 )
-              {
-                input_buff[count]=-1.0f;
-                vis_buff[count] =-1.0f;
-              }
+      int count = 0;
+      for (unsigned int j=0;j<cl_nj;++j) {
+        for (unsigned int i=0;i<cl_ni;++i) {
+          if ( i<mask_map->ni() && j<mask_map->nj() ) {
+            if ( (*mask_map)(i,j)>0 ) {
+              input_buff[count] = -1.0f;
+              vis_buff  [count] = -1.0f;
             }
-            ++count;
           }
+          ++count;
+        }
       }
       in_image->write_to_buffer(queue);
       vis_image->write_to_buffer(queue);
@@ -427,7 +445,6 @@ bool boxm2_ocl_update_process(bprb_func_process& pro)
         kern->set_arg( aux0 );
         kern->set_arg( aux1 );
         kern->set_arg( lookup.ptr() );
-        // kern->set_arg( persp_cam.ptr() );
         kern->set_arg( ray_o_buff.ptr() );
         kern->set_arg( ray_d_buff.ptr() );
 
@@ -539,7 +556,7 @@ bool boxm2_ocl_update_process(bprb_func_process& pro)
 
 
   ///debugging save vis, pre, norm images
-#if 1
+#if 0
   int idx = 0;
   vil_image_view<float> vis_view(cl_ni,cl_nj);
   vil_image_view<float> norm_view(cl_ni,cl_nj);

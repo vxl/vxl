@@ -174,7 +174,7 @@ bool boxm2_ocl_probability_of_image_process(bprb_func_process& pro)
 
   // create all buffers
   cl_float cam_buffer[48];
-  boxm2_ocl_util::set_persp_camera(cam, cam_buffer);
+  boxm2_ocl_util::set_persp_camera( (vpgl_perspective_camera<double>*) cam.ptr(), cam_buffer);
   bocl_mem_sptr persp_cam=new bocl_mem(device->context(), cam_buffer, 3*sizeof(cl_float16), "persp cam buffer");
   persp_cam->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
 

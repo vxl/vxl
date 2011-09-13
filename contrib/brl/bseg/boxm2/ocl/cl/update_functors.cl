@@ -2,8 +2,6 @@
 //Update step cell functor::seg_len
 void step_cell_seglen(AuxArgs aux_args, int data_ptr, uchar llid, float d)
 {
-    d *= aux_args.linfo->block_len; 
-  
 #ifdef ATOMIC_OPT
     // --------- faster and less accurate method... --------------------------
     //keep track of cells being hit
@@ -47,8 +45,6 @@ void step_cell_seglen(AuxArgs aux_args, int data_ptr, uchar llid, float d)
 //preinf step cell functor
 void step_cell_preinf(AuxArgs aux_args, int data_ptr, uchar llid, float d)
 {
-    d *= aux_args.linfo->block_len;
-  
     //keep track of cells being hit
     //cell data, i.e., alpha and app model is needed for some passes
     float  alpha    = aux_args.alpha[data_ptr];
@@ -59,15 +55,10 @@ void step_cell_preinf(AuxArgs aux_args, int data_ptr, uchar llid, float d)
     int mean_int = aux_args.mean_obs[data_ptr]; 
     float mean_obs = convert_float(mean_int) / convert_float(cum_int); 
     float cum_len = convert_float(cum_int) / SEGLEN_FACTOR; 
-/*
-    float cum_len  = convert_float(aux_args.seg_len[data_ptr])/SEGLEN_FACTOR;
-    float mean_obs = convert_float(aux_args.mean_obs[data_ptr])/SEGLEN_FACTOR;
-    mean_obs = mean_obs/cum_len;
-*/
 
     //calculate pre_infinity denomanator (shape of image)
-    pre_infinity_opt( d, //*aux_args.linfo->block_len, 
-                      cum_len, 
+    pre_infinity_opt( d*aux_args.linfo->block_len, 
+                      cum_len*aux_args.linfo->block_len, 
                       mean_obs, 
                       aux_args.vis_inf, 
                       aux_args.pre_inf, 
@@ -81,8 +72,6 @@ void step_cell_preinf(AuxArgs aux_args, int data_ptr, uchar llid, float d)
 //bayes step cell functor
 void step_cell_bayes(AuxArgs aux_args, int data_ptr, uchar llid, float d)
 {
-    d *= aux_args.linfo->block_len;
-  
 #ifdef ATOMIC_OPT
     //keep track of cells being hit
     aux_args.cell_ptrs[llid] = data_ptr;
@@ -135,12 +124,6 @@ void step_cell_bayes(AuxArgs aux_args, int data_ptr, uchar llid, float d)
     float weight3   = (1.0f-mixture.s2-mixture.s5);
 
     //load aux data
-/*
-    float cum_len  = convert_float(aux_args.seg_len[data_ptr])/SEGLEN_FACTOR;
-    float mean_obs = convert_float(aux_args.mean_obs[data_ptr])/SEGLEN_FACTOR;
-    mean_obs = mean_obs/cum_len;
-    
-*/
     int cum_int = aux_args.seg_len[data_ptr]; 
     int mean_int = aux_args.mean_obs[data_ptr]; 
     float mean_obs = convert_float(mean_int) / convert_float(cum_int); 
@@ -148,11 +131,11 @@ void step_cell_bayes(AuxArgs aux_args, int data_ptr, uchar llid, float d)
     
 
     float ray_beta, vis_cont;
-    bayes_ratio_ind( d, //*aux_args.linfo->block_len,
+    bayes_ratio_ind( d*aux_args.linfo->block_len,
                      alpha,
                      mixture,
                      weight3,
-                     cum_len,
+                     cum_len*aux_args.linfo->block_len,
                      mean_obs,
                      aux_args.norm,
                      aux_args.ray_pre,

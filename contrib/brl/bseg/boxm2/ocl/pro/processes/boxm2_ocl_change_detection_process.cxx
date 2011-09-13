@@ -331,7 +331,7 @@ bool boxm2_ocl_change_detection_process(bprb_func_process& pro)
   for (unsigned c=0; c<nj; c++) {
     for (unsigned r=0; r<ni; r++) {
       (*change_rgb_out)(r,c,0) = (vxl_byte) (change_image_buff[c*cl_ni+r] * 255.0f); 
-      (*change_rgb_out)(r,c,1) = (vxl_byte) ((*img_view)(r,c) * 255.0f); 
+      (*change_rgb_out)(r,c,1) = (vxl_byte) ( (*img_view)(r,c) * 255.0f/8.0f ); 
       (*change_rgb_out)(r,c,2) = (vxl_byte) 0; 
       (*change_rgb_out)(r,c,3) = (vxl_byte) 255; 
     }

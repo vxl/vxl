@@ -25,7 +25,7 @@
 namespace boxm2_ocl_refine_process_globals
 {
     const unsigned n_inputs_ = 4;
-    const unsigned n_outputs_ = 0;
+    const unsigned n_outputs_ = 1;
     void compile_refine_tree_kernel(bocl_device_sptr device, bocl_kernel * refine_tree_kernel)
     {
         //gather all render sources... seems like a lot for rendering...
@@ -35,7 +35,6 @@ namespace boxm2_ocl_refine_process_globals
         src_paths.push_back(source_dir + "basic/linked_list.cl"); 
         src_paths.push_back(source_dir + "bit/bit_tree_library_functions.cl");
         src_paths.push_back(source_dir + "bit/refine_bit_scene.cl");
-
 
         //create refine trees kernel (refine trees deterministic.  MOG type is necessary
         // to define, but not used by the kernel - using default value here
@@ -93,30 +92,28 @@ bool boxm2_ocl_refine_process_cons(bprb_func_process& pro)
     input_types_[3] = "float";
 
     // process has 1 output:
-    // output[0]: scene sptr
     vcl_vector<vcl_string>  output_types_(n_outputs_);
+    output_types_[0] = "unsigned";  //numcells
     return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 }
 
 bool boxm2_ocl_refine_process(bprb_func_process& pro)
 {
     using namespace boxm2_ocl_refine_process_globals;
-
     if ( pro.n_inputs() < n_inputs_ ) {
         vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
         return false;
     }
-    float transfer_time=0.0f;
-    float gpu_time=0.0f;
+    float    transfer_time = 0.0f;
+    float    gpu_time      = 0.0f;
+    unsigned num_cells     = 0;     //number of cells in the scene after refine
+
     //get the inputs
     unsigned i = 0;
-    bocl_device_sptr device= pro.get_input<bocl_device_sptr>(i++);
-    boxm2_scene_sptr scene =pro.get_input<boxm2_scene_sptr>(i++);
-    boxm2_opencl_cache_sptr opencl_cache= pro.get_input<boxm2_opencl_cache_sptr>(i++);
-    float thresh  =pro.get_input<float>(i++);
-
-
-    vcl_string identifier=device->device_identifier();
+    bocl_device_sptr        device       = pro.get_input<bocl_device_sptr>(i++);
+    boxm2_scene_sptr        scene        = pro.get_input<boxm2_scene_sptr>(i++);
+    boxm2_opencl_cache_sptr opencl_cache = pro.get_input<boxm2_opencl_cache_sptr>(i++);
+    float                   thresh       = pro.get_input<float>(i++);
 
     // create a command queue.
     int status=0;
@@ -127,8 +124,9 @@ bool boxm2_ocl_refine_process(bprb_func_process& pro)
         vcl_cout<<" ERROR in initializing a queue"<<vcl_endl;
         return false;
     }
-    vcl_string tree_identifier=identifier+"tree";
     // compile the kernel
+    vcl_string identifier      = device->device_identifier();
+    vcl_string tree_identifier = identifier + "tree";
     if (kernels.find(tree_identifier)==kernels.end())
     {
         vcl_cout<<"===========Compiling kernels==========="<<vcl_endl;
@@ -264,6 +262,7 @@ bool boxm2_ocl_refine_process(bprb_func_process& pro)
                 <<"  Num Refined: "<<(newDataSize-dataLen)/8<<'\n'
                 <<"  Scan data sizes time: "<<scan_time.all()<<vcl_endl;
         transfer_time += scan_time.all();
+        num_cells += (unsigned) newDataSize; 
         /////////////////////////////////////////////////////////////////////////
 
         /////////////////////////////////////////////////////////////////////////
@@ -357,6 +356,12 @@ bool boxm2_ocl_refine_process(bprb_func_process& pro)
         }
     }
     vcl_cout<<" Refine GPU Time: "<<gpu_time<<", transfer time: "<<transfer_time<<vcl_endl;
+    
+    // clean up cmdqueue
+    clReleaseCommandQueue(queue);
+    
+    //set output
+    pro.set_output_val<unsigned>(0, num_cells);
     return true;
 }
 

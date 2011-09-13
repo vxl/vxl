@@ -376,10 +376,8 @@ update_bit_scene_main(__global RenderSceneInfo  * info,
       int beta_int= aux_array3[gid];
 
       float mean_obs = convert_float(obs_int) / convert_float(len_int);
-      //mean_obs = mean_obs / cum_len;  
-      // cum_len *= info->block_len;
-      float cell_vis  = convert_float(vis_int) / convert_float(len_int);
-      float cell_beta = convert_float(beta_int) / (convert_float(len_int)); //*info->block_len);
+      float cell_vis  = convert_float(vis_int) / (convert_float(len_int)*info->block_len);
+      float cell_beta = convert_float(beta_int) / (convert_float(len_int)* info->block_len);
       float4 aux_data = (float4) (cum_len, mean_obs, cell_beta, cell_vis);
       float4 nobs     = convert_float4(nobs_array[gid]);
       CONVERT_FUNC_FLOAT8(mixture,mixture_array[gid])/NORM;
