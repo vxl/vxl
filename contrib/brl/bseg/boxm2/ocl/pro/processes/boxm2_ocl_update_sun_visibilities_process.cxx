@@ -28,7 +28,7 @@
 
 namespace boxm2_ocl_update_sun_visibilities_process_globals
 {
-  const unsigned n_inputs_  = 7;
+  const unsigned n_inputs_  = 8;
   const unsigned n_outputs_ = 0;
   vcl_size_t local_threads[2]={8,8};
   vcl_size_t global_threads[2]={8,8};
@@ -80,10 +80,11 @@ bool boxm2_ocl_update_sun_visibilities_process_cons(bprb_func_process& pro)
   input_types_[0] = "bocl_device_sptr";
   input_types_[1] = "boxm2_scene_sptr";
   input_types_[2] = "boxm2_opencl_cache_sptr";
-  input_types_[3] = "vpgl_camera_double_sptr";
-  input_types_[4] = "unsigned";
+  input_types_[3] = "boxm2_cache_sptr";
+  input_types_[4] = "vpgl_camera_double_sptr";
   input_types_[5] = "unsigned";
-  input_types_[6] = "vcl_string";
+  input_types_[6] = "unsigned";
+  input_types_[7] = "vcl_string";
 
   // process has 1 output:
   // output[0]: scene sptr
@@ -107,6 +108,7 @@ bool boxm2_ocl_update_sun_visibilities_process(bprb_func_process& pro)
   bocl_device_sptr          device       = pro.get_input<bocl_device_sptr>(argIdx++);
   boxm2_scene_sptr          scene        = pro.get_input<boxm2_scene_sptr>(argIdx++);
   boxm2_opencl_cache_sptr   opencl_cache = pro.get_input<boxm2_opencl_cache_sptr>(argIdx++);
+  boxm2_cache_sptr          cache        = pro.get_input<boxm2_cache_sptr>(argIdx++);
   vpgl_camera_double_sptr   cam          = pro.get_input<vpgl_camera_double_sptr>(argIdx++);
   unsigned                  ni           = pro.get_input<unsigned>(argIdx++);
   unsigned                  nj           = pro.get_input<unsigned>(argIdx++);
@@ -138,8 +140,8 @@ bool boxm2_ocl_update_sun_visibilities_process(bprb_func_process& pro)
   // create all buffers
   cl_float* ray_origins    = new cl_float[4*cl_ni*cl_nj];
   cl_float* ray_directions = new cl_float[4*cl_ni*cl_nj];
-  bocl_mem_sptr ray_o_buff = new bocl_mem(device->context(), ray_origins, cl_ni*cl_nj * sizeof(cl_float4) , "ray_origins buffer");
-  bocl_mem_sptr ray_d_buff = new bocl_mem(device->context(), ray_directions,  cl_ni*cl_nj * sizeof(cl_float4), "ray_directions buffer");
+  bocl_mem_sptr ray_o_buff = new bocl_mem(device->context(), ray_origins    ,  cl_ni*cl_nj * sizeof(cl_float4), "ray_origins buffer");
+  bocl_mem_sptr ray_d_buff = new bocl_mem(device->context(), ray_directions ,  cl_ni*cl_nj * sizeof(cl_float4), "ray_directions buffer");
   boxm2_ocl_camera_converter::compute_ray_image( device, queue, cam, cl_ni, cl_nj, ray_o_buff, ray_d_buff);
 
   //create vis, pre, norm and input image buffers
@@ -230,15 +232,12 @@ bool boxm2_ocl_update_sun_visibilities_process(bprb_func_process& pro)
       //read info back to host memory
       blk->read_to_buffer(queue);
       aux0->read_to_buffer(queue);
-      //      int * aux_out_float= static_cast<int *> (aux0->cpu_buffer());
-
-      //for (unsigned k = 0 ;k<info_buffer->data_buffer_length;k++)
-      //    vcl_cout<<aux_out_float[k]<<" ";
-
       aux1->read_to_buffer(queue);
       vis_image->read_to_buffer(queue);
       cl_output->read_to_buffer(queue);
       clFinish(queue);
+
+
   }
 
 
@@ -274,8 +273,7 @@ bool boxm2_ocl_update_sun_visibilities_process(bprb_func_process& pro)
 
 
       bocl_mem *aux_out  = opencl_cache->get_data(*id, boxm2_data_traits<BOXM2_AUX0>::prefix(prefix_name),
-                                                  info_buffer->data_buffer_length*auxTypeSize,
-                                                  false);
+                                                  info_buffer->data_buffer_length*auxTypeSize,false);
 
       transfer_time += (float) transfer.all();
       kern->set_arg( blk_info );
@@ -298,6 +296,7 @@ bool boxm2_ocl_update_sun_visibilities_process(bprb_func_process& pro)
       blk->read_to_buffer(queue);
       aux_out->read_to_buffer(queue);
       clFinish(queue);
+      cache->remove_data_base(*id,boxm2_data_traits<BOXM2_AUX0>::prefix(prefix_name));
   }
   vcl_cout<<"Gpu time "<<gpu_time<<" transfer time "<<transfer_time<<vcl_endl;
   clReleaseCommandQueue(queue);
