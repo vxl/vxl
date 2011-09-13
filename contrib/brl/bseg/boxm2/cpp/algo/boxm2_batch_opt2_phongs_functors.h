@@ -157,7 +157,7 @@ class boxm2_batch_update_opt2_phongs_pass2_functor
                                     phongs_model_data[4]);
             float expI=boxm2_phongs_model_processor::expected_color(model,view_dir,sun_elev_,sun_azim_);
             // compute appearance probability of observation
-            float PI=boxm2_phongs_model_processor::prob_density(mean_obs,expI,phongs_model_data[5]);
+            PI=boxm2_phongs_model_processor::prob_density(mean_obs,expI,phongs_model_data[5]);
             // was: =boxm2_data_traits<BOXM2_MOG3_GREY>::processor::prob_density(mog3_data_->data()[index], mean_obs);
         }
         float vis=(*vis_img_)(i,j);
@@ -374,7 +374,6 @@ class boxm2_batch_update_nonray_phongs_functor
         boxm2_data<BOXM2_AUX0>::datatype   & entropy_air          =air_data_->data()[index];
         boxm2_data<BOXM2_AUX1>::datatype   & uncertain_model    =uncertain_data_->data()[index];
 
-        float sigma = 0.75;
         float air_model = vcl_exp(entropy_air);
         float ratio = 0.0f;
         if (air_model> 0.0)
