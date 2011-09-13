@@ -74,6 +74,7 @@ class boxm2_ray_app_density_functor
   vcl_vector<float> * app_density_;
   float intensity_;
 };
+
 class boxm2_ray_probe_brdfs_functor
 {
  public:
@@ -109,8 +110,10 @@ class boxm2_ray_probe_brdfs_functor
     abs_depth_->push_back(abs_depth);
     phongs_vars_->push_back(phongs_model[6]);
     alpha_->push_back(alpha);
+#if 0 // unused ?!?
     float sigma = 0.75;
     float prob_density = 1/(vcl_sqrt(2*vnl_math::pi)* sigma)*vcl_exp(-(entropy_air-2.07)*(entropy_air-2.07)/(2*sigma*sigma));
+#endif
     entropy_histo_air_->push_back(vcl_exp(entropy_air));
     return true;
   }
@@ -125,7 +128,6 @@ class boxm2_ray_probe_brdfs_functor
   vcl_vector<float> * alpha_;
   vcl_vector<float> * phongs_vars_;
   vcl_vector<float> * entropy_histo_air_;
-
 };
 
 #endif
