@@ -33,7 +33,7 @@ void step_cell_aux_previs(AuxArgs aux_args, int data_ptr, uchar llid, float d)
     cell_pre = (* aux_args.ray_pre) * d;
 
     //update ray_pre and ray_vis
-    float temp  = exp(-alpha * d);
+    float temp  = exp(-alpha * d * aux_args.linfo->block_len); // blovk_len is multiplied so that alpha is computed with respect to the scale.
     // updated pre                      Omega         *  PI
     (* aux_args.ray_pre) += (* aux_args.ray_vis)*(1.0f-temp)*PI;
     // updated visibility probability
@@ -44,6 +44,26 @@ void step_cell_aux_previs(AuxArgs aux_args, int data_ptr, uchar llid, float d)
     atom_add(&aux_args.pre_array[data_ptr], pre_int);
     int vis_int  = convert_int_rte(cell_vis * SEGLEN_FACTOR);
     atom_add(&aux_args.vis_array[data_ptr], vis_int);
+    //--------------------------------------------------------------------------
+}
+
+#endif // AUX_PREVIS
+#ifdef UPDATE_AUX_DIRECTION
+//bayes step cell functor
+void step_cell_directions(AuxArgs aux_args, int data_ptr, float d)
+{
+    //slow beta calculation ----------------------------------------------------
+    int len_int = convert_int_rte( d * SEGLEN_FACTOR);
+    atom_add(&aux_args.len[data_ptr], len_int);
+
+    int X_int = convert_int_rte(aux_args.xdir*d * SEGLEN_FACTOR);
+    atom_add(&aux_args.X[data_ptr], X_int);
+
+    int Y_int = convert_int_rte(aux_args.ydir*d * SEGLEN_FACTOR);
+    atom_add(&aux_args.Y[data_ptr], Y_int);
+
+    int Z_int = convert_int_rte(aux_args.zdir*d * SEGLEN_FACTOR);
+    atom_add(&aux_args.Z[data_ptr], Z_int);
     //--------------------------------------------------------------------------
 }
 
