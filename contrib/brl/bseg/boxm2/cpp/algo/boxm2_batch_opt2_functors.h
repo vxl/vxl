@@ -42,7 +42,7 @@ class boxm2_batch_update_opt2_pass2_functor
     return true;
   }
 
-  inline bool step_cell(float seg_len,int index,unsigned i,unsigned j)
+  inline bool step_cell(float seg_len,int index,unsigned i,unsigned j, float abs_depth =0.0)
   {
     boxm2_data<BOXM2_AUX0>::datatype & aux0 = aux0_data_->data()[index];
     boxm2_data<BOXM2_AUX1>::datatype & aux1 = aux1_data_->data()[index];

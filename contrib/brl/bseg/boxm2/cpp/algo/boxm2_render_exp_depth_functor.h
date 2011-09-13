@@ -23,7 +23,7 @@ class boxm2_render_exp_depth_functor
     return true;
   }
 
-  inline bool step_cell(float seg_len,int index,unsigned i, unsigned j)
+  inline bool step_cell(float seg_len,int index,unsigned i, unsigned j, float abs_depth=0.0f)
   {
     boxm2_data<BOXM2_ALPHA>::datatype alpha=alpha_data_->data()[index];
     float vis=(*vis_img_)(i,j);

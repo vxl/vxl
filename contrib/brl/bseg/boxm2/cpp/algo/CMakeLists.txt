@@ -12,14 +12,21 @@ SET(boxm2_cpp_algo_sources
     boxm2_refine_block_function.h     boxm2_refine_block_function.cxx
     boxm2_change_detection_functor.h
     boxm2_mog3_grey_processor.h       boxm2_mog3_grey_processor.cxx
+    boxm2_gauss_grey_processor.h      boxm2_gauss_grey_processor.cxx
+    boxm2_phongs_model_processor.h	  boxm2_phongs_model_processor.cxx
+
     boxm2_data_serial_iterator.h
     boxm2_cast_intensities_functor.h
     boxm2_mean_intensities_batch_functor.h
     boxm2_filter_block_function.h     boxm2_filter_block_function.cxx
     boxm2_batch_functors.h
     boxm2_ray_probe_functor.h
+    boxm2_shadow_model_functor.h
+    boxm2_compute_nonsurface_histogram_functor.h
+    boxm2_compute_phongs_model_functor.h 
     boxm2_gauss_grey_processor.h       boxm2_gauss_grey_processor.cxx
     boxm2_batch_opt2_functors.h
+    boxm2_batch_opt2_phongs_functors.h
     boxm2_image_density_functor.h
     boxm2_update_with_shadow_functor.h
     boxm2_merge_block_function.h     boxm2_merge_block_function.cxx

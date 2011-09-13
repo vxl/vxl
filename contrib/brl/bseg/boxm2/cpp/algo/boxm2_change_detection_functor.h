@@ -27,7 +27,7 @@ class boxm2_change_detection_functor
       return true;
   }
 
-  inline bool step_cell(float seg_len,int index,unsigned i, unsigned j)
+  inline bool step_cell(float seg_len,int index,unsigned i, unsigned j, float abs_depth=0.0)
   {
     boxm2_data<BOXM2_ALPHA>::datatype alpha=alpha_data_->data()[index];
     float vis=(*vis_img_)(i,j);
@@ -95,7 +95,7 @@ class boxm2_change_detection_with_uncertainity_functor
     return true;
   }
 
-  inline bool step_cell(float seg_len,int index,unsigned i, unsigned j)
+  inline bool step_cell(float seg_len,int index,unsigned i, unsigned j, float abs_depth)
   {
     boxm2_data<BOXM2_ALPHA>::datatype alpha=alpha_data_->data()[index];
     boxm2_data<BOXM2_MOG3_GREY>::datatype mog3=mog3_data_->data()[index];

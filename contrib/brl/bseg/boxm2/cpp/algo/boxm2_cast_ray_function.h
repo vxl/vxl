@@ -71,6 +71,7 @@ void boxm2_cast_ray_function(vgl_ray_3d<double> & ray_ij,
   if (tfar <= tblock || tfar < 0) {
     return;
   }
+
   //make sure tnear is at least 0...
   tblock = (tblock > 0.0f) ? tblock : 0.0f;
   //make sure tfar is within the last block so texit surpasses it (and breaks from the outer loop)
@@ -153,7 +154,7 @@ void boxm2_cast_ray_function(vgl_ray_3d<double> & ray_ij,
       float d = (t1-ttree) * linfo->block_len;
       ttree = t1;
 
-      functor.step_cell(d,data_offset,i,j);
+      functor.step_cell(d,data_offset,i,j, (ttree + tblock ) * linfo->block_len);
     }
 
    //scale texit back up
@@ -177,11 +178,10 @@ bool cast_ray_per_block(functor_type functor,
   {
     for (unsigned i=roi_ni0;i<roi_ni;++i)
     {
-      if (i%10==0) vcl_cout<<'.'<<vcl_flush;
+      //if (i%10==0) vcl_cout<<'.'<<vcl_flush;
       for (unsigned j=roi_nj0;j<roi_nj;++j)
       {
-        vgl_ray_3d<double> ray_ij = gcam->ray(i,j);//gcam->backproject(i,j);
-
+        vgl_ray_3d<double> ray_ij = gcam->ray(i,j);
         boxm2_cast_ray_function<functor_type>(ray_ij,linfo,blk_sptr,i,j,functor);
       }
     }
