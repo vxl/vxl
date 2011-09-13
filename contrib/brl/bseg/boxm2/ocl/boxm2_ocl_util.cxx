@@ -15,12 +15,17 @@
 
 
 // fills a float buffer (should be 16*3 floats) with a perspective cam to be sent
-void boxm2_ocl_util::set_persp_camera(vpgl_camera_double_sptr& cam, cl_float* persp_cam)
+void boxm2_ocl_util::set_ocl_camera(vpgl_camera_double_sptr& cam, cl_float* ocl_cam)
 {
   if (vpgl_perspective_camera<double>* pcam =
       dynamic_cast<vpgl_perspective_camera<double>* >(cam.ptr()))
   {
-    set_persp_camera(pcam, persp_cam);
+    set_persp_camera(pcam, ocl_cam);
+  }
+  else if( vpgl_proj_camera<double>* pcam =
+      dynamic_cast<vpgl_proj_camera<double>* >(cam.ptr()))
+  {
+    set_proj_camera(pcam, ocl_cam);
   }
   else {
     vcl_cerr << "Error set_persp_camera() : unsupported camera type\n";
@@ -69,7 +74,48 @@ void boxm2_ocl_util::set_persp_camera(vpgl_perspective_camera<double> * pcam, cl
   persp_cam[cnt++] = K.principal_point().x();
   persp_cam[cnt++] = K.principal_point().y();
 }
+// fills a float buffer (should be 16*3 floats) with a perspective cam to be sent
+void boxm2_ocl_util::set_proj_camera(vpgl_proj_camera<double> * pcam, cl_float* cam)
+{
+  //vcl_cout<<"CAM: "<<(*pcam)<<vcl_endl;
+  vnl_svd<double>* svd=pcam->svd();
+  vnl_matrix<double> Ut=svd->U().conjugate_transpose();
+  vnl_matrix<double> V=svd->V();
+  vnl_vector<double> Winv=svd->Winverse().diagonal();
 
+  //U matrix stored here (16 floats)
+  int cnt=0;
+  for (unsigned i=0;i<Ut.rows();++i)
+  {
+    for (unsigned j=0;j<Ut.cols();++j)
+      cam[cnt++]=(cl_float)Ut(i,j);
+    cam[cnt++]=0;
+  }
+
+  //store V matrix (16 floats)
+  for (unsigned i=0;i<V.rows();++i)
+    for (unsigned j=0;j<V.cols();++j)
+      cam[cnt++]=(cl_float)V(i,j);
+
+  //store W matrix (4 floats)
+  for (unsigned i=0;i<Winv.size();++i)
+    cam[cnt++]=(cl_float)Winv(i);
+
+  //store cam center (4 floats)
+  vgl_point_3d<double> cam_center=pcam->camera_center();
+  cam[cnt++]=(cl_float)cam_center.x();
+  cam[cnt++]=(cl_float)cam_center.y();
+  cam[cnt++]=(cl_float)cam_center.z();
+  cam[cnt++]=(cl_float) 0.0f;
+#if 0 // not valiud for projective camer
+  //store [focal length, focal length, principal point] (4 floats)
+  const vpgl_calibration_matrix<double>& K = pcam->get_calibration();
+  cam[cnt++] = K.x_scale()*K.focal_length();
+  cam[cnt++] = K.y_scale()*K.focal_length();
+  cam[cnt++] = K.principal_point().x();
+  cam[cnt++] = K.principal_point().y();
+#endif
+}
 void boxm2_ocl_util::set_generic_camera(vpgl_camera_double_sptr& cam, cl_float* ray_origins, cl_float* ray_directions, unsigned cl_ni, unsigned cl_nj)
 {
   if (vpgl_generic_camera<double>* gcam =
