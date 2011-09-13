@@ -1,4 +1,4 @@
-// This is brl/bseg/boxm2/cpp/pro/processes/boxm2_cpp_batch_update_processes.cxx
+// This is brl/bseg/boxm2/cpp/pro/processes/boxm2_cpp_batch_compute_shadow_model_process.cxx
 #include <bprb/bprb_func_process.h>
 //:
 // \file
@@ -31,18 +31,17 @@ bool boxm2_cpp_batch_compute_shadow_model_process_cons(bprb_func_process& pro)
 {
   using namespace boxm2_cpp_batch_compute_shadow_model_process_globals;
 
-  //process takes 4 inputs
+  //process takes 3 inputs
   // 0) scene
   // 1) cache
   // 2) stream cache
-  // 3) the pre-computed sigma normalizer table, for fast access to normalizer values given number of images
   vcl_vector<vcl_string> input_types_(n_inputs_);
   input_types_[0] = "boxm2_scene_sptr";
   input_types_[1] = "boxm2_cache_sptr";
   input_types_[2] = "boxm2_stream_cache_sptr";
-  // process has 0 output:
+  // process has 1 output (ambient light)
   vcl_vector<vcl_string>  output_types_(n_outputs_);
-  output_types_[0] = "float";  
+  output_types_[0] = "float";
 
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 }
@@ -51,8 +50,8 @@ bool boxm2_cpp_batch_compute_shadow_model_process(bprb_func_process& pro)
 {
   using namespace boxm2_cpp_batch_compute_shadow_model_process_globals;
 
-  if ( pro.n_inputs() < n_inputs_ ){
-      vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
+  if ( pro.n_inputs() < n_inputs_ ) {
+      vcl_cout << pro.name() << ": The number of inputs should be " << n_inputs_<< vcl_endl;
       return false;
   }
   //get the inputs
@@ -101,9 +100,9 @@ bool boxm2_cpp_batch_compute_shadow_model_process(bprb_func_process& pro)
     int data_buff_length = (int) (sunvis->buffer_length()/sunvisTypeSize);
     boxm2_data_serial_iterator<boxm2_compute_ambient_functor>(data_buff_length,data_functor);
   }
-  if(weights<1e-10f)
+  if (weights<1e-10f)
     ambient_light = weighted_intensities/weights;
-  
+
   pro.set_output_val<float>(0, ambient_light);
   return true;
 }
