@@ -6,18 +6,19 @@
 #include <boxm2/boxm2_block.h>
 #include <boxm2/boxm2_data.h>
 #include <boct/boct_bit_tree2.h>
+#include <vcl_iostream.h>
+
 template <class F>
 void boxm2_data_serial_iterator(int data_buff_length,
                                 F functor)
 {
     for (int i=0; i<data_buff_length; ++i)
     {
-        //: counter 
-        if(i%   (data_buff_length/10) == 0) vcl_cout<<".";
+        // counter
+        if ( i%(data_buff_length/10) == 0 ) vcl_cout<<'.';
         functor.process_cell(i);
     }
 }
-
 
 
 template <class F>
@@ -50,14 +51,11 @@ void boxm2_data_leaves_serial_iterator(boxm2_block * blk,
         }
     }
 
-
     for (int i=0; i<data_buff_length; ++i)
     {
-        if(i%   (data_buff_length/10) == 0) vcl_cout<<".";
+        if ( i%(data_buff_length/10) == 0 ) vcl_cout<<'.';
         functor.process_cell(i);
     }
 }
-
-
 
 #endif // boxm2_data_serial_iterator_h_
