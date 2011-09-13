@@ -44,7 +44,7 @@ class boxm2_adaptor:
       self.active_cache = self.cpu_cache; 
   
   #update wrapper, can pass in a Null device to use 
-  def update(self, cam, img, mask_path="", device_string="") :
+  def update(self, cam, img, mask=None, device_string="") :
     cache = self.active_cache; 
     dev = self.device; 
     
@@ -59,7 +59,7 @@ class boxm2_adaptor:
     if self.rgb :
       update_rgb(self.scene, cache, cam, img, dev); 
     else :
-      update_grey(self.scene, cache, cam, img, dev); 
+      update_grey(self.scene, cache, cam, img, dev, "", mask); 
       
   #render wrapper, same as above
   def render(self, cam, ni=1280, nj=720, device_string="") : 
@@ -116,11 +116,12 @@ class boxm2_adaptor:
   
   def refine(self, thresh=0.3, device_string="") :
     if device_string=="":
-      refine(self.scene, self.active_cache, thresh, self.device); 
+      nCells = refine(self.scene, self.active_cache, thresh, self.device); 
     elif device_string=="gpu" :
-      refine(self.scene, self.opencl_cache, thresh, self.device); 
+      nCells = refine(self.scene, self.opencl_cache, thresh, self.device); 
     elif device_string=="cpp" :
-      refine(self.scene, self.cpu_cache, thresh, None); 
+      nCells = refine(self.scene, self.cpu_cache, thresh, None); 
+    return nCells
 
   def merge(self, thresh=0.3, device_string="") :
     if device_string=="":
@@ -214,7 +215,7 @@ def load_cpp(scene_str) :
 ###############################################
 
 # Generic update - will use GPU if device/openclcache are passed in
-def update_grey(scene, cache, cam, img, device=None, mask="") :
+def update_grey(scene, cache, cam, img, device=None, ident="", mask=None) :
   #If no device is passed in, do cpu update
   if cache.type == "boxm2_cache_sptr" :
     print "boxm2_batch CPU update";
@@ -232,6 +233,9 @@ def update_grey(scene, cache, cam, img, device=None, mask="") :
     boxm2_batch.set_input_from_db(2,cache);
     boxm2_batch.set_input_from_db(3,cam);
     boxm2_batch.set_input_from_db(4,img);
+    boxm2_batch.set_input_string(5,ident);
+    if mask :
+      boxm2_batch.set_input_from_db(6,mask);
     boxm2_batch.run_process();
   else : 
     print "ERROR: Cache type not recognized: ", cache.type; 
@@ -405,6 +409,7 @@ def refine(scene, cache, thresh=0.3, device=None) :
     boxm2_batch.set_input_from_db(1,cache);
     boxm2_batch.set_input_float(2,thresh);
     boxm2_batch.run_process();
+    return 0;
   elif cache.type == "boxm2_opencl_cache_sptr" and device : 
     print "boxm2_batch GPU refine"; 
     boxm2_batch.init_process("boxm2OclRefineProcess");
@@ -413,6 +418,11 @@ def refine(scene, cache, thresh=0.3, device=None) :
     boxm2_batch.set_input_from_db(2,cache);    
     boxm2_batch.set_input_float(3,thresh);
     boxm2_batch.run_process();
+    
+    #get and report cells output
+    (id, type) = boxm2_batch.commit_output(0); 
+    nCells = boxm2_batch.get_output_unsigned(id); 
+    return nCells;
   else : 
     print "ERROR: Cache type unrecognized: ", cache.type; 
     
