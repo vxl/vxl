@@ -24,6 +24,14 @@ SOURCES += processes/boxm2_cpp_batch_update_opt2_processes.cxx
 SOURCES += processes/boxm2_cpp_merge_process.cxx
 SOURCES += processes/boxm2_cpp_image_density_process.cxx
 SOURCES += processes/boxm2_cpp_update_with_shadow_process.cxx
+SOURCES += processes/boxm2_cpp_batch_compute_shadow_model_process.cxx
+SOURCES += processes/boxm2_cpp_render_z_images_process.cxx
+SOURCES += processes/boxm2_cpp_batch_compute_phong_model_process.cxx
+SOURCES += processes/boxm2_cpp_batch_probe_intensities_process.cxx
+SOURCES += processes/boxm2_cpp_batch_update_nonsurface_model_process.cxx
+SOURCES += processes/boxm2_cpp_batch_update_opt2_phongs_processes.cxx
+SOURCES += processes/boxm2_cpp_query_cell_brdf_process.cxx
+SOURCES += processes/boxm2_cpp_ray_probe_app_models_process.cxx
 
 #######################################
 include ${VXLROOT}/config/top-params.mk
