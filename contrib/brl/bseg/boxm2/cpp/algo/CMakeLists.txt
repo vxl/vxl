@@ -24,7 +24,6 @@ SET(boxm2_cpp_algo_sources
     boxm2_shadow_model_functor.h
     boxm2_compute_nonsurface_histogram_functor.h
     boxm2_compute_phongs_model_functor.h
-    boxm2_gauss_grey_processor.h       boxm2_gauss_grey_processor.cxx
     boxm2_batch_opt2_functors.h
     boxm2_batch_opt2_phongs_functors.h
     boxm2_image_density_functor.h
