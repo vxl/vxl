@@ -45,10 +45,10 @@
 
 struct kernel
 {
-  vgl_point_2d<unsigned> min_pt;
-  vgl_point_2d<unsigned> max_pt;
+  vgl_point_2d<float> min_pt;
+  vgl_point_2d<float> max_pt;
   vnl_vector<double> w;
-  vcl_vector<vgl_point_2d<unsigned> > locs;
+  vcl_vector<vgl_point_2d<float> > locs;
 };
 
 namespace bvpl_bundler_features_2d_compute_globals
@@ -108,9 +108,9 @@ bool bvpl_bundler_features_2d_compute_process( bprb_func_process& pro )
   //get inputs
   unsigned i = 0;
   vcl_string bundlerfile    = pro.get_input<vcl_string>(i++);
-  vcl_string img_glob      = pro.get_input<vcl_string>(i++);
-  vcl_string bad_cam_file    = pro.get_input<vcl_string>(i++);
-  vcl_string kernel_dir    = pro.get_input<vcl_string>(i++);
+  vcl_string img_glob		= pro.get_input<vcl_string>(i++);
+  vcl_string bad_cam_file   = pro.get_input<vcl_string>(i++);
+  vcl_string kernel_dir		= pro.get_input<vcl_string>(i++);
 
   //------ PARSE BAD CAMERAS --------
   vcl_ifstream bcfile( bad_cam_file.c_str() );
@@ -147,8 +147,8 @@ bool bvpl_bundler_features_2d_compute_process( bprb_func_process& pro )
 
   vcl_vector<vcl_string> filenames;
   filenames.push_back("I0");
-    filenames.push_back("Ix");
-    filenames.push_back("Iy");
+  filenames.push_back("Ix");
+  filenames.push_back("Iy");
   filenames.push_back("Ixx");
   filenames.push_back("Iyy");
   filenames.push_back("Ixy");
@@ -161,7 +161,7 @@ bool bvpl_bundler_features_2d_compute_process( bprb_func_process& pro )
   for ( k_itr = filenames.begin();
         k_itr != k_end; ++k_itr )
   {
-    vcl_string fname = kernel_dir + "/" + *k_itr + ".txt";
+    vcl_string fname = kernel_dir + "//" + *k_itr + ".txt";
     vcl_ifstream kernel_file(fname.c_str());
 
     if ( !kernel_file.good() )
@@ -173,7 +173,7 @@ bool bvpl_bundler_features_2d_compute_process( bprb_func_process& pro )
     return false;
     }
 
-    vgl_point_2d<unsigned> min_pt, max_pt;
+    vgl_point_2d<float> min_pt, max_pt;
 
     kernel_file >> min_pt;
     kernel_file >> max_pt;
@@ -187,19 +187,37 @@ bool bvpl_bundler_features_2d_compute_process( bprb_func_process& pro )
     k.min_pt = min_pt;
     k.max_pt = max_pt;
 
-    for (unsigned i = 0; !kernel_file.eof(); )
-    {
-      vgl_point_2d<unsigned> loc;
-      kernel_file >> loc;
-      k.locs.push_back(loc);
-      double weight;
-      kernel_file >> weight;
-      w[i++] = weight;
-    }//end kernel weight iteration
+    //for (unsigned i = 0; !kernel_file.eof(); )
+    //{
+    //  vgl_point_2d<float> loc;
+    //  kernel_file >> loc;
+    //  k.locs.push_back(loc);
+    //  double weight;
+    //  kernel_file >> weight;
+    //  w[i++] = weight;
+    //}//end kernel weight iteration
 
+	unsigned idx = 0;
+	while(true)
+    {
+	  
+      vgl_point_2d<float> loc;
+      kernel_file >> loc;
+      double weight;
+	  kernel_file >> weight;
+	  if( kernel_file.eof() )
+		  break;
+	  k.locs.push_back(loc);
+      w[idx++] = weight;
+	  
+    }//end kernel weight iteration
+	idx = 0;
+	k.w.set_size(w.size());
     k.w = w;
 
-    kernel_map.insert(vcl_make_pair(*k_itr,k));
+    kernel_map[*k_itr] = k;
+
+	kernel_file.close();
   }//end kernel file iteration
 
   //------ READING & PROCESSING BUNDLER FILE --------
@@ -266,6 +284,9 @@ bool bvpl_bundler_features_2d_compute_process( bprb_func_process& pro )
 
   for ( unsigned  i = 0; i < num_pts; ++i )
   {
+#ifndef __DEBUG
+	  vcl_cout << "Processing point: " << i << " of " << num_pts << vcl_endl;
+#endif //_DEBUG
     double x,y,z;
 
     //read the 3d point
@@ -288,6 +309,9 @@ bool bvpl_bundler_features_2d_compute_process( bprb_func_process& pro )
 
     for ( unsigned j = 0; j < num_views; ++j )
     {
+#ifndef __DEBUG
+		vcl_cout << "\tProcesssing view: " << j << " of " << num_views << vcl_endl;
+#endif //__DEBUG
       unsigned view_number, key_number;
       double img_x, img_y;
 
@@ -304,7 +328,7 @@ bool bvpl_bundler_features_2d_compute_process( bprb_func_process& pro )
         //seek works by indexing from zero into a vector of filenames
         //therefore b/c the original frames are numbered from one, we need to
         //subtract one.
-        if ( !video_stream.seek_frame(view_number-1) )
+        if ( !video_stream.seek_frame(view_number) )
         {
           vcl_cerr << "---ERROR---- bvpl_bundler_features_2d_compute_process\n"
                    << "\tCOULD NOT FIND FRAME: " << view_number << '\n'
@@ -337,8 +361,8 @@ bool bvpl_bundler_features_2d_compute_process( bprb_func_process& pro )
 
           unsigned nx = k.max_pt.x() - k.min_pt.y() + 1;
           unsigned ny = k.max_pt.y() - k.min_pt.y() + 1;
-          vnl_vector<double> neighborhood(nx*ny);
-
+          vnl_vector<double> neighborhood(k.w.size());
+	
           //build this neighborhood for this kernel
           for ( unsigned i = 0;
                 i < k.locs.size(); ++i )
@@ -353,23 +377,23 @@ bool bvpl_bundler_features_2d_compute_process( bprb_func_process& pro )
               neighborhood[i] = curr_img(x,y);
             else
               neighborhood[i] = double(0.0);
-
-            double f = dot_product(k.w,neighborhood);
-
-            if (*k_itr == "I0")
-              feature_vector[0] = f;
-            else if (*k_itr == "Ix")
-              feature_vector[1] = f;
-            else if (*k_itr == "Iy")
-              feature_vector[2] = f;
-            else if (*k_itr == "Ixx")
-              feature_vector[3] = f;
-            else if (*k_itr == "Iyy")
-              feature_vector[4] = f;
-            else if (*k_itr == "Ixy")
-              feature_vector[5] = f;
-
           }//end kernel loc iteration
+
+		  double f = dot_product(k.w,neighborhood);
+
+		  if (*k_itr == "I0")
+			  feature_vector[0] = f;
+		  else if (*k_itr == "Ix")
+			  feature_vector[1] = f;
+		  else if (*k_itr == "Iy")
+			  feature_vector[2] = f;
+		  else if (*k_itr == "Ixx")
+			  feature_vector[3] = f;
+		  else if (*k_itr == "Iyy")
+			  feature_vector[4] = f;
+		  else if (*k_itr == "Ixy")
+			  feature_vector[5] = f;
+
         }//end filename iteration
 
         view_feature_map.insert(vcl_make_pair(view_number,feature_vector));
@@ -378,8 +402,9 @@ bool bvpl_bundler_features_2d_compute_process( bprb_func_process& pro )
 
     }//end num_views iteration
 
-    bundler_features_sptr->pt_view_feature_map.insert(
-      vcl_make_pair(bundler_pt, view_feature_map) );
+	if( !view_feature_map.empty() )
+		bundler_features_sptr->pt_view_feature_map.insert(
+			vcl_make_pair(bundler_pt, view_feature_map) );
 
   }//end num_pts iteration
 
