@@ -24,8 +24,7 @@
 namespace boxm2_cpp_ray_probe_process_globals
 {
     const unsigned n_inputs_ = 6;
-    const unsigned n_outputs_ = 2;
-    vcl_size_t lthreads[2]={8,8};
+    const unsigned n_outputs_ = 4;
 }
 
 bool boxm2_cpp_ray_probe_process_cons(bprb_func_process& pro)
@@ -46,6 +45,9 @@ bool boxm2_cpp_ray_probe_process_cons(bprb_func_process& pro)
     vcl_vector<vcl_string>  output_types_(n_outputs_);
     output_types_[0] = "bbas_1d_array_float_sptr"; //seg_len
     output_types_[1] = "bbas_1d_array_float_sptr"; //alpha
+    output_types_[2] = "bbas_1d_array_float_sptr"; //vis
+    output_types_[3] = "bbas_1d_array_float_sptr"; //depth
+    //output_types_[4] = "bbas_1d_array_float_sptr"; //alpha
 
     bool good = pro.set_input_types(input_types_) &&
         pro.set_output_types(output_types_);
@@ -101,35 +103,48 @@ bool boxm2_cpp_ray_probe_process(bprb_func_process& pro)
 
     vcl_vector<float> seg_lengths;
     vcl_vector<float> alphas;
+    vcl_vector<float> abs_depth;
+    vcl_vector<float> sun_vis;
     for (id = vis_order.begin(); id != vis_order.end(); ++id)
     {
         vcl_cout<<"Block Id "<<(*id)<<vcl_endl;
         boxm2_block *     blk  =  cache->get_block(*id);
         boxm2_data_base *  alph = cache->get_data_base(*id,boxm2_data_traits<BOXM2_ALPHA>::prefix());
         boxm2_data_base *  mog  = cache->get_data_base(*id,data_type);
+
         vcl_vector<boxm2_data_base*> datas;
         datas.push_back(alph);
         datas.push_back(mog);
 
+        boxm2_ray_probe_functor ray_probe_functor;
+        ray_probe_functor.init_data(datas,seg_lengths,abs_depth,alphas,sun_vis);
+
         boxm2_scene_info_wrapper *scene_info_wrapper=new boxm2_scene_info_wrapper();
         scene_info_wrapper->info=scene->get_blk_metadata(*id);
-        boxm2_ray_probe_functor ray_probe_functor;
-        ray_probe_functor.init_data(datas,seg_lengths,alphas);
 
         cast_ray_per_block<boxm2_ray_probe_functor>(ray_probe_functor,scene_info_wrapper->info,blk,cam,pi+1,pj+1,pi,pj);
     }
 
     bbas_1d_array_float_sptr seg_array  =new bbas_1d_array_float(seg_lengths.size());
+    bbas_1d_array_float_sptr vis_array  =new bbas_1d_array_float(seg_lengths.size());
     bbas_1d_array_float_sptr alpha_array=new bbas_1d_array_float(alphas.size());
+    bbas_1d_array_float_sptr abs_depth_array=new bbas_1d_array_float(abs_depth.size());
+    bbas_1d_array_float_sptr sun_vis_array=new bbas_1d_array_float(abs_depth.size());
 
+    float vis=1.0f;
     for (unsigned i=0;i<seg_lengths.size();i++)
     {
         seg_array->data_array[i]=seg_lengths[i];
+        abs_depth_array->data_array[i]=abs_depth[i];
         alpha_array->data_array[i]=alphas[i];
+        vis*=vcl_exp(-seg_lengths[i]*alphas[i]);
+        vis_array->data_array[i]=vis;
     }
 
     // store scene smaprt pointer
     pro.set_output_val<bbas_1d_array_float_sptr>(0, seg_array);
     pro.set_output_val<bbas_1d_array_float_sptr>(1, alpha_array);
+    pro.set_output_val<bbas_1d_array_float_sptr>(2, vis_array);
+    pro.set_output_val<bbas_1d_array_float_sptr>(3, abs_depth_array);
     return true;
 }
