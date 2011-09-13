@@ -7,16 +7,16 @@
 // to supplement cast ray args
 typedef struct
 {
-  __global float* alpha; 
+  __global float* alpha;
   __global MOG_TYPE*  mog;
-  float* expint; 
-} AuxArgs;  
+  float* expint;
+} AuxArgs;
 
 //forward declare cast ray (so you can use it)
-void cast_ray(int,int,float,float,float,float,float,float, 
-              __constant RenderSceneInfo*, __global int4*, 
-              __local uchar16*, __constant uchar *,__local uchar *, 
-              float*, AuxArgs); 
+void cast_ray(int,int,float,float,float,float,float,float,
+              __constant RenderSceneInfo*, __global int4*,
+              __local uchar16*, __constant uchar *,__local uchar *,
+              float*, AuxArgs);
 __kernel
 void
 render_bit_scene( __constant  RenderSceneInfo    * linfo,
@@ -46,7 +46,7 @@ render_bit_scene( __constant  RenderSceneInfo    * linfo,
 
   // check to see if the thread corresponds to an actual pixel as in some
   // cases #of threads will be more than the pixels.
-  if (i>=(*exp_image_dims).z || j>=(*exp_image_dims).w) 
+  if (i>=(*exp_image_dims).z || j>=(*exp_image_dims).w)
     return;
 
   //Store image index (may save a register).  Also initialize VIS and expected_int
@@ -56,11 +56,11 @@ render_bit_scene( __constant  RenderSceneInfo    * linfo,
   // Calculate ray origin, and direction
   // (make sure ray direction is never axis aligned)
   //----------------------------------------------------------------------------
-  float4 ray_o = ray_origins[ imIndex[llid] ]; 
-  float4 ray_d = ray_directions[ imIndex[llid] ]; 
+  float4 ray_o = ray_origins[ imIndex[llid] ];
+  float4 ray_d = ray_directions[ imIndex[llid] ];
   float ray_ox, ray_oy, ray_oz, ray_dx, ray_dy, ray_dz;
-  //calc_scene_ray(linfo, camera, i, j, &ray_ox, &ray_oy, &ray_oz, &ray_dx, &ray_dy, &ray_dz);  
-  calc_scene_ray_generic_cam(linfo, ray_o, ray_d, &ray_ox, &ray_oy, &ray_oz, &ray_dx, &ray_dy, &ray_dz);  
+  //calc_scene_ray(linfo, camera, i, j, &ray_ox, &ray_oy, &ray_oz, &ray_dx, &ray_dy, &ray_dz);
+  calc_scene_ray_generic_cam(linfo, ray_o, ray_d, &ray_ox, &ray_oy, &ray_oz, &ray_dx, &ray_dy, &ray_dz);
 
   //----------------------------------------------------------------------------
   // we know i,j map to a point on the image, have calculated ray
@@ -71,8 +71,8 @@ render_bit_scene( __constant  RenderSceneInfo    * linfo,
   //float expint  = convert_float(echar)/255.0f;
   float expint  = exp_image[imIndex[llid]];
   float vis     = vis_image[imIndex[llid]];
-  AuxArgs aux_args; 
-  aux_args.alpha  = alpha_array; 
+  AuxArgs aux_args;
+  aux_args.alpha  = alpha_array;
   aux_args.mog    = mixture_array;
   aux_args.expint = &expint;
   cast_ray( i, j,
@@ -80,47 +80,48 @@ render_bit_scene( __constant  RenderSceneInfo    * linfo,
             ray_dx, ray_dy, ray_dz,
             linfo, tree_array,                                    //scene info
             local_tree, bit_lookup, cumsum, &vis, aux_args);      //utility info
-            
+
   //store the expected intensity (as UINT)
   exp_image[imIndex[llid]] =  expint;
   //store visibility at the end of this block
   vis_image[imIndex[llid]] = vis;
 }
 #endif
+
 #ifdef RENDER_DEPTH
 //need to define a struct of type AuxArgs with auxiliary arguments
 // to supplement cast ray args
 typedef struct
 {
-  __global float* alpha; 
+  __global float* alpha;
   float* expdepth;
   float* expdepthsqr;
   float* probsum;
-} AuxArgs;  
+} AuxArgs;
 
 //forward declare cast ray (so you can use it)
-void cast_ray(int,int,float,float,float,float,float,float, 
-              __constant RenderSceneInfo*, __global int4*, 
-              __local uchar16*, __constant uchar *,__local uchar *, 
-              float*, AuxArgs); 
+void cast_ray(int,int,float,float,float,float,float,float,
+              __constant RenderSceneInfo*, __global int4*,
+              __local uchar16*, __constant uchar *,__local uchar *,
+              float*, AuxArgs);
 __kernel
 void
 render_depth( __constant  RenderSceneInfo    * linfo,
-                  __global    int4               * tree_array,
-                  __global    float              * alpha_array,
-                  __global    float4             * ray_origins,
-                  __global    float4             * ray_directions,
-                  //__global    float16            * camera,        // camera orign and SVD of inverse of camera matrix
-                  __global    float              * exp_image,          // input image and store vis_inf and pre_inf
-                  __global    float              * exp_sqr_image,      // sum of squares.
-                  __global    uint4              * exp_image_dims,
-                  __global    float              * output,
-                  __constant  uchar              * bit_lookup,
-                  __global    float              * vis_image,
-                  __global    float              * prob_image,
-                  __local     uchar16            * local_tree,
-                  __local     uchar              * cumsum,        //cumulative sum helper for data pointer
-                  __local     int                * imIndex)
+              __global    int4               * tree_array,
+              __global    float              * alpha_array,
+              __global    float4             * ray_origins,
+              __global    float4             * ray_directions,
+            //__global    float16            * camera,        // camera orign and SVD of inverse of camera matrix
+              __global    float              * exp_image,     // input image and store vis_inf and pre_inf
+              __global    float              * exp_sqr_image, // sum of squares.
+              __global    uint4              * exp_image_dims,
+              __global    float              * output,
+              __constant  uchar              * bit_lookup,
+              __global    float              * vis_image,
+              __global    float              * prob_image,
+              __local     uchar16            * local_tree,
+              __local     uchar              * cumsum,        // cumulative sum helper for data pointer
+              __local     int                * imIndex)
 {
   //----------------------------------------------------------------------------
   //get local id (0-63 for an 8x8) of this patch + image coordinates and camera
@@ -133,7 +134,7 @@ render_depth( __constant  RenderSceneInfo    * linfo,
 
   // check to see if the thread corresponds to an actual pixel as in some
   // cases #of threads will be more than the pixels.
-  if (i>=(*exp_image_dims).z || j>=(*exp_image_dims).w) 
+  if (i>=(*exp_image_dims).z || j>=(*exp_image_dims).w)
     return;
 
    //Store image index (may save a register).  Also initialize VIS and expected_int
@@ -143,10 +144,10 @@ render_depth( __constant  RenderSceneInfo    * linfo,
   // Calculate ray origin, and direction
   // (make sure ray direction is never axis aligned)
   //----------------------------------------------------------------------------
-  float4 ray_o = ray_origins[ imIndex[llid] ]; 
-  float4 ray_d = ray_directions[ imIndex[llid] ]; 
+  float4 ray_o = ray_origins[ imIndex[llid] ];
+  float4 ray_d = ray_directions[ imIndex[llid] ];
   float ray_ox, ray_oy, ray_oz, ray_dx, ray_dy, ray_dz;
-  //calc_scene_ray(linfo, camera, i, j, &ray_ox, &ray_oy, &ray_oz, &ray_dx, &ray_dy, &ray_dz); 
+  //calc_scene_ray(linfo, camera, i, j, &ray_ox, &ray_oy, &ray_oz, &ray_dx, &ray_dy, &ray_dz);
   calc_scene_ray_generic_cam(linfo, ray_o, ray_d, &ray_ox, &ray_oy, &ray_oz, &ray_dx, &ray_dy, &ray_dz);
 
   //----------------------------------------------------------------------------
@@ -158,8 +159,8 @@ render_depth( __constant  RenderSceneInfo    * linfo,
   float expdepthsqr= 0.0f;
   float probsum =prob_image[imIndex[llid]];
   float vis     = vis_image[imIndex[llid]];
-  AuxArgs aux_args; 
-  aux_args.alpha  = alpha_array; 
+  AuxArgs aux_args;
+  aux_args.alpha  = alpha_array;
   aux_args.expdepth = &expdepth;
   aux_args.expdepthsqr = &expdepthsqr;
   aux_args.probsum = &probsum;
@@ -168,8 +169,8 @@ render_depth( __constant  RenderSceneInfo    * linfo,
             ray_dx, ray_dy, ray_dz,
             linfo, tree_array,                                    //scene info
             local_tree, bit_lookup, cumsum, &vis, aux_args);      //utility info
-            
-  //store the expected intensity 
+
+  //store the expected intensity
   exp_image[imIndex[llid]] += (* aux_args.expdepth)*linfo->block_len;
   exp_sqr_image[imIndex[llid]] += (* aux_args.expdepthsqr)*linfo->block_len*linfo->block_len;
   prob_image[imIndex[llid]] = (* aux_args.probsum);
@@ -183,16 +184,16 @@ render_depth( __constant  RenderSceneInfo    * linfo,
 // to supplement cast ray args
 typedef struct
 {
-  __global float* alpha; 
+  __global float* alpha;
   __global int2*  mog;
-  float* expint; 
+  float* expint;
   float* intensity;
-  float* exp_prob_int; 
-} AuxArgs;  
+  float* exp_prob_int;
+} AuxArgs;
 
 //forward declare cast ray (so you can use it)
 void cast_ray(int,int,float,float,float,float,float,float,constant RenderSceneInfo*,
-              global int4*,local uchar16*,constant uchar*,local uchar*, float*, AuxArgs); 
+              global int4*,local uchar16*,constant uchar*,local uchar*, float*, AuxArgs);
 
 __kernel
 void
@@ -235,11 +236,11 @@ change_detection_bit_scene( __constant  RenderSceneInfo    * linfo,
   // Calculate ray origin, and direction
   // (make sure ray direction is never axis aligned)
   //----------------------------------------------------------------------------
-  float4 ray_o = ray_origins[ imIndex[llid] ]; 
-  float4 ray_d = ray_directions[ imIndex[llid] ]; 
+  float4 ray_o = ray_origins[ imIndex[llid] ];
+  float4 ray_d = ray_directions[ imIndex[llid] ];
   float ray_ox, ray_oy, ray_oz, ray_dx, ray_dy, ray_dz;
-  //calc_scene_ray(linfo, camera, i, j, &ray_ox, &ray_oy, &ray_oz, &ray_dx, &ray_dy, &ray_dz);  
-  calc_scene_ray_generic_cam(linfo, ray_o, ray_d, &ray_ox, &ray_oy, &ray_oz, &ray_dx, &ray_dy, &ray_dz);  
+  //calc_scene_ray(linfo, camera, i, j, &ray_ox, &ray_oy, &ray_oz, &ray_dx, &ray_dy, &ray_dz);
+  calc_scene_ray_generic_cam(linfo, ray_o, ray_d, &ray_ox, &ray_oy, &ray_oz, &ray_dx, &ray_dy, &ray_dz);
 
   //----------------------------------------------------------------------------
   // we know i,j map to a point on the image, have calculated ray
@@ -248,7 +249,7 @@ change_detection_bit_scene( __constant  RenderSceneInfo    * linfo,
   //initial expected intensity from this camera angle
   uint  eint  = as_uint(exp_image[imIndex[llid]]);
   uchar echar = convert_uchar(eint);
-  float expected_int = convert_float(echar)/255.0f;   
+  float expected_int = convert_float(echar)/255.0f;
   //input from exp_img
   uint  in_eint  = as_uint(in_exp_image[imIndex[llid]]);
   uchar in_echar = convert_uchar(in_eint);
@@ -259,25 +260,25 @@ change_detection_bit_scene( __constant  RenderSceneInfo    * linfo,
   uint  in_prob_eint  = as_uint(prob_exp_image[imIndex[llid]]);
   uchar in_prob_echar = convert_uchar(in_prob_eint);
   float expected_prob_int= convert_float(in_prob_echar)/255.0f;
-  AuxArgs aux_args; 
-  aux_args.alpha = alpha_array; aux_args.mog = mixture_array; 
+  AuxArgs aux_args;
+  aux_args.alpha = alpha_array; aux_args.mog = mixture_array;
   aux_args.expint = &exp_intensity;
-  aux_args.intensity = &intensity; 
-  aux_args.exp_prob_int = &expected_prob_int; 
-  
+  aux_args.intensity = &intensity;
+  aux_args.exp_prob_int = &expected_prob_int;
+
   cast_ray( i, j,
             ray_ox, ray_oy, ray_oz,
             ray_dx, ray_dy, ray_dz,
 
             //scene info
-            linfo, tree_array, 
-            
+            linfo, tree_array,
+
             //utility info
             local_tree, bit_lookup, cumsum, &vis,
 
             //RENDER SPECIFIC ARGS
             aux_args);
-  
+
   //expected image gets rendered
   exp_image[imIndex[llid]] =  rgbaFloatToInt((float4) 1.0f/(1.0f+expected_int)); //expected_int;
   prob_exp_image[imIndex[llid]] =  rgbaFloatToInt((float4) 1.0f/(1.0f+expected_prob_int)); //expected_int;
@@ -290,16 +291,16 @@ change_detection_bit_scene( __constant  RenderSceneInfo    * linfo,
 // to supplement cast ray args
 typedef struct
 {
-  __global float* alpha; 
+  __global float* alpha;
   __global float8 *  mog;
   __global float4* sundir;
   float4 * ray_dir;
 
-  float* expint; 
-} AuxArgs;  
-void step_cell_render_phongs(AuxArgs   args, 
-                             int      data_ptr, 
-                             float    d, 
+  float* expint;
+} AuxArgs;
+void step_cell_render_phongs(AuxArgs   args,
+                             int      data_ptr,
+                             float    d,
                              float  * vis,
                              float  * expected_i)
 {
@@ -307,12 +308,11 @@ void step_cell_render_phongs(AuxArgs   args,
   float diff_omega=exp(-alpha*d);
   float expected_int_cell=0.0f;
   // for rendering only
-  if(diff_omega<0.995f)
+  if (diff_omega<0.995f)
   {
-      
       float8  data=args.mog[data_ptr];
       expected_int_cell = 0.0;
-      if(data.s0 >0.0)
+      if (data.s0 >0.0)
       {
           float costheta = cos(data.s3);
           float sintheta = sin(data.s4);
@@ -334,11 +334,12 @@ void step_cell_render_phongs(AuxArgs   args,
   (*vis) *= diff_omega;
   (*expected_i)+=expected_int_cell*omega;
 }
+
 //forward declare cast ray (so you can use it)
-void cast_ray(int,int,float,float,float,float,float,float, 
-              __constant RenderSceneInfo*, __global int4*, 
-              __local uchar16*, __constant uchar *,__local uchar *, 
-              float*, AuxArgs); 
+void cast_ray(int,int,float,float,float,float,float,float,
+              __constant RenderSceneInfo*, __global int4*,
+              __local uchar16*, __constant uchar *,__local uchar *,
+              float*, AuxArgs);
 __kernel
 void
 render_bit_scene( __constant  RenderSceneInfo    * linfo,
@@ -368,7 +369,7 @@ render_bit_scene( __constant  RenderSceneInfo    * linfo,
 
   // check to see if the thread corresponds to an actual pixel as in some
   // cases #of threads will be more than the pixels.
-  if (i>=(*exp_image_dims).z || j>=(*exp_image_dims).w) 
+  if (i>=(*exp_image_dims).z || j>=(*exp_image_dims).w)
     return;
 
   //Store image index (may save a register).  Also initialize VIS and expected_int
@@ -378,11 +379,11 @@ render_bit_scene( __constant  RenderSceneInfo    * linfo,
   // Calculate ray origin, and direction
   // (make sure ray direction is never axis aligned)
   //----------------------------------------------------------------------------
-  float4 ray_o = ray_origins[ imIndex[llid] ]; 
-  float4 ray_d = ray_directions[ imIndex[llid] ]; 
+  float4 ray_o = ray_origins[ imIndex[llid] ];
+  float4 ray_d = ray_directions[ imIndex[llid] ];
   float ray_ox, ray_oy, ray_oz, ray_dx, ray_dy, ray_dz;
-  //calc_scene_ray(linfo, camera, i, j, &ray_ox, &ray_oy, &ray_oz, &ray_dx, &ray_dy, &ray_dz);  
-  calc_scene_ray_generic_cam(linfo, ray_o, ray_d, &ray_ox, &ray_oy, &ray_oz, &ray_dx, &ray_dy, &ray_dz);  
+  //calc_scene_ray(linfo, camera, i, j, &ray_ox, &ray_oy, &ray_oz, &ray_dx, &ray_dy, &ray_dz);
+  calc_scene_ray_generic_cam(linfo, ray_o, ray_d, &ray_ox, &ray_oy, &ray_oz, &ray_dx, &ray_dy, &ray_dz);
 
   //----------------------------------------------------------------------------
   // we know i,j map to a point on the image, have calculated ray
@@ -393,8 +394,8 @@ render_bit_scene( __constant  RenderSceneInfo    * linfo,
   //float expint  = convert_float(echar)/255.0f;
   float expint  = exp_image[imIndex[llid]];
   float vis     = vis_image[imIndex[llid]];
-  AuxArgs aux_args; 
-  aux_args.alpha  = alpha_array; 
+  AuxArgs aux_args;
+  aux_args.alpha  = alpha_array;
   aux_args.mog    = mixture_array;
   aux_args.expint = &expint;
   aux_args.sundir = sun_direction;
@@ -405,10 +406,11 @@ render_bit_scene( __constant  RenderSceneInfo    * linfo,
             ray_dx, ray_dy, ray_dz,
             linfo, tree_array,                                    //scene info
             local_tree, bit_lookup, cumsum, &vis, aux_args);      //utility info
-            
+
   //store the expected intensity (as UINT)
   exp_image[imIndex[llid]] =  expint;
   //store visibility at the end of this block
   vis_image[imIndex[llid]] = vis;
 }
+
 #endif
