@@ -3,7 +3,7 @@
 # ** DO NOT EDIT **
 
 # variables to REPLACE
-# 
+#
 # /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/core" /I "$(VXLROOT)/vcl/config.win32" /I "$(VXLROOT)/contrib/mul" == include path
 #   -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE == compiler defines
 #  == override in output directory
@@ -14,16 +14,16 @@
 CFG=boxm2_cpp_algo - Win32 Debug
 !MESSAGE This is not a valid makefile. To build this project using NMAKE,
 !MESSAGE use the Export Makefile command and run
-!MESSAGE 
+!MESSAGE
 !MESSAGE NMAKE /f "boxm2_cpp_algo.mak".
-!MESSAGE 
+!MESSAGE
 !MESSAGE You can specify a configuration when running NMAKE
 !MESSAGE by defining the macro CFG on the command line. For example:
-!MESSAGE 
+!MESSAGE
 !MESSAGE NMAKE /f "boxm2_cpp_algo.mak" CFG="vil2 - Win32 Debug"
-!MESSAGE 
+!MESSAGE
 !MESSAGE Possible choices for configuration are:
-!MESSAGE 
+!MESSAGE
 !MESSAGE "boxm2_cpp_algo - Win32 Debug" (based on "Win32 (x86) Static Library")
 !MESSAGE "boxm2_cpp_algo - Win32 Release" (based on "Win32 (x86) Static Library")
 # Begin Project
@@ -83,7 +83,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo
-!ENDIF 
+!ENDIF
 
 # Begin Target
 
@@ -112,6 +112,9 @@ SOURCE=.\boxm2_gauss_grey_processor.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\boxm2_merge_block_function.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\boxm2_phongs_model_processor.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/boxm2_batch_functors+BOXM2_APMs-.cxx
@@ -187,6 +190,21 @@ SOURCE=.\boxm2_gauss_grey_processor.h
 # End Source File
 # Begin Source File
 SOURCE=.\boxm2_image_density_functor.h
+# End Source File
+# Begin Source File
+SOURCE=.\boxm2_compute_phongs_model_functor.h
+# End Source File
+# Begin Source File
+SOURCE=.\boxm2_batch_opt2_phongs_functors.h
+# End Source File
+# Begin Source File
+SOURCE=.\boxm2_shadow_model_functor.h
+# End Source File
+# Begin Source File
+SOURCE=.\boxm2_compute_nonsurface_histogram_functor.h
+# End Source File
+# Begin Source File
+SOURCE=.\boxm2_phongs_model_processor.h
 # End Source File
 # End Group
 # End Target
