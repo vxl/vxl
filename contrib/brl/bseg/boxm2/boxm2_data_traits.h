@@ -243,9 +243,12 @@ class boxm2_data_info
     if (prefix.find(boxm2_data_traits<BOXM2_MOG2_RGB>::prefix()) != vcl_string::npos)
       return boxm2_data_traits<BOXM2_MOG2_RGB>::datasize();
 
-    if (prefix == boxm2_data_traits<BOXM2_NUM_OBS>::prefix())
-      return boxm2_data_traits<BOXM2_NUM_OBS>::datasize();
+    if (prefix.find(boxm2_data_traits<BOXM2_NUM_OBS_SINGLE>::prefix()) != vcl_string::npos)
+      return boxm2_data_traits<BOXM2_NUM_OBS_SINGLE>::datasize();
 
+    if (prefix.find(boxm2_data_traits<BOXM2_NUM_OBS>::prefix()) != vcl_string::npos)
+      return boxm2_data_traits<BOXM2_NUM_OBS>::datasize();
+    
     if (prefix.find(boxm2_data_traits<BOXM2_AUX0>::prefix()) != vcl_string::npos)
       return boxm2_data_traits<BOXM2_AUX0>::datasize();
     if (prefix.find(boxm2_data_traits<BOXM2_AUX1>::prefix()) != vcl_string::npos)
@@ -267,10 +270,7 @@ class boxm2_data_info
 
     if (prefix.find(boxm2_data_traits<BOXM2_GAUSS_GREY>::prefix()) != vcl_string::npos)
       return boxm2_data_traits<BOXM2_GAUSS_GREY>::datasize();
-
-    if (prefix == boxm2_data_traits<BOXM2_NUM_OBS_SINGLE>::prefix())
-      return boxm2_data_traits<BOXM2_NUM_OBS_SINGLE>::datasize();
-
+    
     return 0;
   }
 
@@ -301,7 +301,12 @@ class boxm2_data_info
       return;
     }
 
-    if (prefix == boxm2_data_traits<BOXM2_NUM_OBS>::prefix()) {
+    if (prefix.find(boxm2_data_traits<BOXM2_NUM_OBS_SINGLE>::prefix()) != vcl_string::npos) {
+      vcl_cout <<  reinterpret_cast<boxm2_data_traits<BOXM2_NUM_OBS_SINGLE>::datatype*>(cell)[0];
+      return;
+    }
+
+    if (prefix.find(boxm2_data_traits<BOXM2_NUM_OBS>::prefix()) != vcl_string::npos) {
       vcl_cout <<  reinterpret_cast<boxm2_data_traits<BOXM2_NUM_OBS>::datatype*>(cell)[0];
       return;
     }
@@ -339,10 +344,7 @@ class boxm2_data_info
       return;
     }
 
-    if (prefix == boxm2_data_traits<BOXM2_NUM_OBS_SINGLE>::prefix()) {
-      vcl_cout <<  reinterpret_cast<boxm2_data_traits<BOXM2_NUM_OBS_SINGLE>::datatype*>(cell)[0];
-      return;
-    }
+
 #endif // 0
 
     vcl_cerr << "In boxm2_data_info::print_data() -- type: " << prefix << " could not be identified!\n";
