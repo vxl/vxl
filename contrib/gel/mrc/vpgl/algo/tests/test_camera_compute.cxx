@@ -416,11 +416,9 @@ static void test_perspective_compute_direct_linear_transform()
 
     vnl_vector_fixed<double, 3> projed_pt = proj * world_pt;
 
-    vcl_cout << projed_pt << vcl_endl;
-
     image_pts.push_back(vgl_point_2d<double>(
-        projed_pt[0] / -projed_pt[2],
-        projed_pt[1] / -projed_pt[2]));
+        projed_pt[0] / projed_pt[2],
+        projed_pt[1] / projed_pt[2]));
   }
 
   //Calculate the projected points
@@ -429,6 +427,7 @@ static void test_perspective_compute_direct_linear_transform()
   vpgl_perspective_camera_compute::compute_dlt(
     image_pts, world_pts, camera, err);
 
+  TEST_NEAR("Small error.", err, 0, .1);
 
   //Check that it is close.
   for (unsigned int i = 0; i < world_pts.size(); i++) {
@@ -436,8 +435,8 @@ static void test_perspective_compute_direct_linear_transform()
     camera.project(world_pts[i].x(), world_pts[i].y(), world_pts[i].z(),
                    x, y);
 
-    TEST_NEAR("Testing that x coord is close", x, -image_pts[i].x(), .001);
-    TEST_NEAR("Testing that y coord is close", y, -image_pts[i].y(), .001);
+    TEST_NEAR("Testing that x coord is close", x, image_pts[i].x(), .001);
+    TEST_NEAR("Testing that y coord is close", y, image_pts[i].y(), .001);
   }
 }
 

@@ -640,11 +640,11 @@ compute_dlt (const vcl_vector< vgl_point_2d<double> >& image_pts,
     // If the world pt is (x,y,z), and the image pt is (u,v),
     // A is of the form
     // [...]
-    // [x, y, z, 1, 0, 0, 0, 0, u*x, u*y, u*z]
-    // [0, 0, 0, 0, x, y, z, 1, v*x, v*y, v*z]
+    // [x, y, z, 1, 0, 0, 0, 0, -u*x, -u*y, -u*z]
+    // [0, 0, 0, 0, x, y, z, 1, -v*x, -v*y, -v*z]
     // [...]
     //
-    // and b is of the form [...; -v; -u; ...]
+    // and b is of the form [...; v; u; ...]
     for (unsigned int i = 0; i < image_pts.size(); ++i)
     {
       //Set the first row of A
@@ -658,9 +658,9 @@ compute_dlt (const vcl_vector< vgl_point_2d<double> >& image_pts,
       A.put(2*i, 6, 0.0);
       A.put(2*i, 7, 0.0);
 
-      A.put(2*i, 8, image_pts[i].x() * world_pts[i].x());
-      A.put(2*i, 9, image_pts[i].x() * world_pts[i].y());
-      A.put(2*i, 10, image_pts[i].x() * world_pts[i].z());
+      A.put(2*i, 8, -image_pts[i].x() * world_pts[i].x());
+      A.put(2*i, 9, -image_pts[i].x() * world_pts[i].y());
+      A.put(2*i, 10, -image_pts[i].x() * world_pts[i].z());
 
       //Set the second row of A
       A.put(2*i+1, 0, 0.0);
@@ -673,13 +673,13 @@ compute_dlt (const vcl_vector< vgl_point_2d<double> >& image_pts,
       A.put(2*i+1, 6, world_pts[i].z());
       A.put(2*i+1, 7, 1.0);
 
-      A.put(2*i+1, 8, image_pts[i].y() * world_pts[i].x());
-      A.put(2*i+1, 9, image_pts[i].y() * world_pts[i].y());
-      A.put(2*i+1, 10, image_pts[i].y() * world_pts[i].z());
+      A.put(2*i+1, 8, -image_pts[i].y() * world_pts[i].x());
+      A.put(2*i+1, 9, -image_pts[i].y() * world_pts[i].y());
+      A.put(2*i+1, 10, -image_pts[i].y() * world_pts[i].z());
 
       //Set the current rows of the RHS vector
-      b[2 * i] = -image_pts[i].x();
-      b[2 * i + 1] = -image_pts[i].y();
+      b[2 * i] = image_pts[i].x();
+      b[2 * i + 1] = image_pts[i].y();
     }
 
     //Solve the system
@@ -710,8 +710,8 @@ compute_dlt (const vcl_vector< vgl_point_2d<double> >& image_pts,
 
       vnl_vector_fixed<double, 3> projed_pt = proj * world_pt;
 
-      projed_pt[0] /= -projed_pt[2];
-      projed_pt[1] /= -projed_pt[2];
+      projed_pt[0] /= projed_pt[2];
+      projed_pt[1] /= projed_pt[2];
 
       double dx = projed_pt[0] - image_pts[i].x();
       double dy = projed_pt[1] - image_pts[i].y();
