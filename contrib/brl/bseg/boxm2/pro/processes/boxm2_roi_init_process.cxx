@@ -51,7 +51,7 @@
 //: globals variables and functions
 namespace boxm2_roi_init_process_globals
 {
-  const unsigned n_inputs_ = 3;
+  const unsigned n_inputs_ = 4;
   const unsigned n_outputs_ = 3;
 
   // === functions ===
@@ -61,8 +61,10 @@ namespace boxm2_roi_init_process_globals
                 vpgl_rational_camera<double>* camera,
                 boxm2_scene_sptr scene,
                 float uncertainty,
-                vil_image_view<unsigned char>* nitf_image_unsigned_char,
-                vpgl_local_rational_camera<double>& local_camera);
+                //vil_image_view<unsigned char>* nitf_image_unsigned_char,
+                vil_image_view_base_sptr& img_ptr,
+                vpgl_local_rational_camera<double>& local_camera,
+                bool convert_to_8_bit);
 
   //: projects the box on the image by taking the union of all the projected corners
   vgl_box_2d<double>* project_box(vpgl_rational_camera<double>* cam,
@@ -78,8 +80,10 @@ bool boxm2_roi_init_process_globals::roi_init( vcl_string const& image_path,
                                                vpgl_rational_camera<double>* camera,
                                                boxm2_scene_sptr scene,
                                                float error,
-                                               vil_image_view<unsigned char>* nitf_image_unsigned_char,
-                                               vpgl_local_rational_camera<double>& local_camera)
+                                               //vil_image_view<unsigned char>* nitf_image_unsigned_char,
+                                               vil_image_view_base_sptr& img_ptr,
+                                               vpgl_local_rational_camera<double>& local_camera,
+                                               bool convert_to_8_bit)
 {
   //: read the image and extract the camera
   vil_image_resource_sptr img = vil_load_image_resource(image_path.c_str());
@@ -121,11 +125,26 @@ bool boxm2_roi_init_process_globals::roi_init( vcl_string const& image_path,
   if (!roi.as_pointer())
     return false;
 
+  if (!convert_to_8_bit) {
+    vcl_cout << "ROI CROP: DO NOT CONVERT TO 8 BIT IMAGE\n";
+    if (roi->pixel_format() == VIL_PIXEL_FORMAT_UINT_16) 
+      img_ptr = new vil_image_view<vxl_uint_16>(roi);
+    else if (roi->pixel_format() == VIL_PIXEL_FORMAT_BYTE) 
+      img_ptr = new vil_image_view<unsigned char>(roi);
+    else {
+      vcl_cout << "boxm2_roi_init_process - Unsupported Pixel Format = " << roi->pixel_format() << vcl_endl;
+      return false;
+    }
+
+  } else {
+
   if (roi->pixel_format() == VIL_PIXEL_FORMAT_UINT_16)
   {
     vil_image_view<vxl_uint_16> nitf_image_vxl_uint_16(roi);
 
-    *nitf_image_unsigned_char = vil_image_view<unsigned char> (roi->ni(),roi->nj(),roi->nplanes());
+    //*nitf_image_unsigned_char = vil_image_view<unsigned char> (roi->ni(),roi->nj(),roi->nplanes());
+    vil_image_view<unsigned char>* nitf_image_unsigned_char = new vil_image_view<unsigned char> (roi->ni(),roi->nj(),roi->nplanes());
+    
 
     int bigendian = 0;
     { union { unsigned int i; char c[4]; } u; u.i = 1; bigendian = u.c[0] == 0; }
@@ -168,16 +187,20 @@ bool boxm2_roi_init_process_globals::roi_init( vcl_string const& image_path,
           //end hack
 #endif
 
+          //(*nitf_image_unsigned_char)(m,n,p) = pixel_val;
           (*nitf_image_unsigned_char)(m,n,p) = pixel_val;
         }
       }
     }
+    img_ptr = nitf_image_unsigned_char; 
   }
   else if (roi->pixel_format() == VIL_PIXEL_FORMAT_BYTE) {
-    *nitf_image_unsigned_char = vil_image_view<unsigned char>(roi);
+    //*nitf_image_unsigned_char = vil_image_view<unsigned char>(roi);
+    img_ptr = new vil_image_view<unsigned char>(roi);
   }
   else
     vcl_cout << "boxm2_roi_init_process - Unsupported Pixel Format = " << roi->pixel_format() << vcl_endl;
+  }
 
   double u, v;
   camera->image_offset(u, v);
@@ -266,8 +289,8 @@ bool boxm2_roi_init_process_cons(bprb_func_process& pro)
   input_types_[i++] = "vcl_string";                // NITF image path
   input_types_[i++] = "vpgl_camera_double_sptr";   // rational camera
   input_types_[i++] = "boxm2_scene_sptr";     // scene
-  if (!pro.set_input_types(input_types_))
-    return false;
+  input_types_[i++] = "bool";  // whether to convert to 8 bits or not, default is true=do the conversion
+  bool good = pro.set_input_types(input_types_);
 
   //output
   unsigned j = 0;
@@ -275,7 +298,12 @@ bool boxm2_roi_init_process_cons(bprb_func_process& pro)
   output_types_[j++] = "vpgl_camera_double_sptr"; // unadjusted local rational camera
   output_types_[j++] = "vil_image_view_base_sptr";  // image ROI
   output_types_[j++] = "float"; // uncertainty
-  return pro.set_output_types(output_types_);
+  
+  good = good && pro.set_output_types(output_types_);
+
+  brdb_value_sptr idx = new brdb_value_t<bool>(true);
+  pro.set_input(3, idx);
+  return good;
 }
 
 
@@ -299,6 +327,8 @@ bool boxm2_roi_init_process(bprb_func_process& pro)
   //voxel_world
   boxm2_scene_sptr scene = pro.get_input<boxm2_scene_sptr>(i++);
 
+  bool convert_to_8_bit = pro.get_input<bool>(i++);
+
   // uncertainty (meters) -- SHOULD BE A PARAM
   float uncertainty=0;
   if ( !pro.parameters()->get_value(error, uncertainty) ) {
@@ -306,7 +336,8 @@ bool boxm2_roi_init_process(bprb_func_process& pro)
     return false;
   }
 
-  vil_image_view<unsigned char>* img_ptr = new vil_image_view<unsigned char>();
+  //vil_image_view<unsigned char>* img_ptr = new vil_image_view<unsigned char>();
+  vil_image_view_base_sptr img_ptr;
   vpgl_rational_camera<double>* rat_camera =
     dynamic_cast<vpgl_rational_camera<double>*> (camera.as_pointer());
   if (!rat_camera) {
@@ -315,7 +346,7 @@ bool boxm2_roi_init_process(bprb_func_process& pro)
   }
 
   vpgl_local_rational_camera<double> local_camera;
-  if (!roi_init(image_path, rat_camera, scene, uncertainty, img_ptr, local_camera)) {
+  if (!roi_init(image_path, rat_camera, scene, uncertainty, img_ptr, local_camera, convert_to_8_bit)) {
     vcl_cerr << "The process has failed!\n";
     return false;
   }
