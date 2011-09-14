@@ -43,6 +43,11 @@ class boxm2_cache: public vbl_ref_count
   //: returns data_base pointer (THIS IS NECESSARY BECAUSE TEMPLATED FUNCTIONS CANNOT BE VIRTUAL)
   virtual boxm2_data_base* get_data_base(boxm2_block_id id, vcl_string type, vcl_size_t num_bytes=0, bool read_only = true) = 0;
 
+  //: returns a data_base pointer which is initialized to the default value of the type, 
+  //  if a block for this type exists on the cache, it is removed and replaced with the new one
+  //  this method does not check whether a block of this type already exists on the disc nor writes it to the disc
+  virtual boxm2_data_base* get_data_base_new(boxm2_block_id id, vcl_string type, bool read_only = true) = 0;
+
   //: removes data from this cache (may or may not write to disk first)
   // Note that this function does not delete the memory, just removes it from the cache
   // and puts it in the garbage vector
