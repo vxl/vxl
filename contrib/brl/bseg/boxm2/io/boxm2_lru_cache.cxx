@@ -159,7 +159,7 @@ boxm2_data_base* boxm2_lru_cache::get_data_base(boxm2_block_id id, vcl_string ty
 boxm2_data_base* boxm2_lru_cache::get_data_base_new(boxm2_block_id id, vcl_string type, bool read_only)
 {
   //: initialize an empty block
-  vcl_cout<<"boxm2_lru_cache::get_data_base_new() initializing empty data "<<id<<" type: "<<type<<vcl_endl;
+  vcl_cout<<"boxm2_lru_cache::initializing empty data "<<id<<" type: "<<type<<vcl_endl;
   boxm2_block_metadata data = scene_->get_block_metadata(id);
   // the following constructor also sets the default values
   boxm2_data_base* block_data = new boxm2_data_base(data, type, read_only); 
