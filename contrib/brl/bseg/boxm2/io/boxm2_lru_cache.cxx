@@ -121,6 +121,7 @@ boxm2_data_base* boxm2_lru_cache::get_data_base(boxm2_block_id id, vcl_string ty
   
   //grab from disk
   boxm2_data_base* loaded = boxm2_sio_mgr::load_block_data_generic(scene_dir_, id, type);
+  boxm2_block_metadata data = scene_->get_block_metadata(id);
 
   //if num_bytes is greater than zero, then you're guaranteed to return a data size with that many bytes
   if(num_bytes > 0) {
@@ -136,14 +137,13 @@ boxm2_data_base* boxm2_lru_cache::get_data_base(boxm2_block_id id, vcl_string ty
             <<" type: "<<type
             <<" to size: "<<num_bytes<<" bytes"<<vcl_endl;
     loaded = new boxm2_data_base(new char[num_bytes], num_bytes, id, read_only);
-    loaded->set_default_value(type);
+    loaded->set_default_value(type, data);
   }
   else {
     //otherwise it's a miss, load sync from disk, update cache
     //loaded = boxm2_sio_mgr::load_block_data_generic(scene_dir_, id, type);
     if (!loaded && scene_->block_exists(id)) {
       vcl_cout<<"boxm2_lru_cache::initializing empty data "<<id<<" type: "<<type<<vcl_endl;
-      boxm2_block_metadata data = scene_->get_block_metadata(id);
       loaded = new boxm2_data_base(data, type, read_only);
     }
   }
@@ -151,6 +151,35 @@ boxm2_data_base* boxm2_lru_cache::get_data_base(boxm2_block_id id, vcl_string ty
   //update data map
   data_map[id] = loaded;
   return loaded;
+}
+
+//: returns a data_base pointer which is initialized to the default value of the type, 
+//  if a block for this type exists on the cache, it is removed and replaced with the new one
+//  this method does not check whether a block of this type already exists on the disc nor writes it to the disc
+boxm2_data_base* boxm2_lru_cache::get_data_base_new(boxm2_block_id id, vcl_string type, bool read_only)
+{
+  //: initialize an empty block
+  vcl_cout<<"boxm2_lru_cache::get_data_base_new() initializing empty data "<<id<<" type: "<<type<<vcl_endl;
+  boxm2_block_metadata data = scene_->get_block_metadata(id);
+  // the following constructor also sets the default values
+  boxm2_data_base* block_data = new boxm2_data_base(data, type, read_only); 
+
+  //grab a reference to the map of cached_data_
+  vcl_map<boxm2_block_id, boxm2_data_base*>& data_map =
+    this->cached_data_map(type);
+
+  //then look for the block you're requesting
+  vcl_map<boxm2_block_id, boxm2_data_base*>::iterator iter = data_map.find(id);
+  if ( iter != data_map.end() )
+  {
+    //congrats you've found the data block in cache, now throw it away
+    delete iter->second; 
+    data_map.erase(iter); 
+  }
+  
+  //: now store the block in the cache
+  data_map[id] = block_data;
+  return block_data;
 }
 
 //: removes data from this cache (may or may not write to disk first)
