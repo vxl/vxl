@@ -182,7 +182,7 @@ void bundler_tracks_impl_match_ann::operator ()(
         tree.n_nearest(pt, 2, closest_pts, indices);
 
         // Conditionally add the match to the set.
-        double sqrd_ratio_dist =
+        const double sqrd_ratio_dist =
             squared_distance(pt, closest_pts[0]) /
             squared_distance(pt, closest_pts[1]);
 

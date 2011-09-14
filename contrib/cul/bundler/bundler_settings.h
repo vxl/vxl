@@ -96,11 +96,14 @@ struct bundler_settings_add_next_images{
     // The standard two ransac parameters for the 
     // projection matrix estimation.
     int number_ransac_rounds;
-    double inlier_thresh;
+
+    // The actual threshold is 
+    // inlier_size_multiplier * max(img width, img hight)
+    double inlier_size_multiplier;
 
     bundler_settings_add_next_images() :
-        number_ransac_rounds(4096),
-        inlier_thresh(.4){ }
+        number_ransac_rounds(40960),
+        inlier_size_multiplier(.4){ }
 };
 
 struct bundler_settings_add_new_points{
@@ -113,7 +116,10 @@ struct bundler_settings_add_new_points{
 };
 
 struct bundler_settings_bundle_adjust{
-    int dummy;
+    int number_of_iterations;
+
+    bundler_settings_bundle_adjust():
+        number_of_iterations(10000) { }
 };
 
 struct bundler_settings_sfm{

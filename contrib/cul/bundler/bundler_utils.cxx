@@ -147,50 +147,55 @@ int bundler_utils_fill_persp_camera_ransac(
         }
     }
 
-    int best_inliers = 0;
+    assert(world_pts.size() == image_pts.size());
+    assert(world_pts.size() >= 6);
 
+    int best_inliers = 0;
     for (int rnd = 0; rnd < ransac_rounds; ++rnd) {
-        vcl_vector< vgl_point_2d<double> > curr_image_pts;
-        vcl_vector< vgl_point_3d<double> > curr_world_pts;
+        vcl_vector< vgl_point_2d<double> > curr_image_pts(6);
+        vcl_vector< vgl_point_3d<double> > curr_world_pts(6);
 
         // Get the points to use in this RANSAC round
-        int match_idxs[6];
+        int match_idxs[6] = {0};
         bundler_utils_get_distinct_indices(
             6, match_idxs, image_pts.size());
 
         for (int idx = 0; idx < 6; idx++) {
-            curr_image_pts.push_back(image_pts[idx]);
-            curr_world_pts.push_back(world_pts[idx]);
+            curr_image_pts[idx] = image_pts[idx];
+            curr_world_pts[idx] = world_pts[idx];
         }
 
 
         //Construct the camera from these correspondences.
-        double err;
+        double err = 0;
         vpgl_perspective_camera<double> camera;
 
-        vpgl_perspective_camera_compute::compute_dlt(
-            curr_image_pts, curr_world_pts, camera, err);
-
+        assert( 
+            vpgl_perspective_camera_compute::compute_dlt(
+                curr_image_pts, curr_world_pts, camera, err) );
 
         // Find the inlier percentage to evaulate how good this camera
         // is.
-        double inlier_count;
-        for (unsigned int pt_ind = 0; pt_ind < image_pts.size(); ++pt_ind)
-        {
-            double u,v;
-            camera.project(world_pts[pt_ind].x(), world_pts[pt_ind].y(),
-                           world_pts[pt_ind].z(), u, v);
+        int inlier_count = 0;
+        for (int pt_ind = 0; pt_ind < image_pts.size(); ++pt_ind) {
 
-            double dx = u - image_pts[pt_ind].x();
-            double dy = v - image_pts[pt_ind].y();
+            double u, v;
+            camera.project(
+                world_pts[pt_ind].x(), 
+                world_pts[pt_ind].y(),
+                world_pts[pt_ind].z(), 
+                u, v);
 
-            if (dx*dx - dy*dy <= thresh_sq) {
+            const double dx = u - image_pts[pt_ind].x();
+            const double dy = v - image_pts[pt_ind].y();
+
+            if (dx*dx + dy*dy <= thresh_sq) {
                 ++inlier_count;
             }
         }
 
         // Now see if this is the best camera so far.
-        if (inlier_count > best_inliers) {
+        if (inlier_count >= best_inliers) {
             image->camera = camera;
             best_inliers = inlier_count;
         }

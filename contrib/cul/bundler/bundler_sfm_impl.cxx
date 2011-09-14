@@ -259,9 +259,12 @@ class image_adder
         thresh(t) { }
 
     void operator()(const bundler_inters_image_sptr &img) {
+        const double threshold = thresh * 
+            vcl_max(img->source->ni(), img->source->nj());
+
         // Get the associated vpgl camera using RANSAC
         bundler_utils_fill_persp_camera_ransac(
-            img, rounds, thresh);
+            img, rounds, threshold);
 
         img->in_recon = true;
 
@@ -286,7 +289,7 @@ void bundler_sfm_impl_add_next_images::operator()(
     image_adder adder(
         &added_cameras,
         settings.number_ransac_rounds,
-        settings.inlier_thresh);
+        settings.inlier_size_multiplier);
 
     // Add every image in the set.
     vcl_for_each(
@@ -325,23 +328,39 @@ static void add_new_track(
     bundler_inters_reconstruction &reconstruction,
     bundler_inters_track_sptr &track)
 {
-    // Set this track as observed.
     assert(!track->observed);
-    track->observed = true;
 
-    // Mark all the points whose image is in the reconstruction
-    // as contributing.
+    // Count the number of points this track now observes.
+    int num_observing_points = 0;
+
     vcl_vector<bundler_inters_feature_sptr>::const_iterator p;
-    for (p = track->points.begin(); p != track->points.end(); ++p)
-    {
+    for (p = track->points.begin(); p != track->points.end(); ++p) {
         if ((*p)->image->in_recon) {
-            track->contributing_points[p - track->points.begin()] = true;
+            num_observing_points++;
         }
     }
 
-    // Find the world point for this track by triangulating
-    // all the contributing points.
-    bundler_utils_triangulate_points(track);
+    // If there are enough points to triangulate, add this track to the
+    // recon.
+    if(num_observing_points >= 2){
+
+        // Mark all the points whose image is in the reconstruction
+        // as contributing.
+        for (p = track->points.begin(); p != track->points.end(); ++p) {
+            if ((*p)->image->in_recon) {
+                const int ind = p - track->points.begin();
+
+                track->contributing_points[ind] = true;
+            }
+        }
+
+        // Find the world point for this track by triangulating
+        // all the contributing points.
+        bundler_utils_triangulate_points(track);
+
+        // Set this track as observed.
+        track->observed = true;
+    }
 }
 
 
@@ -419,7 +438,6 @@ static bool find_point_in_image(
         pt = (*found)->point;
     }
 
-
     return (found != img->features.end());
 }
 
@@ -430,7 +448,6 @@ void bundler_sfm_impl_bundle_adjust::operator()(
 {
     //------------------------------------------------------------------
     // Get the reconstruction into something the bundle adjust routine
-
     // will use.
 
     // Get a list of the perspective cameras currently in 
@@ -504,6 +521,8 @@ void bundler_sfm_impl_bundle_adjust::operator()(
     //------------------------------------------------------------------
     // Perform the bundle adjustment
     vpgl_bundle_adjust bundle_adjust;
+    bundle_adjust.set_max_iterations(settings.number_of_iterations);
+
     bundle_adjust.optimize(cameras, world_points, image_points, mask);
 
 
