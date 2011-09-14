@@ -166,11 +166,19 @@ boxm2_data_base* boxm2_nn_cache::get_data_base(boxm2_block_id id, vcl_string typ
   return loaded;
 }
 
+//: returns a data_base pointer which is initialized to the default value of the type, 
+//   if a block for this type exists on the cache, it is removed and replaced with the new one
+//  this method does not check whether a block of this type already exists on the disc nor writes it to the disc
+boxm2_data_base* boxm2_nn_cache::get_data_base_new(boxm2_block_id id, vcl_string type, bool read_only)
+{
+  vcl_cout<<"BOXM2_DUMB_CACHE::get_data_base_new not implemented"<<vcl_endl;
+  return 0;
+}
+
 void boxm2_nn_cache::remove_data_base(boxm2_block_id, vcl_string type)
 {
   vcl_cout<<"BOXM2_DUMB_CACHE::remove_data_base not implemented"<<vcl_endl;
 }
-
 
 void boxm2_nn_cache::replace_data_base(boxm2_block_id id, vcl_string type, boxm2_data_base* replacement)
 {
