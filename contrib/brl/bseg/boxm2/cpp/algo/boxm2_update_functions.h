@@ -41,4 +41,15 @@ bool boxm2_update_with_shadow(boxm2_scene_sptr & scene,
                               unsigned int roi_ni0=0,
                               unsigned int roi_nj0=0);
 
+bool boxm2_update_using_quality(boxm2_scene_sptr & scene,
+                                vcl_string data_type,int appTypeSize,
+                                vcl_string num_obs_type,
+                                vpgl_camera_double_sptr cam ,
+                                vil_image_view<float>  * input_img,
+                                vil_image_view<float>& quality_img,
+                                unsigned int roi_ni,
+                                unsigned int roi_nj,
+                                unsigned int roi_ni0=0,
+                                unsigned int roi_nj0=0);
+
 #endif  //boxm2_update_functions_h_
