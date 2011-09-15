@@ -22,47 +22,44 @@
 
 class bvpl_vgl_point_3d_coord_compare
 {
- public:
-  bvpl_vgl_point_3d_coord_compare() {}
-  ~bvpl_vgl_point_3d_coord_compare() {}
+public:
+    bvpl_vgl_point_3d_coord_compare() {}
+    ~bvpl_vgl_point_3d_coord_compare() {}
 
-  bool operator() ( vgl_point_3d<double> const& pa, vgl_point_3d<double> pb ) const
-  {
-    if      ( pa.x() != pb.x() ) return pa.x() < pb.x();
-    else if ( pa.y() != pb.y() ) return pa.y() < pb.y();
-    else                         return pa.z() < pb.z();
-  }
+    bool operator() ( vgl_point_3d<double> const& pa, vgl_point_3d<double> pb ) const
+    {
+        if      ( pa.x() != pb.x() ) return pa.x() < pb.x();
+        else if ( pa.y() != pb.y() ) return pa.y() < pb.y();
+        else                         return pa.z() < pb.z();
+    }
 };
 
 
 class bvpl_bundler_features_2d: public vbl_ref_count
 {
- public:
-  typedef vcl_map< vgl_point_3d<double>, 
-    vcl_map<unsigned, vnl_vector<double> >, 
-      bvpl_vgl_point_3d_coord_compare > point_view_feature_map_type;
+public:
+    typedef vcl_map< vgl_point_3d<double>, 
+        vcl_map<unsigned, vnl_vector<double> >, 
+        bvpl_vgl_point_3d_coord_compare > point_view_feature_map_type;
 
-  bvpl_bundler_features_2d() {}
+    bvpl_bundler_features_2d() {}
 
-  ~bvpl_bundler_features_2d() {}
+    ~bvpl_bundler_features_2d() {}
 
-  void b_write( vsl_b_ostream& os ) const;
+    void b_write( vsl_b_ostream& os ) const;
 
-  void b_read( vsl_b_istream& is );
+    void b_read( vsl_b_istream& is );
 
-  void write_txt( vcl_string const& filename ) const;
-
-<<<<<<< .mine
-	void write_txt( vcl_string const& filename ) const;
+    void write_txt( vcl_string const& filename ) const;
 
     void write_feature_txt( vcl_string const& filename ) const;
 
-	//: relation: 3d point - view number - feature vector
-	point_view_feature_map_type pt_view_feature_map;
-=======
-  //: relation: 3d point - view number - feature vector
-  point_view_feature_map_type pt_view_feature_map;
->>>>>>> .r33071
+    //: relation: 3d point - view number - feature vector
+    point_view_feature_map_type pt_view_feature_map;
+
+    //: relation: 3d point - view number - feature vector
+    point_view_feature_map_type pt_view_feature_map;
+
 };
 
 typedef vbl_smart_ptr<bvpl_bundler_features_2d> bvpl_bundler_features_2d_sptr;
