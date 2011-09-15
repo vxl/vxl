@@ -36,5 +36,7 @@ DECLARE_FUNC_CONS(bvpl_find_pairs_process_process);
 DECLARE_FUNC_CONS(bvpl_pair_to_float_process);
 DECLARE_FUNC_CONS(bvpl_bundler_features_2d_compute_process);
 DECLARE_FUNC_CONS(bvpl_bundler_features_2d_write_txt_process);
+DECLARE_FUNC_CONS(bvpl_bundler_features_2d_read_bin_process);
+DECLARE_FUNC_CONS(bvpl_bundler_features_2d_write_bin_process);
 
 #endif
