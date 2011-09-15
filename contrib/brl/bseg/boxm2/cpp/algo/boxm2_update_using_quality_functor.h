@@ -31,7 +31,7 @@ class boxm2_update_using_quality_pass2_functor
     return true;
   }
 
-  inline bool step_cell(float seg_len,int index,unsigned i,unsigned j)
+  inline bool step_cell(float seg_len,int index,unsigned i,unsigned j, float abs_depth=0.0f)
   {
     boxm2_data<BOXM2_AUX>::datatype & aux=aux_data_->data()[index];
     if (aux[0]<1e-10f)return true;
