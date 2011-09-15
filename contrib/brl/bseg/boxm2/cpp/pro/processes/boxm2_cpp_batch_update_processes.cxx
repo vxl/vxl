@@ -85,7 +85,6 @@ bool boxm2_cpp_create_norm_intensities_process(bprb_func_process& pro)
       vcl_cout<<"Block id "<<(*id)<<' ';
       boxm2_block *     blk   = cache->get_block(*id);
       boxm2_block_metadata mdata = scene->get_block_metadata(*id);
-      long num_cells = mdata.sub_block_num_.x() * mdata.sub_block_num_.y() * mdata.sub_block_num_.z();
       // first remove from memory just in case to ensure proper initialization
       cache->remove_data_base(*id,boxm2_data_traits<BOXM2_AUX0>::prefix(identifier));
       cache->remove_data_base(*id,boxm2_data_traits<BOXM2_AUX1>::prefix(identifier));
@@ -203,12 +202,11 @@ bool boxm2_cpp_create_aux_data_process(bprb_func_process& pro)
     vil_image_view<float> pre_inf_img(input_image->ni(),input_image->nj());
     vil_image_view<float> vis_inf_img(input_image->ni(),input_image->nj());
     //initialize pre and vis images
-	  pre_inf_img.fill(0.0f);
+    pre_inf_img.fill(0.0f);
     vis_inf_img.fill(1.0f);
 
     vcl_vector<boxm2_block_id>::iterator id;
 
-    int aux0TypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_AUX0>::prefix());
     for (id = vis_order.begin(); id != vis_order.end(); ++id)
     {
       vcl_cout<<"Block id "<<(*id)<<' ';
@@ -253,9 +251,9 @@ bool boxm2_cpp_create_aux_data_process(bprb_func_process& pro)
 
     //PASS 1 DONE
 
-	  vil_image_view<float> pre_img(input_image->ni(),input_image->nj());
+    vil_image_view<float> pre_img(input_image->ni(),input_image->nj());
     vil_image_view<float> vis_img(input_image->ni(),input_image->nj());
-	  pre_img.fill(0.0f);
+    pre_img.fill(0.0f);
     vis_img.fill(1.0f);
 
     // now run pass 2 to compute cell averages of pre, post, and vis

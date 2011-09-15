@@ -126,7 +126,7 @@ bool boxm2_cpp_create_aux_data_opt2_process(bprb_func_process& pro)
     vil_image_view<float> pre_inf_img(input_image->ni(),input_image->nj());
     vil_image_view<float> vis_inf_img(input_image->ni(),input_image->nj());
     //initialize pre and vis images
-	  pre_inf_img.fill(0.0f);
+    pre_inf_img.fill(0.0f);
     vis_inf_img.fill(1.0f);
 
     vcl_vector<boxm2_block_id>::iterator id;
@@ -202,7 +202,7 @@ bool boxm2_cpp_create_aux_data_opt2_process(bprb_func_process& pro)
 
     vil_image_view<float> pre_img(input_image->ni(),input_image->nj());
     vil_image_view<float> vis_img(input_image->ni(),input_image->nj());
-	  pre_img.fill(0.0f);
+    pre_img.fill(0.0f);
     vis_img.fill(1.0f);
 
     for (id = vis_order.begin(); id != vis_order.end(); ++id)
