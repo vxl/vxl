@@ -3,15 +3,12 @@
 //:
 // \file
 
-//: allocate an empty data diddy
-boxm2_data_base::boxm2_data_base(boxm2_block_metadata data, const vcl_string data_type, bool read_only)
+void helper(boxm2_block_metadata& data, long& num_cells, double& side_len)
 {
-  read_only_ = read_only;
-  id_ = data.id_;
-
   //determine number of cells to allocate - based on init_level
   long init_cells_per_tree; 
-  double side_len = data.sub_block_dim_.x();      //side length for initialized cell
+  //double side_len = data.sub_block_dim_.x();      //side length for initialized cell
+  side_len = data.sub_block_dim_.x();      //side length for initialized cell
   if( data.init_level_ == 1) {
     init_cells_per_tree = 1; 
   }
@@ -29,37 +26,60 @@ boxm2_data_base::boxm2_data_base(boxm2_block_metadata data, const vcl_string dat
   }
 
   //total number of cells = numTrees * init_cells_per_tree
-  long num_cells = data.sub_block_num_.x() *
-                   data.sub_block_num_.y() *
-                   data.sub_block_num_.z() * init_cells_per_tree;
+  num_cells = data.sub_block_num_.x() *
+              data.sub_block_num_.y() *
+              data.sub_block_num_.z() * init_cells_per_tree;
+}
+
+//: allocate an empty data diddy
+boxm2_data_base::boxm2_data_base(boxm2_block_metadata data, const vcl_string data_type, bool read_only)
+{
+  read_only_ = read_only;
+  id_ = data.id_;
+
+  long num_cells; 
+  double side_len; 
+  helper(data, num_cells, side_len);
+
  
   vcl_size_t cell_size = boxm2_data_info::datasize(data_type);
   //total buffer length
   buffer_length_ = num_cells * cell_size;
+#if 0
   vcl_cout<<"boxm2_data_base::empty "<<data_type<<" num cells: "
           <<num_cells<<'\n'
           <<"  number of bytes: "<<buffer_length_<<vcl_endl;
+#endif
 
   //now construct a byte stream, and read in with b_read
   data_buffer_ = new char[buffer_length_];
 
+  this->set_default_value(data_type, data);
+}
+//: accessor to a portion of the byte buffer
+void boxm2_data_base::set_default_value(vcl_string data_type, boxm2_block_metadata data)
+{
+  long num_cells; 
+  double side_len; 
+  helper(data, num_cells, side_len);
+
   //initialize the data to the correct value
-  if (data_type == boxm2_data_traits<BOXM2_ALPHA>::prefix()) {
+  if (data_type.find(boxm2_data_traits<BOXM2_ALPHA>::prefix()) != vcl_string::npos) {
     const float ALPHA_INIT = float(-vcl_log(1.0f - data.p_init_) / side_len);
     float* alphas = (float*) data_buffer_;
     vcl_fill(alphas, alphas+num_cells, ALPHA_INIT); 
   }
-  else   if (data_type == boxm2_data_traits<BOXM2_GAMMA>::prefix()) {
+  else if (data_type.find(boxm2_data_traits<BOXM2_GAMMA>::prefix()) != vcl_string::npos) { 
     const float GAMMA_INIT = float(-vcl_log(1.0f - data.p_init_) / (side_len*side_len*side_len));
     float* alphas = (float*) data_buffer_;
     int buffer_length = (int)(buffer_length_/sizeof(float));
     for (int i=0; i<buffer_length; ++i) alphas[i] = GAMMA_INIT;
   }
-  else if (data_type == boxm2_data_traits<BOXM2_NUM_OBS>::prefix() ||
-           data_type == boxm2_data_traits<BOXM2_AUX>::prefix() ) {
+  else if ( data_type.find(boxm2_data_traits<BOXM2_NUM_OBS>::prefix()) != vcl_string::npos ||
+            data_type.find(boxm2_data_traits<BOXM2_AUX>::prefix()) != vcl_string::npos ) {
     vcl_memset(data_buffer_, 0, buffer_length_);
   }
-  else if (data_type == boxm2_data_traits<BOXM2_GAUSS_RGB>::prefix()) {
+  else if (data_type.find(boxm2_data_traits<BOXM2_GAUSS_RGB>::prefix()) != vcl_string::npos) {
     vcl_memset(data_buffer_, (vxl_byte) 128, buffer_length_);
   }
   else if (data_type == boxm2_data_traits<BOXM2_FLOAT8>::prefix()) {
@@ -68,30 +88,6 @@ boxm2_data_base::boxm2_data_base(boxm2_block_metadata data, const vcl_string dat
       for (int i=0; i<buffer_length; ++i) floats[i] = 0.0;
 
 
-  }
-  else {
-    vcl_memset(data_buffer_, 0, buffer_length_);
-  }
-}
-//: accessor to a portion of the byte buffer
-void boxm2_data_base::set_default_value(vcl_string data_type)
-{
-  if (data_type == boxm2_data_traits<BOXM2_NUM_OBS>::prefix() ||
-           data_type == boxm2_data_traits<BOXM2_AUX>::prefix() ) {
-    vcl_memset(data_buffer_, 0, buffer_length_);
-  }
-  else if (data_type == boxm2_data_traits<BOXM2_GAUSS_RGB>::prefix()) {
-    vcl_memset(data_buffer_, (vxl_byte) 128, buffer_length_);
-  }
-  //default GAMMA value (not influenced by scene size or XML pinit)
-  if (data_type == boxm2_data_traits<BOXM2_GAMMA>::prefix()) {
-    float p_init = .01f; 
-    vcl_cout<<"initializing data to "<<p_init<<vcl_endl;
-    const float GAMMA_INIT = float(-vcl_log(1.0f - p_init) / (.025*.025*.025) );
-    float* alphas = (float*) data_buffer_;
-    int buffer_length = (int)(buffer_length_/sizeof(float));
-    for (int i=0; i<buffer_length; ++i) 
-      alphas[i] = GAMMA_INIT;
   }
   else {
     vcl_memset(data_buffer_, 0, buffer_length_);
