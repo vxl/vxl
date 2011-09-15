@@ -369,6 +369,8 @@ class boxm2_batch_update_app_functor
     vcl_vector<aux_datatype> out = str_cache_->get_next<BOXM2_AUX>(id_, index);
     vcl_vector<nrays_datatype> nrays = str_cache_->get_next<BOXM2_NUM_OBS_SINGLE>(id_, index);
 
+    int cell_no = 2000000;
+
     vcl_vector<aux0_datatype> obs;
     vcl_vector<float> vis;
     vcl_vector<float> pre;
@@ -440,6 +442,8 @@ class boxm2_batch_update_alpha_functor
     vcl_vector<aux1_datatype> out1 = str_cache_->get_next<BOXM2_AUX1>(id_, index);
     vcl_vector<aux_datatype> out = str_cache_->get_next<BOXM2_AUX>(id_, index);
     vcl_vector<nrays_datatype> nrays = str_cache_->get_next<BOXM2_NUM_OBS_SINGLE>(id_, index);
+
+    int cell_no = 2000000;
 
     vcl_vector<aux0_datatype> obs;
     vcl_vector<float> vis;
