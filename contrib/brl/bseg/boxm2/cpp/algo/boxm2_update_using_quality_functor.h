@@ -131,4 +131,4 @@ class boxm2_update_using_quality_functor
   float shadow_sigma_;
 };
 
-#endif   // boxm2_update_with_shadow_functor_h
+#endif // boxm2_update_using_quality_functor_h
