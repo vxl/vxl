@@ -4,6 +4,49 @@
 #include <vnl/io/vnl_io_vector.h>
 #include <vcl_cstdlib.h> // for std::exit()
 
+<<<<<<< .mine
+#include<vcl_iterator.h>
+
+#include<vgl/io/vgl_io_point_3d.h>
+
+#include<vnl/io/vnl_io_vector.h>
+
+=======
+>>>>>>> .r33071
+void bvpl_bundler_features_2d::write_feature_txt( vcl_string const& filename ) const
+{
+    vcl_ofstream of(filename);
+
+	if(!of)
+	{
+		vcl_cerr << "----ERROR---- bvpl_bundler_features_2d::write_txt\n"
+			     << "\tCOULD NOT OPEN FILE: " << filename
+				 << " for writing.\n"
+				 << __FILE__ << '\n'
+				 << __LINE__ << '\n' << vcl_flush;
+		exit(-1);
+	}
+
+    point_view_feature_map_type::const_iterator
+		p_itr, p_end = this->pt_view_feature_map.end();
+
+    of << "points_3d = [ ";
+    for( p_itr = this->pt_view_feature_map.begin();
+            p_itr != p_end; ++p_itr )
+    {
+        
+        vcl_map<unsigned, vnl_vector<double> >::const_iterator
+			v_itr, v_end = p_itr->second.end();
+
+        for( v_itr = p_itr->second.begin();
+                v_itr != v_end; ++v_itr )
+        {
+            of << v_itr->second << '\n';
+        }//end view iteration
+    }//end 3d point iteration 
+
+}//end bvpl_bundler_features_2d::write_mfile
+
 void bvpl_bundler_features_2d::write_txt( vcl_string const& filename ) const
 {
   vcl_ofstream feature_file(filename.c_str());
@@ -30,18 +73,37 @@ void bvpl_bundler_features_2d::write_txt( vcl_string const& filename ) const
     vcl_map<unsigned, vnl_vector<double> >::const_iterator
       v_itr, v_end = p_itr->second.end();
 
+<<<<<<< .mine
+		//output the number of views
+		feature_file << p_itr->second.size() << '\n';
+=======
     //output the number of views
     feature_file << p_itr->second.size();
+>>>>>>> .r33071
 
+<<<<<<< .mine
+		for( v_itr = p_itr->second.begin();
+				v_itr != v_end; ++v_itr )
+		{
+			//output the view number
+			feature_file << v_itr->first << '\n';
+=======
     for ( v_itr = p_itr->second.begin();
           v_itr != v_end; ++v_itr )
     {
       //output the view number
       feature_file << v_itr->first;
+>>>>>>> .r33071
 
+<<<<<<< .mine
+			//output the vector
+			feature_file << v_itr->second << '\n';
+		}//end view iteration
+=======
       //output the vector
       feature_file << v_itr->second;
     }//end view iteration
+>>>>>>> .r33071
 
   }//end point iteration
 
@@ -59,11 +121,19 @@ void bvpl_bundler_features_2d::b_write( vsl_b_ostream& os ) const
   point_view_feature_map_type::const_iterator
     pt_itr, pt_end = this->pt_view_feature_map.end();
 
+<<<<<<< .mine
+	for( pt_itr = this->pt_view_feature_map.begin();
+			pt_itr != pt_end; ++pt_itr )
+	{
+		//write the point
+		vsl_b_write(os, pt_itr->first);
+=======
   for ( pt_itr = this->pt_view_feature_map.begin();
         pt_itr != pt_end; ++pt_end )
   {
     //write the point
     vsl_b_write(os, pt_itr->first);
+>>>>>>> .r33071
 
     //write the number of views
     vsl_b_write(os, pt_itr->second.size());

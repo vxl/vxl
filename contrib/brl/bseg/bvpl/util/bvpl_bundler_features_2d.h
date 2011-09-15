@@ -1,4 +1,4 @@
-//this is /contrib/bof/bof_bundler_features_2d.h
+//this is /contrib/bvpl/bvpl_bundler_features_2d.h
 #ifndef BVPL_BUNDLER_FEATURES_2D_H_
 #define BVPL_BUNDLER_FEATURES_2D_H_
 //:
@@ -52,8 +52,17 @@ class bvpl_bundler_features_2d: public vbl_ref_count
 
   void write_txt( vcl_string const& filename ) const;
 
+<<<<<<< .mine
+	void write_txt( vcl_string const& filename ) const;
+
+    void write_feature_txt( vcl_string const& filename ) const;
+
+	//: relation: 3d point - view number - feature vector
+	point_view_feature_map_type pt_view_feature_map;
+=======
   //: relation: 3d point - view number - feature vector
   point_view_feature_map_type pt_view_feature_map;
+>>>>>>> .r33071
 };
 
 typedef vbl_smart_ptr<bvpl_bundler_features_2d> bvpl_bundler_features_2d_sptr;
