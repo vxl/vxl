@@ -22,7 +22,7 @@
 
 class bvpl_vgl_point_3d_coord_compare
 {
-public:
+  public:
     bvpl_vgl_point_3d_coord_compare() {}
     ~bvpl_vgl_point_3d_coord_compare() {}
 
@@ -37,7 +37,7 @@ public:
 
 class bvpl_bundler_features_2d: public vbl_ref_count
 {
-public:
+  public:
     typedef vcl_map< vgl_point_3d<double>, 
         vcl_map<unsigned, vnl_vector<double> >, 
         bvpl_vgl_point_3d_coord_compare > point_view_feature_map_type;
@@ -56,10 +56,6 @@ public:
 
     //: relation: 3d point - view number - feature vector
     point_view_feature_map_type pt_view_feature_map;
-
-    //: relation: 3d point - view number - feature vector
-    point_view_feature_map_type pt_view_feature_map;
-
 };
 
 typedef vbl_smart_ptr<bvpl_bundler_features_2d> bvpl_bundler_features_2d_sptr;
