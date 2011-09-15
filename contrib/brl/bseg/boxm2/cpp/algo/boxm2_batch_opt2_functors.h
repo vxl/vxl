@@ -18,8 +18,8 @@ class boxm2_batch_update_opt2_pass2_functor
   //: "default" constructor
   boxm2_batch_update_opt2_pass2_functor() {}
 
-  bool init_data(vcl_vector<boxm2_data_base*> & datas, 
-                 vil_image_view<float> * pre_img, 
+  bool init_data(vcl_vector<boxm2_data_base*> & datas,
+                 vil_image_view<float> * pre_img,
                  vil_image_view<float> * vis_img,
                  vil_image_view<float> * beta_denom,
                  float model_prior,
@@ -111,7 +111,7 @@ class boxm2_batch_update_opt2_pass2_functor
   boxm2_data<BOXM2_AUX> * aux_data_;
 
   vil_image_view<float> alpha_integral_;
-  vil_image_view<float> * pre_img_;  
+  vil_image_view<float> * pre_img_;
   vil_image_view<float> * vis_img_;
   vil_image_view<float> * beta_denom_;
   vil_image_view<float> * alt_prob_img_;
@@ -155,37 +155,37 @@ class boxm2_batch_update_opt2_functor
     vcl_vector<float> vis_vector;
     vcl_vector<float> obs_vector;
 
-    int cell_no = 2000000;
-
     // UPDATE METHOD #1 : "OR" of occlusion probabilities
     double log_pass_prob_sum = 0.0;
     double weighted_seg_len_sum = 0.0;
     float max_obs_seg_len = 0.0f;  // max gives the best idea about the size of the cell
 
 #if 0
+    int cell_no = 2000000;
+
     if (index == cell_no) {
-      vcl_cout << "stream cache read: \n";
-      vcl_cout << "aux0: ";
-      for (unsigned int s=0; s<aux.size(); ++s) 
-        vcl_cout << aux0[s] << " ";
+      vcl_cout << "stream cache read:\n"
+               << "aux0: ";
+      for (unsigned int s=0; s<aux.size(); ++s)
+        vcl_cout << aux0[s] << ' ';
       vcl_cout << "\naux1: ";
-      for (unsigned int s=0; s<aux.size(); ++s) 
-        vcl_cout << aux1[s] << " ";
+      for (unsigned int s=0; s<aux.size(); ++s)
+        vcl_cout << aux1[s] << ' ';
       vcl_cout << "\naux[0]: ";
-      for (unsigned int s=0; s<aux.size(); ++s) 
-        vcl_cout << aux[s][0] << " ";
+      for (unsigned int s=0; s<aux.size(); ++s)
+        vcl_cout << aux[s][0] << ' ';
       vcl_cout << "\naux[1]: ";
-      for (unsigned int s=0; s<aux.size(); ++s) 
-        vcl_cout << aux[s][1] << " ";
+      for (unsigned int s=0; s<aux.size(); ++s)
+        vcl_cout << aux[s][1] << ' ';
       vcl_cout << "\naux[2]: ";
-      for (unsigned int s=0; s<aux.size(); ++s) 
-        vcl_cout << aux[s][2] << " ";
+      for (unsigned int s=0; s<aux.size(); ++s)
+        vcl_cout << aux[s][2] << ' ';
       vcl_cout << "\naux[3]: ";
-      for (unsigned int s=0; s<aux.size(); ++s) 
-        vcl_cout << aux[s][3] << " ";
+      for (unsigned int s=0; s<aux.size(); ++s)
+        vcl_cout << aux[s][3] << ' ';
       vcl_cout << "\nnrays ";
-      for (unsigned int s=0; s<aux.size(); ++s) 
-        vcl_cout << nrays[s] << " ";
+      for (unsigned int s=0; s<aux.size(); ++s)
+        vcl_cout << nrays[s] << ' ';
     }
 #endif
     for (unsigned int s=0; s<aux.size(); ++s) {
@@ -207,9 +207,9 @@ class boxm2_batch_update_opt2_functor
       if (index == cell_no) {
         float mean_obs = aux0[s]/obs_seg_len;
         float PI = boxm2_data_traits<APM_TYPE>::processor::prob_density(mog, mean_obs);
-        vcl_cout << "\t m: " << s << " pre_i: " << aux[s][0]/obs_seg_len << " vis_i: " << aux[s][1]/obs_seg_len << vcl_endl
-                 << "obs_seg_len: " << obs_seg_len << " PI: " << PI << " mean_obs: " << mean_obs << vcl_endl;
-        vcl_cout << "max_obs_seg_len: " << max_obs_seg_len << "\n";
+        vcl_cout << "\t m: " << s << " pre_i: " << aux[s][0]/obs_seg_len << " vis_i: " << aux[s][1]/obs_seg_len << '\n'
+                 << "obs_seg_len: " << obs_seg_len << " PI: " << PI << " mean_obs: " << mean_obs << '\n'
+                 << "max_obs_seg_len: " << max_obs_seg_len << vcl_endl;
       }
 #endif
     }
