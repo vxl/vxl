@@ -11,7 +11,9 @@
 
 #include <vimt/vimt_image_2d_of.h>
 #include <vil/vil_resample_bilin.h>
+#include <vnl/vnl_math.h>
 #include <vcl_cmath.h> // for vcl_fmod()
+#include <vcl_cassert.h>
 
 //: Calculate theta in range 0 to x
 inline double calc_theta_mod(double theta, double x)
@@ -25,15 +27,15 @@ inline double calc_theta_mod(double theta, double x)
 
 //: Rotate image by angle theta
 // On exit, dest is sized to completely include rotated source.
-// Its world2im() transformation includes that of the src and 
+// Its world2im() transformation includes that of the src and
 // the rotation (ie world frame is preserved).
 // Note that this currently assumes square pixels.
 // So dest_image.world2im()=rotation*src_image.world2im()
 //  \relatesalso vil_image_view
 template <class sType, class dType>
 inline void vimt_rotate(const vimt_image_2d_of<sType>& src_image,
-                      vimt_image_2d_of<dType>& dest_image,
-                      double theta_deg)
+                        vimt_image_2d_of<dType>& dest_image,
+                        double theta_deg)
 {
   if (theta_deg==0.0)
   {
@@ -53,8 +55,8 @@ inline void vimt_rotate(const vimt_image_2d_of<sType>& src_image,
   // c---d
   int src_ni = src_image.image().ni();
   int src_nj = src_image.image().nj();
-  double c= vcl_cos(theta_90*3.14159265358979323846/180);
-  double s= vcl_sin(theta_90*3.14159265358979323846/180);
+  double c= vcl_cos(theta_90*vnl_math::pi_over_180);
+  double s= vcl_sin(theta_90*vnl_math::pi_over_180);
 
   // calc corners of grid to sample (in original image frame)
   double ai= -src_nj*s*c;

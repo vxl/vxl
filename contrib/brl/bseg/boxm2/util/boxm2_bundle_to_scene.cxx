@@ -1,4 +1,5 @@
 #include "boxm2_bundle_to_scene.h"
+#include <vcl_cassert.h>
 
 bool fit_plane_ransac(vcl_vector<vgl_homg_point_3d<double> > & points, vgl_homg_plane_3d<double>  & plane)
 {
@@ -33,7 +34,7 @@ bool fit_plane_ransac(vcl_vector<vgl_homg_point_3d<double> > & points, vgl_homg_
     }
   }
   vgl_fit_plane_3d<double> fit_plane_inliers;
- 
+
   for (unsigned i=0;i<best_inliers.size();++i)
   {
     fit_plane_inliers.add_point(points[best_inliers[i]]);
@@ -47,7 +48,7 @@ bool fit_plane_ransac(vcl_vector<vgl_homg_point_3d<double> > & points, vgl_homg_
   else
     return false;
 }
- 
+
 bool axis_align_scene(vcl_vector<bwm_video_corr_sptr> & corrs,
                       vcl_vector<vpgl_perspective_camera<double> > & cams)
 {
@@ -57,15 +58,15 @@ bool axis_align_scene(vcl_vector<bwm_video_corr_sptr> & corrs,
     vgl_homg_point_3d<double> homg_world_pt(corrs[i]->world_pt());
     points.push_back(homg_world_pt);
   }
- 
+
   // fit the plane
   vgl_fit_plane_3d<double> fit_plane(points);
   if (!fit_plane.fit(1e6, &vcl_cerr))
     return false;
- 
+
   vgl_homg_plane_3d<double> plane=fit_plane.get_plane();
   vgl_rotation_3d<double> rot_scene(plane.normal(),vgl_vector_3d<double>(0,0,1));
- 
+
   double sumx=0,sumy=0,sumz=0;
   for (unsigned i=0;i<corrs.size();++i)
   {
@@ -93,17 +94,17 @@ bool axis_align_scene(vcl_vector<bwm_video_corr_sptr> & corrs,
   {
     // new rotation
     vgl_rotation_3d<double> rot_cami=cams[i].get_rotation()*rot_scene.inverse();
- 
+
     // new translation
     vnl_vector_fixed<double,3> newtranslation=rot_cami.as_matrix()*tr;
     vgl_vector_3d<double> translation_vec(newtranslation[0],newtranslation[1],newtranslation[2]);
     vgl_vector_3d<double> tr_cami=cams[i].get_translation()+translation_vec;
- 
+
     new_cams.push_back(vpgl_perspective_camera<double>(cams[i].get_calibration(),rot_cami,tr_cami));
     if (new_cams[i].get_camera_center().z()>0)
       ++up;
   }
- 
+
   if (2*up<cams.size())// flip the world
   {
     vnl_quaternion<double> q(vnl_math::pi,0,0);
@@ -127,22 +128,22 @@ bool axis_align_scene(vcl_vector<bwm_video_corr_sptr> & corrs,
   }
   for (unsigned i=0;i<cams.size();++i)
     cams[i]=new_cams[i];
- 
+
   vgl_fit_plane_3d<double> fit_plane1(xformed_points);
   if (!fit_plane1.fit(1e6, &vcl_cerr))
       return false;
- 
+
   vgl_homg_plane_3d<double> plane1=fit_plane1.get_plane();
- 
+
   return true;
 }
- 
+
 vnl_vector_fixed<double,3> stddev( vcl_vector<vgl_point_3d<double> > const& v)
 {
   unsigned n = v.size();
   assert(n>0);
   vnl_vector_fixed<double,3> m(0.0f), stddev(0.0f);
- 
+
   for (unsigned i = 0; i < n; ++i)
   {
     m[0]+=v[i].x();
@@ -151,33 +152,32 @@ vnl_vector_fixed<double,3> stddev( vcl_vector<vgl_point_3d<double> > const& v)
   }
   for (unsigned i = 0; i < 3; ++i)
     m[i]/=n;
- 
+
   for (unsigned i = 0; i < n; ++i)
   {
     stddev[0] += (v[i].x()-m[0])*(v[i].x()-m[0]);
     stddev[1] += (v[i].y()-m[1])*(v[i].y()-m[1]);
     stddev[2] += (v[i].z()-m[2])*(v[i].z()-m[2]);
   }
- 
+
   for (unsigned i = 0; i < 3; ++i)
     stddev[i] = vcl_sqrt(stddev[i]/(n-1));
- 
+
   return stddev;
 }
- 
- 
- 
+
+
 //------------------------------------------------------------------------
 // Calc projection error
 // read the correspondence and 3-d points
 //------------------------------------------------------------------------
-void calc_projection_error( vcl_vector<vpgl_perspective_camera<double> >& cams, 
+void calc_projection_error( vcl_vector<vpgl_perspective_camera<double> >& cams,
                             vcl_set<int>&                    bad_cams,
-                            vcl_vector<bwm_video_corr_sptr>& corrs, 
+                            vcl_vector<bwm_video_corr_sptr>& corrs,
                             vcl_map<unsigned,double>&        view_error_map,
                             vcl_map<unsigned,unsigned>&      view_count_map )
 {
-  double err=0; 
+  double err=0;
   double cnt=0;
   double maxerr=0;
   int maxerrcam=-1;
@@ -187,13 +187,13 @@ void calc_projection_error( vcl_vector<vpgl_perspective_camera<double> >& cams,
     vgl_homg_point_3d<double> wpt(corr->world_pt());
 
     //grab number of views that see this point
-    vcl_map<unsigned, vgl_point_2d<double> >& matches = corr->matches(); 
-    vcl_map<unsigned, vgl_point_2d<double> >::iterator iter;   
+    vcl_map<unsigned, vgl_point_2d<double> >& matches = corr->matches();
+    vcl_map<unsigned, vgl_point_2d<double> >::iterator iter;
     for (iter = matches.begin(); iter != matches.end(); ++iter)
     {
-      unsigned view_number = iter->first; 
-      vgl_point_2d<double> xy = iter->second;  
-      double img_x = xy.x(), img_y = xy.y(); 
+      unsigned view_number = iter->first;
+      vgl_point_2d<double> xy = iter->second;
+      double img_x = xy.x(), img_y = xy.y();
 
       //calc error for this point
       double maxerrframe=0;
@@ -207,7 +207,7 @@ void calc_projection_error( vcl_vector<vpgl_perspective_camera<double> >& cams,
         cams[view_number].project(wpt.x(), wpt.y(), wpt.z(),u,v);
         double rms=vcl_sqrt((u-img_x)*(u-img_x)+(v-img_y)*(v-img_y));
         err+=rms;++cnt;
- 
+
         //store view error and counts in a map
         vcl_map<unsigned,double>::iterator ve_itr = view_error_map.find(view_number);
         if (ve_itr == view_error_map.end())
@@ -222,23 +222,23 @@ void calc_projection_error( vcl_vector<vpgl_perspective_camera<double> >& cams,
         }
       }
     }
-  }  
-} 
- 
+  }
+}
+
 void report_error(vcl_map<unsigned,double>&   view_error_map,
                   vcl_map<unsigned,unsigned>& view_count_map,
-                  vcl_set<int>&               bad_cams, 
+                  vcl_set<int>&               bad_cams,
                   float                       filter_thresh)
 {
-  vcl_cout<<"Projection error per camera: "<<vcl_endl;
+  vcl_cout<<"Projection error per camera:"<<vcl_endl;
   float error  = 0.0;
   float counts = 0.0;
-  vcl_map<unsigned,double>::iterator ve_itr = view_error_map.begin(), 
+  vcl_map<unsigned,double>::iterator ve_itr = view_error_map.begin(),
                                      ve_end = view_error_map.end();
   for (;ve_itr!=ve_end;++ve_itr) {
-    unsigned cam=ve_itr->first; 
+    unsigned cam=ve_itr->first;
     double   err=ve_itr->second;
-    unsigned cnt=view_count_map[cam]; 
+    unsigned cnt=view_count_map[cam];
     vcl_cout<<"   error for camera_"<<cam<<": "<<err/cnt<<vcl_endl;
     if (ve_itr->second/view_count_map[ve_itr->first] > filter_thresh) {
       bad_cams.insert(ve_itr->first);
@@ -249,10 +249,9 @@ void report_error(vcl_map<unsigned,double>&   view_error_map,
     }
   }
   vcl_cout<<"Filtered Avg Projection Error "<<error/counts<<vcl_endl;
-} 
- 
- 
- 
+}
+
+
 // An executable that read bundler file and convert it into video site.
 int main(int argc, char** argv)
 {
@@ -268,9 +267,9 @@ int main(int argc, char** argv)
   vul_arg<bool>       draw_box      ("-draw_box", "Draw Bounding Box around points within 2*(standard deviation) from the center of scene",true);
   vul_arg<bool>       filter        ("-filter_cams", "Filter camera based on Reprojection error of 3d correspondences", false);
   vul_arg<float>      filter_thresh ("-filter_thresh", "Threshold for average rms value for a given view. Units are pixels", .75);
-  vul_arg<bool>       reproject     ("-reproject", "Reproject point cloud using learned cameras for debugging", false); 
+  vul_arg<bool>       reproject     ("-reproject", "Reproject point cloud using learned cameras for debugging", false);
   vul_arg_parse(argc, argv);
- 
+
   // open the bundler file
   vcl_ifstream bfile( bundlerfile().c_str() );
   if (!bfile)
@@ -278,14 +277,14 @@ int main(int argc, char** argv)
     vcl_cout<<"Error Opening Bundler output file"<<vcl_endl;
     return -1;
   }
- 
+
   // verify image dir
   if (!vul_file::is_directory(img_dir().c_str()))
   {
     vcl_cout<<"Image directory does not exist"<<vcl_endl;
     return -1;
   }
-  
+
   //image list istream
   vidl_image_list_istream imgstream(img_dir()+"/*");
   if (!imgstream.is_open())
@@ -293,33 +292,33 @@ int main(int argc, char** argv)
     vcl_cout<<"Invalid image stream"<<vcl_endl;
     return -1;
   }
- 
+
   // get image size
   unsigned ni=imgstream.width();
   unsigned nj=imgstream.height();
- 
+
   // central point of the image
   vgl_point_2d<double> principal_point((double)ni/2,(double)nj/2);
- 
+
   //read bundler file header
   char buffer[1024];
-  bfile.getline(buffer,1024);  
+  bfile.getline(buffer,1024);
   if (bfile.eof())
   {
     vcl_cout<<"File Missing data"<<vcl_endl;
     return -1;
   }
- 
+
   // reading number of cameras and number of 3-d pts
   unsigned num_cams=0, num_pts=0;
-  bfile>>num_cams>>num_pts; 
- 
+  bfile>>num_cams>>num_pts;
+
   // read the cams from bundler and write it to a directory
   vcl_vector<vpgl_perspective_camera<double> > cams;
   vcl_set<int> bad_cams;
   vcl_vector<vnl_matrix_fixed<double,3,3> > Rs;
   vcl_vector<vnl_vector_fixed<double,3> > Ts;
- 
+
   //------------------------------------------------------------------------
   // reading the cameras from bundler
   //------------------------------------------------------------------------
@@ -328,16 +327,16 @@ int main(int argc, char** argv)
   {
     vnl_matrix_fixed<double,3,3> R;
     vnl_vector_fixed<double,3> T;
- 
+
     //grab cam info from file
     bfile>>f>>k1>>k2;
     bfile>>R>>T;
- 
+
     // negating to convert bundlers camera facing towards -ve z to positive
     R(2,0) = -R(2,0); R(2,1) = -R(2,1); R(2,2) = -R(2,2);
     R(1,0) =  R(1,0); R(1,1) =  R(1,1); R(1,2) =  R(1,2);
     T[1]= T[1];
-    T[2]= -T[2];   
+    T[2]= -T[2];
     vnl_vector_fixed<double,3> CC = - R.transpose()*T;
     vgl_point_3d<double> cc(CC[0],CC[1],CC[2]);
     vgl_rotation_3d<double> rot(R);
@@ -356,17 +355,17 @@ int main(int argc, char** argv)
       bad_cams.insert(i);
     }
   }
-  
+
   //------------------------------------------------------------------------
   // Read points into vector of bwm_video_corr_sptrs
   //------------------------------------------------------------------------
   vcl_vector<bwm_video_corr_sptr> corrs;
-  double max_y=-100000.0, min_y = 10000000; 
+  double max_y=-100000.0, min_y = 10000000;
   for (unsigned i=0;i<num_pts;++i)
   {
     bwm_video_corr_sptr corr = new bwm_video_corr();
     double x,y,z;
- 
+
     // read the 3-d point
     bfile>>x>>y>>z;
     corr->set_world_pt(vgl_point_3d<double>(x,y,z));
@@ -375,8 +374,8 @@ int main(int argc, char** argv)
     // read the intenstiy but don't do anything with it right now.
     int r,g,b;
     bfile>>r>>g>>b;
-    corr->set_intensity( vgl_vector_3d<int>(r,g,b) ); 
- 
+    corr->set_intensity( vgl_vector_3d<int>(r,g,b) );
+
     //grab number of views that see this point
     unsigned num_views;
     bfile>>num_views;
@@ -388,13 +387,13 @@ int main(int argc, char** argv)
       bfile>>view_number>>key_number>>img_x>>img_y;
       img_x = img_x+principal_point.x();
       img_y = img_y+principal_point.y();
-      
+
       //track correlations
       corr->add(view_number,vgl_point_2d<double>(img_x,img_y));
     }
     corrs.push_back(corr);
   }
-  
+
   //------------------------------------------------------------------------
   // Calc projection error
   // read the correspondence and 3-d points
@@ -402,7 +401,7 @@ int main(int argc, char** argv)
   vcl_map<unsigned,double> view_error_map;
   vcl_map<unsigned,unsigned> view_count_map;
   calc_projection_error(cams, bad_cams, corrs, view_error_map, view_count_map);
-  
+
   //--------------------------------------------------------------------------
   // make sure the scene is axis aligned
   ////--------------------------------------------------------------------------
@@ -412,7 +411,7 @@ int main(int argc, char** argv)
   for (unsigned i=0;i<num_cams;++i)
     camstream.write_camera(&cams[i]);
   camstream.close();
-          
+
   //------------------------------------------------------------------------
   // Filter out the cams with very high error
   //------------------------------------------------------------------------
@@ -420,7 +419,7 @@ int main(int argc, char** argv)
   {
     report_error(view_error_map,view_count_map,bad_cams,filter_thresh());
 
-    if(site_directory() != "" ) 
+    if ( site_directory() != "" )
     {
       //save reprojection rms to a file
       vcl_string rms_file=site_directory()+"/rms_error.txt";
@@ -435,77 +434,77 @@ int main(int argc, char** argv)
           vcl_cout << "ERROR SAVING RMS FILE!" << vcl_endl;
       ofstr.close();
     }
-    
   }
-  else 
+  else
   {
     report_error(view_error_map,view_count_map,bad_cams,99999.99);
   }
-  
-  
+
   //------------------------------------------------------------------------
   // Debug method: Re project the 3d points into each image
   //------------------------------------------------------------------------
-  if( reproject() ) {
-    //vcl_cout<<"Reprojecting points onto camera model"<<vcl_endl;
-    //for (unsigned i=0;i<cams.size();++i)
-    //{
-      //if ( !bad_cams.count(i) )
-      //{
-        //vpgl_perspective_camera<double> cam = cams[i]; 
-        //vgl_point_2d<double> ppoint = cam.get_calibration().principal_point(); 
-        //vil_image_view<float> img( (int) (2*ppoint.x()), (int) (2*ppoint.y()), 4 ); 
-        //img.fill(0.0); 
-        //vgl_point_3d<double> cc = cam.get_camera_center(); 
-        
-        ////project each point
-        //for (unsigned p=0;p<corrs.size();++p) {
-          //bwm_video_corr_sptr corr = corrs[p];
-          //vgl_point_3d<double> wpt = corr->world_pt();
-          
-          //// read the intenstiy but don't do anything with it right now.
-          //vgl_vector_3d<int> rgb = corr->intensity(); 
-        
-          ////project x,y,z onto image plane, calc rms error
-          //double maxerrframe=0;
-          //double u=0,v=0;
-          //cam.project(wpt.x(), wpt.y(), wpt.z(),u,v);
-          
-          //unsigned uu = vcl_min(img.ni()-1, vcl_max( (unsigned) 0, (unsigned) u)); 
-          //unsigned vv = vcl_min(img.nj()-1, vcl_max( (unsigned) 0, (unsigned) v)); 
+  if ( reproject() ) {
+#if 0
+    vcl_cout<<"Reprojecting points onto camera model"<<vcl_endl;
+    for (unsigned i=0;i<cams.size();++i)
+    {
+      if ( !bad_cams.count(i) )
+      {
+        vpgl_perspective_camera<double> cam = cams[i];
+        vgl_point_2d<double> ppoint = cam.get_calibration().principal_point();
+        vil_image_view<float> img( (int) (2*ppoint.x()), (int) (2*ppoint.y()), 4 );
+        img.fill(0.0);
+        vgl_point_3d<double> cc = cam.get_camera_center();
 
-          ////make sure only the closest one gets put in there
-          //double dist = (cc-wpt).length(); 
-          //double existing_dist = (double) img(uu,vv,3); 
-          //if( existing_dist==0.0 || dist < existing_dist) {
-            //img( uu, vv, 0) = (float) rgb.x(); 
-            //img( uu, vv, 1) = (float) rgb.y(); 
-            //img( uu, vv, 2) = (float) rgb.z(); 
-            //img( uu, vv, 3) = (float) dist; 
-          //}
-        //} 
-        
-        ////convert to vxl byte image for saving
-        //vil_image_view<vxl_byte> bimg( img.ni(), img.nj(), 4 ); 
-        //for( unsigned ii=0; ii<bimg.ni(); ++ii) {
-          //for( unsigned jj=0; jj<bimg.nj(); ++jj) {
-            //bimg( ii, jj, 0) = (vxl_byte) img(ii,jj,0); 
-            //bimg( ii, jj, 1) = (vxl_byte) img(ii,jj,1); 
-            //bimg( ii, jj, 2) = (vxl_byte) img(ii,jj,2); 
-            //bimg( ii, jj, 3) = (vxl_byte) 255; 
-          //}
-        //}
-        //char fname[100]; 
-        //vcl_sprintf(fname, "reproject_%d.png", i); 
-        //vil_save(bimg, fname); 
-      //}
-    //}
-    
+        //project each point
+        for (unsigned p=0;p<corrs.size();++p) {
+          bwm_video_corr_sptr corr = corrs[p];
+          vgl_point_3d<double> wpt = corr->world_pt();
+
+          // read the intenstiy but don't do anything with it right now.
+          vgl_vector_3d<int> rgb = corr->intensity();
+
+          //project x,y,z onto image plane, calc rms error
+          double maxerrframe=0;
+          double u=0,v=0;
+          cam.project(wpt.x(), wpt.y(), wpt.z(),u,v);
+
+          unsigned uu = vcl_min(img.ni()-1, vcl_max( (unsigned) 0, (unsigned) u));
+          unsigned vv = vcl_min(img.nj()-1, vcl_max( (unsigned) 0, (unsigned) v));
+
+          //make sure only the closest one gets put in there
+          double dist = (cc-wpt).length();
+          double existing_dist = (double) img(uu,vv,3);
+          if (existing_dist==0.0 || dist < existing_dist) {
+            img( uu, vv, 0) = (float) rgb.x();
+            img( uu, vv, 1) = (float) rgb.y();
+            img( uu, vv, 2) = (float) rgb.z();
+            img( uu, vv, 3) = (float) dist;
+          }
+        }
+
+        //convert to vxl byte image for saving
+        vil_image_view<vxl_byte> bimg( img.ni(), img.nj(), 4 );
+        for (unsigned ii=0; ii<bimg.ni(); ++ii) {
+          for (unsigned jj=0; jj<bimg.nj(); ++jj) {
+            bimg( ii, jj, 0) = (vxl_byte) img(ii,jj,0);
+            bimg( ii, jj, 1) = (vxl_byte) img(ii,jj,1);
+            bimg( ii, jj, 2) = (vxl_byte) img(ii,jj,2);
+            bimg( ii, jj, 3) = (vxl_byte) 255;
+          }
+        }
+        char fname[100];
+        vcl_sprintf(fname, "reproject_%d.png", i);
+        vil_save(bimg, fname);
+      }
+    }
+#endif // 0
+
     //reproject error map
     vcl_cout<<"Reprojecting Error Map"<<vcl_endl;
-    vgl_point_2d<double> ppoint = cams[0].get_calibration().principal_point(); 
-    vil_image_view<float> errimg((int) (2*ppoint.x()), (int) (2*ppoint.y()) ); 
-    vil_image_view<float> cntimg((int) (2*ppoint.x()), (int) (2*ppoint.y()) ); 
+    vgl_point_2d<double> ppoint = cams[0].get_calibration().principal_point();
+    vil_image_view<float> errimg((int) (2*ppoint.x()), (int) (2*ppoint.y()) );
+    vil_image_view<float> cntimg((int) (2*ppoint.x()), (int) (2*ppoint.y()) );
     errimg.fill(0.0f);
     cntimg.fill(0.0f);
     for (unsigned i=0;i<corrs.size();++i)
@@ -514,13 +513,13 @@ int main(int argc, char** argv)
       vgl_homg_point_3d<double> wpt(corr->world_pt());
 
       //grab number of views that see this point
-      vcl_map<unsigned, vgl_point_2d<double> >& matches = corr->matches(); 
-      vcl_map<unsigned, vgl_point_2d<double> >::iterator iter;   
+      vcl_map<unsigned, vgl_point_2d<double> >& matches = corr->matches();
+      vcl_map<unsigned, vgl_point_2d<double> >::iterator iter;
       for (iter = matches.begin(); iter != matches.end(); ++iter)
       {
-        unsigned view_number = iter->first; 
-        vgl_point_2d<double> xy = iter->second;  
-        double img_x = xy.x(), img_y = xy.y(); 
+        unsigned view_number = iter->first;
+        vgl_point_2d<double> xy = iter->second;
+        double img_x = xy.x(), img_y = xy.y();
 
         //calc error for this point
         double maxerrframe=0;
@@ -533,28 +532,28 @@ int main(int argc, char** argv)
           //project x,y,z onto image plane, calc rms error
           cams[view_number].project(wpt.x(), wpt.y(), wpt.z(),u,v);
           double rms=vcl_sqrt((u-img_x)*(u-img_x)+(v-img_y)*(v-img_y));
-          
-          if(u>=0.0 && u<errimg.ni() && v>=0 && v<=errimg.nj()) {
-            unsigned uu = vcl_min(errimg.ni()-1, vcl_max( (unsigned) 0, (unsigned) u)); 
-            unsigned vv = vcl_min(errimg.nj()-1, vcl_max( (unsigned) 0, (unsigned) v)); 
+
+          if (u>=0.0 && u<errimg.ni() && v>=0 && v<=errimg.nj()) {
+            unsigned uu = vcl_min(errimg.ni()-1, vcl_max( (unsigned) 0, (unsigned) u));
+            unsigned vv = vcl_min(errimg.nj()-1, vcl_max( (unsigned) 0, (unsigned) v));
             errimg(uu,vv) += rms;
-            cntimg(uu,vv) += 1.0f; 
+            cntimg(uu,vv) += 1.0f;
           }
         }
       }
     }
-    
+
     //store division hurr
-    for(int i=0; i<errimg.ni(); ++i)
-      for(int j=0; j<errimg.nj(); ++j)
-        errimg(i,j) = (cntimg(i,j)>0.0f) ? errimg(i,j) / cntimg(i,j) : 0.0f; 
-    
+    for (int i=0; i<errimg.ni(); ++i)
+      for (int j=0; j<errimg.nj(); ++j)
+        errimg(i,j) = (cntimg(i,j)>0.0f) ? errimg(i,j) / cntimg(i,j) : 0.0f;
+
     vcl_cout<<"Saving Error Maps"<<vcl_endl;
-    char ename[100]; 
-    vcl_sprintf(ename, "error_%d.tiff", 0); 
-    vil_save(errimg, ename); 
+    char ename[100];
+    vcl_sprintf(ename, "error_%d.tiff", 0);
+    vil_save(errimg, ename);
   }
-  
+
   //------------------------------------------------------------------------
   // Save calc bounding box
   //------------------------------------------------------------------------
@@ -571,16 +570,16 @@ int main(int argc, char** argv)
   vcl_cout<<"Center of Gravity "<<centre(pts_3d)<<vcl_endl;
   vnl_vector_fixed<double,3> sigma = stddev(pts_3d);
   vcl_cout<<"Point stddev "<< sigma <<vcl_endl;
-  
+
   //------------------------------------------------------------------------
   // Save camera and corresponding image file
   //------------------------------------------------------------------------
   //save images that correspond to good cams
-  vcl_string frm_dir = "frames/"; 
-  vcl_string krt_dir = "cams_krt/"; 
-  if ( !vul_file::is_directory(frm_dir.c_str()) ) 
-    vul_file::make_directory(frm_dir); 
-  else 
+  vcl_string frm_dir = "frames/";
+  vcl_string krt_dir = "cams_krt/";
+  if ( !vul_file::is_directory(frm_dir.c_str()) )
+    vul_file::make_directory(frm_dir);
+  else
     vul_file::delete_file_glob( frm_dir + "/*.png" );
   if ( !vul_file::is_directory(krt_dir.c_str()) )
     vul_file::make_directory( krt_dir );
@@ -605,7 +604,7 @@ int main(int argc, char** argv)
              <<cams[i].get_translation().y()<<' '
              <<cams[i].get_translation().z()<<'\n';
       }
-      
+
       //save image
       vil_image_view<vxl_byte> curr_img;
       imgstream.seek_frame(i);
@@ -616,7 +615,7 @@ int main(int argc, char** argv)
       ++cnt2;
     }
   }//end camera write
-  
+
   //--------------------------------------------------------------------------
   // Define dimensions to be used for a boxm scene
   // Note: x-y dimensions are kind of a good approximation
@@ -625,13 +624,13 @@ int main(int argc, char** argv)
   double minx=-3.0f*sigma[0], miny=-3.0f*sigma[1], minz=-1.0f*sigma[2];
   double maxx=3.0f*sigma[0], maxy=3.0f*sigma[1], maxz=5.0f*sigma[2];
   vgl_box_3d<double> bounding_box2(minx, miny, minz, maxx, maxy,maxz);
- 
+
   //write bounding boxm to xml file
   bxml_document doc;
   bxml_element *root = new bxml_element("bwm_info_for_boxm2");
   doc.set_root_element(root);
   root->append_text("\n");
- 
+
   bxml_element* bbox_elm = new bxml_element("bbox");
   bbox_elm->append_text("\n");
   bbox_elm->set_attribute("minx", minx );
@@ -642,7 +641,7 @@ int main(int argc, char** argv)
   bbox_elm->set_attribute("maxz", maxz );
   root->append_data(bbox_elm);
   root->append_text("\n");
- 
+
   vcl_cout << "Bounding Box containing points which are [-3,3]sigma about x and y and [-1,5]-z_sigma about the scene center: " <<bounding_box2<<'\n'
            << "min_x = " << bounding_box2.min_x() << '\n'
            << "min_y = " << bounding_box2.min_y() << '\n'
@@ -653,21 +652,21 @@ int main(int argc, char** argv)
            << "width = " << bounding_box2.width() << '\n'
            << "depth = " << bounding_box2.depth() << '\n'
            << "height= " << bounding_box2.height() << vcl_endl;
- 
+
   //--------------------------------------------------------------------------
   // Determining the resolution of the cells
   //--------------------------------------------------------------------------
-  int good_cam = 0; 
-  while( bad_cams.count(good_cam) > 0 ) good_cam++; 
+  int good_cam = 0;
+  while ( bad_cams.count(good_cam) > 0 ) good_cam++;
   vcl_cout<<"Determining resolution of cells with cam: "<< good_cam << vcl_endl;
-  
+
   vgl_ray_3d<double> cone_axis;
   double cone_half_angle, solid_angle;
   vpgl_camera_bounds::pixel_solid_angle(cams[good_cam], ni/4, nj/4,cone_axis,cone_half_angle,solid_angle);
   vgl_point_3d<double> cc = cams[good_cam].camera_center();
   double res = 2*(cc-centre(pts_3d)).length()*cone_half_angle;
   vcl_cout<<"Resolution     "<<res<<vcl_endl;
- 
+
   //----------------------------------------------------------------------
   //write to disk
   //----------------------------------------------------------------------
@@ -677,11 +676,11 @@ int main(int argc, char** argv)
   res_elm->set_attribute("val", res);
   root->append_data(res_elm);
   root->append_text("\n");
- 
+
   vcl_ofstream xml_os(xml_file().c_str());
   bxml_write(xml_os, doc);
   xml_os.close();
- 
+
   vcl_ofstream os(vrml_file().c_str());
   if (os)
   {
@@ -693,17 +692,17 @@ int main(int argc, char** argv)
   else
     vcl_cout<<"ERROR OPENING  "<< vrml_file() <<vcl_endl;
   }
- 
+
   bwm_video_site_io site;
   site.set_name(site_name());
   site.set_corrs(corrs);
   site.set_site_directory(site_directory());
   site.set_video_path(img_dir()+"/*");
   site.set_camera_path(cam_dir()+"/*");
- 
+
   vcl_string xml_filename=site_directory()+"/"+site_name()+".xml";
   site.x_write(xml_filename.c_str());
- 
+
   vcl_cout<<"Bad cameras "<<bad_cams.size()<<" :";
   vcl_set<int>::iterator iter=bad_cams.begin();
   for (;iter!=bad_cams.end();++iter)
