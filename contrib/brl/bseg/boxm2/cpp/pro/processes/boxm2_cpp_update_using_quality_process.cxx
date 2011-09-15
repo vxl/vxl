@@ -1,4 +1,4 @@
-// This is brl/bseg/boxm2/cpp/pro/processes/boxm2_cpp_update_image_process.cxx
+// This is brl/bseg/boxm2/cpp/pro/processes/boxm2_cpp_update_using_quality_process.cxx
 #include <bprb/bprb_func_process.h>
 //:
 // \file
@@ -24,7 +24,7 @@
 
 namespace boxm2_cpp_update_using_quality_process_globals
 {
-  const unsigned n_inputs_ = 7;
+  const unsigned n_inputs_ = 6;
   const unsigned n_outputs_ = 0;
 }
 
@@ -50,12 +50,11 @@ bool boxm2_cpp_update_using_quality_process_cons(bprb_func_process& pro)
   // process has 1 output:
   // output[0]: scene sptr
   vcl_vector<vcl_string>  output_types_(n_outputs_);
-  bool good = pro.set_input_types(input_types_) &&
-    pro.set_output_types(output_types_);
-  // in case the 6th input is not set
+  // in case the 6th input is not set:
   brdb_value_sptr idx = new brdb_value_t<vcl_string>("");
-  pro.set_input(5, idx);
-  return good;
+  return pro.set_input_types(input_types_) &&
+         pro.set_output_types(output_types_) &&
+         pro.set_input(5, idx);
 }
 
 bool boxm2_cpp_update_using_quality_process(bprb_func_process& pro)
@@ -63,7 +62,7 @@ bool boxm2_cpp_update_using_quality_process(bprb_func_process& pro)
     using namespace boxm2_cpp_update_using_quality_process_globals;
 
     if ( pro.n_inputs() < n_inputs_ ) {
-        vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
+        vcl_cout << pro.name() << ": The number of inputs should be " << n_inputs_<< vcl_endl;
         return false;
     }
     //get the inputs
