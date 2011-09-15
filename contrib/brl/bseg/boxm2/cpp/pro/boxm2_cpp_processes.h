@@ -47,4 +47,5 @@ DECLARE_FUNC_CONS(boxm2_cpp_merge_process);
 
 DECLARE_FUNC_CONS(boxm2_cpp_update_with_shadow_process);
 DECLARE_FUNC_CONS(boxm2_cpp_image_density_masked_process);
+DECLARE_FUNC_CONS(boxm2_cpp_update_using_quality_process);
 #endif
