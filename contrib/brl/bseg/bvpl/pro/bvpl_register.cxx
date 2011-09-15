@@ -50,4 +50,6 @@ void bvpl_register::register_process()
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvpl_pair_to_float_process, "bvplPairToFloatProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvpl_bundler_features_2d_compute_process, "bvplBundlerFeatures2dComputeProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvpl_bundler_features_2d_write_txt_process, "bvplBundlerFeatures2dWriteTxtProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvpl_bundler_features_2d_read_bin_process, "bvplBundlerFeatures2dReadBinProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvpl_bundler_features_2d_write_bin_process, "bvplBundlerFeatures2dWriteBinProcess");
 }
