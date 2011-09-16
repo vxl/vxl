@@ -145,7 +145,7 @@ float boxm2_ocl_update_tableau::update_frame(vil_image_view_base_sptr in_im, vpg
       && bprb_batch_process_manager::instance()->set_input(3, brdb_cam)    // camera
       && bprb_batch_process_manager::instance()->set_input(4, brdb_img)    // input image
       && bprb_batch_process_manager::instance()->set_input(5, identifier)    // input image
-      && bprb_batch_process_manager::instance()->set_input(6, brdb_mask_img)    // input image
+     // && bprb_batch_process_manager::instance()->set_input(6, brdb_mask_img)    // input image
       && bprb_batch_process_manager::instance()->run_process();
 
   if (good)

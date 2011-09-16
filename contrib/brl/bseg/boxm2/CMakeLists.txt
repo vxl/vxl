@@ -47,6 +47,9 @@ IF(EXPAT_FOUND)
 
     #tableaus
     subdirs(view)
+    
+    #util
+    subdirs(util)
 
     #tests
     SUBDIRS(tests)

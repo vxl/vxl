@@ -534,7 +534,27 @@ def trajectory_next(trajectory) :
   cam = dbvalue(id,type);
   return cam; 
 
+def camera_dir_planar_bbox(dir_name) : 
+  boxm2_batch.init_process("vpglGetBoundingBoxProcess");
+  boxm2_batch.set_input_string(0, dir_name);
+  boxm2_batch.run_process();
 
+def bundle2scene(bundle_file, img_dir) : 
+  boxm2_batch.init_process("boxm2BundleToSceneProcess");
+  boxm2_batch.set_input_string(0, bundle_file);
+  boxm2_batch.set_input_string(1, img_dir); 
+  boxm2_batch.run_process();
+  (scene_id, scene_type) = boxm2_batch.commit_output(0);
+  uscene = dbvalue(scene_id, scene_type);
+  (scene_id, scene_type) = boxm2_batch.commit_output(1);
+  rscene = dbvalue(scene_id, scene_type);
+  return uscene, rscene; 
+  
+def save_scene(scene, fname) : 
+  boxm2_batch.init_process("boxm2WriteSceneXMLProcess");
+  boxm2_batch.set_input_from_db(0,scene);
+  boxm2_batch.set_input_string(1, fname); 
+  boxm2_batch.run_process();
 
 # Create multi block scene - params is a hash of scene parameters
 def save_multi_block_scene(params) : 
