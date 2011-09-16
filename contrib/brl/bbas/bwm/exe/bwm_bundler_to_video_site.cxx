@@ -407,7 +407,7 @@ int main(int argc, char** argv)
     // negating to convert bundlers camera facing towards -ve z to positive
     //vgl_vector_3d<double> t(T(0),-T(1),-T(2));
     vgl_vector_3d<double> t(T(0),T(1),-T(2));
-    
+
     if (f>0.0)
     {
       vpgl_calibration_matrix<double> K(f,principal_point) ;
@@ -458,20 +458,21 @@ int main(int argc, char** argv)
 
       img_x=img_x+principal_point.x();
       img_y=(img_y+principal_point.y());
-      double maxerrframe=0;
       double u=0,v=0;
-      
+
       //project point onto image plane
-      cams[view_number].project(x,y,z,u,v); 
-      vgl_ray_3d<double> ray = cams[view_number].backproject_ray(u,v); 
-      vgl_vector_3d<double> point_dir = vgl_homg_point_3d<double>(x,y,z) - cams[view_number].camera_center(); 
-      double dp = dot_product(point_dir, ray.direction()); 
+      cams[view_number].project(x,y,z,u,v);
+      vgl_ray_3d<double> ray = cams[view_number].backproject_ray(u,v);
+      vgl_vector_3d<double> point_dir = vgl_homg_point_3d<double>(x,y,z) - cams[view_number].camera_center();
+      double dp = dot_product(point_dir, ray.direction());
       vcl_cout<<"dot product: "<<dp<<vcl_endl;
-      if(dp < 0.0) {
-        bad_cams.insert(view_number); 
+      if (dp < 0.0) {
+        bad_cams.insert(view_number);
       }
-      //if (cams[view_number].is_behind_camera(homg_world_pt))
-        //bad_cams.insert(view_number);
+#if 0
+      if (cams[view_number].is_behind_camera(homg_world_pt))
+        bad_cams.insert(view_number);
+#endif
       else
       {
         cams[view_number].project(x,y,z,u,v);
