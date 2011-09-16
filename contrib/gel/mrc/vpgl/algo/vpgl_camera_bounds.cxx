@@ -53,7 +53,7 @@ principal_ray_scan::principal_ray_scan(double cone_half_angle,
     rkm1 = rk;
   }
   //if the entire sphere is covered then add the North pole
-  if (limit == n_samples) {
+  if ( limit == n_samples) {
     theta[n_samples-1] = 0.0;
     phi[n_samples-1]   = 0.0;
   }
@@ -205,6 +205,7 @@ rotation_angle_interval(vpgl_perspective_camera<double> const& cam)
   double half_angle = vcl_atan(0.5/rmin);
   return 2.0*half_angle;
 }
+
 #if 0 // moved to vpgl_ray
 double vpgl_camera_bounds::angle_between_rays(vgl_rotation_3d<double> const& r0,
                                               vgl_rotation_3d<double> const& r1)
@@ -234,7 +235,8 @@ rot_about_ray(vgl_rotation_3d<double> const& r0, vgl_rotation_3d<double> const& 
   double ang0 = r0_alpha_rod.magnitude(), ang1 = r1_alpha_rod.magnitude();
   return vcl_fabs(ang0-ang1);
 }
-#endif
+#endif // 0
+
 void vpgl_camera_bounds::
 relative_transf(vpgl_perspective_camera<double> const& c0,
                 vpgl_perspective_camera<double> const& c1,
@@ -259,15 +261,15 @@ bool vpgl_camera_bounds::pixel_cylinder(vpgl_generic_camera<double> const& cam,
   cylinder_axis = cam.ray(u, v);
   vgl_point_3d<double> axis_origin = cylinder_axis.origin();
   vgl_ray_3d<double> corner_ray;
-  if(u>0&&v>0&&u<nc&&v<nr)
+  if (u>0&&v>0&&u<nc&&v<nr)
     corner_ray = cam.ray(u-0.5, v-0.5);
-  else if(u>0&&v==0&&u<nc)
+  else if (u>0&&v==0&&u<nc)
     corner_ray = cam.ray(u-0.5, v+0.5);
-  else if(u==0&&v>0&&v<nr)
+  else if (u==0&&v>0&&v<nr)
     corner_ray = cam.ray(u+0.5, v-0.5);
-  else if(u==0&&v==0)
+  else if (u==0&&v==0)
     corner_ray = cam.ray(u+0.5, v+0.5);
-  else{
+  else {
     cylinder_radius = 0;
     return false;
   }
@@ -276,18 +278,18 @@ bool vpgl_camera_bounds::pixel_cylinder(vpgl_generic_camera<double> const& cam,
   return true;
 }
 
-bool vpgl_camera_bounds::planar_bouding_box(vpgl_perspective_camera<double> const& c, 
-                                            vgl_box_2d<double>& bbox, 
-                                            double z_plane) 
+bool vpgl_camera_bounds::planar_bouding_box(vpgl_perspective_camera<double> const& c,
+                                            vgl_box_2d<double>& bbox,
+                                            double z_plane)
 {
   //principal point for image size
   vgl_point_2d<double> pp = (c.get_calibration()).principal_point();
-  
-  //backproject four corners of the iamge 
+
+  //backproject four corners of the iamge
   vgl_ray_3d<double> ul = c.backproject(0.0, 0.0);
-  vgl_ray_3d<double> ur = c.backproject(2*pp.x(), 0.0); 
-  vgl_ray_3d<double> bl = c.backproject(0.0, 2*pp.y()); 
-  vgl_ray_3d<double> br = c.backproject(2*pp.x(), 2*pp.y()); 
+  vgl_ray_3d<double> ur = c.backproject(2*pp.x(), 0.0);
+  vgl_ray_3d<double> bl = c.backproject(0.0, 2*pp.y());
+  vgl_ray_3d<double> br = c.backproject(2*pp.x(), 2*pp.y());
 
   //define z plane
   vgl_plane_3d<double> zp( vgl_point_3d<double>( 1.0,  1.0, z_plane),
@@ -295,34 +297,34 @@ bool vpgl_camera_bounds::planar_bouding_box(vpgl_perspective_camera<double> cons
                            vgl_point_3d<double>(-1.0,  1.0, z_plane) );
 
   //intersect each ray with z plane
-  vgl_point_3d<double> ulp, urp, blp, brp; 
-  bool good =    vgl_intersection(ul, zp, ulp); 
-  good = good && vgl_intersection(ur, zp, urp); 
-  good = good && vgl_intersection(bl, zp, blp); 
-  good = good && vgl_intersection(br, zp, brp); 
-  
+  vgl_point_3d<double> ulp, urp, blp, brp;
+  bool good =    vgl_intersection(ul, zp, ulp);
+  good = good && vgl_intersection(ur, zp, urp);
+  good = good && vgl_intersection(bl, zp, blp);
+  good = good && vgl_intersection(br, zp, brp);
+
   //add points to box
-  if(good) {
+  if (good) {
     bbox.add( vgl_point_2d<double>(ulp.x(),ulp.y()) );
     bbox.add( vgl_point_2d<double>(urp.x(),urp.y()) );
     bbox.add( vgl_point_2d<double>(blp.x(),blp.y()) );
     bbox.add( vgl_point_2d<double>(brp.x(),brp.y()) );
   }
-  return good; 
+  return good;
 }
 
-bool vpgl_camera_bounds::planar_bouding_box(vcl_vector<vpgl_perspective_camera<double>* >& cams, 
-                                            vgl_box_2d<double>& bbox, 
-                                            double z_plane) 
+bool vpgl_camera_bounds::planar_bouding_box(vcl_vector<vpgl_perspective_camera<double>* >& cams,
+                                            vgl_box_2d<double>& bbox,
+                                            double z_plane)
 {
-  bool good = false; 
-  for(int i=0; i<cams.size(); ++i) {
-    vgl_box_2d<double> b; 
-    if( planar_bouding_box( *cams[i], b, z_plane ) ) {
+  bool good = false;
+  for (unsigned int i=0; i<cams.size(); ++i) {
+    vgl_box_2d<double> b;
+    if ( planar_bouding_box( *cams[i], b, z_plane ) ) {
       bbox.add(b);
-      good = true;  
+      good = true;
     }
   }
-  return good; 
+  return good;
 }
 
