@@ -20,10 +20,7 @@
 #include <vgl/algo/vgl_orient_box_3d.h>
 #include <vgl/algo/vgl_rotation_3d.h>
 #include <vnl/vnl_double_3.h>
-#include <vnl/vnl_matrix_fixed.h>
 #include <vnl/vnl_quaternion.h>
-#include <vnl/algo/vnl_cholesky.h>
-#include <vnl/algo/vnl_svd_fixed.h>
 #include <vpgl/vpgl_camera.h>
 #include <vpgl/vpgl_rational_camera.h>
 #include <vpgl/vpgl_local_rational_camera.h>
@@ -31,10 +28,7 @@
 #include <vpgl/algo/vpgl_camera_bounds.h>
 
 #include <vidl/vidl_image_list_istream.h>
-#include <vidl/vidl_convert.h>
 
-#include <vil/vil_image_view.h>
-#include <vil/vil_save.h>
 #include <vcl_cstdlib.h> // for rand()
 #include <bwm/bwm_site_mgr.h>
 
@@ -67,12 +61,9 @@ write_vrml_cameras(vcl_ofstream& str,vcl_vector<vpgl_perspective_camera<double> 
         << "Shape {\n"
         << " appearance Appearance{\n"
         << "   material Material\n"
-        << "    {\n";
-    if ( bad_cams.count(i) )
-        str << "      diffuseColor " << 1.0 << ' ' << 0.0 << ' ' << 0.0 << '\n';
-    else
-        str << "     diffuseColor " << 1.0 << ' ' << 1.0 << ' ' << 0.0 << '\n';
-    str << "      transparency " << 0.0 << '\n'
+        << "    {\n"
+        << "      diffuseColor " << 1.0 << ' ' << ( bad_cams.count(i) ? 0.0 : 1.0 ) << ' ' << 0.0 << '\n'
+        << "      transparency " << 0.0 << '\n'
         << "    }\n"
         << "  }\n"
         << " geometry Sphere\n"
@@ -231,7 +222,7 @@ bool axis_align_scene(vcl_vector<vgl_point_3d<double> > & corrs,
     vgl_homg_point_3d<double> prot = rot_scene * p;
     corrs[i]=vgl_point_3d<double>(prot.x()/prot.w(),prot.y()/prot.w(),prot.z()/prot.w());
   }
-  // translation 
+  // translation
   vgl_point_3d<double> points_center = centre(corrs);
 
   vnl_vector_fixed<double,3> tr(points_center.x(),
@@ -303,85 +294,86 @@ vnl_vector_fixed<double,3> stddev( vcl_vector<vgl_point_3d<double> > const& v)
 
   return stddev;
 }
-bool LoadNVM(vcl_ifstream& in, 
+
+bool LoadNVM(vcl_ifstream& in,
              vgl_point_2d<double> principal_point,
-             vcl_vector<vpgl_perspective_camera<double> >& camera_data, 
+             vcl_vector<vpgl_perspective_camera<double> >& camera_data,
              vcl_vector<vgl_point_3d<double> >& point_data,
-             vcl_vector<vgl_point_2d<double> >& measurements, 
-             vcl_vector<int>& ptidx, 
+             vcl_vector<vgl_point_2d<double> >& measurements,
+             vcl_vector<int>& ptidx,
              vcl_vector<int>& camidx,
              vcl_vector<vcl_string>& names)
 {
-    int rotation_parameter_num = 4; 
-    vcl_string token;
-    bool format_r9t = false;
-    if(in.peek() == 'N') 
+  int rotation_parameter_num = 4;
+  vcl_string token;
+  bool format_r9t = false;
+  if (in.peek() == 'N')
+  {
+    in >> token; //file header
+    if (vcl_strstr(token.c_str(), "R9T"))
     {
-        in >> token; //file header
-        if(strstr(token.c_str(), "R9T"))
-        {
-            rotation_parameter_num = 9;    //rotation as 3x3 matrix
-            format_r9t = true;
-        }
+      rotation_parameter_num = 9;  //rotation as 3x3 matrix
+      format_r9t = true;
     }
-    int ncam = 0, npoint = 0, nproj = 0;   
-    // read # of cameras
-    in >> ncam;  if(ncam <= 1) return false; 
-    //read the camera parameters
-    camera_data.resize(ncam); // allocate the camera data
-    names.resize(ncam);
+  }
+  int ncam = 0, npoint = 0, nproj = 0;
+  // read # of cameras
+  in >> ncam;  if (ncam <= 1) return false;
+  //read the camera parameters
+  camera_data.resize(ncam); // allocate the camera data
+  names.resize(ncam);
 
-    for(int i = 0; i < ncam; ++i)
+  for (int i = 0; i < ncam; ++i)
+  {
+    double f, q[4], c[3], d[2];
+    in >> token >> f ;
+    vpgl_calibration_matrix<double> K(f,vgl_point_2d<double>(0,0));//principal_point) ;
+
+
+    for (int j = 0; j < rotation_parameter_num; ++j) in >> q[j];
+    in >> c[0] >> c[1] >> c[2] >> d[0] >> d[1];
+
+    vnl_quaternion<double> quaternion(q[1],q[2],q[3],q[0]);
+    vgl_rotation_3d<double> rot(quaternion);
+    vgl_vector_3d<double> t(c[0],c[1],c[2]);
+    vgl_point_3d<double> cc(c[0],c[1],c[2]);
+
+    vpgl_perspective_camera<double> cam(K,cc,rot);
+    camera_data[i] = cam;
+    names[i] = token;
+  }
+
+  //////////////////////////////////////
+  in >> npoint;   if (npoint <= 0) return false;
+
+  //read image projections and 3D points.
+  point_data.resize(npoint);
+  for (int i = 0; i < npoint; ++i)
+  {
+    float pt[3]; int cc[3], npj;
+    in  >> pt[0] >> pt[1] >> pt[2]
+        >> cc[0] >> cc[1] >> cc[2] >> npj;
+    for (int j = 0; j < npj; ++j)
     {
-        double f, q[4], c[3], d[2];
-        in >> token >> f ;
-        vpgl_calibration_matrix<double> K(f,vgl_point_2d<double>(0,0));//principal_point) ;
+      int cidx, fidx; float imx, imy;
+      in >> cidx >> fidx >> imx >> imy;
 
+      camidx.push_back(cidx);  //camera index
+      ptidx.push_back(i);    //point index
 
-        for(int j = 0; j < rotation_parameter_num; ++j) in >> q[j]; 
-        in >> c[0] >> c[1] >> c[2] >> d[0] >> d[1];
+      double u,v ;
+      camera_data[cidx].project(pt[0],pt[1],pt[2], u , v);
 
-        vnl_quaternion<double> quaternion(q[1],q[2],q[3],q[0]);
-        vgl_rotation_3d<double> rot(quaternion);
-        vgl_vector_3d<double> t(c[0],c[1],c[2]);
-        vgl_point_3d<double> cc(c[0],c[1],c[2]);
-
-        vpgl_perspective_camera<double> cam(K,cc,rot);
-        camera_data[i] = cam;
-        names[i] = token;
+      //add a measurement to the vector
+      measurements.push_back(vgl_point_2d<double>(imx, imy));
+      ++nproj;
     }
-
-    //////////////////////////////////////
-    in >> npoint;   if(npoint <= 0) return false; 
-
-    //read image projections and 3D points.
-    point_data.resize(npoint); 
-    for(int i = 0; i < npoint; ++i)
-    {
-        float pt[3]; int cc[3], npj;
-        in  >> pt[0] >> pt[1] >> pt[2] 
-            >> cc[0] >> cc[1] >> cc[2] >> npj;
-        for(int j = 0; j < npj; ++j)
-        {
-            int cidx, fidx; float imx, imy;
-            in >> cidx >> fidx >> imx >> imy;
-
-            camidx.push_back(cidx);    //camera index
-            ptidx.push_back(i);        //point index
-
-            double u,v ;
-            camera_data[cidx].project(pt[0],pt[1],pt[2], u , v);
-
-            //add a measurment to the vector
-            measurements.push_back(vgl_point_2d<double>(imx, imy));
-            nproj ++;
-        }
-        point_data[i]=vgl_point_3d<double>(pt[0],pt[1],pt[2]);
-    }
-    ///////////////////////////////////////////////////////////////////////////////
-    std::cout << ncam << " cameras; " << npoint << " 3D points; " << nproj << " projections\n";
-
+    point_data[i]=vgl_point_3d<double>(pt[0],pt[1],pt[2]);
+  }
+  ///////////////////////////////////////////////////////////////////////////////
+  vcl_cout << ncam << " cameras; " << npoint << " 3D points; " << nproj << " projections\n";
 }
+
 // An executable that read bundler file and convert it into video site.
 int main(int argc, char** argv)
 {
@@ -432,7 +424,7 @@ int main(int argc, char** argv)
   vcl_vector<vpgl_perspective_camera<double> > cams;
   vcl_vector<vgl_point_3d<double> > point_data;
   vcl_vector<vgl_point_2d<double> > measurements;
-  vcl_vector<int> ptidx; 
+  vcl_vector<int> ptidx;
   vcl_vector<int> camidx;
   vcl_vector<vcl_string> names;
 
@@ -443,9 +435,8 @@ int main(int argc, char** argv)
   vcl_ofstream os(vrml_file().c_str());
   if (os)
   {
-      write_vrml_header(os);
-      write_vrml_points(os,point_data,0.01);
-      write_vrml_cameras(os,cams,0.1,bad_cams);
+    write_vrml_header(os);
+    write_vrml_points(os,point_data,0.01);
+    write_vrml_cameras(os,cams,0.1,bad_cams);
   }
-
 }
