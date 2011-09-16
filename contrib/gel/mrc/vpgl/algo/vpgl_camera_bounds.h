@@ -99,13 +99,12 @@ class vpgl_camera_bounds
                              double& cylinder_radius);
 
   //: The (world coordinates) 2d Bounding Box for a camera at a specific Z plane
-  // returns false if plane and camera do not intersect
+  // \returns false if plane and camera do not intersect
   static bool planar_bouding_box(vpgl_perspective_camera<double> const& c, 
                                  vgl_box_2d<double>& bbox, 
                                  double z_plane=0.0); 
 
-  //: The union of the planar bounding boxes at specific z plane for each camera
-  // passed in
+  //: The union of the planar bounding boxes at specific z plane for each camera passed in
   static bool planar_bouding_box(vcl_vector<vpgl_perspective_camera<double>* >& cams, 
                                  vgl_box_2d<double>& bbox, 
                                  double z_plane=0.0); 
