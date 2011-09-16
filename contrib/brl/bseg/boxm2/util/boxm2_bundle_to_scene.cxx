@@ -1,4 +1,6 @@
 #include "boxm2_bundle_to_scene.h"
+//:
+// \file
 #include <vpgl/algo/vpgl_camera_bounds.h>
 #include <vgl/algo/vgl_orient_box_3d.h>
 #include <vgl/algo/vgl_rotation_3d.h>
@@ -7,28 +9,28 @@
 #include <vnl/vnl_quaternion.h>
 #include <vnl/algo/vnl_cholesky.h>
 #include <vnl/algo/vnl_svd_fixed.h>
- 
+#include <vcl_cassert.h>
 
-//: Main boxm2_bundle_to_scene function, takes in bundle.out file and image 
-//  directory that created img_dir
-void boxm2_util_bundle_to_scene(vcl_string bundle_file, 
-                                vcl_string img_dir, 
-                                vcl_map<vcl_string, vpgl_perspective_camera<double>* >& cams, 
-                                vgl_box_3d<double>& bbox, 
-                                double& resolution) 
+//: Main boxm2_bundle_to_scene function
+//  Takes in bundle.out file and image directory that created img_dir
+void boxm2_util_bundle_to_scene(vcl_string bundle_file,
+                                vcl_string img_dir,
+                                vcl_map<vcl_string, vpgl_perspective_camera<double>* >& cams,
+                                vgl_box_3d<double>& bbox,
+                                double& resolution)
 {
-  boxm2_bundle_to_scene b2s(bundle_file, img_dir);   
-  cams        = b2s.get_cams(); 
-  bbox        = b2s.get_bbox(); 
-  resolution  = b2s.get_resolution(); 
+  boxm2_bundle_to_scene b2s(bundle_file, img_dir);
+  cams        = b2s.get_cams();
+  bbox        = b2s.get_bbox();
+  resolution  = b2s.get_resolution();
 }
 
 // reads bundler file and populates list of cameras, and a scene bounding box
 boxm2_bundle_to_scene::boxm2_bundle_to_scene(vcl_string bundle_file, vcl_string img_dir)
 {
-  img_dir_ = img_dir; 
-  bundle_file_ = bundle_file; 
-  
+  img_dir_ = img_dir;
+  bundle_file_ = bundle_file;
+
   // open the bundler file
   vcl_ifstream bfile( bundle_file.c_str() );
   if (!bfile) {
@@ -53,36 +55,36 @@ boxm2_bundle_to_scene::boxm2_bundle_to_scene(vcl_string bundle_file, vcl_string 
   vgl_point_2d<double> ppoint((double)ni/2,(double)nj/2);
 
   //read cameras/points from bundler file
-  unsigned num_cams=0, num_pts=0; 
-  this->read_nums(bfile, num_cams, num_pts); 
-  this->read_cameras(bfile, num_cams, ppoint); 
-  this->read_points(bfile, num_pts, ppoint); 
+  unsigned num_cams=0, num_pts=0;
+  this->read_nums(bfile, num_cams, num_pts);
+  this->read_cameras(bfile, num_cams, ppoint);
+  this->read_points(bfile, num_pts, ppoint);
   this->calc_projection_error(cams_, bad_cams_, corrs_, view_error_map_, view_count_map_);
-  
+
   //--------------------------------------------------------------------------
   // make sure the scene is axis aligned
   ////--------------------------------------------------------------------------
   if (!axis_align_scene(corrs_,cams_))
     return;
-          
+
   //------------------------------------------------------------------------
   // Filter out the cams with very high error
   //------------------------------------------------------------------------
   report_error(view_error_map_, view_count_map_, bad_cams_, 1.5f);
-  
+
   //------------------------------------------------------------------------
   // Save camera and corresponding image file
   //------------------------------------------------------------------------
   for (unsigned i = 0; i < num_cams; ++i) {
     if ( !bad_cams_.count(i) ) {
       imgstream.seek_frame(i);
-      vcl_string path = imgstream.current_path(); 
-      CamType* cam = new CamType(cams_[i]); 
-      final_cams_[path] = cam; 
+      vcl_string path = imgstream.current_path();
+      CamType* cam = new CamType(cams_[i]);
+      final_cams_[path] = cam;
       //vcl_cout<<"Final cam: "<<path<<vcl_endl;
     }
   }//end camera write
-  
+
   //------------------------------------------------------------------------
   // Save calc bounding box
   //------------------------------------------------------------------------
@@ -93,14 +95,14 @@ boxm2_bundle_to_scene::boxm2_bundle_to_scene(vcl_string bundle_file, vcl_string 
     bounding_box.add(corrs_[i]->world_pt());
     pts_3d.push_back(corrs_[i]->world_pt());
   }
-  
+
   // Dimensions of the World
   vcl_cout<<"Full Point Bounding Box "<<bounding_box<<vcl_endl;
   vgl_point_3d<double> c = centre(pts_3d);
   vcl_cout<<"Center of Gravity "<<centre(pts_3d)<<vcl_endl;
   vnl_vector_fixed<double,3> sigma = stddev(pts_3d);
   vcl_cout<<"Point stddev "<< sigma <<vcl_endl;
-  
+
   //--------------------------------------------------------------------------
   // Define dimensions to be used for a boxm scene
   // Note: x-y dimensions are kind of a good approximation
@@ -109,14 +111,14 @@ boxm2_bundle_to_scene::boxm2_bundle_to_scene(vcl_string bundle_file, vcl_string 
   double minx=-3.0f*sigma[0], miny=-3.0f*sigma[1], minz=-1.0f*sigma[2];
   double maxx=3.0f*sigma[0], maxy=3.0f*sigma[1], maxz=5.0f*sigma[2];
   bbox_ = vgl_box_3d<double>(minx, miny, minz, maxx, maxy,maxz);
- 
+
   //--------------------------------------------------------------------------
   // Determining the resolution of the cells
   //--------------------------------------------------------------------------
-  int good_cam = 0; 
-  while( bad_cams_.count(good_cam) > 0 ) good_cam++; 
+  int good_cam = 0;
+  while ( bad_cams_.count(good_cam) > 0 ) good_cam++;
   vcl_cout<<"Determining resolution of cells with cam: "<< good_cam << vcl_endl;
-  
+
   vgl_ray_3d<double> cone_axis;
   double cone_half_angle, solid_angle;
   vpgl_camera_bounds::pixel_solid_angle(cams_[good_cam], ni/4, nj/4,cone_axis,cone_half_angle,solid_angle);
@@ -131,13 +133,13 @@ bool boxm2_bundle_to_scene::read_nums(vcl_ifstream& bfile, unsigned& num_cams, u
 {
   //read bundler file header
   char buffer[1024];
-  bfile.getline(buffer,1024);  
+  bfile.getline(buffer,1024);
   if (bfile.eof()) {
     vcl_cout<<"File Missing data"<<vcl_endl;
     return false;
   }
   // reading number of cameras and number of 3-d pts
-  bfile>>num_cams>>num_pts; 
+  bfile>>num_cams>>num_pts;
 }
 
 //------------------------------------------------------------------------
@@ -148,22 +150,22 @@ bool boxm2_bundle_to_scene::read_cameras(vcl_ifstream& bfile, unsigned num_cams,
   // read the cams from bundler and write it to a directory
   vcl_vector<vnl_matrix_fixed<double,3,3> > Rs;
   vcl_vector<vnl_vector_fixed<double,3> > Ts;
- 
+
   double f,k1,k2;
   for (unsigned i=0;i<num_cams;++i)
   {
     vnl_matrix_fixed<double,3,3> R;
     vnl_vector_fixed<double,3> T;
- 
+
     //grab cam info from file
     bfile>>f>>k1>>k2;
     bfile>>R>>T;
- 
+
     // negating to convert bundlers camera facing towards -ve z to positive
     R(2,0) = -R(2,0); R(2,1) = -R(2,1); R(2,2) = -R(2,2);
     R(1,0) =  R(1,0); R(1,1) =  R(1,1); R(1,2) =  R(1,2);
     T[1]= T[1];
-    T[2]= -T[2];   
+    T[2]= -T[2];
     vnl_vector_fixed<double,3> CC = - R.transpose()*T;
     vgl_point_3d<double> cc(CC[0],CC[1],CC[2]);
     vgl_rotation_3d<double> rot(R);
@@ -189,12 +191,12 @@ bool boxm2_bundle_to_scene::read_cameras(vcl_ifstream& bfile, unsigned num_cams,
 //------------------------------------------------------------------------
 bool boxm2_bundle_to_scene::read_points(vcl_ifstream& bfile, unsigned num_pts, vgl_point_2d<double> ppoint)
 {
-  double max_y=-100000.0, min_y = 10000000; 
+  double max_y=-100000.0, min_y = 10000000;
   for (unsigned i=0;i<num_pts;++i)
   {
     bwm_video_corr_sptr corr = new bwm_video_corr();
     double x,y,z;
- 
+
     // read the 3-d point
     bfile>>x>>y>>z;
     corr->set_world_pt(vgl_point_3d<double>(x,y,z));
@@ -203,8 +205,8 @@ bool boxm2_bundle_to_scene::read_points(vcl_ifstream& bfile, unsigned num_pts, v
     // read the intenstiy but don't do anything with it right now.
     int r,g,b;
     bfile>>r>>g>>b;
-    corr->set_intensity( vgl_vector_3d<int>(r,g,b) ); 
- 
+    corr->set_intensity( vgl_vector_3d<int>(r,g,b) );
+
     //grab number of views that see this point
     unsigned num_views;
     bfile>>num_views;
@@ -216,12 +218,12 @@ bool boxm2_bundle_to_scene::read_points(vcl_ifstream& bfile, unsigned num_pts, v
       bfile>>view_number>>key_number>>img_x>>img_y;
       img_x = img_x+ppoint.x();
       img_y = img_y+ppoint.y();
-      
+
       //track correlations
       corr->add(view_number,vgl_point_2d<double>(img_x,img_y));
     }
     corrs_.push_back(corr);
-  }    
+  }
 }
 
 bool boxm2_bundle_to_scene::fit_plane_ransac(vcl_vector<vgl_homg_point_3d<double> > & points, vgl_homg_plane_3d<double>  & plane)
@@ -273,7 +275,7 @@ bool boxm2_bundle_to_scene::fit_plane_ransac(vcl_vector<vgl_homg_point_3d<double
 }
 
 bool boxm2_bundle_to_scene::axis_align_scene(vcl_vector<bwm_video_corr_sptr> & corrs,
-                      vcl_vector<vpgl_perspective_camera<double> > & cams)
+                                             vcl_vector<vpgl_perspective_camera<double> > & cams)
 {
   vcl_vector<vgl_homg_point_3d<double> > points;
   for (unsigned i=0;i<corrs.size();++i)
@@ -388,17 +390,17 @@ vnl_double_3 boxm2_bundle_to_scene::stddev( vcl_vector<vgl_point_3d<double> > co
 
   return stddev;
 }
- 
- 
+
+
 //------------------------------------------------------------------------
 // Calc projection error
 // read the correspondence and 3-d points
 //------------------------------------------------------------------------
-void boxm2_bundle_to_scene::calc_projection_error( vcl_vector<vpgl_perspective_camera<double> >& cams, 
-                            vcl_set<int>&                    bad_cams,
-                            vcl_vector<bwm_video_corr_sptr>& corrs,
-                            vcl_map<unsigned,double>&        view_error_map,
-                            vcl_map<unsigned,unsigned>&      view_count_map )
+void boxm2_bundle_to_scene::calc_projection_error( vcl_vector<vpgl_perspective_camera<double> >& cams,
+                                                   vcl_set<int>&                    bad_cams,
+                                                   vcl_vector<bwm_video_corr_sptr>& corrs,
+                                                   vcl_map<unsigned,double>&        view_error_map,
+                                                   vcl_map<unsigned,unsigned>&      view_count_map )
 {
   double err=0;
   double cnt=0;
@@ -449,9 +451,9 @@ void boxm2_bundle_to_scene::calc_projection_error( vcl_vector<vpgl_perspective_c
 }
 
 void boxm2_bundle_to_scene::report_error(vcl_map<unsigned,double>&   view_error_map,
-                  vcl_map<unsigned,unsigned>& view_count_map,
-                  vcl_set<int>&               bad_cams,
-                  float                       filter_thresh)
+                                         vcl_map<unsigned,unsigned>& view_count_map,
+                                         vcl_set<int>&               bad_cams,
+                                         float                       filter_thresh)
 {
   vcl_cout<<"Projection error per camera:"<<vcl_endl;
   float error  = 0.0;
@@ -473,5 +475,4 @@ void boxm2_bundle_to_scene::report_error(vcl_map<unsigned,double>&   view_error_
   }
   vcl_cout<<"Filtered Avg Projection Error "<<error/counts<<vcl_endl;
 }
-
 
