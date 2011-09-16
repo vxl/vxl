@@ -39,6 +39,5 @@ void boxm2_register::register_process()
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_stream_cache_close_files_process, "boxm2StreamCacheCloseFilesProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_compute_sun_affine_camera_process, "boxm2ComputeSunAffineCameraProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_mask_sift_features_process, "boxm2MaskSiftFeaturesProcess");
-
-  
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_bundle_to_scene_process, "boxm2BundleToSceneProcess");
 }

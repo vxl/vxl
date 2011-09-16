@@ -9,6 +9,7 @@
 
 #include <vcl_fstream.h>
 #include <boxm2/boxm2_scene.h>
+#include <vul/vul_file.h>
 
 namespace boxm2_write_scene_xml_process_globals
 {
@@ -48,7 +49,13 @@ bool boxm2_write_scene_xml_process(bprb_func_process& pro)
   boxm2_scene_sptr scene=pro.get_input<boxm2_scene_sptr>(i++);
   vcl_string    filename=pro.get_input<vcl_string>(i++); 
 
+  //set xml path to reflect fname
+  vcl_string xmlPath = scene->xml_path(); 
+  vcl_string xmlDir = vul_file::dirname(xmlPath); 
+  scene->set_xml_path(xmlDir + "/" + filename + ".xml"); 
+  
+  //make file and x_write to file
   vcl_ofstream ofile(scene->xml_path().c_str());
-  x_write(ofile,(*scene.ptr()),filename);
+  x_write(ofile,(*scene.ptr()), "scene");
   return true;
 }
