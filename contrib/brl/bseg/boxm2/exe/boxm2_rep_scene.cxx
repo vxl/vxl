@@ -1,3 +1,5 @@
+//DEPRECATED
+
 //executable args
 #include <vul/vul_arg.h>
 
@@ -76,35 +78,35 @@ int main(int argc,  char** argv)
 
   //4. GET SINGLE BLOCK
   boxm2_block_id id(0,0,0);
-  boxm2_dumb_cache dcache(scene.ptr());
-  boxm2_block_sptr blk      = dcache.get_block(id);
-  boxm2_data_base_sptr alph = dcache.get_data<BOXM2_ALPHA>(id);
-  boxm2_data_base_sptr mog  = dcache.get_data<BOXM2_MOG3_GREY>(id);
+  //boxm2_dumb_cache dcache(scene.ptr());
+  //boxm2_block_sptr blk      = dcache.get_block(id);
+  //boxm2_data_base_sptr alph = dcache.get_data<BOXM2_ALPHA>(id);
+  //boxm2_data_base_sptr mog  = dcache.get_data<BOXM2_MOG3_GREY>(id);
 
-  //5. copy and save it
-  for (int i=0; i<2; ++i) {
-    for (int j=0; j<2; ++j) {
-      char* blkBuffer = new char[blk->byte_count()];
-      vcl_memcpy(blkBuffer, blk->buffer(), blk->byte_count());
-      boxm2_block_id id(i,j,0);
+  ////5. copy and save it
+  //for (int i=0; i<2; ++i) {
+    //for (int j=0; j<2; ++j) {
+      //char* blkBuffer = new char[blk->byte_count()];
+      //vcl_memcpy(blkBuffer, blk->buffer(), blk->byte_count());
+      //boxm2_block_id id(i,j,0);
 
-      //save voxel block
-      boxm2_block block(id, blkBuffer);
-      boxm2_sio_mgr::save_block(new_scene.data_path(), &block);
+      ////save voxel block
+      //boxm2_block block(id, blkBuffer);
+      //boxm2_sio_mgr::save_block(new_scene.data_path(), &block);
 
-      //save alpha buffer
-      char* alphaBuffer = new char[alph->buffer_length()];
-      vcl_memcpy(alphaBuffer, alph->data_buffer(), alph->buffer_length());
-      boxm2_data<BOXM2_ALPHA> alpha_data(alphaBuffer, alph->buffer_length(), id);
-      boxm2_sio_mgr::save_block_data<BOXM2_ALPHA>(new_scene.data_path(), id, &alpha_data);
+      ////save alpha buffer
+      //char* alphaBuffer = new char[alph->buffer_length()];
+      //vcl_memcpy(alphaBuffer, alph->data_buffer(), alph->buffer_length());
+      //boxm2_data<BOXM2_ALPHA> alpha_data(alphaBuffer, alph->buffer_length(), id);
+      //boxm2_sio_mgr::save_block_data<BOXM2_ALPHA>(new_scene.data_path(), id, &alpha_data);
 
-      //save mog buffer
-      char* mogBuffer = new char[mog->buffer_length()];
-      vcl_memcpy(mogBuffer, mog->data_buffer(), mog->buffer_length());
-      boxm2_data<BOXM2_MOG3_GREY> mog_data(mogBuffer, mog->buffer_length(), id);
-      boxm2_sio_mgr::save_block_data<BOXM2_MOG3_GREY>(new_scene.data_path(), id, &mog_data);
-    }
-  }
+      ////save mog buffer
+      //char* mogBuffer = new char[mog->buffer_length()];
+      //vcl_memcpy(mogBuffer, mog->data_buffer(), mog->buffer_length());
+      //boxm2_data<BOXM2_MOG3_GREY> mog_data(mogBuffer, mog->buffer_length(), id);
+      //boxm2_sio_mgr::save_block_data<BOXM2_MOG3_GREY>(new_scene.data_path(), id, &mog_data);
+    //}
+  //}
 
   return 0;
 }
