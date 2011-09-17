@@ -460,10 +460,10 @@ void boxm2_bundle_to_scene::report_error(vcl_map<unsigned,double>&   view_error_
   vcl_map<unsigned,double>::iterator ve_itr = view_error_map.begin(),
                                      ve_end = view_error_map.end();
   for (;ve_itr!=ve_end;++ve_itr) {
-    unsigned cam=ve_itr->first;
-    unsigned cnt=view_count_map[cam];
 #ifdef DEBUG
+    unsigned cam=ve_itr->first;
     double   err=ve_itr->second;
+    unsigned cnt=view_count_map[cam];
     vcl_cout<<"   error for camera_"<<cam<<": "<<err/cnt<<vcl_endl;
 #endif
     if (ve_itr->second/view_count_map[ve_itr->first] > filter_thresh) {
