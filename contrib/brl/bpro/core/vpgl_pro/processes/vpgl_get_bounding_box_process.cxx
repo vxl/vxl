@@ -43,48 +43,48 @@ bool vpgl_get_bounding_box_process(bprb_func_process& pro)
   // get the inputs
   int i=0;
   vcl_string cam_dir = pro.get_input<vcl_string>(i);
-  float      zplane  = 0.0; 
+  float      zplane  = 0.0;
 
   //populate vector of cameras
   //: returns a list of cameras from specified directory
-  vcl_vector<vpgl_perspective_camera<double>* > cams = 
-      boxm2_util::cameras_from_directory(cam_dir); 
-  
+  vcl_vector<vpgl_perspective_camera<double>* > cams =
+      boxm2_util::cameras_from_directory(cam_dir);
+
   //run planar bounding box
-  vgl_box_2d<double> bbox; 
-  bool good = vpgl_camera_bounds::planar_bouding_box(cams,bbox,zplane); 
-  if(good) 
+  vgl_box_2d<double> bbox;
+  bool good = vpgl_camera_bounds::planar_bouding_box(cams,bbox,zplane);
+  if (good)
     vcl_cout<<"Bounding box found: "<<bbox<<vcl_endl;
-  else 
-    vcl_cout<<"Bounding box not found. "<<vcl_endl;
-  
-  
+  else
+    vcl_cout<<"Bounding box not found."<<vcl_endl;
+
+
   //---------------------------------------------------------------------------
   //create zplane count map
   //---------------------------------------------------------------------------
   //determine the resolution of a pixel on the z plane
-  vpgl_perspective_camera<double> cam = *cams[0]; 
+  vpgl_perspective_camera<double> cam = *cams[0];
   vgl_point_2d<double> pp = (cam.get_calibration()).principal_point();
   vgl_ray_3d<double> cone_axis;
   double cone_half_angle, solid_angle;
   vpgl_camera_bounds::pixel_solid_angle(cam, pp.x()/4, pp.y()/4, cone_axis, cone_half_angle, solid_angle);
   vgl_point_3d<double> cc = cam.camera_center();
-  vgl_point_3d<double> zc( bbox.centroid().x(), bbox.centroid().y(), zplane); 
+  vgl_point_3d<double> zc( bbox.centroid().x(), bbox.centroid().y(), zplane);
   double res = 2*(cc-zc).length()*cone_half_angle;
-  
+
   //create an image with this res, and count each pixel
-  unsigned ni = (unsigned) (bbox.width()/res); 
+  unsigned ni = (unsigned) (bbox.width()/res);
   unsigned nj = (unsigned) (bbox.height()/res);
-  vil_image_view<vxl_byte> cntimg(ni, nj); 
+  vil_image_view<vxl_byte> cntimg(ni, nj);
   vcl_cout<<"Created Box size: "<<ni<<','<<nj<<vcl_endl;
-  for(int i=0; i<cams.size(); ++i) {
-    
+  for (unsigned int i=0; i<cams.size(); ++i)
+  {
     //project the four corners to the ground plane
-    cam = *cams[i]; 
+    cam = *cams[i];
     vgl_ray_3d<double> ul = cam.backproject(0.0, 0.0);
-    vgl_ray_3d<double> ur = cam.backproject(2*pp.x(), 0.0); 
-    vgl_ray_3d<double> bl = cam.backproject(0.0, 2*pp.y()); 
-    vgl_ray_3d<double> br = cam.backproject(2*pp.x(), 2*pp.y()); 
+    vgl_ray_3d<double> ur = cam.backproject(2*pp.x(), 0.0);
+    vgl_ray_3d<double> bl = cam.backproject(0.0, 2*pp.y());
+    vgl_ray_3d<double> br = cam.backproject(2*pp.x(), 2*pp.y());
 
     //define z plane
     vgl_plane_3d<double> zp( vgl_point_3d<double>( 1.0,  1.0, zplane),
@@ -92,49 +92,49 @@ bool vpgl_get_bounding_box_process(bprb_func_process& pro)
                              vgl_point_3d<double>(-1.0,  1.0, zplane) );
 
     //intersect each ray with z plane
-    vgl_point_3d<double> ulp, urp, blp, brp; 
-    bool good =    vgl_intersection(ul, zp, ulp); 
-    good = good && vgl_intersection(ur, zp, urp); 
-    good = good && vgl_intersection(bl, zp, blp); 
-    good = good && vgl_intersection(br, zp, brp); 
-    
+    vgl_point_3d<double> ulp, urp, blp, brp;
+    bool good =    vgl_intersection(ul, zp, ulp);
+    good = good && vgl_intersection(ur, zp, urp);
+    good = good && vgl_intersection(bl, zp, blp);
+    good = good && vgl_intersection(br, zp, brp);
+
     //convert the four corners into image coordinates
     typedef vgl_polygon<double>::point_t        Point_type;
     typedef vgl_polygon<double>                 Polygon_type;
-    typedef vgl_polygon_scan_iterator<double>   Polygon_scan; 
+    typedef vgl_polygon_scan_iterator<double>   Polygon_scan;
     Polygon_type poly;
-    poly.new_sheet();    
-    poly.push_back( Point_type( (ulp.x()-bbox.min_x())/res, (ulp.y()-bbox.min_y())/res ) ); 
-    poly.push_back( Point_type( (urp.x()-bbox.min_x())/res, (urp.y()-bbox.min_y())/res ) ); 
-    poly.push_back( Point_type( (blp.x()-bbox.min_x())/res, (blp.y()-bbox.min_y())/res ) ); 
-    poly.push_back( Point_type( (brp.x()-bbox.min_x())/res, (brp.y()-bbox.min_y())/res ) ); 
+    poly.new_sheet();
+    poly.push_back( Point_type( (ulp.x()-bbox.min_x())/res, (ulp.y()-bbox.min_y())/res ) );
+    poly.push_back( Point_type( (urp.x()-bbox.min_x())/res, (urp.y()-bbox.min_y())/res ) );
+    poly.push_back( Point_type( (blp.x()-bbox.min_x())/res, (blp.y()-bbox.min_y())/res ) );
+    poly.push_back( Point_type( (brp.x()-bbox.min_x())/res, (brp.y()-bbox.min_y())/res ) );
 
     // There will be scan lines at y=0, 1 and 2.
-    unsigned int count=0;
     Polygon_scan it(poly, false);
     int y=0;
     for (it.reset(); it.next(); ++y) {
       int y = it.scany();
       for (int x = it.startx(); x <= it.endx(); ++x) {
-        int yy = nj-y; 
-        if(x>=0 && x<ni && yy>=0 && yy<nj) {
-          cntimg(x, nj-y) += (vxl_byte) 1; 
+        int yy = nj-y;
+        if (x>=0 && (unsigned)x<ni && yy>=0 && (unsigned)yy<nj) {
+          cntimg(x, yy) += (vxl_byte) 1;
         }
-        else{
-          //vcl_cout<<"X and Y in scan iterator are out of bounds: "<<x<<','<<y<<vcl_endl;
+#ifdef DEBUG
+        else {
+          vcl_cout<<"X and Y in scan iterator are out of bounds: "<<x<<','<<y<<vcl_endl;
         }
+#endif
       }
     }
   }
-  
+
   //use count image to create a tighter bounding box
   vil_save(cntimg, "countImage.png");
 
-  
   //clean up cameras
-  for(int i=0; i<cams.size(); ++i) 
-    delete cams[i]; 
-  
+  for (unsigned int i=0; i<cams.size(); ++i)
+    delete cams[i];
+
   return good;
 }
 
