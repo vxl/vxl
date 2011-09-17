@@ -105,7 +105,7 @@ bool boxm2_bundle_to_scene_process(bprb_func_process& pro)
   //----------------------------------------------------------------------------
   vcl_map<vcl_string, CamType*> cams;
   vgl_box_3d<double>            bbox;
-  double_t                      resolution;
+  double                        resolution;
   boxm2_util_bundle_to_scene(bundler_out, img_dir, cams, bbox, resolution);
   vcl_cout << "Bounding Box containing points which are [-3,3]sigma about x and y and [-1,5]-z_sigma about the scene center: " <<bbox<<vcl_endl;
 
