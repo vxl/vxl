@@ -140,6 +140,7 @@ bool boxm2_bundle_to_scene::read_nums(vcl_ifstream& bfile, unsigned& num_cams, u
   }
   // reading number of cameras and number of 3-d pts
   bfile>>num_cams>>num_pts;
+  return true;
 }
 
 //------------------------------------------------------------------------
@@ -184,6 +185,7 @@ bool boxm2_bundle_to_scene::read_cameras(vcl_ifstream& bfile, unsigned num_cams,
       bad_cams_.insert(i);
     }
   }
+  return true;
 }
 
 //------------------------------------------------------------------------
@@ -191,7 +193,6 @@ bool boxm2_bundle_to_scene::read_cameras(vcl_ifstream& bfile, unsigned num_cams,
 //------------------------------------------------------------------------
 bool boxm2_bundle_to_scene::read_points(vcl_ifstream& bfile, unsigned num_pts, vgl_point_2d<double> ppoint)
 {
-  double max_y=-100000.0, min_y = 10000000;
   for (unsigned i=0;i<num_pts;++i)
   {
     bwm_video_corr_sptr corr = new bwm_video_corr();
@@ -224,6 +225,7 @@ bool boxm2_bundle_to_scene::read_points(vcl_ifstream& bfile, unsigned num_pts, v
     }
     corrs_.push_back(corr);
   }
+  return true;
 }
 
 bool boxm2_bundle_to_scene::fit_plane_ransac(vcl_vector<vgl_homg_point_3d<double> > & points, vgl_homg_plane_3d<double>  & plane)
@@ -404,8 +406,6 @@ void boxm2_bundle_to_scene::calc_projection_error( vcl_vector<vpgl_perspective_c
 {
   double err=0;
   double cnt=0;
-  double maxerr=0;
-  int maxerrcam=-1;
   for (unsigned i=0;i<corrs.size();++i)
   {
     bwm_video_corr_sptr corr = corrs[i];
@@ -421,14 +421,13 @@ void boxm2_bundle_to_scene::calc_projection_error( vcl_vector<vpgl_perspective_c
       double img_x = xy.x(), img_y = xy.y();
 
       //calc error for this point
-      double maxerrframe=0;
-      double u=0,v=0;
       if (cams[view_number].is_behind_camera(wpt)) {
         bad_cams.insert(view_number);
       }
       else
       {
         //project x,y,z onto image plane, calc rms error
+        double u=0,v=0;
         cams[view_number].project(wpt.x(), wpt.y(), wpt.z(),u,v);
         double rms=vcl_sqrt((u-img_x)*(u-img_x)+(v-img_y)*(v-img_y));
         err+=rms;++cnt;
@@ -462,9 +461,11 @@ void boxm2_bundle_to_scene::report_error(vcl_map<unsigned,double>&   view_error_
                                      ve_end = view_error_map.end();
   for (;ve_itr!=ve_end;++ve_itr) {
     unsigned cam=ve_itr->first;
-    double   err=ve_itr->second;
     unsigned cnt=view_count_map[cam];
-    //vcl_cout<<"   error for camera_"<<cam<<": "<<err/cnt<<vcl_endl;
+#ifdef DEBUG
+    double   err=ve_itr->second;
+    vcl_cout<<"   error for camera_"<<cam<<": "<<err/cnt<<vcl_endl;
+#endif
     if (ve_itr->second/view_count_map[ve_itr->first] > filter_thresh) {
       bad_cams.insert(ve_itr->first);
     }
