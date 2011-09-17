@@ -54,23 +54,23 @@ void test_nn_cache()
 
 void test_dumb_cache()
 {
+#if 0
   // init cache
   vcl_string scene_file=boxm2_test_utils::save_test_simple_scene();
   boxm2_scene scene(scene_file);
   boxm2_dumb_cache dcache(&scene);
 
   // check a few block values
-  vgl_vector_3d<unsigned> nums;
   boxm2_block_sptr blk(dcache.get_block(boxm2_block_id(0,0,0)) );
 
   /*boxm2_data<BOXM2_ALPHA>*/  boxm2_data_base_sptr alph = dcache.get_data<BOXM2_ALPHA>(boxm2_block_id(0,0,0));
   boxm2_data_base_sptr mog = dcache.get_data<BOXM2_MOG3_GREY>(boxm2_block_id(0,0,0));
-  nums = blk->sub_block_num();
-
+  vgl_vector_3d<unsigned> nums = blk->sub_block_num();
   // get another
   blk = dcache.get_block(boxm2_block_id(0,0,0));
-  //mog = dcache.get_data<BOXM2_MOG3_GREY>(boxm2_block_id(0,1,0));
-  //TEST("block carries same meta data:", nums==blk->sub_block_num(), true);
+  mog = dcache.get_data<BOXM2_MOG3_GREY>(boxm2_block_id(0,1,0));
+  TEST("block carries same meta data:", nums==blk->sub_block_num(), true);
+#endif
 }
 
 
@@ -79,8 +79,7 @@ void test_cache()
   //ensure blocks 0.0.0 - 1.1.1 are saved to disk
   boxm2_test_utils::save_test_scene_to_disk();
 
-  //test_dumb_cache();
-  //test_nn_cache();
+  test_nn_cache();
   test_dumb_cache();
 
   //clean up .bin blocks created above
