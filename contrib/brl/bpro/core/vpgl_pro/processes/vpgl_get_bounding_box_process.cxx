@@ -15,7 +15,6 @@
 #include <vsl/vsl_binary_io.h>
 #include <vil/vil_image_view.h>
 #include <vil/vil_save.h>
-#include <boxm2/boxm2_util.h>
 
 //: initialization
 bool vpgl_get_bounding_box_process_cons(bprb_func_process& pro)
@@ -47,12 +46,11 @@ bool vpgl_get_bounding_box_process(bprb_func_process& pro)
 
   //populate vector of cameras
   //: returns a list of cameras from specified directory
-  vcl_vector<vpgl_perspective_camera<double>* > cams =
-      boxm2_util::cameras_from_directory(cam_dir);
+  vcl_vector<vpgl_perspective_camera<double> > cams = cameras_from_directory(cam_dir, 0.0);
 
   //run planar bounding box
   vgl_box_2d<double> bbox;
-  bool good = vpgl_camera_bounds::planar_bouding_box(cams,bbox,zplane);
+  bool good = vpgl_camera_bounds::planar_bounding_box(cams,bbox,zplane);
   if (good)
     vcl_cout<<"Bounding box found: "<<bbox<<vcl_endl;
   else
@@ -63,7 +61,7 @@ bool vpgl_get_bounding_box_process(bprb_func_process& pro)
   //create zplane count map
   //---------------------------------------------------------------------------
   //determine the resolution of a pixel on the z plane
-  vpgl_perspective_camera<double> cam = *cams[0];
+  vpgl_perspective_camera<double> cam = cams[0];
   vgl_point_2d<double> pp = (cam.get_calibration()).principal_point();
   vgl_ray_3d<double> cone_axis;
   double cone_half_angle, solid_angle;
@@ -80,7 +78,7 @@ bool vpgl_get_bounding_box_process(bprb_func_process& pro)
   for (unsigned int i=0; i<cams.size(); ++i)
   {
     //project the four corners to the ground plane
-    cam = *cams[i];
+    cam = cams[i];
     vgl_ray_3d<double> ul = cam.backproject(0.0, 0.0);
     vgl_ray_3d<double> ur = cam.backproject(2*pp.x(), 0.0);
     vgl_ray_3d<double> bl = cam.backproject(0.0, 2*pp.y());
@@ -130,10 +128,6 @@ bool vpgl_get_bounding_box_process(bprb_func_process& pro)
 
   //use count image to create a tighter bounding box
   vil_save(cntimg, "countImage.png");
-
-  //clean up cameras
-  for (unsigned int i=0; i<cams.size(); ++i)
-    delete cams[i];
 
   return good;
 }
