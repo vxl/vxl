@@ -30,19 +30,19 @@ namespace boxm2_cpp_render_z_images_process_globals
 {
   const unsigned n_inputs_ =  4;
   const unsigned n_outputs_ = 0;
-
 }
 
 bool boxm2_cpp_render_z_images_process_cons(bprb_func_process& pro)
 {
   using namespace boxm2_cpp_render_z_images_process_globals;
 
-  //process takes 1 input
+  //process takes 4 inputs
   vcl_vector<vcl_string> input_types_(n_inputs_);
   input_types_[0] = "boxm2_scene_sptr";
   input_types_[1] = "boxm2_cache_sptr";
   input_types_[2] = "vcl_string"; // data identifier
   input_types_[3] = "vcl_string"; //outputdir
+  //and no outputs
   vcl_vector<vcl_string>  output_types_(n_outputs_);
 
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
@@ -81,45 +81,44 @@ bool  boxm2_cpp_render_z_images_process(bprb_func_process& pro)
   unsigned int nj=(unsigned int)vcl_ceil(bbox.height()/yint) -1;
   unsigned int nz=(unsigned int)vcl_ceil(bbox.depth()/zint) -1;
 
-  for(unsigned k = 0;k<nz;k++)
+  for (unsigned k = 0;k<nz;k++)
   {
-      vil_image_view<float> img(ni,nj);
-      float z = bbox.min_z()+zint*k+zint*0.5;
+    vil_image_view<float> img(ni,nj);
+    float z = bbox.min_z()+zint*k+zint*0.5;
 
-      for(unsigned i = 0; i<ni; i++)
+    for (unsigned i = 0; i<ni; i++)
+    {
+      float x = bbox.min_x()+xint*i+xint*0.5;
+      for (unsigned j = 0; j<nj; j++)
       {
-          float x = bbox.min_x()+xint*i+xint*0.5;
-          for(unsigned j = 0; j<nj; j++)
-          {
-              float y = bbox.min_y()+yint*j +yint*0.5;
-              vgl_point_3d<double> local; 
-              boxm2_block_id id;
-              if (!scene->contains(vgl_point_3d<double>(x, y, z), id, local))
-              {
-                  vcl_cout<<"does not contain               "<<vcl_endl;
-                  continue;
-              }
-              int index_x=(int)vcl_floor(local.x());
-              int index_y=(int)vcl_floor(local.y());
-              int index_z=(int)vcl_floor(local.z());
+        float y = bbox.min_y()+yint*j +yint*0.5;
+        vgl_point_3d<double> local;
+        boxm2_block_id id;
+        if (!scene->contains(vgl_point_3d<double>(x, y, z), id, local))
+        {
+          vcl_cout<<"does not contain"<<vcl_endl;
+          continue;
+        }
+        int index_x=(int)vcl_floor(local.x());
+        int index_y=(int)vcl_floor(local.y());
+        int index_z=(int)vcl_floor(local.z());
 
-              boxm2_block * blk=cache->get_block(id);
-              boxm2_block_metadata mdata = scene->get_block_metadata_const(id);
+        boxm2_block * blk=cache->get_block(id);
+        boxm2_block_metadata mdata = scene->get_block_metadata_const(id);
 
-              vnl_vector_fixed<unsigned char,16> treebits=blk->trees()(index_x,index_y,index_z);
-              boct_bit_tree2 tree(treebits.data_block(),mdata.max_level_);
-              int bit_index=tree.traverse(local);
-              int depth=tree.depth_at(bit_index);
-              int index=tree.get_data_index(bit_index,false);
+        vnl_vector_fixed<unsigned char,16> treebits=blk->trees()(index_x,index_y,index_z);
+        boct_bit_tree2 tree(treebits.data_block(),mdata.max_level_);
+        int bit_index=tree.traverse(local);
+        int index=tree.get_data_index(bit_index,false);
 
-              boxm2_data_base         *  float_base  = cache->get_data_base(id,data_identifier);
-              float * buffer = reinterpret_cast<float*>(float_base->data_buffer());
-              img(i,j) = buffer[index];
-          }
+        boxm2_data_base     *  float_base  = cache->get_data_base(id,data_identifier);
+        float * buffer = reinterpret_cast<float*>(float_base->data_buffer());
+        img(i,j) = buffer[index];
       }
-      vcl_ostringstream ss;
-      ss<<outdir<<"/"<<k<<".tiff";
-      vil_save(img,ss.str().c_str());
+    }
+    vcl_ostringstream ss;
+    ss<<outdir<<'/'<<k<<".tiff";
+    vil_save(img,ss.str().c_str());
   }
 
  return true;
