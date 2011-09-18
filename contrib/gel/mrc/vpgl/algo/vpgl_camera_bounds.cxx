@@ -278,9 +278,9 @@ bool vpgl_camera_bounds::pixel_cylinder(vpgl_generic_camera<double> const& cam,
   return true;
 }
 
-bool vpgl_camera_bounds::planar_bouding_box(vpgl_perspective_camera<double> const& c,
-                                            vgl_box_2d<double>& bbox,
-                                            double z_plane)
+bool vpgl_camera_bounds::planar_bounding_box(vpgl_perspective_camera<double> const& c,
+                                             vgl_box_2d<double>& bbox,
+                                             double z_plane)
 {
   //principal point for image size
   vgl_point_2d<double> pp = (c.get_calibration()).principal_point();
@@ -298,10 +298,10 @@ bool vpgl_camera_bounds::planar_bouding_box(vpgl_perspective_camera<double> cons
 
   //intersect each ray with z plane
   vgl_point_3d<double> ulp, urp, blp, brp;
-  bool good =    vgl_intersection(ul, zp, ulp);
-  good = good && vgl_intersection(ur, zp, urp);
-  good = good && vgl_intersection(bl, zp, blp);
-  good = good && vgl_intersection(br, zp, brp);
+  bool good =    vgl_intersection(ul, zp, ulp)
+              && vgl_intersection(ur, zp, urp)
+              && vgl_intersection(bl, zp, blp)
+              && vgl_intersection(br, zp, brp);
 
   //add points to box
   if (good) {
@@ -313,17 +313,17 @@ bool vpgl_camera_bounds::planar_bouding_box(vpgl_perspective_camera<double> cons
   return good;
 }
 
-bool vpgl_camera_bounds::planar_bouding_box(vcl_vector<vpgl_perspective_camera<double>* >& cams,
-                                            vgl_box_2d<double>& bbox,
-                                            double z_plane)
+bool vpgl_camera_bounds::planar_bounding_box(vcl_vector<vpgl_perspective_camera<double> > const& cams,
+                                             vgl_box_2d<double>& bbox,
+                                             double z_plane)
 {
-  bool good = false;
+  bool good = true;
   for (unsigned int i=0; i<cams.size(); ++i) {
     vgl_box_2d<double> b;
-    if ( planar_bouding_box( *cams[i], b, z_plane ) ) {
+    if ( planar_bounding_box( cams[i], b, z_plane ) )
       bbox.add(b);
-      good = true;
-    }
+    else
+      good = false;
   }
   return good;
 }
