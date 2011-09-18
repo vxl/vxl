@@ -23,8 +23,8 @@ static void test_add_next_image(int argc, char** argv)
     if (argc < 2) {
         vcl_cerr<<"Supply a filename for the first two args!\n";
         filepath = IMG_PATH;
-
-    } else {
+    }
+    else {
         filepath = argv[1];
     }
 
@@ -32,9 +32,9 @@ static void test_add_next_image(int argc, char** argv)
     vcl_vector<vil_image_resource_sptr> imgs(NUM_IMGS);
     vcl_vector<double> exif_tags(NUM_IMGS);
 
-    for(int i = 0; i < NUM_IMGS; i++){
+    for (int i = 0; i < NUM_IMGS; i++) {
         vcl_stringstream str;
-        str << filepath << "/kermit" 
+        str << filepath << "/kermit"
             << vcl_setw(3) << vcl_setfill('0') << i << ".jpg";
 
         imgs[i] = vil_load_image_resource(str.str().c_str(), false);
@@ -47,24 +47,24 @@ static void test_add_next_image(int argc, char** argv)
     bundler_tracks tracks_stage;
     tracks_stage.run_feature_stage(imgs, exif_tags, recon);
 
-    
+
     //-------------------- Create the initial reconstruction
     bundler_sfm_impl_create_initial_recon init;
 
     const bool initial_recon_worked = init(recon);
     Assert("The initial reconstruction succeeded.",
-        initial_recon_worked);
+           initial_recon_worked);
 
-    if(!initial_recon_worked){
+    if (!initial_recon_worked) {
         return;
     }
 
     vcl_vector<bundler_inters_image_sptr> to_add, added;
 
- 
+
     bundler_sfm_impl_select_next_images select;
     Assert("There is an image to select.",
-        select(recon, to_add));
+           select(recon, to_add));
 
     TEST_EQUAL("Vectors are the correct size", to_add.size(), 1);
 
@@ -75,25 +75,24 @@ static void test_add_next_image(int argc, char** argv)
     //-------------------- Consistency checks
 
     Assert("Sizes match up", to_add.size() == added.size());
-        
+
     bundler_inters_image_sptr img = added[0];
-    
-    for(int f = 0; f < img->features.size(); f++){
-        if(img->features[f]->track &&
-            img->features[f]->track->contributing_points[f]){
-            
+
+    for (unsigned int f = 0; f < img->features.size(); ++f) {
+        if ( img->features[f]->track &&
+             img->features[f]->track->contributing_points[f]) {
             double u, v;
             img->camera.project(
                 img->features[f]->track->world_point.x(),
                 img->features[f]->track->world_point.y(),
                 img->features[f]->track->world_point.z(),
                 u, v);
-            
+
             TEST_NEAR("The camera projects it's contributing pts well. (x)",
-                img->features[f]->point.x(), u, TOL);
+                      img->features[f]->point.x(), u, TOL);
 
             TEST_NEAR("The camera projects it's contributing pts well. (y)",
-                img->features[f]->point.y(), v, TOL);
+                      img->features[f]->point.y(), v, TOL);
         }
     }
 }

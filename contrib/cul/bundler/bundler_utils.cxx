@@ -170,20 +170,19 @@ int bundler_utils_fill_persp_camera_ransac(
         double err = 0;
         vpgl_perspective_camera<double> camera;
 
-        assert( 
+        assert(
             vpgl_perspective_camera_compute::compute_dlt(
                 curr_image_pts, curr_world_pts, camera, err) );
 
         // Find the inlier percentage to evaulate how good this camera
         // is.
         int inlier_count = 0;
-        for (int pt_ind = 0; pt_ind < image_pts.size(); ++pt_ind) {
-
+        for (unsigned int pt_ind = 0; pt_ind < image_pts.size(); ++pt_ind) {
             double u, v;
             camera.project(
-                world_pts[pt_ind].x(), 
+                world_pts[pt_ind].x(),
                 world_pts[pt_ind].y(),
-                world_pts[pt_ind].z(), 
+                world_pts[pt_ind].z(),
                 u, v);
 
             const double dx = u - image_pts[pt_ind].x();
