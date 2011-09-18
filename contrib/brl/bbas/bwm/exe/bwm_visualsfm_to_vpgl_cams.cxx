@@ -127,6 +127,7 @@ static void write_vrml_points(vcl_ofstream& str,
      <<"}\n";
 }
 
+#if 0 // unused!
 static void write_vrml_box(vcl_ofstream& os,
                            vgl_box_3d<double> const& bounding_box,
                            vnl_vector_fixed<double,3> const& color, float const& transparency)
@@ -148,6 +149,7 @@ static void write_vrml_box(vcl_ofstream& os,
        << "     ]\n" //end children
        << "}\n"; //end Transform
 }
+#endif
 
 bool fit_plane_ransac(vcl_vector<vgl_homg_point_3d<double> > & points, vgl_homg_plane_3d<double>  & plane)
 {
@@ -329,7 +331,6 @@ bool LoadNVM(vcl_ifstream& in,
     in >> token >> f ;
     vpgl_calibration_matrix<double> K(f,vgl_point_2d<double>(0,0));//principal_point) ;
 
-
     for (int j = 0; j < rotation_parameter_num; ++j) in >> q[j];
     in >> c[0] >> c[1] >> c[2] >> d[0] >> d[1];
 
@@ -372,6 +373,7 @@ bool LoadNVM(vcl_ifstream& in,
   }
   ///////////////////////////////////////////////////////////////////////////////
   vcl_cout << ncam << " cameras; " << npoint << " 3D points; " << nproj << " projections\n";
+  return true;
 }
 
 // An executable that read bundler file and convert it into video site.
@@ -389,7 +391,6 @@ int main(int argc, char** argv)
   vul_arg<float>      filter_thresh ("-filter_thresh", "Threshold for average rms value for a given view. Units are pixels", .75);
 
   vul_arg_parse(argc, argv);
-
 
   // verify image dir
   if (!vul_file::is_directory(img_dir().c_str()))
