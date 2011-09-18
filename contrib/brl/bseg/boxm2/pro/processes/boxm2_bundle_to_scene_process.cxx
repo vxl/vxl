@@ -114,15 +114,14 @@ bool boxm2_bundle_to_scene_process(bprb_func_process& pro)
 
   //populate vector of cameras
   //: returns a list of cameras from specified directory
-  vcl_vector<vpgl_perspective_camera<double>* > cs;
+  vcl_vector<vpgl_perspective_camera<double> > cs;
   vcl_map<vcl_string, vpgl_perspective_camera<double>* >::iterator iter;
   for (iter=cams.begin(); iter!=cams.end(); ++iter)
-    cs.push_back(iter->second);
+    cs.push_back(* iter->second);
 
   //run planar bounding box
   vgl_box_2d<double> b2box;
-  bool good = vpgl_camera_bounds::planar_bouding_box(cs,b2box,zplane);
-  if (good)
+  if (vpgl_camera_bounds::planar_bounding_box(cs,b2box,zplane))
     vcl_cout<<"Bounding box found: "<<b2box<<vcl_endl;
   else
     vcl_cout<<"Bounding box not found."<<vcl_endl;
@@ -131,7 +130,7 @@ bool boxm2_bundle_to_scene_process(bprb_func_process& pro)
   //create zplane count map
   //---------------------------------------------------------------------------
   //determine the resolution of a pixel on the z plane
-  vpgl_perspective_camera<double> cam = *cs[0];
+  vpgl_perspective_camera<double> cam = cs[0];
   vgl_point_2d<double> pp = (cam.get_calibration()).principal_point();
   vgl_ray_3d<double> cone_axis;
   double cone_half_angle, solid_angle;
@@ -144,12 +143,12 @@ bool boxm2_bundle_to_scene_process(bprb_func_process& pro)
   //create an image with this res, and count each pixel
   unsigned ni = (unsigned) (b2box.width()/res);
   unsigned nj = (unsigned) (b2box.height()/res);
-  vil_image_view<vxl_byte> cntimg(ni, nj); cntimg.fill(0);
   vcl_cout<<"Created Box size: "<<ni<<','<<nj<<vcl_endl;
+  vil_image_view<vxl_byte> cntimg(ni, nj); cntimg.fill(0);
   for (unsigned int i=0; i<cs.size(); ++i)
   {
     //project the four corners to the ground plane
-    cam = *cs[i];
+    cam = cs[i];
     vgl_ray_3d<double> ul = cam.backproject(0.0, 0.0);
     vgl_ray_3d<double> ur = cam.backproject(2*pp.x(), 0.0);
     vgl_ray_3d<double> bl = cam.backproject(0.0, 2*pp.y());
