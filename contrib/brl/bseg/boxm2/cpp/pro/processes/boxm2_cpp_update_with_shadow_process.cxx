@@ -87,7 +87,7 @@ bool boxm2_cpp_update_with_shadow_process(bprb_func_process& pro)
     vcl_string data_type;
     vcl_string num_obs_type;
     vcl_vector<vcl_string> apps = scene->appearances();
-    int appTypeSize;
+    int appTypeSize = 0; // just to avoid compiler warning about using potentially uninitialised value
     for (unsigned int i=0; i<apps.size(); ++i) {
       if ( apps[i] == boxm2_data_traits<BOXM2_MOG3_GREY>::prefix() )
       {

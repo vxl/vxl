@@ -280,16 +280,13 @@ scan_regions(  bgui_image_tableau_sptr const& img,
 
   vcl_vector<vcl_vector<float > > temp(n_regions);
   float gmin, gmax;
-  for (unsigned r = 0; r< n_regions; ++r)
+  temp[0] = brip_vil_float_ops::scan_region(image, regions[0], gmin, gmax);
+  for (unsigned r = 1; r< n_regions; ++r)
   {
-    float min,  max;
-    vcl_vector<float> v =
-      brip_vil_float_ops::scan_region(image, regions[r], min, max);
-    temp[r]=v;
-    if (r == 0)
-    { gmin = min; gmax = max; }
-    else
-    { if (min<gmin) gmin = min; if (max>gmax) gmax = max; }
+    float min, max;
+    temp[r] = brip_vil_float_ops::scan_region(image, regions[r], min, max);
+    if (min<gmin) gmin = min;
+    if (max>gmax) gmax = max;
   }
 
   //make sure the lower bound is a multiple of 10
@@ -335,6 +332,7 @@ scan_regions(  bgui_image_tableau_sptr const& img,
   }
   delete ip_dialog;
 }
+
 bool bwm_image_processor::crop_to_box(bgui_image_tableau_sptr const& img,
                                       vsol_box_2d_sptr const& roi,
                                       vil_image_resource_sptr& chip)
@@ -347,10 +345,10 @@ bool bwm_image_processor::crop_to_box(bgui_image_tableau_sptr const& img,
   }
   brip_roi_sptr roi_ptr = new brip_roi(image->ni(), image->nj());
   roi_ptr->add_region(roi);
-  if(!brip_vil_float_ops::chip(image, roi_ptr, chip))
-    {
-      vcl_cout << "Crop operation failed\n";
-      return false;
-    }
+  if (!brip_vil_float_ops::chip(image, roi_ptr, chip))
+  {
+    vcl_cout << "Crop operation failed\n";
+    return false;
+  }
   return true;
 }
