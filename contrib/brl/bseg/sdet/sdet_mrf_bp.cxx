@@ -185,8 +185,8 @@ sdet_mrf_bp::sdet_mrf_bp(vil_image_resource_sptr  obs_labels,
 
 void sdet_mrf_bp::send_messages_optimized()
 {
-  int ni = static_cast<int>(ni_), nj = static_cast<int>(nj_);
-  float maxb = static_cast<float>(vnl_numeric_traits<short>::maxval);
+  const int ni = static_cast<int>(ni_), nj = static_cast<int>(nj_);
+  const float maxb = static_cast<float>(vnl_numeric_traits<short>::maxval);
   for (int j = 0; j<nj; ++j)
     for (int i = 0; i<ni; ++i) {
       //site sending the messages
@@ -228,7 +228,7 @@ void sdet_mrf_bp::send_messages_optimized()
           float ms = msg[fq]-summ;
           //if this assert fails, the number of labels is too large
           //compared to the dynamic range of the message elements
-          assert(ms<maxb&&ms>-maxb);
+          assert(ms<=maxb&&ms>=-maxb);
           sq->set_cur_message(3-n, fq, ms);
         }
       }
