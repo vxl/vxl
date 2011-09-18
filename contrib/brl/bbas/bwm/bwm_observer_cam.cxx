@@ -1512,7 +1512,7 @@ void bwm_observer_cam::project_shadow()
       shadow_line_segs_.push_back(this->add_vsol_line_2d(shadow_line));
     }
   }
-  vcl_cout<<"(\theta,\phi) = ("<<sun_elev_angle_<<','<<sun_azim_angle_<<')'<<vcl_endl;
+  vcl_cout<<"(theta,phi) = ("<<sun_elev_angle_<<','<<sun_azim_angle_<<')'<<vcl_endl;
   this->post_redraw();
 }
 
