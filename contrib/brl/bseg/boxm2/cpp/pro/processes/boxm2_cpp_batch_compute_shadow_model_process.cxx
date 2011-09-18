@@ -78,7 +78,6 @@ bool boxm2_cpp_batch_compute_shadow_model_process(bprb_func_process& pro)
   }
 
   // assumes that the data of each image has been created in the data models previously
-  int alphaTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
   // iterate the scene block by block and write to output
   vcl_vector<boxm2_block_id> blk_ids = scene->get_block_ids();
   vcl_vector<boxm2_block_id>::iterator id;
@@ -89,8 +88,6 @@ bool boxm2_cpp_batch_compute_shadow_model_process(bprb_func_process& pro)
   float ambient_light=0.0;
   for (id = blk_ids.begin(); id != blk_ids.end(); id++) {
     boxm2_block     *  blk   = cache->get_block(*id);
-    boxm2_data_base *  alpha  = cache->get_data_base(*id,boxm2_data_traits<BOXM2_ALPHA>::prefix(),0,true);
-
     // pass num_bytes = 0 to make sure disc is read if not already in memory
     boxm2_data_base *  sunvis  = cache->get_data_base(*id,boxm2_data_traits<BOXM2_AUX0>::prefix("sunvis"),0,true);
     //vcl_cout << "buffer length of sunvis: " << sunvis->buffer_length() << '\n';

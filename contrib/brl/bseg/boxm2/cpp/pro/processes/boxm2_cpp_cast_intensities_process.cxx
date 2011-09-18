@@ -52,57 +52,56 @@ bool boxm2_cpp_cast_intensities_process_cons(bprb_func_process& pro)
 
 bool boxm2_cpp_cast_intensities_process(bprb_func_process& pro)
 {
-    using namespace boxm2_cpp_cast_intensities_process_globals;
+  using namespace boxm2_cpp_cast_intensities_process_globals;
 
-    if ( pro.n_inputs() < n_inputs_ ) {
-        vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
-        return false;
-    }
-    //get the inputs
-    unsigned i = 0;
-    boxm2_scene_sptr scene =pro.get_input<boxm2_scene_sptr>(i++);
-    boxm2_cache_sptr cache= pro.get_input<boxm2_cache_sptr>(i++);
-    vpgl_camera_double_sptr cam= pro.get_input<vpgl_camera_double_sptr>(i++);
-    vil_image_view_base_sptr in_img=pro.get_input<vil_image_view_base_sptr>(i++);
-    vil_image_view_base_sptr float_image=boxm2_util::prepare_input_image(in_img);
-    vcl_string identifier = pro.get_input<vcl_string>(i++);
+  if ( pro.n_inputs() < n_inputs_ ) {
+    vcl_cout << pro.name() << ": The number of inputs should be " << n_inputs_<< vcl_endl;
+    return false;
+  }
+  //get the inputs
+  unsigned i = 0;
+  boxm2_scene_sptr scene =pro.get_input<boxm2_scene_sptr>(i++);
+  boxm2_cache_sptr cache= pro.get_input<boxm2_cache_sptr>(i++);
+  vpgl_camera_double_sptr cam= pro.get_input<vpgl_camera_double_sptr>(i++);
+  vil_image_view_base_sptr in_img=pro.get_input<vil_image_view_base_sptr>(i++);
+  vil_image_view_base_sptr float_image=boxm2_util::prepare_input_image(in_img);
+  vcl_string identifier = pro.get_input<vcl_string>(i++);
 
-    if (vil_image_view<float> * input_image=dynamic_cast<vil_image_view<float> * > (float_image.ptr()))
+  if (vil_image_view<float> * input_image=dynamic_cast<vil_image_view<float> * > (float_image.ptr()))
+  {
+    vcl_vector<boxm2_block_id> vis_order=scene->get_vis_blocks(reinterpret_cast<vpgl_generic_camera<double>*>(cam.ptr()));
+    if (vis_order.empty())
     {
-        vcl_vector<boxm2_block_id> vis_order=scene->get_vis_blocks(reinterpret_cast<vpgl_generic_camera<double>*>(cam.ptr()));
-        if (vis_order.empty())
-        {
-            vcl_cout<<" None of the blocks are visible from this viewpoint"<<vcl_endl;
-            return true;
-        }
-
-        bool success=true;
-        boxm2_cast_intensities_functor pass;
-
-        int aux0TypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_AUX0>::prefix());
-
-        vcl_vector<boxm2_block_id>::iterator id;
-        for (id = vis_order.begin(); id != vis_order.end(); ++id)
-        {
-          vcl_cout<<"Block id "<<(*id)<<' ';
-          boxm2_block *     blk   = cache->get_block(*id);
-
-          //: first make sure that the database is removed from memory if it already exists
-          cache->remove_data_base(*id,boxm2_data_traits<BOXM2_AUX0>::prefix(identifier));
-          //: now retrieve it with get_data_base_new method so that even if it exists on disc, a fresh one will be created
-          boxm2_data_base *  alph = cache->get_data_base_new(*id,boxm2_data_traits<BOXM2_AUX0>::prefix(identifier), false);
-          
-          boxm2_scene_info_wrapper *scene_info_wrapper=new boxm2_scene_info_wrapper();
-          scene_info_wrapper->info=scene->get_blk_metadata(*id);
-          pass.init_data(alph,input_image);
-          success=success && cast_ray_per_block<boxm2_cast_intensities_functor>(pass,
-                                                                                scene_info_wrapper->info,
-                                                                                blk,
-                                                                                cam,
-                                                                                input_image->ni(),
-                                                                                input_image->nj());
-        }
-        return true;
+      vcl_cout<<" None of the blocks are visible from this viewpoint"<<vcl_endl;
+      return true;
     }
+
+    bool success=true;
+    boxm2_cast_intensities_functor pass;
+
+    vcl_vector<boxm2_block_id>::iterator id;
+    for (id = vis_order.begin(); id != vis_order.end(); ++id)
+    {
+      vcl_cout<<"Block id "<<(*id)<<' ';
+      boxm2_block *   blk   = cache->get_block(*id);
+
+      //: first make sure that the database is removed from memory if it already exists
+      cache->remove_data_base(*id,boxm2_data_traits<BOXM2_AUX0>::prefix(identifier));
+      //: now retrieve it with get_data_base_new method so that even if it exists on disc, a fresh one will be created
+      boxm2_data_base *  alph = cache->get_data_base_new(*id,boxm2_data_traits<BOXM2_AUX0>::prefix(identifier), false);
+
+      boxm2_scene_info_wrapper *scene_info_wrapper=new boxm2_scene_info_wrapper();
+      scene_info_wrapper->info=scene->get_blk_metadata(*id);
+      pass.init_data(alph,input_image);
+      success=success && cast_ray_per_block<boxm2_cast_intensities_functor>(pass,
+                                                                            scene_info_wrapper->info,
+                                                                            blk,
+                                                                            cam,
+                                                                            input_image->ni(),
+                                                                            input_image->nj());
+    }
+    return true;
+  }
+  else
     return false;
 }

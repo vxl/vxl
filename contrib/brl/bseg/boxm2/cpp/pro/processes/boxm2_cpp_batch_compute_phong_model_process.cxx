@@ -11,7 +11,6 @@
 #include <boxm2/io/boxm2_stream_cache.h>
 #include <boxm2/io/boxm2_cache.h>
 #include <boxm2/boxm2_scene.h>
-#include <boxm2/boxm2_block.h>
 #include <boxm2/boxm2_data_base.h>
 
 //brdb stuff
@@ -65,14 +64,12 @@ bool boxm2_cpp_batch_compute_phong_model_process(bprb_func_process& pro)
   boxm2_stream_cache_sptr str_cache = pro.get_input<boxm2_stream_cache_sptr>(i++);
   float  sun_elev = pro.get_input<float>(i++);
   float  sun_azim = pro.get_input<float>(i++);
-  int alphaTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
 
   // iterate the scene block by block and write to output
   vcl_vector<boxm2_block_id> blk_ids = scene->get_block_ids();
   vcl_vector<boxm2_block_id>::iterator id;
   id = blk_ids.begin();
   for (id = blk_ids.begin(); id != blk_ids.end(); id++) {
-    boxm2_block     *  blk   = cache->get_block(*id);
     boxm2_data_base *  alpha  = cache->get_data_base(*id,boxm2_data_traits<BOXM2_ALPHA>::prefix(),0,true);
 
     boxm2_data_base *  phongs_model_data  = cache->get_data_base(*id,boxm2_data_traits<BOXM2_FLOAT8>::prefix("phongs_model"),alpha->buffer_length()* 8 ,false);

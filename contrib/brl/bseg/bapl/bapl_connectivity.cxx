@@ -212,7 +212,6 @@ bool bapl_conn_table::compute_tracks(vcl_vector<bapl_track_data>& tracks, int ne
         features_queue.pop();
 
         int img_id = feature.first;
-        unsigned int feature_id = feature.second->id();
 
         bapl_keypoint_sptr dummy_sptr;
         bapl_key_match dummy(feature.second, dummy_sptr);
@@ -232,7 +231,7 @@ bool bapl_conn_table::compute_tracks(vcl_vector<bapl_track_data>& tracks, int ne
           p = equal_range((*iter)->matches_.begin(), (*iter)->matches_.end(), dummy, compare_first);
 
           if (p.first == p.second)  continue;
-          assert((p.first)->first->id() == feature_id);
+          assert((p.first)->first->id() == feature.second->id());
           int second_id = (p.first)->second->id();
 
           assert(second_id < (int)img_data_[k]->keys_.size());
