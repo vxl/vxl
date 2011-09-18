@@ -133,10 +133,10 @@ class vpgl_perspective_camera : public vpgl_proj_camera<T>
   // \todo decide whether this needs to be either a static method or a stand-alone function.
   // (Now both are present.)
   static  vpgl_perspective_camera<T>
-   postmultiply( const vpgl_perspective_camera<T>& in_cam,
-                 const vgl_h_matrix_3d<T>& euclid_trans);
+    postmultiply( const vpgl_perspective_camera<T>& in_cam,
+                  const vgl_h_matrix_3d<T>& euclid_trans);
   //: Apply a 3-d Euclidean transformation (transform external cam parameters)
-  static vpgl_perspective_camera<T> 
+  static vpgl_perspective_camera<T>
     postmultiply(const vpgl_perspective_camera<T>& camera,
                  const vgl_rotation_3d<T>& rot, const vgl_vector_3d<T>& trans);
 
@@ -225,6 +225,10 @@ postmultiply( const vpgl_perspective_camera<T>& in_cam,
 {
   return vpgl_perspective_camera<T>::postmultiply(in_cam, euclid_trans);
 }
+
+//: Return a list of camera's, loaded from the (name sorted) files from the given directory
+template <class T>
+vcl_vector<vpgl_perspective_camera<T> > cameras_from_directory(vcl_string dir, T);
 
 //: Binary save
 template <class T>

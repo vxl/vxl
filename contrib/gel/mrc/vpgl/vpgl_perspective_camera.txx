@@ -5,8 +5,7 @@
 // \file
 
 #include "vpgl_perspective_camera.h"
-#include <vcl_cassert.h>
-#include <vcl_iostream.h>
+
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_vector_3d.h>
 #include <vgl/vgl_homg_plane_3d.h>
@@ -19,6 +18,14 @@
 #include <vgl/io/vgl_io_point_3d.h>
 #include <vnl/io/vnl_io_matrix_fixed.h>
 #include <vnl/io/vnl_io_vector_fixed.h>
+
+#include <vul/vul_file.h>
+#include <vul/vul_file_iterator.h>
+
+#include <vcl_cassert.h>
+#include <vcl_iostream.h>
+#include <vcl_fstream.h>
+#include <vcl_algorithm.h> // for std::sort()
 
 //-------------------------------------------
 template <class T>
@@ -591,6 +598,44 @@ vsl_b_read(vsl_b_istream &is, vpgl_perspective_camera<T>* &p)
     p = 0;
 }
 
+//: Return a list of camera's, loaded from the (name sorted) files from the given directory
+template <class T>
+vcl_vector<vpgl_perspective_camera<T> > cameras_from_directory(vcl_string dir, T)
+{
+  vcl_vector<vpgl_perspective_camera<T> > camlist;
+  if (!vul_file::is_directory(dir.c_str()) ) {
+    vcl_cerr << "cameras_from_directory: " << dir << " is not a directory\n";
+    return camlist;
+  }
+
+  //get all of the cam and image files, sort them
+  vcl_string camglob=dir+"/*";
+  vul_file_iterator file_it(camglob.c_str());
+  vcl_vector<vcl_string> cam_files;
+  while (file_it) {
+    vcl_string camName(file_it());
+    cam_files.push_back(camName);
+    ++file_it;
+  }
+  vcl_sort(cam_files.begin(), cam_files.end());
+
+  //take sorted lists and load from file
+  for (vcl_vector<vcl_string>::iterator iter = cam_files.begin();
+       iter != cam_files.end(); ++iter)
+  {
+    vcl_ifstream ifs(iter->c_str());
+    vpgl_perspective_camera<T> pcam;
+    if (!ifs.is_open()) {
+      vcl_cerr << "Failed to open file " << *iter << '\n';
+    }
+    else  {
+      ifs >> pcam;
+      camlist.push_back(pcam);
+    }
+  }
+  return camlist;
+}
+
 
 // Code for easy instantiation.
 #undef vpgl_PERSPECTIVE_CAMERA_INSTANTIATE
@@ -607,6 +652,7 @@ template vpgl_perspective_camera<T > postmultiply(const vpgl_perspective_camera<
 template void vsl_b_read(vsl_b_istream &is, vpgl_perspective_camera<T >* &p); \
 template void vsl_b_write(vsl_b_ostream &os, const vpgl_perspective_camera<T > * p); \
 template void vrml_write(vcl_ostream &s, const vpgl_perspective_camera<T >&, double rad); \
+template vcl_vector<vpgl_perspective_camera<T > > cameras_from_directory(vcl_string dir, T); \
 template vcl_ostream& operator<<(vcl_ostream&, const vpgl_perspective_camera<T >&); \
 template vcl_istream& operator>>(vcl_istream&, vpgl_perspective_camera<T >&)
 
