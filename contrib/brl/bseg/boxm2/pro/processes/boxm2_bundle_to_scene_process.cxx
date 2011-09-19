@@ -34,7 +34,7 @@ bool boxm2_bundle_to_scene_process_cons(bprb_func_process& pro)
   input_types_[0] = "vcl_string";           //bundler or nvm file
   input_types_[1] = "vcl_string";           //image dir path (all images)
   input_types_[2] = "vcl_string";           //appearnce model
-  input_types_[3] = "vcl_string";           //occupancy model
+  input_types_[3] = "vcl_string";           //num_obs model
   input_types_[4] = "vcl_string";           //optional arg - output dir to save cams/imgs
   
   // process has 1 output
