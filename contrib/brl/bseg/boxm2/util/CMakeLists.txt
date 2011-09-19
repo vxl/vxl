@@ -6,7 +6,10 @@ INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bbas )
 INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bseg )
 
 SET(boxm2_util_sources
-    boxm2_bundle_to_scene.h   boxm2_bundle_to_scene.cxx
+    boxm2_convert_bundle.h          boxm2_convert_bundle.cxx
+    boxm2_convert_nvm.h             boxm2_convert_nvm.cxx
+    boxm2_cams_and_box_to_scene.h   boxm2_cams_and_box_to_scene.cxx
+    boxm2_point_util.h              boxm2_point_util.cxx
    )
    
 #no templates yet

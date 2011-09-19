@@ -1,5 +1,5 @@
-#ifndef boxm2_bundle_to_scene_h
-#define boxm2_bundle_to_scene_h
+#ifndef boxm2_convert_nvm_h
+#define boxm2_convert_nvm_h
 //:
 // \file
 #include <vpgl/vpgl_proj_camera.h>
@@ -32,64 +32,44 @@
 
 typedef vpgl_perspective_camera<double> CamType;
 
-//: Main boxm2_bundle_to_scene function
+//: Main boxm2_convert_nvm function
 //  Takes in bundle.out file and image directory that created img_dir
-void boxm2_util_bundle_to_scene(vcl_string bundle_file,
-                                vcl_string img_dir,
-                                vcl_map<vcl_string, CamType*>& cams,
-                                vgl_box_3d<double>& bbox,
-                                double& resolution);
+void boxm2_util_convert_nvm (vcl_string nvm_file,
+                             vcl_string img_dir,
+                             vcl_map<vcl_string, CamType*>& cams,
+                             vgl_box_3d<double>& bbox,
+                             double& resolution);
 
 //: Utility class with static methods
-class boxm2_bundle_to_scene
+class boxm2_convert_nvm
 {
   public:
-    boxm2_bundle_to_scene(vcl_string bundle_file, vcl_string img_dir);
+    boxm2_convert_nvm(vcl_string nvm_file, vcl_string img_dir);
     vcl_map<vcl_string, CamType*>&       get_cams() { return final_cams_; }
     vgl_box_3d<double>                   get_bbox() const { return bbox_; }
     double                               get_resolution() const { return resolution_; }
   private:
 
     //final cams (map from image file name to camera
-    vcl_map<vcl_string, CamType*>                  final_cams_;
+    vcl_map<vcl_string, CamType*>                 final_cams_;
 
     //error map (image number to pixel-wise RMS error, and observation count)
     vcl_vector<bwm_video_corr_sptr>               corrs_;
     vcl_map<unsigned,double>                      view_error_map_;
     vcl_map<unsigned,unsigned>                    view_count_map_;
     vcl_vector<CamType>                           cams_;
+    vcl_vector<vcl_string>                        names_; 
     vcl_set<int>                                  bad_cams_;
     vgl_box_3d<double>                            bbox_;
     vcl_string                                    img_dir_;
-    vcl_string                                    bundle_file_;
+    vcl_string                                    nvm_file_;
     double                                        resolution_;
 
     //-------------------------------------------------------------------------
     // Helpers
     //-------------------------------------------------------------------------
-    bool read_nums(vcl_ifstream& bfile, unsigned& num_cams, unsigned& num_pts);
-    bool read_cameras(vcl_ifstream& bfile, unsigned num_cams, vgl_point_2d<double> ppoint);
-    bool read_points(vcl_ifstream& bfile, unsigned num_pts, vgl_point_2d<double> ppoint);
-
-    bool fit_plane_ransac( vcl_vector<vgl_homg_point_3d<double> > & points,
-                           vgl_homg_plane_3d<double>              & plane);
-
-    bool axis_align_scene(vcl_vector<bwm_video_corr_sptr>              & corrs,
-                          vcl_vector<vpgl_perspective_camera<double> > & cams);
-
-    vnl_double_3 stddev( vcl_vector<vgl_point_3d<double> > const& v);
-
-    // Calc projection error
-    void calc_projection_error( vcl_vector<vpgl_perspective_camera<double> > & cams,
-                                vcl_set<int>                                 & bad_cams,
-                                vcl_vector<bwm_video_corr_sptr>              & corrs,
-                                vcl_map<unsigned,double>                     & view_error_map,
-                                vcl_map<unsigned,unsigned>                   & view_count_map );
-
-    void report_error(vcl_map<unsigned,double>&   view_error_map,
-                      vcl_map<unsigned,unsigned>& view_count_map,
-                      vcl_set<int>&               bad_cams,
-                      float                       filter_thresh);
+    bool read_cameras(vcl_ifstream& bfile, vgl_point_2d<double> ppoint);
+    bool read_points(vcl_ifstream& bfile, vgl_point_2d<double> ppoint);
 };
 
-#endif // boxm2_bundle_to_scene_h
+#endif // boxm2_convert_nvm_h
