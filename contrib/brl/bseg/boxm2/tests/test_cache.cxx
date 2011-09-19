@@ -58,6 +58,7 @@ void test_dumb_cache()
   // init cache
   vcl_string scene_file=boxm2_test_utils::save_test_simple_scene();
   boxm2_scene scene(scene_file);
+
   boxm2_dumb_cache dcache(&scene);
 
   // check a few block values

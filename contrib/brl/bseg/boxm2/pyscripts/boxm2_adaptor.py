@@ -539,16 +539,29 @@ def camera_dir_planar_bbox(dir_name) :
   boxm2_batch.set_input_string(0, dir_name);
   boxm2_batch.run_process();
 
-def bundle2scene(bundle_file, img_dir) : 
+def bundle2scene(bundle_file, img_dir, app_model="boxm2_mog3_grey", out_dir="") : 
+  if app_model == "boxm2_mog3_grey": 
+    nobs_model = "boxm2_num_obs";
+  elif app_model == "boxm2_gauss_rgb" :
+    nobs_model = "boxm2_num_obs_single"
+  else: 
+    print "ERROR appearance model not recognized!!!", app_model; 
+    return
+
+  #run process
   boxm2_batch.init_process("boxm2BundleToSceneProcess");
   boxm2_batch.set_input_string(0, bundle_file);
   boxm2_batch.set_input_string(1, img_dir); 
+  boxm2_batch.set_input_string(2, app_model); 
+  boxm2_batch.set_input_string(3, nobs_model); 
+  boxm2_batch.set_input_string(4, out_dir); 
   boxm2_batch.run_process();
   (scene_id, scene_type) = boxm2_batch.commit_output(0);
   uscene = dbvalue(scene_id, scene_type);
   (scene_id, scene_type) = boxm2_batch.commit_output(1);
   rscene = dbvalue(scene_id, scene_type);
   return uscene, rscene; 
+  
   
 def save_scene(scene, fname) : 
   boxm2_batch.init_process("boxm2WriteSceneXMLProcess");

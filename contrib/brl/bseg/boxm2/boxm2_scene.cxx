@@ -21,10 +21,8 @@ boxm2_scene::boxm2_scene(vcl_string data_path, vgl_point_3d<double> const& origi
     local_origin_=origin;
     data_path_   = data_path;
     xml_path_  = data_path_ + "/scene.xml";
-    vcl_cout<<"PATH "<<xml_path_<<vcl_endl;
     num_illumination_bins_ = -1;
 }
-
 
 //: initializes Scene from XML file
 boxm2_scene::boxm2_scene(vcl_string filename)
