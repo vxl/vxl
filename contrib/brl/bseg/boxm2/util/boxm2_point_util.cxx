@@ -178,11 +178,11 @@ vnl_double_3 boxm2_point_util::stddev( vcl_vector<vgl_point_3d<double> > const& 
 // Calc projection error
 // read the correspondence and 3-d points
 //------------------------------------------------------------------------
-void boxm2_point_util::calc_projection_error( vcl_vector<vpgl_perspective_camera<double> >& cams,
-                                                   vcl_set<int>&                    bad_cams,
-                                                   vcl_vector<bwm_video_corr_sptr>& corrs,
-                                                   vcl_map<unsigned,double>&        view_error_map,
-                                                   vcl_map<unsigned,unsigned>&      view_count_map )
+void boxm2_point_util::calc_projection_error(vcl_vector<vpgl_perspective_camera<double> >& cams,
+                                             vcl_set<int>&                    bad_cams,
+                                             vcl_vector<bwm_video_corr_sptr>& corrs,
+                                             vcl_map<unsigned,double>&        view_error_map,
+                                             vcl_map<unsigned,unsigned>&      view_count_map )
 {
   double err=0;
   double cnt=0;
@@ -202,6 +202,7 @@ void boxm2_point_util::calc_projection_error( vcl_vector<vpgl_perspective_camera
 
       //calc error for this point
       if (cams[view_number].is_behind_camera(wpt)) {
+        vcl_cout<<"Bad camera "<<view_number<<" is behind world point"<<vcl_endl; 
         bad_cams.insert(view_number);
       }
       else
@@ -246,7 +247,9 @@ void boxm2_point_util::report_error(vcl_map<unsigned,double>&   view_error_map,
     unsigned cnt=view_count_map[cam];
     vcl_cout<<"   error for camera_"<<cam<<": "<<err/cnt<<vcl_endl;
 #endif
-    if (ve_itr->second/view_count_map[ve_itr->first] > filter_thresh) {
+    double error = ve_itr->second/view_count_map[ve_itr->first]; 
+    if (error > filter_thresh) {
+      vcl_cout<<"Bad camera "<<ve_itr->first<<" has error "<<error<<vcl_endl; 
       bad_cams.insert(ve_itr->first);
     }
     else {
