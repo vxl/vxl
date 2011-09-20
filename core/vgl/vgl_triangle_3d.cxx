@@ -320,10 +320,30 @@ vgl_triangle_3d_intersection_t vgl_triangle_3d_line_intersection(
   return Skew;
 }
 
+
+namespace
+{
+  static const unsigned calc_edge_index_lookup[8] = {-1, 0, 2, 0, -1, 1, 2, 1};
+  //: Given the [0,2] index of two vertices, in either order, return the edge index [0,2]
+  // eg between vertices 2 and 0 is edge 2.
+  // Use precalculated list lookup, probably fastest.
+  inline unsigned calc_edge_index(unsigned v, unsigned w)
+  {
+    unsigned lookup = v*3u + w;
+    assert (lookup < 8);
+    unsigned edge = calc_edge_index_lookup[lookup];
+    assert (edge < 3);
+    return edge;
+  }
+}
 //=======================================================================
 //: compute the intersection line of the given triangles
 //  \see vgl_triangle_3d_triangle_intersection()
 //  \note an intersection line is not computed for a coplanar intersection
+//  \retval i_line_point1_edge A number [0-5] indicating which edge of the two triangles
+//   point1 of i_line lies on. 0 indicates [a_p1,a_p2], 1 - [a_p2,a_p3], 2 - [a_p3,a_p1],
+//   3 - [b_p1,b_p2], 4 - [b_p2,b_p3], 5 - [b_p3,b_p1]
+//  \retval i_line_point2_edge. As i_line_point1_edge, but for the other end of the intersection.
 vgl_triangle_3d_intersection_t vgl_triangle_3d_triangle_intersection(
   const vgl_point_3d<double>& a_p1,
   const vgl_point_3d<double>& a_p2,
@@ -331,7 +351,10 @@ vgl_triangle_3d_intersection_t vgl_triangle_3d_triangle_intersection(
   const vgl_point_3d<double>& b_p1,
   const vgl_point_3d<double>& b_p2,
   const vgl_point_3d<double>& b_p3,
-  vgl_line_segment_3d<double>& i_line)
+  vgl_line_segment_3d<double>& i_line,
+  unsigned &i_line_point1_edge,
+  unsigned &i_line_point2_edge
+  )
 {
   // triangle intersection algorithm based on code & paper
   // found at http://jgt.akpeters.com/papers/Moller97/
@@ -339,10 +362,11 @@ vgl_triangle_3d_intersection_t vgl_triangle_3d_triangle_intersection(
   //sanity check for degenerate triangles
   if (collinear(a_p1,a_p2,a_p3))
   {
-    if (a_p1 == a_p2 && a_p2==a_p3 && a_p1 == a_p3)
+    if (a_p1 == a_p2 && a_p2==a_p3) // if a has degereated to a single point
     {
       if (vgl_triangle_3d_test_inside(a_p1,b_p1,b_p2,b_p3))
       {
+        i_line_point1_edge = i_line_point2_edge = 0;
         i_line.set(a_p1,a_p1);
         return Coplanar;
       }
@@ -351,15 +375,26 @@ vgl_triangle_3d_intersection_t vgl_triangle_3d_triangle_intersection(
 
     vgl_triangle_3d_intersection_t ret = None;
     vgl_point_3d<double> i_pnt;
-    if ( ( a_p1 != a_p2 && (ret = vgl_triangle_3d_line_intersection(vgl_line_segment_3d<double>(a_p1,a_p2), b_p1,b_p2,b_p3,i_pnt)) != None ) ||
-         ( a_p2 != a_p3 && (ret = vgl_triangle_3d_line_intersection(vgl_line_segment_3d<double>(a_p2,a_p3), b_p1,b_p2,b_p3,i_pnt)) != None ) ||
-         ( a_p1 != a_p3 && (ret = vgl_triangle_3d_line_intersection(vgl_line_segment_3d<double>(a_p1,a_p3), b_p1,b_p2,b_p3,i_pnt)) != None ) )
-    {
+    if ( a_p1 != a_p2 && (ret = vgl_triangle_3d_line_intersection(vgl_line_segment_3d<double>(a_p1,a_p2), b_p1,b_p2,b_p3,i_pnt)) != None )
+    {// half-degenerate tri_a behaves as line. Find line intersection
       i_line.set(i_pnt,i_pnt);
+      i_line_point1_edge = i_line_point2_edge = 0;
       return ret;
     }
-
-    return None;
+    else if ( a_p2 != a_p3 && (ret = vgl_triangle_3d_line_intersection(vgl_line_segment_3d<double>(a_p2,a_p3), b_p1,b_p2,b_p3,i_pnt)) != None )
+    {// half-degenerate tri_a behaves as line. Find line intersection
+      i_line.set(i_pnt,i_pnt);
+      i_line_point1_edge = i_line_point2_edge = 1;
+      return ret;
+    }
+    else if ( a_p1 != a_p3 && (ret = vgl_triangle_3d_line_intersection(vgl_line_segment_3d<double>(a_p1,a_p3), b_p1,b_p2,b_p3,i_pnt)) != None )
+    { // half-degenerate tri a behaves as line intersection.
+      i_line.set(i_pnt,i_pnt);
+      i_line_point1_edge = i_line_point2_edge = 2;
+      return ret;
+    }
+    else
+      return None;
   }
   if (collinear(b_p1,b_p2,b_p3))
   {
@@ -367,6 +402,7 @@ vgl_triangle_3d_intersection_t vgl_triangle_3d_triangle_intersection(
     {
       if (vgl_triangle_3d_test_inside(b_p1,a_p1,a_p2,a_p3))
       {
+        i_line_point1_edge = i_line_point2_edge = 3;
         i_line.set(b_p1,b_p1);
         return Coplanar;
       }
@@ -375,15 +411,25 @@ vgl_triangle_3d_intersection_t vgl_triangle_3d_triangle_intersection(
 
     vgl_triangle_3d_intersection_t ret = None;
     vgl_point_3d<double> i_pnt;
-    if ( ( b_p1 != b_p2 && (ret = vgl_triangle_3d_line_intersection(vgl_line_segment_3d<double>(b_p1,b_p2), a_p1,a_p2,a_p3,i_pnt)) != None ) ||
-         ( b_p2 != b_p3 && (ret = vgl_triangle_3d_line_intersection(vgl_line_segment_3d<double>(b_p2,b_p3), a_p1,a_p2,a_p3,i_pnt)) != None ) ||
-         ( b_p1 != b_p3 && (ret = vgl_triangle_3d_line_intersection(vgl_line_segment_3d<double>(b_p1,b_p3), a_p1,a_p2,a_p3,i_pnt)) != None ) )
-    {
+    if (b_p1 != b_p2 && (ret = vgl_triangle_3d_line_intersection(vgl_line_segment_3d<double>(b_p1,b_p2), a_p1,a_p2,a_p3,i_pnt)) != None )
+    {// half-degenerate tri_a behaves as line. Find line intersection
       i_line.set(i_pnt,i_pnt);
+      i_line_point1_edge = i_line_point2_edge = 3;
       return ret;
     }
-
-    return None;
+    else if ( b_p2 != b_p3 && (ret = vgl_triangle_3d_line_intersection(vgl_line_segment_3d<double>(b_p2,b_p3), a_p1,a_p2,a_p3,i_pnt)) != None )
+    {// half-degenerate tri_a behaves as line. Find line intersection
+      i_line.set(i_pnt,i_pnt);
+      i_line_point1_edge = i_line_point2_edge = 4;
+      return ret;
+    }
+    else if ( b_p1 != b_p3 && (ret = vgl_triangle_3d_line_intersection(vgl_line_segment_3d<double>(b_p1,b_p3), a_p1,a_p2,a_p3,i_pnt)) != None )
+    {// half-degenerate tri_a behaves as line. Find line intersection
+      i_line.set(i_pnt,i_pnt);
+      i_line_point1_edge = i_line_point2_edge = 5;
+      return ret;
+    }
+    else return None;
   }
   //computing intersection of triangles a and b
 
@@ -391,8 +437,7 @@ vgl_triangle_3d_intersection_t vgl_triangle_3d_triangle_intersection(
   vgl_vector_3d<double> a_norm, b_norm, int_line;
   //vgl_vector_3d<double> int_line;
   double a_d, b_d;
-  double d_b[3], d_a[3];
-  double isect1[2], isect2[2];
+  double d_b[3], d_a[3]; // distance of corner [1,2,3] of tri b to plane of tri a, same for tri_a
   double d_b1d_b2, d_b1d_b3, d_a1d_a2, d_a1d_a3;
 
   double p_a[3];
@@ -468,7 +513,7 @@ vgl_triangle_3d_intersection_t vgl_triangle_3d_triangle_intersection(
     return None;
   }
 
-  // Now know triangles contain
+  // Now we know triangles contain
   // the line of their planes intersection.
   // So...compute each triangles interval of the intersection
   // line and determine if they overlap i.e. if the triangles intersect
@@ -511,33 +556,35 @@ vgl_triangle_3d_intersection_t vgl_triangle_3d_triangle_intersection(
     p_b[2] = b_p3.z();
   }
 
-  int a_ival[3] = {0,1,2};
+  int a_ival[3] = {0,1,2}; // re-ordering of tri_a, s.t.
+                           // a_ival[1,2] are on one side, and a_ival[0] on the plane or other side.
+                           // or a_ival[0] one one side and a_ival[1,2) on the plne or other side.
   // compute interval for triangle a
-  if (d_a1d_a2 > 0) //a1, a2 on same side of b's plane, a3 on the other side
+  if (d_a1d_a2 > 0) //a1, a2 on same side of b's plane, a3 on the plane or other side
   {
     a_ival[0] = 2;
     a_ival[1] = 0;
     a_ival[2] = 1;
   }
-  else if (d_a1d_a3 > 0) //a1, a3 on same side of b's plane, a2 on the other side
+  else if (d_a1d_a3 > 0) //a1, a3 on same side of b's plane, a2 on the plane or other side
   {
     a_ival[0] = 1;
     a_ival[1] = 0;
     a_ival[2] = 2;
   }
-  else if (d_a[1]*d_a[2] > 0 || d_a[0] != 0)
+  else if (d_a[1]*d_a[2] > 0 || d_a[0] != 0) //a2, a3 on same side of b's plane, a1 on other side
   {
     a_ival[0] = 0;
     a_ival[1] = 1;
     a_ival[2] = 2;
   }
-  else if (d_a[1] != 0)
+  else if (d_a[1] != 0) // a2 on one side of the plane, and a1, a3 on the plane
   {
     a_ival[0] = 1;
     a_ival[1] = 0;
     a_ival[2] = 2;
   }
-  else if (d_a[2] != 0)
+  else if (d_a[2] != 0) // a3 on one side of the plane, and a1, a2 on the plane
   {
     a_ival[0] = 2;
     a_ival[1] = 0;
@@ -549,7 +596,7 @@ vgl_triangle_3d_intersection_t vgl_triangle_3d_triangle_intersection(
     coplanar = true;
   }
 
-  int b_ival[3] = {0,1,2};
+  int b_ival[3] = {0,1,2}; // see a_ival for description
   if (!coplanar)
   {
     // compute interval for triangle b
@@ -603,9 +650,58 @@ vgl_triangle_3d_intersection_t vgl_triangle_3d_triangle_intersection(
 
     if ( isect1 || isect2 || isect3 )
     {
-      i_line.set( isect1 ? i_pnt1 : (isect2 ? i_pnt2 : i_pnt3),
-                  isect1 && isect2 ? i_pnt2 : (isect1 || isect2) && isect3 ? i_pnt3 :
-                  (isect1 ? i_pnt1 : (isect2 ? i_pnt2 : i_pnt3)) );
+      vgl_point_3d<double> i_line_point1, i_line_point2;
+      if (isect1)
+      {
+        i_line_point1 = i_pnt1;
+        i_line_point1_edge = 0;
+      }
+      else
+      {
+        if (isect2)
+        {
+          i_line_point1 = i_pnt2;
+          i_line_point1_edge = 2;
+        }
+        else
+        {
+          i_line_point1 = i_pnt3;
+          i_line_point1_edge = 3;
+        }
+     }
+
+      if (isect1 && isect2)
+      {
+        i_line_point2 = i_pnt2;
+        i_line_point2_edge = 1;
+      }
+      else if ((isect1 || isect2) && isect3)
+      {
+        i_line_point2 = i_pnt3;
+        i_line_point2_edge = 3;
+      }
+      else
+      {
+        if (isect1)
+        {
+          i_line_point2 = i_pnt1;
+          i_line_point2_edge = 1;
+        }
+        else
+        {
+          if (isect2)
+          {
+            i_line_point2 = i_pnt2;
+            i_line_point2_edge = 2;
+          }
+          else
+          {
+            i_line_point2 = i_pnt3;
+            i_line_point2_edge = 3;
+         }
+        }
+      }
+      i_line.set( i_line_point1, i_line_point2);
       return Coplanar;
     }
 
@@ -613,6 +709,7 @@ vgl_triangle_3d_intersection_t vgl_triangle_3d_triangle_intersection(
     if (vgl_triangle_3d_test_inside(a_p1, b_p1, b_p2, b_p3) ||
         vgl_triangle_3d_test_inside(b_p1, a_p1, a_p2, a_p3))
     {
+      i_line_point1_edge = i_line_point2_edge = 6;
       i_line.set(vgl_point_3d<double> (vgl_nan, vgl_nan, vgl_nan),vgl_point_3d<double> (vgl_nan,vgl_nan,vgl_nan));
       return Coplanar;
     }
@@ -621,78 +718,80 @@ vgl_triangle_3d_intersection_t vgl_triangle_3d_triangle_intersection(
   }
 
   vgl_point_3d<double> i_pnts[4];
+  double isect_a[2]; // selected_direction positions of start and end of intersection line in tri_a's p_a coords,
   //intersection line interval for triangle a
-  double tmp = d_a[a_ival[0]]/(d_a[a_ival[0]]-d_a[a_ival[1]]);
-  isect1[0] = p_a[a_ival[0]] + (p_a[a_ival[1]] - p_a[a_ival[0]])*tmp;
+  double tmp = d_a[a_ival[0]]/(d_a[a_ival[0]]-d_a[a_ival[1]]); // fraction along edge a_ival[0,1] to plane_b's intersection.
+  isect_a[0] = p_a[a_ival[0]] + (p_a[a_ival[1]] - p_a[a_ival[0]])*tmp;
   vgl_point_3d<double> a_vs[] = {a_p1,a_p2,a_p3};
   vgl_vector_3d<double> diff = a_vs[a_ival[1]] - a_vs[a_ival[0]];
   diff *= tmp;
-  i_pnts[0] = a_vs[a_ival[0]] + diff  ;
+  i_pnts[0] = a_vs[a_ival[0]] + diff ; // 3D pos of start of intersection of tri_a and plane_b, on edge a[a_ival[0,1]]
 
   tmp = d_a[a_ival[0]]/(d_a[a_ival[0]]-d_a[a_ival[2]]);
-  isect1[1] = p_a[a_ival[0]] + (p_a[a_ival[2]] - p_a[a_ival[0]])*tmp;
+  isect_a[1] = p_a[a_ival[0]] + (p_a[a_ival[2]] - p_a[a_ival[0]])*tmp;
   diff = a_vs[a_ival[2]] - a_vs[a_ival[0]];
   diff *= tmp;
-  i_pnts[1] = a_vs[a_ival[0]] + diff;
+  i_pnts[1] = a_vs[a_ival[0]] + diff; // 3D pos of end of intersection of tri_a and plane_b, on edge a[a_ival[0,2]]
 
+  double isect_b[2]; // selected_direction positions of start and end of intersection line in tri_b's p_b coords,
   //intersection line interval for triangle b
   tmp = d_b[b_ival[0]]/(d_b[b_ival[0]] - d_b[b_ival[1]]);
-  isect2[0] = p_b[b_ival[0]] + (p_b[b_ival[1]] - p_b[b_ival[0]])*tmp;
+  isect_b[0] = p_b[b_ival[0]] + (p_b[b_ival[1]] - p_b[b_ival[0]])*tmp;
   vgl_point_3d<double> b_vs[] = {b_p1,b_p2,b_p3};
   diff = b_vs[b_ival[1]] - b_vs[b_ival[0]];
   diff *= tmp;
-  i_pnts[2] = b_vs[b_ival[0]] + diff ;
+  i_pnts[2] = b_vs[b_ival[0]] + diff; // 3D pos of start of intersection of tri_b and plane_a, on edge b[b_ival[0,1]]
 
   tmp = d_b[b_ival[0]]/(d_b[b_ival[0]]-d_b[b_ival[2]]);
-  isect2[1] = p_b[b_ival[0]] + (p_b[b_ival[2]] - p_b[b_ival[0]])*tmp;
+  isect_b[1] = p_b[b_ival[0]] + (p_b[b_ival[2]] - p_b[b_ival[0]])*tmp;
   diff = b_vs[b_ival[2]] - b_vs[b_ival[0]];
   diff *= tmp;
-  i_pnts[3] = b_vs[b_ival[0]] + diff;
+  i_pnts[3] = b_vs[b_ival[0]] + diff; // 3D pos of end of intersection of tri_b and plane_a, on edge b[b_ival[0,1]]
 
   unsigned smallest1 = 0;
-  if (isect1[0] > isect1[1])
+  if (isect_a[0] > isect_a[1])
   {
-    tmp = isect1[0];
-    isect1[0]= isect1[1];
-    isect1[1] = tmp;
+    vcl_swap(isect_a[0], isect_a[1]);
     smallest1 = 1;
-  }
+  } // Now isect_a[0] <= isect_a[1]
   unsigned smallest2 = 0;
-  if (isect2[0] > isect2[1])
+  if (isect_b[0] > isect_b[1])
   {
-    tmp = isect2[0];
-    isect2[0]= isect2[1];
-    isect2[1] = tmp;
+    vcl_swap(isect_b[0], isect_b[1]);
     smallest2 = 1;
-  }
+  } // Now isect_b[0] <= isect_b[1]
 
-  if (isect1[1] < isect2[0] || isect2[1] < isect1[0])
+  if (isect_a[1] < isect_b[0] || isect_b[1] < isect_a[0])
   {
     return None; //no intersection
   }
 
   unsigned i_pt1,i_pt2;
   //find the correct intersection line
-  if (isect2[0]<isect1[0])
+  if (isect_b[0]<isect_a[0])
   {
     if (smallest1==0)
     {
       i_pt1 = 0;
+      i_line_point1_edge = calc_edge_index(a_ival[0], a_ival[1]);
     }
     else
     {
       i_pt1 = 1;
+      i_line_point1_edge = calc_edge_index(a_ival[0], a_ival[2]);
     }
 
-    if (isect2[1]<isect1[1])
+    if (isect_b[1]<isect_a[1])
     {
       if (smallest2==0)
       {
         i_pt2 = 3;
+        i_line_point2_edge = calc_edge_index(b_ival[0], b_ival[2]) + 3;
       }
       else
       {
         i_pt2 = 2;
+        i_line_point2_edge = calc_edge_index(b_ival[0], b_ival[1]) + 3;
       }
     }
     else
@@ -700,10 +799,12 @@ vgl_triangle_3d_intersection_t vgl_triangle_3d_triangle_intersection(
       if (smallest1==0)
       {
         i_pt2 = 1;
+        i_line_point2_edge = calc_edge_index(a_ival[0], a_ival[2]);
       }
       else
       {
         i_pt2 = 0;
+        i_line_point2_edge = calc_edge_index(a_ival[0], a_ival[1]);
       }
     }
   }
@@ -712,21 +813,25 @@ vgl_triangle_3d_intersection_t vgl_triangle_3d_triangle_intersection(
     if (smallest2==0)
     {
       i_pt1 = 2;
+      i_line_point1_edge = calc_edge_index(b_ival[0], b_ival[1]) + 3;
     }
     else
     {
       i_pt1 = 3;
+      i_line_point1_edge = calc_edge_index(b_ival[0], b_ival[2]) + 3;
     }
 
-    if (isect2[1]>isect1[1])
+    if (isect_b[1]>isect_a[1])
     {
       if (smallest1==0)
       {
         i_pt2 = 1;
+        i_line_point2_edge = calc_edge_index(a_ival[0], a_ival[2]);
       }
       else
       {
         i_pt2 = 0;
+        i_line_point2_edge = calc_edge_index(a_ival[0], a_ival[1]);
       }
     }
     else
@@ -734,16 +839,39 @@ vgl_triangle_3d_intersection_t vgl_triangle_3d_triangle_intersection(
       if (smallest2==0)
       {
         i_pt2 = 3;
+        i_line_point2_edge = calc_edge_index(b_ival[0], b_ival[2]) + 3;
       }
       else
       {
         i_pt2 = 2;
+        i_line_point2_edge = calc_edge_index(b_ival[0], b_ival[1]) + 3;
       }
     }
   }
 
   i_line.set(i_pnts[i_pt1],i_pnts[i_pt2]);
   return Skew;
+}
+
+
+//=======================================================================
+//: compute the intersection line of the given triangles
+//  \see vgl_triangle_3d_triangle_intersection()
+//  \note an intersection line is not computed for a coplanar intersection
+vgl_triangle_3d_intersection_t vgl_triangle_3d_triangle_intersection(
+  const vgl_point_3d<double>& a_p1,
+  const vgl_point_3d<double>& a_p2,
+  const vgl_point_3d<double>& a_p3,
+  const vgl_point_3d<double>& b_p1,
+  const vgl_point_3d<double>& b_p2,
+  const vgl_point_3d<double>& b_p3,
+  vgl_line_segment_3d<double>& i_line)
+{
+  unsigned iline_p1, iline_p2;
+  return vgl_triangle_3d_triangle_intersection(
+  a_p1, a_p2, a_p3,
+  b_p1, b_p2, b_p3,
+  i_line, iline_p1, iline_p2);
 }
 
 //=======================================================================

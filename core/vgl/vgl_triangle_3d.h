@@ -85,6 +85,24 @@ vgl_triangle_3d_intersection_t vgl_triangle_3d_triangle_intersection(
   const vgl_point_3d<double>& b_p3,
   vgl_line_segment_3d<double>& i_line);
 
+//: compute the intersection line of the given triangles
+//  \see vgl_triangle_3d_triangle_intersection()
+//  \note an intersection line is not computed for a coplanar intersection
+//  \retval i_line_point1_edge A number [0-5] indicating which edge of the two triangles
+//   point1 of i_line lies on. 0 indicates [a_p1,a_p2], 1 - [a_p2,a_p3], 2 - [a_p3,a_p1],
+//   3 - [b_p1,b_p2], 4 - [b_p2,b_p3], 5 - [b_p3,b_p1]
+//  \retval i_line_point2_edge. As i_line_point1_edge, but for the other end of the intersection.
+vgl_triangle_3d_intersection_t vgl_triangle_3d_triangle_intersection(
+  const vgl_point_3d<double>& a_p1,
+  const vgl_point_3d<double>& a_p2,
+  const vgl_point_3d<double>& a_p3,
+  const vgl_point_3d<double>& b_p1,
+  const vgl_point_3d<double>& b_p2,
+  const vgl_point_3d<double>& b_p3,
+  vgl_line_segment_3d<double>& i_line,
+  unsigned &i_line_point1_edge,
+  unsigned &i_line_point2_edge);
+
 //: Compute the line of intersection of the given triangle and plane
 //  The triangle is represented by its vertices \a p1, \a p2, \a p3
 //  \return intersection type

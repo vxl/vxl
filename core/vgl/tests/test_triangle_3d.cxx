@@ -9,6 +9,7 @@
 #include <vcl_iostream.h>
 #include <vcl_ctime.h>
 #include <vgl/vgl_triangle_3d.h>
+#include <vgl/vgl_distance.h>
 #include <vgl/vgl_plane_3d.h>
 #include <vgl/vgl_line_segment_3d.h>
 
@@ -23,16 +24,22 @@ inline void test_non_intersecting()
   vgl_point_3d<double> b_p2(0, 4, 2);
   vgl_point_3d<double> b_p3(4, 0, 2);
 
+  vgl_line_segment_3d<double> iline;
+  unsigned edge_p1, edge_p2;
   vgl_triangle_3d_intersection_t ret
-    = vgl_triangle_3d_triangle_intersection(a_p1,a_p2,a_p3,b_p1,b_p2,b_p3);
+    = vgl_triangle_3d_triangle_intersection(a_p1,a_p2,a_p3,b_p1,b_p2,b_p3, iline, edge_p1, edge_p2);
   TEST("Non-intersecting 1", ret, None);
+  ret = vgl_triangle_3d_triangle_intersection(a_p1,a_p2,a_p3,b_p1,b_p2,b_p3);
+  TEST("Non-intersecting 1 faster version", ret, None);
 
   b_p1.set(-1,0,0);
   b_p2.set(-1,4,0);
   b_p3.set(-4,0,0);
 
-  ret = vgl_triangle_3d_triangle_intersection(a_p1,a_p2,a_p3,b_p1,b_p2,b_p3);
+  ret = vgl_triangle_3d_triangle_intersection(a_p1,a_p2,a_p3,b_p1,b_p2,b_p3, iline, edge_p1, edge_p2);
   TEST("Non-intersecting 2", ret, None);
+  ret = vgl_triangle_3d_triangle_intersection(a_p1,a_p2,a_p3,b_p1,b_p2,b_p3);
+  TEST("Non-intersecting 2 faster version", ret, None);
 }
 
 
@@ -49,7 +56,11 @@ inline void test_intersecting1()
 
   vgl_triangle_3d_intersection_t ret
     = vgl_triangle_3d_triangle_intersection(a_p1,a_p2,a_p3,b_p1,b_p2,b_p3);
-  TEST("Intersecting coplanar", ret, Coplanar);
+  TEST("Intersecting 1 coplanar", ret, Coplanar);
+  vgl_line_segment_3d<double> iline;
+  unsigned edge_p1, edge_p2;
+  ret = vgl_triangle_3d_triangle_intersection(a_p1,a_p2,a_p3,b_p1,b_p2,b_p3, iline, edge_p1, edge_p2);
+  TEST("Intersecting coplanar with iline", ret, Coplanar);
 }
 
 
@@ -66,7 +77,20 @@ inline void test_intersecting2()
 
   vgl_triangle_3d_intersection_t ret
     = vgl_triangle_3d_triangle_intersection(a_p1,a_p2,a_p3,b_p1,b_p2,b_p3);
-  TEST("Intersecting Skew", ret, Skew);
+  TEST("Intersecting 2 Skew", ret, Skew);
+
+  vgl_line_segment_3d<double> i_line;
+  unsigned edge_p1, edge_p2;
+  ret = vgl_triangle_3d_triangle_intersection(a_p1,a_p2,a_p3,b_p1,b_p2,b_p3, i_line, edge_p1, edge_p2);
+  TEST("Intersecting Skew with iline", ret, Skew);
+  double p1_err = vgl_distance(i_line.point1(), vgl_point_3d<double>(0,0,0));
+  double p2_err = vgl_distance(i_line.point2(), vgl_point_3d<double>(1,1,0));
+  //handle ambiguity of intersecting line segment ordering.
+  if (p1_err>p2_err) vcl_swap(edge_p1, edge_p2);
+  TEST_NEAR("Intersecting Skew, iline correct", p1_err + p2_err, 0, 1e-8);
+  // handle ambiguity of intersecting line point 1 , which lies on a vertex of each input triangle.
+  TEST("Intersecting Skew, edge label 1 correct", edge_p1==0 || edge_p1==2 || edge_p1==4 || edge_p1==5, true);
+  TEST("Intersecting Skew, edge label 2 correct", edge_p2==3, true);
 }
 
 
@@ -81,15 +105,28 @@ inline void test_intersecting3()
   vgl_point_3d<double> b_p2(0, 4, 0);
   vgl_point_3d<double> b_p3(0, 0, 4);
 
-  vgl_line_segment_3d<double> i_line;
   vgl_triangle_3d_intersection_t ret
-    = vgl_triangle_3d_triangle_intersection(a_p1,a_p2,a_p3,b_p1,b_p2,b_p3,i_line);
+    = vgl_triangle_3d_triangle_intersection(a_p1,a_p2,a_p3,b_p1,b_p2,b_p3);
+  TEST("Intersecting 3 Skew", ret, Skew);
 
-  vgl_line_segment_3d<double> exp_line(vgl_point_3d<double>(0,0,0), vgl_point_3d<double>(0,4,0));
-  bool intline_correct = i_line == exp_line;
+  vgl_line_segment_3d<double> i_line;
+  unsigned edge_p1, edge_p2;
+  ret = vgl_triangle_3d_triangle_intersection(a_p1,a_p2,a_p3,b_p1,b_p2,b_p3,i_line, edge_p1, edge_p2);
 
-  TEST("Intersecting Skew - w/isect line", ret, Skew);
-  TEST("Intersecting Skew - isect line correct", intline_correct, true);
+  double p1_err = vgl_distance(i_line.point1(), vgl_point_3d<double>(0,0,0));
+  double p2_err = vgl_distance(i_line.point2(), vgl_point_3d<double>(0,4,0));
+  //handle ambiguity of intersecting line segment ordering.
+  if (p1_err > 1e-4)
+  {
+    vcl_swap(edge_p1, edge_p2);
+    p1_err = vgl_distance(i_line.point2(), vgl_point_3d<double>(0,0,0));
+    p2_err = vgl_distance(i_line.point1(), vgl_point_3d<double>(0,4,0));
+  }
+
+  TEST("Intersecting Skew - with isect line", ret, Skew);
+  TEST_NEAR("Intersecting Skew, iline correct", p1_err + p2_err, 0, 1e-8);
+  TEST("Intersecting Skew, edge label 1 correct", edge_p1==2 || edge_p1==5, true);
+  TEST("Intersecting Skew, edge label 2 correct", edge_p2==1 || edge_p2==4, true);
 }
 
 
@@ -104,13 +141,30 @@ inline void test_intersecting4()
   vgl_point_3d<double> b_p2( 0, 4, 0);
   vgl_point_3d<double> b_p3(-4, 0, 0);
 
-  vgl_line_segment_3d<double> i_line;
   vgl_triangle_3d_intersection_t ret
-    = vgl_triangle_3d_triangle_intersection(a_p1,a_p2,a_p3,b_p1,b_p2,b_p3,i_line);
+    = vgl_triangle_3d_triangle_intersection(a_p1,a_p2,a_p3,b_p1,b_p2,b_p3);
+  TEST("Intersecting 4 coplanar", ret, Coplanar);
 
-  TEST("Intersecting coplanar - w/isect line", ret, Coplanar);
-  //TEST("Intersecting 4b", coplanar, true);
-  //TEST("Intersecting 4c", intline_correct, true);
+  vgl_line_segment_3d<double> i_line;
+  unsigned edge_p1, edge_p2;
+  ret = vgl_triangle_3d_triangle_intersection(a_p1,a_p2,a_p3,b_p1,b_p2,b_p3,i_line,edge_p1, edge_p2);
+
+
+  double p1_err = vgl_distance(i_line.point1(), vgl_point_3d<double>(0,0,0));
+  double p2_err = vgl_distance(i_line.point2(), vgl_point_3d<double>(0,4,0));
+  //handle ambiguity of intersecting line segment ordering.
+  if (p1_err > 1e-4)
+  {
+    vcl_swap(edge_p1, edge_p2);
+    p1_err = vgl_distance(i_line.point2(), vgl_point_3d<double>(0,0,0));
+    p2_err = vgl_distance(i_line.point1(), vgl_point_3d<double>(0,4,0));
+  }
+
+  TEST("Intersecting Coplanar - with isect line", ret, Coplanar);
+  TEST_NEAR("Intersecting Coplanar, iline correct", p1_err + p2_err, 0, 1e-8);
+  // Due to coplanarity, edge labels are very ambiguous
+  TEST("Intersecting Coplanar, edge label 1 correct", edge_p1==2 || edge_p1==5 || edge_p1==0 || edge_p1==3, true);
+  TEST("Intersecting Coplanar, edge label 2 correct", edge_p2==1 || edge_p2==4 || edge_p2==0 || edge_p2==3, true);
 }
 
 
