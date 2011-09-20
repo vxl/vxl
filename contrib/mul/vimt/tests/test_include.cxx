@@ -15,6 +15,7 @@
 #include <vimt/vimt_load.h>
 #include <vimt/vimt_reflect.h>
 #include <vimt/vimt_resample_bilin.h>
+#include <vimt/vimt_rotate.h>
 #include <vimt/vimt_sample_grid_bilin.h>
 #include <vimt/vimt_sample_grid_bicub.h>
 #include <vimt/vimt_sample_profile_bilin.h>

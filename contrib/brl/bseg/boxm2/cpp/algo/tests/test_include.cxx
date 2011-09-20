@@ -25,6 +25,7 @@
 #include <boxm2/cpp/algo/boxm2_shadow_model_functor.h>
 #include <boxm2/cpp/algo/boxm2_update_functions.h>
 #include <boxm2/cpp/algo/boxm2_update_image_functor.h>
+#include <boxm2/cpp/algo/boxm2_update_using_quality_functor.h>
 #include <boxm2/cpp/algo/boxm2_update_with_shadow_functor.h>
 
 int main() { return 0; }
