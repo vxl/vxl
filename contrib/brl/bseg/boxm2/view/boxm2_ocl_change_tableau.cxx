@@ -192,19 +192,19 @@ float boxm2_ocl_change_tableau::change_detect(int frame)
   
   //get usable img poitners
   vil_image_view<vxl_byte>* in  = (vil_image_view<vxl_byte>*) change_img.ptr(); 
-  vil_image_view<float>* out = (vil_image_view<float>*) change_out.ptr(); 
+  vil_image_view<float>*    out = (vil_image_view<float>*) change_out.ptr(); 
 
   //test CP buffer
   cl_uint* cpbuffer = new cl_uint[ni_*nj_]; 
   int c = 0; 
   for(int j=0; j<out->nj(); ++j) {
     for(int i=0; i<out->ni(); ++i) {
-      vxl_byte pix_in = (*in)(i,j); 
-      float pchange = (*out)(i,j); 
-      cpbuffer[c] =   ((unsigned int) (255) << 24)  
-                    | ((unsigned int) (0  ) << 16) 
-                    | ((unsigned int) (pix_in) << 8 ) 
-                    | ((unsigned int) (pchange*255.0f)); 
+      vxl_byte pix_in = (*in)(i,j)/4; 
+      float pchange   = (*out)(i,j); 
+      cpbuffer[c]     =   ((unsigned int) (255) << 24)  
+                        | ((unsigned int) (pix_in) << 16) 
+                        | ((unsigned int) (pix_in) << 8 ) 
+                        | ((unsigned int) (pchange*255.0f)); 
       ++c; 
     }
   }
