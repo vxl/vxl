@@ -123,6 +123,9 @@ SOURCE=.\test_ply.cxx
 SOURCE=.\test_pipeline.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\test_add_next_image.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\test_include.cxx
 # End Source File
 # End Group

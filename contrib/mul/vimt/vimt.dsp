@@ -332,6 +332,9 @@ SOURCE=.\vimt_save.h
 # Begin Source File
 SOURCE=.\vimt_reflect.h
 # End Source File
+# Begin Source File
+SOURCE=.\vimt_rotate.h
+# End Source File
 # End Group
 # End Target
 # End Project
