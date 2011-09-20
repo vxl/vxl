@@ -198,7 +198,13 @@ bool boxm2_convert_nvm::read_cameras(vcl_ifstream& in, vgl_point_2d<double> ppoi
       vpgl_perspective_camera<double> cam(K,rot,t);
       cams_[i] = cam;
     }
-    names_[i] = vul_file::basename(token);
+    
+    //scrub name
+    vcl_size_t found = 0; 
+    while( (found=token.find("\\")) != vcl_string::npos )
+      token.replace(found, 1, "/"); 
+    //vcl_cout<<"Scrubbed filename: "<<token<<vcl_endl;
+    names_[i] = vul_file::strip_directory(token);
   }
   return true; 
 }
