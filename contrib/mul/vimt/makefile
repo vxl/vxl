@@ -29,6 +29,7 @@ MANPAGE_SOURCES += vimt_crop.h
 MANPAGE_SOURCES += vimt_convert.h
 SOURCES += vimt_save.cxx
 MANPAGE_SOURCES += vimt_reflect.h
+MANPAGE_SOURCES += vimt_rotate.h
 
 SUBDIRS += algo
 

@@ -7,6 +7,7 @@ MINI_PROG_SOURCES += example2.cxx
 MINI_PROG_SOURCES += example3.cxx
 MINI_PROG_SOURCES += example4.cxx
 MINI_PROG_SOURCES += make_dog_pyramid.cxx
+MINI_PROG_SOURCES += rotate_image.cxx
 
 ################################
 include ${VXLROOT}/config/top.mk
