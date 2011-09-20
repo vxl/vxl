@@ -182,7 +182,7 @@ bool boxm2_ocl_change_detection_process(bprb_func_process& pro)
   bocl_mem_sptr persp_cam=new bocl_mem(device->context(), cam_buffer, 3*sizeof(cl_float16), "persp cam buffer");
   persp_cam->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
 
-  vil_image_view_base_sptr float_img=boxm2_ocl_util::prepare_input_image(img);
+  vil_image_view_base_sptr float_img    =boxm2_ocl_util::prepare_input_image(img, true); //true for force gray scale
   vil_image_view_base_sptr float_exp_img=boxm2_ocl_util::prepare_input_image(exp_img);
   vil_image_view<float>* img_view = static_cast<vil_image_view<float>* >(float_img.ptr());
   vil_image_view<float>* exp_img_view = static_cast<vil_image_view<float>* >(float_exp_img.ptr());

@@ -107,6 +107,7 @@ bool boxm2_ocl_refine_process(bprb_func_process& pro)
     float    transfer_time = 0.0f;
     float    gpu_time      = 0.0f;
     unsigned num_cells     = 0;     //number of cells in the scene after refine
+    unsigned num_refined   = 0;     //number of cells that split
 
     //get the inputs
     unsigned i = 0;
@@ -262,7 +263,8 @@ bool boxm2_ocl_refine_process(bprb_func_process& pro)
                 <<"  Num Refined: "<<(newDataSize-dataLen)/8<<'\n'
                 <<"  Scan data sizes time: "<<scan_time.all()<<vcl_endl;
         transfer_time += scan_time.all();
-        num_cells += (unsigned) newDataSize; 
+        num_cells   += (unsigned) newDataSize; 
+        num_refined += (unsigned) ( (newDataSize-dataLen)/8 ); 
         /////////////////////////////////////////////////////////////////////////
 
         /////////////////////////////////////////////////////////////////////////
@@ -356,7 +358,7 @@ bool boxm2_ocl_refine_process(bprb_func_process& pro)
         }
     }
     vcl_cout<<" Refine GPU Time: "<<gpu_time<<", transfer time: "<<transfer_time<<vcl_endl;
-    
+    vcl_cout<<" Total Num Refined: "<<num_refined<<vcl_endl;
     // clean up cmdqueue
     clReleaseCommandQueue(queue);
     

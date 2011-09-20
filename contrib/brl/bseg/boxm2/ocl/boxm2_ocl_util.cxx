@@ -9,6 +9,7 @@
 #include <vil/vil_image_view.h>
 #include <vil/vil_math.h>
 #include <vil/vil_load.h>
+#include <vil/vil_save.h>
 #include <vpgl/vpgl_perspective_camera.h>
 #include <vpgl/vpgl_calibration_matrix.h>
 #include <bsta/bsta_histogram.h>
@@ -180,34 +181,51 @@ void boxm2_ocl_util::set_bit_lookup(cl_uchar* lookup)
 
 
 // private helper method prepares an input image to be processed by update
-vil_image_view_base_sptr boxm2_ocl_util::prepare_input_image(vcl_string filename)
+vil_image_view_base_sptr boxm2_ocl_util::prepare_input_image(vcl_string filename, bool force_grey)
 {
   //load from file
   vil_image_view_base_sptr loaded_image = vil_load(filename.c_str());
-  return boxm2_ocl_util::prepare_input_image(loaded_image);
+  return boxm2_ocl_util::prepare_input_image(loaded_image, force_grey);
 }
 
 // private helper method prepares an input image to be processed by update
-vil_image_view_base_sptr boxm2_ocl_util::prepare_input_image(vil_image_view_base_sptr loaded_image)
+vil_image_view_base_sptr boxm2_ocl_util::prepare_input_image(vil_image_view_base_sptr loaded_image, bool force_grey)
 {
-  //load from file
-
   //then it's an RGB image (assumes byte image...)
   if (loaded_image->nplanes() == 3 || loaded_image->nplanes() == 4)
   {
-    vcl_cout<<"preparing rgb image"<<vcl_endl;
-    //load image from file and format it into RGBA
-    vil_image_view_base_sptr n_planes = vil_convert_to_n_planes(4, loaded_image);
-    vil_image_view_base_sptr comp_image = vil_convert_to_component_order(n_planes);
-    vil_image_view<vil_rgba<vxl_byte> >* rgba_view = new vil_image_view<vil_rgba<vxl_byte> >(comp_image);
+    //if not forcing RGB image to be grey
+    if(!force_grey) 
+    {
+      vcl_cout<<"preparing rgb image"<<vcl_endl;
+      //load image from file and format it into RGBA
+      vil_image_view_base_sptr n_planes = vil_convert_to_n_planes(4, loaded_image);
+      vil_image_view_base_sptr comp_image = vil_convert_to_component_order(n_planes);
+      vil_image_view<vil_rgba<vxl_byte> >* rgba_view = new vil_image_view<vil_rgba<vxl_byte> >(comp_image);
 
-    //make sure all alpha values are set to 255 (1)
-    vil_image_view<vil_rgba<vxl_byte> >::iterator iter;
-    for (iter = rgba_view->begin(); iter != rgba_view->end(); ++iter) {
-      (*iter) = vil_rgba<vxl_byte>(iter->R(), iter->G(), iter->B(), 255);
+      //make sure all alpha values are set to 255 (1)
+      vil_image_view<vil_rgba<vxl_byte> >::iterator iter;
+      for (iter = rgba_view->begin(); iter != rgba_view->end(); ++iter) {
+        (*iter) = vil_rgba<vxl_byte>(iter->R(), iter->G(), iter->B(), 255);
+      }
+      vil_image_view_base_sptr toReturn(rgba_view);
+      return toReturn;
     }
-    vil_image_view_base_sptr toReturn(rgba_view);
-    return toReturn;
+    else
+    {
+      vcl_cout<<"preparing rgb as input to grey scale float image"<<vcl_endl;
+      
+      //load image from file and format it into grey
+      vil_image_view<vxl_byte>* inimg    = dynamic_cast<vil_image_view<vxl_byte>* >(loaded_image.ptr()); 
+      vil_image_view<float>     gimg(loaded_image->ni(), loaded_image->nj()); 
+      vil_convert_planes_to_grey<vxl_byte, float>(*inimg, gimg); 
+
+      //stretch it into 0-1 range
+      vil_image_view<float>*    floatimg = new vil_image_view<float>(loaded_image->ni(), loaded_image->nj()); 
+      vil_convert_stretch_range_limited(gimg, *floatimg, 0.0f, 255.0f, 0.0f, 1.0f); 
+      vil_image_view_base_sptr toReturn(floatimg);
+      return toReturn;
+    }
   }
 
   //else if loaded planes is just one...
