@@ -507,6 +507,15 @@ def load_image(file_path) :
   img = dbvalue(id,type);
   return img, ni, nj; 
   
+def convert_image(img, type="byte") :
+  boxm2_batch.init_process("vilConvertPixelTypeProcess");
+  boxm2_batch.set_input_from_db(0, img);
+  boxm2_batch.set_input_string(1, type); 
+  boxm2_batch.run_process();
+  (id,type) = boxm2_batch.commit_output(0);
+  cimg = dbvalue(id,type); 
+  return cimg; 
+  
 def save_image(img, file_path) : 
   boxm2_batch.init_process("vilSaveImageViewProcess");
   boxm2_batch.set_input_from_db(0,img);
