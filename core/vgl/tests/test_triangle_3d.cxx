@@ -168,6 +168,85 @@ inline void test_intersecting4()
 }
 
 
+inline void test_intersecting5_arrangement(
+  const vgl_point_3d<double>& a_A, const vgl_point_3d<double>& a_B, const vgl_point_3d<double>& a_C,
+  const vgl_point_3d<double>& b_A, const vgl_point_3d<double>& b_B, const vgl_point_3d<double>& b_C,
+  unsigned expected_edge_1, unsigned expected_edge_2)
+{
+  vgl_triangle_3d_intersection_t ret
+    = vgl_triangle_3d_triangle_intersection(a_A,a_B,a_C,b_A,b_B,b_C);
+  TEST("Intersecting Skew", ret, Skew);
+
+  vgl_line_segment_3d<double> i_line;
+  unsigned edge_p1, edge_p2;
+  ret = vgl_triangle_3d_triangle_intersection(a_A,a_B,a_C,b_A,b_B,b_C,i_line, edge_p1, edge_p2);
+
+  double p1_err = vgl_distance(i_line.point1(), vgl_point_3d<double>(1,1,0));
+  double p2_err = vgl_distance(i_line.point2(), vgl_point_3d<double>(2,2,0));
+  //handle ambiguity of intersecting line segment ordering.
+  if (p1_err > 1e-2)
+  {
+    vcl_swap(edge_p1, edge_p2);
+    p1_err = vgl_distance(i_line.point2(), vgl_point_3d<double>(1,1,0));
+    p2_err = vgl_distance(i_line.point1(), vgl_point_3d<double>(2,2,0));
+  }
+
+  TEST("Intersecting Skew - with isect line", ret, Skew);
+  TEST_NEAR("Intersecting Skew, iline correct", p1_err + p2_err, 0, 1e-8);
+  TEST("Intersecting Skew, edge label 1 correct", edge_p1==expected_edge_1, true);
+  TEST("Intersecting Skew, edge label 2 correct", edge_p2==expected_edge_2, true);
+}
+
+
+//==============================================================================
+inline void test_intersecting5()
+{
+  vgl_point_3d<double> a_p1(0, 0, 0);
+  vgl_point_3d<double> a_p2(0, 4, 0);
+  vgl_point_3d<double> a_p3(4, 0, 0);
+
+  vgl_point_3d<double> b_p1(4, 4, 0);
+  vgl_point_3d<double> b_p2(1, 1, -4);
+  vgl_point_3d<double> b_p3(1, 1, 4);
+
+  vcl_cout << "Test skew intersection with multiple arrangements.\n";
+
+  test_intersecting5_arrangement(a_p1, a_p2, a_p3, b_p1, b_p2, b_p3, 4, 1);
+  test_intersecting5_arrangement(a_p2, a_p1, a_p3, b_p1, b_p2, b_p3, 4, 2);
+  test_intersecting5_arrangement(a_p2, a_p3, a_p1, b_p1, b_p2, b_p3, 4, 0);
+  test_intersecting5_arrangement(a_p3, a_p1, a_p2, b_p1, b_p2, b_p3, 4, 2);
+  test_intersecting5_arrangement(a_p1, a_p2, a_p3, b_p2, b_p3, b_p1, 3, 1);
+  test_intersecting5_arrangement(a_p2, a_p1, a_p3, b_p2, b_p3, b_p1, 3, 2);
+  test_intersecting5_arrangement(a_p2, a_p3, a_p1, b_p2, b_p3, b_p1, 3, 0);
+  test_intersecting5_arrangement(a_p3, a_p1, a_p2, b_p2, b_p3, b_p1, 3, 2);
+  test_intersecting5_arrangement(a_p1, a_p2, a_p3, b_p3, b_p1, b_p2, 5, 1);
+  test_intersecting5_arrangement(a_p2, a_p1, a_p3, b_p3, b_p1, b_p2, 5, 2);
+  test_intersecting5_arrangement(a_p2, a_p3, a_p1, b_p3, b_p1, b_p2, 5, 0);
+  test_intersecting5_arrangement(a_p3, a_p1, a_p2, b_p3, b_p1, b_p2, 5, 2);
+  test_intersecting5_arrangement(a_p1, a_p2, a_p3, b_p2, b_p1, b_p3, 5, 1);
+  test_intersecting5_arrangement(a_p2, a_p1, a_p3, b_p2, b_p1, b_p3, 5, 2);
+  test_intersecting5_arrangement(a_p2, a_p3, a_p1, b_p2, b_p1, b_p3, 5, 0);
+  test_intersecting5_arrangement(a_p3, a_p1, a_p2, b_p2, b_p1, b_p3, 5, 2);
+
+  test_intersecting5_arrangement(b_p1, b_p2, b_p3, a_p1, a_p2, a_p3, 1, 4);
+  test_intersecting5_arrangement(b_p1, b_p2, b_p3, a_p2, a_p1, a_p3, 1, 5);
+  test_intersecting5_arrangement(b_p1, b_p2, b_p3, a_p2, a_p3, a_p1, 1, 3);
+  test_intersecting5_arrangement(b_p1, b_p2, b_p3, a_p3, a_p1, a_p2, 1, 5);
+  test_intersecting5_arrangement(b_p2, b_p3, b_p1, a_p1, a_p2, a_p3, 0, 4);
+  test_intersecting5_arrangement(b_p2, b_p3, b_p1, a_p2, a_p1, a_p3, 0, 5);
+  test_intersecting5_arrangement(b_p2, b_p3, b_p1, a_p2, a_p3, a_p1, 0, 3);
+  test_intersecting5_arrangement(b_p2, b_p3, b_p1, a_p3, a_p1, a_p2, 0, 5);
+  test_intersecting5_arrangement(b_p3, b_p1, b_p2, a_p1, a_p2, a_p3, 2, 4);
+  test_intersecting5_arrangement(b_p3, b_p1, b_p2, a_p2, a_p1, a_p3, 2, 5);
+  test_intersecting5_arrangement(b_p3, b_p1, b_p2, a_p2, a_p3, a_p1, 2, 3);
+  test_intersecting5_arrangement(b_p3, b_p1, b_p2, a_p3, a_p1, a_p2, 2, 5);
+  test_intersecting5_arrangement(b_p2, b_p1, b_p3, a_p1, a_p2, a_p3, 2, 4);
+  test_intersecting5_arrangement(b_p2, b_p1, b_p3, a_p2, a_p1, a_p3, 2, 5);
+  test_intersecting5_arrangement(b_p2, b_p1, b_p3, a_p2, a_p3, a_p1, 2, 3);
+  test_intersecting5_arrangement(b_p2, b_p1, b_p3, a_p3, a_p1, a_p2, 2, 5);
+}
+
+
 //==============================================================================
 inline void test_intersecting_degenerate_triangles1()
 {
@@ -652,6 +731,7 @@ static void test_triangle_3d()
   test_intersecting2();
   test_intersecting3();
   test_intersecting4();
+  test_intersecting5();
 
   test_intersect_plane();
 
