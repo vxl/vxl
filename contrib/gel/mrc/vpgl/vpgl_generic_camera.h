@@ -60,7 +60,8 @@ class vpgl_generic_camera : public vpgl_camera<T>
   vgl_ray_3d<T> ray(vgl_point_3d<T> const& p) const;
 
   //: the ray index at a given level
-  vbl_array_2d<vgl_ray_3d<T> > rays(int level){ return rays_[level];}
+  vbl_array_2d<vgl_ray_3d<T> >& rays(int level){ return rays_[level];}
+
 
   //: the nearest ray origin to the coordinate origin
   vgl_point_3d<T> min_ray_origin(){return min_ray_origin_;}
