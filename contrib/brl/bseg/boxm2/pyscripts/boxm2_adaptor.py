@@ -103,7 +103,7 @@ class boxm2_adaptor:
     return z_image, var_image, x_image, y_image, prob_image, app_image; 
 
   # detect change wrapper, 
-  def change_detect(self, cam, img, exp_img, rgb=False, device_string="") : 
+  def change_detect(self, cam, img, exp_img, n=1, raybelief="", rgb=False, device_string="") : 
     cache = self.active_cache; 
     dev = self.device; 
     if device_string=="gpu" : 
@@ -111,7 +111,7 @@ class boxm2_adaptor:
     elif device_string=="cpp" : 
       cache = self.cpu_cache;
       dev = None;
-    cd_img = change_detect(self.scene,cache,cam,img,exp_img,dev,rgb); 
+    cd_img = change_detect(self.scene,cache,cam,img,exp_img,dev,rgb,n,raybelief); 
     return cd_img; 
   
   def refine(self, thresh=0.3, device_string="") :
@@ -365,7 +365,7 @@ def render_depth(scene, cache, cam, ni=1280, nj=720, device=None) :
     print "ERROR: Cache type not recognized: ", cache.type; 
    
     
-def change_detect(scene, cache, cam, img, exp_img, device=None, rgb=False) : 
+def change_detect(scene, cache, cam, img, exp_img, device=None, rgb=False, n=1, raybelief="") : 
   if cache.type == "boxm2_cache_sptr" : 
     print "boxm2_batch CPU change detection"; 
     boxm2_batch.init_process("boxm2CppChangeDetectionProcess"); 
@@ -387,6 +387,8 @@ def change_detect(scene, cache, cam, img, exp_img, device=None, rgb=False) :
     boxm2_batch.set_input_from_db(3,cam);
     boxm2_batch.set_input_from_db(4,img); 
     boxm2_batch.set_input_from_db(5,exp_img); 
+    boxm2_batch.set_input_int(6, n); 
+    boxm2_batch.set_input_string(7, raybelief);
     boxm2_batch.run_process(); 
     if not rgb :
       (id,type) = boxm2_batch.commit_output(0); 

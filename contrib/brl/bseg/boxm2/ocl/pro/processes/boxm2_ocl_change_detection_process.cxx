@@ -31,7 +31,7 @@
 
 namespace boxm2_ocl_change_detection_process_globals
 {
-  const unsigned n_inputs_     = 6;
+  const unsigned n_inputs_     = 8;
   const unsigned n_outputs_    = 2;
   vcl_size_t local_threads [2] = {8,8};
   vcl_size_t global_threads[2] = {8,8};
@@ -113,14 +113,22 @@ bool boxm2_ocl_change_detection_process_cons(bprb_func_process& pro)
   input_types_[3] = "vpgl_camera_double_sptr";
   input_types_[4] = "vil_image_view_base_sptr";
   input_types_[5] = "vil_image_view_base_sptr";
+  input_types_[6] = "int";   //n for nxn ray casting
+  input_types_[7] = "vcl_string"; //"raybelief" string for using raybelief
 
   // process has 1 output:
   // output[0]: scene sptr
   vcl_vector<vcl_string>  output_types_(n_outputs_);
   output_types_[0] = "vil_image_view_base_sptr";  //prob of change image
   output_types_[1] = "vil_image_view_base_sptr";  //Red Green change image
+  bool good = pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 
-  return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
+  //default is 1x1, with no ray belief
+  brdb_value_sptr nxn  = new brdb_value_t<int>(1);
+  brdb_value_sptr rayb = new brdb_value_t<vcl_string>("");
+  pro.set_input(6, nxn);
+  pro.set_input(7, rayb); 
+  return good; 
 }
 
 bool boxm2_ocl_change_detection_process(bprb_func_process& pro)
@@ -141,6 +149,9 @@ bool boxm2_ocl_change_detection_process(bprb_func_process& pro)
   vpgl_camera_double_sptr   cam           = pro.get_input<vpgl_camera_double_sptr>(i++);
   vil_image_view_base_sptr  img           = pro.get_input<vil_image_view_base_sptr>(i++);
   vil_image_view_base_sptr  exp_img       = pro.get_input<vil_image_view_base_sptr>(i++);
+  int                       n             = pro.get_input<unsigned>(i++);                 //nxn 
+  vcl_string                norm_type     = pro.get_input<vcl_string>(i++); 
+  
 
   unsigned ni=img->ni();
   unsigned nj=img->nj();
@@ -326,8 +337,7 @@ bool boxm2_ocl_change_detection_process(bprb_func_process& pro)
   //----------------------------------------------------------------------------
   // STEP TWO: If adaptive do second pass
   //----------------------------------------------------------------------------
-  bool adaptive = true; 
-  if( adaptive )
+  if( n > 1 )
   {
     //do some bookkeeping before second pass
     float* prob_change_buff = new float[cl_ni*cl_nj]; 
@@ -359,10 +369,11 @@ bool boxm2_ocl_change_detection_process(bprb_func_process& pro)
     bocl_mem_sptr prob_change = new bocl_mem(device->context(),prob_change_buff,cl_ni*cl_nj*sizeof(float),"pass one prob change buffer");
     prob_change->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
-    //run CD for each pixel in a 3x3 neighborhood
-    for(int oi=-2; oi<=2; ++oi) 
+    //run CD for each pixel in a nxn neighborhood
+    int half = n/2; 
+    for(int oi=-half; oi<=half; ++oi) 
     {
-      for(int oj=-2; oj<=2; ++oj) 
+      for(int oj=-half; oj<=half; ++oj) 
       {
         int oi_buff[1] = {oi}; 
         int oj_buff[1] = {oj}; 
@@ -470,10 +481,18 @@ bool boxm2_ocl_change_detection_process(bprb_func_process& pro)
   //----------------------------------------------------------------------------
   bocl_kernel* normalize_change_kernel =  kernels[identifier][2];
   {
+    // Image Dimensions
+    int rbelief_buff[1] = {0};
+    if(norm_type=="raybelief") 
+      rbelief_buff[0] = 1; 
+    bocl_mem_sptr rbelief = new bocl_mem(device->context(), rbelief_buff, sizeof(int), "rbelief buffer");
+    rbelief->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
+    
     normalize_change_kernel->set_arg( change_image.ptr() );
     normalize_change_kernel->set_arg( change_exp_image.ptr() );
     normalize_change_kernel->set_arg( vis_image.ptr() );
     normalize_change_kernel->set_arg( img_dim.ptr());
+    normalize_change_kernel->set_arg( rbelief.ptr());
     normalize_change_kernel->execute( queue, 2, local_threads, global_threads);
     clFinish(queue);
     gpu_time += normalize_change_kernel->exec_time();

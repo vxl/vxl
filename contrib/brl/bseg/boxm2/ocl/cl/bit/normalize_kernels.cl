@@ -178,10 +178,11 @@ __kernel void render_kernel_rgb_gl(__constant float *min_i,
 #endif
 
 #ifdef CHANGE
-__kernel void normalize_change_kernel(__global float * exp_img /* background probability density*/ , 
-                                      __global float * prob_exp_img ,
+__kernel void normalize_change_kernel(__global float* exp_img /* background probability density*/ , 
+                                      __global float* prob_exp_img ,
                                       __global float* vis_img, 
-                                      __global uint4* imgdims)
+                                      __global uint4* imgdims, 
+                                      __global int  * rbelief)
 {
     int i=0,j=0;
     i=get_global_id(0);
@@ -195,7 +196,6 @@ __kernel void normalize_change_kernel(__global float * exp_img /* background pro
         return;
     }
     float vis   = vis_img[imindex];
-
     
     float prob_int = exp_img[imindex] ; 
     prob_int+=vis;
@@ -203,9 +203,16 @@ __kernel void normalize_change_kernel(__global float * exp_img /* background pro
     float prob_exp_int = prob_exp_img[imindex];
     prob_exp_int+=vis;
 
-    float fgbelief=1.0f/(1.0f+prob_int); // - 0.5f*min(prob_int,1/prob_int);
-    float raybelief=prob_exp_int/(1.0f+prob_exp_int)-0.5*min(prob_exp_int,1/prob_exp_int);
-    exp_img[imindex]=fgbelief; //* raybelief;
+    //compute foreground belief
+    if( *rbelief == 0 ) {
+      float fgbelief   = 1.0f/(1.0f+prob_int);
+      exp_img[imindex] = fgbelief; 
+    }
+    else {
+      float fgbelief   = 1.0f/(1.0f+prob_int) - 0.5f*min(prob_int,1/prob_int);
+      float raybelief  = prob_exp_int/(1.0f+prob_exp_int)-0.5*min(prob_exp_int,1/prob_exp_int);
+      exp_img[imindex] = fgbelief*raybelief; 
+    }
 }
 #endif
 #ifdef PROB_IMAGE
