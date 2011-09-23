@@ -5,7 +5,6 @@
 // \author Kieran O'Mahony
 // \date 21 June 2007
 
-#include <vcl_limits.h>
 #include <vgl/vgl_distance.h>
 #include <vgl/vgl_intersection.h>
 #include <vgl/vgl_line_3d_2_points.h>
@@ -13,7 +12,8 @@
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_vector_3d.h>
 #include <vgl/vgl_closest_point.h>
-
+#include <vcl_limits.h>
+#include <vcl_cassert.h>
 
 // Define a file-scope vgl_nan constant
 static const double vgl_nan = vcl_sqrt(-1.0);
@@ -325,7 +325,7 @@ namespace
 {
   static const unsigned calc_edge_index_lookup[8] = {-1, 0, 2, 0, -1, 1, 2, 1};
   //: Given the [0,2] index of two vertices, in either order, return the edge index [0,2]
-  // eg between vertices 2 and 0 is edge 2.
+  // E.g. between vertices 2 and 0 is edge 2.
   // Use precalculated list lookup, probably fastest.
   inline unsigned calc_edge_index(unsigned v, unsigned w)
   {
@@ -337,7 +337,7 @@ namespace
   }
 }
 //=======================================================================
-//: compute the intersection line of the given triangles
+//: Compute the intersection line of the given triangles
 //  \see vgl_triangle_3d_triangle_intersection()
 //  \note an intersection line is not computed for a coplanar intersection
 //  \retval i_line_point1_edge A number [0-5] indicating which edge of the two triangles
@@ -354,7 +354,7 @@ vgl_triangle_3d_intersection_t vgl_triangle_3d_triangle_intersection(
   vgl_line_segment_3d<double>& i_line,
   unsigned &i_line_point1_edge,
   unsigned &i_line_point2_edge
-  )
+ )
 {
   // triangle intersection algorithm based on code & paper
   // found at http://jgt.akpeters.com/papers/Moller97/
@@ -362,7 +362,7 @@ vgl_triangle_3d_intersection_t vgl_triangle_3d_triangle_intersection(
   //sanity check for degenerate triangles
   if (collinear(a_p1,a_p2,a_p3))
   {
-    if (a_p1 == a_p2 && a_p2==a_p3) // if a has degereated to a single point
+    if (a_p1 == a_p2 && a_p2==a_p3) // if it has degenerated to a single point
     {
       if (vgl_triangle_3d_test_inside(a_p1,b_p1,b_p2,b_p3))
       {
@@ -855,7 +855,7 @@ vgl_triangle_3d_intersection_t vgl_triangle_3d_triangle_intersection(
 
 
 //=======================================================================
-//: compute the intersection line of the given triangles
+//: Compute the intersection line of the given triangles
 //  \see vgl_triangle_3d_triangle_intersection()
 //  \note an intersection line is not computed for a coplanar intersection
 vgl_triangle_3d_intersection_t vgl_triangle_3d_triangle_intersection(
