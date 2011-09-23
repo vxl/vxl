@@ -53,10 +53,11 @@ class boxm2_ocl_change_tableau : public boxm2_ocl_render_tableau
 
   //func to update frame on GPU (returns gpu time)
   float change_detect(int frame);
-  vcl_vector<vcl_string> cams_;
-  vcl_vector<vcl_string> imgs_;
-  int frame_; 
-  bool do_render_change_; 
+  vcl_vector<vcl_string>  cams_;
+  vcl_vector<vcl_string>  imgs_;
+  int                     frame_; 
+  bool                    do_render_change_; 
+  int                     n_;               //for nxn change detection
 };
 
 //: declare smart pointer

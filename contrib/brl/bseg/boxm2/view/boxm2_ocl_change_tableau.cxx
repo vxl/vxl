@@ -54,6 +54,7 @@ bool boxm2_ocl_change_tableau::init_change (bocl_device_sptr device,
   imgs_ = change_imgs;
   frame_ = 0; 
   do_render_change_ = false; 
+  n_ = 1; 
   return true;
 }
 
@@ -89,6 +90,18 @@ bool boxm2_ocl_change_tableau::handle(vgui_event const &e)
     this->change_detect(frame_); 
     this->post_redraw(); 
     return true; 
+  }
+  else if( e.type == vgui_KEY_PRESS && e.key == vgui_key('+') ){
+    n_ = (n_+2 > 9) ?  9 : n_+2; 
+    vcl_cout<<"Setting N to "<< n_ <<vcl_endl;
+    this->change_detect(frame_); 
+    this->post_redraw(); 
+  }
+  else if( e.type == vgui_KEY_PRESS && e.key == vgui_key('-') ){
+    n_ = (n_ - 2 < 1) ? 1 : n_-2; 
+    vcl_cout<<"Setting N to "<<n_<<vcl_endl;
+    this->change_detect(frame_); 
+    this->post_redraw(); 
   }
   else if( e.type == vgui_KEY_PRESS && e.key == vgui_key('b') ) {
     do_render_change_ = false; 
@@ -157,6 +170,7 @@ float boxm2_ocl_change_tableau::change_detect(int frame)
   //set up brdb_value_sptr arguments...
   brdb_value_sptr brdb_change_img   = new brdb_value_t<vil_image_view_base_sptr>(change_img); 
   brdb_value_sptr brdb_exp_img      = new brdb_value_t<vil_image_view_base_sptr>(exp_img);
+  brdb_value_sptr brdb_n            = new brdb_value_t<int>(n_); 
 
   //if scene has RGB data type, use color render process
   good = bprb_batch_process_manager::instance()->init_process("boxm2OclChangeDetectionProcess");
@@ -169,6 +183,7 @@ float boxm2_ocl_change_tableau::change_detect(int frame)
       && bprb_batch_process_manager::instance()->set_input(3, brdb_cam)    // camera
       && bprb_batch_process_manager::instance()->set_input(4, brdb_change_img)    // input image
       && bprb_batch_process_manager::instance()->set_input(5, brdb_exp_img)    // input image
+      && bprb_batch_process_manager::instance()->set_input(6, brdb_n)         //nxn change
       && bprb_batch_process_manager::instance()->run_process();
   
   //vil image output from render process
