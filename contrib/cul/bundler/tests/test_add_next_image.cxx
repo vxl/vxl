@@ -3,6 +3,7 @@
 #include <bundler/bundler.h>
 #include <bundler/bundler_sfm_impl.h>
 
+#include <bundler/tests/utils.h>
 
 #include <vil/vil_load.h>
 #include <vcl_string.h>
@@ -14,7 +15,7 @@ static const double TOL = 480 * .4;
 static const int NUM_IMGS = 11;
 
 static const char* IMG_PATH =
-    "test_data";
+    "contrib/cul/bundler/test/test_data";
 
 static void test_add_next_image(int argc, char** argv)
 {
@@ -72,29 +73,14 @@ static void test_add_next_image(int argc, char** argv)
     bundler_sfm_impl_add_next_images add;
     add(to_add, recon, added);
 
+    bundler_sfm_impl_add_new_points add_pts;
+    add_pts(recon, added);
+
+    bundler_sfm_impl_bundle_adjust adjust;
+    adjust(recon);
     //-------------------- Consistency checks
 
-    Assert("Sizes match up", to_add.size() == added.size());
-
-    bundler_inters_image_sptr img = added[0];
-
-    for (unsigned int f = 0; f < img->features.size(); ++f) {
-        if ( img->features[f]->track &&
-             img->features[f]->track->contributing_points[f]) {
-            double u, v;
-            img->camera.project(
-                img->features[f]->track->world_point.x(),
-                img->features[f]->track->world_point.y(),
-                img->features[f]->track->world_point.z(),
-                u, v);
-
-            TEST_NEAR("The camera projects it's contributing pts well. (x)",
-                      img->features[f]->point.x(), u, TOL);
-
-            TEST_NEAR("The camera projects it's contributing pts well. (y)",
-                      img->features[f]->point.y(), v, TOL);
-        }
-    }
+    test_recon(recon, 3);
 }
 
 TESTMAIN_ARGS(test_add_next_image);

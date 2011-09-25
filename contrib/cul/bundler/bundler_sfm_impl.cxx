@@ -196,6 +196,8 @@ static int count_observed_points(
 {
     int num_observed_pts = 0;
 
+    assert( ! to_check->in_recon );
+
     vcl_vector<bundler_inters_feature_sptr>::const_iterator ii;
     for (ii = to_check->features.begin();
          ii != to_check->features.end(); ++ii) {
@@ -218,7 +220,7 @@ bool bundler_sfm_impl_select_next_images::operator()(
     int most_observed_points = 0;
     bundler_inters_image_sptr next_image;
 
-    vcl_vector<bundler_inters_image_sptr>::iterator i;
+    vcl_vector<bundler_inters_image_sptr>::const_iterator i;
     for (i = recon.feature_sets.begin(); i != recon.feature_sets.end(); i++)
     {
         // Only look at images not in the reconstruction.
@@ -235,13 +237,16 @@ bool bundler_sfm_impl_select_next_images::operator()(
         }
     }
 
+
     // Because we wanted this class to be very general, we need to return
     // a vector. Put the next image to add into the vector.
     if (most_observed_points >= settings.min_number_observed_points) {
+        assert(next_image);
+
         to_add.push_back(next_image);
         return true;
-    }
-    else {
+
+    } else {
         return false;
     }
 }
@@ -292,10 +297,7 @@ void bundler_sfm_impl_add_next_images::operator()(
         settings.inlier_size_multiplier);
 
     // Add every image in the set.
-    vcl_for_each(
-        to_add.begin(),
-        to_add.end(),
-        adder);
+    vcl_for_each(to_add.begin(), to_add.end(), adder);
 
     assert(added_cameras.size() == to_add.size());
 }
@@ -365,7 +367,7 @@ static void add_new_track(
 
 
 void bundler_sfm_impl_add_new_points::operator()(
-    bundler_inters_reconstruction &reconstruction,
+    bundler_inters_reconstruction &recon,
     const vcl_vector<bundler_inters_image_sptr> &added)
 {
     //Look at every image that was added in the last round.
@@ -395,8 +397,15 @@ void bundler_sfm_impl_add_new_points::operator()(
                         (*f)->track,
                         settings.min_observing_images,
                         settings.min_ray_angle)) {
-                add_new_track(reconstruction, (*f)->track);
+                add_new_track(recon, (*f)->track);
             }
+        }
+    }
+
+    vcl_vector<bundler_inters_track_sptr>::const_iterator t;
+    for (t = recon.tracks.begin(); t != recon.tracks.end(); ++t){
+        if( (*t)->observed) {
+            bundler_utils_triangulate_points(*t);
         }
     }
 }
@@ -528,11 +537,27 @@ void bundler_sfm_impl_bundle_adjust::operator()(
 
     //------------------------------------------------------------------
     // Extract the information from the bundle adjustment process.
-    for (unsigned int i = 0; i < cameras.size(); ++i) {
-        recon.feature_sets[i]->camera = cameras[i];
+    int camera_index = 0;
+    for(i = recon.feature_sets.begin(); i != recon.feature_sets.end(); i++)
+    {
+        if( (*i)->in_recon ){
+            (*i)->camera = cameras[camera_index];
+            camera_index++;
+        }
     }
 
-    for (unsigned int i = 0; i < world_points.size(); ++i) {
-        recon.tracks[i]->world_point = world_points[i];
+    assert(camera_index == cameras.size());
+
+
+
+    int point_index = 0;
+    for (t = recon.tracks.begin(); t != recon.tracks.end(); t++)
+    {
+        if( (*t)->observed ) { 
+            (*t)->world_point = world_points[point_index];
+            point_index++;
+        }
     }
+    
+    assert(point_index == world_points.size());
 }

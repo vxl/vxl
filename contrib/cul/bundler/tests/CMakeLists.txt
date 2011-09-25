@@ -9,7 +9,8 @@ ADD_EXECUTABLE( bundler_test_all test_driver.cxx
   test_initial_recon.cxx
   test_pipeline.cxx
   test_ply.cxx
-  test_add_next_image.cxx )
+  test_add_next_image.cxx 
+  utils.cxx     utils.h)
 
 
 TARGET_LINK_LIBRARIES(bundler_test_all bundler vpgl_algo vpgl vpgl_file_formats vsol bgeo vgl_algo vnl_algo vnl vgl vil vul vbl rrel bapl rsdl testlib)

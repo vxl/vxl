@@ -124,7 +124,7 @@ double bundler_utils_get_homography_inlier_percentage(
 
 
 //----------------------------------------------------------------------
-int bundler_utils_fill_persp_camera_ransac(
+void bundler_utils_fill_persp_camera_ransac(
     const bundler_inters_image_sptr &image,
     int ransac_rounds,
     double inlier_threshold)
@@ -151,6 +151,8 @@ int bundler_utils_fill_persp_camera_ransac(
     assert(world_pts.size() >= 6);
 
     int best_inliers = 0;
+    vpgl_perspective_camera<double> camera_estimate;
+
     for (int rnd = 0; rnd < ransac_rounds; ++rnd) {
         vcl_vector< vgl_point_2d<double> > curr_image_pts(6);
         vcl_vector< vgl_point_3d<double> > curr_world_pts(6);
@@ -177,7 +179,7 @@ int bundler_utils_fill_persp_camera_ransac(
         // Find the inlier percentage to evaulate how good this camera
         // is.
         int inlier_count = 0;
-        for (unsigned int pt_ind = 0; pt_ind < image_pts.size(); ++pt_ind) {
+        for (int pt_ind = 0; pt_ind < image_pts.size(); ++pt_ind) {
             double u, v;
             camera.project(
                 world_pts[pt_ind].x(),
@@ -195,10 +197,37 @@ int bundler_utils_fill_persp_camera_ransac(
 
         // Now see if this is the best camera so far.
         if (inlier_count >= best_inliers) {
-            image->camera = camera;
+            camera_estimate = camera;
             best_inliers = inlier_count;
         }
     }
 
-    return best_inliers;
+
+    //------------------------------------------------------------------
+    // Now that we have an estimate for the camera, re-do it into a more
+    // expected form.
+    vgl_point_2d<double> principal_point;
+    principal_point.x() = image->source->ni() / 2.0;
+    principal_point.y() = image->source->nj() / 2.0;
+
+    
+    const vpgl_calibration_matrix<double> &k = 
+        camera_estimate.get_calibration();
+
+    const double observed_focal_length = .5 * 
+        (k.get_matrix()(0, 0) +
+        k.get_matrix()(1, 1));
+
+    vcl_cout << k.get_matrix() << vcl_endl;
+    vcl_cout << observed_focal_length << vcl_endl << vcl_endl;
+
+    vpgl_calibration_matrix<double> calibration_mat(
+        image->focal_length, principal_point);
+
+    vpgl_perspective_camera<double> actual_camera(
+        calibration_mat,
+        camera_estimate.get_rotation(),
+        camera_estimate.get_translation());
+
+    image->camera = actual_camera;
 }

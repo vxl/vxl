@@ -2,12 +2,14 @@
 
 #include <bundler/bundler.h>
 
+#include <bundler/tests/utils.h>
+
 
 #include <vil/vil_load.h>
 #include <vcl_string.h>
 #include <vcl_iomanip.h>
 
-static const char* IMG_PATH = "contrib/cul/bundler/tests/test_data";
+static const char* IMG_PATH = "contrib/cul/bundler/test/test_data";
 
 static const int NUM_IMGS = 11;
 static const double FOCAL_LENGTH_MM = 5.4;
@@ -55,6 +57,15 @@ static void test_pipeline(int argc, char** argv)
     bundler_write_ply_file(
         "points.ply", 
         points);
+
+    vcl_cout<<vcl_endl<<vcl_endl<<vcl_endl<<"------------------------\n";
+
+
+    for(int i = 0; i < cameras.size(); i++){
+        vcl_cout<<"=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-"<<vcl_endl;
+        vcl_cout << cameras[i]<<vcl_endl;
+        vcl_cout<<"=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-"<<vcl_endl;
+    }
 }
 
 
