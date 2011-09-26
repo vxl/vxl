@@ -56,8 +56,8 @@ struct bundler_inters_feature : public vbl_ref_count
     // Constructors
     bundler_inters_feature();
     bundler_inters_feature(
-        int row, 
-        int col, 
+        double row, 
+        double col, 
         const vnl_vector<double> &d,
         const bundler_inters_image_sptr &img,
         int index_in_image);

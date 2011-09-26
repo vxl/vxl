@@ -17,7 +17,7 @@
 
 #include <vnl/algo/vnl_svd.h>
 
-//-------------------------------------------------------------------------
+//------------------------------------------------------------------------
 // Generic helper function to create a calibration matrix.
 // Assumes the camera center is the center of the image.
 
@@ -75,8 +75,8 @@ bool bundler_sfm_impl_create_initial_recon::operator()(
         }
     }
 
-    // If we didn't find anything that can be in the initial reconstruction,
-    // panic.
+    // If we didn't find anything that can be in the initial 
+    // reconstruction, panic.
     if ( ! best_match) {
         vcl_cerr<< "Unable to create an initial reconstruction!\n"
                 << "There is not a match set that both has an initial guess"
@@ -466,7 +466,7 @@ void bundler_sfm_impl_bundle_adjust::operator()(
     vcl_vector<bundler_inters_image_sptr>::const_iterator i;
     for(i = recon.feature_sets.begin(); i != recon.feature_sets.end(); i++)
     {
-        if( (*i)->in_recon ){
+        if( (*i)->in_recon ) {
             cameras.push_back( (*i)->camera );
         }
     }
@@ -490,10 +490,10 @@ void bundler_sfm_impl_bundle_adjust::operator()(
     //
     // mask= [[is point 0 visible in cam 0, is point 0 visible in cam 1],
     //     is point 1 visible in cam 0, is point 1 visible in cam 1]]
-    vcl_vector<vgl_point_2d<double> > image_points;
+    vcl_vector< vgl_point_2d<double> > image_points;
 
-    vcl_vector<vcl_vector<bool> > mask( 
-        cameras.size(), vcl_vector<bool>(world_points.size(), false) );
+    vcl_vector<vcl_vector<bool> > mask( cameras.size(), 
+        vcl_vector<bool>(world_points.size(), false) );
 
     int camera_ind = 0; // Which entry in cameras are we on.
     for(i = recon.feature_sets.begin(); i != recon.feature_sets.end(); i++)
@@ -524,15 +524,19 @@ void bundler_sfm_impl_bundle_adjust::operator()(
             point_ind++;
         }
 
+        assert(point_ind == world_points.size());
+
         camera_ind++;
     }
+
+    assert(camera_ind == cameras.size());
 
     //------------------------------------------------------------------
     // Perform the bundle adjustment
     vpgl_bundle_adjust bundle_adjust;
-    bundle_adjust.set_max_iterations(settings.number_of_iterations);
 
-    bundle_adjust.optimize(cameras, world_points, image_points, mask);
+    assert(
+        bundle_adjust.optimize(cameras, world_points, image_points, mask));
 
 
     //------------------------------------------------------------------
@@ -540,7 +544,7 @@ void bundler_sfm_impl_bundle_adjust::operator()(
     int camera_index = 0;
     for(i = recon.feature_sets.begin(); i != recon.feature_sets.end(); i++)
     {
-        if( (*i)->in_recon ){
+        if( (*i)->in_recon ) {
             (*i)->camera = cameras[camera_index];
             camera_index++;
         }

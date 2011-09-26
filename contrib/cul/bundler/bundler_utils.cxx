@@ -218,9 +218,6 @@ void bundler_utils_fill_persp_camera_ransac(
         (k.get_matrix()(0, 0) +
         k.get_matrix()(1, 1));
 
-    vcl_cout << k.get_matrix() << vcl_endl;
-    vcl_cout << observed_focal_length << vcl_endl << vcl_endl;
-
     vpgl_calibration_matrix<double> calibration_mat(
         image->focal_length, principal_point);
 

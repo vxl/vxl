@@ -15,8 +15,8 @@ bundler_inters_feature::bundler_inters_feature():
     visited(false) { }
 
 bundler_inters_feature::bundler_inters_feature(
-    int row, 
-    int col,
+    double row, 
+    double col,
     const vnl_vector<double> &d,
     const bundler_inters_image_sptr &img,
     int ind_in_img):

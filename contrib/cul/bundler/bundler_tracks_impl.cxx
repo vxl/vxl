@@ -17,6 +17,8 @@
 #include <vcl_cassert.h>
 #include <vcl_iostream.h>
 
+static const double TOL = .01;
+
 /*-----------------------Detect Implementation----------------------------*/
 
 class feature_adder
@@ -34,8 +36,8 @@ class feature_adder
         lkp.vertical_cast(kp);
 
         // Create our feature
-        int row = static_cast<int>( lkp->location_i() + 0.5 );
-        int col = static_cast<int>( lkp->location_j() + 0.5 );
+        double row = lkp->location_i();
+        double col = lkp->location_j();
 
         bundler_inters_feature_sptr f(
             new bundler_inters_feature(
@@ -56,6 +58,25 @@ class feature_adder
 };
 
 
+static bool is_close(double a1, double a2){
+    return abs(a1 - a2) < TOL;
+}
+
+static bool kps_in_same_place(
+    bapl_keypoint_sptr const& kp1, 
+    bapl_keypoint_sptr const& kp2) {
+
+    bapl_lowe_keypoint_sptr lkp1;
+    lkp1.vertical_cast(kp1);
+
+    bapl_lowe_keypoint_sptr lkp2;
+    lkp2.vertical_cast(kp2);
+
+    return is_close(lkp1->location_i(), lkp2->location_i()) && 
+        is_close(lkp1->location_j(), lkp2->location_j());
+}
+
+
 // Features detect implementation. Uses SIFT to find the features and
 // descriptors.
 bundler_inters_image_sptr bundler_tracks_impl_detect_sift::operator ()(
@@ -72,6 +93,10 @@ bundler_inters_image_sptr bundler_tracks_impl_detect_sift::operator ()(
         keypoints,
         settings.keypoint_curve_ratio,
         false);
+
+    keypoints.erase(
+        vcl_unique(keypoints.begin(), keypoints.end(), kps_in_same_place),
+        keypoints.end());
 
     // Then we are going to convert from the bapl_lowe_keypoint
     // format to the bundler representation
