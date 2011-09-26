@@ -23,6 +23,9 @@ IF(EXPAT_FOUND)
    ADD_EXECUTABLE( bwm_visualsfm_to_vpgl_cams bwm_visualsfm_to_vpgl_cams.cxx)
    TARGET_LINK_LIBRARIES( bwm_visualsfm_to_vpgl_cams bwm bwm_algo vpgl vgl_algo vnl_algo vgl vnl vul vidl vcl bxml)
 
+   ADD_EXECUTABLE( bwm_nvm_avg_focal_length bwm_nvm_avg_focal_length.cxx)
+   TARGET_LINK_LIBRARIES( bwm_nvm_avg_focal_length bwm bwm_algo vpgl vgl_algo vnl_algo vgl vnl vul vidl vcl bxml)
+
   ENDIF(SHAPELIB_FOUND)
  ENDIF(EXPATPP_FOUND)
 ENDIF(EXPAT_FOUND)
