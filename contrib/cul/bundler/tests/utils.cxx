@@ -1,12 +1,13 @@
 #include <testlib/testlib_test.h>
 
 #include <bundler/tests/utils.h>
+#include <vcl_cmath.h>
 
 static const double TOL = 480 * .2;
 
 void test_recon(const bundler_inters_reconstruction &recon,
-    int expected_cameras){
-
+                int expected_cameras)
+{
     // Check that only tracks with contributing points are observed
     vcl_vector<bundler_inters_track_sptr>::const_iterator i;
     for (i = recon.tracks.begin(); i != recon.tracks.end(); i++){
@@ -47,11 +48,10 @@ void test_recon(const bundler_inters_reconstruction &recon,
         }
     }
 
-
-    if(expected_cameras != -1){
+    if (expected_cameras != -1) {
         TEST_EQUAL("Right number of cameras in the recon.",
-            expected_cameras,
-            num_observed_imgs);
+                   expected_cameras,
+                   num_observed_imgs);
     }
 
     // Check that the projection of every contributing point
@@ -74,29 +74,26 @@ void test_recon(const bundler_inters_reconstruction &recon,
 
                 cam.project(pt.x(), pt.y(), pt.z(), u, v);
 
-
                 TEST_NEAR("The proj. of every contributing pt is close to "
                           "its 3d world point.",
                           u, (*f)->point.x(), TOL);
-
 
                 TEST_NEAR("The proj. of every contributing pt is close to "
                           "its 3d world point.",
                           v, (*f)->point.y(), TOL);
 
-                if( abs(u - (*f)->point.x()) > TOL || 
-                    abs(v - (*f)->point.y()) > TOL){
-                    vcl_cout << "----------------------------" << vcl_endl
-                             << "Point failed!!"<<vcl_endl
-                             << "World point: " << pt << vcl_endl
-                             << "Image point: " << (*f)->point << vcl_endl
+                if (vcl_fabs(u - (*f)->point.x()) > TOL ||
+                    vcl_fabs(v - (*f)->point.y()) > TOL) {
+                    vcl_cout << "----------------------------\n"
+                             << "Point failed!!\n"
+                             << "World point: " << pt << '\n'
+                             << "Image point: " << (*f)->point << '\n'
                              << "Projection: (" << u << ", " << v << ")\n"
-                             << "Camera: " << vcl_endl
-                             << cam 
+                             << "Camera:\n"
+                             << cam
                              << "----------------------------" << vcl_endl;
                 }
             }
         }
     }
-
 }
