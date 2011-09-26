@@ -12,7 +12,6 @@
 #include <rsdl/rsdl_point.h>
 
 #include <vcl_vector.h>
-#include <vcl_cmath.h>
 #include <vcl_stack.h>
 #include <vcl_cassert.h>
 #include <vcl_iostream.h>
@@ -58,22 +57,23 @@ class feature_adder
 };
 
 
-static bool is_close(double a1, double a2){
-    return abs(a1 - a2) < TOL;
+static bool is_close(double a1, double a2)
+{
+    return a1 - a2 < TOL && a2 - a1 < TOL;
 }
 
 static bool kps_in_same_place(
-    bapl_keypoint_sptr const& kp1, 
-    bapl_keypoint_sptr const& kp2) {
-
+    bapl_keypoint_sptr const& kp1,
+    bapl_keypoint_sptr const& kp2)
+{
     bapl_lowe_keypoint_sptr lkp1;
     lkp1.vertical_cast(kp1);
 
     bapl_lowe_keypoint_sptr lkp2;
     lkp2.vertical_cast(kp2);
 
-    return is_close(lkp1->location_i(), lkp2->location_i()) && 
-        is_close(lkp1->location_j(), lkp2->location_j());
+    return is_close(lkp1->location_i(), lkp2->location_i()) &&
+           is_close(lkp1->location_j(), lkp2->location_j());
 }
 
 
