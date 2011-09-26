@@ -25,7 +25,8 @@ static void test_pipeline(int argc, char** argv)
         TEST("test_pipeline", true, false);
 
         filepath = IMG_PATH;
-    } else {
+    }
+    else {
         filepath = argv[1];
     }
 
@@ -42,29 +43,27 @@ static void test_pipeline(int argc, char** argv)
         exif_tags[i] = imgs[i]->ni() * FOCAL_LENGTH_MM / SENSOR_WIDTH_MM;;
     }
 
-
     //-------------------- Run the pipeline
     vcl_vector<vpgl_perspective_camera<double> > cameras;
     vcl_vector<vgl_point_3d<double> > points;
     vnl_sparse_matrix<bool> visibility_graph;
 
     bundler_routines routines;
-    
+
     bundler_driver(
         routines, imgs, exif_tags,
         cameras, points, visibility_graph);
 
     bundler_write_ply_file(
-        "points.ply", 
+        "points.ply",
         points);
 
-    vcl_cout<<vcl_endl<<vcl_endl<<vcl_endl<<"------------------------\n";
+    vcl_cout<<"\n\n\n------------------------\n";
 
-
-    for(int i = 0; i < cameras.size(); i++){
-        vcl_cout<<"=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-"<<vcl_endl;
-        vcl_cout << cameras[i]<<vcl_endl;
-        vcl_cout<<"=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-"<<vcl_endl;
+    for (unsigned int i = 0; i < cameras.size(); i++) {
+        vcl_cout<<"=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-\n"
+                << cameras[i]
+                <<"\n=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-"<<vcl_endl;
     }
 }
 

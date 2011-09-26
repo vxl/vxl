@@ -179,7 +179,7 @@ void bundler_utils_fill_persp_camera_ransac(
         // Find the inlier percentage to evaulate how good this camera
         // is.
         int inlier_count = 0;
-        for (int pt_ind = 0; pt_ind < image_pts.size(); ++pt_ind) {
+        for (unsigned int pt_ind = 0; pt_ind < image_pts.size(); ++pt_ind) {
             double u, v;
             camera.project(
                 world_pts[pt_ind].x(),
@@ -210,14 +210,13 @@ void bundler_utils_fill_persp_camera_ransac(
     principal_point.x() = image->source->ni() / 2.0;
     principal_point.y() = image->source->nj() / 2.0;
 
-    
-    const vpgl_calibration_matrix<double> &k = 
+#if 0 // unused...
+    const vpgl_calibration_matrix<double> &k =
         camera_estimate.get_calibration();
-
-    const double observed_focal_length = .5 * 
+    const double observed_focal_length = .5 *
         (k.get_matrix()(0, 0) +
-        k.get_matrix()(1, 1));
-
+         k.get_matrix()(1, 1));
+#endif
     vpgl_calibration_matrix<double> calibration_mat(
         image->focal_length, principal_point);
 
