@@ -65,3 +65,6 @@ ENDIF( BUILD_TESTING )
 IF( BUILD_EXAMPLES )
   SUBDIRS( examples )
 ENDIF( BUILD_EXAMPLES )
+
+INSTALL_TARGETS(/lib vpgl_algo)
+INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/gel/mrc/vpgl/algo ${vpgl_algo_sources})

@@ -53,4 +53,5 @@ SUBDIRS(bgeo)
 #camera view sphere
 SUBDIRS(vsph)
 
-
+INSTALL_TARGETS(/lib vpgl)
+INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/gel/mrc/vpgl/ ${vpgl_sources})

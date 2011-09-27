@@ -29,3 +29,6 @@ TARGET_LINK_LIBRARIES(vpgl_file_formats vpgl vil vnl)
 IF( BUILD_TESTING )
   SUBDIRS(tests)
 ENDIF( BUILD_TESTING )
+
+INSTALL_TARGETS(/lib vpgl_file_formats)
+INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/gel/mrc/vpgl/file_formats ${vpgl_file_formats_sources})

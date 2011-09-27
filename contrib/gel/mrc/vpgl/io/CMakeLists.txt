@@ -13,6 +13,9 @@ ADD_LIBRARY(vpgl_io ${vpgl_io_sources})
 
 TARGET_LINK_LIBRARIES(vpgl_io vsl vpgl vnl vnl_io vbl_io)
 
+INSTALL_TARGETS(/lib vpgl_io)
+INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/gel/mrc/vpgl/io ${vpgl_io_sources})
+
 IF( BUILD_TESTING )
   SUBDIRS(tests)
 ENDIF( BUILD_TESTING )
