@@ -19,6 +19,10 @@ AUX_SOURCE_DIRECTORY(Templates boxm2_io_sources)
 ADD_LIBRARY(boxm2_io  ${boxm2_io_sources})
 TARGET_LINK_LIBRARIES(boxm2_io boxm2 expatpp vpgl baio vpgl vgl_xio vgl vbl vul vsl vcl)
 
+#install the .h .txx and libs
+INSTALL_TARGETS(/lib boxm2_io)
+INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bseg/boxm2/io ${boxm2_io_sources})
+
 IF( BUILD_TESTING )
   SUBDIRS(tests)
 ENDIF( BUILD_TESTING )

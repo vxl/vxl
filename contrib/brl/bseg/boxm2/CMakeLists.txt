@@ -62,3 +62,7 @@ subdirs(util)
 
 #tests
 SUBDIRS(tests)
+
+#install the .h .txx and libs
+INSTALL_TARGETS(/lib boxm2)
+INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bseg/boxm2/ ${boxm2_sources})

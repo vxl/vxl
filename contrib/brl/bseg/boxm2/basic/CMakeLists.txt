@@ -17,5 +17,9 @@ AUX_SOURCE_DIRECTORY(Templates boxm2_basic_sources)
 ADD_LIBRARY(boxm2_basic  ${boxm2_basic_sources})
 TARGET_LINK_LIBRARIES(boxm2_basic brdb baio expatpp vpgl vgl_xio vgl vnl vbl vsl vcl)
 
+#install the .h .txx and libs
+INSTALL_TARGETS(/lib boxm2_basic)
+INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bseg/boxm2/basic ${boxm2_basic_sources})
+
 #tests
 SUBDIRS(tests)

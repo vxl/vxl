@@ -48,3 +48,7 @@ IF( BUILD_TESTING )
 ENDIF( BUILD_TESTING )
 
 ENDIF(EXPATPP_FOUND)
+
+#install the .h .txx and libs
+INSTALL_TARGETS(/lib boxm)
+INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bseg/boxm/ ${boxm_sources})

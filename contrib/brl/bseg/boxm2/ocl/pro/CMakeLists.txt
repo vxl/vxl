@@ -16,3 +16,6 @@ TARGET_LINK_LIBRARIES(boxm2_ocl_pro boxm2_ocl_algo boct brdb vbl_io expatpp vpgl
 
 #tests
 SUBDIRS(tests)
+
+INSTALL_TARGETS(/lib boxm2_ocl_pro)
+INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bseg/boxm2/ocl/pro ${boxm2_ocl_pro_sources})

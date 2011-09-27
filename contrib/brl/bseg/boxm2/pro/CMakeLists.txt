@@ -23,6 +23,10 @@ IF(EXPAT_FOUND)
 
   ADD_LIBRARY(boxm2_pro ${boxm2_pro_sources})
 
+  #install the .h .txx and libs
+  INSTALL_TARGETS(/lib boxm2_pro)
+  INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bseg/boxm2/pro ${boxm2_pro_sources})
+
   TARGET_LINK_LIBRARIES(boxm2_pro boxm2 boxm2_io boxm2_util bvgl sdet bprb brdb brip imesh vsol bsta bsta_pro vpgl_pro vnl vil_algo vil_io vil vgl vbl_io vul)
 
   IF( BUILD_TESTING )

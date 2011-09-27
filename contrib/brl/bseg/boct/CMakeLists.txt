@@ -18,3 +18,6 @@ TARGET_LINK_LIBRARIES(boct vcl vgl vgl_io vnl_io vbl vnl)
 
 #tests
 SUBDIRS(tests)
+
+INSTALL_TARGETS(/lib boct)
+INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bseg/boct ${boct_sources})
