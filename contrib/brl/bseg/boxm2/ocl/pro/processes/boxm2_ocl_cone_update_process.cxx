@@ -40,7 +40,7 @@ namespace boxm2_ocl_cone_update_process_globals
   {
       //gather all render sources... seems like a lot for rendering...
       vcl_vector<vcl_string> src_paths;
-      vcl_string source_dir = vcl_string(VCL_SOURCE_ROOT_DIR) + "/contrib/brl/bseg/boxm2/ocl/cl/";
+      vcl_string source_dir = boxm2_ocl_util::ocl_src_root();
       src_paths.push_back(source_dir + "scene_info.cl");
       src_paths.push_back(source_dir + "backproject.cl");
       src_paths.push_back(source_dir + "basic/linked_list.cl");

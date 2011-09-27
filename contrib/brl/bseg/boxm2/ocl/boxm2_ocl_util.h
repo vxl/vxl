@@ -12,6 +12,9 @@
 class boxm2_ocl_util
 {
   public:
+  
+    static vcl_string ocl_src_root(); 
+  
     //: fills a float buffer (should be 16*3 floats) with a perspective cam to be sent
     static void set_ocl_camera(vpgl_camera_double_sptr& cam, cl_float* persp_cam);
     static void set_persp_camera(vpgl_perspective_camera<double> * pcam, cl_float* persp_cam);

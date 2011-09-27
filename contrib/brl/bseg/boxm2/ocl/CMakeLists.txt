@@ -1,3 +1,14 @@
+#boxm2/ocl source dir
+SET(BOXM2_OPENCL_SRC_DIR CACHE STRING "Location of OpenCL source files for brl/bseg/boxm2/ (defaults to source tree)" )
+
+# Set up vcl_where_root_dir.h to have a macro set to $VCL_SOURCE_ROOT_DIR
+CONFIGURE_FILE(
+  boxm2_ocl_where_root_dir.h.in
+  ${vxl_BINARY_DIR}/contrib/brl/bseg/boxm2/ocl/boxm2_ocl_where_root_dir.h ESCAPE_QUOTES
+)
+INCLUDE_DIRECTORIES( ${vxl_BINARY_DIR}/contrib/brl/bseg/boxm2/ocl/ )
+
+
 #depends on OPENCL being found...
 INCLUDE( ${VXL_CMAKE_DIR}/NewCMake/FindOpenCL.cmake )
 IF(OPENCL_FOUND)

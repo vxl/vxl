@@ -36,7 +36,7 @@ namespace boxm2_ocl_convert_float_image_to_rgba_process_globals
   void compile_kernel(bocl_device_sptr device,vcl_vector<bocl_kernel*> & vec_kernels, vcl_string opts)
   {
     //create normalize image kernel
-    vcl_string source_dir = vcl_string(VCL_SOURCE_ROOT_DIR) + "/contrib/brl/bseg/boxm2/ocl/cl/";
+    vcl_string source_dir = boxm2_ocl_util::ocl_src_root();
     vcl_vector<vcl_string> norm_src_paths;
     norm_src_paths.push_back(source_dir + "pixel_conversion.cl");
     norm_src_paths.push_back(source_dir + "bit/pixel_conversion_kernels.cl");

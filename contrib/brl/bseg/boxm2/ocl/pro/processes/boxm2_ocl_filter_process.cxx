@@ -23,7 +23,7 @@
 void boxm2_ocl_filter_process_globals::compile_filter_kernel(bocl_device_sptr device,bocl_kernel * refine_data_kernel)
 {
   vcl_vector<vcl_string> src_paths;
-  vcl_string source_dir = vcl_string(VCL_SOURCE_ROOT_DIR) + "/contrib/brl/bseg/boxm2/ocl/cl/";
+  vcl_string source_dir = boxm2_ocl_util::ocl_src_root();
   src_paths.push_back(source_dir + "scene_info.cl");
   src_paths.push_back(source_dir + "bit/bit_tree_library_functions.cl");
   src_paths.push_back(source_dir + "basic/linked_list.cl");

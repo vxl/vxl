@@ -14,6 +14,18 @@
 #include <vpgl/vpgl_calibration_matrix.h>
 #include <bsta/bsta_histogram.h>
 
+//for root dir
+#include <vcl_where_root_dir.h>
+#include "boxm2_ocl_where_root_dir.h"
+
+//returns path to opencl src (cl files)
+vcl_string boxm2_ocl_util::ocl_src_root()
+{
+  vcl_string boxm2_ocl_src_dir(BOXM2_OPENCL_SOURCE_DIR); 
+  if( boxm2_ocl_src_dir == "" ) 
+    boxm2_ocl_src_dir = vcl_string(VCL_SOURCE_ROOT_DIR) + "/contrib/brl/bseg/boxm2/ocl/cl/";
+  return boxm2_ocl_src_dir; 
+}
 
 // fills a float buffer (should be 16*3 floats) with a perspective cam to be sent
 void boxm2_ocl_util::set_ocl_camera(vpgl_camera_double_sptr& cam, cl_float* ocl_cam)
