@@ -13,3 +13,6 @@ TARGET_LINK_LIBRARIES(boxm2_ocl_algo boxm2_ocl vgl vil vul)
 
 #tests
 SUBDIRS(tests)
+
+INSTALL_TARGETS(/lib boxm2_ocl_algo)
+INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bseg/boxm2/ocl/algo ${boxm2_ocl_algo_sources})

@@ -17,5 +17,8 @@ IF( EXPAT_FOUND )
   IF( BUILD_TESTING )
     SUBDIRS(tests)
   ENDIF( BUILD_TESTING )
+  
+  INSTALL_TARGETS(/lib expatpp)
+  INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/b3p/expatpp/ ${expatpp_sources})
 
 ENDIF( EXPAT_FOUND )
