@@ -137,8 +137,8 @@ int move_data(__constant RenderSceneInfo * linfo,
         //calc new alpha
         MOG_TYPE new_value;
         if(is_alpha) {
-          int currLevel = get_depth(j);
-          float side_len = linfo->block_len / (float) (1<<currLevel);
+          int parentLevel = get_depth(pindex);
+          float side_len = linfo->block_len / (float) (1<<parentLevel);
           float newAlpha = (max_alpha_int / side_len); 
           
           //cast as float 
