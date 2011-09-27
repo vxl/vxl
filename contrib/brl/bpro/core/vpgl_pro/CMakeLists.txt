@@ -17,6 +17,9 @@ AUX_SOURCE_DIRECTORY(processes vpgl_pro_sources)
 ADD_LIBRARY(vpgl_pro ${vpgl_pro_sources})
 TARGET_LINK_LIBRARIES(vpgl_pro bprb bgeo vpgl_io vpgl vpgl_algo vnl vil vgl vbl_io vul)
 
+INSTALL_TARGETS(/lib vpgl_pro)
+INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bpro/core/vpgl_pro ${vpgl_pro_sources})
+
 IF( BUILD_TESTING )
   SUBDIRS(tests)
 ENDIF( BUILD_TESTING )

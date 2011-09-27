@@ -18,6 +18,9 @@ AUX_SOURCE_DIRECTORY(processes bbas_pro_sources)
 ADD_LIBRARY(bbas_pro ${bbas_pro_sources})
 TARGET_LINK_LIBRARIES(bbas_pro bprb brdb brad bsta_io bsta vil_io vil vnl_io vnl_algo vnl vbl_io vbl vsl)
 
+INSTALL_TARGETS(/lib bbas_pro)
+INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bpro/core/bbas_pro ${bbas_pro_sources})
+
 IF( BUILD_TESTING )
   SUBDIRS(tests)
 ENDIF( BUILD_TESTING )
