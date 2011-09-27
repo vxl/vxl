@@ -19,3 +19,6 @@ TARGET_LINK_LIBRARIES(bsta_pro bsta_algo bsta_io bsta bprb brdb brip vbl_io)
 IF( BUILD_TESTING )
   SUBDIRS(tests)
 ENDIF( BUILD_TESTING )
+
+INSTALL_TARGETS(/lib bsta_pro)
+INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bbas/bsta/pro ${bsta_pro_sources})

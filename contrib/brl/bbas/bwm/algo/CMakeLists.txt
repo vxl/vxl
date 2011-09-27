@@ -38,3 +38,7 @@ TARGET_LINK_LIBRARIES( bwm_algo bwm sdet vtol vil vil_algo vgl vgl_algo vnl vnl_
 IF( BUILD_TESTING )
   SUBDIRS(tests)
 ENDIF( BUILD_TESTING )
+
+#install the .h .txx and libs
+INSTALL_TARGETS(/lib bwm_algo)
+INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bbas/bwm/algo/ ${bwm_algo_sources})

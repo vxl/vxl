@@ -19,6 +19,9 @@ ADD_LIBRARY(brdb  ${brdb_sources})
 # brdb should not depend on any library that uses it
 TARGET_LINK_LIBRARIES(brdb vbl_io vbl vsl)
 
+#install the .h .txx and libs
+INSTALL_TARGETS(/lib brdb)
+INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bbas/brdb/ ${brdb_sources})
 
 IF(BUILD_TESTING)
   SUBDIRS(tests)

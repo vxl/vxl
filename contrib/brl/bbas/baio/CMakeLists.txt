@@ -28,5 +28,9 @@ ELSEIF(UNIX)
     TARGET_LINK_LIBRARIES(baio rt)
 ENDIF(APPLE)
 
+#install the .h .txx and libs
+INSTALL_TARGETS(/lib baio)
+INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bbas/baio/ ${baio_sources})
+
 #tests
 SUBDIRS(tests)

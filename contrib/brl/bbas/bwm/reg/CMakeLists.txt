@@ -21,6 +21,9 @@ IF(BUILD_TESTING)
   SUBDIRS(tests)
 ENDIF(BUILD_TESTING)
 
+#install the .h .txx and libs
+INSTALL_TARGETS(/lib bwm_reg)
+INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bbas/bwm/reg/ ${bwm_reg_sources})
 
 
 

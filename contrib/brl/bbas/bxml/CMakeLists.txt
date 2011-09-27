@@ -40,3 +40,7 @@ SUBDIRS( bsvg )
 IF( BUILD_TESTING )
   SUBDIRS(tests)
 ENDIF( BUILD_TESTING )
+
+#install the .h .txx and libs
+INSTALL_TARGETS(/lib bxml)
+INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bbas/bxml/ ${bxml_sources})

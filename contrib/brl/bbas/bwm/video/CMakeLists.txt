@@ -44,3 +44,6 @@ ENDIF(BUILD_TESTING)
 
 SUBDIRS(exe)
 
+#install the .h .txx and libs
+INSTALL_TARGETS(/lib bwm_video)
+INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bbas/bwm/video/ ${bwm_video_sources})

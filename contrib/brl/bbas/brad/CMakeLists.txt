@@ -22,3 +22,5 @@
 #tests
 SUBDIRS(tests)
 
+INSTALL_TARGETS(/lib brad)
+INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bbas/brad ${brad_sources})

@@ -40,3 +40,7 @@ SUBDIRS( pro )
 SUBDIRS( vis )
 SUBDIRS( tests )
 SUBDIRS( examples )
+
+#install the .h .txx and libs
+INSTALL_TARGETS(/lib bmsh3d)
+INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bbas/bmsh3d/ ${bmsh3d_sources})

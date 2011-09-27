@@ -114,6 +114,10 @@ SUBDIRS(io)
 SUBDIRS(reg)
 SUBDIRS(video)
 
+#install the .h .txx and libs
+INSTALL_TARGETS(/lib bwm)
+INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bbas/bwm/ ${bwm_sources})
+
 IF(EXPAT_FOUND)
  IF(EXPATPP_FOUND)
   IF(WIN32)

@@ -21,6 +21,10 @@ IF(OPENCL_FOUND)
 
   TARGET_LINK_LIBRARIES(bocl brdb vnl vnl_algo vbl_io vpgl vgl vil vbl vul ${OPENCL_LIBRARIES})
 
+  #install the .h .txx and libs
+  INSTALL_TARGETS(/lib bocl)
+  INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bbas/bocl/ ${bocl_sources})
+
 #tests
 SUBDIRS(tests)
 

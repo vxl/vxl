@@ -385,19 +385,22 @@ void report_error(vcl_map<unsigned,double>&   view_error_map,
                   vcl_set<int>&               bad_cams,
                   float                       filter_thresh)
 {
-  float error = 0.0;
-  float counts =0.0;
-  vcl_map<unsigned,double>::iterator ve_itr = view_error_map.begin(), ve_end = view_error_map.end();
-  for (;ve_itr!=ve_end;++ve_itr)
-  {
-    if (ve_itr->second/view_count_map[ve_itr->first] > filter_thresh)
-    {
+  vcl_cout<<"Projection error per camera: "<<vcl_endl;
+  float error  = 0.0;
+  float counts = 0.0;
+  vcl_map<unsigned,double>::iterator ve_itr = view_error_map.begin(), 
+                                     ve_end = view_error_map.end();
+  for (;ve_itr!=ve_end;++ve_itr) {
+    unsigned cam=ve_itr->first; 
+    double   err=ve_itr->second;
+    unsigned cnt=view_count_map[cam]; 
+    vcl_cout<<"   error for camera_"<<cam<<": "<<err/cnt<<vcl_endl;
+    if (ve_itr->second/view_count_map[ve_itr->first] > filter_thresh) {
       bad_cams.insert(ve_itr->first);
     }
-    else
-    {
-      error+=ve_itr->second;
-      counts+=view_count_map[ve_itr->first];
+    else {
+      error  += ve_itr->second;
+      counts += view_count_map[ve_itr->first];
     }
   }
   vcl_cout<<"Filtered Avg Projection Error "<<error/counts<<vcl_endl;
@@ -536,8 +539,8 @@ int main(int argc, char** argv)
       unsigned view_number, key_number;
       double img_x,img_y;
       bfile>>view_number>>key_number>>img_x>>img_y;
-      img_x =  img_x+principal_point.x();
-      img_y =  img_y+principal_point.y();
+      img_x = img_x+principal_point.x();
+      img_y = img_y+principal_point.y();
 
       //track correlations
       corr->add(view_number,vgl_point_2d<double>(img_x,img_y));
@@ -596,59 +599,112 @@ int main(int argc, char** argv)
   // Debug method: Re project the 3d points into each image
   //------------------------------------------------------------------------
   if ( reproject() ) {
-    vcl_cout<<"Reprojecting points onto camera model"<<vcl_endl;
-    for (unsigned i=0;i<cams.size();++i)
+    //vcl_cout<<"Reprojecting points onto camera model"<<vcl_endl;
+    //for (unsigned i=0;i<cams.size();++i)
+    //{
+      //if ( !bad_cams.count(i) )
+      //{
+        //vpgl_perspective_camera<double> cam = cams[i]; 
+        //vgl_point_2d<double> ppoint = cam.get_calibration().principal_point(); 
+        //vil_image_view<float> img( (int) (2*ppoint.x()), (int) (2*ppoint.y()), 4 ); 
+        //img.fill(0.0); 
+        //vgl_point_3d<double> cc = cam.get_camera_center(); 
+        
+        ////project each point
+        //for (unsigned p=0;p<corrs.size();++p) {
+          //bwm_video_corr_sptr corr = corrs[p];
+          //vgl_point_3d<double> wpt = corr->world_pt();
+
+          //// read the intenstiy but don't do anything with it right now.
+          //vgl_vector_3d<int> rgb = corr->intensity(); 
+        
+          ////project x,y,z onto image plane, calc rms error
+          //double maxerrframe=0;
+          //double u=0,v=0;
+          //cam.project(wpt.x(), wpt.y(), wpt.z(),u,v);
+          
+          //unsigned uu = vcl_min(img.ni()-1, vcl_max( (unsigned) 0, (unsigned) u)); 
+          //unsigned vv = vcl_min(img.nj()-1, vcl_max( (unsigned) 0, (unsigned) v)); 
+
+          ////make sure only the closest one gets put in there
+          //double dist = (cc-wpt).length(); 
+          //double existing_dist = (double) img(uu,vv,3); 
+          //if( existing_dist==0.0 || dist < existing_dist) {
+            //img( uu, vv, 0) = (float) rgb.x(); 
+            //img( uu, vv, 1) = (float) rgb.y(); 
+            //img( uu, vv, 2) = (float) rgb.z(); 
+            //img( uu, vv, 3) = (float) dist; 
+          //}
+        //} 
+        
+        ////convert to vxl byte image for saving
+        //vil_image_view<vxl_byte> bimg( img.ni(), img.nj(), 4 ); 
+        //for( unsigned ii=0; ii<bimg.ni(); ++ii) {
+          //for( unsigned jj=0; jj<bimg.nj(); ++jj) {
+            //bimg( ii, jj, 0) = (vxl_byte) img(ii,jj,0); 
+            //bimg( ii, jj, 1) = (vxl_byte) img(ii,jj,1); 
+            //bimg( ii, jj, 2) = (vxl_byte) img(ii,jj,2); 
+            //bimg( ii, jj, 3) = (vxl_byte) 255; 
+          //}
+        //}
+        //char fname[100]; 
+        //vcl_sprintf(fname, "reproject_%d.png", i); 
+        //vil_save(bimg, fname); 
+      //}
+    //}
+    
+    //reproject error map
+    vcl_cout<<"Reprojecting Error Map"<<vcl_endl;
+    vgl_point_2d<double> ppoint = cams[0].get_calibration().principal_point(); 
+    vil_image_view<float> errimg((int) (2*ppoint.x()), (int) (2*ppoint.y()) ); 
+    vil_image_view<float> cntimg((int) (2*ppoint.x()), (int) (2*ppoint.y()) ); 
+    errimg.fill(0.0f);
+    cntimg.fill(0.0f);
+    for (unsigned i=0;i<corrs.size();++i)
     {
-      if ( !bad_cams.count(i) )
+      bwm_video_corr_sptr corr = corrs[i];
+      vgl_homg_point_3d<double> wpt(corr->world_pt());
+
+      //grab number of views that see this point
+      vcl_map<unsigned, vgl_point_2d<double> >& matches = corr->matches(); 
+      vcl_map<unsigned, vgl_point_2d<double> >::iterator iter;   
+      for (iter = matches.begin(); iter != matches.end(); ++iter)
       {
-        vpgl_perspective_camera<double> cam = cams[i];
-        vgl_point_2d<double> ppoint = cam.get_calibration().principal_point();
-        vil_image_view<float> img( (int) (2*ppoint.x()), (int) (2*ppoint.y()), 4 );
-        img.fill(0.0);
-        vgl_point_3d<double> cc = cam.get_camera_center();
+        unsigned view_number = iter->first; 
+        vgl_point_2d<double> xy = iter->second;  
+        double img_x = xy.x(), img_y = xy.y(); 
 
-        //project each point
-        for (unsigned p=0;p<corrs.size();++p) {
-          bwm_video_corr_sptr corr = corrs[p];
-          vgl_point_3d<double> wpt = corr->world_pt();
-
-          // read the intenstiy but don't do anything with it right now.
-          vgl_vector_3d<int> rgb = corr->intensity();
-
+        //calc error for this point
+        double maxerrframe=0;
+        double u=0,v=0;
+        if (cams[view_number].is_behind_camera(wpt)) {
+          bad_cams.insert(view_number);
+        }
+        else
+        {
           //project x,y,z onto image plane, calc rms error
-          double u=0,v=0;
-          cam.project(wpt.x(), wpt.y(), wpt.z(),u,v);
-          v = img.nj() - v;
-
-          unsigned uu = vcl_min(img.ni()-1, vcl_max( (unsigned) 0, (unsigned) u));
-          unsigned vv = vcl_min(img.nj()-1, vcl_max( (unsigned) 0, (unsigned) v));
-
-          //make sure only the closest one gets put in there
-          double dist = (cc-wpt).length();
-          double existing_dist = (double) img(uu,vv,3);
-          if ( existing_dist==0.0 || dist < existing_dist) {
-            img( uu, vv, 0) = (float) rgb.x();
-            img( uu, vv, 1) = (float) rgb.y();
-            img( uu, vv, 2) = (float) rgb.z();
-            img( uu, vv, 3) = (float) dist;
+          cams[view_number].project(wpt.x(), wpt.y(), wpt.z(),u,v);
+          double rms=vcl_sqrt((u-img_x)*(u-img_x)+(v-img_y)*(v-img_y));
+          
+          if(u>=0.0 && u<errimg.ni() && v>=0 && v<=errimg.nj()) {
+            unsigned uu = vcl_min(errimg.ni()-1, vcl_max( (unsigned) 0, (unsigned) u)); 
+            unsigned vv = vcl_min(errimg.nj()-1, vcl_max( (unsigned) 0, (unsigned) v)); 
+            errimg(uu,vv) += rms;
+            cntimg(uu,vv) += 1.0f; 
           }
         }
-
-        //convert to vxl byte image for saving
-        vil_image_view<vxl_byte> bimg( img.ni(), img.nj(), 4 );
-        for ( unsigned ii=0; ii<bimg.ni(); ++ii) {
-          for ( unsigned jj=0; jj<bimg.nj(); ++jj) {
-            bimg( ii, jj, 0) = (vxl_byte) img(ii,jj,0);
-            bimg( ii, jj, 1) = (vxl_byte) img(ii,jj,1);
-            bimg( ii, jj, 2) = (vxl_byte) img(ii,jj,2);
-            bimg( ii, jj, 3) = (vxl_byte) 255;
-          }
-        }
-        char fname[100];
-        vcl_sprintf(fname, "reproject_%d.png", i);
-        vil_save(bimg, fname);
       }
     }
+    
+    //store division hurr
+    for(int i=0; i<errimg.ni(); ++i)
+      for(int j=0; j<errimg.nj(); ++j)
+        errimg(i,j) = (cntimg(i,j)>0.0f) ? errimg(i,j) / cntimg(i,j) : 0.0f; 
+    
+    vcl_cout<<"Saving Error Maps"<<vcl_endl;
+    char ename[100]; 
+    vcl_sprintf(ename, "error_%d.tiff", 0); 
+    vil_save(errimg, ename); 
   }
 
   //------------------------------------------------------------------------
