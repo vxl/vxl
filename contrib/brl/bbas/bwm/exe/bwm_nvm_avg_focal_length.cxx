@@ -137,6 +137,7 @@ bool NVMreplaceByAvgFocalLength(vcl_ifstream& in1,
         out<<'\n';
     }
     ////////////////////////////////////////////////////////////////////////////
+    return true;
 }
 
 // An executable that read bundler file and convert it into video site.
