@@ -16,10 +16,10 @@
 //: Main boxm2_convert_nvm function
 //  Takes in bundle.out file and image directory that created img_dir
 void boxm2_util_convert_nvm(vcl_string nvm_file,
-                                vcl_string img_dir,
-                                vcl_map<vcl_string, vpgl_perspective_camera<double>* >& cams,
-                                vgl_box_3d<double>& bbox,
-                                double& resolution)
+                            vcl_string img_dir,
+                            vcl_map<vcl_string, vpgl_perspective_camera<double>* >& cams,
+                            vgl_box_3d<double>& bbox,
+                            double& resolution)
 {
   boxm2_convert_nvm b2s(nvm_file, img_dir);
   cams        = b2s.get_cams();
@@ -32,7 +32,7 @@ boxm2_convert_nvm::boxm2_convert_nvm(vcl_string nvm_file, vcl_string img_dir)
 {
   img_dir_ = img_dir;
   nvm_file_ = nvm_file;
-  
+
   // verify image dir
   if (!vul_file::is_directory(img_dir.c_str()))
   {
@@ -51,9 +51,9 @@ boxm2_convert_nvm::boxm2_convert_nvm(vcl_string nvm_file, vcl_string img_dir)
   unsigned nj=imgstream.height();
 
   // central point of the image
-  vgl_point_2d<double> ppoint((double)ni/2,(double)nj/2);  
+  vgl_point_2d<double> ppoint((double)ni/2,(double)nj/2);
   vcl_cout<<"principal point for cams: "<<ppoint<<vcl_endl;
-  
+
   // open the bundler file
   vcl_ifstream bfile( nvm_file.c_str() );
   if (!bfile)
@@ -63,7 +63,7 @@ boxm2_convert_nvm::boxm2_convert_nvm(vcl_string nvm_file, vcl_string img_dir)
   }
   this->read_cameras(bfile, ppoint);
   this->read_points(bfile, ppoint);
-  vcl_cout<<"NVM file out projection error: "<<vcl_endl;
+  vcl_cout<<"NVM file out projection error:"<<vcl_endl;
   boxm2_point_util::calc_projection_error(cams_, bad_cams_, corrs_, view_error_map_, view_count_map_);
 
   //--------------------------------------------------------------------------
@@ -85,7 +85,7 @@ boxm2_convert_nvm::boxm2_convert_nvm(vcl_string nvm_file, vcl_string img_dir)
     if ( !bad_cams_.count(i) ) {
       //imgstream.seek_frame(i);
       //vcl_string path = imgstream.current_path();
-      vcl_string stripped_name = vul_file::strip_extension(names_[i]); 
+      vcl_string stripped_name = vul_file::strip_extension(names_[i]);
       vcl_string path = img_dir + "/" + stripped_name + ".png";
       CamType* cam = new CamType(cams_[i]);
       final_cams_[path] = cam;
@@ -154,18 +154,18 @@ bool boxm2_convert_nvm::read_cameras(vcl_ifstream& in, vgl_point_2d<double> ppoi
   }
 
   // read # of cameras
-  int ncam = 0, npoint = 0, nproj = 0;
-  in >> ncam;  
+  int ncam = 0;
+  in >> ncam;
   if (ncam <= 1) {
     vcl_cout<<"Found fewer than 1 camera in NVM file"<<vcl_endl;
     return false;
   }
   vcl_cout<<"Found "<<ncam<<" cameras in nvm file"<<vcl_endl;
-  
+
   //read the camera parameters
   cams_.resize(ncam); // allocate the camera data
   names_.resize(ncam); // allocate token data
-  for(int i = 0; i < ncam; ++i)
+  for (int i = 0; i < ncam; ++i)
   {
     double f, q[9], c[3], d[2];
     in >> token >> f ;
@@ -175,7 +175,7 @@ bool boxm2_convert_nvm::read_cameras(vcl_ifstream& in, vgl_point_2d<double> ppoi
     in >> c[0] >> c[1] >> c[2] >> d[0] >> d[1];
 
     //if not fixed
-    if(!format_r9t)
+    if (!format_r9t)
     {
       vnl_quaternion<double> quaternion(q[1],q[2],q[3],q[0]);
       vgl_rotation_3d<double> rot(quaternion);
@@ -198,15 +198,15 @@ bool boxm2_convert_nvm::read_cameras(vcl_ifstream& in, vgl_point_2d<double> ppoi
       vpgl_perspective_camera<double> cam(K,rot,t);
       cams_[i] = cam;
     }
-    
+
     //scrub name
-    vcl_size_t found = 0; 
-    while( (found=token.find("\\")) != vcl_string::npos )
-      token.replace(found, 1, "/"); 
+    vcl_size_t found = 0;
+    while ( (found=token.find("\\")) != vcl_string::npos )
+      token.replace(found, 1, "/");
     //vcl_cout<<"Scrubbed filename: "<<token<<vcl_endl;
     names_[i] = vul_file::strip_directory(token);
   }
-  return true; 
+  return true;
 }
 
 //------------------------------------------------------------------------
@@ -215,12 +215,12 @@ bool boxm2_convert_nvm::read_cameras(vcl_ifstream& in, vgl_point_2d<double> ppoi
 bool boxm2_convert_nvm::read_points(vcl_ifstream& in, vgl_point_2d<double> ppoint)
 {
   int npoint;
-  in >> npoint;   
+  in >> npoint;
   if (npoint <= 0) {
     vcl_cout<<"Found 0 points in nvm file, exiting"<<vcl_endl;
     return false;
   }
-  vcl_cout<<"Found "<<npoint<<" points in nvm file. "<<vcl_endl;
+  vcl_cout<<"Found "<<npoint<<" points in nvm file."<<vcl_endl;
 
   //read image projections and 3D points.
   for (int i = 0; i < npoint; ++i)
@@ -228,24 +228,24 @@ bool boxm2_convert_nvm::read_points(vcl_ifstream& in, vgl_point_2d<double> ppoin
     float pt[3]; int cc[3], npj;
     in  >> pt[0] >> pt[1] >> pt[2]
         >> cc[0] >> cc[1] >> cc[2] >> npj;
-    
+
     //create new bwm video corr
     bwm_video_corr_sptr corr = new bwm_video_corr();
     corr->set_world_pt(vgl_point_3d<double>(pt[0],pt[1],pt[2]));
     vgl_homg_point_3d<double> homg_world_pt(corr->world_pt());
-    
+
     for (int j = 0; j < npj; ++j)
     {
       int cidx, fidx;   //camera index (view number), fidx?
       double imx, imy;  //image x and y
       in >> cidx >> fidx >> imx >> imy;
-      imx += ppoint.x(); 
-      imy += ppoint.y(); 
+      imx += ppoint.x();
+      imy += ppoint.y();
 
       //track correlations
       corr->add(cidx, vgl_point_2d<double>(imx,imy));
     }
-    corrs_.push_back(corr); 
+    corrs_.push_back(corr);
   }
   return true;
 }
