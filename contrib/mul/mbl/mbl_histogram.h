@@ -72,6 +72,11 @@ class mbl_histogram
   // \return true if successful
   bool write_probabilities(const char* path);
 
+  //: Write out cumulative probability distribution to a named file
+  //  Format: (bin-centre) sum_prob     (one per line)
+  // \return true if successful
+  bool write_cdf(const char* path);
+
   void print_summary(vcl_ostream& os) const;
   //: Version number for I/O
   short version_no() const;

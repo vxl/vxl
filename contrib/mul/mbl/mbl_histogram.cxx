@@ -165,6 +165,27 @@ bool mbl_histogram::write_probabilities(const char* path)
   return true;
 }
 
+//: Write out cumulative probability distribution to a named file
+//  Format: (bin-centre) sum_prob     (one per line)
+// \return true if successful
+bool mbl_histogram::write_cdf(const char* path)
+{
+  int n = n_bins();
+  if (n==0) return false;
+
+  vcl_ofstream ofs(path);
+  if (!ofs) return false;
+  int sum=n_below_;
+  for (int i=0;i<n_bins();++i)
+  {
+    double dx=vcl_fabs(bins_[i+1]-bins_[i]);
+    sum+=freq_[i];
+    ofs<<0.5*(bins_[i]+bins_[i+1])<<"  "<<double(sum)/n_obs_<<'\n';
+  }
+  ofs.close();
+  return true;
+}
+
 vcl_ostream& operator<<(vcl_ostream& os, const mbl_histogram& histo)
 {
   histo.print_summary(os);
