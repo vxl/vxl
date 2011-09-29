@@ -354,7 +354,7 @@ bool boxm2_ocl_change_detection_process(bprb_func_process& pro)
         //reset those that are high enough
         if (prob_change > PROB_THRESH) {
           change_image_buff[count]     = 0.0f;
-          change_exp_image_buff[count] = 0.0f;
+          //change_exp_image_buff[count] = 0.0f;
         }
 
         //store pass one vis buff, used later in normalize
@@ -363,7 +363,7 @@ bool boxm2_ocl_change_detection_process(bprb_func_process& pro)
     }
     //set the two change images back up
     change_image->write_to_buffer(queue);
-    change_exp_image->write_to_buffer(queue);
+    //change_exp_image->write_to_buffer(queue);
 
     //set prob_change cl buffer
     bocl_mem_sptr prob_change = new bocl_mem(device->context(),prob_change_buff,cl_ni*cl_nj*sizeof(float),"pass one prob change buffer");
@@ -455,7 +455,7 @@ bool boxm2_ocl_change_detection_process(bprb_func_process& pro)
             if (nxn_change_buff[i] > change_image_buff[i])
               change_image_buff[i] = nxn_change_buff[i];
 
-            if (nxn_change_exp_buff[i] > change_exp_image_buff[i])
+            if (nxn_change_exp_buff[i] < change_exp_image_buff[i])
               change_exp_image_buff[i] = nxn_change_exp_buff[i];
           }
         }
