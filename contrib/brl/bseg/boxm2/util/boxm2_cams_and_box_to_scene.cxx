@@ -40,7 +40,7 @@ void boxm2_util_cams_and_box_to_scene (vcl_vector<CamType>& cams,
     double cone_half_angle, solid_angle;
     vpgl_camera_bounds::pixel_solid_angle(cam, pp.x()/4, pp.y()/4, cone_axis, cone_half_angle, solid_angle);
     vgl_point_3d<double> cc = cam.camera_center();
-    vgl_point_3d<double> zc( bbox.centroid().x(), bbox.centroid().y(), zplane);
+    vgl_point_3d<double> zc( b2box.centroid().x(), b2box.centroid().y(), zplane);
     double res = 2*(cc-zc).length()*cone_half_angle;
     vcl_cout<<"Resres :"<<res<<vcl_endl;
     vgl_point_3d<double> scene_origin( b2box.min_x(), b2box.min_y(), bbox.min_z() );
