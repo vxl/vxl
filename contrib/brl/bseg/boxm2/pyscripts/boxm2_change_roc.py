@@ -6,19 +6,8 @@ import pylab
 #calculates pixelwise ROC curve, and estimated area under ROC curve
 def calc_roc(cd_img, gt_img, plot = False, mask_img = None) : 
 
-  boxm2_batch.init_process("vilPixelwiseRocProcess");
-  boxm2_batch.set_input_from_db(0,cd_img);
-  boxm2_batch.set_input_from_db(1,gt_img);
-  if mask_img : boxm2_batch.set_input_from_db(2,mask_img); 
-  boxm2_batch.run_process();
-  (id,type) = boxm2_batch.commit_output(0);
-  tp_temp = boxm2_batch.get_bbas_1d_array_float(id);
-  (id,type) = boxm2_batch.commit_output(1);
-  tn_temp = boxm2_batch.get_bbas_1d_array_float(id);
-  (id,type) = boxm2_batch.commit_output(2);
-  fp_temp = boxm2_batch.get_bbas_1d_array_float(id);
-  (id,type) = boxm2_batch.commit_output(3);
-  fn_temp = boxm2_batch.get_bbas_1d_array_float(id);	
+  #run vil process
+  (tp_temp, tn_temp, fp_temp, fn_temp) = pixel_wise_roc(cd_img, gt_img, mask_img); 
   
   #convert to numpy arrays
   tps = array(tp_temp, float); 
@@ -50,6 +39,8 @@ def calc_roc(cd_img, gt_img, plot = False, mask_img = None) :
   #these are pylab.array types
   return tp_rate, fp_rate;  
 
+
+#computes area under curve
 def area_under_curve(tp_rate, fp_rate) : 
     
   if len(tp_rate) != len(fp_rate) :

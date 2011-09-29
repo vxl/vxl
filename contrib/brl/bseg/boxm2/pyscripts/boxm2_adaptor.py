@@ -1,148 +1,9 @@
+from boxm2_register import boxm2_batch, dbvalue; 
+
 #############################################################################
 # PROVIDES higher level python functions to make boxm2_batch 
 # code more readable/refactored
-#
-# to use our boxm2 python binding, be sure to add: 
-#   <vxl_build_root>/lib/:<vxl_src_root>/contrib/brl/bseg/boxm2/pyscripts/ 
-# to your PYTHONPATH environment variable.  
 #############################################################################
-import boxm2_batch,os;
-boxm2_batch.register_processes();
-boxm2_batch.register_datatypes();
-
-#class used for python/c++ pointers in database
-class dbvalue:
-  def __init__(self, index, type):
-    self.id = index    # unsigned integer
-    self.type = type   # string
-    
-    
-# boxm2_adaptor class offers super simple model manipulation syntax
-# you can always force the process to use CPP by just passing in "cpp" as the last
-# arg to any function in this class
-class boxm2_adaptor: 
-
-  #scene adaptor init
-  def __init__(self, scene_str, rgb=False, device_string="gpu"):
-    
-    #init (list) self vars
-    self.rgb = rgb; 
-    self.scene = None; 
-    self.active_cache = None; 
-    self.device_string = None; 
-    self.cpu_cache = None;
-    self.device = None; 
-    self.opencl_cache = None; 
-    self.ocl_mgr = None; 
-   
-    #if device_string is gpu, load up opencl
-    if device_string[0:3]=="gpu" :  
-      self.scene, self.cpu_cache, self.ocl_mgr, self.device, self.opencl_cache = load_opencl(scene_str); 
-      self.active_cache = self.opencl_cache; 
-    elif device_string[0:3]=="cpp" : 
-      scene.scene, self.cpu_cache = load_cpp(scene_str);     
-      self.active_cache = self.cpu_cache; 
-  
-  #update wrapper, can pass in a Null device to use 
-  def update(self, cam, img, mask=None, device_string="") :
-    cache = self.active_cache; 
-    dev = self.device; 
-    
-    #check if force gpu or cpu
-    if device_string=="gpu" : 
-      cache = self.opencl_cache; 
-    elif device_string=="cpp" : 
-      cache = self.cpu_cache; 
-      dev = None; 
-      
-    #run update grey or RGB
-    if self.rgb :
-      update_rgb(self.scene, cache, cam, img, dev); 
-    else :
-      update_grey(self.scene, cache, cam, img, dev, "", mask); 
-      
-  #render wrapper, same as above
-  def render(self, cam, ni=1280, nj=720, device_string="") : 
-    cache = self.active_cache; 
-    dev = self.device; 
-    #check if force gpu or cpu
-    if device_string=="gpu" : 
-      cache = self.opencl_cache; 
-    elif device_string=="cpp" : 
-      cache = self.cpu_cache; 
-      dev = None; 
-    if self.rgb : 
-      expimg = render_rgb(self.scene, cache, cam, ni, nj, dev); 
-    else : 
-      expimg = render_grey(self.scene, cache, cam, ni, nj, dev); 
-    return expimg; 
-  
-  #render depth image wrapper
-  def render_depth(self, cam, ni=1280, nj=720, device_string="") :
-    cache = self.active_cache; 
-    dev = self.device; 
-    #check if force gpu or cpu
-    if device_string=="gpu" : 
-      cache = self.opencl_cache; 
-    elif device_string=="cpp" : 
-      cache = self.cpu_cache; 
-      dev = None; 
-    expimg = render_depth(self.scene, cache, cam, ni, nj, dev); 
-    return expimg; 
-  
-  #render heigh map render
-  def render_height_map(self, device_string="") : 
-    cache = self.active_cache; 
-    dev = self.device;
-    if device_string=="gpu" : 
-      cache = self.opencl_cache; 
-    elif device_string=="cpp" : 
-      cache = self.cpu_cache; 
-      dev = None; 
-    z_image, var_image, x_image, y_image, prob_image, app_image = render_height_map(self.scene, cache, dev); 
-    return z_image, var_image, x_image, y_image, prob_image, app_image; 
-
-  # detect change wrapper, 
-  def change_detect(self, cam, img, exp_img, n=1, raybelief="", rgb=False, device_string="") : 
-    cache = self.active_cache; 
-    dev = self.device; 
-    if device_string=="gpu" : 
-      cache = self.opencel_cache; 
-    elif device_string=="cpp" : 
-      cache = self.cpu_cache;
-      dev = None;
-    cd_img = change_detect(self.scene,cache,cam,img,exp_img,dev,rgb,n,raybelief); 
-    return cd_img; 
-  
-  def refine(self, thresh=0.3, device_string="") :
-    if device_string=="":
-      nCells = refine(self.scene, self.active_cache, thresh, self.device); 
-    elif device_string=="gpu" :
-      nCells = refine(self.scene, self.opencl_cache, thresh, self.device); 
-    elif device_string=="cpp" :
-      nCells = refine(self.scene, self.cpu_cache, thresh, None); 
-    return nCells
-
-  def merge(self, thresh=0.3, device_string="") :
-    if device_string=="":
-      merge(self.scene, self.active_cache, thresh, self.device); 
-    elif device_string=="gpu" :
-      merge(self.scene, self.opencl_cache, thresh, self.device); 
-    elif device_string=="cpp" :
-      merge(self.scene, self.cpu_cache, thresh, None); 
-
-  def median_filter(self, device_string="") : 
-    if device_string=="":
-      median_filter(self.scene, self.active_cache, self.device); 
-    elif device_string=="gpu" : 
-      median_filter(self.scene, self.opencl_cache, self.device); 
-    elif device_string=="cpp" :
-      median_filter(self.scene, self.cpu_cache, None); 
-
-  #only write the cpu_cache to disk
-  def write_cache(self): 
-    write_cache(self.cpu_cache); 
-       
 
 #does the opencl prep work on an input scene
 def load_opencl(scene_str, device_string="gpu"):
@@ -213,7 +74,6 @@ def load_cpp(scene_str) :
 ###############################################
 # Model building stuff
 ###############################################
-
 # Generic update - will use GPU if device/openclcache are passed in
 def update_grey(scene, cache, cam, img, device=None, ident="", mask=None) :
   #If no device is passed in, do cpu update
@@ -475,55 +335,6 @@ def write_cache(cache) :
   else : 
     print "ERROR: Cache type needs to be boxm2_cache_sptr, not ", cache.type; 
 
-
-###################################################
-# Camera/Image loading and saving
-###################################################
-def load_camera(file_path) : 
-  boxm2_batch.init_process("vpglLoadPerspectiveCameraProcess"); 
-  boxm2_batch.set_input_string(0, file_path);
-  boxm2_batch.run_process();
-  (id,type) = boxm2_batch.commit_output(0);
-  cam = dbvalue(id,type);
-  return cam; 
-  
-def persp2gen(pcam, ni, nj) : 
-  boxm2_batch.init_process("vpglConvertToGenericCameraProcess"); 
-  boxm2_batch.set_input_from_db(0, pcam);
-  boxm2_batch.set_input_unsigned(1, ni); 
-  boxm2_batch.set_input_unsigned(2, nj); 
-  boxm2_batch.run_process();
-  (id,type) = boxm2_batch.commit_output(0);
-  gcam = dbvalue(id,type);
-  return gcam; 
-
-def load_image(file_path) : 
-  boxm2_batch.init_process("vilLoadImageViewProcess");
-  boxm2_batch.set_input_string(0, file_path);
-  boxm2_batch.run_process();
-  (id,type) = boxm2_batch.commit_output(0);
-  (ni_id, ni_type) = boxm2_batch.commit_output(1); 
-  (nj_id, nj_type) = boxm2_batch.commit_output(2); 
-  ni = boxm2_batch.get_output_unsigned(ni_id); 
-  nj = boxm2_batch.get_output_unsigned(nj_id); 
-  img = dbvalue(id,type);
-  return img, ni, nj; 
-  
-def convert_image(img, type="byte") :
-  boxm2_batch.init_process("vilConvertPixelTypeProcess");
-  boxm2_batch.set_input_from_db(0, img);
-  boxm2_batch.set_input_string(1, type); 
-  boxm2_batch.run_process();
-  (id,type) = boxm2_batch.commit_output(0);
-  cimg = dbvalue(id,type); 
-  return cimg; 
-  
-def save_image(img, file_path) : 
-  boxm2_batch.init_process("vilSaveImageViewProcess");
-  boxm2_batch.set_input_from_db(0,img);
-  boxm2_batch.set_input_string(1,file_path);
-  boxm2_batch.run_process();
-
 def init_trajectory(scene, startInc, endInc, radius, ni=1280, nj=720) :  
   boxm2_batch.init_process("boxm2ViewInitTrajectoryProcess"); 
   boxm2_batch.set_input_from_db(0, scene);
@@ -544,11 +355,6 @@ def trajectory_next(trajectory) :
   (id,type) = boxm2_batch.commit_output(0);
   cam = dbvalue(id,type);
   return cam; 
-
-def camera_dir_planar_bbox(dir_name) : 
-  boxm2_batch.init_process("vpglGetBoundingBoxProcess");
-  boxm2_batch.set_input_string(0, dir_name);
-  boxm2_batch.run_process();
 
 def bundle2scene(bundle_file, img_dir, app_model="boxm2_mog3_grey", out_dir="") : 
   if app_model == "boxm2_mog3_grey": 
