@@ -3,18 +3,14 @@
 #include <bundler/bundler.h>
 #include <bundler/bundler_sfm_impl.h>
 
-#include <bundler/tests/utils.h>
-
 #include <vil/vil_load.h>
-#include <vcl_string.h>
-#include <vcl_iomanip.h>
 
 #include <vgl/vgl_point_3d.h>
 
 static const int IMAGE_WIDTH = 320;
 static const int IMAGE_HEIGHT = 640;
 
-static const double TOL = .000001;
+static const double TOL = .001;
 
 // --------------World Points---------------------------------------------
 static const vgl_point_3d<double> WORLD_POINTS[] = {
@@ -82,9 +78,9 @@ static void test_bundle_adjust(){
             int index = recon.feature_sets[j]->features.size();
 
             CAMERAS[j].project(
-                WORLD_POINTS[i].x(),
-                WORLD_POINTS[i].y(),
-                WORLD_POINTS[i].z(),
+                WORLD_POINTS[i].x() + TOL,
+                WORLD_POINTS[i].y() - TOL,
+                WORLD_POINTS[i].z() + TOL/2.0f,
                 row, col);
 
             if((row == 0 && col == 0) or row < 0 or col < 0){ 
@@ -129,8 +125,43 @@ static void test_bundle_adjust(){
     }
 
     for(int i = 0; i < NUM_CAMERAS; i++){
-        Assert("Cameras stayed the same",
-            recon.feature_sets[i]->camera == CAMERAS[i]);
+        // ---------------- Calibrations are similar
+        TEST_NEAR("Focal length is similar",
+            recon.feature_sets[i]->camera.get_calibration().focal_length(),
+            CAMERAS[i].get_calibration().focal_length(), TOL);
+
+        TEST_NEAR("Skew is similar",
+            recon.feature_sets[i]->camera.get_calibration().skew(),
+            CAMERAS[i].get_calibration().skew(), TOL);
+
+        TEST_NEAR("Camera center (x) is similar",
+            recon.feature_sets[i]->
+                camera.get_calibration().principal_point().x(),
+            CAMERAS[i].get_calibration().principal_point().x(), TOL);
+
+        TEST_NEAR("Camera center (y) is similar",
+            recon.feature_sets[i]->
+                camera.get_calibration().principal_point().y(),
+            CAMERAS[i].get_calibration().principal_point().y(), TOL);
+
+
+        // ----------------- Camera centers are similar
+        TEST_NEAR("Camera center is similar (x)",
+            recon.feature_sets[i]->
+                camera.get_camera_center().x(),
+            CAMERAS[i].get_camera_center().x(), TOL);
+
+
+        TEST_NEAR("Camera center is similar (y)",
+            recon.feature_sets[i]->
+                camera.get_camera_center().y(),
+            CAMERAS[i].get_camera_center().y(), TOL);
+
+
+        TEST_NEAR("Camera center is similar (z)",
+            recon.feature_sets[i]->
+                camera.get_camera_center().z(),
+            CAMERAS[i].get_camera_center().z(), TOL);
     }
 }
 
