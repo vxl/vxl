@@ -31,6 +31,10 @@
 #define REG_PROCESS_FUNC_CONS(proc, T, func, nm) \
  T ::register_process( bprb_process_sptr( new proc(func, nm, func##_cons, 0, 0) ) ) 
 
+
+#define REG_PROCESS_FUNC_CONS2(func) \
+bprb_batch_process_manager::register_process( bprb_process_sptr( new bprb_func_process(func, #func, func##_cons, 0, 0) ) ) 
+
 #define REG_PROCESS_FUNC_CONS_INIT(proc, T, func, nm) \
  T ::register_process( bprb_process_sptr( new proc(func, nm, func##_cons, func##_init, 0) ) ) 
 #define REG_PROCESS_FUNC_CONS_FIN(proc, T, func, nm) \
