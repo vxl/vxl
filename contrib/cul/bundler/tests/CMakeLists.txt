@@ -10,6 +10,7 @@ ADD_EXECUTABLE( bundler_test_all test_driver.cxx
   test_pipeline.cxx
   test_ply.cxx
   test_add_next_image.cxx 
+  test_bundle_adjust.cxx
   utils.cxx     utils.h)
 
 
@@ -66,6 +67,12 @@ ADD_TEST(
     bundler_test_add_next_image 
     ${EXECUTABLE_OUTPUT_PATH}/bundler_test_all 
     test_add_next_image )
+
+ADD_TEST( 
+    bundler_test_bundle_adjust 
+    ${EXECUTABLE_OUTPUT_PATH}/bundler_test_all 
+    test_add_bundle_adjust )
+
 
 ADD_EXECUTABLE( bundler_test_include test_include.cxx )
 TARGET_LINK_LIBRARIES( bundler_test_include bundler )
