@@ -7,6 +7,19 @@
 #include <vil/vil_image_view.h>
 #include <vil/vil_convert.h>
 #include <bbas_pro/bbas_1d_array_float.h>
+#include <vcl_algorithm.h>
+#include <vul/vul_timer.h>
+
+
+//do pixelwise sort on the image, and then 
+struct Pair {
+  float         change;
+  unsigned char gt; 
+};
+bool pair_sorter(Pair const& lhs, Pair const& rhs) {
+  return lhs.change < rhs.change; 
+}
+  
 
 //: Constructor
 bool vil_pixelwise_roc_process_cons(bprb_func_process& pro)
@@ -55,10 +68,11 @@ bool vil_pixelwise_roc_process(bprb_func_process& pro)
   }
 
   //true positive, true negative, false positive, false negative
-  bbas_1d_array_float * tp=new bbas_1d_array_float(10);
-  bbas_1d_array_float * tn=new bbas_1d_array_float(10);
-  bbas_1d_array_float * fp=new bbas_1d_array_float(10);
-  bbas_1d_array_float * fn=new bbas_1d_array_float(10);
+  int numPoints = 100; 
+  bbas_1d_array_float * tp=new bbas_1d_array_float(numPoints);
+  bbas_1d_array_float * tn=new bbas_1d_array_float(numPoints);
+  bbas_1d_array_float * fp=new bbas_1d_array_float(numPoints);
+  bbas_1d_array_float * fn=new bbas_1d_array_float(numPoints);
   vil_image_view<float> * detection_map;
 
   //check bounds to make sure they match
@@ -105,6 +119,53 @@ bool vil_pixelwise_roc_process(bprb_func_process& pro)
     return false;
   }
 
+  //sort pixel/gt pairs
+  Pair* pairs = new Pair[ detection_map->ni() * detection_map->nj() ]; 
+  unsigned c = 0; 
+  for(unsigned j=0; j<detection_map->nj(); ++j) {
+    for(unsigned i=0; i<detection_map->ni(); ++i) {
+      Pair p;
+      p.change = (*detection_map)(i,j); 
+      p.gt     = (*ground_truth_map)(i,j);
+      pairs[c] = p; 
+      ++c; 
+    }
+  }
+  //
+  unsigned totPix = detection_map->ni() * detection_map->nj();
+  vcl_sort(pairs, pairs + totPix, &pair_sorter); 
+  
+  //grab 100 points for the ROC curve
+  int incr      = (int) ( (float) totPix / (float) numPoints); 
+  for(int pnt=0; pnt<100; ++pnt) {
+    tp->data_array[pnt]=0.0f;
+    fp->data_array[pnt]=0.0f;
+    tn->data_array[pnt]=0.0f;
+    fn->data_array[pnt]=0.0f;
+
+    int exampleIdx = pnt*incr; 
+    //float thresh = pairs[ exampleIdx ]; 
+    
+    //all classififed examples in this loop are negative
+    for(int i=0; i<exampleIdx; ++i) {
+      bool truth = (pairs[i].gt > 0);
+      if(truth) 
+        fn->data_array[pnt]++; //gt=true, class=false => false neg 
+      else 
+        tn->data_array[pnt]++; //gt=false, class=false => true neg
+    }
+    
+    //all classified examples in this loop are positive
+    for(int i=exampleIdx; i<totPix; ++i) {
+      bool truth = (pairs[i].gt > 0);
+      if(truth)
+        tp->data_array[pnt]++; //gt = true, class = true => true pos
+      else
+        fp->data_array[pnt]++; //gt = false, class = true => false pos
+    }
+  }
+
+#if 0
   //count true positves, false positves, true negatives, false negatives
   int cnt=0;
   for (float t=0.1f;t<1.05f;++cnt,t+=0.1f)
@@ -132,6 +193,7 @@ bool vil_pixelwise_roc_process(bprb_func_process& pro)
       }
     }
   }
+#endif
 
   //set outputs
   if (pro.n_outputs() < 4) {
