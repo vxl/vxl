@@ -1,4 +1,4 @@
-from boxm2_adaptor import *; 
+from vil_adaptor import *;
 import random, os, sys;  
 from numpy import *; 
 import pylab  
