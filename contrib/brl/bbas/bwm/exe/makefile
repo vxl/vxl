@@ -13,6 +13,7 @@ MINI_PROG_SOURCES += bwm_batch_project_meshes_to_perspective_video.cxx
 MINI_PROG_SOURCES += bwm_bundler_to_video_site.cxx
 MINI_PROG_SOURCES += bwm_bundler4_to_video_site.cxx
 MINI_PROG_SOURCES += bwm_visualsfm_to_vpgl_cams.cxx
+MINI_PROG_SOURCES += bwm_nvm_avg_focal_length.cxx
 
 ################################
 include ${VXLROOT}/config/top.mk
