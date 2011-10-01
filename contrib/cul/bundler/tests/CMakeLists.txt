@@ -71,7 +71,7 @@ ADD_TEST(
 ADD_TEST( 
     bundler_test_bundle_adjust 
     ${EXECUTABLE_OUTPUT_PATH}/bundler_test_all 
-    test_add_bundle_adjust )
+    test_bundle_adjust )
 
 
 ADD_EXECUTABLE( bundler_test_include test_include.cxx )
