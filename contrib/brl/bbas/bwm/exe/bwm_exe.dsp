@@ -112,6 +112,9 @@ SOURCE=.\bwm_bundler4_to_video_site.cxx
 # Begin Source File
 SOURCE=.\bwm_visualsfm_to_vpgl_cams.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\bwm_nvm_avg_focal_length.cxx
+# End Source File
 # End Group
 # End Target
 # End Project

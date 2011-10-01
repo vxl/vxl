@@ -115,6 +115,9 @@ SOURCE=.\boxm2_opencl_cache.h
 # Begin Source File
 SOURCE=.\boxm2_ocl_util.h
 # End Source File
+# Begin Source File
+SOURCE=.\boxm2_ocl_where_root_dir.h
+# End Source File
 # End Group
 # End Target
 # End Project

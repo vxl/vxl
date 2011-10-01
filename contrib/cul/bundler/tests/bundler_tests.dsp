@@ -96,6 +96,9 @@ LIB32=link.exe -lib
 SOURCE=.\test_driver.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\utils.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\test_propose_matches.cxx
 # End Source File
 # Begin Source File
@@ -126,7 +129,16 @@ SOURCE=.\test_pipeline.cxx
 SOURCE=.\test_add_next_image.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\test_bundle_adjust.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\test_include.cxx
+# End Source File
+# End Group
+# Begin Group "Header Files"
+# PROP Default_Filter "h;txx"
+# Begin Source File
+SOURCE=.\utils.h
 # End Source File
 # End Group
 # End Target
