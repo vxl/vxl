@@ -22,7 +22,6 @@ TARGET_LINK_LIBRARIES(boxm2_util boxm2 bwm expatpp vpgl baio vpgl vidl vgl_xio v
 INSTALL_TARGETS(/lib boxm2_util)
 INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bseg/boxm2_util/ ${boxm2_util_sources})
 
-#no testing yet
-#IF( BUILD_TESTING )
-  #SUBDIRS(tests)
-#ENDIF( BUILD_TESTING )
+IF( BUILD_TESTING )
+  SUBDIRS(tests)
+ENDIF( BUILD_TESTING )
