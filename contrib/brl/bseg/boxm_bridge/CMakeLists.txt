@@ -13,6 +13,8 @@ IF(OPENCL_FOUND)
   TARGET_LINK_LIBRARIES( boxm_to_boxm2_exe boxm2 boxm boxm_sample boxm2_io boct vnl vgl vul vbl vcl)
 
   #tests
-  SUBDIRS(tests)
+  IF( BUILD_TESTING )
+    SUBDIRS(tests)
+  ENDIF( BUILD_TESTING )
 
 ENDIF(OPENCL_FOUND)

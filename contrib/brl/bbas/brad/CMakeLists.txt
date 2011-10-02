@@ -3,7 +3,8 @@
   INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bbas )
 
   SET(brad_sources
-      brad_illum_util.h               brad_illum_util.cxx brad_illum_cost_function.h
+      brad_illum_util.h               brad_illum_util.cxx
+      brad_illum_cost_function.h
       brad_sun_pos.h                  brad_sun_pos.cxx
       brad_sun_dir_index.h            brad_sun_dir_index.cxx
       brad_hist_prob_feature_vector.h brad_hist_prob_feature_vector.cxx
@@ -20,7 +21,9 @@
   TARGET_LINK_LIBRARIES(brad  bsta vnl_io vnl vgl_algo vnl_algo vgl vil vbl_io vbl vpl vul )
 
 #tests
-SUBDIRS(tests)
+IF( BUILD_TESTING )
+  SUBDIRS(tests)
+ENDIF( BUILD_TESTING )
 
 INSTALL_TARGETS(/lib brad)
 INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bbas/brad ${brad_sources})

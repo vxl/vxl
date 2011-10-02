@@ -1,12 +1,11 @@
 # boxm opencl opengl display
-  INCLUDE( ${VXL_CMAKE_DIR}/NewCMake/FindOpenCL.cmake )
-  IF(OPENCL_FOUND)
-  
-    ADD_DEFINITIONS(-DHAS_OPENCL=1)
-    INCLUDE_DIRECTORIES( ${OPENCL_INCLUDE_PATH} )
-INCLUDE( ${BRL_MODULE_PATH}/FindGLEW.cmake )
+INCLUDE( ${VXL_CMAKE_DIR}/NewCMake/FindOpenCL.cmake )
+IF(OPENCL_FOUND)
+  ADD_DEFINITIONS(-DHAS_OPENCL=1)
+  INCLUDE_DIRECTORIES( ${OPENCL_INCLUDE_PATH} )
+  INCLUDE( ${BRL_MODULE_PATH}/FindGLEW.cmake )
 IF(GLEW_FOUND)
-    ADD_DEFINITIONS(-DHAS_GLEW=1)
+  ADD_DEFINITIONS(-DHAS_GLEW=1)
 
 IF(VGUI_FOUND)
   INCLUDE_DIRECTORIES(${GLEW_INCLUDE_DIR} )
@@ -36,10 +35,14 @@ IF(VGUI_FOUND)
   INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bseg/boxm2/view ${boxm2_view_sources})
 
   TARGET_LINK_LIBRARIES(boxm2_view bocl boxm2_pro boxm2_ocl_pro boxm2_cpp boxm2_cpp_pro vgui bprb bgeo vnl vnl_algo vbl_io vpgl vsph vgl vil vbl vul ${GLEW_LIBRARY} ${OPENCL_LIBRARIES} )
-#pro
-SUBDIRS(pro)
-#pro
-SUBDIRS(tests)
+
+  #pro
+  SUBDIRS(pro)
+
+  #tests
+  IF( BUILD_TESTING )
+    SUBDIRS(tests)
+  ENDIF( BUILD_TESTING )
 ENDIF(VGUI_FOUND)
 ENDIF(GLEW_FOUND)
 ENDIF(OPENCL_FOUND)

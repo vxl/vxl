@@ -61,7 +61,9 @@ subdirs(view)
 subdirs(util)
 
 #tests
-SUBDIRS(tests)
+IF( BUILD_TESTING )
+  SUBDIRS(tests)
+ENDIF( BUILD_TESTING )
 
 #install the .h .txx and libs
 INSTALL_TARGETS(/lib boxm2)

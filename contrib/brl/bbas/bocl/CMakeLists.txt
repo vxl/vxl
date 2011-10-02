@@ -26,7 +26,9 @@ IF(OPENCL_FOUND)
   INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bbas/bocl/ ${bocl_sources})
 
 #tests
-SUBDIRS(tests)
+IF( BUILD_TESTING )
+  SUBDIRS(tests)
+ENDIF( BUILD_TESTING )
 
 #pro
 SUBDIRS(pro)

@@ -33,4 +33,6 @@ INSTALL_TARGETS(/lib baio)
 INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bbas/baio/ ${baio_sources})
 
 #tests
-SUBDIRS(tests)
+IF( BUILD_TESTING )
+  SUBDIRS(tests)
+ENDIF( BUILD_TESTING )

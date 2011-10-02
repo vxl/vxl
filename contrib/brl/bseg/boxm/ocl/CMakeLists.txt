@@ -10,21 +10,21 @@ IF(OPENCL_FOUND)
   INCLUDE_DIRECTORIES( ${GEL_INCLUDE_DIR}/mrc )
 
   SET(boxm_ocl_sources
-      boxm_ray_trace_manager.h boxm_ray_trace_manager.txx
-      boxm_ocl_utils.h boxm_ocl_utils.txx boxm_ocl_utils.cxx
-      boxm_ocl_render_expected.h        boxm_ocl_render_expected.cxx
-      boxm_stat_manager.h boxm_stat_manager.txx
-      boxm_refine_scene_manager.h boxm_refine_scene_manager.cxx
-      boxm_ocl_scene.h boxm_ocl_scene.cxx
-      boxm_render_ocl_scene_manager.h boxm_render_ocl_scene_manager.cxx
-      boxm_re_render_ocl_scene_manager.h boxm_re_render_ocl_scene_manager.cxx
-      boxm_update_ocl_scene_manager.h boxm_update_ocl_scene_manager.cxx
+      boxm_ray_trace_manager.h            boxm_ray_trace_manager.txx
+      boxm_ocl_utils.h                    boxm_ocl_utils.txx                   boxm_ocl_utils.cxx
+      boxm_ocl_render_expected.h          boxm_ocl_render_expected.cxx
+      boxm_stat_manager.h                 boxm_stat_manager.txx
+      boxm_refine_scene_manager.h         boxm_refine_scene_manager.cxx
+      boxm_ocl_scene.h                    boxm_ocl_scene.cxx
+      boxm_render_ocl_scene_manager.h     boxm_render_ocl_scene_manager.cxx
+      boxm_re_render_ocl_scene_manager.h  boxm_re_render_ocl_scene_manager.cxx
+      boxm_update_ocl_scene_manager.h     boxm_update_ocl_scene_manager.cxx
       boxm_ocl_change_detection_manager.h boxm_ocl_change_detection_manager.cxx boxm_ocl_change_detection_manager_sptr.h
-      boxm_ocl_camera_manager.h boxm_ocl_camera_manager.cxx
-      boxm_ocl_bit_scene.h boxm_ocl_bit_scene.cxx
-      boxm_render_bit_scene_manager.h boxm_render_bit_scene_manager.cxx
-      boxm_render_probe_manager.h boxm_render_probe_manager.cxx boxm_render_probe_manager_sptr.h
-      boxm_update_bit_scene_manager.h boxm_update_bit_scene_manager.cxx boxm_update_bit_scene_manager_sptr.h
+      boxm_ocl_camera_manager.h           boxm_ocl_camera_manager.cxx
+      boxm_ocl_bit_scene.h                boxm_ocl_bit_scene.cxx
+      boxm_render_bit_scene_manager.h     boxm_render_bit_scene_manager.cxx
+      boxm_render_probe_manager.h         boxm_render_probe_manager.cxx         boxm_render_probe_manager_sptr.h
+      boxm_update_bit_scene_manager.h     boxm_update_bit_scene_manager.cxx     boxm_update_bit_scene_manager_sptr.h
      )
 
   SET(boxm_ocl_cl_files
@@ -55,9 +55,12 @@ IF(OPENCL_FOUND)
 
   TARGET_LINK_LIBRARIES(boxm_ocl bocl boxm boxm_util boxm_sample boxm_basic boct bprb bgeo vnl vnl_algo vbl_io vpgl vgl vil vbl vul vsl vnl_io ${OPENCL_LIBRARIES})
 
-  SUBDIRS(tests)
   SUBDIRS(pro)
   SUBDIRS(exe)
   SUBDIRS(view)
+
+  IF( BUILD_TESTING )
+    SUBDIRS(tests)
+  ENDIF( BUILD_TESTING )
 
 ENDIF(OPENCL_FOUND)
