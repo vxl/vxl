@@ -23,7 +23,9 @@ IF(OPENCL_FOUND)
   ADD_LIBRARY(icam_ocl ${icam_ocl_sources} )
   TARGET_LINK_LIBRARIES(icam_ocl vpgl vpgl_algo icam vgl vil_algo vil vnl vbl vul ${OPENCL_LIBRARIES})
 
-#tests
-SUBDIRS(tests)
+  #tests
+  IF(BUILD_TESTING)
+    SUBDIRS(tests)
+  ENDIF(BUILD_TESTING)
 
 ENDIF(OPENCL_FOUND)
