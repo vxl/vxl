@@ -53,6 +53,7 @@ class brad_synoptic_function_1d
   vcl_vector<double> vis_;
   vcl_vector<double> intensity_;
   vnl_double_4 cubic_coef_int_;
+  vnl_double_4 cubic_coef_elev_;
 };
 
 #endif
