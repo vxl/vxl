@@ -9,5 +9,6 @@
 #include <brad/brad_phongs_model_est.h>
 #include <brad/brad_sun_dir_index.h>
 #include <brad/brad_sun_pos.h>
+#include <brad/brad_synoptic_function_1d.h>
 
 int main() { return 0; }
