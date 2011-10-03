@@ -92,6 +92,9 @@ vgl_triangle_3d_intersection_t vgl_triangle_3d_triangle_intersection(
 //   point1 of i_line lies on. 0 indicates [a_p1,a_p2], 1 - [a_p2,a_p3], 2 - [a_p3,a_p1],
 //   3 - [b_p1,b_p2], 4 - [b_p2,b_p3], 5 - [b_p3,b_p1]
 //  \retval i_line_point2_edge. As i_line_point1_edge, but for the other end of the intersection.
+//  \note if i_line_point1_edge==i_line_point2_edge, this indicates that due to coplanarity, or
+//  some other corner case, there were more than two edges involved in the intersection
+//  boundaries. The returned edge is one of those edges.
 vgl_triangle_3d_intersection_t vgl_triangle_3d_triangle_intersection(
   const vgl_point_3d<double>& a_p1,
   const vgl_point_3d<double>& a_p2,

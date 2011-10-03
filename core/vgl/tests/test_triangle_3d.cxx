@@ -262,10 +262,12 @@ inline void test_intersecting_degenerate_triangles1()
 
   //Test on a number of different types of degenerate triangle
 
-  const unsigned NUM_TESTS = 6;
+  const unsigned NUM_TESTS = 7;
+  const unsigned NUM_VARIANTS = 3;
 
-  vgl_point_3d<double> degen[][NUM_TESTS] = {
+  vgl_point_3d<double> degen[NUM_TESTS][3] = {
     { vgl_point_3d<double>(-4, 5, 0), vgl_point_3d<double>(-3, 4, 0), vgl_point_3d<double>(-2, 0, 0) }, //Coplanar non-intersecting
+    { vgl_point_3d<double>(4, 5, 0), vgl_point_3d<double>(-3, 4, 0), vgl_point_3d<double>(2, -1, 0) }, //Coplanar non-intersecting
     { vgl_point_3d<double>(2, 5, 0), vgl_point_3d<double>(2, 1, 0), vgl_point_3d<double>(2, -3, 0) },   //Coplanar intersecting
     { vgl_point_3d<double>(0, 8, 0), vgl_point_3d<double>(0, 6, 0), vgl_point_3d<double>(0, 5, 0) },    //Coplanar non-intersecting edge collinear
     { vgl_point_3d<double>(0, 8, 0), vgl_point_3d<double>(0, 3, 0), vgl_point_3d<double>(0, 5, 0) },    //Coplanar intersecting edge collinear
@@ -274,16 +276,18 @@ inline void test_intersecting_degenerate_triangles1()
   };
 
   const char* degen_desc[NUM_TESTS] = {
-    "Coplanar non-intersecting",
-    "Coplanar intersecting",
-    "Coplanar non-intersecting edge collinear",
-    "Coplanar intersecting edge collinear",
-    "Non-coplanar non-intersecting",
-    "Non-coplanar intersecting"
+    "Coplanar non-intersecting possibly non-degenerate",
+    "Coplanar intersecting possibly non-degenerate",
+    "Coplanar intersecting degenerate",
+    "Coplanar non-intersecting edge collinear degenerate",
+    "Coplanar intersecting edge collinear degenerate",
+    "Non-coplanar non-intersecting degenerate",
+    "Non-coplanar intersecting degenerate"
   };
 
-  vgl_triangle_3d_intersection_t exp_result[][NUM_TESTS] = {
+  vgl_triangle_3d_intersection_t exp_result[NUM_TESTS][NUM_VARIANTS] = {
     { None, None, None },
+    { None, Coplanar, Coplanar },
     { Coplanar, Coplanar, Coplanar },
     { None, None, None },
     { Coplanar, Coplanar, Coplanar },
@@ -291,7 +295,21 @@ inline void test_intersecting_degenerate_triangles1()
     { None, Skew, Skew }
   };
 
-  unsigned degen_tests[][3] = {
+  // Expected edges [0-5]=>correct values.  7=>Any repreated values would be correct
+  // 8=>Any repeated values from the degenerate triange would be correct
+  // 9=>No expected answer( since no intersection)
+  unsigned exp_edges[NUM_TESTS][NUM_VARIANTS][2] = {
+    { {9, 9}, {9, 9}, {9, 9} }, // unspecified if non-intersecting
+    { {9, 9}, {8, 8}, {7, 7} }, // repeated edges if coplanar
+    { {3, 3}, {8, 8}, {8, 8} }, // repeated edges if coplanar
+    { {9, 9}, {9, 9}, {9, 9} }, // unspecified if non-intersecting
+    { {3, 3}, {8, 8}, {8, 8} },
+    { {9, 9}, {9, 9}, {9, 9} }, // unspecified if non-intersecting
+    { {9, 9}, {4, 5}, {4, 5} }
+  };
+
+
+  unsigned degen_tests[NUM_VARIANTS][3] = {
     { 1, 1, 1 }, //all vertices the same point
     { 1, 1, 2 }, // one vertex distinct
     { 0, 1, 2 }  // all vertices distinct
@@ -305,8 +323,18 @@ inline void test_intersecting_degenerate_triangles1()
 
   for (unsigned i = 0; i < NUM_TESTS; ++i)
   {
-    for (unsigned j = 0; j < 3; ++j)
+    for (unsigned j = 0; j < NUM_VARIANTS; ++j)
     {
+      if (exp_result[i][j]!=None) // Check for any unwarranted looseness in test.
+        assert(exp_edges[i][j][0]!=9);
+  
+      vcl_string test_desc = degen_desc[i];
+      test_desc += " (";
+      test_desc += degen_tests_desc[j];
+      test_desc += ")";
+
+      vgl_line_segment_3d<double> i_line;
+      unsigned point1_edge = (unsigned) -1, point2_edge = (unsigned) -2;
       vgl_triangle_3d_intersection_t ret =
         vgl_triangle_3d_triangle_intersection(
           valid_p1,
@@ -314,27 +342,55 @@ inline void test_intersecting_degenerate_triangles1()
           valid_p3,
           degen[i][degen_tests[j][0]],
           degen[i][degen_tests[j][1]],
-          degen[i][degen_tests[j][2]]);
+          degen[i][degen_tests[j][2]],
+          i_line, point1_edge, point2_edge);
 
-      vgl_triangle_3d_intersection_t ret_reversed =
-        vgl_triangle_3d_triangle_intersection(
+      TEST(test_desc.c_str(), ret, exp_result[i][j]);
+      if (exp_edges[i][j][0]!=9)
+      {
+        if (point1_edge > point2_edge) // Canonicalise edge results.
+          vcl_swap(point1_edge, point2_edge);
+        if (exp_edges[i][j][0]==8)
+          TEST("Edge 1 == Edge 2 for no definite edge result",
+            point1_edge == point2_edge && point1_edge >= 3, true);
+        else if (exp_edges[i][j][0]==7)
+          TEST("Edge 1 == Edge 2 for no definite edge result",
+            point1_edge == point2_edge, true);
+        else
+        {
+          TEST_NEAR("Edge 1 correct", point1_edge, exp_edges[i][j][0], 0);
+          TEST_NEAR("Edge 2 correct", point2_edge, exp_edges[i][j][1], 0);
+        }
+      }
+      test_desc += " reversed";
+      ret = vgl_triangle_3d_triangle_intersection(
           degen[i][degen_tests[j][0]],
           degen[i][degen_tests[j][1]],
           degen[i][degen_tests[j][2]],
           valid_p1,
           valid_p2,
-          valid_p3);
+          valid_p3,
+          i_line, point1_edge, point2_edge);
 
-      vcl_string test_desc = degen_desc[i];
-      test_desc += " degenerate (";
-      test_desc += degen_tests_desc[j];
-      test_desc += ")";
 
       TEST(test_desc.c_str(), ret, exp_result[i][j]);
-
-      test_desc += " reversed";
-
-      TEST(test_desc.c_str(), ret_reversed, exp_result[i][j]);
+      if (exp_edges[i][j][0]!=9)
+      {
+        if (point1_edge > point2_edge) // Canonicalise edge results.
+          vcl_swap(point1_edge, point2_edge);
+        if (exp_edges[i][j][0]==8)
+          TEST("Edge 1 == Edge 2 for no definite edge result",
+          point1_edge == point2_edge && point1_edge < 3, true);
+        else if (exp_edges[i][j][0]==7)
+          TEST("Edge 1 == Edge 2 for no definite edge result",
+            point1_edge == point2_edge, true);
+        else
+        {
+        // modify exp_edge values to point to other triangle.
+          TEST_NEAR("Edge 1 correct", point1_edge, (exp_edges[i][j][0]+3)%6, 0);
+          TEST_NEAR("Edge 2 correct", point2_edge, (exp_edges[i][j][1]+3)%6, 0);
+        }
+      }
     }
   }
 }

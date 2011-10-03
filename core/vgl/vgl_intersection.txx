@@ -692,6 +692,7 @@ bool vgl_intersection(vgl_ray_3d<T> const& ray,
                  - plane.d();
 
   double t = numer/denom;
+  if (t<0) return false;
   i_pt = pt + t * dir;
   return true;
 }

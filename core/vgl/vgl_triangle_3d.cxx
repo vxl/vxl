@@ -344,6 +344,9 @@ namespace
 //   point1 of i_line lies on. 0 indicates [a_p1,a_p2], 1 - [a_p2,a_p3], 2 - [a_p3,a_p1],
 //   3 - [b_p1,b_p2], 4 - [b_p2,b_p3], 5 - [b_p3,b_p1]
 //  \retval i_line_point2_edge. As i_line_point1_edge, but for the other end of the intersection.
+//  \note if i_line_point1_edge==i_line_point2_edge, this indicates that due to coplanarity, or
+//  some other corner case, there were more than two edges involved in the intersection
+//  boundaries. The returned edge is one of those edges.
 vgl_triangle_3d_intersection_t vgl_triangle_3d_triangle_intersection(
   const vgl_point_3d<double>& a_p1,
   const vgl_point_3d<double>& a_p2,
@@ -373,28 +376,59 @@ vgl_triangle_3d_intersection_t vgl_triangle_3d_triangle_intersection(
       return None;
     }
 
+
     vgl_triangle_3d_intersection_t ret = None;
     vgl_point_3d<double> i_pnt;
+    unsigned tmp_iline_edges[2];
+    unsigned n_tmp_iline_edges = 0;
     if ( a_p1 != a_p2 && (ret = vgl_triangle_3d_line_intersection(vgl_line_segment_3d<double>(a_p1,a_p2), b_p1,b_p2,b_p3,i_pnt)) != None )
-    {// half-degenerate tri_a behaves as line. Find line intersection
+    {// half-degenerate tri_b behaves as line. Find line intersection
       i_line.set(i_pnt,i_pnt);
-      i_line_point1_edge = i_line_point2_edge = 0;
-      return ret;
+      if (ret == Coplanar)
+      {
+        i_line_point1_edge = i_line_point2_edge = 0;
+        return ret;
+      }
+      tmp_iline_edges[0] = 0;
+      n_tmp_iline_edges = 1;
     }
-    else if ( a_p2 != a_p3 && (ret = vgl_triangle_3d_line_intersection(vgl_line_segment_3d<double>(a_p2,a_p3), b_p1,b_p2,b_p3,i_pnt)) != None )
-    {// half-degenerate tri_a behaves as line. Find line intersection
+    if ( a_p2 != a_p3 && (ret = vgl_triangle_3d_line_intersection(vgl_line_segment_3d<double>(a_p2,a_p3), b_p1,b_p2,b_p3,i_pnt)) != None )
+    {// half-degenerate tri_b behaves as line. Find line intersection
       i_line.set(i_pnt,i_pnt);
-      i_line_point1_edge = i_line_point2_edge = 1;
-      return ret;
+      if (ret == Coplanar)
+      {
+        i_line_point1_edge = i_line_point2_edge = 1;
+        return ret;
+      }
+      tmp_iline_edges[n_tmp_iline_edges] = 1;
+      n_tmp_iline_edges++;
     }
-    else if ( a_p1 != a_p3 && (ret = vgl_triangle_3d_line_intersection(vgl_line_segment_3d<double>(a_p1,a_p3), b_p1,b_p2,b_p3,i_pnt)) != None )
-    { // half-degenerate tri a behaves as line intersection.
+    if ( a_p1 != a_p3 && (ret = vgl_triangle_3d_line_intersection(vgl_line_segment_3d<double>(a_p1,a_p3), b_p1,b_p2,b_p3,i_pnt)) != None )
+    {// half-degenerate tri_b behaves as line. Find line intersection
       i_line.set(i_pnt,i_pnt);
-      i_line_point1_edge = i_line_point2_edge = 2;
-      return ret;
+      if (ret == Coplanar)
+      {
+        i_line_point1_edge = i_line_point2_edge = 2;
+        return ret;
+      }
+      if (n_tmp_iline_edges >= 2)
+      { // All edges intersect - return repeated edge to indicate problem
+        i_line_point1_edge = i_line_point2_edge = 0;
+        return ret;
+      }
+      tmp_iline_edges[n_tmp_iline_edges] = 2;
+      n_tmp_iline_edges++;
     }
-    else
-      return None;
+    if (!n_tmp_iline_edges) return None; // Found no edges intersecting with triangle
+    if (n_tmp_iline_edges == 1) // Found one edge intersecting with triangle
+    {
+      i_line_point1_edge = i_line_point2_edge = tmp_iline_edges[0];
+      return Skew;
+    }
+    // Found two edges intersecting with triangle
+    i_line_point1_edge = tmp_iline_edges[0];
+    i_line_point2_edge = tmp_iline_edges[1];
+    return Skew;    
   }
   if (collinear(b_p1,b_p2,b_p3))
   {
@@ -411,26 +445,59 @@ vgl_triangle_3d_intersection_t vgl_triangle_3d_triangle_intersection(
 
     vgl_triangle_3d_intersection_t ret = None;
     vgl_point_3d<double> i_pnt;
+    unsigned tmp_iline_edges[2];
+    unsigned n_tmp_iline_edges = 0;
     if (b_p1 != b_p2 && (ret = vgl_triangle_3d_line_intersection(vgl_line_segment_3d<double>(b_p1,b_p2), a_p1,a_p2,a_p3,i_pnt)) != None )
-    {// half-degenerate tri_a behaves as line. Find line intersection
+    {// half-degenerate tri_b behaves as line. Find line intersection
       i_line.set(i_pnt,i_pnt);
-      i_line_point1_edge = i_line_point2_edge = 3;
-      return ret;
+      if (ret == Coplanar)
+      {
+        i_line_point1_edge = i_line_point2_edge = 3;
+        return ret;
+      }
+      tmp_iline_edges[0] = 3;
+      n_tmp_iline_edges = 1;
     }
-    else if ( b_p2 != b_p3 && (ret = vgl_triangle_3d_line_intersection(vgl_line_segment_3d<double>(b_p2,b_p3), a_p1,a_p2,a_p3,i_pnt)) != None )
-    {// half-degenerate tri_a behaves as line. Find line intersection
+    if ( b_p2 != b_p3 && (ret = vgl_triangle_3d_line_intersection(vgl_line_segment_3d<double>(b_p2,b_p3), a_p1,a_p2,a_p3,i_pnt)) != None )
+    {// half-degenerate tri_b behaves as line. Find line intersection
       i_line.set(i_pnt,i_pnt);
-      i_line_point1_edge = i_line_point2_edge = 4;
-      return ret;
+      if (ret == Coplanar)
+      {
+        i_line_point1_edge = i_line_point2_edge = 4;
+        return ret;
+      }
+      tmp_iline_edges[n_tmp_iline_edges] = 4;
+      n_tmp_iline_edges++;
     }
-    else if ( b_p1 != b_p3 && (ret = vgl_triangle_3d_line_intersection(vgl_line_segment_3d<double>(b_p1,b_p3), a_p1,a_p2,a_p3,i_pnt)) != None )
-    {// half-degenerate tri_a behaves as line. Find line intersection
+    if ( b_p1 != b_p3 && (ret = vgl_triangle_3d_line_intersection(vgl_line_segment_3d<double>(b_p1,b_p3), a_p1,a_p2,a_p3,i_pnt)) != None )
+    {// half-degenerate tri_b behaves as line. Find line intersection
       i_line.set(i_pnt,i_pnt);
-      i_line_point1_edge = i_line_point2_edge = 5;
-      return ret;
+      if (ret == Coplanar)
+      {
+        i_line_point1_edge = i_line_point2_edge = 5;
+        return ret;
+      }
+      if (n_tmp_iline_edges >= 2)
+      { // All edges intersect - return repeated edge to indicate problem
+        i_line_point1_edge = i_line_point2_edge = 3;
+        return ret;
+      }
+      tmp_iline_edges[n_tmp_iline_edges] = 5;
+      n_tmp_iline_edges++;
     }
-    else return None;
+    if (!n_tmp_iline_edges) return None; // Found no edges intersecting with triangle
+    if (n_tmp_iline_edges == 1) // Found one edge intersecting with triangle
+    {
+      i_line_point1_edge = i_line_point2_edge = tmp_iline_edges[0];
+      return Skew;
+    }
+    // Found two edges intersecting with triangle
+    i_line_point1_edge = tmp_iline_edges[0];
+    i_line_point2_edge = tmp_iline_edges[1];
+    return Skew;    
   }
+
+
   //computing intersection of triangles a and b
 
   vgl_vector_3d<double> edge1,edge2;
@@ -654,51 +721,36 @@ vgl_triangle_3d_intersection_t vgl_triangle_3d_triangle_intersection(
       if (isect1)
       {
         i_line_point1 = i_pnt1;
-        i_line_point1_edge = 0;
+        i_line_point1_edge = i_line_point2_edge = 0; // Set repeated edges to indicate incomplete answer
       }
       else
       {
         if (isect2)
         {
           i_line_point1 = i_pnt2;
-          i_line_point1_edge = 2;
+          i_line_point1_edge = i_line_point2_edge = 1;
         }
         else
         {
           i_line_point1 = i_pnt3;
-          i_line_point1_edge = 3;
+          i_line_point1_edge = i_line_point2_edge = 2;
         }
-     }
-
+      }
+      // try and get extent of intersection as best as possible
       if (isect1 && isect2)
-      {
         i_line_point2 = i_pnt2;
-        i_line_point2_edge = 1;
-      }
       else if ((isect1 || isect2) && isect3)
-      {
         i_line_point2 = i_pnt3;
-        i_line_point2_edge = 3;
-      }
       else
       {
         if (isect1)
-        {
           i_line_point2 = i_pnt1;
-          i_line_point2_edge = 1;
-        }
         else
         {
           if (isect2)
-          {
             i_line_point2 = i_pnt2;
-            i_line_point2_edge = 2;
-          }
           else
-          {
             i_line_point2 = i_pnt3;
-            i_line_point2_edge = 3;
-         }
         }
       }
       i_line.set( i_line_point1, i_line_point2);
@@ -706,11 +758,17 @@ vgl_triangle_3d_intersection_t vgl_triangle_3d_triangle_intersection(
     }
 
     // finally, test if triangle a is totally contained in triangle b or vice versa
-    if (vgl_triangle_3d_test_inside(a_p1, b_p1, b_p2, b_p3) ||
-        vgl_triangle_3d_test_inside(b_p1, a_p1, a_p2, a_p3))
+    if (vgl_triangle_3d_test_inside(a_p1, b_p1, b_p2, b_p3))
     {
-      i_line_point1_edge = i_line_point2_edge = 6;
-      i_line.set(vgl_point_3d<double> (vgl_nan, vgl_nan, vgl_nan),vgl_point_3d<double> (vgl_nan,vgl_nan,vgl_nan));
+      i_line_point1_edge = i_line_point2_edge = 0;
+      i_line.set(a_p1, a_p3);
+      return Coplanar;
+    }
+      
+    if (vgl_triangle_3d_test_inside(b_p1, a_p1, a_p2, a_p3))
+    {
+      i_line_point1_edge = i_line_point2_edge = 3;
+      i_line.set(b_p1, b_p3);
       return Coplanar;
     }
 
