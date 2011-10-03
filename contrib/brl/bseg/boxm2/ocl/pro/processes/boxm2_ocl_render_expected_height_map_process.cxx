@@ -313,7 +313,6 @@ bool boxm2_ocl_render_expected_height_map_process(bprb_func_process& pro)
 
   clReleaseCommandQueue(queue);
   i=0;
-
   vil_image_view<float>* exp_img_out=new vil_image_view<float>(ni,nj);
   vil_image_view<float>* exp_var_out=new vil_image_view<float>(ni,nj);
   vil_image_view<float>* xcoord_img=new vil_image_view<float>(ni,nj);
@@ -321,16 +320,15 @@ bool boxm2_ocl_render_expected_height_map_process(bprb_func_process& pro)
   vil_image_view<float>* prob_img=new vil_image_view<float>(ni,nj);
   vil_image_view<float>* app_img=new vil_image_view<float>(ni,nj);
 
-
   for (unsigned c=0;c<nj;++c)
     for (unsigned r=0;r<ni;++r)
     {
-        (*exp_img_out)(r,c)=z-buff[c*cl_ni+r];
-        (*exp_var_out)(r,c)=var_buff[c*cl_ni+r];
-        (*xcoord_img)(r,c)=r*xint+scene_origin[0];
-        (*ycoord_img)(r,c)=c*yint+scene_origin[1];
-        (*prob_img)(r,c)=prob_buff[c*cl_ni+r];
-        (*app_img)(r,c)=app_buff[c*cl_ni+r]; 
+        (*exp_img_out)(r,c) = z-buff[c*cl_ni+r];
+        (*exp_var_out)(r,c) = var_buff[c*cl_ni+r];
+        (*xcoord_img)(r,c)  = r*xint+scene_origin[0];
+        (*ycoord_img)(r,c)  = c*yint+scene_origin[1];
+        (*prob_img)(r,c)    = prob_buff[c*cl_ni+r];
+        (*app_img)(r,c)     = app_buff[c*cl_ni+r]; 
     }
   // store scene smaprt pointer
   pro.set_output_val<vil_image_view_base_sptr>(i++, exp_img_out);
@@ -339,5 +337,12 @@ bool boxm2_ocl_render_expected_height_map_process(bprb_func_process& pro)
   pro.set_output_val<vil_image_view_base_sptr>(i++, ycoord_img);
   pro.set_output_val<vil_image_view_base_sptr>(i++, prob_img);
   pro.set_output_val<vil_image_view_base_sptr>(i++, app_img);
+  
+  delete[] buff; 
+  delete[] var_buff; 
+  delete[] vis_buff; 
+  delete[] prob_buff; 
+  delete[] app_buff; 
+  
   return true;
 }

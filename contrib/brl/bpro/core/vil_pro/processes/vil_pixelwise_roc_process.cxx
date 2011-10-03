@@ -167,36 +167,6 @@ bool vil_pixelwise_roc_process(bprb_func_process& pro)
     }
   }
 
-#if 0
-  / /count true positves, false positves, true negatives, false negatives
-  int cnt=0;
-  for (float t=0.1f;t<1.05f;++cnt,t+=0.1f)
-  {
-    tp->data_array[cnt]=0.0f;
-    fp->data_array[cnt]=0.0f;
-    tn->data_array[cnt]=0.0f;
-    fn->data_array[cnt]=0.0f;
-    for (unsigned i=0;i<detection_map->ni();++i)
-    {
-      for (unsigned j=0;j<detection_map->nj();++j)
-      {
-        // don't do work unless mask pixel is 0
-        if (use_mask && (*mask_map)(i,j)!=0) {
-          vcl_cout<<"NOT DOING WORK!!!"<<vcl_endl;
-          continue;
-        }
-
-        bool pos   = (* detection_map)(i,j)>=t;
-        bool truth = (*ground_truth_map)(i,j)>0;
-        if (pos && truth)   tp->data_array[cnt]++;
-        if (!pos && truth)  fn->data_array[cnt]++;
-        if (!pos && !truth) tn->data_array[cnt]++;
-        if (pos && !truth)  fp->data_array[cnt]++;
-      }
-    }
-  }
-#endif
-
   // set outputs
   if (pro.n_outputs() < 4) {
     vcl_cerr << "vil_pixelwise_roc_process: The number of outputs should be 4\n";
