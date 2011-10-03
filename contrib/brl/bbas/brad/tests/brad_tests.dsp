@@ -114,6 +114,9 @@ SOURCE=.\test_feature_pca.cxx
 SOURCE=.\test_phongs_model_est.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\test_synoptic_function.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\test_include.cxx
 # End Source File
 # Begin Source File

@@ -117,6 +117,9 @@ SOURCE=.\brad_grad_int_feature_vector.cxx
 SOURCE=.\brad_grad_hist_feature_vector.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\brad_synoptic_function_1d.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/brad_eigenspace+brad_hist_prob_feature_vector-.cxx
 # End Source File
 # Begin Source File
@@ -166,6 +169,9 @@ SOURCE=.\brad_grad_hist_feature_vector.h
 # End Source File
 # Begin Source File
 SOURCE=.\brad_grad_int_feature_vector.h
+# End Source File
+# Begin Source File
+SOURCE=.\brad_synoptic_function_1d.h
 # End Source File
 # End Group
 # End Target
