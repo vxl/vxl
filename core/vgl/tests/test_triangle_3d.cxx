@@ -8,6 +8,7 @@
 
 #include <vcl_iostream.h>
 #include <vcl_ctime.h>
+#include <vcl_cassert.h>
 #include <vgl/vgl_triangle_3d.h>
 #include <vgl/vgl_distance.h>
 #include <vgl/vgl_plane_3d.h>
@@ -327,7 +328,7 @@ inline void test_intersecting_degenerate_triangles1()
     {
       if (exp_result[i][j]!=None) // Check for any unwarranted looseness in test.
         assert(exp_edges[i][j][0]!=9);
-  
+
       vcl_string test_desc = degen_desc[i];
       test_desc += " (";
       test_desc += degen_tests_desc[j];
@@ -352,10 +353,10 @@ inline void test_intersecting_degenerate_triangles1()
           vcl_swap(point1_edge, point2_edge);
         if (exp_edges[i][j][0]==8)
           TEST("Edge 1 == Edge 2 for no definite edge result",
-            point1_edge == point2_edge && point1_edge >= 3, true);
+               point1_edge == point2_edge && point1_edge >= 3, true);
         else if (exp_edges[i][j][0]==7)
           TEST("Edge 1 == Edge 2 for no definite edge result",
-            point1_edge == point2_edge, true);
+               point1_edge == point2_edge, true);
         else
         {
           TEST_NEAR("Edge 1 correct", point1_edge, exp_edges[i][j][0], 0);
@@ -380,10 +381,10 @@ inline void test_intersecting_degenerate_triangles1()
           vcl_swap(point1_edge, point2_edge);
         if (exp_edges[i][j][0]==8)
           TEST("Edge 1 == Edge 2 for no definite edge result",
-          point1_edge == point2_edge && point1_edge < 3, true);
+               point1_edge == point2_edge && point1_edge < 3, true);
         else if (exp_edges[i][j][0]==7)
           TEST("Edge 1 == Edge 2 for no definite edge result",
-            point1_edge == point2_edge, true);
+               point1_edge == point2_edge, true);
         else
         {
         // modify exp_edge values to point to other triangle.
