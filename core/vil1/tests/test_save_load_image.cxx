@@ -398,7 +398,10 @@ vil1_image CreateTest24bitImage(int wd, int ht)
   vil1_memory_image_of<vil1_rgb<unsigned char> > image(wd, ht);
   for (int x = 0; x < wd; x++)
     for (int y = 0; y < ht; y++) {
-      unsigned char data[3] = { x%(1<<8), ((x-wd/2)*(y-ht/2)/16) % (1<<8), ((y/3)%(1<<8)) };
+      unsigned char u = x%(1<<8);
+      unsigned char v = ((x-wd/2)*(y-ht/2)/16) % (1<<8);
+      unsigned char w = ((y/3)%(1<<8));
+      unsigned char data[3] = {u,v,w};
       image.put_section(data, x, y, 1, 1);
     }
   return image;
@@ -410,7 +413,10 @@ vil1_image CreateTest3planeImage(int wd, int ht)
   vil1_memory_image image(3, wd, ht, 1, 8, VIL1_COMPONENT_FORMAT_UNSIGNED_INT);
   for (int x = 0; x < wd; x++)
     for (int y = 0; y < ht; y++) {
-      unsigned char data[3] = { x%(1<<8), ((x-wd/2)*(y-ht/2)/16) % (1<<8), ((y/3)%(1<<8)) };
+      unsigned char u = x%(1<<8);
+      unsigned char v = ((x-wd/2)*(y-ht/2)/16) % (1<<8);
+      unsigned char w = ((y/3)%(1<<8));
+      unsigned char data[3] = {u,v,w};
       image.put_section(data, x, y, 1, 1);
     }
   return image;

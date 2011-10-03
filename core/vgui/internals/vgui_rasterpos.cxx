@@ -57,7 +57,7 @@ void vgui_rasterpos2f(float x, float y)
 
 void vgui_rasterpos2i(int x, int y)
 {
-  double X[4]={x,y,0,1};
+  double X[4]={double(x),double(y),0.0,1.0};
   vgui_rasterpos4dv(X);
 }
 
