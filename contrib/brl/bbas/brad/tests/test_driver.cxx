@@ -6,6 +6,7 @@ DECLARE( test_sun_hist );
 DECLARE( test_sun_dir_index );
 DECLARE( test_feature_pca );
 DECLARE( test_phongs_model_est );
+DECLARE( test_synoptic_function );
 
 
 void register_tests()
@@ -16,6 +17,7 @@ void register_tests()
   REGISTER( test_sun_dir_index );
   REGISTER( test_feature_pca );
   REGISTER( test_phongs_model_est );
+  REGISTER( test_synoptic_function );
 }
 
 DEFINE_MAIN;

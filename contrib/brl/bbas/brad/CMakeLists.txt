@@ -14,6 +14,7 @@
       brad_eigenspace_base.h          brad_eigenspace_base.cxx
       brad_eigenspace_sptr.h
       brad_phongs_model_est.h         brad_phongs_model_est.cxx
+      brad_synoptic_function_1d.h     brad_synoptic_function_1d.cxx
      )
   AUX_SOURCE_DIRECTORY(Templates brad_sources)
   ADD_LIBRARY(brad ${brad_sources} )
