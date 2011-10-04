@@ -227,6 +227,7 @@ SET( vnl_sources
   vnl_unary_function.txx       vnl_unary_function.h
   vnl_identity.h
   vnl_random.cxx               vnl_random.h
+  vnl_index_sort.h
 
   # numerical integration
                                vnl_integrant_fnct.h

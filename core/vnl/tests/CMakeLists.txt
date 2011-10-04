@@ -101,6 +101,9 @@ ADD_TEST( vnl_test_power                  ${EXECUTABLE_OUTPUT_PATH}/vnl_test_all
 ADD_TEST( vnl_test_sparse_matrix          ${EXECUTABLE_OUTPUT_PATH}/vnl_test_all test_sparse_matrix          )
 ADD_TEST(test_pow_log                     ${EXECUTABLE_OUTPUT_PATH}/vnl_test_all test_pow_log                )
 
+ADD_EXECUTABLE(test_vnl_index_sort test_vnl_index_sort.cxx)
+TARGET_LINK_LIBRARIES(test_vnl_index_sort vnl)
+
 ADD_EXECUTABLE(vnl_test_include test_include.cxx)
 TARGET_LINK_LIBRARIES(vnl_test_include vnl)
 ADD_EXECUTABLE(vnl_test_template_include test_template_include.cxx)
