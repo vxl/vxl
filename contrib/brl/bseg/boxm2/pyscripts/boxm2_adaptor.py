@@ -467,3 +467,31 @@ def save_multi_block_scene(params) :
   boxm2_batch.set_input_from_db(0,scene);
   boxm2_batch.set_input_string(1, fname); 
   boxm2_batch.run_process();
+
+
+#runs blob change detection process
+def blob_change_detection( change_img, thresh ) : 
+  boxm2_batch.init_process("boxm2BlobChangeDetectionProcess");
+  boxm2_batch.set_input_from_db(0,change_img);
+  boxm2_batch.set_input_float(1, thresh); 
+  boxm2_batch.run_process();
+  
+  
+
+#pixel wise roc process for change detection images
+def blob_precision_recall(cd_img, gt_img, mask_img=None) :
+  boxm2_batch.init_process("boxm2BlobPrecisionRecallProcess");
+  boxm2_batch.set_input_from_db(0,cd_img);
+  boxm2_batch.set_input_from_db(1,gt_img);
+  if mask_img:
+    boxm2_batch.set_input_from_db(2,mask_img);
+  boxm2_batch.run_process();
+  (id,type) = boxm2_batch.commit_output(0);
+  precision = boxm2_batch.get_bbas_1d_array_float(id);
+  (id,type) = boxm2_batch.commit_output(1);
+  recall    = boxm2_batch.get_bbas_1d_array_float(id);
+
+  #return tuple of true positives, true negatives, false positives, etc..
+  return (precision, recall);
+
+
