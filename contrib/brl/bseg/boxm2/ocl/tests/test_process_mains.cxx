@@ -65,9 +65,11 @@ void test_render_height_main(boxm2_scene_sptr& scene, bocl_device_sptr& device, 
   // 4. y coord image
   // 5. prob image (likelihood depth is within the volume)
   vcl_vector< vil_image_view<float>* > out_imgs; 
+  vcl_vector<unsigned int> out_ids; 
   for(int i=0; i<6; ++i) {
     unsigned int out_img = 0;
     good = good && bprb_batch_process_manager::instance()->commit_output(i, out_img);
+    out_ids.push_back(out_img); 
     brdb_query_aptr Q = brdb_query_comp_new("id", brdb_query::EQ, out_img);
     brdb_selection_sptr S = DATABASE->select("vil_image_view_base_sptr_data", Q);
     if (S->size()!=1) {
@@ -90,6 +92,12 @@ void test_render_height_main(boxm2_scene_sptr& scene, bocl_device_sptr& device, 
   vil_save(*out_imgs[3], "y_img.tiff");
   vil_save(*out_imgs[4], "prob_img.tiff");
   vil_save(*out_imgs[5], "app_img.tiff");
+
+  //EXAMPLE
+  //clean up out images
+  for(int i=0; i<out_ids.size(); ++i) {
+    bprb_batch_process_manager::instance()->remove_data(out_ids[i]);
+  }
 }
 
 //: Example c++ calls
@@ -171,8 +179,8 @@ void test_render_main(boxm2_scene_sptr& scene, bocl_device_sptr& device, boxm2_o
 void test_update_main(boxm2_scene_sptr& scene, bocl_device_sptr& device, boxm2_opencl_cache_sptr& opencl_cache )
 {
   //set image and camera directory
-  vcl_string imgdir = "/media/VXL/data/boxm2/downtown/video";
-  vcl_string camdir = "/media/VXL/data/boxm2/downtown/cams";
+  vcl_string imgdir = "/home/acm/data/downtown/imgs";
+  vcl_string camdir = "/home/acm/data/downtown/cams";
   vcl_vector<vcl_string> imgs = boxm2_util::images_from_directory(imgdir);
   vcl_vector<vcl_string> cams = boxm2_util::camfiles_from_directory(camdir);
   if (imgs.size() != cams.size()) {
@@ -209,7 +217,7 @@ void test_update_main(boxm2_scene_sptr& scene, bocl_device_sptr& device, boxm2_o
   //
   vnl_random random(9667566);
 
-  int numLoops = vcl_min((int)imgs.size(), 10);
+  int numLoops = vcl_min((int)imgs.size(), 5);
   for (int i=0; i<numLoops; ++i)
   {
     //grab frame
@@ -242,6 +250,8 @@ void test_update_main(boxm2_scene_sptr& scene, bocl_device_sptr& device, boxm2_o
         && bprb_batch_process_manager::instance()->set_input(3, brdb_cam)    // camera
         && bprb_batch_process_manager::instance()->set_input(4, brdb_img)    // input image
         && bprb_batch_process_manager::instance()->run_process();
+  
+
   }
 }
 
@@ -249,7 +259,7 @@ void test_update_main(boxm2_scene_sptr& scene, bocl_device_sptr& device, boxm2_o
 void test_process_mains()
 {
   // Create scene from file
-  vcl_string scene_file = "/media/VXL/data/boxm2/downtown/model_smooth/scene.xml";
+  vcl_string scene_file = "/home/acm/data/downtown/model_grey/scene.xml";
   boxm2_scene_sptr scene = new boxm2_scene(scene_file);
 
   //make bocl manager (handles a lot of OpenCL stuff)
@@ -264,6 +274,10 @@ void test_process_mains()
   //test_render_main(scene, device, opencl_cache);
   //test_update_main(scene, device, opencl_cache);
   test_render_height_main(scene, device, opencl_cache); 
+  
+  //print database
+  bprb_batch_process_manager::instance()->print_db(); 
+  
 }
 
 TESTMAIN( test_process_mains );
