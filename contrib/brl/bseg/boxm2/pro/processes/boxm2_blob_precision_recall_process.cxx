@@ -1,4 +1,4 @@
-// This is brl/bpro/core/vil_pro/processes/boxm2_blob_precision_recall_process.cxx
+// This is brl/bseg/boxm2/pro/processes/boxm2_blob_precision_recall_process.cxx
 #include <bprb/bprb_func_process.h>
 //:
 // \file
@@ -10,13 +10,12 @@
 #include <vil/vil_convert.h>
 #include <bbas_pro/bbas_1d_array_float.h>
 #include <vcl_algorithm.h>
-#include <vul/vul_timer.h>
 
 namespace boxm2_blob_precision_recall_process_globals
 {
   const unsigned n_inputs_ = 3;
-  const unsigned n_outputs_ = 2;
-  
+  const unsigned n_outputs_ = 4;
+
   // do pixelwise sort on the image, and then
   struct Pair {
     float change;
@@ -29,8 +28,8 @@ namespace boxm2_blob_precision_recall_process_globals
 //: Constructor
 bool boxm2_blob_precision_recall_process_cons(bprb_func_process& pro)
 {
-  using namespace boxm2_blob_precision_recall_process_globals; 
-  
+  using namespace boxm2_blob_precision_recall_process_globals;
+
   // this process takes 3 inputs:
   vcl_vector<vcl_string> input_types;
   input_types.push_back("vil_image_view_base_sptr");  // image
@@ -55,8 +54,8 @@ bool boxm2_blob_precision_recall_process_cons(bprb_func_process& pro)
 //: Execute the process
 bool boxm2_blob_precision_recall_process(bprb_func_process& pro)
 {
-  using namespace boxm2_blob_precision_recall_process_globals; 
-  
+  using namespace boxm2_blob_precision_recall_process_globals;
+
   // Sanity check
   if (pro.n_inputs() < n_inputs_) {
     vcl_cerr << "boxm2_blob_precision_recall_process: The number of inputs should be 2 (with optional 3rd (num thresh) and 4th (mask image))\n";
@@ -120,71 +119,75 @@ bool boxm2_blob_precision_recall_process(bprb_func_process& pro)
     vcl_cout<<"boxm2_blob_precision_recall_process:: mask map is not an unsigned char map"<<vcl_endl;
     return false;
   }
-  
+
   //create boolean gtmap
-  vil_image_view<bool>  gt_map(gt_uchar->ni(), gt_uchar->nj()); 
-  for(int i=0; i<gt_uchar->ni(); ++i) 
-    for(int j=0; j<gt_uchar->nj(); ++j)
-      gt_map(i,j) = (*gt_uchar)(i,j) == 0 ? false : true; 
+  vil_image_view<bool>  gt_map(gt_uchar->ni(), gt_uchar->nj());
+  for (unsigned int i=0; i<gt_uchar->ni(); ++i)
+    for (unsigned int j=0; j<gt_uchar->nj(); ++j)
+      gt_map(i,j) = (*gt_uchar)(i,j) == 0 ? false : true;
 
-
-  //// sort pixel/gt pairs
-  //Pair* pairs = new Pair[ detection_map->ni() * detection_map->nj() ];
-  //unsigned c = 0;
-  //for (unsigned j=0; j<detection_map->nj(); ++j) {
-    //for (unsigned i=0; i<detection_map->ni(); ++i) {
-      //Pair p;
-      //p.change = (*detection_map)(i,j);
-      //p.gt     = gt_map(i,j);
-      //pairs[c] = p;
-      //++c;
-    //}
-  //}
-  //unsigned totPix = detection_map->ni() * detection_map->nj();
-  //vcl_sort(pairs, pairs + totPix, &pair_sorter);
+#if 0
+  // sort pixel/gt pairs
+  Pair* pairs = new Pair[ detection_map->ni() * detection_map->nj() ];
+  unsigned c = 0;
+  for (unsigned j=0; j<detection_map->nj(); ++j) {
+    for (unsigned i=0; i<detection_map->ni(); ++i) {
+      Pair p;
+      p.change = (*detection_map)(i,j);
+      p.gt     = gt_map(i,j);
+      pairs[c] = p;
+      ++c;
+    }
+  }
+  unsigned totPix = detection_map->ni() * detection_map->nj();
+  vcl_sort(pairs, pairs + totPix, &pair_sorter);
+#endif // 0
 
   //grab thresholds by evenly dispersing them through examples
-  //unsigned int incr = totPix / numPoints;
-  float* thresholds = new float[numPoints]; 
-  float  incr       = 1.0/(float)numPoints; 
-  for(int i=0; i<numPoints; ++i) {
-    thresholds[i] = i*incr + .01; //pairs[i*incr].change; 
-    //vcl_cout<<" thresh "<<i<<": "<<thresholds[i]<<","; 
+  float* thresholds = new float[numPoints];
+  float  incr       = 1.0/(float)numPoints; // = totPix / numPoints;
+  for (unsigned int i=0; i<numPoints; ++i) {
+    thresholds[i] = i*incr + .01; //pairs[i*incr].change;
+#ifdef DEBUG
+    vcl_cout<<" thresh "<<i<<": "<<thresholds[i]<<',';
+#endif
   }
+#ifdef DEBUG
   vcl_cout<<vcl_endl;
-    
+#endif
+
   //run blob finder on ground truth image just once
-  vcl_vector<boxm2_change_blob> gt_blobs; 
-  boxm2_util_detect_blobs( gt_map, gt_blobs); 
+  vcl_vector<boxm2_change_blob> gt_blobs;
+  boxm2_util_detect_blobs( gt_map, gt_blobs);
   vcl_cout<<"detected "<< gt_blobs.size() <<" blobs in ground truth"<<vcl_endl;
 
   //for each threshold detect blobs and calc #tps, fps, tns, fns
-  for(unsigned int pnt=0; pnt<numPoints; ++pnt) {
-    float true_positives = 0.0f; 
-    
+  for (unsigned int pnt=0; pnt<numPoints; ++pnt) {
+    float true_positives = 0.0f;
+
     //detect change blobs
-    vcl_vector<boxm2_change_blob> blobs; 
-    boxm2_util_detect_change_blobs( *detection_map, thresholds[pnt], blobs ); 
+    vcl_vector<boxm2_change_blob> blobs;
+    boxm2_util_detect_change_blobs( *detection_map, thresholds[pnt], blobs );
     vcl_cout<<"  thresh "<<thresholds[pnt]<<" detected "<<blobs.size()<<" blobs"<<vcl_endl;
-    
+
     //cross check each ground truth blob against change blobs for coverage
-    for(int g=0; g<gt_blobs.size(); ++g) {
-      boxm2_change_blob& gt_blob = gt_blobs[g]; 
-      for(int c=0; c<blobs.size(); ++c) {
-        if( gt_blob.percent_overlap( blobs[c] ) > .5f )
-          true_positives++; 
+    for (unsigned int g=0; g<gt_blobs.size(); ++g) {
+      boxm2_change_blob& gt_blob = gt_blobs[g];
+      for (unsigned int c=0; c<blobs.size(); ++c) {
+        if ( gt_blob.percent_overlap( blobs[c] ) > .5f )
+          true_positives++;
       }
     }
     vcl_cout<<" num true positives: "<<true_positives<<vcl_endl;
-  
+
     //set precision and recall
     precision->data_array[pnt] = blobs.size()==0 ? 0 : true_positives / blobs.size();
-    recall->data_array[pnt]    = true_positives / gt_blobs.size(); 
+    recall->data_array[pnt]    = true_positives / gt_blobs.size();
   }
-  
+
   // set outputs
   if (pro.n_outputs() < n_outputs_) {
-    vcl_cerr << "boxm2_blob_precision_recall_process: The number of outputs should be "<<n_outputs_<<"\n";
+    vcl_cerr << "boxm2_blob_precision_recall_process: The number of outputs should be "<<n_outputs_<<'\n';
     return false;
   }
   pro.set_output_val<bbas_1d_array_float_sptr>(0, precision);
