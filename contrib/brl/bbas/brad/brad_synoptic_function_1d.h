@@ -17,8 +17,9 @@ class brad_synoptic_function_1d
 {
  public:
 
-  //:constructor to provide the sun illumination direction histogram from which the bin structure is automatically derived
+
   brad_synoptic_function_1d(){}
+  //:constructor from batch orbit data
   brad_synoptic_function_1d(vcl_vector<double> const& elevation,
                             vcl_vector<double> const& azimuth,                 
                             vcl_vector<double> const& vis,
@@ -34,6 +35,7 @@ class brad_synoptic_function_1d
   void set_intensity(vcl_vector<double> const& intensity){
    intensity_ = intensity;}
   void fit_intensity_cubic();
+  //:load batch orbit data from a file
   bool load_samples(vcl_string const& path);
   unsigned size(){return elev_.size();}
   double intensity(unsigned index){return intensity_[index];}
@@ -45,15 +47,15 @@ class brad_synoptic_function_1d
   //:spherical angle between two points on unit sphere
   static double angle(double elev0, double az0, double elev1, double az1);
   vnl_double_4 cubic_coef_int(){return cubic_coef_int_;}
-  vnl_double_4 cubic_coef_elev(){return cubic_coef_elev_;}
   double cubic_interp_inten(double arc_length);
+  double fit_error(){return fit_error_;}
  private:
   vcl_vector<double> elev_;
   vcl_vector<double> azimuth_;
   vcl_vector<double> vis_;
   vcl_vector<double> intensity_;
   vnl_double_4 cubic_coef_int_;
-  vnl_double_4 cubic_coef_elev_;
+  double fit_error_;
 };
 
 #endif

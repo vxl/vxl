@@ -72,6 +72,8 @@ void brad_synoptic_function_1d::fit_intensity_cubic(){
   vnl_double_4 q = Xtw*y;
   vnl_double_4x4 Minv = vnl_inverse(M);
   cubic_coef_int_ = Minv*q;
+  vnl_vector<double> error = W*(y-X*cubic_coef_int_);
+  fit_error_ = error.squared_magnitude();
 }
 
 

@@ -7,17 +7,16 @@ static void test_synoptic_function()
 {
   START("synoptic function test");
   brad_synoptic_function_1d sf;
-  sf.load_samples("E:/mundy/CVGroup/Nibbler/Notes/Experiments/intensities_and_viewing_direction.txt");
+  if(!sf.load_samples("E:/mundy/CVGroup/Nibbler/Notes/Experiments/intensities_and_viewing_direction.txt"))
+    return;
   unsigned n = sf.size();
   for (unsigned i = 0; i<n; ++i){
     double s = sf.arc_length(i);
-#if 0
+
     vcl_cout << s << ' ' << sf.intensity(i) 
              << ' ' << sf.cubic_interp_inten(s)<< ' ' << sf.vis(i) <<  '\n';
-#endif
-    vcl_cout << s << ' ' << sf.elev(i) 
-             << ' ' << sf.cubic_interp_elev(s)<<  '\n';
   }
+  vcl_cout << "Fit Error " << vcl_sqrt(sf.fit_error()) <<'\n';;
 }
 
 TESTMAIN( test_synoptic_function );
