@@ -630,6 +630,7 @@ bool vil_tiff_header::set_header(unsigned ni, unsigned nj, unsigned nplns,
   switch ( nplanes )
   {
     case 1:
+    case 2:
       photometric.val = 1;
       break;
     case 3:
@@ -690,12 +691,14 @@ vil_tiff_header(TIFF* tif, const unsigned ni, const unsigned nj,
   write_short_tag(tif_,TIFFTAG_SAMPLEFORMAT, sample_format);
   write_long_tag(tif_, TIFFTAG_TILEWIDTH, tile_width);
   write_long_tag(tif_, TIFFTAG_TILELENGTH, tile_length);
-#if 0  //may not be needed to handle four planes, seems to work ok without it
-  if (nplanes == 4)
+#if 1  // Handle Alpha channel, assuming it is the last channel
+  if (nplanes == 2 || nplanes == 4)
   {
-    extra_samples.val = 1;
-    extra_samples.valid = true;
-    write_short_tag(tif_,TIFFTAG_EXTRASAMPLES, extra_samples);
+    //extra_samples.val = 1; 
+    //extra_samples.valid = true;
+    vxl_uint_32 num_extra_samples = 1;
+    vxl_uint_16 extra_sample_values[] = { EXTRASAMPLE_ASSOCALPHA/*1*/ };  // Indicate Associated Alpha Data
+    TIFFSetField(tif_, TIFFTAG_EXTRASAMPLES, num_extra_samples, extra_sample_values);
   }
 #endif
   //initialize other flags to false
