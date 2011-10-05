@@ -58,7 +58,7 @@ namespace boxm2_ocl_create_aux_process_globals
 
     second_pass_src.push_back(source_dir + "bit/batch_update_kernels.cl");
     bocl_kernel* convert_aux_int_float = new bocl_kernel();
-    convert_aux_int_float->create_kernel(&device->context(),device->device_id(), second_pass_src, "convert_aux_int_to_float", opts+" -D CONVERT_AUX", "batch_update::convert_aux_int_to_float");
+    convert_aux_int_float->create_kernel(&device->context(),device->device_id(), second_pass_src, "convert_aux_and_normalize", opts+" -D CONVERT_AUX_NORMALIZE", "batch_update::convert_aux_and_normalize");
 
     second_pass_src.push_back(source_dir + "batch_update_functors.cl");
     second_pass_src.push_back(source_dir + "bit/cast_ray_bit.cl");
