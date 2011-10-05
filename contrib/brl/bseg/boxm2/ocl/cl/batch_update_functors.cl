@@ -1,6 +1,6 @@
 #ifdef SEGLENNOBS
 
-//Update step cell functor::seg_len  
+//Update step cell functor::seg_len
 void step_cell_seglen_nobs(AuxArgs aux_args, int data_ptr, uchar llid, float d)
 {
     //SLOW and accurate method
@@ -8,14 +8,14 @@ void step_cell_seglen_nobs(AuxArgs aux_args, int data_ptr, uchar llid, float d)
     atom_add(&aux_args.seg_len[data_ptr], seg_int);
     int cum_obs = convert_int_rte(d * aux_args.obs * SEGLEN_FACTOR);
     atom_add(&aux_args.mean_obs[data_ptr], cum_obs);
-	atom_inc(&aux_args.nobs[data_ptr]);
+    atom_inc(&aux_args.nobs[data_ptr]);
 }
 #endif //SEGLENNOBS
 
 #ifdef AUX_PREVISPOST
 void step_cell_aux_previspost(AuxArgs aux_args, int data_ptr, uchar llid, float d)
 {
-	//slow beta calculation ----------------------------------------------------
+    //slow beta calculation ----------------------------------------------------
     float  alpha    = aux_args.alpha[data_ptr];
     float8 mixture  = convert_float8(aux_args.mog[data_ptr])/(float)NORM;
     float weight3   = (1.0f-mixture.s2-mixture.s5);
@@ -39,33 +39,32 @@ void step_cell_aux_previspost(AuxArgs aux_args, int data_ptr, uchar llid, float 
                                           mixture.s6,
                                           mixture.s7,
                                           weight3 );
-										  
-		float temp  = exp(-alpha * d * aux_args.linfo->block_len);
-		
-		//calculate this cell's vis, pre and post
-		cell_vis = (* aux_args.ray_vis) * d;
-		cell_pre = (* aux_args.ray_pre) * d;
-		cell_post= (* aux_args.pre_inf) - (* aux_args.ray_pre) - (* aux_args.ray_vis)*(1-temp)*PI;
-		cell_post /= temp;
-		cell_post += (* aux_args.vis_inf)*1; //appearance model at infinity is uniform
-		cell_post *= d;
-		
-		//update ray_pre and ray_vis 
-		// updated pre
-		(* aux_args.ray_pre) += (* aux_args.ray_vis)*(1.0f-temp)*PI;
-		// updated visibility probability
-		(* aux_args.ray_vis) *= temp;	
-		
-		
-		//discretize and store pre, vis and post contributions
-		int pre_int = convert_int_rte(cell_pre * SEGLEN_FACTOR);
-		atom_add(& aux_args.pre_array[data_ptr], pre_int);
-		int vis_int  = convert_int_rte(cell_vis * SEGLEN_FACTOR);
-		atom_add(& aux_args.vis_array[data_ptr], vis_int);
-		int post_int  = convert_int_rte(cell_post * SEGLEN_FACTOR);
-		atom_add(& aux_args.post_array[data_ptr], post_int);
-		//--------------------------------------------------------------------------
-	 }
+
+        float temp  = exp(-alpha * d * aux_args.linfo->block_len);
+
+        //calculate this cell's vis, pre and post
+        cell_vis = (* aux_args.ray_vis) * d;
+        cell_pre = (* aux_args.ray_pre) * d;
+        cell_post= (* aux_args.pre_inf) - (* aux_args.ray_pre) - (* aux_args.ray_vis)*(1-temp)*PI;
+        cell_post /= temp;
+        cell_post += (* aux_args.vis_inf)*1; //appearance model at infinity is uniform
+        cell_post *= d;
+
+        //update ray_pre and ray_vis
+        // updated pre
+        (* aux_args.ray_pre) += (* aux_args.ray_vis)*(1.0f-temp)*PI;
+        // updated visibility probability
+        (* aux_args.ray_vis) *= temp;
+
+        //discretize and store pre, vis and post contributions
+        int pre_int = convert_int_rte(cell_pre * SEGLEN_FACTOR);
+        atom_add(& aux_args.pre_array[data_ptr], pre_int);
+        int vis_int  = convert_int_rte(cell_vis * SEGLEN_FACTOR);
+        atom_add(& aux_args.vis_array[data_ptr], vis_int);
+        int post_int  = convert_int_rte(cell_post * SEGLEN_FACTOR);
+        atom_add(& aux_args.post_array[data_ptr], post_int);
+        //--------------------------------------------------------------------------
+     }
 }
 #endif // AUX_PREVISPOST
 
@@ -139,4 +138,3 @@ void step_cell_directions(AuxArgs aux_args, int data_ptr, float d)
 }
 
 #endif // AUX_PREVIS
-
