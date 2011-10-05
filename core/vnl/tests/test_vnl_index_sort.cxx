@@ -1,21 +1,30 @@
-//=========================================================================
-//
-//  Program:   test_vnl_index_sort
-//
-//=========================================================================
+//:
+// \file
+// Tests for vnl_index_sort.h, written by Michael R. Bowers, September 2011.
 
+#ifdef STANDALONE // if running as a stand-alone (test) program,
+                  // options -n and -m (matrix sizes) are available
 #include <getopt.h>
+#else             // else, this program follows the testlib style mechanism
+#include <testlib/testlib_test.h>
+#endif
 
 #include <vnl/vnl_index_sort.h>
+#include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>
 #include <vnl/vnl_random.h>
-#include <vcl_algorithm.h>
+#include <vcl_algorithm.h> // for std::sort()
 #include <vcl_iostream.h>
 
+// The following defaults can be overridden with options -n and -m of the standalone version
 const int cNumElRows = 10;
 const int cNumElCols = 6;
+// And these are the effectivly used values:
+static int numelrows;
+static int numelcols;
 
-void showUsage(const char* programName)
+#ifdef STANDALONE
+static void showUsage(const char* programName)
 {
   vcl_cerr << "USAGE: " << programName << " [OPTIONS]\n"
            << "\t\t-h --help : print this message\n"
@@ -31,10 +40,12 @@ static struct option long_options[] =
     {0,                  0,    0,   0}
 };
 
+int test_vnl_index_sort();
+
 int main( int argc, char *argv[] )
 {
-  int numelrows = cNumElRows;
-  int numelcols = cNumElCols;
+  numelrows = cNumElRows;
+  numelcols = cNumElCols;
 
   int c = 0;
   while (c >= 0)
@@ -58,6 +69,22 @@ int main( int argc, char *argv[] )
       }
   }
 
+  int r = test_vnl_index_sort();
+  if (r)
+    vcl_cerr << "******* " << r << " SORT TESTS FAILED******\n";
+  return r;
+}
+
+#define TEST(t,a,b) \
+  if (a != b) vcl_cerr << t << " FAILED.\n"; \
+  else        vcl_cout << t << " check PASSED." << vcl_endl;
+
+#define TESTMAIN(x) // no-op
+
+#endif // STANDALONE
+
+int test_vnl_index_sort()
+{
   typedef double             MeasurementValueType;
   typedef vnl_vector<MeasurementValueType> MeasurementVectorType;
   typedef vnl_matrix<MeasurementValueType> MeasurementMatrixType;
@@ -68,8 +95,7 @@ int main( int argc, char *argv[] )
 
   typedef vnl_index_sort<MeasurementValueType, RankValType> IndexSortType;
 
-
-  bool caughtError = false;
+  int caughtError = 0;
 
   MeasurementVectorType randomVals(numelrows);
 
@@ -87,51 +113,32 @@ int main( int argc, char *argv[] )
   vcl_sort(vclSortedVals.begin(), vclSortedVals.end());
 
   // check against vcl_sort
-  bool sortCheckFail = true;
-
-  if ((sortCheckFail = (vclSortedVals != sortedVals)))
-    vcl_cerr << "Random Vector Sort FAILED.\n";
-  else
-    vcl_cout << "Random Vector Sort check PASSED." << vcl_endl;
-
-  caughtError = caughtError || sortCheckFail;
+  TEST("Random Vector Sort", vclSortedVals, sortedVals);
+  if (vclSortedVals!=sortedVals) ++caughtError;
 
   // check indices
-  sortCheckFail = false;
+  bool sortCheckFail = false;
   for (unsigned int ix = 0; ix < randomVals.size(); ++ix)
     if (vclSortedVals(ix) != randomVals(sortIndices(ix))) sortCheckFail = true;
 
-  if (sortCheckFail)
-    vcl_cerr << "Random Vector Index Sort FAILED.\n";
-  else
-    vcl_cout << "Random Vector Index Sort check PASSED." << vcl_endl;
-
-  caughtError = caughtError || sortCheckFail;
-
+  TEST("Random Vector Index Sort", sortCheckFail, false);
+  if (sortCheckFail) ++caughtError;
 
   // check in-place sort
   sortedVals = randomVals;
   indexSort.vector_sort_in_place(sortedVals, sortIndices);
-  sortCheckFail = false;
-  if ((sortCheckFail = (vclSortedVals != sortedVals)))
-    vcl_cerr << "In Place Vector Sort FAILED.\n";
-  else
-    vcl_cout << "In Place Vector Sort check PASSED." << vcl_endl;
 
-  caughtError = caughtError || sortCheckFail;
+  TEST("In Place Vector Sort", vclSortedVals, sortedVals);
+  if (sortCheckFail) ++caughtError;
 
   // check indices
   sortCheckFail = false;
   for (unsigned int ix = 0; ix < randomVals.size(); ++ix)
-    if (vclSortedVals(ix) != randomVals(sortIndices(ix))) sortCheckFail = true;
+    if (vclSortedVals(ix) != randomVals(sortIndices(ix)))
+      sortCheckFail = true;
 
-  if (sortCheckFail)
-    vcl_cerr << "In Place Vector Index Sort FAILED.\n";
-  else
-    vcl_cout << "In Place Vector Index Sort check PASSED." << vcl_endl;
-
-  caughtError = caughtError || sortCheckFail;
-
+  TEST("In Place Vector Index Sort", sortCheckFail, false);
+  if (sortCheckFail) ++caughtError;
 
   // check matrix sorting now...
   MeasurementMatrixType randomValM(numelrows, numelcols);
@@ -149,8 +156,7 @@ int main( int argc, char *argv[] )
   bool sortIndexCheckFail;
   sortCheckFail = sortIndexCheckFail = false;
 
-  for (unsigned int rx = 0;
-       rx < randomValM.rows() && !sortIndexCheckFail && !sortCheckFail; ++rx)
+  for (unsigned int rx = 0; rx < randomValM.rows() && !sortIndexCheckFail && !sortCheckFail; ++rx)
   {
     MeasurementVectorType unsortedVectCheck = randomValM.get_row(rx);
     MeasurementVectorType vclSortedVectCheck(unsortedVectCheck);
@@ -162,22 +168,14 @@ int main( int argc, char *argv[] )
     sortCheckFail = (vclSortedVectCheck != sortedVectCheck);
 
     // check indices
-    sortIndexCheckFail = false;
     for (unsigned int ix = 0; ix < sortedVectCheck.size(); ++ix)
       if (sortedVectCheck(ix) != unsortedVectCheck(indexVectCheck(ix)))
         sortIndexCheckFail = true;
   }
-  if (sortCheckFail)
-    vcl_cerr << "Row-Wise Matrix Sort check FAILED.\n";
-  else
-    vcl_cout << "Row-Wise Matrix Sort check PASSED." << vcl_endl;
-
-  if (sortIndexCheckFail)
-    vcl_cerr << "Row-Wise Matrix Index Sort Check FAILED.\n";
-  else
-    vcl_cout << "Row-Wise Matrix Index Sort check PASSED." << vcl_endl;
-
-  caughtError = caughtError || sortCheckFail || sortIndexCheckFail;
+  TEST("Row-Wise Matrix Sort", sortCheckFail, false);
+  if (sortCheckFail) ++caughtError;
+  TEST("Row-Wise Matrix Index Sort", sortIndexCheckFail, false);
+  if (sortIndexCheckFail) ++caughtError;
 
   // do the matrix sort column-wise
   sortCheckFail = sortIndexCheckFail = false;
@@ -196,22 +194,14 @@ int main( int argc, char *argv[] )
     sortCheckFail = (vclSortedVectCheck != sortedVectCheck);
 
     // check indices
-    sortIndexCheckFail = false;
     for (unsigned int ix = 0; ix < sortedVectCheck.size(); ++ix)
       if (sortedVectCheck(ix) != unsortedVectCheck(indexVectCheck(ix)))
         sortIndexCheckFail = true;
   }
-  if (sortCheckFail)
-    vcl_cerr << "Column-Wise Matrix Sort check FAILED.\n";
-  else
-    vcl_cout << "Column-Wise Matrix Sort check PASSED." << vcl_endl;
-
-  if (sortIndexCheckFail)
-    vcl_cerr << "Column-Wise Matrix Index Sort Check FAILED.\n";
-  else
-    vcl_cout << "Column-Wise Matrix Index Sort check PASSED." << vcl_endl;
-
-  caughtError = caughtError || sortCheckFail || sortIndexCheckFail;
+  TEST("Column-Wise Matrix Sort", sortCheckFail, false);
+  if (sortCheckFail) ++caughtError;
+  TEST("Column-Wise Matrix Index Sort", sortIndexCheckFail, false);
+  if (sortIndexCheckFail) ++caughtError;
 
   // check In-place matrix sorting now...
   for (unsigned int rx = 0; rx < randomValM.rows(); ++rx)
@@ -242,17 +232,10 @@ int main( int argc, char *argv[] )
       if (sortedVectCheck(ix) != unsortedVectCheck(indexVectCheck(ix)))
         sortIndexCheckFail = true;
   }
-  if (sortCheckFail)
-    vcl_cerr << "In-place Row-Wise Matrix Sort check FAILED.\n";
-  else
-    vcl_cout << "In-place Row-Wise Matrix Sort check PASSED." << vcl_endl;
-
-  if (sortIndexCheckFail)
-    vcl_cerr << "In-place Row-Wise Matrix Index Sort Check FAILED.\n";
-  else
-    vcl_cout << "In-place Row-Wise Matrix Index Sort check PASSED." << vcl_endl;
-
-  caughtError = caughtError || sortCheckFail || sortIndexCheckFail;
+  TEST("In-place Row-Wise Matrix Sort", sortCheckFail, false);
+  if (sortCheckFail) ++caughtError;
+  TEST("In-place Row-Wise Matrix Index Sort", sortIndexCheckFail, false);
+  if (sortIndexCheckFail) ++caughtError;
 
   sortedValM = randomValM;
   // do the in-place matrix sort column-wise
@@ -269,29 +252,19 @@ int main( int argc, char *argv[] )
     IndexVectorType indexVectCheck = sortedIndicesM.get_column(rx);
 
     // check against vcl_sort
-    // check against vcl_sort
     sortCheckFail = (vclSortedVectCheck != sortedVectCheck);
 
     // check indices
-    sortIndexCheckFail = false;
     for (unsigned int ix = 0; ix < sortedVectCheck.size(); ++ix)
       if (sortedVectCheck(ix) != unsortedVectCheck(indexVectCheck(ix)))
         sortIndexCheckFail = true;
   }
-  if (sortCheckFail)
-    vcl_cerr << "In-place Column-Wise Matrix Sort check FAILED.\n";
-  else
-    vcl_cout << "In-place Column-Wise Matrix Sort check PASSED." << vcl_endl;
+  TEST("In-place Column-Wise Matrix Sort", sortCheckFail, false);
+  if (sortCheckFail) ++caughtError;
+  TEST("In-place Column-Wise Matrix Index Sort", sortIndexCheckFail, false);
+  if (sortIndexCheckFail) ++caughtError;
 
-  if (sortIndexCheckFail)
-    vcl_cerr << "In-place Column-Wise Matrix Index Sort Check FAILED.\n";
-  else
-    vcl_cout << "In-place Column-Wise Matrix Index Sort check PASSED." << vcl_endl;
-
-  caughtError = caughtError || sortCheckFail || sortIndexCheckFail;
-
-  if (caughtError)
-    vcl_cerr << "*******SORT TEST FAILED******\n";
-
-  return caughtError ? 1 : 0;
+  return caughtError;
 }
+
+TESTMAIN(test_vnl_index_sort);

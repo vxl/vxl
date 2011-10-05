@@ -42,6 +42,7 @@ DECLARE( test_crs_index );
 DECLARE( test_sparse_lst_sqr_function );
 DECLARE( test_sparse_matrix );
 DECLARE( test_pow_log );
+DECLARE( test_vnl_index_sort );
 
 void
 register_tests()
@@ -87,6 +88,7 @@ register_tests()
   REGISTER( test_sparse_lst_sqr_function );
   REGISTER( test_sparse_matrix );
   REGISTER( test_pow_log );
+  REGISTER( test_vnl_index_sort );
 }
 
 DEFINE_MAIN;
