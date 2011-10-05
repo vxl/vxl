@@ -36,5 +36,7 @@ DECLARE_FUNC_CONS(boxm2_ocl_aux_update_view_direction_process);
 
 DECLARE_FUNC_CONS(boxm2_ocl_update_sun_visibilities_process); 
 DECLARE_FUNC_CONS(boxm2_ocl_render_expected_shadow_map_process); 
+DECLARE_FUNC_CONS(boxm2_ocl_create_norm_intensities_process); 
+DECLARE_FUNC_CONS(boxm2_ocl_create_aux_process); 
 
 #endif
