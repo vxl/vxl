@@ -23,6 +23,7 @@ DECLARE_FUNC_CONS(boxm2_stream_cache_close_files_process);
 DECLARE_FUNC_CONS(boxm2_compute_sun_affine_camera_process);
 DECLARE_FUNC_CONS(boxm2_mask_sift_features_process);
 DECLARE_FUNC_CONS(boxm2_bundle_to_scene_process);
+DECLARE_FUNC_CONS(boxm2_clear_cache_process);
 DECLARE_FUNC_CONS(boxm2_blob_change_detection_process);
 DECLARE_FUNC_CONS(boxm2_blob_precision_recall_process);
 
