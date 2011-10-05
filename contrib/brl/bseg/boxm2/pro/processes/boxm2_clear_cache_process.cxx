@@ -1,7 +1,7 @@
-// This is brl/bseg/boxm2/pro/processes/boxm2_write_cache_process.cxx
+// This is brl/bseg/boxm2/pro/processes/boxm2_clear_cache_process.cxx
 //:
 // \file
-// \brief  A process to clear cpu cache. 
+// \brief  A process to clear cpu cache.
 //
 // \author Ali Osman Ulusoy
 // \date Oct 05, 2011
@@ -20,6 +20,7 @@ namespace boxm2_clear_cache_process_globals
   const unsigned n_inputs_ = 1;
   const unsigned n_outputs_ = 0;
 }
+
 bool boxm2_clear_cache_process_cons(bprb_func_process& pro)
 {
   using namespace boxm2_clear_cache_process_globals;
@@ -28,10 +29,11 @@ bool boxm2_clear_cache_process_cons(bprb_func_process& pro)
   vcl_vector<vcl_string> input_types_(n_inputs_);
   input_types_[0] = "boxm2_cache_sptr";
 
-  // process has 1 output:
-  // output[0]: scene sptr
+  // process has no outputs
   vcl_vector<vcl_string>  output_types_(n_outputs_);
-  return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
+
+  return pro.set_input_types(input_types_)
+      && pro.set_output_types(output_types_);
 }
 
 bool boxm2_clear_cache_process(bprb_func_process& pro)
@@ -39,7 +41,7 @@ bool boxm2_clear_cache_process(bprb_func_process& pro)
   using namespace boxm2_clear_cache_process_globals;
 
   if ( pro.n_inputs() < n_inputs_ ){
-    vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
+    vcl_cout << pro.name() << ": The number of inputs should be " << n_inputs_<< vcl_endl;
     return false;
   }
   //get the inputs
