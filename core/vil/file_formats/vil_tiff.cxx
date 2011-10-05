@@ -308,7 +308,6 @@ vil_tiff_file_format::make_blocked_output_image(vil_stream* vs,
   if (!h->format_supported)
   {
     TIFFClose(tss->tif);
-    delete tss;
     delete h;
     return 0;
   }
