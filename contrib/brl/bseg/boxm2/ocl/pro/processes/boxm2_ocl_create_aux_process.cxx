@@ -369,9 +369,6 @@ bool boxm2_ocl_create_aux_process(bprb_func_process& pro)
         kern->set_arg( pre_inf_image.ptr());
         kern->set_arg( cl_output.ptr() );
         kern->set_local_arg( local_threads[0]*local_threads[1]   *sizeof(cl_uchar16) );//local tree,
-        kern->set_local_arg( local_threads[0]*local_threads[1]   *sizeof(cl_short2) ); //ray bundle,
-        kern->set_local_arg( local_threads[0]*local_threads[1]   *sizeof(cl_int) );    //cell pointers,
-        kern->set_local_arg( local_threads[0]*local_threads[1]   *sizeof(cl_float) ); //cached aux,
         kern->set_local_arg( local_threads[0]*local_threads[1]*10*sizeof(cl_uchar) ); //cumsum buffer, imindex buffer
         //execute kernel
         kern->execute(queue, 2, local_threads, global_threads);
