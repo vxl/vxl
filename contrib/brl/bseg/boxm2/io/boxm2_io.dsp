@@ -163,6 +163,12 @@ SOURCE=.\Templates/brdb_value_t+boxm2_stream_cache_sptr-.cxx
 # Begin Source File
 SOURCE=.\Templates/vbl_smart_ptr+boxm2_stream_cache-.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\Templates/boxm2_stream_cache+BOXM2_NUM_OBS_SINGLE_INT-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/boxm2_stream_cache+BOXM2_AUX4-.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"

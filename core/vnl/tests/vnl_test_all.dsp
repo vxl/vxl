@@ -214,6 +214,9 @@ SOURCE=.\test_decnum.cxx
 SOURCE=.\test_polynomial.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\test_vnl_index_sort.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\test_include.cxx
 # End Source File
 # Begin Source File

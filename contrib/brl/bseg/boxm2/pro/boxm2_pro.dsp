@@ -147,6 +147,15 @@ SOURCE=.\processes/boxm2_compute_sun_affine_camera_process.cxx
 SOURCE=.\processes/boxm2_bundle_to_scene_process.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\processes/boxm2_blob_change_detection_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/boxm2_clear_cache_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/boxm2_blob_precision_recall_process.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/brdb_value_t+vil_image_view_base_sptr-.cxx
 # End Source File
 # End Group

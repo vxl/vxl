@@ -104,6 +104,9 @@ SOURCE=.\boxm2_convert_nvm.cxx
 # Begin Source File
 SOURCE=.\boxm2_point_util.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\boxm2_detect_change_blobs.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
@@ -118,6 +121,9 @@ SOURCE=.\boxm2_convert_nvm.h
 # End Source File
 # Begin Source File
 SOURCE=.\boxm2_point_util.h
+# End Source File
+# Begin Source File
+SOURCE=.\boxm2_detect_change_blobs.h
 # End Source File
 # End Group
 # End Target

@@ -1319,6 +1319,9 @@ SOURCE=.\vnl_polynomial.h
 # Begin Source File
 SOURCE=.\vnl_decnum_traits.h
 # End Source File
+# Begin Source File
+SOURCE=.\vnl_index_sort.h
+# End Source File
 # End Group
 # End Target
 # End Project

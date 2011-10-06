@@ -182,6 +182,12 @@ SOURCE=.\processes/boxm2_ocl_update_sun_visibilities_process.cxx
 # Begin Source File
 SOURCE=.\processes/boxm2_ocl_aux_update_view_direction_process.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\processes/boxm2_ocl_create_aux_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/boxm2_ocl_create_norm_intensities_process.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
