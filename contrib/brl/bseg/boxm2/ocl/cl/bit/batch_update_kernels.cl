@@ -233,9 +233,6 @@ typedef struct
   __global int* pre_array;
   __global int* post_array;
   __constant RenderSceneInfo * linfo;
-  __local  short2* ray_bundle_array;
-  __local  int*    cell_ptrs;
-  __local  float*  cached_vis;
            float*  ray_vis;
            float*  ray_pre;
            float*  vis_inf;
@@ -267,17 +264,14 @@ aux_previspost_main(__constant  RenderSceneInfo    * linfo,
                     __global    float              * pre_inf_image,     // pre_inf image
                     __global    float              * output,
                     __local     uchar16            * local_tree,        // cache current tree into local memory
-                    __local     short2             * ray_bundle_array,  // gives information for which ray takes over in the workgroup
-                    __local     int                * cell_ptrs,         // local list of cell_ptrs (cells that are hit by this workgroup
-                    __local     float              * cached_vis,        // cached vis used to sum up vis contribution locally
                     __local     uchar              * cumsum)            // cumulative sum for calculating data pointer
 {
   // get local id (0-63 for an 8x8) of this patch
   uchar llid = (uchar)(get_local_id(0) + get_local_size(0)*get_local_id(1));
 
   // initialize pre-broken ray information (non broken rays will be re initialized)
-  ray_bundle_array[llid] = (short2) (-1, 0);
-  cell_ptrs[llid] = -1;
+  //ray_bundle_array[llid] = (short2) (-1, 0);
+  //cell_ptrs[llid] = -1;
 
   //----------------------------------------------------------------------------
   // get image coordinates and camera,
@@ -324,9 +318,9 @@ aux_previspost_main(__constant  RenderSceneInfo    * linfo,
   aux_args.vis_array  = aux_array3;
   aux_args.post_array  = aux_array4;
 
-  aux_args.ray_bundle_array = ray_bundle_array;
-  aux_args.cell_ptrs = cell_ptrs;
-  aux_args.cached_vis = cached_vis;
+  //aux_args.ray_bundle_array = ray_bundle_array;
+  //aux_args.cell_ptrs = cell_ptrs;
+  //aux_args.cached_vis = cached_vis;
   aux_args.ray_vis = &vis;
   aux_args.ray_pre = &pre;
   aux_args.vis_inf = &vis_inf;
@@ -389,11 +383,11 @@ convert_aux_and_normalize(__constant  RenderSceneInfo    * linfo,
     int obs3= as_int(aux_array3[gid]);
     int obs4= as_int(aux_array4[gid]);
 
-    aux_array0[gid]= ((float)obs0)/SEGLEN_FACTOR * linfo->block_len;
-    aux_array1[gid]= ((float)obs1)/SEGLEN_FACTOR * linfo->block_len;
-    aux_array2[gid]= ((float)obs2)/SEGLEN_FACTOR * linfo->block_len;
-    aux_array3[gid]= ((float)obs3)/SEGLEN_FACTOR * linfo->block_len;
-    aux_array4[gid]= ((float)obs4)/SEGLEN_FACTOR * linfo->block_len;
+    aux_array0[gid]= (((float)obs0)/SEGLEN_FACTOR) * linfo->block_len;
+    aux_array1[gid]= (((float)obs1)/SEGLEN_FACTOR) * linfo->block_len;
+    aux_array2[gid]= (((float)obs2)/SEGLEN_FACTOR) * linfo->block_len;
+    aux_array3[gid]= (((float)obs3)/SEGLEN_FACTOR) * linfo->block_len;
+    aux_array4[gid]= (((float)obs4)/SEGLEN_FACTOR) * linfo->block_len;
   }
 }
 #endif //CONVERT_AUX_NORMALIZE
