@@ -90,7 +90,7 @@ bool boxm2_roi_init_process_globals::roi_init( vcl_string const& image_path,
   vcl_string format = img->file_format();
   vcl_string prefix = format.substr(0,4);
   if (prefix.compare("nitf") != 0) {
-    vcl_cerr << "bvxm_roi_init_process::execute - The image should be an NITF\n";
+    vcl_cerr << "boxm2_roi_init_process::execute - The image should be an NITF\n";
     return false;
   }
 
@@ -100,15 +100,18 @@ bool boxm2_roi_init_process_globals::roi_init( vcl_string const& image_path,
 
   bgeo_lvcs_sptr lvcs = new bgeo_lvcs(scene->lvcs());
   vgl_box_2d<double>* roi_box = project_box(camera, lvcs, box, error);
-
+  //vcl_cout << "roi_box = " << roi_box->min_point() << " , " << roi_box->max_point() << vcl_endl;
   brip_roi broi(nitf->ni(), nitf->nj());
+  //vcl_cout << "ni = " << nitf->ni() << " nj = " << nitf->nj() << vcl_endl;
   vsol_box_2d_sptr bb = new vsol_box_2d();
   bb->add_point(roi_box->min_x(), roi_box->min_y());
   bb->add_point(roi_box->max_x(), roi_box->max_y());
+  //vcl_cout << "before clip: " << *bb << vcl_endl;
   bb = broi.clip_to_image_bounds(bb);
-
+  //vcl_cout << "after clip: " << *bb << vcl_endl;
+  //vcl_cout << "bb->width = " << bb->width() << " bb->height = " << bb->height() << vcl_endl;
   if (bb->width() <= 0 || bb->height() <= 0) {
-    vcl_cerr << "bvxm_roi_init_process::roi_init()-- clipping box is out of image boundaries\n";
+    vcl_cerr << "boxm2_roi_init_process::roi_init()-- clipping box is out of image boundaries\n";
     return false;
   }
 
@@ -118,7 +121,7 @@ bool boxm2_roi_init_process_globals::roi_init( vcl_string const& image_path,
                         (unsigned int)bb->get_min_y(),
                         (unsigned int)bb->height());
   if (!roi) {
-    vcl_cerr << "bvxm_roi_init_process::roi_init()-- clipping box is out of image boundaries\n";
+    vcl_cerr << "boxm2_roi_init_process::roi_init()-- clipping box is out of image boundaries\n";
     return false;
   }
 
@@ -303,6 +306,15 @@ bool boxm2_roi_init_process_cons(bprb_func_process& pro)
 
   brdb_value_sptr idx = new brdb_value_t<bool>(true);
   pro.set_input(3, idx);
+
+  // set up  process parameters
+  bprb_parameters_sptr params = new bprb_parameters();
+  if (!params->add<float>("camera uncertainty","camera_uncertainty",0.0f)) {
+	  vcl_cerr << pro.name() << " Error adding parameter" << vcl_endl;
+	  good = false;
+  }
+  pro.set_parameters(params);
+	  
   return good;
 }
 
@@ -311,7 +323,7 @@ bool boxm2_roi_init_process(bprb_func_process& pro)
 {
   using namespace boxm2_roi_init_process_globals;
   //static const parameters
-  static const vcl_string error = "error";
+  static const vcl_string error = "camera_uncertainty";
 
   if ( pro.n_inputs() < n_inputs_ ) {
     vcl_cout << pro.name() << " The input number should be " << n_inputs_<< vcl_endl;
