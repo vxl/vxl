@@ -65,6 +65,7 @@
 #include <vnl/vnl_identity.h>
 #include <vnl/vnl_identity_3x3.h>
 #include <vnl/vnl_imag.h>
+#include <vnl/vnl_index_sort.h>
 #include <vnl/vnl_int_1x1.h>
 #include <vnl/vnl_int_2.h>
 #include <vnl/vnl_int_2x2.h>
