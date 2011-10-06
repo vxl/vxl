@@ -21,14 +21,15 @@ void step_cell_aux_previspost(AuxArgs aux_args, int data_ptr, uchar llid, float 
     float weight3   = (1.0f-mixture.s2-mixture.s5);
 
     //load aux data
-    float cum_len  = convert_float(aux_args.seg_len[data_ptr])/SEGLEN_FACTOR;
-    float mean_obs = convert_float(aux_args.mean_obs[data_ptr])/SEGLEN_FACTOR;
-    mean_obs = mean_obs/cum_len;
+    int cum_int = aux_args.seg_len[data_ptr]; 
+    int mean_int = aux_args.mean_obs[data_ptr]; 
+    float mean_obs = convert_float_rte(mean_int) / convert_float_rte(cum_int); 
+    float cum_len = convert_float_rte(cum_int) / SEGLEN_FACTOR; 
 
-    float cell_vis, cell_pre, cell_post;
+    
     float PI=0.0f;
     // Compute PI for all threads
-    if (cum_len * aux_args.linfo->block_len > 1.0e-10f) {    // if  too small, do nothing
+    if (cum_len * aux_args.linfo->block_len > 1.0e-10f) { // if  too small, do nothing
         PI = gauss_3_mixture_prob_density(mean_obs,
                                           mixture.s0,
                                           mixture.s1,
@@ -42,7 +43,8 @@ void step_cell_aux_previspost(AuxArgs aux_args, int data_ptr, uchar llid, float 
 
         float temp  = exp(-alpha * d * aux_args.linfo->block_len);
 
-        //calculate this cell's vis, pre and post
+        //calculate this cell's vis, pre and post.
+        float cell_vis, cell_pre, cell_post;
         cell_vis = (* aux_args.ray_vis) * d;
         cell_pre = (* aux_args.ray_pre) * d;
         cell_post= (* aux_args.pre_inf) - (* aux_args.ray_pre) - (* aux_args.ray_vis)*(1-temp)*PI;
@@ -50,11 +52,10 @@ void step_cell_aux_previspost(AuxArgs aux_args, int data_ptr, uchar llid, float 
         cell_post += (* aux_args.vis_inf)*1; //appearance model at infinity is uniform
         cell_post *= d;
 
-        //update ray_pre and ray_vis
-        // updated pre
-        (* aux_args.ray_pre) += (* aux_args.ray_vis)*(1.0f-temp)*PI;
-        // updated visibility probability
-        (* aux_args.ray_vis) *= temp;
+        
+        float vis_prob_end = (* aux_args.ray_vis) * temp; 
+		(* aux_args.ray_pre) += ((* aux_args.ray_vis) - vis_prob_end) *  PI;
+		(* aux_args.ray_vis) = vis_prob_end;
 
         //discretize and store pre, vis and post contributions
         int pre_int = convert_int_rte(cell_pre * SEGLEN_FACTOR);
