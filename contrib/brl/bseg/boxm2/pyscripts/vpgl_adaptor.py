@@ -3,7 +3,7 @@ from boxm2_register import boxm2_batch, dbvalue;
 ###################
 #camera loading
 ###################
-def load_camera(file_path) : 
+def load_perspective_camera(file_path) : 
   boxm2_batch.init_process("vpglLoadPerspectiveCameraProcess"); 
   boxm2_batch.set_input_string(0, file_path);
   boxm2_batch.run_process();
@@ -11,6 +11,31 @@ def load_camera(file_path) :
   cam = dbvalue(id,type);
   return cam; 
   
+def load_rational_camera(file_path) : 
+  boxm2_batch.init_process("vpglLoadRationalCameraProcess")
+  boxm2_batch.set_input_string(0, file_path)
+  boxm2_batch.run_process()
+  (id,type) = boxm2_batch.commit_output(0)
+  cam = dbvalue(id,type)
+  return cam
+
+def load_rational_camera_nitf(file_path) : 
+  boxm2_batch.init_process("vpglLoadRationalCameraNITFProcess")
+  boxm2_batch.set_input_string(0, file_path)
+  boxm2_batch.run_process()
+  (id,type) = boxm2_batch.commit_output(0)
+  cam = dbvalue(id,type)
+  return cam
+
+###################
+#camera saving
+###################
+def save_rational_camera(camera,path):
+  boxm2_batch.init_process("vpglSaveRationalCameraProcess")
+  boxm2_batch.set_input_from_db(0,camera)
+  boxm2_batch.set_input_string(1,path)
+  boxm2_batch.run_process()
+
 #################################################
 # perspective go generic conversion
 #################################################
