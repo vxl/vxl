@@ -34,6 +34,8 @@ SOURCES += processes/boxm2_ocl_merge_process.cxx
 SOURCES += processes/boxm2_ocl_render_expected_shadow_map_process.cxx
 SOURCES += processes/boxm2_ocl_update_sun_visibilities_process.cxx
 SOURCES += processes/boxm2_ocl_aux_update_view_direction_process.cxx
+SOURCES += processes/boxm2_ocl_create_aux_process.cxx
+SOURCES += processes/boxm2_ocl_create_norm_intensities_process.cxx
 
 #######################################
 include ${VXLROOT}/config/top-params.mk

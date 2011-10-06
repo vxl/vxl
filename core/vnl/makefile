@@ -25,6 +25,7 @@ MANPAGE_SOURCES += vnl_sparse_matrix.txx
 MANPAGE_SOURCES += vnl_matrix_exp.txx
 MANPAGE_SOURCES += vnl_file_matrix.txx
 MANPAGE_SOURCES += vnl_sym_matrix.txx
+
 # matrix operators
 MANPAGE_SOURCES += vnl_fortran_copy.txx
 MANPAGE_SOURCES += vnl_fortran_copy_fixed.txx
@@ -35,6 +36,7 @@ MANPAGE_SOURCES += vnl_power.h
 MANPAGE_SOURCES += vnl_trace.h
 MANPAGE_SOURCES += vnl_rank.txx
 MANPAGE_SOURCES += vnl_scalar_join_iterator.txx
+MANPAGE_SOURCES += vnl_index_sort.h
 
 # elementrary numerics
 SOURCES += vnl_alloc.cxx

@@ -22,6 +22,9 @@ SOURCES += processes/boxm2_write_cache_process.cxx
 SOURCES += processes/boxm2_mask_sift_features_process.cxx
 SOURCES += processes/boxm2_compute_sun_affine_camera_process.cxx
 SOURCES += processes/boxm2_bundle_to_scene_process.cxx
+SOURCES += processes/boxm2_blob_change_detection_process.cxx
+SOURCES += processes/boxm2_clear_cache_process.cxx
+SOURCES += processes/boxm2_blob_precision_recall_process.cxx
 
 #######################################
 include ${VXLROOT}/config/top-params.mk
