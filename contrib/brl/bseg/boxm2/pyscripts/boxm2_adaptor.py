@@ -468,6 +468,26 @@ def save_multi_block_scene(params) :
   boxm2_batch.set_input_string(1, fname); 
   boxm2_batch.run_process();
 
+def roi_init(NITF_path, camera, scene, convert_to_8bit, params_fname) : 
+  boxm2_batch.init_process("boxm2RoiInitProcess")
+  boxm2_batch.set_params_process(params_fname)
+  boxm2_batch.set_input_string(0, NITF_path)
+  boxm2_batch.set_input_from_db(1,camera)
+  boxm2_batch.set_input_from_db(2,scene)
+  boxm2_batch.set_input_bool(3,convert_to_8bit)
+  result = boxm2_batch.run_process()
+  if result:
+    (id,type) = boxm2_batch.commit_output(0)
+    local_cam = dbvalue(id,type)
+    (id,type) = boxm2_batch.commit_output(1)
+    cropped_image = dbvalue(id,type)
+    (id,type) = boxm2_batch.commit_output(2)
+    uncertainty = boxm2_batch.get_output_float(id)
+  else:
+    local_cam = 0
+    cropped_image = 0
+    uncertainty = 0
+  return result, local_cam, cropped_image, uncertainty 
 
 #runs blob change detection process
 def blob_change_detection( change_img, thresh ) : 
@@ -475,7 +495,6 @@ def blob_change_detection( change_img, thresh ) :
   boxm2_batch.set_input_from_db(0,change_img);
   boxm2_batch.set_input_float(1, thresh); 
   boxm2_batch.run_process();
-  
   
 
 #pixel wise roc process for change detection images
@@ -493,5 +512,4 @@ def blob_precision_recall(cd_img, gt_img, mask_img=None) :
 
   #return tuple of true positives, true negatives, false positives, etc..
   return (precision, recall);
-
 
