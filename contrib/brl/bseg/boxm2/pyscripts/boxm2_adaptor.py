@@ -4,15 +4,18 @@ from boxm2_register import boxm2_batch, dbvalue;
 # PROVIDES higher level python functions to make boxm2_batch 
 # code more readable/refactored
 #############################################################################
-
-#does the opencl prep work on an input scene
-def load_opencl(scene_str, device_string="gpu"):
+def load_scene(scene_str): 
   print("Loading a Scene from file: ", scene_str);
   boxm2_batch.init_process("boxm2LoadSceneProcess");
   boxm2_batch.set_input_string(0, scene_str);
   boxm2_batch.run_process();
   (scene_id, scene_type) = boxm2_batch.commit_output(0);
   scene = dbvalue(scene_id, scene_type);
+  return scene; 
+
+#does the opencl prep work on an input scene
+def load_opencl(scene_str, device_string="gpu"):
+  scene = load_scene(scene_str); 
 
   ###############################################################
   # Create cache, opencl manager, device, and gpu cache
@@ -52,12 +55,7 @@ def load_opencl(scene_str, device_string="gpu"):
   
 #Just loads up CPP cache 
 def load_cpp(scene_str) :
-  print("Loading a Scene from file: ", scene_str);
-  boxm2_batch.init_process("boxm2LoadSceneProcess");
-  boxm2_batch.set_input_string(0, scene_str);
-  boxm2_batch.run_process();
-  (scene_id, scene_type) = boxm2_batch.commit_output(0);
-  scene = dbvalue(scene_id, scene_type);
+  scene = load_scene(scene_str); 
 
   ###############################################################
   # Create cache, opencl manager, device, and gpu cache
@@ -75,7 +73,7 @@ def load_cpp(scene_str) :
 # Model building stuff
 ###############################################
 # Generic update - will use GPU if device/openclcache are passed in
-def update_grey(scene, cache, cam, img, device=None, ident="", mask=None) :
+def update_grey(scene, cache, cam, img, device=None, ident="", mask=None, update_alpha=True) :
   #If no device is passed in, do cpu update
   if cache.type == "boxm2_cache_sptr" :
     print "boxm2_batch CPU update";
@@ -96,11 +94,14 @@ def update_grey(scene, cache, cam, img, device=None, ident="", mask=None) :
     boxm2_batch.set_input_string(5,ident);
     if mask :
       boxm2_batch.set_input_from_db(6,mask);
+    boxm2_batch.set_input_bool(7, update_alpha); 
     boxm2_batch.run_process();
   else : 
     print "ERROR: Cache type not recognized: ", cache.type; 
     
+####################################################################
 # Generic update - will use GPU if device/openclcache are passed in
+####################################################################
 def update_rgb(scene, cache, cam, img, device=None, mask="") :
   #If no device is passed in, do cpu update
   if cache.type == "boxm2_cache_sptr" :
@@ -158,8 +159,10 @@ def render_height_map(scene, cache, device=None) :
   else : 
     print "ERROR: Cache type not recognized: ", cache.type; 
  
+#####################################################################
 # Generic render, returns a dbvalue expected image
 # Cache can be either an OPENCL cache or a CPU cache
+#####################################################################
 def render_grey(scene, cache, cam, ni=1280, nj=720, device=None) :
   if cache.type == "boxm2_cache_sptr" :
     boxm2_batch.init_process("boxm2CppRenderExpectedImageProcess");
@@ -187,7 +190,9 @@ def render_grey(scene, cache, cam, ni=1280, nj=720, device=None) :
   else : 
     print "ERROR: Cache type not recognized: ", cache.type; 
     
+#####################################################################    
 # Generic render, returns a dbvalue expected image
+#####################################################################
 def render_rgb(scene, cache, cam, ni=1280, nj=720, device=None) :
   if cache.type == "boxm2_cache_sptr" :
     print "boxm2_batch CPU render rgb not yet implemented";
@@ -205,7 +210,10 @@ def render_rgb(scene, cache, cam, ni=1280, nj=720, device=None) :
     return exp_image; 
   else : 
     print "ERROR: Cache type not recognized: ", cache.type; 
-    
+ 
+#####################################################################    
+# render depth map 
+#####################################################################
 def render_depth(scene, cache, cam, ni=1280, nj=720, device=None) : 
   if cache.type == "boxm2_cache_sptr" :
     print "boxm2_batch CPU render depth not yet implemented";
@@ -224,7 +232,9 @@ def render_depth(scene, cache, cam, ni=1280, nj=720, device=None) :
   else : 
     print "ERROR: Cache type not recognized: ", cache.type; 
    
-    
+#####################################################################
+# change detection wrapper
+#####################################################################
 def change_detect(scene, cache, cam, img, exp_img, device=None, rgb=False, n=1, raybelief="") : 
   if cache.type == "boxm2_cache_sptr" : 
     print "boxm2_batch CPU change detection"; 
@@ -261,8 +271,10 @@ def change_detect(scene, cache, cam, img, exp_img, device=None, rgb=False, n=1, 
     print "ERROR: Cache type not recognized: ", cache.type;
     
 
-    
+
+#####################################################################    
 #generic refine (will work on color and grey scenes)
+#####################################################################
 def refine(scene, cache, thresh=0.3, device=None) :
   if cache.type == "boxm2_cache_sptr" :
     print "boxm2_batch CPU refine";
@@ -288,7 +300,9 @@ def refine(scene, cache, thresh=0.3, device=None) :
   else : 
     print "ERROR: Cache type unrecognized: ", cache.type; 
     
+#####################################################################
 #generic merge method 
+#####################################################################
 def merge(scene, cache, thresh=0.01, device=None) :
   if cache.type == "boxm2_cache_sptr" :
     print "boxm2_batch CPU merge"; 
@@ -307,8 +321,10 @@ def merge(scene, cache, thresh=0.01, device=None) :
     boxm2_batch.run_process();
   else : 
     print "ERROR: Cache type unrecognized: ", cache.type; 
-    
+
+#####################################################################
 #generic filter scene, should work with color and grey scenes
+#####################################################################
 def median_filter(scene, cache, device=None) : 
   if cache.type == "boxm2_cache_sptr" : 
     print "boxm2_batch CPU median filter"; 
@@ -326,6 +342,10 @@ def median_filter(scene, cache, device=None) :
   else : 
     print "ERROR: Cache type unrecognized: ", cache.type; 
 
+
+######################################################################
+# cache methods
+#####################################################################
 #generic write cache to disk
 def write_cache(cache) : 
   if cache.type == "boxm2_cache_sptr" : 
@@ -335,6 +355,22 @@ def write_cache(cache) :
   else : 
     print "ERROR: Cache type needs to be boxm2_cache_sptr, not ", cache.type; 
 
+#generic clear cache
+def clear_cache(cache) : 
+  if cache.type == "boxm2_cache_sptr" : 
+    boxm2_batch.init_process("boxm2ClearCacheProcess");
+    boxm2_batch.set_input_from_db(0,cache);
+  elif cache.type == "boxm2_opencl_cache_sptr" :
+    boxm2_batch.init_process("boxm2ClearOpenclCacheProcess"); 
+    boxm2_batch.set_input_from_db(0,cache);
+    boxm2_batch.run_process();
+  else : 
+    print "ERROR: Cache type needs to be boxm2_cache_sptr, not ", cache.type; 
+
+
+######################################################################
+# trajectory methods
+#####################################################################
 def init_trajectory(scene, startInc, endInc, radius, ni=1280, nj=720) :  
   boxm2_batch.init_process("boxm2ViewInitTrajectoryProcess"); 
   boxm2_batch.set_input_from_db(0, scene);
@@ -356,6 +392,9 @@ def trajectory_next(trajectory) :
   cam = dbvalue(id,type);
   return cam; 
 
+######################################################################
+# camera/scene methods
+#####################################################################
 def bundle2scene(bundle_file, img_dir, app_model="boxm2_mog3_grey", out_dir="") : 
   if app_model == "boxm2_mog3_grey": 
     nobs_model = "boxm2_num_obs";
@@ -385,6 +424,15 @@ def save_scene(scene, fname) :
   boxm2_batch.set_input_from_db(0,scene);
   boxm2_batch.set_input_string(1, fname); 
   boxm2_batch.run_process();
+  
+def scale_scene(scene, scale) : 
+  boxm2_batch.init_process("boxm2ScaleSceneProcess");
+  boxm2_batch.set_input_from_db(0,scene);
+  boxm2_batch.set_input_float(1, scale); 
+  boxm2_batch.run_process();
+  (scene_id, scene_type) = boxm2_batch.commit_output(0);
+  scene = dbvalue(scene_id, scene_type);
+  return scene; 
 
 # Create multi block scene - params is a hash of scene parameters
 def save_multi_block_scene(params) : 
@@ -489,13 +537,17 @@ def roi_init(NITF_path, camera, scene, convert_to_8bit, params_fname) :
     uncertainty = 0
   return result, local_cam, cropped_image, uncertainty 
 
+
+
+######################################################################
+# blob detection methods
+#####################################################################
 #runs blob change detection process
 def blob_change_detection( change_img, thresh ) : 
   boxm2_batch.init_process("boxm2BlobChangeDetectionProcess");
   boxm2_batch.set_input_from_db(0,change_img);
   boxm2_batch.set_input_float(1, thresh); 
   boxm2_batch.run_process();
-  
 
 #pixel wise roc process for change detection images
 def blob_precision_recall(cd_img, gt_img, mask_img=None) :

@@ -29,7 +29,7 @@ class boxm2_scene_adaptor:
       self.active_cache = self.cpu_cache; 
   
   #update wrapper, can pass in a Null device to use 
-  def update(self, cam, img, mask=None, device_string="") :
+  def update(self, cam, img, update_alpha=True, mask=None, device_string="") :
     cache = self.active_cache; 
     dev = self.device; 
     
@@ -44,7 +44,7 @@ class boxm2_scene_adaptor:
     if self.rgb :
       update_rgb(self.scene, cache, cam, img, dev); 
     else :
-      update_grey(self.scene, cache, cam, img, dev, "", mask); 
+      update_grey(self.scene, cache, cam, img, dev, "", mask, update_alpha); 
       
   #render wrapper, same as above
   def render(self, cam, ni=1280, nj=720, device_string="") : 
@@ -127,3 +127,8 @@ class boxm2_scene_adaptor:
   #only write the cpu_cache to disk
   def write_cache(self): 
     write_cache(self.cpu_cache); 
+
+  #clear cache (both caches if OPENCL scene)
+  def clear_cache(self):
+    clear_cache(self.cpu_cache); 
+    if self.opencl_cache: clear_cache(self.opencl_cache); 
