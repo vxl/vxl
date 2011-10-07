@@ -21,12 +21,11 @@ void step_cell_aux_previspost(AuxArgs aux_args, int data_ptr, uchar llid, float 
     float weight3   = (1.0f-mixture.s2-mixture.s5);
 
     //load aux data
-    int cum_int = aux_args.seg_len[data_ptr]; 
-    int mean_int = aux_args.mean_obs[data_ptr]; 
-    float mean_obs = convert_float_rte(mean_int) / convert_float_rte(cum_int); 
-    float cum_len = convert_float_rte(cum_int) / SEGLEN_FACTOR; 
+    int cum_int = aux_args.seg_len[data_ptr];
+    int mean_int = aux_args.mean_obs[data_ptr];
+    float mean_obs = convert_float_rte(mean_int) / convert_float_rte(cum_int);
+    float cum_len = convert_float_rte(cum_int) / SEGLEN_FACTOR;
 
-    
     float PI=0.0f;
     // Compute PI for all threads
     if (cum_len * aux_args.linfo->block_len > 1.0e-10f) { // if  too small, do nothing
@@ -52,10 +51,9 @@ void step_cell_aux_previspost(AuxArgs aux_args, int data_ptr, uchar llid, float 
         cell_post += (* aux_args.vis_inf)*1; //appearance model at infinity is uniform
         cell_post *= d;
 
-        
-        float vis_prob_end = (* aux_args.ray_vis) * temp; 
-		(* aux_args.ray_pre) += ((* aux_args.ray_vis) - vis_prob_end) *  PI;
-		(* aux_args.ray_vis) = vis_prob_end;
+        float vis_prob_end = (* aux_args.ray_vis) * temp;
+        (* aux_args.ray_pre) += ((* aux_args.ray_vis) - vis_prob_end) *  PI;
+        (* aux_args.ray_vis) = vis_prob_end;
 
         //discretize and store pre, vis and post contributions
         int pre_int = convert_int_rte(cell_pre * SEGLEN_FACTOR);
