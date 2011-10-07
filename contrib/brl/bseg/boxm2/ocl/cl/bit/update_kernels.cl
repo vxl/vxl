@@ -351,6 +351,7 @@ update_bit_scene_main(__global RenderSceneInfo  * info,
                       __global int              * aux_array1,
                       __global int              * aux_array2,
                       __global int              * aux_array3,
+                      __global int              * update_alpha,     //update if not zero
                       __global float            * output)
 {
   int gid=get_global_id(0);
@@ -390,8 +391,12 @@ update_bit_scene_main(__global RenderSceneInfo  * info,
       //use aux data to update cells
       update_cell(&data, aux_data, 2.5f, 0.06f, 0.02);
 
+
+      //write alpha if update alpha is 0
+      if( *update_alpha != 0 ) 
+        alpha_array[gid]      = max(alphamin,data.s0);
+
       //reset the cells in memory
-      alpha_array[gid]      = max(alphamin,data.s0);
       float8 post_mix       = (float8) (data.s1, data.s2, data.s3,
                                         data.s5, data.s6, data.s7,
                                         data.s9, data.sa)*(float) NORM;
