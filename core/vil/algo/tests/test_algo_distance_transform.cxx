@@ -35,6 +35,7 @@ static void test_algo_distance_transform1()
   TEST_NEAR("(0,4)",src_im(0,4),1,1e-6);
   TEST_NEAR("(0,6)",src_im(0,6),1,1e-6);
   TEST_NEAR("(0,7)",src_im(0,7),2,1e-6);
+  TEST_NEAR("(20,0)",src_im(20,0),sqrt2*10.0,1e-5);
 
   vcl_cout<<"Test edge\n";
   TEST_NEAR("(5,20)",src_im(5,20),0,1e-6);
@@ -83,6 +84,7 @@ static void test_algo_distance_transform2()
   TEST_NEAR("(1,5)",src_im(1,5),1,1e-6);
   TEST_NEAR("(1,6)",src_im(1,6),sqrt2,1e-6);
   TEST_NEAR("(1,7)",src_im(1,7),sqrt5,1e-6);
+  TEST_NEAR("(20,0)",src_im(20,0),sqrt2*10.0,1e-5);
 
   vcl_cout<<"Test edge\n";
   TEST_NEAR("(3,20)",src_im(3,20),2,1e-6);

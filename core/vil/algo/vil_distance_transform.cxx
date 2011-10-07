@@ -64,7 +64,7 @@ void vil_distance_transform_one_way(vil_image_view<float>& image)
     *row0 = vcl_min(row0[o4]+sqrt2,*row0);
 
     float* p0 = row0+istep;
-    for (unsigned i=1;i<=ni1;++i,p0+=istep)
+    for (unsigned i=1;i<ni1;++i,p0+=istep)
     {
       *p0 = vcl_min(p0[o1]+1.0f ,*p0); // (-1,0)
       *p0 = vcl_min(p0[o2]+sqrt2,*p0); // (-1,-1)
