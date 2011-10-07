@@ -45,9 +45,17 @@ void boxm2_util_detect_change_blobs(vil_image_view<float>& change,
 //: Detects blobs given a bool image
 void boxm2_util_detect_blobs(const vil_image_view<bool>& imgIn,
                              vcl_vector<boxm2_change_blob>& blobs);
-
-//: utility method to remove single pixels from bool image
-void boxm2_util_remove_singletons(const vil_image_view<bool>& imgIn,
-                                        vil_image_view<bool>& imgOut);
-
+                             
+//: utility method to remove single pixels from bool image                 
+void boxm2_util_remove_singletons(const vil_image_view<bool>& imgIn, 
+                                        vil_image_view<bool>& imgOut); 
+                                        
+   
+                                    
+                                        
+void boxm2_util_blob_to_image( vcl_vector<boxm2_change_blob>& blobs, 
+                               vil_image_view<vxl_byte>& imgOut); 
+                                        
+                                        
+                                    
 #endif // boxm2_detect_change_blobs_h

@@ -141,3 +141,20 @@ void boxm2_util_remove_singletons(const vil_image_view<bool>& imgIn,
     }
   }
 }
+
+
+
+void boxm2_util_blob_to_image(  vcl_vector<boxm2_change_blob>& blobs, 
+                                vil_image_view<vxl_byte>& imgOut) 
+{ 
+  //create a blob image
+  imgOut.fill(0); 
+  vcl_vector<boxm2_change_blob>::iterator iter; 
+  for(iter=blobs.begin(); iter!=blobs.end(); ++iter) {
+    //paint each blob pixel white
+    for(int p=0; p<iter->blob_size(); ++p) {
+      PairType pair = iter->get_pixel(p); 
+      imgOut( pair.x(), pair.y() ) = (vxl_byte) 255; 
+    }
+  }
+}
