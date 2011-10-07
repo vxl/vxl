@@ -8,8 +8,10 @@
 #include <bprb/bprb_parameters.h>
 #include <vil/vil_image_view.h>
 #include <vil/vil_convert.h>
+#include <vil/vil_save.h>
 #include <bbas_pro/bbas_1d_array_float.h>
 #include <vcl_algorithm.h>
+#include <vcl_sstream.h>
 
 namespace boxm2_blob_precision_recall_process_globals
 {
@@ -76,7 +78,7 @@ bool boxm2_blob_precision_recall_process(bprb_func_process& pro)
   }
 
   // true positive, true negative, false positive, false negative
-  const unsigned int numPoints = 10;
+  const unsigned int numPoints = 100;
   bbas_1d_array_float * precision = new bbas_1d_array_float(numPoints);
   bbas_1d_array_float * recall    = new bbas_1d_array_float(numPoints);
   vil_image_view<float> * detection_map;
@@ -170,16 +172,25 @@ bool boxm2_blob_precision_recall_process(bprb_func_process& pro)
     boxm2_util_detect_change_blobs( *detection_map, thresholds[pnt], blobs );
     vcl_cout<<"  thresh "<<thresholds[pnt]<<" detected "<<blobs.size()<<" blobs"<<vcl_endl;
 
+    vil_image_view<vxl_byte> blbImage(gt_map.ni(), gt_map.nj()); 
+    boxm2_util_blob_to_image(blobs, blbImage); 
+    vcl_stringstream fname; 
+    fname<<"blobImage_"<<thresholds[pnt]<<".png";
+    vil_save(blbImage, fname.str().c_str()); 
+
+    
     //cross check each ground truth blob against change blobs for coverage
-    for (unsigned int g=0; g<gt_blobs.size(); ++g) {
-      boxm2_change_blob& gt_blob = gt_blobs[g];
-      for (unsigned int c=0; c<blobs.size(); ++c) {
-        if ( gt_blob.percent_overlap( blobs[c] ) > .5f )
-          true_positives++;
+    for(unsigned g=0; g<gt_blobs.size(); ++g) {
+      boxm2_change_blob& gt_blob = gt_blobs[g]; 
+      for(unsigned c=0; c<blobs.size(); ++c) {
+        if( gt_blob.percent_overlap( blobs[c] ) > .25f )
+          true_positives++; 
       }
     }
     vcl_cout<<" num true positives: "<<true_positives<<vcl_endl;
-
+    
+    
+  
     //set precision and recall
     precision->data_array[pnt] = blobs.size()==0 ? 0 : true_positives / blobs.size();
     recall->data_array[pnt]    = true_positives / gt_blobs.size();
