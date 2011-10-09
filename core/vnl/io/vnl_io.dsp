@@ -290,6 +290,9 @@ SOURCE=.\Templates/vnl_io_vector_fixed+double.10-.cxx
 # Begin Source File
 SOURCE=.\Templates/vnl_io_matrix_fixed+double.1.1-.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\Templates/vnl_io_vector_fixed+double.128-.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
