@@ -158,7 +158,24 @@ def render_height_map(scene, cache, device=None) :
     return z_image, var_image, x_image, y_image, prob_image, app_image; 
   else : 
     print "ERROR: Cache type not recognized: ", cache.type; 
- 
+  # Generic render, returns a dbvalue expected image
+# Cache can be either an OPENCL cache or a CPU cache
+def ingest_height_map(scene, cache,x_img,y_img,z_img, device=None) :
+  if cache.type == "boxm2_cache_sptr" :
+    print "boxm2_adaptor, render height map cpp process not implemented"; 
+
+  elif cache.type == "boxm2_opencl_cache_sptr" and device : 
+    boxm2_batch.init_process("boxm2OclIngestDemProcess");
+    boxm2_batch.set_input_from_db(0,device);
+    boxm2_batch.set_input_from_db(1,scene);
+    boxm2_batch.set_input_from_db(2,cache);
+    boxm2_batch.set_input_from_db(3,z_img);
+    boxm2_batch.set_input_from_db(4,x_img);
+    boxm2_batch.set_input_from_db(5,y_img);
+    boxm2_batch.run_process();
+    return ; 
+  else : 
+    print "ERROR: Cache type not recognized: ", cache.type;
 #####################################################################
 # Generic render, returns a dbvalue expected image
 # Cache can be either an OPENCL cache or a CPU cache
@@ -347,10 +364,11 @@ def median_filter(scene, cache, device=None) :
 # cache methods
 #####################################################################
 #generic write cache to disk
-def write_cache(cache) : 
+def write_cache(cache, do_clear = 0) : 
   if cache.type == "boxm2_cache_sptr" : 
     boxm2_batch.init_process("boxm2WriteCacheProcess");
     boxm2_batch.set_input_from_db(0,cache);
+    boxm2_batch.set_input_bool(1,do_clear);
     boxm2_batch.run_process();
   else : 
     print "ERROR: Cache type needs to be boxm2_cache_sptr, not ", cache.type; 

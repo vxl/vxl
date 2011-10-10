@@ -86,6 +86,17 @@ class boxm2_scene_adaptor:
       dev = None; 
     z_image, var_image, x_image, y_image, prob_image, app_image = render_height_map(self.scene, cache, dev); 
     return z_image, var_image, x_image, y_image, prob_image, app_image; 
+  #ingest heigh map 
+  def ingest_height_map(self,x_img,y_img,z_img, device_string="") : 
+    cache = self.active_cache; 
+    dev = self.device;
+    if device_string=="gpu" : 
+      cache = self.opencl_cache; 
+    elif device_string=="cpp" : 
+      cache = self.cpu_cache; 
+      dev = None; 
+    ingest_height_map(self.scene, cache,x_img,y_img,z_img, dev); 
+    return ; 
 
   # detect change wrapper, 
   def change_detect(self, cam, img, exp_img, n=1, raybelief="", rgb=False, device_string="") : 
@@ -125,8 +136,9 @@ class boxm2_scene_adaptor:
       median_filter(self.scene, self.cpu_cache, None); 
 
   #only write the cpu_cache to disk
-  def write_cache(self): 
-    write_cache(self.cpu_cache); 
+
+  def write_cache(self, do_clear = 0): 
+    write_cache(self.cpu_cache, do_clear); 
 
   #clear cache (both caches if OPENCL scene)
   def clear_cache(self):
