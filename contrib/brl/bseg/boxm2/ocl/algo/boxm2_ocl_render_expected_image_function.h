@@ -19,7 +19,8 @@ float render_expected_image( boxm2_scene_sptr & scene,
                             bocl_kernel* kernel,
                             vcl_size_t * lthreads,
                             unsigned cl_ni,
-                            unsigned cl_nj );
+                            unsigned cl_nj,
+                            int apptypesize);
                             
 float render_cone_expected_image( boxm2_scene_sptr & scene,
                                   bocl_device_sptr & device,
@@ -48,4 +49,19 @@ float render_expected_shadow_map(  boxm2_scene_sptr & scene,
                               vcl_size_t * lthreads,
                               unsigned cl_ni,
                               unsigned cl_nj );
+
+float render_expected_phongs_image( boxm2_scene_sptr & scene,
+                            bocl_device_sptr & device,
+                            boxm2_opencl_cache_sptr & opencl_cache,
+                            cl_command_queue & queue,
+                            vpgl_camera_double_sptr & cam,
+                            bocl_mem_sptr & exp_image,
+                            bocl_mem_sptr & vis_image, 
+                            bocl_mem_sptr & exp_img_dim,
+                            vcl_string data_type,
+                            bocl_kernel* kernel,
+                            vcl_size_t * lthreads,
+                            unsigned cl_ni,
+                            unsigned cl_nj,
+                            bocl_mem_sptr sundir);
 #endif // boxm2_ocl_render_expected_image_function_h_
