@@ -6,6 +6,18 @@
 #include <vnl/vnl_matrix.h>
 #include <vnl/vnl_inverse.h>
 #include <vnl/algo/vnl_svd.h>
+#include <bsta/bsta_gauss_sd1.h>
+static double variance_multiplier(double n_obs){
+  if(n_obs<2)
+    return 100.0;//shouldn't happen
+  if(n_obs==2)
+    return 79.79;
+  double noff = n_obs-1.5;
+  double npow = vcl_pow(noff, 1.55);
+  double a = 1.28 + (20.0/(1.0+npow));
+  return a;
+}
+
 bool brad_synoptic_function_1d::load_samples(vcl_string const& path)
 
 {
@@ -16,15 +28,17 @@ bool brad_synoptic_function_1d::load_samples(vcl_string const& path)
   is >> npts;
   if(npts==0)
     return false;
-  elev_.resize(npts,0.0);
-  azimuth_.resize(npts,0.0);
-  vis_.resize(npts,0.0);
-  intensity_.resize(npts,0.0);
   double x, y, z;
   is >> x >> y >> z;//skip point for now
   vcl_string img_name;
   for(unsigned i = 0; i<npts; ++i){
-    is >> img_name >> intensity_[i] >>vis_[i]  >> elev_[i] >>azimuth_[i] ;
+    double inten ,vis , elev , azimuth;
+    is >> img_name >> inten >> vis >> elev >> azimuth;
+    if(inten<0) continue;
+    intensity_.push_back(inten); 
+    vis_.push_back(vis); 
+    elev_.push_back(elev); 
+    azimuth_.push_back(azimuth);
   }
   this->fit_intensity_cubic();
   return true;
@@ -73,7 +87,16 @@ void brad_synoptic_function_1d::fit_intensity_cubic(){
   vnl_double_4x4 Minv = vnl_inverse(M);
   cubic_coef_int_ = Minv*q;
   vnl_vector<double> error = W*(y-X*cubic_coef_int_);
-  fit_error_ = error.squared_magnitude();
+  cubic_fit_sigma_ = vcl_sqrt(error.squared_magnitude());
+  vnl_vector<double> diag = W.get_diagonal();
+  effective_n_obs_ = diag.sum();
+  if(effective_n_obs_ <2)
+    cubic_fit_sigma_ = -1.0;
+  else{
+    double var = error.squared_magnitude();
+    var *= variance_multiplier(effective_n_obs_);
+    cubic_fit_sigma_ = vcl_sqrt(var/(effective_n_obs_-1));
+  }
 }
 
 
@@ -88,4 +111,125 @@ double brad_synoptic_function_1d::cubic_interp_inten(double arc_length)
   return v;
 }
 
+double brad_synoptic_function_1d::linear_interp_sigma()
+{
+  unsigned n=this->size();
+  if(n<3) return -1.0;
+  double var = 0.0;
+  double total_vis = 0.0;
+  for(unsigned i = 1; i<n-1; ++i){
+    //note can cache these arc lengths for lower computation 
+    //but not bothering now
+    double acm1 = this->arc_length(i-1);
+    double acp1 = this->arc_length(i+1);
+    double ac = this->arc_length(i);
+    double delac = acp1-acm1;
+    if(delac==0.0) return -1.0;
+    double intm1 = intensity_[i-1];
+    double intp1 = intensity_[i+1];
+    double inti = intensity_[i];
+    //linear interpolation
+    double pred_int = (intp1-intm1)*(ac-acm1)/delac + intm1;
+    //prediction error
+    double pred_sq_error = (inti-pred_int)*(inti-pred_int);
+    // minimum visibility
+    double min_vis = vis_[i-1];
+    if(vis_[i]<min_vis) min_vis = vis_[i];
+    if(vis_[i+1]<min_vis) min_vis = vis_[i+1];
+    var += min_vis*pred_sq_error;
+    total_vis += min_vis;
+  }
+  if(total_vis == 0.0) return -1.0;
+  double sigma = vcl_sqrt(var/total_vis);
+  return sigma;
+}
+double brad_synoptic_function_1d::cubic_fit_prob_density()
+{
+  bsta_gauss_sd1 gauss(0.0, inherent_sigma_*inherent_sigma_);
+  return gauss.prob_density(cubic_fit_sigma_);
+}
 
+void brad_synoptic_function_1d::compute_auto_correlation(){
+  // compute mean and standard deviation of the intensities
+  int n = static_cast<int>(this->size());
+  if(n<3) return;
+  double avg = 0.0, intsq = 0.0, vissum = 0.0;
+  for(unsigned i = 0; i<n; ++i){
+    double intv = intensity_[i], intvsq = intv*intv;
+    avg += vis_[i]*intv;
+    intsq += vis_[i]*intvsq;
+    vissum += vis_[i];
+  }
+  if(vissum <2.0) return;
+  double mean = avg/vissum;
+  double vsq = intsq-(mean*mean*vissum);
+  double var = vsq/vissum;
+  //do the autocorrelation, scan over 1/2 the sample size
+    for(int k = 0; k<=n/2; ++k){
+      double cor =0.0, vsum = 0.0;
+      for(int t = k; t<n; ++t){
+        double vis_min = vis_[t];
+        if(vis_[t-k]<vis_min)
+          vis_min = vis_[t-k];
+        vsum+=vis_min;
+        cor += vis_min*(intensity_[t]-mean)*(intensity_[t-k]-mean);
+      }
+      if(vsum>0.0){
+        cor/=vsum;
+        auto_corr_.push_back(cor/var);
+      }else auto_corr_.push_back(0.0);
+    }
+}
+
+void brad_synoptic_function_1d::fit_linear_const(){
+  unsigned n = this->size();
+  // fit linear segment
+  double tau = 0.0;
+  unsigned i = 0;
+  double sumt =0.0, sumtsq = 0.0;
+  while(tau<=tau_s_){
+    tau = arc_length(i);
+    double acor = auto_corr_[i];
+    sumt += tau*(1.0-acor);
+    sumtsq += tau*tau;
+	++i;
+  }
+  if(sumtsq==0.0) alpha_ = 0.0;
+  else alpha_ = sumt/sumtsq;
+  // fit constant segment
+  double sumc = 0.0;
+  double T = 0.0;
+  for(i; i<=n/2; ++i){
+    T+= 1.0;
+    sumc += auto_corr_[i];
+  }
+  if(T==0.0)
+    mu_ = 0.0;
+  mu_ = sumc/T;
+  // compute fit sigma
+  double esq = 0.0, nd = 0.0;
+  for(unsigned i = 0; i<=n/2; ++i){
+    double acl = arc_length(i);
+    double acor =  auto_corr_[i];
+    double iacor = interp_linear_const(acl);
+    esq += (acor-iacor)*(acor-iacor);
+    nd += 1.0;
+  }
+  if(nd<2.0) lin_const_sigma_ = -1.0;
+  else{
+    double mult = variance_multiplier(nd);
+    double var = (mult*esq)/(nd-1.0);
+    lin_const_sigma_ = vcl_sqrt(var);
+  }
+}
+
+double brad_synoptic_function_1d::interp_linear_const(double arc_length){
+  if(arc_length<=tau_s_)
+    return (1.0-alpha_*arc_length);
+  return mu_;
+}
+
+double brad_synoptic_function_1d::lin_const_fit_prob_density(){
+  bsta_gauss_sd1 gauss(0.0, inherent_sigma_*inherent_sigma_);
+  return gauss.prob_density(lin_const_sigma_);
+}
