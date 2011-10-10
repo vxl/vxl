@@ -216,7 +216,7 @@ void step_cell_render_depth2(float depth,
 #ifdef  RENDER_HEIGHT_MAP
 void step_cell_render_depth2(float depth, 
                              __global float  * alpha_data, 
-                             __global uchar8 * cell_data,
+                             __global MOG_TYPE * cell_data,
                              int      data_ptr, 
                              float    d, 
                              float  * vis,
