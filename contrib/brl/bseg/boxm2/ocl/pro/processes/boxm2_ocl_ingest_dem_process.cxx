@@ -1,12 +1,11 @@
 // This is brl/bseg/boxm2/ocl/pro/processes/boxm2_ocl_ingest_dem_process.cxx
+#include <bprb/bprb_func_process.h>
 //:
 // \file
 // \brief  A process for ingesting dem in a 3-d scene.
 //
 // \author Vishal Jain
 // \date Mar 30, 2011
-
-#include <bprb/bprb_func_process.h>
 
 #include <vcl_fstream.h>
 #include <boxm2/ocl/boxm2_opencl_cache.h>
@@ -54,7 +53,7 @@ namespace boxm2_ocl_ingest_dem_process_globals
                                      device->device_id(),
                                      src_paths,
                                      "ingest_height_map",   //kernel name
-                                     options,              //options
+                                     options,               //options
                                      "boxm2 opencl ingest height image"); //kernel identifier (for error checking)
     vec_kernels.push_back(ray_trace_kernel);
   }
@@ -65,7 +64,7 @@ bool boxm2_ocl_ingest_dem_process_cons(bprb_func_process& pro)
 {
   using namespace boxm2_ocl_ingest_dem_process_globals;
 
-  //process takes 1 input
+  //process takes 6 inputs
   vcl_vector<vcl_string> input_types_(n_inputs_);
   input_types_[0] = "bocl_device_sptr";
   input_types_[1] = "boxm2_scene_sptr";
@@ -74,9 +73,8 @@ bool boxm2_ocl_ingest_dem_process_cons(bprb_func_process& pro)
   input_types_[4] = "vil_image_view_base_sptr";
   input_types_[5] = "vil_image_view_base_sptr";
 
-  // process has 1 output:
-  // output[0]: scene sptr
-  vcl_vector<vcl_string>  output_types_(n_outputs_);
+  // process has no outputs
+  vcl_vector<vcl_string> output_types_(n_outputs_);
 
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 }
@@ -98,7 +96,7 @@ bool boxm2_ocl_ingest_dem_process(bprb_func_process& pro)
   boxm2_opencl_cache_sptr opencl_cache= pro.get_input<boxm2_opencl_cache_sptr>(i++);
 
   vil_image_view_base_sptr z_img = pro.get_input<vil_image_view_base_sptr>(i++);
-  
+
   vil_image_view_base_sptr x_img = pro.get_input<vil_image_view_base_sptr>(i++);
   vil_image_view_base_sptr y_img = pro.get_input<vil_image_view_base_sptr>(i++);
 
@@ -112,46 +110,45 @@ bool boxm2_ocl_ingest_dem_process(bprb_func_process& pro)
   vil_image_view<float> * x_img_float = dynamic_cast<vil_image_view<float> * > (x_img.ptr());
   vil_image_view<float> * y_img_float = dynamic_cast<vil_image_view<float> * > (y_img.ptr());
 
-  //: form the ray buffer
-  cl_float* ray_origins    = new float[4*cl_ni*cl_nj]; 
-  cl_float* outimg         = new float[cl_ni*cl_nj]; 
+  // form the ray buffer
+  cl_float* ray_origins    = new float[4*cl_ni*cl_nj];
+  cl_float* outimg         = new float[cl_ni*cl_nj];
 
   int count=0;
   for (unsigned int j=0;j<cl_nj;++j) {
-      for (unsigned int i=0;i<cl_ni;++i) {
-          if ( i < ni && j < nj ) 
-          {
-              ray_origins[count+0] = (*x_img_float)(i,j);
-              ray_origins[count+1] = (*y_img_float)(i,j);
-              ray_origins[count+2] = (*z_img_float)(i,j);
-              ray_origins[count+3] = 0.0;
-          }
-          count = count + 4;
+    for (unsigned int i=0;i<cl_ni;++i) {
+      if ( i < ni && j < nj )
+      {
+        ray_origins[count+0] = (*x_img_float)(i,j);
+        ray_origins[count+1] = (*y_img_float)(i,j);
+        ray_origins[count+2] = (*z_img_float)(i,j);
+        ray_origins[count+3] = 0.0;
       }
+      count += 4;
+    }
   }
 
-  bocl_mem_sptr ray_o_buff = new bocl_mem(device->context(), 
-                                          ray_origins,  
-                                          cl_ni*cl_nj * sizeof(cl_float4), 
+  bocl_mem_sptr ray_o_buff = new bocl_mem(device->context(),
+                                          ray_origins,
+                                          cl_ni*cl_nj * sizeof(cl_float4),
                                           "ray_origins buffer");
   ray_o_buff->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
-  bocl_mem_sptr out_buff = new bocl_mem(device->context(), 
-                                        outimg,  
-                                        cl_ni*cl_nj * sizeof(cl_float), 
+  bocl_mem_sptr out_buff = new bocl_mem(device->context(),
+                                        outimg,
+                                        cl_ni*cl_nj * sizeof(cl_float),
                                         "out image buffer");
   out_buff->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
-  //: ray trace along the rays and fill alpha values
-  
   //get x and y size from scene
   vcl_vector<boxm2_block_id> vis_order = scene->get_block_ids();
   vcl_vector<boxm2_block_id>::iterator id;
-  //: create a command queue.
+  // create a command queue.
   int status=0;
   cl_command_queue queue = clCreateCommandQueue(device->context(),
                                                 *(device->device_id()),
                                                 CL_QUEUE_PROFILING_ENABLE,&status);
-  if (status!=0)return false;
+  if (status!=0)
+    return false;
 
   // compile the kernel
   vcl_string identifier=device->device_identifier();
@@ -183,13 +180,13 @@ bool boxm2_ocl_ingest_dem_process(bprb_func_process& pro)
   vcl_size_t lThreads[] = {8, 8};
   vcl_size_t gThreads[] = {cl_ni,cl_nj};
 
-  vcl_cout<<"Ingesting Dem  "<<vcl_endl;
+  vcl_cout<<"Ingesting Dem"<<vcl_endl;
   // set arguments
- 
+
   for (id = vis_order.begin(); id != vis_order.end(); ++id)
   {
-      vcl_cout<<"Block # "<<*id<<vcl_endl;
-      //choose correct render kernel
+    vcl_cout<<"Block # "<<*id<<vcl_endl;
+    //choose correct render kernel
     boxm2_block_metadata mdata = scene->get_block_metadata(*id);
     bocl_kernel* kern =  kernels[identifier][0];
 
@@ -199,9 +196,8 @@ bool boxm2_ocl_ingest_dem_process(bprb_func_process& pro)
     bocl_mem * alpha         = opencl_cache->get_data<BOXM2_ALPHA>(*id);
     bocl_mem * blk_info      = opencl_cache->loaded_block_info();
     transfer_time           += (float) transfer.all();
- 
-    alpha->zero_gpu_buffer(queue);
 
+    alpha->zero_gpu_buffer(queue);
 
     ////3. SET args
     kern->set_arg(blk_info );
@@ -215,7 +211,7 @@ bool boxm2_ocl_ingest_dem_process(bprb_func_process& pro)
     kern->set_local_arg( lThreads[0]*lThreads[1]*sizeof(cl_uchar16) );
     kern->set_local_arg( lThreads[0]*lThreads[1]*10*sizeof(cl_uchar) );
     kern->set_local_arg( lThreads[0]*lThreads[1]*sizeof(cl_int) );
-    vcl_cout<<"Setting arguments "<<vcl_endl;
+    vcl_cout<<"Setting arguments"<<vcl_endl;
 
     //execute kernel
     kern->execute(queue, 2, lThreads, gThreads);
@@ -230,13 +226,13 @@ bool boxm2_ocl_ingest_dem_process(bprb_func_process& pro)
   vil_image_view<float> test(ni,nj);
   count = 0;
   for (unsigned int j=0;j<cl_nj;++j) {
-      for (unsigned int i=0;i<cl_ni;++i) {
-          if ( i < ni && j < nj ) 
-          {
-              test(i,j) = outimg[count];
-          }
-              count= count +1;
+    for (unsigned int i=0;i<cl_ni;++i) {
+      if ( i < ni && j < nj )
+      {
+        test(i,j) = outimg[count];
       }
+      ++count;
+    }
   }
   vil_save(test,"f:/test.tiff");
   clReleaseCommandQueue(queue);
