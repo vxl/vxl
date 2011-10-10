@@ -11,6 +11,7 @@ DECLARE_FUNC_CONS(brad_save_sun_index_process);
 
 DECLARE_FUNC_CONS(bbas_atmospheric_corr_process);
 DECLARE_FUNC_CONS(bbas_sun_angles_process);
+DECLARE_FUNC_CONS(bbas_camera_angles_process);
 DECLARE_FUNC_CONS(brad_create_eigenspace_process);
 DECLARE_FUNC_CONS(brad_load_eigenspace_process);
 DECLARE_FUNC_CONS(brad_save_eigenspace_process);

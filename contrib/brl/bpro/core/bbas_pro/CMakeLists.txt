@@ -4,6 +4,7 @@ INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR} )
 INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bpro )
 INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bpro/core )
 INCLUDE_DIRECTORIES( ${GEL_INCLUDE_DIR})
+INCLUDE_DIRECTORIES( ${GEL_INCLUDE_DIR}/mrc)
 
 SET(bbas_pro_sources
     bbas_processes.h
@@ -16,7 +17,7 @@ AUX_SOURCE_DIRECTORY(Templates bbas_pro_sources)
 AUX_SOURCE_DIRECTORY(processes bbas_pro_sources)
 
 ADD_LIBRARY(bbas_pro ${bbas_pro_sources})
-TARGET_LINK_LIBRARIES(bbas_pro bprb brdb brad bsta_io bsta vil_io vil vnl_io vnl_algo vnl vbl_io vbl vsl)
+TARGET_LINK_LIBRARIES(bbas_pro bprb brdb brad bsta_io bsta vil_io vil vnl_io vnl_algo vnl vbl_io vbl vsl vpgl vpgl_algo)
 
 INSTALL_TARGETS(/lib bbas_pro)
 INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bpro/core/bbas_pro ${bbas_pro_sources})
