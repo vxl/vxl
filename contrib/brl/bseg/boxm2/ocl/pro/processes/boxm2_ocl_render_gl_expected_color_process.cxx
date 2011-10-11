@@ -130,10 +130,12 @@ bool boxm2_ocl_render_gl_expected_color_process(bprb_func_process& pro)
 
   bool foundDataType = false;
   vcl_string data_type,options;
+  int apptypesize =0;
   if ( scene->has_data_type(boxm2_data_traits<BOXM2_GAUSS_RGB>::prefix()) ) {
     data_type = boxm2_data_traits<BOXM2_GAUSS_RGB>::prefix();
     foundDataType = true;
     options=" -D MOG_TYPE_8 ";
+    apptypesize = boxm2_data_traits<BOXM2_GAUSS_RGB>::datasize();
   }
   if (!foundDataType) {
     vcl_cout<<"boxm2_ocl_render_gl_expected_color_process ERROR: scene doesn't have BOXM2_GAUSS_RGB data type"<<vcl_endl;
@@ -174,7 +176,7 @@ bool boxm2_ocl_render_gl_expected_color_process(bprb_func_process& pro)
   // run expected image function
   float time = render_expected_image(scene, device, opencl_cache, queue,
                                      cam, exp_color, vis_image, exp_img_dim,
-                                     data_type, kernels[identifier][0], lthreads, cl_ni, cl_nj);
+                                     data_type, kernels[identifier][0], lthreads, cl_ni, cl_nj,apptypesize);
 
 
 

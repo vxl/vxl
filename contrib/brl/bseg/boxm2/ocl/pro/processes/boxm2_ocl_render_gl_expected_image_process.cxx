@@ -131,23 +131,28 @@ bool boxm2_ocl_render_gl_expected_image_process(bprb_func_process& pro)
   bool foundDataType = false;
   vcl_string data_type,options;
   vcl_vector<vcl_string> apps = scene->appearances();
+  int apptypesize = 0;
   for (unsigned int i=0; i<apps.size(); ++i) {
     if ( apps[i] == boxm2_data_traits<BOXM2_MOG3_GREY>::prefix() )
     {
       data_type = apps[i];
       foundDataType = true;
       options=" -D MOG_TYPE_8 ";
+      apptypesize = boxm2_data_traits<BOXM2_MOG3_GREY>::datasize();
     }
     else if ( apps[i] == boxm2_data_traits<BOXM2_MOG3_GREY_16>::prefix() )
     {
       data_type = apps[i];
       foundDataType = true;
       options=" -D MOG_TYPE_16 ";
-    } else if ( apps[i] == boxm2_data_traits<BOXM2_GAUSS_GREY>::prefix() )
+      apptypesize = boxm2_data_traits<BOXM2_MOG3_GREY_16>::datasize();
+    } 
+    else if ( apps[i] == boxm2_data_traits<BOXM2_GAUSS_GREY>::prefix() )
     {
       data_type = apps[i];
       foundDataType = true;
       options=" -D GAUSS_TYPE_2 ";
+      apptypesize = boxm2_data_traits<BOXM2_GAUSS_GREY>::datasize();
     }
   }
   if (!foundDataType) {
@@ -186,7 +191,7 @@ bool boxm2_ocl_render_gl_expected_image_process(bprb_func_process& pro)
   // run expected image function
   float time = render_expected_image( scene, device, opencl_cache, queue,
                                       cam, exp_image, vis_image, exp_img_dim,
-                                      data_type, kernels[identifier][0], lthreads, cl_ni, cl_nj);
+                                      data_type, kernels[identifier][0], lthreads, cl_ni, cl_nj, apptypesize);
 
   // normalize
   {
