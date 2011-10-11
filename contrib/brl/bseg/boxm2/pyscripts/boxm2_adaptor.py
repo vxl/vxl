@@ -288,6 +288,18 @@ def change_detect(scene, cache, cam, img, exp_img, device=None, rgb=False, n=1, 
     print "ERROR: Cache type not recognized: ", cache.type;
     
 
+####################################################################
+# Visualize Change Wrapper
+####################################################################
+def visualize_change(change_img, in_img, thresh=.5) : 
+  boxm2_batch.init_process("boxm2OclVisualizeChangeProcess"); 
+  boxm2_batch.set_input_from_db(0,change_img); 
+  boxm2_batch.set_input_from_db(1,in_img); 
+  boxm2_batch.set_input_float(2,thresh);
+  boxm2_batch.run_process(); 
+  (id,type) = boxm2_batch.commit_output(0); 
+  vis_img = dbvalue(id,type); 
+  return vis_img; 
 
 #####################################################################    
 #generic refine (will work on color and grey scenes)
@@ -562,10 +574,13 @@ def roi_init(NITF_path, camera, scene, convert_to_8bit, params_fname) :
 #####################################################################
 #runs blob change detection process
 def blob_change_detection( change_img, thresh ) : 
-  boxm2_batch.init_process("boxm2BlobChangeDetectionProcess");
-  boxm2_batch.set_input_from_db(0,change_img);
-  boxm2_batch.set_input_float(1, thresh); 
-  boxm2_batch.run_process();
+  boxm2_batch.init_process("boxm2BlobChangeDetectionProcess")
+  boxm2_batch.set_input_from_db(0,change_img)
+  boxm2_batch.set_input_float(1, thresh)
+  boxm2_batch.run_process()
+  (id,type) = boxm2_batch.commit_output(0)
+  blobImg = dbvalue(id,type) 
+  return blobImg
 
 #pixel wise roc process for change detection images
 def blob_precision_recall(cd_img, gt_img, mask_img=None) :

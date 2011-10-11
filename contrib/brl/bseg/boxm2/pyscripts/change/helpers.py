@@ -1,4 +1,5 @@
 from boxm2_scene_adaptor import *; 
+from boxm2_adaptor import *
 from vil_adaptor import *
 from vpgl_adaptor import *
 import os, shutil 
@@ -34,7 +35,36 @@ def render_changes(scene, img_glob, cam_glob, outdir, n=1, raybelief="") :
     #render change detection 
     cd_fname = outdir + "/cd_" + imgnum + ".tiff"; 
     cd_img = scene.change_detect(pcam, rimg, expimg, n, raybelief); 
-    save_image(expimg, cd_fname); 
+    save_image(cd_img, cd_fname); 
+  
+  
+#renders a collection (or single) of thresholded images 
+def render_vis_changes(change_glob, img_glob, thresh, outdir) :     
+
+  #make sure imgglob and camglob are string lists and same size
+  if isinstance(change_glob, str) and isinstance(img_glob, str): 
+    img_glob    = [img_glob]; 
+    change_glob = [change_glob]; 
+  assert len(img_glob) == len(change_glob) 
+
+  #make sure outdir exists
+  if not os.path.exists(outdir) :
+    os.makedirs(outdir);   
+  
+  print "Rendering vis change imgs: ", img_glob, " into ", outdir; 
+
+  # load change for each image
+  for idx, img in enumerate(img_glob) :
+  
+    #grab image number of ground truth image
+    imgnum, ext = os.path.splitext( basename(img) ); 
+    cimg,ni,nj  = load_image(change_glob[idx]);  
+    rimg,ni,nj  = load_image(img); 
+    
+    #render visualize image
+    vis_img  = visualize_change(cimg, rimg, thresh); 
+    vis_name = outdir + "/thresh_" + str(thresh) + "_" + imgnum + ".png"; 
+    save_image(vis_img, vis_name); 
   
 
 # helper function grabs the *mog* .bin files and hides them in a
