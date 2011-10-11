@@ -122,12 +122,14 @@ bool boxm2_ocl_render_expected_color_process(bprb_func_process& pro)
   bool foundDataType = false;
   vcl_string data_type,options;
   vcl_vector<vcl_string> apps = scene->appearances();
+  int apptypesize = 0;
   for (unsigned int i=0; i<apps.size(); ++i) {
     if ( apps[i] == boxm2_data_traits<BOXM2_GAUSS_RGB>::prefix() )
     {
       data_type = apps[i];
       foundDataType = true;
       options=" -D MOG_TYPE_8 ";
+      apptypesize= boxm2_data_traits<BOXM2_GAUSS_RGB>::datasize();
     }
   }
   if (!foundDataType) {
@@ -175,7 +177,7 @@ bool boxm2_ocl_render_expected_color_process(bprb_func_process& pro)
   // run expected image function
   render_expected_image(scene, device, opencl_cache, queue,
                         cam, exp_image, vis_image, exp_img_dim,
-                        data_type, kernels[identifier][0], lthreads, cl_ni, cl_nj);
+                        data_type, kernels[identifier][0], lthreads, cl_ni, cl_nj,apptypesize);
 
   // read out expected image
   exp_image->read_to_buffer(queue);
