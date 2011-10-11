@@ -36,6 +36,8 @@ SOURCES += processes/boxm2_ocl_update_sun_visibilities_process.cxx
 SOURCES += processes/boxm2_ocl_aux_update_view_direction_process.cxx
 SOURCES += processes/boxm2_ocl_create_aux_process.cxx
 SOURCES += processes/boxm2_ocl_create_norm_intensities_process.cxx
+SOURCES += processes/boxm2_ocl_ingest_dem_process.cxx
+SOURCES += processes/boxm2_ocl_visualize_change_process.cxx
 
 #######################################
 include ${VXLROOT}/config/top-params.mk
