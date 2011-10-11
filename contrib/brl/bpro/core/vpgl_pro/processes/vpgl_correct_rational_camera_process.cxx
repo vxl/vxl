@@ -137,10 +137,10 @@ bool vpgl_correct_rational_cameras_process(bprb_func_process& pro)
   {
     vcl_stringstream line(awk.line());
     vcl_string cam_path;
-    ifs >> cam_path;
+    line >> cam_path;
     if (cam_path.size() < 2) continue;
     double i, j;
-    ifs >> i; ifs >> j;
+    line >> i; line >> j;
     vcl_cout << "reading cam: " << cam_path << " corr i: " << i << ' ' << j << vcl_endl;
     vcl_string img_name = vul_file::strip_directory(cam_path);
     img_name = vul_file::strip_extension(img_name);
