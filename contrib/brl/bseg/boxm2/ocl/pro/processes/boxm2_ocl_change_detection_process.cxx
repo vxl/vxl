@@ -452,9 +452,12 @@ bool boxm2_ocl_change_detection_process(bprb_func_process& pro)
           //if 1x1 change was high enough...
           if (prob_change_buff[i] > PROB_THRESH) {
 
+            //hack for change image, only run change image buff over smaller window
+            //if(oi >= -(half-1) && oi <=(half-1) && oj >= -(half-1) && oj <=(half-1))
             if (nxn_change_buff[i] > change_image_buff[i])
               change_image_buff[i] = nxn_change_buff[i];
 
+            //hack run change_exp_image_buff over larger window
             if (nxn_change_exp_buff[i] < change_exp_image_buff[i])
               change_exp_image_buff[i] = nxn_change_exp_buff[i];
           }
