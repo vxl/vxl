@@ -171,6 +171,9 @@ SOURCE=.\processes/brad_classify_image_pixel_process.cxx
 SOURCE=.\processes/brad_eigenimage_pixel_process.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\processes/bbas_camera_angles_process.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/brdb_value_t+brad_eigenspace_sptr-.cxx
 # End Source File
 # Begin Source File
