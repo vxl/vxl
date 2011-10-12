@@ -42,7 +42,7 @@ vcl_string escape_space(vcl_string str)
 
 vcl_string make_quoted(vcl_string str)
 {
-  unsigned idx = str.find_first_of("\"", 0);
+  vcl_string::size_type idx = str.find_first_of("\"", 0);
   if (idx == vcl_string::npos) {
     idx = str.find_first_of("\\", 0);
     str.insert(idx, "\"");
