@@ -359,6 +359,62 @@ classify_image(vil_image_resource_sptr const& resc,
   vcl_cout << '\n' << vcl_flush;
   return true;
 }
+template <class T>
+bool brad_eigenspace<T>::
+classify_image(vil_image_resource_sptr const& resc,
+               bsta_joint_histogram_3d<float> const& no_atmos,
+               bsta_joint_histogram_3d<float> const& atmos,
+               unsigned nit, unsigned njt,
+               vil_image_resource_sptr& out_resc,
+               vil_image_resource_sptr& out_resc_orig_size)
+{
+  if(!eigensystem_valid_)
+    return false;
+  unsigned n = funct_.size();
+  vnl_vector<double> v(n);
+  vnl_vector<double> v0 = eigenvectors_.get_column(n-1);
+  vnl_vector<double> v1 = eigenvectors_.get_column(n-2);
+  vnl_vector<double> v2 = eigenvectors_.get_column(n-3);
+  unsigned ni = resc->ni(), nj = resc->nj();
+  if(ni==0||nj==0||ni<nib_||nj<njb_) return false;
+  unsigned nbi = ni/nib_, nbj = nj/njb_;
+  
+  vil_image_view<float> out_r(nbi, nbj, 1);
+  out_resc = vil_new_image_resource_of_view(out_r);
+  
+  vil_image_view<float> out_orig(ni, nj, 1);
+  out_resc_orig_size = vil_new_image_resource_of_view(out_orig);
+  
+  vil_blocked_image_resource_sptr bresc = 
+    vil_new_blocked_image_facade(resc, nit, njt);
+  vil_blocked_image_resource_sptr cbresc = 
+    vil_new_cached_image_resource(bresc);
+  
+  unsigned i0 = 0, j0 = 0;
+  vil_image_view<float> temp(nib_, njb_);
+  for(unsigned r = 0; r<nbj; ++r, j0+=njb_){
+    i0 = 0;
+    vil_image_view<float> row(nbi, 1, 1);
+    for(unsigned c = 0; c<nbi; ++c, i0+=nib_)
+      {
+        vil_image_view_base_sptr view_ptr = 
+          cbresc->get_view(i0, nib_, j0, njb_);
+        vil_image_view<float> fview = vil_convert_cast(float(), view_ptr);
+        vnl_vector<double> v = funct_(fview); 
+        float eig0 = static_cast<float>(dot_product(v, v0));
+        float eig1 = static_cast<float>(dot_product(v, v1));
+        float eig2 = static_cast<float>(dot_product(v, v2));
+        float q = bayes(eig0, eig1, eig2, no_atmos, atmos);
+        row(c, 0)=q;
+        temp.fill(q);
+        out_resc_orig_size->put_view(temp, i0, j0);
+      }
+    out_resc->put_view(row, 0, r);
+    vcl_cout << '.'<< vcl_flush;
+  }
+  vcl_cout << '\n' << vcl_flush;
+  return true;
+}
 
 template <class T>
 bool brad_eigenspace<T>::
