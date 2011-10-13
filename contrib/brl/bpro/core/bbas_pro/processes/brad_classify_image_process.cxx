@@ -15,6 +15,7 @@ bool brad_classify_image_process_cons(bprb_func_process& pro)
 {
 using namespace bbas_core_brad_classify_image;
   bool ok=false;
+  /*
   vcl_vector<vcl_string> input_types(7);
   input_types[0]="brad_eigenspace_sptr"; //eigenspace
   input_types[1]="bsta_joint_histogram_3d_base_sptr"; //no atmospherics
@@ -30,6 +31,23 @@ using namespace bbas_core_brad_classify_image;
   vcl_vector<vcl_string> output_types;
   ok = pro.set_output_types(output_types);
   if (!ok) return ok;
+  */
+  vcl_vector<vcl_string> input_types(6);
+  input_types[0]="brad_eigenspace_sptr"; //eigenspace
+  input_types[1]="bsta_joint_histogram_3d_base_sptr"; //no atmospherics
+  input_types[2]="bsta_joint_histogram_3d_base_sptr"; //with atmospherics
+  input_types[3]="vcl_string"; //input image path
+  input_types[4]="unsigned"; //tile ni
+  input_types[5]="unsigned"; //tile nj
+  ok = pro.set_input_types(input_types);
+  if (!ok) return ok;
+
+  //no outputs
+  vcl_vector<vcl_string> output_types;
+  output_types.push_back("vil_image_view_base_sptr");
+  output_types.push_back("vil_image_view_base_sptr");
+  ok = pro.set_output_types(output_types);
+  if (!ok) return ok;
   return true;
 }
 
@@ -38,7 +56,7 @@ bool brad_classify_image_process(bprb_func_process& pro)
 {
   using namespace bbas_core_brad_classify_image;
   // Sanity check
-  if (pro.n_inputs()!= 7) {
+  if (pro.n_inputs()!= 6) {
     vcl_cout << "brad_classify_image_process: The input number should be 5" << vcl_endl;
     return false;
   }
@@ -72,12 +90,17 @@ bool brad_classify_image_process(bprb_func_process& pro)
     vcl_cout << "in classify_image_process, input resource can't be loaded\n";
     return false;
   } 
-  vcl_string output_path = pro.get_input<vcl_string>(4);
+  //vcl_string output_path = pro.get_input<vcl_string>(4);
 
-  unsigned nit = pro.get_input<unsigned>(5);
-  unsigned njt = pro.get_input<unsigned>(6);
+  unsigned nit = pro.get_input<unsigned>(4);
+  unsigned njt = pro.get_input<unsigned>(5);
 
-  CAST_CALL_EIGENSPACE(es_ptr, ep->classify_image(input, *hist_no, *hist_atmos, nit, njt, output_path), "in classify_image_process - classify function failed\n")
+  //CAST_CALL_EIGENSPACE(es_ptr, ep->classify_image(input, *hist_no, *hist_atmos, nit, njt, output_path), "in classify_image_process - classify function failed\n")
+  vil_image_resource_sptr out_r, out_r_orig_size;
+  CAST_CALL_EIGENSPACE(es_ptr, ep->classify_image(input, *hist_no, *hist_atmos, nit, njt, out_r, out_r_orig_size), "in classify_image_process - classify function failed\n")
+
+  pro.set_output_val<vil_image_view_base_sptr>(0, out_r->get_view());
+  pro.set_output_val<vil_image_view_base_sptr>(1, out_r_orig_size->get_view());
 
   return true;
 }
