@@ -118,6 +118,12 @@ class brad_eigenspace : public brad_eigenspace_base
                       bsta_joint_histogram_3d<float> const& atmos,
                       unsigned nit, unsigned njt,
                       vcl_string const& output_path);
+  bool classify_image(vil_image_resource_sptr const& resc,
+                      bsta_joint_histogram_3d<float> const& no_atmos,
+                      bsta_joint_histogram_3d<float> const& atmos,
+                      unsigned nit, unsigned njt,
+                      vil_image_resource_sptr& out_resc,
+                      vil_image_resource_sptr& out_resc_orig_size);
 
   //: classify an image as to atmospheric content, nit, njt are block size, assumes the resulting image can fit in memory. uses a sliding window to classify each pixel.
   bool classify_image_pixel(vil_image_view<float> const& image,
