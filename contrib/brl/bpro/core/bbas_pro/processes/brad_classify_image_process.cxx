@@ -14,8 +14,7 @@ namespace bbas_core_brad_classify_image
 bool brad_classify_image_process_cons(bprb_func_process& pro)
 {
 using namespace bbas_core_brad_classify_image;
-  bool ok=false;
-  /*
+#if 0
   vcl_vector<vcl_string> input_types(7);
   input_types[0]="brad_eigenspace_sptr"; //eigenspace
   input_types[1]="bsta_joint_histogram_3d_base_sptr"; //no atmospherics
@@ -24,14 +23,14 @@ using namespace bbas_core_brad_classify_image;
   input_types[4]="vcl_string"; //output image path
   input_types[5]="unsigned"; //tile ni
   input_types[6]="unsigned"; //tile nj
-  ok = pro.set_input_types(input_types);
+  bool ok = pro.set_input_types(input_types);
   if (!ok) return ok;
 
   //no outputs
   vcl_vector<vcl_string> output_types;
   ok = pro.set_output_types(output_types);
   if (!ok) return ok;
-  */
+#endif
   vcl_vector<vcl_string> input_types(6);
   input_types[0]="brad_eigenspace_sptr"; //eigenspace
   input_types[1]="bsta_joint_histogram_3d_base_sptr"; //no atmospherics
@@ -39,16 +38,13 @@ using namespace bbas_core_brad_classify_image;
   input_types[3]="vcl_string"; //input image path
   input_types[4]="unsigned"; //tile ni
   input_types[5]="unsigned"; //tile nj
-  ok = pro.set_input_types(input_types);
-  if (!ok) return ok;
 
   //no outputs
   vcl_vector<vcl_string> output_types;
   output_types.push_back("vil_image_view_base_sptr");
   output_types.push_back("vil_image_view_base_sptr");
-  ok = pro.set_output_types(output_types);
-  if (!ok) return ok;
-  return true;
+  return pro.set_input_types(input_types)
+     &&  pro.set_output_types(output_types);
 }
 
 //: Execute the process
@@ -57,39 +53,39 @@ bool brad_classify_image_process(bprb_func_process& pro)
   using namespace bbas_core_brad_classify_image;
   // Sanity check
   if (pro.n_inputs()!= 6) {
-    vcl_cout << "brad_classify_image_process: The input number should be 5" << vcl_endl;
+    vcl_cout << "brad_classify_image_process: The number of inputs should be 6" << vcl_endl;
     return false;
   }
   brad_eigenspace_sptr es_ptr = pro.get_input<brad_eigenspace_sptr>(0);
-  if(!es_ptr){
+  if (!es_ptr) {
     vcl_cout << "in classify_image_process, null eigenspace pointer\n";
     return false;
   }
-  bsta_joint_histogram_3d_base_sptr hno_ptr = 
+  bsta_joint_histogram_3d_base_sptr hno_ptr =
     pro.get_input<bsta_joint_histogram_3d_base_sptr>(1);
 
   bsta_joint_histogram_3d<float>* hist_no = dynamic_cast<bsta_joint_histogram_3d<float>*>(hno_ptr.ptr());
 
-  if(!hist_no){
+  if (!hist_no) {
     vcl_cout << "in classify_image_process, hist can't be cast\n";
     return false;
   }
 
-  bsta_joint_histogram_3d_base_sptr h_atmos_ptr = 
+  bsta_joint_histogram_3d_base_sptr h_atmos_ptr =
     pro.get_input<bsta_joint_histogram_3d_base_sptr>(2);
 
   bsta_joint_histogram_3d<float>* hist_atmos = dynamic_cast<bsta_joint_histogram_3d<float>*>(h_atmos_ptr.ptr());
 
-  if(!hist_atmos){
+  if (!hist_atmos) {
     vcl_cout << "in classify_image_process, hist can't be cast\n";
     return false;
   }
   vcl_string input_path = pro.get_input<vcl_string>(3);
   vil_image_resource_sptr input = vil_load_image_resource(input_path.c_str());
-  if(!input){
+  if (!input) {
     vcl_cout << "in classify_image_process, input resource can't be loaded\n";
     return false;
-  } 
+  }
   //vcl_string output_path = pro.get_input<vcl_string>(4);
 
   unsigned nit = pro.get_input<unsigned>(4);
