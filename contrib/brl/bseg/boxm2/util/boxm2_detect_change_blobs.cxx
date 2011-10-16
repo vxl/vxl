@@ -7,50 +7,51 @@
 #include <vil/algo/vil_binary_erode.h>
 #include <vil/algo/vil_threshold.h>
 #include <vil/vil_save.h>
+#include <vcl_cassert.h>
 
 
 float boxm2_change_blob::percent_overlap(boxm2_change_blob& blob)
 {
   //find number of matching pairs, divided by this area's size
-  vcl_vector<PairType> other = blob.get_pixels(); 
-  float numOverlap = 0.0f; 
-  for(int i=0; i<pixels_.size(); ++i) {
-    for(int j=0; j<other.size(); ++j) {
-      if(pixels_[i] == other[j]) {
-        numOverlap++; 
-        break; 
+  vcl_vector<PairType> other = blob.get_pixels();
+  float numOverlap = 0.0f;
+  for (unsigned int i=0; i<pixels_.size(); ++i) {
+    for (unsigned int j=0; j<other.size(); ++j) {
+      if (pixels_[i] == other[j]) {
+        ++numOverlap;
+        break;
       }
     }
   }
-  
+
   //return percent
-  return numOverlap / pixels_.size(); 
+  return numOverlap / pixels_.size();
 }
 
 
 //: Main boxm2_detect_change_blobs function
 //  Takes in bundle.out file and image directory that created img_dir
-void boxm2_util_detect_change_blobs(vil_image_view<float>& change, 
-                                    float thresh, 
+void boxm2_util_detect_change_blobs(vil_image_view<float>& change,
+                                    float thresh,
                                     vcl_vector<boxm2_change_blob>& blobs)
 {
   //threshold
-  vil_image_view<bool> bool_image(change.ni(), change.nj()); 
-  vil_threshold_above<float>( change, bool_image, thresh ); 
-  vil_image_view<bool> imga(change.ni(), change.nj()), 
-                       imgb(change.ni(), change.nj()); 
-  
+  vil_image_view<bool> bool_image(change.ni(), change.nj());
+  vil_threshold_above<float>( change, bool_image, thresh );
+  vil_image_view<bool> imga(change.ni(), change.nj()),
+                       imgb(change.ni(), change.nj());
+
   //remove singletons
-  boxm2_util_remove_singletons(bool_image, imga); 
+  boxm2_util_remove_singletons(bool_image, imga);
 
   //dilate image
   vil_structuring_element selem;
-  selem.set_to_disk(1.05);  
+  selem.set_to_disk(1.05);
   vil_binary_dilate(imga, imgb, selem);
-  
+
   //erode image
-  selem.set_to_disk(1.05); 
-  vil_binary_erode(imgb, imga, selem); 
+  selem.set_to_disk(1.05);
+  vil_binary_erode(imgb, imga, selem);
 
   //find blobs
   bil_blob_finder finder(imga);
@@ -62,20 +63,20 @@ void boxm2_util_detect_change_blobs(vil_image_view<float>& change,
     //new blob
     boxm2_change_blob blob;
     //go over each row
-    vcl_vector<vil_chord>::iterator iter; 
-    for(iter=region.begin(); iter!=region.end(); ++iter) {
+    vcl_vector<vil_chord>::iterator iter;
+    for (iter=region.begin(); iter!=region.end(); ++iter) {
       //add each pixel in this row to blob
-      for(unsigned i=iter->ilo; i<iter->ihi+1; ++i)
-        blob.add_pixel( PairType(i, iter->j) );  
+      for (unsigned i=iter->ilo; i<iter->ihi+1; ++i)
+        blob.add_pixel( PairType(i, iter->j) );
     }
-    blobs.push_back(blob); 
+    blobs.push_back(blob);
   }
-  
+
   vcl_cout<<"Found "<<blobs.size()<<" blobs"<<vcl_endl;
 }
 
 //: Detects blobs given a bool image
-void boxm2_util_detect_blobs(const vil_image_view<bool>& imgIn, 
+void boxm2_util_detect_blobs(const vil_image_view<bool>& imgIn,
                              vcl_vector<boxm2_change_blob>& blobs)
 {
   //find blobs
@@ -88,73 +89,59 @@ void boxm2_util_detect_blobs(const vil_image_view<bool>& imgIn,
     //new blob
     boxm2_change_blob blob;
     //go over each row
-    vcl_vector<vil_chord>::iterator iter; 
-    for(iter=region.begin(); iter!=region.end(); ++iter) {
+    vcl_vector<vil_chord>::iterator iter;
+    for (iter=region.begin(); iter!=region.end(); ++iter) {
       //add each pixel in this row to blob
-      for(unsigned i=iter->ilo; i<iter->ihi+1; ++i)
-        blob.add_pixel( PairType(i, iter->j) );  
+      for (unsigned i=iter->ilo; i<iter->ihi+1; ++i)
+        blob.add_pixel( PairType(i, iter->j) );
     }
-    blobs.push_back(blob); 
+    blobs.push_back(blob);
   }
 }
 
-//removes pixels that are surrounded by 
-void boxm2_util_remove_singletons(const vil_image_view<bool>& imgIn, 
+//removes pixels that are surrounded by removed pixels
+void boxm2_util_remove_singletons(const vil_image_view<bool>& imgIn,
                                         vil_image_view<bool>& imgOut)
 {
-  for(int i=0; i<imgIn.ni(); ++i) {
-    for(int j=0; j<imgIn.nj(); ++j) {
-      
-      if( imgIn(i,j) ){
+  assert(imgIn.ni() == imgOut.ni() && imgIn.nj() == imgOut.nj());
+  for (unsigned int i=0; i<imgIn.ni(); ++i) {
+    for (unsigned int j=0; j<imgIn.nj(); ++j)
+    {
+      //if this guy is single, make him false
+      imgOut(i,j) = false;
 
-        //check up and down neighbors
-        int ni, nj; 
-        bool isSingle = true; 
-        
+      //check up and down neighbors
+      if (imgIn(i,j))
+      {
         //up
-        ni=i-1, nj=j; 
-        if(ni > 0 && imgIn(ni,nj)) 
-          isSingle = false; 
-        
+        if (i > 1 && imgIn(i-1,j))
+          imgOut(i,j) = true;
         //down
-        ni=i+1, nj=j; 
-        if(ni < imgIn.ni() && imgIn(ni,nj))
-          isSingle = false; 
-        
+        else if (i+1 < imgIn.ni() && imgIn(i+1,j))
+          imgOut(i,j) = true;
         //left
-        nj=j-1, ni=i; 
-        if(nj > 0 && imgIn(ni,nj))
-          isSingle = false; 
-        
+        else if (j > 1 && imgIn(i,j-1))
+          imgOut(i,j) = true;
         //right
-        nj=j+1, ni=i;
-        if(nj < imgIn.nj() && imgIn(ni,nj))
-          isSingle = false; 
-        
-        //if this guy is single, make him false
-        imgOut(i,j) = (isSingle) ? false : true; 
+        else if (j+1 < imgIn.nj() && imgIn(i,j+1))
+          imgOut(i,j) = true;
       }
-      else {
-        imgOut(i,j) = false; 
-      }
-      
     }
   }
 }
 
 
-
-void boxm2_util_blob_to_image(  vcl_vector<boxm2_change_blob>& blobs, 
-                                vil_image_view<vxl_byte>& imgOut) 
-{ 
+void boxm2_util_blob_to_image(vcl_vector<boxm2_change_blob>& blobs,
+                              vil_image_view<vxl_byte>& imgOut)
+{
   //create a blob image
-  imgOut.fill(0); 
-  vcl_vector<boxm2_change_blob>::iterator iter; 
-  for(iter=blobs.begin(); iter!=blobs.end(); ++iter) {
+  imgOut.fill(0);
+  vcl_vector<boxm2_change_blob>::iterator iter;
+  for (iter=blobs.begin(); iter!=blobs.end(); ++iter) {
     //paint each blob pixel white
-    for(int p=0; p<iter->blob_size(); ++p) {
-      PairType pair = iter->get_pixel(p); 
-      imgOut( pair.x(), pair.y() ) = (vxl_byte) 255; 
+    for (unsigned int p=0; p<iter->blob_size(); ++p) {
+      PairType pair = iter->get_pixel(p);
+      imgOut( pair.x(), pair.y() ) = (vxl_byte) 255;
     }
   }
 }
