@@ -14,30 +14,29 @@ namespace boxm2_blob_change_detection_process_globals
 {
   const unsigned n_inputs_ = 4;
   const unsigned n_outputs_ = 1;
-  
-  const float EPSILON = .02f; 
+
+  const float EPSILON = .02f;
 }
 
 bool boxm2_blob_change_detection_process_cons(bprb_func_process& pro)
 {
   using namespace boxm2_blob_change_detection_process_globals;
 
-  //process takes 2 inputs
+  //process takes 4 inputs
   vcl_vector<vcl_string> input_types_(n_inputs_);
   input_types_[0] = "vil_image_view_base_sptr";
   input_types_[1] = "float";
-  
   //two default args - depth maps from two scenes (will be combined to form mask)
-  input_types_[2] = "vil_image_view_base_sptr"; 
-  input_types_[3] = "vil_image_view_base_sptr"; 
+  input_types_[2] = "vil_image_view_base_sptr";
+  input_types_[3] = "vil_image_view_base_sptr";
 
   // default arguments
   brdb_value_sptr empty_img1 = new brdb_value_t<vil_image_view_base_sptr>(new vil_image_view<float>(1,1));
   brdb_value_sptr empty_img2 = new brdb_value_t<vil_image_view_base_sptr>(new vil_image_view<float>(1,1));
-  pro.set_input(2, empty_img1); 
+  pro.set_input(2, empty_img1);
   pro.set_input(3, empty_img2);
 
-  // process has no outputs
+  // process has 1 output
   vcl_vector<vcl_string>  output_types_(n_outputs_);
   output_types_[0] = "vil_image_view_base_sptr";
   return pro.set_input_types(input_types_) &&
@@ -74,20 +73,20 @@ bool boxm2_blob_change_detection_process(bprb_func_process& pro)
     vcl_cout<<"Detection Map cannot be converted to float image"<<vcl_endl;
     return false;
   }
-  
+
   //use two images if they are non default, zero out change image at delta depth image > .02
   //Two depths map are a comparison of the expected depth from the images point of
   //view.  If there is a large discrepency in depth, the change detection algorithm
-  //will not use these pixels.  
-  if(depth1->ni() == depth2->ni() && depth1->ni() == change->ni()) {
+  //will not use these pixels.
+  if (depth1->ni() == depth2->ni() && depth1->ni() == change->ni()) {
     vcl_cout<<"boxm2_blob_change_detection_process::using depth maps for mask"<<vcl_endl;
-    for(int i=0; i<change->ni(); ++i) 
-      for(int j=0; j<change->nj(); ++j) 
-        if( vcl_abs( (*depth1)(i,j) - (*depth2)(i,j) ) > EPSILON )
-          (*change)(i,j) = 0.0f; 
+    for (unsigned int i=0; i<change->ni(); ++i)
+      for (unsigned int j=0; j<change->nj(); ++j)
+        if ( vcl_abs( (*depth1)(i,j) - (*depth2)(i,j) ) > EPSILON )
+          (*change)(i,j) = 0.0f;
   }
   vil_save( *change, "test_change.tiff");
-  
+
 
   //detect change blobs
   vcl_vector<boxm2_change_blob> blobs;
@@ -105,9 +104,9 @@ bool boxm2_blob_change_detection_process(bprb_func_process& pro)
       (*blobImg)( pair.x(), pair.y() ) = (vxl_byte) 255;
     }
   }
-  
+
   //set outputs
-  i = 0; 
+  i = 0;
   pro.set_output_val<vil_image_view_base_sptr>(i, blobImg);
   return true;
 }
