@@ -5,7 +5,7 @@
 
 //Default private variables to null/0
 bocl_kernel* boxm2_ocl_camera_converter::persp_to_generic_kernel = 0;
-
+vcl_map<vcl_string, bocl_kernel*> boxm2_ocl_camera_converter::kernels_;
 
 //takes in an unknown camera (must be vpgl_generic or perspective)
 // cam, it's cl_ni, nj, and creates ray image
@@ -54,11 +54,15 @@ float boxm2_ocl_camera_converter::convert_persp_to_generic(bocl_device_sptr & de
 {
     float transfer_time=0.0f;
     float gpu_time=0.0f;
-    if (!persp_to_generic_kernel) {
+    
+    vcl_string identifier = device->device_identifier();
+    if ( kernels_.find(identifier) == kernels_.end() ) {
       vcl_cout<<"Compiling conversion kernel (should only happen once)..."<<vcl_endl;
-      boxm2_ocl_camera_converter::compile_persp_to_generic_kernel(device);
+      persp_to_generic_kernel = boxm2_ocl_camera_converter::compile_persp_to_generic_kernel(device);
+      kernels_[identifier] = persp_to_generic_kernel; 
     }
-
+    persp_to_generic_kernel = kernels_[identifier];
+    
     //sanity check
     if (pcam->type_name() != "vpgl_perspective_camera") {
       vcl_cout<<"Cannot convert "<<pcam->type_name()<<" to generic cam!!"<<vcl_endl;
@@ -103,22 +107,23 @@ float boxm2_ocl_camera_converter::convert_persp_to_generic(bocl_device_sptr & de
 }
 
 
-void boxm2_ocl_camera_converter::compile_persp_to_generic_kernel(bocl_device_sptr device)
+bocl_kernel* boxm2_ocl_camera_converter::compile_persp_to_generic_kernel(bocl_device_sptr device)
 {
   //gather all cam convert sources
   vcl_vector<vcl_string> src_paths;
-  vcl_string source_dir = vcl_string(VCL_SOURCE_ROOT_DIR) + "/contrib/brl/bseg/boxm2/ocl/cl/";
+  vcl_string source_dir = boxm2_ocl_util::ocl_src_root();
   src_paths.push_back(source_dir + "scene_info.cl");
   src_paths.push_back(source_dir + "backproject.cl");
   src_paths.push_back(source_dir + "camera_convert.cl");
   vcl_string options = "";
 
   //have kernel construct itself using the context and device
-  persp_to_generic_kernel = new bocl_kernel();
-  persp_to_generic_kernel->create_kernel( &device->context(),
+  bocl_kernel* kern = new bocl_kernel();
+  kern->create_kernel( &device->context(),
                                           device->device_id(),
                                           src_paths,
                                           "persp_to_generic",   //kernel name
                                           options,              //options
                                           "boxm2 perspective to generic camera converter kernel"); //kernel identifier (for error checking)
+  return kern; 
 }
