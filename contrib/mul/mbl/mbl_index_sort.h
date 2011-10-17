@@ -95,8 +95,8 @@ void mbl_index_sort(const vcl_vector<T>& data, vcl_vector<unsigned>& index)
 // 
 // For example, a simple index sort can be done as follows.
 // \code
-//  vcl_vector data<double> (n);
-//  vcl_vector index<unsigned> (n/2);
+//  vcl_vector<double> data (n);
+//  vcl_vector<unsigned> index (n/2);
 //  ...
 //  vcl_sort(index.begin(), index.end(), mbl_index_sort_cmp<double>(data));
 // \endcode

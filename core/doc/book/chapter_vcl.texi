@@ -271,7 +271,24 @@ struct X; // forward declare the class.
 VCL_VECTOR_INSTANTIATE(X *);
 @end smallexample
 
-The naming convention for such files is described **** where ? ****.
+The naming convention for such files is as follows:
+@itemize @bullet
+@item Take the full template instantiation, e.g. 
+@code{VSL_VECTOR_IO_INSTANTIATE( vcl_vector< vcl_pair< unsigned int, vxl_int_64 > > )}
+@item Strip the @code{_INSTANTIATE} and convert the Macro name to lowercase, e.g. 
+@code{vsl_vector_io( vcl_vector< vcl_pair< unsigned int, vxl_int_64 > >)}
+@item Convert the macro's brackets @code{()} to angle brackets @code{<>} e.g.
+@code{vsl_vector_io< vcl_vector< vcl_pair< unsigned int, vxl_int_64 > > >}
+@item Replace '@code{unsigned *}' with '@code{u*}', i.e. '@code{unsigned int}' 
+with '@code{uint}', etc. e.g.
+@code{vsl_vector_io< vcl_vector< vcl_pair< uint, vxl_int_64 > > >}
+@item Strip '@code{vcl_}' prefixes from fixed width types. e.g.
+@code{vsl_vector_io< vcl_vector< vcl_pair< uint, int_64 > > >}
+@item Strip spaces and replace '@code{<}' with '@code{+}', '@code{>}' with
+'@code{-}', and '@code{,}' with '@code{.}' e.g.
+@code{vsl_vector_io+vcl_vector+vcl_pair+uint.uint---}
+@item 
+@end itemize
 
 If you are using the build system that comes with VXL and you aren't using
 implicit instantiation you should put such instantiations in the

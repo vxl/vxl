@@ -13,6 +13,12 @@
 //  When copied, the object pointed to gets cloned.
 //  When written or read to/from binary streams,
 //  suitable polymorphic I/O is invoked.
+//
+// \code
+// vcl_auto_ptr<T> inst = get_from_some_factory_function();
+// mbl_cloneable_ptr<T> long_term_store;
+// long_term_store = inst.release();
+// \endcode
 template <class BaseClass>
 class mbl_cloneable_ptr
 {
@@ -125,6 +131,12 @@ void vsl_b_read(vsl_b_istream& bfs, mbl_cloneable_ptr<BaseClass>& p)
 //  When copied, the object pointed to gets cloned.
 //  When written or read to/from binary streams,
 //  suitable polymorphic I/O is invoked.
+//
+// To take ownership of the contents of a vcl_auto_ptr<T> use
+// \code
+// vcl_auto_ptr<T> inst = get_from_some_factory_function();
+// mbl_cloneable_nzptr<T> long_term_store(inst.release());
+// \endcode
 template <class BaseClass>
 class mbl_cloneable_nzptr
 {

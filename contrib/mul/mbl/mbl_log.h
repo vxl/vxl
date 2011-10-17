@@ -67,6 +67,8 @@
 #include <vcl_ostream.h>
 #include <vcl_set.h>
 #include <vcl_map.h>
+#include <vcl_ios.h>
+
 
 // define MBL_LOG_DISABLE_ALL_LOGGING to stop all logging.
 
@@ -354,7 +356,13 @@ class mbl_logger_root
   do { mbl_logger &rlogger = logger; \
     if (rlogger.level() >= mbl_logger:: my_level) {\
       rlogger.mtstart(mbl_logger:: my_level, __FILE__, __LINE__); \
+      vcl_ios_fmtflags flags=rlogger.mtlog().flags(); \
+      vcl_streamsize precision=rlogger.mtlog().precision(); \
+      vcl_streamsize width=rlogger.mtlog().width(); \
       rlogger.mtlog() << message << vcl_endl; \
+      rlogger.mtlog().width(width); \
+      rlogger.mtlog().precision(precision); \
+      rlogger.mtlog().flags(flags); \
       rlogger.mtstop(); } \
   } while (false)
 #endif
