@@ -536,9 +536,12 @@ inline void test_point_containment()
     vgl_point_3d<double> in3(0.01,0,0.01); // almost a corner point
     vgl_point_3d<double> out1(2,0,1); // same plane, outside triangle
     vgl_point_3d<double> out2(2,1,1); // not coplanar, still outside triangle
+    vgl_point_3d<double> in4(0.01,0.1,0.01); // not quite coplanar, but otherwise inside triangle
     TEST("inside 1 - barycentric method", vgl_triangle_3d_test_inside(in1,p1,p2,p3), true);
+    TEST("inside 1 - barycentric method with coplanar tol", vgl_triangle_3d_test_inside(in1,p1,p2,p3, 1e-10), true);
     TEST("inside 1 - cosine method", vgl_triangle_3d_test_inside_simple(in1,p1,p2,p3), true);
     TEST("inside 2 - barycentric method", vgl_triangle_3d_test_inside(in2,p1,p2,p3), true);
+    TEST("inside 2 - barycentric method with coplanar tol", vgl_triangle_3d_test_inside(in2,p1,p2,p3, 1e-10), true);
     TEST("inside 2 - cosine method", vgl_triangle_3d_test_inside_simple(in2,p1,p2,p3), true);
     TEST("inside 3 - barycentric method", vgl_triangle_3d_test_inside(in3,p1,p2,p3), true);
     TEST("inside 3 - cosine method", vgl_triangle_3d_test_inside_simple(in3,p1,p2,p3), true);
@@ -546,6 +549,8 @@ inline void test_point_containment()
     TEST("not inside 1 - cosine method", vgl_triangle_3d_test_inside_simple(out1,p1,p2,p3), false);
     TEST("not inside 2 - barycentric method", vgl_triangle_3d_test_inside(out2,p1,p2,p3), false);
     TEST("not inside 2 - cosine method", vgl_triangle_3d_test_inside_simple(out2,p1,p2,p3), false);
+    TEST("sort of inside 4 - barycentric method with coplanar tol", vgl_triangle_3d_test_inside(in4,p1,p2,p3, 0.2), true);
+    TEST("sort of inside 4 - barycentric method", vgl_triangle_3d_test_inside(in4,p1,p2,p3), false);
   }
   // three collinear points -- the cosine method will always fail in this case
   {

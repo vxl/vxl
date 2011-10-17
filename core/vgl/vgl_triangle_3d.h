@@ -39,6 +39,17 @@ bool vgl_triangle_3d_test_inside(
   const vgl_point_3d<double>& p2,
   const vgl_point_3d<double>& p3);
 
+//: Check if the given point is inside the triangle
+//  The triangle is represented by its vertices \a p1, \a p2, \a p3
+//  \return true if point is inside
+//  \param coplanar_tolerance is used to dismiss points because they are
+//    outside the plane. This doesn't widen the triangle, just thickens it.
+bool vgl_triangle_3d_test_inside(const vgl_point_3d<double>& i_pnt,
+                                 const vgl_point_3d<double>& p1,
+                                 const vgl_point_3d<double>& p2,
+                                 const vgl_point_3d<double>& p3,
+                                 double coplanar_tolerance );
+
 //: Check if point \a i_pnt is inside the triangle
 //  The triangle is represented by its vertices \a p1, \a p2, \a p3
 //  \return true if point is inside

@@ -73,14 +73,18 @@ vcl_vector<vcl_pair<unsigned,unsigned> > vgl_triangle_3d_coincident_edges(
   return coinc_edges;
 }
 
+
 //=======================================================================
 //: Check if the given point is inside the triangle
 //  The triangle is represented by its vertices \a p1, \a p2, \a p3
 //  \return true if point is inside
+//  \param coplanar_tolerance used to dismiss points because they are
+//    outside the plane. This doesn't widen the triangle, just thickens it.
 bool vgl_triangle_3d_test_inside(const vgl_point_3d<double>& i_pnt,
                                  const vgl_point_3d<double>& p1,
                                  const vgl_point_3d<double>& p2,
-                                 const vgl_point_3d<double>& p3 )
+                                 const vgl_point_3d<double>& p3,
+                                 double coplanar_tolerance )
 {
   // firstly perform some degeneracy checks
   if (collinear(p1,p2,p3))
@@ -104,7 +108,7 @@ bool vgl_triangle_3d_test_inside(const vgl_point_3d<double>& i_pnt,
   vgl_plane_3d<double> plane(p1,p2,p3);
 
   //the point needs to be in the triangles plane
-  if (vcl_fabs(vgl_distance(plane,i_pnt)) > sqrteps)
+  if (vgl_distance(plane,i_pnt) > coplanar_tolerance)
     return false;
 
   vgl_vector_3d<double> norm = plane.normal();
@@ -157,6 +161,20 @@ bool vgl_triangle_3d_test_inside(const vgl_point_3d<double>& i_pnt,
   return alpha        >=    -sqrteps /*0*/
       && alpha + beta <= 1.0+sqrteps;
 }
+
+
+//=======================================================================
+//: Check if the given point is inside the triangle
+//  The triangle is represented by its vertices \a p1, \a p2, \a p3
+//  \return true if point is inside
+bool vgl_triangle_3d_test_inside(const vgl_point_3d<double>& i_pnt,
+                                 const vgl_point_3d<double>& p1,
+                                 const vgl_point_3d<double>& p2,
+                                 const vgl_point_3d<double>& p3)
+{
+  return vgl_triangle_3d_test_inside(i_pnt, p1, p2, p3, sqrteps );
+}
+
 
 //=======================================================================
 //: Check if point \a i_pnt is inside the triangle
