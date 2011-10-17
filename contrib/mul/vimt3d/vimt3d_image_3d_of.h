@@ -41,7 +41,8 @@ public:
     : vimt3d_image_3d(w2i), image_(ni, nj, nk, np) {}
 
 
-  //: Construct from a view and a world-to-image transform (takes copies of both).
+  //: Construct from a view and a world-to-image transform.
+  // The underlying pixel data is not duplicated.
   vimt3d_image_3d_of(const vil3d_image_view<T>& view, 
                      const vimt3d_transform_3d& w2i)
     : vimt3d_image_3d(w2i), image_(view) {}
