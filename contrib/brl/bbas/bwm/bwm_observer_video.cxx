@@ -191,8 +191,14 @@ void bwm_observer_video::display_current_frame()
 #endif
     else {
       vil_image_view_base_sptr vb = vidl_convert_wrap_in_view(*frame);
-      if (vb)
+      if (vb){
         img_tab_->set_image_view(*vb);
+        vidl_image_list_istream* ilist_str = dynamic_cast<vidl_image_list_istream*>(video_istr_.ptr());
+		if(ilist_str){
+          vcl_string cur_path = ilist_str->current_path();
+          img_tab_->set_file_name(cur_path);
+		}
+      }
     }
   }
   if (bwm_observer_mgr::instance()->in_corr_picking())
