@@ -1,14 +1,17 @@
 // This is brl/bseg/boxm2/pro/processes/boxm2_blob_change_detection_process.cxx
+#include <bprb/bprb_func_process.h>
 //:
 // \file
 // \brief  Executes blob change detection at specific threshold
 //
 // \author Andrew Miller
 // \date May 26, 2011
-#include <bprb/bprb_func_process.h>
+
 #include <boxm2/util/boxm2_detect_change_blobs.h>
 #include <vil/vil_image_view.h>
 #include <vil/vil_save.h>
+#include <vcl_vector.h>
+#include <vcl_string.h>
 
 namespace boxm2_blob_change_detection_process_globals
 {
@@ -75,14 +78,15 @@ bool boxm2_blob_change_detection_process(bprb_func_process& pro)
   }
 
   //use two images if they are non default, zero out change image at delta depth image > .02
-  //Two depths map are a comparison of the expected depth from the images point of
+  //Two depth maps are a comparison of the expected depth from the images point of
   //view.  If there is a large discrepency in depth, the change detection algorithm
   //will not use these pixels.
   if (depth1->ni() == depth2->ni() && depth1->ni() == change->ni()) {
     vcl_cout<<"boxm2_blob_change_detection_process::using depth maps for mask"<<vcl_endl;
     for (unsigned int i=0; i<change->ni(); ++i)
       for (unsigned int j=0; j<change->nj(); ++j)
-        if ( vcl_abs( (*depth1)(i,j) - (*depth2)(i,j) ) > EPSILON )
+        if ( (*depth1)(i,j) - (*depth2)(i,j) > EPSILON ||
+             (*depth2)(i,j) - (*depth1)(i,j) > EPSILON )
           (*change)(i,j) = 0.0f;
   }
   vil_save( *change, "test_change.tiff");
