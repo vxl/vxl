@@ -87,7 +87,7 @@ bool brad_estimate_phongs_model_process(bprb_func_process& pro)
   vnl_vector<double> x(5);
   x[0] = mean_intensities/sum_weights;
   x[1] = 0.0;
-  x[2] = 5.0;
+  x[2] = 4.0;
   x[3] = 0.0;
   x[4] = 0.0;
   lm.minimize(x);
@@ -102,6 +102,9 @@ bool brad_estimate_phongs_model_process(bprb_func_process& pro)
   bbas_1d_array_float_sptr new_obs = new bbas_1d_array_float(num_samples);
   for (unsigned i=0;i<num_samples;++i)
     new_obs->data_array[i]=pm.val(camera_elev[i],camera_azim[i],sun_elev,sun_azim);
+  for (unsigned i=0;i<num_samples;++i)
+      if(samples_weights[i] > 0.0)
+        new_obs->data_array[i]=pm.val(camera_elev[i],camera_azim[i],sun_elev,sun_azim);
 
   i=0;
   pro.set_output_val<bbas_1d_array_float_sptr>(i++, new_obs);
