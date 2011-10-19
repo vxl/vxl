@@ -9,6 +9,8 @@
 #include <brad/brad_phongs_model_est.h>
 #include <boxm2/cpp/algo/boxm2_phongs_model_processor.h>
 #include <bsta/bsta_histogram.h>
+#include <bsta/algo/bsta_sigma_normalizer.h>
+
 class boxm2_compute_phongs_model_functor
 {
   public:
@@ -24,7 +26,8 @@ class boxm2_compute_phongs_model_functor
     bool init_data(float sun_elev,
                    float sun_azim,
                    boxm2_stream_cache_sptr str_cache,
-                   boxm2_data_base * phongs_model)
+                   boxm2_data_base * phongs_model,
+                   bsta_sigma_normalizer_sptr n_table)
     {
         phongs_model_data_ = new boxm2_data<BOXM2_FLOAT8>(phongs_model->data_buffer(),
                                                           phongs_model->buffer_length(),
@@ -33,6 +36,7 @@ class boxm2_compute_phongs_model_functor
         id_ = phongs_model->block_id();
         sun_elev_ =sun_elev;
         sun_azim_ =sun_azim;
+        n_table_ = n_table;
         return true;
     }
 
@@ -72,6 +76,7 @@ class boxm2_compute_phongs_model_functor
         ydir.insert(ydir.begin(), aux2_raw.begin()+half_m, aux2_raw.end());
         zdir.insert(zdir.begin(), aux3_raw.begin()+half_m, aux3_raw.end());
         vcl_vector<vnl_double_3>  viewing_dirs;
+        float sum_weights = 0.0f ;
         for (unsigned i=0;i<Iobs.size();i++)
         {
             if (Iobs[i] < 0.0 || Iobs[i] > 1.0 )
@@ -79,13 +84,16 @@ class boxm2_compute_phongs_model_functor
             vnl_double_3 vec(xdir[i],ydir[i],zdir[i]);
             vec = vec.normalize();
             viewing_dirs.push_back(vec);
+
+            sum_weights+=vis[i];
         }
 
         float var = 0.09f;
         brad_phongs_model pmodel = boxm2_phongs_model_processor::compute_phongs_model(var,sun_elev_,sun_azim_,Iobs,viewing_dirs,vis);
+        var = var * n_table_->normalization_factor(sum_weights)*n_table_->normalization_factor(sum_weights);
 
         float sum_prob_densities = 0.0f;
-        float sum_weights = 0.0f ;
+        sum_weights = 0.0f ;
 
         for (unsigned i = 0; i < Iobs.size(); i++)
         {
@@ -98,6 +106,7 @@ class boxm2_compute_phongs_model_functor
         phongs_model[2] = pmodel.gamma();
         phongs_model[3] = pmodel.normal_elev();
         phongs_model[4] = pmodel.normal_azim();
+
         phongs_model[5] = var;
         if (sum_weights > 0.0f)
             phongs_model[6] = sum_prob_densities/sum_weights;
@@ -113,6 +122,7 @@ class boxm2_compute_phongs_model_functor
     boxm2_block_id id_;
     float sun_elev_;
     float sun_azim_;
+    bsta_sigma_normalizer_sptr n_table_;
 };
 
 #endif // boxm2_compute_phongs_model_functor_h_

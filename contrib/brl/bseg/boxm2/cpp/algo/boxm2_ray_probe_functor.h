@@ -16,35 +16,103 @@ class boxm2_ray_probe_functor
                  vcl_vector<float> & seg_len,
                  vcl_vector<float> & abs_depth,
                  vcl_vector<float> & alpha,
-                 vcl_vector<float> & sunvis)
+                 vcl_vector<float> & data_to_return,
+                 vcl_string prefix,
+                 int & nelems)
   {
-    alpha_data_=new boxm2_data<BOXM2_ALPHA>(datas[0]->data_buffer(),datas[0]->buffer_length(),datas[0]->block_id());
-    //aux_sun_data_=new boxm2_data<BOXM2_AUX0>(datas[2]->data_buffer(),datas[2]->buffer_length(),datas[2]->block_id());
-    seg_len_=&seg_len;
-    alpha_  =&alpha;
-    //sunvis_ = &sunvis;
-    abs_depth_=&abs_depth;
+    alpha_data_        = new boxm2_data<BOXM2_ALPHA>(datas[0]->data_buffer(),datas[0]->buffer_length(),datas[0]->block_id());
+    data_ptr           = datas[1];
+    seg_len_           = &seg_len;
+    alpha_             = &alpha;
+    abs_depth_         = &abs_depth;
+    data_to_return_    = &data_to_return;
+    prefix_            = prefix;
+    switch(boxm2_data_info::data_type(prefix_))
+    {
+    case(BOXM2_MOG3_GREY):
+        {
+            nelems = 8;
+            break;
+        }
+    case(BOXM2_FLOAT8):
+        {
+            nelems = 8;
+            break;
+        }
+    case(BOXM2_AUX0):
+        {
+            nelems = 1;
+            break;
+        }
+    default:
+        nelems = 0;
+    }
     return true;
   }
 
   inline bool step_cell(float seg_len,int index,unsigned i, unsigned j, float abs_depth)
   {
     boxm2_data<BOXM2_ALPHA>::datatype alpha=alpha_data_->data()[index];
-   // boxm2_data<BOXM2_AUX0>::datatype aux_sun_vis=aux_sun_data_->data()[index];
+
+    switch(boxm2_data_info::data_type(prefix_))
+    {
+    case(BOXM2_MOG3_GREY):
+        {
+            boxm2_data<BOXM2_MOG3_GREY>*  mog3_grey_app_data_= new boxm2_data<BOXM2_MOG3_GREY>(data_ptr->data_buffer(),data_ptr->buffer_length(),data_ptr->block_id());
+            boxm2_data<BOXM2_MOG3_GREY>::datatype mog3_grey_app=mog3_grey_app_data_->data()[index];
+            data_to_return_->push_back((float)mog3_grey_app[0] / 255.0f);
+            data_to_return_->push_back((float)mog3_grey_app[1] / 255.0f);
+            data_to_return_->push_back((float)mog3_grey_app[2] / 255.0f);
+            data_to_return_->push_back((float)mog3_grey_app[3] / 255.0f);
+            data_to_return_->push_back((float)mog3_grey_app[4] / 255.0f);
+            data_to_return_->push_back((float)mog3_grey_app[5] / 255.0f);
+            data_to_return_->push_back((float)mog3_grey_app[6] / 255.0f);
+            data_to_return_->push_back((float)mog3_grey_app[7] / 255.0f);
+             
+            break;
+        }
+    case(BOXM2_FLOAT8):
+        {
+            boxm2_data<BOXM2_FLOAT8>*  mog3_grey_app_data_= new boxm2_data<BOXM2_FLOAT8>(data_ptr->data_buffer(),data_ptr->buffer_length(),data_ptr->block_id());
+            boxm2_data<BOXM2_FLOAT8>::datatype mog3_grey_app=mog3_grey_app_data_->data()[index];
+            data_to_return_->push_back(mog3_grey_app[0]);
+            data_to_return_->push_back(mog3_grey_app[1]);
+            data_to_return_->push_back(mog3_grey_app[2]);
+            data_to_return_->push_back(mog3_grey_app[3]);
+            data_to_return_->push_back(mog3_grey_app[4]);
+            data_to_return_->push_back(mog3_grey_app[5]);
+            data_to_return_->push_back(mog3_grey_app[6]);
+            data_to_return_->push_back(mog3_grey_app[7]);
+            break;
+
+        }
+    case(BOXM2_AUX0):
+        {
+            boxm2_data<BOXM2_AUX0>*  app_data  = new boxm2_data<BOXM2_AUX0>(data_ptr->data_buffer(),data_ptr->buffer_length(),data_ptr->block_id());
+            boxm2_data<BOXM2_AUX0>::datatype app=app_data->data()[index];
+            data_to_return_->push_back(vcl_exp(app));
+            break;
+        }
+
+    default:
+        {
+            vcl_cout<<"Unidentified data "<<vcl_endl;
+        }
+    }
     seg_len_->push_back(seg_len);
     alpha_->push_back(alpha);
     abs_depth_->push_back(abs_depth);
-    //sunvis_->push_back(aux_sun_vis);
     return true;
   }
 
  private:
   boxm2_data<BOXM2_ALPHA> * alpha_data_;
-  boxm2_data<BOXM2_AUX0> * aux_sun_data_;
+  boxm2_data_base * data_ptr;
   vcl_vector<float> * abs_depth_;
   vcl_vector<float> * seg_len_;
   vcl_vector<float> * alpha_;
-  vcl_vector<float> * sunvis_;
+  vcl_vector<float> * data_to_return_;
+  vcl_string prefix_;
 };
 
 class boxm2_ray_app_density_functor
@@ -73,61 +141,6 @@ class boxm2_ray_app_density_functor
   boxm2_data<BOXM2_MOG3_GREY> * mog3_data_;
   vcl_vector<float> * app_density_;
   float intensity_;
-};
-
-class boxm2_ray_probe_brdfs_functor
-{
- public:
-  //: "default" constructor
-  boxm2_ray_probe_brdfs_functor() {}
-
-  bool init_data(vcl_vector<boxm2_data_base*> & datas,
-                 vcl_vector<float> & seg_len,
-                 vcl_vector<float> & abs_depth,
-                 vcl_vector<float> & alpha,
-                 vcl_vector<float> & phongs_vars,
-                 vcl_vector<float> & entropy_histo_air)
-  {
-    alpha_data_             =new boxm2_data<BOXM2_ALPHA>(datas[0]->data_buffer(),datas[0]->buffer_length(),datas[0]->block_id());
-    phongs_models_data_     =new boxm2_data<BOXM2_FLOAT8>(datas[1]->data_buffer(),datas[1]->buffer_length(),datas[1]->block_id());
-    histo_air_data_         =new boxm2_data<BOXM2_MOG3_GREY>(datas[2]->data_buffer(),datas[2]->buffer_length(),datas[2]->block_id());
-    entropy_histo_air_data_ =new boxm2_data<BOXM2_AUX0>(datas[3]->data_buffer(),datas[3]->buffer_length(),datas[3]->block_id());
-    seg_len_               = &seg_len;
-    abs_depth_             = &abs_depth;
-    alpha_                 = &alpha ;
-    phongs_vars_           = &phongs_vars;
-    entropy_histo_air_     = &entropy_histo_air;
-    return true;
-  }
-
-  inline bool step_cell(float seg_len,int index,unsigned i, unsigned j, float abs_depth)
-  {
-    boxm2_data<BOXM2_ALPHA>::datatype alpha=alpha_data_->data()[index];
-    boxm2_data<BOXM2_FLOAT8>::datatype phongs_model=phongs_models_data_->data()[index];
-    boxm2_data<BOXM2_AUX0>::datatype entropy_air=entropy_histo_air_data_->data()[index];
-
-    seg_len_->push_back(seg_len);
-    abs_depth_->push_back(abs_depth);
-    phongs_vars_->push_back(phongs_model[6]);
-    alpha_->push_back(alpha);
-#if 0 // unused ?!?
-    float sigma = 0.75;
-    float prob_density = 1/(vcl_sqrt(2*vnl_math::pi)* sigma)*vcl_exp(-(entropy_air-2.07)*(entropy_air-2.07)/(2*sigma*sigma));
-#endif
-    entropy_histo_air_->push_back(vcl_exp(entropy_air));
-    return true;
-  }
-
- private:
-  boxm2_data<BOXM2_ALPHA>      * alpha_data_;
-  boxm2_data<BOXM2_MOG3_GREY>  * histo_air_data_;
-  boxm2_data<BOXM2_AUX0>       * entropy_histo_air_data_;
-  boxm2_data<BOXM2_FLOAT8>     * phongs_models_data_;
-  vcl_vector<float> * abs_depth_;
-  vcl_vector<float> * seg_len_;
-  vcl_vector<float> * alpha_;
-  vcl_vector<float> * phongs_vars_;
-  vcl_vector<float> * entropy_histo_air_;
 };
 
 #endif
