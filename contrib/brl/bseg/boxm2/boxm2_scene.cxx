@@ -385,6 +385,40 @@ void boxm2_scene::min_block_index (vgl_point_3d<int> &idx,
   local_origin.set(min_x, min_y, min_z);
 }
 
+//: gets the smallest block index
+void boxm2_scene::max_block_index (vgl_point_3d<int> &idx,
+                                   vgl_point_3d<double> &local_origin) const
+{
+  vcl_map<boxm2_block_id, boxm2_block_metadata>::const_iterator iter= blocks_.begin();
+
+  boxm2_block_id id = iter->first;
+  boxm2_block_metadata data = iter->second;
+
+  int max_i=id.i(),max_j=id.j(),max_k=id.k();
+  double max_x = data.local_origin_.x(), max_y= data.local_origin_.y(), max_z= data.local_origin_.z();
+
+  for (; iter != blocks_.end(); ++iter) {
+    id = iter->first;
+    data = iter->second;
+
+    if (id.i() > max_i) {
+      max_i=id.i();
+      max_x = data.local_origin_.x();
+    }
+    if (id.j() > max_j) {
+      max_j=id.j();
+      max_y = data.local_origin_.y();
+    }
+    if (id.k() > max_k) {
+      max_k=id.k();
+      max_z = data.local_origin_.z();
+    }
+  }
+
+  idx.set(max_i,max_j,max_k);
+  local_origin.set(max_x, max_y, max_z);
+}
+
 
 //: returns true if the scene has specified data type (simple linear search)
 bool boxm2_scene::has_data_type(vcl_string data_type)
