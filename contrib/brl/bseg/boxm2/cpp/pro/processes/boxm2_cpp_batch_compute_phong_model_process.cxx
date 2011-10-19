@@ -23,7 +23,7 @@
 //: run batch update
 namespace boxm2_cpp_batch_compute_phong_model_process_globals
 {
-  const unsigned n_inputs_ = 5;
+  const unsigned n_inputs_ = 6;
   const unsigned n_outputs_ = 0;
 }
 
@@ -43,6 +43,7 @@ bool boxm2_cpp_batch_compute_phong_model_process_cons(bprb_func_process& pro)
   input_types_[2] = "boxm2_stream_cache_sptr";
   input_types_[3] = "float"; // sun_elev
   input_types_[4] = "float"; // sun_azim
+  input_types_[5] = "bsta_sigma_normalizer_sptr";
   // process has 0 outputs:
   vcl_vector<vcl_string>  output_types_(n_outputs_);
 
@@ -64,6 +65,7 @@ bool boxm2_cpp_batch_compute_phong_model_process(bprb_func_process& pro)
   boxm2_stream_cache_sptr str_cache = pro.get_input<boxm2_stream_cache_sptr>(i++);
   float  sun_elev = pro.get_input<float>(i++);
   float  sun_azim = pro.get_input<float>(i++);
+  bsta_sigma_normalizer_sptr n_table = pro.get_input<bsta_sigma_normalizer_sptr>(i++);
 
   // iterate the scene block by block and write to output
   vcl_vector<boxm2_block_id> blk_ids = scene->get_block_ids();
@@ -77,7 +79,8 @@ bool boxm2_cpp_batch_compute_phong_model_process(bprb_func_process& pro)
     data_functor.init_data(sun_elev,
                            sun_azim,
                            str_cache,
-                           phongs_model_data);
+                           phongs_model_data,
+                           n_table);
     int phongs_model_TypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_FLOAT8>::prefix());
     int data_buff_length = (int) (phongs_model_data->buffer_length()/phongs_model_TypeSize);
 

@@ -23,8 +23,8 @@
 
 namespace boxm2_cpp_ray_probe_process_globals
 {
-    const unsigned n_inputs_ = 6;
-    const unsigned n_outputs_ = 4;
+    const unsigned n_inputs_ = 7;
+    const unsigned n_outputs_ = 6;
 }
 
 bool boxm2_cpp_ray_probe_process_cons(bprb_func_process& pro)
@@ -38,7 +38,8 @@ bool boxm2_cpp_ray_probe_process_cons(bprb_func_process& pro)
     input_types_[2] = "vpgl_camera_double_sptr";
     input_types_[3] = "unsigned";
     input_types_[4] = "unsigned";
-    input_types_[5] = "vcl_string";// if identifier string is empty, then only one appearance model
+    input_types_[5] = "vcl_string";// prefix
+    input_types_[6] = "vcl_string";// identifier
 
     // process has 1 output:
     // output[0]: scene sptr
@@ -47,13 +48,15 @@ bool boxm2_cpp_ray_probe_process_cons(bprb_func_process& pro)
     output_types_[1] = "bbas_1d_array_float_sptr"; //alpha
     output_types_[2] = "bbas_1d_array_float_sptr"; //vis
     output_types_[3] = "bbas_1d_array_float_sptr"; //depth
-    //output_types_[4] = "bbas_1d_array_float_sptr"; //alpha
+    output_types_[4] = "bbas_1d_array_float_sptr"; //alpha
+    output_types_[5] = "int"; //alpha
 
     bool good = pro.set_input_types(input_types_) &&
         pro.set_output_types(output_types_);
     // in case the 6th input is not set
     brdb_value_sptr idx = new brdb_value_t<vcl_string>("");
     pro.set_input(5, idx);
+    pro.set_input(6, idx);
     return good;
 }
 
@@ -72,6 +75,7 @@ bool boxm2_cpp_ray_probe_process(bprb_func_process& pro)
     vpgl_camera_double_sptr cam= pro.get_input<vpgl_camera_double_sptr>(i++);
     unsigned pi=pro.get_input<unsigned>(i++);
     unsigned pj=pro.get_input<unsigned>(i++);
+    vcl_string prefix = pro.get_input<vcl_string>(i++);
     vcl_string identifier = pro.get_input<vcl_string>(i);
 
     bool foundDataType = false;
@@ -104,20 +108,21 @@ bool boxm2_cpp_ray_probe_process(bprb_func_process& pro)
     vcl_vector<float> seg_lengths;
     vcl_vector<float> alphas;
     vcl_vector<float> abs_depth;
-    vcl_vector<float> sun_vis;
+    vcl_vector<float> data_to_return;
+    int nelems;
     for (id = vis_order.begin(); id != vis_order.end(); ++id)
     {
         vcl_cout<<"Block Id "<<(*id)<<vcl_endl;
         boxm2_block *     blk  =  cache->get_block(*id);
         boxm2_data_base *  alph = cache->get_data_base(*id,boxm2_data_traits<BOXM2_ALPHA>::prefix());
-        boxm2_data_base *  mog  = cache->get_data_base(*id,data_type);
+        boxm2_data_base *  data_of_interest  = cache->get_data_base(*id,prefix+"_"+identifier);
 
         vcl_vector<boxm2_data_base*> datas;
         datas.push_back(alph);
-        datas.push_back(mog);
+        datas.push_back(data_of_interest);
 
         boxm2_ray_probe_functor ray_probe_functor;
-        ray_probe_functor.init_data(datas,seg_lengths,abs_depth,alphas,sun_vis);
+        ray_probe_functor.init_data(datas,seg_lengths,abs_depth,alphas,data_to_return, prefix, nelems);
 
         boxm2_scene_info_wrapper *scene_info_wrapper=new boxm2_scene_info_wrapper();
         scene_info_wrapper->info=scene->get_blk_metadata(*id);
@@ -129,7 +134,7 @@ bool boxm2_cpp_ray_probe_process(bprb_func_process& pro)
     bbas_1d_array_float_sptr vis_array  =new bbas_1d_array_float(seg_lengths.size());
     bbas_1d_array_float_sptr alpha_array=new bbas_1d_array_float(alphas.size());
     bbas_1d_array_float_sptr abs_depth_array=new bbas_1d_array_float(abs_depth.size());
-    bbas_1d_array_float_sptr sun_vis_array=new bbas_1d_array_float(abs_depth.size());
+    bbas_1d_array_float_sptr data_to_return_array=new bbas_1d_array_float(data_to_return.size());
 
     float vis=1.0f;
     for (unsigned i=0;i<seg_lengths.size();i++)
@@ -137,8 +142,11 @@ bool boxm2_cpp_ray_probe_process(bprb_func_process& pro)
         seg_array->data_array[i]=seg_lengths[i];
         abs_depth_array->data_array[i]=abs_depth[i];
         alpha_array->data_array[i]=alphas[i];
+        vcl_cout<<"vis "<< vis<<" alpha "<<alphas[i]<<vcl_endl;
         vis*=vcl_exp(-seg_lengths[i]*alphas[i]);
         vis_array->data_array[i]=vis;
+        for(unsigned j = 0 ; j <nelems; j++)
+            data_to_return_array->data_array[i*nelems+j] = data_to_return[i*nelems+j];
     }
 
     // store scene smaprt pointer
@@ -146,5 +154,7 @@ bool boxm2_cpp_ray_probe_process(bprb_func_process& pro)
     pro.set_output_val<bbas_1d_array_float_sptr>(1, alpha_array);
     pro.set_output_val<bbas_1d_array_float_sptr>(2, vis_array);
     pro.set_output_val<bbas_1d_array_float_sptr>(3, abs_depth_array);
+    pro.set_output_val<bbas_1d_array_float_sptr>(4, data_to_return_array);
+    pro.set_output_val<int>(5, nelems);
     return true;
 }
