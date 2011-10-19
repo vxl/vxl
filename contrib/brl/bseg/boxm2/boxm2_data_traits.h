@@ -303,6 +303,58 @@ class boxm2_data_info
     return 0;
   }
 
+  static boxm2_data_type data_type(vcl_string prefix)
+  {
+    // some of them changed to using find method to account for identifiers
+    if (prefix.find(boxm2_data_traits<BOXM2_ALPHA>::prefix()) != vcl_string::npos)
+      return BOXM2_ALPHA;
+    if (prefix.find(boxm2_data_traits<BOXM2_GAMMA>::prefix()) != vcl_string::npos)
+      return BOXM2_GAMMA;
+     if (prefix.find(boxm2_data_traits<BOXM2_MOG3_GREY_16>::prefix()) != vcl_string::npos)
+      return  BOXM2_MOG3_GREY_16 ;
+
+    if (prefix.find(boxm2_data_traits<BOXM2_MOG3_GREY>::prefix()) != vcl_string::npos)
+      return  BOXM2_MOG3_GREY ;
+
+    if (prefix == boxm2_data_traits<BOXM2_BATCH_HISTOGRAM>::prefix())
+      return  BOXM2_BATCH_HISTOGRAM ;
+
+    if (prefix.find(boxm2_data_traits<BOXM2_MOG2_RGB>::prefix()) != vcl_string::npos)
+      return  BOXM2_MOG2_RGB ;
+
+    if (prefix.find(boxm2_data_traits<BOXM2_NUM_OBS_SINGLE_INT>::prefix()) != vcl_string::npos)
+      return  BOXM2_NUM_OBS_SINGLE_INT ;
+
+    if (prefix.find(boxm2_data_traits<BOXM2_NUM_OBS_SINGLE>::prefix()) != vcl_string::npos)
+      return  BOXM2_NUM_OBS_SINGLE ;
+
+    if (prefix.find(boxm2_data_traits<BOXM2_NUM_OBS>::prefix()) != vcl_string::npos)
+      return  BOXM2_NUM_OBS ;
+
+    if (prefix.find(boxm2_data_traits<BOXM2_AUX0>::prefix()) != vcl_string::npos)
+      return  BOXM2_AUX0 ;
+    if (prefix.find(boxm2_data_traits<BOXM2_AUX1>::prefix()) != vcl_string::npos)
+      return  BOXM2_AUX1 ;
+    if (prefix.find(boxm2_data_traits<BOXM2_AUX2>::prefix()) != vcl_string::npos)
+      return  BOXM2_AUX2 ;
+    if (prefix.find(boxm2_data_traits<BOXM2_AUX3>::prefix()) != vcl_string::npos)
+      return  BOXM2_AUX3 ;
+    if (prefix.find(boxm2_data_traits<BOXM2_AUX4>::prefix()) != vcl_string::npos)
+      return  BOXM2_AUX4 ;
+    if (prefix.find(boxm2_data_traits<BOXM2_AUX>::prefix()) != vcl_string::npos)
+      return  BOXM2_AUX ;
+    if (prefix == boxm2_data_traits<BOXM2_FLOAT8>::prefix())
+      return  BOXM2_FLOAT8 ;
+    if (prefix.find(boxm2_data_traits<BOXM2_INTENSITY>::prefix()) != vcl_string::npos)
+      return  BOXM2_INTENSITY ;
+    if (prefix.find(boxm2_data_traits<BOXM2_GAUSS_RGB>::prefix()) != vcl_string::npos)
+      return  BOXM2_GAUSS_RGB ;
+    if (prefix.find(boxm2_data_traits<BOXM2_GAUSS_GREY>::prefix()) != vcl_string::npos)
+      return  BOXM2_GAUSS_GREY ;
+    return BOXM2_UNKNOWN;
+  }
+
+
   static void print_data(vcl_string prefix, char *cell)
   {
     if (prefix.find(boxm2_data_traits<BOXM2_ALPHA>::prefix()) != vcl_string::npos) {
