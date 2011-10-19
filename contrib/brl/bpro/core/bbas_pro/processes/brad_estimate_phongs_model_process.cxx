@@ -10,7 +10,7 @@
 namespace brad_estimate_phongs_model_process_globals
 {
   const unsigned n_inputs_  = 6;
-  const unsigned n_outputs_ = 6;
+  const unsigned n_outputs_ = 7;
 }
 
 
@@ -34,6 +34,7 @@ bool brad_estimate_phongs_model_process_cons(bprb_func_process& pro)
   output_types_[3] = "float";
   output_types_[4] = "float";
   output_types_[5] = "float";
+  output_types_[6] = "float";
 
   return pro.set_input_types(input_types_) &&
          pro.set_output_types(output_types_);
@@ -100,19 +101,18 @@ bool brad_estimate_phongs_model_process(bprb_func_process& pro)
 
   brad_phongs_model pm(vcl_fabs(x[0]),vcl_fabs(x[1]),x[2],x[3],x[4]);
   bbas_1d_array_float_sptr new_obs = new bbas_1d_array_float(num_samples);
-  for (unsigned i=0;i<num_samples;++i)
-    new_obs->data_array[i]=pm.val(camera_elev[i],camera_azim[i],sun_elev,sun_azim);
-  for (unsigned i=0;i<num_samples;++i)
-      if(samples_weights[i] > 0.0)
-        new_obs->data_array[i]=pm.val(camera_elev[i],camera_azim[i],sun_elev,sun_azim);
 
+  for (unsigned i=0;i<num_samples;++i)
+      new_obs->data_array[i]=pm.val(camera_elev[i],camera_azim[i],sun_elev,sun_azim);
   i=0;
+
   pro.set_output_val<bbas_1d_array_float_sptr>(i++, new_obs);
   pro.set_output_val<float>(i++, x[0]);
   pro.set_output_val<float>(i++, x[1]);
   pro.set_output_val<float>(i++, x[2]);
   pro.set_output_val<float>(i++, x[3]);
   pro.set_output_val<float>(i++, x[4]);
+  pro.set_output_val<float>(i++, f.error_var(x));
   return true;
 }
 
