@@ -25,9 +25,10 @@ class boxm2_scene_adaptor:
       self.scene, self.cpu_cache, self.ocl_mgr, self.device, self.opencl_cache = load_opencl(scene_str); 
       self.active_cache = self.opencl_cache; 
     elif device_string[0:3]=="cpp" : 
-      scene.scene, self.cpu_cache = load_cpp(scene_str);     
+      self.scene, self.cpu_cache = load_cpp(scene_str);     
       self.active_cache = self.cpu_cache; 
-  
+  def describe(self):
+	  describe_scene(self.scene);
   #update wrapper, can pass in a Null device to use 
   def update(self, cam, img, update_alpha=True, mask=None, device_string="") :
     cache = self.active_cache; 

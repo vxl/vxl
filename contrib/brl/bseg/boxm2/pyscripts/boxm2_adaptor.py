@@ -69,6 +69,12 @@ def load_cpp(scene_str) :
   cache = dbvalue(id, type);
   return scene, cache; 
 
+# describe scene process
+  
+def describe_scene(scene):
+  boxm2_batch.init_process("boxm2DescribeSceneProcess");
+  boxm2_batch.set_input_from_db(0, scene);
+  boxm2_batch.run_process();
 ###############################################
 # Model building stuff
 ###############################################
@@ -425,7 +431,7 @@ def trajectory_next(trajectory) :
 ######################################################################
 # camera/scene methods
 #####################################################################
-def bundle2scene(bundle_file, img_dir, app_model="boxm2_mog3_grey", out_dir="") : 
+def bundle2scene(bundle_file, img_dir, app_model="boxm2_mog3_grey", out_dir="NVM_out") : 
   if app_model == "boxm2_mog3_grey": 
     nobs_model = "boxm2_num_obs";
   elif app_model == "boxm2_gauss_rgb" :
