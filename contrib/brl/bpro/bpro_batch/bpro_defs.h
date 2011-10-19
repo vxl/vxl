@@ -12,6 +12,7 @@ py_funcs("set_input_int",set_input_int,METH_VARARGS,"set_input_(i,i) set input i
 py_funcs("set_input_unsigned",set_input_unsigned,METH_VARARGS,"set_input_(i,i) set input i on current process to an unsigned value"),
 py_funcs("set_input_long",set_input_long,METH_VARARGS,"set_input_(i,l) set input i on current process to a long value"),
 py_funcs("set_input_float",set_input_float,METH_VARARGS,"set_input_(i,f) set input i on current process to a float value"),
+py_funcs("set_input_float_array",set_input_float_array,METH_VARARGS,"set_input_(i,f)_array set input i on current process to a float value"),
 py_funcs("set_input_double",set_input_double,METH_VARARGS,"set_input_(i,d) set input i on current process to a double value"),
 py_funcs("get_output_string", get_output_string, METH_VARARGS, "get_output_string(i) return value of output i in the database"),
 py_funcs("get_output_float",get_output_float,METH_VARARGS,"get_output_float(i) return value of output i in the database"),

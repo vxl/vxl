@@ -19,6 +19,7 @@ static PyObject *set_input_int(PyObject *self, PyObject *args);
 static PyObject *set_input_unsigned(PyObject *self, PyObject *args);
 static PyObject *set_input_long(PyObject *self, PyObject *args);
 static PyObject *set_input_float(PyObject *self, PyObject *args);
+static PyObject *set_input_float_array(PyObject *self, PyObject *args);
 static PyObject *set_input_double(PyObject * self, PyObject *args);
 static PyObject *get_output_string(PyObject *self, PyObject *args);
 static PyObject *get_output_float(PyObject *self, PyObject *args);
@@ -173,7 +174,29 @@ PyObject *set_input_float(PyObject * /*self*/, PyObject *args)
   bool result = bprb_batch_process_manager::instance()->set_input(input, v);
   return Py_BuildValue("b", result);
 }
+PyObject *set_input_float_array(PyObject * /*self*/, PyObject *args)
+{
+  int input;
+  PyObject  * list;
+  if (!PyArg_ParseTuple(args, "iO:set_input_float_array", &input, &list))
+    return NULL;
 
+  if(!PyList_Check(list))
+      return Py_BuildValue("b", false);
+  int length=PyList_GET_SIZE(list);
+
+  bbas_1d_array_float_sptr farray=new bbas_1d_array_float(length);
+  for(unsigned i = 0;i < length; i++)
+  {
+      PyObject * obj = PyList_GetItem(list,i);
+      float f=PyFloat_AsDouble(obj);
+      farray->data_array[i]=f;
+  } 
+
+  brdb_value_sptr v = new brdb_value_t<bbas_1d_array_float_sptr>(farray);
+  bool result = bprb_batch_process_manager::instance()->set_input(input, v);
+  return Py_BuildValue("b", result);
+}
 PyObject *set_input_double(PyObject * /*self*/, PyObject *args)
 {
   int input;
