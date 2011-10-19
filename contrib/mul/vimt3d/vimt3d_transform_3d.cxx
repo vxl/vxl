@@ -225,7 +225,7 @@ void vimt3d_transform_3d::simplify(double tol /*=1e-10*/)
       double matrix_form[]= {xx_, yx_, zx_, xy_, yy_, zy_, xz_, yz_, zz_};
       vnl_matrix_fixed<double, 3, 3> X(matrix_form);
       vnl_matrix_fixed<double, 3, 3> S2 = X.transpose() * X;
-      // if X=R*S then X'X = S'*R'*R*S
+      // if X=R*S (where S is a diagonal matrix) then X'X = S'*R'*R*S
       // if R is a rotation matrix then R'*R=I and so X'X = S'*S = [s_x^2 0 0; 0 s_y^2 0; 0 0 s_z^2]
       if (S2(0,1)*S2(0,1) + S2(0,2)*S2(0,2) + S2(1,0)*S2(1,0) + 
           S2(1,2)*S2(1,2) + S2(2,0)*S2(2,0) + S2(2,1)*S2(2,1) >= tol*tol*6)
@@ -245,7 +245,7 @@ void vimt3d_transform_3d::simplify(double tol /*=1e-10*/)
                             xt_, yt_, zt_);
       else
         return;
-      simplify();
+      simplify(tol);
       return;
     }
    case Similarity:
@@ -258,7 +258,7 @@ void vimt3d_transform_3d::simplify(double tol /*=1e-10*/)
       this->set_rigid_body(rx, ry, rz, xt_, yt_, zt_);
     else
       return;
-    simplify();
+    simplify(tol);
     return;
 
    case RigidBody:
@@ -266,7 +266,7 @@ void vimt3d_transform_3d::simplify(double tol /*=1e-10*/)
     if (rx*rx+ry*ry+rz*rz >= tol*tol)
       return;
     this->set_translation(xt_, yt_, zt_);
-    simplify();
+    simplify(tol);
     return;
    case ZoomOnly:
     if (vnl_math_sqr(xx_-1.0) + vnl_math_sqr(yy_-1.0) + vnl_math_sqr(zz_-1.0) >= tol*tol)
