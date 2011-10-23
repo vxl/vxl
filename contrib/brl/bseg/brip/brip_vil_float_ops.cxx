@@ -316,32 +316,44 @@ vil_image_view<float>
 brip_vil_float_ops::gaussian(vil_image_view<float> const& input, float sigma,
                              float fill)
 {
-  vil_image_view<float> dest(input.ni(), input.nj());
+  unsigned ni = input.ni(), nj = input.nj();
+  unsigned np = input.nplanes();
+  vil_image_view<float> dest(ni, nj, np);
   dest.fill(fill);
   unsigned r;
   double* ker;
   brip_1d_gaussian_kernel(sigma, 0.02, r, ker);
-  vil_image_view<float> work(input.ni(), input.nj());
-  work.fill(fill);
+  for(unsigned p = 0; p<np; ++p){
+    vil_image_view<float> input_temp(ni, nj);
+    vil_image_view<float> out_temp(ni, nj);
+    vil_image_view<float> work(ni, nj);
+    work.fill(fill);
+    for(unsigned j = 0; j<nj; ++j)
+      for(unsigned i = 0; i<ni; ++i)
+        input_temp(i,j) = input(i,j,p);
 
-  // filter horizontal
-  int ksize = 2*r + 1 ;
-  float accum=0;
-  vil_convolve_1d(input, work, ker + ksize/2,
-                  -ksize/2, r, accum,
-                  vil_convolve_ignore_edge,
-                  vil_convolve_ignore_edge);
+    // filter horizontal
+    int ksize = 2*r + 1 ;
+    float accum=0;
+    vil_convolve_1d(input_temp, work, ker + ksize/2,
+                    -ksize/2, r, accum,
+                    vil_convolve_ignore_edge,
+                    vil_convolve_ignore_edge);
 
-  // filter vertical
-  vil_image_view<float> work_t = vil_transpose(work);
-  vil_image_view<float> dest_t = vil_transpose(dest);
-  vil_convolve_1d(work_t, dest_t, ker+ ksize/2,
-                  -ksize/2, r, accum,
-                  vil_convolve_ignore_edge,
-                  vil_convolve_ignore_edge);
-
+    // filter vertical
+    vil_image_view<float> work_t = vil_transpose(work);
+    vil_image_view<float> out_temp_t = vil_transpose(dest);
+    vil_convolve_1d(work_t, out_temp_t, ker+ ksize/2,
+                    -ksize/2, r, accum,
+                    vil_convolve_ignore_edge,
+                    vil_convolve_ignore_edge);
+    vil_image_view<float> plane = vil_transpose(out_temp_t);
+    for(unsigned j = 0; j<nj; ++j)
+      for(unsigned i = 0; i<ni; ++i)
+        dest(i,j,p) = plane(i,j);
+  }
   delete ker;
-  return vil_transpose(dest_t);
+  return dest;
 }
 
 #ifdef VIL_CONVOLVE_WITH_MASK_EXISTS // TODO
@@ -1635,11 +1647,12 @@ vil_image_view<float>
 brip_vil_float_ops::convert_to_float(vil_image_view<unsigned char> const& image)
 {
   vil_image_view<float> output;
-  unsigned w = image.ni(), h = image.nj();
-  output.set_size(w,h);
-  for (unsigned y = 0; y<h; y++)
-    for (unsigned x = 0; x<w; x++)
-      output(x,y) = (float)image(x,y);
+  unsigned ni = image.ni(), nj = image.nj(), np = image.nplanes();
+  output.set_size(ni,nj, np);
+  for (unsigned j = 0; j<nj; j++)
+    for (unsigned i = 0; i<ni; i++)
+      for(unsigned p = 0; p<np; ++p)
+        output(i,j,p) = (float)image(i,j,p);
   return output;
 }
 
@@ -1926,22 +1939,23 @@ vil_image_view<float>
 brip_vil_float_ops::convert_to_float(vil_image_resource const& image)
 {
   vil_image_view<float> fimg;
+  vil_pixel_format fmt = image.pixel_format();
   if (vil_pixel_format_num_components(image.pixel_format())==1)
   {
-    if (image.pixel_format()==VIL_PIXEL_FORMAT_UINT_16)
+    if (fmt==VIL_PIXEL_FORMAT_UINT_16)
     {
       vil_image_view<unsigned short> temp=image.get_view();
       fimg = brip_vil_float_ops::convert_to_float(temp);
     }
-    else if (image.pixel_format()==VIL_PIXEL_FORMAT_BYTE)
+    else if (fmt==VIL_PIXEL_FORMAT_BYTE)
     {
       vil_image_view<unsigned char> temp=image.get_view();
       fimg = brip_vil_float_ops::convert_to_float(temp);
     }
-    else if (image.pixel_format()==VIL_PIXEL_FORMAT_FLOAT)
+    else if (fmt==VIL_PIXEL_FORMAT_FLOAT)
       return image.get_view();
   }
-  else if (vil_pixel_format_num_components(image.pixel_format())==3)
+  else if (vil_pixel_format_num_components(fmt)==3)
   {
     vil_image_view<vil_rgb<vxl_byte> > temp= image.get_view();
     fimg = brip_vil_float_ops::convert_to_float(temp);
