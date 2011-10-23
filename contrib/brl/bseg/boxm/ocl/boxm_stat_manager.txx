@@ -13,6 +13,9 @@
 #include <vcl_cassert.h>
 #include <vbl/io/vbl_io_array_2d.h>
 #include "boxm_ocl_utils.h"
+#if !defined (_WIN32) && !defined(__APPLE__)
+#include <malloc.h> // for memalign()
+#endif
 
 
 template<class T>
@@ -165,22 +168,17 @@ int boxm_stat_manager<T>::setup_stat_input_buffer()
 {
   cl_int status = CL_SUCCESS;
   stat_input_buf_ = clCreateBuffer(this->context_,CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR, input_size_*sizeof(cl_float),stat_input_,&status);
-  if (!check_val(status,CL_SUCCESS,"clCreateBuffer (stat input) failed."))
-    return SDK_FAILURE;
-  else
-    return SDK_SUCCESS;
+  return check_val(status,CL_SUCCESS,"clCreateBuffer (stat input) failed.")
+         ? SDK_SUCCESS : SDK_FAILURE;
 }
 
 template<class T>
 int boxm_stat_manager<T>::clean_stat_input_buffer()
 {
   cl_int status = clReleaseMemObject(stat_input_buf_);
-  if (!check_val(status,CL_SUCCESS,"clReleaseMemObject (stat_input_buf_) failed."))
-    return SDK_FAILURE;
-  else {
-    stat_input_buf_=0;
-    return SDK_SUCCESS;
-  }
+  stat_input_buf_=0;
+  return check_val(status,CL_SUCCESS,"clReleaseMemObject (stat_input_buf_) failed.")
+         ? SDK_SUCCESS : SDK_FAILURE;
 }
 
 template<class T>
@@ -188,10 +186,8 @@ int boxm_stat_manager<T>::setup_stat_data_buffer()
 {
   cl_int status = CL_SUCCESS;
   stat_data_buf_ = clCreateBuffer(this->context_,CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR, data_size_*sizeof(cl_float),stat_data_,&status);
-  if (!check_val(status,CL_SUCCESS,"clCreateBuffer (stat data) failed."))
-    return SDK_FAILURE;
-  else
-    return SDK_SUCCESS;
+  return check_val(status,CL_SUCCESS,"clCreateBuffer (stat data) failed.")
+         ? SDK_SUCCESS : SDK_FAILURE;
 }
 
 template<class T>
@@ -216,24 +212,17 @@ int boxm_stat_manager<T>::setup_stat_results_buffer()
                                      result_size_* sizeof(cl_float),
                                      stat_results_,
                                      &status);
-  if (!check_val(status,
-                       CL_SUCCESS,
-                       "clCreateBuffer failed. (stat_results)"))
-    return SDK_FAILURE;
-  else
-    return SDK_SUCCESS;
+  return check_val(status, CL_SUCCESS, "clCreateBuffer failed. (stat_results)")
+         ? SDK_SUCCESS : SDK_FAILURE;
 }
 
 template<class T>
 int boxm_stat_manager<T>::clean_stat_results_buffer()
 {
   cl_int status = clReleaseMemObject(stat_results_buf_);
-  if (!check_val(status,CL_SUCCESS,"clReleaseMemObject (stat_results_buf_) failed."))
-    return SDK_FAILURE;
-  else {
-    stat_results_buf_=0;
-    return SDK_SUCCESS;
-  }
+  stat_results_buf_=0;
+  return check_val(status,CL_SUCCESS,"clReleaseMemObject (stat_results_buf_) failed.")
+         ? SDK_SUCCESS : SDK_FAILURE;
 }
 
 template<class T>
@@ -245,9 +234,7 @@ int boxm_stat_manager<T>::build_kernel_program(bool useimage)
   if (program_) {
     status = clReleaseProgram(program_);
     program_ = 0;
-    if (!check_val(status,
-                         CL_SUCCESS,
-                         "clReleaseProgram failed."))
+    if (!check_val(status, CL_SUCCESS, "clReleaseProgram failed."))
       return SDK_FAILURE;
   }
   const char * source = this->prog_.c_str();
@@ -257,9 +244,7 @@ int boxm_stat_manager<T>::build_kernel_program(bool useimage)
                                        &source,
                                        sourceSize,
                                        &status);
-  if (!check_val(status,
-                       CL_SUCCESS,
-                       "clCreateProgramWithSource failed."))
+  if (!check_val(status, CL_SUCCESS, "clCreateProgramWithSource failed."))
     return SDK_FAILURE;
 
   vcl_string options="";
@@ -274,9 +259,7 @@ int boxm_stat_manager<T>::build_kernel_program(bool useimage)
                           options.c_str(),
                           NULL,
                           NULL);
-  if (!check_val(status,
-                       CL_SUCCESS,
-                       error_to_string(status)))
+  if (!check_val(status, CL_SUCCESS, error_to_string(status)))
   {
     vcl_size_t len;
     char buffer[2048];
@@ -295,10 +278,8 @@ int boxm_stat_manager<T>::create_kernel(vcl_string const& kernel_name)
   cl_int status = CL_SUCCESS;
   // get a kernel object handle for a kernel with the given name
   kernel_ = clCreateKernel(program_,kernel_name.c_str(),&status);
-  if (!check_val(status,CL_SUCCESS,error_to_string(status)))
-    return SDK_FAILURE;
-  else
-    return SDK_SUCCESS;
+  return check_val(status,CL_SUCCESS,error_to_string(status))
+         ? SDK_SUCCESS : SDK_FAILURE;
 }
 
 template<class T>
@@ -309,11 +290,8 @@ int boxm_stat_manager<T>::release_kernel()
     status = clReleaseKernel(kernel_);
   }
   kernel_ = NULL;
-  if (!check_val(status,
-                       CL_SUCCESS,
-                       "clReleaseKernel failed."))
-    return SDK_FAILURE;
-  return SDK_SUCCESS;
+  return check_val(status, CL_SUCCESS, "clReleaseKernel failed.")
+         ? SDK_SUCCESS : SDK_FAILURE;
 }
 
 

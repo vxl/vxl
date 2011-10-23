@@ -9,6 +9,9 @@
 #include <boxm/boxm_scene.h>
 #include <boxm/basic/boxm_block_vis_graph_iterator.h>
 #include <vil/vil_save.h>
+#if !defined (_WIN32) && !defined(__APPLE__)
+#include <malloc.h> // for memalign()
+#endif
 
 //: Initializes CPU side input buffers
 //put tree structure and data into arrays
@@ -70,55 +73,55 @@ build_program(vcl_string const& functor, bool use_cell_data)
 bool
 boxm_update_ocl_scene_manager::build_rendering_program()
 {
-    vcl_string root = vcl_string(VCL_SOURCE_ROOT_DIR);
-    bool locc = this->load_kernel_source(root + "/contrib/brl/bseg/boxm/ocl/cl/loc_code_library_functions.cl");
-    bool cell = this->append_process_kernels(root + "/contrib/brl/bseg/boxm/ocl/cl/cell_utils.cl");
-    bool octr = this->append_process_kernels(root + "/contrib/brl/bseg/boxm/ocl/cl/octree_library_functions.cl");
-    bool bpr  = this->append_process_kernels(root + "/contrib/brl/bseg/boxm/ocl/cl/backproject.cl");
-    bool stat = this->append_process_kernels(root + "/contrib/brl/bseg/boxm/ocl/cl/statistics_library_functions.cl");
-    bool exp  = this->append_process_kernels(root + "/contrib/brl/bseg/boxm/ocl/cl/expected_functor.cl");
-    bool rbun = this->append_process_kernels(root + "/contrib/brl/bseg/boxm/ocl/cl/ray_bundle_library_functions.cl");
-    bool main = this->append_process_kernels(root + "/contrib/brl/bseg/boxm/ocl/cl/ray_trace_ocl_scene.cl");
+  vcl_string root = vcl_string(VCL_SOURCE_ROOT_DIR);
+  bool locc = this->load_kernel_source(root + "/contrib/brl/bseg/boxm/ocl/cl/loc_code_library_functions.cl");
+  bool cell = this->append_process_kernels(root + "/contrib/brl/bseg/boxm/ocl/cl/cell_utils.cl");
+  bool octr = this->append_process_kernels(root + "/contrib/brl/bseg/boxm/ocl/cl/octree_library_functions.cl");
+  bool bpr  = this->append_process_kernels(root + "/contrib/brl/bseg/boxm/ocl/cl/backproject.cl");
+  bool stat = this->append_process_kernels(root + "/contrib/brl/bseg/boxm/ocl/cl/statistics_library_functions.cl");
+  bool exp  = this->append_process_kernels(root + "/contrib/brl/bseg/boxm/ocl/cl/expected_functor.cl");
+  bool rbun = this->append_process_kernels(root + "/contrib/brl/bseg/boxm/ocl/cl/ray_bundle_library_functions.cl");
+  bool main = this->append_process_kernels(root + "/contrib/brl/bseg/boxm/ocl/cl/ray_trace_ocl_scene.cl");
 
-    if (!octr||!bpr||!exp||!stat||!rbun||!main||!locc||!cell) {
-        vcl_cerr << "Error: boxm_update_ocl_scene_manager : failed to load kernel source (helper functions)\n";
-        return false;
-    }
+  if (!octr||!bpr||!exp||!stat||!rbun||!main||!locc||!cell) {
+    vcl_cerr << "Error: boxm_update_ocl_scene_manager : failed to load kernel source (helper functions)\n";
+    return false;
+  }
 
-    //replace step_cell functor with the correct one... opt
-    vcl_cout<<"Using functor step_cell_render_opt"<<vcl_endl;
-    vcl_string patt = "/*$$step_cell$$*/";
-    // transfer cell data from global to local memory if use_cell_data_ == true
-    vcl_string functor = "step_cell_render_opt(mixture_array,alpha_array,data_ptr,d,&data_return);";
+  //replace step_cell functor with the correct one... opt
+  vcl_cout<<"Using functor step_cell_render_opt"<<vcl_endl;
+  vcl_string patt = "/*$$step_cell$$*/";
+  // transfer cell data from global to local memory if use_cell_data_ == true
+  vcl_string functor = "step_cell_render_opt(mixture_array,alpha_array,data_ptr,d,&data_return);";
 
-    // assign the functor calling signature
-    vcl_string::size_type pos_start = this->prog_.find(patt);
-    vcl_string::size_type n1 = patt.size();
-    if (pos_start < this->prog_.size()) {
-      vcl_string::size_type n2 = functor.size();
-      if (!n2)
-        return false;
-      this->prog_ = this->prog_.replace(pos_start, n1, functor.c_str(), n2);
-      return this->build_kernel_program(program_)==SDK_SUCCESS;
-    }
-
+  // assign the functor calling signature
+  vcl_string::size_type pos_start = this->prog_.find(patt);
+  vcl_string::size_type n1 = patt.size();
+  if (pos_start < this->prog_.size()) {
+    vcl_string::size_type n2 = functor.size();
+    if (!n2)
+      return false;
+    this->prog_ = this->prog_.replace(pos_start, n1, functor.c_str(), n2);
     return this->build_kernel_program(program_)==SDK_SUCCESS;
+  }
+
+  return this->build_kernel_program(program_)==SDK_SUCCESS;
 }
 
 bool
 boxm_update_ocl_scene_manager::build_refining_program()
 {
-    vcl_string root = vcl_string(VCL_SOURCE_ROOT_DIR);
-    bool locc = this->load_kernel_source(root + "/contrib/brl/bseg/boxm/ocl/cl/loc_code_library_functions.cl");
-    bool cell = this->append_process_kernels(root + "/contrib/brl/bseg/boxm/ocl/cl/cell_utils.cl");
-    bool octr = this->append_process_kernels(root + "/contrib/brl/bseg/boxm/ocl/cl/octree_library_functions.cl");
-    bool refn = this->append_process_kernels(root + "/contrib/brl/bseg/boxm/ocl/cl/refine_blocks_opt.cl");
+  vcl_string root = vcl_string(VCL_SOURCE_ROOT_DIR);
+  bool locc = this->load_kernel_source(root + "/contrib/brl/bseg/boxm/ocl/cl/loc_code_library_functions.cl");
+  bool cell = this->append_process_kernels(root + "/contrib/brl/bseg/boxm/ocl/cl/cell_utils.cl");
+  bool octr = this->append_process_kernels(root + "/contrib/brl/bseg/boxm/ocl/cl/octree_library_functions.cl");
+  bool refn = this->append_process_kernels(root + "/contrib/brl/bseg/boxm/ocl/cl/refine_blocks_opt.cl");
 
-    if (!refn || !octr || !locc || !cell) {
-      vcl_cerr << "Error: boxm_update_ocl_scene_manager : failed to load kernel source (helper functions)\n";
-      return false;
-    }
-    return this->build_kernel_program(program_)==SDK_SUCCESS;
+  if (!refn || !octr || !locc || !cell) {
+    vcl_cerr << "Error: boxm_update_ocl_scene_manager : failed to load kernel source (helper functions)\n";
+    return false;
+  }
+  return this->build_kernel_program(program_)==SDK_SUCCESS;
 }
 
 bool boxm_update_ocl_scene_manager::set_kernels()
@@ -160,7 +163,7 @@ bool boxm_update_ocl_scene_manager::set_kernels()
   // pass 4 update_ocl_scene_main
   kernel = clCreateKernel(program_,"update_ocl_scene_main_opt",&status);
   if (check_val(status,CL_SUCCESS,error_to_string(status))!=CHECK_SUCCESS)
-      return false;
+    return false;
   kernels_.push_back(kernel);
 
   // kernel 5 ray_trace_ocl_scene_full_data
@@ -256,20 +259,16 @@ int boxm_update_ocl_scene_manager::setup_app_density_buffer()
   cl_int status = CL_SUCCESS;
   app_density_buf_ = clCreateBuffer(this->context_,CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR,
                                     sizeof(cl_float4),app_density_,&status);
-  if (!check_val(status,CL_SUCCESS,"clCreateBuffer (app density) failed."))
-    return SDK_FAILURE;
-  else
-    return SDK_SUCCESS;
+  return check_val(status,CL_SUCCESS,"clCreateBuffer (app density) failed.")
+         ? SDK_SUCCESS : SDK_FAILURE;
 }
 
 
 int boxm_update_ocl_scene_manager::clean_app_density_buffer()
 {
   cl_int status = clReleaseMemObject(app_density_buf_);
-  if (!check_val(status,CL_SUCCESS,"clReleaseMemObject (app_density_buf_) failed."))
-    return SDK_FAILURE;
-  else
-    return SDK_SUCCESS;
+  return check_val(status,CL_SUCCESS,"clReleaseMemObject (app_density_buf_) failed.")
+         ? SDK_SUCCESS : SDK_FAILURE;
 }
 
 bool boxm_update_ocl_scene_manager::set_args(unsigned pass)
@@ -320,12 +319,12 @@ bool boxm_update_ocl_scene_manager::set_args(unsigned pass)
                             sizeof(cl_mem), (void *)&app_density_buf_);
     if (check_val(status, CL_SUCCESS, "clSetKernelArg failed. (remote surface appearance)")!=CHECK_SUCCESS)
       return false;
+
     status = clSetKernelArg(kernels_[pass], 2,
                             sizeof(cl_mem), (void *)&img_dims_buf_);
-    return check_val(status, CL_SUCCESS,
-                           "clSetKernelArg failed. (image dimensions)")==CHECK_SUCCESS;
+    return check_val(status, CL_SUCCESS, "clSetKernelArg failed. (image dimensions)")==CHECK_SUCCESS;
   }
-  if (pass==0 || pass ==1 || pass==3) // update_ocl_scene (aux data passes)
+  if (pass==0 || pass==1 || pass==3) // update_ocl_scene (aux data passes)
   {
     int i=0;
     status = clSetKernelArg(kernels_[pass],i++,sizeof(cl_mem),(void *)&scene_dims_buf_);
@@ -333,7 +332,7 @@ bool boxm_update_ocl_scene_manager::set_args(unsigned pass)
       return SDK_FAILURE;
     status = clSetKernelArg(kernels_[pass],i++,sizeof(cl_mem),(void *)&scene_origin_buf_);
     if (!check_val(status,CL_SUCCESS,"clSetKernelArg failed. (scene_orign_buf_)"))
-        return SDK_FAILURE;
+      return SDK_FAILURE;
     status = clSetKernelArg(kernels_[pass],i++,sizeof(cl_mem),(void *)&block_dims_buf_);
     if (!check_val(status,CL_SUCCESS,"clSetKernelArg failed. (block_dims_buf_)"))
       return SDK_FAILURE;
@@ -372,7 +371,7 @@ bool boxm_update_ocl_scene_manager::set_args(unsigned pass)
     //cell aux data buffer
     status = clSetKernelArg(kernels_[pass],i++,sizeof(cl_mem),(void *)&cell_aux_data_buf_);
     if (!check_val(status,CL_SUCCESS,"clSetKernelArg failed. (cell_data_buf_)"))
-        return SDK_FAILURE;
+      return SDK_FAILURE;
 
     // camera buffer
     status = clSetKernelArg(kernels_[pass],i++,sizeof(cl_mem),(void *)&persp_cam_buf_);
@@ -561,10 +560,7 @@ bool boxm_update_ocl_scene_manager::set_commandqueue()
 {
   cl_int status = CL_SUCCESS;
   command_queue_ = clCreateCommandQueue(this->context(),this->devices()[0],CL_QUEUE_PROFILING_ENABLE,&status);
-  if (!check_val(status,CL_SUCCESS,"Falied in command queue creation" + error_to_string(status)))
-    return false;
-
-  return true;
+  return check_val(status,CL_SUCCESS,"Falied in command queue creation" + error_to_string(status))==CHECK_SUCCESS;
 }
 
 
@@ -601,13 +597,13 @@ bool boxm_update_ocl_scene_manager::set_workspace(unsigned pass)
 
   if (pass==0 || pass==1 || pass==3) // passes for computing aux
   {
-      globalThreads[0]=this->wni_/2; globalThreads[1]=this->wnj_/2;
-      localThreads[0] =this->bni_  ; localThreads[1] =this->bnj_  ;
+    globalThreads[0]=this->wni_/2; globalThreads[1]=this->wnj_/2;
+    localThreads[0] =this->bni_  ; localThreads[1] =this->bnj_  ;
   }
   if (pass==2)// pass for normalizing image
   {
-      globalThreads[0]=this->wni_;globalThreads[1]=this->wnj_;
-      localThreads[0] =this->bni_;localThreads[0] =this->bnj_;
+    globalThreads[0]=this->wni_;globalThreads[1]=this->wnj_;
+    localThreads[0] =this->bni_;localThreads[0] =this->bnj_;
   }
   if (pass==4)  // pass for updating data from aux data
   {
@@ -616,13 +612,13 @@ bool boxm_update_ocl_scene_manager::set_workspace(unsigned pass)
   }
   if (pass==5)
   {
-      globalThreads[0]=this->wni_;globalThreads[1]=this->wnj_;
-      localThreads[0] =this->bni_;localThreads[1] =this->bnj_;
+    globalThreads[0]=this->wni_;globalThreads[1]=this->wnj_;
+    localThreads[0] =this->bni_;localThreads[1] =this->bnj_;
   }
   if (pass==6)
   {
-      globalThreads[0]=numbuffer_;globalThreads[1]=1;
-      localThreads[0] =1;localThreads[1] =1;
+    globalThreads[0]=numbuffer_;globalThreads[1]=1;
+    localThreads[0] =1;localThreads[1] =1;
   }
   if (used_local_memory > this->total_local_memory())
   {
@@ -640,39 +636,39 @@ bool boxm_update_ocl_scene_manager::run(unsigned pass)
   cl_int status = SDK_SUCCESS;
   cl_ulong tstart,tend;
 
-  if (pass==0 || pass ==1 || pass==3)
+  if (pass==0 || pass==1 || pass==3)
   {
-      for (unsigned k=0;k<2;k++)
+    for (unsigned k=0;k<2;k++)
+    {
+      for (unsigned l=0;l<2;l++)
       {
-          for (unsigned l=0;l<2;l++)
-          {
-              status=clEnqueueWriteBuffer(command_queue_,offset_y_buf_,0,0,sizeof(cl_uint),(void *)&k,0,0,0);
-              status=clEnqueueWriteBuffer(command_queue_,offset_x_buf_,0,0,sizeof(cl_uint),(void *)&l,0,0,0);
-              clFinish(command_queue_);
-              cl_event ceEvent=0;
+        status=clEnqueueWriteBuffer(command_queue_,offset_y_buf_,0,0,sizeof(cl_uint),(void *)&k,0,0,0);
+        status=clEnqueueWriteBuffer(command_queue_,offset_x_buf_,0,0,sizeof(cl_uint),(void *)&l,0,0,0);
+        clFinish(command_queue_);
+        cl_event ceEvent=0;
 
-              status = clEnqueueNDRangeKernel(command_queue_, kernels_[pass], 2,NULL,globalThreads,localThreads,0,NULL,&ceEvent);
-              if (check_val(status,CL_SUCCESS,"clEnqueueNDRangeKernel failed. "+error_to_string(status))!=CHECK_SUCCESS)
-                  return false;
-              status = clFinish(command_queue_);
-              if (check_val(status,CL_SUCCESS,"clFinish failed."+error_to_string(status))!=CHECK_SUCCESS)
-                  return false;
-              status = clGetEventProfilingInfo(ceEvent,CL_PROFILING_COMMAND_END,sizeof(cl_ulong),&tend,0);
-              status = clGetEventProfilingInfo(ceEvent,CL_PROFILING_COMMAND_START,sizeof(cl_ulong),&tstart,0);
-              gpu_time_+= 1e-6f * float(tend - tstart); // convert nanoseconds to milliseconds
-          }
+        status = clEnqueueNDRangeKernel(command_queue_, kernels_[pass], 2,NULL,globalThreads,localThreads,0,NULL,&ceEvent);
+        if (check_val(status,CL_SUCCESS,"clEnqueueNDRangeKernel failed. "+error_to_string(status))!=CHECK_SUCCESS)
+          return false;
+        status = clFinish(command_queue_);
+        if (check_val(status,CL_SUCCESS,"clFinish failed."+error_to_string(status))!=CHECK_SUCCESS)
+          return false;
+        status = clGetEventProfilingInfo(ceEvent,CL_PROFILING_COMMAND_END,sizeof(cl_ulong),&tend,0);
+        status = clGetEventProfilingInfo(ceEvent,CL_PROFILING_COMMAND_START,sizeof(cl_ulong),&tstart,0);
+        gpu_time_+= 1e-6f * float(tend - tstart); // convert nanoseconds to milliseconds
       }
+    }
   }
   if (pass==2 || pass ==4 || pass==5 || pass==6)
   {
-      cl_event ceEvent =0;
-      status = clEnqueueNDRangeKernel(command_queue_, kernels_[pass], 2,NULL,globalThreads,localThreads,0,NULL,&ceEvent);
-      if (check_val(status,CL_SUCCESS,"clEnqueueNDRangeKernel failed. "+error_to_string(status))!=CHECK_SUCCESS)
-          return false;
-      status = clFinish(command_queue_);
-      status = clGetEventProfilingInfo(ceEvent,CL_PROFILING_COMMAND_END,sizeof(cl_ulong),&tend,0);
-      status = clGetEventProfilingInfo(ceEvent,CL_PROFILING_COMMAND_START,sizeof(cl_ulong),&tstart,0);
-      gpu_time_+= 1e-6f * float(tend - tstart); // convert nanoseconds to milliseconds
+    cl_event ceEvent =0;
+    status = clEnqueueNDRangeKernel(command_queue_, kernels_[pass], 2,NULL,globalThreads,localThreads,0,NULL,&ceEvent);
+    if (check_val(status,CL_SUCCESS,"clEnqueueNDRangeKernel failed. "+error_to_string(status))!=CHECK_SUCCESS)
+      return false;
+    status = clFinish(command_queue_);
+    status = clGetEventProfilingInfo(ceEvent,CL_PROFILING_COMMAND_END,sizeof(cl_ulong),&tend,0);
+    status = clGetEventProfilingInfo(ceEvent,CL_PROFILING_COMMAND_START,sizeof(cl_ulong),&tstart,0);
+    gpu_time_+= 1e-6f * float(tend - tstart); // convert nanoseconds to milliseconds
   }
   return check_val(status,CL_SUCCESS,"clFinish failed."+error_to_string(status))==CHECK_SUCCESS;
 }
@@ -680,9 +676,9 @@ bool boxm_update_ocl_scene_manager::run(unsigned pass)
 
 bool boxm_update_ocl_scene_manager::run_scene()
 {
-    return setup_online_processing()&&
-           online_processing()      &&
-           finish_online_processing();
+  return setup_online_processing()&&
+         online_processing()      &&
+         finish_online_processing();
 }
 
 bool boxm_update_ocl_scene_manager::setup_online_processing()
@@ -717,7 +713,7 @@ bool boxm_update_ocl_scene_manager::online_processing()
       return false;
     }
 
-    /******** read some output **************************************/
+    // ****************** read some output *****************************
     if (pass == 4) {  //only read for data setting pass
       cl_event events[1];
       int status = clEnqueueReadBuffer(command_queue_,output_debug_buf_,CL_TRUE,
@@ -741,7 +737,7 @@ bool boxm_update_ocl_scene_manager::online_processing()
               <<output_debug_[8]<<'\n'
               <<"  nobsmix:"<<output_debug_[9]<<vcl_endl;
     }
-    /****************************************************************/
+    // *****************************************************************
   }
   vcl_cout << "Timing Analysis\n"
            << "===============\n"
@@ -764,7 +760,7 @@ bool boxm_update_ocl_scene_manager::rendering()
   this->set_args(pass);
   this->set_workspace(pass);
   if (!this->run(pass))
-      return false;
+    return false;
   vcl_cout << "Timing Analysis\n"
            << "===============\n"
            << "openCL Running time "<<gpu_time_<<" ms" << vcl_endl
@@ -796,12 +792,12 @@ bool boxm_update_ocl_scene_manager::refine()
   this->set_args(pass);
   this->set_workspace(pass);
   if (!this->run(pass))
-      return false;
+    return false;
   vcl_cout << "===============\n"
            << "Timing Analysis:\n"
            << "openCL Running time "<<gpu_time_<<" ms" << vcl_endl;
 
-  /******** read some output **************************************/
+  // ****************** read some output *****************************
   cl_event events[1];
   int status = clEnqueueReadBuffer(command_queue_,output_debug_buf_,CL_TRUE,
                                    0,numbuffer_*sizeof(cl_float),
@@ -839,7 +835,7 @@ bool boxm_update_ocl_scene_manager::refine()
     }
   }
   vcl_cout<<vcl_endl;
-  /****************************************************************/
+  // *******************************************************************
 
   return true;
 }
@@ -917,7 +913,7 @@ bool boxm_update_ocl_scene_manager::read_output_image()
     return false;
 
   status = clReleaseEvent(events[0]);
-  return check_val(status,CL_SUCCESS,"clReleaseEvent failed.")==1;
+  return check_val(status,CL_SUCCESS,"clReleaseEvent failed.")==CHECK_SUCCESS;
 }
 
 
@@ -976,7 +972,6 @@ bool boxm_update_ocl_scene_manager::read_trees()
   if (!check_val(status,CL_SUCCESS,"clEnqueueBuffer (cell block_ptrs )failed."))
     return false;
 
-
   status = clWaitForEvents(1, &events[0]);
   if (!check_val(status,CL_SUCCESS,"clWaitForEvents failed."))
     return false;
@@ -987,21 +982,21 @@ bool boxm_update_ocl_scene_manager::read_trees()
   // Wait for the read buffer to finish execution
 
   status = clReleaseEvent(events[0]);
-  return check_val(status,CL_SUCCESS,"clReleaseEvent failed.")==1;
+  return check_val(status,CL_SUCCESS,"clReleaseEvent failed.")==CHECK_SUCCESS;
 }
 
 bool boxm_update_ocl_scene_manager::save_scene()
 {
-    this->read_trees();
+  this->read_trees();
 
-    scene_->set_blocks(block_ptrs_);
-    scene_->set_tree_buffers_opt(cells_);
-    scene_->set_mem_ptrs(mem_ptrs_);
-    scene_->set_alpha_values(cell_alpha_);
-    scene_->set_mixture_values(cell_mixture_);
-    scene_->set_num_obs_values(cell_num_obs_);
+  scene_->set_blocks(block_ptrs_);
+  scene_->set_tree_buffers_opt(cells_);
+  scene_->set_mem_ptrs(mem_ptrs_);
+  scene_->set_alpha_values(cell_alpha_);
+  scene_->set_mixture_values(cell_mixture_);
+  scene_->set_num_obs_values(cell_num_obs_);
 
-    return scene_->save();
+  return scene_->save();
 }
 
 void boxm_update_ocl_scene_manager::print_tree()
@@ -1042,10 +1037,9 @@ bool boxm_update_ocl_scene_manager::clean_update()
   return true;
 }
 
-/*******************************************
- * build_kernel_program - builds kernel program
- * from source (a vcl string)
- *******************************************/
+//**************************************************************************
+// build_kernel_program - builds kernel program from source (a vcl string)
+//**************************************************************************
 
 int boxm_update_ocl_scene_manager::build_kernel_program(cl_program & program)
 {
@@ -1067,9 +1061,7 @@ int boxm_update_ocl_scene_manager::build_kernel_program(cl_program & program)
                                       &source,
                                       sourceSize,
                                       &status);
-  if (!check_val(status,
-                       CL_SUCCESS,
-                       "clCreateProgramWithSource failed."))
+  if (!check_val(status, CL_SUCCESS, "clCreateProgramWithSource failed."))
     return SDK_FAILURE;
 
   // create a cl program executable for all the devices specified
@@ -1079,9 +1071,7 @@ int boxm_update_ocl_scene_manager::build_kernel_program(cl_program & program)
                           "",
                           NULL,
                           NULL);
-  if (!check_val(status,
-                       CL_SUCCESS,
-                       error_to_string(status)))
+  if (!check_val(status, CL_SUCCESS, error_to_string(status)))
   {
     vcl_size_t len;
     char buffer[2048];
@@ -1097,44 +1087,44 @@ int boxm_update_ocl_scene_manager::build_kernel_program(cl_program & program)
 
 bool boxm_update_ocl_scene_manager::set_scene_data()
 {
-    return set_scene_dims()
-        && set_scene_origin()
-        && set_block_dims()
-        && set_block_ptrs()
-        && set_root_level()
-        && set_mem_ptrs();
+  return set_scene_dims()
+      && set_scene_origin()
+      && set_block_dims()
+      && set_block_ptrs()
+      && set_root_level()
+      && set_mem_ptrs();
 }
 
 
 bool boxm_update_ocl_scene_manager::clean_scene_data()
 {
-    return clean_scene_dims()
-        && clean_scene_origin()
-        && clean_block_dims()
-        && clean_block_ptrs()
-        && clean_root_level();
+  return clean_scene_dims()
+      && clean_scene_origin()
+      && clean_block_dims()
+      && clean_block_ptrs()
+      && clean_root_level();
 }
 
 
 bool boxm_update_ocl_scene_manager::set_scene_data_buffers()
 {
-    return set_scene_dims_buffers()
-        && set_scene_origin_buffers()
-        && set_block_dims_buffers()
-        && set_block_ptrs_buffers()
-        && set_root_level_buffers()
-        && set_mem_ptrs_buffers();
+  return set_scene_dims_buffers()
+      && set_scene_origin_buffers()
+      && set_block_dims_buffers()
+      && set_block_ptrs_buffers()
+      && set_root_level_buffers()
+      && set_mem_ptrs_buffers();
 }
 
 
 bool boxm_update_ocl_scene_manager::release_scene_data_buffers()
 {
-    return release_scene_dims_buffers()
-        && release_scene_origin_buffers()
-        && release_block_dims_buffers()
-        && release_block_ptrs_buffers()
-        && release_root_level_buffers()
-        && release_mem_ptrs_buffers();
+  return release_scene_dims_buffers()
+      && release_scene_origin_buffers()
+      && release_block_dims_buffers()
+      && release_block_ptrs_buffers()
+      && release_root_level_buffers()
+      && release_mem_ptrs_buffers();
 }
 
 
@@ -1184,7 +1174,7 @@ bool boxm_update_ocl_scene_manager::set_scene_origin_buffers()
                                      CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR,
                                      4*sizeof(cl_float),
                                      scene_origin_,&status);
-  return check_val(status,CL_SUCCESS,"clCreateBuffer (scene_origin_) failed.")==1;
+  return check_val(status,CL_SUCCESS,"clCreateBuffer (scene_origin_) failed.")==CHECK_SUCCESS;
 }
 
 
@@ -1192,7 +1182,7 @@ bool boxm_update_ocl_scene_manager::release_scene_origin_buffers()
 {
   cl_int status;
   status = clReleaseMemObject(scene_origin_buf_);
-  return check_val(status,CL_SUCCESS,"clReleaseMemObject failed (scene_origin_buf_).")==1;
+  return check_val(status,CL_SUCCESS,"clReleaseMemObject failed (scene_origin_buf_).")==CHECK_SUCCESS;
 }
 
 
@@ -1230,7 +1220,7 @@ bool boxm_update_ocl_scene_manager::set_scene_dims_buffers()
                                    CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR,
                                    sizeof(cl_int4),
                                    scene_dims_,&status);
-  return check_val(status,CL_SUCCESS,"clCreateBuffer (scene_dims_) failed.")==1;
+  return check_val(status,CL_SUCCESS,"clCreateBuffer (scene_dims_) failed.")==CHECK_SUCCESS;
 }
 
 
@@ -1238,7 +1228,7 @@ bool boxm_update_ocl_scene_manager::release_scene_dims_buffers()
 {
   cl_int status;
   status = clReleaseMemObject(scene_dims_buf_);
-  return check_val(status,CL_SUCCESS,"clReleaseMemObject failed (scene_dims_buf_).")==1;
+  return check_val(status,CL_SUCCESS,"clReleaseMemObject failed (scene_dims_buf_).")==CHECK_SUCCESS;
 }
 
 
@@ -1278,7 +1268,7 @@ bool boxm_update_ocl_scene_manager::set_block_dims_buffers()
                                    CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR,
                                    4*sizeof(cl_float),
                                    block_dims_,&status);
-  return check_val(status,CL_SUCCESS,"clCreateBuffer (block_dims_) failed.")==1;
+  return check_val(status,CL_SUCCESS,"clCreateBuffer (block_dims_) failed.")==CHECK_SUCCESS;
 }
 
 
@@ -1286,7 +1276,7 @@ bool boxm_update_ocl_scene_manager::release_block_dims_buffers()
 {
   cl_int status;
   status = clReleaseMemObject(block_dims_buf_);
-  return check_val(status,CL_SUCCESS,"clReleaseMemObject failed (block_dims_buf_).")==1;
+  return check_val(status,CL_SUCCESS,"clReleaseMemObject failed (block_dims_buf_).")==CHECK_SUCCESS;
 }
 
 
@@ -1357,11 +1347,11 @@ bool boxm_update_ocl_scene_manager::release_mem_ptrs_buffers()
   cl_int status;
   status = clReleaseMemObject(mem_ptrs_buf_);
   if (!check_val(status,CL_SUCCESS,"clReleaseMemObject failed (mem_ptrs_buf_)."))
-      return false;
+    return false;
 
   //release output debugger
   status = clReleaseMemObject(output_debug_buf_);
-  return check_val(status,CL_SUCCESS,"clReleaseMemObject failed (output_debug_buf_).")==1;
+  return check_val(status,CL_SUCCESS,"clReleaseMemObject failed (output_debug_buf_).")==CHECK_SUCCESS;
 }
 
 bool boxm_update_ocl_scene_manager::clean_mem_ptrs()
@@ -1379,14 +1369,14 @@ bool boxm_update_ocl_scene_manager::set_block_ptrs_buffers()
                                    CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR,
                                    scene_x_*scene_y_*scene_z_*sizeof(cl_int4),
                                    block_ptrs_,&status);
-  return check_val(status,CL_SUCCESS,"clCreateBuffer (block_ptrs_) failed.")==1;
+  return check_val(status,CL_SUCCESS,"clCreateBuffer (block_ptrs_) failed.")==CHECK_SUCCESS;
 }
 
 bool boxm_update_ocl_scene_manager::release_block_ptrs_buffers()
 {
   cl_int status;
   status = clReleaseMemObject(block_ptrs_buf_);
-  return check_val(status,CL_SUCCESS,"clReleaseMemObject failed (block_ptrs_buf_).")==1;
+  return check_val(status,CL_SUCCESS,"clReleaseMemObject failed (block_ptrs_buf_).")==CHECK_SUCCESS;
 }
 
 
@@ -1405,7 +1395,7 @@ bool boxm_update_ocl_scene_manager::set_root_level_buffers()
                                    CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR,
                                    sizeof(cl_uint),
                                    &root_level_,&status);
-  return check_val(status,CL_SUCCESS,"clCreateBuffer (root level) failed.")==1;
+  return check_val(status,CL_SUCCESS,"clCreateBuffer (root level) failed.")==CHECK_SUCCESS;
 }
 
 
@@ -1488,10 +1478,10 @@ bool boxm_update_ocl_scene_manager::set_all_blocks()
       cell_aux_data_[i++]=0.0;
 
 
-  /****** size output **********/
+  // ****** size output **********
   vcl_cout<<"Numbuffer "<<numbuffer_<< " Len buffer "<<lenbuffer_
           <<"  total cells "<<cells_size_<<vcl_endl;
-  /****** size output **********/
+  // ****** size output **********
 
   return true;
 }
@@ -1568,7 +1558,7 @@ bool boxm_update_ocl_scene_manager::set_tree_buffers()
     return false;
 
 
-  /** GPU MEMORY INFO **********************/
+  // ** GPU MEMORY INFO **********************
   float cellMB = (float)cells_size_*sizeof(cl_int2)/1024.0f/1024.0f;
   float alphaMB = (float)cell_data_size_*sizeof(cl_float)/1024.0f/1024.0f;
   float mixtureMB = (float)cell_data_size_*sizeof(cl_uchar8)/1024.0f/1024.0f;
@@ -1582,9 +1572,9 @@ bool boxm_update_ocl_scene_manager::set_tree_buffers()
           <<"    Num Obs  "<<numobsMB<<"MB\n"
           <<"    Aux Data "<<auxMB<<"MB\n"
           <<"    TOTAL:   "<<total<<" MB"<<vcl_endl;
-  /****************************************/
+  // ****************************************
 
- return true;
+  return true;
 }
 
 
@@ -1711,7 +1701,7 @@ bool boxm_update_ocl_scene_manager::set_persp_camera_buffers()
                                   CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR,
                                   3*sizeof(cl_float16),
                                   persp_cam_,&status);
-  return check_val(status,CL_SUCCESS,"clCreateBuffer (persp_cam_buf_) failed.")==1;
+  return check_val(status,CL_SUCCESS,"clCreateBuffer (persp_cam_buf_) failed.")==CHECK_SUCCESS;
 }
 
 
@@ -1731,7 +1721,7 @@ bool boxm_update_ocl_scene_manager::release_persp_camera_buffers()
 {
   cl_int status;
   status = clReleaseMemObject(persp_cam_buf_);
-  return check_val(status,CL_SUCCESS,"clReleaseMemObject failed (persp_cam_buf_).")==1;
+  return check_val(status,CL_SUCCESS,"clReleaseMemObject failed (persp_cam_buf_).")==CHECK_SUCCESS;
 }
 
 
@@ -1833,7 +1823,7 @@ bool boxm_update_ocl_scene_manager::set_input_image_buffers()
                               CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR,
                               wni_*wnj_*sizeof(cl_float4),
                               image_,&status);
-  return check_val(status,CL_SUCCESS,"clCreateBuffer (image_buf_) failed.")==1;
+  return check_val(status,CL_SUCCESS,"clCreateBuffer (image_buf_) failed.")==CHECK_SUCCESS;
 }
 
 
@@ -1852,7 +1842,7 @@ bool boxm_update_ocl_scene_manager::write_image_buffer()
     return false;
   status=clFinish(command_queue_);
 
-  return check_val(status,CL_SUCCESS,"clFinish (writing) failed.")==1;
+  return check_val(status,CL_SUCCESS,"clFinish (writing) failed.")==CHECK_SUCCESS;
 }
 
 bool boxm_update_ocl_scene_manager::set_image_dims_buffers()
@@ -1863,7 +1853,7 @@ bool boxm_update_ocl_scene_manager::set_image_dims_buffers()
                                  CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR,
                                  sizeof(cl_uint4),
                                  img_dims_,&status);
-  return check_val(status,CL_SUCCESS,"clCreateBuffer (imd_dims_buf_) failed.")==1;
+  return check_val(status,CL_SUCCESS,"clCreateBuffer (imd_dims_buf_) failed.")==CHECK_SUCCESS;
 }
 
 
@@ -1875,7 +1865,7 @@ bool boxm_update_ocl_scene_manager::release_input_image_buffers()
     return false;
 
   status = clReleaseMemObject(img_dims_buf_);
-  return check_val(status,CL_SUCCESS,"clReleaseMemObject failed (img_dims_buf_).")==1;
+  return check_val(status,CL_SUCCESS,"clReleaseMemObject failed (img_dims_buf_).")==CHECK_SUCCESS;
 }
 
 
@@ -1902,7 +1892,7 @@ bool boxm_update_ocl_scene_manager::set_offset_buffers(int offset_x,int offset_y
                                  CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR,
                                  sizeof(cl_int),
                                  &offset_y_,&status);
-  return check_val(status,CL_SUCCESS,"clCreateBuffer (offset_y_) failed.")==1;
+  return check_val(status,CL_SUCCESS,"clCreateBuffer (offset_y_) failed.")==CHECK_SUCCESS;
 }
 
 
@@ -1918,6 +1908,6 @@ bool boxm_update_ocl_scene_manager::release_offset_buffers()
     return false;
 
   status = clReleaseMemObject(offset_y_buf_);
-  return check_val(status,CL_SUCCESS,"clReleaseMemObject failed (offset_y_buf_).")==1;
+  return check_val(status,CL_SUCCESS,"clReleaseMemObject failed (offset_y_buf_).")==CHECK_SUCCESS;
 }
 

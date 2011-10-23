@@ -11,9 +11,11 @@
 #include <vcl_sstream.h>
 #include <bocl/bocl_utils.h>
 #include <vcl_cstdio.h>
+#if !defined (_WIN32) && !defined(__APPLE__)
+#include <malloc.h> // for memalign()
+#endif
 
-
-//: Insure only one instance is created
+//: Ensure only one instance is created
 template <class T>
 T* bocl_manager<T>::instance()
 {
@@ -125,11 +127,12 @@ bool bocl_manager<T>::initialize_cl()
 
   //////////////////////////////////////////////////////////////////////////////
   //store current_device_/context for older functions that use bocl_manager
-  if(gpu_found)
-  curr_device_ = gpus_[0];
-  else if(cpu_found)
-  curr_device_ = cpus_[0];
-  else return false;
+  if (gpu_found)
+    curr_device_ = gpus_[0];
+  else if (cpu_found)
+    curr_device_ = cpus_[0];
+  else
+    return false;
   context_ = curr_device_->context();
   vcl_cout<<"Default device: "<<*curr_device_<<vcl_endl;
   //////////////////////////////////////////////////////////////////////////////
