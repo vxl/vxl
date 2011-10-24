@@ -994,7 +994,7 @@ bool boxm_update_bit_scene_manager::set_query_point_args()
       return false;
     //output float buffer (one float for each buffer)
     status = clSetKernelArg(query_point_kernel_,i++,sizeof(cl_mem),(void *)&output_debug_buf_);
-    return check_val(status,CL_SUCCESS,"clSetKernelArg failed. (output debugger)")==CHECK_SUCCESS;
+    return check_val(status,CL_SUCCESS,"clSetKernelArg failed. (output debugger)")==CL_SUCCESS;
 }
 
 
@@ -1504,7 +1504,7 @@ bool boxm_update_bit_scene_manager::set_update_args(unsigned pass)
       return false;
     //output float buffer (one float for each buffer)
     status = clSetKernelArg(update_kernels_[pass],i++,sizeof(cl_mem),(void *)&output_debug_buf_);
-    return check_val(status,CL_SUCCESS,"clSetKernelArg failed. (output debugger)")==CHECK_SUCCESS;
+    return check_val(status,CL_SUCCESS,"clSetKernelArg failed. (output debugger)")==CL_SUCCESS;
   }
   else if (pass==1)
   {
@@ -1603,7 +1603,7 @@ bool boxm_update_bit_scene_manager::set_update_args(unsigned pass)
       return false;
     //output float buffer (one float for each buffer)
     status = clSetKernelArg(update_kernels_[pass],i++,sizeof(cl_mem),(void *)&output_debug_buf_);
-    return check_val(status,CL_SUCCESS,"clSetKernelArg failed. (output debugger)")==CHECK_SUCCESS;
+    return check_val(status,CL_SUCCESS,"clSetKernelArg failed. (output debugger)")==CL_SUCCESS;
   }
   else if (pass==2) //divide alpha which is not done
   {
@@ -1642,7 +1642,7 @@ bool boxm_update_bit_scene_manager::set_update_args(unsigned pass)
       //return false;
     //output float buffer (one float for each buffer)
     status = clSetKernelArg(update_kernels_[pass],i++,sizeof(cl_mem),(void *)&output_debug_buf_);
-    return check_val(status,CL_SUCCESS,"clSetKernelArg failed. (output debugger)")==CHECK_SUCCESS;
+    return check_val(status,CL_SUCCESS,"clSetKernelArg failed. (output debugger)")==CL_SUCCESS;
   }
   else if (pass==4)
   {
@@ -1758,7 +1758,7 @@ bool boxm_update_bit_scene_manager::set_update_args(unsigned pass)
       return false;
     //output float buffer (one float for each buffer)
     status = clSetKernelArg(update_kernels_[pass],i++,sizeof(cl_mem),(void *)&output_debug_buf_);
-    return check_val(status,CL_SUCCESS,"clSetKernelArg failed. (output debugger)")==CHECK_SUCCESS;
+    return check_val(status,CL_SUCCESS,"clSetKernelArg failed. (output debugger)")==CL_SUCCESS;
   }
   //END ray trace update pass args -------------------------------------------------
 
@@ -1812,7 +1812,7 @@ bool boxm_update_bit_scene_manager::set_update_args(unsigned pass)
       //return false;
     //output float buffer (one float for each buffer)
     status = clSetKernelArg(update_kernels_[pass],i++,sizeof(cl_mem),(void *)&output_debug_buf_);
-    return check_val(status,CL_SUCCESS,"clSetKernelArg failed. (output debugger)")==CHECK_SUCCESS;
+    return check_val(status,CL_SUCCESS,"clSetKernelArg failed. (output debugger)")==CL_SUCCESS;
   }
   //end pass 4 args ------------------------------------------------------------
 
@@ -1826,7 +1826,7 @@ bool boxm_update_bit_scene_manager::set_update_args(unsigned pass)
     if (!check_val(status, CL_SUCCESS, "clSetKernelArg failed. (remote surface appearance)"))
       return false;
     status = clSetKernelArg(update_kernels_[pass], i++, sizeof(cl_mem), (void *)&img_dims_buf_);
-    return check_val(status, CL_SUCCESS, "clSetKernelArg failed. (image dimensions)")==CHECK_SUCCESS;
+    return check_val(status, CL_SUCCESS, "clSetKernelArg failed. (image dimensions)")==CL_SUCCESS;
   }
   //end pass 2 args ------------------------------------------------------------
   else
@@ -1993,7 +1993,7 @@ bool boxm_update_bit_scene_manager::set_commandqueue()
 {
   cl_int status = CL_SUCCESS;
   command_queue_ = clCreateCommandQueue(this->context(),this->devices()[0],CL_QUEUE_PROFILING_ENABLE,&status);
-  return check_val(status,CL_SUCCESS,"Falied in command queue creation" + error_to_string(status))==CHECK_SUCCESS;
+  return check_val(status,CL_SUCCESS,"Falied in command queue creation" + error_to_string(status))==CL_SUCCESS;
 }
 
 
@@ -2582,7 +2582,7 @@ bool boxm_update_bit_scene_manager::read_output_image()
     return false;
 
   status = clReleaseEvent(events[0]);
-  return check_val(status,CL_SUCCESS,"clReleaseEvent failed.")==CHECK_SUCCESS;
+  return check_val(status,CL_SUCCESS,"clReleaseEvent failed.")==CL_SUCCESS;
 }
 
 
@@ -2670,7 +2670,7 @@ bool boxm_update_bit_scene_manager::read_scene()
   // Wait for the read buffer to finish execution
 
   status = clReleaseEvent(events[0]);
-  return check_val(status,CL_SUCCESS,"clReleaseEvent failed.")==CHECK_SUCCESS;
+  return check_val(status,CL_SUCCESS,"clReleaseEvent failed.")==CL_SUCCESS;
 }
 
 bool boxm_update_bit_scene_manager::save_scene()
@@ -2824,13 +2824,13 @@ bool boxm_update_bit_scene_manager::set_persp_camera_buffers()
                                   CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR,
                                   3*sizeof(cl_float16),
                                   persp_cam_,&status);
-  if (!check_val(status,CL_SUCCESS,"clCreateBuffer (persp_cam_buf_) failed.")==CHECK_SUCCESS)
+  if (!check_val(status,CL_SUCCESS,"clCreateBuffer (persp_cam_buf_) failed.")==CL_SUCCESS)
     return false;
   persp_mat_buf_ = clCreateBuffer(this->context_,
                                   CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR,
                                   sizeof(cl_float16),
                                   persp_mat_,&status);
-  return check_val(status,CL_SUCCESS,"clCreateBuffer (persp_mat_) failed.")==CHECK_SUCCESS;
+  return check_val(status,CL_SUCCESS,"clCreateBuffer (persp_mat_) failed.")==CL_SUCCESS;
 }
 
 
@@ -2855,7 +2855,7 @@ bool boxm_update_bit_scene_manager::release_persp_camera_buffers()
   cl_int status;
   status = clReleaseMemObject(persp_cam_buf_);
   status = clReleaseMemObject(persp_mat_buf_);
-  return check_val(status,CL_SUCCESS,"clReleaseMemObject failed (persp_cam_buf_).")==CHECK_SUCCESS;
+  return check_val(status,CL_SUCCESS,"clReleaseMemObject failed (persp_cam_buf_).")==CL_SUCCESS;
 }
 
 
@@ -2974,7 +2974,7 @@ bool boxm_update_bit_scene_manager::set_input_image_buffers()
                               CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR,
                               wni_*wnj_*sizeof(cl_float4),
                               image_,&status);
-  return check_val(status,CL_SUCCESS,"clCreateBuffer (image_buf_) failed.")==CHECK_SUCCESS;
+  return check_val(status,CL_SUCCESS,"clCreateBuffer (image_buf_) failed.")==CL_SUCCESS;
 }
 
 
@@ -2993,7 +2993,7 @@ bool boxm_update_bit_scene_manager::write_image_buffer()
     return false;
   status=clFinish(command_queue_);
 
-  return check_val(status,CL_SUCCESS,"clFinish (writing) failed.")==CHECK_SUCCESS;
+  return check_val(status,CL_SUCCESS,"clFinish (writing) failed.")==CL_SUCCESS;
 }
 
 bool boxm_update_bit_scene_manager::set_image_dims_buffers()
@@ -3004,7 +3004,7 @@ bool boxm_update_bit_scene_manager::set_image_dims_buffers()
                                  CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR,
                                  sizeof(cl_uint4),
                                  img_dims_,&status);
-  return check_val(status,CL_SUCCESS,"clCreateBuffer (imd_dims_buf_) failed.")==CHECK_SUCCESS;
+  return check_val(status,CL_SUCCESS,"clCreateBuffer (imd_dims_buf_) failed.")==CL_SUCCESS;
 }
 
 
@@ -3016,7 +3016,7 @@ bool boxm_update_bit_scene_manager::release_input_image_buffers()
     return false;
 
   status = clReleaseMemObject(img_dims_buf_);
-  return check_val(status,CL_SUCCESS,"clReleaseMemObject failed (img_dims_buf_).")==CHECK_SUCCESS;
+  return check_val(status,CL_SUCCESS,"clReleaseMemObject failed (img_dims_buf_).")==CL_SUCCESS;
 }
 
 
@@ -3044,7 +3044,7 @@ bool boxm_update_bit_scene_manager::set_offset_buffers(int offset_x,int offset_y
                                  CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR,
                                  sizeof(cl_int),
                                  &offset_y_,&status);
-  return check_val(status,CL_SUCCESS,"clCreateBuffer (offset_y_) failed.")==CHECK_SUCCESS;
+  return check_val(status,CL_SUCCESS,"clCreateBuffer (offset_y_) failed.")==CL_SUCCESS;
 }
 
 
@@ -3060,7 +3060,7 @@ bool boxm_update_bit_scene_manager::release_offset_buffers()
     return false;
 
   status = clReleaseMemObject(offset_y_buf_);
-  return check_val(status,CL_SUCCESS,"clReleaseMemObject failed (offset_y_buf_).")==CHECK_SUCCESS;
+  return check_val(status,CL_SUCCESS,"clReleaseMemObject failed (offset_y_buf_).")==CL_SUCCESS;
 }
 
 bool boxm_update_bit_scene_manager::read_output_debug()
@@ -3080,7 +3080,7 @@ bool boxm_update_bit_scene_manager::read_output_debug()
     return false;
 
   status = clReleaseEvent(events[0]);
-  return check_val(status,CL_SUCCESS,"clWaitForEvents failed.")==CHECK_SUCCESS;
+  return check_val(status,CL_SUCCESS,"clWaitForEvents failed.")==CL_SUCCESS;
 }
 
 bool boxm_update_bit_scene_manager::get_output_debug_array(vcl_vector<float> & data)
@@ -3120,7 +3120,7 @@ bool boxm_update_bit_scene_manager::set_rayoutput_buffers()
                                        raydepth_*sizeof(cl_float),
                                        rayoutput_[i],&status);
   }
-  return check_val(status,CL_SUCCESS,"clCreateBuffer (rayoutput_) failed.")==CHECK_SUCCESS;
+  return check_val(status,CL_SUCCESS,"clCreateBuffer (rayoutput_) failed.")==CL_SUCCESS;
 }
 
 bool boxm_update_bit_scene_manager::release_rayoutput_buffers()
@@ -3129,7 +3129,7 @@ bool boxm_update_bit_scene_manager::release_rayoutput_buffers()
   for (unsigned i=0;i<10;i++)
     status = clReleaseMemObject(rayoutput_buf_[i]);
 
-  return check_val(status,CL_SUCCESS,"clReleaseMemObject failed (rayoutput_buf_).")==CHECK_SUCCESS;
+  return check_val(status,CL_SUCCESS,"clReleaseMemObject failed (rayoutput_buf_).")==CL_SUCCESS;
 }
 
 bool boxm_update_bit_scene_manager::clean_rayoutput()
@@ -3162,7 +3162,7 @@ bool boxm_update_bit_scene_manager::read_output_array()
     status = clReleaseEvent(events[0]);
   }
 
-  return check_val(status,CL_SUCCESS,"clReleaseEvent failed.")==CHECK_SUCCESS;
+  return check_val(status,CL_SUCCESS,"clReleaseEvent failed.")==CL_SUCCESS;
 }
 
 void boxm_update_bit_scene_manager::getoutputarray(vcl_vector< vcl_vector<float> >& out)

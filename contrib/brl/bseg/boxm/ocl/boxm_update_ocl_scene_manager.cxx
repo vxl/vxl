@@ -560,7 +560,7 @@ bool boxm_update_ocl_scene_manager::set_commandqueue()
 {
   cl_int status = CL_SUCCESS;
   command_queue_ = clCreateCommandQueue(this->context(),this->devices()[0],CL_QUEUE_PROFILING_ENABLE,&status);
-  return check_val(status,CL_SUCCESS,"Falied in command queue creation" + error_to_string(status))==CHECK_SUCCESS;
+  return check_val(status,CL_SUCCESS,"Falied in command queue creation" + error_to_string(status))==CL_SUCCESS;
 }
 
 
@@ -913,7 +913,7 @@ bool boxm_update_ocl_scene_manager::read_output_image()
     return false;
 
   status = clReleaseEvent(events[0]);
-  return check_val(status,CL_SUCCESS,"clReleaseEvent failed.")==CHECK_SUCCESS;
+  return check_val(status,CL_SUCCESS,"clReleaseEvent failed.")==CL_SUCCESS;
 }
 
 
@@ -982,7 +982,7 @@ bool boxm_update_ocl_scene_manager::read_trees()
   // Wait for the read buffer to finish execution
 
   status = clReleaseEvent(events[0]);
-  return check_val(status,CL_SUCCESS,"clReleaseEvent failed.")==CHECK_SUCCESS;
+  return check_val(status,CL_SUCCESS,"clReleaseEvent failed.")==CL_SUCCESS;
 }
 
 bool boxm_update_ocl_scene_manager::save_scene()
@@ -1174,7 +1174,7 @@ bool boxm_update_ocl_scene_manager::set_scene_origin_buffers()
                                      CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR,
                                      4*sizeof(cl_float),
                                      scene_origin_,&status);
-  return check_val(status,CL_SUCCESS,"clCreateBuffer (scene_origin_) failed.")==CHECK_SUCCESS;
+  return check_val(status,CL_SUCCESS,"clCreateBuffer (scene_origin_) failed.")==CL_SUCCESS;
 }
 
 
@@ -1182,7 +1182,7 @@ bool boxm_update_ocl_scene_manager::release_scene_origin_buffers()
 {
   cl_int status;
   status = clReleaseMemObject(scene_origin_buf_);
-  return check_val(status,CL_SUCCESS,"clReleaseMemObject failed (scene_origin_buf_).")==CHECK_SUCCESS;
+  return check_val(status,CL_SUCCESS,"clReleaseMemObject failed (scene_origin_buf_).")==CL_SUCCESS;
 }
 
 
@@ -1220,7 +1220,7 @@ bool boxm_update_ocl_scene_manager::set_scene_dims_buffers()
                                    CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR,
                                    sizeof(cl_int4),
                                    scene_dims_,&status);
-  return check_val(status,CL_SUCCESS,"clCreateBuffer (scene_dims_) failed.")==CHECK_SUCCESS;
+  return check_val(status,CL_SUCCESS,"clCreateBuffer (scene_dims_) failed.")==CL_SUCCESS;
 }
 
 
@@ -1228,7 +1228,7 @@ bool boxm_update_ocl_scene_manager::release_scene_dims_buffers()
 {
   cl_int status;
   status = clReleaseMemObject(scene_dims_buf_);
-  return check_val(status,CL_SUCCESS,"clReleaseMemObject failed (scene_dims_buf_).")==CHECK_SUCCESS;
+  return check_val(status,CL_SUCCESS,"clReleaseMemObject failed (scene_dims_buf_).")==CL_SUCCESS;
 }
 
 
@@ -1268,7 +1268,7 @@ bool boxm_update_ocl_scene_manager::set_block_dims_buffers()
                                    CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR,
                                    4*sizeof(cl_float),
                                    block_dims_,&status);
-  return check_val(status,CL_SUCCESS,"clCreateBuffer (block_dims_) failed.")==CHECK_SUCCESS;
+  return check_val(status,CL_SUCCESS,"clCreateBuffer (block_dims_) failed.")==CL_SUCCESS;
 }
 
 
@@ -1276,7 +1276,7 @@ bool boxm_update_ocl_scene_manager::release_block_dims_buffers()
 {
   cl_int status;
   status = clReleaseMemObject(block_dims_buf_);
-  return check_val(status,CL_SUCCESS,"clReleaseMemObject failed (block_dims_buf_).")==CHECK_SUCCESS;
+  return check_val(status,CL_SUCCESS,"clReleaseMemObject failed (block_dims_buf_).")==CL_SUCCESS;
 }
 
 
@@ -1351,7 +1351,7 @@ bool boxm_update_ocl_scene_manager::release_mem_ptrs_buffers()
 
   //release output debugger
   status = clReleaseMemObject(output_debug_buf_);
-  return check_val(status,CL_SUCCESS,"clReleaseMemObject failed (output_debug_buf_).")==CHECK_SUCCESS;
+  return check_val(status,CL_SUCCESS,"clReleaseMemObject failed (output_debug_buf_).")==CL_SUCCESS;
 }
 
 bool boxm_update_ocl_scene_manager::clean_mem_ptrs()
@@ -1369,14 +1369,14 @@ bool boxm_update_ocl_scene_manager::set_block_ptrs_buffers()
                                    CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR,
                                    scene_x_*scene_y_*scene_z_*sizeof(cl_int4),
                                    block_ptrs_,&status);
-  return check_val(status,CL_SUCCESS,"clCreateBuffer (block_ptrs_) failed.")==CHECK_SUCCESS;
+  return check_val(status,CL_SUCCESS,"clCreateBuffer (block_ptrs_) failed.")==CL_SUCCESS;
 }
 
 bool boxm_update_ocl_scene_manager::release_block_ptrs_buffers()
 {
   cl_int status;
   status = clReleaseMemObject(block_ptrs_buf_);
-  return check_val(status,CL_SUCCESS,"clReleaseMemObject failed (block_ptrs_buf_).")==CHECK_SUCCESS;
+  return check_val(status,CL_SUCCESS,"clReleaseMemObject failed (block_ptrs_buf_).")==CL_SUCCESS;
 }
 
 
@@ -1395,7 +1395,7 @@ bool boxm_update_ocl_scene_manager::set_root_level_buffers()
                                    CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR,
                                    sizeof(cl_uint),
                                    &root_level_,&status);
-  return check_val(status,CL_SUCCESS,"clCreateBuffer (root level) failed.")==CHECK_SUCCESS;
+  return check_val(status,CL_SUCCESS,"clCreateBuffer (root level) failed.")==CL_SUCCESS;
 }
 
 
@@ -1701,7 +1701,7 @@ bool boxm_update_ocl_scene_manager::set_persp_camera_buffers()
                                   CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR,
                                   3*sizeof(cl_float16),
                                   persp_cam_,&status);
-  return check_val(status,CL_SUCCESS,"clCreateBuffer (persp_cam_buf_) failed.")==CHECK_SUCCESS;
+  return check_val(status,CL_SUCCESS,"clCreateBuffer (persp_cam_buf_) failed.")==CL_SUCCESS;
 }
 
 
@@ -1721,7 +1721,7 @@ bool boxm_update_ocl_scene_manager::release_persp_camera_buffers()
 {
   cl_int status;
   status = clReleaseMemObject(persp_cam_buf_);
-  return check_val(status,CL_SUCCESS,"clReleaseMemObject failed (persp_cam_buf_).")==CHECK_SUCCESS;
+  return check_val(status,CL_SUCCESS,"clReleaseMemObject failed (persp_cam_buf_).")==CL_SUCCESS;
 }
 
 
@@ -1823,7 +1823,7 @@ bool boxm_update_ocl_scene_manager::set_input_image_buffers()
                               CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR,
                               wni_*wnj_*sizeof(cl_float4),
                               image_,&status);
-  return check_val(status,CL_SUCCESS,"clCreateBuffer (image_buf_) failed.")==CHECK_SUCCESS;
+  return check_val(status,CL_SUCCESS,"clCreateBuffer (image_buf_) failed.")==CL_SUCCESS;
 }
 
 
@@ -1842,7 +1842,7 @@ bool boxm_update_ocl_scene_manager::write_image_buffer()
     return false;
   status=clFinish(command_queue_);
 
-  return check_val(status,CL_SUCCESS,"clFinish (writing) failed.")==CHECK_SUCCESS;
+  return check_val(status,CL_SUCCESS,"clFinish (writing) failed.")==CL_SUCCESS;
 }
 
 bool boxm_update_ocl_scene_manager::set_image_dims_buffers()
@@ -1853,7 +1853,7 @@ bool boxm_update_ocl_scene_manager::set_image_dims_buffers()
                                  CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR,
                                  sizeof(cl_uint4),
                                  img_dims_,&status);
-  return check_val(status,CL_SUCCESS,"clCreateBuffer (imd_dims_buf_) failed.")==CHECK_SUCCESS;
+  return check_val(status,CL_SUCCESS,"clCreateBuffer (imd_dims_buf_) failed.")==CL_SUCCESS;
 }
 
 
@@ -1865,7 +1865,7 @@ bool boxm_update_ocl_scene_manager::release_input_image_buffers()
     return false;
 
   status = clReleaseMemObject(img_dims_buf_);
-  return check_val(status,CL_SUCCESS,"clReleaseMemObject failed (img_dims_buf_).")==CHECK_SUCCESS;
+  return check_val(status,CL_SUCCESS,"clReleaseMemObject failed (img_dims_buf_).")==CL_SUCCESS;
 }
 
 
@@ -1892,7 +1892,7 @@ bool boxm_update_ocl_scene_manager::set_offset_buffers(int offset_x,int offset_y
                                  CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR,
                                  sizeof(cl_int),
                                  &offset_y_,&status);
-  return check_val(status,CL_SUCCESS,"clCreateBuffer (offset_y_) failed.")==CHECK_SUCCESS;
+  return check_val(status,CL_SUCCESS,"clCreateBuffer (offset_y_) failed.")==CL_SUCCESS;
 }
 
 
@@ -1908,6 +1908,6 @@ bool boxm_update_ocl_scene_manager::release_offset_buffers()
     return false;
 
   status = clReleaseMemObject(offset_y_buf_);
-  return check_val(status,CL_SUCCESS,"clReleaseMemObject failed (offset_y_buf_).")==CHECK_SUCCESS;
+  return check_val(status,CL_SUCCESS,"clReleaseMemObject failed (offset_y_buf_).")==CL_SUCCESS;
 }
 

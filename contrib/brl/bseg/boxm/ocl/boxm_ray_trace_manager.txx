@@ -1219,7 +1219,7 @@ bool boxm_ray_trace_manager<T>:: read_output_image()
 
   // release the command Queue
   status = clReleaseCommandQueue(command_queue_);
-  return check_val(status,CL_SUCCESS,"clReleaseCommandQueue failed.")==CHECK_SUCCESS;
+  return check_val(status,CL_SUCCESS,"clReleaseCommandQueue failed.")==CL_SUCCESS;
 }
 
 #define BOXM_RAY_TRACE_MANAGER_INSTANTIATE(T) \

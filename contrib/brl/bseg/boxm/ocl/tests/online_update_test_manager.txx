@@ -127,7 +127,8 @@ bool online_update_test_manager<T>::set_kernels()
   if (!this->build_program("pre_infinity(d,image_vect,ray_bundle_array, cached_data, cached_aux_data)", true))
     return false;
   kernel = clCreateKernel(program_,"update_aux",&status);
-  if (check_val(status,CL_SUCCESS,error_to_string(status))!=CHECK_SUCCESS)    return false;
+  if (check_val(status,CL_SUCCESS,error_to_string(status))!=CHECK_SUCCESS)
+    return false;
   kernels_.push_back(kernel);
   //pass 2 norm image (pre-requisite to C++ pass 2)
   kernel = clCreateKernel(program_,"proc_norm_image",&status);
@@ -261,7 +262,7 @@ bool online_update_test_manager<T>::create_command_queue()
   cl_int status = SDK_SUCCESS;
   // set up a command queue
   command_queue_ = clCreateCommandQueue(this->context(),this->devices()[0],CL_QUEUE_PROFILING_ENABLE,&status);
-  return check_val(status,CL_SUCCESS,"Falied in command queue creation" + error_to_string(status))==CHECK_SUCCESS;
+  return check_val(status,CL_SUCCESS,"Falied in command queue creation" + error_to_string(status))==CL_SUCCESS;
 }
 
 template<class T>
@@ -487,7 +488,7 @@ bool online_update_test_manager<T>:: read_output_image()
     return false;
 
   status = clReleaseEvent(events[0]);
-  return check_val(status,CL_SUCCESS,"clReleaseEvent failed.")==CHECK_SUCCESS;
+  return check_val(status,CL_SUCCESS,"clReleaseEvent failed.")==CL_SUCCESS;
 }
 
 template<class T>
@@ -530,7 +531,7 @@ bool online_update_test_manager<T>:: read_trees()
   // Wait for the read buffer to finish execution
 
   status = clReleaseEvent(events[0]);
-  return check_val(status,CL_SUCCESS,"clReleaseEvent failed.")==CHECK_SUCCESS;
+  return check_val(status,CL_SUCCESS,"clReleaseEvent failed.")==CL_SUCCESS;
 }
 
 template<class T>
@@ -806,7 +807,7 @@ bool online_update_test_manager<T>::set_root_level_buffers()
                                    CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR,
                                    sizeof(cl_uint),
                                    &root_level_,&status);
-  return check_val(status,CL_SUCCESS,"clCreateBuffer (root level) failed.")==CHECK_SUCCESS;
+  return check_val(status,CL_SUCCESS,"clCreateBuffer (root level) failed.")==CL_SUCCESS;
 }
 
 template<class T>
@@ -969,7 +970,7 @@ bool online_update_test_manager<T>::set_tree_buffers()
                                         sizeof(cl_uint),
                                         data_array_size_,&status);
 
-  return check_val(status,CL_SUCCESS,"clCreateBuffer (data_array_size_) failed.")==CHECK_SUCCESS;
+  return check_val(status,CL_SUCCESS,"clCreateBuffer (data_array_size_) failed.")==CL_SUCCESS;
 }
 
 template<class T>
@@ -990,7 +991,7 @@ bool online_update_test_manager<T>::release_tree_buffers()
     return false;
   status = clReleaseMemObject(data_array_size_buf_);
 
-  return check_val(status,CL_SUCCESS,"clReleaseMemObject failed (tree_bbox_buf_).")==CHECK_SUCCESS;
+  return check_val(status,CL_SUCCESS,"clReleaseMemObject failed (tree_bbox_buf_).")==CL_SUCCESS;
 }
 
 template<class T>
@@ -1051,7 +1052,7 @@ bool online_update_test_manager<T>::set_persp_camera_buffers()
                                   CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR,
                                   3*sizeof(cl_float16),
                                   persp_cam_,&status);
-  return check_val(status,CL_SUCCESS,"clCreateBuffer (persp_cam_buf_) failed.")==CHECK_SUCCESS;
+  return check_val(status,CL_SUCCESS,"clCreateBuffer (persp_cam_buf_) failed.")==CL_SUCCESS;
 }
 
 template<class T>
@@ -1059,7 +1060,7 @@ bool online_update_test_manager<T>::release_persp_camera_buffers()
 {
   cl_int status;
   status = clReleaseMemObject(persp_cam_buf_);
-  return check_val(status,CL_SUCCESS,"clReleaseMemObject failed (persp_cam_buf_).")==CHECK_SUCCESS;
+  return check_val(status,CL_SUCCESS,"clReleaseMemObject failed (persp_cam_buf_).")==CL_SUCCESS;
 }
 
 
@@ -1126,7 +1127,7 @@ bool online_update_test_manager<T>::set_input_image_buffers()
                                  CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR,
                                  sizeof(cl_uint4),
                                  img_dims_,&status);
-  return check_val(status,CL_SUCCESS,"clCreateBuffer (imd_dims_buf_) failed.")==CHECK_SUCCESS;
+  return check_val(status,CL_SUCCESS,"clCreateBuffer (imd_dims_buf_) failed.")==CL_SUCCESS;
 }
 
 template<class T>
@@ -1165,7 +1166,7 @@ bool online_update_test_manager<T>::set_offset_buffers(int offset_x,int offset_y
                                  CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR,
                                  sizeof(cl_int),
                                  &offset_y_,&status);
-  return check_val(status,CL_SUCCESS,"clCreateBuffer (offset_y_) failed.")==CHECK_SUCCESS;
+  return check_val(status,CL_SUCCESS,"clCreateBuffer (offset_y_) failed.")==CL_SUCCESS;
 }
 
 template<class T>
@@ -1181,14 +1182,14 @@ bool online_update_test_manager<T>::release_offset_buffers()
     return false;
 
   status = clReleaseMemObject(offset_y_buf_);
-  return check_val(status,CL_SUCCESS,"clReleaseMemObject failed (offset_y_buf_).")==CHECK_SUCCESS;
+  return check_val(status,CL_SUCCESS,"clReleaseMemObject failed (offset_y_buf_).")==CL_SUCCESS;
 }
 
 template<class T>
 bool online_update_test_manager<T>::release_command_queue()
 {
   cl_int status = clReleaseCommandQueue(command_queue_);
-  return check_val(status,CL_SUCCESS,"clReleaseCommandQueue failed.")==CHECK_SUCCESS;
+  return check_val(status,CL_SUCCESS,"clReleaseCommandQueue failed.")==CL_SUCCESS;
 }
 
 //****************************************
