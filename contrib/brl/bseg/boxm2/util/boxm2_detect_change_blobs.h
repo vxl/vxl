@@ -2,7 +2,6 @@
 #define boxm2_detect_change_blobs_h
 //:
 // \file
-#include <vil/vil_chord.h>
 #include <vil/vil_image_view.h>
 #include <vgl/vgl_point_2d.h>
 #include <vcl_vector.h>
