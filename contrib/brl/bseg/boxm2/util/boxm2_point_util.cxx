@@ -1,11 +1,8 @@
 #include "boxm2_point_util.h"
 #include <vpgl/algo/vpgl_camera_bounds.h>
-#include <vgl/algo/vgl_orient_box_3d.h>
 #include <vgl/algo/vgl_rotation_3d.h>
 #include <vnl/vnl_double_3.h>
 #include <vnl/vnl_quaternion.h>
-#include <vnl/algo/vnl_cholesky.h>
-#include <vnl/algo/vnl_svd_fixed.h>
 #include <vcl_cassert.h>
 
 bool boxm2_point_util::fit_plane_ransac(vcl_vector<vgl_homg_point_3d<double> > & points, vgl_homg_plane_3d<double>  & plane)
