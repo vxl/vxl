@@ -11,7 +11,7 @@ SET(bvpl_util_sources
 AUX_SOURCE_DIRECTORY(Templates bvpl_util_sources)
 
 ADD_LIBRARY(bvpl_util ${bvpl_util_sources})
-TARGET_LINK_LIBRARIES(bvpl_util bvpl brdb bwm vil_algo vgl vnl vbl)
+TARGET_LINK_LIBRARIES(bvpl_util bvpl brdb bwm vil_algo vgl_io vgl vnl_io vnl vbl)
 
 SUBDIRS(io)
 
