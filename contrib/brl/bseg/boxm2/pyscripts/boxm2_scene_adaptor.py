@@ -63,19 +63,36 @@ class boxm2_scene_adaptor:
       expimg = render_grey(self.scene, cache, cam, ni, nj, dev);
     return expimg;
 
+  #render wrapper, same as above
+  def render_vis(self, cam, ni=1280, nj=720, device_string="") : 
+    cache = self.active_cache; 
+    dev = self.device; 
+    #check if force gpu or cpu
+    if device_string=="gpu" : 
+      cache = self.opencl_cache; 
+    elif device_string=="cpp" : 
+      cache = self.cpu_cache; 
+      dev = None; 
+    if self.rgb : 
+      print "Render visibility map not implemented for color scenes"; 
+      return; 
+    else : 
+      expimg, vis_image = render_grey_and_vis(self.scene, cache, cam, ni, nj, dev); 
+    return expimg, vis_image; 
+  
   #render depth image wrapper
   def render_depth(self, cam, ni=1280, nj=720, device_string="") :
     cache = self.active_cache;
     dev = self.device;
     #check if force gpu or cpu
-    if device_string=="gpu" :
-      cache = self.opencl_cache;
-    elif device_string=="cpp" :
-      cache = self.cpu_cache;
-      dev = None;
-    expimg = render_depth(self.scene, cache, cam, ni, nj, dev);
-    return expimg;
-
+    if device_string=="gpu" : 
+      cache = self.opencl_cache; 
+    elif device_string=="cpp" : 
+      cache = self.cpu_cache; 
+      dev = None; 
+    expimg,varimg = render_depth(self.scene, cache, cam, ni, nj, dev); 
+    return expimg,varimg; 
+  
   #render heigh map render
   def render_height_map(self, device_string="") :
     cache = self.active_cache;

@@ -213,6 +213,31 @@ def render_grey(scene, cache, cam, ni=1280, nj=720, device=None) :
   else : 
     print "ERROR: Cache type not recognized: ", cache.type; 
     
+#####################################################################
+# Generic render, returns a dbvalue expected image
+# Cache can be either an OPENCL cache or a CPU cache
+#####################################################################
+def render_grey_and_vis(scene, cache, cam, ni=1280, nj=720, device=None) :
+  if cache.type == "boxm2_cache_sptr" :
+    print "boxm2_batch CPU render grey and vis not yet implemented";
+    return; 
+  elif cache.type == "boxm2_opencl_cache_sptr" and device : 
+    boxm2_batch.init_process("boxm2OclRenderExpectedImageProcess");
+    boxm2_batch.set_input_from_db(0,device);
+    boxm2_batch.set_input_from_db(1,scene);
+    boxm2_batch.set_input_from_db(2,cache);
+    boxm2_batch.set_input_from_db(3,cam);
+    boxm2_batch.set_input_unsigned(4,ni);
+    boxm2_batch.set_input_unsigned(5,nj);
+    boxm2_batch.run_process();
+    (id,type) = boxm2_batch.commit_output(0);
+    exp_image = dbvalue(id,type);
+    (id,type) = boxm2_batch.commit_output(1);
+    vis_image = dbvalue(id,type); 
+    return exp_image,vis_image; 
+  else : 
+    print "ERROR: Cache type not recognized: ", cache.type; 
+    
 #####################################################################    
 # Generic render, returns a dbvalue expected image
 #####################################################################
@@ -251,7 +276,9 @@ def render_depth(scene, cache, cam, ni=1280, nj=720, device=None) :
     boxm2_batch.run_process();
     (id,type) = boxm2_batch.commit_output(0);
     exp_image = dbvalue(id,type);
-    return exp_image; 
+    (id,type) = boxm2_batch.commit_output(1); 
+    var_image = dbvalue(id,type); 
+    return exp_image, var_image 
   else : 
     print "ERROR: Cache type not recognized: ", cache.type; 
    
@@ -579,10 +606,13 @@ def roi_init(NITF_path, camera, scene, convert_to_8bit, params_fname) :
 # blob detection methods
 #####################################################################
 #runs blob change detection process
-def blob_change_detection( change_img, thresh ) : 
+def blob_change_detection( change_img, thresh, depth1=None, depth2=None ) : 
   boxm2_batch.init_process("boxm2BlobChangeDetectionProcess")
   boxm2_batch.set_input_from_db(0,change_img)
   boxm2_batch.set_input_float(1, thresh)
+  if( depth1 and depth2 ):
+    boxm2_batch.set_input_from_db(2,depth1)
+    boxm2_batch.set_input_from_db(3,depth2)
   boxm2_batch.run_process()
   (id,type) = boxm2_batch.commit_output(0)
   blobImg = dbvalue(id,type) 

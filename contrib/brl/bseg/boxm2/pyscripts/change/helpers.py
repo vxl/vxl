@@ -71,8 +71,9 @@ def render_vis_changes(change_glob, img_glob, thresh, outdir) :
 # separate directory.  return moves em back in
 def move_appearance( scene_dir ) : 
   #make temp dir
-  if not os.path.exists( scene_dir + "/tmp" ):
-    os.mkdir( scene_dir + "/tmp" );
+  if os.path.exists( scene_dir + "/tmp" ):
+    shutil.rmtree( scene_dir + "/tmp" );
+  os.mkdir( scene_dir + "/tmp" );
   
   #move mog and numobs
   mogs = glob( scene_dir + "/*mog*"); 
