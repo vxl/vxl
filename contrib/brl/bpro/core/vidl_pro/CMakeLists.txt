@@ -23,7 +23,7 @@ AUX_SOURCE_DIRECTORY(Templates vidl_pro_sources)
 AUX_SOURCE_DIRECTORY(processes vidl_pro_sources)
 
 ADD_LIBRARY(vidl_pro ${vidl_pro_sources})
-TARGET_LINK_LIBRARIES(vidl_pro bprb brdb vidl vil_io vsl vul)
+TARGET_LINK_LIBRARIES(vidl_pro bprb brdb vidl vil_io vil vsl vul)
 
 IF( BUILD_TESTING )
   SUBDIRS(tests)
