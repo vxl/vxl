@@ -173,7 +173,7 @@ void brad_synoptic_function_1d::compute_auto_correlation()
         if (vis_[t-k]<vis_min)
           vis_min = vis_[t-k];
         vsum+=vis_min;
-        cor += vis_min*(intensity_[t]-mean)*(intensity_[t-k]-mean);
+        cor += (vis_min*(intensity_[t]-mean)*(intensity_[t-k]-mean));
       }
       if (vsum>0.0) {
         cor/=vsum;
@@ -195,11 +195,11 @@ void brad_synoptic_function_1d::fit_linear_const()
     double acor = auto_corr_[i];
     sumt += tau*(1.0-acor);
     sumtsq += tau*tau;
-    ++i;
+    i++;
   }
   if (sumtsq==0.0) alpha_ = 0.0;
   else alpha_ = sumt/sumtsq;
-  // fit constant segment
+  // fit constant segment starting at tau_s+
   double sumc = 0.0;
   double T = 0.0;
   for (i; i<=n/2; ++i) {
@@ -234,8 +234,35 @@ double brad_synoptic_function_1d::interp_linear_const(double arc_length)
     return mu_;
 }
 
-double brad_synoptic_function_1d::lin_const_fit_prob_density()
-{
+
+void brad_synoptic_function_1d::
+auto_corr_freq_amplitudes(vcl_vector<double>& freq_amplitudes){
+  unsigned n = this->size();
+  double temp = n/2, norm = vcl_sqrt(1/temp);
+  freq_amplitudes.clear();
+  max_freq_amplitude_ = 0.0;
+  // max frequency, half the number of samples in the autocorrelation function
+  for(int k = 0; k<=n/4; ++k){
+    double ac = 0, as =0;//fourier coefficients
+    for(int i = 0; i<=n/2; ++i){
+      double x = this->arc_length(i);
+      double arg = x*k;
+      ac += vcl_cos(arg)*auto_corr_[i];
+      as += vcl_sin(arg)*auto_corr_[i];
+    }
+    // frequency amplitude
+    double amp = norm*vcl_sqrt(ac*ac + as*as);
+    if(amp>max_freq_amplitude_)
+      max_freq_amplitude_ = amp;
+    freq_amplitudes.push_back(amp);
+  }
+}
+double brad_synoptic_function_1d::lin_const_fit_prob_density(){
   bsta_gauss_sd1 gauss(0.0, inherent_sigma_*inherent_sigma_);
   return gauss.prob_density(lin_const_sigma_);
+}
+
+double brad_synoptic_function_1d::max_frequency_prob_density(){
+  bsta_gauss_sd1 gauss(max_freq_mean_, max_freq_sigma_*max_freq_sigma_);
+  return gauss.prob_density(max_freq_amplitude_);
 }

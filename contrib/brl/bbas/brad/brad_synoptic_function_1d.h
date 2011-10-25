@@ -18,14 +18,18 @@ class brad_synoptic_function_1d
  public:
 
 
-  brad_synoptic_function_1d(): inherent_sigma_(0.02), tau_s_(0.25){}
+  brad_synoptic_function_1d(): inherent_sigma_(0.02), tau_s_(0.25),
+    //    max_freq_mean_(0.487648), max_freq_sigma_(0.127436755) {}
+    max_freq_mean_(0.487648), max_freq_sigma_(0.2) {}
   //:constructor from batch orbit data
   brad_synoptic_function_1d(vcl_vector<double> const& elevation,
                             vcl_vector<double> const& azimuth,                 
                             vcl_vector<double> const& vis,
                             vcl_vector<double> const& intensity):
-    elev_(elevation),azimuth_(azimuth),vis_(vis),intensity_(intensity), inherent_sigma_(0.02), tau_s_(0.25)
-    {this->fit_intensity_cubic();}
+    elev_(elevation),azimuth_(azimuth),vis_(vis),intensity_(intensity),
+    inherent_sigma_(0.02), tau_s_(0.25), max_freq_mean_(0.487648),
+    //    max_freq_sigma_(0.127436755){this->fit_intensity_cubic();}
+    max_freq_sigma_(0.2){this->fit_intensity_cubic();}
   //: set members
   void set_elevation(vcl_vector<double> const& elevation){
     elev_ = elevation;}
@@ -102,8 +106,15 @@ class brad_synoptic_function_1d
   //: interpolate the autocorrelation function with the linear/const model
   double interp_linear_const(double arc_length);
 
+  //: compute frequency components of autocorrelation function
+  void auto_corr_freq_amplitudes(vcl_vector<double>& freq_amplitudes);
+
   //: probability density of the linear/const fit
   double lin_const_fit_prob_density();
+
+  //: probability density for maximum Fourier amplitude of the autocorrelation
+  double max_frequency_prob_density();
+
  private:
   vcl_vector<double> elev_;
   vcl_vector<double> azimuth_;
@@ -118,6 +129,9 @@ class brad_synoptic_function_1d
   double alpha_;
   double mu_;
   double lin_const_sigma_;
+  double max_freq_amplitude_;
+  double max_freq_mean_;
+  double max_freq_sigma_;
 };
 
 #endif
