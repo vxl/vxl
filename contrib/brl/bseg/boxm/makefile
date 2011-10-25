@@ -11,7 +11,7 @@ MANPAGE_SOURCES += boxm_scene.txx
 MANPAGE_SOURCES += boxm_block.txx
 MANPAGE_SOURCES += boxm_aux_scene.txx
 
-SUBDIRS += basic algo pro sample util ocl
+SUBDIRS += basic algo pro sample util
 
 #######################################
 include ${VXLROOT}/config/top-params.mk
