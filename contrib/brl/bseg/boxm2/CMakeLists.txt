@@ -48,8 +48,7 @@ subdirs(cpp)
 #opencl accelerated library
 subdirs(ocl)
 
-#exes
-subdirs(exe)
+
 
 #pro
 subdirs(pro)
