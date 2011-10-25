@@ -8,7 +8,7 @@
 #include <vgl/vgl_intersection.h>
 #include <vgl/vgl_polygon_scan_iterator.h>
 #include <vpgl/algo/vpgl_camera_bounds.h>
-#include <vil/vil_save.h>
+#include <vil/vil_image_view.h>
 
 //~ //: takes in a list of cameras and a bounding box, creates 
 //  an update scene and a render scene
