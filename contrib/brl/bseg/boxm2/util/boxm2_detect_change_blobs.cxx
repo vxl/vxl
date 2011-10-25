@@ -6,7 +6,6 @@
 #include <vil/algo/vil_binary_dilate.h>
 #include <vil/algo/vil_binary_erode.h>
 #include <vil/algo/vil_threshold.h>
-#include <vil/vil_save.h>
 #include <vcl_cassert.h>
 
 
