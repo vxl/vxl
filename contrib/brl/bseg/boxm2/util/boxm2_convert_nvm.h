@@ -4,8 +4,6 @@
 // \file
 #include <vpgl/vpgl_proj_camera.h>
 #include <vpgl/vpgl_perspective_camera.h>
-#include <vil/vil_image_view.h>
-#include <vil/vil_load.h>
 
 #include <bwm/bwm_observer_cam.h>
 #include <bwm/video/bwm_video_cam_ostream.h>
@@ -21,7 +19,6 @@
 #include <vcl_string.h>
 #include <vcl_algorithm.h>
 #include <vul/vul_file.h>
-#include <vgl/algo/vgl_fit_plane_3d.h>
 #include <vgl/vgl_distance.h>
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_vector_3d.h>
