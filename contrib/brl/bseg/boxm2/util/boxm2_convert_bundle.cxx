@@ -3,13 +3,11 @@
 //:
 // \file
 #include <vpgl/algo/vpgl_camera_bounds.h>
-#include <vgl/algo/vgl_orient_box_3d.h>
+#include <vgl/vgl_box_3d.h>
 #include <vgl/algo/vgl_rotation_3d.h>
 #include <vnl/vnl_double_3.h>
 #include <vnl/vnl_matrix_fixed.h>
 #include <vnl/vnl_quaternion.h>
-#include <vnl/algo/vnl_cholesky.h>
-#include <vnl/algo/vnl_svd_fixed.h>
 #include <vcl_cassert.h>
 
 //: Main boxm2_convert_bundle function
