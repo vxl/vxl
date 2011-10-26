@@ -17,6 +17,7 @@
 #include <vgl/vgl_box_3d.h>
 #include <vgl/vgl_intersection.h>
 #include <vgl/vgl_polygon_scan_iterator.h>
+#include <vil/vil_load.h>
 #include <vil/vil_save.h>
 
 namespace boxm2_bundle_to_scene_process_globals
@@ -29,25 +30,25 @@ bool boxm2_bundle_to_scene_process_cons(bprb_func_process& pro)
 {
   using namespace boxm2_bundle_to_scene_process_globals;
 
-  //process takes 2 inputs
+  //process takes 5 inputs
   vcl_vector<vcl_string> input_types_(n_inputs_);
-  input_types_[0] = "vcl_string";           //bundler or nvm file
-  input_types_[1] = "vcl_string";           //image dir path (all images)
-  input_types_[2] = "vcl_string";           //appearnce model
-  input_types_[3] = "vcl_string";           //num_obs model
-  input_types_[4] = "vcl_string";           //optional arg - output dir to save cams/imgs
-  
-  // process has 1 output
+  input_types_[0] = "vcl_string"; // bundler or nvm file
+  input_types_[1] = "vcl_string"; // image dir path (all images)
+  input_types_[2] = "vcl_string"; // appearnce model
+  input_types_[3] = "vcl_string"; // num_obs model
+  input_types_[4] = "vcl_string"; // optional arg - output dir to save cams/imgs
+
+  // process has 2 outputs
   vcl_vector<vcl_string>  output_types_(n_outputs_);
   output_types_[0] = "boxm2_scene_sptr";  //update scene
   output_types_[1] = "boxm2_scene_sptr";  //render scene
-  
+
   //set input and output types
   bool good = pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 
   //default arguments - default filename is "scene"
-  brdb_value_sptr filename = new brdb_value_t<vcl_string>("");
-  pro.set_input(4, filename);
+  brdb_value_sptr dir_name = new brdb_value_t<vcl_string>("");
+  pro.set_input(4, dir_name);
   return good;
 }
 
@@ -56,7 +57,7 @@ bool boxm2_bundle_to_scene_process(bprb_func_process& pro)
   using namespace boxm2_bundle_to_scene_process_globals;
   typedef vpgl_perspective_camera<double> CamType;
   if ( pro.n_inputs() < n_inputs_ ) {
-    vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
+    vcl_cout << pro.name() << ": The number of inputs should be " << n_inputs_<< vcl_endl;
     return false;
   }
 
@@ -77,9 +78,9 @@ bool boxm2_bundle_to_scene_process(bprb_func_process& pro)
   vcl_map<vcl_string, CamType*> cams;
   vgl_box_3d<double>            bbox;
   double                        resolution;
-  if(vul_file::extension(bundler_out) == ".out") 
+  if (vul_file::extension(bundler_out) == ".out")
     boxm2_util_convert_bundle(bundler_out, img_dir, cams, bbox, resolution);
-  else if(vul_file::extension(bundler_out) == ".nvm")
+  else if (vul_file::extension(bundler_out) == ".nvm")
     boxm2_util_convert_nvm(bundler_out, img_dir, cams, bbox, resolution);
 
   //create vector of camera objects
@@ -97,42 +98,41 @@ bool boxm2_bundle_to_scene_process(bprb_func_process& pro)
     return false;
   boxm2_scene_sptr uscene = new boxm2_scene(scene_dir, bbox.min_point());
   uscene->set_appearances(appearance);
-  
+
   //create render scene
   boxm2_scene_sptr rscene = new boxm2_scene(scene_dir, bbox.min_point());
   rscene->set_appearances(appearance);
 
   //build the two scenes
   boxm2_util_cams_and_box_to_scene(cs, bbox, *uscene, *rscene);
-  
+
   //----------------------------------------------------------------------------
   //if output directory is non empty, create directory and save imgs, cams dirs
   //----------------------------------------------------------------------------
-  if(out_dir != "") 
+  if (out_dir != "")
   {
-    vcl_string krt_dir = out_dir + "/cams_krt"; 
-    vcl_string img_dir = out_dir + "/imgs"; 
-    bool good = vul_file::make_directory_path( out_dir.c_str() ) &&
-                vul_file::make_directory_path( krt_dir.c_str() ) &&
-                vul_file::make_directory_path( img_dir.c_str() ) ; 
-    if(!good) {
-      vcl_cout<<"boxm2_bundle_to_scene_process::cannot write images/cams to disk"<<vcl_endl;
+    vcl_string krt_dir = out_dir + "/cams_krt";
+    vcl_string img_dir = out_dir + "/imgs";
+    if (! vul_file::make_directory_path( out_dir.c_str() ) ||
+        ! vul_file::make_directory_path( krt_dir.c_str() ) ||
+        ! vul_file::make_directory_path( img_dir.c_str() ) ) {
+      vcl_cout<<"boxm2_bundle_to_scene_process: cannot write images/cams to disk"<<vcl_endl;
     }
     else {
       vcl_cout<<"    Writing cameras and images to disk"<<vcl_endl;
-      
+
       //write cams to disk
-      vcl_map<vcl_string, CamType*>::iterator iter; 
-      for(iter = cams.begin(); iter != cams.end(); ++iter) {
-          
+      vcl_map<vcl_string, CamType*>::iterator iter;
+      for (iter = cams.begin(); iter != cams.end(); ++iter)
+      {
         //image basename
-        vcl_string full_img_name = iter->first; 
-        vcl_string img_name      = vul_file::basename(full_img_name); 
-        vcl_string stripped_name = vul_file::strip_extension(img_name); 
+        vcl_string full_img_name = iter->first;
+        vcl_string img_name      = vul_file::basename(full_img_name);
+        vcl_string stripped_name = vul_file::strip_extension(img_name);
 
         //good camera
-        CamType    cam      = *iter->second; 
-        
+        CamType    cam      = *iter->second;
+
         //save cam file
         char filename[1024];
         vcl_sprintf(filename,"%s/%s_cam.txt", krt_dir.c_str(), stripped_name.c_str());
@@ -147,14 +147,14 @@ bool boxm2_bundle_to_scene_process(bprb_func_process& pro)
                <<cam.get_translation().y()<<' '
                <<cam.get_translation().z()<<'\n';
         }
-        ofile.close(); 
+        ofile.close();
 
         //save image
         vcl_cout<<"    Writing camera and image for image "<<full_img_name<<vcl_endl;
         vil_image_view_base_sptr img      = vil_load(full_img_name.c_str());
-        vcl_string               img_path = img_dir + "/" + img_name;     
-        vil_save( *img, img_path.c_str() ); 
-        
+        vcl_string               img_path = img_dir + "/" + img_name;
+        vil_save( *img, img_path.c_str() );
+
         //vil_image_view<vxl_byte> curr_img;
         //imgstream.seek_frame(i);
         //vidl_convert_to_view(*imgstream.current_frame(),curr_img);
@@ -165,10 +165,10 @@ bool boxm2_bundle_to_scene_process(bprb_func_process& pro)
       }
     }
   }
-  
-    
+
+
   //----------------------------------------------------------------------------
-  // set output and return 
+  // set output and return
   //----------------------------------------------------------------------------
   //set output
   i=0;  // store scene smart pointer
