@@ -40,6 +40,7 @@ int main(int argc, char ** argv)
   //       so that it is MUCH faster if running on a
   //       computer with nice graphic card.
   //vgui::init(argc, argv);
+#ifdef WIN32
   int my_argc = argc+1;
   char** my_argv = new char*[argc+1];
   for (int i=0; i<argc; i++)
@@ -49,7 +50,7 @@ int main(int argc, char ** argv)
   vgui::init(my_argc, my_argv);
   delete[] my_argv[argc];
   delete[] my_argv;
-#if 0
+#else
     //init vgui (should choose/determine toolkit)
     vgui::init(argc, argv);
 #endif
