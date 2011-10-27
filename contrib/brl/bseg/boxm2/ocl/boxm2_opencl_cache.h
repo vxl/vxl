@@ -68,6 +68,9 @@ class boxm2_opencl_cache: public vbl_ref_count
 
     //: deep_replace data replaces not only the current data on the gpu cached, but pushes a block to the cpu cache
     void deep_replace_data(boxm2_block_id id, vcl_string type, bocl_mem* mem, bool read_only=true);
+    
+    //: deep_remove_data removes this id and type from ocl cache, as well as the cpu cache
+    void deep_remove_data(boxm2_block_id id, vcl_string type, bool write_out=true); 
 
     //: to string method prints out LRU order
     vcl_string to_string(); 

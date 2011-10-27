@@ -294,6 +294,29 @@ void boxm2_opencl_cache::deep_replace_data(boxm2_block_id id, vcl_string type, b
 }
 
 
+//: deep remove data, removes from ocl cache as well
+void boxm2_opencl_cache::deep_remove_data(boxm2_block_id id, vcl_string type, bool write_out)
+{
+  //find the data in this map
+  vcl_map<boxm2_block_id, bocl_mem*>& data_map = this->cached_data_map(type); 
+  vcl_map<boxm2_block_id, bocl_mem*>::iterator iter = data_map.find(id);
+  if ( iter != data_map.end() ) {
+    // release existing memory
+    bocl_mem* toDelete = iter->second;
+    delete toDelete;
+    data_map.erase(iter);
+  }
+
+  //remove from cpu_cache_
+  cpu_cache_->remove_data_base(id, type); 
+  
+  //remove from lru_order
+  //vcl_list<boxm2_block_id>::iterator loc = vcl_find(lru_order_.begin(), lru_order_.end(), id); 
+  //if(loc != lru_order_.end()) 
+    //lru_order_.erase(loc); 
+}
+
+
 //: helper method, \returns a reference to correct data map (ensures one exists)
 vcl_map<boxm2_block_id, bocl_mem*>& boxm2_opencl_cache::cached_data_map(vcl_string prefix)
 {
