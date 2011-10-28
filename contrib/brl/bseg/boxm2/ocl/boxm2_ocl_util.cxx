@@ -1,5 +1,6 @@
 #include "boxm2_ocl_util.h"
 #include <boxm2/boxm2_util.h>
+#include <boxm2/boxm2_data_traits.h>
 //:
 // \file
 #include <vgl/vgl_point_3d.h>
@@ -245,3 +246,14 @@ void boxm2_ocl_util::get_render_transfer_function(vcl_vector<vcl_string> imgfile
   }
 }
 
+
+vcl_string boxm2_ocl_util::mog_options(vcl_string data_type)
+{
+  if ( data_type == boxm2_data_traits<BOXM2_MOG3_GREY>::prefix() )
+    return " -D MOG_TYPE_8 ";
+  else if ( data_type == boxm2_data_traits<BOXM2_MOG3_GREY_16>::prefix() )
+    return " -D MOG_TYPE_16 ";
+  else if ( data_type == boxm2_data_traits<BOXM2_GAUSS_GREY>::prefix() )
+    return " -D GAUSS_TYPE_2 ";
+  return ""; 
+}

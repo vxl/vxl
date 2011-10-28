@@ -29,6 +29,9 @@ class boxm2_ocl_util
     //: this function obtains a cdf of the intensity distribution over a sequcne of image which can be used for rendering images.
     static void get_render_transfer_function(vcl_vector<vcl_string> imgfilenames, float & min, float & max, vbl_array_1d<float> & tf);
 
+    //: mog optoins
+    static vcl_string mog_options( vcl_string data_type ); 
+
  };
 
 #endif // boxm2_ocl_util_h
