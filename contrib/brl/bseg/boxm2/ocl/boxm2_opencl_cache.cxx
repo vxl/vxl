@@ -351,8 +351,6 @@ void boxm2_opencl_cache::lru_push_front( boxm2_block_id id )
 //: helper to remove all data and block memory by ID
 boxm2_block_id boxm2_opencl_cache::lru_remove_last() 
 {
-  vcl_cout<<"LRU CACHE STATE: \n"<<this->to_string()<<vcl_endl;
-  
   //grab and remove last element
   boxm2_block_id lru_id = lru_order_.back();
   lru_order_.pop_back(); 
@@ -387,7 +385,6 @@ boxm2_block_id boxm2_opencl_cache::lru_remove_last()
   return lru_id; 
 }
 
-
 vcl_string boxm2_opencl_cache::to_string() {
   vcl_stringstream s; 
   s << "boxm2_opencl_cache::order: "; 
@@ -402,7 +399,6 @@ vcl_string boxm2_opencl_cache::to_string() {
 }
 
 // === Dummy (empty) instantiations for binary I/O
-
 void vsl_b_write(vsl_b_ostream& os, boxm2_opencl_cache const& scene) {}
 void vsl_b_write(vsl_b_ostream& os, const boxm2_opencl_cache* &p) {}
 void vsl_b_write(vsl_b_ostream& os, boxm2_opencl_cache_sptr& sptr) {}
