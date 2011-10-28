@@ -32,14 +32,13 @@ class boxm2_util
                                                                              unsigned nj,
                                                                              vgl_box_3d<double> bb);
 
-    static vil_image_view_base_sptr prepare_input_image(vil_image_view_base_sptr loaded_image);
-    static vil_image_view_base_sptr prepare_input_image(vcl_string filename) { 
+    static vil_image_view_base_sptr prepare_input_image(vil_image_view_base_sptr loaded_image, bool force_grey=true);
+    static vil_image_view_base_sptr prepare_input_image(vcl_string filename, bool force_grey=true) { 
       vil_image_view_base_sptr loaded_image = vil_load(filename.c_str());
-      return boxm2_util::prepare_input_image(loaded_image);
+      return boxm2_util::prepare_input_image(loaded_image,force_grey);
     }
     
     static vil_rgba<vxl_byte> mean_pixel(vil_image_view<vil_rgba<vxl_byte> >& img); 
-
     static vpgl_perspective_camera<double>* construct_camera(double elevation, 
                                                               double azimuth, 
                                                               double radius, 
