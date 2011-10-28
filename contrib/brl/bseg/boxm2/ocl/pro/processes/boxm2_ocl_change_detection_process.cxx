@@ -16,6 +16,7 @@
 #include <boxm2/boxm2_block.h>
 #include <boxm2/boxm2_data_base.h>
 #include <boxm2/ocl/boxm2_ocl_util.h>
+#include <boxm2/boxm2_util.h>
 #include <vil/vil_image_view.h>
 #include <vil/vil_save.h>
 
@@ -210,8 +211,8 @@ bool boxm2_ocl_change_detection_process(bprb_func_process& pro)
   persp_cam->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
 
   //prepare input images
-  vil_image_view_base_sptr float_img     = boxm2_ocl_util::prepare_input_image(img, true); //true for force gray scale
-  vil_image_view_base_sptr float_exp_img = boxm2_ocl_util::prepare_input_image(exp_img);
+  vil_image_view_base_sptr float_img     = boxm2_util::prepare_input_image(img, true); //true for force gray scale
+  vil_image_view_base_sptr float_exp_img = boxm2_util::prepare_input_image(exp_img, true);
   vil_image_view<float>*   img_view      = static_cast<vil_image_view<float>* >(float_img.ptr());
   vil_image_view<float>*   exp_img_view  = static_cast<vil_image_view<float>* >(float_exp_img.ptr());
 

@@ -13,6 +13,7 @@
 #include <boxm2/boxm2_block.h>
 #include <boxm2/boxm2_data_base.h>
 #include <boxm2/ocl/boxm2_ocl_util.h>
+#include <boxm2/boxm2_util.h>
 #include <vil/vil_image_view.h>
 //brdb stuff
 #include <brdb/brdb_value.h>
@@ -128,8 +129,7 @@ bool boxm2_ocl_update_histogram_process(bprb_func_process& pro)
   bocl_mem_sptr persp_cam=new bocl_mem(device->context(), cam_buffer, 3*sizeof(cl_float16), "persp cam buffer");
   persp_cam->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
-
-  vil_image_view_base_sptr in_img=boxm2_ocl_util::prepare_input_image(in_img_name);
+  vil_image_view_base_sptr in_img=boxm2_util::prepare_input_image(in_img_name, true);
 
   unsigned ni=in_img->ni();
   unsigned nj=in_img->nj();

@@ -15,6 +15,7 @@
 #include <boxm2/boxm2_block.h>
 #include <boxm2/boxm2_data_base.h>
 #include <boxm2/ocl/boxm2_ocl_util.h>
+#include <boxm2/boxm2_util.h>
 #include <boxm2/ocl/algo/boxm2_ocl_camera_converter.h>
 #include <vil/vil_image_view.h>
 #include <vil/vil_load.h>
@@ -188,7 +189,7 @@ bool boxm2_ocl_update_color_process(bprb_func_process& pro)
   }
 
   //prepare input image
-  vil_image_view_base_sptr float_img = boxm2_ocl_util::prepare_input_image(img);
+  vil_image_view_base_sptr float_img = boxm2_util::prepare_input_image(img, false);
   if ( float_img->pixel_format() != VIL_PIXEL_FORMAT_RGBA_BYTE ) {
     vcl_cout<<"boxm2_ocl_update_color_process::using a non RGBA image!!"<<vcl_endl;
     return false;

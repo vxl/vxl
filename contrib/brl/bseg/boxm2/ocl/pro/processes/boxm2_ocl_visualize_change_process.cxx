@@ -11,6 +11,7 @@
 #include <vcl_algorithm.h>
 #include <vcl_sstream.h>
 #include <boxm2/ocl/boxm2_ocl_util.h>
+#include <boxm2/boxm2_util.h>
 #include <vil/vil_image_view.h>
 #include <vil/vil_save.h>
 
@@ -60,7 +61,7 @@ bool boxm2_ocl_visualize_change_process(bprb_func_process& pro)
   float                     thresh         = pro.get_input<float>(i++);                 //nxn
   
   //prep in image, cast to grey float
-  vil_image_view_base_sptr  f_in       = boxm2_ocl_util::prepare_input_image(in_sptr, true); //true for force gray scale
+  vil_image_view_base_sptr  f_in       = boxm2_util::prepare_input_image(in_sptr, true); //true for force gray scale
   vil_image_view<float>*    in_img     = dynamic_cast<vil_image_view<float>* >(f_in.ptr()); 
   unsigned ni=in_img->ni();
   unsigned nj=in_img->nj();

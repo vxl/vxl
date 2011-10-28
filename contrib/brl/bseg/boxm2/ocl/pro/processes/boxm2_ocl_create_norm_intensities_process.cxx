@@ -14,6 +14,7 @@
 #include <boxm2/boxm2_block.h>
 #include <boxm2/boxm2_data_base.h>
 #include <boxm2/ocl/boxm2_ocl_util.h>
+#include <boxm2/boxm2_util.h>
 #include <vil/vil_image_view.h>
 #include <boxm2/ocl/algo/boxm2_ocl_camera_converter.h>
 
@@ -187,7 +188,7 @@ bool boxm2_ocl_create_norm_intensities_process(bprb_func_process& pro)
   }
 
   //grab input image, establish cl_ni, cl_nj (so global size is divisible by local size)
-  vil_image_view_base_sptr float_img=boxm2_ocl_util::prepare_input_image(img);
+  vil_image_view_base_sptr float_img=boxm2_util::prepare_input_image(img,true);
   vil_image_view<float>* img_view = static_cast<vil_image_view<float>* >(float_img.ptr());
   unsigned cl_ni=(unsigned)RoundUp(img_view->ni(),(int)local_threads[0]);
   unsigned cl_nj=(unsigned)RoundUp(img_view->nj(),(int)local_threads[1]);

@@ -24,6 +24,7 @@
 #include <bocl/bocl_device.h>
 #include <bocl/bocl_kernel.h>
 #include <boxm2/ocl/algo/boxm2_ocl_render_expected_image_function.h>
+#include <vul/vul_timer.h>
 
 
 namespace boxm2_ocl_render_expected_image_process_globals
@@ -33,7 +34,6 @@ namespace boxm2_ocl_render_expected_image_process_globals
   vcl_size_t lthreads[2]={8,8};
 
   static vcl_map<vcl_string,vcl_vector<bocl_kernel*> > kernels;
-
   void compile_kernel(bocl_device_sptr device,vcl_vector<bocl_kernel*> & vec_kernels, vcl_string opts)
   {
     //gather all render sources... seems like a lot for rendering...
@@ -113,6 +113,7 @@ bool boxm2_ocl_render_expected_image_process(bprb_func_process& pro)
 {
   using namespace boxm2_ocl_render_expected_image_process_globals;
 
+  vul_timer rtime; 
   if ( pro.n_inputs() < n_inputs_ ) {
     vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
     return false;
@@ -232,6 +233,7 @@ bool boxm2_ocl_render_expected_image_process(bprb_func_process& pro)
         (*exp_img_out)(r,c)= (vxl_byte) (buff[c*cl_ni+r] * 255.0f);
 #endif
 
+  vcl_cout<<"Total Render time: "<<rtime.all()<<" ms"<<vcl_endl;
   delete [] vis_buff; 
   delete [] buff;
   clReleaseCommandQueue(queue);

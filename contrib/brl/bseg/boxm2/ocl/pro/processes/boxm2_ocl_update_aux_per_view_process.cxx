@@ -9,11 +9,13 @@
 #include <bprb/bprb_func_process.h>
 
 #include <vcl_fstream.h>
+#include <vcl_algorithm.h>
 #include <boxm2/ocl/boxm2_opencl_cache.h>
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/boxm2_block.h>
 #include <boxm2/boxm2_data_base.h>
 #include <boxm2/ocl/boxm2_ocl_util.h>
+#include <boxm2/boxm2_util.h>
 #include <vil/vil_image_view.h>
 #include <boxm2/ocl/algo/boxm2_ocl_camera_converter.h>
 
@@ -53,27 +55,26 @@ namespace boxm2_ocl_update_aux_per_view_process_globals
       src_paths.push_back(source_dir + "update_functors.cl");
       src_paths.push_back(source_dir + "bit/cast_ray_bit.cl");
 
-
+      //convert aux buffer int values to float (just divide by SEGLENFACTOR
       second_pass_src.push_back(source_dir + "bit/batch_update_kernels.cl");
       bocl_kernel* convert_aux_int_float = new bocl_kernel();
       convert_aux_int_float->create_kernel(&device->context(),device->device_id(), second_pass_src, "convert_aux_int_to_float", opts+" -D CONVERT_AUX", "batch_update::convert_aux_int_to_float");
 
-      second_pass_src.push_back(source_dir + "batch_update_functors.cl");
-      second_pass_src.push_back(source_dir + "bit/cast_ray_bit.cl");
-
       //compilation options
-      vcl_string options = opts;
-      //create all passes
       bocl_kernel* seg_len = new bocl_kernel();
-      vcl_string seg_opts = options + " -D SEGLEN -D STEP_CELL=step_cell_seglen(aux_args,data_ptr,llid,d) ";
+      vcl_string seg_opts = opts + " -D SEGLEN -D STEP_CELL=step_cell_seglen(aux_args,data_ptr,llid,d) ";
       seg_len->create_kernel(&device->context(),device->device_id(), src_paths, "seg_len_main", seg_opts, "batch_update::seg_len");
       vec_kernels.push_back(seg_len);
 
       //push back cast_ray_bit
+      second_pass_src.push_back(source_dir + "batch_update_functors.cl");
+      second_pass_src.push_back(source_dir + "bit/cast_ray_bit.cl");
       bocl_kernel* aux_pre_vis = new bocl_kernel();
-      vcl_string bayes_opt = options + " -D AUX_PREVIS -D STEP_CELL=step_cell_aux_previs(aux_args,data_ptr,llid,d) ";
+      vcl_string bayes_opt = opts + " -D AUX_PREVIS -D STEP_CELL=step_cell_aux_previs(aux_args,data_ptr,llid,d) ";
       aux_pre_vis->create_kernel(&device->context(),device->device_id(), second_pass_src, "aux_previs_main", bayes_opt, "batch_update::aux_previs_main");
       vec_kernels.push_back(aux_pre_vis);
+      
+      
       ////may need DIFF LIST OF SOURCES FOR THSI GUY TOO
       vec_kernels.push_back(convert_aux_int_float);
 
@@ -174,7 +175,7 @@ bool boxm2_ocl_update_aux_per_view_process(bprb_func_process& pro)
   }
 
   //grab input image, establish cl_ni, cl_nj (so global size is divisible by local size)
-  vil_image_view_base_sptr float_img=boxm2_ocl_util::prepare_input_image(img);
+  vil_image_view_base_sptr float_img=boxm2_util::prepare_input_image(img);
   vil_image_view<float>* img_view = static_cast<vil_image_view<float>* >(float_img.ptr());
   unsigned cl_ni=(unsigned)RoundUp(img_view->ni(),(int)local_threads[0]);
   unsigned cl_nj=(unsigned)RoundUp(img_view->nj(),(int)local_threads[1]);
@@ -261,6 +262,7 @@ bool boxm2_ocl_update_aux_per_view_process(bprb_func_process& pro)
       int alphaTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
       info_buffer->data_buffer_length = (int) (alpha->num_bytes()/alphaTypeSize);
       blk_info->write_to_buffer((queue));
+     
       // data type string may contain an identifier so determine the buffer size
       bocl_mem* mog       = opencl_cache->get_data(*id,data_type,alpha->num_bytes()/alphaTypeSize*appTypeSize,false);
 
@@ -368,7 +370,8 @@ bool boxm2_ocl_update_aux_per_view_process(bprb_func_process& pro)
         kern->set_arg( aux1 );
         kern->set_arg( aux2 );
         kern->set_arg( aux3 );
-                //execute kernel
+               
+        //execute kernel
         kern->execute(queue, 2, local_threads, global_threads);
         int status = clFinish(queue);
         check_val(status, MEM_FAILURE, "UPDATE EXECUTE FAILED: " + error_to_string(status));
@@ -382,12 +385,6 @@ bool boxm2_ocl_update_aux_per_view_process(bprb_func_process& pro)
         aux1->read_to_buffer(queue);
         aux2->read_to_buffer(queue);
         aux3->read_to_buffer(queue);
-
-        float * aux0_f=static_cast<float*> (aux0->cpu_buffer());
-        float * aux2_f=static_cast<float*> (aux2->cpu_buffer());
-        for (unsigned k=0;k<10;k++)
-          if (aux0_f[k]>0.0)
-            vcl_cout<<aux2_f[k]/aux0_f[k]<<' ';
       }
       //read image out to buffer (from gpu)
       in_image->read_to_buffer(queue);
@@ -397,7 +394,16 @@ bool boxm2_ocl_update_aux_per_view_process(bprb_func_process& pro)
       clFinish(queue);
     }
   }
-
+  
+#if 1
+  //write out and delete the aux views
+  for (id = vis_order.begin(); id != vis_order.end(); ++id) {
+    opencl_cache->deep_remove_data(*id, boxm2_data_traits<BOXM2_AUX0>::prefix(suffix));
+    opencl_cache->deep_remove_data(*id, boxm2_data_traits<BOXM2_AUX1>::prefix(suffix));
+    opencl_cache->deep_remove_data(*id, boxm2_data_traits<BOXM2_AUX2>::prefix(suffix));
+    opencl_cache->deep_remove_data(*id, boxm2_data_traits<BOXM2_AUX3>::prefix(suffix));
+  }
+#endif
 
    delete [] vis_buff;
    delete [] pre_buff;
