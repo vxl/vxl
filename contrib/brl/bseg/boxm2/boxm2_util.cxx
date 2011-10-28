@@ -1,4 +1,5 @@
 #include "boxm2_util.h"
+#include <boxm2/boxm2_data_traits.h>
 //:
 // \file
 
@@ -484,4 +485,23 @@ boxm2_util::generate_image_histogram(vil_image_view_base_sptr  img, unsigned int
 
     
     return hist;
+}
+
+
+bool boxm2_util::verify_appearance(boxm2_scene& scene, const vcl_vector<vcl_string>&valid_types, vcl_string& data_type, int& appTypeSize ) 
+{
+  bool foundDataType = false;
+  vcl_vector<vcl_string> apps = scene.appearances();
+  for (unsigned int i=0; i<apps.size(); ++i) {
+
+    //look for valid types
+    for(int c=0; c<valid_types.size(); ++c) {
+      if(apps[i] == valid_types[c]) {
+        foundDataType = true;
+        data_type = apps[i];
+        appTypeSize = (int) boxm2_data_info::datasize( apps[i] );
+      }
+    }
+  }
+  return foundDataType; 
 }

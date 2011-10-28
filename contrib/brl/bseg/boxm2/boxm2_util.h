@@ -9,6 +9,8 @@
 #include <vil/vil_image_view.h>
 #include <vil/vil_load.h>
 #include <bsta/bsta_histogram.h>
+#include <boxm2/boxm2_scene.h>
+
 //: Utility class with static methods
 class boxm2_util
 {
@@ -58,6 +60,9 @@ class boxm2_util
 
     //: function to obtain an image histogram
     static bsta_histogram_sptr generate_image_histogram(vil_image_view_base_sptr float_img, unsigned int numbins);
+
+    //verifies that a scene has a valid appearance, spits out data type and apperance type size
+    static bool verify_appearance(boxm2_scene& scene, const vcl_vector<vcl_string>&valid_types, vcl_string& data_type, int& appTypeSize ); 
 
 };
 
