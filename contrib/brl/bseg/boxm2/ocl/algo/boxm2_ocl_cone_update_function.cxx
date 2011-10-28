@@ -2,12 +2,14 @@
 //
 #include <vul/vul_timer.h>
 #include <boxm2/ocl/boxm2_ocl_util.h>
+#include <boxm2/boxm2_util.h>
 #include <boxm2/ocl/algo/boxm2_ocl_camera_converter.h>
 #include <vpgl/algo/vpgl_camera_bounds.h>
 #include <vgl/vgl_ray_3d.h>
 #include <boct/boct_bit_tree2.h>
 #include <vil/vil_image_view.h>
 #include <vil/vil_save.h>
+
 
 
 //render_cone_expected_image - pretty much the same as above but one of the local
@@ -40,7 +42,7 @@ float boxm2_ocl_adaptive_cone_update( boxm2_scene_sptr & scene,
   }
 
   //grab input image, establish cl_ni, cl_nj (so global size is divisible by local size)
-  vil_image_view_base_sptr float_img = boxm2_ocl_util::prepare_input_image(in_img);
+  vil_image_view_base_sptr float_img = boxm2_util::prepare_input_image(in_img);
   vil_image_view<float>* img_view = static_cast<vil_image_view<float>* >(float_img.ptr());
   unsigned cl_ni=(unsigned)RoundUp(img_view->ni(),(int)local_threads[0]);
   unsigned cl_nj=(unsigned)RoundUp(img_view->nj(),(int)local_threads[1]);
@@ -373,7 +375,7 @@ float boxm2_ocl_cone_update( boxm2_scene_sptr & scene,
   }
 
   //grab input image, establish cl_ni, cl_nj (so global size is divisible by local size)
-  vil_image_view_base_sptr float_img = boxm2_ocl_util::prepare_input_image(in_img);
+  vil_image_view_base_sptr float_img = boxm2_util::prepare_input_image(in_img);
   vil_image_view<float>* img_view = static_cast<vil_image_view<float>* >(float_img.ptr());
   unsigned cl_ni=(unsigned)RoundUp(img_view->ni(),(int)local_threads[0]);
   unsigned cl_nj=(unsigned)RoundUp(img_view->nj(),(int)local_threads[1]);

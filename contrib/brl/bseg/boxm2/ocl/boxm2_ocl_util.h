@@ -23,9 +23,12 @@ class boxm2_ocl_util
 
     //: fills in a 256 char array with number of BITS for each value (255 = 8, 254 = 7 etc)
     static void set_bit_lookup(cl_uchar* lookup);
+    
     //: private helper method prepares an input image to be processed by update
+/*
     static vil_image_view_base_sptr prepare_input_image(vcl_string filename, bool force_grey=false);
     static vil_image_view_base_sptr prepare_input_image(vil_image_view_base_sptr loaded_image, bool force_grey=false);
+*/
 
     static void load_perspective_camera(vcl_string filename, vpgl_perspective_camera<double> & pcam);
 
