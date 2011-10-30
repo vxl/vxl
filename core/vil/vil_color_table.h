@@ -11,8 +11,6 @@
 //   8 Nov 2005 Initial port from TargetJr.
 // \endverbatim
 //
-// \description
-//
 // This file provides a way to load color tables directly, rather than computing them.
 // It was created from the predefined color tables in IDL. It provides a way of adding
 // pseudo-color to data for visualization purposes.
