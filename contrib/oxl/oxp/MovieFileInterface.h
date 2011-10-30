@@ -21,8 +21,9 @@ struct MovieFileInterface
   //: Return length of movie in frames
   virtual int GetLength() = 0;
 
-  //: Return size of the frame \argfont{frame_index}.
+  //: Return X size of the frame \p frame_index.
   virtual int GetSizeX(int frame_index) = 0;
+  //: Return Y size of the frame \p frame_index.
   virtual int GetSizeY(int frame_index) = 0;
 
   //: Return bits per pixel of images.

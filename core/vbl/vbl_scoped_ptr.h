@@ -77,7 +77,7 @@ class vbl_scoped_ptr
     vbl_checked_delete(ptr_);
   }
 
-  //: Make this own \arg p, releasing any existing pointer.
+  //: Make this own \p p, releasing any existing pointer.
   void reset( T* p = 0 ) // never throws
   {
     this_type(p).swap(*this);

@@ -100,7 +100,8 @@ NViewMatches::NViewMatches(int nviews, int min_overlap):
 {
 }
 
-NViewMatches::~NViewMatches() {
+NViewMatches::~NViewMatches()
+{
   //  delete _indx_array;
 }
 
@@ -151,7 +152,7 @@ bool NViewMatches::load(vcl_istream& s)
 bool NViewMatches::save(vcl_ostream& s)
 {
   for (unsigned i = 0; i < size(); ++i)
-    s << (*this)[i] << "\n";
+    s << (*this)[i] << '\n';
   return s.good() != 0;
 }
 
@@ -161,7 +162,7 @@ bool NViewMatches::save(const char* filename)
   return save(o);
 }
 
-//: Count how many matches are consistent with \argfont{match}
+//: Count how many matches are consistent with \p match
 int NViewMatches::count_matches(const NViewMatch& match)
 {
   int nmatches = 0;
@@ -171,7 +172,7 @@ int NViewMatches::count_matches(const NViewMatch& match)
   return nmatches;
 }
 
-//: Return an array of the indices that match the given match
+//: Return an array of the indices that match the given \p match
 vcl_vector<int> NViewMatches::get_matches(const NViewMatch& match)
 {
   vcl_vector<int> ret;
@@ -207,22 +208,22 @@ int NViewMatches::incorporate(const NViewMatch& newtrack)
         (*i).incorporate(newtrack);
         ++nmatches;
         merged = i;
-      } else {
-        if ((*i).is_consistent(*merged)) {
-          vcl_cerr << "Merge : " << (*i) << vcl_endl;
-          vcl_cerr << "        " << (*merged) << vcl_endl;
-          // A further consistent match, so merge the two match tracks
-          (*merged).incorporate((*i));
-          erase(i);
-          --i; // step back so we don't skip any matches
-          ++nmatches;
-        } else {
-          // Two matches are inconsistent so remove them both and return -1
-          //  vcl_cerr << "NViewMatches::incorporate(): Doh! Found inconsistent matches - removing them\n";
-          erase(i);
-          erase(merged);
-          return -1;
-        }
+      }
+      else if ((*i).is_consistent(*merged)) {
+        vcl_cerr << "Merge : " << (*i) << '\n'
+                 << "        " << (*merged) << '\n';
+        // A further consistent match, so merge the two match tracks
+        (*merged).incorporate((*i));
+        erase(i);
+        --i; // step back so we don't skip any matches
+        ++nmatches;
+      }
+      else {
+        // Two matches are inconsistent so remove them both and return -1
+        //  vcl_cerr << "NViewMatches::incorporate(): Doh! Found inconsistent matches - removing them\n";
+        erase(i);
+        erase(merged);
+        return -1;
       }
     }
   }
@@ -231,14 +232,15 @@ int NViewMatches::incorporate(const NViewMatch& newtrack)
     return size() - 1;
   }
 
-//  if (nmatches > 1) {
-//    vcl_cerr << "NViewMatches::incorporate(): " << nmatches << " consistent matches merged\n";
-//  }
-
+#ifdef DEBUG
+  if (nmatches > 1) {
+    vcl_cerr << "NViewMatches::incorporate(): " << nmatches << " consistent matches merged\n";
+  }
+#endif
   return merged - begin();
 }
 
-//: Build an NViewMatch from the triplet (base_view..base_view+2)
+//: Build an NViewMatch from the triplet \p (base_view..base_view+2)
 NViewMatch NViewMatches::make_triplet_match(int base_view, int c1, int c2, int c3)
 {
   assert(base_view+2 < _nviews);
@@ -249,7 +251,7 @@ NViewMatch NViewMatches::make_triplet_match(int base_view, int c1, int c2, int c
   return newtrack;
 }
 
-//: Build an NViewMatch from the triplet (base_view..base_view+2), and incorporate.
+//: Build an NViewMatch from the triplet \p (base_view..base_view+2), and incorporate.
 int NViewMatches::incorporate_triplet(int base_view, int c1, int c2, int c3)
 {
   assert(base_view+2 < _nviews);
@@ -262,5 +264,6 @@ int NViewMatches::incorporate_triplet(int base_view, int c1, int c2, int c3)
 
 // Should ALWAYS be called before using the match matrix!
 // Efficiently checks for inconsistencies and removes them.
-void NViewMatches::remove_inconsistencies() {
+void NViewMatches::remove_inconsistencies()
+{
 }

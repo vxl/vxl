@@ -475,8 +475,8 @@ vidl1_ffmpeg_codec::advance() const
 
 //: The frame numbers are zero-based, so the first frame of the video is frame 0.
 //
-//  \param frame Seek so that the next cur_frame() returns frame \arg frame.
-//  \return Returns \c false if the seek was unsuccessful.
+//  \param frame Seek so that the next cur_frame() returns frame \p frame.
+//  \returs \c false if the seek was unsuccessful.
 //
 bool
 vidl1_ffmpeg_codec::seek( unsigned frame ) const
