@@ -37,8 +37,8 @@ bool mcal_var_basis_cost::can_use_variance() const
 }
 
   //: Compute component of the cost function from given basis vector
-  // \param: unit_basis - Unit vector defining basis direction
-  // \param: projections - Projections of the dataset onto this basis vector
+  // \param[in] unit_basis   Unit vector defining basis direction
+  // \param[in] projections  Projections of the dataset onto this basis vector
 double mcal_var_basis_cost::cost(const vnl_vector<double>& unit_basis,
                                  const vnl_vector<double>& projections)
 {

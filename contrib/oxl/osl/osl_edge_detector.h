@@ -1,10 +1,9 @@
 //-*- c++ -*-------------------------------------------------------------------
 #ifndef osl_edge_detector_h
 #define osl_edge_detector_h
-//
+//:
+// \file
 // \brief Charlie's topological edge detector
-// .INCLUDE osl/osl_edge_detector.h
-// .FILE osl_edge_detector.cxx
 //
 // A class for performing topologically-accurate edgel detection.  NB: this
 // implementation is (unintentionally) stochastic, so you don't necessarily
@@ -19,9 +18,8 @@
 //
 // Full documentation is given in INRIA technical report 2444, 1994.
 //
-// \author:
-//             Charlie Rothwell - 5/10/94
-//             INRIA, Sophia Antipolis
+// \author Charlie Rothwell - 5/10/94
+//         INRIA, Sophia Antipolis
 //
 // \verbatim
 //  Modifications:

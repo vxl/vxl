@@ -37,15 +37,15 @@ class mcal_sparse_basis_cost : public mcal_single_basis_cost
   virtual bool can_use_variance() const;
 
   //: Compute component of the cost function from given basis vector
-  // \param: unit_basis - Unit vector defining basis direction
-  // \param: projections - Projections of the dataset onto this basis vector
+  // \param[in] unit_basis   Unit vector defining basis direction
+  // \param[in] projections  Projections of the dataset onto this basis vector
   virtual double cost(const vnl_vector<double>& unit_basis,
                       const vnl_vector<double>& projections);
 
   //: Compute component of the cost function from given basis vector
   // Cost is log(variance) + alpha sum |e_i|.
-  // \param: unit_basis - Unit vector defining basis direction
-  // \param: variance - Variance of projections of the dataset onto this basis vector
+  // \param[in] unit_basis Unit vector defining basis direction
+  // \param[in] variance   Variance of projections of the dataset onto this basis vector
   virtual double cost_from_variance(const vnl_vector<double>& unit_basis,
                                     double variance);
 

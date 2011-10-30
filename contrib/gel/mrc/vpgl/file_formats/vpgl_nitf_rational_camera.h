@@ -3,7 +3,7 @@
 #define vpgl_nitf_rational_camera_h_
 //:
 // \file
-// \brief: instance a nitf_rational camera from nitf header information.
+// \brief instance a nitf_rational camera from nitf header information.
 // \author Jim Green
 // \date Dec 2006
 //
@@ -21,7 +21,6 @@
 //
 #include <vpgl/vpgl_rational_camera.h>
 #include <vcl_string.h>
-// not used? #include <vcl_vector.h>
 #include <vnl/vnl_double_2.h>
 #include <vil/file_formats/vil_nitf2_image.h>
 

@@ -87,7 +87,7 @@ class vgl_h_matrix_1d
   //: Fill M with contents of the 2x2 homography matrix
   void get (vnl_matrix_fixed<T,2,2>* M) const;
   //:
-  // \deprecated; use the vnl_matrix_fixed variant instead
+  // \deprecated use the vnl_matrix_fixed variant instead
   void get (vnl_matrix<T>* M) const;
   //: Fill M with contents of the 2x2 homography matrix
   void get (T* M) const;

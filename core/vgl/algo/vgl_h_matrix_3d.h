@@ -91,7 +91,7 @@ class vgl_h_matrix_3d
   //: Fill M with contents of the 4x4 homography matrix
   void get (vnl_matrix_fixed<T,4,4>* M) const;
   //:
-  // \deprecated; use the vnl_matrix_fixed variant instead
+  // \deprecated use the vnl_matrix_fixed variant instead
   void get (vnl_matrix<T>* M) const;
   //: Fill M with contents of the 4x4 homography matrix
   void get (T* M) const;

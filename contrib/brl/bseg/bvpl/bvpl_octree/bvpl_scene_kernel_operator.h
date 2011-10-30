@@ -3,7 +3,7 @@
 #define bvpl_scene_kernel_operator_h
 //:
 // \file
-// \brief: A class that operates a bvpl_kernel on a boxm_scene
+// \brief A class that operates a bvpl_kernel on a boxm_scene
 // \author Isabel Restrepo mir@lems.brown.edu
 // \date  November 18, 2009
 //
@@ -101,7 +101,7 @@ void bvpl_scene_kernel_operator::operate(boxm_scene<boct_tree<short, T_data > > 
 
     //if level and location code of cells isn't the same then continue
     if ((center_cell->level() != out_center_cell->level()) || !(in_code.isequal(&out_code))){
-      vcl_cerr << " Input and output cells don't have the same structure " << vcl_endl;
+      vcl_cerr << " Input and output cells don't have the same structure\n";
       ++iterator;
       ++out_iter;
       continue;

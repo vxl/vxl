@@ -1,6 +1,6 @@
 //:
 // \file
-// \brief: A process to save a gradient scene to a flat binary file
+// \brief A process to save a gradient scene to a flat binary file
 // \author Isabel Restrepo
 // \date 3-Aug-2011
 
