@@ -16,12 +16,13 @@ class boxm2_nn_cache : public boxm2_cache
     //: returns block pointer to block specified by ID
     virtual boxm2_block* get_block(boxm2_block_id id);
 
-    //: returns data_base pointer (THIS IS NECESSARY BECAUSE TEMPLATED FUNCTIONS CANNOT BE VIRTUAL)
+    //: returns data_base pointer
+    //  (THIS IS NECESSARY BECAUSE TEMPLATED FUNCTIONS CANNOT BE VIRTUAL)
     virtual boxm2_data_base* get_data_base(boxm2_block_id, vcl_string type, vcl_size_t num_bytes=0, bool read_only = true);
 
-    //: returns a data_base pointer which is initialized to the default value of the type, 
-    //  if a block for this type exists on the cache, it is removed and replaced with the new one
-    //  this method does not check whether a block of this type already exists on the disc nor writes it to the disc
+    //: returns a data_base pointer which is initialized to the default value of the type.
+    //  If a block for this type exists on the cache, it is removed and replaced with the new one
+    //  This method does not check whether a block of this type already exists on the disk nor writes it to the disk
     virtual boxm2_data_base* get_data_base_new(boxm2_block_id id, vcl_string type, bool read_only = true);
 
     //: deletes a data item from the cpu cache
@@ -43,13 +44,14 @@ class boxm2_nn_cache : public boxm2_cache
     // \todo not yet implemented
     virtual void disable_write() { vcl_cerr << "Not yet implemented!!!\n"; }
 
-     //: delete all the memory, caution: make sure to call write to disc methods not to loose writable data
+     //: delete all the memory
+     //  Caution: make sure to call write to disk methods not to loose writable data
     // \todo not yet implemented
     virtual void clear_cache() { vcl_cerr << "Not yet implemented!!!\n"; }
 
   private:
 
-    //: keep a map of boxm2_block pointers (size will be limited to 9 blocks
+    //: keep a map of boxm2_block pointers (size will be limited to 9 blocks)
     vcl_map<boxm2_block_id, boxm2_block*> cached_blocks_;
 
     //: keeps one copy of each type of cached data
@@ -58,7 +60,8 @@ class boxm2_nn_cache : public boxm2_cache
     //: directory where blocks are found
     vcl_string scene_dir_;
 
-    //---------Helper Methods --------------------------------------------------
+    // ---------Helper Methods --------------------------------------------------
+
     //: private update cache method (very simple)
     void update_block_cache(boxm2_block* blk);
 
@@ -81,9 +84,9 @@ class boxm2_nn_cache : public boxm2_cache
     //: returns a list of neighbors for a given ID
     vcl_vector<boxm2_block_id> get_neighbor_list(boxm2_block_id center);
 
-    //: helper method determines if this block is
+    //: helper method determines if this block is valid
     bool is_valid_id(boxm2_block_id);
-    //--------------------------------------------------------------------------
+    // --------------------------------------------------------------------------
 };
 
 //: shows elements in cache

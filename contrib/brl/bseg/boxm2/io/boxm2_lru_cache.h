@@ -7,7 +7,7 @@
 #include <boxm2/io/boxm2_cache.h>
 #include <vcl_iostream.h>
 
-#define MAX_BYTES 1024*1024*1024*4 //4 gigs of memory is max...
+#define MAX_BYTES 1024*1024*1024*4 // 4 gigs of memory is max...
 
 //: A cache that keeps the most recently used blocks and data, while kicking out the least recently used blocks and data to make more room.
 //  Currently just stores blocks in a map, not caring about space
@@ -25,9 +25,9 @@ class boxm2_lru_cache : public boxm2_cache
     //: returns data_base pointer (THIS IS NECESSARY BECAUSE TEMPLATED FUNCTIONS CANNOT BE VIRTUAL)
     virtual boxm2_data_base* get_data_base(boxm2_block_id id, vcl_string type, vcl_size_t num_bytes=0, bool read_only = true);
 
-    //: returns a data_base pointer which is initialized to the default value of the type, 
-    //  if a block for this type exists on the cache, it is removed and replaced with the new one
-    //  this method does not check whether a block of this type already exists on the disc nor writes it to the disc
+    //: returns a data_base pointer which is initialized to the default value of the type.
+    //  If a block for this type exists on the cache, it is removed and replaced with the new one.
+    //  This method does not check whether a block of this type already exists on the disc nor writes it to the disc
     virtual boxm2_data_base* get_data_base_new(boxm2_block_id id, vcl_string type, bool read_only = true);
 
     //: removes data from this cache (may or may not write to disk first)
@@ -62,14 +62,14 @@ class boxm2_lru_cache : public boxm2_cache
     //: directory where blocks are found
     vcl_string scene_dir_;
 
-    //---------Helper Methods --------------------------------------------------
+    // ---------Helper Methods --------------------------------------------------
 
     //: helper method returns a reference to correct data map (ensures one exists)
     vcl_map<boxm2_block_id, boxm2_data_base*>& cached_data_map(vcl_string prefix);
 
     //: helper method determines if this block is
     bool is_valid_id(boxm2_block_id);
-    //--------------------------------------------------------------------------
+    // --------------------------------------------------------------------------
 };
 
 //: shows elements in cache
