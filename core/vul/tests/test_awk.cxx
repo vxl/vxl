@@ -6,7 +6,7 @@
 // \brief  Rudimentary testing of the vul_awk class
 // \author Eric Moyer (Wright State University)
 // \date   15 July 2009
-// \history built upon the shell of test_regexp, but has no tests in common
+// History: built upon the shell of test_regexp, but has no tests in common
 
 #include <vcl_sstream.h>
 #include <vcl_iostream.h>

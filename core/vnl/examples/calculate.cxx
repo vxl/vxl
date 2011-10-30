@@ -20,14 +20,14 @@
 //    123!
 //    10 * 11 / 12
 //    binom(100,50)
-//    EOF 
+//    EOF
 //  echo '33333333333333333333333333333e-5%12345' | calculate
 //
 // Uses the class vnl_decnum to do the I/O and the arithmetic.
 //
 // \author Peter Vanroose, ABIS Leuven
 // \date  August 2011
-// \history Originally written for double precision arithmetic (1996).
+// History: Originally written for double precision arithmetic (1996).
 
 #include <vnl/vnl_decnum.h>
 #include <vcl_iostream.h>
@@ -50,11 +50,12 @@ vnl_decnum diff(vnl_decnum const& a, vnl_decnum const& b) { return a-b; }
 vnl_decnum fac(vnl_decnum const& a) { if (a<=one) return one; else return a*fac(a-one); }
 vnl_decnum binom(vnl_decnum const& a, vnl_decnum const& b) { if (a<zero || b<zero || a<b) return zero; return fac(a)/fac(a-b)/fac(b); }
 
-
 typedef vnl_decnum (*fptr1) (vnl_decnum const&);
 typedef vnl_decnum (*fptr2) (vnl_decnum const&,vnl_decnum const&);
 typedef vnl_decnum (*fptr3) (vnl_decnum const&,unsigned long);
-class node {
+
+class node
+{
  public:
   fptr1 func1;
   fptr2 func2;
@@ -68,7 +69,7 @@ void ErrorExit(vcl_string const& expr, char const* t, unsigned long s)
   vcl_cerr << "Error parsing expression -- " << t << ":\n" << expr << vcl_endl;
   while (s--) vcl_cerr << ' ';
   vcl_cerr << "^\n";
-  vcl_exit(1); 
+  vcl_exit(1);
 }
 
 //: find end of argument, i.e., comma or ')'
@@ -162,7 +163,7 @@ int put_brackets(vcl_string& expr, unsigned long s, int l)
 
   // remove unary +:
   if (expr[s]=='+') expr.erase(s,1L);
-  
+
   // process unary minus:
   if (expr[s]=='-' && l<2) ErrorExit(expr, "nothing following unary minus",s);
   if (l<1) ErrorExit(expr, "something missing", s);
@@ -269,7 +270,7 @@ node build_tree(vcl_string const& expr, unsigned long s, int l)
   if (expr[s] == ')') ErrorExit(expr, "string begins with closing bracket",s);
   while (l > 0 && expr[s] == '(' && blocklength(expr,s,l) == l) ++s, l-=2;
   if (l <= 0) ErrorExit(expr, "empty block",s);
-  if (expr[s] == ')') ErrorExit(expr, "emtpy ()",s);
+  if (expr[s] == ')') ErrorExit(expr, "empty ()",s);
   j = blocklength(expr,s,l);
   if (j==l && expr[s]>='0' && expr[s]<='9') { // number
     n.func1 = 0; n.func2 = 0; n.func3 = 0; n.param2 = 0;
@@ -360,7 +361,8 @@ vnl_decnum calc(node *n)
   return vnl_decnum("0"); // never reached...
 }
 
-int main(int argc, char* argv[]) {
+int main(int argc, char* argv[])
+{
   if (argc>2) {
     vcl_cerr << "Syntax:  calculate expression\n";
     return 1;

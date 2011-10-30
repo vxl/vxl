@@ -6,7 +6,7 @@
 // \brief  Thorough testing of class vul_reg_exp (regular expression matching)
 // \author Peter Vanroose, KULeuven, ESAT/PSI
 // \date   13 June 2002
-// \history Adapted from the original Texas Instruments COOL test suite,
+// History: Adapted from the original Texas Instruments COOL test suite,
 //          but with lots of tests added.
 
 #include <vcl_iostream.h>
