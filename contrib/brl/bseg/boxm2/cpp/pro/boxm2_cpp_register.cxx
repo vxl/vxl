@@ -43,6 +43,8 @@ void boxm2_cpp_register::register_process()
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_cpp_batch_compute_shadow_model_process, "boxm2CppBatchComputeShadowModelProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_cpp_batch_update_nonsurface_model_process, "boxm2CppBatchUpdateNonsurfaceModelProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_cpp_batch_compute_phong_model_process, "boxm2CppBatchComputePhongModelProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_cpp_batch_compute_synoptic_function_1d_process, "boxm2CppBatchComputeSynopticFunction1dProcess");
+  
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_cpp_query_cell_brdf_process, "boxm2CppQueryCellBrdfProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_cpp_pre_infinity_opt2_phongs_process, "boxm2CppPreInfinityOpt2PhongsProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_cpp_batch_update_opt2_phongs_process, "boxm2CppBatchUpdateOpt2PhongsProcess");
