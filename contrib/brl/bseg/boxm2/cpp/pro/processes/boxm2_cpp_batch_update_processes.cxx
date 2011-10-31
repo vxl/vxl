@@ -489,7 +489,8 @@ bool boxm2_cpp_batch_update_app_process(bprb_func_process& pro)
   for (id = blk_ids.begin(); id != blk_ids.end(); ++id) {
     // reads from disc if not already in memory
     boxm2_data_base *  alph  = cache->get_data_base(*id,boxm2_data_traits<BOXM2_ALPHA>::prefix(),0,false);
-    boxm2_data_base *  mog  = cache->get_data_base(*id,data_type,0,false);
+    //boxm2_data_base *  mog  = cache->get_data_base(*id,data_type,0,false);
+    boxm2_data_base* mog       = cache->get_data_base(*id,data_type,alph->buffer_length()/alphaTypeSize*appTypeSize,false);
 
     if ( data_type.find(boxm2_data_traits<BOXM2_MOG3_GREY>::prefix()) != vcl_string::npos )
     {
