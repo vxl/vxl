@@ -18,25 +18,19 @@ class boxm2_compute_nonsurface_histogram_functor
     //: "default" constructor
     boxm2_compute_nonsurface_histogram_functor() {}
 
-    bool init_data(boxm2_data_base * histo_data,
-                   boxm2_data_base * entropy_histo_data,
+    bool init_data(boxm2_data_base * entropy_histo_data,
                    boxm2_stream_cache_sptr str_cache)
     {
-        histo_data_=new boxm2_data<BOXM2_MOG3_GREY>(histo_data->data_buffer(),
-                                                    histo_data->buffer_length(),
-                                                    histo_data->block_id());
-
         entropy_histo_data_=new boxm2_data<BOXM2_AUX0>(entropy_histo_data->data_buffer(),
                                                        entropy_histo_data->buffer_length(),
                                                        entropy_histo_data->block_id());
         str_cache_ = str_cache;
-        id_ = histo_data->block_id();
+        id_ = entropy_histo_data_->block_id();
         return true;
     }
 
     inline bool process_cell(int index)
     {
-        boxm2_data<BOXM2_MOG3_GREY>::datatype & histo=histo_data_->data()[index];
         boxm2_data<BOXM2_AUX0>::datatype            & entropy_histo=entropy_histo_data_->data()[index];
 
         vcl_vector<aux0_datatype>  out0   = str_cache_->get_next<BOXM2_AUX0>(id_, index);
@@ -45,7 +39,6 @@ class boxm2_compute_nonsurface_histogram_functor
         unsigned nobs = (unsigned)out0.size();
 
         vcl_vector<float> temp_histogram(8,0.125f);
-        for (unsigned i =0;i<histo.size();i++) histo[i] = 1.0f;
 
         vcl_vector<float> Iobs;
         vcl_vector<float> vis;
@@ -74,29 +67,24 @@ class boxm2_compute_nonsurface_histogram_functor
             int bin_index  = (int) vcl_floor(gradI*8);
             bin_index = bin_index>7 ? 7:bin_index;
             temp_histogram[bin_index] += (vis[i]+vis[index])/2;
-            sum+= (vis[i]+vis[index])/2;
+            sum += (vis[i]+vis[index])/2;
         }
         for (unsigned i =0; i < 8;i++) temp_histogram[i] /= sum;
-
-        // Normalize histogram
-        for (unsigned i = 0; i < temp_histogram.size(); i++)
-                histo[i] = (unsigned char)vcl_floor(temp_histogram[i] *255.0f ) ;
 
         entropy_histo  =0.0;
         for (unsigned int i = 0; i<8; ++i)
         {
-            double pi = (double)(histo[i])/255.0;
+            double pi = temp_histogram[i];
             if (pi>0)
-                entropy_histo -= pi*vcl_log(static_cast<double>(pi));
+                entropy_histo += pi*vcl_log(static_cast<double>(pi));
         }
-        entropy_histo *= vnl_math::log2e;
-
+        entropy_histo /= vnl_math::log2e;
+        entropy_histo = vcl_exp(-entropy_histo);
 
         return true;
     }
 
   private:
-    boxm2_data<BOXM2_MOG3_GREY>* histo_data_;
     boxm2_data<BOXM2_AUX0>* entropy_histo_data_;
     boxm2_stream_cache_sptr str_cache_;
     boxm2_block_id id_;

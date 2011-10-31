@@ -49,40 +49,47 @@ class boxm2_ray_probe_functor
 
     switch (boxm2_data_info::data_type(prefix_))
     {
-      case BOXM2_MOG3_GREY: {
-        boxm2_data<BOXM2_MOG3_GREY>*  mog3_grey_app_data_= new boxm2_data<BOXM2_MOG3_GREY>(data_ptr->data_buffer(),data_ptr->buffer_length(),data_ptr->block_id());
-        boxm2_data<BOXM2_MOG3_GREY>::datatype mog3_grey_app=mog3_grey_app_data_->data()[index];
-        data_to_return_->push_back((float)mog3_grey_app[0] / 255.0f);
-        data_to_return_->push_back((float)mog3_grey_app[1] / 255.0f);
-        data_to_return_->push_back((float)mog3_grey_app[2] / 255.0f);
-        data_to_return_->push_back((float)mog3_grey_app[3] / 255.0f);
-        data_to_return_->push_back((float)mog3_grey_app[4] / 255.0f);
-        data_to_return_->push_back((float)mog3_grey_app[5] / 255.0f);
-        data_to_return_->push_back((float)mog3_grey_app[6] / 255.0f);
-        data_to_return_->push_back((float)mog3_grey_app[7] / 255.0f);
-        break;
-      }
-      case BOXM2_FLOAT8: {
-        boxm2_data<BOXM2_FLOAT8>*  mog3_grey_app_data_= new boxm2_data<BOXM2_FLOAT8>(data_ptr->data_buffer(),data_ptr->buffer_length(),data_ptr->block_id());
-        boxm2_data<BOXM2_FLOAT8>::datatype mog3_grey_app=mog3_grey_app_data_->data()[index];
-        data_to_return_->push_back(mog3_grey_app[0]);
-        data_to_return_->push_back(mog3_grey_app[1]);
-        data_to_return_->push_back(mog3_grey_app[2]);
-        data_to_return_->push_back(mog3_grey_app[3]);
-        data_to_return_->push_back(mog3_grey_app[4]);
-        data_to_return_->push_back(mog3_grey_app[5]);
-        data_to_return_->push_back(mog3_grey_app[6]);
-        data_to_return_->push_back(mog3_grey_app[7]);
-        break;
-      }
-      case BOXM2_AUX0: {
-        boxm2_data<BOXM2_AUX0>*  app_data  = new boxm2_data<BOXM2_AUX0>(data_ptr->data_buffer(),data_ptr->buffer_length(),data_ptr->block_id());
-        boxm2_data<BOXM2_AUX0>::datatype app=app_data->data()[index];
-        data_to_return_->push_back(vcl_exp(app));
-        break;
-      }
-      default:
-        vcl_cout<<"Unidentified data"<<vcl_endl;
+    case(BOXM2_MOG3_GREY):
+        {
+            boxm2_data<BOXM2_MOG3_GREY>*  mog3_grey_app_data_= new boxm2_data<BOXM2_MOG3_GREY>(data_ptr->data_buffer(),data_ptr->buffer_length(),data_ptr->block_id());
+            boxm2_data<BOXM2_MOG3_GREY>::datatype mog3_grey_app=mog3_grey_app_data_->data()[index];
+            data_to_return_->push_back((float)mog3_grey_app[0] / 255.0f);
+            data_to_return_->push_back((float)mog3_grey_app[1] / 255.0f);
+            data_to_return_->push_back((float)mog3_grey_app[2] / 255.0f);
+            data_to_return_->push_back((float)mog3_grey_app[3] / 255.0f);
+            data_to_return_->push_back((float)mog3_grey_app[4] / 255.0f);
+            data_to_return_->push_back((float)mog3_grey_app[5] / 255.0f);
+            data_to_return_->push_back((float)mog3_grey_app[6] / 255.0f);
+            data_to_return_->push_back((float)mog3_grey_app[7] / 255.0f);
+             
+            break;
+        }
+    case(BOXM2_FLOAT8):
+        {
+            boxm2_data<BOXM2_FLOAT8>*  mog3_grey_app_data_= new boxm2_data<BOXM2_FLOAT8>(data_ptr->data_buffer(),data_ptr->buffer_length(),data_ptr->block_id());
+            boxm2_data<BOXM2_FLOAT8>::datatype mog3_grey_app=mog3_grey_app_data_->data()[index];
+            data_to_return_->push_back(mog3_grey_app[0]);
+            data_to_return_->push_back(mog3_grey_app[1]);
+            data_to_return_->push_back(mog3_grey_app[2]);
+            data_to_return_->push_back(mog3_grey_app[3]);
+            data_to_return_->push_back(mog3_grey_app[4]);
+            data_to_return_->push_back(mog3_grey_app[5]);
+            data_to_return_->push_back(mog3_grey_app[6]);
+            data_to_return_->push_back(mog3_grey_app[7]);
+            break;
+
+        }
+    case(BOXM2_AUX0):
+        {
+            boxm2_data<BOXM2_AUX0>*  app_data  = new boxm2_data<BOXM2_AUX0>(data_ptr->data_buffer(),data_ptr->buffer_length(),data_ptr->block_id());
+            boxm2_data<BOXM2_AUX0>::datatype app=app_data->data()[index];
+            data_to_return_->push_back(app);
+            break;
+        }
+
+    default:
+        {
+        }
     }
     seg_len_->push_back(seg_len);
     alpha_->push_back(alpha);

@@ -46,15 +46,9 @@ void boxm2_data_leaves_serial_iterator(boxm2_block * blk,
                 int depth = curr_tree.depth_at(i);
                 int side_len = 1<<depth;
                 int index = curr_tree.get_data_index(i);
-                functor.process_cell(index);
+                functor.process_cell(index,side_len);
             }
         }
-    }
-
-    for (int i=0; i<data_buff_length; ++i)
-    {
-        if ( i%(data_buff_length/10) == 0 ) vcl_cout<<'.';
-        functor.process_cell(i);
     }
 }
 
