@@ -15,6 +15,7 @@
 #include <boxm2/boxm2_block.h>
 #include <boxm2/boxm2_data_base.h>
 #include <boxm2/ocl/boxm2_ocl_util.h>
+#include <boxm2/boxm2_util.h>
 //brdb stuff
 #include <brdb/brdb_value.h>
 
@@ -128,42 +129,26 @@ bool boxm2_ocl_render_gl_expected_image_process(bprb_func_process& pro)
   bocl_mem_sptr exp_img_dim =pro.get_input<bocl_mem_sptr>(i++);
   vcl_string app_identifier = pro.get_input<vcl_string>(i++);
 
-  bool foundDataType = false;
-  vcl_string data_type,options;
-  vcl_vector<vcl_string> apps = scene->appearances();
-  int apptypesize = 0;
-  for (unsigned int i=0; i<apps.size(); ++i) {
-    if ( apps[i] == boxm2_data_traits<BOXM2_MOG3_GREY>::prefix() )
-    {
-      data_type = apps[i];
-      foundDataType = true;
-      options=" -D MOG_TYPE_8 ";
-      apptypesize = boxm2_data_traits<BOXM2_MOG3_GREY>::datasize();
-    }
-    else if ( apps[i] == boxm2_data_traits<BOXM2_MOG3_GREY_16>::prefix() )
-    {
-      data_type = apps[i];
-      foundDataType = true;
-      options=" -D MOG_TYPE_16 ";
-      apptypesize = boxm2_data_traits<BOXM2_MOG3_GREY_16>::datasize();
-    } 
-    else if ( apps[i] == boxm2_data_traits<BOXM2_GAUSS_GREY>::prefix() )
-    {
-      data_type = apps[i];
-      foundDataType = true;
-      options=" -D GAUSS_TYPE_2 ";
-      apptypesize = boxm2_data_traits<BOXM2_GAUSS_GREY>::datasize();
-    }
-  }
-  if (!foundDataType) {
-    vcl_cout<<"BOXM2_OCL_RENDER_PROCESS ERROR: scene doesn't have BOXM2_MOG3_GREY or BOXM2_MOG3_GREY_16 or BOXM2_GAUSS_GREY data type"<<vcl_endl;
+  //get scene data type and appTypeSize
+  vcl_string data_type;
+  int apptypesize; 
+  vcl_vector<vcl_string> valid_types; 
+  valid_types.push_back(boxm2_data_traits<BOXM2_MOG3_GREY>::prefix()); 
+  valid_types.push_back(boxm2_data_traits<BOXM2_GAUSS_GREY>::prefix()); 
+  valid_types.push_back(boxm2_data_traits<BOXM2_MOG3_GREY_16>::prefix()); 
+  if( !boxm2_util::verify_appearance( *scene, valid_types, data_type, apptypesize ) ) {
+    vcl_cout<<"boxm2_ocl_paint_batch ERROR: scene doesn't have BOXM2_MOG3_GREY or BOXM2_MOG3_GREY_16 data type"<<vcl_endl;
     return false;
   }
-  if (app_identifier.size() > 0) {
-   data_type += "_" + app_identifier;
-  }
 
-//: create a command queue.
+  //make sure apperance identifier is correct
+  if (app_identifier.size() > 0) 
+   data_type += "_" + app_identifier;
+   
+  //get initial options (MOG TYPE)
+  vcl_string options = boxm2_ocl_util::mog_options(data_type);  
+
+  //: create a command queue.
   int status=0;
   cl_command_queue queue = clCreateCommandQueue(device->context(),*(device->device_id()),
                                                 CL_QUEUE_PROFILING_ENABLE,&status);
