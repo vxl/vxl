@@ -191,7 +191,6 @@ class boxm2_synoptic_fucntion_1d_functor
         xdir.insert(xdir.begin(), aux1_raw.begin()+half_m, aux1_raw.end());
         ydir.insert(ydir.begin(), aux2_raw.begin()+half_m, aux2_raw.end());
         zdir.insert(zdir.begin(), aux3_raw.begin()+half_m, aux3_raw.end());
-        
 
         vcl_vector<double> thetas;
         vcl_vector<double> phis;
@@ -210,7 +209,6 @@ class boxm2_synoptic_fucntion_1d_functor
             obs_double.push_back(Iobs[i]);
             phis.push_back(vcl_atan2(vec[1],vec[0]));
             thetas.push_back(vcl_acos(vec[2]));
-
         }
 
         brad_synoptic_function_1d f(thetas,phis,vis_double,obs_double);
@@ -225,7 +223,7 @@ class boxm2_synoptic_fucntion_1d_functor
 
         cubic_model[6] = f.max_frequency_prob_density();
         float p = cubic_model[5]/(cubic_model[5]+cubic_model[6]) ;
-        if(p<1)
+        if (p<1)
             alpha = -(vcl_log(1-p)) / side_len;
         else
             alpha =10000;
@@ -237,7 +235,6 @@ class boxm2_synoptic_fucntion_1d_functor
     boxm2_data<BOXM2_ALPHA>* alpha_model_data_;
     boxm2_stream_cache_sptr str_cache_;
     boxm2_block_id id_;
-
 };
 
 class boxm2_compute_empty_model_gradient_functor
@@ -321,4 +318,5 @@ class boxm2_compute_empty_model_gradient_functor
     boxm2_stream_cache_sptr str_cache_;
     boxm2_block_id id_;
 };
-#endif // boxm2_compute_phongs_model_functor_h_
+
+#endif // boxm2_synoptic_function_functors_h_
