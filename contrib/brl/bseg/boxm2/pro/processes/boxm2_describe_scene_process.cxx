@@ -14,7 +14,7 @@
 namespace boxm2_describe_scene_process_globals
 {
   const unsigned n_inputs_ = 1;
-  const unsigned n_outputs_ = 0;
+  const unsigned n_outputs_ = 1;
 }
 bool boxm2_describe_scene_process_cons(bprb_func_process& pro)
 {
@@ -24,9 +24,9 @@ bool boxm2_describe_scene_process_cons(bprb_func_process& pro)
   vcl_vector<vcl_string> input_types_(n_inputs_);
   input_types_[0] = "boxm2_scene_sptr";
 
-  // process has no outputs:
+  // process has 1 outputs:
   vcl_vector<vcl_string>  output_types_(n_outputs_);
-
+  output_types_[0] = "vcl_string";                    //path to model data
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 }
 
@@ -45,5 +45,9 @@ bool boxm2_describe_scene_process(bprb_func_process& pro)
     return false;
   }
   vcl_cout << *scene;
+
+  //set model dir as output
+  vcl_string dataPath = scene->data_path(); 
+  pro.set_output_val<vcl_string>(0, dataPath);
   return true;
 }
