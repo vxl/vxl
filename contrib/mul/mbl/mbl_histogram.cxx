@@ -180,7 +180,7 @@ bool mbl_histogram::write_cdf(const char* path)
   {
     double dx=vcl_fabs(bins_[i+1]-bins_[i]);
     sum+=freq_[i];
-    ofs<<0.5*(bins_[i]+bins_[i+1])<<"  "<<double(sum)/(dx*n_obs_)<<'\n';
+    ofs<<0.5*(bins_[i]+bins_[i+1])<<"  "<<double(sum)/n_obs_<<'\n';
   }
   ofs.close();
   return true;
