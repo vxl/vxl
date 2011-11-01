@@ -272,56 +272,56 @@ bool boxm2_util::generate_html(int height, int width, int nrows, int ncols, vcl_
 {
   char html[4*1024];
   vcl_sprintf(html,
-              "<!DOCTYPE html>\n \
-<html lang='en'>\n \
-<head>\n \
-  <meta charset='utf-8' content='text/html' http-equiv='Content-type' />\n \
-  <title>Volume Visualizer</title>\n \
-  <!-- Reel/Jquery Script Includes -->\n \
-  <script src='js/jquery.min.js' type='text/javascript'></script>\n \
-  <script src='js/jquery.reel-min.js' type='text/javascript'></script>\n \
-  <script src='js/jquery.disabletextselect-min.js' type='text/javascript'></script>\n \
-  <script src='js/jquery.mousewheel-min.js' type='text/javascript'></script>\n \
-  <script src='js/js.js' type='text/javascript'></script>\n \
-  <script src='js/miniZoomPan.js' type='text/javascript'></script>\n \
-  <style  src='css/miniZoomPan.css' type='text/css' />\n \
-  <meta name='viewport' content='width = %d' />\n \
-  <style>\n \
-    html, body{ margin: 0; background: #000 url(iphone.instructions.gif) no-repeat 0 %dpx; }\n \
-  </style>\n \
-  <!-- ZOOM Script -->\n \
-  <script type= 'text/javascript'>/*<![CDATA[*/\n \
-      $(function() {\n \
-        $('#zoom01').miniZoomPan({\n \
-            sW: %d,\n \
-            sH: %d,\n \
-            lW: %d,\n \
-            lH: %d\n \
-          })\n \
-      });\n \
-      /*]]>*/\n \
-  </script>\n \
-</head>\n \
-<body>\n \
-  <div id='zoom01'>\n \
-    <img id='image' src='img/scene_0_0.jpg' width='%dpx' height=%dpx' />\n \
-  </div>\n \
-  <script type='text/javascript'>\n \
-    $(document).ready(function() {\n \
-      $('#image').reel({\n \
-        frame: 1,\n \
-        footage: %d,\n \
-        frames: %d,\n \
-        rows: %d,\n \
-        row: 1,\n \
-        path: 'img/',\n \
-        image: 'img/scene_0_0.jpg',\n \
-        images: scene_frames(),\n \
-        horizontal: true,\n \
-      });\n \
-    });\n \
-  </script>\n \
-</body>\n \
+              "<!DOCTYPE html>\n\
+<html lang='en'>\n\
+<head>\n\
+  <meta charset='utf-8' content='text/html' http-equiv='Content-type' />\n\
+  <title>Volume Visualizer</title>\n\
+  <!-- Reel/Jquery Script Includes -->\n\
+  <script src='js/jquery.min.js' type='text/javascript'></script>\n\
+  <script src='js/jquery.reel-min.js' type='text/javascript'></script>\n\
+  <script src='js/jquery.disabletextselect-min.js' type='text/javascript'></script>\n\
+  <script src='js/jquery.mousewheel-min.js' type='text/javascript'></script>\n\
+  <script src='js/js.js' type='text/javascript'></script>\n\
+  <script src='js/miniZoomPan.js' type='text/javascript'></script>\n\
+  <style  src='css/miniZoomPan.css' type='text/css' />\n\
+  <meta name='viewport' content='width = %d' />\n\
+  <style>\n\
+    html, body{ margin: 0; background: #000 url(iphone.instructions.gif) no-repeat 0 %dpx; }\n\
+  </style>\n\
+  <!-- ZOOM Script -->\n\
+  <script type= 'text/javascript'>/*<![CDATA[*/\n\
+      $(function() {\n\
+        $('#zoom01').miniZoomPan({\n\
+            sW: %d,\n\
+            sH: %d,\n\
+            lW: %d,\n\
+            lH: %d\n\
+          })\n\
+      });\n\
+      /*]]>*/\n\
+  </script>\n\
+</head>\n\
+<body>\n\
+  <div id='zoom01'>\n\
+    <img id='image' src='img/scene_0_0.jpg' width='%dpx' height=%dpx' />\n\
+  </div>\n\
+  <script type='text/javascript'>\n\
+    $(document).ready(function() {\n\
+      $('#image').reel({\n\
+        frame: 1,\n\
+        footage: %d,\n\
+        frames: %d,\n\
+        rows: %d,\n\
+        row: 1,\n\
+        path: 'img/',\n\
+        image: 'img/scene_0_0.jpg',\n\
+        images: scene_frames(),\n\
+        horizontal: true,\n\
+      });\n\
+    });\n\
+  </script>\n\
+</body>\n\
 </html>",
               width,
               width,
@@ -386,7 +386,7 @@ vil_image_view_base_sptr boxm2_util::prepare_input_image(vil_image_view_base_spt
   if (loaded_image->nplanes() == 3 || loaded_image->nplanes() == 4)
   {
     //if not forcing RGB image to be grey
-    if(!force_grey) 
+    if (!force_grey)
     {
       vcl_cout<<"preparing rgb image"<<vcl_endl;
       //load image from file and format it into RGBA
@@ -405,15 +405,15 @@ vil_image_view_base_sptr boxm2_util::prepare_input_image(vil_image_view_base_spt
     else
     {
       vcl_cout<<"preparing rgb as input to grey scale float image"<<vcl_endl;
-      
+
       //load image from file and format it into grey
-      vil_image_view<vxl_byte>* inimg    = dynamic_cast<vil_image_view<vxl_byte>* >(loaded_image.ptr()); 
-      vil_image_view<float>     gimg(loaded_image->ni(), loaded_image->nj()); 
-      vil_convert_planes_to_grey<vxl_byte, float>(*inimg, gimg); 
+      vil_image_view<vxl_byte>* inimg    = dynamic_cast<vil_image_view<vxl_byte>* >(loaded_image.ptr());
+      vil_image_view<float>     gimg(loaded_image->ni(), loaded_image->nj());
+      vil_convert_planes_to_grey<vxl_byte, float>(*inimg, gimg);
 
       //stretch it into 0-1 range
-      vil_image_view<float>*    floatimg = new vil_image_view<float>(loaded_image->ni(), loaded_image->nj()); 
-      vil_convert_stretch_range_limited(gimg, *floatimg, 0.0f, 255.0f, 0.0f, 1.0f); 
+      vil_image_view<float>*    floatimg = new vil_image_view<float>(loaded_image->ni(), loaded_image->nj());
+      vil_convert_stretch_range_limited(gimg, *floatimg, 0.0f, 255.0f, 0.0f, 1.0f);
       vil_image_view_base_sptr toReturn(floatimg);
       return toReturn;
     }
@@ -423,26 +423,26 @@ vil_image_view_base_sptr boxm2_util::prepare_input_image(vil_image_view_base_spt
   if (loaded_image->nplanes() == 1)
   {
     vcl_cout<<"Preparing grey scale image"<<vcl_endl;
-    
+
     //preapre floatimg for stretched img
     vil_image_view<float>* floatimg;
-    if (vil_image_view<vxl_byte> *img_byte = dynamic_cast<vil_image_view<vxl_byte>*>(loaded_image.ptr())) 
+    if (vil_image_view<vxl_byte> *img_byte = dynamic_cast<vil_image_view<vxl_byte>*>(loaded_image.ptr()))
     {
-        floatimg = new vil_image_view<float>(loaded_image->ni(), loaded_image->nj(), 1);
-        vil_convert_stretch_range_limited(*img_byte, *floatimg, vxl_byte(0), vxl_byte(255), 0.0f, 1.0f);
+      floatimg = new vil_image_view<float>(loaded_image->ni(), loaded_image->nj(), 1);
+      vil_convert_stretch_range_limited(*img_byte, *floatimg, vxl_byte(0), vxl_byte(255), 0.0f, 1.0f);
     }
-    else if (vil_image_view<unsigned short> *img_byte = dynamic_cast<vil_image_view<unsigned short>*>(loaded_image.ptr())) 
+    else if (vil_image_view<unsigned short> *img_byte = dynamic_cast<vil_image_view<unsigned short>*>(loaded_image.ptr()))
     {
-        floatimg = new vil_image_view<float>(loaded_image->ni(), loaded_image->nj(), 1);
-        vil_convert_stretch_range_limited(*img_byte, *floatimg,(unsigned short)30500,(unsigned short)32500,  0.0f, 1.0f); // hardcoded to be fixed.
+      floatimg = new vil_image_view<float>(loaded_image->ni(), loaded_image->nj(), 1);
+      vil_convert_stretch_range_limited(*img_byte, *floatimg,(unsigned short)30500,(unsigned short)32500,  0.0f, 1.0f); // hardcoded to be fixed.
     }
     else if (vil_image_view<float> *img_float = dynamic_cast<vil_image_view<float>*>(loaded_image.ptr()))
     {
-        return vil_image_view_base_sptr(img_float);
+      return vil_image_view_base_sptr(img_float);
     }
     else {
-        vcl_cerr << "Failed to load image\n";
-        return 0;
+      vcl_cerr << "Failed to load image\n";
+      return 0;
     }
     vil_image_view_base_sptr toReturn(floatimg);
     return toReturn;
@@ -471,37 +471,35 @@ vil_rgba<vxl_byte> boxm2_util::mean_pixel(vil_image_view<vil_rgba<vxl_byte> >& i
                              (vxl_byte) (mean[2]/count),
                              255 );
 }
-bsta_histogram_sptr 
+
+bsta_histogram_sptr
 boxm2_util::generate_image_histogram(vil_image_view_base_sptr  img, unsigned int numbins)
 {
-    bsta_histogram<float> * hist= new bsta_histogram<float>(0.0,1.0,numbins);
-    if(vil_image_view<float> * float_img = dynamic_cast<vil_image_view<float> *> (img.ptr()))
-    {
-        for(unsigned i =0;i<float_img->ni();i++)
-            for(unsigned j =0;j<float_img->nj();j++)
-                hist->upcount((*float_img)(i,j) ,1 );
+  bsta_histogram<float> * hist= new bsta_histogram<float>(0.0,1.0,numbins);
+  if (vil_image_view<float> * float_img = dynamic_cast<vil_image_view<float> *> (img.ptr()))
+  {
+    for (unsigned i =0;i<float_img->ni();i++)
+      for (unsigned j =0;j<float_img->nj();j++)
+        hist->upcount((*float_img)(i,j) ,1 );
+  }
 
-    }
-
-    
-    return hist;
+  return hist;
 }
 
 
-bool boxm2_util::verify_appearance(boxm2_scene& scene, const vcl_vector<vcl_string>&valid_types, vcl_string& data_type, int& appTypeSize ) 
+bool boxm2_util::verify_appearance(boxm2_scene& scene, const vcl_vector<vcl_string>&valid_types, vcl_string& data_type, int& appTypeSize )
 {
   bool foundDataType = false;
   vcl_vector<vcl_string> apps = scene.appearances();
   for (unsigned int i=0; i<apps.size(); ++i) {
-
     //look for valid types
-    for(int c=0; c<valid_types.size(); ++c) {
-      if(apps[i] == valid_types[c]) {
+    for (unsigned int c=0; c<valid_types.size(); ++c) {
+      if (apps[i] == valid_types[c]) {
         foundDataType = true;
         data_type = apps[i];
         appTypeSize = (int) boxm2_data_info::datasize( apps[i] );
       }
     }
   }
-  return foundDataType; 
+  return foundDataType;
 }
