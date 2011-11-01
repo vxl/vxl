@@ -31,18 +31,17 @@ bool boxm2_cpp_ray_probe_process_cons(bprb_func_process& pro)
 {
     using namespace boxm2_cpp_ray_probe_process_globals;
 
-    //process takes 1 input
+    //process takes 7 inputs:
     vcl_vector<vcl_string> input_types_(n_inputs_);
     input_types_[0] = "boxm2_scene_sptr";
     input_types_[1] = "boxm2_cache_sptr";
     input_types_[2] = "vpgl_camera_double_sptr";
     input_types_[3] = "unsigned";
     input_types_[4] = "unsigned";
-    input_types_[5] = "vcl_string";// prefix
-    input_types_[6] = "vcl_string";// identifier
+    input_types_[5] = "vcl_string";// prefix (optional)
+    input_types_[6] = "vcl_string";// identifier (optional)
 
-    // process has 1 output:
-    // output[0]: scene sptr
+    // process has 6 outputs:
     vcl_vector<vcl_string>  output_types_(n_outputs_);
     output_types_[0] = "bbas_1d_array_float_sptr"; //seg_len
     output_types_[1] = "bbas_1d_array_float_sptr"; //alpha
@@ -52,8 +51,8 @@ bool boxm2_cpp_ray_probe_process_cons(bprb_func_process& pro)
     output_types_[5] = "int"; //alpha
 
     bool good = pro.set_input_types(input_types_) &&
-        pro.set_output_types(output_types_);
-    // in case the 6th input is not set
+                pro.set_output_types(output_types_);
+    // in case the 6th or 7th input are not set
     brdb_value_sptr idx = new brdb_value_t<vcl_string>("");
     pro.set_input(5, idx);
     pro.set_input(6, idx);
@@ -137,7 +136,7 @@ bool boxm2_cpp_ray_probe_process(bprb_func_process& pro)
     bbas_1d_array_float_sptr data_to_return_array=new bbas_1d_array_float(data_to_return.size());
 
     float vis=1.0f;
-    for (unsigned i=0;i<seg_lengths.size();i++)
+    for (unsigned i=0; i<seg_lengths.size(); ++i)
     {
         seg_array->data_array[i]=seg_lengths[i];
         abs_depth_array->data_array[i]=abs_depth[i];
@@ -145,7 +144,7 @@ bool boxm2_cpp_ray_probe_process(bprb_func_process& pro)
         vcl_cout<<"vis "<< vis<<" alpha "<<alphas[i]<<vcl_endl;
         vis*=vcl_exp(-seg_lengths[i]*alphas[i]);
         vis_array->data_array[i]=vis;
-        for(unsigned j = 0 ; j <nelems; j++)
+        for (int j=0 ; j<nelems; ++j)
             data_to_return_array->data_array[i*nelems+j] = data_to_return[i*nelems+j];
     }
 
