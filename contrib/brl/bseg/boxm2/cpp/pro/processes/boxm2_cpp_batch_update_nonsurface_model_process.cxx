@@ -19,6 +19,7 @@
 
 #include <boxm2/cpp/algo/boxm2_synoptic_function_functors.h>
 #include <boxm2/cpp/algo/boxm2_data_serial_iterator.h>
+
 //: run batch update
 namespace boxm2_cpp_batch_update_nonsurface_model_process_globals
 {
@@ -30,11 +31,10 @@ bool boxm2_cpp_batch_update_nonsurface_model_process_cons(bprb_func_process& pro
 {
   using namespace boxm2_cpp_batch_update_nonsurface_model_process_globals;
 
-  //process takes 4 inputs
+  //process takes 3 inputs
   // 0) scene
   // 1) cache
   // 2) stream cache
-  // 3) the pre-computed sigma normalizer table, for fast access to normalizer values given number of images
   vcl_vector<vcl_string> input_types_(n_inputs_);
   input_types_[0] = "boxm2_scene_sptr";
   input_types_[1] = "boxm2_cache_sptr";
@@ -49,9 +49,9 @@ bool boxm2_cpp_batch_update_nonsurface_model_process(bprb_func_process& pro)
 {
   using namespace boxm2_cpp_batch_update_nonsurface_model_process_globals;
 
-  if ( pro.n_inputs() < n_inputs_ ){
-      vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
-      return false;
+  if ( pro.n_inputs() < n_inputs_ ) {
+    vcl_cout << pro.name() << ": The number of inputs should be " << n_inputs_<< vcl_endl;
+    return false;
   }
   //get the inputs
   unsigned i = 0;
@@ -76,7 +76,6 @@ bool boxm2_cpp_batch_update_nonsurface_model_process(bprb_func_process& pro)
     boxm2_data_serial_iterator<boxm2_compute_empty_model_gradient_functor>(data_buff_length,data_functor);
 
     cache->remove_data_base(*id,boxm2_data_traits<BOXM2_AUX0>::prefix("entropy_histo_air"));
-
   }
   return true;
 }
