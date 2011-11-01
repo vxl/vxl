@@ -178,7 +178,6 @@ bool mbl_histogram::write_cdf(const char* path)
   int sum=n_below_;
   for (int i=0;i<n_bins();++i)
   {
-    double dx=vcl_fabs(bins_[i+1]-bins_[i]);
     sum+=freq_[i];
     ofs<<0.5*(bins_[i]+bins_[i+1])<<"  "<<double(sum)/n_obs_<<'\n';
   }
