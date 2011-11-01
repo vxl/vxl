@@ -316,7 +316,6 @@ class boxm2_synoptic_fucntion_1d_functor
         vcl_vector<double> vis_double;
         vcl_vector<double> obs_double;
 
-        float sum_weights = 0.0f ;
         for (unsigned i=0;i<Iobs.size();i++)
         {
             if (Iobs[i] < 0.0 || Iobs[i] > 1.0 )
