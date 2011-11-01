@@ -14,3 +14,6 @@ class dbvalue:
   def __init__(self, index, type):
     self.id = index    # unsigned integer
     self.type = type   # string
+
+def remove_data(id):
+  boxm2_batch.remove_data(id)
