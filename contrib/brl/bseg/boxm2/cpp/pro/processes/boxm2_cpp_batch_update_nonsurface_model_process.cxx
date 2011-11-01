@@ -17,7 +17,7 @@
 #include <brdb/brdb_value.h>
 #include <boxm2/boxm2_util.h>
 
-#include <boxm2/cpp/algo/boxm2_compute_nonsurface_histogram_functor.h>
+#include <boxm2/cpp/algo/boxm2_synoptic_function_functors.h>
 #include <boxm2/cpp/algo/boxm2_data_serial_iterator.h>
 //: run batch update
 namespace boxm2_cpp_batch_update_nonsurface_model_process_globals
@@ -69,11 +69,11 @@ bool boxm2_cpp_batch_update_nonsurface_model_process(bprb_func_process& pro)
 
     // pass num_bytes = 0 to make sure disc is read if not already in memory
     boxm2_data_base *  entropy_histo_air  = cache->get_data_base(*id,boxm2_data_traits<BOXM2_AUX0>::prefix("entropy_histo_air"),alpha->buffer_length(),false);
-    boxm2_compute_nonsurface_histogram_functor data_functor;
+    boxm2_compute_empty_model_gradient_functor data_functor;
     data_functor.init_data(entropy_histo_air, str_cache);
     int histo_entropy_airTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_AUX0>::prefix());
     int data_buff_length  = (int)(entropy_histo_air->buffer_length()/histo_entropy_airTypeSize);
-    boxm2_data_serial_iterator<boxm2_compute_nonsurface_histogram_functor>(data_buff_length,data_functor);
+    boxm2_data_serial_iterator<boxm2_compute_empty_model_gradient_functor>(data_buff_length,data_functor);
 
     cache->remove_data_base(*id,boxm2_data_traits<BOXM2_AUX0>::prefix("entropy_histo_air"));
 
