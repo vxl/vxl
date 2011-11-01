@@ -40,7 +40,7 @@ class boxm2_compute_phongs_model_functor
         return true;
     }
 
-    inline bool process_cell(int index)
+    inline bool process_cell(int index, bool is_leaf = false, float side_len = 0.0)
     {
         boxm2_data<BOXM2_FLOAT8>::datatype & phongs_model=phongs_model_data_->data()[index];
         vcl_vector<aux0_datatype>  aux0_raw   = str_cache_->get_next<BOXM2_AUX0>(id_, index);
@@ -112,7 +112,6 @@ class boxm2_compute_phongs_model_functor
             phongs_model[6] = sum_prob_densities/sum_weights;
         else
             phongs_model[6] = 0.0f;
-
         return true;
     }
 
