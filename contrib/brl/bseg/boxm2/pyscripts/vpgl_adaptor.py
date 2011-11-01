@@ -55,6 +55,19 @@ def camera_dir_planar_bbox(dir_name) :
   boxm2_batch.set_input_string(0, dir_name);
   boxm2_batch.run_process();
 
+def project_point(camera,x,y,z):
+    boxm2_batch.init_process('vpglProjectProcess')
+    boxm2_batch.set_input_from_db(0,camera)
+    boxm2_batch.set_input_float(1,x)
+    boxm2_batch.set_input_float(2,y)
+    boxm2_batch.set_input_float(3,z)
+    boxm2_batch.run_process()
+    (id,type) = boxm2_batch.commit_output(0)
+    u = boxm2_batch.get_output_float(id)
+    (id,type) = boxm2_batch.commit_output(1)
+    v = boxm2_batch.get_output_float(id)
+    return (u,v)
+
 # gets view direction at a point for a perspective camera
 def get_view_at_point(persp_cam,x,y,z):
   boxm2_batch.init_process("vpglGetViewDirectionAtPointProcess");
