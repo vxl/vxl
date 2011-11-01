@@ -32,6 +32,7 @@ MANPAGE_SOURCES += boxm2_batch_opt2_phongs_functors.h
 MANPAGE_SOURCES += boxm2_shadow_model_functor.h
 MANPAGE_SOURCES += boxm2_compute_nonsurface_histogram_functor.h
 MANPAGE_SOURCES += boxm2_update_using_quality_functor.h
+MANPAGE_SOURCES += boxm2_synoptic_function_functors.h
 
 #######################################
 include ${VXLROOT}/config/top-params.mk

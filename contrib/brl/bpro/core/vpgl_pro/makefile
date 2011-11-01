@@ -26,6 +26,7 @@ SOURCES += processes/vpgl_resample_perspective_camera_process.cxx
 SOURCES += processes/vpgl_get_view_direction_at_point_process.cxx
 SOURCES += processes/vpgl_generate_3d_point_process_from_depth_process.cxx
 SOURCES += processes/vpgl_get_bounding_box_process.cxx
+SOURCES += processes/vpgl_nitf_footprint_process.cxx
 
 #######################################
 include ${VXLROOT}/config/top-params.mk
