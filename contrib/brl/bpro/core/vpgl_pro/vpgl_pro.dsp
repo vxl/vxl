@@ -159,6 +159,9 @@ SOURCE=.\processes/vpgl_generate_3d_point_process_from_depth_process.cxx
 SOURCE=.\processes/vpgl_get_bounding_box_process.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\processes/vpgl_nitf_footprint_process.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/brdb_value_t+vpgl_camera_double_sptr-.cxx
 # End Source File
 # End Group

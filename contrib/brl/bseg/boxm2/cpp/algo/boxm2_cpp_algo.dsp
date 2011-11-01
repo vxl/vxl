@@ -209,6 +209,9 @@ SOURCE=.\boxm2_phongs_model_processor.h
 # Begin Source File
 SOURCE=.\boxm2_update_using_quality_functor.h
 # End Source File
+# Begin Source File
+SOURCE=.\boxm2_synoptic_function_functors.h
+# End Source File
 # End Group
 # End Target
 # End Project
