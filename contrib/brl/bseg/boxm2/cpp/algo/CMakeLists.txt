@@ -28,6 +28,8 @@ SET(boxm2_cpp_algo_sources
     boxm2_image_density_functor.h
     boxm2_update_with_shadow_functor.h
     boxm2_merge_block_function.h     boxm2_merge_block_function.cxx
+
+    boxm2_compute_nonsurface_histogram_functor.h
    )
 AUX_SOURCE_DIRECTORY(Templates boxm2_cpp_algo_sources)
 
