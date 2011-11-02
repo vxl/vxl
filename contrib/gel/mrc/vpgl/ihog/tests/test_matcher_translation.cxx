@@ -16,8 +16,8 @@
 
 #include <testlib/testlib_root_dir.h>
 
-void test_good_image() {
-
+void test_good_image()
+{
   vcl_string root_dir = testlib_root_dir();
   vcl_string image_file =
     root_dir + "/contrib/gel/mrc/vpgl/ihog/tests/dalmation.tif";
@@ -38,11 +38,11 @@ void test_good_image() {
   vil_image_view<float> mask0(ni,nj);
   mask0.fill(1.0f);
 
-  /*
+#if 0
   ni = img_1.ni(); nj = img_1.nj();
   vil_image_view<float> warped_img(ni,nj);
   vil_convert_cast(img_1, warped_img);
-  */
+#endif
 
   // construct arbitrary homography
   double tx = -20.3, ty = 30.7;
@@ -53,7 +53,7 @@ void test_good_image() {
   // warp image with homography
   ihog_image<float> sample_im;
   ihog_image<float> sample_mask;
-  
+
   vgl_point_2d<double> p(0,0);
   vgl_vector_2d<double> u(1,0);
   vgl_vector_2d<double> v(0,1);
@@ -72,15 +72,15 @@ void test_good_image() {
   vil_convert_cast(warped_img,byte_image);
   vil_save(byte_image,"img1.tiff");
 #endif
-  
-  
+
+
   int border = 2;
   ihog_world_roi roi(img0.ni()- 2*border,
                      img0.nj()- 2*border,
                      vgl_point_2d<double>(border,border));
   ihog_transform_2d init_xform;
   init_xform.set_translation_only(0,0);
-  
+
   ihog_image<float> from_img(img0, init_xform);
   ihog_image<float> to_img(warped_img, ihog_transform_2d());
   ihog_image<float> mask_img(warped_mask, ihog_transform_2d());
@@ -88,40 +88,43 @@ void test_good_image() {
   minimizer.minimize_using_minfo(init_xform);
   double error = minimizer.get_end_error();
   vcl_cout << "end_error = " << error << '\n'
-
            << "original homography:\n"
-           << xform_in.get_matrix() << vcl_endl << '\n'
-
+           << xform_in.get_matrix() << '\n' << '\n'
            << "lm generated homography:\n"
-           << init_xform.get_matrix() << vcl_endl << vcl_endl;
+           << init_xform.get_matrix() << '\n' << vcl_endl;
   //test result
   vgl_point_2d<double> p0 = init_xform.origin();
   double err_trans = (vcl_fabs(p0.x()-tx) + vcl_fabs(p0.y()-ty))/100;
   TEST_NEAR("rigid_body trans",err_trans,0.0, 0.01);
 }
-void scale_im(vil_image_view<float>& im, vil_image_view<vxl_byte>& im_byte, float scale) {
+
+void scale_im(vil_image_view<float>& im, vil_image_view<vxl_byte>& im_byte, float scale)
+{
   unsigned ni = im.ni(), nj = im.nj();
-  //: scale the image to byte
-  for(unsigned j = 0; j<nj; ++j) 
-    for(unsigned i = 0; i<ni; ++i) {
-        float v = scale*im(i,j);
-        if(v>255.0f) v= 255.0f; if(v<0.0f) v = 0.0f;
-        im(i,j) = v;
-      }
-  
+  // scale the image to byte
+  for (unsigned j = 0; j<nj; ++j)
+    for (unsigned i = 0; i<ni; ++i) {
+      float v = scale*im(i,j);
+      if (v>255.0f) v= 255.0f;
+      if (v<0.0f) v = 0.0f;
+      im(i,j) = v;
+    }
+
   vil_convert_cast(im, im_byte);
 }
-void test_exp_image() {
+
+void test_exp_image()
+{
   vil_image_view<float> img_0 = vil_load("H:/projects/MultiScale/Baghdad/dim_2/exp_frame_84_ill_bin_2.tiff");
   unsigned ni = img_0.ni(), nj = img_0.nj();
   vil_image_view<vxl_byte> img_0_byte(ni, nj);
   scale_im(img_0, img_0_byte, 255.0f);
 
   vil_image_view<vxl_byte> img_1 = vil_load("H:/projects/MultiScale/Baghdad/dim_2/cropped_imgs/view_00_cropped_normalized_resampled.png");
-  
+
   vil_image_view<float> img0(ni,nj);
   vil_convert_cast(img_0_byte,img0);
-  
+
   vil_image_view<float> img1(img_1.ni(),img_1.nj());
   vil_convert_cast(img_1, img1);
   vil_image_view<float> mask1(img_1.ni(),img_1.nj());
@@ -152,7 +155,7 @@ void test_exp_image() {
                      vgl_point_2d<double>(border,border));
   ihog_transform_2d init_xform;
   init_xform.set_translation_only(0,0);
-  
+
   ihog_image<float> from_img(img0, init_xform);
   //ihog_image<float> to_img(img1, ihog_transform_2d());
   ihog_image<float> to_img(warped_img, ihog_transform_2d());
@@ -162,13 +165,11 @@ void test_exp_image() {
   minimizer.minimize_using_minfo(init_xform);
   double error = minimizer.get_end_error();
   vcl_cout << "end_error = " << error << '\n'
-
            << "lm generated homography:\n"
-           << init_xform.get_matrix() << vcl_endl << vcl_endl;
+           << init_xform.get_matrix() << '\n' << vcl_endl;
   //test result
   vgl_point_2d<double> p0 = init_xform.origin();
-  vcl_cout << "tx: " << p0.x() << " " << " ty: " << p0.y() << "\n";
- 
+  vcl_cout << "tx: " << p0.x() << "  ty: " << p0.y() << vcl_endl;
 }
 
 void test_pixelwise_minfo()
@@ -184,10 +185,10 @@ void test_pixelwise_minfo()
   unsigned ni = img_0.ni(), nj = img_0.nj();
   vil_image_view<vxl_byte> img_0_byte(ni, nj);
   scale_im(img_0, img_0_byte, 255.0f);
-  
+
   vil_image_view<float> img0(ni,nj);
   vil_convert_cast(img_0_byte,img0);
-  
+
   vil_image_view<float> img1(img_1.ni(),img_1.nj());
   vil_convert_cast(img_1, img1);
 
@@ -216,7 +217,7 @@ void test_pixelwise_minfo()
   int border = 15;
   ihog_world_roi roi(ni- 2*border, nj- 2*border, vgl_point_2d<double>(border,border));
 
-  ihog_image<float> im0(img0); 
+  ihog_image<float> im0(img0);
   vnl_vector<double> from_samples = roi.sample(im0);
   ihog_image<float> imask(mask);
   vnl_vector<double> mask_samples = roi.sample(imask);
@@ -238,7 +239,7 @@ void test_pixelwise_minfo()
       xform.set_translation_only(tx,ty);
 
       ihog_image<float> sample_im; ihog_image<float> sample_mask;
-      
+
       //ihog_image<float> curr_img(img1,xform);
       ihog_image<float> curr_img(warped_img_o,xform);
       ihog_resample_bilin(curr_img,sample_im,p,u,v,(int)ni,(int)nj);
@@ -250,14 +251,14 @@ void test_pixelwise_minfo()
       ihog_resample_bilin(curr_mask,sample_mask,p,u,v,ni,nj);
       vil_image_view<float> warped_mask = sample_mask.image();
       ihog_image<float> warped_mask_i(warped_mask);
-
-      //vcl_stringstream ss; ss << "img1_" << tx << "_" << ty << ".png";
-      //vil_image_view<vxl_byte> im_byte(ni, nj);
-      //scale_im(warped_img, im_byte, 1.0f);
-      //vil_save(im_byte, ss.str().c_str());
+#if 0
+      vcl_stringstream ss; ss << "img1_" << tx << '_' << ty << ".png";
+      vil_image_view<vxl_byte> im_byte(ni, nj);
+      scale_im(warped_img, im_byte, 1.0f);
+      vil_save(im_byte, ss.str().c_str());
+#endif
       vnl_vector<double> to_samples = roi.sample(warped_img_i);
       vnl_vector<double> to_mask_samples = roi.sample(warped_mask_i);
-      //double mi = ihog_minfo_cost_func::entropy_diff(mask_samples, from_samples, to_samples, 16);
       double mi = ihog_minfo_cost_func::entropy_diff(to_mask_samples, from_samples, to_samples, 16);
       if (mi < mi_min) {
         mi_min = mi;
@@ -276,10 +277,10 @@ void test_pixelwise_minfo()
 
   vil_image_view<vxl_byte> out_min_byte(ni, nj);
   scale_im(out_min, out_min_byte, 1.0f);
-  vcl_stringstream ss; ss << "out_min_img_" << tx_min << "_" << ty_min << ".png";
+  vcl_stringstream ss; ss << "out_min_img_" << tx_min << '_' << ty_min << ".png";
   vil_save(out_min_byte, ss.str().c_str());
 
-  //: now refine using powell
+  // now refine using powell
   ihog_transform_2d init_xform;
   init_xform.set_translation_only(tx_min,ty_min);
   vcl_cout << "applying powell:, init_x: " << tx_min << " init_y: " << ty_min << vcl_endl;
@@ -291,13 +292,11 @@ void test_pixelwise_minfo()
   minimizer.minimize_using_minfo(init_xform);
   double error = minimizer.get_end_error();
   vcl_cout << "end_error = " << error << '\n'
-
            << "lm generated homography:\n"
-           << init_xform.get_matrix() << vcl_endl << vcl_endl;
+           << init_xform.get_matrix() << '\n' << vcl_endl;
   //test result
   vgl_point_2d<double> p0 = init_xform.origin();
   vcl_cout << "after powell:, x: " << p0.x() << " y: " << p0.y() << vcl_endl;
-  
 }
 
 void test_exhaustive_minfo()
@@ -314,10 +313,10 @@ void test_exhaustive_minfo()
   unsigned ni = img_0.ni(), nj = img_0.nj();
   vil_image_view<vxl_byte> img_0_byte(ni, nj);
   scale_im(img_0, img_0_byte, 255.0f);
-  
+
   vil_image_view<float> img0(ni,nj);
   vil_convert_cast(img_0_byte,img0);
-  
+
   vil_image_view<float> img1(img_1.ni(),img_1.nj());
   vil_convert_cast(img_1, img1);
 
@@ -346,7 +345,7 @@ void test_exhaustive_minfo()
   int border = 15;
   ihog_world_roi roi(ni- 2*border, nj- 2*border, vgl_point_2d<double>(border,border));
 
-  ihog_image<float> im0(img0); 
+  ihog_image<float> im0(img0);
   vnl_vector<double> from_samples = roi.sample(im0);
   ihog_image<float> imask(mask);
   vnl_vector<double> mask_samples = roi.sample(imask);
@@ -368,7 +367,7 @@ void test_exhaustive_minfo()
       xform.set_translation_only(tx,ty);
 
       ihog_image<float> sample_im; ihog_image<float> sample_mask;
-      
+
       //ihog_image<float> curr_img(img1,xform);
       ihog_image<float> curr_img(warped_img_o,xform);
       ihog_resample_bilin(curr_img,sample_im,p,u,v,(int)ni,(int)nj);
@@ -380,14 +379,14 @@ void test_exhaustive_minfo()
       ihog_resample_bilin(curr_mask,sample_mask,p,u,v,ni,nj);
       vil_image_view<float> warped_mask = sample_mask.image();
       ihog_image<float> warped_mask_i(warped_mask);
-
-      //vcl_stringstream ss; ss << "img1_" << tx << "_" << ty << ".png";
-      //vil_image_view<vxl_byte> im_byte(ni, nj);
-      //scale_im(warped_img, im_byte, 1.0f);
-      //vil_save(im_byte, ss.str().c_str());
+#if 0
+      vcl_stringstream ss; ss << "img1_" << tx << '_' << ty << ".png";
+      vil_image_view<vxl_byte> im_byte(ni, nj);
+      scale_im(warped_img, im_byte, 1.0f);
+      vil_save(im_byte, ss.str().c_str());
+#endif
       vnl_vector<double> to_samples = roi.sample(warped_img_i);
       vnl_vector<double> to_mask_samples = roi.sample(warped_mask_i);
-      //double mi = ihog_minfo_cost_func::entropy_diff(mask_samples, from_samples, to_samples, 16);
       double mi = ihog_minfo_cost_func::entropy_diff(to_mask_samples, from_samples, to_samples, 16);
       if (mi < mi_min) {
         mi_min = mi;
@@ -406,10 +405,10 @@ void test_exhaustive_minfo()
 
   vil_image_view<vxl_byte> out_min_byte(ni, nj);
   scale_im(out_min, out_min_byte, 1.0f);
-  vcl_stringstream ss; ss << "out_min_img_" << tx_min << "_" << ty_min << ".png";
+  vcl_stringstream ss; ss << "out_min_img_" << tx_min << '_' << ty_min << ".png";
   vil_save(out_min_byte, ss.str().c_str());
 
-  //: now refine using powell
+  // now refine using powell
   ihog_transform_2d init_xform;
   init_xform.set_translation_only(tx_min,ty_min);
   vcl_cout << "applying powell:, init_x: " << tx_min << " init_y: " << ty_min << vcl_endl;
@@ -421,9 +420,8 @@ void test_exhaustive_minfo()
   minimizer.minimize_using_minfo(init_xform);
   double error = minimizer.get_end_error();
   vcl_cout << "end_error = " << error << '\n'
-
            << "lm generated homography:\n"
-           << init_xform.get_matrix() << vcl_endl << vcl_endl;
+           << init_xform.get_matrix() << '\n' << vcl_endl;
   //test result
   vgl_point_2d<double> p0 = init_xform.origin();
   vcl_cout << "after powell:, x: " << p0.x() << " y: " << p0.y() << vcl_endl;
@@ -431,14 +429,12 @@ void test_exhaustive_minfo()
 
 static void test_matcher_translation()
 {
-  
   START ("test matcher translation");
 
   //test_good_image();
   //test_exp_image();
   //test_pixelwise_minfo();
   test_exhaustive_minfo();
-  
 }
 
 TESTMAIN( test_matcher_translation );
