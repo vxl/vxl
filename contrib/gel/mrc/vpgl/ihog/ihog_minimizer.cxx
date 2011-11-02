@@ -4,9 +4,11 @@
 // \file
 
 #include <ihog/ihog_lsqr_cost_func.h>
+#include <ihog/ihog_minfo_cost_func.h>
 #include <vil/algo/vil_gauss_filter.h>
 #include <vnl/algo/vnl_amoeba.h>
 #include <vnl/algo/vnl_levenberg_marquardt.h>
+#include <vnl/algo/vnl_powell.h>
 #include <vcl_cstdlib.h>
 
 // generate a pyramid of transforms corresponding to the vil_image_pyramid
@@ -47,7 +49,6 @@ ihog_minimizer::ihog_minimizer( const ihog_image<float>& image1,
     levels = 1;
     roi_pyramid_.push_back(roi_L);
   }
-
 
   w2img1_ = w2img_pyramid(image1.world2im(), levels);
   w2img2_ = w2img_pyramid(image2.world2im(), levels);
@@ -252,4 +253,204 @@ ihog_minimizer::minimize(ihog_transform_2d& xform)
     delete cost;
   }
 }
+
+//: a sub-pixel minimization with an exhaustive initialization at each level of the pyramid
+void ihog_minimizer::minimize_exhaustive_minfo(int radius, ihog_transform_2d& xform)
+{
+  ihog_transform_2d::Form form = xform.form();
+  int n_levels = from_pyramid_.nlevels();
+  vnl_vector<double> param, fx;
+  xform.params(param);
+  // the expression 1.0/(1<<X) is a bit more efficient than std::pow(0.5,X),
+  // and it avoids having to #include <cmath> :       -- PVr
+  double init_scale = 1.0/(1<<n_levels);
+
+  ihog_transform_2d undo_xform;
+  undo_xform.set_zoom_only(1.0/init_scale,0.0,0.0);
+  ihog_transform_2d undo_step;
+  undo_step.set_zoom_only(0.5,0.0,0.0);
+  xform.set_origin( vgl_point_2d<double>(xform.origin().x()*init_scale,
+                                     xform.origin().y()*init_scale) );
+  double scaled_radius = radius*init_scale;
+
+  for (int L=from_pyramid_.nlevels()-1; L>=0; --L)
+  {
+    //vcl_cout << "-- L: " << L << vcl_endl;
+    xform.set_origin( vgl_point_2d<double>(xform.origin().x()*2.0,
+                                           xform.origin().y()*2.0) );
+    scaled_radius = scaled_radius*2.0;
+    //vcl_cout << "--- scaled_radius: " << scaled_radius << vcl_endl;
+    undo_xform = undo_xform * undo_step;
+    ihog_image<float> image1(from_pyramid_(L),w2img1_[L]);
+    ihog_image<float> image2(to_pyramid_(L),w2img2_[L]);
+
+    ihog_image<float> im1(image1);
+    ihog_image<float> im2(image2);
+    vil_gauss_filter_5tap(image1.image(),im1.image(),vil_gauss_filter_5tap_params(2));
+    vil_gauss_filter_5tap(image2.image(),im2.image(),vil_gauss_filter_5tap_params(2));
+    im1.set_world2im(undo_xform*image1.world2im());
+    im2.set_world2im(undo_xform*image2.world2im());
+
+    ihog_minfo_cost_func *cost;
+    // no masks
+    if (!from_mask_ && !to_mask_)
+    {
+      cost = new ihog_minfo_cost_func(im1, im2, roi_pyramid_[L], xform);
+    }
+    // one mask
+    else if (from_mask_ || to_mask_) {
+      if (from_mask_) {
+        ihog_image<float> image_mask(from_mask_pyramid_(L),w2mask_img1_[L]);
+        ihog_image<float> immask(image_mask);
+        immask.set_world2im(undo_xform*image_mask.world2im());
+        cost = new ihog_minfo_cost_func( im1, im2, immask, roi_pyramid_[L], xform, true);
+      }
+      else {
+        ihog_image<float> image_mask(to_mask_pyramid_(L),w2mask_img2_[L]);
+        ihog_image<float> immask(image_mask);
+        immask.set_world2im(undo_xform*image_mask.world2im());
+        cost = new ihog_minfo_cost_func( im1, im2, immask, roi_pyramid_[L], xform, false);
+      }
+    }
+    // both masks
+    else
+    {
+      ihog_image<float> from_image_mask(from_mask_pyramid_(L),w2mask_img1_[L]);
+      ihog_image<float> f_immask(from_image_mask);
+      f_immask.set_world2im(undo_xform*from_image_mask.world2im());
+
+      ihog_image<float> to_image_mask(to_mask_pyramid_(L),w2mask_img2_[L]);
+      ihog_image<float> t_immask(to_image_mask);
+      t_immask.set_world2im(undo_xform*to_image_mask.world2im());
+
+      cost = new ihog_minfo_cost_func( im1, im2, f_immask, t_immask, roi_pyramid_[L], xform);
+    }
+
+    // now at this level first minimize using exhaustive search
+    double min = 1000.0f; int min_tx, min_ty;
+    int ix = xform.get_translation().x(); int iy = xform.get_translation().y();
+    int r = (int)(scaled_radius/(from_pyramid_.nlevels()-L)); 
+    //vcl_cout << "--- r: " << r << vcl_endl;
+    for (int tx = ix-r; tx < ix + r+1; tx++) {
+      for (int ty = iy-r; ty < iy + r+1; ty++) {
+        //xform.set_translation_only(tx, ty);
+        ihog_transform_2d tform;
+        tform.set_translation_only(tx,ty);
+        vnl_vector<double> param;
+        tform.params(param);
+        double mi = cost->f(param);
+        if (mi < min) { min = mi; min_tx = tx; min_ty = ty; }
+      }
+    }
+    //vcl_cout << "min_tx: " << min_tx << " min_ty: " << min_ty << vcl_endl;
+    xform.set_translation_only(min_tx, min_ty);
+
+    // now refine using Powell
+    vnl_powell minimizer(cost);
+
+    //minimizer.set_trace(true);
+    xform.params(param);
+    minimizer.minimize(param);
+    end_error_ = minimizer.get_end_error();
+    xform.set(param,form);
+    delete cost;
+  }
+}
+
+//: Run the minimization using mutual information cost
+void ihog_minimizer::minimize_using_minfo(ihog_transform_2d& xform)
+{
+  ihog_transform_2d::Form form = xform.form();
+  int n_levels = from_pyramid_.nlevels();
+  vnl_vector<double> param, fx;
+  xform.params(param);
+  // the expression 1.0/(1<<X) is a bit more efficient than std::pow(0.5,X),
+  // and it avoids having to #include <cmath> :       -- PVr
+  double init_scale = 1.0/(1<<n_levels);
+
+  ihog_transform_2d undo_xform;
+  undo_xform.set_zoom_only(1.0/init_scale,0.0,0.0);
+  ihog_transform_2d undo_step;
+  undo_step.set_zoom_only(0.5,0.0,0.0);
+  xform.set_origin( vgl_point_2d<double>(xform.origin().x()*init_scale,
+                                     xform.origin().y()*init_scale) );
+
+  vcl_cout << "initial:\n";
+  vcl_cout << "\t xform, ox: " << xform.origin().x() << " oy: " << xform.origin().y() << " tx: " << xform.get_translation().x() << " ty: " << xform.get_translation().y() << "\n";
+
+  for (int L=from_pyramid_.nlevels()-1; L>=0; --L)
+  {
+    vcl_cout << "BEGIN level L: " << L << "\n";
+    vcl_cout << "\t xform, ox: " << xform.origin().x() << " oy: " << xform.origin().y() << " tx: " << xform.get_translation().x() << " ty: " << xform.get_translation().y() << "\n";
+
+    xform.set_origin( vgl_point_2d<double>(xform.origin().x()*2.0,
+                                           xform.origin().y()*2.0) );
+
+    vcl_cout << "BEGIN level L after ADJUSTMENT: " << L << "\n";
+    vcl_cout << "\t xform, ox: " << xform.origin().x() << " oy: " << xform.origin().y() << " tx: " << xform.get_translation().x() << " ty: " << xform.get_translation().y() << "\n";
+
+    undo_xform = undo_xform * undo_step;
+    ihog_image<float> image1(from_pyramid_(L),w2img1_[L]);
+    ihog_image<float> image2(to_pyramid_(L),w2img2_[L]);
+
+    ihog_image<float> im1(image1);
+    ihog_image<float> im2(image2);
+    vil_gauss_filter_5tap(image1.image(),im1.image(),vil_gauss_filter_5tap_params(2));
+    vil_gauss_filter_5tap(image2.image(),im2.image(),vil_gauss_filter_5tap_params(2));
+    im1.set_world2im(undo_xform*image1.world2im());
+    im2.set_world2im(undo_xform*image2.world2im());
+
+    ihog_minfo_cost_func *cost;
+    // no masks
+    if (!from_mask_ && !to_mask_)
+    {
+      cost = new ihog_minfo_cost_func(im1, im2, roi_pyramid_[L], xform);
+    }
+    // one mask
+    else if (from_mask_ || to_mask_) {
+      if (from_mask_) {
+        ihog_image<float> image_mask(from_mask_pyramid_(L),w2mask_img1_[L]);
+        ihog_image<float> immask(image_mask);
+        immask.set_world2im(undo_xform*image_mask.world2im());
+        cost = new ihog_minfo_cost_func( im1, im2, immask, roi_pyramid_[L], xform, true);
+      }
+      else {
+        ihog_image<float> image_mask(to_mask_pyramid_(L),w2mask_img2_[L]);
+        ihog_image<float> immask(image_mask);
+        immask.set_world2im(undo_xform*image_mask.world2im());
+        cost = new ihog_minfo_cost_func( im1, im2, immask, roi_pyramid_[L], xform, false);
+      }
+    }
+    // both masks
+    else
+    {
+      ihog_image<float> from_image_mask(from_mask_pyramid_(L),w2mask_img1_[L]);
+      ihog_image<float> f_immask(from_image_mask);
+      f_immask.set_world2im(undo_xform*from_image_mask.world2im());
+
+      ihog_image<float> to_image_mask(to_mask_pyramid_(L),w2mask_img2_[L]);
+      ihog_image<float> t_immask(to_image_mask);
+      t_immask.set_world2im(undo_xform*to_image_mask.world2im());
+
+      cost = new ihog_minfo_cost_func( im1, im2, f_immask, t_immask, roi_pyramid_[L], xform);
+    }
+
+    //vnl_levenberg_marquardt minimizer(*cost);
+    vnl_powell minimizer(cost);
+
+    //minimizer.set_trace(true);
+    xform.params(param);
+    minimizer.minimize(param);
+    end_error_ = minimizer.get_end_error();
+    xform.set(param,form);
+    delete cost;
+    vcl_cout << "END level L: " << L << "\n";
+    vcl_cout << "\t xform, ox: " << xform.origin().x() << " oy: " << xform.origin().y() << " tx: " << xform.get_translation().x() << " ty: " << xform.get_translation().y() << "\n";
+
+  }
+  vcl_cout << "FINAL: \n";
+  vcl_cout << "\t xform, ox: " << xform.origin().x() << " oy: " << xform.origin().y() << " tx: " << xform.get_translation().x() << " ty: " << xform.get_translation().y() << "\n";
+
+}
+
 
