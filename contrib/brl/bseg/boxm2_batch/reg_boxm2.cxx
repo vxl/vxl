@@ -19,6 +19,8 @@
 #include <bbas_pro/bbas_register.h>
 #include <bsta/pro/bsta_register.h>
 
+#include <ihog_pro/ihog_register.h>
+
 
 PyObject *
 register_processes(PyObject *self, PyObject *args)
@@ -36,6 +38,7 @@ register_processes(PyObject *self, PyObject *args)
 #endif
   bbas_register::register_process();
   bsta_register::register_process();
+  ihog_register::register_process();
   Py_INCREF(Py_None);
   return Py_None;
 }
@@ -59,6 +62,7 @@ register_datatypes(PyObject *self, PyObject *args)
 #endif
   bbas_register::register_datatype();
   bsta_register::register_datatype();
+  ihog_register::register_datatype();
   Py_INCREF(Py_None);
   return Py_None;
 }
