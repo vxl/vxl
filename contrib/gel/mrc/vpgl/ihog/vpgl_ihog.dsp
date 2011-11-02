@@ -114,6 +114,9 @@ SOURCE=.\ihog_utils.cxx
 SOURCE=.\ihog_sample_grid_bilin.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\ihog_minfo_cost_func.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/vbl_smart_ptr+ihog_world_roi-.cxx
 # End Source File
 # Begin Source File
@@ -154,6 +157,9 @@ SOURCE=.\ihog_transform_2d_sptr.h
 # End Source File
 # Begin Source File
 SOURCE=.\ihog_world_roi_sptr.h
+# End Source File
+# Begin Source File
+SOURCE=.\ihog_minfo_cost_func.h
 # End Source File
 # End Group
 # End Target
