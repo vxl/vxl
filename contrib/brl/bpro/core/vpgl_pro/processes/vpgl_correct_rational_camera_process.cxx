@@ -38,8 +38,8 @@ bool vpgl_correct_rational_camera_process_cons(bprb_func_process& pro)
 //: Execute the process
 bool vpgl_correct_rational_camera_process(bprb_func_process& pro)
 {
-  if (pro.n_inputs() != 1) {
-    vcl_cout << "vpgl_correct_rational_camera_process: The input number should be 1, not " << pro.n_inputs() << vcl_endl;
+  if (pro.n_inputs() != 3) {
+    vcl_cout << "vpgl_correct_rational_camera_process: The input number should be 3, not " << pro.n_inputs() << vcl_endl;
     return false;
   }
 
@@ -129,33 +129,49 @@ bool vpgl_correct_rational_cameras_process(bprb_func_process& pro)
   }
 
   vcl_vector<vpgl_rational_camera<double> > cams;
+  vcl_vector<vpgl_rational_camera<double> > cams_origs;
+  vcl_vector<vpgl_local_rational_camera<double>* > cams_local;
   vcl_vector<vgl_point_2d<double> > corrs;
 
   vcl_vector<vcl_string> out_cam_names;
+  vcl_vector<vcl_string> out_cam_orig_names;
   vul_awk awk(ifs);
+  bool local = true;
   for (; awk; ++awk)
   {
     vcl_stringstream line(awk.line());
-    vcl_string cam_path;
+    vcl_string cam_path, orig_cam_path;
     line >> cam_path;
     if (cam_path.size() < 2) continue;
     double i, j;
     line >> i; line >> j;
+    ifs >> orig_cam_path;
     vcl_cout << "reading cam: " << cam_path << " corr i: " << i << ' ' << j << vcl_endl;
     vcl_string img_name = vul_file::strip_directory(cam_path);
     img_name = vul_file::strip_extension(img_name);
     vcl_string out_cam_name = output_path + img_name + ".rpb";
+    vcl_string out_cam_orig_name = output_path + img_name + "_orig.rpb";
     vcl_cout << "img name: " << out_cam_name << vcl_endl;
 
-
-    vpgl_rational_camera<double> *ratcam = read_rational_camera<double>(cam_path);
-
+    vpgl_local_rational_camera<double> *ratcam = read_local_rational_camera<double>(cam_path);
     if ( !ratcam ) {
-      vcl_cerr << "Failed to load rational camera from file" << cam_path << '\n';
-      return false;
+      local = false;
+      vpgl_rational_camera<double> *ratcam2 = read_rational_camera<double>(cam_path);
+      if ( !ratcam2 ) {
+        vcl_cerr << "Failed to load rational camera from file" << cam_path << '\n';
+        return false;
+      }
+      cams.push_back(*ratcam2);
+    } else {
+      cams_local.push_back(ratcam);
+      vpgl_rational_camera<double> *ratcam2 = read_rational_camera<double>(cam_path);
+      cams.push_back(*ratcam2);
     }
-    cams.push_back(*ratcam);
+    vpgl_rational_camera<double> *ratcam3 = read_rational_camera<double>(orig_cam_path);
+    cams_origs.push_back(*ratcam3);
+    
     out_cam_names.push_back(out_cam_name);
+    out_cam_orig_names.push_back(out_cam_orig_name);
 
     vgl_point_2d<double> cor(i,j);
     corrs.push_back(cor);
@@ -177,12 +193,23 @@ bool vpgl_correct_rational_cameras_process(bprb_func_process& pro)
   vcl_cout << "after adjustment 3D intersection point: " << intersection << vcl_endl;
 
   for (unsigned i = 0; i < cams.size(); i++) {
+    if (local) {
+      vcl_cout << "correcting LOCAL cam!!\n";
+      double u_off,v_off;
+      cams_local[i]->image_offset(u_off,v_off);
+      cams_local[i]->set_image_offset(u_off + cam_trans[i].x(), v_off + cam_trans[i].y());
+      cams_local[i]->save(out_cam_names[i]);
+    } else {
+      double u_off,v_off;
+      cams[i].image_offset(u_off,v_off);
+      cams[i].set_image_offset(u_off + cam_trans[i].x(), v_off + cam_trans[i].y());
+      cams[i].save(out_cam_names[i]);
+    }
     double u_off,v_off;
-    cams[i].image_offset(u_off,v_off);
-    cams[i].set_image_offset(u_off + cam_trans[i].x(), v_off + cam_trans[i].y());
-    cams[i].save(out_cam_names[i]);
+    cams_origs[i].image_offset(u_off,v_off);
+    cams_origs[i].set_image_offset(u_off + cam_trans[i].x(), v_off + cam_trans[i].y());
+    cams_origs[i].save(out_cam_orig_names[i]);
   }
-
   return true;
 }
 
@@ -406,4 +433,63 @@ bool vpgl_correct_rational_cameras_mult_corr_refine_process(bprb_func_process& p
 
   return true;
 }
+
+
+//: initialization
+bool vpgl_get_offsets_process_cons(bprb_func_process& pro)
+{
+  //this process takes one input: the filename
+  bool ok=false;
+  vcl_vector<vcl_string> input_types;
+  input_types.push_back("vpgl_camera_double_sptr");
+  ok = pro.set_input_types(input_types);
+  if (!ok) return ok;
+
+  vcl_vector<vcl_string> output_types;
+  output_types.push_back("double");  // ofset x
+  output_types.push_back("double");  // ofset y
+  ok = pro.set_output_types(output_types);
+  if (!ok) return ok;
+
+  return true;
+}
+
+//: Execute the process
+bool vpgl_get_offsets_process(bprb_func_process& pro)
+{
+  if (pro.n_inputs() != 1) {
+    vcl_cout << "vpgl_correct_rational_camera_process: The input number should be 3, not " << pro.n_inputs() << vcl_endl;
+    return false;
+  }
+
+  // get the inputs
+  vpgl_camera_double_sptr cam = pro.get_input<vpgl_camera_double_sptr>(0);
+
+  vpgl_local_rational_camera<double>* cam_local_rat = dynamic_cast<vpgl_local_rational_camera<double>*>(cam.ptr());
+  if (!cam_local_rat) {
+    vpgl_rational_camera<double>* cam_rational = dynamic_cast<vpgl_rational_camera<double>*>(cam.ptr());
+    if (!cam_rational) {
+      vcl_cerr << "In vpgl_correct_rational_camera_process() input is not of type: vpgl_rational_camera<double>\n";
+      return false;
+    }
+    else {
+      vcl_cout << "In vpgl_correct_rational_camera_process() - correcting rational camera..\n";
+      vpgl_rational_camera<double> cam_out_rational(*cam_rational);
+      double offset_u, offset_v;
+      cam_out_rational.image_offset(offset_u,offset_v);
+      pro.set_output_val<double>(0, offset_u);
+      pro.set_output_val<double>(1, offset_v);
+      return true;
+    }
+  }
+
+  vcl_cout << "In vpgl_correct_rational_camera_process() - correcting LOCAL rational camera..\n";
+  vpgl_local_rational_camera<double> cam_out_local_rational(*cam_local_rat);
+  double offset_u, offset_v;
+  cam_out_local_rational.image_offset(offset_u,offset_v);
+  pro.set_output_val<double>(0, offset_u);
+  pro.set_output_val<double>(1, offset_v);
+  return true;
+}
+
 
