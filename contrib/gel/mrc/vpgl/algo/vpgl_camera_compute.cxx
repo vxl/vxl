@@ -1246,7 +1246,7 @@ vpgl_generic_camera_compute::interp_pair(vgl_ray_3d<double> const& r0,
 //
 bool vpgl_generic_camera_compute::
 compute( vpgl_local_rational_camera<double> const& rat_cam,
-         int ni, int nj, vpgl_generic_camera<double> & gen_cam)
+         int ni, int nj, vpgl_generic_camera<double> & gen_cam, unsigned level)
 {
   // get z bounds
   double zoff = rat_cam.offset(vpgl_rational_camera<double>::Z_INDX);
@@ -1377,8 +1377,12 @@ compute( vpgl_local_rational_camera<double> const& rat_cam,
         }
       }
   }
-  gen_cam = vpgl_generic_camera<double>(ray_pyr[0]);
-  return true;
+  //gen_cam = vpgl_generic_camera<double>(ray_pyr[0]);
+  if ((int)level < n_levels) {
+    gen_cam = vpgl_generic_camera<double>(ray_pyr[level]);
+    return true;
+  } else
+    return false;
 }
 
 
@@ -1429,11 +1433,11 @@ compute( vpgl_affine_camera<double> const& aff_cam, int ni, int nj,
 
 bool vpgl_generic_camera_compute::
 compute( vpgl_camera_double_sptr const& camera, int ni, int nj,
-         vpgl_generic_camera<double> & gen_cam)
+         vpgl_generic_camera<double> & gen_cam, unsigned level)
 {
   if (vpgl_local_rational_camera<double>* cam =
       dynamic_cast<vpgl_local_rational_camera<double>*>(camera.ptr()))
-    return vpgl_generic_camera_compute::compute(*cam, ni, nj, gen_cam);
+    return vpgl_generic_camera_compute::compute(*cam, ni, nj, gen_cam, level);
 
   if (vpgl_proj_camera<double>* cam =
       dynamic_cast<vpgl_proj_camera<double>*>(camera.ptr()))
