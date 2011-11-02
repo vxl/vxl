@@ -146,6 +146,7 @@ class boxm2_scene : public vbl_ref_count
     void set_blocks(vcl_map<boxm2_block_id, boxm2_block_metadata> blocks) { blocks_ = blocks; }
     void add_block_metadata(boxm2_block_metadata data);
     void set_appearances(vcl_vector<vcl_string> const& appearances){ this->appearances_ = appearances; }
+    void set_num_illumination_bins(int num_bins) { this->num_illumination_bins_ = num_bins; }
 
     //: scene path mutators
     void set_xml_path(vcl_string path)              { xml_path_ = path; }
