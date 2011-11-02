@@ -25,3 +25,6 @@ SUBDIRS(bbas_pro)
 #icam process class
 SUBDIRS(icam_pro)
 
+#ihog process class
+SUBDIRS(ihog_pro)
+
