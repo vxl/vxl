@@ -111,7 +111,7 @@ bool boxm2_roi_init_process_globals::roi_init( vcl_string const& image_path,
   //vcl_cout << "after clip: " << *bb << vcl_endl;
   //vcl_cout << "bb->width = " << bb->width() << " bb->height = " << bb->height() << vcl_endl;
   if (bb->width() <= 0 || bb->height() <= 0) {
-    vcl_cerr << "boxm2_roi_init_process::roi_init()-- clipping box is out of image boundaries\n";
+    //vcl_cerr << "bvxm_roi_init_process::roi_init()-- clipping box is out of image boundaries\n";
     return false;
   }
 
@@ -355,7 +355,7 @@ bool boxm2_roi_init_process(bprb_func_process& pro)
 
   vpgl_local_rational_camera<double> local_camera;
   if (!roi_init(image_path, rat_camera, scene, uncertainty, img_ptr, local_camera, convert_to_8_bit)) {
-    vcl_cerr << "The process has failed!\n";
+    //vcl_cerr << "The process has failed!\n";
     return false;
   }
 
