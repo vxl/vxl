@@ -22,16 +22,17 @@
 //  Modifications <none>
 // \endverbatim
 
+#include <vcl_iosfwd.h>
 #include <vcl_string.h>
 #include <vbl/vbl_array_2d.h>
 #include <vgl/vgl_ray_3d.h>
 #include <vgl/vgl_point_3d.h>
 #include <vpgl/vpgl_camera.h>
+
 template <class T>
 class vpgl_generic_camera : public vpgl_camera<T>
 {
  public:
-
   vpgl_generic_camera();
   vpgl_generic_camera( vbl_array_2d<vgl_ray_3d<T> > const& rays);
 
@@ -39,7 +40,9 @@ class vpgl_generic_camera : public vpgl_camera<T>
 
   virtual vcl_string type_name() const { return "vpgl_generic_camera"; }
 
-  //: The generic camera interface. u represents image column, v image row. Finds projection using a pyramid search over the rays and so not particularly efficient.
+  //: The generic camera interface.
+  // \p u represents image column, \p v image row.
+  // Finds projection using a pyramid search over the rays and so not particularly efficient.
   virtual void project(const T x, const T y, const T z, T& u, T& v) const;
 
   //: the number of columns (u coordinate) in the ray image
@@ -51,7 +54,7 @@ class vpgl_generic_camera : public vpgl_camera<T>
   unsigned rows() const { return rays_[0].rows();}
 
   //: the number of pyramid levels
-  unsigned n_levels(){return static_cast<unsigned>(n_levels_);}
+  unsigned n_levels() const {return static_cast<unsigned>(n_levels_);}
 
   //: the ray corresponding to a given pixel
   vgl_ray_3d<T> ray(const T u, const T v) const;
@@ -64,10 +67,10 @@ class vpgl_generic_camera : public vpgl_camera<T>
 
 
   //: the nearest ray origin to the coordinate origin
-  vgl_point_3d<T> min_ray_origin(){return min_ray_origin_;}
+  vgl_point_3d<T> min_ray_origin() const {return min_ray_origin_;}
 
   //: the furthest ray origin from the coordinate origin
-  vgl_point_3d<T> max_ray_origin(){return max_ray_origin_;}
+  vgl_point_3d<T> max_ray_origin() const {return max_ray_origin_;}
 
   //: debug function
   void print_orig(int level);
