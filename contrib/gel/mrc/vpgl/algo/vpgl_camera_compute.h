@@ -127,10 +127,10 @@ class vpgl_generic_camera_compute
 {
  public:
 
-  //: Compute a generic camera from a local rational camera
+  //: Compute a generic camera from a local rational camera, level is the level of pyramid to return
   static bool compute( vpgl_local_rational_camera<double> const& rat_cam,
                        int ni, int nj,
-                       vpgl_generic_camera<double> & gen_cam);
+                       vpgl_generic_camera<double> & gen_cam, unsigned level = 0);
 
   //: Compute a generic camera from a projective camera. Also covers the perspetive case
   static bool compute( vpgl_proj_camera<double> const& prj_cam,
@@ -153,7 +153,7 @@ class vpgl_generic_camera_compute
 
   //::convert abstract camera to generic camera
   static bool compute( vpgl_camera_double_sptr const& camera, int ni, int nj,
-                       vpgl_generic_camera<double> & gen_cam);
+                       vpgl_generic_camera<double> & gen_cam, unsigned level = 0);
  private:
   //utility methods 
   //: interpolate rays to fill next higher resolution pyramid layer
