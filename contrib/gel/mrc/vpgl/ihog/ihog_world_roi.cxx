@@ -44,7 +44,7 @@ ihog_world_roi::sample_weights( const ihog_image<float>& image) const
       vgl_point_2d<double> im_p = w2i(p);
       if (im_p.x() < 0 || im_p.x() > ni-1 || im_p.y() < 0 || im_p.y() > nj-1)
         *vec_data = 0.0;
-      else{
+      else {
         double xdist = (im_p.x() > (ni-1)/2.0)?((ni-1)-im_p.x()):(im_p.x());
         double ydist = (im_p.y() > (nj-1)/2.0)?((nj-1)-im_p.y()):(im_p.y());
         double dist = (xdist < ydist)?xdist:ydist;
