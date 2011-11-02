@@ -38,9 +38,9 @@ void vpgl_register::register_process()
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vpgl_resample_perspective_camera_process, "vpglResamplePerspectiveCameraProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vpgl_generate_3d_point_from_depth_process, "vpglGenerate3dPointFromDepthProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vpgl_get_view_direction_at_point_process, "vpglGetViewDirectionAtPointProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vpgl_get_offsets_process, "vpglGetOffsetsProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vpgl_get_bounding_box_process, "vpglGetBoundingBoxProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vpgl_nitf_footprint_process, "vpglNITFFootprintProcess");
-
 }
 
 
