@@ -72,6 +72,9 @@ class vpgl_generic_camera : public vpgl_camera<T>
   //: debug function
   void print_orig(int level);
 
+  //: visualization
+  void print_to_vrml(int level, vcl_ostream& os);
+
  protected:
   void nearest_ray_to_point(vgl_point_3d<T> const& p,
                             int& nearest_r, int& nearest_c) const;
