@@ -11,6 +11,7 @@ SOURCES += ihog_transform_2d.cxx
 SOURCES += ihog_sample_grid_bilin.cxx
 MANPAGE_SOURCES += ihog_image.h
 SOURCES += ihog_utils.cxx
+SOURCES += ihog_minfo_cost_func.cxx
 
 MANPAGE_SOURCES += ihog_transform_2d_sptr.h
 MANPAGE_SOURCES += ihog_world_roi_sptr.h
