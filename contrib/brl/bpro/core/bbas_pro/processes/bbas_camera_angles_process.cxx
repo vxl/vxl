@@ -50,30 +50,42 @@ bool bbas_camera_angles_process(bprb_func_process& pro)
 
   //get the inputs
   vpgl_camera_double_sptr camera = pro.get_input<vpgl_camera_double_sptr>(0);
-  // make sure camera is local rational
+
+  double pt_x = pro.get_input<float>(1);
+  double pt_y = pro.get_input<float>(2);
+  double pt_z = pro.get_input<float>(3);
+
+  // make sure camera is using a local coordinate frame
   vpgl_local_rational_camera<double> *local_cam = dynamic_cast<vpgl_local_rational_camera<double>*>(camera.ptr());
   if (!local_cam) {
-      vcl_cerr << "ERROR: bbas_camera_angles_process : error casting camera to a vpgl_local_rational_camera<double> " << vcl_endl;
-      return false;
+      vpgl_rational_camera<double> *rcam = dynamic_cast<vpgl_rational_camera<double>*>(camera.ptr());
+      if (rcam) {
+          // rational camera operates on geodetic coordinates, but we need a Euclidean space.
+          double lat = pt_y;
+          double lon = pt_x;
+          double el = pt_z;
+          bgeo_lvcs lvcs(lat, lon, el, bgeo_lvcs::wgs84, 0.0, 0.0, bgeo_lvcs::DEG, bgeo_lvcs::METERS);
+          camera = new vpgl_local_rational_camera<double>(lvcs,*rcam);
+          // should return 0,0,0 since point was used as origin
+          lvcs.global_to_local(lon, lat, el, bgeo_lvcs::wgs84, pt_x, pt_y, pt_z);
+      }
   }
 
-  float pt_x = pro.get_input<float>(1);
-  float pt_y = pro.get_input<float>(2);
-  float pt_z = pro.get_input<float>(3);
-
-  vgl_point_3d<float> focus_pt(pt_x, pt_y, pt_z);
+  vgl_point_3d<double> focus_pt(pt_x, pt_y, pt_z);
 
   // project point into image
   double pt_u, pt_v;
-  local_cam->project(pt_x,pt_y,pt_z, pt_u,pt_v);
+  camera->project(pt_x,pt_y,pt_z, pt_u,pt_v);
   
   // backproject to plane above and below point
-  const double plane_dist = 5.0; // arbitrary distance above and below focus point to backproject to.
+  const double plane_dist = 10.0; // arbitrary distance above and below focus point to backproject to.
+  const double z_low = pt_z - plane_dist;
+  const double z_high = pt_z + plane_dist;
   vgl_point_2d<double> img_pt(pt_u,pt_v);
-  vgl_point_3d<double> focus_pt_high(pt_x, pt_y, pt_z + plane_dist);
-  vgl_point_3d<double> focus_pt_low(pt_x, pt_y,pt_z - plane_dist);
-  vgl_plane_3d<double> plane_high(0.0, 0.0, 1.0, -(pt_z + plane_dist));
-  vgl_plane_3d<double> plane_low(0.0, 0.0, 1.0, -(pt_z - plane_dist));
+  vgl_point_3d<double> focus_pt_high(pt_x, pt_y, z_high);
+  vgl_point_3d<double> focus_pt_low(pt_x, pt_y, z_low);
+  vgl_plane_3d<double> plane_high(0.0, 0.0, 1.0, -z_high);
+  vgl_plane_3d<double> plane_low(0.0, 0.0, 1.0, -z_low);
   vpgl_backproject::bproj_plane(camera.ptr(), img_pt, plane_high, focus_pt_high, focus_pt_high);
   vpgl_backproject::bproj_plane(camera.ptr(), img_pt, plane_low, focus_pt_low, focus_pt_low);
 
