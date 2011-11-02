@@ -35,7 +35,7 @@
 #ifndef MOG_TYPE
     #define MOG_TYPE int2
     #define CONVERT_FUNC(lhs,data) uchar8 lhs = as_uchar8(data)
-    #define CONVERT_FUNC_SAT_RTE(lhs,data) lhs = convert_uchar8_sat_rte(data)
+    #define CONVERT_FUNC_SAT_RTE(lhs,data) lhs = as_int2(convert_uchar8_sat_rte(data)); 
     #define NORM 255
 #endif
 
