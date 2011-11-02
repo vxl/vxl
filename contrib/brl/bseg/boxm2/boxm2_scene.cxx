@@ -459,6 +459,12 @@ void x_write(vcl_ostream &os, boxm2_scene& scene, vcl_string name)
     apms.add_attribute("apm", apps[i]);
     apms.x_write(os);
   }
+  if (scene.num_illumination_bins() > 0) {
+    vsl_basic_xml_element apms(APM_TAG);
+    vcl_stringstream ss; ss << scene.num_illumination_bins();
+    apms.add_attribute("num_illumination_bins", ss.str());
+    apms.x_write(os);
+  }
 
   //write block information for each block
   vcl_map<boxm2_block_id, boxm2_block_metadata> blocks = scene.blocks();
