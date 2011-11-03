@@ -64,7 +64,7 @@ bocl_device_info::bocl_device_info(cl_device_id* device)
   if (!check_val(status,CL_SUCCESS, "clGetDeviceInfo CL_DEVICE_MAX_WORK_ITEM_DIMENSIONS failed."))
     return;
   //get max work item sizes
-  max_work_item_sizes_ = (vcl_size_t*)vcl_malloc(max_dimensions_ * sizeof(vcl_size_t));
+  max_work_item_sizes_ = new vcl_size_t[max_dimensions_]; //(vcl_size_t*)vcl_malloc(max_dimensions_ * sizeof(vcl_size_t));
   status = clGetDeviceInfo(*device_, CL_DEVICE_MAX_WORK_ITEM_SIZES, sizeof(vcl_size_t) * max_dimensions_, (void*)max_work_item_sizes_, NULL);
   if (!check_val(status, CL_SUCCESS, "clGetDeviceInfo CL_DEVICE_MAX_WORK_ITEM_SIZES failed."))
     return;
@@ -203,7 +203,7 @@ bocl_device_info::~bocl_device_info()
 {
   if (max_work_item_sizes_)
   {
-    vcl_free(max_work_item_sizes_);
+    delete[] max_work_item_sizes_; //vcl_free(max_work_item_sizes_);
     max_work_item_sizes_ = NULL;
   }
 }
