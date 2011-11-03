@@ -6,9 +6,9 @@ __kernel
 void
 batch_update_appearance(__global RenderSceneInfo  * info,
                         __global MOG_TYPE         * mog,
-                        __global int              * sampleIndex,      //starting location for each cell in sample buffer
-                        __global float            * sampleInt,        //intensities for each cell
-                        __global float            * sampleVis,        //visibility vals for each cell
+                        __global uint             * sampleIndex,      //starting location for each cell in sample buffer
+                        __global uchar            * sampleInt,        //intensities for each cell
+                        __global uchar            * sampleVis,        //visibility vals for each cell
                         __global int              * totalNumSamples,       //total number of samples for this block
                         __global float            * output)
 {
@@ -22,19 +22,20 @@ batch_update_appearance(__global RenderSceneInfo  * info,
   if (gid<datasize)
   {
     //calculate the number of samples for this cell
-    int start = sampleIndex[gid]; 
-    int end   = (gid==datasize-1) ? (*totalNumSamples) : sampleIndex[gid+1]; 
-    int numSamples = end-start; 
+    uint start = sampleIndex[gid]; 
+    uint end   = (gid==datasize-1) ? (*totalNumSamples) : sampleIndex[gid+1]; 
+    int numSamples = (int) (end-start); 
     if(numSamples <= 0) 
       return; 
     
     //create global float* buffers for stat calcs
-    global float* obs = &sampleInt[start]; //sampleInt + start; 
-    global float* vis = &sampleVis[start]; // + start; 
+    global char* obs = &sampleInt[start]; //sampleInt + start; 
+    global char* vis = &sampleVis[start]; // + start; 
     
     //calculatea app model
     float min_sigma = .02; 
     float8 mog3 = weighted_mog3_em( obs, vis, numSamples, min_sigma ); 
+    
     //DEBUGGER MEAN_VAR
 /*
     float2 mean_var = weighted_mean_var(obs, vis, numSamples); 

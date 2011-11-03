@@ -20,6 +20,7 @@
 
 //bsta sigma normalizer...
 #include <bsta/algo/bsta_sigma_normalizer.h>
+#include <vul/vul_timer.h>
 
 namespace boxm2_ocl_paint_batch_process_globals
 {
@@ -87,6 +88,7 @@ bool boxm2_ocl_paint_batch_process(bprb_func_process& pro)
   }
 
   // iterate the scene block by block and write to output
+  vul_timer totalTime; 
   vcl_vector<boxm2_block_id> blk_ids = scene->get_block_ids();
   vcl_vector<boxm2_block_id>::iterator id = blk_ids.begin();
   for (; id != blk_ids.end(); ++id) {
@@ -94,6 +96,7 @@ bool boxm2_ocl_paint_batch_process(bprb_func_process& pro)
     vcl_cout<<" block "<<bid<<vcl_endl;
     boxm2_ocl_paint_batch::paint_block(scene,device,str_cache,ocl_cache,queue,data_type,bid,n_table);
   }
+  vcl_cout<<"boxm2_ocl_paint_batch_process:: Total time - "<<(float) totalTime.all()/1000.0f<<" sec"<<vcl_endl; 
 
   return true;
 }
