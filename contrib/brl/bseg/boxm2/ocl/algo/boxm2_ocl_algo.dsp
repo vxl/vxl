@@ -103,6 +103,9 @@ SOURCE=.\boxm2_ocl_camera_converter.cxx
 # Begin Source File
 SOURCE=.\boxm2_ocl_cone_update_function.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\boxm2_ocl_paint_batch.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
@@ -114,6 +117,9 @@ SOURCE=.\boxm2_ocl_camera_converter.h
 # End Source File
 # Begin Source File
 SOURCE=.\boxm2_ocl_cone_update_function.h
+# End Source File
+# Begin Source File
+SOURCE=.\boxm2_ocl_paint_batch.h
 # End Source File
 # End Group
 # End Target

@@ -194,6 +194,9 @@ SOURCE=.\processes/boxm2_ocl_ingest_dem_process.cxx
 # Begin Source File
 SOURCE=.\processes/boxm2_ocl_visualize_change_process.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\processes/boxm2_ocl_paint_batch_process.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"

@@ -99,9 +99,6 @@ SOURCE=.\test_driver.cxx
 SOURCE=.\test_lvcs.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\test_sun_pos.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\test_include.cxx
 # End Source File
 # End Group
