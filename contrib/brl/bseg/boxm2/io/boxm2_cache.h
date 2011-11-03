@@ -57,7 +57,7 @@ class boxm2_cache: public vbl_ref_count
 
   //: returns data pointer to data specified by ID and data_type
   template <boxm2_data_type T>
-  boxm2_data<T>* get_data(boxm2_block_id id);
+  boxm2_data<T>* get_data(boxm2_block_id id, vcl_size_t num_bytes=0, bool read_only=true);
 
   //: dumps writeable data onto disk
   // -- pure virtual method; see specialisations
@@ -92,9 +92,9 @@ class boxm2_cache: public vbl_ref_count
 //: returns a boxm2_data<T>* from the cache
 //  This is a work around for the lack of support of virtual templated functions
 template <boxm2_data_type T>
-boxm2_data<T>* boxm2_cache::get_data(boxm2_block_id id)
+boxm2_data<T>* boxm2_cache::get_data(boxm2_block_id id, vcl_size_t num_bytes, bool read_only)
 {
-  boxm2_data_base* base = this->get_data_base(id, boxm2_data_traits<T>::prefix());
+  boxm2_data_base* base = this->get_data_base(id, boxm2_data_traits<T>::prefix(), num_bytes, read_only);
   return static_cast<boxm2_data<T>* >(base);
 }
 

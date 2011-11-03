@@ -198,9 +198,11 @@ void boxm2_lru_cache::remove_data_base(boxm2_block_id id, vcl_string type)
     boxm2_data_base* litter = data_map[id];
     if (!litter->read_only_) {
       // save it
-      vcl_cout<<"boxm2_lru_cache::remove_data_base of type "<<type<<"; saving to disk"<<vcl_endl;
+      vcl_cout<<"boxm2_lru_cache::remove_data_base "<<type<<":"<<id<<"; saving to disk"<<vcl_endl;
       boxm2_sio_mgr::save_block_data_base(scene_dir_, id, litter, type);
     }
+    else
+      vcl_cout<<"boxm2_lru_cache::remove_data_base "<<type<<":"<<id<<"; not saving to disk"<<vcl_endl;
     // now throw it away
     delete litter;
     data_map.erase(rem);
