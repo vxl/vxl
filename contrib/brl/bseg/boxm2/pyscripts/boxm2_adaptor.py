@@ -69,12 +69,15 @@ def load_cpp(scene_str) :
   cache = dbvalue(id, type);
   return scene, cache; 
 
-# describe scene process
-  
+# describe scene process, returns the path containing scene data
 def describe_scene(scene):
   boxm2_batch.init_process("boxm2DescribeSceneProcess");
   boxm2_batch.set_input_from_db(0, scene);
   boxm2_batch.run_process();
+  (id, type) = boxm2_batch.commit_output(0); 
+  dataPath = boxm2_batch.get_output_string(id); 
+  return dataPath; 
+  
 ###############################################
 # Model building stuff
 ###############################################
@@ -634,3 +637,22 @@ def blob_precision_recall(cd_img, gt_img, mask_img=None) :
   #return tuple of true positives, true negatives, false positives, etc..
   return (precision, recall);
 
+
+#########################################################################
+#Batch update process
+#########################################################################
+def update_aux_per_view(scene, cache, img, cam, imgString, device=None) : 
+  if cache.type == "boxm2_cache_sptr" :
+    print "boxm2_batch CPU update aux per view not yet implemented";
+  elif cache.type == "boxm2_opencl_cache_sptr" and device : 
+    boxm2_batch.init_process("boxm2OclUpdateAuxPerViewProcess");
+    boxm2_batch.set_input_from_db(0, device);
+    boxm2_batch.set_input_from_db(1, scene);
+    boxm2_batch.set_input_from_db(2, cache);
+    boxm2_batch.set_input_from_db(3, cam);
+    boxm2_batch.set_input_from_db(4, img);
+    boxm2_batch.set_input_string(5, imgString);
+    boxm2_batch.run_process();
+  else:
+    print "ERROR: Cache type not recognized: ", cache.type; 
+   
