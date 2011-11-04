@@ -18,8 +18,8 @@
 // Scans through training_images and eigenvectors and deletes the
 // elements thereof.
 //
-//.status under development
-//.author Brendan McCane
+// \status under development
+// \author Brendan McCane
 //----------------------------------------------------------------------
 
 EigenFace::~EigenFace()
@@ -29,7 +29,7 @@ EigenFace::~EigenFace()
   // delete contents of the training images vector
   vcl_vector<vnl_vector<double> *>::iterator iter;
   for (iter=training_images.begin();
-     iter!=training_images.end(); iter++)
+       iter!=training_images.end(); iter++)
     delete *iter;
 
   // delete contents of the eigenvectors
@@ -38,7 +38,7 @@ EigenFace::~EigenFace()
 
   // delete contents of the encoded_training_images
   for (iter=encoded_training_images.begin();
-     iter!=encoded_training_images.end(); iter++)
+       iter!=encoded_training_images.end(); iter++)
     delete *iter;
 
   // delete contents of the training labels
@@ -53,12 +53,12 @@ EigenFace::~EigenFace()
 // Converts the input training image into a vector first, then adds
 // this vector to the list.
 //
-// .param Image *im: the image to add
-// .param char *label: the class label for the image
-// .ret bool: success or otherwise of the insertion procedure
+// \param im    : the image to add
+// \param label : the class label for the image
+// \returns bool: success or otherwise of the insertion procedure
 //
-//.status under development
-//.author Brendan McCane
+// \status under development
+// \author Brendan McCane
 //----------------------------------------------------------------------
 
 bool EigenFace::add_training_image(Image *im, const char * label)
@@ -76,7 +76,7 @@ bool EigenFace::add_training_image(Image *im, const char * label)
     return false;
   }
   training_images.push_back(image_vector);
-  training_labels.push_back(strdup(label));
+  training_labels.push_back(strndup(label,1024));
   // postconditions: elements actually inserted
   assert(training_images.back()==image_vector);
   assert(vcl_strcmp(training_labels.back(),label)==0);
@@ -88,11 +88,11 @@ bool EigenFace::add_training_image(Image *im, const char * label)
 //
 // Returns the requested eigenvector if it exists, NULL if it doesn't.
 //
-// .param int i: the index of the requested eigenvector
-// .ret vnl_vector<double>: the requested eigenvector
+// \param i: the index of the requested eigenvector
+// \returns vnl_vector<double>: the requested eigenvector
 //
-//.status under development
-//.author Brendan McCane
+// \status under development
+// \author Brendan McCane
 //----------------------------------------------------------------------
 
 vnl_vector<double> *EigenFace::get_eigenvector(int i)
@@ -112,11 +112,11 @@ vnl_vector<double> *EigenFace::get_eigenvector(int i)
 //
 // Returns the requested eigenvalue if it exists, 0 if it doesn't.
 //
-// .param int i: the index of the requested eigenvector
-// .ret double: the requested eigenvalue
+// \param i: the index of the requested eigenvector
+// \returns double: the requested eigenvalue
 //
-//.status under development
-//.author Brendan McCane
+// \status under development
+// \author Brendan McCane
 //----------------------------------------------------------------------
 
 double EigenFace::get_eigenvalue(int i)
@@ -161,8 +161,8 @@ void EigenFace::cleanup()
 // success, false on failure. This will populate the eigenvectors and
 // eigenvalues vectors.
 //
-//.status under development
-//.author Brendan McCane
+// \status under development
+// \author Brendan McCane
 //----------------------------------------------------------------------
 
 bool EigenFace::calculate_eigenfaces()
@@ -241,11 +241,11 @@ void EigenFace::check_training()
 // Convert the input image to a 1d vector by stacking the rows of the
 // image on top of each other (vertically).
 //
-// .param Image *im: the image to convert
-// .ret vnl_vector<double> *: the resultant vector
+// \param im: the image to convert
+// \returns vnl_vector<double> *: the resultant vector
 //
-//.status under development
-//.author Brendan McCane
+// \status under development
+// \author Brendan McCane
 //----------------------------------------------------------------------
 
 vnl_vector<double> *EigenFace::convert_image_to_vector(Image *im)
@@ -265,10 +265,10 @@ vnl_vector<double> *EigenFace::convert_image_to_vector(Image *im)
 //
 // Check to see if the calculated vectors are in fact eigenvectors.
 //
-// .ret bool: true if eigenvectors, false otherwise
+// \returns bool: true if eigenvectors, false otherwise
 //
-//.status under development
-//.author Brendan McCane
+// \status under development
+// \author Brendan McCane
 //----------------------------------------------------------------------
 
 bool EigenFace::check_eigenvectors()
@@ -300,8 +300,8 @@ bool EigenFace::check_eigenvectors()
 //
 // Save each of the eigenvectors as an image.
 //
-//.status under development
-//.author Brendan McCane
+// \status under development
+// \author Brendan McCane
 //----------------------------------------------------------------------
 
 void EigenFace::save_as_images(int width, int height)
@@ -337,8 +337,8 @@ void EigenFace::save_as_images(int width, int height)
 //
 // Encode all training images for later classification.
 //
-//.status under development
-//.author Brendan McCane
+// \status under development
+// \author Brendan McCane
 //----------------------------------------------------------------------
 void EigenFace::encode_training_images()
 {
@@ -354,12 +354,11 @@ void EigenFace::encode_training_images()
 //
 // Given an input image, encode it as a vector of weights.
 //
-// .param Image *im: the input image
+// \param im: the input image
+// \returns vnl_vector<double>*: the vector of weights
 //
-// .ret vnl_vector<double>*: the vector of weights
-//
-//.status under development
-//.author Brendan McCane
+// \status under development
+// \author Brendan McCane
 //----------------------------------------------------------------------
 
 vnl_vector<double>* EigenFace::encode(Image *im)
@@ -397,12 +396,11 @@ vnl_vector<double>* EigenFace::encode(vnl_vector<double> *t_vec)
 //
 // Given an input set of weights, rebuild an image.
 //
-// .param vnl_vector<double>*: the input set of weights
+// \param wts : the input set of weights
+// \returns vnl_vector<double>*: the reconstructed image in a vector
 //
-// .ret vnl_vector<double>*: the reconstructed image in a vector
-//
-//.status under development
-//.author Brendan McCane
+// \status under development
+// \author Brendan McCane
 //----------------------------------------------------------------------
 
 vnl_vector<double>* EigenFace::decode(vnl_vector<double> *wts)
@@ -421,17 +419,13 @@ vnl_vector<double>* EigenFace::decode(vnl_vector<double> *wts)
 // Try to classify the given image using k-nearest neighbours
 //
 // \param im        the image to classify
-//
 // \param k         the number of nearest neighbours to use
-//
 // \param dim       the number of dimensions of the eigenvectors to use
-//
 // \param threshold distances above this threshold are treated as not recognised
-//
 // \return the label of the recognised image or NULL if unsuccessful
 //
-//.status under development
-//.author Brendan McCane
+// \status under development
+// \author Brendan McCane
 //----------------------------------------------------------------------
 
 char *EigenFace::classify(Image *im, double threshold, int k, int dim)
@@ -504,8 +498,8 @@ char *EigenFace::classify(Image *im, double threshold, int k, int dim)
 //
 // \param basefile  the basename of the files
 //
-//.status under development
-//.author Brendan McCane
+// \status under development
+// \author Brendan McCane
 //----------------------------------------------------------------------
 
 void EigenFace::output_xgobi(char *basefile)
