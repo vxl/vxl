@@ -275,11 +275,15 @@ void ihog_minimizer::minimize_exhaustive_minfo(int radius, ihog_transform_2d& xf
 
   for (int L=from_pyramid_.nlevels()-1; L>=0; --L)
   {
-    //vcl_cout << "-- L: " << L << vcl_endl;
+#ifdef DEBUG
+    vcl_cout << "-- L: " << L << vcl_endl;
+#endif
     xform.set_origin( vgl_point_2d<double>(xform.origin().x()*2.0,
                                            xform.origin().y()*2.0) );
     scaled_radius = scaled_radius*2.0;
-    //vcl_cout << "--- scaled_radius: " << scaled_radius << vcl_endl;
+#ifdef DEBUG
+    vcl_cout << "--- scaled_radius: " << scaled_radius << vcl_endl;
+#endif
     undo_xform = undo_xform * undo_step;
     ihog_image<float> image1(from_pyramid_(L),w2img1_[L]);
     ihog_image<float> image2(to_pyramid_(L),w2img2_[L]);
@@ -328,11 +332,14 @@ void ihog_minimizer::minimize_exhaustive_minfo(int radius, ihog_transform_2d& xf
 
     // now at this level first minimize using exhaustive search
     double min = 1000.0f; int min_tx, min_ty;
-    int ix = xform.get_translation().x(); int iy = xform.get_translation().y();
-    int r = (int)(scaled_radius/(from_pyramid_.nlevels()-L)); 
-    //vcl_cout << "--- r: " << r << vcl_endl;
-    for (int tx = ix-r; tx < ix + r+1; tx++) {
-      for (int ty = iy-r; ty < iy + r+1; ty++) {
+    int ix = int(xform.get_translation().x());
+    int iy = int(xform.get_translation().y());
+    int r  = int(scaled_radius/(from_pyramid_.nlevels()-L));
+#ifdef DEBUG
+    vcl_cout << "--- r: " << r << vcl_endl;
+#endif
+    for (int tx = ix-r; tx < ix + r+1; ++tx) {
+      for (int ty = iy-r; ty < iy + r+1; ++ty) {
         //xform.set_translation_only(tx, ty);
         ihog_transform_2d tform;
         tform.set_translation_only(tx,ty);
@@ -342,7 +349,9 @@ void ihog_minimizer::minimize_exhaustive_minfo(int radius, ihog_transform_2d& xf
         if (mi < min) { min = mi; min_tx = tx; min_ty = ty; }
       }
     }
-    //vcl_cout << "min_tx: " << min_tx << " min_ty: " << min_ty << vcl_endl;
+#ifdef DEBUG
+    vcl_cout << "min_tx: " << min_tx << " min_ty: " << min_ty << vcl_endl;
+#endif
     xform.set_translation_only(min_tx, min_ty);
 
     // now refine using Powell
@@ -375,19 +384,19 @@ void ihog_minimizer::minimize_using_minfo(ihog_transform_2d& xform)
   xform.set_origin( vgl_point_2d<double>(xform.origin().x()*init_scale,
                                      xform.origin().y()*init_scale) );
 
-  vcl_cout << "initial:\n";
-  vcl_cout << "\t xform, ox: " << xform.origin().x() << " oy: " << xform.origin().y() << " tx: " << xform.get_translation().x() << " ty: " << xform.get_translation().y() << "\n";
+  vcl_cout << "initial:\n"
+           << "\t xform, ox: " << xform.origin().x() << " oy: " << xform.origin().y() << " tx: " << xform.get_translation().x() << " ty: " << xform.get_translation().y() << '\n';
 
   for (int L=from_pyramid_.nlevels()-1; L>=0; --L)
   {
-    vcl_cout << "BEGIN level L: " << L << "\n";
-    vcl_cout << "\t xform, ox: " << xform.origin().x() << " oy: " << xform.origin().y() << " tx: " << xform.get_translation().x() << " ty: " << xform.get_translation().y() << "\n";
+    vcl_cout << "BEGIN level L: " << L << '\n'
+             << "\t xform, ox: " << xform.origin().x() << " oy: " << xform.origin().y() << " tx: " << xform.get_translation().x() << " ty: " << xform.get_translation().y() << '\n';
 
     xform.set_origin( vgl_point_2d<double>(xform.origin().x()*2.0,
                                            xform.origin().y()*2.0) );
 
-    vcl_cout << "BEGIN level L after ADJUSTMENT: " << L << "\n";
-    vcl_cout << "\t xform, ox: " << xform.origin().x() << " oy: " << xform.origin().y() << " tx: " << xform.get_translation().x() << " ty: " << xform.get_translation().y() << "\n";
+    vcl_cout << "BEGIN level L after ADJUSTMENT: " << L << '\n'
+             << "\t xform, ox: " << xform.origin().x() << " oy: " << xform.origin().y() << " tx: " << xform.get_translation().x() << " ty: " << xform.get_translation().y() << '\n';
 
     undo_xform = undo_xform * undo_step;
     ihog_image<float> image1(from_pyramid_(L),w2img1_[L]);
@@ -444,13 +453,10 @@ void ihog_minimizer::minimize_using_minfo(ihog_transform_2d& xform)
     end_error_ = minimizer.get_end_error();
     xform.set(param,form);
     delete cost;
-    vcl_cout << "END level L: " << L << "\n";
-    vcl_cout << "\t xform, ox: " << xform.origin().x() << " oy: " << xform.origin().y() << " tx: " << xform.get_translation().x() << " ty: " << xform.get_translation().y() << "\n";
-
+    vcl_cout << "END level L: " << L << '\n'
+             << "\t xform, ox: " << xform.origin().x() << " oy: " << xform.origin().y() << " tx: " << xform.get_translation().x() << " ty: " << xform.get_translation().y() << '\n';
   }
-  vcl_cout << "FINAL: \n";
-  vcl_cout << "\t xform, ox: " << xform.origin().x() << " oy: " << xform.origin().y() << " tx: " << xform.get_translation().x() << " ty: " << xform.get_translation().y() << "\n";
-
+  vcl_cout << "FINAL:\n"
+           << "\t xform, ox: " << xform.origin().x() << " oy: " << xform.origin().y() << " tx: " << xform.get_translation().x() << " ty: " << xform.get_translation().y() << '\n';
 }
-
 
