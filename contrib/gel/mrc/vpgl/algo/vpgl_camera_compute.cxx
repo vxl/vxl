@@ -8,7 +8,7 @@
 #include <vcl_iostream.h>
 #include <vcl_cassert.h>
 #include <vcl_cstdlib.h> // for rand()
-#include <vcl_cmath.h>
+#include <vcl_cmath.h> // for std::fabs(double)
 #include <vnl/vnl_numeric_traits.h>
 #include <vnl/vnl_det.h>
 #include <vnl/vnl_inverse.h>
@@ -36,8 +36,7 @@
 //#define CAMERA_DEBUG
 //------------------------------------------
 bool
-vpgl_proj_camera_compute::compute(
-                                  const vcl_vector< vgl_point_2d<double> >& image_pts,
+vpgl_proj_camera_compute::compute(const vcl_vector< vgl_point_2d<double> >& image_pts,
                                   const vcl_vector< vgl_point_3d<double> >& world_pts,
                                   vpgl_proj_camera<double>& camera )
 {
@@ -53,8 +52,7 @@ vpgl_proj_camera_compute::compute(
 
 //------------------------------------------
 bool
-vpgl_proj_camera_compute::compute(
-                                  const vcl_vector< vgl_homg_point_2d<double> >& image_pts,
+vpgl_proj_camera_compute::compute(const vcl_vector< vgl_homg_point_2d<double> >& image_pts,
                                   const vcl_vector< vgl_homg_point_3d<double> >& world_pts,
                                   vpgl_proj_camera<double>& camera )
 {
@@ -96,8 +94,7 @@ vpgl_proj_camera_compute::compute(
 
 //------------------------------------------
 bool
-vpgl_affine_camera_compute::compute(
-                                    const vcl_vector< vgl_point_2d<double> >& image_pts,
+vpgl_affine_camera_compute::compute(const vcl_vector< vgl_point_2d<double> >& image_pts,
                                     const vcl_vector< vgl_point_3d<double> >& world_pts,
                                     vpgl_affine_camera<double>& camera )
 {
@@ -133,28 +130,29 @@ vpgl_affine_camera_compute::compute(
 
 static vcl_vector<double>
 pvector(const double x, const double y, const double z)
-{  vcl_vector<double> pv(20);
- pv[0]= x*x*x;
- pv[1]= x*x*y;
- pv[2]= x*x*z;
- pv[3]= x*x;
- pv[4]= x*y*y;
- pv[5]= x*y*z;
- pv[6]= x*y;
- pv[7]= x*z*z;
- pv[8]= x*z;
- pv[9]= x;
- pv[10]= y*y*y;
- pv[11]= y*y*z;
- pv[12]= y*y;
- pv[13]= y*z*z;
- pv[14]= y*z;
- pv[15]= y;
- pv[16]= z*z*z;
- pv[17]= z*z;
- pv[18]= z;
- pv[19]= 1;
- return pv;
+{
+  vcl_vector<double> pv(20);
+  pv[0]= x*x*x;
+  pv[1]= x*x*y;
+  pv[2]= x*x*z;
+  pv[3]= x*x;
+  pv[4]= x*y*y;
+  pv[5]= x*y*z;
+  pv[6]= x*y;
+  pv[7]= x*z*z;
+  pv[8]= x*z;
+  pv[9]= x;
+  pv[10]= y*y*y;
+  pv[11]= y*y*z;
+  pv[12]= y*y;
+  pv[13]= y*z*z;
+  pv[14]= y*z;
+  pv[15]= y;
+  pv[16]= z*z*z;
+  pv[17]= z*z;
+  pv[18]= z;
+  pv[19]= 1;
+  return pv;
 }
 
 static vcl_vector<double>
@@ -304,7 +302,7 @@ compute( vpgl_rational_camera<double> const& rat_cam,
                         den_v_dz0*den_v_dz0);
 
   // determine if the projection is affine
-  if (ndu/vcl_fabs(den_u_0)<1.0e-10||ndv/vcl_fabs(den_v_0)<1.0e-10)
+  if (ndu<vcl_fabs(den_u_0)*1e-10||ndv<vcl_fabs(den_v_0)*1e-10)
   {
     vcl_cout << "Camera is nearly affine - approximation not implemented!\n";
     return false;
@@ -1045,8 +1043,8 @@ compute_local( vpgl_rational_camera<double> const& rat_cam,
 
     vgl_homg_point_3d<double> nwp = norm_trans*wp_loc;
     assert(   vcl_fabs(nwp.x()) <= 1
-              && vcl_fabs(nwp.y()) <= 1
-              && vcl_fabs(nwp.z()) <= 1 );
+           && vcl_fabs(nwp.y()) <= 1
+           && vcl_fabs(nwp.z()) <= 1 );
     norm_world_pts.push_back(vgl_point_3d<double>(nwp) );
   }
   //Assume identity calibration matrix initially, since image point
@@ -1274,8 +1272,8 @@ compute( vpgl_local_rational_camera<double> const& rat_cam,
   ray_pyr[0].resize(nj, ni);
   ray_pyr[0].fill(vgl_ray_3d<double>(vgl_point_3d<double>(0,0,0),vgl_vector_3d<double>(0,0,1)));
   nr[0]=nj;   nc[0]=ni; scl[0]=1.0;
-  int di = vcl_ceil((float)ni/2)+1,
-      dj = vcl_ceil((float)nj/2)+1;
+  int di = (ni+1)/2+1,
+      dj = (nj+1)/2+1;
 
   for (int i=1; i<n_levels; ++i)
   {
@@ -1285,8 +1283,8 @@ compute( vpgl_local_rational_camera<double> const& rat_cam,
     nr[i]=dj;
     nc[i]=di;
     scl[i]=2.0*scl[i-1];
-    di = vcl_ceil((float)di/2)+1;
-    dj = vcl_ceil((float)dj/2)+1;
+    di = (di+1)/2+1;
+    dj = (dj+1)/2+1;
   }
   // compute the ray interpolation tolerances
   double org_tol = 0.0;
@@ -1381,7 +1379,8 @@ compute( vpgl_local_rational_camera<double> const& rat_cam,
   if ((int)level < n_levels) {
     gen_cam = vpgl_generic_camera<double>(ray_pyr[level]);
     return true;
-  } else
+  }
+  else
     return false;
 }
 
