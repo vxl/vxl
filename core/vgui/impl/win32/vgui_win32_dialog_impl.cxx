@@ -587,7 +587,7 @@ bool vgui_win32_dialog_impl::ask()
       // the button width is the maximum of label length, image width,
       // and default button width
       cx = field->label.size()*cxChar;
-      if ( cx < pb->width ) cx = pb->width;
+      if ( cx < (short)(pb->width) ) cx = pb->width;
       //if ( cx < button_length ) cx = button_length;
       cy = pb->height;
       cy += field->label.empty() ? 0 : button_height;

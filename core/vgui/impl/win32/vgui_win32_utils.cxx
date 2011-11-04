@@ -144,7 +144,7 @@ int vgui_win32_utils::addMenuItems(vgui_menu const &vguimenu, int offset_in, boo
     assert(offset < menu_capacity);
 
     // Deal with overflow.
-    if ( offset > menu_capacity-max_menuitem_size ) {
+    if ( offset > menu_capacity-(int)max_menuitem_size ) {
       menu_capacity <<= 1; // double the capacity.
       pMenu = (unsigned char *)realloc(pMenu, sizeof(MENUITEMTEMPLATEHEADER)+menu_capacity);
       if ( pMenu == NULL ) {
@@ -328,7 +328,7 @@ int vgui_win32_utils::addMenuItemsEx(vgui_menu const &vguimenu, int offset_in, b
     assert(offset < menu_capacity);
 
     // Deal with buffer overflow.
-    if ( offset > menu_capacity-max_menuitem_size ) {
+    if ( offset > menu_capacity-(int)max_menuitem_size ) {
       menu_capacity <<= 1; // double the capacity.
       pMenu = (unsigned char *)realloc(pMenu, sizeof(MENUEX_TEMPLATE_HEADER) + menu_capacity);
       if ( pMenu == NULL ) {
