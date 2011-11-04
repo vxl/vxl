@@ -12,23 +12,23 @@
 
 void print_usage()
 {
-  vcl_cout << "vimt_rotate_image -i image.jpg -A 15 -o output.jpg" << vcl_endl;
-  vcl_cout << "Loads in named image.\n";
-  vcl_cout << "Rotates by A (in degrees).\n";
-  vcl_cout << "Saves output to given file.\n";
-  vcl_cout <<vcl_endl;
+  vcl_cout << "vimt_rotate_image -i image.jpg -A 15 -o output.jpg\n"
+           << "Loads in named image.\n"
+           << "Rotates by A (in degrees).\n"
+           << "Saves output to given file.\n"
+           << vcl_endl;
   vul_arg_display_usage_and_exit();
 }
 
 // Draw line between given world points
 void draw_line(vimt_image_2d_of<vxl_byte>& image,
-              double x0, double y0, double x1, double y1)
+               double x0, double y0, double x1, double y1)
 {
   vgl_point_2d<double> p0=image.world2im()(x0,y0);
   vgl_point_2d<double> p1=image.world2im()(x1,y1);
 
   vgl_vector_2d<double> u=p1-p0;
-  unsigned n = u.length();
+  double n = u.length();
   u/=n;
   for (unsigned i=0;i<n;++i)
   {
