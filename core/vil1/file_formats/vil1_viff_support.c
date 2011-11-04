@@ -94,7 +94,6 @@ vil1_viff_createimage(vxl_uint_32 col_size, vxl_uint_32 row_size,
           *imagedata,
           tmp_comment[LENGTH];
   float   *location;
-  size_t  cstrlen;
   int     image_data_size_bytes,          /* # data bytes */
           image_data_count_pixels,        /* # data pixels */
           map_size_bytes,                 /* # map bytes */
@@ -112,19 +111,8 @@ vil1_viff_createimage(vxl_uint_32 col_size, vxl_uint_32 row_size,
 
 /* setup the comment (can only be 511 chars) */
 
-    cstrlen = comment?strlen(comment):0;
-    if (cstrlen > 0)
-    {
-       if (cstrlen < 512)
-          strcpy(tmp_comment, comment?comment:"");
-       else
-       {
-          strncpy(tmp_comment, comment?comment:"", LENGTH - 1);
-          strcat(tmp_comment, "");
-       }
-    }
-    else
-       strcpy(tmp_comment, "");
+    strncpy(tmp_comment, comment?comment:"", LENGTH);
+    tmp_comment[LENGTH - 1] = '\0';
 
 /* Load the image header with the values. These can be over-ridden by
    giving them a different value after returning to the calling routine.
@@ -134,7 +122,7 @@ vil1_viff_createimage(vxl_uint_32 col_size, vxl_uint_32 row_size,
     image->release = XV_IMAGE_REL_NUM;
     image->version = XV_IMAGE_VER_NUM;
     image->machine_dep = VFF_DEP_IEEEORDER; /* assume IEEE byte order */
-    strcpy(image->comment, tmp_comment);
+    strncpy(image->comment, tmp_comment, LENGTH);
     image->row_size = row_size;
     image->col_size = col_size;
     image->startx = VFF_NOTSUB;
