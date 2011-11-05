@@ -76,7 +76,7 @@ bool EigenFace::add_training_image(Image *im, const char * label)
     return false;
   }
   training_images.push_back(image_vector);
-  training_labels.push_back(strndup(label,1024));
+  training_labels.push_back(strdup(label));
   // postconditions: elements actually inserted
   assert(training_images.back()==image_vector);
   assert(vcl_strcmp(training_labels.back(),label)==0);
