@@ -131,8 +131,10 @@ IF(VXL_CONFIG_CMAKE)
     SET(VXL_LIBRARY_PATH ${VXL_LIBRARY_DIR})
   ENDIF(VXL_PROVIDE_OLD_CACHE_NAMES)
 
-  # Allow use of VXL's cmake/doxygen framework
-  INCLUDE(${VXL_CMAKE_DOXYGEN_DIR}/doxygen.cmake)
+  IF(VXL_CMAKE_DOXYGEN_DIR)
+    # Allow use of VXL's cmake/doxygen framework
+    INCLUDE(${VXL_CMAKE_DOXYGEN_DIR}/doxygen.cmake)
+  ENDIF(VXL_CMAKE_DOXYGEN_DIR)
 
   IF(VXL_PROVIDE_STANDARD_OPTIONS)
     # Provide the standard set of VXL CMake options to the project.
