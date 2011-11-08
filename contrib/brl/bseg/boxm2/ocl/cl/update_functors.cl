@@ -27,6 +27,8 @@ void step_cell_seglen(AuxArgs aux_args, int data_ptr, uchar llid, float d)
         atom_add(&aux_args.seg_len[data_ptr], seg_int);
         atom_add(&aux_args.mean_obs[data_ptr], cum_obs);
     }
+    //reset cell_ptrs to negative one every time (prevents invisible layer bug)
+    aux_args.cell_ptrs[llid] = -1;
     //------------------------------------------------------------------------
 #else
     //SLOW and accurate method
@@ -36,8 +38,7 @@ void step_cell_seglen(AuxArgs aux_args, int data_ptr, uchar llid, float d)
     atom_add(&aux_args.mean_obs[data_ptr], cum_obs);
 #endif
 
-    //reset cell_ptrs to negative one every time (prevents invisible layer bug)
-    aux_args.cell_ptrs[llid] = -1;
+
 }
 #endif // SEGLEN
 
@@ -195,3 +196,13 @@ void step_cell_cumlen(AuxArgs aux_args, int data_ptr, uchar llid, float d)
     atom_add(&aux_args.seg_len[data_ptr], seg_int);
 }
 #endif // CUMLEN
+
+
+#ifdef INGEST_HEIGHT_MAP 
+void step_cell_ingest_height_map(AuxArgs aux_args, int data_ptr, float d)
+{
+    float alpha = - (log(1-0.999))/d;
+    aux_args.alpha[data_ptr] = alpha;
+}
+
+#endif
