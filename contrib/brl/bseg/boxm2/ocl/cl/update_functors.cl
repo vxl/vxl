@@ -37,8 +37,6 @@ void step_cell_seglen(AuxArgs aux_args, int data_ptr, uchar llid, float d)
     int cum_obs = convert_int_rte(d * aux_args.obs * SEGLEN_FACTOR);
     atom_add(&aux_args.mean_obs[data_ptr], cum_obs);
 #endif
-
-
 }
 #endif // SEGLEN
 
@@ -52,19 +50,19 @@ void step_cell_preinf(AuxArgs aux_args, int data_ptr, uchar llid, float d)
     CONVERT_FUNC_FLOAT8(mixture,aux_args.mog[data_ptr])/NORM;
     float  weight3  = (1.0f-mixture.s2-mixture.s5);
 
-    int cum_int = aux_args.seg_len[data_ptr]; 
-    int mean_int = aux_args.mean_obs[data_ptr]; 
-    float mean_obs = convert_float(mean_int) / convert_float(cum_int); 
-    float cum_len = convert_float(cum_int) / SEGLEN_FACTOR; 
+    int cum_int = aux_args.seg_len[data_ptr];
+    int mean_int = aux_args.mean_obs[data_ptr];
+    float mean_obs = convert_float(mean_int) / convert_float(cum_int);
+    float cum_len = convert_float(cum_int) / SEGLEN_FACTOR;
 
     //calculate pre_infinity denomanator (shape of image)
-    pre_infinity_opt( d*aux_args.linfo->block_len, 
-                      cum_len*aux_args.linfo->block_len, 
-                      mean_obs, 
-                      aux_args.vis_inf, 
-                      aux_args.pre_inf, 
-                      alpha, 
-                      mixture, 
+    pre_infinity_opt( d*aux_args.linfo->block_len,
+                      cum_len*aux_args.linfo->block_len,
+                      mean_obs,
+                      aux_args.vis_inf,
+                      aux_args.pre_inf,
+                      alpha,
+                      mixture,
                       weight3);
 }
 #endif // PREINF
@@ -125,11 +123,11 @@ void step_cell_bayes(AuxArgs aux_args, int data_ptr, uchar llid, float d)
     float weight3   = (1.0f-mixture.s2-mixture.s5);
 
     //load aux data
-    int cum_int = aux_args.seg_len[data_ptr]; 
-    int mean_int = aux_args.mean_obs[data_ptr]; 
-    float mean_obs = convert_float(mean_int) / convert_float(cum_int); 
-    float cum_len = convert_float(cum_int) / SEGLEN_FACTOR; 
-    
+    int cum_int = aux_args.seg_len[data_ptr];
+    int mean_int = aux_args.mean_obs[data_ptr];
+    float mean_obs = convert_float(mean_int) / convert_float(cum_int);
+    float cum_len = convert_float(cum_int) / SEGLEN_FACTOR;
+
 
     float ray_beta, vis_cont;
     bayes_ratio_ind( d*aux_args.linfo->block_len,
@@ -183,8 +181,8 @@ void step_cell_update_hist(AuxArgs aux_args, int data_ptr, uchar llid, float d)
     *(aux_args.vis)=vis;
 
     if (index2>=0 && index2<=2)
-      atom_add(&aux_args.hist[8*data_ptr+4+index2], upcount_int);
-    //atom_add(&aux_args.hist[8*data_ptr+7], upcount_int);
+        atom_add(&aux_args.hist[8*data_ptr+4+index2], upcount_int);
+      //atom_add(&aux_args.hist[8*data_ptr+7],        upcount_int);
 }
 #endif // UPDATE_HIST
 
@@ -198,11 +196,11 @@ void step_cell_cumlen(AuxArgs aux_args, int data_ptr, uchar llid, float d)
 #endif // CUMLEN
 
 
-#ifdef INGEST_HEIGHT_MAP 
+#ifdef INGEST_HEIGHT_MAP
 void step_cell_ingest_height_map(AuxArgs aux_args, int data_ptr, float d)
 {
     float alpha = - (log(1-0.999))/d;
     aux_args.alpha[data_ptr] = alpha;
 }
-
 #endif
+
