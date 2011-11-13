@@ -86,9 +86,9 @@ vil_bmp_image::vil_bmp_image(vil_stream* vs, unsigned nx, unsigned ny,
 {
   if (format != VIL_PIXEL_FORMAT_BYTE)
     vcl_cerr << "Sorry -- pixel format " << format << " not yet supported\n";
-  // FIXME - we only support 8 and 24 bpp; add support for 1, 4, 16 and 32 bpp
+  // FIXME - we only support 8, 24 bpp, and 32bpp; add support for 1, 4, and 16 bpp
   assert(format == VIL_PIXEL_FORMAT_BYTE);
-  assert(nplanes == 1 || nplanes == 3);
+  assert(nplanes == 1 || nplanes == 3 || nplanes == 4);
 
   is_->ref();
 
@@ -148,8 +148,8 @@ bool vil_bmp_image::read_header()
   core_hdr.print(vcl_cerr); // blather
 #endif
   // allowed values for bitsperpixel are 1 4 8 16 24 32;
-  // currently we only support 8 and 24 - FIXME
-  if ( core_hdr.bitsperpixel != 8 && core_hdr.bitsperpixel != 24 )
+  // currently we only support 8, 24, and 32 - FIXME
+  if ( core_hdr.bitsperpixel != 8 && core_hdr.bitsperpixel != 24 && core_hdr.bitsperpixel != 32 )
   {
     where << "BMP file has a non-supported pixel size of " << core_hdr.bitsperpixel << " bits\n";
     return false;
@@ -332,8 +332,8 @@ vil_image_view_base_sptr vil_bmp_image::get_copy_view(
   }
   //
   unsigned bytes_per_pixel = core_hdr.bitsperpixel / 8;
-  assert(core_hdr.bitsperpixel == 8 || core_hdr.bitsperpixel == 24);
-  // FIXME - add support for 1, 4, 16 and 32 bpp
+  assert(core_hdr.bitsperpixel == 8 || core_hdr.bitsperpixel == 24 || core_hdr.bitsperpixel == 32 );
+  // FIXME - add support for 1, 4, and 16 bpp
 
   // actual number of bytes per raster in file.
   unsigned have_bytes_per_raster = ((bytes_per_pixel * core_hdr.width + 3)/4)*4;
@@ -395,9 +395,9 @@ bool vil_bmp_image::put_view(const vil_image_view_base& view,
   assert (view.pixel_format() == VIL_PIXEL_FORMAT_BYTE); // FIXME
   const vil_image_view<vxl_byte> & view2 = static_cast<const vil_image_view<vxl_byte> &>(view);
 
-  unsigned bypp = nplanes();
-  unsigned rowlen = ni() * bypp;
-  unsigned padlen = (3-(rowlen+3)%4); // round row length up to a multiple of 4
+  unsigned const bypp = nplanes();
+  unsigned const rowlen = ni() * bypp;
+  unsigned const padlen = (3-(rowlen+3)%4); // round row length up to a multiple of 4
   vxl_byte padding[3]={0, 0, 0};
 
   if ((view2.planestep() == -1||nplanes()==1)&&
@@ -410,7 +410,7 @@ bool vil_bmp_image::put_view(const vil_image_view_base& view,
       if (padlen !=0) is_->write(padding, padlen);
     }
   }
-  else
+  else if (nplanes()==3)
   {
     assert(nplanes()==3);
     vxl_byte* buf = new vxl_byte[rowlen+padlen];
@@ -418,11 +418,33 @@ bool vil_bmp_image::put_view(const vil_image_view_base& view,
     for (unsigned j=0; j<view2.nj(); ++j)
     {
       vxl_byte* b = buf;
+      unsigned int const negj = view2.nj()-j-1;
       for (unsigned i=0; i<view2.ni(); ++i)
       {
-        *(b++) = view2(i, view2.nj()-j-1, 2);
-        *(b++) = view2(i, view2.nj()-j-1, 1);
-        *(b++) = view2(i, view2.nj()-j-1, 0);
+        *(b++) = view2(i, negj, 2);  //B
+        *(b++) = view2(i, negj, 1);  //G
+        *(b++) = view2(i, negj, 0);  //R
+      }
+      is_->seek(bit_map_start+(j+y0)*(rowlen+padlen)+x0*bypp);
+      is_->write(buf, rowlen+padlen);
+    }
+    delete [] buf;
+  }
+  else /*nplanes()==4*/
+  {
+    assert(nplanes()==4);
+    vxl_byte* buf = new vxl_byte[rowlen+padlen];
+    for (unsigned i=rowlen; i<rowlen+padlen; ++i) buf[i]=0;
+    for (unsigned j=0; j<view2.nj(); ++j)
+    {
+      vxl_byte* b = buf;
+      unsigned int const negj = view2.nj()-j-1;
+      for (unsigned i=0; i<view2.ni(); ++i)
+      {
+        *(b++) = view2(i, negj, 2);  //B
+        *(b++) = view2(i, negj, 1);  //G
+        *(b++) = view2(i, negj, 0);  //R
+        *(b++) = view2(i, negj, 3);  //A
       }
       is_->seek(bit_map_start+(j+y0)*(rowlen+padlen)+x0*bypp);
       is_->write(buf, rowlen+padlen);

@@ -13,6 +13,8 @@
 //  Modifications
 // 27 May 2000 fsm Numerous endianness and structure-packing bugs fixed.
 //  3 October 2001 Peter Vanroose - Implemented get_property("top_row_first")
+// 13 November 2011 Gehua Yang - Allow read and write 32bpp image. Default to have the first plane as alpha channel
+//                               See a good reference at http://en.wikipedia.org/wiki/BMP_file_format 
 //\endverbatim
 
 class vil_stream;
