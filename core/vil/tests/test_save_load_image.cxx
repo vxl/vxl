@@ -22,6 +22,7 @@
 //    2 Oct 2002 - Peter Vanroose - replaced image24 tests by image3p
 //      Jun 2003 - Peter Vanroose - added viff, iris, mit tests for vil
 //   20 Oct 2009 - Gehua Yang     - added tests for wchar_t overloading functions on Windows
+//   14 Nov 2011 - Gehua Yang     - added tests for saving/loading 32bpp ARGB image with PNG, TIFF, and BMP format
 // \endverbatim
 
 #include <vcl_cstring.h>
@@ -455,6 +456,20 @@ vil_image_view<vxl_byte> CreateTest3planeImage(int wd, int ht)
   return image;
 }
 
+// create a 24 bit color test image, with 3 planes
+vil_image_view<vxl_byte> CreateTest4planeImage(int wd, int ht)
+{
+  vil_image_view<vxl_byte> image( wd, ht, 4);
+  for (int i = 0; i < wd; i++)
+    for (int j = 0; j < ht; j++) {
+      image(i,j,0) = vxl_byte(i%(1<<8));
+      image(i,j,1) = vxl_byte(((i-wd/2)*(j-ht/2)/16)%(1<<8));
+      image(i,j,2) = vxl_byte(((j/3)%(1<<8)));
+      image(i,j,3) = vxl_byte(((i*(ht-1)+j*(wd-1))%(1<<8)));
+    }
+  return image;
+}
+
 // create a 24 bit color test image, with 3 interleaved planes
 vil_image_view<vxl_byte> CreateTest3ComponentImage(int wd, int ht)
 {
@@ -532,6 +547,7 @@ static void test_save_load_image()
   vil_image_view<vxl_uint_32>         image32 = CreateTest32bitImage(sizex, sizey);
   vil_image_view<vxl_byte>            image3p = CreateTest3planeImage(sizex, sizey);
   vil_image_view<vxl_byte>            image3c = CreateTest3ComponentImage(sizex, sizey);
+  vil_image_view<vxl_byte>            image4p = CreateTest4planeImage(sizex, sizey);
   vil_image_view<float>               imagefloat = CreateTestfloatImage(sizex, sizey);
   vil_image_view<double>              imagedouble = CreateTestdoubleImage(sizex, sizey);
 
@@ -541,6 +557,7 @@ static void test_save_load_image()
   vil_test_image_type("png", image8);
   vil_test_image_type("png", image16);
   vil_test_image_type("png", image3p);
+  vil_test_image_type("png", image4p);
 #endif
 
 
@@ -561,6 +578,7 @@ static void test_save_load_image()
 #if 1
   vil_test_image_type("bmp", image8);
   vil_test_image_type("bmp", image3p);
+  vil_test_image_type("bmp", image4p);
 #endif
 
 
@@ -585,6 +603,7 @@ static void test_save_load_image()
 #endif
   vil_test_image_type("tiff", image8);
   vil_test_image_type("tiff", image3p);
+  vil_test_image_type("tiff", image4p);
   vil_test_image_type("tiff", image1);
   vil_test_image_type("tiff", image16);
   vil_test_image_type("tiff", image32);

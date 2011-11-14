@@ -331,12 +331,12 @@ vil_image_view_base_sptr vil_bmp_image::get_copy_view(
     return 0;
   }
   //
-  unsigned bytes_per_pixel = core_hdr.bitsperpixel / 8;
+  unsigned const bytes_per_pixel = core_hdr.bitsperpixel / 8;
   assert(core_hdr.bitsperpixel == 8 || core_hdr.bitsperpixel == 24 || core_hdr.bitsperpixel == 32 );
   // FIXME - add support for 1, 4, and 16 bpp
 
   // actual number of bytes per raster in file.
-  unsigned have_bytes_per_raster = ((bytes_per_pixel * core_hdr.width + 3)/4)*4;
+  unsigned const have_bytes_per_raster = ((bytes_per_pixel * core_hdr.width + 3)/4)*4;
 
   // number of bytes we want per raster.
   unsigned long want_bytes_per_raster = nx*bytes_per_pixel;
@@ -375,11 +375,36 @@ vil_image_view_base_sptr vil_bmp_image::get_copy_view(
     return 0;
   }
 
+  vcl_ptrdiff_t plane_step = 1;
+  if( core_hdr.bitsperpixel == 24 )
+  {
+    return new vil_image_view<vxl_byte>(
+      buf,
+      reinterpret_cast<vxl_byte *>(buf->data())+(ny-1)*want_bytes_per_raster + nplanes()-1,
+      nx, ny, nplanes(),
+      nplanes(), -(long)want_bytes_per_raster, -1/*correspond to BB GG RR*/);
+  }
+  else if( core_hdr.bitsperpixel == 32 )
+  {
+    // re-organize channel ordering from BGRA to RGBA. 
+    // In other words,  swap B and R
+    assert( (want_bytes_per_raster & 3) == 0 );  //  must be multiple of 4
+    vxl_byte* data = reinterpret_cast<vxl_byte *>(buf->data());
+    vxl_byte* const data_end = data+(want_bytes_per_raster*ny);
+    for(; data!=data_end; data+=4)
+    {
+      // memory layout for pixel color values:
+      // BB GG RR AA BB GG RR AA ....
+      // Change to RR GG BB AA RR GG BB AA ...
+      vcl_swap(data[0], data[2]);
+    }
+  }
+
   return new vil_image_view<vxl_byte>(
     buf,
-    reinterpret_cast<vxl_byte *>(buf->data())+(ny-1)*want_bytes_per_raster + nplanes()-1,
+    reinterpret_cast<vxl_byte *>(buf->data())+(ny-1)*want_bytes_per_raster,
     nx, ny, nplanes(),
-    nplanes(), -(long)want_bytes_per_raster, -1);
+    nplanes(), -(long)want_bytes_per_raster, plane_step);
 }
 
 

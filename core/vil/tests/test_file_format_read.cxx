@@ -22,6 +22,11 @@
 //
 // Compare the results of loading different files with the true data
 // that's supposed to be in those files.
+//
+// \verbatim
+//  Modifications
+//   14 Nov 2011 - Gehua Yang     - added tests for loading 32bpp ARGB image
+// \endverbatim
 
 static vcl_string image_base;
 
@@ -499,6 +504,7 @@ test_file_format_read( int argc, char* argv[] )
   vcl_cout << "Windows bitmap [bmp]\n";
   TEST("8-bit greyscale (xv created)", CheckFile(CompareGrey<vxl_byte>(), "ff_grey8bit_true.txt", "ff_grey8bit.bmp" ), true);
   TEST("8-bit RGB (xv created)", CheckFile(ComparePlanes<vxl_byte,3>(), "ff_planar8bit_true.txt", "ff_rgb8bit_xv.bmp" ), true);
+  TEST("8-bit RGBA uncompressed (Photoshop created)", CheckFile(CompareRGBA<vxl_byte>(), "ff_rgba8bit_true.txt", "ff_rgba8bit_uncompressed_ps.bmp" ), true);
 
   vcl_cout << "Portable Network Graphics [png]\n";
   TEST("8-bit RGB uncompressed", CheckFile(CompareRGB<vxl_byte>(), "ff_rgb8bit_true.txt", "ff_rgb8bit_uncompressed.png" ), true);
