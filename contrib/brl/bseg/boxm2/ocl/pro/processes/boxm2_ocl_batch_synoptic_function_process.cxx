@@ -218,19 +218,19 @@ bool boxm2_ocl_batch_synoptic_function_process(bprb_func_process& pro)
       //    vcl_cout<<k<<" : "<<cubic_coeffs[k]<<"\n";
 
 
-      boxm2_block *     cpu_blk     = cache->get_block(*id);
-      boxm2_data_base *  cpu_alpha  = cache->get_data_base(*id,boxm2_data_traits<BOXM2_ALPHA>::prefix(),0,false);
-      boxm2_data_base *  cubic_model_data  = cache->get_data_base(*id,boxm2_data_traits<BOXM2_FLOAT8>::prefix("cubic_model"),cpu_alpha->buffer_length()* 8 ,false);
-      boxm2_update_synoptic_probability data_functor;
-      data_functor.init_data(cpu_alpha,cubic_model_data);
+      //boxm2_block *     cpu_blk     = cache->get_block(*id);
+      //boxm2_data_base *  cpu_alpha  = cache->get_data_base(*id,boxm2_data_traits<BOXM2_ALPHA>::prefix(),0,false);
+      //boxm2_data_base *  cubic_model_data  = cache->get_data_base(*id,boxm2_data_traits<BOXM2_FLOAT8>::prefix("cubic_model"),cpu_alpha->buffer_length()* 8 ,false);
+      //boxm2_update_synoptic_probability data_functor;
+      //data_functor.init_data(cpu_alpha,cubic_model_data);
      
-      int phongs_model_TypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_FLOAT8>::prefix());
-      int data_buff_length = (int) (cubic_model_data->buffer_length()/phongs_model_TypeSize);
+      //int phongs_model_TypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_FLOAT8>::prefix());
+      //int data_buff_length = (int) (cubic_model_data->buffer_length()/phongs_model_TypeSize);
 
-      boxm2_data_leaves_serial_iterator<boxm2_update_synoptic_probability>(cpu_blk,data_buff_length,data_functor);
+      //boxm2_data_leaves_serial_iterator<boxm2_update_synoptic_probability>(cpu_blk,data_buff_length,data_functor);
 
-      cache->remove_data_base( *id, boxm2_data_traits<BOXM2_FLOAT8>::prefix("cubic_model") );
-      cache->remove_data_base(*id,boxm2_data_traits<BOXM2_ALPHA>::prefix());
+      //cache->remove_data_base( *id, boxm2_data_traits<BOXM2_FLOAT8>::prefix("cubic_model") );
+      //cache->remove_data_base(*id,boxm2_data_traits<BOXM2_ALPHA>::prefix());
   }
   clReleaseCommandQueue(queue);
 
