@@ -7,16 +7,23 @@
 //  - WEIGHT_TYPE
 //
 
-
-//--------------------------------------------------
-// Weighted Mean/Variance
 //define sample type and conversion to float
-#define SAMPLE_TYPE global uchar
-#define SAMPLE2FLOAT(samp)  (convert_float(samp)/255.0f)
+#ifdef SAMPLE_GLOBAL_FLOAT
+  #define SAMPLE_TYPE global float
+  #define SAMPLE2FLOAT(samp)  (samp)
+#else
+  #define SAMPLE_TYPE global uchar
+  #define SAMPLE2FLOAT(samp)  (convert_float(samp)/255.0f)
+#endif
 
 //define EM weight type (may be different than GAUSS weight type
-#define EM_WEIGHT_TYPE global uchar
-#define EM_WEIGHT2FLOAT(samp)  (convert_float(samp)/255.0f)
+#ifdef EM_WEIGHT_GLOBAL_FLOAT
+  #define EM_WEIGHT_TYPE global float
+  #define EM_WEIGHT2FLOAT(samp)  (samp)
+#else
+  #define EM_WEIGHT_TYPE global uchar
+  #define EM_WEIGHT2FLOAT(samp)  (convert_float(samp)/255.0f)
+#endif
 
 //define wieght and conversion to float
 #define GAUSS_WEIGHT_TYPE float
@@ -62,6 +69,26 @@ float2 weighted_mean_var(SAMPLE_TYPE* obs, GAUSS_WEIGHT_TYPE* vis, int numSample
   return (float2) (sample_mean, sample_var); 
 }
 
+//sort an MOG3 in place
+void sort_mog3(float8* mog3) 
+{
+  //store some vars
+  float mu0 = mog3->s0, sigma0 = mog3->s1, w0 = mog3->s2,
+        mu1 = mog3->s3, sigma1 = mog3->s4, w1 = mog3->s5, 
+        mu2 = mog3->s6, sigma2 = mog3->s7; 
+  float w2 = 1.0f - w0 - w1; 
+  short Nobs0, Nobs1, Nobs2; 
+  
+  //sort mix3 in statistics library function
+  sort_mix_3( &mu0, &sigma0, &w0, &Nobs0,
+              &mu1, &sigma1, &w1, &Nobs1,
+              &mu2, &sigma2, &w2, &Nobs2); 
+  
+  //replace vars
+  mog3->s0 = mu0, mog3->s1 = sigma0, mog3->s2 = w0,
+  mog3->s3 = mu1, mog3->s4 = sigma1, mog3->s5 = w1, 
+  mog3->s6 = mu2, mog3->s7 = sigma2;  
+}
 
 //EM Constants-----------------------------
 #define SQRT1_2      .70710678118654752440
@@ -109,8 +136,6 @@ float8 weighted_mog3_em(SAMPLE_TYPE*    obs,     //samples from MOG3 distributio
 
   //if we have more than MAX_SAMPLES, limit it
   numSamples = min(numSamples, MAX_SAMPLES);      
-  float obs_weights[MAX_SAMPLES] = {0}; 
-  float mode_weight_sum[3];
    
   //2d array of responsibiliites - mode_probs[mode][n] = prob( mode given example n)
   float mode0_probs[MAX_SAMPLES] = {0}; 
@@ -174,15 +199,14 @@ float8 weighted_mog3_em(SAMPLE_TYPE*    obs,     //samples from MOG3 distributio
       //compute weight sum for this mode
       mode_weight_sum[m] = 0.0f; 
       for(uint n=0; n<numSamples; ++n) {
-        obs_weights[n]      = mode_probs[m][n]; 
-        mode_weight_sum[m] += obs_weights[n]; 
+        mode_weight_sum[m] += mode_probs[m][n]; 
       }
       total_weight_sum += mode_weight_sum[m];
       
       //train this gaussian
       float  mode_mean = 0.5f;
       float  mode_var  = 1.0f;
-      float2 mode_gauss = weighted_mean_var(obs, (GAUSS_WEIGHT_TYPE*) obs_weights, numSamples); 
+      float2 mode_gauss = weighted_mean_var(obs, (GAUSS_WEIGHT_TYPE*) mode_probs[m], numSamples); 
       mode_mean = mode_gauss.x; 
       mode_var  = clamp(mode_gauss.y, min_var, big_var);
 
@@ -204,7 +228,29 @@ float8 weighted_mog3_em(SAMPLE_TYPE*    obs,     //samples from MOG3 distributio
   //post EM calculation
   // unbias variance based on number of observations for each mode... (might be taken care of)
   // sort the modes based on weight
-  //model.sort();
+  sort_mog3(&mog3);  
   mog3 = clamp(mog3, 0.0f, 1.0f); 
   return mog3;
 }
+
+
+
+//TEST KERNEL - just sends in one set
+__kernel 
+void test_weighted_em( global float*    obs,     //samples from MOG3 distribution
+                       global float*    vis,     //visibility of samples (weights)
+                       global uint*     numSamples,
+                       global uchar8*   mog,
+                       global float*    min_sigma )
+{
+  int gid = get_global_id(0);
+  if(gid==0) 
+  {
+    //calculatea app model
+    float8 mog3 = weighted_mog3_em( obs, vis, *numSamples,  *min_sigma ); 
+    
+    //reset the cells in memory
+    mog[gid] = convert_uchar8(mog3 * 255.0f); 
+  }
+}       
+                          
