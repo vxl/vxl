@@ -13,6 +13,7 @@ SET(boxm2_io_sources
     boxm2_nn_cache.h       boxm2_nn_cache.cxx
     boxm2_lru_cache.h      boxm2_lru_cache.cxx
     boxm2_stream_cache.h   boxm2_stream_cache.cxx boxm2_stream_cache.txx
+    boxm2_stream_block_cache.h   boxm2_stream_block_cache.cxx
    )
 AUX_SOURCE_DIRECTORY(Templates boxm2_io_sources)
 
