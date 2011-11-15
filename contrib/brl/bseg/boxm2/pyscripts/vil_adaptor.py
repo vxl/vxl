@@ -50,3 +50,13 @@ def pixel_wise_roc(cd_img, gt_img, mask_img=None) :
   #return tuple of true positives, true negatives, false positives, etc..
   return (tp, tn, fp, fn);
 
+# get image dimensions
+def image_size(img):
+    boxm2_batch.init_process('vilImageSizeProcess')
+    boxm2_batch.set_input_from_db(0,img)
+    boxm2_batch.run_process()
+    (id,type) = boxm2_batch.commit_output(0)
+    ni = boxm2_batch.get_output_unsigned(id)
+    (id,type) = boxm2_batch.commit_output(1)
+    nj = boxm2_batch.get_output_unsigned(id)
+    return ni,nj
