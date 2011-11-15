@@ -275,6 +275,8 @@ bool boxm2_ocl_update_aux_per_view_process(bprb_func_process& pro)
       transfer_time += (float) transfer.all();
       if (i==UPDATE_AUX_LEN_INT)
       {
+
+
         aux0->zero_gpu_buffer(queue);
         aux1->zero_gpu_buffer(queue);
 
@@ -385,6 +387,11 @@ bool boxm2_ocl_update_aux_per_view_process(bprb_func_process& pro)
         aux1->read_to_buffer(queue);
         aux2->read_to_buffer(queue);
         aux3->read_to_buffer(queue);
+
+        opencl_cache->deep_remove_data(*id,boxm2_data_traits<BOXM2_AUX0>::prefix(suffix), true);
+        opencl_cache->deep_remove_data(*id,boxm2_data_traits<BOXM2_AUX1>::prefix(suffix), true);
+        opencl_cache->deep_remove_data(*id,boxm2_data_traits<BOXM2_AUX2>::prefix(suffix), true);
+        opencl_cache->deep_remove_data(*id,boxm2_data_traits<BOXM2_AUX3>::prefix(suffix), true);
       }
       //read image out to buffer (from gpu)
       in_image->read_to_buffer(queue);
@@ -394,22 +401,12 @@ bool boxm2_ocl_update_aux_per_view_process(bprb_func_process& pro)
       clFinish(queue);
     }
   }
-  
-#if 1
-  //write out and delete the aux views
-  for (id = vis_order.begin(); id != vis_order.end(); ++id) {
-    opencl_cache->deep_remove_data(*id, boxm2_data_traits<BOXM2_AUX0>::prefix(suffix));
-    opencl_cache->deep_remove_data(*id, boxm2_data_traits<BOXM2_AUX1>::prefix(suffix));
-    opencl_cache->deep_remove_data(*id, boxm2_data_traits<BOXM2_AUX2>::prefix(suffix));
-    opencl_cache->deep_remove_data(*id, boxm2_data_traits<BOXM2_AUX3>::prefix(suffix));
-  }
-#endif
 
-   delete [] vis_buff;
-   delete [] pre_buff;
-   delete [] input_buff;
-   delete [] ray_origins;
-   delete [] ray_directions;
+  delete [] vis_buff;
+  delete [] pre_buff;
+  delete [] input_buff;
+  delete [] ray_origins;
+  delete [] ray_directions;
 
   vcl_cout<<"Gpu time "<<gpu_time<<" transfer time "<<transfer_time<<vcl_endl;
   clReleaseCommandQueue(queue);
