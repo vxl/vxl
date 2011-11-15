@@ -12,9 +12,7 @@
 #include <boxm/algo/pro/boxm_algo_register.h>
 #include <boxm/algo/rt/pro/boxm_algo_rt_register.h>
 #include <boxm/algo/sp/pro/boxm_algo_sp_register.h>
-#if defined(HAS_OPENCL) && HAS_OPENCL
-#include <boxm/ocl/pro/boxm_ocl_register.h>
-#endif
+
 #include <bvpl/bvpl_octree/pro/bvpl_octree_register.h>
 #include <bsta/pro/bsta_register.h>
 #include <bapl/pro/bapl_register.h>
@@ -31,9 +29,6 @@ register_processes(PyObject *self, PyObject *args)
   boxm_algo_rt_register::register_process();
   boxm_algo_sp_register::register_process();
   sdet_register::register_process();
-#if defined(HAS_OPENCL) && HAS_OPENCL
-  boxm_ocl_register::register_process();
-#endif
   bvpl_octree_register::register_process();
   //icam_register::register_process();
   bapl_register::register_process();
@@ -52,9 +47,7 @@ register_datatypes(PyObject *self, PyObject *args)
 
   boxm_algo_rt_register::register_datatype();
   boxm_algo_sp_register::register_datatype();
-#if defined(HAS_OPENCL) && HAS_OPENCL
-  boxm_ocl_register::register_datatype();
-#endif
+
   bvpl_octree_register::register_datatype();
   bsta_register::register_datatype();
   //icam_register::register_datatype();
