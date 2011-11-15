@@ -1,4 +1,4 @@
-__kernel 
+__kernel
 void test_matrix4x4_inverse(__global float *mat4x4,
                             __global float *invmat4x4,
                             __local  float *lmat4x4,
@@ -13,7 +13,7 @@ void test_matrix4x4_inverse(__global float *mat4x4,
     invmat4x4[llid] = linvmat4x4[llid];
 }
 
-__kernel 
+__kernel
 void test_cubic_fit(__global float * gobs,       // dim n
                     __global float * gvis,       // dim n
                     __global float * gs,       // dim 4
@@ -23,7 +23,7 @@ void test_cubic_fit(__global float * gobs,       // dim n
                     __local float * obs,       // dim n
                     __local float * vis,       // dim n
                     __local float * s,         // dim n
-                    __local float * temp, 
+                    __local float * temp,
                     __local float * XtWX,      // dim 16
                     __local float * cofactor,  // dim 16
                     __local float * invXtWX,   // dim 16
@@ -37,5 +37,4 @@ void test_cubic_fit(__global float * gobs,       // dim n
 
     fit_intensity_cubic(obs,vis,s,temp,XtWX,cofactor,invXtWX,XtY,coeffs,nobs);
     cubic_fit_error(obs, vis,s, temp,coeffs,vars,nobs);
-
 }

@@ -1,38 +1,38 @@
 bool fit_intensity_cubic(__local float * obs,       // dim n
                          __local float * vis,       // dim n
                          __local float * s,         // dim n
-                         __local float * temp, 
+                         __local float * temp,
                          __local float * XtWX,      // dim 16
                          __local float * cofactor,  // dim 16
                          __local float * invXtWX,   // dim 16
                          __local float * XtY,       // dim 4
-                         __local float * outerprodl,       // dim 16
-                             __local float * l,       // dim 4
-                         __global float * coeffs,       // dim 8
+                         __local float * outerprodl,// dim 16
+                         __local float * l,         // dim 4
+                         __global float * coeffs,   // dim 8
                          __constant int * nobs)
 {
-    //: construct the matrix XtWX
+    // construct the matrix XtWX
     int gid = get_group_id(0);
     uchar llid = (uchar)(get_local_id(0) + get_local_size(0)*get_local_id(1));
 
-    //: find the min s and the max s;
-    if(llid == 0)
+    // find the min s and the max s;
+    if (llid == 0)
     {
         int min_index = 0;
         int max_index = (*nobs)-1;
         float stemp =10000;
-        for(unsigned int i = 0 ; i< (*nobs) ; i++)
+        for (unsigned int i = 0 ; i< (*nobs) ; i++)
         {
-            if(s[llid]<stemp)
+            if (s[llid]<stemp)
             {
                 min_index = llid;
                 stemp = s[llid];
             }
         }
         stemp = -10000;
-        for(unsigned int i = 0 ; i< (*nobs) ; i++)
+        for (unsigned int i = 0 ; i< (*nobs) ; i++)
         {
-            if(s[llid]>stemp)
+            if (s[llid]>stemp)
             {
                 max_index = llid;
                 stemp = s[llid];
@@ -44,41 +44,41 @@ bool fit_intensity_cubic(__local float * obs,       // dim n
         l[3] = (s[min_index]*s[min_index]*s[min_index]  - s[max_index]*s[max_index]*s[max_index]);
     }
     barrier(CLK_LOCAL_MEM_FENCE);
-    if(llid < (*nobs) )
+    if (llid < (*nobs) )
         temp[llid] = vis[llid];
     barrier(CLK_LOCAL_MEM_FENCE);
-    for(unsigned int k = 0 ; k< 7; k++)
+    for (unsigned int k = 0 ; k< 7; k++)
     {
         float sum = 0;
-        for(unsigned int i = 0 ; i< (*nobs) ; i++)
+        for (unsigned int i = 0 ; i< (*nobs) ; i++)
             sum+= temp[i];
-        //: writing at appropriate places in the matrix.
-        if(get_local_id(0) + get_local_id(1) == k && get_local_id(0) < 4 && get_local_id(1) < 4)
+        // writing at appropriate places in the matrix.
+        if (get_local_id(0) + get_local_id(1) == k && get_local_id(0) < 4 && get_local_id(1) < 4)
             XtWX[get_local_id(0) + 4*get_local_id(1)] = sum;
-        if(llid < (*nobs) )
+        if (llid < (*nobs) )
             temp[llid] = temp[llid] * s[llid];
     }
     barrier(CLK_LOCAL_MEM_FENCE);
     onl_outerproduct_4x4(l,l,outerprodl);
-    if(llid < 16)
+    if (llid < 16)
         XtWX[ llid] = XtWX[ llid] + outerprodl[llid];
     barrier(CLK_LOCAL_MEM_FENCE);
-    //: RHS XtWY
-    if(llid < (*nobs) )
+    // RHS XtWY
+    if (llid < (*nobs) )
         temp[llid] = obs[llid]*vis[llid];
     barrier(CLK_LOCAL_MEM_FENCE);
 
-    if(llid< (*nobs))
+    if (llid< (*nobs))
     {
-        for(unsigned int k = 0 ; k< 4; k++)
+        for (unsigned int k = 0 ; k< 4; k++)
         {
-            if(llid == 0 )
+            if (llid == 0 )
             {
                 float sum = 0;
-                for(unsigned int i = 0 ; i< *nobs; i++)
+                for (unsigned int i = 0 ; i< *nobs; i++)
                     sum+= temp[i];
                 XtY[k] = sum;
-            }       
+            }
             temp[llid] = temp[llid] * s[llid];
         }
     }
@@ -88,16 +88,17 @@ bool fit_intensity_cubic(__local float * obs,       // dim n
     // inv(XtWX) * XtY
     for ( unsigned int k = 0 ; k < 4; k++)
     {
-        if(llid == k)
+        if (llid == k)
         {
             float sum = 0;
-            for(unsigned int i = 0 ; i< 4; i++)
+            for (unsigned int i = 0 ; i< 4; i++)
                 sum+= invXtWX[k*4+i] * XtY[i];
             coeffs[gid*8+k] = sum;
         }
     }
     barrier(CLK_LOCAL_MEM_FENCE);
 }
+
 float variance_multiplier(float n_obs)
 {
     if (n_obs<2)
@@ -112,12 +113,12 @@ float variance_multiplier(float n_obs)
 void cubic_fit_error(__local float  * obs,       // dim n
                      __local float  * vis,       // dim n
                      __local float  * s,         // dim n
-                     __local float  * temp, 
+                     __local float  * temp,
                      __global float * coeffs,   // dim 8
                      __constant float * internal_sigma,
                      __constant int * nobs)
 {
-    //: Compute Variance or Error 
+    // Compute Variance or Error
     uchar llid = (uchar)(get_local_id(0) + get_local_size(0)*get_local_id(1));
     int gid = get_group_id(0);
 
@@ -125,17 +126,17 @@ void cubic_fit_error(__local float  * obs,       // dim n
     float b = coeffs[gid*8+1];
     float c = coeffs[gid*8+2];
     float d = coeffs[gid*8+3];
-    if(llid < *nobs)
+    if (llid < *nobs)
     {
         temp[llid] = vis[llid]*(a+b*s[llid]+c*s[llid]*s[llid]+d*s[llid]*s[llid]*s[llid] - obs[llid]);
         temp[llid] = temp[llid]*temp[llid];
     }
     barrier(CLK_LOCAL_MEM_FENCE);
-    if(llid == 0)
+    if (llid == 0)
     {
         float var = 0.0f;
         float e_nobs = 0.0f;
-        for(unsigned i = 0; i < *nobs; i++)
+        for (unsigned i = 0; i < *nobs; i++)
         {
             var += temp[i];
             e_nobs +=vis[i];
@@ -149,7 +150,7 @@ void cubic_fit_error(__local float  * obs,       // dim n
         }
         coeffs[gid*8+4] =var;
 
-        //: Computing Density
+        // Computing Density
         float denom = 1/sqrt(2*M_PI*(*internal_sigma)*(*internal_sigma));
         float numer = exp(-var/(2*(*internal_sigma)*(*internal_sigma)));
 
@@ -163,16 +164,16 @@ void compute_empty(__local float * obs,       // dim n
                    __global float * coeffs,       // dim 8
                    __constant int * nobs)
 {
-    //: construct the matrix XtWX
+    // construct the matrix XtWX
     int gid = get_group_id(0);
     uchar llid = (uchar)(get_local_id(0) + get_local_size(0)*get_local_id(1));
-    if(llid < 8)
+    if (llid < 8)
         hist[llid] = 0.125;
-    if(llid == 0)
+    if (llid == 0)
     {
-        //: intialize the histogram with uniform density.
+        // initialize the histogram with uniform density.
         float sum = 1.0f;
-        for(unsigned i = 0; i< (*nobs) ; i++)
+        for (unsigned i = 0; i< (*nobs) ; i++)
         {
             int next = i+1;
             if (i == (*nobs)-1)
@@ -182,12 +183,12 @@ void compute_empty(__local float * obs,       // dim n
             sum +=(vis[i]+vis[next])/2;
         }
 
-        for(unsigned i = 0; i< 8; i++)
+        for (unsigned i = 0; i< 8; i++)
             hist[i] /= sum;
     }
 
     barrier(CLK_LOCAL_MEM_FENCE);
-    if(llid == 0)
+    if (llid == 0)
     {
         float entropy_histo = 0.0f;
         for (unsigned int i = 0; i<8; ++i)
