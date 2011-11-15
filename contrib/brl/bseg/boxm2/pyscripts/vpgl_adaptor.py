@@ -27,6 +27,15 @@ def load_rational_camera_nitf(file_path) :
   cam = dbvalue(id,type);
   return cam;
 
+def create_local_rational_camera(rational_cam_fname, lvcs_fname):
+    boxm2_batch.init_process('vpglCreateLocalRationalCameraProcess')
+    boxm2_batch.set_input_string(0,rational_cam_fname)
+    boxm2_batch.set_input_string(1,lvcs_fname)
+    boxm2_batch.run_process()
+    (id,type) = boxm2_batch.commit_output(0)
+    cam = dbvalue(id,type)
+    return cam
+
 ###################
 #camera saving
 ###################
@@ -96,4 +105,16 @@ def get_3d_from_depth(persp_cam,u,v,t) :
   (id, type) = boxm2_batch.commit_output(2);
   z=boxm2_batch.get_output_float(id);
   return x,y,z;
+
+# create a generic camera
+def convert_to_generic_camera(cam_in, ni, nj, level=0):
+    boxm2_batch.init_process('vpglConvertToGenericCameraProcess')
+    boxm2_batch.set_input_from_db(0,cam_in)
+    boxm2_batch.set_input_unsigned(1,ni)
+    boxm2_batch.set_input_unsigned(2,nj)
+    boxm2_batch.set_input_unsigned(3,level)
+    boxm2_batch.run_process()
+    (id,type) = boxm2_batch.commit_output(0)
+    generic_cam = dbvalue(id,type)
+    return generic_cam
 
