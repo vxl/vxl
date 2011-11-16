@@ -23,7 +23,10 @@ class boxm2_ocl_util
 
     //: fills in a 256 char array with number of BITS for each value (255 = 8, 254 = 7 etc)
     static void set_bit_lookup(cl_uchar* lookup);
-    
+
+    //: fills in an array of directions with canonical dodecahedron directions
+    static void set_dodecahedron_dir_lookup(cl_float4* dir);
+
     static void load_perspective_camera(vcl_string filename, vpgl_perspective_camera<double> & pcam);
 
     //: this function obtains a cdf of the intensity distribution over a sequcne of image which can be used for rendering images.
@@ -31,7 +34,6 @@ class boxm2_ocl_util
 
     //: mog optoins
     static vcl_string mog_options( vcl_string data_type ); 
-
  };
 
 #endif // boxm2_ocl_util_h
