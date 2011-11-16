@@ -34,6 +34,9 @@ enum boxm2_data_type
   BOXM2_AUX3,
   BOXM2_AUX4,
   BOXM2_FLOAT8,
+  BOXM2_VIS_SPHERE,
+  BOXM2_NORMAL,
+  BOXM2_POINT,
   BOXM2_GAUSS_GREY,
   BOXM2_UNKNOWN
 };
@@ -117,6 +120,29 @@ class boxm2_data_traits<BOXM2_MOG2_RGB>
   { if (!identifier.size()) return "boxm2_mog2_rgb"; else return "boxm2_mog2_rgb_"+identifier; }
 };
 
+
+template<>
+class boxm2_data_traits<BOXM2_NORMAL>
+{
+ public:
+  typedef vnl_vector_fixed<float, 4> datatype;
+  static vcl_size_t datasize() { return sizeof(datatype); }
+  static vcl_string prefix(const vcl_string& identifier = "")
+  { if (!identifier.size()) return "boxm2_normal"; else return "boxm2_normal_"+identifier; }
+};
+
+
+template<>
+class boxm2_data_traits<BOXM2_POINT>
+{
+ public:
+  typedef vnl_vector_fixed<float, 4> datatype;
+  static vcl_size_t datasize() { return sizeof(datatype); }
+  static vcl_string prefix(const vcl_string& identifier = "")
+  { if (!identifier.size()) return "boxm2_point"; else return "boxm2_point_"+identifier; }
+};
+
+
 template<>
 class boxm2_data_traits<BOXM2_NUM_OBS>
 {
@@ -172,6 +198,17 @@ class boxm2_data_traits<BOXM2_FLOAT8>
   static vcl_string prefix(const vcl_string& identifier = "")
   { if (!identifier.size()) return "float8"; else return "float8_"+identifier; }
 };
+
+template<>
+class boxm2_data_traits<BOXM2_VIS_SPHERE>
+{
+ public:
+  typedef vnl_vector_fixed<float, 16> datatype;
+  static vcl_size_t datasize() { return sizeof(datatype); }
+  static vcl_string prefix(const vcl_string& identifier = "")
+  { if (!identifier.size()) return "boxm2_vis_sphere"; else return "boxm2_vis_sphere_"+identifier; }
+};
+
 
 template<>
 class boxm2_data_traits<BOXM2_AUX0>
@@ -250,6 +287,7 @@ class boxm2_data_info
   static vcl_size_t datasize(vcl_string prefix)
   {
     // some of them changed to using find method to account for identifiers
+
     if (prefix.find(boxm2_data_traits<BOXM2_ALPHA>::prefix()) != vcl_string::npos)
       return boxm2_data_traits<BOXM2_ALPHA>::datasize();
     if (prefix.find(boxm2_data_traits<BOXM2_GAMMA>::prefix()) != vcl_string::npos)
@@ -290,6 +328,8 @@ class boxm2_data_info
       return boxm2_data_traits<BOXM2_AUX>::datasize();
     if (prefix == boxm2_data_traits<BOXM2_FLOAT8>::prefix())
       return boxm2_data_traits<BOXM2_FLOAT8>::datasize();
+    if (prefix == boxm2_data_traits<BOXM2_VIS_SPHERE>::prefix())
+      return boxm2_data_traits<BOXM2_VIS_SPHERE>::datasize();
 
     if (prefix.find(boxm2_data_traits<BOXM2_INTENSITY>::prefix()) != vcl_string::npos)
       return boxm2_data_traits<BOXM2_INTENSITY>::datasize();
@@ -300,6 +340,11 @@ class boxm2_data_info
     if (prefix.find(boxm2_data_traits<BOXM2_GAUSS_GREY>::prefix()) != vcl_string::npos)
       return boxm2_data_traits<BOXM2_GAUSS_GREY>::datasize();
 
+    if (prefix.find(boxm2_data_traits<BOXM2_NORMAL>::prefix()) != vcl_string::npos)
+      return boxm2_data_traits<BOXM2_NORMAL>::datasize();
+    
+    if (prefix.find(boxm2_data_traits<BOXM2_POINT>::prefix()) != vcl_string::npos)
+      return boxm2_data_traits<BOXM2_POINT>::datasize();
     return 0;
   }
 
