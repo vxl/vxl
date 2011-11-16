@@ -88,6 +88,11 @@ void boxm2_data_base::set_default_value(vcl_string data_type, boxm2_block_metada
       int buffer_length = (int)(buffer_length_/sizeof(float));
       for (int i=0; i<buffer_length; ++i) floats[i] = 0.0;
   }
+  else if (data_type == boxm2_data_traits<BOXM2_VIS_SPHERE>::prefix()) {
+        float* floats = (float*) data_buffer_;
+        int buffer_length = (int)(buffer_length_/sizeof(float));
+        for (int i=0; i<buffer_length; ++i) floats[i] = 1.0f;
+    }
   else {
     vcl_memset(data_buffer_, 0, buffer_length_);
   }
