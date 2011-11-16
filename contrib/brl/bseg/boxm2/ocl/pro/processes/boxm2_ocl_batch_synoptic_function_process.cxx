@@ -55,13 +55,13 @@ bool boxm2_ocl_batch_synoptic_function_process_cons(bprb_func_process& pro)
 {
   using namespace boxm2_ocl_batch_synoptic_function_process_globals;
 
-  //process takes 1 input
+  //process takes 6 inputs, no output
   vcl_vector<vcl_string> input_types_(n_inputs_);
   input_types_[0] = "bocl_device_sptr";
   input_types_[1] = "boxm2_scene_sptr";
   input_types_[2] = "boxm2_opencl_cache_sptr";
   input_types_[3] = "unsigned";         //: number of obs
-  input_types_[4] = "vcl_string";       //: identifiers name file.
+  input_types_[4] = "vcl_string";       //: identifiers name file
   input_types_[5] = "float";            //: interim sigma
 
   vcl_vector<vcl_string>  output_types_(n_outputs_);
@@ -74,7 +74,7 @@ bool boxm2_ocl_batch_synoptic_function_process(bprb_func_process& pro)
   using namespace boxm2_ocl_batch_synoptic_function_process_globals;
 
   if ( pro.n_inputs() < n_inputs_ ) {
-    vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
+    vcl_cout << pro.name() << ": The number of inputs should be " << n_inputs_<< vcl_endl;
     return false;
   }
   float transfer_time=0.0f;
@@ -83,7 +83,7 @@ bool boxm2_ocl_batch_synoptic_function_process(bprb_func_process& pro)
   unsigned i = 0;
   bocl_device_sptr device             = pro.get_input<bocl_device_sptr>(i++);
   boxm2_scene_sptr scene              = pro.get_input<boxm2_scene_sptr>(i++);
-  boxm2_opencl_cache_sptr opencl_cache = pro.get_input<boxm2_opencl_cache_sptr>(i++);
+  boxm2_opencl_cache_sptr opencl_cache= pro.get_input<boxm2_opencl_cache_sptr>(i++);
   unsigned int nobs                   = pro.get_input<unsigned>(i++);
   vcl_string identifier_filename      = pro.get_input<vcl_string>(i++);
   float interim_sigma                 = pro.get_input<float>(i++);
@@ -99,9 +99,9 @@ bool boxm2_ocl_batch_synoptic_function_process(bprb_func_process& pro)
   unsigned int n_images = 0;
   ifs >> n_images;
   for (unsigned int i=0; i<n_images; ++i) {
-      vcl_string img_id;
-      ifs >> img_id;
-      image_ids.push_back(img_id);
+    vcl_string img_id;
+    ifs >> img_id;
+    image_ids.push_back(img_id);
   }
   ifs.close();
 
@@ -134,106 +134,106 @@ bool boxm2_ocl_batch_synoptic_function_process(bprb_func_process& pro)
   vcl_vector<boxm2_block_id>::iterator id;
   for (id = block_ids.begin(); id != block_ids.end(); ++id)
   {
-      //choose correct render kernel
-      
-      bocl_mem* blk       = opencl_cache->get_block(*id);
-      bocl_mem* blk_info  = opencl_cache->loaded_block_info();
-      bocl_mem* alpha     = opencl_cache->get_data<BOXM2_ALPHA>(*id,0,true);
-      int alphaTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
-      boxm2_scene_info* info_buffer = (boxm2_scene_info*) blk_info->cpu_buffer();
-      info_buffer->data_buffer_length = (int) (alpha->num_bytes()/alphaTypeSize);
-     
-      //grab an appropriately sized AUX data buffer
-      int auxTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_FLOAT8>::prefix());
-      bocl_mem *coeffs_buff  = opencl_cache->get_data(*id, 
-                                                       boxm2_data_traits<BOXM2_FLOAT8>::prefix("cubic_model"),
-                                                       info_buffer->data_buffer_length*auxTypeSize,false);
-      
-      bocl_kernel * kern = kernels[(device->device_id())][0];
-      boxm2_block_metadata mdata = scene->get_block_metadata(*id);
-      str_blk_cache.init(*id);
-      int datasize = str_blk_cache.block_size_in_bytes_["aux0"]/ sizeof(float);
+    //choose correct render kernel
+
+    bocl_mem* blk       = opencl_cache->get_block(*id);
+    bocl_mem* blk_info  = opencl_cache->loaded_block_info();
+    bocl_mem* alpha     = opencl_cache->get_data<BOXM2_ALPHA>(*id,0,true);
+    int alphaTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
+    boxm2_scene_info* info_buffer = (boxm2_scene_info*) blk_info->cpu_buffer();
+    info_buffer->data_buffer_length = (int) (alpha->num_bytes()/alphaTypeSize);
+
+    //grab an appropriately sized AUX data buffer
+    int auxTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_FLOAT8>::prefix());
+    bocl_mem *coeffs_buff  = opencl_cache->get_data(*id,
+                                                    boxm2_data_traits<BOXM2_FLOAT8>::prefix("cubic_model"),
+                                                    info_buffer->data_buffer_length*auxTypeSize,false);
+
+    bocl_kernel * kern = kernels[(device->device_id())][0];
+    boxm2_block_metadata mdata = scene->get_block_metadata(*id);
+    str_blk_cache.init(*id);
+    int datasize = str_blk_cache.block_size_in_bytes_["aux0"]/ sizeof(float);
 
 
-      boxm2_data_base * data_type0 = str_blk_cache.data_types_["aux0"];
-      bocl_mem_sptr bocl_data_type0 = new bocl_mem(device->context(),data_type0->data_buffer(),data_type0->buffer_length(),"");
-      bocl_data_type0->create_buffer(CL_MEM_USE_HOST_PTR,queue);
+    boxm2_data_base * data_type0 = str_blk_cache.data_types_["aux0"];
+    bocl_mem_sptr bocl_data_type0 = new bocl_mem(device->context(),data_type0->data_buffer(),data_type0->buffer_length(),"");
+    bocl_data_type0->create_buffer(CL_MEM_USE_HOST_PTR,queue);
 
 
-      boxm2_data_base * data_type1 = str_blk_cache.data_types_["aux1"];
-      bocl_mem_sptr bocl_data_type1 = new bocl_mem(device->context(),data_type1->data_buffer(),data_type1->buffer_length(),"");
-      bocl_data_type1->create_buffer(CL_MEM_USE_HOST_PTR,queue);
+    boxm2_data_base * data_type1 = str_blk_cache.data_types_["aux1"];
+    bocl_mem_sptr bocl_data_type1 = new bocl_mem(device->context(),data_type1->data_buffer(),data_type1->buffer_length(),"");
+    bocl_data_type1->create_buffer(CL_MEM_USE_HOST_PTR,queue);
 
-      boxm2_data_base * data_type2 = str_blk_cache.data_types_["aux2"];
-      bocl_mem_sptr bocl_data_type2 = new bocl_mem(device->context(),data_type2->data_buffer(),data_type2->buffer_length(),"");
-      bocl_data_type2->create_buffer(CL_MEM_USE_HOST_PTR,queue);
+    boxm2_data_base * data_type2 = str_blk_cache.data_types_["aux2"];
+    bocl_mem_sptr bocl_data_type2 = new bocl_mem(device->context(),data_type2->data_buffer(),data_type2->buffer_length(),"");
+    bocl_data_type2->create_buffer(CL_MEM_USE_HOST_PTR,queue);
 
-      vcl_cout<<"No of cells "<<datasize<<vcl_endl;
+    vcl_cout<<"No of cells "<<datasize<<vcl_endl;
 
-      bocl_mem_sptr  nobs_mem=new bocl_mem(device->context(), &nobs, sizeof(int), "Number of Obs");
-      nobs_mem->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
+    bocl_mem_sptr  nobs_mem=new bocl_mem(device->context(), &nobs, sizeof(int), "Number of Obs");
+    nobs_mem->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
-      bocl_mem_sptr interim_sigma_mem=new bocl_mem(device->context(), &interim_sigma, sizeof(int), "Interim Sigma");
-      interim_sigma_mem->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
+    bocl_mem_sptr interim_sigma_mem=new bocl_mem(device->context(), &interim_sigma, sizeof(int), "Interim Sigma");
+    interim_sigma_mem->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
-      kern->set_arg(bocl_data_type0.ptr());
-      kern->set_arg(bocl_data_type1.ptr());
-      kern->set_arg(bocl_data_type2.ptr());
-      kern->set_arg(nobs_mem.ptr());
-      kern->set_arg(interim_sigma_mem.ptr());
+    kern->set_arg(bocl_data_type0.ptr());
+    kern->set_arg(bocl_data_type1.ptr());
+    kern->set_arg(bocl_data_type2.ptr());
+    kern->set_arg(nobs_mem.ptr());
+    kern->set_arg(interim_sigma_mem.ptr());
 
-      bocl_mem_sptr  datasize_mem=new bocl_mem(device->context(), &datasize, sizeof(int), "Data Size");
-      datasize_mem->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
+    bocl_mem_sptr  datasize_mem=new bocl_mem(device->context(), &datasize, sizeof(int), "Data Size");
+    datasize_mem->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
-      kern->set_arg(datasize_mem.ptr());
-      kern->set_arg(coeffs_buff);
+    kern->set_arg(datasize_mem.ptr());
+    kern->set_arg(coeffs_buff);
 
-      kern->set_local_arg(nobs*sizeof(float));
-      kern->set_local_arg(nobs*sizeof(float));
-      kern->set_local_arg(nobs*sizeof(float));
-      kern->set_local_arg(nobs*sizeof(float));
-      kern->set_local_arg(16*sizeof(float));
-      kern->set_local_arg(16*sizeof(float));
-      kern->set_local_arg(16*sizeof(float));
-      kern->set_local_arg(4*sizeof(float));
-      kern->set_local_arg(16*sizeof(float));
-      kern->set_local_arg(4*sizeof(float));
+    kern->set_local_arg(nobs*sizeof(float));
+    kern->set_local_arg(nobs*sizeof(float));
+    kern->set_local_arg(nobs*sizeof(float));
+    kern->set_local_arg(nobs*sizeof(float));
+    kern->set_local_arg(16*sizeof(float));
+    kern->set_local_arg(16*sizeof(float));
+    kern->set_local_arg(16*sizeof(float));
+    kern->set_local_arg(4*sizeof(float));
+    kern->set_local_arg(16*sizeof(float));
+    kern->set_local_arg(4*sizeof(float));
 
-      vcl_size_t lThreads[] = {4, 8};
-      vcl_size_t gThreads[] = {datasize*4,8};
+    vcl_size_t lThreads[] = {4, 8};
+    vcl_size_t gThreads[] = {datasize*4,8};
 
-      kern->execute(queue, 2, lThreads, gThreads);
-      
-      clFinish(queue);
-      vcl_cout<<"Time taken "<< kern->exec_time()<<vcl_endl;
+    kern->execute(queue, 2, lThreads, gThreads);
 
-      //clear render kernel args so it can reset em on next execution
-      kern->clear_args();
-      coeffs_buff->read_to_buffer(queue);
+    clFinish(queue);
+    vcl_cout<<"Time taken "<< kern->exec_time()<<vcl_endl;
 
-      float * cubic_coeffs = (float*) coeffs_buff->cpu_buffer();
+    //clear render kernel args so it can reset em on next execution
+    kern->clear_args();
+    coeffs_buff->read_to_buffer(queue);
 
-      //vcl_cout<<"Debug Info ";
-      //for(unsigned k =0; k< 100;k++)
-      //    vcl_cout<<k<<" : "<<cubic_coeffs[k]<<"\n";
+    float * cubic_coeffs = (float*) coeffs_buff->cpu_buffer();
+#if 0
+    vcl_cout<<"Debug Info ";
+    for (unsigned k=0; k<100; ++k)
+      vcl_cout<<k<<" : "<<cubic_coeffs[k]<<'\n';
 
+    boxm2_block *     cpu_blk     = cache->get_block(*id);
+    boxm2_data_base *  cpu_alpha  = cache->get_data_base(*id,boxm2_data_traits<BOXM2_ALPHA>::prefix(),0,false);
+    boxm2_data_base *  cubic_model_data  = cache->get_data_base(*id,boxm2_data_traits<BOXM2_FLOAT8>::prefix("cubic_model"),cpu_alpha->buffer_length()* 8 ,false);
+    boxm2_update_synoptic_probability data_functor;
+    data_functor.init_data(cpu_alpha,cubic_model_data);
 
-      //boxm2_block *     cpu_blk     = cache->get_block(*id);
-      //boxm2_data_base *  cpu_alpha  = cache->get_data_base(*id,boxm2_data_traits<BOXM2_ALPHA>::prefix(),0,false);
-      //boxm2_data_base *  cubic_model_data  = cache->get_data_base(*id,boxm2_data_traits<BOXM2_FLOAT8>::prefix("cubic_model"),cpu_alpha->buffer_length()* 8 ,false);
-      //boxm2_update_synoptic_probability data_functor;
-      //data_functor.init_data(cpu_alpha,cubic_model_data);
-     
-      //int phongs_model_TypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_FLOAT8>::prefix());
-      //int data_buff_length = (int) (cubic_model_data->buffer_length()/phongs_model_TypeSize);
+    int phongs_model_TypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_FLOAT8>::prefix());
+    int data_buff_length = (int) (cubic_model_data->buffer_length()/phongs_model_TypeSize);
 
-      //boxm2_data_leaves_serial_iterator<boxm2_update_synoptic_probability>(cpu_blk,data_buff_length,data_functor);
+    boxm2_data_leaves_serial_iterator<boxm2_update_synoptic_probability>(cpu_blk,data_buff_length,data_functor);
 
-      //cache->remove_data_base( *id, boxm2_data_traits<BOXM2_FLOAT8>::prefix("cubic_model") );
-      //cache->remove_data_base(*id,boxm2_data_traits<BOXM2_ALPHA>::prefix());
+    cache->remove_data_base( *id, boxm2_data_traits<BOXM2_FLOAT8>::prefix("cubic_model") );
+    cache->remove_data_base(*id,boxm2_data_traits<BOXM2_ALPHA>::prefix());
+#endif // 0
   }
   clReleaseCommandQueue(queue);
 
-  vcl_cout<<"Finished Ocl Cubic in "<<t.all()<<" ms "<<vcl_endl;
+  vcl_cout<<"Finished Ocl Cubic in "<<t.all()<<" ms"<<vcl_endl;
   return true;
 }
