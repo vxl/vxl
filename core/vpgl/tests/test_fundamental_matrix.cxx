@@ -91,13 +91,6 @@ static void test_fundamental_matrix()
              vgl_distance( p3i[0], vgl_point_2d<double>(
                 C2l_est2.project( vgl_homg_point_3d<double>(p3w[0]) ) ) ), 0, 5.0 );
 
-  // Test registered fundamental matrix construction:
-  vgl_point_2d<double> p3r(0,2);
-  vgl_point_2d<double> p3l(-4,7);
-  vpgl_reg_fundamental_matrix<double> F4(p3r,p3l);
-  TEST_NEAR( "registered fundamental_matrix", dot_product(
-    vnl_vector_fixed<double,3>(p3l.x(),p3l.y(),1),
-    F4.get_matrix()*vnl_vector_fixed<double,3>(p3r.x(),p3r.y(),1)), 0, 1e-06 );
 }
 
 TESTMAIN(test_fundamental_matrix);

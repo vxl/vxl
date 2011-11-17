@@ -4,6 +4,7 @@
 #include <vcl_vector.h>
 #include <vcl_cmath.h>
 #include <vpgl/vpgl_local_rational_camera.h>
+#include <vpgl/io/vpgl_io_local_rational_camera.h>
 #include <vpgl/vpgl_lvcs.h>
 #include <vnl/vnl_matrix_fixed.h>
 
@@ -85,11 +86,11 @@ static void test_local_rational_camera()
   // test binary I/O
   vcl_string b_path = "./test_binary.vsl";
   vsl_b_ofstream os(b_path);
-  lrcam.b_write(os);
+  vsl_b_write(os, lrcam);
   os.close();
   vsl_b_ifstream is(b_path);
   vpgl_local_rational_camera<double> lrcam_r;
-  lrcam_r.b_read(is);
+  vsl_b_read(is, lrcam_r);
   double ulb, vlb;
   lrc_r->project(0.0, 0.0, 0.0, ulb, vlb);
   TEST_NEAR("read from binary file", vcl_fabs(ug-ulb)+vcl_fabs(vg-vlb),
