@@ -21,9 +21,9 @@
 #include <vil/vil_pyramid_image_view.h>
 
 //vsph
-#include <vpgl/vsph/vsph_view_sphere.h>
-#include <vpgl/vsph/vsph_view_point.h>
-#include <vpgl/vsph/vsph_sph_point_3d.h>
+#include <vsph/vsph_view_sphere.h>
+#include <vsph/vsph_view_point.h>
+#include <vsph/vsph_sph_point_3d.h>
 
 #define PYRAMID_MAX_LEVEL 4
 #define PYRAMID_SCALE 0.85
