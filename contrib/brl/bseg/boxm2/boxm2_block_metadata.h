@@ -17,7 +17,6 @@
 // \date   16 Dec 2010
 //
 #include <boxm2/basic/boxm2_block_id.h>
-#include <vpgl/bgeo/bgeo_lvcs.h>
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_vector_3d.h>
 #include <vcl_iosfwd.h>

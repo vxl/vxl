@@ -24,30 +24,30 @@ boxm2_scene_parser::boxm2_scene_parser()
   init_params();
 }
 
-bool boxm2_scene_parser::lvcs(bgeo_lvcs& lvcs)
+bool boxm2_scene_parser::lvcs(vpgl_lvcs& lvcs)
 {
-  bgeo_lvcs::cs_names cs_name = bgeo_lvcs::str_to_enum(lvcs_cs_name_.data());
-  bgeo_lvcs::LenUnits len_unit;
-  bgeo_lvcs::AngUnits geo_unit;
+  vpgl_lvcs::cs_names cs_name = vpgl_lvcs::str_to_enum(lvcs_cs_name_.data());
+  vpgl_lvcs::LenUnits len_unit;
+  vpgl_lvcs::AngUnits geo_unit;
    if (vcl_strcmp(lvcs_XYZ_unit_.data(), "feet")==0)
-     len_unit = bgeo_lvcs::FEET;
+     len_unit = vpgl_lvcs::FEET;
    if (vcl_strcmp(lvcs_XYZ_unit_.data(), "meters")==0)
-     len_unit = bgeo_lvcs::METERS;
+     len_unit = vpgl_lvcs::METERS;
    else {
      vcl_cout << "LVCS Length Unit " << lvcs_XYZ_unit_ << " is not valid\n";
      return false;
    }
 
    if (vcl_strcmp(lvcs_geo_angle_unit_.data(), "radians")==0)
-     geo_unit = bgeo_lvcs::RADIANS;
+     geo_unit = vpgl_lvcs::RADIANS;
    if (vcl_strcmp(lvcs_geo_angle_unit_.data(), "degrees")==0)
-     geo_unit = bgeo_lvcs::DEG;
+     geo_unit = vpgl_lvcs::DEG;
    else {
      vcl_cout << "LVCS Geo Angle Unit " << lvcs_geo_angle_unit_ << " is not valid\n";
      return false;
    }
 
-   lvcs = bgeo_lvcs(lvcs_origin_lat_,lvcs_origin_lon_,lvcs_origin_elev_, cs_name,
+   lvcs = vpgl_lvcs(lvcs_origin_lat_,lvcs_origin_lon_,lvcs_origin_elev_, cs_name,
                     lvcs_lat_scale_, lvcs_lon_scale_, geo_unit, len_unit,
                     lvcs_local_origin_x_, lvcs_local_origin_y_, lvcs_theta_);
   return true;

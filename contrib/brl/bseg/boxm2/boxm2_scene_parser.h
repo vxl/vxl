@@ -6,7 +6,7 @@
 
 #include <boxm2/basic/boxm2_block_id.h>
 #include <boxm2/boxm2_block_metadata.h>
-#include <vpgl/bgeo/bgeo_lvcs.h>
+#include <vpgl/vpgl_lvcs.h>
 #include <vgl/vgl_point_3d.h>
 #include <vcl_map.h>
 
@@ -35,7 +35,7 @@ class boxm2_scene_parser : public expatpp
   ~boxm2_scene_parser(void) {}
 
    // ACCESSORS for parser info
-   bool lvcs(bgeo_lvcs& lvcs);
+   bool lvcs(vpgl_lvcs& lvcs);
    vgl_point_3d<double> origin() const { return origin_; }
    vcl_string path() const { return path_; }
    vcl_string name() const { return name_; }

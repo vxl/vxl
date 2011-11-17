@@ -8,7 +8,7 @@
 //
 #include <boxm2/basic/boxm2_block_id.h>
 #include <boxm2/boxm2_block_metadata.h>
-#include <vpgl/bgeo/bgeo_lvcs.h>
+#include <vpgl/vpgl_lvcs.h>
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_box_3d.h>
 #include <vcl_iosfwd.h>
@@ -125,7 +125,7 @@ class boxm2_scene : public vbl_ref_count
     //: scene dimensions accessors
     vgl_point_3d<double>    local_origin()const { return local_origin_; }
     vgl_point_3d<double>    rpc_origin()  const { return rpc_origin_; }
-    bgeo_lvcs               lvcs()        const { return lvcs_; }
+    vpgl_lvcs               lvcs()        const { return lvcs_; }
 
     //: scene path accessors
     vcl_string              xml_path()    const { return xml_path_; }
@@ -142,7 +142,7 @@ class boxm2_scene : public vbl_ref_count
     //: scene mutators
     void set_local_origin(vgl_point_3d<double> org) { local_origin_ = org; }
     void set_rpc_origin(vgl_point_3d<double> rpc)   { rpc_origin_ = rpc; }
-    void set_lvcs(bgeo_lvcs lvcs)                   { lvcs_ = lvcs; }
+    void set_lvcs(vpgl_lvcs lvcs)                   { lvcs_ = lvcs; }
     void set_blocks(vcl_map<boxm2_block_id, boxm2_block_metadata> blocks) { blocks_ = blocks; }
     void add_block_metadata(boxm2_block_metadata data);
     void set_appearances(vcl_vector<vcl_string> const& appearances){ this->appearances_ = appearances; }
@@ -155,7 +155,7 @@ class boxm2_scene : public vbl_ref_count
   private:
 
     //: world scene information
-    bgeo_lvcs               lvcs_;
+    vpgl_lvcs               lvcs_;
     vgl_point_3d<double>    local_origin_;
     vgl_point_3d<double>    rpc_origin_;
 

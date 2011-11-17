@@ -440,7 +440,7 @@ void x_write(vcl_ostream &os, boxm2_scene& scene, vcl_string name)
   scene_elm.x_write_open(os);
 
   //write lvcs information
-  bgeo_lvcs lvcs = scene.lvcs();
+  vpgl_lvcs lvcs = scene.lvcs();
   lvcs.x_write(os, LVCS_TAG);
   x_write(os, scene.local_origin(), LOCAL_ORIGIN_TAG);
 
@@ -531,7 +531,7 @@ vcl_ostream& operator <<(vcl_ostream &s, boxm2_scene& scene)
   for (unsigned int i=0; i<apps.size(); ++i)
     s << "    " << apps[i] << ", ";
   s << '\n';
-  bgeo_lvcs lvcs = scene.lvcs();
+  vpgl_lvcs lvcs = scene.lvcs();
   s << lvcs << '\n';
 
   vgl_box_3d<double> bb = scene.bounding_box();

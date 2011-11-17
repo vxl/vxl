@@ -19,7 +19,6 @@
 #include <boxm2/basic/boxm2_array_2d.h>
 #include <boxm2/basic/boxm2_array_3d.h>
 #include <vnl/vnl_vector_fixed.h>
-#include <vpgl/bgeo/bgeo_lvcs.h>
 #include <vgl/vgl_vector_3d.h>
 #include <vcl_iosfwd.h>
 
