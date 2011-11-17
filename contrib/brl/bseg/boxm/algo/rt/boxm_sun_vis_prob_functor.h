@@ -9,7 +9,7 @@
 #include <boxm/basic/boxm_seg_length_functor.h>
 #include "boxm_pre_infinity_functor.h"
 #include <boxm/sample/algo/boxm_simple_grey_processor.h>
-#include <vpgl/algo/vpgl_camera_from_box.h>
+#include <bpgl/algo/bpgl_camera_from_box.h>
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_box_3d.h>
 #include <vgl/vgl_vector_3d.h>
@@ -75,7 +75,7 @@ void boxm_sun_vis_prob(boxm_scene<boct_tree<T_loc, T_data > > &scene,
   unsigned sun_ni = 1<<max_level;//twice as many
   unsigned sun_nj = sun_ni;
   vpgl_affine_camera<double> sun_cam =
-  vpgl_camera_from_box::affine_camera_from_box(world_bb, -sun_angle, sun_ni, sun_nj);
+  bpgl_camera_from_box::affine_camera_from_box(world_bb, -sun_angle, sun_ni, sun_nj);
 
   vpgl_camera_double_sptr cam = new vpgl_affine_camera<double> (sun_cam);
 

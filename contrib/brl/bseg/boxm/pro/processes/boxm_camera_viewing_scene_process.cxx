@@ -19,7 +19,7 @@
 #include <brdb/brdb_value.h>
 
 #include <vpgl/vpgl_perspective_camera.h>
-#include <vpgl/algo/vpgl_project.h>
+#include <bpgl/algo/bpgl_project.h>
 #include <vpgl/vpgl_lvcs_sptr.h>
 #include <vpgl/vpgl_lvcs.h>
 #include <vcl_string.h>
@@ -114,7 +114,7 @@ bool boxm_camera_viewing_scene_process(bprb_func_process& pro)
 
   //4) Adjust the focal length so that the box projects into the image
   // project the bounding box
-  vgl_box_2d<double> image_bb = vpgl_project::project_bounding_box(*cam, bb);
+  vgl_box_2d<double> image_bb = bpgl_project::project_bounding_box(*cam, bb);
   // get 2-d box diameter and image diameter
   double bw = image_bb.width(), bh = image_bb.height();
   double bd = vcl_sqrt(bw*bw + bh*bh);
