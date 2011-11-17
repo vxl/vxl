@@ -4,6 +4,7 @@
 #define BUNDLER_DEBUG
 
 #include <vcl_vector.h>
+#include <vcl_utility.h>
 
 #include <vbl/vbl_smart_ptr.txx>
 #include <vbl/vbl_ref_count.h>
@@ -16,7 +17,7 @@
 
 #include <vil/vil_image_resource.h>
 
-#include <mrc/vpgl/vpgl_perspective_camera.h>
+#include <vpgl/vpgl_perspective_camera.h>
 
 // A magic number that indicates an image either has no exif tag, or
 // the exif tag does not have a focal length

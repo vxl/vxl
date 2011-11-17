@@ -23,7 +23,7 @@
 #include <vil/vil_image_resource.h>
 
 // Include the classes used to represent cameras and points.
-#include <mrc/vpgl/vpgl_perspective_camera.h>
+#include <vpgl/vpgl_perspective_camera.h>
 #include <vgl/vgl_point_3d.h>
 
 // Include the classes for the stages.

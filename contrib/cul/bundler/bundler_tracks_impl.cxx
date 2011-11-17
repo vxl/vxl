@@ -1,8 +1,8 @@
 #include <bundler/bundler_tracks_impl.h>
 #include <bundler/bundler_inters.h>
 
-#include <mrc/vpgl/vpgl_fundamental_matrix.h>
-#include <mrc/vpgl/algo/vpgl_fm_compute_ransac.h>
+#include <vpgl/vpgl_fundamental_matrix.h>
+#include <bpgl/algo/bpgl_fm_compute_ransac.h>
 
 #include <bapl/bapl_lowe_keypoint_sptr.h>
 #include <bapl/bapl_keypoint_extractor.h>
@@ -293,7 +293,7 @@ void bundler_tracks_impl_refine_epipolar::operator ()(
 
     // Get the rhs and lhs vectors
     // Create the ransac problem solver
-    vpgl_fm_compute_ransac ransac;
+    bpgl_fm_compute_ransac ransac;
     ransac.set_desired_prob_good(settings.probability_good_f_mat);
     ransac.set_outlier_threshold(settings.outlier_threshold);
     ransac.set_max_outlier_frac(settings.max_outlier_frac);

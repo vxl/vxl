@@ -83,7 +83,7 @@ static void test_bundle_adjust(){
                 WORLD_POINTS[i].z() + TOL/2.0f,
                 row, col);
 
-            if((row == 0 && col == 0) or row < 0 or col < 0){ 
+            if((row == 0 && col == 0) || row < 0 || col < 0){ 
                 continue; 
             }
 

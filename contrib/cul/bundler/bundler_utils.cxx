@@ -1,7 +1,7 @@
 #include <bundler/bundler_utils.h>
 
-#include <mrc/vpgl/algo/vpgl_triangulate_points.h>
-#include <mrc/vpgl/algo/vpgl_camera_compute.h>
+#include <vpgl/algo/vpgl_triangulate_points.h>
+#include <vpgl/algo/vpgl_camera_compute.h>
 
 #include <vcl_cmath.h>
 #include <vcl_cstdlib.h>

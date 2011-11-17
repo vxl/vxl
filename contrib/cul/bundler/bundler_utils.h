@@ -8,7 +8,7 @@
 #include <vgl/vgl_point_2d.h>
 #include <vnl/vnl_double_3x3.h>
 
-#include <mrc/vpgl/vpgl_perspective_camera.h>
+#include <vpgl/vpgl_perspective_camera.h>
 #include <bundler/bundler_inters.h>
 
 // Generally useful function used for RANSAC.

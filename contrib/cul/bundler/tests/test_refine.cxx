@@ -1,7 +1,7 @@
 #include <testlib/testlib_test.h>
 #include <bundler/bundler_tracks_impl.h>
 
-#include <mrc/vpgl/algo/vpgl_fm_compute_ransac.h>
+#include <bpgl/algo/bpgl_fm_compute_ransac.h>
 
 #include <vil/vil_load.h>
 
