@@ -1,5 +1,4 @@
 #include <boct/boct_bit_tree.h>
-#include <boct/boct_bit_tree2.h>
 #include <boct/boct_loc_code.h>
 #include <boct/boct_test_util.h>
 #include <boct/boct_tree.h>
