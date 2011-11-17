@@ -14,7 +14,7 @@ ADD_EXECUTABLE( bundler_test_all test_driver.cxx
   utils.cxx     utils.h)
 
 
-TARGET_LINK_LIBRARIES(bundler_test_all bundler vpgl_algo vpgl vpgl_file_formats vsol bgeo vgl_algo vnl_algo vnl vgl vil vul vbl rrel bapl rsdl testlib)
+TARGET_LINK_LIBRARIES(bundler_test_all bundler vpgl_algo vpgl vpgl_file_formats vsol vgl_algo vnl_algo vnl vgl vil vul vbl rrel bapl rsdl testlib)
 
 ADD_TEST( 
     bundler_test_utils 

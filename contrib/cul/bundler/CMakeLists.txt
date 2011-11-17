@@ -32,7 +32,7 @@ SET(bundler_sources
 
 ADD_LIBRARY(bundler ${bundler_sources})
 
-TARGET_LINK_LIBRARIES(bundler vpgl_algo vpgl vpgl_file_formats vsol bgeo vgl_algo vnl_algo vnl vgl vil vul vbl rrel bapl rsdl)
+TARGET_LINK_LIBRARIES(bundler vpgl_algo vpgl vpgl_file_formats vsol vgl_algo vnl_algo vnl vgl vil vul vbl rrel bapl rsdl)
 
 IF( BUILD_TESTING )
   SUBDIRS(tests)
