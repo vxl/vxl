@@ -7,7 +7,7 @@
 #include <vgl/vgl_box_3d.h>
 #include <vgl/vgl_homg_point_3d.h>
 #include <vgl/algo/vgl_rotation_3d.h>
-#include <vpgl/algo/vpgl_project.h>
+#include <bpgl/algo/bpgl_project.h>
 #include <bpgl/algo/bpgl_camera_from_box.h>
 #include <vpgl/vpgl_calibration_matrix.h>
 #include <vgl/vgl_homg_line_3d_2_points.h>
@@ -22,7 +22,7 @@ static void test_camera_from_box()
   double sq3 = 1.0/vcl_sqrt(3.0);
   vgl_vector_3d<double> ray(-sq3, -sq3, -sq3);
   vpgl_affine_camera<double> C = bpgl_camera_from_box::affine_camera_from_box(box, ray, ni, nj);
-  vgl_box_2d<double> b2d = vpgl_project::project_bounding_box(C, box);
+  vgl_box_2d<double> b2d = bpgl_project::project_bounding_box(C, box);
   vgl_point_2d<double> pmin = b2d.min_point(), pmax = b2d.max_point();
   vgl_point_2d<double> imin(0,0), imax(150, 100);
   double len = (pmin-imin).length() + (pmax-imax).length();
@@ -31,7 +31,7 @@ static void test_camera_from_box()
   vgl_homg_line_3d_2_points<double> line = C.backproject(ph);
   vgl_point_3d<double> cam_center(10, 10, 10);
   vpgl_perspective_camera<double> Cp = bpgl_camera_from_box::persp_camera_from_box(box, cam_center, ni, nj);
-  vgl_box_2d<double> b2dp = vpgl_project::project_bounding_box(Cp, box);
+  vgl_box_2d<double> b2dp = bpgl_project::project_bounding_box(Cp, box);
   vgl_point_2d<double> c2d = b2dp.centroid();
   pmin = b2dp.min_point(); pmax = b2dp.max_point();
   len = (pmin-imin).length() + (pmax-imax).length() + (c2d-vgl_point_2d<double>(ni/2.0, nj/2.0)).length();
@@ -45,7 +45,7 @@ static void test_camera_from_box()
   vpgl_affine_camera<double> sun_cam = bpgl_camera_from_box::affine_camera_from_box(sun_box, sun_ray, ni, nj);
   sun_cam.set_viewing_distance(300000);
   vgl_box_2d<double> sun_b2d = 
-    vpgl_project::project_bounding_box(sun_cam, sun_box);
+    bpgl_project::project_bounding_box(sun_cam, sun_box);
   vgl_homg_point_2d<double> sun_ph(ni/2.0, nj/2.0);
   vgl_homg_line_3d_2_points<double> sun_line = sun_cam.backproject(sun_ph);
   vgl_homg_point_3d<double> pi = sun_line.point_infinite();

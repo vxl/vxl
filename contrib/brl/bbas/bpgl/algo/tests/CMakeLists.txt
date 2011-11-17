@@ -10,6 +10,7 @@ ADD_EXECUTABLE( bpgl_algo_test_all
   test_camera_homographies.cxx
   test_camera_from_box.cxx
   test_construct_cameras.cxx
+  test_project.cxx
 )
 
 TARGET_LINK_LIBRARIES( bpgl_algo_test_all bpgl_algo vpgl_algo vgl_algo vgl vnl_algo vnl vil vul testlib )
@@ -26,6 +27,7 @@ ADD_TEST( bpgl_algo_test_optimize_camera             ${EXECUTABLE_OUTPUT_PATH}/b
 ADD_TEST( bpgl_algo_test_interpolate                 ${EXECUTABLE_OUTPUT_PATH}/bpgl_algo_test_all test_interpolate )
 ADD_TEST( bpgl_algo_test_camera_homographies         ${EXECUTABLE_OUTPUT_PATH}/bpgl_algo_test_all test_camera_homographies )
 ADD_TEST( bpgl_algo_test_camera_from_box             ${EXECUTABLE_OUTPUT_PATH}/bpgl_algo_test_all test_camera_from_box )
+ADD_TEST( bpgl_algo_test_project                     ${EXECUTABLE_OUTPUT_PATH}/bpgl_algo_test_all test_project )
 
 
 

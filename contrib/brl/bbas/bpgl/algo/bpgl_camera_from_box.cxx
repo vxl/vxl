@@ -1,5 +1,5 @@
 #include "bpgl_camera_from_box.h"
-#include <vpgl/algo/vpgl_project.h>
+#include "bpgl_project.h"
 #include <vpgl/vpgl_calibration_matrix.h>
 #include <vgl/algo/vgl_rotation_3d.h>
 
@@ -16,7 +16,7 @@ persp_camera_from_box(vgl_box_3d<double> const & box,
   vgl_point_3d<double> cnt = box.centroid();
   vgl_homg_point_3d<double> cnth(cnt.x(), cnt.y(), cnt.z());
   C.look_at(cnth);
-  vgl_box_2d<double> b2d = vpgl_project::project_bounding_box(C, box);
+  vgl_box_2d<double> b2d = bpgl_project::project_bounding_box(C, box);
   vgl_point_2d<double> cnt2 = b2d.centroid();
   double w = b2d.width(), h = b2d.height();
   if(w==0||h==0) return C;
@@ -40,7 +40,7 @@ affine_camera_from_box(vgl_box_3d<double> const & box,
   vgl_point_3d<double> cnt = box.centroid();
   vgl_vector_3d<double> up(0,0,1);
   vpgl_affine_camera<double> C(ray, up, cnt, ni/2.0, nj/2.0, du, dv);
-  vgl_box_2d<double> b2d = vpgl_project::project_bounding_box(C, box);
+  vgl_box_2d<double> b2d = bpgl_project::project_bounding_box(C, box);
   double w = b2d.width(), h = b2d.height();
   if(w==0||h==0) return C;
   double su = ni/w, sv = nj/h;
