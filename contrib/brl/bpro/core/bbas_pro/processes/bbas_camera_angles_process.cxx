@@ -11,7 +11,6 @@
 #include <vpgl/vpgl_camera.h>
 #include <vpgl/vpgl_local_rational_camera.h>
 #include <vpgl/algo/vpgl_backproject.h>
-//#include <vpgl/bgeo/bgeo_lvcs.h>
 #include <vcl_vector.h>
 #include <vcl_iostream.h>
 
@@ -64,10 +63,10 @@ bool bbas_camera_angles_process(bprb_func_process& pro)
           double lat = pt_y;
           double lon = pt_x;
           double el = pt_z;
-          bgeo_lvcs lvcs(lat, lon, el, bgeo_lvcs::wgs84, 0.0, 0.0, bgeo_lvcs::DEG, bgeo_lvcs::METERS);
+          vpgl_lvcs lvcs(lat, lon, el, vpgl_lvcs::wgs84, 0.0, 0.0, vpgl_lvcs::DEG, vpgl_lvcs::METERS);
           camera = new vpgl_local_rational_camera<double>(lvcs,*rcam);
           // should return 0,0,0 since point was used as origin
-          lvcs.global_to_local(lon, lat, el, bgeo_lvcs::wgs84, pt_x, pt_y, pt_z);
+          lvcs.global_to_local(lon, lat, el, vpgl_lvcs::wgs84, pt_x, pt_y, pt_z);
       }
   }
 
