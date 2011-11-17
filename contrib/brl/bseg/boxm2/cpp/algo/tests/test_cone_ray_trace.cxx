@@ -76,7 +76,7 @@ void test_cone_ray_trace()
     for (int y=0; y<4; ++y) {
       //load current block/tree
       uchar16 tree = blk->trees()(x,y,0);
-      boct_bit_tree2 bit_tree( (unsigned char*)tree.data_block(), info->root_level+1);
+      boct_bit_tree bit_tree( (unsigned char*)tree.data_block(), info->root_level+1);
       int data_ptr = bit_tree.get_data_ptr();
 
       alpha_data_->data()[data_ptr] = 1000;
@@ -87,7 +87,7 @@ void test_cone_ray_trace()
     for (int y=4; y<8; ++y) {
       //load current block/tree
       uchar16 tree = blk->trees()(x,y,0);
-      boct_bit_tree2 bit_tree( (unsigned char*)tree.data_block(), info->root_level+1);
+      boct_bit_tree bit_tree( (unsigned char*)tree.data_block(), info->root_level+1);
       int data_ptr = bit_tree.get_data_ptr();
 
       alpha_data_->data()[data_ptr] = 1000;

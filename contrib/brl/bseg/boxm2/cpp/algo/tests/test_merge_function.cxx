@@ -16,7 +16,7 @@ void test_merge_bit_tree()
     //--------------------------------------------------------------------------
     //try a simple tree
     {
-      boct_bit_tree2 btree; 
+      boct_bit_tree btree; 
       btree.set_bit_at(0, true); 
 
       //setup alpha buffer
@@ -28,7 +28,7 @@ void test_merge_bit_tree()
 
       //test single merge
       boxm2_merge_block_function merge_function;
-      boct_bit_tree2 merged = merge_function.merge_bit_tree(btree, alpha, 0.3f);
+      boct_bit_tree merged = merge_function.merge_bit_tree(btree, alpha, 0.3f);
       
       for(int i=0; i<73; ++i) {
         if(merged.bit_at(i) != 0) {
@@ -42,7 +42,7 @@ void test_merge_bit_tree()
     //--------------------------------------------------------------------------
     //try slightly more complex tree
     {
-      boct_bit_tree2 btree; 
+      boct_bit_tree btree; 
       btree.set_bit_at(0, true);   //should have 17 cells
       btree.set_bit_at(1, true); 
 
@@ -55,7 +55,7 @@ void test_merge_bit_tree()
 
       //test single merge
       boxm2_merge_block_function merge_function;
-      boct_bit_tree2 merged = merge_function.merge_bit_tree(btree, alpha, 0.3f);
+      boct_bit_tree merged = merge_function.merge_bit_tree(btree, alpha, 0.3f);
       
       if(merged.bit_at(0) != 1) {
         TEST("Merge larger tree (merged root, shouldn't have)", true, false); 
@@ -73,7 +73,7 @@ void test_merge_bit_tree()
     //--------------------------------------------------------------------------
     //finally test a tree that shouldn't merge (due to one cell)
     {
-      boct_bit_tree2 btree; 
+      boct_bit_tree btree; 
       btree.set_bit_at(0, true);   //should have 17 cells
       btree.set_bit_at(1, true); 
 
@@ -88,7 +88,7 @@ void test_merge_bit_tree()
 
       //test single merge
       boxm2_merge_block_function merge_function;
-      boct_bit_tree2 merged = merge_function.merge_bit_tree(btree, alpha, 0.3f);
+      boct_bit_tree merged = merge_function.merge_bit_tree(btree, alpha, 0.3f);
       
       if(merged.bit_at(0) == 1 && merged.bit_at(1) == 1) 
         TEST("Merge fails correctly", true, true); 
