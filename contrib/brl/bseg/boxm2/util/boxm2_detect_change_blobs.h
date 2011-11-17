@@ -49,7 +49,8 @@ void boxm2_util_detect_blobs(const vil_image_view<bool>& imgIn,
 void boxm2_util_remove_singletons(const vil_image_view<bool>& imgIn, 
                                         vil_image_view<bool>& imgOut); 
                                         
-   
+void boxm2_util_dilate_erode(const vil_image_view<bool>& imgIn,
+                                   vil_image_view<bool>& imgOut);
                                     
                                         
 void boxm2_util_blob_to_image( vcl_vector<boxm2_change_blob>& blobs, 

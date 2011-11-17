@@ -1,5 +1,4 @@
 #include "boxm2_point_util.h"
-#include <vpgl/algo/vpgl_camera_bounds.h>
 #include <vgl/algo/vgl_rotation_3d.h>
 #include <vnl/vnl_double_3.h>
 #include <vnl/vnl_quaternion.h>

@@ -2,7 +2,7 @@
 #include "boxm2_point_util.h"
 //:
 // \file
-#include <vpgl/algo/vpgl_camera_bounds.h>
+#include <vsph/vsph_camera_bounds.h>
 #include <vgl/vgl_box_3d.h>
 #include <vgl/algo/vgl_rotation_3d.h>
 #include <vnl/vnl_double_3.h>
@@ -120,7 +120,7 @@ boxm2_convert_bundle::boxm2_convert_bundle(vcl_string bundle_file, vcl_string im
 
   vgl_ray_3d<double> cone_axis;
   double cone_half_angle, solid_angle;
-  vpgl_camera_bounds::pixel_solid_angle(cams_[good_cam], ni/4, nj/4,cone_axis,cone_half_angle,solid_angle);
+  vsph_camera_bounds::pixel_solid_angle(cams_[good_cam], ni/4, nj/4,cone_axis,cone_half_angle,solid_angle);
   vgl_point_3d<double> cc = cams_[good_cam].camera_center();
   resolution_ = 2*(cc-centre(pts_3d)).length()*cone_half_angle;
   vcl_cout<<"Resolution     "<<resolution_<<vcl_endl;

@@ -7,7 +7,7 @@
 #include <vgl/vgl_box_2d.h>
 #include <vgl/vgl_intersection.h>
 #include <vgl/vgl_polygon_scan_iterator.h>
-#include <vpgl/algo/vpgl_camera_bounds.h>
+#include <vsph/vsph_camera_bounds.h>
 #include <vil/vil_image_view.h>
 
 //~ //: takes in a list of cameras and a bounding box, creates 
@@ -25,7 +25,7 @@ void boxm2_util_cams_and_box_to_scene (vcl_vector<CamType>& cams,
 
     //run planar bounding box
     vgl_box_2d<double> b2box;
-    if (vpgl_camera_bounds::planar_bounding_box(cams,b2box,zplane))
+    if (vsph_camera_bounds::planar_bounding_box(cams,b2box,zplane))
         vcl_cout<<"Bounding box found: "<<b2box<<vcl_endl;
     else
         vcl_cout<<"Bounding box not found."<<vcl_endl;
@@ -38,7 +38,7 @@ void boxm2_util_cams_and_box_to_scene (vcl_vector<CamType>& cams,
     vgl_point_2d<double> pp = (cam.get_calibration()).principal_point();
     vgl_ray_3d<double> cone_axis;
     double cone_half_angle, solid_angle;
-    vpgl_camera_bounds::pixel_solid_angle(cam, pp.x()/4, pp.y()/4, cone_axis, cone_half_angle, solid_angle);
+    vsph_camera_bounds::pixel_solid_angle(cam, pp.x()/4, pp.y()/4, cone_axis, cone_half_angle, solid_angle);
     vgl_point_3d<double> cc = cam.camera_center();
     vgl_point_3d<double> zc( b2box.centroid().x(), b2box.centroid().y(), zplane);
     double res = 2*(cc-zc).length()*cone_half_angle;
