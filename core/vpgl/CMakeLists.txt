@@ -20,7 +20,6 @@ SET( vpgl_sources
   vpgl_essential_matrix.h          vpgl_essential_matrix.txx
   vpgl_affine_fundamental_matrix.h vpgl_affine_fundamental_matrix.txx
   vpgl_rational_camera.h           vpgl_rational_camera.txx
-  vpgl_comp_rational_camera.h      vpgl_comp_rational_camera.txx
   vpgl_local_rational_camera.h     vpgl_local_rational_camera.txx
   vpgl_generic_camera.h            vpgl_generic_camera.txx
   vpgl_dll.h
