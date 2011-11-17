@@ -13,7 +13,7 @@ SET(vsph_sources
 AUX_SOURCE_DIRECTORY(Templates vsph_sources)
 
 ADD_LIBRARY(vsph ${vsph_sources})
-TARGET_LINK_LIBRARIES(vsph vpgl vpgl_algo vpgl_io vgl_algo vgl_io vgl vbl vnl vcl)
+TARGET_LINK_LIBRARIES(vsph vpgl vpgl_algo vpgl_io vgl_algo vgl_io vgl vbl vnl vcl bpgl_algo)
 
 IF(BUILD_TESTING)
   SUBDIRS(tests)

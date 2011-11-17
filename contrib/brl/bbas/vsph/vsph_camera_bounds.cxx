@@ -1,5 +1,5 @@
 #include "vsph_camera_bounds.h"
-#include <vpgl/algo/vpgl_project.h>
+#include <bpgl/algo/bpgl_project.h>
 #include <vpgl/algo/vpgl_ray.h>
 #include <vpgl/vpgl_calibration_matrix.h>
 #include <vgl/algo/vgl_rotation_3d.h>
@@ -177,7 +177,7 @@ box_solid_angle(vpgl_perspective_camera<double> const& cam,
                 double& solid_angle)
 {
   //project the box into the image
-  vgl_box_2d<double> b2d = vpgl_project::project_bounding_box(cam, box);
+  vgl_box_2d<double> b2d = bpgl_project::project_bounding_box(cam, box);
   if (b2d.min_x()<0||b2d.min_y()<0)
     return false;//box falls outside the image
   vgl_point_2d<double> pp = cam.get_calibration().principal_point();

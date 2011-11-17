@@ -12,7 +12,7 @@
 #include <vgl/vgl_ray_3d.h>
 #include <vgl/algo/vgl_rotation_3d.h>
 #include <vpgl/vpgl_calibration_matrix.h>
-#include <vpgl/algo/vpgl_project.h>
+#include <bpgl/algo/bpgl_project.h>
 #include <vpgl/algo/vpgl_backproject.h>
 #include <vsph/vsph_camera_bounds.h>
 
@@ -102,7 +102,7 @@ static void test_camera_bounds()
   vgl_point_3d<double> minp(-0.3, -0.3, 0), maxp(-0.9, 0.3, 0.3);
   vgl_box_3d<double> box;
   box.add(minp); box.add(maxp);
-  vgl_box_2d<double> box_prj = vpgl_project::project_bounding_box(C, box);
+  vgl_box_2d<double> box_prj = bpgl_project::project_bounding_box(C, box);
   bool good = vsph_camera_bounds::box_solid_angle(C, box, cone_axis,half_ang, sang);
   double mask = good ? 1.0 : 0.0;
   vcl_cout << " box "<< cone_axis << '\n'
