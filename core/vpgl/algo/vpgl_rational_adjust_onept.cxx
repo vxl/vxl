@@ -62,7 +62,7 @@ void vpgl_z_search_lsqr::f(vnl_vector<double> const& elevation,
   variance[0] = scatter_var(cameras_, image_pts_,initial_pt_, elevation[0], xm_, ym_);
 }
 
-static bool
+bool vpgl_rational_adjust_onept::
 find_intersection_point(vcl_vector<vpgl_rational_camera<double> > const& cams,
                         vcl_vector<vgl_point_2d<double> > const& corrs,
                         vgl_point_3d<double>& p_3d)
@@ -116,7 +116,7 @@ find_intersection_point(vcl_vector<vpgl_rational_camera<double> > const& cams,
   return true;
 }
 
-static bool
+bool vpgl_rational_adjust_onept::
 refine_intersection_pt(vcl_vector<vpgl_rational_camera<double> > const& cams,
                        vcl_vector<vgl_point_2d<double> > const& image_pts,
                        vgl_point_3d<double> const& initial_pt,

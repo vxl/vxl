@@ -55,6 +55,17 @@ class vpgl_rational_adjust_onept
  public:
   ~vpgl_rational_adjust_onept() {}
 
+  static bool
+  find_intersection_point(vcl_vector<vpgl_rational_camera<double> > const& cams,
+                          vcl_vector<vgl_point_2d<double> > const& corrs,
+                          vgl_point_3d<double>& p_3d);
+
+  static bool
+  refine_intersection_pt(vcl_vector<vpgl_rational_camera<double> > const& cams,
+                         vcl_vector<vgl_point_2d<double> > const& image_pts,
+                         vgl_point_3d<double> const& initial_pt,
+                         vgl_point_3d<double>& final_pt);
+
   static bool adjust(vcl_vector<vpgl_rational_camera<double> > const& cams,
                      vcl_vector<vgl_point_2d<double> > const& corrs,
                      vcl_vector<vgl_vector_2d<double> >& cam_translations,
