@@ -23,7 +23,7 @@
 
 // camera includes
 #include <vpgl/vpgl_generic_camera.h>
-#include <vpgl/algo/vpgl_camera_bounds.h>
+#include <bbas/vsph/vsph_camera_bounds.h>
 
 #define MIN_T         1.0
 #define UNIT_SPHERE_RADIUS 0.620350490899400016668006812 // = 1/vcl_cbrt(vnl_math::pi*4/3);
@@ -225,7 +225,7 @@ bool cast_cone_ray_per_block( functor_type functor,
         vgl_ray_3d<double> ray_ij; //= cam->ray(i,j);
         double cone_half_angle, solid_angle;
         vpgl_perspective_camera<double>* pcam = (vpgl_perspective_camera<double>*) cam.ptr();
-        vpgl_camera_bounds::pixel_solid_angle(*pcam, ((float)i)+0.5f, ((float)j)+0.5f, ray_ij, cone_half_angle, solid_angle);
+        vsph_camera_bounds::pixel_solid_angle(*pcam, ((float)i)+0.5f, ((float)j)+0.5f, ray_ij, cone_half_angle, solid_angle);
 
         // normalize ray such that each block is of unit length
         vgl_point_3d<double> block_origin( (ray_ij.origin().x()-linfo->scene_origin[0])/linfo->block_len,

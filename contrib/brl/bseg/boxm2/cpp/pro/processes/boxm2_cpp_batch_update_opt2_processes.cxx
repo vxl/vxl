@@ -74,14 +74,14 @@ bool boxm2_cpp_create_aux_data_opt2_process(bprb_func_process& pro)
   }
   //get the inputs
   unsigned i = 0;
-  boxm2_scene_sptr scene =pro.get_input<boxm2_scene_sptr>(i++);
-  boxm2_cache_sptr cache= pro.get_input<boxm2_cache_sptr>(i++);
-  vpgl_camera_double_sptr cam= pro.get_input<vpgl_camera_double_sptr>(i++);
-  vil_image_view_base_sptr in_img=pro.get_input<vil_image_view_base_sptr>(i++);
-  vil_image_view_base_sptr float_image=boxm2_util::prepare_input_image(in_img);
-  vcl_string identifier = pro.get_input<vcl_string>(i++);
-  float shadow_prior = pro.get_input<float>(i++);
-  float shadow_sigma = pro.get_input<float>(i++);
+  boxm2_scene_sptr scene               = pro.get_input<boxm2_scene_sptr>(i++);
+  boxm2_cache_sptr cache               = pro.get_input<boxm2_cache_sptr>(i++);
+  vpgl_camera_double_sptr cam          = pro.get_input<vpgl_camera_double_sptr>(i++);
+  vil_image_view_base_sptr in_img      = pro.get_input<vil_image_view_base_sptr>(i++);
+  vil_image_view_base_sptr float_image = boxm2_util::prepare_input_image(in_img, true);
+  vcl_string identifier                = pro.get_input<vcl_string>(i++);
+  float shadow_prior                   = pro.get_input<float>(i++);
+  float shadow_sigma                   = pro.get_input<float>(i++);
 
   if (vil_image_view<float> * input_image=dynamic_cast<vil_image_view<float> * > (float_image.ptr()))
   {

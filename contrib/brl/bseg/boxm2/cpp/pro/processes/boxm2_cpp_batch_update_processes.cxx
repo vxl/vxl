@@ -65,7 +65,7 @@ bool boxm2_cpp_create_norm_intensities_process(bprb_func_process& pro)
   boxm2_cache_sptr cache= pro.get_input<boxm2_cache_sptr>(i++);
   vpgl_camera_double_sptr cam= pro.get_input<vpgl_camera_double_sptr>(i++);
   vil_image_view_base_sptr in_img=pro.get_input<vil_image_view_base_sptr>(i++);
-  vil_image_view_base_sptr float_image=boxm2_util::prepare_input_image(in_img);
+  vil_image_view_base_sptr float_image=boxm2_util::prepare_input_image(in_img, true);
   vcl_string identifier = pro.get_input<vcl_string>(i++);
 
   if (vil_image_view<float> * input_image=dynamic_cast<vil_image_view<float> * > (float_image.ptr()))
@@ -156,7 +156,7 @@ bool boxm2_cpp_create_aux_data_process(bprb_func_process& pro)
   boxm2_cache_sptr cache= pro.get_input<boxm2_cache_sptr>(i++);
   vpgl_camera_double_sptr cam= pro.get_input<vpgl_camera_double_sptr>(i++);
   vil_image_view_base_sptr in_img=pro.get_input<vil_image_view_base_sptr>(i++);
-  vil_image_view_base_sptr float_image=boxm2_util::prepare_input_image(in_img);
+  vil_image_view_base_sptr float_image=boxm2_util::prepare_input_image(in_img, true);
   vcl_string identifier = pro.get_input<vcl_string>(i++);
 
   if (vil_image_view<float> * input_image=dynamic_cast<vil_image_view<float> * > (float_image.ptr()))
@@ -487,10 +487,14 @@ bool boxm2_cpp_batch_update_app_process(bprb_func_process& pro)
   vcl_vector<boxm2_block_id>::iterator id;
   id = blk_ids.begin();
   for (id = blk_ids.begin(); id != blk_ids.end(); ++id) {
+    
+    boxm2_block_id bid = *id; 
+    vcl_cout<<" block "<<bid<<vcl_endl;
+    
     // reads from disc if not already in memory
     boxm2_data_base *  alph  = cache->get_data_base(*id,boxm2_data_traits<BOXM2_ALPHA>::prefix(),0,false);
-    //boxm2_data_base *  mog  = cache->get_data_base(*id,data_type,0,false);
-    boxm2_data_base* mog       = cache->get_data_base(*id,data_type,alph->buffer_length()/alphaTypeSize*appTypeSize,false);
+    int numData = alph->buffer_length() / alphaTypeSize; 
+    boxm2_data_base *  mog   = cache->get_data_base(*id,data_type,numData*appTypeSize,false);
 
     if ( data_type.find(boxm2_data_traits<BOXM2_MOG3_GREY>::prefix()) != vcl_string::npos )
     {
