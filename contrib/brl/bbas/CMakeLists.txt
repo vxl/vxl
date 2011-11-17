@@ -44,6 +44,12 @@ SUBDIRS(baio)
 # Brown radiometry library
 SUBDIRS(brad)
 
+# viewsphere Library
+  SUBDIRS(vsph)
+
+# camera library
+  SUBDIRS (bpgl)
+
 IF( BUILD_GEL )
   # spatial object algorithms
   SUBDIRS(bsol)
