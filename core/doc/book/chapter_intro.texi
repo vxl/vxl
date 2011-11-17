@@ -104,6 +104,10 @@ of this facility.
 This library allows you to represent and manipulate transformations, transformation graphs,
 and units of measurement.
 
+@subsection vpgll: Cameras and Fundamental Matrix
+Representation of various types of cameras and geometric relationships between cameras. Provides algorithms for camera calibration and other photogrammetry proceedures.
+
+
 @subsection vidl: Video
 
 Load and save images from video files and sources.

@@ -183,7 +183,18 @@ Copyright @copyright{} 2000 Andrew Fitzgibbon
 @cindex co-ordinate systems
 
 @include chapter_vcsl.texi
+@comment ------------------------------------------------------------------
+@node    vpgl
+@comment node-name, next,      previous, up
+@chapter vpgl: Cameras and Fundamental Matrix
+@cindex projective camera
+@cindex perspective camera
+@cindex affine camera
+@cindex rational camera
+@cindex generic camera
+@cindex fundamental matrix
 
+@include chapter_vpgl.texi
 @comment ------------------------------------------------------------------
 @node    vidl1
 @comment node-name, next,      previous, up
