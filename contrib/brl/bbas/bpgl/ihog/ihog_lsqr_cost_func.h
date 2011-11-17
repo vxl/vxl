@@ -15,9 +15,9 @@
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_least_squares_function.h>
 #include <vil/vil_image_view.h>
-#include <ihog_world_roi.h>
-#include <ihog_image.h>
-#include <ihog_transform_2d.h>
+#include <ihog/ihog_world_roi.h>
+#include <ihog/ihog_image.h>
+#include <ihog/ihog_transform_2d.h>
 
 //: A least squares cost function for registering video frames by minimizing square difference in intensities
 class ihog_lsqr_cost_func : public vnl_least_squares_function
