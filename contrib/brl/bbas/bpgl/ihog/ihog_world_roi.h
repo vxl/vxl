@@ -18,7 +18,7 @@
 #include <vgl/vgl_vector_2d.h>
 #include <vnl/vnl_vector.h>
 #include <vil/vil_image_view.h>
-#include <ihog_image.h>
+#include <ihog/ihog_image.h>
 
 //:A class to represent a region of interest in world coordinates.
 // This class holds the parameters of a uniform grid in the world

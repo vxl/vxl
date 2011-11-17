@@ -16,9 +16,9 @@
 //   <none>
 // \endverbatim
 
-#include <ihog_world_roi.h>
-#include <ihog_transform_2d.h>
-#include <ihog_image.h>
+#include <ihog/ihog_world_roi.h>
+#include <ihog/ihog_transform_2d.h>
+#include <ihog/ihog_image.h>
 #include <vil/vil_pyramid_image_view.h>
 
 //: Minimize registration error at multiple scales

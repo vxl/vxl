@@ -58,10 +58,14 @@ void bsta_fit_gaussian(vcl_vector<T> const& samples, vcl_vector<T> const& sample
     var += diff*diff*weight_norm;
     weight_norm_sqrd_sum += weight_norm*weight_norm;
   }
-  var /= ((T)1 - weight_norm_sqrd_sum);
+  if( (T)(1-weight_norm_sqrd_sum) > (T) 0 )
+    var /= ((T)1 - weight_norm_sqrd_sum);
+  else
+    var = (T) 0; 
 
   gaussian.set_mean(mean);
-  gaussian.set_covar(var);
+  if(var > 0)
+    gaussian.set_covar(var);
 }
 
 //: fit a N-D spherical Gaussian distribution to a set of weighted samples
