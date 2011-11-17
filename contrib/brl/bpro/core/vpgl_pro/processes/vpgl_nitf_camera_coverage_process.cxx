@@ -5,7 +5,7 @@
 
 #include <bprb/bprb_parameters.h>
 #include <vcl_iostream.h>
-#include <vpgl/algo/vpgl_nitf_camera_coverage.h>
+#include <bpgl/algo/bpgl_nitf_camera_coverage.h>
 
 //: initialization
 bool vpgl_nitf_camera_coverage_process_cons(bprb_func_process& pro)
@@ -56,7 +56,7 @@ bool vpgl_nitf_camera_coverage_process(bprb_func_process& pro)
 
   get_regions(region_file, regions);
 
-  if (!vpgl_nitf_camera_coverage::coverage_list(regions,in_img_list, out_img_list))
+  if (!bpgl_nitf_camera_coverage::coverage_list(regions,in_img_list, out_img_list))
   {
     vcl_cerr << "Error vpgl_nitf_camera_coverage_process: Failed to get coverage list" << vcl_endl;
     return false;

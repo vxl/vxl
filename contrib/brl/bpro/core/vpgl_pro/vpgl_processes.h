@@ -20,8 +20,10 @@ DECLARE_FUNC_CONS(vpgl_correct_rational_camera_process);
 DECLARE_FUNC_CONS(vpgl_create_perspective_camera_process);
 DECLARE_FUNC_CONS(vpgl_save_perspective_camera_vrml_process);
 DECLARE_FUNC_CONS(vpgl_correct_rational_cameras_process);
+#if 0
 DECLARE_FUNC_CONS(vpgl_correct_rational_cameras_mult_corr_process);
 DECLARE_FUNC_CONS(vpgl_correct_rational_cameras_mult_corr_refine_process);
+#endif
 DECLARE_FUNC_CONS(vpgl_project_process);
 DECLARE_FUNC_CONS(vpgl_convert_to_generic_camera_process);
 DECLARE_FUNC_CONS(vpgl_resample_perspective_camera_process);

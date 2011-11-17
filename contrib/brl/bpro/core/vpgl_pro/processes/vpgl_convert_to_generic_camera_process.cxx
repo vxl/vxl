@@ -7,6 +7,7 @@
 #include <vcl_iostream.h>
 #include <vpgl/vpgl_generic_camera.h>
 #include <vpgl/algo/vpgl_camera_compute.h>
+#include <vpgl/algo/vpgl_camera_convert.h>
 
 
 //: Init function
@@ -16,7 +17,7 @@ bool vpgl_convert_to_generic_camera_process_cons(bprb_func_process& pro)
   //  0) abstract camera
   //  1) ni (# image columns)
   //  2) nj (# image rows)
-  //
+  //  3) level (the pyramid scale)
   bool ok=false;
   vcl_vector<vcl_string> input_types;
   input_types.push_back("vpgl_camera_double_sptr");
@@ -57,7 +58,9 @@ bool vpgl_convert_to_generic_camera_process(bprb_func_process& pro)
   unsigned ni = pro.get_input<unsigned>(1), nj = pro.get_input<unsigned>(2);
   unsigned level = pro.get_input<unsigned>(3);
   vpgl_generic_camera<double> gcam;
-  if(!vpgl_generic_camera_compute::compute(camera, (int)ni, (int)nj, gcam, level)){
+
+//FIXME!!!  if(!vpgl_generic_camera_convert::convert(camera, (int)ni, (int)nj, gcam, level)){
+   if(!vpgl_generic_camera_convert::convert(camera, (int)ni, (int)nj, gcam)){
    vcl_cout<<"camera conversion failed\n"<<vcl_endl;
     return false;
   } 

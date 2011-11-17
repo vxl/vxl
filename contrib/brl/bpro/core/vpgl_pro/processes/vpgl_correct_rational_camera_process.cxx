@@ -13,7 +13,7 @@
 #include <vul/vul_awk.h>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_point_3d.h>
-#include <vpgl/algo/vpgl_adjust_rational_trans_onept.h>
+#include <vpgl/algo/vpgl_rational_adjust_onept.h>
 
 //: initialization
 bool vpgl_correct_rational_camera_process_cons(bprb_func_process& pro)
@@ -183,8 +183,8 @@ bool vpgl_correct_rational_cameras_process(bprb_func_process& pro)
   vcl_cout << "Executing adjust image offsets\n";
   vcl_vector<vgl_vector_2d<double> > cam_trans;
   vgl_point_3d<double> intersection;
-  if (!vpgl_adjust_rational_trans_onept::adjust(cams, corrs, cam_trans,
-                                                intersection))
+  if (!vpgl_rational_adjust_onept::adjust(cams, corrs, cam_trans,
+                                          intersection))
   {
     vcl_cerr<< "In vpgl_correct_rational_cameras_process - adjustment failed\n";
     return false;
@@ -213,7 +213,7 @@ bool vpgl_correct_rational_cameras_process(bprb_func_process& pro)
   return true;
 }
 
-
+#if 0
 //:
 //  Take a list of rational cameras and a list of 2D image correspondences of multiple 3D point locations,
 //  find those 3D locations and camera adjustments by optimizing all of their projections back to the images,
@@ -434,6 +434,8 @@ bool vpgl_correct_rational_cameras_mult_corr_refine_process(bprb_func_process& p
   return true;
 }
 
+#endif
+
 
 //: initialization
 bool vpgl_get_offsets_process_cons(bprb_func_process& pro)
@@ -491,5 +493,6 @@ bool vpgl_get_offsets_process(bprb_func_process& pro)
   pro.set_output_val<double>(1, offset_v);
   return true;
 }
+
 
 

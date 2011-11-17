@@ -8,6 +8,7 @@
 #include <vcl_fstream.h>
 #include <vpgl/vpgl_camera.h>
 #include <vpgl/vpgl_proj_camera.h>
+#include <vpgl/io/vpgl_io_proj_camera.h>
 #include <vnl/vnl_matrix_fixed.h>
 #include <vul/vul_file.h>
 
@@ -39,7 +40,7 @@ bool vpgl_load_proj_camera_process(bprb_func_process& pro)
   if (ext == ".vsl") { // load binary
     vpgl_proj_camera<double>* procamp = new vpgl_proj_camera<double>();
     vsl_b_ifstream ins(camera_filename.c_str());
-    procamp->b_read(ins);
+    vsl_b_read(ins, *procamp);
     ins.close();
     vpgl_camera_double_sptr procam = procamp;
     pro.set_output_val<vpgl_camera_double_sptr>(0, procam);

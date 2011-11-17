@@ -5,10 +5,8 @@
 
 #include <bprb/bprb_parameters.h>
 #include <vcl_iostream.h>
-#include <vpgl/vpgl_camera_sptr.h>
+#include <vpgl/vpgl_camera_double_sptr.h>
 #include <vpgl/vpgl_local_rational_camera.h>
-#include <vpgl/bgeo/bgeo_lvcs.h>
-#include <vpgl/bgeo/bgeo_lvcs_sptr.h>
 
 //: initialization
 bool vpgl_load_local_rational_camera_process_cons(bprb_func_process& pro)

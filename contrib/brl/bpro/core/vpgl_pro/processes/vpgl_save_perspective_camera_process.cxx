@@ -9,6 +9,7 @@
 #include <vpgl/vpgl_camera.h>
 #include <vpgl/vpgl_perspective_camera.h>
 #include <vpgl/vpgl_calibration_matrix.h>
+#include <vpgl/io/vpgl_io_perspective_camera.h>
 #include <vsl/vsl_binary_io.h>
 #include <vul/vul_file.h>
 
@@ -46,7 +47,7 @@ bool vpgl_save_perspective_camera_process(bprb_func_process& pro)
   if(ext == ".vsl") // binary form
     {
       vsl_b_ofstream bp_out(camera_filename.c_str());
-      cam->b_write(bp_out);
+      vsl_b_write(bp_out, *cam);
       bp_out.close();
   }else{
   // write matrices to the text file.

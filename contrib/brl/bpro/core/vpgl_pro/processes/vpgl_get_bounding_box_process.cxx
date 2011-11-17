@@ -8,7 +8,7 @@
 #include <vcl_fstream.h>
 #include <vgl/vgl_plane_3d.h>
 #include <vgl/vgl_intersection.h>
-#include <vpgl/algo/vpgl_camera_bounds.h>
+#include <vsph/vsph_camera_bounds.h>
 #include <vgl/vgl_polygon_scan_iterator.h>
 #include <vgl/vgl_polygon.h>
 #include <vgl/vgl_box_2d.h>
@@ -50,7 +50,7 @@ bool vpgl_get_bounding_box_process(bprb_func_process& pro)
 
   //run planar bounding box
   vgl_box_2d<double> bbox;
-  bool good = vpgl_camera_bounds::planar_bounding_box(cams,bbox,zplane);
+  bool good = vsph_camera_bounds::planar_bounding_box(cams,bbox,zplane);
   if (good)
     vcl_cout<<"Bounding box found: "<<bbox<<vcl_endl;
   else
@@ -65,7 +65,7 @@ bool vpgl_get_bounding_box_process(bprb_func_process& pro)
   vgl_point_2d<double> pp = (cam.get_calibration()).principal_point();
   vgl_ray_3d<double> cone_axis;
   double cone_half_angle, solid_angle;
-  vpgl_camera_bounds::pixel_solid_angle(cam, pp.x()/4, pp.y()/4, cone_axis, cone_half_angle, solid_angle);
+  vsph_camera_bounds::pixel_solid_angle(cam, pp.x()/4, pp.y()/4, cone_axis, cone_half_angle, solid_angle);
   vgl_point_3d<double> cc = cam.camera_center();
   vgl_point_3d<double> zc( bbox.centroid().x(), bbox.centroid().y(), zplane);
   double res = 2*(cc-zc).length()*cone_half_angle;

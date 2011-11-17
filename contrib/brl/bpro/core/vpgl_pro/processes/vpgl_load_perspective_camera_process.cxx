@@ -5,8 +5,9 @@
 
 #include <vcl_iostream.h>
 #include <vcl_fstream.h>
-#include <vpgl/vpgl_camera_sptr.h>
+#include <vpgl/vpgl_camera_double_sptr.h>
 #include <vpgl/vpgl_perspective_camera.h>
+#include <vpgl/io/vpgl_io_perspective_camera.h>
 #include <vpgl/vpgl_calibration_matrix.h>
 #include <vsl/vsl_binary_io.h>
 #include <vul/vul_file.h>
@@ -51,7 +52,7 @@ bool vpgl_load_perspective_camera_process(bprb_func_process& pro)
   if (ext == ".vsl") // binary form
   {
     vsl_b_ifstream bp_in(camera_filename.c_str());
-    pcam->b_read(bp_in);
+    vsl_b_read(bp_in, *pcam);
     bp_in.close();
   }
   else {
