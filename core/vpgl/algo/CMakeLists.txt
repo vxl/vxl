@@ -19,6 +19,7 @@ SET( vpgl_algo_sources
   vpgl_ortho_procrustes.h          vpgl_ortho_procrustes.cxx
   vpgl_rational_adjust_onept.h     vpgl_rational_adjust_onept.cxx
   vpgl_rational_adjust.h           vpgl_rational_adjust.cxx
+  vpgl_rational_adjust_multipt.h   vpgl_rational_adjust_multipt.cxx
   vpgl_triangulate_points.h        vpgl_triangulate_points.cxx
   vpgl_bundle_adjust.h             vpgl_bundle_adjust.cxx
   vpgl_bundle_adjust_lsqr.h        vpgl_bundle_adjust_lsqr.cxx
