@@ -223,7 +223,7 @@ vcl_string boxm2_test_utils::save_test_empty_scene()
   boxm2_scene scene;
   scene.set_local_origin(vgl_point_3d<double>(0.0, 0.0, 0.0));
   scene.set_rpc_origin(vgl_point_3d<double>(0.0, 0.0, 0.0));
-  bgeo_lvcs lvcs;
+  vpgl_lvcs lvcs;
   scene.set_lvcs(lvcs);
   scene.set_xml_path(test_file);
   scene.set_data_path(test_dir);
@@ -264,7 +264,7 @@ vcl_string boxm2_test_utils::save_test_simple_scene()
   boxm2_scene scene;
   scene.set_local_origin(vgl_point_3d<double>(0.0, 0.0, 0.0));
   scene.set_rpc_origin(vgl_point_3d<double>(0.0, 0.0, 0.0));
-  bgeo_lvcs lvcs;
+  vpgl_lvcs lvcs;
   scene.set_lvcs(lvcs);
   scene.set_xml_path(test_file);
   scene.set_data_path(test_dir);

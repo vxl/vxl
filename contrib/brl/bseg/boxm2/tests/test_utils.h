@@ -7,7 +7,7 @@
 #include <boxm2/boxm2_block.h>
 #include <boxm2/boxm2_data.h>
 #include <testlib/testlib_test.h>
-#include <vpgl/vpgl_camera_sptr.h>
+#include <vpgl/vpgl_camera_double_sptr.h>
 
 class boxm2_test_utils
 {
