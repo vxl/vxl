@@ -344,6 +344,7 @@ class boxm2_batch_update_app_functor
  public:
   typedef boxm2_data_traits<BOXM2_AUX0>::datatype aux0_datatype;
   typedef boxm2_data_traits<BOXM2_AUX1>::datatype aux1_datatype;
+  typedef boxm2_data_traits<BOXM2_AUX2>::datatype aux2_datatype;
   typedef boxm2_data_traits<BOXM2_NUM_OBS_SINGLE>::datatype nrays_datatype;
   typedef boxm2_data_traits<BOXM2_AUX>::datatype aux_datatype;
 
@@ -366,8 +367,10 @@ class boxm2_batch_update_app_functor
 
     vcl_vector<aux0_datatype> out0 = str_cache_->get_next<BOXM2_AUX0>(id_, index);
     vcl_vector<aux1_datatype> out1 = str_cache_->get_next<BOXM2_AUX1>(id_, index);
-    vcl_vector<aux_datatype> out = str_cache_->get_next<BOXM2_AUX>(id_, index);
-    vcl_vector<nrays_datatype> nrays = str_cache_->get_next<BOXM2_NUM_OBS_SINGLE>(id_, index);
+    vcl_vector<aux2_datatype> out2 = str_cache_->get_next<BOXM2_AUX2>(id_, index);
+
+    //vcl_vector<aux_datatype> out = str_cache_->get_next<BOXM2_AUX>(id_, index);
+    //vcl_vector<nrays_datatype> nrays = str_cache_->get_next<BOXM2_NUM_OBS_SINGLE>(id_, index);
 
     int cell_no = 2000000;
 
@@ -378,20 +381,25 @@ class boxm2_batch_update_app_functor
 
     float max_obs_seg_len = 0.0f;  // max gives the best idea about the size of the cell
     for (unsigned m = 0; m < nimgs; m++) {
-      float obs_seg_len = out1[m];
-      float mean_obs = out0[m]/obs_seg_len;
-      obs.push_back(mean_obs);
+      
+      
+      float obs_seg_len = out0[m];
+      if(obs_seg_len > 1e-12f) {
+        float mean_obs = out1[m]/obs_seg_len;
+        obs.push_back(mean_obs);
 
-      max_obs_seg_len = max_obs_seg_len > obs_seg_len/nrays[m] ? max_obs_seg_len : obs_seg_len/nrays[m];
+        //max_obs_seg_len = max_obs_seg_len > obs_seg_len/nrays[m] ? max_obs_seg_len : obs_seg_len/nrays[m];
 
-      float pre_i = out[m][0]/obs_seg_len; // mean pre
-      pre.push_back(pre_i);
-      float vis_i = out[m][1]/obs_seg_len; // mean vis
-      vis.push_back(vis_i);
-
+        //float pre_i = out[m][0]/obs_seg_len; // mean pre
+        //pre.push_back(pre_i);
+        float vis_i = out2[m]/obs_seg_len; // mean vis
+        vis.push_back(vis_i);
+/*
       if (index == cell_no) {
         vcl_cout << "\t m: " << m << " pre_i: " << pre_i << " vis_i: " << vis_i << '\n'
                  << "obs_seg_len: " << obs_seg_len << " mean_obs: " << mean_obs << vcl_endl;
+      }
+*/
       }
     }
 

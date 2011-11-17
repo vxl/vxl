@@ -8,7 +8,7 @@
 #include <brdb/brdb_value.h>
 
 #include <boxm2/cpp/algo/boxm2_merge_block_function.h>
-#include <boct/boct_bit_tree2.h>
+#include <boct/boct_bit_tree.h>
 
 
 void test_merge_bit_tree()

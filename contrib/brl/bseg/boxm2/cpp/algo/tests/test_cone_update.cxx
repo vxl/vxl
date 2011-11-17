@@ -9,7 +9,7 @@
 #include <vpgl/vpgl_perspective_camera.h>
 #include <vil/vil_image_view.h>
 
-#include <boct/boct_bit_tree2.h>
+#include <boct/boct_bit_tree.h>
 
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/boxm2_block.h>

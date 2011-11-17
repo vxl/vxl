@@ -17,7 +17,7 @@
 #include <boxm2/boxm2_block.h>
 #include <boxm2/boxm2_data.h>
 #include <boxm2/boxm2_util.h>
-#include <boct/boct_bit_tree2.h>
+#include <boct/boct_bit_tree.h>
 #include <vcl_algorithm.h>
 #include <vcl_list.h>
 
