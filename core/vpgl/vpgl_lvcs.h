@@ -99,7 +99,6 @@ class vpgl_lvcs : public vbl_ref_count
   friend vcl_ostream& operator << (vcl_ostream& os, const vpgl_lvcs& local_coord_sys);
   friend vcl_istream& operator >> (vcl_istream& os, vpgl_lvcs& local_coord_sys);
   bool operator==(vpgl_lvcs const& r) const;
-  void x_write(vcl_ostream &os, vcl_string element_name) const;
 
   // INTERNALS-----------------------------------------------------------------
 
