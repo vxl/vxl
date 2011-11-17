@@ -3,7 +3,7 @@
 #define vpgl_ortho_procrustes_h_
 //:
 // \file
-// \brief Solve min(R,s) ||X-sRY||, where R is a rotation matrix, X,Y are 3-d points, s is a scalar.
+// \brief Solve min(R,s) ||X-s(RY+t)||, where R is a rotation matrix, X,Y are 3-d points, s is a scalar and t is a translation vector.
 // \author J. L. Mundy
 // \date June 29, 2007
 //
@@ -13,8 +13,8 @@
 
 //: Solve orthogonal Procrustes problem
 // Solve the orthogonal Procrustes problem by finding a rotation matrix, R,
-// and scale factor, s, that minimizes the distance between two pointsets,
-// X and Y, where Y is transformed by R to produce X.
+// scale factor, s, and translation vector, t, that minimizes the distance 
+// between two pointsets, X and Y, where Y is transformed to produce X.
 class vpgl_ortho_procrustes
 {
  public:
