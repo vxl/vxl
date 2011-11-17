@@ -7,11 +7,8 @@
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>
 #include <vnl/algo/vnl_svd.h>
-#include <vil/vil_convert.h>
 #include <vil/vil_image_view.h>
 #include <vil/vil_math.h>
-#include <vil/vil_load.h>
-#include <vil/vil_save.h>
 #include <vpgl/vpgl_perspective_camera.h>
 #include <vpgl/vpgl_calibration_matrix.h>
 #include <bsta/bsta_histogram.h>
@@ -20,66 +17,67 @@
 #include <vcl_where_root_dir.h>
 #include "boxm2_ocl_where_root_dir.h"
 
-void boxm2_ocl_util::set_dodecahedron_dir_lookup(cl_float4* dodecahedron_dir) {
-	float golden = 0.8507; //the golden ratio
-	float other = 0.5257;
+void boxm2_ocl_util::set_dodecahedron_dir_lookup(cl_float4* dodecahedron_dir)
+{
+  float golden = 0.8507; //the golden ratio
+  float other = 0.5257;
 
-	dodecahedron_dir[0].x = 0;
-	dodecahedron_dir[0].y = -golden;
-	dodecahedron_dir[0].z = -other;
+  dodecahedron_dir[0].x = 0;
+  dodecahedron_dir[0].y = -golden;
+  dodecahedron_dir[0].z = -other;
 
-	dodecahedron_dir[1].x = 0;
-	dodecahedron_dir[1].y = -golden;
-	dodecahedron_dir[1].z = other;
+  dodecahedron_dir[1].x = 0;
+  dodecahedron_dir[1].y = -golden;
+  dodecahedron_dir[1].z = other;
 
-	dodecahedron_dir[2].x = 0;
-	dodecahedron_dir[2].y = golden;
-	dodecahedron_dir[2].z = -other;
+  dodecahedron_dir[2].x = 0;
+  dodecahedron_dir[2].y = golden;
+  dodecahedron_dir[2].z = -other;
 
-	dodecahedron_dir[3].x = 0;
-	dodecahedron_dir[3].y = golden;
-	dodecahedron_dir[3].z = other;
+  dodecahedron_dir[3].x = 0;
+  dodecahedron_dir[3].y = golden;
+  dodecahedron_dir[3].z = other;
 
-	dodecahedron_dir[4].x = -other;
-	dodecahedron_dir[4].y = 0;
-	dodecahedron_dir[4].z = -golden;
+  dodecahedron_dir[4].x = -other;
+  dodecahedron_dir[4].y = 0;
+  dodecahedron_dir[4].z = -golden;
 
-	dodecahedron_dir[5].x = -other;
-	dodecahedron_dir[5].y = 0;
-	dodecahedron_dir[5].z = golden;
+  dodecahedron_dir[5].x = -other;
+  dodecahedron_dir[5].y = 0;
+  dodecahedron_dir[5].z = golden;
 
-	dodecahedron_dir[6].x = other;
-	dodecahedron_dir[6].y = 0;
-	dodecahedron_dir[6].z = -golden;
+  dodecahedron_dir[6].x = other;
+  dodecahedron_dir[6].y = 0;
+  dodecahedron_dir[6].z = -golden;
 
-	dodecahedron_dir[7].x = other;
-	dodecahedron_dir[7].y = 0;
-	dodecahedron_dir[7].z = golden;
+  dodecahedron_dir[7].x = other;
+  dodecahedron_dir[7].y = 0;
+  dodecahedron_dir[7].z = golden;
 
-	dodecahedron_dir[8].x = -golden;
-	dodecahedron_dir[8].y = -other;
-	dodecahedron_dir[8].z = 0;
+  dodecahedron_dir[8].x = -golden;
+  dodecahedron_dir[8].y = -other;
+  dodecahedron_dir[8].z = 0;
 
-	dodecahedron_dir[9].x = -golden;
-	dodecahedron_dir[9].y = other;
-	dodecahedron_dir[9].z = 0;
+  dodecahedron_dir[9].x = -golden;
+  dodecahedron_dir[9].y = other;
+  dodecahedron_dir[9].z = 0;
 
-	dodecahedron_dir[10].x = golden;
-	dodecahedron_dir[10].y = -other;
-	dodecahedron_dir[10].z = 0;
+  dodecahedron_dir[10].x = golden;
+  dodecahedron_dir[10].y = -other;
+  dodecahedron_dir[10].z = 0;
 
-	dodecahedron_dir[11].x = golden;
-	dodecahedron_dir[11].y = other;
-	dodecahedron_dir[11].z = 0;
+  dodecahedron_dir[11].x = golden;
+  dodecahedron_dir[11].y = other;
+  dodecahedron_dir[11].z = 0;
 }
 
 //returns path to opencl src (cl files)
 vcl_string boxm2_ocl_util::ocl_src_root()
 {
-  vcl_string boxm2_ocl_src_dir(BOXM2_OPENCL_SOURCE_DIR); 
-  if( boxm2_ocl_src_dir == "" ) 
+  vcl_string boxm2_ocl_src_dir(BOXM2_OPENCL_SOURCE_DIR);
+  if ( boxm2_ocl_src_dir == "" )
     boxm2_ocl_src_dir = vcl_string(VCL_SOURCE_ROOT_DIR) + "/contrib/brl/bseg/boxm2/ocl/cl/";
-  return boxm2_ocl_src_dir; 
+  return boxm2_ocl_src_dir;
 }
 
 // fills a float buffer (should be 16*3 floats) with a perspective cam to be sent
@@ -90,8 +88,8 @@ void boxm2_ocl_util::set_ocl_camera(vpgl_camera_double_sptr& cam, cl_float* ocl_
   {
     set_persp_camera(pcam, ocl_cam);
   }
-  else if( vpgl_proj_camera<double>* pcam =
-      dynamic_cast<vpgl_proj_camera<double>* >(cam.ptr()))
+  else if (vpgl_proj_camera<double>* pcam =
+           dynamic_cast<vpgl_proj_camera<double>* >(cam.ptr()))
   {
     set_proj_camera(pcam, ocl_cam);
   }
@@ -184,6 +182,7 @@ void boxm2_ocl_util::set_proj_camera(vpgl_proj_camera<double> * pcam, cl_float* 
   cam[cnt++] = K.principal_point().y();
 #endif
 }
+
 void boxm2_ocl_util::set_generic_camera(vpgl_camera_double_sptr& cam, cl_float* ray_origins, cl_float* ray_directions, unsigned cl_ni, unsigned cl_nj)
 {
   if (vpgl_generic_camera<double>* gcam =
@@ -269,7 +268,7 @@ void boxm2_ocl_util::get_render_transfer_function(vcl_vector<vcl_string> imgfile
     interval=imgfilenames.size()/10;
 
   // this loop obtains min and max over all images.
-  for (unsigned i=0;i<imgfilenames.size();i=i+interval)
+  for (unsigned i=0;i<imgfilenames.size();i+=interval)
   {
     vil_image_view_base_sptr img_ptr=boxm2_util::prepare_input_image(imgfilenames[i]);
     if (vil_image_view<float> * imgf=dynamic_cast<vil_image_view<float>*>(img_ptr.ptr()))
@@ -299,7 +298,6 @@ void boxm2_ocl_util::get_render_transfer_function(vcl_vector<vcl_string> imgfile
   }
 }
 
-
 vcl_string boxm2_ocl_util::mog_options(vcl_string data_type)
 {
   if ( data_type == boxm2_data_traits<BOXM2_MOG3_GREY>::prefix() )
@@ -308,5 +306,6 @@ vcl_string boxm2_ocl_util::mog_options(vcl_string data_type)
     return " -D MOG_TYPE_16 ";
   else if ( data_type == boxm2_data_traits<BOXM2_GAUSS_GREY>::prefix() )
     return " -D GAUSS_TYPE_2 ";
-  return ""; 
+  else
+    return "";
 }
