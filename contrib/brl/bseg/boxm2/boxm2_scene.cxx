@@ -10,10 +10,12 @@
 #include <vgl/xio/vgl_xio_point_3d.h>
 #include <vgl/xio/vgl_xio_vector_3d.h>
 #include <boxm2/boxm2_scene_parser.h>
+#include <vpgl/xio/vpgl_xio_lvcs.h>
 
 //vgl includes
 #include <vgl/vgl_vector_3d.h>
 #include <vgl/vgl_distance.h>
+
 
 
 boxm2_scene::boxm2_scene(vcl_string data_path, vgl_point_3d<double> const& origin)
@@ -441,7 +443,7 @@ void x_write(vcl_ostream &os, boxm2_scene& scene, vcl_string name)
 
   //write lvcs information
   vpgl_lvcs lvcs = scene.lvcs();
-  lvcs.x_write(os, LVCS_TAG);
+  x_write(os, lvcs, LVCS_TAG);
   x_write(os, scene.local_origin(), LOCAL_ORIGIN_TAG);
 
   //write scene path for (needs to know where blocks are)
