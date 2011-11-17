@@ -75,7 +75,7 @@ class vpgl_generic_camera_convert
   //: Convert a local rational camera to a generic camera
   static bool convert( vpgl_local_rational_camera<double> const& rat_cam,
                        int ni, int nj,
-                       vpgl_generic_camera<double> & gen_cam);
+                       vpgl_generic_camera<double> & gen_cam, unsigned level = 0);
 
   //: Convert a proj_camera to a generic camera
   static bool convert( vpgl_proj_camera<double> const& prj_cam,
@@ -99,7 +99,7 @@ class vpgl_generic_camera_convert
 
   //::convert an abstract camera to generic camera
   static bool convert( vpgl_camera_double_sptr const& camera, int ni, int nj,
-                       vpgl_generic_camera<double> & gen_cam);
+                       vpgl_generic_camera<double> & gen_cam, unsigned level = 0);
  private:
   //utility methods 
   //: interpolate rays to fill next higher resolution pyramid layer
