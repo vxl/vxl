@@ -15,7 +15,7 @@
 #include "video/bwm_video_corr.h"
 #include "video/bwm_video_cam_istream.h"
 #include <vpgl/vpgl_perspective_camera.h>
-#include <vpgl/algo/vpgl_project.h>
+#include <bpgl/algo/bpgl_project.h>
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_vector_3d.h>
 #include <vgl/vgl_box_3d.h>
@@ -1399,7 +1399,7 @@ void bwm_site_mgr::compute_3d_world_params()
   cam_istr->seek_camera(0);
   vpgl_perspective_camera<double>* cam = cam_istr->current_camera();
   //project the bounding box
-  vgl_box_2d<double> bb_2d = vpgl_project::project_bounding_box(*cam, bb);
+  vgl_box_2d<double> bb_2d = bpgl_project::project_bounding_box(*cam, bb);
   //get the number of pixels on the diagonal
   double w = bb_2d.width(), h = bb_2d.height();
   double diag2 = vcl_sqrt(w*w + h*h);
