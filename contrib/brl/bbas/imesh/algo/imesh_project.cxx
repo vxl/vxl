@@ -77,7 +77,7 @@ imesh_project_verts(const imesh_vertex_array<3>& verts3d,
 
 void
 imesh_distort_verts(const vcl_vector<vgl_point_2d<double> >& in_verts,
-                    const vpgl_lens_distortion<double>& lens,
+                    const bpgl_lens_distortion<double>& lens,
                     vcl_vector<vgl_point_2d<double> >& out_verts)
 {
   out_verts.resize(in_verts.size());
@@ -223,7 +223,7 @@ imesh_render_faces_interp(const imesh_mesh& mesh,
 //  Set each pixel of the image to true if the mesh project onto it
 void imesh_project(const imesh_mesh& mesh,
                    const vpgl_proj_camera<double>& camera,
-                   const vpgl_lens_distortion<double>& lens,
+                   const bpgl_lens_distortion<double>& lens,
                    vil_image_view<bool>& image)
 {
   assert(mesh.vertices().dim() == 3);
@@ -242,7 +242,7 @@ void imesh_project(const imesh_mesh& mesh,
 void imesh_project(const imesh_mesh& mesh,
                    const vcl_vector<vgl_vector_3d<double> >& normals,
                    const vpgl_proj_camera<double>& camera,
-                   const vpgl_lens_distortion<double>& lens,
+                   const bpgl_lens_distortion<double>& lens,
                    vil_image_view<bool>& image,
                    vgl_box_2d<unsigned int>* bbox)
 {
