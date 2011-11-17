@@ -28,7 +28,6 @@
 #include <vpgl/vpgl_rational_camera.h>
 #include <vpgl/vpgl_local_rational_camera.h>
 #include <vpgl/vpgl_perspective_camera.h>
-#include <vpgl/algo/vpgl_camera_bounds.h>
 
 #include <vidl/vidl_image_list_istream.h>
 #include <vidl/vidl_convert.h>

@@ -8,7 +8,7 @@
 #include <vgl/vgl_plane_3d.h>
 #include <vil/vil_image_resource_sptr.h>
 #include <brip/brip_roi.h>
-#include <vpgl/bgeo/bgeo_lvcs.h>
+#include <vpgl/vpgl_lvcs.h>
 #include <vpgl/vpgl_rational_camera.h>
 #include <vsol/vsol_digital_curve_2d_sptr.h>
 #include <vsol/vsol_digital_curve_3d_sptr.h>
@@ -67,7 +67,7 @@ class bwm_reg_image : public vbl_ref_count
   vil_image_resource_sptr image_;
   vpgl_rational_camera<double> camera_;
   vgl_point_3d<double> world_point_;
-  bgeo_lvcs lvcs_;
+  vpgl_lvcs lvcs_;
   vgl_plane_3d<double> world_plane_;
   brip_roi roi_;
   double radius_;

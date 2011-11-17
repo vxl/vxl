@@ -12,7 +12,7 @@
 #include <bwm/video/bwm_video_cam_istream.h>
 #include <bwm/video/bwm_video_cam_ostream.h>
 
-#include <vpgl/bgeo/bgeo_lvcs.h>
+#include <vpgl/vpgl_lvcs.h>
 #include <vgl/algo/vgl_h_matrix_3d_compute_linear.h>
 
 static bool process_camera_from_photo_overlay(vcl_string const& params_path, vcl_string const& output_cam_path)
@@ -38,7 +38,7 @@ static bool process_camera_from_photo_overlay(vcl_string const& params_path, vcl
           << " CAUTION: focal length should be in pixels!\n"
           << "using LVCS: lvcs_lat " << lvcs_lat << " lvcs_long: " << lvcs_longit << vcl_endl;
 
- bgeo_lvcs_sptr lvcs = new bgeo_lvcs(lvcs_lat, lvcs_longit);
+ vpgl_lvcs_sptr lvcs = new vpgl_lvcs(lvcs_lat, lvcs_longit);
  double x,y,z;
  lvcs->global_to_local(longit, lat, alt, lvcs->get_cs_name(), x,y,z);
  vgl_homg_point_3d<double> camera_center(x,y,z);
@@ -111,7 +111,7 @@ static bool process_conv(vcl_string const& site_path,
   if (!cp.open_video_site(site_path, false))
     return false;
 
-  bgeo_lvcs_sptr lvcs = new bgeo_lvcs(latt, longit);
+  vpgl_lvcs_sptr lvcs = new vpgl_lvcs(latt, longit);
   cp.convert_world_pts_to_local(lvcs);
   cp.write_video_site(output_site_path);
   return true;
@@ -349,14 +349,15 @@ static bool process(vcl_string const& site_path,
     cameras_mapped.push_back(new_cam);
 #endif
     vpgl_perspective_camera<double> new_cam;
-    vpgl_proj_camera<double> in_cam(*cp.cameras()[k].cast_to_proj_camera());
+	
+    vpgl_proj_camera<double> in_cam(static_cast<vpgl_proj_camera<double> >(cp.cameras()[k]));
     vpgl_proj_camera<double> new_proj = postmultiply(in_cam,H_inverse);
     cameras_mapped_proj.push_back(new_proj);
     if (vpgl_perspective_decomposition(new_proj.get_matrix(),new_cam))
     //if (postmultiply(cameras2[k], H, new_cam))
       cameras_mapped.push_back(new_cam);
   }
-
+ 
   cp.close_camera_istream();
   cp.close_camera_ostream();
 

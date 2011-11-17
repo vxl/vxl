@@ -9,7 +9,7 @@
 #include <vnl/algo/vnl_amoeba.h>
 #include <vul/vul_file.h>
 #include <vpl/vpl.h> // vpl_unlink()
-#include <vpgl/algo/vpgl_interpolate.h>
+#include <bpgl/algo/bpgl_interpolate.h>
 #include <vpgl/algo/vpgl_bundle_adjust.h>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_homg_point_3d.h>
@@ -24,7 +24,7 @@
 #include <vidl/vidl_convert.h>
 #include <vidl/vidl_image_list_istream.h>
 
-#include <vpgl/bgeo/bgeo_lvcs.h>
+#include <vpgl/vpgl_lvcs.h>
 
 #include <vcl_cmath.h>
 #include <vcl_cstdio.h> // for std::sprintf
@@ -235,7 +235,7 @@ vcl_vector<vgl_point_3d<double> > bwm_video_corr_processor::world_pts()
 }
 
 //: if the world coordinates are given in global coordinates of satellite cameras, convert them to local coordinate frame of the given lvcs
-void bwm_video_corr_processor::convert_world_pts_to_local(bgeo_lvcs_sptr lvcs)
+void bwm_video_corr_processor::convert_world_pts_to_local(vpgl_lvcs_sptr lvcs)
 {
   for (vcl_vector<bwm_video_corr_sptr>::iterator cit = corrs_.begin();
        cit != corrs_.end(); ++cit)
@@ -345,7 +345,7 @@ interpolate_cameras(vcl_vector<vpgl_perspective_camera<double> > known_cams,
       if (verbose_)
         vcl_cout << "Interpolating between frames[" << fi-1
                  << ':' << ki-1 << "]\n";
-      if (!vpgl_interpolate::interpolate(c0, c1, n_interp, icams))
+      if (!bpgl_interpolate::interpolate(c0, c1, n_interp, icams))
       {
         vcl_cerr << "Interpolation failed\n";
         return false;

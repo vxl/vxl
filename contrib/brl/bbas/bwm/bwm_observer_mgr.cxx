@@ -7,7 +7,7 @@
 #include <vgl/vgl_vector_2d.h>
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_plane_3d.h>
-#include <vpgl/algo/vpgl_adjust_rational_trans_onept.h>
+#include <vpgl/algo/vpgl_rational_adjust_onept.h>
 #include <vsl/vsl_basic_xml_element.h>
 #include <vgui/vgui_dialog.h>
 
@@ -529,7 +529,7 @@ void bwm_observer_mgr::adjust_camera_offsets()
   vcl_cout << "Executing adjust image offsets\n";
   vcl_vector<vgl_vector_2d<double> > cam_trans;
   vgl_point_3d<double> intersection;
-  if (!vpgl_adjust_rational_trans_onept::adjust(rcams, cpoints, cam_trans,
+  if (!vpgl_rational_adjust_onept::adjust(rcams, cpoints, cam_trans,
                                                 intersection))
   {
     vcl_cerr << "In bwm_observer_rat_cam::adjust_image_offsets - "
@@ -613,7 +613,7 @@ void bwm_observer_mgr::find_terrain_points(vcl_vector<vgl_point_3d<double> >& po
     vcl_cout << "Executing adjust image offsets\n";
     vcl_vector<vgl_vector_2d<double> > cam_trans;
     vgl_point_3d<double> intersection;
-    if (!vpgl_adjust_rational_trans_onept::adjust(rcams, cpoints, cam_trans,
+    if (!vpgl_rational_adjust_onept::adjust(rcams, cpoints, cam_trans,
                                                   intersection))
     {
       vcl_cerr << "In bwm_observer_rat_cam::find_terrain_points - "

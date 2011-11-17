@@ -28,7 +28,7 @@
 #include <vsol/vsol_digital_curve_2d.h>
 #include <vsol/vsol_digital_curve_3d.h>
 #include <vpgl/vpgl_rational_camera.h>
-#include <vpgl/bgeo/bgeo_lvcs.h>
+#include <vpgl/vpgl_lvcs.h>
 #include <vil/vil_image_resource_sptr.h>
 #include <brip/brip_roi.h>
 #include "bwm_reg_image_sptr.h"

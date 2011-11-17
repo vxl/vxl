@@ -197,9 +197,10 @@ class bwm_observer_cam : public bwm_observer_vgui
                              vpgl_camera<double>* cam,
                              vcl_vector<vgl_polygon<double> > &poly_2d_list);
 
+#if 0
   void create_boxm_scene();
   void load_boxm_scene();
-
+#endif
  protected:
 
   //: to compute direciton of sun.

@@ -62,11 +62,11 @@ bool bwm_world::remove(bwm_observable_sptr obj)
 void bwm_world::set_lvcs(double lat, double lon, double elev)
 {
   // clean up the olde one, if any
-  lvcs_ = bgeo_lvcs(lat, lon, elev);
+  lvcs_ = vpgl_lvcs(lat, lon, elev);
   lvcs_valid_ = true;
 }
 
-bool bwm_world::get_lvcs(bgeo_lvcs &lvcs)
+bool bwm_world::get_lvcs(vpgl_lvcs &lvcs)
 {
   vgl_point_3d<double> center;
 
@@ -79,13 +79,13 @@ bool bwm_world::get_lvcs(bgeo_lvcs &lvcs)
 #if 0 // commented out
   // else, create from the world point
   else if (world_pt_valid_) {
-    lvcs = bgeo_lvcs(world_pt_.x(), world_pt_.y(), world_pt_.z());
+    lvcs = vpgl_lvcs(world_pt_.x(), world_pt_.y(), world_pt_.z());
     return true;
   }
 
   // get from the tableau mgr, as the avg of the camera centers
   else if (bwm_observer_mgr::instance()->comp_avg_camera_center(center)) {
-    lvcs = bgeo_lvcs(center.x(), center.y(), center.z());
+    lvcs = vpgl_lvcs(center.x(), center.y(), center.z());
     return true;
   }
 #endif // 0
@@ -99,7 +99,7 @@ bool bwm_world::get_lvcs(bgeo_lvcs &lvcs)
   lvcs_dialog.field("Elevation:", elev);
   if (!lvcs_dialog.ask())
     return false;
-  lvcs_ = bgeo_lvcs(lat, lon, elev);
+  lvcs_ = vpgl_lvcs(lat, lon, elev);
   lvcs_valid_ = true;
   return true;
 }
@@ -261,7 +261,7 @@ void bwm_world::save_gml()
 
 void bwm_world::save_kml()
 {
-  bgeo_lvcs lvcs;
+  vpgl_lvcs lvcs;
   if (!get_lvcs(lvcs)) {
     vcl_cerr << "Error: lvcs not defined.\n";
     return;
@@ -318,7 +318,7 @@ void bwm_world::save_kml()
 
 void bwm_world::save_x3d()
 {
-  bgeo_lvcs lvcs;
+  vpgl_lvcs lvcs;
   if (!get_lvcs(lvcs)) {
     vcl_cerr << "Error: lvcs not defined.\n";
     return;
@@ -362,7 +362,7 @@ void bwm_world::save_x3d()
 
 void bwm_world::save_kml_collada()
 {
-  bgeo_lvcs lvcs;
+  vpgl_lvcs lvcs;
   if (!get_lvcs(lvcs)) {
     vcl_cerr << "Error: lvcs not defined.\n";
     return;

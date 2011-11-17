@@ -2,7 +2,7 @@
 #include <vcl_cmath.h>
 #include <testlib/testlib_test.h>
 #include <vpgl/vpgl_perspective_camera.h>
-#include <vpgl/algo/vpgl_interpolate.h>
+#include <bpgl/algo/bpgl_interpolate.h>
 #include <vnl/vnl_double_3x3.h>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_point_3d.h>

@@ -5,6 +5,7 @@
 #include <vul/vul_file_iterator.h>
 #include <vul/vul_file.h>
 #include <vsl/vsl_binary_io.h>
+#include <vpgl/io/vpgl_io_perspective_camera.h>
 
 //: The initial camera index
 // \note the initial camera index is invalid until advance() is called
@@ -114,7 +115,7 @@ bwm_video_cam_istream::current_camera()
       if (ext == ".vsl") // binary form
       {
         vsl_b_ifstream bp_in(cam_paths_[index_].c_str());
-        current_camera_->b_read(bp_in);
+        vsl_b_read(bp_in, *current_camera_);
         bp_in.close();
         return current_camera_;
       }

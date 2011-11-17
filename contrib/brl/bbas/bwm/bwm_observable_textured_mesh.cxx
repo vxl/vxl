@@ -4,7 +4,7 @@
 #include <vul/vul_file.h>
 #include <vgl/vgl_point_2d.h>
 
-void bwm_observable_textured_mesh::save_gml(vcl_ostream& os, int obj_count, bgeo_lvcs* lvcs)
+void bwm_observable_textured_mesh::save_gml(vcl_ostream& os, int obj_count, vpgl_lvcs* lvcs)
 {
   if (lvcs) {
       //bmsh3d_textured_mesh_mc* mesh = static_cast<bmsh3d_textured_mesh_mc*>(object_);
@@ -30,7 +30,7 @@ void bwm_observable_textured_mesh::save_gml(vcl_ostream& os, int obj_count, bgeo
         for (unsigned j=0; j<face->vertices().size(); j++) {
           bmsh3d_vertex* v = (bmsh3d_vertex*) face->vertices(j);
            double x,y,z;
-            lvcs->global_to_local(v->pt().x(),v->pt().y(),v->pt().z(),bgeo_lvcs::wgs84,x,y,z,bgeo_lvcs::DEG,bgeo_lvcs::METERS);
+            lvcs->global_to_local(v->pt().x(),v->pt().y(),v->pt().z(),vpgl_lvcs::wgs84,x,y,z,vpgl_lvcs::DEG,vpgl_lvcs::METERS);
             os << "<gml:pos srsDimension=\"3\">";
             os << x << " " << y << " " << z;
             os << "</gml:pos>\n";
@@ -39,7 +39,7 @@ void bwm_observable_textured_mesh::save_gml(vcl_ostream& os, int obj_count, bgeo
         //Now print the first vertex again to close the polygon
         bmsh3d_vertex* v = (bmsh3d_vertex*) face->vertices(0);
         double x,y,z;
-        lvcs->global_to_local(v->pt().x(),v->pt().y(),v->pt().z(),bgeo_lvcs::wgs84,x,y,z,bgeo_lvcs::DEG,bgeo_lvcs::METERS);
+        lvcs->global_to_local(v->pt().x(),v->pt().y(),v->pt().z(),vpgl_lvcs::wgs84,x,y,z,vpgl_lvcs::DEG,vpgl_lvcs::METERS);
         os << "<gml:pos srsDimension=\"3\">";
         os << x << " " << y << " " << z;
         os << "</gml:pos>\n";
@@ -78,7 +78,7 @@ void bwm_observable_textured_mesh::save_gml(vcl_ostream& os, int obj_count, bgeo
   }
 }
 
-void bwm_observable_textured_mesh::save_kml(vcl_ostream& os, int obj_count, bgeo_lvcs* lvcs,
+void bwm_observable_textured_mesh::save_kml(vcl_ostream& os, int obj_count, vpgl_lvcs* lvcs,
                                             double ground_height, double x_offset, double y_offset )
 {
   if (lvcs) {
@@ -127,7 +127,7 @@ void bwm_observable_textured_mesh::save_kml(vcl_ostream& os, int obj_count, bgeo
 }
 
 
-void bwm_observable_textured_mesh::save_kml_collada(vcl_ostream& os, bgeo_lvcs* lvcs,
+void bwm_observable_textured_mesh::save_kml_collada(vcl_ostream& os, vpgl_lvcs* lvcs,
                                                     vcl_string geometry_id,
                                                     vcl_string geometry_position_id,
                                                     vcl_string geometry_position_array_id,
@@ -154,7 +154,7 @@ void bwm_observable_textured_mesh::save_kml_collada(vcl_ostream& os, bgeo_lvcs* 
     bmsh3d_vertex* v = (bmsh3d_vertex*)vit->second;
     vert_indices[v->id()] = vert_idx;
     double x,y,z;
-    lvcs->global_to_local(v->pt().x(),v->pt().y(),v->pt().z(),bgeo_lvcs::wgs84,x,y,z,bgeo_lvcs::DEG,bgeo_lvcs::METERS);
+    lvcs->global_to_local(v->pt().x(),v->pt().y(),v->pt().z(),vpgl_lvcs::wgs84,x,y,z,vpgl_lvcs::DEG,vpgl_lvcs::METERS);
     os << x << " " << y << " " << z << " ";
   }
 
@@ -220,7 +220,7 @@ void bwm_observable_textured_mesh::save_kml_collada(vcl_ostream& os, bgeo_lvcs* 
   }
 }
 
-void bwm_observable_textured_mesh::save_x3d(vcl_ostream &os, bgeo_lvcs* lvcs)
+void bwm_observable_textured_mesh::save_x3d(vcl_ostream &os, vpgl_lvcs* lvcs)
 {
   if (!lvcs)
     return;
@@ -250,7 +250,7 @@ void bwm_observable_textured_mesh::save_x3d(vcl_ostream &os, bgeo_lvcs* lvcs)
       bmsh3d_vertex* v = (bmsh3d_vertex*)vit->second;
       vert_indices[v->id()] = idx;
       double x,y,z;
-      lvcs->global_to_local(v->pt().x(),v->pt().y(),v->pt().z(),bgeo_lvcs::wgs84,x,y,z,bgeo_lvcs::DEG,bgeo_lvcs::METERS);
+      lvcs->global_to_local(v->pt().x(),v->pt().y(),v->pt().z(),vpgl_lvcs::wgs84,x,y,z,vpgl_lvcs::DEG,vpgl_lvcs::METERS);
       os <<"       " << x << " " << y << " " << z << ",\n";
     }
     os << "        ]\n";

@@ -12,6 +12,7 @@
 #include <vgl/vgl_intersection.h>
 #include <vpgl/vpgl_generic_camera.h>
 #include <vpgl/algo/vpgl_camera_compute.h>
+#include <vpgl/algo/vpgl_camera_convert.h>
 #include <vil/vil_image_view.h>
 #include <vil/vil_new.h>
 #define DEBUG
@@ -58,7 +59,7 @@ bwm_observer_generic_cam::bwm_observer_generic_cam(bgui_image_tableau_sptr img,
   else{
       vpgl_generic_camera<double> gcam;
       int ni = img_res->ni(), nj = img_res->nj();
-      vpgl_generic_camera_compute::compute(cam, ni, nj, gcam);
+      vpgl_generic_camera_convert::convert(cam, ni, nj, gcam);
       camera_ = new vpgl_generic_camera<double>(gcam);
   }
 

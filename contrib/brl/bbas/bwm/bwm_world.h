@@ -7,7 +7,7 @@
 
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_plane_3d.h>
-#include <vpgl/bgeo/bgeo_lvcs.h>
+#include <vpgl/vpgl_lvcs.h>
 
 class bwm_world
 {
@@ -51,10 +51,10 @@ class bwm_world
 
   void set_lvcs(double lat, double lon, double elev);
 
-  void set_lvcs(bgeo_lvcs &lvcs) { lvcs_ = lvcs; lvcs_valid_ = true; }
+  void set_lvcs(vpgl_lvcs &lvcs) { lvcs_ = lvcs; lvcs_valid_ = true; }
 
   //: returns true if it can figure out a value, false otherwise
-  bool get_lvcs(bgeo_lvcs &lvcs);
+  bool get_lvcs(vpgl_lvcs &lvcs);
 
   void load_shape_file();
   //*********** Save methods
@@ -87,7 +87,7 @@ class bwm_world
   //: The set of objects in the world such as mesh and vsol
   vcl_vector<bwm_observable_sptr> objects_;
 
-  bgeo_lvcs lvcs_;
+  vpgl_lvcs lvcs_;
 
   bool lvcs_valid_;
 };

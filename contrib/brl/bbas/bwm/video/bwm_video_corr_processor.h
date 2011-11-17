@@ -25,7 +25,7 @@
 #include <bwm/video/bwm_video_cam_istream_sptr.h>
 #include <bwm/video/bwm_video_cam_ostream_sptr.h>
 #include <bwm/video/bwm_video_site_io.h>
-#include <vpgl/bgeo/bgeo_lvcs_sptr.h>
+#include <vpgl/vpgl_lvcs_sptr.h>
 
 //: A least squares cost function for registering correspondences by minimizing square difference in intensities
 class bwm_video_corr_lsqr_cost_func : public vnl_least_squares_function
@@ -102,7 +102,7 @@ class bwm_video_corr_processor
   vcl_vector<vgl_point_3d<double> > world_pts();
 
   //: if the world coordinates are given in global coordinates of satellite cameras, convert them to local coordinate frame of the given lvcs
-  void convert_world_pts_to_local(bgeo_lvcs_sptr lvcs);
+  void convert_world_pts_to_local(vpgl_lvcs_sptr lvcs);
 
   vcl_string site_name() const {return site_name_;}
   vcl_string video_path() const {return video_path_;}

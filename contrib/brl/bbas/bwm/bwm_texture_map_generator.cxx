@@ -15,12 +15,12 @@
 #include <bmsh3d/bmsh3d_textured_face_mc.h>
 #include <bmsh3d/bmsh3d_vertex.h>
 
-#include <vpgl/bgeo/bgeo_lvcs.h>
+#include <vpgl/vpgl_lvcs.h>
 
 
 bool bwm_texture_map_generator::generate_texture_map(bwm_observable_mesh_sptr obj,
                                                      vcl_string texture_filename,
-                                                     bgeo_lvcs lvcs)
+                                                     vpgl_lvcs lvcs)
 {
   if (observers_.size() == 0) {
     vcl_cerr << "Error: Cannot create texture map, zero observers!\n";
@@ -233,7 +233,7 @@ bool bwm_texture_map_generator::generate_texture_map(bwm_observable_mesh_sptr ob
   return true;
 }
 
-vgl_vector_3d<double> bwm_texture_map_generator::compute_face_normal_lvcs(bmsh3d_face* face, bgeo_lvcs lvcs)
+vgl_vector_3d<double> bwm_texture_map_generator::compute_face_normal_lvcs(bmsh3d_face* face, vpgl_lvcs lvcs)
 {
   vgl_vector_3d<double> normal;
 
@@ -241,16 +241,16 @@ vgl_vector_3d<double> bwm_texture_map_generator::compute_face_normal_lvcs(bmsh3d
 
   double cx,cy,cz;
   vgl_point_3d<double> centroid = face->compute_center_pt();
-  lvcs.global_to_local(centroid.x(), centroid.y(), centroid.z(),bgeo_lvcs::wgs84,cx,cy,cz,bgeo_lvcs::DEG,bgeo_lvcs::METERS);
+  lvcs.global_to_local(centroid.x(), centroid.y(), centroid.z(),vpgl_lvcs::wgs84,cx,cy,cz,vpgl_lvcs::DEG,vpgl_lvcs::METERS);
 
   double vx,vy,vz;
   bmsh3d_vertex* last_v = (bmsh3d_vertex*) verts.back();
-  lvcs.global_to_local(last_v->pt().x(),last_v->pt().y(),last_v->pt().z(),bgeo_lvcs::wgs84,vx,vy,vz,bgeo_lvcs::DEG,bgeo_lvcs::METERS);
+  lvcs.global_to_local(last_v->pt().x(),last_v->pt().y(),last_v->pt().z(),vpgl_lvcs::wgs84,vx,vy,vz,vpgl_lvcs::DEG,vpgl_lvcs::METERS);
   vgl_vector_3d<double> a(vx-cx, vy-cy, vz-cz);
 
   for (unsigned i=0; i < verts.size(); i++) {
     bmsh3d_vertex* v = (bmsh3d_vertex*) verts[i];
-    lvcs.global_to_local(v->pt().x(),v->pt().y(),v->pt().z(),bgeo_lvcs::wgs84,vx,vy,vz,bgeo_lvcs::DEG,bgeo_lvcs::METERS);
+    lvcs.global_to_local(v->pt().x(),v->pt().y(),v->pt().z(),vpgl_lvcs::wgs84,vx,vy,vz,vpgl_lvcs::DEG,vpgl_lvcs::METERS);
 
     vgl_vector_3d<double> b(vx-cx, vy-cy, vz-cz);
     vgl_vector_3d<double> n = cross_product (a, b);

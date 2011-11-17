@@ -45,9 +45,10 @@
 #include <vgui/vgui_dialog_extensions.h>
 #include <vgui/vgui_projection_inspector.h>
 #include <bgui/bgui_vsol_soview2D.h>
-
+#if 0
 #include <boxm/boxm_apm_traits.h>
 #include <boxm/boxm_scene_parser.h>
+#endif
 #include <vsl/vsl_basic_xml_element.h>
 #include <vpgl/algo/vpgl_camera_compute.h>
 
@@ -1579,10 +1580,10 @@ void  bwm_observer_cam::position_vertex(bool show_as_geo)
   double lx,ly,lz;
   bool lvcs_valid = bwm_world::instance()->lvcs_valid();
   if (lvcs_valid) {
-    bgeo_lvcs lvcs;
+    vpgl_lvcs lvcs;
     bwm_world::instance()->get_lvcs(lvcs);
   // convert point to local
-  lvcs.global_to_local(p3d->x(), p3d->y(), p3d->z(), bgeo_lvcs::wgs84,lx, ly, lz);
+  lvcs.global_to_local(p3d->x(), p3d->y(), p3d->z(), vpgl_lvcs::wgs84,lx, ly, lz);
   }
   else {
     lx = p3d->x(); ly = p3d->y(); lz = p3d->z();
@@ -1719,7 +1720,7 @@ void bwm_project_meshes(vcl_vector<vcl_string> paths,
     }
   }
 }
-
+#if 0
 void bwm_observer_cam::create_boxm_scene()
 {
   vgui_soview2D* obj =  bwm_observer_img::get_selected_object(POLYGON_TYPE);
@@ -1734,9 +1735,9 @@ void bwm_observer_cam::create_boxm_scene()
     double z_dim = bb.depth();
 
     double lx=min.x(), ly=min.y(), lz=min.z();
-    bgeo_lvcs lvcs(ly, lx, lz,bgeo_lvcs::wgs84, bgeo_lvcs::DEG, bgeo_lvcs::METERS);
+    vpgl_lvcs lvcs(ly, lx, lz,vpgl_lvcs::wgs84, vpgl_lvcs::DEG, vpgl_lvcs::METERS);
     double local_x, local_y, local_z;
-    lvcs.global_to_local(lx+x_dim,ly+y_dim,lz+z_dim,bgeo_lvcs::wgs84,local_x, local_y, local_z);
+    lvcs.global_to_local(lx+x_dim,ly+y_dim,lz+z_dim,vpgl_lvcs::wgs84,local_x, local_y, local_z);
 
     // create the dialog
     vgui_dialog_extensions dialog("Enter the World Parameters");
@@ -1895,7 +1896,7 @@ void bwm_observer_cam::load_boxm_scene()
   double y_size = dims.y()*block_dim.y();
   double z_size = dims.z()*block_dim.z();
 
-  bgeo_lvcs lvcs;
+  vpgl_lvcs lvcs;
   if (parser.lvcs(lvcs)) {
     // set lvcs
     bwm_world::instance()->set_lvcs(lvcs);
@@ -1905,14 +1906,14 @@ void bwm_observer_cam::load_boxm_scene()
 
     // find the origin in global coordinates
     double lon, lat, elev;
-    lvcs.local_to_global(loc_origin.x(), loc_origin.y(), loc_origin.z(), bgeo_lvcs::wgs84, lon, lat, elev);
+    lvcs.local_to_global(loc_origin.x(), loc_origin.y(), loc_origin.z(), vpgl_lvcs::wgs84, lon, lat, elev);
     world_min.set(lon,lat,elev);
 
     //find the max point of world in local coordinates
     double w_max_x = loc_origin.x() + x_size;
     double w_max_y = loc_origin.y() + y_size;
     double w_max_z = loc_origin.z() + z_size;
-    lvcs.local_to_global(w_max_x, w_max_y, w_max_z, bgeo_lvcs::wgs84, lon, lat, elev);
+    lvcs.local_to_global(w_max_x, w_max_y, w_max_z, vpgl_lvcs::wgs84, lon, lat, elev);
     world_max.set(lon,lat,elev);
   }
   else {
@@ -1926,3 +1927,4 @@ void bwm_observer_cam::load_boxm_scene()
   bwm_world::instance()->add(mesh);
   bwm_observer_mgr::instance()->attach(mesh);
 }
+#endif

@@ -12,6 +12,8 @@
 #include <vgl/vgl_homg_line_3d_2_points.h>
 #include <vgl/algo/vgl_homg_operators_3d.h>
 #include <vpgl/vpgl_perspective_camera.h>
+#include <vpgl/io/vpgl_io_proj_camera.h>
+#include <vpgl/io/vpgl_io_perspective_camera.h>
 #define DEBUG
 
 vpgl_camera<double>* bwm_observer_proj_cam::
@@ -30,7 +32,7 @@ read_camera(vcl_string cam_path, vcl_string subtype)
                  << " invalid binary camera file " << cam_path.data() << '\n';
         return 0;
       }
-      pcam.b_read(bp_in);
+      vsl_b_read(bp_in, pcam);
       bp_in.close();
       vpgl_proj_camera<double> cam(pcam.get_matrix());
       return cam.clone();

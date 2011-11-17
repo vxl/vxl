@@ -30,7 +30,6 @@
 #include <vgui/vgui_style.h>
 
 #include <bgui/bgui_vsol_soview2D.h>
-#include <vpgl/bgeo/bgeo_lvcs.h>
 
 #include <vpgl/algo/vpgl_backproject.h>
 
@@ -155,11 +154,11 @@ vgl_vector_3d<double> bwm_observer_rat_cam::camera_direction()
 
   // convert p1 and p2 to lvcs
   double x,y,z;
-  bgeo_lvcs lvcs;
+  vpgl_lvcs lvcs;
   if (bwm_world::instance()->get_lvcs(lvcs)) {
-    lvcs.global_to_local(p1.x(),p1.y(),p1.z(),bgeo_lvcs::wgs84,x,y,z,bgeo_lvcs::DEG,bgeo_lvcs::METERS);
+    lvcs.global_to_local(p1.x(),p1.y(),p1.z(),vpgl_lvcs::wgs84,x,y,z,vpgl_lvcs::DEG,vpgl_lvcs::METERS);
     p1.set(x,y,z);
-    lvcs.global_to_local(p2.x(),p2.y(),p2.z(),bgeo_lvcs::wgs84,x,y,z,bgeo_lvcs::DEG,bgeo_lvcs::METERS);
+    lvcs.global_to_local(p2.x(),p2.y(),p2.z(),vpgl_lvcs::wgs84,x,y,z,vpgl_lvcs::DEG,vpgl_lvcs::METERS);
     p2.set(x,y,z);
   }
 
@@ -265,7 +264,7 @@ void bwm_observer_rat_cam::set_lvcs_at_selected_vertex()
   vsol_point_3d_sptr sv = selected_vertex();
   if (!sv)
     return;
-  bgeo_lvcs lvcs(sv->y(),sv->x(),sv->z(), bgeo_lvcs::wgs84,bgeo_lvcs::DEG,bgeo_lvcs::METERS);
+  vpgl_lvcs lvcs(sv->y(),sv->x(),sv->z(), vpgl_lvcs::wgs84,vpgl_lvcs::DEG,vpgl_lvcs::METERS);
   bwm_world::instance()->set_lvcs(lvcs);
   vcl_cout << "defining lvcs with origin = <" << sv->x() << ", "<<
     sv->y() <<", "<< sv->z() << '>' <<vcl_endl;
@@ -289,10 +288,10 @@ void bwm_observer_rat_cam::define_lvcs(float x1, float y1)
   backproj_poly(origin_poly2d,origin_poly3d);
 
   // note constructor takes lat, long (as opposed to long, lat) so switch x and y
-  bgeo_lvcs lvcs(origin_poly3d->vertex(0)->y(),
+  vpgl_lvcs lvcs(origin_poly3d->vertex(0)->y(),
                  origin_poly3d->vertex(0)->x(),
                  origin_poly3d->vertex(0)->z(),
-                 bgeo_lvcs::wgs84,bgeo_lvcs::DEG,bgeo_lvcs::METERS);
+                 vpgl_lvcs::wgs84,vpgl_lvcs::DEG,vpgl_lvcs::METERS);
   vcl_cout << "defining lvcs with origin = <"
            << origin_poly3d->vertex(0)->x() << ", "
            << origin_poly3d->vertex(0)->y() << ", "
@@ -309,13 +308,13 @@ void bwm_observer_rat_cam::adjust_camera_offset(vsol_point_2d_sptr img_point)
   }
 #endif // 0
 
-  bgeo_lvcs lvcs;
+  vpgl_lvcs lvcs;
   if (bwm_world::instance()->get_lvcs(lvcs))
   {
     // get projection of lvcs origin
     double lat,lon,elev;
-    lvcs.local_to_global(0, 0, 0,bgeo_lvcs::wgs84, lon ,lat ,elev,
-                         bgeo_lvcs::DEG,bgeo_lvcs::METERS);
+    lvcs.local_to_global(0, 0, 0,vpgl_lvcs::wgs84, lon ,lat ,elev,
+                         vpgl_lvcs::DEG,vpgl_lvcs::METERS);
     vgl_point_3d<double> world_pt(lon,lat,elev);
     vgl_point_2d<double> image_pt;
     proj_point(world_pt,image_pt);
@@ -353,7 +352,7 @@ void bwm_observer_rat_cam::save_selected()
     return;
   }
 
-  bgeo_lvcs lvcs;
+  vpgl_lvcs lvcs;
   if (bwm_world::instance()->get_lvcs(lvcs)) {
     unsigned face_id;
     bwm_observable_sptr obj = selected_face(face_id);
@@ -994,7 +993,7 @@ void bwm_observer_rat_cam::load_lvcs()
   is >> lon;
   is >> elev;
 
-  lvcs_ = new bgeo_lvcs(lat,lon,elev,bgeo_lvcs::wgs84,bgeo_lvcs::DEG,bgeo_lvcs::METERS);
+  lvcs_ = new vpgl_lvcs(lat,lon,elev,vpgl_lvcs::wgs84,vpgl_lvcs::DEG,vpgl_lvcs::METERS);
   vcl_cout << "loaded lvcs with origin "<<lat<<", "<<lon<<", "<<elev<<vcl_endl;
 
   return;
@@ -1021,7 +1020,7 @@ void bwm_observer_rat_cam::convert_file_to_lvcs()
     is >> lat;
     is >> lon;
     is >> elev;
-    lvcs_->global_to_local(lon,lat,elev,bgeo_lvcs::wgs84,x,y,z,bgeo_lvcs::DEG,bgeo_lvcs::METERS);
+    lvcs_->global_to_local(lon,lat,elev,vpgl_lvcs::wgs84,x,y,z,vpgl_lvcs::DEG,vpgl_lvcs::METERS);
     os << x <<' '<< y <<' '<<z<<vcl_endl;
   }
 

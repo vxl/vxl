@@ -21,7 +21,7 @@
 #include <vsol/vsol_polygon_3d_sptr.h>
 #include <vsol/vsol_point_3d_sptr.h>
 #include <vsol/vsol_line_3d_sptr.h>
-#include <vpgl/bgeo/bgeo_lvcs.h>
+#include <vpgl/vpgl_lvcs.h>
 
 
 class bwm_observable : public vgui_observable, public vbl_ref_count
@@ -91,9 +91,9 @@ class bwm_observable : public vgui_observable, public vbl_ref_count
 
   virtual void label_wall(unsigned face_id)=0;
 
-  virtual bwm_observable_sptr global_to_local(bgeo_lvcs* lvcs, double& min_z)=0;
+  virtual bwm_observable_sptr global_to_local(vpgl_lvcs* lvcs, double& min_z)=0;
 
-  virtual void save(const char* filename, bgeo_lvcs* lvcs)=0;
+  virtual void save(const char* filename, vpgl_lvcs* lvcs)=0;
 
   virtual void save(const char* filename)=0;
 

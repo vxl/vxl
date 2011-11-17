@@ -261,7 +261,7 @@ void bwm_popup_menu::get_menu(vgui_menu &menu)
     mesh_submenu.add("Set Draw Mode", draw_menu);
 
     mesh_submenu.separator();
-
+#if 0
     vgui_menu boxm_submenu;
 
     boxm_submenu.add("Create BOXM scene from mesh",
@@ -271,7 +271,7 @@ void bwm_popup_menu::get_menu(vgui_menu &menu)
                      new vgui_command_simple<bwm_tableau_cam>(cam_tab,&bwm_tableau_cam::load_boxm_scene));
 
     mesh_submenu.add("BOXM", boxm_submenu);
-
+#endif
     if (tab_->type_name().compare("bwm_tableau_rat_cam") == 0) {
       bwm_tableau_rat_cam* rat_cam_tab = static_cast<bwm_tableau_rat_cam* > (tab_.as_pointer());
       mesh_submenu.separator();

@@ -14,8 +14,8 @@ bwm_reg_image::bwm_reg_image(vil_image_resource_sptr const& image,
   camera_(rcam), world_point_(world_point), world_plane_(world_plane),
   roi_(0), radius_(0)
 {
-  lvcs_ =  bgeo_lvcs(world_point_.y(),world_point_.x(),world_point_.z(),
-                     bgeo_lvcs::wgs84,bgeo_lvcs::DEG,bgeo_lvcs::METERS);
+  lvcs_ =  vpgl_lvcs(world_point_.y(),world_point_.x(),world_point_.z(),
+                     vpgl_lvcs::wgs84,vpgl_lvcs::DEG,vpgl_lvcs::METERS);
 }
 
 // find the gsd in meters/per/pixel along the diagonal of the image
@@ -45,15 +45,15 @@ double bwm_reg_image::diagonal_gsd()
   // convert upper left position to meters
     double xul, yul, zul;
     lvcs_.global_to_local(wul.x(), wul.y(), wul.z(),
-                       bgeo_lvcs::wgs84,
+                       vpgl_lvcs::wgs84,
                        xul,yul,zul,
-                       bgeo_lvcs::DEG,bgeo_lvcs::METERS);
+                       vpgl_lvcs::DEG,vpgl_lvcs::METERS);
   // convert lower right position to meters
   double xlr, ylr, zlr;
   lvcs_.global_to_local(wlr.x(), wlr.y(), wlr.z(),
-                       bgeo_lvcs::wgs84,
+                       vpgl_lvcs::wgs84,
                        xlr,ylr,zlr,
-                       bgeo_lvcs::DEG,bgeo_lvcs::METERS);
+                       vpgl_lvcs::DEG,vpgl_lvcs::METERS);
 
   double world_diag = vcl_sqrt((xlr-xul)*(xlr-xul)+(ylr-yul)*(ylr-yul));
   //shouldn't happen
@@ -71,16 +71,16 @@ void bwm_reg_image::compute_region_of_interest(float sigma)
   // convert to local coordinates since projection error is in meters
   double lx, ly, lz;
   lvcs_.global_to_local(world_point_.x(),world_point_.y(),
-                        world_point_.z(),bgeo_lvcs::wgs84,
+                        world_point_.z(),vpgl_lvcs::wgs84,
                         lx,ly,lz,
-                        bgeo_lvcs::DEG,bgeo_lvcs::METERS);
+                        vpgl_lvcs::DEG,vpgl_lvcs::METERS);
 
   lx+=radius_; //deviation is roughly isotropic so x is as good as any
   
   // convert back to geographic coordinates
   double lon, lat, elev;
-  lvcs_.local_to_global(lx, ly, lz,bgeo_lvcs::wgs84, lon, lat ,elev,
-                        bgeo_lvcs::DEG,bgeo_lvcs::METERS);
+  lvcs_.local_to_global(lx, ly, lz,vpgl_lvcs::wgs84, lon, lat ,elev,
+                        vpgl_lvcs::DEG,vpgl_lvcs::METERS);
   
   vgl_point_3d<double> radius_point_3d(lon, lat, elev);
 

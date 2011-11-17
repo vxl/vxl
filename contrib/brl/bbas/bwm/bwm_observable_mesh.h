@@ -126,11 +126,11 @@ class bwm_observable_mesh : public bwm_observable
 
   //SoSeparator* convert_coin3d(bool b_shape_hints, float transp, int colorcode);
 
-  bwm_observable_sptr global_to_local(bgeo_lvcs* lvcs, double& min_z);
+  bwm_observable_sptr global_to_local(vpgl_lvcs* lvcs, double& min_z);
 
   bool load_from(vcl_string filename);
 
-  void save(const char* filename, bgeo_lvcs* lvcs);
+  void save(const char* filename, vpgl_lvcs* lvcs);
 
   void save(const char* filename);
 

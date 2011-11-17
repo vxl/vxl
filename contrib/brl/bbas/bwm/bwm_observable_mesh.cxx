@@ -1276,7 +1276,7 @@ void bwm_observable_mesh::triangulate()
   notify_observers("update");
 }
 
-bwm_observable_sptr bwm_observable_mesh::global_to_local(bgeo_lvcs* lvcs, double& min_z)
+bwm_observable_sptr bwm_observable_mesh::global_to_local(vpgl_lvcs* lvcs, double& min_z)
 {
   if (lvcs) {
     bmsh3d_mesh_mc* mesh = object_->clone();
@@ -1285,8 +1285,8 @@ bwm_observable_sptr bwm_observable_mesh::global_to_local(bgeo_lvcs* lvcs, double
       bmsh3d_vertex* v = (bmsh3d_vertex*)vit->second;
       double x,y,z;
       lvcs->global_to_local(v->pt().x(), v->pt().y(), v->pt().z(),
-                            bgeo_lvcs::wgs84,x,y,z,
-                            bgeo_lvcs::DEG,bgeo_lvcs::METERS);
+                            vpgl_lvcs::wgs84,x,y,z,
+                            vpgl_lvcs::DEG,vpgl_lvcs::METERS);
       if (z < min_z) {
         min_z = z;
       }
@@ -1332,7 +1332,7 @@ bool bwm_observable_mesh::load_from(vcl_string filename)
   return true;
 }
 
-void bwm_observable_mesh::save(const char* filename, bgeo_lvcs* lvcs)
+void bwm_observable_mesh::save(const char* filename, vpgl_lvcs* lvcs)
 {
   object_->build_IFS_mesh();
   bmsh3d_mesh* mesh2 = object_->clone();
@@ -1346,7 +1346,7 @@ void bwm_observable_mesh::save(const char* filename, bgeo_lvcs* lvcs)
   for (; it != mesh2->vertexmap().end(); it++) {
     bmsh3d_vertex* V = (bmsh3d_vertex*) (*it).second;
     double x=0,y=0,z=0;
-    lvcs->global_to_local(V->pt().x(),V->pt().y(),V->pt().z(),bgeo_lvcs::wgs84,x,y,z,bgeo_lvcs::DEG,bgeo_lvcs::METERS);
+    lvcs->global_to_local(V->pt().x(),V->pt().y(),V->pt().z(),vpgl_lvcs::wgs84,x,y,z,vpgl_lvcs::DEG,vpgl_lvcs::METERS);
     vgl_point_3d<double> new_pt(x,y,z);
     vcl_cout << "converted global <"<<V->pt().x() <<", "<< V->pt().y()
              <<", "<< V->pt().z() <<"> to <" <<x<< ", "<<y<<" ,"<<z<<'>'<<vcl_endl;

@@ -6,7 +6,7 @@
 #include <vpl/vpl.h> // vpl_unlink()
 #include <vpgl/vpgl_calibration_matrix.h>
 #include <vpgl/vpgl_perspective_camera.h>
-#include <vpgl/algo/vpgl_camera_homographies.h>
+#include <bpgl/algo/bpgl_camera_homographies.h>
 #include <bwm/video/bwm_video_corr_processor.h>
 #include <bwm/video/bwm_video_site_io.h>
 #include <bwm/video/bwm_video_cam_istream.h>
@@ -46,7 +46,7 @@ static bool process(vcl_string const& site_path,
   while (true) {
     vpgl_perspective_camera<double>* cam = cam_istr.current_camera();
     vpgl_perspective_camera<double> tr_cam =
-      vpgl_camera_homographies::transform_camera_to_plane(*cam, world_plane);
+      bpgl_camera_homographies::transform_camera_to_plane(*cam, world_plane);
     if (! cam_ostr.write_camera(&tr_cam))
       return false;
     if (!cam_istr.advance())
@@ -54,7 +54,7 @@ static bool process(vcl_string const& site_path,
   }
   //transform the points
   vcl_vector<vgl_point_3d<double> > tr_pts =
-    vpgl_camera_homographies::transform_points_to_plane(world_plane, cen, pts );
+    bpgl_camera_homographies::transform_points_to_plane(world_plane, cen, pts );
   cp.set_world_pts(tr_pts);
   vcl_string camera_opath = trans_cam_dir+"/*";
   cp.set_camera_path(camera_opath);

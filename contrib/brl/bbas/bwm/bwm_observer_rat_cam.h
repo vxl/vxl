@@ -12,7 +12,7 @@
 #include <vsol/vsol_polygon_3d_sptr.h>
 
 #include <vpgl/vpgl_rational_camera.h>
-#include <vpgl/bgeo/bgeo_lvcs.h>
+#include <vpgl/vpgl_lvcs.h>
 
 #include <bgui/bgui_image_tableau_sptr.h>
 

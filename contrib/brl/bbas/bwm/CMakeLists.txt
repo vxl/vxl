@@ -9,8 +9,6 @@ INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR} )
 INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bbas )
 INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bseg )
 INCLUDE_DIRECTORIES( ${GEL_INCLUDE_DIR} )
-INCLUDE_DIRECTORIES( ${GEL_INCLUDE_DIR}/mrc )
-
 INCLUDE( ${VXL_CMAKE_DIR}/NewCMake/FindDirectShow.cmake )
 IF(DIRECTSHOW_FOUND)
 INCLUDE_DIRECTORIES(${DIRECTSHOW_INCLUDE_DIRS})
@@ -106,7 +104,7 @@ AUX_SOURCE_DIRECTORY(Templates bwm_sources)
 
 ADD_LIBRARY(bwm ${bwm_sources})
 
-TARGET_LINK_LIBRARIES( bwm bwm_video bwm_reg bwm_algo bwm_io bsta_io bmsh3d bmsh3d_algo bgeo bsol vsol vdgl bgui vgui vil vbl vgl vgl_algo vnl_algo vnl vpgl vpgl_algo vpgl_file_formats bvgl vul boxm)
+TARGET_LINK_LIBRARIES( bwm bwm_video bwm_reg bwm_algo bwm_io vsph bsta_io bmsh3d bmsh3d_algo bsol vsol vdgl bgui vgui vil vbl vgl vgl_algo vnl_algo vnl vpgl vpgl_algo vpgl_io vpgl_file_formats bvgl vul )
 
 SUBDIRS(algo)
 SUBDIRS(pro)

@@ -4,6 +4,8 @@
 #include <vul/vul_file.h>
 #include <vul/vul_sprintf.h>
 #include <vsl/vsl_binary_io.h>
+#include <vpgl/io/vpgl_io_proj_camera.h>
+#include <vpgl/io/vpgl_io_perspective_camera.h>
 
 //------------------------------------------------------------------------------
 
@@ -93,7 +95,7 @@ write_camera(const vpgl_perspective_camera<double>*  cam)
   vsl_b_ofstream bp_out(file_name.c_str());
   if (!bp_out)
     return false;
-  cam->b_write(bp_out);
+  vsl_b_write(bp_out, *cam);
   bp_out.close();
   return true;
 }
@@ -112,7 +114,7 @@ write_camera(const vpgl_proj_camera<double>*  cam)
   vsl_b_ofstream bp_out(file_name.c_str());
   if (!bp_out)
     return false;
-  cam->b_write(bp_out);
+  vsl_b_write(bp_out, *cam);
   bp_out.close();
   return true;
 }

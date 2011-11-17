@@ -132,10 +132,10 @@ class bwm_tableau_cam : public bwm_tableau_img
   void set_face_mode() { my_observer_->set_face_mode(); }
   void set_edge_mode() { my_observer_->set_edge_mode(); }
   void set_vertex_mode() { my_observer_->set_vertex_mode(); }
-
+#if 0
   void create_boxm_scene() { my_observer_->create_boxm_scene(); }
   void load_boxm_scene() { my_observer_->load_boxm_scene(); }
-
+#endif
   bool show_vertices_;
 
  protected:

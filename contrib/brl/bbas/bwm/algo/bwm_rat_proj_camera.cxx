@@ -1,4 +1,5 @@
 #include "bwm_rat_proj_camera.h"
+#include <vpgl/algo/vpgl_camera_convert.h>
 //:
 // \file
 
@@ -29,7 +30,7 @@ void bwm_rat_proj_camera::compute()
                             soz.scale()/2.);
 
   vgl_box_3d<double> vol(pmin, pmax);
-  vpgl_perspective_camera_compute::compute(rat_cam_, vol, persp_cam_, t_);
+  vpgl_perspective_camera_convert::convert(rat_cam_, vol, persp_cam_, t_);
 }
 
 #if 0

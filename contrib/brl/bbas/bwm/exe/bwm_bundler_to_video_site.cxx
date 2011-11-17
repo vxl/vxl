@@ -28,7 +28,7 @@
 #include <vpgl/vpgl_rational_camera.h>
 #include <vpgl/vpgl_local_rational_camera.h>
 #include <vpgl/vpgl_perspective_camera.h>
-#include <vpgl/algo/vpgl_camera_bounds.h>
+#include <vsph/vsph_camera_bounds.h>
 
 #include <vidl/vidl_image_list_istream.h>
 #include <vidl/vidl_convert.h>
@@ -655,7 +655,7 @@ int main(int argc, char** argv)
   double cone_half_angle;
   double solid_angle;
 
-  vpgl_camera_bounds::pixel_solid_angle(cams[0],ni/4,nj/4,cone_axis,cone_half_angle,solid_angle);
+  vsph_camera_bounds::pixel_solid_angle(cams[0],ni/4,nj/4,cone_axis,cone_half_angle,solid_angle);
 
   vgl_point_3d<double> cc=cams[0].camera_center();
   double res=2*(cc-centre(pts_3d)).length()*cone_half_angle;
