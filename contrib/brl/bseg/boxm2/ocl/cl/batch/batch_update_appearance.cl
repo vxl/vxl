@@ -36,16 +36,6 @@ batch_update_appearance(__global RenderSceneInfo  * info,
     float min_sigma = .02; 
     float8 mog3 = weighted_mog3_em( obs, vis, numSamples, min_sigma ); 
     
-    //DEBUGGER MEAN_VAR
-/*
-    float2 mean_var = weighted_mean_var(obs, vis, numSamples); 
-    float8 mog3 = (float8) (0.0f); 
-    mog3.s0 = mean_var.x; 
-    mog3.s1 = max(mean_var.y, .02f);
-    mog3.s1 = .06f; 
-    mog3.s2 = .99f; 
-*/
-    
     //reset the cells in memory
     mog3 *= (float) NORM; 
     CONVERT_FUNC_SAT_RTE(mog[gid], mog3);
