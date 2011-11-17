@@ -28,7 +28,7 @@ SET(bapl_sources
 AUX_SOURCE_DIRECTORY(Templates bapl_sources)
 
 ADD_LIBRARY(bapl  ${bapl_sources})
-TARGET_LINK_LIBRARIES(bapl vpgl_algo ipts vimt brip rrel vnl_algo vnl vil_algo vil_io vil vgl_algo vgl vbl_io vbl)
+TARGET_LINK_LIBRARIES(bapl bpgl_algo vpgl_algo ipts vimt brip rrel vnl_algo vnl vil_algo vil_io vil vgl_algo vgl vbl_io vbl)
 
 #IF( BUILD_EXAMPLES )
   SUBDIRS( examples )
