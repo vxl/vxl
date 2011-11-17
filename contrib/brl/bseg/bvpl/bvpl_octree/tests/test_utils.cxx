@@ -30,7 +30,7 @@ boxm_scene<boct_tree<short, float> >* create_scene(unsigned world_dimx,unsigned 
   //crete the input scene
   unsigned int max_tree_level = 3;
   unsigned int init_level = 1;
-  bgeo_lvcs lvcs(33.33,44.44,10.0, bgeo_lvcs::wgs84, bgeo_lvcs::DEG, bgeo_lvcs::METERS);
+  vpgl_lvcs lvcs(33.33,44.44,10.0, vpgl_lvcs::wgs84, vpgl_lvcs::DEG, vpgl_lvcs::METERS);
   vgl_point_3d<double> origin(0,0,0);
 
   vgl_vector_3d<double> block_dim(10, 10, 10); //world coordinate dimensions of a block
