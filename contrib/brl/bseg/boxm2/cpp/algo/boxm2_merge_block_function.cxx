@@ -95,10 +95,10 @@ bool boxm2_merge_block_function::merge(vcl_vector<boxm2_data_base*>& datas)
 
       //1. get current tree information
       uchar16 tree  = (*blk_iter);
-      boct_bit_tree2 curr_tree( (unsigned char*) tree.data_block(), max_level_);
+      boct_bit_tree curr_tree( (unsigned char*) tree.data_block(), max_level_);
 
       //3. merge tree locally (only updates refined_tree and returns new tree size)
-      boct_bit_tree2 refined_tree = this->merge_bit_tree(curr_tree, alpha_, prob_thresh_);
+      boct_bit_tree refined_tree = this->merge_bit_tree(curr_tree, alpha_, prob_thresh_);
       int newSize = refined_tree.num_cells();
 
       //cache refined tree
@@ -124,10 +124,10 @@ bool boxm2_merge_block_function::merge(vcl_vector<boxm2_data_base*>& datas)
   {
       //1. get current tree information
       uchar16 tree  = (*blk_iter);
-      boct_bit_tree2 old_tree( (unsigned char*) tree.data_block(), max_level_);
+      boct_bit_tree old_tree( (unsigned char*) tree.data_block(), max_level_);
 
       //2. refine tree locally (only updates refined_tree and returns new tree size)
-      boct_bit_tree2 refined_tree( (unsigned char*) trees_copy[currIndex].data_block(), max_level_);
+      boct_bit_tree refined_tree( (unsigned char*) trees_copy[currIndex].data_block(), max_level_);
 
       //2.5 pack data bits into refined tree
       //store data index in bits [10, 11, 12, 13] ;
@@ -172,10 +172,10 @@ bool boxm2_merge_block_function::merge(vcl_vector<boxm2_data_base*>& datas)
 // so no tree_buffer information is needed, whereas the data is modified
 // on the global level, so buffers, offsets are used
 /////////////////////////////////////////////////////////////////
-boct_bit_tree2 boxm2_merge_block_function::merge_bit_tree(boct_bit_tree2& unrefined_tree, float* alphas, float prob_thresh)
+boct_bit_tree boxm2_merge_block_function::merge_bit_tree(boct_bit_tree& unrefined_tree, float* alphas, float prob_thresh)
 {
   //initialize tree to return
-  boct_bit_tree2 merged_tree(unrefined_tree.get_bits(), max_level_);
+  boct_bit_tree merged_tree(unrefined_tree.get_bits(), max_level_);
 
   //it can't be merged if it's a root
   if (merged_tree.bit_at(0) == 0)
@@ -251,8 +251,8 @@ boct_bit_tree2 boxm2_merge_block_function::merge_bit_tree(boct_bit_tree2& unrefi
 //   else if merged_tree(bit)==1 && unrefined_tree(bit)==1
 //     for i=1:8
 //       data[dataIndex++] = old_data[unrefined_tree.data_ptr(bit)];
-int boxm2_merge_block_function::move_data( boct_bit_tree2& old_tree,
-                                           boct_bit_tree2& merged_tree,
+int boxm2_merge_block_function::move_data( boct_bit_tree& old_tree,
+                                           boct_bit_tree& merged_tree,
                                            float*  alpha,
                                            uchar8* mog,
                                            ushort4* num_obs,

@@ -6,7 +6,7 @@
 #include <boxm2/boxm2_data_traits.h>
 #include <boxm2/cpp/algo/boxm2_cast_ray_function.h>
 #include <boxm2/cpp/algo/boxm2_mog3_grey_processor.h>
-#include <boct/boct_bit_tree2.h>
+#include <boct/boct_bit_tree.h>
 #include <vnl/vnl_vector_fixed.h>
 #include <vcl_iostream.h>
 #include <boxm2/io/boxm2_cache.h>
@@ -31,13 +31,13 @@ class boxm2_refine_block_function
   bool refine_deterministic(vcl_vector<boxm2_data_base*>& datas);
 
   //: refine bit tree
-  boct_bit_tree2 refine_bit_tree(boct_bit_tree2& curr_tree,
+  boct_bit_tree refine_bit_tree(boct_bit_tree& curr_tree,
                                  int buff_offset,
                                  bool is_random=true);
 
   //: move data into new location
-  int move_data(boct_bit_tree2& unrefined_tree,
-                boct_bit_tree2& refined_tree,
+  int move_data(boct_bit_tree& unrefined_tree,
+                boct_bit_tree& refined_tree,
                 float*  alpha_cpy,
                 uchar8*  mog_cpy,
                 ushort4* num_obs_cpy );
