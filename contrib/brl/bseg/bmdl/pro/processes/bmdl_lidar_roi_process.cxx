@@ -13,8 +13,8 @@
 #include <bprb/bprb_parameters.h>
 #include <bprb/bprb_func_process.h>
 
-#include <vpgl/bgeo/bgeo_utm.h>
-#include <vpgl/bgeo/bgeo_lvcs.h>
+#include <vpgl/vpgl_utm.h>
+#include <vpgl/vpgl_lvcs.h>
 #include <vpgl/file_formats/vpgl_geo_camera.h>
 
 #include <brip/brip_roi.h>
@@ -113,7 +113,7 @@ bool lidar_roi(unsigned type,  //0 for geo coordinates, 1 for image coord
         double y = corners[i].y();
         double z = corners[i].z();
         double lx, ly, lz;
-        camera->lvcs()->global_to_local(x, y, z, bgeo_lvcs::wgs84, lx, ly, lz);
+        camera->lvcs()->global_to_local(x, y, z,vpgl_lvcs::wgs84, lx, ly, lz);
         double u,v;
         camera->project(lx,ly,lz,u,v);
         vgl_point_2d<double> p(u,v);

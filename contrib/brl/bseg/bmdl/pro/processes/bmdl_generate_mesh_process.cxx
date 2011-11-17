@@ -29,8 +29,8 @@
 
 #include <vpgl/vpgl_camera.h>
 #include <vpgl/file_formats/vpgl_geo_camera.h>
-#include <vpgl/bgeo/bgeo_lvcs_sptr.h>
-#include <vpgl/bgeo/bgeo_lvcs.h>
+#include <vpgl/vpgl_lvcs_sptr.h>
+#include <vpgl/vpgl_lvcs.h>
 #include <vul/vul_file.h>
 
 #if HAS_ZLIB
@@ -47,7 +47,7 @@ void update_mesh_coord(imesh_mesh& imesh, vpgl_geo_camera* cam)
     unsigned int x = (unsigned int)vertices(v,0); // explicit cast from double
     unsigned int y = (unsigned int)vertices(v,1);
     unsigned int z = (unsigned int)vertices(v,2);
-    bgeo_lvcs_sptr lvcs = cam->lvcs();
+    vpgl_lvcs_sptr lvcs = cam->lvcs();
     double lon, lat, elev;
     cam->img_to_wgs(x, y, z, lon, lat, elev);
     vertices[v][0] = lon;
