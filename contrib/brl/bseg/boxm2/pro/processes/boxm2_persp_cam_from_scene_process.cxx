@@ -8,7 +8,7 @@
 
 #include <bprb/bprb_func_process.h>
 #include <boxm2/boxm2_scene.h>
-#include <vpgl/algo/vpgl_camera_from_box.h>
+#include <bpgl/algo/bpgl_camera_from_box.h>
 namespace boxm2_persp_cam_from_scene_process_globals
 {
   const unsigned n_inputs_ = 6;
@@ -53,7 +53,7 @@ bool boxm2_persp_cam_from_scene_process(bprb_func_process& pro)
   vgl_box_3d<double> box = scene->bounding_box();
   vgl_point_3d<double> cam_center(xc, yc, zc);
   vpgl_perspective_camera<double> cam = 
-    vpgl_camera_from_box::persp_camera_from_box(box, cam_center, ni, nj);
+    bpgl_camera_from_box::persp_camera_from_box(box, cam_center, ni, nj);
   
   //set the output
   pro.set_output_val<vpgl_camera_double_sptr>(0, new vpgl_perspective_camera<double>(cam));

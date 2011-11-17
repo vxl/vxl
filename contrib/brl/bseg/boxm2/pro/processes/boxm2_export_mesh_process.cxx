@@ -24,7 +24,6 @@
 
 //vpgl camera stuff
 #include <vpgl/vpgl_perspective_camera.h>
-#include <vpgl/algo/vpgl_project.h>
 
 //det and imesh includes
 #include <sdet/sdet_image_mesh.h>

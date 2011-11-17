@@ -8,7 +8,7 @@
 
 #include <bprb/bprb_func_process.h>
 #include <boxm2/boxm2_scene.h>
-#include <vpgl/algo/vpgl_camera_from_box.h>
+#include <bpgl/algo/bpgl_camera_from_box.h>
 #include <vpgl/algo/vpgl_camera_convert.h>
 #include <vcl_cmath.h>
 namespace boxm2_compute_sun_affine_camera_process_globals
@@ -63,7 +63,7 @@ bool boxm2_compute_sun_affine_camera_process(bprb_func_process& pro)
   unsigned int dimx = (unsigned int) vcl_floor(box.width()/(mdata.sub_block_dim_.x()/vcl_pow(2.0,(double)mdata.max_level_-1))+ 0.5);
   unsigned int dimy = (unsigned int) vcl_floor(box.height()/(mdata.sub_block_dim_.y()/vcl_pow(2.0,(double)mdata.max_level_-1))+ 0.5);
 
-  vpgl_affine_camera<double> affine_camera  = vpgl_camera_from_box::affine_camera_from_box(box,
+  vpgl_affine_camera<double> affine_camera  = bpgl_camera_from_box::affine_camera_from_box(box,
                                                        sun_dir_downwards,
                                                        dimx,
                                                        dimy);
