@@ -95,7 +95,7 @@ bool boxm2_ocl_visualize_change_process(bprb_func_process& pro)
       vxl_byte intensity = (vxl_byte) (255.0f * (*in_img)(i,j)); 
       
       //if it's change, mark it as change
-      if( mask(i,j) > thresh && intensity<245) {
+      if( mask(i,j) > thresh) {
         (*out_img)(i,j,0) = (vxl_byte) 255; 
         (*out_img)(i,j,1) = (vxl_byte) 0; 
         (*out_img)(i,j,2) = (vxl_byte) 0; 
