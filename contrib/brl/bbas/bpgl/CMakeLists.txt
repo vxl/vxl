@@ -24,6 +24,9 @@ SUBDIRS(algo)
 # determine unknown camera parameters
 SUBDIRS(icam)
 
+# image homography registration
+SUBDIRS(ihog)
+
 IF(BUILD_TESTING)
   SUBDIRS(tests)
 ENDIF(BUILD_TESTING)
