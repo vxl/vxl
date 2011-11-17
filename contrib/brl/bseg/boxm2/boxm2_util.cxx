@@ -3,7 +3,7 @@
 //:
 // \file
 
-#include <vpgl/algo/vpgl_project.h>
+#include <bpgl/algo/bpgl_project.h>
 
 //vgl includes
 #include <vgl/vgl_point_3d.h>
@@ -193,7 +193,7 @@ boxm2_util::construct_camera( double elevation,
   double id = vcl_sqrt(dni*dni + dnj*dnj);
   double f;
   if (fit_bb) {
-    vgl_box_2d<double> image_bb = vpgl_project::project_bounding_box(*cam, bb);
+    vgl_box_2d<double> image_bb = bpgl_project::project_bounding_box(*cam, bb);
     // get 2-d box diameter and image diameter
     double bw = image_bb.width(), bh = image_bb.height();
     double bd = vcl_sqrt(bw*bw + bh*bh);
