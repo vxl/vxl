@@ -8,7 +8,7 @@ ADD_EXECUTABLE( boct_test_all
   test_clone_tree.cxx
   test_tree_cell_reader.cxx
   test_bit_tree.cxx
-  test_bit_tree2.cxx
+  #test_bit_tree2.cxx
  )
 
 TARGET_LINK_LIBRARIES( boct_test_all boct testlib vnl vgl_io vgl vpl)

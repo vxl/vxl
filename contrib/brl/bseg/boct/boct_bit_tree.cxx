@@ -4,318 +4,37 @@
 #include "boct_tree_cell.h"
 #include <vcl_iostream.h>
 #include <vcl_list.h>
+#include <vcl_algorithm.h>
+#include <vcl_cstring.h> // for std::memcpy()
 
 //: default constructor
 boct_bit_tree::boct_bit_tree()
 {
   bits_ = new unsigned char[16];
-  data_ = new float[585*16];
-
-  //initialize num levels, bits
-  num_levels_ = 4;
-  for (int i=0;i<16; i++)
-    bits_[i] = 0;
+  vcl_memset(bits_, 0, 16); 
 }
 
 //: constructor from an array of char bits
-boct_bit_tree::boct_bit_tree(char* bits)
+boct_bit_tree::boct_bit_tree(unsigned char* bits, int num_levels)
 {
-  bits_ = new unsigned char[16];
-  data_ = new float[585*16];
+    bits_ = new unsigned char[16];
 
-  //initialize num levels, bits
-  num_levels_ = 4;
+    //initialize num levels, bits
+    num_levels_ = vcl_min(4,num_levels);
 
-  //zero out bits to start
-  for (int i=0;i<16; i++)
-    bits_[i] = 0;
+    //copy 16 bytes
+    vcl_memcpy(bits_, bits, 16);
 
-  //initialize bits
-  for (int i=0;i<73; i++)
-    this->set_bit_at(i, (bool) bits[i]);
+    ////zero out bits to start
+    //for (int i=0;i<16; i++)
+        //bits_[i] = bits[i];
 }
 
-//: Constructor from boct_tree<short, float> *
-boct_bit_tree::boct_bit_tree(boct_tree<short,float > * tree)
+int boct_bit_tree::traverse(const vgl_point_3d<double> p, int deepest)
 {
-  bits_ = new unsigned char[16];
-  data_ = new float[585*16];
+  //deepest level to traverse is either
+  deepest = vcl_max(deepest-1, num_levels_-1);
 
-  //initialize num levels, bits
-  num_levels_ = 4;
-
-  //zero out bits to start
-  for (int i=0;i<16; i++)
-    bits_[i] = 0;
-
-  if (tree->number_levels() > 4) {
-    vcl_cerr<<"Tree is too deep\n";
-    return;
-  }
-
-  boct_tree_cell<short, float>* root = tree->root();
-  this->encode(root, 0);
-}
-
-//: constructor from vcl_vector<int4>
-boct_bit_tree::boct_bit_tree(vcl_vector<int4> tree, vcl_vector<float16> data)
-{
-  bits_ = new unsigned char[16];
-  data_ = new float[585*16];
-
-  //initialize num levels, bits
-  num_levels_ = 4;
-
-  //zero out bits to start
-  for (int i=0; i<16; i++)
-    bits_[i] = 0;
-  for (int i=0; i<585*16; i++)
-    data_[i] = 0.0;
-
-  //encode tree
-  int4 root = tree[0];
-  this->encode(root, 0, tree);
-
-  //encode data..
-  this->encode_data(tree, data);
-
-  //run a comparison test to make sure the information is identical
-  if (!this->verify_tree(0, 0, tree,data)) {
-    vcl_cout<<"-----------------------------------------------\n"
-            <<(*this)<<vcl_endl;
-    this->print_input_tree(tree, data);
-    vcl_cout<<"-----------------------------------------------"<<vcl_endl;
-  }
-}
-
-//Depth first search traversal, comparing children's data along the way...
-bool boct_bit_tree::verify_tree(int i, int node, vcl_vector<int4> tree, vcl_vector<float16> data)
-{
-  //make sure tree encoding is correct
-  int child = tree[node][1];
-  if ( ((bit_at(i) == 1) && (child<0)) || ((bit_at(i) == 0) && (child>0)) ) {
-    vcl_cout<<"Bit at "<<i<<" is one, input child is null - BAD"<<vcl_endl;
-    return false;
-  }
-
-  if (bit_at(i) == 1) {
-    bool good = true;
-    for (int c=0; c<8; c++)
-      good = good && verify_tree(8*i+1+c, child+c, tree, data);
-    return good;
-  }
-
-  float16 tree_dat = data[tree[node][2]];
-  int bit_dat  = get_data_index(i);
-  bool same = true;
-  for (int j=0; j<16; j++) {
-    float diff = vcl_fabs(data_[bit_dat+j] - tree_dat[j]);
-
-    //if diff is nan, then set both values to zero, and return same
-    if (diff != diff) {
-      data_[bit_dat+j] = 0.0;
-      tree_dat[j] = 0.0;
-    }
-    else if (diff >= 1e-5) {
-      same = false;
-    }
-  }
-
-  if (!same) {
-      vcl_cout<<"!! TREE ENCODING IS BAD AT BIT: "<<i<<" node "<<node<<vcl_endl;
-  }
-  return same;
-}
-
-
-//debug printer - should print tree depth first search wise
-void boct_bit_tree::print_input_tree(vcl_vector<int4> tree, vcl_vector<float16> data)
-{
-  vcl_cout<<"INPUT TREE:"<<vcl_endl;
-
-  //print generation 1 data (root data)
-  int root_data = tree[0][2];
-  vcl_cout<<"root: "<<tree[0]<<" dat:"<<data[root_data]<<vcl_endl;
-
-  //print generation 2 data
-  vcl_cout<<" depth 1:"<<vcl_endl;
-  int child = tree[0][1];
-  if (child > 0) {
-    for (int i=0; i<8; i++) {
-      int data_ptr = tree[child+i][2];
-      vcl_cout<<" child@"<<i+1<<':'<<tree[child+i]<<" dat:"<<data[data_ptr]<<vcl_endl;
-    }
-  }
-
-#if 0
-  //print generation 3 ...
-  vcl_cout<<" depth 2:"<<vcl_endl;
-  if (child > 0) {
-    for (int i=0; i<8; i++) {
-      int gchild = tree[child+i][1];
-      if (gchild > 0) {
-        for (int j=0; j<8; j++) {
-          //???
-        }
-      }
-    }
-  }
-#endif // 0
-}
-
-//: helper recursive method encode
-void boct_bit_tree::encode(boct_tree_cell<short, float>* node, int i)
-{
-  if (!node->is_leaf())
-  {
-    //if it's got children - set it's bit to 1
-    this->set_bit_at(i, 1);
-
-    //recur on each child
-    boct_tree_cell<short, float>* children = node->children();
-    for (unsigned c=0; c<8; c++) {
-      this->encode(&children[c], (8*i+1)+c);
-    }
-  }
-}
-
-void boct_bit_tree::encode(int4 node, int i, vcl_vector<int4> tree)
-{
-  if (node[1] >= 0)
-  {
-    //set bit to 1
-    this->set_bit_at(i,1);
-
-    //recur on each child
-    int child_ptr = node[1];
-    for (unsigned c=0; c<8; c++) {
-      this->encode(tree[child_ptr+c], (8*i+1)+c, tree);
-    }
-  }
-}
-
-void boct_bit_tree::encode_data(vcl_vector<int4> tree, vcl_vector<float16> data)
-{
-  int dataIndex = 0;
-
-  //run a BFS to re-order data items
-  vcl_list<int> open;
-  open.push_back(0);
-  while (!open.empty())
-  {
-    int curr = open.front(); open.pop_front();
-    int4 currNode = tree[curr];
-    float16 currData = data[currNode[2]];
-
-    //insert current node's data into array
-    for (int i=0; i<16; i++)
-      data_[dataIndex+i] = currData[i];
-    dataIndex += 16;
-
-    //enqueue child nodes
-    if (currNode[1] > 0) {
-      int childPtr = currNode[1];
-      for (int i=0; i<8; i++)
-        open.push_back(childPtr+i);
-    }
-  }
-}
-
-// A local (and recursive) implementation for a^b with a and b both integer;
-// this is a more accurate alternative for std::pow(double a,double b),
-// certainly in those cases where b is relatively small.
-inline static int int_pow(int a, unsigned int b)
-{
-  if (b==0) return 1;
-  else if (b==1) return a;
-  else return int_pow(a*a,b/2) * int_pow(a, b%2);
-}
-
-int boct_bit_tree::traverse(const vgl_point_3d<double> p)
-{
-#if 0
-  vcl_cout<<"Traverse to point "<<p
-          <<" through "<<num_levels_<<" levels"<<vcl_endl;
-#endif
-  //find location code for point
-  boct_loc_code<short> target_code = boct_loc_code<short>(p, num_levels_-1);
-  int target_level = target_code.level;
-  if (target_level < 0)
-    return -1;
-
-  //initialize current cell (curr_cell = has_children?)
-  unsigned char curr_cell = this->bit_at(0);
-  int cell_index = 0;
-  int curr_level = num_levels_-1;  //root level
-  boct_loc_code<short> found_code = target_code;
-  while (target_level<curr_level && curr_cell)
-  {
-    //update found loc code (loc code belonging to correct child)
-    short c_index = target_code.child_index(curr_level);
-    found_code    = found_code.child_loc_code(c_index, curr_level-1);
-
-    //update cell_index = first_child_index + child_offset
-    cell_index = (cell_index*8+1) + (int) c_index; //8i+1 + c_index
-    curr_cell  = this->bit_at(cell_index);
-
-    //decrement curr_level
-    --curr_level;
-  }
-  return cell_index;
-#if 0
-  //get offset in max generation
-  unsigned short offset = this->loc_code_to_gen_offset(loc_code, num_levels_);
-
-  //starting at maximum level, look for parent bit to be equal to 1
-  unsigned int d = num_levels_-1;
-
-  //initialize BI to point to the first index of depth d
-  int bi = (int_pow(8, d)-1) / 7;
-
-  //offset bi to point to the 'leaf bit' pointed to by the loc_code
-  bi += offset;
-
-  //find the parent, if this parent is 0, keep going until you find pi=1
-  int pi = (bi-1)/8; // automatically rounding downwards, since bi is integer
-  vcl_cout<<"    start Bit Index: "<<bi<<"  parent: "<<pi<<vcl_endl;
-  while (bit_at(pi) == 0 && pi > 0) {
-    bi = pi;
-    pi = (bi-1)/8;
-  }
-
-  //now that you have bi = valid leaf, return it's index and use it to find its data
-  return bi;
-#endif // 0
-}
-
-int boct_bit_tree::traverse_opt(const vgl_point_3d<double> p)
-{
-  // Pseudo code for new optimized traverse algo:
-  // i = 0;
-  // point p;
-  // int code;
-  // while (bit_at(i) == 1)
-  //    p *= 2;
-  //    code = (int) p;
-  //    c_index = code & 1; (LSB)
-  //    i = 2i+1 + c_index;
-  // endwhile
-
-  //int bit_index = 0;
-  //vnl_vector_fixed<double,3> point;
-  //point[0] = p.x(), point[1] = p.y(), point[2] = p.z();
-  //while (bit_at(bit_index) == 1) {
-  //  point += point;
-  //  unsigned c_x = ((unsigned) point[0]) & 1;
-  //  unsigned c_y = ((unsigned) point[1]) & 1;
-  //  unsigned c_z = ((unsigned) point[2]) & 1;
-  //  int c_index = c_x + (c_y<<1) + (c_z<<2);
-  //  bit_index = (8*bit_index + 1) + c_index;
-  //}
-  //return bit_index;
-
-
-    // vars to replace "tree_bit_at"
   //force 1 register: curr = (bit, child_offset, depth, c_offset)
   int curr_bit = (int)(bits_[0]);
   int child_offset = 0;
@@ -330,7 +49,7 @@ int boct_bit_tree::traverse_opt(const vgl_point_3d<double> p)
   double pointz = p.z();//clamp(p.z(), 0.0001f, 0.9999f);
 
   // while the curr node has children
-  while (curr_bit && depth < 3) {
+  while (curr_bit && depth < deepest ) {
     //determine child offset and bit index for given point
     pointx += pointx;                                             //point = point*2
     pointy += pointy;
@@ -350,77 +69,99 @@ int boct_bit_tree::traverse_opt(const vgl_point_3d<double> p)
   return bit_index;
 }
 
-//:
-// \todo This isn't debugged
-unsigned short
-boct_bit_tree::loc_code_to_gen_offset(boct_loc_code<short> loc_code, int depth)
+vgl_point_3d<double> boct_bit_tree::cell_center(int bit_index)
 {
-  //need to map the location code to a number between 0 and 2^(num_levels-1)
-  //note: i believe X needs to be the LSB, followed by Y and Z (Z,Y,X)
-  unsigned short packed = 0;
-  unsigned short mask = 1;
-  for (int i=0; i<depth; i++) {
-    unsigned short mz = (mask & loc_code.z_loc_); //>>i;
-    unsigned short my = (mask & loc_code.y_loc_); //>>i;
-    unsigned short mx = (mask & loc_code.x_loc_); //>>i;
-
-    //vcl_cout<<"Packed = "<<packed<< "   mask: "<<mask<<'\n'
-    //        <<mz<<' '<<my<<' '<<mx<<vcl_endl;
-    //note that mz is shifted to the right i times, and then left
-    //3*i times... can just shift to the left 2*i times..
-    packed += (mx <<  2*i)
-            + (my << (2*i + 1))
-            + (mz << (2*i + 2));
-    mask <<= 1;
-  }
-  vcl_cout<<"    Loc code "<<loc_code<<" maps to "<<packed<<vcl_endl;
-  return packed;
+  //Indexes into precomputed cell_center matrix
+  return vgl_point_3d<double>(centerX[bit_index],
+                              centerY[bit_index],
+                              centerZ[bit_index]);
 }
 
-int boct_bit_tree::loc_code_to_index(boct_loc_code<short> loc_code, int root_level)
+bool boct_bit_tree::valid_cell(int bit_index)
 {
-  int level = loc_code.level;
-  int depth = root_level - level;
-
-  //index of first node at depth
-  int level_index = (int) (int_pow(8, depth)-1) / 7;
-
-  //need to map the location code to a number between 0 and 2^(num_levels-1)
-  //note: i believe X needs to be the LSB, followed by Y and Z (Z,Y,X)
-  int ri = root_level-1;
-  unsigned short packed = 0;
-  for (int i=depth; i>0; i--, ri--)  {
-    unsigned short mask = 1<<ri;
-    //get bit at mask
-    unsigned short mz = (mask & loc_code.z_loc_)>>ri;
-    unsigned short my = (mask & loc_code.y_loc_)>>ri;
-    unsigned short mx = (mask & loc_code.x_loc_)>>ri;
-
-    packed += (mz << (3*i-1))
-            + (my << (3*i-2))
-            + (mx << (3*i-3));
-  }
-  return level_index + packed;
+  return (bit_index==0) || this->bit_at((bit_index-1)>>3);
 }
 
-
-//: Return cell with a particular locational code
-int boct_bit_tree::get_data_index(int bit_index)
+bool boct_bit_tree::is_leaf(int bit_index)
 {
-  //count bits for each byte
-  int count = 0 ;
-  for (int i=0; i<10; i++) {
-    unsigned char n = bits_[i];
-    while (n)  {
-      count++ ;
-      n &= (n - 1) ;
+  return this->valid_cell(bit_index) && (this->bit_at(bit_index)==0);
+}
+
+//returns bit indices of leaf nodes under rootBit
+vcl_vector<int> boct_bit_tree::get_leaf_bits(int rootBit)
+{
+  //use num cells to accelerate (cut off for loop)
+  vcl_vector<int> leafBits;
+
+  //special root case
+  if ( bits_[0] == 0 && rootBit == 0 ) {
+    leafBits.push_back(0);
+    return leafBits;
+  }
+
+  //otherwise calc list of bit indices in the subtree of rootBIT, and then verify leaves
+  vcl_vector<int> subTree;
+  vcl_list<unsigned> toVisit;
+  toVisit.push_back(rootBit);
+  while (!toVisit.empty()) {
+    int currBitIndex = toVisit.front();
+    toVisit.pop_front();
+    if ( this->is_leaf(currBitIndex) ) {
+      subTree.push_back(currBitIndex);
+    }
+    else { //add children to the visit list
+      unsigned firstChild = 8 * currBitIndex + 1;
+      for (int ci = 0; ci < 8; ++ci)
+        toVisit.push_back( firstChild + ci );
     }
   }
-  return 8*count+1;
+  return subTree;
+}
+
+//: Return cell with a particular locational code
+int boct_bit_tree::get_data_index(int bit_index, bool is_random) const
+{
+  ////Unpack data offset (offset to root data)
+  //tree[10] and [11] should form the short that refers to data offset
+  //root and first gen are special case, return just the root offset + bit_index
+
+  int count_offset;
+  if (is_random)
+    count_offset = (int)bits_[10]*256+(int)bits_[11];
+  else
+    count_offset = (int) (bits_[13]<<24) | (bits_[12]<<16) | (bits_[11]<<8) | (bits_[10]);
+
+  return count_offset + this->get_relative_index(bit_index);
+}
+
+//: returns bit index assuming root data is located at 0
+int  boct_bit_tree::get_relative_index(int bit_index) const
+{
+  if (bit_index < 9)
+    return bit_index;
+
+  //otherwise get parent index, parent byte index and relative bit index
+  unsigned char oneuplevel = (bit_index-1)>>3;          //bit index of parent
+  unsigned char byte_index = ((oneuplevel-1)>>3) + 1;   //byte where parent is found
+
+  //count pre parent bits
+  int count=0;
+  for (int i=0; i<byte_index; ++i)
+    count += bit_lookup[bits_[i]];
+
+  //dont forget parent bits occurring the parent BYTE
+  unsigned char sub_bit_index = 8-((oneuplevel-1)&(8-1));
+  unsigned char temp = bits_[byte_index]<<sub_bit_index;
+
+  count = count + bit_lookup[temp];
+  unsigned char finestleveloffset=(bit_index-1)&(8-1);
+  count = 8*count+1 +finestleveloffset;
+
+  return count;
 }
 
 //: return number of cells in this tree (size of data chunk)
-int boct_bit_tree::size() const
+int boct_bit_tree::num_cells() const
 {
   //count bits for each byte
   int count = 0 ;
@@ -437,7 +178,7 @@ int boct_bit_tree::size() const
 
 //----BIT MANIP Methods -----------------------------------------------
 unsigned char
-boct_bit_tree::bit_at(int index)
+boct_bit_tree::bit_at(int index) const
 {
   //make sure it's in bounds - all higher cells are leaves and thus 0
   if (index > 72)
@@ -455,6 +196,7 @@ boct_bit_tree::bit_at(int index)
   int bi = (index-9)%8;
   return (1<<bi & bits_[i]) ? 1 : 0;
 }
+
 
 void
 boct_bit_tree::set_bit_at(int index, bool val)
@@ -488,73 +230,315 @@ inline static int int_log8(unsigned int a)
   return r;
 }
 
+// A local (and recursive) implementation for a^b with a and b both integer;
+// this is a more accurate alternative for std::pow(double a,double b),
+// certainly in those cases where b is relatively small.
+inline static int int_pow(int a, unsigned int b)
+{
+  if (b==0) return 1;
+  else if (b==1) return a;
+  else return int_pow(a*a,b/2) * int_pow(a, b%2);
+}
+
+
+int boct_bit_tree::max_num_cells()
+{
+  return int((int_pow(8.0, num_levels_+1) - 1.0) / 7.0);
+}
+
+int boct_bit_tree::max_num_inner_cells()
+{
+  return int((int_pow(8.0, num_levels_) - 1.0) / 7.0);
+}
+
 int boct_bit_tree::depth_at(int index) const
 {
   return int_log8(7*index+1);
 }
 
+#if 0
+//: gets and sets buffer pointers (located at bytes 12 and 13
+int boct_bit_tree::get_buffer_ptr()
+{
+  unsigned char hi = this->bits_[12];
+  unsigned char lo = this->bits_[13];
+  unsigned short value = (unsigned short) ((hi << 8) | lo);
+  return int(value);
+}
+
+int boct_bit_tree::set_buffer_ptr(int ptr)
+{
+  unsigned char hi = (unsigned char)(ptr >> 8);
+  unsigned char lo = (unsigned char)(ptr & 255);
+  this->bits_[12] = hi;
+  this->bits_[13] = lo;
+  return  0;
+}
+#endif // 0
+
+int boct_bit_tree::get_data_ptr(bool is_random)
+{
+  if (is_random)
+  {
+    unsigned char hi = this->bits_[10];
+    unsigned char lo = this->bits_[11];
+    unsigned short value = (unsigned short) ((hi << 8) | lo);
+    return int(value);
+  }
+  else
+  {
+    return int((bits_[13]<<24) | (bits_[12]<<16) | (bits_[11]<<8) | (bits_[10]));
+  }
+}
+
+int boct_bit_tree::set_data_ptr(int ptr, bool is_random)
+{
+  if (is_random)
+  {
+    unsigned char hi = (unsigned char)(ptr >> 8);
+    unsigned char lo = (unsigned char)(ptr & 255);
+    this->bits_[10] = hi;
+    this->bits_[11] = lo;
+  }
+  else
+  {
+    this->bits_[10] = (ptr) & 0xff;
+    this->bits_[11] = (ptr>>8)  & 0xff;
+    this->bits_[12] = (ptr>>16) & 0xff;
+    this->bits_[13] = (ptr>>24) & 0xff;
+  }
+  return 0;
+}
+
+
+unsigned char boct_bit_tree::bit_lookup[] =
+{ 0,   1,   1,   2,   1,   2,   2,   3,   1,   2,   2,   3,   2,   3,   3,   4,
+  1,   2,   2,   3,   2,   3,   3,   4,   2,   3,   3,   4,   3,   4,   4,   5,
+  1,   2,   2,   3,   2,   3,   3,   4,   2,   3,   3,   4,   3,   4,   4,   5,
+  2,   3,   3,   4,   3,   4,   4,   5,   3,   4,   4,   5,   4,   5,   5,   6,
+  1,   2,   2,   3,   2,   3,   3,   4,   2,   3,   3,   4,   3,   4,   4,   5,
+  2,   3,   3,   4,   3,   4,   4,   5,   3,   4,   4,   5,   4,   5,   5,   6,
+  2,   3,   3,   4,   3,   4,   4,   5,   3,   4,   4,   5,   4,   5,   5,   6,
+  3,   4,   4,   5,   4,   5,   5,   6,   4,   5,   5,   6,   5,   6,   6,   7,
+  1,   2,   2,   3,   2,   3,   3,   4,   2,   3,   3,   4,   3,   4,   4,   5,
+  2,   3,   3,   4,   3,   4,   4,   5,   3,   4,   4,   5,   4,   5,   5,   6,
+  2,   3,   3,   4,   3,   4,   4,   5,   3,   4,   4,   5,   4,   5,   5,   6,
+  3,   4,   4,   5,   4,   5,   5,   6,   4,   5,   5,   6,   5,   6,   6,   7,
+  2,   3,   3,   4,   3,   4,   4,   5,   3,   4,   4,   5,   4,   5,   5,   6,
+  3,   4,   4,   5,   4,   5,   5,   6,   4,   5,   5,   6,   5,   6,   6,   7,
+  3,   4,   4,   5,   4,   5,   5,   6,   4,   5,   5,   6,   5,   6,   6,   7,
+  4,   5,   5,   6,   5,   6,   6,   7,   5,   6,   6,   7,   6,   7,   7,   8
+};
+
+float boct_bit_tree::centerX[] =
+{ 0.5,
+  0.25,0.75,0.25,0.75,0.25,0.75,0.25,0.75,0.125,0.375,
+  0.125,0.375,0.125,0.375,0.125,0.375,0.625,0.875,0.625,0.875,
+  0.625,0.875,0.625,0.875,0.125,0.375,0.125,0.375,0.125,0.375,
+  0.125,0.375,0.625,0.875,0.625,0.875,0.625,0.875,0.625,0.875,
+  0.125,0.375,0.125,0.375,0.125,0.375,0.125,0.375,0.625,0.875,
+  0.625,0.875,0.625,0.875,0.625,0.875,0.125,0.375,0.125,0.375,
+  0.125,0.375,0.125,0.375,0.625,0.875,0.625,0.875,0.625,0.875,
+  0.625,0.875,0.0625,0.1875,0.0625,0.1875,0.0625,0.1875,0.0625,0.1875,
+  0.3125,0.4375,0.3125,0.4375,0.3125,0.4375,0.3125,0.4375,0.0625,0.1875,
+  0.0625,0.1875,0.0625,0.1875,0.0625,0.1875,0.3125,0.4375,0.3125,0.4375,
+  0.3125,0.4375,0.3125,0.4375,0.0625,0.1875,0.0625,0.1875,0.0625,0.1875,
+  0.0625,0.1875,0.3125,0.4375,0.3125,0.4375,0.3125,0.4375,0.3125,0.4375,
+  0.0625,0.1875,0.0625,0.1875,0.0625,0.1875,0.0625,0.1875,0.3125,0.4375,
+  0.3125,0.4375,0.3125,0.4375,0.3125,0.4375,0.5625,0.6875,0.5625,0.6875,
+  0.5625,0.6875,0.5625,0.6875,0.8125,0.9375,0.8125,0.9375,0.8125,0.9375,
+  0.8125,0.9375,0.5625,0.6875,0.5625,0.6875,0.5625,0.6875,0.5625,0.6875,
+  0.8125,0.9375,0.8125,0.9375,0.8125,0.9375,0.8125,0.9375,0.5625,0.6875,
+  0.5625,0.6875,0.5625,0.6875,0.5625,0.6875,0.8125,0.9375,0.8125,0.9375,
+  0.8125,0.9375,0.8125,0.9375,0.5625,0.6875,0.5625,0.6875,0.5625,0.6875,
+  0.5625,0.6875,0.8125,0.9375,0.8125,0.9375,0.8125,0.9375,0.8125,0.9375,
+  0.0625,0.1875,0.0625,0.1875,0.0625,0.1875,0.0625,0.1875,0.3125,0.4375,
+  0.3125,0.4375,0.3125,0.4375,0.3125,0.4375,0.0625,0.1875,0.0625,0.1875,
+  0.0625,0.1875,0.0625,0.1875,0.3125,0.4375,0.3125,0.4375,0.3125,0.4375,
+  0.3125,0.4375,0.0625,0.1875,0.0625,0.1875,0.0625,0.1875,0.0625,0.1875,
+  0.3125,0.4375,0.3125,0.4375,0.3125,0.4375,0.3125,0.4375,0.0625,0.1875,
+  0.0625,0.1875,0.0625,0.1875,0.0625,0.1875,0.3125,0.4375,0.3125,0.4375,
+  0.3125,0.4375,0.3125,0.4375,0.5625,0.6875,0.5625,0.6875,0.5625,0.6875,
+  0.5625,0.6875,0.8125,0.9375,0.8125,0.9375,0.8125,0.9375,0.8125,0.9375,
+  0.5625,0.6875,0.5625,0.6875,0.5625,0.6875,0.5625,0.6875,0.8125,0.9375,
+  0.8125,0.9375,0.8125,0.9375,0.8125,0.9375,0.5625,0.6875,0.5625,0.6875,
+  0.5625,0.6875,0.5625,0.6875,0.8125,0.9375,0.8125,0.9375,0.8125,0.9375,
+  0.8125,0.9375,0.5625,0.6875,0.5625,0.6875,0.5625,0.6875,0.5625,0.6875,
+  0.8125,0.9375,0.8125,0.9375,0.8125,0.9375,0.8125,0.9375,0.0625,0.1875,
+  0.0625,0.1875,0.0625,0.1875,0.0625,0.1875,0.3125,0.4375,0.3125,0.4375,
+  0.3125,0.4375,0.3125,0.4375,0.0625,0.1875,0.0625,0.1875,0.0625,0.1875,
+  0.0625,0.1875,0.3125,0.4375,0.3125,0.4375,0.3125,0.4375,0.3125,0.4375,
+  0.0625,0.1875,0.0625,0.1875,0.0625,0.1875,0.0625,0.1875,0.3125,0.4375,
+  0.3125,0.4375,0.3125,0.4375,0.3125,0.4375,0.0625,0.1875,0.0625,0.1875,
+  0.0625,0.1875,0.0625,0.1875,0.3125,0.4375,0.3125,0.4375,0.3125,0.4375,
+  0.3125,0.4375,0.5625,0.6875,0.5625,0.6875,0.5625,0.6875,0.5625,0.6875,
+  0.8125,0.9375,0.8125,0.9375,0.8125,0.9375,0.8125,0.9375,0.5625,0.6875,
+  0.5625,0.6875,0.5625,0.6875,0.5625,0.6875,0.8125,0.9375,0.8125,0.9375,
+  0.8125,0.9375,0.8125,0.9375,0.5625,0.6875,0.5625,0.6875,0.5625,0.6875,
+  0.5625,0.6875,0.8125,0.9375,0.8125,0.9375,0.8125,0.9375,0.8125,0.9375,
+  0.5625,0.6875,0.5625,0.6875,0.5625,0.6875,0.5625,0.6875,0.8125,0.9375,
+  0.8125,0.9375,0.8125,0.9375,0.8125,0.9375,0.0625,0.1875,0.0625,0.1875,
+  0.0625,0.1875,0.0625,0.1875,0.3125,0.4375,0.3125,0.4375,0.3125,0.4375,
+  0.3125,0.4375,0.0625,0.1875,0.0625,0.1875,0.0625,0.1875,0.0625,0.1875,
+  0.3125,0.4375,0.3125,0.4375,0.3125,0.4375,0.3125,0.4375,0.0625,0.1875,
+  0.0625,0.1875,0.0625,0.1875,0.0625,0.1875,0.3125,0.4375,0.3125,0.4375,
+  0.3125,0.4375,0.3125,0.4375,0.0625,0.1875,0.0625,0.1875,0.0625,0.1875,
+  0.0625,0.1875,0.3125,0.4375,0.3125,0.4375,0.3125,0.4375,0.3125,0.4375,
+  0.5625,0.6875,0.5625,0.6875,0.5625,0.6875,0.5625,0.6875,0.8125,0.9375,
+  0.8125,0.9375,0.8125,0.9375,0.8125,0.9375,0.5625,0.6875,0.5625,0.6875,
+  0.5625,0.6875,0.5625,0.6875,0.8125,0.9375,0.8125,0.9375,0.8125,0.9375,
+  0.8125,0.9375,0.5625,0.6875,0.5625,0.6875,0.5625,0.6875,0.5625,0.6875,
+  0.8125,0.9375,0.8125,0.9375,0.8125,0.9375,0.8125,0.9375,0.5625,0.6875,
+  0.5625,0.6875,0.5625,0.6875,0.5625,0.6875,0.8125,0.9375,0.8125,0.9375,
+  0.8125,0.9375,0.8125,0.9375
+};
+
+float boct_bit_tree::centerY[] =
+{ 0.5,
+  0.25,0.25,0.75,0.75,0.25,0.25,0.75,0.75,0.125,0.125,
+  0.375,0.375,0.125,0.125,0.375,0.375,0.125,0.125,0.375,0.375,
+  0.125,0.125,0.375,0.375,0.625,0.625,0.875,0.875,0.625,0.625,
+  0.875,0.875,0.625,0.625,0.875,0.875,0.625,0.625,0.875,0.875,
+  0.125,0.125,0.375,0.375,0.125,0.125,0.375,0.375,0.125,0.125,
+  0.375,0.375,0.125,0.125,0.375,0.375,0.625,0.625,0.875,0.875,
+  0.625,0.625,0.875,0.875,0.625,0.625,0.875,0.875,0.625,0.625,
+  0.875,0.875,0.0625,0.0625,0.1875,0.1875,0.0625,0.0625,0.1875,0.1875,
+  0.0625,0.0625,0.1875,0.1875,0.0625,0.0625,0.1875,0.1875,0.3125,0.3125,
+  0.4375,0.4375,0.3125,0.3125,0.4375,0.4375,0.3125,0.3125,0.4375,0.4375,
+  0.3125,0.3125,0.4375,0.4375,0.0625,0.0625,0.1875,0.1875,0.0625,0.0625,
+  0.1875,0.1875,0.0625,0.0625,0.1875,0.1875,0.0625,0.0625,0.1875,0.1875,
+  0.3125,0.3125,0.4375,0.4375,0.3125,0.3125,0.4375,0.4375,0.3125,0.3125,
+  0.4375,0.4375,0.3125,0.3125,0.4375,0.4375,0.0625,0.0625,0.1875,0.1875,
+  0.0625,0.0625,0.1875,0.1875,0.0625,0.0625,0.1875,0.1875,0.0625,0.0625,
+  0.1875,0.1875,0.3125,0.3125,0.4375,0.4375,0.3125,0.3125,0.4375,0.4375,
+  0.3125,0.3125,0.4375,0.4375,0.3125,0.3125,0.4375,0.4375,0.0625,0.0625,
+  0.1875,0.1875,0.0625,0.0625,0.1875,0.1875,0.0625,0.0625,0.1875,0.1875,
+  0.0625,0.0625,0.1875,0.1875,0.3125,0.3125,0.4375,0.4375,0.3125,0.3125,
+  0.4375,0.4375,0.3125,0.3125,0.4375,0.4375,0.3125,0.3125,0.4375,0.4375,
+  0.5625,0.5625,0.6875,0.6875,0.5625,0.5625,0.6875,0.6875,0.5625,0.5625,
+  0.6875,0.6875,0.5625,0.5625,0.6875,0.6875,0.8125,0.8125,0.9375,0.9375,
+  0.8125,0.8125,0.9375,0.9375,0.8125,0.8125,0.9375,0.9375,0.8125,0.8125,
+  0.9375,0.9375,0.5625,0.5625,0.6875,0.6875,0.5625,0.5625,0.6875,0.6875,
+  0.5625,0.5625,0.6875,0.6875,0.5625,0.5625,0.6875,0.6875,0.8125,0.8125,
+  0.9375,0.9375,0.8125,0.8125,0.9375,0.9375,0.8125,0.8125,0.9375,0.9375,
+  0.8125,0.8125,0.9375,0.9375,0.5625,0.5625,0.6875,0.6875,0.5625,0.5625,
+  0.6875,0.6875,0.5625,0.5625,0.6875,0.6875,0.5625,0.5625,0.6875,0.6875,
+  0.8125,0.8125,0.9375,0.9375,0.8125,0.8125,0.9375,0.9375,0.8125,0.8125,
+  0.9375,0.9375,0.8125,0.8125,0.9375,0.9375,0.5625,0.5625,0.6875,0.6875,
+  0.5625,0.5625,0.6875,0.6875,0.5625,0.5625,0.6875,0.6875,0.5625,0.5625,
+  0.6875,0.6875,0.8125,0.8125,0.9375,0.9375,0.8125,0.8125,0.9375,0.9375,
+  0.8125,0.8125,0.9375,0.9375,0.8125,0.8125,0.9375,0.9375,0.0625,0.0625,
+  0.1875,0.1875,0.0625,0.0625,0.1875,0.1875,0.0625,0.0625,0.1875,0.1875,
+  0.0625,0.0625,0.1875,0.1875,0.3125,0.3125,0.4375,0.4375,0.3125,0.3125,
+  0.4375,0.4375,0.3125,0.3125,0.4375,0.4375,0.3125,0.3125,0.4375,0.4375,
+  0.0625,0.0625,0.1875,0.1875,0.0625,0.0625,0.1875,0.1875,0.0625,0.0625,
+  0.1875,0.1875,0.0625,0.0625,0.1875,0.1875,0.3125,0.3125,0.4375,0.4375,
+  0.3125,0.3125,0.4375,0.4375,0.3125,0.3125,0.4375,0.4375,0.3125,0.3125,
+  0.4375,0.4375,0.0625,0.0625,0.1875,0.1875,0.0625,0.0625,0.1875,0.1875,
+  0.0625,0.0625,0.1875,0.1875,0.0625,0.0625,0.1875,0.1875,0.3125,0.3125,
+  0.4375,0.4375,0.3125,0.3125,0.4375,0.4375,0.3125,0.3125,0.4375,0.4375,
+  0.3125,0.3125,0.4375,0.4375,0.0625,0.0625,0.1875,0.1875,0.0625,0.0625,
+  0.1875,0.1875,0.0625,0.0625,0.1875,0.1875,0.0625,0.0625,0.1875,0.1875,
+  0.3125,0.3125,0.4375,0.4375,0.3125,0.3125,0.4375,0.4375,0.3125,0.3125,
+  0.4375,0.4375,0.3125,0.3125,0.4375,0.4375,0.5625,0.5625,0.6875,0.6875,
+  0.5625,0.5625,0.6875,0.6875,0.5625,0.5625,0.6875,0.6875,0.5625,0.5625,
+  0.6875,0.6875,0.8125,0.8125,0.9375,0.9375,0.8125,0.8125,0.9375,0.9375,
+  0.8125,0.8125,0.9375,0.9375,0.8125,0.8125,0.9375,0.9375,0.5625,0.5625,
+  0.6875,0.6875,0.5625,0.5625,0.6875,0.6875,0.5625,0.5625,0.6875,0.6875,
+  0.5625,0.5625,0.6875,0.6875,0.8125,0.8125,0.9375,0.9375,0.8125,0.8125,
+  0.9375,0.9375,0.8125,0.8125,0.9375,0.9375,0.8125,0.8125,0.9375,0.9375,
+  0.5625,0.5625,0.6875,0.6875,0.5625,0.5625,0.6875,0.6875,0.5625,0.5625,
+  0.6875,0.6875,0.5625,0.5625,0.6875,0.6875,0.8125,0.8125,0.9375,0.9375,
+  0.8125,0.8125,0.9375,0.9375,0.8125,0.8125,0.9375,0.9375,0.8125,0.8125,
+  0.9375,0.9375,0.5625,0.5625,0.6875,0.6875,0.5625,0.5625,0.6875,0.6875,
+  0.5625,0.5625,0.6875,0.6875,0.5625,0.5625,0.6875,0.6875,0.8125,0.8125,
+  0.9375,0.9375,0.8125,0.8125,0.9375,0.9375,0.8125,0.8125,0.9375,0.9375,
+  0.8125,0.8125,0.9375,0.9375
+};
+
+float boct_bit_tree::centerZ[] =
+{ 0.5,
+  0.25,0.25,0.25,0.25,0.75,0.75,0.75,0.75,0.125,0.125,
+  0.125,0.125,0.375,0.375,0.375,0.375,0.125,0.125,0.125,0.125,
+  0.375,0.375,0.375,0.375,0.125,0.125,0.125,0.125,0.375,0.375,
+  0.375,0.375,0.125,0.125,0.125,0.125,0.375,0.375,0.375,0.375,
+  0.625,0.625,0.625,0.625,0.875,0.875,0.875,0.875,0.625,0.625,
+  0.625,0.625,0.875,0.875,0.875,0.875,0.625,0.625,0.625,0.625,
+  0.875,0.875,0.875,0.875,0.625,0.625,0.625,0.625,0.875,0.875,
+  0.875,0.875,0.0625,0.0625,0.0625,0.0625,0.1875,0.1875,0.1875,0.1875,
+  0.0625,0.0625,0.0625,0.0625,0.1875,0.1875,0.1875,0.1875,0.0625,0.0625,
+  0.0625,0.0625,0.1875,0.1875,0.1875,0.1875,0.0625,0.0625,0.0625,0.0625,
+  0.1875,0.1875,0.1875,0.1875,0.3125,0.3125,0.3125,0.3125,0.4375,0.4375,
+  0.4375,0.4375,0.3125,0.3125,0.3125,0.3125,0.4375,0.4375,0.4375,0.4375,
+  0.3125,0.3125,0.3125,0.3125,0.4375,0.4375,0.4375,0.4375,0.3125,0.3125,
+  0.3125,0.3125,0.4375,0.4375,0.4375,0.4375,0.0625,0.0625,0.0625,0.0625,
+  0.1875,0.1875,0.1875,0.1875,0.0625,0.0625,0.0625,0.0625,0.1875,0.1875,
+  0.1875,0.1875,0.0625,0.0625,0.0625,0.0625,0.1875,0.1875,0.1875,0.1875,
+  0.0625,0.0625,0.0625,0.0625,0.1875,0.1875,0.1875,0.1875,0.3125,0.3125,
+  0.3125,0.3125,0.4375,0.4375,0.4375,0.4375,0.3125,0.3125,0.3125,0.3125,
+  0.4375,0.4375,0.4375,0.4375,0.3125,0.3125,0.3125,0.3125,0.4375,0.4375,
+  0.4375,0.4375,0.3125,0.3125,0.3125,0.3125,0.4375,0.4375,0.4375,0.4375,
+  0.0625,0.0625,0.0625,0.0625,0.1875,0.1875,0.1875,0.1875,0.0625,0.0625,
+  0.0625,0.0625,0.1875,0.1875,0.1875,0.1875,0.0625,0.0625,0.0625,0.0625,
+  0.1875,0.1875,0.1875,0.1875,0.0625,0.0625,0.0625,0.0625,0.1875,0.1875,
+  0.1875,0.1875,0.3125,0.3125,0.3125,0.3125,0.4375,0.4375,0.4375,0.4375,
+  0.3125,0.3125,0.3125,0.3125,0.4375,0.4375,0.4375,0.4375,0.3125,0.3125,
+  0.3125,0.3125,0.4375,0.4375,0.4375,0.4375,0.3125,0.3125,0.3125,0.3125,
+  0.4375,0.4375,0.4375,0.4375,0.0625,0.0625,0.0625,0.0625,0.1875,0.1875,
+  0.1875,0.1875,0.0625,0.0625,0.0625,0.0625,0.1875,0.1875,0.1875,0.1875,
+  0.0625,0.0625,0.0625,0.0625,0.1875,0.1875,0.1875,0.1875,0.0625,0.0625,
+  0.0625,0.0625,0.1875,0.1875,0.1875,0.1875,0.3125,0.3125,0.3125,0.3125,
+  0.4375,0.4375,0.4375,0.4375,0.3125,0.3125,0.3125,0.3125,0.4375,0.4375,
+  0.4375,0.4375,0.3125,0.3125,0.3125,0.3125,0.4375,0.4375,0.4375,0.4375,
+  0.3125,0.3125,0.3125,0.3125,0.4375,0.4375,0.4375,0.4375,0.5625,0.5625,
+  0.5625,0.5625,0.6875,0.6875,0.6875,0.6875,0.5625,0.5625,0.5625,0.5625,
+  0.6875,0.6875,0.6875,0.6875,0.5625,0.5625,0.5625,0.5625,0.6875,0.6875,
+  0.6875,0.6875,0.5625,0.5625,0.5625,0.5625,0.6875,0.6875,0.6875,0.6875,
+  0.8125,0.8125,0.8125,0.8125,0.9375,0.9375,0.9375,0.9375,0.8125,0.8125,
+  0.8125,0.8125,0.9375,0.9375,0.9375,0.9375,0.8125,0.8125,0.8125,0.8125,
+  0.9375,0.9375,0.9375,0.9375,0.8125,0.8125,0.8125,0.8125,0.9375,0.9375,
+  0.9375,0.9375,0.5625,0.5625,0.5625,0.5625,0.6875,0.6875,0.6875,0.6875,
+  0.5625,0.5625,0.5625,0.5625,0.6875,0.6875,0.6875,0.6875,0.5625,0.5625,
+  0.5625,0.5625,0.6875,0.6875,0.6875,0.6875,0.5625,0.5625,0.5625,0.5625,
+  0.6875,0.6875,0.6875,0.6875,0.8125,0.8125,0.8125,0.8125,0.9375,0.9375,
+  0.9375,0.9375,0.8125,0.8125,0.8125,0.8125,0.9375,0.9375,0.9375,0.9375,
+  0.8125,0.8125,0.8125,0.8125,0.9375,0.9375,0.9375,0.9375,0.8125,0.8125,
+  0.8125,0.8125,0.9375,0.9375,0.9375,0.9375,0.5625,0.5625,0.5625,0.5625,
+  0.6875,0.6875,0.6875,0.6875,0.5625,0.5625,0.5625,0.5625,0.6875,0.6875,
+  0.6875,0.6875,0.5625,0.5625,0.5625,0.5625,0.6875,0.6875,0.6875,0.6875,
+  0.5625,0.5625,0.5625,0.5625,0.6875,0.6875,0.6875,0.6875,0.8125,0.8125,
+  0.8125,0.8125,0.9375,0.9375,0.9375,0.9375,0.8125,0.8125,0.8125,0.8125,
+  0.9375,0.9375,0.9375,0.9375,0.8125,0.8125,0.8125,0.8125,0.9375,0.9375,
+  0.9375,0.9375,0.8125,0.8125,0.8125,0.8125,0.9375,0.9375,0.9375,0.9375,
+  0.5625,0.5625,0.5625,0.5625,0.6875,0.6875,0.6875,0.6875,0.5625,0.5625,
+  0.5625,0.5625,0.6875,0.6875,0.6875,0.6875,0.5625,0.5625,0.5625,0.5625,
+  0.6875,0.6875,0.6875,0.6875,0.5625,0.5625,0.5625,0.5625,0.6875,0.6875,
+  0.6875,0.6875,0.8125,0.8125,0.8125,0.8125,0.9375,0.9375,0.9375,0.9375,
+  0.8125,0.8125,0.8125,0.8125,0.9375,0.9375,0.9375,0.9375,0.8125,0.8125,
+  0.8125,0.8125,0.9375,0.9375,0.9375,0.9375,0.8125,0.8125,0.8125,0.8125,
+  0.9375,0.9375,0.9375,0.9375
+};
+
 
 //------ I/O ----------------------------------------------------------
 vcl_ostream& operator <<(vcl_ostream &s, boct_bit_tree &t)
 {
-  float* data = t.get_data();
-  s << "BOCT_BIT_TREE:" << vcl_endl;
-#ifdef DEBUG
-  unsigned char* bits = t.get_bits();
-  s << "bytes:" << vcl_endl;
-  for (int i=0; i<16; i++)
-    s << "byte "<<i<<": "<< (int) bits[i] <<vcl_endl;
-#endif
-
-  s << "Tree bits:\n"
-    << "depth 0: "<< (int) (t.bit_at(0)) << vcl_endl;
-  int dat_index = t.get_data_index(0);
-  s << "   data at 0 ("<<dat_index<<"):";
-  for (int i=0; i<16; i++)
-    s << ' ' << data[dat_index+i];
-  s << '\n';
+  s << "boct_bit_tree:\n"
+    << "Tree bits:\n"
+    << "depth 0: "<< (int) (t.bit_at(0))
+    << '\n'; 
 
   //one
-  if (t.bit_at(0)) {
-    s << "depth 1:";
-    for (int i=1; i<9; i++)
-      s << "  " << (int) t.bit_at(i);
-    s << '\n';
-    for (int i=1; i<9; i++) {
-      dat_index = t.get_data_index(i);
-      s << "   data at 1 ("<<dat_index<<"):";
-      for (int j=0; j<16; j++)
-        s << ' ' << data[dat_index+j];
-      s << '\n';
-    }
-  }
-
-#if 0
-  //two
+  s << "depth 1:";
+  for (int i=1; i<9; i++)
+    s << "  " << (int) t.bit_at(i);
+  s << '\n'; 
+  
+  //two 
   s << "depth 2:";
   for (int i=9; i<73; i++)
-  {
-    if ((i-9)%16 == 0 && i != 9)
-      s<<"\n         ";
-    else if ((i-9)%8 == 0 && i != 9)
-      s<<"    ";
+    s << "  " << (int) t.bit_at(i);
+  s << '\n'; 
 
-    s << ' ' << (int) t.bit_at(i);
-  }
-  s << '\n';
-#endif // 0
   return s;
 }
-
-#if 0 // recursive function to write out the binary representation of number
-void binary(unsigned int number)
-{
-  if (number <= 1) {
-    vcl_cout << number;
-  }
-  else {
-    binary(number >> 1);
-    vcl_cout << (number%2);
-  }
-}
-#endif // 0
