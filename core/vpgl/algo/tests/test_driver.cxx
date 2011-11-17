@@ -4,7 +4,6 @@ DECLARE( test_fm_compute );
 DECLARE( test_camera_compute );
 DECLARE( test_camera_convert );
 DECLARE( test_backproject );
-DECLARE( test_project );
 DECLARE( test_ray );
 DECLARE( test_ray_intersect );
 DECLARE( test_optimize_camera );
@@ -22,7 +21,6 @@ void register_tests()
 REGISTER( test_fm_compute );
 REGISTER( test_camera_compute );
 REGISTER( test_camera_convert );
-REGISTER( test_project );
 REGISTER( test_backproject );
 REGISTER( test_ray );
 REGISTER( test_ray_intersect );
