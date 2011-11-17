@@ -8,13 +8,13 @@
 #include <boxm/boxm_scene.h>
 #include <imesh/imesh_mesh.h>
 #include <imesh/imesh_operations.h>
-#include <vpgl/bgeo/bgeo_lvcs.h>
+#include <vpgl/vpgl_lvcs.h>
 #include <vgl/vgl_box_3d.h>
 #include <vgl/vgl_intersection.h>
 #include <vgl/algo/vgl_intersection.h>
 #include <vcl_iostream.h>
 
-bool is_mesh_in_block(imesh_mesh & mesh, vgl_box_3d<double> block_bbox,bgeo_lvcs& lvcs, bool use_lvcs)
+bool is_mesh_in_block(imesh_mesh & mesh, vgl_box_3d<double> block_bbox,vpgl_lvcs& lvcs, bool use_lvcs)
 {
   imesh_face_array_base& fs = mesh.faces();
   vcl_list<vgl_point_3d<double> > v_list;
@@ -29,7 +29,7 @@ bool is_mesh_in_block(imesh_mesh & mesh, vgl_box_3d<double> block_bbox,bgeo_lvcs
       if (use_lvcs) {
         double lx, ly, lz;
         lvcs.global_to_local(vertices(v_id,0), vertices(v_id,1), vertices(v_id,2),
-                             bgeo_lvcs::wgs84,lx,ly,lz);
+                             vpgl_lvcs::wgs84,lx,ly,lz);
         v=vgl_point_3d<double>(lx,ly,lz);
       }
       else
@@ -47,7 +47,7 @@ bool is_mesh_in_block(imesh_mesh & mesh, vgl_box_3d<double> block_bbox,bgeo_lvcs
 }
 
 template <class T_loc, class T_data>
-bool are_meshes_in_block(vcl_vector<imesh_mesh>  meshes, vgl_box_3d<double> block_bbox,bgeo_lvcs& lvcs, bool use_lvcs)
+bool are_meshes_in_block(vcl_vector<imesh_mesh>  meshes, vgl_box_3d<double> block_bbox,vpgl_lvcs& lvcs, bool use_lvcs)
 {
   bool flag=false;
   for (unsigned k=0;k<meshes.size();k++)
@@ -66,7 +66,7 @@ bool are_meshes_in_block(vcl_vector<imesh_mesh>  meshes, vgl_box_3d<double> bloc
         if (use_lvcs) {
           double lx, ly, lz;
           lvcs.global_to_local(vertices(v_id,0), vertices(v_id,1), vertices(v_id,2),
-                               bgeo_lvcs::wgs84,lx,ly,lz);
+                               vpgl_lvcs::wgs84,lx,ly,lz);
           v=vgl_point_3d<double>(lx,ly,lz);
         }
         else
@@ -85,7 +85,7 @@ bool are_meshes_in_block(vcl_vector<imesh_mesh>  meshes, vgl_box_3d<double> bloc
 
 template <class T_loc, class T_data>
 void boxm_fill_in_mesh_into_block(boxm_block<boct_tree<T_loc, T_data> > *block,
-                                  vcl_vector<imesh_mesh> meshes, bgeo_lvcs& lvcs, bool use_lvcs, T_data val)
+                                  vcl_vector<imesh_mesh> meshes, vpgl_lvcs& lvcs, bool use_lvcs, T_data val)
 {
   typedef boct_tree<T_loc, T_data> tree_type;
   tree_type* tree = block->get_tree();
@@ -104,7 +104,7 @@ void boxm_fill_in_mesh_into_block(boxm_block<boct_tree<T_loc, T_data> > *block,
         if (use_lvcs) {
           double lx, ly, lz;
           lvcs.global_to_local(vertices(v_id,0), vertices(v_id,1), vertices(v_id,2),
-                               bgeo_lvcs::wgs84,lx,ly,lz);
+                               vpgl_lvcs::wgs84,lx,ly,lz);
           v=vgl_point_3d<double>(lx,ly,lz);
         }
         else
@@ -147,7 +147,7 @@ void boxm_fill_in_mesh_into_block(boxm_block<boct_tree<T_loc, T_data> > *block,
 //: this is to copy mesh into existing tree and replacing the appearance model of the existing tree.
 VCL_DEFINE_SPECIALIZATION
 void boxm_fill_in_mesh_into_block(boxm_block<boct_tree<short, boxm_sample<BOXM_APM_MOG_GREY> > > *block,
-                                  vcl_vector<imesh_mesh> meshes, bgeo_lvcs& lvcs,
+                                  vcl_vector<imesh_mesh> meshes, vpgl_lvcs& lvcs,
                                   bool use_lvcs, boxm_sample<BOXM_APM_MOG_GREY> val)
 {
   typedef boct_tree<short, boxm_sample<BOXM_APM_MOG_GREY> > tree_type;
@@ -170,7 +170,7 @@ void boxm_fill_in_mesh_into_block(boxm_block<boct_tree<short, boxm_sample<BOXM_A
           if (use_lvcs) {
             double lx, ly, lz;
             lvcs.global_to_local(vertices(v_id,0), vertices(v_id,1), vertices(v_id,2),
-                                 bgeo_lvcs::wgs84,lx,ly,lz);
+                                 vpgl_lvcs::wgs84,lx,ly,lz);
             v=vgl_point_3d<double>(lx,ly,lz);
           }
           else
@@ -221,7 +221,7 @@ void boxm_fill_in_mesh_into_block(boxm_block<boct_tree<short, boxm_sample<BOXM_A
 
 VCL_DEFINE_SPECIALIZATION
 void boxm_fill_in_mesh_into_block(boxm_block<boct_tree<short, boxm_sample<BOXM_APM_SIMPLE_GREY> > > *block,
-                                  vcl_vector<imesh_mesh> meshes, bgeo_lvcs& lvcs,
+                                  vcl_vector<imesh_mesh> meshes, vpgl_lvcs& lvcs,
                                   bool use_lvcs, boxm_sample<BOXM_APM_SIMPLE_GREY> val)
 {
   typedef boct_tree<short, boxm_sample<BOXM_APM_SIMPLE_GREY> > tree_type;
@@ -244,7 +244,7 @@ void boxm_fill_in_mesh_into_block(boxm_block<boct_tree<short, boxm_sample<BOXM_A
           if (use_lvcs) {
             double lx, ly, lz;
             lvcs.global_to_local(vertices(v_id,0), vertices(v_id,1), vertices(v_id,2),
-                                 bgeo_lvcs::wgs84,lx,ly,lz);
+                                 vpgl_lvcs::wgs84,lx,ly,lz);
             v=vgl_point_3d<double>(lx,ly,lz);
           }
           else
@@ -298,7 +298,7 @@ void boxm_fill_in_mesh_into_scene(boxm_scene<boct_tree<T_loc, T_data > > &scene,
                                   vcl_vector<imesh_mesh> meshes, bool use_lvcs, T_data val)
 {
   typedef boct_tree<T_loc, T_data > tree_type;
-  bgeo_lvcs lvcs=scene.lvcs();
+  vpgl_lvcs lvcs=scene.lvcs();
   boxm_block_iterator<tree_type> iter(&scene);
   for (; !iter.end(); iter++) {
     vgl_box_3d<double> block_bb=scene.get_block_bbox(iter.index().x(),iter.index().y(),iter.index().z());

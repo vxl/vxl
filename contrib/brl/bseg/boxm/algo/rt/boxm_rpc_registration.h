@@ -27,7 +27,7 @@
 #include <boxm/boxm_scene.h>
 #include <boxm/util/boxm_utils.h>
 #include <vpgl/algo/vpgl_backproject.h>
-#include <vpgl/bgeo/bgeo_lvcs_sptr.h>
+#include <vpgl/vpgl_lvcs_sptr.h>
 
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_point_3d.h>
@@ -40,7 +40,7 @@
 #include <vcl_limits.h>
 
 int convert_uncertainty_from_meters_to_pixels(float uncertainty,
-                                              bgeo_lvcs lvcs,
+                                              vpgl_lvcs lvcs,
                                               vpgl_camera_double_sptr camera)
 {
   // estimate the offset search size in the image space
@@ -57,7 +57,7 @@ int convert_uncertainty_from_meters_to_pixels(float uncertainty,
     else if (camera->type_name()=="vpgl_rational_camera") {
       double lon, lat, gz;
       lvcs.local_to_global(curr_corner.x(), curr_corner.y(), curr_corner.z(),
-                           bgeo_lvcs::wgs84, lon, lat, gz, bgeo_lvcs::DEG, bgeo_lvcs::METERS);
+                           vpgl_lvcs::wgs84, lon, lat, gz, vpgl_lvcs::DEG, vpgl_lvcs::METERS);
       curr_pt.set(lon, lat, gz);
     }
     else // dummy initialisation, to avoid compiler warning

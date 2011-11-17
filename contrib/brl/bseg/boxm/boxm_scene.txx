@@ -12,7 +12,7 @@
 #include <vgl/vgl_intersection.h>
 #include <vsl/vsl_basic_xml_element.h>
 #include <vsl/vsl_binary_io.h>
-#include <vpgl/bgeo/bgeo_lvcs.h>
+#include <vpgl/vpgl_lvcs.h>
 
 #include <vpl/vpl.h>
 #include <vcl_cmath.h>
@@ -23,7 +23,7 @@
 #include <vcl_cassert.h>
 
 template <class T>
-boxm_scene<T>::boxm_scene(const bgeo_lvcs& lvcs,
+boxm_scene<T>::boxm_scene(const vpgl_lvcs& lvcs,
                           const vgl_point_3d<double>& origin,
                           const vgl_vector_3d<double>& block_dim,
                           const vgl_vector_3d<unsigned>& world_dim,
@@ -96,7 +96,7 @@ void boxm_scene<T>::create_blocks(const vgl_vector_3d<double>& /*block_dim*/,
 }
 
 template <class T>
-boxm_scene<T>::boxm_scene(const bgeo_lvcs& lvcs,
+boxm_scene<T>::boxm_scene(const vpgl_lvcs& lvcs,
                           const vgl_point_3d<double>& origin,
                           const vgl_vector_3d<double>& block_dim,
                           const vgl_vector_3d<unsigned>& world_dim,
@@ -811,7 +811,7 @@ void x_write(vcl_ostream &os, boxm_scene<T>& scene, vcl_string name)
   load_all_blocks.add_attribute("value", scene.load_all_blocks()? 1 : 0);
   load_all_blocks.x_write(os);
 
-  bgeo_lvcs lvcs=scene.lvcs();
+  vpgl_lvcs lvcs=scene.lvcs();
   lvcs.x_write(os, LVCS_TAG);
   x_write(os, scene.origin(), LOCAL_ORIGIN_TAG);
   x_write(os, scene.block_dim(), BLOCK_DIMENSIONS_TAG);
@@ -840,7 +840,7 @@ void x_write(vcl_ostream &os, boxm_scene<T>& scene, vcl_string name)
 template <class T>
 bool boxm_scene<T>::parse_config(boxm_scene_parser& parser)
 {
-  bgeo_lvcs lvcs;
+  vpgl_lvcs lvcs;
   parser.lvcs(lvcs);
   vgl_vector_3d<unsigned> dims = parser.block_nums();
 
@@ -877,7 +877,7 @@ bool boxm_scene<T>::parse_xml_string(vcl_string xml, boxm_scene_parser& parser)
     return false;
   }
 
-  bgeo_lvcs lvcs;
+  vpgl_lvcs lvcs;
   parser.lvcs(lvcs);
   vgl_vector_3d<unsigned> nums = parser.block_nums();
 

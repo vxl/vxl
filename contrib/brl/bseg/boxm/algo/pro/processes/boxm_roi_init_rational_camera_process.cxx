@@ -33,7 +33,7 @@
 #include <vil/file_formats/vil_nitf2_image.h>
 #include <vil/vil_image_view_base.h>
 #include <vpgl/vpgl_local_rational_camera.h>
-#include <vpgl/bgeo/bgeo_lvcs_sptr.h>
+#include <vpgl/vpgl_lvcs_sptr.h>
 
 #include <bprb/bprb_parameters.h>
 
@@ -47,14 +47,14 @@ namespace boxm_roi_init_rational_camera_process_globals
   bool roi_init(vcl_string const& image_path,
                 vpgl_rational_camera<double>* camera,
                 vgl_box_3d<double> box,
-                bgeo_lvcs lvcs,
+                vpgl_lvcs lvcs,
                 float uncertainty,
                 vil_image_view<unsigned char>* nitf_image_unsigned_char,
                 vpgl_local_rational_camera<double>& local_camera);
 
   //: projects the box on the image by taking the union of all the projected corners
   vgl_box_2d<double>* project_box(vpgl_rational_camera<double>* cam,
-                                  bgeo_lvcs lvcs,
+                                  vpgl_lvcs lvcs,
                                   vgl_box_3d<double> box,
                                   float r);
 }
@@ -153,7 +153,7 @@ bool boxm_roi_init_rational_camera_process(bprb_func_process& pro)
 bool boxm_roi_init_rational_camera_process_globals::roi_init(vcl_string const& image_path,
                                                              vpgl_rational_camera<double>* camera,
                                                              vgl_box_3d<double> box,
-                                                             bgeo_lvcs lvcs,
+                                                             vpgl_lvcs lvcs,
                                                              float uncertainty,
                                                              vil_image_view<unsigned char>* nitf_image_unsigned_char,
                                                              vpgl_local_rational_camera<double>& local_camera)
@@ -265,7 +265,7 @@ bool boxm_roi_init_rational_camera_process_globals::roi_init(vcl_string const& i
 
 //:project_box function
 vgl_box_2d<double>*boxm_roi_init_rational_camera_process_globals::project_box( vpgl_rational_camera<double>* cam,
-                                                                               bgeo_lvcs lvcs,
+                                                                               vpgl_lvcs lvcs,
                                                                                vgl_box_3d<double> box,
                                                                                float r)
 {
@@ -276,7 +276,7 @@ vgl_box_2d<double>*boxm_roi_init_rational_camera_process_globals::project_box( v
 
   // global to local
   double lx, ly, lz;
-  lvcs.global_to_local(xoff, yoff, zoff, bgeo_lvcs::wgs84, lx, ly, lz, bgeo_lvcs::DEG, bgeo_lvcs::METERS);
+  lvcs.global_to_local(xoff, yoff, zoff, vpgl_lvcs::wgs84, lx, ly, lz, vpgl_lvcs::DEG, vpgl_lvcs::METERS);
   double center[3];
   center[0] = lx;
   center[1] = ly;
@@ -292,7 +292,7 @@ vgl_box_2d<double>*boxm_roi_init_rational_camera_process_globals::project_box( v
   for (unsigned i=0; i<cam_corners.size(); i++) {
     vgl_point_3d<double> cam_corner = cam_corners[i];
     lvcs.local_to_global(cam_corner.x(), cam_corner.y(), cam_corner.z(),
-                         bgeo_lvcs::wgs84, lon, lat, gz, bgeo_lvcs::DEG, bgeo_lvcs::METERS);
+                         vpgl_lvcs::wgs84, lon, lat, gz, vpgl_lvcs::DEG, vpgl_lvcs::METERS);
     vpgl_rational_camera<double>* new_cam = cam->clone();
     new_cam->set_offset(vpgl_rational_camera<double>::X_INDX, lon);
     new_cam->set_offset(vpgl_rational_camera<double>::Y_INDX, lat);
@@ -302,7 +302,7 @@ vgl_box_2d<double>*boxm_roi_init_rational_camera_process_globals::project_box( v
     for (unsigned int j=0; j < box_corners.size(); j++) {
       // convert the box corners to world coordinates
       lvcs.local_to_global(box_corners[j].x(), box_corners[j].y(), box_corners[j].z(),
-                           bgeo_lvcs::wgs84, lon, lat, gz, bgeo_lvcs::DEG, bgeo_lvcs::METERS);
+                           vpgl_lvcs::wgs84, lon, lat, gz, vpgl_lvcs::DEG, vpgl_lvcs::METERS);
       vgl_point_2d<double> p2d = new_cam->project(vgl_point_3d<double>(lon, lat, gz));
       roi->add(p2d);
     }

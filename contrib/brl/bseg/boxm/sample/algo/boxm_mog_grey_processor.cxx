@@ -99,7 +99,7 @@ void boxm_mog_grey_processor::finalize_appearance(vcl_vector<boxm_apm_traits<BOX
                                                   float min_sigma)
 {
   static const unsigned int nmodes = boxm_apm_traits<BOXM_APM_MOG_GREY>::n_gaussian_modes_;
-  const unsigned int nobs = obs.size();
+  const unsigned int nobs = (unsigned int)obs.size();
   const float min_var = min_sigma*min_sigma;
   const float big_sigma = (float)vnl_math::sqrt1_2; // maximum possible std. dev for set of samples drawn from [0 1]
   const float big_var = big_sigma * big_sigma;
@@ -133,7 +133,7 @@ void boxm_mog_grey_processor::compute_appearance(vcl_vector<boxm_apm_traits<BOXM
   const float big_sigma = (float)vnl_math::sqrt1_2; // maximum possible std. dev for set of samples drawn from [0 1]
   const float big_var = big_sigma * big_sigma;
 
-  unsigned int nobs = obs.size();
+  unsigned int nobs = (unsigned int)obs.size();
   if (nobs == 0) {
     // nothing to do.
     return;

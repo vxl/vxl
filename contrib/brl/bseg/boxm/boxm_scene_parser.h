@@ -9,7 +9,7 @@
 #include <expatpp.h>
 #include <vcl_string.h>
 
-#include <vpgl/bgeo/bgeo_lvcs.h>
+#include <vpgl/vpgl_lvcs.h>
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_vector_3d.h>
 
@@ -35,7 +35,7 @@ class boxm_scene_parser : public expatpp
 
   ~boxm_scene_parser(void) {}
 
-   bool lvcs(bgeo_lvcs& lvcs);
+   bool lvcs(vpgl_lvcs& lvcs);
    vgl_point_3d<double> origin() const { return vgl_point_3d<double>(local_orig_x_,local_orig_y_,local_orig_z_); }
    vgl_vector_3d<double> block_dim() const { return vgl_vector_3d<double>(block_dim_x_,block_dim_y_,block_dim_z_); }
    vgl_vector_3d<unsigned> block_nums() const { return vgl_vector_3d<unsigned>(block_num_x_,block_num_y_,block_num_z_); }

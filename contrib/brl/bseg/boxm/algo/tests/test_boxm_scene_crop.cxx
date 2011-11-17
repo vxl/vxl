@@ -68,7 +68,7 @@ static void test_boxm_scene_crop()
   boct_tree<short,float> *tree = new boct_tree<short,float>(3);
   fill_sample_octree(tree);
 
-  bgeo_lvcs lvcs(33.33,44.44,10.0, bgeo_lvcs::wgs84, bgeo_lvcs::DEG, bgeo_lvcs::METERS);
+  vpgl_lvcs lvcs(33.33,44.44,10.0, vpgl_lvcs::wgs84, vpgl_lvcs::DEG, vpgl_lvcs::METERS);
   vgl_point_3d<double> origin(0.0,0.0,0.0);
 
   //world coordinate dimensions of a block

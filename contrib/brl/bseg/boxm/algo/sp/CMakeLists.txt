@@ -19,4 +19,4 @@ IF( BUILD_TESTING )
   SUBDIRS(tests)
 ENDIF( BUILD_TESTING )
 
-TARGET_LINK_LIBRARIES(boxm_algo_sp boxm boxm_util boxm_sample boxm_sample_algo boxm_basic bsta imesh vpgl bgeo vgl_algo vgl vil vul vcl)
+TARGET_LINK_LIBRARIES(boxm_algo_sp boxm boxm_util boxm_sample boxm_sample_algo boxm_basic bsta imesh vpgl vgl_algo vgl vil vul vcl)

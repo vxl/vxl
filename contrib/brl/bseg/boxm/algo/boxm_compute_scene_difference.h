@@ -8,7 +8,7 @@
 #include <boxm/boxm_scene.h>
 #include <imesh/imesh_mesh.h>
 #include <imesh/imesh_operations.h>
-#include <vpgl/bgeo/bgeo_lvcs.h>
+#include <vpgl/vpgl_lvcs.h>
 #include <vgl/vgl_point_3d.h>
 #include <vcl_iostream.h>
 

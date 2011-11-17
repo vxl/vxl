@@ -18,7 +18,7 @@
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_vector_3d.h>
 #include <vbl/vbl_array_3d.h>
-#include <vpgl/bgeo/bgeo_lvcs.h>
+#include <vpgl/vpgl_lvcs.h>
 #include <boct/boct_tree.h>
 #include <vcl_string.h>
 #include <vcl_iosfwd.h>
@@ -40,7 +40,7 @@ class boxm_scene :public boxm_scene_base
   boxm_scene() : active_block_(vgl_point_3d<int>(-1,-1,-1)), save_internal_nodes_(false), save_platform_independent_(true) {}
 
   //: Constructor from lvcs, world origin, dimension of the block (in world coordinates) and number of blocks(world_dim)
-  boxm_scene(const bgeo_lvcs& lvcs,
+  boxm_scene(const vpgl_lvcs& lvcs,
              const vgl_point_3d<double>& origin,
              const vgl_vector_3d<double>& block_dim,
              const vgl_vector_3d<unsigned>& world_dim,
@@ -49,7 +49,7 @@ class boxm_scene :public boxm_scene_base
              const bool save_platform_independent_ = true);
 
   //: Constructor from lvcs, world origin, dimension of the block, number of blocks and initialization level
-  boxm_scene(const bgeo_lvcs& lvcs,
+  boxm_scene(const vpgl_lvcs& lvcs,
              const vgl_point_3d<double>& origin,
              const vgl_vector_3d<double>& block_dim,
              const vgl_vector_3d<unsigned>& world_dim,
@@ -123,7 +123,7 @@ class boxm_scene :public boxm_scene_base
   //: Returns the indices of active neighbors;
   vcl_set<vgl_point_3d<int>, bvgl_point_3d_cmp<int> >& active_blocks() { return active_blocks_; }
 
-  bgeo_lvcs lvcs() const { return lvcs_; }
+  vpgl_lvcs lvcs() const { return lvcs_; }
 
   vgl_point_3d<double> origin() const { return origin_; }
 
@@ -322,7 +322,7 @@ class boxm_scene :public boxm_scene_base
   }
 
  protected:
-  bgeo_lvcs lvcs_;
+  vpgl_lvcs lvcs_;
   vgl_point_3d<double> origin_;
   vgl_point_3d<double> rpc_origin_;
 

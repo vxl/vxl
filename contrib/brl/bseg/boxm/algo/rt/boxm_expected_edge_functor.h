@@ -5,7 +5,7 @@
 #include <boxm/boxm_scene.h>
 #include <boxm/algo/rt/boxm_render_expected_edge_tangent_image_functor.h>
 
-#include <vpgl/vpgl_camera_sptr.h>
+#include <vpgl/vpgl_camera_double_sptr.h>
 #include <vpgl/vpgl_perspective_camera.h>
 #include <vil/vil_image_view.h>
 #include <vil/vil_transform.h>
