@@ -19,7 +19,7 @@
 //smart ptr includes
 #include <vbl/vbl_ref_count.h>
 #include <vbl/vbl_smart_ptr.h>
-
+#include <vsl/vsl_binary_io.h>
 
 class boxm2_trajectory : public vbl_ref_count
 {

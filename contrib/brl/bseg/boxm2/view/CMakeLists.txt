@@ -34,7 +34,7 @@ IF(VGUI_FOUND)
   INSTALL_TARGETS(/lib boxm2_view)
   INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bseg/boxm2/view ${boxm2_view_sources})
 
-  TARGET_LINK_LIBRARIES(boxm2_view bocl boxm2_pro boxm2_ocl_pro boxm2_cpp boxm2_cpp_pro vgui bprb bgeo vnl vnl_algo vbl_io vpgl vsph vgl vil vbl vul ${GLEW_LIBRARY} ${OPENCL_LIBRARIES} )
+  TARGET_LINK_LIBRARIES(boxm2_view bocl boxm2_pro boxm2_ocl_pro boxm2_cpp boxm2_cpp_pro vgui bprb vnl vnl_algo vbl_io vpgl vsph vgl vil vbl vul ${GLEW_LIBRARY} ${OPENCL_LIBRARIES} )
 
   #pro
   SUBDIRS(pro)

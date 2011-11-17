@@ -9,7 +9,7 @@
 
 #include <vcl_fstream.h>
 #include <boxm2/view/boxm2_trajectory.h>
-#include <vpgl/vpgl_camera_sptr.h>
+#include <vpgl/vpgl_camera_double_sptr.h>
 #include <vpgl/vpgl_perspective_camera.h>
 #include <vpgl/vpgl_calibration_matrix.h>
 
