@@ -11,7 +11,7 @@
 
 #include <vgl/vgl_point_2d.h>
 #include <vpgl/vpgl_fundamental_matrix.h>
-#include <vpgl/algo/vpgl_fm_compute_ransac.h>
+#include <bpgl/algo/bpgl_fm_compute_ransac.h>
 #include <vgl/algo/vgl_h_matrix_2d_optimize_lmq.h>
 
 //: Binary io, NOT IMPLEMENTED, signatures defined to use bapl_keypoint_set as a brdb_value
@@ -131,7 +131,7 @@ void bapl_keypoint_match_set::refine_matches(float outlier_threshold, vcl_vector
   }
 
   vpgl_fundamental_matrix<double> fm;
-  vpgl_fm_compute_ransac fmcr;
+  bpgl_fm_compute_ransac fmcr;
   fmcr.set_generate_all(true);
   fmcr.set_outlier_threshold(outlier_threshold);
   fmcr.compute( rpts, lpts, fm);
