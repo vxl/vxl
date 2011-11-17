@@ -410,7 +410,7 @@ unsigned int boct_tree<T_loc, T_data>::size()
 {
   // Note: There should be a more efficient way to do this -DEC
   vcl_vector<boct_tree_cell<T_loc, T_data>*> leaves = leaf_cells();
-  return leaves.size();
+  return (unsigned int)leaves.size();
 }
 
 //: Returns all leaf cells at a specified level of the tree
@@ -546,7 +546,7 @@ void boct_tree<T_loc,T_data>::b_write(vsl_b_ostream & os, bool save_internal_nod
     vsl_b_write(os, num_levels_);
     vsl_b_write(os, global_bbox_);
     vcl_vector<boct_tree_cell<T_loc,T_data>*> cells = leaf_cells();
-    const unsigned int ncells = cells.size();
+    const unsigned int ncells = (unsigned int)cells.size();
     vsl_b_write(os, ncells);
 
     plat_dep_cell_store *write_buff = new plat_dep_cell_store[ncells];
