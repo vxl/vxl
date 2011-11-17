@@ -18,11 +18,7 @@
 
 //directory utility
 #include <vcl_where_root_dir.h>
-#if 0
-#include <bocl/bocl_device.h>
-#include <bocl/bocl_kernel.h>
-#endif
-#include <boct/boct_bit_tree2.h>
+#include <boct/boct_bit_tree.h>
 #define SEGLEN_FACTOR 93206.7555f   //Hack representation of int32.maxvalue/(ni*nj*block_length)
 
 namespace boxm2_cpp_query_cell_data_process_globals
@@ -80,7 +76,7 @@ bool  boxm2_cpp_query_cell_data_process(bprb_func_process& pro)
   boxm2_block * blk=cache->get_block(id);
   boxm2_block_metadata mdata = scene->get_block_metadata_const(id);
   vnl_vector_fixed<unsigned char,16> treebits=blk->trees()(index_x,index_y,index_z);
-  boct_bit_tree2 tree(treebits.data_block(),mdata.max_level_);
+  boct_bit_tree tree(treebits.data_block(),mdata.max_level_);
   int bit_index=tree.traverse(local);
 
   int depth=tree.depth_at(bit_index);

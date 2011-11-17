@@ -19,7 +19,7 @@
 #include <bsta/bsta_joint_histogram.h>
 //directory utility
 #include <vcl_where_root_dir.h>
-#include <boct/boct_bit_tree2.h>
+#include <boct/boct_bit_tree.h>
 #include <brad/brad_phongs_model_est.h>
 
 //#define SEGLEN_FACTOR 93206.7555f   //Hack representation of int32.maxvalue/(ni*nj*block_length)
@@ -94,7 +94,7 @@ bool  boxm2_cpp_query_cell_brdf_process(bprb_func_process& pro)
   boxm2_block * blk=cache->get_block(id);
   boxm2_block_metadata mdata = scene->get_block_metadata_const(id);
   vnl_vector_fixed<unsigned char,16> treebits=blk->trees()(index_x,index_y,index_z);
-  boct_bit_tree2 tree(treebits.data_block(),mdata.max_level_);
+  boct_bit_tree tree(treebits.data_block(),mdata.max_level_);
   int bit_index=tree.traverse(local);
   int index=tree.get_data_index(bit_index,false);
   boxm2_data_base          *  phongs_base  = cache->get_data_base(id,boxm2_data_traits<BOXM2_FLOAT8>::prefix("phongs_model"));
