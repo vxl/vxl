@@ -5,8 +5,8 @@
 #include <vcl_fstream.h>
 
 #include <vpgl/vpgl_perspective_camera.h>
-#include <vpgl/vsph/vsph_view_sphere.h>
-#include <vpgl/vsph/vsph_view_point.h>
+#include <vsph/vsph_view_sphere.h>
+#include <vsph/vsph_view_point.h>
 #include <vil/vil_image_view_base.h>
 #include <vil/vil_image_view.h>
 #include <vil/vil_save.h>
