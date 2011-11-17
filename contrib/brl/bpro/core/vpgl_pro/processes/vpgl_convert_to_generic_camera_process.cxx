@@ -59,8 +59,7 @@ bool vpgl_convert_to_generic_camera_process(bprb_func_process& pro)
   unsigned level = pro.get_input<unsigned>(3);
   vpgl_generic_camera<double> gcam;
 
-//FIXME!!!  if(!vpgl_generic_camera_convert::convert(camera, (int)ni, (int)nj, gcam, level)){
-   if(!vpgl_generic_camera_convert::convert(camera, (int)ni, (int)nj, gcam)){
+  if(!vpgl_generic_camera_convert::convert(camera, (int)ni, (int)nj, gcam, level)){
    vcl_cout<<"camera conversion failed\n"<<vcl_endl;
     return false;
   } 
