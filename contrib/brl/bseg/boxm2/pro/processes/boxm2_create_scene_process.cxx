@@ -75,10 +75,10 @@ bool boxm2_create_scene_process(bprb_func_process& pro)
   boxm2_scene_sptr scene =new boxm2_scene(datapath,vgl_point_3d<double>(origin_x,origin_y,origin_z));
   scene->set_local_origin(vgl_point_3d<double>(origin_x,origin_y,origin_z));
   scene->set_appearances(appearance);
-  bgeo_lvcs lv = scene->lvcs();
+  vpgl_lvcs lv = scene->lvcs();
   lv.set_origin((double)lon, (double)lat, (double)elev);
   scene->set_lvcs(lv);
-  scene->set_num_illumination_bins(num_bins);
+  //scene->set_num_illumination_bins(num_bins);
 
   i=0;  // store scene smart pointer
   pro.set_output_val<boxm2_scene_sptr>(i++, scene);

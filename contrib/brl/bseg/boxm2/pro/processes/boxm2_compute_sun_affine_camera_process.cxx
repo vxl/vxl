@@ -9,7 +9,7 @@
 #include <bprb/bprb_func_process.h>
 #include <boxm2/boxm2_scene.h>
 #include <vpgl/algo/vpgl_camera_from_box.h>
-#include <vpgl/algo/vpgl_camera_compute.h>
+#include <vpgl/algo/vpgl_camera_convert.h>
 #include <vcl_cmath.h>
 namespace boxm2_compute_sun_affine_camera_process_globals
 {
@@ -75,7 +75,7 @@ bool boxm2_compute_sun_affine_camera_process(bprb_func_process& pro)
   vcl_cout<<"Max "<<u<<","<<v<<vcl_endl;
 
   vpgl_generic_camera<double> * gen_cam =new vpgl_generic_camera<double>();
-  vpgl_generic_camera_compute::compute(affine_camera,dimx,dimy,*gen_cam);
+  vpgl_generic_camera_convert::convert(affine_camera,dimx,dimy,*gen_cam);
   gen_cam->project(box.min_x(),box.min_y(),box.min_z(),u,v);
   vcl_cout<<"GMin "<<u<<","<<v<<" ";
   gen_cam->project(box.max_x(),box.max_y(),box.max_z(),u,v);

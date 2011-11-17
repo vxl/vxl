@@ -12,7 +12,6 @@
 #include <boxm2/util/boxm2_convert_bundle.h>
 #include <boxm2/util/boxm2_convert_nvm.h>
 #include <boxm2/util/boxm2_cams_and_box_to_scene.h>
-#include <vpgl/algo/vpgl_camera_bounds.h>
 #include <vgl/vgl_box_2d.h>
 #include <vgl/vgl_box_3d.h>
 #include <vgl/vgl_intersection.h>

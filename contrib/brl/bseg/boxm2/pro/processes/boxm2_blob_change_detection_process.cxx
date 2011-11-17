@@ -12,6 +12,7 @@
 #include <vil/vil_save.h>
 #include <vcl_vector.h>
 #include <vcl_string.h>
+#include <vnl/vnl_random.h>
 
 namespace boxm2_blob_change_detection_process_globals
 {
@@ -99,14 +100,21 @@ bool boxm2_blob_change_detection_process(bprb_func_process& pro)
   //create a blob image
   vil_image_view<vxl_byte>* blobImg = new vil_image_view<vxl_byte>(change_img->ni(), change_img->nj());
   blobImg->fill(0);
+  vnl_random random; 
   vcl_vector<boxm2_change_blob>::iterator iter;
   for (iter=blobs.begin(); iter!=blobs.end(); ++iter)
   {
+    vxl_byte blobColor = (vxl_byte)  random.lrand32(10,255);      
     //paint each blob pixel white
-    for (unsigned int p=0; p<iter->blob_size(); ++p) {
-      PairType pair = iter->get_pixel(p);
-      (*blobImg)( pair.x(), pair.y() ) = (vxl_byte) 255;
+    if(iter->blob_size() < 500) {
+      for (unsigned int p=0; p<iter->blob_size(); ++p) {
+        PairType pair = iter->get_pixel(p);
+        (*blobImg)( pair.x(), pair.y() ) = (vxl_byte) 255; // blobColor; 
+      }
     }
+    //else {
+    //  vcl_cout<<"Skipping blob of size "<<iter->blob_size()<<vcl_endl;
+    //}
   }
 
   //set outputs

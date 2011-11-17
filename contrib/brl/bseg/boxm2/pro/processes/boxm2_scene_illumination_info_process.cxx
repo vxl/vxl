@@ -43,7 +43,7 @@ bool boxm2_scene_illumination_info_process(bprb_func_process& pro)
   }
   //get the inputs
   boxm2_scene_sptr scene = pro.get_input<boxm2_scene_sptr>(0);
-  bgeo_lvcs vcs = scene->lvcs();
+  vpgl_lvcs vcs = scene->lvcs();
   double latitude, longitude, elevation;
   vcs.get_origin(latitude, longitude, elevation);
   int num_illum_bins = scene->num_illumination_bins();
