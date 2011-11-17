@@ -13,6 +13,7 @@
 #include <vsl/vsl_basic_xml_element.h>
 #include <vsl/vsl_binary_io.h>
 #include <vpgl/vpgl_lvcs.h>
+#include <vpgl/xio/vpgl_xio_lvcs.h>
 
 #include <vpl/vpl.h>
 #include <vcl_cmath.h>
@@ -812,7 +813,7 @@ void x_write(vcl_ostream &os, boxm_scene<T>& scene, vcl_string name)
   load_all_blocks.x_write(os);
 
   vpgl_lvcs lvcs=scene.lvcs();
-  lvcs.x_write(os, LVCS_TAG);
+  x_write(os, lvcs, LVCS_TAG);
   x_write(os, scene.origin(), LOCAL_ORIGIN_TAG);
   x_write(os, scene.block_dim(), BLOCK_DIMENSIONS_TAG);
 
