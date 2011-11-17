@@ -226,8 +226,8 @@ template <class T>
 void vpgl_fundamental_matrix<T>::set_matrix( const vpgl_proj_camera<T>& cr,
                                              const vpgl_proj_camera<T>& cl )
 {
-  vnl_vector_fixed<T, 3> nv = cr.svd()->nullvector();
-  vnl_matrix_fixed<T, 3, 3> m = cl.get_matrix();
+  vnl_vector_fixed<T, 4> nv = cr.svd()->nullvector();
+  vnl_matrix_fixed<T, 3, 4> m = cl.get_matrix();
   vnl_vector_fixed<T, 3> nvt =  m * nv;
   vnl_vector_fixed<double, 3> nvtd;
   // unfortunately, vnl_cross_product_matrix is only defined for double
