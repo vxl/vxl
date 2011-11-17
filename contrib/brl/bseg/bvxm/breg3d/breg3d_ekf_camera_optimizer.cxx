@@ -21,8 +21,8 @@
 
 // for computing homography
 #include <ihog/ihog_transform_2d.h>
-#include <vpgl/ihog/ihog_world_roi.h>
-#include <vpgl/ihog/ihog_minimizer.h>
+#include <ihog/ihog_world_roi.h>
+#include <ihog/ihog_minimizer.h>
 #include <brip/brip_vil_float_ops.h>
 
 

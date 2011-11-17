@@ -3,10 +3,10 @@
 #include <vnl/vnl_double_3x3.h>
 #include <vnl/vnl_double_2x3.h>
 
-#include <vpgl/ihog/ihog_transform_2d.h>
-#include <vpgl/ihog/ihog_image.h>
-#include <vpgl/ihog/ihog_world_roi.h>
-#include <vpgl/ihog/ihog_minimizer.h>
+#include <ihog/ihog_transform_2d.h>
+#include <ihog/ihog_image.h>
+#include <ihog/ihog_world_roi.h>
+#include <ihog/ihog_minimizer.h>
 
 ihog_transform_2d breg3d_lm_direct_homography_generator::compute_homography()
 {

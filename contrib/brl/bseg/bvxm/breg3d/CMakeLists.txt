@@ -2,8 +2,9 @@
 # 3-d video registration using the bvxm library
 IF(BUILD_MUL)
   INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bseg )
-  INCLUDE_DIRECTORIES( ${GEL_INCLUDE_DIR}/mrc/vpgl)
+  INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bbas/bpgl )
   INCLUDE_DIRECTORIES( ${MUL_INCLUDE_DIR})
+  INCLUDE_DIRECTORIES( ${VXLCORE_INCLUDE_DIR} )
 
   SET(breg3d_sources
       breg3d_ekf_camera_optimizer.h            breg3d_ekf_camera_optimizer.cxx

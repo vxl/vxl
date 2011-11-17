@@ -5,7 +5,6 @@
 
 #include <vpgl/vpgl_camera.h>
 #include <vpgl/vpgl_perspective_camera.h>
-#include <vpgl/algo/vpgl_interpolate.h>
 
 #include <breg3d/breg3d_ekf_camera_optimizer_state.h>
 
