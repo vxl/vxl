@@ -23,7 +23,7 @@ SET( vpgl_sources
   vpgl_local_rational_camera.h     vpgl_local_rational_camera.txx
   vpgl_generic_camera.h            vpgl_generic_camera.txx
   vpgl_dll.h
-  vpgl_lvcs.h                      vpgl_lvcs.cxx
+  vpgl_lvcs.h                      vpgl_lvcs.cxx	vpgl_lvcs_sptr.h
   vpgl_utm.h                       vpgl_utm.cxx
   vpgl_earth_constants.h
   vpgl_datum_conversion.h          vpgl_datum_conversion.cxx
