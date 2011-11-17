@@ -86,10 +86,10 @@ bool boxm2_refine_block_function::refine_deterministic(vcl_vector<boxm2_data_bas
 
       //1. get current tree information
       uchar16 tree  = (*blk_iter);
-      boct_bit_tree2 curr_tree( (unsigned char*) tree.data_block(), max_level_);
+      boct_bit_tree curr_tree( (unsigned char*) tree.data_block(), max_level_);
 
       //3. refine tree locally (only updates refined_tree and returns new tree size)
-      boct_bit_tree2 refined_tree = this->refine_bit_tree(curr_tree, 0, false);  //i.e. is not random
+      boct_bit_tree refined_tree = this->refine_bit_tree(curr_tree, 0, false);  //i.e. is not random
       int newSize = refined_tree.num_cells();
 
       //cache refined tree
@@ -116,10 +116,10 @@ bool boxm2_refine_block_function::refine_deterministic(vcl_vector<boxm2_data_bas
   {
       //1. get current tree information
       uchar16 tree  = (*blk_iter);
-      boct_bit_tree2 old_tree( (unsigned char*) tree.data_block(), max_level_);
+      boct_bit_tree old_tree( (unsigned char*) tree.data_block(), max_level_);
 
       //2. refine tree locally (only updates refined_tree and returns new tree size)
-      boct_bit_tree2 refined_tree( (unsigned char*) trees_copy[currIndex].data_block(), max_level_);
+      boct_bit_tree refined_tree( (unsigned char*) trees_copy[currIndex].data_block(), max_level_);
 
       //2.5 pack data bits into refined tree
       //store data index in bits [10, 11, 12, 13] ;
@@ -152,12 +152,12 @@ bool boxm2_refine_block_function::refine_deterministic(vcl_vector<boxm2_data_bas
 // so no tree_buffer information is needed, whereas the data is modified
 // on the global level, so buffers, offsets are used
 /////////////////////////////////////////////////////////////////
-boct_bit_tree2 boxm2_refine_block_function::refine_bit_tree(boct_bit_tree2& unrefined_tree,
+boct_bit_tree boxm2_refine_block_function::refine_bit_tree(boct_bit_tree& unrefined_tree,
                                                             int buff_offset,
                                                             bool is_random)
 {
   //initialize tree to return
-  boct_bit_tree2 refined_tree(unrefined_tree.get_bits(), max_level_);
+  boct_bit_tree refined_tree(unrefined_tree.get_bits(), max_level_);
 
   //no need to do depth first search, just iterate and check each node along the way
   //(iterate through the max number of inner cells)
@@ -211,8 +211,8 @@ boct_bit_tree2 boxm2_refine_block_function::refine_bit_tree(boct_bit_tree2& unre
 //Deterministic move data
 //moves data from src to destination
 //returns the number of split nodes for this tree (for assertions)
-int boxm2_refine_block_function::move_data(boct_bit_tree2& unrefined_tree,
-                                           boct_bit_tree2& refined_tree,
+int boxm2_refine_block_function::move_data(boct_bit_tree& unrefined_tree,
+                                           boct_bit_tree& refined_tree,
                                            float*  alpha_cpy,
                                            uchar8*  mog_cpy,
                                            ushort4* num_obs_cpy )

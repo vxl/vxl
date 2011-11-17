@@ -4,7 +4,7 @@
 // \file
 
 #include <boxm2/boxm2_data_traits.h>
-#include <boct/boct_bit_tree2.h>
+#include <boct/boct_bit_tree.h>
 #include <vnl/vnl_vector_fixed.h>
 #include <vcl_iostream.h>
 #include <boxm2/io/boxm2_cache.h>
@@ -31,11 +31,11 @@ class boxm2_merge_block_function
   bool merge(vcl_vector<boxm2_data_base*>& datas);
 
   //: refine bit tree
-  boct_bit_tree2 merge_bit_tree(boct_bit_tree2& curr_tree, float* alphas, float prob_thresh);
+  boct_bit_tree merge_bit_tree(boct_bit_tree& curr_tree, float* alphas, float prob_thresh);
 
   //: move data into new location
-  int move_data( boct_bit_tree2& unrefined_tree,
-                 boct_bit_tree2& merged_tree,
+  int move_data( boct_bit_tree& unrefined_tree,
+                 boct_bit_tree& merged_tree,
                  float*   alpha,
                  uchar8*  mog,
                  ushort4* num_obs,

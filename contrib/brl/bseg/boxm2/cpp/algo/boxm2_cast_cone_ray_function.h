@@ -97,7 +97,7 @@ void boxm2_cast_cone_ray_function(vgl_box_3d<double>& block_box,
         for (int z=minCell.z(); z<maxCell.z(); ++z) {
           // load current block/tree
           uchar16 tree = blk_sptr->trees()(x,y,z);
-          boct_bit_tree2 bit_tree( (unsigned char*) tree.data_block(), linfo->root_level+1);
+          boct_bit_tree bit_tree( (unsigned char*) tree.data_block(), linfo->root_level+1);
 
           // determine how deep in each block you'll go
           unsigned deepest_gen = linfo->root_level;
@@ -151,7 +151,7 @@ void boxm2_cast_cone_ray_function(vgl_box_3d<double>& block_box,
         for (int z=minCell.z(); z<maxCell.z(); ++z) {
           // load current block/tree
           uchar16 tree = blk_sptr->trees()(x,y,z);
-          boct_bit_tree2 bit_tree( (unsigned char*) tree.data_block(), linfo->root_level+1);
+          boct_bit_tree bit_tree( (unsigned char*) tree.data_block(), linfo->root_level+1);
 
           // determine how deep in each block you'll go
           unsigned deepest_gen = linfo->root_level;

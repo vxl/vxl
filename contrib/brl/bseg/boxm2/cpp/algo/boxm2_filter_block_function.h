@@ -6,7 +6,7 @@
 #include <boxm2/boxm2_data_traits.h>
 #include <boxm2/cpp/algo/boxm2_cast_ray_function.h>
 #include <boxm2/cpp/algo/boxm2_mog3_grey_processor.h>
-#include <boct/boct_bit_tree2.h>
+#include <boct/boct_bit_tree.h>
 #include <vnl/vnl_vector_fixed.h>
 #include <vcl_iostream.h>
 #include <boxm2/io/boxm2_cache.h>

@@ -29,7 +29,7 @@ boxm2_filter_block_function::boxm2_filter_block_function(boxm2_block_metadata da
       {
         //load current block/tree
         uchar16 tree = trees(x,y,z);
-        boct_bit_tree2 bit_tree( (unsigned char*) tree.data_block(), data.max_level_);
+        boct_bit_tree bit_tree( (unsigned char*) tree.data_block(), data.max_level_);
 
         //FOR ALL LEAVES IN CURRENT TREE
         vcl_vector<int> leafBits = bit_tree.get_leaf_bits();
@@ -57,7 +57,7 @@ boxm2_filter_block_function::boxm2_filter_block_function(boxm2_block_metadata da
                                         (int) abCenter.y(),
                                         (int) abCenter.z() );
             uchar16 ntree = trees(blkIdx.x(), blkIdx.y(), blkIdx.z());
-            boct_bit_tree2 neighborTree( (unsigned char*) ntree.data_block(), data.max_level_);
+            boct_bit_tree neighborTree( (unsigned char*) ntree.data_block(), data.max_level_);
 
             //traverse to local center
             vgl_point_3d<double> locCenter((double) abCenter.x() - blkIdx.x(),

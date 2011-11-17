@@ -13,7 +13,7 @@
 #include <boxm2/boxm2_data.h>
 #include <boxm2/boxm2_util.h>
 
-#include <boct/boct_bit_tree2.h>
+#include <boct/boct_bit_tree.h>
 
 #include <vcl_algorithm.h>
 #include <vpgl/vpgl_generic_camera.h>
@@ -101,7 +101,7 @@ void boxm2_cast_ray_function(vgl_ray_3d<double> & ray_ij,
     //load current block/tree
     uchar16 tree=blk_sptr->trees()((unsigned short)cell_minx,(unsigned short)cell_miny,(unsigned short)cell_minz);
 
-    boct_bit_tree2 bit_tree((unsigned char*)tree.data_block(),linfo->root_level+1);
+    boct_bit_tree bit_tree((unsigned char*)tree.data_block(),linfo->root_level+1);
 
     //local ray origin is entry point (point should be in [0,1])
     //(note that cell_min is the current block index at this point)

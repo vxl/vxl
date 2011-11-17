@@ -5,7 +5,7 @@
 
 #include <boxm2/boxm2_block.h>
 #include <boxm2/boxm2_data.h>
-#include <boct/boct_bit_tree2.h>
+#include <boct/boct_bit_tree.h>
 #include <vcl_iostream.h>
 
 template <class F>
@@ -35,7 +35,7 @@ void boxm2_data_leaves_serial_iterator(boxm2_block * blk,
     for (blk_iter = trees.begin(); blk_iter != trees.end(); ++blk_iter, ++currIndex)
     {
         uchar16 tree  = (*blk_iter);
-        boct_bit_tree2 curr_tree( (unsigned char*) tree.data_block(), 4);
+        boct_bit_tree curr_tree( (unsigned char*) tree.data_block(), 4);
 
         if ( currIndex%counter_length == 0 ) vcl_cout<<'.';
 
