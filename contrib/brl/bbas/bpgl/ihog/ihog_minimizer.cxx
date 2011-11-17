@@ -3,7 +3,7 @@
 //:
 // \file
 
-#include <ihog_lsqr_cost_func.h>
+#include <ihog/ihog_lsqr_cost_func.h>
 #include <vil/algo/vil_gauss_filter.h>
 #include <vnl/algo/vnl_amoeba.h>
 #include <vnl/algo/vnl_levenberg_marquardt.h>
