@@ -12,7 +12,6 @@
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_least_squares_function.h>
 #include <vpgl/vpgl_rational_camera.h>
-#include <vpgl/vpgl_comp_rational_camera.h>
 #include <vgl/vgl_vector_2d.h>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_point_3d.h>
