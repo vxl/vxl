@@ -144,7 +144,7 @@ class bxml_element : public bxml_data
   }
 
   //: Return the number of attributes
-  unsigned int num_attributes() const { return attributes_.size(); }
+  unsigned int num_attributes() const { return (unsigned int)attributes_.size(); }
 
   //: An iterator to the beginning of the attributes
   const_attr_iterator attr_begin() const { return attributes_.begin(); }
@@ -153,7 +153,7 @@ class bxml_element : public bxml_data
   const_attr_iterator attr_end() const { return attributes_.end(); }
 
   //: Return the number of data nodes
-  unsigned int num_data() const { return data_.size(); }
+  unsigned int num_data() const { return (unsigned int)data_.size(); }
 
   //: An iterator to the beginning of the data
   const_data_iterator data_begin() const { return data_.begin(); }
