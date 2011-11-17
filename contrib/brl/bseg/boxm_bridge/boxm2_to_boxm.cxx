@@ -186,7 +186,7 @@ int main(int argc, char** argv)
   boxm2_lru_cache::create(&scene2);
   boxm2_cache_sptr cache = boxm2_cache::instance();
 
-  bgeo_lvcs lvcs = scene2.lvcs();
+  vpgl_lvcs lvcs = scene2.lvcs();
   //vgl_point_3d<double> origin = scene2.local_origin();
   vgl_box_3d<double> world = scene2.bounding_box();
   vcl_map<boxm2_block_id, boxm2_block_metadata> blocks = scene2.blocks();
