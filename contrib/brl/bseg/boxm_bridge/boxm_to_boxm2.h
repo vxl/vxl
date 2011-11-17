@@ -4,7 +4,7 @@
 // \file
 
 #include <boct/boct_tree.h>
-#include <boct/boct_bit_tree2.h>
+#include <boct/boct_bit_tree.h>
 #include <boxm2/boxm2_data.h>
 #include <boxm2/boxm2_data_traits.h>
 #include <boxm/sample/boxm_sample.h>
@@ -25,6 +25,6 @@ void convert_data(boct_tree_cell<T_loc,T_data>* tree_cell,
 
 //: converts the boct_octree to bit tree representation
 template <class T_loc, class T_data>
-void convert_to_bittree(boct_tree_cell<T_loc,T_data>* tree_cell, boct_bit_tree2*& bit_tree);
+void convert_to_bittree(boct_tree_cell<T_loc,T_data>* tree_cell, boct_bit_tree*& bit_tree);
 
 #endif // boxm_to_boxm2_h_

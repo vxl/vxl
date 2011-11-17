@@ -11,7 +11,7 @@
 
 //boct files
 #include <boct/boct_tree.h>
-#include <boct/boct_bit_tree2.h>
+#include <boct/boct_bit_tree.h>
 
 //boxm2 files
 #include <boxm2/boxm2_scene.h>
@@ -84,7 +84,7 @@ void convert_data(boct_tree_cell<T_loc,T_data>* tree_cell,
 
 //: recursively sets the bits based on the octree structure
 template <class T_loc, class T_data>
-void set_bits(boct_bit_tree2*& bit_tree, int idx, unsigned int child_idx, boct_tree_cell<T_loc,T_data> & cell)
+void set_bits(boct_bit_tree*& bit_tree, int idx, unsigned int child_idx, boct_tree_cell<T_loc,T_data> & cell)
 {
   if (cell.code_.level == 0)
     return;
@@ -99,9 +99,9 @@ void set_bits(boct_bit_tree2*& bit_tree, int idx, unsigned int child_idx, boct_t
 
 //: converts the bit tree to boct_octree representation
 template <class T_loc, class T_data>
-void convert_to_bittree(boct_tree_cell<T_loc,T_data>* tree_cell, boct_bit_tree2*& bit_tree)
+void convert_to_bittree(boct_tree_cell<T_loc,T_data>* tree_cell, boct_bit_tree*& bit_tree)
 {
-  bit_tree = new boct_bit_tree2();
+  bit_tree = new boct_bit_tree();
   // first set all the bits to 0
   for (unsigned i=0; i<73; i++)
     bit_tree->set_bit_at(i,false);
@@ -217,7 +217,7 @@ int main(int argc, char** argv)
               node->all_children(children);
               int n2= children.size()+1;
 
-              boct_bit_tree2* bit_tree;
+              boct_bit_tree* bit_tree;
               convert_to_bittree(node, bit_tree);
               int n1=bit_tree->num_cells();
               int start=data_idx;

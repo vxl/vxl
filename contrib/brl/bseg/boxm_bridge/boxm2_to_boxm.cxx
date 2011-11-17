@@ -11,7 +11,7 @@
 
 //boct files
 #include <boct/boct_tree.h>
-#include <boct/boct_bit_tree2.h>
+#include <boct/boct_bit_tree.h>
 
 //boxm2 files
 #include <boxm2/boxm2_scene.h>
@@ -109,7 +109,7 @@ boxm_sample<BOXM_APM_MOG_GREY> create_sample(float alpha,
 
 // converts the bit tree to boct_octree representation
 template <class T_loc, class T_data>
-void convert_tree(boct_bit_tree2 const& bit_tree, boct_tree<T_loc,T_data>*& tree,
+void convert_tree(boct_bit_tree const& bit_tree, boct_tree<T_loc,T_data>*& tree,
                   boxm2_data<BOXM2_ALPHA>* alpha_data,
                   boxm2_data<BOXM2_MOG3_GREY>* mog3_data,
                   boxm2_data<BOXM2_NUM_OBS>* num_obs)
@@ -252,7 +252,7 @@ int main(int argc, char** argv)
       for (unsigned y=0; y<dim.y(); y++) {
         for (unsigned x=0; x<dim.x(); x++) {
           boxm2_block::uchar16 tree = block->trees()[x][y][z];
-          boct_bit_tree2 bit_tree((unsigned char*)tree.data_block());
+          boct_bit_tree bit_tree((unsigned char*)tree.data_block());
           if (bit_tree.num_cells() >= 1) {
             tree_type* octree;
             convert_tree(bit_tree,octree,alpha_data,mog3_data,num_obs);
