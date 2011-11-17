@@ -33,7 +33,7 @@ bool gen_lidar_view(int x, int y, int z,
                     vcl_vector<vgl_box_3d<double> > boxes,
                     vil_image_view_base_sptr& lidar,
                     vpgl_camera_double_sptr& cam,
-                    bgeo_lvcs_sptr& lvcs)
+                    vpgl_lvcs_sptr& lvcs)
 {
   vil_image_view<float> lv(x, y);
   lv.fill(0);
@@ -94,7 +94,7 @@ bool bvxm_create_synth_lidar_data_process(bprb_func_process& pro)
     return false;
   }
 
-  bgeo_lvcs_sptr lvcs = new bgeo_lvcs();
+  vpgl_lvcs_sptr lvcs = new vpgl_lvcs();
   if (lvcs_path != "") {
     vcl_ifstream is(lvcs_path.c_str());
     if (!is)

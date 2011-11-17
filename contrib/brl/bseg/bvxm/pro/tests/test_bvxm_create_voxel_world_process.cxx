@@ -73,7 +73,7 @@ static void test_bvxm_create_voxel_world_process()
   comp = comp && (0.98< params->max_occupancy_prob()) && (params->max_occupancy_prob() < 1.0);
   comp = comp && (params->lvcs());   // non-null lvcs
   // fill out the values in the test lvcs file
-  bgeo_lvcs lvcs(32.724233, -117.156105, 39.0, bgeo_lvcs::wgs84, 0.1, 0.1);
+  vpgl_lvcs lvcs(32.724233, -117.156105, 39.0, vpgl_lvcs::wgs84, 0.1, 0.1);
   comp = comp && (*(params->lvcs()) == lvcs);
   TEST("world parameters check", comp ,true);
 }

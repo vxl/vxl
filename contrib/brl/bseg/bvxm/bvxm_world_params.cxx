@@ -4,6 +4,7 @@
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_box_3d.h>
 #include <vgl/vgl_vector_3d.h>
+#include <vpgl/io/vpgl_io_lvcs.h>
 
 //---------------------------------------------------
 bvxm_world_params::bvxm_world_params()
@@ -34,7 +35,7 @@ bvxm_world_params::set_params(
   const vgl_point_3d<float>& corner,
   const vgl_vector_3d<unsigned int>& num_voxels,
   float voxel_length,
-  bgeo_lvcs_sptr lvcs,
+  vpgl_lvcs_sptr lvcs,
   float min_ocp_prob,
   float max_ocp_prob,
   unsigned max_scale,
@@ -75,7 +76,7 @@ void bvxm_world_params::b_write(vsl_b_ostream & os) const
   vsl_b_write(os,corner_);
   vsl_b_write(os,num_voxels_);
   vsl_b_write(os,voxel_length_);
-  lvcs_->b_write(os);
+  vsl_b_write(os, *lvcs_);
   vsl_b_write(os,min_occupancy_prob_);
   vsl_b_write(os,max_occupancy_prob_);
   vsl_b_write(os, base_x_);
@@ -95,7 +96,8 @@ void bvxm_world_params::b_read(vsl_b_istream & is)
     vsl_b_read(is,corner_);
     vsl_b_read(is,num_voxels_);
     vsl_b_read(is,voxel_length_);
-    lvcs_->b_read(is);
+	lvcs_ = new vpgl_lvcs();
+    vsl_b_read(is, *lvcs_);
     vsl_b_read(is,min_occupancy_prob_);
     vsl_b_read(is,max_occupancy_prob_);
     break;
@@ -107,7 +109,8 @@ void bvxm_world_params::b_read(vsl_b_istream & is)
       vsl_b_read(is,corner_);
       vsl_b_read(is,num_voxels_);
       vsl_b_read(is,voxel_length_);
-      lvcs_->b_read(is);
+	  lvcs_ = new vpgl_lvcs();
+      vsl_b_read(is, *lvcs_);
       vsl_b_read(is,min_occupancy_prob_);
       vsl_b_read(is,max_occupancy_prob_);
       vsl_b_read(is, base_x_);

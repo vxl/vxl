@@ -94,7 +94,7 @@ static void test_tangent_update()
   bvxm_world_params_sptr params = new bvxm_world_params;
 
   // needs an lvcs, TO DO, instantiate lvcs with right parameters
-  bgeo_lvcs_sptr lvcs = new bgeo_lvcs();
+  vpgl_lvcs_sptr lvcs = new vpgl_lvcs();
   params->set_params(model_dir,grid_corner,grid_size,vox_len,lvcs);
 
   world->set_params(params);

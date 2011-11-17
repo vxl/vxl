@@ -37,7 +37,7 @@ static void test_bvxm_create_local_rpc_process()
 
   vgl_vector_3d<unsigned int> num_voxels(20,20,5);
   float voxel_length = 1.0f;
-  bgeo_lvcs_sptr lvcs = new bgeo_lvcs(33.3358982058333, 44.38220165, 74.5333333333333);
+  vpgl_lvcs_sptr lvcs = new vpgl_lvcs(33.3358982058333, 44.38220165, 74.5333333333333);
   bvxm_world_params_sptr voxel_world_params = new bvxm_world_params();
   // create a test directory for intermediate files
   vul_file::make_directory("./local_rpc_test");

@@ -21,7 +21,7 @@
 #include "grid/bvxm_voxel_slab.h"
 #include "bvxm_world_params.h"
 
-#include <vpgl/vpgl_camera_sptr.h>
+#include <vpgl/vpgl_camera_double_sptr.h>
 #include <vpgl/vpgl_rational_camera.h>
 #include <vpgl/vpgl_perspective_camera.h>
 #include <vgl/algo/vgl_h_matrix_2d.h>
@@ -140,7 +140,7 @@ class bvxm_util
 
   static vpgl_camera_double_sptr downsample_camera(vpgl_camera_double_sptr camera,unsigned int scale);
 
-  static int convert_uncertainty_from_meters_to_pixels(float uncertainty, bgeo_lvcs_sptr lvcs, vpgl_camera_double_sptr camera);
+  static int convert_uncertainty_from_meters_to_pixels(float uncertainty, vpgl_lvcs_sptr lvcs, vpgl_camera_double_sptr camera);
 
   static vpgl_camera_double_sptr downsample_persp_camera(vpgl_camera_double_sptr camera,unsigned int scale);
 

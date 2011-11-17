@@ -64,7 +64,7 @@ bool bvxm_create_local_rpc_process(bprb_func_process& pro)
   }
 
   // create the local rational camera using the voxel model and the rational camera
-  bgeo_lvcs_sptr lvcs = vox_world->get_params()->lvcs();
+  vpgl_lvcs_sptr lvcs = vox_world->get_params()->lvcs();
   vpgl_local_rational_camera<double> cam_out(*lvcs,*cam_inp);
 
   //Set and Store outputs

@@ -50,7 +50,7 @@ namespace bvxm_roi_init_process_globals
 
   //: projects the box on the image by taking the union of all the projected corners
   vgl_box_2d<double>* project_box(vpgl_rational_camera<double>* cam,
-                                  bgeo_lvcs_sptr lvcs,
+                                  vpgl_lvcs_sptr lvcs,
                                   vgl_box_3d<double> box,
                                   float r);
 }

@@ -27,8 +27,8 @@
 #include <vsl/vsl_binary_io.h>
 #include <vgl/io/vgl_io_vector_3d.h>
 #include <vgl/io/vgl_io_point_3d.h>
-#include <vpgl/bgeo/bgeo_lvcs.h>
-#include <vpgl/bgeo/bgeo_lvcs_sptr.h>
+#include <vpgl/vpgl_lvcs.h>
+#include <vpgl/vpgl_lvcs_sptr.h>
 
 class bvxm_world_params : public vbl_ref_count
 {
@@ -44,7 +44,7 @@ class bvxm_world_params : public vbl_ref_count
     const vgl_point_3d<float>& corner,
     const vgl_vector_3d<unsigned int>& num_voxels,
     float voxel_length,
-    bgeo_lvcs_sptr lvcs = bgeo_lvcs_sptr(0),
+    vpgl_lvcs_sptr lvcs = vpgl_lvcs_sptr(0),
     float min_ocp_prob = 0.001f,
     float max_ocp_prob = 0.999f,
     unsigned max_scale = 1,
@@ -91,7 +91,7 @@ class bvxm_world_params : public vbl_ref_count
 
   inline float min_occupancy_prob() const { return min_occupancy_prob_; }
   inline float max_occupancy_prob() const { return max_occupancy_prob_; }
-  inline bgeo_lvcs_sptr lvcs() { return lvcs_; }
+  inline vpgl_lvcs_sptr lvcs() { return lvcs_; }
 
   inline float edges_n_normal() const { return edges_n_normal_; }
   inline void increment_edges_n_normal(float increment) { edges_n_normal_ += increment; }
@@ -117,7 +117,7 @@ class bvxm_world_params : public vbl_ref_count
   vgl_point_3d<float> rpc_origin_;
   vgl_vector_3d<unsigned int> num_voxels_;
   float voxel_length_;
-  bgeo_lvcs_sptr lvcs_;
+  vpgl_lvcs_sptr lvcs_;
   float min_occupancy_prob_;
   float max_occupancy_prob_;
   float edges_n_normal_;

@@ -75,7 +75,7 @@ bool bvxm_fill_mesh_normals_grid_process(bprb_func_process& pro)
   bvxm_voxel_grid_base_sptr grid = pro.get_input<bvxm_voxel_grid_base_sptr>(i++);
 
   // read lvcs input
-  bgeo_lvcs lvcs;
+  vpgl_lvcs lvcs;
   vcl_string lvcs_path = pro.get_input<vcl_string>(i++);
   vcl_ifstream s(lvcs_path.data());
   lvcs.read(s);

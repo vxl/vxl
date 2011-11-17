@@ -235,7 +235,7 @@ void bvxm_util::logical_and(bvxm_voxel_slab<bool> const& s1, bvxm_voxel_slab<boo
   return;
 }
 
-int bvxm_util::convert_uncertainty_from_meters_to_pixels(float uncertainty, bgeo_lvcs_sptr lvcs, vpgl_camera_double_sptr camera)
+int bvxm_util::convert_uncertainty_from_meters_to_pixels(float uncertainty, vpgl_lvcs_sptr lvcs, vpgl_camera_double_sptr camera)
 {
   // estimate the offset search size in the image space
   vgl_box_3d<double> box_uncertainty(-uncertainty,-uncertainty,-uncertainty,uncertainty,uncertainty,uncertainty);
@@ -251,7 +251,7 @@ int bvxm_util::convert_uncertainty_from_meters_to_pixels(float uncertainty, bgeo
     else if (camera->type_name()=="vpgl_rational_camera") {
       double lon, lat, gz;
       lvcs->local_to_global(curr_corner.x(), curr_corner.y(), curr_corner.z(),
-                            bgeo_lvcs::wgs84, lon, lat, gz, bgeo_lvcs::DEG, bgeo_lvcs::METERS);
+                            vpgl_lvcs::wgs84, lon, lat, gz, vpgl_lvcs::DEG, vpgl_lvcs::METERS);
       curr_pt.set(lon, lat, gz);
     }
     else // dummy initialisation, to avoid compiler warning

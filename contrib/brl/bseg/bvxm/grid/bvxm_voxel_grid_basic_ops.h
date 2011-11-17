@@ -24,7 +24,7 @@
 #include <imesh/imesh_mesh.h>
 #include <vgl/vgl_box_3d.h>
 #include <vgl/algo/vgl_intersection.h>
-#include <vpgl/bgeo/bgeo_lvcs.h>
+#include <vpgl/vpgl_lvcs.h>
 #include <vil3d/vil3d_image_view.h>
 #include <vil3d/algo/vil3d_distance_transform.h>
 #include <vnl/vnl_vector_fixed.h>
@@ -220,7 +220,7 @@ bool bvxm_load_mesh_into_grid(bvxm_voxel_grid<T>* grid,imesh_mesh& mesh,T val)
 }
 
 //: function to convert a mesh in global coordinates to a mesh in local coordinates
-void covert_global_mesh_to_local(imesh_mesh & inmesh,bgeo_lvcs& lvcs);
+void covert_global_mesh_to_local(imesh_mesh & inmesh,vpgl_lvcs& lvcs);
 
 bool bvxm_load_mesh_normals_into_grid(bvxm_voxel_grid<vnl_vector_fixed<float,3> >* grid,imesh_mesh& mesh);
 

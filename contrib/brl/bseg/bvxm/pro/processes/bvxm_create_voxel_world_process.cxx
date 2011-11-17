@@ -68,7 +68,7 @@ bool bvxm_create_voxel_world_process(bprb_func_process& pro)
   vcl_string lvcs_path;
   pro.parameters()->get_value(param_lvcs_, lvcs_path);
 
-  bgeo_lvcs_sptr lvcs = new bgeo_lvcs();
+  vpgl_lvcs_sptr lvcs = new vpgl_lvcs();
   if (lvcs_path != "") {
     vcl_ifstream is(lvcs_path.c_str());
     if (!is)

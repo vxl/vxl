@@ -73,7 +73,7 @@ bool bvxm_detect_scale_process(bprb_func_process& pro)
   if (image_diag == 0)
     return false;
 
-  bgeo_lvcs_sptr lvcs=main_world->get_params()->lvcs();
+  vpgl_lvcs_sptr lvcs=main_world->get_params()->lvcs();
 
   vgl_point_3d<double> world_point=main_world->get_params()->world_box_local().centroid();
   vgl_plane_3d<double> world_plane(0,0,1,-world_point.z());
@@ -102,15 +102,15 @@ bool bvxm_detect_scale_process(bprb_func_process& pro)
   //  // convert upper left position to meters
   //  double xul, yul, zul;
   //  lvcs->global_to_local(wul.x(), wul.y(), wul.z(),
-  //                     bgeo_lvcs::wgs84,
+  //                     vpgl_lvcs::wgs84,
   //                     xul,yul,zul,
-  //                     bgeo_lvcs::DEG,bgeo_lvcs::METERS);
+  //                     vpgl_lvcs::DEG,vpgl_lvcs::METERS);
   //// convert lower right position to meters
   //double xlr, ylr, zlr;
   //lvcs->global_to_local(wlr.x(), wlr.y(), wlr.z(),
-  //                     bgeo_lvcs::wgs84,
+  //                     vpgl_lvcs::wgs84,
   //                     xlr,ylr,zlr,
-  //                     bgeo_lvcs::DEG,bgeo_lvcs::METERS);
+  //                     vpgl_lvcs::DEG,vpgl_lvcs::METERS);
 
   double world_diag = vcl_sqrt((wlr.x()-wul.x())*(wlr.x()-wul.x())+(wlr.y()-wul.y())*(wlr.y()-wul.y()));
   //shouldn't happen

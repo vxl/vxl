@@ -22,7 +22,7 @@
 #include <vil/vil_pixel_format.h>
 #include <vil/file_formats/vil_tiff.h>
 
-#include <vpgl/bgeo/bgeo_utm.h>
+#include <vpgl/vpgl_utm.h>
 #include <brip/brip_roi.h>
 
 //: set input and output types
@@ -84,7 +84,7 @@ bool bvxm_lidar_init_process(bprb_func_process& pro)
   // second return may be null, in that case only first return will be considered
   vil_image_resource_sptr second_ret = vil_load_image_resource(second.c_str());
 
-  bgeo_lvcs_sptr lvcs = world_params->lvcs();
+  vpgl_lvcs_sptr lvcs = world_params->lvcs();
   if (!lvcs) {
     vcl_cout << "bvxm_lidar_init_process -- LVCS is not set!\n";
     return false;
@@ -159,7 +159,7 @@ bool bvxm_lidar_init_process_globals::lidar_init( vil_image_resource_sptr lidar,
     }
 
     vcl_cout << *(camera->lvcs()) << vcl_endl;
-    camera->lvcs()->local_to_global(200,200,0,bgeo_lvcs::wgs84,lon,lat,elev);
+    camera->lvcs()->local_to_global(200,200,0,vpgl_lvcs::wgs84,lon,lat,elev);
     vcl_cout << "corner--> lon=" << lon << "  lat=" << lat << " gz=" << elev << vcl_endl;
     brip_roi broi(tiff_img->ni(), tiff_img->nj());
     vsol_box_2d_sptr bb = new vsol_box_2d();

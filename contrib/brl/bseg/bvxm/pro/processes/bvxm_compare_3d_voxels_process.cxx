@@ -52,7 +52,7 @@ bool bvxm_compare_3d_voxels_process(bprb_func_process& pro)
   vcl_string filename = pro.get_input<vcl_string>(i++);
 
   // for the ground truth
-  bgeo_lvcs_sptr lvcs=main_world->get_params()->lvcs();
+  vpgl_lvcs_sptr lvcs=main_world->get_params()->lvcs();
 
   typedef bvxm_voxel_traits<OCCUPANCY>::voxel_datatype ocp_datatype;
 

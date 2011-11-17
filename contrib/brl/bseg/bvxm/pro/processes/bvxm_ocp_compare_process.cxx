@@ -6,7 +6,7 @@
 #include <bprb/bprb_parameters.h>
 #include <vgl/vgl_vector_3d.h>
 #include <vcl_string.h>
-#include <vpgl/bgeo/bgeo_lvcs_sptr.h>
+#include <vpgl/vpgl_lvcs_sptr.h>
 #include <bprb/bprb_process.h>
 #include <vpgl/vpgl_local_rational_camera.h>
 

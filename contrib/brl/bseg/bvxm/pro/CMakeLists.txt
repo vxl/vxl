@@ -81,7 +81,7 @@ IF(EXPAT_FOUND)
 
   ADD_LIBRARY(bvxm_pro ${bvxm_pro_sources})
 
-  TARGET_LINK_LIBRARIES(bvxm_pro bprb bvxm bvxm_io bvxm_grid bvxm_grid_io expatpp sdet vpgl vpgl_io vpgl_algo vpgl_file_formats vpgl_pro vsol vil_io vil_pro vgl_algo vnl_algo vnl_io vnl vil_algo vil vgl vul bgeo brdb vbl_io)
+  TARGET_LINK_LIBRARIES(bvxm_pro bprb bvxm bvxm_io bvxm_grid bvxm_grid_io expatpp sdet vpgl vpgl_io vpgl_algo vpgl_file_formats vpgl_pro vsol vil_io vil_pro vgl_algo vnl_algo vnl_io vnl vil_algo vil vgl vul brdb vbl_io)
 
   IF( BUILD_TESTING )
     SUBDIRS(tests)

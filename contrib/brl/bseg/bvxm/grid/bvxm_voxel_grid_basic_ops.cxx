@@ -8,13 +8,13 @@
 #include <vcl_list.h>
 
 //: function to convert a mesh in global coordinates to a mesh in local coordinates
-void covert_global_mesh_to_local(imesh_mesh & inmesh,bgeo_lvcs& lvcs)
+void covert_global_mesh_to_local(imesh_mesh & inmesh,vpgl_lvcs& lvcs)
 {
   imesh_vertex_array<3>& in_verts=inmesh.vertices<3>() ;
   for (unsigned i=0; i < in_verts.size(); ++i)
   {
     double lx, ly, lz;
-    lvcs.global_to_local(in_verts(i,0),in_verts(i,1),in_verts(i,2),bgeo_lvcs::wgs84,lx,ly,lz);
+    lvcs.global_to_local(in_verts(i,0),in_verts(i,1),in_verts(i,2),vpgl_lvcs::wgs84,lx,ly,lz);
     imesh_vertex<3> v(lx,ly,lz);
     in_verts[i]=v;
   }
