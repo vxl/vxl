@@ -31,7 +31,7 @@ void bsta_fit_gaussian(vcl_vector<T> const& samples, vcl_vector<T> const& sample
     return;
   }
 
- const unsigned int nobs = samples.size();
+ const unsigned int nobs = (unsigned int)samples.size();
   T weight_sum = 0;
 
   // compute mean
@@ -242,7 +242,7 @@ void bsta_fit_gaussian(vcl_vector<typename gauss_type::vector_type> const& sampl
                        gauss_type& gaussian, typename gauss_type::covar_type min_covar)
 {
   // sanity checks
-  const unsigned int nobs = samples.size();
+  const unsigned int nobs = (unsigned int)samples.size();
   if (nobs != sample_probs.size()) {
     vcl_cerr << "bsta_fit_gaussian : error - samples.size == " << samples.size()
              << ", sample_probs.size == " << sample_probs.size() << vcl_endl;
