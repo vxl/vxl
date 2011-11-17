@@ -3,7 +3,7 @@
 #include <vul/vul_timer.h>
 #include <boxm2/ocl/boxm2_ocl_util.h>
 #include <boxm2/ocl/algo/boxm2_ocl_camera_converter.h>
-#include <vpgl/algo/vpgl_camera_bounds.h>
+#include <vsph/vsph_camera_bounds.h>
 #include <vgl/vgl_ray_3d.h>
 #include <boct/boct_bit_tree2.h>
 
@@ -154,7 +154,7 @@ float render_cone_expected_image( boxm2_scene_sptr & scene,
         vgl_ray_3d<double> ray_ij; //= cam->ray(i,j);
         double cone_half_angle, solid_angle;
         vpgl_perspective_camera<double>* pcam = (vpgl_perspective_camera<double>*) cam.ptr();
-        vpgl_camera_bounds::pixel_solid_angle(*pcam, i, j, ray_ij, cone_half_angle, solid_angle);
+        vsph_camera_bounds::pixel_solid_angle(*pcam, i, j, ray_ij, cone_half_angle, solid_angle);
         ray_directions[4*cnt+3] = (cl_float) cone_half_angle;
         cnt++;
       }
