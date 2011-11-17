@@ -21,7 +21,7 @@
 #include <bocl/bocl_device.h>
 #include <bocl/bocl_kernel.h>
 
-#include <boct/boct_bit_tree2.h>
+#include <boct/boct_bit_tree.h>
 #define SEGLEN_FACTOR 93206.7555f   //Hack representation of int32.maxvalue/(ni*nj*block_length)
 
 namespace boxm2_ocl_query_hist_data_process_globals
@@ -90,7 +90,7 @@ bool boxm2_ocl_query_hist_data_process(bprb_func_process& pro)
 
 
     vnl_vector_fixed<unsigned char,16> treebits=blk->trees()(index_x,index_y,index_z);
-    boct_bit_tree2 tree(treebits.data_block(),mdata.max_level_);
+    boct_bit_tree tree(treebits.data_block(),mdata.max_level_);
     int bit_index=tree.traverse(vgl_point_3d<double>(local_x,local_y,local_z));
 
     //int buff_index=(int)treebits[12]*256+(int)treebits[13];

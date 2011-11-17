@@ -6,7 +6,7 @@
 #include <testlib/testlib_root_dir.h>
 #include <vcl_where_root_dir.h>
 
-#include <boct/boct_bit_tree2.h>
+#include <boct/boct_bit_tree.h>
 #include <bocl/bocl_manager.h>
 #include <bocl/bocl_buffer_mgr.h>
 #include <bocl/bocl_kernel.h>
@@ -47,7 +47,7 @@ void print_probs(boxm2_block* blk, float* alphas, boxm2_block_metadata data, int
     for (int i=0; i<3; ++i) {
       float prob=0.0f;
       uchar16 tree = blk->trees()(i,j,0);
-      boct_bit_tree2 bit_tree( (unsigned char*) tree.data_block(), 3 );
+      boct_bit_tree bit_tree( (unsigned char*) tree.data_block(), 3 );
       int idx = bit_tree.get_data_ptr();
 
       if ( bit_tree.is_leaf(0) ) {
@@ -87,7 +87,7 @@ void print_alphas(boxm2_block* blk, float* alphas, boxm2_block_metadata /*data*/
 
       float prob=0.0f;
       uchar16 tree = blk->trees()(i,j,0);
-      boct_bit_tree2 bit_tree( (unsigned char*) tree.data_block(), 3 );
+      boct_bit_tree bit_tree( (unsigned char*) tree.data_block(), 3 );
       int idx = bit_tree.get_data_ptr();
       if ( bit_tree.is_leaf(0) ) {
         prob = alphas[idx];
@@ -142,7 +142,7 @@ void test_inner_cluster(boxm2_block* blk,
   for (int i=0; i<3; ++i) {
     for (int j=0; j<3; ++j) {
       uchar16 tree = blk->trees()(i,j,0);
-      boct_bit_tree2 bit_tree( (unsigned char*) tree.data_block(), 3 );
+      boct_bit_tree bit_tree( (unsigned char*) tree.data_block(), 3 );
 
       //make middle one complex
       if (i==1 && j==1) {
@@ -201,9 +201,9 @@ void test_inner_cluster(boxm2_block* blk,
   lookup->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
 
   //center buffers
-  bocl_mem_sptr centerX = new bocl_mem(device->context(), boct_bit_tree2::centerX, sizeof(cl_float)*585, "centersX lookup buffer");
-  bocl_mem_sptr centerY = new bocl_mem(device->context(), boct_bit_tree2::centerY, sizeof(cl_float)*585, "centersY lookup buffer");
-  bocl_mem_sptr centerZ = new bocl_mem(device->context(), boct_bit_tree2::centerZ, sizeof(cl_float)*585, "centersZ lookup buffer");
+  bocl_mem_sptr centerX = new bocl_mem(device->context(), boct_bit_tree::centerX, sizeof(cl_float)*585, "centersX lookup buffer");
+  bocl_mem_sptr centerY = new bocl_mem(device->context(), boct_bit_tree::centerY, sizeof(cl_float)*585, "centersY lookup buffer");
+  bocl_mem_sptr centerZ = new bocl_mem(device->context(), boct_bit_tree::centerZ, sizeof(cl_float)*585, "centersZ lookup buffer");
   centerX->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
   centerY->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
   centerZ->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
@@ -277,7 +277,7 @@ void test_outer_cluster(boxm2_block* blk,
   for (int i=0; i<3; ++i) {
     for (int j=0; j<3; ++j) {
       uchar16 tree = blk->trees()(i,j,0);
-      boct_bit_tree2 bit_tree( (unsigned char*) tree.data_block(), 3 );
+      boct_bit_tree bit_tree( (unsigned char*) tree.data_block(), 3 );
 
       //make middle one simple
       if (i==1 && j==1) {
@@ -333,9 +333,9 @@ void test_outer_cluster(boxm2_block* blk,
   lookup->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
 
   //center buffers
-  bocl_mem_sptr centerX = new bocl_mem(device->context(), boct_bit_tree2::centerX, sizeof(cl_float)*585, "centersX lookup buffer");
-  bocl_mem_sptr centerY = new bocl_mem(device->context(), boct_bit_tree2::centerY, sizeof(cl_float)*585, "centersY lookup buffer");
-  bocl_mem_sptr centerZ = new bocl_mem(device->context(), boct_bit_tree2::centerZ, sizeof(cl_float)*585, "centersZ lookup buffer");
+  bocl_mem_sptr centerX = new bocl_mem(device->context(), boct_bit_tree::centerX, sizeof(cl_float)*585, "centersX lookup buffer");
+  bocl_mem_sptr centerY = new bocl_mem(device->context(), boct_bit_tree::centerY, sizeof(cl_float)*585, "centersY lookup buffer");
+  bocl_mem_sptr centerZ = new bocl_mem(device->context(), boct_bit_tree::centerZ, sizeof(cl_float)*585, "centersZ lookup buffer");
   centerX->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
   centerY->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
   centerZ->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);

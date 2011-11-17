@@ -18,7 +18,7 @@
 
 //directory utility
 #include <vul/vul_timer.h>
-#include <boct/boct_bit_tree2.h>
+#include <boct/boct_bit_tree.h>
 
 void boxm2_ocl_filter_process_globals::compile_filter_kernel(bocl_device_sptr device,bocl_kernel * refine_data_kernel)
 {
@@ -97,9 +97,9 @@ bool boxm2_ocl_filter_process(bprb_func_process& pro)
     lookup->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
 
     //center buffers
-    bocl_mem_sptr centerX = new bocl_mem(device->context(), boct_bit_tree2::centerX, sizeof(cl_float)*585, "centersX lookup buffer");
-    bocl_mem_sptr centerY = new bocl_mem(device->context(), boct_bit_tree2::centerY, sizeof(cl_float)*585, "centersY lookup buffer");
-    bocl_mem_sptr centerZ = new bocl_mem(device->context(), boct_bit_tree2::centerZ, sizeof(cl_float)*585, "centersZ lookup buffer");
+    bocl_mem_sptr centerX = new bocl_mem(device->context(), boct_bit_tree::centerX, sizeof(cl_float)*585, "centersX lookup buffer");
+    bocl_mem_sptr centerY = new bocl_mem(device->context(), boct_bit_tree::centerY, sizeof(cl_float)*585, "centersY lookup buffer");
+    bocl_mem_sptr centerZ = new bocl_mem(device->context(), boct_bit_tree::centerZ, sizeof(cl_float)*585, "centersZ lookup buffer");
     centerX->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
     centerY->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
     centerZ->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
