@@ -4,7 +4,7 @@
 //#include <bpgl/algo/bpgl_backproject.h>
 //#include <bpgl/algo/bpgl_bundle_adjust.h>
 //#include <bpgl/algo/bpgl_bundle_adjust_lsqr.h>
-//#include <bpgl/algo/bpgl_bundle_rolling_shutter_adjust.h>
+#include <bpgl/algo/bpgl_bundle_rolling_shutter_adjust.h>
 //#include <bpgl/algo/bpgl_camera_bounds.h>
 //#include <bpgl/algo/bpgl_camera_compute.h>
 #include <bpgl/algo/bpgl_camera_from_box.h>
@@ -30,5 +30,6 @@
 //#include <bpgl/algo/bpgl_ray_intersect.h>
 //#include <bpgl/algo/bpgl_triangulate_points.h>
 #include <bpgl/algo/bpgl_vsol_lens_warp.h>
+#include <bpgl/algo/bpgl_project.h>
 
 int main() { return 0; }
