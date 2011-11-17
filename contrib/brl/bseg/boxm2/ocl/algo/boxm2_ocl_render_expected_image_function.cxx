@@ -5,7 +5,7 @@
 #include <boxm2/ocl/algo/boxm2_ocl_camera_converter.h>
 #include <vsph/vsph_camera_bounds.h>
 #include <vgl/vgl_ray_3d.h>
-#include <boct/boct_bit_tree2.h>
+#include <boct/boct_bit_tree.h>
 
 float render_expected_image(  boxm2_scene_sptr & scene,
                               bocl_device_sptr & device,
@@ -182,9 +182,9 @@ float render_cone_expected_image( boxm2_scene_sptr & scene,
     lookup->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
 
     //center buffer
-    bocl_mem_sptr centerX = new bocl_mem(device->context(), boct_bit_tree2::centerX, sizeof(cl_float)*585, "centersX lookup buffer");
-    bocl_mem_sptr centerY = new bocl_mem(device->context(), boct_bit_tree2::centerY, sizeof(cl_float)*585, "centersY lookup buffer");
-    bocl_mem_sptr centerZ = new bocl_mem(device->context(), boct_bit_tree2::centerZ, sizeof(cl_float)*585, "centersZ lookup buffer");
+    bocl_mem_sptr centerX = new bocl_mem(device->context(), boct_bit_tree::centerX, sizeof(cl_float)*585, "centersX lookup buffer");
+    bocl_mem_sptr centerY = new bocl_mem(device->context(), boct_bit_tree::centerY, sizeof(cl_float)*585, "centersY lookup buffer");
+    bocl_mem_sptr centerZ = new bocl_mem(device->context(), boct_bit_tree::centerZ, sizeof(cl_float)*585, "centersZ lookup buffer");
     centerX->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
     centerY->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
     centerZ->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
