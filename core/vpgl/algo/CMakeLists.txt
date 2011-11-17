@@ -7,6 +7,7 @@ SET( vpgl_algo_sources
   vpgl_project.h                   vpgl_project.cxx
   vpgl_camera_compute.h            vpgl_camera_compute.cxx
   vpgl_camera_convert.h             vpgl_camera_convert.cxx
+  vpgl_camera_homographies.h        vpgl_camera_homographies.cxx
   vpgl_fm_compute_7_point.h        vpgl_fm_compute_7_point.cxx
   vpgl_fm_compute_8_point.h        vpgl_fm_compute_8_point.cxx
   vpgl_fm_compute_2_point.h        vpgl_fm_compute_2_point.cxx
