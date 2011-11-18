@@ -786,8 +786,22 @@ convert( vpgl_local_rational_camera<double> const& rat_cam,
   double zoff = rat_cam.offset(vpgl_rational_camera<double>::Z_INDX);
   double zscl = rat_cam.scale(vpgl_rational_camera<double>::Z_INDX);
   // construct high and low planes
-  vgl_plane_3d<double> high(0.0, 0.0, 1.0, -(zoff+zscl));
-  vgl_plane_3d<double> low(0.0, 0.0, 1.0, -(zoff-zscl));
+  // NOTE: z_scale seems to usually be much larger than actual dimensions of scene, which
+  //       sometimes causes trouble for vpgl_backproj_plane, which causes the conversion to fail.
+  //       Using half scale value for now, but maybe we should consider taking "top" and "bottom"
+  //       z values as user-specified inputs.  -dec 15 Nov 2011
+  double el_low = zoff-zscl/2;
+  double el_high = zoff+zscl/2;
+  double lon = rat_cam.offset(vpgl_rational_camera<double>::X_INDX);
+  double lat = rat_cam.offset(vpgl_rational_camera<double>::Y_INDX);
+  double x,y, z_low, z_high;
+  // convert high and low elevations to local z values
+  rat_cam.lvcs().global_to_local(lon,lat,el_low,vpgl_lvcs::wgs84,x,y,z_low,vpgl_lvcs::DEG);
+  rat_cam.lvcs().global_to_local(lon,lat,el_high,vpgl_lvcs::wgs84,x,y,z_high,vpgl_lvcs::DEG);
+    
+  vgl_plane_3d<double> high(0.0, 0.0, 1.0, -z_high);
+  vgl_plane_3d<double> low(0.0, 0.0, 1.0, -z_low);
+
   // initial guess for backprojection to planes
   vgl_point_3d<double> org(0.0, 0.0, zoff+zscl), endpt(0.0, 0.0, zoff-zscl);
 
