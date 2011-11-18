@@ -199,7 +199,7 @@ void vpgl_geo_camera::translate(double tx, double ty, double z)
   }
 }
 
-void vpgl_geo_camera::img_to_wgs(const unsigned i, const unsigned j, const unsigned z,
+void vpgl_geo_camera::img_to_wgs(const double i, const double j, const double z,
                                  double& lon, double& lat, double& elev)
 {
   vnl_vector<double> v(4), res(4);

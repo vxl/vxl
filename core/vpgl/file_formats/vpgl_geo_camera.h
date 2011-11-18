@@ -91,7 +91,7 @@ class vpgl_geo_camera : public vpgl_camera<double>
   friend vcl_istream&  operator>>(vcl_istream& s, vpgl_geo_camera& p);
 
   //: returns the corresponding geographical coordinates for a given pixel position (i,j)
-  void img_to_wgs(const unsigned i, const unsigned j, const unsigned z,
+  void img_to_wgs(const double i, const double j, const double z,
                   double& lon, double& lat, double& elev);
 
 #if 0
