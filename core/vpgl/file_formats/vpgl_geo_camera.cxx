@@ -12,6 +12,10 @@
 #include <vpgl/vpgl_lvcs.h>
 #include <vpgl/vpgl_utm.h>
 
+#include <vil/file_formats/vil_geotiff_header.h>
+#include <vil/file_formats/vil_tiff.h>
+#include <vil/file_formats/vil_nitf2_image.h>
+
 vpgl_geo_camera::vpgl_geo_camera()
 {
   trans_matrix_.set_size(4,4);
@@ -30,17 +34,24 @@ vpgl_geo_camera::vpgl_geo_camera(vpgl_geo_camera const& rhs)
   this->scale_tag_ = rhs.scale_tag_;
 }
 
-bool vpgl_geo_camera::init_geo_camera(vil_tiff_image* const& gtif_img,
+bool vpgl_geo_camera::init_geo_camera(vil_image_resource_sptr const geotiff_img,
                                       vpgl_lvcs_sptr lvcs,
                                       vpgl_geo_camera*& camera)
 {
+  // check if the image is tiff
+  vil_tiff_image* geotiff_tiff = dynamic_cast<vil_tiff_image*> (geotiff_img.ptr());
+  if (!geotiff_tiff) {
+      vcl_cerr << "vpgl_geo_camera::init_geo_camera : Error casting vil_image_resource to a tiff image." << vcl_endl;
+      return false;
+  }
+  
   // check if the tiff file is geotiff
-  if (!gtif_img->is_GEOTIFF()) {
-    vcl_cout << "vpgl_geo_camera::init_geo_camera -- The image should be a GEOTIFF!\n";
+  if (!geotiff_tiff->is_GEOTIFF()) {
+    vcl_cerr << "vpgl_geo_camera::init_geo_camera -- The image should be a GEOTIFF!\n";
     return false;
   }
 
-  vil_geotiff_header* gtif = gtif_img->get_geotiff_header();
+  vil_geotiff_header* gtif = geotiff_tiff->get_geotiff_header();
   int utm_zone;
   vil_geotiff_header::GTIF_HEMISPH h;
 

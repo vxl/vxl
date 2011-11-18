@@ -21,8 +21,7 @@
 
 #include <vpgl/vpgl_camera.h>
 
-
-#include <vil/file_formats/vil_tiff.h>
+#include <vil/vil_image_resource_sptr.h>
 
 class vpgl_geo_camera : public vpgl_camera<double>
 {
@@ -40,7 +39,7 @@ class vpgl_geo_camera : public vpgl_camera<double>
 
   vpgl_geo_camera(vpgl_camera<double> const& rhs);
 
-  static bool init_geo_camera(vil_tiff_image* const& geotiff_img,
+  static bool init_geo_camera(vil_image_resource_sptr const geotiff_img,
                               vpgl_lvcs_sptr lvcs,
                               vpgl_geo_camera*& camera);
 
