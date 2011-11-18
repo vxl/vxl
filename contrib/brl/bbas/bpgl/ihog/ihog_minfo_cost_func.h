@@ -1,4 +1,4 @@
-// This is gel/mrc/vpgl/ihog/ihog_lsqr_cost_func.h
+// This is brl/bbas/bpgl/ihog/ihog_minfo_cost_func.h
 #ifndef ihog_minfo_cost_func_h_
 #define ihog_minfo_cost_func_h_
 //:
@@ -9,11 +9,10 @@
 //
 // \verbatim
 //  Modifications
-//   
+//  <none yet>
 // \endverbatim
 
 #include <vnl/vnl_vector.h>
-//#include <vnl/vnl_least_squares_function.h>
 #include <vnl/vnl_cost_function.h>
 #include <vil/vil_image_view.h>
 #include <ihog/ihog_world_roi.h>
@@ -21,7 +20,6 @@
 #include <ihog/ihog_transform_2d.h>
 
 //: A least squares cost function for registering video frames by minimizing square difference in intensities
-//class ihog_minfo_cost_func : public vnl_least_squares_function
 class ihog_minfo_cost_func : public vnl_cost_function
 {
  public:

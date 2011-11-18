@@ -1,4 +1,4 @@
-// This is vpgl/ihog/ihog_minfo_cost_func.cxx
+// This is brl/bbas/bpgl/ihog/ihog_minfo_cost_func.cxx
 #include "ihog_minfo_cost_func.h"
 //:
 // \file
