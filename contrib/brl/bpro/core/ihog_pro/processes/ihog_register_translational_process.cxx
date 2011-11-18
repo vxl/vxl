@@ -61,15 +61,13 @@ bool ihog_register_translational_process(bprb_func_process& pro)
                      vgl_point_2d<double>(border,border));
   
   ihog_transform_2d init_xform;
-  // TODO can't find these functions in ihog
-  //init_xform.set_translation_only(0,0);
+  init_xform.set_translation_only(0,0);
   ihog_image<float> from_img(img0, init_xform);
   ihog_image<float> to_img(img1, ihog_transform_2d());
   ihog_image<float> mask_img(mask1, ihog_transform_2d());
   ihog_minimizer minimizer(from_img, to_img, mask_img, roi, false);
   
-  // TODO can't find these functions in ihog
-  //minimizer.minimize_exhaustive_minfo(radius, init_xform);
+  minimizer.minimize_exhaustive_minfo(radius, init_xform);
   double error = minimizer.get_end_error();
   vcl_cout << "end_error = " << error << '\n'
            << "lm generated homography:\n"
