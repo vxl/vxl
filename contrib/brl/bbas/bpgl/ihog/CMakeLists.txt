@@ -13,6 +13,7 @@ SET(ihog_sources
                               ihog_image.h
    ihog_utils.cxx             ihog_utils.h
    ihog_cost_func.cxx         ihog_cost_func.h
+   ihog_minfo_cost_func.cxx   ihog_minfo_cost_func.h
 )
 
 AUX_SOURCE_DIRECTORY(Templates ihog_sources)
