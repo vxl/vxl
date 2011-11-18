@@ -223,11 +223,11 @@ void vpgl_em_compute_5_point<T>::compute_constraint_polynomials(
 
     // Last term
     for (int i = 0; i < 9; ++i) {
-        constraints[i] = .5 * (constraints[i] +
+        constraints[i] = (constraints[i] +
             entry_polynomials[(i%3) + 6] *
                 (entry_polynomials[6] * entry_polynomials[3*(i/3) + 0]*2 +
                  entry_polynomials[7] * entry_polynomials[3*(i/3) + 1]*2 +
-                 entry_polynomials[8] * entry_polynomials[3*(i/3) + 2]*2));
+                 entry_polynomials[8] * entry_polynomials[3*(i/3) + 2]*2)) * .5;
     }
 
     // Now we are going to create a polynomial from the constraint det(E)= 0.
