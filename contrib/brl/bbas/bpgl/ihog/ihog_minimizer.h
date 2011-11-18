@@ -50,7 +50,13 @@ class ihog_minimizer
   //: Run the minimization
   void minimize(ihog_transform_2d& xform);
 
-  double get_end_error() {return end_error_;}
+  //: a sub-pixel minimization with an exhaustive initialization at each level of the pyramid
+  void minimize_exhaustive_minfo(int radius, ihog_transform_2d& xform);
+
+  //: Run the minimization using mutual information cost
+  void minimize_using_minfo(ihog_transform_2d& xform);
+
+  double get_end_error(){return end_error_;}
   //:debug purposes
   vil_pyramid_image_view<float>& from_pyr() {return from_pyramid_;}
   vil_pyramid_image_view<float>& to_pyr() {return to_pyramid_;}
@@ -69,7 +75,7 @@ class ihog_minimizer
   vcl_vector<ihog_world_roi> roi_pyramid_;
 
   //  static const unsigned min_level_size_ = 256;
-  static const unsigned min_level_size_ = 128;
+  static const unsigned min_level_size_ = 8;
   double end_error_;
   bool from_mask_; // true if mask is associated with from_pyramid_
   bool to_mask_; // true if mask is associated with to_pyramid_
