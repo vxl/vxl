@@ -93,6 +93,8 @@ class ihog_transform_2d : public vgl_h_matrix_2d<double>, public vbl_ref_count
                   const vgl_vector_2d<double> & u,
                   const vgl_vector_2d<double> & v);
 
+  void set_translation_only(double t_x, double t_y) { set_zoom_only(1,t_x,t_y); }
+
   //: Calculates inverse of this transformation
   ihog_transform_2d inverse() const;
 
