@@ -1,4 +1,4 @@
-// This is gel/mrc/vpgl/file_formats/vpgl_geo_camera.cxx
+// This is core/vpgl/file_formats/vpgl_geo_camera.cxx
 #include "vpgl_geo_camera.h"
 //:
 // \file
@@ -44,7 +44,7 @@ bool vpgl_geo_camera::init_geo_camera(vil_image_resource_sptr const geotiff_img,
       vcl_cerr << "vpgl_geo_camera::init_geo_camera : Error casting vil_image_resource to a tiff image." << vcl_endl;
       return false;
   }
-  
+
   // check if the tiff file is geotiff
   if (!geotiff_tiff->is_GEOTIFF()) {
     vcl_cerr << "vpgl_geo_camera::init_geo_camera -- The image should be a GEOTIFF!\n";
@@ -94,7 +94,7 @@ bool vpgl_geo_camera::init_geo_camera(vil_image_resource_sptr const geotiff_img,
     double* trans_matrix_values;
     double sx1, sy1, sz1;
     bool scale_tag=false;
-    if (gtif->gtif_trans_matrix(trans_matrix_values)){
+    if (gtif->gtif_trans_matrix(trans_matrix_values)) {
       vcl_cout << "Transfer matrix is given, using that...." << vcl_endl;
       trans_matrix.copy_in(trans_matrix_values);
       vcl_cout << "Warning LIDAR sample spacing different than 1 meter will not be handled correctly!\n";
@@ -280,7 +280,7 @@ bool vpgl_geo_camera::comp_trans_matrix(double sx1, double sy1, double sz1,
   //      |   0.0   0.0   0.0   1.0   |
   //      |-                         -|
   double sx = 1.0, sy = 1.0, sz = 1.0;
-  if (scale_tag){
+  if (scale_tag) {
     sx = sx1; sy = sy1; sz = sz1;
   }
   double Tx = X - I*sx;

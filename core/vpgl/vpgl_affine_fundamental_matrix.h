@@ -1,4 +1,4 @@
-// This is gel/mrc/vpgl/vpgl_affine_fundamental_matrix.h
+// This is core/vpgl/vpgl_affine_fundamental_matrix.h
 #ifndef vpgl_affine_fundamental_matrix_h_
 #define vpgl_affine_fundamental_matrix_h_
 //:

@@ -1,4 +1,4 @@
-// This is bbas/vpgl/icam/icam_depth_trans_pyramid.h
+// This is bbas/bpgl/icam/icam_depth_trans_pyramid.h
 #ifndef icam_depth_trans_pyramid_h_
 #define icam_depth_trans_pyramid_h_
 //:
@@ -65,17 +65,17 @@ class icam_depth_trans_pyramid
   void set_to_fl(double to_fl) {to_fl_ = to_fl;}
   void set_to_pu(double to_pu) {to_pu_ = to_pu;}
   void set_to_pv(double to_pv) {to_pv_ = to_pv;}
-  double to_fl(){return to_fl_;}
-  double to_pu(){return to_pu_;}
-  double to_pv(){return to_pv_;}
-  void set_rotation(vgl_rotation_3d<double> const& rot){rot_ = rot;}
-  vgl_rotation_3d<double>& rotation(){
+  double to_fl() {return to_fl_;}
+  double to_pu() {return to_pu_;}
+  double to_pv() {return to_pv_;}
+  void set_rotation(vgl_rotation_3d<double> const& rot) {rot_ = rot;}
+  vgl_rotation_3d<double>& rotation() {
     return rot_;}
-  void set_translation(vgl_vector_3d<double> const& trans){trans_ = trans;}
-  vgl_vector_3d<double>& translation(){return trans_;}
+  void set_translation(vgl_vector_3d<double> const& trans) {trans_ = trans;}
+  vgl_vector_3d<double>& translation() {return trans_;}
   icam_depth_transform depth_trans(unsigned level, bool smooth_map = false,
                                    double smooth_sigma = 1.0);
-  unsigned n_params(){return n_params_;}
+  unsigned n_params() {return n_params_;}
   void set_params(vnl_vector<double> const& params);
   vnl_vector<double> params();
   vil_image_view<double> depth(unsigned level)

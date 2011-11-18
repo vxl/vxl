@@ -1,4 +1,4 @@
-// This is gel/mrc/vpgl/vpgl_proj_camera.txx
+// This is core/vpgl/vpgl_proj_camera.txx
 #ifndef vpgl_proj_camera_txx_
 #define vpgl_proj_camera_txx_
 //:
@@ -125,7 +125,8 @@ vgl_line_segment_2d<T> vpgl_proj_camera<T>::project(
   vgl_line_segment_2d<T> image_line( point1_im, point2_im );
   return image_line;
 }
-  //: Project an infinite line in the world onto an infinite line in the image plane.
+
+//: Project an infinite line in the world onto an infinite line in the image plane.
 template <class T>
 vgl_line_2d<T> vpgl_proj_camera<T>::project( const vgl_infinite_line_3d<T>& world_line ) const
 {
@@ -136,6 +137,7 @@ vgl_line_2d<T> vpgl_proj_camera<T>::project( const vgl_infinite_line_3d<T>& worl
   vgl_line_2d<T> image_line( point1_im, point2_im );
   return image_line;
 }
+
 //------------------------------------
 template <class T>
 vgl_homg_line_3d_2_points<T> vpgl_proj_camera<T>::backproject(
@@ -151,6 +153,7 @@ vgl_homg_line_3d_2_points<T> vpgl_proj_camera<T>::backproject(
     return vgl_homg_line_3d_2_points<T>( camera_center(), wp );
   return vgl_homg_line_3d_2_points<T>( wp, camera_center() );
 }
+
   //: Find the 3d ray that goes through the camera center and the provided image point.
 template <class T>
 vgl_ray_3d<T> vpgl_proj_camera<T>::backproject_ray(const vgl_homg_point_2d<T>& image_point ) const
@@ -159,7 +162,7 @@ vgl_ray_3d<T> vpgl_proj_camera<T>::backproject_ray(const vgl_homg_point_2d<T>& i
     vnl_vector_fixed<T,3>( image_point.x(), image_point.y(), image_point.w() ).as_ref() );
   vgl_homg_point_3d<T> wp( vnl_wp[0], vnl_wp[1], vnl_wp[2], vnl_wp[3] );
   //in this case the world point defines a direction
-  if ( wp.ideal(.000001f) ){
+  if ( wp.ideal(.000001f) ) {
     vgl_vector_3d<T> dir(wp.x(), wp.y(), wp.z());
     return vgl_ray_3d<T>(this->camera_center(), dir);
   }
@@ -256,11 +259,12 @@ vcl_istream&  operator>>(vcl_istream& s,
 
   return s ;
 }
+
 template <class T>
 void vpgl_proj_camera<T>::save(vcl_string cam_path)
 {
   vcl_ofstream os(cam_path.c_str());
-  if(!os.is_open()){
+  if (!os.is_open()) {
     vcl_cout << "unable to open output stream in vpgl_proj_camera<T>::save(.)\n";
     return;
   }
@@ -278,7 +282,7 @@ vgl_h_matrix_3d<T> get_canonical_h( vpgl_proj_camera<T>& camera )
   vnl_vector<T> l = camera.svd()->solve( vnl_vector<T>(3,(T)0) );
 
   vnl_matrix_fixed<T,4,4> H;
-  for ( int i = 0; i < 4; i++ ){
+  for ( int i = 0; i < 4; i++ ) {
     for ( int j = 0; j < 3; j++ )
       H(i,j) = Pinv(i,j);
     H(i,3) = l(i);

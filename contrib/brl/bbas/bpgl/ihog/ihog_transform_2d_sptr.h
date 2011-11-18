@@ -1,4 +1,4 @@
-// This is vpgl/ihog_transform_2d_sptr.h
+// This is bbas/bpgl/ihog/ihog_transform_2d_sptr.h
 #ifndef ihog_transform_2d_sptr_h_
 #define ihog_transform_2d_sptr_h_
 //:

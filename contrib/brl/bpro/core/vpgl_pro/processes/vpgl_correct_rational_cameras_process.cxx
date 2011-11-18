@@ -1,4 +1,4 @@
-// This is brl/bpro/core/vpgl_pro/processes/vpgl_correct_rational_camera_process.cxx
+// This is brl/bpro/core/vpgl_pro/processes/vpgl_correct_rational_cameras_process.cxx
 #include <bprb/bprb_func_process.h>
 //:
 // \file
@@ -94,14 +94,15 @@ bool vpgl_correct_rational_cameras_process(bprb_func_process& pro)
         return false;
       }
       cams.push_back(*ratcam2);
-    } else {
+    }
+    else {
       cams_local.push_back(ratcam);
       vpgl_rational_camera<double> *ratcam2 = read_rational_camera<double>(cam_path);
       cams.push_back(*ratcam2);
     }
     vpgl_rational_camera<double> *ratcam3 = read_rational_camera<double>(orig_cam_path);
     cams_origs.push_back(*ratcam3);
-    
+
     out_cam_names.push_back(out_cam_name);
     out_cam_orig_names.push_back(out_cam_orig_name);
 
@@ -131,7 +132,8 @@ bool vpgl_correct_rational_cameras_process(bprb_func_process& pro)
       cams_local[i]->image_offset(u_off,v_off);
       cams_local[i]->set_image_offset(u_off + cam_trans[i].x(), v_off + cam_trans[i].y());
       cams_local[i]->save(out_cam_names[i]);
-    } else {
+    }
+    else {
       double u_off,v_off;
       cams[i].image_offset(u_off,v_off);
       cams[i].set_image_offset(u_off + cam_trans[i].x(), v_off + cam_trans[i].y());

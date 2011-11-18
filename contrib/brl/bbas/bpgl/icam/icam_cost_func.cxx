@@ -1,4 +1,4 @@
-// This is vpgl/icam/icam_cost_func.cxx
+// This is bbas/bpgl/icam/icam_cost_func.cxx
 #include "icam_cost_func.h"
 //:
 // \file

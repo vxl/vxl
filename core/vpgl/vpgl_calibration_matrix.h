@@ -1,4 +1,4 @@
-// This is gel/mrc/vpgl/vpgl_calibration_matrix.h
+// This is core/vpgl/vpgl_calibration_matrix.h
 #ifndef vpgl_calibration_matrix_h_
 #define vpgl_calibration_matrix_h_
 //:
@@ -32,7 +32,7 @@ class vpgl_calibration_matrix
   vpgl_calibration_matrix();
 
   //: Destructor
-  virtual ~vpgl_calibration_matrix(){}
+  virtual ~vpgl_calibration_matrix() {}
 
   //: Construct using all of the camera parameters.
   // Must satisfy the following requirements: x,y_scales must be > 0, focal_length must be not equal to 0.

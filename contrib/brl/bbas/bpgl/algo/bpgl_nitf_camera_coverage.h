@@ -1,4 +1,4 @@
-// This is gel/mrc/bpgl/algo/bpgl_nitf_camera_coverage.h
+// This is bbas/bpgl/algo/bpgl_nitf_camera_coverage.h
 #ifndef bpgl_nitf_camera_coverage_h_
 #define bpgl_nitf_camera_coverage_h_
 //:

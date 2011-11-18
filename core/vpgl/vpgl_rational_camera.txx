@@ -1,4 +1,4 @@
-// This is gel/mrc/vpgl/vpgl_rational_camera.txx
+// This is core/vpgl/vpgl_rational_camera.txx
 #ifndef vpgl_rational_camera_txx_
 #define vpgl_rational_camera_txx_
 //:
@@ -455,7 +455,7 @@ vpgl_rational_camera<T>* read_rational_camera(vcl_istream& istr)
   vcl_string input;
   char bulk[100];
 
-  while (!istr.eof()){
+  while (!istr.eof()) {
     istr >> input;
 
     if (input=="sampScale") {

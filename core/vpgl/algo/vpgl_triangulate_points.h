@@ -1,4 +1,4 @@
-// This is gel/mrc/vpgl/algo/vpgl_triangulate_points.h
+// This is core/vpgl/algo/vpgl_triangulate_points.h
 #ifndef VPGL_TRIANGULATE_POINTS_H
 #define VPGL_TRIANGULATE_POINTS_H
 //:

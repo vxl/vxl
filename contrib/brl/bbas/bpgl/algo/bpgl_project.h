@@ -1,4 +1,4 @@
-// This is gel/mrc/vpgl/algo/bpgl_project.h
+// This is brl/bbas/bpgl/algo/bpgl_project.h
 #ifndef bpgl_project_h_
 #define bpgl_project_h_
 //:
@@ -24,7 +24,7 @@ class bpgl_project
                                                    vgl_box_3d<double> const & box);
     static vgl_box_2d<double> project_bounding_box(vpgl_proj_camera<double>  cam,
                                                    vgl_box_3d<double> const & box);
- private: 
+ private:
   //: constructor private - static methods only
   bpgl_project();
 };

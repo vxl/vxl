@@ -1,4 +1,4 @@
-// This is gel/mrc/vpgl/vpgl_perspective_camera.txx
+// This is core/vpgl/vpgl_perspective_camera.txx
 #ifndef vpgl_perspective_camera_txx_
 #define vpgl_perspective_camera_txx_
 //:
@@ -272,7 +272,7 @@ bool vpgl_perspective_decomposition( const vnl_matrix_fixed<T,3,4>& camera_matri
   if ( det == (T)0 ) return false;
   // To insure a true rotation (determinant = 1) we must start with a positive
   // determinant H.  This is decomposed into K and R, each with positive determinant.
-  if ( det < (T)0 ){
+  if ( det < (T)0 ) {
     H *= (T)-1;
     t *= (T)-1;
   }
@@ -292,8 +292,8 @@ bool vpgl_perspective_decomposition( const vnl_matrix_fixed<T,3,4>& camera_matri
   vnl_matrix_fixed<T,3,3> q,r,Qf,Rf;
   q = QR.Q();
   r = QR.R();
-  for ( int i = 0; i < 3; i++ ){
-    for ( int j = 0; j < 3; j++ ){
+  for ( int i = 0; i < 3; i++ ) {
+    for ( int j = 0; j < 3; j++ ) {
       Qf(i,j) = q(2-j,2-i);
       Rf(i,j) = r(2-j,2-i);
     }
@@ -306,8 +306,8 @@ bool vpgl_perspective_decomposition( const vnl_matrix_fixed<T,3,4>& camera_matri
   int r2pos = Rf(2,2) > 0 ? 1 : -1;
   int diag[3] = { r0pos, r1pos, r2pos };
   vnl_matrix_fixed<T,3,3> K1,R1;
-  for ( int i = 0; i < 3; i++ ){
-    for ( int j = 0; j < 3; j++ ){
+  for ( int i = 0; i < 3; i++ ) {
+    for ( int j = 0; j < 3; j++ ) {
       K1(i,j) = diag[j]*Rf(i,j);
       R1(i,j) = diag[i]*Qf(i,j);
     }

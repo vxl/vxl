@@ -1,4 +1,4 @@
-// This is gel/mrc/vpgl/vpgl_affine_camera.txx
+// This is core/vpgl/vpgl_affine_camera.txx
 #ifndef vpgl_affine_camera_txx_
 #define vpgl_affine_camera_txx_
 //:
@@ -58,7 +58,7 @@ template <class T>
 vpgl_affine_camera<T>::
 vpgl_affine_camera(vgl_vector_3d<T> ray, vgl_vector_3d<T> up,
                    vgl_point_3d<T> stare_pt,
-                   T u0, T v0, T su, T sv){
+                   T u0, T v0, T su, T sv) {
 
   vgl_vector_3d<T> uvec = normalized(up), rvec = normalized(ray);
   vnl_matrix_fixed<T,3,3> R;
@@ -94,7 +94,7 @@ vpgl_affine_camera(vgl_vector_3d<T> ray, vgl_vector_3d<T> up,
 
   //form affine camera
   vnl_vector_fixed<T, 4> r0, r1;
-  for (unsigned i = 0; i<3; ++i){
+  for (unsigned i = 0; i<3; ++i) {
     r0[i] = su*R[0][i];
     r1[i] = sv*R[1][i];
   }
@@ -144,13 +144,14 @@ backproject( const vgl_homg_point_2d<T>& image_point ) const
   vgl_homg_line_3d_2_points<T> line =
     vpgl_proj_camera<T>::backproject(image_point);
   vgl_homg_point_3d<T> cph = vgl_closest_point_origin(line);
-  if(!is_ideal(cph, vgl_tolerance<T>::position)){
+  if (!is_ideal(cph, vgl_tolerance<T>::position)) {
   vgl_point_3d<T> cp(cph);
   vgl_point_3d<T> eye_pt = cp-(view_distance_*ray_dir_);
   vgl_homg_point_3d<T> pt_fin(eye_pt.x(), eye_pt.y(), eye_pt.z());
   vgl_homg_point_3d<T> pinf(ray_dir_.x(), ray_dir_.y(), ray_dir_.z(), (T)0);
   ret = vgl_homg_line_3d_2_points<T>(pt_fin, pinf);
-  }else
+  }
+  else
     vcl_cout << "Warning vpgl_affine_camera::backproject produced line "
              << " at infinity \n";
   return ret;

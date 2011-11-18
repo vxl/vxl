@@ -1,4 +1,4 @@
-//This is brl/bseg/bpgl/bpgl_camera_estimator.h
+//This is brl/bbas/bpgl/bpgl_camera_estimator.h
 #ifndef bpgl_camera_estimator_h_
 #define bpgl_camera_estimator_h_
 //:
@@ -75,10 +75,10 @@ class bpgl_camera_estimator
 template <class exp_edge_func>
 template <class T1,class T2,class TR>
 vil_image_view<TR> bpgl_camera_estimator<exp_edge_func>::estimate_offsets_fd(const vil_image_view<T1> &img1,
-                                                                              const vil_image_view<T2> &img2,
-                                                                              int &offset_x,
-                                                                              int &offset_y,
-                                                                              float &score)
+                                                                             const vil_image_view<T2> &img2,
+                                                                             int &offset_x,
+                                                                             int &offset_y,
+                                                                             float &score)
 {
   vil_image_view<float> img_1;
   brip_vil_float_ops::normalize_to_interval<T1,float>(img1,img_1,0.0f,1.0f);

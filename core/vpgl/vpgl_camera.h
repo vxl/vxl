@@ -1,4 +1,4 @@
-// This is gel/mrc/vpgl/vpgl_camera.h
+// This is core/vpgl/vpgl_camera.h
 #ifndef vpgl_camera_h_
 #define vpgl_camera_h_
 //:
@@ -41,7 +41,7 @@ class vpgl_camera : public vbl_ref_count
   virtual void project(const T x, const T y, const T z, T& u, T& v) const = 0;
 };
 
-// conveniance typedefs for smart pointers to abstract cameras
+// convenience typedefs for smart pointers to abstract cameras
 #include "vpgl_camera_double_sptr.h"
 #include "vpgl_camera_float_sptr.h"
 

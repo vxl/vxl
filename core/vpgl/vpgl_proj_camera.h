@@ -1,4 +1,4 @@
-// This is gel/mrc/vpgl/vpgl_proj_camera.h
+// This is core/vpgl/vpgl_proj_camera.h
 #ifndef vpgl_proj_camera_h_
 #define vpgl_proj_camera_h_
 //:
@@ -93,7 +93,7 @@ class vpgl_proj_camera : public vpgl_camera<T>
 
   //: Equality test
   inline bool operator==(vpgl_proj_camera<T> const &that) const
-  { return (this == &that) || (this->get_matrix()==that.get_matrix());}
+  { return this == &that || this->get_matrix()==that.get_matrix(); }
 
   // ----------------- Projections and Backprojections:------------------------
 

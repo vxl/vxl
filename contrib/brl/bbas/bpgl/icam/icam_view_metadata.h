@@ -1,4 +1,4 @@
-// This is bbas/vpgl/icam/icam_view_metadata.h
+// This is bbas/bpgl/icam/icam_view_metadata.h
 #ifndef icam_view_metadata_h_
 #define icam_view_metadata_h_
 //:
@@ -25,12 +25,12 @@ class icam_view_metadata
  public:
 
    //: default constructor
-   icam_view_metadata(){}
+   icam_view_metadata() {}
 
    icam_view_metadata(vcl_string const& exp_img,
                       vcl_string const& dt_path);
 
-   ~icam_view_metadata(){}
+   ~icam_view_metadata() {}
 
    virtual void register_image(vil_image_view<float> const& source_img,
                                vpgl_camera_double_sptr camera,

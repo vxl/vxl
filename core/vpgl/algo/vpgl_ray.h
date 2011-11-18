@@ -1,4 +1,4 @@
-// This is gel/mrc/vpgl/algo/vpgl_ray.h
+// This is core/vpgl/algo/vpgl_ray.h
 #ifndef vpgl_ray_h_
 #define vpgl_ray_h_
 //:
@@ -96,8 +96,8 @@ class vpgl_ray
                   vgl_ray_3d<double>& ray);
 
   static bool principal_ray(vpgl_perspective_camera<double> const& cam,
-                            vgl_ray_3d<double>& pray){
-    vpgl_proj_camera<double> const* procam = 
+                            vgl_ray_3d<double>& pray) {
+    vpgl_proj_camera<double> const* procam =
       static_cast<vpgl_proj_camera<double> const* >(&cam);
     return  vpgl_ray::principal_ray(*procam, pray);
   }
@@ -111,7 +111,7 @@ class vpgl_ray
   // ====== operations on rotation matrices with respect to camera rays ======
 
     //: angle(radians) between principal ray of one rotation and the principal ray of a second rotation
-  // Rotations \p r0 and \p r1 are expressed as vgl_rotation<T> 
+  // Rotations \p r0 and \p r1 are expressed as vgl_rotation<T>
   static double angle_between_rays(vgl_rotation_3d<double> const& r0, vgl_rotation_3d<double> const& r1);
 
   //: the rotation about the principal ray required to go from \p r0 to \p r1

@@ -1,4 +1,4 @@
-// This is gel/mrc/vpgl/vpgl_perspective_camera.h
+// This is core/vpgl/vpgl_perspective_camera.h
 #ifndef vpgl_perspective_camera_h_
 #define vpgl_perspective_camera_h_
 //:
@@ -74,7 +74,7 @@ class vpgl_perspective_camera : public vpgl_proj_camera<T>
   vpgl_perspective_camera( const vpgl_perspective_camera& cam );
 
   //: Destructor
-  virtual ~vpgl_perspective_camera(){}
+  virtual ~vpgl_perspective_camera() {}
 
   virtual vcl_string type_name() const { return "vpgl_perspective_camera"; }
 

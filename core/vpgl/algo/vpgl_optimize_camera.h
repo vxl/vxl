@@ -1,4 +1,4 @@
-// This is gel/mrc/vpgl/algo/vpgl_optimize_camera.h
+// This is core/vpgl/algo/vpgl_optimize_camera.h
 #ifndef vpgl_optimize_camera_h_
 #define vpgl_optimize_camera_h_
 //:

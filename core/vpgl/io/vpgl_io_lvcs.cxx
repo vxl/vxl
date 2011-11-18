@@ -1,8 +1,11 @@
 #include <vpgl/vpgl_lvcs.h>
 #include <vpgl/io/vpgl_io_lvcs.h>
+//:
+// \file
 #include <vnl/io/vnl_io_matrix_fixed.h>
 
-void vsl_b_write(vsl_b_ostream & os, vpgl_lvcs const& lvcs){
+void vsl_b_write(vsl_b_ostream & os, vpgl_lvcs const& lvcs)
+{
   if (!os) return;
   unsigned version = 1;
   vsl_b_write(os, version);
@@ -29,14 +32,15 @@ void vsl_b_write(vsl_b_ostream & os, vpgl_lvcs const& lvcs){
 }
 
 //: Binary load lvcs from stream.
-void vsl_b_read(vsl_b_istream & is, vpgl_lvcs &lvcs){
+void vsl_b_read(vsl_b_istream & is, vpgl_lvcs &lvcs)
+{
   if (!is) return;
   short ver;
   vsl_b_read(is, ver);
   switch (ver)
-    {
+  {
     case 1:
-		{
+    {
       unsigned cs_name;
       vsl_b_read(is, cs_name);
       vpgl_lvcs::cs_names name = static_cast<vpgl_lvcs::cs_names>(cs_name);
@@ -60,17 +64,18 @@ void vsl_b_read(vsl_b_istream & is, vpgl_lvcs &lvcs){
                      geo_angle_unit, localXYZUnit, lox, loy, theta);
       lvcs = temp;
       break;
-		}
+    }
     default:
       vcl_cerr << "I/O ERROR: vpgl_lvcs::b_read(vsl_b_istream&)\n"
                << "           Unknown version number "<< ver << '\n';
       is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
       return;
-    }
+  }
 }
 
 //: Print human readable summary of object to a stream
-void vsl_print_summary(vcl_ostream& os,const vpgl_lvcs & c){
+void vsl_print_summary(vcl_ostream& os,const vpgl_lvcs & c)
+{
   os << c << '\n';
 }
 

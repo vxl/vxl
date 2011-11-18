@@ -1,4 +1,4 @@
-// This is gel/mrc/vpgl/algo/vpgl_ray_intersect.h
+// This is core/vpgl/algo/vpgl_ray_intersect.h
 #ifndef vpgl_ray_intersect_h_
 #define vpgl_ray_intersect_h_
 //:
@@ -71,7 +71,7 @@ class vpgl_ray_intersect
  public:
 
   vpgl_ray_intersect(unsigned dim);
-  ~vpgl_ray_intersect(){}
+  ~vpgl_ray_intersect() {}
 
   //: Intersect the rays. return false if intersection fails
   // Note image points are not homogeneous because require

@@ -96,7 +96,7 @@ void bvxm_world_params::b_read(vsl_b_istream & is)
     vsl_b_read(is,corner_);
     vsl_b_read(is,num_voxels_);
     vsl_b_read(is,voxel_length_);
-	lvcs_ = new vpgl_lvcs();
+    lvcs_ = new vpgl_lvcs();
     vsl_b_read(is, *lvcs_);
     vsl_b_read(is,min_occupancy_prob_);
     vsl_b_read(is,max_occupancy_prob_);
@@ -109,7 +109,7 @@ void bvxm_world_params::b_read(vsl_b_istream & is)
       vsl_b_read(is,corner_);
       vsl_b_read(is,num_voxels_);
       vsl_b_read(is,voxel_length_);
-	  lvcs_ = new vpgl_lvcs();
+      lvcs_ = new vpgl_lvcs();
       vsl_b_read(is, *lvcs_);
       vsl_b_read(is,min_occupancy_prob_);
       vsl_b_read(is,max_occupancy_prob_);

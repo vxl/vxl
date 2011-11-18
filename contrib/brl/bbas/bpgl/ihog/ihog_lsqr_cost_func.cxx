@@ -1,4 +1,4 @@
-// This is vpgl/ihog_lsqr_cost_func.cxx
+// This is bbas/bpgl/ihog/ihog_lsqr_cost_func.cxx
 #include "ihog_lsqr_cost_func.h"
 //:
 // \file

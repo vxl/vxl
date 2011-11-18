@@ -1,4 +1,4 @@
-// This is bbas/vpgl/icam/icam_utils.h
+// This is bbas/bpgl/icam/icam_utils.h
 #ifndef icam_utils_h_
 #define icam_utils_h_
 //:

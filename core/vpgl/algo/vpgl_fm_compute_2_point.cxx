@@ -1,4 +1,4 @@
-// This is gel/mrc/vpgl/algo/vpgl_fm_compute_2_point.cxx
+// This is core/vpgl/algo/vpgl_fm_compute_2_point.cxx
 #ifndef vpgl_fm_compute_2_point_cxx_
 #define vpgl_fm_compute_2_point_cxx_
 //:
@@ -22,14 +22,14 @@ vpgl_fm_compute_2_point::compute(
                                  vpgl_fundamental_matrix<double>& fm )
 {
   // Check that there are at least 2 points.
-  if ( pr.size() < 2 || pl.size() < 2 ){
+  if ( pr.size() < 2 || pl.size() < 2 ) {
     vcl_cerr << "vpgl_fm_compute_2_point: Need at least 2 point pairs.\n"
              << "Number in each set: " << pr.size() << ", " << pl.size() << vcl_endl;
     return false;
   }
 
   // Check that the correspondence lists are the same size.
-  if ( pr.size() != pl.size() ){
+  if ( pr.size() != pl.size() ) {
     vcl_cerr << "vpgl_fm_compute_2_point: Need correspondence lists of same size.\n";
     return false;
   }
@@ -39,20 +39,20 @@ vpgl_fm_compute_2_point::compute(
   vgl_norm_trans_2d<double> prnt, plnt;
   double sl = 1.0, sr = 1.0, cxl=0.0, cyl = 0.0, cxr = 0.0, cyr = 0.0;
   bool isotropic = true;
-  if ( precondition_ ){
+  if ( precondition_ ) {
     prnt.compute_from_points(pr, isotropic);
     vnl_matrix_fixed<double, 3, 3> mr = prnt.get_matrix();
     sr = mr[0][0]; cxr = -mr[0][2]/sr; cyr = -mr[1][2]/sr;
     plnt.compute_from_points(pl, isotropic);
     vnl_matrix_fixed<double, 3, 3> ml = plnt.get_matrix();
     sl = ml[0][0]; cxl = -ml[0][2]/sl; cyl = -ml[1][2]/sl;
-    for ( unsigned int i = 0; i < pl.size(); i++ ){
+    for ( unsigned int i = 0; i < pl.size(); i++ ) {
       pr_norm.push_back( prnt*pr[i] );
       pl_norm.push_back( plnt*pl[i] );
     }
   }
   else{
-    for ( unsigned int i = 0; i < pl.size(); i++ ){
+    for ( unsigned int i = 0; i < pl.size(); i++ ) {
       pr_norm.push_back( pr[i] );
       pl_norm.push_back( pl[i] );
     }

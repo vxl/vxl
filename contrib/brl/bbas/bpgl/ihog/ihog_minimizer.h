@@ -1,4 +1,4 @@
-// This is vpgl/ihog_minimizer.h
+// This is bbas/bpgl/ihog/ihog_minimizer.h
 #ifndef ihog_minimizer_h_
 #define ihog_minimizer_h_
 //:
@@ -50,10 +50,10 @@ class ihog_minimizer
   //: Run the minimization
   void minimize(ihog_transform_2d& xform);
 
-  double get_end_error(){return end_error_;}
+  double get_end_error() {return end_error_;}
   //:debug purposes
-  vil_pyramid_image_view<float>& from_pyr(){return from_pyramid_;}
-  vil_pyramid_image_view<float>& to_pyr(){return to_pyramid_;}
+  vil_pyramid_image_view<float>& from_pyr() {return from_pyramid_;}
+  vil_pyramid_image_view<float>& to_pyr() {return to_pyramid_;}
 
  protected:
   vil_pyramid_image_view<float> from_pyramid_;

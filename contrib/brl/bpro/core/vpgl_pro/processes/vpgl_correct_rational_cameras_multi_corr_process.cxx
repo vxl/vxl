@@ -1,4 +1,4 @@
-// This is brl/bpro/core/vpgl_pro/processes/vpgl_correct_rational_camera_process.cxx
+// This is brl/bpro/core/vpgl_pro/processes/vpgl_correct_rational_cameras_multi_corr_process.cxx
 #include <bprb/bprb_func_process.h>
 //:
 // \file

@@ -1,4 +1,4 @@
-// This is gel/mrc/vpgl/algo/vpgl_fm_compute_7_point.cxx
+// This is core/vpgl/algo/vpgl_fm_compute_7_point.cxx
 #ifndef vpgl_fm_compute_7_point_cxx_
 #define vpgl_fm_compute_7_point_cxx_
 //:

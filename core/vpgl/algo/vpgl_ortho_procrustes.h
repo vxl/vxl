@@ -1,4 +1,4 @@
-// This is gel/mrc/vpgl/algo/vpgl_ortho_procrustes.h
+// This is core/vpgl/algo/vpgl_ortho_procrustes.h
 #ifndef vpgl_ortho_procrustes_h_
 #define vpgl_ortho_procrustes_h_
 //:
@@ -13,7 +13,7 @@
 
 //: Solve orthogonal Procrustes problem
 // Solve the orthogonal Procrustes problem by finding a rotation matrix, R,
-// scale factor, s, and translation vector, t, that minimizes the distance 
+// scale factor, s, and translation vector, t, that minimizes the distance
 // between two pointsets, X and Y, where Y is transformed to produce X.
 class vpgl_ortho_procrustes
 {

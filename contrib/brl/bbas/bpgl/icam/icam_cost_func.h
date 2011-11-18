@@ -1,4 +1,4 @@
-// This is bbas/vpgl/icam/icam_cost_func.h
+// This is bbas/bpgl/icam/icam_cost_func.h
 #ifndef icam_cost_func_h_
 #define icam_cost_func_h_
 //:

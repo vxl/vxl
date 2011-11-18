@@ -1,4 +1,4 @@
-// This is gel/mrc/vpgl/algo/vpgl_camera_compute.h
+// This is core/vpgl/algo/vpgl_camera_compute.h
 #ifndef vpgl_camera_compute_h_
 #define vpgl_camera_compute_h_
 //:
@@ -66,13 +66,13 @@ class vpgl_perspective_camera_compute
                        vpgl_perspective_camera<double>& camera );
 
 
-  //: Uses the direct linear transform algorithm described in "Multiple 
+  //: Uses the direct linear transform algorithm described in "Multiple
   // View Geometry in Computer Vision" to find the projection matrix,
   // and extracts the parameters of the camera from this projection matrix.
   // Requires: image_pts and world_pts are correspondences. image_pts is
   //  the projected form, and world_pts is the unprojected form. There
   //  need to be at least 6 points.
-  // Returns: true if successful. err is filled with the two-norm of the 
+  // Returns: true if successful. err is filled with the two-norm of the
   //  projection error vector. camera is filled with the perspective
   //  decomposition of the projection matrix
   static bool compute_dlt (

@@ -1,4 +1,4 @@
-// This is gel/mrc/vpgl/algo/vpgl_optimize_camera.cxx
+// This is core/vpgl/algo/vpgl_optimize_camera.cxx
 #include "vpgl_optimize_camera.h"
 //:
 // \file
@@ -132,8 +132,8 @@ vpgl_orientation_position_calibration_lsqr::f(vnl_vector<double> const& x, vnl_v
   kk[1][1]=x[8]; kk[1][2]=x[9]; kk[2][2]=1.0;
 
   // Check that it is a valid calibration matrix.
-  if ( !(kk[0][0]>0) || !(kk[1][1]>0) ){
-    for (unsigned int i=0; i<world_points_.size(); ++i){
+  if ( !(kk[0][0]>0) || !(kk[1][1]>0) ) {
+    for (unsigned int i=0; i<world_points_.size(); ++i) {
       fx[2*i]   = 100000000;
       fx[2*i+1] = 100000000;
     }

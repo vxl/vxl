@@ -1,4 +1,4 @@
-// This is gel/mrc/vpgl/file_formats/vpgl_nitf_rational_camera.h
+// This is core/vpgl/file_formats/vpgl_nitf_rational_camera.h
 #ifndef vpgl_nitf_rational_camera_h_
 #define vpgl_nitf_rational_camera_h_
 //:

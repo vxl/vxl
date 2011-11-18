@@ -1,12 +1,14 @@
 #ifndef vpgl_io_affine_camera_txx_
 #define vpgl_io_affine_camera_txx_
-
+//:
+// \file
 #include <vpgl/vpgl_affine_camera.h>
 #include <vpgl/io/vpgl_io_affine_camera.h>
 #include <vnl/io/vnl_io_matrix_fixed.h>
 
 template <class T>
-void vsl_b_write(vsl_b_ostream & os, vpgl_affine_camera<T> const& camera){
+void vsl_b_write(vsl_b_ostream & os, vpgl_affine_camera<T> const& camera)
+{
   if (!os) return;
   unsigned version = 1;
   vsl_b_write(os, version);
@@ -16,7 +18,8 @@ void vsl_b_write(vsl_b_ostream & os, vpgl_affine_camera<T> const& camera){
 
 //: Binary load camera from stream.
 template <class T>
-void vsl_b_read(vsl_b_istream & is, vpgl_affine_camera<T> &camera){
+void vsl_b_read(vsl_b_istream & is, vpgl_affine_camera<T> &camera)
+{
   if (!is) return;
   short ver;
   vsl_b_read(is, ver);
@@ -40,15 +43,16 @@ void vsl_b_read(vsl_b_istream & is, vpgl_affine_camera<T> &camera){
 
 //: Print human readable summary of object to a stream
 template <class T>
-void vsl_print_summary(vcl_ostream& os,const vpgl_affine_camera<T> & c){
+void vsl_print_summary(vcl_ostream& os,const vpgl_affine_camera<T> & c)
+{
   os << c << '\n';
 }
 
 
 
 #define VPGL_IO_AFFINE_CAMERA_INSTANTIATE(T) \
-template void vsl_b_write(vsl_b_ostream & os, vpgl_affine_camera<T> const& camera); \
-template void vsl_b_read(vsl_b_istream & is, vpgl_affine_camera<T> &camera); \
-template void vsl_print_summary(vcl_ostream& os,const vpgl_affine_camera<T> & b);
+template void vsl_b_write(vsl_b_ostream & os, vpgl_affine_camera<T > const& camera); \
+template void vsl_b_read(vsl_b_istream & is, vpgl_affine_camera<T > &camera); \
+template void vsl_print_summary(vcl_ostream& os,const vpgl_affine_camera<T > & b)
 
 #endif // vpgl_io_affine_camera_txx_

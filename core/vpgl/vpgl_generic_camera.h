@@ -1,4 +1,4 @@
-// This is gel/mrc/vpgl/vpgl_generic_camera.h
+// This is core/vpgl/vpgl_generic_camera.h
 #ifndef vpgl_generic_camera_h_
 #define vpgl_generic_camera_h_
 //:
@@ -51,7 +51,7 @@ class vpgl_generic_camera : public vpgl_camera<T>
   unsigned rows() const { return rays_[0].rows();}
 
   //: the number of pyramid levels
-  unsigned n_levels(){return static_cast<unsigned>(n_levels_);}
+  unsigned n_levels() {return static_cast<unsigned>(n_levels_);}
 
   //: the ray corresponding to a given pixel
   vgl_ray_3d<T> ray(const T u, const T v) const;
@@ -60,14 +60,14 @@ class vpgl_generic_camera : public vpgl_camera<T>
   vgl_ray_3d<T> ray(vgl_point_3d<T> const& p) const;
 
   //: the ray index at a given level
-  vbl_array_2d<vgl_ray_3d<T> >& rays(int level){ return rays_[level];}
+  vbl_array_2d<vgl_ray_3d<T> >& rays(int level) { return rays_[level];}
 
 
   //: the nearest ray origin to the coordinate origin
-  vgl_point_3d<T> min_ray_origin(){return min_ray_origin_;}
+  vgl_point_3d<T> min_ray_origin() {return min_ray_origin_;}
 
   //: the furthest ray origin from the coordinate origin
-  vgl_point_3d<T> max_ray_origin(){return max_ray_origin_;}
+  vgl_point_3d<T> max_ray_origin() {return max_ray_origin_;}
 
   //: debug function
   void print_orig(int level);

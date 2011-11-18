@@ -1,4 +1,4 @@
-// This is gel/mrc/vpgl/vpgl_fundamental_matrix.txx
+// This is core/vpgl/vpgl_fundamental_matrix.txx
 #ifndef vpgl_fundamental_matrix_txx_
 #define vpgl_fundamental_matrix_txx_
 //:
@@ -231,12 +231,12 @@ void vpgl_fundamental_matrix<T>::set_matrix( const vpgl_proj_camera<T>& cr,
   vnl_vector_fixed<T, 3> nvt =  m * nv;
   vnl_vector_fixed<double, 3> nvtd;
   // unfortunately, vnl_cross_product_matrix is only defined for double
-  for(unsigned i = 0; i<3; ++i)
+  for (unsigned i = 0; i<3; ++i)
     nvtd[i] = static_cast<double>(nvt[i]);
   vnl_cross_product_matrix e2x( nvtd );
   vnl_matrix_fixed<T, 3, 3> e2xt;
-   for(unsigned r = 0; r<3; ++r)
-    for(unsigned c = 0; c<3; ++c)
+   for (unsigned r = 0; r<3; ++r)
+    for (unsigned c = 0; c<3; ++c)
       e2xt[r][c] = static_cast<T>(e2x[r][c]);
    vnl_matrix_fixed<T, 3, 3> temp = e2xt * (cl.get_matrix() * cr.svd()->inverse());
    set_matrix( temp );

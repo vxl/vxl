@@ -1,4 +1,4 @@
-// This is bbas/vpgl/algo/vpgl_list.txx
+// This is bbas/bpgl/algo/bpgl_list.txx
 #ifndef bpgl_list_txx_
 #define bpgl_list_txx_
 //:
@@ -35,7 +35,7 @@ bpgl_read_list(
     return false;
 
   char line_buffer[256];
-  while ( ifp.eof() == 0 ){
+  while ( ifp.eof() == 0 ) {
     char nc = (char)ifp.peek();
     if ( nc == '-' || (nc >= '0' && nc <= '9') ) {
       T new_object;

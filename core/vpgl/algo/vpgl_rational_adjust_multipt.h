@@ -1,10 +1,10 @@
-// This is gel/mrc/vpgl/algo/vpgl_rational_adjust_multipt.h
+// This is core/vpgl/algo/vpgl_rational_adjust_multipt.h
 #ifndef vpgl_rational_adjust_multipt_h_
 #define vpgl_rational_adjust_multipt_h_
 //:
 // \file
 // \brief Adjust image offsets to register a set of rational cameras using multiple correspondence points
-// \author Ozge C. Ozcanli 
+// \author Ozge C. Ozcanli
 // \date Nov 17, 2011
 //
 

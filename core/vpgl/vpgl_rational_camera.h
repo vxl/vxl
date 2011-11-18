@@ -1,4 +1,4 @@
-// This is gel/mrc/vpgl/vpgl_rational_camera.h
+// This is core/vpgl/vpgl_rational_camera.h
 #ifndef vpgl_rational_camera_h_
 #define vpgl_rational_camera_h_
 //:
@@ -74,7 +74,8 @@ class vpgl_scale_offset
   {
     if (scale_==0)
       return 0;
-    return (value-offset_)/scale_;
+    else
+      return (value-offset_)/scale_;
   }
 
   // un-normalize a coordinate value
@@ -85,9 +86,10 @@ class vpgl_scale_offset
   }
   //: Equality test
   inline bool operator==(vpgl_scale_offset<T> const &that) const
-  { return (this == &that) || 
-      ((this->scale()==that.scale())&&
-       (this->offset() == that.offset()) );}
+  { return this == &that ||
+           (this->scale()==that.scale() &&
+            this->offset() == that.offset() );
+  }
  private:
   //members
   T scale_;
@@ -152,7 +154,7 @@ class vpgl_rational_camera : public vpgl_camera<T>
 
   //: Equality test
   inline bool operator==(vpgl_rational_camera<T> const &that) const
-  { return (this == &that) || 
+  { return this == &that ||
       ((this->coefficient_matrix()==that.coefficient_matrix())&&
        (this->scale_offsets() == that.scale_offsets()) );}
 

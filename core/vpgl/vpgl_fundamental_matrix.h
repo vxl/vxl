@@ -1,4 +1,4 @@
-// This is gel/mrc/vpgl/vpgl_fundamental_matrix.h
+// This is core/vpgl/vpgl_fundamental_matrix.h
 #ifndef vpgl_fundamental_matrix_h_
 #define vpgl_fundamental_matrix_h_
 //:
@@ -62,7 +62,7 @@ class vpgl_fundamental_matrix
   // WARNING! This constructor uses two 3x3 inverse calculations, so it is expensive.
   vpgl_fundamental_matrix(const vpgl_calibration_matrix<T> &kr,
                           const vpgl_calibration_matrix<T> &kl,
-                          const vpgl_essential_matrix<T> &em); 
+                          const vpgl_essential_matrix<T> &em);
   //: Assignment
   const vpgl_fundamental_matrix<T>& operator=( const vpgl_fundamental_matrix<T>& fm );
 

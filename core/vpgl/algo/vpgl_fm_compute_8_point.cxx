@@ -1,4 +1,4 @@
-// This is gel/mrc/vpgl/algo/vpgl_fm_compute_8_point.cxx
+// This is core/vpgl/algo/vpgl_fm_compute_8_point.cxx
 #ifndef vpgl_fm_compute_8_point_cxx_
 #define vpgl_fm_compute_8_point_cxx_
 //:
@@ -22,14 +22,14 @@ vpgl_fm_compute_8_point::compute(
   vpgl_fundamental_matrix<double>& fm )
 {
   // Check that there are at least 8 points.
-  if ( pr.size() < 8 || pl.size() < 8 ){
+  if ( pr.size() < 8 || pl.size() < 8 ) {
     vcl_cerr << "vpgl_fm_compute_8_point: Need at least 8 point pairs.\n"
              << "Number in each set: " << pr.size() << ", " << pl.size() << vcl_endl;
     return false;
   }
 
   // Check that the correspondence lists are the same size.
-  if ( pr.size() != pl.size() ){
+  if ( pr.size() != pl.size() ) {
     vcl_cerr << "vpgl_fm_compute_7_point: Need correspondence lists of same size.\n";
     return false;
   }
@@ -37,16 +37,16 @@ vpgl_fm_compute_8_point::compute(
   // Condition if necessary.
   vcl_vector< vgl_homg_point_2d<double> > pr_norm, pl_norm;
   vgl_norm_trans_2d<double> prnt, plnt;
-  if ( precondition_ ){
+  if ( precondition_ ) {
     prnt.compute_from_points(pr);
     plnt.compute_from_points(pl);
-    for ( unsigned int i = 0; i < pl.size(); i++ ){
+    for ( unsigned int i = 0; i < pl.size(); i++ ) {
       pr_norm.push_back( prnt*pr[i] );
       pl_norm.push_back( plnt*pl[i] );
     }
   }
   else{
-    for ( unsigned int i = 0; i < pl.size(); i++ ){
+    for ( unsigned int i = 0; i < pl.size(); i++ ) {
       pr_norm.push_back( pr[i] );
       pl_norm.push_back( pl[i] );
     }
@@ -54,7 +54,7 @@ vpgl_fm_compute_8_point::compute(
 
   // Solve!
   vnl_matrix<double> S(pr_norm.size(),9);
-  for ( unsigned int i = 0; i < pr_norm.size(); i++ ){
+  for ( unsigned int i = 0; i < pr_norm.size(); i++ ) {
     S(i,0) = pl_norm[i].x()*pr_norm[i].x();
     S(i,1) = pl_norm[i].x()*pr_norm[i].y();
     S(i,2) = pl_norm[i].x()*pr_norm[i].w();
@@ -76,7 +76,8 @@ vpgl_fm_compute_8_point::compute(
     fm.set_matrix( F_vnl ); // constructor enforces rank 2
     vnl_matrix_fixed<double,3,3> F_vnl_trunc(fm.get_matrix());
     fm.set_matrix( plnt.get_matrix().transpose()*F_vnl_trunc*prnt.get_matrix() );
-  } else
+  }
+  else
     fm.set_matrix( F_vnl );
   return true;
 };

@@ -1,4 +1,4 @@
-// This is gel/mrc/vpgl/algo/vpgl_camera_homographies.h
+// This is core/vpgl/algo/vpgl_camera_homographies.h
 #ifndef vpgl_camera_homographies_h_
 #define vpgl_camera_homographies_h_
 //:

@@ -16,7 +16,7 @@
 static void test_camera_io()
 {
   vcl_cout << "Testing base camera io" << vcl_endl;
-  vpgl_camera<double>* cam, *cam_r;  
+  vpgl_camera<double>* cam, *cam_r;
   //===========   proj_camera ==================
   // Some matrices for testing.
   double random_list[12] = { 10.6, 1.009, .676, .5, -13, -10, 8, 5, 88, -2, -100, 11 };
@@ -30,35 +30,39 @@ static void test_camera_io()
   vsl_b_read(bp_inp, cam_r);
   bp_inp.close();
   vpl_unlink("test_proj_camera_io.tmp");
-  vpgl_proj_camera<double>* pcam_r = 
+  vpgl_proj_camera<double>* pcam_r =
     dynamic_cast<vpgl_proj_camera<double>*>(cam_r);
-  if(!pcam_r)
+  if (!pcam_r) {
     TEST("cast to proj_camera", false, true);
-  else
+  }
+  else {
     TEST("recovered proj_camera", pcam_r->get_matrix(), random_matrix );
+  }
   delete cam_r; cam_r = 0;
   //================= test smart pointer io ============
   vpgl_camera_double_sptr cam_sptr = cam, cam_r_sptr=0;
   vsl_b_ofstream bp_outps("test_camera_sptr_io.tmp");
   vsl_b_write(bp_outps, cam_sptr);
   bp_outps.close();
-  
+
   vsl_b_ifstream bp_inps("test_camera_sptr_io.tmp");
   vsl_b_read(bp_inps, cam_r_sptr);
   bp_inp.close();
   vpl_unlink("test_camera_sptr_io.tmp");
 
-  if(!cam_r_sptr)
+  if (!cam_r_sptr)
     TEST("camera sptr read ", false, true);
-  else{
-	  vpgl_proj_camera<double>* pcam_r = 
+  else {
+    vpgl_proj_camera<double>* pcam_r =
     dynamic_cast<vpgl_proj_camera<double>*>(cam_r_sptr.as_pointer());
-	  if(!pcam_r)
-	    TEST("sptr cast to proj camera", false, true);
-       else TEST("recovered proj_camera from sptr",
-         pcam_r->get_matrix(), random_matrix );
+    if (!pcam_r) {
+      TEST("sptr cast to proj camera", false, true);
+    }
+    else {
+      TEST("recovered proj_camera from sptr", pcam_r->get_matrix(), random_matrix );
+    }
   }
-  delete cam; cam = 0; 
+  delete cam; cam = 0;
   //===========   perpsective_camera ==================
   double data[] = { 2000,    0, 512,
                     0, 2000, 384,
@@ -71,7 +75,7 @@ static void test_camera_io()
   vnl_double_3 axis(0.0, 1.0, 0.0);
   vgl_h_matrix_3d<double> R;
   R.set_identity().set_rotation_about_axis(axis, theta);
-  vpgl_perspective_camera<double>* percam = 
+  vpgl_perspective_camera<double>* percam =
     new vpgl_perspective_camera<double>(K, center, vgl_rotation_3d<double>(R));
   cam = percam;
   vsl_b_ofstream bp_outper("test_perspective_camera_io.tmp");
@@ -83,17 +87,19 @@ static void test_camera_io()
   bp_inper.close();
   vpl_unlink("test_perspective_camera_io.tmp");
 
-  vpgl_perspective_camera<double>* percam_r = 
+  vpgl_perspective_camera<double>* percam_r =
     dynamic_cast<vpgl_perspective_camera<double>*>(cam_r);
-  if(!percam_r)
+  if (!percam_r) {
     TEST("cast to perspective_camera", false, true);
-  else
+  }
+  else {
     TEST("recovered perspective_camera", *percam, *percam_r);
+  }
   delete cam; cam = 0; delete cam_r; cam_r = 0;
   //===========   affine_camera ==================
-  random_list[8]=0.0; random_list[9]=0.0; 
+  random_list[8]=0.0; random_list[9]=0.0;
   random_list[10]=0.0;  random_list[11]=1.0;
-  vpgl_affine_camera<double>* acam = 
+  vpgl_affine_camera<double>* acam =
     new vpgl_affine_camera<double>( random_matrix );
   acam->set_viewing_distance(1000.0);
   cam = acam;
@@ -107,12 +113,14 @@ static void test_camera_io()
   bp_ina.close();
   vpl_unlink("test_affine_camera_io.tmp");
 
-  vpgl_affine_camera<double>* acam_r = 
+  vpgl_affine_camera<double>* acam_r =
     dynamic_cast<vpgl_affine_camera<double>*>(cam_r);
-  if(!acam_r)
+  if (!acam_r) {
     TEST("cast to affine_camera", false, true);
-  else
+  }
+  else {
     TEST("recovered affine_camera", *acam, *acam_r);
+  }
 
   delete cam; cam = 0; delete cam_r; cam_r = 0;
 
@@ -136,7 +144,7 @@ static void test_camera_io()
   double sz = 5.0, oz = 10.0;
   double su = 1000.0, ou = 500;
   double sv = 500.0, ov = 200;
-  vpgl_rational_camera<double>* rcam = 
+  vpgl_rational_camera<double>* rcam =
     new vpgl_rational_camera<double>(neu_u, den_u, neu_v, den_v,
                                      sx, ox, sy, oy, sz, oz,
                                      su, ou, sv, ov);
@@ -149,20 +157,22 @@ static void test_camera_io()
   vsl_b_read(bp_inr, cam_r);
   bp_inr.close();
   vpl_unlink("test_rational_camera_io.tmp");
-  vpgl_rational_camera<double>* rcam_r = 
+  vpgl_rational_camera<double>* rcam_r =
     dynamic_cast<vpgl_rational_camera<double>*>(cam_r);
-  if(!rcam_r)
+  if (!rcam_r) {
     TEST("cast to rational_camera", false, true);
-  else
+  }
+  else {
     TEST("recovered rational_camera", *rcam, *rcam_r);
+  }
 
-   delete cam_r; cam_r = 0;
+  delete cam_r; cam_r = 0;
   //===========   local_rational_camera ==================
 
   vpgl_lvcs lvcs(33.4447732, -114.3085932, 0.0, vpgl_lvcs::wgs84, vpgl_lvcs::DEG, vpgl_lvcs::METERS);
-  vpgl_local_rational_camera<double>* lrcam = 
+  vpgl_local_rational_camera<double>* lrcam =
     new vpgl_local_rational_camera<double>(lvcs, *rcam);
-  delete cam; 
+  delete cam;
   cam = lrcam;
   vsl_b_ofstream bp_outlr("test_local_rational_camera_io.tmp");
   vsl_b_write(bp_outlr, cam);
@@ -172,12 +182,14 @@ static void test_camera_io()
   vsl_b_read(bp_inlr, cam_r);
   bp_inlr.close();
   vpl_unlink("test_local_rational_camera_io.tmp");
-  vpgl_local_rational_camera<double>* lrcam_r = 
+  vpgl_local_rational_camera<double>* lrcam_r =
     dynamic_cast<vpgl_local_rational_camera<double>*>(cam_r);
-  if(!lrcam_r)
+  if (!lrcam_r) {
     TEST("cast to local_rational_camera", false, true);
-  else
+  }
+  else {
     TEST("recovered local_rational_camera", *lrcam, *lrcam_r);
+  }
   delete cam; cam = 0; delete cam_r; cam_r = 0;
 }
 

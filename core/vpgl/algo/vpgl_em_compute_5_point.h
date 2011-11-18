@@ -1,4 +1,4 @@
-// This is gel/mrc/vpgl/algo/vpgl_em_compute_5_point.h
+// This is core/vpgl/algo/vpgl_em_compute_5_point.h
 #ifndef vpgl_em_compute_5_point_h_
 #define vpgl_em_compute_5_point_h_
 //:
@@ -84,7 +84,8 @@ class vpgl_em_compute_5_point
         const vnl_matrix<double> &action_matrix,
         vcl_vector<vpgl_essential_matrix<T> > &ems) const;
 
-    double get_coeff(const vnl_real_npolynomial &p,
+    double get_coeff(
+        const vnl_real_npolynomial &p,
         unsigned int x_p, unsigned int y_p, unsigned int z_p) const;
 };
 
@@ -93,10 +94,10 @@ template <class T>
 class vpgl_em_compute_5_point_ransac
 {
     public:
-        vpgl_em_compute_5_point_ransac() : 
+        vpgl_em_compute_5_point_ransac() :
             num_rounds(512u), inlier_threshold(2.25), verbose(false) { }
 
-        vpgl_em_compute_5_point_ransac(unsigned nr, double trsh, bool v) : 
+        vpgl_em_compute_5_point_ransac(unsigned nr, double trsh, bool v) :
             num_rounds(nr), inlier_threshold(trsh), verbose(v) { }
 
     bool compute(

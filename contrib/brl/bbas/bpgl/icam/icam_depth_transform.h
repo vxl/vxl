@@ -1,4 +1,4 @@
-// This is bbas/vpgl/icam/icam_depth_transform.h
+// This is bbas/bpgl/icam/icam_depth_transform.h
 #ifndef icam_depth_transform_h_
 #define icam_depth_transform_h_
 //:
@@ -52,7 +52,7 @@
 class icam_depth_transform
 {
  public:
-  icam_depth_transform(): scale_factors_(vnl_vector<double>()){}
+  icam_depth_transform(): scale_factors_(vnl_vector<double>()) {}
 
   //: Construct with the same calibration matrix
   // \p adjust_to_fl determines if the to_focal_length can be varied in a search
@@ -78,9 +78,9 @@ class icam_depth_transform
   ~icam_depth_transform() {}
   void set_scale_factors(vnl_vector<double> const& scales)
   { scale_factors_ = scales; }
-  vnl_vector<double>& scale_factors(){return scale_factors_;}
-  void set_adjust_to_fl(bool adjust){adjust_to_fl_=adjust;}
-  bool adjust_to_fl(){return adjust_to_fl_;}
+  vnl_vector<double>& scale_factors() {return scale_factors_;}
+  void set_adjust_to_fl(bool adjust) {adjust_to_fl_=adjust;}
+  bool adjust_to_fl() {return adjust_to_fl_;}
   void set_calibration_matrix(vnl_matrix_fixed<double, 3, 3> const& K)
   { this->set_k(K); }
   void set_calibration_matrix(vnl_matrix_fixed<double, 3, 3> const& K_from,
@@ -88,9 +88,9 @@ class icam_depth_transform
   { this->set_k(K_from, K_to); }
   void set_depth_map(vil_image_view<double> const& depth)
     {depth_ = depth; invert_depth(depth);}
-  void set_rotation(vgl_rotation_3d<double> const& rot){rot_=rot;}
-  void set_translation(vgl_vector_3d<double> const& trans){trans_ = trans;}
-  vnl_matrix_fixed<double, 3, 3> calibration_matrix(){return K_to();}
+  void set_rotation(vgl_rotation_3d<double> const& rot) {rot_=rot;}
+  void set_translation(vgl_vector_3d<double> const& trans) {trans_ = trans;}
+  vnl_matrix_fixed<double, 3, 3> calibration_matrix() {return K_to();}
   vnl_matrix_fixed<double, 3, 3>& from_calibration_matrix_inv()
   { return K_from_inv_; }
   vnl_matrix_fixed<double, 3, 3> to_calibration_matrix()
@@ -101,9 +101,9 @@ class icam_depth_transform
   double to_pu() {return to_pu_;}
   double to_pv() {return to_pv_;}
 
-  vil_image_view<double>& depth_map(){return depth_ ;}
-  vgl_rotation_3d<double> rotation(){return vgl_rotation_3d<double>(rot_);}
-  vgl_vector_3d<double>& translation(){return trans_;}
+  vil_image_view<double>& depth_map() {return depth_ ;}
+  vgl_rotation_3d<double> rotation() {return vgl_rotation_3d<double>(rot_);}
+  vgl_vector_3d<double>& translation() {return trans_;}
 
   bool transform(double from_u, double from_v, double& to_u, double& to_v) const;
   bool transform(vgl_point_2d<double> const& from_p,

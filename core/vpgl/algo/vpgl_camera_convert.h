@@ -1,4 +1,4 @@
-// This is gel/mrc/vpgl/algo/vpgl_camera_convert.h
+// This is core/vpgl/algo/vpgl_camera_convert.h
 #ifndef vpgl_camera_convert_h_
 #define vpgl_camera_convert_h_
 //:
@@ -86,13 +86,13 @@ class vpgl_generic_camera_convert
   static bool convert( vpgl_perspective_camera<double> const& per_cam,
                        int ni, int nj,
                        vpgl_generic_camera<double> & gen_cam)
-    {
-      vpgl_perspective_camera<double> nc_cam(per_cam); 
-      vpgl_proj_camera<double>* prj_cam_ptr = 
-        dynamic_cast<vpgl_proj_camera<double>*>(&nc_cam);
-      if(!prj_cam_ptr) return false;
-      return convert(*prj_cam_ptr, ni, nj, gen_cam);
-    }
+  {
+    vpgl_perspective_camera<double> nc_cam(per_cam);
+    vpgl_proj_camera<double>* prj_cam_ptr =
+      dynamic_cast<vpgl_proj_camera<double>*>(&nc_cam);
+    if (!prj_cam_ptr) return false;
+    return convert(*prj_cam_ptr, ni, nj, gen_cam);
+  }
   //: Convert an affine_camera to a generic camera
   static bool convert( vpgl_affine_camera<double> const& aff_cam,
                        int ni, int nj, vpgl_generic_camera<double> & gen_cam);
@@ -101,16 +101,17 @@ class vpgl_generic_camera_convert
   static bool convert( vpgl_camera_double_sptr const& camera, int ni, int nj,
                        vpgl_generic_camera<double> & gen_cam, unsigned level = 0);
  private:
-  //utility methods 
+  //utility methods
   //: interpolate rays to fill next higher resolution pyramid layer
-  static bool 
+  static bool
     upsample_rays(vcl_vector<vgl_ray_3d<double> > const& ray_nbrs,
                   vgl_ray_3d<double> const& ray,
                   vcl_vector<vgl_ray_3d<double> >& interp_rays);
   //: interpolate a span of rays base on a linear interpolation. n_grid is the step distance from r1. r0 and r1 are one unit apart.
-  static vgl_ray_3d<double> interp_pair(vgl_ray_3d<double> const& r0, 
+  static vgl_ray_3d<double> interp_pair(vgl_ray_3d<double> const& r0,
                                         vgl_ray_3d<double> const& r1,
                                         double n_grid);
   vpgl_generic_camera_convert();
 };
+
 #endif // vpgl_camera_convert_h_

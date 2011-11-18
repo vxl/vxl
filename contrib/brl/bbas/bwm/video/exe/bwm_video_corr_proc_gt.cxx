@@ -349,7 +349,7 @@ static bool process(vcl_string const& site_path,
     cameras_mapped.push_back(new_cam);
 #endif
     vpgl_perspective_camera<double> new_cam;
-	
+
     vpgl_proj_camera<double> in_cam(static_cast<vpgl_proj_camera<double> >(cp.cameras()[k]));
     vpgl_proj_camera<double> new_proj = postmultiply(in_cam,H_inverse);
     cameras_mapped_proj.push_back(new_proj);
@@ -357,7 +357,7 @@ static bool process(vcl_string const& site_path,
     //if (postmultiply(cameras2[k], H, new_cam))
       cameras_mapped.push_back(new_cam);
   }
- 
+
   cp.close_camera_istream();
   cp.close_camera_ostream();
 

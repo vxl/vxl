@@ -1,4 +1,4 @@
-// This is gel/mrc/vpgl/vsph/vsph_spherical_coord.cxx
+// This is bbas/vsph/vsph_spherical_coord.cxx
 #include "vsph_spherical_coord.h"
 #include <vcl_complex.h>
 #include <vcl_cmath.h>

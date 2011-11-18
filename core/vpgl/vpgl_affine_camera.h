@@ -1,4 +1,4 @@
-// This is gel/mrc/vpgl/vpgl_affine_camera.h
+// This is core/vpgl/vpgl_affine_camera.h
 #ifndef vpgl_affine_camera_h_
 #define vpgl_affine_camera_h_
 //:
@@ -11,7 +11,7 @@
 //  Modifications
 //  March 14, 2010 J.L. Mundy brought in virtual functions of proj_camera
 //  that require special treatment for the affine case. Added a default
-//  viewing distance to alow these methods to construct finite objects when
+//  viewing distance to allow these methods to construct finite objects when
 //  the camera center is infinity.
 //  at infinity.
 // \endverbatim
@@ -44,7 +44,7 @@ class vpgl_affine_camera : public vpgl_proj_camera<T>
   //: Construct from a ray direction, up vector, 3-d stare point: vnl interface
   // \a p projects to (\a u0, \a v0), \a su and \a sv are calibration scale factors
   vpgl_affine_camera(vnl_vector_fixed<T, 3> ray, vnl_vector_fixed<T, 3> up,
-                     vnl_vector_fixed<T, 3> stare_pt, T u0, T v0, T su, T sv){
+                     vnl_vector_fixed<T, 3> stare_pt, T u0, T v0, T su, T sv) {
     vgl_vector_3d<T> ry(ray[0], ray[1], ray[2]), u(up[0], up[1], up[2]);
     vgl_point_3d<T> pt(stare_pt[0], stare_pt[1], stare_pt[2]);
     (*this) = vpgl_affine_camera<T>(ry, u, pt, u0, v0, su, sv);
@@ -59,14 +59,15 @@ class vpgl_affine_camera : public vpgl_proj_camera<T>
   // === The following virtual functions require special treatment for the affine camera ===
 
   //: set a finite viewing distance to allow the methods below to return finite objects
-  void set_viewing_distance(T dist){view_distance_ = dist;}
+  void set_viewing_distance(T dist) {view_distance_ = dist;}
   T viewing_distance() const {return view_distance_;}
 
   //: Equality test
   inline bool operator==(vpgl_affine_camera<T> const &that) const
-  { return (this == &that) || 
-      ((this->get_matrix()==that.get_matrix())&&
-       (this->viewing_distance() == that.viewing_distance()) );}
+  { return this == &that ||
+           (this->get_matrix()==that.get_matrix() &&
+            this->viewing_distance() == that.viewing_distance() );
+  }
 
 //: Find the 3d coordinates of the center of the camera. Will be an ideal point with the sense of the ray direction.
   virtual vgl_homg_point_3d<T> camera_center() const;
@@ -80,7 +81,7 @@ class vpgl_affine_camera : public vpgl_proj_camera<T>
 
  private:
   T view_distance_; // distance from origin along rays
-  vgl_vector_3d<T> ray_dir_;//needed to assign a consistent sense to the ray 
+  vgl_vector_3d<T> ray_dir_;//needed to assign a consistent sense to the ray
 };
 
 #endif // vpgl_affine_camera_h_

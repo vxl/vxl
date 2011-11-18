@@ -1,4 +1,4 @@
-// This is core/vpgl/algo/vpgl_rational_adjust__onept.h
+// This is core/vpgl/algo/vpgl_rational_adjust_onept.h
 #ifndef vpgl_rational_adjust_onept_h_
 #define vpgl_rational_adjust_onept_h_
 //:

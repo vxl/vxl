@@ -1,4 +1,4 @@
-// This is gel/mrc/vpgl/file_formats/vpgl_nitf_rational_camera.cxx
+// This is core/vpgl/file_formats/vpgl_nitf_rational_camera.cxx
 #include "vpgl_nitf_rational_camera.h"
 //:
 // \file
@@ -328,7 +328,7 @@ init(vil_nitf2_image* nitf_image, bool verbose)
   return true;
 }
 
-vpgl_nitf_rational_camera::vpgl_nitf_rational_camera(){
+vpgl_nitf_rational_camera::vpgl_nitf_rational_camera() {
 }
 
 

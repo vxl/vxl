@@ -1,4 +1,4 @@
-// This is vpgl/icam/icam_transform_2d.h
+// This is bbas/bpgl/icam/icam_transform_2d.h
 #ifndef icam_transform_2d_h_
 #define icam_transform_2d_h_
 //:
@@ -79,7 +79,7 @@ class icam_transform_2d : public vgl_h_matrix_2d<double>, public vbl_ref_count
   // \a   s: Scaling
   // \a t_x: Translation in x
   // \a t_y: Translation in y
-  void set_zoom_only(double s, double t_x, double t_y) { set_zoom_only(s,s,t_x,t_y); } 
+  void set_zoom_only(double s, double t_x, double t_y) { set_zoom_only(s,s,t_x,t_y); }
 
   //: Sets the transformation to rotation then translation.
   // \a theta: rotation
@@ -108,7 +108,7 @@ class icam_transform_2d : public vgl_h_matrix_2d<double>, public vbl_ref_count
 
   //: Fills v with parameters of transform of type Form
   void params_of(vnl_vector<double>& v, Form) const;
- 
+
   icam_transform_2d operator*(icam_transform_2d const& R) const
   {
     icam_transform_2d T(get_matrix()*R.get_matrix(), Identity);
@@ -118,7 +118,7 @@ class icam_transform_2d : public vgl_h_matrix_2d<double>, public vbl_ref_count
     else if (form()==Translation||R.form()==Translation) T.set_form(Translation);
     return T;
   }
- 
+
   //: Applies transformation to (x,y)
   vgl_point_2d<double>  operator()(double x, double y) const;
 

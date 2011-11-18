@@ -1,4 +1,4 @@
-// This is gel/mrc/vpgl/vpgl_local_rational_camera.h
+// This is core/vpgl/vpgl_local_rational_camera.h
 #ifndef vpgl_local_rational_camera_h_
 #define vpgl_local_rational_camera_h_
 //:
@@ -47,14 +47,15 @@ class vpgl_local_rational_camera : public vpgl_rational_camera<T>
 
   //: Equality test
   inline bool operator==(vpgl_local_rational_camera<T> const &that) const
-    { return (this == &that) || 
-        ( (static_cast<vpgl_rational_camera<T> const&>(*this) ==
-          static_cast<vpgl_rational_camera<T> const&>(that))&&
-          (this->lvcs() == that.lvcs()) ) ;} 
+  { return this == &that ||
+           ( static_cast<vpgl_rational_camera<T> const&>(*this) ==
+             static_cast<vpgl_rational_camera<T> const&>(that)      &&
+             this->lvcs() == that.lvcs() );
+  }
 // Mutators/Accessors
 
 //: set the local vertical coordinate system
-void set_lvcs(vpgl_lvcs const& lvcs){lvcs_ = lvcs;}
+void set_lvcs(vpgl_lvcs const& lvcs) {lvcs_ = lvcs;}
 
 vpgl_lvcs lvcs() const {return lvcs_;}
 

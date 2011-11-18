@@ -1,4 +1,4 @@
-// This is gel/mrc/vpgl/algo/vpgl_backproject.h
+// This is core/vpgl/algo/vpgl_backproject.h
 #ifndef vpgl_backproject_h_
 #define vpgl_backproject_h_
 //:

@@ -1,4 +1,4 @@
-// This is vpgl/ihog_transform_2d.h
+// This is bbas/bpgl/ihog/ihog_transform_2d.h
 #ifndef ihog_transform_2d_h_
 #define ihog_transform_2d_h_
 //:
@@ -40,10 +40,10 @@ class ihog_transform_2d : public vgl_h_matrix_2d<double>, public vbl_ref_count
     : vgl_h_matrix_2d<double>(xform), form_(form) {}
 
   //: Destructor
-  ~ihog_transform_2d(){}
+  ~ihog_transform_2d() {}
 
   Form form() const {return form_;}
-  void set_form(const Form form){form_ = form;}
+  void set_form(const Form form) {form_ = form;}
   //vnl_double_3x3 matrix() const { return t12_matrix_; } -- use get_matrix() instead!
 
   void set(vnl_double_3x3 const& t_matrix) { vgl_h_matrix_2d<double>::set(t_matrix); }

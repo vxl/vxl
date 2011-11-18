@@ -1,4 +1,4 @@
-// This is gel/mrc/vpgl/algo/vpgl_ray.cxx
+// This is core/vpgl/algo/vpgl_ray.cxx
 #include "vpgl_ray.h"
 //:
 // \file

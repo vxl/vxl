@@ -1,4 +1,4 @@
-// This is gel/mrc/vpgl/vpgl_generic_camera.txx
+// This is core/vpgl/vpgl_generic_camera.txx
 #ifndef vpgl_generic_camera_txx_
 #define vpgl_generic_camera_txx_
 //:
@@ -33,15 +33,15 @@ vpgl_generic_camera( vbl_array_2d<vgl_ray_3d<T> > const& rays)
   double min_dist = vnl_numeric_traits<double>::maxval;
   double max_dist = 0.0;
   vgl_point_3d<T> datum(T(0), T(0), T(0));
-  for(int v = 0; v<nr; ++v)
-    for(int u = 0; u<nc; ++u){
+  for (int v = 0; v<nr; ++v)
+    for (int u = 0; u<nc; ++u) {
       vgl_point_3d<T> org = rays[v][u].origin();
       double d = vgl_distance(datum, org);
-      if(d>max_dist){
+      if (d>max_dist) {
         max_dist = d;
         max_ray_origin_ = org;
       }
-      if(d<min_dist){
+      if (d<min_dist) {
         min_dist = d;
         min_ray_origin_ = org;
       }
@@ -49,27 +49,27 @@ vpgl_generic_camera( vbl_array_2d<vgl_ray_3d<T> > const& rays)
   // form the pyramid for efficient projection
   // find the number of levels
   double dim = nc;
-  if(nr<nc)
+  if (nr<nc)
     dim = nr;
   double lv = vcl_log(dim)/vcl_log(2.0);
   n_levels_ = static_cast<int>(lv);// round down
-  if(dim/vcl_pow(2.0, static_cast<double>(n_levels_-1)) < 3.0) n_levels_--;
-  if(n_levels_<=0) n_levels_ = 1;
+  if (dim/vcl_pow(2.0, static_cast<double>(n_levels_-1)) < 3.0) n_levels_--;
+  if (n_levels_<=0) n_levels_ = 1;
   rays_.resize(n_levels_);
   nr_.resize(n_levels_);
   nc_.resize(n_levels_);
   rays_[0]=rays;
   nr_[0]=nr; nc_[0]=nc;
   int nrlv = nr/2, nclv = nc/2;
-  for(int lev = 1; lev<n_levels_; ++lev){
+  for (int lev = 1; lev<n_levels_; ++lev) {
     rays_[lev].resize(nrlv, nclv);
     nr_[lev]=nrlv; nc_[lev]=nclv;
-    for(int r = 0; r<nrlv; ++r)
-      for(int c = 0; c<nclv; ++c)// nearest neighbor downsampling
+    for (int r = 0; r<nrlv; ++r)
+      for (int c = 0; c<nclv; ++c)// nearest neighbor downsampling
         rays_[lev][r][c] = rays_[lev-1][2*r][2*c];
     //next level
     nrlv /= 2; nclv /= 2;
-  }  
+  }
 }
 
 // the ray closest to the given 3-d point is selected
@@ -77,9 +77,9 @@ vpgl_generic_camera( vbl_array_2d<vgl_ray_3d<T> > const& rays)
 // and so the bound of the ray origin is not taken into account
 //
 template <class T>
-void vpgl_generic_camera<T>::nearest_ray(int level, 
+void vpgl_generic_camera<T>::nearest_ray(int level,
                                          vgl_point_3d<T> const& p,
-                                         int start_r, int end_r, 
+                                         int start_r, int end_r,
                                          int start_c, int end_c,
                                          int& nearest_r, int& nearest_c) const
 {
@@ -88,12 +88,12 @@ void vpgl_generic_camera<T>::nearest_ray(int level,
   assert(start_c>=0 && end_c < nc_[level]);
   nearest_r = 0, nearest_c = 0;
   double min_d = vnl_numeric_traits<double>::maxval;
-  for(int r = start_r; r<=end_r; ++r)
-    for(int c = start_c; c<=end_c; ++c){
+  for (int r = start_r; r<=end_r; ++r)
+    for (int c = start_c; c<=end_c; ++c) {
       double d = vgl_distance(rays_[level][r][c], p);
-      if(d<min_d){
+      if (d<min_d) {
         min_d=d;
-        nearest_r = r; 
+        nearest_r = r;
         nearest_c = c;
       }
     }
@@ -106,26 +106,26 @@ nearest_ray_to_point(vgl_point_3d<T> const& p,
   int lev = n_levels_-1;
   int start_r = 0, end_r = nr_[lev];
   int start_c = 0, end_c = nc_[lev];
-  for(; lev >= 0; --lev){
-    if(start_r<0) start_r = 0;
-    if(start_c<0) start_c = 0;
-    if(end_r>=nr_[lev]) end_r = nr_[lev]-1;
-    if(end_c>=nc_[lev]) end_c = nc_[lev]-1;
+  for (; lev >= 0; --lev) {
+    if (start_r<0) start_r = 0;
+    if (start_c<0) start_c = 0;
+    if (end_r>=nr_[lev]) end_r = nr_[lev]-1;
+    if (end_c>=nc_[lev]) end_c = nc_[lev]-1;
     nearest_ray(lev, p, start_r, end_r, start_c, end_c,
                 nearest_r, nearest_c);
     // compute new bounds
     start_r = 2*nearest_r-1; start_c = 2*nearest_c-1;
     end_r = start_r + 2; end_c = start_c +2;
     // check if the image sizes are odd, so search range is extended
-    if(lev ==1&&nr_[0]%2!=0) end_r++;
-    if(lev ==1&&nc_[0]%2!=0) end_c++;
+    if (lev ==1&&nr_[0]%2!=0) end_r++;
+    if (lev ==1&&nc_[0]%2!=0) end_c++;
   }
 }
 template <class T>
 void vpgl_generic_camera<T>::
 refine_ray_at_point(int nearest_c, int nearest_r,
-                           vgl_point_3d<T> const& p,
-                           vgl_ray_3d<T>& ray) const
+                    vgl_point_3d<T> const& p,
+                    vgl_ray_3d<T>& ray) const
 {
   T u = static_cast<T>(nearest_c), v = static_cast<T>(nearest_r);
   ray = this->ray(u, v);
@@ -148,15 +148,15 @@ ray(vgl_point_3d<T> const& p) const
 }
 
 // refine the projection to sub-pixel accuracy
-// use an affine invariant map between the plane passing through p and the 
-// image plane. The plane normal is given by the direction of the 
+// use an affine invariant map between the plane passing through p and the
+// image plane. The plane normal is given by the direction of the
 // nearest ray to p, but negated, so as to point upward.
 template <class T>
 void vpgl_generic_camera<T>::
 refine_projection(int nearest_c, int nearest_r, vgl_point_3d<T> const& p,
                   T& u, T& v) const
 {
-  // the ray closest to the projected 3-d point 
+  // the ray closest to the projected 3-d point
   vgl_ray_3d<T> nr = rays_[0][nearest_r][nearest_c];
 
   // construct plane with normal given by -nr.direction() through p
@@ -171,34 +171,34 @@ refine_projection(int nearest_c, int nearest_r, vgl_point_3d<T> const& p,
   //find intersections of neigboring rays with the plane
   //need at least two neigbors
   img_pts.push_back(vgl_point_2d<T>(0.0, 0.0));
-  if(nearest_r>0){
+  if (nearest_r>0) {
     vgl_ray_3d<T> r = rays_[0][nearest_r-1][nearest_c];
     valid_inter = vgl_intersection(r, pl, ipt);
     inter_pts.push_back(ipt);
     img_pts.push_back(vgl_point_2d<T>(0.0, -1.0));
   }
-  if(nearest_c>0){
+  if (nearest_c>0) {
     vgl_ray_3d<T> r = rays_[0][nearest_r][nearest_c-1];
     valid_inter = vgl_intersection(r, pl, ipt);
     inter_pts.push_back(ipt);
     img_pts.push_back(vgl_point_2d<T>(-1.0, 0.0));
   }
   int nrght = static_cast<int>(cols())-1;
-  if(nearest_c<nrght){
+  if (nearest_c<nrght) {
     vgl_ray_3d<T> r = rays_[0][nearest_r][nearest_c+1];
     valid_inter = vgl_intersection(r, pl, ipt);
     inter_pts.push_back(ipt);
     img_pts.push_back(vgl_point_2d<T>(1.0, 0.0));
   }
   int nbl = static_cast<int>(rows())-1;
-  if(nearest_r<nbl){
+  if (nearest_r<nbl) {
     vgl_ray_3d<T> r = rays_[0][nearest_r+1][nearest_c];
     valid_inter = vgl_intersection(r, pl, ipt);
     inter_pts.push_back(ipt);
     img_pts.push_back(vgl_point_2d<T>(0.0, 1.0));
   }
   //less than two neighbors, shouldn't happen!
-  if(!valid_inter||inter_pts.size()<3){
+  if (!valid_inter||inter_pts.size()<3) {
     u = static_cast<T>(nearest_c);
     v = static_cast<T>(nearest_r);
     return;
@@ -220,7 +220,7 @@ refine_projection(int nearest_c, int nearest_r, vgl_point_3d<T> const& p,
   u = nearest_c + del.x();
   v = nearest_r + del.y();
 }
-// projects by exhaustive search in a pyramid. 
+// projects by exhaustive search in a pyramid.
 template <class T>
 void vpgl_generic_camera<T>::project(const T x, const T y, const T z,
                                      T& u, T& v) const
@@ -242,54 +242,54 @@ vgl_ray_3d<T> vpgl_generic_camera<T>::ray(const T u, const T v) const
   int iv = static_cast<int>(dv);
   assert(iu<static_cast<int>(cols()) && iv<static_cast<int>(rows()));
   //check for integer pixel coordinates
-  if((du-iu) == 0.0 && (dv-iv) == 0.0)
+  if ((du-iu) == 0.0 && (dv-iv) == 0.0)
     return rays_[0][iv][iu];
   // u or v is sub-pixel so find interpolated ray
   //find neighboring rays and pixel distances to the sub-pixel location
   vcl_vector<double> dist;
   vcl_vector<vgl_ray_3d<T> > nrays;
   // ray above
-  if(iv>0){
+  if (iv>0) {
     vgl_ray_3d<T> ru = rays_[0][iv-1][iu];
     nrays.push_back(ru);
     double d = vcl_sqrt((iv-1-dv)*(iv-1-dv) + (iu-du)*(iu-du));
-    if(d==0.0) 
+    if (d==0.0)
       return ru;
     dist.push_back(1.0/d);
   }
   // ray to the left
-  if(iu>0){
+  if (iu>0) {
     vgl_ray_3d<T> rl = rays_[0][iv][iu-1];
     nrays.push_back(rl);
     double d = vcl_sqrt((iv-dv)*(iv-dv) + (iu-1-du)*(iu-1-du));
-    if(d==0.0) 
+    if (d==0.0)
       return rl;
     dist.push_back(1.0/d);
   }
   // ray to the right
   int nrght = static_cast<int>(cols())-1;
-  if(iu<nrght){
+  if (iu<nrght) {
     vgl_ray_3d<T> rr = rays_[0][iv][iu+1];
     nrays.push_back(rr);
     double d = vcl_sqrt((iv-dv)*(iv-dv) + (iu+1-du)*(iu+1-du));
-    if(d==0.0) 
+    if (d==0.0)
       return rr;
     dist.push_back(1.0/d);
   }
   // ray below
   int nbl = static_cast<int>(rows())-1;
-  if(iv<nbl){
+  if (iv<nbl) {
     vgl_ray_3d<T> rd = rays_[0][iv+1][iu];
     nrays.push_back(rd);
     double d = vcl_sqrt((iv+1-dv)*(iv+1-dv) + (iu-du)*(iu-du));
-    if(d==0.0) 
+    if (d==0.0)
       return rd;
     dist.push_back(1.0/d);
   }
   // compute the interpolated ray
   double ox = 0.0, oy = 0.0, oz = 0.0, dx = 0.0, dy = 0.0, dz = 0.0;
   double sumw = 0.0;
-  for(unsigned i = 0; i<nrays.size(); ++i){
+  for (unsigned i = 0; i<nrays.size(); ++i) {
     vgl_ray_3d<T> r = nrays[i];
     vgl_point_3d<T> org = r.origin();
     vgl_vector_3d<T> dir = r.direction();
@@ -313,10 +313,10 @@ vgl_ray_3d<T> vpgl_generic_camera<T>::ray(const T u, const T v) const
 template <class T>
 void vpgl_generic_camera<T>::print_orig(int level)
 {
-  for(int r = 0; r<nr_[level]; ++r){
-    for(int c = 0; c<nc_[level]; ++c){
+  for (int r = 0; r<nr_[level]; ++r) {
+    for (int c = 0; c<nc_[level]; ++c) {
       vgl_point_3d<T> o = rays_[level][r][c].origin();
-      vcl_cout << "(" << o.x() << ' ' << o.y() << ") "; 
+      vcl_cout << "(" << o.x() << ' ' << o.y() << ") ";
     }
     vcl_cout << '\n';
   }

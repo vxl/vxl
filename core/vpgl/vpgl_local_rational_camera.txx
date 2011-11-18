@@ -1,4 +1,4 @@
-// This is gel/mrc/vpgl/vpgl_local_rational_camera.txx
+// This is core/vpgl/vpgl_local_rational_camera.txx
 #ifndef vpgl_local_rational_camera_txx_
 #define vpgl_local_rational_camera_txx_
 //:

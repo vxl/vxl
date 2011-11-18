@@ -1,4 +1,4 @@
-// This is gel/mrc/vpgl/algo/vpgl_camera_compute.cxx
+// This is core/vpgl/algo/vpgl_camera_compute.cxx
 #ifndef vpgl_camera_compute_cxx_
 #define vpgl_camera_compute_cxx_
 

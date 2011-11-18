@@ -1,4 +1,4 @@
-// This is gel/mrc/vpgl/vpgl_essential_matrix.txx
+// This is core/vpgl/vpgl_essential_matrix.txx
 #ifndef vpgl_essential_matrix_txx_
 #define vpgl_essential_matrix_txx_
 //:
