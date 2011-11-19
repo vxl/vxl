@@ -1,31 +1,31 @@
-# Microsoft Developer Studio Project File - Name="boct" - Package Owner=<4>
+# Microsoft Developer Studio Project File - Name="vpgl_algo_tests" - Package Owner=<4>
 # Microsoft Developer Studio Generated Build File, Format Version 6.00
 # ** DO NOT EDIT **
 
 # variables to REPLACE
 # 
-# /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/core" /I "$(VXLROOT)/vcl/config.win32" /I "$(VXLROOT)/contrib/brl/bseg" == include path
+# /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/core" /I "$(VXLROOT)/vcl/config.win32" /I "$(VXLROOT)/contrib/mul" == include path
 #   -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE == compiler defines
 #  == override in output directory
-# boct  == name of output library
+# vpgl_algo_tests  == name of output library
 
 # TARGTYPE "Win32 (x86) Static Library" 0x0104
 
-CFG=boct - Win32 Debug
+CFG=vpgl_algo_tests - Win32 Debug
 !MESSAGE This is not a valid makefile. To build this project using NMAKE,
 !MESSAGE use the Export Makefile command and run
 !MESSAGE 
-!MESSAGE NMAKE /f "boct.mak".
+!MESSAGE NMAKE /f "vpgl_algo_tests.mak".
 !MESSAGE 
 !MESSAGE You can specify a configuration when running NMAKE
 !MESSAGE by defining the macro CFG on the command line. For example:
 !MESSAGE 
-!MESSAGE NMAKE /f "boct.mak" CFG="boct - Win32 Debug"
+!MESSAGE NMAKE /f "vpgl_algo_tests.mak" CFG="vil2 - Win32 Debug"
 !MESSAGE 
 !MESSAGE Possible choices for configuration are:
 !MESSAGE 
-!MESSAGE "boct - Win32 Debug" (based on "Win32 (x86) Static Library")
-!MESSAGE "boct - Win32 Release" (based on "Win32 (x86) Static Library")
+!MESSAGE "vpgl_algo_tests - Win32 Debug" (based on "Win32 (x86) Static Library")
+!MESSAGE "vpgl_algo_tests - Win32 Release" (based on "Win32 (x86) Static Library")
 # Begin Project
 # PROP AllowPerConfigDependencies 0
 # PROP Scc_ProjName ""
@@ -33,7 +33,7 @@ CFG=boct - Win32 Debug
 CPP=cl.exe
 RSC=rc.exe
 
-!IF  "$(CFG)" == "boct - Win32 Release"
+!IF  "$(CFG)" == "vpgl_algo_tests - Win32 Release"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
@@ -47,7 +47,7 @@ RSC=rc.exe
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB" /FD /c
 # ADD CPP /nologo /D "NDEBUG" /D "WIN32" /D "_MBCS" /D "_LIB" /FD /c
-# ADD CPP /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/core" /I "$(VXLROOT)/vcl/config.win32" /I "$(VXLROOT)/contrib/brl/bseg" -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "boct_EXPORTS"
+# ADD CPP /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/core" /I "$(VXLROOT)/vcl/config.win32" /I "$(VXLROOT)/contrib/mul" -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "vpgl_algo_tests_EXPORTS"
 # ADD CPP /W3 /Zm1000 /GX /GR
 # ADD CPP /MD /O2
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
@@ -59,7 +59,7 @@ LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo
 # ADD LIB32 /nologo
 
-!ELSEIF  "$(CFG)" == "boct - Win32 Debug"
+!ELSEIF  "$(CFG)" == "vpgl_algo_tests - Win32 Debug"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
@@ -73,7 +73,7 @@ LIB32=link.exe -lib
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB" /FD /c
 # ADD CPP /nologo /D "_DEBUG" /D "WIN32" /D "_MBCS" /D "_LIB" /FD /GZ /c
-# ADD CPP /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/core" /I "$(VXLROOT)/vcl/config.win32" /I "$(VXLROOT)/contrib/brl/bseg" -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "boct_EXPORTS"
+# ADD CPP /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/core" /I "$(VXLROOT)/vcl/config.win32" /I "$(VXLROOT)/contrib/mul" -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "vpgl_algo_tests_EXPORTS"
 # ADD CPP /W3 /Zm1000 /GX /GR
 # ADD CPP /MDd /Zi /Od /GZ
 # ADD BASE RSC /l 0x409 /d "_DEBUG"
@@ -87,97 +87,64 @@ LIB32=link.exe -lib
 
 # Begin Target
 
-# Name "boct - Win32 Release"
-# Name "boct - Win32 Debug"
+# Name "vpgl_algo_tests - Win32 Release"
+# Name "vpgl_algo_tests - Win32 Debug"
 
 # Begin Group "Source Files"
 # PROP Default_Filter "cxx"
 # Begin Source File
-SOURCE=.\boct_tree_cell.cxx
+SOURCE=.\test_driver.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\boct_bit_tree.cxx
+SOURCE=.\test_ortho_procrustes.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/boct_loc_code+short-.cxx
+SOURCE=.\test_fm_compute.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/boct_tree_cell+short.vgl_point_3d+double--.cxx
+SOURCE=.\test_ray_intersect.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/boct_test_util+short.vgl_point_3d+double--.cxx
+SOURCE=.\test_rational_adjust.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/boct_tree+short.vgl_point_3d+double--.cxx
+SOURCE=.\test_camera_compute.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/boct_tree+short.float-.cxx
+SOURCE=.\test_template_include.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/boct_tree_cell_reader+short.float-.cxx
+SOURCE=.\test_rational_adjust_onept.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/boct_tree_cell+short.float-.cxx
+SOURCE=.\test_backproject.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/boct_tree_cell+short.vnl_vector_fixed+float.2--.cxx
+SOURCE=.\test_ba_shared_k_lsqr.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/boct_tree+short.vnl_vector_fixed+float.2--.cxx
+SOURCE=.\test_camera_convert.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/boct_tree+short.int-.cxx
+SOURCE=.\test_ba_fixed_k_lsqr.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/boct_tree_cell+short.int-.cxx
+SOURCE=.\test_bundle_adjust.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/boct_tree+short.bool-.cxx
+SOURCE=.\test_optimize_camera.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/boct_tree_cell+short.bool-.cxx
+SOURCE=.\test_em_compute_5_point.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/boct_tree+short.char-.cxx
+SOURCE=.\test_ray.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/boct_tree_cell+short.char-.cxx
-# End Source File
-# End Group
-# Begin Group "Header Files"
-# PROP Default_Filter "h;txx"
-# Begin Source File
-SOURCE=.\boct_test_util.txx
+SOURCE=.\test_triangulate.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\boct_tree.txx
-# End Source File
-# Begin Source File
-SOURCE=.\boct_loc_code.h
-# End Source File
-# Begin Source File
-SOURCE=.\boct_tree_cell.h
-# End Source File
-# Begin Source File
-SOURCE=.\boct_test_util.h
-# End Source File
-# Begin Source File
-SOURCE=.\boct_tree.h
-# End Source File
-# Begin Source File
-SOURCE=.\boct_tree_cell.txx
-# End Source File
-# Begin Source File
-SOURCE=.\boct_loc_code.txx
-# End Source File
-# Begin Source File
-SOURCE=.\boct_tree_cell_reader.h
-# End Source File
-# Begin Source File
-SOURCE=.\boct_tree_cell_reader.txx
-# End Source File
-# Begin Source File
-SOURCE=.\boct_bit_tree.h
+SOURCE=.\test_include.cxx
 # End Source File
 # End Group
 # End Target

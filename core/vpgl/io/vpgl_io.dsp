@@ -1,31 +1,31 @@
-# Microsoft Developer Studio Project File - Name="boxm2_io" - Package Owner=<4>
+# Microsoft Developer Studio Project File - Name="vpgl_io" - Package Owner=<4>
 # Microsoft Developer Studio Generated Build File, Format Version 6.00
 # ** DO NOT EDIT **
 
 # variables to REPLACE
 # 
-# /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/core" /I "$(VXLROOT)/vcl/config.win32" /I "$(VXLROOT)/contrib/brl/bseg" == include path
+# /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/core" /I "$(VXLROOT)/vcl/config.win32" /I "$(VXLROOT)/contrib/mul" == include path
 #   -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE == compiler defines
 #  == override in output directory
-# boxm2_io  == name of output library
+# vpgl_io  == name of output library
 
 # TARGTYPE "Win32 (x86) Static Library" 0x0104
 
-CFG=boxm2_io - Win32 Debug
+CFG=vpgl_io - Win32 Debug
 !MESSAGE This is not a valid makefile. To build this project using NMAKE,
 !MESSAGE use the Export Makefile command and run
 !MESSAGE 
-!MESSAGE NMAKE /f "boxm2_io.mak".
+!MESSAGE NMAKE /f "vpgl_io.mak".
 !MESSAGE 
 !MESSAGE You can specify a configuration when running NMAKE
 !MESSAGE by defining the macro CFG on the command line. For example:
 !MESSAGE 
-!MESSAGE NMAKE /f "boxm2_io.mak" CFG="bmrf - Win32 Debug"
+!MESSAGE NMAKE /f "vpgl_io.mak" CFG="vil2 - Win32 Debug"
 !MESSAGE 
 !MESSAGE Possible choices for configuration are:
 !MESSAGE 
-!MESSAGE "boxm2_io - Win32 Debug" (based on "Win32 (x86) Static Library")
-!MESSAGE "boxm2_io - Win32 Release" (based on "Win32 (x86) Static Library")
+!MESSAGE "vpgl_io - Win32 Debug" (based on "Win32 (x86) Static Library")
+!MESSAGE "vpgl_io - Win32 Release" (based on "Win32 (x86) Static Library")
 # Begin Project
 # PROP AllowPerConfigDependencies 0
 # PROP Scc_ProjName ""
@@ -33,7 +33,7 @@ CFG=boxm2_io - Win32 Debug
 CPP=cl.exe
 RSC=rc.exe
 
-!IF  "$(CFG)" == "boxm2_io - Win32 Release"
+!IF  "$(CFG)" == "vpgl_io - Win32 Release"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
@@ -47,7 +47,7 @@ RSC=rc.exe
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB" /FD /c
 # ADD CPP /nologo /D "NDEBUG" /D "WIN32" /D "_MBCS" /D "_LIB" /FD /c
-# ADD CPP /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/core" /I "$(VXLROOT)/vcl/config.win32" /I "$(VXLROOT)/contrib/brl/bseg" -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "boxm2_io_EXPORTS"
+# ADD CPP /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/core" /I "$(VXLROOT)/vcl/config.win32" /I "$(VXLROOT)/contrib/mul" -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "vpgl_io_EXPORTS"
 # ADD CPP /W3 /Zm1000 /GX /GR
 # ADD CPP /MD /O2
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
@@ -59,7 +59,7 @@ LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo
 # ADD LIB32 /nologo
 
-!ELSEIF  "$(CFG)" == "boxm2_io - Win32 Debug"
+!ELSEIF  "$(CFG)" == "vpgl_io - Win32 Debug"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
@@ -73,7 +73,7 @@ LIB32=link.exe -lib
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB" /FD /c
 # ADD CPP /nologo /D "_DEBUG" /D "WIN32" /D "_MBCS" /D "_LIB" /FD /GZ /c
-# ADD CPP /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/core" /I "$(VXLROOT)/vcl/config.win32" /I "$(VXLROOT)/contrib/brl/bseg" -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "boxm2_io_EXPORTS"
+# ADD CPP /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/core" /I "$(VXLROOT)/vcl/config.win32" /I "$(VXLROOT)/contrib/mul" -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "vpgl_io_EXPORTS"
 # ADD CPP /W3 /Zm1000 /GX /GR
 # ADD CPP /MDd /Zi /Od /GZ
 # ADD BASE RSC /l 0x409 /d "_DEBUG"
@@ -87,123 +87,94 @@ LIB32=link.exe -lib
 
 # Begin Target
 
-# Name "boxm2_io - Win32 Release"
-# Name "boxm2_io - Win32 Debug"
+# Name "vpgl_io - Win32 Release"
+# Name "vpgl_io - Win32 Debug"
 
-# Begin Project
-# Begin Target
 # Begin Group "Source Files"
 # PROP Default_Filter "cxx"
 # Begin Source File
-SOURCE=.\boxm2_cache.cxx
+SOURCE=.\vpgl_io_camera.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\boxm2_dumb_cache.cxx
+SOURCE=.\vpgl_io_lvcs.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\boxm2_asio_mgr.cxx
+SOURCE=.\Templates/vpgl_io_camera+float-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\boxm2_sio_mgr.cxx
+SOURCE=.\Templates/vpgl_io_affine_camera+double-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\boxm2_nn_cache.cxx
+SOURCE=.\Templates/vpgl_io_local_rational_camera+double-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\boxm2_lru_cache.cxx
+SOURCE=.\Templates/vpgl_io_local_rational_camera+float-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\boxm2_stream_cache.cxx
+SOURCE=.\Templates/vpgl_io_rational_camera+double-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\boxm2_stream_block_cache.cxx
+SOURCE=.\Templates/vpgl_io_proj_camera+double-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/brdb_value_t+boxm2_cache_sptr-.cxx
+SOURCE=.\Templates/vpgl_io_perspective_camera+double-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vbl_smart_ptr+boxm2_cache-.cxx
+SOURCE=.\Templates/vpgl_io_camera+double-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/boxm2_stream_cache+BOXM2_AUX1-.cxx
+SOURCE=.\Templates/vpgl_io_proj_camera+float-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/boxm2_stream_cache+BOXM2_MOG3_GREY-.cxx
+SOURCE=.\Templates/vpgl_io_affine_camera+float-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/boxm2_stream_cache+BOXM2_ALPHA-.cxx
+SOURCE=.\Templates/vpgl_io_perspective_camera+float-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/boxm2_stream_cache+BOXM2_AUX2-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/boxm2_stream_cache+BOXM2_MOG2_RGB-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/boxm2_stream_cache+BOXM2_AUX-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/boxm2_stream_cache+BOXM2_MOG3_GREY_16-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/boxm2_stream_cache+BOXM2_AUX0-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/boxm2_stream_cache+BOXM2_AUX3-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/boxm2_stream_cache+BOXM2_NUM_OBS_SINGLE-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vbl_smart_ptr+boxm2_stream_cache_datatype_helper-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vbl_smart_ptr+boxm2_stream_cache_helper-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/brdb_value_t+boxm2_stream_cache_sptr-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vbl_smart_ptr+boxm2_stream_cache-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/boxm2_stream_cache+BOXM2_NUM_OBS_SINGLE_INT-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/boxm2_stream_cache+BOXM2_AUX4-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vbl_smart_ptr+boxm2_stream_block_cache-.cxx
+SOURCE=.\Templates/vpgl_io_rational_camera+float-.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
 # Begin Source File
-SOURCE=.\boxm2_sio_mgr.h
+SOURCE=.\vpgl_io_affine_camera.txx
 # End Source File
 # Begin Source File
-SOURCE=.\boxm2_asio_mgr.h
+SOURCE=.\vpgl_io_rational_camera.txx
 # End Source File
 # Begin Source File
-SOURCE=.\boxm2_cache.h
+SOURCE=.\vpgl_io_rational_camera.h
 # End Source File
 # Begin Source File
-SOURCE=.\boxm2_nn_cache.h
+SOURCE=.\vpgl_io_proj_camera.txx
 # End Source File
 # Begin Source File
-SOURCE=.\boxm2_dumb_cache.h
+SOURCE=.\vpgl_io_local_rational_camera.txx
 # End Source File
 # Begin Source File
-SOURCE=.\boxm2_lru_cache.h
+SOURCE=.\vpgl_io_camera.txx
 # End Source File
 # Begin Source File
-SOURCE=.\boxm2_stream_cache.h
+SOURCE=.\vpgl_io_camera.h
 # End Source File
 # Begin Source File
-SOURCE=.\boxm2_stream_cache.txx
+SOURCE=.\vpgl_io_proj_camera.h
 # End Source File
 # Begin Source File
-SOURCE=.\boxm2_stream_block_cache.h
+SOURCE=.\vpgl_io_perspective_camera.h
+# End Source File
+# Begin Source File
+SOURCE=.\vpgl_io_lvcs.h
+# End Source File
+# Begin Source File
+SOURCE=.\vpgl_io_local_rational_camera.h
+# End Source File
+# Begin Source File
+SOURCE=.\vpgl_io_perspective_camera.txx
+# End Source File
+# Begin Source File
+SOURCE=.\vpgl_io_affine_camera.h
 # End Source File
 # End Group
 # End Target

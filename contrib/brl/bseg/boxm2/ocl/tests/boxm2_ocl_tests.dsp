@@ -184,6 +184,9 @@ SOURCE=.\test_image_pyramid.cxx
 SOURCE=.\test_process_mains.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\test_weighted_em.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\test_include.cxx
 # End Source File
 # End Group

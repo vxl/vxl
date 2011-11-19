@@ -239,9 +239,6 @@ SOURCE=.\test_tree_cell_reader.cxx
 SOURCE=.\test_bit_tree.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\test_bit_tree2.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\test_include.cxx
 # End Source File
 # Begin Source File

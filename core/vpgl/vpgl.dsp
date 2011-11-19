@@ -1,31 +1,31 @@
-# Microsoft Developer Studio Project File - Name="boxm2_ocl_pro" - Package Owner=<4>
+# Microsoft Developer Studio Project File - Name="vpgl" - Package Owner=<4>
 # Microsoft Developer Studio Generated Build File, Format Version 6.00
 # ** DO NOT EDIT **
 
 # variables to REPLACE
-#
+# 
 # /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/core" /I "$(VXLROOT)/vcl/config.win32" /I "$(VXLROOT)/contrib/mul" == include path
 #   -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE == compiler defines
 #  == override in output directory
-# boxm2_ocl_pro  == name of output library
+# vpgl  == name of output library
 
 # TARGTYPE "Win32 (x86) Static Library" 0x0104
 
-CFG=boxm2_ocl_pro - Win32 Debug
+CFG=vpgl - Win32 Debug
 !MESSAGE This is not a valid makefile. To build this project using NMAKE,
 !MESSAGE use the Export Makefile command and run
-!MESSAGE
-!MESSAGE NMAKE /f "boxm2_ocl_pro.mak".
-!MESSAGE
+!MESSAGE 
+!MESSAGE NMAKE /f "vpgl.mak".
+!MESSAGE 
 !MESSAGE You can specify a configuration when running NMAKE
 !MESSAGE by defining the macro CFG on the command line. For example:
-!MESSAGE
-!MESSAGE NMAKE /f "boxm2_ocl_pro.mak" CFG="vil2 - Win32 Debug"
-!MESSAGE
+!MESSAGE 
+!MESSAGE NMAKE /f "vpgl.mak" CFG="vil2 - Win32 Debug"
+!MESSAGE 
 !MESSAGE Possible choices for configuration are:
-!MESSAGE
-!MESSAGE "boxm2_ocl_pro - Win32 Debug" (based on "Win32 (x86) Static Library")
-!MESSAGE "boxm2_ocl_pro - Win32 Release" (based on "Win32 (x86) Static Library")
+!MESSAGE 
+!MESSAGE "vpgl - Win32 Debug" (based on "Win32 (x86) Static Library")
+!MESSAGE "vpgl - Win32 Release" (based on "Win32 (x86) Static Library")
 # Begin Project
 # PROP AllowPerConfigDependencies 0
 # PROP Scc_ProjName ""
@@ -33,7 +33,7 @@ CFG=boxm2_ocl_pro - Win32 Debug
 CPP=cl.exe
 RSC=rc.exe
 
-!IF  "$(CFG)" == "boxm2_ocl_pro - Win32 Release"
+!IF  "$(CFG)" == "vpgl - Win32 Release"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
@@ -47,7 +47,7 @@ RSC=rc.exe
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB" /FD /c
 # ADD CPP /nologo /D "NDEBUG" /D "WIN32" /D "_MBCS" /D "_LIB" /FD /c
-# ADD CPP /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/core" /I "$(VXLROOT)/vcl/config.win32" /I "$(VXLROOT)/contrib/mul" -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "boxm2_ocl_pro_EXPORTS"
+# ADD CPP /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/core" /I "$(VXLROOT)/vcl/config.win32" /I "$(VXLROOT)/contrib/mul" -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "vpgl_EXPORTS"
 # ADD CPP /W3 /Zm1000 /GX /GR
 # ADD CPP /MD /O2
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
@@ -59,7 +59,7 @@ LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo
 # ADD LIB32 /nologo
 
-!ELSEIF  "$(CFG)" == "boxm2_ocl_pro - Win32 Debug"
+!ELSEIF  "$(CFG)" == "vpgl - Win32 Debug"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
@@ -73,7 +73,7 @@ LIB32=link.exe -lib
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB" /FD /c
 # ADD CPP /nologo /D "_DEBUG" /D "WIN32" /D "_MBCS" /D "_LIB" /FD /GZ /c
-# ADD CPP /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/core" /I "$(VXLROOT)/vcl/config.win32" /I "$(VXLROOT)/contrib/mul" -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "boxm2_ocl_pro_EXPORTS"
+# ADD CPP /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/core" /I "$(VXLROOT)/vcl/config.win32" /I "$(VXLROOT)/contrib/mul" -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "vpgl_EXPORTS"
 # ADD CPP /W3 /Zm1000 /GX /GR
 # ADD CPP /MDd /Zi /Od /GZ
 # ADD BASE RSC /l 0x409 /d "_DEBUG"
@@ -83,134 +83,176 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo
-!ENDIF
+!ENDIF 
 
 # Begin Target
 
-# Name "boxm2_ocl_pro - Win32 Release"
-# Name "boxm2_ocl_pro - Win32 Debug"
+# Name "vpgl - Win32 Release"
+# Name "vpgl - Win32 Debug"
 
 # Begin Group "Source Files"
 # PROP Default_Filter "cxx"
 # Begin Source File
-SOURCE=.\boxm2_ocl_register.cxx
+SOURCE=.\vpgl_datum_conversion.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\processes/boxm2_ocl_render_expected_image_process.cxx
+SOURCE=.\vpgl_utm.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\processes/boxm2_create_opencl_cache_process.cxx
+SOURCE=.\vpgl_lvcs.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\processes/boxm2_ocl_query_hist_data_process.cxx
+SOURCE=.\Templates/vpgl_fundamental_matrix+float-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\processes/boxm2_ocl_update_histogram_process.cxx
+SOURCE=.\Templates/vbl_smart_ptr+vpgl_camera+double--.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\processes/boxm2_ocl_batch_probability_process.cxx
+SOURCE=.\Templates/vpgl_essential_matrix+double-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\processes/boxm2_ocl_query_cell_data_process.cxx
+SOURCE=.\Templates/vpgl_calibration_matrix+float-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\processes/boxm2_ocl_render_expected_depth_process.cxx
+SOURCE=.\Templates/vpgl_affine_camera+double-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\processes/boxm2_ocl_update_process.cxx
+SOURCE=.\Templates/vpgl_perspective_camera+double-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\processes/boxm2_ocl_refine_process.cxx
+SOURCE=.\Templates/vpgl_local_rational_camera+float-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\processes/boxm2_ocl_render_gl_expected_image_process.cxx
+SOURCE=.\Templates/vpgl_fundamental_matrix+double-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\processes/boxm2_ocl_render_expected_height_map_process.cxx
+SOURCE=.\Templates/vpgl_rational_camera+double-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\processes/boxm2_ocl_update_color_process.cxx
+SOURCE=.\Templates/vpgl_proj_camera+double-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\processes/boxm2_ocl_render_expected_color_process.cxx
+SOURCE=.\Templates/vpgl_proj_camera+float-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\processes/boxm2_ocl_render_gl_expected_color_process.cxx
+SOURCE=.\Templates/vpgl_generic_camera+float-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\processes/boxm2_ocl_change_detection_process.cxx
+SOURCE=.\Templates/vpgl_affine_camera+float-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\processes/boxm2_ocl_convert_float_image_to_rgba_process.cxx
+SOURCE=.\Templates/vpgl_rational_camera+float-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\processes/boxm2_ocl_probability_of_image_process.cxx
+SOURCE=.\Templates/vpgl_calibration_matrix+double-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\processes/boxm2_ocl_probability_of_image_gl_process.cxx
+SOURCE=.\Templates/vpgl_affine_fundamental_matrix+double-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\processes/boxm2_ocl_render_cone_expected_image_process.cxx
+SOURCE=.\Templates/vbl_smart_ptr+vpgl_camera+float--.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\processes/boxm2_ocl_filter_process.cxx
+SOURCE=.\Templates/vpgl_local_rational_camera+double-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\processes/boxm2_clear_opencl_cache_process.cxx
+SOURCE=.\Templates/vpgl_generic_camera+double-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\processes/boxm2_ocl_cone_update_process.cxx
+SOURCE=.\Templates/vbl_smart_ptr+vpgl_lvcs-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\processes/boxm2_ocl_update_aux_per_view_process.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\processes/boxm2_ocl_adaptive_cone_update_process.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\processes/boxm2_ocl_adaptive_cone_render_expected_process.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\processes/boxm2_ocl_merge_process.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\processes/boxm2_ocl_render_expected_shadow_map_process.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\processes/boxm2_ocl_update_sun_visibilities_process.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\processes/boxm2_ocl_aux_update_view_direction_process.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\processes/boxm2_ocl_create_aux_process.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\processes/boxm2_ocl_create_norm_intensities_process.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\processes/boxm2_ocl_ingest_dem_process.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\processes/boxm2_ocl_visualize_change_process.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\processes/boxm2_ocl_paint_batch_process.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\processes/boxm2_ocl_batch_synoptic_function_process.cxx
+SOURCE=.\Templates/vpgl_perspective_camera+float-.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
 # Begin Source File
-SOURCE=.\boxm2_ocl_register.h
+SOURCE=.\vpgl_datum_conversion.h
 # End Source File
 # Begin Source File
-SOURCE=.\boxm2_ocl_processes.h
+SOURCE=.\vpgl_affine_camera.h
 # End Source File
 # Begin Source File
-SOURCE=.\processes/boxm2_ocl_filter_process.h
+SOURCE=.\vpgl_earth_constants.h
+# End Source File
+# Begin Source File
+SOURCE=.\vpgl_local_rational_camera.h
+# End Source File
+# Begin Source File
+SOURCE=.\vpgl_calibration_matrix.txx
+# End Source File
+# Begin Source File
+SOURCE=.\vpgl_utm.h
+# End Source File
+# Begin Source File
+SOURCE=.\vpgl_fundamental_matrix.h
+# End Source File
+# Begin Source File
+SOURCE=.\vpgl_lvcs_sptr.h
+# End Source File
+# Begin Source File
+SOURCE=.\vpgl_camera_double_sptr.h
+# End Source File
+# Begin Source File
+SOURCE=.\vpgl_essential_matrix.txx
+# End Source File
+# Begin Source File
+SOURCE=.\vpgl_generic_camera.txx
+# End Source File
+# Begin Source File
+SOURCE=.\vpgl_proj_camera.h
+# End Source File
+# Begin Source File
+SOURCE=.\vpgl_camera.h
+# End Source File
+# Begin Source File
+SOURCE=.\vpgl_dll.h
+# End Source File
+# Begin Source File
+SOURCE=.\vpgl_calibration_matrix.h
+# End Source File
+# Begin Source File
+SOURCE=.\vpgl_essential_matrix.h
+# End Source File
+# Begin Source File
+SOURCE=.\vpgl_proj_camera.txx
+# End Source File
+# Begin Source File
+SOURCE=.\vpgl_fundamental_matrix.txx
+# End Source File
+# Begin Source File
+SOURCE=.\vpgl_camera_float_sptr.h
+# End Source File
+# Begin Source File
+SOURCE=.\vpgl_lvcs.h
+# End Source File
+# Begin Source File
+SOURCE=.\vpgl_rational_camera.h
+# End Source File
+# Begin Source File
+SOURCE=.\vpgl_perspective_camera.txx
+# End Source File
+# Begin Source File
+SOURCE=.\vpgl_affine_fundamental_matrix.txx
+# End Source File
+# Begin Source File
+SOURCE=.\vpgl_rational_camera.txx
+# End Source File
+# Begin Source File
+SOURCE=.\vpgl_affine_camera.txx
+# End Source File
+# Begin Source File
+SOURCE=.\vpgl_local_rational_camera.txx
+# End Source File
+# Begin Source File
+SOURCE=.\vpgl_affine_fundamental_matrix.h
+# End Source File
+# Begin Source File
+SOURCE=.\vpgl_generic_camera.h
+# End Source File
+# Begin Source File
+SOURCE=.\vpgl_perspective_camera.h
 # End Source File
 # End Group
 # End Target
