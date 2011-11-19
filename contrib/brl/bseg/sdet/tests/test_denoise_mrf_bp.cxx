@@ -11,10 +11,14 @@
 
 static void test_denoise_mrf_bp()
 {
+#if 0
   vil_image_resource_sptr depth =
-      vil_load_image_resource("f:/visdt/z_image.tiff");
+
+    vil_load_image_resource("e:/images/MeshStudies/FixedModelBug/z_image.tiff");
+
   vil_image_resource_sptr var =
-    vil_load_image_resource("f:/visdt/var_image.tiff");
+
+    vil_load_image_resource("e:/images/MeshStudies/FixedModelBug/var_image.tiff");
   sdet_denoise_mrf_bp_params dmbp;
   dmbp.n_iter_ = 3;
   dmbp.pyramid_levels_ = 5;
@@ -22,17 +26,17 @@ static void test_denoise_mrf_bp()
   dmbp.truncation_cost_=400;
   dmbp.n_labels_ = 64;
 
-  dmbp.lambda_=0.01f;
+  //dmbp.lambda_=0.000001f;
+  dmbp.lambda_=0.001f;
+
   sdet_denoise_mrf_bp mbp(dmbp);
   mbp.set_image(depth);   mbp.set_variance(var);
   bool success = mbp.denoise();
   if (success) {
     vil_image_resource_sptr outr = mbp.output();
     vil_save_image_resource(outr,
-                            "f:/visdt/z_image_out.tiff",
-                            "tiff");
-
+                            "e:/images/MeshStudies/FixedModelBug/belief_.001.tiff", "tiff");
   }
+#endif
 }
-
 TESTMAIN(test_denoise_mrf_bp);
