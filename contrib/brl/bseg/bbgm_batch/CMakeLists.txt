@@ -3,6 +3,7 @@ INCLUDE( ${VXL_CMAKE_DIR}/NewCMake/FindPython.cmake )
 IF( PYTHON_FOUND )
   INCLUDE( ${BRL_MODULE_PATH}/FindEXPAT.cmake )
   IF( EXPAT_FOUND )
+    IF(EXPATPP_FOUND)
     INCLUDE(${VXL_CMAKE_DIR}/FindTIFF.cmake)
     IF(TIFF_FOUND)
       INCLUDE( ${VXL_CMAKE_DIR}/FindGEOTIFF.cmake)
@@ -43,7 +44,7 @@ IF( PYTHON_FOUND )
         TARGET_LINK_LIBRARIES(bbgm_batch
                               bprb brdb bpro_batch bbgm_pro
                               vidl_pro vil_pro
-                              vbl vil_io vil_io)
+                              vbl vil_io vil_io expat expatpp)
 
         IF (PYTHON_DEBUG_LIBRARIES)
           TARGET_LINK_LIBRARIES( bbgm_batch debug ${PYTHON_DEBUG_LIBRARY})
@@ -59,5 +60,6 @@ IF( PYTHON_FOUND )
 
       ENDIF(GEOTIFF_FOUND )
     ENDIF(TIFF_FOUND )
+   ENDIF( EXPATPP_FOUND )
   ENDIF( EXPAT_FOUND )
 ENDIF( PYTHON_FOUND )
