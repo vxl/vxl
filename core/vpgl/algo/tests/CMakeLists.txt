@@ -35,7 +35,6 @@ ADD_TEST( vpgl_algo_test_ortho_procrustes            ${EXECUTABLE_OUTPUT_PATH}/v
 ADD_TEST( vpgl_algo_test_em_compute_5_point          ${EXECUTABLE_OUTPUT_PATH}/vpgl_algo_test_all test_em_compute_5_point )
 ADD_TEST( vpgl_algo_test_triangulate          ${EXECUTABLE_OUTPUT_PATH}/vpgl_algo_test_all test_triangulate )
 ADD_TEST( vpgl_algo_test_bundle_adjust          ${EXECUTABLE_OUTPUT_PATH}/vpgl_algo_test_all test_bundle_adjust )
-ADD_TEST( vpgl_algo_test_bundle_adjust          ${EXECUTABLE_OUTPUT_PATH}/vpgl_algo_test_all test_bundle_adjust )
 ADD_TEST( vpgl_algo_test_ba_fixed_k_lsqr             ${EXECUTABLE_OUTPUT_PATH}/vpgl_algo_test_all test_ba_fixed_k_lsqr )
 ADD_TEST( vpgl_algo_test_ba_shared_k_lsqr            ${EXECUTABLE_OUTPUT_PATH}/vpgl_algo_test_all test_ba_shared_k_lsqr )
 
