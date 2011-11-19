@@ -19,6 +19,10 @@ TARGET_LINK_LIBRARIES(bwm_transform_video_site_proc  bwm_video vsol vil vnl vgl 
 
 ADD_EXECUTABLE(bwm_video_corr_to_groundtruth_images bwm_video_corr_to_groundtruth_images.cxx)
 TARGET_LINK_LIBRARIES(bwm_video_corr_to_groundtruth_images  bwm_video vnl vpl vul expat expatpp)
+
+ADD_EXECUTABLE(bwm_video_normalize bwm_video_normalize.cxx)
+TARGET_LINK_LIBRARIES(bwm_video_normalize  bwm_video vnl vpl vul expat expatpp)
+
  ENDIF(EXPATPP_FOUND)
 ENDIF(EXPAT_FOUND)
 
@@ -28,12 +32,6 @@ TARGET_LINK_LIBRARIES(bwm_planar_reg_proc  bwm_video vnl vgl vpl vul )
 
 ADD_EXECUTABLE(bwm_extract_snippets bwm_extract_snippets.cxx)
 TARGET_LINK_LIBRARIES(bwm_extract_snippets  bwm_video vsol vnl vil vbl_io vpl vul vsl)
-
-
-
-
-ADD_EXECUTABLE(bwm_video_normalize bwm_video_normalize.cxx)
-TARGET_LINK_LIBRARIES(bwm_video_normalize  bwm_video vnl vpl vul)
 
 ADD_EXECUTABLE(bwm_video_normalize_3d_corr bwm_video_normalize_3d_corr.cxx)
 TARGET_LINK_LIBRARIES(bwm_video_normalize_3d_corr  bwm bwm_algo bwm_video vnl vpl vul)
