@@ -16,9 +16,9 @@
 #include <vpgl/algo/vpgl_optimize_camera.h>
 #include <vpgl/algo/vpgl_ortho_procrustes.h>
 #include <vpgl/algo/vpgl_rational_adjust.h>
+#include <vpgl/algo/vpgl_rational_adjust_multipt.h>
 #include <vpgl/algo/vpgl_ray.h>
 #include <vpgl/algo/vpgl_ray_intersect.h>
 #include <vpgl/algo/vpgl_triangulate_points.h>
-
 
 int main() { return 0; }
