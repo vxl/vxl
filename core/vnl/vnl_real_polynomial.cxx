@@ -157,6 +157,23 @@ vnl_real_polynomial operator*(const vnl_real_polynomial& f1, const vnl_real_poly
 
   return prod;
 }
+//: Add rhs to this and return *this
+vnl_real_polynomial& vnl_real_polynomial::operator+=(vnl_real_polynomial const& rhs){
+  *this = (*this) + rhs;
+  return *this;
+}
+
+//: Subtract rhs from this and return *this
+vnl_real_polynomial& vnl_real_polynomial::operator-=(vnl_real_polynomial const& rhs){
+  *this = (*this) - rhs;
+  return *this;
+}
+
+//: multiply rhs with this and return *this
+vnl_real_polynomial& vnl_real_polynomial::operator*=(vnl_real_polynomial const& rhs){
+  *this = (*this) * rhs;
+  return *this;
+}
 
 //: Returns RMS difference between f1 and f2 over range [x1,x2]
 // $\frac1{\sqrt{|x_2-x_1|}}\,\sqrt{\int_{x_1}^{x_2}\left(f_1(x)-f_2(x)\right)^2\,dx}$
