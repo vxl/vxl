@@ -229,7 +229,7 @@ rrel_irls::estimate( const rrel_estimation_problem* problem,
     // Test to see if the sum of the weights is less or equal to zero.
     double sum_wgt = 0;
 
-    for (int i = 0; i < weights.size(); ++i ) {
+    for ( unsigned int i = 0; i < weights.size(); ++i ) {
       sum_wgt += weights[i];
     }
 
