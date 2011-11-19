@@ -1,2 +1,0 @@
-contrib/brl/bmvl/brct/tests/data/police/00010.png
--826.548 158.096
