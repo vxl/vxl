@@ -67,6 +67,10 @@ SUBDIRS += baio
 
 SUBDIRS += brad
 
+SUBDIRS += vsph
+
+SUBDIRS += bpgl
+
 ################################
 include ${VXLROOT}/config/top.mk
 ################################

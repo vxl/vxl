@@ -1,5 +1,6 @@
-# CARMEN
-SUBDIRS += carmen_interface
+USES += core
+
+MINI_PROG_SOURCES += vpgl_synth_bundle_adjust.cxx
 
 ################################
 include ${VXLROOT}/config/top.mk

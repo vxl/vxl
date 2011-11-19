@@ -1,0 +1,8 @@
+USES += contrib/brl contrib/brl/bbas core
+
+MINI_PROG_SOURCES += register_images_exe.cxx
+MINI_PROG_SOURCES += compute_homographies_exe.cxx
+
+################################
+include ${VXLROOT}/config/top.mk
+################################

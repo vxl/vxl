@@ -1,15 +1,14 @@
-USES += contrib/brl contrib/brl/bseg core
+USES += contrib/brl contrib/brl/bbas core
 include ../config.mk
 include $(VXLROOT)/core/testlib/config.mk
 
 TESTMAIN := test_driver.cxx
 
-TESTS += test_refine.cxx
-TESTS += test_image_pyramid.cxx
-TESTS += test_process_mains.cxx
-TESTS += test_weighted_em.cxx
+TESTS += test_poly_radial_distortion.cxx
+TESTS += test_segmented_rolling_shutter_camera.cxx
 
 MINI_PROG_SOURCES += test_include.cxx
+MINI_PROG_SOURCES += test_template_include.cxx
 
 #########################################
 include ${VXLROOT}/config/static-tests.mk

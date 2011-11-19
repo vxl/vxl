@@ -1,13 +1,13 @@
-USES += contrib/brl contrib/brl/bseg core
+USES += contrib/brl contrib/brl/bbas core
 include ../config.mk
 include $(VXLROOT)/core/testlib/config.mk
 
 TESTMAIN := test_driver.cxx
 
-TESTS += test_refine.cxx
-TESTS += test_image_pyramid.cxx
-TESTS += test_process_mains.cxx
-TESTS += test_weighted_em.cxx
+TESTS += test_rotation_only.cxx
+TESTS += test_icam_view_sphere.cxx
+TESTS += test_minimizer.cxx
+TESTS += test_icam_transform.cxx
 
 MINI_PROG_SOURCES += test_include.cxx
 

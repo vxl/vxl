@@ -9,6 +9,7 @@ SOURCES += boxm2_sio_mgr.cxx
 SOURCES += boxm2_nn_cache.cxx
 SOURCES += boxm2_lru_cache.cxx
 SOURCES += boxm2_stream_cache.cxx
+SOURCES += boxm2_stream_block_cache.cxx
 MANPAGE_SOURCES += boxm2_stream_cache.txx
 
 #######################################

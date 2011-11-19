@@ -1,0 +1,23 @@
+USES += contrib/brl contrib/brl/bbas core
+
+LIBRARY := vsph
+VERSION := 1.0
+
+SOURCES += vsph_camera_bounds.cxx
+SOURCES += vsph_spherical_coord.cxx
+SOURCES += vsph_sph_point_3d.cxx
+MANPAGE_SOURCES += vsph_view_sphere.txx
+MANPAGE_SOURCES += vsph_view_point.h
+MANPAGE_SOURCES += vsph_spherical_coord_sptr.h
+
+#######################################
+include ${VXLROOT}/config/top-params.mk
+#######################################
+
+ifndef NOTEST
+ SUBDIRS += tests
+endif
+
+######################################
+include ${VXLROOT}/config/top-rules.mk
+######################################
