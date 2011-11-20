@@ -53,6 +53,7 @@ void create_view_sphere(icam_view_sphere_sptr& view_sphere)
 
 static void test_minimizer()
 {
+#if 0 // need actual data (TO DO add test that doesn't)
   vcl_string root_dir = testlib_root_dir();
   vcl_map<unsigned int, vcl_string> images, depth_images;
   vcl_vector<vcl_string> camera_f;
@@ -98,6 +99,7 @@ static void test_minimizer()
   if (load_image<float>(source_file, source_img)) {
     view_sphere->register_image(*source_img, params);
   }
+#endif
 }
 
 
