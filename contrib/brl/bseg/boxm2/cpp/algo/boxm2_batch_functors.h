@@ -2,7 +2,6 @@
 #define boxm2_batch_functors_h_
 //:
 // \file
-
 #include <boxm2/cpp/algo/boxm2_cast_ray_function.h>
 #include <boxm2/cpp/algo/boxm2_mog3_grey_processor.h>
 #include <boxm2/cpp/algo/boxm2_gauss_grey_processor.h>
@@ -72,7 +71,7 @@ class boxm2_batch_update_pass1_functor
     boxm2_data<BOXM2_AUX0>::datatype & aux0 = aux0_data_->data()[index];
     boxm2_data<BOXM2_AUX1>::datatype & aux1 = aux1_data_->data()[index];
 
-    if (aux1<1e-10f)return true;
+    if (aux1<1e-10f) return true;
 
     // compute average intensity for the cell
     float mean_obs =aux0/aux1;
@@ -102,10 +101,9 @@ class boxm2_batch_update_pass1_functor
     pre+=vis*(1-temp)*PI;
     vis*=temp;
 #if 0
-  if (vis*(1-temp) < 0)
-    vcl_cout << "ERROR" << vcl_endl;
+    if (vis*(1-temp) < 0)
+      vcl_cout << "ERROR" << vcl_endl;
 #endif
-
     (*pre_img_)(i,j)=pre;
     (*vis_img_)(i,j)=vis;
 
@@ -155,7 +153,7 @@ class boxm2_batch_update_pass2_functor
     boxm2_data<BOXM2_AUX0>::datatype & aux0 = aux0_data_->data()[index];
     boxm2_data<BOXM2_AUX1>::datatype & aux1 = aux1_data_->data()[index];
 
-    if (aux1<1e-10f)return true;
+    if (aux1<1e-10f) return true;
 
     // compute average intensity for the cell
     float mean_obs = aux0/aux1;
@@ -193,19 +191,15 @@ class boxm2_batch_update_pass2_functor
     boxm2_data<BOXM2_ALPHA>::datatype alpha=alpha_data_->data()[index];
     float temp=vcl_exp(-seg_len*alpha);
 
-  //float pre_inf_val = (*pre_inf_)(i,j);
-  //float cell_val = vis*(1-temp)*PI;
-  float post = (*pre_inf_)(i,j) - pre - vis*(1-temp)*PI;
-  //: now correct post
-  if (post > 1e-8f)
-    post /= temp;
-  else
-    post = 0;
+    float post = (*pre_inf_)(i,j) - pre - vis*(1-temp)*PI;
+    // now correct post
+    if (post > 1e-8f)
+      post /= temp;
+    else
+      post = 0;
 
-  float PI_inf = 1; //assume uniform distributed background model.
-  //float inf_term = (*vis_inf_)(i,j) * PI_inf;
-  post +=  (*vis_inf_)(i,j) * PI_inf;
-
+    float PI_inf = 1; //assume uniformly distributed background model.
+    post +=  (*vis_inf_)(i,j) * PI_inf;
 
     boxm2_data<BOXM2_AUX>::datatype & aux = aux_data_->data()[index];
     // accumulate aux sample values
@@ -287,7 +281,7 @@ class boxm2_batch_update_functor
         float mean_obs = out0[m]/obs_seg_len;
         obs.push_back(mean_obs);
 
-        max_obs_seg_len = max_obs_seg_len > obs_seg_len/nrays[m] ? max_obs_seg_len : obs_seg_len/nrays[m];
+        if (max_obs_seg_len < obs_seg_len/nrays[m]) max_obs_seg_len = obs_seg_len/nrays[m];
 
         float PI = boxm2_data_traits<APM_TYPE>::processor::prob_density(mog, mean_obs);
         float pre_i = out[m][0]/obs_seg_len; // mean pre
@@ -301,29 +295,27 @@ class boxm2_batch_update_functor
       }
     }
 
-    //update alpha and mog if ray hit the cell significantly
+    // update alpha and mog if ray hit the cell significantly
     if (max_obs_seg_len>1e-8f) {
-    float p_q = 1.0f-vcl_exp(-alpha*max_obs_seg_len);
+      float p_q = 1.0f-vcl_exp(-alpha*max_obs_seg_len);
 
-    //correct term1 and term2
-    term1 = vcl_exp(term1);
-    term2 = vcl_exp(term2);
+      //correct term1 and term2
+      term1 = vcl_exp(term1);
+      term2 = vcl_exp(term2);
 
-    //: compute new alpha value
-    float p_q_new = p_q*term1 / (p_q*term1 + (1.0f-p_q)*term2);
-    //alpha *= p_q_new;
-    alpha = -vcl_log(1.0f-p_q_new)/max_obs_seg_len;
+      // compute new alpha value
+      float p_q_new = p_q*term1 / (p_q*term1 + (1.0f-p_q)*term2);
+      alpha = -vcl_log(1.0f-p_q_new)/max_obs_seg_len; //alpha *= p_q_new;
 
-    float alpha_min = -vcl_log(1.f-0.0001f)/max_obs_seg_len;
-    float alpha_max = -vcl_log(1.f-0.995f)/max_obs_seg_len;
-    if (alpha < alpha_min)
-      alpha = alpha_min;
-    if (alpha > alpha_max)
-     alpha = alpha_max;
+      float alpha_min = -vcl_log(1.f-0.0001f)/max_obs_seg_len;
+      float alpha_max = -vcl_log(1.f-0.995f)/max_obs_seg_len;
+      if (alpha < alpha_min)
+        alpha = alpha_min;
+      if (alpha > alpha_max)
+       alpha = alpha_max;
 
-    //: compute new appearance model
-    //boxm2_data_traits<APM_TYPE>::processor::compute_app_model(mog,obs,vis,n_table_,0.03f);
-    boxm2_data_traits<APM_TYPE>::processor::compute_app_model(mog,obs,pre,vis,n_table_,0.03f);
+      // compute new appearance model
+      boxm2_data_traits<APM_TYPE>::processor::compute_app_model(mog,obs,pre,vis,n_table_,0.03f);
     }
     return true;
   }
@@ -368,10 +360,10 @@ class boxm2_batch_update_app_functor
     vcl_vector<aux0_datatype> out0 = str_cache_->get_next<BOXM2_AUX0>(id_, index);
     vcl_vector<aux1_datatype> out1 = str_cache_->get_next<BOXM2_AUX1>(id_, index);
     vcl_vector<aux2_datatype> out2 = str_cache_->get_next<BOXM2_AUX2>(id_, index);
-
-    //vcl_vector<aux_datatype> out = str_cache_->get_next<BOXM2_AUX>(id_, index);
-    //vcl_vector<nrays_datatype> nrays = str_cache_->get_next<BOXM2_NUM_OBS_SINGLE>(id_, index);
-
+#if 0
+    vcl_vector<aux_datatype> out = str_cache_->get_next<BOXM2_AUX>(id_, index);
+    vcl_vector<nrays_datatype> nrays = str_cache_->get_next<BOXM2_NUM_OBS_SINGLE>(id_, index);
+#endif
     int cell_no = 2000000;
 
     vcl_vector<aux0_datatype> obs;
@@ -379,27 +371,21 @@ class boxm2_batch_update_app_functor
     vcl_vector<float> pre;
     unsigned nimgs = (unsigned)out0.size();
 
-    float max_obs_seg_len = 0.0f;  // max gives the best idea about the size of the cell
     for (unsigned m = 0; m < nimgs; m++) {
-      
-      
       float obs_seg_len = out0[m];
-      if(obs_seg_len > 1e-12f) {
+      if (obs_seg_len > 1e-12f) {
         float mean_obs = out1[m]/obs_seg_len;
         obs.push_back(mean_obs);
 
-        //max_obs_seg_len = max_obs_seg_len > obs_seg_len/nrays[m] ? max_obs_seg_len : obs_seg_len/nrays[m];
-
-        //float pre_i = out[m][0]/obs_seg_len; // mean pre
-        //pre.push_back(pre_i);
+        //pre.push_back(out[m][0]/obs_seg_len); // mean pre
         float vis_i = out2[m]/obs_seg_len; // mean vis
         vis.push_back(vis_i);
-/*
-      if (index == cell_no) {
-        vcl_cout << "\t m: " << m << " pre_i: " << pre_i << " vis_i: " << vis_i << '\n'
-                 << "obs_seg_len: " << obs_seg_len << " mean_obs: " << mean_obs << vcl_endl;
-      }
-*/
+#if 0
+        if (index == cell_no) {
+          vcl_cout << "\t m: " << m << " pre_i: " << pre_i << " vis_i: " << vis_i << '\n'
+                   << "obs_seg_len: " << obs_seg_len << " mean_obs: " << mean_obs << vcl_endl;
+        }
+#endif
       }
     }
 
@@ -466,7 +452,7 @@ class boxm2_batch_update_alpha_functor
       float mean_obs = out0[m]/obs_seg_len;
       obs.push_back(mean_obs);
 
-      max_obs_seg_len = max_obs_seg_len > obs_seg_len/nrays[m] ? max_obs_seg_len : obs_seg_len/nrays[m];
+      if (max_obs_seg_len < obs_seg_len/nrays[m]) max_obs_seg_len = obs_seg_len/nrays[m];
 
       float PI = boxm2_data_traits<APM_TYPE>::processor::prob_density(mog, mean_obs);
       float pre_i = out[m][0]/obs_seg_len; // mean pre
