@@ -50,7 +50,7 @@
 // multi-line messages in a single log output.
 //
 // You can also use the logger to control the dumping of data files straight to the filesystem.
-// /code
+// \code
 // if (my_log.level() >= mbl_logger::INFO && my_log.dump())
 // {
 //   vcl_string filename=my_log.dump_prefix()+"my_image.png";
@@ -61,6 +61,15 @@
 // }
 // \endcode
 //
+// You can find all logger names in some source code using the following commands
+// \code
+//find . -type f | grep -v '\.svn' | xargs grep mbl_logger | \
+//  perl -ne ' if (/\"(.*)\"/) { print qq($1\n) } | \
+//  sort -u | less
+// \endcode
+
+
+
 #include <vcl_fstream.h>
 #include <vcl_streambuf.h>
 #include <vcl_string.h>
