@@ -3,7 +3,6 @@
 #define vpgl_camera_convert_cxx_
 
 #include "vpgl_camera_convert.h"
-#include "vpgl_camera_compute.h"
 //:
 // \file
 #include <vcl_iostream.h>
@@ -24,6 +23,7 @@
 #include <vgl/vgl_homg_point_3d.h>
 #include <vpgl/algo/vpgl_ortho_procrustes.h>
 #include <vpgl/algo/vpgl_optimize_camera.h>
+#include <vpgl/algo/vpgl_camera_compute.h>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_box_3d.h>
@@ -798,7 +798,7 @@ convert( vpgl_local_rational_camera<double> const& rat_cam,
   // convert high and low elevations to local z values
   rat_cam.lvcs().global_to_local(lon,lat,el_low,vpgl_lvcs::wgs84,x,y,z_low,vpgl_lvcs::DEG);
   rat_cam.lvcs().global_to_local(lon,lat,el_high,vpgl_lvcs::wgs84,x,y,z_high,vpgl_lvcs::DEG);
-    
+
   vgl_plane_3d<double> high(0.0, 0.0, 1.0, -z_high);
   vgl_plane_3d<double> low(0.0, 0.0, 1.0, -z_low);
 
@@ -822,8 +822,8 @@ convert( vpgl_local_rational_camera<double> const& rat_cam,
   ray_pyr[0].resize(nj, ni);
   ray_pyr[0].fill(vgl_ray_3d<double>(vgl_point_3d<double>(0,0,0),vgl_vector_3d<double>(0,0,1)));
   nr[0]=nj;   nc[0]=ni; scl[0]=1.0;
-  int di = vcl_ceil((float)ni/2)+1,
-      dj = vcl_ceil((float)nj/2)+1;
+  int di = (ni+1)/2+1,
+      dj = (nj+1)/2+1;
 
   for (int i=1; i<n_levels; ++i)
   {
@@ -928,7 +928,8 @@ convert( vpgl_local_rational_camera<double> const& rat_cam,
   if ((int)level < n_levels) {
     gen_cam = vpgl_generic_camera<double>(ray_pyr[level]);
     return true;
-  } else
+  }
+  else
     return false;
 }
 
