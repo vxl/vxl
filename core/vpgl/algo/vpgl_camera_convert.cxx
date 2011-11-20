@@ -11,14 +11,11 @@
 #include <vcl_cmath.h>
 #include <vnl/vnl_numeric_traits.h>
 #include <vnl/vnl_det.h>
-#include <vnl/vnl_inverse.h>
 #include <vnl/vnl_vector_fixed.h>
-#include <vnl/vnl_double_3.h>
 #include <vnl/vnl_matrix_fixed.h>
 #include <vnl/algo/vnl_svd.h>
 #include <vnl/algo/vnl_qr.h>
 #include <vgl/algo/vgl_rotation_3d.h>
-//#include <vgl/algo/vgl_h_matrix_2d_convert_linear.h>
 #include <vgl/algo/vgl_h_matrix_3d.h>
 #include <vgl/vgl_homg_point_3d.h>
 #include <vpgl/algo/vpgl_ortho_procrustes.h>
@@ -37,28 +34,30 @@
 
 static vcl_vector<double>
 pvector(const double x, const double y, const double z)
-{  vcl_vector<double> pv(20);
- pv[0]= x*x*x;
- pv[1]= x*x*y;
- pv[2]= x*x*z;
- pv[3]= x*x;
- pv[4]= x*y*y;
- pv[5]= x*y*z;
- pv[6]= x*y;
- pv[7]= x*z*z;
- pv[8]= x*z;
- pv[9]= x;
- pv[10]= y*y*y;
- pv[11]= y*y*z;
- pv[12]= y*y;
- pv[13]= y*z*z;
- pv[14]= y*z;
- pv[15]= y;
- pv[16]= z*z*z;
- pv[17]= z*z;
- pv[18]= z;
- pv[19]= 1;
- return pv;
+{
+  //fill the vector
+  vcl_vector<double> pv(20);
+  pv[0]= x*x*x;
+  pv[1]= x*x*y;
+  pv[2]= x*x*z;
+  pv[3]= x*x;
+  pv[4]= x*y*y;
+  pv[5]= x*y*z;
+  pv[6]= x*y;
+  pv[7]= x*z*z;
+  pv[8]= x*z;
+  pv[9]= x;
+  pv[10]= y*y*y;
+  pv[11]= y*y*z;
+  pv[12]= y*y;
+  pv[13]= y*z*z;
+  pv[14]= y*z;
+  pv[15]= y;
+  pv[16]= z*z*z;
+  pv[17]= z*z;
+  pv[18]= z;
+  pv[19]= 1;
+  return pv;
 }
 
 static vcl_vector<double>
@@ -118,7 +117,7 @@ power_vector_dz(const double x, const double y, const double z)
 //convert the value of the polynomial
 static double pval(vcl_vector<double> const& pv, vcl_vector<double>const& coef)
 {
-  double sum = 0;
+  double sum = 0.0;
   for (unsigned i = 0; i<20; ++i)
     sum += pv[i]*coef[i];
   return sum;
@@ -188,10 +187,10 @@ convert( vpgl_rational_camera<double> const& rat_cam,
 
   //Construct the matrix to convert the center of projection
   vnl_matrix<double> C(4,4);
-  C[0][0]=neu_u_dx0;   C[0][1]=neu_u_dy0; C[0][2]=neu_u_dz0; C[0][3]=neu_u_0;
-  C[1][0]=den_u_dx0;   C[1][1]=den_u_dy0; C[1][2]=den_u_dz0; C[1][3]=den_u_0;
-  C[2][0]=neu_v_dx0;   C[2][1]=neu_v_dy0; C[2][2]=neu_v_dz0; C[2][3]=neu_v_0;
-  C[3][0]=den_v_dx0;   C[3][1]=den_v_dy0; C[3][2]=den_v_dz0; C[3][3]=den_v_0;
+  C[0][0]=neu_u_dx0; C[0][1]=neu_u_dy0; C[0][2]=neu_u_dz0; C[0][3]=neu_u_0;
+  C[1][0]=den_u_dx0; C[1][1]=den_u_dy0; C[1][2]=den_u_dz0; C[1][3]=den_u_0;
+  C[2][0]=neu_v_dx0; C[2][1]=neu_v_dy0; C[2][2]=neu_v_dz0; C[2][3]=neu_v_0;
+  C[3][0]=den_v_dx0; C[3][1]=den_v_dy0; C[3][2]=den_v_dz0; C[3][3]=den_v_0;
 
   vnl_svd<double> svd(C);
   vnl_vector<double> nv = svd.nullvector();
@@ -426,10 +425,9 @@ convert( vpgl_rational_camera<double> const& rat_cam,
   //Convert solution for rotation and translation and calibration matrix of
   //the perspective camera
   vpgl_calibration_matrix<double> K(kk);
-  bool good = vpgl_perspective_camera_compute::compute(norm_image_pts,
-                                                       norm_world_pts,
-                                                       K, camera);
-  if (!good)
+  if (! vpgl_perspective_camera_compute::compute(norm_image_pts,
+                                                 norm_world_pts,
+                                                 K, camera))
     return false;
   vcl_cout << camera << '\n';
   //form the full camera by premultiplying by the image normalization
@@ -464,7 +462,6 @@ convert( vpgl_rational_camera<double> const& rat_cam,
   }
   vcl_cout << "Max Error = " << err_max << " at " << max_pt << '\n'
            << "Min Error = " << err_min << " at " << min_pt << '\n'
-
            << "final cam\n" << camera << '\n';
   return true;
 }
@@ -536,8 +533,9 @@ convert_local( vpgl_rational_camera<double> const& rat_cam,
   vgl_point_3d<double> minp = approximation_volume.min_point();
   vgl_point_3d<double> maxp = approximation_volume.max_point();
   double xmin = minp.x(), ymin = minp.y(), zmin = minp.z();
-  double xrange = maxp.x()-xmin, yrange = maxp.y()-ymin,
-    zrange = maxp.z()-zmin;
+  double xrange = maxp.x()-xmin,
+         yrange = maxp.y()-ymin,
+         zrange = maxp.z()-zmin;
   if (xrange<0||yrange<0||zrange<0)
     return false;
   //Randomly generate points
@@ -551,7 +549,6 @@ convert_local( vpgl_rational_camera<double> const& rat_cam,
     double ry = yrange*(vcl_rand()/(RAND_MAX+1.0));
     double rz = zrange*(vcl_rand()/(RAND_MAX+1.0));
     vgl_point_3d<double> wp(xmin+rx, ymin+ry, zmin+rz);
-
     vgl_point_2d<double> ip = rat_cam.project(wp);
     if (ip.x()<0||ip.x()>ni||ip.y()<0||ip.y()>nj)
       continue;
@@ -579,8 +576,8 @@ convert_local( vpgl_rational_camera<double> const& rat_cam,
 
     vgl_homg_point_3d<double> nwp = norm_trans*wp_loc;
     assert(   vcl_fabs(nwp.x()) <= 1
-              && vcl_fabs(nwp.y()) <= 1
-              && vcl_fabs(nwp.z()) <= 1 );
+           && vcl_fabs(nwp.y()) <= 1
+           && vcl_fabs(nwp.z()) <= 1 );
     norm_world_pts.push_back(vgl_point_3d<double>(nwp) );
   }
   //Assume identity calibration matrix initially, since image point
@@ -593,10 +590,9 @@ convert_local( vpgl_rational_camera<double> const& rat_cam,
   //Convert solution for rotation and translation and calibration matrix of
   //the perspective camera
   vpgl_calibration_matrix<double> K(kk);
-  bool good = vpgl_perspective_camera_compute::compute(norm_image_pts,
-                                                       norm_world_pts,
-                                                       K, camera);
-  if (!good)
+  if (! vpgl_perspective_camera_compute::compute(norm_image_pts,
+                                                 norm_world_pts,
+                                                 K, camera))
     return false;
   vcl_cout << camera << '\n';
   //form the full camera by premultiplying by the image normalization
@@ -669,6 +665,7 @@ static bool interp_ray(vcl_vector<vgl_ray_3d<double> > const& ray_nbrs,
   intrp_ray.set(iorg, idir);
   return true;
 }
+
 // convert tolerances on ray origin and ray direction to test interpolation
 static bool ray_tol(vpgl_local_rational_camera<double> const& rat_cam,
                     double mid_u, double mid_v,
@@ -833,8 +830,8 @@ convert( vpgl_local_rational_camera<double> const& rat_cam,
     nr[i]=dj;
     nc[i]=di;
     scl[i]=2.0*scl[i-1];
-    di = vcl_ceil((float)di/2)+1;
-    dj = vcl_ceil((float)dj/2)+1;
+    di = (di+1)/2+1;
+    dj = (dj+1)/2+1;
   }
   // convert the ray interpolation tolerances
   double org_tol = 0.0;
@@ -845,7 +842,7 @@ convert( vpgl_local_rational_camera<double> const& rat_cam,
     return false;
   bool need_interp = true;
   int lev = n_levels-1;
-  for (;lev>=0&&need_interp; --lev) {
+  for (; lev>=0&&need_interp; --lev) {
     // set rays at current pyramid level
     for (int j =0; j<nr[lev]; ++j) {
       int sj = static_cast<int>(scl[lev]*j);
