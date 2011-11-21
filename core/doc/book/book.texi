@@ -55,6 +55,7 @@ Copyright @copyright{} 2000 Andrew Fitzgibbon
 * vidl::
 * vpdl::
 * vcsl::
+* vpgl::
 * vidl1::
 * structure::
 * build::
