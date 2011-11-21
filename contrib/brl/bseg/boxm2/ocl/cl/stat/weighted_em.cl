@@ -41,13 +41,13 @@ float2 weighted_mean_var(SAMPLE_TYPE* obs, GAUSS_WEIGHT_TYPE* vis, int numSample
     
   float sample_mean     = 0.0f;
   float sum_weights     = 0.0f; 
-  float sum_sqr_weights = 0.0f; 
+  
   for(uint i=0; i<numSamples; ++i) {
     float w = GAUSS_WEIGHT2FLOAT( vis[i] );
     float o = SAMPLE2FLOAT( obs[i] ); 
     sample_mean     += o*w; 
     sum_weights     += w; 
-    sum_sqr_weights += w*w; 
+    //sum_sqr_weights += w*w; 
   }
 
   //divide the weighted mean
@@ -57,15 +57,17 @@ float2 weighted_mean_var(SAMPLE_TYPE* obs, GAUSS_WEIGHT_TYPE* vis, int numSample
     return (float2) (0.0f); 
   
   //sum square differences for unbiased variance estimation
-  float sum_sqr_diffs = 0.0f; 
+  float sum_sqr_diffs = 0.0f;
+  float sum_sqr_weights = 0.0f; 
   for(uint i=0; i<numSamples; ++i) {
-    float w = GAUSS_WEIGHT2FLOAT( vis[i] ); 
+    float w = GAUSS_WEIGHT2FLOAT( vis[i] ) ;
+	w = w/ sum_weights;
     float o = SAMPLE2FLOAT( obs[i] ); 
-    sum_sqr_diffs += w * (o-sample_mean)*(o-sample_mean); 
+    sum_sqr_diffs =sum_sqr_diffs+ w * (o-sample_mean)*(o-sample_mean); 
+	sum_sqr_weights += w*w; 
   }
-  
   //calculate unbiased weighted variance
-  float sample_var = (sum_weights / (sum_weights*sum_weights - sum_sqr_weights) ) * sum_sqr_diffs; 
+  float sample_var = (sum_sqr_diffs / (1.0f - sum_sqr_weights) );
   return (float2) (sample_mean, sample_var); 
 }
 
@@ -208,11 +210,11 @@ float8 weighted_mog3_em(SAMPLE_TYPE*    obs,     //samples from MOG3 distributio
       float  mode_var  = 1.0f;
       float2 mode_gauss = weighted_mean_var(obs, (GAUSS_WEIGHT_TYPE*) mode_probs[m], numSamples); 
       mode_mean = mode_gauss.x; 
-      mode_var  = clamp(mode_gauss.y, min_var, big_var);
+      mode_var  = mode_gauss.y;// mode_gauss.clamp(mode_gauss.y, min_var, big_var);
 
       // update mode parameters
       mog3Arr[ m*3 ]   = mode_mean; 
-      mog3Arr[ m*3+1 ] = mode_var;  
+      mog3Arr[ m*3+1 ] =sqrt( mode_var);  
     }
     
     // update mode weights
