@@ -77,7 +77,7 @@ class ihog_transform_2d : public vgl_h_matrix_2d<double>, public vbl_ref_count
   //   s: Scaling
   // t_x: Translation in x
   // t_y: Translation in y
-  void set_zoom_only(double s, double t_x, double t_y) { set_zoom_only(s,s,t_x,t_y); }
+  void set_zoom_only(double s, double t_x, double t_y) { set_zoom_only(s,s,t_x,t_y); form_ = Translation; }
 
   //: Sets the transformation to rotation then translation.
   // theta: rotation
@@ -93,7 +93,7 @@ class ihog_transform_2d : public vgl_h_matrix_2d<double>, public vbl_ref_count
                   const vgl_vector_2d<double> & u,
                   const vgl_vector_2d<double> & v);
 
-  void set_translation_only(double t_x, double t_y) { set_zoom_only(1,t_x,t_y); }
+  void set_translation_only(double t_x, double t_y) { set_zoom_only(1,t_x,t_y); form_ = Translation; }
 
   //: Calculates inverse of this transformation
   ihog_transform_2d inverse() const;
