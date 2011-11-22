@@ -387,6 +387,7 @@ boxm2_block_id boxm2_opencl_cache::lru_remove_last()
 
 vcl_string boxm2_opencl_cache::to_string() {
   vcl_stringstream s; 
+  s << "MB in cache: " << (float) this->bytes_in_cache()/1024.0f/1024.0f<<'\n';
   s << "boxm2_opencl_cache::order: "; 
   vcl_list<boxm2_block_id>::iterator iter; 
   for(iter=lru_order_.begin(); iter!=lru_order_.end(); ++iter)

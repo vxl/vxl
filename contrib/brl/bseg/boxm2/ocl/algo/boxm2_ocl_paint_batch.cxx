@@ -167,6 +167,8 @@ void boxm2_ocl_paint_batch::paint_block( boxm2_scene_sptr           scene,
   vcl_cout<<" Batch paint block GPU Time: "<<gpu_time<<", transfer time: "<<transfer_time<<vcl_endl;
 
   // clean up cmdqueue
+  opencl_cache->clear_cache(); 
+  vcl_cout<<"Opencl Cache: "<<opencl_cache->to_string()<<vcl_endl;
   clReleaseCommandQueue(queue);
   delete[] sampleIndex;
 }

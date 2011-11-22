@@ -27,7 +27,7 @@ class boxm2_scene_adaptor:
 
     #if device_string is gpu, load up opencl
     if device_string[0:3]=="gpu" :
-      self.scene, self.cpu_cache, self.ocl_mgr, self.device, self.opencl_cache = load_opencl(scene_str);
+      self.scene, self.cpu_cache, self.ocl_mgr, self.device, self.opencl_cache = load_opencl(scene_str, device_string);
       self.active_cache = self.opencl_cache;
     elif device_string[0:3]=="cpp" :
       self.scene, self.cpu_cache = load_cpp(scene_str);
