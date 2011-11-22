@@ -445,7 +445,7 @@ static int list_parse(vcl_list<int> &out, char ** argv)
 
     // Remove this match from the front of string.
     str.erase(0, endp);
-    if (str[0] == ',') str.erase(0, 1);
+    if (!str.empty() && str[0] == ',') str.erase(0, 1);
 
 #if 0
     vcl_cerr << "Range regexp matched [" << token <<  "]: parts ["
