@@ -6,7 +6,13 @@
 #include <vpl/vpl.h>
 #include <vsl/vsl_binary_io.h>
 #include <vgl/io/vgl_io_point_3d.h>
-
+#include <vnl/vnl_matrix_fixed.h>
+double camera_diff_norm(vpgl_perspective_camera<double> const& C0,
+                        vpgl_perspective_camera<double> const& C1)
+{
+  vnl_matrix_fixed<double,3,4> dif = C0.get_matrix()- C1.get_matrix();
+  return dif.fro_norm();
+}
 static void test_perspective_camera_io()
 {
   vcl_cout << "Testing perspective camera" << vcl_endl;
@@ -47,7 +53,8 @@ static void test_perspective_camera_io()
   bp_in.close();
   vpl_unlink("test_perspective_camera_io.tmp");
   vcl_cout << "Recovered Camera " << P_r;
-  TEST("recovered camera", P, P_r);
+  double er = camera_diff_norm(P, P_r);
+  TEST_NEAR("recovered camera", er, 0.0, 1e-3);
 }
 
 TESTMAIN(test_perspective_camera_io);
