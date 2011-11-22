@@ -32,7 +32,7 @@
 
 namespace boxm2_ocl_change_detection_process_globals
 {
-  const unsigned n_inputs_     = 8;
+  const unsigned n_inputs_     = 9;
   const unsigned n_outputs_    = 2;
   vcl_size_t local_threads [2] = {8,8};
   vcl_size_t global_threads[2] = {8,8};
@@ -116,6 +116,7 @@ bool boxm2_ocl_change_detection_process_cons(bprb_func_process& pro)
   input_types_[5] = "vil_image_view_base_sptr";
   input_types_[6] = "int";   //n for nxn ray casting
   input_types_[7] = "vcl_string"; //"raybelief" string for using raybelief
+  input_types_[8] = "bool";       //true to use max mode probability
 
   // process has 1 output:
   // output[0]: scene sptr
@@ -126,9 +127,11 @@ bool boxm2_ocl_change_detection_process_cons(bprb_func_process& pro)
 
   //default is 1x1, with no ray belief
   brdb_value_sptr nxn  = new brdb_value_t<int>(1);
-  brdb_value_sptr rayb = new brdb_value_t<vcl_string>("");
+  brdb_value_sptr rayb = new brdb_value_t<vcl_string>(""); //use ray belief? 
+  brdb_value_sptr pmax = new brdb_value_t<bool>(false);    //use max-mode probability instead of mixture?
   pro.set_input(6, nxn);
   pro.set_input(7, rayb);
+  pro.set_input(8, pmax);
   return good;
 }
 
@@ -152,7 +155,7 @@ bool boxm2_ocl_change_detection_process(bprb_func_process& pro)
   vil_image_view_base_sptr  exp_img       = pro.get_input<vil_image_view_base_sptr>(i++);
   int                       n             = pro.get_input<unsigned>(i++);                 //nxn
   vcl_string                norm_type     = pro.get_input<vcl_string>(i++);
-
+  bool                      pmax          = pro.get_input<bool>(i++);
 
   unsigned ni=img->ni();
   unsigned nj=img->nj();
@@ -186,6 +189,10 @@ bool boxm2_ocl_change_detection_process(bprb_func_process& pro)
     vcl_cout<<"boxm2_ocl_change_detection_process ERROR: scene doesn't have BOXM2_NUM_OBS type"<<vcl_endl;
     return false;
   }
+
+  //specify max mode options
+  if( pmax ) 
+    options += " -D USE_MAX_MODE  ";
 
   //: create a command queue.
   int status=0;

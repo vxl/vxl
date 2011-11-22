@@ -94,14 +94,20 @@ void step_cell_change_detection_uchar8_w_expected(__global MOG_TYPE * cell_data,
   (*vis)=(*vis)*(1-prob);
   (*change_density) += prob_den*omega;
 
+#ifdef USE_MAX_MODE
+  //calc using max
+  float e_prob_den = 0.0f; 
+  float mode1_prob = gauss_prob_density(e_img_intensity, data.s0, data.s1); 
+  float mode2_prob = gauss_prob_density(e_img_intensity, data.s3, data.s4); 
+  float mode3_prob = gauss_prob_density(e_img_intensity, data.s6, data.s7); 
+  e_prob_den = fmax(mode1_prob, fmax(mode2_prob, mode3_prob)); 
+#else
   float e_prob_den=gauss_3_mixture_prob_density(e_img_intensity,
                                               data.s0,data.s1,data.s2,
                                               data.s3,data.s4,data.s5,
                                               data.s6,data.s7,1-data.s2-data.s5);
-
-
+#endif
   (*e_change_density) += e_prob_den*omega;
-
 }
 #endif
 #ifdef PROB_IMAGE
