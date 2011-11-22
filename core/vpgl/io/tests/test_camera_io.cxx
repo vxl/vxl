@@ -12,6 +12,12 @@
 #include <vnl/vnl_double_3x4.h>
 #include <vpl/vpl.h>
 #include <vsl/vsl_binary_io.h>
+static double camera_diff_norm(vpgl_perspective_camera<double> const& C0,
+                               vpgl_perspective_camera<double> const& C1)
+{
+  vnl_matrix_fixed<double,3,4> dif = C0.get_matrix()- C1.get_matrix();
+  return dif.fro_norm();
+}
 
 static void test_camera_io()
 {
@@ -93,7 +99,8 @@ static void test_camera_io()
     TEST("cast to perspective_camera", false, true);
   }
   else {
-    TEST("recovered perspective_camera", *percam, *percam_r);
+    double er = camera_diff_norm(*percam, *percam_r);
+    TEST_NEAR("recovered perspective_camera", er, 0.0, 1e-3);
   }
   delete cam; cam = 0; delete cam_r; cam_r = 0;
   //===========   affine_camera ==================

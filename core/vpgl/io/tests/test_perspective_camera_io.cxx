@@ -7,8 +7,8 @@
 #include <vsl/vsl_binary_io.h>
 #include <vgl/io/vgl_io_point_3d.h>
 #include <vnl/vnl_matrix_fixed.h>
-double camera_diff_norm(vpgl_perspective_camera<double> const& C0,
-                        vpgl_perspective_camera<double> const& C1)
+static double camera_diff_norm(vpgl_perspective_camera<double> const& C0,
+                               vpgl_perspective_camera<double> const& C1)
 {
   vnl_matrix_fixed<double,3,4> dif = C0.get_matrix()- C1.get_matrix();
   return dif.fro_norm();
