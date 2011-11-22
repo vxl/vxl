@@ -288,7 +288,7 @@ def render_depth(scene, cache, cam, ni=1280, nj=720, device=None) :
 #####################################################################
 # change detection wrapper
 #####################################################################
-def change_detect(scene, cache, cam, img, exp_img, device=None, rgb=False, n=1, raybelief="") : 
+def change_detect(scene, cache, cam, img, exp_img, device=None, rgb=False, n=1, raybelief="", max_mode=False) : 
   if cache.type == "boxm2_cache_sptr" : 
     print "boxm2_batch CPU change detection"; 
     boxm2_batch.init_process("boxm2CppChangeDetectionProcess"); 
@@ -312,6 +312,7 @@ def change_detect(scene, cache, cam, img, exp_img, device=None, rgb=False, n=1, 
     boxm2_batch.set_input_from_db(5,exp_img); 
     boxm2_batch.set_input_int(6, n); 
     boxm2_batch.set_input_string(7, raybelief);
+    boxm2_batch.set_input_bool(8, max_mode); 
     boxm2_batch.run_process(); 
     if not rgb :
       (id,type) = boxm2_batch.commit_output(0); 
