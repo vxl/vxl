@@ -218,7 +218,7 @@ foreach(book ${DOXYGEN_BOOK_LIST})
     
     execute_process(
       COMMAND ${TEXI2HTML_EXECUTABLE}
-        -split=chapter -number -output=. -I=. book.texi
+        -split=chapter -l2h -number -output=. -I=. book.texi
       WORKING_DIRECTORY "${book_output_dir}"
       OUTPUT_FILE
         "${CMAKE_BINARY_DIR}/doxy/output/texi2html_${bname}.out"
