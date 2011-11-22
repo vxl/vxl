@@ -76,6 +76,7 @@ void mbl_index_sort(const vcl_vector<T>& data, vcl_vector<int>& index)
 
 //: Sort n elements, giving the resulting order in index
 //  data[index[0]] is smallest element, data[index[n-1]] is largest
+//  \note to get a sorted list, apply sorted[i] = data[index[i]], for all i.
 template <class T>
 void mbl_index_sort(const vcl_vector<T>& data, vcl_vector<unsigned>& index)
 {
