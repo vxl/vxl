@@ -526,6 +526,7 @@ inline void test_point_containment()
            << " test vgl_triangle_3d_test_inside()\n"
            << "------------------------------------\n";
 
+
   // three arbitrary coplanar points (note that coplanarity is assumed by the two methods!)
   {
     vgl_point_3d<double> p1(0,0,0);
@@ -580,6 +581,17 @@ inline void test_point_containment()
     TEST("inside (coincident points) - barycentric method", vgl_triangle_3d_test_inside(in1,p1,p2,p3), true);
     TEST("not inside (coincident points) - barycentric method", vgl_triangle_3d_test_inside(out1,p1,p2,p3), false);
   }
+  // almost degenerate triangle
+  {
+    vgl_point_3d<double> p1(-250.00000027628425, 307.98258024874724, 359.57738152050911);
+    vgl_point_3d<double> p2(-239.99999999497970, 314.64924710295026, 359.57738152050911);
+    vgl_point_3d<double> p3(-240.00000000000000, 314.64924709960337, 359.57738152050911);
+
+    vgl_point_3d<double> in1(-245.00000013828425, 311.31591367584872, 359.57738152050911);
+    vgl_point_3d<double> out1(-245.00000013828425, 311.31591367584872, 359.575);
+//    TEST("inside (High AR triangle) - barycentric method", vgl_triangle_3d_test_inside(in1,p1,p2,p3), true);
+    TEST("not inside (High AR triangle) - barycentric method", vgl_triangle_3d_test_inside(out1,p1,p2,p3), false);
+  }
 }
 
 //==============================================================================
@@ -629,52 +641,67 @@ inline void test_closest_point()
            << " test_closest_point()\n"
            << "----------------------\n";
 
-  // Consider a triangle in the XY plane.
-  vgl_point_3d<double> p1(0,0,0);
-  vgl_point_3d<double> p2(1,0,0);
-  vgl_point_3d<double> p3(0,1,0);
-
-  // Test one of the actual vertices
   {
-    vgl_point_3d<double> q(0,0,0);
-    vgl_point_3d<double> c = vgl_triangle_3d_closest_point(q, p1, p2, p3);
-    TEST_NEAR("Vertex point", (c-p1).length(), 0.0, 1e-6);
+    // Consider a triangle in the XY plane.
+    vgl_point_3d<double> p1(0,0,0);
+    vgl_point_3d<double> p2(1,0,0);
+    vgl_point_3d<double> p3(0,1,0);
+
+    // Test one of the actual vertices
+    {
+      vgl_point_3d<double> q(0,0,0);
+      vgl_point_3d<double> c = vgl_triangle_3d_closest_point(q, p1, p2, p3);
+      TEST_NEAR("Vertex point", (c-p1).length(), 0.0, 1e-6);
+    }
+
+    // Test a point along a triangle edge
+    {
+      vgl_point_3d<double> q(0.5, 0.0, 0.0);
+      vgl_point_3d<double> c = vgl_triangle_3d_closest_point(q, p1, p2, p3);
+      TEST_NEAR("Edge point", (c-q).length(), 0.0, 1e-6);
+    }
+
+    // Test a point within the triangle
+    {
+      vgl_point_3d<double> q(0.1, 0.1, 0.0);
+      vgl_point_3d<double> c = vgl_triangle_3d_closest_point(q, p1, p2, p3);
+      TEST_NEAR("Point inside", (c-q).length(), 0.0, 1e-6);
+    }
+
+    // Test a point outside the triangle (but in same plane)
+    {
+      vgl_point_3d<double> q(-1.0, 0.0, 0.0);
+      vgl_point_3d<double> c = vgl_triangle_3d_closest_point(q, p1, p2, p3);
+      TEST_NEAR("Point outside but same plane", (c-p1).length(), 0.0, 1e-6);
+    }
+
+    // Test a point outside the triangle (in a different plane, but would project inside the triangle)
+    {
+      vgl_point_3d<double> q(0.1, 0.1, 1.0);
+      vgl_point_3d<double> c = vgl_triangle_3d_closest_point(q, p1, p2, p3);
+      vgl_point_3d<double> r(0.1, 0.1, 0.0); // The expected closest point
+      TEST_NEAR("Point inside", (c-r).length(), 0.0, 1e-6);
+    }
+
+    // Test a point outside the triangle (in a different plane, and would project outside the triangle)
+    {
+      vgl_point_3d<double> q(-1.0, 0.0, 1.0);
+      vgl_point_3d<double> c = vgl_triangle_3d_closest_point(q, p1, p2, p3);
+      TEST_NEAR("Point outside and different plane", (c-p1).length(), 0.0, 1e-6);
+    }
   }
-
-  // Test a point along a triangle edge
+  // Nearly degenerate triangle
   {
-    vgl_point_3d<double> q(0.5, 0.0, 0.0);
-    vgl_point_3d<double> c = vgl_triangle_3d_closest_point(q, p1, p2, p3);
-    TEST_NEAR("Edge point", (c-q).length(), 0.0, 1e-6);
-  }
+    vgl_point_3d<double> p1(-250.00000027628425, 307.98258024874724, 359.57738152050911);
+    vgl_point_3d<double> p2(-239.99999999497970, 314.64924710295026, 359.57738152050911);
+    vgl_point_3d<double> p3(-240.00000000000000, 314.64924709960337, 359.57738152050911);
 
-  // Test a point within the triangle
-  {
-    vgl_point_3d<double> q(0.1, 0.1, 0.0);
-    vgl_point_3d<double> c = vgl_triangle_3d_closest_point(q, p1, p2, p3);
-    TEST_NEAR("Point inside", (c-q).length(), 0.0, 1e-6);
-  }
-
-  // Test a point outside the triangle (but in same plane)
-  {
-    vgl_point_3d<double> q(-1.0, 0.0, 0.0);
-    vgl_point_3d<double> c = vgl_triangle_3d_closest_point(q, p1, p2, p3);
-    TEST_NEAR("Point outside but same plane", (c-p1).length(), 0.0, 1e-6);
-  }
-
-  // Test a point outside the triangle (in a different plane, but would project inside the triangle)
-  {
-    vgl_point_3d<double> q(0.1, 0.1, 1.0);
-    vgl_point_3d<double> c = vgl_triangle_3d_closest_point(q, p1, p2, p3);
-    vgl_point_3d<double> r(0.1, 0.1, 0.0); // The expected closest point
-    TEST_NEAR("Point inside", (c-r).length(), 0.0, 1e-6);
-  }
-
-  // Test a point outside the triangle (in a different plane, and would project outside the triangle)
-  {
-    vgl_point_3d<double> q(-1.0, 0.0, 1.0);
-    vgl_point_3d<double> c = vgl_triangle_3d_closest_point(q, p1, p2, p3);
-    TEST_NEAR("Point outside and different plane", (c-p1).length(), 0.0, 1e-6);
+    vgl_point_3d<double> in1(-245.00000013828425, 311.31591367584872, 359.57738152050911);
+    vgl_point_3d<double> out1(-245.00000013828425, 311.31591367584872, 380);
+    vgl_point_3d<double> c = vgl_triangle_3d_closest_point(in1, p1, p2, p3);
+    TEST_NEAR("Point inside High AR triangle", vgl_distance(c, in1), 0, 1e-8);
+    c = vgl_triangle_3d_closest_point(out1, p1, p2, p3);
+    TEST_NEAR("Point outside High AR triangle", vgl_distance(c, in1), 0, 1e-8);
   }
 }
 
@@ -787,6 +814,9 @@ inline void test_aspect_ratio()
 //==============================================================================
 static void test_triangle_3d()
 {
+
+  test_closest_point();
+
   test_non_intersecting();
 
   test_intersecting1();
@@ -803,7 +833,6 @@ static void test_triangle_3d()
   test_coincident_edges1();
   test_coincident_edges2();
 
-  test_closest_point();
   test_distance();
   test_area();
   test_aspect_ratio();

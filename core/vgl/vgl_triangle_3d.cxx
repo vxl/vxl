@@ -20,6 +20,36 @@ static const double vgl_nan = vcl_sqrt(-1.0);
 static const double sqrteps = vcl_sqrt(vcl_numeric_limits<double>::epsilon());
 static const double pi = 3.14159265358979323846;
 
+namespace
+{
+  //: Create plane through three points. Ignore degeneracy.
+  vgl_plane_3d<double> create_plane_and_ignore_degenerate(const vgl_point_3d<double>& p1,
+    const vgl_point_3d<double>& p2, const vgl_point_3d<double>& p3)
+  {
+
+    vgl_plane_3d<double> plane;
+    double *a = reinterpret_cast<double *>(&plane);
+
+    a[0] = p2.y()*p3.z() - p2.z()*p3.y()
+         + p3.y()*p1.z() - p3.z()*p1.y()
+         + p1.y()*p2.z() - p1.z()*p2.y();
+
+    a[1] = p2.z()*p3.x() - p2.x()*p3.z()
+         + p3.z()*p1.x() - p3.x()*p1.z()
+         + p1.z()*p2.x() - p1.x()*p2.z();
+
+    a[2] = p2.x()*p3.y() - p2.y()*p3.x()
+         + p3.x()*p1.y() - p3.y()*p1.x()
+         + p1.x()*p2.y() - p1.y()*p2.x();
+
+    a[3] = p1.x()*(p2.z()*p3.y() - p2.y()*p3.z())
+         + p2.x()*(p3.z()*p1.y() - p3.y()*p1.z())
+         + p3.x()*(p1.z()*p2.y() - p1.y()*p2.z());
+    return plane;
+  }
+
+}
+
 //=======================================================================
 //: Check for coincident edges of triangles a and b
 //  \return a vector of the coincident edges
@@ -84,8 +114,9 @@ bool vgl_triangle_3d_test_inside(const vgl_point_3d<double>& i_pnt,
                                  const vgl_point_3d<double>& p1,
                                  const vgl_point_3d<double>& p2,
                                  const vgl_point_3d<double>& p3,
-                                 double coplanar_tolerance )
+                                 double coplanar_tolerance)
 {
+  
   // firstly perform some degeneracy checks
   if (collinear(p1,p2,p3))
   { //the triangle is degenerate - its vertices are collinear
@@ -100,12 +131,15 @@ bool vgl_triangle_3d_test_inside(const vgl_point_3d<double>& i_pnt,
            vgl_line_segment_3d<double>(p1,p3).contains(i_pnt);
   }
 
+  // Project to 2d plane, to avoid a degenerate result get
+  // the plane normal and identify the largest (abs) x,y or z component
+  vgl_plane_3d<double> plane = 
+    create_plane_and_ignore_degenerate(p1, p2, p3);
+
+
   // use badouel's algorithm ( a barycentric method)
   // based on the code & paper found at http://jgt.akpeters.com/papers/MollerTrumbore97/
 
-  // Project to 2d plane, to avoid a degenerate result get
-  // the plane normal and identify the largest (abs) x,y or z component
-  vgl_plane_3d<double> plane(p1,p2,p3);
 
   //the point needs to be in the triangles plane
   if (vgl_distance(plane,i_pnt) > coplanar_tolerance)
@@ -172,7 +206,7 @@ bool vgl_triangle_3d_test_inside(const vgl_point_3d<double>& i_pnt,
                                  const vgl_point_3d<double>& p2,
                                  const vgl_point_3d<double>& p3)
 {
-  return vgl_triangle_3d_test_inside(i_pnt, p1, p2, p3, sqrteps );
+  return vgl_triangle_3d_test_inside(i_pnt, p1, p2, p3, sqrteps);
 }
 
 
@@ -1417,7 +1451,7 @@ vgl_point_3d<double> vgl_triangle_3d_closest_point(
     return vgl_closest_point(vgl_line_3d_2_points<double>(p2, p3), q);
 
   // Construct a plane from the 3 vertices of the triangle
-  vgl_plane_3d<double> plane(p1,  p2, p3);
+  vgl_plane_3d<double> plane = create_plane_and_ignore_degenerate(p1, p2, p3);
 
   // Find the closest point on the whole plane to the test point
   vgl_point_3d<double> cp = vgl_closest_point<double>(plane, q);
