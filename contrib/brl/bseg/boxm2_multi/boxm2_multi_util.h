@@ -18,13 +18,12 @@
 class boxm2_multi_util
 {
   public:
-  
+
     // Helper to pick out data type
     static bool get_scene_appearances( boxm2_scene_sptr    scene,
-                                       vcl_string&         data_type, 
-                                       vcl_string&         options, 
-                                       int&                apptypesize); 
-  
+                                       vcl_string&         data_type,
+                                       vcl_string&         options,
+                                       int&                apptypesize);
 };
 
-#endif //multi_cache.h
+#endif // boxm2_multi_util_h
