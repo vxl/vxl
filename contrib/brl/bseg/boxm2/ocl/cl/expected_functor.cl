@@ -82,11 +82,12 @@ void step_cell_change_detection_uchar8_w_expected(__global MOG_TYPE * cell_data,
   float8 data= convert_float8(uchar_data)/NORM;
 
 #ifdef USE_MAX_MODE
-  //calc using max
+  //calc using max only if 1) Weight is non-zero and 2) variance is above some thresh
   float prob_den = 0.0f; 
-  float mode1_prob = gauss_prob_density(img_intensity, data.s0, data.s1); 
-  float mode2_prob = gauss_prob_density(img_intensity, data.s3, data.s4); 
-  float mode3_prob = gauss_prob_density(img_intensity, data.s6, data.s7); 
+  float w2 = 1.0f - data.s2 - data.s5; 
+  float mode1_prob = (data.s2 > 10e-6f && data.s1 > .01f) ? gauss_prob_density(img_intensity, data.s0, data.s1) : 0.0f; 
+  float mode2_prob = (data.s5 > 10e-6f && data.s4 > .01f) ? gauss_prob_density(img_intensity, data.s3, data.s4) : 0.0f; 
+  float mode3_prob = (w2      > 10e-6f && data.s7 > .01f) ? gauss_prob_density(img_intensity, data.s6, data.s7) : 0.0f; 
   prob_den = fmax(mode1_prob, fmax(mode2_prob, mode3_prob)); 
 #else
   float prob_den=gauss_3_mixture_prob_density(img_intensity,
