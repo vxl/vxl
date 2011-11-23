@@ -81,3 +81,6 @@ SUBDIRS(bapl)
 
 #the bridge lib to convert between boxm and boxm2 scenes
 SUBDIRS(boxm_bridge)
+
+#multi gpu library
+SUBDIRS(boxm2_multi)
