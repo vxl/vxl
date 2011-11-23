@@ -28,47 +28,47 @@ float boxm2_multi_render::render(boxm2_multi_cache&              cache,
 {
   vcl_cout<<"------------ boxm2_multi_render -----------------------"<<vcl_endl;
   //verify appearance model
-  vul_timer rtime; rtime.mark(); 
+  vul_timer rtime; rtime.mark();
   vcl_size_t lthreads[2] = {8,8};
   vcl_string data_type, options;
-  int apptypesize; 
-  if( !get_scene_appearances(cache.get_scene(), data_type, options, apptypesize) ) 
-    return 0.0f; 
-   
+  int apptypesize;
+  if ( !get_scene_appearances(cache.get_scene(), data_type, options, apptypesize) )
+    return 0.0f;
+
   //setup image size
-  int ni=img.ni(), 
+  int ni=img.ni(),
       nj=img.nj();
 
   //set up image lists
-  vcl_vector<cl_command_queue> queues; 
-  vcl_vector<bocl_mem_sptr> exp_mems, vis_mems; 
-  
+  vcl_vector<cl_command_queue> queues;
+  vcl_vector<bocl_mem_sptr> exp_mems, vis_mems;
+
   //for each device/cache, run a render
   vcl_vector<boxm2_opencl_cache*>  ocl_caches = cache.get_vis_sub_scenes( (vpgl_perspective_camera<double>*) cam.ptr());
-  for(int i=0; i<ocl_caches.size(); ++i) {
-    
+  for (int i=0; i<ocl_caches.size(); ++i)
+  {
     //grab sub scene and it's cache
-    boxm2_opencl_cache*     ocl_cache = ocl_caches[i]; 
-    boxm2_scene_sptr        sub_scene = ocl_cache->get_scene(); 
-    bocl_device_sptr        device    = ocl_cache->get_device(); 
-    
+    boxm2_opencl_cache*     ocl_cache = ocl_caches[i];
+    boxm2_scene_sptr        sub_scene = ocl_cache->get_scene();
+    bocl_device_sptr        device    = ocl_cache->get_device();
+
     // compile the kernel/retrieve cached kernel for this device
     vcl_string identifier=device->device_identifier()+options;
     if (kernels.find(identifier)==kernels.end()) {
-      vcl_cout<<"===========Compiling kernels==========="<<vcl_endl;
-      vcl_cout<<" for device: "<<device<<vcl_endl;
+      vcl_cout<<"===========Compiling kernels==========="<<vcl_endl
+              <<" for device: "<<device<<vcl_endl;
       vcl_vector<bocl_kernel*> ks;
       compile_kernel(device,ks,options);
       kernels[identifier]=ks;
     }
-        
-    //: create a command queue.
+
+    // create a command queue.
     int status=0;
     cl_command_queue queue = clCreateCommandQueue( device->context(),
                                                    *(device->device_id()),
                                                    CL_QUEUE_PROFILING_ENABLE,
                                                    &status );
-    queues.push_back(queue); 
+    queues.push_back(queue);
     if (status!=0) {
       vcl_cout<<"boxm2_multi_render::render unalbe to create command queue"<<vcl_endl;
       return 0.0f;
@@ -78,10 +78,10 @@ float boxm2_multi_render::render(boxm2_multi_cache&              cache,
     unsigned cl_ni=RoundUp(ni,lthreads[0]);
     unsigned cl_nj=RoundUp(nj,lthreads[1]);
     float* buff = new float[cl_ni*cl_nj];
-    vcl_fill(buff, buff+cl_ni*cl_nj, 0.0f); 
+    vcl_fill(buff, buff+cl_ni*cl_nj, 0.0f);
     bocl_mem_sptr exp_image=new bocl_mem(device->context(),buff,cl_ni*cl_nj*sizeof(float),"exp image buffer");
     exp_image->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
-    exp_mems.push_back(exp_image); 
+    exp_mems.push_back(exp_image);
 
     //create image dim buff
     int img_dim_buff[4];
@@ -95,69 +95,69 @@ float boxm2_multi_render::render(boxm2_multi_cache&              cache,
     vcl_fill(vis_buff, vis_buff + cl_ni*cl_nj, 1.0f);
     bocl_mem_sptr vis_image = new bocl_mem(device->context(), vis_buff, cl_ni*cl_nj*sizeof(float), "exp image buffer");
     vis_image->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
-    vis_mems.push_back(vis_image); 
+    vis_mems.push_back(vis_image);
 
     // run expected image function
     vcl_cout<<"  rendering with device: "<<device<<vcl_endl;
-    this->render_scene( sub_scene, 
-                        device, 
-                        ocl_cache, 
+    this->render_scene( sub_scene,
+                        device,
+                        ocl_cache,
                         queue,
-                        cam, 
-                        exp_image, 
-                        vis_image, 
+                        cam,
+                        exp_image,
+                        vis_image,
                         exp_img_dim,
-                        data_type, 
-                        kernels[identifier][0], 
-                        lthreads, 
-                        cl_ni, 
+                        data_type,
+                        kernels[identifier][0],
+                        lthreads,
+                        cl_ni,
                         cl_nj,
                         apptypesize );
   }
 
-  //finish execution along each queue 
-  for(int i=0; i<queues.size(); ++i)
-    clFinish(queues[i]); 
-  
+  //finish execution along each queue
+  for (int i=0; i<queues.size(); ++i)
+    clFinish(queues[i]);
+
   //read all images in
-  vcl_vector<float*> exp_imgs, vis_imgs; 
-  for(int i=0; i<exp_mems.size(); ++i) {
+  vcl_vector<float*> exp_imgs, vis_imgs;
+  for (int i=0; i<exp_mems.size(); ++i) {
     // read out expected image
     exp_mems[i]->read_to_buffer(queues[i]);
     vis_mems[i]->read_to_buffer(queues[i]);
-    
+
     //populate vil_image_views for combination
-    exp_imgs.push_back( (float*) exp_mems[i]->cpu_buffer()); 
-    vis_imgs.push_back( (float*) vis_mems[i]->cpu_buffer()); 
+    exp_imgs.push_back( (float*) exp_mems[i]->cpu_buffer());
+    vis_imgs.push_back( (float*) vis_mems[i]->cpu_buffer());
   }
 
   //------------------------------------------------------------------------
   //combine images
   float pre_time = (float) rtime.all(); rtime.mark();
-  vil_image_view<float> vis_out(ni,nj); 
-  vis_out.fill(1.0f); 
-  img.fill(0.0f); 
-  for(int idx=0; idx<exp_imgs.size(); ++idx) {
-    float* v = vis_imgs[idx]; 
+  vil_image_view<float> vis_out(ni,nj);
+  vis_out.fill(1.0f);
+  img.fill(0.0f);
+  for (int idx=0; idx<exp_imgs.size(); ++idx) {
+    float* v = vis_imgs[idx];
     float* e = exp_imgs[idx];
-    int c=0; 
-    for(int j=0; j<nj; ++j) {
-      for(int i=0; i<ni; ++i) {
-        img(i,j)     += e[c] * vis_out(i,j); 
+    int c=0;
+    for (int j=0; j<nj; ++j) {
+      for (int i=0; i<ni; ++i) {
+        img(i,j)     += e[c] * vis_out(i,j);
         vis_out(i,j) *= v[c];
-        ++c; 
+        ++c;
       }
     }
-    
+
     //delete image buffers
-    delete[] v; 
-    delete[] e; 
+    delete[] v;
+    delete[] e;
   }
-  float combine_time = (float) rtime.all(); 
-  vcl_cout<<"\nMulti Render Time: "<<combine_time + pre_time<<" ms"<<vcl_endl;
-  vcl_cout<<"  pre_time (gpu+overhead): "<<pre_time<<" ms"<<vcl_endl;
-  vcl_cout<<"  combine time (end):      "<<combine_time<<" ms"<<vcl_endl;
-  return (float) combine_time+pre_time; 
+  float combine_time = (float) rtime.all();
+  vcl_cout<<"\nMulti Render Time: "<<combine_time + pre_time<<" ms"<<vcl_endl
+          <<"  pre_time (gpu+overhead): "<<pre_time<<" ms"<<vcl_endl
+          <<"  combine time (end):      "<<combine_time<<" ms"<<vcl_endl;
+  return (float) combine_time+pre_time;
 }
 
 float boxm2_multi_render::render_scene( boxm2_scene_sptr scene,
@@ -308,8 +308,8 @@ void boxm2_multi_render::compile_kernel(bocl_device_sptr device,vcl_vector<bocl_
 
 //pick out data type
 bool boxm2_multi_render::get_scene_appearances(boxm2_scene_sptr    scene,
-                                               vcl_string&         data_type, 
-                                               vcl_string&         options, 
+                                               vcl_string&         data_type,
+                                               vcl_string&         options,
                                                int&                apptypesize)
 {
   bool foundDataType = false;
@@ -335,5 +335,5 @@ bool boxm2_multi_render::get_scene_appearances(boxm2_scene_sptr    scene,
     vcl_cout<<"BOXM2_OCL_RENDER_PROCESS ERROR: scene doesn't have BOXM2_MOG3_GREY or BOXM2_MOG3_GREY_16 data type"<<vcl_endl;
     return false;
   }
-  return true; 
+  return true;
 }

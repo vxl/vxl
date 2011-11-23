@@ -1,5 +1,8 @@
 #ifndef boxm2_multi_pre_vis_inf_h_
 #define boxm2_multi_pre_vis_inf_h_
+//:
+// \file
+// \brief This class does the cumulative seg len and cumulative observation on the GPU.
 
 #include <boxm2_multi_cache.h>
 #include <boxm2/boxm2_scene.h>
@@ -10,25 +13,21 @@
 #include <bocl/bocl_kernel.h>
 #include <brdb/brdb_value.h>
 
-//: boxm2_multi_pre_vis_inf
-// This class does the cumulative seg len and cumulative observation 
-// on the GPU.  
-
 //: boxm2_multi_cache - example realization of abstract cache class
 class boxm2_multi_pre_vis_inf
 {
   public:
-   
-    //three separate sub procedures (three separate map reduce tasks)
-    static float pre_vis_inf(       boxm2_multi_cache&                cache, 
-                              const vil_image_view<float>&          img, 
-                                    vpgl_camera_double_sptr         cam, 
-                                    vcl_map<bocl_device*, float*>&  vis_map, 
-                                    vcl_map<bocl_device*, float*>&  pre_map, 
-                                    float*                          norm_img ); 
 
-  private: 
-                            
+    //three separate sub procedures (three separate map reduce tasks)
+    static float pre_vis_inf( boxm2_multi_cache&              cache,
+                              const vil_image_view<float>&    img,
+                              vpgl_camera_double_sptr         cam,
+                              vcl_map<bocl_device*, float*>&  vis_map,
+                              vcl_map<bocl_device*, float*>&  pre_map,
+                              float*                          norm_img );
+
+  private:
+
     //renders single image
     static float pre_vis_scene  ( boxm2_scene_sptr          scene,
                                   bocl_device_sptr          device,
@@ -43,23 +42,23 @@ class boxm2_multi_pre_vis_inf
                                   vcl_size_t *              lthreads,
                                   unsigned                  cl_ni,
                                   unsigned                  cl_nj,
-                                  int                       apptypesize ); 
-                                  
-    static float pre_vis_reduce(  boxm2_multi_cache&    cache,
-                                  vcl_vector<float*>& pre_imgs, 
-                                  vcl_vector<float*>& vis_imgs,
-                                  vcl_vector<boxm2_opencl_cache*>& ocl_caches,
-                                  vcl_map<bocl_device*, float*>& pre_map, 
-                                  vcl_map<bocl_device*, float*>& vis_map,
-                                  int ni, 
-                                  int nj,
-                                  float* norm_img   ); 
+                                  int                       apptypesize );
 
-    
+    static float pre_vis_reduce(  boxm2_multi_cache&    cache,
+                                  vcl_vector<float*>&   pre_imgs,
+                                  vcl_vector<float*>&   vis_imgs,
+                                  vcl_vector<boxm2_opencl_cache*>& ocl_caches,
+                                  vcl_map<bocl_device*, float*>& pre_map,
+                                  vcl_map<bocl_device*, float*>& vis_map,
+                                  int ni,
+                                  int nj,
+                                  float* norm_img   );
+
+
     //map keeps track of all kernels compiled and cached
     static vcl_map<vcl_string, vcl_vector<bocl_kernel*> > kernels_;
-  
-    //copmile kernels and cache
+
+    //compile kernels and cache
     static vcl_vector<bocl_kernel*>& get_kernels(bocl_device_sptr device, vcl_string opts);
 };
 

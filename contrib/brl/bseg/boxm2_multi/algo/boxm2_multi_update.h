@@ -1,6 +1,7 @@
 #ifndef boxm2_multi_update_h
 #define boxm2_multi_update_h
-
+//:
+// \file
 #include <boxm2_multi_cache.h>
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/ocl/boxm2_opencl_cache.h>
@@ -18,17 +19,17 @@ class boxm2_multi_update
     typedef vnl_vector_fixed<unsigned char, 16> uchar16;
 
     //multi render header
-    static float update(boxm2_multi_cache& cache, const vil_image_view<float>& img, vpgl_camera_double_sptr cam ); 
+    static float update(boxm2_multi_cache& cache, const vil_image_view<float>& img, vpgl_camera_double_sptr cam );
 
-  private: 
-  
+  private:
+
     //-------------------------------------------------------------------
     //static opencl kernel compilation functions
     //-------------------------------------------------------------------
     //map keeps track of all kernels compiled and cached
     static vcl_map<vcl_string,vcl_vector<bocl_kernel*> > kernels_;
-  
-    //copmile kernels and cache
+
+    //compile kernels and cache
     static vcl_vector<bocl_kernel*>& get_kernels(bocl_device_sptr device, vcl_string opts);
 };
 
