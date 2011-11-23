@@ -7,7 +7,7 @@ from os.path import basename, splitext;
 from glob import glob; 
 
 #renders a collection of images/cameras into outdir
-def render_changes(scene, img_glob, cam_glob, outdir, n=1, raybelief="") :     
+def render_changes(scene, img_glob, cam_glob, outdir, n=1, raybelief="", max_mode=False) :     
 
   #make sure imgglob and camglob are string lists and same size
   if isinstance(img_glob, str) and isinstance(cam_glob, str): 
@@ -34,7 +34,7 @@ def render_changes(scene, img_glob, cam_glob, outdir, n=1, raybelief="") :
     
     #render change detection 
     cd_fname = outdir + "/cd_" + imgnum + ".tiff"; 
-    cd_img = scene.change_detect(pcam, rimg, expimg, n, raybelief); 
+    cd_img = scene.change_detect(pcam, rimg, expimg, n, raybelief, max_mode); 
     save_image(cd_img, cd_fname); 
   
   
