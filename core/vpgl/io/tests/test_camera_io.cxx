@@ -197,7 +197,7 @@ static void test_camera_io()
   else {
     TEST("recovered local_rational_camera", *lrcam, *lrcam_r);
   }
-  delete cam; cam = 0; delete cam_r; cam_r = 0;
+  //  delete cam; cam = 0; delete cam_r; cam_r = 0;
 }
 
 TESTMAIN(test_camera_io);
