@@ -155,7 +155,7 @@ float boxm2_multi_store_aux::store_aux_scene(boxm2_scene_sptr          scene,
   vcl_vector<boxm2_block_id>::iterator id;
   for (id = vis_order.begin(); id != vis_order.end(); ++id)
   {
-    vcl_cout<<(*id);
+    //vcl_cout<<(*id);
     //choose correct render kernel
     boxm2_block_metadata mdata = scene->get_block_metadata(*id);
     bocl_kernel* kern =  kernel;

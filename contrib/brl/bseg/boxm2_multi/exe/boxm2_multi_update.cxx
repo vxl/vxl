@@ -37,7 +37,7 @@ int main(int argc,  char** argv)
   vul_arg<vcl_string> scene_file("-scene", "scene filename", "");
   vul_arg<vcl_string> img_dir("-imgdir", "update image directory",""); 
   vul_arg<vcl_string> cam_dir("-camdir", "update camera directory", ""); 
-  vul_arg<unsigned>   num_updates("-num", "Number of updates", 1); 
+  vul_arg<unsigned>   num_updates("-num", "Number of updates", 10); 
   vul_arg_parse(argc, argv);
   
   //create scene
@@ -52,29 +52,30 @@ int main(int argc,  char** argv)
   //make a multicache
   for(int i=0; i<mgr->gpus_.size(); ++i)
     vcl_cout<<" GPU "<<i<<": "<<mgr->gpus_[i]<<vcl_endl;
-  vcl_vector<bocl_device*> first; 
-  first.push_back(mgr->gpus_[0]); 
-  boxm2_multi_cache mcache(scene, first); 
+  boxm2_multi_cache mcache(scene, mgr->gpus_); 
   vcl_cout<<"Multi Cache: \n"<<mcache.to_string()<<vcl_endl;
 
   //-- GET UPDATE IMG/CAMS ---
   vcl_vector<vcl_string> imgs = boxm2_util::images_from_directory( img_dir() );
   vcl_vector<vcl_string> cams = boxm2_util::camfiles_from_directory( cam_dir() );
 
-  //int numUpdates = vcl_min( (int) num_updates(), (int) imgs.size()); 
-  //for(int i=0; i<numUpdates; ++i) 
-  //{
-    //vil_image_view_base_sptr inImg = boxm2_util::prepare_input_image(imgs[i], true); 
-    //vpgl_camera_double_sptr  inCam = boxm2_util::camera_from_file( cams[i] );
-    //vil_image_view<float>* inImgPtr = dynamic_cast<vil_image_view<float>* >(inImg.ptr()); 
-    //boxm2_multi_update::update(mcache, *inImgPtr, inCam); 
-  //}
+  //-----------------------------------------------------------
+  //run updates
+  //-----------------------------------------------------------
+  int numUpdates = vcl_min( (int) num_updates(), (int) imgs.size()); 
+  for(int i=0; i<numUpdates; ++i) 
+  {
+    vil_image_view_base_sptr inImg = boxm2_util::prepare_input_image(imgs[i], true); 
+    vpgl_camera_double_sptr  inCam = boxm2_util::camera_from_file( cams[i] );
+    vil_image_view<float>* inImgPtr = dynamic_cast<vil_image_view<float>* >(inImg.ptr()); 
+    boxm2_multi_update::update(mcache, *inImgPtr, inCam); 
+  }
 
-
+  //-----------------------------------------------------------
   //render out
-  //make render object
+  //-----------------------------------------------------------
   float mean_time=0.0f; 
-  int num_renders = 1;  
+  int num_renders = 5; 
   boxm2_multi_render renderer; 
   int ni=1280, nj=720; 
   for(int i=0; i<num_renders; ++i) {

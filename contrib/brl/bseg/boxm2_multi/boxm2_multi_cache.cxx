@@ -39,6 +39,7 @@ boxm2_multi_cache::boxm2_multi_cache(boxm2_scene_sptr              scene,
       if(id.i() >= lower && id.i() < upper) {
         boxm2_block_metadata md = iter->second; 
         sub_scene_blocks[id] = md; 
+        vcl_cout<<" added: "<<id<<" to dev "<<dev_id<<vcl_endl;
         blocksAdded++; 
       }
     }    
@@ -56,8 +57,13 @@ boxm2_multi_cache::boxm2_multi_cache(boxm2_scene_sptr              scene,
     ocl_caches_.push_back(ocl_cache); 
   }
   
-  if( blocksAdded != scene->blocks().size() ) 
-    throw "boxm2_multi_cache blocks added not equal to number of blocks in original scene: "; //<<blocksAdded<<" != "<<scene->blocks().size()<<vcl_endl;
+  if( blocksAdded != scene->blocks().size() ) {
+    vcl_cout<<"boxm2_multi_cache blocks added not equal to number of blocks in original scene: \n"
+            <<"  Num gpus: "<<devices.size()<< '\n'
+            <<"  blocks added: "<<blocksAdded<<" != "<<scene->blocks().size()<<vcl_endl;
+            
+    throw -1; 
+  }
 }
 
 boxm2_multi_cache::~boxm2_multi_cache()
