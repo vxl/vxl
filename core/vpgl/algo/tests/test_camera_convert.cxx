@@ -160,6 +160,7 @@ void test_generic_camera_convert()
     double x = 457.0765, y = 526.2103, z = 34.68;
     double u0=0, v0=0;
     lcam.project(x, y, z, u0, v0);
+    vcl_cout << "(u0 v0)=(" << u0 << ' ' << v0 << ")\n";
     vgl_ray_3d<double> lray, gray;
     success = vpgl_ray::ray(lcam, tu, tv, lray);
     gray = gcam.ray(tu, tv);
@@ -177,15 +178,17 @@ void test_generic_camera_convert()
     int ua[4] = { 0, 832,   0, 832};
     int va[4] = { 0,   0, 876, 876};
     dorg = 0.0; dang = 0.0;
+    // DEC reduced z range by 1/2 so need the following delta
+    vgl_vector_3d<double> delta(72.792, -51, 250);
     for (unsigned k = 0; k<4; ++k) {
       gray = gcam.ray(ua[k], va[k]);
       success = success && vpgl_ray::ray(lcam, ua[k], va[k], lray);
-      lorg = lray.origin(), gorg  = gray.origin();
+      lorg = lray.origin()-delta, gorg  = gray.origin();
       ldir = lray.direction(), gdir  = gray.direction();
       dorg += (lorg-gorg).length();
       dang += vcl_fabs(angle(ldir, gdir));
     }
-    TEST("corner rays", success && dorg<0.1 && dang < 0.0001, true);
+    TEST("corner rays", success && dorg<1.1 && dang < 0.001, true);
   }
   else {
     TEST("local rational to generic", false, true);
