@@ -88,6 +88,7 @@ foreach my $dir (@DIRS)
     my %updir_files = ();
     my %inc_files = ();
     my $prefix=$dir; $prefix =~ s![^/]*$ !!x; $prefix =~ s!^.*\b(vcl|core|contrib/brl/(bbas|bseg)|contrib/gel/mrc|contrib/[^/]*)/!!;
+    $prefix =~ s!^bpgl/(icam|ihog)!$1!;
     if (opendir UPDIR,"$dir/..") {
       foreach (grep {m/\.h(|xx)$/} readdir(UPDIR))
       {
