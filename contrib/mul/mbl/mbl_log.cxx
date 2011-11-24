@@ -350,6 +350,7 @@ void mbl_logger::reinitialise()
     mbl_logger::root().categories().get(id);
 
   level_ = cat.level;
+  dump_prefix_ = cat.dump_prefix;
 
   if (cat.output == mbl_log_categories::cat_spec::NAMED_STREAM)
   {
