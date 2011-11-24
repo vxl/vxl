@@ -51,7 +51,7 @@ SUBDIRS += brec_batch
 SUBDIRS += boct
 
 # octree based modeling 
-SUBDIRS += boxm boxm2
+SUBDIRS += boxm boxm2 boxm2_multi
 
 #the bridge lib to convert between boxm and boxm2 scenes
 SUBDIRS += boxm_bridge

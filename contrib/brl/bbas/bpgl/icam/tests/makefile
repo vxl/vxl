@@ -5,7 +5,6 @@ include $(VXLROOT)/core/testlib/config.mk
 TESTMAIN := test_driver.cxx
 
 TESTS += test_rotation_only.cxx
-TESTS += test_icam_view_sphere.cxx
 TESTS += test_minimizer.cxx
 TESTS += test_icam_transform.cxx
 
