@@ -44,7 +44,7 @@ static void test_camera_io()
   else {
     TEST("recovered proj_camera", pcam_r->get_matrix(), random_matrix );
   }
-  delete cam_r; cam_r = 0;
+  //  delete cam_r; cam_r = 0;
   //================= test smart pointer io ============
   vpgl_camera_double_sptr cam_sptr = cam, cam_r_sptr=0;
   vsl_b_ofstream bp_outps("test_camera_sptr_io.tmp");
@@ -68,7 +68,7 @@ static void test_camera_io()
       TEST("recovered proj_camera from sptr", pcam_r->get_matrix(), random_matrix );
     }
   }
-  delete cam; cam = 0;
+  //delete cam; cam = 0;
   //===========   perpsective_camera ==================
   double data[] = { 2000,    0, 512,
                     0, 2000, 384,
@@ -102,7 +102,7 @@ static void test_camera_io()
     double er = camera_diff_norm(*percam, *percam_r);
     TEST_NEAR("recovered perspective_camera", er, 0.0, 1e-3);
   }
-  delete cam; cam = 0; delete cam_r; cam_r = 0;
+  //  delete cam; cam = 0; delete cam_r; cam_r = 0;
   //===========   affine_camera ==================
   random_list[8]=0.0; random_list[9]=0.0;
   random_list[10]=0.0;  random_list[11]=1.0;
@@ -129,7 +129,7 @@ static void test_camera_io()
     TEST("recovered affine_camera", *acam, *acam_r);
   }
 
-  delete cam; cam = 0; delete cam_r; cam_r = 0;
+  //delete cam; cam = 0; delete cam_r; cam_r = 0;
 
   //===========   rational_camera ==================
 
@@ -173,7 +173,7 @@ static void test_camera_io()
     TEST("recovered rational_camera", *rcam, *rcam_r);
   }
 
-  delete cam_r; cam_r = 0;
+  //  delete cam_r; cam_r = 0;
   //===========   local_rational_camera ==================
 
   vpgl_lvcs lvcs(33.4447732, -114.3085932, 0.0, vpgl_lvcs::wgs84, vpgl_lvcs::DEG, vpgl_lvcs::METERS);
