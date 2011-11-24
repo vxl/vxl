@@ -15,3 +15,7 @@ SET(boxm2_multi_algo_sources
 ADD_LIBRARY(boxm2_multi_algo  ${boxm2_multi_algo_sources})
 TARGET_LINK_LIBRARIES(boxm2_multi_algo boxm2_multi)# boxm2_ocl boxm2_ocl_pro boct brdb bsta vbl_io vpgl_algo vpgl vgl_xio vgl vnl_algo vnl vbl vil vul vsl vcl)
 
+IF( BUILD_TESTING )
+  SUBDIRS(tests)
+ENDIF( BUILD_TESTING )
+

@@ -25,8 +25,9 @@ SUBDIRS(algo)
 #executables
 SUBDIRS(exe)
 
+#tests
+IF( BUILD_TESTING )
+  SUBDIRS(tests)
+ENDIF( BUILD_TESTING )
+
 ENDIF(OPENCL_FOUND)
-
-
-
-
