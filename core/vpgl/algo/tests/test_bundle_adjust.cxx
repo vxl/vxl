@@ -216,7 +216,7 @@ static void test_bundle_adjust()
     for ( unsigned i=0; i< unknown_world.size(); ++i)
       rms_3d_pts += (unknown_world[i] - world[i]).sqr_length();
     rms_3d_pts = vcl_sqrt(rms_3d_pts/world.size());
-    TEST_NEAR("Solution Correct (fixed K)", rms_3d_pts, 0.0, 1e-3);
+    TEST_NEAR("Solution Correct (fixed K)", rms_3d_pts, 0.0, 2.0e-3);
 
     // make default cameras
     unknown_cameras = vcl_vector<vpgl_perspective_camera<double> >(cameras.size(),init_cam);
@@ -230,7 +230,7 @@ static void test_bundle_adjust()
     for ( unsigned i=0; i< unknown_world.size(); ++i)
       rms_3d_pts += (unknown_world[i] - world[i]).sqr_length();
     rms_3d_pts = vcl_sqrt(rms_3d_pts/world.size());
-    TEST_NEAR("Solution Correct (without gradient, fixed K)", rms_3d_pts, 0.0, 1e-3);
+    TEST_NEAR("Solution Correct (without gradient, fixed K)", rms_3d_pts, 0.0, 2.0e-3);
 
     vpgl_bundle_adjust::write_vrml("test_bundle_fixed_k.wrl",unknown_cameras,unknown_world);
   }
@@ -259,7 +259,7 @@ static void test_bundle_adjust()
     for ( unsigned i=0; i< unknown_world.size(); ++i)
       rms_3d_pts += (unknown_world[i] - world[i]).sqr_length();
     rms_3d_pts = vcl_sqrt(rms_3d_pts/world.size());
-    TEST_NEAR("Solution Correct (est focal len)", rms_3d_pts, 0.0, 2e-3);
+    TEST_NEAR("Solution Correct (est focal len)", rms_3d_pts, 0.0, 2.0e-3);
 
     // make default cameras
     unknown_cameras = vcl_vector<vpgl_perspective_camera<double> >(cameras.size(),init_cam);
@@ -273,7 +273,7 @@ static void test_bundle_adjust()
     for ( unsigned i=0; i< unknown_world.size(); ++i)
       rms_3d_pts += (unknown_world[i] - world[i]).sqr_length();
     rms_3d_pts = vcl_sqrt(rms_3d_pts/world.size());
-    TEST_NEAR("Solution Correct (without gradient, est focal len)", rms_3d_pts, 0.0, 2e-3);
+    TEST_NEAR("Solution Correct (without gradient, est focal len)", rms_3d_pts, 0.0, 2.0e-3);
 
     vpgl_bundle_adjust::write_vrml("test_bundle_est_f.wrl",unknown_cameras,unknown_world);
   }
@@ -334,7 +334,7 @@ static void test_bundle_adjust()
     for ( unsigned i=0; i< unknown_world.size(); ++i)
       rms_3d_pts += (unknown_world[i] - world[i]).sqr_length();
     rms_3d_pts = vcl_sqrt(rms_3d_pts/world.size());
-    TEST_NEAR("Solution Correct (outliers)", rms_3d_pts, 0.0, 1e-3);
+    TEST_NEAR("Solution Correct (outliers)", rms_3d_pts, 0.0, 1.0e-3);
 
     unknown_cameras = init_cameras;
     unknown_world = init_world;
@@ -377,7 +377,7 @@ static void test_bundle_adjust()
     for ( unsigned i=0; i< unknown_world.size(); ++i)
       rms_3d_pts += (unknown_world[i] - world[i]).sqr_length();
     rms_3d_pts = vcl_sqrt(rms_3d_pts/world.size());
-    TEST_NEAR("Solution Correct (without gradient, outliers)", rms_3d_pts, 0.0, 1e-3);
+    TEST_NEAR("Solution Correct (without gradient, outliers)", rms_3d_pts, 0.0, 1.0e-3);
 
     vpgl_bundle_adjust::write_vrml("test_bundle_est_f.wrl",unknown_cameras,unknown_world);
   }
