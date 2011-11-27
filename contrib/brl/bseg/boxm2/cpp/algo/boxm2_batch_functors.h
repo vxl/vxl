@@ -363,8 +363,9 @@ class boxm2_batch_update_app_functor
 #if 0
     vcl_vector<aux_datatype> out = str_cache_->get_next<BOXM2_AUX>(id_, index);
     vcl_vector<nrays_datatype> nrays = str_cache_->get_next<BOXM2_NUM_OBS_SINGLE>(id_, index);
+
+    const int cell_no = 2000000;
 #endif
-    int cell_no = 2000000;
 
     vcl_vector<aux0_datatype> obs;
     vcl_vector<float> vis;
