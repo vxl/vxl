@@ -19,6 +19,7 @@ DECLARE_FUNC_CONS(boxm2_cpp_mean_intensities_print_process);
 DECLARE_FUNC_CONS(boxm2_cpp_create_norm_intensities_process);
 DECLARE_FUNC_CONS(boxm2_cpp_data_print_process);
 DECLARE_FUNC_CONS(boxm2_cpp_filter_process);
+DECLARE_FUNC_CONS(boxm2_cpp_compute_derivative_process);
 
 DECLARE_FUNC_CONS(boxm2_cpp_vis_of_point_process);
 DECLARE_FUNC_CONS(boxm2_cpp_batch_probe_intensities_process);
