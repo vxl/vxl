@@ -18,7 +18,7 @@ bpgl_camera_estimator.h bpgl_camera_estimator.txx bpgl_camera_estimator_amoeba.h
 AUX_SOURCE_DIRECTORY(Templates bpgl_sources)
 
 ADD_LIBRARY(bpgl ${bpgl_sources})
-TARGET_LINK_LIBRARIES(bpgl vpgl vpgl_algo vpgl_io vgl_algo vgl_io vgl vbl vnl vcl)
+TARGET_LINK_LIBRARIES(bpgl brip vpgl vpgl_algo vpgl_io vgl_algo vgl_io vgl vbl vnl vcl)
 
 # algorithms involving cameras
 SUBDIRS(algo)
