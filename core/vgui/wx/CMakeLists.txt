@@ -26,4 +26,8 @@ IF(wxWidgets_FOUND)
   ADD_LIBRARY(vgui_wx ${vgui_wx_sources})
   TARGET_LINK_LIBRARIES(vgui_wx vgui ${wxWidgets_LIBRARIES})
 
+  IF (BUILD_TESTING)
+    SUBDIRS(tests)
+  ENDIF (BUILD_TESTING)
+
 ENDIF(wxWidgets_FOUND)
