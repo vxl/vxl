@@ -12,7 +12,7 @@ boxm2_opencl_cache::boxm2_opencl_cache(boxm2_scene_sptr scene,
 : scene_(scene), maxBlocksInCache(maxBlocks), bytesInCache_(0), block_info_(0), device_(device)
 {
   // store max bytes allowed in cache - use only 80 percent of the memory
-  maxBytesInCache_ = (unsigned long) (device->info().total_global_memory_ * .85);
+  maxBytesInCache_ = (unsigned long) (device->info().total_global_memory_ * .95);
 
   // by default try to create an LRU cache
   boxm2_lru_cache::create(scene);
@@ -316,6 +316,19 @@ void boxm2_opencl_cache::deep_remove_data(boxm2_block_id id, vcl_string type, bo
     //lru_order_.erase(loc); 
 }
 
+//: shallow_remove_data removes data with id and type from ocl cache only
+void boxm2_opencl_cache::shallow_remove_data(boxm2_block_id id, vcl_string type)
+{
+  //find the data in this map
+  vcl_map<boxm2_block_id, bocl_mem*>& data_map = this->cached_data_map(type);
+  vcl_map<boxm2_block_id, bocl_mem*>::iterator iter = data_map.find(id);
+  if ( iter != data_map.end() ) {
+    // release existing memory
+    bocl_mem* toDelete = iter->second;
+    delete toDelete;
+    data_map.erase(iter);
+  }
+}
 
 //: helper method, \returns a reference to correct data map (ensures one exists)
 vcl_map<boxm2_block_id, bocl_mem*>& boxm2_opencl_cache::cached_data_map(vcl_string prefix)

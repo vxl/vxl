@@ -72,6 +72,10 @@ class boxm2_opencl_cache: public vbl_ref_count
     //: deep_remove_data removes this id and type from ocl cache, as well as the cpu cache
     void deep_remove_data(boxm2_block_id id, vcl_string type, bool write_out=true); 
 
+    //: shallow_remove_data removes data with id and type from ocl cache only
+    void shallow_remove_data(boxm2_block_id id, vcl_string type);
+
+
     //: to string method prints out LRU order
     vcl_string to_string(); 
 
