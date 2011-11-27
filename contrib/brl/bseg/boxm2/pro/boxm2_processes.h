@@ -26,5 +26,7 @@ DECLARE_FUNC_CONS(boxm2_bundle_to_scene_process);
 DECLARE_FUNC_CONS(boxm2_clear_cache_process);
 DECLARE_FUNC_CONS(boxm2_blob_change_detection_process);
 DECLARE_FUNC_CONS(boxm2_blob_precision_recall_process);
+DECLARE_FUNC_CONS(boxm2_export_visibility_wrl_process);
+DECLARE_FUNC_CONS(boxm2_export_point_cloud_xyz_process);
 
 #endif

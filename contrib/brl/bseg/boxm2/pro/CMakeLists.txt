@@ -28,7 +28,7 @@ IF(EXPAT_FOUND)
   INSTALL_TARGETS(/lib boxm2_pro)
   INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bseg/boxm2/pro ${boxm2_pro_sources})
 
-  TARGET_LINK_LIBRARIES(boxm2_pro boxm2 boxm2_io boxm2_util bbas_pro bvgl sdet bprb brdb brip imesh vsol bsta bsta_pro vpgl_pro vnl vil_algo vil_io vil vgl vbl_io vul)
+  TARGET_LINK_LIBRARIES(boxm2_pro boxm2 boxm2_io boxm2_util bbas_pro bvgl sdet bprb brdb brip imesh vsol bsta bsta_pro vpgl_pro vnl vil_algo vil_io vil vgl vbl_io vul bvrml)
 
   IF( BUILD_TESTING )
     SUBDIRS(tests)
