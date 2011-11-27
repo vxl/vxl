@@ -1,6 +1,4 @@
 #include "bpro_batch.h"
-#include <vcl_string.h>
-#include <vcl_iostream.h>
 
 #include <bprb/bprb_batch_process_manager.h>
 #include <bprb/bprb_macros.h>
@@ -11,6 +9,9 @@
 #include <brdb/brdb_database_manager.h>
 #include <bpro/core/bbas_pro/bbas_1d_array_float.h>
 #include <bpro/core/bbas_pro/bbas_1d_array_string.h>
+
+#include <vcl_string.h>
+#include <vcl_iostream.h>
 
 static PyObject *init_process(PyObject *self, PyObject *args);
 static PyObject *set_input_bool(PyObject *self, PyObject *args);
@@ -56,7 +57,7 @@ PyMethodDef batch_methods[] =
      "register_datatypes() insert tables in the database for each type"},
 #endif // 0
     #include "bpro_defs.h"
-#if 0 
+#if 0
     {initp, init_process, METH_VARARGS,  initp_com},
     {proc_print_def, process_print_default_params, METH_VARARGS, proc_print_def_com},
     {set_prm_proc, set_params_process, METH_VARARGS, set_prm_proc_com},
@@ -90,7 +91,7 @@ PyObject *init_process(PyObject * /*self*/, PyObject *args)
   if (!PyArg_ParseTuple(args, "s:init_process", &name))
     return NULL;
   vcl_string n(name);
-  if(verbose_state)
+  if (verbose_state)
     vcl_cout << n << '\n';
   bool result = bprb_batch_process_manager::instance()->init_process(n);
   return Py_BuildValue("b", result);
@@ -103,7 +104,7 @@ PyObject *set_input_bool(PyObject * /*self*/, PyObject *args)
   if (!PyArg_ParseTuple(args, "ib:set_input_bool", &input, &value))
     return NULL;
   brdb_value_sptr v = new brdb_value_t<bool>(value);
-  if(verbose_state)
+  if (verbose_state)
     vcl_cout << "input[" << input << "](bool): " << value << '\n';
   bool result = bprb_batch_process_manager::instance()->set_input(input, v);
   return Py_BuildValue("b", result);
@@ -117,7 +118,7 @@ set_input_string(PyObject * /*self*/, PyObject *args)
   if (!PyArg_ParseTuple(args, "is:set_input_string", &input, &value))
     return NULL;
   brdb_value_sptr v = new brdb_value_t<vcl_string>(value);
-  if(verbose_state)
+  if (verbose_state)
     vcl_cout << "input[" << input << "](string): " << value << '\n';
   bool result = bprb_batch_process_manager::instance()->set_input(input, v);
   return Py_BuildValue("b", result);
@@ -130,7 +131,7 @@ PyObject *set_input_unsigned(PyObject * /*self*/, PyObject *args)
   if (!PyArg_ParseTuple(args, "ii:set_input_unsigned", &input, &ivalue))
     return NULL;
   brdb_value_sptr iv = new brdb_value_t<unsigned>(ivalue);
-  if(verbose_state)
+  if (verbose_state)
     vcl_cout << "input[" << input << "](unsigned): " << ivalue << '\n';
   bool result = bprb_batch_process_manager::instance()->set_input(input, iv);
   return Py_BuildValue("b", result);
@@ -143,7 +144,7 @@ PyObject *set_input_int(PyObject * /*self*/, PyObject *args)
   if (!PyArg_ParseTuple(args, "ii:set_input_int", &input, &ivalue))
     return NULL;
   brdb_value_sptr iv = new brdb_value_t<int>(ivalue);
-  if(verbose_state)
+  if (verbose_state)
     vcl_cout << "input[" << input << "](int): " << ivalue << '\n';
   bool result = bprb_batch_process_manager::instance()->set_input(input, iv);
   return Py_BuildValue("b", result);
@@ -156,7 +157,7 @@ PyObject *set_input_long(PyObject * /*self*/, PyObject *args)
   if (!PyArg_ParseTuple(args, "il:set_input_long", &input, &value))
     return NULL;
   brdb_value_sptr v = new brdb_value_t<long>(value);
-  if(verbose_state)
+  if (verbose_state)
     vcl_cout << "input[" << input << "](long): " << value << '\n';
   bool result = bprb_batch_process_manager::instance()->set_input(input, v);
   return Py_BuildValue("b", result);
@@ -169,11 +170,12 @@ PyObject *set_input_float(PyObject * /*self*/, PyObject *args)
   if (!PyArg_ParseTuple(args, "if:set_input_float", &input, &value))
     return NULL;
   brdb_value_sptr v = new brdb_value_t<float>(value);
-  if(verbose_state)
+  if (verbose_state)
     vcl_cout << "input[" << input << "](float): " << value << '\n';
   bool result = bprb_batch_process_manager::instance()->set_input(input, v);
   return Py_BuildValue("b", result);
 }
+
 PyObject *set_input_float_array(PyObject * /*self*/, PyObject *args)
 {
   int input;
@@ -181,22 +183,23 @@ PyObject *set_input_float_array(PyObject * /*self*/, PyObject *args)
   if (!PyArg_ParseTuple(args, "iO:set_input_float_array", &input, &list))
     return NULL;
 
-  if(!PyList_Check(list))
-      return Py_BuildValue("b", false);
-  int length=PyList_GET_SIZE(list);
+  if (!PyList_Check(list))
+    return Py_BuildValue("b", false);
+  unsigned int length=PyList_GET_SIZE(list);
 
   bbas_1d_array_float_sptr farray=new bbas_1d_array_float(length);
-  for(unsigned i = 0;i < length; i++)
+  for (unsigned i = 0; i < length; ++i)
   {
-      PyObject * obj = PyList_GetItem(list,i);
-      float f=PyFloat_AsDouble(obj);
-      farray->data_array[i]=f;
-  } 
+    PyObject * obj = PyList_GetItem(list,i);
+    float f=PyFloat_AsDouble(obj);
+    farray->data_array[i]=f;
+  }
 
   brdb_value_sptr v = new brdb_value_t<bbas_1d_array_float_sptr>(farray);
   bool result = bprb_batch_process_manager::instance()->set_input(input, v);
   return Py_BuildValue("b", result);
 }
+
 PyObject *set_input_double(PyObject * /*self*/, PyObject *args)
 {
   int input;
@@ -204,7 +207,7 @@ PyObject *set_input_double(PyObject * /*self*/, PyObject *args)
   if (!PyArg_ParseTuple(args, "id:set_input_double", &input, &value))
     return NULL;
   brdb_value_sptr v = new brdb_value_t<double>(value);
-  if(verbose_state)
+  if (verbose_state)
     vcl_cout << "input[" << input << "](double): " << value << '\n';
   bool result = bprb_batch_process_manager::instance()->set_input(input, v);
   return Py_BuildValue("b", result);
@@ -287,31 +290,31 @@ PyObject *get_output_double(PyObject * /*self*/, PyObject *args)
   float value;
   if (!PyArg_ParseTuple(args, "i:get_output_double", &id))
     return NULL;
-  
+
   vcl_string relation_name = "double_data";
-  
+
   // query to get the data
   brdb_query_aptr Q = brdb_query_comp_new("id", brdb_query::EQ, id);
   brdb_selection_sptr selec = DATABASE->select(relation_name, Q);
-  
+
   if (selec->size()!=1) {
     vcl_cout << "in get_output_double() - no relation with type" << relation_name << " id: " << id << vcl_endl;
     return Py_BuildValue("d",-1.0);
   }
-  
+
   brdb_value_sptr brdb_value;
   if (!selec->get_value(vcl_string("value"), brdb_value)) {
     vcl_cout << "in get_output_double() didn't get value\n";
     return Py_BuildValue("d",-1.0);
   }
-  
+
   if (!brdb_value) {
     vcl_cout << "in get_output_double() - null value\n";
     return Py_BuildValue("d",-1.0);
   }
   brdb_value_t<double>* result_out = static_cast<brdb_value_t<double>* >(brdb_value.ptr());
   value = result_out->value();
-  
+
   return Py_BuildValue("d", value);
 }
 
@@ -321,31 +324,31 @@ PyObject *get_output_int(PyObject * /*self*/, PyObject *args)
   unsigned value;
   if (!PyArg_ParseTuple(args, "i:get_output_int", &id))
     return NULL;
-  
+
   vcl_string relation_name = "int_data";
-  
+
   // query to get the data
   brdb_query_aptr Q = brdb_query_comp_new("id", brdb_query::EQ, id);
   brdb_selection_sptr selec = DATABASE->select(relation_name, Q);
-  
+
   if (selec->size()!=1) {
     vcl_cout << "in get_output_int() - no relation with type" << relation_name << " id: " << id << vcl_endl;
     return Py_BuildValue("i",1000);
   }
-  
+
   brdb_value_sptr brdb_value;
   if (!selec->get_value(vcl_string("value"), brdb_value)) {
     vcl_cout << "in get_output_int() didn't get value\n";
     return Py_BuildValue("i",1000);
   }
-  
+
   if (!brdb_value) {
     vcl_cout << "in get_output_int() - null value\n";
     return Py_BuildValue("i",1000);
   }
   brdb_value_t<int>* result_out = static_cast<brdb_value_t<int>* >(brdb_value.ptr());
   value = result_out->value();
-  
+
   return Py_BuildValue("i", value);
 }
 
@@ -454,6 +457,7 @@ PyObject *commit_output(PyObject * /*self*/, PyObject *args)
   else
     return Py_BuildValue("is", id, type.c_str());
 }
+
 PyObject *set_input_from_db(PyObject * /*self*/, PyObject *args)
 {
   unsigned input;
@@ -553,7 +557,7 @@ PyObject *get_bbas_1d_array_float(PyObject * /*self*/, PyObject *args)
 
   array_1d = PyList_New(value->data_array.size());
   PyObject *x;
-  for(unsigned i=0;i<value->data_array.size();i++)
+  for (unsigned i=0;i<value->data_array.size();i++)
   {
     x=PyFloat_FromDouble((double)value->data_array[i]);
     PyList_SetItem(array_1d, i,x);//Py_DECREF(x);
@@ -597,7 +601,7 @@ PyObject *get_bbas_1d_array_string(PyObject * /*self*/, PyObject *args)
   value = result_out->value();
 
   array_1d = PyList_New(value->data_array.size());
-  for(unsigned i=0;i<value->data_array.size();i++)
+  for (unsigned i=0;i<value->data_array.size();i++)
   {
     PyObject *x = Py_BuildValue("s", value->data_array[i].c_str());
     PyList_SetItem(array_1d, i,x);
