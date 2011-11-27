@@ -12,3 +12,8 @@ SUBDIRS(pro)
 
 # cpp process APIs.
 SUBDIRS(algo)
+
+#tests
+IF( BUILD_TESTING )
+  SUBDIRS(tests)
+ENDIF( BUILD_TESTING )
