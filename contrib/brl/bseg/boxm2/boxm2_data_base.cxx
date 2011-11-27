@@ -83,12 +83,12 @@ void boxm2_data_base::set_default_value(vcl_string data_type, boxm2_block_metada
   else if (data_type.find(boxm2_data_traits<BOXM2_GAUSS_RGB>::prefix()) != vcl_string::npos) {
     vcl_memset(data_buffer_, (vxl_byte) 128, buffer_length_);
   }
-  else if (data_type == boxm2_data_traits<BOXM2_FLOAT8>::prefix()) {
+  else if ( data_type.find(boxm2_data_traits<BOXM2_FLOAT8>::prefix()) != vcl_string::npos ) {
       float* floats = (float*) data_buffer_;
       int buffer_length = (int)(buffer_length_/sizeof(float));
       for (int i=0; i<buffer_length; ++i) floats[i] = 0.0;
   }
-  else if (data_type == boxm2_data_traits<BOXM2_VIS_SPHERE>::prefix()) {
+  else if (data_type.find(boxm2_data_traits<BOXM2_VIS_SPHERE>::prefix()) != vcl_string::npos ) {
         float* floats = (float*) data_buffer_;
         int buffer_length = (int)(buffer_length_/sizeof(float));
         for (int i=0; i<buffer_length; ++i) floats[i] = 1.0f;
