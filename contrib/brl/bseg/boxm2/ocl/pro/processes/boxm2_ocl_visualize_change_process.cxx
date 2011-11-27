@@ -13,7 +13,6 @@
 #include <boxm2/ocl/boxm2_ocl_util.h>
 #include <boxm2/boxm2_util.h>
 #include <vil/vil_image_view.h>
-#include <vil/vil_save.h>
 
 //brdb stuff
 #include <brdb/brdb_value.h>
@@ -59,56 +58,53 @@ bool boxm2_ocl_visualize_change_process(bprb_func_process& pro)
   vil_image_view_base_sptr  change_sptr    = pro.get_input<vil_image_view_base_sptr>(i++);
   vil_image_view_base_sptr  in_sptr        = pro.get_input<vil_image_view_base_sptr>(i++);
   float                     thresh         = pro.get_input<float>(i++);                 //nxn
-  
+
   //prep in image, cast to grey float
   vil_image_view_base_sptr  f_in       = boxm2_util::prepare_input_image(in_sptr, true); //true for force gray scale
-  vil_image_view<float>*    in_img     = dynamic_cast<vil_image_view<float>* >(f_in.ptr()); 
+  vil_image_view<float>*    in_img     = dynamic_cast<vil_image_view<float>* >(f_in.ptr());
   unsigned ni=in_img->ni();
   unsigned nj=in_img->nj();
-  
-  
+
+
   //build a mask image
-  vil_image_view<bool> mask(ni,nj); 
-  mask.fill(false); 
+  vil_image_view<bool> mask(ni,nj);
+  mask.fill(false);
 
   //try byte image (passed in mask)
-  vil_image_view<vxl_byte>* change_b = dynamic_cast<vil_image_view<vxl_byte>* >(change_sptr.ptr()); 
-  if(change_b) 
+  vil_image_view<vxl_byte>* change_b = dynamic_cast<vil_image_view<vxl_byte>* >(change_sptr.ptr());
+  if (change_b)
   {
-    for(int i=0; i<ni; ++i)
-      for(int j=0; j<nj; ++j)
-        mask(i,j) = (*change_b)(i,j)==0 ? false : true; 
+    for (unsigned int i=0; i<ni; ++i)
+      for (unsigned int j=0; j<nj; ++j)
+        mask(i,j) = (*change_b)(i,j)==0 ? false : true;
   }
-  else if(vil_image_view<float>* change_f = dynamic_cast<vil_image_view<float>* >(change_sptr.ptr())) 
+  else if (vil_image_view<float>* change_f = dynamic_cast<vil_image_view<float>* >(change_sptr.ptr()))
   {
-    for(int i=0; i<ni; ++i)
-      for(int j=0; j<nj; ++j)
-        mask(i,j) = (*change_f)(i,j)>thresh ? true : false; 
+    for (unsigned int i=0; i<ni; ++i)
+      for (unsigned int j=0; j<nj; ++j)
+        mask(i,j) = (*change_f)(i,j)>thresh ? true : false;
   }
 
   //prepare output RGB image
-  vil_image_view<vxl_byte>* out_img = new vil_image_view<vxl_byte>(ni,nj,3); 
-  for(int i=0; i<ni; ++i) {
-    for(int j=0; j<nj; ++j) {
-      
-      //intensity at IJ
-      vxl_byte intensity = (vxl_byte) (255.0f * (*in_img)(i,j)); 
-      
+  vil_image_view<vxl_byte>* out_img = new vil_image_view<vxl_byte>(ni,nj,3);
+  for (unsigned int i=0; i<ni; ++i) {
+    for (unsigned int j=0; j<nj; ++j) {
       //if it's change, mark it as change
-      if( mask(i,j) > thresh) {
-        (*out_img)(i,j,0) = (vxl_byte) 255; 
-        (*out_img)(i,j,1) = (vxl_byte) 0; 
-        (*out_img)(i,j,2) = (vxl_byte) 0; 
+      if ( mask(i,j) > thresh) {
+        (*out_img)(i,j,0) = (vxl_byte) 255;
+        (*out_img)(i,j,1) = (vxl_byte) 0;
+        (*out_img)(i,j,2) = (vxl_byte) 0;
       }
       else {
-        float pixVal = (*in_img)(i,j); 
-        (*out_img)(i,j,0) = (vxl_byte) ( 255.0f * pixVal ); 
-        (*out_img)(i,j,1) = (vxl_byte) ( 255.0f * pixVal ); 
-        (*out_img)(i,j,2) = (vxl_byte) ( 255.0f * pixVal ); 
+        //intensity at IJ
+        float pixVal = (*in_img)(i,j);
+        (*out_img)(i,j,0) = (vxl_byte) ( 255.0f * pixVal );
+        (*out_img)(i,j,1) = (vxl_byte) ( 255.0f * pixVal );
+        (*out_img)(i,j,2) = (vxl_byte) ( 255.0f * pixVal );
       }
     }
   }
-  
+
   // store scene smaprt pointer
   i=0;
   pro.set_output_val<vil_image_view_base_sptr>(i++, out_img);
