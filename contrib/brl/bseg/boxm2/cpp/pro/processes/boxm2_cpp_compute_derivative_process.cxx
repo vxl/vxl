@@ -2,11 +2,12 @@
 #include <bprb/bprb_func_process.h>
 //:
 // \file
-// \brief  A filtering process to compute derivative in x,y and z directions. The derivative kernels are specified
-//         as filenames. Files contain kernel coefficients. See /contrib/brl/bseg/bvpl/doc/ for examples.
-//         The user can specify a probability threshold as well as a normal magnitude threshold.
-//         Points not meeting these criteria will simply not be saved. The user can also specify a specific block to
-//         run the process on. If no blocks are specified, it is run on all blocks.
+// \brief  A filtering process to compute derivative in x,y and z directions.
+// The derivative kernels are specified as filenames.
+// Files contain kernel coefficients. See contrib/brl/bseg/bvpl/doc/ for examples.
+// The user can specify a probability threshold as well as a normal magnitude threshold.
+// Points not meeting these criteria will simply not be saved. The user can also specify a specific block to
+// run the process on. If no blocks are specified, it is run on all blocks.
 //
 // \author Ali Osman Ulusoy
 // \date Oct 06, 2011
@@ -33,7 +34,7 @@ bool boxm2_cpp_compute_derivative_process_cons(bprb_func_process& pro)
 {
   using namespace boxm2_cpp_compute_derivative_process_globals;
 
-  //process takes 1 input
+  //process takes 10 inputs
   vcl_vector<vcl_string> input_types_(n_inputs_);
   input_types_[0] = "boxm2_scene_sptr";
   input_types_[1] = "boxm2_cache_sptr";
@@ -70,8 +71,6 @@ bool boxm2_cpp_compute_derivative_process_cons(bprb_func_process& pro)
   return good;
 }
 
-//#define DEBUG
-
 bool boxm2_cpp_compute_derivative_process(bprb_func_process& pro)
 {
   using namespace boxm2_cpp_compute_derivative_process_globals;
@@ -96,14 +95,14 @@ bool boxm2_cpp_compute_derivative_process(bprb_func_process& pro)
 
   //if id's aren't specified, use all blocks in the scene.
   vcl_map<boxm2_block_id, boxm2_block_metadata> blocks;
-  if(id_x == -1 && id_y == -1 && id_z == -1)
+  if (id_x == -1 && id_y == -1 && id_z == -1)
   {
     vcl_cout << "Running boxm2_cpp_compute_derivative_process on all blocks..." << vcl_endl;
     blocks = scene->blocks();
   }
   else
   {
-    vcl_cout << "Running boxm2_cpp_compute_derivative_process on block: (" << id_x << "," << id_y << "," << id_z << ")..." << vcl_endl;
+    vcl_cout << "Running boxm2_cpp_compute_derivative_process on block: (" << id_x << ',' << id_y << ',' << id_z << ")..." << vcl_endl;
     boxm2_block_id id(id_x,id_y,id_z);
     blocks[id] = scene->get_block_metadata(id);
   }
@@ -135,13 +134,15 @@ bool boxm2_cpp_compute_derivative_process(bprb_func_process& pro)
     vcl_size_t dataSize = alph->buffer_length();
     boxm2_data_traits<BOXM2_POINT>::datatype *   point_data = (boxm2_data_traits<BOXM2_POINT>::datatype*) points->data_buffer();
     boxm2_data_traits<BOXM2_NORMAL>::datatype *   normal_data = (boxm2_data_traits<BOXM2_NORMAL>::datatype*) normals->data_buffer();
-	for(unsigned i = 0; i < dataSize /  boxm2_data_info::datasize(boxm2_data_traits<BOXM2_POINT>::prefix());i++ ) {
-		//vcl_cout << "p: " << point_data[i][0] << " " << point_data[i][1] << " "<< point_data[i][2] << " n: "<< normal_data[i][0] << " "<< normal_data[i][0] << " "<< normal_data[i][0] << " " << vcl_endl;
-		vcl_cout << point_data[i][3] << vcl_endl;
-	}
+    for (unsigned i = 0; i < dataSize /  boxm2_data_info::datasize(boxm2_data_traits<BOXM2_POINT>::prefix());i++ ) {
+#if 0
+      vcl_cout << "p: " << point_data[i][0] << ' ' << point_data[i][1] << ' '<< point_data[i][2] << " n: "
+               << normal_data[i][0] << ' '<< normal_data[i][0] << ' '<< normal_data[i][0] << vcl_endl;
+#endif
+      vcl_cout << point_data[i][3] << vcl_endl;
+    }
 #endif
   }
-
 
   return true;
 }

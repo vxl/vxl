@@ -1,16 +1,15 @@
 // This is brl/bseg/boxm2/ocl/pro/processes/boxm2_ocl_flip_normals_using_vis_process.cxx
+#include <bprb/bprb_func_process.h>
 //:
 // \file
 // \brief  A process for solving the sign ambiguity in the normals computed using boxm2_cpp_compute_derivative_process.
-//         This processes uses visibility to disambiguate the normal direction.
-//         Given boxm2_point and boxm2_normal data, it computes maximum visibility on the hemisphere centered
-//         at the normal and also on the hemisphere centered at the flipped normal. The direction with the higher
-//         visibility is saved in boxm2_normal.
+// This processes uses visibility to disambiguate the normal direction.
+// Given boxm2_point and boxm2_normal data, it computes maximum visibility on the hemisphere centered
+// at the normal and also on the hemisphere centered at the flipped normal. The direction with the higher
+// visibility is saved in boxm2_normal.
 //
 // \author Ali Osman Ulusoy
 // \date Oct 10, 2011
-
-#include <bprb/bprb_func_process.h>
 
 #include <vcl_fstream.h>
 #include <boxm2/ocl/boxm2_opencl_cache.h>
@@ -57,15 +56,15 @@ namespace boxm2_ocl_flip_normals_using_vis_process_globals
 
     //compilation options
     vcl_string options = opts+" -D INTENSITY ";
-    
+
     bocl_kernel* compute_vis = new bocl_kernel();
     vcl_string seg_opts = options + " -D COMPVIS -D STEP_CELL=step_cell_computevis(aux_args,data_ptr,llid,d) ";
     compute_vis->create_kernel(&device->context(),device->device_id(), src_paths, "compute_vis", seg_opts, "compute_vis");
     vec_kernels.push_back(compute_vis);
-    
+
     bocl_kernel* decide_normal_dir = new bocl_kernel();
     decide_normal_dir->create_kernel(&device->context(),device->device_id(), src_paths, "decide_normal_dir", seg_opts, "decide_normal_dir");
-	vec_kernels.push_back(decide_normal_dir);
+    vec_kernels.push_back(decide_normal_dir);
     return ;
   }
 
@@ -85,7 +84,7 @@ bool boxm2_ocl_flip_normals_using_vis_process_cons(bprb_func_process& pro)
   // process has 0 output:
   vcl_vector<vcl_string>  output_types_(n_outputs_);
   bool good = pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
-  
+
   return good;
 }
 
@@ -106,7 +105,7 @@ bool boxm2_ocl_flip_normals_using_vis_process(bprb_func_process& pro)
   }
   float transfer_time=0.0f;
   float gpu_time=0.0f;
-  
+
   //get the inputs
   unsigned i = 0;
   bocl_device_sptr         device       = pro.get_input<bocl_device_sptr>(i++);
@@ -158,7 +157,7 @@ bool boxm2_ocl_flip_normals_using_vis_process(bprb_func_process& pro)
                                                  *(device->device_id()),
                                                  CL_QUEUE_PROFILING_ENABLE,
                                                  &status);
-  if (status!=0) 
+  if (status!=0)
     return false;
 
   // compile the kernel if not already compiled
@@ -196,7 +195,7 @@ bool boxm2_ocl_flip_normals_using_vis_process(bprb_func_process& pro)
   for (unsigned int i=0; i<kernels[identifier].size(); ++i)
   {
       //remove all the alphas and points from opencl cache
-      if(i == DECIDE_NORMAL) {
+      if (i == DECIDE_NORMAL) {
           for (blk_iter = blocks.begin(); blk_iter != blocks.end(); ++blk_iter)
           {
             boxm2_block_id id = blk_iter->first;
@@ -207,8 +206,8 @@ bool boxm2_ocl_flip_normals_using_vis_process(bprb_func_process& pro)
 
       for (blk_iter = blocks.begin(); blk_iter != blocks.end(); ++blk_iter)
       {
-    	  boxm2_block_id id = blk_iter->first;
-    	  vcl_cout << "Processing block: " << id << vcl_endl;
+          boxm2_block_id id = blk_iter->first;
+          vcl_cout << "Processing block: " << id << vcl_endl;
 
         //get kernel
         bocl_kernel* kern =  kernels[identifier][i];
@@ -251,7 +250,7 @@ bool boxm2_ocl_flip_normals_using_vis_process(bprb_func_process& pro)
 
             bocl_mem* points = opencl_cache->get_data<BOXM2_POINT>(blk_iter->first,0,false);
 
-            if(id == id_inner)
+            if (id == id_inner)
               contain_point[0] = true;
             else
               contain_point[0] = false;
@@ -292,7 +291,7 @@ bool boxm2_ocl_flip_normals_using_vis_process(bprb_func_process& pro)
           int status = clFinish(queue);
           check_val(status, MEM_FAILURE, "READ VIS_SPHERE FAILED: " + error_to_string(status));
         }
-        else if(i == DECIDE_NORMAL) {
+        else if (i == DECIDE_NORMAL) {
           transfer.mark();
 
           //load tree
@@ -343,11 +342,11 @@ bool boxm2_ocl_flip_normals_using_vis_process(bprb_func_process& pro)
 #ifdef DEBUG
         vnl_vector_fixed<float, 4>  * aux_data=static_cast<vnl_vector_fixed<float, 4> *> (aux->cpu_buffer());
         for (unsigned k=0; k < info_buffer->data_buffer_length; k++) {
-        	if(aux_data[k][0]  != -1) {
-        		for(unsigned i = 0; i < 12; i++)
-        			vcl_cout << aux_data[k][i] << " ";
-        		vcl_cout << vcl_endl;
-        	}
+            if (aux_data[k][0]  != -1) {
+                for (unsigned i = 0; i < 12; i++)
+                    vcl_cout << aux_data[k][i] << ' ';
+                vcl_cout << vcl_endl;
+            }
         }
         //vcl_cout << vcl_endl << "The count is " << count << vcl_endl;
 #endif
@@ -355,17 +354,16 @@ bool boxm2_ocl_flip_normals_using_vis_process(bprb_func_process& pro)
         vnl_vector_fixed<float, 16> * vis_data=static_cast< vnl_vector_fixed<float, 16>*> (vis_sphere->cpu_buffer());
         unsigned count = 0;
         for (unsigned k=0;k < (points->num_bytes()/pointsTypeSize); k++) {
-			if(vis_data[k][15] != -1.0f) {
-				count++;
-				if(count % 1000 == 0)
-					vcl_cout << vis_data[k] << vcl_endl;
-			}
+            if (vis_data[k][15] != -1.0f) {
+                count++;
+                if (count % 1000 == 0)
+                    vcl_cout << vis_data[k] << vcl_endl;
+            }
           }
 
         vcl_cout << vcl_endl << "The count is " << count << vcl_endl;
 #endif
     }
-
   }
 
   vcl_cout<<"Gpu time "<<gpu_time<<" transfer time "<<transfer_time<<vcl_endl;

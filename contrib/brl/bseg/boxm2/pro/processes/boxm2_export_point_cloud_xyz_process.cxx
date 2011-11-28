@@ -24,7 +24,6 @@ namespace boxm2_export_point_cloud_xyz_process_globals
 
 bool boxm2_export_point_cloud_xyz_process_cons(bprb_func_process& pro)
 {
-
   using namespace boxm2_export_point_cloud_xyz_process_globals;
 
   //process takes 2 inputs
@@ -52,12 +51,11 @@ bool boxm2_export_point_cloud_xyz_process_cons(bprb_func_process& pro)
 
 
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
-
 }
+
 
 bool boxm2_export_point_cloud_xyz_process (bprb_func_process& pro)
 {
-
   using namespace boxm2_export_point_cloud_xyz_process_globals;
 
   if ( pro.n_inputs() < n_inputs_ ) {
@@ -97,30 +95,28 @@ bool boxm2_export_point_cloud_xyz_process (bprb_func_process& pro)
 
     //refine block and datas
     boxm2_block_metadata data = blk_iter->second;
-    if(output_filename.substr(output_filename.find_last_of(".") + 1) == "xyz")
-   	 boxm2_export_point_cloud_xyz_function::exportPointCloudXYZ(data,blk,vis,points,normals,myfile, output_prob, output_vis, vis_t);
-    else if(output_filename.substr(output_filename.find_last_of(".") + 1) == "ply")
-   	 boxm2_export_point_cloud_xyz_function::exportPointCloudPLY(data,blk,vis,points,normals,myfile, output_prob, output_vis, vis_t, num_vertices);
+    if (output_filename.substr(output_filename.find_last_of(".") + 1) == "xyz")
+        boxm2_export_point_cloud_xyz_function::exportPointCloudXYZ(data,blk,vis,points,normals,myfile, output_prob, output_vis, vis_t);
+    else if (output_filename.substr(output_filename.find_last_of(".") + 1) == "ply")
+        boxm2_export_point_cloud_xyz_function::exportPointCloudPLY(data,blk,vis,points,normals,myfile, output_prob, output_vis, vis_t, num_vertices);
     else
-   	 vcl_cout << "UNKNOWN FILE FORMAT..." << vcl_endl;
+        vcl_cout << "UNKNOWN FILE FORMAT..." << vcl_endl;
   }
   myfile.flush();
   myfile.close();
 
   //if ply, have to write annoying header at the beginning
-  if(output_filename.substr(output_filename.find_last_of(".") + 1) == "ply") {
-	  vcl_ifstream myfile_input;
-	  myfile_input.open(output_filename.c_str());
-	  vcl_stringstream ss;
-	  ss << myfile_input.rdbuf();
-	  myfile_input.close();
-	  myfile.open(output_filename.c_str());
-	  boxm2_export_point_cloud_xyz_function::writePLYHeader(myfile,num_vertices,ss);
-	  myfile.flush();
-	  myfile.close();
+  if (output_filename.substr(output_filename.find_last_of(".") + 1) == "ply") {
+      vcl_ifstream myfile_input;
+      myfile_input.open(output_filename.c_str());
+      vcl_stringstream ss;
+      ss << myfile_input.rdbuf();
+      myfile_input.close();
+      myfile.open(output_filename.c_str());
+      boxm2_export_point_cloud_xyz_function::writePLYHeader(myfile,num_vertices,ss);
+      myfile.flush();
+      myfile.close();
   }
-
-
 
   return true;
 }

@@ -23,17 +23,18 @@ class boxm2_compute_derivative_function
 
   //: "default" constructor
   boxm2_compute_derivative_function(boxm2_block_metadata data, boxm2_block* blk, boxm2_data_base* alphas,
-									  boxm2_data_base* normals,  boxm2_data_base* points, float prob_threshold,
-									  float normal_threshold, vcl_string  kernel_x_file_name,
-									  vcl_string kernel_y_file_name, vcl_string kernel_z_file_name);
+                                    boxm2_data_base* normals,  boxm2_data_base* points, float prob_threshold,
+                                    float normal_threshold, vcl_string  kernel_x_file_name,
+                                    vcl_string kernel_y_file_name, vcl_string kernel_z_file_name);
 
  private:
   //: returns a list of 3d points of neighboring cells in 3d
   vcl_vector<vcl_pair<vgl_point_3d<int>, vgl_point_3d<double> > >  neighbor_points(const  vgl_point_3d<double>& cellCenter, double side_len, const boxm2_array_3d<uchar16>& trees, int nhood_size );
   //: evaluate given points in the data
-  vcl_vector<vcl_pair<vgl_point_3d<int>, float> > eval_neighbors(boxm2_block_metadata data, const boct_bit_tree& bit_tree,
-			const vcl_vector<vcl_pair<vgl_point_3d<int>, vgl_point_3d<double> > >& neighbors,  const boxm2_array_3d<uchar16>& trees,
-			const boxm2_data_traits<BOXM2_ALPHA>::datatype* alpha_data, int curr_depth);
+  vcl_vector<vcl_pair<vgl_point_3d<int>, float> > eval_neighbors(
+            boxm2_block_metadata data, const boct_bit_tree& bit_tree,
+            const vcl_vector<vcl_pair<vgl_point_3d<int>, vgl_point_3d<double> > >& neighbors,  const boxm2_array_3d<uchar16>& trees,
+            const boxm2_data_traits<BOXM2_ALPHA>::datatype* alpha_data, int curr_depth);
   //: load kernel from file
   vcl_vector<vcl_pair<vgl_point_3d<int>, float> > load_kernel(vcl_string filename);
   //: apply a filter to given neighborhood

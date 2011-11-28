@@ -16,7 +16,7 @@ class boxm2_compute_export_vis_wrl_function
  public:
   //: "default" constructor
   static void exportVisToWRL(boxm2_block_metadata data, boxm2_block* blk,
-							 boxm2_data_base* alphas, boxm2_data_base* vis,
-							 boxm2_data_base* points, vcl_ofstream& file);
+                             boxm2_data_base* alphas, boxm2_data_base* vis,
+                             boxm2_data_base* points, vcl_ofstream& file);
 };
 #endif

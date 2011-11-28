@@ -7,55 +7,53 @@
 
 typedef struct
 {
-   __global float* alpha; 
+   __global float* alpha;
             float* visibility;
             bool* start;
-  __constant RenderSceneInfo * linfo; 
-} AuxArgs;  
+  __constant RenderSceneInfo * linfo;
+} AuxArgs;
 
 //forward declare cast ray (so you can use it)
-void cast_ray(int,int,float,float,float,float,float,float,__constant RenderSceneInfo*, 
-              __global int4*,local uchar16*,constant uchar *,local uchar *,float*,AuxArgs); 
+void cast_ray(int,int,float,float,float,float,float,float,__constant RenderSceneInfo*,
+              __global int4*,local uchar16*,constant uchar *,local uchar *,float*,AuxArgs);
 __kernel
 void
 compute_vis(__constant  uint                * datasize_points,
             __constant  RenderSceneInfo     * linfo,
-			__constant  float4	   			* directions,
-             __global    int4               * tree_array,       // tree structure for each block
-             __constant  uchar              * bit_lookup,       // used to get data_index
-             __global    float              * alpha_array,
-             __global    float4             * points,
-             __global    float4             * normals,
-             __global    float16            * vis_sphere, 
-             __constant   bool             * contain_point,
-             __local     uchar16            * local_tree,       // cache current tree into local memory
-             __local     uchar              * cumsum)
+            __constant  float4                   * directions,
+            __global    int4               * tree_array,       // tree structure for each block
+            __constant  uchar              * bit_lookup,       // used to get data_index
+            __global    float              * alpha_array,
+            __global    float4             * points,
+            __global    float4             * normals,
+            __global    float16            * vis_sphere,
+            __constant   bool             * contain_point,
+            __local     uchar16            * local_tree,       // cache current tree into local memory
+            __local     uchar              * cumsum)
 {
-
-  int gid=get_global_id(0);
-  if (gid<datasize_points[0]) {
-      
+    int gid=get_global_id(0);
+    if (gid<datasize_points[0]) {
         //get normal and point from global mem
-        float4 ray_o = points[ gid ]; 
+        float4 ray_o = points[ gid ];
         float4 ray_d = normals[ gid ];
-        
+
         //check if there is a normal here
-        if( (ray_d.x == 0 && ray_d.y == 0 && ray_d.z ==0) || (ray_o.x == 0 && ray_o.y == 0 && ray_o.z == 0)) {
+        if ( (ray_d.x == 0 && ray_d.y == 0 && ray_d.z ==0) || (ray_o.x == 0 && ray_o.y == 0 && ray_o.z == 0)) {
            vis_sphere[gid].sf = -1.0f; //flag to indicate there is no normal in this location.
            return;
         }
         else {
-            
-          //declare ray 
+
+          //declare ray
           float ray_ox, ray_oy, ray_oz, ray_dx, ray_dy, ray_dz, normal_x,normal_y,normal_z;
-          calc_scene_ray_generic_cam(linfo, ray_o, ray_d, &ray_ox, &ray_oy, &ray_oz, &ray_dx, &ray_dy, &ray_dz);  
-		  normal_x = ray_dx; normal_y = ray_dy; normal_z = ray_dz; 
-		  
-          
+          calc_scene_ray_generic_cam(linfo, ray_o, ray_d, &ray_ox, &ray_oy, &ray_oz, &ray_dx, &ray_dy, &ray_dz);
+          normal_x = ray_dx; normal_y = ray_dy; normal_z = ray_dz;
+
+
           AuxArgs aux_args;
           aux_args.linfo    = linfo;
-          aux_args.alpha   = alpha_array; 
-          
+          aux_args.alpha   = alpha_array;
+
           //get visibilities from global mem to private mem
           float private_vis[16];
           private_vis[0] = vis_sphere[gid].s0;
@@ -70,25 +68,25 @@ compute_vis(__constant  uint                * datasize_points,
           private_vis[9] = vis_sphere[gid].s9;
           private_vis[10] = vis_sphere[gid].sa;
           private_vis[11] = vis_sphere[gid].sb;
-          
+
           //loop thru directions
           bool start;
-		  for(unsigned int i = 0; i < 12; i++) {
-			//setup ray
+          for (unsigned int i = 0; i < 12; i++) {
+            //setup ray
             start = !contain_point[0];
-			aux_args.visibility = &(private_vis[i]);
-			aux_args.start = &start;
-                   
-            calc_scene_ray_generic_cam(linfo, ray_o, directions[i], &ray_ox, &ray_oy, &ray_oz, &ray_dx, &ray_dy, &ray_dz);  
-            
+            aux_args.visibility = &(private_vis[i]);
+            aux_args.start = &start;
+
+            calc_scene_ray_generic_cam(linfo, ray_o, directions[i], &ray_ox, &ray_oy, &ray_oz, &ray_dx, &ray_dy, &ray_dz);
+
             //shoot ray
-			cast_ray( 1, 1,
-                    ray_ox, ray_oy, ray_oz,
-                    ray_dx, ray_dy, ray_dz,
-                    linfo, tree_array,                                              //scene info
-                    local_tree, bit_lookup, cumsum, &(private_vis[i]), aux_args);     //utility info
-		  }
-          
+            cast_ray( 1, 1,
+                      ray_ox, ray_oy, ray_oz,
+                      ray_dx, ray_dy, ray_dz,
+                      linfo, tree_array,                                              //scene info
+                      local_tree, bit_lookup, cumsum, &(private_vis[i]), aux_args);   //utility info
+          }
+
           //transfer from private mem to global mem
           vis_sphere[gid].s0 = private_vis[0];
           vis_sphere[gid].s1 = private_vis[1];
@@ -102,7 +100,7 @@ compute_vis(__constant  uint                * datasize_points,
           vis_sphere[gid].s9 = private_vis[9];
           vis_sphere[gid].sa = private_vis[10];
           vis_sphere[gid].sb = private_vis[11];
-		}
+        }
     }
 }
 
@@ -110,39 +108,37 @@ compute_vis(__constant  uint                * datasize_points,
 void step_cell_computevis(AuxArgs aux_args, int data_ptr, uchar llid, float d)
 {
     //start computing visibility after ray has left the original cell
-	if((*aux_args.start)) {
-		float  alpha  = aux_args.alpha[data_ptr];
-		float  seg_len = d * aux_args.linfo->block_len;
-		(*aux_args.visibility) *= exp(-alpha * seg_len);
-	}
-	else
-		(*aux_args.start) = true;
+    if ((*aux_args.start)) {
+        float  alpha  = aux_args.alpha[data_ptr];
+        float  seg_len = d * aux_args.linfo->block_len;
+        (*aux_args.visibility) *= exp(-alpha * seg_len);
+    }
+    else
+        (*aux_args.start) = true;
 }
 
 __kernel
 void
 decide_normal_dir(     __constant  RenderSceneInfo    * linfo,
-                       __constant  float4  			  * directions,
+                       __constant  float4                * directions,
                        __global    float4             * normals,
                        __global    float              * vis,
-                       __global    float16            * vis_sphere ) 
+                       __global    float16            * vis_sphere )
 {
-      int gid=get_global_id(0);
-      int datasize = linfo->data_len ;//* info->num_buffer;
-      if (gid<datasize) {         
-          
-          vis[gid] = -1.0f;
-          
-          //check if there is meaningful data here
-          if(vis_sphere[gid].sf != -1.0f) {
-          
-            //declare ray 
+    int gid=get_global_id(0);
+    int datasize = linfo->data_len ;//* info->num_buffer;
+    if (gid<datasize) {
+        vis[gid] = -1.0f;
+
+        //check if there is meaningful data here
+        if (vis_sphere[gid].sf != -1.0f) {
+            //declare ray
             float4 dummy = (float4) (1.0,1.0,1.0,1.0);
             float4 ray_d = normals[ gid ];
-            
+
             float ray_ox, ray_oy, ray_oz, ray_dx, ray_dy, ray_dz, normal_x,normal_y,normal_z;
-            calc_scene_ray_generic_cam(linfo, dummy, ray_d, &ray_ox, &ray_oy, &ray_oz, &ray_dx, &ray_dy, &ray_dz);  
-            normal_x = ray_dx; normal_y = ray_dy; normal_z = ray_dz; 
+            calc_scene_ray_generic_cam(linfo, dummy, ray_d, &ray_ox, &ray_oy, &ray_oz, &ray_dx, &ray_dy, &ray_dz);
+            normal_x = ray_dx; normal_y = ray_dy; normal_z = ray_dz;
 
             float max_vis = 0.0f;
             float max_vis_flipped = 0.0f;
@@ -159,24 +155,22 @@ decide_normal_dir(     __constant  RenderSceneInfo    * linfo,
             private_vis[9] = vis_sphere[gid].s9;
             private_vis[10] = vis_sphere[gid].sa;
             private_vis[11] = vis_sphere[gid].sb;
-            
-            
+
             //compute max visibility in normal and opposite hemisphere
-            for(unsigned int i = 0; i < 12; i++) {
-                calc_scene_ray_generic_cam(linfo, dummy, directions[i], &ray_ox, &ray_oy, &ray_oz, &ray_dx, &ray_dy, &ray_dz);  
-                if(dot((float4)(ray_dx,ray_dy,ray_dz,0), (float4)(normal_x,normal_y,normal_z,0)) > 0) 
+            for (unsigned int i = 0; i < 12; i++) {
+                calc_scene_ray_generic_cam(linfo, dummy, directions[i], &ray_ox, &ray_oy, &ray_oz, &ray_dx, &ray_dy, &ray_dz);
+                if (dot((float4)(ray_dx,ray_dy,ray_dz,0), (float4)(normal_x,normal_y,normal_z,0)) > 0)
                     max_vis = (max_vis < private_vis[i]) ? private_vis[i] : max_vis;
-                else 
+                else
                     max_vis_flipped = (max_vis_flipped < private_vis[i]) ? private_vis[i] : max_vis_flipped;
             }
-            
+
             //flip if necessary
             normals[ gid ] = (max_vis_flipped > max_vis) ?  (float4)(-normal_x,-normal_y,-normal_z,0) : (float4)(normal_x,normal_y,normal_z,0);
             //store max visibility
             vis[gid] = (max_vis_flipped > max_vis) ? max_vis_flipped : max_vis;
-            
-          }            
-      }
+        }
+    }
 }
-            
+
 #endif //COMPVIS
