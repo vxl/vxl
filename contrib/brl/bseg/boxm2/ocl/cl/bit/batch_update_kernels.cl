@@ -139,7 +139,7 @@ typedef struct
   __local  float*  cached_vis;
            float*  ray_vis;
            float*  ray_pre;
-		   float   obs; 
+           float   obs;
   __constant RenderSceneInfo * linfo;
 } AuxArgs;
 
@@ -150,24 +150,24 @@ void cast_ray(int,int,float,float,float,float,float,float,__constant RenderScene
 __kernel
 void
 aux_len_int_vis_main(__constant  RenderSceneInfo    * linfo,
-                __global    int4               * tree_array,        // tree structure for each block
-                __global    float              * alpha_array,       // alpha for each block
-                __global    int                * aux_array0,        // four aux arrays strung together
-                __global    int                * aux_array1,        // four aux arrays strung together
-                __global    int                * aux_array2,        // four aux arrays strung together
-                __global    int                * aux_array3,        // four aux arrays strung together
-                __constant  uchar              * bit_lookup,        // used to get data_index
-                __global    float4             * ray_origins,
-                __global    float4             * ray_directions,
-                __global    uint4              * imgdims,           // dimensions of the input image
-                __global    float              * vis_image,         // visibility image (for keeping vis across blocks)
-                __global    float              * in_image,         // preinf image (for keeping pre across blocks)
-                __global    float              * output,
-                __local     uchar16            * local_tree,        // cache current tree into local memory
-                __local     short2             * ray_bundle_array,  // gives information for which ray takes over in the workgroup
-                __local     int                * cell_ptrs,         // local list of cell_ptrs (cells that are hit by this workgroup
-                __local     float              * cached_vis,        // cached vis used to sum up vis contribution locally
-                __local     uchar              * cumsum)            // cumulative sum for calculating data pointer
+                     __global    int4               * tree_array,        // tree structure for each block
+                     __global    float              * alpha_array,       // alpha for each block
+                     __global    int                * aux_array0,        // four aux arrays strung together
+                     __global    int                * aux_array1,        // four aux arrays strung together
+                     __global    int                * aux_array2,        // four aux arrays strung together
+                     __global    int                * aux_array3,        // four aux arrays strung together
+                     __constant  uchar              * bit_lookup,        // used to get data_index
+                     __global    float4             * ray_origins,
+                     __global    float4             * ray_directions,
+                     __global    uint4              * imgdims,           // dimensions of the input image
+                     __global    float              * vis_image,         // visibility image (for keeping vis across blocks)
+                     __global    float              * in_image,          // preinf image (for keeping pre across blocks)
+                     __global    float              * output,
+                     __local     uchar16            * local_tree,        // cache current tree into local memory
+                     __local     short2             * ray_bundle_array,  // gives information for which ray takes over in the workgroup
+                     __local     int                * cell_ptrs,         // local list of cell_ptrs (cells that are hit by this workgroup
+                     __local     float              * cached_vis,        // cached vis used to sum up vis contribution locally
+                     __local     uchar              * cumsum)            // cumulative sum for calculating data pointer
 {
   // get local id (0-63 for an 8x8) of this patch
   uchar llid = (uchar)(get_local_id(0) + get_local_size(0)*get_local_id(1));
@@ -219,7 +219,7 @@ aux_len_int_vis_main(__constant  RenderSceneInfo    * linfo,
   aux_args.cell_ptrs = cell_ptrs;
   aux_args.cached_vis = cached_vis;
   aux_args.ray_vis = &vis;
-  aux_args.obs	   = in_image[j*get_global_size(0) + i];
+  aux_args.obs     = in_image[j*get_global_size(0) + i];
 
   cast_ray( i, j,
             ray_ox, ray_oy, ray_oz,
@@ -229,7 +229,6 @@ aux_len_int_vis_main(__constant  RenderSceneInfo    * linfo,
 
   //write out vis and pre
   vis_image[j*get_global_size(0)+i] = vis;
-  
 }
 #endif //
 
@@ -514,11 +513,11 @@ convert_nobs_int_short(__constant  RenderSceneInfo    * linfo,
 #endif //CONVERT_NOBS_INT_SHORT
 #ifdef CONVERT_AUX_XYZ_THETAPHI
 __kernel void
-convert_aux_xyz_to_thetaphi(__constant  RenderSceneInfo    * linfo,
-                             __global float* aux_array0,
-                             __global float* aux_array1,
-                             __global float* aux_array2,
-                             __global float* aux_array3)
+convert_aux_xyz_to_thetaphi(__constant  RenderSceneInfo * linfo,
+                            __global float* aux_array0,
+                            __global float* aux_array1,
+                            __global float* aux_array2,
+                            __global float* aux_array3)
 {
   int gid=get_global_id(0);
   int datasize = linfo->data_len ;//* info->num_buffer;
@@ -533,7 +532,7 @@ convert_aux_xyz_to_thetaphi(__constant  RenderSceneInfo    * linfo,
     float denom = sqrt(obs1*obs1+obs2*obs2+obs3*obs3);
     float theta = acos(obs3/denom);
 
-    aux_array0[gid]=theta; 
+    aux_array0[gid]=theta;
     aux_array1[gid]=phi;
   }
 }
