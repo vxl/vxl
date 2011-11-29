@@ -107,6 +107,16 @@ def update_grey(scene, cache, cam, img, device=None, ident="", mask=None, update
     boxm2_batch.run_process();
   else : 
     print "ERROR: Cache type not recognized: ", cache.type; 
+def update_app_grey(scene, cache, cam, img, device=None) :
+  #If no device is passed in, do cpu update
+  print("boxm2 GPU App online update");
+  boxm2_batch.init_process("boxm2OclPaintOnlineProcess");
+  boxm2_batch.set_input_from_db(0,device);
+  boxm2_batch.set_input_from_db(1,scene);
+  boxm2_batch.set_input_from_db(2,cache);
+  boxm2_batch.set_input_from_db(3,img);
+  boxm2_batch.set_input_from_db(4,cam);
+  boxm2_batch.run_process();
     
 ####################################################################
 # Generic update - will use GPU if device/openclcache are passed in
