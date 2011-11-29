@@ -116,7 +116,29 @@ void step_cell_aux_previs(AuxArgs aux_args, int data_ptr, uchar llid, float d)
     //--------------------------------------------------------------------------
 }
 #endif // AUX_PREVIS
+#ifdef AUX_LEN_INT_VIS
+//bayes step cell functor
+void step_cell_aux_len_int_vis(AuxArgs aux_args, int data_ptr, uchar llid, float d)
+{
+    //slow beta calculation ----------------------------------------------------
+    int seg_int = convert_int_rte(d * SEGLEN_FACTOR);
+    atom_add(&aux_args.seg_len[data_ptr], seg_int);
+    int cum_obs = convert_int_rte(d * aux_args.obs * SEGLEN_FACTOR);
+    atom_add(&aux_args.mean_obs[data_ptr], cum_obs);
+	float vis = (* aux_args.ray_vis);
 
+    int vis_int  = convert_int_rte(d*vis * SEGLEN_FACTOR);
+    atom_add(&aux_args.vis_array[data_ptr], vis_int);
+    //update  ray_vis
+    float  alpha    = aux_args.alpha[data_ptr];
+    float temp  = exp(-alpha * d * aux_args.linfo->block_len); // blovk_len is multiplied so that alpha is computed with respect to the scale.
+    // updated visibility probability
+    (* aux_args.ray_vis) *= temp;
+
+
+    //--------------------------------------------------------------------------
+}
+#endif
 #ifdef UPDATE_AUX_DIRECTION
 //bayes step cell functor
 void step_cell_directions(AuxArgs aux_args, int data_ptr, float d)
