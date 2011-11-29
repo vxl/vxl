@@ -413,3 +413,73 @@ update_bit_scene_main(__global RenderSceneInfo  * info,
   }
   
 }
+
+#ifdef UPDATE_APP_GREY
+__kernel
+void
+update_mog3_main(__global RenderSceneInfo  * info,
+                      __global MOG_TYPE         * mixture_array,
+                      __global ushort4          * nobs_array,
+                      __global int              * aux_array0,
+                      __global int              * aux_array1,
+                      __global int              * aux_array2,
+                      __global float            * output)
+{
+  int gid=get_global_id(0);
+  int datasize = info->data_len ;
+  if (gid<datasize)
+  {
+    //if alpha is less than zero don't update
+    float  cell_min = info->block_len/(float)(1<<info->root_level);
+
+    //get cell cumulative length and make sure it isn't 0
+    int len_int = aux_array0[gid]; 
+    float cum_len  = convert_float(len_int)/SEGLEN_FACTOR; 
+
+    
+    //update cell if alpha and cum_len are greater than 0
+    if (cum_len > 1e-10f)
+    {
+      int obs_int = aux_array1[gid]; 
+      int vis_int = aux_array2[gid]; 
+
+      float mean_obs = convert_float(obs_int) / convert_float(len_int);
+      float cell_vis  = convert_float(vis_int) / (convert_float(len_int)*info->block_len);
+
+      float4 nobs     = convert_float4(nobs_array[gid]);
+      CONVERT_FUNC_FLOAT8(mixture,mixture_array[gid])/NORM;
+
+	  float mu0 = mixture.s0, sigma0 = mixture.s1, w0 = mixture.s2;
+	  float mu1 = mixture.s3, sigma1 = mixture.s4, w1 = mixture.s5;
+	  float mu2 = mixture.s6, sigma2 = mixture.s7, w2 = 0.0;
+	  if(w0>0.0f && w1>0.0f)
+		  w2=1-w0-w1;  
+
+	  short Nobs0 = (short)nobs.s0, Nobs1 = (short)nobs.s1, Nobs2 = (short)nobs.s2; 
+	  float Nobs_mix = nobs.s3/100.0;
+
+	  update_gauss_3_mixture(mean_obs,              //mean observation
+							 cell_vis,              //cell_visability
+							 2.5f,0.07f,0.02f,
+							 &mu0,&sigma0,&w0,&Nobs0,
+							 &mu1,&sigma1,&w1,&Nobs1,
+							 &mu2,&sigma2,&w2,&Nobs2,
+							 &Nobs_mix);
+      //reset the cells in memory
+      float8 post_mix       = (float8) (mu0, sigma0, w0,
+                                        mu1, sigma1, w1,
+										mu2, sigma2)*(float) NORM;
+      float4 post_nobs      = (float4) (Nobs0, Nobs1, Nobs2,Nobs_mix*100.0);
+      CONVERT_FUNC_SAT_RTE(mixture_array[gid],post_mix);
+      nobs_array[gid]       = convert_ushort4_sat_rte(post_nobs);
+    }
+    
+    //clear out aux data
+    aux_array0[gid] = 0; 
+    aux_array1[gid] = 0; 
+    aux_array2[gid] = 0;
+
+  }
+  
+}
+#endif

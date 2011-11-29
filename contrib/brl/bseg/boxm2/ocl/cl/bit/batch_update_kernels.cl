@@ -125,6 +125,113 @@ aux_previs_main(__constant  RenderSceneInfo    * linfo,
 }
 #endif //
 
+#ifdef AUX_LEN_INT_VIS
+typedef struct
+{
+  __global float*   alpha;
+  __global int* seg_len;
+  __global int* mean_obs;
+  __global int* vis_array;
+  __global int* pre_array;
+
+  __local  short2* ray_bundle_array;
+  __local  int*    cell_ptrs;
+  __local  float*  cached_vis;
+           float*  ray_vis;
+           float*  ray_pre;
+		   float   obs; 
+  __constant RenderSceneInfo * linfo;
+} AuxArgs;
+
+//forward declare cast ray (so you can use it)
+void cast_ray(int,int,float,float,float,float,float,float,__constant RenderSceneInfo*,
+              __global int4*,local uchar16*,constant uchar *,local uchar *,float*,AuxArgs);
+
+__kernel
+void
+aux_len_int_vis_main(__constant  RenderSceneInfo    * linfo,
+                __global    int4               * tree_array,        // tree structure for each block
+                __global    float              * alpha_array,       // alpha for each block
+                __global    int                * aux_array0,        // four aux arrays strung together
+                __global    int                * aux_array1,        // four aux arrays strung together
+                __global    int                * aux_array2,        // four aux arrays strung together
+                __global    int                * aux_array3,        // four aux arrays strung together
+                __constant  uchar              * bit_lookup,        // used to get data_index
+                __global    float4             * ray_origins,
+                __global    float4             * ray_directions,
+                __global    uint4              * imgdims,           // dimensions of the input image
+                __global    float              * vis_image,         // visibility image (for keeping vis across blocks)
+                __global    float              * in_image,         // preinf image (for keeping pre across blocks)
+                __global    float              * output,
+                __local     uchar16            * local_tree,        // cache current tree into local memory
+                __local     short2             * ray_bundle_array,  // gives information for which ray takes over in the workgroup
+                __local     int                * cell_ptrs,         // local list of cell_ptrs (cells that are hit by this workgroup
+                __local     float              * cached_vis,        // cached vis used to sum up vis contribution locally
+                __local     uchar              * cumsum)            // cumulative sum for calculating data pointer
+{
+  // get local id (0-63 for an 8x8) of this patch
+  uchar llid = (uchar)(get_local_id(0) + get_local_size(0)*get_local_id(1));
+
+  // initialize pre-broken ray information (non broken rays will be re initialized)
+  ray_bundle_array[llid] = (short2) (-1, 0);
+  cell_ptrs[llid] = -1;
+
+  //----------------------------------------------------------------------------
+  // get image coordinates and camera,
+  // check for validity before proceeding
+  //----------------------------------------------------------------------------
+  int i=0,j=0;
+  i=get_global_id(0);
+  j=get_global_id(1);
+
+  // check to see if the thread corresponds to an actual pixel as in some
+  // cases #of threads will be more than the pixels.
+  if (i>=(*imgdims).z || j>=(*imgdims).w || i<(*imgdims).x || j<(*imgdims).y)
+    return;
+  float vis0 = 1.0f;
+  float vis = vis_image[j*get_global_size(0) + i];
+
+
+  barrier(CLK_LOCAL_MEM_FENCE);
+
+  //----------------------------------------------------------------------------
+  // we know i,j map to a point on the image,
+  // BEGIN RAY TRACE
+  //----------------------------------------------------------------------------
+  float4 ray_o = ray_origins[ j*get_global_size(0) + i ];
+  float4 ray_d = ray_directions[ j*get_global_size(0) + i ];
+  float ray_ox, ray_oy, ray_oz, ray_dx, ray_dy, ray_dz;
+  calc_scene_ray_generic_cam(linfo, ray_o, ray_d, &ray_ox, &ray_oy, &ray_oz, &ray_dx, &ray_dy, &ray_dz);
+
+  //----------------------------------------------------------------------------
+  // we know i,j map to a point on the image, have calculated ray
+  // BEGIN RAY TRACE
+  //----------------------------------------------------------------------------
+  AuxArgs aux_args;
+  aux_args.linfo    = linfo;
+  aux_args.alpha      = alpha_array;
+  aux_args.seg_len    = aux_array0;
+  aux_args.mean_obs   = aux_array1;
+  aux_args.vis_array  = aux_array2;
+  aux_args.pre_array  = aux_array3;
+
+  aux_args.ray_bundle_array = ray_bundle_array;
+  aux_args.cell_ptrs = cell_ptrs;
+  aux_args.cached_vis = cached_vis;
+  aux_args.ray_vis = &vis;
+  aux_args.obs	   = in_image[j*get_global_size(0) + i];
+
+  cast_ray( i, j,
+            ray_ox, ray_oy, ray_oz,
+            ray_dx, ray_dy, ray_dz,
+            linfo, tree_array,                                  //scene info
+            local_tree, bit_lookup, cumsum, &vis0, aux_args);    //utility info
+
+  //write out vis and pre
+  vis_image[j*get_global_size(0)+i] = vis;
+  
+}
+#endif //
 
 #ifdef UPDATE_AUX_DIRECTION
 typedef struct
@@ -405,7 +512,32 @@ convert_nobs_int_short(__constant  RenderSceneInfo    * linfo,
    }
 }
 #endif //CONVERT_NOBS_INT_SHORT
+#ifdef CONVERT_AUX_XYZ_THETAPHI
+__kernel void
+convert_aux_xyz_to_thetaphi(__constant  RenderSceneInfo    * linfo,
+                             __global float* aux_array0,
+                             __global float* aux_array1,
+                             __global float* aux_array2,
+                             __global float* aux_array3)
+{
+  int gid=get_global_id(0);
+  int datasize = linfo->data_len ;//* info->num_buffer;
+  if (gid<datasize)
+  {
+    float obs0= (float) as_int(aux_array0[gid]);
+    float obs1= (float) as_int(aux_array1[gid]);
+    float obs2= (float) as_int(aux_array2[gid]);
+    float obs3= (float) as_int(aux_array3[gid]);
 
+    float phi   = atan2(obs2,obs1);
+    float denom = sqrt(obs1*obs1+obs2*obs2+obs3*obs3);
+    float theta = acos(obs3/denom);
+
+    aux_array0[gid]=theta; 
+    aux_array1[gid]=phi;
+  }
+}
+#endif //CONVERT_AUX
 
 #ifdef SEGLENNOBS
 typedef struct
