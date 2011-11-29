@@ -17,21 +17,18 @@
 class boxm2_ocl_paint_online
 {
   public:
-	  static bool paint_scene( boxm2_scene_sptr           scene,
-							  bocl_device_sptr           device,
-							  boxm2_opencl_cache_sptr    opencl_cache,
-							  vil_image_view_base_sptr   img,
-							  vpgl_camera_double_sptr    cam); 
+    static bool paint_scene( boxm2_scene_sptr         scene,
+                             bocl_device_sptr         device,
+                             boxm2_opencl_cache_sptr  opencl_cache,
+                             vil_image_view_base_sptr img,
+                             vpgl_camera_double_sptr  cam);
 
   private:
-
     //compile kernels and place in static map
-    static vcl_vector<bocl_kernel*> compile_kernels( bocl_device_sptr device, vcl_string opts="" ); 
+    static vcl_vector<bocl_kernel*> compile_kernels( bocl_device_sptr device, vcl_string opts="" );
 
     //map of paint kernel by device
-    static vcl_map<vcl_string, vcl_vector<bocl_kernel*> > kernels_; 
-
-
+    static vcl_map<vcl_string, vcl_vector<bocl_kernel*> > kernels_;
 };
 
-#endif // boxm2_ocl_paint_batch_h_
+#endif // boxm2_ocl_paint_online_h_
