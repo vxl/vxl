@@ -1,18 +1,16 @@
+//:
+// \file
 //
 //  boxm_normals_to_boxm2.cxx
 //  vxl_xcode4
-//
+// \author
 //  Created by David Borton on 11/28/11.
 //  Copyright (c) 2011 Brown University. All rights reserved.
 //
 
-#include <iostream>
-
-
 #include "boxm_to_boxm2.h"
-//:
-// \file
 #include <vcl_queue.h>
+#include <vcl_iostream.h>
 
 //executable args
 #include <vul/vul_arg.h>
@@ -39,7 +37,7 @@
 
 //: extracts the tree cell's data into an array format for boxm2 representation
 template <class T_loc, class T_data>
-void convert_data( boct_tree<T_loc,T_data>* tree,
+void convert_data(boct_tree<T_loc,T_data>* tree,
                   boct_tree_cell<T_loc,T_data>* tree_cell,
                   boxm2_data_traits<BOXM2_NORMAL>::datatype* normals_arr,
                   boxm2_data_traits<BOXM2_POINT>::datatype* points_arr,
@@ -51,22 +49,22 @@ void convert_data( boct_tree<T_loc,T_data>* tree,
   while (!Q.empty()) {
     boct_tree_cell<T_loc,T_data>* ptr = Q.front();
     {
-      //deconstruct_sample(ptr->data(),alpha[data_idx],data[data_idx],num_obs[data_idx]);
+      //destruct_sample(ptr->data(),alpha[data_idx],data[data_idx],num_obs[data_idx]);
       T_data normal = tree_cell->data();
       vgl_point_3d<double> point = tree->global_centroid(tree_cell);
-      
+
       normals_arr[data_idx][0] = normal[0];
       normals_arr[data_idx][1] = normal[2];
       normals_arr[data_idx][2] = normal[3];
       normals_arr[data_idx][3] = 0.0f;
-      
+
       points_arr[data_idx][0] = point.x();
       points_arr[data_idx][1] = point.y();
       points_arr[data_idx][2] = point.z();
       points_arr[data_idx][3] = 0.0f;
-  
+
       data_idx++;
-      
+
       if (!ptr->is_leaf()) {
         boct_tree_cell<T_loc,T_data>* children = ptr->children();
         for (unsigned j=0; j<8; j++) {
@@ -84,7 +82,7 @@ void set_bits(boct_bit_tree2*& bit_tree, int idx, unsigned int child_idx, boct_t
 {
   if (cell.code_.level == 0)
     return;
-  
+
   if (!cell.is_leaf()) {
     int bit_idx=idx*8+1+child_idx;
     bit_tree->set_bit_at(bit_idx,true);
@@ -101,16 +99,16 @@ void convert_to_bittree(boct_tree_cell<T_loc,T_data>* tree_cell, boct_bit_tree2*
   // first set all the bits to 0
   for (unsigned i=0; i<73; i++)
     bit_tree->set_bit_at(i,false);
-  
+
   // empty tree
   if (!tree_cell)
     return;
-  
+
   // only root node
   if (tree_cell->is_leaf()) {
     return;
   }
-  
+
   int idx=0;
   bit_tree->set_bit_at(idx,true); // root
   for (unsigned i=0; i<8; i++) {  // level root-1
@@ -132,7 +130,7 @@ void convert_scene( boxm_scene<boct_octree<T_loc, T_data> > &scene, boxm2_scene 
     vgl_box_3d<double> block_bb = block->bounding_box();
     vcl_cout<<block_bb<<vcl_endl;
     tree_type * tree = block->get_tree();
-    
+
     // create metadata for the block
     boxm2_block_id block_id(idx.x(),idx.y(),idx.z());
     vgl_vector_3d<double> sub_block_dim(1.0/dim,1.0/dim,1.0/dim);
@@ -144,7 +142,7 @@ void convert_scene( boxm_scene<boct_octree<T_loc, T_data> > &scene, boxm2_scene 
                                   real_block_dim,sub_block_num,1,4,650.0,0.001);
     boxm2_block new_block(metadata);
     new_blocks[block_id]=metadata;
-    
+
     // find the total number of cells to figure out data array sizes, as the first step
     int data_size=0;
     for (unsigned z=0; z<dim; z++) {
@@ -168,12 +166,12 @@ void convert_scene( boxm_scene<boct_octree<T_loc, T_data> > &scene, boxm2_scene 
         }
       }
     }
-    
+
     // allocate data array
     boxm2_data_traits<BOXM2_NORMAL>::datatype* normals_arr=new  boxm2_data_traits<BOXM2_NORMAL>::datatype[data_size];
     boxm2_data_traits<BOXM2_POINT>::datatype* points_arr=new  boxm2_data_traits<BOXM2_POINT>::datatype[data_size];
     float* alpha_arr = new float[data_size];
-    
+
     // divide the blocks
     int data_idx=0;
     boxm2_array_3d<boxm2_block::uchar16>& trees = new_block.trees();
@@ -193,7 +191,7 @@ void convert_scene( boxm_scene<boct_octree<T_loc, T_data> > &scene, boxm2_scene 
             vcl_vector<boct_tree_cell<T_loc, T_data > *> children;
             node->all_children(children);
             int n2= children.size()+1;
-            
+
             boct_bit_tree2* bit_tree;
             convert_to_bittree(node, bit_tree);
             int n1=bit_tree->num_cells();
@@ -206,7 +204,7 @@ void convert_scene( boxm_scene<boct_octree<T_loc, T_data> > &scene, boxm2_scene 
             t.set(bit_tree->get_bits());
             if (n1 != n2) {
               vcl_cout << x << ',' << y << ',' << z << '\n'
-              << "ERROR! The converted tree is not right, should have " << n1 << " nodes instead of " << n2 << vcl_endl;
+                       << "ERROR! The converted tree is not right, should have " << n1 << " nodes instead of " << n2 << vcl_endl;
             }
           }
         }
@@ -216,11 +214,11 @@ void convert_scene( boxm_scene<boct_octree<T_loc, T_data> > &scene, boxm2_scene 
     boxm2_data<BOXM2_NORMAL> *normals_data=new boxm2_data<BOXM2_NORMAL>(b1,data_size*sizeof(boxm2_data_traits<BOXM2_NORMAL>::datatype),block_id);
     char* b2 = reinterpret_cast<char *>(pointa_arr);
     boxm2_data<BOXM2_POINT> *points_data=new boxm2_data<BOXM2_POINT>(b2,data_size*sizeof(boxm2_data_traits<BOXM2_POINT>::datatype),block_id);
-    
+
     boxm2_sio_mgr::save_block(new_scene.data_path(), &new_block);
     boxm2_sio_mgr::save_block_data(new_scene.data_path(), block_id, normals_data);
     boxm2_sio_mgr::save_block_data(new_scene.data_path(), block_id, points_data);
-    
+
     delete [] normals_arr;
     delete [] points_arr;
     iter++;
@@ -236,23 +234,22 @@ int main(int argc, char** argv)
   vul_arg<vcl_string> out_dir("-out", "output directory", "");
   vul_arg<unsigned int> sub_block_dim("-dim", "sub block dimensions", 64);
   vul_arg_parse(argc, argv);
-  
 
   if (scene.appearence_model() == VNL_FLOAT_3) {
     typedef boct_tree<short, VNL_FLOAT_3 > tree_type;
     boxm_scene<tree_type> scene;
     scene.load_scene(scene_path());
-    
+
     // create a boxm2 scene
     boxm2_scene new_scene;
     new_scene.set_data_path(out_dir());
     new_scene.set_local_origin(scene.origin());
     new_scene.set_lvcs(scene.lvcs());
     new_scene.set_xml_path(out_dir()+"/scene.xml");
-    
+
     //initialize a block
     boxm2_lru_cache::create(&new_scene);
-    
-    convert_scene(scene, new_scene);
 
+    convert_scene(scene, new_scene);
   }
+}
