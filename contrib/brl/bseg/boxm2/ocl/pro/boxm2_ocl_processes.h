@@ -35,6 +35,7 @@ DECLARE_FUNC_CONS(boxm2_ocl_adaptive_cone_render_expected_process);
 
 DECLARE_FUNC_CONS(boxm2_ocl_update_aux_per_view_process); 
 DECLARE_FUNC_CONS(boxm2_ocl_aux_update_view_direction_process); 
+DECLARE_FUNC_CONS(boxm2_ocl_batch_synoptic_function_process); 
 
 DECLARE_FUNC_CONS(boxm2_ocl_update_sun_visibilities_process); 
 DECLARE_FUNC_CONS(boxm2_ocl_render_expected_shadow_map_process); 
@@ -43,5 +44,6 @@ DECLARE_FUNC_CONS(boxm2_ocl_create_aux_process);
 DECLARE_FUNC_CONS(boxm2_ocl_flip_normals_using_vis_process);
 
 DECLARE_FUNC_CONS(boxm2_ocl_paint_batch_process); 
+DECLARE_FUNC_CONS(boxm2_ocl_paint_online_process); 
 
 #endif

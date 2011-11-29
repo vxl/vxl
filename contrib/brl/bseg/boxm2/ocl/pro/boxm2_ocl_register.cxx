@@ -33,9 +33,10 @@ void boxm2_ocl_register::register_process()
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_ocl_create_norm_intensities_process, "boxm2OclCreateNormIntensitiesProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_ocl_create_aux_process, "boxm2OclCreateAuxProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_ocl_aux_update_view_direction_process, "boxm2OclAuxUpdateViewDirectionProcess");
-  
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_ocl_batch_synoptic_function_process, "boxm2OclBatchSynopticFunctionProcess");
   //batch paint
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_ocl_paint_batch_process, "boxm2OclPaintBatchProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_ocl_paint_online_process, "boxm2OclPaintOnlineProcess");
   
   // research
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_ocl_update_histogram_process, "boxm2OclUpdateHistogramProcess");
