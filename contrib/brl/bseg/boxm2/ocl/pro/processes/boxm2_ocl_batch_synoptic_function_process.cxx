@@ -211,11 +211,12 @@ bool boxm2_ocl_batch_synoptic_function_process(bprb_func_process& pro)
     kern->clear_args();
     coeffs_buff->read_to_buffer(queue);
 
-    float * cubic_coeffs = (float*) coeffs_buff->cpu_buffer();
+    //float * cubic_coeffs = (float*) coeffs_buff->cpu_buffer();
 #if 0
     vcl_cout<<"Debug Info ";
     for (unsigned k=0; k<100; ++k)
       vcl_cout<<k<<" : "<<cubic_coeffs[k]<<'\n';
+#endif // 0
 
     boxm2_block *     cpu_blk     = cache->get_block(*id);
     boxm2_data_base *  cpu_alpha  = cache->get_data_base(*id,boxm2_data_traits<BOXM2_ALPHA>::prefix(),0,false);
@@ -230,7 +231,6 @@ bool boxm2_ocl_batch_synoptic_function_process(bprb_func_process& pro)
 
     cache->remove_data_base( *id, boxm2_data_traits<BOXM2_FLOAT8>::prefix("cubic_model") );
     cache->remove_data_base(*id,boxm2_data_traits<BOXM2_ALPHA>::prefix());
-#endif // 0
   }
   clReleaseCommandQueue(queue);
 

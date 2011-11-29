@@ -523,7 +523,7 @@ bool boxm2_ocl_change_detection_process(bprb_func_process& pro)
   for (unsigned c=0;c<nj;c++)
     for (unsigned r=0;r<ni;r++)
       (*change_img_out)(r,c) = change_image_buff[c*cl_ni+r];
-  vil_save(*change_img_out, "change_test.tiff");
+  
 
   //store rgb change image
   vil_image_view_base_sptr rgb_sptr =  new vil_image_view<vxl_byte>(ni,nj, 4);
