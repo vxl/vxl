@@ -21,7 +21,7 @@
 #include <bocl/bocl_kernel.h>
 #include <vul/vul_timer.h>
 #include <vcl_algorithm.h>
-
+#include <vil/vil_save.h>
 //: Declare kernels
 //: Declare kernels
 vcl_map<vcl_string, vcl_vector<bocl_kernel*> > boxm2_ocl_paint_online::kernels_;
@@ -93,13 +93,13 @@ bool boxm2_ocl_paint_online::paint_scene(boxm2_scene_sptr          scene,
 	vil_image_view_base_sptr float_img = boxm2_util::prepare_input_image(img, true);
 	vil_image_view<float>* img_view = static_cast<vil_image_view<float>* >(float_img.ptr());
 
+	vil_save(*img_view, "f:/temp2.tif");
 	vcl_size_t local_threads[2]={8,8};
 	vcl_size_t global_threads[2]={8,8};
 	unsigned cl_ni=(unsigned)RoundUp(img_view->ni(),(int)local_threads[0]);
 	unsigned cl_nj=(unsigned)RoundUp(img_view->nj(),(int)local_threads[1]);
 
-	global_threads[0]=cl_ni;
-	global_threads[1]=cl_nj;
+
 
 	//set generic cam
 	cl_float* ray_origins    = new cl_float[4*cl_ni*cl_nj];
@@ -158,15 +158,20 @@ bool boxm2_ocl_paint_online::paint_scene(boxm2_scene_sptr          scene,
 	//set masked values
 	for (id = vis_order.begin(); id != vis_order.end(); ++id)
 	{
+		vcl_cout<<*id;
 		//choose correct render kernel
 		boxm2_block_metadata mdata = scene->get_block_metadata(*id);
 		bocl_kernel* kern =  kerns[0];
-
+		global_threads[0]=cl_ni;
+		global_threads[1]=cl_nj;
+		local_threads[0]=8;
+		local_threads[1]=8;
+		
 		//write the image values to the buffer
 		vul_timer transfer;
 		bocl_mem* blk       = opencl_cache->get_block(*id);
 		bocl_mem* blk_info  = opencl_cache->loaded_block_info();
-		bocl_mem* alpha     = opencl_cache->get_data<BOXM2_ALPHA>(*id,0,false);
+		bocl_mem* alpha     = opencl_cache->get_data(*id,boxm2_data_traits<BOXM2_ALPHA>::prefix());
 		boxm2_scene_info* info_buffer = (boxm2_scene_info*) blk_info->cpu_buffer();
 		int alphaTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
 		info_buffer->data_buffer_length = (int) (alpha->num_bytes()/alphaTypeSize);
@@ -224,12 +229,12 @@ bool boxm2_ocl_paint_online::paint_scene(boxm2_scene_sptr          scene,
 		local_threads[1] = 1 ;
 		global_threads[0]=RoundUp(info_buffer->data_buffer_length,local_threads[0]);
 		global_threads[1]=1;
-
+		aux2->read_to_buffer(queue);
 		bocl_kernel* kern1 =  kerns[1];
 		int mogTypeSize     = (int) boxm2_data_info::datasize(data_type);
 		bocl_mem* mog       = opencl_cache->get_data(*id, data_type, info_buffer->data_buffer_length*mogTypeSize, false);
-		int nobs_size     = (int) boxm2_data_info::datasize(num_obs_type);
-		bocl_mem* num_obs       = opencl_cache->get_data(*id, num_obs_type, info_buffer->data_buffer_length*nobs_size, false);
+		int nobs_size		= (int) boxm2_data_info::datasize(num_obs_type);
+		bocl_mem* num_obs   = opencl_cache->get_data(*id, num_obs_type, info_buffer->data_buffer_length*nobs_size, false);
 
 		kern1->set_arg( blk_info );
 		kern1->set_arg( mog );
@@ -241,7 +246,6 @@ bool boxm2_ocl_paint_online::paint_scene(boxm2_scene_sptr          scene,
 
 		//execute kernel
 		kern1->execute(queue, 2, local_threads, global_threads);
-		vcl_cout<<"RUN "<<vcl_endl;
 		status = clFinish(queue);
 
 		check_val(status, MEM_FAILURE, "UPDATE App FAILED: " + error_to_string(status));
@@ -251,10 +255,16 @@ bool boxm2_ocl_paint_online::paint_scene(boxm2_scene_sptr          scene,
 		//write info to disk
 		mog->read_to_buffer(queue);
 		num_obs->read_to_buffer(queue);
+		cl_output->read_to_buffer(queue);
+		vis_image->read_to_buffer(queue);
+
 		//read image out to buffer (from gpu)
 		clFinish(queue);      
+
+		
 	}
 	///debugging save vis, pre, norm images
+
 
 	delete [] vis_buff;
 	delete [] input_buff;
