@@ -6,5 +6,6 @@
 
 // execute and const functions
 DECLARE_FUNC_CONS(brip_extrema_process);
+DECLARE_FUNC_CONS(brip_blobwise_mutual_info_process);
 
 #endif
