@@ -19,6 +19,14 @@
 
 #undef DEBUG_LEAKS
 
+template <class T_loc,class T_data>
+struct boct_cell_data {
+  boct_cell_data(vgl_point_3d<double> c, T_loc l, T_data d): centroid_(c), level_(l), data_(d){}
+  vgl_point_3d<double> centroid_;
+  T_loc level_;
+  T_data data_;
+};
+
 enum boct_cell_face {NONE = 0x00,
                      Z_LOW = 0x01,
                      Z_HIGH = 0x02,
@@ -135,8 +143,6 @@ class boct_tree_cell
   //: Fills a cells with the average value of the 8 children in a dynamic programming manner
   void set_data_to_avg_children();
 
-  const boct_loc_code<T_loc> get_code();
-
   //: currently this function just goes down the tree
   //  \todo make it flexible and go from one node to another.
   boct_tree_cell<T_loc,T_data>* traverse(boct_loc_code<T_loc> &code);
@@ -149,6 +155,8 @@ class boct_tree_cell
 #endif
   short level() const { return code_.level; }
   void set_level(short level) { code_.level=level; }
+  const boct_loc_code<T_loc> get_code();
+  void set_code(const boct_loc_code<T_loc> &code) {code_ = code; } 
   boct_tree_cell<T_loc,T_data>* children() { return children_; }
   boct_tree_cell<T_loc,T_data>* parent() { return parent_; }
 
@@ -183,6 +191,10 @@ class boct_tree_cell
   void print();
 
   void delete_children();
+  
+  //: This function will remove the childre, therfor making the current cell a leaf, if all children are not at the 
+  //  specified level
+  bool remove_children_if_not_leaf_at_level( short  level);
 
   static short version_no() { return 1; }
 
