@@ -60,3 +60,29 @@ def image_size(img):
     (id,type) = boxm2_batch.commit_output(1)
     nj = boxm2_batch.get_output_unsigned(id)
     return ni,nj
+
+
+def gradient(img) :
+    boxm2_batch.init_process('vilGradientProcess')
+    boxm2_batch.set_input_from_db(0,img)
+    boxm2_batch.run_process()
+    #x image
+    (id,type) = boxm2_batch.commit_output(0)
+    dIdx = dbvalue(id,type)
+    #y image
+    (id,type) = boxm2_batch.commit_output(1)
+    dIdy = dbvalue(id,type)
+    #mag image
+    (id,type) = boxm2_batch.commit_output(2)
+    magImg = dbvalue(id,type)
+    return dIdx, dIdy, magImg
+    
+def gradient_angle(Ix, Iy) :
+    boxm2_batch.init_process('vilGradientAngleProcess')
+    boxm2_batch.set_input_from_db(0,Ix)
+    boxm2_batch.set_input_from_db(1,Iy)
+    boxm2_batch.run_process()
+    #x image
+    (id,type) = boxm2_batch.commit_output(0)
+    angleImg = dbvalue(id,type)
+    return angleImg
