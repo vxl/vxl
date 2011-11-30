@@ -131,7 +131,6 @@ boct_tree_cell<T_loc,T_data>* boct_tree<T_loc,T_data>::construct_tree(vcl_vector
   return root;
 }
 
-
 //: Destructor. Deleted all cells
 template <class T_loc,class T_data>
 boct_tree<T_loc,T_data>::~boct_tree()
@@ -160,6 +159,16 @@ boct_tree<T_loc,T_data>* boct_tree<T_loc,T_data>::clone()
   }
   boct_tree<T_loc,T_data> temp_tree;
   boct_tree_cell<T_loc, T_data>* cloned_root = temp_tree.construct_tree(cloned_cells, this->number_levels());
+  boct_tree<T_loc,T_data>* tree = new boct_tree<T_loc,T_data>(cloned_root,  this->number_levels());
+  tree->set_bbox(this->bounding_box());
+  return tree;
+}
+
+//: Clones the entire internal data (not only leaves) 
+template <class T_loc,class T_data>
+boct_tree<T_loc,T_data>* boct_tree<T_loc,T_data>::clone_all()
+{
+  boct_tree_cell<T_loc, T_data>* cloned_root = root_->clone(NULL);
   boct_tree<T_loc,T_data>* tree = new boct_tree<T_loc,T_data>(cloned_root,  this->number_levels());
   tree->set_bbox(this->bounding_box());
   return tree;
@@ -221,7 +230,6 @@ boct_tree<T_loc, T_data>* boct_tree<T_loc,T_data>::clone_and_intersect(boct_tree
   }
 }
 
-
 //: Initialize all cells with a value
 template <class T_loc,class T_data>
 void boct_tree<T_loc,T_data>::init_cells(T_data val)
@@ -274,7 +282,7 @@ boct_tree_cell<T_loc,T_data>* boct_tree<T_loc,T_data>::locate_point(const vgl_po
 
 //: Returns the leaf cell that contains the 3d point specified in global coordinates
 template <class T_loc,class T_data>
-boct_tree_cell<T_loc,T_data>* boct_tree<T_loc,T_data>::locate_point_global(const vgl_point_3d<double>& p)
+boct_tree_cell<T_loc,T_data>* boct_tree<T_loc,T_data>::locate_point_global(const vgl_point_3d<double>& p, short level)
 {
   short curr_level=root_level_;
   vgl_point_3d<double> norm_p((p.x()-global_bbox_.min_x())/global_bbox_.width(),
@@ -298,7 +306,7 @@ boct_tree_cell<T_loc,T_data>* boct_tree<T_loc,T_data>::locate_point_global(const
   // temporary pointer to traverse
   boct_tree_cell<T_loc,T_data>* curr_cell=root_;
 
-  while (curr_cell->children()&& curr_level>0)
+  while (curr_cell->children()&& curr_level>level)
   {
     short index_child=loccode_->child_index(curr_level);
     if (index_child >7) {
@@ -312,6 +320,41 @@ boct_tree_cell<T_loc,T_data>* boct_tree<T_loc,T_data>::locate_point_global(const
   delete loccode_;
   return curr_cell;
 }
+
+
+//: Returns the leaf cell that contains the 3d point specified in global coordinates. This function starts search from the cell given in the input
+template <class T_loc,class T_data>
+boct_tree_cell<T_loc,T_data>* boct_tree<T_loc,T_data>::locate_point_global(const vgl_point_3d<double>& p, boct_tree_cell<T_loc,T_data>* curr_cell)
+{
+  short curr_level= curr_cell->code_.level;
+  vgl_point_3d<double> norm_p((p.x()-global_bbox_.min_x())/global_bbox_.width(),
+                              (p.y()-global_bbox_.min_y())/global_bbox_.height(),
+                              (p.z()-global_bbox_.min_z())/global_bbox_.depth());
+  
+  
+  // convert point to location code.
+  boct_loc_code<T_loc>* loccode_=new boct_loc_code<T_loc>(norm_p, root_level_, max_val_);
+#if 0
+  // check to see if point is contained in the sub-octree
+  if (!root_->code_.isequal(loccode_,curr_level))
+    return 0;
+#endif
+  
+  while (curr_cell->children()&& curr_level>0)
+  {
+    short index_child=loccode_->child_index(curr_level);
+    if (index_child >7) {
+      vcl_cout << loccode_ << vcl_endl
+      << "ERROR 3: child_index is " << index_child << vcl_endl;
+    }
+    curr_cell=curr_cell->children()+index_child;
+    --curr_level;
+  }
+  // delete the location code constructed
+  delete loccode_;
+  return curr_cell;
+}
+
 
 //: Returns the cell containing "p", at the closest level available to "level"
 template <class T_loc,class T_data>
@@ -364,6 +407,44 @@ boct_tree_cell<T_loc,T_data>* boct_tree<T_loc,T_data>::locate_region(const vgl_b
   return locate_point_at_level(r.min_point(),level_z, check_out_of_bounds);
 }
 
+//: Returns all leaf cells entirely contained in 3d region in global coordinates
+template <class T_loc,class T_data>
+void boct_tree<T_loc,T_data>::locate_region_leaves_global(const vgl_box_3d<double>& r, vcl_vector<boct_tree_cell<T_loc,T_data>*> &leaves)
+{
+  boct_tree_cell<T_loc,T_data>* root = locate_region_global(r);
+  vcl_vector<boct_tree_cell<T_loc,T_data>*> all_leaves;
+  root->leaf_children(all_leaves);
+  
+  // now check that the leaves are contained in the region
+  typename vcl_vector<boct_tree_cell<T_loc,T_data>*>::iterator it = all_leaves.begin();
+  for (; it!=all_leaves.end(); ++it)
+  {
+    if (r.contains(cell_bounding_box(*it)))
+      leaves.push_back(*it);
+  }
+  
+  return;
+}
+
+//: Returns all cells (at the specified level)  entirely contained in 3d region in global coordinates 
+template <class T_loc,class T_data>
+void boct_tree<T_loc,T_data>::locate_region_cells_global(const vgl_box_3d<double>& r, vcl_vector<boct_tree_cell<T_loc,T_data>*> &leaves, short level)
+{
+  boct_tree_cell<T_loc,T_data>* root = locate_region_global(r);
+  vcl_vector<boct_tree_cell<T_loc,T_data>*> cells_at_level;
+  root->children_at_level(cells_at_level, level);
+  
+  // now check that the leaves are contained in the region
+  typename vcl_vector<boct_tree_cell<T_loc,T_data>*>::iterator it = cells_at_level.begin();
+  for (; it!=cells_at_level.end(); ++it)
+  {
+    if (r.contains(cell_bounding_box(*it)))
+      leaves.push_back(*it);
+  }
+  
+  return;
+}
+
 //: Returns the smallest cell that entirely contains a 3d region in global coordinates
 template <class T_loc,class T_data>
 boct_tree_cell<T_loc,T_data>* boct_tree<T_loc,T_data>::locate_region_global(const vgl_box_3d<double>& r, bool check_out_of_bounds)
@@ -378,6 +459,26 @@ boct_tree_cell<T_loc,T_data>* boct_tree<T_loc,T_data>::locate_region_global(cons
 
   vgl_box_3d<double> r_local(min_point, max_point);
   return locate_region(r_local, check_out_of_bounds);
+}
+
+//: Returns all leaf cells entirely contained in 3d region in global coordinates
+//  Code assumes boxes have the same centroid
+template <class T_loc,class T_data>
+void boct_tree<T_loc,T_data>::locate_leaves_in_hollow_region_global(const vgl_box_3d<double>& outer_r, const vgl_box_3d<double>& inner_r, vcl_vector<boct_tree_cell<T_loc,T_data>*> &leaves)
+{
+  boct_tree_cell<T_loc,T_data>* root = locate_region_global(outer_r);
+  vcl_vector<boct_tree_cell<T_loc,T_data>*> all_leaves;
+  root->leaf_children(all_leaves);
+  
+  // now check that the leaves are contained in the "in_between" region
+  typename vcl_vector<boct_tree_cell<T_loc,T_data>*>::iterator it = all_leaves.begin();
+  for (; it!=all_leaves.end(); ++it)
+  {
+    if ((!vgl_intersection(cell_bounding_box(*it),outer_r).is_empty())&&(vgl_intersection(cell_bounding_box(*it),inner_r).is_empty()))
+      leaves.push_back(*it);
+  }
+  
+  return;
 }
 
 //: Split the tree
@@ -538,6 +639,8 @@ void boct_tree<T_loc,T_data>::b_write(vsl_b_ostream & os, bool save_internal_nod
   short v = version_no(save_internal_nodes, platform_independent);
 #ifdef DEBUG
   vcl_cout << "Writing tree binary version: " << v << vcl_endl;
+  vcl_cout << "Number of leveles: " << num_levels_ << vcl_endl;
+
 #endif
 
   if (v == 3) {
@@ -626,28 +729,32 @@ void boct_tree<T_loc,T_data>::b_read(vsl_b_istream & is)
       T_data cell_data;
       vsl_b_read(is, code);
       vsl_b_read(is, cell_data);
-
+      
       // temporary pointer to traverse
       boct_tree_cell<T_loc,T_data>* curr_cell=root;
       short curr_level=num_levels_-1;
       short level=code.level;
+      
       while (curr_level>level)
       {
         if (curr_cell->is_leaf()) {
           curr_cell->split();
         }
         short child_index=code.child_index(curr_level);
+        
         if (child_index < 0)
           vcl_cout << "ERROR 1: child_index is " << child_index << vcl_endl;
+        
         curr_cell=curr_cell->children()+child_index;
         --curr_level;
+        
       }
 
       // the place of the cell is found, put the data in
       if (curr_cell->code_.isequal(&code))
         curr_cell->set_data(cell_data);
       else
-        vcl_cerr << "First WRONG ERROR CODE OR CELL FOUND:"<<curr_cell->code_<<"!="<<code<<vcl_endl;
+        vcl_cerr << "WRONG ERROR CODE OR CELL FOUND:"<<curr_cell->code_<<"!="<<code<<vcl_endl;
     }
         
     //release old memory
