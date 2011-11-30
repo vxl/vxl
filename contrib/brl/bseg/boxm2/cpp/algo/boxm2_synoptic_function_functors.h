@@ -383,5 +383,48 @@ class boxm2_compute_phongs_and_empty_update_functor
     float sun_azim_;
     bsta_sigma_normalizer_sptr n_table_;
 };
+class boxm2_update_synoptic_probability
+{
+public:
+    boxm2_update_synoptic_probability() {}
+
+    bool init_data(boxm2_data_base * alpha_model,
+                   boxm2_data_base * cubic_model)
+    {
+        cubic_model_data_ = new boxm2_data<BOXM2_FLOAT8>(cubic_model->data_buffer(),
+                                                         cubic_model->buffer_length(),
+                                                         cubic_model->block_id());
+        alpha_model_data_ = new boxm2_data<BOXM2_ALPHA>(alpha_model->data_buffer(),
+                                                        alpha_model->buffer_length(),
+                                                        alpha_model->block_id());
+        id_ = cubic_model->block_id();
+        return true;
+    }
+
+    inline bool process_cell(int index, bool isleaf = false, float side_len =0.0)
+    {
+        boxm2_data<BOXM2_FLOAT8>::datatype & cubic_model=cubic_model_data_->data()[index];
+        boxm2_data<BOXM2_ALPHA>::datatype & alpha=alpha_model_data_->data()[index];
+        if (!isleaf)
+            return true;
+
+        float ps = 1 - vcl_exp(-alpha*side_len);    
+        float p = cubic_model[5] * ps /(cubic_model[5] * ps +cubic_model[6] * (1-ps) ) ;
+
+
+       
+        if (p<1)
+            alpha = -(vcl_log(1-p)) / side_len;
+        else
+            alpha =10000;
+        return true;
+    }
+
+  private:
+    boxm2_data<BOXM2_FLOAT8>* cubic_model_data_;
+    boxm2_data<BOXM2_ALPHA>* alpha_model_data_;
+    boxm2_stream_cache_sptr str_cache_;
+    boxm2_block_id id_;
+};
 
 #endif // boxm2_synoptic_function_functors_h_
