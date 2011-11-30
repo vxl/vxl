@@ -58,29 +58,28 @@ int main(int argc,  char** argv)
   //-- GET UPDATE IMG/CAMS ---
   vcl_vector<vcl_string> imgs = boxm2_util::images_from_directory( img_dir() );
   vcl_vector<vcl_string> cams = boxm2_util::camfiles_from_directory( cam_dir() );
-
+  
   //-----------------------------------------------------------
-  //run updates
-  //-----------------------------------------------------------
-  int numUpdates = vcl_min( (int) num_updates(), (int) imgs.size()); 
-  for(int i=0; i<numUpdates; ++i) 
-  {
-    vil_image_view_base_sptr inImg = boxm2_util::prepare_input_image(imgs[i], true); 
-    vpgl_camera_double_sptr  inCam = boxm2_util::camera_from_file( cams[i] );
-    vil_image_view<float>* inImgPtr = dynamic_cast<vil_image_view<float>* >(inImg.ptr()); 
-    boxm2_multi_update::update(mcache, *inImgPtr, inCam); 
-  }
-
-  //-----------------------------------------------------------
-  //render out
+  //render setup
   //-----------------------------------------------------------
   float mean_time=0.0f; 
   int num_renders = 5; 
   boxm2_multi_render renderer; 
   int ni=1280, nj=720; 
-  for(int i=0; i<num_renders; ++i) {
+
+  //-----------------------------------------------------------
+  //run update/renders
+  //-----------------------------------------------------------
+  int numUpdates = vcl_min( (int) num_updates(), (int) imgs.size()); 
+  for(int i=0; i<numUpdates; ++i) 
+  {
+    //update with input image
+    vil_image_view_base_sptr inImg = boxm2_util::prepare_input_image(imgs[i], true); 
+    vpgl_camera_double_sptr  inCam = boxm2_util::camera_from_file( cams[i] );
+    vil_image_view<float>* inImgPtr = dynamic_cast<vil_image_view<float>* >(inImg.ptr()); 
+    boxm2_multi_update::update(mcache, *inImgPtr, inCam); 
     
-    //create initial cam (or pass in your own
+    //create cam
     double currInc    = 45.0;
     double currRadius = scene->bounding_box().height(); 
     double currAz     = i*30.0f; 
@@ -88,16 +87,13 @@ int main(int argc,  char** argv)
     pcam = boxm2_util::construct_camera(currInc, currAz, currRadius, ni, nj, scene->bounding_box(), false);
     vpgl_camera_double_sptr cam = new vpgl_perspective_camera<double>(*pcam);
     
-    //outimg
+    //render/save image
     vil_image_view<float> out(ni,nj); 
     float rtime = renderer.render(mcache, out, cam); 
     vcl_cout<<"Render "<<i<<" time: "<<rtime<<vcl_endl;
     vcl_stringstream s; s<<"out_"<<i<<".tiff"; 
     vil_save(out, s.str().c_str()); 
-    
-    mean_time += rtime; 
   }
-  vcl_cout<<"Mean render time: "<<mean_time/num_renders<<vcl_endl;
-  
+
   return 0;
 }
