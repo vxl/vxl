@@ -188,6 +188,31 @@ boct_tree_cell<T_loc,T_data>* boct_tree_cell<T_loc,T_data>::clone_and_intersect(
 
 
 template<class T_loc,class T_data>
+bool boct_tree_cell<T_loc,T_data>::remove_children_if_not_leaf_at_level(short  level)
+{
+  bool flag = false;
+  
+  if(is_leaf()){
+    if(code_.level ==level){
+      return true;
+    }else {
+      return false;
+    }
+  }  
+  
+  for (unsigned i=0; i<8; i++) {
+    flag = flag || children_[i].remove_children_if_not_leaf_at_level(level);
+  }
+  
+  if(!flag)
+    this->delete_children();
+  
+  return flag;
+}
+
+
+
+template<class T_loc,class T_data>
 void boct_tree_cell<T_loc,T_data>::delete_children()
 {
   if (!is_leaf()) {
@@ -821,6 +846,7 @@ void boct_tree_cell<T_loc,T_data>::all_children(vcl_vector<boct_tree_cell<T_loc,
 }
 
 //:Averages the value of the 8 children in a dynamic programming manner
+// .cxx contains the template instantiation for specific data types
 template<class T_loc, class T_data>
 void boct_tree_cell<T_loc,T_data>::set_data_to_avg_children()
 {
