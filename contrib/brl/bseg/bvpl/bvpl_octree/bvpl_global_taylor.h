@@ -19,19 +19,27 @@
 //Forward declaration
 class bvpl_global_corners;
 
+template <class T_data, unsigned DIM>
+boxm_apm_type bvpl_taylor_apm();
 
+namespace bvpl_global_tylor_defaults {
+  const vcl_string kernel_names[10] = {"I0", "Ix", "Iy", "Iz", "Ixx", "Iyy", "Izz", "Ixy", "Ixz", "Iyz" };
+;
+}
+
+template<class T_data, unsigned DIM>
 class bvpl_global_taylor : public vbl_ref_count
 {
   
 public:
   
   //: Constructor  from xml file
-  bvpl_global_taylor(const vcl_string &path);
+  bvpl_global_taylor(const vcl_string &path, const vcl_string kernel_names[]);
 
   //: Init auxiliary scenes and smallest cell length values
   void init();
 
-  //: Compute the 10 taylor kernels for this scene at current block. The output is saved to the projection scene as a 10-d vector
+  //: Compute the DIM taylor kernels for this scene at current block. The output is saved to the projection scene as a DIM-d vector
   void compute_taylor_coefficients(int scene_id, int block_i, int block_j, int block_k);
 
   //: Extract a particular coefficient scene
@@ -72,7 +80,7 @@ protected:
   //vcl_vector<bool> training_scenes_;
 
   //: A vector to 2-degree taylor approximation kernels
-  //  The order is I0, Ix, Iy, Iz, Ixx, Iyy, Izz, Ixy, Ixz, Iyz
+  //  The order is I0, Ix, Iy, Iz, Ixx, Iyy, Izz, Ixy, Ixz, Iyz (therefore this class works for dimensions 1-10)
   bvpl_kernel_vector_sptr kernel_vector_;
 
   //: Path to kernel files
@@ -82,7 +90,6 @@ protected:
 
 };
 
-typedef vbl_smart_ptr<bvpl_global_taylor > bvpl_global_taylor_sptr;
 
 
 #endif
