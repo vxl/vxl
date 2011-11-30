@@ -328,3 +328,4 @@ int main(int argc, char** argv)
     convert_scene(scene, valid_scene, alpha_scene, new_scene);
 
   }
+}
