@@ -99,6 +99,19 @@ bool vil_convert_pixel_type_process(bprb_func_process& pro)
     pro.set_output_val<vil_image_view_base_sptr>(0, vil_convert_to_component_order(bimage));
     return true;
   }
+  else if (out_type=="grey")   {
+    vil_image_view<float>* floatimg = new vil_image_view<float>(img->ni(), img->nj());
+    if (img->nplanes() == 3 || img->nplanes() == 4) {
+      vil_image_view<vxl_byte>* inImg = dynamic_cast<vil_image_view<vxl_byte>* >(img.ptr());
+      vil_image_view<float>     greyImg(img->ni(), img->nj());
+      vil_convert_planes_to_grey<vxl_byte, float>(*inImg, greyImg);
+
+      //stretch it into 0-1 range
+      vil_convert_stretch_range_limited(greyImg, *floatimg, 0.0f, 255.0f, 0.0f, 1.0f);
+    }
+    pro.set_output_val<vil_image_view_base_sptr>(0, floatimg);
+    return true;
+  }
   else
     return false;
 }

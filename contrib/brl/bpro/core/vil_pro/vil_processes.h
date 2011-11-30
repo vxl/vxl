@@ -32,4 +32,5 @@ DECLARE_FUNC_CONS(vil_pixelwise_roc_process);
 DECLARE_FUNC_CONS(vil_rgb_to_grey_process);
 DECLARE_FUNC_CONS(vil_nitf_date_time_process);
 DECLARE_FUNC_CONS(vil_convert_pixel_type_process); 
+DECLARE_FUNC_CONS(vil_gradient_angle_process);
 #endif
