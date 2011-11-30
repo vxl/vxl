@@ -7,7 +7,8 @@ SET(boxm2_ocl_algo_sources
     boxm2_ocl_camera_converter.h                boxm2_ocl_camera_converter.cxx
     boxm2_ocl_cone_update_function.h            boxm2_ocl_cone_update_function.cxx
     boxm2_ocl_paint_batch.h                     boxm2_ocl_paint_batch.cxx
-    boxm2_ocl_paint_online.h                     boxm2_ocl_paint_online.cxx
+    boxm2_ocl_paint_online.h                    boxm2_ocl_paint_online.cxx
+    boxm2_ocl_change_detection.h                boxm2_ocl_change_detection.cxx
    )
 
 ADD_LIBRARY(boxm2_ocl_algo  ${boxm2_ocl_algo_sources})

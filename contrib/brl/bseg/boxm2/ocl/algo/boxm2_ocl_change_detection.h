@@ -1,0 +1,65 @@
+// This is brl/bseg/boxm2/ocl/pro/processes/boxm2_ocl_change_detection_process.cxx
+//:
+// \file
+// \brief  A process for change detection
+//
+// \author Vishal Jain
+// \date Mar 10, 2011
+
+#include <vcl_fstream.h>
+#include <vcl_algorithm.h>
+#include <vcl_sstream.h>
+#include <boxm2/ocl/boxm2_opencl_cache.h>
+#include <boxm2/boxm2_scene.h>
+#include <boxm2/boxm2_block.h>
+#include <boxm2/boxm2_data_base.h>
+#include <boxm2/ocl/boxm2_ocl_util.h>
+#include <boxm2/boxm2_util.h>
+#include <vil/vil_image_view.h>
+#include <vil/vil_save.h>
+
+//directory utility
+#include <vul/vul_timer.h>
+#include <vcl_where_root_dir.h>
+#include <bocl/bocl_device.h>
+#include <bocl/bocl_kernel.h>
+
+namespace boxm2_ocl_change_detection_globals {
+  const float PROB_THRESH = 0.1f; 
+}; 
+
+class boxm2_ocl_change_detection
+{
+  public: 
+
+    static bool change_detect(  vil_image_view<float>&    change_img, 
+                                vil_image_view<vxl_byte>& rgb_change_img, 
+                                bocl_device_sptr          device,
+                                boxm2_scene_sptr          scene,
+                                boxm2_opencl_cache_sptr   opencl_cache,
+                                vpgl_camera_double_sptr   cam,
+                                vil_image_view_base_sptr  img,
+                                vil_image_view_base_sptr  exp_img,
+                                int                       n,
+                                vcl_string                norm_type,
+                                bool                      pmax ); 
+
+  private: 
+    static vcl_vector<bocl_kernel*>& get_kernels(bocl_device_sptr device, vcl_string opts); 
+    
+    
+    static bool get_scene_appearances(boxm2_scene_sptr    scene,
+                                      vcl_string&         data_type,
+                                      vcl_string&         num_obs_type,
+                                      vcl_string&         options,
+                                      int&                apptypesize); 
+                                      
+    static vcl_map<vcl_string, vcl_vector<bocl_kernel*> > kernels_;
+
+  
+    static void full_pyramid(vil_image_view_base_sptr in_img, float* img_buff, unsigned cl_ni, unsigned cl_nj);
+    
+    
+    static double mutual_information_2d(const vnl_vector<double>& X, const vnl_vector<double>& Y, int nbins); 
+    
+}; 
