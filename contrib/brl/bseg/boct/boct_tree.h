@@ -22,6 +22,7 @@
 #include <vsl/vsl_binary_io.h>
 #include <vcl_cmath.h>
 #include <vcl_iostream.h>
+#include <vnl/vnl_vector_fixed.h>
 
 template <class T_loc, class T_data>
 class boct_tree
@@ -56,10 +57,21 @@ class boct_tree
 
   //: Destructor
   ~boct_tree();
-
-  //: Clones with the same data
+  
+  //: Resets the number of levels, use with caution - location code of cells need to be chaged externally
+  void reset_num_levels(short num_levels)
+  {
+    root_level_ = num_levels -1;
+    num_levels_ = num_levels;
+    max_val_ = (double)(1 << root_level_);
+  }
+   
+  //: Clones with the same data - only clones the leaves
   boct_tree<T_loc,T_data>* clone();
-
+  
+  //: Clones with the same data - clones all cells
+  boct_tree<T_loc,T_data>* clone_all();
+  
   //: Clone a subtree determined by the root
   boct_tree<T_loc, T_data>* clone_subtree(boct_tree_cell<T_loc, T_data>* root, short num_levels);
 
@@ -68,9 +80,10 @@ class boct_tree
                                                 short parent_tree_root_level,
                                                 vgl_box_3d<double> local_crop_box);
 
-  template <class T_data_to>
+  
+  template<class T_data_to>
   boct_tree<T_loc,T_data_to>* clone_to_type() {
-
+    
     vcl_vector<boct_tree_cell<T_loc, T_data>*> cells = leaf_cells();
     vcl_vector<boct_tree_cell<T_loc, T_data_to> > cloned_cells;
     for (unsigned i=0; i<cells.size(); i++) {
@@ -82,16 +95,66 @@ class boct_tree
     tree->set_bbox(this->bounding_box());
     return tree;
   }
+  
+  
+  //: Clone only from leaves at given level
+#if 0
+  template<class T_data_to>
+  boct_tree<T_loc,T_data_to>* clone_to_type(short level, boct_tree<T_loc, bool>* valid_tree= NULL)
+  {
+    vcl_vector<boct_tree_cell<T_loc, T_data>*> cells = leaf_cells_at_level(level);
+    vcl_vector<boct_tree_cell<T_loc, T_data_to> > cloned_cells;
+    
+    if(!valid_tree){
+      for (unsigned i=0; i<cells.size(); i++) {
+        cloned_cells.push_back(boct_tree_cell<T_loc, T_data_to>(cells[i]->code_));
+      }
+    }else {
+      vcl_vector<boct_tree_cell<T_loc, T_data>*> valid_cells = valid_tree->leaf_cells_at_level(level);
+      for (unsigned i=0; i<cells.size(); i++) {
+        if(valid_cells[i]->data())
+          cloned_cells.push_back(boct_tree_cell<T_loc, T_data_to>(cells[i]->code_));
+      }
+    }
+    
+    boct_tree<T_loc,T_data_to> temp_tree;
+    boct_tree_cell<T_loc, T_data_to>* cloned_root = temp_tree.construct_tree(cloned_cells, this->number_levels());
+    boct_tree<T_loc,T_data_to>* tree = new boct_tree<T_loc,T_data_to>(cloned_root,  this->number_levels());
+    tree->set_bbox(this->bounding_box());
+    return tree;
+  }
+#endif
+  
+ 
+  template <unsigned DIM>
+  boct_tree<T_loc,vnl_vector_fixed<T_data, DIM> >* clone_to_vector() {
+    
+    vcl_vector<boct_tree_cell<T_loc, T_data>*> cells = leaf_cells();
+    vcl_vector<boct_tree_cell<T_loc, vnl_vector_fixed<T_data, DIM> > > cloned_cells;
+    for (unsigned i=0; i<cells.size(); i++) {
+      cloned_cells.push_back(boct_tree_cell<T_loc, vnl_vector_fixed<T_data, DIM> >(cells[i]->code_));
+      cloned_cells[i].set_data(vnl_vector_fixed<T_data, DIM>(cells[i]->data()));
+
+    }
+    boct_tree<T_loc,vnl_vector_fixed<T_data, DIM> > temp_tree;
+    boct_tree_cell<T_loc, vnl_vector_fixed<T_data, DIM> >* cloned_root = temp_tree.construct_tree(cloned_cells, this->number_levels());
+    boct_tree<T_loc,vnl_vector_fixed<T_data, DIM> >* tree = new boct_tree<T_loc,vnl_vector_fixed<T_data, DIM> >(cloned_root,  this->number_levels());
+    tree->set_bbox(this->bounding_box());
+    return tree;
+  }
 
   //: Initialize all cells with a value
   void init_cells(T_data val);
 
   //: Returns the leaf cell that contains the 3d point specified in global coordinates
-  boct_tree_cell<T_loc,T_data>* locate_point_global(const vgl_point_3d<double>& p);
+  boct_tree_cell<T_loc,T_data>* locate_point_global(const vgl_point_3d<double>& p, short level=0);
+  
+  //: Returns the leaf cell that contains the 3d point specified in global coordinates. This function starts search within the given cell
+  boct_tree_cell<T_loc,T_data>* locate_point_global(const vgl_point_3d<double>& p, boct_tree_cell<T_loc,T_data>* current_cell);
 
   //: Returns the leaf cell that contains the 3d point specified in octree-coordinates i.e. [0,1)x[0,1)x[0,1), with optional safe check for out of bounds
   boct_tree_cell<T_loc,T_data>* locate_point(const vgl_point_3d<double>& p, bool check_out_of_bounds = false);
-
+   
   //: Returns the cell at a particular level(not necessarily a leaf) containing the 3d point in octree-coordinates i.e. [0,1)x[0,1)x[0,1),with optional safe check for out of bounds
   boct_tree_cell<T_loc,T_data>* locate_point_at_level(const vgl_point_3d<double>& p, short level, bool check_out_of_bounds = false);
 
@@ -102,65 +165,17 @@ class boct_tree
   boct_tree_cell<T_loc,T_data>* locate_region(const vgl_box_3d<double>& r, bool check_out_of_bounds = false);
 
   //: Returns all leaf cells entirely contained in 3d region in global coordinates
-  void locate_region_leaves_global(const vgl_box_3d<double>& r, vcl_vector<boct_tree_cell<T_loc,T_data>*> &leaves)
-  {
-    boct_tree_cell<T_loc,T_data>* root = locate_region_global(r);
-    vcl_vector<boct_tree_cell<T_loc,T_data>*> all_leaves;
-    root->leaf_children(all_leaves);
-
-    // now check that the leaves are contained in the region
-    typename vcl_vector<boct_tree_cell<T_loc,T_data>*>::iterator it = all_leaves.begin();
-    for (; it!=all_leaves.end(); ++it)
-    {
-      if (!vgl_intersection(cell_bounding_box(*it),r).is_empty())
-        leaves.push_back(*it);
-    }
-
-    return;
-  }
-
-  //: Returns all leaf cells entirely contained in 3d region in global coordinates
-  void locate_region_leaves_global_2(const vgl_box_3d<double>& r, vcl_vector<boct_tree_cell<T_loc,T_data>*> &leaves)
-  {
-    boct_tree_cell<T_loc,T_data>* root = locate_region_global(r);
-    vcl_vector<boct_tree_cell<T_loc,T_data>*> all_leaves;
-    root->leaf_children(all_leaves);
-
-    // now check that the leaves are contained in the region
-    vgl_point_3d<double>  centroid = r.centroid();
-    boct_tree_cell<T_loc,T_data> *centroid_cell = locate_point_global(centroid);
-    double radius = vcl_sqrt(r.width()*r.width() + r.depth()*r.depth()+r.height()*r.height()) + 1e-7;
-    typename vcl_vector<boct_tree_cell<T_loc,T_data>*>::iterator it = all_leaves.begin();
-    for (; it!=all_leaves.end(); ++it)
-    {
-      if ((global_origin(*it) - global_origin(centroid_cell)).length() < radius)
-        leaves.push_back(*it);
-    }
-
-    return;
-  }
+  void locate_region_leaves_global(const vgl_box_3d<double>& r, vcl_vector<boct_tree_cell<T_loc,T_data>*> &leaves);
+  
+  //: Returns all cells (at the specified level)  entirely contained in 3d region in global coordinates 
+  void locate_region_cells_global(const vgl_box_3d<double>& r, vcl_vector<boct_tree_cell<T_loc,T_data>*> &leaves, short level);
 
   //: Returns all leaf cells entirely contained in 3d region in global coordinates
   //  Code assumes boxes have the same centroid
-  void locate_leaves_in_hollow_region_global(const vgl_box_3d<double>& outer_r, const vgl_box_3d<double>& inner_r, vcl_vector<boct_tree_cell<T_loc,T_data>*> &leaves)
-  {
-    boct_tree_cell<T_loc,T_data>* root = locate_region_global(outer_r);
-    vcl_vector<boct_tree_cell<T_loc,T_data>*> all_leaves;
-    root->leaf_children(all_leaves);
-
-    // now check that the leaves are contained in the "in_between" region
-    typename vcl_vector<boct_tree_cell<T_loc,T_data>*>::iterator it = all_leaves.begin();
-    for (; it!=all_leaves.end(); ++it)
-    {
-      if ((!vgl_intersection(cell_bounding_box(*it),outer_r).is_empty())&&(vgl_intersection(cell_bounding_box(*it),inner_r).is_empty()))
-        leaves.push_back(*it);
-    }
-
-    return;
-  }
+  void locate_leaves_in_hollow_region_global(const vgl_box_3d<double>& outer_r, const vgl_box_3d<double>& inner_r, vcl_vector<boct_tree_cell<T_loc,T_data>*> &leaves);
 
 
-  //: Change the date of all leaf cells entirely contained in 3d region in global coordinates
+  //: Change the data of all leaf cells entirely contained in 3d region in global coordinates
   void change_leaves_in_global_region_leaves_global(const vgl_box_3d<double>& r, const T_data &val)
   {
     boct_tree_cell<T_loc,T_data>* root = locate_region_global(r);
@@ -188,6 +203,14 @@ class boct_tree
     root->leaf_children(leaves);
     return;
   }
+  
+  //: If at least a children of a given cell is not a leaf at given level, then children are removed
+  void remove_children_if_not_leaf_at_level(short level)
+  {
+    root_->remove_children_if_not_leaf_at_level(level);
+    return;
+  }
+  
 
   //: Return cell with a particular locational code
   boct_tree_cell<T_loc,T_data>* get_cell(  boct_loc_code<T_loc>& code) { return root_->traverse(code); }
