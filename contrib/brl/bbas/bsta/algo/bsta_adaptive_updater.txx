@@ -42,7 +42,7 @@ bsta_mg_statistical_updater<mix_dist_>::update( mix_dist_& mix, const vector_& s
 
   // if no matches add a new component
   if (matched.empty()) {
-    insert(mix,sample,alpha);
+    this->insert(mix,sample,alpha);
     mix.normalize_weights();
   }
   else
@@ -123,7 +123,7 @@ bsta_mg_grimson_statistical_updater<mix_dist_>::update( mix_dist_& mix,
     mix.set_weight(i, weight);
   }
   if (match<0) {
-    insert(mix,sample,alpha);
+    this->insert(mix,sample,alpha);
     match = mix.num_components()-1;
   }
 
