@@ -10,7 +10,6 @@ void boxm2_compute_export_vis_wrl_function::exportVisToWRL(boxm2_block_metadata 
     vcl_size_t dataSize = alphas->buffer_length();
     boxm2_data_traits<BOXM2_AUX0>::datatype *   vis_data = (boxm2_data_traits<BOXM2_AUX0>::datatype*) vis->data_buffer();
     boxm2_data_traits<BOXM2_POINT>::datatype *  p_data = (boxm2_data_traits<BOXM2_POINT>::datatype*) points->data_buffer();
-    unsigned count = 0;
     file << "Shape {\n"
          <<"  geometry PointSet {\n"
          <<"     coord DEF mypts Coordinate { point [ ";
@@ -44,6 +43,7 @@ void boxm2_compute_export_vis_wrl_function::exportVisToWRL(boxm2_block_metadata 
          << "}\n";
 
 #ifdef DEBUG
+    unsigned count = 0;
     for (unsigned i = 0; i < dataSize /  boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());i++ ) {
         if (vis_data[i] == 1) {
             ++count;
