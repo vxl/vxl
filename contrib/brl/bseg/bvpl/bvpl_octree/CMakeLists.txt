@@ -34,15 +34,15 @@ SET(bvpl_octree_sources
     bvpl_scene_statistics.h               bvpl_scene_statistics.cxx
     bvpl_discover_pca_kernels.h           bvpl_discover_pca_kernels.cxx
     bvpl_pca_error_scenes.h               bvpl_pca_error_scenes.cxx
-    bvpl_global_pca.h                     bvpl_global_pca.txx                     
+    bvpl_global_pca.h                     bvpl_global_pca.txx
     bvpl_taylor_scenes_map.h              bvpl_taylor_scenes_map.cxx
     bvpl_taylor_basis.h                   bvpl_taylor_basis.cxx
-    bvpl_global_taylor.h                  bvpl_global_taylor.txx		bvpl_global_taylor.cxx
+    bvpl_global_taylor.h                  bvpl_global_taylor.txx          bvpl_global_taylor.cxx
     bvpl_global_corners.h                 bvpl_global_corners.cxx
     bvpl_corner_detector.h
     bvpl_corner_functors.h
     bvpl_gauss3D_steerable_filters.h      bvpl_gauss3D_steerable_filters.cxx
-)
+   )
 
 AUX_SOURCE_DIRECTORY(Templates bvpl_octree_sources)
 
