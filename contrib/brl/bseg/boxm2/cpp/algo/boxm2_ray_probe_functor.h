@@ -31,12 +31,17 @@ class boxm2_ray_probe_functor
     switch (boxm2_data_info::data_type(prefix_))
     {
       case BOXM2_MOG3_GREY:
+		  nelems= 8;
+		  break;
       case BOXM2_FLOAT8:
         nelems = 8;
         break;
       case BOXM2_AUX0:
         nelems = 1;
         break;
+	  case BOXM2_NUM_OBS:
+		nelems = 4;
+		break;
       default:
         nelems = 0;
     }
@@ -86,7 +91,16 @@ class boxm2_ray_probe_functor
             data_to_return_->push_back(app);
             break;
         }
-
+    case(BOXM2_NUM_OBS):
+        {
+            boxm2_data<BOXM2_NUM_OBS>* num_obs_data  = new boxm2_data<BOXM2_NUM_OBS>(data_ptr->data_buffer(),data_ptr->buffer_length(),data_ptr->block_id());
+            boxm2_data<BOXM2_NUM_OBS>::datatype app=num_obs_data->data()[index];
+            data_to_return_->push_back(app[0]);
+            data_to_return_->push_back(app[1]);
+            data_to_return_->push_back(app[2]);
+            data_to_return_->push_back(app[3]);
+            break;
+        }
     default:
         {
         }

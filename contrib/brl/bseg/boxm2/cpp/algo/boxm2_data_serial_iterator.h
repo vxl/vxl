@@ -39,17 +39,18 @@ void boxm2_data_leaves_serial_iterator(boxm2_block * blk,
 
         if ( currIndex%counter_length == 0 ) vcl_cout<<'.';
 
-        for (int i=0; i<585; i++)
+
+       for (int i=0; i<585; i++)
         {
             //if current bit is 0 and parent bit is 1, you're at a leaf
             int pi = (i-1)>>3;           //Bit_index of parent bit
             bool validParent = curr_tree.bit_at(pi) || (i==0); // special case for root
-            if (validParent && curr_tree.bit_at(i)==0)
+            if (validParent )//&& curr_tree.bit_at(i)==0)
             {
                 int depth = curr_tree.depth_at(i);
-                int side_len = 1<<depth;
+                float side_len = 1.0f/ (float) (1<<depth);
                 int index = curr_tree.get_data_index(i);
-                functor.process_cell(index,side_len);
+                functor.process_cell(index,curr_tree.is_leaf(i),side_len*blk->sub_block_dim().x());
             }
         }
     }
