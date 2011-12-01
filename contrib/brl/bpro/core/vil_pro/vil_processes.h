@@ -33,4 +33,6 @@ DECLARE_FUNC_CONS(vil_rgb_to_grey_process);
 DECLARE_FUNC_CONS(vil_nitf_date_time_process);
 DECLARE_FUNC_CONS(vil_convert_pixel_type_process); 
 DECLARE_FUNC_CONS(vil_gradient_angle_process);
+DECLARE_FUNC_CONS(vil_image_ssd_process);
+DECLARE_FUNC_CONS(vil_image_mean_process);
 #endif
