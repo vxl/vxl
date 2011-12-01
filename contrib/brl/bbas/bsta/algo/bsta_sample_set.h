@@ -36,7 +36,7 @@ class bsta_sample_set : public bsta_parzen_sphere<T,n>
   typedef typename bsta_parzen_sphere<T,n>::vector_type vector_;
 
   // Constructor
-  bsta_sample_set(T bandwidth = T(1)) : bsta_parzen_sphere<T,n>() { set_bandwidth(bandwidth); }
+  bsta_sample_set(T bandwidth = T(1)) : bsta_parzen_sphere<T,n>() { this->set_bandwidth(bandwidth); }
 
   //: Compute the mean in a window around the given pt, the window size is the bandwidth
   //  If there are no points within bandwidth of the input pt, \return false
