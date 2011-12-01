@@ -134,6 +134,17 @@ bool boxm_create_scene_process(bprb_func_process& pro)
       vcl_cout << "Scene path: " << scene->filename()<< vcl_endl;
     }
   }
+  else if (scene_ptr->appearence_model() == VNL_FLOAT_10) {
+    if (!scene_ptr->multi_bin())
+    {
+      typedef boct_tree<short,vnl_vector_fixed<float, 10> > tree_type;
+      boxm_scene<tree_type>* scene = new boxm_scene<tree_type>();
+      scene->load_scene(fname);
+      scene_ptr = scene;
+      vcl_cout << "Loading scene of type vnl_float_10" << vcl_endl;
+      vcl_cout << "Scene path: " << scene->filename()<< vcl_endl;
+    }
+  }
   else if (scene_ptr->appearence_model() == BOXM_BOOL) {
     if (!scene_ptr->multi_bin())
     {
