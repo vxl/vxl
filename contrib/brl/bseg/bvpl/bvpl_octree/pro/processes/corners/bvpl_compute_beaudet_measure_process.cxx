@@ -45,6 +45,9 @@ bool bvpl_compute_beaudet_measure_process_cons(bprb_func_process& pro)
 bool bvpl_compute_beaudet_measure_process(bprb_func_process& pro)
 {
   using namespace bvpl_compute_beaudet_measure_process_globals;
+  
+    typedef vbl_smart_ptr<bvpl_global_taylor<double, 10> > bvpl_global_taylor_sptr;
+
 
   //get inputs
   unsigned i = 0;

@@ -48,6 +48,8 @@ bool bvpl_compute_harris_measure_process(bprb_func_process& pro)
 
   //get inputs
   unsigned i = 0;
+  typedef vbl_smart_ptr<bvpl_global_taylor<double, 10> > bvpl_global_taylor_sptr;
+
   bvpl_global_taylor_sptr global_taylor = pro.get_input<bvpl_global_taylor_sptr>(i++);
   bvpl_global_corners_sptr global_corners = pro.get_input<bvpl_global_corners_sptr>(i++);
   int scene_id = pro.get_input<int>(i++);
