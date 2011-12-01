@@ -9,7 +9,7 @@ typedef struct
 {
   __global float* alpha;
   __global MOG_TYPE *  mog;
-  float intensity;
+  float4 intensity;
   float intensity_exp;
   float* change;
   float* change_exp;
@@ -29,7 +29,7 @@ change_detection_bit_scene( __constant  RenderSceneInfo    * linfo,
                             __global    float              * alpha_array,
                             __global    MOG_TYPE           * mixture_array,
                             __global    float16            * camera,        // camera orign and SVD of inverse of camera matrix
-                            __global    float              * in_image,      // input image and store vis_inf and pre_inf
+                            __global    float4              * in_image,      // input image and store vis_inf and pre_inf
                             __global    float              * exp_image,      // input image and store vis_inf and pre_inf
                             __global    float              * change_image,      // input image and store vis_inf and pre_inf
                             __global    float              * change_exp_image,       //input image
@@ -58,7 +58,7 @@ change_detection_bit_scene( __constant  RenderSceneInfo    * linfo,
   float change          = change_image[imIndex[llid]];
   float change_exp      = change_exp_image[imIndex[llid]];
   float intensity_exp   = exp_image[imIndex[llid]];
-  float intensity       = in_image[imIndex[llid]];
+  float4 intensity       = in_image[imIndex[llid]];
   float vis             = vis_image[imIndex[llid]];
 
   //find neighbor pixel
@@ -108,7 +108,7 @@ nxn_change_detection( __constant  RenderSceneInfo    * linfo,
                       __global    int                * offset_i,            //nxn offset (can be negative
                       __global    int                * offset_j,            //nxn offset (can be negative
                       __global    float16            * camera,              
-                      __global    float              * in_image,            // input image 
+                      __global    float4              * in_image,            // input image 
                       __global    float              * exp_image,           // expected image
                       __global    float              * change_image,        // change image
                       __global    float              * change_exp_image,    // change exp image
@@ -159,7 +159,7 @@ nxn_change_detection( __constant  RenderSceneInfo    * linfo,
    
     //intensity's belong to neighbor
     float intensity_exp   = exp_image[imIndex[llid]];
-    float intensity       = in_image [imIndex[llid]];
+    float4 intensity       = in_image [imIndex[llid]];
     
     //setup aux args for step cell function
     AuxArgs aux_args;
