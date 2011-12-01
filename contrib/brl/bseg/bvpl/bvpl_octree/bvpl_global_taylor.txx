@@ -142,49 +142,47 @@ void bvpl_global_taylor<T_data, DIM>::compute_taylor_coefficients(int scene_id, 
 }
 
 
-
 //: Threshold non-salient features according to Harris' measure
 template<class T_data, unsigned DIM>
 void bvpl_global_taylor<T_data, DIM>::threshold_corners(int scene_id, int block_i, int block_j, int block_k, double harris_k)
 {
-  
   typedef boct_tree<short,vnl_vector_fixed<double,10> > taylor_tree_type;
   typedef boct_tree_cell<short,vnl_vector_fixed<double,10> > taylor_cell_type;
-  
+
   boxm_scene_base_sptr data_scene_base =load_scene(scene_id);
   boxm_scene_base_sptr proj_scene_base =load_projection_scene(scene_id);
   boxm_scene_base_sptr valid_scene_base = load_valid_scene(scene_id);
-  
+
   boxm_scene<taylor_tree_type>* proj_scene = dynamic_cast<boxm_scene<taylor_tree_type>*>(proj_scene_base.as_pointer());
   boxm_scene<boct_tree<short, bool> >* valid_scene = dynamic_cast<boxm_scene<boct_tree<short, bool> >*> (valid_scene_base.as_pointer());
-  boxm_scene<boct_tree<short, float> >* corner_scene = 
+  boxm_scene<boct_tree<short, float> >* corner_scene =
   new boxm_scene<boct_tree<short, float> >(valid_scene->lvcs(), valid_scene->origin(), valid_scene->block_dim(), valid_scene->world_dim(), valid_scene->max_level(), valid_scene->init_level());
   corner_scene->set_appearance_model(BOXM_FLOAT);
   corner_scene->set_paths(valid_scene->path(), "harris_scene");
   corner_scene->write_scene("/harris_scene.xml");
-  
+
   if (!( proj_scene && valid_scene && corner_scene ))
   {
     vcl_cerr << "Error in bvpl_global_taylor::threshold_corners: Could not cast input scenes\n";
     return;
   }
-  
+
   //init variables
   proj_scene->unload_active_blocks();
   valid_scene->unload_active_blocks();
-  
+
   //operate on scene
   bvpl_corner_detector corner_detector;
   bvpl_harris_laptev_functor harris_functor(harris_k);
-  
+
   vgl_point_3d<int> max_neigborhood_idx = kernel_vector_->max();
   vgl_point_3d<int> min_neigborhood_idx = kernel_vector_->min();
-  
-  vcl_cout << "Neigborhood for harris threshhold: " << min_neigborhood_idx << " , " << max_neigborhood_idx << vcl_endl;
-  
+
+  vcl_cout << "Neighborhood for harris threshhold: " << min_neigborhood_idx << " , " << max_neigborhood_idx << vcl_endl;
+
   corner_detector.detect_and_threshold(proj_scene, harris_functor, min_neigborhood_idx, max_neigborhood_idx,
                                        block_i, block_j, block_k, valid_scene, corner_scene, finest_cell_length_[scene_id]);
-  
+
   //clean memory
   proj_scene->unload_active_blocks();
   valid_scene->unload_active_blocks();
@@ -374,7 +372,6 @@ void bvpl_global_taylor<T_data, DIM>::xml_write()
   doc.set_root_element(root);
   root->append_text("\n");
 
-
   //write the scenes
   for (unsigned i =0; i<scenes_.size(); i++)
   {
@@ -417,7 +414,6 @@ void bvpl_global_taylor<T_data, DIM>::extract_coefficient_scene(int scene_id, in
 
   boxm_scene<projection_tree_type>* projection_scene = dynamic_cast<boxm_scene<projection_tree_type>* >(projection_scene_base.as_pointer());
 
-
   if (!(projection_scene && float_scene))
   {
     vcl_cerr << "Error in bof_util::random_label_for_training: Could not cast scenes\n";
@@ -444,7 +440,6 @@ void bvpl_global_taylor<T_data, DIM>::extract_coefficient_scene(int scene_id, in
     projection_tree_type* projection_tree = projection_scene->get_block(it.index())->get_tree();
     float_tree_type* float_tree = projection_tree->clone_to_type<float>();
 
-
     //get leaf cells
     vcl_vector<projection_cell_type *> projection_leaves = projection_tree->leaf_cells();
     vcl_vector<float_cell_type *> float_leaves = float_tree->leaf_cells();
@@ -466,6 +461,6 @@ void bvpl_global_taylor<T_data, DIM>::extract_coefficient_scene(int scene_id, in
 
 
 #define BVPL_GLOBAL_TAYLOR_INSTANTIATE(T1,T2) \
-template class bvpl_global_taylor<T1,T2>
+template class bvpl_global_taylor<T1,T2 >
 
 #endif
