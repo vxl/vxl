@@ -13,6 +13,7 @@
 // \endverbatim
 
 #include <boxm/boxm_scene.h>
+#include <vcl_iostream.h>
 
 //: A class to combine children cells and fill intermediate nodes
 template <class T_data>
@@ -34,7 +35,6 @@ class boxm_fill_internal_cells
     scene_out->set_appearance_model(scene_in->appearence_model());
 
     scene_out->write_scene(block_pref + ".xml");
-    
 
     //Iterate through the blocks
     boxm_block_iterator<tree_type> iter_in = scene_in->iterator();
