@@ -49,5 +49,9 @@ DECLARE_FUNC_CONS(bvpl_corner_statistics_process);
 DECLARE_FUNC_CONS(bvpl_threshold_corners_process);
 DECLARE_FUNC_CONS(bvpl_compute_beaudet_measure_process);
 
+//Steerable filters
+DECLARE_FUNC_CONS(bvpl_init_sf_response_scene_process);
+DECLARE_FUNC_CONS(bvpl_compute_sf_raw_response_process);
+
 
 #endif

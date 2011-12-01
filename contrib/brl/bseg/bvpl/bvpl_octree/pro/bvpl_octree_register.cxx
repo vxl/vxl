@@ -14,6 +14,8 @@
 
 void bvpl_octree_register::register_datatype()
 {
+  typedef vbl_smart_ptr<bvpl_global_taylor<double, 10> > bvpl_global_taylor_sptr;
+  
   REGISTER_DATATYPE(bvpl_taylor_scenes_map_sptr);
   REGISTER_DATATYPE(bvpl_pca_error_scenes_sptr);
   REGISTER_DATATYPE(bvpl_discover_pca_kernels_sptr);
@@ -68,4 +70,8 @@ void bvpl_octree_register::register_process()
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvpl_load_global_corners_process, "bvplLoadGlobalCornersProcess");  
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvpl_corner_statistics_process, "bvplCornerStatisticsProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvpl_compute_beaudet_measure_process, "bvplComputeBeaudetMeasureProcess");
+  
+  //Steerable filters
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvpl_init_sf_response_scene_process, "bvplInitSFResponseSceneProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvpl_compute_sf_raw_response_process, "bvplComputeSFRawResponseProcess");
 }
