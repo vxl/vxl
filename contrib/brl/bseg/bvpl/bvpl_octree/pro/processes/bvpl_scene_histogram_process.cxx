@@ -53,7 +53,7 @@ bool bvpl_scene_histogram_process(bprb_func_process& pro)
       typedef boct_tree<short, float > tree_type;
       boxm_scene<tree_type> *scene_in = static_cast<boxm_scene<tree_type>* > (scene_base.as_pointer());
       bsta_histogram<float> hist;
-      compute_scene_statistics(scene_in, hist);
+      bvpl_compute_scene_statistics(scene_in, hist);
       hist.pretty_print();
       break;
     }
