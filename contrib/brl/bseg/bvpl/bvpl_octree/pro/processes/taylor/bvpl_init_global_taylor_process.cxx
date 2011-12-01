@@ -14,7 +14,7 @@
 //:global variables
 namespace bvpl_init_global_taylor_process_globals
 {
-  const unsigned n_inputs_ = 1;
+  const unsigned n_inputs_ = 2;
   const unsigned n_outputs_ = 0;
 }
 
@@ -26,6 +26,7 @@ bool bvpl_init_global_taylor_process_cons(bprb_func_process& pro)
 
   vcl_vector<vcl_string> input_types_(n_inputs_);
   input_types_[0] = "vcl_string"; // path to taylor_global_info file
+  input_types_[1] = "int"; // dimension (3 for xyz derivatives, 10 for all 1st and 2nd order derivatives)
 
   vcl_vector<vcl_string> output_types_(n_outputs_);
 
@@ -40,9 +41,28 @@ bool bvpl_init_global_taylor_process(bprb_func_process& pro)
 
   //get inputs
   vcl_string taylor_dir = pro.get_input<vcl_string>(0);
+  int dim = pro.get_input<int>(1);
+ 
+  switch (dim) {
+    case 3:
+    {
+      vcl_string kernel_names[] = {"Ix", "Iy", "Iz"};
+      bvpl_global_taylor<float, 3> global_taylor(taylor_dir, kernel_names);
+      global_taylor.init();
+      break;
+    }
+    case 10:
+    {
+      const vcl_string kernel_names[10] = {"I0", "Ix", "Iy", "Iz", "Ixx", "Iyy", "Izz", "Ixy", "Ixz", "Iyz" };
+      bvpl_global_taylor<double, 10> global_taylor(taylor_dir, kernel_names);
+      global_taylor.init();
+      break;
+    }
+    default:
+      break;
+  }
 
-  bvpl_global_taylor global_taylor(taylor_dir);
-  global_taylor.init();
-
+  
+  
   return true;
 }

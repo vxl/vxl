@@ -15,7 +15,7 @@
 //:global variables
 namespace bvpl_compute_taylor_coefficients_process_globals
 {
-  const unsigned n_inputs_ = 5 ;
+  const unsigned n_inputs_ = 6 ;
   const unsigned n_outputs_ = 0;
 }
 
@@ -32,6 +32,7 @@ bool bvpl_compute_taylor_coefficients_process_cons(bprb_func_process& pro)
   input_types_[i++] = "int";  //block Indices
   input_types_[i++] = "int";
   input_types_[i++] = "int";
+  input_types_[i++] = "int"; // dimension (3 for xyz derivatives, 10 for all 1st and 2nd order derivatives)
 
   vcl_vector<vcl_string> output_types_(n_outputs_);
 
@@ -51,12 +52,29 @@ bool bvpl_compute_taylor_coefficients_process(bprb_func_process& pro)
   int block_i = pro.get_input<int>(i++);
   int block_j = pro.get_input<int>(i++);
   int block_k = pro.get_input<int>(i++);
-
+  int dim = pro.get_input<int>(i++);
+  
   if (!vul_file::is_directory(taylor_dir))
     return false;
 
-  bvpl_global_taylor global_taylor(taylor_dir);
-  global_taylor.compute_taylor_coefficients(scene_id, block_i, block_j, block_k);
-
+  switch (dim) {
+    case 3:
+    {
+      vcl_string kernel_names[] = {"Ix", "Iy", "Iz"};
+      bvpl_global_taylor<float, 3> global_taylor(taylor_dir, kernel_names);
+      global_taylor.compute_taylor_coefficients(scene_id, block_i, block_j, block_k);
+      break;
+    }
+    case 10:
+    {
+      const vcl_string kernel_names[10] = {"I0", "Ix", "Iy", "Iz", "Ixx", "Iyy", "Izz", "Ixy", "Ixz", "Iyz" };
+      bvpl_global_taylor<double, 10> global_taylor(taylor_dir, kernel_names);
+      global_taylor.compute_taylor_coefficients(scene_id, block_i, block_j, block_k);
+      break;
+    }
+    default:
+      break;
+  }
+  
   return true;
 }

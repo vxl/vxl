@@ -47,7 +47,8 @@ bool bvpl_explore_coefficient_scene_process(bprb_func_process& pro)
   int scene_id = pro.get_input<int>(1);
   int coeff_id = pro.get_input<int>(2);
 
-  bvpl_global_taylor taylor(taylor_dir);
+  const vcl_string kernel_names[10] = {"I0", "Ix", "Iy", "Iz", "Ixx", "Iyy", "Izz", "Ixy", "Ixz", "Iyz" };
+  bvpl_global_taylor<double, 10> taylor(taylor_dir, kernel_names);
 
   boxm_scene_base_sptr valid_scene_base = taylor.load_valid_scene(scene_id);
   boxm_scene<boct_tree<short, bool> >* valid_scene = dynamic_cast<boxm_scene<boct_tree<short, bool> >*> (valid_scene_base.as_pointer());
