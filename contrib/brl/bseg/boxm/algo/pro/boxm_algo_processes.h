@@ -21,4 +21,7 @@ DECLARE_FUNC_CONS(boxm_compute_scene_difference_process);
 DECLARE_FUNC_CONS(boxm_compute_entropy_process);
 DECLARE_FUNC_CONS(boxm_compute_expected_color_scene_process);
 DECLARE_FUNC_CONS(boxm_linear_combination_process);
+DECLARE_FUNC_CONS(boxm_explore_cells_at_level_process);
+DECLARE_FUNC_CONS(boxm_fill_internal_cells_process);
+DECLARE_FUNC_CONS(boxm_remove_level0_process);
 #endif
