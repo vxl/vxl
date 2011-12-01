@@ -196,6 +196,24 @@ SOURCE=.\Templates/boxm_scene+boct_tree+short.char--.cxx
 # Begin Source File
 SOURCE=.\Templates/vbl_array_3d+boxm_block+boct_tree+short.char--~-.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\Templates/boct_tree+short.vnl_vector_fixed+float.10--.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/boct_tree+short.vnl_vector_fixed+float.3--.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/boxm_block+boct_tree+short.vnl_vector_fixed+float.10---.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/boxm_block+boct_tree+short.vnl_vector_fixed+float.3---.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/boct_tree+short.vnl_vector_fixed+double.10--.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/boxm_block+boct_tree+short.vnl_vector_fixed+double.10---.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"

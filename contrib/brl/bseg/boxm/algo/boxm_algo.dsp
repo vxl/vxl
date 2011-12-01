@@ -140,6 +140,9 @@ SOURCE=.\boxm_linear_operations.h
 # Begin Source File
 SOURCE=.\boxm_save_scene_raw_general.h
 # End Source File
+# Begin Source File
+SOURCE=.\boxm_scene_levels_utils.h
+# End Source File
 # End Group
 # End Target
 # End Project

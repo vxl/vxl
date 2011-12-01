@@ -143,6 +143,12 @@ SOURCE=.\processes/boxm_compute_expected_color_scene_process.cxx
 # Begin Source File
 SOURCE=.\processes/boxm_save_scene_raw_process.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\processes/boxm_remove_level0_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/boxm_fill_internal_cells_process.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"

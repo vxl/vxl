@@ -152,6 +152,15 @@ SOURCE=.\Templates/brip_quadtree_utils+float-.cxx
 # Begin Source File
 SOURCE=.\Templates/vbl_smart_ptr+brip_quadtree_node_base-.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\Templates/brip_blobwise_mutual_info+float-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/brip_mutual_info+float-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/brip_histogram+float-.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
@@ -238,6 +247,12 @@ SOURCE=.\brip_kernel.h
 # End Source File
 # Begin Source File
 SOURCE=.\brip_subpix_convolution.h
+# End Source File
+# Begin Source File
+SOURCE=.\brip_blobwise_mutual_info.h
+# End Source File
+# Begin Source File
+SOURCE=.\brip_blobwise_mutual_info.txx
 # End Source File
 # End Group
 # End Target

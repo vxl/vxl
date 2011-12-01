@@ -106,6 +106,12 @@ SOURCE=.\boxm2_ocl_cone_update_function.cxx
 # Begin Source File
 SOURCE=.\boxm2_ocl_paint_batch.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\boxm2_ocl_change_detection.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\boxm2_ocl_paint_online.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
@@ -120,6 +126,12 @@ SOURCE=.\boxm2_ocl_cone_update_function.h
 # End Source File
 # Begin Source File
 SOURCE=.\boxm2_ocl_paint_batch.h
+# End Source File
+# Begin Source File
+SOURCE=.\boxm2_ocl_change_detection.h
+# End Source File
+# Begin Source File
+SOURCE=.\boxm2_ocl_paint_online.h
 # End Source File
 # End Group
 # End Target

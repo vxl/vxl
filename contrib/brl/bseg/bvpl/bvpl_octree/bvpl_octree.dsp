@@ -117,6 +117,18 @@ SOURCE=.\bvpl_global_taylor.cxx
 SOURCE=.\bvpl_global_corners.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\bvpl_gauss3D_steerable_filters.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/bvpl_global_taylor+float.3-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/bvpl_global_taylor+double.10-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vbl_smart_ptr+bvpl_global_taylor+double.10--.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/boxm_block+boct_tree+short.bvpl_octree_sample+bsta_num_obs+bsta_gauss_sf1----.cxx
 # End Source File
 # Begin Source File
@@ -127,12 +139,6 @@ SOURCE=.\Templates/boct_tree+short.bvpl_octree_sample+float--.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/boct_tree+short.bvpl_octree_sample+bsta_num_obs+bsta_gauss_sf1---.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/boxm_block+boct_tree+short.vnl_vector_fixed+float.3---.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/boct_tree+short.vnl_vector_fixed+float.3--.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/vbl_smart_ptr+bvpl_pca_error_scenes-.cxx
@@ -159,25 +165,16 @@ SOURCE=.\Templates/vnl_vector_fixed+double.125-.cxx
 SOURCE=.\Templates/bvpl_global_pca+125-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/boct_tree+short.vnl_vector_fixed+double.10--.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\Templates/vnl_matrix_fixed+double.125.125-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/boxm_block+boct_tree+short.bvpl_pca_basis_sample+10---.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/boxm_block+boct_tree+short.vnl_vector_fixed+double.10---.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\Templates/vbl_smart_ptr+bvpl_global_pca+125--.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/vbl_smart_ptr+bvpl_global_corners-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vbl_smart_ptr+bvpl_global_taylor-.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
@@ -247,6 +244,12 @@ SOURCE=.\bvpl_corner_detector.h
 # End Source File
 # Begin Source File
 SOURCE=.\bvpl_corner_functors.h
+# End Source File
+# Begin Source File
+SOURCE=.\bvpl_gauss3D_steerable_filters.h
+# End Source File
+# Begin Source File
+SOURCE=.\bvpl_global_taylor.txx
 # End Source File
 # End Group
 # End Target

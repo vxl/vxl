@@ -108,9 +108,6 @@ SOURCE=.\bvpl_io_global_pca.cxx
 SOURCE=.\bvpl_io_global_corners.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\bvpl_io_global_taylor.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\Templates/vbl_io_smart_ptr+bvpl_discover_pca_kernels-.cxx
 # End Source File
 # Begin Source File
@@ -123,7 +120,7 @@ SOURCE=.\Templates/vbl_io_smart_ptr+bvpl_pca_error_scenes-.cxx
 SOURCE=.\Templates/vbl_io_smart_ptr+bvpl_global_pca+125--.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vbl_io_smart_ptr+bvpl_global_taylor-.cxx
+SOURCE=.\Templates/vbl_io_smart_ptr+bvpl_global_taylor+double.10--.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/vbl_io_smart_ptr+bvpl_global_corners-.cxx

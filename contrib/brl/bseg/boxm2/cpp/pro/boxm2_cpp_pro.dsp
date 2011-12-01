@@ -179,6 +179,9 @@ SOURCE=.\processes/boxm2_cpp_update_using_quality_process.cxx
 # Begin Source File
 SOURCE=.\processes/boxm2_cpp_batch_compute_synoptic_function_1d_process.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\processes/boxm2_cpp_compute_derivative_process.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"

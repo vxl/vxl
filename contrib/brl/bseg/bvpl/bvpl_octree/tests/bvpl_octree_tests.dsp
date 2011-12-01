@@ -111,6 +111,9 @@ SOURCE=.\test_pca_kernels.cxx
 SOURCE=.\test_taylor_basis.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\test_gauss3D_steerable_filters.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\test_include.cxx
 # End Source File
 # Begin Source File

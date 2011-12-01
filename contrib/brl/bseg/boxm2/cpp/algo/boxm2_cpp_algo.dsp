@@ -117,6 +117,15 @@ SOURCE=.\boxm2_merge_block_function.cxx
 SOURCE=.\boxm2_phongs_model_processor.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\boxm2_export_point_cloud_xyz_function.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\boxm2_compute_derivative_function.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\boxm2_export_vis_wrl_function.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/boxm2_batch_functors+BOXM2_APMs-.cxx
 # End Source File
 # End Group
@@ -211,6 +220,15 @@ SOURCE=.\boxm2_update_using_quality_functor.h
 # End Source File
 # Begin Source File
 SOURCE=.\boxm2_synoptic_function_functors.h
+# End Source File
+# Begin Source File
+SOURCE=.\boxm2_export_point_cloud_xyz_function.h
+# End Source File
+# Begin Source File
+SOURCE=.\boxm2_export_vis_wrl_function.h
+# End Source File
+# Begin Source File
+SOURCE=.\boxm2_compute_derivative_function.h
 # End Source File
 # End Group
 # End Target

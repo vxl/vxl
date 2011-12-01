@@ -177,6 +177,15 @@ SOURCE=.\processes/vil_nitf_date_time_process.cxx
 SOURCE=.\processes/vil_convert_pixel_type_process.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\processes/vil_gradient_angle_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/vil_image_ssd_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/vil_image_mean_process.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/brdb_value_t+vil_image_view_base_sptr-.cxx
 # End Source File
 # End Group

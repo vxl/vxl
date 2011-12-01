@@ -207,6 +207,12 @@ SOURCE=.\processes/corners/bvpl_load_global_corners_process.cxx
 SOURCE=.\processes/corners/bvpl_corner_statistics_process.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\processes/steerable_filters/bvpl_init_sf_response_scene_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/steerable_filters/bvpl_compute_sf_raw_response_process.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/brdb_value_t+bvpl_pca_error_scenes_sptr-.cxx
 # End Source File
 # Begin Source File
@@ -222,7 +228,7 @@ SOURCE=.\Templates/brdb_value_t+boxm_scene_base_sptr-.cxx
 SOURCE=.\Templates/brdb_value_t+bvpl_global_pca_125_sptr-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/brdb_value_t+bvpl_global_taylor_sptr-.cxx
+SOURCE=.\Templates/brdb_value_t+vbl_smart_ptr+bvpl_global_taylor+double.10---.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/brdb_value_t+bvpl_global_corners_sptr-.cxx
