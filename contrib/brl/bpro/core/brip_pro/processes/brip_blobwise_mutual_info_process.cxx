@@ -18,8 +18,7 @@ namespace brip_blobwise_mutual_info_process_globals
 {
   const unsigned n_inputs_  = 3;
   const unsigned n_outputs_ = 1;
-  
-  
+
   // private helper method prepares an input image to be processed by update
   vil_image_view<float>* prepare_input_image(vil_image_view_base_sptr loaded_image) {
     //then it's an RGB image (assumes byte image...)
@@ -69,8 +68,7 @@ namespace brip_blobwise_mutual_info_process_globals
     vcl_cerr<<"Failed to recognize input image type\n";
     return 0;
   }
-
-}; 
+};
 
 //: Constructor
 bool brip_blobwise_mutual_info_process_cons(bprb_func_process& pro)
@@ -80,16 +78,11 @@ bool brip_blobwise_mutual_info_process_cons(bprb_func_process& pro)
   input_types.push_back("vil_image_view_base_sptr"); // input image
   input_types.push_back("vil_image_view_base_sptr"); // expected image
   input_types.push_back("vil_image_view_base_sptr"); // blob/mask image
-  bool good = pro.set_input_types(input_types);
-  if(!good) return good; 
-
   //output
   vcl_vector<vcl_string> output_types;
-  output_types.push_back("vil_image_view_base_sptr");  // visualize image (mutual informaiton differs by color
-  good= pro.set_output_types(output_types);
-  if (!good) return good;
-  
-  return true;
+  output_types.push_back("vil_image_view_base_sptr");  // visualize image (mutual information differs by color
+  return pro.set_input_types(input_types)
+     &&  pro.set_output_types(output_types);
 }
 
 
@@ -97,7 +90,7 @@ bool brip_blobwise_mutual_info_process_cons(bprb_func_process& pro)
 bool brip_blobwise_mutual_info_process(bprb_func_process& pro)
 {
   using namespace brip_blobwise_mutual_info_process_globals;
-  
+
   // Sanity check
   if (pro.n_inputs() < n_inputs_) {
     vcl_cout << "brip_blobwise_mutual_info_process: The input number should be " << n_inputs_ << vcl_endl;
@@ -109,39 +102,39 @@ bool brip_blobwise_mutual_info_process(bprb_func_process& pro)
   vil_image_view_base_sptr in_img_ptr   = pro.get_input<vil_image_view_base_sptr>(i++);
   vil_image_view_base_sptr exp_img_ptr  = pro.get_input<vil_image_view_base_sptr>(i++);
   vil_image_view_base_sptr blob_img_ptr = pro.get_input<vil_image_view_base_sptr>(i++);
-  
+
   //prepare input images
-  vil_image_view<float>*  in_img  = prepare_input_image(in_img_ptr); 
+  vil_image_view<float>*  in_img  = prepare_input_image(in_img_ptr);
   vil_image_view<float>*  exp_img = prepare_input_image(exp_img_ptr);
-  
+
   //mask image should be a byte image...
   unsigned ni=blob_img_ptr->ni(), nj=blob_img_ptr->nj();
-  vil_image_view<vxl_byte>* blob_img = dynamic_cast<vil_image_view<vxl_byte>* >(blob_img_ptr.ptr()); 
-  vil_image_view<bool> mask_img(ni, nj); 
-  for(int i=0; i<ni; ++i)
-    for(int j=0; j<nj; ++j)
-      mask_img(i,j) = ( (*blob_img)(i,j) > 0 ) ? true : false; 
+  vil_image_view<vxl_byte>* blob_img = dynamic_cast<vil_image_view<vxl_byte>* >(blob_img_ptr.ptr());
+  vil_image_view<bool> mask_img(ni, nj);
+  for (unsigned int i=0; i<ni; ++i)
+    for (unsigned int j=0; j<nj; ++j)
+      mask_img(i,j) = ( (*blob_img)(i,j) > 0 ) ? true : false;
 
-  //calculate per blob mutual information 
+  //calculate per blob mutual information
   vil_image_view<float>* mi_image = new vil_image_view<float>(in_img->ni(), in_img->nj()) ;
-  mi_image->fill(0.0f); 
-  brip_blobwise_mutual_info(*in_img, *exp_img, mask_img, *mi_image); 
-  
+  mi_image->fill(0.0f);
+  brip_blobwise_mutual_info(*in_img, *exp_img, mask_img, *mi_image);
+
   //create new blob info (threshold the mi image by some value)
-  float thresh = .03f; 
-  vil_image_view<vxl_byte>* new_blobs = new vil_image_view<vxl_byte>(ni,nj); 
-  for(int i=0; i<ni; ++i) 
-    for(int j=0; j<nj; ++j) {
-      if( mask_img(i,j) && (*mi_image)(i,j) < thresh) 
-        (*new_blobs)(i,j) = (vxl_byte) 255; 
+  float thresh = .03f;
+  vil_image_view<vxl_byte>* new_blobs = new vil_image_view<vxl_byte>(ni,nj);
+  for (unsigned int i=0; i<ni; ++i)
+    for (unsigned int j=0; j<nj; ++j) {
+      if ( mask_img(i,j) && (*mi_image)(i,j) < thresh)
+        (*new_blobs)(i,j) = (vxl_byte) 255;
       else
-        (*new_blobs)(i,j) = (vxl_byte) 0; 
+        (*new_blobs)(i,j) = (vxl_byte) 0;
     }
-  
+
   //debug save
   vil_save(*mi_image, "Mutual_Info.tiff");
-  delete mi_image; 
-  
+  delete mi_image;
+
   i=0;
   pro.set_output_val<vil_image_view_base_sptr>(i++, new_blobs);
   return true;
