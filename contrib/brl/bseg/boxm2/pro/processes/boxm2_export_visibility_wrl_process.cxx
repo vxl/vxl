@@ -14,7 +14,6 @@
 #include <boxm2/boxm2_util.h>
 #include <boxm2/io/boxm2_cache.h>
 
-
 #include <bvrml/bvrml_write.h>
 #include "boxm2/cpp/algo/boxm2_export_vis_wrl_function.h"
 
@@ -26,27 +25,20 @@ namespace boxm2_export_visibility_wrl_process_globals
 
 bool boxm2_export_visibility_wrl_process_cons(bprb_func_process& pro)
 {
-
   using namespace boxm2_export_visibility_wrl_process_globals;
 
-  //process takes 2 inputs
-  int i=0;
+  //process takes 3 inputs
   vcl_vector<vcl_string> input_types_(n_inputs_);
   input_types_[0] = "boxm2_scene_sptr";
   input_types_[1] = "boxm2_cache_sptr";
   input_types_[2] = "vcl_string";
-
-  // process has 1 output
+  // process has no outputs
   vcl_vector<vcl_string>  output_types_(n_outputs_);
-  //output_types_[0] = "boxm2_scene_sptr";
-
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
-
 }
 
 bool boxm2_export_visibility_wrl_process(bprb_func_process& pro)
 {
-
   using namespace boxm2_export_visibility_wrl_process_globals;
 
   if ( pro.n_inputs() < n_inputs_ ) {
@@ -90,5 +82,4 @@ bool boxm2_export_visibility_wrl_process(bprb_func_process& pro)
 
   return true;
 }
-
 
