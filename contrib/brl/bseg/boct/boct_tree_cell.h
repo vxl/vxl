@@ -156,7 +156,7 @@ class boct_tree_cell
   short level() const { return code_.level; }
   void set_level(short level) { code_.level=level; }
   const boct_loc_code<T_loc> get_code();
-  void set_code(const boct_loc_code<T_loc> &code) {code_ = code; } 
+  void set_code(const boct_loc_code<T_loc> &code) {code_ = code; }
   boct_tree_cell<T_loc,T_data>* children() { return children_; }
   boct_tree_cell<T_loc,T_data>* parent() { return parent_; }
 
@@ -191,9 +191,8 @@ class boct_tree_cell
   void print();
 
   void delete_children();
-  
-  //: This function will remove the childre, therfor making the current cell a leaf, if all children are not at the 
-  //  specified level
+
+  //: This function will remove the children, therefore making the current cell a leaf, if all children are not at the specified level
   bool remove_children_if_not_leaf_at_level( short  level);
 
   static short version_no() { return 1; }
