@@ -75,6 +75,13 @@ class boxm_dristhi_traits<char>
 };
 
 template <>
+class boxm_dristhi_traits<short>
+{
+public:
+  static unsigned char dristhi_header() {return 3;}
+};
+
+template <>
 class boxm_dristhi_traits<unsigned int>
 {
  public:
@@ -456,6 +463,7 @@ void boxm_save_scene_raw_general(boxm_scene<boct_tree<T_loc, T_data > > &scene,
 
         data[out_index] += (T_data)(cell_val*update_weight);
       }
+    
     }
 
     // write the data into a bin file, generate a file name
@@ -475,8 +483,12 @@ void boxm_save_scene_raw_general(boxm_scene<boct_tree<T_loc, T_data > > &scene,
     T_data* dp = data;
     for (; dp < data + data_size; ++dp) {
       T_data v = *dp;
+      if (v > 19 || v < -1)
+        vcl_cerr << "Error, v: " << v << vcl_endl;
       vsl_b_write(os, (T_data)v);
     }
+    vcl_cerr << " Data Correct ? " << vcl_endl;
+
     delete[] data;
     os.close();
     iter++;
@@ -542,8 +554,8 @@ void boxm_save_scene_raw_general(boxm_scene<boct_tree<T_loc, T_data > > &scene,
         while (j < ncells*ncells*dim.z()) {
           for (unsigned z=dim.z();z>0; z--) {
             vsl_b_ifstream* s=streams(x,y,z-1);
-            s->is().read(reinterpret_cast<char*>(read_data), ncells*sizeof(T_data));
-            os.write(reinterpret_cast<char*>(read_data),ncells*sizeof(T_data));
+            s->is().read((char*)read_data, ncells*sizeof(T_data));
+            os.write((char*)read_data,ncells*sizeof(T_data));
             j+=ncells;
             k+=ncells;
           }
@@ -581,8 +593,10 @@ void boxm_save_scene_raw_general_to_byte(boxm_scene<boct_tree<T_loc, T_data > > 
 {
   typedef boct_tree<T_loc, T_data > tree_type;
 
+  vcl_cout << " Using boxm_save_scene_raw_general_to_byte \n";
+
   bsta_histogram<float> hist;
-  compute_scene_statistics(&scene, hist);
+  boxm_compute_scene_statistics(&scene, hist);
 
   // create an array for each block, and save in a binary file
 
