@@ -31,7 +31,7 @@ bool boxm_compute_scene_statistics(boxm_scene<boct_tree<T_loc, T_data > >* scene
     ++iterator;
   }
 
-  unsigned nbins = 500;// vcl_floor(vcl_sqrt(cell_count));
+  unsigned nbins = vcl_abs(max-min);// vcl_floor(vcl_sqrt(cell_count));
   response_hist = bsta_histogram<float>(min, max, nbins);
   scene->unload_active_blocks();
   iterator.begin();
@@ -93,5 +93,8 @@ bool compute_scene_statistics(boxm_scene<boct_tree<T_loc, T_data > >& scene, bst
   }
   return true;
 }
+
+
+
 
 #endif
