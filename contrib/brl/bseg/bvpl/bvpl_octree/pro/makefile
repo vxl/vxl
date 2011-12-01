@@ -46,6 +46,8 @@ SOURCES += processes/corners/bvpl_compute_beaudet_measure_process.cxx
 SOURCES += processes/corners/bvpl_compute_harris_measure_process.cxx
 SOURCES += processes/corners/bvpl_load_global_corners_process.cxx
 SOURCES += processes/corners/bvpl_corner_statistics_process.cxx
+SOURCES += processes/steerable_filters/bvpl_init_sf_response_scene_process.cxx
+SOURCES += processes/steerable_filters/bvpl_compute_sf_raw_response_process.cxx
 
 #######################################
 include ${VXLROOT}/config/top-params.mk

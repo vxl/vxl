@@ -40,6 +40,8 @@ SOURCES += processes/boxm2_ocl_ingest_dem_process.cxx
 SOURCES += processes/boxm2_ocl_visualize_change_process.cxx
 SOURCES += processes/boxm2_ocl_paint_batch_process.cxx
 SOURCES += processes/boxm2_ocl_batch_synoptic_function_process.cxx
+SOURCES += processes/boxm2_ocl_flip_normals_using_vis_process.cxx
+SOURCES += processes/boxm2_ocl_paint_online_process.cxx
 
 #######################################
 include ${VXLROOT}/config/top-params.mk

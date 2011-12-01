@@ -11,6 +11,7 @@ TESTS += test_upload_mesh.cxx
 TESTS += test_save_scene_raw.cxx
 TESTS += test_fill_in_mesh.cxx
 TESTS += test_linear_operations.cxx
+TESTS += test_remove_level0.cxx
 
 MINI_PROG_SOURCES += test_include.cxx
 

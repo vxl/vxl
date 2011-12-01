@@ -33,6 +33,9 @@ MANPAGE_SOURCES += boxm2_shadow_model_functor.h
 MANPAGE_SOURCES += boxm2_compute_nonsurface_histogram_functor.h
 MANPAGE_SOURCES += boxm2_update_using_quality_functor.h
 MANPAGE_SOURCES += boxm2_synoptic_function_functors.h
+SOURCES += boxm2_export_point_cloud_xyz_function.cxx
+SOURCES += boxm2_compute_derivative_function.cxx
+SOURCES += boxm2_export_vis_wrl_function.cxx
 
 #######################################
 include ${VXLROOT}/config/top-params.mk

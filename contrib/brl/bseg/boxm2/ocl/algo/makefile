@@ -6,6 +6,8 @@ SOURCES += boxm2_ocl_render_expected_image_function.cxx
 SOURCES += boxm2_ocl_camera_converter.cxx
 SOURCES += boxm2_ocl_cone_update_function.cxx
 SOURCES += boxm2_ocl_paint_batch.cxx
+SOURCES += boxm2_ocl_change_detection.cxx
+SOURCES += boxm2_ocl_paint_online.cxx
 
 #######################################
 include ${VXLROOT}/config/top-params.mk

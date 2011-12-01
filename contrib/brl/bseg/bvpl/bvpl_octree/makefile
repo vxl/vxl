@@ -19,10 +19,12 @@ SOURCES += bvpl_pca_error_scenes.cxx
 SOURCES += bvpl_taylor_scenes_map.cxx
 MANPAGE_SOURCES += bvpl_global_pca.txx
 SOURCES += bvpl_global_taylor.cxx
+MANPAGE_SOURCES += bvpl_global_taylor.txx
 MANPAGE_SOURCES += bvpl_block_vector_operator.h
 SOURCES += bvpl_global_corners.cxx
 MANPAGE_SOURCES += bvpl_corner_detector.h
 MANPAGE_SOURCES += bvpl_corner_functors.h
+SOURCES += bvpl_gauss3D_steerable_filters.cxx
 
 SUBDIRS += pro sample io
 

@@ -9,6 +9,7 @@ TESTS += test_octree_kernel_operator.cxx
 TESTS += test_octree_neighbors.cxx
 TESTS += test_pca_kernels.cxx
 TESTS += test_taylor_basis.cxx
+TESTS += test_gauss3D_steerable_filters.cxx
 
 MINI_PROG_SOURCES += test_include.cxx
 MINI_PROG_SOURCES += test_template_include.cxx
