@@ -22,7 +22,8 @@ class bvpl_global_corners;
 template <class T_data, unsigned DIM>
 boxm_apm_type bvpl_taylor_apm();
 
-namespace bvpl_global_tylor_defaults {
+namespace bvpl_global_tylor_defaults
+{
   const vcl_string kernel_names[10] = {"I0", "Ix", "Iy", "Iz", "Ixx", "Iyy", "Izz", "Ixy", "Ixz", "Iyz" };
 ;
 }
@@ -30,9 +31,8 @@ namespace bvpl_global_tylor_defaults {
 template<class T_data, unsigned DIM>
 class bvpl_global_taylor : public vbl_ref_count
 {
-  
-public:
-  
+ public:
+
   //: Constructor  from xml file
   bvpl_global_taylor(const vcl_string &path, const vcl_string kernel_names[]);
 
@@ -47,7 +47,7 @@ public:
 
   //: Threshold non-salient features according to Harris' measure
   void threshold_corners(int scene_id, int block_i, int block_j, int block_k, double k);
-  
+
   //: Write to taylor_global_info.xml
   void xml_write();
 
@@ -63,13 +63,13 @@ public:
   //boxm_scene_base_sptr load_train_scene (int scene_id);
   boxm_scene_base_sptr load_valid_scene (int scene_id);
   boxm_scene_base_sptr load_projection_scene (int scene_id);
-  
+
   vcl_string xml_path() { return path_out_ + "/taylor_global_info.xml"; }
-  
+
   friend class bvpl_global_corners;
-  
-protected:
-  
+
+ protected:
+
   //: A vector to hold scene paths
   vcl_vector<vcl_string> scenes_;
   //: A vector to hold paths to keep any kind of auxiliary scene or info(must be in the same order as scenes_)
@@ -87,9 +87,11 @@ protected:
   vcl_string kernels_path_;
   //: Path to xml info file
   vcl_string path_out_;
-
 };
 
+#include <vbl/vbl_smart_ptr.h>
+// This does not really seem like a good idea to me ... - PVr.
+typedef vbl_smart_ptr<bvpl_global_taylor<double,10> > bvpl_global_taylor_sptr;
 
 
 #endif
