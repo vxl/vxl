@@ -28,8 +28,10 @@ ihog_minfo_cost_func::ihog_minfo_cost_func( const ihog_image<float>& image1,
   from_samples_ = roi_.sample(from_image_);
   //use_gradient_ = false;
   //int number_of_residuals = from_samples_.size();
+#if 0
   int number_of_residuals = 1;  // just the mutual info
-  //vnl_least_squares_function::init(params.size(), number_of_residuals);
+  vnl_least_squares_function::init(params.size(), number_of_residuals);
+#endif
 }
 
 
@@ -57,10 +59,12 @@ ihog_minfo_cost_func::ihog_minfo_cost_func( const ihog_image<float>& image1,
   vnl_vector<double> params;
   init_xform.params(params);
   from_samples_ = roi_.sample(from_image_);
-  //int number_of_residuals = from_samples_.size();
-  int number_of_residuals = 1;  // just the mutual info
-  //use_gradient_ = false;
-  //vnl_least_squares_function::init(params.size(), number_of_residuals);
+#if 0
+  int number_of_residuals = from_samples_.size();
+      number_of_residuals = 1;  // just the mutual info
+  use_gradient_ = false;
+  vnl_least_squares_function::init(params.size(), number_of_residuals);
+#endif
 }
 
 ihog_minfo_cost_func::ihog_minfo_cost_func(const ihog_image<float>& image1,
@@ -84,10 +88,12 @@ ihog_minfo_cost_func::ihog_minfo_cost_func(const ihog_image<float>& image1,
   vnl_vector<double> params;
   init_xform.params(params);
   from_samples_ = roi_.sample(from_image_);
-  //int number_of_residuals = from_samples_.size();
-  int number_of_residuals = 1;  // just the mutual info
-  //use_gradient_ = false;
-  //vnl_least_squares_function::init(params.size(), number_of_residuals);
+#if 0
+  int number_of_residuals = from_samples_.size();
+      number_of_residuals = 1;  // just the mutual info
+  use_gradient_ = false;
+  vnl_least_squares_function::init(params.size(), number_of_residuals);
+#endif
 }
 
 
@@ -154,16 +160,16 @@ double ihog_minfo_cost_func::entropy_diff(vnl_vector<double>& mask_samples, vnl_
     if (mask_samples[i]>0.0) {
       //match the gpu implementation, which does a floor operation
       unsigned id = static_cast<unsigned>(vcl_floor(from_samples[i]*scl)),
-        is = static_cast<unsigned>(vcl_floor(to_samples[i]*scl));
+               is = static_cast<unsigned>(vcl_floor(to_samples[i]*scl));
 
-      if (id>nbins-1 || is> nbins-1)
+      if (id+1>(unsigned)nbins || is+1>(unsigned)nbins)
         continue;
       h[id][is] += 1.0;
       total_weight += 1.0;
     }
   // convert to probability
-  for (unsigned r = 0; r<nbins; ++r)
-    for (unsigned c = 0; c<nbins; ++c)
+  for (int r = 0; r<nbins; ++r)
+    for (int c = 0; c<nbins; ++c)
       h[r][c] /= total_weight;
 
   unsigned nr = (unsigned)h.rows(), nc = (unsigned)h.cols();
