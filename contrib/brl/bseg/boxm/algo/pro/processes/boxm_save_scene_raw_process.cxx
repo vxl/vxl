@@ -78,7 +78,7 @@ bool boxm_save_scene_raw_process(bprb_func_process& pro)
         return false;
       }
       else { // write the whole scene
-        boxm_save_scene_raw_general<short,float>(*scene, filepath + ".raw", resolution);
+        boxm_save_scene_raw_general_to_byte<short,float>(*scene, filepath + ".raw", resolution);
       }
     }
   }
