@@ -6,6 +6,7 @@ ADD_EXECUTABLE( boxm_algo_test_all
   test_boxm_fill_internal_cells.cxx
   test_boxm_scene_crop.cxx
   test_linear_operations.cxx
+  test_remove_level0.cxx
   
  )
 
@@ -23,6 +24,7 @@ ADD_TEST( boxm_algo_test_upload_mesh         ${EXECUTABLE_OUTPUT_PATH}/boxm_algo
 ADD_TEST( boxm_algo_test_fill_internal_cells ${EXECUTABLE_OUTPUT_PATH}/boxm_algo_test_all test_boxm_fill_internal_cells  )
 ADD_TEST( boxm_algo_test_scene_crop          ${EXECUTABLE_OUTPUT_PATH}/boxm_algo_test_all test_boxm_scene_crop  )
 ADD_TEST( boxm_algo_test_linear_operations   ${EXECUTABLE_OUTPUT_PATH}/boxm_algo_test_all test_linear_operations )
+ADD_TEST( boxm_algo_remove_level0            ${EXECUTABLE_OUTPUT_PATH}/boxm_algo_test_all test_remove_level0 )
 
 ADD_EXECUTABLE( boxm_algo_test_include test_include.cxx )
 TARGET_LINK_LIBRARIES( boxm_algo_test_include boxm_algo)

@@ -11,6 +11,7 @@
 void init_tree(boct_tree<short,float> *tree, unsigned i)
 {
   tree-> split(); //now we have 8 cells
+  //tree->print();
   vcl_vector<boct_tree_cell<short,float>*> leaves = tree->leaf_cells();
   leaves[i]->set_data(0.8f);
   leaves[i]->split();
