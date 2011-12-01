@@ -177,6 +177,12 @@ class boxm_scene :public boxm_scene_base
 
   //: Return all leaf cells in a region
   void leaves_in_region(vgl_box_3d<double>, vcl_vector<boct_tree_cell<loc_type, datatype>* >& cells);
+  
+  //: Return all leaf_data in a region - data is copied to new memory location
+  void leaves_data_in_region(vgl_box_3d<double> box, vcl_vector<boct_cell_data<loc_type, datatype> > &cell_data);
+  
+  //: Returns the data of all cells at a given level, that are contained in the specified region
+  void cell_data_in_region(vgl_box_3d<double> box, vcl_vector<boct_cell_data<loc_type, datatype> > &cell_data, unsigned level);
 
   //: Return all leaf cells between an inner box and an outter box
   void leaves_in_hollow_region(vgl_box_3d<double> outer_box, vgl_box_3d<double> inner_box, vcl_vector<boct_tree_cell<loc_type, datatype>* >& cells);
@@ -186,7 +192,7 @@ class boxm_scene :public boxm_scene_base
   void change_leaves_in_regions(vcl_vector<vgl_box_3d<double> > boxes, const vcl_vector<datatype> &all_data);
 
   //: Locate point in scene coordinates. Assumes that the block containing the point is already loaded into memory
-  boct_tree_cell<loc_type, datatype>* locate_point_in_memory(vgl_point_3d<double> &p);
+  boct_tree_cell<loc_type, datatype>* locate_point_in_memory(vgl_point_3d<double> &p, unsigned level = 0);
 
   void set_block(vgl_point_3d<int> const& idx, boxm_block<T>* block)
   {
@@ -275,13 +281,33 @@ class boxm_scene :public boxm_scene_base
     iter_out.begin();
     while (!iter.end())
     {
-      vcl_cout << "Clone blocks to type -block i\n";
       load_block(iter.index());
       scene_out.load_block(iter.index());
       T_out  *tree_out =(*iter)->get_tree()->template clone_to_type<typename boxm_scene<T_out>::datatype>();
       (*iter_out)->init_tree(tree_out);
       tree_out->init_cells(data);
-      vcl_cout << "Clone blocks to type -block ii\n";
+      scene_out.write_active_block();
+      ++iter;
+      ++iter_out;
+    }
+  }
+  
+  //: Returns a scene of a vector type with the same structure and vector intialized to the the same data
+  template <unsigned DIM>
+  void clone_blocks_to_vector(boxm_scene<boct_tree<short, vnl_vector_fixed<datatype, DIM> > > &scene_out)
+  {
+    typedef boct_tree<short, vnl_vector_fixed<datatype, DIM> > type_tree_out;
+    vcl_cout << "Clone blocks to type\n";
+    boxm_block_iterator<T> iter(this);
+    boxm_block_iterator<type_tree_out> iter_out = scene_out.iterator();
+    iter.begin();
+    iter_out.begin();
+    while (!iter.end())
+    {
+      load_block(iter.index());
+      scene_out.load_block(iter.index());
+      type_tree_out  *tree_out =(*iter)->get_tree()->template clone_to_vector<DIM>();
+      (*iter_out)->init_tree(tree_out);
       scene_out.write_active_block();
       ++iter;
       ++iter_out;
@@ -299,6 +325,9 @@ class boxm_scene :public boxm_scene_base
 
   //: Return the length of finest-level cell in the scene
   double finest_cell_length();
+  
+  //: Return the length of cells at a given level in the scene
+  double cell_length(unsigned level);
 
   //: Return the length of finest-level cell in the scene. Iterates through blocks assuming they are all in memory
   double finest_cell_length_in_memory() const;
@@ -432,7 +461,7 @@ class boxm_block_iterator
 };
 
 
-//: A class to iterate through all LEAF cells in a boxm_scene
+//: A class to iterate through all -or only leaf- cells in a boxm_scene
 template <class T>
 class boxm_cell_iterator
 {
@@ -448,18 +477,18 @@ class boxm_cell_iterator
      block_loading_func_(other.block_loading_func_), read_only_(other.read_only_) {}
 
   //: Constructor from a block iterator and function pointer to loading mechanism i.e load_block() or load_block_and_neighbors()
-  boxm_cell_iterator(boxm_block_iterator<T> iter, ptr2func block_loading_func, bool read_only = false)
-    : block_iterator_(iter), block_loading_func_((ptr2constfunc)block_loading_func), read_only_(read_only) {}
+  boxm_cell_iterator(boxm_block_iterator<T> iter, ptr2func block_loading_func, bool read_only = false, bool use_internal_cells = false)
+    : block_iterator_(iter), block_loading_func_((ptr2constfunc)block_loading_func), read_only_(read_only), use_internal_cells_(use_internal_cells) {}
 
   //: "Const" constructor from a block iterator and function pointer to loading mechanism i.e load_block() or load_block_and_neighbors()
-  boxm_cell_iterator(boxm_block_iterator<T> iter, ptr2constfunc block_loading_func, bool read_only)
-    : block_iterator_(iter), block_loading_func_(block_loading_func), read_only_(read_only) { assert(read_only); }
+  boxm_cell_iterator(boxm_block_iterator<T> iter, ptr2constfunc block_loading_func, bool read_only, bool use_internal_cells = false)
+    : block_iterator_(iter), block_loading_func_(block_loading_func), read_only_(read_only), use_internal_cells_(use_internal_cells) { assert(read_only); }
 
   //: Destructor
   ~boxm_cell_iterator() {}
 
   //: Iterator begin
-  boxm_cell_iterator<T>& begin();
+  boxm_cell_iterator<T>& begin(bool use_internal_cells=false);
 
   //: Iterator end
   bool end();
@@ -499,6 +528,7 @@ class boxm_cell_iterator
   typename vcl_vector< boct_tree_cell<loc_type , datatype >* >::const_iterator cells_iterator_;
   ptr2constfunc block_loading_func_;
   bool read_only_;
+  bool use_internal_cells_;
 };
 
 
