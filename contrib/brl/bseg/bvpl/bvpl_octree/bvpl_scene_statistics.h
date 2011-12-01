@@ -15,11 +15,48 @@
 #include <bsta/bsta_histogram.h>
 #include <boxm/boxm_scene.h>
 
-bool compute_scene_statistics(boxm_scene< boct_tree<short, vnl_vector_fixed<float,3> > > *scene, bsta_histogram<float> &response_hist );
+template <unsigned DIM>
+bool bvpl_compute_scene_statistics(boxm_scene< boct_tree<short, vnl_vector_fixed<float,DIM> > > *scene, bsta_histogram<float> &response_hist )
+{
+  typedef boct_tree<short, vnl_vector_fixed<float,DIM> > tree_type;
+  typedef boct_tree_cell<short,vnl_vector_fixed<float,DIM> > cell_type;
+  
+  
+  //(1) Traverse the leaves of the scene
+  boxm_cell_iterator<tree_type > iterator = scene->cell_iterator(&boxm_scene<tree_type>::load_block, true);
+  
+  iterator.begin();
+  float cell_count = 0;
+  float max = (*iterator)->data().magnitude();
+  float min = max;
+  float mag = max;
+  while (!iterator.end()) {
+    cell_count++;
+    mag = (*iterator)->data().magnitude();
+    if ( mag > max)  max = mag;
+    if ( mag < min)  min = mag;
+    ++iterator;
+  }
+  
+  unsigned nbins = vcl_floor(vcl_sqrt(cell_count));
+  response_hist = bsta_histogram<float>(min, max, nbins);
+  
+  iterator.begin();
+  
+  while (!iterator.end()) {
+    response_hist.upcount(static_cast<float>((*iterator)->data().magnitude()), 1.0f);
+    ++iterator;
+  }
+  
+  scene->unload_active_blocks();
+  
+  return true;
+}
+
 
 
 template <class T_loc, class T_data>
-bool compute_scene_statistics(boxm_scene<boct_tree<T_loc, T_data > >* scene, bsta_histogram<float>& response_hist )//, bsta_histogram<float>& level_hist, unsigned& n_leaves)
+bool bvpl_compute_scene_statistics(boxm_scene<boct_tree<T_loc, T_data > >* scene, bsta_histogram<float>& response_hist, unsigned nbins = 0 )//, bsta_histogram<float>& level_hist, unsigned& n_leaves)
 {
   typedef boct_tree<T_loc, T_data> tree_type;
   typedef boct_tree_cell<T_loc,T_data> cell_type;
@@ -40,7 +77,8 @@ bool compute_scene_statistics(boxm_scene<boct_tree<T_loc, T_data > >* scene, bst
     ++iterator;
   }
   
-  unsigned nbins = vcl_floor(vcl_sqrt(cell_count));
+  if(nbins == 0)
+    nbins = vcl_floor(vcl_sqrt(cell_count));
   response_hist = bsta_histogram<float>(min, max, nbins);
   scene->unload_active_blocks();
   iterator.begin();
