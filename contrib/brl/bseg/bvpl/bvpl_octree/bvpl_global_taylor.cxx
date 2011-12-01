@@ -5,7 +5,6 @@
 
 #include "bvpl_global_taylor.h"
 
-
 template <>
 boxm_apm_type bvpl_taylor_apm<double, 10>(){return VNL_DOUBLE_10;}
 
