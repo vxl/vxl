@@ -27,12 +27,14 @@ class boxm_fill_internal_cells
     // but we need to change the mode of the scene to be saving internal nodes
     bool save_internal_nodes = true;
     boxm_scene<tree_type> *scene_out = new boxm_scene<tree_type>(scene_in->lvcs(), scene_in->origin(), scene_in->block_dim(),
-                                                                 scene_in->world_dim(), save_internal_nodes);
+                                                                 scene_in->world_dim(), scene_in->max_level(), scene_in->init_level(),
+                                                                 false, save_internal_nodes);
     vcl_string block_pref = scene_in->block_prefix() + "_all_nodes";
     scene_out->set_paths(scene_in->path(), block_pref);
     scene_out->set_appearance_model(scene_in->appearence_model());
 
     scene_out->write_scene(block_pref + ".xml");
+    
 
     //Iterate through the blocks
     boxm_block_iterator<tree_type> iter_in = scene_in->iterator();
@@ -40,6 +42,7 @@ class boxm_fill_internal_cells
 
     iter_in.begin();
     iter_out.begin();
+
     while (!iter_in.end() && !iter_out.end())
     {
       scene_in->load_block(iter_in.index());
@@ -50,6 +53,7 @@ class boxm_fill_internal_cells
       tree_type *tree_out = tree_in->clone();
       this->traverse_and_fill(tree_out);
       (*iter_out)->init_tree(tree_out);
+      vcl_cout << "writing block: " << iter_out.index() <<vcl_endl;
       scene_out->write_active_block();
 
       iter_in++; iter_out++;
