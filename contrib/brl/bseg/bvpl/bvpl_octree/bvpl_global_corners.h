@@ -17,7 +17,11 @@
 
 class bvpl_global_corners : public vbl_ref_count
 {
- public:
+
+  typedef vbl_smart_ptr<bvpl_global_taylor<double, 10> > bvpl_global_taylor_sptr;
+
+  public:
+
   //: Constructor  from xml file
   bvpl_global_corners(const vcl_string &path);
 
