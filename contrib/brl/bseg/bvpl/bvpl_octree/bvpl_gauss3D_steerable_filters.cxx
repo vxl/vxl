@@ -108,7 +108,6 @@ bool bvpl_gauss3D_steerable_filters::basis_response_at_leaves(boxm_scene<boct_tr
 
     while ( !(cell_it.end() || temp_cell_it.end() || valid_cell_it.end()) )
     {
-      cell_type *center_cell = *cell_it;
       cell_type *temp_center_cell = *temp_cell_it;
       boct_tree_cell<short, bool> *valid_center_cell = *valid_cell_it;
 

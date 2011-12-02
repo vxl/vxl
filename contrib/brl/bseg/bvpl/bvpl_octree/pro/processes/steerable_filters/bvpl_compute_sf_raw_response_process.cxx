@@ -51,10 +51,10 @@ bool bvpl_compute_sf_raw_response_process(bprb_func_process& pro)
   unsigned i = 0;
   boxm_scene_base_sptr scene_base = pro.get_input<boxm_scene_base_sptr>(i++);
   boxm_scene_base_sptr valid_scene_base = pro.get_input<boxm_scene_base_sptr>(i++);
-  int block_i = pro.get_input<int>(i++);
-  int block_j = pro.get_input<int>(i++);
-  int block_k = pro.get_input<int>(i++);
-  
+  int block_i = pro.get_input<int>(i++); // unused!!!
+  int block_j = pro.get_input<int>(i++); // unused!!!
+  int block_k = pro.get_input<int>(i++); // unused!!!
+
   //get scene
   typedef boct_tree<short, vnl_vector_fixed< float,10 > > response_tree_type;
   typedef boct_tree<short, bool > valid_tree_type;
@@ -63,10 +63,10 @@ bool bvpl_compute_sf_raw_response_process(bprb_func_process& pro)
   if (boxm_scene<response_tree_type> *scene_in = dynamic_cast<boxm_scene< response_tree_type >* >(scene_base.as_pointer()))
   {
     double cell_length = scene_in->finest_cell_length();
-    
+
     if (boxm_scene<valid_tree_type> *valid_scene = dynamic_cast<boxm_scene< valid_tree_type >* >(valid_scene_base.as_pointer()))
     {
-      bvpl_gauss3D_steerable_filters sf;      
+      bvpl_gauss3D_steerable_filters sf;
       sf.basis_response_at_leaves(scene_in,valid_scene, cell_length);
     }
   }
