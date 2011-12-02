@@ -100,6 +100,7 @@ class boxm2_ray_probe_functor
         break;
       }
       default: // do nothing
+        break;
     }
     seg_len_->push_back(seg_len);
     alpha_->push_back(alpha);
