@@ -18,6 +18,7 @@ enum vgui_key
   vgui_NEWLINE='\n',
   vgui_RETURN='\r',
   vgui_ESC=27, /* */ vgui_ESCAPE=27,
+  vgui_space=' ', // 32
   vgui_EXCLAM='!', // 33
   vgui_HASH='#', // 35
   vgui_DOLLAR='$', // 36
@@ -29,7 +30,9 @@ enum vgui_key
   vgui_MINUS='-', // 45
   vgui_POINT='.', // 46
   vgui_SLASH='/', // 47
+  vgui_LESS='<', // 60
   vgui_EQUALS='=', // 61
+  vgui_GREATER='>', // 62
   vgui_QUESTION='?', // 63
   vgui_LEFTBRACKET='[', // 91
   vgui_RIGHTBRACKET=']', // 93
