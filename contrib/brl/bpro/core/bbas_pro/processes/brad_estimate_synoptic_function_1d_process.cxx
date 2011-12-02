@@ -1,12 +1,13 @@
-// This is brl/bpro/core/bbas_pro/processes/brad_estimate_synoptic_fucntion_1d_process.cxx
+// This is brl/bpro/core/bbas_pro/processes/brad_estimate_synoptic_function_1d_process.cxx
 #include <bprb/bprb_func_process.h>
+//:
+// \file
 #include <bpro/core/bbas_pro/bbas_1d_array_float.h>
 #include <brad/brad_synoptic_function_1d.h>
 #include <vcl_algorithm.h>
 #include <vnl/algo/vnl_levenberg_marquardt.h>
 #include <vnl/vnl_math.h>
-//:
-// \file
+
 namespace brad_estimate_synoptic_fucntion_1d_process_globals
 {
   const unsigned n_inputs_  = 5;
@@ -29,7 +30,7 @@ bool brad_estimate_synoptic_fucntion_1d_process_cons(bprb_func_process& pro)
   vcl_vector<vcl_string>  output_types_(n_outputs_);
   output_types_[0] = "bbas_1d_array_float_sptr";
   output_types_[1] = "float";
-  
+
   return pro.set_input_types(input_types_) &&
          pro.set_output_types(output_types_);
 }
@@ -38,8 +39,6 @@ bool brad_estimate_synoptic_fucntion_1d_process_cons(bprb_func_process& pro)
 //: Execute the process
 bool brad_estimate_synoptic_fucntion_1d_process(bprb_func_process& pro)
 {
-
-
   // get the inputs
   unsigned i=0;
   bbas_1d_array_float_sptr intensities = pro.get_input<bbas_1d_array_float_sptr>(i++);
@@ -70,28 +69,28 @@ bool brad_estimate_synoptic_fucntion_1d_process(bprb_func_process& pro)
   }
   brad_synoptic_function_1d f(camera_elev,camera_azim,vis,samples);
 
-  if(surface)
+  if (surface)
   {
-      f.fit_intensity_cubic();
-      vcl_cout<<"Cubic Interpolation Model: "<<f.cubic_coef_int()<<" prob density "<<f.cubic_fit_prob_density()<<vcl_endl;
-      bbas_1d_array_float_sptr new_obs = new bbas_1d_array_float(num_samples);
-      for (unsigned i=0;i<num_samples;++i)
-          new_obs->data_array[i]=f.cubic_interp_inten(f.arc_length(i));
-      i=0;
-      pro.set_output_val<bbas_1d_array_float_sptr>(i++, new_obs);
-      pro.set_output_val<float>(i++, f.cubic_fit_prob_density());
+    f.fit_intensity_cubic();
+    vcl_cout<<"Cubic Interpolation Model: "<<f.cubic_coef_int()<<" prob density "<<f.cubic_fit_prob_density()<<vcl_endl;
+    bbas_1d_array_float_sptr new_obs = new bbas_1d_array_float(num_samples);
+    for (unsigned i=0;i<num_samples;++i)
+      new_obs->data_array[i]=f.cubic_interp_inten(f.arc_length(i));
+    i=0;
+    pro.set_output_val<bbas_1d_array_float_sptr>(i++, new_obs);
+    pro.set_output_val<float>(i++, f.cubic_fit_prob_density());
   }
   else
   {
-      f.compute_auto_correlation();
-      vcl_vector<double> amps;
-      f.auto_corr_freq_amplitudes(amps);
-      bbas_1d_array_float_sptr new_obs = new bbas_1d_array_float(amps.size());
-      for (unsigned i=0;i<amps.size();++i)
-          new_obs->data_array[i]=amps[i];
-      i=0;
-      pro.set_output_val<bbas_1d_array_float_sptr>(i++, new_obs);
-      pro.set_output_val<float>(i++, f.max_frequency_prob_density());
+    f.compute_auto_correlation();
+    vcl_vector<double> amps;
+    f.auto_corr_freq_amplitudes(amps);
+    bbas_1d_array_float_sptr new_obs = new bbas_1d_array_float(amps.size());
+    for (unsigned i=0;i<amps.size();++i)
+      new_obs->data_array[i]=amps[i];
+    i=0;
+    pro.set_output_val<bbas_1d_array_float_sptr>(i++, new_obs);
+    pro.set_output_val<float>(i++, f.max_frequency_prob_density());
   }
   return true;
 }
