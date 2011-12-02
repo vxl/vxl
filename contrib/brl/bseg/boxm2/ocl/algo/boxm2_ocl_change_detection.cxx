@@ -38,8 +38,8 @@ vcl_map<vcl_string, vcl_vector<bocl_kernel*> > boxm2_ocl_change_detection::kerne
 
 
 //main change detect function
-bool boxm2_ocl_change_detection::change_detect( vil_image_view<float>&    change_img, 
-                                                vil_image_view<vxl_byte>& rgb_change_img, 
+bool boxm2_ocl_change_detection::change_detect( vil_image_view<float>&    change_img,
+                                                vil_image_view<vxl_byte>& rgb_change_img,
                                                 bocl_device_sptr          device,
                                                 boxm2_scene_sptr          scene,
                                                 boxm2_opencl_cache_sptr   opencl_cache,
@@ -49,7 +49,6 @@ bool boxm2_ocl_change_detection::change_detect( vil_image_view<float>&    change
                                                 int                       n,
                                                 vcl_string                norm_type,
                                                 bool                      pmax )
-                                                
 {
   float transfer_time=0.0f;
   float gpu_time=0.0f;
@@ -63,15 +62,15 @@ bool boxm2_ocl_change_detection::change_detect( vil_image_view<float>&    change
   //---- get scene info -----
   bool foundDataType = false, foundNumObsType = false;
   vcl_string data_type,num_obs_type,options;
-  int apptypesize; 
-  get_scene_appearances( scene, data_type, num_obs_type, options, apptypesize); 
+  int apptypesize;
+  get_scene_appearances( scene, data_type, num_obs_type, options, apptypesize);
 
   //specify max mode options
-  if( pmax ) 
+  if ( pmax )
     options += " -D USE_MAX_MODE  ";
 
   //grab kernel
-  vcl_vector<bocl_kernel*>& kerns = get_kernels(device, options); 
+  vcl_vector<bocl_kernel*>& kerns = get_kernels(device, options);
 
   //create a command queue.
   int status=0;
@@ -79,7 +78,6 @@ bool boxm2_ocl_change_detection::change_detect( vil_image_view<float>&    change
                                                 CL_QUEUE_PROFILING_ENABLE,&status);
   if (status!=0)
     return false;
-
 
   //----- PREP INPUT BUFFERS -------------
   //prepare cam buffers
@@ -106,8 +104,8 @@ bool boxm2_ocl_change_detection::change_detect( vil_image_view<float>&    change
   float* change_image_buff      = new float[cl_ni*cl_nj];
   float* change_exp_image_buff  = new float[cl_ni*cl_nj];
   float* input_buff             = new float[4*cl_ni*cl_nj];
-  full_pyramid(float_img, input_buff, cl_ni, cl_nj); 
-  
+  full_pyramid(float_img, input_buff, cl_ni, cl_nj);
+
   for (unsigned i=0;i<cl_ni*cl_nj;i++) {
     vis_buff[i]=1.0f;
     change_image_buff[i]=0.0f;
@@ -126,8 +124,6 @@ bool boxm2_ocl_change_detection::change_detect( vil_image_view<float>&    change
     }
   }
 
-
-
   //prepare image buffers (GPU)
   bocl_mem_sptr in_image=new bocl_mem(device->context(),input_buff, 4*cl_ni*cl_nj*sizeof(float),"input image buffer");
   in_image->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
@@ -145,7 +141,7 @@ bool boxm2_ocl_change_detection::change_detect( vil_image_view<float>&    change
   vis_image->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
   // Image Dimensions
-  int img_dim_buff[] = { 0, 0, img_view->ni(), img_view->nj() }; 
+  int img_dim_buff[] = { 0, 0, img_view->ni(), img_view->nj() };
   bocl_mem_sptr img_dim=new bocl_mem(device->context(), img_dim_buff, sizeof(int)*4, "image dims");
   img_dim->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
@@ -330,9 +326,8 @@ bool boxm2_ocl_change_detection::change_detect( vil_image_view<float>&    change
         for (unsigned int i=0; i<cl_ni*cl_nj; ++i) {
           //if 1x1 change was high enough...
           if (prob_change_buff[i] > PROB_THRESH) {
-
             //hack for change image, only run change image buff over smaller window
-            //if(oi >= -(half-1) && oi <=(half-1) && oj >= -(half-1) && oj <=(half-1))
+            //if (oi >= -(half-1) && oi <=(half-1) && oj >= -(half-1) && oj <=(half-1))
             if (nxn_change_buff[i] > change_image_buff[i])
               change_image_buff[i] = nxn_change_buff[i];
 
@@ -356,7 +351,6 @@ bool boxm2_ocl_change_detection::change_detect( vil_image_view<float>&    change
     change_image->write_to_buffer(queue);
     change_exp_image->write_to_buffer(queue);
   }
-
 
   //----------------------------------------------------------------------------
   // STEP THREE: Do normalize pass on change image
@@ -392,7 +386,7 @@ bool boxm2_ocl_change_detection::change_detect( vil_image_view<float>&    change
   //store change image
   for (unsigned c=0;c<nj;c++)
     for (unsigned r=0;r<ni;r++)
-      change_img(r,c) = change_image_buff[c*cl_ni+r]; 
+      change_img(r,c) = change_image_buff[c*cl_ni+r];
 
   //store rgb change image
   for (unsigned c=0; c<nj; c++) {
@@ -421,32 +415,32 @@ bool boxm2_ocl_change_detection::change_detect( vil_image_view<float>&    change
 void boxm2_ocl_change_detection::full_pyramid(vil_image_view_base_sptr in_img, float* img_buff, unsigned cl_ni, unsigned cl_nj)
 {
   // half the size of the previous image
-  vil_pyramid_image_view<float> pyramid(in_img, 4); 
-  
+  vil_pyramid_image_view<float> pyramid(in_img, 4);
+
   // resized images
   unsigned ni = in_img->ni(), nj = in_img->nj();
-  vil_image_view<float> half(ni,nj), quarter(ni,nj), eighth(ni,nj); 
-  vil_resample_bilin(pyramid(1), half, ni, nj); 
-  vil_resample_bilin(pyramid(2), quarter, ni, nj); 
-  vil_resample_bilin(pyramid(3), eighth, ni, nj); 
-  vil_save(half, "half.tiff"); 
-  vil_save(quarter, "quarter.tiff"); 
-  vil_save(eighth, "eighth.tiff"); 
+  vil_image_view<float> half(ni,nj), quarter(ni,nj), eighth(ni,nj);
+  vil_resample_bilin(pyramid(1), half, ni, nj);
+  vil_resample_bilin(pyramid(2), quarter, ni, nj);
+  vil_resample_bilin(pyramid(3), eighth, ni, nj);
+  vil_save(half, "half.tiff");
+  vil_save(quarter, "quarter.tiff");
+  vil_save(eighth, "eighth.tiff");
 
   //load up each level of pixels
-  int idx=0; 
-  for(unsigned c=0; c<cl_nj; ++c) {
-    for(unsigned r=0; r<cl_ni; ++r) {
+  int idx=0;
+  for (unsigned c=0; c<cl_nj; ++c) {
+    for (unsigned r=0; r<cl_ni; ++r) {
       //int idx = 4*(c*cl_ni+r);
-      //img_buff[ idx ] = pyramid(0)(r,c); 
-      //img_buff[ idx+1 ] = pyramid(1)(r/2,c/2); 
-      //img_buff[ idx+2 ] = pyramid(2)(r/4, c/4); 
-      //img_buff[ idx+3 ] = pyramid(3)(r/8, c/8);  
-      //idx+=4; 
-      img_buff[idx++] = pyramid(0)(r,c); 
-      img_buff[idx++] = half(r,c); 
-      img_buff[idx++] = quarter(r,c); 
-      img_buff[idx++] = eighth(r,c); 
+      //img_buff[ idx ] = pyramid(0)(r,c);
+      //img_buff[ idx+1 ] = pyramid(1)(r/2,c/2);
+      //img_buff[ idx+2 ] = pyramid(2)(r/4, c/4);
+      //img_buff[ idx+3 ] = pyramid(3)(r/8, c/8);
+      //idx+=4;
+      img_buff[idx++] = pyramid(0)(r,c);
+      img_buff[idx++] = half(r,c);
+      img_buff[idx++] = quarter(r,c);
+      img_buff[idx++] = eighth(r,c);
     }
   }
 }
@@ -462,7 +456,7 @@ bool boxm2_ocl_change_detection::get_scene_appearances( boxm2_scene_sptr    scen
                                                         int&                apptypesize)
 {
   vcl_vector<vcl_string> apps = scene->appearances();
-  bool foundDataType = false, foundNumObsType = false; 
+  bool foundDataType = false, foundNumObsType = false;
   for (unsigned int i=0; i<apps.size(); ++i) {
     if ( apps[i] == boxm2_data_traits<BOXM2_MOG3_GREY>::prefix() )
     {
@@ -493,7 +487,7 @@ bool boxm2_ocl_change_detection::get_scene_appearances( boxm2_scene_sptr    scen
 
   //set apptype size
   apptypesize = (int) boxm2_data_info::datasize(data_type);
-  return true; 
+  return true;
 }
 
 //---------------------------------------------------
@@ -503,13 +497,13 @@ vcl_vector<bocl_kernel*>& boxm2_ocl_change_detection::get_kernels(bocl_device_sp
 {
   // check to see if this device has compiled kernels already
   vcl_string identifier = device->device_identifier() + opts;
-  if (kernels_.find(identifier) != kernels_.end()) 
-    return kernels_[identifier]; 
+  if (kernels_.find(identifier) != kernels_.end())
+    return kernels_[identifier];
 
   //if not, compile and cache them
   vcl_cout<<"===========Compiling multi update kernels===========\n"
           <<"  for device: "<<device->device_identifier()<<vcl_endl;
-  
+
   //gather all render sources... seems like a lot for rendering...
   vcl_vector<vcl_string> src_paths;
   vcl_string source_dir = boxm2_ocl_util::ocl_src_root();
@@ -562,19 +556,18 @@ vcl_vector<bocl_kernel*>& boxm2_ocl_change_detection::get_kernels(bocl_device_sp
                                           "normalize change detection kernel"); //kernel identifier (for error checking)
 
   //store in a vector in the map and return
-  vcl_vector<bocl_kernel*> vec_kernels; 
+  vcl_vector<bocl_kernel*> vec_kernels;
   vec_kernels.push_back(ray_trace_kernel);
   vec_kernels.push_back(nxn_kernel);
   vec_kernels.push_back(normalize_render_kernel);
-  kernels_[identifier] = vec_kernels; 
-  return kernels_[identifier]; 
+  kernels_[identifier] = vec_kernels;
+  return kernels_[identifier];
 }
-
 
 
 //------------------------------------------------------
 // calculates mutual information for a set of 2d samples
-// of pixel values 
+// of pixel values
 //------------------------------------------------------
 double boxm2_ocl_change_detection::mutual_information_2d(const vnl_vector<double>& X, const vnl_vector<double>& Y, int nbins)
 {
@@ -582,22 +575,22 @@ double boxm2_ocl_change_detection::mutual_information_2d(const vnl_vector<double
 
   //compute the intensity histogram
   vbl_array_2d<double> p_xy(nbins, nbins, 0.0);
-  unsigned nr = (unsigned)p_xy.rows(), 
+  unsigned nr = (unsigned)p_xy.rows(),
            nc = (unsigned)p_xy.cols();
   double total_weight = 0.0;
   for (unsigned i = 0; i<X.size(); ++i) {
-      //match the gpu implementation, which does a floor opedration
-      unsigned ix = static_cast<unsigned>(vcl_floor(X[i]*scl)),
-               iy = static_cast<unsigned>(vcl_floor(Y[i]*scl));
-      if (ix>nbins-1 || iy>nbins-1)
-        continue;
-      p_xy[ix][iy] += 1.0;
-      total_weight += 1.0;
+    //match the gpu implementation, which does a floor opedration
+    unsigned ix = static_cast<unsigned>(vcl_floor(X[i]*scl)),
+             iy = static_cast<unsigned>(vcl_floor(Y[i]*scl));
+    if (ix+1>(unsigned)nbins || iy+1>(unsigned)nbins)
+      continue;
+    p_xy[ix][iy] += 1.0;
+    total_weight += 1.0;
   }
-  
+
   // convert to probability
-  for (unsigned r = 0; r<nbins; ++r)
-    for (unsigned c = 0; c<nbins; ++c)
+  for (int r = 0; r<nbins; ++r)
+    for (int c = 0; c<nbins; ++c)
       p_xy[r][c] /= total_weight;
 
   // marginalize x,y to get p(x) and p(y)
@@ -605,29 +598,29 @@ double boxm2_ocl_change_detection::mutual_information_2d(const vnl_vector<double
   for (unsigned c = 0; c<nc; ++c)
     for (unsigned r = 0; r<nr; ++r)
       px[c] += p_xy[r][c];
-      
-  vbl_array_1d<double> py(nr,0.0); 
+
+  vbl_array_1d<double> py(nr,0.0);
   for (unsigned r = 0; r<nr; ++r)
     for (unsigned c = 0; c<nc; ++c)
       py[r] += p_xy[r][c];
-  
+
   //calculate entropy of p(x) and p(y)
-  double H_x = 0.0; 
+  double H_x = 0.0;
   for (unsigned c = 0; c<nc; ++c) {
     double prob = px[c];
     if (prob>0.0)
       H_x += prob*vcl_log(prob);
   }
-  
-  double H_y = 0.0; 
+
+  double H_y = 0.0;
   for (unsigned r = 0; r<nr; ++r) {
     double prob = py[r];
     if (prob>0.0)
       H_y += prob*vcl_log(prob);
   }
-  
+
   //calculate joint entropy H(x,y)
-  double H_xy = 0.0; 
+  double H_xy = 0.0;
   for (unsigned r = 0; r<nr; ++r) {
     for (unsigned c = 0; c<nc; ++c) {
         double prc = p_xy[r][c];
@@ -635,8 +628,8 @@ double boxm2_ocl_change_detection::mutual_information_2d(const vnl_vector<double
           H_xy += prc*vcl_log(prc);
     }
   }
-  
+
   //calculate MI = H(X) + H(Y) - H(X,Y)
-  double MI = H_x + H_y - H_xy; 
+  double MI = H_x + H_y - H_xy;
   return -MI/vcl_log(2.0);
 }
