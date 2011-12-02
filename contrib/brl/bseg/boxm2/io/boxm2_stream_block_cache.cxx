@@ -44,6 +44,7 @@ bool boxm2_stream_block_cache::init(boxm2_block_id id)
         data_types_[data_types_list_[i]]          = data_buffer;
         block_size_in_bytes_[data_types_list_[i]] = num_bytes;
     }
+    return true;
 }
 
 //: hidden destructor (private so it cannot be called -- forces the class to be singleton)
