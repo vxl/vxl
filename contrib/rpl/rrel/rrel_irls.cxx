@@ -23,8 +23,9 @@ const int rrel_irls::dflt_iterations_for_scale_ = 1;
 rrel_irls::rrel_irls( int max_iterations )
   : max_iterations_(max_iterations), test_converge_(true),
     convergence_tol_(dflt_convergence_tol_), est_scale_during_(true),
+    use_weighted_scale_(true),
     iterations_for_scale_est_(dflt_iterations_for_scale_),
-    use_weighted_scale_(true), scale_lower_bound_( -1.0 ),
+    scale_lower_bound_( -1.0 ),
     trace_level_(0), params_initialized_(false), scale_initialized_(false),
     obj_fcn_(1e256), prev_obj_fcn_(1e256),
     converged_(false), iteration_(0)
