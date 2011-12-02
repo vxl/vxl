@@ -17,7 +17,7 @@ SET(boxm2_multi_sources
    )
 
 ADD_LIBRARY(boxm2_multi  ${boxm2_multi_sources})
-TARGET_LINK_LIBRARIES(boxm2_multi boxm2_multi_algo boxm2)# boxm2_ocl boxm2_ocl_pro boct brdb bsta vbl_io vpgl_algo vpgl vgl_xio vgl vnl_algo vnl vbl vil vul vsl vcl)
+TARGET_LINK_LIBRARIES(boxm2_multi boxm2)
 
 #multi gpu implementations
 SUBDIRS(algo)
