@@ -226,7 +226,7 @@ bool vgui_vrml_draw_visitor::Visit(QvCylinder* node)
 {
   float r = node->radius.value;
   float h = node->height.value;
-  int parts = (int)node->parts.value;
+  bool parts = (int)node->parts.value != 0;
 
   glRotated(-90, 1, 0, 0);
 
@@ -264,7 +264,7 @@ bool vgui_vrml_draw_visitor::Visit(QvCone* node)
 {
   float r = node->bottomRadius.value;
   float h = node->height.value;
-  int parts = (int)node->parts.value;
+  bool parts = (int)node->parts.value != 0;
   float tz = h/2;
 
   glRotated(90, 1, 0, 0);
