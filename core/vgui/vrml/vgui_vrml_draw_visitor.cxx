@@ -240,10 +240,10 @@ bool vgui_vrml_draw_visitor::Visit(QvCylinder* node)
 
   // fsm : GLU_OUTSIDE/GLU_INSIDE are not GLenums. cast avoids warning (egcs).
   gluQuadricOrientation(quadric, GLenum(GLU_OUTSIDE) );
-  if (parts && (QvCylinder::SIDES | QvCylinder::ALL))
+  if (parts && (QvCylinder::SIDES | QvCylinder::ALL)!=0)
     gluCylinder(quadric, r,r, h, QUADRIC_COMPLEXITY, 2);
 
-  if (parts && (QvCylinder::BOTTOM | QvCylinder::ALL)) {
+  if (parts && (QvCylinder::BOTTOM | QvCylinder::ALL)!=0) {
     gluQuadricOrientation(quadric, GLenum(GLU_INSIDE) );
     gluDisk(quadric, 0, r, QUADRIC_COMPLEXITY, 3);
     gluQuadricOrientation(quadric, GLenum(GLU_OUTSIDE) );
@@ -251,7 +251,7 @@ bool vgui_vrml_draw_visitor::Visit(QvCylinder* node)
 
   glTranslatef(0,0,h);
 
-  if (parts && (QvCylinder::TOP | QvCylinder::ALL))
+  if (parts && (QvCylinder::TOP | QvCylinder::ALL)!=0)
     gluDisk(quadric, 0, r, QUADRIC_COMPLEXITY, 3); // z = h
 
   glTranslatef(0,0,-h/2);
@@ -275,12 +275,12 @@ bool vgui_vrml_draw_visitor::Visit(QvCone* node)
   else
     gluQuadricDrawStyle(quadric, GLenum(GLU_FILL));
 
-  if (parts && (QvCone::SIDES | QvCone::ALL))
+  if (parts && (QvCone::SIDES | QvCone::ALL)!=0)
     gluCylinder(quadric, 0, r, h, QUADRIC_COMPLEXITY, 2);
 
   glTranslatef(0,0, 2 * tz);
 
-  if (parts && (QvCone::BOTTOM | QvCone::ALL))
+  if (parts && (QvCone::BOTTOM | QvCone::ALL)!=0)
     gluDisk(quadric, 0, r, QUADRIC_COMPLEXITY, 3);
 
   glTranslatef(0,0, -tz);
