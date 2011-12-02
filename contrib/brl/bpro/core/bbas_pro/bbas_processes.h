@@ -31,7 +31,7 @@ DECLARE_FUNC_CONS(brad_classify_image_process);
 
 
 DECLARE_FUNC_CONS(brad_estimate_phongs_model_process);
-DECLARE_FUNC_CONS(brad_estimate_synoptic_fucntion_1d_process);
+DECLARE_FUNC_CONS(brad_estimate_synoptic_function_1d_process);
 DECLARE_FUNC_CONS(brad_estimate_empty_process);
 
 DECLARE_FUNC_CONS(brad_estimate_shadow_model_process);
