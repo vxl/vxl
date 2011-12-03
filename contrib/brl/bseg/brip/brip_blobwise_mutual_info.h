@@ -33,10 +33,10 @@ double brip_hist_kl_div(const vcl_vector<double>& P, double magP,
                         const vcl_vector<double>& Q, double magQ)
 {
   double kl = 0.0;
-  for(int i=0; i<P.size(); ++i) {
+  for (unsigned int i=0; i<P.size(); ++i) {
     double probP = P[i]/magP; 
     double probQ = Q[i]/magQ; 
-    if(probP==0 || probQ==0) continue; 
+    if (probP==0 || probQ==0) continue; 
     
     kl += probP * vcl_log( probP / probQ ); 
   }
