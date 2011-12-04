@@ -55,21 +55,21 @@ void test_render_height_main(boxm2_scene_sptr& scene, bocl_device_sptr& device, 
   //set process args
   good = good && bprb_batch_process_manager::instance()->set_input(0, brdb_device) // device
               && bprb_batch_process_manager::instance()->set_input(1, brdb_scene)  //  scene
-              && bprb_batch_process_manager::instance()->set_input(2, brdb_opencl_cache) 
+              && bprb_batch_process_manager::instance()->set_input(2, brdb_opencl_cache)
               && bprb_batch_process_manager::instance()->run_process();
 
-  //The Height Map Process has 5 outputs - 
+  //The Height Map Process has 5 outputs -
   // 1. expected height (z image)
   // 2. variance in expected height
   // 3. x coord image
   // 4. y coord image
   // 5. prob image (likelihood depth is within the volume)
-  vcl_vector< vil_image_view<float>* > out_imgs; 
-  vcl_vector<unsigned int> out_ids; 
-  for(int i=0; i<6; ++i) {
+  vcl_vector< vil_image_view<float>* > out_imgs;
+  vcl_vector<unsigned int> out_ids;
+  for (int i=0; i<6; ++i) {
     unsigned int out_img = 0;
     good = good && bprb_batch_process_manager::instance()->commit_output(i, out_img);
-    out_ids.push_back(out_img); 
+    out_ids.push_back(out_img);
     brdb_query_aptr Q = brdb_query_comp_new("id", brdb_query::EQ, out_img);
     brdb_selection_sptr S = DATABASE->select("vil_image_view_base_sptr_data", Q);
     if (S->size()!=1) {
@@ -82,10 +82,10 @@ void test_render_height_main(boxm2_scene_sptr& scene, bocl_device_sptr& device, 
                << " didn't get value\n";
     }
     vil_image_view_base_sptr out_img_sptr = value->val<vil_image_view_base_sptr>();
-    vil_image_view<float>* flt_ptr = (vil_image_view<float>*) out_img_sptr.ptr(); 
-    out_imgs.push_back(flt_ptr); 
+    vil_image_view<float>* flt_ptr = (vil_image_view<float>*) out_img_sptr.ptr();
+    out_imgs.push_back(flt_ptr);
   }
-  
+
   vil_save(*out_imgs[0], "height.tiff");
   vil_save(*out_imgs[1], "var.tiff");
   vil_save(*out_imgs[2], "x_img.tiff");
@@ -95,7 +95,7 @@ void test_render_height_main(boxm2_scene_sptr& scene, bocl_device_sptr& device, 
 
   //EXAMPLE
   //clean up out images
-  for(int i=0; i<out_ids.size(); ++i) {
+  for (unsigned int i=0; i<out_ids.size(); ++i) {
     bprb_batch_process_manager::instance()->remove_data(out_ids[i]);
   }
 }
@@ -151,7 +151,7 @@ void test_render_main(boxm2_scene_sptr& scene, bocl_device_sptr& device, boxm2_o
   //set process args
   good = good && bprb_batch_process_manager::instance()->set_input(0, brdb_device) // device
               && bprb_batch_process_manager::instance()->set_input(1, brdb_scene)  //  scene
-              && bprb_batch_process_manager::instance()->set_input(2, brdb_opencl_cache) 
+              && bprb_batch_process_manager::instance()->set_input(2, brdb_opencl_cache)
               && bprb_batch_process_manager::instance()->set_input(3, brdb_cam)    // camera
               && bprb_batch_process_manager::instance()->set_input(4, brdb_ni)     // ni for rendered image
               && bprb_batch_process_manager::instance()->set_input(5, brdb_nj)     // nj for rendered image
@@ -250,8 +250,6 @@ void test_update_main(boxm2_scene_sptr& scene, bocl_device_sptr& device, boxm2_o
         && bprb_batch_process_manager::instance()->set_input(3, brdb_cam)    // camera
         && bprb_batch_process_manager::instance()->set_input(4, brdb_img)    // input image
         && bprb_batch_process_manager::instance()->run_process();
-  
-
   }
 }
 
@@ -273,11 +271,10 @@ void test_process_mains()
   //run render and update mains
   //test_render_main(scene, device, opencl_cache);
   //test_update_main(scene, device, opencl_cache);
-  test_render_height_main(scene, device, opencl_cache); 
-  
+  test_render_height_main(scene, device, opencl_cache);
+
   //print database
-  bprb_batch_process_manager::instance()->print_db(); 
-  
+  bprb_batch_process_manager::instance()->print_db();
 }
 
 TESTMAIN( test_process_mains );
