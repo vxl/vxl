@@ -20,7 +20,7 @@ namespace brip_blobwise_kl_div_process_globals
 {
   const unsigned n_inputs_  = 4;
   const unsigned n_outputs_ = 2;
-  
+
   // private helper method prepares an input image to be processed by update
   vil_image_view<float>* prepare_input_image(vil_image_view_base_sptr loaded_image) {
     //then it's an RGB image (assumes byte image...)
@@ -70,23 +70,22 @@ namespace brip_blobwise_kl_div_process_globals
     vcl_cerr<<"Failed to recognize input image type\n";
     return 0;
   }
-
-}; 
+};
 
 //: Constructor
 bool brip_blobwise_kl_div_process_cons(bprb_func_process& pro)
 {
   using namespace brip_blobwise_kl_div_process_globals;
-  
+
   //input
   vcl_vector<vcl_string> input_types(n_inputs_);
-  input_types[0] = "vil_image_view_base_sptr"; // img1 
+  input_types[0] = "vil_image_view_base_sptr"; // img1
   input_types[1] = "vil_image_view_base_sptr"; // img2
   input_types[2] = "vil_image_view_base_sptr"; // blob/mask image
-  input_types[3] = "float"; 
+  input_types[3] = "float";
   bool good = pro.set_input_types(input_types);
-  if(!good) return good; 
-  
+  if (!good) return good;
+
   //input default args
   brdb_value_sptr thresh = new brdb_value_t<float>(.1f);
   pro.set_input(3, thresh);
@@ -95,10 +94,7 @@ bool brip_blobwise_kl_div_process_cons(bprb_func_process& pro)
   vcl_vector<vcl_string> output_types(n_outputs_);
   output_types[0] = "vil_image_view_base_sptr";  // KL Div image (kl div in each blobs place)
   output_types[1] = "vil_image_view_base_sptr";  // new blob image (thresholded by percentage of KL)
-  good= pro.set_output_types(output_types);
-  if (!good) return good;
-  
-  return true;
+  return pro.set_output_types(output_types);
 }
 
 
@@ -106,7 +102,7 @@ bool brip_blobwise_kl_div_process_cons(bprb_func_process& pro)
 bool brip_blobwise_kl_div_process(bprb_func_process& pro)
 {
   using namespace brip_blobwise_kl_div_process_globals;
-  
+
   // Sanity check
   if (pro.n_inputs() < n_inputs_) {
     vcl_cout << "brip_blobwise_kl_div_process: The input number should be " << n_inputs_ << vcl_endl;
@@ -118,51 +114,51 @@ bool brip_blobwise_kl_div_process(bprb_func_process& pro)
   vil_image_view_base_sptr in_img_ptr   = pro.get_input<vil_image_view_base_sptr>(i++);
   vil_image_view_base_sptr exp_img_ptr  = pro.get_input<vil_image_view_base_sptr>(i++);
   vil_image_view_base_sptr blob_img_ptr = pro.get_input<vil_image_view_base_sptr>(i++);
-  float_t                  thresh       = pro.get_input<float>(i++); 
-  
+  float                    thresh       = pro.get_input<float>(i++);
+
   //prepare input images
-  vil_image_view<float>*  in_img  = prepare_input_image(in_img_ptr); 
+  vil_image_view<float>*  in_img  = prepare_input_image(in_img_ptr);
   vil_image_view<float>*  exp_img = prepare_input_image(exp_img_ptr);
-  unsigned ni=blob_img_ptr->ni(), 
+  unsigned ni=blob_img_ptr->ni(),
            nj=blob_img_ptr->nj();
 
   //----------------------------------
   //pre process mask image
-  vil_image_view<vxl_byte>* blob_img = static_cast<vil_image_view<vxl_byte>* >(blob_img_ptr.ptr()); 
-  vil_image_view<bool> mask_img(ni, nj), mask_dest(ni,nj), mask_dest1(ni,nj); 
-  for(int i=0; i<ni; ++i)
-    for(int j=0; j<nj; ++j)
-      mask_img(i,j) = ( (*blob_img)(i,j) > 0 ) ? true : false; 
-  
+  vil_image_view<vxl_byte>* blob_img = static_cast<vil_image_view<vxl_byte>* >(blob_img_ptr.ptr());
+  vil_image_view<bool> mask_img(ni, nj), mask_dest(ni,nj), mask_dest1(ni,nj);
+  for (unsigned int i=0; i<ni; ++i)
+    for (unsigned int j=0; j<nj; ++j)
+      mask_img(i,j) = ( (*blob_img)(i,j) > 0 ) ? true : false;
+
   //dilate twice
   vil_structuring_element selem;
   selem.set_to_disk(1.05);
   vil_binary_dilate(mask_img, mask_dest, selem);
   vil_binary_dilate(mask_dest, mask_dest1, selem);
   vil_binary_dilate(mask_dest1, mask_dest, selem);
-  
+
   //-----------------------------------------
-  //calculate per blob KL Divergence 
+  //calculate per blob KL Divergence
   vil_image_view<float>* kl_img = new vil_image_view<float>(ni, nj);
-  kl_img->fill(0.0f); 
-  brip_blobwise_kl_div(*in_img, *exp_img, mask_dest, *kl_img); 
-  
+  kl_img->fill(0.0f);
+  brip_blobwise_kl_div(*in_img, *exp_img, mask_dest, *kl_img);
+
   //-----------------------------------------
   //create thresholded KL Img
   //find min max on Mutual Info
-  float min_value, max_value; 
-  vil_math_value_range(*kl_img, min_value, max_value); 
-  
+  float min_value, max_value;
+  vil_math_value_range(*kl_img, min_value, max_value);
+
   //create new blob info (threshold the KL image by some value)
   // USE old, unchanged mask image to keep blobs small
-  thresh *= max_value; 
-  vil_image_view<vxl_byte>* new_blobs = new vil_image_view<vxl_byte>(ni,nj); 
-  for(int i=0; i<ni; ++i) 
-    for(int j=0; j<nj; ++j) {
-      if( mask_img(i,j) && (*kl_img)(i,j) > thresh) 
-        (*new_blobs)(i,j) = (vxl_byte) 255; 
+  thresh *= max_value;
+  vil_image_view<vxl_byte>* new_blobs = new vil_image_view<vxl_byte>(ni,nj);
+  for (unsigned int i=0; i<ni; ++i)
+    for (unsigned int j=0; j<nj; ++j) {
+      if ( mask_img(i,j) && (*kl_img)(i,j) > thresh)
+        (*new_blobs)(i,j) = (vxl_byte) 255;
       else
-        (*new_blobs)(i,j) = (vxl_byte) 0; 
+        (*new_blobs)(i,j) = (vxl_byte) 0;
     }
 
   //------------------------------------------------
