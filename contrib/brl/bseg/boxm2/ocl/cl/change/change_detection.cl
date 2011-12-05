@@ -58,7 +58,7 @@ change_detection_bit_scene( __constant  RenderSceneInfo    * linfo,
   float change          = change_image[imIndex[llid]];
   float change_exp      = change_exp_image[imIndex[llid]];
   float intensity_exp   = exp_image[imIndex[llid]];
-  float4 intensity       = in_image[imIndex[llid]];
+  float4 intensity      = in_image[imIndex[llid]];
   float vis             = vis_image[imIndex[llid]];
 
   //find neighbor pixel
