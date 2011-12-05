@@ -8,7 +8,7 @@
 #include <vnl/algo/vnl_levenberg_marquardt.h>
 #include <vnl/vnl_math.h>
 
-namespace brad_estimate_synoptic_fucntion_1d_process_globals
+namespace brad_estimate_synoptic_function_1d_process_globals
 {
   const unsigned n_inputs_  = 5;
   const unsigned n_outputs_ = 2;
@@ -16,9 +16,9 @@ namespace brad_estimate_synoptic_fucntion_1d_process_globals
 
 
 //: Constructor
-bool brad_estimate_synoptic_fucntion_1d_process_cons(bprb_func_process& pro)
+bool brad_estimate_synoptic_function_1d_process_cons(bprb_func_process& pro)
 {
-  using namespace brad_estimate_synoptic_fucntion_1d_process_globals;
+  using namespace brad_estimate_synoptic_function_1d_process_globals;
 
   vcl_vector<vcl_string> input_types_(n_inputs_);
   input_types_[0] = "bbas_1d_array_float_sptr";
@@ -37,7 +37,7 @@ bool brad_estimate_synoptic_fucntion_1d_process_cons(bprb_func_process& pro)
 
 
 //: Execute the process
-bool brad_estimate_synoptic_fucntion_1d_process(bprb_func_process& pro)
+bool brad_estimate_synoptic_function_1d_process(bprb_func_process& pro)
 {
   // get the inputs
   unsigned i=0;
@@ -76,7 +76,7 @@ bool brad_estimate_synoptic_fucntion_1d_process(bprb_func_process& pro)
     bbas_1d_array_float_sptr new_obs = new bbas_1d_array_float(num_samples);
     for (unsigned i=0;i<num_samples;++i)
       new_obs->data_array[i]=f.cubic_interp_inten(f.arc_length(i));
-    i=0;
+    int i=0;
     pro.set_output_val<bbas_1d_array_float_sptr>(i++, new_obs);
     pro.set_output_val<float>(i++, f.cubic_fit_prob_density());
   }
@@ -88,7 +88,7 @@ bool brad_estimate_synoptic_fucntion_1d_process(bprb_func_process& pro)
     bbas_1d_array_float_sptr new_obs = new bbas_1d_array_float(amps.size());
     for (unsigned i=0;i<amps.size();++i)
       new_obs->data_array[i]=amps[i];
-    i=0;
+    int i=0;
     pro.set_output_val<bbas_1d_array_float_sptr>(i++, new_obs);
     pro.set_output_val<float>(i++, f.max_frequency_prob_density());
   }
