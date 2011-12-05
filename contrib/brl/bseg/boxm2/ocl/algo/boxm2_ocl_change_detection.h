@@ -27,8 +27,14 @@
 namespace boxm2_ocl_change_detection_globals
 {
   const float PROB_THRESH = 0.1f;
+  static bool get_scene_appearances(boxm2_scene_sptr    scene,
+                                    vcl_string&         data_type,
+                                    vcl_string&         num_obs_type,
+                                    vcl_string&         options,
+                                    int&                apptypesize);
 };
 
+//Older, single pass, multi-res change detection
 class boxm2_ocl_change_detection
 {
   public:
@@ -47,17 +53,37 @@ class boxm2_ocl_change_detection
   private:
     static vcl_vector<bocl_kernel*>& get_kernels(bocl_device_sptr device, vcl_string opts);
 
-    static bool get_scene_appearances(boxm2_scene_sptr    scene,
-                                      vcl_string&         data_type,
-                                      vcl_string&         num_obs_type,
-                                      vcl_string&         options,
-                                      int&                apptypesize);
-
     static vcl_map<vcl_string, vcl_vector<bocl_kernel*> > kernels_;
 
     static void full_pyramid(vil_image_view_base_sptr in_img, float* img_buff, unsigned cl_ni, unsigned cl_nj);
 
     static double mutual_information_2d(const vnl_vector<double>& X, const vnl_vector<double>& Y, int nbins);
+};
+
+
+//: new change detection
+//  The idea behind this change detection is to help smooth out detections where
+//  the image resolution and the model resolution do not match.  
+//  First pass: find per-cell mean observation
+//  second pass: run change detection w/ observation in per cell aux data
+class boxm2_ocl_two_pass_change
+{
+  public:
+    static bool change_detect(  vil_image_view<float>&    change_img,
+                                bocl_device_sptr          device,
+                                boxm2_scene_sptr          scene,
+                                boxm2_opencl_cache_sptr   opencl_cache,
+                                vpgl_camera_double_sptr   cam,
+                                vil_image_view_base_sptr  img,
+                                vil_image_view_base_sptr  exp_img,
+                                int                       n,
+                                vcl_string                norm_type,
+                                bool                      pmax=false);
+
+  private:
+    static vcl_vector<bocl_kernel*>& get_kernels(bocl_device_sptr device, vcl_string opts);
+
+    static vcl_map<vcl_string, vcl_vector<bocl_kernel*> > kernels_;
 };
 
 #endif // boxm2_ocl_change_detection_h_

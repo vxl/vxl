@@ -34,72 +34,6 @@ namespace boxm2_ocl_change_detection_process_globals
 {
   const unsigned n_inputs_     = 9;
   const unsigned n_outputs_    = 2;
-  //vcl_size_t local_threads [2] = {8,8};
-  //vcl_size_t global_threads[2] = {8,8};
-
-  ////pass two probability threshold (if greater than this, will do nxn on pixel)
-  //const float PROB_THRESH = .1f;
-
-  //static vcl_map<vcl_string,vcl_vector<bocl_kernel*> > kernels;
-
-  //void compile_kernel(bocl_device_sptr device,vcl_vector<bocl_kernel*>& vec_kernels, vcl_string opts)
-  //{
-    ////gather all render sources... seems like a lot for rendering...
-    ////gather all render sources... seems like a lot for rendering...
-    //vcl_vector<vcl_string> src_paths;
-    //vcl_string source_dir = boxm2_ocl_util::ocl_src_root();
-    //src_paths.push_back(source_dir + "scene_info.cl");
-    //src_paths.push_back(source_dir + "cell_utils.cl");
-    //src_paths.push_back(source_dir + "bit/bit_tree_library_functions.cl");
-    //src_paths.push_back(source_dir + "backproject.cl");
-    //src_paths.push_back(source_dir + "statistics_library_functions.cl");
-    //src_paths.push_back(source_dir + "expected_functor.cl");
-    //src_paths.push_back(source_dir + "ray_bundle_library_opt.cl");
-    //src_paths.push_back(source_dir + "bit/change_detection.cl");
-    //src_paths.push_back(source_dir + "bit/cast_ray_bit.cl");
-
-    ////set kernel options
-    //opts += " -D CHANGE -D DETERMINISTIC ";
-    //vcl_string options=opts;
-    //opts += " -D STEP_CELL=step_cell_change_detection_uchar8_w_expected(aux_args.mog,aux_args.alpha,data_ptr,d*linfo->block_len,vis,aux_args.change,aux_args.change_exp,aux_args.intensity,aux_args.intensity_exp) ";
-
-    ////have kernel construct itself using the context and device
-    //bocl_kernel * ray_trace_kernel = new bocl_kernel();
-    //ray_trace_kernel->create_kernel( &device->context(),
-                                     //device->device_id(),
-                                     //src_paths,
-                                     //"change_detection_bit_scene",   //kernel name
-                                     //opts,              //options
-                                     //"boxm2 1x1 ocl change detection"); //kernel identifier (for error checking)
-    //vec_kernels.push_back(ray_trace_kernel);
-
-    ////create nxn kernel
-    //vcl_stringstream pthresh;
-    //pthresh<<" -D PROB_THRESH="<<PROB_THRESH<<"  ";
-    //opts += pthresh.str();
-    //bocl_kernel * nxn_kernel = new bocl_kernel();
-    //nxn_kernel->create_kernel( &device->context(),
-                               //device->device_id(),
-                               //src_paths,
-                               //"nxn_change_detection",
-                               //opts,
-                               //"boxm2 nxn ocl change detection kernel");
-    //vec_kernels.push_back(nxn_kernel);
-
-    ////create normalize image kernel
-    //vcl_vector<vcl_string> norm_src_paths;
-    //norm_src_paths.push_back(source_dir + "pixel_conversion.cl");
-    //norm_src_paths.push_back(source_dir + "bit/normalize_kernels.cl");
-    //bocl_kernel * normalize_render_kernel=new bocl_kernel();
-    //normalize_render_kernel->create_kernel( &device->context(),
-                                            //device->device_id(),
-                                            //norm_src_paths,
-                                            //"normalize_change_kernel",   //kernel name
-                                            //options,              //options
-                                            //"normalize change detection kernel"); //kernel identifier (for error checking)
-
-    //vec_kernels.push_back(normalize_render_kernel);
-  //}
 }
 
 bool boxm2_ocl_change_detection_process_cons(bprb_func_process& pro)
@@ -161,20 +95,52 @@ bool boxm2_ocl_change_detection_process(bprb_func_process& pro)
   unsigned ni=img->ni();
   unsigned nj=img->nj();
 
-  // store scene smaprt pointer
+  //allocate two output images
   vil_image_view<float>*    change_img     = new vil_image_view<float>(ni, nj); 
   vil_image_view<vxl_byte>* rgb_change_img = new vil_image_view<vxl_byte>(ni,nj,4); 
-  boxm2_ocl_change_detection::change_detect( *change_img, 
-                                             *rgb_change_img, 
-                                             device, 
-                                             scene,
-                                             opencl_cache,
-                                             cam,
-                                             img,
-                                             exp_img,
-                                             n,
-                                             norm_type,
-                                             pmax ); 
+
+  //check to see which type of change detection to do, either two pass, or regular
+  if( norm_type == "twopass" ) {
+    boxm2_ocl_two_pass_change::change_detect( *change_img, 
+                                               device, 
+                                               scene,
+                                               opencl_cache,
+                                               cam,
+                                               img,
+                                               exp_img,
+                                               n,
+                                               norm_type,
+                                               pmax ); 
+  }
+  else {
+    // store scene smaprt pointer
+    boxm2_ocl_change_detection::change_detect( *change_img, 
+                                               *rgb_change_img, 
+                                               device, 
+                                               scene,
+                                               opencl_cache,
+                                               cam,
+                                               img,
+                                               exp_img,
+                                               n,
+                                               norm_type,
+                                               pmax ); 
+  }
+  
+  //store rgb change image
+  vcl_cout<<" preparing rgb output image"<<vcl_endl;
+  vil_image_view_base_sptr  float_img = boxm2_util::prepare_input_image(img, true); //true for force gray scale
+  vil_image_view<float>&    inImg     = *static_cast<vil_image_view<float>* >(float_img.ptr());
+  vil_image_view<float>&    change    = *change_img; 
+  vil_image_view<vxl_byte>& rgb       = *rgb_change_img; 
+  for (unsigned c=0; c<nj; c++) {
+    for (unsigned r=0; r<ni; r++) {
+      rgb(r,c,0) = (vxl_byte) ( change(r,c) * 255.0f);
+      rgb(r,c,1) = (vxl_byte) ( inImg(r,c) * 255.0f/8.0f );
+      rgb(r,c,2) = (vxl_byte) 0;
+      rgb(r,c,3) = (vxl_byte) 255;
+    }
+  }
   
   // set outputs
   i=0;
