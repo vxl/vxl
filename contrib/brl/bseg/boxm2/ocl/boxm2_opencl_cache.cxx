@@ -263,6 +263,45 @@ bocl_mem* boxm2_opencl_cache::get_data(boxm2_block_id id, vcl_string type, vcl_s
   return data;
 }
 
+
+//: Get data new generic
+// Possible issue: if \p num_bytes is greater than 0, should it then always initialize a new data object?
+bocl_mem* boxm2_opencl_cache::get_data_new(boxm2_block_id id, vcl_string type, vcl_size_t num_bytes, bool read_only)
+{
+  //push id to front of LRU list
+  this->lru_push_front(id);
+
+  // grab a reference to the map of cached_data_
+  vcl_map<boxm2_block_id, bocl_mem*>& data_map = this->cached_data_map(type);
+
+  // then look for the block you're requesting, if found, delete it.
+  vcl_map<boxm2_block_id, bocl_mem*>::iterator iter = data_map.find(id);
+  if ( iter != data_map.end() ) {
+    delete iter->second;
+    data_map.erase(iter);
+  }
+
+  // load new data into CPU cache and check size to see if GPU cache needs cleaning
+  boxm2_data_base* data_base = cpu_cache_->get_data_base_new(id,type,num_bytes,read_only);
+  vcl_size_t toLoadSize = data_base->buffer_length();
+
+  // make enough space by kicking out blocks
+  while ( this->bytes_in_cache()+toLoadSize > maxBytesInCache_ && !data_map.empty() ) // was: data_map.size() >= maxBlocksInCache
+  {
+    vcl_cout<<"Bytes in cache: "<<bytesInCache_<<" max bytes in cache! "<<maxBytesInCache_<<vcl_endl;
+    boxm2_block_id lru_id = this->lru_remove_last();
+    if(lru_id == id) vcl_cout<<"boxm2_opencl_cache:: Single Block Size is too big for GPU RAM "<<vcl_endl;
+  }
+
+  // initialize buffer from CPU cache and return
+  bocl_mem* data = new bocl_mem(*context_, data_base->data_buffer(), data_base->buffer_length(), type);
+  data->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
+  bytesInCache_ += data->num_bytes();
+  data_map[id] = data;
+  return data;
+}
+
+
 //: Deep data replace.
 // This replaces not only the data in the GPU cache, but
 // in the cpu cache as well (by creating a new one)

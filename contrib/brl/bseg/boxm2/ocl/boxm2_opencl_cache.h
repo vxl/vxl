@@ -56,9 +56,10 @@ class boxm2_opencl_cache: public vbl_ref_count
     template<boxm2_data_type T>
     bocl_mem* get_data(boxm2_block_id, vcl_size_t num_bytes=0, bool read_only = true);
     bocl_mem* get_data(boxm2_block_id, vcl_string type, vcl_size_t num_bytes=0, bool read_only = true);
-    
-    //: returns new data (
-    bocl_mem* get_data_new(boxm2_block_id, vcl_string type, vcl_size_t num_bytes=0, bool read_only = true); 
+
+    template<boxm2_data_type T>
+        bocl_mem* get_data_new(boxm2_block_id, vcl_size_t num_bytes=0, bool read_only = true);
+    bocl_mem* get_data_new(boxm2_block_id id, vcl_string type, vcl_size_t num_bytes = 0, bool read_only = true);
 
     //: empties out cache, deletes all bocl_mem*s
     bool clear_cache();
@@ -131,6 +132,13 @@ template<boxm2_data_type T>
 bocl_mem* boxm2_opencl_cache::get_data(boxm2_block_id id, vcl_size_t num_bytes, bool read_only)
 {
   return get_data(id, boxm2_data_traits<T>::prefix(), num_bytes, read_only);
+}
+
+//: get new data by type and id
+template<boxm2_data_type T>
+bocl_mem* boxm2_opencl_cache::get_data_new(boxm2_block_id id, vcl_size_t num_bytes, bool read_only)
+{
+  return get_data_new(id, boxm2_data_traits<T>::prefix(), num_bytes, read_only);
 }
 
 //: Binary write boxm2_cache  to stream
