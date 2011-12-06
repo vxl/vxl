@@ -17,6 +17,7 @@
 #include <vgl/vgl_homg_plane_3d.h>
 #include <vgl/vgl_homg_line_3d_2_points.h>
 #include <vgl/vgl_line_3d_2_points.h>
+#include <vgl/vgl_line_segment_2d.h>
 #include <vgl/vgl_line_segment_3d.h>
 #include <vgl/vgl_polygon.h>
 #include <vgl/vgl_ray_3d.h>
@@ -597,6 +598,30 @@ vgl_closest_points(vgl_line_segment_3d<T> const& l1,
   return ret;
 }
 
+template <class T>
+vgl_point_2d<T> vgl_closest_point(vgl_line_segment_2d<T> const& l,
+                                  vgl_point_2d<T> const& p)
+{
+  vgl_point_2d<T> q;
+  vgl_closest_point_to_linesegment(q.x(), q.y(), 
+                                   l.point1().x(), l.point1().y(),
+                                   l.point2().x(), l.point2().y(),
+                                   p.x(), p.y());
+  return q;
+}
+
+template <class T>
+vgl_point_3d<T> vgl_closest_point(vgl_line_segment_3d<T> const& l,
+                                  vgl_point_3d<T> const& p)
+{
+ vgl_point_3d<T> q;
+ vgl_closest_point_to_linesegment(q.x(), q.y(), q.z(),
+                                  l.point1().x(), l.point1().y(), l.point1().z(),
+                                  l.point2().x(), l.point2().y(), l.point2().z(),
+                                  p.x(), p.y(), p.z());
+ return q;
+}
+
 #undef DIST_SQR_TO_LINE_SEG_2D
 #undef DIST_SQR_TO_LINE_SEG_3D
 
@@ -633,6 +658,8 @@ template vgl_homg_point_3d<T > vgl_closest_point(vgl_homg_point_3d<T >const&,vgl
 template vcl_pair<vgl_point_3d<T >,vgl_point_3d<T > > \
          vgl_closest_points(vgl_line_3d_2_points<T >const&, vgl_line_3d_2_points<T >const&, bool*); \
 template vcl_pair<vgl_point_3d<T >,vgl_point_3d<T > > \
-         vgl_closest_points(vgl_line_segment_3d<T >const&, vgl_line_segment_3d<T >const&, bool*)
+         vgl_closest_points(vgl_line_segment_3d<T >const&, vgl_line_segment_3d<T >const&, bool*); \
+template vgl_point_2d<T > vgl_closest_point(vgl_line_segment_2d<T > const&, vgl_point_2d<T > const&); \
+template vgl_point_3d<T > vgl_closest_point(vgl_line_segment_3d<T > const&, vgl_point_3d<T > const&)
 
 #endif // vgl_closest_point_txx_

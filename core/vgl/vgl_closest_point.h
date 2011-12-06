@@ -298,5 +298,27 @@ vgl_closest_points(const vgl_line_segment_3d<T>& l1,
                    const vgl_line_segment_3d<T>& l2,
                    bool* unique=0);
 
+//: Return the closest point on a line segment \a l to a point \a p in 2D
+// \relatesalso vgl_point_2d
+// \relatesalso vgl_line_segment_2d
+// \sa vgl_distance_to_linesegment()
+template <class T>
+vgl_point_2d<T> vgl_closest_point(vgl_line_segment_2d<T> const& l,
+                                  vgl_point_2d<T> const& p);
+template <class T> inline
+vgl_point_2d<T> vgl_closest_point(vgl_point_2d<T> const& p,
+                                  vgl_line_segment_2d<T> const& l) { return vgl_closest_point(l,p); }
+
+//: Return the closest point on a line segment \a l to a point \a p in 3D
+// \relatesalso vgl_point_3d
+// \relatesalso vgl_line_segment_3d
+// \sa vgl_distance_to_linesegment()
+template <class T>
+vgl_point_3d<T> vgl_closest_point(vgl_line_segment_3d<T> const& l,
+                                  vgl_point_3d<T> const& p);
+template <class T> inline
+vgl_point_3d<T> vgl_closest_point(vgl_point_3d<T> const& p,
+                                  vgl_line_segment_3d<T> const& l) { return vgl_closest_point(l,p); }
+
 
 #endif // vgl_closest_point_h_
