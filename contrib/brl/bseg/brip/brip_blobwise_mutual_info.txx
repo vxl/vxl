@@ -163,7 +163,7 @@ void brip_blobwise_kl_div( const vil_image_view<T>& img1,
     //---find global min/max values
     T min1, max1, min2, max2;
     vil_math_value_range(x, min1, max1);
-    vil_math_value_range(y, min1, max1);
+    vil_math_value_range(y, min2, max2);
     double min = vcl_min(min1, min2);
     double max = vcl_max(max1, max2);
 
