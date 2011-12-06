@@ -16,7 +16,7 @@ void boxm2_compute_export_vis_wrl_function::exportVisToWRL(boxm2_block_metadata 
     float maxVis = 0;
     float minVis = 1;
     for (unsigned i = 0; i < dataSize /  boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());i++ ) {
-        if (vis_data[i] != -1 && vis_data[i] >= 0) {
+        if (vis_data[i] != -1 && vis_data[i] > 0) {
             file << p_data[i][0] << ' ' << p_data[i][1] << ' ' << p_data[i][2] << ",\n";
             if (maxVis < vis_data[i])
                 maxVis = vis_data[i];
@@ -29,7 +29,7 @@ void boxm2_compute_export_vis_wrl_function::exportVisToWRL(boxm2_block_metadata 
     file << " ] }\n"
          <<"     color Color { color [ ";
     for (unsigned i = 0; i < dataSize /  boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());i++ ) {
-        if (vis_data[i] != -1 && vis_data[i] >= 0) {
+        if (vis_data[i] != -1 && vis_data[i] > 0) {
 #if 0
             if (maxVis-minVis != 0)
                 file << (vis_data[i]-minVis)/(maxVis-minVis) << ' ' << (vis_data[i]-minVis)/(maxVis-minVis) << ' ' << (vis_data[i]-minVis)/(maxVis-minVis) << ",\n";

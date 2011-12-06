@@ -17,12 +17,12 @@ class boxm2_export_point_cloud_xyz_function
   static void exportPointCloudXYZ(boxm2_block_metadata data, boxm2_block* blk,
                                   boxm2_data_base* alphas,
                                   boxm2_data_base* points, boxm2_data_base* normals, vcl_ofstream& file,
-                                  bool output_prob, bool output_vis, float vis_t);
+                                  bool output_aux, float vis_t, float nmag_t);
   static void exportPointCloudPLY(boxm2_block_metadata data, boxm2_block* blk,
                                   boxm2_data_base* alphas,
                                   boxm2_data_base* points, boxm2_data_base* normals, vcl_ofstream& file,
-                                  bool output_prob, bool output_vis, float vis_t, unsigned& num_vertices);
-  static void writePLYHeader(vcl_ofstream& file, unsigned num_vertices, vcl_stringstream& ss);
+                                  bool output_aux, float vis_t, float nmag_t, unsigned& num_vertices);
+  static void writePLYHeader(vcl_ofstream& file, unsigned num_vertices, vcl_stringstream& ss, bool output_aux);
 };
 
 #endif
