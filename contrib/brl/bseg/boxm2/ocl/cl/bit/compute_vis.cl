@@ -18,16 +18,16 @@ void cast_ray(int,int,float,float,float,float,float,float,__constant RenderScene
               __global int4*,local uchar16*,constant uchar *,local uchar *,float*,AuxArgs);
 __kernel
 void
-compute_vis(__constant  uint                * datasize_points,
-            __constant  RenderSceneInfo     * linfo,
-            __constant  float4                   * directions,
+compute_vis(__constant  uint               * datasize_points,
+            __constant  RenderSceneInfo    * linfo,
+            __constant  float4             * directions,
             __global    int4               * tree_array,       // tree structure for each block
             __constant  uchar              * bit_lookup,       // used to get data_index
             __global    float              * alpha_array,
             __global    float4             * points,
             __global    float4             * normals,
             __global    float16            * vis_sphere,
-            __constant   bool             * contain_point,
+            __constant   bool              * contain_point,
             __local     uchar16            * local_tree,       // cache current tree into local memory
             __local     uchar              * cumsum)
 {
@@ -36,7 +36,7 @@ compute_vis(__constant  uint                * datasize_points,
         //get normal and point from global mem
         float4 ray_o = points[ gid ];
         float4 ray_d = normals[ gid ];
-
+        
         //check if there is a normal here
         if ( (ray_d.x == 0 && ray_d.y == 0 && ray_d.z ==0) || (ray_o.x == 0 && ray_o.y == 0 && ray_o.z == 0)) {
            vis_sphere[gid].sf = -1.0f; //flag to indicate there is no normal in this location.
@@ -71,9 +71,12 @@ compute_vis(__constant  uint                * datasize_points,
 
           //loop thru directions
           bool start;
+          float vis;
           for (unsigned int i = 0; i < 12; i++) {
             //setup ray
             start = !contain_point[0];
+            
+            vis = private_vis[i];
             aux_args.visibility = &(private_vis[i]);
             aux_args.start = &start;
 
@@ -83,8 +86,8 @@ compute_vis(__constant  uint                * datasize_points,
             cast_ray( 1, 1,
                       ray_ox, ray_oy, ray_oz,
                       ray_dx, ray_dy, ray_dz,
-                      linfo, tree_array,                                              //scene info
-                      local_tree, bit_lookup, cumsum, &(private_vis[i]), aux_args);   //utility info
+                      linfo, tree_array,                               //scene info
+                      local_tree, bit_lookup, cumsum, &vis, aux_args);   //utility info
           }
 
           //transfer from private mem to global mem
@@ -120,7 +123,7 @@ void step_cell_computevis(AuxArgs aux_args, int data_ptr, uchar llid, float d)
 __kernel
 void
 decide_normal_dir(     __constant  RenderSceneInfo    * linfo,
-                       __constant  float4                * directions,
+                       __constant  float4             * directions,
                        __global    float4             * normals,
                        __global    float              * vis,
                        __global    float16            * vis_sphere )
@@ -166,7 +169,7 @@ decide_normal_dir(     __constant  RenderSceneInfo    * linfo,
             }
 
             //flip if necessary
-            normals[ gid ] = (max_vis_flipped > max_vis) ?  (float4)(-normal_x,-normal_y,-normal_z,0) : (float4)(normal_x,normal_y,normal_z,0);
+            normals[ gid ] = (max_vis_flipped > max_vis) ?  (float4)(-normal_x,-normal_y,-normal_z,normals[gid].w) : (float4)(normal_x,normal_y,normal_z,normals[gid].w);
             //store max visibility
             vis[gid] = (max_vis_flipped > max_vis) ? max_vis_flipped : max_vis;
         }
