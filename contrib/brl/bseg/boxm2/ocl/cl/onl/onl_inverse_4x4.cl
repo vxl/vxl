@@ -49,31 +49,30 @@ bool onl_inverse_4x4(__local float * mat4x4,__local float * cofactor4x4, __local
     //get local id (0-63 for an 8x8) of this patch
     uchar llidr = (uchar)(get_local_id(0));
     uchar llidc = (uchar)(get_local_id(1));
-	uchar llid = (uchar)(llidr + 4*llidc);
+    uchar llid = (uchar)(llidr + 4*llidc);
 
     if (llidr < 4 && llidc < 4)
         cofactor4x4[llid] = cofactor_ij_v1(mat4x4,llidr,llidc);
     barrier(CLK_LOCAL_MEM_FENCE);
-	if (llidr < 4 && llidc < 4)
-	{
-		float det = determinant(mat4x4,cofactor4x4);
-		uchar llid_transpose = (uchar)(llidc + 4*llidr);
-		// put it in the inverse of the matrix.
-		invmat4x4[llid_transpose] = cofactor4x4[llid] / det ;
-	}
+    if (llidr < 4 && llidc < 4)
+    {
+        float det = determinant(mat4x4,cofactor4x4);
+        uchar llid_transpose = (uchar)(llidc + 4*llidr);
+        // put it in the inverse of the matrix.
+        invmat4x4[llid_transpose] = cofactor4x4[llid] / det ;
+    }
     barrier(CLK_LOCAL_MEM_FENCE);
 }
 
 // Assuming 4x4 workgroup
 bool onl_outerproduct_4x4(__local float * v1,__local float * v2, __local float * out4x4)
 {
-    
     uchar llidr = (uchar)(get_local_id(0));
     uchar llidc = (uchar)(get_local_id(1));
     if (llidr < 4 && llidc < 4)
-	{
-		uchar llid = (uchar)(llidr + 4*llidc);
-		out4x4[llid] = v1[llidr]*v2[llidc] ;
-	}
+    {
+        uchar llid = (uchar)(llidr + 4*llidc);
+        out4x4[llid] = v1[llidr]*v2[llidc] ;
+    }
     barrier(CLK_LOCAL_MEM_FENCE);
 }

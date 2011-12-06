@@ -153,10 +153,10 @@ void cubic_fit_error(__local float  * obs,       // dim n
         float denom = sqrt(2*M_PI)*(*internal_sigma);
         float numer = exp(-var/(2*(*internal_sigma)*(*internal_sigma)));
         coeffs[gid*8+5] = numer/denom;
-		if(var < 0 ) 
-			coeffs[gid*8+5] = 1.0;
+        if (var < 0 )
+            coeffs[gid*8+5] = 1.0;
     }
-	barrier(CLK_LOCAL_MEM_FENCE);
+    barrier(CLK_LOCAL_MEM_FENCE);
 }
 
 void compute_empty(__local float * obs,       // dim n
