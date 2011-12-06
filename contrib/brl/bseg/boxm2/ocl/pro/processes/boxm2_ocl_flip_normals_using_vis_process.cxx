@@ -8,6 +8,7 @@
 // at the normal and also on the hemisphere centered at the flipped normal. The direction with the higher
 // visibility is saved in boxm2_normal.
 //
+// TODO: implement a vis_sphere initializer kernel.
 // \author Ali Osman Ulusoy
 // \date Oct 10, 2011
 
@@ -50,7 +51,6 @@ namespace boxm2_ocl_flip_normals_using_vis_process_globals
     src_paths.push_back(source_dir + "backproject.cl");
     src_paths.push_back(source_dir + "statistics_library_functions.cl");
     src_paths.push_back(source_dir + "ray_bundle_library_opt.cl");
-    src_paths.push_back(source_dir + "bit/update_kernels.cl");
     src_paths.push_back(source_dir + "bit/compute_vis.cl");
     src_paths.push_back(source_dir + "bit/cast_ray_bit.cl");
 
@@ -119,37 +119,7 @@ bool boxm2_ocl_flip_normals_using_vis_process(bprb_func_process& pro)
   //make correct data types are here
   bool foundDataType = false, foundNumObsType = false;
   vcl_string data_type,num_obs_type,options;
-  vcl_vector<vcl_string> apps = scene->appearances();
-  int appTypeSize;
-  for (unsigned int i=0; i<apps.size(); ++i) {
-    if ( apps[i] == boxm2_data_traits<BOXM2_MOG3_GREY>::prefix() )
-    {
-      data_type = apps[i];
-      foundDataType = true;
-      options=" -D MOG_TYPE_8 ";
-      appTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_MOG3_GREY>::prefix());
-    }
-    else if ( apps[i] == boxm2_data_traits<BOXM2_MOG3_GREY_16>::prefix() )
-    {
-      data_type = apps[i];
-      foundDataType = true;
-      options=" -D MOG_TYPE_16 ";
-      appTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_MOG3_GREY_16>::prefix());
-    }
-    else if ( apps[i] == boxm2_data_traits<BOXM2_NUM_OBS>::prefix() )
-    {
-      num_obs_type = apps[i];
-      foundNumObsType = true;
-    }
-  }
-  if (!foundDataType) {
-    vcl_cout<<"BOXM2_OPENCL_UPDATE_PROCESS ERROR: scene doesn't have BOXM2_MOG3_GREY or BOXM2_MOG3_GREY_16 data type"<<vcl_endl;
-    return false;
-  }
-  if (!foundNumObsType) {
-    vcl_cout<<"BOXM2_OPENCL_UPDATE_PROCESS ERROR: scene doesn't have BOXM2_NUM_OBS type"<<vcl_endl;
-    return false;
-  }
+
 
   // create a command queue.
   int status=0;
@@ -206,8 +176,8 @@ bool boxm2_ocl_flip_normals_using_vis_process(bprb_func_process& pro)
 
       for (blk_iter = blocks.begin(); blk_iter != blocks.end(); ++blk_iter)
       {
-          boxm2_block_id id = blk_iter->first;
-          vcl_cout << "Processing block: " << id << vcl_endl;
+        boxm2_block_id id = blk_iter->first;
+        vcl_cout << "Processing block: " << id << vcl_endl;
 
         //get kernel
         bocl_kernel* kern =  kernels[identifier][i];
@@ -216,11 +186,7 @@ bool boxm2_ocl_flip_normals_using_vis_process(bprb_func_process& pro)
 
         //load normals
         bocl_mem* normals = opencl_cache->get_data<BOXM2_NORMAL>(blk_iter->first,0,false);
-
-        //array to store visibilities computed around a sphere
-        vcl_size_t visTypeSize = boxm2_data_info::datasize(boxm2_data_traits<BOXM2_VIS_SPHERE>::prefix());
         vcl_size_t normalsTypeSize = boxm2_data_info::datasize(boxm2_data_traits<BOXM2_NORMAL>::prefix());
-        bocl_mem *vis_sphere   = opencl_cache->get_data<BOXM2_VIS_SPHERE>(blk_iter->first, (normals->num_bytes()/normalsTypeSize)*visTypeSize, false);
 
         //load block info
         datasize[0] = (unsigned)(normals->num_bytes()/normalsTypeSize);
@@ -229,62 +195,67 @@ bool boxm2_ocl_flip_normals_using_vis_process(bprb_func_process& pro)
         transfer_time += (float) transfer.all();
         if (i==COMPUTE_VIS) {
 
-          //zip through each block
-          vcl_map<boxm2_block_id, boxm2_block_metadata>::iterator blk_iter_inner;
-          for (blk_iter_inner = blocks.begin(); blk_iter_inner != blocks.end(); ++blk_iter_inner) {
+            //array to store visibilities computed around a sphere
+            //ask for a new BOXM2_VIS_SPHERE data so that it gets initialized properly.
+            vcl_size_t visTypeSize = boxm2_data_info::datasize(boxm2_data_traits<BOXM2_VIS_SPHERE>::prefix());
+            bocl_mem *vis_sphere   = opencl_cache->get_data_new<BOXM2_VIS_SPHERE>(blk_iter->first, (normals->num_bytes()/normalsTypeSize)*visTypeSize, false);
 
-            transfer.mark();
-            boxm2_block_id id_inner = blk_iter_inner->first;
-            //vcl_cout << "--Loading block " << id_inner << vcl_endl;
+            //zip through each block
+            vcl_map<boxm2_block_id, boxm2_block_metadata>::iterator blk_iter_inner;
+            for (blk_iter_inner = blocks.begin(); blk_iter_inner != blocks.end(); ++blk_iter_inner) {
 
-            //load tree and alpha
-            boxm2_block_metadata mdata = blk_iter_inner->second;
-            vul_timer transfer;
-            bocl_mem* blk       = opencl_cache->get_block(blk_iter_inner->first);
-            bocl_mem* blk_info  = opencl_cache->loaded_block_info();
-            bocl_mem* alpha     = opencl_cache->get_data<BOXM2_ALPHA>(blk_iter_inner->first,0,false);
-            boxm2_scene_info* info_buffer = (boxm2_scene_info*) blk_info->cpu_buffer();
-            int alphaTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
-            info_buffer->data_buffer_length = (int) (alpha->num_bytes()/alphaTypeSize);
-            blk_info->write_to_buffer((queue));
+              transfer.mark();
+              boxm2_block_id id_inner = blk_iter_inner->first;
+              //vcl_cout << "--Loading block " << id_inner << vcl_endl;
 
-            bocl_mem* points = opencl_cache->get_data<BOXM2_POINT>(blk_iter->first,0,false);
+              //load tree and alpha
+              boxm2_block_metadata mdata = blk_iter_inner->second;
+              vul_timer transfer;
+              bocl_mem* blk       = opencl_cache->get_block(blk_iter_inner->first);
+              bocl_mem* blk_info  = opencl_cache->loaded_block_info();
+              bocl_mem* alpha     = opencl_cache->get_data<BOXM2_ALPHA>(blk_iter_inner->first,0,false);
+              boxm2_scene_info* info_buffer = (boxm2_scene_info*) blk_info->cpu_buffer();
+              int alphaTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
+              info_buffer->data_buffer_length = (int) (alpha->num_bytes()/alphaTypeSize);
+              blk_info->write_to_buffer((queue));
 
-            if (id == id_inner)
-              contain_point[0] = true;
-            else
-              contain_point[0] = false;
-            contain_point_mem->write_to_buffer(queue);
+              bocl_mem* points = opencl_cache->get_data<BOXM2_POINT>(blk_iter->first,0,false);
 
-            transfer_time += (float) transfer.all();
+              if (id == id_inner)
+                contain_point[0] = true;
+              else
+                contain_point[0] = false;
+              contain_point_mem->write_to_buffer(queue);
 
-            local_threads[0] = 128;
-            local_threads[1] = 1;
-            global_threads[0] = RoundUp((normals->num_bytes()/normalsTypeSize), local_threads[0]);
-            global_threads[1]=1;
+              transfer_time += (float) transfer.all();
 
-            kern->set_arg( datasize_mem.ptr() );
-            kern->set_arg( blk_info );
-            kern->set_arg( dodecahedron_dir_lookup.ptr());
-            kern->set_arg( blk );
-            kern->set_arg( lookup.ptr()  );
-            kern->set_arg( alpha  );
-            kern->set_arg( points );
-            kern->set_arg( normals );
-            kern->set_arg( vis_sphere);
-            kern->set_arg( contain_point_mem.ptr());
-            kern->set_local_arg( local_threads[0]*local_threads[1]*sizeof(cl_uchar16) );//local tree,
-            kern->set_local_arg( local_threads[0]*local_threads[1]*10*sizeof(cl_uchar) ); //cumsum buffer, imindex buffer
+              local_threads[0] = 128;
+              local_threads[1] = 1;
+              global_threads[0] = RoundUp((normals->num_bytes()/normalsTypeSize), local_threads[0]);
+              global_threads[1]=1;
 
-            //execute kernel
-            kern->execute(queue, 2, local_threads, global_threads);
-            int status = clFinish(queue);
-            check_val(status, MEM_FAILURE, "VISIBIITY EXECUTE FAILED: " + error_to_string(status));
-            gpu_time += kern->exec_time();
+              kern->set_arg( datasize_mem.ptr() );
+              kern->set_arg( blk_info );
+              kern->set_arg( dodecahedron_dir_lookup.ptr());
+              kern->set_arg( blk );
+              kern->set_arg( lookup.ptr()  );
+              kern->set_arg( alpha  );
+              kern->set_arg( points );
+              kern->set_arg( normals );
+              kern->set_arg( vis_sphere);
+              kern->set_arg( contain_point_mem.ptr());
+              kern->set_local_arg( local_threads[0]*local_threads[1]*sizeof(cl_uchar16) );//local tree,
+              kern->set_local_arg( local_threads[0]*local_threads[1]*10*sizeof(cl_uchar) ); //cumsum buffer, imindex buffer
 
-            //clear render kernel args so it can reset em on next execution
-            kern->clear_args();
-          }
+              //execute kernel
+              kern->execute(queue, 2, local_threads, global_threads);
+              int status = clFinish(queue);
+              check_val(status, MEM_FAILURE, "VISIBIITY EXECUTE FAILED: " + error_to_string(status));
+              gpu_time += kern->exec_time();
+
+              //clear render kernel args so it can reset em on next execution
+              kern->clear_args();
+            }
 
           //read from gpu
           vis_sphere->read_to_buffer(queue);
@@ -302,6 +273,9 @@ bool boxm2_ocl_flip_normals_using_vis_process(bprb_func_process& pro)
           boxm2_scene_info* info_buffer = (boxm2_scene_info*) blk_info->cpu_buffer();
           info_buffer->data_buffer_length = (int) (normals->num_bytes()/normalsTypeSize);
           blk_info->write_to_buffer((queue));
+
+          //load visibilities
+          bocl_mem* vis_sphere = opencl_cache->get_data<BOXM2_VIS_SPHERE>(blk_iter->first,0,false);
 
           //array to store final visibility of a point
           bocl_mem* vis   = opencl_cache->get_data<BOXM2_AUX0>(blk_iter->first, (normals->num_bytes()/normalsTypeSize) *boxm2_data_info::datasize(boxm2_data_traits<BOXM2_AUX0>::prefix()),false);
@@ -340,6 +314,7 @@ bool boxm2_ocl_flip_normals_using_vis_process(bprb_func_process& pro)
 
 
 #ifdef DEBUG
+
         vnl_vector_fixed<float, 4>  * aux_data=static_cast<vnl_vector_fixed<float, 4> *> (aux->cpu_buffer());
         for (unsigned k=0; k < info_buffer->data_buffer_length; k++) {
             if (aux_data[k][0]  != -1) {
@@ -348,20 +323,18 @@ bool boxm2_ocl_flip_normals_using_vis_process(bprb_func_process& pro)
                 vcl_cout << vcl_endl;
             }
         }
-        //vcl_cout << vcl_endl << "The count is " << count << vcl_endl;
+        vcl_cout << vcl_endl;
 #endif
 #ifdef DEBUG2
         vnl_vector_fixed<float, 16> * vis_data=static_cast< vnl_vector_fixed<float, 16>*> (vis_sphere->cpu_buffer());
+        vnl_vector_fixed<float, 4> * normal_data=static_cast< vnl_vector_fixed<float, 4>*> (normals->cpu_buffer());
+        bocl_mem* points = opencl_cache->get_data<BOXM2_POINT>(blk_iter->first,0,false);
+        vnl_vector_fixed<float, 4> * point_data=static_cast< vnl_vector_fixed<float, 4>*> (points->cpu_buffer());
         unsigned count = 0;
-        for (unsigned k=0;k < (points->num_bytes()/pointsTypeSize); k++) {
-            if (vis_data[k][15] != -1.0f) {
-                count++;
-                if (count % 1000 == 0)
-                    vcl_cout << vis_data[k] << vcl_endl;
-            }
+        for (unsigned k=0; k < (normals->num_bytes()/normalsTypeSize); k++) {
+            if (vis_data[k][15] != -1.0f && normal_data[k][2] < -0.5 && point_data[k][2] < 0.0 )
+              vcl_cout << vis_data[k] << "  " << normal_data[k] << vcl_endl;
           }
-
-        vcl_cout << vcl_endl << "The count is " << count << vcl_endl;
 #endif
     }
   }
