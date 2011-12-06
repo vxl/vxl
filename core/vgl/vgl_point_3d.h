@@ -68,16 +68,21 @@ class vgl_point_3d
 
   // Data Access-------------------------------------------------------------
 
+  inline Type &x() {return x_;}
+  inline Type &y() {return y_;}
+  inline Type &z() {return z_;}
+
   inline Type x() const {return x_;}
   inline Type y() const {return y_;}
   inline Type z() const {return z_;}
 
   //: Set \a x, \a y and \a z
-  //  Note that \a x, \a y, or \a z cannot be set individually
-  inline void set (Type px, Type py, Type pz){ x_ = px; y_ = py; z_ = pz; }
+  //  Note that \a x, \a y, and \a z can also be set individually
+  inline void set(Type px, Type py, Type pz) { x_ = px; y_ = py; z_ = pz; }
+
   //: Set \a x, \a y and \a z
-  //  Note that \a x, \a y, or \a z cannot be set individually
-  inline void set (Type const p[3]) { x_ = p[0]; y_ = p[1]; z_ = p[2]; }
+  //  Note that \a x, \a y, and \a z can also be set individually
+  inline void set(Type const p[3]) { x_ = p[0]; y_ = p[1]; z_ = p[2]; }
 
   //: Return true iff the point is at infinity (an ideal point).
   //  Always returns false.
