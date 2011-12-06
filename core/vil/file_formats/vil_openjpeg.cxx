@@ -25,7 +25,7 @@
 #include <vbl/vbl_smart_ptr.txx>
 #include <vil/vil_image_view.txx>
 
-// How can we avoid using the "deprecated" functions?
+// TODO: How can we avoid using the "deprecated" functions?
 #define USE_OPJ_DEPRECATED
 extern "C" {
   #include <openjpeg.h>
@@ -521,7 +521,7 @@ vil_openjpeg_image
   this->impl_->image_ = decoder.take_image();
 
   // Delay num reduction computation until requested
-  this->impl_->header_.num_reductions_ = -1;
+  this->impl_->header_.num_reductions_ = static_cast<vxl_uint_32>(-1);
 
 #if 0 // Move to a lazy evaluation
   // Find out how many reductions are available
@@ -616,7 +616,7 @@ vil_openjpeg_image
 {
   if ( !this->impl_->is_valid_ )
     return static_cast<unsigned int>(-1);
-  if ( this->impl_->header_.num_reductions_ == static_cast<unsigned int>(-1) )
+  if ( this->impl_->header_.num_reductions_ == static_cast<vxl_uint_32>(-1) )
   {
     vil_openjpeg_decoder decoder(this->impl_->opj_codec_format_);
     // Find out how many reductions are available
