@@ -149,6 +149,9 @@ SOURCE=.\processes/boxm_remove_level0_process.cxx
 # Begin Source File
 SOURCE=.\processes/boxm_fill_internal_cells_process.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\processes/boxm_explore_cells_at_level_process.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"

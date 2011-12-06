@@ -174,6 +174,12 @@ SOURCE=.\processes/brad_eigenimage_pixel_process.cxx
 SOURCE=.\processes/bbas_camera_angles_process.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\processes/brad_estimate_synoptic_function_1d_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/brad_estimate_empty_process.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/brdb_value_t+brad_eigenspace_sptr-.cxx
 # End Source File
 # Begin Source File
