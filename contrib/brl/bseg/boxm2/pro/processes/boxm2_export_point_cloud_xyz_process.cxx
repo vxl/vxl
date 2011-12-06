@@ -31,19 +31,19 @@ bool boxm2_export_point_cloud_xyz_process_cons(bprb_func_process& pro)
   vcl_vector<vcl_string> input_types_(n_inputs_);
   input_types_[0] = "boxm2_scene_sptr";
   input_types_[1] = "boxm2_cache_sptr";
-  input_types_[2] = "vcl_string";
-  input_types_[3] = "bool"; //output prob
-  input_types_[4] = "bool"; //output vis
-  input_types_[5] = "float";
+  input_types_[2] = "vcl_string"; //filename
+  input_types_[3] = "bool"; //output additional info (prob, vis, normal magnitude)
+  input_types_[4] = "float"; //visibility threshold
+  input_types_[5] = "float"; //normal magnitude threshold
 
   brdb_value_sptr output_prob = new brdb_value_t<bool>(false);
   pro.set_input(3, output_prob);
 
-  brdb_value_sptr output_vis = new brdb_value_t<bool>(false);
-  pro.set_input(4, output_vis);
-
   brdb_value_sptr vis_t = new brdb_value_t<float>(0);
-  pro.set_input(5, vis_t);
+  pro.set_input(4, vis_t);
+
+  brdb_value_sptr nmag_t = new brdb_value_t<float>(0);
+  pro.set_input(5, nmag_t);
 
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 }
@@ -63,13 +63,11 @@ bool boxm2_export_point_cloud_xyz_process (bprb_func_process& pro)
   boxm2_scene_sptr scene = pro.get_input<boxm2_scene_sptr>(i++);
   boxm2_cache_sptr cache = pro.get_input<boxm2_cache_sptr>(i++);
   vcl_string output_filename = pro.get_input<vcl_string>(i++);
-  bool output_prob = pro.get_input<bool>(i++);
-  bool output_vis = pro.get_input<bool>(i++);
+  bool output_aux = pro.get_input<bool>(i++);
   float vis_t = pro.get_input<float>(i++);
+  float nmag_t = pro.get_input<float>(i++);
 
   unsigned num_vertices = 0;
-
-  vcl_cout << "START EXPORTING POINT CLOUD WITH VISIBILITY THRESHOLD  " << vis_t << vcl_endl;
 
   vcl_ofstream myfile;
   myfile.open(output_filename.c_str());
@@ -91,9 +89,9 @@ bool boxm2_export_point_cloud_xyz_process (bprb_func_process& pro)
     //refine block and datas
     boxm2_block_metadata data = blk_iter->second;
     if (output_filename.substr(output_filename.find_last_of(".") + 1) == "xyz")
-      boxm2_export_point_cloud_xyz_function::exportPointCloudXYZ(data,blk,vis,points,normals,myfile, output_prob, output_vis, vis_t);
+      boxm2_export_point_cloud_xyz_function::exportPointCloudXYZ(data,blk,vis,points,normals,myfile, output_aux, vis_t, nmag_t);
     else if (output_filename.substr(output_filename.find_last_of(".") + 1) == "ply")
-      boxm2_export_point_cloud_xyz_function::exportPointCloudPLY(data,blk,vis,points,normals,myfile, output_prob, output_vis, vis_t, num_vertices);
+      boxm2_export_point_cloud_xyz_function::exportPointCloudPLY(data,blk,vis,points,normals,myfile, output_aux, vis_t, nmag_t, num_vertices);
     else
       vcl_cout << "UNKNOWN FILE FORMAT..." << vcl_endl;
   }
@@ -108,7 +106,7 @@ bool boxm2_export_point_cloud_xyz_process (bprb_func_process& pro)
     ss << myfile_input.rdbuf();
     myfile_input.close();
     myfile.open(output_filename.c_str());
-    boxm2_export_point_cloud_xyz_function::writePLYHeader(myfile,num_vertices,ss);
+    boxm2_export_point_cloud_xyz_function::writePLYHeader(myfile,num_vertices,ss,output_aux);
     myfile.flush();
     myfile.close();
   }
