@@ -23,6 +23,7 @@ SOURCES += processes/boxm_compute_expected_color_scene_process.cxx
 SOURCES += processes/boxm_save_scene_raw_process.cxx
 SOURCES += processes/boxm_remove_level0_process.cxx
 SOURCES += processes/boxm_fill_internal_cells_process.cxx
+SOURCES += processes/boxm_explore_cells_at_level_process.cxx
 
 #######################################
 include ${VXLROOT}/config/top-params.mk

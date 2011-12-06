@@ -8,6 +8,7 @@ SOURCES += brip_register.cxx
 MANPAGE_SOURCES += brip_processes.h
 SOURCES += processes/brip_extrema_process.cxx
 SOURCES += processes/brip_blobwise_mutual_info_process.cxx
+SOURCES += processes/brip_blobwise_kl_div_process.cxx
 
 #######################################
 include ${VXLROOT}/config/top-params.mk
