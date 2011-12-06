@@ -20,6 +20,7 @@ SET(boxm2_cpp_algo_sources
     boxm2_mean_intensities_batch_functor.h
     boxm2_filter_block_function.h     boxm2_filter_block_function.cxx
     boxm2_compute_derivative_function.h     boxm2_compute_derivative_function.cxx
+    boxm2_apply_filter_function.h     boxm2_apply_filter_function.txx
     boxm2_export_vis_wrl_function.h     boxm2_export_vis_wrl_function.cxx
     boxm2_export_point_cloud_xyz_function.h     boxm2_export_point_cloud_xyz_function.cxx
     boxm2_batch_functors.h
