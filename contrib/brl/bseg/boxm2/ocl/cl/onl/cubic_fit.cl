@@ -23,19 +23,19 @@ bool fit_intensity_cubic(__local float * obs,       // dim n
         float stemp =10000;
         for (unsigned int i = 0 ; i< (*nobs) ; i++)
         {
-            if (s[llid]<stemp)
+            if (s[i]<stemp)
             {
-                min_index = llid;
-                stemp = s[llid];
+                min_index = i;
+                stemp = s[i];
             }
         }
         stemp = -10000;
         for (unsigned int i = 0 ; i< (*nobs) ; i++)
         {
-            if (s[llid]>stemp)
+            if (s[i]>stemp)
             {
-                max_index = llid;
-                stemp = s[llid];
+                max_index = i;
+                stemp = s[i];
             }
         }
         l[0] = 0.0;
@@ -142,20 +142,21 @@ void cubic_fit_error(__local float  * obs,       // dim n
             e_nobs +=vis[i];
         }
         if (e_nobs <2)
-            var = 1.0;
+            var = -1.0;
         else
         {
             var = var * variance_multiplier(e_nobs);
             var =var/(e_nobs-1);
         }
-        coeffs[gid*8+4] =var;
-
+        coeffs[gid*8+4] =sqrt(var);
         // Computing Density
-        float denom = 1/sqrt(2*M_PI*(*internal_sigma)*(*internal_sigma));
+        float denom = sqrt(2*M_PI)*(*internal_sigma);
         float numer = exp(-var/(2*(*internal_sigma)*(*internal_sigma)));
-
-        coeffs[gid*8+5] = numer*denom;
+        coeffs[gid*8+5] = numer/denom;
+		if(var < 0 ) 
+			coeffs[gid*8+5] = 1.0;
     }
+	barrier(CLK_LOCAL_MEM_FENCE);
 }
 
 void compute_empty(__local float * obs,       // dim n
