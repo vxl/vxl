@@ -157,17 +157,30 @@ boxm2_data_base* boxm2_lru_cache::get_data_base(boxm2_block_id id, vcl_string ty
 //: returns a data_base pointer which is initialized to the default value of the type.
 //  If a block for this type exists on the cache, it is removed and replaced with the new one.
 //  This method does not check whether a block of this type already exists on the disk nor writes it to the disk
-boxm2_data_base* boxm2_lru_cache::get_data_base_new(boxm2_block_id id, vcl_string type, bool read_only)
+boxm2_data_base* boxm2_lru_cache::get_data_base_new(boxm2_block_id id, vcl_string type, vcl_size_t num_bytes, bool read_only)
 {
-  // initialize an empty block
-  vcl_cout<<"boxm2_lru_cache::initializing empty data "<<id<<" type: "<<type<<vcl_endl;
-  boxm2_block_metadata data = scene_->get_block_metadata(id);
-  // the following constructor also sets the default values
-  boxm2_data_base* block_data = new boxm2_data_base(data, type, read_only);
+
+  boxm2_data_base* block_data;
+  if(num_bytes > 0)   {
+    boxm2_block_metadata data = scene_->get_block_metadata(id);
+    // requesting a specific number of bytes,
+    vcl_cout<<"boxm2_lru_cache::initializing empty data "<<id
+            <<" type: "<<type
+            <<" to size: "<<num_bytes<<" bytes"<<vcl_endl;
+    block_data = new boxm2_data_base(new char[num_bytes], num_bytes, id, read_only);
+    block_data->set_default_value(type, data);
+  }
+  else   {
+    // initialize an empty block
+    vcl_cout<<"boxm2_lru_cache::initializing empty data "<<id<<" type: "<<type<<vcl_endl;
+    boxm2_block_metadata data = scene_->get_block_metadata(id);
+    // the following constructor also sets the default values
+    block_data = new boxm2_data_base(data, type, read_only);
+  }
+
 
   // grab a reference to the map of cached_data_
-  vcl_map<boxm2_block_id, boxm2_data_base*>& data_map =
-    this->cached_data_map(type);
+  vcl_map<boxm2_block_id, boxm2_data_base*>& data_map = this->cached_data_map(type);
 
   // then look for the block you're requesting
   vcl_map<boxm2_block_id, boxm2_data_base*>::iterator iter = data_map.find(id);
