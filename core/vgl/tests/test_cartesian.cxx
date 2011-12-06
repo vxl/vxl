@@ -256,12 +256,12 @@ static void test_point_2d()
   vgl_point_2d<int> p1(3,7), p2(d), p3(-1,-8);
   vcl_cout << p3 << vcl_endl;
 
-  TEST("constructor", p1.x() == 3 && p1.y()==7, true);
+  TEST("constructor", p1.x()==3 && p1.y()==7, true);
 
   TEST("inequality", (p1 != p3), true);
 
   p3.set(3,7);
-  TEST("set", p3.x() == 3 && p3.y()==7, true);
+  TEST("set", p3.x()==3 && p3.y()==7, true);
 
   TEST("equality", (p1 == p3), true);
 
@@ -271,7 +271,8 @@ static void test_point_2d()
   TEST("+=", (p2+=d1), p1);
   TEST("+=", p2, p1);
 
-  p2.set(4,5);
+  p2.x()=4; p2.y()=5;
+  TEST("set individually", p2.x()==4 && p2.y()==5, true);
   p3.set(7,-1);
   bool b = collinear(p1,p2,p3);
   TEST("collinear", b, true);
@@ -341,6 +342,8 @@ static void test_point_3d()
   TEST("+=", p2, p1);
 
   p2.set(4,5,2);
+  p2.x()=4; p2.y()=5; p2.z()=2;
+  TEST("set individually", p2.x()==4 && p2.y()==5 && p2.z()==2, true);
   p3.set(7,-1,11);
   bool b = collinear(p1,p2,p3);
   TEST("collinear", b, true);
@@ -765,10 +768,10 @@ static void test_box_2d()
 
   vgl_box_2d<int> ib(10, 11, 10, 11);
   vcl_cout << ib << vcl_endl;
-  TEST("Integer box centroid", ib.centroid_x() == 10 && ib.centroid_y()==10, true);
+  TEST("Integer box centroid", ib.centroid_x()==10 && ib.centroid_y()==10, true);
   ib.set_width(1); ib.set_height(1);
   vcl_cout << ib << vcl_endl;
-  TEST("Integer box centroid drift", ib.centroid_x() == 10 && ib.centroid_y()==10, true);
+  TEST("Integer box centroid drift", ib.centroid_x()==10 && ib.centroid_y()==10, true);
 
   ib = vgl_box_2d<int>(10, 11, 10, 11);
   ib.set_width(4); ib.set_height(4);
@@ -777,13 +780,13 @@ static void test_box_2d()
   ib.set_width(3); ib.set_height(3);
   ib.set_width(4); ib.set_height(4);
   vcl_cout << ib << ib.centroid() << vcl_endl;
-  TEST("Integer box centroid drift", ib.centroid_x() == 10 && ib.centroid_y()==10, true);
+  TEST("Integer box centroid drift", ib.centroid_x()==10 && ib.centroid_y()==10, true);
 
   ib = vgl_box_2d<int>(9, 11, 9, 11);
   vcl_cout << ib << ib.centroid() << vcl_endl;
   ib.set_width(3); ib.set_height(3);
   vcl_cout << ib << ib.centroid() << vcl_endl;
-  TEST("Integer box centroid", ib.centroid_x() == 10 && ib.centroid_y()==10, true);
+  TEST("Integer box centroid", ib.centroid_x()==10 && ib.centroid_y()==10, true);
 
   ib = vgl_box_2d<int>(-11, -10, -11, -10);
   vcl_cout << ib << ib.centroid() << vcl_endl;
@@ -793,7 +796,7 @@ static void test_box_2d()
   ib.set_width(4); ib.set_height(4);
   ib.set_width(3); ib.set_height(3);
   vcl_cout << ib << ib.centroid() << vcl_endl;
-  TEST("Integer box negative centroid drift", ib.centroid_x() == -10 && ib.centroid_y()==-10, true);
+  TEST("Integer box negative centroid drift", ib.centroid_x()==-10 && ib.centroid_y()==-10, true);
 
   ib = vgl_box_2d<int>(-11, -9, -11, -9);
   vcl_cout << ib << ib.centroid() << vcl_endl;
@@ -802,7 +805,7 @@ static void test_box_2d()
   ib.set_width(3); ib.set_height(3);
   ib.set_width(4); ib.set_height(4);
   vcl_cout << ib << ib.centroid() << vcl_endl;
-  TEST("Integer box negative centroid drift", ib.centroid_x() == -10 && ib.centroid_y()==-10, true);
+  TEST("Integer box negative centroid drift", ib.centroid_x()==-10 && ib.centroid_y()==-10, true);
 
   vgl_point_2d<double> min1(10,10), max1(20,20),
                        min2(40,40), max2(50,50),
