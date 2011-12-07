@@ -26,7 +26,8 @@
 // \endverbatim
 // Throws a mbl_exception_parse_error if it fails.
 void mbl_parse_keyword_list(vcl_istream& is, const vcl_string& keyword,
-                vcl_vector<vcl_string>& items);
+                vcl_vector<vcl_string>& items,
+                bool discard_comments = false);
 
 
 //: Read in keyword separated blocks of text from stream.
@@ -44,6 +45,7 @@ void mbl_parse_keyword_list(vcl_istream& is, const vcl_string& keyword,
 // \endverbatim
 // Throws a mbl_exception_parse_error if it fails.
 void mbl_parse_keyword_list2(vcl_istream& is, const vcl_string& keyword,
-                vcl_vector<vcl_string>& items);
+                vcl_vector<vcl_string>& items,
+                bool discard_comments = false);
 
 #endif // mbl_parse_keyword_list_h_

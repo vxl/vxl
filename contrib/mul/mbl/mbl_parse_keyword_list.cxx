@@ -21,7 +21,8 @@
 // }
 // \endverbatim
 void mbl_parse_keyword_list(vcl_istream& is, const vcl_string& keyword,
-                            vcl_vector<vcl_string>& items)
+                            vcl_vector<vcl_string>& items,
+                            bool discard_comments /* = false */)
 {
   vcl_string s = mbl_parse_block(is);
   vcl_istringstream ss(s);
@@ -37,8 +38,19 @@ void mbl_parse_keyword_list(vcl_istream& is, const vcl_string& keyword,
   while (!ss.eof())
   {
     ss >> label;         // Next follows the parameters
-    if (label == "}") continue;
-    if (label!=keyword)
+
+    if (label == "}") 
+      continue;
+
+    else if ( discard_comments && (label.substr(0,2) == "//") )
+    {
+      // Comment line, so read to end
+      vcl_string comment_string;
+      vcl_getline(ss, comment_string);
+      continue;
+    }
+
+    else if (label!=keyword)
     {
       vcl_string error_msg = "Expected keyword: '";
       error_msg+=keyword;
@@ -62,7 +74,8 @@ void mbl_parse_keyword_list(vcl_istream& is, const vcl_string& keyword,
 // }
 // \endverbatim
 void mbl_parse_keyword_list2(vcl_istream& is, const vcl_string& keyword,
-                             vcl_vector<vcl_string>& items)
+                             vcl_vector<vcl_string>& items,
+                             bool discard_comments /* = false */)
 {
   vcl_string s = mbl_parse_block(is);
   vcl_istringstream ss(s);
@@ -78,7 +91,18 @@ void mbl_parse_keyword_list2(vcl_istream& is, const vcl_string& keyword,
   while (!ss.eof())
   {
     ss >> label;         // Next follows the parameters
-    if (label == "}") continue;
+
+    if (label == "}") 
+      continue;
+
+    else if ( discard_comments && (label.substr(0,2) == "//") )
+    {
+      // Comment line, so read to end
+      vcl_string comment_string;
+      vcl_getline(ss, comment_string);
+      continue;
+    }
+
     if (label!=keyword)
     {
       vcl_string error_msg = "Expected keyword: '";
