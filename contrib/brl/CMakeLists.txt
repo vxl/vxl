@@ -46,14 +46,7 @@ SUBDIRS(bbas)
 IF( BUILD_GEL )
   # segmentation package
   SUBDIRS(bseg)
-
-  # video view library
-  SUBDIRS(vvid)
 ENDIF( BUILD_GEL )
-
-# multiview library
-# test if bmvl is used by anyone prior to removal
-#SUBDIRS(bmvl)
 
 # standalone executables
 SUBDIRS(bexe)
