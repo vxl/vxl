@@ -583,6 +583,7 @@ void bwm_site_mgr::load_site()
             mesh->load_from(path);
             if (mesh) {
               bwm_observable_mesh_sptr obj = new bwm_observable_mesh();
+              obj->set_site(site_name_);
               bwm_observer_mgr::instance()->attach(obj);
               if (type.compare(object_types_[MESH_FEATURE]) == 0)
                 obj->set_mesh_type(bwm_observable_mesh::BWM_MESH_FEATURE);

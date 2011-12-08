@@ -1,4 +1,5 @@
 #include "bwm_tableau_cam.h"
+#include "bwm_site_mgr.h"
 //:
 // \file
 #include <bwm/bwm_tableau_mgr.h>
@@ -58,6 +59,7 @@ void bwm_tableau_cam::create_polygon_mesh()
   bwm_world::instance()->add(my_polygon);
   bwm_observer_mgr::instance()->attach(my_polygon);
   my_polygon->set_object(poly3d);
+  my_polygon->set_site(bwm_site_mgr::instance()->site_name());
   this->unlock();
 }
 

@@ -263,7 +263,7 @@ bool bwm_observer_cam::handle(const vgui_event &e)
       else if (e.modifier == vgui_CTRL)
         this->translate_along_optical_cone(0.1);
       else
-        this->translate_along_optical_cone(0.0001);
+        this->translate_along_optical_cone(0.01);
     }
     in_jog_mode_ = true;
     return true;
@@ -276,7 +276,7 @@ bool bwm_observer_cam::handle(const vgui_event &e)
       else if (e.modifier == vgui_CTRL)
         this->translate_along_optical_cone(-0.1);
       else
-        this->translate_along_optical_cone(-0.0001);
+        this->translate_along_optical_cone(-0.01);
     }
     in_jog_mode_ = true;
     return true;

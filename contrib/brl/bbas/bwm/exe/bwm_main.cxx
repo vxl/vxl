@@ -31,7 +31,7 @@ int main(int argc, char** argv)
   my_argv[argc] = new char[13];
   vcl_strcpy(my_argv[argc], "--mfc-use-gl");
   vgui::init(my_argc, my_argv);
-#if 1
+#if 0
   delete[] my_argv[argc];
   delete[] my_argv;
 #endif

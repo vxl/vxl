@@ -100,9 +100,15 @@ class bwm_observable : public vgui_observable, public vbl_ref_count
   vcl_string path() const { return path_; }
   void set_path(vcl_string const& path) { path_=path; }
 
+  vcl_string site() const { return site_; }
+  void set_site(vcl_string const& site) { site_=site; }
+
  protected:
   //: the observable file path
   vcl_string path_;
+  //: the observable site name
+  vcl_string site_;
+
   vgl_vector_3d<double> last_translation_;
 };
 

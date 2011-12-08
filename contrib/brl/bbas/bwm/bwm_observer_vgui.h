@@ -101,6 +101,8 @@ class bwm_observer_vgui : public bwm_observer_img, public bwm_observer
   //: display a cross soview at the specified location
   void add_cross(float x, float y, float r);
 
+  //: find the object corresponding to the soview id.
+  bwm_observable_sptr find_object(unsigned soview2d_id, unsigned &face_id);
  protected:
   //allows children to take some action if a correspondence is set
   virtual void correspondence_action() {}
@@ -130,8 +132,6 @@ class bwm_observer_vgui : public bwm_observer_img, public bwm_observer
   vcl_map<unsigned, vsol_point_3d_sptr> vertex_3d_map_;
 
   bwm_observable_sptr moving_face_;
-
-  bwm_observable_sptr find_object(unsigned soview2d_id, unsigned &face_id);
 
   unsigned get_selected_3d_vertex_index(unsigned poly_id);
 

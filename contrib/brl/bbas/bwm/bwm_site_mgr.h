@@ -40,6 +40,9 @@ class bwm_site_mgr
   void save_video_cams_and_world_pts_vrml();
   //: compute 3-d parameters, site bounding box and GSD
   void compute_3d_world_params();
+  //:site info
+  vcl_string site_name(){ return site_name_;}
+  vcl_string site_dir(){ return site_dir_;}
  private:
   bwm_site_mgr();
   static bwm_site_mgr* instance_;

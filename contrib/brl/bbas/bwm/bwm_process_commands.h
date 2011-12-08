@@ -148,6 +148,31 @@ class bwm_adjust_camera_offsets_command: public vgui_command
   virtual void execute() { bwm_observer_mgr::instance()->adjust_camera_offsets(); }
 };
 
+class bwm_add_3d_centroid_corr_command: public vgui_command
+{
+ public:
+  bwm_add_3d_centroid_corr_command() {}
+  ~bwm_add_3d_centroid_corr_command() {}
+  virtual vcl_string name() const {return "add_site_to_site_centroid_corr"; }
+  virtual void execute() { bwm_observer_mgr::instance()->add_3d_corr_centroid(); }
+};
+class bwm_save_3d_site_corr_command: public vgui_command
+{
+ public:
+  bwm_save_3d_site_corr_command() {}
+  ~bwm_save_3d_site_corr_command() {}
+  virtual vcl_string name() const {return "save_site_to_site_corrs"; }
+  virtual void execute() { bwm_observer_mgr::instance()->save_3d_corrs(); }
+};
+
+class bwm_load_3d_site_corr_command: public vgui_command
+{
+ public:
+  bwm_load_3d_site_corr_command() {}
+  ~bwm_load_3d_site_corr_command() {}
+  virtual vcl_string name() const {return "load_site_to_site_corrs"; }
+  virtual void execute() { bwm_observer_mgr::instance()->load_3d_corrs(); }
+};
 class bwm_corresp_process_command: public bwm_menu_process_command
 {
  public:
@@ -166,6 +191,12 @@ class bwm_corresp_process_command: public bwm_menu_process_command
     menu.add("Move to First Correspondence", new bwm_move_to_corr_command());
     menu.add("Adjust Cameras (One Corr.)",
              new bwm_adjust_camera_offsets_command());
+    menu.add("Add 3d site correspondence (face centroid)",
+             new bwm_add_3d_centroid_corr_command());
+    menu.add("Save 3d site correspondences",
+             new bwm_save_3d_site_corr_command());
+    menu.add("Load 3d site correspondences",
+             new bwm_load_3d_site_corr_command());
   }
   virtual void execute() {}
 };

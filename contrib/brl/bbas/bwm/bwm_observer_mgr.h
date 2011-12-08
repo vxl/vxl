@@ -10,14 +10,17 @@
 #include "bwm_observer.h"
 #include "bwm_observer_cam.h"
 #include "bwm_observable.h"
+#include "bwm_observable_sptr.h"
 #include "bwm_observer_rat_cam.h"
 #include "bwm_corr.h"
 #include "bwm_corr_sptr.h"
+#include "bwm_3d_corr_sptr.h"
+
 
 class bwm_observer_mgr
 {
  public:
-  typedef enum {IMAGE_TO_IMAGE, WORLD_TO_IMAGE} BWM_CORR_MODE;
+  typedef enum {IMAGE_TO_IMAGE, WORLD_TO_IMAGE, WORLD_TO_WORLD} BWM_CORR_MODE;
   typedef enum {SINGLE_PT_CORR, MULTIPLE_CORRS} BWM_N_CORRS;
   typedef enum {FEATURE_CORR, TERRAIN_CORR} BWM_CORR_TYPE;
 
@@ -34,8 +37,8 @@ class bwm_observer_mgr
   //: cleans up the correspondences and initializes the system for a new site
   void clear();
 
-  vcl_vector<bwm_observer_cam*> observers_cam();
-  vcl_vector<bwm_observer_rat_cam*> observers_rat_cam();
+  vcl_vector<bwm_observer_cam*> observers_cam() const;
+  vcl_vector<bwm_observer_rat_cam*> observers_rat_cam() const;
 
 
   void add(bwm_observer* o);
@@ -89,6 +92,32 @@ class bwm_observer_mgr
 
   void find_terrain_points(vcl_vector<vgl_point_3d<double> >& points);
 
+  //============ site to site correspondence methods ==============
+  // methods for selecting correspondences between multiple sites
+  // observables provide the site string name. 3-d points are constructed 
+  // from multiple views either as 3-d polygon vertices or polygon centroids.
+
+  //: get all selected soviews to find the corresponding vertices or polygons
+  vcl_vector<bwm_observable_sptr> 
+    all_selected_observables(vcl_string const& soview_type) const;
+
+  //: requires exactly two selected vertices each in a unique site
+  // (NOT YET IMPLEMENTED)
+  bool add_3d_corr_vertex();
+
+  //: requires exactly two selected polygons each in a unique site. 
+  //  Corresponds centroids of the polygons
+  bool add_3d_corr_centroid();
+
+  //: save 3d_corrs as an ascii file
+  void save_3d_corrs() const;
+  static void save_3d_corrs(vcl_string const& path,
+                            vcl_vector<bwm_3d_corr_sptr> const& corrs);
+
+  //: load 3d_corrs from an ascii file
+  void load_3d_corrs();
+  static void load_3d_corrs(vcl_string const& path,
+                            vcl_vector<bwm_3d_corr_sptr>& corrs);
  private:
   bwm_observer_mgr() : start_corr_(false)
   {
@@ -107,7 +136,7 @@ class bwm_observer_mgr
   BWM_CORR_TYPE corr_type_;
   vcl_vector<bwm_corr_sptr> corr_list_;
   vcl_vector<bwm_corr_sptr> terrain_corr_list_;
-
+  vcl_vector<bwm_3d_corr_sptr> site_to_site_corr_list_;
 #if 0
   bool world_point_valid_;
   vgl_point_3d<double> corr_world_pt_;

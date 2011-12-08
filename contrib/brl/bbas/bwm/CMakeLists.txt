@@ -77,7 +77,8 @@ IF(EXPAT_FOUND)
        bwm_observable_mesh_circular.cxx bwm_observable_mesh_circular.h
        bwm_observable_textured_mesh.cxx bwm_observable_textured_mesh.h    bwm_observable_textured_mesh_sptr.h
        bwm_texture_map_generator.cxx    bwm_texture_map_generator.h
-       bwm_corr.cxx                     bwm_corr.h                        bwm_corr_sptr.h
+       bwm_corr.cxx                     bwm_corr.h          bwm_corr_sptr.h
+       bwm_3d_corr.cxx                  bwm_3d_corr.h       bwm_3d_corr_sptr.h
     )
   ENDIF(SHAPELIB_FOUND)
  ENDIF(EXPATPP_FOUND)
