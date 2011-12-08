@@ -10,7 +10,6 @@
 #include <vgl/vgl_plane_3d.h>
 #include <vpgl/algo/vpgl_rational_adjust_onept.h>
 #include <vsl/vsl_basic_xml_element.h>
-#include <vgui/vgui_dialog.h>
 #include <vsol/vsol_point_3d.h>
 #include <vsol/vsol_polygon_3d.h>
 #include <vgui/vgui_soview.h>
@@ -100,6 +99,7 @@ void bwm_observer_mgr::detach(bwm_observable_sptr obs)
   for (unsigned i=0; i<observers_.size(); i++)
     obs->detach(observers_[i]);
 }
+
 void bwm_observer_mgr::remove(bwm_observer* observer)
 {
   for (unsigned i=0; i<observers_.size(); i++)
@@ -629,83 +629,90 @@ void bwm_observer_mgr::find_terrain_points(vcl_vector<vgl_point_3d<double> >& po
   }
   terrain_corr_list_.clear();
 }
+
 //: find all selected polygons across all observers
 vcl_vector<bwm_observable_sptr> bwm_observer_mgr::
-all_selected_observables(vcl_string const& soview_type) const{
+all_selected_observables(vcl_string const& soview_type) const
+{
   vcl_vector<bwm_observable_sptr> sel_obsbls;
   vcl_vector<bwm_observer_cam*> obs_cam = this->observers_cam();
 
-  for(vcl_vector<bwm_observer_cam*>::iterator oit = obs_cam.begin();
-      oit != obs_cam.end(); ++oit){
+  for (vcl_vector<bwm_observer_cam*>::iterator oit = obs_cam.begin();
+       oit != obs_cam.end(); ++oit) {
     bwm_observer_cam* obs = *oit;
-    if(!obs){
+    if (!obs) {
     vcl_cout << "null observer in all_selected_observables\n";
     return sel_obsbls;//empty
     }
     vcl_vector<vgui_soview*> soviews = obs->get_selected_soviews();
-    for(vcl_vector<vgui_soview*>::iterator sit = soviews.begin();
-        sit != soviews.end(); ++sit){
-      if((*sit)->type_name().compare(soview_type)==0){
+    for (vcl_vector<vgui_soview*>::iterator sit = soviews.begin();
+         sit != soviews.end(); ++sit) {
+      if ((*sit)->type_name().compare(soview_type)==0) {
         unsigned face_id;
         bwm_observable_sptr obj=(*oit)->find_object(soviews[0]->get_id(),face_id);
-        if(obj) sel_obsbls.push_back(obj);
+        if (obj) sel_obsbls.push_back(obj);
       }
     }
   }
   return sel_obsbls;
 }
+
 //: requires exactly two selected vertices each in a unique site
-bool bwm_observer_mgr::add_3d_corr_vertex(){
+bool bwm_observer_mgr::add_3d_corr_vertex()
+{
   // not implemented yet
   return true;
 }
 
 //: requires exactly two selected polygons each in a unique site. Corresponds centroids of the polygons
-bool bwm_observer_mgr::add_3d_corr_centroid(){
-  vcl_vector<bwm_observable_sptr> obs = 
+bool bwm_observer_mgr::add_3d_corr_centroid()
+{
+  vcl_vector<bwm_observable_sptr> obs =
     this->all_selected_observables("bgui_vsol_soview2D_polygon");
-  if(obs.size()!=2){
+  if (obs.size()!=2) {
     vcl_cout << "must have exactly two polygons selected\n";
     return false;
   }
   bwm_observable_sptr obs0 = obs[0], obs1 = obs[1];
-  if(obs0->site() == obs1->site()){
-   vcl_cout << "each polygon must be from a different site\n";
+  if (obs0->site() == obs1->site()) {
+    vcl_cout << "each polygon must be from a different site\n";
     return false;
-  } 
+  }
   vcl_map<int, vsol_polygon_3d_sptr> polys0 = obs0->extract_faces();
   vcl_map<int, vsol_polygon_3d_sptr> polys1 = obs1->extract_faces();
-  if(polys0.size() !=1 || polys1.size() !=1){
-   vcl_cout << "must be exactly 1 polygon in each obserable\n";
+  if (polys0.size() !=1 || polys1.size() !=1) {
+   vcl_cout << "must be exactly 1 polygon in each observable\n";
     return false;
-  } 
+  }
   vcl_map<int, vsol_polygon_3d_sptr>::iterator pit = polys0.begin();
   vsol_polygon_3d_sptr poly0 = (*pit).second;
   pit = polys1.begin();
-  vsol_polygon_3d_sptr poly1 = (*pit).second;  
+  vsol_polygon_3d_sptr poly1 = (*pit).second;
   unsigned n0 = poly0->size(), n1 = poly1->size();
-  if(!n0||!n1){
+  if (!n0||!n1) {
    vcl_cout << "poly with no vertices in add_3d_corr";
     return false;
-  } 
+  }
   double xc0 = 0.0, yc0 = 0.0, zc0 = 0.0;
   double xc1 = 0.0, yc1 = 0.0, zc1 = 0.0;
-  for(unsigned i = 0; i<n0; ++i){
+  for (unsigned i = 0; i<n0; ++i) {
     vsol_point_3d_sptr vi = poly0->vertex(i);
-    xc0 += (*vi).x(); yc0 += (*vi).y();     zc0 += (*vi).z();
+    xc0 += (*vi).x(); yc0 += (*vi).y(); zc0 += (*vi).z();
   }
-  for(unsigned i = 0; i<n0; ++i){
+  for (unsigned i = 0; i<n0; ++i) {
     vsol_point_3d_sptr vi = poly1->vertex(i);
-    xc1 += (*vi).x(); yc1 += (*vi).y();     zc1 += (*vi).z();
+    xc1 += (*vi).x(); yc1 += (*vi).y(); zc1 += (*vi).z();
   }
   bwm_3d_corr_sptr corr_3d = new bwm_3d_corr();
   corr_3d->set_match(obs0->site(), xc0/n0, yc0/n0, zc0/n0);
   corr_3d->set_match(obs1->site(), xc1/n1, yc1/n1, zc1/n1);
   site_to_site_corr_list_.push_back(corr_3d);
-	return true;
+  return true;
 }
+
 //: save 3d_corrs
-void bwm_observer_mgr::save_3d_corrs() const{
+void bwm_observer_mgr::save_3d_corrs() const
+{
   vcl_string path = "";
   vcl_string ext = "*.cor";
   vgui_dialog corr_dlg("Save 3d Correspondences");
@@ -714,28 +721,29 @@ void bwm_observer_mgr::save_3d_corrs() const{
     return;
   bwm_observer_mgr::save_3d_corrs(path, site_to_site_corr_list_);
 }
-  
+
 void bwm_observer_mgr::save_3d_corrs(vcl_string const& path,
                                      vcl_vector<bwm_3d_corr_sptr> const& corrs)
 {
   vcl_ofstream os(path.c_str());
-  if(!os.is_open())
-    {
-      vcl_cout << "couldn't open 3d_corr file path\n";
-      return ;
-    }
+  if (!os.is_open())
+  {
+    vcl_cout << "couldn't open 3d_corr file path\n";
+    return ;
+  }
   unsigned n = corrs.size();
-  if(!n){
-      vcl_cout << "no 3d_corrs to save\n";
-      return ;
-    }
+  if (!n) {
+    vcl_cout << "no 3d_corrs to save\n";
+    return ;
+  }
   os << "Ncorrs: " << n << '\n';
-  for(unsigned i = 0; i<n; ++i)
+  for (unsigned i = 0; i<n; ++i)
     os << *corrs[i];
 }
 
 //: load 3d_corrs
-void bwm_observer_mgr::load_3d_corrs(){
+void bwm_observer_mgr::load_3d_corrs()
+{
   vcl_string path = "";
   vcl_string ext = "*.cor";
   vgui_dialog corr_dlg("Load 3d Correspondences");
@@ -744,63 +752,65 @@ void bwm_observer_mgr::load_3d_corrs(){
     return;
   bwm_observer_mgr::load_3d_corrs(path, site_to_site_corr_list_);
 }
+
 void bwm_observer_mgr::load_3d_corrs(vcl_string const& path,
-                                     vcl_vector<bwm_3d_corr_sptr>& corrs){
+                                     vcl_vector<bwm_3d_corr_sptr>& corrs)
+{
   vcl_ifstream is(path.c_str());
-  if(!is.is_open())
-    {
-      vcl_cout << "couldn't open 3d_corr file path\n";
-      return ;
-    }
+  if (!is.is_open())
+  {
+    vcl_cout << "couldn't open 3d_corr file path\n";
+    return ;
+  }
   //clear out any existing correspondences
   corrs.clear();
   vcl_string temp, temp1, temp2;
   is >> temp;
-  if(temp!="Ncorrs:"){
+  if (temp!="Ncorrs:") {
     vcl_cout << "error in 3d_corr file\n";
     return;
   }
-  unsigned n_corrs = 0;  
+  unsigned n_corrs = 0;
   is >> n_corrs;
-  for(unsigned i = 0; i<n_corrs; ++i){
+  for (unsigned i = 0; i<n_corrs; ++i) {
     is >> temp >> temp1 >> temp2;
-    if(temp2!="Sites:"){
+    if (temp2!="Sites:") {
       vcl_cout << "error in 3d_corr file\n";
       return;
-    } 
+    }
     unsigned n_sites = 0;
     is >> n_sites;
     double x = 0.0, y = 0.0, z = 0.0;
     vcl_string site;
-	bwm_3d_corr_sptr corr = new bwm_3d_corr();
-    for(unsigned s = 0; s<n_sites; ++s){
+    bwm_3d_corr_sptr corr = new bwm_3d_corr();
+    for (unsigned s = 0; s<n_sites; ++s) {
       is >> temp >> temp1;
-      if(temp != "Site["){
-      vcl_cout << "error in 3d_corr file\n";
-      return;
-      } 
+      if (temp != "Site[") {
+        vcl_cout << "error in 3d_corr file\n";
+        return;
+      }
       site = temp1;
       is >> temp >> temp1;
-      if(temp1 != "X:"){
-      vcl_cout << "error in 3d_corr file\n";
-      return;
-      } 
+      if (temp1 != "X:") {
+        vcl_cout << "error in 3d_corr file\n";
+        return;
+      }
       is >> x;
       is >> temp;
-      if(temp != "Y:"){
-      vcl_cout << "error in 3d_corr file\n";
-      return;
-      } 
+      if (temp != "Y:") {
+        vcl_cout << "error in 3d_corr file\n";
+        return;
+      }
       is >> y;
       is >> temp;
-      if(temp != "Z:"){
-      vcl_cout << "error in 3d_corr file\n";
-      return;
-      } 
+      if (temp != "Z:") {
+        vcl_cout << "error in 3d_corr file\n";
+        return;
+      }
       is >> z;
       is >> temp;//eat up the trailing ")"
       corr->set_match(site, x, y, z);
     }
-    corrs.push_back(corr);      
+    corrs.push_back(corr);
   }
 }

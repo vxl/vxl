@@ -17,25 +17,27 @@
 #include <vpgl/vpgl_perspective_camera.h>
 #include <vpgl/algo/vpgl_ortho_procrustes.h>
 
-// the resulting similarity maps from the coordinate frame of pts1 
+// the resulting similarity maps from the coordinate frame of pts1
 // to the coordinate frame of pts0
 static bool compute_similarity(vnl_matrix<double> const& pts0,
                                vnl_matrix<double> const& pts1,
-                               vgl_rotation_3d<double>& R, 
-                               vnl_vector_fixed<double, 3>& t, 
-                               double& scale){
+                               vgl_rotation_3d<double>& R,
+                               vnl_vector_fixed<double, 3>& t,
+                               double& scale)
+{
   vpgl_ortho_procrustes op(pts0, pts1);
   R = op.R();
   t = op.t();
   scale = op.s();
-  if(! op.compute_ok()) return false;
-  vcl_cout << "Ortho procrustes error " 
+  if (! op.compute_ok()) return false;
+  vcl_cout << "Ortho procrustes error "
            << vcl_sqrt(op.residual_mean_sq_error()) << '\n';
   return true;
 }
+
 // the input camera is in the coordinate system of pts0. The output camera
-// is the camera the coordinate system of pts 0 mapped to the 
-// coordinate system of pts1, that is, 
+// is the camera the coordinate system of pts 0 mapped to the
+// coordinate system of pts1, that is,
 //
 //  x1 =  K[R0|t0](Hs Hs^-1) X1, where Hs is the similarity transform.
 //
@@ -47,12 +49,12 @@ static bool compute_similarity(vnl_matrix<double> const& pts0,
 //                       |0 0 s 0||        |
 //                       |0 0 0 1|| 0 0 0 1|
 //                        -      - -      -
-// It follows that R' = R0*Rs and t' = t0/s + R*ts 
+// It follows that R' = R0*Rs and t' = t0/s + R*ts
 //
-static vpgl_perspective_camera<double>  
+static vpgl_perspective_camera<double>
 transform_camera(vpgl_perspective_camera<double> const& cam,
-                 vgl_rotation_3d<double> const& Rs, 
-                 vnl_vector_fixed<double, 3> const& ts, 
+                 vgl_rotation_3d<double> const& Rs,
+                 vnl_vector_fixed<double, 3> const& ts,
                  const double scale)
 {
   vnl_matrix_fixed<double,3,3> Rms = Rs.as_matrix();
@@ -66,14 +68,15 @@ transform_camera(vpgl_perspective_camera<double> const& cam,
   vnl_matrix_fixed<double, 3, 3> Rt = R*Rms;
   vgl_rotation_3d<double> Rtr(Rt);
   //compute new translation
-  vnl_vector_fixed<double, 3> tt = (1.0/scale)*t + R*ts;  
+  vnl_vector_fixed<double, 3> tt = (1.0/scale)*t + R*ts;
   vgl_vector_3d<double> ttg(tt[0], tt[1], tt[2]);
   //construct transformed camera
   vpgl_perspective_camera<double> camt(K, Rtr, ttg);
   return camt;
 }
+
 // this executable finds a similarity transform, given a set of corresponding
-// 3-d points. The similiarity transform is then applied to a directory of 
+// 3-d points. The similiarity transform is then applied to a directory of
 // perspective cameras to produce cameras in the new coordinate system
 
 int main(int argc, char** argv)
@@ -84,51 +87,51 @@ int main(int argc, char** argv)
 
   vul_arg<vcl_string> input_cam_dir ("-in_cam_dir","directory to get cams","");
   vul_arg<vcl_string> output_cam_dir ("-out_cam_dir","directory to store cams", "");
-    
-  if(argc != 7){
+
+  if (argc != 7) {
     vcl_cout << "usage: bwm_3d_site_transform -corrs <corr file> -in_cam_dir <dir> -out_cam_dir <dir>\n";
-	return -1;
+    return -1;
   }
 
   vul_arg_parse(argc, argv);
 
   // verify input camera dir
   if (!vul_file::is_directory(input_cam_dir().c_str()))
-    {
-      vcl_cout<<"Input Camera directory does not exist"<<vcl_endl;
-      return -1;
-    }
+  {
+    vcl_cout<<"Input Camera directory does not exist"<<vcl_endl;
+    return -1;
+  }
 
   // verify output camera dir
   if (!vul_file::is_directory(output_cam_dir().c_str()))
-    {
-      vcl_cout<<"Output Camera directory does not exist"<<vcl_endl;
-      return -1;
-    }
+  {
+    vcl_cout<<"Output Camera directory does not exist"<<vcl_endl;
+    return -1;
+  }
 
   vcl_vector<bwm_3d_corr_sptr> corrs;
   bwm_observer_mgr::load_3d_corrs(corrs_path(), corrs);
   // assume correspondences between two sites only
   unsigned n = corrs.size();
   vnl_matrix<double> pts0(3,n), pts1(3,n);
-  for(unsigned i = 0; i<n; ++i){
+  for (unsigned i = 0; i<n; ++i) {
     vcl_cout << *(corrs[i]);
     vcl_vector<vgl_point_3d<double> > match_pts = corrs[i]->matching_pts();
-    pts0[0][i] = match_pts[0].x();  pts1[0][i] = match_pts[1].x();  
-    pts0[1][i] = match_pts[0].y();  pts1[1][i] = match_pts[1].y();  
-    pts0[2][i] = match_pts[0].z();  pts1[2][i] = match_pts[1].z();  
+    pts0[0][i] = match_pts[0].x();  pts1[0][i] = match_pts[1].x();
+    pts0[1][i] = match_pts[0].y();  pts1[1][i] = match_pts[1].y();
+    pts0[2][i] = match_pts[0].z();  pts1[2][i] = match_pts[1].z();
   }
   vgl_rotation_3d<double> R;
   vnl_vector_fixed<double, 3> t;
   double scale;
-  if(!compute_similarity(pts0, pts1, R, t, scale)){
+  if (!compute_similarity(pts0, pts1, R, t, scale)) {
     vcl_cout << "similarity computation failed\n";
     return -1;
   }
   vcl_cout << "scale = " << scale << "\nR = " << R << "\nt = " << t << '\n';
   //transform the cameras
   vcl_string in_dir = input_cam_dir() + "/*.txt";
-  for(vul_file_iterator fn = in_dir.c_str(); fn; ++fn){
+  for (vul_file_iterator fn = in_dir.c_str(); fn; ++fn) {
     vcl_string f = fn();
     vcl_ifstream is(f.c_str());
     vpgl_perspective_camera<double> cam;

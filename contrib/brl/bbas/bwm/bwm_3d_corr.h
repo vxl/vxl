@@ -21,12 +21,12 @@
 #include <vcl_iosfwd.h>
 #include <vgl/vgl_point_3d.h>
 
-// Correspondence between 3-d points, each in different bwm sites.
+//: Correspondence between 3-d points, each in different bwm sites.
 // The site is designated by its string name. Typically there will be
 // two sites, the cameras for each generated from independent bundle
 // adjustment processes. Thus, the 3-d coordinate frames of the two
 // sites are not the same and differ by a similarity transform in most cases.
-// The transform can be computed given a set of bwm_3d_corr(s). 
+// The transform can be computed given a set of bwm_3d_corr(s).
 class bwm_3d_corr : public vbl_ref_count
 {
  public:
@@ -52,22 +52,22 @@ class bwm_3d_corr : public vbl_ref_count
   //: return a vector of corresponding 3-d points
   vcl_vector<vgl_point_3d<double> > matching_pts() const;
 
-  //: Mutators
+  // === Mutators ===
+
   //: replace a 3-d point
   bool update_match(vcl_string const& site,
                     vgl_point_3d<double> old_pt,
                     vgl_point_3d<double> new_pt);
   //:set a match
-  void set_match(vcl_string const& site, 
+  void set_match(vcl_string const& site,
                  const double x, const double y, const double z);
 
   //: Utility functions
   friend vcl_ostream&  operator<<(vcl_ostream& s, bwm_3d_corr const& c);
 
-
  protected:
+  // === Members ===
 
-  //members
   vcl_map<vcl_string, vgl_point_3d<double> > matches_;//!< match in each site
 };
 
