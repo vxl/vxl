@@ -1,17 +1,21 @@
 #ifndef boxm2_apply_filter_function_txx
 #define boxm2_apply_filter_function_txx
-
+//:
+// \file
 #include "boxm2_apply_filter_function.h"
 
 #if 0
 # define PROB
 #endif
 
+#include <vcl_cassert.h>
+#include <vcl_iostream.h>
 
 //: "default" constructor
 template<boxm2_data_type RESPONSE_DATA_TYPE>
 boxm2_apply_filter_function<RESPONSE_DATA_TYPE>::boxm2_apply_filter_function(
-    vcl_string kernel_base_file_name, unsigned num_kernels) {
+    vcl_string kernel_base_file_name, unsigned num_kernels)
+{
   kernels_.clear();
   num_kernels_ = 0;
   vcl_string filename;
@@ -20,7 +24,7 @@ boxm2_apply_filter_function<RESPONSE_DATA_TYPE>::boxm2_apply_filter_function(
   for (unsigned i = 0; i < num_kernels; i++) {
     //compute full kernel file name
     vcl_stringstream ss;
-    ss << kernel_base_file_name << "_" << i << ".txt";
+    ss << kernel_base_file_name << '_' << i << ".txt";
     vcl_cout << "Loading " << ss.str() << vcl_endl;
 
     //load kernel from file
@@ -47,8 +51,8 @@ boxm2_apply_filter_function<RESPONSE_DATA_TYPE>::boxm2_apply_filter_function(
       ifs >> weight;
       if (ifs.eof())
         break;
-      kernel.push_back(vcl_pair<vgl_point_3d<float> , float> (vgl_point_3d<
-          float> (this_loc.x(), this_loc.y(), this_loc.z()), weight));
+      kernel.push_back(vcl_pair<vgl_point_3d<float> , float> (
+          vgl_point_3d<float> (this_loc.x(), this_loc.y(), this_loc.z()), weight));
     }
 
     //push onto vector
@@ -67,8 +71,9 @@ boxm2_apply_filter_function<RESPONSE_DATA_TYPE>::boxm2_apply_filter_function(
 template<boxm2_data_type RESPONSE_DATA_TYPE>
 void boxm2_apply_filter_function<RESPONSE_DATA_TYPE>::apply_filter(
     boxm2_block_metadata data, boxm2_block* blk, boxm2_data_base* alphas,
-    boxm2_data_base* response, boxm2_data_base* points, float prob_threshold, boxm2_data_base * normals, vcl_vector<vnl_vector_fixed<double,4> > * normal_dir) {
-
+    boxm2_data_base* response, boxm2_data_base* points, float prob_threshold,
+    boxm2_data_base* normals, vcl_vector<vnl_vector_fixed<double,4> > * normal_dir)
+{
   boxm2_block_id id = blk->block_id();
 
   //3d array of trees
@@ -111,7 +116,7 @@ void boxm2_apply_filter_function<RESPONSE_DATA_TYPE>::apply_filter(
           points_data[currIdx][3] = 0;
 
           //init normals
-          if(normals) {
+          if (normals) {
             boxm2_data_traits<BOXM2_NORMAL>::datatype* normals_data = (boxm2_data_traits<BOXM2_NORMAL>::datatype*) normals->data_buffer();
             normals_data[currIdx][0] = 0;
             normals_data[currIdx][1] = 0;
@@ -129,7 +134,7 @@ void boxm2_apply_filter_function<RESPONSE_DATA_TYPE>::apply_filter(
           //compute neighborhood of cell center
           vcl_vector<vcl_pair<vgl_point_3d<int> , vgl_point_3d<double> > > neighborhood;
           //if at least one kernel cannot be evaluated, don' compute anything
-          if(!neighbor_points(cellCenter, side_len, trees, neighborhood))
+          if (!neighbor_points(cellCenter, side_len, trees, neighborhood))
             continue;
 
           //eval neighborhood
@@ -149,7 +154,7 @@ void boxm2_apply_filter_function<RESPONSE_DATA_TYPE>::apply_filter(
 #endif
 
           //interpolate result to normals if it is present
-          if(normals) {
+          if (normals) {
             boxm2_data_traits<BOXM2_NORMAL>::datatype* normals_data = (boxm2_data_traits<BOXM2_NORMAL>::datatype*) normals->data_buffer();
 
             double normal_x = 0, normal_y = 0, normal_z = 0;
@@ -173,7 +178,6 @@ void boxm2_apply_filter_function<RESPONSE_DATA_TYPE>::apply_filter(
             normals_data[currIdx][2] = normal_z;
             normals_data[currIdx][3] = norm;
           }
-
         } //end leaf for
       } //end z for
     } //end y for
@@ -182,22 +186,27 @@ void boxm2_apply_filter_function<RESPONSE_DATA_TYPE>::apply_filter(
 
 
 template<boxm2_data_type RESPONSE_DATA_TYPE>
-bool boxm2_apply_filter_function<RESPONSE_DATA_TYPE>::neighbor_points( const vgl_point_3d<double>& cellCenter, double side_len,
-                                            const boxm2_array_3d<uchar16>& trees, vcl_vector<vcl_pair<vgl_point_3d<int> , vgl_point_3d<double> > >& neighborhood) {
-
+bool boxm2_apply_filter_function<RESPONSE_DATA_TYPE>::neighbor_points(
+    const vgl_point_3d<double>& cellCenter, double side_len,
+    const boxm2_array_3d<uchar16>& trees, vcl_vector<vcl_pair<vgl_point_3d<int> , vgl_point_3d<double> > >& neighborhood)
+{
    for (int i = kernel_extent_min_.x(); i <= kernel_extent_max_.x(); i++) {
      for (int j = kernel_extent_min_.y(); j <= kernel_extent_max_.y(); j++) {
        for (int k = kernel_extent_min_.z(); k <= kernel_extent_max_.z(); k++) {
          //check if calculated neighbor is out of bounds
-         if ( cellCenter.x() + i*side_len < trees.get_row1_count() && cellCenter.y() + j*side_len < trees.get_row2_count() && cellCenter.z() + k*side_len < trees.get_row3_count()
-             && cellCenter.x() + i*side_len >= 0 && cellCenter.y() + j*side_len >= 0 && cellCenter.z() + k*side_len >= 0) {
-             vcl_pair<vgl_point_3d<int>, vgl_point_3d<double> > mypair(vgl_point_3d<int>(i, j, k),
+         if ( cellCenter.x() + i*side_len < trees.get_row1_count() &&
+              cellCenter.y() + j*side_len < trees.get_row2_count() &&
+              cellCenter.z() + k*side_len < trees.get_row3_count() &&
+              cellCenter.x() + i*side_len >= 0 &&
+              cellCenter.y() + j*side_len >= 0 &&
+              cellCenter.z() + k*side_len >= 0) {
+             vcl_pair<vgl_point_3d<int>, vgl_point_3d<double> > mypair(
+                 vgl_point_3d<int>(i, j, k),
                  vgl_point_3d<double>(cellCenter.x() + i*side_len, cellCenter.y() + j*side_len,  cellCenter.z() + k*side_len));
              neighborhood.push_back(mypair);
          }
          else
            return false; //immediately return
-
        }
      }
    }
@@ -206,11 +215,11 @@ bool boxm2_apply_filter_function<RESPONSE_DATA_TYPE>::neighbor_points( const vgl
 }
 
 template<boxm2_data_type RESPONSE_DATA_TYPE>
-vcl_vector<vcl_pair<vgl_point_3d<int> , float> > boxm2_apply_filter_function<
-    RESPONSE_DATA_TYPE>::eval_neighbors(boxm2_block_metadata data,
-                                        const boct_bit_tree& bit_tree, const vcl_vector<vcl_pair<vgl_point_3d<int> , vgl_point_3d<double> > > & neighbors,
-                                        const boxm2_array_3d<uchar16>& trees, const boxm2_data_traits<BOXM2_ALPHA>::datatype* alpha_data, int curr_depth) {
-
+vcl_vector<vcl_pair<vgl_point_3d<int> , float> > boxm2_apply_filter_function<RESPONSE_DATA_TYPE>::eval_neighbors(
+    boxm2_block_metadata data,
+    const boct_bit_tree& bit_tree, const vcl_vector<vcl_pair<vgl_point_3d<int> , vgl_point_3d<double> > > & neighbors,
+    const boxm2_array_3d<uchar16>& trees, const boxm2_data_traits<BOXM2_ALPHA>::datatype* alpha_data, int curr_depth)
+{
   vcl_vector<vcl_pair<vgl_point_3d<int> , float> > probs;
 
   double side_len = 1.0 / (double) (1 << curr_depth);
@@ -218,15 +227,14 @@ vcl_vector<vcl_pair<vgl_point_3d<int> , float> > boxm2_apply_filter_function<
   for (unsigned int i = 0; i < neighbors.size(); ++i) {
     //load neighbor block/tree
     vgl_point_3d<double> abCenter = neighbors[i].second;
-    vgl_point_3d<int> blkIdx((int) abCenter.x(), (int) abCenter.y(),
-        (int) abCenter.z());
+    vgl_point_3d<int> blkIdx((int)abCenter.x(), (int)abCenter.y(), (int)abCenter.z());
     uchar16 ntree = trees(blkIdx.x(), blkIdx.y(), blkIdx.z());
-    boct_bit_tree neighborTree((unsigned char*) ntree.data_block(),
-        data.max_level_);
+    boct_bit_tree neighborTree((unsigned char*) ntree.data_block(), data.max_level_);
 
     //traverse to local center
     vgl_point_3d<double> locCenter((double) abCenter.x() - blkIdx.x(),
-        (double) abCenter.y() - blkIdx.y(), (double) abCenter.z() - blkIdx.z());
+                                   (double) abCenter.y() - blkIdx.y(),
+                                   (double) abCenter.z() - blkIdx.z());
     int neighborBitIdx = neighborTree.traverse(locCenter, curr_depth);
 
     //if the cells are the same size, or the neighbor is larger
@@ -247,7 +255,8 @@ vcl_vector<vcl_pair<vgl_point_3d<int> , float> > boxm2_apply_filter_function<
       vcl_pair<vgl_point_3d<int> , float> mypair(neighbors[i].first, alpha);
       probs.push_back(mypair);
 #endif
-    } else //neighbor is smaller, must combine neighborhood
+    }
+    else //neighbor is smaller, must combine neighborhood
     {
       //get cell, combine neighborhood to one probability
 
@@ -282,8 +291,8 @@ vcl_vector<vcl_pair<vgl_point_3d<int> , float> > boxm2_apply_filter_function<
 
 template<boxm2_data_type RESPONSE_DATA_TYPE>
 float boxm2_apply_filter_function<RESPONSE_DATA_TYPE>::eval_filter(
-    vcl_vector<vcl_pair<vgl_point_3d<int> , float> > neighbors, vcl_vector<vcl_pair<vgl_point_3d<float> , float> > filter) {
-
+    vcl_vector<vcl_pair<vgl_point_3d<int> , float> > neighbors, vcl_vector<vcl_pair<vgl_point_3d<float> , float> > filter)
+{
   float sum = 0;
   for (unsigned i = 0; i < filter.size(); i++) {
     vgl_point_3d<float> loc_float = filter[i].first;
