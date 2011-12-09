@@ -99,6 +99,9 @@ SOURCE=.\bwm_observer_generic_cam.cxx
 SOURCE=.\bwm_tableau_generic_cam.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\bwm_3d_corr.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/vbl_smart_ptr+bwm_command-.cxx
 # End Source File
 # Begin Source File
@@ -112,6 +115,9 @@ SOURCE=.\Templates/vbl_smart_ptr+bwm_observable_mesh-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/vbl_smart_ptr+bwm_observable_textured_mesh-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vbl_smart_ptr+bwm_3d_corr-.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
@@ -262,6 +268,12 @@ SOURCE=.\bwm_observer_generic_cam.h
 # End Source File
 # Begin Source File
 SOURCE=.\bwm_tableau_generic_cam.h
+# End Source File
+# Begin Source File
+SOURCE=.\bwm_3d_corr_sptr.h
+# End Source File
+# Begin Source File
+SOURCE=.\bwm_3d_corr.h
 # End Source File
 # End Group
 # End Target

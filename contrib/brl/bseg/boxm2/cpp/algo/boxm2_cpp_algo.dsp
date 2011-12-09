@@ -128,6 +128,12 @@ SOURCE=.\boxm2_export_vis_wrl_function.cxx
 # Begin Source File
 SOURCE=.\Templates/boxm2_batch_functors+BOXM2_APMs-.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\Templates/boxm2_apply_filter_function+FLOAT16-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/boxm2_apply_filter_function+BOXM2_NORMAL-.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
@@ -229,6 +235,12 @@ SOURCE=.\boxm2_export_vis_wrl_function.h
 # End Source File
 # Begin Source File
 SOURCE=.\boxm2_compute_derivative_function.h
+# End Source File
+# Begin Source File
+SOURCE=.\boxm2_apply_filter_function.txx
+# End Source File
+# Begin Source File
+SOURCE=.\boxm2_apply_filter_function.h
 # End Source File
 # End Group
 # End Target

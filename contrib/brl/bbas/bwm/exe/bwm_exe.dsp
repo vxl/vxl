@@ -115,6 +115,9 @@ SOURCE=.\bwm_visualsfm_to_vpgl_cams.cxx
 # Begin Source File
 SOURCE=.\bwm_nvm_avg_focal_length.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\bwm_3d_site_transform.cxx
+# End Source File
 # End Group
 # End Target
 # End Project
