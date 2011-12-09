@@ -1,3 +1,4 @@
+#include <boxm2/cpp/algo/boxm2_apply_filter_function.h>
 #include <boxm2/cpp/algo/boxm2_batch_functors.h>
 #include <boxm2/cpp/algo/boxm2_batch_opt2_functors.h>
 #include <boxm2/cpp/algo/boxm2_batch_opt2_phongs_functors.h>

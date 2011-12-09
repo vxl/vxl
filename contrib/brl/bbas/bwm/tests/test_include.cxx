@@ -1,3 +1,5 @@
+#include <bwm/bwm_3d_corr.h>
+#include <bwm/bwm_3d_corr_sptr.h>
 #include <bwm/bwm_command.h>
 #include <bwm/bwm_command_macros.h>
 #include <bwm/bwm_command_sptr.h>
