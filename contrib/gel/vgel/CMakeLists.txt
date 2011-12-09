@@ -1,7 +1,7 @@
 # gel/vgel/CMakeLists.txt
 
 doxygen_add_library(contrib/gel/vgel
-  DEPENDS contrib/gel/vtol core/vidl1 core/vidl_vil1 contrib/oxl/mvl
+  DEPENDS contrib/gel/vtol core/vidl_vil1 contrib/oxl/mvl
   PACKAGE contrib/gel
   DESCRIPTION "Kanade-Lucas_Tomasi feature tracker"
   )
@@ -28,7 +28,7 @@ IF(BUILD_OXL)
  TARGET_LINK_LIBRARIES(vgel mvl)
 ENDIF(BUILD_OXL)
 
-TARGET_LINK_LIBRARIES(vgel vgel_kl vtol vil vil1 vidl1 vidl_vil1 vbl)
+TARGET_LINK_LIBRARIES(vgel vgel_kl vtol vil vil1 vidl_vil1 vbl)
 
 IF( BUILD_TESTING )
   SUBDIRS(tests)
