@@ -13,7 +13,6 @@
 #include <vtol/vtol_vertex_2d.h>
 #include <vidl_vil1/vidl_vil1_frame.h>
 #include <vidl_vil1/vidl_vil1_movie.h>
-#include <vidl1/vidl1_movie.h>
 
 #include <vcl_deprecated.h>
 #include <vcl_iostream.h>
@@ -376,20 +375,6 @@ void vgel_kl::match_sequence(vidl_vil1_movie_sptr             movie,
        ++pframe)
   {
     vil1_image im = vil1_image(pframe->get_image());
-    image_list.push_back(im);
-  }
-  match_sequence(image_list,matches);
-}
-
-void vgel_kl::match_sequence(vidl1_movie_sptr                 movie,
-                             vgel_multi_view_data_vertex_sptr matches)
-{
-  vcl_vector<vil_image_resource_sptr> image_list;
-  for (vidl1_movie::frame_iterator pframe = movie->first();
-       pframe <= movie->last();
-       ++pframe)
-  {
-      vil_image_resource_sptr im = vil_new_image_resource_of_view (*pframe->get_view());
     image_list.push_back(im);
   }
   match_sequence(image_list,matches);

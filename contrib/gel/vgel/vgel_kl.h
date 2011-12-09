@@ -16,7 +16,6 @@ extern "C" {
 #include <vcl_vector.h>
 #include <vgel/vgel_multi_view_data_vertex_sptr.h>
 #include <vidl_vil1/vidl_vil1_movie_sptr.h>
-#include <vidl1/vidl1_movie_sptr.h>
 #include <vxl_config.h>
 #include <vil/vil_image_view.h>
 
@@ -81,9 +80,6 @@ class vgel_kl
   // \deprecated Use other vil(2) version
   // May be removed after VXL 1.1.1
   virtual void match_sequence(vidl_vil1_movie_sptr,
-                              vgel_multi_view_data_vertex_sptr);
-  //: get matching points from a sequence of video frames
-  virtual void match_sequence(vidl1_movie_sptr,
                               vgel_multi_view_data_vertex_sptr);
 
   //: extract feature points from a single image
