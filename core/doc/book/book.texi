@@ -56,7 +56,6 @@ Copyright @copyright{} 2000 Andrew Fitzgibbon
 * vpdl::
 * vcsl::
 * vpgl::
-* vidl1::
 * structure::
 * build::
 * coding standards::
@@ -196,14 +195,6 @@ Copyright @copyright{} 2000 Andrew Fitzgibbon
 @cindex fundamental matrix
 
 @include chapter_vpgl.texi
-@comment ------------------------------------------------------------------
-@node    vidl1
-@comment node-name, next,      previous, up
-@chapter vidl1: Video Access (Deprecated)
-@cindex video
-
-@include chapter_vidl1.texi
-
 @comment ------------------------------------------------------------------
 @node    structure
 @comment node-name, next,     previous, up

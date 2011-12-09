@@ -36,7 +36,6 @@ SOURCEFILES=book.texi \
             chapter_vcsl.texi \
             chapter_vgl.texi \
             chapter_vgui.texi \
-            chapter_vidl1.texi \
             chapter_vidl.texi \
             chapter_vil.texi \
             chapter_vil1.texi \
