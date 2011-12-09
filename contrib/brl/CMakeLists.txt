@@ -1,5 +1,5 @@
 # brl/CMakeLists.txt
-# Mutual dependencies:  bbas --> bseg --> vvid  and  bbas --> bmvl
+# Mutual dependencies:  bbas --> bseg  and  bbas --> bmvl
 
 PROJECT( brl )
 
