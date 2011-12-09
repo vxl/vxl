@@ -5,7 +5,7 @@ SUBDIRS += bbas
 SUBDIRS += bseg
 
 # video view library
-SUBDIRS += vvid
+#SUBDIRS += vvid
 
 # multiview library
 #SUBDIRS += bmvl

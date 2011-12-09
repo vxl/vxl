@@ -34,6 +34,7 @@ SOURCES += processes/boxm2_cpp_query_cell_brdf_process.cxx
 SOURCES += processes/boxm2_cpp_update_using_quality_process.cxx
 SOURCES += processes/boxm2_cpp_batch_compute_synoptic_function_1d_process.cxx
 SOURCES += processes/boxm2_cpp_compute_derivative_process.cxx
+SOURCES += processes/boxm2_cpp_filter_response_process.cxx
 
 #######################################
 include ${VXLROOT}/config/top-params.mk
