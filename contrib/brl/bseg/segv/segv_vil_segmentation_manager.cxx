@@ -84,9 +84,6 @@
 #include <sdet/sdet_watershed_region_proc.h>
 #include <sdet/sdet_region_proc_params.h>
 #include <sdet/sdet_region_proc.h>
-#include <strk/strk_region_info_params.h>
-#include <strk/strk_region_info.h>
-#include <strk/strk_io.h>
 #include <sdet/sdet_third_order_edge_det_params.h>
 #include <sdet/sdet_third_order_edge_det.h>
 segv_vil_segmentation_manager *segv_vil_segmentation_manager::instance_ = 0;
@@ -1916,15 +1913,13 @@ void segv_vil_segmentation_manager::extrema()
   vil_image_view<float> fimg =
     brip_vil_float_ops::convert_to_float(img);
   vil_image_view<float> extr;
-  bool output_mask = false, output_unclipped = false;
+  bool output_mask = false, output_unclipped = false, mag_only = false;
   if (choice == 1) output_mask = true;
   if (choice == 2) output_unclipped = true;
   if (fast)
-    extr = brip_vil_float_ops::fast_extrema(fimg, lambda0, lambda1, theta, bright,
-                                            output_mask, output_unclipped);
+    extr = brip_vil_float_ops::fast_extrema(fimg, lambda0, lambda1, theta, bright, output_mask, output_unclipped);
   else
-    extr = brip_vil_float_ops::extrema(fimg, lambda0, lambda1, theta, bright,
-                                       output_mask, output_unclipped);
+    extr = brip_vil_float_ops::extrema(fimg, lambda0, lambda1, theta, bright, mag_only, output_mask, output_unclipped);
 
   vcl_cout << "Extrema computation time " << t.real() << " msec\n";
   unsigned ni = extr.ni(), nj = extr.nj(), np = extr.nplanes();

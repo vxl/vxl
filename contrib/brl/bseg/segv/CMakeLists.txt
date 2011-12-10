@@ -3,7 +3,6 @@
 
 doxygen_add_library(contrib/brl/bseg/segv
   DEPENDS
-    contrib/brl/bseg/strk
     contrib/brl/bbas/bgui
     contrib/brl/bbas/bxml
   PACKAGE contrib/brl
@@ -25,7 +24,6 @@ IF(HAS_VGUI)
 
  SET(segv_sources
      dll.h vil_dll.h
-     segv_segmentation_manager.cxx     segv_segmentation_manager.h
      segv_vil_segmentation_manager.cxx segv_vil_segmentation_manager.h
      segv_menus.cxx                    segv_menus.h
      segv_vil_menus.cxx                segv_vil_menus.h
@@ -39,7 +37,7 @@ IF(HAS_VGUI)
  INSTALL_TARGETS(/lib segv)
  INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bseg/segv ${segv_sources})
 
- TARGET_LINK_LIBRARIES(segv bgui vgui strk sdet bsol bvgl brip vpgl_file_formats vpgl vtol vdgl vsol vil vil_algo vil1 vnl vgl vul vbl)
+ TARGET_LINK_LIBRARIES(segv bgui vgui sdet bsol bvgl brip vpgl_file_formats vpgl vtol vdgl vsol vil vil_algo vil1 vnl vgl vul vbl)
 
  IF (BUILD_TESTING)
   SUBDIRS(tests)

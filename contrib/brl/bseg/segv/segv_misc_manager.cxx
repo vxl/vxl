@@ -64,11 +64,7 @@
 #include <sdet/sdet_watershed_region_proc.h>
 #include <sdet/sdet_region_proc_params.h>
 #include <sdet/sdet_region_proc.h>
-#include <strk/strk_region_info_params.h>
-#include <strk/strk_region_info.h>
-#include <strk/strk_io.h>
 
-;
 segv_misc_manager *segv_misc_manager::instance_ = 0;
 
 segv_misc_manager *segv_misc_manager::instance()
