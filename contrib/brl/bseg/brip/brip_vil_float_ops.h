@@ -124,10 +124,14 @@ class brip_vil_float_ops
             vil_image_view<float> const& Iyy,
             bool determinant = true);
 
+  //: scale invariant means that the response is independent of the 
+  //  sigma_y of the unrotated derivative operator, i.e. the direction
+  //  of the derivative
   static void extrema_kernel_mask(float lambda0, float lambda1, float theta,
                                   vbl_array_2d<float>& kernel,
                                   vbl_array_2d<bool>& mask,
-                                  float cutoff_percentage = 0.01f);
+                                  float cutoff_percentage = 0.01f,
+                                  bool scale_invariant = false);
 
 
   //: Compute the standard deviation of an operator response, given the image intensity standard deviation at each pixel
@@ -148,15 +152,17 @@ class brip_vil_float_ops
   static vil_image_view<float> extrema(vil_image_view<float> const& input,
                                        float lambda0, float lambda1,
                                        float theta, bool bright = true,
+                                       bool mag_only = false,
                                        bool output_response_mask = true,
-                                       bool unclipped_response = false);
+                                       bool unclipped_response = false,
+                                       bool scale_invariant = false);
 
   //: Find anisotropic intensity extrema at a range of orientations and return the maximal response at the best orientation.
   //  Theta interval is in degrees
   //  If lambda0 == lambda1 then reduces to the normal extrema operator
   static vil_image_view<float> extrema_rotational(vil_image_view<float> const& input,
                                                   float lambda0, float lambda1,
-                                                  float theta_interval, bool bright = true);
+                                                  float theta_interval, bool bright = true, bool mag_only = false, bool scale_invariant = false);
 
   //: compute the inscribed rectangle in an ellipse with largest (1+h)(1+w). Needed for fast non-maximal suppression. Theta is in degrees.
   static void max_inscribed_rect(float lambda0, float lambda1, float theta,

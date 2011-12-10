@@ -3718,11 +3718,11 @@ float brip_vil_float_ops::extrema_revert_angle(float angle)
   }
   return angle;
 }
-
+//: if scale_invariant = true then the response mag is indpendent of lambda1
 void brip_vil_float_ops::extrema_kernel_mask(float lambda0, float lambda1,
                                              float theta,
                                              vbl_array_2d<float>& kernel,
-                                             vbl_array_2d<bool>& mask, float cutoff_percentage)
+                                             vbl_array_2d<bool>& mask, float cutoff_percentage, bool scale_invariant)
 {
   theta = extrema_revert_angle(theta);//in range [-90, 90]
   //convert theta to radians
@@ -3759,7 +3759,7 @@ void brip_vil_float_ops::extrema_kernel_mask(float lambda0, float lambda1,
       mask[ry+rj][rx+ri] = g>=cutoff;
       double temp = (-s*rx + c*ry);
       temp = temp*temp*s1sq;
-      double v = (temp -1)*g*s1sq;
+      double v = (temp -1)*g*(scale_invariant?1.0:s1sq);
       coef[ry+rj][rx+ri] = v;
       residual+=v;
       total += vcl_fabs(v);
@@ -3847,8 +3847,9 @@ std_dev_operator_method2(vil_image_view<float> const& sd_image,
 vil_image_view<float>
 brip_vil_float_ops::extrema(vil_image_view<float> const& input,
                             float lambda0, float lambda1, float theta,
-                            bool bright, bool output_response_mask,
-                            bool unclipped_response)
+                            bool bright, bool mag_only, 
+                            bool output_response_mask,
+                            bool unclipped_response, bool scale_invariant)
 {
   vbl_array_2d<float> fa;
   vbl_array_2d<bool> mask;
@@ -3900,7 +3901,9 @@ brip_vil_float_ops::extrema(vil_image_view<float> const& input,
           if (mask[jj+rj][ii+ri])
             sum += coef[jj+rj][ii+ri]*input(i+ii, j+jj);
       temp2(i,j) = static_cast<float>(sum);
-      if (bright) { // coefficients are negative at center
+      if(mag_only){
+        temp(i,j) = vcl_fabs(sum);
+      }else if (bright) { // coefficients are negative at center
         if (sum<0) temp(i,j) = static_cast<float>(-sum);
       }
       else {
@@ -3967,7 +3970,7 @@ brip_vil_float_ops::extrema(vil_image_view<float> const& input,
 //  if lambda0 == lambda1 then reduces to the normal extrema operator
 vil_image_view<float> brip_vil_float_ops::extrema_rotational(vil_image_view<float> const& input,
                                                              float lambda0, float lambda1,
-                                                             float theta_interval, bool bright)
+                                                             float theta_interval, bool bright, bool mag_only, bool scale_invariant)
 {
   unsigned ni = input.ni();
   unsigned nj = input.nj();
@@ -3976,7 +3979,7 @@ vil_image_view<float> brip_vil_float_ops::extrema_rotational(vil_image_view<floa
   output.fill(0.0f);
 
   if (lambda0 == lambda1) {  // if isotropic reduces to normal extrema calculation (perfect orientation symmetry)
-    vil_image_view<float> res_mask_current = extrema(input, lambda0, lambda1, 0.0f, bright, true, true);
+    vil_image_view<float> res_mask_current = extrema(input, lambda0, lambda1, 0.0f, bright, mag_only, true, true);
     for (unsigned j = 0; j<nj; j++)
       for (unsigned i = 0; i<ni; i++) {
         output(i,j,0) = res_mask_current(i,j,0);  // return the non-max suppressed for angle 0
@@ -4029,7 +4032,9 @@ vil_image_view<float> brip_vil_float_ops::extrema_rotational(vil_image_view<floa
             if (mask[jj+rj][ii+ri])
               sum += double(fa[jj+rj][ii+ri])*input(i+ii, j+jj);
 
-        if (bright) { // coefficients are negative at center
+        if(mag_only){
+          res = vcl_fabs(sum);
+        }else if (bright) { // coefficients are negative at center
           if (sum<0) res = static_cast<float>(-sum);
         }
         else {
