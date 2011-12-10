@@ -14,9 +14,6 @@ IF( HAS_VGUI )
   ADD_DEFINITIONS(-DHAS_XERCES)
  ENDIF(HAS_XERCES)
 
- ADD_EXECUTABLE (seg seg.cxx)
- TARGET_LINK_LIBRARIES(seg segv vgui)
-
  ADD_EXECUTABLE (seg_vil seg_vil.cxx)
  TARGET_LINK_LIBRARIES(seg_vil segv vgui)
 
