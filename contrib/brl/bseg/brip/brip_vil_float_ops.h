@@ -16,6 +16,9 @@
 //  Modifications
 //   Feb 15 2003 Initial version
 //   Jan 24 2004 Renamed to brip_vil_float_ops, to support moving from vil1 to vil
+//   Dec 11 2011 - Peter Vanroose - replaced all unsigned char by vxl_byte
+//                                  (before there was a mix of the two)
+//                                  and all unsigned short by vxl_uint_16
 // \endverbatim
 //
 //-----------------------------------------------------------------------------
@@ -33,6 +36,7 @@
 #include <vil/vil_rgb.h>
 #include <vsol/vsol_box_2d_sptr.h>
 #include <brip/brip_roi_sptr.h>
+#include <vxl_config.h> // for vxl_byte & vxl_uint_16
 
 class brip_vil_float_ops
 {
@@ -76,15 +80,10 @@ class brip_vil_float_ops
     double_resolution(vil_image_view<float> const& input,
                       float filter_coef=0.6f);
 
-  //: subtracts image_1 from image_2
-  static vil_image_view<float>
-    difference(vil_image_view<float> const& image_1,
-               vil_image_view<float> const& image_2);
-
-  //: sets values greater than thresh to specified level and the rest to zero
+  //: sets values greater than \p thresh to specified \p level and the rest to zero
   static vil_image_view<float>
     threshold(vil_image_view<float> const & image,
-              const float thresh, const float level = 255.0);
+              const float thresh, const float level = 255.0f);
 
   template <class T_from,class T_to>
   static void normalize_to_interval(const vil_image_view<T_from>& img_inp,
@@ -92,27 +91,39 @@ class brip_vil_float_ops
                                     float min,
                                     float max);
 
-  //: sets absolute values greater than thresh to specified level
+  //: sets absolute values greater than \p thresh to specified \p level
   static vil_image_view<float>
     abs_clip_to_level(vil_image_view<float> const & image,
-                      const float thresh, const float level = 0.0);
+                      const float thresh, const float level = 0.0f);
 
-  static vil_image_view<float>
-    average_NxN(vil_image_view<float> const & img, int N);
-
-  //: The gradient using a 3x3 kernel
+  //: Returns the gradient using a 3x3 kernel
+  // \verbatim
+  //         1  |-1  0  1|         1  |-1 -1 -1|
+  //   Ix = --- |-1  0  1|   Iy = --- | 0  0  0|
+  //         6  |-1  0  1|         6  | 1  1  1|
+  // \endverbatim
+  // Larger masks are computed by pre-convolving with a Gaussian
   static void gradient_3x3(vil_image_view<float> const& input,
                            vil_image_view<float>& grad_x,
                            vil_image_view<float>& grad_y);
 
+  //: Returns the gradient magnitude using a 3x3 kernel
   static void gradient_mag_3x3(vil_image_view<float> const& input,
                                vil_image_view<float>& mag);
 
+  //: Returns the gradient and its magnitude, using a 3x3 kernel
   static void gradient_mag_comp_3x3(vil_image_view<float> const& input,
                                     vil_image_view<float>& mag,
-                                    vil_image_view<float>& gx,
-                                    vil_image_view<float>& gy);
+                                    vil_image_view<float>& grad_x,
+                                    vil_image_view<float>& grad_y);
 
+  //: Returns the Hessian using a 3x3 kernel
+  // \verbatim
+  //          1 | 1  -2  1|          1 |  1  1  1|         1  | 1  0 -1|
+  //   Ixx = ---| 1  -2  1|   Iyy = ---| -2 -2 -2|  Ixy = --- | 0  0  0|
+  //          3 | 1  -2  1|          3 |  1  1  1|         4  |-1  0  1|
+  // \endverbatim
+  // Larger masks are computed by pre-convolving with a Gaussian
   static void hessian_3x3(vil_image_view<float> const& input,
                           vil_image_view<float>& Ixx,
                           vil_image_view<float>& Ixy,
@@ -124,15 +135,16 @@ class brip_vil_float_ops
             vil_image_view<float> const& Iyy,
             bool determinant = true);
 
-  //: scale invariant means that the response is independent of the 
-  //  sigma_y of the unrotated derivative operator, i.e. the direction
+  //:
+  //  \p theta must be given in degrees.
+  //  Scale invariant means that the response is independent of the
+  //  \a sigma_y of the unrotated derivative operator, i.e. the direction
   //  of the derivative
   static void extrema_kernel_mask(float lambda0, float lambda1, float theta,
                                   vbl_array_2d<float>& kernel,
                                   vbl_array_2d<bool>& mask,
                                   float cutoff_percentage = 0.01f,
                                   bool scale_invariant = false);
-
 
   //: Compute the standard deviation of an operator response, given the image intensity standard deviation at each pixel
   static  vil_image_view<float>
@@ -145,10 +157,11 @@ class brip_vil_float_ops
     std_dev_operator_method2(vil_image_view<float> const& sd_image,
                              vbl_array_2d<float> const& kernel);
 
-  //: a helper function for the extrema method, revert angle to the range [-90, 90]
+  //: a helper function for the extrema method: reverts angle to the range [-90, 90]
   static float extrema_revert_angle(float angle);
 
-  //: Find anisotropic intensity extrema. Theta is in degrees
+  //: Find anisotropic intensity extrema.
+  // \p theta is in degrees
   static vil_image_view<float> extrema(vil_image_view<float> const& input,
                                        float lambda0, float lambda1,
                                        float theta, bool bright = true,
@@ -158,18 +171,21 @@ class brip_vil_float_ops
                                        bool scale_invariant = false);
 
   //: Find anisotropic intensity extrema at a range of orientations and return the maximal response at the best orientation.
-  //  Theta interval is in degrees
-  //  If lambda0 == lambda1 then reduces to the normal extrema operator
+  // \p theta_interval is in degrees
+  //  If \p lambda0 == \p lambda1 then reduces to the normal extrema operator
   static vil_image_view<float> extrema_rotational(vil_image_view<float> const& input,
                                                   float lambda0, float lambda1,
                                                   float theta_interval, bool bright = true, bool mag_only = false, bool scale_invariant = false);
 
-  //: compute the inscribed rectangle in an ellipse with largest (1+h)(1+w). Needed for fast non-maximal suppression. Theta is in degrees.
+  //: Compute the inscribed rectangle in an ellipse with largest $(1+h)(1+w)$.
+  //  Needed for fast non-maximal suppression.
+  //  \p theta is in degrees.
   static void max_inscribed_rect(float lambda0, float lambda1, float theta,
                                  float& u_rect, float& v_rect);
 
   //: Find intensity extrema using kernel decomposition.
-  // Theta is in degrees. Image rotation is applied then separated u, v kernels produce the response.
+  //  \p theta is in degrees.
+  //  Image rotation is applied then separated u, v kernels produce the response.
   static vil_image_view<float> fast_extrema(vil_image_view<float> const& input,
                                             float lambda0, float lambda1,
                                             float theta, bool bright = true,
@@ -177,13 +193,23 @@ class brip_vil_float_ops
                                             bool unclipped_response = false,
                                             float cutoff_percentage = 0.01f);
 
-  //: IxIx.transpose gradient matrix elements for a NxN region(N = 2n+1)
+  //: Ix.Ix-transpose gradient matrix elements for an NxN region ($N = 2n+1$)
+  // That is,
+  // \verbatim
+  //                        _                           _
+  //                       | (dI/dx)^2    (dI/dx)(dI/dy) |
+  //                       |                             |
+  //  A = Sum(neighborhood)|                             |
+  //                       |(dI/dx)(dI/dy)   (dI/dx)^2   |
+  //                       |_                           _|
+  // \endverbatim
+  // over a $2n+1 ~\times~ 2n+1$ neighborhood.
   static void grad_matrix_NxN(vil_image_view<float> const& input, unsigned n,
                               vil_image_view<float>& IxIx,
                               vil_image_view<float>& IxIy,
                               vil_image_view<float>& IyIy);
 
-  //: Tr(IxIx.transpose) for a NxN region, N = 2n+1)
+  //: Tr(IxIx.transpose) for a NxN region ($N = 2n+1$)
   static  vil_image_view<float>
     trace_grad_matrix_NxN(vil_image_view<float> const& input, unsigned n);
 
@@ -193,21 +219,38 @@ class brip_vil_float_ops
                                       vil_image_view<float> const& IyIy,
                                       double scale=0.04);
 
-  //: computes the conditioning of the 2n+1 x 2n+1 gradient neighborhood
+  //: Computes the conditioning of the $2n+1 ~\times~ 2n+1$ gradient neighborhood
+  // Compute the sqrt of the product of the eigenvalues of the
+  // gradient matrix over a 2n+1 x 2n+1 neighborhood
+  // That is,
+  // \verbatim
+  //                        _                           _
+  //                       | (dI/dx)^2    (dI/dx)(dI/dy) |
+  //                       |                             |
+  //  A = Sum(neighborhood)|                             |
+  //                       |(dI/dx)(dI/dy)   (dI/dx)^2   |
+  //                       |_                           _|
+  // \endverbatim
+  // The output image is sqrt(lamba_1*lambda_2) where lambda_i are the eigenvalues
   static vil_image_view<float>
     sqrt_grad_singular_values(vil_image_view<float>& input, int n);
 
+  //:
+  // Returns the image with max scale values
   static vil_image_view<float> max_scale_trace(vil_image_view<float> input,
                                                float min_scale,
                                                float max_scale,
                                                float scale_inc);
-  //: exactly same as max_scale_trace, only return the image with actual trace values at max scales instead of the image with max scale values
+
+  //:
+  // Exactly same as max_scale_trace,
+  // only return the image with actual trace values at max scales instead of the image with max scale values
   static vil_image_view<float> max_scale_trace_value(vil_image_view<float> input,
                                                      float min_scale,
                                                      float max_scale,
                                                      float scale_inc);
 
-  //: computes Lucas-Kanade optical flow on a 2n+1 neighborhood
+  //: computes Lucas-Kanade optical flow on a $2n+1$ neighborhood
   static void Lucas_KanadeMotion(vil_image_view<float>& current_frame,
                                  vil_image_view<float>& previous_frame,
                                  int n, double thresh,
@@ -232,7 +275,7 @@ class brip_vil_float_ops
                             float& vx,
                             float& vy);
 
-  //: computes optical flow using Horn & Schunck's method
+  //: computes optical flow using Horn and Schunck's method
   static int Horn_SchunckMotion(vil_image_view<float> const & current_frame,
                                 vil_image_view<float> const& previous_frame,
                                 vil_image_view<float>& vx,
@@ -240,41 +283,45 @@ class brip_vil_float_ops
                                 const float alpha_coef=10000.0f,
                                 const int no_of_iterations=5);
 
-  //: fills a border of width w on left and right of image with value
+  //: fills a border of width \p w on left and right of image with value
   static void fill_x_border(vil_image_view<float>& image, unsigned w, float value);
 
-  //: fills a border of width h on top and bottom of image with value
+  //: fills a border of height \p h on top and bottom of image with value
   static void fill_y_border(vil_image_view<float>& image, unsigned h, float value);
 
   //: converts a float image to a byte value range
-  static vil_image_view<unsigned char>
+  static vil_image_view<vxl_byte>
     convert_to_byte(vil_image_view<float> const& image);
 
   //: converts a float image to a byte value range within a specified range
-  static vil_image_view<unsigned char>
+  static vil_image_view<vxl_byte>
     convert_to_byte(vil_image_view<float> const& image,
                     float min_val, float max_val);
 
-  //: converts an unsigned short image to a byte value range within a specified range
-  static vil_image_view<unsigned char>
-    convert_to_byte(vil_image_view<unsigned short> const& image,
-                    unsigned short min_val, unsigned short max_val);
+  //: converts an unsigned short (16-bit) image to a byte value range within a specified range
+  static vil_image_view<vxl_byte>
+    convert_to_byte(vil_image_view<vxl_uint_16> const& image,
+                    vxl_uint_16 min_val, vxl_uint_16 max_val);
 
-  //: converts a generic image to a byte image. Use this instead of convert_to_grey
-  static vil_image_view<unsigned char>
+  //: converts a generic image to a byte image.
+  // Use this instead of convert_to_grey
+  static vil_image_view<vxl_byte>
     convert_to_byte(vil_image_resource_sptr const& image);
 
-  //: converts a float image to an unsigned short image within a range
-  static vil_image_view<unsigned short>
+  //: converts a float image to an unsigned short (16-bit) image within a range
+  // Use this instead of convert_to_grey
+  static vil_image_view<vxl_uint_16>
     convert_to_short(vil_image_view<float> const& image,
                      float min_val, float max_val);
-  //: converts a float image to an unsigned short image.
-  // range determined automatically
-  static vil_image_view<unsigned short>
+
+  //: converts a float image to an unsigned short (16-bit) image.
+  // Range is determined automatically
+  static vil_image_view<vxl_uint_16>
     convert_to_short(vil_image_view<float> const& image);
 
-  //: converts a generic image to an unsigned short image
-  static vil_image_view<unsigned short>
+  //: converts a generic image to an unsigned short (16-bit) image
+  // Use this instead of convert_to_grey
+  static vil_image_view<vxl_uint_16>
     convert_to_short(vil_image_resource_sptr const& image);
 
   //: converts a vil_image_resource to a float image
@@ -287,57 +334,85 @@ class brip_vil_float_ops
   { return brip_vil_float_ops::convert_to_float(*image); }
 
   static vil_image_view<float>
-    convert_to_float(vil_image_view<unsigned char> const& image);
+    convert_to_float(vil_image_view<vxl_byte> const& image);
 
   static vil_image_view<float>
-    convert_to_float(vil_image_view<unsigned short> const& image);
+    convert_to_float(vil_image_view<vxl_uint_16> const& image);
 
   //: converts a byte image to a bool image
   static vil_image_view<bool>
-    convert_to_bool(vil_image_view<unsigned char> const& image);
+    convert_to_bool(vil_image_view<vxl_byte> const& image);
 
   //: converts an RGB image to a float image
   static vil_image_view<float>
     convert_to_float(vil_image_view<vil_rgb<vxl_byte> > const& image);
 
-  //: convert a color image to float IHS images
+  //: convert a single RGB pixel to (I,H,S)
+  static void rgb_to_ihs(vil_rgb<vxl_byte> const& rgb,
+                         float& i, float& h, float& s);
+
+  //: convert a single (I,H,S) pixel to RGB
+  static void ihs_to_rgb(vil_rgb<vxl_byte>& rgb,
+                         const float i, const float h, const float s);
+
+  //: converts a byte-pixel color image to float (I,H,S) image triple
   static void
     convert_to_IHS(vil_image_view<vil_rgb<vxl_byte> > const& image,
                    vil_image_view<float>& I,
                    vil_image_view<float>& H,
                    vil_image_view<float>& S);
+
+  //: converts a byte-pixel image to float (I,H,S) image triple
   static void
-    convert_to_IHS(vil_image_view<unsigned char> const& image,
+    convert_to_IHS(vil_image_view<vxl_byte> const& image,
                    vil_image_view<float>& I,
                    vil_image_view<float>& H,
                    vil_image_view<float>& S);
 
-  //: display IHS images as RGB (not conversion from IHS to RGB)
+  //: display (I,H,S) image triple as RGB (no conversion from IHS to RGB!)
   static void
     display_IHS_as_RGB(vil_image_view<float> const& I,
                        vil_image_view<float> const& H,
                        vil_image_view<float> const& S,
                        vil_image_view<vil_rgb<vxl_byte> >& image);
 
-  //: Create a color image from multiple view channels
+#if 0 // TODO ?
+  //: converting IHS to RGB
+  static void
+    convert_IHS_as_RGB(vil_image_view<float> const& I,
+                       vil_image_view<float> const& H,
+                       vil_image_view<float> const& S,
+                       vil_image_view<vil_rgb<vxl_byte> >& image);
+#endif // 0
+
+  //: Create a byte-pixel color image from multiple view channels (R,G,B)
   // All views have to have the same array dimensions
   static vil_image_view<vil_rgb<vxl_byte> >
-    combine_color_planes(vil_image_view<unsigned char> const& R,
-                         vil_image_view<unsigned char> const& G,
-                         vil_image_view<unsigned char> const& B);
+    combine_color_planes(vil_image_view<vxl_byte> const& R,
+                         vil_image_view<vxl_byte> const& G,
+                         vil_image_view<vxl_byte> const& B);
 
-  //: Create a unsigned char color image from multiple resource channels
+  //: Create a byte-pixel color image from multiple resource channels (R,G,B)
   // Images do not have to be the same size arrays
   static vil_image_view<vil_rgb<vxl_byte> >
     combine_color_planes(vil_image_resource_sptr const& R,
                          vil_image_resource_sptr const& G,
                          vil_image_resource_sptr const& B);
 
-  //: converts a generic image to greyscale (RGB<unsigned char>)
-  static vil_image_view<unsigned char>
+  //: converts a generic (byte-pixel RGB) image to greyscale
+  static vil_image_view<vxl_byte>
     convert_to_grey(vil_image_resource const& img);
 
-  //: loads a 2n+1 x 2n+1 convolution kernel (see .cxx for file format)
+  //: loads a $2n+1 ~\times~ 2n+1$ convolution kernel
+  // Assumes a square kernel with odd dimensions, i.e., $w,h = 2n+1$
+  // format:
+  // \verbatim
+  //     n
+  //     scale
+  //     k00  k01  ... k02n
+  //           ...
+  //     k2n0 k2n1 ... k2n2n
+  // \endverbatim
   static vbl_array_2d<float> load_kernel(vcl_string const& file);
 
   //: compute basis images for a set of input images
@@ -354,12 +429,14 @@ class brip_vil_float_ops
                                         vil_image_view<float> const& phase,
                                         vil_image_view<float>& output);
 
-  //: resize to specified dimensions, fill with zeros if output is larger
+  //: resize to specified dimensions.
+  //  Fill with zeros if output is larger
   static void resize(vil_image_view<float> const& input,
                      unsigned width, unsigned height,
                      vil_image_view<float>& output);
 
-  //: resize to closest power of two larger dimensions than the input
+  //: resize to closest power of two larger dimensions than the input.
+  //  Fill with zeros if output is larger
   static bool
     resize_to_power_of_two(vil_image_view<float> const& input,
                            vil_image_view<float>& output);
@@ -373,6 +450,12 @@ class brip_vil_float_ops
                              vil_image_view<float>& output);
 
   //: 2x2 bilinear interpolation of image at specified location
+  // Neighborhood:
+  // \verbatim
+  //      xr
+  //   yr 0  x
+  //      x  x
+  // \endverbatim
   static double
     bilinear_interpolation(vil_image_view<float> const& input,
                            double x, double y);
@@ -381,7 +464,7 @@ class brip_vil_float_ops
   // \note if the output size is fixed then only the corresponding
   // input image space is transformed.
   static bool homography(vil_image_view<float> const& input,
-                         vgl_h_matrix_2d<double>const& H,
+                         vgl_h_matrix_2d<double> const& H,
                          vil_image_view<float>& output,
                          bool output_size_fixed = false,
                          float output_fill_value = 0.0f);
@@ -390,16 +473,20 @@ class brip_vil_float_ops
   static vil_image_view<float> rotate(vil_image_view<float> const& input,
                                       double theta_deg);
 
-  //: extract a region of interest. If roi does not overlap input, return false
+  //: extract a region of interest.
+  // If \p roi does not overlap input, return false
   static bool chip(vil_image_view<float> const& input,
                    vsol_box_2d_sptr const& roi, vil_image_view<float>& chip);
 
   //: convert image resource to a chip of equivalent pixel type
+  // If \p roi does not overlap input, return false
   static bool chip(vil_image_resource_sptr const& image,
                    brip_roi_sptr const& roi,
                    vil_image_resource_sptr & chip);
 
-  //: chip multiple images. Must be all the same dimensions
+  //: chip multiple images.
+  // Must be all the same dimensions
+  // If \p roi does not overlap input, return false
   static bool chip(vcl_vector<vil_image_resource_sptr> const& images,
                    brip_roi_sptr const& roi,
                    vcl_vector<vil_image_resource_sptr>& chips);
@@ -425,21 +512,13 @@ class brip_vil_float_ops
                               vil_image_view<float>& out,
                               int radius = 5, float intensity_thresh=25.0f);
 
-  //: convert a single i,h,s  pixel to rgb
-  static void ihs_to_rgb(vil_rgb<vxl_byte>& rgb,
-                         const float i, const float h, const float s);
-
-  //: convert a single rgb pixel to ihs
-  static void rgb_to_ihs(vil_rgb<vxl_byte> const& rgb,
-                         float& i, float& h, float& s);
-
   //: Compute the intensity entropy of a region about the specified pixel
   //  No bounds check
   static float entropy_i(const unsigned i, const unsigned j,
                          const unsigned i_radius,
                          const unsigned j_radius,
                          vil_image_view<float> const& intensity,
-                         const float range = 255.0, const unsigned bins = 16);
+                         const float range = 255.0f, const unsigned bins = 16);
 
   //: Compute the gradient entropy of a region about the specified pixel
   //  No bounds check
@@ -448,7 +527,7 @@ class brip_vil_float_ops
                          const unsigned j_radius,
                          vil_image_view<float> const& gradx,
                          vil_image_view<float> const& grady,
-                         const float range = 360.0, const unsigned bins = 8);
+                         const float range = 360.0f, const unsigned bins = 8);
 
   //: Compute the hue and saturation entropy of a region about the specified pixel
   //  No bounds check
@@ -457,7 +536,7 @@ class brip_vil_float_ops
                           const unsigned j_radius,
                           vil_image_view<float> const& hue,
                           vil_image_view<float> const& sat,
-                          const float range = 360.0, const unsigned bins = 8);
+                          const float range = 360.0f, const unsigned bins = 8);
 
   //: Compute the entropy of the specified region about each pixel
   static vil_image_view<float> entropy(const unsigned i_radius,
@@ -469,17 +548,18 @@ class brip_vil_float_ops
                                        const bool gradient = true,
                                        const bool ihs = false);
 
-  //no bounds check
+  //: Compute the intensity minfo of a region about the specified pixel
+  //  No bounds check
   static float minfo_i(const unsigned i0, const unsigned j0,
                        const unsigned i1, const unsigned j1,
                        const unsigned i_radius,
                        const unsigned j_radius,
                        vil_image_view<float> const& intensity0,
                        vil_image_view<float> const& intensity1,
-                       const float range = 255.0, const unsigned bins = 16);
+                       const float range = 255.0f, const unsigned bins = 16);
 
-  //:Compute the gradient minfo of a region about the specified pixel
-  // No bounds check
+  //: Compute the gradient minfo of a region about the specified pixel
+  //  No bounds check
   static float minfo_g(const unsigned i0, const unsigned j0,
                        const unsigned i1, const unsigned j1,
                        const unsigned i_radius,
@@ -488,10 +568,10 @@ class brip_vil_float_ops
                        vil_image_view<float> const& grady0,
                        vil_image_view<float> const& gradx1,
                        vil_image_view<float> const& grady1,
-                       const float range = 360.0, const unsigned bins = 8);
+                       const float range = 360.0f, const unsigned bins = 8);
 
-  //:Compute the hue and saturation minfo of a region about the specified pixel
-  // No bounds check
+  //: Compute the hue and saturation minfo of a region about the specified pixel
+  //  No bounds check
   static float minfo_hs(const unsigned i0, const unsigned j0,
                         const unsigned i1, const unsigned j1,
                         const unsigned i_radius,
@@ -500,9 +580,9 @@ class brip_vil_float_ops
                         vil_image_view<float> const& sat0,
                         vil_image_view<float> const& hue1,
                         vil_image_view<float> const& sat1,
-                        const float range = 360.0, const unsigned bins = 8);
+                        const float range = 360.0f, const unsigned bins = 8);
 
-  //:compute the minfo of the specified region about each pixel
+  //: Compute the minfo of the specified region about each pixel
   static bool minfo(const unsigned i_radius,
                     const unsigned j_radius,
                     const unsigned step,
@@ -517,9 +597,16 @@ class brip_vil_float_ops
 
   //  ===  Arithmetic operations  ===
 
+  //: Blur the image with an NxN averaging filter
+  static vil_image_view<float> average_NxN(vil_image_view<float> const& img, int N);
+
   //: Add two images from a general resource (forces types to be the same)
   static vil_image_resource_sptr sum(vil_image_resource_sptr const& img0,
                                      vil_image_resource_sptr const& img1);
+
+  //: subtracts \p image_1 from \p image_2
+  static vil_image_view<float> difference(vil_image_view<float> const& image_1,
+                                          vil_image_view<float> const& image_2);
 
   //: subtract two generic images, return img0-img1 (forces types to the same)
   static vil_image_resource_sptr difference(vil_image_resource_sptr const& img0,
@@ -529,8 +616,29 @@ class brip_vil_float_ops
   static vil_image_resource_sptr negate(vil_image_resource_sptr const& imgr);
 
   //: Color order operator, output an index based on RGB intensity order
-  static vil_image_view<unsigned char>
+  // It has been observed that color order is somewhat invariant to illumination
+  // The tolerance determines if two color bands are too close to determine order,
+  // i.e. they should be considered equal instead
+  // the two relations being considered  are <, > and =, so the relationship
+  // graph looks like:
+  // \verbatim
+  //         G
+  //       /   \.
+  //   > < =   > < =
+  //    /         \.
+  //  R  - > < = -  B
+  // \endverbatim
+  // Thus, there are three graph edges with each of three possible labels or
+  // 9 possible order codes. An easy coding scheme is to use the top 6 bits of
+  // the byte output pixel. The relationship is encoded as states of bit pairs
+  // \verbatim
+  // Color relations  R*G  R*B  G*B    * indicates > < = (1,2,3)
+  // Bit indices      7,6  5,4  3,2
+  // \endverbatim
+  static vil_image_view<vxl_byte>
     color_order(vil_image_view<float> const& color_image, float eq_tol);
+
+  //  ===  Internals  ===
 
  private:
 
@@ -565,15 +673,6 @@ class brip_vil_float_ops
   static float gaussian_blocking_filter(float dir_fx, float dir_fy,
                                         float f0, float radius,
                                         float fx, float fy);
-
-#if 0 // TODO ?
-  //: converting IHS to RGB
-  static void
-    convert_IHS_as_RGB(vil_image_view<float> const& I,
-                       vil_image_view<float> const& H,
-                       vil_image_view<float> const& S,
-                       vil_image_view<vil_rgb<vxl_byte> >& image);
-#endif // 0
 
   //: u-coordinate of an ellipse defined by lambda0, lambda1 and theta, vs. phi
   static float elu(float phi, float lamda0, float lambda1, float theta);
