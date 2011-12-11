@@ -476,7 +476,7 @@ IGNORE_PREFIX          = vxl_ vcl_ vpl_ vsl_ vul_ vbl_ vnl_ vgl_ vil_ vil1_ \
                          mbl_ mil_ mil3d_ oxp_ osl_ gst_ gevd_ mvl_ gmvl_ \
                          geml_ vsrl_ gtrl_ vipl_ vepl_ vepl2_ vgui_ vgel_ \
                          vmal_ pdf1d_ vpdfl_ clsfy_ gkll_ rrel_ rsdl_ \
-                         ouel_ ouml_ jvid_ vvid_
+                         ouel_ ouml_ jvid_
 
 #---------------------------------------------------------------------------
 # configuration options related to the HTML output
