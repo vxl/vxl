@@ -99,7 +99,6 @@ foreach my $dir (@DIRS)
                || m/\bbpro_defs\.h$/
                || m/\bmvl2_video_(from|to)_avi_(linux|windows)\.h$/
                  );
-             # || m/vidl1_(win|avifile)_avicodec/
       }
       closedir(UPDIR);
     }
@@ -561,7 +560,7 @@ foreach my $dir (@DIRS)
   {
     if ($hsource_files{$s} > 1) {
       &duplicate_message($s, $cmakef, '# !!')
-        unless ($s eq 'vidl1_avicodec.h' || $s =~ m/\bFl_(blender|movie|twowin)_ui\.h$/ ||
+        unless ($s =~ m/\bFl_(blender|movie|twowin)_ui\.h$/ ||
                 $s eq 'my_pyramid.h' || $s eq 'my_pyramid_functions.txx' || $s eq 'baio.h');
     }
     delete $hsource_files{$s};

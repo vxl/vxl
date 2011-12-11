@@ -20,7 +20,7 @@ else
   die "VXLROOT is not defined, and no command line arguments were given"
     unless (defined($V));
   chdir $V or die "Cannot chdir to $V";
-  $DIRS = "core/vpdl core/vcsl core/vgui core/vidl core/vidl1 core/vidl_vil1 contrib";
+  $DIRS = "core/vpdl core/vcsl core/vgui core/vidl core/vidl_vil1 contrib";
   @FILES = grep {! m!contrib/conversions!} qx(find $DIRS \\\( -name .svn -prune \\\) -o -type f \\\( -name \\\*.cxx -o -name \\\*.txx -o -name \\\*.cc -o -name \\\*.cpp -o -name \\\*.c -o -name \\\*.h \\\) -print);
   chomp @FILES;
 }
