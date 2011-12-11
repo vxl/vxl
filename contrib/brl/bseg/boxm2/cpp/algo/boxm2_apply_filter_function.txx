@@ -222,7 +222,9 @@ vcl_vector<vcl_pair<vgl_point_3d<int> , float> > boxm2_apply_filter_function<RES
 {
   vcl_vector<vcl_pair<vgl_point_3d<int> , float> > probs;
 
+#ifdef PROB
   double side_len = 1.0 / (double) (1 << curr_depth);
+#endif
 
   for (unsigned int i = 0; i < neighbors.size(); ++i) {
     //load neighbor block/tree
@@ -266,13 +268,13 @@ vcl_vector<vcl_pair<vgl_point_3d<int> , float> > boxm2_apply_filter_function<RES
       vcl_vector<int>::iterator leafIter;
       for (leafIter = subLeafBits.begin(); leafIter != subLeafBits.end(); ++leafIter) {
         //side length of the cell
-        int ndepth = bit_tree.depth_at(*leafIter);
-        double nlen = 1.0 / (double) (1 << ndepth);
         int dataIndex = neighborTree.get_data_index(*leafIter);
 #ifdef PROB
+        int ndepth = bit_tree.depth_at(*leafIter);
+        double nlen = 1.0 / (double) (1 << ndepth);
         totalAlphaL += (float)(alpha_data[dataIndex] * nlen * data.sub_block_dim_.x());
 #else
-        totalAlphaL += (float) (alpha_data[dataIndex]);
+        totalAlphaL += (float)(alpha_data[dataIndex]);
 #endif
       }
 
