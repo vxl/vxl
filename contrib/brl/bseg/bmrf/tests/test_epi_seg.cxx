@@ -12,7 +12,7 @@
 
 
 //: Test the node class
-void test_epi_seg()
+static void epi_seg()
 {
   //Testing constructors
   vgl_point_2d<double> p0(0,0), p1(1,1);
@@ -79,7 +79,7 @@ void test_epi_seg()
 
 static void test_epi_seg()
 {
-  test_epi_seg();
+  epi_seg();
 }
 
 TESTMAIN(test_epi_seg);

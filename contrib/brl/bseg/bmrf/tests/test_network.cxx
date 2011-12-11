@@ -11,7 +11,7 @@
 #include <bmrf/bmrf_network.h>
 
 //: Test the network class
-void test_network()
+static void network()
 {
   bmrf_node_sptr node_1 = new bmrf_node(new bmrf_epi_seg, 1, 0.1);
   bmrf_node_sptr node_2 = new bmrf_node(new bmrf_epi_seg, 1, 0.2);
@@ -142,7 +142,7 @@ void test_network()
 
 static void test_network()
 {
-  test_network();
+  network();
 }
 
 TESTMAIN(test_network);

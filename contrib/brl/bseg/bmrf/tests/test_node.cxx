@@ -24,7 +24,7 @@ class bmrf_node_tester : public bmrf_node
 typedef vbl_smart_ptr<bmrf_node_tester> bmrf_node_tester_sptr;
 
 //: Test the node class
-void test_node()
+static void node()
 {
   bmrf_node_sptr node_1 = new bmrf_node(NULL, 1, 0.5);
   bmrf_node_sptr node_2 = new bmrf_node(NULL, 2, 0.7);
@@ -79,7 +79,7 @@ void test_node()
 
 static void test_node()
 {
-  test_node();
+  node();
 }
 
 TESTMAIN(test_node);

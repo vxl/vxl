@@ -107,7 +107,7 @@ frame_image(const int frame,
 }
 
 //: Test the node class
-void test_network_builder()
+static void network_builder()
 {
   //The velocity
   float gamma = 0.1f;
@@ -181,7 +181,7 @@ void test_network_builder()
 
 static void test_network_builder()
 {
-  test_network_builder();
+  network_builder();
 }
 
 TESTMAIN(test_network_builder);
