@@ -8,17 +8,8 @@ SUBDIRS(brip)
 # segmentation feature detection library
 SUBDIRS(sdet)
 
-# video processors
-SUBDIRS(vpro)
-
-# tracking
-SUBDIRS(strk)
-
 # Markov Random Fields - This library is deprecated
-#SUBDIRS(bmrf)
-
-# misc
-#SUBDIRS(bcons)
+SUBDIRS(bmrf)
 
 # segmentation view library
 SUBDIRS(segv)
@@ -73,8 +64,6 @@ SUBDIRS(bvpl_batch)
 
 # voxel processing library python interface for octrees
 SUBDIRS(bvpl_octree_batch)
-
-
 
 # Brown affine patch library, SIFT keypoint & descriptor
 SUBDIRS(bapl)
