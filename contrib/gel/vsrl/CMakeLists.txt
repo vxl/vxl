@@ -3,7 +3,6 @@
 doxygen_add_library(contrib/gel/vsrl
   DEPENDS
     contrib/brl/bseg/sdet
-    contrib/gel/vgel
     contrib/tbl/vepl1
     core/vgui
     core/vil1
@@ -43,20 +42,7 @@ IF (HAS_VGUI)
 
  SET(vsrl_sources ${vsrl_sources}
   vsrl_point_picker.cxx         vsrl_point_picker.h    vsrl_point_picker_sptr.h
-  vsrl_menus.h vsrl_menus.cxx
  )
- IF (BUILD_TBL)
- IF (BUILD_BRL)
- IF (BUILD_RPL)
-   INCLUDE_DIRECTORIES(${TBL_INCLUDE_DIR})
-   INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR}/bseg)
-   INCLUDE_DIRECTORIES(${RPL_INCLUDE_DIR}) # rsdl is in rpl
-   SET(vsrl_sources ${vsrl_sources}
-    vsrl_manager.cxx              vsrl_manager.h
-   )
- ENDIF (BUILD_RPL)
- ENDIF (BUILD_BRL)
- ENDIF (BUILD_TBL)
 ENDIF (HAS_VGUI)
 
 ADD_LIBRARY(vsrl ${vsrl_sources})
@@ -78,10 +64,7 @@ IF (HAS_VGUI)
  ENDIF (BUILD_RPL)
 ENDIF (HAS_VGUI)
 
-TARGET_LINK_LIBRARIES(vsrl vtol vdgl vgl vil1 vnl vgel)
-
-# vgel uses mvl from oxl
-INCLUDE_DIRECTORIES(${OXL_INCLUDE_DIR})
+TARGET_LINK_LIBRARIES(vsrl vtol vdgl vgl vil1 vnl)
 
 IF( BUILD_TESTING )
   SUBDIRS(tests)

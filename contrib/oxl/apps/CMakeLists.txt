@@ -1,2 +1,2 @@
 # ./oxl/apps/CMakeLists.txt
-SUBDIRS( glmovie vxl_vrml_viewer )
+SUBDIRS( vxl_vrml_viewer )
