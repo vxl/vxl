@@ -16,9 +16,6 @@ SUBDIRS += geml
 # Multi-view database
 SUBDIRS += gmvl
 
-# Kanade-Lucas-Tomasi feature tracker
-SUBDIRS += vgel/kl vgel gkll
-
 # Dense matcher
 SUBDIRS += vmal
 

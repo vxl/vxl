@@ -37,6 +37,7 @@ SOURCES += processes/vil_convert_pixel_type_process.cxx
 SOURCES += processes/vil_gradient_angle_process.cxx
 SOURCES += processes/vil_image_ssd_process.cxx
 SOURCES += processes/vil_image_mean_process.cxx
+SOURCES += processes/vil_image_range_process.cxx
 
 #######################################
 include ${VXLROOT}/config/top-params.mk

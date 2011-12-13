@@ -33,7 +33,7 @@ SUBDIRS += vpdl
 SUBDIRS += vpgl
 
 # video
-SUBDIRS += vidl vidl_vil1
+SUBDIRS += vidl
 
 # multi-platform GUI toolkit
 SUBDIRS += vgui

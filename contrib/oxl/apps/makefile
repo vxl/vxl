@@ -1,4 +1,4 @@
-SUBDIRS = glmovie vxl_vrml_viewer
+SUBDIRS = vxl_vrml_viewer
 
 ################################
 include ${VXLROOT}/config/top.mk

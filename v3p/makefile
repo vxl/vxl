@@ -42,10 +42,6 @@ ifneq (,$(strip $(wildcard $(GEOTIFF_INC_DIR)/../v3p_tag)))
 SUBDIRS += geotiff
 endif
 
-ifneq (,$(strip $(wildcard $(MPEG2_INC_DIR)/../../v3p_tag)))
-SUBDIRS += mpeg2
-endif
-
 ifneq (,$(strip $(wildcard $(DCMTK_INC_DIR)/../../../v3p_tag)))
 SUBDIRS += dcmtk
 endif

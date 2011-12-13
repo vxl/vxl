@@ -26,10 +26,8 @@ SOURCES += vsrl_step_diffusion.cxx
 SOURCES += vsrl_saliency_diffusion.cxx
 SOURCES += vsrl_token_saliency.cxx
 SOURCES += vsrl_parameters.cxx
-SOURCES += vsrl_manager.cxx
 SOURCES += vsrl_point_picker.cxx
 MANPAGE_SOURCES += vsrl_point_picker_sptr.h
-SOURCES += vsrl_menus.cxx
 SOURCES += vsrl_region_disparity.cxx
 
 DEFINES += -DBUILDING_VSRL_DLL
