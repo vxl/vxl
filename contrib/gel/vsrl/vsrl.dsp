@@ -138,12 +138,6 @@ SOURCE=.\vsrl_window_accumulator.cxx
 SOURCE=.\vsrl_point_picker.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\vsrl_manager.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\vsrl_menus.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\vsrl_region_disparity.cxx
 # End Source File
 # End Group
@@ -196,12 +190,6 @@ SOURCE=.\vsrl_token_saliency.h
 # End Source File
 # Begin Source File
 SOURCE=.\vsrl_window_accumulator.h
-# End Source File
-# Begin Source File
-SOURCE=.\vsrl_manager.h
-# End Source File
-# Begin Source File
-SOURCE=.\vsrl_menus.h
 # End Source File
 # Begin Source File
 SOURCE=.\vsrl_point_picker.h

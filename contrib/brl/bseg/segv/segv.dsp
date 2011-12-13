@@ -93,12 +93,6 @@ LIB32=link.exe -lib
 # Begin Group "Source Files"
 # PROP Default_Filter "cxx"
 # Begin Source File
-SOURCE=.\segv_segmentation_manager.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\segv_menus.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\segv_vtol2D_tableau.cxx
 # End Source File
 # Begin Source File
@@ -120,9 +114,6 @@ SOURCE=.\segv_misc_menus.cxx
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
 # Begin Source File
-SOURCE=.\segv_segmentation_manager.h
-# End Source File
-# Begin Source File
 SOURCE=.\segv_vtol2D_tableau.h
 # End Source File
 # Begin Source File
@@ -130,9 +121,6 @@ SOURCE=.\segv_vtol2D_tableau_sptr.h
 # End Source File
 # Begin Source File
 SOURCE=.\segv_vtol_soview2D.h
-# End Source File
-# Begin Source File
-SOURCE=.\segv_menus.h
 # End Source File
 # Begin Source File
 SOURCE=.\segv_vil_menus.h

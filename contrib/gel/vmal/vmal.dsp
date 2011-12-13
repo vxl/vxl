@@ -111,12 +111,6 @@ SOURCE=.\vmal_dense_matching.cxx
 SOURCE=.\vmal_homog2d.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\vmal_kl.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\vmal_kl_params.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\vmal_lines_correlation.cxx
 # End Source File
 # Begin Source File
@@ -148,12 +142,6 @@ SOURCE=.\vmal_dense_matching.h
 # End Source File
 # Begin Source File
 SOURCE=.\vmal_homog2d.h
-# End Source File
-# Begin Source File
-SOURCE=.\vmal_kl.h
-# End Source File
-# Begin Source File
-SOURCE=.\vmal_kl_params.h
 # End Source File
 # Begin Source File
 SOURCE=.\vmal_lines_correlation.h
