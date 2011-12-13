@@ -104,7 +104,7 @@ vidl_v4l2_control_menu::vidl_v4l2_control_menu(const v4l2_queryctrl& ctr, int f)
   struct v4l2_querymenu menu;
   vcl_memset(&menu, 0, sizeof (menu));
   menu.id= ctrl_.id;
-  for (menu.index = 0; (int) menu.index <= ctrl_.maximum;menu.index++) {
+  for (menu.index = ctrl_.minimum; (int) menu.index <= ctrl_.maximum;menu.index++) {
                 if (0 == ioctl (fd, VIDIOC_QUERYMENU, &menu)) {
                         items.push_back((char *)menu.name);
                 } else {
