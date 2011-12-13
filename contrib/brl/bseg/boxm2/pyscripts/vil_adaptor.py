@@ -61,7 +61,16 @@ def image_size(img):
     nj = boxm2_batch.get_output_unsigned(id)
     return ni,nj
 
-
+def image_range(img):
+    boxm2_batch.init_process('vilImageRangeProcess')
+    boxm2_batch.set_input_from_db(0,img)
+    boxm2_batch.run_process()
+    (id,type) = boxm2_batch.commit_output(0)
+    minVal = boxm2_batch.get_output_float(id)
+    (id,type) = boxm2_batch.commit_output(1)
+    maxVal = boxm2_batch.get_output_float(id)
+    return minVal, maxVal
+    
 def gradient(img) :
     boxm2_batch.init_process('vilGradientProcess')
     boxm2_batch.set_input_from_db(0,img)

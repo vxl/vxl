@@ -29,3 +29,20 @@ def blobwise_kl_div(p_img, q_img, blob_img, thresh=.1) :
   (id,type) = boxm2_batch.commit_output(1);
   thresh_img = dbvalue(id,type);
   return kl_img, thresh_img;
+
+###########################################################
+# Calculate number of true blob intersections, false blobs and total true blobs
+###########################################################
+def blob_intersection(mp_img, gt_img):
+  boxm2_batch.init_process("bripBlobIntersectionProcess")
+  boxm2_batch.set_input_from_db(0, mp_img);
+  boxm2_batch.set_input_from_db(1, gt_img);  
+  boxm2_batch.run_process();
+  
+  (id,type) = boxm2_batch.commit_output(0);
+  tp = boxm2_batch.get_output_int(id);
+  (id,type) = boxm2_batch.commit_output(1);
+  fp = boxm2_batch.get_output_int(id);
+  (id,type) = boxm2_batch.commit_output(2);
+  numBlobs = boxm2_batch.get_output_int(id);
+  return (tp, fp, numBlobs)

@@ -106,12 +106,12 @@ bool boxm2_blob_change_detection_process(bprb_func_process& pro)
   {
     vxl_byte blobColor = (vxl_byte)  random.lrand32(10,255);      
     //paint each blob pixel white
-    if(iter->blob_size() < 500) {
+    //if(iter->blob_size() < 500) {
       for (unsigned int p=0; p<iter->blob_size(); ++p) {
         PairType pair = iter->get_pixel(p);
         (*blobImg)( pair.x(), pair.y() ) = (vxl_byte) 255; // blobColor; 
       }
-    }
+    //}
     //else {
     //  vcl_cout<<"Skipping blob of size "<<iter->blob_size()<<vcl_endl;
     //}
