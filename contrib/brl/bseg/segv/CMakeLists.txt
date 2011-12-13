@@ -25,7 +25,6 @@ IF(HAS_VGUI)
  SET(segv_sources
      dll.h vil_dll.h
      segv_vil_segmentation_manager.cxx segv_vil_segmentation_manager.h
-     segv_menus.cxx                    segv_menus.h
      segv_vil_menus.cxx                segv_vil_menus.h
      segv_vtol2D_tableau.cxx           segv_vtol2D_tableau.h   segv_vtol2D_tableau_sptr.h
      segv_vtol_soview2D.cxx            segv_vtol_soview2D.h
