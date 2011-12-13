@@ -150,7 +150,7 @@ vidl_v4l2_device::~vidl_v4l2_device()
   for (unsigned int i=0;i<controls_.size();++i) delete controls_[i];
 }
 
-void vidl_v4l2_device::reset()
+void vidl_v4l2_device::reset(bool try_some_formats)
 {
   if (is_open()) {
     if (capturing)
@@ -170,7 +170,10 @@ void vidl_v4l2_device::reset()
     return;
   }
 
-  try_formats();
+  fmt.fmt.pix.width = 0; // format not set
+  fmt.fmt.pix.height =0;
+  if (try_some_formats) try_formats();
+  
   // inputs already updated
   update_controls();
   for (int i=0;i<n_controls();++i)
@@ -286,9 +289,9 @@ bool vidl_v4l2_device::set_v4l2_format(unsigned int fourcode, int width, int hei
 
   if (is_open()) {
     if (capturing)
-      stop_capturing();
+      stop_capturing(); 
     if (buffers)
-      uninit_mmap();
+      uninit_mmap(); 
     vcl_memset(&fmt, 0, sizeof(fmt));
 
     fmt.type                = V4L2_BUF_TYPE_VIDEO_CAPTURE;
@@ -296,13 +299,26 @@ bool vidl_v4l2_device::set_v4l2_format(unsigned int fourcode, int width, int hei
     fmt.fmt.pix.height      = height;
     fmt.fmt.pix.pixelformat = fourcode;
     fmt.fmt.pix.field       = V4L2_FIELD_INTERLACED; // add to parameters?
-
     if (-1 == xioctl(fd, VIDIOC_S_FMT, &fmt)) {
-      fmt.fmt.pix.width = 0;
-      fmt.fmt.pix.height =0;
-      return false;
+      if (errno==EBUSY) { // try to recover the device
+	reset(false);	
+	fmt.type                = V4L2_BUF_TYPE_VIDEO_CAPTURE;
+        fmt.fmt.pix.width       = width;
+        fmt.fmt.pix.height      = height;
+        fmt.fmt.pix.pixelformat = fourcode;
+        fmt.fmt.pix.field       = V4L2_FIELD_INTERLACED; // add to parameters?
+	if (-1 == xioctl(fd, VIDIOC_S_FMT, &fmt)) {
+	   fmt.fmt.pix.width = 0;
+           fmt.fmt.pix.height= 0;
+           return false;
+	}
+      }
+      else {
+	   fmt.fmt.pix.width = 0;
+           fmt.fmt.pix.height= 0;
+           return false;      
+      }
     }
-
     // Now we can set frame rate
     if (fps!=0.0) {
       struct v4l2_streamparm sfrate;
@@ -323,7 +339,6 @@ bool vidl_v4l2_device::set_v4l2_format(unsigned int fourcode, int width, int hei
         }
       }
     }
-
     if (init_mmap(pre_nbuffers)) // add to parameters?;
       return true;
     else {
