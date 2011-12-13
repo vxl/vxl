@@ -102,8 +102,8 @@ class vidl_v4l2_device
   vidl_v4l2_device(const char *file);
   ~vidl_v4l2_device();
 
-  //: Reset the device to an initial state
-  void reset();
+  //: Reset the device to an initial state (default true for backward compatibility)
+  void reset(bool try_some_formats=true);
 
   //: Name of the associated file device (same as constructor)
   vcl_string device_file() const { return dev_name_; }
