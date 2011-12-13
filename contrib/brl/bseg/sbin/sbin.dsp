@@ -161,9 +161,6 @@ LINK32=link.exe
 # Begin Group "Source Files"
 # PROP Default_Filter "cxx"
 # Begin Source File
-SOURCE=.\seg.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\seg_vil.cxx
 # End Source File
 # Begin Source File
