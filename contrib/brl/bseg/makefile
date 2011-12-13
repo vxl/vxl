@@ -7,14 +7,8 @@ SUBDIRS += brip
 # segmentation feature detection library
 SUBDIRS += sdet
 
-# video processors
-SUBDIRS += vpro
-
-# tracking
-SUBDIRS += strk
-
 # markov random fields - This library is deprecated
-#SUBDIRS += bmrf
+SUBDIRS += bmrf
 
 # misc
 #SUBDIRS += bcons

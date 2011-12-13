@@ -10,9 +10,6 @@ SUBDIRS += bseg
 # multiview library
 #SUBDIRS += bmvl
  
-# standalone executables
-SUBDIRS += bexe
-
 # process libraries
 SUBDIRS += bpro
 
