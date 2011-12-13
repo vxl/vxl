@@ -71,7 +71,9 @@ void vidl_v4l2_device::update_controls()
     if (0 == ioctl(fd, VIDIOC_QUERYCTRL, &ctrl)) {// error ignored
       vidl_v4l2_control *pc= vidl_v4l2_control::new_control(ctrl, fd);
       if (pc) controls_.push_back(pc);
-    } else  break;
+    }
+    else
+      break;
   }
 
 #ifdef V4L2_CTRL_FLAG_NEXT_CTRL // apparently, not all versions of V4L2 support extended controls ... (PVr)
@@ -109,11 +111,11 @@ vidl_v4l2_device::vidl_v4l2_device(const char *file)
   last_error="";
 
   if (!open()) {
-    vcl_cerr << "Error creating device: " << last_error << vcl_endl;
+    vcl_cerr << "Error creating device: " << last_error << '\n';
     return;
   }
   if (!initialize_device()) {
-    vcl_cerr << "Error initializing device: " << last_error << vcl_endl;
+    vcl_cerr << "Error initializing device: " << last_error << '\n';
     close();
     return;
   }
@@ -122,7 +124,7 @@ vidl_v4l2_device::vidl_v4l2_device(const char *file)
   struct v4l2_input inp;
 
 #ifdef DEBUG
-  vcl_cerr << "Looking for inputs..." << fd << vcl_endl;
+  vcl_cerr << "Looking for inputs..." << fd << '\n';
 #endif
   for (inp.index=0;-1!=xioctl(fd,VIDIOC_ENUMINPUT,&inp); inp.index++) {
 #ifdef DEBUG
@@ -161,11 +163,11 @@ void vidl_v4l2_device::reset(bool try_some_formats)
   }
   last_error="";
   if (!open()) {
-    vcl_cerr << "Error creating device: " << last_error << vcl_endl;
+    vcl_cerr << "Error creating device: " << last_error << '\n';
     return;
   }
   if (!initialize_device()) {
-    vcl_cerr << "Error initializing device: " << last_error << vcl_endl;
+    vcl_cerr << "Error initializing device: " << last_error << '\n';
     close();
     return;
   }
@@ -173,7 +175,7 @@ void vidl_v4l2_device::reset(bool try_some_formats)
   fmt.fmt.pix.width = 0; // format not set
   fmt.fmt.pix.height =0;
   if (try_some_formats) try_formats();
-  
+
   // inputs already updated
   update_controls();
   for (int i=0;i<n_controls();++i)
@@ -289,9 +291,9 @@ bool vidl_v4l2_device::set_v4l2_format(unsigned int fourcode, int width, int hei
 
   if (is_open()) {
     if (capturing)
-      stop_capturing(); 
+      stop_capturing();
     if (buffers)
-      uninit_mmap(); 
+      uninit_mmap();
     vcl_memset(&fmt, 0, sizeof(fmt));
 
     fmt.type                = V4L2_BUF_TYPE_VIDEO_CAPTURE;
@@ -301,22 +303,22 @@ bool vidl_v4l2_device::set_v4l2_format(unsigned int fourcode, int width, int hei
     fmt.fmt.pix.field       = V4L2_FIELD_INTERLACED; // add to parameters?
     if (-1 == xioctl(fd, VIDIOC_S_FMT, &fmt)) {
       if (errno==EBUSY) { // try to recover the device
-	reset(false);	
-	fmt.type                = V4L2_BUF_TYPE_VIDEO_CAPTURE;
+        reset(false);
+        fmt.type                = V4L2_BUF_TYPE_VIDEO_CAPTURE;
         fmt.fmt.pix.width       = width;
         fmt.fmt.pix.height      = height;
         fmt.fmt.pix.pixelformat = fourcode;
         fmt.fmt.pix.field       = V4L2_FIELD_INTERLACED; // add to parameters?
-	if (-1 == xioctl(fd, VIDIOC_S_FMT, &fmt)) {
-	   fmt.fmt.pix.width = 0;
-           fmt.fmt.pix.height= 0;
-           return false;
-	}
+        if (-1 == xioctl(fd, VIDIOC_S_FMT, &fmt)) {
+          fmt.fmt.pix.width = 0;
+          fmt.fmt.pix.height= 0;
+          return false;
+        }
       }
       else {
-	   fmt.fmt.pix.width = 0;
-           fmt.fmt.pix.height= 0;
-           return false;      
+        fmt.fmt.pix.width = 0;
+        fmt.fmt.pix.height= 0;
+        return false;
       }
     }
     // Now we can set frame rate
@@ -370,7 +372,8 @@ bool vidl_v4l2_device::init_mmap(int reqbuf)
       f << dev_name_ << " does not support memory mapping";
       last_error=f.str();
       return false;
-    } else {
+    }
+    else {
       last_error = "v4l2_device -> VIDEOC_REQBUFS";
       return false;
     }
