@@ -7,7 +7,7 @@
 // \date Mar 10, 2011
 
 #include <bprb/bprb_func_process.h>
-
+#include <vul/vul_timer.h>
 #include <vcl_fstream.h>
 #include <vcl_algorithm.h>
 #include <vcl_sstream.h>
@@ -100,6 +100,7 @@ bool boxm2_ocl_change_detection_process(bprb_func_process& pro)
   vil_image_view<vxl_byte>* rgb_change_img = new vil_image_view<vxl_byte>(ni,nj,4); 
 
   //check to see which type of change detection to do, either two pass, or regular
+  vul_timer t; 
   if( norm_type == "twopass" ) {
     boxm2_ocl_two_pass_change::change_detect( *change_img, 
                                                device, 
@@ -126,6 +127,7 @@ bool boxm2_ocl_change_detection_process(bprb_func_process& pro)
                                                norm_type,
                                                pmax ); 
   }
+  vcl_cout<<" change time: "<<t.all()<<" ms"<<vcl_endl;
   
   //store rgb change image
   vcl_cout<<" preparing rgb output image"<<vcl_endl;

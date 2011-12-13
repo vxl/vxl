@@ -769,23 +769,34 @@ bool boxm2_ocl_two_pass_change::change_detect(vil_image_view<float>&    change_i
   //----------------------------------------------------------------------------
   //run CD for each pixel in a nxn neighborhood
   //----------------------------------------------------------------------------
+  //--- order offsets so you do 0,0 first -----
   int half = n/2;
-  for (int oi=-half; oi<=half; ++oi)
+  vcl_vector<int> ois; ois.push_back(0); 
+  vcl_vector<int> ojs; ojs.push_back(0); 
+  for (int o=-half; o<=half; ++o) {
+    if(o==0) continue;
+    ois.push_back(o); 
+    ojs.push_back(o); 
+  }
+  
+  //iterate over offsets i, offsets j
+  for (int offi=0; offi<ois.size(); ++offi)
   {
-    for (int oj=-half; oj<=half; ++oj)
+    for (int offj=0; offj<ojs.size(); ++offj)
     {
-      int oi_buff[1] = {oi};
-      int oj_buff[1] = {oj};
-      bocl_mem_sptr oi_mem = new bocl_mem(device->context(),oi_buff, sizeof(int),"offset i buffer");
-      bocl_mem_sptr oj_mem = new bocl_mem(device->context(),oj_buff, sizeof(int),"offset j buffer");
+      int oi = ois[offi]; 
+      int oj = ojs[offj]; 
+      vcl_cout<<"CHANGE OFFSET ("<<oi<<","<<oj<<")"<<vcl_endl;
+      bocl_mem_sptr oi_mem = new bocl_mem(device->context(), &oi, sizeof(int),"offset i buffer");
+      bocl_mem_sptr oj_mem = new bocl_mem(device->context(), &oj, sizeof(int),"offset j buffer");
       oi_mem->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
       oj_mem->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
       //----- STEP ONE: per cell mean obs pass ---------
-      vcl_cout<<"STEP ONE CHANGE PASS ("<<oi<<","<<oj<<")"<<vcl_endl;
       //For each ID in the visibility order, grab that block
       vcl_vector<boxm2_block_id> vis_order = scene->get_vis_blocks( cam );
       vcl_vector<boxm2_block_id>::iterator id;
+      vcl_cout<<"  STEP ONE "<<vcl_endl;
       for (id = vis_order.begin(); id != vis_order.end(); ++id)
       {
         //choose correct render kernel
@@ -838,7 +849,7 @@ bool boxm2_ocl_two_pass_change::change_detect(vil_image_view<float>&    change_i
       }
       
       //----- STEP TWO: prob background pas --------
-      vcl_cout<<"STEP TWO CHANGE PASS ("<<oi<<","<<oj<<")"<<vcl_endl;
+      vcl_cout<<"  STEP TWO CHANGE PASS"<<vcl_endl;
       for (id = vis_order.begin(); id != vis_order.end(); ++id)
       {
         //choose correct render kernel
@@ -913,7 +924,19 @@ bool boxm2_ocl_two_pass_change::change_detect(vil_image_view<float>&    change_i
       if(oi==0 && oj==0)
         for(unsigned i=0; i<cl_ni*cl_nj; ++i) 
           true_vis[i] = vis_buff[i]; 
-      
+          
+      //----- update mask image ------
+      for(int i=0; i<cl_ni*cl_nj; ++i) {
+        if(mask_buff[i]) {
+          float change      = max_background_buff[count];
+          float vis         = true_vis[count];
+          float prob_change = 1.0f / (1.0f + change+vis);
+          if(prob_change < PROB_THRESH)
+            mask_buff[i] = (vxl_byte) 0; 
+        }
+      }
+      mask_image->write_to_buffer(queue); 
+    
       //----------------------------------------------------------------------------
       // ZERO OUT auxiliary data, reset vis and change buffers
       //----------------------------------------------------------------------------
