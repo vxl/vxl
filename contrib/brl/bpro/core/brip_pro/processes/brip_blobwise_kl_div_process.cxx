@@ -160,6 +160,12 @@ bool brip_blobwise_kl_div_process(bprb_func_process& pro)
       else
         (*new_blobs)(i,j) = (vxl_byte) 0;
     }
+    
+  //make sure KL div image isn't overstepping old blobs
+  for (unsigned i=0; i<ni; ++i)
+    for (unsigned int j=0; j<nj; ++j)
+      if ( !mask_img(i,j) )
+        (*kl_img)(i,j) = 0.0f;  
 
   //------------------------------------------------
   // set outputs

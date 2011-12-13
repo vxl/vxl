@@ -35,4 +35,5 @@ DECLARE_FUNC_CONS(vil_convert_pixel_type_process);
 DECLARE_FUNC_CONS(vil_gradient_angle_process);
 DECLARE_FUNC_CONS(vil_image_ssd_process);
 DECLARE_FUNC_CONS(vil_image_mean_process);
+DECLARE_FUNC_CONS(vil_image_range_process);
 #endif

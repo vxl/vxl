@@ -8,5 +8,5 @@
 DECLARE_FUNC_CONS(brip_extrema_process);
 DECLARE_FUNC_CONS(brip_blobwise_mutual_info_process);
 DECLARE_FUNC_CONS(brip_blobwise_kl_div_process);
-
+DECLARE_FUNC_CONS(brip_blob_intersection_process);
 #endif
