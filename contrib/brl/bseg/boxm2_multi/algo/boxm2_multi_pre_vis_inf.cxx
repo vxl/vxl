@@ -2,6 +2,7 @@
 #include <boxm2_multi_util.h>
 
 #include <vcl_algorithm.h>
+#include <vcl_sstream.h>
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/boxm2_util.h>
 #include <bocl/bocl_manager.h>
@@ -37,7 +38,7 @@ float boxm2_multi_pre_vis_inf::pre_vis_inf(       boxm2_multi_cache&         cac
                                                 vcl_map<bocl_device*, float*>& pre_map, 
                                                 float*                         norm_img )
 {
-  vcl_cout<<"------------ boxm2_multi_pre_vis_inf store aux--------------"<<vcl_endl;
+  vcl_cout<<"------------ boxm2_multi_pre_vis_inf pre_vis_inf--------------"<<vcl_endl;
   //verify appearance model
   vcl_size_t lthreads[2] = {8,8};
   vcl_string data_type, options;
@@ -94,9 +95,7 @@ float boxm2_multi_pre_vis_inf::pre_vis_inf(       boxm2_multi_cache&         cac
     pre_mems.push_back(pre_image);
 
     //create image dim buff
-    int img_dim_buff[4];
-    img_dim_buff[0] = 0;   img_dim_buff[2] = ni;
-    img_dim_buff[1] = 0;   img_dim_buff[3] = nj;
+    int img_dim_buff[4] = {0, 0, ni, nj}; 
     bocl_mem_sptr img_dim = new bocl_mem(device->context(), img_dim_buff, sizeof(int)*4, "image dims");
     img_dim->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
     
@@ -138,7 +137,7 @@ float boxm2_multi_pre_vis_inf::pre_vis_inf(       boxm2_multi_cache&         cac
 }
 
 
-float boxm2_multi_pre_vis_inf::pre_vis_reduce(  boxm2_multi_cache&    cache,
+float boxm2_multi_pre_vis_inf::pre_vis_reduce(boxm2_multi_cache&  cache,
                                               vcl_vector<float*>& pre_imgs, 
                                               vcl_vector<float*>& vis_imgs,
                                               vcl_vector<boxm2_opencl_cache*>& ocl_caches ,
@@ -162,7 +161,7 @@ float boxm2_multi_pre_vis_inf::pre_vis_reduce(  boxm2_multi_cache&    cache,
       //make sure v and p are updated
       for(int c=0; c<ni*nj; ++c) {
         v[c] *= prev_vis[c]; 
-        p[c] += prev_pre[c]; 
+        p[c]  = p[c]*prev_vis[c] + prev_pre[c]; 
       }
       
     }
@@ -177,7 +176,7 @@ float boxm2_multi_pre_vis_inf::pre_vis_reduce(  boxm2_multi_cache&    cache,
   vis_map[dev0.ptr()] = vis0; 
   pre_map[dev0.ptr()] = pre0; 
   for(int idx=1; idx<ocl_caches.size(); ++idx) {
-    
+    vcl_cout<<"adding image for cache "<<idx<<vcl_endl;
     boxm2_opencl_cache*     ocl_cache = ocl_caches[idx]; 
     boxm2_scene_sptr        sub_scene = ocl_cache->get_scene(); 
     bocl_device_sptr        device    = ocl_cache->get_device(); 
@@ -185,6 +184,11 @@ float boxm2_multi_pre_vis_inf::pre_vis_reduce(  boxm2_multi_cache&    cache,
     vis_map[ device.ptr() ] = vis_imgs[idx-1]; 
     pre_map[ device.ptr() ] = pre_imgs[idx-1]; 
   }
+
+#if 0
+  write_imgs_out(vis_map, ni, nj, "vis");
+  write_imgs_out(pre_map, ni, nj, "pre");
+#endif
 
   //--------------------------------------------  
   //run proc_norm image to create norm image
@@ -247,6 +251,22 @@ float boxm2_multi_pre_vis_inf::pre_vis_reduce(  boxm2_multi_cache&    cache,
   check_val(status, MEM_FAILURE, "PROC NORM KERNEL EXECUTE FAILED: " + error_to_string(status));
   proc_kern->clear_args();
   norm_mem->read_to_buffer(queue);
+  
+#if 0
+  int count=0;
+  vil_image_view<float> visInf(ni,nj), preInf(ni,nj), norm(ni,nj);
+  for(int j=0; j<nj; ++j)
+    for(int i=0; i<ni; ++i) {
+      visInf(i,j) = vis_end[count]; 
+      preInf(i,j) = pre_end[count]; 
+      norm(i,j)   = norm_img[count];
+      count++;
+    }
+  vil_save(visInf, "visInf.tiff");
+  vil_save(preInf, "preInf.tiff");
+  vil_save(norm, "norm.tiff");
+#endif
+  
 }
 
 //MAP function for store aux scene step
@@ -414,3 +434,20 @@ vcl_vector<bocl_kernel*>& boxm2_multi_pre_vis_inf::get_kernels(bocl_device_sptr 
   return kernels_[identifier]; 
 }
 
+
+void boxm2_multi_pre_vis_inf::write_imgs_out(vcl_map<bocl_device*, float*>& img_map, int ni, int nj, vcl_string name)
+{
+  vcl_map<bocl_device*, float*>::iterator iter; 
+  for(iter=img_map.begin(); iter!=img_map.end(); ++iter) {
+    float* img = iter->second; 
+    int count=0; 
+    vil_image_view<float> outImg(ni,nj); 
+    for(int j=0; j<nj; ++j)
+      for(int i=0; i<ni; ++i)
+        outImg(i,j) = img[count++]; 
+        
+    vcl_string outName = name + iter->first->device_identifier() + ".tiff"; 
+    vil_save(outImg, outName.c_str());
+  }
+  
+}

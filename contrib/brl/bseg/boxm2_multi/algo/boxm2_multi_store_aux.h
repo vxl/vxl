@@ -38,7 +38,8 @@ class boxm2_multi_store_aux
                                   vcl_size_t *              lthreads,
                                   unsigned                  cl_ni,
                                   unsigned                  cl_nj,
-                                  int                       apptypesize );
+                                  int                       apptypesize,
+                                  bocl_mem_sptr &           cl_output);
 
     //map keeps track of all kernels compiled and cached
     static vcl_map<vcl_string, bocl_kernel*> kernels_;

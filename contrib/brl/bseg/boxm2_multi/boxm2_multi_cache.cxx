@@ -20,9 +20,9 @@ boxm2_multi_cache::boxm2_multi_cache(boxm2_scene_sptr              scene,
   scene->max_block_index(max_ids, max_origin);
 
   //divide by half in each direction (take ceiling)
-  vgl_point_3d<int> incr_ids( (int) vcl_ceil( (float)max_ids.x()/devices.size() ),
-                              (int) vcl_ceil( (float)max_ids.y()/devices.size() ),
-                              (int) vcl_ceil( (float)max_ids.z()/devices.size() ) );
+  vgl_point_3d<int> incr_ids( (int) vcl_ceil( (float)(max_ids.x()+1)/devices.size() ),
+                              (int) vcl_ceil( (float)(max_ids.y()+1)/devices.size() ),
+                              (int) vcl_ceil( (float)(max_ids.z()+1)/devices.size() ) );
 
   //for each device create a new scene
   int blocksAdded = 0;
@@ -63,7 +63,6 @@ boxm2_multi_cache::boxm2_multi_cache(boxm2_scene_sptr              scene,
     vcl_cout<<"boxm2_multi_cache blocks added not equal to number of blocks in original scene:\n"
             <<"  Num gpus: "<<devices.size()<< '\n'
             <<"  blocks added: "<<blocksAdded<<" != "<<scene->blocks().size()<<vcl_endl;
-
     throw -1;
   }
 }

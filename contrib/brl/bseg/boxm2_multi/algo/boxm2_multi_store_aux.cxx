@@ -51,6 +51,7 @@ float boxm2_multi_store_aux::store_aux(       boxm2_multi_cache&         cache,
   vcl_vector<cl_command_queue> queues; 
   
   //for each device/cache, run an update
+  vcl_vector<bocl_mem_sptr> out_imgs; 
   vcl_vector<boxm2_opencl_cache*>  ocl_caches = cache.get_vis_sub_scenes( (vpgl_perspective_camera<double>*) cam.ptr());
   for(int i=0; i<ocl_caches.size(); ++i) {
     
@@ -90,12 +91,42 @@ float boxm2_multi_store_aux::store_aux(       boxm2_multi_cache&         cache,
     int img_dim_buff[4] = {0,0,ni,nj}; 
     bocl_mem_sptr img_dim = new bocl_mem(device->context(), img_dim_buff, sizeof(int)*4, "image dims");
     img_dim->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
+    
+    // Output Array
+    float* output_arr = new float[cl_ni*cl_nj];
+    vcl_fill(output_arr, output_arr+cl_ni*cl_nj, 0.0f);
+    bocl_mem_sptr  cl_output=new bocl_mem(device->context(), output_arr, sizeof(float)*cl_ni*cl_nj, "output buffer");
+    cl_output->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
+    out_imgs.push_back(cl_output);
 
     //store aux data
     store_aux_scene( sub_scene, device, ocl_cache, queue, 
                      cam, in_mem, img_dim, data_type, 
-                     kern, lthreads, cl_ni, cl_nj, apptypesize); 
+                     kern, lthreads, cl_ni, cl_nj, apptypesize, cl_output); 
+                    
+    delete[] inImg; 
+    //delete[] output_arr;
   }
+
+//==== DEBUG ====
+#if 1
+  unsigned cl_ni=RoundUp(ni,lthreads[0]);
+  unsigned cl_nj=RoundUp(nj,lthreads[1]);
+  vil_image_view<float> segLens(cl_ni,cl_nj);
+  segLens.fill(0.0f);
+  for(int i=0; i<queues.size(); ++i) {
+    clFinish(queues[i]); 
+    out_imgs[i]->read_to_buffer(queues[i]); 
+    float* output_arr = (float*) out_imgs[i]->cpu_buffer();
+    int count=0;
+    for(int j=0; j<cl_nj; ++j)
+      for(int i=0; i<cl_ni; ++i)
+        segLens(i,j) += output_arr[count++];
+    delete[] output_arr; 
+  }
+  vil_save(segLens, "seg_len.tiff");
+#endif
+//==============
 
   //-------------------------------------
   //finish execution along each queue (block c++ until all GPUS are done
@@ -119,7 +150,8 @@ float boxm2_multi_store_aux::store_aux_scene(boxm2_scene_sptr          scene,
                                         vcl_size_t *              lthreads,
                                         unsigned                  cl_ni,
                                         unsigned                  cl_nj,
-                                        int                       apptypesize )
+                                        int                       apptypesize,
+                                        bocl_mem_sptr &           cl_output )
 {
   //camera check
   if (cam->type_name()!= "vpgl_perspective_camera" &&
@@ -134,12 +166,6 @@ float boxm2_multi_store_aux::store_aux_scene(boxm2_scene_sptr          scene,
   bocl_mem_sptr ray_o_buff = new bocl_mem(device->context(), ray_origins   ,  cl_ni*cl_nj * sizeof(cl_float4), "ray_origins buffer");
   bocl_mem_sptr ray_d_buff = new bocl_mem(device->context(), ray_directions,  cl_ni*cl_nj * sizeof(cl_float4), "ray_directions buffer");
   boxm2_ocl_camera_converter::compute_ray_image( device, queue, cam, cl_ni, cl_nj, ray_o_buff, ray_d_buff);
-
-  // Output Array
-  float output_arr[100];
-  for (int i=0; i<100; ++i) output_arr[i] = 0.0f;
-  bocl_mem_sptr  cl_output=new bocl_mem(device->context(), output_arr, sizeof(float)*100, "output buffer");
-  cl_output->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
   // bit lookup buffer
   cl_uchar lookup_arr[256];

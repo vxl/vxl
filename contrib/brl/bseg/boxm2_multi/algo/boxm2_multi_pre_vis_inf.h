@@ -60,6 +60,9 @@ class boxm2_multi_pre_vis_inf
 
     //compile kernels and cache
     static vcl_vector<bocl_kernel*>& get_kernels(bocl_device_sptr device, vcl_string opts);
+    
+    //debug write imgs to disk method
+    static void write_imgs_out(vcl_map<bocl_device*, float*>& img_map, int ni, int nj,vcl_string name);
 };
 
 #endif
