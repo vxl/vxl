@@ -45,4 +45,5 @@ void boxm2_register::register_process()
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_blob_precision_recall_process, "boxm2BlobPrecisionRecallProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_export_visibility_wrl_process, "boxm2ExportVisibilityWRLProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_export_point_cloud_xyz_process, "boxm2ExportPointCloudXYZProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_scene_bbox_process, "boxm2SceneBboxProcess");
 }
