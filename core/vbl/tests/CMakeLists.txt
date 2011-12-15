@@ -14,6 +14,7 @@ ADD_EXECUTABLE( vbl_test_all
   vbl_test_qsort.cxx
   vbl_test_sparse_array_2d.cxx
   vbl_test_sparse_array_3d.cxx
+  vbl_test_batch_multimap.cxx
   vbl_test_smart_ptr.cxx
   vbl_test_ref_count.cxx
   vbl_test_scoped_ptr.cxx
@@ -30,6 +31,7 @@ ADD_TEST( vbl_test_array           ${EXECUTABLE_OUTPUT_PATH}/vbl_test_all vbl_te
 ADD_TEST( vbl_test_bit_array       ${EXECUTABLE_OUTPUT_PATH}/vbl_test_all vbl_test_bit_array )
 ADD_TEST( vbl_test_sparse_array_2d ${EXECUTABLE_OUTPUT_PATH}/vbl_test_all vbl_test_sparse_array_2d )
 ADD_TEST( vbl_test_sparse_array_3d ${EXECUTABLE_OUTPUT_PATH}/vbl_test_all vbl_test_sparse_array_3d )
+ADD_TEST( vbl_test_batch_multimap  ${EXECUTABLE_OUTPUT_PATH}/vbl_test_all vbl_test_batch_multimap )
 ADD_TEST( vbl_test_smart_ptr       ${EXECUTABLE_OUTPUT_PATH}/vbl_test_all vbl_test_smart_ptr )
 ADD_TEST( vbl_test_ref_count       ${EXECUTABLE_OUTPUT_PATH}/vbl_test_all vbl_test_ref_count )
 ADD_TEST( vbl_test_scoped_ptr      ${EXECUTABLE_OUTPUT_PATH}/vbl_test_all vbl_test_scoped_ptr )

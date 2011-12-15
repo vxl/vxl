@@ -8,6 +8,7 @@ DECLARE(vbl_test_array);
 DECLARE(vbl_test_bit_array);
 DECLARE(vbl_test_sparse_array_2d);
 DECLARE(vbl_test_sparse_array_3d);
+DECLARE(vbl_test_batch_multimap);
 DECLARE(vbl_test_smart_ptr);
 DECLARE(vbl_test_ref_count);
 DECLARE(vbl_test_scoped_ptr);
@@ -26,6 +27,7 @@ register_tests()
   REGISTER(vbl_test_bit_array);
   REGISTER(vbl_test_sparse_array_2d);
   REGISTER(vbl_test_sparse_array_3d);
+  REGISTER(vbl_test_batch_multimap);
   REGISTER(vbl_test_smart_ptr);
   REGISTER(vbl_test_ref_count);
   REGISTER(vbl_test_scoped_ptr);
