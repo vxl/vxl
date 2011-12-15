@@ -1,4 +1,5 @@
 from boxm2_register import boxm2_batch, dbvalue;
+import math
 
 ###################
 #camera loading
@@ -10,6 +11,35 @@ def load_perspective_camera(file_path) :
   (id,type) = boxm2_batch.commit_output(0);
   cam = dbvalue(id,type);
   return cam;
+
+#Scale = (scale_u, scale_v), ppoint = (u,v), center = (x,y,z), look_pt = (x,y,z)
+def create_perspective_camera( scale, ppoint, center, look_pt ) :
+  boxm2_batch.init_process("vpglCreatePerspectiveCameraProcess");
+  boxm2_batch.set_input_double(0, scale[0]);
+  boxm2_batch.set_input_double(1, ppoint[0]);
+  boxm2_batch.set_input_double(2, scale[1]);
+  boxm2_batch.set_input_double(3, ppoint[1]);
+  boxm2_batch.set_input_double(4, center[0]);
+  boxm2_batch.set_input_double(5, center[1]);
+  boxm2_batch.set_input_double(6, center[2]);
+  boxm2_batch.set_input_double(7, look_pt[0]);
+  boxm2_batch.set_input_double(8, look_pt[1]);
+  boxm2_batch.set_input_double(9, look_pt[2]);
+  boxm2_batch.run_process();
+  (id,type) = boxm2_batch.commit_output(0);
+  cam = dbvalue(id,type);
+  return cam;
+
+# returns cam center from azimuth (degrees), elevation (degrees), radius, look point
+def get_camera_center( azimuth, elevation, radius, lookPt) :
+  deg_to_rad = math.pi/180.0; 
+  el = elevation*deg_to_rad
+  az = azimuth*deg_to_rad;
+  cx = radius*math.sin(el)*math.cos(az);
+  cy = radius*math.sin(el)*math.sin(az);
+  cz = radius*math.cos(el);
+  center = (cx + lookPt[0], cy + lookPt[1], cz + lookPt[2]); 
+  return center;
 
 def load_rational_camera(file_path) :
   boxm2_batch.init_process("vpglLoadRationalCameraProcess");

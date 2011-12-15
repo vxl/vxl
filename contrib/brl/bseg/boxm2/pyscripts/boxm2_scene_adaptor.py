@@ -24,6 +24,7 @@ class boxm2_scene_adaptor:
     self.ocl_mgr = None;
     self.str_cache = None;
     self.model_dir = None;
+    self.bbox = None;
 
     #if device_string is gpu, load up opencl
     if device_string[0:3]=="gpu" :
@@ -35,10 +36,18 @@ class boxm2_scene_adaptor:
 
     #store model directory for later use
     self.model_dir = self.describe();
+    self.bbox = self.bounding_box();
 
-  #describe scene
+  #describe scene (returns data path)
   def describe(self) :
     return describe_scene(self.scene);
+
+  #returns scene bounding box
+  def bounding_box(self) :
+    if self.bbox :
+      return self.bbox
+    else: 
+      return scene_bbox(self.scene); 
 
   #update wrapper, can pass in a Null device to use
   def update(self, cam, img, update_alpha=True, mask=None, device_string="") :

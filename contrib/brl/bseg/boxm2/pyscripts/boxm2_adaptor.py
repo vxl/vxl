@@ -78,6 +78,20 @@ def describe_scene(scene):
   dataPath = boxm2_batch.get_output_string(id); 
   return dataPath; 
   
+# returns bounding box as two tuple points (minpt, maxpt)
+def scene_bbox(scene):
+  boxm2_batch.init_process("boxm2SceneBboxProcess");
+  boxm2_batch.set_input_from_db(0, scene);
+  boxm2_batch.run_process();
+  out = []
+  for outIdx in range(6):
+    (id, type) = boxm2_batch.commit_output(outIdx); 
+    pt = boxm2_batch.get_output_double(id); 
+    out.append(pt);
+  minPt = (out[0], out[1], out[2]);
+  maxPt = (out[3], out[4], out[5]);
+  return (minPt, maxPt); 
+  
 ###############################################
 # Model building stuff
 ###############################################
