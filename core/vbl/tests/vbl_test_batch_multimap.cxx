@@ -142,7 +142,7 @@ static void vbl_test_array_3d()
 namespace
 {
   template <typename CI>
-  bool is_sorted(CI begin, CI end)
+  bool issorted(CI begin, CI end)
   {
     if (begin==end) return false; // Since it is for a test, empty is unexpected.
     
@@ -172,7 +172,7 @@ static void vbl_test_batch_multimap()
   
   vbl_batch_multimap<vcl_string, int> bmmap(test_data.begin(), test_data.end());
   
-  TEST("batch_multimap sorted data set correctly", is_sorted(bmmap.begin(), bmmap.end()), true);
+  TEST("batch_multimap sorted data set correctly", issorted(bmmap.begin(), bmmap.end()), true);
   
   TEST("batch_multimap::size", bmmap.size(), 7);
   TEST("batch_multimap::find", bmmap.find("-7")->second, -7);

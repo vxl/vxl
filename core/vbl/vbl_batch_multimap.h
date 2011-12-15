@@ -20,7 +20,7 @@
 // This container stores its elements in a single vector, and has fast construction and deletion.
 // It has all the const-access map fundtions, but its contents can only be modified all-at-once.
 template <typename K, typename T, typename C=vcl_less<K> >
-struct vbl_batch_multimap
+class vbl_batch_multimap
 {
 public:
   typedef K key_type;
