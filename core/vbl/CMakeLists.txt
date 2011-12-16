@@ -28,6 +28,7 @@ SET( vbl_sources
   vbl_sparse_array_3d.txx     vbl_sparse_array_3d.h
   vbl_big_sparse_array_3d.txx vbl_big_sparse_array_3d.h
   vbl_batch_multimap.h
+  vbl_batch_compact_multimap.h
 
                               vbl_ref_count.h
   vbl_bounding_box.txx        vbl_bounding_box.h

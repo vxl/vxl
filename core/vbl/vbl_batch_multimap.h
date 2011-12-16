@@ -15,7 +15,10 @@
 #include <vcl_utility.h>
 #include <vcl_algorithm.h>
 
+namespace
+{
 
+}
 //: A fast read and batch-write map-style collection.
 // This container stores its elements in a single vector, and has fast construction and deletion.
 // It has all the const-access map fundtions, but its contents can only be modified all-at-once.
@@ -36,18 +39,22 @@ public:
 
 
 
-  class value_compare
+  class value_compare_t
   : public vcl_binary_function<value_type, value_type, bool>
   {
-    friend class vbl_batch_multimap<key_type, mapped_type, key_compare>;
-  protected:
+  //  friend class vbl_batch_multimap<key_type, mapped_type, key_compare>;
+  // protected:
+  public:
     key_compare comp;
 
-    value_compare(key_compare c)
+    value_compare_t(key_compare c)
     : comp(c) { }
 
   public:
     bool operator()(const value_type& x, const value_type& y) const
+    { return comp(x.first, y.first); }
+
+    bool compare(const value_type& x, const value_type& y) const
     { return comp(x.first, y.first); }
   };
 
@@ -58,7 +65,7 @@ public:
   vbl_batch_multimap(CI start, CI finish):
     data_(start, finish)
   {
-    vcl_sort(data_.begin(), data_.end(), value_compare(key_compare()));
+    vcl_sort(data_.begin(), data_.end(), value_compare_t(key_compare()));
   }
 
   //: Change all the values in the multimap.
@@ -66,7 +73,7 @@ public:
   void assign(CI start, CI finish)
   {
     data_.assign(start, finish);
-    vcl_sort(data_.begin(), data_.end(), value_compare(key_compare()));
+    vcl_sort(data_.begin(), data_.end(), value_compare_t(key_compare()));
   }
 
   //: Change all the values in the multimap, to a ready sorted sequence
@@ -75,12 +82,18 @@ public:
   void assign_sorted(CI start, CI finish)
   {
     data_.assign(start, finish);
-    assert(is_sorted(data_.begin(), data_.end(), value_compare(key_compare())));
+    assert(is_sorted(start, finish, value_compare_t(key_compare())));
   }
 
-  void swap(vbl_batch_multimap& x)
+  void swap(vbl_batch_multimap& rhs)
   {
-    data_.swap(x.data_);
+    data_.swap(rhs.data_);
+  }
+
+
+  bool operator==(const vbl_batch_multimap&rhs)
+  {
+    return data_ == rhs.data_;
   }
 
 // const vector API  
@@ -98,7 +111,7 @@ public:
   const_iterator lower_bound(const key_type& key) const
   {
     return vcl_lower_bound(data_.begin(), data_.end(),
-      make_pair(key, mapped_type()), value_compare(key_compare()));
+      make_pair(key, mapped_type()), value_compare_t(key_compare()));
   }
 
   //: Finds the one past the end of a subsequence matching given \p key.
@@ -107,14 +120,14 @@ public:
   const_iterator upper_bound(const key_type& key) const
   {
     return vcl_upper_bound(data_.begin(), data_.end(),
-      make_pair(key, mapped_type()), value_compare(key_compare()));
+      make_pair(key, mapped_type()), value_compare_t(key_compare()));
   }
 
   //: A more efficient  make_pair(lower_bound(...), upper_bound(...))
   vcl_pair<const_iterator, const_iterator> equal_range(const key_type& key) const
   {
     return vcl_equal_range(data_.begin(), data_.end(),
-      make_pair(key, mapped_type()), value_compare(key_compare()));
+      make_pair(key, mapped_type()), value_compare_t(key_compare()));
   }
 
   //: Finds the first matching value in the sequence, or returns end() if no match,
@@ -137,16 +150,19 @@ public:
   
 private:
   container_type data_;
-  bool is_sorted()
-  {
-    if (empty()) return true;
 
-    for (const_iterator it=data_.begin(), end=data_.end()-1; it != end; ++it)
+  template <typename CI, typename CMP>
+  static bool is_sorted(CI start, CI end, CMP comp)
+  {
+    if (start == end) return true;
+
+    for (end--; start!=end; ++start)
     {
-      if (! value_compare(*it, *(it+1))) return false;
+      if ( comp(*(start+1), *start)) return false;
     }
     return true;
   }
+
 };
 
 template<typename K, typename T, typename C>
