@@ -37,7 +37,7 @@ namespace {
 
   // To set frame rate
   void double2fraction(double value, int& n, int& d) {
-    if (value < 0.0) value = value;
+    if (value < 0.0) value = -value;
     int a= n= (int)(value*10000+0.5);
     int b= d= 10000;
     int resto= a%b;
@@ -111,11 +111,11 @@ vidl_v4l2_device::vidl_v4l2_device(const char *file)
   last_error="";
 
   if (!open()) {
-    vcl_cerr << "Error creating device: " << last_error << '\n';
+    vcl_cerr << "Error creating device: " << last_error << vcl_endl;
     return;
   }
   if (!initialize_device()) {
-    vcl_cerr << "Error initializing device: " << last_error << '\n';
+    vcl_cerr << "Error initializing device: " << last_error << vcl_endl;
     close();
     return;
   }
@@ -124,24 +124,26 @@ vidl_v4l2_device::vidl_v4l2_device(const char *file)
   struct v4l2_input inp;
 
 #ifdef DEBUG
-  vcl_cerr << "Looking for inputs..." << fd << '\n';
+  vcl_cerr << "Looking for inputs..." << fd << vcl_endl;
 #endif
   for (inp.index=0;-1!=xioctl(fd,VIDIOC_ENUMINPUT,&inp); inp.index++) {
 #ifdef DEBUG
-    vcl_cerr << "Inserting input...\n";
+    vcl_cerr << "Inserting input..." << vcl_endl;
 #endif
     inputs_.push_back(vidl_v4l2_input(inp));
   }
-#if 0
+
   fmt.fmt.pix.width = 0;
   fmt.fmt.pix.height =0;
-#endif
-  try_formats();
-  update_controls();
+
+  //try_formats();
+  //update_controls();
+  close();
 }
 
 vidl_v4l2_device::~vidl_v4l2_device()
 {
+#if 0
   if (is_open()) {
     if (capturing)
       stop_capturing();
@@ -149,11 +151,14 @@ vidl_v4l2_device::~vidl_v4l2_device()
       uninit_mmap();
     close();
   }
+#endif
+  close();
   for (unsigned int i=0;i<controls_.size();++i) delete controls_[i];
 }
 
-void vidl_v4l2_device::reset(bool try_some_formats)
+void vidl_v4l2_device::reset()
 {
+#if 0
   if (is_open()) {
     if (capturing)
       stop_capturing();
@@ -161,6 +166,8 @@ void vidl_v4l2_device::reset(bool try_some_formats)
       uninit_mmap();
     close();
   }
+#endif
+  close();
   last_error="";
   if (!open()) {
     vcl_cerr << "Error creating device: " << last_error << '\n';
@@ -174,10 +181,10 @@ void vidl_v4l2_device::reset(bool try_some_formats)
 
   fmt.fmt.pix.width = 0; // format not set
   fmt.fmt.pix.height =0;
-  if (try_some_formats) try_formats();
+  //if (try_some_formats) try_formats();
 
   // inputs already updated
-  update_controls();
+  update_controls();//perhaps, we need to iterate over all inputs and reset controls, but probably, user is interested in current input
   for (int i=0;i<n_controls();++i)
     get_control(i)->reset();
   // Set default values?
@@ -185,7 +192,7 @@ void vidl_v4l2_device::reset(bool try_some_formats)
 
 bool vidl_v4l2_device::open()
 {
-  if (is_open()) close(); // ?????
+  if (is_open()) if (!close()) return false;// ?????
 
   struct stat st;
 
@@ -252,26 +259,26 @@ bool vidl_v4l2_device::initialize_device()
   return true;
 }
 
-bool vidl_v4l2_device::try_formats()
+bool vidl_v4l2_device::try_formats(int width, int height)
 {
   // change order
   // better select formats implemented in vidl
 
-  if (set_v4l2_format(V4L2_PIX_FMT_BGR24,640,480)) return true;
-  if (set_v4l2_format(V4L2_PIX_FMT_BGR32,640,480)) return true;
-  if (set_v4l2_format(V4L2_PIX_FMT_RGB565,640,480)) return true;
-  if (set_v4l2_format(V4L2_PIX_FMT_RGB555,640,480)) return true;
+  if (set_v4l2_format(V4L2_PIX_FMT_BGR24,width,height)) return true;
+  if (set_v4l2_format(V4L2_PIX_FMT_BGR32,width,height)) return true;
+  if (set_v4l2_format(V4L2_PIX_FMT_RGB565,width,height)) return true;
+  if (set_v4l2_format(V4L2_PIX_FMT_RGB555,width,height)) return true;
 
-  if (set_v4l2_format(V4L2_PIX_FMT_YUYV,640,480)) return true;
-  if (set_v4l2_format(V4L2_PIX_FMT_UYVY,640,480)) return true;
+  if (set_v4l2_format(V4L2_PIX_FMT_YUYV,width,height)) return true;
+  if (set_v4l2_format(V4L2_PIX_FMT_UYVY,width,height)) return true;
 
-  if (set_v4l2_format(V4L2_PIX_FMT_YUV422P,640,480)) return true;
-  if (set_v4l2_format(V4L2_PIX_FMT_YVU420,640,480)) return true;
-  if (set_v4l2_format(V4L2_PIX_FMT_YUV420,640,480)) return true;
-  if (set_v4l2_format(V4L2_PIX_FMT_YUV411P,640,480)) return true;
-  if (set_v4l2_format(V4L2_PIX_FMT_YVU410,640,480)) return true;
+  if (set_v4l2_format(V4L2_PIX_FMT_YUV422P,width,height)) return true;
+  if (set_v4l2_format(V4L2_PIX_FMT_YVU420,width,height)) return true;
+  if (set_v4l2_format(V4L2_PIX_FMT_YUV420,width,height)) return true;
+  if (set_v4l2_format(V4L2_PIX_FMT_YUV411P,width,height)) return true;
+  if (set_v4l2_format(V4L2_PIX_FMT_YVU410,width,height)) return true;
 
-  if (set_v4l2_format(V4L2_PIX_FMT_GREY,640,480)) return true;
+  if (set_v4l2_format(V4L2_PIX_FMT_GREY,width,height)) return true;
 
   // add other formats...
 
@@ -289,6 +296,7 @@ bool vidl_v4l2_device::set_v4l2_format(unsigned int fourcode, int width, int hei
   fmt.fmt.pix.width = 0;
   fmt.fmt.pix.height= 0;
 
+  if (!is_open()) reset();
   if (is_open()) {
     if (capturing)
       stop_capturing();
@@ -303,7 +311,7 @@ bool vidl_v4l2_device::set_v4l2_format(unsigned int fourcode, int width, int hei
     fmt.fmt.pix.field       = V4L2_FIELD_INTERLACED; // add to parameters?
     if (-1 == xioctl(fd, VIDIOC_S_FMT, &fmt)) {
       if (errno==EBUSY) { // try to recover the device
-        reset(false);
+        reset();
         fmt.type                = V4L2_BUF_TYPE_VIDEO_CAPTURE;
         fmt.fmt.pix.width       = width;
         fmt.fmt.pix.height      = height;
@@ -569,11 +577,21 @@ bool vidl_v4l2_device::uninit_mmap()
 
 bool vidl_v4l2_device::close()
 {
-  if (-1 == ::close(fd)) {
-    last_error= "Error closing device";
-    return false; // errno_exit("close");
+  if (is_open()) {
+    if (capturing)
+      stop_capturing();
+    if (buffers)
+      uninit_mmap();
+    for (unsigned int i=0;i<controls_.size();++i) delete controls_[i]; 
+    controls_.clear();
+
+    last_error="";
+    if (-1 == ::close (fd)) {
+      last_error= "Error closing device";
+      return false; //     errno_exit ("close");
+    }
+    fd = -1;
   }
-  fd = -1;
   return true;
 }
 
@@ -596,6 +614,7 @@ bool vidl_v4l2_device::set_input(unsigned int i)
 {
   if (current_input()==i)
     return true;
+  if (!is_open()) reset();
   if (!is_open() || i>=n_inputs())
     return false;
 

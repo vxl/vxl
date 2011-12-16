@@ -78,18 +78,21 @@ class vidl_v4l2_device
   vcl_vector<vidl_v4l2_input> inputs_;
   vcl_vector<vidl_v4l2_control *> controls_;
   void update_controls(); // must be called after input change
+  
+  // Reset the device to an initial state 
+  // It was public, but it is not usefull for users of device, so it is moved to private
+  void reset();
 
   bool open(); // return true if successful
   bool initialize_device(); //  return true if successful
   bool init_mmap(int reqbuf);
   bool uninit_mmap ();
+  // Close device. If other functions are called, it would be automatically re-opened.
   bool close();
 
   bool is_open() const { return fd!=-1; }
   bool is_prepared_for_capturing() const  { return buffers!=0; }
   bool good() const { return last_error.size()==0; }
-
-  bool try_formats();
 
   // non-valid functions
   vidl_v4l2_device(const vidl_v4l2_device&);
@@ -98,12 +101,14 @@ class vidl_v4l2_device
  public:
 
   //: Constructor
+  // After construction, device is closed (device is not busy). 
+  // You can use device as a boolean expression to test if device is ok.
+  // \param file device name (for example, "/dev/video")
   // \param file device name (for example, "/dev/video")
   vidl_v4l2_device(const char *file);
   ~vidl_v4l2_device();
 
-  //: Reset the device to an initial state (default true for backward compatibility)
-  void reset(bool try_some_formats=true);
+
 
   //: Name of the associated file device (same as constructor)
   vcl_string device_file() const { return dev_name_; }
@@ -127,12 +132,22 @@ class vidl_v4l2_device
   // \param fourcode A four character code defined in v4l2 (see v4l2 specification and vidl_pixel_format.h) indicating pixel encoding
   // \param width can be changed by drivers to the closest possible value
   // \param height can be changed by drivers to the closest possible value
+  // \param fps frame rate to try (not garanteed).
   // \return if successful
   // \see format_is_set
   bool set_v4l2_format(unsigned int fourcode, int width, int height,double fps=0.0);
 
+  //: Try several formats implemented in vidl
+  // \param width can be changed by drivers to the closest possible value
+  // \param height can be changed by drivers to the closest possible value
+  // \param fps frame rate to try (not garanteed).
+  // \return if successful
+
+  bool try_formats(int width= 640, int height= 480);
+
+  
   //: Return if the format is set.
-  // Normally, a format is automatically selected of user call set_v4l2_format. User can use this function to know if a format is selected before calling start_capturing.
+  // Normally, a format is automatically selected or user call set_v4l2_format. User can use this function to know if a format is selected before calling start_capturing.
   // \see set_v4l2_format
   bool format_is_set() const { return fmt.fmt.pix.width!=0; }
 
