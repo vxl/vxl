@@ -13,7 +13,7 @@
 
 namespace boxm2_create_scene_process_globals
 {
-  const unsigned n_inputs_ = 10;
+  const unsigned n_inputs_ = 9;
   const unsigned n_outputs_ = 1;
 }
 
@@ -21,26 +21,30 @@ bool boxm2_create_scene_process_cons(bprb_func_process& pro)
 {
   using namespace boxm2_create_scene_process_globals;
 
-  //process takes 2 inputs
+  //process takes 9 inputs
   vcl_vector<vcl_string> input_types_(n_inputs_);
   input_types_[0] = "vcl_string";
   input_types_[1] = "vcl_string";
   input_types_[2] = "vcl_string";
-  input_types_[3] = "float"; // origin x 
+  input_types_[3] = "float"; // origin x
   input_types_[4] = "float"; // origin y
   input_types_[5] = "float"; // origin z
   input_types_[6] = "float"; // lon
   input_types_[7] = "float"; // lat
   input_types_[8] = "float"; // elev
+#if 0
   input_types_[9] = "int";   // number of illumination bins in the scene
+#endif
 
   // process has 1 output
   vcl_vector<vcl_string>  output_types_(n_outputs_);
   output_types_[0] = "boxm2_scene_sptr";
-  
-  //: ill bins might not be set
+
+  // ill bins might not be set
   brdb_value_sptr idx = new brdb_value_t<int>(0);
+#if 0
   pro.set_input(9, idx);
+#endif
   pro.set_input(8, idx);
   pro.set_input(7, idx);
   pro.set_input(6, idx);
@@ -68,7 +72,9 @@ bool boxm2_create_scene_process(bprb_func_process& pro)
   float lon           = pro.get_input<float>(i++);
   float lat           = pro.get_input<float>(i++);
   float elev          = pro.get_input<float>(i++);
+#if 0
   int num_bins        = pro.get_input<int>(i++);
+#endif
 
   if (!vul_file::make_directory_path(datapath.c_str()))
     return false;
@@ -78,7 +84,9 @@ bool boxm2_create_scene_process(bprb_func_process& pro)
   vpgl_lvcs lv = scene->lvcs();
   lv.set_origin((double)lon, (double)lat, (double)elev);
   scene->set_lvcs(lv);
-  //scene->set_num_illumination_bins(num_bins);
+#if 0
+  scene->set_num_illumination_bins(num_bins);
+#endif
 
   i=0;  // store scene smart pointer
   pro.set_output_val<boxm2_scene_sptr>(i++, scene);
