@@ -64,6 +64,7 @@ bool configure_input(vidl_v4l2_device& dev)
   }
   else {
     vcl_cout << "Input: " << dev.input(inum).name() << " selected." << vcl_endl;
+    dev.try_formats();
     if (! dev.format_is_set()) {
       vcl_cout << "A default format has not been set." << vcl_endl;
       if (dev.set_v4l2_format(V4L2_PIX_FMT_YUV420,640,480)) { // for example
