@@ -35,6 +35,9 @@ MANPAGE_SOURCES += vbl_scoped_ptr.h
 
 MANPAGE_SOURCES += vbl_attributes.txx
 
+MANPAGE_SOURCES += vbl_batch_multimap.h
+MANPAGE_SOURCES += vbl_batch_compact_multimap.h
+
 # debugging
 
 DEFINES += -DBUILDING_VBL_DLL

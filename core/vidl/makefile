@@ -44,10 +44,12 @@ MANPAGE_SOURCES += vidl_config.h.in
 MANPAGE_SOURCES += vidl_ffmpeg_istream_stub.txx
 MANPAGE_SOURCES += vidl_ffmpeg_istream_v1.txx
 MANPAGE_SOURCES += vidl_ffmpeg_istream_v2.txx
+MANPAGE_SOURCES += vidl_ffmpeg_istream_v3.txx
 MANPAGE_SOURCES += vidl_ffmpeg_ostream_stub.txx
 MANPAGE_SOURCES += vidl_ffmpeg_ostream_v1.txx
 MANPAGE_SOURCES += vidl_ffmpeg_ostream_v2.txx
 MANPAGE_SOURCES += vidl_ffmpeg_ostream_v3.txx
+MANPAGE_SOURCES += vidl_ffmpeg_ostream_v4.txx
 
 SOURCES += vidl_v4l2_pixel_format.cxx
 SOURCES += vidl_v4l2_device.cxx

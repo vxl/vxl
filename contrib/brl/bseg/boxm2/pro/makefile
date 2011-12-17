@@ -27,6 +27,7 @@ SOURCES += processes/boxm2_clear_cache_process.cxx
 SOURCES += processes/boxm2_blob_precision_recall_process.cxx
 SOURCES += processes/boxm2_export_visibility_wrl_process.cxx
 SOURCES += processes/boxm2_export_point_cloud_xyz_process.cxx
+SOURCES += processes/boxm2_scene_bbox_process.cxx
 
 #######################################
 include ${VXLROOT}/config/top-params.mk
