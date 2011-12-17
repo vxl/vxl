@@ -1,12 +1,10 @@
 // This is core/vbl/vbl_batch_compact_multimap.h
 #ifndef vbl_batch_compact_multimap_h_
 #define vbl_batch_compact_multimap_h_
-
 //:
 // \file
 // \brief Like a smaller and slightly faster vcl_batch_multimap but without the pair<key, value> sequence
 // \author Ian Scott, Imorphics 2011
-
 
 #include <vcl_cassert.h>
 #include <vcl_vector.h>
@@ -25,7 +23,7 @@
 template <typename K, typename T, typename C=vcl_less<K> >
 class vbl_batch_compact_multimap
 {
-public:
+ public:
   typedef K key_type;
   typedef T value_type;
   //: The type of data in the inputted sequence.
@@ -39,27 +37,25 @@ public:
   typedef typename key_container_type::const_iterator const_key_iterator;
   typedef typename value_container_type::const_iterator const_value_iterator;
 
-protected:
+ protected:
   //: The type of container used internally to process inputted data.
   typedef typename vcl_vector<input_type> input_container_type;
 
-public:
-
+ public:
   class input_compare
   : public vcl_binary_function<input_type, input_type, bool>
   {
     friend class vbl_batch_compact_multimap<key_type, value_type, key_compare>;
-  protected:
+   protected:
     key_compare comp;
 
     input_compare(key_compare c)
     : comp(c) { }
 
-  public:
+   public:
     bool operator()(const input_type& x, const input_type& y) const
     { return comp(x.first, y.first); }
   };
-
 
   vbl_batch_compact_multimap() {}
 
@@ -91,11 +87,11 @@ public:
     assert(is_sorted(start, finish, input_compare(key_compare())));
     while (start != finish)
     {
-      vcl_iterator_traits<CI>::value_type const & last_start_val = *start;
+      typename vcl_iterator_traits<CI>::value_type const & last_start_val = *start;
       keys_.push_back(start->first);
       indices_.push_back(values_.size());
       values_.push_back(start->second);
-      while(++start != finish && *start == last_start_val)
+      while (++start != finish && *start == last_start_val)
       {
         values_.push_back(start->second);
       }
@@ -113,11 +109,11 @@ public:
   bool operator==(const vbl_batch_compact_multimap& rhs)
   {
     return keys_ == rhs.keys_ &&
-      indices_ == rhs.indices_ &&
-      values_ == rhs.values_;
+           indices_ == rhs.indices_ &&
+           values_ == rhs.values_;
   }
 
-// const vector API  
+  // const vector API
 
   const_key_iterator keys_begin() const { return keys_.begin(); }
   const_key_iterator keys_end() const { return keys_.end(); }
@@ -126,26 +122,26 @@ public:
   bool empty() const { return values_.empty(); }
   vcl_size_t size() const { return values_.size(); }
 
-// const map API
+  // const map API
 
   //: Finds the beginning of a subsequence of values whose key matches given \p x.
-  // /return iterator to the first value whose key matches \p x, or the 
+  // \return iterator to the first value whose key matches \p x, or the
   //   next greatest element if no match is found.
   const_value_iterator lower_bound(const key_type& x) const
   {
     const_key_iterator k_it = vcl_lower_bound(keys_.begin(), keys_.end(),
-      x, key_compare() );
+                                              x, key_compare() );
 
     return values_.begin() + indices_[k_it - keys_.begin()];
   }
 
   //: Finds the one past the end of a subsequence of values whose key matches given \p x.
-  // /return iterator to one past the last value whose key that matches \p key, or to the 
+  // \return iterator to one past the last value whose key that matches \p key, or to the
   //   next greatest element if no match is found.
   const_value_iterator upper_bound(const key_type& x) const
   {
     const_key_iterator k_it = vcl_upper_bound(keys_.begin(), keys_.end(),
-      x, key_compare() );
+                                              x, key_compare() );
 
     return values_.begin() + indices_[k_it - keys_.begin()];
   }
@@ -154,7 +150,7 @@ public:
   vcl_pair<const_value_iterator, const_value_iterator> equal_range(const key_type& x) const
   {
     const_key_iterator k_it = vcl_lower_bound(keys_.begin(), keys_.end(),
-      x, key_compare() );
+                                              x, key_compare() );
 
     if (k_it == keys_end() || *k_it != x)
     {
@@ -164,7 +160,7 @@ public:
     else
     {
       return vcl_make_pair(values_.begin() + indices_[k_it - keys_.begin()],
-        values_.begin() + indices_[k_it - keys_.begin() + 1u] );
+                           values_.begin() + indices_[k_it - keys_.begin() + 1u] );
     }
   }
 
@@ -172,28 +168,27 @@ public:
   const_value_iterator find(const key_type& x) const
   {
     const_key_iterator k_it = vcl_lower_bound(keys_.begin(), keys_.end(),
-      x, key_compare() );
+                                              x, key_compare() );
 
     if (k_it == keys_end() || *k_it != x)
       return values_end();
     else
       return values_.begin() + indices_[k_it - keys_.begin()];
   }
-  
+
   //: Finds the number of values matching key \p x,
   vcl_size_t count(const key_type& x) const
   {
     const_key_iterator k_it = vcl_lower_bound(keys_.begin(), keys_.end(),
-      x, key_compare() );
+                                              x, key_compare() );
 
     if (k_it == keys_end() || *k_it != x)
       return 0;
     else
       return indices_[k_it - keys_.begin() + 1u] - indices_[k_it - keys_.begin()];
   }
-  
-  
-private:
+
+ private:
   key_container_type keys_;
   index_container_type indices_;
   value_container_type values_;
@@ -203,7 +198,7 @@ private:
   {
     if (start == end) return true;
 
-    for (end--; start!=end; ++start)
+    for (--end; start!=end; ++start)
     {
       // if cmp(a,b) is the sorting criteria, then !cmp(b,a) is the testing criteria for is_sorted.
       if (comp(*(start+1), *start)) return false;
