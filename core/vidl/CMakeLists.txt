@@ -75,7 +75,8 @@ IF( FFMPEG_FOUND )
       vidl_ffmpeg_convert.h          vidl_ffmpeg_convert.cxx
       vidl_ffmpeg_istream_v1.txx     vidl_ffmpeg_ostream_v1.txx
       vidl_ffmpeg_istream_v2.txx     vidl_ffmpeg_ostream_v2.txx
-                                     vidl_ffmpeg_ostream_v3.txx
+      vidl_ffmpeg_istream_v3.txx     vidl_ffmpeg_ostream_v3.txx
+                                     vidl_ffmpeg_ostream_v4.txx
      )
 # Stub implementation, when ffmeg is not available
 ELSE( FFMPEG_FOUND )
