@@ -1,4 +1,4 @@
-// This is core/vidl/vidl_ffmpeg_istream_v2.txx
+// This is core/vidl/vidl_ffmpeg_istream_v3.txx
 #ifndef vidl_ffmpeg_istream_v3_txx_
 #define vidl_ffmpeg_istream_v3_txx_
 #include "vidl_ffmpeg_istream.h"
@@ -180,7 +180,6 @@ open(const vcl_string& filename)
        vcl_string("avi") == is_->fmt_cxt_->iformat->name ) {
     is_->frame_number_offset_ = 1;
   }
-
 
   return true;
 }

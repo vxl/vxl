@@ -1,4 +1,4 @@
-// This is core/vidl/vidl_ffmpeg_ostream_v3.txx
+// This is core/vidl/vidl_ffmpeg_ostream_v4.txx
 #ifndef vidl_ffmpeg_ostream_v3_txx_
 #define vidl_ffmpeg_ostream_v3_txx_
 #include "vidl_ffmpeg_ostream.h"
@@ -42,7 +42,6 @@ struct vidl_ffmpeg_ostream::pimpl
   cur_frame_( 0 ),
   video_rc_eq_(NULL)
   { }
-
 
   AVFormatContext* fmt_cxt_;
   bool file_opened_;
@@ -108,7 +107,8 @@ open()
       close();
       return false;
     }
-  } else {
+  }
+  else {
     close();
     return false;
   }
@@ -362,7 +362,7 @@ open()
 
   video_enc->me_method = params_.me_method_;
 
-  /* two pass mode */
+  // two pass mode
   if (params_.do_pass_)
   {
     if (params_.do_pass_ == 1)
@@ -375,7 +375,6 @@ open()
     }
   }
 
-
   vcl_strncpy( os_->fmt_cxt_->filename, filename_.c_str(), 1023 );
 
   if ( avio_open( &os_->fmt_cxt_->pb, filename_.c_str(), URL_WRONLY) < 0 )
@@ -385,7 +384,6 @@ open()
     return false;
   }
   os_->file_opened_ = true;
-
 
   //dump_format( os_->fmt_cxt_, 1, filename_, 1 );
 
@@ -476,7 +474,6 @@ write_frame(const vidl_frame_sptr& frame)
              << frame->ni() << 'x' << frame->nj() << ")\n";
     return false;
   }
-
 
   PixelFormat fmt = vidl_pixel_format_to_ffmpeg(frame->pixel_format());
 
