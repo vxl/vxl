@@ -276,24 +276,6 @@ SOURCE=.\vidl_istream_sptr.h
 SOURCE=.\vidl_ostream_sptr.h
 # End Source File
 # Begin Source File
-SOURCE=.\vidl_ffmpeg_istream_stub.txx
-# End Source File
-# Begin Source File
-SOURCE=.\vidl_ffmpeg_istream_v1.txx
-# End Source File
-# Begin Source File
-SOURCE=.\vidl_ffmpeg_istream_v2.txx
-# End Source File
-# Begin Source File
-SOURCE=.\vidl_ffmpeg_ostream_stub.txx
-# End Source File
-# Begin Source File
-SOURCE=.\vidl_ffmpeg_ostream_v1.txx
-# End Source File
-# Begin Source File
-SOURCE=.\vidl_ffmpeg_ostream_v2.txx
-# End Source File
-# Begin Source File
 SOURCE=.\vidl_v4l2_pixel_format.h
 # End Source File
 # Begin Source File
@@ -312,7 +294,31 @@ SOURCE=.\vidl_v4l2_istream.h
 SOURCE=.\vidl_v4l2_control.h
 # End Source File
 # Begin Source File
+SOURCE=.\vidl_ffmpeg_istream_stub.txx
+# End Source File
+# Begin Source File
+SOURCE=.\vidl_ffmpeg_ostream_stub.txx
+# End Source File
+# Begin Source File
+SOURCE=.\vidl_ffmpeg_ostream_v1.txx
+# End Source File
+# Begin Source File
+SOURCE=.\vidl_ffmpeg_ostream_v2.txx
+# End Source File
+# Begin Source File
 SOURCE=.\vidl_ffmpeg_ostream_v3.txx
+# End Source File
+# Begin Source File
+SOURCE=.\vidl_ffmpeg_istream_v1.txx
+# End Source File
+# Begin Source File
+SOURCE=.\vidl_ffmpeg_istream_v2.txx
+# End Source File
+# Begin Source File
+SOURCE=.\vidl_ffmpeg_istream_v3.txx
+# End Source File
+# Begin Source File
+SOURCE=.\vidl_ffmpeg_ostream_v4.txx
 # End Source File
 # Begin Source File
 SOURCE=.\vidl_v4l_ulong_fix.h

@@ -353,6 +353,12 @@ SOURCE=.\vbl_attributes.h
 # Begin Source File
 SOURCE=.\vbl_attributes.txx
 # End Source File
+# Begin Source File
+SOURCE=.\vbl_batch_multimap.h
+# End Source File
+# Begin Source File
+SOURCE=.\vbl_batch_compact_multimap.h
+# End Source File
 # End Group
 # End Target
 # End Project
