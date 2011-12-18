@@ -179,10 +179,23 @@ bool boxm2_ocl_render_expected_color_process(bprb_func_process& pro)
                         cam, exp_image, vis_image, exp_img_dim,
                         data_type, kernels[identifier][0], lthreads, cl_ni, cl_nj,apptypesize);
 
+  // normalize
+  {
+    vcl_size_t gThreads[] = {cl_ni,cl_nj};
+    bocl_kernel* normalize_kern = kernels[identifier][1];
+    normalize_kern->set_arg( exp_image.ptr() );
+    normalize_kern->set_arg( vis_image.ptr() );
+    normalize_kern->set_arg( exp_img_dim.ptr());
+    normalize_kern->execute( queue, 2, lthreads, gThreads);
+    clFinish(queue);
+
+    //clear render kernel args so it can reset em on next execution
+    normalize_kern->clear_args();
+  }
+
   // read out expected image
   exp_image->read_to_buffer(queue);
   vil_image_view<vil_rgba<vxl_byte> >* exp_img_out = new vil_image_view<vil_rgba<vxl_byte> >(ni,nj);
-
   int numFloats = 4;
   int count = 0;
   for (unsigned c=0;c<nj;++c) {
