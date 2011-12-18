@@ -37,3 +37,11 @@ def camera_angles(camera, x,y,z):
   return (cam_az, cam_el)
 
 
+#Removes elements from brdb (list of elements, or just one)
+def remove_from_db(dbvals) :
+  if not isinstance(dbvals, (list, tuple)) : 
+    dbvals = [dbvals]
+  for dbval in dbvals:
+    boxm2_batch.init_process("bbasRemoveFromDbProcess")
+    boxm2_batch.set_input_unsigned(0, dbval.id);
+    boxm2_batch.run_process();

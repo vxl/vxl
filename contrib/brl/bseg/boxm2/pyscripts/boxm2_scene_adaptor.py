@@ -2,6 +2,7 @@ from boxm2_adaptor import *
 from vil_adaptor import *;
 from vpgl_adaptor import *;
 from os.path import basename, splitext
+import sys
 
 #############################################################################
 # boxm2_scene_adaptor class offers super simple model manipulation syntax
@@ -11,10 +12,9 @@ from os.path import basename, splitext
 class boxm2_scene_adaptor:
 
   #scene adaptor init
-  def __init__(self, scene_str, rgb=False, device_string="gpu") :
+  def __init__(self, scene_str, device_string="gpu") :
 
     #init (list) self vars
-    self.rgb = rgb;
     self.scene = None;
     self.active_cache = None;
     self.device_string = None;
@@ -33,21 +33,24 @@ class boxm2_scene_adaptor:
     elif device_string[0:3]=="cpp" :
       self.scene, self.cpu_cache = load_cpp(scene_str);
       self.active_cache = self.cpu_cache;
+    else :
+      print "UNKNOWN device type: ", device_string
+      print "exiting."
+      sys.exit(-1)
 
     #store model directory for later use
-    self.model_dir = self.describe();
-    self.bbox = self.bounding_box();
+    self.bbox = scene_bbox(self.scene);
+    self.description = describe_scene(self.scene);
+    self.model_dir = self.description['dataPath'];
+    self.rgb = self.description['appType'] == "boxm2_gauss_rgb";
 
   #describe scene (returns data path)
   def describe(self) :
-    return describe_scene(self.scene);
+    return self.description;
 
   #returns scene bounding box
   def bounding_box(self) :
-    if self.bbox :
-      return self.bbox
-    else: 
-      return scene_bbox(self.scene); 
+    return self.bbox
 
   #update wrapper, can pass in a Null device to use
   def update(self, cam, img, update_alpha=True, mask=None, device_string="") :
@@ -66,6 +69,7 @@ class boxm2_scene_adaptor:
       update_rgb(self.scene, cache, cam, img, dev);
     else :
       update_grey(self.scene, cache, cam, img, dev, "", mask, update_alpha);
+      
   #update wrapper, can pass in a Null device to use
   def update_app(self, cam, img, device_string="") :
     cache = self.active_cache;
@@ -135,6 +139,7 @@ class boxm2_scene_adaptor:
       dev = None;
     z_image, var_image, x_image, y_image, prob_image, app_image = render_height_map(self.scene, cache, dev);
     return z_image, var_image, x_image, y_image, prob_image, app_image;
+    
   #ingest heigh map
   def ingest_height_map(self,x_img,y_img,z_img, device_string="") :
     cache = self.active_cache;

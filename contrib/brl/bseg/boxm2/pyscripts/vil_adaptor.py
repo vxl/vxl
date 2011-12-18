@@ -16,6 +16,7 @@ def load_image(file_path) :
   return img, ni, nj;
 
 def save_image(img, file_path) :
+  assert not isinstance(list, tuple) 
   boxm2_batch.init_process("vilSaveImageViewProcess");
   boxm2_batch.set_input_from_db(0,img);
   boxm2_batch.set_input_string(1,file_path);

@@ -76,7 +76,13 @@ def describe_scene(scene):
   boxm2_batch.run_process();
   (id, type) = boxm2_batch.commit_output(0); 
   dataPath = boxm2_batch.get_output_string(id); 
-  return dataPath; 
+  (id, type) = boxm2_batch.commit_output(1);
+  appType = boxm2_batch.get_output_string(id);
+  description = { 
+                  'dataPath': dataPath, 
+                  'appType': appType, 
+                }
+  return description; 
   
 # returns bounding box as two tuple points (minpt, maxpt)
 def scene_bbox(scene):
