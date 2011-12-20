@@ -1,4 +1,4 @@
-// This is core/vidl/bil_raw_image_istream.cxx
+// This is brl/bbas/bil/bil_raw_image_istream.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
@@ -35,7 +35,7 @@ bil_raw_image_istream()
   : index_(INIT_INDEX),
     ni_(0), nj_(0),
     format_(VIDL_PIXEL_FORMAT_UNKNOWN),
-    current_frame_(NULL), 
+    current_frame_(NULL),
     time_stamp_(-1) {}
 
 
@@ -45,7 +45,7 @@ bil_raw_image_istream(const vcl_string& glob)
   : index_(INIT_INDEX),
     ni_(0), nj_(0),
     format_(VIDL_PIXEL_FORMAT_UNKNOWN),
-    current_frame_(NULL), 
+    current_frame_(NULL),
     time_stamp_(-1)
 {
   open(glob);
@@ -59,30 +59,30 @@ bil_raw_image_istream::
 open(const vcl_string& rawFile)
 {
   //open up raw file, and read 20 byte header
-  this->raw_file_ = rawFile; 
+  this->raw_file_ = rawFile;
   raw_.open(raw_file_.c_str(), vcl_ios::in | vcl_ios::binary);
-  
-  int ni, nj, pixelSize; 
-  int64_t numFrames; 
+
+  int ni, nj, pixelSize;
+  int64_t numFrames;
   raw_.read( (char*) &ni, sizeof(ni) );
   raw_.read( (char*) &nj, sizeof(nj) );
   raw_.read( (char*) &pixelSize, sizeof(pixelSize) );
   raw_.read( (char*) &numFrames, sizeof(numFrames) );
-  vcl_cout<<"Raw file header: \n"
-          <<"  size: "<<ni<<","<<nj<<'\n'
+  vcl_cout<<"Raw file header:\n"
+          <<"  size: "<<ni<<','<<nj<<'\n'
           <<"  pixel:"<<pixelSize<<'\n'
           <<"  #fram:"<<numFrames<<vcl_endl;
-  
+
   //store in member vars
-  ni_ = ni; 
-  nj_ = nj; 
-  num_frames_ = numFrames; 
+  ni_ = ni;
+  nj_ = nj;
+  num_frames_ = numFrames;
   pixel_size_ = pixelSize;
-  if(pixelSize==24)
+  if (pixelSize==24)
     format_ = VIDL_PIXEL_FORMAT_RGB_24;
-  else if(pixelSize==8)
+  else if (pixelSize==8)
     format_ = VIDL_PIXEL_FORMAT_MONO_8;
-  else if(pixelSize==16)
+  else if (pixelSize==16)
     format_ = VIDL_PIXEL_FORMAT_MONO_16;
 
   //index is invalid until advance is called
@@ -102,7 +102,7 @@ close()
   ni_ = 0;
   nj_ = 0;
   format_ = VIDL_PIXEL_FORMAT_UNKNOWN;
-  raw_.close(); 
+  raw_.close();
   vcl_cout<<"bil_raw_image_istream closed"<<vcl_endl;
 }
 
@@ -136,33 +136,33 @@ bil_raw_image_istream::current_frame()
   //hack way to clean up current memory
   if (is_valid()) {
     if (!current_frame_) {
-      
+
       //calc image size, seek to offset
       unsigned int imgSize = ni_*nj_*pixel_size_/8;
-      long long loc = 20 + (long long) index_* ( (long long)imgSize + 8); 
-      raw_.seekg(loc, vcl_ios::beg); 
-      
+      long long loc = 20 + (long long) index_* ( (long long)imgSize + 8);
+      raw_.seekg(loc, vcl_ios::beg);
+
       //allocate vil memory chunk
       vil_memory_chunk_sptr mem_chunk = new vil_memory_chunk(imgSize,VIL_PIXEL_FORMAT_BYTE);
-      
+
       //read image from byte stream
-      if(pixel_size_==24) {
+      if (pixel_size_==24) {
         raw_.read( (char*) mem_chunk->data(), imgSize );
-        current_frame_ = new vil_image_view<vxl_byte>(mem_chunk, (vxl_byte*) mem_chunk->data(), ni_, nj_, 3, 3, 3*ni_, 1); 
+        current_frame_ = new vil_image_view<vxl_byte>(mem_chunk, (vxl_byte*) mem_chunk->data(), ni_, nj_, 3, 3, 3*ni_, 1);
       }
-      else if(pixel_size_==8){
+      else if (pixel_size_==8){
         raw_.read( (char*) mem_chunk->data(), imgSize );
-        current_frame_ = new vil_image_view<vxl_byte>(mem_chunk, (vxl_byte*) mem_chunk->data(), ni_, nj_, 1, 1, ni_, ni_*nj_);       
+        current_frame_ = new vil_image_view<vxl_byte>(mem_chunk, (vxl_byte*) mem_chunk->data(), ni_, nj_, 1, 1, ni_, ni_*nj_);
       }
-      else if(pixel_size_==16) {
+      else if (pixel_size_==16) {
         raw_.read( (char*) mem_chunk->data(), imgSize );
-        current_frame_ = new vil_image_view<unsigned short>(mem_chunk, (unsigned short*) mem_chunk->data(), ni_, nj_, 1, 1, ni_, ni_*nj_);    
+        current_frame_ = new vil_image_view<unsigned short>(mem_chunk, (unsigned short*) mem_chunk->data(), ni_, nj_, 1, 1, ni_, ni_*nj_);
       }
-        
+
       //read timestamp
-      int64_t timeStamp; 
-      raw_.read( (char*) &timeStamp, sizeof(timeStamp) ); 
-      time_stamp_ = timeStamp; 
+      int64_t timeStamp;
+      raw_.read( (char*) &timeStamp, sizeof(timeStamp) );
+      time_stamp_ = timeStamp;
     }
     return current_frame_;
   }

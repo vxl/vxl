@@ -1,4 +1,4 @@
-// This is core/vidl/bil_raw_image_istream.h
+// This is brl/bbas/bil/bil_raw_image_istream.h
 #ifndef bil_raw_image_istream_h_
 #define bil_raw_image_istream_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
@@ -76,7 +76,7 @@ class bil_raw_image_istream : public vbl_ref_count
 
   //: Return the frame rate (0.0 if unspecified)
   virtual double frame_rate() const { return 0.0; }
-  
+
   //: Return the duration in seconds (0.0 if unknown)
   virtual double duration() const { return 0.0; }
 
@@ -95,35 +95,35 @@ class bil_raw_image_istream : public vbl_ref_count
   //: Seek to the given frame number (but do not load the image)
   // \returns true if successful
   virtual bool seek_frame(unsigned int frame_number);
-  
+
   //: return time stamp
   int64_t time_stamp() { return time_stamp_; }
 
  private:
- 
+
   //: raw file path
   vcl_string   raw_file_;
-  vcl_ifstream raw_; 
- 
+  vcl_ifstream raw_;
+
   //: The current index
   unsigned int index_;
 
   //: The image width
   unsigned int ni_;
-  
+
   //: The image height
   unsigned int nj_;
-  
+
   //: number of frames in file
   unsigned int num_frames_;
-  
+
   //: The pixel format
   vidl_pixel_format format_;
   unsigned int pixel_size_;
 
   //: The current frame (cached)
   vil_image_view_base_sptr current_frame_;
-  int64_t time_stamp_; 
+  int64_t time_stamp_;
 };
 
 //: Smart_Pointer typedef for boxm2_data_base
