@@ -61,9 +61,9 @@ open(const vcl_string& rawFile)
   //open up raw file, and read 20 byte header
   this->raw_file_ = rawFile;
   raw_.open(raw_file_.c_str(), vcl_ios::in | vcl_ios::binary);
-
-  int ni, nj, pixelSize;
-  int64_t numFrames;
+  
+  int ni, nj, pixelSize; 
+  vxl_int_64 numFrames; 
   raw_.read( (char*) &ni, sizeof(ni) );
   raw_.read( (char*) &nj, sizeof(nj) );
   raw_.read( (char*) &pixelSize, sizeof(pixelSize) );
@@ -160,9 +160,9 @@ bil_raw_image_istream::current_frame()
       }
 
       //read timestamp
-      int64_t timeStamp;
-      raw_.read( (char*) &timeStamp, sizeof(timeStamp) );
-      time_stamp_ = timeStamp;
+      vxl_int_64 timeStamp; 
+      raw_.read( (char*) &timeStamp, sizeof(timeStamp) ); 
+      time_stamp_ = timeStamp; 
     }
     return current_frame_;
   }

@@ -97,7 +97,7 @@ class bil_raw_image_istream : public vbl_ref_count
   virtual bool seek_frame(unsigned int frame_number);
 
   //: return time stamp
-  int64_t time_stamp() { return time_stamp_; }
+  vxl_int_64 time_stamp() { return time_stamp_; }
 
  private:
 
@@ -123,7 +123,7 @@ class bil_raw_image_istream : public vbl_ref_count
 
   //: The current frame (cached)
   vil_image_view_base_sptr current_frame_;
-  int64_t time_stamp_;
+  vxl_int_64  time_stamp_; 
 };
 
 //: Smart_Pointer typedef for boxm2_data_base
