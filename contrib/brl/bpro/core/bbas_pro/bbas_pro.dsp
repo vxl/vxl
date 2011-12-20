@@ -180,6 +180,9 @@ SOURCE=.\processes/brad_estimate_synoptic_function_1d_process.cxx
 SOURCE=.\processes/brad_estimate_empty_process.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\processes/bbas_remove_from_db_process.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/brdb_value_t+brad_eigenspace_sptr-.cxx
 # End Source File
 # Begin Source File

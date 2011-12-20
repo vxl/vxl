@@ -93,10 +93,13 @@ LIB32=link.exe -lib
 # Begin Group "Source Files"
 # PROP Default_Filter "cxx"
 # Begin Source File
+SOURCE=.\test_driver.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\test_bounded_image_view.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\test_driver.cxx
+SOURCE=.\test_raw_image_istream.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\test_include.cxx

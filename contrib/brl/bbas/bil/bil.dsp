@@ -93,6 +93,9 @@ LIB32=link.exe -lib
 # Begin Group "Source Files"
 # PROP Default_Filter "cxx"
 # Begin Source File
+SOURCE=.\bil_raw_image_istream.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/bil_bounded_image_view+double-.cxx
 # End Source File
 # Begin Source File
@@ -100,6 +103,12 @@ SOURCE=.\Templates/bil_bounded_image_view+uchar-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/bil_bounded_image_view+ushort-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vbl_smart_ptr+bil_raw_image_istream-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/brdb_value_t+bil_raw_image_istream_sptr-.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
@@ -112,6 +121,9 @@ SOURCE=.\bil_bounded_image_view.txx
 # End Source File
 # Begin Source File
 SOURCE=.\bil_math.h
+# End Source File
+# Begin Source File
+SOURCE=.\bil_raw_image_istream.h
 # End Source File
 # End Group
 # End Target
