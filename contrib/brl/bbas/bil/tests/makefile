@@ -4,6 +4,7 @@ include ${VXLROOT}/core/testlib/config.mk
 
 TESTMAIN := test_driver.cxx
 TESTS += test_bounded_image_view.cxx
+TESTS += test_raw_image_istream.cxx
 
 MINI_PROG_SOURCES += test_include.cxx
 MINI_PROG_SOURCES += test_template_include.cxx

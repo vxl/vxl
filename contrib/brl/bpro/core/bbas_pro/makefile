@@ -35,6 +35,7 @@ SOURCES += processes/brad_eigenimage_pixel_process.cxx
 SOURCES += processes/bbas_camera_angles_process.cxx
 SOURCES += processes/brad_estimate_synoptic_function_1d_process.cxx
 SOURCES += processes/brad_estimate_empty_process.cxx
+SOURCES += processes/bbas_remove_from_db_process.cxx
 
 #######################################
 include ${VXLROOT}/config/top-params.mk
