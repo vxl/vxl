@@ -6,10 +6,12 @@
 #include <bprb/bprb_batch_process_manager.h>
 
 #include <vil/vil_image_view_base.h>
+#include <bil/bil_raw_image_istream.h>
 
 void vil_register::register_datatype()
 {
   REGISTER_DATATYPE(vil_image_view_base_sptr);
+  REGISTER_DATATYPE(bil_raw_image_istream_sptr); 
 }
 
 void vil_register::register_process()
@@ -45,5 +47,8 @@ void vil_register::register_process()
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vil_image_ssd_process, "vilImageSSDProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vil_image_mean_process, "vilImageMeanProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vil_image_range_process, "vilImageRangeProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bil_create_raw_image_istream_process, "bilCreateRawImageIstreamProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bil_read_frame_process, "bilReadFrameProcess");
+
 }
 

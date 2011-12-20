@@ -36,4 +36,7 @@ DECLARE_FUNC_CONS(vil_gradient_angle_process);
 DECLARE_FUNC_CONS(vil_image_ssd_process);
 DECLARE_FUNC_CONS(vil_image_mean_process);
 DECLARE_FUNC_CONS(vil_image_range_process);
+DECLARE_FUNC_CONS(bil_create_raw_image_istream_process);
+DECLARE_FUNC_CONS(bil_read_frame_process);
+
 #endif
