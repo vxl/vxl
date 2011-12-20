@@ -49,6 +49,7 @@ void vil_register::register_process()
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vil_image_range_process, "vilImageRangeProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bil_create_raw_image_istream_process, "bilCreateRawImageIstreamProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bil_read_frame_process, "bilReadFrameProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bil_seek_frame_process, "bilSeekFrameProcess");
 
 }
 
