@@ -30,7 +30,30 @@ def convert_image(img, type="byte") :
   (id,type) = boxm2_batch.commit_output(0);
   cimg = dbvalue(id,type);
   return cimg;
+  
+################################
+# BAE raw file image stream
+################################
+def bae_raw_stream(file_path) : 
+  boxm2_batch.init_process("bilCreateRawImageIstreamProcess")
+  boxm2_batch.set_input_string(0,file_path);
+  boxm2_batch.run_process();
+  (id, type) = boxm2_batch.commit_output(0);
+  stream = dbvalue(id, type);
+  (id, type) = boxm2_batch.commit_output(1); 
+  numImgs = boxm2_batch.get_output_int(id);
+  return stream, numImgs 
 
+def next_frame(rawStream) :
+  boxm2_batch.init_process("bilReadFrameProcess")
+  boxm2_batch.set_input_from_db(0,rawStream);
+  boxm2_batch.run_process();
+  (id, type) = boxm2_batch.commit_output(0);
+  img = dbvalue(id,type);
+  (id, type) = boxm2_batch.commit_output(1);
+  time = boxm2_batch.get_output_unsigned(id);
+  return img, time
+  
 #pixel wise roc process for change detection images
 def pixel_wise_roc(cd_img, gt_img, mask_img=None) :
   boxm2_batch.init_process("vilPixelwiseRocProcess");

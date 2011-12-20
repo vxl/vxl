@@ -2,6 +2,7 @@ from boxm2_scene_adaptor import *;
 from boxm2_adaptor import *
 from vil_adaptor import *
 from vpgl_adaptor import *
+from bbas_adaptor import *;
 import os, shutil 
 from os.path import basename, splitext;
 from glob import glob; 
@@ -36,6 +37,9 @@ def render_changes(scene, img_glob, cam_glob, outdir, n=1, raybelief="", max_mod
     cd_fname = outdir + "/cd_" + imgnum + ".tiff"; 
     cd_img = scene.change_detect(pcam, rimg, expimg, n, raybelief, max_mode); 
     save_image(cd_img, cd_fname); 
+    
+    #clean up
+    remove_from_db( [rimg, expimg, cd_img] );
   
   
 #renders a collection (or single) of thresholded images 
