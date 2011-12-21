@@ -1,4 +1,4 @@
-// This is contrib/brl/bhdfs/bhdfs_stream.h
+// This is brl/bbas/bhdfs/bhdfs_vil_stream.h
 #ifndef bhdfs_vil_stream_h_
 #define bhdfs_vil_stream_h_
 //:
@@ -7,7 +7,6 @@
 // \author    awf@robots.ox.ac.uk
 // \date 16 Feb 00
 
-//#include <vcl_fstream.h>
 #include <vil/vil_stream.h>
 #include "bhdfs_fstream.h"
 #include <vxl_config.h>
