@@ -17,6 +17,10 @@ SET(oul_sources oul_copyright.h)
 INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/oul ${oul_sources})
 
 SUBDIRS(ouel ouml)
+# V4L has been removed in 2.6.38
+CHECK_INCLUDE_FILE("linux/videodev.h" OUL_HAVE_LINUX_VIDEODEV_H)
+IF(OUL_HAVE_LINUX_VIDEODEV_H)
 IF(CMAKE_SYSTEM MATCHES "Linux*")
   SUBDIRS(oufgl)
 ENDIF(CMAKE_SYSTEM MATCHES "Linux*")
+ENDIF(OUL_HAVE_LINUX_VIDEODEV_H)
