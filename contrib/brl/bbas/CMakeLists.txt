@@ -76,3 +76,7 @@ IF( BUILD_GEL )
   SUBDIRS(imesh)
 
 ENDIF( BUILD_GEL )
+
+# Brown hadoop library
+SUBDIRS(bhdfs)
+
