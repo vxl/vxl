@@ -1,4 +1,4 @@
-// This is contrib/brl/bbas/bhdfs/tests/test_vil_save_load_image.cxx
+// This is brl/bbas/bhdfs/tests/test_vil_save_load_image.cxx
 #include <testlib/testlib_test.h>
 //:
 // \file
@@ -220,10 +220,10 @@ static bool create_colour_gif(const char* filename)
   f->write(header.c_str(), header.length());
   f->write(a, 7);
   for (int i=0; i<256; ++i) {
-	  unsigned char buf[3]; buf[0] = (unsigned char)i; buf[1] = (unsigned char)i; buf[2] = (unsigned char)0;
-	  f->write(buf, 3);
+    unsigned char buf[3]; buf[0] = (unsigned char)i; buf[1] = (unsigned char)i; buf[2] = (unsigned char)0;
+    f->write(buf, 3);
   }
-  f->write(b, 642); 
+  f->write(b, 642);
   f->close();
   return true;
 }
@@ -261,10 +261,10 @@ static bool create_grey_gif(const char* filename)
   f->write(header.c_str(), header.length());
   f->write(a,7);
   for (int i=0; i<256; ++i) {
-	  unsigned char buf[3]; buf[0] = (unsigned char)i; buf[1] = (unsigned char)i; buf[2] = (unsigned char)i;
-	  f->write(buf, 3);
+    unsigned char buf[3]; buf[0] = (unsigned char)i; buf[1] = (unsigned char)i; buf[2] = (unsigned char)i;
+    f->write(buf, 3);
   }
-  f->write(b, 336); 
+  f->write(b, 336);
   f->close();
   return true;
 }
@@ -387,7 +387,6 @@ void vil_test_image_type(char const* type_name, // type for image to read and wr
   // STEP 8) Remove the temporarily written file
   TEST("remove test image ", mins->rm(fname) != -1, true);
 #endif
-
 }
 
 
@@ -499,7 +498,7 @@ static void test_vil_save_image_resource()
 {
   vil_image_view<vxl_byte> view = CreateTest8bitImage(251, 153);
   vil_image_resource_sptr mem = vil_new_image_resource_of_view(view);
-  
+
   bhdfs_manager_sptr mins = bhdfs_manager::instance();
   vcl_string cur_dir = mins->get_working_dir();
   vcl_string fname = cur_dir + "/test_save_image_resource.pgm";
@@ -575,18 +574,18 @@ static void test_vil_save_load_image()
 
 
   // TIFF
-#if 1
+#if 0
 #ifdef BOOLEAN_TIFF_WORKS // boolean doesn't work (yet)
-  //vil_test_image_type("tiff", image1);
+  vil_test_image_type("tiff", image1);
 #endif
-/*  vil_test_image_type("tiff", image8);
+  vil_test_image_type("tiff", image8);
   vil_test_image_type("tiff", image3p);
   vil_test_image_type("tiff", image1);
   vil_test_image_type("tiff", image16);
   vil_test_image_type("tiff", image32);
   vil_test_image_type("tiff", imagefloat);
-  vil_test_image_type("tiff", imagedouble);*/
-#endif
+  vil_test_image_type("tiff", imagedouble);
+#endif // 0
 
 
   // GIF (read-only)
@@ -604,9 +603,8 @@ static void test_vil_save_load_image()
   vil_test_image_type("iris", image3p);
 #endif
 
-/*
   // mit
-#if 1
+#if 0
 #ifdef BOOLEAN_MIT_WORKS // boolean doesn't work (yet)
   vil_test_image_type("mit", image1, false);
 #endif
@@ -615,7 +613,6 @@ static void test_vil_save_load_image()
   vil_test_image_type("mit", image32, false);
   vil_test_image_type("mit", image3p, false);
 #endif
-*/
 
   // NITF (read-only for the time being)
 #if HAS_NITF && 0 // nitf write doesn't seem to work, currently (Aug.2009)
@@ -672,7 +669,6 @@ static void test_vil_save_load_image()
   test_vil_save_image_resource();
 
 #endif
-
 }
 
 TESTMAIN(test_vil_save_load_image);

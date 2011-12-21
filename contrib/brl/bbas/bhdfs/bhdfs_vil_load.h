@@ -1,4 +1,4 @@
-// This is contrib/brl/bbas/bhdfs/bhdfs_vil_load.h
+// This is brl/bbas/bhdfs/bhdfs_vil_load.h
 #ifndef bhdfs_vil_load_h_
 #define bhdfs_vil_load_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
@@ -32,42 +32,51 @@
 //: Load an image resource object from a file.
 // \relatesalso vil_image_resource
 vil_image_resource_sptr bhdfs_vil_load_image_resource(char const* filename,
-                                                bool verbose = true);
+                                                      bool verbose = true);
 
 //: Load an image resource object from a file.
 // Won't use plugins.
 // \relatesalso vil_image_resource
 vil_image_resource_sptr bhdfs_vil_load_image_resource_raw(char const*,
-                                                    bool verbose = true);
+                                                          bool verbose = true);
 
+#if 0
 //: Load from a filename with a plugin.
 // \relatesalso vil_image_resource
-//vil_image_resource_sptr bhdfs_vil_load_image_resource_plugin(char const*);
+vil_image_resource_sptr bhdfs_vil_load_image_resource_plugin(char const*);
+#endif
 
-
+#if 0
 //: Load a pyramid image resource object from a file or directory.
 // \relatesalso vil_pyramid_image_resource
-//vil_pyramid_image_resource_sptr
-//bhdfs_vil_load_pyramid_resource(char const* directory_or_file, bool verbose = true);
+vil_pyramid_image_resource_sptr
+bhdfs_vil_load_pyramid_resource(char const* directory_or_file, bool verbose = true);
+#endif
 
 //: Convenience function for loading an image into an image view.
 // \relatesalso vil_image_view
 vil_image_view_base_sptr bhdfs_vil_load(const char *, bool verbose = true);
 
-/*
 #if defined(VCL_WIN32) && VXL_USE_WIN_WCHAR_T
+
+#if 0
 //: Load an image resource object from a file.
 // \relatesalso vil_image_resource
 vil_image_resource_sptr vil_load_image_resource(wchar_t const* filename, bool verbose = true);
+#endif
 
+#if 0
 //: Load an image resource object from a file.
 // Won't use plugins.
 vil_image_resource_sptr vil_load_image_resource_raw(wchar_t const*, bool verbose = true);
+#endif
 
+#if 0
 //: Convenience function for loading an image into an image view.
 // \relatesalso vil_image_view
 vil_image_view_base_sptr vil_load(const wchar_t *, bool verbose = true);
+#endif
+
 #endif //defined(VCL_WIN32) && VXL_USE_WIN_WCHAR_T
-*/
 
 #endif // bhdfs_vil_load_h_
