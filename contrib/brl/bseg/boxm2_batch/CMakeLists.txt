@@ -2,6 +2,7 @@
 INCLUDE( ${VXL_CMAKE_DIR}/NewCMake/FindPython.cmake )
 INCLUDE( ${VXL_CMAKE_DIR}/NewCMake/FindOpenCL.cmake )
 INCLUDE( ${BRL_MODULE_PATH}/FindGLEW.cmake )
+INCLUDE( ${BRL_CMAKE_DIR}/FindHadoop.cmake )
 
 IF( PYTHON_FOUND )
   INCLUDE( ${BRL_MODULE_PATH}/FindEXPAT.cmake )
@@ -43,7 +44,12 @@ IF( PYTHON_FOUND )
       ADD_DEFINITIONS(-DHAS_OPENCL=1)
       TARGET_LINK_LIBRARIES(boxm2_batch bocl_pro  boxm2_ocl_pro )
     ENDIF(OPENCL_FOUND)
-
+    
+    IF(HDFS_FOUND)
+      ADD_DEFINITIONS(-DHAS_HDFS=1)
+      TARGET_LINK_LIBRARIES(boxm2_batch bhdfs_pro ) 
+    ENDIF(HDFS_FOUND)
+    
     IF (PYTHON_DEBUG_LIBRARIES)
       TARGET_LINK_LIBRARIES( boxm2_batch debug ${PYTHON_DEBUG_LIBRARY})
     ENDIF(PYTHON_DEBUG_LIBRARIES )
@@ -51,6 +57,8 @@ IF( PYTHON_FOUND )
     IF(PYTHON_LIBRARIES)
       TARGET_LINK_LIBRARIES( boxm2_batch optimized ${PYTHON_LIBRARY})
     ENDIF(PYTHON_LIBRARIES)
+    
+    
 
     IF( BUILD_TESTING )
       SUBDIRS(tests)
