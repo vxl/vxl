@@ -21,7 +21,9 @@
 #include <bsta/pro/bsta_register.h>
 
 #include <ihog_pro/ihog_register.h>
-
+#if defined(HAS_HDFS) && HAS_HDFS
+#include <bhdfs/pro/bhdfs_register.h>
+#endif
 
 PyObject *
 register_processes(PyObject *self, PyObject *args)
@@ -41,6 +43,9 @@ register_processes(PyObject *self, PyObject *args)
   bbas_register::register_process();
   bsta_register::register_process();
   ihog_register::register_process();
+#if defined(HAS_HDFS) && HAS_HDFS
+  bhdfs_register::register_process();
+#endif
   Py_INCREF(Py_None);
   return Py_None;
 }
@@ -66,6 +71,9 @@ register_datatypes(PyObject *self, PyObject *args)
   bbas_register::register_datatype();
   bsta_register::register_datatype();
   ihog_register::register_datatype();
+#if defined(HAS_HDFS) && HAS_HDFS
+  bhdfs_register::register_datatype();
+#endif
   Py_INCREF(Py_None);
   return Py_None;
 }
