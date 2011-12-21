@@ -1,19 +1,18 @@
-// This is contrib/brl/bbas/bhdfs/bhdfs_vil_stream.cxx
-
+// This is brl/bbas/bhdfs/bhdfs_vil_stream.cxx
 #include "bhdfs_vil_stream.h"
-//#include <vcl_cassert.h>
-//#include <vcl_limits.h>
-//#include <vcl_iostream.h>
-//#include <vcl_ios.h>
+//:
+// \file
 
-//: supported flags are "r" (read only), "w" (for write and truncate), (append is not supported by libdhfs yet)
+//:
+// supported flags are "r" (read only), "w" (for write and truncate), (append is not supported by libdhfs yet)
 bhdfs_vil_stream::bhdfs_vil_stream(char const* fn, char const* mode)
 {
   f_ = new bhdfs_fstream(fn, mode);
 }
 
 #if defined(VCL_WIN32) && VXL_USE_WIN_WCHAR_T
-//: supported flags are "r" (read only), "w" (for write and truncate), (append is not supported by libdhfs yet)
+//:
+// supported flags are "r" (read only), "w" (for write and truncate), (append is not supported by libdhfs yet)
 bhdfs_vil_stream::bhdfs_vil_stream(wchar_t const* fn, char const* mode)
 {
   f_ = new bhdfs_fstream(fn, mode);
