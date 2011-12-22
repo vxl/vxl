@@ -58,6 +58,9 @@ class bocl_mem : public vbl_ref_count
   //: zeros out GPU buffer
   bool zero_gpu_buffer(const cl_command_queue& cmd_queue);
 
+  //: intitializes GPU buffer with a constant value
+  bool init_gpu_buffer(void const* init_val, vcl_size_t value_size, cl_command_queue& cmd_queue);
+
   //: returns a reference to the buffer
   cl_mem& buffer()        { return buffer_; }
 

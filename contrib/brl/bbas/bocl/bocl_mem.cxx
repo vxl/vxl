@@ -98,6 +98,43 @@ bool bocl_mem::zero_gpu_buffer(const cl_command_queue& cmd_queue)
   return MEM_SUCCESS;
 }
 
+//: helper method to initialize gpu buffer with a constant value
+bool bocl_mem::init_gpu_buffer(void const* init_val, vcl_size_t value_size, cl_command_queue& cmd_queue)
+{
+  // sanity check on sizes
+  if (this->num_bytes_ % value_size != 0) {
+    vcl_cerr << "ERROR: bocl_mem::init_gpu_buffer(): value_size does not divide evenly into buffer size." <<vcl_endl;
+    return MEM_FAILURE;
+  }
+  unsigned char* init_buff = new unsigned char[this->num_bytes_];
+  unsigned int num_values = this->num_bytes_ / value_size;
+  vcl_cout << "value_size = " << value_size << vcl_endl;
+  vcl_cout << "num_values = " << num_values << vcl_endl;
+
+  // fill in buffer with copies of init value
+  unsigned char* buff_ptr = init_buff;
+  for (unsigned int i=0; i<num_values; ++i) {
+    vcl_memcpy(buff_ptr, init_val, value_size);
+    buff_ptr += value_size;
+  }
+  // copy buffer over to GPU
+  ceEvent_ = 0;
+  cl_int status = MEM_FAILURE;
+  status = clEnqueueWriteBuffer(cmd_queue,
+                                this->buffer_,
+                                CL_TRUE,          //True=BLocking, False=NonBlocking
+                                0,
+                                this->num_bytes_,
+                                init_buff,
+                                0,                //cl_uint num_events_in_wait_list
+                                0,
+                                &ceEvent_);
+  delete[] init_buff;
+  if (!check_val(status,MEM_FAILURE,"clEnqueueWriteBuffer (INIT BUFFER) failed: " + this->id_ + error_to_string(status)))
+    return MEM_FAILURE;
+  return MEM_SUCCESS;
+}
+
 //: write to command queue
 bool bocl_mem::write_to_buffer(const cl_command_queue& cmd_queue)
 {
