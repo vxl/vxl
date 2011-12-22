@@ -16,6 +16,8 @@
 #include <bsta/pro/bsta_register.h>
 #include <bapl/pro/bapl_register.h>
 
+#include <bbas_pro/bbas_register.h>
+
 #include <boxm/basic/boxm_util_data_types.h>
 PyObject *
 register_processes(PyObject *self, PyObject *args)
@@ -30,6 +32,7 @@ register_processes(PyObject *self, PyObject *args)
   sdet_register::register_process();
   //icam_register::register_process();
   bapl_register::register_process();
+  bbas_register::register_process();
   Py_INCREF(Py_None);
   return Py_None;
 }
@@ -49,6 +52,7 @@ register_datatypes(PyObject *self, PyObject *args)
   bsta_register::register_datatype();
   //icam_register::register_datatype();
   bapl_register::register_datatype();
+  bbas_register::register_datatype();
   Py_INCREF(Py_None);
   return Py_None;
 }
