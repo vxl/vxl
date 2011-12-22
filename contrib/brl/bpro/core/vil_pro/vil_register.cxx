@@ -43,6 +43,7 @@ void vil_register::register_process()
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vil_rgb_to_grey_process, "vilRGBToGreyProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vil_nitf_date_time_process, "vilNITFDateTimeProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vil_convert_pixel_type_process, "vilConvertPixelTypeProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vil_median_filter_process, "vilMedianFilterProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vil_gradient_angle_process, "vilGradientAngleProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vil_image_ssd_process, "vilImageSSDProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vil_image_mean_process, "vilImageMeanProcess");
@@ -50,6 +51,5 @@ void vil_register::register_process()
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bil_create_raw_image_istream_process, "bilCreateRawImageIstreamProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bil_read_frame_process, "bilReadFrameProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bil_seek_frame_process, "bilSeekFrameProcess");
-
 }
 
