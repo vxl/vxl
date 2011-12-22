@@ -77,6 +77,13 @@ class vpgl_generic_camera_convert
                        int ni, int nj,
                        vpgl_generic_camera<double> & gen_cam, unsigned level = 0);
 
+  //: Convert a local rational camera to a generic camera, using user-specified z bounds
+  //: Note that the z values are relative to the local coordinate system
+  static bool convert( vpgl_local_rational_camera<double> const& rat_cam,
+                       int ni, int nj,
+                       vpgl_generic_camera<double> & gen_cam, 
+                       double local_z_min, double local_z_max, unsigned level = 0);
+
   //: Convert a proj_camera to a generic camera
   static bool convert( vpgl_proj_camera<double> const& prj_cam,
                        int ni, int nj,

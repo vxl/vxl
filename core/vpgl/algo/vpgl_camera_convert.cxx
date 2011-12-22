@@ -796,11 +796,29 @@ convert( vpgl_local_rational_camera<double> const& rat_cam,
   rat_cam.lvcs().global_to_local(lon,lat,el_low,vpgl_lvcs::wgs84,x,y,z_low,vpgl_lvcs::DEG);
   rat_cam.lvcs().global_to_local(lon,lat,el_high,vpgl_lvcs::wgs84,x,y,z_high,vpgl_lvcs::DEG);
 
-  vgl_plane_3d<double> high(0.0, 0.0, 1.0, -z_high);
-  vgl_plane_3d<double> low(0.0, 0.0, 1.0, -z_low);
+  return convert(rat_cam, ni, nj, gen_cam, z_low, z_high, level);
+}
+ 
+
+//
+// convert a generic camera from a local rational camera
+// the approach is to form a pyramid and convert rays by
+// back-projecting to top and bottom planes of the valid
+// elevations of the rational camera. Successive higher resolution
+// layers of the pyramid are populated until the interpolation of
+// a ray by the four adjacent neighbors is sufficiently accurate
+// The remaining layers of the pyramid are filled in by interpolation
+//
+bool vpgl_generic_camera_convert::
+convert( vpgl_local_rational_camera<double> const& rat_cam,
+         int ni, int nj, vpgl_generic_camera<double> & gen_cam, 
+         double local_z_min, double local_z_max, unsigned level)
+{
+  vgl_plane_3d<double> high(0.0, 0.0, 1.0, -local_z_max);
+  vgl_plane_3d<double> low(0.0, 0.0, 1.0, -local_z_min);
 
   // initial guess for backprojection to planes
-  vgl_point_3d<double> org(0.0, 0.0, zoff+zscl), endpt(0.0, 0.0, zoff-zscl);
+  vgl_point_3d<double> org(0.0, 0.0, local_z_max), endpt(0.0, 0.0, local_z_min);
 
   // initialize the ray pyramid
   // convert the required number of levels
@@ -845,17 +863,42 @@ convert( vpgl_local_rational_camera<double> const& rat_cam,
   for (; lev>=0&&need_interp; --lev) {
     // set rays at current pyramid level
     for (int j =0; j<nr[lev]; ++j) {
-      int sj = static_cast<int>(scl[lev]*j);
+      int sj = static_cast<int>(scl[lev]*(j+0.5)); // add 0.5 to get to pixel center
       //if (sj>=nj) sj = nj;
       for (int i =0;i<nc[lev]; ++i)
       {
-        int si = static_cast<int>(scl[lev]*i);
+        int si = static_cast<int>(scl[lev]*(i+0.5)); // add 0.5 to get to pixel center
         //if (si>=ni) si = ni;
         vgl_point_2d<double> ip(si,sj);
+#if 1  // use result from previous pyramid level to initialize guess
+        vgl_point_3d<double> prev_org(0.0,0.0,local_z_max);
+        vgl_point_3d<double> prev_endpt(0.0, 0.0, local_z_min);
+        // initialize guess with 
+        //vcl_cout << "level: i,j = " << lev << ":   " << i << ", " << j << vcl_endl;
+        if (lev < n_levels-1) {
+          double rel_scale = scl[lev]/scl[lev+1];
+          int i_above = static_cast<int>(rel_scale * i);
+          int j_above = static_cast<int>(rel_scale * j);
+   
+          prev_org = ray_pyr[lev+1][j_above][i_above].origin();
+          vgl_vector_3d<double> prev_dir = ray_pyr[lev+1][j_above][i_above].direction();
+          // find endpoint 
+          double ray_len = (local_z_min - prev_org.z()) / prev_dir.z();
+          prev_endpt = prev_org + (prev_dir * ray_len);
+          //vcl_cout << "prev_org = " << prev_org << "  prev_endpt = " << prev_endpt << vcl_endl;
+        }
+
+        if (!vpgl_backproject::bproj_plane(&rat_cam, ip, high, prev_org, org))
+          return false;
+        if (!vpgl_backproject::bproj_plane(&rat_cam, ip, low, prev_endpt, endpt))
+          return false;
+        //vcl_cout << "     org = " << org << "       endpt = " << endpt << vcl_endl;
+#else
         if (!vpgl_backproject::bproj_plane(&rat_cam, ip, high, vgl_point_3d<double>(0.0,0.0,0.0), org))
           return false;
         if (!vpgl_backproject::bproj_plane(&rat_cam, ip, low, vgl_point_3d<double>(0.0,0.0,0.0), endpt))
           return false;
+#endif
         vgl_vector_3d<double> dir = endpt-org;
         ray_pyr[lev][j][i].set(org, dir);
       }
@@ -929,7 +972,6 @@ convert( vpgl_local_rational_camera<double> const& rat_cam,
   else
     return false;
 }
-
 
 bool vpgl_generic_camera_convert::
 convert( vpgl_proj_camera<double> const& prj_cam, int ni, int nj,

@@ -35,6 +35,7 @@ bool vpgl_backproject::bproj_plane(const vpgl_camera<double>* cam,
   cf.set_params(initial_guess, x1);
   vnl_amoeba amoeba(cf);
   amoeba.set_max_iterations(1000);
+  amoeba.set_relative_diameter(1.0);
   vnl_vector<double> x(&x1[0], 2);
   amoeba.minimize(x); x1 = x;
   cf.point_3d(x1, world_point);
