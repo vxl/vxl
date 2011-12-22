@@ -346,11 +346,10 @@ vcl_ostream& operator << (vcl_ostream& os, const bsol_distance_histogram& h)
   double max_cnt = h.max_count();
   if (!max_cnt)
     return os;
-  // forced to cast away const
-  bsol_distance_histogram & hh = (bsol_distance_histogram&)h; // casting away const !!!
-  vcl_vector<double>& vals = hh.values();
-  vcl_vector<double>& cnts = hh.counts();
-  for (unsigned int i=0; i<vals.size(); i++)
+
+  vcl_vector<double> const& vals = h.values();
+  vcl_vector<double> const& cnts = h.counts();
+  for (unsigned int i=0; i<vals.size(); ++i)
   {
     double val = vals[i];
     vcl_cout << val << '|';
