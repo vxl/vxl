@@ -492,7 +492,7 @@ def trajectory_next(trajectory) :
 ######################################################################
 # camera/scene methods
 #####################################################################
-def bundle2scene(bundle_file, img_dir, app_model="boxm2_mog3_grey", out_dir="NVM_out") : 
+def bundle2scene(bundle_file, img_dir, app_model="boxm2_mog3_grey", out_dir="nvm_out") : 
   if app_model == "boxm2_mog3_grey": 
     nobs_model = "boxm2_num_obs";
   elif app_model == "boxm2_gauss_rgb" :
