@@ -2,12 +2,14 @@
 //:
 // \file
 
+#define copy_parent_data_ 0
+
+
 //: initialize generic data base pointers as their data type
 bool boxm2_refine_block_function::init_data(boxm2_block* blk, vcl_vector<boxm2_data_base*> & datas, float prob_thresh)
 {
     //store block and pointer to uchar16 3d block
     blk_   = blk;
-    trees_ = blk_->trees().data_block();
 
     //store data buffers
     int i=0;
@@ -253,8 +255,14 @@ int boxm2_refine_block_function::move_data(boct_bit_tree& unrefined_tree,
       //move root data to new location
       int currLevel = unrefined_tree.depth_at(j);
       float side_len = block_len_ / (float) (1<<currLevel);
+      
       alpha_cpy[newDataPtr]  = (max_alpha_int_ / side_len);
+      //alpha_cpy[newDataPtr]  = (float(-vcl_log(1.0f - p_init_)) / side_len);
+#if copy_parent_data_
+      mog_cpy[newDataPtr] = mog_[oldDataPtr]; 
+#else      
       mog_cpy[newDataPtr]    = uchar8((uchar) 0);
+#endif
       num_obs_cpy[newDataPtr]= ushort4((ushort) 0);
 
       //update new data pointer

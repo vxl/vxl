@@ -47,7 +47,6 @@ class boxm2_refine_block_function
 
  private:
   boxm2_block* blk_;
-  uchar16*     trees_;
 
   float*       alpha_;
   uchar8*      mog_;
