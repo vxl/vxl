@@ -2,7 +2,7 @@
 #include <bprb/bprb_func_process.h>
 //:
 // \file
-// \brief A process to convert perspective camera to rational camera.
+// \brief A process to convert a local_rational_camera to a generic_camera, using user-defined min and max z planes.
 
 #include <vcl_iostream.h>
 #include <vpgl/vpgl_generic_camera.h>
