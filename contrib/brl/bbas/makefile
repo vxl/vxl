@@ -71,6 +71,8 @@ SUBDIRS += vsph
 
 SUBDIRS += bpgl
 
+SUBDIRS += bhdfs
+
 ################################
 include ${VXLROOT}/config/top.mk
 ################################

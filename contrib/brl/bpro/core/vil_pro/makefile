@@ -39,6 +39,7 @@ SOURCES += processes/vil_image_ssd_process.cxx
 SOURCES += processes/vil_image_mean_process.cxx
 SOURCES += processes/vil_image_range_process.cxx
 SOURCES += processes/bil_create_raw_image_istream_process.cxx
+SOURCES += processes/vil_median_filter_process.cxx
 
 #######################################
 include ${VXLROOT}/config/top-params.mk
