@@ -37,7 +37,7 @@ class vbl_batch_compact_multimap
   typedef typename key_container_type::const_iterator const_key_iterator;
   typedef typename value_container_type::const_iterator const_value_iterator;
 
- protected:
+  protected:
   //: The type of container used internally to process inputted data.
   typedef typename vcl_vector<input_type> input_container_type;
 
@@ -45,8 +45,9 @@ class vbl_batch_compact_multimap
   class input_compare
   : public vcl_binary_function<input_type, input_type, bool>
   {
+   public:
     friend class vbl_batch_compact_multimap<key_type, value_type, key_compare>;
-   protected:
+  
     key_compare comp;
 
     input_compare(key_compare c)
