@@ -28,6 +28,7 @@ DECLARE_FUNC_CONS(bsta_joint_hist_3d_vrml_process);
 DECLARE_FUNC_CONS(bsta_clone_joint_hist_3d_process);
 DECLARE_FUNC_CONS(brad_update_joint_hist_3d_process);
 DECLARE_FUNC_CONS(brad_classify_image_process);
+DECLARE_FUNC_CONS(brad_classify_image_pixel_process);
 
 
 DECLARE_FUNC_CONS(brad_estimate_phongs_model_process);
