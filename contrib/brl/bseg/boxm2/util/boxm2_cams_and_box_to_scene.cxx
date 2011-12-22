@@ -4,6 +4,7 @@
 // \file
 
 #include <boxm2/boxm2_block_metadata.h>
+#include <vgl/vgl_plane_3d.h>
 #include <vgl/vgl_box_2d.h>
 #include <vgl/vgl_intersection.h>
 #include <vgl/vgl_polygon_scan_iterator.h>
@@ -41,7 +42,7 @@ void boxm2_util_cams_and_box_to_scene (vcl_vector<CamType>& cams,
     vsph_camera_bounds::pixel_solid_angle(cam, pp.x()/4, pp.y()/4, cone_axis, cone_half_angle, solid_angle);
     vgl_point_3d<double> cc = cam.camera_center();
     vgl_point_3d<double> zc( b2box.centroid().x(), b2box.centroid().y(), zplane);
-    double res = 2*(cc-zc).length()*cone_half_angle;
+    double res = 1.2*(cc-zc).length()*cone_half_angle;
     vcl_cout<<"Resres :"<<res<<vcl_endl;
     vgl_point_3d<double> scene_origin( b2box.min_x(), b2box.min_y(), bbox.min_z() );
 
@@ -139,7 +140,8 @@ void boxm2_util_cams_and_box_to_scene (vcl_vector<CamType>& cams,
         for (unsigned int j=0; j<numBlocks.y(); ++j) {
             for (unsigned int k=0; k<numBlocks.z(); ++k){
                 //setup update scene with loose criteria
-                if ( boxm2_util_has_observation(i,j,numSubBlocks*8, cntimg) ) {
+                //if ( boxm2_util_has_observation(i,j,numSubBlocks*8, cntimg) ) 
+                {
                     //get block map
                     boxm2_block_id id(i,j,k);
                     vcl_map<boxm2_block_id, boxm2_block_metadata> blks = uscene.blocks();
