@@ -321,6 +321,37 @@ void vpgl_generic_camera<T>::print_orig(int level)
     vcl_cout << '\n';
   }
 }
+
+template <class T>
+void vpgl_generic_camera<T>::print_to_vrml(int level, vcl_ostream& os)
+{
+  
+   for(int r = 0; r<nr_[level]; ++r) {
+    for(int c = 0; c<nc_[level]; ++c) {
+      vgl_point_3d<T> o = rays_[level][r][c].origin(); 
+    os<< "Transform {\n"
+      << "translation " << o.x() << ' ' << o.y() << ' '
+      << ' ' << o.z() << '\n'
+      << "children [\n"
+      << "Shape {\n"
+      << " appearance DEF A1 Appearance {\n"
+      << "   material Material\n"
+      << "    {\n"
+      << "      diffuseColor " << 1 << ' ' << 0 << ' ' << 0 << '\n'
+      << "      emissiveColor " << .3 << ' ' << 0 << ' ' << 0 << '\n'
+      << "    }\n"
+      << "  }\n"
+      << " geometry Sphere\n"
+      <<   "{\n"
+      << "  radius " << 20 << '\n'
+      <<  "   }\n"
+      <<  "  }\n"
+      <<  " ]\n"
+      << "}\n";  
+    }
+  }
+}
+
 // Code for easy instantiation.
 #undef vpgl_GENERIC_CAMERA_INSTANTIATE
 #define vpgl_GENERIC_CAMERA_INSTANTIATE(T) \
