@@ -96,9 +96,9 @@ bool brip_blob_intersection_process(bprb_func_process& pro)
   int numTP=0;
   bool* trueBlobs = new bool[mp_blobs.size()];
   vcl_fill(trueBlobs, trueBlobs+mp_blobs.size(), false);
-  for (int i=0; i<gt_blobs.size(); ++i) {
+  for (unsigned int i=0; i<gt_blobs.size(); ++i) {
     bool gt_blob_found = false;
-    for (int j=0; j<mp_blobs.size(); ++j) {
+    for (unsigned int j=0; j<mp_blobs.size(); ++j) {
       blob_t gt_blob = gt_blobs[i];
       blob_t mp_blob = mp_blobs[j];
 
@@ -142,7 +142,7 @@ bool brip_blob_intersection_process(bprb_func_process& pro)
 
   // count non intersecting blobs
   int falseBlobs = 0;
-  for (int i=0; i<mp_blobs.size(); ++i)
+  for (unsigned int i=0; i<mp_blobs.size(); ++i)
     if (!trueBlobs[i]) falseBlobs++;
 
   // set outputs
