@@ -13,6 +13,7 @@
 
 #include <vcl_fstream.h>
 #include <bocl/bocl_manager.h>
+#include <vcl_sstream.h>
 
 namespace bocl_get_device_process_globals
 {
@@ -58,36 +59,32 @@ bool bocl_get_device_process(bprb_func_process& pro)
   }
 
   //for multi-gpu setups
-  else if (device_type=="gpu1")
-  {
-    if (mgr->gpus_.size()<2) return false;
-    bocl_device_sptr device = mgr->gpus_[1];
-    pro.set_output_val<bocl_device_sptr>(0,device);
-    return true;
+  vcl_string dev = device_type.substr(0,3);
+  if(dev=="gpu") {
+    vcl_string str = device_type.substr(3, device_type.size());
+    int gpuIdx;
+    vcl_istringstream ( str ) >> gpuIdx;
+    if(gpuIdx < mgr->gpus_.size()) {
+      bocl_device_sptr device = mgr->gpus_[gpuIdx];
+      pro.set_output_val<bocl_device_sptr>(0,device);
+      return true; 
+    }
   }
-  else if (device_type=="gpu2")
-  {
-    if (mgr->gpus_.size()<3) return false;
-    bocl_device_sptr device = mgr->gpus_[2];
-    pro.set_output_val<bocl_device_sptr>(0,device);
-    return true;
-  }
-  else
-  {
-    vcl_cout<<"Cannot recognize device string.  Available devices:\n";
 
-    //list gpu options
-    vcl_cout<<"  GPUs: ";
-    for (unsigned int i=0; i<mgr->gpus_.size(); ++i)
-      vcl_cout<<"gpu"<<i<<", ";
-    vcl_cout<<'\n';
+  //at this point, device cannot be recognized
+  vcl_cout<<"Cannot recognize device string.  Available devices:\n";
 
-    //list CPU options
-    vcl_cout<<"  CPUs: ";
-    for (unsigned int i=0; i<mgr->cpus_.size(); ++i)
-      vcl_cout<<"cpu"<<i <<", ";
+  //list gpu options
+  vcl_cout<<"  GPUs: ";
+  for (unsigned int i=0; i<mgr->gpus_.size(); ++i)
+    vcl_cout<<"gpu"<<i<<", ";
+  vcl_cout<<'\n';
 
-    vcl_cout<<vcl_endl;
-    return false;
-  }
+  //list CPU options
+  vcl_cout<<"  CPUs: ";
+  for (unsigned int i=0; i<mgr->cpus_.size(); ++i)
+    vcl_cout<<"cpu"<<i <<", ";
+
+  vcl_cout<<vcl_endl;
+  return false;
 }
