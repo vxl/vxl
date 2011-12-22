@@ -95,12 +95,14 @@ void step_cell_change_detection_uchar8_w_expected(__global MOG_TYPE * cell_data,
   //choose value based on cell depth
   int cell_depth = get_depth(bit_index); 
   float img_in = img_intensity.x;  
+/*
   if(cell_depth==0) 
     img_in = img_intensity.w; 
   else if(cell_depth==1)
     img_in = img_intensity.z; 
   else if(cell_depth==2)
     img_in = img_intensity.y; 
+*/
   float prob_den=gauss_3_mixture_prob_density(img_in,
                                               data.s0,data.s1,data.s2,
                                               data.s3,data.s4,data.s5,
