@@ -32,9 +32,7 @@ bool bvpl_compute_sf_raw_response_process_cons(bprb_func_process& pro)
   unsigned i = 0;
   input_types_[i++] = "boxm_scene_base_sptr";  //input/response scene
   input_types_[i++] = "boxm_scene_base_sptr";  //valid scene
-  input_types_[i++] = "int";                   //block i
-  input_types_[i++] = "int";                   //block j
-  input_types_[i++] = "int";                   //block k
+
 
   vcl_vector<vcl_string> output_types_(n_outputs_);
 
@@ -51,9 +49,6 @@ bool bvpl_compute_sf_raw_response_process(bprb_func_process& pro)
   unsigned i = 0;
   boxm_scene_base_sptr scene_base = pro.get_input<boxm_scene_base_sptr>(i++);
   boxm_scene_base_sptr valid_scene_base = pro.get_input<boxm_scene_base_sptr>(i++);
-  int block_i = pro.get_input<int>(i++); // unused!!!
-  int block_j = pro.get_input<int>(i++); // unused!!!
-  int block_k = pro.get_input<int>(i++); // unused!!!
 
   //get scene
   typedef boct_tree<short, vnl_vector_fixed< float,10 > > response_tree_type;
