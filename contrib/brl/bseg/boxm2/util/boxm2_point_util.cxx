@@ -1,5 +1,6 @@
 #include "boxm2_point_util.h"
 #include <vgl/algo/vgl_rotation_3d.h>
+#include <vgl/vgl_distance.h>
 #include <vnl/vnl_double_3.h>
 #include <vnl/vnl_quaternion.h>
 #include <vcl_cassert.h>
@@ -8,13 +9,13 @@ bool boxm2_point_util::fit_plane_ransac(vcl_vector<vgl_homg_point_3d<double> > &
 {
   unsigned int nchoose=3;
   unsigned int nsize=points.size();
-  unsigned int max_its = 500;
+  unsigned int max_its = 1000;
   double err=10.0;
-  double inlier_dist = 0.01;
+  double inlier_dist = 0.1;
   vcl_vector<int> best_inliers;
   for (unsigned i=0;i<max_its;++i)
   {
-    vcl_cout << '.';
+    vcl_cout << '.' << vcl_flush;
     vcl_vector<vgl_homg_point_3d<double> > subset;
     vcl_vector<int> inliers;
     for (unsigned j=0;j<nchoose;++j)
@@ -61,13 +62,27 @@ bool boxm2_point_util::axis_align_scene(vcl_vector<bwm_video_corr_sptr> & corrs,
     vgl_homg_point_3d<double> homg_world_pt(corrs[i]->world_pt());
     points.push_back(homg_world_pt);
   }
-
+  
+  //double max_dist = 0.0f; 
+  //for(int i=0; i<points.size(); ++i) 
+    //for(int j=0; j<points.size(); ++j) 
+      //if( vgl_distance(points[i], points[j]) > max_dist)
+        //max_dist = vgl_distance(points[i], points[j]); 
+  
+//Either fit using ransac, or just minimum squared error
+#if 0
+  //fit plane ransac
+  vgl_homg_plane_3d<double> plane; 
+  fit_plane_ransac(points, plane); 
+#else
   // fit the plane
   vgl_fit_plane_3d<double> fit_plane(points);
   if (!fit_plane.fit(1e6, &vcl_cerr))
     return false;
-
   vgl_homg_plane_3d<double> plane=fit_plane.get_plane();
+#endif
+  
+  //get plane rotation
   vgl_rotation_3d<double> rot_scene(plane.normal(),vgl_vector_3d<double>(0,0,1));
 
   double sumx=0,sumy=0,sumz=0;
@@ -132,11 +147,11 @@ bool boxm2_point_util::axis_align_scene(vcl_vector<bwm_video_corr_sptr> & corrs,
   for (unsigned i=0;i<cams.size();++i)
     cams[i]=new_cams[i];
 
-  vgl_fit_plane_3d<double> fit_plane1(xformed_points);
-  if (!fit_plane1.fit(1e6, &vcl_cerr))
-      return false;
+  //vgl_fit_plane_3d<double> fit_plane1(xformed_points);
+  //if (!fit_plane1.fit(1e6, &vcl_cerr))
+      //return false;
 
-  vgl_homg_plane_3d<double> plane1=fit_plane1.get_plane();
+  //vgl_homg_plane_3d<double> plane1=fit_plane1.get_plane();
 
   return true;
 }
