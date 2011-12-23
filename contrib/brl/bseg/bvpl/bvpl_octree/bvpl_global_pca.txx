@@ -24,7 +24,7 @@
 
 #include <vcl_cassert.h>
 
-#define DEBUG_PROJ
+//#define DEBUG_PROJ
 
 //: Create from xml_file
 template <unsigned feature_dim>
@@ -221,67 +221,66 @@ bvpl_global_pca<feature_dim>::bvpl_global_pca(const vcl_string &path)
 
 //: Init auxiliary scenes and smallest cell length values
 template <unsigned feature_dim>
-void bvpl_global_pca<feature_dim>::init()
+void bvpl_global_pca<feature_dim>::init(unsigned scene_id)
 {
-  for(unsigned i = 0; i < aux_dirs_.size(); i++)
+
+  boxm_scene_base_sptr data_scene_base = load_scene(scene_id);
+  boxm_scene<boct_tree<short, float> >* data_scene = dynamic_cast<boxm_scene<boct_tree<short, float> >*> (data_scene_base.as_pointer());
+  if (!data_scene){
+    vcl_cerr << "Error in bvpl_global_pca<feature_dim>::init(): Could not cast data scene \n";
+    return;
+  }
+  double finest_cell_length = data_scene->finest_cell_length();
+  finest_cell_length_[scene_id] = finest_cell_length;
+  nleaves_[scene_id] = data_scene->size();
+
+  if (!(vul_file::exists(aux_dirs_[scene_id]) && vul_file::is_directory(aux_dirs_[scene_id]))){
+    vul_file::make_directory(aux_dirs_[scene_id]);
+  }
+
   {
-    boxm_scene_base_sptr data_scene_base = load_scene(i);
-    boxm_scene<boct_tree<short, float> >* data_scene = dynamic_cast<boxm_scene<boct_tree<short, float> >*> (data_scene_base.as_pointer());
-    if (!data_scene){
-      vcl_cerr << "Error in bvpl_global_pca<feature_dim>::init(): Could not cast data scene \n";
-      return;
+    vcl_stringstream aux_scene_ss;
+    aux_scene_ss << "train_scene_" << scene_id ;
+    vcl_string aux_scene_path = aux_dirs_[scene_id] + "/" + aux_scene_ss.str() + ".xml";
+    if(!vul_file::exists(aux_scene_path)){
+      vcl_cout<< "Scene: " << aux_scene_path << " does not exist, initializing" << vcl_endl;
+      boxm_scene<boct_tree<short, bool> > *aux_scene =
+      new boxm_scene<boct_tree<short, bool> >(data_scene->lvcs(), data_scene->origin(), data_scene->block_dim(), data_scene->world_dim(), data_scene->max_level(), data_scene->init_level());
+      aux_scene->set_appearance_model(BOXM_BOOL);
+      aux_scene->set_paths(aux_dirs_[scene_id], aux_scene_ss.str());
+      aux_scene->write_scene("/" + aux_scene_ss.str() +  ".xml");
     }
-    double finest_cell_length = data_scene->finest_cell_length();
-    finest_cell_length_[i] = finest_cell_length;
-    nleaves_[i] = data_scene->size();
-    
-    if (!(vul_file::exists(aux_dirs_[i]) && vul_file::is_directory(aux_dirs_[i]))){
-      vul_file::make_directory(aux_dirs_[i]);
+  }
+  {
+    vcl_stringstream aux_scene_ss;
+    aux_scene_ss << "valid_scene_" << scene_id ;
+    vcl_string aux_scene_path = aux_dirs_[scene_id] + "/" + aux_scene_ss.str() + ".xml";
+    if(!vul_file::exists(aux_scene_path)){
+      vcl_cout<< "Scene: " << aux_scene_path << " does not exist, initializing" << vcl_endl;
+      boxm_scene<boct_tree<short, bool> > *aux_scene =
+      new boxm_scene<boct_tree<short, bool> >(data_scene->lvcs(), data_scene->origin(), data_scene->block_dim(), data_scene->world_dim(), data_scene->max_level(), data_scene->init_level());
+      aux_scene->set_appearance_model(BOXM_BOOL);
+      aux_scene->set_paths(aux_dirs_[scene_id], aux_scene_ss.str());
+      aux_scene->write_scene("/" + aux_scene_ss.str() +  ".xml");
     }
-    
-    {
-      vcl_stringstream aux_scene_ss;
-      aux_scene_ss << "train_scene_" << i ;
-      vcl_string aux_scene_path = aux_dirs_[i] + "/" + aux_scene_ss.str() + ".xml";
-      if(!vul_file::exists(aux_scene_path)){
-        vcl_cout<< "Scene: " << aux_scene_path << " does not exist, initializing" << vcl_endl;
-        boxm_scene<boct_tree<short, bool> > *aux_scene =
-        new boxm_scene<boct_tree<short, bool> >(data_scene->lvcs(), data_scene->origin(), data_scene->block_dim(), data_scene->world_dim(), data_scene->max_level(), data_scene->init_level());
-        aux_scene->set_appearance_model(BOXM_BOOL);
-        aux_scene->set_paths(aux_dirs_[i], aux_scene_ss.str());
-        aux_scene->write_scene("/" + aux_scene_ss.str() +  ".xml");
-      }    
-    }
-    {
-      vcl_stringstream aux_scene_ss;
-      aux_scene_ss << "valid_scene_" << i ;
-      vcl_string aux_scene_path = aux_dirs_[i] + "/" + aux_scene_ss.str() + ".xml";
-      if(!vul_file::exists(aux_scene_path)){
-        vcl_cout<< "Scene: " << aux_scene_path << " does not exist, initializing" << vcl_endl;
-        boxm_scene<boct_tree<short, bool> > *aux_scene =
-        new boxm_scene<boct_tree<short, bool> >(data_scene->lvcs(), data_scene->origin(), data_scene->block_dim(), data_scene->world_dim(), data_scene->max_level(), data_scene->init_level());
-        aux_scene->set_appearance_model(BOXM_BOOL);
-        aux_scene->set_paths(aux_dirs_[i], aux_scene_ss.str());
-        aux_scene->write_scene("/" + aux_scene_ss.str() +  ".xml");
-      }    
-    }
-       
-    {
-      vcl_stringstream proj_scene_ss;
-      proj_scene_ss << "proj_pca_scene_" << i ;
-      vcl_string proj_scene_path = aux_dirs_[i] + "/" + proj_scene_ss.str() + ".xml";
-      if(!vul_file::exists(proj_scene_path)){
-        vcl_cout<< "Scene: " << proj_scene_path << " does not exist, initializing" << vcl_endl;
-        typedef boct_tree<short,vnl_vector_fixed<double,10> > pca_tree_type;
-        boxm_scene<pca_tree_type > *proj_scene =
-        new boxm_scene<pca_tree_type >(data_scene->lvcs(), data_scene->origin(), data_scene->block_dim(), data_scene->world_dim(), data_scene->max_level(), data_scene->init_level());
-        proj_scene->set_appearance_model(VNL_DOUBLE_10);
-        proj_scene->set_paths(aux_dirs_[i], proj_scene_ss.str());
-        proj_scene->write_scene("/" + proj_scene_ss.str() +  ".xml");
-      }
+  }
+
+  {
+    vcl_stringstream proj_scene_ss;
+    proj_scene_ss << "proj_pca_scene_" << scene_id ;
+    vcl_string proj_scene_path = aux_dirs_[scene_id] + "/" + proj_scene_ss.str() + ".xml";
+    if(!vul_file::exists(proj_scene_path)){
+      vcl_cout<< "Scene: " << proj_scene_path << " does not exist, initializing" << vcl_endl;
+      typedef boct_tree<short,vnl_vector_fixed<double,10> > pca_tree_type;
+      boxm_scene<pca_tree_type > *proj_scene =
+      new boxm_scene<pca_tree_type >(data_scene->lvcs(), data_scene->origin(), data_scene->block_dim(), data_scene->world_dim(), data_scene->max_level(), data_scene->init_level());
+      proj_scene->set_appearance_model(VNL_DOUBLE_10);
+      proj_scene->set_paths(aux_dirs_[scene_id], proj_scene_ss.str());
+      proj_scene->write_scene("/" + proj_scene_ss.str() +  ".xml");
     }
   }
   
+
   xml_write();
 }
 
