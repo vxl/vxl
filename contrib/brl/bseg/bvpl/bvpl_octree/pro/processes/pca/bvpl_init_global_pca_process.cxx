@@ -14,7 +14,7 @@
 //:global variables
 namespace bvpl_init_global_pca_process_globals
 {
-  const unsigned n_inputs_ = 1;
+  const unsigned n_inputs_ = 2;
   const unsigned n_outputs_ = 0;
 }
 
@@ -26,6 +26,7 @@ bool bvpl_init_global_pca_process_cons(bprb_func_process& pro)
 
   vcl_vector<vcl_string> input_types_(n_inputs_);
   input_types_[0] = "vcl_string"; // path to pca_global_info file
+  input_types_[1] = "unsigned"; //id of the scene to initialize
 
   vcl_vector<vcl_string> output_types_(n_outputs_);
 
@@ -40,9 +41,10 @@ bool bvpl_init_global_pca_process(bprb_func_process& pro)
 
   //get inputs
   vcl_string pca_dir = pro.get_input<vcl_string>(0);
+  unsigned scene_id = pro.get_input<unsigned>(1);
 
   bvpl_global_pca<125> global_pca(pca_dir);
-  global_pca.init();
+  global_pca.init(scene_id);
 
   return true;
 }
