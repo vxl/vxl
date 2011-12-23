@@ -1113,6 +1113,70 @@ void boxm_scene<T>::leaves_in_region(vgl_box_3d<double> box, vcl_vector<boct_tre
   return;
 }
 
+//: Level of the cell containing a 3d region, which coordinates are given in scene coordinates.
+template <class T>
+short boxm_scene<T>::level_region(vgl_box_3d<double> box)
+{
+  vgl_box_3d<double> valid_box = vgl_intersection(get_world_bbox(),box);
+
+  if (valid_box.is_empty()) {
+    vcl_cout << "Warning in boxm_scene<T>::level_region: Region does not intersect scene\n";
+    return -1;
+  }
+
+  vgl_point_3d<double> min_point = valid_box.min_point();
+  vgl_point_3d<double> max_point = valid_box.max_point();
+
+  // load blocks intersecting the region
+  vgl_point_3d<int> min_idx;
+  get_block_index(min_point, min_idx);
+
+  vgl_point_3d<int> max_idx;
+  get_block_index(max_point, max_idx);
+//#ifdef DEBUG
+  vcl_cout << "Loading Region beteween blocks: " << max_idx << ", " << min_idx << vcl_endl;
+//#endif
+  if (!load_blocks(min_idx, max_idx))
+    return -1;
+
+  short level = -1;
+
+  // traverse blocks. for each block get the cells intersects the portion of the region contained in the block
+  for (int k = min_idx.z(); k <= max_idx.z(); k++)
+  {
+    for (int j = min_idx.y(); j <= max_idx.y(); j++)
+    {
+      for (int i = min_idx.x(); i <= max_idx.x();i++)
+      {
+        boxm_block<T>* block = blocks_(i,j,k);
+        vgl_box_3d<double> local_box = vgl_intersection(get_block_bbox(i,j,k),box);
+
+        vcl_cout << ".....In tree with box dimension: " << get_block_bbox(i,j,k).width() << ", " << get_block_bbox(i,j,k).depth() << ", " << get_block_bbox(i,j,k).height()
+            << "looking for box with dim: " << box.width() << ", " << box.depth() << ", " <<box.height() <<vcl_endl;
+
+        // subtract a little from the max point because octree cell are give by a half-closed interval [...).
+        // if this is not done, the endpoint may be out of bounds
+        vgl_box_3d<double> local_box_exclusive(local_box.min_point().x(), local_box.min_point().y(), local_box.min_point().z(),
+                                               local_box.max_point().x()- 1e-7, local_box.max_point().y()- 1e-7,local_box.max_point().z()- 1e-7);
+        T *tree = block->get_tree();
+        if (!tree)
+          continue;
+
+        boct_tree_cell<loc_type, datatype>* region_cell = tree->locate_region_global(local_box_exclusive);
+        if (region_cell->level() > level)
+          level = region_cell->level();
+
+        vcl_cout << "level: " << level << box <<vcl_endl;
+
+      }
+    }
+  }
+  this->unload_active_blocks();
+  return level;
+}
+
+
+
 
 //: Return all leaf cells between an inner box and an outter box
 template <class T>

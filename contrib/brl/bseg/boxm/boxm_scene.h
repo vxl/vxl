@@ -178,6 +178,9 @@ class boxm_scene :public boxm_scene_base
   //: Return all leaf cells in a region
   void leaves_in_region(vgl_box_3d<double>, vcl_vector<boct_tree_cell<loc_type, datatype>* >& cells);
   
+  //: Return the level of the smallest cell entirely containing the 3d region
+  short level_region(vgl_box_3d<double> box);
+
   //: Return all leaf_data in a region - data is copied to new memory location
   void leaves_data_in_region(vgl_box_3d<double> box, vcl_vector<boct_cell_data<loc_type, datatype> > &cell_data);
   
