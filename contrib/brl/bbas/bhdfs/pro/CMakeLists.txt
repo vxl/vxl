@@ -19,4 +19,8 @@ IF(EXPAT_FOUND)
 
   TARGET_LINK_LIBRARIES(bhdfs_pro bhdfs bprb vil_algo vil_io vil)
 
+  IF(BUILD_TESTING)
+    SUBDIRS(tests)
+  ENDIF(BUILD_TESTING)
+
 ENDIF(EXPAT_FOUND)
