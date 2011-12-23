@@ -11,6 +11,7 @@
 #ifdef MOG_TYPE_16 
     #define MOG_TYPE int4
     #define CONVERT_FUNC(lhs,data) ushort8 lhs = as_ushort8(data)
+    #define CONVERT_FUNC_FLOAT8(lhs,data) float8 lhs = convert_float8( as_ushort8(data) )
     #define CONVERT_FUNC_SAT_RTE(lhs,data) lhs = as_int4( convert_ushort8_sat_rte(data) )
     #define NORM 65535
 #endif

@@ -91,7 +91,7 @@ void update_gauss(float x, float rho, float* mu, float* sigma,
 {
   float var = (*sigma)*(*sigma);
   float diff = x-(*mu);
-  var = (1.0f-rho)*(var +rho*diff*diff);
+  //var = (1.0f-rho)*(var +rho*diff*diff);
   *mu = *mu + rho*diff;
   *sigma = sqrt(var);
   *sigma = (*sigma < min_sigma)? min_sigma: *sigma;

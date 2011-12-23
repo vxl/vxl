@@ -36,6 +36,7 @@ void step_cell_seglen(AuxArgs aux_args, int data_ptr, uchar llid, float d)
     atom_add(&aux_args.seg_len[data_ptr], seg_int);
     int cum_obs = convert_int_rte(d * aux_args.obs * SEGLEN_FACTOR);
     atom_add(&aux_args.mean_obs[data_ptr], cum_obs);
+    //(*aux_args.ray_len) += d; 
 #endif
 }
 #endif // SEGLEN
@@ -128,7 +129,6 @@ void step_cell_bayes(AuxArgs aux_args, int data_ptr, uchar llid, float d)
     float mean_obs = convert_float(mean_int) / convert_float(cum_int);
     float cum_len = convert_float(cum_int) / SEGLEN_FACTOR;
 
-
     float ray_beta, vis_cont;
     bayes_ratio_ind( d*aux_args.linfo->block_len,
                      alpha,
@@ -147,6 +147,9 @@ void step_cell_bayes(AuxArgs aux_args, int data_ptr, uchar llid, float d)
     atom_add(&aux_args.beta_array[data_ptr], beta_int);
     int vis_int  = convert_int_rte(vis_cont * SEGLEN_FACTOR);
     atom_add(&aux_args.vis_array[data_ptr], vis_int);
+    
+    //debug expected int along ray
+    //*(aux_args.outInt) += mean_obs*vis_cont; 
     //-------------------------------------------------------------------------- */
 #endif
 

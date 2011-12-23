@@ -19,7 +19,7 @@ __kernel void normalize_render_kernel(__global float * exp_img,
 
     //normalize image with respect to visibility
     float vis   = vis_img[imindex];
-    exp_img[imindex] = exp_img[imindex]+ (vis*0.5f);
+    exp_img[imindex] = exp_img[imindex] + (vis*0.5f);
 }
 
 __kernel void normalize_render_rgb_kernel(__global float4* exp_img, 
@@ -187,21 +187,26 @@ __kernel void normalize_change_kernel(__global float* exp_img /* background prob
     int i=0,j=0;
     i=get_global_id(0);
     j=get_global_id(1);
-
-
     int imindex=j*get_global_size(0)+i;
+    
     // check to see if the thread corresponds to an actual pixel as in some
     // cases #of threads will be more than the pixels.
     if (i>=(*imgdims).z || j>=(*imgdims).w) {
         return;
     }
+    
+    //get vis, if it's greater than some threshold, we don't have enough information
     float vis   = vis_img[imindex];
+    if(vis > .2f) {
+      exp_img[imindex] = 0.0f; 
+      return; 
+    }
     
     float prob_int = exp_img[imindex] ; 
-    prob_int+=vis;
+    //prob_int+=vis;
 
     float prob_exp_int = prob_exp_img[imindex];
-    prob_exp_int+=vis;
+    //prob_exp_int+=vis;
 
     //compute foreground belief
     if( *rbelief == 0 ) {
@@ -209,9 +214,11 @@ __kernel void normalize_change_kernel(__global float* exp_img /* background prob
       exp_img[imindex] = fgbelief; 
     }
     else {
-      float fgbelief   = 1.0f/(1.0f+prob_int) - 0.5f*min(prob_int,1/prob_int);
-      float raybelief  = prob_exp_int/(1.0f+prob_exp_int)-0.5*min(prob_exp_int,1/prob_exp_int);
-      exp_img[imindex] = fgbelief*raybelief; 
+      float fgbelief   = 1.0f/(1.0f+prob_int); // - 0.5f*min(prob_int,1/prob_int);
+      float raybelief  = prob_exp_int/(1.0f+prob_exp_int); //-0.5*min(prob_exp_int,1/prob_exp_int);
+      
+      //thresh
+      exp_img[imindex] = raybelief*fgbelief; //(raybelief > .25) ? fgbelief : 0.0f; 
     }
 }
 #endif

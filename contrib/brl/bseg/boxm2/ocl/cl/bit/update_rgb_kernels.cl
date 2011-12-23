@@ -534,7 +534,7 @@ update_bit_scene_main(__global RenderSceneInfo  * info,
       alpha *= cell_beta; 
       
       //reset the cells in memory
-      alpha_array[gid]      = max(alphamin, alpha);  //TODO COMMENTED OUT FOR PAINTING
+      //alpha_array[gid]      = max(alphamin, alpha);  //TODO COMMENTED OUT FOR PAINTING
       float8 post_mix       = mixture * (float) NORM;
       CONVERT_FUNC_SAT_RTE(mixture_array[gid],post_mix); 
     }

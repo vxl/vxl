@@ -17,6 +17,7 @@ typedef struct
   __local  float4* cached_aux;
            float   obs;
   __global float * output;
+          float * ray_len; 
   __constant RenderSceneInfo * linfo;
 } AuxArgs;
 
@@ -89,11 +90,16 @@ seg_len_main(__constant  RenderSceneInfo    * linfo,
   aux_args.cached_aux = cached_aux_data;
   aux_args.obs = obs;
   aux_args.output = output;
+  //float rlen = output[imIndex]; 
+  //aux_args.ray_len = &rlen; 
   cast_ray( i, j,
             ray_ox, ray_oy, ray_oz,
             ray_dx, ray_dy, ray_dz,
             linfo, tree_array,                                  //scene info
             local_tree, bit_lookup, cumsum, &vis, aux_args);    //utility info
+            
+            
+  //output[imIndex] = rlen; 
 }
 #endif
 
@@ -199,13 +205,17 @@ typedef struct
   __global int* mean_obs;
   __global int* vis_array;
   __global int* beta_array;
-
-  __local  short2* ray_bundle_array;
-  __local  int*    cell_ptrs;
-  __local  float*  cached_vis;
+  
            float   norm;
            float*  ray_vis;
            float*  ray_pre;
+            
+           float*  outInt; 
+
+  //local caching args
+  __local  short2* ray_bundle_array;
+  __local  int*    cell_ptrs;
+  __local  float*  cached_vis;
 
   __constant RenderSceneInfo * linfo;
 } AuxArgs;
@@ -296,6 +306,12 @@ bayes_main(__constant  RenderSceneInfo    * linfo,
   aux_args.norm = norm;
   aux_args.ray_vis = &vis;
   aux_args.ray_pre = &pre;
+  
+  //---debug
+  //float outInt = output[j*get_global_size(0) + i]; 
+  //aux_args.outInt = &outInt; 
+  //---------
+  
   cast_ray( i, j,
             ray_ox, ray_oy, ray_oz,
             ray_dx, ray_dy, ray_dz,
@@ -305,6 +321,10 @@ bayes_main(__constant  RenderSceneInfo    * linfo,
   //write out vis and pre
   vis_image[j*get_global_size(0)+i] = vis;
   pre_image[j*get_global_size(0)+i] = pre;
+  
+  //---debug
+  //output[j*get_global_size(0) + i] = outInt; 
+  //----
 }
 #endif
 
