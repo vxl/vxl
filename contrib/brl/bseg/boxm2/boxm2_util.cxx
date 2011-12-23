@@ -434,7 +434,7 @@ vil_image_view_base_sptr boxm2_util::prepare_input_image(vil_image_view_base_spt
     else if (vil_image_view<unsigned short> *img_byte = dynamic_cast<vil_image_view<unsigned short>*>(loaded_image.ptr()))
     {
       floatimg = new vil_image_view<float>(loaded_image->ni(), loaded_image->nj(), 1);
-      vil_convert_stretch_range_limited(*img_byte, *floatimg,(unsigned short)30500,(unsigned short)32500,  0.0f, 1.0f); // hardcoded to be fixed.
+      vil_convert_stretch_range_limited(*img_byte, *floatimg,(unsigned short)0,(unsigned short)65535,  0.0f, 1.0f); // hardcoded to be fixed.
     }
     else if (vil_image_view<float> *img_float = dynamic_cast<vil_image_view<float>*>(loaded_image.ptr()))
     {
