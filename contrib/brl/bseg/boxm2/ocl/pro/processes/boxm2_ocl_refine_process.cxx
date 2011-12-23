@@ -185,7 +185,7 @@ bool boxm2_ocl_refine_process(bprb_func_process& pro)
         opencl_cache->clear_cache();
         boxm2_block_metadata data = blk_iter->second;
         boxm2_block_id id = blk_iter->first;
-        vcl_cout<<"Refining Block "<< id << vcl_endl;
+        vcl_cout<<"Refining Block "<< id << "...";
 
         bocl_kernel* kern=kernels[tree_identifier];
         
@@ -195,12 +195,12 @@ bool boxm2_ocl_refine_process(bprb_func_process& pro)
         int numTrees = data.sub_block_num_.x() * data.sub_block_num_.y() * data.sub_block_num_.z();
 
         //set up tree copy
-        vcl_cout<<"  creating tree copy"<<vcl_endl;
+        //vcl_cout<<"  creating tree copy"<<vcl_endl;
         bocl_mem_sptr blk_copy = new bocl_mem(device->context(), NULL, numTrees*sizeof(cl_uchar16), "refine trees block copy buffer");
         blk_copy->create_buffer(CL_MEM_READ_WRITE| CL_MEM_ALLOC_HOST_PTR, (queue));
 
         //set up tree size (first find num trees)
-        vcl_cout<<"  creating tree sizes buff"<<vcl_endl;
+        //vcl_cout<<"  creating tree sizes buff"<<vcl_endl;
         bocl_mem_sptr tree_sizes = new bocl_mem(device->context(), NULL, sizeof(cl_int)*numTrees, "refine tree sizes buffer");
         tree_sizes->create_buffer(CL_MEM_READ_WRITE | CL_MEM_ALLOC_HOST_PTR, (queue));
         clFinish((queue));
@@ -259,9 +259,9 @@ bool boxm2_ocl_refine_process(bprb_func_process& pro)
         tree_sizes->write_to_buffer((queue));
         
         int dataLen = alpha->num_bytes()/sizeof(float); 
-        vcl_cout<<"  New data size: "<<newDataSize<<", old data: "<<dataLen<<'\n'
-                <<"  Num Refined: "<<(newDataSize-dataLen)/8<<'\n'
-                <<"  Scan data sizes time: "<<scan_time.all()<<vcl_endl;
+        //vcl_cout<<"  New data size: "<<newDataSize<<", old data: "<<dataLen<<'\n'
+        //        <<"  Num Refined: "<<(newDataSize-dataLen)/8<<'\n'
+        //        <<"  Scan data sizes time: "<<scan_time.all()<<vcl_endl;
         transfer_time += scan_time.all();
         num_cells   += (unsigned) newDataSize; 
         num_refined += (unsigned) ( (newDataSize-dataLen)/8 ); 
@@ -282,7 +282,7 @@ bool boxm2_ocl_refine_process(bprb_func_process& pro)
         data_types.push_back(boxm2_data_traits<BOXM2_ALPHA>::prefix());
         for (unsigned int i=0; i<data_types.size(); ++i)
         {
-            vcl_cout<<"  Swapping data of type: "<<data_types[i]<<vcl_endl;
+            //vcl_cout<<"  Swapping data of type: "<<data_types[i]<<vcl_endl;
             vcl_string options=get_option_string(boxm2_data_info::datasize(data_types[i]));
             vcl_string data_identifier= identifier+options;
             if (kernels.find(data_identifier)==kernels.end())
@@ -298,7 +298,7 @@ bool boxm2_ocl_refine_process(bprb_func_process& pro)
             bocl_mem* dat = opencl_cache->get_data(id, data_types[i]);
 
             //get a new data pointer (with newSize), will create CPU buffer and GPU buffer
-            vcl_cout<<"  Data_type "<<data_types[i]<<" new size is: "<<newDataSize<<vcl_endl;
+            //vcl_cout<<"  Data_type "<<data_types[i]<<" new size is: "<<newDataSize<<vcl_endl;
             int dataBytes = boxm2_data_info::datasize(data_types[i]) * newDataSize;
             bocl_mem* new_dat = new bocl_mem(device->context(), NULL, dataBytes, "new data buffer " + data_types[i]);
             new_dat->create_buffer(CL_MEM_READ_WRITE, queue);
@@ -352,7 +352,7 @@ bool boxm2_ocl_refine_process(bprb_func_process& pro)
             ////write the data to buffer
             opencl_cache->deep_replace_data(id, data_types[i], new_dat);
             if (data_types[i] == boxm2_data_traits<BOXM2_ALPHA>::prefix()) {
-                vcl_cout<<"  Writing refined trees."<<vcl_endl;
+                //vcl_cout<<"  Writing refined trees."<<vcl_endl;
                 blk->read_to_buffer(queue);
             }
         }
