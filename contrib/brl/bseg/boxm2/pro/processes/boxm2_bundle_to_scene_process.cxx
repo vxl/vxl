@@ -7,7 +7,6 @@
 // \author Andy Miller
 // \date Sep 16, 2011
 #include <vcl_fstream.h>
-#include <vul/vul_file.h>
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/util/boxm2_convert_bundle.h>
 #include <boxm2/util/boxm2_convert_nvm.h>
@@ -18,6 +17,8 @@
 #include <vgl/vgl_polygon_scan_iterator.h>
 #include <vil/vil_load.h>
 #include <vil/vil_save.h>
+#include <vul/vul_file.h>
+#include <vul/vul_file_iterator.h>
 
 namespace boxm2_bundle_to_scene_process_globals
 {
@@ -65,7 +66,7 @@ bool boxm2_bundle_to_scene_process(bprb_func_process& pro)
   //----------------------------------------------------------------------------
   unsigned i = 0;
   vcl_string bundler_out = pro.get_input<vcl_string>(i++); //bundler out
-  vcl_string img_dir     = pro.get_input<vcl_string>(i++); //bundler out
+  vcl_string in_img_dir  = pro.get_input<vcl_string>(i++); //input png/tiff images
   vcl_vector<vcl_string> appearance(2,"");
   appearance[0]          = pro.get_input<vcl_string>(i++); //Appearance Model String
   appearance[1]          = pro.get_input<vcl_string>(i++); //Occupancy Model String
@@ -78,9 +79,9 @@ bool boxm2_bundle_to_scene_process(bprb_func_process& pro)
   vgl_box_3d<double>            bbox;
   double                        resolution;
   if (vul_file::extension(bundler_out) == ".out")
-    boxm2_util_convert_bundle(bundler_out, img_dir, cams, bbox, resolution);
+    boxm2_util_convert_bundle(bundler_out, in_img_dir, cams, bbox, resolution);
   else if (vul_file::extension(bundler_out) == ".nvm")
-    boxm2_util_convert_nvm(bundler_out, img_dir, cams, bbox, resolution);
+    boxm2_util_convert_nvm(bundler_out, in_img_dir, cams, bbox, resolution);
 
   //create vector of camera objects
   vcl_vector<vpgl_perspective_camera<double> > cs;
@@ -148,12 +149,20 @@ bool boxm2_bundle_to_scene_process(bprb_func_process& pro)
         ofile.close();
 
         //save image
-        vcl_cout<<"    Writing camera and image for image "<<full_img_name<<vcl_endl;
-        vil_image_view_base_sptr img      = vil_load(full_img_name.c_str());
-        vcl_string               img_path = img_dir + "/" + img_name;
-        vil_save( *img, img_path.c_str() );
-
-        //vil_image_view<vxl_byte> curr_img;
+        vcl_string outImgName;
+        vcl_string inImgGlob = in_img_dir + "/" + stripped_name + ".*";
+        vul_file_iterator moveImage(inImgGlob.c_str()); 
+        if (moveImage) { 
+          outImgName = vcl_string(moveImage());
+          vcl_cout<<"    Writing camera and image for image "<<outImgName<<vcl_endl;
+          vil_image_view_base_sptr img      = vil_load(outImgName.c_str());
+          vcl_string               img_path = img_dir + "/" + img_name;
+          vil_save( *img, img_path.c_str() );
+        }
+        else {
+          vcl_cout<<"Cannot move image "<<full_img_name<<" ! breaking !"<<vcl_endl;
+        }
+       
         //imgstream.seek_frame(i);
         //vidl_convert_to_view(*imgstream.current_frame(),curr_img);
         //char imgfname[1024];

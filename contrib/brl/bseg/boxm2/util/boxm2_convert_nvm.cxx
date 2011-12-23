@@ -84,7 +84,8 @@ boxm2_convert_nvm::boxm2_convert_nvm(vcl_string nvm_file, vcl_string img_dir)
       //imgstream.seek_frame(i);
       //vcl_string path = imgstream.current_path();
       vcl_string stripped_name = vul_file::strip_extension(names_[i]);
-      vcl_string path = img_dir + "/" + stripped_name + ".png";
+      //vcl_string path = img_dir + "/" + stripped_name + ".png";
+      vcl_string path = img_dir + "/" + names_[i]; 
       CamType* cam = new CamType(cams_[i]);
       final_cams_[path] = cam;
       //vcl_cout<<"Final cam: "<<path<<vcl_endl;
