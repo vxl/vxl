@@ -155,8 +155,8 @@ bool boxm2_bundle_to_scene_process(bprb_func_process& pro)
         if (moveImage) { 
           outImgName = vcl_string(moveImage());
           vcl_cout<<"    Writing camera and image for image "<<outImgName<<vcl_endl;
-          vil_image_view_base_sptr img      = vil_load(outImgName.c_str());
-          vcl_string               img_path = img_dir + "/" + img_name;
+          vil_image_view_base_sptr img = vil_load(outImgName.c_str());
+          vcl_string img_path = img_dir + "/" + vul_file::basename(outImgName);
           vil_save( *img, img_path.c_str() );
         }
         else {
