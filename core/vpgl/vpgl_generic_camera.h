@@ -22,11 +22,13 @@
 //  Modifications <none>
 // \endverbatim
 
-#include <vcl_string.h>
 #include <vbl/vbl_array_2d.h>
 #include <vgl/vgl_ray_3d.h>
 #include <vgl/vgl_point_3d.h>
 #include <vpgl/vpgl_camera.h>
+#include <vcl_iosfwd.h>
+#include <vcl_string.h>
+
 template <class T>
 class vpgl_generic_camera : public vpgl_camera<T>
 {
@@ -61,7 +63,6 @@ class vpgl_generic_camera : public vpgl_camera<T>
 
   //: the ray index at a given level
   vbl_array_2d<vgl_ray_3d<T> >& rays(int level) { return rays_[level];}
-
 
   //: the nearest ray origin to the coordinate origin
   vgl_point_3d<T> min_ray_origin() {return min_ray_origin_;}
