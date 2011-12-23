@@ -40,7 +40,6 @@ class vpgl_proj_camera_convert
 };
 
 
-
 //:Various methods for computing a perspective camera
 class vpgl_perspective_camera_convert
 {
@@ -78,10 +77,10 @@ class vpgl_generic_camera_convert
                        vpgl_generic_camera<double> & gen_cam, unsigned level = 0);
 
   //: Convert a local rational camera to a generic camera, using user-specified z bounds
-  //: Note that the z values are relative to the local coordinate system
+  //  Note that the z values are relative to the local coordinate system
   static bool convert( vpgl_local_rational_camera<double> const& rat_cam,
                        int ni, int nj,
-                       vpgl_generic_camera<double> & gen_cam, 
+                       vpgl_generic_camera<double> & gen_cam,
                        double local_z_min, double local_z_max, unsigned level = 0);
 
   //: Convert a proj_camera to a generic camera
@@ -100,6 +99,7 @@ class vpgl_generic_camera_convert
     if (!prj_cam_ptr) return false;
     return convert(*prj_cam_ptr, ni, nj, gen_cam);
   }
+
   //: Convert an affine_camera to a generic camera
   static bool convert( vpgl_affine_camera<double> const& aff_cam,
                        int ni, int nj, vpgl_generic_camera<double> & gen_cam);
@@ -107,8 +107,9 @@ class vpgl_generic_camera_convert
   //::convert an abstract camera to generic camera
   static bool convert( vpgl_camera_double_sptr const& camera, int ni, int nj,
                        vpgl_generic_camera<double> & gen_cam, unsigned level = 0);
+
+  // === utility methods ===
  private:
-  //utility methods
   //: interpolate rays to fill next higher resolution pyramid layer
   static bool
     upsample_rays(vcl_vector<vgl_ray_3d<double> > const& ray_nbrs,
