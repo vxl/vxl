@@ -40,7 +40,7 @@ class bvpl_global_pca: public vbl_ref_count
   bvpl_global_pca(const vcl_string &path);
 
   //: Init auxiliary scenes and smallest cell length values
-  void init();
+  void init(unsigned scene_id);
 
   //: Computes the scatter matrix and mean vector of a portion of random samples from a block
   bool sample_statistics( int scene_id, int block_i, int block_j, int block_k,
@@ -90,11 +90,12 @@ class bvpl_global_pca: public vbl_ref_count
 
   vcl_string path_out() const { return path_out_; }
 
-  vcl_vector<vcl_string> scenes() const { return scenes_; }
-  vcl_vector<vcl_string> aux_dirs() const { return aux_dirs_; }
-  vcl_vector<double> cell_lengths() const { return finest_cell_length_; }
-  vcl_vector<bool> training_scenes() const { return training_scenes_; }
-
+  inline vcl_vector<vcl_string> scenes() const { return scenes_; }
+  inline vcl_vector<vcl_string> aux_dirs() const { return aux_dirs_; }
+  inline vcl_vector<double> cell_lengths() const { return finest_cell_length_; }
+  inline vcl_vector<bool> training_scenes() const { return training_scenes_; }
+  inline vgl_box_3d<int> nbbox() const { return nbbox_; }
+  inline unsigned nscenes() const { return scenes_.size(); }
  protected:
 
   //: A vector to hold scene paths
@@ -134,6 +135,7 @@ class bvpl_global_pca: public vbl_ref_count
 
   void write_pca_matrices();
 
+ public:
   boxm_scene_base_sptr load_scene (int scene_id);
   boxm_scene_base_sptr load_train_scene (int scene_id);
   boxm_scene_base_sptr load_valid_scene (int scene_id);
