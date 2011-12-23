@@ -60,14 +60,14 @@ bool bocl_get_device_process(bprb_func_process& pro)
 
   //for multi-gpu setups
   vcl_string dev = device_type.substr(0,3);
-  if(dev=="gpu") {
+  if (dev=="gpu") {
     vcl_string str = device_type.substr(3, device_type.size());
-    int gpuIdx;
+    unsigned int gpuIdx;
     vcl_istringstream ( str ) >> gpuIdx;
-    if(gpuIdx < mgr->gpus_.size()) {
+    if (gpuIdx < mgr->gpus_.size()) {
       bocl_device_sptr device = mgr->gpus_[gpuIdx];
       pro.set_output_val<bocl_device_sptr>(0,device);
-      return true; 
+      return true;
     }
   }
 
