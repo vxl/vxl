@@ -1,10 +1,9 @@
 // This is boct_construct_tree.h
 #ifndef boct_construct_tree_h
 #define boct_construct_tree_h
-
 //:
 // \file
-// \brief AUtility fuction to costruct a boct_tree
+// \brief A Utility function to construct a boct_tree
 // \author Isabel Restrepo mir@lems.brown.edu
 // \date  16-Sep-2011.
 //
@@ -19,7 +18,7 @@
 template <class T_loc,class T_data>
 boct_tree_cell<T_loc,T_data>* boct_construct_tree(vcl_vector<boct_tree_cell<T_loc, T_data> >& leaf_nodes,
                                                   short num_levels, T_data default_val)
-{  
+{
   // create an empty tree
   boct_loc_code<T_loc> code;
   boct_tree_cell<T_loc,T_data>* root;
@@ -33,17 +32,17 @@ boct_tree_cell<T_loc,T_data>* boct_construct_tree(vcl_vector<boct_tree_cell<T_lo
     vcl_cerr << "boct_tree: the tree max level is 0, cannot create a tree!\n";
     return 0;
   }
-  
+
   for (unsigned i=0; i<leaf_nodes.size(); i++)
   {
     boct_tree_cell<T_loc, T_data>& cell = leaf_nodes[i];
     boct_loc_code<T_loc> loccode=cell.code_;
     int level=loccode.level;
-    
+
     // temporary pointer to traverse
     boct_tree_cell<T_loc,T_data>* curr_cell=root;
     short curr_level=num_levels-1;
-    
+
     while (curr_level>level)
     {
       if (curr_cell->is_leaf()) {
@@ -55,7 +54,7 @@ boct_tree_cell<T_loc,T_data>* boct_construct_tree(vcl_vector<boct_tree_cell<T_lo
       curr_cell=curr_cell->children()+child_index;
       --curr_level;
     }
-    
+
     if (curr_cell->code_.isequal(&loccode))
       // the place of the cell is found, put the data in
       curr_cell->set_data(cell.data());
@@ -64,4 +63,5 @@ boct_tree_cell<T_loc,T_data>* boct_construct_tree(vcl_vector<boct_tree_cell<T_lo
   }
   return root;
 }
+
 #endif

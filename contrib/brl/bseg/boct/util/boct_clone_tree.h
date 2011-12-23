@@ -23,24 +23,24 @@ boct_tree<T_loc,T_data_to>* boct_clone_to_type(boct_tree<T_loc, T_data>* tree, s
 {
   vcl_vector<boct_tree_cell<T_loc, T_data>*> cells = tree->leaf_cells_at_level(level);
   vcl_vector<boct_tree_cell<T_loc, T_data_to> > cloned_cells;
-  
-  if(!valid_tree){
+
+  if (!valid_tree) {
     for (unsigned i=0; i<cells.size(); i++) {
       cloned_cells.push_back(boct_tree_cell<T_loc, T_data_to>(cells[i]->code_));
     }
-  }else {
+  }
+  else {
     vcl_vector<boct_tree_cell<T_loc, bool>*> valid_cells = valid_tree->leaf_cells_at_level(level);
     for (unsigned i=0; i<cells.size(); i++) {
-      if(valid_cells[i]->data())
+      if (valid_cells[i]->data())
         cloned_cells.push_back(boct_tree_cell<T_loc, T_data_to>(cells[i]->code_));
     }
   }
-  
+
   boct_tree_cell<T_loc, T_data_to>* cloned_root = boct_construct_tree(cloned_cells, tree->number_levels(), default_val );
   boct_tree<T_loc,T_data_to>* cloned_tree = new boct_tree<T_loc,T_data_to>(cloned_root,  tree->number_levels());
   cloned_tree->set_bbox(tree->bounding_box());
   return cloned_tree;
 }
 
- 
 #endif
