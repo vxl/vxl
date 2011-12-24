@@ -49,8 +49,8 @@ bool breg3d_init_ekf_camera_optimizer_process::execute()
 
   vpgl_perspective_camera<double> *cam0;
   if (!(cam0 = dynamic_cast<vpgl_perspective_camera<double>*>(input0->value().ptr()))) {
-       vcl_cerr << "error: process expects camera to be a vpgl_perspective_camera." << '\n';
-      return false;
+    vcl_cerr << "error: process expects camera to be a vpgl_perspective_camera." << '\n';
+    return false;
   }
 
   // get parameters
@@ -63,7 +63,7 @@ bool breg3d_init_ekf_camera_optimizer_process::execute()
     vcl_cout << "breg3d_init_ekf_camera_optimizer_process::execute() -- problem in retrieving parameter position_variance\n";
     return false;
   }
-    if (!parameters()->get_value(vcl_string("translation_scale"), t_scale)) {
+  if (!parameters()->get_value(vcl_string("translation_scale"), t_scale)) {
     vcl_cout << "breg3d_init_ekf_camera_optimizer_process::execute() -- problem in retrieving parameter translation_scale\n";
     return false;
   }
@@ -71,8 +71,7 @@ bool breg3d_init_ekf_camera_optimizer_process::execute()
   breg3d_ekf_camera_optimizer_state init_state(t_scale,cam0->camera_center(),cam0->get_rotation(),pos_var,rot_var);
 
   //store output
-  brdb_value_sptr output0 =
-    new brdb_value_t<breg3d_ekf_camera_optimizer_state>(init_state);
+  brdb_value_sptr output0 = new brdb_value_t<breg3d_ekf_camera_optimizer_state>(init_state);
   output_data_[0] = output0;
 
   return true;
