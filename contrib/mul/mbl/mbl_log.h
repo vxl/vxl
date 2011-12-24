@@ -61,13 +61,10 @@
 // }
 // \endcode
 //
-// You can find all logger names in some source code using the following commands
+// You can find all logger names in all source code in some subtree using the following command:
 // \code
-//find . -type f | grep -v '\.svn' | xargs grep mbl_logger | \
-//  perl -ne ' if (/\"(.*)\"/) { print qq($1\n) } | \
-//  sort -u | less
+//  find . -type f | fgrep -v /.svn/ | xargs perl -ne 'print if s/.*\bmbl_logger(\s+\w+)?\s*\(\"(.*)\"\).*/$2\n/;' | sort -u
 // \endcode
-
 
 
 #include <vcl_fstream.h>
@@ -170,7 +167,7 @@ class mbl_log_output_file: public mbl_log_output_base
   //: Ignore calls to terminate_flush.
   // The current log message should be manually terminated.
   bool ignore_flush_;
-public:
+ public:
   mbl_log_output_file(const vcl_string &filename, const char *id);
   //: Start a new log entry, with id info.
   // Future calls to terminate_flush will be ignored.
@@ -220,7 +217,7 @@ class mbl_logger
   //: Update settings in light of changes to the root / configuration.
   void reinitialise();
 
-public:
+ public:
   mbl_logger(const char *id);
   ~mbl_logger();
 
@@ -244,7 +241,7 @@ public:
   // that begin with "foo_" in sub-directory my_dump_area of the cwd.
   const vcl_string& dump_prefix() const {return dump_prefix_;}
 
-#endif
+#endif // MBL_LOG_DISABLE_ALL_LOGGING
 
   static mbl_logger_root &root();
 
