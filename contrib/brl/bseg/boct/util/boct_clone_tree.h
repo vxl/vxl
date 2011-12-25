@@ -1,4 +1,4 @@
-// This is brl/bseg/boct/boct_tree.h
+// This is brl/bseg/boct/util/boct_clone_tree.h
 #ifndef boct_clone_tree_h_
 #define boct_clone_tree_h_
 //:

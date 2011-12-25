@@ -1,4 +1,4 @@
-// This is brl/bpro/core/vil_pro/processes/vil_save_image_view_process.cxx
+// This is brl/bbas/bhdfs/pro/processes/bhdfs_save_image_view_process.cxx
 #include <bprb/bprb_func_process.h>
 //:
 // \file
@@ -29,7 +29,7 @@ bool bhdfs_save_image_view_process(bprb_func_process& pro)
 {
   // Sanity check
   if (pro.n_inputs()< 2) {
-    vcl_cout << "vil_save_image_view_process: The input number should be 2" << vcl_endl;
+    vcl_cout << "vil_save_image_view_process: The number of inputs should be 2" << vcl_endl;
     return false;
   }
 
@@ -43,10 +43,10 @@ bool bhdfs_save_image_view_process(bprb_func_process& pro)
   bool result = bhdfs_vil_save(*img, image_filename.c_str());
 
   if ( !result ) {
-    vcl_cerr << "Failed to save image to" << image_filename << vcl_endl;
+    vcl_cerr << "Failed to save image to" << image_filename << '\n';
     return false;
   }
-
-  return true;
+  else
+    return true;
 }
 
