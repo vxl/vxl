@@ -1,21 +1,20 @@
-/* Copyright 2006-2009 Brad King, Chuck Stewart
-   Distributed under the Boost Software License, Version 1.0.
-   (See accompanying file rgtl_license_1_0.txt or copy at
-   http://www.boost.org/LICENSE_1_0.txt) */
 #ifndef rgtl_sqt_objects_hxx
 #define rgtl_sqt_objects_hxx
-
 //:
 // \file
 // \brief Store objects in a star-shaped region for spatial queries.
 // \author Brad King
 // \date April 2007
+// \copyright
+// Copyright 2006-2009 Brad King, Chuck Stewart
+// Distributed under the Boost Software License, Version 1.0.
+// (See accompanying file rgtl_license_1_0.txt or copy at
+// http://www.boost.org/LICENSE_1_0.txt)
 
 #include <vcl_memory.h>
 #include <vcl_iosfwd.h>
 
 class rgtl_serialize_access;
-
 
 class rgtl_child_index_tag;
 template <typename Tag> class rgtl_tagged_index;
@@ -35,7 +34,7 @@ template <class T, unsigned int n> class vnl_vector_fixed;
 template <unsigned int D>
 class rgtl_sqt_objects
 {
-public:
+ public:
   //: Type representing a logical octree cell index.
   typedef rgtl_sqt_cell_location<D> cell_location_type;
 
@@ -51,17 +50,18 @@ public:
   //: Type representing an object array specifically for building a SQT.
   typedef rgtl_sqt_object_array<D> sqt_object_array_type;
 
-  //: Default constructor should be used only just before loading a
-  //  previously serialized instance.
+  //: Default constructor should be used only just before loading a previously serialized instance.
   rgtl_sqt_objects(object_array_type const& oa);
 
-  //: Construct with a set of objects, the star-shape guard location,
+  //:
+  //  Construct with a set of objects, the star-shape guard location,
   //  a maximum subdivision level, and a maximum number of objects per
   //  leaf.
   rgtl_sqt_objects(sqt_object_array_type const& soa,
                    double const origin[D], int ml, int mpl);
 
-  //: Build with a set of objects, the star-shape guard location,
+  //:
+  //  Build with a set of objects, the star-shape guard location,
   //  a maximum subdivision level, and a maximum number of objects per
   //  leaf.
   void build(sqt_object_array_type const& soa,
@@ -77,8 +77,8 @@ public:
   //  returned.  Otherwise false is returned.
   bool query_ray(double const d[D], double x[D], double* s) const;
 
-  //: Query the k closest objects to the given point.  Returns the
-  //  number of objects found.  Any combination of the object ids,
+  //: Query the k closest objects to the given point.
+  //  Returns the number of objects found.  Any combination of the object ids,
   //  squared distances, and closest point locations may be obtained.
   //  Pass null pointers to for the results not desired.  If a
   //  non-negative value is given for bound_squared no objects outside
@@ -105,7 +105,7 @@ public:
   bool get_depth_range(unsigned int face, cell_index_type cell_index,
                        double& depth_min, double& depth_max) const;
 
-private:
+ private:
   // Internal implementation details.
   typedef rgtl_sqt_objects_internal<D> internal_type;
   vcl_auto_ptr<internal_type> internal_;
@@ -114,4 +114,4 @@ private:
   template <class Serializer> void serialize(Serializer& sr);
 };
 
-#endif
+#endif // rgtl_sqt_objects_hxx

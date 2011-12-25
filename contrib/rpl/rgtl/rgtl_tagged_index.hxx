@@ -1,27 +1,26 @@
-/* Copyright 2006-2009 Brad King, Chuck Stewart
-   Distributed under the Boost Software License, Version 1.0.
-   (See accompanying file rgtl_license_1_0.txt or copy at
-   http://www.boost.org/LICENSE_1_0.txt) */
 #ifndef rgtl_tagged_index_hxx
 #define rgtl_tagged_index_hxx
-
-#include "rgtl_serialize_access.hxx"
-
-#include <vcl_cstddef.h>
-
 //:
 // \file
 // \brief Unsigned integer wrapper for type-safe indexing
 // \author Brad King
 // \date December 2006
+// \copyright
+// Copyright 2006-2009 Brad King, Chuck Stewart
+// Distributed under the Boost Software License, Version 1.0.
+// (See accompanying file rgtl_license_1_0.txt or copy at
+// http://www.boost.org/LICENSE_1_0.txt)
 
-//: Wraps an unsigned integer for use as an index.  The index is
-//  compatible only with other indexes using the same tag.  Implicit
-//  conversions are disallowed.  This provides type-safe indexing.
+#include "rgtl_serialize_access.hxx"
+#include <vcl_cstddef.h>
+
+//: Wraps an unsigned integer for use as an index.
+//  The index is compatible only with other indexes using the same tag.
+//  Implicit conversions are disallowed.  This provides type-safe indexing.
 template <typename Tag>
 class rgtl_tagged_index
 {
-public:
+ public:
   //: The underlying index type.
   typedef vcl_size_t index_type;
 
@@ -37,29 +36,29 @@ public:
   //: Wrap some standard integer operators.
   rgtl_tagged_index& operator++() { ++value_; return *this; }
   rgtl_tagged_index& operator*=(index_type r)
-    {
+  {
     value_ *= r;
     return *this;
-    }
+  }
   rgtl_tagged_index& operator|=(index_type r)
-    {
+  {
     value_ |= r;
     return *this;
-    }
+  }
   friend rgtl_tagged_index operator-(rgtl_tagged_index const& l, int r)
-    {
+  {
     return rgtl_tagged_index(l.value_ - r);
-    }
+  }
 
-private:
+ private:
   index_type value_;
 
   friend class rgtl_serialize_access;
   template <class Serializer>
   void serialize(Serializer& sr)
-    {
-    sr & value_;
-    }
+  {
+    sr& value_;
+  }
 };
 
-#endif
+#endif // rgtl_tagged_index_hxx

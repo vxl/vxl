@@ -1,15 +1,15 @@
-/* Copyright 2006-2009 Brad King, Chuck Stewart
-   Distributed under the Boost Software License, Version 1.0.
-   (See accompanying file rgtl_license_1_0.txt or copy at
-   http://www.boost.org/LICENSE_1_0.txt) */
 #ifndef rgtl_separating_axis_projection_hxx
 #define rgtl_separating_axis_projection_hxx
-
 //:
 // \file
 // \brief Represent the projection of an object onto a separating axis.
 // \author Brad King
 // \date February 2007
+// \copyright
+// Copyright 2006-2009 Brad King, Chuck Stewart
+// Distributed under the Boost Software License, Version 1.0.
+// (See accompanying file rgtl_license_1_0.txt or copy at
+// http://www.boost.org/LICENSE_1_0.txt)
 
 #include "rgtl_serialize_access.hxx"
 
@@ -20,9 +20,8 @@ template <class T>
 class rgtl_separating_axis_projection
 {
   typedef vcl_numeric_limits<T> limits;
-public:
-  //: Default construct with the range +inf..-inf which is an inside-out
-  //  projection on the entire line.
+ public:
+  //: Default construct with the range +inf..-inf which is an inside-out projection on the entire line.
   rgtl_separating_axis_projection(): lower_(limits::infinity()),
                                      upper_(-limits::infinity()) {}
 
@@ -31,50 +30,48 @@ public:
 
   //: Update the lower bound given a projected point on the object.
   void update_lower(T p)
+  {
+    if (p < this->lower_)
     {
-    if(p < this->lower_)
-      {
       this->lower_ = p;
-      }
     }
+  }
 
   //: Update the upper bound given a projected point on the object.
   void update_upper(T p)
+  {
+    if (p > this->upper_)
     {
-    if(p > this->upper_)
-      {
       this->upper_ = p;
-      }
     }
+  }
 
   //: Update the lower and upper bounds given a projected point on the object.
   void update(T p)
-    {
+  {
     this->update_lower(p);
     this->update_upper(p);
-    }
+  }
 
-  //: Update the lower or upper bound for a point at infinity in the
-  //  given direction.
+  //: Update the lower or upper bound for a point at infinity in the given direction.
   void update_ray(T p)
+  {
+    if (p < 0)
     {
-    if(p < 0)
-      {
       this->lower_ = -limits::infinity();
-      }
-    else if(p > 0)
-      {
-      this->upper_ = limits::infinity();
-      }
     }
-
-  //: Update the lower and upper bound for an interval centered at the
-  //  given point with the given radius.
-  void update_sphere(T c, T r)
+    else if (p > 0)
     {
+      this->upper_ = limits::infinity();
+    }
+  }
+
+  //: Update the lower and upper bound for an interval centered at the given point with the given radius.
+  void update_sphere(T c, T r)
+  {
     this->update_lower(c-r);
     this->update_upper(c+r);
-    }
+  }
 
   //: Set the lower and upper bounds of the projection range.
   void set_lower(T l) { this->lower_ = l; }
@@ -87,11 +84,11 @@ public:
   //: Return whether or not two projections are disjoint.
   static bool disjoint(rgtl_separating_axis_projection<T> const& a,
                        rgtl_separating_axis_projection<T> const& b)
-    {
+  {
     return a.upper() < b.lower() || a.lower() > b.upper();
-    }
+  }
 
-private:
+ private:
   //: Store the lower and upper bounds of the projection range.
   T lower_;
   T upper_;
@@ -99,10 +96,10 @@ private:
   friend class rgtl_serialize_access;
   template <class Serializer>
   void serialize(Serializer& sr)
-    {
-    sr & lower_;
-    sr & upper_;
-    }
+  {
+    sr& lower_;
+    sr& upper_;
+  }
 };
 
-#endif
+#endif // rgtl_separating_axis_projection_hxx

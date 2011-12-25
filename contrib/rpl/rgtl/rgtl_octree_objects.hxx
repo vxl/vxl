@@ -1,15 +1,15 @@
-/* Copyright 2006-2009 Brad King, Chuck Stewart
-   Distributed under the Boost Software License, Version 1.0.
-   (See accompanying file rgtl_license_1_0.txt or copy at
-   http://www.boost.org/LICENSE_1_0.txt) */
 #ifndef rgtl_octree_objects_hxx
 #define rgtl_octree_objects_hxx
-
 //:
 // \file
 // \brief Store a set of objects in an octree for efficient spatial queries.
 // \author Brad King
 // \date March 2007
+// \copyright
+// Copyright 2006-2009 Brad King, Chuck Stewart
+// Distributed under the Boost Software License, Version 1.0.
+// (See accompanying file rgtl_license_1_0.txt or copy at
+// http://www.boost.org/LICENSE_1_0.txt)
 
 #include <vcl_vector.h>
 
@@ -32,17 +32,15 @@ template <unsigned int D> class rgtl_octree_objects_internal;
 template <unsigned int D>
 class rgtl_octree_objects
 {
-public:
+ public:
   typedef rgtl_object_array<D> object_array_type;
   typedef rgtl_octree_cell_bounds<D> bounds_type;
 
-  //: Construct with a set of objects, the region of interest,
-  //  and a maximum subdivision level.
+  //: Construct with a set of objects, the region of interest, and a maximum subdivision level.
   rgtl_octree_objects(object_array_type const& objs,
                       bounds_type const& b, int ml);
 
-  //: Default constructor should be used only just before loading a
-  //  previously serialized instance.
+  //: Default constructor should be used only just before loading a previously serialized instance.
   rgtl_octree_objects(object_array_type const& oa);
 
   //: Destruct.
@@ -61,8 +59,8 @@ public:
   //  object not in the set.
   int query_object(int id, vcl_vector<int>& ids) const;
 
-  //: Query the k closest objects to the given point.  Returns the
-  //  number of objects found.  Any combination of the object ids,
+  //: Query the k closest objects to the given point.
+  //  Returns the number of objects found.  Any combination of the object ids,
   //  squared distances, and closest point locations may be obtained.
   //  Pass null pointers to for the results not desired.  If a
   //  non-negative value is given for bound_squared no objects outside
@@ -80,7 +78,7 @@ public:
   //: Enable/Disable query_closest debug output if support is compiled in.
   void set_query_closest_debug(bool b);
 
-private:
+ private:
   // Internal implementation details.
   typedef rgtl_octree_objects_internal<D> internal_type;
   internal_type* internal_;
@@ -89,4 +87,4 @@ private:
   template <class Serializer> void serialize(Serializer& sr);
 };
 
-#endif
+#endif // rgtl_octree_objects_hxx

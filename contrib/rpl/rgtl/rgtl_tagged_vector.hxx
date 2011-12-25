@@ -1,15 +1,15 @@
-/* Copyright 2006-2009 Brad King, Chuck Stewart
-   Distributed under the Boost Software License, Version 1.0.
-   (See accompanying file rgtl_license_1_0.txt or copy at
-   http://www.boost.org/LICENSE_1_0.txt) */
 #ifndef rgtl_tagged_vector_hxx
 #define rgtl_tagged_vector_hxx
-
 //:
 // \file
 // \brief STL vector wrapper with type-safe indexing
 // \author Brad King
 // \date December 2006
+// \copyright
+// Copyright 2006-2009 Brad King, Chuck Stewart
+// Distributed under the Boost Software License, Version 1.0.
+// (See accompanying file rgtl_license_1_0.txt or copy at
+// http://www.boost.org/LICENSE_1_0.txt)
 
 #include "rgtl_tagged_index.hxx"
 #include "rgtl_serialize_access.hxx"
@@ -19,14 +19,13 @@
 
 #include <vcl_vector.h>
 
-//: Wrap an STL vector and replace the indexing operators with
-//  tagged-indexing equivalents.
+//: Wrap an STL vector and replace the indexing operators with tagged-indexing equivalents.
 template <typename Tag, typename T>
 class rgtl_tagged_vector: protected vcl_vector<T>
 {
   // TODO: Use a mmap-ed file to allow very large vectors.
   typedef vcl_vector<T> derived;
-public:
+ public:
   //: Allow access to standard vector types.
   typedef typename derived::size_type size_type;
   typedef typename derived::value_type value_type;
@@ -45,9 +44,9 @@ public:
 
   //: Indexing operators require the tagged index type.
   reference operator[](index_type i)
-    { return derived::operator[](i); }
+  { return derived::operator[](i); }
   const_reference operator[](index_type i) const
-    { return derived::operator[](i); }
+  { return derived::operator[](i); }
 
   //: Allow access to standard vector operations.
   void push_back(T const& v) { derived::push_back(v); }
@@ -59,13 +58,13 @@ public:
   const_iterator end() const { return derived::end(); }
   void erase(iterator first, iterator last) { derived::erase(first, last); }
   void clear() { derived::clear(); }
-private:
+ private:
   friend class rgtl_serialize_access;
   template <class Serializer>
   void serialize(Serializer& sr)
-    {
-    sr & rgtl_serialize_base<derived>(*this);
-    }
+  {
+    sr& rgtl_serialize_base<derived>(*this);
+  }
 };
 
-#endif
+#endif // rgtl_tagged_vector_hxx

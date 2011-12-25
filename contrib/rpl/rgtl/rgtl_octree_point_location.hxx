@@ -1,15 +1,15 @@
-/* Copyright 2006-2009 Brad King, Chuck Stewart
-   Distributed under the Boost Software License, Version 1.0.
-   (See accompanying file rgtl_license_1_0.txt or copy at
-   http://www.boost.org/LICENSE_1_0.txt) */
 #ifndef rgtl_octree_point_location_hxx
 #define rgtl_octree_point_location_hxx
-
 //:
 // \file
 // \brief Represent the logical index of an octree corner point.
 // \author Brad King
 // \date March 2007
+// \copyright
+// Copyright 2006-2009 Brad King, Chuck Stewart
+// Distributed under the Boost Software License, Version 1.0.
+// (See accompanying file rgtl_license_1_0.txt or copy at
+// http://www.boost.org/LICENSE_1_0.txt)
 
 #include <vcl_iosfwd.h>
 
@@ -28,7 +28,7 @@ template <unsigned int D> class rgtl_octree_cell_location;
 template <unsigned int D>
 class rgtl_octree_point_location
 {
-public:
+ public:
   //: Type representing cell locations.
   typedef rgtl_octree_cell_location<D> cell_location_type;
 
@@ -51,9 +51,9 @@ public:
   unsigned int& operator[](unsigned int j) { return index_[j]; }
   unsigned int const& operator[](unsigned int j) const { return index_[j]; }
 
-private:
-  //: The depth of the level of this point in the tree.  Level zero is
-  //  the root cell.  Negative levels are invalid indices.
+ private:
+  //: The depth of the level of this point in the tree.
+  //  Level zero is the root cell.  Negative levels are invalid indices.
   int level_;
 
   //: The index of the point in the uniform grid defined at this level.
@@ -70,4 +70,4 @@ template <unsigned int D>
 vcl_ostream& operator<<(vcl_ostream& os,
                         rgtl_octree_point_location<D> const& point);
 
-#endif
+#endif // rgtl_octree_point_location_hxx

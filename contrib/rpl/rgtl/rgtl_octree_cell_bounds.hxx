@@ -1,15 +1,15 @@
-/* Copyright 2006-2009 Brad King, Chuck Stewart
-   Distributed under the Boost Software License, Version 1.0.
-   (See accompanying file rgtl_license_1_0.txt or copy at
-   http://www.boost.org/LICENSE_1_0.txt) */
 #ifndef rgtl_octree_cell_bounds_hxx
 #define rgtl_octree_cell_bounds_hxx
-
 //:
 // \file
 // \brief Represent the bounding box for an octree cell in D dimensions.
 // \author Brad King
 // \date February 2007
+// \copyright
+// Copyright 2006-2009 Brad King, Chuck Stewart
+// Distributed under the Boost Software License, Version 1.0.
+// (See accompanying file rgtl_license_1_0.txt or copy at
+// http://www.boost.org/LICENSE_1_0.txt)
 
 #include <vnl/vnl_vector_fixed.h>
 
@@ -22,7 +22,7 @@ template <unsigned int D> class rgtl_octree_cell_location;
 template <unsigned int D>
 class rgtl_octree_cell_bounds
 {
-public:
+ public:
   //: Type used to represent the hypercube origin.
   typedef vnl_vector_fixed<double, D> point_type;
 
@@ -37,15 +37,15 @@ public:
   void set_bounds(double const o[D], double s);
   void set_bounds(point_type const& o, double s);
 
-  //: Compute a bounding hypercube enclosing the given axis-aligned
+  //:
+  //  Compute a bounding hypercube enclosing the given axis-aligned
   //  bounding box with the longest axis scaled by the given factor.
   //  The resulting cube will be centered around the original bounding
   //  box along each axis.
   void compute_bounds(double const (&bds)[D][2], double factor = 1);
   void compute_bounds(double const bds[D*2], double factor = 1);
 
-  //: Compute the bounding hypercube for the given cell in a tree
-  //  with the given root cell bounds.
+  //: Compute the bounding hypercube for the given cell in a tree with the given root cell bounds.
   void compute_bounds(rgtl_octree_cell_bounds<D> const& root_bounds,
                       rgtl_octree_cell_location<D> const& cell);
 
@@ -66,17 +66,17 @@ public:
   point_type const& origin() const { return this->origin_; }
   double origin(unsigned int i) const { return this->origin_[i]; }
 
-private:
+ private:
   point_type origin_;
   double size_;
 
   friend class rgtl_serialize_access;
   template <class Serializer>
   void serialize(Serializer& sr)
-    {
-    sr & origin_;
-    sr & size_;
-    }
+  {
+    sr& origin_;
+    sr& size_;
+  }
 };
 
-#endif
+#endif // rgtl_octree_cell_bounds_hxx

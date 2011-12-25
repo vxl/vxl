@@ -1,15 +1,15 @@
-/* Copyright 2006-2009 Brad King, Chuck Stewart
-   Distributed under the Boost Software License, Version 1.0.
-   (See accompanying file rgtl_license_1_0.txt or copy at
-   http://www.boost.org/LICENSE_1_0.txt) */
 #ifndef rgtl_sqt_space_hxx
 #define rgtl_sqt_space_hxx
-
 //:
 // \file
 // \brief Spherical space parameterization.
 // \author Brad King
 // \date April 2007
+// \copyright
+// Copyright 2006-2009 Brad King, Chuck Stewart
+// Distributed under the Boost Software License, Version 1.0.
+// (See accompanying file rgtl_license_1_0.txt or copy at
+// http://www.boost.org/LICENSE_1_0.txt)
 
 #include "rgtl_config.hxx"
 #include "rgtl_static_assert.hxx"
@@ -18,7 +18,7 @@
 template <unsigned int D>
 class rgtl_sqt_space_base
 {
-public:
+ public:
   //: Get the canonical cube face containing the given direction.
   static unsigned int direction_to_face(double const d[D]);
 };
@@ -27,7 +27,7 @@ public:
 template <unsigned int D, unsigned int Face>
 class rgtl_sqt_space: public rgtl_sqt_space_base<D>
 {
-public:
+ public:
   //: The embedding dimension of the hypersphere.
   RGTL_STATIC_CONST(unsigned int, dimension = D);
 
@@ -50,14 +50,13 @@ public:
   //  must be consistent with face_side.
   static void direction_to_parameters(double const d[D], double u[D-1]);
 
-  //: Compute a normal to the isoplane on which the j-th parameter is
-  //  constant at the given value.  The normal points in the direction
-  //  of increasing parameter value.
+  //: Compute a normal to the isoplane on which the j-th parameter is constant at the given value.
+  //  The normal points in the direction of increasing parameter value.
   static void isoplane_normal(unsigned int j, double u, double n[D]);
 
-private:
+ private:
   // Make sure the face index is in range.
   RGTL_STATIC_ASSERT(Face < (D<<1));
 };
 
-#endif
+#endif // rgtl_sqt_space_hxx

@@ -1,15 +1,15 @@
-/* Copyright 2006-2009 Brad King, Chuck Stewart
-   Distributed under the Boost Software License, Version 1.0.
-   (See accompanying file rgtl_license_1_0.txt or copy at
-   http://www.boost.org/LICENSE_1_0.txt) */
 #ifndef rgtl_octree_cell_location_hxx
 #define rgtl_octree_cell_location_hxx
-
 //:
 // \file
 // \brief Represent the logical index of an octree cell in D dimensions.
 // \author Brad King
 // \date February 2007
+// \copyright
+// Copyright 2006-2009 Brad King, Chuck Stewart
+// Distributed under the Boost Software License, Version 1.0.
+// (See accompanying file rgtl_license_1_0.txt or copy at
+// http://www.boost.org/LICENSE_1_0.txt)
 
 #include "rgtl_compact_tree_index.hxx"
 
@@ -26,7 +26,7 @@
 template <unsigned int D>
 class rgtl_octree_cell_location
 {
-public:
+ public:
   //: Constructor initializes to root cell.
   rgtl_octree_cell_location();
 
@@ -48,15 +48,15 @@ public:
   void get_parent(rgtl_octree_cell_location& parent) const;
   rgtl_octree_cell_location<D> get_parent() const;
 
-  //: Get the cell location of a child cell.  The child index must be
-  //  in the range 0..(2^D-1).
+  //: Get the cell location of a child cell.
+  //  The child index must be in the range 0..(2^D-1).
   void get_child(child_index_type child_index,
                  rgtl_octree_cell_location& child) const;
   rgtl_octree_cell_location<D> get_child(child_index_type child_index) const;
 
-private:
-  //: The depth of the level of this cell in the tree.  Level zero is
-  //  the root cell.  Negative levels are invalid indices.
+ private:
+  //: The depth of the level of this cell in the tree.
+  //  Level zero is the root cell.  Negative levels are invalid indices.
   int level_;
 
   //: The index of the cell in the uniform grid defined at this level.
@@ -79,4 +79,4 @@ template <unsigned int D>
 vcl_ostream& operator<<(vcl_ostream& os,
                         rgtl_octree_cell_location<D> const& cell);
 
-#endif
+#endif // rgtl_octree_cell_location_hxx

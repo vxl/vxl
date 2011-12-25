@@ -1,15 +1,15 @@
-/* Copyright 2006-2009 Brad King, Chuck Stewart
-   Distributed under the Boost Software License, Version 1.0.
-   (See accompanying file rgtl_license_1_0.txt or copy at
-   http://www.boost.org/LICENSE_1_0.txt) */
 #ifndef rgtl_octree_data_fixed_hxx
 #define rgtl_octree_data_fixed_hxx
-
 //:
 // \file
 // \brief Represent an octree
 // \author Brad King
 // \date February 2007
+// \copyright
+// Copyright 2006-2009 Brad King, Chuck Stewart
+// Distributed under the Boost Software License, Version 1.0.
+// (See accompanying file rgtl_license_1_0.txt or copy at
+// http://www.boost.org/LICENSE_1_0.txt)
 
 #include "rgtl_compact_tree_data_fixed.hxx"
 #include "rgtl_serialize_access.hxx"
@@ -23,7 +23,7 @@ template <unsigned int D,
 class rgtl_octree_data_fixed:
   public rgtl_compact_tree_data_fixed<D, LeafDataType, NodeDataType>
 {
-public:
+ public:
   typedef rgtl_compact_tree_data_fixed<D, LeafDataType, NodeDataType> derived;
   typedef typename derived::cell_index_type cell_index_type;
   typedef typename derived::node_index_type node_index_type;
@@ -64,12 +64,11 @@ public:
                      cell_location_type& out_cell,
                      cell_index_type& out_cidx) const;
 
-  //: Get the index of the child of the a current cell containing a
-  //  destination cell.
+  //: Get the index of the child of the a current cell containing a destination cell.
   child_index_type
   get_child_containing(cell_location_type const& dest_cell,
                        cell_location_type const& cur_cell) const;
-private:
+ private:
   leaf_data_type const* set_leaf_data(cell_location_type const& cell_dest,
                                       leaf_data_type const* leaf_data,
                                       cell_location_type const& cell_current,
@@ -85,9 +84,9 @@ private:
   friend class rgtl_serialize_access;
   template <class Serializer>
   void serialize(Serializer& sr)
-    {
-    sr & rgtl_serialize_base<derived>(*this);
-    }
+  {
+    sr& rgtl_serialize_base<derived>(*this);
+  }
 };
 
-#endif
+#endif // rgtl_octree_data_fixed_hxx
