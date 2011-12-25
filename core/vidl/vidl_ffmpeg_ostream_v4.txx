@@ -1,6 +1,6 @@
 // This is core/vidl/vidl_ffmpeg_ostream_v4.txx
-#ifndef vidl_ffmpeg_ostream_v3_txx_
-#define vidl_ffmpeg_ostream_v3_txx_
+#ifndef vidl_ffmpeg_ostream_v4_txx_
+#define vidl_ffmpeg_ostream_v4_txx_
 #include "vidl_ffmpeg_ostream.h"
 //:
 // \file
@@ -537,4 +537,4 @@ write_frame(const vidl_frame_sptr& frame)
   return true;
 }
 
-#endif // vidl_ffmpeg_ostream_v3_txx_
+#endif // vidl_ffmpeg_ostream_v4_txx_
