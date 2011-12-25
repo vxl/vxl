@@ -1,4 +1,4 @@
-// This is boct_construct_tree.h
+// This is brl/bseg/boct/util/boct_construct_tree.h
 #ifndef boct_construct_tree_h
 #define boct_construct_tree_h
 //:
@@ -13,6 +13,7 @@
 // \endverbatim
 
 #include <boct/boct_tree.h>
+#include <vcl_iostream.h>
 
 //: Construct a tree from leaf nodes. Cells are initialized to the default value given
 template <class T_loc,class T_data>
