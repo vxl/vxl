@@ -36,10 +36,10 @@ struct vidl_ffmpeg_ostream::pimpl
 {
   pimpl()
   : fmt_cxt_( 0 ),
-  file_opened_( false ),
-  codec_opened_( false ),
-  cur_frame_( 0 ),
-  video_rc_eq_(NULL)
+    file_opened_( false ),
+    codec_opened_( false ),
+    cur_frame_( 0 ),
+    video_rc_eq_(NULL)
   { }
 
 
@@ -107,7 +107,8 @@ open()
       close();
       return false;
     }
-  } else {
+  }
+  else {
     close();
     return false;
   }
@@ -363,7 +364,7 @@ open()
 
   video_enc->me_method = params_.me_method_;
 
-  /* two pass mode */
+  // two pass mode
   if (params_.do_pass_)
   {
     if (params_.do_pass_ == 1)
@@ -431,13 +432,11 @@ close()
   os_->video_rc_eq_ = NULL;
 
   if ( os_->fmt_cxt_ ) {
-
     if ( os_->file_opened_ ) {
       av_write_trailer( os_->fmt_cxt_ );
       url_fclose( os_->fmt_cxt_->pb );
       os_->file_opened_ = false;
     }
-
     if ( os_->fmt_cxt_->nb_streams > 0 ) {
       if ( os_->codec_opened_ ) {
         for ( unsigned i = 0; i < os_->fmt_cxt_->nb_streams; ++i ) {
@@ -453,7 +452,6 @@ close()
         av_free( os_->fmt_cxt_->streams[i] );
       }
     }
-
     av_free( os_->fmt_cxt_ );
     os_->fmt_cxt_ = 0;
   }
