@@ -416,6 +416,8 @@ update_bit_scene_main(__global RenderSceneInfo  * info,
                                         data.s5, data.s6, data.s7,
                                         data.s9, data.sa)*(float) NORM;
       float4 post_nobs      = (float4) (data.s4, data.s8, data.sb, data.sc*100.0);
+      
+      //check if mog_var is fixed, if so, overwrite variance in post_mix
       if(*mog_var > 0.0f){
         post_mix.s1 = (*mog_var) * (float) NORM;
         post_mix.s4 = (*mog_var) * (float) NORM;
