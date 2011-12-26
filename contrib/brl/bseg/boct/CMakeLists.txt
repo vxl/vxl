@@ -7,7 +7,8 @@ SET(boct_sources
     boct_test_util.txx        boct_test_util.h
     boct_tree_cell_reader.txx boct_tree_cell_reader.h
     boct_bit_tree.cxx         boct_bit_tree.h
-    #boct_bit_tree2.cxx        boct_bit_tree2.h
+    util/boct_clone_tree.h
+    util/boct_construct_tree.h
 )
 
 AUX_SOURCE_DIRECTORY(Templates boct_sources)
