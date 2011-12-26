@@ -56,6 +56,14 @@ def load_rational_camera_nitf(file_path) :
   (id,type) = boxm2_batch.commit_output(0);
   cam = dbvalue(id,type);
   return cam;
+  
+def load_local_rational_camera(file_path) :
+  boxm2_batch.init_process("vpglLoadLocalRationalCameraProcess");
+  boxm2_batch.set_input_string(0, file_path);
+  boxm2_batch.run_process();
+  (id,type) = boxm2_batch.commit_output(0);
+  cam = dbvalue(id,type);
+  return cam;
 
 def create_local_rational_camera(rational_cam_fname, lvcs_fname):
     boxm2_batch.init_process('vpglCreateLocalRationalCameraProcess')
@@ -147,4 +155,28 @@ def convert_to_generic_camera(cam_in, ni, nj, level=0):
     (id,type) = boxm2_batch.commit_output(0)
     generic_cam = dbvalue(id,type)
     return generic_cam
+    
+# create a generic camera from a local rational with user-specified z range
+def convert_local_rational_to_generic(cam_in, ni, nj, min_z, max_z, level=0):
+    boxm2_batch.init_process('vpglConvertLocalRationalToGenericProcess')
+    boxm2_batch.set_input_from_db(0,cam_in)
+    boxm2_batch.set_input_unsigned(1,ni)
+    boxm2_batch.set_input_unsigned(2,nj)
+    boxm2_batch.set_input_float(3,min_z)
+    boxm2_batch.set_input_float(4,max_z)
+    boxm2_batch.set_input_unsigned(5,level)
+    boxm2_batch.run_process()
+    (id,type) = boxm2_batch.commit_output(0)
+    generic_cam = dbvalue(id,type)
+    return generic_cam
 
+# correct a rational camera
+def correct_rational_camera(cam_in, offset_x, offset_y):
+    boxm2_batch.init_process('vpglCorrectRationalCameraProcess')
+    boxm2_batch.set_input_from_db(0,cam_in)
+    boxm2_batch.set_input_double(1,offset_x)
+    boxm2_batch.set_input_double(2,offset_y)
+    boxm2_batch.run_process()
+    (id,type) = boxm2_batch.commit_output(0)
+    corrected_cam = dbvalue(id,type)
+    return corrected_cam
