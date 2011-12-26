@@ -11,6 +11,9 @@ MANPAGE_SOURCES += boct_tree_cell.txx
 MANPAGE_SOURCES += boct_tree_cell_reader.txx
 SOURCES += boct_tree_cell.cxx
 SOURCES += boct_bit_tree.cxx
+MANPAGE_SOURCES += util/boct_construct_tree.h
+MANPAGE_SOURCES += util/boct_clone_tree.h
+
 
 #######################################
 include ${VXLROOT}/config/top-params.mk
