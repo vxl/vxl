@@ -7,12 +7,13 @@
 // to supplement cast ray args
 typedef struct
 {
-  __global float* alpha;
-  __global MOG_TYPE *  mog;
-  float4 intensity;
-  float intensity_exp;
-  float* change;
-  float* change_exp;
+  __global float*       alpha;
+  __global MOG_TYPE *   mog;
+           float4       intensity;
+           float        intensity_exp;
+           float*       change;
+           float*       change_exp;
+           float*       vis; 
 } AuxArgs;
 
 //forward declare cast ray (so you can use it)
@@ -76,6 +77,7 @@ change_detection_bit_scene( __constant  RenderSceneInfo    * linfo,
   aux_args.intensity_exp= intensity_exp;
   aux_args.change       = &change;
   aux_args.change_exp   = &change_exp;
+  aux_args.vis          = &vis; 
 
   cast_ray( currI, currJ,
             ray_ox, ray_oy, ray_oz,
@@ -95,6 +97,56 @@ change_detection_bit_scene( __constant  RenderSceneInfo    * linfo,
   change_exp_image[imIndex[llid]] = change_exp; //expected_int;
   vis_image[imIndex[llid]]        = vis;
 }
+
+
+//step cell functor
+void step_cell_change(AuxArgs aux_args, int data_ptr, uchar llid, float d)
+{
+  //grab float8 version mog data
+  CONVERT_FUNC_FLOAT8(data, aux_args.mog[data_ptr])/NORM; 
+
+#if 0
+  //calc using max only if 1) Weight is non-zero and 2) variance is above some thresh
+  float prob_den = 0.0f; 
+  float w2 = 1.0f - data.s2 - data.s5; 
+  float mode1_prob = (data.s2 > 10e-6f && data.s1 > .01f) ? gauss_prob_density(img_intensity, data.s0, data.s1) : 0.0f; 
+  float mode2_prob = (data.s5 > 10e-6f && data.s4 > .01f) ? gauss_prob_density(img_intensity, data.s3, data.s4) : 0.0f; 
+  float mode3_prob = (w2      > 10e-6f && data.s7 > .01f) ? gauss_prob_density(img_intensity, data.s6, data.s7) : 0.0f; 
+  prob_den = fmax(mode1_prob, fmax(mode2_prob, mode3_prob)); 
+#endif
+  
+  //choose value based on cell depth
+  //int cell_depth = get_depth(bit_index); 
+  float img_in = aux_args.intensity.x;  
+/*
+  if(cell_depth==0) 
+    img_in = img_intensity.w; 
+  else if(cell_depth==1)
+    img_in = img_intensity.z; 
+  else if(cell_depth==2)
+    img_in = img_intensity.y; 
+*/
+  float prob_den=gauss_3_mixture_prob_density(img_in,
+                                              data.s0,data.s1,data.s2,
+                                              data.s3,data.s4,data.s5,
+                                              data.s6,data.s7,1.0f-data.s2-data.s5);
+
+  float alpha = aux_args.alpha[data_ptr];
+  float prob  = 1.0f - exp(-alpha*d);
+  float omega = (*aux_args.vis)*prob;
+  (*aux_args.vis) = (*aux_args.vis)*(1.0f-prob);
+  
+  //set change 
+  (*aux_args.change) += prob_den*omega;
+  
+  //track ray belief
+  float e_prob_den = gauss_3_mixture_prob_density(aux_args.intensity_exp,
+                                                  data.s0,data.s1,data.s2,
+                                                  data.s3,data.s4,data.s5,
+                                                  data.s6,data.s7,1.0f-data.s2-data.s5);
+  (*aux_args.change_exp) += e_prob_den*omega;
+}
+
 
 //------------------------------------------------------------------------------
 // NxN change detection (simple, single ray independent CD). 
@@ -169,6 +221,7 @@ nxn_change_detection( __constant  RenderSceneInfo    * linfo,
     aux_args.intensity_exp= intensity_exp;
     aux_args.change       = &change;
     aux_args.change_exp   = &change_exp;
+    aux_args.vis          = &vis; 
 
     //cast neighbor ray
     cast_ray( i, j,
