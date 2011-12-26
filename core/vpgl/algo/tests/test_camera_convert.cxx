@@ -1,11 +1,9 @@
 #include <testlib/testlib_test.h>
 #include <vcl_iostream.h>
 #include <vnl/vnl_fwd.h>
-#include <vnl/vnl_vector_fixed.h>
 #include <vnl/vnl_matrix_fixed.h>
-#include <vgl/vgl_homg_point_3d.h>
+#include <vgl/vgl_homg_point_2d.h>
 #include <vgl/vgl_point_3d.h>
-#include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_box_3d.h>
 #include <vgl/algo/vgl_h_matrix_3d.h>
 #include <vgl/algo/vgl_rotation_3d.h>
@@ -15,6 +13,7 @@
 #include <vpgl/vpgl_perspective_camera.h>
 #include <vpgl/vpgl_generic_camera.h>
 #include <vul/vul_timer.h>
+
 //a rational camera from a commercial satellite image
 vpgl_rational_camera<double> construct_rational_camera()
 {
@@ -113,34 +112,27 @@ vpgl_local_rational_camera<double> construct_local_rational_camera()
   vpgl_local_rational_camera<double> loc_rat_cam(lvcs, rat_cam);
   return loc_rat_cam;
 }
+
 void test_rational_camera_approx()
 {
   vpgl_rational_camera<double> rat_cam = construct_rational_camera();
   vcl_cout << rat_cam;
-  vpgl_scale_offset<double> sox =
-    rat_cam.scl_off(vpgl_rational_camera<double>::X_INDX);
-  vpgl_scale_offset<double> soy =
-    rat_cam.scl_off(vpgl_rational_camera<double>::Y_INDX);
-  vpgl_scale_offset<double> soz =
-    rat_cam.scl_off(vpgl_rational_camera<double>::Z_INDX);
-  vpgl_scale_offset<double> sou =
-    rat_cam.scl_off(vpgl_rational_camera<double>::U_INDX);
-  vpgl_scale_offset<double> sov =
-    rat_cam.scl_off(vpgl_rational_camera<double>::V_INDX);
-  vgl_point_3d<double> pmin(sox.offset()-sox.scale(),
-                            soy.offset()-soy.scale(), 0);
-  vgl_point_3d<double> pmax(sox.offset()+sox.scale(), soy.offset()+soy.scale(),
-                            soz.scale());
+  vpgl_scale_offset<double> sox = rat_cam.scl_off(vpgl_rational_camera<double>::X_INDX);
+  vpgl_scale_offset<double> soy = rat_cam.scl_off(vpgl_rational_camera<double>::Y_INDX);
+  vpgl_scale_offset<double> soz = rat_cam.scl_off(vpgl_rational_camera<double>::Z_INDX);
+  vpgl_scale_offset<double> sou = rat_cam.scl_off(vpgl_rational_camera<double>::U_INDX);
+  vpgl_scale_offset<double> sov = rat_cam.scl_off(vpgl_rational_camera<double>::V_INDX);
+  vgl_point_3d<double> pmin(sox.offset()-sox.scale(), soy.offset()-soy.scale(), 0);
+  vgl_point_3d<double> pmax(sox.offset()+sox.scale(), soy.offset()+soy.scale(), soz.scale());
   vgl_box_3d<double> approx_vol(pmin, pmax);
 
   vpgl_perspective_camera<double> pc;
-  //vpgl_perspective_camera_convert pcc;
 
   vgl_h_matrix_3d<double> norm_trans;
-
   vpgl_perspective_camera_convert::convert(rat_cam, approx_vol, pc, norm_trans);
-  vcl_cout << "Test Result\n" << pc << '\n';
-
+  vcl_cout << "Test Result\n" << pc;
+  TEST("vpgl_perspective_camera_convert",pc.get_calibration().get_matrix()(0,1), 0);
+  vcl_cout << '\n';
 }
 
 void test_generic_camera_convert()
@@ -170,9 +162,8 @@ void test_generic_camera_convert()
     double dang = angle(ldir, gdir);
     double u, v;
     gcam.project(x, y, z, u, v);
-    double du = vcl_fabs(u-u0);
-    double dv = vcl_fabs(v-v0);
-    double del = du + dv;
+    vcl_cout << "(u v)=(" << u << ' ' << v << ")\n";
+    double del = vcl_fabs(u-u0) + vcl_fabs(v-v0);
     TEST_NEAR("test ray projection at center", del, 0.0, 0.5);
     // four corners
     int ua[4] = { 0, 832,   0, 832};
@@ -254,4 +245,5 @@ static void test_camera_convert(int argc, char* argv[])
   test_rational_camera_approx();
   test_generic_camera_convert();
 }
+
 TESTMAIN_ARGS(test_camera_convert)
