@@ -31,7 +31,7 @@
 
 namespace boxm2_ocl_update_process_globals
 {
-  const unsigned n_inputs_  = 8;
+  const unsigned n_inputs_  = 9;
   const unsigned n_outputs_ = 0;
   enum {
       UPDATE_SEGLEN = 0,
@@ -108,19 +108,22 @@ bool boxm2_ocl_update_process_cons(bprb_func_process& pro)
   input_types_[5] = "vcl_string";                   //illumination identifier
   input_types_[6] = "vil_image_view_base_sptr";     //mask image view
   input_types_[7] = "bool";                         //do_update_alpha/don't update alpha
-                                                    
+  input_types_[8] = "float";                        //variance value? if 0.0 or less, then use variable variance   
+
   // process has 1 output:
   // output[0]: scene sptr
   vcl_vector<vcl_string>  output_types_(n_outputs_);
   bool good = pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
   
-  // default 6 and 7 inputs
+  // default 6 and 7 and 8 inputs
   brdb_value_sptr idx        = new brdb_value_t<vcl_string>("");
   brdb_value_sptr empty_mask = new brdb_value_t<vil_image_view_base_sptr>(new vil_image_view<unsigned char>(1,1));
   brdb_value_sptr up_alpha   = new brdb_value_t<bool>(true);  //by default update alpha
+  brdb_value_sptr def_var    = new brdb_value_t<float>(-1.0f);
   pro.set_input(5, idx);
   pro.set_input(6, empty_mask);
-  pro.set_input(7, up_alpha); 
+  pro.set_input(7, up_alpha);
+  pro.set_input(8, def_var); 
   return good;
 }
 
@@ -148,6 +151,7 @@ bool boxm2_ocl_update_process(bprb_func_process& pro)
   vcl_string               ident        = pro.get_input<vcl_string>(i++);
   vil_image_view_base_sptr mask_sptr    = pro.get_input<vil_image_view_base_sptr>(i++);
   bool                     update_alpha = pro.get_input<bool>(i++); 
+  float                    mog_var      = pro.get_input<float>(i++);
 
   //catch a "null" mask (not really null because that throws an error)
   bool use_mask = false;
@@ -203,7 +207,7 @@ bool boxm2_ocl_update_process(bprb_func_process& pro)
     return false;
   }
   if (ident.size() > 0) {
-    data_type += "_" + ident;
+  data_type += "_" + ident;
     num_obs_type += "_" + ident;
   }
 
@@ -348,11 +352,12 @@ bool boxm2_ocl_update_process(bprb_func_process& pro)
       //execute kernel
       proc_kern->execute( queue, 2, local_threads, global_threads);
       int status = clFinish(queue);
-      check_val(status, MEM_FAILURE, "UPDATE EXECUTE FAILED: " + error_to_string(status));
+      if(!check_val(status, MEM_FAILURE, "UPDATE EXECUTE FAILED: " + error_to_string(status)))
+        return false;
       proc_kern->clear_args();
       norm_image->read_to_buffer(queue);
 
-     continue;
+      continue;
     }
     
     //set masked values
@@ -527,6 +532,10 @@ bool boxm2_ocl_update_process(bprb_func_process& pro)
         bocl_mem_sptr up_alpha_mem = new bocl_mem(device->context(), up_alpha, sizeof(up_alpha), "update alpha bool buffer");
         up_alpha_mem->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
 
+        //mog variance, if 0.0f or less, then var will be learned
+        bocl_mem_sptr mog_var_mem = new bocl_mem(device->context(), &mog_var, sizeof(mog_var), "update gauss variance");
+        mog_var_mem->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
+
         local_threads[0] = 64;
         local_threads[1] = 1 ;
         global_threads[0]=RoundUp(info_buffer->data_buffer_length,local_threads[0]);
@@ -541,6 +550,7 @@ bool boxm2_ocl_update_process(bprb_func_process& pro)
         kern->set_arg( aux2 );
         kern->set_arg( aux3 );
         kern->set_arg( up_alpha_mem.ptr() );
+        kern->set_arg( mog_var_mem.ptr() );
         kern->set_arg( cl_output.ptr() );
         
         //execute kernel

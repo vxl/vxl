@@ -53,7 +53,7 @@ class boxm2_scene_adaptor:
     return self.bbox
 
   #update wrapper, can pass in a Null device to use
-  def update(self, cam, img, update_alpha=True, mask=None, device_string="") :
+  def update(self, cam, img, update_alpha=True, mask=None, device_string="", var=-1.0) :
     cache = self.active_cache;
     dev = self.device;
 
@@ -68,7 +68,7 @@ class boxm2_scene_adaptor:
     if self.rgb :
       update_rgb(self.scene, cache, cam, img, dev);
     else :
-      update_grey(self.scene, cache, cam, img, dev, "", mask, update_alpha);
+      update_grey(self.scene, cache, cam, img, dev, "", mask, update_alpha, var);
       
   #update wrapper, can pass in a Null device to use
   def update_app(self, cam, img, device_string="") :

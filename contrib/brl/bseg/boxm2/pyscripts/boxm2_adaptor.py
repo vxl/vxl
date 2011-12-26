@@ -102,7 +102,7 @@ def scene_bbox(scene):
 # Model building stuff
 ###############################################
 # Generic update - will use GPU if device/openclcache are passed in
-def update_grey(scene, cache, cam, img, device=None, ident="", mask=None, update_alpha=True) :
+def update_grey(scene, cache, cam, img, device=None, ident="", mask=None, update_alpha=True, var=-1.0) :
   #If no device is passed in, do cpu update
   if cache.type == "boxm2_cache_sptr" :
     print "boxm2_batch CPU update";
@@ -124,6 +124,7 @@ def update_grey(scene, cache, cam, img, device=None, ident="", mask=None, update
     if mask :
       boxm2_batch.set_input_from_db(6,mask);
     boxm2_batch.set_input_bool(7, update_alpha); 
+    boxm2_batch.set_input_float(8, var);
     boxm2_batch.run_process();
   else : 
     print "ERROR: Cache type not recognized: ", cache.type; 
