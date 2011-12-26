@@ -179,6 +179,12 @@ SOURCE=.\boct_tree_cell_reader.txx
 # Begin Source File
 SOURCE=.\boct_bit_tree.h
 # End Source File
+# Begin Source File
+SOURCE=.\util/boct_construct_tree.h
+# End Source File
+# Begin Source File
+SOURCE=.\util/boct_clone_tree.h
+# End Source File
 # End Group
 # End Target
 # End Project
