@@ -9,23 +9,23 @@ doxygen_add_library(contrib/tbl/vepl
 INCLUDE_DIRECTORIES(${MUL_INCLUDE_DIR})
 
 SET(vepl_sources
- vepl2_threshold.cxx            vepl2_threshold.h
- vepl2_add_random_noise.cxx     vepl2_add_random_noise.h
- vepl2_monadic.cxx              vepl2_monadic.h
- vepl2_dyadic.cxx               vepl2_dyadic.h
- vepl2_erode_disk.cxx           vepl2_erode_disk.h
- vepl2_dilate_disk.cxx          vepl2_dilate_disk.h
- vepl2_sobel.cxx                vepl2_sobel.h
- vepl2_gaussian_convolution.cxx vepl2_gaussian_convolution.h
- vepl2_x_gradient.cxx           vepl2_x_gradient.h
- vepl2_y_gradient.cxx           vepl2_y_gradient.h
- vepl2_gradient_mag.cxx         vepl2_gradient_mag.h
- vepl2_gradient_dir.cxx         vepl2_gradient_dir.h
- vepl2_median.cxx               vepl2_median.h
- vepl2_moment.cxx               vepl2_moment.h
- vepl2_histogram.cxx            vepl2_histogram.h
+ vepl_threshold.cxx            vepl_threshold.h
+ vepl_add_random_noise.cxx     vepl_add_random_noise.h
+ vepl_monadic.cxx              vepl_monadic.h
+ vepl_dyadic.cxx               vepl_dyadic.h
+ vepl_erode_disk.cxx           vepl_erode_disk.h
+ vepl_dilate_disk.cxx          vepl_dilate_disk.h
+ vepl_sobel.cxx                vepl_sobel.h
+ vepl_gaussian_convolution.cxx vepl_gaussian_convolution.h
+ vepl_x_gradient.cxx           vepl_x_gradient.h
+ vepl_y_gradient.cxx           vepl_y_gradient.h
+ vepl_gradient_mag.cxx         vepl_gradient_mag.h
+ vepl_gradient_dir.cxx         vepl_gradient_dir.h
+ vepl_median.cxx               vepl_median.h
+ vepl_moment.cxx               vepl_moment.h
+ vepl_histogram.cxx            vepl_histogram.h
 
- vepl2_convert.txx              vepl2_convert.h
+ vepl_convert.txx              vepl_convert.h
 
  accessors/vipl_accessors_vil_image_view_base.h
  accessors/vipl_accessors_vil_image_view_base.txx
@@ -37,18 +37,18 @@ ADD_DEFINITIONS(-DINSTANTIATE_TEMPLATES)
 # AUX_SOURCE_DIRECTORY(Templates vepl_sources)
 
 IF(CMAKE_COMPILER_IS_GNUCXX)
-  SET_SOURCE_FILES_PROPERTIES(vepl2_gaussian_convolution.cxx PROPERTIES COMPILE_FLAGS -O0)
-  SET_SOURCE_FILES_PROPERTIES(vepl2_threshold.cxx PROPERTIES COMPILE_FLAGS -O1)
-  SET_SOURCE_FILES_PROPERTIES(vepl2_add_random_noise.cxx PROPERTIES COMPILE_FLAGS -O1)
-  SET_SOURCE_FILES_PROPERTIES(vepl2_dyadic.cxx PROPERTIES COMPILE_FLAGS -O0)
-  SET_SOURCE_FILES_PROPERTIES(vepl2_dilate_disk.cxx PROPERTIES COMPILE_FLAGS -O1)
-  SET_SOURCE_FILES_PROPERTIES(vepl2_erode_disk.cxx PROPERTIES COMPILE_FLAGS -O1)
-  SET_SOURCE_FILES_PROPERTIES(vepl2_median.cxx PROPERTIES COMPILE_FLAGS -O1)
-  SET_SOURCE_FILES_PROPERTIES(vepl2_moment.cxx PROPERTIES COMPILE_FLAGS -O1)
-  SET_SOURCE_FILES_PROPERTIES(vepl2_histogram.cxx PROPERTIES COMPILE_FLAGS -O1)
-  SET_SOURCE_FILES_PROPERTIES(Templates/vepl2_convert+uchar-.cxx PROPERTIES COMPILE_FLAGS -O1)
-  SET_SOURCE_FILES_PROPERTIES(Templates/vepl2_convert+short-.cxx PROPERTIES COMPILE_FLAGS -O1)
-  SET_SOURCE_FILES_PROPERTIES(Templates/vepl2_convert+float-.cxx PROPERTIES COMPILE_FLAGS -O1)
+  SET_SOURCE_FILES_PROPERTIES(vepl_gaussian_convolution.cxx PROPERTIES COMPILE_FLAGS -O0)
+  SET_SOURCE_FILES_PROPERTIES(vepl_threshold.cxx PROPERTIES COMPILE_FLAGS -O1)
+  SET_SOURCE_FILES_PROPERTIES(vepl_add_random_noise.cxx PROPERTIES COMPILE_FLAGS -O1)
+  SET_SOURCE_FILES_PROPERTIES(vepl_dyadic.cxx PROPERTIES COMPILE_FLAGS -O0)
+  SET_SOURCE_FILES_PROPERTIES(vepl_dilate_disk.cxx PROPERTIES COMPILE_FLAGS -O1)
+  SET_SOURCE_FILES_PROPERTIES(vepl_erode_disk.cxx PROPERTIES COMPILE_FLAGS -O1)
+  SET_SOURCE_FILES_PROPERTIES(vepl_median.cxx PROPERTIES COMPILE_FLAGS -O1)
+  SET_SOURCE_FILES_PROPERTIES(vepl_moment.cxx PROPERTIES COMPILE_FLAGS -O1)
+  SET_SOURCE_FILES_PROPERTIES(vepl_histogram.cxx PROPERTIES COMPILE_FLAGS -O1)
+  SET_SOURCE_FILES_PROPERTIES(Templates/vepl_convert+uchar-.cxx PROPERTIES COMPILE_FLAGS -O1)
+  SET_SOURCE_FILES_PROPERTIES(Templates/vepl_convert+short-.cxx PROPERTIES COMPILE_FLAGS -O1)
+  SET_SOURCE_FILES_PROPERTIES(Templates/vepl_convert+float-.cxx PROPERTIES COMPILE_FLAGS -O1)
 ENDIF(CMAKE_COMPILER_IS_GNUCXX)
 
 ADD_LIBRARY(vepl ${vepl_sources})

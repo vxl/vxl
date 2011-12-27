@@ -6,36 +6,36 @@
 #include <vxl_config.h> // for vxl_byte etc.
 #include <vcl_string.h>
 
-DECLARE(vepl2_test_dilate_disk);
-DECLARE(vepl2_test_dyadic);
-DECLARE(vepl2_test_erode_disk);
-DECLARE(vepl2_test_gaussian_convolution);
-DECLARE(vepl2_test_gradient_dir);
-DECLARE(vepl2_test_gradient_mag);
-DECLARE(vepl2_test_median);
-DECLARE(vepl2_test_moment);
-DECLARE(vepl2_test_monadic);
-DECLARE(vepl2_test_sobel);
-DECLARE(vepl2_test_threshold);
-DECLARE(vepl2_test_x_gradient);
-DECLARE(vepl2_test_y_gradient);
+DECLARE(vepl_test_dilate_disk);
+DECLARE(vepl_test_dyadic);
+DECLARE(vepl_test_erode_disk);
+DECLARE(vepl_test_gaussian_convolution);
+DECLARE(vepl_test_gradient_dir);
+DECLARE(vepl_test_gradient_mag);
+DECLARE(vepl_test_median);
+DECLARE(vepl_test_moment);
+DECLARE(vepl_test_monadic);
+DECLARE(vepl_test_sobel);
+DECLARE(vepl_test_threshold);
+DECLARE(vepl_test_x_gradient);
+DECLARE(vepl_test_y_gradient);
 
 void
 register_tests()
 {
-  REGISTER(vepl2_test_dilate_disk);
-  REGISTER(vepl2_test_dyadic);
-  REGISTER(vepl2_test_erode_disk);
-  REGISTER(vepl2_test_gaussian_convolution);
-  REGISTER(vepl2_test_gradient_dir);
-  REGISTER(vepl2_test_gradient_mag);
-  REGISTER(vepl2_test_median);
-  REGISTER(vepl2_test_moment);
-  REGISTER(vepl2_test_monadic);
-  REGISTER(vepl2_test_sobel);
-  REGISTER(vepl2_test_threshold);
-  REGISTER(vepl2_test_x_gradient);
-  REGISTER(vepl2_test_y_gradient);
+  REGISTER(vepl_test_dilate_disk);
+  REGISTER(vepl_test_dyadic);
+  REGISTER(vepl_test_erode_disk);
+  REGISTER(vepl_test_gaussian_convolution);
+  REGISTER(vepl_test_gradient_dir);
+  REGISTER(vepl_test_gradient_mag);
+  REGISTER(vepl_test_median);
+  REGISTER(vepl_test_moment);
+  REGISTER(vepl_test_monadic);
+  REGISTER(vepl_test_sobel);
+  REGISTER(vepl_test_threshold);
+  REGISTER(vepl_test_x_gradient);
+  REGISTER(vepl_test_y_gradient);
 }
 
 DEFINE_MAIN;

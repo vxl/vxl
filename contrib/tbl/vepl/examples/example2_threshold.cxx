@@ -2,7 +2,7 @@
 
 //:
 // \file
-//  This example program shows a typical use of the vepl2_threshold function on
+//  This example program shows a typical use of the vepl_threshold function on
 //  a ubyte image.  The input image (argv[1]) must be ubyte, and in that
 //  case is clipped (threshold value argv[3], default 10) to argv[2]
 //  which is always a PGM file image.
@@ -10,7 +10,7 @@
 // \author Peter Vanroose, K.U.Leuven, ESAT/PSI
 // \date   7 October 2002, from vepl1/examples
 //
-#include <vepl/vepl2_threshold.h>
+#include <vepl/vepl_threshold.h>
 #include <vxl_config.h> // for vxl_byte
 
 // for I/O:
@@ -36,7 +36,7 @@ main(int argc, char** argv)
   vxl_byte threshold = (argc < 4) ? 128 : vxl_byte(vcl_atoi(argv[3]));
 
   // perform thresholding:
-  vil_image_resource_sptr out = vepl2_threshold(in,threshold,0,255);
+  vil_image_resource_sptr out = vepl_threshold(in,threshold,0,255);
 
   // Write output:
   if (vil_save_image_resource(out, argv[2], "pnm"))

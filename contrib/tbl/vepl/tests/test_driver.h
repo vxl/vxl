@@ -1,5 +1,5 @@
-#ifndef vepl2_test_driver_h_
-#define vepl2_test_driver_h_
+#ifndef vepl_test_driver_h_
+#define vepl_test_driver_h_
 
 #include <vil/vil_image_resource.h>
 #include <vcl_string.h>
@@ -38,4 +38,4 @@ bool difference(vil_image_resource_sptr a,
 #define ONE_TEST(x,i,r,T,v,m,a) { vcl_cout << "Starting "<<m<<" test\n"; i = x(r a); difference(i,r,v,m); }
 #define FUZ_TEST(x,i,r,T,v,m,a) { vcl_cout << "Starting "<<m<<" test\n"; i = x(r a); difference(i,r,v,m,false); }
 
-#endif // vepl2_test_driver_h_
+#endif // vepl_test_driver_h_

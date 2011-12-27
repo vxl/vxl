@@ -10,7 +10,7 @@
 // \author Peter Vanroose, K.U.Leuven, ESAT/PSI
 // \date   7 October 2002, from vepl1/examples
 //
-#include <vepl/vepl2_median.h>
+#include <vepl/vepl_median.h>
 
 // for I/O:
 #include <vil/vil_load.h>
@@ -34,7 +34,7 @@ main(int argc, char** argv) {
   float radius = (argc < 4) ? 1.5f : (float)vcl_atof(argv[3]);
 
   // The filter:
-  vil_image_resource_sptr out = vepl2_median(in,radius);
+  vil_image_resource_sptr out = vepl_median(in,radius);
 
   // Write output:
   if (vil_save_image_resource(out, argv[2], "pnm"))

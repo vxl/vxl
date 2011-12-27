@@ -8,7 +8,7 @@
 // \author Peter Vanroose, K.U.Leuven, ESAT/PSI
 // \date   7 October 2002, from vepl1/examples
 //
-#include <vepl/vepl2_gradient_mag.h>
+#include <vepl/vepl_gradient_mag.h>
 
 // for I/O:
 #include <vil/vil_load.h>
@@ -28,7 +28,7 @@ main(int argc, char** argv) {
   if (!in) { vcl_cerr << "Please use a ubyte image as input\n"; return 2; }
 
   // The filter:
-  vil_image_resource_sptr out = vepl2_gradient_mag(in);
+  vil_image_resource_sptr out = vepl_gradient_mag(in);
 
   // Write output:
   if (vil_save_image_resource(out, argv[2], "pnm"))

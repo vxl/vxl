@@ -1,14 +1,14 @@
 //:
 // \file
 //  This example program shows a typical use of a convolution filter, namely
-//  the vepl2_sobel (gradient) operator on a greyscale image.  The input image
-//  (argv[1]) must be a ubyte image, and in that case its vepl2_sobel image is
+//  the vepl_sobel (gradient) operator on a greyscale image.  The input image
+//  (argv[1]) must be a ubyte image, and in that case its vepl_sobel image is
 //  written to argv[2] which is always a PGM file image.
 //
 // \author Peter Vanroose, K.U.Leuven, ESAT/PSI
 // \date   7 October 2002, from vepl1/examples
 //
-#include <vepl/vepl2_sobel.h>
+#include <vepl/vepl_sobel.h>
 
 // for I/O:
 #include <vil/vil_load.h>
@@ -28,7 +28,7 @@ main(int argc, char** argv) {
   if (!in) { vcl_cerr << "Please use a ubyte image as input\n"; return 2; }
 
   // The filter:
-  vil_image_resource_sptr out = vepl2_sobel(in);
+  vil_image_resource_sptr out = vepl_sobel(in);
 
   // Write output:
   if (vil_save_image_resource(out, argv[2], "pnm"))

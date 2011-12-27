@@ -1,6 +1,6 @@
 //:
 // \file
-//  This example program shows a typical use of the vepl2_convert function on
+//  This example program shows a typical use of the vepl_convert function on
 //  any image.  The input image (argv[1]) is converted to a ubyte image
 //  and written to argv[2] which is always a PGM file image.
 //  When the input image is RGB, its intensity is extracted.
@@ -10,7 +10,7 @@
 // \author Peter Vanroose, K.U.Leuven, ESAT/PSI
 // \date   7 October 2002, from vepl1/examples
 //
-#include <vepl/vepl2_convert.h>
+#include <vepl/vepl_convert.h>
 #include <vil/vil_rgb.h>
 
 // for I/O:
@@ -41,17 +41,17 @@ main(int argc, char** argv)
   { // monochrome
     if (vil_pixel_format_sizeof_components(in->pixel_format()) == 1)
       vcl_cerr << "Warning: no conversion necessary\n";
-    vil_image_resource_sptr out = vepl2_convert(in, (vxl_byte)0);
+    vil_image_resource_sptr out = vepl_convert(in, (vxl_byte)0);
     if (vil_save_image_resource(out, argv[2], "pnm"))
-      vcl_cout << "vepl2_convert()ed grey image to PGM image "<< argv[2]<< '\n';
+      vcl_cout << "vepl_convert()ed grey image to PGM image "<< argv[2]<< '\n';
     else
       vcl_cout << "Could not convert grey image as PGM to " << argv[2] << '\n';
   }
   else if (in->nplanes() == 1 || in->nplanes() == 3) // colour (RGB)
   {
-    vil_image_resource_sptr out = vepl2_convert(in,rgbcell());
+    vil_image_resource_sptr out = vepl_convert(in,rgbcell());
     if (vil_save_image_resource(out, argv[2], "pnm"))
-      vcl_cout << "vepl2_convert()ed RGB image to PPM image "<< argv[2] << '\n';
+      vcl_cout << "vepl_convert()ed RGB image to PPM image "<< argv[2] << '\n';
     else
       vcl_cout << "Could not convert RGB image as PPM to " << argv[2] << '\n';
   }

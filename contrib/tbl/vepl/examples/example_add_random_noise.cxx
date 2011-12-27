@@ -1,6 +1,6 @@
 //:
 // \file
-//  This example program shows a typical use of the vepl2_add_random_noise function
+//  This example program shows a typical use of the vepl_add_random_noise function
 //  on a ubyte image.  The input image (argv[1]) must be ubyte, and in that
 //  case random noise is added to it (Gaussian, with sigma argv[3], default
 //  1) to argv[2] which is always a PGM file image.
@@ -12,7 +12,7 @@
 #include <vil/vil_load.h>
 #include <vil/vil_save.h>
 
-#include <vepl/vepl2_add_random_noise.h>
+#include <vepl/vepl_add_random_noise.h>
 #include <vcl_iostream.h>
 #include <vcl_cstdlib.h> // for atof()
 
@@ -28,7 +28,7 @@ main(int argc, char** argv) {
   double sigma = (argc < 4) ? 5 : vcl_atof(argv[3]);
 
   // The filter:
-  vil_image_resource_sptr out = vepl2_add_random_noise(in,sigma);
+  vil_image_resource_sptr out = vepl_add_random_noise(in,sigma);
 
   // Output to file:
   if (vil_save_image_resource(out, argv[2], "pnm"))
