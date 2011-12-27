@@ -863,11 +863,11 @@ convert( vpgl_local_rational_camera<double> const& rat_cam,
   for (; lev>=0&&need_interp; --lev) {
     // set rays at current pyramid level
     for (int j =0; j<nr[lev]; ++j) {
-      int sj = static_cast<int>(scl[lev]*(j+0.5)); // add 0.5 to get to pixel center
+      int sj = static_cast<int>(scl[lev]*j); 
       //if (sj>=nj) sj = nj;
       for (int i =0;i<nc[lev]; ++i)
       {
-        int si = static_cast<int>(scl[lev]*(i+0.5)); // add 0.5 to get to pixel center
+        int si = static_cast<int>(scl[lev]*i); 
         //if (si>=ni) si = ni;
         vgl_point_2d<double> ip(si,sj);
 #if 1  // use result from previous pyramid level to initialize guess
