@@ -111,10 +111,11 @@ bool boxm2_cpp_ray_probe_process(bprb_func_process& pro)
     int nelems;
     for (id = vis_order.begin(); id != vis_order.end(); ++id)
     {
-        vcl_cout<<"Block Id "<<(*id)<<vcl_endl;
         boxm2_block *     blk  =  cache->get_block(*id);
         boxm2_data_base *  alph = cache->get_data_base(*id,boxm2_data_traits<BOXM2_ALPHA>::prefix());
-        boxm2_data_base *  data_of_interest  = cache->get_data_base(*id,prefix+"_"+identifier);
+		vcl_string name = prefix;
+		if(identifier!="") name+= ("_"+identifier);
+        boxm2_data_base *  data_of_interest  = cache->get_data_base(*id,name);
 
         vcl_vector<boxm2_data_base*> datas;
         datas.push_back(alph);
@@ -141,7 +142,6 @@ bool boxm2_cpp_ray_probe_process(bprb_func_process& pro)
         seg_array->data_array[i]=seg_lengths[i];
         abs_depth_array->data_array[i]=abs_depth[i];
         alpha_array->data_array[i]=alphas[i];
-        vcl_cout<<"vis "<< vis<<" alpha "<<alphas[i]<<vcl_endl;
         vis*=vcl_exp(-seg_lengths[i]*alphas[i]);
         vis_array->data_array[i]=vis;
         for (int j=0 ; j<nelems; ++j)
