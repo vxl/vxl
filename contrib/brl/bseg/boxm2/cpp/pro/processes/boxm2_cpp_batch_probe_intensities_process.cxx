@@ -87,24 +87,17 @@ bool boxm2_cpp_batch_probe_intensities_process(bprb_func_process& pro)
   int data_index=tree.get_data_index(bit_index,false);
   vcl_cout<<"Index is "<<data_index<<vcl_endl;
 
-  //vcl_vector<float> cum_len=str_cache->get_random_i<BOXM2_AUX0>(id,data_index);
-  //vcl_vector<float> cum_int=str_cache->get_random_i<BOXM2_AUX1>(id,data_index);
-  //vcl_vector<float> cum_vis=str_cache->get_random_i<BOXM2_AUX2>(id,data_index);
-  //vcl_vector<float> cum_pre=str_cache->get_random_i<BOXM2_AUX3>(id,data_index);
    vcl_vector<float> cum_len;
    vcl_vector<float> cum_int;
    vcl_vector<float> cum_vis;
    vcl_vector<float> cum_pre;
-  for(unsigned k  = 0 ; k <=data_index; k++)
+  for (int k=0; k<=data_index; ++k)
   {
-  cum_len=str_cache->get_next<BOXM2_AUX0>(id,k);
-  cum_int=str_cache->get_next<BOXM2_AUX1>(id,k);
-  cum_vis=str_cache->get_next<BOXM2_AUX2>(id,k);
-  cum_pre=str_cache->get_next<BOXM2_AUX3>(id,k);
+    cum_len=str_cache->get_next<BOXM2_AUX0>(id,k);
+    cum_int=str_cache->get_next<BOXM2_AUX1>(id,k);
+    cum_vis=str_cache->get_next<BOXM2_AUX2>(id,k);
+    cum_pre=str_cache->get_next<BOXM2_AUX3>(id,k);
   }
-  boxm2_data_base *  alpha  = cache->get_data_base(id,boxm2_data_traits<BOXM2_ALPHA>::prefix(),0,false);
-  boxm2_data<BOXM2_AUX0> * alpha_data_=new boxm2_data<BOXM2_AUX0>(alpha->data_buffer(),alpha->buffer_length(),alpha->block_id());
-
 
   vcl_cout<<"=================="<<vcl_endl;
   bbas_1d_array_float_sptr intensities  =new bbas_1d_array_float(cum_int.size());
@@ -113,23 +106,22 @@ bool boxm2_cpp_batch_probe_intensities_process(bprb_func_process& pro)
 
   for (unsigned i=0;i<cum_int.size();i++)
   {
-      if(cum_len[i]>1e-10f)
-      {
-          intensities->data_array[i]=cum_int[i]/cum_len[i];
-          visibilites->data_array[i]=cum_vis[i]/cum_len[i];
-		  pres->data_array[i] = cum_pre[i]/ cum_len[i];
-      }
-      else
-      {
-          intensities->data_array[i]=-1.0f;
-          visibilites->data_array[i]= 0.0f;
-		  pres->data_array[i]=0.0f;
-      }
+    if (cum_len[i]>1e-10f)
+    {
+      intensities->data_array[i]=cum_int[i]/cum_len[i];
+      visibilites->data_array[i]=cum_vis[i]/cum_len[i];
+      pres->data_array[i] = cum_pre[i]/ cum_len[i];
+    }
+    else
+    {
+      intensities->data_array[i]=-1.0f;
+      visibilites->data_array[i]= 0.0f;
+      pres->data_array[i]=0.0f;
+    }
   }// store scene smaprt pointer
   pro.set_output_val<bbas_1d_array_float_sptr>(0, intensities );
   pro.set_output_val<bbas_1d_array_float_sptr>(1, visibilites );
   pro.set_output_val<bbas_1d_array_float_sptr>(2, pres );
-
 
   return true;
 }
