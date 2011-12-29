@@ -38,6 +38,9 @@ SUBDIRS += vidl
 # multi-platform GUI toolkit
 SUBDIRS += vgui
 
+# coordinate systems
+SUBDIRS += vcsl
+
 #######################################
 include ${VXLROOT}/config/top-params.mk
 #######################################

@@ -19,28 +19,28 @@ MANPAGE_SOURCES += accessors/vipl_accessors_vil_image_view_base.txx
 MANPAGE_SOURCES += section/vipl_filterable_section_container_generator_vil_image_view_base.txx
 
 # A. Point operators:
-MANPAGE_SOURCES += vepl2_convert.txx
-SOURCES += vepl2_threshold.cxx
-SOURCES += vepl2_add_random_noise.cxx
-SOURCES += vepl2_monadic.cxx
-SOURCES += vepl2_dyadic.cxx
+MANPAGE_SOURCES += vepl_convert.txx
+SOURCES += vepl_threshold.cxx
+SOURCES += vepl_add_random_noise.cxx
+SOURCES += vepl_monadic.cxx
+SOURCES += vepl_dyadic.cxx
 
 # B. Convolutions:
-SOURCES += vepl2_erode_disk.cxx
-SOURCES += vepl2_dilate_disk.cxx
-SOURCES += vepl2_sobel.cxx
-SOURCES += vepl2_gaussian_convolution.cxx
-SOURCES += vepl2_x_gradient.cxx
-SOURCES += vepl2_y_gradient.cxx
-SOURCES += vepl2_gradient_mag.cxx
-SOURCES += vepl2_gradient_dir.cxx
-SOURCES += vepl2_median.cxx
+SOURCES += vepl_erode_disk.cxx
+SOURCES += vepl_dilate_disk.cxx
+SOURCES += vepl_sobel.cxx
+SOURCES += vepl_gaussian_convolution.cxx
+SOURCES += vepl_x_gradient.cxx
+SOURCES += vepl_y_gradient.cxx
+SOURCES += vepl_gradient_mag.cxx
+SOURCES += vepl_gradient_dir.cxx
+SOURCES += vepl_median.cxx
 
 # C. Moments:
-SOURCES += vepl2_moment.cxx
+SOURCES += vepl_moment.cxx
 
 # Z. Miscellaneous:
-SOURCES += vepl2_histogram.cxx
+SOURCES += vepl_histogram.cxx
 
 #######################################
 include ${VXLROOT}/config/top-params.mk
@@ -62,18 +62,18 @@ include ${VXLROOT}/config/top-rules.mk
 
 ifeq "$(TJ_GCC30) $(OS)" "1 OSF1V4"
 # gcc 3.0 needs too much virtual memory with -O2
-FLAGS_vepl2_gaussian_convolution.cxx := -O3 # or -O0 would also work, but not -O1 or -O2
-FLAGS_vepl2_threshold.cxx := -O1
-FLAGS_vepl2_add_random_noise.cxx := -O1
-FLAGS_vepl2_dyadic.cxx := -O0
-FLAGS_vepl2_dilate_disk.cxx := -O1
-FLAGS_vepl2_erode_disk.cxx := -O1
-FLAGS_vepl2_median.cxx := -O1
-FLAGS_vepl2_moment.cxx := -O1
-FLAGS_vepl2_histogram.cxx := -O1
-FLAGS_vepl2_gradient_mag.cxx := -O1
-FLAGS_Templates/vepl2_convert+uchar-.cxx := -O1
-FLAGS_Templates/vepl2_convert+short-.cxx := -O1
-FLAGS_Templates/vepl2_convert+float-.cxx := -O1
-FLAGS_Templates/vepl2_convert+vil_rgb+uchar--.cxx := -O1
+FLAGS_vepl_gaussian_convolution.cxx := -O3 # or -O0 would also work, but not -O1 or -O2
+FLAGS_vepl_threshold.cxx := -O1
+FLAGS_vepl_add_random_noise.cxx := -O1
+FLAGS_vepl_dyadic.cxx := -O0
+FLAGS_vepl_dilate_disk.cxx := -O1
+FLAGS_vepl_erode_disk.cxx := -O1
+FLAGS_vepl_median.cxx := -O1
+FLAGS_vepl_moment.cxx := -O1
+FLAGS_vepl_histogram.cxx := -O1
+FLAGS_vepl_gradient_mag.cxx := -O1
+FLAGS_Templates/vepl_convert+uchar-.cxx := -O1
+FLAGS_Templates/vepl_convert+short-.cxx := -O1
+FLAGS_Templates/vepl_convert+float-.cxx := -O1
+FLAGS_Templates/vepl_convert+vil_rgb+uchar--.cxx := -O1
 endif

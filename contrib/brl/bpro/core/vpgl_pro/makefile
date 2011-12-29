@@ -31,6 +31,7 @@ SOURCES += processes/vpgl_get_rpc_offsets_process.cxx
 SOURCES += processes/vpgl_correct_rational_cameras_multi_corr_process.cxx
 SOURCES += processes/vpgl_correct_rational_cameras_process.cxx
 SOURCES += processes/vpgl_convert_local_rational_to_generic_process.cxx
+SOURCES += processes/vpgl_generate_3d_point_from_cams_process.cxx
 
 #######################################
 include ${VXLROOT}/config/top-params.mk
