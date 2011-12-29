@@ -19,7 +19,7 @@ bool vil_pixel_value_process_cons(bprb_func_process& pro)
   input_types.push_back("vil_image_view_base_sptr");
   input_types.push_back("int");
   input_types.push_back("int");
-  
+
   vcl_vector<vcl_string> output_types;
   output_types.push_back("float");  // pixel value
   return pro.set_input_types(input_types)
@@ -28,7 +28,7 @@ bool vil_pixel_value_process_cons(bprb_func_process& pro)
 
 //: Execute the process
 bool vil_pixel_value_process(bprb_func_process& pro)
-{ 
+{
   // Sanity check
   if (pro.n_inputs()<3) {
     vcl_cout << "vil_pixel_value_process: The input number should be 3" << vcl_endl;
@@ -37,22 +37,22 @@ bool vil_pixel_value_process(bprb_func_process& pro)
 
   // get the input
   vil_image_view_base_sptr img = pro.get_input<vil_image_view_base_sptr>(0);
-  int i = pro.get_input<int>(1);
-  int j = pro.get_input<int>(2);
-  if(i < 0 || i >= img->ni()) {
+  unsigned int i = pro.get_input<int>(1);
+  unsigned int j = pro.get_input<int>(2);
+  if (i >= img->ni()) {
     pro.set_output_val<float>(0, -1.0f);
     return true;
-  } 
-  if(j < 0 || j >= img->nj()) {
+  }
+  if (j >= img->nj()) {
     pro.set_output_val<float>(0, -1.0f);
     return true;
   }
 
-  //byte? 
-  if(img->pixel_format() == VIL_PIXEL_FORMAT_BYTE)
+  //byte?
+  if (img->pixel_format() == VIL_PIXEL_FORMAT_BYTE)
   {
     vil_image_view<vxl_byte>& inimg = *dynamic_cast<vil_image_view<vxl_byte>* >(img.ptr());
-    if(inimg.nplanes() == 3 || inimg.nplanes() == 4) {
+    if (inimg.nplanes() == 3 || inimg.nplanes() == 4) {
       vil_rgb<vxl_byte> pixel( inimg(i,j,0), inimg(i,j,1), inimg(i,j,2) );
       float pixVal = pixel.grey() / 255.0f;
       pro.set_output_val<float>(0, pixVal);
@@ -64,14 +64,14 @@ bool vil_pixel_value_process(bprb_func_process& pro)
       return true;
     }
   }
-  else if(img->pixel_format() == VIL_PIXEL_FORMAT_UINT_16)
+  else if (img->pixel_format() == VIL_PIXEL_FORMAT_UINT_16)
   {
     vil_image_view<vxl_uint_16>& inimg = *dynamic_cast<vil_image_view<vxl_uint_16>* >(img.ptr());
     float pixVal = inimg(i,j) / 65535.0f;
     pro.set_output_val<float>(0, pixVal);
     return true;
   }
-  else if(img->pixel_format() == VIL_PIXEL_FORMAT_FLOAT)
+  else if (img->pixel_format() == VIL_PIXEL_FORMAT_FLOAT)
   {
     vil_image_view<float>& inimg = *dynamic_cast<vil_image_view<float>* >(img.ptr());
     pro.set_output_val<float>(0, inimg(i,j));
