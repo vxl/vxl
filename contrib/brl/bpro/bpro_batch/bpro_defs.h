@@ -9,7 +9,9 @@ py_funcs("set_params_process",set_params_process,METH_VARARGS,"set_params_proces
 py_funcs("set_input_bool",set_input_bool,METH_VARARGS,"set_input_(i,b) set input i on current process to a bool value"),
 py_funcs("set_input_string",set_input_string,METH_VARARGS,"set_input_(i,s) set input i on current process to a string value"),
 py_funcs("set_input_int",set_input_int,METH_VARARGS,"set_input_(i,i) set input i on current process to an int value"),
+py_funcs("set_input_int_array",set_input_int_array,METH_VARARGS,"set_input_(i,f)_array set input i on current process to a int value"),
 py_funcs("set_input_unsigned",set_input_unsigned,METH_VARARGS,"set_input_(i,i) set input i on current process to an unsigned value"),
+py_funcs("set_input_unsigned_array",set_input_unsigned_array,METH_VARARGS,"set_input_(i,f)_array set input i on current process to a unsigned value"),
 py_funcs("set_input_long",set_input_long,METH_VARARGS,"set_input_(i,l) set input i on current process to a long value"),
 py_funcs("set_input_float",set_input_float,METH_VARARGS,"set_input_(i,f) set input i on current process to a float value"),
 py_funcs("set_input_float_array",set_input_float_array,METH_VARARGS,"set_input_(i,f)_array set input i on current process to a float value"),
@@ -31,6 +33,8 @@ py_funcs("remove_data_obj",remove_data_obj,METH_VARARGS,"remove_data_obj(i) remo
 py_funcs("print_db",print_db,METH_VARARGS,"print_db() print the database"),
 py_funcs("clear",clear,METH_VARARGS,"clear() clear the database tables"),
 py_funcs("get_bbas_1d_array_float",get_bbas_1d_array_float,METH_VARARGS,"get_bbas_1d_array_float(i) set the database 1d array"),
+py_funcs("get_bbas_1d_array_int",get_bbas_1d_array_int,METH_VARARGS,"get_bbas_1d_array_int(i) set the database 1d array"),
+py_funcs("get_bbas_1d_array_unsigned",get_bbas_1d_array_unsigned,METH_VARARGS,"get_bbas_1d_array_unsigned(i) set the database 1d array"),
 py_funcs("set_stdout",set_stdout,METH_VARARGS,"set_stdout redirects stdout to a file"),
 py_funcs("reset_stdout",reset_stdout,METH_VARARGS,"reset_stdout resets stdout to the console"),
 
