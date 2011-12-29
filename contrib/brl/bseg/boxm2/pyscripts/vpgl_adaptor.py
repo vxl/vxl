@@ -144,23 +144,29 @@ def get_3d_from_depth(persp_cam,u,v,t) :
   z=boxm2_batch.get_output_float(id);
   return x,y,z;
   
+# triangulates a list of cams and a list of points
 def get_3d_from_cams( cams, points ):
-  assert( len(cams) == len(points) == 2 )
-  boxm2_batch.init_process("vpglGenerate3dPointFromCamsProcess");
-  boxm2_batch.set_input_from_db(0, cams[0] );
-  boxm2_batch.set_input_float(1,points[0][0]);
-  boxm2_batch.set_input_float(2,points[0][1]);
-  boxm2_batch.set_input_from_db(3, cams[1] );
-  boxm2_batch.set_input_float(4,points[1][0]);
-  boxm2_batch.set_input_float(5,points[1][1]);
-  boxm2_batch.run_process();
-  (id, type) = boxm2_batch.commit_output(0);
-  x=boxm2_batch.get_output_float(id);
-  (id, type) = boxm2_batch.commit_output(1);
-  y=boxm2_batch.get_output_float(id);
-  (id, type) = boxm2_batch.commit_output(2);
-  z=boxm2_batch.get_output_float(id);
-  return x,y,z;
+    assert( len(cams) == len(points) and len(cams) > 1 )
+    #list of points will just be [u1,v1,u2,v2...]
+    ptlist = [] 
+    for p in points:
+        ptlist.append(p[0])
+        ptlist.append(p[1])
+    #list of cam ids (type will be checked in C++)
+    camlist = []
+    for cam in cams:
+        camlist.append(cam.id)
+    boxm2_batch.init_process("vpglGenerate3dPointFromCamsProcess");
+    boxm2_batch.set_input_unsigned_array(0, camlist)
+    boxm2_batch.set_input_int_array(1, ptlist)
+    boxm2_batch.run_process();
+    (id, type) = boxm2_batch.commit_output(0);
+    x=boxm2_batch.get_output_float(id);
+    (id, type) = boxm2_batch.commit_output(1);
+    y=boxm2_batch.get_output_float(id);
+    (id, type) = boxm2_batch.commit_output(2);
+    z=boxm2_batch.get_output_float(id);
+    return x,y,z;
 
 # create a generic camera
 def convert_to_generic_camera(cam_in, ni, nj, level=0):
