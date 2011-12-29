@@ -32,3 +32,29 @@ def get_info_along_ray(scene,cache,cam,u,v,prefix,identifier="") :
     return len_array_1d, alpha_array_1d, vis_array_1d ,tabs_array_1d, data_array_1d, nelems;
   else :
     return len_array_1d, alpha_array_1d, vis_array_1d ,tabs_array_1d;
+    
+def query_cell_brdf(scene,cache,point,model_type): 
+  boxm2_batch.init_process("boxm2CppQueryCellBrdfProcess");
+  boxm2_batch.set_input_from_db(0, scene);
+  boxm2_batch.set_input_from_db(1, cache);
+  boxm2_batch.set_input_float(2, point[0]);
+  boxm2_batch.set_input_float(3, point[1]);
+  boxm2_batch.set_input_float(4, point[2]);
+  boxm2_batch.set_input_string(5, model_type);
+  boxm2_batch.run_process();
+  
+def probe_intensities(scene, cpu_cache, str_cache, point):
+  boxm2_batch.init_process("boxm2CppBatchProbeIntensitiesProcess");
+  boxm2_batch.set_input_from_db(0,scene);
+  boxm2_batch.set_input_from_db(1,cpu_cache);
+  boxm2_batch.set_input_from_db(2,str_cache);
+  boxm2_batch.set_input_float(3,point[0]);
+  boxm2_batch.set_input_float(4,point[1]);
+  boxm2_batch.set_input_float(5,point[2]);
+  boxm2_batch.run_process();
+  (id,type) = boxm2_batch.commit_output(0);
+  intensities=boxm2_batch.get_bbas_1d_array_float(id);
+  (id,type) = boxm2_batch.commit_output(1);
+  visibilities=boxm2_batch.get_bbas_1d_array_float(id);
+  return intensities, visibilities
+  

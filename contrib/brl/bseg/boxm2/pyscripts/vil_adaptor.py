@@ -85,6 +85,17 @@ def pixel_wise_roc(cd_img, gt_img, mask_img=None) :
   #return tuple of true positives, true negatives, false positives, etc..
   return (tp, tn, fp, fn);
 
+#get image pixel value (always 0-1 float)
+def pixel(img, point):
+    boxm2_batch.init_process("vilPixelValueProcess") 
+    boxm2_batch.set_input_from_db(0,img)
+    boxm2_batch.set_input_int(1, int(point[0]))
+    boxm2_batch.set_input_int(2, int(point[1]))
+    boxm2_batch.run_process()
+    (id,type) = boxm2_batch.commit_output(0)
+    val = boxm2_batch.get_output_float(id)
+    return val
+    
 # get image dimensions
 def image_size(img):
     boxm2_batch.init_process('vilImageSizeProcess')

@@ -1,4 +1,5 @@
 from boxm2_adaptor import *
+from boxm2_tools_adaptor import *
 from vil_adaptor import *;
 from vpgl_adaptor import *;
 from os.path import basename, splitext
@@ -199,7 +200,14 @@ class boxm2_scene_adaptor:
     if self.opencl_cache:
       clear_cache(self.opencl_cache);
 
+  ################################33
+  #get info functions
+  def get_info_along_ray(self,cam,u,v,prefix,identifier="") :
+    return get_info_along_ray(self.scene,self.cpu_cache,cam,u,v,prefix,identifier)
 
+  def query_cell_brdf(self, point, model_type) :
+    return query_cell_brdf(self.scene,self.cpu_cache,point,model_type)  
+  
   #####################################################################
   ######### BATCH UPDATE METHODS ######################################
   #####################################################################
