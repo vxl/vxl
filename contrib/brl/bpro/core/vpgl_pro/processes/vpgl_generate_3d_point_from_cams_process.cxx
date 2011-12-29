@@ -1,5 +1,10 @@
 // This is brl/bpro/core/vpgl_pro/processes/vpgl_generate_3d_point_process_from_depth_process.cxx
 #include <bprb/bprb_func_process.h>
+#include <brdb/brdb_value.h>
+#include <brdb/brdb_selection.h>
+#include <bprb/bprb_batch_process_manager.h>
+#include <bprb/bprb_parameters.h>
+#include <bprb/bprb_macros.h>
 //:
 // \file
 
@@ -10,9 +15,12 @@
 #include <vpgl/vpgl_calibration_matrix.h>
 #include <vpgl/algo/vpgl_triangulate_points.h>
 #include <vsl/vsl_binary_io.h>
+#include <bpro/core/bbas_pro/bbas_1d_array_int.h>
+#include <bpro/core/bbas_pro/bbas_1d_array_unsigned.h>
+
 namespace vpgl_generate_3d_point_from_cams_process_globals
 {
-    const unsigned n_inputs_ = 6;
+    const unsigned n_inputs_ = 2;
     const unsigned n_outputs_ = 3;
 }
 //: Init function
@@ -22,12 +30,14 @@ bool vpgl_generate_3d_point_from_cams_process_cons(bprb_func_process& pro)
 
     //process takes 1 input
     vcl_vector<vcl_string> input_types_(n_inputs_);
-    input_types_[0] = "vpgl_camera_double_sptr";
-    input_types_[1] = "float";
-    input_types_[2] = "float";
-    input_types_[3] = "vpgl_camera_double_sptr";
-    input_types_[4] = "float";
-    input_types_[5] = "float";
+    input_types_[0] = "bbas_1d_array_unsigned_sptr";
+    input_types_[1] = "bbas_1d_array_int_sptr"; // points
+
+    //input_types_[1] = "float";
+    //input_types_[2] = "float";
+    //input_types_[3] = "vpgl_camera_double_sptr";
+    //input_types_[4] = "float";
+    //input_types_[5] = "float";
     
     // process has 1 output:
     // output[0]: scene sptr
@@ -49,31 +59,38 @@ bool vpgl_generate_3d_point_from_cams_process(bprb_func_process& pro)
     vcl_cerr << "vpgl_generate_3d_point_from_cams_process: Invalid inputs\n";
     return false;
   }
+  
   // get the inputs
   unsigned i=0;
-  vpgl_camera_double_sptr cam1_ptr = pro.get_input<vpgl_camera_double_sptr>(i++);
-  float u1 = pro.get_input<float>(i++);
-  float v1 = pro.get_input<float>(i++);
-  vpgl_camera_double_sptr cam2_ptr = pro.get_input<vpgl_camera_double_sptr>(i++);
-  float u2 = pro.get_input<float>(i++);
-  float v2 = pro.get_input<float>(i++);
-
-  //cast cams
-  vpgl_perspective_camera<double>* cam1 = dynamic_cast<vpgl_perspective_camera<double>*>(cam1_ptr.ptr());
-  vpgl_perspective_camera<double>* cam2 = dynamic_cast<vpgl_perspective_camera<double>*>(cam2_ptr.ptr());
-  if (!cam1 || !cam2) {
-    vcl_cerr << "vpgl_generate_3d_point_from_cams_process: couldn't cast camera\n";
-    return false;
-  }
+  bbas_1d_array_unsigned_sptr cam_ids_ptr = pro.get_input<bbas_1d_array_unsigned_sptr>(i++);
+  bbas_1d_array_int_sptr      imgPoints   = pro.get_input<bbas_1d_array_int_sptr>(i++);
 
   //vector of cams, vector of points
   vcl_vector<vpgl_perspective_camera<double> > cams; 
-  cams.push_back(*cam1);
-  cams.push_back(*cam2);
-  
+  vbl_array_1d<unsigned>& cam_ids = cam_ids_ptr->data_array; 
+  for(int i=0; i<cam_ids.size(); ++i) {
+    unsigned cam_id = cam_ids[i]; 
+    brdb_query_aptr Q = brdb_query_comp_new("id", brdb_query::EQ, cam_id);
+    brdb_selection_sptr S = DATABASE->select("vpgl_camera_double_sptr_data", Q);
+    if (S->size()!=1) {
+      vcl_cout << "in vpgl_generate_3d_from_cams- bad input value\n";
+      return false;
+    }
+    brdb_value_sptr value;
+    if (!S->get_value(vcl_string("value"), value)) {
+      vcl_cout << "in vpgl_generate_3d_from_cams- bad input value\n";
+      return false;
+    }
+    vpgl_camera_double_sptr          cam_sptr = value->val<vpgl_camera_double_sptr>();
+    vpgl_perspective_camera<double>* cam_ptr  = (vpgl_perspective_camera<double>*) cam_sptr.ptr();
+    cams.push_back(*cam_ptr);
+  }
+
+  //gather image points
   vcl_vector<vgl_point_2d<double> > points;
-  points.push_back(vgl_point_2d<double>(u1,v1));
-  points.push_back(vgl_point_2d<double>(u2,v2));
+  vbl_array_1d<int>& pts = imgPoints->data_array; 
+  for(int i=0; i<pts.size(); i+=2)
+    points.push_back( vgl_point_2d<double>(pts[i], pts[i+1]) );
   
   //: Calculates the best 3D point corresponding to a set of 2D camera points.
   // Takes in a list of points and cameras, and finds the
