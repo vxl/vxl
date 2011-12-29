@@ -42,6 +42,8 @@ void vpgl_register::register_process()
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vpgl_get_rpc_offsets_process, "vpglGetRPCOffsetsProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vpgl_get_bounding_box_process, "vpglGetBoundingBoxProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vpgl_nitf_footprint_process, "vpglNITFFootprintProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vpgl_generate_3d_point_from_cams_process, "vpglGenerate3dPointFromCamsProcess");
+  
 }
 
 
