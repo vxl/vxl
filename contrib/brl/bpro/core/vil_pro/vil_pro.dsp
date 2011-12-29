@@ -195,6 +195,9 @@ SOURCE=.\processes/bil_create_raw_image_istream_process.cxx
 SOURCE=.\processes/vil_median_filter_process.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\processes/vil_pixel_value_process.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/brdb_value_t+vil_image_view_base_sptr-.cxx
 # End Source File
 # End Group

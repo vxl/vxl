@@ -121,43 +121,43 @@ LINK32=link.exe
 SOURCE=.\test_driver.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\vepl2_test_dilate_disk.cxx
+SOURCE=.\vepl_test_dilate_disk.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\vepl2_test_dyadic.cxx
+SOURCE=.\vepl_test_dyadic.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\vepl2_test_erode_disk.cxx
+SOURCE=.\vepl_test_erode_disk.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\vepl2_test_gaussian_convolution.cxx
+SOURCE=.\vepl_test_gaussian_convolution.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\vepl2_test_gradient_dir.cxx
+SOURCE=.\vepl_test_gradient_dir.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\vepl2_test_gradient_mag.cxx
+SOURCE=.\vepl_test_gradient_mag.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\vepl2_test_median.cxx
+SOURCE=.\vepl_test_median.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\vepl2_test_moment.cxx
+SOURCE=.\vepl_test_moment.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\vepl2_test_monadic.cxx
+SOURCE=.\vepl_test_monadic.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\vepl2_test_sobel.cxx
+SOURCE=.\vepl_test_sobel.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\vepl2_test_threshold.cxx
+SOURCE=.\vepl_test_threshold.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\vepl2_test_x_gradient.cxx
+SOURCE=.\vepl_test_x_gradient.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\vepl2_test_y_gradient.cxx
+SOURCE=.\vepl_test_y_gradient.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\test_include.cxx
