@@ -75,13 +75,17 @@ class boxm2_scene_adaptor:
   def update_app(self, cam, img, device_string="") :
     cache = self.active_cache;
     dev = self.device;
+    
     #check if force gpu or cpu
     if device_string=="gpu" :
       cache = self.opencl_cache;
     elif device_string=="cpp" :
       print " Not  implemented in C++ yet ";
       return;
-    update_app_grey(self.scene, cache, cam, img, dev);
+    if self.rgb :
+      update_rgb(self.scene, cache, cam, img, dev, "", False);
+    else :
+      update_app_grey(self.scene, cache, cam, img, dev);
 
   #render wrapper, same as above
   def render(self, cam, ni=1280, nj=720, device_string="") :
@@ -200,7 +204,7 @@ class boxm2_scene_adaptor:
     if self.opencl_cache:
       clear_cache(self.opencl_cache);
 
-  ################################33
+  ################################
   #get info functions
   def get_info_along_ray(self,cam,u,v,prefix,identifier="") :
     return get_info_along_ray(self.scene,self.cpu_cache,cam,u,v,prefix,identifier)

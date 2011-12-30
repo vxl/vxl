@@ -142,7 +142,7 @@ def update_app_grey(scene, cache, cam, img, device=None) :
 ####################################################################
 # Generic update - will use GPU if device/openclcache are passed in
 ####################################################################
-def update_rgb(scene, cache, cam, img, device=None, mask="") :
+def update_rgb(scene, cache, cam, img, device=None, mask="", updateAlpha=True) :
   #If no device is passed in, do cpu update
   if cache.type == "boxm2_cache_sptr" :
     print "boxm2_batch rgb CPU update not implemented";
@@ -154,6 +154,9 @@ def update_rgb(scene, cache, cam, img, device=None, mask="") :
     boxm2_batch.set_input_from_db(2,cache);
     boxm2_batch.set_input_from_db(3,cam);
     boxm2_batch.set_input_from_db(4,img);
+    boxm2_batch.set_input_string(5, "");  #identifier
+    boxm2_batch.set_input_string(6, mask) #mask file
+    boxm2_batch.set_input_bool(7, updateAlpha);
     boxm2_batch.run_process();
   else : 
     print "ERROR: Cache type not recognized: ", cache.type; 

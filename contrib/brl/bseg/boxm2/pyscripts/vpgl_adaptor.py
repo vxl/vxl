@@ -30,6 +30,19 @@ def create_perspective_camera( scale, ppoint, center, look_pt ) :
   cam = dbvalue(id,type);
   return cam;
 
+#resize a camera from size0 =(ni,nj) to size1 (ni_1, nj_1)
+def resample_perspective_camera( cam, size0, size1 ):
+  boxm2_batch.init_process("vpglResamplePerspectiveCameraProcess")
+  boxm2_batch.set_input_from_db(0, cam) 
+  boxm2_batch.set_input_int(1, size0[0])
+  boxm2_batch.set_input_int(2, size0[1])
+  boxm2_batch.set_input_int(3, size1[0])
+  boxm2_batch.set_input_int(4, size1[1])
+  boxm2_batch.run_process()
+  (id,type) = boxm2_batch.commit_output(0)
+  out = dbvalue(id,type)
+  return out
+
 # returns cam center from azimuth (degrees), elevation (degrees), radius, look point
 def get_camera_center( azimuth, elevation, radius, lookPt) :
   deg_to_rad = math.pi/180.0; 

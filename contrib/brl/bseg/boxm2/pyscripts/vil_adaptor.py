@@ -96,6 +96,19 @@ def pixel(img, point):
     val = boxm2_batch.get_output_float(id)
     return val
     
+
+#resize image (default returns float image
+def resize(img, ni, nj, pixel="float"):
+    boxm2_batch.init_process("vilResampleProcess") 
+    boxm2_batch.set_input_from_db(0,img)
+    boxm2_batch.set_input_int(1, ni)
+    boxm2_batch.set_input_int(2, nj)
+    boxm2_batch.set_input_string(3, pixel);
+    boxm2_batch.run_process()
+    (id,type) = boxm2_batch.commit_output(0)
+    img = dbvalue(id,type)
+    return img
+    
 # get image dimensions
 def image_size(img):
     boxm2_batch.init_process('vilImageSizeProcess')
