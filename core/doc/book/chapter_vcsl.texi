@@ -11,8 +11,8 @@ This includes classes for
 @item Radians, degrees, and meters.
 @item 2D and 3D Cartesian co-ordinate systems
 @item Various polar co-ordinate systems
-@item Various geographic co-ordinate systems.
-@item Various Transformations
+@item Various geographic co-ordinate systems
+@item Various transformations between those
 @end itemize
 
 @section Contents
@@ -23,6 +23,8 @@ This includes classes for
   @itemize @bullet
     @item @code{vcsl_length}
     @item @code{vcsl_angle}
+    @item @code{vcsl_area}
+    @item @code{vcsl_volume}
   @end itemize
 
   @item @code{vcsl_unit} - Abstract unit associated to a dimension
@@ -36,6 +38,15 @@ This includes classes for
       @item @code{vcsl_radian} - This is the standard angular unit
       @item @code{vcsl_degree}
     @end itemize
+    @item @code{vcsl_area_unit}
+    @itemize @bullet
+      @item @code{vcsl_squaremeter} - This is the standard area unit
+    @end itemize
+    @item @code{vcsl_volume_unit}
+    @itemize @bullet
+      @item @code{vcsl_cubicmeter} - This is the standard volume unit
+      @item @code{vcsl_liter}
+    @end itemize
   @end itemize
 @end itemize
 
@@ -43,31 +54,55 @@ This includes classes for
 @itemize @bullet
   @item @code{vcsl_coordinate_system}
   @itemize @bullet
-    @item @code{vcsl_cartesian_2d}
-    @item @code{vcsl_cartesian_3d}
-    @item @code{vcsl_cylindrical}
-    @item @code{vcsl_polar}
-    @item @code{vcsl_spherical}
-    @item @code{vcsl_geographic}
+    @item @code{vcsl_planar}
     @itemize @bullet
-      @item @code{vcsl_geocentric} - Intended to represent a location relative to the earth
-      @item @code{vcsl_geodetic} - Intended to represent a location relative to the earth
-      @item @code{vcsl_lambertian} - Lambert Conformal Conic Projection
-      @item @code{vcsl_utm} - Universal Transverse Mercator projection
+      @item @code{vcsl_cartesian_2d}
+      @item @code{vcsl_polar}
+    @end itemize
+    @item @code{vcsl_spatial}
+    @itemize @bullet
+      @item @code{vcsl_cartesian_3d}
+      @item @code{vcsl_cylindrical}
+      @item @code{vcsl_spherical}
+      @item @code{vcsl_geographic}
+      @itemize @bullet
+        @item @code{vcsl_geocentric} - Intended to represent a location relative to the earth
+        @item @code{vcsl_geodetic} - Intended to represent a location relative to the earth
+        @item @code{vcsl_lambertian} - Lambert Conformal Conic Projection
+        @item @code{vcsl_utm} - Universal Transverse Mercator projection
+      @end itemize
     @end itemize
   @end itemize
 
-  @item @code{vcsl_spatial_transformation}
+  @item @code{vcsl_transformation}
   @itemize @bullet
-    @item @code{vcsl_cylindrical_to_cartesian_3d}
-    @item @code{vcsl_perspective}
-    @item @code{vcsl_rotation} - Rotation about an axis through the origin
+    @item @code{vcsl_planar_transformation}
     @itemize @bullet
-      @item @code{vcsl_displacement} - Rotation about a general axis
+      @item @code{vcsl_rotation_2d} - Rotation about an axis through the origin
+      @itemize @bullet
+        @item @code{vcsl_displacement_2d} - Rotation about a general axis
+      @end itemize
+      @item @code{vcsl_scale_2d}
+      @item @code{vcsl_translation_2d}
+      @item @code{vcsl_composition_2d} - Composition of transformations
     @end itemize
-    @item @code{vcsl_scale}
-    @item @code{vcsl_translation}
-    @item @code{vcsl_composition} - Composition of transformations
+
+    @item @code{vcsl_spatial_transformation}
+    @itemize @bullet
+      @item @code{vcsl_cylindrical_to_cartesian_3d}
+      @item @code{vcsl_rotation_3d} - Rotation about an axis through the origin
+      @itemize @bullet
+        @item @code{vcsl_displacement_3d} - Rotation about a general axis
+      @end itemize
+      @item @code{vcsl_scale_3d}
+      @item @code{vcsl_translation_3d}
+      @item @code{vcsl_composition_3d} - Composition of transformations
+    @end itemize
+
+    @item @code{vcsl_3d_to_2d_transformation}
+    @itemize @bullet
+      @item @code{vcsl_perspective}
+    @end itemize
   @end itemize
 
   @item @code{vcsl_graph} - Represent multiple co-ordinate systems and transformation between them.
@@ -81,7 +116,7 @@ The following example shows how to use and build a set of co-ordinate systems.
 @example
 
 #include <vcsl/vcsl_cartesian_3d.h>
-#include <vcsl/vcsl_rotation.h>
+#include <vcsl/vcsl_rotation_3d.h>
 #include <vcsl/vcsl_graph.h>
 ...
   //: Convenient indices for vectors representing points, etc.
@@ -121,7 +156,7 @@ The following example shows how to use and build a set of co-ordinate systems.
 
   //: 90 degree rotation about WCS y-axis
   // Transforms from WCS to right CS
-  vcsl_rotation rightXF;
+  vcsl_rotation_3d rightXF;
   rightXF.set_static(vnl_math::pi_over_2, yA);
 
   //: WCS rotated 90 degrees about the y-axis to produce right hand view/CS
@@ -142,7 +177,7 @@ The following example shows how to use and build a set of co-ordinate systems.
 @section Further Work
 
 @enumerate
-@item Write conversion between classic coordinate systems in the same than the
+@item Write conversion between classic coordinate systems in the same style as the
 class vcsl_cylindrical_to_cartesian_3d (singleton pattern)
     @itemize @bullet
     @item @code{vcsl_spherical_to_cartesian_3d}
@@ -155,7 +190,7 @@ class vcsl_cylindrical_to_cartesian_3d (singleton pattern)
 
 @item Add other units and dimensions
 
-@item In @code{vcsl_spatial_transformation}, add
+@item In @code{vcsl_transformation}, add
 @example
 //: May `this' have a matrix representation ?
 virtual bool is_linear(void) const=0;
