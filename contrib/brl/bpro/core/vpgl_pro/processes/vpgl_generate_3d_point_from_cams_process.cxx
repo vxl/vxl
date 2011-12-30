@@ -33,12 +33,6 @@ bool vpgl_generate_3d_point_from_cams_process_cons(bprb_func_process& pro)
   input_types_[0] = "bbas_1d_array_unsigned_sptr";
   input_types_[1] = "bbas_1d_array_int_sptr"; // points
 
-  //input_types_[1] = "float";
-  //input_types_[2] = "float";
-  //input_types_[3] = "vpgl_camera_double_sptr";
-  //input_types_[4] = "float";
-  //input_types_[5] = "float";
-
   // process has 3 outputs
   vcl_vector<vcl_string>  output_types_(n_outputs_);
   output_types_[0] = "float"; //X
