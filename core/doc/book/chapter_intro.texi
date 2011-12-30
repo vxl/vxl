@@ -42,8 +42,8 @@ light, fast, and not weird.
 
 @section Core Libraries
 
-The core of @vxl{x} was defined in February 2000, and comprises five
-libraries.
+The core of @vxl{x} was defined in February 2000, and comprises six
+libraries plus a compatibility layer.
 
 @subsection vcl: The C++ compatibility layer.
 
@@ -71,7 +71,7 @@ returned by value, or passed into routines.  The use of objects to hold the
 output of matrix decompositions also reduces the amount of copying that
 needs to be done.  The numerical algorithms are wrappers around
 public-domain, high quality Fortran code from the TargetJr @code{netlib}
-library.
+library but that part of vnl is placed in a separate library: @code{vnl_algo}.
 
 @subsection vil: Imaging.
 The imaging library is designed to work well with very large images, but
@@ -100,16 +100,16 @@ of this facility.
 @section Additional Libraries
 
 @subsection vcsl: Co-ordinate Systems
-
 This library allows you to represent and manipulate transformations, transformation graphs,
 and units of measurement.
 
-@subsection vpgll: Cameras and Fundamental Matrix
-Representation of various types of cameras and geometric relationships between cameras. Provides algorithms for camera calibration and other photogrammetry proceedures.
+@subsection vpgl: Cameras and Fundamental Matrix
+Representation of various types of cameras and geometric relationships between cameras. Provides algorithms for camera calibration and other photogrammetry procedures.
 
+@subsection vpdl: Probability Distributions
+Data structures to represent univariate and multivariate probability distributions and algorithms to operate on them, like sampling and estimation.
 
 @subsection vidl: Video
-
 Load and save images from video files and sources.
 
 @section Documentation
