@@ -484,8 +484,9 @@ update_bit_scene_main(__global RenderSceneInfo  * info,
                       __global ushort           * nobs_array,
                       __global int              * aux_seg_len,        // seg len aux array
                       __global int              * aux_mean_obs,      // mean obs r aux array
-                      __global int              * aux_vis,      // mean obs r aux array
+                      __global int              * aux_vis,       // mean obs r aux array
                       __global int              * aux_beta,      // mean obs r aux array
+                      __global int              * update_alpha,
                       __global float            * output)
 {
   float t_match = 2.5f;  
@@ -534,7 +535,8 @@ update_bit_scene_main(__global RenderSceneInfo  * info,
       alpha *= cell_beta; 
       
       //reset the cells in memory
-      //alpha_array[gid]      = max(alphamin, alpha);  //TODO COMMENTED OUT FOR PAINTING
+      if(*update_alpha) 
+        alpha_array[gid]      = max(alphamin, alpha); 
       float8 post_mix       = mixture * (float) NORM;
       CONVERT_FUNC_SAT_RTE(mixture_array[gid],post_mix); 
     }
@@ -547,3 +549,4 @@ update_bit_scene_main(__global RenderSceneInfo  * info,
   }
   
 }
+

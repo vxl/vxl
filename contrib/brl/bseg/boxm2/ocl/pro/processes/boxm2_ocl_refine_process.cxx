@@ -196,12 +196,14 @@ bool boxm2_ocl_refine_process(bprb_func_process& pro)
 
         //set up tree copy
         //vcl_cout<<"  creating tree copy"<<vcl_endl;
-        bocl_mem_sptr blk_copy = new bocl_mem(device->context(), NULL, numTrees*sizeof(cl_uchar16), "refine trees block copy buffer");
+        //bocl_mem_sptr blk_copy = new bocl_mem(device->context(), NULL, numTrees*sizeof(cl_uchar16), "refine trees block copy buffer");
+        bocl_mem_sptr blk_copy = opencl_cache->alloc_mem(numTrees*sizeof(cl_uchar16), NULL, "refine trees block copy buffer");
         blk_copy->create_buffer(CL_MEM_READ_WRITE| CL_MEM_ALLOC_HOST_PTR, (queue));
 
         //set up tree size (first find num trees)
         //vcl_cout<<"  creating tree sizes buff"<<vcl_endl;
-        bocl_mem_sptr tree_sizes = new bocl_mem(device->context(), NULL, sizeof(cl_int)*numTrees, "refine tree sizes buffer");
+        //bocl_mem_sptr tree_sizes = new bocl_mem(device->context(), NULL, sizeof(cl_int)*numTrees, "refine tree sizes buffer");
+        bocl_mem_sptr tree_sizes = opencl_cache->alloc_mem(sizeof(cl_int)*numTrees, NULL, "refine tree sizes buffer");
         tree_sizes->create_buffer(CL_MEM_READ_WRITE | CL_MEM_ALLOC_HOST_PTR, (queue));
         clFinish((queue));
 
@@ -300,7 +302,8 @@ bool boxm2_ocl_refine_process(bprb_func_process& pro)
             //get a new data pointer (with newSize), will create CPU buffer and GPU buffer
             //vcl_cout<<"  Data_type "<<data_types[i]<<" new size is: "<<newDataSize<<vcl_endl;
             int dataBytes = boxm2_data_info::datasize(data_types[i]) * newDataSize;
-            bocl_mem* new_dat = new bocl_mem(device->context(), NULL, dataBytes, "new data buffer " + data_types[i]);
+            //bocl_mem* new_dat = new bocl_mem(device->context(), NULL, dataBytes, "new data buffer " + data_types[i]);
+            bocl_mem* new_dat = opencl_cache->alloc_mem(dataBytes, NULL, "new data buffer " + data_types[i]);
             new_dat->create_buffer(CL_MEM_READ_WRITE, queue);
 
             //grab the block out of the cache as well
@@ -355,7 +358,13 @@ bool boxm2_ocl_refine_process(bprb_func_process& pro)
                 //vcl_cout<<"  Writing refined trees."<<vcl_endl;
                 blk->read_to_buffer(queue);
             }
+            
+            opencl_cache->unref_mem(new_dat); 
         }
+        
+        
+        opencl_cache->unref_mem(blk_copy.ptr());
+        opencl_cache->unref_mem(tree_sizes.ptr());
     }
     vcl_cout<<" Refine GPU Time: "<<gpu_time<<", transfer time: "<<transfer_time<<vcl_endl;
     vcl_cout<<" Total Num Refined: "<<num_refined<<vcl_endl;

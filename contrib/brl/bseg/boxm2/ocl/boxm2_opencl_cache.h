@@ -61,11 +61,17 @@ class boxm2_opencl_cache: public vbl_ref_count
         bocl_mem* get_data_new(boxm2_block_id, vcl_size_t num_bytes=0, bool read_only = true);
     bocl_mem* get_data_new(boxm2_block_id id, vcl_string type, vcl_size_t num_bytes = 0, bool read_only = true);
 
+    //: returns a flat bocl_mem of a certain size
+    bocl_mem* alloc_mem(vcl_size_t num_bytes, void* cpu_buff=NULL, vcl_string id="bocl_mem in pool"); 
+    void      unref_mem(bocl_mem* mem); 
+    void      free_mem(bocl_mem* mem);
+    void      free_mem_pool(); 
+
     //: empties out cache, deletes all bocl_mem*s
     bool clear_cache();
 
     //: returns num bytes in cache
-    long bytes_in_cache();
+    vcl_size_t bytes_in_cache();
 
     //: deep_replace data replaces not only the current data on the gpu cached, but pushes a block to the cpu cache
     void deep_replace_data(boxm2_block_id id, vcl_string type, bocl_mem* mem, bool read_only=true);
@@ -75,7 +81,6 @@ class boxm2_opencl_cache: public vbl_ref_count
 
     //: shallow_remove_data removes data with id and type from ocl cache only
     void shallow_remove_data(boxm2_block_id id, vcl_string type);
-
 
     //: to string method prints out LRU order
     vcl_string to_string(); 
@@ -110,6 +115,10 @@ class boxm2_opencl_cache: public vbl_ref_count
 
     //: helper method for finding the right data map
     vcl_map<boxm2_block_id, bocl_mem*>& cached_data_map(vcl_string prefix);
+
+    //: memory cache - caches various non model memory (images, some aux data)
+    // Does not account for block/data_base data
+    vcl_map<bocl_mem*, vcl_size_t> mem_pool_;
 
     ////////////////////////////////////////////////////////////////////////////
     // opencl objects
