@@ -14,7 +14,14 @@
 #include <vcl_vector.h>
 #include <vil/vil_image_view_base.h>
 
-//container for blocks to maintain a timestamp and mutation state
+// \verbatim
+//  Modifications
+//   J.L. Mundy replaced priority queue with sort on block vector
+//   container for simplicity, January 01, 2012
+// \endverbatim
+
+//container for blocks to maintain a timestamp 
+//note that the larger value of time corresponds to the newest block
 struct bcell
 {
   bcell(const unsigned bindex_i, const unsigned bindex_j,
@@ -36,7 +43,18 @@ struct bcell
  private:
   static unsigned long time_; //static timekeeper
 };
-
+// the ordering predicate for block birthdate. Oldest block is at 
+// blocks_.begin()
+class bcell_less
+{
+ public:
+  bcell_less(){}
+  //the predicate function
+  bool operator()(bcell* const& ba, bcell* const& bb) const
+  {
+    return ba->birthdate_ < bb->birthdate_;
+  }
+};
 class vil_block_cache
 {
  public:
@@ -54,13 +72,6 @@ class vil_block_cache
   //:block capacity
   unsigned block_size() const{return nblocks_;}
  private:
-  struct compare
-  {
-    bool operator()(bcell* const& c1, bcell* const& c2) const
-    { if (c1&&c2)return c1->birthdate_ > c2->birthdate_; else return false; }
-  };
-  //:block queue member
-  vcl_priority_queue<bcell*, vcl_vector<bcell*>, compare > queue_;
   //:block index member
   vcl_vector<bcell*> blocks_;
   //:capacity in blocks

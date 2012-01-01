@@ -60,6 +60,8 @@ class vil_pyramid_image_view
 
     vil_image_view_base_sptr get_view(unsigned level, double& scale) { scale=scales_[level]; return images_[level];  }
 
+    double scale(unsigned level){return scales_[level];}
+
     //: The pixel type of the images
     typedef T pixel_type;
 

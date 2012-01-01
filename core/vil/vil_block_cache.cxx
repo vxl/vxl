@@ -8,16 +8,12 @@ unsigned long bcell::time_ = 0;
 
 vil_block_cache::~vil_block_cache()
 {
-  assert(queue_.size()==blocks_.size());
-  blocks_.clear();//empty the index
-  //empty the queue
-  unsigned nq = queue_.size();
-  for (unsigned i = 0; i<nq; ++i)
-  {
-    bcell* fb = queue_.top();
-    queue_.pop();
-    delete fb;
+  for(vcl_vector<bcell*>::iterator bit = blocks_.begin();
+      bit != blocks_.end(); ++bit){
+    delete *bit;
+    *bit = 0;
   }
+  blocks_.clear();//empty the index
 }
 
 //:add a block to the buffer.
@@ -28,11 +24,11 @@ bool vil_block_cache::add_block(const unsigned& block_index_i,
   //create a cell
 
   bcell* cell = new bcell(block_index_i, block_index_j, blk);
-  if (queue_.size()>=nblocks_)
+  if (blocks_.size()>=nblocks_)
     if (!this->remove_block())
       return false;
-  queue_.push(cell);
   blocks_.push_back(cell);
+  vcl_sort(blocks_.begin(), blocks_.end(), bcell_less());
   return true;
 }
 
@@ -55,18 +51,16 @@ bool vil_block_cache::get_block(const unsigned& block_index_i,
   return found;
 }
 
-//:remove the lowest priority block
+//:remove the oldest priority block
 bool vil_block_cache::remove_block()
 {
-  if (queue_.size()==0)
+  if(!blocks_.size()){
+    vcl_cerr << "warning: attempt to remove block from empty cache\n";
     return false;
-  bcell* top_cell = queue_.top();
-  vcl_vector<bcell*>::iterator bit;
-  bit = vcl_find(blocks_.begin(), blocks_.end(), top_cell);
-  if (bit == blocks_.end())
-    return false;
+  }
+  // queue should already be sorted
+  // remove oldest
+  vcl_vector<bcell*>::iterator bit = blocks_.begin();
   blocks_.erase(bit);
-  queue_.pop();//remove the top cell from the queue
-  delete top_cell;
   return true;
 }
