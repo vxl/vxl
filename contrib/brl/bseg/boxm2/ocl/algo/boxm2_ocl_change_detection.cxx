@@ -169,19 +169,24 @@ bool boxm2_ocl_change_detection::change_detect( vil_image_view<float>&    change
   }
 
   //prepare image buffers (GPU)
-  bocl_mem_sptr in_image=new bocl_mem(device->context(),input_buff, 4*cl_ni*cl_nj*sizeof(float),"input image buffer");
+  //bocl_mem_sptr in_image=new bocl_mem(device->context(),input_buff, 4*cl_ni*cl_nj*sizeof(float),"input image buffer");
+  bocl_mem_sptr in_image = opencl_cache->alloc_mem(4*cl_ni*cl_nj*sizeof(float), input_buff, "input image buffer");
   in_image->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
 
-  bocl_mem_sptr exp_image=new bocl_mem(device->context(),exp_image_buff,cl_ni*cl_nj*sizeof(float),"expected image buffer");
+  //bocl_mem_sptr exp_image=new bocl_mem(device->context(),exp_image_buff,cl_ni*cl_nj*sizeof(float),"expected image buffer");
+  bocl_mem_sptr exp_image = opencl_cache->alloc_mem(cl_ni*cl_nj*sizeof(float), exp_image_buff, "expected image buffer");
   exp_image->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
 
-  bocl_mem_sptr change_image=new bocl_mem(device->context(),change_image_buff,cl_ni*cl_nj*sizeof(float),"change image buffer");
+  //bocl_mem_sptr change_image=new bocl_mem(device->context(),change_image_buff,cl_ni*cl_nj*sizeof(float),"change image buffer");
+  bocl_mem_sptr change_image = opencl_cache->alloc_mem(cl_ni*cl_nj*sizeof(float), change_image_buff, "change image buffer");
   change_image->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
-  bocl_mem_sptr change_exp_image=new bocl_mem(device->context(),change_exp_image_buff,cl_ni*cl_nj*sizeof(float),"change exp image buffer");
+  //bocl_mem_sptr change_exp_image=new bocl_mem(device->context(),change_exp_image_buff,cl_ni*cl_nj*sizeof(float),"change exp image buffer");
+  bocl_mem_sptr change_exp_image = opencl_cache->alloc_mem(cl_ni*cl_nj*sizeof(float), change_exp_image_buff, "change exp image buffer"); 
   change_exp_image->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
-  bocl_mem_sptr vis_image=new bocl_mem(device->context(),vis_buff,cl_ni*cl_nj*sizeof(float),"vis image buffer");
+  //bocl_mem_sptr vis_image=new bocl_mem(device->context(),vis_buff,cl_ni*cl_nj*sizeof(float),"vis image buffer");
+  bocl_mem_sptr vis_image = opencl_cache->alloc_mem(cl_ni*cl_nj*sizeof(float), vis_buff, "vis image buffer"); 
   vis_image->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
   // Image Dimensions
@@ -448,6 +453,11 @@ bool boxm2_ocl_change_detection::change_detect( vil_image_view<float>&    change
   delete [] vis_buff;
   delete [] exp_image_buff;
   delete [] input_buff;
+  opencl_cache->unref_mem(in_image.ptr()); 
+  opencl_cache->unref_mem(vis_image.ptr());
+  opencl_cache->unref_mem(exp_image.ptr());
+  opencl_cache->unref_mem(change_image.ptr());
+  opencl_cache->unref_mem(change_exp_image.ptr());
   clReleaseCommandQueue(queue);
   return true;
 }
@@ -731,24 +741,29 @@ bool boxm2_ocl_two_pass_change::change_detect(vil_image_view<float>&    change_i
       ++count;
     }
   }
-
+  
   //prepare image buffers (GPU)
-  bocl_mem_sptr in_image=new bocl_mem(device->context(),input_buff, cl_ni*cl_nj*sizeof(float),"input image buffer");
+  bocl_mem_sptr in_image = opencl_cache->alloc_mem(cl_ni*cl_nj*sizeof(float), input_buff, "input image buffer");
   in_image->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
 
-  bocl_mem_sptr exp_image=new bocl_mem(device->context(),exp_image_buff,cl_ni*cl_nj*sizeof(float),"expected image buffer");
+  //bocl_mem_sptr exp_image=new bocl_mem(device->context(),exp_image_buff,cl_ni*cl_nj*sizeof(float),"expected image buffer");
+  bocl_mem_sptr exp_image = opencl_cache->alloc_mem(cl_ni*cl_nj*sizeof(float), exp_image_buff, "expected image buffer");
   exp_image->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
 
-  bocl_mem_sptr change_image=new bocl_mem(device->context(),change_image_buff,cl_ni*cl_nj*sizeof(float),"change image buffer");
+  //bocl_mem_sptr change_image=new bocl_mem(device->context(),change_image_buff,cl_ni*cl_nj*sizeof(float),"change image buffer");
+  bocl_mem_sptr change_image = opencl_cache->alloc_mem(cl_ni*cl_nj*sizeof(float), change_image_buff, "change image buffer");
   change_image->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
-  bocl_mem_sptr change_exp_image=new bocl_mem(device->context(),change_exp_image_buff,cl_ni*cl_nj*sizeof(float),"change exp image buffer");
+  //bocl_mem_sptr change_exp_image=new bocl_mem(device->context(),change_exp_image_buff,cl_ni*cl_nj*sizeof(float),"change exp image buffer");
+  bocl_mem_sptr change_exp_image = opencl_cache->alloc_mem(cl_ni*cl_nj*sizeof(float), change_exp_image_buff, "change exp image buffer"); 
   change_exp_image->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
-  bocl_mem_sptr vis_image=new bocl_mem(device->context(),vis_buff,cl_ni*cl_nj*sizeof(float),"vis image buffer");
+  //bocl_mem_sptr vis_image=new bocl_mem(device->context(),vis_buff,cl_ni*cl_nj*sizeof(float),"vis image buffer");
+  bocl_mem_sptr vis_image = opencl_cache->alloc_mem(cl_ni*cl_nj*sizeof(float), vis_buff, "vis image buffer"); 
   vis_image->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
-  
-  bocl_mem_sptr mask_image = new bocl_mem(device->context(),mask_buff,cl_ni*cl_nj*sizeof(vxl_byte),"change mask image buffer");
+
+  //bocl_mem_sptr mask_image = new bocl_mem(device->context(),mask_buff,cl_ni*cl_nj*sizeof(vxl_byte),"change mask image buffer");
+  bocl_mem_sptr mask_image = opencl_cache->alloc_mem(cl_ni*cl_nj*sizeof(vxl_byte), mask_buff, "change mask image buffer");
   mask_image->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
   // Image Dimensions
@@ -1025,6 +1040,12 @@ bool boxm2_ocl_two_pass_change::change_detect(vil_image_view<float>&    change_i
   delete [] max_background_buff; 
   delete [] min_prob_exp_buff; 
   delete [] mask_buff; 
+  opencl_cache->unref_mem(in_image.ptr()); 
+  opencl_cache->unref_mem(vis_image.ptr());
+  opencl_cache->unref_mem(exp_image.ptr());
+  opencl_cache->unref_mem(change_image.ptr());
+  opencl_cache->unref_mem(change_exp_image.ptr());
+  opencl_cache->unref_mem(mask_image.ptr());
   clReleaseCommandQueue(queue);
   return true;
 }
