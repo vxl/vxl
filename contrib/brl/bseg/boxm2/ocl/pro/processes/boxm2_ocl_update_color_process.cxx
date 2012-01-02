@@ -38,10 +38,10 @@ bool boxm2_ocl_update_color_process_cons(bprb_func_process& pro)
   // output[0]: scene sptr
   vcl_vector<vcl_string>  output_types_(n_outputs_);
   bool good = pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
-  
+
   //set defaults inputs
   brdb_value_sptr idx         = new brdb_value_t<vcl_string>("");
-  brdb_value_sptr updateAlpha = new brdb_value_t<bool>(true); 
+  brdb_value_sptr updateAlpha = new brdb_value_t<bool>(true);
   pro.set_input(5, idx);
   pro.set_input(6, idx);
   pro.set_input(7, updateAlpha);
@@ -55,8 +55,6 @@ bool boxm2_ocl_update_color_process(bprb_func_process& pro)
     vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
     return false;
   }
-  float transfer_time=0.0f;
-  float gpu_time=0.0f;
 
   //get the inputs: device, scene, opencl_cache, cam, img
   unsigned argIdx = 0;
@@ -71,7 +69,7 @@ bool boxm2_ocl_update_color_process(bprb_func_process& pro)
 
   //call ocl update
   boxm2_ocl_update_color::update_color(scene,device,opencl_cache,cam,img,in_identifier,mask_filename,updateAlpha);
-  
+
   //no outputs
   return true;
 }
