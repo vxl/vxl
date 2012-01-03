@@ -6,6 +6,7 @@
 #include <msm/msm_no_limiter.h>
 #include <msm/msm_param_limiter.h>
 #include <msm/msm_points.h>
+#include <msm/msm_pose_maker.h>
 #include <msm/msm_ref_shape_instance.h>
 #include <msm/msm_ref_shape_model.h>
 #include <msm/msm_reflect_shape.h>
