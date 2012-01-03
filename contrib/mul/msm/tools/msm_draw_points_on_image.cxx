@@ -6,7 +6,8 @@
 #include <mbl/mbl_eps_writer.h>
 #include <msm/msm_points.h>
 #include <msm/utils/msm_draw_shape_to_eps.h>
-
+#include <vil/vil_resample_bilin.h>
+#include <vil/algo/vil_gauss_filter.h>
 #include <msm/msm_curve.h>
 #include <vgl/vgl_point_2d.h>
 #include <vul/vul_arg.h>
@@ -35,6 +36,7 @@ int main( int argc, char* argv[] )
   vul_arg<vcl_string> pt_colour("-pc","Point colour","none");
   vul_arg<vcl_string> pt_edge_colour("-pbc","Point border colour","none");
   vul_arg<double> pt_radius("-pr","Point radius",2.0);
+  vul_arg<double> scale("-s","Scaling to apply",1.0);
 
   vul_arg_parse(argc,argv);
 
@@ -68,6 +70,20 @@ int main( int argc, char* argv[] )
       return 1;
     }
     vcl_cout<<"Image is "<<image<<vcl_endl;
+  }
+
+  if (fabs(scale()-1.0)>1e-3)
+  {
+    // Scale image and points
+    vil_image_view<vxl_byte> image2;
+    image2.deep_copy(image);
+    if (scale()<0.51)
+      vil_gauss_filter_2d(image,image2,1.0,3);
+    vil_resample_bilin(image2,image,
+                       int(0.5+scale()*image.ni()),
+                       int(0.5+scale()*image.nj()));
+
+    points.scale_by(scale());
   }
 
 
