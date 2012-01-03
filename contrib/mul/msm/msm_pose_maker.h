@@ -8,12 +8,13 @@
 #include <msm/msm_points.h>
 #include <msm/msm_curve.h>
 #include <vgl/vgl_vector_2d.h>
+#include <vcl_iosfwd.h>
 
 //: Compute a direction at each point, usually normal to curve.
 //  Generates a unit direction vector for each point.
 //  Typically these are defined as normals to the curve passing
 //  through the point.
-// 
+//
 //  Define tangent at point i as line between end0_[i] and end1_[i].
 //  If end0_[i]==end1_[i] then use vector (1,0) in ref. frame.
 class msm_pose_maker
@@ -25,9 +26,7 @@ class msm_pose_maker
   //: Define tangent at point i as line between end0_[i] and end1_[i]
   vcl_vector<unsigned> end1_;
 
-
  public:
-
   ~msm_pose_maker() {}
 
   //: Set up definitions of directions from the curves.
