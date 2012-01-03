@@ -1,11 +1,12 @@
-// This is brl/bseg/boxm2/ocl/pro/processes/boxm2_ocl_update_color_process.cxx
+// This is brl/bseg/boxm2/ocl/algo/boxm2_ocl_update_color.cxx
+#include "boxm2_ocl_update_color.h"
 //:
 // \file
 // \brief  A process for updating a color model
 //
 // \author Vishal Jain
 // \date Mar 25, 2011
-#include "boxm2_ocl_update_color.h"
+
 #include <vcl_fstream.h>
 #include <vcl_algorithm.h>
 #include <boxm2/ocl/boxm2_opencl_cache.h>
@@ -30,11 +31,11 @@ vcl_map<vcl_string,vcl_vector<bocl_kernel*> > boxm2_ocl_update_color::kernels_;
 //Main public method, updates color model
 bool boxm2_ocl_update_color::update_color(boxm2_scene_sptr         scene,
                                           bocl_device_sptr         device,
-                                          boxm2_opencl_cache_sptr  opencl_cache, 
+                                          boxm2_opencl_cache_sptr  opencl_cache,
                                           vpgl_camera_double_sptr  cam,
                                           vil_image_view_base_sptr img,
                                           vcl_string               in_identifier,
-                                          vcl_string               mask_filename, 
+                                          vcl_string               mask_filename,
                                           bool                     update_alpha)
 {
   float transfer_time=0.0f;
@@ -81,7 +82,7 @@ bool boxm2_ocl_update_color::update_color(boxm2_scene_sptr         scene,
     return false;
 
   // compile kernels if not already compiled
-  vcl_vector<bocl_kernel*>& kernels = get_kernels(device, options); 
+  vcl_vector<bocl_kernel*>& kernels = get_kernels(device, options);
 
   //prepare input image
   vil_image_view_base_sptr float_img = boxm2_util::prepare_input_image(img, false);
@@ -133,7 +134,7 @@ bool boxm2_ocl_update_color::update_color(boxm2_scene_sptr         scene,
       ++count;
     }
   }
-  
+
   //bocl_mem_sptr in_image=new bocl_mem(device->context(),input_buff,cl_ni*cl_nj*sizeof(float),"input image buffer");
   bocl_mem_sptr in_image = opencl_cache->alloc_mem(cl_ni*cl_nj*sizeof(cl_float4), input_buff, "input image buffer");
   in_image->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
@@ -149,9 +150,9 @@ bool boxm2_ocl_update_color::update_color(boxm2_scene_sptr         scene,
   //bocl_mem_sptr norm_image=new bocl_mem(device->context(),norm_buff,cl_ni*cl_nj*sizeof(float),"pre image buffer");
   bocl_mem_sptr norm_image = opencl_cache->alloc_mem(cl_ni*cl_nj*sizeof(float), norm_buff, "norm image buffer");
   norm_image->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
-  
+
   // Image Dimensions
-  int img_dim_buff[4] = {0, 0, img_view->ni(), img_view->nj() }; 
+  int img_dim_buff[4] = {0, 0, img_view->ni(), img_view->nj() };
   bocl_mem_sptr img_dim=new bocl_mem(device->context(), img_dim_buff, sizeof(int)*4, "image dims");
   img_dim->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
@@ -408,7 +409,7 @@ bool boxm2_ocl_update_color::update_color(boxm2_scene_sptr         scene,
   delete [] input_buff;
   delete [] ray_origins;
   delete [] ray_directions;
-  opencl_cache->unref_mem(in_image.ptr()); 
+  opencl_cache->unref_mem(in_image.ptr());
   opencl_cache->unref_mem(vis_image.ptr());
   opencl_cache->unref_mem(pre_image.ptr());
   opencl_cache->unref_mem(norm_image.ptr());
@@ -433,8 +434,8 @@ vcl_vector<bocl_kernel*>& boxm2_ocl_update_color::get_kernels(bocl_device_sptr d
   // compile kernels if not already compiled
   vcl_string identifier = device->device_identifier() + opts;
   if (kernels_.find(identifier) != kernels_.end())
-    return kernels_[identifier]; 
-  
+    return kernels_[identifier];
+
   //otherwise compile the kernels
   vcl_cout<<"=== boxm2_ocl_update_color_process::compiling kernels on device "<<identifier<<"==="<<vcl_endl;
 
@@ -457,7 +458,7 @@ vcl_vector<bocl_kernel*>& boxm2_ocl_update_color::get_kernels(bocl_device_sptr d
   options += opts;
 
   //populate vector of kernels
-  vcl_vector<bocl_kernel*> vec_kernels; 
+  vcl_vector<bocl_kernel*> vec_kernels;
 
   //seg len pass
   bocl_kernel* seg_len = new bocl_kernel();
