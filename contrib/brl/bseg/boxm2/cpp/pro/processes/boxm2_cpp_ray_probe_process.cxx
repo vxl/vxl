@@ -113,8 +113,8 @@ bool boxm2_cpp_ray_probe_process(bprb_func_process& pro)
     {
         boxm2_block *     blk  =  cache->get_block(*id);
         boxm2_data_base *  alph = cache->get_data_base(*id,boxm2_data_traits<BOXM2_ALPHA>::prefix());
-		vcl_string name = prefix;
-		if(identifier!="") name+= ("_"+identifier);
+        vcl_string name = prefix;
+        if (identifier!="") name+= ("_"+identifier);
         boxm2_data_base *  data_of_interest  = cache->get_data_base(*id,name);
 
         vcl_vector<boxm2_data_base*> datas;

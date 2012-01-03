@@ -50,7 +50,7 @@ bool boxm2_cpp_query_cell_brdf_process_cons(bprb_func_process& pro)
   input_types_[5] = "vcl_string"; //identifier string
 
   vcl_vector<vcl_string>  output_types_(n_outputs_);
-  
+
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 }
 
@@ -90,27 +90,25 @@ bool  boxm2_cpp_query_cell_brdf_process(bprb_func_process& pro)
                                                                           phongs_base->buffer_length(),
                                                                           phongs_base->block_id());
 
-
-
   typedef boxm2_data_traits<BOXM2_FLOAT8>::datatype boxm2_float8_datatype;
   boxm2_array_1d<boxm2_float8_datatype> phongs_data_array=phongs_data->data();
   boxm2_float8_datatype model=phongs_data_array[index];
 
-  vcl_cout<<"Index is  "<<index<<vcl_endl;
-  if(ident == "phongs_model")
-	  vcl_cout<<"Phongs Model ["<<model[0]<<','
-								<<model[1]<<','
-								<<model[2]<<','
-								<<model[3]<<','
-								<<model[4]<<','
-								<<model[5]<<']'<<vcl_endl;
+  vcl_cout<<"Index is "<<index<<vcl_endl;
+  if (ident == "phongs_model")
+    vcl_cout<<"Phongs Model ["<<model[0]<<','
+                              <<model[1]<<','
+                              <<model[2]<<','
+                              <<model[3]<<','
+                              <<model[4]<<','
+                              <<model[5]<<']'<<vcl_endl;
   else if (ident == "cubic_model")
-	  vcl_cout<<"Cubic Model ["<<model[0]<<','
-                            <<model[1]<<','
-                            <<model[2]<<','
-                            <<model[3]<<','
-                            <<model[4]<<','
-                            <<model[5]<<']'<<vcl_endl;
+    vcl_cout<<"Cubic Model ["<<model[0]<<','
+                             <<model[1]<<','
+                             <<model[2]<<','
+                             <<model[3]<<','
+                             <<model[4]<<','
+                             <<model[5]<<']'<<vcl_endl;
 
   return true;
 }
