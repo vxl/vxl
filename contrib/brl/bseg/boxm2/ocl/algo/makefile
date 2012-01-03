@@ -8,6 +8,7 @@ SOURCES += boxm2_ocl_cone_update_function.cxx
 SOURCES += boxm2_ocl_paint_batch.cxx
 SOURCES += boxm2_ocl_change_detection.cxx
 SOURCES += boxm2_ocl_paint_online.cxx
+SOURCES += boxm2_ocl_update_color.cxx
 
 #######################################
 include ${VXLROOT}/config/top-params.mk

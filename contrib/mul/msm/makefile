@@ -23,6 +23,7 @@ SOURCES += msm_ellipsoid_limiter.cxx
 SOURCES += msm_ref_shape_model.cxx
 SOURCES += msm_shape_perturber.cxx
 SOURCES += msm_reflect_shape.cxx
+SOURCES += msm_pose_maker.cxx
 
 SUBDIRS += tools utils
 

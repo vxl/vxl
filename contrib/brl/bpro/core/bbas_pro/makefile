@@ -4,9 +4,13 @@ LIBRARY := bbas_pro
 VERSION := 1.0
 
 SOURCES += bbas_register.cxx
+MANPAGE_SOURCES += bbas_processes.h
+
 SOURCES += bbas_1d_array_float.cxx
 SOURCES += bbas_1d_array_string.cxx
-MANPAGE_SOURCES += bbas_processes.h
+SOURCES += bbas_1d_array_int.cxx
+SOURCES += bbas_1d_array_unsigned.cxx
+
 MANPAGE_SOURCES += bbas_1d_array_string_sptr.h
 
 SOURCES += processes/brad_display_sun_index_process.cxx
