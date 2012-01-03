@@ -1,0 +1,134 @@
+//:
+// \file
+// \author Tim Cootes
+// \brief Compute a direction at each point, usually normal to curve
+
+#include "msm_pose_maker.h"
+#include <vsl/vsl_binary_loader.h>
+#include <mbl/mbl_read_props.h>
+#include <mbl/mbl_exception.h>
+#include <vsl/vsl_vector_io.h>
+
+//=======================================================================
+
+//: Set up definitions of directions from the curves.
+void msm_pose_maker::set_from_curves(unsigned n_points, 
+                                           const msm_curves& curves)
+{
+  end0_.resize(n_points,0);
+  end1_.resize(n_points,0);
+
+  for (unsigned j=0;j<curves.size();++j)
+  {
+    const msm_curve& curve=curves[j];
+    unsigned nc=curve.size();
+    // Tangent at point defined by previous and next points
+    for (unsigned i=0;i<nc;++i)
+    {
+      if (defined(curve[i])) continue;
+      end0_[curve[i]]=curve[(i+nc-1)%nc];
+      end1_[curve[i]]=curve[(i+nc+1)%nc];
+    }
+    // For open curves, first point tangent is p0-p1,
+    // last is p[nc-2],p[nc-1]
+    if (curve.open())
+    {
+      if (defined(curve[0]))
+        end0_[curve[0]]=curve[0];  // First point is p[0]-p[1]
+      if (defined(curve[0]))
+        end1_[curve[nc-1]]=curve[nc-1];
+    }
+  }
+}
+
+//: Compute a direction at each point, usually normal to curve.
+void msm_pose_maker::create_vectors(const msm_points& points,
+                      vcl_vector<vgl_vector_2d<double> >& dir) const
+{
+  if (end0_.size()==0)
+  {
+    dir.resize(points.size());
+    for (unsigned i=0;i<dir.size();++i)
+      dir[i]=vgl_vector_2d<double>(1,0);
+    return;
+  }
+
+  unsigned n_points=points.size();
+  dir.resize(n_points);
+  for (unsigned i=0;i<n_points;++i)
+  {
+    vgl_point_2d<double> p=points[i];
+    if (end0_[i]==end1_[i])
+    {
+      dir[i]=vgl_vector_2d<double>(1,0);
+    }
+    else
+    {
+      vgl_vector_2d<double> t = points[end0_[i]]
+                                 - points[end1_[i]];
+      double L=t.length();
+      if (L<=1e-8)
+        dir[i]=vgl_vector_2d<double>(1,0);
+      else
+      {
+        // Normal is (-t.y(),t.x())/L
+        dir[i]=vgl_vector_2d<double>(-t.y()/L,t.x()/L);
+      }
+    }
+  }
+}
+
+//=======================================================================
+
+void msm_pose_maker::print_summary(vcl_ostream& os) const
+{
+  os<<" n_points: "<<end0_.size();
+}
+
+const static short version_no = 1;
+
+//: Save class to binary file stream
+void msm_pose_maker::b_write(vsl_b_ostream& bfs) const
+{
+  vsl_b_write(bfs,version_no);
+  vsl_b_write(bfs,end0_);
+  vsl_b_write(bfs,end1_);
+}
+
+
+//: Load class from binary file stream
+void msm_pose_maker::b_read(vsl_b_istream& bfs)
+{
+  short version;
+  vsl_b_read(bfs,version);
+  switch (version)
+  {
+    case (1):
+      vsl_b_read(bfs,end0_);
+      vsl_b_read(bfs,end1_);
+      break;
+    default:
+      vcl_cerr << "msm_pose_maker::b_read() :\n"
+               << "Unexpected version number " << version << vcl_endl;
+      bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+      return;
+  }
+}
+
+
+//: Binary file stream output operator for class reference
+void vsl_b_write(vsl_b_ostream& bfs, const msm_pose_maker& b)
+{ b.b_write(bfs); }
+
+//: Binary file stream input operator for class reference
+void vsl_b_read(vsl_b_istream& bfs, msm_pose_maker& b)
+{ b.b_read(bfs); }
+
+//: Stream output operator for class reference
+vcl_ostream& operator<<(vcl_ostream& os,const msm_pose_maker& b)
+{
+  b.print_summary(os);
+  return os;
+}
+
+

@@ -33,6 +33,7 @@ SET(msm_sources
   msm_ellipsoid_limiter.h     msm_ellipsoid_limiter.cxx
 
   msm_reflect_shape.h         msm_reflect_shape.cxx
+  msm_pose_maker.h            msm_pose_maker.cxx
 )
 
 AUX_SOURCE_DIRECTORY(Templates msm_sources)
