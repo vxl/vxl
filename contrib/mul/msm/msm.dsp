@@ -148,6 +148,9 @@ SOURCE=.\msm_shape_perturber.cxx
 SOURCE=.\msm_reflect_shape.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\msm_pose_maker.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/mbl_cloneables_factory+msm_param_limiter-.cxx
 # End Source File
 # Begin Source File
@@ -218,6 +221,9 @@ SOURCE=.\msm_shape_perturber.h
 # End Source File
 # Begin Source File
 SOURCE=.\msm_reflect_shape.h
+# End Source File
+# Begin Source File
+SOURCE=.\msm_pose_maker.h
 # End Source File
 # End Group
 # End Target
