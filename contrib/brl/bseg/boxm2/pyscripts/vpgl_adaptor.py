@@ -1,5 +1,5 @@
 from boxm2_register import boxm2_batch, dbvalue;
-import math
+import math, numpy
 
 ###################
 #camera loading
@@ -43,7 +43,7 @@ def resample_perspective_camera( cam, size0, size1 ):
   out = dbvalue(id,type)
   return out
 
-# returns cam center from azimuth (degrees), elevation (degrees), radius, look point
+# returns cartesian cam center from azimuth (degrees), elevation (degrees), radius, look point
 def get_camera_center( azimuth, elevation, radius, lookPt) :
   deg_to_rad = math.pi/180.0; 
   el = elevation*deg_to_rad
@@ -53,6 +53,15 @@ def get_camera_center( azimuth, elevation, radius, lookPt) :
   cz = radius*math.cos(el);
   center = (cx + lookPt[0], cy + lookPt[1], cz + lookPt[2]); 
   return center;
+
+#returns spherical coordinates about sCenter given cartesian point
+def cart2sphere(cartPt, sCenter):
+  #offset cart point
+  cartPt = numpy.subtract(cartPt, sCenter)
+  rad = math.sqrt( sum(cartPt*cartPt) )
+  az = math.atan2(cartPt[1],cartPt[0])
+  el = math.acos(cartPt[2]/rad)
+  return ( math.degrees(az), math.degrees(el), rad)
 
 def load_rational_camera(file_path) :
   boxm2_batch.init_process("vpglLoadRationalCameraProcess");
@@ -95,7 +104,12 @@ def save_rational_camera(camera,path) :
   boxm2_batch.set_input_from_db(0,camera);
   boxm2_batch.set_input_string(1,path);
   boxm2_batch.run_process();
-
+def save_perspective_camera(camera,path) :
+  boxm2_batch.init_process("vpglSavePerspectiveCameraProcess");
+  boxm2_batch.set_input_from_db(0,camera);
+  boxm2_batch.set_input_string(1,path);
+  boxm2_batch.run_process();  
+  
 #################################################
 # perspective go generic conversion
 #################################################
