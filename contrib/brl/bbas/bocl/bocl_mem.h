@@ -87,6 +87,8 @@ class bocl_mem : public vbl_ref_count
 
   //: pointer to the corresponding CPU buffer
   void* cpu_buf_;
+  bool  delete_cpu_;
+  cl_command_queue* queue_; 
 
   //: number of bytes this buffer points to
   vcl_size_t num_bytes_;

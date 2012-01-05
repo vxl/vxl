@@ -3,13 +3,18 @@
 // \file
 #include <vcl_iostream.h>
 #include <vcl_cstring.h>
+#include <vcl_cstdio.h>
+#include <vcl_cstdlib.h>
+
 
 bocl_mem::bocl_mem(const cl_context& context, void* buffer, unsigned num_bytes, vcl_string id)
 : cpu_buf_(buffer),
   num_bytes_(num_bytes),
   context_(context),
   id_(id),
-  is_gl_(false)
+  is_gl_(false),
+  delete_cpu_(false),
+  queue_(NULL)
 {}
 
 bocl_mem::~bocl_mem()
@@ -51,6 +56,10 @@ bool bocl_mem::create_buffer(const cl_mem_flags& flags, cl_command_queue& queue)
     clFinish(queue);
     if (!check_val(status, MEM_FAILURE, "clEnqueueMapBuffer CL_MEM_HOST_PTR failed: " + this->id_))
       return MEM_FAILURE;
+    
+    //this buffer owns its CPU memory, make sure it gets deleted
+    delete_cpu_ = true;
+    queue_ = &queue;
   }
   return MEM_SUCCESS;
 }
@@ -68,18 +77,25 @@ bool bocl_mem::create_image_buffer(const cl_mem_flags& flags, const cl_image_for
 
 bool bocl_mem::release_memory()
 {
+  //release mapped memory
+  if(delete_cpu_ && cpu_buf_ && queue_) {
+    cl_int status = clEnqueueUnmapMemObject (*queue_, buffer_, cpu_buf_, 0, NULL, NULL);
+    if (!check_val(status,MEM_FAILURE,"clEnqueueUnmapMemObject failed: " + this->id_))
+      return MEM_FAILURE;
+  }
+  
   //release mem
   cl_int status = clReleaseMemObject(buffer_);
   if (!check_val(status,MEM_FAILURE,"clReleaseMemObject failed: " + this->id_))
     return MEM_FAILURE;
-
+  
   return MEM_SUCCESS;
 }
 
 //: helper method to zero out gpu buffer
 bool bocl_mem::zero_gpu_buffer(const cl_command_queue& cmd_queue)
 {
-  unsigned char* zeros = new unsigned char[this->num_bytes_]; // All 1000 values initialized to zero.
+  unsigned char* zeros = new unsigned char[this->num_bytes_]; // All values initialized to zero.
   vcl_memset(zeros, 0, this->num_bytes_);
   ceEvent_ = 0;
   cl_int status = MEM_FAILURE;
