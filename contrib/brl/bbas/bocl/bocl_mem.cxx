@@ -9,12 +9,12 @@
 
 bocl_mem::bocl_mem(const cl_context& context, void* buffer, unsigned num_bytes, vcl_string id)
 : cpu_buf_(buffer),
+  delete_cpu_(false),
+  queue_(NULL),
   num_bytes_(num_bytes),
   context_(context),
   id_(id),
-  is_gl_(false),
-  delete_cpu_(false),
-  queue_(NULL)
+  is_gl_(false)
 {}
 
 bocl_mem::~bocl_mem()
@@ -32,6 +32,7 @@ bool bocl_mem::create_buffer(const cl_mem_flags& flags)
     return MEM_FAILURE;
   return MEM_SUCCESS;
 }
+
 bool bocl_mem::create_buffer(const cl_mem_flags& flags, cl_command_queue& queue)
 {
   cl_int status = MEM_FAILURE;
@@ -40,23 +41,23 @@ bool bocl_mem::create_buffer(const cl_mem_flags& flags, cl_command_queue& queue)
   buffer_ = clCreateBuffer(this->context_, flags, this->num_bytes_, this->cpu_buf_, &status);
   if (!check_val(status, MEM_FAILURE, "clCreateBuffer failed: " + this->id_))
     return MEM_FAILURE;
-  
+
   //if memory was allocated and a null pointer was passed in, store it
   if ( (flags & CL_MEM_ALLOC_HOST_PTR) && !cpu_buf_) {
-#ifdef DEBUG    
+#ifdef DEBUG
     vcl_cout<<"bocl_mem is allocating host pointer"<<vcl_endl;
 #endif
-    cpu_buf_ = clEnqueueMapBuffer(queue, 
-                                  buffer_, 
-                                  CL_TRUE, 
-                                  CL_MAP_READ & CL_MAP_WRITE, 
-                                  0, 
+    cpu_buf_ = clEnqueueMapBuffer(queue,
+                                  buffer_,
+                                  CL_TRUE,
+                                  CL_MAP_READ & CL_MAP_WRITE,
+                                  0,
                                   this->num_bytes_,
-                                  0,NULL, NULL, &status); 
+                                  0,NULL, NULL, &status);
     clFinish(queue);
     if (!check_val(status, MEM_FAILURE, "clEnqueueMapBuffer CL_MEM_HOST_PTR failed: " + this->id_))
       return MEM_FAILURE;
-    
+
     //this buffer owns its CPU memory, make sure it gets deleted
     delete_cpu_ = true;
     queue_ = &queue;
@@ -78,17 +79,17 @@ bool bocl_mem::create_image_buffer(const cl_mem_flags& flags, const cl_image_for
 bool bocl_mem::release_memory()
 {
   //release mapped memory
-  if(delete_cpu_ && cpu_buf_ && queue_) {
+  if (delete_cpu_ && cpu_buf_ && queue_) {
     cl_int status = clEnqueueUnmapMemObject (*queue_, buffer_, cpu_buf_, 0, NULL, NULL);
     if (!check_val(status,MEM_FAILURE,"clEnqueueUnmapMemObject failed: " + this->id_))
       return MEM_FAILURE;
   }
-  
+
   //release mem
   cl_int status = clReleaseMemObject(buffer_);
   if (!check_val(status,MEM_FAILURE,"clReleaseMemObject failed: " + this->id_))
     return MEM_FAILURE;
-  
+
   return MEM_SUCCESS;
 }
 
@@ -124,8 +125,8 @@ bool bocl_mem::init_gpu_buffer(void const* init_val, vcl_size_t value_size, cl_c
   }
   unsigned char* init_buff = new unsigned char[this->num_bytes_];
   unsigned int num_values = this->num_bytes_ / value_size;
-  vcl_cout << "value_size = " << value_size << vcl_endl;
-  vcl_cout << "num_values = " << num_values << vcl_endl;
+  vcl_cout << "value_size = " << value_size << vcl_endl
+           << "num_values = " << num_values << vcl_endl;
 
   // fill in buffer with copies of init value
   unsigned char* buff_ptr = init_buff;
