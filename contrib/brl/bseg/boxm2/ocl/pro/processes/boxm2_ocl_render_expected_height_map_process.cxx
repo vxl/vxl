@@ -203,27 +203,28 @@ bool boxm2_ocl_render_expected_height_map_process(bprb_func_process& pro)
   float* app_buff = new float[cl_ni*cl_nj]; 
   for (unsigned i=0;i<cl_ni*cl_nj;i++) app_buff[i]=0.0f;
 
-  bocl_mem_sptr exp_image=new bocl_mem(device->context(),buff,cl_ni*cl_nj*sizeof(float),"height (z) buffer ");
+  //new bocl_mem(device->context(),buff,cl_ni*cl_nj*sizeof(float),"height (z) buffer ");
+  bocl_mem_sptr exp_image=opencl_cache->alloc_mem(cl_ni*cl_nj*sizeof(float),buff,"height (z) buffer "); 
   exp_image->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
-
-  bocl_mem_sptr var_image=new bocl_mem(device->context(),var_buff,cl_ni*cl_nj*sizeof(float),"var image buffer");
+  
+  //new bocl_mem(device->context(),var_buff,cl_ni*cl_nj*sizeof(float),"var image buffer");
+  bocl_mem_sptr var_image=opencl_cache->alloc_mem(cl_ni*cl_nj*sizeof(float),var_buff, "var image buffer");
   var_image->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
-  bocl_mem_sptr vis_image=new bocl_mem(device->context(),vis_buff,cl_ni*cl_nj*sizeof(float),"vis image buffer");
+  //new bocl_mem(device->context(),vis_buff,cl_ni*cl_nj*sizeof(float),"vis image buffer");
+  bocl_mem_sptr vis_image=opencl_cache->alloc_mem(cl_ni*cl_nj*sizeof(float),vis_buff, "vis image buffer");
   vis_image->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
-  bocl_mem_sptr prob_image=new bocl_mem(device->context(),prob_buff,cl_ni*cl_nj*sizeof(float),"vis x omega image buffer");
+  //new bocl_mem(device->context(),prob_buff,cl_ni*cl_nj*sizeof(float),"vis x omega image buffer");   
+  bocl_mem_sptr prob_image=opencl_cache->alloc_mem(cl_ni*cl_nj*sizeof(float),prob_buff, "vis x omega image buffer");
   prob_image->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
-  bocl_mem_sptr app_image=new bocl_mem(device->context(),app_buff,cl_ni*cl_nj*sizeof(float),"exp image buffer");
+  //new bocl_mem(device->context(),app_buff,cl_ni*cl_nj*sizeof(float),"exp image buffer");
+  bocl_mem_sptr app_image=opencl_cache->alloc_mem(cl_ni*cl_nj*sizeof(float),app_buff, "app image buffer");
   app_image->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
   // Image Dimensions
-  int img_dim_buff[4];
-  img_dim_buff[0] = 0;
-  img_dim_buff[1] = 0;
-  img_dim_buff[2] = ni;
-  img_dim_buff[3] = nj;
+  int img_dim_buff[4] = {0,0,ni,nj};
   bocl_mem_sptr exp_img_dim=new bocl_mem(device->context(), img_dim_buff, sizeof(int)*4, "image dims");
   exp_img_dim->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
@@ -337,12 +338,15 @@ bool boxm2_ocl_render_expected_height_map_process(bprb_func_process& pro)
   pro.set_output_val<vil_image_view_base_sptr>(i++, ycoord_img);
   pro.set_output_val<vil_image_view_base_sptr>(i++, prob_img);
   pro.set_output_val<vil_image_view_base_sptr>(i++, app_img);
-  
   delete[] buff; 
   delete[] var_buff; 
   delete[] vis_buff; 
   delete[] prob_buff; 
   delete[] app_buff; 
-  
+  opencl_cache->unref_mem(exp_image.ptr()); 
+  opencl_cache->unref_mem(var_image.ptr()); 
+  opencl_cache->unref_mem(vis_image.ptr()); 
+  opencl_cache->unref_mem(prob_image.ptr()); 
+  opencl_cache->unref_mem(app_image.ptr()); 
   return true;
 }

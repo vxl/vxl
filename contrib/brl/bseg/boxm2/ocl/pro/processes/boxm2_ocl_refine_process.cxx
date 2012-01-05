@@ -195,19 +195,12 @@ bool boxm2_ocl_refine_process(bprb_func_process& pro)
         int numTrees = data.sub_block_num_.x() * data.sub_block_num_.y() * data.sub_block_num_.z();
 
         //set up tree copy
-        //vcl_cout<<"  creating tree copy"<<vcl_endl;
-        //bocl_mem_sptr blk_copy = new bocl_mem(device->context(), NULL, numTrees*sizeof(cl_uchar16), "refine trees block copy buffer");
-        bocl_mem_sptr blk_copy = opencl_cache->alloc_mem(numTrees*sizeof(cl_uchar16), NULL, "refine trees block copy buffer");
-        blk_copy->create_buffer(CL_MEM_READ_WRITE| CL_MEM_ALLOC_HOST_PTR, (queue));
+        bocl_mem_sptr blk_copy = opencl_cache->alloc_mem(numTrees*sizeof(cl_uchar16), new cl_uchar16[numTrees], "refine trees block copy buffer");
+        blk_copy->create_buffer(CL_MEM_READ_WRITE| CL_MEM_COPY_HOST_PTR); 
 
         //set up tree size (first find num trees)
-        //vcl_cout<<"  creating tree sizes buff"<<vcl_endl;
-        //bocl_mem_sptr tree_sizes = new bocl_mem(device->context(), NULL, sizeof(cl_int)*numTrees, "refine tree sizes buffer");
-        bocl_mem_sptr tree_sizes = opencl_cache->alloc_mem(sizeof(cl_int)*numTrees, NULL, "refine tree sizes buffer");
-        tree_sizes->create_buffer(CL_MEM_READ_WRITE | CL_MEM_ALLOC_HOST_PTR, (queue));
-        clFinish((queue));
-
-        //run refine block into copy
+        bocl_mem_sptr tree_sizes = opencl_cache->alloc_mem(sizeof(cl_int)*numTrees, new cl_int[numTrees], "refine tree sizes buffer");
+        tree_sizes->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
         //write the image values to the buffer
         vul_timer transfer;
@@ -233,7 +226,6 @@ bool boxm2_ocl_refine_process(bprb_func_process& pro)
         kern->set_arg( lookup.ptr() );
         kern->set_arg( cl_output.ptr() );
         kern->set_local_arg( lThreads[0]*10*sizeof(cl_uchar) );
-        //kern->set_local_arg( lThreads[0]*73*sizeof(cl_uchar) );
         kern->set_local_arg( lThreads[0]*sizeof(cl_uchar16) );
         kern->set_local_arg( lThreads[0]*sizeof(cl_uchar16) );
 
@@ -302,7 +294,6 @@ bool boxm2_ocl_refine_process(bprb_func_process& pro)
             //get a new data pointer (with newSize), will create CPU buffer and GPU buffer
             //vcl_cout<<"  Data_type "<<data_types[i]<<" new size is: "<<newDataSize<<vcl_endl;
             int dataBytes = boxm2_data_info::datasize(data_types[i]) * newDataSize;
-            //bocl_mem* new_dat = new bocl_mem(device->context(), NULL, dataBytes, "new data buffer " + data_types[i]);
             bocl_mem* new_dat = opencl_cache->alloc_mem(dataBytes, NULL, "new data buffer " + data_types[i]);
             new_dat->create_buffer(CL_MEM_READ_WRITE, queue);
 
@@ -352,17 +343,18 @@ bool boxm2_ocl_refine_process(bprb_func_process& pro)
             kern->clear_args();
             gpu_time += kern->exec_time();
 
-            ////write the data to buffer
+            //write the data to buffer
             opencl_cache->deep_replace_data(id, data_types[i], new_dat);
-            if (data_types[i] == boxm2_data_traits<BOXM2_ALPHA>::prefix()) {
-                //vcl_cout<<"  Writing refined trees."<<vcl_endl;
-                blk->read_to_buffer(queue);
-            }
+            if (data_types[i] == boxm2_data_traits<BOXM2_ALPHA>::prefix()) 
+              blk->read_to_buffer(queue);
             
+            //ocl cache shifted new dat into data buffer, 
             opencl_cache->unref_mem(new_dat); 
         }
         
-        
+        //tree copy had CPU mem allocated, needs to be deleted
+        delete[] (cl_uint16*) blk_copy->cpu_buffer();
+        delete[] (cl_int*) tree_sizes->cpu_buffer();
         opencl_cache->unref_mem(blk_copy.ptr());
         opencl_cache->unref_mem(tree_sizes.ptr());
     }

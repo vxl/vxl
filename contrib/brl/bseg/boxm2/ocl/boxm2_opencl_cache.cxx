@@ -271,7 +271,7 @@ bocl_mem* boxm2_opencl_cache::get_data(boxm2_block_id id, vcl_string type, vcl_s
     bocl_mem* data = new bocl_mem(*context_, NULL, num_bytes, type);
     data->create_buffer(CL_MEM_READ_WRITE);
     this->deep_replace_data(id,type,data,read_only);
-    data->zero_gpu_buffer(*queue_);
+    //data->zero_gpu_buffer(*queue_);
     data_map[id] = data;
     bytesInCache_ += data->num_bytes();
     return data;

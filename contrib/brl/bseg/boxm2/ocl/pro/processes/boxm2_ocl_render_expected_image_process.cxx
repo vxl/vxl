@@ -179,7 +179,7 @@ bool boxm2_ocl_render_expected_image_process(bprb_func_process& pro)
   float* buff = new float[cl_ni*cl_nj];
   for (unsigned i=0;i<cl_ni*cl_nj;i++) buff[i]=0.0f;
 
-  bocl_mem_sptr exp_image=new bocl_mem(device->context(),buff,cl_ni*cl_nj*sizeof(float),"exp image buffer");
+  bocl_mem_sptr exp_image=opencl_cache->alloc_mem(cl_ni*cl_nj*sizeof(float), buff,"exp image buffer");
   exp_image->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
   int img_dim_buff[4];
@@ -191,7 +191,7 @@ bool boxm2_ocl_render_expected_image_process(bprb_func_process& pro)
   // visibility image
   float* vis_buff = new float[cl_ni*cl_nj];
   vcl_fill(vis_buff, vis_buff + cl_ni*cl_nj, 1.0f);
-  bocl_mem_sptr vis_image = new bocl_mem(device->context(), vis_buff, cl_ni*cl_nj*sizeof(float), "exp image buffer");
+  bocl_mem_sptr vis_image = opencl_cache->alloc_mem(cl_ni*cl_nj*sizeof(float), vis_buff,"vis image buffer");
   vis_image->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
   // run expected image function
@@ -236,6 +236,9 @@ bool boxm2_ocl_render_expected_image_process(bprb_func_process& pro)
   vcl_cout<<"Total Render time: "<<rtime.all()<<" ms"<<vcl_endl;
   delete [] vis_buff; 
   delete [] buff;
+  opencl_cache->unref_mem(vis_image.ptr());
+  opencl_cache->unref_mem(exp_image.ptr());
+
   clReleaseCommandQueue(queue);
   i=0;
   // store scene smaprt pointer

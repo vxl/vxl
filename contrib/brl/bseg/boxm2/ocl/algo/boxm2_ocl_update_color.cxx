@@ -276,7 +276,6 @@ bool boxm2_ocl_update_color::update_color(boxm2_scene_sptr         scene,
         kern->set_arg( aux2 );
         kern->set_arg( aux3 );
         kern->set_arg( lookup.ptr() );
-        // kern->set_arg( persp_cam.ptr() );
         kern->set_arg( ray_o_buff.ptr() );
         kern->set_arg( ray_d_buff.ptr() );
 
@@ -314,7 +313,6 @@ bool boxm2_ocl_update_color::update_color(boxm2_scene_sptr         scene,
         kern->set_arg( aux1 );
         kern->set_arg( lookup.ptr() );
 
-        // kern->set_arg( persp_cam.ptr() );
         kern->set_arg( ray_o_buff.ptr() );
         kern->set_arg( ray_d_buff.ptr() );
 
@@ -340,7 +338,6 @@ bool boxm2_ocl_update_color::update_color(boxm2_scene_sptr         scene,
         kern->set_arg( aux3 );
         kern->set_arg( lookup.ptr() );
 
-        // kern->set_arg( persp_cam.ptr() );
         kern->set_arg( ray_o_buff.ptr() );
         kern->set_arg( ray_d_buff.ptr() );
 
