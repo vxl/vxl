@@ -6,6 +6,7 @@
 # to your PYTHONPATH environment variable.  
 #############################################################################
 import boxm2_batch;
+boxm2_batch.not_verbose();
 boxm2_batch.register_processes();
 boxm2_batch.register_datatypes();
 

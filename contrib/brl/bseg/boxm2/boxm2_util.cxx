@@ -388,7 +388,7 @@ vil_image_view_base_sptr boxm2_util::prepare_input_image(vil_image_view_base_spt
     //if not forcing RGB image to be grey
     if (!force_grey)
     {
-      vcl_cout<<"preparing rgb image"<<vcl_endl;
+      //vcl_cout<<"preparing rgb image"<<vcl_endl;
       //load image from file and format it into RGBA
       vil_image_view_base_sptr n_planes = vil_convert_to_n_planes(4, loaded_image);
       vil_image_view_base_sptr comp_image = vil_convert_to_component_order(n_planes);
@@ -404,8 +404,7 @@ vil_image_view_base_sptr boxm2_util::prepare_input_image(vil_image_view_base_spt
     }
     else
     {
-      vcl_cout<<"preparing rgb as input to grey scale float image"<<vcl_endl;
-
+      //vcl_cout<<"preparing rgb as input to grey scale float image"<<vcl_endl;
       //load image from file and format it into grey
       vil_image_view<vxl_byte>* inimg    = dynamic_cast<vil_image_view<vxl_byte>* >(loaded_image.ptr());
       vil_image_view<float>     gimg(loaded_image->ni(), loaded_image->nj());
@@ -422,8 +421,7 @@ vil_image_view_base_sptr boxm2_util::prepare_input_image(vil_image_view_base_spt
   //else if loaded planes is just one...
   if (loaded_image->nplanes() == 1)
   {
-    vcl_cout<<"Preparing grey scale image"<<vcl_endl;
-
+    //vcl_cout<<"Preparing grey scale image"<<vcl_endl;
     //preapre floatimg for stretched img
     vil_image_view<float>* floatimg;
     if (vil_image_view<vxl_byte> *img_byte = dynamic_cast<vil_image_view<vxl_byte>*>(loaded_image.ptr()))
