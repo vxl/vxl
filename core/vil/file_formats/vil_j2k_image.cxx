@@ -473,6 +473,9 @@ vil_image_view_base_sptr vil_j2k_image::s_decode_jpeg_2000( vil_stream* vs,
                                                             double i_factor, double j_factor )
 {
   vil_j2k_image* j2k_image = new vil_j2k_image(vs);
+  //remove limit by default, since vil is not typically used remotely
+  //but more commonly with large image files - JLM Jan 07, 2012
+  j2k_image->unsetMaxImageDimension();
   vil_image_view_base_sptr view = j2k_image->get_copy_view_decimated(i0, ni, j0, nj, i_factor, j_factor);
   delete j2k_image;
   return view;

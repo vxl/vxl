@@ -135,7 +135,7 @@ bool vil_save_image_resource(const vil_image_resource_sptr &ir, char const* file
   }
   vil_image_resource_sptr out = vil_new_image_resource(os, ir->ni(), ir->nj(),
                                                        ir->nplanes(),
-                                                       ir->pixel_format(), file_format);
+                                                      ir->pixel_format(), file_format);
   if (!out) {
     vcl_cerr << __FILE__ ": (vil_save) Cannot save to type [" << file_format << "]\n";
     return false;
