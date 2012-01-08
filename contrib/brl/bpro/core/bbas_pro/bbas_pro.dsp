@@ -189,7 +189,7 @@ SOURCE=.\processes/brad_estimate_empty_process.cxx
 SOURCE=.\processes/bbas_remove_from_db_process.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/brdb_value_t+bbas_1d_array_unsigned_sptr-.cxx
+SOURCE=.\Templates/brdb_value_t+bbas_1d_array_uint_sptr-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/vbl_io_smart_ptr+bbas_1d_array_unsigned-.cxx

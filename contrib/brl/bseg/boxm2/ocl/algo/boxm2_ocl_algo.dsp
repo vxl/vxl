@@ -115,6 +115,9 @@ SOURCE=.\boxm2_ocl_paint_online.cxx
 # Begin Source File
 SOURCE=.\boxm2_ocl_update_color.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\boxm2_ocl_refine.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
@@ -138,6 +141,9 @@ SOURCE=.\boxm2_ocl_paint_online.h
 # End Source File
 # Begin Source File
 SOURCE=.\boxm2_ocl_update_color.h
+# End Source File
+# Begin Source File
+SOURCE=.\boxm2_ocl_refine.h
 # End Source File
 # End Group
 # End Target
