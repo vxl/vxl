@@ -345,7 +345,8 @@ vxl_uint_16  vil_tiff_header::n_images()
 bool vil_tiff_header::compute_pixel_format()
 {
   //also need sample_format.valid but use default (1) for images that don't have it
-  if (!(bits_per_sample.valid) || !(samples_per_pixel.valid) ||
+  // -GY- use default (1) for images that do not have SamplesPerPixel tag
+  if (!(bits_per_sample.valid) || /*!(samples_per_pixel.valid) ||*/
       !(planar_config.valid) || !photometric.valid           )
   {
     pix_fmt = VIL_PIXEL_FORMAT_UNKNOWN;

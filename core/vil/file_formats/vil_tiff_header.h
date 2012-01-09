@@ -34,6 +34,7 @@
 //  Modifications
 //   November 8, 2007 - Added the case of four planes that is necessary to
 //                      read and write satellite multispectral image data - JLM
+//   January 9, 2012  - Use default value (1) for images that do not have SamplesPerPixel tag - GY
 // \endverbatim
 
 #include <vcl_string.h>
