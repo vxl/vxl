@@ -156,7 +156,7 @@ bool vil_tiff_header::read_header()
   read_string(tif_,TIFFTAG_SOFTWARE, software);
   read_short_tag(tif_,TIFFTAG_SAMPLEFORMAT, sample_format, 1);
   strip_byte_counts_valid = false;
-  if (rows_per_strip.valid&&samples_per_pixel.valid)
+  if (rows_per_strip.valid)
   {
     strip_byte_counts_valid =
       TIFFGetField(tif_,TIFFTAG_STRIPBYTECOUNTS , &strip_byte_counts)>0;
@@ -170,7 +170,7 @@ bool vil_tiff_header::read_header()
 
   strip_offsets_valid = false;
 #ifdef DEBUG
-  if (rows_per_strip.valid&&samples_per_pixel.valid)
+  if (rows_per_strip.valid)
   {
     strip_offsets_valid =
       TIFFGetField(tif_, TIFFTAG_STRIPOFFSETS, &strip_offsets)>0;
@@ -202,7 +202,7 @@ bool vil_tiff_header::read_header()
   tile_offsets_valid = false;
 
 #ifdef DEBUG
-  if (tile_width.valid&&tile_length.valid&&samples_per_pixel.valid)
+  if (tile_width.valid&&tile_length.valid)
   {
     tile_offsets_valid =
       TIFFGetField(tif_, TIFFTAG_TILEOFFSETS, &tile_offsets)>0;
@@ -215,7 +215,7 @@ bool vil_tiff_header::read_header()
 
   tile_byte_counts_valid = false;
 #ifdef DEBUG
-  if (tile_width.valid&&tile_length.valid&&samples_per_pixel.valid)
+  if (tile_width.valid&&tile_length.valid)
   {
     tile_byte_counts_valid =
      TIFFGetField(tif_, TIFFTAG_TILEBYTECOUNTS, &tile_byte_counts)>0;
@@ -233,7 +233,7 @@ bool vil_tiff_header::read_header()
 // for example a multi-band image.
 unsigned vil_tiff_header::n_separate_image_planes() const
 {
-  if (planar_config.valid&&samples_per_pixel.valid)
+  if (planar_config.valid)
   {
     if (planar_config.val == PLANARCONFIG_SEPARATE)
       return samples_per_pixel.val;
@@ -281,7 +281,7 @@ unsigned vil_tiff_header::encoded_bytes_per_block() const
 // the number of samples in a scan line
 unsigned vil_tiff_header::samples_per_line() const
 {
-  if (samples_per_pixel.valid&&image_width.valid)
+  if (image_width.valid)
     return samples_per_pixel.val*image_width.val;
   return 0;
 }
