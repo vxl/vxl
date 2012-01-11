@@ -42,6 +42,7 @@ class vbl_batch_compact_multimap
   typedef typename vcl_vector<input_type> input_container_type;
 
  public:
+  //: A comparator to sort input data, by ignoring the value in pair<key, value>
   class input_compare
   : public vcl_binary_function<input_type, input_type, bool>
   {
@@ -50,10 +51,8 @@ class vbl_batch_compact_multimap
   
     key_compare comp;
 
-    input_compare(key_compare c)
-    : comp(c) { }
+    input_compare(key_compare c): comp(c) { }
 
-   public:
     bool operator()(const input_type& x, const input_type& y) const
     { return comp(x.first, y.first); }
   };
@@ -88,11 +87,11 @@ class vbl_batch_compact_multimap
     assert(is_sorted(start, finish, input_compare(key_compare())));
     while (start != finish)
     {
-      typename vcl_iterator_traits<CI>::value_type const & last_start_val = *start;
+     typename vcl_iterator_traits<CI>::value_type::first_type const & last_start_val = start->first;
       keys_.push_back(start->first);
       indices_.push_back(values_.size());
       values_.push_back(start->second);
-      while (++start != finish && *start == last_start_val)
+      while(++start != finish && start->first == last_start_val)
       {
         values_.push_back(start->second);
       }
@@ -150,6 +149,8 @@ class vbl_batch_compact_multimap
   //: A more efficient  make_pair(lower_bound(...), upper_bound(...))
   vcl_pair<const_value_iterator, const_value_iterator> equal_range(const key_type& x) const
   {
+    // This appears particularly slow in MSVC10 with no optimisation. In particular it appears slower
+    // than vcl_map dereference.
     const_key_iterator k_it = vcl_lower_bound(keys_.begin(), keys_.end(),
                                               x, key_compare() );
 
