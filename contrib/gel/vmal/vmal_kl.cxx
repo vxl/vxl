@@ -7,8 +7,6 @@
 #include <vil1/vil1_image_as.h>
 #include <vmal/vmal_multi_view_data.h>
 #include <vtol/vtol_vertex_2d.h>
-#include <vidl_vil1/vidl_vil1_frame.h>
-#include <vidl_vil1/vidl_vil1_movie.h>
 
 #include <vcl_iostream.h>
 
@@ -107,6 +105,7 @@ void vmal_kl::match_sequence(vcl_vector<vil1_image> &image_list,vmal_multi_view_
 }
 
 
+#if 0 // vidl_vil1 no longer exists
 void vmal_kl::match_sequence(vidl_vil1_movie_sptr movie,vmal_multi_view_data_vertex_sptr matches)
 {
   vcl_vector<vil1_image> image_list;
@@ -119,6 +118,7 @@ void vmal_kl::match_sequence(vidl_vil1_movie_sptr movie,vmal_multi_view_data_ver
     }
   match_sequence(image_list,matches);
 }
+#endif
 
 vcl_vector<vtol_vertex_2d_sptr>* vmal_kl::extract_points(vil1_image & image)
 {

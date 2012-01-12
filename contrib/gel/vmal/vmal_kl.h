@@ -15,8 +15,6 @@ extern "C" {
 #include <vil1/vil1_image.h>
 #include <vcl_vector.h>
 #include <vmal/vmal_multi_view_data_vertex_sptr.h>
-#include <vidl_vil1/vidl_vil1_movie_sptr.h>
-
 
 class vmal_kl
 {
@@ -34,7 +32,9 @@ class vmal_kl
 
   void match_sequence(vcl_vector<vil1_image> &,vmal_multi_view_data_vertex_sptr);
 
+#if 0 // vidl_vil1 no longer exists
   void match_sequence(vidl_vil1_movie_sptr,vmal_multi_view_data_vertex_sptr);
+#endif
 
   vcl_vector<vtol_vertex_2d_sptr> * extract_points(vil1_image &);
 
