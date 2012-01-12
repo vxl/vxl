@@ -31,6 +31,11 @@ SUBDIRS(geml)
 # Multi-view database
 SUBDIRS(gmvl)
 
+# Kanade-Lucas-Tomasi feature tracker;
+IF (BUILD_UNMAINTAINED_LIBRARIES OR BUILD_FOR_VXL_DASHBOARD)
+  SUBDIRS(vgel/kl vgel gkll)
+ENDIF (BUILD_UNMAINTAINED_LIBRARIES OR BUILD_FOR_VXL_DASHBOARD)
+
 # Dense matcher
 SUBDIRS(vmal)
 
