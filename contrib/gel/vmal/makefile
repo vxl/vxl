@@ -7,6 +7,8 @@ USES += contrib/oxl contrib/gel core
 LIBRARY := vmal
 VERSION := 1
 
+MANPAGE_SOURCES += vmal_kl.h
+MANPAGE_SOURCES += vmal_kl_params.h
 SOURCES += vmal_convert_osl.cxx
 SOURCES += vmal_convert_vtol.cxx
 SOURCES += vmal_dense_matching.cxx

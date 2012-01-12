@@ -29,6 +29,8 @@ SOURCES += vsrl_parameters.cxx
 SOURCES += vsrl_point_picker.cxx
 MANPAGE_SOURCES += vsrl_point_picker_sptr.h
 SOURCES += vsrl_region_disparity.cxx
+SOURCES += vsrl_manager.cxx
+SOURCES += vsrl_menus.cxx
 
 DEFINES += -DBUILDING_VSRL_DLL
 

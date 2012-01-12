@@ -32,6 +32,9 @@ SUBDIRS += mrc
 # Intensity face attributes (MPP)
 SUBDIRS += vifa
 
+# Kanade-Lucas-Tomasi feature tracker
+SUBDIRS += vgel/kl vgel gkll
+
 ################################
 include ${VXLROOT}/config/top.mk
 ################################
