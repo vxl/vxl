@@ -140,6 +140,12 @@ SOURCE=.\vsrl_point_picker.cxx
 # Begin Source File
 SOURCE=.\vsrl_region_disparity.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\vsrl_manager.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vsrl_menus.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
@@ -199,6 +205,12 @@ SOURCE=.\vsrl_point_picker_sptr.h
 # End Source File
 # Begin Source File
 SOURCE=.\vsrl_region_disparity.h
+# End Source File
+# Begin Source File
+SOURCE=.\vsrl_manager.h
+# End Source File
+# Begin Source File
+SOURCE=.\vsrl_menus.h
 # End Source File
 # End Group
 # End Target

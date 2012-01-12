@@ -167,6 +167,12 @@ SOURCE=.\vmal_multi_view_data_edge_sptr.h
 # Begin Source File
 SOURCE=.\vmal_multi_view_data_vertex_sptr.h
 # End Source File
+# Begin Source File
+SOURCE=.\vmal_kl.h
+# End Source File
+# Begin Source File
+SOURCE=.\vmal_kl_params.h
+# End Source File
 # End Group
 # End Target
 # End Project
