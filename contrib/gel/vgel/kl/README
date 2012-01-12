@@ -1,0 +1,28 @@
+**********************************************************************
+NOTICE:
+
+Copyright (1997,1998) The Board of Trustees of the Leland Stanford Junior
+Univeristy.  Except for commercial resale, lease, license or other
+commercial transactions, permission is hereby given to use, copy, modify,
+and distribute this software. STANFORD MAKES NO REPRESENTATIONS OR
+WARRANTIES OF ANY KIND CONCERNING THIS SOFTWARE.
+
+Inquiries to adapt this code for commercial use should be directed
+to the Office of Technology Licensing of Stanford University,
+http://www-leland.stanford.edu/group/OTL, (650) 723-0651.
+**********************************************************************
+
+KLT
+An implementation of the Kanade-Lucas-Tomasi feature tracker
+
+Version 1.1.5
+
+Author: Stan Birchfield
+        birchfield@cs.stanford.edu
+ 
+Date: October 7, A. D. 1998
+
+The code can be obtained from http://www.vision.stanford.edu/~birch/klt,
+where the official manuals reside.  For your convenience, unofficial 
+manuals have been placed in the current subdirectory 'doc'.
+
