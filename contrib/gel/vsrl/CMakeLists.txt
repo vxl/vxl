@@ -3,6 +3,7 @@
 doxygen_add_library(contrib/gel/vsrl
   DEPENDS
     contrib/brl/bseg/sdet
+    contrib/gel/vgel
     contrib/tbl/vepl1
     core/vgui
     core/vil1
@@ -35,15 +36,29 @@ SET(vsrl_sources
 
 # vsrl_manager depends on vgui, on tbl/vepl1 and on brl/bseg/sdet
 # vsrl_menus and vsrl_point_picker depend on vgui
-INCLUDE( ${VXL_CMAKE_DIR}/UseVGUI.cmake )
+#INCLUDE( ${VXL_CMAKE_DIR}/UseVGUI.cmake )
 
-IF (HAS_VGUI)
- INCLUDE_DIRECTORIES(${VXLCORE_INCLUDE_DIR})
-
- SET(vsrl_sources ${vsrl_sources}
-  vsrl_point_picker.cxx         vsrl_point_picker.h    vsrl_point_picker_sptr.h
- )
-ENDIF (HAS_VGUI)
+# vsrl_manager etc. removed until old vidl dependency is resolved.
+#IF (HAS_VGUI)
+# INCLUDE_DIRECTORIES(${VXLCORE_INCLUDE_DIR})
+#
+# SET(vsrl_sources ${vsrl_sources}
+#  vsrl_point_picker.cxx         vsrl_point_picker.h    vsrl_point_picker_sptr.h
+#  vsrl_menus.h vsrl_menus.cxx
+# )
+# IF (BUILD_TBL)
+# IF (BUILD_BRL)
+# IF (BUILD_RPL)
+#   INCLUDE_DIRECTORIES(${TBL_INCLUDE_DIR})
+#   INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR}/bseg)
+#   INCLUDE_DIRECTORIES(${RPL_INCLUDE_DIR}) # rsdl is in rpl
+#   SET(vsrl_sources ${vsrl_sources}
+#    vsrl_manager.cxx              vsrl_manager.h
+#   )
+# ENDIF (BUILD_RPL)
+# ENDIF (BUILD_BRL)
+# ENDIF (BUILD_TBL)
+#ENDIF (HAS_VGUI)
 
 ADD_LIBRARY(vsrl ${vsrl_sources})
 INSTALL_TARGETS(/lib vsrl)
@@ -64,7 +79,10 @@ IF (HAS_VGUI)
  ENDIF (BUILD_RPL)
 ENDIF (HAS_VGUI)
 
-TARGET_LINK_LIBRARIES(vsrl vtol vdgl vgl vil1 vnl)
+TARGET_LINK_LIBRARIES(vsrl vtol vdgl vgl vil1 vnl vgel)
+
+# vgel uses mvl from oxl
+INCLUDE_DIRECTORIES(${OXL_INCLUDE_DIR})
 
 IF( BUILD_TESTING )
   SUBDIRS(tests)
