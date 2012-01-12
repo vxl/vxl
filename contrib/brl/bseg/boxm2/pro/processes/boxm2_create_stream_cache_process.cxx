@@ -64,7 +64,7 @@ bool boxm2_create_stream_cache_process(bprb_func_process& pro)
     vcl_string img_id;
     ifs >> img_id;
     image_ids.push_back(img_id);
-    vcl_cout << "adding: " << img_id << vcl_endl;
+    //vcl_cout << "adding: " << img_id << vcl_endl;
   }
   ifs.close();
 
@@ -81,7 +81,7 @@ bool boxm2_create_stream_cache_process(bprb_func_process& pro)
     vcl_string type_name;
     ifst >> type_name;
     type_names.push_back(type_name);
-    vcl_cout << "adding type: " << type_name << vcl_endl;
+    //vcl_cout << "adding type: " << type_name << vcl_endl;
   }
   ifst.close();
 
