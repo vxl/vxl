@@ -1,3 +1,6 @@
+// vmal_kl removed until old vidl dependency is resolved.
+//#include <vmal/vmal_kl_params.h>
+//#include <vmal/vmal_kl.h>
 #include <vmal/vmal_homog2d.h>
 #include <vmal/vmal_convert_vtol.h>
 #include <vmal/vmal_refine_lines.h>
