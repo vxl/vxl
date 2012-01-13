@@ -4,7 +4,7 @@
 // \file
 #include "boxm2_apply_filter_function.h"
 
-#if 0
+#if 1
 # define PROB
 #endif
 
@@ -74,6 +74,7 @@ void boxm2_apply_filter_function<RESPONSE_DATA_TYPE>::apply_filter(
     boxm2_data_base* response, boxm2_data_base* points, float prob_threshold,
     boxm2_data_base* normals, vcl_vector<vnl_vector_fixed<double,4> > * normal_dir)
 {
+
   boxm2_block_id id = blk->block_id();
 
   //3d array of trees
@@ -134,7 +135,8 @@ void boxm2_apply_filter_function<RESPONSE_DATA_TYPE>::apply_filter(
           //compute neighborhood of cell center
           vcl_vector<vcl_pair<vgl_point_3d<int> , vgl_point_3d<double> > > neighborhood;
           //if at least one kernel cannot be evaluated, don' compute anything
-          if (!neighbor_points(cellCenter, side_len, trees, neighborhood))
+          double smallest_side_len = 1.0 / (double) (1 << 3);
+          if (!neighbor_points(cellCenter, smallest_side_len, trees, neighborhood))
             continue;
 
           //eval neighborhood
