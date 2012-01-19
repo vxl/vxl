@@ -19,6 +19,7 @@
 #include <vcl_functional.h>
 #include <vcl_vector.h>
 #include <vcl_ostream.h>
+#include <vcl_utility.h>
 
 //: Fill an output sequence with incrementing values.
 // A bit like vcl_fill, but after each assignment, the value is incremented.
@@ -202,7 +203,6 @@ mbl_stl_output_t1<Cont> mbl_stl_output(const Cont &c, const char * sep=" ")
   return mbl_stl_output_t1<Cont>(c, sep);
 }
 
-#endif // mbl_stl_h_
 
 
 
@@ -246,3 +246,5 @@ inline vcl_pair<IT1, IT2>
     else return its;
   }
 }
+
+#endif // mbl_stl_h_
