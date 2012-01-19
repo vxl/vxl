@@ -124,12 +124,6 @@ bool boxm2_ocl_change_detection::change_detect( vil_image_view<float>&    change
     return false;
 
   //----- PREP INPUT BUFFERS -------------
-  //prepare cam buffers
-  cl_float cam_buffer[48];
-  boxm2_ocl_util::set_ocl_camera(cam, cam_buffer);
-  bocl_mem_sptr persp_cam=new bocl_mem(device->context(), cam_buffer, 3*sizeof(cl_float16), "persp cam buffer");
-  persp_cam->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
-
   //prepare input images
   vil_image_view_base_sptr float_img     = boxm2_util::prepare_input_image(img, true); //true for force gray scale
   vil_image_view_base_sptr float_exp_img = boxm2_util::prepare_input_image(exp_img, true);
@@ -141,6 +135,13 @@ bool boxm2_ocl_change_detection::change_detect( vil_image_view<float>&    change
   unsigned cl_nj    = RoundUp(img_view->nj(),local_threads[1]);
   global_threads[0] = cl_ni;
   global_threads[1] = cl_nj;
+
+  // create all buffers
+  cl_float* ray_origins = new cl_float[4*cl_ni*cl_nj];
+  cl_float* ray_directions = new cl_float[4*cl_ni*cl_nj];
+  bocl_mem_sptr ray_o_buff = opencl_cache->alloc_mem(cl_ni*cl_nj*sizeof(cl_float4), ray_origins, "ray_origins buffer");
+  bocl_mem_sptr ray_d_buff = opencl_cache->alloc_mem(cl_ni*cl_nj*sizeof(cl_float4), ray_directions, "ray_directions buffer");
+  boxm2_ocl_camera_converter::compute_ray_image( device, queue, cam, cl_ni, cl_nj, ray_o_buff, ray_d_buff);
 
   //prepare image buffers (cpu)
   float* vis_buff               = new float[cl_ni*cl_nj];
@@ -231,7 +232,9 @@ bool boxm2_ocl_change_detection::change_detect( vil_image_view<float>&    change
     kern->set_arg( blk );
     kern->set_arg( alpha );
     kern->set_arg( mog );
-    kern->set_arg( persp_cam.ptr() );
+    //kern->set_arg( persp_cam.ptr() );
+    kern->set_arg( ray_o_buff.ptr() );
+    kern->set_arg( ray_d_buff.ptr() );
     kern->set_arg( in_image.ptr() );
     kern->set_arg( exp_image.ptr() );
     kern->set_arg( change_image.ptr() );
@@ -344,7 +347,9 @@ bool boxm2_ocl_change_detection::change_detect( vil_image_view<float>&    change
           kern->set_arg( mog );
           kern->set_arg( oi_mem.ptr() );    //offset i
           kern->set_arg( oj_mem.ptr() );    //offset j
-          kern->set_arg( persp_cam.ptr() );
+          //kern->set_arg( persp_cam.ptr() );
+          kern->set_arg( ray_o_buff.ptr() );
+          kern->set_arg( ray_d_buff.ptr() );  
           kern->set_arg( in_image.ptr() );
           kern->set_arg( exp_image.ptr() );
           kern->set_arg( nxn_change.ptr() );        //pass two change image
@@ -448,6 +453,8 @@ bool boxm2_ocl_change_detection::change_detect( vil_image_view<float>&    change
   }
 
   //cleanup the image buffers
+  delete [] ray_origins;
+  delete [] ray_directions;
   delete [] change_image_buff;
   delete [] change_exp_image_buff;
   delete [] vis_buff;
@@ -458,6 +465,8 @@ bool boxm2_ocl_change_detection::change_detect( vil_image_view<float>&    change
   opencl_cache->unref_mem(exp_image.ptr());
   opencl_cache->unref_mem(change_image.ptr());
   opencl_cache->unref_mem(change_exp_image.ptr());
+  opencl_cache->unref_mem(ray_o_buff.ptr());
+  opencl_cache->unref_mem(ray_d_buff.ptr());
   clReleaseCommandQueue(queue);
   return true;
 }

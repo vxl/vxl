@@ -29,7 +29,9 @@ change_detection_bit_scene( __constant  RenderSceneInfo    * linfo,
                             __global    int4               * tree_array,
                             __global    float              * alpha_array,
                             __global    MOG_TYPE           * mixture_array,
-                            __global    float16            * camera,        // camera orign and SVD of inverse of camera matrix
+                            //__global    float16            * camera,        // camera orign and SVD of inverse of camera matrix
+                            __global    float4             * ray_origins,
+                            __global    float4             * ray_directions,
                             __global    float4              * in_image,      // input image and store vis_inf and pre_inf
                             __global    float              * exp_image,      // input image and store vis_inf and pre_inf
                             __global    float              * change_image,      // input image and store vis_inf and pre_inf
@@ -67,8 +69,16 @@ change_detection_bit_scene( __constant  RenderSceneInfo    * linfo,
   int currJ = j; 
     
   //calc scene ray
+  //float ray_ox, ray_oy, ray_oz, ray_dx, ray_dy, ray_dz;
+  //calc_scene_ray(linfo, camera, currI, currJ, &ray_ox, &ray_oy, &ray_oz, &ray_dx, &ray_dy, &ray_dz);
+  //----------------------------------------------------------------------------
+  // we know i,j map to a point on the image,
+  // BEGIN RAY TRACE
+  //----------------------------------------------------------------------------
+  float4 ray_o = ray_origins[ imIndex ];
+  float4 ray_d = ray_directions[ imIndex ];
   float ray_ox, ray_oy, ray_oz, ray_dx, ray_dy, ray_dz;
-  calc_scene_ray(linfo, camera, currI, currJ, &ray_ox, &ray_oy, &ray_oz, &ray_dx, &ray_dy, &ray_dz);
+  calc_scene_ray_generic_cam(linfo, ray_o, ray_d, &ray_ox, &ray_oy, &ray_oz, &ray_dx, &ray_dy, &ray_dz);
 
   AuxArgs aux_args;
   aux_args.alpha        = alpha_array;
@@ -159,7 +169,9 @@ nxn_change_detection( __constant  RenderSceneInfo    * linfo,
                       __global    MOG_TYPE           * mixture_array,
                       __global    int                * offset_i,            //nxn offset (can be negative
                       __global    int                * offset_j,            //nxn offset (can be negative
-                      __global    float16            * camera,              
+                      //__global    float16            * camera,              
+                      __global    float4             * ray_origins,
+                      __global    float4             * ray_directions,
                       __global    float4              * in_image,            // input image 
                       __global    float              * exp_image,           // expected image
                       __global    float              * change_image,        // change image
@@ -201,8 +213,16 @@ nxn_change_detection( __constant  RenderSceneInfo    * linfo,
     int nIdx = currJ*get_global_size(0)+currI;
     
     //calc scene ray
+    //float ray_ox, ray_oy, ray_oz, ray_dx, ray_dy, ray_dz;
+    //calc_scene_ray(linfo, camera, currI, currJ, &ray_ox, &ray_oy, &ray_oz, &ray_dx, &ray_dy, &ray_dz);
+    //----------------------------------------------------------------------------
+    // we know i,j map to a point on the image,
+    // BEGIN RAY TRACE
+    //----------------------------------------------------------------------------
+    float4 ray_o = ray_origins[ imIndex ];
+    float4 ray_d = ray_directions[ imIndex ];
     float ray_ox, ray_oy, ray_oz, ray_dx, ray_dy, ray_dz;
-    calc_scene_ray(linfo, camera, currI, currJ, &ray_ox, &ray_oy, &ray_oz, &ray_dx, &ray_dy, &ray_dz);
+    calc_scene_ray_generic_cam(linfo, ray_o, ray_d, &ray_ox, &ray_oy, &ray_oz, &ray_dx, &ray_dy, &ray_dz);
   
     //set p change, change_exp, intensity and vis for this neighbor pixel
     float change          = change_image    [imIndex[llid]];
