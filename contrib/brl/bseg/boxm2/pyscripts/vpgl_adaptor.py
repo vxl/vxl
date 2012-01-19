@@ -216,7 +216,8 @@ def convert_local_rational_to_generic(cam_in, ni, nj, min_z, max_z, level=0):
     boxm2_batch.set_input_float(3,min_z)
     boxm2_batch.set_input_float(4,max_z)
     boxm2_batch.set_input_unsigned(5,level)
-    boxm2_batch.run_process()
+    if not boxm2_batch.run_process():
+        return None
     (id,type) = boxm2_batch.commit_output(0)
     generic_cam = dbvalue(id,type)
     return generic_cam
