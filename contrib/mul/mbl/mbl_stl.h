@@ -203,3 +203,46 @@ mbl_stl_output_t1<Cont> mbl_stl_output(const Cont &c, const char * sep=" ")
 }
 
 #endif // mbl_stl_h_
+
+
+
+//: Find first instance of common value in two sorted sequences.
+// \return pair. Either *pair.first == *pair.second, or pair.first == finish1 && pair.second == finish2 if
+// no matches are found.
+template <class IT1, class IT2>
+inline vcl_pair<IT1, IT2>
+  mbl_stl_find_common_value(IT1 start1, IT1 finish1, IT2 start2, IT2 finish2)
+{
+  vcl_pair<IT1, IT2> its(start1, start2);
+  while (true)
+  {
+    if (its.first == finish1 || its.second == finish2) return make_pair(finish1, finish2);
+
+    else if (*its.first < *its.second)
+      ++its.first;
+    else if (*its.second < *its.first)
+      ++its.second;
+    else return its;
+  }
+}
+
+
+//: Find first instance of common value in two sequences sorted by specified comparator.
+// \return pair. Either *pair.first == *pair.second, or pair.first == finish1 && pair.second == finish2 if
+// no matches are found.
+template <class IT1, class IT2, class CMP>
+inline vcl_pair<IT1, IT2>
+  mbl_stl_find_common_value(IT1 start1, IT1 finish1, IT2 start2, IT2 finish2, CMP comp = CMP())
+{
+  vcl_pair<IT1, IT2> its(start1, start2);
+  while (true)
+  {
+    if (its.first == finish1 || its.second == finish2) return make_pair(finish1, finish2);
+
+    else if (comp(*its.first, *its.second))
+      ++its.first;
+    else if (comp(*its.second, *its.first))
+      ++its.second;
+    else return its;
+  }
+}
