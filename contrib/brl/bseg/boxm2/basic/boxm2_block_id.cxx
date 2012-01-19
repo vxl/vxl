@@ -3,7 +3,7 @@
 // \file
 #include <vcl_sstream.h>
 
-vcl_string boxm2_block_id::to_string()
+vcl_string boxm2_block_id::to_string() const
 {
   vcl_ostringstream s1;
   s1 << (*this);
@@ -12,7 +12,7 @@ vcl_string boxm2_block_id::to_string()
 
 
 //: scene output stream operator
-vcl_ostream& operator <<(vcl_ostream &s, boxm2_block_id& id)
+vcl_ostream& operator <<(vcl_ostream &s, boxm2_block_id const& id) 
 {
   s << "id_" << id.i() << '_' << id.j() << '_' << id.k();
   return s;

@@ -55,13 +55,13 @@ class boxm2_block_id : public vbl_ref_count
     inline bool operator>=(boxm2_block_id const& v) const { return !operator<(v); }
 
     //: to string
-    vcl_string to_string();
+    vcl_string to_string() const;
 };
 
 typedef vbl_smart_ptr<boxm2_block_id> boxm2_block_id_sptr;
 
 //: scene output stream operator
-vcl_ostream& operator <<(vcl_ostream &s, boxm2_block_id& id);
+vcl_ostream& operator <<(vcl_ostream &s, boxm2_block_id const& id);
 
 
 //------IO Necessary for smart pointer linking ---------------------------------
