@@ -13,6 +13,8 @@ def load_image(file_path) :
   ni = boxm2_batch.get_output_unsigned(ni_id);
   nj = boxm2_batch.get_output_unsigned(nj_id);
   img = dbvalue(id,type);
+  boxm2_batch.remove_data(ni_id)
+  boxm2_batch.remove_data(nj_id)
   return img, ni, nj;
 
 def save_image(img, file_path) :
@@ -154,3 +156,24 @@ def gradient_angle(Ix, Iy) :
     (id,type) = boxm2_batch.commit_output(0)
     angleImg = dbvalue(id,type)
     return angleImg
+
+def init_float_image(ni,nj,init_val):
+    boxm2_batch.init_process("vilInitFloatImageProcess")
+    boxm2_batch.set_input_unsigned(0,ni)
+    boxm2_batch.set_input_unsigned(1,nj)
+    boxm2_batch.set_input_float(2, init_val)
+    boxm2_batch.run_process()
+    (id,type) = boxm2_batch.commit_output(0)
+    img = dbvalue(id,type)
+    return img
+
+def threshold_image(img, value, threshold_above=True):
+    boxm2_batch.init_process("vilThresholdImageProcess")
+    boxm2_batch.set_input_from_db(0,img)
+    boxm2_batch.set_input_float(1,value)
+    boxm2_batch.set_input_bool(2,threshold_above)
+    boxm2_batch.run_process()
+    (id,type) = boxm2_batch.commit_output(0)
+    mask = dbvalue(id,type)
+    return mask
+
