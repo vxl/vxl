@@ -72,7 +72,7 @@ int main( int argc, char* argv[] )
     vcl_cout<<"Image is "<<image<<vcl_endl;
   }
 
-  if (fabs(scale()-1.0)>1e-3)
+  if (scale() > 1.001 || scale() < 0.999)
   {
     // Scale image and points
     vil_image_view<vxl_byte> image2;
