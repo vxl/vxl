@@ -75,8 +75,8 @@ change_detection_bit_scene( __constant  RenderSceneInfo    * linfo,
   // we know i,j map to a point on the image,
   // BEGIN RAY TRACE
   //----------------------------------------------------------------------------
-  float4 ray_o = ray_origins[ imIndex ];
-  float4 ray_d = ray_directions[ imIndex ];
+  float4 ray_o = ray_origins[ imIndex[llid] ];
+  float4 ray_d = ray_directions[ imIndex[llid] ];
   float ray_ox, ray_oy, ray_oz, ray_dx, ray_dy, ray_dz;
   calc_scene_ray_generic_cam(linfo, ray_o, ray_d, &ray_ox, &ray_oy, &ray_oz, &ray_dx, &ray_dy, &ray_dz);
 
@@ -219,8 +219,8 @@ nxn_change_detection( __constant  RenderSceneInfo    * linfo,
     // we know i,j map to a point on the image,
     // BEGIN RAY TRACE
     //----------------------------------------------------------------------------
-    float4 ray_o = ray_origins[ imIndex ];
-    float4 ray_d = ray_directions[ imIndex ];
+    float4 ray_o = ray_origins[ imIndex[llid] ];
+    float4 ray_d = ray_directions[ imIndex[llid] ];
     float ray_ox, ray_oy, ray_oz, ray_dx, ray_dy, ray_dz;
     calc_scene_ray_generic_cam(linfo, ray_o, ray_d, &ray_ox, &ray_oy, &ray_oz, &ray_dx, &ray_dy, &ray_dz);
   
