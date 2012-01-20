@@ -35,6 +35,16 @@ static void test_sphere()
   TEST("clip (y=1,z=0) to unit sphere", u.clip(l2, p1, p2), true);
   TEST("Intersection point 1", p1, vgl_point_3d<double>(0,1,0));
   TEST("Intersection point 2", p2, vgl_point_3d<double>(0,1,0));
+
+  // Test basic i/o
+  vcl_cout << u << vcl_endl;
+  vcl_ostringstream oss;
+  oss << u.centre().x() << " "  << u.centre().y() << " "  
+      << u.centre().z() << " "  << u.radius();
+  vcl_istringstream iss(oss.str());
+  vgl_sphere_3d<double> v;
+  iss >> v;
+  TEST("Basic i/o", u==v, true);
 }
 
 TESTMAIN(test_sphere);

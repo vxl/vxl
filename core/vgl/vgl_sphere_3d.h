@@ -9,6 +9,7 @@
 // \brief a sphere in 3D nonhomogeneous space
 // \author Ian Scott
 
+#include <vcl_iosfwd.h>
 #include <vgl/vgl_fwd.h> // forward declare vgl_line_3d_2_points
 #include <vgl/vgl_point_3d.h>
 
@@ -63,7 +64,29 @@ class vgl_sphere_3d
   //: Calculate the end points of a line clipped by this sphere.
   bool clip(const vgl_line_3d_2_points<Type> & line,
             vgl_point_3d<Type> &p1, vgl_point_3d<Type> &p2) const;
+  
+  //: Writes "<vgl_sphere_3d centre=vgl_point_3d<x,y,z> radius=r)>" to stream
+  vcl_ostream& print(vcl_ostream& os) const;
+
+  //: Read from stream, possibly with formatting.
+  //  Either just reads 4 blank-separated numbers,
+  //  or reads 4 comma-separated numbers,
+  //  or reads 4 numbers in parenthesized form "(123, 321, 567, 890)"
+  vcl_istream& read(vcl_istream& is);
 };
+
+
+//: Writes "<vgl_sphere_3d centre=vgl_point_3d<x,y,z> radius=r)>" to stream
+template <class Type>
+vcl_ostream& operator<<(vcl_ostream& os, const vgl_sphere_3d<Type>& sph);
+
+//: Read from stream, possibly with formatting.
+//  Either just reads 4 blank-separated numbers,
+//  or reads 4 comma-separated numbers,
+//  or reads 4 numbers in parenthesized form "(123, 321, 567, 890)"
+template <class Type>
+vcl_istream& operator>>(vcl_istream& is, vgl_sphere_3d<Type>& sph);
+
 
 #define VGL_SPHERE_3D_INSTANTIATE(T) extern "please include vgl/vgl_sphere_3d.txx first"
 
