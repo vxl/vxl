@@ -4,6 +4,7 @@
 // \file
 
 #include <bpgl/algo/bpgl_project.h>
+#include <boct/boct_bit_tree.h>
 
 //vgl includes
 #include <vgl/vgl_point_3d.h>
@@ -501,3 +502,51 @@ bool boxm2_util::verify_appearance(boxm2_scene& scene, const vcl_vector<vcl_stri
   }
   return foundDataType;
 }
+
+
+
+
+bool boxm2_util::query_point(boxm2_scene_sptr& scene,
+                             boxm2_cache_sptr& cache, 
+                             const vgl_point_3d<double>& point,
+                             float& prob, float& intensity)
+{
+  vgl_point_3d<double> local;
+  boxm2_block_id id;
+  if (!scene->contains(point, id, local))
+    return false;
+
+  int index_x=(int)vcl_floor(local.x());
+  int index_y=(int)vcl_floor(local.y());
+  int index_z=(int)vcl_floor(local.z());
+  boxm2_block * blk=cache->get_block(id);
+  boxm2_block_metadata mdata = scene->get_block_metadata_const(id);
+  vnl_vector_fixed<unsigned char,16> treebits=blk->trees()(index_x,index_y,index_z);
+  boct_bit_tree tree(treebits.data_block(),mdata.max_level_);
+  int bit_index=tree.traverse(local);
+
+  int depth=tree.depth_at(bit_index);
+
+  //int buff_index=(int)treebits[12]*256+(int)treebits[13];
+  //int data_offset=buff_index*65536+tree.get_data_index(bit_index);
+  int data_offset=tree.get_data_index(bit_index,false);
+  boxm2_data_base *  alpha_base  = cache->get_data_base(id,boxm2_data_traits<BOXM2_ALPHA>::prefix());
+  boxm2_data<BOXM2_ALPHA> *alpha_data=new boxm2_data<BOXM2_ALPHA>(alpha_base->data_buffer(),alpha_base->buffer_length(),alpha_base->block_id());
+
+  boxm2_array_1d<float> alpha_data_array=alpha_data->data();
+  float alpha=alpha_data_array[data_offset];
+
+  float side_len=static_cast<float>(mdata.sub_block_dim_.x()/((float)(1<<depth)));
+  //vcl_cout<<" DATA OFFSET "<<side_len<<vcl_endl;
+  
+  //store cell probabilty
+  prob=1.0f-vcl_exp(-alpha*side_len);
+  boxm2_data_base *  int_base  = cache->get_data_base(id,boxm2_data_traits<BOXM2_MOG3_GREY>::prefix());
+  boxm2_data<BOXM2_MOG3_GREY> *int_data=new boxm2_data<BOXM2_MOG3_GREY>(int_base->data_buffer(),int_base->buffer_length(),int_base->block_id());
+
+  boxm2_array_1d<vnl_vector_fixed<unsigned char,8> > int_data_array=int_data->data();
+  intensity=(float)int_data_array[data_offset][0]/255.0f;
+  
+  return true;
+}
+

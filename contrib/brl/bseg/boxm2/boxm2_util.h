@@ -10,6 +10,7 @@
 #include <vil/vil_load.h>
 #include <bsta/bsta_histogram.h>
 #include <boxm2/boxm2_scene.h>
+#include <boxm2/io/boxm2_cache.h>
 
 //: Utility class with static methods
 class boxm2_util
@@ -64,6 +65,11 @@ class boxm2_util
     //verifies that a scene has a valid appearance, spits out data type and apperance type size
     static bool verify_appearance(boxm2_scene& scene, const vcl_vector<vcl_string>&valid_types, vcl_string& data_type, int& appTypeSize ); 
 
+
+    static bool query_point(boxm2_scene_sptr& scene,
+                            boxm2_cache_sptr& cache, 
+                            const vgl_point_3d<double>& point,
+                            float& prob, float& intensity);
 };
 
 #endif // boxm2_util_h
