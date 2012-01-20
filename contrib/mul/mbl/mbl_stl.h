@@ -204,8 +204,6 @@ mbl_stl_output_t1<Cont> mbl_stl_output(const Cont &c, const char * sep=" ")
 }
 
 
-
-
 //: Find first instance of common value in two sorted sequences.
 // \return pair. Either *pair.first == *pair.second, or pair.first == finish1 && pair.second == finish2 if
 // no matches are found.
