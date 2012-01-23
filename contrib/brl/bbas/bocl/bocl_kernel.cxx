@@ -158,7 +158,7 @@ vcl_size_t bocl_kernel::workgroup_size()
 
 vcl_string bocl_kernel::build_log()
 {
-  char log[4*1024];
+  char log[40*1024];
   int status = clGetProgramBuildInfo( program_, (*device_), CL_PROGRAM_BUILD_LOG, sizeof(log), (void*) log, NULL);
   if ( !check_val(status,CL_SUCCESS,"bocl_kernel::build_log()  failed (" + id_ + ") " +error_to_string(status)) )
     return "";
