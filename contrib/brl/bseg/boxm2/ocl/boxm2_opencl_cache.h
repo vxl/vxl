@@ -95,7 +95,7 @@ class boxm2_opencl_cache: public vbl_ref_count
 
     //: maximum number of blocks this cache will allow (eventually this will become smart)
     void lru_push_front( boxm2_block_id id ); 
-    boxm2_block_id lru_remove_last(); //removes all data and block with this ID
+    bool lru_remove_last(boxm2_block_id& id); //removes all data and block with this ID. returns false if lru is empty
     vcl_list<boxm2_block_id> lru_order_; 
     unsigned int maxBlocksInCache;
     unsigned long bytesInCache_;

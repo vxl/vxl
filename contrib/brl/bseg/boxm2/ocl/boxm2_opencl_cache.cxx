@@ -170,7 +170,11 @@ bocl_mem* boxm2_opencl_cache::get_block(boxm2_block_id id)
             <<"    removing... ";
     while ( this->bytes_in_cache()+toLoadSize > maxBytesInCache_ && !cached_blocks_.empty() )
     {
-      boxm2_block_id lru_id = this->lru_remove_last();
+      boxm2_block_id lru_id;
+      if (!this->lru_remove_last(lru_id)) {
+         vcl_cerr << "ERROR: boxm2_opencl_cache::get_block(): lru is empty" << vcl_endl;
+         return (bocl_mem*)0;
+      }
       vcl_cout<<lru_id<<" ... ";
       if (lru_id == id)
         vcl_cout<<"boxm2_opencl_cache:: Single Block Size is too big for GPU RAM"<<vcl_endl;
@@ -256,7 +260,11 @@ bocl_mem* boxm2_opencl_cache::get_data(boxm2_block_id id, vcl_string type, vcl_s
             <<"    removing... ";
     while ( this->bytes_in_cache()+toLoadSize > maxBytesInCache_ && !data_map.empty() )
     {
-      boxm2_block_id lru_id = this->lru_remove_last();
+      boxm2_block_id lru_id;
+      if(!this->lru_remove_last(lru_id)) {
+         vcl_cerr << "ERROR: boxm2_opencl_cache::get_data() : lru is empty" << vcl_endl;
+         return (bocl_mem*)0;
+      }
       vcl_cout<<lru_id<<" ... ";
       if (lru_id == id)
         vcl_cout<<"boxm2_opencl_cache:: Single Block Size is too big for GPU RAM"<<vcl_endl;
@@ -314,7 +322,11 @@ bocl_mem* boxm2_opencl_cache::get_data_new(boxm2_block_id id, vcl_string type, v
             <<"    removing... ";
     while ( this->bytes_in_cache()+toLoadSize > maxBytesInCache_ && !data_map.empty() )
     {
-      boxm2_block_id lru_id = this->lru_remove_last();
+      boxm2_block_id lru_id;
+      if (!this->lru_remove_last(lru_id)) {
+         vcl_cerr << "ERROR: boxm2_opencl_cache::get_data_new() : lru is empty " << vcl_endl;
+         return (bocl_mem*)0;
+      }
       vcl_cout<<lru_id<<" ... ";
       if (lru_id == id)
         vcl_cout<<"boxm2_opencl_cache:: Single Block Size is too big for GPU RAM"<<vcl_endl;
@@ -343,7 +355,11 @@ bocl_mem* boxm2_opencl_cache::alloc_mem(vcl_size_t num_bytes, void* cpu_buff, vc
             <<"    removing... ";
     while ( this->bytes_in_cache()+num_bytes > maxBytesInCache_ )
     {
-      boxm2_block_id lru_id = this->lru_remove_last();
+      boxm2_block_id lru_id;
+      if (!this->lru_remove_last(lru_id)) {
+         vcl_cerr << "ERROR: lru empty. unable to alloc buffer of requested size. " << vcl_endl;
+         return (bocl_mem*)0;
+      }
       vcl_cout<<lru_id<<" ... ";
     }
     vcl_cout<<vcl_endl;
@@ -484,10 +500,14 @@ void boxm2_opencl_cache::lru_push_front( boxm2_block_id id )
 }
 
 //: helper to remove all data and block memory by ID
-boxm2_block_id boxm2_opencl_cache::lru_remove_last()
+bool boxm2_opencl_cache::lru_remove_last(boxm2_block_id &lru_id)
 {
   //grab and remove last element
-  boxm2_block_id lru_id = lru_order_.back();
+  if (lru_order_.empty()) {
+     vcl_cerr << "ERROR: boxm2_opencl_cache::lru_remove_last() : LRU is empty " << vcl_endl;
+     return false;
+  }
+  lru_id = lru_order_.back();
   lru_order_.pop_back();
 
   // then look for the block to delete
@@ -517,7 +537,7 @@ boxm2_block_id boxm2_opencl_cache::lru_remove_last()
     }
   }
 
-  return lru_id;
+  return true;
 }
 
 vcl_string boxm2_opencl_cache::to_string()
