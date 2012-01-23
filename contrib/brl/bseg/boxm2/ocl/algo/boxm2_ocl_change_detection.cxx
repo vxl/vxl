@@ -211,7 +211,7 @@ bool boxm2_ocl_change_detection::change_detect( vil_image_view<float>&    change
   // STEP ONE: Do 1x1 Change Detection Pass
   //----------------------------------------------------------------------------
   //For each ID in the visibility order, grab that block
-  vcl_vector<boxm2_block_id> vis_order = scene->get_vis_blocks( (vpgl_perspective_camera<double>*) cam.ptr());
+  vcl_vector<boxm2_block_id> vis_order = scene->get_vis_blocks(cam);
   vcl_vector<boxm2_block_id>::iterator id;
   for (id = vis_order.begin(); id != vis_order.end(); ++id)
   {
