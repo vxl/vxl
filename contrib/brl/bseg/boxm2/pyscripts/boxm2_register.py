@@ -18,3 +18,12 @@ class dbvalue:
 
 def remove_data(id):
   boxm2_batch.remove_data(id)
+
+def get_output_float(id):
+  fval = boxm2_batch.get_output_float(id)
+  return fval
+
+def get_output_unsigned(id):
+  uval = boxm2_batch.get_output_unsigned(id)
+  return uval
+

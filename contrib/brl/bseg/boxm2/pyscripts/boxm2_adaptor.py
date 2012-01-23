@@ -1,4 +1,5 @@
 from boxm2_register import boxm2_batch, dbvalue; 
+import os
 
 #############################################################################
 # PROVIDES higher level python functions to make boxm2_batch 
@@ -219,6 +220,24 @@ def ingest_height_map(scene, cache,x_img,y_img,z_img, device=None) :
     return ; 
   else : 
     print "ERROR: Cache type not recognized: ", cache.type;
+    
+# Ingest a Buckeye-Style DEM, i.e. first return and last return image pair
+def ingest_buckeye_dem(scene, cache, first_return_fname, last_return_fname, geoid_height, device=None) :
+  if cache.type == "boxm2_cache_sptr" :
+    print "boxm2_adaptor, ingest_buckeye cpp process not implemented"; 
+
+  elif cache.type == "boxm2_opencl_cache_sptr" and device : 
+    boxm2_batch.init_process("boxm2OclIngestBuckeyeDemProcess");
+    boxm2_batch.set_input_from_db(0,device);
+    boxm2_batch.set_input_from_db(1,scene);
+    boxm2_batch.set_input_from_db(2,cache);
+    boxm2_batch.set_input_string(3,first_return_fname);
+    boxm2_batch.set_input_string(4,last_return_fname);
+    boxm2_batch.set_input_float(5,geoid_height);
+    boxm2_batch.run_process();
+    return ; 
+  else : 
+    print "ERROR: Cache type not recognized: ", cache.type;
 #####################################################################
 # Generic render, returns a dbvalue expected image
 # Cache can be either an OPENCL cache or a CPU cache
@@ -318,7 +337,30 @@ def render_depth(scene, cache, cam, ni=1280, nj=720, device=None) :
     return exp_image, var_image 
   else : 
     print "ERROR: Cache type not recognized: ", cache.type; 
-   
+    
+#####################################################################    
+# render image of expected z values 
+#####################################################################
+def render_z_image(scene, cache, cam, ni=1280, nj=720, normalize = False, device=None) : 
+  if cache.type == "boxm2_cache_sptr" :
+    print "boxm2_batch CPU render depth not yet implemented";
+  elif cache.type == "boxm2_opencl_cache_sptr" and device : 
+    boxm2_batch.init_process("boxm2OclRenderExpectedZImageProcess");
+    boxm2_batch.set_input_from_db(0,device);
+    boxm2_batch.set_input_from_db(1,scene);
+    boxm2_batch.set_input_from_db(2,cache);
+    boxm2_batch.set_input_from_db(3,cam);
+    boxm2_batch.set_input_unsigned(4,ni);
+    boxm2_batch.set_input_unsigned(5,nj);
+    boxm2_batch.set_input_bool(6,normalize)
+    boxm2_batch.run_process();
+    (id,type) = boxm2_batch.commit_output(0);
+    z_exp_image = dbvalue(id,type);
+    (id,type) = boxm2_batch.commit_output(1); 
+    z_var_image = dbvalue(id,type); 
+    return z_exp_image, z_var_image 
+  else : 
+    print "ERROR: Cache type not recognized: ", cache.type; 
 #####################################################################
 # change detection wrapper
 #####################################################################
@@ -676,7 +718,7 @@ def blob_precision_recall(cd_img, gt_img, mask_img=None) :
 #########################################################################
 #Batch update process
 #########################################################################
-def update_aux_per_view(scene, cache, img, cam, imgString, device=None) : 
+def update_aux_per_view(scene, cache, img, cam, imgString, device=None, mask=None) : 
   if cache.type == "boxm2_cache_sptr" :
     print "boxm2_batch CPU update aux per view not yet implemented";
   elif cache.type == "boxm2_opencl_cache_sptr" and device : 
@@ -687,7 +729,60 @@ def update_aux_per_view(scene, cache, img, cam, imgString, device=None) :
     boxm2_batch.set_input_from_db(3, cam);
     boxm2_batch.set_input_from_db(4, img);
     boxm2_batch.set_input_string(5, imgString);
+    if mask:
+        boxm2_batch.set_input_from_db(6,mask)
     boxm2_batch.run_process();
   else:
     print "ERROR: Cache type not recognized: ", cache.type; 
    
+###########################################################
+# create sun camera
+# astro_coords=True indicates az,el in degrees north of east, degrees above horizon
+def compute_sun_affine_camera(scene, sun_az, sun_el, astro_coords = True):
+       boxm2_batch.init_process("boxm2ComputeSunAffineCameraProcess")
+       boxm2_batch.set_input_from_db(0,scene)
+       boxm2_batch.set_input_float(1,sun_el)
+       boxm2_batch.set_input_float(2,sun_az)
+       boxm2_batch.set_input_bool(3,astro_coords)
+       boxm2_batch.run_process()
+       (id,type) = boxm2_batch.commit_output(0)
+       sun_cam = dbvalue(id,type)
+       (ni_id,type) = boxm2_batch.commit_output(1)
+       (nj_id,type) = boxm2_batch.commit_output(2)
+       ni = boxm2_batch.get_output_unsigned(ni_id)
+       nj = boxm2_batch.get_output_unsigned(nj_id)
+       boxm2_batch.remove_data(ni_id)
+       boxm2_batch.remove_data(nj_id)
+       return sun_cam, ni, nj
+    
+    
+#######################################################
+# update sun visibility probabilities
+def update_sun_visibilities(scene,device,ocl_cache,cache,sun_camera,ni,nj,prefix_name):
+    boxm2_batch.init_process("boxm2OclUpdateSunVisibilitiesProcess")
+    boxm2_batch.set_input_from_db(0,device)
+    boxm2_batch.set_input_from_db(1,scene)
+    boxm2_batch.set_input_from_db(2,ocl_cache)
+    boxm2_batch.set_input_from_db(3,cache)
+    boxm2_batch.set_input_from_db(4,sun_camera)
+    boxm2_batch.set_input_unsigned(5, ni)
+    boxm2_batch.set_input_unsigned(6, nj)
+    boxm2_batch.set_input_string(7,prefix_name)
+    boxm2_batch.run_process()
+
+#######################################################
+# render shadow map 
+def render_shadow_map(scene,device, ocl_cache, camera, ni, nj, prefix_name=''):
+    boxm2_batch.init_process("boxm2OclRenderExpectedShadowMapProcess")
+    boxm2_batch.set_input_from_db(0,device)
+    boxm2_batch.set_input_from_db(1,scene)
+    boxm2_batch.set_input_from_db(2,ocl_cache)
+    boxm2_batch.set_input_from_db(3,camera)
+    boxm2_batch.set_input_unsigned(4, ni)
+    boxm2_batch.set_input_unsigned(5, nj)
+    boxm2_batch.set_input_string(6,prefix_name)
+    boxm2_batch.run_process()
+    (id,type) = boxm2_batch.commit_output(0)
+    shadow_map = dbvalue(id,type)
+    return shadow_map
+
