@@ -13,6 +13,7 @@ SET(boxm2_sources
     boxm2_data.h                  boxm2_data.txx
     boxm2_data_traits.h
     boxm2_util.h                  boxm2_util.cxx
+	 boxm2_normal_albedo_array.h   boxm2_normal_albedo_array.cxx
    )
 
 INCLUDE( ${BRL_MODULE_PATH}/FindEXPAT.cmake )

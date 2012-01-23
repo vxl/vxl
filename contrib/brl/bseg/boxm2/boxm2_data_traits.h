@@ -11,6 +11,9 @@
 #include <vcl_cstddef.h> // for std::size_t
 #include <vnl/vnl_vector_fixed.h>
 #include <vcl_iostream.h>
+
+#include "boxm2_normal_albedo_array.h"
+
 class boxm2_mog3_grey_processor;
 class boxm2_gauss_grey_processor;
 
@@ -39,6 +42,7 @@ enum boxm2_data_type
   BOXM2_NORMAL,
   BOXM2_POINT,
   BOXM2_GAUSS_GREY,
+  BOXM2_NORMAL_ALBEDO_ARRAY,
   BOXM2_UNKNOWN
 };
 
@@ -292,6 +296,15 @@ class boxm2_data_traits<BOXM2_INTENSITY>
   { if (!identifier.size()) return "boxm2_intensity"; else return "boxm2_intensity_"+identifier; }
 };
 
+template<>
+class boxm2_data_traits<BOXM2_NORMAL_ALBEDO_ARRAY>
+{
+ public:
+  typedef boxm2_normal_albedo_array datatype;
+  static vcl_size_t datasize() { return sizeof(boxm2_normal_albedo_array); }
+  static vcl_string prefix() { return "boxm2_normal_albedo_array"; }
+};
+
 //: HACKY WAY TO GENERICALLY GET DATASIZES -
 class boxm2_data_info
 {
@@ -354,11 +367,15 @@ class boxm2_data_info
     if (prefix.find(boxm2_data_traits<BOXM2_GAUSS_GREY>::prefix()) != vcl_string::npos)
       return boxm2_data_traits<BOXM2_GAUSS_GREY>::datasize();
 
+    if (prefix.find(boxm2_data_traits<BOXM2_NORMAL_ALBEDO_ARRAY>::prefix()) != vcl_string::npos) 
+      return boxm2_data_traits<BOXM2_NORMAL_ALBEDO_ARRAY>::datasize();
+
     if (prefix.find(boxm2_data_traits<BOXM2_NORMAL>::prefix()) != vcl_string::npos)
       return boxm2_data_traits<BOXM2_NORMAL>::datasize();
     
     if (prefix.find(boxm2_data_traits<BOXM2_POINT>::prefix()) != vcl_string::npos)
       return boxm2_data_traits<BOXM2_POINT>::datasize();
+
     return 0;
   }
 
@@ -412,6 +429,8 @@ class boxm2_data_info
       return  BOXM2_GAUSS_RGB ;
     if (prefix.find(boxm2_data_traits<BOXM2_GAUSS_GREY>::prefix()) != vcl_string::npos)
       return  BOXM2_GAUSS_GREY ;
+    if (prefix.find(boxm2_data_traits<BOXM2_NORMAL_ALBEDO_ARRAY>::prefix()) != vcl_string::npos) 
+      return  BOXM2_NORMAL_ALBEDO_ARRAY ;
     return BOXM2_UNKNOWN;
   }
 
