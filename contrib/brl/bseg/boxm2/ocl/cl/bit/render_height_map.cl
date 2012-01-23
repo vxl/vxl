@@ -190,3 +190,96 @@ void ingest_height_map(__constant  RenderSceneInfo    * linfo,
 
 }
 #endif // INGEST_HEIGHT_MAP
+
+
+
+#ifdef INGEST_BUCKEYE_DEM
+//need to define a struct of type AuxArgs with auxiliary arguments
+// to supplement cast ray args
+typedef struct
+{
+  __global float * belief;
+  __global float * uncertainty;
+  float  first_depth;
+  float  last_depth;
+} AuxArgs;
+
+//forward declare cast ray (so you can use it)
+void cast_ray(int,int,float,float,float,float,float,float,
+              __constant RenderSceneInfo*, __global int4*,
+              __local uchar16*, __constant uchar *,__local uchar *,
+              float*, AuxArgs);
+__kernel
+void ingest_buckeye_dem(__constant  RenderSceneInfo    * linfo,
+                       __global    uint4              * image_dims,
+                       __global    float4             * ray_origin_buff,
+                       __global    float              * a1_buff,
+                       __global    float              * a2_buff,
+                       __global    int4               * tree_array,
+                       __global    float              * aux0_array,
+                       __global    float              * aux1_array,
+                       __constant  uchar              * bit_lookup,
+                       __local     uchar16            * local_tree,
+                       __local     uchar              * cumsum,        // cumulative sum helper for data pointer
+                       __local     int                * imIndex)
+{
+  //----------------------------------------------------------------------------
+  //get local id (0-63 for an 8x8) of this patch + image coordinates and camera
+  // check for validity before proceeding
+  //----------------------------------------------------------------------------
+  uchar llid = (uchar)(get_local_id(0) + get_local_size(0)*get_local_id(1));
+  int i=0,j=0;
+  i=get_global_id(0);
+  j=get_global_id(1);
+  imIndex[llid] = j*get_global_size(0)+i;
+  // check to see if the thread corresponds to an actual pixel as in some
+  // cases #of threads will be more than the pixels.
+  if (i>=(*image_dims).z || j>=(*image_dims).w)
+    return;
+
+  float first_depth = a1_buff[imIndex[llid]];
+  float last_depth = a2_buff[imIndex[llid]];
+    
+  //----------------------------------------------------------------------------
+  // Calculate ray origin, and direction
+  // (make sure ray direction is never axis aligned)
+  //----------------------------------------------------------------------------
+  float4 ray_o = ray_origin_buff[ imIndex[llid] ];
+
+  float4 ray_d = (float4)( 0.001,  0.001, -1.0, 1.0);
+
+  float ray_ox = 0.0f;float ray_oy = 0.0f;float ray_oz = 0.0f;
+  float ray_dx = 0.0f;float ray_dy = 0.0f;float ray_dz = 0.0f;
+
+  calc_scene_ray_generic_cam(linfo, ray_o, ray_d, 
+                             &ray_ox, &ray_oy, &ray_oz, 
+                             &ray_dx, &ray_dy, &ray_dz);
+
+  ////----------------------------------------------------------------------------
+  //// we know i,j map to a point on the image, have calculated ray
+  //// BEGIN RAY TRACE
+  ////----------------------------------------------------------------------------
+
+  AuxArgs aux_args;
+
+  aux_args.belief  = aux0_array;
+  aux_args.uncertainty = aux1_array;
+  // This happens sometimes, not sure why.
+  if (first_depth > last_depth) {
+    aux_args.first_depth = last_depth;
+    aux_args.last_depth = first_depth;  
+  } 
+  else {
+    aux_args.first_depth = first_depth;
+    aux_args.last_depth = last_depth;
+  }
+  float vis = 1.0;
+
+  cast_ray( i, j,
+            ray_ox, ray_oy, ray_oz,
+            ray_dx, ray_dy, ray_dz,
+            linfo, tree_array,                                    //scene info
+            local_tree, bit_lookup, cumsum, &vis, aux_args);      //utility info
+
+}
+#endif // INGEST_BUCKEYE_DEM
