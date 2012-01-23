@@ -133,7 +133,7 @@ double ihog_minfo_cost_func::f(vnl_vector<double> const& x)
   }
   else
   {
-    vnl_vector<double> mask_samples;
+    vnl_vector<double> mask_samples(from_samples_.size());
     mask_samples.fill(1.0f);
     //fx[0] = entropy_diff(mask_samples, to_samples);
     return entropy_diff(mask_samples, from_samples_, to_samples, nbins_);
