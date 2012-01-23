@@ -1,0 +1,143 @@
+// This is brl/bseg/sdet/sdet_texture_classifier_params.cxx
+#include "sdet_texture_classifier_params.h"
+//:
+// \file
+// See sdet_texture_classifier_params.h
+//
+//-----------------------------------------------------------------------------
+#include <vcl_sstream.h>
+#include <vcl_iostream.h>
+
+//------------------------------------------------------------------------
+// Constructors
+//
+sdet_texture_classifier_params::sdet_texture_classifier_params():
+  n_scales_(3), scale_interval_(45.0f), angle_interval_(30.0f)
+  {
+    lambda0_=4.0f;  lambda1_=1.6f; //was 3.0/1.2
+    laplace_radius_ = 1.5f;
+    gauss_radius_ = 1.5f;
+    cutoff_per_ = 0.01f;
+    signed_response_ = true;
+    mag_ = false;
+    fast_ = true;
+    k_ = 100;
+    n_samples_ = 200000;
+    k_near_ = 1;
+    block_size_ = 64;
+    weight_offset_ = 0.01f;
+  }
+
+sdet_texture_classifier_params::
+sdet_texture_classifier_params(const sdet_texture_classifier_params& dmp)
+  : gevd_param_mixin()
+{
+  InitParams(dmp.n_scales_, dmp.scale_interval_, dmp.angle_interval_,
+             dmp.lambda0_, dmp.lambda1_,dmp.laplace_radius_,
+             dmp.gauss_radius_,dmp.cutoff_per_, dmp.signed_response_,
+             dmp.mag_, dmp.fast_, dmp.k_, dmp.n_samples_,
+             dmp.k_near_, dmp.block_size_, dmp.weight_offset_);
+}
+
+sdet_texture_classifier_params::
+sdet_texture_classifier_params(unsigned n_scales,
+                               float scale_interval,
+                               float angle_interval,
+                               float lambda0,
+                               float lambda1,
+                               float laplace_radius, 
+                               float gauss_radius, 
+                               float cutoff_per,
+                               bool signed_response,
+                               bool mag,
+                               bool fast,
+                               unsigned k,
+                               unsigned n_samples,
+                               unsigned k_near,
+                               unsigned block_size,
+                               float weight_offset
+                               )
+{
+  InitParams(n_scales, angle_interval,scale_interval, 
+             lambda0, lambda1, laplace_radius, gauss_radius,
+             cutoff_per, signed_response, mag, fast, k, n_samples,
+             k_near, block_size, weight_offset);
+}
+
+void sdet_texture_classifier_params::
+InitParams(unsigned n_scales, float scale_interval, float angle_interval,
+           float lambda0, float lambda1,
+           float laplace_radius, float gauss_radius, 
+           float cutoff_per, bool signed_response,
+           bool mag, bool fast, unsigned k, unsigned n_samples,
+           unsigned k_near,
+           unsigned block_size,
+           float weight_offset)
+{
+  n_scales_ = n_scales;
+  scale_interval_ = scale_interval;
+  angle_interval_ = angle_interval;
+  lambda0_ = lambda0;
+  lambda1_ = lambda1;
+  laplace_radius_ = laplace_radius;
+  gauss_radius_ = gauss_radius;
+  cutoff_per_ = cutoff_per;
+  signed_response_ = signed_response;
+  mag_ = mag;
+  fast_ = fast;
+  k_ = k;
+  n_samples_ = n_samples;
+  k_near_ = k_near;
+  block_size_ = block_size;
+  weight_offset_ =   weight_offset;
+}
+
+//-----------------------------------------------------------------------------
+//
+//:   Checks that parameters are within acceptable bounds
+bool sdet_texture_classifier_params::SanityCheck()
+{
+  //  Note that msg << ends seems to restart the string and erase the
+  //  previous string. We should only use it as the last call, use
+  //  vcl_endl otherwise.
+  vcl_stringstream msg;
+  bool valid = true;
+
+  if (n_scales_ < 3)
+    {
+      msg << "ERROR: at least 3 filters are needed!\n";
+      valid = false;
+    }
+  if(mag_&&signed_response_){
+      msg << "ERROR: can't have both abs mag and signed responses!\n";
+      valid = false;
+    }
+
+
+  msg << vcl_ends;
+
+  SetErrorMsg(msg.str().c_str());
+  return valid;
+}
+
+vcl_ostream& operator << (vcl_ostream& os, const sdet_texture_classifier_params& dmp)
+{
+  os << "sdet_texture_classifier_params:\n[---\n"
+     << "n scales " << dmp.n_scales_ << " scale interval " 
+     << dmp.scale_interval_ << '\n'
+     << "angle interval " << dmp.angle_interval_ << '\n'
+     << "lambda0 " << dmp.lambda0_ << " lambda1 " << dmp.lambda1_ << '\n';
+  os << "laplace lambda " << dmp.laplace_radius_ << '\n';
+  os << "gauss lambda " << dmp.gauss_radius_ << '\n';
+  os << "gauss cutoff thresh " << dmp.cutoff_per_ << '\n';
+  os << "signed response " << dmp.signed_response_ << '\n';
+  os << "magnitude " << dmp.mag_ << '\n';
+  os << "fast " << dmp.fast_ << '\n';
+  os << "k " << dmp.k_ << '\n';
+  os << "n_samples " << dmp.n_samples_ << '\n';
+  os << "k_near " << dmp.k_near_ << '\n';
+  os << "block size " << dmp.block_size_ << '\n';
+  os << "weight offset " << dmp.weight_offset_ << '\n';
+  os << "---]\n";
+  return os;
+}

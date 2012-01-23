@@ -46,6 +46,9 @@ SET(sdet_sources
     sdet_denoise_mrf_bp.cxx              sdet_denoise_mrf_bp.h
     sdet_denoise_mrf_bp_params.cxx       sdet_denoise_mrf_bp_params.h
     sdet_vrml_display.cxx                sdet_vrml_display.h
+    sdet_texture_classifier.cxx          sdet_texture_classifier.h
+    sdet_texture_classifier_params.cxx   sdet_texture_classifier_params.h
+    sdet_k_means.cxx                     sdet_k_means.h
 )
 AUX_SOURCE_DIRECTORY(Templates sdet_sources)
 
@@ -53,7 +56,7 @@ ADD_LIBRARY(sdet ${sdet_sources})
 INSTALL_TARGETS(/lib sdet)
 INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bseg/sdet ${sdet_sources})
 
-TARGET_LINK_LIBRARIES(sdet brip bsol btol bdgl gevd vdgl vtol vsol imesh_algo imesh vil vil_algo vil1 vgl_algo vgl bvgl vnl_algo vnl vul vbl bil_algo)
+TARGET_LINK_LIBRARIES(sdet brip bsol btol bdgl gevd vdgl vtol vsol imesh_algo imesh vil vil_algo vil1 vgl_algo vgl bvgl vnl_algo vnl vul vbl bil_algo vsl vnl_io)
 
 IF(BUILD_TESTING)
   SUBDIRS(tests)
