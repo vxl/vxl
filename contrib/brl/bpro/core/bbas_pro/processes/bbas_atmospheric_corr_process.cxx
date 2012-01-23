@@ -79,12 +79,16 @@ bool bbas_atmospheric_corr_process(bprb_func_process& pro)
   float frac = 0.0001f;
   float airlight = h.value_with_area_below(frac);
   float mean = h.mean_vals(airlight, h.max());
-  //  float irrad = (mean-airlight)/sz;
-  float irrad = (mean-airlight);
+//#def BBAS_NORM_USE_SUN_ANGLE
+#ifdef BBAS_NORM_USE_SUN_ANGLE
+  float irrad = (mean-airlight)/sz;
   //
   // The corrected image should be explained by a Lambertian model,
   // that is, Icorr = alpha_i (n_i . s_j)
   //
+#else
+  float irrad = (mean-airlight);
+#endif
   vcl_cout << "airlight " << airlight << "  irradiance " << irrad << '\n';
 
   vil_image_view<float> float_img(ni_, nj_);
@@ -97,7 +101,9 @@ bool bbas_atmospheric_corr_process(bprb_func_process& pro)
       float_img(i,j) = v;
     }
   
-#if 1
+#ifdef BBAS_NORM_USE_SUN_ANGLE
+  pro.set_output_val<vil_image_view_base_sptr>(0, new vil_image_view<float>(float_img));
+#else
   // 0 and 3 come from the relative refectances 
   vil_image_view<float> float_stretch(ni_, nj_);
   vil_convert_stretch_range_limited<float>(float_img, float_stretch,
