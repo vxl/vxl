@@ -2,6 +2,19 @@
 INCLUDE_DIRECTORIES( ${OPENCL_INCLUDE_PATH} )
 INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bbas )
 INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR} )
+
+# TIFF and GEOTIFF needed for extracting coordinate information from buckeye lidar images
+INCLUDE(${VXL_CMAKE_DIR}/FindTIFF.cmake)
+IF(TIFF_FOUND)
+  INCLUDE_DIRECTORIES(${TIFF_INCLUDE_DIR})
+ENDIF(TIFF_FOUND)
+
+INCLUDE( ${VXL_CMAKE_DIR}/FindGEOTIFF.cmake)
+IF(GEOTIFF_FOUND)
+  INCLUDE_DIRECTORIES( ${GEOTIFF_INCLUDE_DIR} )
+ENDIF(GEOTIFF_FOUND)
+
+
 SET(boxm2_ocl_pro_sources
     boxm2_ocl_processes.h
     boxm2_ocl_register.h                     boxm2_ocl_register.cxx

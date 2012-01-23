@@ -9,8 +9,10 @@ DECLARE_FUNC_CONS(boxm2_create_opencl_cache_process);
 DECLARE_FUNC_CONS(boxm2_ocl_render_expected_image_process);
 DECLARE_FUNC_CONS(boxm2_ocl_render_gl_expected_image_process);
 DECLARE_FUNC_CONS(boxm2_ocl_render_expected_depth_process);
+DECLARE_FUNC_CONS(boxm2_ocl_render_expected_z_image_process); // 3-d to dem
 DECLARE_FUNC_CONS(boxm2_ocl_render_expected_height_map_process); // 3-d to dem
 DECLARE_FUNC_CONS(boxm2_ocl_ingest_dem_process); // dem to 3-d.
+DECLARE_FUNC_CONS(boxm2_ocl_ingest_buckeye_dem_process);
 DECLARE_FUNC_CONS(boxm2_ocl_update_process);
 DECLARE_FUNC_CONS(boxm2_ocl_refine_process);
 DECLARE_FUNC_CONS(boxm2_ocl_merge_process);
@@ -44,6 +46,9 @@ DECLARE_FUNC_CONS(boxm2_ocl_create_aux_process);
 DECLARE_FUNC_CONS(boxm2_ocl_flip_normals_using_vis_process);
 
 DECLARE_FUNC_CONS(boxm2_ocl_paint_batch_process); 
-DECLARE_FUNC_CONS(boxm2_ocl_paint_online_process); 
+DECLARE_FUNC_CONS(boxm2_ocl_paint_online_process);
+
+//DECLARE_FUNC_CONS(boxm2_ocl_update_alpha_naa_process);
+//DECLARE_FUNC_CONS(boxm2_ocl_render_expected_image_naa_process);
 
 #endif
