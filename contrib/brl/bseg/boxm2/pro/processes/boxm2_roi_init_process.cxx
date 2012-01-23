@@ -206,8 +206,9 @@ bool boxm2_roi_init_process_globals::roi_init( vcl_string const& image_path,
   camera->image_offset(u, v);
   double tu =  u - roi_box->min_x();
   double tv =  v - roi_box->min_y();
-  camera->set_image_offset(tu, tv);
-  local_camera = vpgl_local_rational_camera<double> (*lvcs, *camera);
+  vpgl_rational_camera<double> new_cam(*camera);
+  new_cam.set_image_offset(tu, tv);
+  local_camera = vpgl_local_rational_camera<double> (*lvcs, new_cam);
   delete roi_box;
   return true;
 }
