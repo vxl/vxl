@@ -12,5 +12,6 @@ DECLARE_FUNC_CONS(sdet_write_edge_file_process);
 DECLARE_FUNC_CONS(sdet_detect_edge_line_fitted_process);
 DECLARE_FUNC_CONS(sdet_detect_third_order_edges_process);
 DECLARE_FUNC_CONS(sdet_detect_third_order_edges_dt_process);
+DECLARE_FUNC_CONS(sdet_texture_classifier_process);
 
 #endif
