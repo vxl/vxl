@@ -14,6 +14,7 @@ ADD_EXECUTABLE( brip_test_all
   test_mask.cxx
   test_label_equivalence.cxx
   test_extrema.cxx
+  test_filter_bank.cxx
 )
 TARGET_LINK_LIBRARIES( brip_test_all brip vgl_algo vgl vnl_algo vnl vil vil1 vbl testlib)
 
@@ -30,6 +31,7 @@ ADD_TEST( brip_test_mask               ${EXECUTABLE_OUTPUT_PATH}/brip_test_all t
 ADD_TEST( brip_test_label_equivalence  ${EXECUTABLE_OUTPUT_PATH}/brip_test_all test_label_equivalence )
 IF(SEGFAULT_FIXED)
 ADD_TEST( brip_test_extrema            ${EXECUTABLE_OUTPUT_PATH}/brip_test_all test_extrema )
+ADD_TEST( brip_test_filter_bank            ${EXECUTABLE_OUTPUT_PATH}/brip_test_all test_filter_bank )
 ENDIF(SEGFAULT_FIXED)
 
 ADD_EXECUTABLE( brip_test_include test_include.cxx )

@@ -34,6 +34,7 @@ SET(brip_sources
    brip_interp_kernel.h
    brip_gaussian_kernel.h
    brip_blobwise_mutual_info.h brip_blobwise_mutual_info.txx
+   brip_filter_bank.h        brip_filter_bank.cxx
 )
 AUX_SOURCE_DIRECTORY(Templates brip_sources)
 

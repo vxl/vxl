@@ -12,6 +12,7 @@ DECLARE( test_max_scale_response );
 DECLARE( test_mask );
 DECLARE( test_label_equivalence );
 DECLARE( test_extrema );
+DECLARE( test_filter_bank );
 void
 register_tests()
 {
@@ -25,8 +26,8 @@ register_tests()
   REGISTER( test_quadtree );
   REGISTER( test_max_scale_response );
   REGISTER( test_mask );
-  REGISTER( test_label_equivalence );
   REGISTER( test_extrema );
+  REGISTER( test_filter_bank );
 }
 
 DEFINE_MAIN;

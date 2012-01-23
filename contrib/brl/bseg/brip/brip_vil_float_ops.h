@@ -55,6 +55,9 @@ class brip_vil_float_ops
   static vil_image_view<float> gaussian(vil_image_view<float> const& input,
                                         float sigma,
                                         float fill = 0.0f);
+  //: computes absolute value
+  static vil_image_view<float> 
+    absolute_value(vil_image_view<float> const& input);
 
 #ifdef VIL_CONVOLVE_WITH_MASK_EXISTS // TODO
   //: convolves with a Gaussian kernel and for a given mask
@@ -160,22 +163,43 @@ class brip_vil_float_ops
   //: a helper function for the extrema method: reverts angle to the range [-90, 90]
   static float extrema_revert_angle(float angle);
 
-  //: Find anisotropic intensity extrema.
-  // \p theta is in degrees
+
+  //: Find anisotropic intensity extrema (Gaussian 2nd derivative). Theta is in degrees
+  // the effect of bright, mag_only and signed response are as follows:
+  //  bright  mag_only signed_response        result
+  // ------------------------------------------------
+  //  false    false      false          dark extrema response 
+  //  false    false      true           signed output(full range)
+  //  false    true       false          absolute mag output
+  //  false    true       true           invalid
+  //  true     false      false          bright extrema output
+  //  true     false      true           signed output(full range)
+  //  true     true       false          absolute mag output
+  //  true     true       true           invalid
+  // 
+
   static vil_image_view<float> extrema(vil_image_view<float> const& input,
                                        float lambda0, float lambda1,
                                        float theta, bool bright = true,
                                        bool mag_only = false,
                                        bool output_response_mask = true,
-                                       bool unclipped_response = false,
-                                       bool scale_invariant = false);
+                                       bool signed_response = false,
+                                       bool scale_invariant = false,
+                                       bool non_max_suppress = true,
+                                       float cutoff_per = 0.01f);
 
   //: Find anisotropic intensity extrema at a range of orientations and return the maximal response at the best orientation.
   // \p theta_interval is in degrees
   //  If \p lambda0 == \p lambda1 then reduces to the normal extrema operator
   static vil_image_view<float> extrema_rotational(vil_image_view<float> const& input,
                                                   float lambda0, float lambda1,
-                                                  float theta_interval, bool bright = true, bool mag_only = false, bool scale_invariant = false);
+                                                  float theta_interval, 
+                                                  bool bright = true, 
+                                                  bool mag_only = false, 
+                                                  bool signed_response = false, 
+                                                  bool scale_invariant = false,
+                                                  bool non_max_suppress = true,
+                                                  float cutoff_per = 0.01f);
 
   //: Compute the inscribed rectangle in an ellipse with largest $(1+h)(1+w)$.
   //  Needed for fast non-maximal suppression.
@@ -188,10 +212,25 @@ class brip_vil_float_ops
   //  Image rotation is applied then separated u, v kernels produce the response.
   static vil_image_view<float> fast_extrema(vil_image_view<float> const& input,
                                             float lambda0, float lambda1,
-                                            float theta, bool bright = true,
-                                            bool output_response_mask = true,
-                                            bool unclipped_response = false,
-                                            float cutoff_percentage = 0.01f);
+                                            float theta, bool bright = true, 
+                                            bool mag_only = false, 
+                                            bool output_response_mask = true, 
+                                            bool signed_response = false, 
+                                            bool scale_invariant = false, 
+                                            bool non_max_suppress = true, 
+                                            float cutoff= 0.01f);
+
+
+  static vil_image_view<float>& resp,
+    fast_extrema_rotational(vil_image_view<float> const& input, 
+                            float lambda0, float lambda1,
+                            float theta_interval, 
+                            bool bright =false,
+                            bool mag_only = false, 
+                            bool signed_response =true,
+                            bool scale_invariant = true, 
+                            bool non_max_suppress = false,
+                            float cutoff=0.01f);
 
   //: Ix.Ix-transpose gradient matrix elements for an NxN region ($N = 2n+1$)
   // That is,
@@ -204,6 +243,7 @@ class brip_vil_float_ops
   //                       |_                           _|
   // \endverbatim
   // over a $2n+1 ~\times~ 2n+1$ neighborhood.
+
   static void grad_matrix_NxN(vil_image_view<float> const& input, unsigned n,
                               vil_image_view<float>& IxIx,
                               vil_image_view<float>& IxIy,
