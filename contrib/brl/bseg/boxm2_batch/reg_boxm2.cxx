@@ -9,6 +9,7 @@
 #include <boxm2/cpp/pro/boxm2_cpp_register.h>
 #include <vpgl_pro/vpgl_register.h>
 #include <vil_pro/vil_register.h>
+#include <sdet_pro/sdet_register.h>
 #include <brip_pro/brip_register.h>
 #if defined(HAS_OPENCL) && HAS_OPENCL
 #include <bocl/pro/bocl_register.h>
@@ -43,6 +44,7 @@ register_processes(PyObject *self, PyObject *args)
   bbas_register::register_process();
   bsta_register::register_process();
   ihog_register::register_process();
+  sdet_register::register_process();
 #if defined(HAS_HDFS) && HAS_HDFS
   bhdfs_register::register_process();
 #endif
