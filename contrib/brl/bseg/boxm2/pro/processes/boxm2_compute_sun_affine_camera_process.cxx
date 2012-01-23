@@ -1,9 +1,9 @@
 // This is brl/bseg/boxm2/pro/processes/boxm2_compute_sun_affine_camera_process.cxx
 //:
 // \file
-// \brief  A process for computing a perspective camera, given a scene, camera center, and desired image resolution
+// \brief  A process for computing an affine camera, given a scene, and sun position
 //
-// \author J. L. Mundy
+// \author Vishal Jain
 // \date May 24, 2011
 
 #include <bprb/bprb_func_process.h>
@@ -13,7 +13,7 @@
 #include <vcl_cmath.h>
 namespace boxm2_compute_sun_affine_camera_process_globals
 {
-  const unsigned n_inputs_ = 3;
+  const unsigned n_inputs_ = 4;
   const unsigned n_outputs_ = 3;
 }
 bool boxm2_compute_sun_affine_camera_process_cons(bprb_func_process& pro)
@@ -25,14 +25,22 @@ bool boxm2_compute_sun_affine_camera_process_cons(bprb_func_process& pro)
   input_types_[0] = "boxm2_scene_sptr";
   input_types_[1] = "float"; //Elevation
   input_types_[2] = "float"; //Azimuthal angle of the sun
+  input_types_[3] = "bool";  // set to TRUE if el,az are in astronomical coord. system, i.e. degrees above horizon, degrees east of north
+  bool result = pro.set_input_types(input_types_);
 
   // process has 1 output:
   vcl_vector<vcl_string>  output_types_(n_outputs_);
-  output_types_[0] = "vpgl_camera_double_sptr";// longitude
-  output_types_[1] = "unsigned";// longitude
-  output_types_[2] = "unsigned";// longitude
+  output_types_[0] = "vpgl_camera_double_sptr";// affine sun camera
+  output_types_[1] = "unsigned";// number of pixels (x)
+  output_types_[2] = "unsigned";// number of pixels (y)
+   
+  result &= pro.set_output_types(output_types_);
 
-  return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
+  // set default for input[3], so as to not break old code
+  brdb_value_sptr default_astro = new brdb_value_t<bool>(false);
+  pro.set_input(3,default_astro);
+
+  return result;
 }
 
 bool boxm2_compute_sun_affine_camera_process(bprb_func_process& pro)
@@ -45,14 +53,26 @@ bool boxm2_compute_sun_affine_camera_process(bprb_func_process& pro)
   }
   //get the inputs
   boxm2_scene_sptr scene = pro.get_input<boxm2_scene_sptr>(0);
+  vcl_cout << "scene = " << scene.ptr() << vcl_endl;
   float elevation  = pro.get_input<float>(1);
   float azimuthal  = pro.get_input<float>(2);
+  bool astro_coords = pro.get_input<bool>(3);
 
-
-  vgl_vector_3d<double> sun_dir_downwards(-vcl_sin(elevation)*vcl_cos(azimuthal),
-                                          -vcl_sin(elevation)*vcl_sin(azimuthal),
-                                          -vcl_cos(elevation));
-
+  vgl_vector_3d<double> sun_dir_downwards;
+  if (astro_coords){
+    vcl_cout << "Using Astronomical Coordinate System" << vcl_endl; 
+    double az_rads = vnl_math::pi/180 * azimuthal;
+    double el_rads = vnl_math::pi/180 * elevation;
+    sun_dir_downwards = -vgl_vector_3d<double>(vcl_cos(el_rads)*vcl_sin(az_rads),
+                                               vcl_cos(el_rads)*vcl_cos(az_rads),
+                                               vcl_sin(el_rads));
+  }
+  else {
+  sun_dir_downwards = vgl_vector_3d<double>(-vcl_sin(elevation)*vcl_cos(azimuthal),
+                                            -vcl_sin(elevation)*vcl_sin(azimuthal),
+                                            -vcl_cos(elevation));
+  }
+  vcl_cout << "Sun ray direction = " << sun_dir_downwards << vcl_endl;
   vcl_map<boxm2_block_id, boxm2_block_metadata> blk_info=scene->blocks();
   vcl_map<boxm2_block_id, boxm2_block_metadata>::iterator iter = blk_info.begin();
 
@@ -62,7 +82,10 @@ bool boxm2_compute_sun_affine_camera_process(bprb_func_process& pro)
   boxm2_block_metadata mdata = iter->second;
   unsigned int dimx = (unsigned int) vcl_floor(box.width()/(mdata.sub_block_dim_.x()/vcl_pow(2.0,(double)mdata.max_level_-1))+ 0.5);
   unsigned int dimy = (unsigned int) vcl_floor(box.height()/(mdata.sub_block_dim_.y()/vcl_pow(2.0,(double)mdata.max_level_-1))+ 0.5);
-
+//TEMP
+dimx /= 2;
+dimy /= 2;
+//END TEMP
   vpgl_affine_camera<double> affine_camera  = bpgl_camera_from_box::affine_camera_from_box(box,
                                                        sun_dir_downwards,
                                                        dimx,
