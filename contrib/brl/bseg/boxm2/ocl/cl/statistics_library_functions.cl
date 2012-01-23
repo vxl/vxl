@@ -1,4 +1,11 @@
 #pragma OPENCL EXTENSION cl_khr_byte_addressable_store : enable
+
+// "dot" doesnt seem to be defined for float16
+float __OVERLOADABLE__ dot(float16 x, float16 y)
+{
+  return x.s0*y.s0 + x.s1*y.s1 + x.s2*y.s2 + x.s3*y.s3 + x.s4*y.s4 + x.s5*y.s5 + x.s6*y.s6 + x.s7*y.s7 + x.s8*y.s8 + x.s9*y.s9 + x.sa*y.sa + x.sb*y.sb + x.sc*y.sc + x.sd*y.sd + x.se*y.se + x.sf*y.sf;
+}
+
 float gauss_prob_density(float x, float mu, float sigma)
 {
   if(sigma <= 0.0f) 
@@ -6,6 +13,26 @@ float gauss_prob_density(float x, float mu, float sigma)
   
   float ratio=(x - mu)/sigma;
   return 0.398942280f*exp(-0.5f*ratio*ratio)/sigma;
+}
+
+#if 0
+float16 gauss_prob_density_f16(float16 *x, float mu, float sigma)
+{
+  if(sigma <= 0.0f) 
+    return 1.0f; 
+  
+  float16 ratio=(*x - mu)/sigma;
+  return 0.398942280f*exp(-0.5f*ratio*ratio)/sigma;
+}
+#endif
+
+float16 gauss_prob_density_f16(float16 *x, float mu, float16 *sigma)
+{
+  //if(sigma <= 0.0f) 
+  //  return 1.0f; 
+  
+  float16 ratio=(*x - mu)/ *sigma;
+  return 0.398942280f*exp(-0.5f*ratio*ratio)/ *sigma;
 }
 
 //3D gaussian with assumed 3 independent dimensions

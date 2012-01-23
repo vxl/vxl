@@ -38,6 +38,7 @@ DECLARE_FUNC_CONS(boxm2_cpp_pre_infinity_opt2_phongs_process);
 DECLARE_FUNC_CONS(boxm2_cpp_batch_update_opt2_phongs_process);
 DECLARE_FUNC_CONS(boxm2_cpp_batch_update_nonray_process);
 DECLARE_FUNC_CONS(boxm2_cpp_render_z_images_process);
+DECLARE_FUNC_CONS(boxm2_cpp_batch_compute_normal_albedo_process);
 
 DECLARE_FUNC_CONS(boxm2_cpp_create_aux_data_opt2_process);
 DECLARE_FUNC_CONS(boxm2_cpp_batch_update_opt2_process);

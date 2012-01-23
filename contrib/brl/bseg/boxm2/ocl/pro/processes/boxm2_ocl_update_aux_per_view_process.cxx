@@ -18,6 +18,7 @@
 #include <boxm2/boxm2_util.h>
 #include <vil/vil_image_view.h>
 #include <boxm2/ocl/algo/boxm2_ocl_camera_converter.h>
+#include <vil/vil_convert.h>
 
 //brdb stuff
 #include <brdb/brdb_value.h>
@@ -30,7 +31,7 @@
 
 namespace boxm2_ocl_update_aux_per_view_process_globals
 {
-  const unsigned n_inputs_  = 6;
+  const unsigned n_inputs_  = 7;
   const unsigned n_outputs_ = 0;
   enum {
     UPDATE_AUX_LEN_INT_VIS        = 0,
@@ -63,7 +64,6 @@ namespace boxm2_ocl_update_aux_per_view_process_globals
     aux_len_int_vis->create_kernel(&device->context(),device->device_id(), src_paths, "aux_len_int_vis_main", aux_opt, "batch_update::aux_len_int_vis_main");
     vec_kernels.push_back(aux_len_int_vis);
 
-
     ////may need DIFF LIST OF SOURCES FOR THSI GUY TOO
     vec_kernels.push_back(convert_aux_int_float);
 
@@ -86,6 +86,7 @@ bool boxm2_ocl_update_aux_per_view_process_cons(bprb_func_process& pro)
   input_types_[3] = "vpgl_camera_double_sptr";
   input_types_[4] = "vil_image_view_base_sptr";
   input_types_[5] = "vcl_string";
+  input_types_[6] = "vil_image_view_base_sptr";
 
   // process has 1 output:
   // output[0]: scene sptr
@@ -93,8 +94,11 @@ bool boxm2_ocl_update_aux_per_view_process_cons(bprb_func_process& pro)
 
   bool good = pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
   // in case the 6th input is not set
-  brdb_value_sptr idx = new brdb_value_t<vcl_string>("");
-  pro.set_input(5, idx);
+  brdb_value_sptr idx5 = new brdb_value_t<vcl_string>("");
+  pro.set_input(5, idx5);
+  // in case the 7th input is not set
+  brdb_value_sptr idx6 = new brdb_value_t<vil_image_view_base_sptr>();
+  pro.set_input(6, idx6);
   return good;
 }
 
@@ -117,7 +121,27 @@ bool boxm2_ocl_update_aux_per_view_process(bprb_func_process& pro)
   boxm2_opencl_cache_sptr opencl_cache  = pro.get_input<boxm2_opencl_cache_sptr>(i++);
   vpgl_camera_double_sptr cam           = pro.get_input<vpgl_camera_double_sptr>(i++);
   vil_image_view_base_sptr img          = pro.get_input<vil_image_view_base_sptr>(i++);
-  vcl_string suffix                      = pro.get_input<vcl_string>(i++);
+  vcl_string suffix                     = pro.get_input<vcl_string>(i++);
+  vil_image_view_base_sptr mask_base         = pro.get_input<vil_image_view_base_sptr>(i++);
+
+  vil_image_view<float> mask(img->ni(),img->nj());
+  if (mask_base){
+    if (vil_image_view<vxl_byte> *mask_byte = dynamic_cast<vil_image_view<vxl_byte>*>(mask_base.ptr())) {
+      vil_convert_stretch_range_limited(*mask_byte, mask, (vxl_byte)0, (vxl_byte)255, 0.0f, 1.0f);
+    }
+    else if (vil_image_view<float> *mask_float = dynamic_cast<vil_image_view<float>*>(mask_base.ptr())) {
+      // clamp values at (0,1)
+      vil_convert_stretch_range_limited(*mask_float,mask, 0.0f, 1.0f, 0.0f, 1.0f);
+    }
+    else {
+      vcl_cerr << "ERROR: unknown mask pixel type" << vcl_endl;
+      return false;
+    }
+  }
+  else {
+    // no mask specified: use all pixels
+    mask.fill(1.0f);
+  }
 
   long binCache = opencl_cache.ptr()->bytes_in_cache();
   vcl_cout<<"Update MBs in cache: "<<binCache/(1024.0*1024.0)<<vcl_endl;
@@ -140,6 +164,13 @@ bool boxm2_ocl_update_aux_per_view_process(bprb_func_process& pro)
       foundDataType = true;
       options=" -D MOG_TYPE_16 ";
       appTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_MOG3_GREY_16>::prefix());
+    }
+    else if ( apps[i] == boxm2_data_traits<BOXM2_NORMAL_ALBEDO_ARRAY>::prefix() )
+    {
+      data_type = apps[i];
+      foundDataType = true;
+      options=" -D BOXM2_NORMAL_ALBEDO_ARRAY ";
+      appTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_NORMAL_ALBEDO_ARRAY>::prefix());
     }
   }
   if (!foundDataType) {
@@ -174,36 +205,46 @@ bool boxm2_ocl_update_aux_per_view_process(bprb_func_process& pro)
   //set generic cam
   cl_float* ray_origins = new cl_float[4*cl_ni*cl_nj];
   cl_float* ray_directions = new cl_float[4*cl_ni*cl_nj];
-  bocl_mem_sptr ray_o_buff = new bocl_mem(device->context(), ray_origins, cl_ni*cl_nj * sizeof(cl_float4) , "ray_origins buffer");
-  bocl_mem_sptr ray_d_buff = new bocl_mem(device->context(), ray_directions,  cl_ni*cl_nj * sizeof(cl_float4), "ray_directions buffer");
+  vcl_cout << "allocating ray_o_buff: ni = " << cl_ni << ", nj = " << cl_nj << "  size = " << cl_ni*cl_nj*sizeof(cl_float4) << vcl_endl;
+  bocl_mem_sptr ray_o_buff = opencl_cache->alloc_mem( cl_ni*cl_nj * sizeof(cl_float4) , ray_origins,"ray_origins buffer");
+  vcl_cout << "allocating ray_d_buff: ni = " << cl_ni << ", nj = " << cl_nj << vcl_endl;
+  bocl_mem_sptr ray_d_buff = opencl_cache->alloc_mem(cl_ni*cl_nj * sizeof(cl_float4), ray_directions,"ray_directions buffer");
   boxm2_ocl_camera_converter::compute_ray_image( device, queue, cam, cl_ni, cl_nj, ray_o_buff, ray_d_buff);
 
   //Visibility, Preinf, Norm, and input image buffers
   float* vis_buff = new float[cl_ni*cl_nj];
-  float* pre_buff = new float[cl_ni*cl_nj];
+  //float* pre_buff = new float[cl_ni*cl_nj];
   float* input_buff=new float[cl_ni*cl_nj];
+#if 0
   for (unsigned i=0;i<cl_ni*cl_nj;i++)
   {
     vis_buff[i]=1.0f;
-    pre_buff[i]=0.0f;
+    //pre_buff[i]=0.0f;
   }
+#endif
   int count=0;
   for (unsigned int j=0;j<cl_nj;++j)
     for (unsigned int i=0;i<cl_ni;++i)
     {
       input_buff[count] = 0.0f;
-      if (i<img_view->ni() && j< img_view->nj()) input_buff[count]=(*img_view)(i,j);
+      vis_buff[i] = 1.0f;
+      if (i<img_view->ni() && j< img_view->nj()) {
+        input_buff[count]=(*img_view)(i,j);
+        vis_buff[count] = mask(i,j);
+      }
       ++count;
     }
-
-  bocl_mem_sptr in_image=new bocl_mem(device->context(),input_buff,cl_ni*cl_nj*sizeof(float),"input image buffer");
+  vcl_cout << "allocating input_buff: ni = " << cl_ni << ", nj = " << cl_nj << vcl_endl;
+  bocl_mem_sptr in_image=opencl_cache->alloc_mem(cl_ni*cl_nj*sizeof(float),input_buff,"input image buffer");
   in_image->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
-  bocl_mem_sptr vis_image=new bocl_mem(device->context(),vis_buff,cl_ni*cl_nj*sizeof(float),"vis image buffer");
+  vcl_cout << "allocating vis_buff: ni = " << cl_ni << ", nj = " << cl_nj << vcl_endl;
+  bocl_mem_sptr vis_image=opencl_cache->alloc_mem(cl_ni*cl_nj*sizeof(float),vis_buff,"vis image buffer");
   vis_image->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
-  bocl_mem_sptr pre_image=new bocl_mem(device->context(),pre_buff,cl_ni*cl_nj*sizeof(float),"pre image buffer");
-  pre_image->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
+  //bocl_mem_sptr pre_image=new bocl_mem(device->context(),pre_buff,cl_ni*cl_nj*sizeof(float),"pre image buffer");
+  //pre_image->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
+  vcl_cout << "Done allocating images" << vcl_endl;
 
   // Image Dimensions
   int img_dim_buff[4];
@@ -341,14 +382,19 @@ bool boxm2_ocl_update_aux_per_view_process(bprb_func_process& pro)
       //read image out to buffer (from gpu)
       in_image->read_to_buffer(queue);
       vis_image->read_to_buffer(queue);
-      pre_image->read_to_buffer(queue);
+      //pre_image->read_to_buffer(queue);
       cl_output->read_to_buffer(queue);
       clFinish(queue);
     }
   }
 
+  opencl_cache->unref_mem(vis_image.ptr());
+  opencl_cache->unref_mem(in_image.ptr());
+  opencl_cache->unref_mem(ray_d_buff.ptr());
+  opencl_cache->unref_mem(ray_o_buff.ptr());
+
   delete [] vis_buff;
-  delete [] pre_buff;
+  //delete [] pre_buff;
   delete [] input_buff;
   delete [] ray_origins;
   delete [] ray_directions;

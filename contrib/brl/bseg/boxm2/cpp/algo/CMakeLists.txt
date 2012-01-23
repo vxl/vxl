@@ -35,6 +35,8 @@ SET(boxm2_cpp_algo_sources
     boxm2_merge_block_function.h     boxm2_merge_block_function.cxx
 
     boxm2_compute_nonsurface_histogram_functor.h
+	boxm2_compute_phongs_model_functor.h
+	boxm2_compute_normal_albedo_functor.h
    )
 AUX_SOURCE_DIRECTORY(Templates boxm2_cpp_algo_sources)
 

@@ -48,7 +48,7 @@ DECLARE_FUNC_CONS(boxm2_ocl_flip_normals_using_vis_process);
 DECLARE_FUNC_CONS(boxm2_ocl_paint_batch_process); 
 DECLARE_FUNC_CONS(boxm2_ocl_paint_online_process);
 
-//DECLARE_FUNC_CONS(boxm2_ocl_update_alpha_naa_process);
-//DECLARE_FUNC_CONS(boxm2_ocl_render_expected_image_naa_process);
+DECLARE_FUNC_CONS(boxm2_ocl_update_alpha_naa_process);
+DECLARE_FUNC_CONS(boxm2_ocl_render_expected_image_naa_process);
 
 #endif

@@ -266,3 +266,50 @@ void step_cell_render_depth2(float depth,
 }
 
 #endif
+
+#ifdef RENDER_Z_IMAGE
+
+void step_cell_render_z(float z, 
+                        __global float  * alpha_data, 
+                        int      data_ptr, 
+                        float    seg_len, 
+                        float  * vis,
+                        float  * expected_z,
+						float  * expected_z_sqr,
+                        float  * probsum)
+{
+  float alpha = alpha_data[data_ptr];
+  float diff_omega=exp(-alpha*seg_len);
+  float omega=(*vis) * (1.0f - diff_omega);
+  (*probsum)+=omega;
+  (*vis) *= diff_omega;
+  (*expected_z)+= z*omega;
+  (*expected_z_sqr)+= z*z*omega;
+  
+}
+#endif
+
+#ifdef RENDER_NAA
+void step_cell_render_naa(AuxArgs aux_args, 
+                          int      data_ptr, 
+                          float    d, 
+                          float  * vis,
+                          float  * expected_i)
+{
+  float alpha = aux_args.alpha[data_ptr];
+  float diff_omega=exp(-alpha*d);
+  float expected_int_cell=0.0f;
+  // for rendering only
+  if(diff_omega<0.995f)
+  {
+        __global float16 *albedos = (__global float16*)&(aux_args.naa_apm[data_ptr*32]);
+		__global float16 *normal_weights = (__global float16*)&(aux_args.naa_apm[data_ptr*32 + 16]);
+		
+        float16 predictions = aux_args.irradiance * (*aux_args.normals_dot_sun) * (*albedos);
+		expected_int_cell = dot(predictions, *normal_weights);
+  }
+  float omega=(*vis) * (1.0f - diff_omega);
+  (*vis) *= diff_omega;
+  (*expected_i)+=expected_int_cell*omega;
+}
+#endif

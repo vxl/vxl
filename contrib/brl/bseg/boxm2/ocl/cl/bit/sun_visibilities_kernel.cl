@@ -15,8 +15,9 @@ typedef struct
   __global int  * vis_array;
   __local  short2* ray_bundle_array;
   __local  int*    cell_ptrs;
-  __local  float*  cached_vis;
+ // __local  float*  cached_vis;
            float*  ray_vis;
+           float*  last_vis;
 } AuxArgs;
 
 
@@ -31,13 +32,20 @@ void step_cell_seglen_vis(AuxArgs aux_args, int data_ptr, uchar llid, float d)
     atom_add(&aux_args.seg_len[data_ptr], seg_int);
     //calculate this ray's contribution to beta
     float  alpha    = aux_args.alpha[data_ptr];
-    float cell_vis = (* aux_args.ray_vis) * d;
+    //float cell_vis = (* aux_args.ray_vis) * d;
+    float cell_vis = *(aux_args.last_vis) * d;
 
     //update ray_pre and ray_vis
     float temp  = exp(-alpha * d);
     // updated visibility probability
     (* aux_args.ray_vis) *= temp;
 
+    // keep track of vis at last "empty" cell to prevent self-shadowing within uncertain regions
+    const float occlusion_thresh = 0.0; // 0.99
+    if (temp >= occlusion_thresh) {
+       *(aux_args.last_vis) = *(aux_args.ray_vis);
+    }
+    
     //discretize and store beta and vis contribution
     int vis_int  = convert_int_rte(cell_vis * SEGLEN_FACTOR);
     atom_add(&aux_args.vis_array[data_ptr], vis_int);
@@ -59,6 +67,7 @@ seg_len_and_vis_main(__constant  RenderSceneInfo    * linfo,
                      __global    float4             * ray_directions,
                      __global    uint4              * imgdims,           // dimensions of the input image
                      __global    float              * vis_image,         // visibility image (for keeping vis across blocks)
+                     __global    float              * last_vis_image,    // like visibility image, but updates only in "empty" regions to prevent self-shadowing within uncertain regions
                      __global    float              * output,
                      __local     uchar16            * local_tree,        // cache current tree into local memory
                      __local     short2             * ray_bundle_array,  // gives information for which ray takes over in the workgroup
@@ -87,6 +96,7 @@ seg_len_and_vis_main(__constant  RenderSceneInfo    * linfo,
     return;
   float vis0 = 1.0f;
   float vis = vis_image[j*get_global_size(0) + i];
+  float last_vis = last_vis_image[j*get_global_size(0) + i];
 
   barrier(CLK_LOCAL_MEM_FENCE);
 
@@ -111,8 +121,9 @@ seg_len_and_vis_main(__constant  RenderSceneInfo    * linfo,
 
   aux_args.ray_bundle_array = ray_bundle_array;
   aux_args.cell_ptrs = cell_ptrs;
-  aux_args.cached_vis = cached_vis;
+  //aux_args.cached_vis = cached_vis;
   aux_args.ray_vis = &vis;
+  aux_args.last_vis = &last_vis;
   cast_ray( i, j,
             ray_ox, ray_oy, ray_oz,
             ray_dx, ray_dy, ray_dz,
@@ -121,6 +132,8 @@ seg_len_and_vis_main(__constant  RenderSceneInfo    * linfo,
 
   //write out vis and pre
   vis_image[j*get_global_size(0)+i] = vis;
+  last_vis_image[j*get_global_size(0)+i] = last_vis;
+
 }
 #endif
 

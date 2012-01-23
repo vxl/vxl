@@ -1,21 +1,24 @@
-// This is brl/bseg/boxm2/ocl/pro/processes/boxm2_ocl_render_expected_image_process.cxx
+// This is brl/bseg/boxm2/ocl/pro/processes/boxm2_ocl_render_expected_image_naa_process.cxx
 //:
 // \file
-// \brief  A process for rendering the scene.
+// \brief  A process for rendering the scene using the normalized_albedo_array appearance model.
 //
-// \author Vishal Jain
-// \date Mar 10, 2011
+// \author Daniel Crispell
+// \date Dec 19, 2011
 
 #include <bprb/bprb_func_process.h>
 
 #include <vcl_fstream.h>
 #include <vcl_algorithm.h>
+#include <vcl_vector.h>
 #include <boxm2/ocl/boxm2_opencl_cache.h>
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/boxm2_block.h>
 #include <boxm2/boxm2_data_base.h>
 #include <boxm2/ocl/boxm2_ocl_util.h>
 #include <vil/vil_image_view.h>
+#include <vgl/vgl_vector_3d.h>
+
 //brdb stuff
 #include <brdb/brdb_value.h>
 
@@ -27,14 +30,14 @@
 #include <vul/vul_timer.h>
 
 
-namespace boxm2_ocl_render_expected_image_process_globals
+namespace boxm2_ocl_render_expected_image_naa_process_globals
 {
-  const unsigned n_inputs_ = 7;
+  const unsigned n_inputs_ = 9;
   const unsigned n_outputs_ = 2;
   vcl_size_t lthreads[2]={8,8};
 
   static vcl_map<vcl_string,vcl_vector<bocl_kernel*> > kernels;
-  void compile_kernel(bocl_device_sptr device,vcl_vector<bocl_kernel*> & vec_kernels, vcl_string opts)
+  bool compile_kernel(bocl_device_sptr device,vcl_vector<bocl_kernel*> & vec_kernels, vcl_string opts)
   {
     //gather all render sources... seems like a lot for rendering...
     vcl_vector<vcl_string> src_paths;
@@ -44,47 +47,55 @@ namespace boxm2_ocl_render_expected_image_process_globals
     src_paths.push_back(source_dir + "bit/bit_tree_library_functions.cl");
     src_paths.push_back(source_dir + "backproject.cl");
     src_paths.push_back(source_dir + "statistics_library_functions.cl");
-    src_paths.push_back(source_dir + "expected_functor.cl");
     src_paths.push_back(source_dir + "ray_bundle_library_opt.cl");
     src_paths.push_back(source_dir + "bit/render_bit_scene.cl");
+    src_paths.push_back(source_dir + "expected_functor.cl");
     src_paths.push_back(source_dir + "bit/cast_ray_bit.cl");
 
     //set kernel options
     //#define STEP_CELL step_cell_render(mixture_array, alpha_array, data_ptr, d, &vis, &expected_int);
-    vcl_string options = opts + " -D RENDER ";
+    vcl_string options = opts + " -D RENDER_NAA ";
     options += " -D DETERMINISTIC ";
-    options += " -D STEP_CELL=step_cell_render(aux_args.mog,aux_args.alpha,data_ptr,d*linfo->block_len,vis,aux_args.expint)";
+    options += " -D STEP_CELL=step_cell_render_naa(aux_args,data_ptr,d*linfo->block_len,vis,aux_args.expint)";
 
     //have kernel construct itself using the context and device
     bocl_kernel * ray_trace_kernel=new bocl_kernel();
 
-    ray_trace_kernel->create_kernel( &device->context(),
+    if(!ray_trace_kernel->create_kernel( &device->context(),
                                      device->device_id(),
                                      src_paths,
                                      "render_bit_scene",   //kernel name
                                      options,              //options
-                                     "boxm2 opencl render_bit_scene"); //kernel identifier (for error checking)
+                                     "boxm2 opencl render_bit_scene")) { //kernel identifier (for error checking)
+       vcl_cerr << "create_kernel (render kernel) returned error." << vcl_endl;
+       return false;
+    }
     vec_kernels.push_back(ray_trace_kernel);
+
     //create normalize image kernel
     vcl_vector<vcl_string> norm_src_paths;
     norm_src_paths.push_back(source_dir + "pixel_conversion.cl");
     norm_src_paths.push_back(source_dir + "bit/normalize_kernels.cl");
     bocl_kernel * normalize_render_kernel=new bocl_kernel();
 
-    normalize_render_kernel->create_kernel( &device->context(),
+    options = opts + " -D RENDER ";
+    if(!normalize_render_kernel->create_kernel( &device->context(),
                                             device->device_id(),
                                             norm_src_paths,
                                             "normalize_render_kernel",   //kernel name
                                             options,              //options
-                                            "normalize render kernel"); //kernel identifier (for error checking)
-
+                                            "normalize render kernel")){ //kernel identifier (for error checking)
+      vcl_cerr << "create_kernel (normalize kernel) returned error." << vcl_endl;
+      return false;
+    }
     vec_kernels.push_back(normalize_render_kernel);
+    return true;
   }
 }
 
-bool boxm2_ocl_render_expected_image_process_cons(bprb_func_process& pro)
+bool boxm2_ocl_render_expected_image_naa_process_cons(bprb_func_process& pro)
 {
-  using namespace boxm2_ocl_render_expected_image_process_globals;
+  using namespace boxm2_ocl_render_expected_image_naa_process_globals;
 
   //process takes 1 input
   vcl_vector<vcl_string> input_types_(n_inputs_);
@@ -94,7 +105,9 @@ bool boxm2_ocl_render_expected_image_process_cons(bprb_func_process& pro)
   input_types_[3] = "vpgl_camera_double_sptr";
   input_types_[4] = "unsigned";
   input_types_[5] = "unsigned";
-  input_types_[6] = "vcl_string";
+  input_types_[6] = "float";
+  input_types_[7] = "float";
+  input_types_[8] = "float";
 
   // process has 1 output:
   // output[0]: scene sptr
@@ -103,15 +116,13 @@ bool boxm2_ocl_render_expected_image_process_cons(bprb_func_process& pro)
   output_types_[1] = "vil_image_view_base_sptr";
 
   bool good = pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
-  // in case the 7th input is not set
-  brdb_value_sptr idx = new brdb_value_t<vcl_string>("");
-  pro.set_input(6, idx);
+  
   return good;
 }
 
-bool boxm2_ocl_render_expected_image_process(bprb_func_process& pro)
+bool boxm2_ocl_render_expected_image_naa_process(bprb_func_process& pro)
 {
-  using namespace boxm2_ocl_render_expected_image_process_globals;
+  using namespace boxm2_ocl_render_expected_image_naa_process_globals;
 
   vul_timer rtime; 
   if ( pro.n_inputs() < n_inputs_ ) {
@@ -119,46 +130,44 @@ bool boxm2_ocl_render_expected_image_process(bprb_func_process& pro)
     return false;
   }
   //get the inputs
-  unsigned i = 0;
-  bocl_device_sptr device= pro.get_input<bocl_device_sptr>(i++);
-  boxm2_scene_sptr scene =pro.get_input<boxm2_scene_sptr>(i++);
+  bocl_device_sptr device= pro.get_input<bocl_device_sptr>(0);
+  boxm2_scene_sptr scene =pro.get_input<boxm2_scene_sptr>(1);
 
-  boxm2_opencl_cache_sptr opencl_cache= pro.get_input<boxm2_opencl_cache_sptr>(i++);
-  vpgl_camera_double_sptr cam= pro.get_input<vpgl_camera_double_sptr>(i++);
-  unsigned ni=pro.get_input<unsigned>(i++);
-  unsigned nj=pro.get_input<unsigned>(i++);
-  vcl_string ident = pro.get_input<vcl_string>(i++);
+  boxm2_opencl_cache_sptr opencl_cache= pro.get_input<boxm2_opencl_cache_sptr>(2);
+  vpgl_camera_double_sptr cam= pro.get_input<vpgl_camera_double_sptr>(3);
+  unsigned ni=pro.get_input<unsigned>(4);
+  unsigned nj=pro.get_input<unsigned>(5);
+  float sun_az_degrees = pro.get_input<float>(6);
+  float sun_el_degrees = pro.get_input<float>(7);
+  float irradiance = pro.get_input<float>(8);
 
-  bool foundDataType = false;
+  bool found_appearance = false;
   vcl_string data_type,options;
   vcl_vector<vcl_string> apps = scene->appearances();
 
   int apptypesize = 0;
   for (unsigned int i=0; i<apps.size(); ++i) {
-    if ( apps[i] == boxm2_data_traits<BOXM2_MOG3_GREY>::prefix() )
+    if ( apps[i] == boxm2_data_traits<BOXM2_NORMAL_ALBEDO_ARRAY>::prefix() )
     {
       data_type = apps[i];
-      foundDataType = true;
-      options=" -D MOG_TYPE_8 ";
-      apptypesize = boxm2_data_traits<BOXM2_MOG3_GREY>::datasize();
-    }
-    else if ( apps[i] == boxm2_data_traits<BOXM2_MOG3_GREY_16>::prefix() )
-    {
-      data_type = apps[i];
-      foundDataType = true;
-      options=" -D MOG_TYPE_16 ";
-      apptypesize = boxm2_data_traits<BOXM2_MOG3_GREY_16>::datasize();
+      found_appearance = true;
+      apptypesize = boxm2_data_traits<BOXM2_NORMAL_ALBEDO_ARRAY>::datasize();
     }
   }
-  if (!foundDataType) {
-    vcl_cout<<"BOXM2_OCL_RENDER_PROCESS ERROR: scene doesn't have BOXM2_MOG3_GREY or BOXM2_MOG3_GREY_16 data type"<<vcl_endl;
+  if (!found_appearance) {
+    vcl_cout<<"BOXM2_OCL_RENDER_IMAGE_NAA_PROCESS ERROR: scene doesn't have BOXM2_NORMAL_ALBEDO_ARRAY data type" << vcl_endl;
     return false;
   }
-  if (ident.size() > 0) {
-    data_type += "_" + ident;
-  }
 
-//: create a command queue.
+  // convert sun az,el to Euclidean vector
+  double sun_az = sun_az_degrees * vnl_math::pi_over_180;
+  double sun_el = sun_el_degrees * vnl_math::pi_over_180;
+  double sun_x = vcl_sin(sun_az)*vcl_cos(sun_el);
+  double sun_y = vcl_cos(sun_az)*vcl_cos(sun_el);
+  double sun_z = vcl_sin(sun_el);
+  vgl_vector_3d<double> sun_dir(sun_x, sun_y, sun_z);
+
+  //: create a command queue.
   int status=0;
   cl_command_queue queue = clCreateCommandQueue(device->context(),*(device->device_id()),
                                                 CL_QUEUE_PROFILING_ENABLE,&status);
@@ -170,7 +179,10 @@ bool boxm2_ocl_render_expected_image_process(bprb_func_process& pro)
   {
     vcl_cout<<"===========Compiling kernels==========="<<vcl_endl;
     vcl_vector<bocl_kernel*> ks;
-    compile_kernel(device,ks,options);
+    if(!compile_kernel(device,ks,options)){
+      vcl_cerr << "ERROR: compile_kernel returned false." << vcl_endl;
+      return false;
+    }
     kernels[identifier]=ks;
   }
 
@@ -191,13 +203,31 @@ bool boxm2_ocl_render_expected_image_process(bprb_func_process& pro)
   // visibility image
   float* vis_buff = new float[cl_ni*cl_nj];
   vcl_fill(vis_buff, vis_buff + cl_ni*cl_nj, 1.0f);
-  bocl_mem_sptr vis_image = opencl_cache->alloc_mem(cl_ni*cl_nj*sizeof(float), vis_buff,"vis image buffer");
+  bocl_mem_sptr vis_image=opencl_cache->alloc_mem(cl_ni*cl_nj*sizeof(float),vis_buff,"vis image buffer");
   vis_image->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
+  // buffer holding dot product of normals with sun direction
+  vcl_vector<vgl_vector_3d<double> > normals = boxm2_normal_albedo_array::get_normals();
+  unsigned int num_normals = normals.size();
+  float* normals_dot_sun_buff = new float[num_normals];
+  // fill in normals dot sun_dir
+  for (unsigned int i=0; i<num_normals; ++i) {
+    normals_dot_sun_buff[i] = (float)dot_product(sun_dir, normals[i]);
+    if (normals_dot_sun_buff[i] < 0.0f) {
+      normals_dot_sun_buff[i] = 0.0f;
+    }
+  }
+  bocl_mem_sptr normals_dot_sun = new bocl_mem(device->context(), normals_dot_sun_buff, sizeof(float)*num_normals,"normals_dot_sun buffer");
+  normals_dot_sun->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
+
+  float irrad_buffer[4]={irradiance, 0.0, 0.0, 0.0};
+  bocl_mem_sptr irrad = new bocl_mem(device->context(), irrad_buffer, sizeof(cl_float4), "image irradiance buffer");
+  irrad->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
+
   // run expected image function
-  render_expected_image(scene, device, opencl_cache, queue,
+  render_expected_image_naa(scene, device, opencl_cache, queue,
                         cam, exp_image, vis_image, exp_img_dim,
-                        data_type, kernels[identifier][0], lthreads, cl_ni, cl_nj,apptypesize);
+                        kernels[identifier][0], lthreads, cl_ni, cl_nj, normals_dot_sun, irrad);
 
   // normalize
   {
@@ -217,32 +247,32 @@ bool boxm2_ocl_render_expected_image_process(bprb_func_process& pro)
   exp_image->read_to_buffer(queue);
   vis_image->read_to_buffer(queue);
 
-#if 0 //output a float image by default
+#if 1 //output a float image by default
   vil_image_view<float>* exp_img_out=new vil_image_view<float>(ni,nj);
   for (unsigned c=0;c<nj;c++)
     for (unsigned r=0;r<ni;r++)
       (*exp_img_out)(r,c)=buff[c*cl_ni+r];
+  vil_image_view<float>* vis_img_out=new vil_image_view<float>(ni,nj);
+  for (unsigned c=0;c<nj;c++)
+    for (unsigned r=0;r<ni;r++)
+      (*vis_img_out)(r,c)=vis_buff[c*cl_ni+r];
 #else //option to output a byte image (For easier saving)
   vil_image_view<vxl_byte>* exp_img_out=new vil_image_view<vxl_byte>(ni,nj);
     for (unsigned c=0;c<nj;c++)
       for (unsigned r=0;r<ni;r++)
         (*exp_img_out)(r,c)= (vxl_byte) (buff[c*cl_ni+r] * 255.0f);
 #endif
-  vil_image_view<float>* vis_img_out=new vil_image_view<float>(ni,nj);
-  for (unsigned c=0;c<nj;c++)
-    for (unsigned r=0;r<ni;r++)
-      (*vis_img_out)(r,c)=vis_buff[c*cl_ni+r];
 
   vcl_cout<<"Total Render time: "<<rtime.all()<<" ms"<<vcl_endl;
+  opencl_cache->unref_mem(exp_image.ptr());
+  opencl_cache->unref_mem(vis_image.ptr());
+
   delete [] vis_buff; 
   delete [] buff;
-  opencl_cache->unref_mem(vis_image.ptr());
-  opencl_cache->unref_mem(exp_image.ptr());
-
   clReleaseCommandQueue(queue);
-  i=0;
+
   // store scene smaprt pointer
-  pro.set_output_val<vil_image_view_base_sptr>(i++, exp_img_out);
-  pro.set_output_val<vil_image_view_base_sptr>(i++, vis_img_out);
+  pro.set_output_val<vil_image_view_base_sptr>(0, exp_img_out);
+  pro.set_output_val<vil_image_view_base_sptr>(1, vis_img_out);
   return true;
 }

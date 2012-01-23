@@ -151,6 +151,11 @@ bool boxm2_ocl_update_sun_visibilities_process(bprb_func_process& pro)
   bocl_mem_sptr vis_image=new bocl_mem(device->context(),vis_buff,cl_ni*cl_nj*sizeof(float),"vis image buffer");
   vis_image->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
+  float* last_vis_buff  = new float[cl_ni*cl_nj];
+  vcl_fill(last_vis_buff, last_vis_buff+cl_ni*cl_nj, 1.0f);
+
+  bocl_mem_sptr last_vis_image=new bocl_mem(device->context(),last_vis_buff,cl_ni*cl_nj*sizeof(float),"last vis image buffer");
+  last_vis_image->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
   // Image Dimensions
   int img_dim_buff[4];
@@ -179,6 +184,7 @@ bool boxm2_ocl_update_sun_visibilities_process(bprb_func_process& pro)
 
   for (id = vis_order.begin(); id != vis_order.end(); ++id)
   {
+      vcl_cout << "update_sun_vis0: id = " << id->to_string() << vcl_endl;
       //choose correct render kernel
       boxm2_block_metadata mdata = scene->get_block_metadata(*id);
       bocl_kernel* kern =  kernels[identifier][0];
@@ -213,6 +219,7 @@ bool boxm2_ocl_update_sun_visibilities_process(bprb_func_process& pro)
       kern->set_arg( ray_d_buff.ptr() );
       kern->set_arg( img_dim.ptr() );
       kern->set_arg( vis_image.ptr() );
+      kern->set_arg( last_vis_image.ptr() );
       kern->set_arg( cl_output.ptr() );
       kern->set_local_arg( local_threads[0]*local_threads[1]*sizeof(cl_uchar16) );//local tree,
       kern->set_local_arg( local_threads[0]*local_threads[1]*sizeof(cl_short2) ); //ray bundle,
@@ -234,6 +241,7 @@ bool boxm2_ocl_update_sun_visibilities_process(bprb_func_process& pro)
       aux0->read_to_buffer(queue);
       aux1->read_to_buffer(queue);
       vis_image->read_to_buffer(queue);
+      last_vis_image->read_to_buffer(queue);
       cl_output->read_to_buffer(queue);
       clFinish(queue);
 
@@ -242,6 +250,7 @@ bool boxm2_ocl_update_sun_visibilities_process(bprb_func_process& pro)
 
 
    delete [] vis_buff;
+   delete [] last_vis_buff;
    delete [] ray_origins;
    delete [] ray_directions;
 
@@ -250,8 +259,10 @@ bool boxm2_ocl_update_sun_visibilities_process(bprb_func_process& pro)
    local_threads[1] = 1;
   for (id = vis_order.begin(); id != vis_order.end(); ++id)
   {
+      vcl_cout << "update_sun_vis2 : id = " << id->to_string() << vcl_endl;
       //choose correct render kernel
       boxm2_block_metadata mdata = scene->get_block_metadata(*id);
+      //vcl_cout << "got metadata " << vcl_endl;
       bocl_kernel* kern =  kernels[identifier][1];
 
       //write the image values to the buffer
@@ -265,16 +276,18 @@ bool boxm2_ocl_update_sun_visibilities_process(bprb_func_process& pro)
       info_buffer->data_buffer_length = (int) (alpha->num_bytes()/alphaTypeSize);
       blk_info->write_to_buffer((queue));
 
+      //vcl_cout << "getting aux0 and aux1 data " << vcl_endl;
       //grab an appropriately sized AUX data buffer
       int auxTypeSize = boxm2_data_info::datasize(boxm2_data_traits<BOXM2_AUX0>::prefix());
-      bocl_mem *aux0   = opencl_cache->get_data<BOXM2_AUX0>(*id, info_buffer->data_buffer_length*auxTypeSize,false);
+      bocl_mem *aux0   = opencl_cache->get_data<BOXM2_AUX0>(*id, info_buffer->data_buffer_length*auxTypeSize,true);
       auxTypeSize = boxm2_data_info::datasize(boxm2_data_traits<BOXM2_AUX1>::prefix());
-      bocl_mem *aux1   = opencl_cache->get_data<BOXM2_AUX1>(*id, info_buffer->data_buffer_length*auxTypeSize,false);
+      bocl_mem *aux1   = opencl_cache->get_data<BOXM2_AUX1>(*id, info_buffer->data_buffer_length*auxTypeSize,true);
 
-
+      //vcl_cout << "getting output data: prefix_name = " << prefix_name << vcl_endl;
       bocl_mem *aux_out  = opencl_cache->get_data(*id, boxm2_data_traits<BOXM2_AUX0>::prefix(prefix_name),
                                                   info_buffer->data_buffer_length*auxTypeSize,false);
 
+      //vcl_cout << "got data. " << vcl_endl;
       transfer_time += (float) transfer.all();
       kern->set_arg( blk_info );
       kern->set_arg( aux0 );
@@ -282,6 +295,7 @@ bool boxm2_ocl_update_sun_visibilities_process(bprb_func_process& pro)
       kern->set_arg( aux_out );
       global_threads[0]=RoundUp(info_buffer->data_buffer_length,local_threads[0]);
       global_threads[1]=1;
+      //vcl_cout << "executing kernel " << vcl_endl;
 
       //execute kernel
       kern->execute(queue, 2, local_threads, global_threads);
@@ -289,14 +303,23 @@ bool boxm2_ocl_update_sun_visibilities_process(bprb_func_process& pro)
       if (!check_val(status, MEM_FAILURE, "UPDATE EXECUTE FAILED: " + error_to_string(status)) )
           return false;
       gpu_time += kern->exec_time();
+      clFinish(queue);
+      //vcl_cout << "kernel completed" << vcl_endl;
 
       //clear render kernel args so it can reset em on next execution
       kern->clear_args();
+      //vcl_cout << "1" << vcl_endl;
       //read info back to host memory
       blk->read_to_buffer(queue);
+      //vcl_cout << "2" << vcl_endl;
+      //vcl_cout << "aux_out cpu_buffer= " << aux_out->cpu_buffer() << vcl_endl;
+      //vcl_cout << "aux_out nbytes = " << aux_out->num_bytes() << vcl_endl;
       aux_out->read_to_buffer(queue);
+      //vcl_cout << "3" << vcl_endl;
       clFinish(queue);
+      //vcl_cout << "4" << vcl_endl;
       cache->remove_data_base(*id,boxm2_data_traits<BOXM2_AUX0>::prefix(prefix_name));
+      //vcl_cout << "5" << vcl_endl;
   }
   vcl_cout<<"Gpu time "<<gpu_time<<" transfer time "<<transfer_time<<vcl_endl;
   clReleaseCommandQueue(queue);
