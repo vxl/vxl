@@ -1,10 +1,12 @@
 #include <vcl_iostream.h>
 #include <vcl_iomanip.h>
 #include <vcl_limits.h> // for infinity()
+#include <vxl_config.h> // for VCL_STATIC_CONST_INIT_FLOAT_NO_DEFN
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_complex.h> // for vnl_math_abs(std::complex)
 #include <testlib/testlib_test.h>
 
+#if !VCL_STATIC_CONST_INIT_FLOAT_NO_DEFN
 static
 void check_pointer( const void * )
 {
@@ -29,11 +31,14 @@ void test_static_const_definition()
   check_pointer( &vnl_math::eps );
   check_pointer( &vnl_math::sqrteps );
 }
+#endif
 
 void test_math()
 {
+#if !VCL_STATIC_CONST_INIT_FLOAT_NO_DEFN
   // Call it to avoid compiler warnings
   test_static_const_definition();
+#endif
 
   int n = -11;
   float f = -7.5f;
