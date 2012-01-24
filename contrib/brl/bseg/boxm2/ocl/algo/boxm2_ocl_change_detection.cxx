@@ -486,24 +486,22 @@ void boxm2_ocl_change_detection::full_pyramid(vil_image_view_base_sptr in_img, f
   vil_resample_bilin(pyramid(1), half, ni, nj);
   vil_resample_bilin(pyramid(2), quarter, ni, nj);
   vil_resample_bilin(pyramid(3), eighth, ni, nj);
+#if 0
   vil_save(half, "half.tiff");
   vil_save(quarter, "quarter.tiff");
   vil_save(eighth, "eighth.tiff");
-
+#endif
   //load up each level of pixels
   int idx=0;
   for (unsigned c=0; c<cl_nj; ++c) {
     for (unsigned r=0; r<cl_ni; ++r) {
-      //int idx = 4*(c*cl_ni+r);
-      //img_buff[ idx ] = pyramid(0)(r,c);
-      //img_buff[ idx+1 ] = pyramid(1)(r/2,c/2);
-      //img_buff[ idx+2 ] = pyramid(2)(r/4, c/4);
-      //img_buff[ idx+3 ] = pyramid(3)(r/8, c/8);
-      //idx+=4;
-      img_buff[idx++] = pyramid(0)(r,c);
-      img_buff[idx++] = half(r,c);
-      img_buff[idx++] = quarter(r,c);
-      img_buff[idx++] = eighth(r,c);
+      if (c<nj && r<ni) {
+        img_buff[idx] = pyramid(0)(r,c);
+        img_buff[idx+1] = half(r,c);
+        img_buff[idx+2] = quarter(r,c);
+        img_buff[idx+3] = eighth(r,c);
+      }
+      idx += 4;
     }
   }
 }
