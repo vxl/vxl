@@ -4,19 +4,19 @@
 // \file
 
 #include <boxm2/io/boxm2_stream_cache.h>
-#include <vcl_vector.h>
-#include <vcl_algorithm.h>
 #include <bsta/bsta_histogram.h>
 #include <boxm2/boxm2_data_traits.h>
 #include <boxm2/boxm2_normal_albedo_array.h>
 #include <bpro/core/bbas_pro/bbas_1d_array_float.h>
 #include <vgl/vgl_vector_3d.h>
-
 #include <vnl/vnl_random.h>
+#include <vcl_vector.h>
+#include <vcl_algorithm.h>
+#include <vcl_iostream.h>
 
 class boxm2_compute_normal_albedo_functor
 {
-public:
+ public:
   typedef boxm2_data_traits<BOXM2_NORMAL_ALBEDO_ARRAY>::datatype naa_datatype;
   typedef boxm2_data_traits<BOXM2_ALPHA>::datatype alpha_datatype;
   typedef boxm2_data_traits<BOXM2_AUX0>::datatype aux0_datatype;
@@ -50,11 +50,11 @@ public:
     return true;
   }
 
-  inline bool process_cell(int index, bool is_leaf = false, float side_len = 0.0)
+  inline bool process_cell(unsigned int index, bool is_leaf = false, float side_len = 0.0)
   {
     if (index >= naa_model_data_->data().size()) {
-      vcl_cerr << "ERROR: index = " << index << ", naa_model_data_->data().size = " << naa_model_data_->data().size() << vcl_endl;
-      vcl_cerr << "   alpha_data_->data().size() = " << alpha_data_->data().size() << vcl_endl;
+      vcl_cerr << "ERROR: index = " << index << ", naa_model_data_->data().size = " << naa_model_data_->data().size() << vcl_endl
+               << "   alpha_data_->data().size() = " << alpha_data_->data().size() << vcl_endl;
       return false;
     }
     if (index >= alpha_data_->data().size()) {
@@ -94,7 +94,7 @@ public:
       intensities.push_back(randgen.drand64());
     }
 #endif
-  
+
 
     //vcl_cout << "Iobs.size() = " << intensities.size() << vcl_endl;
     //vcl_cout << "vis.size() = " << vis_vals.size() << vcl_endl;
@@ -146,8 +146,7 @@ public:
 
     const double uniform_density = 1.0;
     const double surface_prior = 1.0 - vcl_exp(-alpha*side_len);
-
-    const double normal_prior = surface_prior*(1.0/num_normals);
+//  const double normal_prior = surface_prior/num_normals;
     double prob_sum = 0.0;
 
     // for each normal, compute optimal albedo
@@ -189,7 +188,7 @@ public:
           // note this estimate of the prediction variance ignores second order term (product of albedo and irradiance errors)
           pred_sigma_sqrd = sun_dot*sun_dot*(irrad*irrad*sigma_sqrd_albedo + albedo*albedo*sigma_sqrd_irrad);
         }
-        double weight = vis_vals[m];   
+        double weight = vis_vals[m];
         double intensity = intensities[m];
         double intensity_diff = predicted - intensity;
         double gauss_norm = vnl_math::one_over_sqrt2pi / vcl_sqrt(pred_sigma_sqrd);
@@ -219,8 +218,10 @@ public:
       double vox_prob = surface_prior*surface_obs_density/total_obs_prob;
       double uncertainty = vcl_min(vox_prob,1.0-vox_prob)*2.0;
       double belief = vox_prob - uncertainty/2.0;
-      //vcl_cout << "surface_prior = " << surface_prior << "   surface_obs_density = " << surface_obs_density << "   postieror = " << vox_prob << "  belief = " << belief << vcl_endl;
-      //vcl_cout << "b=" << belief << "  " << vcl_endl;
+#ifdef DEBUG
+      vcl_cout << "surface_prior = " << surface_prior << "   surface_obs_density = " << surface_obs_density
+               << "   posterior = " << vox_prob << "  belief = " << belief << vcl_endl;
+#endif
       alpha = -vcl_log(1.0 - belief) / side_len;
     }
     /////////////////////////////////////
@@ -228,7 +229,7 @@ public:
     return true;
   }
 
-private:
+ private:
   boxm2_data<BOXM2_NORMAL_ALBEDO_ARRAY>* naa_model_data_;
   boxm2_data<BOXM2_ALPHA>* alpha_data_;
 
@@ -239,7 +240,6 @@ private:
   bbas_1d_array_float_sptr image_irrad_;
 
   bool update_alpha_;
-
 };
 
 #endif // boxm2_compute_normal_albedo_functor_h_
