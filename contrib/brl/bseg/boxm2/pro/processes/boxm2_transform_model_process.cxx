@@ -1,7 +1,7 @@
 // This is brl/bseg/boxm2/pro/processes/boxm2_transform_model_process.cxx
 //:
 // \file
-// \brief  A process for applying a similarity transform to the model by modifiying the parameters
+// \brief  A process for applying a similarity transform to the model by modifying the parameters
 //
 // \author Vishal Jain
 // \date Mar 10, 2011
@@ -23,6 +23,7 @@ namespace boxm2_transform_model_process_globals
   const unsigned n_inputs_ = 8;
   const unsigned n_outputs_ = 0;
 }
+
 bool boxm2_transform_model_process_cons(bprb_func_process& pro)
 {
   using namespace boxm2_transform_model_process_globals;
@@ -41,7 +42,8 @@ bool boxm2_transform_model_process_cons(bprb_func_process& pro)
   // process has 0 outputs:
   vcl_vector<vcl_string>  output_types_(n_outputs_);
 
-  return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
+  return pro.set_input_types(input_types_)
+      && pro.set_output_types(output_types_);
 }
 
 bool boxm2_transform_model_process(bprb_func_process& pro)
@@ -54,19 +56,22 @@ bool boxm2_transform_model_process(bprb_func_process& pro)
   }
   //get the inputs
   boxm2_scene_sptr scene = pro.get_input<boxm2_scene_sptr>(0);
-  if(!scene){
+  if (!scene) {
     vcl_cout << " null scene in boxm2_transform_model_process\n";
     return false;
   }
-  float translation_x = pro.get_input<float>(1);
-  float translation_y = pro.get_input<float>(2);
-  float translation_z = pro.get_input<float>(3);
-  float rotation_x = pro.get_input<float>(4);
-  float rotation_y = pro.get_input<float>(5);
-  float rotation_z = pro.get_input<float>(6);
-  float scale = pro.get_input<float>(7);
-  
+  double translation_x = pro.get_input<float>(1);
+  double translation_y = pro.get_input<float>(2);
+  double translation_z = pro.get_input<float>(3);
   vgl_vector_3d<double> trans_vec(translation_x, translation_y, translation_z);
+#if 0 // FIXME - currently unused!!
+  double rotation_x = pro.get_input<float>(4);
+  double rotation_y = pro.get_input<float>(5);
+  double rotation_z = pro.get_input<float>(6);
+  vgl_vector_3d<double> rot_vec(rotation_x, rotation_y, rotation_z);
+  double scale = pro.get_input<float>(7);
+#endif
+
 #if 0
   vpgl_lvcs lvcs = scene->lvcs();
   double lox, loy, theta;
@@ -78,16 +83,15 @@ bool boxm2_transform_model_process(bprb_func_process& pro)
   elev += translation_z;
   lvcs.set_transform(lox,loy,theta);
   lvcs.set_origin(lat,lon,elev);
-  
+
   scene->set_lvcs(lvcs);
 #else
-   vcl_map<boxm2_block_id, boxm2_block_metadata>& blocks = scene->blocks();
-   vcl_map<boxm2_block_id, boxm2_block_metadata>::iterator bit = blocks.begin();
-   for (; bit != blocks.end(); ++bit) {
-	   vgl_point_3d<double> old_origin = bit->second.local_origin_;
-	   bit->second.local_origin_ = old_origin + trans_vec;
-   }
-  
+  vcl_map<boxm2_block_id, boxm2_block_metadata>& blocks = scene->blocks();
+  vcl_map<boxm2_block_id, boxm2_block_metadata>::iterator bit = blocks.begin();
+  for (; bit != blocks.end(); ++bit) {
+    vgl_point_3d<double> old_origin = bit->second.local_origin_;
+    bit->second.local_origin_ = old_origin + trans_vec;
+  }
 #endif
 
   return true;
