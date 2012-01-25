@@ -70,9 +70,9 @@ void bwm_popup_menu::get_menu(vgui_menu &menu)
   submenu.separator();
 
   submenu.add( "Save 2D Spatial Objects (binary)",
-               new vgui_command_simple<bwm_tableau_img>(img_tab,
-                                                        &bwm_tableau_img::save_spatial_objects_2d));
-  submenu.separator();
+               new vgui_command_simple<bwm_tableau_img>(img_tab, &bwm_tableau_img::save_spatial_objects_2d));
+submenu.add( "Load 2D Spatial Objects (binary)",
+               new vgui_command_simple<bwm_tableau_img>(img_tab, &bwm_tableau_img::load_spatial_objects_2d));
   submenu.add( "Save Pointset 2D (ascii)",
                new vgui_command_simple<bwm_tableau_img>(img_tab,
                                                         &bwm_tableau_img::save_pointset_2d_ascii));
@@ -160,6 +160,8 @@ void bwm_popup_menu::get_menu(vgui_menu &menu)
   MENU_TAB_ADD_PROCESS("Range Map", "range_map", img_other, img_tab);
   MENU_TAB_ADD_PROCESS("Intensity Profile", "intensity_profile", img_other, img_tab);
   MENU_TAB_ADD_PROCESS("Histogram Plot", "histogram", img_other, img_tab);
+
+  MENU_TAB_ADD_PROCESS("Histogram Plot(Poly)", "histogram_poly", img_other, img_tab);
 
   img_other.add( "Show Path" ,
                  new vgui_command_simple<bwm_tableau_img>(img_tab,

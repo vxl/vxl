@@ -17,6 +17,10 @@
 
 int main(int argc, char** argv)
 {
+#include <vsl/vsl_binary_io.h>
+#include <vsol/vsol_polygon_2d.h>
+#include <vsol/vsol_polygon_2d_sptr.h>
+vsl_add_to_binary_loader(vsol_polygon_2d());
   //  _CrtSetDbgFlag ( _CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF );
 
   // initialize vgui
@@ -48,6 +52,7 @@ int main(int argc, char** argv)
 
   // image processes
   REG_PROCESS(bwm_histogram_process_command);
+  REG_PROCESS(bwm_histogram_poly_process_command);
   REG_PROCESS(bwm_intens_profile_process_command);
   REG_PROCESS(bwm_range_map_process_command);
   REG_PROCESS(bwm_step_edge_process_command);

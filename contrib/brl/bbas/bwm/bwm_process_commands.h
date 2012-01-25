@@ -42,6 +42,18 @@ class bwm_histogram_process_command: public bwm_tab_process_command
       tab->hist_plot();}
 };
 
+class bwm_histogram_poly_process_command: public bwm_tab_process_command
+{
+ public:
+  bwm_histogram_poly_process_command() {}
+  ~bwm_histogram_poly_process_command() {}
+  virtual vcl_string name() const {return "histogram_poly"; }
+  virtual void execute()
+  {
+      bwm_tableau_img* tab = static_cast<bwm_tableau_img*> (tableau_.as_pointer());
+      tab->hist_plot_in_poly();}
+};
+
 class bwm_intens_profile_process_command: public bwm_tab_process_command
 {
  public:

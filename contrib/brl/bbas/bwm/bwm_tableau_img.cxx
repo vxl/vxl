@@ -206,7 +206,7 @@ void bwm_tableau_img::save_spatial_objects_2d()
     my_observer_->get_spatial_objects_2d();
   if (sos.size() == 0)
     return;
-  vgui_dialog save_dlg("Save Spatial Objects");
+  vgui_dialog save_dlg("Save Spatial Objects 2d");
   vcl_string ext, binary_filename;
   save_dlg.file("Binary Filename", ext, binary_filename);
   if (!save_dlg.ask())
@@ -220,6 +220,25 @@ void bwm_tableau_img::save_spatial_objects_2d()
     return;
   }
   vsl_b_write(ostr, sos);
+}
+void bwm_tableau_img::load_spatial_objects_2d(){
+  vgui_dialog save_dlg("Load Spatial Objects 2d");
+  vcl_string ext, binary_filename;
+  save_dlg.file("Binary Filename", ext, binary_filename);
+  if (!save_dlg.ask())
+    return;
+  if (binary_filename == "")
+    return;
+  vsl_b_ifstream istr(binary_filename);
+  if (!istr) {
+    vcl_cerr << "Failed to open inputt stream "
+             << binary_filename << vcl_endl;
+    return;
+  }
+  vcl_vector<vsol_spatial_object_2d_sptr> sos;
+  vsl_b_read(istr, sos);
+  my_observer_->add_spatial_objects(sos);
+  my_observer_->post_redraw();
 }
 
 void bwm_tableau_img::save_pointset_2d_ascii()

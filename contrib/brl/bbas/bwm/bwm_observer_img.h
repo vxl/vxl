@@ -74,8 +74,9 @@ class bwm_observer_img : public bgui_vsol2D_tableau
   void paste(float x, float y);
   
   void clear_objects();
-  
+  //: various types of selected objects
   bool get_selected_box(bgui_vsol_soview2D_polygon* &box);
+  bool get_selected_poly(bgui_vsol_soview2D_polygon* &poly);
 
   //: clears the edges inside a selected box
   void clear_box();
@@ -85,6 +86,7 @@ class bwm_observer_img : public bgui_vsol2D_tableau
   virtual void delete_all();
 
   void hist_plot();
+  void hist_plot_in_poly();
 
   void intensity_profile(float start_col, float start_row,
                          float end_col, float end_row);

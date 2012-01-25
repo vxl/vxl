@@ -325,7 +325,12 @@ bool bwm_observer_img::get_selected_box(bgui_vsol_soview2D_polygon* &box)
 
   return false;
 }
-
+bool bwm_observer_img::get_selected_poly(bgui_vsol_soview2D_polygon* &poly){
+  bgui_vsol_soview2D_polygon* p = (bgui_vsol_soview2D_polygon*)get_selected_object(POLYGON_TYPE);
+  if(!p) return false;
+  poly = p;
+  return true;
+}
 vgui_soview2D* bwm_observer_img::get_selected_object(vcl_string type,
                                                      bool warn)
 {
@@ -608,6 +613,16 @@ void bwm_observer_img::clear_reg_segmentation()
 void bwm_observer_img::hist_plot()
 {
   bwm_image_processor::hist_plot(img_tab_);
+}
+
+void bwm_observer_img::hist_plot_in_poly(){
+  bgui_vsol_soview2D_polygon* p;
+  if(!get_selected_poly(p)){
+    vcl_cerr << " No polygon to scan to produce hist plot\n";
+    return;
+  }
+  vsol_polygon_2d_sptr poly = p->sptr();
+  bwm_image_processor::hist_plot(img_tab_, poly);
 }
 
 void bwm_observer_img::intensity_profile(float start_col, float start_row,

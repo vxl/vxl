@@ -45,6 +45,9 @@ class bwm_tableau_img : public bwm_tableau, public bgui_picker_tableau
   //: Draws the histogram on a graph (if the image is greyscale)
   void hist_plot() { my_observer_->hist_plot(); }
 
+  //: Draws the histogram on a graph (if the image is greyscale)
+  void hist_plot_in_poly() { my_observer_->hist_plot_in_poly(); }
+
   //: Draws the intensity profile on a selected line(if the image is greyscale)
   void intensity_profile();
 
@@ -87,6 +90,7 @@ class bwm_tableau_img : public bwm_tableau, public bgui_picker_tableau
 
   //: utilities
   void save_spatial_objects_2d();
+  void load_spatial_objects_2d();
   void save_pointset_2d_ascii();
 
   //: internal detail

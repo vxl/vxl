@@ -13,14 +13,15 @@
 #include <brip/brip_roi.h>
 #include <brip/brip_vil_float_ops.h>
 #include <vtol/vtol_edge_2d_sptr.h>
-
+#include <vsol/vsol_box_2d.h>
 #include <vsol/vsol_box_2d_sptr.h>
 #include <vsol/vsol_line_2d_sptr.h>
 #include <vsol/vsol_digital_curve_2d_sptr.h>
 
 #include <vil/vil_image_resource.h>
 
-void bwm_image_processor::hist_plot(bgui_image_tableau_sptr img)
+void bwm_image_processor::hist_plot(bgui_image_tableau_sptr img,
+                                    vsol_polygon_2d_sptr p)
 {
   if (!img)
   {
@@ -35,7 +36,7 @@ void bwm_image_processor::hist_plot(bgui_image_tableau_sptr img)
     return;
   }
 
-  bgui_image_utils iu(res);
+  bgui_image_utils iu(res, p);
   bgui_graph_tableau_sptr g = iu.hist_graph();
 
   if (!g)
@@ -337,12 +338,18 @@ bool bwm_image_processor::crop_to_box(bgui_image_tableau_sptr const& img,
                                       vsol_box_2d_sptr const& roi,
                                       vil_image_resource_sptr& chip)
 {
+  
   vil_image_resource_sptr image = img->get_image_resource();
   if (!image||!image->ni()||!image->nj())
   {
     vcl_cerr << "In bwm_observer_img::step_edges_vd() - no image\n";
     return false;
   }
+  double xmin = roi->get_min_x(), xmax = roi->get_max_x(),
+    ymin = roi->get_min_y(), ymax=roi->get_max_y();
+  vcl_cout << "croping subset of image(" << image->ni() << ' ' 
+           << image->nj() << ")->org(" << xmin << ' ' << ymin << "):size("
+           << xmax-xmin << ' ' << ymax-ymin << ")\n" << vcl_flush;
   brip_roi_sptr roi_ptr = new brip_roi(image->ni(), image->nj());
   roi_ptr->add_region(roi);
   if (!brip_vil_float_ops::chip(image, roi_ptr, chip))

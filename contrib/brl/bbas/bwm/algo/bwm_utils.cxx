@@ -325,6 +325,10 @@ bwm_utils::load_image(vcl_string& filename, vgui_range_map_params_sptr& rmps)
   if (is_pyr)
   { gl_map = true; cache = true;}
 
+  unsigned ni =res->ni(), nj = res->nj();
+  unsigned area = ni*nj;
+  if(area>2500000) gl_map = true;
+
   bgui_image_utils biu(res);
 
   if (biu.range_map_from_hist(gamma, invert, gl_map, cache, rmps))
