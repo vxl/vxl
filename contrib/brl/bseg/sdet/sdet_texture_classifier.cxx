@@ -979,24 +979,30 @@ classify_image_blocks(vcl_string const& img_path)
 vil_image_view<float> sdet_texture_classifier::
 classify_image_blocks_qual(vcl_string const& img_path)
 {
-  vul_timer t;
   vil_image_resource_sptr resc = vil_load_image_resource(img_path.c_str());
-  vil_image_view<float> img = scale_image(resc);
-  vcl_cout << "Classifying quality " << img_path << "\nsize(" << img.ni()
-           << ' ' << img.nj() << ")pixels:[" << texton_dictionary_.size()
-           << "]categories\n" << vcl_flush;
-  if (!color_map_valid_)
+  vil_image_view<float> img = scale_image(resc); // map to [0, 1]
+  vcl_cout << "Classifying quality on image " << img_path << '\n' << vcl_flush;
+  return classify_image_blocks_qual(img);
+}
+
+vil_image_view<float> 
+ sdet_texture_classifier::classify_image_blocks_qual(vil_image_view<float> const& image)
+{
+  vcl_cout << "image size(" << image.ni()<< ' ' << image.nj() << ")pixels:[" 
+           << texton_dictionary_.size() << "]categories \n" << vcl_flush;
+  vul_timer t;
+  if(!color_map_valid_)
     this->init_color_map();
   if (!texton_index_valid_)
     this->compute_texton_index();
-  this->compute_filter_bank(img);
+  this->compute_filter_bank(image);
   unsigned dim = filter_responses_.n_levels();
   vcl_cout << "texton dimension " << dim +2<< '\n';
 
   int margin = static_cast<int>(this->max_filter_radius());
   vcl_cout << "filter kernel margin " << margin << '\n';
-  int ni = static_cast<int>(img.ni());
-  int nj = static_cast<int>(img.nj());
+  int ni = static_cast<int>(image.ni());
+  int nj = static_cast<int>(image.nj());
   if ((ni-margin)<=0 || (nj-margin)<=0) {
     vcl_cout << "Image smaller than filter margin\n";
     return vil_image_view<float>(0, 0);
@@ -1056,7 +1062,6 @@ classify_image_blocks_qual(vcl_string const& img_path)
   vcl_cout << "\nBlock classification took " << t.real()/1000.0 << " seconds\n" << vcl_flush;
   return prob;
 }
-
 unsigned sdet_texture_classifier::max_filter_radius() const
 {
   unsigned maxr = filter_responses_.invalid_border();

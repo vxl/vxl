@@ -130,7 +130,8 @@ class sdet_texture_classifier : public sdet_texture_classifier_params
   //: image of atmospheric quality expressed as colors
   //: (should be done in a separate class - later JLM)
   vil_image_view<float> classify_image_blocks_qual(vcl_string const& img_path);
-
+  vil_image_view<float> 
+    classify_image_blocks_qual(vil_image_view<float> const& image);
   //: print 
   void print_dictionary() const;
   void print_distances() const;
