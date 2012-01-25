@@ -31,7 +31,7 @@
 bool extract_gaussian_primitives(vil_image_resource_sptr img, float lambda0, float lambda1, float theta, bool bright, float cutoff_percentage, float strength_threshold, unsigned type, vcl_vector<brec_part_instance_sptr>& parts)
 {
   vil_image_view<float> fimg = brip_vil_float_ops::convert_to_float(img);
-  vil_image_view<float> extr = brip_vil_float_ops::extrema(fimg, lambda0, lambda1, theta, bright, true);
+  vil_image_view<float> extr = brip_vil_float_ops::extrema(fimg, lambda0, lambda1, theta, bright, false,true);
   if (extr.nplanes() < 2)
     return false;
 
@@ -335,7 +335,7 @@ bool brec_part_gaussian::construct_bg_response_model(vil_image_view<float>& mean
   unsigned nj = mean_img.nj();
 
   // find the response img for this operator
-  vil_image_view<float> mean_res = brip_vil_float_ops::extrema(mean_img, lambda0_, lambda1_, theta_, bright_, true); // was "false"
+  vil_image_view<float> mean_res = brip_vil_float_ops::extrema(mean_img, lambda0_, lambda1_, theta_, bright_, false, true); // was "false"
 #if 0
   vil_save(mean_res, "mean_response_img.tiff");
 #endif // 0
@@ -375,7 +375,7 @@ bool brec_part_gaussian::construct_bg_response_model_gauss(vil_image_view<float>
   unsigned nj = mean_img.nj();
 
   // find the response img for this operator
-  vil_image_view<float> mean_res = brip_vil_float_ops::extrema(mean_img, lambda0_, lambda1_, theta_, bright_, true, true);
+  vil_image_view<float> mean_res = brip_vil_float_ops::extrema(mean_img, lambda0_, lambda1_, theta_, bright_, false, true, true);
   // find the sd dev of the operator at every pixel
   vbl_array_2d<float> kernel; vbl_array_2d<bool> mask;
   brip_vil_float_ops::extrema_kernel_mask(lambda0_, lambda1_, theta_, kernel, mask);
@@ -415,7 +415,7 @@ bool brec_part_gaussian::construct_class_response_models(vil_image_view<float>& 
   unsigned nj = img.nj();
 
   // find the response img for this operator
-  vil_image_view<float> res = brip_vil_float_ops::extrema(img, lambda0_, lambda1_, theta_, bright_, true);
+  vil_image_view<float> res = brip_vil_float_ops::extrema(img, lambda0_, lambda1_, theta_, bright_, false, true);
   if (res.ni() != ni || res.nj() != nj)
     return false;
 
@@ -538,7 +538,7 @@ bool brec_part_gaussian::update_response_hist(vil_image_view<float>& img, vil_im
   unsigned nj = img.nj();
 
   // find the response img for this operator
-  vil_image_view<float> res = brip_vil_float_ops::extrema(img, lambda0_, lambda1_, theta_, bright_, false); // was: "true"
+  vil_image_view<float> res = brip_vil_float_ops::extrema(img, lambda0_, lambda1_, theta_, bright_, false, false); // was: "true"
   if (res.ni() != ni || res.nj() != nj)
     return false;
 
@@ -572,7 +572,7 @@ bool brec_part_gaussian::extract(vil_image_view<float>& img, vil_image_view<floa
   unsigned nj = img.nj();
 
   // find the response img for this operator
-  vil_image_view<float> op_res = brip_vil_float_ops::extrema(img, lambda0_, lambda1_, theta_+rot_angle, bright_, false);
+  vil_image_view<float> op_res = brip_vil_float_ops::extrema(img, lambda0_, lambda1_, theta_+rot_angle, bright_, false, false);
   if (op_res.ni() != ni || op_res.nj() != nj)
     return false;
 
@@ -699,7 +699,7 @@ bool brec_part_gaussian::extract(vil_image_view<float>& img, vil_image_view<floa
   unsigned nj = img.nj();
 
   // find the response img for this operator
-  vil_image_view<float> op_res = brip_vil_float_ops::extrema(img, lambda0_, lambda1_, theta_+rot_angle, bright_, false);
+  vil_image_view<float> op_res = brip_vil_float_ops::extrema(img, lambda0_, lambda1_, theta_+rot_angle, bright_, false, false);
   if (op_res.ni() != ni || op_res.nj() != nj)
     return false;
 
@@ -759,7 +759,7 @@ bool brec_part_gaussian::update_foreground_posterior(vil_image_view<float>& img,
   unsigned nj = img.nj();
 
   // find the response img for this operator
-  vil_image_view<float> op_res = brip_vil_float_ops::extrema(img, lambda0_, lambda1_, theta_, bright_, false);
+  vil_image_view<float> op_res = brip_vil_float_ops::extrema(img, lambda0_, lambda1_, theta_, bright_, false, false);
   if (op_res.ni() != ni || op_res.nj() != nj)
     return false;
 
