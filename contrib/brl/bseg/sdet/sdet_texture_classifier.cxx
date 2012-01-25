@@ -443,8 +443,12 @@ bool sdet_texture_classifier::save_dictionary(vcl_string const& path) const
     vcl_cout << "Can't open binary stream in save_dictionary\n";
     return false;
   }
+  sdet_texture_classifier_params const * tcp_ptr =
+    dynamic_cast<sdet_texture_classifier_params const*>(this);
+  vsl_b_write(os, *tcp_ptr);                                    
   vsl_b_write(os, texton_dictionary_);
   vsl_b_write(os, category_histograms_);
+  os.close();
   return true;
 }
 
@@ -459,12 +463,16 @@ bool sdet_texture_classifier::load_dictionary(vcl_string const& path)
   texton_dictionary_.clear();
   texton_index_.clear();
   category_histograms_.clear();
+  sdet_texture_classifier_params* tcp_ptr
+    = dynamic_cast<sdet_texture_classifier_params*>(this);
+  vsl_b_read(is, *tcp_ptr);
   vsl_b_read(is, texton_dictionary_);
   this->compute_distances();
   this->compute_texton_index();
   vsl_b_read(is, category_histograms_);
   this->compute_texton_weights();
   this->compute_interclass_probs();
+  is.close();
   return true;
 }
 

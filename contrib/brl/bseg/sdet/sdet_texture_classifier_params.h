@@ -14,6 +14,7 @@
 #include <gevd/gevd_param_mixin.h>
 #include <vcl_iosfwd.h>
 #include <vcl_vector.h>
+#include <vsl/vsl_binary_io.h>
 class sdet_texture_classifier_params : public gevd_param_mixin
 {
  public:
@@ -96,4 +97,16 @@ class sdet_texture_classifier_params : public gevd_param_mixin
   float weight_offset_;
 };
 
+//: Binary save vgl_point_2d to stream.
+void vsl_b_write(vsl_b_ostream &os, 
+                 const sdet_texture_classifier_params & tcp);
+
+//: Binary load vgl_point_2d from stream.
+void vsl_b_read(vsl_b_istream &is, sdet_texture_classifier_params & tcp);
+
+//: Print human readable summary of object to a stream
+void vsl_print_summary(vcl_ostream& os,
+                       const sdet_texture_classifier_params & tcp);
+
 #endif // sdet_texture_classifier_params_h_
+

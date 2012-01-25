@@ -141,3 +141,53 @@ vcl_ostream& operator << (vcl_ostream& os, const sdet_texture_classifier_params&
   os << "---]\n";
   return os;
 }
+//: Binary save vgl_point_2d to stream.
+void vsl_b_write(vsl_b_ostream &os, 
+                 const sdet_texture_classifier_params & tcp)
+{
+  sdet_texture_classifier_params& tcpnc = 
+    const_cast<sdet_texture_classifier_params&>(tcp);
+  vsl_b_write(os,tcpnc.n_scales_);
+  vsl_b_write(os,tcpnc.scale_interval_);
+  vsl_b_write(os,tcpnc.angle_interval_);
+  vsl_b_write(os,tcpnc.lambda0_);
+  vsl_b_write(os,tcpnc.lambda1_);
+  vsl_b_write(os,tcpnc.laplace_radius_);
+  vsl_b_write(os,tcpnc.gauss_radius_);
+  vsl_b_write(os,tcpnc.cutoff_per_);
+  vsl_b_write(os,tcpnc.signed_response_);
+  vsl_b_write(os,tcpnc.mag_);
+  vsl_b_write(os,tcpnc.fast_);
+  vsl_b_write(os,tcpnc.k_);
+  vsl_b_write(os,tcpnc.n_samples_);
+  vsl_b_write(os,tcpnc.k_near_);
+  vsl_b_write(os,tcpnc.block_size_);
+  vsl_b_write(os,tcpnc.weight_offset_);
+}
+
+//: Binary load vgl_point_2d from stream.
+void vsl_b_read(vsl_b_istream &is, sdet_texture_classifier_params & tcp)
+{
+  vsl_b_read(is,tcp.n_scales_);
+  vsl_b_read(is,tcp.scale_interval_);
+  vsl_b_read(is,tcp.angle_interval_);
+  vsl_b_read(is,tcp.lambda0_);
+  vsl_b_read(is,tcp.lambda1_);
+  vsl_b_read(is,tcp.laplace_radius_);
+  vsl_b_read(is,tcp.gauss_radius_);
+  vsl_b_read(is,tcp.cutoff_per_);
+  vsl_b_read(is,tcp.signed_response_);
+  vsl_b_read(is,tcp.mag_);
+  vsl_b_read(is,tcp.fast_);
+  vsl_b_read(is,tcp.k_);
+  vsl_b_read(is,tcp.n_samples_);
+  vsl_b_read(is,tcp.k_near_);
+  vsl_b_read(is,tcp.block_size_);
+  vsl_b_read(is,tcp.weight_offset_);
+}
+//: Print human readable summary of object to a stream
+void vsl_print_summary(vcl_ostream& os,
+                       const sdet_texture_classifier_params & tcp)
+{
+  os << tcp; 
+}
