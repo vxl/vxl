@@ -1447,7 +1447,17 @@ void segv_vil_segmentation_manager::gaussian()
   vil_image_resource_sptr gaussr = vil_new_image_resource_of_view(gauss);
   this->add_image(gaussr);
 }
-
+void segv_vil_segmentation_manager::abs_value(){
+  vil_image_resource_sptr img = this->selected_image();
+  if(!img){
+    vcl_cout << "No image to for absolute value\n";
+    return;
+  }
+  vil_image_view<float> view = brip_vil_float_ops::convert_to_float(img);
+  vil_image_view<float> abs = brip_vil_float_ops::absolute_value(view);
+  vil_image_resource_sptr absr = vil_new_image_resource_of_view(abs);
+  this->add_image(absr);
+}
 void segv_vil_segmentation_manager::inline_viewer()
 {
   bgui_image_tableau_sptr itab = this->selected_image_tab();
@@ -1898,14 +1908,19 @@ void segv_vil_segmentation_manager::extrema()
   static bool color_overlay = true;
   static bool fast = true;
   static int choice = 1;
+  vcl_vector<vcl_string> choices;
+  choices.push_back("Point Response Only");
+  choices.push_back("Point & Mask");
+  choices.push_back("Point & Unclipped");
+  choices.push_back("SignedPerPixel");
+  choices.push_back("AbsolutePerPixel");
   vgui_dialog extrema_dialog("Detect Extrema");
   extrema_dialog.field("lambda0",lambda0);
   extrema_dialog.field("lambda1",lambda1);
   extrema_dialog.field("theta",theta);
   extrema_dialog.checkbox("Bright Extrema?(check)",bright);
   extrema_dialog.checkbox("ColorOverlay?(check)",color_overlay);
-  extrema_dialog.choice("Display Mode", "Point Response Only",
-                        "Point & Mask", "Point & Unclipped", choice);
+  extrema_dialog.choice("Display Mode", choices, choice);
   extrema_dialog.checkbox("Fast Alg.(check)", fast);
   if (!extrema_dialog.ask())
     return;
@@ -1914,14 +1929,31 @@ void segv_vil_segmentation_manager::extrema()
     brip_vil_float_ops::convert_to_float(img);
   vil_image_view<float> extr;
   bool output_mask = false, output_unclipped = false, mag_only = false;
+  bool scale_invariant = false, non_max_suppress = true; 
   if (choice == 1) output_mask = true;
   if (choice == 2) output_unclipped = true;
+  if (choice == 3) {
+    scale_invariant = true;
+    output_unclipped = true;
+    non_max_suppress = false;
+  }
+  if (choice == 4)  {
+    scale_invariant = true;
+    mag_only = true;
+    output_unclipped = false;
+    non_max_suppress = false;
+  }
   if (fast)
-    extr = brip_vil_float_ops::fast_extrema(fimg, lambda0, lambda1, theta, bright, output_mask, output_unclipped);
+    extr = brip_vil_float_ops::fast_extrema(fimg, lambda0, lambda1, theta, bright, mag_only, output_mask, output_unclipped, scale_invariant, non_max_suppress);
   else
-    extr = brip_vil_float_ops::extrema(fimg, lambda0, lambda1, theta, bright, mag_only, output_mask, output_unclipped);
+    extr = brip_vil_float_ops::extrema(fimg, lambda0, lambda1, theta, bright, mag_only, output_mask, output_unclipped, scale_invariant, non_max_suppress);
 
   vcl_cout << "Extrema computation time " << t.real() << " msec\n";
+  if(choice ==3 || choice == 4){
+    vil_image_resource_sptr resc = vil_new_image_resource_of_view(extr);
+    this->add_image(resc);
+    return;
+  }
   unsigned ni = extr.ni(), nj = extr.nj(), np = extr.nplanes();
   if (choice==0&&!color_overlay){
     if (np!=1)

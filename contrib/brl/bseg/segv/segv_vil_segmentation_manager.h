@@ -85,6 +85,7 @@ class segv_vil_segmentation_manager : public vgui_wrapper_tableau
   void gradient_mag_angle();
   void fft();
   void gaussian();
+  void abs_value();
   // -- segmentation --
 
   void threshold_image();

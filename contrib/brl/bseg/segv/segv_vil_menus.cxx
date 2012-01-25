@@ -171,7 +171,6 @@ void segv_vil_menus::rot_extrema_callback()
   segv_vil_segmentation_manager::instance()->rot_extrema();
 }
 
-
 void segv_vil_menus::beaudet_callback()
 {
   segv_vil_segmentation_manager::instance()->beaudet();
@@ -249,6 +248,11 @@ void segv_vil_menus::gaussian_callback()
   segv_vil_segmentation_manager::instance()->gaussian();
 }
 
+void segv_vil_menus::abs_value_callback()
+{
+  segv_vil_segmentation_manager::instance()->abs_value();
+}
+
 //segv_vil_menus definition
 vgui_menu segv_vil_menus::get_menu()
 {
@@ -306,6 +310,7 @@ vgui_menu segv_vil_menus::get_menu()
   menuops.add("Subtract Images:", subtract_images_callback);
   menuops.add("Negate Image:", negate_image_callback);
   menuops.add("Gaussian Smoothing:", gaussian_callback);
+  menuops.add("Absolute Value:", abs_value_callback);
   menuops.add("Entropy", entropy_callback);
   menuops.add("Mutal Information", minfo_callback);
   menuops.add("Max Trace Scale",  max_trace_scale_callback);

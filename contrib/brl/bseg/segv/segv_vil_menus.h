@@ -68,6 +68,7 @@ class segv_vil_menus
   SEGV_VIL_DLL_DATA static void create_roi_callback();
   SEGV_VIL_DLL_DATA static void crop_image_callback();
   SEGV_VIL_DLL_DATA static void gaussian_callback();
+  SEGV_VIL_DLL_DATA static void abs_value_callback();
 
   //JIM METHOD
   SEGV_VIL_DLL_DATA static void project_points_callback();
