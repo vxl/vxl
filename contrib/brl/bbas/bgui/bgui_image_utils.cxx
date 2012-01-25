@@ -16,6 +16,7 @@
 #include <vsol/vsol_point_2d_sptr.h>
 #include <vgl/vgl_polygon.h>
 #include <vgl/vgl_polygon_scan_iterator.h>
+
 bgui_image_utils::bgui_image_utils():
   hist_valid_(false), percent_limit_(0.0002), bin_limit_(1000),
   n_skip_upper_bins_(0), n_skip_lower_bins_(1), min_blocks_(50),
@@ -51,7 +52,8 @@ void bgui_image_utils::set_image(vil_image_resource_sptr const& image)
   hist_valid_ = false;
 }
 
-void bgui_image_utils::set_poly(vsol_polygon_2d_sptr const& poly){
+void bgui_image_utils::set_poly(vsol_polygon_2d_sptr const& poly)
+{
   poly_ = poly;
 }
 
@@ -91,10 +93,11 @@ bool bgui_image_utils::init_histogram_from_data()
   if (!bir)
     bir = vil_new_blocked_image_facade(image);
 
-  if(!poly_){
+  if (!poly_) {
     if (!this->set_data_by_random_blocks(min_blocks_, bir, scan_fraction_))
       return false;
-  }else{
+  }
+  else {
     if (!this->set_data_inside_polygon(bir))
       return false;
   }
@@ -154,7 +157,6 @@ bool bgui_image_utils::init_histogram_from_data()
     vcl_cout << "Format not supported by bgui_image_utils\n";
     return false;
   }
-  return false;
 }
 
 // Determine the pixel format of the view and cast to appropriate type
@@ -222,32 +224,35 @@ set_data_by_random_blocks(const unsigned total_num_blocks,
     if (!this->set_data_from_view(bir->get_block(bi, bj), fraction))
       return false;
   }
- return true;
+  return true;
 }
+
 bool bgui_image_utils::
-set_data_inside_polygon(vil_blocked_image_resource_sptr const& bir){
+set_data_inside_polygon(vil_blocked_image_resource_sptr const& bir)
+{
   vil_blocked_image_resource_sptr cbir =
     vil_new_cached_image_resource(bir);
-  if(!cbir){
+  if (!cbir) {
     vcl_cout << "Null cached image resource to construct histogram\n";
     return false;
   }
   // convert to vgl_polygon
   vgl_polygon<double> vpoly; vpoly.new_sheet();
-    unsigned nverts = poly_->size();
-    for(unsigned i = 0; i<nverts; ++i){
-      vsol_point_2d_sptr v = poly_->vertex(i);
-      vpoly.push_back(v->x(), v->y());
-    }
-    vgl_polygon_scan_iterator<double> psi(vpoly);
-    for (psi.reset(); psi.next(); ) {
-      int j = psi.scany();
-      int is  = psi.startx(), iend = psi.endx();
-      vil_image_view_base_sptr const& view = 
-        cbir->get_view(is,(iend-is), j,1);       
-      if(!this->set_data_from_view(view))
-        return false;
-    }
+  unsigned nverts = poly_->size();
+  for (unsigned i = 0; i<nverts; ++i) {
+    vsol_point_2d_sptr v = poly_->vertex(i);
+    vpoly.push_back(v->x(), v->y());
+  }
+  vgl_polygon_scan_iterator<double> psi(vpoly);
+  for (psi.reset(); psi.next(); ) {
+    int j = psi.scany();
+    int is  = psi.startx(), iend = psi.endx();
+    vil_image_view_base_sptr const& view =
+      cbir->get_view(is,(iend-is), j,1);
+    if (!this->set_data_from_view(view))
+      return false;
+  }
+  return true;
 }
 
 bool bgui_image_utils::construct_histogram()
