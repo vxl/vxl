@@ -18,18 +18,21 @@
 #include <bsta/bsta_histogram.h>
 #include <bgui/bgui_graph_tableau.h>
 #include <vgui/vgui_range_map_params_sptr.h>
+#include <vsol/vsol_polygon_2d_sptr.h>
 class bgui_image_utils
 {
  public:
   //:constructors
   bgui_image_utils();
 
-  bgui_image_utils(vil_image_resource_sptr const& image);
+  bgui_image_utils(vil_image_resource_sptr const& image,
+                   vsol_polygon_2d_sptr const& poly = 0);
 
   ~bgui_image_utils(){}
 
   //: Set the image on which properties are computed
   void set_image(vil_image_resource_sptr const& image);
+  void set_poly(vsol_polygon_2d_sptr const& poly);
 
   void set_bin_limit( unsigned bin_limit){ bin_limit_ = bin_limit;}
   void set_n_skip_upper_bins(unsigned n_skip){n_skip_upper_bins_=n_skip;}
@@ -64,6 +67,8 @@ class bgui_image_utils
   bool set_data_by_random_blocks(const unsigned total_num_blocks,
                                  vil_blocked_image_resource_sptr const& bir,
                                  double fraction = 1.0);
+  bool set_data_inside_polygon(vil_blocked_image_resource_sptr const& bir);
+
   bool construct_histogram();
   double compute_lower_bound(unsigned plane = 0);
   double compute_upper_bound(unsigned plane = 0);
@@ -78,6 +83,7 @@ class bgui_image_utils
   double scan_fraction_;
 
   vil_image_resource_sptr image_;
+  vsol_polygon_2d_sptr poly_;
   vcl_vector<bsta_histogram<double> > hist_;
   vcl_vector<vcl_vector<double> > data_;
 };
