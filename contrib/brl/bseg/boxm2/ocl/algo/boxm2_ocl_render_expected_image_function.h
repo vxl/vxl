@@ -80,4 +80,18 @@ float render_expected_image_naa(  boxm2_scene_sptr & scene,
                                   bocl_mem_sptr normals_dot_sun,
                                   bocl_mem_sptr irradiance);
 
+float render_expected_albedo_normal(  boxm2_scene_sptr & scene,
+                                      bocl_device_sptr & device,
+                                      boxm2_opencl_cache_sptr & opencl_cache,
+                                      cl_command_queue & queue,
+                                      vpgl_camera_double_sptr & cam,
+                                      bocl_mem_sptr & exp_image,
+                                      bocl_mem_sptr & vis_image,
+                                      bocl_mem_sptr & exp_img_dim,
+                                      bocl_kernel* kernel,
+                                      vcl_size_t * lthreads,
+                                      unsigned cl_ni,
+                                      unsigned cl_nj);
+
 #endif // boxm2_ocl_render_expected_image_function_h_
+

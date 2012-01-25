@@ -313,3 +313,31 @@ void step_cell_render_naa(AuxArgs aux_args,
   (*expected_i)+=expected_int_cell*omega;
 }
 #endif
+
+#ifdef RENDER_ALBEDO_NORMAL
+void step_cell_render_albedo_normal(AuxArgs aux_args, 
+                                    int      data_ptr, 
+                                    float    d, 
+                                    float  * vis
+                                    )
+{
+  float alpha = aux_args.alpha[data_ptr];
+  float diff_omega = exp(-alpha*d);
+  float4 expected_albedo_normal_cell = (float4)(0);
+  // for rendering only
+  if(diff_omega<0.995f)
+  {
+      __global float16 *albedos = (__global float16*)&(aux_args.naa_apm[data_ptr*32]);
+		__global float16 *normal_weights = (__global float16*)&(aux_args.naa_apm[data_ptr*32 + 16]);
+		
+		expected_albedo_normal_cell.s0 = dot(*albedos, *normal_weights);
+      expected_albedo_normal_cell.s1 = dot(*aux_args.normals_x, *normal_weights);
+      expected_albedo_normal_cell.s2 = dot(*aux_args.normals_y, *normal_weights);
+      expected_albedo_normal_cell.s3 = dot(*aux_args.normals_z, *normal_weights);
+  }
+  float omega=(*vis) * (1.0f - diff_omega);
+  (*vis) *= diff_omega;
+  *(aux_args.expected_albedo_normal) += expected_albedo_normal_cell*omega;
+}
+#endif
+

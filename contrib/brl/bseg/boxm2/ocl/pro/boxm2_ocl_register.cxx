@@ -67,5 +67,6 @@ void boxm2_ocl_register::register_process()
 
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_ocl_update_alpha_naa_process, "boxm2OclUpdateAlphaNAAProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_ocl_render_expected_image_naa_process, "boxm2OclRenderExpectedImageNAAProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_ocl_render_expected_albedo_normal_process, "boxm2OclRenderExpectedAlbedoNormalProcess");
 
 }

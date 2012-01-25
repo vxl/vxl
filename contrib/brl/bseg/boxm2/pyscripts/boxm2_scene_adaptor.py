@@ -438,6 +438,24 @@ class boxm2_scene_adaptor:
       print("ERROR: run_process() returned False")
     return
 
+  def render_expected_albedo_normal(self, camera, ni, nj):
+    boxm2_batch.init_process("boxm2OclRenderExpectedAlbedoNormalProcess");
+    boxm2_batch.set_input_from_db(0,self.device)
+    boxm2_batch.set_input_from_db(1,self.scene)
+    boxm2_batch.set_input_from_db(2,self.opencl_cache)
+    boxm2_batch.set_input_from_db(3,camera)
+    boxm2_batch.set_input_unsigned(4,ni)
+    boxm2_batch.set_input_unsigned(5,nj)
+    boxm2_batch.run_process()
+    (id,type) = boxm2_batch.commit_output(0)
+    exp_albedo = dbvalue(id,type)
+    (id,type) = boxm2_batch.commit_output(1)
+    exp_normal = dbvalue(id,type)
+    (id,type) = boxm2_batch.commit_output(2)
+    mask_image = dbvalue(id,type)
+    return(exp_albedo, exp_normal, mask_image)
+
+
   def transform(self, tx,ty,tz,rx,ry,rz,scale):
       boxm2_batch.init_process("boxm2TransformModelProcess")
       boxm2_batch.set_input_from_db(0,self.scene)
