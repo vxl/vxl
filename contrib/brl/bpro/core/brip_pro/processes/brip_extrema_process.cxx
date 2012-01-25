@@ -78,7 +78,7 @@ bool brip_extrema_process(bprb_func_process& pro)
   vil_image_view<float> out;
   if (fast)
     out = brip_vil_float_ops::fast_extrema(gimage, lambda0, lambda1,
-                                           theta, bright, true);
+                                           theta, bright, false, true);
   else
     out = brip_vil_float_ops::extrema(gimage, lambda0, lambda1,
                                       theta, bright, true);
