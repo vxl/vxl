@@ -44,5 +44,6 @@ void bbas_register::register_process()
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, brad_estimate_synoptic_function_1d_process, "bradEstimateSynopticFunction1dProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, brad_estimate_empty_process, "bradEstimateEmptyProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bbas_remove_from_db_process, "bbasRemoveFromDbProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, brad_nitf_abs_radiometric_calibration_process, "bradNITFAbsRadiometricCalibrationProcess");
   
 }
