@@ -37,6 +37,7 @@ SOURCES += boxm2_export_point_cloud_xyz_function.cxx
 SOURCES += boxm2_compute_derivative_function.cxx
 SOURCES += boxm2_export_vis_wrl_function.cxx
 MANPAGE_SOURCES += boxm2_apply_filter_function.txx
+MANPAGE_SOURCES += boxm2_compute_normal_albedo_functor.h
 
 #######################################
 include ${VXLROOT}/config/top-params.mk

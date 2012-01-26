@@ -15,6 +15,7 @@ TESTS += test_quadtree.cxx
 TESTS += test_label_equivalence.cxx
 TESTS += test_mask.cxx
 TESTS += test_extrema.cxx
+TESTS += test_filter_bank.cxx
 
 MINI_PROG_SOURCES += test_include.cxx
 MINI_PROG_SOURCES += test_template_include.cxx

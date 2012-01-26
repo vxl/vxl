@@ -42,6 +42,11 @@ SOURCES += processes/boxm2_ocl_paint_batch_process.cxx
 SOURCES += processes/boxm2_ocl_batch_synoptic_function_process.cxx
 SOURCES += processes/boxm2_ocl_flip_normals_using_vis_process.cxx
 SOURCES += processes/boxm2_ocl_paint_online_process.cxx
+SOURCES += processes/boxm2_ocl_render_expected_albedo_normal_process.cxx
+SOURCES += processes/boxm2_ocl_ingest_buckeye_process.cxx
+SOURCES += processes/boxm2_ocl_update_alpha_naa_process.cxx
+SOURCES += processes/boxm2_ocl_render_expected_z_image_process.cxx
+SOURCES += processes/boxm2_ocl_render_expected_image_naa_process.cxx
 
 #######################################
 include ${VXLROOT}/config/top-params.mk
