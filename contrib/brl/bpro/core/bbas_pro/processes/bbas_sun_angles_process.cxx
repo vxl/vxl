@@ -3,6 +3,7 @@
 // \file
 #include <bprb/bprb_func_process.h>
 #include <bprb/bprb_parameters.h>
+#include <brad/brad_sun_pos.h>
 #include <vil/vil_image_resource.h>
 #include <vil/vil_load.h>
 #include <vil/file_formats/vil_nitf2_image.h>
@@ -21,11 +22,13 @@ bool bbas_sun_angles_process_cons(bprb_func_process& pro)
     return false;
 
   //output
-   // 0: sun elevation
-   // 1: sun azimuth
-  vcl_vector<vcl_string> output_types_(2);
+   // 0: sun elevation (degrees)
+   // 1: sun azimuth (degrees)
+   // 2: Earth-Sun distance (astronomical units)
+  vcl_vector<vcl_string> output_types_(3);
   output_types_[0] = "float";  
   output_types_[1] = "float";
+  output_types_[2] = "float";
   return pro.set_output_types(output_types_);
 }
 
@@ -69,7 +72,6 @@ bool bbas_sun_angles_process(bprb_func_process& pro)
 
   double sun_el;
   double sun_az;
-
   bool success = hdr->get_sun_params(sun_el, sun_az);
 
   if (!success) {
@@ -77,9 +79,21 @@ bool bbas_sun_angles_process(bprb_func_process& pro)
     return false;
   }
 
-  //store bin index
+  int year, month, day, hour, minute;
+  success = hdr->get_date_time(year,month,day,hour,minute);
+
+  if (!success) {
+    vcl_cerr << "error bbas_sun_angles_process: failed to get date/time from nitf image" << vcl_endl;
+    return false;
+  }
+  double sun_dist = brad_sun_distance(year,month,day,hour,minute);
+  
+
+  //store outputs
   pro.set_output_val<float>(0, (float)sun_el);
   pro.set_output_val<float>(1, (float)sun_az);
+  pro.set_output_val<float>(2, (float)sun_dist);
 
   return true;
 }
+
