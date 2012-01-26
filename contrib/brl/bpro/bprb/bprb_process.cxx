@@ -106,7 +106,10 @@ bool bprb_process::verify_inputs()
 {
   for (unsigned i = 0; i<n_inputs(); ++i)
   {
-    if (!input_data_[i]) return false;
+    if (!input_data_[i]) {
+       vcl_cerr << "Missing Input " << i << vcl_endl;
+       return false;
+    }
     if (!(input_data_[i]->is_a()==input_types_[i])) {
       vcl_cout << "Invalid input_data_type[" << i << "] - should be " << input_types_[i]
                << " but is " << input_data_[i]->is_a() << " instead\n";
