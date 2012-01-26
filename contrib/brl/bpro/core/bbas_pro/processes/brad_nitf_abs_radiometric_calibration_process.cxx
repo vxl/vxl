@@ -56,21 +56,30 @@ bool brad_nitf_abs_radiometric_calibration_process(bprb_func_process& pro)
   vcl_ifstream ifs( imd_file_path.c_str() );
   //: now parse the IMD file
   vul_awk awk(ifs);
-  float fact = 1.0f;
+  float absCalfact = 1.0f;
+  float effectiveBand = 1.0f;
   for (; awk; ++awk)
   {
     vcl_stringstream linestr(awk.line());
     vcl_string tag; 
     linestr >> tag;
-    if (tag != "absCalFactor")
+    
+    if (tag.compare("absCalFactor") == 0) {
+      linestr >> tag;  // read =
+      linestr >> absCalfact;
       continue;
-    linestr >> tag;  // read =
-    linestr >> fact;
-    vcl_cout << "absCalFactor: " << fact << vcl_endl;
-    break;
+    }
+    if (tag.compare("effectiveBandwidth") == 0) {
+      linestr >> tag;  // read =
+      linestr >> effectiveBand;
+      continue;
+    }
   }
+  vcl_cout << "abs: " << absCalfact << " eff: " << effectiveBand << vcl_endl;
   //: now just scale the image with this factor
-  vil_math_scale_values(img, fact);
+  vil_math_scale_values(img, absCalfact);
+  float scale = 1.0f/effectiveBand;
+  vil_math_scale_values(img, scale);
 
   //output date time info
   pro.set_output_val<vil_image_view_base_sptr>(0, new vil_image_view<float>(img));
