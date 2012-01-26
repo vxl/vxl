@@ -177,3 +177,15 @@ def threshold_image(img, value, threshold_above=True):
     mask = dbvalue(id,type)
     return mask
 
+def stretch_image(img, min_value, max_value, output_type_str='float'):
+    boxm2_batch.init_process("vilStretchImageProcess")
+    boxm2_batch.set_input_from_db(0,img)
+    boxm2_batch.set_input_float(1,min_value)
+    boxm2_batch.set_input_float(2,max_value)
+    boxm2_batch.set_input_string(3,output_type_str)
+    boxm2_batch.run_process()
+    (id,type) = boxm2_batch.commit_output(0)
+    img_out = dbvalue(id,type)
+    return img_out
+
+
