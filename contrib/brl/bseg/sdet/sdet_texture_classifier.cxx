@@ -1018,7 +1018,10 @@ vil_image_view<float>
   unsigned block_area = block_size_*block_size_;
   float weight = 1.0f/static_cast<float>(block_area);
   vil_image_view<float> prob(ni, nj, 3);
-  prob.fill(0.5f);
+  for(unsigned j = 0; j<image.nj(); ++j)
+    for(unsigned i = 0; i<image.ni(); ++i){
+      prob(i,j,0) = 0.0f; prob(i,j,1) = 0.0f; prob(i,j,2) = 1.0f;
+    }
   unsigned nh = texton_index_.size();
   int bidxv = 0;
   for (int j = margin; j<(nj-margin); j+=block_size_, ++bidxv) {
