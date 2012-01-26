@@ -84,7 +84,6 @@ static void test_sun_pos()
   minutes = 47;
   seconds = 41;
   dist = brad_sun_distance(year, month, day, hours, minutes, seconds);
-  //dist_er = vcl_abs(dist - 0.988637822);
   dist_er = vcl_abs(dist - 0.988733426);
   TEST_NEAR("sun_distance_test5", dist_er, 0, 1e-4);
 
