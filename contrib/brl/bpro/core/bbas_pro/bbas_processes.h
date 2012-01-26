@@ -41,4 +41,6 @@ DECLARE_FUNC_CONS(brad_classify_image_pixel_process);
 DECLARE_FUNC_CONS(brad_eigenimage_pixel_process);
 DECLARE_FUNC_CONS(bbas_remove_from_db_process);
 
+DECLARE_FUNC_CONS(brad_nitf_abs_radiometric_calibration_process);
+
 #endif // bbas_processes_h_
