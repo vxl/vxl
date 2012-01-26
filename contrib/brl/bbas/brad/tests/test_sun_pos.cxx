@@ -76,5 +76,17 @@ static void test_sun_pos()
   dist_er = vcl_abs(dist - 1.016471);
   TEST_NEAR("sun_distance_test4", dist_er, 0, 1e-4);
 
+  // Test Earth-Sun Distance for a future date
+  year = 2050;
+  month = 2;
+  day = 20;
+  hours = 7;
+  minutes = 47;
+  seconds = 41;
+  dist = brad_sun_distance(year, month, day, hours, minutes, seconds);
+  //dist_er = vcl_abs(dist - 0.988637822);
+  dist_er = vcl_abs(dist - 0.988733426);
+  TEST_NEAR("sun_distance_test5", dist_er, 0, 1e-4);
+
 }
 TESTMAIN( test_sun_pos );

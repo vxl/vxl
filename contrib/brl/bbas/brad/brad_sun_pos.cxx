@@ -35,7 +35,7 @@ double solve_eccentric_anomaly(double mean_anomaly, double eccentricity)
 
    // this approximation of the eccentric anomaly is probably good enough..
    double approx_E = mean_anomaly + eccentricity * vcl_sin(mean_anomaly);
-#if 1
+
    // .. but solve using minimizer just to be sure.
    // Create 1D cost function
    class kepler_cost_fn : public vnl_cost_function 
@@ -60,15 +60,28 @@ double solve_eccentric_anomaly(double mean_anomaly, double eccentricity)
    brent.set_f_tolerance(1e-6);
    brent.set_verbose(true);
    double E = brent.minimize(approx_E);
-#else
-   double E = approx_E;
-#endif
+
    return E;
 }
 
 
 double brad_sun_distance(int year, int month, int day, int hours, int minutes, int seconds)
 {
+   const double J2000 = 2451545.0; // Jan 1, 2000 
+   double jday = julian_day(year, month, day, hours, minutes, seconds);
+
+#define BRAD_USE_EARTH_SUN_DIST_APPROX
+#ifdef BRAD_USE_EARTH_SUN_DIST_APPROX
+   // Simple Approximation taken from Digital Globe tech note "Radiometric Use of Quickbird Imagery"
+   // Seems to be quite accurate over relevant range of dates. -DEC 01/26/2012
+   double D = jday - J2000;
+   double g = 357.529 + 0.98560028 * D;
+   double g_rad = g * rad;
+   double dist = 1.00014 - 0.01671*vcl_cos(g_rad) - 0.00014*vcl_cos(2.0*g_rad);
+   return dist;
+#else
+   // More Exact calculation valid over longer time period: taken from:
+   // "Keplerian Elements for Approximate Positions of the Major Planets", E M Standish JPL/Caltech
    const double mean_dist0 =  1.00000261;       // au
    const double d_mean_dist = 0.00000562;     // au / century
    const double eccentricity0 = 0.01671123;    // unitless
@@ -79,9 +92,6 @@ double brad_sun_distance(int year, int month, int day, int hours, int minutes, i
    const double d_peri_long =  0.32327364;     // degrees / century
 
    const double days_per_century = 36525.6363;
-   const double J2000 = 2451545.0; // Jan 1, 2000 
-
-   double jday = julian_day(year, month, day, hours, minutes, seconds);
    double T = (jday - J2000)/days_per_century;
    // compute orbit parameters 
    double mean_dist = mean_dist0 + T*d_mean_dist;
@@ -98,6 +108,7 @@ double brad_sun_distance(int year, int month, int day, int hours, int minutes, i
    double radius = mean_dist * (1.0 - eccentricity * vcl_cos(eccentric_anomaly));
 
    return radius;
+#endif
 }
 
 
