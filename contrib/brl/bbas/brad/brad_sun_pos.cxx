@@ -2,7 +2,10 @@
 //:
 // \file
 #include <vnl/vnl_math.h>
+#include <vnl/vnl_cost_function.h>
+#include <vnl/algo/vnl_brent_minimizer.h>
 #include <vcl_cmath.h>
+#include <vcl_map.h>
 #include <vcl_cstdlib.h> // for std::rand()
 #include <vcl_iostream.h>
 
@@ -12,6 +15,91 @@ static double rad    = vnl_math::pi_over_180;
 static double invrad = vnl_math::deg_per_rad;
 static double dEarthMeanRadius  =  6371.01;   // In km
 static double dAstronomicalUnit =  149597890; // In km
+
+
+double julian_day(int year, int month, int day, int hour=0, int minute=0, int second=0)
+{
+   int a = (14 - month)/12;
+   int y = year + 4800 - a;
+   int m = month + 12*a - 3;
+
+   int JDN = day + (153*m + 2)/5 + 365*y + y/4 - y/100 + y/400 - 32045;
+   double JD = JDN + double(hour - 12)/24.0 + double(minute)/1440.0 + double(second)/86400.0;
+
+   return JD;
+}
+
+
+double solve_eccentric_anomaly(double mean_anomaly, double eccentricity)
+{
+
+   // this approximation of the eccentric anomaly is probably good enough..
+   double approx_E = mean_anomaly + eccentricity * vcl_sin(mean_anomaly);
+#if 1
+   // .. but solve using minimizer just to be sure.
+   // Create 1D cost function
+   class kepler_cost_fn : public vnl_cost_function 
+   {
+   public:
+      kepler_cost_fn(double mean_anomaly, double eccentricity) 
+         : vnl_cost_function(1), M_(mean_anomaly), e_(eccentricity) {}
+
+      double f(const vnl_vector<double>& x)
+      {
+         double residual = M_ - (x[0] - e_*vcl_sin(x[0])); 
+         return residual*residual;
+      }
+   protected:
+      double M_; // mean anomaly
+      double e_; // eccentricity
+   };
+ 
+   kepler_cost_fn cost_fun(mean_anomaly, eccentricity);
+   // solve for eccentric anomaly using brent minimizer
+   vnl_brent_minimizer brent(cost_fun);
+   brent.set_f_tolerance(1e-6);
+   brent.set_verbose(true);
+   double E = brent.minimize(approx_E);
+#else
+   double E = approx_E;
+#endif
+   return E;
+}
+
+
+double brad_sun_distance(int year, int month, int day, int hours, int minutes, int seconds)
+{
+   const double mean_dist0 =  1.00000261;       // au
+   const double d_mean_dist = 0.00000562;     // au / century
+   const double eccentricity0 = 0.01671123;    // unitless
+   const double d_eccentricity =   -0.00004392; // /century
+   const double mean_long0 =  100.46457166;    // degrees
+   const double d_mean_long = 35999.37244981;  // degrees / century
+   const double peri_long0 =  102.93768193;    // degrees
+   const double d_peri_long =  0.32327364;     // degrees / century
+
+   const double days_per_century = 36525.6363;
+   const double J2000 = 2451545.0; // Jan 1, 2000 
+
+   double jday = julian_day(year, month, day, hours, minutes, seconds);
+   double T = (jday - J2000)/days_per_century;
+   // compute orbit parameters 
+   double mean_dist = mean_dist0 + T*d_mean_dist;
+   double eccentricity = eccentricity0 + T*d_eccentricity;
+   double mean_long = mean_long0 + T*d_mean_long;
+   double peri_long = peri_long0 + T*d_peri_long;
+
+   double mean_anomaly = mean_long - peri_long;
+   double mean_anomaly_rads = mean_anomaly * rad;
+   mean_anomaly_rads = vnl_math::angle_0_to_2pi(mean_anomaly_rads);
+   // solve for eccentric anomaly
+   double eccentric_anomaly = solve_eccentric_anomaly(mean_anomaly_rads, eccentricity);
+
+   double radius = mean_dist * (1.0 - eccentricity * vcl_cos(eccentric_anomaly));
+
+   return radius;
+}
+
 
 int rand_minutes( int center, int range)
 {

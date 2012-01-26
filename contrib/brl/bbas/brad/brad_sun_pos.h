@@ -23,12 +23,18 @@
 //----------------------------------------------------------------------------
 #ifndef __BRAD_SUN_POS_H
 #define __BRAD_SUN_POS_H
+
 #include <bbas/bsta/bsta_spherical_histogram.h>
+
+
 //: the position of the sun relative to the local tangent plane
 void brad_sun_pos(int year, int month, int day,
                   int hours, int minutes, int seconds,
                   double longitude, double latitude,
                   double& sun_azimuth, double& sun_elevation);
+
+//: The distance to the sun on the given date (in astronomical units)
+double brad_sun_distance(int year, int month, int day, int hours=0, int minutes=0, int seconds=0);
 
 //: the range of the sun positions over an interval when observed at a range of times each day. Interval starts on January 1st in the given year and goes to the end of the last year plus interval_days. The observation time range is centered on obs_time.
 void brad_sun_direction_hist(int obs_time_year, int obs_time_hours, 
