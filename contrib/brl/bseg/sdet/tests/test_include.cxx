@@ -24,6 +24,7 @@
 #include <sdet/sdet_image_mesh.h>
 #include <sdet/sdet_image_mesh_params.h>
 #include <sdet/sdet_img_edge.h>
+#include <sdet/sdet_k_means.h>
 #include <sdet/sdet_mrf_bp.h>
 #include <sdet/sdet_mrf_site_bp.h>
 #include <sdet/sdet_nms.h>
@@ -33,6 +34,8 @@
 #include <sdet/sdet_region_edge.h>
 #include <sdet/sdet_region_proc.h>
 #include <sdet/sdet_region_proc_params.h>
+#include <sdet/sdet_texture_classifier.h>
+#include <sdet/sdet_texture_classifier_params.h>
 #include <sdet/sdet_third_order_edge_det.h>
 #include <sdet/sdet_third_order_edge_det_params.h>
 #include <sdet/sdet_vrml_display.h>

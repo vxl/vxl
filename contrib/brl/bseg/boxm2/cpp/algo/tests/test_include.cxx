@@ -8,6 +8,7 @@
 #include <boxm2/cpp/algo/boxm2_change_detection_functor.h>
 #include <boxm2/cpp/algo/boxm2_compute_derivative_function.h>
 #include <boxm2/cpp/algo/boxm2_compute_nonsurface_histogram_functor.h>
+#include <boxm2/cpp/algo/boxm2_compute_normal_albedo_functor.h>
 #include <boxm2/cpp/algo/boxm2_compute_phongs_model_functor.h>
 #include <boxm2/cpp/algo/boxm2_cone_update_image_functor.h>
 #include <boxm2/cpp/algo/boxm2_data_serial_iterator.h>
