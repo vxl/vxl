@@ -113,6 +113,9 @@ SOURCE=.\boxm2_block_metadata.cxx
 SOURCE=.\boxm2_scene_parser.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\boxm2_normal_albedo_array.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/vbl_array_3d+vnl_vector_fixed+ushort.2--.cxx
 # End Source File
 # Begin Source File
@@ -160,6 +163,9 @@ SOURCE=.\Templates/boxm2_data+BOXM2_MOG2_RGB-.cxx
 # Begin Source File
 SOURCE=.\Templates/boxm2_data+BOXM2_BATCH_HISTOGRAM-.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\Templates/boxm2_data+BOXM2_NORMAL_ALBEDO_ARRAY-.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
@@ -189,6 +195,9 @@ SOURCE=.\boxm2_util.h
 # End Source File
 # Begin Source File
 SOURCE=.\boxm2_scene_parser.h
+# End Source File
+# Begin Source File
+SOURCE=.\boxm2_normal_albedo_array.h
 # End Source File
 # End Group
 # End Target

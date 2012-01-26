@@ -189,6 +189,15 @@ SOURCE=.\processes/brad_estimate_empty_process.cxx
 SOURCE=.\processes/bbas_remove_from_db_process.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\processes/brad_estimate_radiance_values_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/brad_nitf_abs_radiometric_calibration_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/bbas_estimate_irradiance_process.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/brdb_value_t+bbas_1d_array_uint_sptr-.cxx
 # End Source File
 # Begin Source File

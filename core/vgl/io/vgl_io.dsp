@@ -290,6 +290,9 @@ SOURCE=.\Templates/vgl_io_h_matrix_2d+double-.cxx
 # Begin Source File
 SOURCE=.\Templates/vgl_io_point_2d+uint-.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\Templates/vsl_vector_io+vgl_point_3d+int--.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"

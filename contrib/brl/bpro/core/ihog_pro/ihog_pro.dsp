@@ -98,6 +98,12 @@ SOURCE=.\ihog_register.cxx
 # Begin Source File
 SOURCE=.\processes/ihog_register_translational_process.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\processes/ihog_mutual_information_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/ihog_compute_mi_cost_surface_process.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"

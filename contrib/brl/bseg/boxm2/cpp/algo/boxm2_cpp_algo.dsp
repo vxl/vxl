@@ -242,6 +242,9 @@ SOURCE=.\boxm2_apply_filter_function.txx
 # Begin Source File
 SOURCE=.\boxm2_apply_filter_function.h
 # End Source File
+# Begin Source File
+SOURCE=.\boxm2_compute_normal_albedo_functor.h
+# End Source File
 # End Group
 # End Target
 # End Project

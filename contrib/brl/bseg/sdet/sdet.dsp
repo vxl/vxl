@@ -204,6 +204,15 @@ SOURCE=.\sdet_mrf_bp.cxx
 SOURCE=.\sdet_vrml_display.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\sdet_texture_classifier_params.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\sdet_k_means.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\sdet_texture_classifier.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/vbl_smart_ptr+sdet_region_edge-.cxx
 # End Source File
 # Begin Source File
@@ -337,6 +346,15 @@ SOURCE=.\sdet_mrf_bp_sptr.h
 # End Source File
 # Begin Source File
 SOURCE=.\sdet_vrml_display.h
+# End Source File
+# Begin Source File
+SOURCE=.\sdet_k_means.h
+# End Source File
+# Begin Source File
+SOURCE=.\sdet_texture_classifier.h
+# End Source File
+# Begin Source File
+SOURCE=.\sdet_texture_classifier_params.h
 # End Source File
 # End Group
 # End Target

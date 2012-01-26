@@ -107,6 +107,12 @@ SOURCE=.\processes/sdet_detect_edge_tangent_interp_process.cxx
 # Begin Source File
 SOURCE=.\processes/sdet_detect_third_order_edges_process.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\processes/sdet_texture_classifier_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/sdet_texture_classifier_kernel_margin_process.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"

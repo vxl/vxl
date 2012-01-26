@@ -206,6 +206,21 @@ SOURCE=.\processes/boxm2_ocl_flip_normals_using_vis_process.cxx
 # Begin Source File
 SOURCE=.\processes/boxm2_ocl_paint_online_process.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\processes/boxm2_ocl_render_expected_albedo_normal_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/boxm2_ocl_ingest_buckeye_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/boxm2_ocl_update_alpha_naa_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/boxm2_ocl_render_expected_z_image_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/boxm2_ocl_render_expected_image_naa_process.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"

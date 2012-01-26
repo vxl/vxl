@@ -251,6 +251,9 @@ SOURCE=.\test_mask.cxx
 SOURCE=.\test_extrema.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\test_filter_bank.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\test_include.cxx
 # End Source File
 # Begin Source File

@@ -126,6 +126,9 @@ SOURCE=.\brip_line_generator.cxx
 SOURCE=.\brip_rect_mask.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\brip_filter_bank.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/brip_histogram+double-.cxx
 # End Source File
 # Begin Source File
@@ -253,6 +256,9 @@ SOURCE=.\brip_blobwise_mutual_info.h
 # End Source File
 # Begin Source File
 SOURCE=.\brip_blobwise_mutual_info.txx
+# End Source File
+# Begin Source File
+SOURCE=.\brip_filter_bank.h
 # End Source File
 # End Group
 # End Target
