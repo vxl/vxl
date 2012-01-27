@@ -58,7 +58,7 @@ bool brad_estimate_radiance_values_process_cons(bprb_func_process& pro)
   pro.set_input(4, new brdb_value_t<float>(Esun));
   float Edown = 0.0;
   pro.set_input(5, new brdb_value_t<float>(Edown));
-  float optical_depth = 0.05;
+  float optical_depth = 0.10;
   pro.set_input(6, new brdb_value_t<float>(optical_depth));
   
   return true;
@@ -78,12 +78,12 @@ bool brad_estimate_radiance_values_process(bprb_func_process& pro)
   vil_image_view_base_sptr input_img = 
     pro.get_input<vil_image_view_base_sptr>(0);
 
-  float sun_el = pro.get_input<float>(1);
-  float sun_dist = pro.get_input<float>(2);
-  float sensor_el = pro.get_input<float>(3);
-  float solar_irrad = pro.get_input<float>(4);
-  float down_irrad = pro.get_input<float>(5);
-  float optical_depth = pro.get_input<float>(6);
+  double sun_el = pro.get_input<float>(1);
+  double sun_dist = pro.get_input<float>(2);
+  double sensor_el = pro.get_input<float>(3);
+  double solar_irrad = pro.get_input<float>(4);
+  double down_irrad = pro.get_input<float>(5);
+  double optical_depth = pro.get_input<float>(6);
 
   //check inputs validity
   if (!input_img) {
@@ -114,7 +114,7 @@ bool brad_estimate_radiance_values_process(bprb_func_process& pro)
 
   // compute airlight 
   float frac = 0.0001f;
-  float airlight = h.value_with_area_below(frac);
+  double airlight = h.value_with_area_below(frac);
  
   vcl_cout << "min = " << minval << ", airlight = " << airlight << vcl_endl;
 
