@@ -1,4 +1,4 @@
-// This is brl/bseg/boxm2/ocl/pro/processes/boxm2_ocl_ingest_buckeye_dem_process.cxx
+// This is brl/bseg/boxm2/ocl/pro/processes/boxm2_ocl_ingest_buckeye_process.cxx
 #include <bprb/bprb_func_process.h>
 //:
 // \file
@@ -8,6 +8,7 @@
 // \date November 8, 2011
 
 #include <vcl_algorithm.h>
+#include <vcl_cmath.h>
 #include <vcl_fstream.h>
 #include <boct/boct_bit_tree.h>
 #include <boxm2/ocl/boxm2_opencl_cache.h>
@@ -19,7 +20,6 @@
 #include <vil/vil_image_view.h>
 #include <vil/vil_image_resource.h>
 #include <vil/vil_load.h>
-#include <vil/vil_save.h>
 //brdb stuff
 #include <brdb/brdb_value.h>
 
@@ -37,7 +37,7 @@
 // Helper class which updates alpha values based on belief and uncertainty computed from DEM
 class alpha_update_from_opinion_functor
 {
-public:
+ public:
   alpha_update_from_opinion_functor(boxm2_data_base* alpha, boxm2_data_base* aux0, boxm2_data_base* aux1, double sb_side_len)
    : subblock_side_len_(sb_side_len)
    {
@@ -55,26 +55,26 @@ public:
      boxm2_data<BOXM2_ALPHA>::datatype &alpha = alpha_data_->data()[index];
      float belief = aux0_data_->data()[index];
      float uncertainty = aux1_data_->data()[index];
-
-     //vcl_cout << "index " << index << ": belief = " << belief << ", uncertainty = " << uncertainty << ", alpha = " << alpha << vcl_endl;
-
+#ifdef DEBUG
+     vcl_cout << "index " << index << ": belief = " << belief << ", uncertainty = " << uncertainty << ", alpha = " << alpha << vcl_endl;
+#endif
      float ray_len = side_len;
 
      float PQ_prior = 1.0f - float(vcl_exp(-alpha*ray_len));
      float PQ = belief + uncertainty*PQ_prior;
 
-     alpha = float(-log(1.0 - PQ)/ray_len);
+     alpha = float(-vcl_log(1.0 - PQ)/ray_len);
 
      if (alpha < 0) {
-       vcl_cerr << "ERROR: alpha = " << alpha << ",  PQ = " << PQ << " ray_len = " << ray_len << vcl_endl;
-       vcl_cerr << "    belief = " << belief << " uncertainty = " << uncertainty << "  PQ_prior = " << PQ_prior << vcl_endl;
+       vcl_cerr << "ERROR: alpha = " << alpha << ",  PQ = " << PQ << " ray_len = " << ray_len << '\n'
+                << "    belief = " << belief << " uncertainty = " << uncertainty << "  PQ_prior = " << PQ_prior << '\n';
        alpha = 0.0f;
      }
 
      return true;
   }
 
-protected:
+ protected:
   boxm2_data<BOXM2_ALPHA> *alpha_data_;
   boxm2_data<BOXM2_AUX0> *aux0_data_;
   boxm2_data<BOXM2_AUX1> *aux1_data_;
@@ -101,10 +101,9 @@ namespace boxm2_ocl_ingest_buckeye_dem_process_globals
     //set kernel options
     options += " -D INGEST_BUCKEYE_DEM ";
     options += " -D STEP_CELL=step_cell_ingest_buckeye_dem(aux_args,data_ptr,(t_vox_exit-d)*linfo->block_len,t_vox_exit*linfo->block_len)";
-    vcl_cout << "Kernel Options = [" << options << "]" << vcl_endl;
+    vcl_cout << "Kernel Options = [" << options << ']' << vcl_endl;
     //have kernel construct itself using the context and device
     bocl_kernel * ray_trace_kernel=new bocl_kernel();
-
 
     ray_trace_kernel->create_kernel( &device->context(),
                                      device->device_id(),
@@ -128,7 +127,7 @@ bool boxm2_ocl_ingest_buckeye_dem_process_cons(bprb_func_process& pro)
   input_types_[2] = "boxm2_opencl_cache_sptr";
   input_types_[3] = "vcl_string"; // first return geotiff filename
   input_types_[4] = "vcl_string"; // last return geotiff filename
-  input_types_[5] = "float"; // geoid height 
+  input_types_[5] = "float"; // geoid height
 
   // process has no outputs
   vcl_vector<vcl_string> output_types_(n_outputs_);
@@ -162,7 +161,7 @@ bool boxm2_ocl_ingest_buckeye_dem_process(bprb_func_process& pro)
   vil_image_resource_sptr a2_res = vil_load_image_resource(a2_fname.c_str());
 
   vpgl_lvcs_sptr lvcs = new vpgl_lvcs(scene->lvcs());
-  
+
   vpgl_geo_camera* geocam = 0;
   vpgl_geo_camera::init_geo_camera(a1_res, lvcs, geocam);
 
@@ -181,7 +180,7 @@ bool boxm2_ocl_ingest_buckeye_dem_process(bprb_func_process& pro)
   int max_j = int(vcl_min(a1_res->nj()-1.0, vcl_ceil(proj_bbox.max_y())));
 
   if ((min_i > max_i) || (min_j > max_j)) {
-      vcl_cerr << "Error: boxm2_ocl_ingest_buckeye_dem_process: No overlap between scene and DEM image." << vcl_endl;
+      vcl_cerr << "Error: boxm2_ocl_ingest_buckeye_dem_process: No overlap between scene and DEM image.\n";
       return false;
   }
 
@@ -193,18 +192,17 @@ bool boxm2_ocl_ingest_buckeye_dem_process(bprb_func_process& pro)
 
   vil_image_view<float>* a1_view = dynamic_cast<vil_image_view<float>*>(a1_view_base.ptr());
   if (!a1_view) {
-      vcl_cerr << "Error: boxm2_ocl_ingest_buckeye_dem_process: could not cast first return image to a vil_image_view<float>" << vcl_endl;
+      vcl_cerr << "Error: boxm2_ocl_ingest_buckeye_dem_process: could not cast first return image to a vil_image_view<float>\n";
       return false;
   }
   vil_image_view<float>* a2_view = dynamic_cast<vil_image_view<float>*>(a2_view_base.ptr());
   if (!a2_view) {
-      vcl_cerr << "Error: boxm2_ocl_ingest_buckeye_dem_process: could not cast last return image to a vil_image_view<float>" << vcl_endl;
+      vcl_cerr << "Error: boxm2_ocl_ingest_buckeye_dem_process: could not cast last return image to a vil_image_view<float>\n";
       return false;
   }
 
   unsigned int cl_ni  = RoundUp(ni,8);
   unsigned int cl_nj  = RoundUp(nj,8);
-
 
   // form the ray buffer
   cl_float* ray_origins    = new float[4*cl_ni*cl_nj];
@@ -226,9 +224,9 @@ bool boxm2_ocl_ingest_buckeye_dem_process(bprb_func_process& pro)
         geocam->img_to_wgs(full_i, full_j, 0.0, lon, lat, el);
         lvcs->global_to_local(lon,lat,el_first, vpgl_lvcs::wgs84, x, y, z_first);
         lvcs->global_to_local(lon,lat,el_last, vpgl_lvcs::wgs84, x, y, z_last);
-        
+
         // start rays slightly above maximum height of model
-        float z_origin = float(scene_bbox.max_z()) + 1.0f; 
+        float z_origin = float(scene_bbox.max_z()) + 1.0f;
 
         ray_origins[count4+0] = float(x);
         ray_origins[count4+1] = float(y);
@@ -243,7 +241,6 @@ bool boxm2_ocl_ingest_buckeye_dem_process(bprb_func_process& pro)
       ++count;
     }
   }
-
 
   bocl_mem_sptr ray_o_buff = new bocl_mem(device->context(),
                                           ray_origins,
@@ -358,8 +355,8 @@ bool boxm2_ocl_ingest_buckeye_dem_process(bprb_func_process& pro)
     vcl_cout<<"Setting arguments"<<vcl_endl;
 
     //execute kernel
-    if(!kern->execute(queue, 2, lThreads, gThreads)) {
-      vcl_cerr << "boxm2_ocl_ingest_buckeye_dem_process: kern->execute() returned error. exiting process." << vcl_endl;
+    if (!kern->execute(queue, 2, lThreads, gThreads)) {
+      vcl_cerr << "boxm2_ocl_ingest_buckeye_dem_process: kern->execute() returned error. exiting process.\n";
       clReleaseCommandQueue(queue);
       return false;
     }
@@ -367,7 +364,7 @@ bool boxm2_ocl_ingest_buckeye_dem_process(bprb_func_process& pro)
     vcl_cout << "Calling clFinish" << vcl_endl;
     status = clFinish(queue);
     if ( !check_val(status,CL_SUCCESS,"clFinish failed (" + kern->id() + ") " +error_to_string(status)) ) {
-      vcl_cerr << "boxm2_ocl_ingest_dem_process: clFinish returned error. exiting process." << vcl_endl;
+      vcl_cerr << "boxm2_ocl_ingest_dem_process: clFinish returned error. exiting process.\n";
       clReleaseCommandQueue(queue);
       return false;
     }
@@ -378,7 +375,6 @@ bool boxm2_ocl_ingest_buckeye_dem_process(bprb_func_process& pro)
     vcl_cout << "Reading back AUX buffers" << vcl_endl;
     aux0->read_to_buffer(queue );
     aux1->read_to_buffer(queue );
-
 
     //clear render kernel args so it can reset em on next execution
     kern->clear_args();
@@ -400,13 +396,12 @@ bool boxm2_ocl_ingest_buckeye_dem_process(bprb_func_process& pro)
     int datasize = boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
     vcl_cout << "datasize = " << datasize << vcl_endl;
     int data_len = int(alpha_data->buffer_length() / boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix()));
-    vcl_cout << "data length = " << data_len << vcl_endl;
-    vcl_cout << "Updating Alpha values.." << vcl_endl;
+    vcl_cout << "data length = " << data_len << vcl_endl
+             << "Updating Alpha values.." << vcl_endl;
     boxm2_data_leaves_serial_iterator<alpha_update_from_opinion_functor>(block, data_len, update_func);
     vcl_cout << "Done updating Alpha values." << vcl_endl;
-    
   }
-  
+
   clReleaseCommandQueue(queue);
   return true;
 }
