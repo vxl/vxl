@@ -82,7 +82,7 @@ bool brad_estimate_radiance_values_process(bprb_func_process& pro)
   double sun_dist = pro.get_input<float>(2);
   double sensor_el = pro.get_input<float>(3);
   double solar_irrad = pro.get_input<float>(4);
-  double down_irrad = pro.get_input<float>(5);
+  double E_down = pro.get_input<float>(5);
   double optical_depth = pro.get_input<float>(6);
 
   //check inputs validity
@@ -125,11 +125,15 @@ bool brad_estimate_radiance_values_process(bprb_func_process& pro)
   double T_sun = vcl_exp(-optical_depth / vcl_sin(sun_el_rads));
   double T_view = vcl_exp(-optical_depth / vcl_sin(sat_el_rads));
 
+  double E_sun = solar_irrad/(sun_dist*sun_dist);
+
   // ideal Lambertian reflector, surface normal = [0 0 1]
   double sun_dot_norm = vcl_sin(sun_el_rads);
-  double Lsat_horizontal = T_view*(solar_irrad/(sun_dist*sun_dist)*sun_dot_norm*T_sun + down_irrad)/vnl_math::pi + airlight;
-  // idead Lambertian reflector facing the sun
-  double Lsat_sun_facing = T_view*(solar_irrad/(sun_dist*sun_dist)*T_sun + down_irrad)/vnl_math::pi + airlight;
+  double Lsat_horizontal = T_view*(E_sun*sun_dot_norm*T_sun + E_down)/vnl_math::pi + airlight;
+  // ideal Lambertian reflector facing the sun
+  // compute shape factor L for surface facing direction of sun
+  double L = 1.0 - 0.5*vcl_cos(vnl_math::pi_over_2 - sun_el_rads);
+  double Lsat_sun_facing = T_view*(E_sun*T_sun + E_down*L)/vnl_math::pi + airlight;
 
   vcl_cout << "max = " << maxval << " Lhoriz = " << Lsat_horizontal << " Lsun = " << Lsat_sun_facing << vcl_endl;
 
