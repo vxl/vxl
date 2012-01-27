@@ -1,12 +1,11 @@
 // This is brl/bseg/boxm2/ocl/pro/processes/boxm2_ocl_update_process.cxx
+#include <bprb/bprb_func_process.h>
 //:
 // \file
 // \brief  A process for updating the scene.
 //
 // \author Vishal Jain
 // \date Mar 25, 2011
-
-#include <bprb/bprb_func_process.h>
 
 #include <vcl_fstream.h>
 #include <boxm2/ocl/boxm2_opencl_cache.h>
@@ -17,7 +16,6 @@
 #include <boxm2/boxm2_util.h>
 #include <vil/vil_image_view.h>
 #include <vil/vil_save.h>
-#include <vil/vil_load.h>
 #include <boxm2/ocl/algo/boxm2_ocl_camera_converter.h>
 
 //brdb stuff
@@ -74,7 +72,7 @@ namespace boxm2_ocl_update_process_globals
 
     //may need DIFF LIST OF SOURCES FOR THIS GUY
     bocl_kernel* proc_img = new bocl_kernel();
-	vcl_string norm_opts = options + " -D PROC_NORM ";
+    vcl_string norm_opts = options + " -D PROC_NORM ";
     proc_img->create_kernel(&device->context(),device->device_id(), non_ray_src, "proc_norm_image", norm_opts, "update::proc_norm_image");
     vec_kernels.push_back(proc_img);
 
@@ -110,13 +108,13 @@ bool boxm2_ocl_update_process_cons(bprb_func_process& pro)
   input_types_[5] = "vcl_string";                   //illumination identifier
   input_types_[6] = "vil_image_view_base_sptr";     //mask image view
   input_types_[7] = "bool";                         //do_update_alpha/don't update alpha
-  input_types_[8] = "float";                        //variance value? if 0.0 or less, then use variable variance   
+  input_types_[8] = "float";                        //variance value? if 0.0 or less, then use variable variance
 
   // process has 1 output:
   // output[0]: scene sptr
   vcl_vector<vcl_string>  output_types_(n_outputs_);
   bool good = pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
-  
+
   // default 6 and 7 and 8 inputs
   brdb_value_sptr idx        = new brdb_value_t<vcl_string>("");
   brdb_value_sptr empty_mask = new brdb_value_t<vil_image_view_base_sptr>(new vil_image_view<unsigned char>(1,1));
@@ -125,7 +123,7 @@ bool boxm2_ocl_update_process_cons(bprb_func_process& pro)
   pro.set_input(5, idx);
   pro.set_input(6, empty_mask);
   pro.set_input(7, up_alpha);
-  pro.set_input(8, def_var); 
+  pro.set_input(8, def_var);
   return good;
 }
 
@@ -142,7 +140,7 @@ bool boxm2_ocl_update_process(bprb_func_process& pro)
   }
   float transfer_time=0.0f;
   float gpu_time=0.0f;
-  
+
   //get the inputs
   unsigned i = 0;
   bocl_device_sptr         device       = pro.get_input<bocl_device_sptr>(i++);
@@ -152,22 +150,22 @@ bool boxm2_ocl_update_process(bprb_func_process& pro)
   vil_image_view_base_sptr img          = pro.get_input<vil_image_view_base_sptr>(i++);
   vcl_string               ident        = pro.get_input<vcl_string>(i++);
   vil_image_view_base_sptr mask_sptr    = pro.get_input<vil_image_view_base_sptr>(i++);
-  bool                     update_alpha = pro.get_input<bool>(i++); 
+  bool                     update_alpha = pro.get_input<bool>(i++);
   float                    mog_var      = pro.get_input<float>(i++);
 
   //catch a "null" mask (not really null because that throws an error)
   bool use_mask = false;
-  if( mask_sptr->ni() == img->ni() && mask_sptr->nj() == img->nj() ) {
+  if ( mask_sptr->ni() == img->ni() && mask_sptr->nj() == img->nj() ) {
     vcl_cout<<"Update using mask."<<vcl_endl;
     use_mask = true;
   }
-  vil_image_view<unsigned char>* mask_map = 0; 
-  if(use_mask) {
+  vil_image_view<unsigned char>* mask_map = 0;
+  if (use_mask) {
     mask_map = dynamic_cast<vil_image_view<unsigned char> *>(mask_sptr.ptr());
     if (!mask_map) {
       vcl_cout<<"boxm2_update_process:: mask map is not an unsigned char map"<<vcl_endl;
       return false;
-    } 
+    }
   }
 
   //cache size sanity check
@@ -219,7 +217,7 @@ bool boxm2_ocl_update_process(bprb_func_process& pro)
                                                  *(device->device_id()),
                                                  CL_QUEUE_PROFILING_ENABLE,
                                                  &status);
-  if (status!=0) 
+  if (status!=0)
     return false;
 
   // compile the kernel if not already compiled
@@ -259,7 +257,7 @@ bool boxm2_ocl_update_process(bprb_func_process& pro)
     pre_buff[i]=0.0f;
     norm_buff[i]=0.0f;
   }
-  
+
   //determine min/max i and j
   unsigned int min_i=1000000000, max_i=0;
   unsigned int min_j=1000000000, max_j=0;
@@ -278,13 +276,13 @@ bool boxm2_ocl_update_process(bprb_func_process& pro)
       }
     }
   }
-  
+
   //copy input vals into image
   int count=0;
   for (unsigned int j=0;j<cl_nj;++j) {
     for (unsigned int i=0;i<cl_ni;++i) {
       input_buff[count] = 0.0f;
-      if ( i<img_view->ni() && j< img_view->nj() ) 
+      if ( i<img_view->ni() && j< img_view->nj() )
         input_buff[count] = (*img_view)(i,j);
       ++count;
     }
@@ -312,7 +310,7 @@ bool boxm2_ocl_update_process(bprb_func_process& pro)
   img_dim_buff[1] = 0;
   img_dim_buff[2] = img_view->ni();
   img_dim_buff[3] = img_view->nj();
-  
+
 #if 0
   if (min_i<max_i && min_j<max_j)
   {
@@ -323,7 +321,7 @@ bool boxm2_ocl_update_process(bprb_func_process& pro)
     vcl_cout<<"ROI "<<min_i<<' '<<min_j<<' '<<max_i<<' '<<max_j<<vcl_endl;
   }
 #endif // 0
-  
+
   bocl_mem_sptr img_dim=new bocl_mem(device->context(), img_dim_buff, sizeof(int)*4, "image dims");
   img_dim->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
@@ -360,14 +358,14 @@ bool boxm2_ocl_update_process(bprb_func_process& pro)
       //execute kernel
       proc_kern->execute( queue, 2, local_threads, global_threads);
       int status = clFinish(queue);
-      if(!check_val(status, MEM_FAILURE, "UPDATE EXECUTE FAILED: " + error_to_string(status)))
+      if (!check_val(status, MEM_FAILURE, "UPDATE EXECUTE FAILED: " + error_to_string(status)))
         return false;
       proc_kern->clear_args();
       norm_image->read_to_buffer(queue);
 
       continue;
     }
-    
+
     //set masked values
     vis_image->read_to_buffer(queue);
     if (use_mask)
@@ -536,7 +534,7 @@ bool boxm2_ocl_update_process(bprb_func_process& pro)
 
         // update_alpha boolean buffer
         cl_int up_alpha[1];
-        up_alpha[0] = update_alpha ? 1 : 0; 
+        up_alpha[0] = update_alpha ? 1 : 0;
         bocl_mem_sptr up_alpha_mem = new bocl_mem(device->context(), up_alpha, sizeof(up_alpha), "update alpha bool buffer");
         up_alpha_mem->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
 
@@ -560,7 +558,7 @@ bool boxm2_ocl_update_process(bprb_func_process& pro)
         kern->set_arg( up_alpha_mem.ptr() );
         kern->set_arg( mog_var_mem.ptr() );
         kern->set_arg( cl_output.ptr() );
-        
+
         //execute kernel
         kern->execute(queue, 2, local_threads, global_threads);
         int status = clFinish(queue);
@@ -584,7 +582,6 @@ bool boxm2_ocl_update_process(bprb_func_process& pro)
       clFinish(queue);
     }
   }
-
 
   ///debugging save vis, pre, norm images
 #if 0
@@ -611,7 +608,7 @@ bool boxm2_ocl_update_process(bprb_func_process& pro)
   delete [] input_buff;
   delete [] ray_origins;
   delete [] ray_directions;
-  opencl_cache->unref_mem(in_image.ptr()); 
+  opencl_cache->unref_mem(in_image.ptr());
   opencl_cache->unref_mem(vis_image.ptr());
   opencl_cache->unref_mem(pre_image.ptr());
   opencl_cache->unref_mem(norm_image.ptr());

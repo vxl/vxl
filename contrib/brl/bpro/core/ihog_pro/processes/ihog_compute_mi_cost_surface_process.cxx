@@ -14,27 +14,21 @@
 //: Init function
 bool ihog_compute_mi_cost_surface_process_cons(bprb_func_process& pro)
 {
-  //this process takes two inputs: 
+  //this process takes four inputs and one output:
   //  0) image 0
   //  1) image 1
   //  2) mask
-  //  2) int        radius 
-  bool ok=false;
+  //  3) radius
   vcl_vector<vcl_string> input_types;
   input_types.push_back("vil_image_view_base_sptr");
   input_types.push_back("vil_image_view_base_sptr");
   input_types.push_back("vil_image_view_base_sptr");
   input_types.push_back("int");
-  ok = pro.set_input_types(input_types);
-
-  if (!ok) return ok;
-
   vcl_vector<vcl_string> output_types;
   output_types.push_back("vil_image_view_base_sptr");
-  ok = pro.set_output_types(output_types);
-  if (!ok) return ok;
 
-  return true;
+  return pro.set_input_types(input_types)
+      && pro.set_output_types(output_types);
 }
 
 //: Execute the process
@@ -53,7 +47,7 @@ bool ihog_compute_mi_cost_surface_process(bprb_func_process& pro)
   unsigned ni = img_0.ni(), nj = img_0.nj();
   vil_image_view<float> img0(ni,nj);
   vil_convert_cast(img_0,img0);
-  
+
   vil_image_view<float> img1(img_1.ni(),img_1.nj());
   vil_convert_cast(img_1, img1);
 
@@ -67,7 +61,7 @@ bool ihog_compute_mi_cost_surface_process(bprb_func_process& pro)
   ihog_world_roi roi(img0.ni()- 2*border,
                      img0.nj()- 2*border,
                      vgl_point_2d<double>(border,border));
-  
+
   ihog_transform_2d init_xform;
   init_xform.set_translation_only(0,0);
   ihog_image<float> from_img(img1, init_xform);
@@ -76,34 +70,34 @@ bool ihog_compute_mi_cost_surface_process(bprb_func_process& pro)
   ihog_image<float> to_img(img0, ihog_transform_2d());
   ihog_image<float> mask1_img(mask1, ihog_transform_2d());
   ihog_image<float> mask0_img(mask0, ihog_transform_2d());
-  
+
   ihog_minfo_cost_func cost_fun(to_img, from_img, mask0_img, mask1_img, roi, init_xform);
   //ihog_minfo_cost_func cost_fun(to_img, from_img, roi, init_xform);
-  
+
   float step = 1.0f;
   int half_n_steps = radius;
   int n_steps = 2*half_n_steps + 1;
   vil_image_view<float> *cost_map = new vil_image_view<float>(n_steps,n_steps);
   vil_image_view_base_sptr cost_map_sptr(cost_map);
-  
+
   for (int i=0; i<n_steps; ++i) {
-	  vcl_cout << "-------------------------------------  i = " << i << vcl_endl;
-	  for (int j=0; j<n_steps; ++j) {
-		float offset_x = (j - half_n_steps)*step;
-		float offset_y = (i - half_n_steps)*step;
-		ihog_transform_2d xform;
-		xform.set_translation_only(offset_x,offset_y);
-		vnl_vector<double> x;
-		xform.params(x);
-		//vcl_cout << "x = " << x << vcl_endl;
-		double minfo = cost_fun.f(x);
-		(*cost_map)(i,j) = minfo;
-		vcl_cout << "minfo(" << offset_x << ", " << offset_y << ") = " << minfo << vcl_endl;
-	  }
+    vcl_cout << "-------------------------------------  i = " << i << vcl_endl;
+    for (int j=0; j<n_steps; ++j) {
+      float offset_x = (j - half_n_steps)*step;
+      float offset_y = (i - half_n_steps)*step;
+      ihog_transform_2d xform;
+      xform.set_translation_only(offset_x,offset_y);
+      vnl_vector<double> x;
+      xform.params(x);
+      //vcl_cout << "x = " << x << vcl_endl;
+      double minfo = cost_fun.f(x);
+      (*cost_map)(i,j) = minfo;
+      vcl_cout << "minfo(" << offset_x << ", " << offset_y << ") = " << minfo << vcl_endl;
+    }
   }
-  
+
   pro.set_output_val<vil_image_view_base_sptr>(0,cost_map_sptr);
-  
+
   return true;
 }
 

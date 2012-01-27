@@ -412,9 +412,7 @@ render_bit_scene( __constant  RenderSceneInfo    * linfo,
   //store visibility at the end of this block
   vis_image[imIndex[llid]] = vis;
 }
-
 #endif
-
 
 
 #ifdef RENDER_Z_IMAGE
@@ -436,20 +434,20 @@ void cast_ray(int,int,float,float,float,float,float,float,
 __kernel
 void
 render_z_image( __constant  RenderSceneInfo    * linfo,
-              __global    int4               * tree_array,
-              __global    float              * alpha_array,
-              __global    float4             * ray_origins,
-              __global    float4             * ray_directions,
-              __global    float              * exp_image,     
-              __global    float              * exp_sqr_image, // sum of squares.
-              __global    uint4              * exp_image_dims,
-              __global    float              * output,
-              __constant  uchar              * bit_lookup,
-              __global    float              * vis_image,
-              __global    float              * prob_image,
-              __local     uchar16            * local_tree,
-              __local     uchar              * cumsum,        // cumulative sum helper for data pointer
-              __local     int                * imIndex)
+                __global    int4               * tree_array,
+                __global    float              * alpha_array,
+                __global    float4             * ray_origins,
+                __global    float4             * ray_directions,
+                __global    float              * exp_image,
+                __global    float              * exp_sqr_image, // sum of squares.
+                __global    uint4              * exp_image_dims,
+                __global    float              * output,
+                __constant  uchar              * bit_lookup,
+                __global    float              * vis_image,
+                __global    float              * prob_image,
+                __local     uchar16            * local_tree,
+                __local     uchar              * cumsum,        // cumulative sum helper for data pointer
+                __local     int                * imIndex)
 {
   //----------------------------------------------------------------------------
   //get local id (0-63 for an 8x8) of this patch + image coordinates and camera
@@ -475,7 +473,7 @@ render_z_image( __constant  RenderSceneInfo    * linfo,
   float4 ray_o = ray_origins[ imIndex[llid] ];
   float4 ray_d = ray_directions[ imIndex[llid] ];
   float ray_ox, ray_oy, ray_oz, ray_dx, ray_dy, ray_dz;
-  
+
   calc_scene_ray_generic_cam(linfo, ray_o, ray_d, &ray_ox, &ray_oy, &ray_oz, &ray_dx, &ray_dy, &ray_dz);
 
   //----------------------------------------------------------------------------
@@ -530,8 +528,8 @@ render_bit_scene( __constant  RenderSceneInfo    * linfo,
                   __global    int4               * tree_array,
                   __global    float              * alpha_array,
                   __global    float              * naa_array,
-				  __global    float16            * normals_dot_sun,
-				  __global    float4             * irradiance,
+                  __global    float16            * normals_dot_sun,
+                  __global    float4             * irradiance,
                   __global    float4             * ray_origins,
                   __global    float4             * ray_directions,
                   __global    float              * exp_image,      // input image and store vis_inf and pre_inf
@@ -623,9 +621,9 @@ render_albedo_normal( __constant  RenderSceneInfo    * linfo,
                       __global    int4               * tree_array,
                       __global    float              * alpha_array,
                       __global    float              * naa_array,
-				          __global    float16            * normals_x,
-				          __global    float16            * normals_y,
-				          __global    float16            * normals_z,
+                      __global    float16            * normals_x,
+                      __global    float16            * normals_y,
+                      __global    float16            * normals_z,
                       __global    float4             * ray_origins,
                       __global    float4             * ray_directions,
                       __global    float4             * exp_image,      // expected albedo and normal values

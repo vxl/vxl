@@ -17,7 +17,7 @@ typedef struct
   __local  float4* cached_aux;
            float   obs;
   __global float * output;
-          float * ray_len; 
+          float * ray_len;
   __constant RenderSceneInfo * linfo;
 } AuxArgs;
 
@@ -90,16 +90,15 @@ seg_len_main(__constant  RenderSceneInfo    * linfo,
   aux_args.cached_aux = cached_aux_data;
   aux_args.obs = obs;
   aux_args.output = output;
-  //float rlen = output[imIndex]; 
-  //aux_args.ray_len = &rlen; 
+  //float rlen = output[imIndex];
+  //aux_args.ray_len = &rlen;
   cast_ray( i, j,
             ray_ox, ray_oy, ray_oz,
             ray_dx, ray_dy, ray_dz,
             linfo, tree_array,                                  //scene info
             local_tree, bit_lookup, cumsum, &vis, aux_args);    //utility info
-            
-            
-  //output[imIndex] = rlen; 
+
+  //output[imIndex] = rlen;
 }
 #endif
 
@@ -205,12 +204,12 @@ typedef struct
   __global int* mean_obs;
   __global int* vis_array;
   __global int* beta_array;
-  
+
            float   norm;
            float*  ray_vis;
            float*  ray_pre;
-            
-           float*  outInt; 
+
+           float*  outInt;
 
   //local caching args
   __local  short2* ray_bundle_array;
@@ -306,12 +305,12 @@ bayes_main(__constant  RenderSceneInfo    * linfo,
   aux_args.norm = norm;
   aux_args.ray_vis = &vis;
   aux_args.ray_pre = &pre;
-  
+
   //---debug
-  //float outInt = output[j*get_global_size(0) + i]; 
-  //aux_args.outInt = &outInt; 
+  //float outInt = output[j*get_global_size(0) + i];
+  //aux_args.outInt = &outInt;
   //---------
-  
+
   cast_ray( i, j,
             ray_ox, ray_oy, ray_oz,
             ray_dx, ray_dy, ray_dz,
@@ -321,9 +320,9 @@ bayes_main(__constant  RenderSceneInfo    * linfo,
   //write out vis and pre
   vis_image[j*get_global_size(0)+i] = vis;
   pre_image[j*get_global_size(0)+i] = pre;
-  
+
   //---debug
-  //output[j*get_global_size(0) + i] = outInt; 
+  //output[j*get_global_size(0) + i] = outInt;
   //----
 }
 #endif
@@ -412,16 +411,16 @@ update_bit_scene_main(__global RenderSceneInfo  * info,
                                  0.0, 0.0, 0.0);
 
       //use aux data to update cells
-      update_cell(&data, aux_data, 2.5f, 0.06f, 0.02f); 
-      
+      update_cell(&data, aux_data, 2.5f, 0.06f, 0.02f);
+
       //set appearance model (figure out if var is fixed or not)
       float8 post_mix       = (float8) (data.s1, data.s2, data.s3,
                                         data.s5, data.s6, data.s7,
                                         data.s9, data.sa)*(float) NORM;
       float4 post_nobs      = (float4) (data.s4, data.s8, data.sb, data.sc*100.0);
-      
+
       //check if mog_var is fixed, if so, overwrite variance in post_mix
-      if(*mog_var > 0.0f){
+      if (*mog_var > 0.0f) {
         post_mix.s1 = (*mog_var) * (float) NORM;
         post_mix.s4 = (*mog_var) * (float) NORM;
         post_mix.s7 = (*mog_var) * (float) NORM;
@@ -466,7 +465,6 @@ update_mog3_main(__global RenderSceneInfo  * info,
     //get cell cumulative length and make sure it isn't 0
     int len_int = aux_array0[gid];
     float cum_len  = convert_float(len_int)/SEGLEN_FACTOR;
-
 
     //update cell if alpha and cum_len are greater than 0
     if (cum_len > 1e-10f)
@@ -524,7 +522,7 @@ typedef struct
   __global int* mean_obs;
            float* vis_inf;
            float* pre_inf;
-		   float irradiance;
+           float irradiance;
   __constant RenderSceneInfo * linfo;
 } AuxArgs;
 
@@ -535,22 +533,22 @@ void cast_ray(int,int,float,float,float,float,float,float,__constant RenderScene
 __kernel
 void
 pre_inf_naa_main(__constant  RenderSceneInfo    * linfo,
-             __global    int4               * tree_array,       // tree structure for each block
-             __global    float              * alpha_array,      // alpha for each block
-             __global    float16            * normals_dot_sun,    // dot product of normals with illumination angle
-			 __global    float              * naa_apm_array,       // albedo (per normal) and weights for each block (32 floats per cell)
-			 __global    float4             * irradiance,         // estimated scene irradiance
-             __global    int                * aux_array0,        // four aux arrays strung together
-             __global    int                * aux_array1,        // four aux arrays strung together
-             __constant  uchar              * bit_lookup,       // used to get data_index
-             __global    float4             * ray_origins,
-             __global    float4             * ray_directions,
-             __global    uint4              * imgdims,          // dimensions of the input image
-             __global    float              * vis_image,        // visibility image
-             __global    float              * pre_image,        // preinf image
-             __global    float              * output,
-             __local     uchar16            * local_tree,       // cache current tree into local memory
-             __local     uchar              * cumsum )           // cumulative sum for calculating data pointer
+                 __global    int4               * tree_array,       // tree structure for each block
+                 __global    float              * alpha_array,      // alpha for each block
+                 __global    float16            * normals_dot_sun,    // dot product of normals with illumination angle
+                 __global    float              * naa_apm_array,       // albedo (per normal) and weights for each block (32 floats per cell)
+                 __global    float4             * irradiance,         // estimated scene irradiance
+                 __global    int                * aux_array0,        // four aux arrays strung together
+                 __global    int                * aux_array1,        // four aux arrays strung together
+                 __constant  uchar              * bit_lookup,       // used to get data_index
+                 __global    float4             * ray_origins,
+                 __global    float4             * ray_directions,
+                 __global    uint4              * imgdims,          // dimensions of the input image
+                 __global    float              * vis_image,        // visibility image
+                 __global    float              * pre_image,        // preinf image
+                 __global    float              * output,
+                 __local     uchar16            * local_tree,       // cache current tree into local memory
+                 __local     uchar              * cumsum )           // cumulative sum for calculating data pointer
 {
   //get local id (0-63 for an 8x8) of this patch
   uchar llid = (uchar)(get_local_id(0) + get_local_size(0)*get_local_id(1));
@@ -641,28 +639,28 @@ void cast_ray(int,int,float,float,float,float,float,float,__constant RenderScene
 __kernel
 void
 bayes_main_naa(__constant  RenderSceneInfo    * linfo,
-           __global    int4               * tree_array,        // tree structure for each block
-           __global    float              * alpha_array,       // alpha for each block
-           __global    float16            * normals_dot_sun_array,     
-		   __global    float              * naa_apm_array,
-		   __global    float4             * irradiance,
-           __global    int                * aux_array0,        // four aux arrays strung together
-           __global    int                * aux_array1,        // four aux arrays strung together
-           __global    int                * aux_array2,        // four aux arrays strung together
-           __global    int                * aux_array3,        // four aux arrays strung together
-           __constant  uchar              * bit_lookup,        // used to get data_index
-           __global    float4             * ray_origins,
-           __global    float4             * ray_directions,
-           __global    uint4              * imgdims,           // dimensions of the input image
-           __global    float              * vis_image,         // visibility image (for keeping vis across blocks)
-           __global    float              * pre_image,         // preinf image (for keeping pre across blocks)
-           __global    float              * norm_image,        // norm image (for bayes update normalization factor)
-           __global    float              * output,
-           __local     uchar16            * local_tree,        // cache current tree into local memory
-           __local     short2             * ray_bundle_array,  // gives information for which ray takes over in the workgroup
-           __local     int                * cell_ptrs,         // local list of cell_ptrs (cells that are hit by this workgroup
-           __local     float              * cached_vis,        // cached vis used to sum up vis contribution locally
-           __local     uchar              * cumsum)            // cumulative sum for calculating data pointer
+               __global    int4               * tree_array,        // tree structure for each block
+               __global    float              * alpha_array,       // alpha for each block
+               __global    float16            * normals_dot_sun_array,
+               __global    float              * naa_apm_array,
+               __global    float4             * irradiance,
+               __global    int                * aux_array0,        // four aux arrays strung together
+               __global    int                * aux_array1,        // four aux arrays strung together
+               __global    int                * aux_array2,        // four aux arrays strung together
+               __global    int                * aux_array3,        // four aux arrays strung together
+               __constant  uchar              * bit_lookup,        // used to get data_index
+               __global    float4             * ray_origins,
+               __global    float4             * ray_directions,
+               __global    uint4              * imgdims,           // dimensions of the input image
+               __global    float              * vis_image,         // visibility image (for keeping vis across blocks)
+               __global    float              * pre_image,         // preinf image (for keeping pre across blocks)
+               __global    float              * norm_image,        // norm image (for bayes update normalization factor)
+               __global    float              * output,
+               __local     uchar16            * local_tree,        // cache current tree into local memory
+               __local     short2             * ray_bundle_array,  // gives information for which ray takes over in the workgroup
+               __local     int                * cell_ptrs,         // local list of cell_ptrs (cells that are hit by this workgroup
+               __local     float              * cached_vis,        // cached vis used to sum up vis contribution locally
+               __local     uchar              * cumsum)            // cumulative sum for calculating data pointer
 {
   //get local id (0-63 for an 8x8) of this patch
   uchar llid = (uchar)(get_local_id(0) + get_local_size(0)*get_local_id(1));
@@ -756,7 +754,7 @@ update_bit_scene_main_alpha_only(__global RenderSceneInfo  * info,
   #if 1
     //if alpha is less than zero don't update
     float  alpha    = alpha_array[gid];
-	
+
     float  cell_min = info->block_len/(float)(1<<info->root_level);
 
     //get cell cumulative length and make sure it isn't 0
@@ -769,7 +767,6 @@ update_bit_scene_main_alpha_only(__global RenderSceneInfo  * info,
     //update cell if alpha and cum_len are greater than 0
     if (alpha > 0.0f && cum_len > 1e-10f)
     {
-
       int obs_int = aux_array1[gid];
       int vis_int = aux_array2[gid];
       int beta_int= aux_array3[gid];
@@ -779,8 +776,8 @@ update_bit_scene_main_alpha_only(__global RenderSceneInfo  * info,
       float cell_beta = convert_float(beta_int) / (convert_float(len_int)* info->block_len);
 
       clamp(cell_beta, 0.8, 1.25);
-	  alpha *= cell_beta;
-     
+      alpha *= cell_beta;
+
       alpha_array[gid] = max(alphamin, alpha);
     }
 #endif
@@ -795,5 +792,4 @@ update_bit_scene_main_alpha_only(__global RenderSceneInfo  * info,
 }
 
 #endif
-
 

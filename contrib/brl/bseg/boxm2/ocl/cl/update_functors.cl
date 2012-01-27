@@ -37,7 +37,7 @@ void step_cell_seglen(AuxArgs aux_args, int data_ptr, uchar llid, float d)
     atom_add(&aux_args.seg_len[data_ptr], seg_int);
     int cum_obs = convert_int_rte(d * aux_args.obs * SEGLEN_FACTOR);
     atom_add(&aux_args.mean_obs[data_ptr], cum_obs);
-    //(*aux_args.ray_len) += d; 
+    //(*aux_args.ray_len) += d;
 #endif
 }
 #endif // SEGLEN
@@ -96,7 +96,10 @@ void step_cell_bayes(AuxArgs aux_args, int data_ptr, uchar llid, float d)
     barrier(CLK_LOCAL_MEM_FENCE);
 
     //calculate bayes ratio
-    bayes_ratio_functor(d, //*aux_args.linfo->block_len,
+    bayes_ratio_functor(d,
+#if 0
+                        *aux_args.linfo->block_len,
+#endif
                         mean_obs,
                         aux_args.ray_pre,
                         aux_args.ray_vis,
@@ -148,9 +151,11 @@ void step_cell_bayes(AuxArgs aux_args, int data_ptr, uchar llid, float d)
     atom_add(&aux_args.beta_array[data_ptr], beta_int);
     int vis_int  = convert_int_rte(vis_cont * SEGLEN_FACTOR);
     atom_add(&aux_args.vis_array[data_ptr], vis_int);
-    
+
+#if 0
     //debug expected int along ray
-    //*(aux_args.outInt) += mean_obs*vis_cont; 
+    *(aux_args.outInt) += mean_obs*vis_cont;
+#endif
     //-------------------------------------------------------------------------- */
 #endif
 
@@ -206,54 +211,51 @@ void step_cell_ingest_height_map(AuxArgs aux_args, int data_ptr, float d)
     float alpha = - (log(1-0.999))/d;
     aux_args.alpha[data_ptr] = alpha;
 }
-
 #endif // INGEST_HEIGHT_MAP
 
-#ifdef INGEST_BUCKEYE_DEM 
-void step_cell_ingest_buckeye_dem(AuxArgs aux_args, int data_ptr, float d0, float d1)
-{
-
+#ifdef INGEST_BUCKEYE_DEM
 #define Z_SIGMA 1.0
 #define NEAR_ZERO 1e-5
 
+void step_cell_ingest_buckeye_dem(AuxArgs aux_args, int data_ptr, float d0, float d1)
+{
     float b = aux_args.belief[data_ptr];
     float u = aux_args.uncertainty[data_ptr];
 
     // probability first return lies within cell
     const float norm_const = 1.0/(sqrt(2.0)*Z_SIGMA);
-	//const float norm_const2 = 1.0/(sqrt(2.0)*2*Z_SIGMA);
-	// null case (first_depth > last_depth)
-	//const float null_case_prob = 1.0 - 0.5 * (1.0 + erf((aux_args.last_depth - aux_args.first_depth)*norm_const2));
+    //const float norm_const2 = 1.0/(sqrt(2.0)*2*Z_SIGMA);
+    // null case (first_depth > last_depth)
+    //const float null_case_prob = 1.0 - 0.5 * (1.0 + erf((aux_args.last_depth - aux_args.first_depth)*norm_const2));
     // P(d0 < first_depth < d1)
     const float P1 = 0.5 * (erf((d1 - aux_args.first_depth)*norm_const) - erf((d0 - aux_args.first_depth)*norm_const));
     // P(d0 < last_depth < d1)
     const float P2 = 0.5 * (erf((d1 - aux_args.last_depth)*norm_const) - erf((d0 - aux_args.last_depth)*norm_const));
-	
-	
+
+
     const float b_obs =  P1 + P2 - P1*P2;
     // P(d1 < first_depth)
     const float d_obs1 = 1.0 - 0.5 * (1.0 + erf((d1 - aux_args.first_depth)*norm_const));
-	const float d_obs2 = 1.0 - 0.5 * (1.0 + erf((d1 - aux_args.last_depth)*norm_const));
-	const float d_obs =  d_obs1*d_obs2;
+    const float d_obs2 = 1.0 - 0.5 * (1.0 + erf((d1 - aux_args.last_depth)*norm_const));
+    const float d_obs =  d_obs1*d_obs2;
     const float u_obs = 1.0 - b_obs - d_obs;
-	
+
     const float denom = u + u_obs - u*u_obs;
-    
+
     // Perform Cumalitive Fusion on two subjective logic opinions
     if ((u_obs > NEAR_ZERO) || (u > NEAR_ZERO)) {
       b = (b*u_obs + b_obs*u)/denom;
-	  u = u*u_obs/denom;
+      u = u*u_obs/denom;
     }
     else {
       b = 0.5*(b_obs + b);
       u = 0.0;
     }
-	aux_args.belief[data_ptr] = b;
+    aux_args.belief[data_ptr] = b;
     aux_args.uncertainty[data_ptr] = u;
-	//aux_args.belief[data_ptr] = aux_args.first_depth;
-	//aux_args.uncertainty[data_ptr] = aux_args.last_depth;
+    //aux_args.belief[data_ptr] = aux_args.first_depth;
+    //aux_args.uncertainty[data_ptr] = aux_args.last_depth;
 }
-
 #endif // INGEST_BUCKEYE_DEM
 
 #ifdef PREINF_NAA
@@ -271,36 +273,36 @@ void step_cell_preinf_naa(AuxArgs aux_args, int data_ptr, uchar llid, float d)
     float cum_len = convert_float(cum_int) / SEGLEN_FACTOR;
 
     //calculate pre_infinity denominator (shape of image)
-	float seg_len_real = d*aux_args.linfo->block_len;
-	float cum_len_real = cum_len*aux_args.linfo->block_len;
-	
-    /* if total length of rays is too small, do nothing */
+    float seg_len_real = d*aux_args.linfo->block_len;
+    float cum_len_real = cum_len*aux_args.linfo->block_len;
+
+    // if total length of rays is too small, do nothing
     float PI = 0.0f;
     if (cum_len_real > 1.0e-10f)
     {
-	    __global float16 *albedos = (__global float16*)&(aux_args.naa_apm[data_ptr*32]);
-		__global float16 *normal_weights = (__global float16*)&(aux_args.naa_apm[data_ptr*32 + 16]);
-		
-		int16 self_shadow = islessequal(*aux_args.normals_dot_sun, (float16)0.0);
-		float16 predictions_shadow = 0.0f;
-		float16 prediction_sigmas_shadow = SIGMA_SHADOW;
+        __global float16 *albedos = (__global float16*)&(aux_args.naa_apm[data_ptr*32]);
+        __global float16 *normal_weights = (__global float16*)&(aux_args.naa_apm[data_ptr*32 + 16]);
+
+        int16 self_shadow = islessequal(*aux_args.normals_dot_sun, (float16)0.0);
+        float16 predictions_shadow = 0.0f;
+        float16 prediction_sigmas_shadow = SIGMA_SHADOW;
         float16 predictions_model = aux_args.irradiance * (*aux_args.normals_dot_sun) * (*albedos);
-		float16 prediction_sigmas_model = (*aux_args.normals_dot_sun)*sqrt(aux_args.irradiance*aux_args.irradiance*SIGMA_SQRD_ALBEDO + (*albedos)*(*albedos)*SIGMA_SQRD_IRRAD);
-		
-		float16 predictions = select(predictions_model, predictions_shadow, self_shadow);
-		float16 prediction_sigmas = select(prediction_sigmas_model, prediction_sigmas_shadow, self_shadow);
-		float16 prediction_densities = gauss_prob_density_f16(&predictions, mean_obs, &prediction_sigmas);
-		PI = dot(prediction_densities, *normal_weights);
-	}
+        float16 prediction_sigmas_model = (*aux_args.normals_dot_sun)*sqrt(aux_args.irradiance*aux_args.irradiance*SIGMA_SQRD_ALBEDO + (*albedos)*(*albedos)*SIGMA_SQRD_IRRAD);
 
-    /* Calculate pre and vis infinity */
+        float16 predictions = select(predictions_model, predictions_shadow, self_shadow);
+        float16 prediction_sigmas = select(prediction_sigmas_model, prediction_sigmas_shadow, self_shadow);
+        float16 prediction_densities = gauss_prob_density_f16(&predictions, mean_obs, &prediction_sigmas);
+        PI = dot(prediction_densities, *normal_weights);
+    }
+
+    // Calculate pre and vis infinity
     float diff_omega = exp(-alpha * seg_len_real);
-    float vis_prob_end = (*aux_args.vis_inf) * diff_omega; 
+    float vis_prob_end = (*aux_args.vis_inf) * diff_omega;
 
-    /* updated pre                      Omega         *   PI  */
+    // updated pre                      Omega         *   PI
     (*aux_args.pre_inf) += ((*aux_args.vis_inf) - vis_prob_end) *  PI;
-    
-    /* updated visibility probability */
+
+    // updated visibility probability
     (*aux_args.vis_inf) = vis_prob_end;
 }
 
@@ -314,46 +316,46 @@ void step_cell_bayes_naa(AuxArgs aux_args, int data_ptr, uchar llid, float d)
 {
     //slow beta calculation ----------------------------------------------------
     float  alpha = aux_args.alpha[data_ptr];
-  
+
     //load aux data
     int cum_int = aux_args.seg_len[data_ptr];
     int mean_int = aux_args.mean_obs[data_ptr];
     float mean_obs = convert_float(mean_int) / convert_float(cum_int);
     float cum_len = convert_float(cum_int) / SEGLEN_FACTOR;
-	
-	float seg_len_real = d*aux_args.linfo->block_len;
-	float cum_len_real = cum_len*aux_args.linfo->block_len;
-	
-	float PI = 0.0f;
+
+    float seg_len_real = d*aux_args.linfo->block_len;
+    float cum_len_real = cum_len*aux_args.linfo->block_len;
+
+    float PI = 0.0f;
     if (cum_len_real > 1.0e-10f)
     {
-	    __global float16 *albedos = (__global float16*)&(aux_args.naa_apm[data_ptr*32]);
-		__global float16 *normal_weights = (__global float16*)&(aux_args.naa_apm[data_ptr*32 + 16]);
-		
-		int16 self_shadow = islessequal(*aux_args.normals_dot_sun, (float16)0.0);
-		float16 predictions_shadow = 0.0f;
-		float16 prediction_sigmas_shadow = SIGMA_SHADOW;
+        __global float16 *albedos = (__global float16*)&(aux_args.naa_apm[data_ptr*32]);
+        __global float16 *normal_weights = (__global float16*)&(aux_args.naa_apm[data_ptr*32 + 16]);
+
+        int16 self_shadow = islessequal(*aux_args.normals_dot_sun, (float16)0.0);
+        float16 predictions_shadow = 0.0f;
+        float16 prediction_sigmas_shadow = SIGMA_SHADOW;
         float16 predictions_model = aux_args.irradiance * (*aux_args.normals_dot_sun) * (*albedos);
-		float16 prediction_sigmas_model = (*aux_args.normals_dot_sun)*sqrt(aux_args.irradiance*aux_args.irradiance*SIGMA_SQRD_ALBEDO + (*albedos)*(*albedos)*SIGMA_SQRD_IRRAD);
-		
-		float16 predictions = select(predictions_model, predictions_shadow, self_shadow);
-		float16 prediction_sigmas = select(prediction_sigmas_model, prediction_sigmas_shadow, self_shadow);
-		float16 prediction_densities = gauss_prob_density_f16(&predictions, mean_obs, &prediction_sigmas);
-		PI = dot(prediction_densities, *normal_weights);
-	}
-	
+        float16 prediction_sigmas_model = (*aux_args.normals_dot_sun)*sqrt(aux_args.irradiance*aux_args.irradiance*SIGMA_SQRD_ALBEDO + (*albedos)*(*albedos)*SIGMA_SQRD_IRRAD);
+
+        float16 predictions = select(predictions_model, predictions_shadow, self_shadow);
+        float16 prediction_sigmas = select(prediction_sigmas_model, prediction_sigmas_shadow, self_shadow);
+        float16 prediction_densities = gauss_prob_density_f16(&predictions, mean_obs, &prediction_sigmas);
+        PI = dot(prediction_densities, *normal_weights);
+    }
+
     //calculate this ray's contribution to beta
     float ray_beta = ((*aux_args.ray_pre) + PI*(*aux_args.ray_vis))*seg_len_real/aux_args.norm;
-    float vis_cont = (*aux_args.ray_vis) * seg_len_real;  
-                            
+    float vis_cont = (*aux_args.ray_vis) * seg_len_real;
+
     //update ray_pre and ray_vis
     float temp  = exp(-alpha * seg_len_real);
-    
-    /* updated pre                      Omega         *  PI         */
+
+    // updated pre                      Omega         *  PI
     (*aux_args.ray_pre) += (*aux_args.ray_vis)*(1.0f-temp)*PI;//(image_vect[llid].z - vis_prob_end) * PI;
-    /* updated visibility probability */
+    // updated visibility probability
     (*aux_args.ray_vis) *= temp;
-	
+
     //discretize and store beta and vis contribution
     int beta_int = convert_int_rte(ray_beta * SEGLEN_FACTOR);
     atom_add(&aux_args.beta_array[data_ptr], beta_int);
