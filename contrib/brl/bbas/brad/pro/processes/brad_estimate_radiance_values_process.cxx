@@ -15,7 +15,7 @@
 #endif
 
 #include <brdb/brdb_value.h>
-#include <brip/brip_vil_float_ops.h>
+//#include <brip/brip_vil_float_ops.h>
 
 //:sets input and output types
 bool brad_estimate_radiance_values_process_cons(bprb_func_process& pro)

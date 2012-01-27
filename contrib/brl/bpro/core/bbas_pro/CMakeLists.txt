@@ -19,7 +19,7 @@ AUX_SOURCE_DIRECTORY(Templates bbas_pro_sources)
 AUX_SOURCE_DIRECTORY(processes bbas_pro_sources)
 
 ADD_LIBRARY(bbas_pro ${bbas_pro_sources})
-TARGET_LINK_LIBRARIES(bbas_pro bprb brdb brad bsta_io bsta vpgl vpgl_algo vil_io vil vnl_io vnl_algo vnl vgl vbl_io vbl vsl)
+TARGET_LINK_LIBRARIES(bbas_pro bprb brdb brad brad_io bsta_io bsta vpgl vpgl_algo vil_io vil vnl_io vnl_algo vnl vgl vbl_io vbl vsl)
 
 INSTALL_TARGETS(/lib bbas_pro)
 INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bpro/core/bbas_pro ${bbas_pro_sources})

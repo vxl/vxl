@@ -21,6 +21,9 @@
   ADD_LIBRARY(brad ${brad_sources} )
 
   TARGET_LINK_LIBRARIES(brad  bsta vnl_io vnl vgl_algo vnl_algo vgl vil vbl_io vbl vpl vul )
+  
+  SUBDIRS(io)
+  SUBDIRS(pro)
 
 #tests
 IF( BUILD_TESTING )

@@ -5,11 +5,10 @@
 #include <bprb/bprb_macros.h>
 #include <bprb/bprb_func_process.h>
 #include <bprb/bprb_batch_process_manager.h>
-#include <brad/brad_eigenspace.h>
 #include <bsta/bsta_joint_histogram_3d.h>
+
 void bbas_register::register_datatype()
 {
-  REGISTER_DATATYPE( brad_eigenspace_sptr );
   REGISTER_DATATYPE( bsta_joint_histogram_3d_base_sptr );
 }
 
@@ -19,32 +18,12 @@ void bbas_register::register_process()
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bbas_estimate_irradiance_process,"bbasEstimateIrradianceProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bbas_sun_angles_process,"bbasSunAnglesProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bbas_camera_angles_process,"bbasCameraAnglesProcess");
-  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, brad_display_sun_index_process, "bradDisplaySunIndexProcess");
-  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, brad_sun_dir_bin_process, "bradSunDirBinProcess");
-  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager,brad_save_sun_index_process , "bradSaveSunIndexProcess");
-  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager,brad_create_eigenspace_process , "bradCreateEigenspaceProcess");
-  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager,brad_save_eigenspace_process , "bradSaveEigenspaceProcess");
-  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager,brad_load_eigenspace_process , "bradLoadEigenspaceProcess");
-  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager,brad_describe_eigenspace_process , "bradDescribeEigenspaceProcess");
-  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager,brad_compute_eigenspace_process , "bradComputeEigenspaceProcess");
-  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager,brad_train_histograms_process , "bradTrainHistogramsProcess");
   REG_PROCESS_FUNC_CONS_FIN(bprb_func_process, bprb_batch_process_manager,bbas_string_array_process , "bbasStringArrayProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager,bbas_merge_string_array_process , "bbasMergeStringArrayProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager,bsta_load_joint_hist_3d_process , "bstaLoadJointHist3dProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager,bsta_save_joint_hist_3d_process , "bstaSaveJointHist3dProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager,bsta_joint_hist_3d_vrml_process , "bstaJointHist3dVrmlProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager,bsta_clone_joint_hist_3d_process , "bstaCloneJointHist3dProcess");
-  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager,brad_update_joint_hist_3d_process , "bradUpdateJointHist3dProcess");
-  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager,brad_classify_image_process , "bradClassifyImageProcess");
-  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager,brad_classify_image_pixel_process, "bradClassifyImagePixelProcess");
-  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, brad_estimate_phongs_model_process, "bradEstimatePhongsModelProcess");
-  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, brad_estimate_shadow_model_process, "bradEstimateShadowModelProcess");
-  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, brad_classify_image_pixel_process, "bradClassifyImagePixelProcess");
-  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, brad_eigenimage_pixel_process, "bradEigenimagePixelProcess");
-  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, brad_estimate_synoptic_function_1d_process, "bradEstimateSynopticFunction1dProcess");
-  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, brad_estimate_empty_process, "bradEstimateEmptyProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bbas_remove_from_db_process, "bbasRemoveFromDbProcess");
-  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, brad_nitf_abs_radiometric_calibration_process, "bradNITFAbsRadiometricCalibrationProcess");
-  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, brad_estimate_radiance_values_process, "bradEstimateRadianceValuesProcess");
   
 }

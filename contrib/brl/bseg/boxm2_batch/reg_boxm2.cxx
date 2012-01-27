@@ -19,6 +19,7 @@
 #endif
 #endif
 #include <bbas_pro/bbas_register.h>
+#include <brad/pro/brad_register.h>
 #include <bsta/pro/bsta_register.h>
 
 #include <ihog_pro/ihog_register.h>
@@ -42,6 +43,7 @@ register_processes(PyObject *self, PyObject *args)
 #endif
 #endif
   bbas_register::register_process();
+  brad_register::register_process();
   bsta_register::register_process();
   ihog_register::register_process();
   sdet_register::register_process();
@@ -71,6 +73,7 @@ register_datatypes(PyObject *self, PyObject *args)
 #endif
 #endif
   bbas_register::register_datatype();
+  brad_register::register_datatype();
   bsta_register::register_datatype();
   ihog_register::register_datatype();
 #if defined(HAS_HDFS) && HAS_HDFS
