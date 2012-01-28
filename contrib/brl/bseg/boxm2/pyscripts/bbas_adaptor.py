@@ -66,16 +66,6 @@ def camera_angles(camera, x,y,z):
   cam_el = boxm2_batch.get_output_float(id)
   return (cam_az, cam_el)
 
-# radiometrically normalize a Quickbird image (cropped) based on AbsCalFactor in IMD file
-def radiometrically_calibrate(cropped_image, imd_filename):
-  boxm2_batch.init_process("bradNITFAbsRadiometricCalibrationProcess")
-  boxm2_batch.set_input_from_db(0, cropped_image)
-  boxm2_batch.set_input_string(1, imd_filename)
-  boxm2_batch.run_process()
-  (id, type) = boxm2_batch.commit_output(0)
-  cropped_img_cal = dbvalue(id, type)
-  return cropped_img_cal
-
 def estimate_radiance_values(image, sun_el, sun_dist, sensor_el, solar_irrad=None, downwelled_irrad=None, optical_depth=None):
   boxm2_batch.init_process("bradEstimateRadianceValuesProcess")
   boxm2_batch.set_input_from_db(0,image)
