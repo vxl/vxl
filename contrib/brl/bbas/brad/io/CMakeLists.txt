@@ -3,6 +3,7 @@
 
 SET(brad_io_sources
   brad_io_image_metadata.h  brad_io_image_metadata.cxx
+  brad_io_atmospheric_parameters.h brad_io_atmospheric_parameters.cxx
 )
 AUX_SOURCE_DIRECTORY(Templates brad_io_sources)
 
