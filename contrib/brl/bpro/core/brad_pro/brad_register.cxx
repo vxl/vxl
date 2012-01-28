@@ -37,5 +37,6 @@ void brad_register::register_process()
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, brad_estimate_empty_process, "bradEstimateEmptyProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, brad_nitf_abs_radiometric_calibration_process, "bradNITFAbsRadiometricCalibrationProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, brad_estimate_radiance_values_process, "bradEstimateRadianceValuesProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, brad_nitf_read_metadata_process, "bradNITFReadMetadataProcess");
 }
 
