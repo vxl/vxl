@@ -12,9 +12,18 @@
 #include <vbl/vbl_ref_count.h>
 #include <vbl/vbl_smart_ptr.h>
 
+#include <vcl_string.h>
+#include <vcl_iostream.h>
+
+struct image_time {
+  int year, month, day, hour, min;
+};
+
 class brad_image_metadata : public vbl_ref_count
 {
 public:
+   brad_image_metadata() : gain_(1.0), offset_(0.0) {} 
+
    // position of sun relative to imaged location 
    double sun_elevation_; // degrees above horizon
    double sun_azimuth_;   // degrees east of north
@@ -29,9 +38,26 @@ public:
 
    // band-averaged sun irradiance (includes term accounting for Earth-Sun distance)
    double sun_irradiance_; // units W m^-2 
+
+   image_time t_;
 };
 
 typedef vbl_smart_ptr<brad_image_metadata> brad_image_metadata_sptr;
+
+//: parse header in nitf image, assumes that metadata files are in the same folder with the image
+//   if meta_folder is not empty, they are searched in that folder as well
+bool parse(vcl_string& nitf_filename, brad_image_metadata_sptr& md, vcl_string meta_folder = "");
+
+inline vcl_ostream& operator<< (vcl_ostream& s, brad_image_metadata const& m) 
+{ s << "image metadata \n"
+    << "\tsun elevation = " << m.sun_elevation_ << "\n"
+    << "\tsun azimuth = " << m.sun_azimuth_ << "\n"
+    << "\tview_elevation = " << m.view_elevation_ << "\n"
+    << "\tview_azimuth = " << m.view_azimuth_ << "\n" 
+    << "\tgain = " << m.gain_ << "\n"
+    << "\toffset = " << m.offset_ << "\n" 
+    << "\tsun irradiance = " << m.sun_irradiance_ << "\n" 
+    << vcl_endl; return s; }
 
 #endif
 
