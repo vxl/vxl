@@ -13,35 +13,16 @@ SOURCES += bbas_1d_array_unsigned.cxx
 
 MANPAGE_SOURCES += bbas_1d_array_string_sptr.h
 
-SOURCES += processes/brad_display_sun_index_process.cxx
-SOURCES += processes/brad_save_sun_index_process.cxx
-SOURCES += processes/brad_sun_dir_bin_process.cxx
 SOURCES += processes/bbas_sun_angles_process.cxx
 SOURCES += processes/bbas_atmospheric_corr_process.cxx
-SOURCES += processes/brad_update_joint_hist_3d_process.cxx
-SOURCES += processes/brad_describe_eigenspace_process.cxx
 SOURCES += processes/bbas_string_array_process.cxx
-SOURCES += processes/brad_save_eigenspace_process.cxx
 SOURCES += processes/bsta_clone_joint_hist_3d_process.cxx
 SOURCES += processes/bsta_joint_hist_3d_vrml_process.cxx
 SOURCES += processes/bsta_load_joint_hist_3d_process.cxx
-SOURCES += processes/brad_create_eigenspace_process.cxx
 SOURCES += processes/bsta_save_joint_hist_3d_process.cxx
-SOURCES += processes/brad_train_histograms_process.cxx
 SOURCES += processes/bbas_merge_string_array_process.cxx
-SOURCES += processes/brad_compute_eigenspace_process.cxx
-SOURCES += processes/brad_load_eigenspace_process.cxx
-SOURCES += processes/brad_classify_image_process.cxx
-SOURCES += processes/brad_estimate_shadow_model_process.cxx
-SOURCES += processes/brad_estimate_phongs_model_process.cxx
-SOURCES += processes/brad_classify_image_pixel_process.cxx
-SOURCES += processes/brad_eigenimage_pixel_process.cxx
 SOURCES += processes/bbas_camera_angles_process.cxx
-SOURCES += processes/brad_estimate_synoptic_function_1d_process.cxx
-SOURCES += processes/brad_estimate_empty_process.cxx
 SOURCES += processes/bbas_remove_from_db_process.cxx
-SOURCES += processes/brad_estimate_radiance_values_process.cxx
-SOURCES += processes/brad_nitf_abs_radiometric_calibration_process.cxx
 SOURCES += processes/bbas_estimate_irradiance_process.cxx
 
 #######################################
