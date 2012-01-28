@@ -6,6 +6,7 @@
 
 #include <brad/brad_eigenspace.h>
 #include <brad/brad_image_metadata.h>
+#include <brad/brad_atmospheric_parameters.h>
 
 #include "brad_processes.h"
 
@@ -13,6 +14,7 @@ void brad_register::register_datatype()
 {
   REGISTER_DATATYPE( brad_eigenspace_sptr );
   REGISTER_DATATYPE( brad_image_metadata_sptr );
+  REGISTER_DATATYPE( brad_atmospheric_parameters_sptr );
 }
 
 void brad_register::register_process()
@@ -36,7 +38,8 @@ void brad_register::register_process()
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, brad_estimate_synoptic_function_1d_process, "bradEstimateSynopticFunction1dProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, brad_estimate_empty_process, "bradEstimateEmptyProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, brad_nitf_abs_radiometric_calibration_process, "bradNITFAbsRadiometricCalibrationProcess");
-  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, brad_estimate_radiance_values_process, "bradEstimateRadianceValuesProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, brad_nitf_read_metadata_process, "bradNITFReadMetadataProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, brad_estimate_atmospheric_parameters_process, "bradEstimateAtmosphericParametersProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, brad_estimate_reflectance_process, "bradEstimateReflectanceProcess");
 }
 
