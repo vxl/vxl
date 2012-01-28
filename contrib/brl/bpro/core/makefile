@@ -27,6 +27,9 @@ SUBDIRS += icam_pro
 # ihog process classes
 SUBDIRS += ihog_pro
 
+# brad process classes
+SUBDIRS += brad_pro
+
 ################################
 include ${VXLROOT}/config/top.mk
 ################################

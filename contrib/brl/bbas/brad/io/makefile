@@ -3,7 +3,7 @@ USES += contrib/brl contrib/brl/bbas core
 LIBRARY := brad-io
 VERSION := 1.0
 
-MANPAGE_SOURCES += brad_io_image_metadata.h
+SOURCES += brad_io_image_metadata.cxx
 
 #######################################
 include ${VXLROOT}/config/top-params.mk
