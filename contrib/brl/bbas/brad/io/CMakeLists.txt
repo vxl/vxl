@@ -4,7 +4,7 @@
 SET(brad_io_sources
   brad_io_image_metadata.h
 )
-#AUX_SOURCE_DIRECTORY(Templates brad_io_sources)
+AUX_SOURCE_DIRECTORY(Templates brad_io_sources)
 
 ADD_LIBRARY(brad_io  ${brad_io_sources})
 TARGET_LINK_LIBRARIES(brad_io brad vnl_io vbl_io vbl)
