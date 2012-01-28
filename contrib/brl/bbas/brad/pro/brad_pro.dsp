@@ -101,6 +101,63 @@ SOURCE=.\processes/brad_estimate_shadow_model_process.cxx
 # Begin Source File
 SOURCE=.\processes/brad_estimate_phongs_model_process.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\processes/brad_display_sun_index_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/brad_save_sun_index_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/brad_sun_dir_bin_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/brad_compute_eigenspace_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/brad_load_eigenspace_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/brad_update_joint_hist_3d_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/brad_describe_eigenspace_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/brad_save_eigenspace_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/brad_create_eigenspace_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/brad_train_histograms_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/brad_classify_image_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/brad_classify_image_pixel_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/brad_eigenimage_pixel_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/brad_estimate_synoptic_function_1d_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/brad_estimate_empty_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/brad_estimate_radiance_values_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/brad_nitf_abs_radiometric_calibration_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/brdb_value_t+brad_eigenspace_sptr-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/brdb_value_t+brad_image_metadata_sptr-.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
