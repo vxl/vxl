@@ -50,7 +50,7 @@ class brad_synoptic_function_1d
   bool load_samples(vcl_string const& path);
 
   //: the number of observations on the orbit
-  unsigned size(){return elev_.size();}
+  unsigned size(){return (unsigned)elev_.size();}
 
   //: member accessors
   double intensity(unsigned index){return intensity_[index];}
