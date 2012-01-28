@@ -7,7 +7,6 @@
 
 DECLARE_FUNC_CONS(bbas_atmospheric_corr_process);
 DECLARE_FUNC_CONS(bbas_estimate_irradiance_process);
-DECLARE_FUNC_CONS(bbas_sun_angles_process);
 DECLARE_FUNC_CONS(bbas_camera_angles_process);
 DECLARE_FUNC_CONS_FIN(bbas_string_array_process);
 DECLARE_FUNC_CONS(bbas_merge_string_array_process);

@@ -16,7 +16,6 @@ void bbas_register::register_process()
 {
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bbas_atmospheric_corr_process,"bbasAtmosphericCorrProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bbas_estimate_irradiance_process,"bbasEstimateIrradianceProcess");
-  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bbas_sun_angles_process,"bbasSunAnglesProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bbas_camera_angles_process,"bbasCameraAnglesProcess");
   REG_PROCESS_FUNC_CONS_FIN(bprb_func_process, bprb_batch_process_manager,bbas_string_array_process , "bbasStringArrayProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager,bbas_merge_string_array_process , "bbasMergeStringArrayProcess");
