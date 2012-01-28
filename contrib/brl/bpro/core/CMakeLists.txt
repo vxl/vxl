@@ -28,3 +28,6 @@ SUBDIRS(icam_pro)
 #ihog process class
 SUBDIRS(ihog_pro)
 
+#brad process classes
+SUBDIRS(brad_pro)
+

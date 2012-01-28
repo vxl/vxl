@@ -19,7 +19,7 @@
 #endif
 #endif
 #include <bbas_pro/bbas_register.h>
-#include <brad/pro/brad_register.h>
+#include <brad_pro/brad_register.h>
 #include <bsta/pro/bsta_register.h>
 
 #include <ihog_pro/ihog_register.h>
