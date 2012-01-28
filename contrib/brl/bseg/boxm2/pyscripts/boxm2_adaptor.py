@@ -659,13 +659,14 @@ def save_multi_block_scene(params) :
   boxm2_batch.set_input_string(1, fname); 
   boxm2_batch.run_process();
 
-def roi_init(NITF_path, camera, scene, convert_to_8bit, params_fname) : 
+def roi_init(NITF_path, camera, scene, convert_to_8bit, params_fname, margin=0) : 
   boxm2_batch.init_process("boxm2RoiInitProcess")
   boxm2_batch.set_params_process(params_fname)
   boxm2_batch.set_input_string(0, NITF_path)
   boxm2_batch.set_input_from_db(1,camera)
   boxm2_batch.set_input_from_db(2,scene)
   boxm2_batch.set_input_bool(3,convert_to_8bit)
+  boxm2_batch.set_input_int(4, margin)
   result = boxm2_batch.run_process()
   if result:
     (id,type) = boxm2_batch.commit_output(0)
