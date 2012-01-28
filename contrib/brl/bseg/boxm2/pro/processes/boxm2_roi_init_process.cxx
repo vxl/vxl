@@ -51,7 +51,7 @@
 //: globals variables and functions
 namespace boxm2_roi_init_process_globals
 {
-  const unsigned n_inputs_ = 4;
+  const unsigned n_inputs_ = 5;
   const unsigned n_outputs_ = 3;
 
   // === functions ===
@@ -64,7 +64,7 @@ namespace boxm2_roi_init_process_globals
                 //vil_image_view<unsigned char>* nitf_image_unsigned_char,
                 vil_image_view_base_sptr& img_ptr,
                 vpgl_local_rational_camera<double>& local_camera,
-                bool convert_to_8_bit);
+                bool convert_to_8_bit, int margin);
 
   //: projects the box on the image by taking the union of all the projected corners
   vgl_box_2d<double>* project_box(vpgl_rational_camera<double>* cam,
@@ -83,7 +83,8 @@ bool boxm2_roi_init_process_globals::roi_init( vcl_string const& image_path,
                                                //vil_image_view<unsigned char>* nitf_image_unsigned_char,
                                                vil_image_view_base_sptr& img_ptr,
                                                vpgl_local_rational_camera<double>& local_camera,
-                                               bool convert_to_8_bit)
+                                               bool convert_to_8_bit,
+                                               int margin)
 {
   //: read the image and extract the camera
   vil_image_resource_sptr img = vil_load_image_resource(image_path.c_str());
@@ -100,20 +101,26 @@ bool boxm2_roi_init_process_globals::roi_init( vcl_string const& image_path,
 
   vpgl_lvcs_sptr lvcs = new vpgl_lvcs(scene->lvcs());
   vgl_box_2d<double>* roi_box = project_box(camera, lvcs, box, error);
-  //vcl_cout << "roi_box = " << roi_box->min_point() << " , " << roi_box->max_point() << vcl_endl;
+  
   brip_roi broi(nitf->ni(), nitf->nj());
-  //vcl_cout << "ni = " << nitf->ni() << " nj = " << nitf->nj() << vcl_endl;
+
+  vsol_box_2d_sptr bb2 = new vsol_box_2d();
+  bb2->add_point(roi_box->min_x(), roi_box->min_y());
+  bb2->add_point(roi_box->max_x(), roi_box->max_y());
+  bb2 = broi.clip_to_image_bounds(bb2);
+  if (bb2->width() <= 0 || bb2->height() <= 0) 
+    return false;
+
+  //: use the margin
+  roi_box->set_width(roi_box->width() + 2*margin);
+  roi_box->set_height(roi_box->height() + 2*margin);
+  
   vsol_box_2d_sptr bb = new vsol_box_2d();
   bb->add_point(roi_box->min_x(), roi_box->min_y());
   bb->add_point(roi_box->max_x(), roi_box->max_y());
-  //vcl_cout << "before clip: " << *bb << vcl_endl;
   bb = broi.clip_to_image_bounds(bb);
-  //vcl_cout << "after clip: " << *bb << vcl_endl;
-  //vcl_cout << "bb->width = " << bb->width() << " bb->height = " << bb->height() << vcl_endl;
-  if (bb->width() <= 0 || bb->height() <= 0) {
-    //vcl_cerr << "bvxm_roi_init_process::roi_init()-- clipping box is out of image boundaries\n";
+  if (bb->width() <= 0 || bb->height() <= 0) 
     return false;
-  }
 
   vil_image_view_base_sptr roi =
     nitf->get_copy_view((unsigned int)bb->get_min_x(),
@@ -129,7 +136,7 @@ bool boxm2_roi_init_process_globals::roi_init( vcl_string const& image_path,
     return false;
 
   if (!convert_to_8_bit) {
-    vcl_cout << "ROI CROP: DO NOT CONVERT TO 8 BIT IMAGE\n";
+    //vcl_cout << "ROI CROP: DO NOT CONVERT TO 8 BIT IMAGE\n";
     if (roi->pixel_format() == VIL_PIXEL_FORMAT_UINT_16)
       img_ptr = new vil_image_view<vxl_uint_16>(roi);
     else if (roi->pixel_format() == VIL_PIXEL_FORMAT_BYTE)
@@ -283,13 +290,14 @@ vgl_box_2d<double>* boxm2_roi_init_process_globals::project_box( vpgl_rational_c
 bool boxm2_roi_init_process_cons(bprb_func_process& pro)
 {
   using namespace boxm2_roi_init_process_globals;
-  //this process takes 4 inputs:
+  //this process takes 5 inputs:
   vcl_vector<vcl_string> input_types_(n_inputs_);
   unsigned  i = 0;
   input_types_[i++] = "vcl_string";                // NITF image path
   input_types_[i++] = "vpgl_camera_double_sptr";   // rational camera
   input_types_[i++] = "boxm2_scene_sptr";     // scene
   input_types_[i++] = "bool";  // whether to convert to 8 bits or not, default is true=do the conversion
+  input_types_[i++] = "int";   // margin - clip an image with an extra margin around, default is zero if not set
   bool good = pro.set_input_types(input_types_);
 
   //this process takes 3 outputs:
@@ -303,6 +311,9 @@ bool boxm2_roi_init_process_cons(bprb_func_process& pro)
 
   brdb_value_sptr idx = new brdb_value_t<bool>(true);
   pro.set_input(3, idx);
+
+  brdb_value_sptr idx2 = new brdb_value_t<int>(0);
+  pro.set_input(4, idx2);
 
   // set up  process parameters
   bprb_parameters_sptr params = new bprb_parameters();
@@ -337,6 +348,7 @@ bool boxm2_roi_init_process(bprb_func_process& pro)
   boxm2_scene_sptr scene = pro.get_input<boxm2_scene_sptr>(i++);
 
   bool convert_to_8_bit = pro.get_input<bool>(i++);
+  int margin = pro.get_input<int>(i++);
 
   // uncertainty (meters) -- SHOULD BE A PARAM
   float uncertainty=0;
@@ -355,7 +367,7 @@ bool boxm2_roi_init_process(bprb_func_process& pro)
   }
 
   vpgl_local_rational_camera<double> local_camera;
-  if (!roi_init(image_path, rat_camera, scene, uncertainty, img_ptr, local_camera, convert_to_8_bit)) {
+  if (!roi_init(image_path, rat_camera, scene, uncertainty, img_ptr, local_camera, convert_to_8_bit, margin)) {
     //vcl_cerr << "The process has failed!\n";
     return false;
   }
