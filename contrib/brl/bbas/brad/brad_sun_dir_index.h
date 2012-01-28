@@ -38,7 +38,7 @@ class brad_sun_dir_index
                      vcl_vector<vnl_double_3> sun_dir_bin_centers)
     : longitude_deg_(longitude_deg), latitude_deg_(latitude_deg),
     cone_axes_(sun_dir_bin_centers), cone_half_angle_(0.0){
-    bin_radius_ = (sun_dir_bin_centers.size()-1)/2;}
+    bin_radius_ = ((int)sun_dir_bin_centers.size()-1)/2;}
 
   ~brad_sun_dir_index(){}
 
