@@ -2,7 +2,7 @@
 # Brown radiometry io Library.
 
 SET(brad_io_sources
-  brad_io_image_metadata.h
+  brad_io_image_metadata.h  brad_io_image_metadata.cxx
 )
 AUX_SOURCE_DIRECTORY(Templates brad_io_sources)
 
