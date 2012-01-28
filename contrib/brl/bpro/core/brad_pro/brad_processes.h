@@ -31,5 +31,6 @@ DECLARE_FUNC_CONS(brad_classify_image_pixel_process);
 DECLARE_FUNC_CONS(brad_eigenimage_pixel_process);
 DECLARE_FUNC_CONS(brad_nitf_abs_radiometric_calibration_process);
 DECLARE_FUNC_CONS(brad_estimate_radiance_values_process);
+DECLARE_FUNC_CONS(brad_nitf_read_metadata_process);
 
 #endif
