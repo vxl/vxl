@@ -92,6 +92,9 @@ LIB32=link.exe -lib
 # Begin Group "Source Files"
 # PROP Default_Filter "cxx"
 # Begin Source File
+SOURCE=.\brad_io_image_metadata.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/vbl_io_smart_ptr+brad_image_metadata-.cxx
 # End Source File
 # End Group
