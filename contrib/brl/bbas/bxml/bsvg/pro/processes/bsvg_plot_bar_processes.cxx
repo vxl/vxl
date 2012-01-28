@@ -106,7 +106,7 @@ bool bsvg_bar_plot_add_process(bprb_func_process& pro)
 }
 
 //: Constructor
-bool bsvg_bar_plot_write_process_cons(bprb_func_process& pro)
+bool bsvg_plot_write_process_cons(bprb_func_process& pro)
 {
   bool ok=false;
   vcl_vector<vcl_string> input_types;
@@ -119,7 +119,7 @@ bool bsvg_bar_plot_write_process_cons(bprb_func_process& pro)
   return ok;
 }
 
-bool bsvg_bar_plot_write_process(bprb_func_process& pro)
+bool bsvg_plot_write_process(bprb_func_process& pro)
 {
   if (pro.n_inputs() < 2) {
     vcl_cerr << "dbrec_image_parse_process - invalid inputs\n";
