@@ -153,10 +153,22 @@ SOURCE=.\processes/brad_estimate_radiance_values_process.cxx
 SOURCE=.\processes/brad_nitf_abs_radiometric_calibration_process.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\processes/brad_nitf_read_metadata_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/brad_estimate_atmospheric_parameters_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/brad_estimate_reflectance_process.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/brdb_value_t+brad_eigenspace_sptr-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/brdb_value_t+brad_image_metadata_sptr-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/brdb_value_t+brad_atmospheric_parameters_sptr-.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"

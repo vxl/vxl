@@ -95,7 +95,13 @@ LIB32=link.exe -lib
 SOURCE=.\brad_io_image_metadata.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\brad_io_atmospheric_parameters.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/vbl_io_smart_ptr+brad_image_metadata-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vbl_io_smart_ptr+brad_atmospheric_parameters-.cxx
 # End Source File
 # End Group
 # End Target
@@ -103,6 +109,9 @@ SOURCE=.\Templates/vbl_io_smart_ptr+brad_image_metadata-.cxx
 # PROP Default_Filter "h;txx"
 # Begin Source File
 SOURCE=.\brad_io_image_metadata.h
+# End Source File
+# Begin Source File
+SOURCE=.\brad_io_atmospheric_parameters.h
 # End Source File
 # End Group
 # End Target

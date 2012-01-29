@@ -108,9 +108,6 @@ SOURCE=.\bbas_1d_array_int.cxx
 SOURCE=.\bbas_1d_array_unsigned.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\processes/bbas_sun_angles_process.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\processes/bbas_atmospheric_corr_process.cxx
 # End Source File
 # Begin Source File

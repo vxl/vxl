@@ -120,6 +120,12 @@ SOURCE=.\brad_grad_hist_feature_vector.cxx
 SOURCE=.\brad_synoptic_function_1d.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\brad_image_atmospherics_est.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\brad_image_metadata.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/brad_eigenspace+brad_hist_prob_feature_vector-.cxx
 # End Source File
 # Begin Source File
@@ -133,6 +139,9 @@ SOURCE=.\Templates/brad_eigenspace+brad_grad_int_feature_vector-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/vbl_smart_ptr+brad_image_metadata-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vbl_smart_ptr+brad_atmospheric_parameters-.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
@@ -178,6 +187,12 @@ SOURCE=.\brad_synoptic_function_1d.h
 # End Source File
 # Begin Source File
 SOURCE=.\brad_image_metadata.h
+# End Source File
+# Begin Source File
+SOURCE=.\brad_atmospheric_parameters.h
+# End Source File
+# Begin Source File
+SOURCE=.\brad_image_atmospherics_est.h
 # End Source File
 # End Group
 # End Target
