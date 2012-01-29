@@ -14,6 +14,8 @@
 #include <vil/vil_load.h>
 #include <vil/file_formats/vil_nitf2_image.h>
 
+#include <brad/brad_sun_pos.h>
+
 void parse_from_imd(vcl_string filename, brad_image_metadata_sptr& md)
 {
   vcl_ifstream ifs( filename.c_str() );
@@ -46,6 +48,7 @@ void parse_from_imd(vcl_string filename, brad_image_metadata_sptr& md)
 
 void parse_from_pvl(vcl_string filename, brad_image_metadata_sptr& md)
 {
+  vcl_cout << "Parse from PVL file is not implemented yet!\n";
   return;
 }
 
@@ -95,6 +98,23 @@ bool parse(vcl_string& nitf_filename, brad_image_metadata_sptr& md, vcl_string m
 
   md->number_of_bits_ = hdr->get_number_of_bits_per_pixel();
 
+  double solar_irrad = 1.0;
+  vcl_string img_info = hdr->get_image_source();
+  if (img_info.find("IKONOS") != vcl_string::npos || nitf_filename.find("IK") != vcl_string::npos) 
+    solar_irrad = 1375.8;
+  else if (img_info.find("GeoEye-1") != vcl_string::npos)  // OZGE TODO: check this one
+    solar_irrad = 1617;
+  else if (img_info.find("QuickBird") != vcl_string::npos || nitf_filename.find("QB") != vcl_string::npos)
+    solar_irrad = 1381.7;
+  else if (img_info.find("WorldView") != vcl_string::npos || nitf_filename.find("WV") != vcl_string::npos)
+    solar_irrad = 1580.814;
+  else 
+    vcl_cerr << "Cannot find satellite name for: " << img_info << " in NITF: " << nitf_filename;
+  vcl_cout << "solar_irrad: " << solar_irrad << vcl_endl;
+  //: set sun irradiance using Eart-Sun distance
+  double d = brad_sun_distance(year, month, day, hour, min);
+  md->sun_irradiance_ = solar_irrad/(d*d);
+
   vcl_string dirname = vul_file::dirname(nitf_filename);
 
   //: set gain offset defaults, some satellites' images do not require any adjustment
@@ -142,7 +162,6 @@ bool parse(vcl_string& nitf_filename, brad_image_metadata_sptr& md, vcl_string m
 
   if (meta_filename.size() == 0) {
     // check if this is IKONOS
-    vcl_string img_info = hdr->get_image_source();
     vcl_string type = hdr->get_image_type(); // type mono is band PAN
     unsigned bpp = hdr->get_number_of_bits_per_pixel();
     vcl_cout << "Ikonos: bpp " << bpp << " type: " << type << vcl_endl;
