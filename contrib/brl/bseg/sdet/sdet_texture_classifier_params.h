@@ -32,7 +32,6 @@ class sdet_texture_classifier_params : public gevd_param_mixin
                                  bool fast,
                                  unsigned k,
                                  unsigned n_samples,
-                                 unsigned k_near,
                                  unsigned block_size,
                                  float weight_offset);
   sdet_texture_classifier_params(const sdet_texture_classifier_params& old_params);
@@ -55,7 +54,6 @@ class sdet_texture_classifier_params : public gevd_param_mixin
                   bool fast,
                   unsigned k,
                   unsigned n_samples,
-                  unsigned k_near,
                   unsigned block_size,
                   float weight_offset);
  public:
@@ -80,7 +78,7 @@ class sdet_texture_classifier_params : public gevd_param_mixin
   float cutoff_per_;
   //: should the filter response be signed vs. absolute value
   bool signed_response_;
-  //: should the filter response be absolute value vs. signed
+  //: should the filter response be absolute value vs. signed or clipped
   bool mag_;
   //: should the fast algorithm be used to compute the filters
   bool fast_;
@@ -88,8 +86,6 @@ class sdet_texture_classifier_params : public gevd_param_mixin
   unsigned k_;
   //: the number of samples to be randomly selected from the training images
   unsigned n_samples_;
-  //: the number of k nearest neighbors
-  unsigned k_near_;
   //: the square block size for test images
   unsigned block_size_;
   //: a factor that controls the weighting of textons that appear in more than

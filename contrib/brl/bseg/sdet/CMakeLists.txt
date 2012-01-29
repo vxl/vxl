@@ -49,6 +49,8 @@ SET(sdet_sources
     sdet_texture_classifier.cxx          sdet_texture_classifier.h
     sdet_texture_classifier_params.cxx   sdet_texture_classifier_params.h
     sdet_k_means.cxx                     sdet_k_means.h
+    sdet_atmospheric_image_classifier.cxx 
+    sdet_atmospheric_image_classifier.h 
 )
 AUX_SOURCE_DIRECTORY(Templates sdet_sources)
 

@@ -56,7 +56,8 @@ vcl_vector<vgl_polygon<double> > load_polys(vcl_string const& poly_path)
   return vpolys;
 }
 
-static vil_image_view<float> scale_image(vil_image_resource_sptr const& resc)
+vil_image_view<float> sdet_texture_classifier::
+scale_image(vil_image_resource_sptr const& resc)
 {
   vil_pixel_format fmt = resc->pixel_format();
   vil_image_view<float> img = brip_vil_float_ops::convert_to_float(resc);
@@ -73,7 +74,7 @@ static unsigned gauss_radius(float sigma, float cutoff_ratio)
   int r = static_cast<unsigned>(vcl_sqrt((-2.0*vcl_log(cutoff_ratio))/sigma_sq_inv)+0.5);
   return r;
 }
-
+// define a color map for texture categories. Defined for up to eight classes
 void sdet_texture_classifier::init_color_map()
 {
   vcl_vector<vnl_vector_fixed<float, 3> > colors(8);
@@ -147,7 +148,8 @@ compute_filter_bank(vil_image_view<float> const& img)
   vcl_cout << "Computed filter bank in " << t.real()/1000.0 << " secs.\n";
   return true;
 }
-
+// Used to define the initial k means cluster centers
+// by random selection from the training data
 vcl_vector<vnl_vector<double> > sdet_texture_classifier::
 random_centers(vcl_vector<vnl_vector<double> > const& training_data,
                unsigned k) const{
@@ -159,7 +161,8 @@ random_centers(vcl_vector<vnl_vector<double> > const& training_data,
   }
   return rand_centers;
 }
-
+// compute a vector of filter responses, which are sampled from the 
+// response pixels for the input image
 bool sdet_texture_classifier::compute_training_data(vcl_string const& category)
 {
   // dimension of filter bank
@@ -211,7 +214,9 @@ bool sdet_texture_classifier::compute_training_data(vcl_string const& category)
   vcl_cout << "Collect texture samples in texture box region" << t.real()/1000.0 << " secs.\n";
   return true;
 }
-
+// compute a vector of filter responses, which are sampled from the 
+// response pixels for the input image. Only responses within the 
+// polygon are considered
 bool sdet_texture_classifier::compute_training_data(vcl_string const& category,
                                                     vgl_polygon<double> const& texture_region)
 {
@@ -267,7 +272,9 @@ bool sdet_texture_classifier::compute_training_data(vcl_string const& category,
   vcl_cout << "Collect texture samples in texture polygon in " << t.real()/1000.0 << " secs.\n";
   return true;
 }
-
+// compute a vector of filter responses, which are sampled from the 
+// response pixels for the input image. Only responses within the 
+// the set of polygon regions are considered
 bool   sdet_texture_classifier::
 compute_training_data(vcl_string const& category,
                       vcl_vector<vgl_polygon<double> > const& texture_regions) {
@@ -335,7 +342,8 @@ compute_training_data(vcl_string const& category,
   vcl_cout << "Collect texture samples in texture polygon in " << t.real()/1000.0 << " secs.\n";
   return true;
 }
-
+// execute the k means algorithm to form textons
+// assumes that training data has been initialized
 bool sdet_texture_classifier::compute_textons(vcl_string const& category)
 {
   vul_timer t;
@@ -490,7 +498,9 @@ void sdet_texture_classifier::print_dictionary() const
     }
   }
 }
-
+// compute the nearest distance between textons in different categories
+// for the same category the distance is defined as the maximum distance
+// between textons in the category
 void sdet_texture_classifier::compute_distances()
 {
   dist_.clear();
@@ -525,39 +535,42 @@ void sdet_texture_classifier::compute_distances()
   }
   distances_valid_ = true;
 }
-
+// compute the probability of a category, given the textons of itself or other
+// categories. Provides a measure of the distinctiveness of a category.
+// The texton histogram probabilities are multiplied by a weight factor that
+// is based on how many categories in which a texton appears. 
 void sdet_texture_classifier::compute_interclass_probs()
 {
   inter_prob_.clear();
-  vcl_map< vcl_string, vcl_vector<float> >::const_iterator jt= category_histograms_.begin();
+  vcl_map< vcl_string, vcl_vector<float> >::const_iterator jt= 
+    category_histograms_.begin();
   for (; jt!= category_histograms_.end(); ++jt) {
     vcl_vector<float> const & histj = (*jt).second;
-
     unsigned n = histj.size();
     float prob_total = 0.0f;
-    vcl_map<vcl_string, vcl_vector<float> >::const_iterator it= category_histograms_.begin();
+    vcl_map<vcl_string, vcl_vector<float> >::const_iterator it= 
+      category_histograms_.begin();
     for (; it!= category_histograms_.end(); ++it) {
-#if 0
-      if ((*it).first == (*jt).first) {
-        inter_prob_[(*jt).first][(*it).first] = 0.0f;
-      }
-      else {
-#endif
-        float prob_sum = 0.0f;
-        vcl_vector<float> const& histi = (*it).second;
-        for (unsigned j = 0; j<n; ++j)
-          if (histj[j]>0.0f && histi[j]>0.0f)
+      float prob_sum = 0.0f;
+      vcl_vector<float> const& histi = (*it).second;
+      for (unsigned j = 0; j<n; ++j)
+        if (histj[j]>0.0f && histi[j]>0.0f)
             prob_sum += texton_weights_[j]*histj[j];
         inter_prob_[(*jt).first][(*it).first] = prob_sum;
         prob_total += prob_sum;
-      }
+    }
     it=category_histograms_.begin();
     for (; it!= category_histograms_.end(); ++it)
       inter_prob_[(*jt).first][(*it).first] /= prob_total;
   }
   inter_prob_valid_ = true;
 }
-
+// The weighting factor for textons based on 
+// probability of belonging to multiple categories.
+// Here p = 1/Nc , where Nc is the number of categories in which
+// a texton appears. The factor off accounts for the singularity
+// of the log function and controls the rapidity of falloff in
+// weight with Nc.
 static float w(float p, float off)
 {
   float t0 = -vcl_log(off), t1 = vcl_log(1.0f+off);
@@ -565,7 +578,9 @@ static float w(float p, float off)
   res /= (t0 + t1);
   return res;
 }
-
+// Assign a weighting factor to each texton. The weight is 1 if the
+// texton appears in only one category and falls off as the number of 
+// categories that share the texton increase
 void sdet_texture_classifier::compute_texton_weights()
 {
   if (texton_index_valid_) this->compute_texton_index();
@@ -670,34 +685,6 @@ void sdet_texture_classifier::print_texton_weights() const
     vcl_cout << (*wit) << '\n';
 }
 
-double sdet_texture_classifier::category_prob(vcl_string const& category,
-                                              vnl_vector<double> const& filt,
-                                              double sigma)
-{
-  // find distances
-  double min_dist_self;
-  vcl_vector<double> min_dist_others;
-  vcl_map< vcl_string, vcl_vector<vnl_vector<double> > >::const_iterator jt= texton_dictionary_.begin();
-  for (; jt!= texton_dictionary_.end(); ++jt) {
-    //compute min distance between filter and cluster centers
-    double min_dist = vnl_numeric_traits<double>::maxval;
-    for (unsigned j = 0; j<(*jt).second.size(); ++j) {
-      double d = vnl_vector_ssd(filt,(*jt).second[j]);
-      //root mean square dist (RMS)
-      d = vcl_sqrt(d/(*jt).second[j].size());
-      if (d<min_dist) min_dist = d;
-    }
-    if ((*jt).first == category)
-      min_dist_self = min_dist;
-    else
-      min_dist_others.push_back(min_dist);
-  }
-  double prob = vcl_exp(-(min_dist_self*min_dist_self)/(sigma*sigma));
-  double prob_sum =prob;
-  for (unsigned i = 0; i< min_dist_others.size(); ++i)
-    prob_sum += vcl_exp(-(min_dist_others[i]*min_dist_others[i])/(sigma*sigma));
-  return prob/prob_sum;
-}
 
 // transfer the texton dictionary to an efficient index for sorting
 // on Euclidean distance
@@ -762,51 +749,6 @@ void sdet_texture_classifier::compute_category_histograms()
 }
 
 void sdet_texture_classifier::
-nearest_category(vnl_vector<double> const& query,
-                 vnl_vector_fixed<float, 3>& color) {
-  assert(k_near_>=1);
-  if (k_near_>1) {
-    //sort textons on distance from query filter response vector
-    sdet_neighbor_less nless(query);
-    vcl_sort(texton_index_.begin(), texton_index_.end(), nless);
-    vcl_map<vcl_string, double> category_count;
-    //initialize nearest neighbor count
-    vcl_map< vcl_string, vcl_vector<vnl_vector<double> > >::const_iterator it= texton_dictionary_.begin();
-    for (; it!= texton_dictionary_.end(); ++it)
-      category_count[(*it).first]=0.0;
-    //count number of occurrences of each category
-    for (vcl_vector<sdet_neighbor>::iterator nit = texton_index_.begin();
-         nit != texton_index_.begin()+k_near_; ++nit)
-      category_count[(*nit).cat_]+=1.0;
-    //find the max count and associated category
-    double max_count = 0.0;
-    vcl_string max_category;
-    for (vcl_map<vcl_string, double>::iterator cit = category_count.begin();
-         cit != category_count.end(); ++cit)
-      if ((*cit).second>max_count) {
-        max_count = (*cit).second;
-        max_category = (*cit).first;
-      }
-    color = color_map_[max_category];
-    //assign a probability that is the fraction of k for max count
-    color *= (static_cast<float>(max_count)/static_cast<float>(k_near_));
-    return;
-  }
-  // k_near ==1
-  double min_dist = vnl_numeric_traits<double>::maxval;
-  vcl_string min_cat;
-  for (vcl_vector<sdet_neighbor>::iterator nit = texton_index_.begin();
-       nit != texton_index_.end(); ++nit) {
-    double d = vnl_vector_ssd((*nit).k_mean_, query);
-    if (d<min_dist) {
-      min_dist = d;
-      min_cat = (*nit).cat_;
-    }
-  }
-  color = color_map_[min_cat];
-}
-
-void sdet_texture_classifier::
 update_hist(vnl_vector<double> const& f, float weight, vcl_vector<float>& hist)
 {
   unsigned indx = this->nearest_texton_index(f);
@@ -854,45 +796,6 @@ category_color_mix(vcl_map<vcl_string, float>  & probs,
   color_mix = mix/prob_sum;
 }
 
-void sdet_texture_classifier::
-category_quality_color_mix(vcl_map<vcl_string, float>  & probs,
-                           vnl_vector_fixed<float, 3>& color_mix)
-{
-  //start with max prob color
-  vcl_map<vcl_string, vcl_vector<float> >::iterator hit = category_histograms_.begin();
-
-  float atmos_sum = 0.0f;
-  float no_atmos_sum = 0.0f;
-  float prob_sum = 0.0f;
-  float up = 0.0f;
-  for (; hit != category_histograms_.end(); ++hit) {
-    const vcl_string& cat = (*hit).first;
-    float p = probs[cat];
-    prob_sum += p;
-    if (cat=="haz"||cat=="cld")
-      atmos_sum += p;
-    else if (cat=="des")
-      up = p;
-    else
-      no_atmos_sum += p;
-  }
-  float u = up/prob_sum;
-  float p_bad  = atmos_sum/(prob_sum-up);
-  float p_good = no_atmos_sum/(prob_sum-up);
-  float p_min = p_bad;
-  if (p_good<p_min) p_min = p_good;
-  if ((p_min-0.5f*u) < 0.0f) u = 2.0*p_min;
-  float b_bad = p_bad - 0.5f*u;
-  float b_good = p_good - 0.5f*u;
-  vnl_vector_fixed<float, 3> unct, good, bad;
-  bad[0]  = 1.0f;   bad[1] = 0.0f;  bad[2] = 0.0f;
-  good[0] = 0.0f;  good[1] = 1.0f; good[2] = 0.0f;
-  unct[0] = 0.0f;  unct[1] = 0.0f; unct[2] = 1.0f;
-  if (up<prob_sum)
-    color_mix = b_good*good + b_bad*bad +  u*unct;
-  else
-    color_mix = u*unct;
-}
 
 #if 0 //=====debug====
 static bool required_block(int bidxu, int bidxv, int i,
@@ -973,96 +876,6 @@ classify_image_blocks(vcl_string const& img_path)
       vnl_vector_fixed<float, 3> color;
       //colorize output
       this->category_color_mix(texture_probs, color);
-      for (unsigned r = 0; r<block_size_; ++r)
-        for (unsigned c = 0; c<block_size_; ++c)
-          for (unsigned b = 0; b<3; ++b)
-            prob(i+c,j+r,b) = color[b];
-    }
-    vcl_cout << '.' << vcl_flush;
-  }
-  vcl_cout << "\nBlock classification took " << t.real()/1000.0 << " seconds\n" << vcl_flush;
-  return prob;
-}
-
-vil_image_view<float> sdet_texture_classifier::
-classify_image_blocks_qual(vcl_string const& img_path)
-{
-  vil_image_resource_sptr resc = vil_load_image_resource(img_path.c_str());
-  vil_image_view<float> img = scale_image(resc); // map to [0, 1]
-  vcl_cout << "Classifying quality on image " << img_path << '\n' << vcl_flush;
-  return classify_image_blocks_qual(img);
-}
-
-vil_image_view<float> 
- sdet_texture_classifier::classify_image_blocks_qual(vil_image_view<float> const& image)
-{
-  vcl_cout << "image size(" << image.ni()<< ' ' << image.nj() << ")pixels:[" 
-           << texton_dictionary_.size() << "]categories \n" << vcl_flush;
-  vul_timer t;
-  if(!color_map_valid_)
-    this->init_color_map();
-  if (!texton_index_valid_)
-    this->compute_texton_index();
-  this->compute_filter_bank(image);
-  unsigned dim = filter_responses_.n_levels();
-  vcl_cout << "texton dimension " << dim +2<< '\n';
-
-  int margin = static_cast<int>(this->max_filter_radius());
-  vcl_cout << "filter kernel margin " << margin << '\n';
-  int ni = static_cast<int>(image.ni());
-  int nj = static_cast<int>(image.nj());
-  if ((ni-margin)<=0 || (nj-margin)<=0) {
-    vcl_cout << "Image smaller than filter margin\n";
-    return vil_image_view<float>(0, 0);
-  }
-  unsigned block_area = block_size_*block_size_;
-  float weight = 1.0f/static_cast<float>(block_area);
-  vil_image_view<float> prob(ni, nj, 3);
-  for(unsigned j = 0; j<image.nj(); ++j)
-    for(unsigned i = 0; i<image.ni(); ++i){
-      prob(i,j,0) = 0.0f; prob(i,j,1) = 0.0f; prob(i,j,2) = 1.0f;
-    }
-  unsigned nh = texton_index_.size();
-  int bidxv = 0;
-  for (int j = margin; j<(nj-margin); j+=block_size_, ++bidxv) {
-    int bidxu = 0;
-    for (int i = margin; i<(ni-margin); i+=block_size_, ++bidxu) {
-      vcl_vector<float> h(nh, 0.0f);
-      for (unsigned r = 0; r<block_size_; ++r)
-        for (unsigned c = 0; c<block_size_; ++c) {
-          vnl_vector<double> temp(dim+2);
-          for (unsigned f = 0; f<dim; ++f)
-            temp[f]=filter_responses_.response(f)(i+c,j+r);
-          temp[dim]=laplace_(i+c,j+r); temp[dim+1]=gauss_(i+c,j+r);
-          //hist bins are probabilities
-          //i.e., sum h[i] = 1.0
-          this->update_hist(temp, weight, h);
-        }
-      //finished a block
-      vcl_map<vcl_string, float> texture_probs = this->texture_probabilities(h);
-
-#if 0 //=====debug====
-      int ii = 7518, jj = 2909;
-      if (required_block(bidxu, bidxv, ii, jj, block_size_, margin)) {
-        vcl_cout << "probs(" << i << ' ' << j << ")\n";
-        float psum = 0.0;
-        for (vcl_map<vcl_string, float>::iterator cit = texture_probs.begin();
-             cit != texture_probs.end(); ++cit)
-          psum += (*cit).second;
-
-        for (vcl_map<vcl_string, float>::iterator cit =texture_probs.begin();
-             cit != texture_probs.end(); ++cit)
-          vcl_cout << (*cit).first << ' ' << ((*cit).second)/psum << '\n';
-#ifdef DEBUG
-        vcl_cout << " hist\n";
-        for (unsigned i = 0; i<nh; ++i)
-          vcl_cout << h[i]<< '\n';
-#endif
-      }
-#endif
-      vnl_vector_fixed<float, 3> color;
-      //colorize output
-      this->category_quality_color_mix(texture_probs, color);
       for (unsigned r = 0; r<block_size_; ++r)
         for (unsigned c = 0; c<block_size_; ++c)
           for (unsigned b = 0; b<3; ++b)

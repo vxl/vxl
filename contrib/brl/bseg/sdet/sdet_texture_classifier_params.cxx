@@ -23,7 +23,6 @@ sdet_texture_classifier_params::sdet_texture_classifier_params():
     fast_ = true;
     k_ = 100;
     n_samples_ = 200000;
-    k_near_ = 1;
     block_size_ = 64;
     weight_offset_ = 0.01f;
   }
@@ -35,8 +34,8 @@ sdet_texture_classifier_params(const sdet_texture_classifier_params& dmp)
   InitParams(dmp.n_scales_, dmp.scale_interval_, dmp.angle_interval_,
              dmp.lambda0_, dmp.lambda1_,dmp.laplace_radius_,
              dmp.gauss_radius_,dmp.cutoff_per_, dmp.signed_response_,
-             dmp.mag_, dmp.fast_, dmp.k_, dmp.n_samples_,
-             dmp.k_near_, dmp.block_size_, dmp.weight_offset_);
+             dmp.mag_, dmp.fast_, dmp.k_, dmp.n_samples_, dmp.block_size_,
+             dmp.weight_offset_);
 }
 
 sdet_texture_classifier_params::
@@ -53,7 +52,6 @@ sdet_texture_classifier_params(unsigned n_scales,
                                bool fast,
                                unsigned k,
                                unsigned n_samples,
-                               unsigned k_near,
                                unsigned block_size,
                                float weight_offset
                                )
@@ -61,7 +59,7 @@ sdet_texture_classifier_params(unsigned n_scales,
   InitParams(n_scales, angle_interval,scale_interval, 
              lambda0, lambda1, laplace_radius, gauss_radius,
              cutoff_per, signed_response, mag, fast, k, n_samples,
-             k_near, block_size, weight_offset);
+             block_size, weight_offset);
 }
 
 void sdet_texture_classifier_params::
@@ -70,7 +68,6 @@ InitParams(unsigned n_scales, float scale_interval, float angle_interval,
            float laplace_radius, float gauss_radius, 
            float cutoff_per, bool signed_response,
            bool mag, bool fast, unsigned k, unsigned n_samples,
-           unsigned k_near,
            unsigned block_size,
            float weight_offset)
 {
@@ -87,7 +84,6 @@ InitParams(unsigned n_scales, float scale_interval, float angle_interval,
   fast_ = fast;
   k_ = k;
   n_samples_ = n_samples;
-  k_near_ = k_near;
   block_size_ = block_size;
   weight_offset_ =   weight_offset;
 }
@@ -135,7 +131,6 @@ vcl_ostream& operator << (vcl_ostream& os, const sdet_texture_classifier_params&
   os << "fast " << dmp.fast_ << '\n';
   os << "k " << dmp.k_ << '\n';
   os << "n_samples " << dmp.n_samples_ << '\n';
-  os << "k_near " << dmp.k_near_ << '\n';
   os << "block size " << dmp.block_size_ << '\n';
   os << "weight offset " << dmp.weight_offset_ << '\n';
   os << "---]\n";
@@ -160,7 +155,6 @@ void vsl_b_write(vsl_b_ostream &os,
   vsl_b_write(os,tcpnc.fast_);
   vsl_b_write(os,tcpnc.k_);
   vsl_b_write(os,tcpnc.n_samples_);
-  vsl_b_write(os,tcpnc.k_near_);
   vsl_b_write(os,tcpnc.block_size_);
   vsl_b_write(os,tcpnc.weight_offset_);
 }
@@ -181,7 +175,6 @@ void vsl_b_read(vsl_b_istream &is, sdet_texture_classifier_params & tcp)
   vsl_b_read(is,tcp.fast_);
   vsl_b_read(is,tcp.k_);
   vsl_b_read(is,tcp.n_samples_);
-  vsl_b_read(is,tcp.k_near_);
   vsl_b_read(is,tcp.block_size_);
   vsl_b_read(is,tcp.weight_offset_);
 }

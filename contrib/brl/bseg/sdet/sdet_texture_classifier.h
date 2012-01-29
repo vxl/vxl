@@ -17,7 +17,7 @@
 // are the same as in the Varma and Zisserman work. Thus the filter space
 // dimension is n_scales + 2, where n_scales is the number of scales for
 // the anisotropic filters. The processing is carried out in two stages:
-// 1) training - a set of texture classes is defined along with associtated
+// 1) training - a set of texture classes is defined along with associated
 //               training images. It is possible to specify a polygon or 
 //               multiple polygons to denote image regions corresponding to
 //               the texture samples. The training images are processed to
@@ -97,9 +97,12 @@ class sdet_texture_classifier : public sdet_texture_classifier_params
     {return filter_responses_;}
 
   //: append to training data (current filter responses)
+  //: randomly select training samples from full training image for category
   bool compute_training_data(vcl_string const& category);
+  //: randomly select training samples from within the specified region
   bool compute_training_data(vcl_string const& category,
                              vgl_polygon<double> const& texture_region);
+  //: randomly select training samples from within the specified regions
   bool compute_training_data(vcl_string const& category,
                              vcl_vector<vgl_polygon<double> >const& texture_regions);
   //: compute textons with k_means for the specified texture category
@@ -117,7 +120,7 @@ class sdet_texture_classifier : public sdet_texture_classifier_params
   //: The texton histograms derived from the training data 
   void compute_category_histograms();
 
-  //: save dictionary, binary
+  //: save texton dictionary, binary (includes classifer params at top of file)
   bool save_dictionary(vcl_string const& path) const;
   //: load dictionary, binary
   bool load_dictionary(vcl_string const& path);
@@ -127,11 +130,7 @@ class sdet_texture_classifier : public sdet_texture_classifier_params
 {color_map_ = color_map; color_map_valid_ = true;}
   //: image of category probabilities expressed as colors
   vil_image_view<float> classify_image_blocks(vcl_string const& img_path);
-  //: image of atmospheric quality expressed as colors
-  //: (should be done in a separate class - later JLM)
-  vil_image_view<float> classify_image_blocks_qual(vcl_string const& img_path);
-  vil_image_view<float> 
-    classify_image_blocks_qual(vil_image_view<float> const& image);
+
   //: print 
   void print_dictionary() const;
   void print_distances() const;
@@ -141,26 +140,20 @@ class sdet_texture_classifier : public sdet_texture_classifier_params
   void print_texton_weights() const;
   //: debug utilities
 
-  
  protected:
   sdet_texture_classifier();
+  vil_image_view<float> scale_image(vil_image_resource_sptr const& resc);
   vcl_vector<vnl_vector<double> > 
     random_centers(vcl_vector<vnl_vector<double> > const& training_data,
                    unsigned k) const;
   void compute_distances();
   void compute_interclass_probs();
   void compute_texton_weights();
-  double category_prob(vcl_string const& category,
-                       vnl_vector<double> const& filt,
-                       double sigma);
+
   void init_color_map();
 
-  // note k in this case is k-nearest neighbor not k in k-means.
-  void nearest_category(vnl_vector<double> const& query,
-                        vnl_vector_fixed<float, 3>& color);
   void compute_texton_index();
-  float single_category(vcl_string const& cat,vnl_vector<double> const& query,
-                        double sigma, double& min_dist);
+
   unsigned nearest_texton_index(vnl_vector<double> const& query);
 
   //: update the texton histogram with a filter vector
