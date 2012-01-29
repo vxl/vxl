@@ -25,6 +25,9 @@ SOURCES += processes/brad_estimate_synoptic_function_1d_process.cxx
 SOURCES += processes/brad_estimate_empty_process.cxx
 SOURCES += processes/brad_estimate_radiance_values_process.cxx
 SOURCES += processes/brad_nitf_abs_radiometric_calibration_process.cxx
+SOURCES += processes/brad_nitf_read_metadata_process.cxx
+SOURCES += processes/brad_estimate_atmospheric_parameters_process.cxx
+SOURCES += processes/brad_estimate_reflectance_process.cxx
 
 #######################################
 include ${VXLROOT}/config/top-params.mk

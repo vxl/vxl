@@ -4,6 +4,7 @@ LIBRARY := brad-io
 VERSION := 1.0
 
 SOURCES += brad_io_image_metadata.cxx
+SOURCES += brad_io_atmospheric_parameters.cxx
 
 #######################################
 include ${VXLROOT}/config/top-params.mk

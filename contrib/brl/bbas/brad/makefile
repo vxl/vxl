@@ -15,7 +15,9 @@ MANPAGE_SOURCES += brad_eigenspace_sptr.h
 SOURCES += brad_grad_int_feature_vector.cxx
 SOURCES += brad_grad_hist_feature_vector.cxx
 SOURCES += brad_synoptic_function_1d.cxx
-MANPAGE_SOURCES += brad_image_metadata.h
+SOURCES += brad_image_atmospherics_est.cxx
+SOURCES += brad_image_metadata.cxx
+MANPAGE_SOURCES += brad_atmospheric_parameters.h
 
 SUBDIRS += io
 

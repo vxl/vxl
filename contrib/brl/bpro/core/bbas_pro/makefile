@@ -13,7 +13,6 @@ SOURCES += bbas_1d_array_unsigned.cxx
 
 MANPAGE_SOURCES += bbas_1d_array_string_sptr.h
 
-SOURCES += processes/bbas_sun_angles_process.cxx
 SOURCES += processes/bbas_atmospheric_corr_process.cxx
 SOURCES += processes/bbas_string_array_process.cxx
 SOURCES += processes/bsta_clone_joint_hist_3d_process.cxx
