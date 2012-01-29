@@ -93,6 +93,8 @@ bool parse(vcl_string& nitf_filename, brad_image_metadata_sptr& md, vcl_string m
   }
   md->t_.year = year; md->t_.month = month; md->t_.day = day; md->t_.hour = hour; md->t_.min = min;
 
+  md->number_of_bits_ = hdr->get_number_of_bits_per_pixel();
+
   vcl_string dirname = vul_file::dirname(nitf_filename);
 
   //: set gain offset defaults, some satellites' images do not require any adjustment
@@ -136,10 +138,22 @@ bool parse(vcl_string& nitf_filename, brad_image_metadata_sptr& md, vcl_string m
         break;
       }
     }
-  }
+  } 
 
   if (meta_filename.size() == 0) {
-    vcl_cout << "could not find metadata for: " << imagename << vcl_endl;
+    // check if this is IKONOS
+    vcl_string img_info = hdr->get_image_source();
+    vcl_string type = hdr->get_image_type(); // type mono is band PAN
+    unsigned bpp = hdr->get_number_of_bits_per_pixel();
+    vcl_cout << "Ikonos: bpp " << bpp << " type: " << type << vcl_endl;
+    if (img_info.compare("IKONOS") == 0 && type.compare("MONO") == 0 && bpp == (unsigned)11) {
+      vcl_cout << "An 11-bit Panchromatic IKONOS image, setting gain & offset values according to tech document\n";
+      md->gain_ = (10.0/161.0)/0.403;
+      md->offset_ = 0.0;
+    } else {
+      vcl_cout << "could not set gain and offset for " << imagename << vcl_endl;
+    }
+    vcl_cout << *md;
     return true;
   }
   

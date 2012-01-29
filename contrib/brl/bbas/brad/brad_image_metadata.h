@@ -40,6 +40,7 @@ public:
    double sun_irradiance_; // units W m^-2 
 
    image_time t_;
+   unsigned number_of_bits_;
 };
 
 typedef vbl_smart_ptr<brad_image_metadata> brad_image_metadata_sptr;
@@ -57,6 +58,7 @@ inline vcl_ostream& operator<< (vcl_ostream& s, brad_image_metadata const& m)
     << "\tgain = " << m.gain_ << "\n"
     << "\toffset = " << m.offset_ << "\n" 
     << "\tsun irradiance = " << m.sun_irradiance_ << "\n" 
+    << "\tnumber_of_bits = " << m.number_of_bits_ << "\n"
     << vcl_endl; return s; }
 
 #endif
