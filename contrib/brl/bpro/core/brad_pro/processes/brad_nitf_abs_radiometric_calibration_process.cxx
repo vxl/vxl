@@ -3,7 +3,7 @@
 // \file
 //   Satellite images usually require an absolute radiometric calibration:
 //      http://www.digitalglobe.com/downloads/QuickBird_technote_raduse_v1.pdf
-//   In the output image, the pixel values are top-of-atmosphere  band-integrated  radiance values 
+//   In the output image, the pixel values are top-of-atmosphere  band-averaged radiance values 
 //     with unit W m^-2 sr^-1 um^-1
 //
 //
