@@ -5,7 +5,7 @@
 #include <bprb/bprb_func_process.h>
 #include <bprb/bprb_parameters.h>
 #include <brdb/brdb_value.h>
-#include <sdet/sdet_texture_classifier.h>
+#include <sdet/sdet_atmospheric_image_classifier.h>
 #include <sdet/sdet_texture_classifier_params.h>
 #include <vil/vil_image_view.h>
 //: initialize input and output types
@@ -51,8 +51,13 @@ bool sdet_texture_classifier_process(bprb_func_process& pro)
   tcp.signed_response_ = true;
   tcp.mag_ = false;
   tcp.block_size_ = block_size;
-  sdet_texture_classifier tc(tcp);
+  sdet_atmospheric_image_classifier tc(tcp);
   tc.load_dictionary(texton_dict_path);
+  vcl_vector<vcl_string> cats;
+  // hard code the names of the atomospheric categories - needs more
+  // generality - JLM
+  cats.push_back("cld");   cats.push_back("haz");
+  tc.set_atmospheric_categories(cats);
   vil_image_view<float> class_img =
     tc.classify_image_blocks_qual(fview);
   // return the output image
