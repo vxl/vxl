@@ -8,6 +8,7 @@
 // \date Oct 29, 2006
 
 #include <vpgl/vpgl_rational_camera.h>
+#include <vpgl/vpgl_local_rational_camera.h>
 #include <vpgl/vpgl_proj_camera.h>
 #include <vgl/vgl_fwd.h>
 #include <vnl/vnl_double_2.h>
@@ -65,6 +66,11 @@ class vpgl_backproject
                                  vgl_point_2d<double> const& point,
                                  vgl_vector_2d<double> const& vect,
                                  vgl_plane_3d<double>& plane);
+
+  //: Use backprojection to determine direction to camera from 3-d point
+  static bool direction_to_camera(vpgl_local_rational_camera<double> const& cam,
+                                  vgl_point_3d<double> const& point,
+                                  vgl_vector_3d<double> &to_camera);
 
  private:
   //: constructor private - static methods only

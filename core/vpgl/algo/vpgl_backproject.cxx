@@ -8,6 +8,7 @@
 #include <vnl/algo/vnl_amoeba.h>
 #include <vgl/vgl_intersection.h>
 #include <vpgl/vpgl_generic_camera.h>
+
 //: Backproject an image point onto a plane, start with initial_guess
 bool vpgl_backproject::bproj_plane(const vpgl_camera<double>* cam,
                                    vnl_double_2 const& image_point,
@@ -113,5 +114,30 @@ vpgl_backproject::bproj_point_vector(vpgl_proj_camera<double> const& cam,
   plane = vgl_plane_3d<double>(hpl);
   //might add checks for ideal plane later
   return true;
+}
+
+
+//: Use backprojection to determine direction to camera from 3-d point
+bool vpgl_backproject::direction_to_camera(vpgl_local_rational_camera<double> const& cam,
+                                           vgl_point_3d<double> const& point,
+                                           vgl_vector_3d<double> &to_camera)
+{
+  // assumes that camera is above point of interest
+  // project point to image, and backproject to another z-plane, vector points to sensor
+  vgl_point_2d<double> img_pt = cam.project(point);
+  const double z_off = 10.0;
+  vgl_plane_3d<double> plane_high(0,0,1,-(point.z()+z_off));
+  vgl_point_3d<double> point_high;
+  vgl_point_3d<double> guess(point.x(),point.y(),point.z() + z_off);
+  if (!bproj_plane(cam, img_pt, plane_high, guess, point_high)) {
+    return false;
+  }
+  // this assumes camera z > point.z
+  to_camera = point_high - point;
+  // normalize vector
+  normalize(to_camera);
+
+  return true;
+
 }
 
