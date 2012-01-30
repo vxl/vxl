@@ -22,6 +22,9 @@ struct image_time {
 class brad_image_metadata : public vbl_ref_count
 {
 public:
+   //: Constructor extracts information from NITF header and vendor-specific metadata file
+   brad_image_metadata(vcl_string const& nitf_filename, vcl_string const& meta_folder = "");
+   //: Default constructor
    brad_image_metadata() : gain_(1.0), offset_(0.0) {} 
 
    // position of sun relative to imaged location 
@@ -41,13 +44,19 @@ public:
 
    image_time t_;
    unsigned number_of_bits_;
+protected:
+   //: parse header in nitf image, assumes that metadata files are in the same folder with the image
+   //   if meta_folder is not empty, they are searched in that folder as well
+   bool parse(vcl_string const& nitf_filename, vcl_string const& meta_folder = "");
+   //: Parse Quickbird IMD file
+   bool parse_from_imd(vcl_string const& filename);
+   //: Parse GeoEye PVL file
+   bool parse_from_pvl(vcl_string const& filename);
+
 };
 
 typedef vbl_smart_ptr<brad_image_metadata> brad_image_metadata_sptr;
 
-//: parse header in nitf image, assumes that metadata files are in the same folder with the image
-//   if meta_folder is not empty, they are searched in that folder as well
-bool parse(vcl_string& nitf_filename, brad_image_metadata_sptr& md, vcl_string meta_folder = "");
 
 inline vcl_ostream& operator<< (vcl_ostream& s, brad_image_metadata const& m) 
 { s << "image metadata \n"
