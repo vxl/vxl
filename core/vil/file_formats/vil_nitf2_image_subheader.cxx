@@ -347,15 +347,18 @@ void vil_nitf2_image_subheader::add_shared_field_defs_1(vil_nitf2_field_definiti
     .field("TGTID",  "Target Identifier",   NITF_STR_BCSA(17), true)
     .field("IID2",   "Image Identifier 2",  NITF_STR_ECSA(80), true);
 }
+/*
 bool vil_nitf2_image_subheader::
 get_date_time(int& year, int& month, int& day, int& hour, int& min)
 {
+  vcl_cout  << "In vil_nitf2_image_subheader::get_date_time!\n";
   vcl_string date_time = "";
   bool success = this->get_property("IDATIM", date_time);
   if (!success) {
     vcl_cout << "IDATIM Property failed in vil_nitf2_image_subheader\n";
     return false;
   }
+  vcl_cout  << "In vil_nitf2_image_subheader::get_date_time!\n";
   //d==day,h==hour,n==min,ss==sec,Z==zulu,m==month, y==year suffix
   // format is ddhhnnssZmmmyy
   vcl_string s_day, s_hour, s_min, s_month, s_year_suff;
@@ -367,6 +370,8 @@ get_date_time(int& year, int& month, int& day, int& hour, int& min)
   vcl_string months[]={"JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG",
                         "SEP", "OCT", "NOV", "DEC"};
   bool found = false;
+  vcl_cout << date_time << "\n";
+  vcl_cout << s_day << " " << s_hour << " " << s_min << " " << s_month << " " << s_year_suff << vcl_endl;
   for(int i = 0; (i<12)&&(!found); ++i)
     if(s_month==months[i]){
       found = true;
@@ -379,6 +384,56 @@ get_date_time(int& year, int& month, int& day, int& hour, int& min)
   min =  vcl_atoi(s_min.c_str());
   year = vcl_atoi(s_year_suff.c_str());
   year += 2000;//good until the next millenium
+  return true;
+}
+*/
+bool vil_nitf2_image_subheader::
+get_date_time(int& year, int& month, int& day, int& hour, int& min)
+{
+  vcl_string date_time = "";
+  bool success = this->get_property("IDATIM", date_time);
+  if (!success) {
+    vcl_cout << "IDATIM Property failed in vil_nitf2_image_subheader\n";
+    return false;
+  }
+  //d==day,h==hour,n==min,ss==sec,Z==zulu,m==month, y==year
+  // format is ddhhnnssZmmmyy OR yyyymmddhhnnss (the NITF 2.1 Commercial format)
+  vcl_string s_day, s_hour, s_min, s_month, s_year;
+  // try ddhhnnssZmmmyy first
+  vcl_string s_zulu = date_time.substr(8,1);
+  if (s_zulu=="Z") {
+    s_day   = date_time.substr(0,2);
+    s_hour  = date_time.substr(2,2);
+    s_min   = date_time.substr(4,2);
+    s_month = date_time.substr(9,3);
+    s_year  = date_time.substr(12,2);
+    vcl_string months[]={"JAN", "FEB", "MAR", "APR",
+                         "MAY", "JUN", "JUL", "AUG",
+                         "SEP", "OCT", "NOV", "DEC"};
+    bool found = false;
+    for(int i = 0; (i<12)&&(!found); ++i) {
+      if(s_month==months[i]){
+        found = true;
+        month = i+1;
+      }
+    }
+    if(!found) {
+      return false;
+    }
+  } else {  // try yyyymmddhhnnss
+    s_year  = date_time.substr(0,4);
+    s_month = date_time.substr(4,2);
+    s_day   = date_time.substr(6,2);
+    s_hour  = date_time.substr(8,2);
+    s_min   = date_time.substr(10,2);
+    month   = vcl_atoi(s_month.c_str());
+  }
+  day  = vcl_atoi(s_day.c_str());
+  hour = vcl_atoi(s_hour.c_str());
+  min =  vcl_atoi(s_min.c_str());
+  year = vcl_atoi(s_year.c_str());
+  if (year < 100)
+    year += 2000;//good until the next millenium
   return true;
 }
 unsigned vil_nitf2_image_subheader::nplanes() const
@@ -432,6 +487,30 @@ unsigned int vil_nitf2_image_subheader::get_num_blocks_y() const
     return blocks_per_col;
   }
   return 0;
+}
+unsigned int vil_nitf2_image_subheader::get_number_of_bits_per_pixel() const
+{
+  int bits_per_pixel;
+  if (get_property("ABPP", bits_per_pixel)) {
+    return bits_per_pixel;
+  }
+  return 0;
+}
+vcl_string vil_nitf2_image_subheader::get_image_source() const
+{
+  vcl_string source;
+  if (get_property("ISORCE", source)) {
+    return source;
+  }
+  return "";
+}
+vcl_string vil_nitf2_image_subheader::get_image_type() const
+{
+  vcl_string id;
+  if (get_property("IREP", id)) {
+    return id;
+  }
+  return "";
 }
 
 bool vil_nitf2_image_subheader::get_lut_info(unsigned int band,

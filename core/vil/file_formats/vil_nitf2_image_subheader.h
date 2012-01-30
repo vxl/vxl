@@ -56,6 +56,9 @@ class vil_nitf2_image_subheader
   unsigned int get_pixels_per_block_y() const;
   unsigned int get_num_blocks_x() const;
   unsigned int get_num_blocks_y() const;
+  unsigned int get_number_of_bits_per_pixel() const;
+  vcl_string get_image_source() const;
+  vcl_string get_image_type() const;
   bool has_data_mask_table() const { return data_mask_table() != 0; }
   const vil_nitf2_data_mask_table* data_mask_table() const { return m_data_mask_table; }
 
