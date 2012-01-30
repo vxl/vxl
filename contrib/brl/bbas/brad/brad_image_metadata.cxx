@@ -13,6 +13,12 @@
 #include <vil/vil_image_resource.h>
 #include <vil/vil_load.h>
 #include <vil/file_formats/vil_nitf2_image.h>
+#include <vpgl/file_formats/vpgl_nitf_rational_camera.h>
+#include <vpgl/vpgl_local_rational_camera.h>
+#include <vpgl/vpgl_lvcs.h>
+#include <vpgl/algo/vpgl_backproject.h>
+#include <vgl/vgl_point_3d.h>
+#include <vgl/vgl_vector_3d.h>
 
 #include <brad/brad_sun_pos.h>
 
@@ -115,6 +121,29 @@ bool parse(vcl_string& nitf_filename, brad_image_metadata_sptr& md, vcl_string m
   double d = brad_sun_distance(year, month, day, hour, min);
   md->sun_irradiance_ = solar_irrad/(d*d);
 
+  // compute satellite az,el values for center of image 
+  vpgl_nitf_rational_camera nitf_cam(nitf_image, false);
+  double off_u, off_v;
+  nitf_cam.image_offset(off_u, off_v);
+  // get lat,lon offsets for local euclidean coord. system origin
+  double lon0 = nitf_cam.offset(vpgl_rational_camera<double>::X_INDX);
+  double lat0 = nitf_cam.offset(vpgl_rational_camera<double>::Y_INDX);
+  // get elevation offset value
+  double el0 = nitf_cam.offset(vpgl_rational_camera<double>::Z_INDX);
+  vpgl_lvcs lvcs(lat0, lon0, el0, vpgl_lvcs::wgs84, 0, 0, vpgl_lvcs::DEG, vpgl_lvcs::METERS);
+  vpgl_local_rational_camera<double> local_cam(lvcs, nitf_cam);
+  // determine direction to camera
+  vgl_vector_3d<double> to_camera;
+  vpgl_backproject::direction_to_camera(local_cam, vgl_point_3d<double>(0,0,0), to_camera);
+  // convert vector to az,el 
+  const double rad_to_deg = 180.0 / vnl_math::pi;
+  // degrees above horizon
+  md->view_elevation_ = vcl_asin(to_camera.z()) * rad_to_deg;
+  // degrees east of north
+  md->view_azimuth_ = vcl_atan2(to_camera.x(), to_camera.y()) * rad_to_deg;
+  if (md->view_azimuth_ < 0)
+    md->view_azimuth_ += 360;
+ 
   vcl_string dirname = vul_file::dirname(nitf_filename);
 
   //: set gain offset defaults, some satellites' images do not require any adjustment
@@ -163,7 +192,7 @@ bool parse(vcl_string& nitf_filename, brad_image_metadata_sptr& md, vcl_string m
   if (meta_filename.size() == 0) {
     // check if this is IKONOS
     vcl_string type = hdr->get_image_type(); // type mono is band PAN
-    unsigned bpp = hdr->get_number_of_bits_per_pixel();
+    unsigned bpp = md->number_of_bits_;
     vcl_cout << "Ikonos: bpp " << bpp << " type: " << type << vcl_endl;
     if (img_info.compare("IKONOS") == 0 && type.compare("MONO") == 0 && bpp == (unsigned)11) {
       vcl_cout << "An 11-bit Panchromatic IKONOS image, setting gain & offset values according to tech document\n";
