@@ -22,12 +22,71 @@
 
 #include <brad/brad_sun_pos.h>
 
+// Construct using nitf and metadata file 
 brad_image_metadata::brad_image_metadata(vcl_string const& nitf_filename, vcl_string const& meta_folder)
 {
   if (!parse(nitf_filename, meta_folder)) {
     vcl_cerr << "ERROR parsing image metadata " << vcl_endl;
   }
 } 
+
+// Write brad_image_metadata to stream
+vcl_ostream&  operator<<(vcl_ostream& s, brad_image_metadata const& md)
+{
+   s << "sun_elevation = " << md.sun_elevation_ << vcl_endl;
+   s << "sun_azimuth = " << md.sun_azimuth_ << vcl_endl;
+   s << "view_elevation = " << md.view_elevation_ << vcl_endl;
+   s << "view_azimuth = " << md.view_azimuth_ << vcl_endl;
+   s << "gain = " << md.gain_ << vcl_endl;
+   s << "offset = " << md.offset_ << vcl_endl; 
+   s << "sun_irradiance = " << md.sun_irradiance_ << vcl_endl;
+   s << "number_of_bits = " << md.number_of_bits_ << vcl_endl;
+ 
+   return s;
+}
+
+// Read brad_image_metadata from stream
+vcl_istream&  operator>>(vcl_istream& s, brad_image_metadata& md)
+{ 
+   vcl_string input;
+   while (!s.eof()) {
+      s >> input;
+      if (input=="sun_elevation") {
+         s >> input;
+         s >> md.sun_elevation_;
+      }
+      if (input=="sun_azimuth") {
+         s >> input;
+         s >> md.sun_azimuth_;
+      }
+      if (input=="view_elevation") {
+         s >> input;
+         s >> md.view_elevation_;
+      }
+      if (input=="view_azimuth") {
+         s >> input;
+         s >> md.view_azimuth_;
+      }
+      if (input == "gain") {
+         s >> input;
+         s >> md.gain_;
+      }
+      if (input == "offset") {
+         s >> input;
+         s >> md.offset_;
+      }
+      if (input == "sun_irradiance") {
+         s >> input;
+         s >> md.sun_irradiance_;
+      }
+      if (input == "number_of_bits") {
+         s >> input;
+         s >> md.number_of_bits_;
+      }
+   }
+   return s;
+}
+
 
 bool brad_image_metadata::parse_from_imd(vcl_string const& filename)
 {

@@ -16,13 +16,13 @@
       brad_phongs_model_est.h         brad_phongs_model_est.cxx
       brad_synoptic_function_1d.h     brad_synoptic_function_1d.cxx
       brad_image_metadata.h           brad_image_metadata.cxx
-      brad_atmospheric_parameters.h 
+      brad_atmospheric_parameters.h   brad_atmospheric_parameters.cxx 
       brad_image_atmospherics_est.h  brad_image_atmospherics_est.cxx
      )
   AUX_SOURCE_DIRECTORY(Templates brad_sources)
   ADD_LIBRARY(brad ${brad_sources} )
 
-  TARGET_LINK_LIBRARIES(brad  bsta vnl_io vnl vgl_algo vnl_algo vgl vil vbl_io vbl vpl vul )
+  TARGET_LINK_LIBRARIES(brad  bsta vnl_io vnl vgl_algo vnl_algo vgl vil vpgl vpgl_algo vbl_io vbl vpl vul )
   
   SUBDIRS(io)
 

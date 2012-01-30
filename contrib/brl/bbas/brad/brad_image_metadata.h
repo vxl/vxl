@@ -57,18 +57,11 @@ protected:
 
 typedef vbl_smart_ptr<brad_image_metadata> brad_image_metadata_sptr;
 
+//: Write brad_image_metadata to stream
+vcl_ostream&  operator<<(vcl_ostream& s, brad_image_metadata const& md);
 
-inline vcl_ostream& operator<< (vcl_ostream& s, brad_image_metadata const& m) 
-{ s << "image metadata \n"
-    << "\tsun elevation = " << m.sun_elevation_ << "\n"
-    << "\tsun azimuth = " << m.sun_azimuth_ << "\n"
-    << "\tview_elevation = " << m.view_elevation_ << "\n"
-    << "\tview_azimuth = " << m.view_azimuth_ << "\n" 
-    << "\tgain = " << m.gain_ << "\n"
-    << "\toffset = " << m.offset_ << "\n" 
-    << "\tsun irradiance = " << m.sun_irradiance_ << "\n" 
-    << "\tnumber_of_bits = " << m.number_of_bits_ << "\n"
-    << vcl_endl; return s; }
+//: Read brad_image_metadata from stream
+vcl_istream&  operator>>(vcl_istream& s, brad_image_metadata& md);
 
 #endif
 

@@ -9,6 +9,7 @@
 #ifndef brad_atmospheric_parameters_h_
 #define brad_atmospheric_parameters_h_
 
+#include <vcl_iostream.h>
 #include <vbl/vbl_ref_count.h>
 #include <vbl/vbl_smart_ptr.h>
 
@@ -26,6 +27,12 @@ public:
 };
 
 typedef vbl_smart_ptr<brad_atmospheric_parameters> brad_atmospheric_parameters_sptr;
+
+//: Write brad_atmospheric_parameters to stream
+vcl_ostream&  operator<<(vcl_ostream& s, brad_atmospheric_parameters const& atm);
+
+//: Read brad_atmospheric_parameters from stream
+vcl_istream&  operator>>(vcl_istream& s, brad_atmospheric_parameters& atm);
 
 #endif
 

@@ -7,6 +7,8 @@ SET( brad_test_sources
    test_feature_pca.cxx
    test_phongs_model_est.cxx
    test_synoptic_function.cxx
+   test_image_metadata.cxx
+   test_atmospheric_parameters.cxx
    )
 
 ADD_EXECUTABLE(brad_test_all ${brad_test_sources})
@@ -19,6 +21,8 @@ ADD_TEST( brad_test_all ${EXECUTABLE_OUTPUT_PATH}/brad_test_all test_sun_dir_ind
 ADD_TEST( brad_test_all ${EXECUTABLE_OUTPUT_PATH}/brad_test_all test_phongs_model_est)
 ADD_TEST( brad_test_all ${EXECUTABLE_OUTPUT_PATH}/brad_test_all test_feature_pca)
 ADD_TEST( brad_test_all ${EXECUTABLE_OUTPUT_PATH}/brad_test_all test_synoptic_function)
+ADD_TEST( brad_test_all ${EXECUTABLE_OUTPUT_PATH}/brad_test_all test_image_metadata)
+ADD_TEST( brad_test_all ${EXECUTABLE_OUTPUT_PATH}/brad_test_all test_atmospheric_parameters)
 
 ADD_EXECUTABLE( brad_test_include test_include.cxx )
 TARGET_LINK_LIBRARIES( brad_test_include brad)

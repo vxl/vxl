@@ -7,7 +7,8 @@ DECLARE( test_sun_dir_index );
 DECLARE( test_feature_pca );
 DECLARE( test_phongs_model_est );
 DECLARE( test_synoptic_function );
-
+DECLARE( test_image_metadata );
+DECLARE( test_atmospheric_parameters );
 
 void register_tests()
 {
@@ -18,6 +19,8 @@ void register_tests()
   REGISTER( test_feature_pca );
   REGISTER( test_phongs_model_est );
   REGISTER( test_synoptic_function );
+  REGISTER( test_image_metadata );
+  REGISTER( test_atmospheric_parameters );
 }
 
 DEFINE_MAIN;
