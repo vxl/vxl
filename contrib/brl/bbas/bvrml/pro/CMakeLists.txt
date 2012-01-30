@@ -17,9 +17,9 @@ ADD_LIBRARY(bvrml_pro ${bvrml_pro_sources} )
 
 TARGET_LINK_LIBRARIES(bvrml_pro bvrml vpgl_algo vpgl_io bprb )
 
-#IF( BUILD_TESTING )
-#  SUBDIRS(tests)
-#ENDIF( BUILD_TESTING )
+IF( BUILD_TESTING )
+  SUBDIRS(tests)
+ENDIF( BUILD_TESTING )
 
 INSTALL_TARGETS(/lib bvrml_pro)
 INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bbas/bvrml/pro ${bvrml_pro_sources})
