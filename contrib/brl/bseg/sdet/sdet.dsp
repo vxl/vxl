@@ -213,6 +213,9 @@ SOURCE=.\sdet_k_means.cxx
 SOURCE=.\sdet_texture_classifier.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\sdet_atmospheric_image_classifier.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/vbl_smart_ptr+sdet_region_edge-.cxx
 # End Source File
 # Begin Source File
@@ -355,6 +358,9 @@ SOURCE=.\sdet_texture_classifier.h
 # End Source File
 # Begin Source File
 SOURCE=.\sdet_texture_classifier_params.h
+# End Source File
+# Begin Source File
+SOURCE=.\sdet_atmospheric_image_classifier.h
 # End Source File
 # End Group
 # End Target

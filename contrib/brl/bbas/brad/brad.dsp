@@ -126,6 +126,9 @@ SOURCE=.\brad_image_atmospherics_est.cxx
 SOURCE=.\brad_image_metadata.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\brad_atmospheric_parameters.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/brad_eigenspace+brad_hist_prob_feature_vector-.cxx
 # End Source File
 # Begin Source File
