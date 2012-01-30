@@ -3,6 +3,7 @@
 #include <sdet/sdet_region_edge_sptr.h>
 #include <sdet/sdet_region_sptr.h>
 
+#include <sdet/sdet_atmospheric_image_classifier.h>
 #include <sdet/sdet_contour.h>
 #include <sdet/sdet_denoise_mrf.h>
 #include <sdet/sdet_denoise_mrf_bp.h>
