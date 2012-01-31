@@ -6,13 +6,15 @@
 #include <boxm2/io/boxm2_stream_cache.h>
 #include <bsta/bsta_histogram.h>
 #include <boxm2/boxm2_data_traits.h>
-#include <boxm2/boxm2_normal_albedo_array.h>
-#include <bpro/core/bbas_pro/bbas_1d_array_float.h>
 #include <vgl/vgl_vector_3d.h>
 #include <vnl/vnl_random.h>
 #include <vcl_vector.h>
 #include <vcl_algorithm.h>
 #include <vcl_iostream.h>
+
+#include <brad/brad_image_metadata.h>
+#include <brad/brad_atmospheric_parameters.h>
+#include <brad/brad_illum_util.h>
 
 class boxm2_compute_normal_albedo_functor
 {
@@ -27,9 +29,8 @@ class boxm2_compute_normal_albedo_functor
   //: standard constructor
   boxm2_compute_normal_albedo_functor(bool update_alpha)  : update_alpha_(update_alpha) {}
 
-  bool init_data(bbas_1d_array_float_sptr sun_azim,
-                 bbas_1d_array_float_sptr sun_elev,
-                 bbas_1d_array_float_sptr image_irrad,
+  bool init_data(vcl_vector<brad_image_metadata> const& metadata,
+                 vcl_vector<brad_atmospheric_parameters> const& atm_params,
                  boxm2_stream_cache_sptr str_cache,
                  boxm2_data_base * alpha_data,
                  boxm2_data_base * normal_albedo_model)
@@ -43,9 +44,8 @@ class boxm2_compute_normal_albedo_functor
                                               alpha_data->block_id());
     str_cache_ = str_cache;
     id_ = normal_albedo_model->block_id();
-    sun_elev_ = sun_elev;
-    sun_azim_ = sun_azim;
-    image_irrad_ = image_irrad;
+    metadata_ = metadata;
+    atm_params_ = atm_params;
 
     return true;
   }
@@ -82,50 +82,53 @@ class boxm2_compute_normal_albedo_functor
       }
     }
 
-    vcl_vector<aux1_datatype> intensities;
+    vcl_vector<aux1_datatype> radiances;
     vcl_vector<aux2_datatype> vis_vals;
 
     vis_vals.insert(vis_vals.begin(), aux2_raw.begin(), aux2_raw.end());
-#if 1
-    intensities.insert(intensities.begin(), aux1_raw.begin(), aux1_raw.end());
-#else
-    vnl_random randgen;
-    for (unsigned int i=0; i<vis_vals.size(); ++i) {
-      intensities.push_back(randgen.drand64());
-    }
-#endif
+    radiances.insert(radiances.begin(), aux1_raw.begin(), aux1_raw.end());
 
-
-    //vcl_cout << "Iobs.size() = " << intensities.size() << vcl_endl;
+    //vcl_cout << "Iobs.size() = " << radiances.size() << vcl_endl;
     //vcl_cout << "vis.size() = " << vis_vals.size() << vcl_endl;
 
-    const unsigned int num_images = intensities.size();
+    const unsigned int num_images = radiances.size();
 
-    // sanity check on sun azimuth array
-    if (sun_azim_->data_array.size() != num_images) {
-      vcl_cerr << "ERROR: sun_azim array size = " << sun_azim_->data_array.size() << ", num_images = " << num_images << vcl_endl;
+    // sanity check on metadata array
+    if (metadata_.size() != num_images) {
+      vcl_cerr << "ERROR: metadata array size = " << metadata_.size() << ", num_images = " << num_images << vcl_endl;
       return false;
     }
-    // sanity check on sun elevation array
-    if (sun_elev_->data_array.size() != num_images) {
-      vcl_cerr << "ERROR: sun_azim array size = " << sun_elev_->data_array.size() << ", num_images = " << num_images << vcl_endl;
-      return false;
-    }
-    // sanity check on irradiance array
-    if (image_irrad_->data_array.size() != num_images) {
-       vcl_cerr << "ERROR: irradiance array size = " << image_irrad_->data_array.size() << ", num_images = " << num_images << vcl_endl;
+    // sanity check on atmospheric params array
+    if (atm_params_.size() != num_images) {
+      vcl_cerr << "ERROR: atmospheric params array size = " << atm_params_.size() << ", num_images = " << num_images << vcl_endl;
       return false;
     }
 
     vcl_vector<vgl_vector_3d<double> > sun_positions;
-    // convert sun az,el into 3d vectors
+    vcl_vector<vgl_vector_3d<double> > view_directions;
+    // convert sun and view az,el into 3d vectors
     for (unsigned int i=0; i<num_images; ++i) {
-      double az = sun_azim_->data_array[i] * vnl_math::pi_over_180; //convert to radians
-      double el = sun_elev_->data_array[i] * vnl_math::pi_over_180; //convert to radians
+      double az = metadata_[i].sun_azimuth_ * vnl_math::pi_over_180; //convert to radians
+      double el = metadata_[i].sun_elevation_ * vnl_math::pi_over_180; //convert to radians
       double x = vcl_sin(az)*vcl_cos(el);
       double y = vcl_cos(az)*vcl_cos(el);
       double z = vcl_sin(el);
       sun_positions.push_back(vgl_vector_3d<double>(x,y,z));
+    }
+    for (unsigned int i=0; i<num_images; ++i) {
+      double az = metadata_[i].view_azimuth_ * vnl_math::pi_over_180; //convert to radians
+      double el = metadata_[i].view_elevation_ * vnl_math::pi_over_180; //convert to radians
+      double x = vcl_sin(az)*vcl_cos(el);
+      double y = vcl_cos(az)*vcl_cos(el);
+      double z = vcl_sin(el);
+      view_directions.push_back(vgl_vector_3d<double>(x,y,z));
+    }
+    // convert optical depth to transmittance values
+    vcl_vector<double> T_sun;
+    vcl_vector<double> T_view;
+    for (unsigned int i=0; i<num_images; ++i) {
+       T_sun.push_back(vcl_exp(-atm_params_[i].optical_depth_ / sun_positions[i].z()));
+       T_view.push_back(vcl_exp(-atm_params_[i].optical_depth_ / view_directions[i].z()));
     }
 
     float sum_weights = 0.0f ;
@@ -141,7 +144,6 @@ class boxm2_compute_normal_albedo_functor
     // fixed parameters
 
     const double sigma_sqrd_shadow = boxm2_normal_albedo_array_constants::sigma_shadow * boxm2_normal_albedo_array_constants::sigma_shadow;
-    const double sigma_sqrd_irrad =  boxm2_normal_albedo_array_constants::sigma_irrad * boxm2_normal_albedo_array_constants::sigma_irrad;
     const double sigma_sqrd_albedo = boxm2_normal_albedo_array_constants::sigma_albedo * boxm2_normal_albedo_array_constants::sigma_albedo;
 
     const double uniform_density = 1.0;
@@ -162,9 +164,9 @@ class boxm2_compute_normal_albedo_functor
           continue;
         }
         double weight = vis_vals[m]; // weight observation by visibility probability
-        double intensity_norm = intensities[m] / image_irrad_->data_array[m];
-        numerator += weight*sun_dot*intensity_norm;
-        denominator += weight*sun_dot*sun_dot;
+        double rho = brad_expected_reflectance_chavez(radiances[m], normal, sun_positions[m], T_sun[m], T_view[m], metadata_[m].sun_irradiance_, atm_params_[m].skylight_, atm_params_[m].airlight_);
+        numerator += weight*rho;
+        denominator += weight;
       }
       double albedo = 0.0;
       if (denominator > 0.0) {
@@ -176,21 +178,18 @@ class boxm2_compute_normal_albedo_functor
       double log_pred_prob = 0.0;
       for (unsigned int m=0; m<num_images; ++m) {
         double sun_dot = dot_product(sun_positions[m],normal);
-        double irrad = image_irrad_->data_array[m];
-        double predicted, pred_sigma_sqrd;
+        double pred_sigma_sqrd;
         if (sun_dot <= 0.0) {
-          // should be in shadow
-          predicted = 0.0;
           pred_sigma_sqrd = sigma_sqrd_shadow;
         }
         else {
-          predicted = irrad*albedo*sun_dot;
           // note this estimate of the prediction variance ignores second order term (product of albedo and irradiance errors)
-          pred_sigma_sqrd = sun_dot*sun_dot*(irrad*irrad*sigma_sqrd_albedo + albedo*albedo*sigma_sqrd_irrad);
+          pred_sigma_sqrd = sun_dot*sun_dot*(sigma_sqrd_albedo); //TODO: error propagation for chavez model
         }
+        double predicted = brad_expected_radiance_chavez(albedo, normal, sun_positions[m], T_sun[m], T_view[m], metadata_[m].sun_irradiance_, atm_params_[m].skylight_, atm_params_[m].airlight_);
         double weight = vis_vals[m];
-        double intensity = intensities[m];
-        double intensity_diff = predicted - intensity;
+        double radiance = radiances[m];
+        double intensity_diff = predicted - radiance;
         double gauss_norm = vnl_math::one_over_sqrt2pi / vcl_sqrt(pred_sigma_sqrd);
         double intensity_prob = gauss_norm * vcl_exp((-intensity_diff*intensity_diff)/(2.0*pred_sigma_sqrd));
         double prob = weight * intensity_prob + (1.0 - weight)*uniform_density;
@@ -235,10 +234,8 @@ class boxm2_compute_normal_albedo_functor
 
   boxm2_stream_cache_sptr str_cache_;
   boxm2_block_id id_;
-  bbas_1d_array_float_sptr sun_elev_;
-  bbas_1d_array_float_sptr sun_azim_;
-  bbas_1d_array_float_sptr image_irrad_;
-
+  vcl_vector<brad_image_metadata> metadata_;
+  vcl_vector<brad_atmospheric_parameters> atm_params_;
   bool update_alpha_;
 };
 

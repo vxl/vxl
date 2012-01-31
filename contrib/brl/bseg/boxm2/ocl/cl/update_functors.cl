@@ -284,10 +284,10 @@ void step_cell_preinf_naa(AuxArgs aux_args, int data_ptr, uchar llid, float d)
         __global float16 *normal_weights = (__global float16*)&(aux_args.naa_apm[data_ptr*32 + 16]);
 
         int16 self_shadow = islessequal(*aux_args.normals_dot_sun, (float16)0.0);
-        float16 predictions_shadow = 0.0f;
+        float16 predictions_shadow = aux_args.radiance_scales_shadow (*albedos) + aux_args.radiance_offset;
         float16 prediction_sigmas_shadow = SIGMA_SHADOW;
-        float16 predictions_model = aux_args.irradiance * (*aux_args.normals_dot_sun) * (*albedos);
-        float16 prediction_sigmas_model = (*aux_args.normals_dot_sun)*sqrt(aux_args.irradiance*aux_args.irradiance*SIGMA_SQRD_ALBEDO + (*albedos)*(*albedos)*SIGMA_SQRD_IRRAD);
+        float16 predictions_model = aux_args.radiance_scales * (*albedos) + aux_args.radiance_offset;
+        float16 prediction_sigmas_model = (*aux_args.normals_dot_sun)*sqrt(SIGMA_SQRD_ALBEDO + (*albedos)*(*albedos));
 
         float16 predictions = select(predictions_model, predictions_shadow, self_shadow);
         float16 prediction_sigmas = select(prediction_sigmas_model, prediction_sigmas_shadow, self_shadow);
@@ -333,10 +333,11 @@ void step_cell_bayes_naa(AuxArgs aux_args, int data_ptr, uchar llid, float d)
         __global float16 *normal_weights = (__global float16*)&(aux_args.naa_apm[data_ptr*32 + 16]);
 
         int16 self_shadow = islessequal(*aux_args.normals_dot_sun, (float16)0.0);
-        float16 predictions_shadow = 0.0f;
+
+        float16 predictions_shadow = aux_args.radiance_scales_shadow (*albedos) + aux_args.radiance_offset;
         float16 prediction_sigmas_shadow = SIGMA_SHADOW;
-        float16 predictions_model = aux_args.irradiance * (*aux_args.normals_dot_sun) * (*albedos);
-        float16 prediction_sigmas_model = (*aux_args.normals_dot_sun)*sqrt(aux_args.irradiance*aux_args.irradiance*SIGMA_SQRD_ALBEDO + (*albedos)*(*albedos)*SIGMA_SQRD_IRRAD);
+        float16 predictions_model = aux_args.radiance_scales * (*albedos) + aux_args.radiance_offset;
+        float16 prediction_sigmas_model = (*aux_args.normals_dot_sun)*sqrt(SIGMA_SQRD_ALBEDO + (*albedos)*(*albedos));
 
         float16 predictions = select(predictions_model, predictions_shadow, self_shadow);
         float16 prediction_sigmas = select(prediction_sigmas_model, prediction_sigmas_shadow, self_shadow);

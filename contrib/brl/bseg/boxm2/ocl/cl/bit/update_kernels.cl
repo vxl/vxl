@@ -516,13 +516,14 @@ update_mog3_main(__global RenderSceneInfo  * info,
 typedef struct
 {
   __global float* alpha;
-  __global float16 *normals_dot_sun;
+  __global float16 *radiance_scales;
+  __global float16 *radiance_scales_shadow;
+           float radiance_offset;
   __global float *naa_apm; // 32 floats per cell
   __global int* seg_len;
   __global int* mean_obs;
            float* vis_inf;
            float* pre_inf;
-           float irradiance;
   __constant RenderSceneInfo * linfo;
 } AuxArgs;
 
@@ -535,9 +536,10 @@ void
 pre_inf_naa_main(__constant  RenderSceneInfo    * linfo,
                  __global    int4               * tree_array,       // tree structure for each block
                  __global    float              * alpha_array,      // alpha for each block
-                 __global    float16            * normals_dot_sun,    // dot product of normals with illumination angle
+                 __global    float16            * radiance_scales,        // scales for computing radiance from albedo
+                 __global    float16            * radiance_scales_shadow, // scales for computing radiance from albedo (in shadow)
+                 __global    float              * radiance_offset,        // offset value for computing radiance from albedo
                  __global    float              * naa_apm_array,       // albedo (per normal) and weights for each block (32 floats per cell)
-                 __global    float4             * irradiance,         // estimated scene irradiance
                  __global    int                * aux_array0,        // four aux arrays strung together
                  __global    int                * aux_array1,        // four aux arrays strung together
                  __constant  uchar              * bit_lookup,       // used to get data_index
@@ -591,13 +593,14 @@ pre_inf_naa_main(__constant  RenderSceneInfo    * linfo,
   AuxArgs aux_args;
   aux_args.linfo   = linfo;
   aux_args.alpha   = alpha_array;
-  aux_args.normals_dot_sun = normals_dot_sun;
+  aux_args.radiance_scales = radiance_scales;
+  aux_args.radiance_scales_shadow = radiance_scales;
+  aux_args.radiance_offset = *radiance_offset;
   aux_args.naa_apm = naa_apm_array;
   aux_args.seg_len   = aux_array0;
   aux_args.mean_obs  = aux_array1;
   aux_args.vis_inf = &vis_inf;
   aux_args.pre_inf = &pre_inf;
-  aux_args.irradiance = (*irradiance).s0;
   cast_ray( i, j,
             ray_ox, ray_oy, ray_oz,
             ray_dx, ray_dy, ray_dz,
@@ -615,7 +618,9 @@ pre_inf_naa_main(__constant  RenderSceneInfo    * linfo,
 typedef struct
 {
   __global float*   alpha;
-  __global float16 * normals_dot_sun;
+  __global float16 * radiance_scales;
+  __global float16 * radiance_scales_shadow;
+           float radiance_offset;
   __global float * naa_apm;
   __global int* seg_len;
   __global int* mean_obs;
@@ -628,7 +633,6 @@ typedef struct
            float   norm;
            float*  ray_vis;
            float*  ray_pre;
-           float irradiance;
   __constant RenderSceneInfo * linfo;
 } AuxArgs;
 
@@ -641,9 +645,10 @@ void
 bayes_main_naa(__constant  RenderSceneInfo    * linfo,
                __global    int4               * tree_array,        // tree structure for each block
                __global    float              * alpha_array,       // alpha for each block
-               __global    float16            * normals_dot_sun_array,
+               __global    float16            * radiance_scales,
+               __global    float16            * radiance_scales_shadow,
+               __global    float              * radiance_offset,
                __global    float              * naa_apm_array,
-               __global    float4             * irradiance,
                __global    int                * aux_array0,        // four aux arrays strung together
                __global    int                * aux_array1,        // four aux arrays strung together
                __global    int                * aux_array2,        // four aux arrays strung together
@@ -707,7 +712,9 @@ bayes_main_naa(__constant  RenderSceneInfo    * linfo,
   AuxArgs aux_args;
   aux_args.linfo      = linfo;
   aux_args.alpha      = alpha_array;
-  aux_args.normals_dot_sun = normals_dot_sun_array;
+  aux_args.radiance_scales = radiance_scales;
+  aux_args.radiance_scales_shadow = radiance_scales_shadow;
+  aux_args.radiance_offset = *radiance_offset;
   aux_args.naa_apm    = naa_apm_array;
   aux_args.seg_len    = aux_array0;
   aux_args.mean_obs   = aux_array1;
@@ -720,7 +727,6 @@ bayes_main_naa(__constant  RenderSceneInfo    * linfo,
   aux_args.norm = norm;
   aux_args.ray_vis = &vis;
   aux_args.ray_pre = &pre;
-  aux_args.irradiance = (*irradiance).s0;
   cast_ray( i, j,
             ray_ox, ray_oy, ray_oz,
             ray_dx, ray_dy, ray_dz,

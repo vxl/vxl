@@ -395,17 +395,16 @@ class boxm2_scene_adaptor:
 
     self.write_cache();
 
-  def cpu_batch_compute_normal_albedo(self, sun_az_list, sun_el_list, irrad_list):
+  def cpu_batch_compute_normal_albedo(self, metadata_filename_list, atmospheric_params_filename_list):
     boxm2_batch.init_process("boxm2CppBatchComputeNormalAlbedoProcess")
     boxm2_batch.set_input_from_db(0,self.scene)
     boxm2_batch.set_input_from_db(1,self.cpu_cache)
     boxm2_batch.set_input_from_db(2,self.str_cache)
-    boxm2_batch.set_input_float_array(3,sun_az_list)
-    boxm2_batch.set_input_float_array(4,sun_el_list)
-    boxm2_batch.set_input_float_array(5,irrad_list)
+    boxm2_batch.set_input_string(3,metadata_filename_list)
+    boxm2_batch.set_input_string(4,atmospheric_params_filename_list)
     boxm2_batch.run_process()
 
-  def render_expected_image_naa(self, camera, ni,nj, sun_az,sun_el, irrad):
+  def render_expected_image_naa(self, camera, ni,nj, metadata, atmospheric_params):
     boxm2_batch.init_process("boxm2OclRenderExpectedImageNAAProcess");
     boxm2_batch.set_input_from_db(0,self.device)
     boxm2_batch.set_input_from_db(1,self.scene)
@@ -413,9 +412,8 @@ class boxm2_scene_adaptor:
     boxm2_batch.set_input_from_db(3,camera)
     boxm2_batch.set_input_unsigned(4,ni)
     boxm2_batch.set_input_unsigned(5,nj)
-    boxm2_batch.set_input_float(6,sun_az)
-    boxm2_batch.set_input_float(7,sun_el)
-    boxm2_batch.set_input_float(8,irrad)
+    boxm2_batch.set_input_from_db(6,metadata)
+    boxm2_batch.set_input_from_db(7,atmopsheric_params)
     boxm2_batch.run_process()
     (id,type) = boxm2_batch.commit_output(0)
     exp_image = dbvalue(id,type)
@@ -423,7 +421,7 @@ class boxm2_scene_adaptor:
     mask_image = dbvalue(id,type)
     return(exp_image, mask_image)
 
-  def update_alpha_naa(self, image, mask, camera, sun_az, sun_el, irrad):
+  def update_alpha_naa(self, image, mask, camera, metadata, atmospheric_params):
     boxm2_batch.init_process("boxm2OclUpdateAlphaNAAProcess")
     boxm2_batch.set_input_from_db(0, self.device)
     boxm2_batch.set_input_from_db(1, self.scene)
@@ -431,9 +429,8 @@ class boxm2_scene_adaptor:
     boxm2_batch.set_input_from_db(3, camera)
     boxm2_batch.set_input_from_db(4, image)
     boxm2_batch.set_input_from_db(5, mask)
-    boxm2_batch.set_input_float(6,sun_az)
-    boxm2_batch.set_input_float(7,sun_el)
-    boxm2_batch.set_input_float(8,irrad)
+    boxm2_batch.set_input_from_db(6, metadata)
+    boxm2_batch.set_input_from_db(7, atmospheric_params)
     if not (boxm2_batch.run_process()):
       print("ERROR: run_process() returned False")
     return

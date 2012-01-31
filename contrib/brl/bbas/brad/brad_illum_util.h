@@ -19,6 +19,9 @@
 #include <vnl/vnl_double_4.h>
 #include <vnl/vnl_matrix.h>
 #include <vnl/vnl_vector.h>
+#include <vgl/vgl_vector_3d.h>
+#include <brad/brad_image_metadata.h>
+#include <brad/brad_atmospheric_parameters.h>
 
 bool brad_load_surface_nhbds(vcl_string const& path,
                              vcl_vector<vcl_vector<vnl_matrix<float> > >& nhds);
@@ -100,5 +103,33 @@ void brad_display_illumination_space_vrml(vnl_matrix<double> illum_dirs,
                                           vnl_double_3 degenerate_dir =
                                           vnl_double_3(0,0,0));
 
+double brad_expected_radiance_chavez(double reflectance,
+                                     vgl_vector_3d<double> const& normal, 
+                                     brad_image_metadata const& md, 
+                                     brad_atmospheric_parameters const& atm);
 
+double brad_expected_radiance_chavez(double reflectance,
+                                     vgl_vector_3d<double> const& normal,
+                                     vgl_vector_3d<double> const& sun_dir,
+                                     double T_sun,
+                                     double T_view,
+                                     double solar_irradiance,
+                                     double skylight,
+                                     double airlight);
+
+double brad_expected_reflectance_chavez(double toa_radiance,
+                                        vgl_vector_3d<double> const& normal,
+                                        brad_image_metadata const& md,
+                                        brad_atmospheric_parameters const& atm);
+
+double brad_expected_reflectance_chavez(double toa_radiance,
+                                        vgl_vector_3d<double> const& normal,
+                                        vgl_vector_3d<double> const& sun_dir,
+                                        double T_sun,
+                                        double T_view,
+                                        double solar_irradiance,
+                                        double skylight,
+                                        double airlight);
+      
+                                        
 #endif // brad_illum_util_h_

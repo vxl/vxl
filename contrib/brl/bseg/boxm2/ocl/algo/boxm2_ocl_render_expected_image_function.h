@@ -6,6 +6,8 @@
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/boxm2_block.h>
 #include <boxm2/ocl/boxm2_opencl_cache.h>
+#include <brad/brad_image_metadata.h>
+#include <brad/brad_atmospheric_parameters.h>
 
 float render_expected_image( boxm2_scene_sptr & scene,
                             bocl_device_sptr & device,
@@ -77,8 +79,8 @@ float render_expected_image_naa(  boxm2_scene_sptr & scene,
                                   vcl_size_t * lthreads,
                                   unsigned cl_ni,
                                   unsigned cl_nj,
-                                  bocl_mem_sptr normals_dot_sun,
-                                  bocl_mem_sptr irradiance);
+                                  const brad_image_metadata_sptr metadata,
+                                  const brad_atmospheric_parameters_sptr atm_params);
 
 float render_expected_albedo_normal(  boxm2_scene_sptr & scene,
                                       bocl_device_sptr & device,

@@ -21,6 +21,10 @@
 #include <vil/vil_convert.h>
 #include <boxm2/ocl/algo/boxm2_ocl_camera_converter.h>
 
+#include <brad/brad_illum_util.h>
+#include <brad/brad_image_metadata.h>
+#include <brad/brad_atmospheric_parameters.h>
+
 //brdb stuff
 #include <brdb/brdb_value.h>
 
@@ -32,7 +36,7 @@
 
 namespace boxm2_ocl_update_alpha_naa_process_globals
 {
-  const unsigned n_inputs_  = 9;
+  const unsigned n_inputs_  = 8;
   const unsigned n_outputs_ = 0;
   enum {
       UPDATE_SEGLEN = 0,
@@ -137,9 +141,8 @@ bool boxm2_ocl_update_alpha_naa_process_cons(bprb_func_process& pro)
   input_types_[3] = "vpgl_camera_double_sptr";      //input camera
   input_types_[4] = "vil_image_view_base_sptr";     //input image
   input_types_[5] = "vil_image_view_base_sptr";     //mask image view
-  input_types_[6] = "float";                        // sun azimuth (degrees)
-  input_types_[7] = "float";                        // sun elevation (degrees)
-  input_types_[8] = "float";                        // image irradiance (estimate with bbas_estimate_irradiance_process)
+  input_types_[6] = "brad_image_metadata_sptr";     // image metadata
+  input_types_[7] = "brad_atmospheric_parameters_sptr";  // atmospheric parameters
                                                     
   // process has 1 output:
   // output[0]: scene sptr
@@ -174,9 +177,8 @@ bool boxm2_ocl_update_alpha_naa_process(bprb_func_process& pro)
   vpgl_camera_double_sptr  cam          = pro.get_input<vpgl_camera_double_sptr>(3);
   vil_image_view_base_sptr img          = pro.get_input<vil_image_view_base_sptr>(4);
   vil_image_view_base_sptr mask_sptr    = pro.get_input<vil_image_view_base_sptr>(5);
-  float                 sun_az_degrees  = pro.get_input<float>(6);
-  float                 sun_el_degrees  = pro.get_input<float>(7);
-  float                 image_irrad     = pro.get_input<float>(8);
+  brad_image_metadata_sptr metadata     = pro.get_input<brad_image_metadata_sptr>(6);
+  brad_atmospheric_parameters_sptr atm_params = pro.get_input<brad_atmospheric_parameters_sptr>(7);
 
   //vcl_cout << "BEGIN: bytes in cache = " << opencl_cache->bytes_in_cache() << vcl_endl;
 
@@ -206,13 +208,26 @@ bool boxm2_ocl_update_alpha_naa_process(bprb_func_process& pro)
     vcl_cerr << "ERROR: boxm2_ocl_update_alpha_naa_process: num_normals = " << num_normals << ".  Expected 16" << vcl_endl;
     return false;
   }
-  // convert sun az,el to Euclidean vector
-  double sun_az = sun_az_degrees * vnl_math::pi_over_180;
-  double sun_el = sun_el_degrees * vnl_math::pi_over_180;
-  double sun_x = vcl_sin(sun_az)*vcl_cos(sun_el);
-  double sun_y = vcl_cos(sun_az)*vcl_cos(sun_el);
-  double sun_z = vcl_sin(sun_el);
-  vgl_vector_3d<double> sun_dir(sun_x, sun_y, sun_z);
+
+  // buffers for holding radiance scales per normal
+  float* radiance_scales_buff = new float[num_normals];
+  float* radiance_scales_shadow_buff = new float[num_normals];
+  float* radiance_offset_buff = new float[1];
+  
+  // compute offsets and scale for linear radiance model
+  // compute offset as radiance of surface with 0 reflectance
+  double offset = brad_expected_radiance_chavez(0.0, vgl_vector_3d<double>(0,0,1), *metadata, *atm_params);
+  *radiance_offset_buff = offset;
+  // compute scale factors for each surface normal
+  for (unsigned n=0; n < num_normals; ++n) {
+     // use perfect reflector to compute radiance scale
+     double radiance = brad_expected_radiance_chavez(1.0, normals[n], *metadata, *atm_params);
+     radiance_scales_buff[n] = radiance - offset;
+     brad_image_metadata shadow_metadata = *metadata;
+     shadow_metadata.sun_irradiance_ = 0;
+     double radiance_shadow = brad_expected_radiance_chavez(1.0, normals[n], shadow_metadata, *atm_params);
+     radiance_scales_shadow_buff[n] = radiance_shadow - offset;
+  }
 
   //cache size sanity check
   long binCache = opencl_cache.ptr()->bytes_in_cache();
@@ -281,16 +296,6 @@ bool boxm2_ocl_update_alpha_naa_process(bprb_func_process& pro)
   bocl_mem_sptr ray_o_buff = opencl_cache->alloc_mem(cl_ni*cl_nj*sizeof(cl_float4), ray_origins,"ray_origins buffer");
   bocl_mem_sptr ray_d_buff = opencl_cache->alloc_mem(cl_ni*cl_nj*sizeof(cl_float4), ray_directions,"ray_directions buffer");
   boxm2_ocl_camera_converter::compute_ray_image( device, queue, cam, cl_ni, cl_nj, ray_o_buff, ray_d_buff);
-
-  // buffer holding dot product of normals with sun direction
-  float* normals_dot_sun_buff = new float[num_normals];
-  // fill in normals dot sun_dir
-  for (unsigned int i=0; i<num_normals; ++i) {
-    normals_dot_sun_buff[i] = (float)dot_product(sun_dir, normals[i]);
-    if (normals_dot_sun_buff[i] < 0.0f) {
-      normals_dot_sun_buff[i] = 0.0f;
-    }
-  }
 
   // Visibility, Preinf, Norm, and input image buffers
   float* vis_buff = new float[cl_ni*cl_nj];
@@ -368,8 +373,14 @@ bool boxm2_ocl_update_alpha_naa_process(bprb_func_process& pro)
   bocl_mem_sptr norm_image=opencl_cache->alloc_mem(cl_ni*cl_nj*sizeof(float),norm_buff,"norm image buffer");
   norm_image->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
-  bocl_mem_sptr normals_dot_sun = new bocl_mem(device->context(), normals_dot_sun_buff, sizeof(float)*num_normals,"normals_dot_sun buffer");
-  normals_dot_sun->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
+  bocl_mem_sptr radiance_scales = new bocl_mem(device->context(), radiance_scales_buff, sizeof(float)*num_normals,"radiance scales buffer");
+  radiance_scales->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
+
+  bocl_mem_sptr radiance_scales_shadow = new bocl_mem(device->context(), radiance_scales_shadow_buff, sizeof(float)*num_normals,"shadow radiance scales buffer");
+  radiance_scales_shadow->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
+
+  bocl_mem_sptr radiance_offset = new bocl_mem(device->context(), radiance_offset_buff, sizeof(float),"radiance offset buffer");
+  radiance_offset->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
 
   // Image Dimensions
   int img_dim_buff[4];
@@ -411,10 +422,6 @@ bool boxm2_ocl_update_alpha_naa_process(bprb_func_process& pro)
 
   //vcl_cout << "######  Entering stage loop: bytes in cache = " << opencl_cache->bytes_in_cache() << vcl_endl;
   
-  float irrad_buffer[4]={image_irrad,0.0,0.0,0.0};
-  bocl_mem_sptr irrad = new bocl_mem(device->context(), irrad_buffer, sizeof(cl_float4), "image irradiance buffer");
-  irrad->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
-
   // set arguments
   vcl_vector<boxm2_block_id> vis_order = scene->get_vis_blocks(cam);
   vcl_vector<boxm2_block_id>::iterator id;
@@ -541,9 +548,10 @@ bool boxm2_ocl_update_alpha_naa_process(bprb_func_process& pro)
         kern->set_arg( blk_info );
         kern->set_arg( blk );
         kern->set_arg( alpha );
-        kern->set_arg( normals_dot_sun.ptr() );
+        kern->set_arg( radiance_scales.ptr() );
+        kern->set_arg( radiance_scales_shadow.ptr() );
+        kern->set_arg( radiance_offset.ptr() );
         kern->set_arg( naa_apm );
-        kern->set_arg( irrad.ptr() );
         kern->set_arg( aux0 );
         kern->set_arg( aux1 );
         kern->set_arg( lookup.ptr() );
@@ -585,9 +593,10 @@ bool boxm2_ocl_update_alpha_naa_process(bprb_func_process& pro)
         kern->set_arg( blk_info );
         kern->set_arg( blk );
         kern->set_arg( alpha );
-        kern->set_arg( normals_dot_sun.ptr() );
+        kern->set_arg( radiance_scales.ptr() );
+        kern->set_arg( radiance_scales_shadow.ptr() );
+        kern->set_arg( radiance_offset.ptr() );
         kern->set_arg( naa_apm );
-        kern->set_arg( irrad.ptr() );
         kern->set_arg( aux0 );
         kern->set_arg( aux1 );
         kern->set_arg( aux2 );
@@ -712,6 +721,10 @@ bool boxm2_ocl_update_alpha_naa_process(bprb_func_process& pro)
   delete [] input_buff;
   delete [] ray_origins;
   delete [] ray_directions;
+ 
+  delete [] radiance_scales_buff;
+  delete [] radiance_scales_shadow_buff;
+  delete [] radiance_offset_buff;
 
   vcl_cout<<"Gpu time "<<gpu_time<<" transfer time "<<transfer_time<<vcl_endl;
   clReleaseCommandQueue(queue);

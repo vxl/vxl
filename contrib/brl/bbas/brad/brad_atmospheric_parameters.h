@@ -23,7 +23,7 @@ public:
    //: optical depth of nadir path through atmosphere to ground
    double optical_depth_;
    //: predicted at-sensor radiance value of a horizontal perfect lambertian reflector
-   double predicted_lambertian_max_; // units W m^2 sr^-2 um^-2
+   //double predicted_lambertian_max_; // units W m^2 sr^-2 um^-2
 };
 
 typedef vbl_smart_ptr<brad_atmospheric_parameters> brad_atmospheric_parameters_sptr;

@@ -16,6 +16,9 @@
 #include <boxm2/boxm2_normal_albedo_array.h>
 #include <bpro/core/bbas_pro/bbas_1d_array_float.h>
 
+#include <brad/brad_image_metadata.h>
+#include <brad/brad_atmospheric_parameters.h>
+
 //brdb stuff
 #include <brdb/brdb_value.h>
 #include <boxm2/boxm2_util.h>
@@ -27,7 +30,7 @@
 //: run batch update
 namespace boxm2_cpp_batch_compute_normal_albedo_process_globals
 {
-  const unsigned n_inputs_ = 6;
+  const unsigned n_inputs_ = 5;
   const unsigned n_outputs_ = 0;
 }
 
@@ -39,16 +42,14 @@ bool boxm2_cpp_batch_compute_normal_albedo_process_cons(bprb_func_process& pro)
   // 0) scene
   // 1) cache
   // 2) stream cache
-  // 3) the list of sun elevations
-  // 4) the list of sun azimuths
-  // 5) the list of image irradiances (compute with bbas_estimate_irradiance_process)
+  // 3) name of text file containing list of image_metadata files
+  // 4) name of text file containing list of atmospheric_parameters files
   vcl_vector<vcl_string> input_types_(n_inputs_);
   input_types_[0] = "boxm2_scene_sptr";
   input_types_[1] = "boxm2_cache_sptr";
   input_types_[2] = "boxm2_stream_cache_sptr";
-  input_types_[3] = "bbas_1d_array_float_sptr"; // sun_azimuths (degrees)
-  input_types_[4] = "bbas_1d_array_float_sptr"; // sun_elivations (degrees)
-  input_types_[5] = "bbas_1d_array_float_sptr"; // estimated irradiances (compute with bbas_estimate_irradiance_process)
+  input_types_[3] = "vcl_string"; 
+  input_types_[4] = "vcl_string"; 
 
   // process has 0 outputs:
   vcl_vector<vcl_string>  output_types_(n_outputs_);
@@ -69,11 +70,54 @@ bool boxm2_cpp_batch_compute_normal_albedo_process(bprb_func_process& pro)
   boxm2_scene_sptr scene = pro.get_input<boxm2_scene_sptr>(0);
   boxm2_cache_sptr cache = pro.get_input<boxm2_cache_sptr>(1);
   boxm2_stream_cache_sptr str_cache = pro.get_input<boxm2_stream_cache_sptr>(2);
+  
+  vcl_string md_list_fname = pro.get_input<vcl_string>(3);
+  vcl_string atm_list_fname = pro.get_input<vcl_string>(4);
 
-  bbas_1d_array_float_sptr sun_azims = pro.get_input<bbas_1d_array_float_sptr>(3);
-  bbas_1d_array_float_sptr sun_elevs = pro.get_input<bbas_1d_array_float_sptr>(4);
+  // load metadata and atmopsheric_parameters
+  vcl_vector<brad_image_metadata> metadata;
+  vcl_vector<brad_atmospheric_parameters> atm_params;
 
-  bbas_1d_array_float_sptr irrads = pro.get_input<bbas_1d_array_float_sptr>(5);
+  vcl_ifstream md_list_ifs(md_list_fname.c_str());
+  if (!md_list_ifs.good()) {
+     vcl_cerr << "ERROR reading: " << md_list_fname << vcl_endl;
+     return false;
+  }
+  while (!md_list_ifs.eof()) {
+     vcl_string filename;
+     md_list_ifs >> filename;
+     brad_image_metadata md;
+     vcl_ifstream md_ifs(filename.c_str());
+     if (!md_ifs.good()) {
+        vcl_cerr << "ERROR reading image_metadata file: " << filename << vcl_endl;
+        return false;
+     }
+     md_ifs >> md;
+     metadata.push_back(md);
+  }
+
+  vcl_ifstream atm_list_ifs(atm_list_fname.c_str());
+  if (!atm_list_ifs.good()) {
+     vcl_cerr << "ERROR reading: " << atm_list_fname << vcl_endl;
+     return false;
+  }
+  while (!atm_list_ifs.eof()) {
+     vcl_string filename;
+     atm_list_ifs >> filename;
+     brad_atmospheric_parameters atm;
+     vcl_ifstream atm_ifs(filename.c_str());
+     if (!atm_ifs.good()) {
+        vcl_cerr << "ERROR reading atmospheric_parameters file: " << filename << vcl_endl;
+        return false;
+     }
+     atm_ifs >> atm;
+     atm_params.push_back(atm);
+  }
+  // sanity check
+  if (metadata.size() != atm_params.size()) {
+     vcl_cerr << "ERROR: metadata and atmospheric parameter files are different length" << vcl_endl;
+     return false;
+  }
 
   // iterate the scene block by block and write to output
   vcl_vector<boxm2_block_id> blk_ids = scene->get_block_ids();
@@ -95,7 +139,7 @@ bool boxm2_cpp_batch_compute_normal_albedo_process(bprb_func_process& pro)
 
     bool update_alpha = false;
     boxm2_compute_normal_albedo_functor data_functor(update_alpha);
-    data_functor.init_data(sun_azims, sun_elevs, irrads, str_cache, alpha, na_model_data);
+    data_functor.init_data(metadata, atm_params, str_cache, alpha, na_model_data);
 
     int na_model_TypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_NORMAL_ALBEDO_ARRAY>::prefix());
     int data_buff_length = (int) (na_model_data->buffer_length()/na_model_TypeSize);

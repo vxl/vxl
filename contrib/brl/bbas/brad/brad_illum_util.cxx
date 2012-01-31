@@ -4,6 +4,7 @@
 #include <vcl_cassert.h>
 #include <vcl_cmath.h>
 #include <vgl/algo/vgl_rotation_3d.h>
+#include <vgl/vgl_vector_3d.h>
 #include <vnl/vnl_double_3.h>
 #include <vnl/vnl_quaternion.h>
 #include <vnl/algo/vnl_svd.h>
@@ -11,6 +12,8 @@
 #include <vcl_iostream.h>
 #include <vnl/vnl_cross.h>
 #include <brad/brad_illum_cost_function.h>
+#include <brad/brad_image_metadata.h>
+#include <brad/brad_atmospheric_parameters.h>
 
 bool brad_load_surface_nhbds(vcl_string const& path,
                              vcl_vector<vcl_vector<vnl_matrix<float> > >& nhds)
@@ -766,3 +769,82 @@ void  brad_display_illumination_space_vrml(vnl_matrix<double> illum_dirs,
       << "}\n";
   str.close();
 }
+
+
+double brad_expected_radiance_chavez(double reflectance,
+                                     vgl_vector_3d<double> const& normal, 
+                                     brad_image_metadata const& md, 
+                                     brad_atmospheric_parameters const& atm)
+{
+   double deg2rad = vnl_math::pi_over_180;
+   double sun_az = md.sun_azimuth_ * deg2rad;
+   double sun_el = md.sun_elevation_ * deg2rad;
+   double view_el = md.view_elevation_ * deg2rad;
+   vgl_vector_3d<double> sun_dir(vcl_sin(sun_az)*vcl_cos(sun_el),
+                                 vcl_cos(sun_az)*vcl_cos(sun_el),
+                                 vcl_sin(sun_el));
+
+   double T_sun = vcl_exp(-atm.optical_depth_ / sun_dir.z());
+   double T_view = vcl_exp(-atm.optical_depth_ / vcl_sin(view_el));
+
+   return brad_expected_radiance_chavez(reflectance, normal, sun_dir, T_sun, T_view, md.sun_irradiance_, atm.skylight_, atm.airlight_);
+}
+
+double brad_expected_radiance_chavez(double reflectance,
+                                     vgl_vector_3d<double> const& normal,
+                                     vgl_vector_3d<double> const& sun_dir,
+                                     double T_sun,
+                                     double T_view,
+                                     double solar_irradiance,
+                                     double skylight,
+                                     double airlight)
+{
+   double sun_dot_norm = dot_product(sun_dir, normal);
+   if (sun_dot_norm < 0) {
+      sun_dot_norm = 0;
+   }
+   return reflectance * T_view * (solar_irradiance* sun_dot_norm * T_sun + skylight) / vnl_math::pi  + airlight;
+   
+}
+
+double brad_expected_reflectance_chavez(double toa_radiance,
+                                        vgl_vector_3d<double> const& normal,
+                                        brad_image_metadata const& md,
+                                        brad_atmospheric_parameters const& atm)
+{
+
+   double deg2rad = vnl_math::pi_over_180;
+   double sun_az = md.sun_azimuth_ * deg2rad;
+   double sun_el = md.sun_elevation_ * deg2rad;
+   double view_el = md.view_elevation_ * deg2rad;
+   vgl_vector_3d<double> sun_dir(vcl_sin(sun_az)*vcl_cos(sun_el),
+                                 vcl_cos(sun_az)*vcl_cos(sun_el),
+                                 vcl_sin(sun_el));
+
+   double T_sun = vcl_exp(-atm.optical_depth_ / sun_dir.z());
+   double T_view = vcl_exp(-atm.optical_depth_ / vcl_sin(view_el));
+
+   return brad_expected_reflectance_chavez(toa_radiance, normal, sun_dir, T_sun, T_view, md.sun_irradiance_, atm.skylight_, atm.airlight_);
+}
+
+double brad_expected_reflectance_chavez(double toa_radiance,
+                                        vgl_vector_3d<double> const& normal,
+                                        vgl_vector_3d<double> const& sun_dir,
+                                        double T_sun,
+                                        double T_view,
+                                        double solar_irradiance,
+                                        double skylight,
+                                        double airlight)
+{
+   double sun_dot_norm = dot_product(sun_dir, normal);
+   if (sun_dot_norm < 0) {
+      sun_dot_norm = 0;
+   }
+   double denom = T_view * (solar_irradiance * sun_dot_norm * T_sun + skylight);
+   if (denom < 1e-6) {
+      // reflectance is undefined, set to zero
+      return 0;
+   }
+   return vnl_math::pi * (toa_radiance - airlight) / denom;
+}
+

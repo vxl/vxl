@@ -27,10 +27,12 @@ def radiometrically_calibrate(cropped_image, meta):
   return cropped_img_cal
 
 # estimate atmospheric parameters
-def estimate_atmospheric_parameters(image, metadata):
+def estimate_atmospheric_parameters(image, metadata, mean_reflectance = None):
   boxm2_batch.init_process("bradEstimateAtmosphericParametersProcess")
   boxm2_batch.set_input_from_db(0,image)
   boxm2_batch.set_input_from_db(1,metadata)
+  if mean_reflectance != None:
+     boxm2_batch.set_input_float(2,mean_reflectance)
   boxm2_batch.run_process()
   (id,type) = boxm2_batch.commit_output(0)
   atm_params = dbvalue(id,type)
@@ -47,4 +49,38 @@ def estimate_reflectance(image, metadata, atmospheric_params):
   reflectance_img = dbvalue(id,type)
   return reflectance_img
 
+# save image_metadata
+def save_image_metadata(metadata, filename):
+  boxm2_batch.init_process("bradSaveImageMetadataProcess")
+  boxm2_batch.set_input_from_db(0,metadata)
+  boxm2_batch.set_input_string(1,filename)
+  boxm2_batch.run_process()
+  return
+ 
+# save atmospheric parameters
+def save_atmospheric_parameters(atm_params, filename):
+  boxm2_batch.init_process("bradSaveAtmosphericParametersProcess")
+  boxm2_batch.set_input_from_db(0,atm_params)
+  boxm2_batch.set_input_string(1,filename)
+  boxm2_batch.run_process()
+  return
+
+# save image_metadata
+def load_image_metadata(filename):
+  boxm2_batch.init_process("bradLoadImageMetadataProcess")
+  boxm2_batch.set_input_string(0,filename)
+  boxm2_batch.run_process()
+  (id,type) = boxm2_batch.commit_output(0)
+  mdata = dbvalue(id,type)
+  return mdata
+
+# save atmospheric parameters
+def load_atmospheric_parameters(filename):
+  boxm2_batch.init_process("bradLoadAtmosphericParametersProcess")
+  boxm2_batch.set_input_string(0,filename)
+  boxm2_batch.run_process()
+  (id,type) = boxm2_batch.commit_output(0)
+  atm_params = dbvalue(id,type)
+  return atm_params
+ 
 

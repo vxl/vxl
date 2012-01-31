@@ -41,5 +41,10 @@ void brad_register::register_process()
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, brad_nitf_read_metadata_process, "bradNITFReadMetadataProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, brad_estimate_atmospheric_parameters_process, "bradEstimateAtmosphericParametersProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, brad_estimate_reflectance_process, "bradEstimateReflectanceProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, brad_save_image_metadata_process, "bradSaveImageMetadataProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, brad_save_atmospheric_parameters_process, "bradSaveAtmosphericParametersProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, brad_load_image_metadata_process, "bradLoadImageMetadataProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, brad_load_atmospheric_parameters_process, "bradLoadAtmosphericParametersProcess");
+
 }
 

@@ -36,6 +36,43 @@ bool brad_estimate_atmospheric_parameters(vil_image_view<float> const& radiance,
   return true;
 }
 
+bool brad_estimate_atmospheric_parameters(vil_image_view<float> const& radiance, brad_image_metadata const& mdata, float mean_reflectance, brad_atmospheric_parameters &params)
+{
+  unsigned int ni = radiance.ni();
+  unsigned int nj = radiance.nj();
+  // find min and max values in image
+  float minval, maxval;
+  vil_math_value_range(radiance,minval,maxval);
+  // compute histogram for image
+  bsta_histogram<float> h(minval, maxval, 512);
+  for(unsigned j = 0; j<nj; ++j)
+    for(unsigned i = 0; i<ni; ++i)
+      h.upcount(radiance(i, j), 1.0f);
+
+  // compute airlight 
+  float frac = 0.0001f;
+  double airlight = h.value_with_area_below(frac);
+   
+  vcl_cout << "min = " << minval << ", airlight = " << airlight << vcl_endl;
+
+  // find image mean
+  float radiance_mean;
+  vil_math_mean(radiance_mean, radiance, 0);
+
+  // fix skylight
+  double skylight = 0.0;
+
+  double deg2rad = vnl_math::pi_over_180;
+  double optical_depth = -vcl_log(vnl_math::pi / (mean_reflectance * mdata.sun_irradiance_ * vcl_sin(deg2rad*mdata.sun_elevation_)) * (radiance_mean - airlight));
+  optical_depth /= (1.0/vcl_sin(deg2rad*mdata.view_elevation_) + 1.0/vcl_sin(deg2rad*mdata.sun_elevation_));
+
+  params.airlight_ = airlight;
+  params.optical_depth_ = optical_depth;
+  params.skylight_ = skylight;
+
+  return true;
+}
+
 
 bool brad_estimate_reflectance_image(vil_image_view<float> const& radiance, brad_image_metadata const& mdata, brad_atmospheric_parameters const& atm_params, vil_image_view<float> &reflectance)
 {

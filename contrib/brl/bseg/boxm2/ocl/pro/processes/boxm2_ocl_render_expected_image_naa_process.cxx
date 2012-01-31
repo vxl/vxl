@@ -29,10 +29,12 @@
 #include <boxm2/ocl/algo/boxm2_ocl_render_expected_image_function.h>
 #include <vul/vul_timer.h>
 
+#include <brad/brad_image_metadata.h>
+#include <brad/brad_atmospheric_parameters.h>
 
 namespace boxm2_ocl_render_expected_image_naa_process_globals
 {
-  const unsigned n_inputs_ = 9;
+  const unsigned n_inputs_ = 8;
   const unsigned n_outputs_ = 2;
   vcl_size_t lthreads[2]={8,8};
 
@@ -105,9 +107,8 @@ bool boxm2_ocl_render_expected_image_naa_process_cons(bprb_func_process& pro)
   input_types_[3] = "vpgl_camera_double_sptr";
   input_types_[4] = "unsigned";
   input_types_[5] = "unsigned";
-  input_types_[6] = "float";
-  input_types_[7] = "float";
-  input_types_[8] = "float";
+  input_types_[6] = "brad_image_metadata_sptr";
+  input_types_[7] = "brad_atmospheric_parameters_sptr";
 
   // process has 1 output:
   // output[0]: scene sptr
@@ -137,9 +138,9 @@ bool boxm2_ocl_render_expected_image_naa_process(bprb_func_process& pro)
   vpgl_camera_double_sptr cam= pro.get_input<vpgl_camera_double_sptr>(3);
   unsigned ni=pro.get_input<unsigned>(4);
   unsigned nj=pro.get_input<unsigned>(5);
-  float sun_az_degrees = pro.get_input<float>(6);
-  float sun_el_degrees = pro.get_input<float>(7);
-  float irradiance = pro.get_input<float>(8);
+
+  brad_image_metadata_sptr metadata = pro.get_input<brad_image_metadata_sptr>(6);
+  brad_atmospheric_parameters_sptr atm_params = pro.get_input<brad_atmospheric_parameters_sptr>(7);
 
   bool found_appearance = false;
   vcl_string data_type,options;
@@ -158,14 +159,6 @@ bool boxm2_ocl_render_expected_image_naa_process(bprb_func_process& pro)
     vcl_cout<<"BOXM2_OCL_RENDER_IMAGE_NAA_PROCESS ERROR: scene doesn't have BOXM2_NORMAL_ALBEDO_ARRAY data type" << vcl_endl;
     return false;
   }
-
-  // convert sun az,el to Euclidean vector
-  double sun_az = sun_az_degrees * vnl_math::pi_over_180;
-  double sun_el = sun_el_degrees * vnl_math::pi_over_180;
-  double sun_x = vcl_sin(sun_az)*vcl_cos(sun_el);
-  double sun_y = vcl_cos(sun_az)*vcl_cos(sun_el);
-  double sun_z = vcl_sin(sun_el);
-  vgl_vector_3d<double> sun_dir(sun_x, sun_y, sun_z);
 
   //: create a command queue.
   int status=0;
@@ -206,28 +199,11 @@ bool boxm2_ocl_render_expected_image_naa_process(bprb_func_process& pro)
   bocl_mem_sptr vis_image=opencl_cache->alloc_mem(cl_ni*cl_nj*sizeof(float),vis_buff,"vis image buffer");
   vis_image->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
-  // buffer holding dot product of normals with sun direction
-  vcl_vector<vgl_vector_3d<double> > normals = boxm2_normal_albedo_array::get_normals();
-  unsigned int num_normals = normals.size();
-  float* normals_dot_sun_buff = new float[num_normals];
-  // fill in normals dot sun_dir
-  for (unsigned int i=0; i<num_normals; ++i) {
-    normals_dot_sun_buff[i] = (float)dot_product(sun_dir, normals[i]);
-    if (normals_dot_sun_buff[i] < 0.0f) {
-      normals_dot_sun_buff[i] = 0.0f;
-    }
-  }
-  bocl_mem_sptr normals_dot_sun = new bocl_mem(device->context(), normals_dot_sun_buff, sizeof(float)*num_normals,"normals_dot_sun buffer");
-  normals_dot_sun->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
-
-  float irrad_buffer[4]={irradiance, 0.0, 0.0, 0.0};
-  bocl_mem_sptr irrad = new bocl_mem(device->context(), irrad_buffer, sizeof(cl_float4), "image irradiance buffer");
-  irrad->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
 
   // run expected image function
   render_expected_image_naa(scene, device, opencl_cache, queue,
                         cam, exp_image, vis_image, exp_img_dim,
-                        kernels[identifier][0], lthreads, cl_ni, cl_nj, normals_dot_sun, irrad);
+                        kernels[identifier][0], lthreads, cl_ni, cl_nj, metadata, atm_params);
 
   // normalize
   {
@@ -269,6 +245,8 @@ bool boxm2_ocl_render_expected_image_naa_process(bprb_func_process& pro)
 
   delete [] vis_buff; 
   delete [] buff;
+
+
   clReleaseCommandQueue(queue);
 
   // store scene smaprt pointer
