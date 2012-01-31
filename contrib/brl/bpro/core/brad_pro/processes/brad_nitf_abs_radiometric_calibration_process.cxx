@@ -48,8 +48,17 @@ bool brad_nitf_abs_radiometric_calibration_process(bprb_func_process& pro)
   brad_image_metadata_sptr md = pro.get_input<brad_image_metadata_sptr>(1);
 
   vil_image_view<float> img = *vil_convert_cast(float(), img_sptr);
+  
+  float min_val, max_val;
+  vil_math_value_range(img, min_val, max_val);
+  vcl_cout << "before calibration img min: " << min_val << " max: " << max_val << vcl_endl;
+  
+  //: calibrate
   vil_math_scale_and_offset_values(img, md->gain_, md->offset_);
-
+  
+  vil_math_value_range(img, min_val, max_val);
+  vcl_cout << "after calibration img min: " << min_val << " max: " << max_val << vcl_endl;
+  
   //output date time info
   pro.set_output_val<vil_image_view_base_sptr>(0, new vil_image_view<float>(img));
   return true;
