@@ -47,7 +47,7 @@ bool brad_estimate_synoptic_function_1d_process(bprb_func_process& pro)
   bbas_1d_array_float_sptr camera_azim_array = pro.get_input<bbas_1d_array_float_sptr>(i++);
   bool surface = pro.get_input<bool>(i++);
 
-  unsigned num_samples=intensities->data_array.size();
+  unsigned num_samples=(unsigned)intensities->data_array.size();
   vcl_vector<double> samples(num_samples,0.0f);
   vcl_vector<double> vis(num_samples,0.0f);
   vcl_vector<double> camera_elev(num_samples,0.0f);
