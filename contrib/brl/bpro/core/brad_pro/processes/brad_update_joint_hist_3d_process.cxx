@@ -17,7 +17,7 @@ namespace bbas_core_brad_update_hist
                            bsta_joint_histogram_3d<float>& hist
                           )
   {
-    unsigned n = paths.data_array.size();
+    unsigned n = (unsigned)paths.data_array.size();
 
     vcl_vector<vil_image_resource_sptr> resources;
     for (unsigned i  = 0; i < n; ++i) {
