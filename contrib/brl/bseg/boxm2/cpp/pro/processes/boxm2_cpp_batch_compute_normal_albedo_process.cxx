@@ -86,6 +86,9 @@ bool boxm2_cpp_batch_compute_normal_albedo_process(bprb_func_process& pro)
   while (!md_list_ifs.eof()) {
      vcl_string filename;
      md_list_ifs >> filename;
+     if (filename.length() == 0)
+        continue;
+     vcl_cout << "metadata filename = <" << filename << ">" <<  vcl_endl;
      brad_image_metadata md;
      vcl_ifstream md_ifs(filename.c_str());
      if (!md_ifs.good()) {
@@ -104,6 +107,9 @@ bool boxm2_cpp_batch_compute_normal_albedo_process(bprb_func_process& pro)
   while (!atm_list_ifs.eof()) {
      vcl_string filename;
      atm_list_ifs >> filename;
+     if (filename.length() == 0)
+        continue;
+     vcl_cout << "atmospheric_params filename = <" << filename << ">" <<  vcl_endl;
      brad_atmospheric_parameters atm;
      vcl_ifstream atm_ifs(filename.c_str());
      if (!atm_ifs.good()) {
