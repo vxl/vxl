@@ -15,7 +15,6 @@ static void test_atmospheric_parameters()
    atm.airlight_ = 120.5;
    atm.skylight_ = 28.0;
    atm.optical_depth_ = 0.20;
-   atm.predicted_lambertian_max_ = 160.0;
 
    vcl_stringstream ss;
    ss << atm;
@@ -27,7 +26,6 @@ static void test_atmospheric_parameters()
    TEST_NEAR("i/o test: airlight", atm.airlight_,atm2.airlight_,tol);
    TEST_NEAR("i/o test: skylight", atm.skylight_, atm2.skylight_, tol);
    TEST_NEAR("i/o test: optical_depth",atm.optical_depth_, atm2.optical_depth_, tol);
-   TEST_NEAR("i/o test: predicted_lambertian_max",atm.predicted_lambertian_max_, atm2.predicted_lambertian_max_, tol);
 }
 
 TESTMAIN( test_atmospheric_parameters );
