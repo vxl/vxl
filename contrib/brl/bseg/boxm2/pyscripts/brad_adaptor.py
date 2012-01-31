@@ -49,13 +49,14 @@ def estimate_reflectance(image, metadata, atmospheric_params):
   reflectance_img = dbvalue(id,type)
   return reflectance_img
 
-# save image_metadata
-def save_image_metadata(metadata, filename):
-  boxm2_batch.init_process("bradSaveImageMetadataProcess")
+def find_sun_dir_bin(metadata, output_file):
+  boxm2_batch.init_process("bradSunDirBinProcess");
   boxm2_batch.set_input_from_db(0,metadata)
-  boxm2_batch.set_input_string(1,filename)
-  boxm2_batch.run_process()
-  return
+  boxm2_batch.set_input_string(1,output_file);
+  boxm2_batch.run_process();
+  (bin_id,bin_type)=boxm2_batch.commit_output(0);
+  bin = boxm2_batch.get_output_int(bin_id);
+  return bin
  
 # save atmospheric parameters
 def save_atmospheric_parameters(atm_params, filename):
