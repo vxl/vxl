@@ -159,8 +159,8 @@ bool bsvg_plot_roc_process2(bprb_func_process& pro)
   vcl_vector<float> xs, ys;
   for (vbl_array_1d<float>::iterator iter = tpr_vals->data_array.begin(), iter2 = fpr_vals->data_array.begin(); 
     iter != tpr_vals->data_array.end(); iter++, iter2++) {
-    xs.push_back(*iter);
-    ys.push_back(*iter2);
+    ys.push_back(*iter);
+    xs.push_back(*iter2);
     vcl_cout << "tp: " << *iter << " fp: " << *iter2 << vcl_endl;
   }
   vcl_cout << vcl_endl;
@@ -273,8 +273,8 @@ bool bsvg_roc_plot_add_process(bprb_func_process& pro)
   vcl_vector<float> xs, ys;
   for (vbl_array_1d<float>::iterator iter = tpr_vals->data_array.begin(), iter2 = fpr_vals->data_array.begin(); 
     iter != tpr_vals->data_array.end(); iter++, iter2++) {
-    xs.push_back(*iter);
-    ys.push_back(*iter2);
+    xs.push_back(*iter2);
+    ys.push_back(*iter);
   }
   bsvg_plot* p = dynamic_cast<bsvg_plot*>(doc.ptr());
   p->add_line(xs, ys, color);
