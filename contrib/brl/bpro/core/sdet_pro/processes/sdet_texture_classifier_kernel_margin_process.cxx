@@ -15,11 +15,11 @@ bool sdet_texture_classifier_kernel_margin_process_cons(bprb_func_process& pro)
   // kernel_margin_process takes 1 input:
   vcl_vector<vcl_string> input_types;
   input_types.push_back("vcl_string"); //texton dictionary path
+  pro.set_input_types(input_types);
   // kernel_margin_process has 1 output:
   vcl_vector<vcl_string> output_types;
-  output_types.push_back("unsigned"); // output[0]: kernel margin
-  return pro.set_input_types(input_types)
-      && pro.set_output_types(output_types);
+  output_types.push_back("int");
+  return pro.set_output_types(output_types);
 }
 
 //: generates the edge map
@@ -39,6 +39,6 @@ bool sdet_texture_classifier_kernel_margin_process(bprb_func_process& pro)
   tc.load_dictionary(texton_dict_path);
   unsigned margin = tc.max_filter_radius();
   vcl_cout << "output margin = " << margin << '\n';
-  pro.set_output_val<unsigned>(0, margin);
+  pro.set_output_val<int>(0, (int)margin);
   return true;
 }
