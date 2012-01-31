@@ -42,8 +42,8 @@ bool brad_nitf_read_metadata_process(bprb_func_process& pro)
   vcl_string nitf_img_name = pro.get_input<vcl_string>(0);
   vcl_string meta_folder = pro.get_input<vcl_string>(1);
   
-  brad_image_metadata_sptr md = new brad_image_metadata(nitf_img_name, meta_folder);
-
+  brad_image_metadata_sptr md = new brad_image_metadata;
+  md->parse(nitf_img_name, meta_folder);
   pro.set_output_val<brad_image_metadata_sptr>(0, md);
   return true;
 }
