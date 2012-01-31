@@ -5,6 +5,7 @@
 #include <brad/brad_sun_dir_index.h>
 #include <vnl/vnl_double_3.h>
 #include <vcl_fstream.h>
+#include <brad/brad_image_metadata.h>
 
 //: Constructor
 bool brad_sun_dir_bin_process_cons(bprb_func_process& pro)
@@ -12,8 +13,7 @@ bool brad_sun_dir_bin_process_cons(bprb_func_process& pro)
   //input
   bool ok=false;
   vcl_vector<vcl_string> input_types;
-  input_types.push_back("float");      // sun azimuth
-  input_types.push_back("float");      // sun elevation
+  input_types.push_back("brad_image_metadata_sptr");
   input_types.push_back("vcl_string"); // sun illumination bin file path
   ok = pro.set_input_types(input_types);
   if (!ok) return ok;
@@ -30,15 +30,16 @@ bool brad_sun_dir_bin_process_cons(bprb_func_process& pro)
 bool brad_sun_dir_bin_process(bprb_func_process& pro)
 {
   // Sanity check
-  if (pro.n_inputs()< 3) {
-    vcl_cout << "brad_sun_dir_bin_process: The input number should be 3" << vcl_endl;
+  if (pro.n_inputs()< 2) {
+    vcl_cout << "brad_sun_dir_bin_process: The input number should be 2" << vcl_endl;
     return false;
   }
 
   // get the inputs
   unsigned i=0;
-  double sun_az = pro.get_input<float>(i++);
-  double sun_el = pro.get_input<float>(i++);
+  brad_image_metadata_sptr md = pro.get_input<brad_image_metadata_sptr>(i++);
+  double sun_az = md->sun_azimuth_;
+  double sun_el = md->sun_elevation_;
   vcl_string bin_input_path = pro.get_input<vcl_string>(i);
   vcl_ifstream is(bin_input_path.c_str());
   if (!is.is_open()) {
