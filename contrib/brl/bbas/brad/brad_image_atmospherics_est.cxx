@@ -67,7 +67,7 @@ bool brad_estimate_atmospheric_parameters(vil_image_view<float> const& radiance,
   optical_depth /= (1.0/vcl_sin(deg2rad*mdata.view_elevation_) + 1.0/vcl_sin(deg2rad*mdata.sun_elevation_));
 
   params.airlight_ = airlight;
-  params.optical_depth_ = optical_depth;
+  params.optical_depth_ = vcl_max(0.0, optical_depth);
   params.skylight_ = skylight;
 
   return true;
