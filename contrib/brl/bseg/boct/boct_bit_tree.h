@@ -14,6 +14,7 @@
 // \endverbatim
 
 #include <vgl/vgl_point_3d.h>
+#include <vgl/vgl_box_3d.h>
 #include <vcl_bitset.h>
 #include <vcl_iosfwd.h>
 #include <vcl_vector.h>
@@ -45,6 +46,14 @@ class boct_bit_tree
 
   //: gets the cell center (octree is assumed to be [0,1]x[0,1]x[0,1]
   vgl_point_3d<double> cell_center(int bit_index);
+
+  //: gets the cell bounding box (octree is assumed to be [0,1]x[0,1]x[0,1]
+  vgl_box_3d<double> cell_box(int bit_index, 
+                              vgl_point_3d<double> orig=vgl_point_3d<double>(0,0,0),
+                              double len=1.0); 
+
+  //: returns octree cell length on one side (assumed [0,1]^3)
+  double cell_len(int bit_index);
 
   //: tells you if a valid cell is at bit_index (if and only if its parent is 1)
   bool valid_cell(int bit_index);
