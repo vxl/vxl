@@ -12,7 +12,7 @@ bool brad_save_image_metadata_process_cons(bprb_func_process& pro)
   //input
   bool ok=false;
   vcl_vector<vcl_string> input_types;
-  input_types.push_back("brad_image_metadata_sptr"); 
+  input_types.push_back("brad_image_metadata_sptr");
   input_types.push_back("vcl_string");
   ok = pro.set_input_types(input_types);
   if (!ok) return ok;
@@ -29,16 +29,15 @@ bool brad_save_image_metadata_process(bprb_func_process& pro)
 {
   // Sanity check
   if (pro.n_inputs() != 2) {
-    vcl_cout << "brad_save_image_metadata_process: The input number should be 2" << vcl_endl;
+    vcl_cout << "brad_save_image_metadata_process: The number of inputs should be 2" << vcl_endl;
     return false;
   }
 
   // get the inputs
-  unsigned i=0;
-  //output file name
   brad_image_metadata_sptr metadata = pro.get_input<brad_image_metadata_sptr>(0);
   vcl_string out_file = pro.get_input<vcl_string>(1);
 
+  //output file name
   vcl_ofstream os(out_file.c_str());
   if (!os.is_open()) {
     vcl_cout << "in save_image_metadata_process, couldn't open output file : " << out_file << vcl_endl;
