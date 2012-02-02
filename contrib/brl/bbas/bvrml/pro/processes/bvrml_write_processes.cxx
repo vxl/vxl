@@ -1,11 +1,11 @@
-//This is brl/bbas/bsta/pro/processes/bsta_sigma_normalization_table_process.cxx
+//This is brl/bbas/bvrml/pro/processes/bvrml_write_processes.cxx
+#include <bprb/bprb_func_process.h>
 //:
 // \file
 //   Precompute normalization values for possible sample set sizes,
 //   made into a separate process for fast access and also to avoid optimization routines on GPU
 //   if later processes are run on GPU
 //
-#include <bprb/bprb_func_process.h>
 #include <bprb/bprb_parameters.h>
 #include <bsta/algo/bsta_sigma_normalizer.h>
 
@@ -48,7 +48,7 @@ bool bvrml_write_box_process_cons(bprb_func_process& pro)
               pro.set_output_types(output_types_);
 
   brdb_value_sptr idxw = new brdb_value_t<bool>(1);
-  pro.set_input(7, idxw);  
+  pro.set_input(7, idxw);
   brdb_value_sptr idxr = new brdb_value_t<float>(1.0f);
   pro.set_input(8, idxr);
   brdb_value_sptr idxg = new brdb_value_t<float>(1.0f);
@@ -90,7 +90,7 @@ bool bvrml_write_box_process(bprb_func_process& pro)
   else
     bvrml_write::write_vrml_box(ofs, box, r, g, b, transparency);
   ofs.close();
-  
+
   return true;
 }
 
@@ -130,7 +130,7 @@ bool bvrml_write_perspective_cam_process(bprb_func_process& pro)
   float red = pro.get_input<float>(3);
   float green = pro.get_input<float>(4);
   float blue = pro.get_input<float>(5);
-  
+
   vpgl_perspective_camera<double> *cam = dynamic_cast<vpgl_perspective_camera<double>*>(camera.as_pointer());
   if (!cam) {
     vcl_cerr << "error: could not convert camera input to a vpgl_perspective_camera\n";
@@ -146,7 +146,7 @@ bool bvrml_write_perspective_cam_process(bprb_func_process& pro)
   bvrml_write::write_vrml_sphere(ofs, sp, red, green, blue, 0.0f);
   bvrml_write::write_vrml_line(ofs, cent, axis, rad*10, red, green, blue);
   ofs.close();
-  
+
   return true;
 }
 
@@ -158,7 +158,7 @@ bool bvrml_write_origin_and_axes_process_cons(bprb_func_process& pro)
   vcl_vector<vcl_string> input_types_(2);
   input_types_[0] = "vcl_string";
   input_types_[1] = "float";  // length of the axis lines
-  
+
 
   //output
   vcl_vector<vcl_string> output_types_(0);
@@ -179,7 +179,7 @@ bool bvrml_write_origin_and_axes_process(bprb_func_process& pro)
     //get the inputs
   vcl_string fname = pro.get_input<vcl_string>(0);
   float len = pro.get_input<float>(1);
-  
+
   vcl_ofstream ofs(fname.c_str(), vcl_ios::app);
 
   //: get cam center
@@ -193,7 +193,7 @@ bool bvrml_write_origin_and_axes_process(bprb_func_process& pro)
   bvrml_write::write_vrml_line(ofs, cent, axis_y, len, 0.0f, 1.0f, 0.0f);
   bvrml_write::write_vrml_line(ofs, cent, axis_z, len, 0.0f, 0.0f, 1.0f);
   ofs.close();
-  
+
   return true;
 }
 
@@ -227,7 +227,7 @@ bool bvrml_write_point_process(bprb_func_process& pro)
     vcl_cout << pro.name() << ": Invalid inputs" << vcl_endl;
     return false;
   }
-    
+
   //get the inputs
   vcl_string fname = pro.get_input<vcl_string>(0);
   float x = pro.get_input<float>(1);
@@ -237,7 +237,7 @@ bool bvrml_write_point_process(bprb_func_process& pro)
   float red = pro.get_input<float>(5);
   float green = pro.get_input<float>(6);
   float blue = pro.get_input<float>(7);
-  
+
   vcl_ofstream ofs(fname.c_str(), vcl_ios::app);
 
   //: get cam center
@@ -245,8 +245,7 @@ bool bvrml_write_point_process(bprb_func_process& pro)
   vgl_sphere_3d<float> sp((float)cent.x(), (float)cent.y(), (float)cent.z(), rad);
   bvrml_write::write_vrml_sphere(ofs, sp, red, green, blue, 0.0f);
   ofs.close();
-  
+
   return true;
 }
-
 

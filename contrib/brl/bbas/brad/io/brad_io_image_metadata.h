@@ -1,4 +1,4 @@
-// This is brl/bbas/bsta/io/brad_io_image_metadata.h
+// This is brl/bbas/brad/io/brad_io_image_metadata.h
 #ifndef brad_io_image_metadata_h_
 #define brad_io_image_metadata_h_
 //:

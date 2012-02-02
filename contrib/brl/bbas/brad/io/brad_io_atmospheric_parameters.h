@@ -1,4 +1,4 @@
-// This is brl/bbas/bsta/io/brad_io_atmospheric_parameters.h
+// This is brl/bbas/brad/io/brad_io_atmospheric_parameters.h
 #ifndef brad_io_atmospheric_parameters_h_
 #define brad_io_atmospheric_parameters_h_
 //:
