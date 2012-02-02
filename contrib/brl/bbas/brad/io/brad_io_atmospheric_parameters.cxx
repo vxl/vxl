@@ -1,5 +1,6 @@
 #include "brad_io_atmospheric_parameters.h"
-
+//:
+// \file
 #include <brad/brad_atmospheric_parameters.h>
 #include <vsl/vsl_binary_io.h>
 #include <vcl_iostream.h>

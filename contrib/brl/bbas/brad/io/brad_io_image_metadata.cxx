@@ -1,5 +1,6 @@
 #include "brad_io_image_metadata.h"
-
+//:
+// \file
 #include <brad/brad_image_metadata.h>
 #include <vsl/vsl_binary_io.h>
 #include <vcl_iostream.h>
