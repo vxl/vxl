@@ -10,11 +10,11 @@
 //    Brown University
 //
 //-----------------------------------------------------------------------------
-#include <vbl/vbl_ref_count.h>
 #include <gevd/gevd_param_mixin.h>
 #include <vcl_iosfwd.h>
 #include <vcl_vector.h>
 #include <vsl/vsl_binary_io.h>
+
 class sdet_texture_classifier_params : public gevd_param_mixin
 {
  public:
@@ -46,8 +46,8 @@ class sdet_texture_classifier_params : public gevd_param_mixin
                   float angle_interval,
                   float lambda0,
                   float lambda1,
-                  float laplace_radius, 
-                  float gauss_radius, 
+                  float laplace_radius,
+                  float gauss_radius,
                   float cutoff_per,
                   bool signed_response,
                   bool mag,
@@ -57,9 +57,8 @@ class sdet_texture_classifier_params : public gevd_param_mixin
                   unsigned block_size,
                   float weight_offset);
  public:
-  //
-  // Parameter blocks and parameters
-  //
+  // === Parameter blocks and parameters ===
+
   //: the number of scales used for the anisotropic filters
   unsigned n_scales_;
   //: the scale range for the anisotropic filters
@@ -88,13 +87,12 @@ class sdet_texture_classifier_params : public gevd_param_mixin
   unsigned n_samples_;
   //: the square block size for test images
   unsigned block_size_;
-  //: a factor that controls the weighting of textons that appear in more than
-  // one class
+  //: a factor that controls the weighting of textons that appear in more than one class
   float weight_offset_;
 };
 
 //: Binary save vgl_point_2d to stream.
-void vsl_b_write(vsl_b_ostream &os, 
+void vsl_b_write(vsl_b_ostream &os,
                  const sdet_texture_classifier_params & tcp);
 
 //: Binary load vgl_point_2d from stream.
@@ -105,4 +103,3 @@ void vsl_print_summary(vcl_ostream& os,
                        const sdet_texture_classifier_params & tcp);
 
 #endif // sdet_texture_classifier_params_h_
-

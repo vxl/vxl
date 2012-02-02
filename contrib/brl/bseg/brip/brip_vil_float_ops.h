@@ -56,7 +56,7 @@ class brip_vil_float_ops
                                         float sigma,
                                         float fill = 0.0f);
   //: computes absolute value
-  static vil_image_view<float> 
+  static vil_image_view<float>
     absolute_value(vil_image_view<float> const& input);
 
 #ifdef VIL_CONVOLVE_WITH_MASK_EXISTS // TODO
@@ -165,10 +165,10 @@ class brip_vil_float_ops
 
 
   //: Find anisotropic intensity extrema (Gaussian 2nd derivative). Theta is in degrees
-  // the effect of bright, mag_only and signed response are as follows:
+  //  The effect of bright, mag_only and signed response are as follows:
   //  bright  mag_only signed_response        result
   // ------------------------------------------------
-  //  false    false      false          dark extrema response 
+  //  false    false      false          dark extrema response
   //  false    false      true           signed output(full range)
   //  false    true       false          absolute mag output
   //  false    true       true           invalid
@@ -176,7 +176,7 @@ class brip_vil_float_ops
   //  true     false      true           signed output(full range)
   //  true     true       false          absolute mag output
   //  true     true       true           invalid
-  // 
+  //
 
   static vil_image_view<float> extrema(vil_image_view<float> const& input,
                                        float lambda0, float lambda1,
@@ -193,10 +193,10 @@ class brip_vil_float_ops
   //  If \p lambda0 == \p lambda1 then reduces to the normal extrema operator
   static vil_image_view<float> extrema_rotational(vil_image_view<float> const& input,
                                                   float lambda0, float lambda1,
-                                                  float theta_interval, 
-                                                  bool bright = true, 
-                                                  bool mag_only = false, 
-                                                  bool signed_response = false, 
+                                                  float theta_interval,
+                                                  bool bright = true,
+                                                  bool mag_only = false,
+                                                  bool signed_response = false,
                                                   bool scale_invariant = false,
                                                   bool non_max_suppress = true,
                                                   float cutoff_per = 0.01f);
@@ -212,23 +212,23 @@ class brip_vil_float_ops
   //  Image rotation is applied then separated u, v kernels produce the response.
   static vil_image_view<float> fast_extrema(vil_image_view<float> const& input,
                                             float lambda0, float lambda1,
-                                            float theta, bool bright = true, 
-                                            bool mag_only = false, 
-                                            bool output_response_mask = true, 
-                                            bool signed_response = false, 
-                                            bool scale_invariant = false, 
-                                            bool non_max_suppress = true, 
+                                            float theta, bool bright = true,
+                                            bool mag_only = false,
+                                            bool output_response_mask = true,
+                                            bool signed_response = false,
+                                            bool scale_invariant = false,
+                                            bool non_max_suppress = true,
                                             float cutoff= 0.01f);
 
 
   static vil_image_view<float>& resp,
-    fast_extrema_rotational(vil_image_view<float> const& input, 
+    fast_extrema_rotational(vil_image_view<float> const& input,
                             float lambda0, float lambda1,
-                            float theta_interval, 
+                            float theta_interval,
                             bool bright =false,
-                            bool mag_only = false, 
+                            bool mag_only = false,
                             bool signed_response =true,
-                            bool scale_invariant = true, 
+                            bool scale_invariant = true,
                             bool non_max_suppress = false,
                             float cutoff=0.01f);
 
