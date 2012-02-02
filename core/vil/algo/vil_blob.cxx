@@ -65,7 +65,7 @@ namespace
     //: Create a new label;
     LABEL new_label()
     {
-      node n = {store_.size(), 0};
+      node n = {(LABEL)store_.size(), 0};
       store_.push_back(n);
       return n.parent;
     }
