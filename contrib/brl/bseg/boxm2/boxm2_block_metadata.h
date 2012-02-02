@@ -18,6 +18,7 @@
 //
 #include <boxm2/basic/boxm2_block_id.h>
 #include <vgl/vgl_point_3d.h>
+#include <vgl/vgl_box_3d.h>
 #include <vgl/vgl_vector_3d.h>
 #include <vcl_iosfwd.h>
 
@@ -71,6 +72,18 @@ class boxm2_block_metadata: public vbl_ref_count
     int                     max_level_;    //each sub_blocks's max_level (default 4)
     double                  max_mb_;       //each total block mb
     double                  p_init_;       //initialize occupancy probs with this
+
+    //: bounding box for this block
+    vgl_box_3d<double>      bbox(); 
+    vgl_box_3d<double>      bbox(int x, int y, int z) {
+      return vgl_box_3d<double>( local_origin_.x() + x*sub_block_dim_.x(),
+                                 local_origin_.y() + y*sub_block_dim_.y(),
+                                 local_origin_.z() + z*sub_block_dim_.z(),
+                                 local_origin_.x() + (x+1)*sub_block_dim_.x(),
+                                 local_origin_.y() + (y+1)*sub_block_dim_.y(),
+                                 local_origin_.z() + (z+1)*sub_block_dim_.z() );
+    }
+
 };
 //: Smart_Pointer typedef for boxm2_block
 typedef vbl_smart_ptr<boxm2_block_metadata> boxm2_block_metadata_sptr;
