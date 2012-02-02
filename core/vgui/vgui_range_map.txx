@@ -107,12 +107,11 @@ compute_byte_table(const Type min, const Type max, const float gamma,
   else
   {
     //The values have to be shifted by min
-    unsigned long mint =
-      static_cast<unsigned long>(vcl_numeric_limits<Type>::min());
-    unsigned long maxt =
-      static_cast<unsigned long>(vcl_numeric_limits<Type>::max());
-    for (unsigned long i = 0; mint+i <= maxt; ++i)
-      bmap[i] = map_pixel_byte(static_cast<Type>(mint+i), min, max,
+    long mint = static_cast<long>(vcl_numeric_limits<Type>::min());
+    long maxt = static_cast<long>(vcl_numeric_limits<Type>::max());
+    long range = static_cast<long>(maxt-mint);
+    for (long i = 0; i <= range; ++i)
+      bmap[i] = map_pixel_byte(static_cast<Type>(i+mint), min, max,
                                gamma, ratio);
   }
   return bmap;
