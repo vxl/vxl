@@ -2,7 +2,6 @@
 //:
 // \file
 
-#include <vul/vul_file.h>
 #include <vcl_iostream.h>
 #include <vcl_fstream.h>
 #include <vul/vul_awk.h>
@@ -22,32 +21,32 @@
 
 #include <brad/brad_sun_pos.h>
 
-// Construct using nitf and metadata file 
+// Construct using nitf and metadata file
 brad_image_metadata::brad_image_metadata(vcl_string const& nitf_filename, vcl_string const& meta_folder)
 {
   if (!parse(nitf_filename, meta_folder)) {
-    vcl_cerr << "ERROR parsing image metadata " << vcl_endl;
+    vcl_cerr << "ERROR parsing image metadata\n";
   }
-} 
+}
 
 // Write brad_image_metadata to stream
 vcl_ostream&  operator<<(vcl_ostream& s, brad_image_metadata const& md)
 {
-   s << "sun_elevation = " << md.sun_elevation_ << vcl_endl;
-   s << "sun_azimuth = " << md.sun_azimuth_ << vcl_endl;
-   s << "view_elevation = " << md.view_elevation_ << vcl_endl;
-   s << "view_azimuth = " << md.view_azimuth_ << vcl_endl;
-   s << "gain = " << md.gain_ << vcl_endl;
-   s << "offset = " << md.offset_ << vcl_endl; 
-   s << "sun_irradiance = " << md.sun_irradiance_ << vcl_endl;
-   s << "number_of_bits = " << md.number_of_bits_ << vcl_endl;
- 
+   s << "sun_elevation = " << md.sun_elevation_ << '\n'
+     << "sun_azimuth = " << md.sun_azimuth_ << '\n'
+     << "view_elevation = " << md.view_elevation_ << '\n'
+     << "view_azimuth = " << md.view_azimuth_ << '\n'
+     << "gain = " << md.gain_ << '\n'
+     << "offset = " << md.offset_ << '\n'
+     << "sun_irradiance = " << md.sun_irradiance_ << '\n'
+     << "number_of_bits = " << md.number_of_bits_ << vcl_endl;
+
    return s;
 }
 
 // Read brad_image_metadata from stream
 vcl_istream&  operator>>(vcl_istream& s, brad_image_metadata& md)
-{ 
+{
    vcl_string input;
    while (!s.eof()) {
       s >> input;
@@ -95,16 +94,16 @@ bool brad_image_metadata::parse_from_imd(vcl_string const& filename)
     vcl_cerr << "Error opening file " << filename << vcl_endl;
     return false;
   }
-  //: now parse the IMD file
+  // now parse the IMD file
   vul_awk awk(ifs);
   double absCalfact = 1.0;
   double effectiveBand = 1.0;
   for (; awk; ++awk)
   {
     vcl_stringstream linestr(awk.line());
-    vcl_string tag; 
+    vcl_string tag;
     linestr >> tag;
-    
+
     if (tag.compare("absCalFactor") == 0) {
       linestr >> tag;  // read =
       linestr >> absCalfact;
@@ -129,7 +128,7 @@ bool brad_image_metadata::parse_from_pvl(vcl_string const& filename)
 }
 
 //: parse header in nitf image, assumes that metadata files are in the same folder with the image
-//   if meta_folder is not empty, they are searched in that folder as well
+//  If meta_folder is not empty, they are searched in that folder as well
 bool brad_image_metadata::parse(vcl_string const& nitf_filename, vcl_string const& meta_folder)
 {
   vil_image_resource_sptr image = vil_load_image_resource(nitf_filename.c_str());
@@ -161,7 +160,7 @@ bool brad_image_metadata::parse(vcl_string const& nitf_filename, vcl_string cons
     vcl_cerr << "failed to obtain sun parameters info\n";
     return false;
   }
-  
+
   sun_elevation_ = sun_el;
   sun_azimuth_ = sun_az;
 
@@ -176,7 +175,7 @@ bool brad_image_metadata::parse(vcl_string const& nitf_filename, vcl_string cons
 
   double solar_irrad = 1.0;
   vcl_string img_info = hdr->get_image_source();
-  if (img_info.find("IKONOS") != vcl_string::npos || nitf_filename.find("IK") != vcl_string::npos) 
+  if (img_info.find("IKONOS") != vcl_string::npos || nitf_filename.find("IK") != vcl_string::npos)
     solar_irrad = 1375.8;
   else if (img_info.find("GeoEye-1") != vcl_string::npos)  // OZGE TODO: check this one
     solar_irrad = 1617;
@@ -184,14 +183,14 @@ bool brad_image_metadata::parse(vcl_string const& nitf_filename, vcl_string cons
     solar_irrad = 1381.7;
   else if (img_info.find("WorldView") != vcl_string::npos || nitf_filename.find("WV") != vcl_string::npos)
     solar_irrad = 1580.814;
-  else 
+  else
     vcl_cerr << "Cannot find satellite name for: " << img_info << " in NITF: " << nitf_filename;
   vcl_cout << "solar_irrad: " << solar_irrad << vcl_endl;
-  //: set sun irradiance using Eart-Sun distance
+  // set sun irradiance using Eart-Sun distance
   double d = brad_sun_distance(year, month, day, hour, min);
   sun_irradiance_ = solar_irrad/(d*d);
 
-  // compute satellite az,el values for center of image 
+  // compute satellite az,el values for center of image
   vpgl_nitf_rational_camera nitf_cam(nitf_image, false);
   double off_u, off_v;
   nitf_cam.image_offset(off_u, off_v);
@@ -205,7 +204,7 @@ bool brad_image_metadata::parse(vcl_string const& nitf_filename, vcl_string cons
   // determine direction to camera
   vgl_vector_3d<double> to_camera;
   vpgl_backproject::direction_to_camera(local_cam, vgl_point_3d<double>(0,0,0), to_camera);
-  // convert vector to az,el 
+  // convert vector to az,el
   const double rad_to_deg = 180.0 / vnl_math::pi;
   // degrees above horizon
   view_elevation_ = vcl_asin(to_camera.z()) * rad_to_deg;
@@ -213,15 +212,15 @@ bool brad_image_metadata::parse(vcl_string const& nitf_filename, vcl_string cons
   view_azimuth_ = vcl_atan2(to_camera.x(), to_camera.y()) * rad_to_deg;
   if (view_azimuth_ < 0)
     view_azimuth_ += 360;
- 
+
   vcl_string dirname = vul_file::dirname(nitf_filename);
 
-  //: set gain offset defaults, some satellites' images do not require any adjustment
+  // set gain offset defaults, some satellites' images do not require any adjustment
   gain_ = 1.0f;
-  offset_ = 0.0f; 
+  offset_ = 0.0f;
 
-  //: look for metadata files with known formats recursively in the directory of the image
-  //  if we find one, check file name to see if it is for the same image, if so parse it
+  // look for metadata files with known formats recursively in the directory of the image
+  // If we find one, check file name to see if it is for the same image, if so parse it
   vcl_string imagename = vul_file::strip_directory(nitf_filename);
   imagename = vul_file::strip_extension(imagename);
   vcl_cout << "imagename: " << imagename << vcl_endl;
@@ -233,10 +232,10 @@ bool brad_image_metadata::parse(vcl_string const& nitf_filename, vcl_string cons
     vcl_string name = vul_file::strip_directory(filename);
     name = vul_file::strip_extension(name);
     vcl_string ext = vul_file::extension(filename);
-    if (imagename.find(name) != vcl_string::npos && 
-         (ext.compare(".IMD") == 0 || ext.compare(".imd") == 0 ||
-          ext.compare(".PVL") == 0 || ext.compare(".pvl") == 0)
-         ) {
+    if (imagename.find(name) != vcl_string::npos &&
+        (ext.compare(".IMD") == 0 || ext.compare(".imd") == 0 ||
+         ext.compare(".PVL") == 0 || ext.compare(".pvl") == 0)
+       ) {
       meta_filename = filename;
       break;
     }
@@ -249,15 +248,15 @@ bool brad_image_metadata::parse(vcl_string const& nitf_filename, vcl_string cons
       vcl_string name = vul_file::strip_directory(filename);
       name = vul_file::strip_extension(name);
       vcl_string ext = vul_file::extension(filename);
-      if (imagename.find(name) != vcl_string::npos && 
-         (ext.compare(".IMD") == 0 || ext.compare(".imd") == 0 ||
-          ext.compare(".PVL") == 0 || ext.compare(".pvl") == 0)
+      if (imagename.find(name) != vcl_string::npos &&
+          (ext.compare(".IMD") == 0 || ext.compare(".imd") == 0 ||
+           ext.compare(".PVL") == 0 || ext.compare(".pvl") == 0)
          ) {
         meta_filename = filename;
         break;
       }
     }
-  } 
+  }
 
   if (meta_filename.size() == 0) {
     // check if this is IKONOS
@@ -268,13 +267,14 @@ bool brad_image_metadata::parse(vcl_string const& nitf_filename, vcl_string cons
       vcl_cout << "An 11-bit Panchromatic IKONOS image, setting gain & offset values according to tech document\n";
       gain_ = (10.0/161.0)/0.403;
       offset_ = 0.0;
-    } else {
+    }
+    else {
       vcl_cout << "could not set gain and offset for " << imagename << vcl_endl;
     }
     vcl_cout << *this;
     return true;
   }
-  
+
   vcl_string ext = vul_file::extension(meta_filename);
   if (ext.compare(".IMD") == 0 || ext.compare(".imd") == 0)
     parse_from_imd(meta_filename);
