@@ -15,15 +15,17 @@
 
 class brad_atmospheric_parameters : public vbl_ref_count
 {
-public:
+ public:
    //: upwelled radiance 
    double airlight_; // units W m^-2 sr^-2 um^-2
    //: downwelled irradiance 
    double skylight_; // units W m^-2 um^-2
    //: optical depth of nadir path through atmosphere to ground
    double optical_depth_;
+#if 0
    //: predicted at-sensor radiance value of a horizontal perfect lambertian reflector
-   //double predicted_lambertian_max_; // units W m^2 sr^-2 um^-2
+   double predicted_lambertian_max_; // units W m^2 sr^-2 um^-2
+#endif
 };
 
 typedef vbl_smart_ptr<brad_atmospheric_parameters> brad_atmospheric_parameters_sptr;
