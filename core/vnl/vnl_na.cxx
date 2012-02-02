@@ -9,6 +9,7 @@
 #include <vxl_config.h>
 #include <vcl_istream.h>
 #include <vcl_ios.h>
+#include <vnl/vnl_math.h>
 
 //: A particular qNaN to indicate not available.
 // This returns the bit pattern 0x7ff00000000007a2, as used by Octave and R
@@ -50,7 +51,6 @@ float vnl_na(float)
   return a;
 }
 
-
 //: True if parameter is specific NA qNaN.
 // Tests for bit pattern 0x7ff00000000007a2, as used by Octave and R
 bool vnl_na_isna(double x)
@@ -71,6 +71,21 @@ bool vnl_na_isna(float x)
   return ((*reinterpret_cast<vxl_uint_32*>(&x))&0xffbfffffL) // ignore signalling bit
     == 0x7f8007a2L;
 }
+
+
+
+//: Replace NaNs with NA, leave other values alone.
+double vnl_na_nan_to_na(double v)
+{
+  return vnl_math_isnan(v) ? vnl_na(double()) : v;
+}
+
+//: Replace NaNs with NA, leave other values alone.
+float vnl_na_nan_to_na(float v)
+{
+  return vnl_math_isnan(v) ? vnl_na(float()) : v;
+}
+
 
 //: Read a floating point number or "NA" from a stream.
 template <class T> inline void vnl_na_extract_type(vcl_istream &is, T& x)

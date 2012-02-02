@@ -17,11 +17,14 @@
 
 template <class T> void test_na_type(T na_v, T qnan_v)
 {
+  TEST("isnan(NaN)", vnl_math_isnan(qnan_v), true);
   TEST("isnan(NA)", vnl_math_isnan(vnl_na(T())), true);
   TEST("isnan(NA2)", vnl_math_isnan(na_v), true);
   TEST("isnan(1/NA2)", vnl_math_isnan(1.0f/na_v), true);
   TEST("isna(NA)", vnl_na_isna(vnl_na(T())), true);
   TEST("isna(NA2)", vnl_na_isna(na_v), true);
+  TEST("!isna(-NA2)", vnl_na_isna(-na_v), false); // This is annoying.
+  TEST("!isna(-1.0 * NA2)", vnl_na_isna(-1.0f * na_v), true);
   TEST("isna(1/NA2)", vnl_na_isna(1.0f/na_v), true);
   TEST("!isfinite(NA)", !vnl_math_isfinite(na_v), true);
   TEST("!isinf(NA)", !vnl_math_isinf(na_v), true);
@@ -31,6 +34,13 @@ template <class T> void test_na_type(T na_v, T qnan_v)
   TEST("!isna(-1.0)", !vnl_na_isna(-1.0), true);
   TEST("!isna(inf)", !vnl_na_isna(vcl_numeric_limits<T>::infinity()), true);
   TEST("!isna(NaN)", !vnl_na_isna(qnan_v), true);
+  TEST("!isna(-NaN)", !vnl_na_isna(-qnan_v), true);
+  TEST("isna(nan_to_na(NaN))", vnl_na_isna(vnl_na_nan_to_na(qnan_v)), true);
+  TEST("!isna(nan_to_na(4.0))", !vnl_na_isna(vnl_na_nan_to_na(T(4.0))), true);
+  TEST("nan_to_na(4.0)", vnl_na_nan_to_na(T(4.0)), T(4.0));
+  TEST("nan_to_na(-inf)", vnl_na_nan_to_na(-vcl_numeric_limits<T>::infinity()), -vcl_numeric_limits<T>::infinity());
+  TEST("isna(nan_to_na(NaN))", vnl_na_isna(vnl_na_nan_to_na(qnan_v)), true);
+  TEST("!isna(nan_to_na(4.0))", !vnl_na_isna(vnl_na_nan_to_na(T(4.0))), true);
 
   {
     T x=0.0;
