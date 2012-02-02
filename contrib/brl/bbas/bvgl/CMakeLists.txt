@@ -18,6 +18,8 @@ SET(bvgl_sources
  bvgl_changes_sptr.h
  bvgl_point_3d_cmp.h
  bvgl_triangle_interpolation_iterator.h  bvgl_triangle_interpolation_iterator.txx
+ bvgl_intersection.h                     bvgl_intersection.txx
+ bvgl_triangle_3d.h                      bvgl_triangle_3d.txx
  bvgl_volume_of_intersection.h           bvgl_volume_of_intersection.txx
  bvgl_ray_pyramid.h                      bvgl_ray_pyramid.cxx
 )
