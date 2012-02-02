@@ -367,10 +367,10 @@ bool vil_tiff_header::compute_pixel_format()
         {
           case 8:
             pix_fmt = VIL_PIXEL_FORMAT_SBYTE;
-            return false;
+            return true;
           case 16:
             pix_fmt = VIL_PIXEL_FORMAT_INT_16;
-            return false;
+            return true;
           case 32:
             pix_fmt = VIL_PIXEL_FORMAT_INT_32;
             return false;
