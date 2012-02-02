@@ -1,5 +1,4 @@
 #include "brad_illum_util.h"
-#include <vgl/vgl_vector_3d.h>
 #include <vcl_fstream.h>
 #include <vcl_cassert.h>
 #include <vcl_cmath.h>
@@ -21,8 +20,7 @@ bool brad_load_surface_nhbds(vcl_string const& path,
   vcl_ifstream is(path.c_str());
   if (!is.is_open())
   {
-    vcl_cerr << "In load_surface_nhbds(.) - "
-             <<"neighborhood path is not valid\n";
+    vcl_cerr << "In load_surface_nhbds(.) - neighborhood path is not valid\n";
     return false;
   }
 
@@ -30,15 +28,13 @@ bool brad_load_surface_nhbds(vcl_string const& path,
   vcl_string temp;
   is >> temp;
   if (temp!="dim:") {
-    vcl_cerr << "In load_surface_nhbds(.) - "
-             <<"file parse error\n";
+    vcl_cerr << "In load_surface_nhbds(.) - file parse error\n";
     return false;
   }
   is >> dim;
   is >> temp;
   if (temp!="n_tracks:") {
-    vcl_cerr << "In load_surface_nhbds(.) - "
-             <<"file parse error\n";
+    vcl_cerr << "In load_surface_nhbds(.) - file parse error\n";
     return false;
   }
   is >> ntracks;
@@ -46,8 +42,7 @@ bool brad_load_surface_nhbds(vcl_string const& path,
     vcl_vector<vnl_matrix<float> > nbs;
     is >> temp;
     if (temp!="n_i:") {
-      vcl_cerr << "In load_surface_nhbds(.) - "
-               <<"file parse error\n";
+      vcl_cerr << "In load_surface_nhbds(.) - file parse error\n";
       return false;
     }
     unsigned ni;
@@ -69,8 +64,7 @@ bool brad_load_illumination_dirs(vcl_string const& path,
   vcl_ifstream is(path.c_str());
   if (!is.is_open())
   {
-    vcl_cerr << "In load_illumination_dirs(.) - "
-             <<"illumination dir path is not valid\n";
+    vcl_cerr << "In load_illumination_dirs(.) - illumination dir path is not valid\n";
     return false;
   }
   ill_dirs.clear();
@@ -78,8 +72,7 @@ bool brad_load_illumination_dirs(vcl_string const& path,
   is >> temp;
   if (temp != "n_dirs:")
   {
-    vcl_cerr << "In load_illumination_dirs(.) - "
-             <<"invalid file syntax\n";
+    vcl_cerr << "In load_illumination_dirs(.) - invalid file syntax\n";
     return false;
   }
   unsigned n_dirs = 0;
@@ -99,8 +92,7 @@ bool brad_load_norm_intensities(vcl_string const& path,
   vcl_ifstream is(path.c_str());
   if (!is.is_open())
   {
-    vcl_cerr << "In load_norm_intensities(.) - "
-             <<"normlized intensity path is not valid\n";
+    vcl_cerr << "In load_norm_intensities(.) - normlized intensity path is not valid\n";
     return false;
   }
   norm_ints.clear();
@@ -108,8 +100,7 @@ bool brad_load_norm_intensities(vcl_string const& path,
   is >> temp;
   if (temp != "n_ints:")
   {
-    vcl_cerr << "In load_norm_intensities(.) - "
-             <<"invalid file syntax\n";
+    vcl_cerr << "In load_norm_intensities(.) - invalid file syntax\n";
     return false;
   }
   unsigned n_ints = 0;
@@ -131,8 +122,7 @@ bool brad_solve_lambertian_model(vcl_vector<vnl_double_3> const& ill_dirs,
   // form the "A" and "b" matrices
   unsigned m = ill_dirs.size(), n = 3;
   if (m<4) {
-    vcl_cerr << "In solve_lambertian_model(.) - "
-             <<"insufficient number of illumination dirs\n";
+    vcl_cerr << "In solve_lambertian_model(.) - insufficient number of illumination dirs\n";
     return false;
   }
   fitting_error.clear();
@@ -772,8 +762,8 @@ void  brad_display_illumination_space_vrml(vnl_matrix<double> illum_dirs,
 
 
 double brad_expected_radiance_chavez(double reflectance,
-                                     vgl_vector_3d<double> const& normal, 
-                                     brad_image_metadata const& md, 
+                                     vgl_vector_3d<double> const& normal,
+                                     brad_image_metadata const& md,
                                      brad_atmospheric_parameters const& atm)
 {
    double deg2rad = vnl_math::pi_over_180;
@@ -804,7 +794,6 @@ double brad_expected_radiance_chavez(double reflectance,
       sun_dot_norm = 0;
    }
    return reflectance * T_view * (solar_irradiance* sun_dot_norm * T_sun + skylight) / vnl_math::pi  + airlight;
-   
 }
 
 double brad_expected_reflectance_chavez(double toa_radiance,
@@ -812,7 +801,6 @@ double brad_expected_reflectance_chavez(double toa_radiance,
                                         brad_image_metadata const& md,
                                         brad_atmospheric_parameters const& atm)
 {
-
    double deg2rad = vnl_math::pi_over_180;
    double sun_az = md.sun_azimuth_ * deg2rad;
    double sun_el = md.sun_elevation_ * deg2rad;
