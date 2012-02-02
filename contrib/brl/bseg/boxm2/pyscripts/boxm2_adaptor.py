@@ -560,7 +560,7 @@ def bundle2scene(bundle_file, img_dir, app_model="boxm2_mog3_grey", out_dir="nvm
   (scene_id, scene_type) = boxm2_batch.commit_output(1);
   rscene = dbvalue(scene_id, scene_type);
   return uscene, rscene; 
-  
+
   
 def save_scene(scene, fname) : 
   boxm2_batch.init_process("boxm2WriteSceneXMLProcess");
@@ -601,12 +601,18 @@ def save_multi_block_scene(params) :
   vox_length = params['vox_length'] if 'vox_length' in params else 1.0; 
   sb_length = params['sub_block_length'] if 'sub_block_length' in params else .125; 
   fname = params['filename'] if 'filename' in params else "scene"; 
-  
+
   #reconcile sub block length vs voxel length
   if 'sub_block_length' in params : 
     vox_length = sb_length / 8.0; 
   elif 'vox_length' in params  : 
     sb_length = vox_length * 8 ; 
+
+  #set up tuples
+  if 'origin' in params: 
+    orig_x, orig_y, orig_z = params['origin']
+  if 'num_vox' in params:
+    num_vox_x, num_vox_y, num_vox_z = params['num_vox']
 
   #run create scene process
   boxm2_batch.init_process("boxm2CreateSceneProcess");
