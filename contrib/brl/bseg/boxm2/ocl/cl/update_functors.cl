@@ -280,21 +280,19 @@ void step_cell_preinf_naa(AuxArgs aux_args, int data_ptr, uchar llid, float d)
     float PI = 0.0f;
     if (cum_len_real > 1.0e-10f)
     {
+        // retrieve albedo and normal probabilities
         __global float16 *albedos = (__global float16*)&(aux_args.naa_apm[data_ptr*32]);
         __global float16 *normal_weights = (__global float16*)&(aux_args.naa_apm[data_ptr*32 + 16]);
 
-        int16 self_shadow = islessequal(*aux_args.normals_dot_sun, (float16)0.0);
-        float16 predictions_shadow = aux_args.radiance_scales_shadow (*albedos) + aux_args.radiance_offset;
-        float16 prediction_sigmas_shadow = SIGMA_SHADOW;
-        float16 predictions_model = aux_args.radiance_scales * (*albedos) + aux_args.radiance_offset;
-        float16 prediction_sigmas_model = (*aux_args.normals_dot_sun)*sqrt(SIGMA_SQRD_ALBEDO + (*albedos)*(*albedos));
+        // compute mean and sigma of radiance value as linear function of albedo and albedo^2, respectively
+        float16 radiance_predictions = *aux_args.radiance_reflectance_factors * (*albedos) + *aux_args.radiance_offsets;
+        float16 radiance_variances = *aux_args.radiance_var_reflectance_sqrd_factors * (*albedos)*(*albedos) + *aux_args.radiance_var_offsets;
+        float16 radiance_sigmas = sqrt(radiance_variances);
+        float16 prediction_densities = gauss_prob_density_f16(&radiance_predictions, mean_obs, &radiance_sigmas);
 
-        float16 predictions = select(predictions_model, predictions_shadow, self_shadow);
-        float16 prediction_sigmas = select(prediction_sigmas_model, prediction_sigmas_shadow, self_shadow);
-        float16 prediction_densities = gauss_prob_density_f16(&predictions, mean_obs, &prediction_sigmas);
+        // take weighted average based on surface normal probabilities
         PI = dot(prediction_densities, *normal_weights);
     }
-
     // Calculate pre and vis infinity
     float diff_omega = exp(-alpha * seg_len_real);
     float vis_prob_end = (*aux_args.vis_inf) * diff_omega;
@@ -329,19 +327,17 @@ void step_cell_bayes_naa(AuxArgs aux_args, int data_ptr, uchar llid, float d)
     float PI = 0.0f;
     if (cum_len_real > 1.0e-10f)
     {
+        // retrieve albedo and normal probabilities
         __global float16 *albedos = (__global float16*)&(aux_args.naa_apm[data_ptr*32]);
         __global float16 *normal_weights = (__global float16*)&(aux_args.naa_apm[data_ptr*32 + 16]);
 
-        int16 self_shadow = islessequal(*aux_args.normals_dot_sun, (float16)0.0);
+        // compute mean and sigma of radiance value as linear function of albedo and albedo^2, respectively
+        float16 radiance_predictions = *aux_args.radiance_reflectance_factors * (*albedos) + *aux_args.radiance_offsets;
+        float16 radiance_variances = *aux_args.radiance_var_reflectance_sqrd_factors * (*albedos)*(*albedos) + *aux_args.radiance_var_offsets;
+        float16 radiance_sigmas = sqrt(radiance_variances);
+        float16 prediction_densities = gauss_prob_density_f16(&radiance_predictions, mean_obs, &radiance_sigmas);
 
-        float16 predictions_shadow = aux_args.radiance_scales_shadow (*albedos) + aux_args.radiance_offset;
-        float16 prediction_sigmas_shadow = SIGMA_SHADOW;
-        float16 predictions_model = aux_args.radiance_scales * (*albedos) + aux_args.radiance_offset;
-        float16 prediction_sigmas_model = (*aux_args.normals_dot_sun)*sqrt(SIGMA_SQRD_ALBEDO + (*albedos)*(*albedos));
-
-        float16 predictions = select(predictions_model, predictions_shadow, self_shadow);
-        float16 prediction_sigmas = select(prediction_sigmas_model, prediction_sigmas_shadow, self_shadow);
-        float16 prediction_densities = gauss_prob_density_f16(&predictions, mean_obs, &prediction_sigmas);
+        // take weighted average based on surface normal probabilities
         PI = dot(prediction_densities, *normal_weights);
     }
 
@@ -353,7 +349,7 @@ void step_cell_bayes_naa(AuxArgs aux_args, int data_ptr, uchar llid, float d)
     float temp  = exp(-alpha * seg_len_real);
 
     // updated pre                      Omega         *  PI
-    (*aux_args.ray_pre) += (*aux_args.ray_vis)*(1.0f-temp)*PI;//(image_vect[llid].z - vis_prob_end) * PI;
+    (*aux_args.ray_pre) += (*aux_args.ray_vis)*(1.0f-temp)*PI;
     // updated visibility probability
     (*aux_args.ray_vis) *= temp;
 

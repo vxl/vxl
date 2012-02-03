@@ -130,6 +130,14 @@ double brad_expected_reflectance_chavez(double toa_radiance,
                                         double solar_irradiance,
                                         double skylight,
                                         double airlight);
-      
-                                        
+
+double brad_radiance_variance_chavez(double reflectance,
+                                     vgl_vector_3d<double> const& normal,
+                                     brad_image_metadata const& md,
+                                     brad_atmospheric_parameters const& atm,
+                                     double reflectance_var,
+                                     double optical_depth_var,
+                                     double skylight_var,
+                                     double airlight_var);
+
 #endif // brad_illum_util_h_

@@ -205,6 +205,8 @@ bool boxm2_ocl_render_expected_image_naa_process(bprb_func_process& pro)
                         cam, exp_image, vis_image, exp_img_dim,
                         kernels[identifier][0], lthreads, cl_ni, cl_nj, metadata, atm_params);
 
+  vcl_cout << "Normalizing " << vcl_endl;
+
   // normalize
   {
     vcl_size_t gThreads[] = {cl_ni,cl_nj};
@@ -219,9 +221,13 @@ bool boxm2_ocl_render_expected_image_naa_process(bprb_func_process& pro)
     normalize_kern->clear_args();
   }
 
+  vcl_cout << "done normalizing " << vcl_endl;
+
   // read out expected image
   exp_image->read_to_buffer(queue);
   vis_image->read_to_buffer(queue);
+  
+  vcl_cout << "done reading images " << vcl_endl;
 
 #if 1 //output a float image by default
   vil_image_view<float>* exp_img_out=new vil_image_view<float>(ni,nj);

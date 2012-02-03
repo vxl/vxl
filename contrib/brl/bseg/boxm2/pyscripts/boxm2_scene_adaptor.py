@@ -413,7 +413,7 @@ class boxm2_scene_adaptor:
     boxm2_batch.set_input_unsigned(4,ni)
     boxm2_batch.set_input_unsigned(5,nj)
     boxm2_batch.set_input_from_db(6,metadata)
-    boxm2_batch.set_input_from_db(7,atmopsheric_params)
+    boxm2_batch.set_input_from_db(7,atmospheric_params)
     boxm2_batch.run_process()
     (id,type) = boxm2_batch.commit_output(0)
     exp_image = dbvalue(id,type)

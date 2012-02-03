@@ -3,10 +3,10 @@
 #include <vgl/vgl_vector_3d.h>
 #include "boxm2_normal_albedo_array.h"
 
-const double boxm2_normal_albedo_array_constants::sigma_shadow = 0.01;
-const double boxm2_normal_albedo_array_constants::sigma_irrad = 0.005;
-const double boxm2_normal_albedo_array_constants::sigma_albedo = 0.05;
-
+const double boxm2_normal_albedo_array_constants::sigma_albedo = 0.02;
+const double boxm2_normal_albedo_array_constants::sigma_airlight= 5.0;
+const double boxm2_normal_albedo_array_constants::sigma_optical_depth = 0.04;
+const double boxm2_normal_albedo_array_constants::sigma_skylight = 10.0;
 
 vcl_vector<vgl_vector_3d<double> > boxm2_normal_albedo_array::get_normals()
 {

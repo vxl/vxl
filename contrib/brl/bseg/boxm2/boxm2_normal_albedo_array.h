@@ -30,9 +30,10 @@ protected:
 class boxm2_normal_albedo_array_constants
 {
 public:
-    static const double sigma_shadow;
-    static const double sigma_irrad;
     static const double sigma_albedo;
+    static const double sigma_optical_depth;
+    static const double sigma_airlight;
+    static const double sigma_skylight;
 };
 
 #endif

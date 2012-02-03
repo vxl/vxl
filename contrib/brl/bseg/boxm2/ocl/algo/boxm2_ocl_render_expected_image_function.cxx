@@ -499,34 +499,39 @@ float render_expected_image_naa(  boxm2_scene_sptr & scene,
       return false;
     }
 
-    // buffers for holding radiance scales per normal
-    float* radiance_scales_buff = new float[num_normals];
-    float* radiance_scales_shadow_buff = new float[num_normals];
-    float* radiance_offset_buff = new float[1];
-    
-    // compute offsets and scale for linear radiance model
-    // compute offset as radiance of surface with 0 reflectance
-    double offset = brad_expected_radiance_chavez(0.0, vgl_vector_3d<double>(0,0,1), *metadata, *atm_params);
-    *radiance_offset_buff = offset;
-    // compute scale factors for each surface normal
-    for (unsigned n=0; n < num_normals; ++n) {
+   double deg2rad = vnl_math::pi_over_180;
+   double sun_az = metadata->sun_azimuth_ * deg2rad;
+   double sun_el = metadata->sun_elevation_ * deg2rad;
+   vgl_vector_3d<double> sun_dir(vcl_sin(sun_az)*vcl_cos(sun_el),
+                                 vcl_cos(sun_az)*vcl_cos(sun_el),
+                                 vcl_sin(sun_el));
+
+   // buffers for holding radiance scales and offsets per normal
+   float* radiance_scales_buff = new float[num_normals];
+   float* radiance_offsets_buff = new float[num_normals];
+  
+   // compute offsets and scale for linear radiance model
+   for (unsigned n=0; n < num_normals; ++n) {
+      // compute offset as radiance of surface with 0 reflectance
+      double offset = brad_expected_radiance_chavez(0.0, normals[n], *metadata, *atm_params);
+      radiance_offsets_buff[n] = offset;
       // use perfect reflector to compute radiance scale
       double radiance = brad_expected_radiance_chavez(1.0, normals[n], *metadata, *atm_params);
       radiance_scales_buff[n] = radiance - offset;
+#if 0
       brad_image_metadata shadow_metadata = *metadata;
       shadow_metadata.sun_irradiance_ = 0;
       double radiance_shadow = brad_expected_radiance_chavez(1.0, normals[n], shadow_metadata, *atm_params);
-      radiance_scales_shadow_buff[n] = radiance_shadow - offset;
-    }
+      radiance_shadow_scales_buff[n] = radiance_shadow - offset;
+#endif
+      vcl_cout << "radiance_scales["<<n<<"] = " << radiance_scales_buff[n] << vcl_endl;
+   }
 
     bocl_mem_sptr radiance_scales = new bocl_mem(device->context(), radiance_scales_buff, sizeof(float)*num_normals,"radiance scales buffer");
     radiance_scales->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
 
-    bocl_mem_sptr radiance_scales_shadow = new bocl_mem(device->context(), radiance_scales_shadow_buff, sizeof(float)*num_normals,"shadow radiance scales buffer");
-    radiance_scales->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
-  
-    bocl_mem_sptr radiance_offset = new bocl_mem(device->context(), radiance_offset_buff, sizeof(float)*num_normals,"radiance offset buffer");
-    radiance_offset->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
+    bocl_mem_sptr radiance_offsets = new bocl_mem(device->context(), radiance_offsets_buff, sizeof(float)*num_normals,"radiance offset buffer");
+    radiance_offsets->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
 
     // Output Array
     float output_arr[100];
@@ -573,8 +578,7 @@ float render_expected_image_naa(  boxm2_scene_sptr & scene,
         kern->set_arg( alpha );
         kern->set_arg( naa_apm );
         kern->set_arg( radiance_scales.ptr() );
-        kern->set_arg( radiance_scales_shadow.ptr() );
-        kern->set_arg( radiance_offset.ptr() );
+        kern->set_arg( radiance_offsets.ptr() );
         kern->set_arg( ray_o_buff.ptr() );
         kern->set_arg( ray_d_buff.ptr() );
         kern->set_arg( exp_image.ptr() );
@@ -607,10 +611,11 @@ float render_expected_image_naa(  boxm2_scene_sptr & scene,
     delete[] ray_origins;
     delete[] ray_directions;
     delete[] radiance_scales_buff;
-    delete[] radiance_scales_shadow_buff;
-    delete[] radiance_offset_buff;
+    //delete[] radiance_scales_shadow_buff;
+    delete[] radiance_offsets_buff;
 
     vcl_cout<<"Gpu time "<<gpu_time<<" transfer time "<<transfer_time<<vcl_endl;
+    vcl_cout << "Returning " << vcl_endl;
     return gpu_time + transfer_time;
 }
 

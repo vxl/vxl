@@ -516,9 +516,10 @@ update_mog3_main(__global RenderSceneInfo  * info,
 typedef struct
 {
   __global float* alpha;
-  __global float16 *radiance_scales;
-  __global float16 *radiance_scales_shadow;
-           float radiance_offset;
+  __global float16 *radiance_reflectance_factors;
+  __global float16 *radiance_offsets;
+  __global float16 *radiance_var_reflectance_sqrd_factors;
+  __global float16 *radiance_var_offsets;
   __global float *naa_apm; // 32 floats per cell
   __global int* seg_len;
   __global int* mean_obs;
@@ -536,9 +537,10 @@ void
 pre_inf_naa_main(__constant  RenderSceneInfo    * linfo,
                  __global    int4               * tree_array,       // tree structure for each block
                  __global    float              * alpha_array,      // alpha for each block
-                 __global    float16            * radiance_scales,        // scales for computing radiance from albedo
-                 __global    float16            * radiance_scales_shadow, // scales for computing radiance from albedo (in shadow)
-                 __global    float              * radiance_offset,        // offset value for computing radiance from albedo
+                 __global    float16            * radiance_reflectance_factors, // scales for computing radiance from albedo 
+                 __global    float16            * radiance_offsets,        // offset value for computing radiance from albedo
+                 __global    float16            * radiance_var_reflectance_sqrd_factors, // scales for computing radiance  variance from albedo^2
+                 __global    float16            * radiance_var_offsets,    // offset values for computing radiance variance from albedo
                  __global    float              * naa_apm_array,       // albedo (per normal) and weights for each block (32 floats per cell)
                  __global    int                * aux_array0,        // four aux arrays strung together
                  __global    int                * aux_array1,        // four aux arrays strung together
@@ -593,9 +595,10 @@ pre_inf_naa_main(__constant  RenderSceneInfo    * linfo,
   AuxArgs aux_args;
   aux_args.linfo   = linfo;
   aux_args.alpha   = alpha_array;
-  aux_args.radiance_scales = radiance_scales;
-  aux_args.radiance_scales_shadow = radiance_scales;
-  aux_args.radiance_offset = *radiance_offset;
+  aux_args.radiance_reflectance_factors = radiance_reflectance_factors;
+  aux_args.radiance_offsets = radiance_offsets;
+  aux_args.radiance_var_reflectance_sqrd_factors = radiance_var_reflectance_sqrd_factors;
+  aux_args.radiance_var_offsets = radiance_var_offsets;
   aux_args.naa_apm = naa_apm_array;
   aux_args.seg_len   = aux_array0;
   aux_args.mean_obs  = aux_array1;
@@ -614,13 +617,47 @@ pre_inf_naa_main(__constant  RenderSceneInfo    * linfo,
 #endif
 
 
+#ifdef PROC_NORM_NAA
+// normalize the pre_inf image...
+//
+__kernel
+void
+proc_norm_image (  __global float* norm_image,
+                   __global float* vis_image,
+                   __global float* pre_image,
+                   __global uint4 * imgdims)
+{
+  // linear global id of the normalization image
+  int i=0;
+  int j=0;
+  i=get_global_id(0);
+  j=get_global_id(1);
+  float vis = vis_image[j*get_global_size(0) + i];
+
+  if (i>=(*imgdims).z && j>=(*imgdims).w && vis<0.0f)
+    return;
+
+  float pre = pre_image[j*get_global_size(0) + i];
+  // "background" distribution is no longer uniform (0,1)
+  const float background_density = 0.001;
+  float norm = (pre+vis*background_density);
+  norm_image[j*get_global_size(0) + i] = norm;
+
+  // the following  quantities have to be re-initialized before
+  // the bayes_ratio kernel is executed
+  vis_image[j*get_global_size(0) + i] = 1.0f; // initial vis = 1.0f
+  pre_image[j*get_global_size(0) + i] = 0.0f; // initial pre = 0.0
+}
+#endif
+
 #ifdef BAYES_NAA
 typedef struct
 {
   __global float*   alpha;
-  __global float16 * radiance_scales;
-  __global float16 * radiance_scales_shadow;
-           float radiance_offset;
+  __global float16 *radiance_reflectance_factors;
+  __global float16 *radiance_offsets;
+  __global float16 *radiance_var_reflectance_sqrd_factors;
+  __global float16 *radiance_var_offsets;
   __global float * naa_apm;
   __global int* seg_len;
   __global int* mean_obs;
@@ -645,9 +682,10 @@ void
 bayes_main_naa(__constant  RenderSceneInfo    * linfo,
                __global    int4               * tree_array,        // tree structure for each block
                __global    float              * alpha_array,       // alpha for each block
-               __global    float16            * radiance_scales,
-               __global    float16            * radiance_scales_shadow,
-               __global    float              * radiance_offset,
+               __global    float16            * radiance_reflectance_factors, // scales for computing radiance from albedo 
+               __global    float16            * radiance_offsets,        // offset value for computing radiance from albedo
+               __global    float16            * radiance_var_reflectance_sqrd_factors, // scales for computing radiance  variance from albedo^2
+               __global    float16            * radiance_var_offsets,    // offset values for computing radiance variance from albedo
                __global    float              * naa_apm_array,
                __global    int                * aux_array0,        // four aux arrays strung together
                __global    int                * aux_array1,        // four aux arrays strung together
@@ -712,9 +750,10 @@ bayes_main_naa(__constant  RenderSceneInfo    * linfo,
   AuxArgs aux_args;
   aux_args.linfo      = linfo;
   aux_args.alpha      = alpha_array;
-  aux_args.radiance_scales = radiance_scales;
-  aux_args.radiance_scales_shadow = radiance_scales_shadow;
-  aux_args.radiance_offset = *radiance_offset;
+  aux_args.radiance_reflectance_factors = radiance_reflectance_factors;
+  aux_args.radiance_offsets = radiance_offsets;
+  aux_args.radiance_var_reflectance_sqrd_factors = radiance_var_reflectance_sqrd_factors;
+  aux_args.radiance_var_offsets = radiance_var_offsets;
   aux_args.naa_apm    = naa_apm_array;
   aux_args.seg_len    = aux_array0;
   aux_args.mean_obs   = aux_array1;

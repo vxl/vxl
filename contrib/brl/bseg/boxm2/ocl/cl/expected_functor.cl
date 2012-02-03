@@ -306,7 +306,7 @@ void step_cell_render_naa(AuxArgs aux_args,
     __global float16 *albedos = (__global float16*)&(aux_args.naa_apm[data_ptr*32]);
     __global float16 *normal_weights = (__global float16*)&(aux_args.naa_apm[data_ptr*32 + 16]);
 
-    float16 predictions = aux_args.radiance_scales * (*albedos) + aux_args.radiance_offset;
+    float16 predictions = *aux_args.radiance_scales * (*albedos) + *aux_args.radiance_offsets;
     expected_int_cell = dot(predictions, *normal_weights);
   }
   float omega=(*vis) * (1.0f - diff_omega);

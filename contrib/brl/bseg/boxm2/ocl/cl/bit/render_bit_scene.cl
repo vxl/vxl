@@ -512,8 +512,8 @@ typedef struct
 {
   __global float* alpha;
   __global float* naa_apm;
-  __global float16* normals_dot_sun;
-  float irradiance;
+  __global float16* radiance_scales;
+  __global float16* radiance_offsets;
   float* expint;
 } AuxArgs;
 
@@ -528,8 +528,8 @@ render_bit_scene( __constant  RenderSceneInfo    * linfo,
                   __global    int4               * tree_array,
                   __global    float              * alpha_array,
                   __global    float              * naa_array,
-                  __global    float16            * normals_dot_sun,
-                  __global    float4             * irradiance,
+                  __global    float16            * radiance_scales,
+                  __global    float16            * radiance_offsets,
                   __global    float4             * ray_origins,
                   __global    float4             * ray_directions,
                   __global    float              * exp_image,      // input image and store vis_inf and pre_inf
@@ -580,8 +580,8 @@ render_bit_scene( __constant  RenderSceneInfo    * linfo,
   AuxArgs aux_args;
   aux_args.alpha  = alpha_array;
   aux_args.naa_apm    = naa_array;
-  aux_args.normals_dot_sun = normals_dot_sun;
-  aux_args.irradiance = (*irradiance).s0;
+  aux_args.radiance_scales = radiance_scales;
+  aux_args.radiance_offsets = radiance_offsets;
   aux_args.expint = &expint;
   cast_ray( i, j,
             ray_ox, ray_oy, ray_oz,

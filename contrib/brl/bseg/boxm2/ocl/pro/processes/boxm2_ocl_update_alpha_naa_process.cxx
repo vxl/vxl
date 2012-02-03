@@ -66,19 +66,9 @@ namespace boxm2_ocl_update_alpha_naa_process_globals
     vcl_string options = opts + " -D INTENSITY  ";
     options += " -D DETERMINISTIC ";
 
-    const double sigma_shadow = boxm2_normal_albedo_array_constants::sigma_shadow;
-    const double sigma_sqrd_irrad =  boxm2_normal_albedo_array_constants::sigma_irrad * boxm2_normal_albedo_array_constants::sigma_irrad;
-    const double sigma_sqrd_albedo = boxm2_normal_albedo_array_constants::sigma_albedo * boxm2_normal_albedo_array_constants::sigma_albedo;
-
-    vcl_stringstream sigma_options_ss;
-    sigma_options_ss.setf(vcl_ios::fixed);
-
-    sigma_options_ss << "-D SIGMA_SQRD_IRRAD=" << sigma_sqrd_irrad << " -D SIGMA_SQRD_ALBEDO=" << sigma_sqrd_albedo << " -D SIGMA_SHADOW=" << sigma_shadow << " " << vcl_ends;
-
     //create all passes
     bocl_kernel* seg_len = new bocl_kernel();
     vcl_string seg_opts = options + "-D SEGLEN -D STEP_CELL=step_cell_seglen(aux_args,data_ptr,llid,d) ";
-    vcl_cout << "seg_opts = " << seg_opts << vcl_endl;
     if (!seg_len->create_kernel(&device->context(),device->device_id(), src_paths, "seg_len_main", seg_opts, "update::seg_len")) {
       vcl_cerr << "ERROR compiling kernel " << vcl_endl;
       return false;
@@ -86,9 +76,7 @@ namespace boxm2_ocl_update_alpha_naa_process_globals
     vec_kernels.push_back(seg_len);
 
     bocl_kernel* pre_inf = new bocl_kernel();
-    vcl_string pre_opts = options + " -D PREINF_NAA -D STEP_CELL=step_cell_preinf_naa(aux_args,data_ptr,llid,d) " + sigma_options_ss.str();
-    vcl_cout << "pre_opts.size = " << pre_opts.size() << vcl_endl;
-    vcl_cout << "pre_opts = " << pre_opts << vcl_endl;
+    vcl_string pre_opts = options + " -D PREINF_NAA -D STEP_CELL=step_cell_preinf_naa(aux_args,data_ptr,llid,d) ";
     if (!pre_inf->create_kernel(&device->context(),device->device_id(), src_paths, "pre_inf_naa_main", pre_opts, "update::pre_inf_naa")) {
       vcl_cerr << "ERROR compiling kernel " << vcl_endl;
       return false;
@@ -97,7 +85,7 @@ namespace boxm2_ocl_update_alpha_naa_process_globals
 
 
     bocl_kernel* proc_img = new bocl_kernel();
-    vcl_string proc_opt = options + " -D PROC_NORM ";
+    vcl_string proc_opt = options + " -D PROC_NORM_NAA ";
     if(!proc_img->create_kernel(&device->context(),device->device_id(), non_ray_src, "proc_norm_image", proc_opt, "update::proc_norm_image")){
       vcl_cerr << "ERROR compling kernel " << vcl_endl;
       return false;
@@ -106,9 +94,7 @@ namespace boxm2_ocl_update_alpha_naa_process_globals
 
 
     bocl_kernel* bayes_main = new bocl_kernel();
-    vcl_string bayes_opt = options + " -D BAYES_NAA -D STEP_CELL=step_cell_bayes_naa(aux_args,data_ptr,llid,d) " + sigma_options_ss.str();
-    vcl_cout << "bayes_opt.size = " << bayes_opt.size() << vcl_endl;
-    vcl_cout << "bayes_opt = " << bayes_opt << vcl_endl;
+    vcl_string bayes_opt = options + " -D BAYES_NAA -D STEP_CELL=step_cell_bayes_naa(aux_args,data_ptr,llid,d) ";
     if(!bayes_main->create_kernel(&device->context(),device->device_id(), src_paths, "bayes_main_naa", bayes_opt, "update::bayes_naa_main")){
       vcl_cerr << "ERROR compiling kernel " << vcl_endl;
       return false;
@@ -133,7 +119,7 @@ bool boxm2_ocl_update_alpha_naa_process_cons(bprb_func_process& pro)
 {
   using namespace boxm2_ocl_update_alpha_naa_process_globals;
 
-  //process takes 9 inputs
+  //process takes 8 inputs
   vcl_vector<vcl_string> input_types_(n_inputs_);
   input_types_[0] = "bocl_device_sptr";
   input_types_[1] = "boxm2_scene_sptr";
@@ -158,6 +144,12 @@ bool boxm2_ocl_update_alpha_naa_process_cons(bprb_func_process& pro)
 
 bool boxm2_ocl_update_alpha_naa_process(bprb_func_process& pro)
 {
+   // variances
+  const double reflectance_var = boxm2_normal_albedo_array_constants::sigma_albedo * boxm2_normal_albedo_array_constants::sigma_albedo;
+  const double airlight_var = boxm2_normal_albedo_array_constants::sigma_airlight * boxm2_normal_albedo_array_constants::sigma_airlight;
+  const double optical_depth_var = boxm2_normal_albedo_array_constants::sigma_optical_depth * boxm2_normal_albedo_array_constants::sigma_optical_depth;
+  const double skylight_var = boxm2_normal_albedo_array_constants::sigma_skylight * boxm2_normal_albedo_array_constants::sigma_skylight;
+
   using namespace boxm2_ocl_update_alpha_naa_process_globals;
   vcl_size_t local_threads[2]={8,8};
   vcl_size_t global_threads[2]={8,8};
@@ -179,8 +171,6 @@ bool boxm2_ocl_update_alpha_naa_process(bprb_func_process& pro)
   vil_image_view_base_sptr mask_sptr    = pro.get_input<vil_image_view_base_sptr>(5);
   brad_image_metadata_sptr metadata     = pro.get_input<brad_image_metadata_sptr>(6);
   brad_atmospheric_parameters_sptr atm_params = pro.get_input<brad_atmospheric_parameters_sptr>(7);
-
-  //vcl_cout << "BEGIN: bytes in cache = " << opencl_cache->bytes_in_cache() << vcl_endl;
 
   if( mask_sptr->ni() != img->ni() || mask_sptr->nj() != img->nj() ) {
     vcl_cerr << "ERROR: mask and image sizes do not match! exiting without update."<< vcl_endl;
@@ -209,24 +199,36 @@ bool boxm2_ocl_update_alpha_naa_process(bprb_func_process& pro)
     return false;
   }
 
+   double deg2rad = vnl_math::pi_over_180;
+   double sun_az = metadata->sun_azimuth_ * deg2rad;
+   double sun_el = metadata->sun_elevation_ * deg2rad;
+   vgl_vector_3d<double> sun_dir(vcl_sin(sun_az)*vcl_cos(sun_el),
+                                 vcl_cos(sun_az)*vcl_cos(sun_el),
+                                 vcl_sin(sun_el));
+
   // buffers for holding radiance scales per normal
   float* radiance_scales_buff = new float[num_normals];
-  float* radiance_scales_shadow_buff = new float[num_normals];
-  float* radiance_offset_buff = new float[1];
+  float* radiance_offsets_buff = new float[num_normals];
+  float* radiance_var_scales_buff = new float[num_normals];
+  float* radiance_var_offsets_buff = new float[num_normals];
   
-  // compute offsets and scale for linear radiance model
-  // compute offset as radiance of surface with 0 reflectance
-  double offset = brad_expected_radiance_chavez(0.0, vgl_vector_3d<double>(0,0,1), *metadata, *atm_params);
-  *radiance_offset_buff = offset;
-  // compute scale factors for each surface normal
+  // compute offsets and scales for linear radiance model
   for (unsigned n=0; n < num_normals; ++n) {
+     // compute offsets as radiance of surface with 0 reflectance
+     double offset = brad_expected_radiance_chavez(0.0, normals[n], *metadata, *atm_params);
+     radiance_offsets_buff[n] = offset;
      // use perfect reflector to compute radiance scale
      double radiance = brad_expected_radiance_chavez(1.0, normals[n], *metadata, *atm_params);
      radiance_scales_buff[n] = radiance - offset;
-     brad_image_metadata shadow_metadata = *metadata;
-     shadow_metadata.sun_irradiance_ = 0;
-     double radiance_shadow = brad_expected_radiance_chavez(1.0, normals[n], shadow_metadata, *atm_params);
-     radiance_scales_shadow_buff[n] = radiance_shadow - offset;
+     // compute offset of radiance variance
+     double var_offset = brad_radiance_variance_chavez(0.0, normals[n], *metadata, *atm_params, reflectance_var, optical_depth_var, skylight_var, airlight_var);
+     radiance_var_offsets_buff[n] = var_offset;
+     // compute scale
+     double var = brad_radiance_variance_chavez(1.0, normals[n], *metadata, *atm_params, reflectance_var, optical_depth_var, skylight_var, airlight_var);
+     radiance_var_scales_buff[n] = var - var_offset;
+     vcl_cout << "---- normal = " << normals[n] << vcl_endl;
+     vcl_cout << "radiance scale = " << radiance << " offset = " << offset << vcl_endl;
+     vcl_cout << "radiance var scale = " << var << " variance offset = " << var_offset << vcl_endl;
   }
 
   //cache size sanity check
@@ -376,11 +378,14 @@ bool boxm2_ocl_update_alpha_naa_process(bprb_func_process& pro)
   bocl_mem_sptr radiance_scales = new bocl_mem(device->context(), radiance_scales_buff, sizeof(float)*num_normals,"radiance scales buffer");
   radiance_scales->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
 
-  bocl_mem_sptr radiance_scales_shadow = new bocl_mem(device->context(), radiance_scales_shadow_buff, sizeof(float)*num_normals,"shadow radiance scales buffer");
-  radiance_scales_shadow->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
+  bocl_mem_sptr radiance_offsets = new bocl_mem(device->context(), radiance_offsets_buff, sizeof(float)*num_normals,"radiance offsets buffer");
+  radiance_offsets->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
 
-  bocl_mem_sptr radiance_offset = new bocl_mem(device->context(), radiance_offset_buff, sizeof(float),"radiance offset buffer");
-  radiance_offset->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
+  bocl_mem_sptr radiance_var_scales = new bocl_mem(device->context(), radiance_var_scales_buff, sizeof(float)*num_normals,"radiance variance scales buffer");
+  radiance_var_scales->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
+
+  bocl_mem_sptr radiance_var_offsets = new bocl_mem(device->context(), radiance_var_offsets_buff, sizeof(float)*num_normals,"radiance variance offsets buffer");
+  radiance_var_offsets->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
 
   // Image Dimensions
   int img_dim_buff[4];
@@ -549,8 +554,9 @@ bool boxm2_ocl_update_alpha_naa_process(bprb_func_process& pro)
         kern->set_arg( blk );
         kern->set_arg( alpha );
         kern->set_arg( radiance_scales.ptr() );
-        kern->set_arg( radiance_scales_shadow.ptr() );
-        kern->set_arg( radiance_offset.ptr() );
+        kern->set_arg( radiance_offsets.ptr() );
+        kern->set_arg( radiance_var_scales.ptr() );
+        kern->set_arg( radiance_var_offsets.ptr() );
         kern->set_arg( naa_apm );
         kern->set_arg( aux0 );
         kern->set_arg( aux1 );
@@ -594,8 +600,9 @@ bool boxm2_ocl_update_alpha_naa_process(bprb_func_process& pro)
         kern->set_arg( blk );
         kern->set_arg( alpha );
         kern->set_arg( radiance_scales.ptr() );
-        kern->set_arg( radiance_scales_shadow.ptr() );
-        kern->set_arg( radiance_offset.ptr() );
+        kern->set_arg( radiance_offsets.ptr() );
+        kern->set_arg( radiance_var_scales.ptr() );
+        kern->set_arg( radiance_var_offsets.ptr() );
         kern->set_arg( naa_apm );
         kern->set_arg( aux0 );
         kern->set_arg( aux1 );
@@ -615,7 +622,8 @@ bool boxm2_ocl_update_alpha_naa_process(bprb_func_process& pro)
         kern->set_local_arg( local_threads[0]*local_threads[1]*sizeof(cl_int) );    //cell pointers,
         kern->set_local_arg( local_threads[0]*local_threads[1]*sizeof(cl_float) ); //cached aux,
         kern->set_local_arg( local_threads[0]*local_threads[1]*10*sizeof(cl_uchar) ); //cumsum buffer, imindex buffer
-                //execute kernel
+
+        //execute kernel
         kern->execute(queue, 2, local_threads, global_threads);
         int status = clFinish(queue);
         check_val(status, MEM_FAILURE, "UPDATE EXECUTE FAILED: " + error_to_string(status));
@@ -659,20 +667,13 @@ bool boxm2_ocl_update_alpha_naa_process(bprb_func_process& pro)
         kern->clear_args();
 
         vcl_cout << "reading alpha" << vcl_endl;
-        //write info to disk
-        //vcl_cout << "alpha cpu buffer = " << alpha->cpu_buffer() << vcl_endl;
-        //vcl_cout << "alpha->buffer() = " << alpha->buffer() << vcl_endl;
-
-        //vcl_cout << "alpha num_bytes = " << alpha->num_bytes() << vcl_endl;
-        //vcl_cout << "bytes in cache = " << opencl_cache->bytes_in_cache() << vcl_endl;
         alpha->read_to_buffer(queue);
-        //vcl_cout << "read_to_buffer returned " << vcl_endl;
 
         clFinish(queue);
 
         vcl_cout << "reading alpha, clFinish returned" << vcl_endl;
       }
-      if (i != UPDATE_CELL ){
+      //if (i != UPDATE_CELL ){
         vcl_cout << "reading images to buffer, i = " << i << vcl_endl;
         //vcl_cout << "bytes in cache = " << opencl_cache->bytes_in_cache() << vcl_endl;
         //read image out to buffer (from gpu)
@@ -683,29 +684,28 @@ bool boxm2_ocl_update_alpha_naa_process(bprb_func_process& pro)
         cl_output->read_to_buffer(queue);
         clFinish(queue);
 
-        //vcl_cout << "done reading images" << vcl_endl;
-        //vcl_cout << "bytes in cache = " << opencl_cache->bytes_in_cache() << vcl_endl;
-      }
+        ///debugging save vis, pre, norm images
+        int idx = 0;
+        vil_image_view<float> vis_view(cl_ni,cl_nj);
+        vil_image_view<float> norm_view(cl_ni,cl_nj);
+        vil_image_view<float> pre_view(cl_ni,cl_nj);
+        for (unsigned c=0;c<cl_nj;++c) {
+          for (unsigned r=0;r<cl_ni;++r) {
+            vis_view(r,c) = vis_buff[idx];
+            norm_view(r,c) = norm_buff[idx];
+            pre_view(r,c) = pre_buff[idx];
+            idx++;
+          }
+        }
+        vil_save( vis_view, "vis_debug.tiff");
+        vil_save( norm_view, "norm_debug.tiff");
+        vil_save( pre_view, "pre_debug.tiff");
+        vcl_cout << "done writing debug images" << vcl_endl;
+
+     // }
     }
   }
 
-
-  ///debugging save vis, pre, norm images
-  int idx = 0;
-  vil_image_view<float> vis_view(cl_ni,cl_nj);
-  vil_image_view<float> norm_view(cl_ni,cl_nj);
-  vil_image_view<float> pre_view(cl_ni,cl_nj);
-  for (unsigned c=0;c<cl_nj;++c) {
-    for (unsigned r=0;r<cl_ni;++r) {
-      vis_view(r,c) = vis_buff[idx];
-      norm_view(r,c) = norm_buff[idx];
-      pre_view(r,c) = pre_buff[idx];
-      idx++;
-    }
-  }
-  vil_save( vis_view, "vis_debug.tiff");
-  vil_save( norm_view, "norm_debug.tiff");
-  vil_save( pre_view, "pre_debug.tiff");
 
   vcl_cout << "deleting buffers " << vcl_endl;
   opencl_cache->unref_mem(ray_o_buff.ptr());
@@ -723,8 +723,9 @@ bool boxm2_ocl_update_alpha_naa_process(bprb_func_process& pro)
   delete [] ray_directions;
  
   delete [] radiance_scales_buff;
-  delete [] radiance_scales_shadow_buff;
-  delete [] radiance_offset_buff;
+  delete [] radiance_offsets_buff;
+  delete [] radiance_var_scales_buff;
+  delete [] radiance_var_offsets_buff;
 
   vcl_cout<<"Gpu time "<<gpu_time<<" transfer time "<<transfer_time<<vcl_endl;
   clReleaseCommandQueue(queue);

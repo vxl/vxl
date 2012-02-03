@@ -793,7 +793,9 @@ double brad_expected_radiance_chavez(double reflectance,
    if (sun_dot_norm < 0) {
       sun_dot_norm = 0;
    }
-   return reflectance * T_view * (solar_irradiance* sun_dot_norm * T_sun + skylight) / vnl_math::pi  + airlight;
+   // compute shape factor
+   double F = 1.0 - 0.5*vcl_sqrt(1.0 - normal.z()*normal.z());
+   return reflectance * T_view * (solar_irradiance* sun_dot_norm * T_sun + F*skylight) / vnl_math::pi  + airlight;
 }
 
 double brad_expected_reflectance_chavez(double toa_radiance,
@@ -828,11 +830,62 @@ double brad_expected_reflectance_chavez(double toa_radiance,
    if (sun_dot_norm < 0) {
       sun_dot_norm = 0;
    }
-   double denom = T_view * (solar_irradiance * sun_dot_norm * T_sun + skylight);
+   // compute shape factor
+   double F = 1.0 - 0.5*vcl_sqrt(1.0 - normal.z()*normal.z());
+   double denom = T_view * (solar_irradiance * sun_dot_norm * T_sun + F*skylight);
    if (denom < 1e-6) {
       // reflectance is undefined, set to zero
       return 0;
    }
-   return vnl_math::pi * (toa_radiance - airlight) / denom;
+   double reflectance = vnl_math::pi * (toa_radiance - airlight) / denom;
+   if (reflectance > 1.0) {
+      reflectance = 1.0;
+   }
+   if (reflectance < 0.0) {
+      reflectance = 0.0;
+   }
+   return reflectance;
+}
+
+double brad_radiance_variance_chavez(double reflectance,
+                                     vgl_vector_3d<double> const& normal,
+                                     brad_image_metadata const& md,
+                                     brad_atmospheric_parameters const& atm,
+                                     double reflectance_var,
+                                     double optical_depth_var,
+                                     double skylight_var,
+                                     double airlight_var)
+{
+   double deg2rad = vnl_math::pi_over_180;
+   double sun_az = md.sun_azimuth_ * deg2rad;
+   double sun_el = md.sun_elevation_ * deg2rad;
+   double view_el = md.view_elevation_ * deg2rad;
+   vgl_vector_3d<double> sun_dir(vcl_sin(sun_az)*vcl_cos(sun_el),
+                                 vcl_cos(sun_az)*vcl_cos(sun_el),
+                                 vcl_sin(sun_el));
+   
+   double T_sun = vcl_exp(-atm.optical_depth_ / sun_dir.z());
+   double T_view = vcl_exp(-atm.optical_depth_ / vcl_sin(view_el));
+
+   double sun_dot_norm = dot_product(sun_dir, normal);
+   if (sun_dot_norm < 0)
+      sun_dot_norm = 0.0;
+   
+   // compute shape factor for surface
+   double F = 1.0 - 0.5*vcl_sqrt(1.0 - normal.z()*normal.z());
+   double dL_dskylight = F*reflectance*T_view/vnl_math::pi;
+   double dL_dairlight = 1.0;
+
+   double dL_doptical_depth = md.sun_irradiance_*reflectance*sun_dot_norm*T_sun*T_view/(vnl_math::pi * sun_dir.z());
+   dL_doptical_depth += (md.sun_irradiance_*sun_dot_norm*T_sun + atm.skylight_*F) * reflectance * T_view / (vnl_math::pi * vcl_sin(view_el));
+
+   double dL_dreflectance = (md.sun_irradiance_ * sun_dot_norm * T_sun + atm.skylight_ * F * T_view) / vnl_math::pi;
+
+   double radiance_var = dL_dskylight*dL_dskylight*skylight_var;
+   radiance_var += dL_dairlight*dL_dairlight*airlight_var;
+   radiance_var += dL_doptical_depth*dL_doptical_depth*optical_depth_var;
+   radiance_var += dL_dreflectance*dL_dreflectance*reflectance_var;
+
+   return radiance_var;
 }
 
