@@ -21,6 +21,7 @@
 #include <boxm2/cpp/algo/boxm2_merge_block_function.h>
 #include <boxm2/cpp/algo/boxm2_mog3_grey_processor.h>
 #include <boxm2/cpp/algo/boxm2_phongs_model_processor.h>
+#include <boxm2/cpp/algo/boxm2_points_to_volume_function.h>
 #include <boxm2/cpp/algo/boxm2_ray_probe_functor.h>
 #include <boxm2/cpp/algo/boxm2_refine_block_function.h>
 #include <boxm2/cpp/algo/boxm2_render_cone_functor.h>
