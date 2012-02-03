@@ -28,6 +28,10 @@ SOURCES += processes/brad_nitf_abs_radiometric_calibration_process.cxx
 SOURCES += processes/brad_nitf_read_metadata_process.cxx
 SOURCES += processes/brad_estimate_atmospheric_parameters_process.cxx
 SOURCES += processes/brad_estimate_reflectance_process.cxx
+SOURCES += processes/brad_save_atmospheric_parameters_process.cxx
+SOURCES += processes/brad_load_atmospheric_parameters_process.cxx
+SOURCES += processes/brad_save_image_metadata_process.cxx
+SOURCES += processes/brad_load_image_metadata_process.cxx
 
 #######################################
 include ${VXLROOT}/config/top-params.mk

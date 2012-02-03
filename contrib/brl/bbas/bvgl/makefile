@@ -14,6 +14,8 @@ MANPAGE_SOURCES += bvgl_point_3d_cmp.h
 MANPAGE_SOURCES += bvgl_triangle_interpolation_iterator.txx
 MANPAGE_SOURCES += bvgl_volume_of_intersection.txx
 SOURCES += bvgl_ray_pyramid.cxx
+MANPAGE_SOURCES += bvgl_intersection.txx
+MANPAGE_SOURCES += bvgl_triangle_3d.txx
 
 #######################################
 include ${VXLROOT}/config/top-params.mk

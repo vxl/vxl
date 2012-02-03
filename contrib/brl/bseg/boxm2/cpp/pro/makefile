@@ -36,6 +36,7 @@ SOURCES += processes/boxm2_cpp_batch_compute_synoptic_function_1d_process.cxx
 SOURCES += processes/boxm2_cpp_compute_derivative_process.cxx
 SOURCES += processes/boxm2_cpp_filter_response_process.cxx
 SOURCES += processes/boxm2_cpp_batch_compute_normal_albedo_process.cxx
+SOURCES += processes/boxm2_cpp_points_to_volume_process.cxx
 
 #######################################
 include ${VXLROOT}/config/top-params.mk
