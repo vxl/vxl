@@ -252,6 +252,9 @@ SOURCE=.\test_bvgl_volume_of_intersection.cxx
 SOURCE=.\test_bvgl_ray_pyramid.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\test_bvgl_intersection.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\test_include.cxx
 # End Source File
 # Begin Source File

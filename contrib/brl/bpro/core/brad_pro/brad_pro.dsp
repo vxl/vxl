@@ -162,6 +162,18 @@ SOURCE=.\processes/brad_estimate_atmospheric_parameters_process.cxx
 SOURCE=.\processes/brad_estimate_reflectance_process.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\processes/brad_save_atmospheric_parameters_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/brad_load_atmospheric_parameters_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/brad_save_image_metadata_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/brad_load_image_metadata_process.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/brdb_value_t+brad_eigenspace_sptr-.cxx
 # End Source File
 # Begin Source File
