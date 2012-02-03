@@ -36,7 +36,7 @@ SET(boxm2_cpp_algo_sources
 
     boxm2_compute_nonsurface_histogram_functor.h
     boxm2_compute_phongs_model_functor.h
-    boxm2_compute_normal_albedo_functor.h
+    boxm2_compute_normal_albedo_functor.h  boxm2_compute_normal_albedo_functor.cxx
     boxm2_points_to_volume_function.h  boxm2_points_to_volume_function.cxx
   )
 AUX_SOURCE_DIRECTORY(Templates boxm2_cpp_algo_sources)
