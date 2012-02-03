@@ -27,6 +27,7 @@ class boct_bit_tree
   //: Default constructor
   boct_bit_tree();
   boct_bit_tree(unsigned char* bits, int num_levels=4);
+  boct_bit_tree(const boct_bit_tree& other);
 
   //: Destructor
   ~boct_bit_tree() {
@@ -83,6 +84,7 @@ class boct_bit_tree
 
   //get bits and data
   unsigned char* get_bits() { return bits_; }
+  unsigned char* get_bits() const { return bits_; }
 
   //: gets pointers stored in bits 10, 11, 12, 13
   int get_data_ptr(bool is_random=false);
@@ -92,6 +94,12 @@ class boct_bit_tree
 
   //: returns bit indices of leaf nodes under rootBit
   vcl_vector<int> get_leaf_bits(int rootBit=0);
+
+  //: returns parent index (invalid for bit_index = 0)
+  int parent_index(int bit_index) { return (bit_index-1)>>3; }
+
+  //: returns bit index of first child
+  int child_index(int bit_index) { return (bit_index<<3) + 1; }
 
   //cached arrays are public - make em const too
   static unsigned char bit_lookup[256];

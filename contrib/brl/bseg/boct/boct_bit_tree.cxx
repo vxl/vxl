@@ -14,6 +14,14 @@ boct_bit_tree::boct_bit_tree()
   vcl_memset(bits_, 0, 16); 
 }
 
+//: copy constructor
+boct_bit_tree::boct_bit_tree(const boct_bit_tree& other)
+{
+  bits_ = new unsigned char[16]; 
+  num_levels_ = other.number_levels();
+  vcl_memcpy(bits_, other.get_bits(), 16);
+}
+
 //: constructor from an array of char bits
 boct_bit_tree::boct_bit_tree(unsigned char* bits, int num_levels)
 {
