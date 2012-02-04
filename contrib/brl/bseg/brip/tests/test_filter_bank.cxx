@@ -7,6 +7,7 @@
 #include <vcl_iostream.h>
 #include <vil/vil_load.h>
 #include <vil/vil_save.h>
+#include <vnl/vnl_math.h>
 static void test_filter_bank()
 {
   unsigned ni = 500, nj = 500;
@@ -25,11 +26,9 @@ static void test_filter_bank()
   vcl_cout << bnk;
   vil_image_view<float>& resp = bnk.response(n_levels-1);
   float v = resp(ni/2, nj/2);
-  TEST_NEAR("filter_bank response", v, -0.016052786f, 0.001f);
+  TEST_NEAR("filter_bank response", v, -0.016099010f, 0.001f);
   unsigned band = bnk.invalid_border();
   vcl_cout << " Interval:" << band << '\n';
-  TEST("invalid_border", band, 258);
+  TEST("invalid_border", band, 259);
 }
- 
-
 TESTMAIN(test_filter_bank);
