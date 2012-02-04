@@ -12,34 +12,32 @@
 #include <vcl_set.h>
 
 //: constructor - populates list of AABBs
-//: "default" constructor
-boxm2_points_to_volume::boxm2_points_to_volume(boxm2_scene_sptr scene, 
-                                               boxm2_cache_sptr cache, 
-                                               imesh_mesh& points) : 
-                                                                      scene_(scene), 
-                                                                      cache_(cache),
-                                                                      points_(points)
+boxm2_points_to_volume::boxm2_points_to_volume(boxm2_scene_sptr scene,
+                                               boxm2_cache_sptr cache,
+                                               imesh_mesh& points)
+: scene_(scene),
+  cache_(cache),
+  points_(points)
 {
   //store mesh triangles
-  vcl_cout<<"Triangulating points: "<<vcl_endl;
-  vcl_auto_ptr<imesh_regular_face_array<3> > meshTris = imesh_triangulate(points_.faces()); 
-  vcl_cout<<"   ... done. "<<vcl_endl;
+  vcl_cout<<"Triangulating points:"<<vcl_endl;
+  vcl_auto_ptr<imesh_regular_face_array<3> > meshTris = imesh_triangulate(points_.faces());
+  vcl_cout<<"   ... done."<<vcl_endl;
 
   //store bvpgl triangles
   const imesh_vertex_array<3>& verts = points_.vertices<3>();
-  for(unsigned i=0; i<meshTris->size(); ++i) {
-    imesh_regular_face<3>& triPts = (*meshTris)[i]; 
+  for (unsigned i=0; i<meshTris->size(); ++i) {
+    imesh_regular_face<3>& triPts = (*meshTris)[i];
     vgl_box_3d<double> triBox;
     triBox.add( verts[triPts[0]] );
     triBox.add( verts[triPts[1]] );
     triBox.add( verts[triPts[2]] );
-    triBoxes_.push_back(triBox); 
+    triBoxes_.push_back(triBox);
 
     //push triangles
     bvgl_triangle_3d<double> tri(verts[triPts[0]], verts[triPts[1]], verts[triPts[2]]);
     tris_.push_back(tri);
   }
-
 }
 
 
@@ -47,7 +45,7 @@ boxm2_points_to_volume::boxm2_points_to_volume(boxm2_scene_sptr scene,
 void boxm2_points_to_volume::fillVolume()
 {
   //grab blocks from scene
-  vcl_map<boxm2_block_id, boxm2_block_metadata> blocks = scene_->blocks(); 
+  vcl_map<boxm2_block_id, boxm2_block_metadata> blocks = scene_->blocks();
 
   //zip through each block
   vcl_map<boxm2_block_id, boxm2_block_metadata>::iterator blk_iter;
@@ -56,33 +54,33 @@ void boxm2_points_to_volume::fillVolume()
     boxm2_block_id id = blk_iter->first;
     vcl_cout<<"Converting Block: "<<id<<vcl_endl;
     boxm2_block *        blk   = cache_->get_block(id);
-    boxm2_data_base *    alpha = cache_->get_data_base(id,boxm2_data_traits<BOXM2_ALPHA>::prefix());
     boxm2_block_metadata data  = blk_iter->second;
-    vcl_size_t           nTrees= blk->trees().size(); 
+    vcl_size_t           nTrees= blk->trees().size();
 
     //array of arrays (one arrya for each tree in block)
     vcl_vector<vcl_vector<float> > datas(nTrees);
     vcl_vector<vcl_vector<float> > datas2(nTrees);
-    this->fillBlockByTri(data, blk,datas); 
-    //for(int i=0; i<nTrees; ++i)
-    //  if(datas.size() != datas2.size())
-    //    vcl_cout<<"Tree "<<i<<" doesn't match..."<<vcl_endl;
-
+    this->fillBlockByTri(data, blk,datas);
+#ifdef DEBUG
+    for (int i=0; i<nTrees; ++i)
+      if (datas.size() != datas2.size())
+        vcl_cout<<"Tree "<<i<<" doesn't match..."<<vcl_endl;
+#endif
     //------ Store alphas in cache ----------
     //count data lengths for this blocr
     vcl_size_t dataLen=0;
-    for(int i=0; i<datas.size(); ++i)
+    for (unsigned int i=0; i<datas.size(); ++i)
       dataLen += datas[i].size();
-    if(dataLen < nTrees)
+    if (dataLen < nTrees)
       vcl_cout<<"NOT ALL TREES HAVE DATA THATS NO GOOD"<<vcl_endl;
 
-    //initilize block data
+    //initialize block data
     boxm2_data_base* newA = new boxm2_data_base(new char[dataLen * sizeof(float) ], dataLen * sizeof(float), id);
-    float* fullAlphas = reinterpret_cast<float*>(newA->data_buffer()); 
+    float* fullAlphas = reinterpret_cast<float*>(newA->data_buffer());
     vcl_size_t c=0;
-    for(int i=0; i<datas.size(); ++i)
-      for(int j=0; j<datas[i].size(); ++j)
-        fullAlphas[c++] = datas[i][j]; 
+    for (unsigned int i=0; i<datas.size(); ++i)
+      for (unsigned int j=0; j<datas[i].size(); ++j)
+        fullAlphas[c++] = datas[i][j];
 
     //Replace data in the cache
     boxm2_cache_sptr cache = boxm2_cache::instance();
@@ -93,31 +91,30 @@ void boxm2_points_to_volume::fillVolume()
 //:iterates over each triangle that intersects with a block, indexing into trees
 void boxm2_points_to_volume::fillBlockByTri(boxm2_block_metadata& data, boxm2_block* blk, vcl_vector<vcl_vector<float> >& alphas)
 {
-  //initialize trees root data to empty 
+  //initialize trees root data to empty
   boxm2_array_3d<uchar16>&  trees = blk->trees();  //trees to refine
-  int Nx = trees.get_row1_count(); 
+  int Nx = trees.get_row1_count();
   int Ny = trees.get_row2_count();
   int Nz = trees.get_row3_count();
 
   //create a vector for each tree in the block (of size one)
-  float emptyRoot = alphaProb(.001f, data.sub_block_dim_.x()); 
-  float fullRoot = alphaProb(.999f, data.sub_block_dim_.x());
+  float emptyRoot = alphaProb(.001f, data.sub_block_dim_.x());
   alphas.resize(trees.size());
-  for(int i=0; i<trees.size(); ++i) 
-    alphas[i].push_back(emptyRoot); 
+  for (unsigned int i=0; i<trees.size(); ++i)
+    alphas[i].push_back(emptyRoot);
 
   //grab local tris
   vcl_vector<vgl_box_3d<double> > localTriBoxes;
   vcl_vector<bvgl_triangle_3d<double> > localTris;
-  this->tris_in_box(data.bbox(), tris_, triBoxes_, localTris, localTriBoxes); 
+  this->tris_in_box(data.bbox(), tris_, triBoxes_, localTris, localTriBoxes);
   vcl_cout<<"  local tris: "<<localTris.size()<<vcl_endl;
   vcl_size_t numInts = 0;
 
   //go through each triangle and expand tree (just root for now)
-  vgl_point_3d<double> blkO = data.local_origin_; 
-  for(int i=0; i<localTris.size(); ++i) {
-    bvgl_triangle_3d<double>& tri = localTris[i]; 
-    vgl_box_3d<double>& triBox = localTriBoxes[i]; 
+  vgl_point_3d<double> blkO = data.local_origin_;
+  for (unsigned int i=0; i<localTris.size(); ++i) {
+    bvgl_triangle_3d<double>& tri = localTris[i];
+    vgl_box_3d<double>& triBox = localTriBoxes[i];
 
     //get index bounds
     double sbLen = data.sub_block_dim_.x();
@@ -129,20 +126,20 @@ void boxm2_points_to_volume::fillBlockByTri(boxm2_block_metadata& data, boxm2_bl
     int maxZ = clamp( (int) ( (triBox.max_z() - blkO.z()) / sbLen )+1, 0, Nz);
 
     //grab local tree
-    for(int x=minX; x<maxX; ++x)
-      for(int y=minY; y<maxY; ++y) 
-        for(int z=minZ; z<maxZ; ++z) {
-          uchar16& tree = trees(x,y,z); 
+    for (int x=minX; x<maxX; ++x)
+      for (int y=minY; y<maxY; ++y)
+        for (int z=minZ; z<maxZ; ++z) {
+          uchar16& tree = trees(x,y,z);
           boct_bit_tree curr_tree( (unsigned char*) tree.data_block(), 4);
           vgl_box_3d<double> datBox = data.bbox(x,y,z);
-          if(bvgl_intersection(datBox, tri)) {
+          if (bvgl_intersection(datBox, tri)) {
             numInts++;
             //make sure tree is refined fully
-            int offset = z + Nz*(y + x*Ny); 
-            refine_tree(curr_tree, datBox, tri, alphas[offset]);  
+            int offset = z + Nz*(y + x*Ny);
+            refine_tree(curr_tree, datBox, tri, alphas[offset]);
             vcl_memcpy((unsigned char*) tree.data_block(), curr_tree.get_bits(),16);
             trees(x,y,z) = tree;
-          } 
+          }
         }
 
   }  //end block triangle loop
@@ -150,36 +147,36 @@ void boxm2_points_to_volume::fillBlockByTri(boxm2_block_metadata& data, boxm2_bl
 
   //make sure each tree has the right index
   vcl_size_t c = 0, currDatPtr = 0, numOne=0;
-  for(int x=0; x<Nx; ++x)
-    for(int y=0; y<Ny; ++y)
-      for(int z=0; z<Nz; ++z) {
+  for (int x=0; x<Nx; ++x)
+    for (int y=0; y<Ny; ++y)
+      for (int z=0; z<Nz; ++z) {
         uchar16& tree = trees(x,y,z);
         boct_bit_tree curr_tree( (unsigned char*) tree.data_block(), 4);
         curr_tree.set_data_ptr(currDatPtr);
         vcl_memcpy((unsigned char*) tree.data_block(), curr_tree.get_bits(),16);
-       
+
         //sanity checks
-        if(alphas[c].size()==1) numOne++;
-        if(curr_tree.num_cells() != alphas[c].size())
+        if (alphas[c].size()==1) numOne++;
+        if (curr_tree.num_cells() != alphas[c].size())
           vcl_cout<<"Tree and alphas dont match in final copy!!! bad!!!!"<<vcl_endl;
 
         currDatPtr += alphas[c].size();
-        ++c; 
+        ++c;
       }
 
   vcl_cout<<" Num size one: "<<numOne<<" of "<<Nx*Ny*Nz<<vcl_endl;
 }
 
 void boxm2_points_to_volume::refine_tree(boct_bit_tree& tree,
-                                         vgl_box_3d<double>& treeBox, 
+                                         vgl_box_3d<double>& treeBox,
                                          bvgl_triangle_3d<double>& tri,
                                          vcl_vector<float>& alpha)
 {
   const int maxCell = 9;
   double blockLen = treeBox.width();
   boct_bit_tree orig(tree);
-  int origSize = tree.num_cells();
-  if(alpha.size() != origSize)
+  unsigned int origSize = tree.num_cells();
+  if (alpha.size() != origSize)
     vcl_cout<<"Alpha size doesnt match orig size. BAD!!!"<<vcl_endl;
 
   //keep track of new cells that intersect
@@ -187,69 +184,69 @@ void boxm2_points_to_volume::refine_tree(boct_bit_tree& tree,
 
   //traverse tree, put data in BFS order
   vcl_queue<int> queue; queue.push(0);
-  while(!queue.empty()) {
+  while (!queue.empty()) {
     int currBit = queue.front(); queue.pop();
-    vgl_box_3d<double> cellBox = tree.cell_box(currBit, treeBox.min_point(), blockLen); 
+    vgl_box_3d<double> cellBox = tree.cell_box(currBit, treeBox.min_point(), blockLen);
 
     //if tri intersects, move onto children
-    if(bvgl_intersection(cellBox, tri))
-    { 
+    if (bvgl_intersection(cellBox, tri))
+    {
       //keep track of new surfaces
-      if(tree.bit_at(currBit)==0)
+      if (tree.bit_at(currBit)==0)
         newSurface.insert(currBit);
 
-      if(currBit < maxCell) {
+      if (currBit < maxCell) {
         //flip currBit to denote children
-        tree.set_bit_at(currBit, true); 
+        tree.set_bit_at(currBit, true);
         int firstChild = tree.child_index(currBit);
-        for(int i=0; i<8; ++i) 
+        for (int i=0; i<8; ++i)
           queue.push(firstChild+i);
       }
     }
   }
 
-  //sanity check
- //if( !newSurface.empty() ) {
- //  vcl_cout<<"  New surfaces: ";
- //  for(vcl_set<int>::iterator i=newSurface.begin(); i!=newSurface.end(); ++i)
- //    vcl_cout<<"  "<<*i<<" ";
- //  vcl_cout<<vcl_endl;
- //}
-
+#ifdef DEBUG //sanity check
+ if ( !newSurface.empty() ) {
+   vcl_cout<<"  New surfaces:";
+   for (vcl_set<int>::iterator i=newSurface.begin(); i!=newSurface.end(); ++i)
+     vcl_cout<<' '<<*i;
+   vcl_cout<<vcl_endl;
+ }
+#endif
   //now make sure the data is in place
   int refineSize = tree.num_cells();
 
   //otherwise zip through the tree in BFS order, setting alpha
   int alphIdx = 0;
-  float fullRoot = alphaProb(.999f, 1.0f); //divide by cellLen 
+  float fullRoot = alphaProb(.999f, 1.0f); //divide by cellLen
   float emptyRoot = alphaProb(.001f, 1.0f); //divide by cellLen
   vcl_vector<float> origAlphas = alpha;
   alpha.resize(refineSize);
   queue.push(0); //should be empty from above
-  while(!queue.empty()) {
+  while (!queue.empty()) {
     int currBit = queue.front(); queue.pop();
 
     //if currBit is a valid cell in the old tree, move it's data into place
-    if(newSurface.find(currBit)!=newSurface.end()) {
+    if (newSurface.find(currBit)!=newSurface.end()) {
       //vcl_cout<<"  Inserting new surface! for "<<currBit<<vcl_endl;
-      float cellLen = blockLen*tree.cell_len(currBit);    
-      alpha[alphIdx] = fullRoot/cellLen; 
+      float cellLen = blockLen*tree.cell_len(currBit);
+      alpha[alphIdx] = fullRoot/cellLen;
     }
-    else if( orig.valid_cell(currBit) ) {
-      alpha[alphIdx] = origAlphas[orig.get_relative_index(currBit)]; 
+    else if ( orig.valid_cell(currBit) ) {
+      alpha[alphIdx] = origAlphas[orig.get_relative_index(currBit)];
     }
     else {
-      float cellLen = blockLen*tree.cell_len(currBit);    
-      alpha[alphIdx] = emptyRoot/cellLen; 
+      float cellLen = blockLen*tree.cell_len(currBit);
+      alpha[alphIdx] = emptyRoot/cellLen;
     }
 
     //tack children onto queue
-    if( tree.bit_at(currBit) && currBit < maxCell ){
+    if ( tree.bit_at(currBit) && currBit < maxCell ){
       int firstChild = tree.child_index(currBit);
-      for(int i=0; i<8; ++i)
+      for (int i=0; i<8; ++i)
         queue.push(firstChild+i);
     }
-    ++alphIdx; 
+    ++alphIdx;
   }
 }
 
@@ -261,20 +258,20 @@ boxm2_points_to_volume::tris_in_box(const vgl_box_3d<double>& bbox,
                                     vcl_vector<bvgl_triangle_3d<double> >& int_tris,
                                     vcl_vector<vgl_box_3d<double> >& int_boxes)
 {
-  if(tris.size() != bboxes.size()) {
-    vcl_cout<<" Triangle intersection not one to one w/ bounding boxes: "<<vcl_endl;
+  if (tris.size() != bboxes.size()) {
+    vcl_cout<<" Triangle intersection not one to one w/ bounding boxes:"<<vcl_endl;
     return;
   }
 
   //use AABBs for faster collision detection
   vcl_vector<bvgl_triangle_3d<double> >::const_iterator tri = tris.begin();
-  vcl_vector<vgl_box_3d<double> >::const_iterator box = bboxes.begin(); 
-  for( ; tri != tris.end(); ++tri, ++box) { 
-    if(!bbox_intersect(*box, bbox))
+  vcl_vector<vgl_box_3d<double> >::const_iterator box = bboxes.begin();
+  for ( ; tri != tris.end(); ++tri, ++box) {
+    if (!bbox_intersect(*box, bbox))
       continue;
-    if(bvgl_intersection(bbox, *tri)) {
+    if (bvgl_intersection(bbox, *tri)) {
       int_tris.push_back(*tri);
-      int_boxes.push_back(*box); 
+      int_boxes.push_back(*box);
     }
   }
 }
@@ -283,14 +280,14 @@ boxm2_points_to_volume::tris_in_box(const vgl_box_3d<double>& bbox,
 vcl_vector<bvgl_triangle_3d<double> >
 boxm2_points_to_volume::tris_in_box(const imesh_mesh& mesh, vgl_box_3d<double>& box)
 {
-  vcl_vector<bvgl_triangle_3d<double> > contained; 
-  const imesh_vertex_array<3>& verts = mesh.vertices<3>(); 
+  vcl_vector<bvgl_triangle_3d<double> > contained;
+  const imesh_vertex_array<3>& verts = mesh.vertices<3>();
   vcl_auto_ptr<imesh_regular_face_array<3> > tris = imesh_triangulate(mesh.faces());
   imesh_regular_face_array<3>::const_iterator iter;
-  for(iter = tris->begin(); iter != tris->end(); ++iter) { 
-    imesh_regular_face<3> idx =(*iter); 
-    bvgl_triangle_3d<double> tri(verts[idx[0]], verts[idx[1]], verts[idx[2]]); 
-    if(bvgl_intersection(box, tri))
+  for (iter = tris->begin(); iter != tris->end(); ++iter) {
+    imesh_regular_face<3> idx =(*iter);
+    bvgl_triangle_3d<double> tri(verts[idx[0]], verts[idx[1]], verts[idx[2]]);
+    if (bvgl_intersection(box, tri))
       contained.push_back(tri);
   }
   return contained;
@@ -300,10 +297,10 @@ boxm2_points_to_volume::tris_in_box(const imesh_mesh& mesh, vgl_box_3d<double>& 
 vcl_vector<bvgl_triangle_3d<double> >
 boxm2_points_to_volume::tris_in_box(vcl_vector<bvgl_triangle_3d<double> >& tris, vgl_box_3d<double>& box)
 {
-  vcl_vector<bvgl_triangle_3d<double> > contained; 
-  vcl_vector<bvgl_triangle_3d<double> >::const_iterator iter;  
-  for(iter = tris.begin(); iter != tris.end(); ++iter) { 
-    if(bvgl_intersection(box, *iter))
+  vcl_vector<bvgl_triangle_3d<double> > contained;
+  vcl_vector<bvgl_triangle_3d<double> >::const_iterator iter;
+  for (iter = tris.begin(); iter != tris.end(); ++iter) {
+    if (bvgl_intersection(box, *iter))
       contained.push_back(*iter);
   }
   return contained;
