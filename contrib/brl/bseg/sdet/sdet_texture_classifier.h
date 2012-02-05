@@ -79,7 +79,8 @@ class sdet_neighbor_less
   vnl_vector<double> query_;
 };
 
-class sdet_texture_classifier : public sdet_texture_classifier_params
+class sdet_texture_classifier : public sdet_texture_classifier_params,
+                                public vbl_ref_count
 {
  public:
   //: constructor from parameter block
@@ -104,6 +105,10 @@ class sdet_texture_classifier : public sdet_texture_classifier_params
   //: randomly select training samples from within the specified regions
   bool compute_training_data(vcl_string const& category,
                              vcl_vector<vgl_polygon<double> >const& texture_regions);
+  //: randomly select training samples from within a region loaded from file
+  bool compute_training_data(vcl_string const& category,
+                             vcl_string const& poly_path = "");
+
   //: compute textons with k_means for the specified texture category
   bool compute_textons(vcl_string const& category);
 
@@ -116,7 +121,7 @@ class sdet_texture_classifier : public sdet_texture_classifier_params
                        vcl_vector<vcl_string> const& poly_paths=
                        vcl_vector<vcl_string>());
 
-  //: The texton histograms derived from the training data
+  //: The texton histograms derived from the training data 
   void compute_category_histograms();
 
   //: save texton dictionary, binary (includes classifier params at top of file)
@@ -191,5 +196,24 @@ class sdet_texture_classifier : public sdet_texture_classifier_params
   vcl_vector<float> texton_weights_;
   bool texton_weights_valid_;
 };
+#include <sdet/sdet_texture_classifier_sptr.h>
+//: Binary save parameters to stream.
+void vsl_b_write(vsl_b_ostream & os, sdet_texture_classifier const &tc);
 
+//: Binary load parameters from stream.
+void vsl_b_read(vsl_b_istream & is, sdet_texture_classifier &tc);
+
+void vsl_print_summary(vcl_ostream &os, const sdet_texture_classifier &tc);
+
+void vsl_b_read(vsl_b_istream& is, sdet_texture_classifier* tc);
+
+void vsl_b_write(vsl_b_ostream& os, const sdet_texture_classifier* &tc);
+ 
+void vsl_print_summary(vcl_ostream& os, const sdet_texture_classifier* &tc);
+
+void vsl_b_read(vsl_b_istream& is, sdet_texture_classifier_sptr& tc);
+
+void vsl_b_write(vsl_b_ostream& os, const sdet_texture_classifier_sptr &tc);
+
+void vsl_print_summary(vcl_ostream& os, const sdet_texture_classifier_sptr &tc);
 #endif // sdet_texture_classifier_h_

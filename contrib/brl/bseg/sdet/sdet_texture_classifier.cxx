@@ -13,6 +13,7 @@
 #include <vgl/vgl_polygon_scan_iterator.h>
 #include <vil/vil_math.h>
 #include <vil/vil_load.h>
+#include <vil/vil_save.h>
 #include <vil/vil_crop.h>
 #include <vbl/io/vbl_io_smart_ptr.h>
 #include <vsol/vsol_polygon_2d.h>
@@ -146,6 +147,15 @@ compute_filter_bank(vil_image_view<float> const& img)
       gauss_(i,j) =gauss_(i,j)*0.03f;//HACK!! Need principled way to scale
   //filter responses
   vcl_cout << "Computed filter bank in " << t.real()/1000.0 << " secs.\n";
+#if 0
+  //=============== temporary debug ====================
+  vil_save(filter_responses_.response(0), "e:/images/TextureTraining/s0.tiff");
+  vil_save(filter_responses_.response(1), "e:/images/TextureTraining/s1.tiff");
+  vil_save(filter_responses_.response(2), "e:/images/TextureTraining/s2.tiff");
+  vil_save(laplace_, "e:/images/TextureTraining/laplace.tiff");
+  vil_save(gauss_, "e:/images/TextureTraining/gauss.tiff");
+  //===========================================================
+#endif
   return true;
 }
 // Used to define the initial k means cluster centers
@@ -342,6 +352,24 @@ compute_training_data(vcl_string const& category,
   vcl_cout << "Collect texture samples in texture polygon in " << t.real()/1000.0 << " secs.\n";
   return true;
 }
+bool sdet_texture_classifier::compute_training_data(vcl_string const& category,
+                                                    vcl_string const& poly_path){
+  vcl_vector<vgl_polygon<double> > polys;
+  if (poly_path=="") {
+    //create a polygon that is the bounding box of the image
+    unsigned ni = laplace_.ni(), nj = laplace_.nj();
+    vgl_polygon<double> temp; temp.new_sheet();
+    temp.push_back(0.0, 0.0);
+    temp.push_back(0.0, static_cast<double>(nj));
+    temp.push_back(static_cast<double>(ni), static_cast<double>(nj));
+    temp.push_back(static_cast<double>(ni), 0.0);
+    polys.push_back(temp);
+  }
+  else {
+   polys = load_polys(poly_path);
+  }
+  return this->compute_training_data(category, polys);
+}
 // execute the k means algorithm to form textons
 // assumes that training data has been initialized
 bool sdet_texture_classifier::compute_textons(vcl_string const& category)
@@ -350,7 +378,7 @@ bool sdet_texture_classifier::compute_textons(vcl_string const& category)
   // run k_means
   vcl_vector<vnl_vector<double> >& train_data = training_data_[category];
   vcl_cout << "Start k means for category " << category << " with sample size "
-           << train_data.size() << vcl_flush;
+           << train_data.size() << '\n' << vcl_flush;
   vcl_vector<vnl_vector<double> > centers = random_centers(train_data, k_);
 
   unsigned converged_k = k_;
@@ -451,6 +479,7 @@ bool sdet_texture_classifier::save_dictionary(vcl_string const& path) const
     vcl_cout << "Can't open binary stream in save_dictionary\n";
     return false;
   }
+  vcl_cout << "Save dictionary to " << path << '\n';
   sdet_texture_classifier_params const * tcp_ptr =
     dynamic_cast<sdet_texture_classifier_params const*>(this);
   vsl_b_write(os, *tcp_ptr);                                    
@@ -555,9 +584,9 @@ void sdet_texture_classifier::compute_interclass_probs()
       vcl_vector<float> const& histi = (*it).second;
       for (unsigned j = 0; j<n; ++j)
         if (histj[j]>0.0f && histi[j]>0.0f)
-            prob_sum += texton_weights_[j]*histj[j];
-        inter_prob_[(*jt).first][(*it).first] = prob_sum;
-        prob_total += prob_sum;
+          prob_sum += texton_weights_[j]*histj[j];
+      inter_prob_[(*jt).first][(*it).first] = prob_sum;
+      prob_total += prob_sum;
     }
     it=category_histograms_.begin();
     for (; it!= category_histograms_.end(); ++it)
@@ -656,7 +685,7 @@ void sdet_texture_classifier::print_category_histograms() const
   for (unsigned i = 0; i<nt; ++i) {
     for (unsigned j = 0; j<nh; ++j)
       vcl_cout << hists[i][j] << ' ';
-   vcl_cout << '\n';
+    vcl_cout << '\n';
   }
 }
 
@@ -895,3 +924,26 @@ unsigned sdet_texture_classifier::max_filter_radius() const
   if (gr>maxr) maxr = gr;
   return maxr;
 }
+//dummy vsl io functions to allow sdet_texture_classifier to be inserted into
+//brdb as a dbvalue
+
+void vsl_b_write(vsl_b_ostream & os, sdet_texture_classifier const &tc)
+{ /* do nothing */ }
+
+//: Binary load parameters from stream.
+void vsl_b_read(vsl_b_istream & is, sdet_texture_classifier &tc)
+{ /* do nothing */ }
+void vsl_print_summary(vcl_ostream &os, const sdet_texture_classifier &tc)
+{ /* do nothing */ }
+void vsl_b_read(vsl_b_istream& is, sdet_texture_classifier* tc)
+{ /* do nothing */ }
+void vsl_b_write(vsl_b_ostream& os, const sdet_texture_classifier* &tc)
+{ /* do nothing */ }
+void vsl_print_summary(vcl_ostream& os, const sdet_texture_classifier* &tc)
+{ /* do nothing */ }
+void vsl_b_read(vsl_b_istream& is, sdet_texture_classifier_sptr& tc)
+{ /* do nothing */ }
+void vsl_b_write(vsl_b_ostream& os, const sdet_texture_classifier_sptr &tc)
+{ /* do nothing */ }
+void vsl_print_summary(vcl_ostream& os, const sdet_texture_classifier_sptr &tc)
+{ /* do nothing */ }
