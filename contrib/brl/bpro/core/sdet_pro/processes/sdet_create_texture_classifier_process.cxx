@@ -58,9 +58,11 @@ bool sdet_create_texture_classifier_process(bprb_func_process& pro)
 
   //set texture classifier params
   sdet_texture_classifier_params tcp;
+  tcp.k_              = k;
   tcp.lambda0_        = lambda0;
   tcp.lambda1_        = lambda1;
   tcp.n_scales_       = n_scales;
+  tcp.n_samples_      = n_samples;
   tcp.scale_interval_ = scale_interval;
   tcp.angle_interval_ = angle_interval;
   tcp.laplace_radius_ = laplace_radius;
