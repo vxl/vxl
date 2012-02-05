@@ -39,9 +39,9 @@ bool fit_intensity_cubic(__local float * obs,       // dim n
             }
         }
         l[0] = 0.0;
-        l[1] = (s[min_index] -s[max_index]);
-        l[2] = l[1]*(s[min_index]  + s[max_index]);
-        l[3] = (s[min_index]*s[min_index]*s[min_index]  - s[max_index]*s[max_index]*s[max_index]);
+        l[1] = s[min_index]-s[max_index];
+        l[2] = s[min_index]*s[min_index]  - s[max_index]*s[max_index];
+        l[3] = s[min_index]*s[min_index]*s[min_index]  - s[max_index]*s[max_index]*s[max_index];
     }
     barrier(CLK_LOCAL_MEM_FENCE);
     if (llid < (*nobs) )
@@ -99,6 +99,104 @@ bool fit_intensity_cubic(__local float * obs,       // dim n
     barrier(CLK_LOCAL_MEM_FENCE);
 }
 
+//: with constraints at the endpoint
+//bool fit_intensity_cubic(__local float * obs,       // dim n
+//                         __local float * vis,       // dim n
+//                         __local float * s,         // dim n
+//                         __local float * temp,
+//                         __local float * XtWX,      // dim 16
+//                         __local float * cofactor,  // dim 16
+//                         __local float * invXtWX,   // dim 16
+//                         __local float * XtY,       // dim 4
+//                         __local float * outerprodl,// dim 16
+//                         __local float * l,         // dim 4
+//                         __global float * coeffs,   // dim 8
+//                         __constant int * nobs)
+//{
+//    // construct the matrix XtWX
+//	int gid = get_group_id(0);
+//	uchar llid = (uchar)(get_local_id(0) + get_local_size(0)*get_local_id(1));
+//
+//	if (llid < (*nobs) )
+//		temp[llid] = vis[llid];
+//	barrier(CLK_LOCAL_MEM_FENCE);
+//	if(llid == 0)
+//	{
+//		float sum = 0;
+//		for (unsigned int i = 0 ; i< (*nobs) ; i++)
+//		{
+//			sum+= temp[i];
+//			temp[i]=temp[i]*(-s[llid]*M_PI*M_PI+s[llid]*s[llid]*s[llid]);
+//		}
+//		XtWX[0 + 4*0] = sum;
+//		sum = 0.0;
+//		for (unsigned int i = 0 ; i< (*nobs) ; i++)
+//		{
+//			sum+= temp[i];
+//			temp[i]=temp[i]*temp[i];
+//		}
+//		XtWX[1 + 4*0] = sum;
+//		XtWX[0 + 4*1] = sum;
+//		sum=0.0;
+//		for (unsigned int i = 0 ; i< (*nobs) ; i++)
+//			sum+= temp[i];
+//		XtWX[1 + 4*1] = sum;
+//		XtWX[2 + 4*2] = 1.0;
+//		XtWX[3 + 4*3] = 1.0;
+//	}
+//	barrier(CLK_LOCAL_MEM_FENCE);
+//
+//	// RHS XtWY
+//	if (llid < (*nobs) )
+//		temp[llid] = obs[llid]*vis[llid];
+//	barrier(CLK_LOCAL_MEM_FENCE);
+//
+//    if (llid==0)
+//    {
+//		float sum = 0;
+//		for (unsigned int i = 0 ; i< *nobs; i++)
+//		{
+//			sum+= temp[i];
+//			temp[i]=temp[i]*(-s[llid]*M_PI*M_PI+s[llid]*s[llid]*s[llid]);
+//		}
+//		XtY[0] = sum;
+//		sum =0.0;
+//		for (unsigned int i = 0 ; i< *nobs; i++)
+//		{
+//			sum+= temp[i];
+//		}
+//		XtY[1] = sum;
+//	}
+//    barrier(CLK_LOCAL_MEM_FENCE);
+//    // Inverse of XtWX
+//
+//	if(llid == 0)
+//	{
+//		float determinant = XtWX[0 + 4*0]*XtWX[1 + 4*1] - XtWX[1 + 4*0]*XtWX[0 + 4*1];
+//
+//		invXtWX[0+4*0] = determinant==0.0? 0.0: XtWX[1 + 4*1]/determinant  ;
+//		invXtWX[1+4*0] = determinant==0.0? 0.0: -XtWX[1 + 4*0]/determinant ;
+//		invXtWX[0+4*1] = determinant==0.0?0.0: -XtWX[0 + 4*1]/determinant  ;
+//		invXtWX[1+4*1] = determinant==0.0? 0.0: XtWX[0 + 4*0]/determinant  ;
+//	}
+//	barrier(CLK_LOCAL_MEM_FENCE);
+//    // inv(XtWX) * XtY
+//	if (llid == 0)
+//	{
+//		float coeff0 = 0;
+//		for (unsigned int i = 0 ; i< 2; i++)
+//			coeff0+= invXtWX[i] * XtY[i];
+//		float coeff1 = 0;
+//		for (unsigned int i = 0 ; i< 2; i++)
+//			coeff1+= invXtWX[4+i]*XtY[i];
+//		coeffs[gid*8+0] = coeff0;
+//		coeffs[gid*8+1] = -M_PI*M_PI*coeff1;
+//		coeffs[gid*8+2] = 0.0;
+//		coeffs[gid*8+3] = coeff1;
+//	}
+//	barrier(CLK_LOCAL_MEM_FENCE);
+//
+//}
 float variance_multiplier(float n_obs)
 {
     if (n_obs<2)
@@ -142,13 +240,16 @@ void cubic_fit_error(__local float  * obs,       // dim n
             e_nobs +=vis[i];
         }
         if (e_nobs <2)
-            var = -1.0;
+            var = 1.0;
         else
         {
             var = var * variance_multiplier(e_nobs);
             var =var/(e_nobs-1);
         }
-        coeffs[gid*8+4] =sqrt(var);
+		if(var > 0.0f)
+			coeffs[gid*8+4] =sqrt(var);
+		else 
+			coeffs[gid*8+4] = 1.0;
         // Computing Density
         float denom = sqrt(2*M_PI)*(*internal_sigma);
         float numer = exp(-var/(2*(*internal_sigma)*(*internal_sigma)));
@@ -158,46 +259,121 @@ void cubic_fit_error(__local float  * obs,       // dim n
     }
     barrier(CLK_LOCAL_MEM_FENCE);
 }
+// Entropy based empty model
+//void compute_empty(__local float * obs,       // dim n
+//                   __local float * vis,       // dim n
+//                   __local float * hist,      // dim 16
+//                   __global float * coeffs,       // dim 8
+//                   __constant int * nobs)
+//{
+//    // construct the matrix XtWX
+//    int gid = get_group_id(0);
+//    uchar llid = (uchar)(get_local_id(0) + get_local_size(0)*get_local_id(1));
+//    if (llid < 8)
+//        hist[llid] = 0.125;
+//    if (llid == 0)
+//    {
+//        // initialize the histogram with uniform density.
+//        float sum = 1.0f;
+//        for (unsigned i = 0; i< (*nobs) ; i++)
+//        {
+//            int next = i+1;
+//			int prev = i-1;
+//            if (i == (*nobs)-1)
+//                next =0;
+//			if( i == 0)
+//				prev = (*nobs)-1;
+//
+//            float gradI=fabs(obs[i]-obs[next]);
+//			float gradgradI=fabs(2*obs[i]-obs[next]-obs[prev]);
+//            hist[(int)ceil(gradI*8/2)] += (vis[i]+vis[next])/2;
+//            sum +=(vis[i]+vis[next])/2;
+//        }
+//
+//        for (unsigned i = 0; i< 8; i++)
+//            hist[i] /= sum;
+//    }
+//
+//    barrier(CLK_LOCAL_MEM_FENCE);
+//    if (llid == 0)
+//    {
+//        float entropy_histo = 0.0f;
+//        for (unsigned int i = 0; i<8; ++i)
+//        {
+//            entropy_histo += hist[i]*log(hist[i]);
+//        }
+//        entropy_histo  = exp(-entropy_histo);
+//        coeffs[gid*8+6]= entropy_histo;
+//
+//    }
+//    barrier(CLK_LOCAL_MEM_FENCE);
+//}
 
-void compute_empty(__local float * obs,       // dim n
+// empty function based on posts
+void compute_empty(__local float * posts,       // dim n
                    __local float * vis,       // dim n
-                   __local float * hist,      // dim 16
-                   __global float * coeffs,       // dim 8
+				   __global float * coeffs,       // dim 8
                    __constant int * nobs)
 {
     // construct the matrix XtWX
     int gid = get_group_id(0);
     uchar llid = (uchar)(get_local_id(0) + get_local_size(0)*get_local_id(1));
-    if (llid < 8)
-        hist[llid] = 0.125;
+	float sigma2 = 0.007;
     if (llid == 0)
     {
         // initialize the histogram with uniform density.
-        float sum = 1.0f;
+        float sum = 0.0f;
+        float sum_p = 0.0f;
         for (unsigned i = 0; i< (*nobs) ; i++)
         {
-            int next = i+1;
-            if (i == (*nobs)-1)
-                next =0;
-            float gradI=fabs(obs[i]-obs[next]);
-            hist[(int)ceil(gradI*8)] += (vis[i]+vis[next])/2;
-            sum +=(vis[i]+vis[next])/2;
+			if(vis[i]!=1.0)
+			{
+            sum  += vis[i];
+			//sum_p+= -0.5*vis[i]*(1-posts[i])*(1-posts[i])/sigma2;
+			sum_p+= vis[i]*posts[i];
+			}
         }
-
-        for (unsigned i = 0; i< 8; i++)
-            hist[i] /= sum;
-    }
-
-    barrier(CLK_LOCAL_MEM_FENCE);
-    if (llid == 0)
-    {
-        float entropy_histo = 0.0f;
-        for (unsigned int i = 0; i<8; ++i)
-        {
-            entropy_histo += hist[i]*log(hist[i]);
-        }
-        entropy_histo  = exp(-entropy_histo);///1.4426950);
-        coeffs[gid*8+6]= entropy_histo;
+		if(sum > 0.0)
+			sum_p=sum_p/sum;
+			
+		//float p = exp(sum_p) ;
+		//p= p/sqrt(2*M_PI*sigma2);
+		coeffs[gid*8+6]= sum_p;
     }
     barrier(CLK_LOCAL_MEM_FENCE);
 }
+
+// Zigzag based empty model
+//void compute_empty(__local float * obs,       // dim n
+//                   __local float * vis,       // dim n
+//                   __local float * hist,      // dim 16
+//                   __global float * coeffs,       // dim 8
+//                   __constant int * nobs)
+//{
+//    // construct the matrix XtWX
+//    int gid = get_group_id(0);
+//    uchar llid = (uchar)(get_local_id(0) + get_local_size(0)*get_local_id(1));
+//    if (llid == 0)
+//    {
+//        // initialize the histogram with uniform density.
+//        float sum_weights = 0.0f;
+//		float avg_variance = 0.0f;
+//        for (int i = 0; i< (*nobs) ; i++)
+//        {
+//            int next = i+1;
+//			int prev = i-1;
+//            if (i == (*nobs)-1)
+//                next =0;
+//			if( i == 0)
+//				prev = (*nobs)-1;
+//			float w= min(vis[prev],min(vis[i],vis[next]));
+//			avg_variance+=w*fabs((obs[i]+obs[next]+obs[prev])/3- obs[i])*fabs((obs[i]+obs[next]+obs[prev])/3- obs[i]);
+//			sum_weights =sum_weights +w ;
+//        }
+//		avg_variance= avg_variance / sum_weights;
+//		avg_variance= avg_variance/(0.025*0.025);
+//
+//		coeffs[gid*8+6]= avg_variance;//exp(avg_variance);//numer/denom;
+//    }
+//    barrier(CLK_LOCAL_MEM_FENCE);
+//}
