@@ -47,6 +47,7 @@ SOURCES += sdet_texture_classifier_params.cxx
 SOURCES += sdet_k_means.cxx
 SOURCES += sdet_texture_classifier.cxx
 SOURCES += sdet_atmospheric_image_classifier.cxx
+MANPAGE_SOURCES += sdet_texture_classifier_sptr.h
 
 #######################################
 include ${VXLROOT}/config/top-params.mk

@@ -12,6 +12,8 @@ SOURCES += processes/sdet_detect_edge_tangent_interp_process.cxx
 SOURCES += processes/sdet_detect_third_order_edges_process.cxx
 SOURCES += processes/sdet_texture_classifier_process.cxx
 SOURCES += processes/sdet_texture_classifier_kernel_margin_process.cxx
+SOURCES += processes/sdet_create_texture_classifier_process.cxx
+SOURCES += processes/sdet_texture_training_process.cxx
 
 #######################################
 include ${VXLROOT}/config/top-params.mk
