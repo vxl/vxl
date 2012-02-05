@@ -47,8 +47,8 @@ bool boxm2_cpp_ray_probe_process_cons(bprb_func_process& pro)
     output_types_[1] = "bbas_1d_array_float_sptr"; //alpha
     output_types_[2] = "bbas_1d_array_float_sptr"; //vis
     output_types_[3] = "bbas_1d_array_float_sptr"; //depth
-    output_types_[4] = "bbas_1d_array_float_sptr"; //alpha
-    output_types_[5] = "int"; //alpha
+    output_types_[4] = "bbas_1d_array_float_sptr"; //data type asked for
+    output_types_[5] = "int"; //n elems
 
     bool good = pro.set_input_types(input_types_) &&
                 pro.set_output_types(output_types_);
@@ -135,7 +135,6 @@ bool boxm2_cpp_ray_probe_process(bprb_func_process& pro)
     bbas_1d_array_float_sptr alpha_array=new bbas_1d_array_float(alphas.size());
     bbas_1d_array_float_sptr abs_depth_array=new bbas_1d_array_float(abs_depth.size());
     bbas_1d_array_float_sptr data_to_return_array=new bbas_1d_array_float(data_to_return.size());
-
     float vis=1.0f;
     for (unsigned i=0; i<seg_lengths.size(); ++i)
     {
