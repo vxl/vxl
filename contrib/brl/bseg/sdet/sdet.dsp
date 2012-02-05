@@ -230,6 +230,9 @@ SOURCE=.\Templates/vbl_array_2d+sdet_mrf_site_bp_sptr-.cxx
 # Begin Source File
 SOURCE=.\Templates/vbl_smart_ptr+sdet_mrf_bp-.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\Templates/vbl_smart_ptr+sdet_texture_classifier-.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
@@ -361,6 +364,9 @@ SOURCE=.\sdet_texture_classifier_params.h
 # End Source File
 # Begin Source File
 SOURCE=.\sdet_atmospheric_image_classifier.h
+# End Source File
+# Begin Source File
+SOURCE=.\sdet_texture_classifier_sptr.h
 # End Source File
 # End Group
 # End Target

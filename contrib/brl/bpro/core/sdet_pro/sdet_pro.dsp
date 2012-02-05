@@ -113,6 +113,15 @@ SOURCE=.\processes/sdet_texture_classifier_process.cxx
 # Begin Source File
 SOURCE=.\processes/sdet_texture_classifier_kernel_margin_process.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\processes/sdet_create_texture_classifier_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/sdet_texture_training_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/brdb_value_t+sdet_texture_classifier_sptr-.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"

@@ -138,6 +138,9 @@ SOURCE=.\processes/bbas_remove_from_db_process.cxx
 SOURCE=.\processes/bbas_estimate_irradiance_process.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\processes/imesh_ply_bbox_process.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/brdb_value_t+bbas_1d_array_uint_sptr-.cxx
 # End Source File
 # Begin Source File
