@@ -303,7 +303,41 @@ void bayes_ratio_ind( float  seg_len,
 }
 
 
-
+/* bayes ratio independent functor (for independent rays) */
+void compute_post_ind( float  seg_len, float block_len,
+                   float  alpha,
+                   float8 mixture, 
+                   float  weight3, 
+                   float  cum_len,
+                   float  mean_obs,
+                   float  norm,
+                   float* ray_pre,
+                   float* ray_vis,
+                   float* ray_beta,
+                   float* vis_cont )
+{
+    float PI = 0.0;
+  
+    /* Compute PI for all threads */
+    if (seg_len > 1.0e-10f) {    /* if  too small, do nothing */
+        PI = gauss_3_mixture_prob_density(mean_obs,
+                                           mixture.s0, 
+                                           mixture.s1, 
+                                           mixture.s2,
+                                           mixture.s3, 
+                                           mixture.s4, 
+                                           mixture.s5,
+                                           mixture.s6,
+                                           mixture.s7,
+                                           weight3 );
+    }
+    //calculate this ray's contribution to beta
+	float temp  = exp(-alpha * seg_len*block_len);
+	(*ray_pre) += (*ray_vis)*(1.0f-temp)*PI;
+	(*ray_beta) = ( (*ray_pre)/norm )*seg_len;
+    (*vis_cont) = (*ray_vis) * seg_len;  
+    (*ray_vis) *= temp;
+}
 
 /* Aux Data = [cell_len, mean_obs*cell_len, beta, cum_vis]  */
 void update_cell(float16 * data, float4 aux_data,float t_match, float init_sigma, float min_sigma)
@@ -338,39 +372,4 @@ void update_cell(float16 * data, float4 aux_data,float t_match, float init_sigma
     (*data).sc=(float)Nobs_mix;
 }
 
-#if 0
-/* Aux Data = [cell_len, mean_obs*cell_len, beta, cum_vis]  */
-void update_cell2(float * alpha, float8 * mixture, float * weight3,
-                  float4 aux_data, float t_match, float init_sigma, float min_sigma)
-{
-    float mu0 = (*mixture).s0, sigma0 = (*mixture).s1, w0 = (*mixture).s2;
-    float mu1 = (*mixture).s3, sigma1 = (*mixture).s4, w1 = (*mixture).s5;
-    float mu2 = (*mixture).s6, sigma2 = (*mixture).s7, w2 = (*weight3);
-    
-    //short Nobs0 = (short)(*nobs).s0, Nobs1 = (short)(*nobs).s1, Nobs2 = (short)(*nobs).s2; 
-    //float Nobs_mix = (*nobs).s3;
-    short Nobs0, Nobs1, Nobs2;
-    float Nobs_mix;
-
-    update_gauss_3_mixture2( aux_data.y,              //mean observation
-                             aux_data.w,              //cell_visability
-                             t_match,                 
-                             init_sigma,min_sigma,
-                             &mu0,&sigma0,&w0,&Nobs0,
-                             &mu1,&sigma1,&w1,&Nobs1,
-                             &mu2,&sigma2,&w2,&Nobs2,
-                             &Nobs_mix);
-                           
-    (*alpha) *= aux_data.z/aux_data.x;
-    (*mixture).s0=mu0; (*mixture).s1=sigma0; (*mixture).s2=w0;
-    (*mixture).s3=mu1; (*mixture).s4=sigma1; (*mixture).s5=w1;
-    (*mixture).s6=mu2; (*mixture).s7=sigma2; (*weight3)=w2; 
-    
-/*
-    //do we need nobs anymore?
-    (*nobs).s0 = Nobs0; (*nobs).s1 = Nobs1; (*nobs).s2 = Nobs2;
-    (*nobs).s0 = Nobs_mix;
-*/
-}
-#endif
 
