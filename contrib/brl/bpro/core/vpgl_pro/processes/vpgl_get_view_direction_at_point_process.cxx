@@ -59,7 +59,7 @@ bool vpgl_get_view_direction_at_point_process(bprb_func_process& pro)
   }
 
   vgl_point_3d<double> camcenter=cam->camera_center();
-  vgl_vector_3d<double> view_direction=camcenter-vgl_point_3d<double>(x,y,z);
+  vgl_vector_3d<double> view_direction=vgl_point_3d<double>(x,y,z)-camcenter;
   normalize(view_direction);
 
   float theta =vcl_acos(view_direction.z());
