@@ -73,6 +73,7 @@ register_datatypes(PyObject *self, PyObject *args)
 #endif
 #endif
   bbas_register::register_datatype();
+  sdet_register::register_datatype();
   brad_register::register_datatype();
   bsta_register::register_datatype();
   ihog_register::register_datatype();
