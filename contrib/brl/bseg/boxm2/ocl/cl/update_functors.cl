@@ -47,11 +47,11 @@ void step_cell_seglen(AuxArgs aux_args, int data_ptr, uchar llid, float d)
 void step_cell_preinf(AuxArgs aux_args, int data_ptr, uchar llid, float d)
 {
     //keep track of cells being hit
-    //cell data, i.e., alpha and app model is needed for some passes
+    ////cell data, i.e., alpha and app model is needed for some passes
     float  alpha    = aux_args.alpha[data_ptr];
     CONVERT_FUNC_FLOAT8(mixture,aux_args.mog[data_ptr])/NORM;
     float  weight3  = (1.0f-mixture.s2-mixture.s5);
-
+		
     int cum_int = aux_args.seg_len[data_ptr];
     int mean_int = aux_args.mean_obs[data_ptr];
     float mean_obs = convert_float(mean_int) / convert_float(cum_int);
@@ -212,6 +212,43 @@ void step_cell_ingest_height_map(AuxArgs aux_args, int data_ptr, float d)
     aux_args.alpha[data_ptr] = alpha;
 }
 #endif // INGEST_HEIGHT_MAP
+
+#ifdef POST
+//bayes step cell functor
+void step_cell_post(AuxArgs aux_args, int data_ptr, uchar llid, float d)
+{
+    //slow beta calculation ----------------------------------------------------
+    float  alpha    = aux_args.alpha[data_ptr];
+    CONVERT_FUNC_FLOAT8(mixture,aux_args.mog[data_ptr])/NORM;
+    float weight3   = (1.0f-mixture.s2-mixture.s5);
+
+    //load aux data
+    int cum_int = aux_args.seg_len[data_ptr];
+    int mean_int = aux_args.mean_obs[data_ptr];
+    float mean_obs = convert_float(mean_int) / convert_float(cum_int);
+    float cum_len = convert_float(cum_int) / SEGLEN_FACTOR;
+
+    float ray_beta, vis_cont;
+    compute_post_ind( d,aux_args.linfo->block_len,
+                     alpha,
+                     mixture,
+                     weight3,
+                     cum_len*aux_args.linfo->block_len,
+                     mean_obs,
+                     aux_args.norm,
+                     aux_args.ray_pre,
+                     aux_args.ray_vis,
+                     &ray_beta,
+                     &vis_cont);
+
+    //discretize and store beta and vis contribution
+    int beta_int = convert_int_rte(ray_beta * SEGLEN_FACTOR);
+    atom_add(&aux_args.beta_array[data_ptr], beta_int);
+    int vis_int  = convert_int_rte(vis_cont * SEGLEN_FACTOR);
+    atom_add(&aux_args.vis_array[data_ptr], vis_int);
+    
+}
+#endif // POST
 
 #ifdef INGEST_BUCKEYE_DEM
 #define Z_SIGMA 1.0
