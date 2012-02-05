@@ -27,7 +27,7 @@ class brad_synoptic_function_1d
                             vcl_vector<double> const& vis,
                             vcl_vector<double> const& intensity):
     elev_(elevation),azimuth_(azimuth),vis_(vis),intensity_(intensity),
-    inherent_sigma_(0.02), tau_s_(0.25), max_freq_mean_(0.487648),
+    inherent_sigma_(0.06), tau_s_(0.25), max_freq_mean_(0.487648),
     //    max_freq_sigma_(0.127436755){this->fit_intensity_cubic();}
     max_freq_sigma_(0.2){this->fit_intensity_cubic();}
   //: set members

@@ -1,8 +1,11 @@
 #include <brad/brad_synoptic_function_1d.h>
 #include <vcl_fstream.h>
 #include <vcl_cmath.h>
+#include <vcl_algorithm.h>
 #include <vnl/vnl_double_3.h>
 #include <vnl/vnl_double_4x4.h>
+#include <vnl/vnl_double_2x2.h>
+#include <vnl/vnl_double_2.h>
 #include <vnl/vnl_matrix.h>
 #include <vnl/vnl_inverse.h>
 #include <vnl/algo/vnl_svd.h>
@@ -59,13 +62,9 @@ angle(double elev0, double az0, double elev1, double az1)
 
 double brad_synoptic_function_1d::arc_length(unsigned index)
 {
-  unsigned n = this->size();
-  if (n==0) return 0.0;
-  double sum = 0.0;
-  for (unsigned k = 1; k<=index; ++k)
-    sum += brad_synoptic_function_1d::angle(elev_[k-1],azimuth_[k-1],
-                                            elev_[k],azimuth_[k]);
-  return sum;
+    unsigned n = this->size();
+    float s = azimuth_[index];
+    return s;
 }
 
 void brad_synoptic_function_1d::fit_intensity_cubic()
@@ -75,15 +74,45 @@ void brad_synoptic_function_1d::fit_intensity_cubic()
   vnl_matrix<double> X(n,4, 1.0);
   vnl_matrix<double> W(n,n, 0.0);
   vnl_vector<double> y(n);
+
+  double min_s = 1e10;
+  double max_s = -1e10;
+
+  double min_vis=0.0;
+  double max_vis=0.0;
+
+  
+  for (unsigned r = 0; r<n;++r) 
+  {
+      double s = this->arc_length(r);
+      if(min_s >   s)
+      {
+          min_s = s;
+          min_vis = vis_[r];
+      }
+      if( max_s < s)
+      {
+          max_vis = vis_[r];
+          max_s =s;
+      }
+  }
   for (unsigned r = 0; r<n;++r) {
     double s = this->arc_length(r);
     X[r][1]=s; X[r][2]=s*s; X[r][3]=X[r][2]*s;
     W[r][r] = vis_[r]; y[r]=intensity_[r];
   }
+
+  vnl_double_4 l;
+  l[0] = 0; 
+  l[1] = min_s - max_s ;
+  l[2] = min_s*min_s - max_s*max_s ;
+  l[3] = min_s*min_s*min_s - max_s*max_s*max_s ;
+
+  vnl_double_4x4 ll= /*vcl_min(min_vis, max_vis)*/outer_product<double>(l,l);
   //compute cubic coefficients
   vnl_matrix<double> Xt = X.transpose();
   vnl_matrix<double> Xtw = Xt*W;
-  vnl_double_4x4 M = Xtw*X;
+  vnl_double_4x4 M = Xtw*X + ll;
   vnl_double_4 q = Xtw*y;
   vnl_double_4x4 Minv = vnl_inverse(M);
   cubic_coef_int_ = Minv*q;
@@ -161,7 +190,7 @@ void brad_synoptic_function_1d::compute_auto_correlation()
     intsq += vis_[i]*intvsq;
     vissum += vis_[i];
   }
-  if (vissum <2.0) return;
+  //if (vissum <2.0) return;
   double mean = avg/vissum;
   double vsq = intsq-(mean*mean*vissum);
   double var = vsq/vissum;
@@ -239,34 +268,42 @@ void brad_synoptic_function_1d::
 auto_corr_freq_amplitudes(vcl_vector<double>& freq_amplitudes)
 {
   unsigned n = this->size();
-  double temp = n/2, norm = vcl_sqrt(1/temp);
+  double temp = n/2;
+  double norm = vcl_sqrt(1/temp);
+
   freq_amplitudes.clear();
   max_freq_amplitude_ = 0.0;
-  // max frequency, half the number of samples in the autocorrelation function
+    // max frequency, half the number of samples in the autocorrelation function
   for (unsigned int k = 0; k<=n/4; ++k) {
     double ac = 0, as =0;//fourier coefficients
-    for (unsigned int i = 0; i<=n/2; ++i) {
+      for (unsigned int i = 0; i<=n/2; ++i) {
       double x = this->arc_length(i);
-      double arg = x*k;
+          double arg = x*k;
       ac += vcl_cos(arg)*auto_corr_[i];
       as += vcl_sin(arg)*auto_corr_[i];
+
     }
+
     // frequency amplitude
     double amp = norm*vcl_sqrt(ac*ac + as*as);
     if (amp>max_freq_amplitude_)
       max_freq_amplitude_ = amp;
     freq_amplitudes.push_back(amp);
   }
+
+
 }
 
 double brad_synoptic_function_1d::lin_const_fit_prob_density()
 {
+
   bsta_gauss_sd1 gauss(0.0, inherent_sigma_*inherent_sigma_);
   return gauss.prob_density(lin_const_sigma_);
 }
 
 double brad_synoptic_function_1d::max_frequency_prob_density()
 {
+
   bsta_gauss_sd1 gauss(max_freq_mean_, max_freq_sigma_*max_freq_sigma_);
   return gauss.prob_density(max_freq_amplitude_);
 }
