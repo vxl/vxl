@@ -55,6 +55,7 @@
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_vector_fixed.h>
 #include <brip/brip_filter_bank.h>
+#include <vbl/vbl_ref_count.h>
 
 struct sdet_neighbor
 {
