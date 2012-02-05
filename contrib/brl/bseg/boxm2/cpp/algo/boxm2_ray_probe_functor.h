@@ -48,7 +48,7 @@ class boxm2_ray_probe_functor
       case BOXM2_AUX3:
         nelems = 1;
         break;
-	  case BOXM2_NUM_OBS:
+      case BOXM2_NUM_OBS:
         nelems = 4;
         break;
       default:
@@ -119,7 +119,7 @@ class boxm2_ray_probe_functor
         data_to_return_->push_back(app);
         break;
       }
-	  case BOXM2_NUM_OBS:
+      case BOXM2_NUM_OBS:
       {
         boxm2_data<BOXM2_NUM_OBS>* num_obs_data  = new boxm2_data<BOXM2_NUM_OBS>(data_ptr->data_buffer(),data_ptr->buffer_length(),data_ptr->block_id());
         boxm2_data<BOXM2_NUM_OBS>::datatype app=num_obs_data->data()[index];

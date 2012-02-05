@@ -1,27 +1,27 @@
 //------------------------------------------------------------------------------
-// Scene info struct - contains values (no pointers) for scene 
+// Scene info struct - contains values (no pointers) for scene
 // and world meta information.  can be passed into kernel to cut down on args
-// NOTE that this is missing information, like mem pointers and number of 
+// NOTE that this is missing information, like mem pointers and number of
 // blocks per buffer (info needed for update)
 //------------------------------------------------------------------------------
 
 
-//apperance model SIZE for the scene. 
+//appearance model SIZE for the scene.
 //note that merge and refine use this for both numobs and alpha
-#ifdef MOG_TYPE_16 
+#ifdef MOG_TYPE_16
     #define MOG_TYPE int4
     #define CONVERT_FUNC(lhs,data) ushort8 lhs = as_ushort8(data)
     #define CONVERT_FUNC_FLOAT8(lhs,data) float8 lhs = convert_float8( as_ushort8(data) )
     #define CONVERT_FUNC_SAT_RTE(lhs,data) lhs = as_int4( convert_ushort8_sat_rte(data) )
-	#define EXPECTED_INT(lhs, data) lhs =((data.s0) * (data.s2)+(data.s3) * (data.s5)+(data.s6) * (1 - data.s2 - data.s5)); 
+    #define EXPECTED_INT(lhs, data) lhs =((data.s0) * (data.s2)+(data.s3) * (data.s5)+(data.s6) * (1 - data.s2 - data.s5));
     #define NORM 65535
 #endif
-#ifdef MOG_TYPE_8 
+#ifdef MOG_TYPE_8
     #define MOG_TYPE int2
     #define CONVERT_FUNC(lhs,data) uchar8 lhs = as_uchar8(data)
     #define CONVERT_FUNC_FLOAT8(lhs,data) float8 lhs = convert_float8( as_uchar8(data) )
     #define CONVERT_FUNC_SAT_RTE(lhs,data) lhs = as_int2( convert_uchar8_sat_rte(data) )
-	#define EXPECTED_INT(lhs, data) lhs =((data.s0) * (data.s2)+(data.s3) * (data.s5)+(data.s6) * (1 - data.s2 - data.s5)); 
+    #define EXPECTED_INT(lhs, data) lhs =((data.s0) * (data.s2)+(data.s3) * (data.s5)+(data.s6) * (1 - data.s2 - data.s5));
     #define NORM 255
 #endif
 #ifdef MOG_TYPE_4
@@ -38,7 +38,7 @@
 #ifndef MOG_TYPE
     #define MOG_TYPE int2
     #define CONVERT_FUNC(lhs,data) uchar8 lhs = as_uchar8(data)
-    #define CONVERT_FUNC_SAT_RTE(lhs,data) lhs = as_int2(convert_uchar8_sat_rte(data)); 
+    #define CONVERT_FUNC_SAT_RTE(lhs,data) lhs = as_int2(convert_uchar8_sat_rte(data));
     #define NORM 255
 #endif
 
@@ -47,8 +47,8 @@
     #define MOG_TYPE float8
     #define CONVERT_FUNC(lhs,data) float8 lhs = data
     #define CONVERT_FUNC_FLOAT8(lhs,data) float8 lhs = convert_float8( data)
-	#define CONVERT_FUNC_SAT_RTE(lhs,data) lhs = data; 
-	#define EXPECTED_INT(lhs, data) lhs = min(data.s7*data.s7,1/(data.s7*data.s7))
+    #define CONVERT_FUNC_SAT_RTE(lhs,data) lhs = data;
+    #define EXPECTED_INT(lhs, data) lhs = min(data.s7*data.s7,1/(data.s7*data.s7))
     #define NORM 1.0
 #endif
 
@@ -65,22 +65,22 @@
 
 typedef struct
 {
-  //world information  
+  //world information
   float4    origin;                   // scene origin (point)
   int4      dims;                     // number of blocks in each dimension
   float     block_len;                // size of each block (can only be 1 number now that we've established blocks are cubes)
-  float     epsilon; 
+  float     epsilon;
 
-  //tree meta information 
+  //tree meta information
   int       root_level;               // root_level of trees
   int       num_buffer;               // number of buffers (both data and tree)
   int       tree_len;                 // length of tree buffer (number of cells/trees)
   int       data_len;                 // length of data buffer (number of cells)
-  
-} RenderSceneInfo;   
+
+} RenderSceneInfo;
 
 
-typedef struct 
+typedef struct
 {
     float x;
     float y;

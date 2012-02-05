@@ -84,7 +84,7 @@ boxm2_stream_cache::boxm2_stream_cache(boxm2_scene_sptr scene,
   for ( it = data_types_.begin(); it != data_types_.end(); it++) {
     it->second->buf_size_  = (unsigned long)it->second->cell_size_*k;
 #ifdef DEBUG
-	vcl_cout << it->first << " will have " << it->second->buf_size_/vcl_pow(2.0, 20.0) << " MB buffers per identifier.\n";
+    vcl_cout << it->first << " will have " << it->second->buf_size_/vcl_pow(2.0, 20.0) << " MB buffers per identifier.\n";
 #endif
   }
 }
@@ -94,8 +94,8 @@ boxm2_stream_cache::~boxm2_stream_cache()
 {
   data_types_.clear();
   for (vcl_map<vcl_string, vcl_vector<boxm2_stream_cache_helper_sptr> >::iterator it = data_streams_.begin();
-    it != data_streams_.end(); it++) {
-      it->second.clear(); // calls the destructor for each member which closes the streams
+       it != data_streams_.end(); it++) {
+    it->second.clear(); // calls the destructor for each member which closes the streams
   }
   data_streams_.clear();
 }
@@ -104,11 +104,11 @@ boxm2_stream_cache::~boxm2_stream_cache()
 void boxm2_stream_cache::close_streams()
 {
   for (vcl_map<vcl_string, vcl_vector<boxm2_stream_cache_helper_sptr> >::iterator it = data_streams_.begin();
-    it != data_streams_.end(); it++) {
-      vcl_vector<boxm2_stream_cache_helper_sptr>& strs = it->second;
-      for (unsigned i = 0; i < strs.size(); i++) {
-        strs[i]->close_file();
-      }
+       it != data_streams_.end(); it++) {
+    vcl_vector<boxm2_stream_cache_helper_sptr>& strs = it->second;
+    for (unsigned i = 0; i < strs.size(); i++) {
+      strs[i]->close_file();
+    }
   }
 }
 

@@ -51,7 +51,7 @@ void step_cell_preinf(AuxArgs aux_args, int data_ptr, uchar llid, float d)
     float  alpha    = aux_args.alpha[data_ptr];
     CONVERT_FUNC_FLOAT8(mixture,aux_args.mog[data_ptr])/NORM;
     float  weight3  = (1.0f-mixture.s2-mixture.s5);
-		
+
     int cum_int = aux_args.seg_len[data_ptr];
     int mean_int = aux_args.mean_obs[data_ptr];
     float mean_obs = convert_float(mean_int) / convert_float(cum_int);
@@ -229,7 +229,7 @@ void step_cell_post(AuxArgs aux_args, int data_ptr, uchar llid, float d)
     float cum_len = convert_float(cum_int) / SEGLEN_FACTOR;
 
     float ray_beta, vis_cont;
-    compute_post_ind( d,aux_args.linfo->block_len,
+    compute_post_ind(d,aux_args.linfo->block_len,
                      alpha,
                      mixture,
                      weight3,
@@ -246,7 +246,6 @@ void step_cell_post(AuxArgs aux_args, int data_ptr, uchar llid, float d)
     atom_add(&aux_args.beta_array[data_ptr], beta_int);
     int vis_int  = convert_int_rte(vis_cont * SEGLEN_FACTOR);
     atom_add(&aux_args.vis_array[data_ptr], vis_int);
-    
 }
 #endif // POST
 

@@ -1,7 +1,7 @@
 from boxm2_register import boxm2_batch, dbvalue
 
 #############################################################################
-# PROVIDES higher level bbas python functions to make boxm2_batch 
+# PROVIDES higher level bbas python functions to make boxm2_batch
 # code more readable/refactored
 #############################################################################
 def atmospheric_correct(image, sun_z):
@@ -11,7 +11,7 @@ def atmospheric_correct(image, sun_z):
   boxm2_batch.run_process()
   (id,type) = boxm2_batch.commit_output(0)
   image_corrected = dbvalue(id,type)
-  return image_corrected 
+  return image_corrected
 
 def estimate_irradiance(image, sun_z, mean_albedo=1.0):
   boxm2_batch.init_process('bbasEstimateIrradianceProcess')
@@ -50,7 +50,7 @@ def sun_position(image_path):
   boxm2_batch.remove_data(id)
   (id,type) = boxm2_batch.commit_output(2)
   sun_dist = boxm2_batch.get_output_float(id)
-  boxm2_batch.remove_data(id)  
+  boxm2_batch.remove_data(id)
   return(sun_az, sun_el, sun_dist)
 
 def camera_angles(camera, x,y,z):
@@ -72,11 +72,11 @@ def bbox_from_ply(filename):
   boxm2_batch.set_input_string(0,filename)
   boxm2_batch.run_process()
   for i in (0,1,2):
-	  (id,type) = boxm2_batch.commit_output(i)
-	  minpoint.append(boxm2_batch.get_output_double(id));
+    (id,type) = boxm2_batch.commit_output(i)
+    minpoint.append(boxm2_batch.get_output_double(id));
   for i in (3,4,5):
-	  (id,type) = boxm2_batch.commit_output(i)
-	  maxpoint.append(boxm2_batch.get_output_double(id));
+    (id,type) = boxm2_batch.commit_output(i)
+    maxpoint.append(boxm2_batch.get_output_double(id));
   return (minpoint, maxpoint)
 
 def estimate_radiance_values(image, sun_el, sun_dist, sensor_el, solar_irrad=None, downwelled_irrad=None, optical_depth=None):
@@ -103,10 +103,9 @@ def estimate_radiance_values(image, sun_el, sun_dist, sensor_el, solar_irrad=Non
   boxm2_batch.remove_data(id)
   return (airlight, ref_horizontal, ref_sun_facing)
 
-
 #Removes elements from brdb (list of elements, or just one)
 def remove_from_db(dbvals) :
-  if not isinstance(dbvals, (list, tuple)) : 
+  if not isinstance(dbvals, (list, tuple)) :
     dbvals = [dbvals]
   for dbval in dbvals:
     boxm2_batch.init_process("bbasRemoveFromDbProcess")

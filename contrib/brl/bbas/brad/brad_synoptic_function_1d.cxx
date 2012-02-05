@@ -62,9 +62,7 @@ angle(double elev0, double az0, double elev1, double az1)
 
 double brad_synoptic_function_1d::arc_length(unsigned index)
 {
-    unsigned n = this->size();
-    float s = azimuth_[index];
-    return s;
+    return azimuth_[index];
 }
 
 void brad_synoptic_function_1d::fit_intensity_cubic()
@@ -81,20 +79,19 @@ void brad_synoptic_function_1d::fit_intensity_cubic()
   double min_vis=0.0;
   double max_vis=0.0;
 
-  
-  for (unsigned r = 0; r<n;++r) 
+  for (unsigned r = 0; r<n;++r)
   {
-      double s = this->arc_length(r);
-      if(min_s >   s)
-      {
-          min_s = s;
-          min_vis = vis_[r];
-      }
-      if( max_s < s)
-      {
-          max_vis = vis_[r];
-          max_s =s;
-      }
+    double s = this->arc_length(r);
+    if (min_s >   s)
+    {
+      min_s = s;
+      min_vis = vis_[r];
+    }
+    if ( max_s < s)
+    {
+      max_vis = vis_[r];
+      max_s =s;
+    }
   }
   for (unsigned r = 0; r<n;++r) {
     double s = this->arc_length(r);
@@ -103,7 +100,7 @@ void brad_synoptic_function_1d::fit_intensity_cubic()
   }
 
   vnl_double_4 l;
-  l[0] = 0; 
+  l[0] = 0;
   l[1] = min_s - max_s ;
   l[2] = min_s*min_s - max_s*max_s ;
   l[3] = min_s*min_s*min_s - max_s*max_s*max_s ;
@@ -281,7 +278,6 @@ auto_corr_freq_amplitudes(vcl_vector<double>& freq_amplitudes)
           double arg = x*k;
       ac += vcl_cos(arg)*auto_corr_[i];
       as += vcl_sin(arg)*auto_corr_[i];
-
     }
 
     // frequency amplitude
@@ -290,20 +286,16 @@ auto_corr_freq_amplitudes(vcl_vector<double>& freq_amplitudes)
       max_freq_amplitude_ = amp;
     freq_amplitudes.push_back(amp);
   }
-
-
 }
 
 double brad_synoptic_function_1d::lin_const_fit_prob_density()
 {
-
   bsta_gauss_sd1 gauss(0.0, inherent_sigma_*inherent_sigma_);
   return gauss.prob_density(lin_const_sigma_);
 }
 
 double brad_synoptic_function_1d::max_frequency_prob_density()
 {
-
   bsta_gauss_sd1 gauss(max_freq_mean_, max_freq_sigma_*max_freq_sigma_);
   return gauss.prob_density(max_freq_amplitude_);
 }

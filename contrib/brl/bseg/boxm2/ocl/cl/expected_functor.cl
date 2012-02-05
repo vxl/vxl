@@ -104,7 +104,7 @@ void step_cell_change_detection_uchar8_w_expected(__global MOG_TYPE * cell_data,
   float prob_den=gauss_3_mixture_prob_density(img_in,
                                               data.s0,data.s1,data.s2,
                                               data.s3,data.s4,data.s5,
- 	                                          data.s6,data.s7,1-data.s2-data.s5);
+                                              data.s6,data.s7,1-data.s2-data.s5);
 
 #endif
 
