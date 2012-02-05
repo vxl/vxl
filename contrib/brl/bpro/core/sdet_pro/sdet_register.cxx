@@ -5,9 +5,11 @@
 #include <bprb/bprb_macros.h>
 #include <bprb/bprb_func_process.h>
 #include <bprb/bprb_batch_process_manager.h>
+#include <sdet/sdet_texture_classifier.h>
 
 void sdet_register::register_datatype()
 {
+  REGISTER_DATATYPE(sdet_texture_classifier_sptr);
 }
 
 void sdet_register::register_process()
@@ -21,4 +23,6 @@ void sdet_register::register_process()
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, sdet_detect_third_order_edges_dt_process, "sdetDetectThirdOrderEdgesDTProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, sdet_texture_classifier_process, "sdetTextureClassifierProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, sdet_texture_classifier_kernel_margin_process, "sdetTextureClassifierKernelMarginProcess");
+  REG_PROCESS_FUNC_CONS_FIN(bprb_func_process, bprb_batch_process_manager, sdet_texture_training_process, "sdetTextureTrainingProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, sdet_create_texture_classifier_process, "sdetCreateTextureClassifierProcess");
 }

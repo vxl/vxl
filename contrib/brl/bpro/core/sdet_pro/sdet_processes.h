@@ -14,5 +14,7 @@ DECLARE_FUNC_CONS(sdet_detect_third_order_edges_process);
 DECLARE_FUNC_CONS(sdet_detect_third_order_edges_dt_process);
 DECLARE_FUNC_CONS(sdet_texture_classifier_process);
 DECLARE_FUNC_CONS(sdet_texture_classifier_kernel_margin_process);
+DECLARE_FUNC_CONS_FIN(sdet_texture_training_process);
+DECLARE_FUNC_CONS(sdet_create_texture_classifier_process);
 
 #endif
