@@ -2,6 +2,7 @@
 #include <sdet/sdet_mrf_site_bp_sptr.h>
 #include <sdet/sdet_region_edge_sptr.h>
 #include <sdet/sdet_region_sptr.h>
+#include <sdet/sdet_texture_classifier_sptr.h>
 
 #include <sdet/sdet_atmospheric_image_classifier.h>
 #include <sdet/sdet_contour.h>
