@@ -4,7 +4,7 @@
 //:
 // \file
 // \author Andrew Miller
-// 
+//
 //  implementation based on code from Tomas Akenine-Moller
 //  http://jgt.akpeters.com/papers/AkenineMoller01/tribox.html
 
@@ -13,13 +13,11 @@
 #include <vcl_cassert.h>
 #include <vcl_cmath.h>
 #include <vcl_algorithm.h>
-#include <vnl/vnl_math.h>
-#include <vgl/vgl_sphere_3d.h>
 #include <vcl_vector.h>
 
 //helper functions
-namespace bvgl_intersection_helpers {
-
+namespace bvgl_intersection_helpers
+{
   //label axes (for iterating)
   enum Axes { X=0, Y=1, Z=2 };
 
@@ -43,17 +41,17 @@ namespace bvgl_intersection_helpers {
   template <typename T>
   inline void findMinMax(T x0, T x1, T x2, T& min, T&max) {
     min = max = x0;
-    if(x1 < min) min = x1;
-    if(x1 > max) max = x1; 
-    if(x2 < min) min = x2;
-    if(x2 > max) max = x2; 
-  } 
+    if (x1 < min) min = x1;
+    if (x1 > max) max = x1;
+    if (x2 < min) min = x2;
+    if (x2 > max) max = x2;
+  }
 
-  template <typename T> 
+  template <typename T>
   bool planeBoxIntersect(T normal[3], T d, T maxbox[3]) {
     T vmin[3],vmax[3];
-    for(int q=X;q<=Z;q++) {
-      if(normal[q]>0.0f) {
+    for (int q=X;q<=Z;q++) {
+      if (normal[q]>0.0f) {
         vmin[q]=-maxbox[q];
         vmax[q]=maxbox[q];
       }
@@ -62,11 +60,8 @@ namespace bvgl_intersection_helpers {
         vmax[q]=-maxbox[q];
       }
     }
-    if(dot(normal,vmin)+d > 0.0f) 
-      return false;
-    if(dot(normal,vmax)+d >= 0.0f) 
-      return true;
-    return false;
+    return dot(normal,vmin)+d <= 0.0f
+       &&  dot(normal,vmax)+d >= 0.0f;
   }
 
   template<int Axis0, int Axis1, typename T>
@@ -76,10 +71,7 @@ namespace bvgl_intersection_helpers {
     T min = vcl_min(p0, p1);
     T max = vcl_max(p0, p1);
     T rad = fedge[Axis1]*boxhalfsize[Axis0] + fedge[Axis0]*boxhalfsize[Axis1];
-    if(min > rad || max < -rad)
-      return false;
-    else
-      return true;
+    return min <= rad && max >= -rad;
   }
 }
 
@@ -88,19 +80,15 @@ namespace bvgl_intersection_helpers {
 template <typename T>
 bool bvgl_intersection(vgl_box_3d<T> const& A, bvgl_triangle_3d<T> const& B)
 {
-  using namespace bvgl_intersection_helpers; 
+  // use separating axis theorem to intersect triangle and box */
+  using namespace bvgl_intersection_helpers;
 
   //check to see if the triangle slices the box
   T boxcenter[3] = { A.centroid_x(), A.centroid_y(), A.centroid_z() };
   T boxhalfsize[3] = { A.width()/2.0, A.height()/2.0, A.depth()/2.0 };
-  T triverts[3][3] = { B[0].x(), B[0].y(), B[0].z(), 
-                       B[1].x(), B[1].y(), B[1].z(), 
-                       B[2].x(), B[2].y(), B[2].z() };  
-
-  // use separating axis theorem to intersect triangle and box */
-  T axis[3];
-  T p0,p1,p2,rad,fex,fey,fez;  
-  T normal[3];
+  T triverts[3][3] = { { B[0].x(), B[0].y(), B[0].z() },
+                       { B[1].x(), B[1].y(), B[1].z() },
+                       { B[2].x(), B[2].y(), B[2].z() } };
 
   //translate box to origin (tri verts subtracted)
   T v0[3],v1[3],v2[3];
@@ -108,7 +96,7 @@ bool bvgl_intersection(vgl_box_3d<T> const& A, bvgl_triangle_3d<T> const& B)
   subtract(v1,triverts[1],boxcenter);
   subtract(v2,triverts[2],boxcenter);
 
-  // compute triangle edges 
+  // compute triangle edges
   T e0[3],e1[3],e2[3];
   subtract(e0,v1,v0);
   subtract(e1,v2,v1);
@@ -117,39 +105,40 @@ bool bvgl_intersection(vgl_box_3d<T> const& A, bvgl_triangle_3d<T> const& B)
   //Test 1: test AABB collision (Box to tri AABB)
   T min, max;
   findMinMax(v0[X],v1[X],v2[X],min,max);
-  if(min>boxhalfsize[X] || max<-boxhalfsize[X]) 
+  if (min>boxhalfsize[X] || max<-boxhalfsize[X])
     return false;
   findMinMax(v0[Y],v1[Y],v2[Y],min,max);
-  if(min>boxhalfsize[Y] || max<-boxhalfsize[Y]) 
+  if (min>boxhalfsize[Y] || max<-boxhalfsize[Y])
     return false;
   findMinMax(v0[Z],v1[Z],v2[Z],min,max);
-  if(min>boxhalfsize[Z] || max<-boxhalfsize[Z]) 
+  if (min>boxhalfsize[Z] || max<-boxhalfsize[Z])
     return false;
 
   //Test 2: test box/plane intersection
+  T normal[3];
   cross(normal,e0,e1);
   T d = -dot(normal,v0);  /* plane eq: normal.x+d=0 */
-  if(!planeBoxIntersect(normal,d,boxhalfsize)) 
+  if (!planeBoxIntersect(normal,d,boxhalfsize))
     return false;
 
   //test 3: if plane/box do intersect, test bounds
-  T fe[3] = { fabs(e0[X]), fabs(e0[Y]), fabs(e0[Z]) };
-  if( !axisTest<Y,Z>(e0, fe, v0, v2, boxhalfsize) || 
+  T fe[3] = { vcl_fabs(e0[X]), vcl_fabs(e0[Y]), vcl_fabs(e0[Z]) };
+  if (!axisTest<Y,Z>(e0, fe, v0, v2, boxhalfsize) ||
       !axisTest<X,Z>(e0, fe, v0, v2, boxhalfsize) ||
       !axisTest<X,Y>(e0, fe, v1, v2, boxhalfsize) )
     return false;
 
-  fe[X]=fabs(e1[X]); fe[Y]=fabs(e1[Y]); fe[Z]=fabs(e1[Z]);
-  if( !axisTest<Y,Z>(e1, fe, v0, v2, boxhalfsize) ||
+  fe[X]=vcl_fabs(e1[X]); fe[Y]=vcl_fabs(e1[Y]); fe[Z]=vcl_fabs(e1[Z]);
+  if (!axisTest<Y,Z>(e1, fe, v0, v2, boxhalfsize) ||
       !axisTest<X,Z>(e1, fe, v0, v2, boxhalfsize) ||
       !axisTest<X,Y>(e1, fe, v0, v1, boxhalfsize) )
     return false;
 
-  fe[X]=fabs(e2[X]); fe[Y]=fabs(e2[Y]); fe[Z]=fabs(e2[Z]);
-  if( !axisTest<Y,Z>(e2, fe, v0, v1, boxhalfsize) ||
+  fe[X]=vcl_fabs(e2[X]); fe[Y]=vcl_fabs(e2[Y]); fe[Z]=vcl_fabs(e2[Z]);
+  if (!axisTest<Y,Z>(e2, fe, v0, v1, boxhalfsize) ||
       !axisTest<X,Z>(e2, fe, v0, v1, boxhalfsize) ||
       !axisTest<X,Y>(e2, fe, v1, v2, boxhalfsize) )
-    return false; 
+    return false;
 
   //otherwise box and tri overlap
   return true;
