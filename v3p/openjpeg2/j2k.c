@@ -8011,19 +8011,18 @@ void j2k_setup_encoder(opj_j2k_t *p_j2k, opj_cparameters_t *parameters, opj_imag
 			}else{
 				if (parameters->csty & J2K_CCP_CSTY_PRT) {
 					int p = 0;
-					for (j = tccp->numresolutions - 1; j >= 0; j--) {
+					for (j = tccp->numresolutions; j > 0; --j) {
 						if (p < parameters->res_spec) {
-							
 							if (parameters->prcw_init[p] < 1) {
-								tccp->prcw[j] = 1;
+								tccp->prcw[j-1] = 1;
 							} else {
-								tccp->prcw[j] = int_floorlog2(parameters->prcw_init[p]);
+								tccp->prcw[j-1] = int_floorlog2(parameters->prcw_init[p]);
 							}
 							
 							if (parameters->prch_init[p] < 1) {
-								tccp->prch[j] = 1;
+								tccp->prch[j-1] = 1;
 							}else {
-								tccp->prch[j] = int_floorlog2(parameters->prch_init[p]);
+								tccp->prch[j-1] = int_floorlog2(parameters->prch_init[p]);
 							}
 
 						} else {
@@ -8032,19 +8031,19 @@ void j2k_setup_encoder(opj_j2k_t *p_j2k, opj_cparameters_t *parameters, opj_imag
 							int size_prch = parameters->prch_init[res_spec - 1] >> (p - (res_spec - 1));
 							
 							if (size_prcw < 1) {
-								tccp->prcw[j] = 1;
+								tccp->prcw[j-1] = 1;
 							} else {
-								tccp->prcw[j] = int_floorlog2(size_prcw);
+								tccp->prcw[j-1] = int_floorlog2(size_prcw);
 							}
 							
 							if (size_prch < 1) {
-								tccp->prch[j] = 1;
+								tccp->prch[j-1] = 1;
 							} else {
-								tccp->prch[j] = int_floorlog2(size_prch);
+								tccp->prch[j-1] = int_floorlog2(size_prch);
 							}
 						}
 						p++;
-						/*printf("\nsize precinct for level %d : %d,%d\n", j,tccp->prcw[j], tccp->prch[j]); */
+						/*printf("\nsize precinct for level %d : %d,%d\n", j-1,tccp->prcw[j-1], tccp->prch[j-1]); */
 					}	//end for
 				} else {
 					for (j = 0; j < tccp->numresolutions; j++) {
