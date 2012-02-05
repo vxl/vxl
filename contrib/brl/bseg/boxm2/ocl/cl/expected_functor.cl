@@ -21,9 +21,7 @@ void step_cell_render(__global MOG_TYPE   * cell_data,
   {
       CONVERT_FUNC(udata,cell_data[data_ptr]);
       float8  data=convert_float8(udata)/NORM;
-      expected_int_cell = ((data.s0) * (data.s2)
-                          +(data.s3) * (data.s5)
-                          +(data.s6) * (1 - data.s2 - data.s5));
+      EXPECTED_INT(expected_int_cell,data);
   }
   float omega=(*vis) * (1.0f - diff_omega);
   (*vis) *= diff_omega;
@@ -92,7 +90,6 @@ void step_cell_change_detection_uchar8_w_expected(__global MOG_TYPE * cell_data,
   float mode3_prob = (w2      > 10e-6f && data.s7 > .01f) ? gauss_prob_density(img_intensity, data.s6, data.s7) : 0.0f;
   prob_den = fmax(mode1_prob, fmax(mode2_prob, mode3_prob));
 #else
-
   //choose value based on cell depth
   int cell_depth = get_depth(bit_index);
   float img_in = img_intensity.x;
@@ -107,7 +104,8 @@ void step_cell_change_detection_uchar8_w_expected(__global MOG_TYPE * cell_data,
   float prob_den=gauss_3_mixture_prob_density(img_in,
                                               data.s0,data.s1,data.s2,
                                               data.s3,data.s4,data.s5,
-                                              data.s6,data.s7,1-data.s2-data.s5);
+ 	                                          data.s6,data.s7,1-data.s2-data.s5);
+
 #endif
 
   float alpha=alpha_data[data_ptr];
