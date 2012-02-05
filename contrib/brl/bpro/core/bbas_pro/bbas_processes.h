@@ -17,5 +17,6 @@ DECLARE_FUNC_CONS(bsta_joint_hist_3d_vrml_process);
 DECLARE_FUNC_CONS(bsta_clone_joint_hist_3d_process);
 DECLARE_FUNC_CONS(bbas_remove_from_db_process);
 
+DECLARE_FUNC_CONS(imesh_ply_bbox_process);
 
 #endif // bbas_processes_h_
