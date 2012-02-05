@@ -83,7 +83,9 @@ boxm2_stream_cache::boxm2_stream_cache(boxm2_scene_sptr scene,
   vcl_map<vcl_string, boxm2_stream_cache_datatype_helper_sptr>::iterator it;
   for ( it = data_types_.begin(); it != data_types_.end(); it++) {
     it->second->buf_size_  = (unsigned long)it->second->cell_size_*k;
-    vcl_cout << it->first << " will have " << it->second->buf_size_/vcl_pow(2.0, 20.0) << " MB buffers per identifier.\n";
+#ifdef DEBUG
+	vcl_cout << it->first << " will have " << it->second->buf_size_/vcl_pow(2.0, 20.0) << " MB buffers per identifier.\n";
+#endif
   }
 }
 
