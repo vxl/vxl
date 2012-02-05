@@ -39,7 +39,16 @@ class boxm2_ray_probe_functor
       case BOXM2_AUX0:
         nelems = 1;
         break;
-      case BOXM2_NUM_OBS:
+      case BOXM2_AUX1:
+        nelems = 1;
+        break;
+      case BOXM2_AUX2:
+        nelems = 1;
+        break;
+      case BOXM2_AUX3:
+        nelems = 1;
+        break;
+	  case BOXM2_NUM_OBS:
         nelems = 4;
         break;
       default:
@@ -89,7 +98,28 @@ class boxm2_ray_probe_functor
         data_to_return_->push_back(app);
         break;
       }
-      case BOXM2_NUM_OBS:
+      case BOXM2_AUX1:
+      {
+        boxm2_data<BOXM2_AUX1>*  app_data  = new boxm2_data<BOXM2_AUX1>(data_ptr->data_buffer(),data_ptr->buffer_length(),data_ptr->block_id());
+        boxm2_data<BOXM2_AUX1>::datatype app=app_data->data()[index];
+        data_to_return_->push_back(app);
+        break;
+      }
+      case BOXM2_AUX2:
+      {
+        boxm2_data<BOXM2_AUX2>*  app_data  = new boxm2_data<BOXM2_AUX2>(data_ptr->data_buffer(),data_ptr->buffer_length(),data_ptr->block_id());
+        boxm2_data<BOXM2_AUX2>::datatype app=app_data->data()[index];
+        data_to_return_->push_back(app);
+        break;
+      }
+      case BOXM2_AUX3:
+      {
+        boxm2_data<BOXM2_AUX3>*  app_data  = new boxm2_data<BOXM2_AUX3>(data_ptr->data_buffer(),data_ptr->buffer_length(),data_ptr->block_id());
+        boxm2_data<BOXM2_AUX3>::datatype app=app_data->data()[index];
+        data_to_return_->push_back(app);
+        break;
+      }
+	  case BOXM2_NUM_OBS:
       {
         boxm2_data<BOXM2_NUM_OBS>* num_obs_data  = new boxm2_data<BOXM2_NUM_OBS>(data_ptr->data_buffer(),data_ptr->buffer_length(),data_ptr->block_id());
         boxm2_data<BOXM2_NUM_OBS>::datatype app=num_obs_data->data()[index];
