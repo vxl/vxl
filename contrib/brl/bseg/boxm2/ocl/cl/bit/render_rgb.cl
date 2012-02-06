@@ -67,8 +67,11 @@ render_bit_scene( __constant  RenderSceneInfo    * linfo,
   // we know i,j map to a point on the image, have calculated ray
   // BEGIN RAY TRACE
   //----------------------------------------------------------------------------
+  
   float4  expint = exp_image[imIndex[llid]];
+#ifdef YUV
   expint = rgb2yuv(expint); 
+#endif
   float  vis     = vis_image[imIndex[llid]];
   AuxArgs aux_args; 
   aux_args.alpha  = alpha_array; 
@@ -83,7 +86,9 @@ render_bit_scene( __constant  RenderSceneInfo    * linfo,
             
   //store the expected intensity (as UINT)
   //YUV edit
+#ifdef YUV
   expint = yuv2rgb(expint); 
+#endif
   exp_image[imIndex[llid]] = expint;  
 
   //store visibility at the end of this block
@@ -102,12 +107,14 @@ void step_cell_render(AuxArgs aux_args, int data_ptr, uchar llid, float d)
     float8 data = convert_float8(udata)/255.0f; 
     
     //expected cell is just the means
-    expected_int_cell = data.s0123; 
+    expected_int_cell = (float4)data.s0123; 
     
     //undo the step taken in compress RGB U/V is in [0,1], 
     // put them back in ranges U in [-.436, .436] and V in [-.615, .615]
-    expected_int_cell.y = expected_int_cell.y*U_RANGE - U_MAX; 
+#ifdef YUV
+	expected_int_cell.y = expected_int_cell.y*U_RANGE - U_MAX; 
     expected_int_cell.z = expected_int_cell.z*V_RANGE - V_MAX; 
+#endif
   }
   
   //calc and store visibility
