@@ -180,8 +180,7 @@ bool boxm2_ocl_update_aux_per_view_process(bprb_func_process& pro)
 
   // create a command queue.
   int status=0;
-  cl_command_queue queue = clCreateCommandQueue(device->context(),*(device->device_id()),
-    CL_QUEUE_PROFILING_ENABLE,&status);
+  cl_command_queue queue = clCreateCommandQueue(device->context(),*(device->device_id()),CL_QUEUE_PROFILING_ENABLE,&status);
   if (status!=0) return false;
 
   vcl_string identifier=device->device_identifier()+options;
@@ -297,7 +296,7 @@ bool boxm2_ocl_update_aux_per_view_process(bprb_func_process& pro)
       //grab an appropriately sized AUX data buffer
       int auxTypeSize  = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_AUX0>::prefix());
       bocl_mem *aux0   = opencl_cache->get_data(*id, boxm2_data_traits<BOXM2_AUX0>::prefix(suffix),info_buffer->data_buffer_length*auxTypeSize,false);
-      auxTypeSize     = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_AUX1>::prefix());
+      auxTypeSize      = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_AUX1>::prefix());
       bocl_mem *aux1   = opencl_cache->get_data(*id, boxm2_data_traits<BOXM2_AUX1>::prefix(suffix),info_buffer->data_buffer_length*auxTypeSize,false);
       auxTypeSize      = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_AUX2>::prefix());
       bocl_mem *aux2   = opencl_cache->get_data(*id,boxm2_data_traits<BOXM2_AUX2>::prefix(suffix), info_buffer->data_buffer_length*auxTypeSize,false);
