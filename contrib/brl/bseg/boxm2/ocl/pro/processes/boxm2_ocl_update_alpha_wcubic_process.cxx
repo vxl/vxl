@@ -74,7 +74,8 @@ namespace boxm2_ocl_update_alpha_wcubic_process_globals
 
     //may need DIFF LIST OF SOURCES FOR THIS GUY
     bocl_kernel* proc_img = new bocl_kernel();
-    proc_img->create_kernel(&device->context(),device->device_id(), non_ray_src, "proc_norm_image", options, "update::proc_norm_image");
+	vcl_string proc_norm_opts =options+ " -D PROC_NORM ";
+    proc_img->create_kernel(&device->context(),device->device_id(), non_ray_src, "proc_norm_image", proc_norm_opts, "update::proc_norm_image");
     vec_kernels.push_back(proc_img);
 
     //push back cast_ray_bit
