@@ -149,6 +149,14 @@ bool boxm2_ocl_render_expected_image_process(bprb_func_process& pro)
       options=" -D MOG_TYPE_16 ";
       apptypesize = boxm2_data_traits<BOXM2_MOG3_GREY_16>::datasize();
     }
+	else if ( apps[i] == boxm2_data_traits<BOXM2_FLOAT8>::prefix() )
+	{
+      data_type = apps[i];
+      foundDataType = true;
+      options=" -D FLOAT8 ";
+      apptypesize = boxm2_data_traits<BOXM2_FLOAT8>::datasize();
+
+	}
   }
   if (!foundDataType) {
     vcl_cout<<"BOXM2_OCL_RENDER_PROCESS ERROR: scene doesn't have BOXM2_MOG3_GREY or BOXM2_MOG3_GREY_16 data type"<<vcl_endl;
