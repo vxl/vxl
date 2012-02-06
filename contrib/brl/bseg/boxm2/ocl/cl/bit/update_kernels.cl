@@ -29,8 +29,8 @@ void
 seg_len_main(__constant  RenderSceneInfo    * linfo,
              __global    int4               * tree_array,       // tree structure for each block
              __global    float              * alpha_array,      // alpha for each block
-             __global    int                * aux_array0,        // aux data array (four aux arrays strung together)
-             __global    int                * aux_array1,        // aux data array (four aux arrays strung together)
+             __global    int                * aux_array0,       // aux data array (four aux arrays strung together)
+             __global    int                * aux_array1,       // aux data array (four aux arrays strung together)
              __constant  uchar              * bit_lookup,       // used to get data_index
              __global    float4             * ray_origins,
              __global    float4             * ray_directions,
@@ -111,6 +111,7 @@ typedef struct
   __global int* mean_obs;
            float* vis_inf;
            float* pre_inf;
+		   float phi;
   __constant RenderSceneInfo * linfo;
 } AuxArgs;
 
@@ -183,6 +184,7 @@ pre_inf_main(__constant  RenderSceneInfo    * linfo,
   aux_args.mean_obs  = aux_array1;
   aux_args.vis_inf = &vis_inf;
   aux_args.pre_inf = &pre_inf;
+  aux_args.phi     = atan2(ray_d.y,ray_d.x);
   cast_ray( i, j,
             ray_ox, ray_oy, ray_oz,
             ray_dx, ray_dy, ray_dz,
@@ -215,6 +217,7 @@ typedef struct
   __local  short2* ray_bundle_array;
   __local  int*    cell_ptrs;
   __local  float*  cached_vis;
+		   float phi;
 
   __constant RenderSceneInfo * linfo;
 } AuxArgs;
@@ -298,6 +301,7 @@ bayes_main(__constant  RenderSceneInfo    * linfo,
   aux_args.mean_obs   = aux_array1;
   aux_args.vis_array  = aux_array2;
   aux_args.beta_array = aux_array3;
+  aux_args.phi		  = atan2(ray_d.y,ray_d.x);
 
   aux_args.ray_bundle_array = ray_bundle_array;
   aux_args.cell_ptrs = cell_ptrs;
@@ -359,7 +363,6 @@ proc_norm_image (  __global float* norm_image,
 #endif
 
 #ifdef UPDATE_BIT_SCENE_MAIN
-
 // Update each cell using its aux data
 //
 __kernel
@@ -442,6 +445,7 @@ update_bit_scene_main(__global RenderSceneInfo  * info,
     aux_array3[gid] = 0;
   }
 }
+
 #endif
 
 #ifdef UPDATE_APP_GREY
@@ -455,58 +459,97 @@ update_mog3_main(__global RenderSceneInfo  * info,
                  __global int              * aux_array2,
                  __global float            * output)
 {
+	  int gid=get_global_id(0);
+	  int datasize = info->data_len ;
+	  if (gid<datasize)
+	  {
+
+		//get cell cumulative length and make sure it isn't 0
+		int len_int = aux_array0[gid]; 
+		float cum_len  = convert_float(len_int)/SEGLEN_FACTOR; 
+		//update cell if alpha and cum_len are greater than 0
+		if (cum_len > 1e-10f)
+		{
+		  int obs_int = aux_array1[gid]; 
+		  int vis_int = aux_array2[gid]; 
+		  output[0] = obs_int;
+
+		  float mean_obs = convert_float(obs_int) / convert_float(len_int);
+		  float cell_vis  = convert_float(vis_int) / convert_float(len_int);
+
+		  float4 nobs     = convert_float4(nobs_array[gid]);
+		  CONVERT_FUNC_FLOAT8(mixture,mixture_array[gid])/NORM;
+
+		  float mu0 = mixture.s0, sigma0 = mixture.s1, w0 = mixture.s2;
+		  float mu1 = mixture.s3, sigma1 = mixture.s4, w1 = mixture.s5;
+		  float mu2 = mixture.s6, sigma2 = mixture.s7, w2 = 0.0;
+		  if(w0>0.0f && w1>0.0f)
+			  w2=1-w0-w1;  
+
+		  short Nobs0 = (short)nobs.s0, Nobs1 = (short)nobs.s1, Nobs2 = (short)nobs.s2; 
+		  float Nobs_mix = nobs.s3/100.0;
+		  update_gauss_3_mixture(mean_obs,              //mean observation
+								 cell_vis,              //cell_visability
+								 2.5f,0.07f,0.02f,
+								 &mu0,&sigma0,&w0,&Nobs0,
+								 &mu1,&sigma1,&w1,&Nobs1,
+								 &mu2,&sigma2,&w2,&Nobs2,
+								 &Nobs_mix);
+		  //reset the cells in memory
+		  float8 post_mix       = (float8) (mu0, sigma0, w0,
+											mu1, sigma1, w1,
+											mu2, sigma2)*(float) NORM;
+		  float4 post_nobs      = (float4) (Nobs0, Nobs1, Nobs2,Nobs_mix*100.0);
+		  CONVERT_FUNC_SAT_RTE(mixture_array[gid],post_mix);
+		  nobs_array[gid]       = convert_ushort4_sat_rte(post_nobs);
+		}
+	  }
+}
+#endif
+
+#ifdef UPDATE_ALPHA
+// Update each cell using its aux data
+//
+__kernel
+void
+update_bit_scene_main(__global RenderSceneInfo  * info,
+                      __global float            * alpha_array,
+                      __global int              * aux_array0,
+                      __global int              * aux_array1,
+                      __global int              * aux_array2,
+                      __global int              * aux_array3,
+                      __global float            * output)
+{
   int gid=get_global_id(0);
-  int datasize = info->data_len ;
+  int datasize = info->data_len ;//* info->num_buffer;
   if (gid<datasize)
   {
     //if alpha is less than zero don't update
-    float  cell_min = info->block_len/(float)(1<<info->root_level);
+    float  alpha    = alpha_array[gid];
+    float  cell_min = info->block_len	;
 
     //get cell cumulative length and make sure it isn't 0
     int len_int = aux_array0[gid];
     float cum_len  = convert_float(len_int)/SEGLEN_FACTOR;
 
+    //minimum alpha value, don't let blocks get below this
+    float  alphamin = -log(1.0-0.0001)/cell_min;
+
     //update cell if alpha and cum_len are greater than 0
-    if (cum_len > 1e-10f)
+    if (alpha > 0.0f && cum_len > 1e-10f)
     {
-      int obs_int = aux_array1[gid];
-      int vis_int = aux_array2[gid];
-
-      float mean_obs = convert_float(obs_int) / convert_float(len_int);
-      float cell_vis  = convert_float(vis_int) / (convert_float(len_int)*info->block_len);
-
-      float4 nobs     = convert_float4(nobs_array[gid]);
-      CONVERT_FUNC_FLOAT8(mixture,mixture_array[gid])/NORM;
-
-      float mu0 = mixture.s0, sigma0 = mixture.s1, w0 = mixture.s2;
-      float mu1 = mixture.s3, sigma1 = mixture.s4, w1 = mixture.s5;
-      float mu2 = mixture.s6, sigma2 = mixture.s7, w2 = 0.0;
-      if (w0>0.0f && w1>0.0f)
-        w2=1-w0-w1;
-
-      short Nobs0 = (short)nobs.s0, Nobs1 = (short)nobs.s1, Nobs2 = (short)nobs.s2;
-      float Nobs_mix = nobs.s3/100.0;
-
-      update_gauss_3_mixture(mean_obs,              //mean observation
-                             cell_vis,              //cell_visability
-                             2.5f,0.07f,0.02f,
-                             &mu0,&sigma0,&w0,&Nobs0,
-                             &mu1,&sigma1,&w1,&Nobs1,
-                             &mu2,&sigma2,&w2,&Nobs2,
-                             &Nobs_mix);
-      //reset the cells in memory
-      float8 post_mix       = (float8) (mu0, sigma0, w0,
-                                        mu1, sigma1, w1,
-                                        mu2, sigma2)*(float) NORM;
-      float4 post_nobs      = (float4) (Nobs0, Nobs1, Nobs2,Nobs_mix*100.0);
-      CONVERT_FUNC_SAT_RTE(mixture_array[gid],post_mix);
-      nobs_array[gid]       = convert_ushort4_sat_rte(post_nobs);
+      int beta_int= aux_array3[gid];
+	  float cell_beta = convert_float(beta_int) / (convert_float(len_int));
+	  cell_beta = clamp(cell_beta, 0.5,2.0);
+      alpha = alpha * cell_beta;
+      alpha_array[gid]      = max(alpha,alphamin);
     }
 
     //clear out aux data
     aux_array0[gid] = 0;
     aux_array1[gid] = 0;
-    aux_array2[gid] = 0;
+	aux_array2[gid] = 0;
+	aux_array3[gid] = 0;
   }
 }
 #endif
