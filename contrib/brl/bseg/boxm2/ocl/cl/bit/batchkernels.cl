@@ -168,14 +168,9 @@ clean_seg_len_main(__constant RenderSceneInfo * info,
                    __global float           * output)
 {
   int gid=get_global_id(0);
-  int datasize = info->data_len * info->num_buffer;
+  int datasize = info->data_len;
   if (gid<datasize)
-  {
       aux_array[gid] = 0.0f;
-
-      if (gid<500)
-        output[gid]=aux_array[gid];
-  }
 }
 #endif
 #ifdef UPDATE_PROB
