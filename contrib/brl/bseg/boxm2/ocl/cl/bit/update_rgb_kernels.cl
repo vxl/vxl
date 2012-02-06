@@ -94,10 +94,12 @@ seg_len_main(__constant  RenderSceneInfo    * linfo,
   aux_args.ray_bundle_array = ray_bundle_array;
   aux_args.cell_ptrs  = cell_ptrs;
   aux_args.cached_aux = cached_aux_data; 
+  aux_args.obs = obs; 
   
   //-----YUV edit ----///
+#ifdef YUV
   aux_args.obs = rgb2yuv(obs); 
-  
+#endif  
   aux_args.output = output; 
   cast_ray( i, j,
             ray_ox, ray_oy, ray_oz,
@@ -119,7 +121,7 @@ compress_rgb(__global RenderSceneInfo * info,
              __global int             * aux_mean_obsV)      // mean obs r aux array)
 {
   int gid = get_global_id(0);
-  int datasize = info->data_len * info->num_buffer;
+  int datasize = info->data_len;
   if (gid<datasize)
   {
     //get the segment length
@@ -137,8 +139,10 @@ compress_rgb(__global RenderSceneInfo * info,
     //------------- YUV EDIT ---------------
     //now mean_obs should have Y, U, V where U in [-.436, .436] and V in [-.615, .615]
     //put them in a 0-1 range
+#ifdef YUV
     mean_obs.y = (mean_obs.y + U_MAX)/U_RANGE; 
     mean_obs.z = (mean_obs.z + V_MAX)/V_RANGE;
+#endif
     //-----------------------------------
     
     //pack them in a single integer, and store in global memory
@@ -339,9 +343,9 @@ bayes_main(__constant  RenderSceneInfo    * linfo,
   aux_args.alpha   = alpha_array; 
   aux_args.mog     = mixture_array; 
   aux_args.seg_len = aux_seg_len;
-  aux_args.mean_obs   = aux_mean_obs;//&aux_array[linfo->num_buffer * linfo->data_len]; 
-  aux_args.vis_array  = aux_vis; //&aux_array[2 * linfo->num_buffer * linfo->data_len];
-  aux_args.beta_array = aux_beta; //&aux_array[3 * linfo->num_buffer * linfo->data_len];
+  aux_args.mean_obs   = aux_mean_obs;  //&aux_array[linfo->num_buffer * linfo->data_len]; 
+  aux_args.vis_array  = aux_vis;       //&aux_array[2 * linfo->num_buffer * linfo->data_len];
+  aux_args.beta_array = aux_beta;      //&aux_array[3 * linfo->num_buffer * linfo->data_len];
   
   aux_args.ray_bundle_array = ray_bundle_array; 
   aux_args.cell_ptrs = cell_ptrs; 
@@ -446,14 +450,12 @@ void update_yuv_appearance(float8* mixture, float* nobs, float4 mean_obs, float 
     update_gauss(mean_obs.x, rho, &mu, &sigma, min_sigma);
     (*mixture).s0 = mu; 
     (*mixture).s4 = 0.07; 
-    
     //u channel
     mu = (*mixture).s1;
     sigma = (*mixture).s5; 
     update_gauss(mean_obs.y, rho, &mu, &sigma, min_sigma); 
     (*mixture).s1 = mu; 
     (*mixture).s5 = 0.1; 
-    
     //v channel
     mu = (*mixture).s2;
     sigma = (*mixture).s6; 
@@ -493,7 +495,7 @@ update_bit_scene_main(__global RenderSceneInfo  * info,
   float init_sigma = 0.03f; 
   float min_sigma = 0.02f; 
   int gid=get_global_id(0);
-  int datasize = info->data_len * info->num_buffer;
+  int datasize = info->data_len ;
   if (gid<datasize)
   {
     //if alpha is less than zero don't update
