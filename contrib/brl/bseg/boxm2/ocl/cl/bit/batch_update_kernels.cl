@@ -462,10 +462,10 @@ convert_aux_int_to_float(__constant  RenderSceneInfo    * linfo,
     int obs2= as_int(aux_array2[gid]);
     int obs3= as_int(aux_array3[gid]);
 
-    aux_array0[gid]=((float)obs0)/SEGLEN_FACTOR;
-    aux_array1[gid]=((float)obs1)/SEGLEN_FACTOR;
-    aux_array2[gid]=((float)obs2)/SEGLEN_FACTOR;
-    aux_array3[gid]=((float)obs3)/SEGLEN_FACTOR;
+    aux_array0[gid]=((float)obs0);
+    aux_array1[gid]=((float)obs1);
+    aux_array2[gid]=((float)obs2);
+    aux_array3[gid]=((float)obs3);
   }
 }
 #endif //CONVERT_AUX
