@@ -91,7 +91,7 @@ bool boxm2_ocl_paint_online::paint_scene(boxm2_scene_sptr          scene,
   vil_image_view_base_sptr float_img = boxm2_util::prepare_input_image(img, true);
   vil_image_view<float>* img_view = static_cast<vil_image_view<float>* >(float_img.ptr());
 
-  vil_save(*img_view, "f:/temp2.tif");
+
   vcl_size_t local_threads[2]={8,8};
   vcl_size_t global_threads[2]={8,8};
   unsigned cl_ni=(unsigned)RoundUp(img_view->ni(),(int)local_threads[0]);
