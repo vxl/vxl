@@ -38,6 +38,9 @@ DECLARE_FUNC_CONS(boxm2_ocl_adaptive_cone_render_expected_process);
 DECLARE_FUNC_CONS(boxm2_ocl_update_aux_per_view_process); 
 DECLARE_FUNC_CONS(boxm2_ocl_aux_update_view_direction_process); 
 DECLARE_FUNC_CONS(boxm2_ocl_batch_synoptic_function_process); 
+DECLARE_FUNC_CONS(boxm2_ocl_update_alpha_wcubic_process);
+DECLARE_FUNC_CONS(boxm2_ocl_uncertainty_per_image_process);
+DECLARE_FUNC_CONS(boxm2_ocl_batch_uncertainty_process);
 
 DECLARE_FUNC_CONS(boxm2_ocl_update_sun_visibilities_process); 
 DECLARE_FUNC_CONS(boxm2_ocl_render_expected_shadow_map_process); 

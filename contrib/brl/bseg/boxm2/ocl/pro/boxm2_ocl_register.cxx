@@ -35,6 +35,12 @@ void boxm2_ocl_register::register_process()
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_ocl_create_aux_process, "boxm2OclCreateAuxProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_ocl_aux_update_view_direction_process, "boxm2OclAuxUpdateViewDirectionProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_ocl_batch_synoptic_function_process, "boxm2OclBatchSynopticFunctionProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_ocl_update_alpha_wcubic_process, "boxm2OclUpdateAlphaWcubicProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_ocl_uncertainty_per_image_process, "boxm2OclUncertaintyPerImageProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_ocl_batch_uncertainty_process, "boxm2OclBatchUncertaintyProcess");
+  
+  
+  
   //batch paint
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_ocl_paint_batch_process, "boxm2OclPaintBatchProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_ocl_paint_online_process, "boxm2OclPaintOnlineProcess");
