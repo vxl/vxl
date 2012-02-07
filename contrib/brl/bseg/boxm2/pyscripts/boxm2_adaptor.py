@@ -139,7 +139,16 @@ def update_app_grey(scene, cache, cam, img, device=None) :
   boxm2_batch.set_input_from_db(3,img);
   boxm2_batch.set_input_from_db(4,cam);
   boxm2_batch.run_process();
-    
+def update_hist_app_grey(scene, cache, cam, img, device=None) :
+  #If no device is passed in, do cpu update
+  print("boxm2 GPU App online update");
+  boxm2_batch.init_process("boxm2OclUpdateHistogramAppProcess");
+  boxm2_batch.set_input_from_db(0,device);
+  boxm2_batch.set_input_from_db(1,scene);
+  boxm2_batch.set_input_from_db(2,cache);
+  boxm2_batch.set_input_from_db(3,img);
+  boxm2_batch.set_input_from_db(4,cam);
+  boxm2_batch.run_process();    
 ####################################################################
 # Generic update - will use GPU if device/openclcache are passed in
 ####################################################################
@@ -242,7 +251,7 @@ def ingest_buckeye_dem(scene, cache, first_return_fname, last_return_fname, geoi
 # Generic render, returns a dbvalue expected image
 # Cache can be either an OPENCL cache or a CPU cache
 #####################################################################
-def render_grey(scene, cache, cam, ni=1280, nj=720, device=None) :
+def render_grey(scene, cache, cam, ident_string="",ni=1280, nj=720, device=None) :
   if cache.type == "boxm2_cache_sptr" :
     boxm2_batch.init_process("boxm2CppRenderExpectedImageProcess");
     boxm2_batch.set_input_from_db(0,scene);
@@ -250,6 +259,7 @@ def render_grey(scene, cache, cam, ni=1280, nj=720, device=None) :
     boxm2_batch.set_input_from_db(2,cam);
     boxm2_batch.set_input_unsigned(3,ni);
     boxm2_batch.set_input_unsigned(4,nj);
+    boxm2_batch.set_input_string(5,ident_string);
     boxm2_batch.run_process();
     (id,type) = boxm2_batch.commit_output(0);
     exp_image = dbvalue(id,type);
@@ -262,6 +272,7 @@ def render_grey(scene, cache, cam, ni=1280, nj=720, device=None) :
     boxm2_batch.set_input_from_db(3,cam);
     boxm2_batch.set_input_unsigned(4,ni);
     boxm2_batch.set_input_unsigned(5,nj);
+    boxm2_batch.set_input_string(6,ident_string);
     boxm2_batch.run_process();
     (id,type) = boxm2_batch.commit_output(0);
     exp_image = dbvalue(id,type);
