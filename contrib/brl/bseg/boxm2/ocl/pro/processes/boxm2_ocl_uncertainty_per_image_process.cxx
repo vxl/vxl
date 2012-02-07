@@ -72,7 +72,9 @@ namespace boxm2_ocl_uncertainty_per_image_process_globals
 
 		//may need DIFF LIST OF SOURCES FOR THIS GUY
 		bocl_kernel* proc_img = new bocl_kernel();
-		proc_img->create_kernel(&device->context(),device->device_id(), non_ray_src, "proc_norm_image", options, "update::proc_norm_image");
+		vcl_string proc_norm_opts =options+ " -D PROC_NORM ";
+
+		proc_img->create_kernel(&device->context(),device->device_id(), non_ray_src, "proc_norm_image", proc_norm_opts, "update::proc_norm_image");
 		vec_kernels.push_back(proc_img);
 
 		//push back cast_ray_bit
@@ -81,9 +83,9 @@ namespace boxm2_ocl_uncertainty_per_image_process_globals
 		avg_surface_empty_ratio_main->create_kernel(&device->context(),device->device_id(), src_paths, "avg_surface_empty_ratio_main", avg_surface_empty_ratio_opt, "update::avg_surface_empty_ratio_main");
 		vec_kernels.push_back(avg_surface_empty_ratio_main);
 
-			bocl_kernel* convert_aux_int_float = new bocl_kernel();
-    convert_aux_int_float->create_kernel(&device->context(),device->device_id(), non_ray_src, "convert_aux_int_to_float", opts+" -D CONVERT_AUX ", "batch_update::convert_aux_int_to_float");
-	vec_kernels.push_back(convert_aux_int_float);
+		bocl_kernel* convert_aux_int_float = new bocl_kernel();
+		convert_aux_int_float->create_kernel(&device->context(),device->device_id(), non_ray_src, "convert_aux_int_to_float", opts+" -D CONVERT_AUX ", "batch_update::convert_aux_int_to_float");
+		vec_kernels.push_back(convert_aux_int_float);
 
 		return ;
 	}
@@ -256,7 +258,6 @@ bool boxm2_ocl_uncertainty_per_image_process(bprb_func_process& pro)
 	vcl_vector<boxm2_block_id>::iterator id;
 	for (unsigned int i=0; i<kernels[identifier].size(); ++i)
 	{
-		vcl_cout<<" i "<<vcl_endl;
 		if (i==UPDATE_SEGLEN)
 		{
 			for (id = vis_order.begin(); id != vis_order.end(); ++id)
@@ -360,24 +361,24 @@ bool boxm2_ocl_uncertainty_per_image_process(bprb_func_process& pro)
 				//clear render kernel args so it can reset em on next execution
 				kern->clear_args();
 			}
-			pre_inf_image->read_to_buffer(queue);
-			for (unsigned k=0;k<cl_ni*cl_nj;k++)
-				pre_buff[k]=pre_inf_buff[k];
-			pre_image->write_to_buffer(queue);
+			//pre_inf_image->read_to_buffer(queue);
+			//for (unsigned k=0;k<cl_ni*cl_nj;k++)
+			//	pre_buff[k]=pre_inf_buff[k];
+			//pre_image->write_to_buffer(queue);
 		}
 		else if( i == UPDATE_PROC ) {
-			bocl_kernel * proc_kern=kernels[identifier][i];
+			//bocl_kernel * proc_kern=kernels[identifier][i];
 
-			proc_kern->set_arg( norm_image.ptr() );
-			proc_kern->set_arg( vis_image.ptr() );
-			proc_kern->set_arg( pre_image.ptr());
-			proc_kern->set_arg( img_dim.ptr() );
+			//proc_kern->set_arg( norm_image.ptr() );
+			//proc_kern->set_arg( vis_image.ptr() );
+			//proc_kern->set_arg( pre_image.ptr());
+			//proc_kern->set_arg( img_dim.ptr() );
 
-			//execute kernel
-			proc_kern->execute( queue, 2, local_threads, global_threads);
-			int status = clFinish(queue);
-			check_val(status, MEM_FAILURE, "UPDATE EXECUTE FAILED: " + error_to_string(status));
-			proc_kern->clear_args();
+			////execute kernel
+			//proc_kern->execute( queue, 2, local_threads, global_threads);
+			//int status = clFinish(queue);
+			//check_val(status, MEM_FAILURE, "UPDATE EXECUTE FAILED: " + error_to_string(status));
+			//proc_kern->clear_args();
 		} 
 		else if (i==UPDATE_AVG_RATIO_EMPTY_SURFACE) // kernel to compute avg ratio of empty and surface
 		{
@@ -467,10 +468,10 @@ bool boxm2_ocl_uncertainty_per_image_process(bprb_func_process& pro)
 				int alphaTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
 				info_buffer->data_buffer_length = (int) (alpha->num_bytes()/alphaTypeSize);
 				blk_info->write_to_buffer((queue));
-			local_threads[0] = 64;
-			local_threads[1] = 1 ;
-			global_threads[0]=RoundUp(info_buffer->data_buffer_length,local_threads[0]);
-			global_threads[1]=1;
+				local_threads[0] = 64;
+				local_threads[1] = 1 ;
+				global_threads[0]=RoundUp(info_buffer->data_buffer_length,local_threads[0]);
+				global_threads[1]=1;
 
 				//grab an appropriately sized AUX data buffer
 				int auxTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_AUX0>::prefix());
