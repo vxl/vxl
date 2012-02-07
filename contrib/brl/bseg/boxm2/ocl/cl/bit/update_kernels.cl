@@ -100,7 +100,7 @@ seg_len_main(__constant  RenderSceneInfo    * linfo,
 
   //output[imIndex] = rlen;
 }
-#endif
+#endif // SEGLEN
 
 #ifdef PREINF
 typedef struct
@@ -111,7 +111,7 @@ typedef struct
   __global int* mean_obs;
            float* vis_inf;
            float* pre_inf;
-		   float phi;
+           float phi;
   __constant RenderSceneInfo * linfo;
 } AuxArgs;
 
@@ -195,7 +195,7 @@ pre_inf_main(__constant  RenderSceneInfo    * linfo,
   vis_image[j*get_global_size(0)+i] = vis_inf;
   pre_image[j*get_global_size(0)+i] = pre_inf;
 }
-#endif
+#endif // PREINF
 
 #ifdef BAYES
 typedef struct
@@ -217,7 +217,7 @@ typedef struct
   __local  short2* ray_bundle_array;
   __local  int*    cell_ptrs;
   __local  float*  cached_vis;
-		   float phi;
+           float phi;
 
   __constant RenderSceneInfo * linfo;
 } AuxArgs;
@@ -301,7 +301,7 @@ bayes_main(__constant  RenderSceneInfo    * linfo,
   aux_args.mean_obs   = aux_array1;
   aux_args.vis_array  = aux_array2;
   aux_args.beta_array = aux_array3;
-  aux_args.phi		  = atan2(ray_d.y,ray_d.x);
+  aux_args.phi          = atan2(ray_d.y,ray_d.x);
 
   aux_args.ray_bundle_array = ray_bundle_array;
   aux_args.cell_ptrs = cell_ptrs;
@@ -329,7 +329,7 @@ bayes_main(__constant  RenderSceneInfo    * linfo,
   //output[j*get_global_size(0) + i] = outInt;
   //----
 }
-#endif
+#endif // BAYES
 
 #ifdef PROC_NORM
 // normalize the pre_inf image...
@@ -360,7 +360,7 @@ proc_norm_image (  __global float* norm_image,
   vis_image[j*get_global_size(0) + i] = 1.0f; // initial vis = 1.0f
   pre_image[j*get_global_size(0) + i] = 0.0f; // initial pre = 0.0
 }
-#endif
+#endif // PROC_NORM
 
 #ifdef UPDATE_BIT_SCENE_MAIN
 // Update each cell using its aux data
@@ -446,7 +446,7 @@ update_bit_scene_main(__global RenderSceneInfo  * info,
   }
 }
 
-#endif
+#endif // UPDATE_BIT_SCENE_MAIN
 
 #ifdef UPDATE_APP_GREY
 __kernel
@@ -459,53 +459,52 @@ update_mog3_main(__global RenderSceneInfo  * info,
                  __global int              * aux_array2,
                  __global float            * output)
 {
-	  int gid=get_global_id(0);
-	  int datasize = info->data_len ;
-	  if (gid<datasize)
-	  {
+      int gid=get_global_id(0);
+      int datasize = info->data_len ;
+      if (gid<datasize)
+      {
+        //get cell cumulative length and make sure it isn't 0
+        int len_int = aux_array0[gid];
+        float cum_len  = convert_float(len_int)/SEGLEN_FACTOR;
+        //update cell if alpha and cum_len are greater than 0
+        if (cum_len > 1e-10f)
+        {
+          int obs_int = aux_array1[gid];
+          int vis_int = aux_array2[gid];
+          output[0] = obs_int;
 
-		//get cell cumulative length and make sure it isn't 0
-		int len_int = aux_array0[gid]; 
-		float cum_len  = convert_float(len_int)/SEGLEN_FACTOR; 
-		//update cell if alpha and cum_len are greater than 0
-		if (cum_len > 1e-10f)
-		{
-		  int obs_int = aux_array1[gid]; 
-		  int vis_int = aux_array2[gid]; 
-		  output[0] = obs_int;
+          float mean_obs = convert_float(obs_int) / convert_float(len_int);
+          float cell_vis  = convert_float(vis_int) / convert_float(len_int);
 
-		  float mean_obs = convert_float(obs_int) / convert_float(len_int);
-		  float cell_vis  = convert_float(vis_int) / convert_float(len_int);
+          float4 nobs     = convert_float4(nobs_array[gid]);
+          CONVERT_FUNC_FLOAT8(mixture,mixture_array[gid])/NORM;
 
-		  float4 nobs     = convert_float4(nobs_array[gid]);
-		  CONVERT_FUNC_FLOAT8(mixture,mixture_array[gid])/NORM;
+          float mu0 = mixture.s0, sigma0 = mixture.s1, w0 = mixture.s2;
+          float mu1 = mixture.s3, sigma1 = mixture.s4, w1 = mixture.s5;
+          float mu2 = mixture.s6, sigma2 = mixture.s7, w2 = 0.0;
+          if (w0>0.0f && w1>0.0f)
+              w2=1-w0-w1;
 
-		  float mu0 = mixture.s0, sigma0 = mixture.s1, w0 = mixture.s2;
-		  float mu1 = mixture.s3, sigma1 = mixture.s4, w1 = mixture.s5;
-		  float mu2 = mixture.s6, sigma2 = mixture.s7, w2 = 0.0;
-		  if(w0>0.0f && w1>0.0f)
-			  w2=1-w0-w1;  
-
-		  short Nobs0 = (short)nobs.s0, Nobs1 = (short)nobs.s1, Nobs2 = (short)nobs.s2; 
-		  float Nobs_mix = nobs.s3/100.0;
-		  update_gauss_3_mixture(mean_obs,              //mean observation
-								 cell_vis,              //cell_visability
-								 2.5f,0.07f,0.02f,
-								 &mu0,&sigma0,&w0,&Nobs0,
-								 &mu1,&sigma1,&w1,&Nobs1,
-								 &mu2,&sigma2,&w2,&Nobs2,
-								 &Nobs_mix);
-		  //reset the cells in memory
-		  float8 post_mix       = (float8) (mu0, sigma0, w0,
-											mu1, sigma1, w1,
-											mu2, sigma2)*(float) NORM;
-		  float4 post_nobs      = (float4) (Nobs0, Nobs1, Nobs2,Nobs_mix*100.0);
-		  CONVERT_FUNC_SAT_RTE(mixture_array[gid],post_mix);
-		  nobs_array[gid]       = convert_ushort4_sat_rte(post_nobs);
-		}
-	  }
+          short Nobs0 = (short)nobs.s0, Nobs1 = (short)nobs.s1, Nobs2 = (short)nobs.s2;
+          float Nobs_mix = nobs.s3/100.0;
+          update_gauss_3_mixture(mean_obs,              //mean observation
+                                 cell_vis,              //cell_visability
+                                 2.5f,0.07f,0.02f,
+                                 &mu0,&sigma0,&w0,&Nobs0,
+                                 &mu1,&sigma1,&w1,&Nobs1,
+                                 &mu2,&sigma2,&w2,&Nobs2,
+                                 &Nobs_mix);
+          //reset the cells in memory
+          float8 post_mix       = (float8) (mu0, sigma0, w0,
+                                            mu1, sigma1, w1,
+                                            mu2, sigma2)*(float) NORM;
+          float4 post_nobs      = (float4) (Nobs0, Nobs1, Nobs2,Nobs_mix*100.0);
+          CONVERT_FUNC_SAT_RTE(mixture_array[gid],post_mix);
+          nobs_array[gid]       = convert_ushort4_sat_rte(post_nobs);
+        }
+      }
 }
-#endif
+#endif // UPDATE_APP_GREY
 
 #ifdef UPDATE_ALPHA
 // Update each cell using its aux data
@@ -526,7 +525,7 @@ update_bit_scene_main(__global RenderSceneInfo  * info,
   {
     //if alpha is less than zero don't update
     float  alpha    = alpha_array[gid];
-    float  cell_min = info->block_len	;
+    float  cell_min = info->block_len    ;
 
     //get cell cumulative length and make sure it isn't 0
     int len_int = aux_array0[gid];
@@ -539,8 +538,8 @@ update_bit_scene_main(__global RenderSceneInfo  * info,
     if (alpha > 0.0f && cum_len > 1e-10f)
     {
       int beta_int= aux_array3[gid];
-	  float cell_beta = convert_float(beta_int) / (convert_float(len_int));
-	  cell_beta = clamp(cell_beta, 0.5,2.0);
+      float cell_beta = convert_float(beta_int) / (convert_float(len_int));
+      cell_beta = clamp(cell_beta, 0.5,2.0);
       alpha = alpha * cell_beta;
       alpha_array[gid]      = max(alpha,alphamin);
     }
@@ -548,12 +547,11 @@ update_bit_scene_main(__global RenderSceneInfo  * info,
     //clear out aux data
     aux_array0[gid] = 0;
     aux_array1[gid] = 0;
-	aux_array2[gid] = 0;
-	aux_array3[gid] = 0;
+    aux_array2[gid] = 0;
+    aux_array3[gid] = 0;
   }
 }
-#endif
-
+#endif // UPDATE_ALPHA
 
 #ifdef PREINF_NAA
 typedef struct
@@ -580,7 +578,7 @@ void
 pre_inf_naa_main(__constant  RenderSceneInfo    * linfo,
                  __global    int4               * tree_array,       // tree structure for each block
                  __global    float              * alpha_array,      // alpha for each block
-                 __global    float16            * radiance_reflectance_factors, // scales for computing radiance from albedo 
+                 __global    float16            * radiance_reflectance_factors, // scales for computing radiance from albedo
                  __global    float16            * radiance_offsets,        // offset value for computing radiance from albedo
                  __global    float16            * radiance_var_reflectance_sqrd_factors, // scales for computing radiance  variance from albedo^2
                  __global    float16            * radiance_var_offsets,    // offset values for computing radiance variance from albedo
@@ -657,8 +655,7 @@ pre_inf_naa_main(__constant  RenderSceneInfo    * linfo,
   vis_image[j*get_global_size(0)+i] = vis_inf;
   pre_image[j*get_global_size(0)+i] = pre_inf;
 }
-#endif
-
+#endif // PREINF_NAA
 
 #ifdef PROC_NORM_NAA
 // normalize the pre_inf image...
@@ -691,7 +688,7 @@ proc_norm_image (  __global float* norm_image,
   vis_image[j*get_global_size(0) + i] = 1.0f; // initial vis = 1.0f
   pre_image[j*get_global_size(0) + i] = 0.0f; // initial pre = 0.0
 }
-#endif
+#endif // PROC_NORM_NAA
 
 #ifdef BAYES_NAA
 typedef struct
@@ -725,7 +722,7 @@ void
 bayes_main_naa(__constant  RenderSceneInfo    * linfo,
                __global    int4               * tree_array,        // tree structure for each block
                __global    float              * alpha_array,       // alpha for each block
-               __global    float16            * radiance_reflectance_factors, // scales for computing radiance from albedo 
+               __global    float16            * radiance_reflectance_factors, // scales for computing radiance from albedo
                __global    float16            * radiance_offsets,        // offset value for computing radiance from albedo
                __global    float16            * radiance_var_reflectance_sqrd_factors, // scales for computing radiance  variance from albedo^2
                __global    float16            * radiance_var_offsets,    // offset values for computing radiance variance from albedo
@@ -819,8 +816,7 @@ bayes_main_naa(__constant  RenderSceneInfo    * linfo,
   vis_image[j*get_global_size(0)+i] = vis;
   pre_image[j*get_global_size(0)+i] = pre;
 }
-#endif
-
+#endif // BAYES_NAA
 
 #ifdef UPDATE_ALPHA_ONLY
 
@@ -839,7 +835,7 @@ update_bit_scene_main_alpha_only(__global RenderSceneInfo  * info,
   int datasize = info->data_len ;//* info->num_buffer;
   if (gid<datasize)
   {
-  #if 1
+#if 1
     //if alpha is less than zero don't update
     float  alpha    = alpha_array[gid];
 
@@ -868,16 +864,13 @@ update_bit_scene_main_alpha_only(__global RenderSceneInfo  * info,
 
       alpha_array[gid] = max(alphamin, alpha);
     }
-#endif
-#if 1
     //clear out aux data
     aux_array0[gid] = 0;
     aux_array1[gid] = 0;
     aux_array2[gid] = 0;
     aux_array3[gid] = 0;
-#endif
+#endif // 1
   }
 }
 
-#endif
-
+#endif // UPDATE_ALPHA_ONLY

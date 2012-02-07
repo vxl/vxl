@@ -19,8 +19,6 @@
 //-----------------------------------------------------------------------------
 //: The constructor takes a snapshot of the current viewport and scissor areas.
 //  The destructor restores that state.
-
-
 //--------------------------------------------------------------------------------
 
 bgui_image_tableau::bgui_image_tableau()
@@ -145,12 +143,12 @@ get_pixel_info_from_image(const int x, const int y,
       return;
     }
     else if (n_p==4) {
-		vil_image_view<vxl_byte > v = r->get_view(x,1,y,1);
+      vil_image_view<vxl_byte > v = r->get_view(x,1,y,1);
       if (!v)
         vcl_sprintf(msg, "Pixel Not Available");
       else//as a default, just display first three bands as RGB
-		vcl_sprintf(msg, "(%d, %d) (ubyte)[ R=%d,G=%d,B=%d, X=%d]", x, y,
-			v(0,0,0), v(0,0,1), v(0,0,2), v(0,0,3));
+        vcl_sprintf(msg, "(%d, %d) (ubyte)[ R=%d,G=%d,B=%d, X=%d]", x, y,
+                    v(0,0,0), v(0,0,1), v(0,0,2), v(0,0,3));
       return;
     }
     return;
@@ -177,14 +175,14 @@ get_pixel_info_from_image(const int x, const int y,
       return;
     }
     else if (n_p==4) {
-		vil_image_view<vxl_byte > v = r->get_view(x,1,y,1);
+      vil_image_view<vxl_byte > v = r->get_view(x,1,y,1);
       if (!v)
         vcl_sprintf(msg, "Pixel Not Available");
-	  else//as a default, just display first three bands as RGB
-		vcl_sprintf(msg, "(%d, %d) (sbyte)[ R=%d,G=%d,B=%d,X=%d]", x, y,
-			v(0,0,0), v(0,0,1), v(0,0,2), v(0,0,3));
+      else//as a default, just display first three bands as RGB
+        vcl_sprintf(msg, "(%d, %d) (sbyte)[ R=%d,G=%d,B=%d,X=%d]", x, y,
+                    v(0,0,0), v(0,0,1), v(0,0,2), v(0,0,3));
       return;
-	}
+    }
     return;
    }
    case  VIL_PIXEL_FORMAT_UINT_16:

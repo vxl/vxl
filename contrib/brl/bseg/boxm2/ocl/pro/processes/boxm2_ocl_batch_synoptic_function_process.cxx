@@ -149,34 +149,32 @@ bool boxm2_ocl_batch_synoptic_function_process(bprb_func_process& pro)
     bocl_mem *coeffs_buff  = opencl_cache->get_data(*id,
                                                     boxm2_data_traits<BOXM2_FLOAT8>::prefix("cubic_model"),
                                                     info_buffer->data_buffer_length*auxTypeSize,false);
-	coeffs_buff->zero_gpu_buffer(queue);
+    coeffs_buff->zero_gpu_buffer(queue);
 
-	bocl_kernel * kern = kernels[(device->device_id())][0];
-	boxm2_block_metadata mdata = scene->get_block_metadata(*id);
-	str_blk_cache.init(*id);
+    bocl_kernel * kern = kernels[(device->device_id())][0];
+    boxm2_block_metadata mdata = scene->get_block_metadata(*id);
+    str_blk_cache.init(*id);
 
-	int datasize = str_blk_cache.block_size_in_bytes_["aux0"]/ sizeof(float);
-
+    int datasize = str_blk_cache.block_size_in_bytes_["aux0"]/ sizeof(float);
 
     boxm2_data_base * data_type0 = str_blk_cache.data_types_["aux0"];
     bocl_mem_sptr bocl_data_type0 = new bocl_mem(device->context(),data_type0->data_buffer(),data_type0->buffer_length(),"");
-    if(!bocl_data_type0->create_buffer(CL_MEM_USE_HOST_PTR,queue))
-		vcl_cout<<"Aux0 buffer was not created"<<vcl_endl;
+    if (!bocl_data_type0->create_buffer(CL_MEM_USE_HOST_PTR,queue))
+      vcl_cout<<"Aux0 buffer was not created"<<vcl_endl;
     boxm2_data_base * data_type1 = str_blk_cache.data_types_["aux1"];
     bocl_mem_sptr bocl_data_type1 = new bocl_mem(device->context(),data_type1->data_buffer(),data_type1->buffer_length(),"");
-    if(!bocl_data_type1->create_buffer(CL_MEM_USE_HOST_PTR,queue))
-		vcl_cout<<"Aux1 buffer was not created"<<vcl_endl;
+    if (!bocl_data_type1->create_buffer(CL_MEM_USE_HOST_PTR,queue))
+      vcl_cout<<"Aux1 buffer was not created"<<vcl_endl;
 
     boxm2_data_base * data_type2 = str_blk_cache.data_types_["aux2"];
     bocl_mem_sptr bocl_data_type2 = new bocl_mem(device->context(),data_type2->data_buffer(),data_type2->buffer_length(),"");
-    if(!bocl_data_type2->create_buffer(CL_MEM_USE_HOST_PTR,queue))
-		vcl_cout<<"Aux2 buffer was not created"<<vcl_endl;
+    if (!bocl_data_type2->create_buffer(CL_MEM_USE_HOST_PTR,queue))
+      vcl_cout<<"Aux2 buffer was not created"<<vcl_endl;
 
     boxm2_data_base * data_type3 = str_blk_cache.data_types_["aux3"];
     bocl_mem_sptr bocl_data_type3 = new bocl_mem(device->context(),data_type3->data_buffer(),data_type3->buffer_length(),"");
-    if(!bocl_data_type3->create_buffer(CL_MEM_USE_HOST_PTR,queue))
-		vcl_cout<<"Aux3 buffer was not created"<<vcl_endl;
-
+    if (!bocl_data_type3->create_buffer(CL_MEM_USE_HOST_PTR,queue))
+      vcl_cout<<"Aux3 buffer was not created"<<vcl_endl;
 
     bocl_mem_sptr  nobs_mem=new bocl_mem(device->context(), &nobs, sizeof(int), "Number of Obs");
     nobs_mem->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
@@ -187,7 +185,7 @@ bool boxm2_ocl_batch_synoptic_function_process(bprb_func_process& pro)
     kern->set_arg(bocl_data_type0.ptr());
     kern->set_arg(bocl_data_type1.ptr());
     kern->set_arg(bocl_data_type2.ptr());
-	kern->set_arg(bocl_data_type3.ptr());
+    kern->set_arg(bocl_data_type3.ptr());
     kern->set_arg(nobs_mem.ptr());
     kern->set_arg(interim_sigma_mem.ptr());
 
@@ -200,7 +198,7 @@ bool boxm2_ocl_batch_synoptic_function_process(bprb_func_process& pro)
     kern->set_local_arg(nobs*sizeof(float));
     kern->set_local_arg(nobs*sizeof(float));
     kern->set_local_arg(nobs*sizeof(float));
-	kern->set_local_arg(nobs*sizeof(float));
+    kern->set_local_arg(nobs*sizeof(float));
     kern->set_local_arg(nobs*sizeof(float));
     kern->set_local_arg(16*sizeof(float));
     kern->set_local_arg(16*sizeof(float));
@@ -208,7 +206,7 @@ bool boxm2_ocl_batch_synoptic_function_process(bprb_func_process& pro)
     kern->set_local_arg(4*sizeof(float));
     kern->set_local_arg(16*sizeof(float));
     kern->set_local_arg(4*sizeof(float));
-	kern->set_local_arg(1*sizeof(int));
+    kern->set_local_arg(1*sizeof(int));
 
     vcl_size_t lThreads[] = {8, 8};
     vcl_size_t gThreads[] = {datasize*8,8};
@@ -221,7 +219,7 @@ bool boxm2_ocl_batch_synoptic_function_process(bprb_func_process& pro)
     //clear render kernel args so it can reset em on next execution
     kern->clear_args();
     coeffs_buff->read_to_buffer(queue);
-	clFinish(queue);
+    clFinish(queue);
     cache->remove_data_base( *id, boxm2_data_traits<BOXM2_FLOAT8>::prefix("cubic_model") );
   }
   clReleaseCommandQueue(queue);

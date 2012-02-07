@@ -1,12 +1,11 @@
 // This is brl/bseg/boxm2/ocl/pro/processes/boxm2_ocl_render_expected_image_process.cxx
+#include <bprb/bprb_func_process.h>
 //:
 // \file
 // \brief  A process for rendering the scene.
 //
 // \author Vishal Jain
 // \date Mar 10, 2011
-
-#include <bprb/bprb_func_process.h>
 
 #include <vcl_fstream.h>
 #include <vcl_algorithm.h>
@@ -113,7 +112,7 @@ bool boxm2_ocl_render_expected_image_process(bprb_func_process& pro)
 {
   using namespace boxm2_ocl_render_expected_image_process_globals;
 
-  vul_timer rtime; 
+  vul_timer rtime;
   if ( pro.n_inputs() < n_inputs_ ) {
     vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
     return false;
@@ -149,14 +148,13 @@ bool boxm2_ocl_render_expected_image_process(bprb_func_process& pro)
       options=" -D MOG_TYPE_16 ";
       apptypesize = boxm2_data_traits<BOXM2_MOG3_GREY_16>::datasize();
     }
-	else if ( apps[i] == boxm2_data_traits<BOXM2_FLOAT8>::prefix() )
-	{
+    else if ( apps[i] == boxm2_data_traits<BOXM2_FLOAT8>::prefix() )
+    {
       data_type = apps[i];
       foundDataType = true;
       options=" -D FLOAT8 ";
       apptypesize = boxm2_data_traits<BOXM2_FLOAT8>::datasize();
-
-	}
+    }
   }
   if (!foundDataType) {
     vcl_cout<<"BOXM2_OCL_RENDER_PROCESS ERROR: scene doesn't have BOXM2_MOG3_GREY or BOXM2_MOG3_GREY_16 data type"<<vcl_endl;
@@ -242,7 +240,7 @@ bool boxm2_ocl_render_expected_image_process(bprb_func_process& pro)
       (*vis_img_out)(r,c)=vis_buff[c*cl_ni+r];
 
   vcl_cout<<"Total Render time: "<<rtime.all()<<" ms"<<vcl_endl;
-  delete [] vis_buff; 
+  delete [] vis_buff;
   delete [] buff;
   opencl_cache->unref_mem(vis_image.ptr());
   opencl_cache->unref_mem(exp_image.ptr());

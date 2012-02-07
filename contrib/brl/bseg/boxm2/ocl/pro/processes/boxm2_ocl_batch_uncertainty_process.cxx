@@ -54,14 +54,14 @@ bool boxm2_ocl_batch_uncertainty_process_cons(bprb_func_process& pro)
 {
   using namespace boxm2_ocl_batch_uncertainty_process_globals;
 
-  //process takes 6 inputs, no output
+  //process takes 5 inputs, no output
   vcl_vector<vcl_string> input_types_(n_inputs_);
   input_types_[0] = "bocl_device_sptr";
   input_types_[1] = "boxm2_scene_sptr";
   input_types_[2] = "boxm2_opencl_cache_sptr";
   input_types_[3] = "unsigned";         //: number of obs
   input_types_[4] = "vcl_string";       //: identifiers name file
-  
+
   vcl_vector<vcl_string>  output_types_(n_outputs_);
 
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
@@ -89,8 +89,8 @@ bool boxm2_ocl_batch_uncertainty_process(bprb_func_process& pro)
   //: Read data types and identifier file names.
   vcl_ifstream ifs(identifier_filename.c_str());
   if (!ifs.good()) {
-      vcl_cerr << "error opening file " <<identifier_filename << '\n';
-      return false;
+    vcl_cerr << "error opening file " <<identifier_filename << '\n';
+    return false;
   }
   vcl_vector<vcl_string> image_ids;
   unsigned int n_images = 0;
@@ -132,7 +132,6 @@ bool boxm2_ocl_batch_uncertainty_process(bprb_func_process& pro)
   for (id = block_ids.begin(); id != block_ids.end(); ++id)
   {
     //choose correct render kernel
-
     bocl_mem* blk       = opencl_cache->get_block(*id);
     bocl_mem* blk_info  = opencl_cache->loaded_block_info();
     bocl_mem* alpha     = opencl_cache->get_data<BOXM2_ALPHA>(*id,0,true);
@@ -146,25 +145,25 @@ bool boxm2_ocl_batch_uncertainty_process(bprb_func_process& pro)
                                                     boxm2_data_traits<BOXM2_FLOAT8>::prefix("cubic_model"),
                                                     info_buffer->data_buffer_length*auxTypeSize,false);
 
-	bocl_kernel * kern = kernels[(device->device_id())][0];
-	boxm2_block_metadata mdata = scene->get_block_metadata(*id);
-	str_blk_cache.init(*id);
+    bocl_kernel * kern = kernels[(device->device_id())][0];
+    boxm2_block_metadata mdata = scene->get_block_metadata(*id);
+    str_blk_cache.init(*id);
 
-	int datasize = str_blk_cache.block_size_in_bytes_["aux0"]/ sizeof(float);
+    int datasize = str_blk_cache.block_size_in_bytes_["aux0"]/ sizeof(float);
     boxm2_data_base * data_type0 = str_blk_cache.data_types_["aux0"];
     bocl_mem_sptr bocl_data_type0 = new bocl_mem(device->context(),data_type0->data_buffer(),data_type0->buffer_length(),"");
-    if(!bocl_data_type0->create_buffer(CL_MEM_USE_HOST_PTR,queue))
-		vcl_cout<<"Aux0 buffer was not created"<<vcl_endl;
+    if (!bocl_data_type0->create_buffer(CL_MEM_USE_HOST_PTR,queue))
+      vcl_cout<<"Aux0 buffer was not created"<<vcl_endl;
 
     boxm2_data_base * data_type2 = str_blk_cache.data_types_["aux2"];
     bocl_mem_sptr bocl_data_type2 = new bocl_mem(device->context(),data_type2->data_buffer(),data_type2->buffer_length(),"");
-    if(!bocl_data_type2->create_buffer(CL_MEM_USE_HOST_PTR,queue))
-		vcl_cout<<"Aux2 buffer was not created"<<vcl_endl;
+    if (!bocl_data_type2->create_buffer(CL_MEM_USE_HOST_PTR,queue))
+      vcl_cout<<"Aux2 buffer was not created"<<vcl_endl;
 
     boxm2_data_base * data_type3 = str_blk_cache.data_types_["aux3"];
     bocl_mem_sptr bocl_data_type3 = new bocl_mem(device->context(),data_type3->data_buffer(),data_type3->buffer_length(),"");
-    if(!bocl_data_type3->create_buffer(CL_MEM_USE_HOST_PTR,queue))
-		vcl_cout<<"Aux3 buffer was not created"<<vcl_endl;
+    if (!bocl_data_type3->create_buffer(CL_MEM_USE_HOST_PTR,queue))
+      vcl_cout<<"Aux3 buffer was not created"<<vcl_endl;
     bocl_mem_sptr  nobs_mem=new bocl_mem(device->context(), &nobs, sizeof(int), "Number of Obs");
     nobs_mem->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
@@ -173,11 +172,11 @@ bool boxm2_ocl_batch_uncertainty_process(bprb_func_process& pro)
 
     kern->set_arg(bocl_data_type0.ptr());
     kern->set_arg(bocl_data_type2.ptr());
-	kern->set_arg(bocl_data_type3.ptr());
-	kern->set_arg(nobs_mem.ptr());
-	kern->set_arg(datasize_mem.ptr());
+    kern->set_arg(bocl_data_type3.ptr());
+    kern->set_arg(nobs_mem.ptr());
+    kern->set_arg(datasize_mem.ptr());
     kern->set_arg(coeffs_buff);
-	kern->set_local_arg(nobs*sizeof(float));
+    kern->set_local_arg(nobs*sizeof(float));
     kern->set_local_arg(nobs*sizeof(float));
 
     vcl_size_t lThreads[] = {8, 8};
@@ -191,20 +190,21 @@ bool boxm2_ocl_batch_uncertainty_process(bprb_func_process& pro)
     //clear render kernel args so it can reset em on next execution
     kern->clear_args();
     coeffs_buff->read_to_buffer(queue);
-	clFinish(queue);
+    clFinish(queue);
+#if 0
+    boxm2_block *     cpu_blk     = cache->get_block(*id);
+    boxm2_data_base *  cpu_alpha  = cache->get_data_base(*id,boxm2_data_traits<BOXM2_ALPHA>::prefix(),0,false);
+    boxm2_data_base *  cubic_model_data  = cache->get_data_base(*id,boxm2_data_traits<BOXM2_FLOAT8>::prefix("cubic_model"),cpu_alpha->buffer_length()* 8 ,false);
+    boxm2_update_synoptic_probability data_functor;
+    data_functor.init_data(cpu_alpha,cubic_model_data);
 
-	//boxm2_block *     cpu_blk     = cache->get_block(*id);
-	//boxm2_data_base *  cpu_alpha  = cache->get_data_base(*id,boxm2_data_traits<BOXM2_ALPHA>::prefix(),0,false);
-	//boxm2_data_base *  cubic_model_data  = cache->get_data_base(*id,boxm2_data_traits<BOXM2_FLOAT8>::prefix("cubic_model"),cpu_alpha->buffer_length()* 8 ,false);
-	//boxm2_update_synoptic_probability data_functor;
-	//data_functor.init_data(cpu_alpha,cubic_model_data);
+    int phongs_model_typesize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_FLOAT8>::prefix());
+    int data_buff_length = (int) (cubic_model_data->buffer_length()/phongs_model_typesize);
 
-	//int phongs_model_typesize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_FLOAT8>::prefix());
-	//int data_buff_length = (int) (cubic_model_data->buffer_length()/phongs_model_typesize);
-
-	//boxm2_data_leaves_serial_iterator<boxm2_update_synoptic_probability>(cpu_blk,data_buff_length,data_functor);
+    boxm2_data_leaves_serial_iterator<boxm2_update_synoptic_probability>(cpu_blk,data_buff_length,data_functor);
+    opencl_cache->deep_remove_data( *id, boxm2_data_traits<BOXM2_ALPHA>::prefix(), true );
+#endif // 0
     opencl_cache->deep_remove_data( *id, boxm2_data_traits<BOXM2_FLOAT8>::prefix("cubic_model"), true );
-//    opencl_cache->deep_remove_data( *id, boxm2_data_traits<BOXM2_ALPHA>::prefix(), true );
   }
   clReleaseCommandQueue(queue);
 
