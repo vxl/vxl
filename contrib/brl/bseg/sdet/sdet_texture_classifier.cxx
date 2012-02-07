@@ -75,6 +75,7 @@ static unsigned gauss_radius(float sigma, float cutoff_ratio)
   int r = static_cast<unsigned>(vcl_sqrt((-2.0*vcl_log(cutoff_ratio))/sigma_sq_inv)+0.5);
   return r;
 }
+
 // define a color map for texture categories. Defined for up to eight classes
 void sdet_texture_classifier::init_color_map()
 {
@@ -110,8 +111,8 @@ void sdet_texture_classifier::print_color_map() const
 }
 
 sdet_texture_classifier::
-sdet_texture_classifier(sdet_texture_classifier_params const& params):
-  sdet_texture_classifier_params(params),
+sdet_texture_classifier(sdet_texture_classifier_params const& params)
+: sdet_texture_classifier_params(params),
   filter_responses_(brip_filter_bank(params.n_scales_,
                                      params.scale_interval_,
                                      params.lambda0_,
@@ -119,7 +120,8 @@ sdet_texture_classifier(sdet_texture_classifier_params const& params):
                                      params.angle_interval_,
                                      params.cutoff_per_)),
   distances_valid_(false), inter_prob_valid_(false), color_map_valid_(false),
-  texton_index_valid_(false), texton_weights_valid_(false) {}
+  texton_index_valid_(false), texton_weights_valid_(false)
+{}
 
 
 bool sdet_texture_classifier::
@@ -158,6 +160,7 @@ compute_filter_bank(vil_image_view<float> const& img)
 #endif
   return true;
 }
+
 // Used to define the initial k means cluster centers
 // by random selection from the training data
 vcl_vector<vnl_vector<double> > sdet_texture_classifier::
@@ -171,7 +174,8 @@ random_centers(vcl_vector<vnl_vector<double> > const& training_data,
   }
   return rand_centers;
 }
-// compute a vector of filter responses, which are sampled from the 
+
+// compute a vector of filter responses, which are sampled from the
 // response pixels for the input image
 bool sdet_texture_classifier::compute_training_data(vcl_string const& category)
 {
@@ -224,8 +228,9 @@ bool sdet_texture_classifier::compute_training_data(vcl_string const& category)
   vcl_cout << "Collect texture samples in texture box region" << t.real()/1000.0 << " secs.\n";
   return true;
 }
-// compute a vector of filter responses, which are sampled from the 
-// response pixels for the input image. Only responses within the 
+
+// compute a vector of filter responses, which are sampled from the
+// response pixels for the input image. Only responses within the
 // polygon are considered
 bool sdet_texture_classifier::compute_training_data(vcl_string const& category,
                                                     vgl_polygon<double> const& texture_region)
@@ -282,8 +287,9 @@ bool sdet_texture_classifier::compute_training_data(vcl_string const& category,
   vcl_cout << "Collect texture samples in texture polygon in " << t.real()/1000.0 << " secs.\n";
   return true;
 }
-// compute a vector of filter responses, which are sampled from the 
-// response pixels for the input image. Only responses within the 
+
+// compute a vector of filter responses, which are sampled from the
+// response pixels for the input image. Only responses within the
 // the set of polygon regions are considered
 bool   sdet_texture_classifier::
 compute_training_data(vcl_string const& category,
@@ -352,8 +358,10 @@ compute_training_data(vcl_string const& category,
   vcl_cout << "Collect texture samples in texture polygon in " << t.real()/1000.0 << " secs.\n";
   return true;
 }
+
 bool sdet_texture_classifier::compute_training_data(vcl_string const& category,
-                                                    vcl_string const& poly_path){
+                                                    vcl_string const& poly_path)
+{
   vcl_vector<vgl_polygon<double> > polys;
   if (poly_path=="") {
     //create a polygon that is the bounding box of the image
@@ -370,6 +378,7 @@ bool sdet_texture_classifier::compute_training_data(vcl_string const& category,
   }
   return this->compute_training_data(category, polys);
 }
+
 // execute the k means algorithm to form textons
 // assumes that training data has been initialized
 bool sdet_texture_classifier::compute_textons(vcl_string const& category)
@@ -482,7 +491,7 @@ bool sdet_texture_classifier::save_dictionary(vcl_string const& path) const
   vcl_cout << "Save dictionary to " << path << '\n';
   sdet_texture_classifier_params const * tcp_ptr =
     dynamic_cast<sdet_texture_classifier_params const*>(this);
-  vsl_b_write(os, *tcp_ptr);                                    
+  vsl_b_write(os, *tcp_ptr);
   vsl_b_write(os, texton_dictionary_);
   vsl_b_write(os, category_histograms_);
   os.close();
@@ -527,6 +536,7 @@ void sdet_texture_classifier::print_dictionary() const
     }
   }
 }
+
 // compute the nearest distance between textons in different categories
 // for the same category the distance is defined as the maximum distance
 // between textons in the category
@@ -564,20 +574,21 @@ void sdet_texture_classifier::compute_distances()
   }
   distances_valid_ = true;
 }
+
 // compute the probability of a category, given the textons of itself or other
 // categories. Provides a measure of the distinctiveness of a category.
 // The texton histogram probabilities are multiplied by a weight factor that
-// is based on how many categories in which a texton appears. 
+// is based on how many categories in which a texton appears.
 void sdet_texture_classifier::compute_interclass_probs()
 {
   inter_prob_.clear();
-  vcl_map< vcl_string, vcl_vector<float> >::const_iterator jt= 
+  vcl_map< vcl_string, vcl_vector<float> >::const_iterator jt=
     category_histograms_.begin();
   for (; jt!= category_histograms_.end(); ++jt) {
     vcl_vector<float> const & histj = (*jt).second;
     unsigned n = histj.size();
     float prob_total = 0.0f;
-    vcl_map<vcl_string, vcl_vector<float> >::const_iterator it= 
+    vcl_map<vcl_string, vcl_vector<float> >::const_iterator it=
       category_histograms_.begin();
     for (; it!= category_histograms_.end(); ++it) {
       float prob_sum = 0.0f;
@@ -594,7 +605,8 @@ void sdet_texture_classifier::compute_interclass_probs()
   }
   inter_prob_valid_ = true;
 }
-// The weighting factor for textons based on 
+
+// The weighting factor for textons based on
 // probability of belonging to multiple categories.
 // Here p = 1/Nc , where Nc is the number of categories in which
 // a texton appears. The factor off accounts for the singularity
@@ -607,8 +619,9 @@ static float w(float p, float off)
   res /= (t0 + t1);
   return res;
 }
+
 // Assign a weighting factor to each texton. The weight is 1 if the
-// texton appears in only one category and falls off as the number of 
+// texton appears in only one category and falls off as the number of
 // categories that share the texton increase
 void sdet_texture_classifier::compute_texton_weights()
 {
@@ -915,6 +928,7 @@ classify_image_blocks(vcl_string const& img_path)
   vcl_cout << "\nBlock classification took " << t.real()/1000.0 << " seconds\n" << vcl_flush;
   return prob;
 }
+
 unsigned sdet_texture_classifier::max_filter_radius() const
 {
   unsigned maxr = filter_responses_.invalid_border();
@@ -924,13 +938,13 @@ unsigned sdet_texture_classifier::max_filter_radius() const
   if (gr>maxr) maxr = gr;
   return maxr;
 }
+
+// === Binary I/O ===
+
 //dummy vsl io functions to allow sdet_texture_classifier to be inserted into
 //brdb as a dbvalue
-
 void vsl_b_write(vsl_b_ostream & os, sdet_texture_classifier const &tc)
 { /* do nothing */ }
-
-//: Binary load parameters from stream.
 void vsl_b_read(vsl_b_istream & is, sdet_texture_classifier &tc)
 { /* do nothing */ }
 void vsl_print_summary(vcl_ostream &os, const sdet_texture_classifier &tc)
