@@ -1,4 +1,4 @@
-// This is brl/bpro/core/bbas_pro/processes/brad_load_eigenspace_process.cxx
+// This is brl/bpro/core/brad_pro/processes/brad_load_eigenspace_process.cxx
 #include <bprb/bprb_func_process.h>
 #include <brad/brad_eigenspace.h>
 #include <vsl/vsl_binary_io.h>
@@ -42,7 +42,7 @@ bool brad_load_eigenspace_process(bprb_func_process& pro)
   }
   brad_eigenspace_sptr espace;
   vsl_b_read(is, espace);
-  if(!espace){
+  if (!espace){
     vcl_cout << "in load_eigenspace_process, null eigenspace pointer\n";
     return false;
   }

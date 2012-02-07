@@ -1,4 +1,4 @@
-// This is brl/bpro/core/bbas_pro/processes/brad_estimate_empty_process.cxx
+// This is brl/bpro/core/brad_pro/processes/brad_estimate_empty_process.cxx
 #include <bprb/bprb_func_process.h>
 #include <bpro/core/bbas_pro/bbas_1d_array_float.h>
 #include <brad/brad_phongs_model_est.h>
@@ -25,13 +25,12 @@ bool brad_estimate_empty_process_cons(bprb_func_process& pro)
     input_types_[2] = "bbas_1d_array_float_sptr";
     input_types_[3] = "bbas_1d_array_float_sptr";
 
-
     vcl_vector<vcl_string>  output_types_(n_outputs_);
 
     output_types_[0] = "float";
 
-    return pro.set_input_types(input_types_) &&
-        pro.set_output_types(output_types_);
+    return pro.set_input_types(input_types_)
+        && pro.set_output_types(output_types_);
 }
 
 

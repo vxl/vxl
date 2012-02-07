@@ -1,4 +1,4 @@
-//This is brl/bpro/core/bbas_pro/processes/brad_estimate_reflectance_process.cxx
+//This is brl/bpro/core/brad_pro/processes/brad_estimate_reflectance_process.cxx
 //:
 // \file
 #include <bprb/bprb_func_process.h>
@@ -30,21 +30,20 @@ bool brad_estimate_reflectance_process_cons(bprb_func_process& pro)
 
   //output: predicted reflectance values:
   vcl_vector<vcl_string> output_types_(1);
-  output_types_[0] = "vil_image_view_base_sptr"; 
+  output_types_[0] = "vil_image_view_base_sptr";
 
   if (!pro.set_output_types(output_types_))
      return false;
-  
+
   return true;
 }
 
 bool brad_estimate_reflectance_process(bprb_func_process& pro)
 {
-
   //check number of inputs
-  if(!pro.verify_inputs())
+  if (!pro.verify_inputs())
   {
-    vcl_cout << pro.name() << " Invalid inputs " << vcl_endl;
+    vcl_cout << pro.name() << " Invalid inputs" << vcl_endl;
     return false;
   }
 
@@ -60,23 +59,23 @@ bool brad_estimate_reflectance_process(bprb_func_process& pro)
   }
 
   if (radiance_img_base->pixel_format() != VIL_PIXEL_FORMAT_FLOAT) {
-     vcl_cerr << "ERROR: brad_estimate_reflectance: expecting floating point image " << vcl_endl;
+     vcl_cerr << "ERROR: brad_estimate_reflectance: expecting floating point image\n";
      return false;
   }
   vil_image_view<float>* radiance_img = dynamic_cast<vil_image_view<float>*>(radiance_img_base.ptr());
   if (!radiance_img) {
-     vcl_cerr << "ERROR: brad_estimate_reflectance: error casting to float image" << vcl_endl;
+     vcl_cerr << "ERROR: brad_estimate_reflectance: error casting to float image\n";
      return false;
   }
 
-  unsigned int ni = radiance_img->ni(); 
-  unsigned int nj = radiance_img->nj(); 
+  unsigned int ni = radiance_img->ni();
+  unsigned int nj = radiance_img->nj();
 
   vil_image_view<float> *reflectance_img = new vil_image_view<float>(ni,nj);
   vil_image_view_base_sptr output_img(reflectance_img);
 
   brad_estimate_reflectance_image(*radiance_img, *mdata, *atm_params, *reflectance_img);
-  
+
   pro.set_output_val<vil_image_view_base_sptr>(0, output_img);
 
   return true;

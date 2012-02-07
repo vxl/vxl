@@ -1,4 +1,4 @@
-// This is brl/bpro/core/bbas_pro/processes/brad_classify_image_pixel_process.cxx
+// This is brl/bpro/core/brad_pro/processes/brad_classify_image_pixel_process.cxx
 #include <bprb/bprb_func_process.h>
 #include <brad/brad_eigenspace.h>
 #include <vil/vil_new.h>
@@ -20,7 +20,7 @@ using namespace bbas_core_brad_classify_image_pixel;
   input_types[0]="brad_eigenspace_sptr"; //eigenspace
   input_types[1]="bsta_joint_histogram_3d_base_sptr"; //no atmospherics
   input_types[2]="bsta_joint_histogram_3d_base_sptr"; //with atmospherics
-  input_types[3]="vil_image_view_base_sptr"; //input image 
+  input_types[3]="vil_image_view_base_sptr"; //input image
   input_types[4]="float";//prob ratio
   ok = pro.set_input_types(input_types);
   if (!ok) return ok;
@@ -43,40 +43,40 @@ bool brad_classify_image_pixel_process(bprb_func_process& pro)
     return false;
   }
   brad_eigenspace_sptr es_ptr = pro.get_input<brad_eigenspace_sptr>(0);
-  if(!es_ptr){
+  if (!es_ptr){
     vcl_cout << "in classify_image_pixel_process, null eigenspace pointer\n";
     return false;
   }
-  bsta_joint_histogram_3d_base_sptr hno_ptr = 
+  bsta_joint_histogram_3d_base_sptr hno_ptr =
     pro.get_input<bsta_joint_histogram_3d_base_sptr>(1);
 
   bsta_joint_histogram_3d<float>* hist_no = dynamic_cast<bsta_joint_histogram_3d<float>*>(hno_ptr.ptr());
 
-  if(!hist_no){
+  if (!hist_no){
     vcl_cout << "in classify_image_pixel_process, hist can't be cast\n";
     return false;
   }
 
-  bsta_joint_histogram_3d_base_sptr h_atmos_ptr = 
+  bsta_joint_histogram_3d_base_sptr h_atmos_ptr =
     pro.get_input<bsta_joint_histogram_3d_base_sptr>(2);
 
   bsta_joint_histogram_3d<float>* hist_atmos = dynamic_cast<bsta_joint_histogram_3d<float>*>(h_atmos_ptr.ptr());
 
-  if(!hist_atmos){
+  if (!hist_atmos){
     vcl_cout << "in classify_image_pixel_process, hist can't be cast\n";
     return false;
   }
   vil_image_view_base_sptr image = pro.get_input<vil_image_view_base_sptr>(3);
-  if(!image){
+  if (!image){
     vcl_cout << "in classify_image_pixel_process, input image view is null\n";
     return false;
-  } 
+  }
   vil_image_view<float> fimage = *vil_convert_cast(float(), image);
   float prob_ratio = pro.get_input<float>(4);
 
   vil_image_view<float> class_image;
   CAST_CALL_EIGENSPACE(es_ptr, ep->classify_image_pixel(fimage, *hist_no, *hist_atmos, prob_ratio, class_image), "in classify_image_pixel_process - classify function failed\n")
-  pro.set_output_val<vil_image_view_base_sptr>(0, new vil_image_view<float>(class_image));  
+  pro.set_output_val<vil_image_view_base_sptr>(0, new vil_image_view<float>(class_image));
   return true;
 }
 

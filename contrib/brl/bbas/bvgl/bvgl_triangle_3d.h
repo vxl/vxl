@@ -1,15 +1,16 @@
-// This is brl/bbas/bvgl/bvgl_triangle.h
+// This is brl/bbas/bvgl/bvgl_triangle_3d.h
 #ifndef bvgl_triangle_h_
 #define bvgl_triangle_h_
 //:
 // \file
-// \brief simple 3d triangle 
+// \brief simple 3d triangle
 // \author Jan 30, 2012 Andrew Miller
 //
 
 #include <vgl/vgl_fwd.h> // forward declare various vgl classes
-#include <vcl_vector.h>
 #include <vgl/vgl_sphere_3d.h>
+#include <vcl_vector.h>
+#include <vcl_iosfwd.h>
 
 template <class Type>
 class bvgl_triangle_3d
@@ -24,12 +25,12 @@ class bvgl_triangle_3d
                     vgl_point_3d<Type> const& corner2,
                     vgl_point_3d<Type> const& corner3);
 
-
   //: access points
   vgl_point_3d<Type>        operator[](int index) { return points_[index]; }
   vgl_point_3d<Type> const& operator[](int index) const { return points_[index]; }
 
-  //: ----- IO --------
+  // ----- IO --------
+
   //: Write "<vgl_box_3d x0,y0,z0 to x1,y1,z1>" to stream
   vcl_ostream& print(vcl_ostream&) const;
 
@@ -39,9 +40,8 @@ class bvgl_triangle_3d
   //: Read x0,y0,z0,x1,y1,z1 from stream
   vcl_istream& read(vcl_istream&);
 
-
-  private:
-    vgl_point_3d<Type> points_[3];
+ private:
+  vgl_point_3d<Type> points_[3];
 };
 
 template <class Type>

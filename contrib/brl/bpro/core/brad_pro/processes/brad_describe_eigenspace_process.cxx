@@ -1,4 +1,4 @@
-// This is brl/bpro/core/bbas_pro/processes/brad_describe_eigenspace_process.cxx
+// This is brl/bpro/core/brad_pro/processes/brad_describe_eigenspace_process.cxx
 #include <bprb/bprb_func_process.h>
 #include <brad/brad_eigenspace.h>
 #include <vsl/vsl_binary_io.h>
@@ -33,7 +33,7 @@ bool brad_describe_eigenspace_process(bprb_func_process& pro)
     return false;
   }
   brad_eigenspace_sptr es_ptr = pro.get_input<brad_eigenspace_sptr>(0);
-  if(!es_ptr){
+  if (!es_ptr){
     vcl_cout << "in describe_eigenspace_process, null eigenspace pointer\n";
     return false;
   }

@@ -1,4 +1,4 @@
-// This is brl/bpro/core/bbas_pro/processes/brad_estimate_phongs_model_process.cxx
+// This is brl/bpro/core/brad_pro/processes/brad_estimate_phongs_model_process.cxx
 #include <bprb/bprb_func_process.h>
 #include <bpro/core/bbas_pro/bbas_1d_array_float.h>
 #include <brad/brad_phongs_model_est.h>

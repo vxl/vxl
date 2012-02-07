@@ -1,4 +1,4 @@
-// This is brl/bpro/core/bbas_pro/processes/brad_classify_image_process.cxx
+// This is brl/bpro/core/brad_pro/processes/brad_classify_image_process.cxx
 #include <bprb/bprb_func_process.h>
 #include <brad/brad_eigenspace.h>
 #include <vil/vil_load.h>
@@ -13,7 +13,7 @@ namespace bbas_core_brad_classify_image
 //: Constructor
 bool brad_classify_image_process_cons(bprb_func_process& pro)
 {
-using namespace bbas_core_brad_classify_image;
+  using namespace bbas_core_brad_classify_image;
 #if 0
   vcl_vector<vcl_string> input_types(7);
   input_types[0]="brad_eigenspace_sptr"; //eigenspace

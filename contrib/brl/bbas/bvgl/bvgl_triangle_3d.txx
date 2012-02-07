@@ -1,4 +1,4 @@
-// This is core/vgl/bvgl_triangle_3d.txx
+// This is brl/bbas/bvgl/bvgl_triangle_3d.txx
 #ifndef bvgl_triangle_3d_txx_
 #define bvgl_triangle_3d_txx_
 //:
@@ -34,8 +34,8 @@ bvgl_triangle_3d<Type>::bvgl_triangle_3d(vgl_point_3d<Type> const& corner1,
 template <class Type>
 vcl_ostream& bvgl_triangle_3d<Type>::print(vcl_ostream& s) const
 {
-  return s << "<bvgl_triangle_3d "<< ' ' << points_[0] << ' ' 
-                                         << points_[1] << ' ' 
+  return s << "<bvgl_triangle_3d "<< ' ' << points_[0] << ' '
+                                         << points_[1] << ' '
                                          << points_[2] << '>';
 }
 

@@ -1,18 +1,18 @@
-// This is brl/bpro/core/bbas_pro/processes/brad_train_histograms_process.cxx
+// This is brl/bpro/core/brad_pro/processes/brad_train_histograms_process.cxx
 #include <bprb/bprb_func_process.h>
-#include <brad/brad_eigenspace.h>
-#include <bpro/core/bbas_pro/bbas_1d_array_string.h>
-#include <vcl_vector.h>
-#include <vcl_string.h>
-#include <vil/vil_load.h>
-#include <vcl_fstream.h>
 //:
 // \file
 // \brief global variables and functions
 
+#include <brad/brad_eigenspace.h>
+#include <bpro/core/bbas_pro/bbas_1d_array_string.h>
+#include <vil/vil_load.h>
+#include <vcl_vector.h>
+#include <vcl_string.h>
+#include <vcl_fstream.h>
+
 namespace bbas_core_brad_train_hist
 {
-
   template <class T>
   bool hist_training_process(bbas_1d_array_string const& low_paths,
                              bbas_1d_array_string const& high_paths,
@@ -20,42 +20,42 @@ namespace bbas_core_brad_train_hist
                              double frac, unsigned nit, unsigned njt,
                              bsta_joint_histogram_3d<float>& low_hist,
                              bsta_joint_histogram_3d<float>& high_hist
-                             )
+                            )
   {
     unsigned nlow = low_paths.data_array.size();
     unsigned nbins = 20;
     vcl_vector<vil_image_resource_sptr> low_resources;
-    for(unsigned i  = 0; i < nlow; ++i){
-      vil_image_resource_sptr temp = 
+    for (unsigned i  = 0; i < nlow; ++i){
+      vil_image_resource_sptr temp =
         vil_load_image_resource(low_paths.data_array[i].c_str());
-      if(!temp) return false;
+      if (!temp) return false;
       low_resources.push_back(temp);
     }
     unsigned nhigh = high_paths.data_array.size();
     vcl_vector<vil_image_resource_sptr> high_resources;
-    for(unsigned i  = 0; i < nhigh; ++i){
-      vil_image_resource_sptr temp = 
+    for (unsigned i  = 0; i < nhigh; ++i){
+      vil_image_resource_sptr temp =
         vil_load_image_resource(high_paths.data_array[i].c_str());
-      if(!temp) return false;
+      if (!temp) return false;
       high_resources.push_back(temp);
     }
     bsta_joint_histogram_3d<float> hist_init;
 
-
     vcl_vector<vil_image_resource_sptr> resources = low_resources;
-    for(vcl_vector<vil_image_resource_sptr>::iterator rit = high_resources.begin();
-        rit != high_resources.end(); ++rit)
+    for (vcl_vector<vil_image_resource_sptr>::iterator rit = high_resources.begin();
+         rit != high_resources.end(); ++rit)
       resources.push_back(*rit);
-    if(frac==1.0)
+    if (frac==1.0)
       espace.init_histogram_blocked(resources, nbins, hist_init, nit, njt);
     else
       espace.init_histogram_rand(resources, nbins, hist_init, frac, nit, njt);
     low_hist = hist_init;
     high_hist = hist_init;
-    if(frac==1.0){
+    if (frac==1.0){
       espace.update_histogram_blocked(low_resources, low_hist, nit, njt);
       espace.update_histogram_blocked(high_resources, high_hist, nit, njt);
-    }else{
+    }
+    else {
       espace.update_histogram_rand(low_resources, low_hist, frac, nit, njt);
       espace.update_histogram_rand(high_resources, high_hist, frac, nit, njt);
     }

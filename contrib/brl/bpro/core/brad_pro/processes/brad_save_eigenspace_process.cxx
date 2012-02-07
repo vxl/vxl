@@ -1,4 +1,4 @@
-// This is brl/bpro/core/bbas_pro/processes/brad_save_eigenspace_process.cxx
+// This is brl/bpro/core/brad_pro/processes/brad_save_eigenspace_process.cxx
 #include <bprb/bprb_func_process.h>
 #include <brad/brad_eigenspace.h>
 #include <vsl/vsl_binary_io.h>
@@ -35,7 +35,7 @@ bool brad_save_eigenspace_process(bprb_func_process& pro)
   }
   int i = 0;
   brad_eigenspace_sptr espace = pro.get_input<brad_eigenspace_sptr>(i++);
-  if(!espace){
+  if (!espace){
     vcl_cout << "in save_eigenspace_process, null eigenspace pointer\n";
     return false;
   }

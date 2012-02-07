@@ -1,4 +1,4 @@
-// This is brl/bpro/core/bbas_pro/processes/brad_compute_eigenspace_process.cxx
+// This is brl/bpro/core/brad_pro/processes/brad_compute_eigenspace_process.cxx
 #include <bprb/bprb_func_process.h>
 #include <brad/brad_eigenspace.h>
 #include <bpro/core/bbas_pro/bbas_1d_array_string.h>
@@ -14,8 +14,8 @@ namespace bbas_core_brad_compute
   template <class T>
   bool eigen_training_process(bbas_1d_array_string const& paths, double frac,
                               unsigned nit, unsigned njt,
-                              brad_eigenspace<T>& espace) {
-
+                              brad_eigenspace<T>& espace)
+  {
     unsigned n = paths.data_array.size();
 
     vcl_vector<vil_image_resource_sptr> resources;

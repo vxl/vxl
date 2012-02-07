@@ -1,4 +1,4 @@
-// This is brl/bpro/core/bbas_pro/processes/brad_sun_dir_bin_process.cxx
+// This is brl/bpro/core/brad_pro/processes/brad_sun_dir_bin_process.cxx
 #include <bprb/bprb_func_process.h>
 //:
 // \file

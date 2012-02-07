@@ -1,4 +1,4 @@
-// This is brl/bpro/core/bbas_pro/processes/brad_update_joint_hist_3d_process.cxx
+// This is brl/bpro/core/brad_pro/processes/brad_update_joint_hist_3d_process.cxx
 #include <bprb/bprb_func_process.h>
 //:
 // \file
@@ -26,7 +26,7 @@ namespace bbas_core_brad_update_hist
       if (!temp) return false;
       resources.push_back(temp);
     }
-    if(frac==1.0)
+    if (frac==1.0)
       espace.update_histogram_blocked(resources, hist, nit, njt);
     else
       espace.update_histogram_rand(resources, hist, frac, nit, njt);

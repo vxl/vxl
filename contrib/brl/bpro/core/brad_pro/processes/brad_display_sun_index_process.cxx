@@ -1,4 +1,4 @@
-// This is brl/bpro/core/bbas_pro/processes/brad_display_sun_index_process.cxx
+// This is brl/bpro/core/brad_pro/processes/brad_display_sun_index_process.cxx
 #include <bprb/bprb_func_process.h>
 #include <brad/brad_sun_dir_index.h>
 //:

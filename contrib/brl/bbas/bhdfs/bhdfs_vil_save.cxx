@@ -1,16 +1,15 @@
-// This is contrib/brl/bbas/bhdfs/bdhfs_vil_save.cxx
+// This is brl/bbas/bhdfs/bhdfs_vil_save.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
+#include "bhdfs_vil_save.h"
 //:
 // \file
 //
 // \verbatim
 //  Modifications
-// 
+//
 // \endverbatim
-
-#include "bhdfs_vil_save.h"
 
 #include <vcl_cctype.h>
 #include <vcl_cstring.h>
@@ -86,7 +85,7 @@ bool bhdfs_vil_save(const vil_image_view_base & i, char const* filename)
 
 //: Send vil_image to disk.
 bool bhdfs_vil_save_image_resource(const vil_image_resource_sptr &ir, char const* filename,
-                             char const* file_format)
+                                   char const* file_format)
 {
   //vil_stream* os = vil_open(filename, "w");
   vil_stream* os = new bhdfs_vil_stream(filename, "w");
@@ -109,5 +108,4 @@ bool bhdfs_vil_save_image_resource(const vil_image_resource_sptr &ir, char const
 {
   return bhdfs_vil_save_image_resource(ir, filename, vil_save_guess_file_format(filename));
 }
-
 

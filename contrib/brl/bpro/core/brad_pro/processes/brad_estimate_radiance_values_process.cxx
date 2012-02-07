@@ -1,4 +1,4 @@
-//This is brl/bpro/core/bbas_pro/processes/brad_estimate_radiance_values_process.cxx
+//This is brl/bpro/core/brad_pro/processes/brad_estimate_radiance_values_process.cxx
 //:
 // \file
 #include <bprb/bprb_func_process.h>
@@ -46,13 +46,13 @@ bool brad_estimate_radiance_values_process_cons(bprb_func_process& pro)
   //1: horizontal lambertian surface with reflectance = 1
   //2: sun-facing lambertian surface with reflectance = 1
   vcl_vector<vcl_string> output_types_(3);
-  output_types_[0] = "float"; 
+  output_types_[0] = "float";
   output_types_[1] = "float";
   output_types_[2] = "float";
 
   if (!pro.set_output_types(output_types_))
-     return false;
-  
+    return false;
+
   // set default parameter values
   float Esun = 1381.79;
   pro.set_input(4, new brdb_value_t<float>(Esun));
@@ -60,22 +60,21 @@ bool brad_estimate_radiance_values_process_cons(bprb_func_process& pro)
   pro.set_input(5, new brdb_value_t<float>(Edown));
   float optical_depth = 0.10;
   pro.set_input(6, new brdb_value_t<float>(optical_depth));
-  
+
   return true;
 }
 
 bool brad_estimate_radiance_values_process(bprb_func_process& pro)
 {
-
   //check number of inputs
-  if(!pro.verify_inputs())
+  if (!pro.verify_inputs())
   {
-    vcl_cout << pro.name() << " Invalid inputs " << vcl_endl;
+    vcl_cout << pro.name() << " Invalid inputs" << vcl_endl;
     return false;
   }
 
   //get the inputs
-  vil_image_view_base_sptr input_img = 
+  vil_image_view_base_sptr input_img =
     pro.get_input<vil_image_view_base_sptr>(0);
 
   double sun_el = pro.get_input<float>(1);
@@ -91,16 +90,16 @@ bool brad_estimate_radiance_values_process(bprb_func_process& pro)
     return false;
   }
 
-  unsigned ni_ = input_img->ni(); 
-  unsigned nj_ = input_img->nj(); 
-  
+  unsigned ni_ = input_img->ni();
+  unsigned nj_ = input_img->nj();
+
   if (input_img->pixel_format() != VIL_PIXEL_FORMAT_FLOAT) {
-     vcl_cerr << "ERROR: brad_estimate_radiance_values: expecting floating point image " << vcl_endl;
+     vcl_cerr << "ERROR: brad_estimate_radiance_values: expecting floating point image\n";
      return false;
   }
   vil_image_view<float>* image = dynamic_cast<vil_image_view<float>*>(input_img.ptr());
   if (!image) {
-     vcl_cerr << "ERROR: brad_estimate_radiance_values: error casting to float image" << vcl_endl;
+     vcl_cerr << "ERROR: brad_estimate_radiance_values: error casting to float image\n";
      return false;
   }
   // find min and max values in image
@@ -108,14 +107,14 @@ bool brad_estimate_radiance_values_process(bprb_func_process& pro)
   vil_math_value_range(*image,minval,maxval);
   // compute histogram for image
   bsta_histogram<float> h(minval, maxval, 512);
-  for(unsigned j = 0; j<nj_; ++j)
-    for(unsigned i = 0; i<ni_; ++i)
+  for (unsigned j = 0; j<nj_; ++j)
+    for (unsigned i = 0; i<ni_; ++i)
       h.upcount((*image)(i, j), 1.0f);
 
-  // compute airlight 
+  // compute airlight
   float frac = 0.0001f;
   double airlight = h.value_with_area_below(frac);
- 
+
   vcl_cout << "min = " << minval << ", airlight = " << airlight << vcl_endl;
 
   // calculate atmosphere transmittance value
