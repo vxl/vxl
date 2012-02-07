@@ -47,7 +47,6 @@ bool boxm2_compute_normal_albedo_functor::process_cell(unsigned int index, bool 
       return false;
    }
    boxm2_data<BOXM2_NORMAL_ALBEDO_ARRAY>::datatype & naa_model = naa_model_data_->data()[index];
-   boxm2_data<BOXM2_ALPHA>::datatype & alpha = alpha_data_->data()[index];
    vcl_vector<aux0_datatype> aux0_raw = str_cache_->get_next<BOXM2_AUX0>(id_, index); // seg_len
    vcl_vector<aux1_datatype> aux1_raw = str_cache_->get_next<BOXM2_AUX1>(id_, index); // mean_obs
    vcl_vector<aux2_datatype> aux2_raw = str_cache_->get_next<BOXM2_AUX2>(id_, index); // vis
@@ -216,6 +215,7 @@ bool boxm2_compute_normal_albedo_functor::process_cell(unsigned int index, bool 
    }
 #if 0
    if (update_alpha_) {
+      boxm2_data<BOXM2_ALPHA>::datatype & alpha = alpha_data_->data()[index];
       const double surface_prior = 1.0 - vcl_exp(-alpha*side_len);
       double total_obs_prob = surface_prior * surface_obs_density + (1.0-surface_prior)*empty_obs_density; // uniform density for "empty" model
       double vox_prob = surface_prior*surface_obs_density/total_obs_prob;
