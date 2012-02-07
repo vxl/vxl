@@ -46,21 +46,23 @@
 //               the large disparity in sample populations used to compute
 //               the histograms, e.g. 400,000 in training vs. 4096 for
 //               a test image block.
+
 #include <sdet/sdet_texture_classifier_params.h>
+#include <brip/brip_filter_bank.h>
 #include <vil/vil_image_resource.h>
 #include <vil/vil_image_view.h>
 #include <vgl/vgl_polygon.h>
-#include <vcl_vector.h>
-#include <vcl_map.h>
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_vector_fixed.h>
-#include <brip/brip_filter_bank.h>
 #include <vbl/vbl_ref_count.h>
+#include <vcl_vector.h>
+#include <vcl_map.h>
+#include <vcl_iosfwd.h>
 
 struct sdet_neighbor
 {
-  sdet_neighbor(vcl_string const& category, vnl_vector<double> const& k_mean):
-    cat_(category), k_mean_(k_mean){}
+  sdet_neighbor(vcl_string const& category, vnl_vector<double> const& k_mean)
+  : cat_(category), k_mean_(k_mean){}
   vcl_string cat_;
   vnl_vector<double> k_mean_;
 };
@@ -122,7 +124,7 @@ class sdet_texture_classifier : public sdet_texture_classifier_params,
                        vcl_vector<vcl_string> const& poly_paths=
                        vcl_vector<vcl_string>());
 
-  //: The texton histograms derived from the training data 
+  //: The texton histograms derived from the training data
   void compute_category_histograms();
 
   //: save texton dictionary, binary (includes classifier params at top of file)
@@ -209,7 +211,7 @@ void vsl_print_summary(vcl_ostream &os, const sdet_texture_classifier &tc);
 void vsl_b_read(vsl_b_istream& is, sdet_texture_classifier* tc);
 
 void vsl_b_write(vsl_b_ostream& os, const sdet_texture_classifier* &tc);
- 
+
 void vsl_print_summary(vcl_ostream& os, const sdet_texture_classifier* &tc);
 
 void vsl_b_read(vsl_b_istream& is, sdet_texture_classifier_sptr& tc);
