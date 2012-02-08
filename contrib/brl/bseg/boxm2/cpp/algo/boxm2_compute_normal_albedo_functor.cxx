@@ -42,70 +42,71 @@ bool boxm2_compute_normal_albedo_functor::init_data(vcl_vector<brad_image_metada
    num_images_ = metadata.size();
    // sanity check on atmospheric parameters
    if (atm_params_.size() != num_images_) {
-      vcl_cerr << "ERROR: boxm2_compute_normal_albedo_functor: image metadata.size() = " << num_images_ << ", atm_params_.size() = " << atm_params_.size() << vcl_endl;
+      vcl_cerr << "ERROR: boxm2_compute_normal_albedo_functor: image metadata.size() = "
+               << num_images_ << ", atm_params_.size() = " << atm_params_.size() << '\n';
       return false;
    }
    // get normal directions
    normals_ = boxm2_normal_albedo_array::get_normals();
    num_normals_ = normals_.size();
 
-  // compute offsets and scales for linear radiance model
-  reflectance_scales_.resize(num_images_);
-  reflectance_offsets_.resize(num_images_);
-  radiance_scales_.resize(num_images_);
-  radiance_offsets_.resize(num_images_);
-  radiance_var_scales_.resize(num_images_);
-  radiance_var_offsets_.resize(num_images_);
-  sun_positions_.resize(num_images_);
-  for (unsigned int m=0; m<num_images_; ++m) {
-     // convert sun and view az,el into 3d vectors
-     double az = metadata_[m].sun_azimuth_ * vnl_math::pi_over_180; //convert to radians
-     double el = metadata_[m].sun_elevation_ * vnl_math::pi_over_180; //convert to radians
-     double x = vcl_sin(az)*vcl_cos(el);
-     double y = vcl_cos(az)*vcl_cos(el);
-     double z = vcl_sin(el);
-     sun_positions_[m] = vgl_vector_3d<double>(x,y,z);
+   // compute offsets and scales for linear radiance model
+   reflectance_scales_.resize(num_images_);
+   reflectance_offsets_.resize(num_images_);
+   radiance_scales_.resize(num_images_);
+   radiance_offsets_.resize(num_images_);
+   radiance_var_scales_.resize(num_images_);
+   radiance_var_offsets_.resize(num_images_);
+   sun_positions_.resize(num_images_);
+   for (unsigned int m=0; m<num_images_; ++m) {
+      // convert sun and view az,el into 3d vectors
+      double az = metadata_[m].sun_azimuth_ * vnl_math::pi_over_180; //convert to radians
+      double el = metadata_[m].sun_elevation_ * vnl_math::pi_over_180; //convert to radians
+      double x = vcl_sin(az)*vcl_cos(el);
+      double y = vcl_cos(az)*vcl_cos(el);
+      double z = vcl_sin(el);
+      sun_positions_[m] = vgl_vector_3d<double>(x,y,z);
 
-     reflectance_scales_[m].resize(num_normals_);
-     reflectance_offsets_[m].resize(num_normals_);
-     radiance_scales_[m].resize(num_normals_);
-     radiance_offsets_[m].resize(num_normals_);
-     radiance_var_scales_[m].resize(num_normals_);
-     radiance_var_offsets_[m].resize(num_normals_);
-     for (unsigned n=0; n < num_normals_; ++n) {
-        // compute offsets as radiance of surface with 0 reflectance
-        double radiance_offset = brad_expected_radiance_chavez(0.0, normals_[n], metadata_[m], atm_params_[m]);
-        radiance_offsets_[m][n] = radiance_offset;
-        // use perfect reflector to compute radiance scale
-        double radiance = brad_expected_radiance_chavez(1.0, normals_[n], metadata_[m], atm_params_[m]);
-        radiance_scales_[m][n] = radiance - radiance_offset;
-        // compute offset of radiance variance
-        double var_offset = brad_radiance_variance_chavez(0.0, normals_[n], metadata_[m], atm_params_[m], reflectance_var, optical_depth_var, skylight_var, airlight_var);
-        radiance_var_offsets_[m][n] = var_offset;
-        // compute scale
-        double var = brad_radiance_variance_chavez(1.0, normals_[n], metadata_[m], atm_params_[m], reflectance_var, optical_depth_var, skylight_var, airlight_var);
-        radiance_var_scales_[m][n] = var - var_offset;
-        // compute offset for reflectance calculation
-        double reflectance_offset = brad_expected_reflectance_chavez(0.0, normals_[n], metadata_[m], atm_params_[m]);
-        reflectance_offsets_[m][n] = reflectance_offset;
-        // compute scale
-        double reflectance = brad_expected_reflectance_chavez(1.0, normals_[n], metadata_[m], atm_params_[m]);
-        reflectance_scales_[m][n] = reflectance - reflectance_offset;
-     }
-  }
-  return true;
+      reflectance_scales_[m].resize(num_normals_);
+      reflectance_offsets_[m].resize(num_normals_);
+      radiance_scales_[m].resize(num_normals_);
+      radiance_offsets_[m].resize(num_normals_);
+      radiance_var_scales_[m].resize(num_normals_);
+      radiance_var_offsets_[m].resize(num_normals_);
+      for (unsigned n=0; n < num_normals_; ++n) {
+         // compute offsets as radiance of surface with 0 reflectance
+         double radiance_offset = brad_expected_radiance_chavez(0.0, normals_[n], metadata_[m], atm_params_[m]);
+         radiance_offsets_[m][n] = radiance_offset;
+         // use perfect reflector to compute radiance scale
+         double radiance = brad_expected_radiance_chavez(1.0, normals_[n], metadata_[m], atm_params_[m]);
+         radiance_scales_[m][n] = radiance - radiance_offset;
+         // compute offset of radiance variance
+         double var_offset = brad_radiance_variance_chavez(0.0, normals_[n], metadata_[m], atm_params_[m], reflectance_var, optical_depth_var, skylight_var, airlight_var);
+         radiance_var_offsets_[m][n] = var_offset;
+         // compute scale
+         double var = brad_radiance_variance_chavez(1.0, normals_[n], metadata_[m], atm_params_[m], reflectance_var, optical_depth_var, skylight_var, airlight_var);
+         radiance_var_scales_[m][n] = var - var_offset;
+         // compute offset for reflectance calculation
+         double reflectance_offset = brad_expected_reflectance_chavez(0.0, normals_[n], metadata_[m], atm_params_[m]);
+         reflectance_offsets_[m][n] = reflectance_offset;
+         // compute scale
+         double reflectance = brad_expected_reflectance_chavez(1.0, normals_[n], metadata_[m], atm_params_[m]);
+         reflectance_scales_[m][n] = reflectance - reflectance_offset;
+      }
+   }
+   return true;
 }
 
 
 bool boxm2_compute_normal_albedo_functor::process_cell(unsigned int index, bool is_leaf, float side_len)
 {
    if (index >= naa_model_data_->data().size()) {
-      vcl_cerr << "ERROR: index = " << index << ", naa_model_data_->data().size = " << naa_model_data_->data().size() << vcl_endl
-               << "   alpha_data_->data().size() = " << alpha_data_->data().size() << vcl_endl;
+      vcl_cerr << "ERROR: index = " << index << ", naa_model_data_->data().size = " << naa_model_data_->data().size() << '\n'
+               << "   alpha_data_->data().size() = " << alpha_data_->data().size() << '\n';
       return false;
    }
    if (index >= alpha_data_->data().size()) {
-      vcl_cerr << "ERROR: index = " << index << ", alpha_data_->data().size = " << alpha_data_->data().size() << vcl_endl;
+      vcl_cerr << "ERROR: index = " << index << ", alpha_data_->data().size = " << alpha_data_->data().size() << '\n';
       return false;
    }
    boxm2_data<BOXM2_NORMAL_ALBEDO_ARRAY>::datatype & naa_model = naa_model_data_->data()[index];
@@ -135,11 +136,11 @@ bool boxm2_compute_normal_albedo_functor::process_cell(unsigned int index, bool 
    vis_vals.insert(vis_vals.begin(), aux2_raw.begin(), aux2_raw.end());
    radiances.insert(radiances.begin(), aux1_raw.begin(), aux1_raw.end());
 
-   if(radiances.size() != num_images_) {
-      vcl_cerr << "ERROR: boxm2_compute_normal_albedo_functor: aux data size does not match number of images" << vcl_endl;
+   if (radiances.size() != num_images_) {
+      vcl_cerr << "ERROR: boxm2_compute_normal_albedo_functor: aux data size does not match number of images" << '\n';
       return false;
    }
-  
+
    float sum_weights = 0.0f ;
    for (unsigned i=0; i<num_images_; ++i)
    {
@@ -148,7 +149,6 @@ bool boxm2_compute_normal_albedo_functor::process_cell(unsigned int index, bool 
 
    //////////////////////////////////////
 
-   const double surface_prior = 1.0 - vcl_exp(-alpha*side_len);
    double prob_sum = 0.0;
 
    // for each normal, compute optimal reflectance
@@ -172,7 +172,7 @@ bool boxm2_compute_normal_albedo_functor::process_cell(unsigned int index, bool 
          }
          double pred_var = radiance_var_scales_[m][n]*rho*rho + radiance_var_offsets_[m][n];
          if (!(pred_var > 0.1)) {
-            vcl_cerr << "------- ERROR: prediction variance = " << pred_var << vcl_endl;
+            vcl_cerr << "------- ERROR: prediction variance = " << pred_var << '\n';
             pred_var = 1.0;
          }
          double weight = vis_vals[m] / (1.0 + vcl_sqrt(pred_var));
@@ -181,7 +181,7 @@ bool boxm2_compute_normal_albedo_functor::process_cell(unsigned int index, bool 
       }
       double albedo = 0.0;
       if (denominator > 0.0) {
-          albedo = numerator / denominator;
+         albedo = numerator / denominator;
       }
       naa_model.set_albedo(n,albedo);
 
@@ -220,7 +220,7 @@ bool boxm2_compute_normal_albedo_functor::process_cell(unsigned int index, bool 
          }
          log_pred_prob += vcl_log(prob);
          if (!(log_pred_prob <= 0)){
-            vcl_cerr << "error" << vcl_endl;
+            vcl_cerr << "error\n";
          }
       }
       double pred_prob = vcl_exp(log_pred_prob);
@@ -228,15 +228,15 @@ bool boxm2_compute_normal_albedo_functor::process_cell(unsigned int index, bool 
       prob_sum += pred_prob;
    }
    if (prob_sum <= 1e-8) {
-       for (unsigned int n=0; n<num_normals_; ++n) {
-          naa_model.set_probability(n,1.0/num_normals_);
-       }
+      for (unsigned int n=0; n<num_normals_; ++n) {
+         naa_model.set_probability(n,1.0/num_normals_);
+      }
    }
    else {
       for (unsigned int n=0; n<num_normals_; ++n) {
          double normal_prob = obs_probs[n]/prob_sum;
          if (!(normal_prob >= 0)) {
-            vcl_cerr << "ERROR: normal_prob[" << n << "] = " << normal_prob << vcl_endl;
+            vcl_cerr << "ERROR: normal_prob[" << n << "] = " << normal_prob << '\n';
             normal_prob = 0.0;
          }
          naa_model.set_probability(n,normal_prob);
@@ -244,12 +244,13 @@ bool boxm2_compute_normal_albedo_functor::process_cell(unsigned int index, bool 
    }
 #if 0
    if (update_alpha_) {
-   double total_obs_prob = surface_prior * surface_obs_density + (1.0-surface_prior)*empty_obs_density; // uniform density for "empty" model
-   double vox_prob = surface_prior*surface_obs_density/total_obs_prob;
-   double uncertainty = vcl_min(vox_prob,1.0-vox_prob)*2.0;
-   double belief = vox_prob - uncertainty/2.0;
-   alpha = -vcl_log(1.0 - belief) / side_len;
-   }
+      const double surface_prior = 1.0 - vcl_exp(-alpha*side_len);
+      double total_obs_prob = surface_prior * surface_obs_density + (1.0-surface_prior)*empty_obs_density; // uniform density for "empty" model
+      double vox_prob = surface_prior*surface_obs_density/total_obs_prob;
+      double uncertainty = vcl_min(vox_prob,1.0-vox_prob)*2.0;
+      double belief = vox_prob - uncertainty/2.0;
+      alpha = -vcl_log(1.0 - belief) / side_len;
+      }
 #endif
    return true;
 }
