@@ -838,12 +838,16 @@ double brad_expected_reflectance_chavez(double toa_radiance,
       return 0;
    }
    double reflectance = vnl_math::pi * (toa_radiance - airlight) / denom;
+   // some algorithms depend on "invalid" reflectances being returned in order to compute 
+   // constants A,B for reflectance = A*radiance + B  -DEC 7 Feb 2012
+#if 0
    if (reflectance > 1.0) {
       reflectance = 1.0;
    }
    if (reflectance < 0.0) {
       reflectance = 0.0;
    }
+#endif
    return reflectance;
 }
 
