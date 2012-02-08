@@ -82,10 +82,7 @@ bool boxm2_compute_sun_affine_camera_process(bprb_func_process& pro)
   boxm2_block_metadata mdata = iter->second;
   unsigned int dimx = (unsigned int) vcl_floor(box.width()/(mdata.sub_block_dim_.x()/vcl_pow(2.0,(double)mdata.max_level_-1))+ 0.5);
   unsigned int dimy = (unsigned int) vcl_floor(box.height()/(mdata.sub_block_dim_.y()/vcl_pow(2.0,(double)mdata.max_level_-1))+ 0.5);
-//TEMP
-dimx /= 2;
-dimy /= 2;
-//END TEMP
+
   vpgl_affine_camera<double> affine_camera  = bpgl_camera_from_box::affine_camera_from_box(box,
                                                        sun_dir_downwards,
                                                        dimx,
