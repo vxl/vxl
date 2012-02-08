@@ -161,7 +161,8 @@ bool boxm2_ocl_update_alpha_wcubic_process(bprb_func_process& pro)
     }
   }
   if (!foundDataType) {
-    vcl_cout<<"BOXM2_OPENCL_UPDATE_PROCESS ERROR: scene doesn't have BOXM2_MOG3_GREY or BOXM2_MOG3_GREY_16 data type"<<vcl_endl;
+    vcl_cout<<"BOXM2_OPENCL_UPDATE_PROCESS ERROR: scene doesn't have "
+            <<boxm2_data_traits<BOXM2_FLOAT8>::prefix()<<vcl_endl;
     return false;
   }
   if (ident.size() > 0) {

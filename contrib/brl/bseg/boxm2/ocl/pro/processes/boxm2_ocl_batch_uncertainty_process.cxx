@@ -204,7 +204,7 @@ bool boxm2_ocl_batch_uncertainty_process(bprb_func_process& pro)
     boxm2_data_leaves_serial_iterator<boxm2_update_synoptic_probability>(cpu_blk,data_buff_length,data_functor);
     opencl_cache->deep_remove_data( *id, boxm2_data_traits<BOXM2_ALPHA>::prefix(), true );
 #endif // 0
-    opencl_cache->deep_remove_data( *id, boxm2_data_traits<BOXM2_FLOAT8>::prefix("cubic_model"), true );
+  // opencl_cache->deep_remove_data( *id, boxm2_data_traits<BOXM2_FLOAT8>::prefix("cubic_model"), true );
   }
   clReleaseCommandQueue(queue);
 
