@@ -10,7 +10,7 @@ import sys
 # you can always force the process to use CPP by just passing in "cpp" as the last
 # arg to any function in this class
 #############################################################################
-class boxm2_scene_adaptor(object):
+class boxm2_scene_adaptor:
 
   #scene adaptor init
   def __init__(self, scene_str, device_string="gpu") :
@@ -44,6 +44,13 @@ class boxm2_scene_adaptor(object):
     self.description = describe_scene(self.scene);
     self.model_dir = self.description['dataPath'];
     self.rgb = self.description['appType'] == "boxm2_gauss_rgb";
+
+  def __del__(self):
+    boxm2_batch.remove_data(self.scene.id)
+    boxm2_batch.remove_data(self.cpu_cache.id)
+    boxm2_batch.remove_data(self.ocl_mgr.id)
+    boxm2_batch.remove_data(self.device.id)
+    boxm2_batch.remove_data(self.opencl_cache.id)
 
   #describe scene (returns data path)
   def describe(self) :
@@ -277,6 +284,12 @@ class boxm2_scene_adaptor(object):
     (cache_id, cache_type) = boxm2_batch.commit_output(0);
     self.str_cache = dbvalue(cache_id, cache_type);
 
+  # remove stream cache object from database
+  def destroy_stream_cache(self):
+    if self.str_cache:
+       boxm2_batch.remove_data(self.str_cache.id)
+       self.str_cache = None
+
   #writes aux data for each image in imgs array
   def write_aux_data(self, imgs, cams) :
     for idx in range( len(imgs) ) :
@@ -403,6 +416,11 @@ class boxm2_scene_adaptor(object):
     boxm2_batch.set_input_string(3,metadata_filename_list)
     boxm2_batch.set_input_string(4,atmospheric_params_filename_list)
     boxm2_batch.run_process()
+    
+    # close the files so that they can be reloaded after the next iteration
+    boxm2_batch.init_process("boxm2StreamCacheCloseFilesProcess");
+    boxm2_batch.set_input_from_db(0,self.str_cache);
+    boxm2_batch.run_process();
 
   def render_expected_image_naa(self, camera, ni,nj, metadata, atmospheric_params):
     boxm2_batch.init_process("boxm2OclRenderExpectedImageNAAProcess");
