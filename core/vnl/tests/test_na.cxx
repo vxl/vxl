@@ -7,7 +7,6 @@
 #include <testlib/testlib_test.h>
 
 
-
 #define print_hex(p) \
   vcl_hex<<vcl_setfill('0')<<vcl_setw(2)<<(short)reinterpret_cast<unsigned char*>(&p)[sizeof(p)-1]; \
   for (unsigned int i=2; i<=sizeof(p); ++i) \
@@ -23,8 +22,8 @@ template <class T> void test_na_type(T na_v, T qnan_v)
   TEST("isnan(1/NA2)", vnl_math_isnan(1.0f/na_v), true);
   TEST("isna(NA)", vnl_na_isna(vnl_na(T())), true);
   TEST("isna(NA2)", vnl_na_isna(na_v), true);
-  TEST("!isna(-NA2)", vnl_na_isna(-na_v), false); // This is annoying.
-  TEST("!isna(-1.0 * NA2)", vnl_na_isna(-1.0f * na_v), true);
+  TEST("!isna(-NA2)", vnl_na_isna(-na_v), false); // this is annoying
+  TEST("!isna(-1.0 * NA2)", vnl_na_isna(-1.0f * na_v), false);
   TEST("isna(1/NA2)", vnl_na_isna(1.0f/na_v), true);
   TEST("!isfinite(NA)", !vnl_math_isfinite(na_v), true);
   TEST("!isinf(NA)", !vnl_math_isinf(na_v), true);
@@ -143,8 +142,8 @@ template <class T> void test_na_type(T na_v, T qnan_v)
     T x=0.0, y=0.0;
     ss >> vnl_na_stream(x) >> vnl_na_stream(y);
     TEST("x,y=\"-1.0 NA\"", vnl_na_isna(y) && x==-1.0, true);
-    vcl_cout << "y = " << y << " = " << print_hex(y) << vcl_endl;
-    vcl_cout << "ss = " << ss.str() << vcl_endl;
+    vcl_cout << "y = " << y << " = " << print_hex(y) << '\n'
+             << "ss = " << ss.str() << vcl_endl;
   }
 }
 
@@ -163,10 +162,10 @@ void test_na()
     vcl_cout<<vcl_setfill('0')<<vcl_setw(2)<<(short)(reinterpret_cast<unsigned char*>(&p))[sizeof(p)-i]; \
   vcl_cout<<vcl_dec
 
-  vcl_cout << "qnan_d = " << qnan_d << " = " << print_hex(qnan_d) << vcl_endl
-           << "na_d   = " << na_d   << " = " << print_hex(na_d)   << vcl_endl
-           << "qnan_f = " << qnan_f << " = " << print_hex(qnan_f) << vcl_endl
-           << "na_f   = " << na_f   << " = " << print_hex(na_f)   << vcl_endl
+  vcl_cout << "qnan_d = " << qnan_d << " = " << print_hex(qnan_d) << '\n'
+           << "na_d   = " << na_d   << " = " << print_hex(na_d)   << '\n'
+           << "qnan_f = " << qnan_f << " = " << print_hex(qnan_f) << '\n'
+           << "na_f   = " << na_f   << " = " << print_hex(na_f)   << '\n'
            << vcl_endl;
 
   vcl_cout << "\nSingle precision\n";
