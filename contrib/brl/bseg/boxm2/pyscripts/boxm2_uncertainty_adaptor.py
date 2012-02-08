@@ -27,7 +27,12 @@ class UncertainScene(boxm2_scene_adaptor):
     #update synoptic function (per voxel cubic)
     self.batch_synoptic_function();
     #update alphas
-    self.update_all_alphas_with_cubic();
+    #self.update_all_alphas_with_cubic();
+
+  def compute_uncertainty(self):
+    """Store voxel uncertainty in cubic (float8) """
+    self.store_all_uncertainty_aux()
+    self.batch_uncertainty()
 
 
   #store all uncertainty aux data for each view
@@ -53,7 +58,7 @@ class UncertainScene(boxm2_scene_adaptor):
   def batch_uncertainty(self):
     """Calculate voxel uncertainty"""
     # write image identifiers to file
-    image_id_fname = "./image_list.txt"
+    image_id_fname = self.model_dir + "/image_list.txt"
     fd = open(image_id_fname,"w")
     print >> fd, len(self.imgList)
     for i,img in enumerate(self.imgList):

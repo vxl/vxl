@@ -10,7 +10,7 @@ import sys
 # you can always force the process to use CPP by just passing in "cpp" as the last
 # arg to any function in this class
 #############################################################################
-class boxm2_scene_adaptor:
+class boxm2_scene_adaptor(object):
 
   #scene adaptor init
   def __init__(self, scene_str, device_string="gpu") :
