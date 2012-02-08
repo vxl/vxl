@@ -251,7 +251,7 @@ def ingest_buckeye_dem(scene, cache, first_return_fname, last_return_fname, geoi
 # Generic render, returns a dbvalue expected image
 # Cache can be either an OPENCL cache or a CPU cache
 #####################################################################
-def render_grey(scene, cache, cam, ident_string="",ni=1280, nj=720, device=None) :
+def render_grey(scene, cache, cam, ni=1280, nj=720, device=None, ident_string="") :
   if cache.type == "boxm2_cache_sptr" :
     boxm2_batch.init_process("boxm2CppRenderExpectedImageProcess");
     boxm2_batch.set_input_from_db(0,scene);

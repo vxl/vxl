@@ -88,7 +88,7 @@ class boxm2_scene_adaptor(object):
       update_app_grey(self.scene, cache, cam, img, dev);
 
   #render wrapper, same as above
-  def render(self, cam, ni=1280, nj=720, device_string="") :
+  def render(self, cam, ni=1280, nj=720, device_string="", ident_string="") :
     cache = self.active_cache;
     dev = self.device;
     #check if force gpu or cpu
@@ -100,7 +100,7 @@ class boxm2_scene_adaptor(object):
     if self.rgb :
       expimg = render_rgb(self.scene, cache, cam, ni, nj, dev);
     else :
-      expimg = render_grey(self.scene, cache, cam, ni, nj, dev);
+      expimg = render_grey(self.scene, cache, cam, ni, nj, dev, ident_string);
     return expimg;
 
   #render wrapper, same as above
