@@ -5,11 +5,17 @@ class UncertainScene(boxm2_scene_adaptor):
   """ Class for an uncertain scene - can handle updating, painting, rendering """
 
   def __init__(self, imgList, camList, *args, **kw):
+    """Initialize uncertain scene with imgs/cams,scene and device"""
     assert len(imgList) == len(camList)
     super(UncertainScene,self).__init__(*args, **kw)
     self.imgList = imgList
     self.camList = camList
 
+  def render_uncertainty(self, cam, ni, nj):
+    """ Render uncertainty - this requires a float8 to be present """
+    img = render_grey(self.scene, self.opencl_cache, 
+                      cam,ni,nj,self.device,"cubic_model")
+    return img
 
   #update batch with one call
   def update_batch(self):
@@ -23,6 +29,45 @@ class UncertainScene(boxm2_scene_adaptor):
     #update alphas
     self.update_all_alphas_with_cubic();
 
+
+  #store all uncertainty aux data for each view
+  def store_all_uncertainty_aux(self):
+    for i,img in enumerate(self.imgList):
+      cam = load_perspective_camera(self.camList[i])
+      img,ni,nj = load_image(self.imgList[i])
+      self.uncertainty_per_view(cam,img,i)
+      remove_from_db([img,cam])
+    self.write_cache(True)
+
+  def uncertainty_per_view(self, cam, img, viewNum):
+    """Store uncertainty aux data per image for this model """
+    boxm2_batch.init_process("boxm2OclUncertaintyPerImageProcess");
+    boxm2_batch.set_input_from_db(0, self.device);
+    boxm2_batch.set_input_from_db(1, self.scene);
+    boxm2_batch.set_input_from_db(2, self.opencl_cache);
+    boxm2_batch.set_input_from_db(3, cam);
+    boxm2_batch.set_input_from_db(4, img);
+    boxm2_batch.set_input_string(5,"img_"+"%05d"%viewNum);
+    boxm2_batch.run_process();
+
+  def batch_uncertainty(self):
+    """Calculate voxel uncertainty"""
+    # write image identifiers to file
+    image_id_fname = "./image_list.txt"
+    fd = open(image_id_fname,"w")
+    print >> fd, len(self.imgList)
+    for i,img in enumerate(self.imgList):
+      print >> fd, "img_%05d"%i
+    fd.close()
+    #open the stream cache, this is a read-only cache
+    boxm2_batch.init_process("boxm2OclBatchUncertaintyProcess");
+    boxm2_batch.set_input_from_db(0,self.device);
+    boxm2_batch.set_input_from_db(1,self.scene);
+    boxm2_batch.set_input_from_db(2,self.opencl_cache);
+    boxm2_batch.set_input_unsigned(3,len(self.imgList));
+    boxm2_batch.set_input_string(4,image_id_fname);
+    boxm2_batch.run_process();
+    self.write_cache(True)
 
 
   # update step 1
