@@ -421,9 +421,16 @@ bool boxm2_ocl_update_alpha_naa_process(bprb_func_process& pro)
   lookup->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
 
   // app density used for proc_norm_image
-  float app_buffer[4]={1.0,0.0,0.0,0.0};
-  bocl_mem_sptr app_density = new bocl_mem(device->context(), app_buffer, sizeof(cl_float4), "app density buffer");
-  app_density->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
+  float background_density_buffer[1];
+  // compute expected value of background density over normal directions
+  double expected_dL_drho = 0.0;
+  for (unsigned int n=0; n<num_normals; ++n) {
+     expected_dL_drho += radiance_scales_buff[n] / num_normals;
+  }
+  *background_density_buffer = 1.0 / expected_dL_drho;
+
+  bocl_mem_sptr background_density = new bocl_mem(device->context(), background_density_buffer, sizeof(cl_float), "background appearance density buffer");
+  background_density->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
   //vcl_cout << "######  Entering stage loop: bytes in cache = " << opencl_cache->bytes_in_cache() << vcl_endl;
   
@@ -442,6 +449,7 @@ bool boxm2_ocl_update_alpha_naa_process(bprb_func_process& pro)
       proc_kern->set_arg( vis_image.ptr() );
       proc_kern->set_arg( pre_image.ptr());
       proc_kern->set_arg( img_dim.ptr() );
+      proc_kern->set_arg( background_density.ptr() );
 
       //execute kernel
       proc_kern->execute( queue, 2, local_threads, global_threads);

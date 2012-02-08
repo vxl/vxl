@@ -42,7 +42,27 @@ class boxm2_compute_normal_albedo_functor
   boxm2_block_id id_;
   vcl_vector<brad_image_metadata> metadata_;
   vcl_vector<brad_atmospheric_parameters> atm_params_;
+
+  unsigned int num_normals_;
+  unsigned int num_images_;
   bool update_alpha_;
+
+  // cache sun positions
+  vcl_vector<vgl_vector_3d<double> > sun_positions_;
+  // cache normal directions
+  vcl_vector<vgl_vector_3d<double> > normals_;
+
+  // cache scale and offset values for reflectance, expected radiance, and expected radiance variance
+  // reflectance = scale * radiance + offset
+  vcl_vector<vcl_vector<double> > reflectance_scales_;
+  vcl_vector<vcl_vector<double> > reflectance_offsets_;
+  // expected radiance = scale * reflectance + offset
+  vcl_vector<vcl_vector<double> > radiance_scales_;
+  vcl_vector<vcl_vector<double> > radiance_offsets_;
+  // radiance variance = scale*reflectance*reflectance + offset
+  vcl_vector<vcl_vector<double> > radiance_var_scales_;
+  vcl_vector<vcl_vector<double> > radiance_var_offsets_;
+
 };
 
 #endif // boxm2_compute_normal_albedo_functor_h_

@@ -42,6 +42,29 @@ __kernel void normalize_render_rgb_kernel(__global float4* exp_img,
 }
 
 #endif
+
+#ifdef RENDER_NAA
+__kernel void normalize_render_kernel(__global float * exp_img, 
+                                      __global float* vis_img, 
+                                      __global uint4* imgdims,
+                                      __global float* background_radiance)
+{
+    int i=0,j=0;
+    i=get_global_id(0);
+    j=get_global_id(1);
+    int imindex=j*get_global_size(0)+i;
+   
+    // check to see if the thread corresponds to an actual pixel as in some
+    // cases #of threads will be more than the pixels.
+    if (i>=(*imgdims).z || j>=(*imgdims).w) 
+        return;
+
+    //normalize image with respect to visibility
+    float vis   = vis_img[imindex];
+    exp_img[imindex] = exp_img[imindex] + (vis*(*background_radiance));
+}
+#endif
+
 #ifdef RENDER_DEPTH
 __kernel void normalize_render_depth_kernel(__global float * exp_img,
                                             __global float * var_img,

@@ -665,7 +665,8 @@ void
 proc_norm_image (  __global float* norm_image,
                    __global float* vis_image,
                    __global float* pre_image,
-                   __global uint4 * imgdims)
+                   __global uint4* imgdims,
+                   __global float* background_density)
 {
   // linear global id of the normalization image
   int i=0;
@@ -679,8 +680,7 @@ proc_norm_image (  __global float* norm_image,
 
   float pre = pre_image[j*get_global_size(0) + i];
   // "background" distribution is no longer uniform (0,1)
-  const float background_density = 0.001;
-  float norm = (pre+vis*background_density);
+  float norm = pre + vis * (*background_density);
   norm_image[j*get_global_size(0) + i] = norm;
 
   // the following  quantities have to be re-initialized before

@@ -31,6 +31,7 @@
 
 #include <brad/brad_image_metadata.h>
 #include <brad/brad_atmospheric_parameters.h>
+#include <brad/brad_illum_util.h>
 
 namespace boxm2_ocl_render_expected_image_naa_process_globals
 {
@@ -80,7 +81,7 @@ namespace boxm2_ocl_render_expected_image_naa_process_globals
     norm_src_paths.push_back(source_dir + "bit/normalize_kernels.cl");
     bocl_kernel * normalize_render_kernel=new bocl_kernel();
 
-    options = opts + " -D RENDER ";
+    options = opts + " -D RENDER_NAA ";
     if(!normalize_render_kernel->create_kernel( &device->context(),
                                             device->device_id(),
                                             norm_src_paths,
@@ -193,6 +194,14 @@ bool boxm2_ocl_render_expected_image_naa_process(bprb_func_process& pro)
   bocl_mem_sptr exp_img_dim=new bocl_mem(device->context(), img_dim_buff, sizeof(int)*4, "image dims");
   exp_img_dim->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
+  float background_rad_buff[1];
+  // assume expected value of albedo is around 0.2
+  const double expected_albedo = 0.2;
+  double expected_radiance = brad_expected_radiance_chavez(expected_albedo,vgl_vector_3d<double>(0,0,1),*metadata,*atm_params);
+  background_rad_buff[0] = expected_radiance;
+  bocl_mem_sptr background_rad = new bocl_mem(device->context(), background_rad_buff, sizeof(float), "background radiance value");
+  background_rad->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
+
   // visibility image
   float* vis_buff = new float[cl_ni*cl_nj];
   vcl_fill(vis_buff, vis_buff + cl_ni*cl_nj, 1.0f);
@@ -214,6 +223,7 @@ bool boxm2_ocl_render_expected_image_naa_process(bprb_func_process& pro)
     normalize_kern->set_arg( exp_image.ptr() );
     normalize_kern->set_arg( vis_image.ptr() );
     normalize_kern->set_arg( exp_img_dim.ptr());
+    normalize_kern->set_arg( background_rad.ptr() );
     normalize_kern->execute( queue, 2, lthreads, gThreads);
     clFinish(queue);
 
