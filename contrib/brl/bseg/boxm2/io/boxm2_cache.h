@@ -70,6 +70,9 @@ class boxm2_cache: public vbl_ref_count
   //: delete all the memory
   // Caution: make sure to call write to disk methods not to loose writable data
   virtual void clear_cache() = 0;
+  
+  //: return scene sptr
+  virtual boxm2_scene_sptr get_scene() { return scene_; }
 
  protected:
 
