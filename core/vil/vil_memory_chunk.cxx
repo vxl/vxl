@@ -58,6 +58,12 @@ void vil_memory_chunk::unref()
   }
 }
 
+//: Pointer to first element of data
+void* vil_memory_chunk::data() { return data_;}
+
+//: Pointer to first element of data
+void* vil_memory_chunk::const_data() const { return data_;}
+
 //: Create empty space for n elements.
 //  Leave existing data untouched if the size is already n.
 void vil_memory_chunk::set_size(unsigned long n, vil_pixel_format pixel_form)

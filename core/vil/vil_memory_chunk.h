@@ -57,10 +57,10 @@ class vil_memory_chunk
     int ref_count() const { return ref_count_; }
 
     //: Pointer to first element of data
-    virtual void* data() { return data_;}
+    virtual void* data();
 
     //: Pointer to first element of data
-    virtual void* const_data() const { return data_;}
+    virtual void* const_data() const;
 
     //: Indicate what format data is to be saved as in binary IO
     vil_pixel_format pixel_format() const { return pixel_format_; }
