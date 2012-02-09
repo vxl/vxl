@@ -15,6 +15,7 @@
 //  Image data block used by vil_image_view<T>.
 class vil_memory_chunk
 {
+  protected:
     //: Data
     void *data_;
 
@@ -56,10 +57,10 @@ class vil_memory_chunk
     int ref_count() const { return ref_count_; }
 
     //: Pointer to first element of data
-    void* data() { return data_;}
+    virtual void* data() { return data_;}
 
     //: Pointer to first element of data
-    void* const_data() const { return data_;}
+    virtual void* const_data() const { return data_;}
 
     //: Indicate what format data is to be saved as in binary IO
     vil_pixel_format pixel_format() const { return pixel_format_; }
@@ -69,7 +70,7 @@ class vil_memory_chunk
 
     //: Create space for n bytes
     //  pixel_format indicates what format to be used for binary IO
-    void set_size(unsigned long n, vil_pixel_format pixel_format);
+    virtual void set_size(unsigned long n, vil_pixel_format pixel_format);
 };
 
 typedef vil_smart_ptr<vil_memory_chunk> vil_memory_chunk_sptr;
