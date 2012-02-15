@@ -69,7 +69,7 @@ render_bit_scene( __constant  RenderSceneInfo    * linfo,
   //----------------------------------------------------------------------------
 
   float4  expint = exp_image[imIndex[llid]];
-#ifdef 1 //YUV
+#ifdef YUV
   expint = rgb2yuv(expint);
 #endif
   float  vis     = vis_image[imIndex[llid]];
@@ -112,7 +112,7 @@ void step_cell_render(AuxArgs aux_args, int data_ptr, uchar llid, float d)
 
     //undo the step taken in compress RGB U/V is in [0,1],
     // put them back in ranges U in [-.436, .436] and V in [-.615, .615]
-#ifdef 1//YUV
+#ifdef YUV
     expected_int_cell.y = expected_int_cell.y*U_RANGE - U_MAX;
     expected_int_cell.z = expected_int_cell.z*V_RANGE - V_MAX;
 #endif

@@ -37,7 +37,11 @@ void step_cell_seglen(AuxArgs aux_args, int data_ptr, uchar llid, float d)
     atom_add(&aux_args.seg_len[data_ptr], seg_int);
     int cum_obs = convert_int_rte(d * aux_args.obs * SEGLEN_FACTOR);
     atom_add(&aux_args.mean_obs[data_ptr], cum_obs);
-    //(*aux_args.ray_len) += d;
+
+#ifdef DEBUG
+    (*aux_args.ray_len) += d;
+#endif
+
 #endif
 }
 #endif // SEGLEN

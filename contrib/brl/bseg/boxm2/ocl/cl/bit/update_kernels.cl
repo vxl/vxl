@@ -89,16 +89,23 @@ seg_len_main(__constant  RenderSceneInfo    * linfo,
   aux_args.cell_ptrs  = cell_ptrs;
   aux_args.cached_aux = cached_aux_data;
   aux_args.obs = obs;
+
+#ifdef DEBUG
   aux_args.output = output;
-  //float rlen = output[imIndex];
-  //aux_args.ray_len = &rlen;
+  float rlen = output[imIndex];
+  aux_args.ray_len = &rlen;
+#endif
+
   cast_ray( i, j,
             ray_ox, ray_oy, ray_oz,
             ray_dx, ray_dy, ray_dz,
             linfo, tree_array,                                  //scene info
             local_tree, bit_lookup, cumsum, &vis, aux_args);    //utility info
 
-  //output[imIndex] = rlen;
+#ifdef DEBUG
+  output[imIndex] = rlen;
+#endif
+
 }
 #endif // SEGLEN
 

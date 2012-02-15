@@ -97,7 +97,7 @@ seg_len_main(__constant  RenderSceneInfo    * linfo,
   aux_args.obs = obs; 
   
   //-----YUV edit ----///
-#ifdef 1 // YUV
+#ifdef YUV
   aux_args.obs = rgb2yuv(obs); 
 #endif  
   aux_args.output = output; 
@@ -139,7 +139,7 @@ compress_rgb(__global RenderSceneInfo * info,
     //------------- YUV EDIT ---------------
     //now mean_obs should have Y, U, V where U in [-.436, .436] and V in [-.615, .615]
     //put them in a 0-1 range
-#ifdef 1 //YUV
+#ifdef YUV
     mean_obs.y = (mean_obs.y + U_MAX)/U_RANGE; 
     mean_obs.z = (mean_obs.z + V_MAX)/V_RANGE;
 #endif
