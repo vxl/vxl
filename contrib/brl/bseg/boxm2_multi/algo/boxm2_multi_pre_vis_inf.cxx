@@ -29,42 +29,47 @@ vcl_map<vcl_string, vcl_vector<bocl_kernel*> > boxm2_multi_pre_vis_inf::kernels_
 
 
 //-------------------------------------------------------------
-// Stores seg len and observation in cell-level aux data
+// pre_vis_inf
 //-------------------------------------------------------------
-float boxm2_multi_pre_vis_inf::pre_vis_inf(       boxm2_multi_cache&         cache, 
-                                          const vil_image_view<float>&   img, 
-                                                vpgl_camera_double_sptr  cam,
-                                                vcl_map<bocl_device*, float*>& vis_map, 
-                                                vcl_map<bocl_device*, float*>& pre_map, 
-                                                float*                         norm_img )
+float boxm2_multi_pre_vis_inf::pre_vis_inf(      boxm2_multi_cache&       cache, 
+                                           const vil_image_view<float>&   img, 
+                                                 vpgl_camera_double_sptr  cam,
+                                                 vcl_map<bocl_device*, float*>& vis_map, 
+                                                 vcl_map<bocl_device*, float*>& pre_map, 
+                                                 float*  norm_img )
 {
-  vcl_cout<<"------------ boxm2_multi_pre_vis_inf pre_vis_inf--------------"<<vcl_endl;
+  vcl_cout<<"------------ boxm2_pre_vis_inf map --------------"<<vcl_endl;
   //verify appearance model
   vcl_size_t lthreads[2] = {8,8};
   vcl_string data_type, options;
   int apptypesize; 
   if( !boxm2_multi_util::get_scene_appearances(cache.get_scene(), data_type, options, apptypesize) ) 
     return 0.0f; 
-   
+
   //setup image size
   int ni=img.ni(), 
       nj=img.nj();
+  unsigned cl_ni=RoundUp(ni,lthreads[0]);
+  unsigned cl_nj=RoundUp(nj,lthreads[1]);
+  vcl_size_t gThreads[] = {cl_ni,cl_nj};
 
-  //set up image lists
+  //-------------------------------------------------------
+  //prepare buffers for each device
+  //-------------------------------------------------------
   vcl_vector<cl_command_queue> queues; 
-  vcl_vector<bocl_mem_sptr> vis_mems, pre_mems; 
-  
-  //for each device/cache, run an update
-  vcl_vector<boxm2_opencl_cache*>  ocl_caches = cache.get_vis_sub_scenes( (vpgl_perspective_camera<double>*) cam.ptr());
+  vcl_vector<bocl_mem_sptr> vis_mems, pre_mems, out_imgs, 
+                            img_dims, ray_ds, ray_os, lookups; 
+  vcl_vector<vcl_vector<boxm2_block_id> > vis_orders;
+  vcl_size_t maxBlocks = 0;
+  vcl_vector<boxm2_opencl_cache*>  ocl_caches = cache.get_vis_sub_scenes(cam);
   for(int i=0; i<ocl_caches.size(); ++i) {
-    
     //grab sub scene and it's cache
-    boxm2_opencl_cache*     ocl_cache = ocl_caches[i]; 
-    boxm2_scene_sptr        sub_scene = ocl_cache->get_scene(); 
-    bocl_device_sptr        device    = ocl_cache->get_device(); 
-    
+    boxm2_opencl_cache* ocl_cache = ocl_caches[i]; 
+    boxm2_scene_sptr    sub_scene = ocl_cache->get_scene(); 
+    bocl_device_sptr    device    = ocl_cache->get_device(); 
+
     // compile the kernel/retrieve cached kernel for this device
-    vcl_vector<bocl_kernel*>& kerns = get_kernels(device, options);
+    vcl_vector<bocl_kernel*> kerns = get_kernels(device, options);
 
     // create a command queue.
     int status=0;
@@ -74,68 +79,187 @@ float boxm2_multi_pre_vis_inf::pre_vis_inf(       boxm2_multi_cache&         cac
                                                    &status );
     queues.push_back(queue); 
     if (status!=0) {
-      vcl_cout<<"boxm2_multi_pre_vis_inf::store_aux unable to create command queue"<<vcl_endl;
+      vcl_cout<<"boxm2_multi_store_aux::store_aux unable to create command queue"<<vcl_endl;
       return 0.0f;
     }
 
     //prepare kernel variables
-    //create image and workspace size
-    unsigned cl_ni=RoundUp(ni,lthreads[0]);
-    unsigned cl_nj=RoundUp(nj,lthreads[1]);
+    //create image dim buff
+    int img_dim_buff[4] = {0,0,ni,nj}; 
+    bocl_mem_sptr img_dim = new bocl_mem(device->context(), img_dim_buff, sizeof(int)*4, "image dims");
+    img_dim->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
+    img_dims.push_back(img_dim);
+
+    // Output Array
+    float* output_arr = new float[cl_ni*cl_nj];
+    vcl_fill(output_arr, output_arr+cl_ni*cl_nj, 0.0f);
+    bocl_mem_sptr  cl_output=new bocl_mem(device->context(), output_arr, sizeof(float)*cl_ni*cl_nj, "output buffer");
+    cl_output->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
+    out_imgs.push_back(cl_output);
+
+    //set generic cam and get visible block order
+    cl_float* ray_origins    = new cl_float[4*cl_ni*cl_nj];
+    cl_float* ray_directions = new cl_float[4*cl_ni*cl_nj];
+    bocl_mem_sptr ray_o_buff = new bocl_mem(device->context(), ray_origins   ,  cl_ni*cl_nj * sizeof(cl_float4), "ray_origins buffer");
+    bocl_mem_sptr ray_d_buff = new bocl_mem(device->context(), ray_directions,  cl_ni*cl_nj * sizeof(cl_float4), "ray_directions buffer");
+    boxm2_ocl_camera_converter::compute_ray_image( device, queue, cam, cl_ni, cl_nj, ray_o_buff, ray_d_buff);
+    ray_os.push_back(ray_o_buff);
+    ray_ds.push_back(ray_d_buff);
+
+    //pre/vis images
     float* vis_buff = new float[cl_ni*cl_nj];
     vcl_fill(vis_buff, vis_buff+cl_ni*cl_nj, 1.0f); 
     bocl_mem_sptr vis_image = new bocl_mem(device->context(),vis_buff, cl_ni*cl_nj*sizeof(float), "vis image buffer");
     vis_image->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
     vis_mems.push_back(vis_image);
-    
+
     float* pre_buff = new float[cl_ni*cl_nj];
     vcl_fill(pre_buff, pre_buff+cl_ni*cl_nj, 0.0f); 
     bocl_mem_sptr pre_image = new bocl_mem(device->context(),pre_buff, cl_ni*cl_nj*sizeof(float), "pre image buffer");
     pre_image->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
     pre_mems.push_back(pre_image);
 
-    //create image dim buff
-    int img_dim_buff[4] = {0, 0, ni, nj}; 
-    bocl_mem_sptr img_dim = new bocl_mem(device->context(), img_dim_buff, sizeof(int)*4, "image dims");
-    img_dim->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
-    
-    //store aux data
-    pre_vis_scene( sub_scene, device, ocl_cache, queue, 
-                   cam, vis_image, pre_image, img_dim, data_type, 
-                   kerns[0], lthreads, cl_ni, cl_nj, apptypesize); 
+    // bit lookup buffer
+    cl_uchar lookup_arr[256];
+    boxm2_ocl_util::set_bit_lookup(lookup_arr);
+    bocl_mem_sptr lookup=new bocl_mem(device->context(), lookup_arr, sizeof(cl_uchar)*256, "bit lookup buffer");
+    lookup->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
+    lookups.push_back(lookup);
+
+    // set arguments
+    vcl_vector<boxm2_block_id> vis_order = sub_scene->get_vis_blocks(cam);
+    vis_orders.push_back(vis_order);
+    maxBlocks = vcl_max(vis_order.size(), maxBlocks);
   }
 
-  //-------------------------------------------------------------------
-  //finish execution along each queue (block c++ until all GPUS are done
-  //-------------------------------------------------------------------
-  for(int i=0; i<queues.size(); ++i)
-    clFinish(queues[i]); 
-  
+
+  //----------------------------------------------------------------
+  // Call per block/per scene update (to ensure cpu-> gpu cache works
+  //---------------------------------------------------------------
+  for(int blk=0; blk<maxBlocks; ++blk) {
+    for(int i=0; i<ocl_caches.size(); ++i) {
+      //grab sub scene and it's cache
+      boxm2_opencl_cache* ocl_cache = ocl_caches[i]; 
+      boxm2_scene_sptr    sub_scene = ocl_cache->get_scene(); 
+      bocl_device_sptr    device    = ocl_cache->get_device(); 
+
+      // compile the kernel/retrieve cached kernel for this device
+      vcl_vector<bocl_kernel*> kerns = get_kernels(device, options);
+
+      //Run block store aux
+      vcl_vector<boxm2_block_id>& vis_order = vis_orders[i]; 
+      if(blk >= vis_order.size()) 
+        continue;
+      boxm2_block_id id = vis_order[blk]; 
+      pre_vis_per_block(id, sub_scene, ocl_cache, queues[i], data_type, kerns[0], 
+                        vis_mems[i], pre_mems[i], img_dims[i], 
+                        ray_os[i], ray_ds[i],
+                        out_imgs[i], lookups[i], lthreads, gThreads);
+    }
+
+    //finish
+    for(int i=0; i<queues.size(); ++i) 
+      clFinish(queues[i]); 
+  }
+
+  //------------------
   //read all images in
   vcl_vector<float*> pre_imgs, vis_imgs; 
   for(int i=0; i<vis_mems.size(); ++i) {
     // read out expected image
     pre_mems[i]->read_to_buffer(queues[i]);
     vis_mems[i]->read_to_buffer(queues[i]);
-    
+
     //populate vil_image_views for combination
     pre_imgs.push_back( (float*) pre_mems[i]->cpu_buffer()); 
     vis_imgs.push_back( (float*) vis_mems[i]->cpu_buffer()); 
   }
-  
-  //release these queues
-  for(int i=0; i<queues.size(); ++i)
+
+  //-------------------------------------
+  //finish execution along each queue (block c++ until all GPUS are done
+  //-------------------------------------
+  for(int i=0; i<queues.size(); ++i) {
+    float* rayO = (float*) ray_os[i]->cpu_buffer();
+    float* rayD = (float*) ray_ds[i]->cpu_buffer();
+    delete[] rayO;
+    delete[] rayD; 
     clReleaseCommandQueue(queues[i]); 
+  }
 
   //-------------------------------------------------------------------
   // Reduce images into pre/vis image and make sure the interim 
   // pre/vis images are correct
   //-------------------------------------------------------------------
   pre_vis_reduce(cache, pre_imgs, vis_imgs, ocl_caches, pre_map, vis_map, ni, nj, norm_img); 
-  
-  return 0.0f; 
 }
 
+
+void boxm2_multi_pre_vis_inf::pre_vis_per_block(const boxm2_block_id&     id,
+                                                boxm2_scene_sptr    scene,
+                                                boxm2_opencl_cache* opencl_cache,
+                                                cl_command_queue&   queue,
+                                                vcl_string          data_type,
+                                                bocl_kernel*        kern,
+                                                bocl_mem_sptr&      vis_image,
+                                                bocl_mem_sptr&      pre_image,
+                                                bocl_mem_sptr&      img_dim,
+                                                bocl_mem_sptr&      ray_o_buff,
+                                                bocl_mem_sptr&      ray_d_buff,
+                                                bocl_mem_sptr&      cl_output,
+                                                bocl_mem_sptr&      lookup,
+                                                vcl_size_t*         lthreads,
+                                                vcl_size_t*         gThreads)
+{
+  //choose correct render kernel
+  boxm2_block_metadata mdata = scene->get_block_metadata(id);
+
+  //write the image values to the buffer
+  bocl_mem* blk       = opencl_cache->get_block(id);
+  bocl_mem* blk_info  = opencl_cache->loaded_block_info();
+  bocl_mem* alpha     = opencl_cache->get_data<BOXM2_ALPHA>(id,0,false);
+  
+  //calc data buffer length (write it in blk_info)
+  vcl_size_t dataLen = (vcl_size_t) (alpha->num_bytes()/boxm2_data_traits<BOXM2_ALPHA>::datasize());
+  boxm2_scene_info* info_buffer = (boxm2_scene_info*) blk_info->cpu_buffer();
+  info_buffer->data_buffer_length = (int) dataLen;
+  blk_info->write_to_buffer(queue);
+
+  //grab MOG
+  int apptypesize = (int) boxm2_data_info::datasize(data_type);
+  bocl_mem* mog  = opencl_cache->get_data(id,data_type, dataLen*apptypesize,false);
+  
+  //grab NumObs
+  vcl_string numObsType = boxm2_data_traits<BOXM2_NUM_OBS>::prefix(); 
+  int nobsTypeSize = (int) boxm2_data_info::datasize(numObsType);
+  bocl_mem* num_obs = opencl_cache->get_data(id,numObsType, dataLen*nobsTypeSize,false);
+  
+  //grab an appropriately sized AUX data buffer
+  bocl_mem *aux0 = opencl_cache->get_data<BOXM2_AUX0>(id, dataLen*boxm2_data_traits<BOXM2_AUX0>::datasize());
+  bocl_mem *aux1 = opencl_cache->get_data<BOXM2_AUX1>(id, dataLen*boxm2_data_traits<BOXM2_AUX1>::datasize());
+  
+  //--------- set args and execute ------------
+  kern->set_arg( blk_info );
+  kern->set_arg( blk );
+  kern->set_arg( alpha );
+  kern->set_arg( mog );
+  kern->set_arg( num_obs );
+  kern->set_arg( aux0 );
+  kern->set_arg( aux1 );
+  kern->set_arg( lookup.ptr() );
+  kern->set_arg( ray_o_buff.ptr() );
+  kern->set_arg( ray_d_buff.ptr() );
+  kern->set_arg( img_dim.ptr() );
+  kern->set_arg( vis_image.ptr() );
+  kern->set_arg( pre_image.ptr() );
+  kern->set_arg( cl_output.ptr() );
+  kern->set_local_arg( lthreads[0]*lthreads[1]*sizeof(cl_uchar16) );//local tree,
+  kern->set_local_arg( lthreads[0]*lthreads[1]*10*sizeof(cl_uchar) ); //cumsum buffer, imindex buffer
+  //execute kernel
+  kern->execute(queue, 2, lthreads, gThreads);
+
+  //clear render kernel args so it can reset em on next execution
+  kern->clear_args();
+}
 
 float boxm2_multi_pre_vis_inf::pre_vis_reduce(boxm2_multi_cache&  cache,
                                               vcl_vector<float*>& pre_imgs, 
@@ -269,118 +393,6 @@ float boxm2_multi_pre_vis_inf::pre_vis_reduce(boxm2_multi_cache&  cache,
   
 }
 
-//MAP function for store aux scene step
-float boxm2_multi_pre_vis_inf::pre_vis_scene(boxm2_scene_sptr           scene,
-                                            bocl_device_sptr          device,
-                                            boxm2_opencl_cache*       opencl_cache,
-                                            cl_command_queue &        queue,
-                                            vpgl_camera_double_sptr & cam,
-                                            bocl_mem_sptr &           vis_image,
-                                            bocl_mem_sptr &           pre_image,
-                                            bocl_mem_sptr &           img_dim,
-                                            vcl_string                data_type,
-                                            bocl_kernel*              kern,
-                                            vcl_size_t *              lThreads,
-                                            unsigned                  cl_ni,
-                                            unsigned                  cl_nj,
-                                            int                       apptypesize )
-{
-  //camera check
-  if (cam->type_name()!= "vpgl_perspective_camera" &&
-      cam->type_name()!= "vpgl_generic_camera" ) {
-    vcl_cout<<"Cannot render with camera of type "<<cam->type_name()<<vcl_endl;
-    return 0.0f;
-  }
-
-  //set generic cam and get visible block order
-  cl_float* ray_origins    = new cl_float[4*cl_ni*cl_nj];
-  cl_float* ray_directions = new cl_float[4*cl_ni*cl_nj];
-  bocl_mem_sptr ray_o_buff = new bocl_mem(device->context(), ray_origins   ,  cl_ni*cl_nj * sizeof(cl_float4), "ray_origins buffer");
-  bocl_mem_sptr ray_d_buff = new bocl_mem(device->context(), ray_directions,  cl_ni*cl_nj * sizeof(cl_float4), "ray_directions buffer");
-  boxm2_ocl_camera_converter::compute_ray_image( device, queue, cam, cl_ni, cl_nj, ray_o_buff, ray_d_buff);
-
-  // Output Array
-  float output_arr[100];
-  for (int i=0; i<100; ++i) output_arr[i] = 0.0f;
-  bocl_mem_sptr  cl_output=new bocl_mem(device->context(), output_arr, sizeof(float)*100, "output buffer");
-  cl_output->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
-
-  // bit lookup buffer
-  cl_uchar lookup_arr[256];
-  boxm2_ocl_util::set_bit_lookup(lookup_arr);
-  bocl_mem_sptr lookup=new bocl_mem(device->context(), lookup_arr, sizeof(cl_uchar)*256, "bit lookup buffer");
-  lookup->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
-
-  //2. set global thread size
-  vcl_size_t gThreads[] = {cl_ni,cl_nj};
-
-  // set arguments
-  vcl_vector<boxm2_block_id> vis_order = scene->get_vis_blocks(cam);
-  vcl_vector<boxm2_block_id>::iterator id;
-  for (id = vis_order.begin(); id != vis_order.end(); ++id)
-  {
-    //vcl_cout<<(*id);
-    
-    //choose correct render kernel
-    boxm2_block_metadata mdata = scene->get_block_metadata(*id);
-
-    //write the image values to the buffer
-    bocl_mem* blk       = opencl_cache->get_block(*id);
-    bocl_mem* blk_info  = opencl_cache->loaded_block_info();
-    bocl_mem* alpha     = opencl_cache->get_data<BOXM2_ALPHA>(*id,0,false);
-    
-    //calc data buffer length
-    boxm2_scene_info* info_buffer = (boxm2_scene_info*) blk_info->cpu_buffer();
-    int alphaTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
-    info_buffer->data_buffer_length = (int) (alpha->num_bytes()/alphaTypeSize);
-    blk_info->write_to_buffer((queue));
-    bocl_mem* mog       = opencl_cache->get_data(*id,data_type,alpha->num_bytes()/alphaTypeSize*apptypesize,false);    
-    
-    vcl_string numObsType = boxm2_data_traits<BOXM2_NUM_OBS>::prefix(); 
-    int nobsTypeSize = (int)boxm2_data_info::datasize(numObsType);
-    bocl_mem* num_obs   = opencl_cache->get_data(*id,numObsType,alpha->num_bytes()/alphaTypeSize*nobsTypeSize,false);
-    
-    //grab an appropriately sized AUX data buffer
-    int auxTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_AUX0>::prefix());
-    bocl_mem *aux0   = opencl_cache->get_data<BOXM2_AUX0>(*id, info_buffer->data_buffer_length*auxTypeSize);
-    auxTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_AUX1>::prefix());
-    bocl_mem *aux1   = opencl_cache->get_data<BOXM2_AUX1>(*id, info_buffer->data_buffer_length*auxTypeSize);
-    
-    //--------- set args and execute ------------
-    kern->set_arg( blk_info );
-    kern->set_arg( blk );
-    kern->set_arg( alpha );
-    kern->set_arg( mog );
-    kern->set_arg( num_obs );
-    kern->set_arg( aux0 );
-    kern->set_arg( aux1 );
-    kern->set_arg( lookup.ptr() );
-    kern->set_arg( ray_o_buff.ptr() );
-    kern->set_arg( ray_d_buff.ptr() );
-    kern->set_arg( img_dim.ptr() );
-    kern->set_arg( vis_image.ptr() );
-    kern->set_arg( pre_image.ptr() );
-    kern->set_arg( cl_output.ptr() );
-    kern->set_local_arg( lThreads[0]*lThreads[1]*sizeof(cl_uchar16) );//local tree,
-    kern->set_local_arg( lThreads[0]*lThreads[1]*10*sizeof(cl_uchar) ); //cumsum buffer, imindex buffer
-    //execute kernel
-    kern->execute(queue, 2, lThreads, gThreads);
-    
-    //int status = clFinish(queue);
-    //check_val(status, MEM_FAILURE, "UPDATE EXECUTE FAILED: " + error_to_string(status));
-    //gpu_time += kern->exec_time();
-
-    //clear render kernel args so it can reset em on next execution
-    kern->clear_args();
-  }
-
-  //clean up cam
-  delete[] ray_origins;
-  delete[] ray_directions;
-  return 0.0f;
-}
-
-
 
 //-----------------------------------------------------------------
 // returns vector of bocl_kernels for this specific device
@@ -422,7 +434,8 @@ vcl_vector<bocl_kernel*>& boxm2_multi_pre_vis_inf::get_kernels(bocl_device_sptr 
 
   //may need DIFF LIST OF SOURCES FOR THIS GUY
   bocl_kernel* proc_img = new bocl_kernel();
-  proc_img->create_kernel(&device->context(),device->device_id(), non_ray_src, "proc_norm_image", options, "update::proc_norm_image");
+  vcl_string proc_opts = options + " -D PROC_NORM ";
+  proc_img->create_kernel(&device->context(),device->device_id(), non_ray_src, "proc_norm_image", proc_opts, "update::proc_norm_image");
 
   //vector of kernels:
   vcl_vector<bocl_kernel*> kerns(2); 

@@ -11,7 +11,6 @@
 #include <vpgl/vpgl_perspective_camera.h>
 #include <bocl/bocl_device.h>
 #include <bocl/bocl_kernel.h>
-#include <brdb/brdb_value.h>
 
 //: boxm2_multi_cache - example realization of abstract cache class
 class boxm2_multi_store_aux
@@ -25,21 +24,25 @@ class boxm2_multi_store_aux
 
   private:
 
-    //renders single image
-    static float store_aux_scene( boxm2_scene_sptr          scene,
-                                  bocl_device_sptr          device,
-                                  boxm2_opencl_cache*       opencl_cache,
-                                  cl_command_queue &        queue,
-                                  vpgl_camera_double_sptr & cam,
-                                  bocl_mem_sptr &           in_image,
-                                  bocl_mem_sptr &           img_dim,
-                                  vcl_string                data_type,
-                                  bocl_kernel*              kernel,
-                                  vcl_size_t *              lthreads,
-                                  unsigned                  cl_ni,
-                                  unsigned                  cl_nj,
-                                  int                       apptypesize,
-                                  bocl_mem_sptr &           cl_output);
+    // Reads aux memory from GPU to CPU ram
+    static void read_aux(const boxm2_block_id& id, 
+                        boxm2_opencl_cache* opencl_cache, 
+                        cl_command_queue&   queue);
+
+
+    static void store_aux_per_block(const boxm2_block_id& id,
+                                          boxm2_scene_sptr    scene,
+                                          boxm2_opencl_cache* opencl_cache,
+                                          cl_command_queue&   queue,
+                                          bocl_kernel*        kernel,
+                                          bocl_mem_sptr&      in_image,
+                                          bocl_mem_sptr&      img_dim,
+                                          bocl_mem_sptr&      ray_o_buff,
+                                          bocl_mem_sptr&      ray_d_buff,
+                                          bocl_mem_sptr&      cl_output,
+                                          bocl_mem_sptr&      lookup,
+                                          vcl_size_t*         lthreads,
+                                          vcl_size_t*         gthreads);
 
     //map keeps track of all kernels compiled and cached
     static vcl_map<vcl_string, bocl_kernel*> kernels_;

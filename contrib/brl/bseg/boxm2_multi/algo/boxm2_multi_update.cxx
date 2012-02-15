@@ -33,15 +33,15 @@ float boxm2_multi_update::update(       boxm2_multi_cache&              cache,
                                         vpgl_camera_double_sptr         cam)
 {
   vcl_cout<<"------------ boxm2_multi_update -----------------------"<<vcl_endl;
-  
+
   //store aux data (cell vis, cell length) 
   boxm2_multi_store_aux::store_aux(cache, img, cam); 
-  
+
   //calcl pre/vis inf, and store pre/vis images along the way
   float* norm_img = new float[img.ni() * img.nj()]; 
   vcl_map<bocl_device*, float*> pre_map, vis_map;
   boxm2_multi_pre_vis_inf::pre_vis_inf(cache, img, cam, vis_map, pre_map, norm_img); 
-  
+ 
   //calculate cell beta, cell vis, and finally reduce each cell to new alphas
   boxm2_multi_update_cell::update_cells(cache, img, cam, vis_map, pre_map, norm_img); 
 }

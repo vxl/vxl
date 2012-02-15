@@ -22,9 +22,9 @@
 #include <vnl/vnl_random.h>
 #include <vul/vul_timer.h>
 
-float boxm2_multi_render::render(boxm2_multi_cache&              cache,
-                                 vil_image_view<float>&          img,
-                                 vpgl_camera_double_sptr         cam)
+float boxm2_multi_render::render(boxm2_multi_cache&      cache,
+                                 vil_image_view<float>&  img,
+                                 vpgl_camera_double_sptr cam)
 {
   vcl_cout<<"------------ boxm2_multi_render -----------------------"<<vcl_endl;
   //verify appearance model
@@ -44,7 +44,7 @@ float boxm2_multi_render::render(boxm2_multi_cache&              cache,
   vcl_vector<bocl_mem_sptr> exp_mems, vis_mems;
 
   //for each device/cache, run a render
-  vcl_vector<boxm2_opencl_cache*>  ocl_caches = cache.get_vis_sub_scenes( (vpgl_perspective_camera<double>*) cam.ptr());
+  vcl_vector<boxm2_opencl_cache*> ocl_caches = cache.get_vis_sub_scenes(cam.ptr());
   for (int i=0; i<ocl_caches.size(); ++i)
   {
     //grab sub scene and it's cache
@@ -213,43 +213,9 @@ float boxm2_multi_render::render_scene( boxm2_scene_sptr scene,
     for (id = vis_order.begin(); id != vis_order.end(); ++id)
     {
         vcl_cout<<(*id);
-        //choose correct render kernel
-        boxm2_block_metadata mdata = scene->get_block_metadata(*id);
-        bocl_kernel* kern =  kernel;
-
-        //write the image values to the buffer
-        vul_timer transfer;
-        bocl_mem* blk       = opencl_cache->get_block(*id);
-        bocl_mem* blk_info  = opencl_cache->loaded_block_info();
-        bocl_mem* alpha     = opencl_cache->get_data<BOXM2_ALPHA>(*id);
-        int alphaTypeSize   = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
-        // data type string may contain an identifier so determine the buffer size
-        bocl_mem* mog       = opencl_cache->get_data(*id,data_type,alpha->num_bytes()/alphaTypeSize*apptypesize,true);
-        transfer_time += (float) transfer.all();
-
-        ////3. SET args
-        kern->set_arg( blk_info );
-        kern->set_arg( blk );
-        kern->set_arg( alpha );
-        kern->set_arg( mog );
-        kern->set_arg( ray_o_buff.ptr() );
-        kern->set_arg( ray_d_buff.ptr() );
-        kern->set_arg( exp_image.ptr() );
-        kern->set_arg( exp_img_dim.ptr());
-        kern->set_arg( cl_output.ptr() );
-        kern->set_arg( lookup.ptr() );
-        kern->set_arg( vis_image.ptr() );
-
-        //local tree , cumsum buffer, imindex buffer
-        kern->set_local_arg( lthreads[0]*lthreads[1]*sizeof(cl_uchar16) );
-        kern->set_local_arg( lthreads[0]*lthreads[1]*10*sizeof(cl_uchar) );
-        kern->set_local_arg( lthreads[0]*lthreads[1]*sizeof(cl_int) );
-
-        //execute kernel
-        kern->execute(queue, 2, lthreads, gThreads);
-
-        //clear render kernel args so it can reset em on next execution
-        kern->clear_args();
+        render_block(scene, *id, opencl_cache, queue,  ray_o_buff, ray_d_buff, 
+                     exp_image, vis_image, exp_img_dim, cl_output, lookup, data_type, kernel, 
+                     lthreads, cl_ni, cl_nj, apptypesize);
     }
 
     //clean up cam
@@ -257,6 +223,66 @@ float boxm2_multi_render::render_scene( boxm2_scene_sptr scene,
     delete[] ray_directions;
     return gpu_time + transfer_time;
 }
+
+float boxm2_multi_render::render_block( boxm2_scene_sptr& scene, 
+                                        boxm2_block_id id,
+                                        boxm2_opencl_cache* opencl_cache, 
+                                        cl_command_queue& queue,
+                                        bocl_mem_sptr & ray_o_buff,
+                                        bocl_mem_sptr & ray_d_buff,
+                                        bocl_mem_sptr & exp_image,
+                                        bocl_mem_sptr & vis_image,
+                                        bocl_mem_sptr & exp_img_dim,
+                                        bocl_mem_sptr & cl_output,
+                                        bocl_mem_sptr & lookup,
+                                        vcl_string data_type,
+                                        bocl_kernel* kern,
+                                        vcl_size_t* lthreads,
+                                        unsigned cl_ni,
+                                        unsigned cl_nj,
+                                        int apptypesize)
+                                      
+{
+    //choose correct render kernel
+    boxm2_block_metadata mdata = scene->get_block_metadata(id);
+    vcl_size_t gThreads[] = {cl_ni,cl_nj};
+
+    //write the image values to the buffer
+    vul_timer transfer;
+    bocl_mem* blk       = opencl_cache->get_block(id);
+    bocl_mem* blk_info  = opencl_cache->loaded_block_info();
+    bocl_mem* alpha     = opencl_cache->get_data<BOXM2_ALPHA>(id);
+    int alphaTypeSize   = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
+    // data type string may contain an identifier so determine the buffer size
+    bocl_mem* mog       = opencl_cache->get_data(id,data_type,alpha->num_bytes()/alphaTypeSize*apptypesize,true);
+    float transfer_time = (float) transfer.all();
+
+    ////3. SET args
+    kern->set_arg( blk_info );
+    kern->set_arg( blk );
+    kern->set_arg( alpha );
+    kern->set_arg( mog );
+    kern->set_arg( ray_o_buff.ptr() );
+    kern->set_arg( ray_d_buff.ptr() );
+    kern->set_arg( exp_image.ptr() );
+    kern->set_arg( exp_img_dim.ptr());
+    kern->set_arg( cl_output.ptr() );
+    kern->set_arg( lookup.ptr() );
+    kern->set_arg( vis_image.ptr() );
+
+    //local tree , cumsum buffer, imindex buffer
+    kern->set_local_arg( lthreads[0]*lthreads[1]*sizeof(cl_uchar16) );
+    kern->set_local_arg( lthreads[0]*lthreads[1]*10*sizeof(cl_uchar) );
+    kern->set_local_arg( lthreads[0]*lthreads[1]*sizeof(cl_int) );
+
+    //execute kernel
+    kern->execute(queue, 2, lthreads, gThreads);
+
+    //clear render kernel args so it can reset em on next execution
+    kern->clear_args();  
+    return transfer_time;
+}
+
 
 //multi_render compile
 void boxm2_multi_render::compile_kernel(bocl_device_sptr device,vcl_vector<bocl_kernel*> & vec_kernels, vcl_string opts)

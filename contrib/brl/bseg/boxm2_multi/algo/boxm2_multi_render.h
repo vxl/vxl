@@ -21,7 +21,9 @@ class boxm2_multi_render
   public:
 
     //: multi render header
-    float render(boxm2_multi_cache& cache, vil_image_view<float>& img, vpgl_camera_double_sptr cam );
+    float render(boxm2_multi_cache&       cache, 
+                 vil_image_view<float>&   img, 
+                 vpgl_camera_double_sptr  cam );
 
   private:
 
@@ -52,6 +54,27 @@ class boxm2_multi_render
                         unsigned cl_ni,
                         unsigned cl_nj,
                         int apptypesize  );
+                     
+    //:calls render block code
+    float render_block( boxm2_scene_sptr& scene, 
+                        boxm2_block_id id,
+                        boxm2_opencl_cache* opencl_cache, 
+                        cl_command_queue& queue,
+                        bocl_mem_sptr & ray_o_buff,
+                        bocl_mem_sptr & ray_d_buff,
+                        bocl_mem_sptr & exp_image,
+                        bocl_mem_sptr & vis_image,
+                        bocl_mem_sptr & exp_img_dim,
+                        bocl_mem_sptr & cl_output,
+                        bocl_mem_sptr & lookup,
+                        vcl_string data_type,
+                        bocl_kernel* kern,
+                        vcl_size_t* lthreads,
+                        unsigned cl_ni,
+                        unsigned cl_nj,
+                        int apptypesize);
+    
+    
 };
 
 #endif

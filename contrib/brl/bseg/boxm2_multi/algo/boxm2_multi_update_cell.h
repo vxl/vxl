@@ -27,23 +27,23 @@ class boxm2_multi_update_cell
                               float*                         norm_image );
 
   private:
-
-    //renders single image
-    static float calc_beta_scene( boxm2_scene_sptr          scene,
-                                  bocl_device_sptr          device,
-                                  boxm2_opencl_cache*       opencl_cache,
-                                  cl_command_queue &        queue,
-                                  vpgl_camera_double_sptr & cam,
-                                  bocl_mem_sptr &           vis_image,
-                                  bocl_mem_sptr &           pre_image,
-                                  bocl_mem_sptr &           norm_image,
-                                  bocl_mem_sptr &           img_dim,
-                                  vcl_string                data_type,
-                                  bocl_kernel*              kernel,
-                                  vcl_size_t *              lthreads,
-                                  unsigned                  cl_ni,
-                                  unsigned                  cl_nj,
-                                  int                       apptypesize );
+    //runs pre/vis on single block
+    static void calc_beta_per_block(const boxm2_block_id&     id,
+                                    boxm2_scene_sptr    scene,
+                                    boxm2_opencl_cache* opencl_cache,
+                                    cl_command_queue&   queue,
+                                    vcl_string          data_type,
+                                    bocl_kernel*        kern,
+                                    bocl_mem_sptr&      vis_image,
+                                    bocl_mem_sptr&      pre_image,
+                                    bocl_mem_sptr&      norm_image,
+                                    bocl_mem_sptr&      img_dim,
+                                    bocl_mem_sptr&      ray_o_buff,
+                                    bocl_mem_sptr&      ray_d_buff,
+                                    bocl_mem_sptr&      cl_output,
+                                    bocl_mem_sptr&      lookup,
+                                    vcl_size_t*         lthreads,
+                                    vcl_size_t*         gThreads);
 
     static float calc_beta_reduce( boxm2_multi_cache& mcache,
                                    vcl_vector<boxm2_opencl_cache*>& ocl_caches );

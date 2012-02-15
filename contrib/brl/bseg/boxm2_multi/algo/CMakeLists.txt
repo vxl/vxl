@@ -10,6 +10,7 @@ SET(boxm2_multi_algo_sources
     boxm2_multi_store_aux.h    boxm2_multi_store_aux.cxx
     boxm2_multi_pre_vis_inf.h  boxm2_multi_pre_vis_inf.cxx
     boxm2_multi_update_cell.h  boxm2_multi_update_cell.cxx
+    boxm2_multi_refine.h       boxm2_multi_refine.cxx
    )
 
 ADD_LIBRARY(boxm2_multi_algo  ${boxm2_multi_algo_sources})
