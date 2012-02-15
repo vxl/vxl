@@ -103,6 +103,12 @@ class boxm2_scene : public vbl_ref_count
     //: const so return a copy
     boxm2_block_metadata get_block_metadata_const(boxm2_block_id id) const;
 
+    //: return number of trees in block
+    int num_trees_in_block(boxm2_block_id id) { 
+      boxm2_block_metadata& d = blocks_[id];
+      return d.sub_block_num_.x() * d.sub_block_num_.y() * d.sub_block_num_.z();
+    }
+
     vcl_vector<boxm2_block_id> get_block_ids() const;
 
     //: gets a tight bounding box for the scene
