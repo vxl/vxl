@@ -135,7 +135,7 @@ int main(int argc,  char** argv)
     
     //create initial cam (or pass in your own
     double currInc    = 45.0;
-    double currRadius = scene->bounding_box().height(); 
+    double currRadius = 2*scene->bounding_box().height(); 
     double currAz     = i*30.0f; 
     vpgl_perspective_camera<double>* pcam;
     pcam = boxm2_util::construct_camera(currInc, currAz, currRadius, ni(), nj(), scene->bounding_box(), false);
@@ -154,8 +154,8 @@ int main(int argc,  char** argv)
   
   
   //test scene render on one gpu
-  boxm2_opencl_cache* opencl_cache = new boxm2_opencl_cache(scene, mgr->gpus_[0]);
-  test_render_expected_images(scene, mgr->gpus_[0], opencl_cache);
-  
+  //boxm2_opencl_cache* opencl_cache = new boxm2_opencl_cache(scene, mgr->gpus_[0]);
+  //test_render_expected_images(scene, mgr->gpus_[0], opencl_cache);
+
   return 0;
 }

@@ -6,9 +6,11 @@
 #include <boxm2_multi_cache.h>
 #include <algo/boxm2_multi_render.h>
 #include <algo/boxm2_multi_update.h>
+#include <algo/boxm2_multi_refine.h>
 
 #include <vcl_where_root_dir.h>
 #include <vcl_algorithm.h>
+#include <vnl/vnl_random.h>
 
 //executable args
 #include <vul/vul_arg.h>
@@ -35,8 +37,8 @@ int main(int argc,  char** argv)
 {
   //init vgui (should choose/determine toolkit)
   vul_arg<vcl_string> scene_file("-scene", "scene filename", "");
-  vul_arg<vcl_string> img_dir("-imgdir", "update image directory",""); 
-  vul_arg<vcl_string> cam_dir("-camdir", "update camera directory", ""); 
+  vul_arg<vcl_string> img_dir("-imgdir", "update image directory", "nvm_out/imgs/"); 
+  vul_arg<vcl_string> cam_dir("-camdir", "update camera directory", "nvm_out/cams_krt/"); 
   vul_arg<unsigned>   num_updates("-num", "Number of updates", 10); 
   vul_arg_parse(argc, argv);
   
@@ -74,11 +76,13 @@ int main(int argc,  char** argv)
   //run update/renders
   //-----------------------------------------------------------
   int numUpdates = vcl_min( (int) num_updates(), (int) imgs.size()); 
+  vnl_random random(9667566);
   for(int i=0; i<numUpdates; ++i) 
   {
     //update with input image
-    vil_image_view_base_sptr inImg = boxm2_util::prepare_input_image(imgs[i], true); 
-    vpgl_camera_double_sptr  inCam = boxm2_util::camera_from_file( cams[i] );
+    int frame = random.lrand32(0, imgs.size()-1);
+    vil_image_view_base_sptr inImg = boxm2_util::prepare_input_image(imgs[frame], true); 
+    vpgl_camera_double_sptr  inCam = boxm2_util::camera_from_file( cams[frame] );
     vil_image_view<float>* inImgPtr = dynamic_cast<vil_image_view<float>* >(inImg.ptr()); 
     boxm2_multi_update::update(mcache, *inImgPtr, inCam); 
     
@@ -96,7 +100,13 @@ int main(int argc,  char** argv)
     vcl_cout<<"Render "<<i<<" time: "<<rtime<<vcl_endl;
     vcl_stringstream s; s<<"out_"<<i<<".tiff"; 
     vil_save(out, s.str().c_str()); 
+
+    if(i%10==9) 
+      boxm2_multi_refine::refine(mcache, .3f);
   }
+  
+  //write cache
+  boxm2_lru_cache::instance()->write_to_disk();
 
   return 0;
 }
