@@ -6,6 +6,7 @@
 
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/ocl/boxm2_opencl_cache.h>
+#include <vpgl/vpgl_generic_camera.h>
 
 //open cl includes
 #include <bocl/bocl_cl.h>
@@ -32,10 +33,14 @@ class boxm2_multi_cache: public vbl_ref_count
     boxm2_scene_sptr                 get_scene()  { return scene_; }
     vcl_string to_string();
 
+    //clear all OCL caches 
+    void clear();
+
     //: return a vector of sub scene pointers in visibility order from this camera
     vcl_vector<boxm2_opencl_cache*> get_vis_order_from_pt(vgl_point_3d<double> const& pt);
     vcl_vector<boxm2_opencl_cache*> get_vis_sub_scenes(vpgl_perspective_camera<double>* cam);
-
+    vcl_vector<boxm2_opencl_cache*> get_vis_sub_scenes(vpgl_generic_camera<double>* cam);
+    vcl_vector<boxm2_opencl_cache*> get_vis_sub_scenes(vpgl_camera_double_sptr cam);
   private:
 
     boxm2_scene_sptr                    scene_;

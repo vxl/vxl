@@ -92,6 +92,27 @@ vcl_vector<boxm2_opencl_cache*> boxm2_multi_cache::get_vis_sub_scenes(vpgl_persp
   return this->get_vis_order_from_pt(cam_center);
 }
 
+vcl_vector<boxm2_opencl_cache*> 
+boxm2_multi_cache::get_vis_sub_scenes(vpgl_generic_camera<double>* cam){
+  vgl_point_3d<double> cam_center = cam->max_ray_origin();
+  return this->get_vis_order_from_pt(cam_center);
+}
+
+vcl_vector<boxm2_opencl_cache*> 
+boxm2_multi_cache::get_vis_sub_scenes(vpgl_camera_double_sptr cam)
+{
+  if ( cam->type_name() == "vpgl_generic_camera" )
+    return this->get_vis_sub_scenes( (vpgl_generic_camera<double>*) cam.ptr() );
+  else if ( cam->type_name() == "vpgl_perspective_camera" )
+    return this->get_vis_sub_scenes( (vpgl_perspective_camera<double>*) cam.ptr() );
+  else
+    vcl_cout<<"boxm2_scene::get_vis_blocks doesn't support camera type "<<cam->type_name()<<vcl_endl;
+
+  //else return empty
+  vcl_vector<boxm2_opencl_cache*> empty;
+  return empty;
+}
+
 vcl_vector<boxm2_opencl_cache*> boxm2_multi_cache::get_vis_order_from_pt(vgl_point_3d<double> const& pt)
 {
   //Map of distance, id
@@ -119,7 +140,6 @@ vcl_vector<boxm2_opencl_cache*> boxm2_multi_cache::get_vis_order_from_pt(vgl_poi
   return vis_order;
 }
 
-
 vcl_string boxm2_multi_cache::to_string()
 {
   vcl_stringstream s;
@@ -132,9 +152,14 @@ vcl_string boxm2_multi_cache::to_string()
   return s.str();
 }
 
+void boxm2_multi_cache::clear()
+{
+  for(int i=0; i<ocl_caches_.size(); ++i)
+    ocl_caches_[i]->clear_cache();
+}
+
 
 //----------------------- stream io----------------------------------------//
-
 //: shows elements in cache
 vcl_ostream& operator<<(vcl_ostream &s, boxm2_multi_cache& cache)
 {
