@@ -1,6 +1,8 @@
 #include "boxm2_multi_refine.h"
-#include <boxm2_multi_util.h>
+//:
+// \file
 
+#include <boxm2_multi_util.h>
 
 #include <vcl_algorithm.h>
 #include <boxm2/boxm2_scene.h>
@@ -27,7 +29,7 @@ float boxm2_multi_refine::refine(boxm2_multi_cache& cache, float thresh)
 {
   //debug clearing
   cache.clear();
-  
+
   vcl_cout<<"------------ boxm2_multi_render -----------------------"<<vcl_endl;
   float    transfer_time = 0.0f;
   float    gpu_time      = 0.0f;
@@ -39,26 +41,26 @@ float boxm2_multi_refine::refine(boxm2_multi_cache& cache, float thresh)
   vcl_size_t lthreads[2] = {64,1};
   vcl_string data_type, options;
   int apptypesize;
-  if( !boxm2_multi_util::get_scene_appearances(cache.get_scene(), data_type, options, apptypesize) ) 
-    return 0.0f; 
+  if ( !boxm2_multi_util::get_scene_appearances(cache.get_scene(), data_type, options, apptypesize) )
+    return 0.0f;
 
   //set up image lists
   vcl_vector<cl_command_queue> queues;
-  
+
   //--------------------------------
   //prep buffers for each device
   //--------------------------------
-  vcl_vector<BlockMemMap > sizeMaps, copyMaps, newDataMaps; 
-  vcl_vector<BlockIntMap > newDataSizes; 
+  vcl_vector<BlockMemMap > sizeMaps, copyMaps, newDataMaps;
+  vcl_vector<BlockIntMap > newDataSizes;
   vcl_vector<vcl_vector<boxm2_block_id> > vis_orders;
-  vcl_vector<bocl_mem_sptr> out_mems, lookups, prob_mems; 
+  vcl_vector<bocl_mem_sptr> out_mems, lookups, prob_mems;
   vcl_size_t maxBlocks = 0;
   vcl_vector<boxm2_opencl_cache*> ocl_caches = cache.ocl_caches();
-  for(int i=0; i<ocl_caches.size(); ++i) {
+  for (int i=0; i<ocl_caches.size(); ++i) {
     //grab sub scene and it's cache
-    boxm2_opencl_cache* ocl_cache = ocl_caches[i]; 
-    boxm2_scene_sptr    sub_scene = ocl_cache->get_scene(); 
-    bocl_device_sptr    device    = ocl_cache->get_device(); 
+    boxm2_opencl_cache* ocl_cache = ocl_caches[i];
+    boxm2_scene_sptr    sub_scene = ocl_cache->get_scene();
+    bocl_device_sptr    device    = ocl_cache->get_device();
 
     // create a command queue.
     int status=0;
@@ -66,12 +68,12 @@ float boxm2_multi_refine::refine(boxm2_multi_cache& cache, float thresh)
                                                    *(device->device_id()),
                                                    CL_QUEUE_PROFILING_ENABLE,
                                                    &status );
-    queues.push_back(queue); 
+    queues.push_back(queue);
     if (status!=0) {
       vcl_cout<<"boxm2_multi_store_aux::store_aux unable to create command queue"<<vcl_endl;
       return 0.0f;
     }
-    
+
     //prob threshold buffer
     bocl_mem_sptr prob_thresh = new bocl_mem(device->context(), &thresh, sizeof(float), "prob_thresh buffer");
     prob_thresh->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
@@ -95,7 +97,7 @@ float boxm2_multi_refine::refine(boxm2_multi_cache& cache, float thresh)
     vcl_vector<boxm2_block_id> ids = sub_scene->get_block_ids();
     vis_orders.push_back(ids);
     maxBlocks = vcl_max(maxBlocks, ids.size());
-  
+
     //initialize sizebuff map (id->mem), and blockCopy map (id->mem)
     BlockMemMap sizeMap, copyMap, newDataMap;
     BlockIntMap newSizeMap;
@@ -108,36 +110,35 @@ float boxm2_multi_refine::refine(boxm2_multi_cache& cache, float thresh)
   //------------------------------------------------------------------
   //STEP ONE for each device/cache, refine trees
   //------------------------------------------------------------------
-  for(int blk=0; blk<maxBlocks; ++blk) {
-    for(int i=0; i<ocl_caches.size(); ++i) {
+  for (int blk=0; blk<maxBlocks; ++blk) {
+    for (int i=0; i<ocl_caches.size(); ++i) {
       //grab sub scene and it's cache
-      boxm2_opencl_cache* ocl_cache = ocl_caches[i]; 
-      boxm2_scene_sptr    sub_scene = ocl_cache->get_scene(); 
-      bocl_device_sptr    device    = ocl_cache->get_device(); 
+      boxm2_opencl_cache* ocl_cache = ocl_caches[i];
+      boxm2_scene_sptr    sub_scene = ocl_cache->get_scene();
+      bocl_device_sptr    device    = ocl_cache->get_device();
 
       //Run block store aux
-      vcl_vector<boxm2_block_id>& vis_order = vis_orders[i]; 
-      if(blk >= vis_order.size()) 
+      vcl_vector<boxm2_block_id>& vis_order = vis_orders[i];
+      if (blk >= vis_order.size())
         continue;
-      boxm2_block_id id = vis_order[blk]; 
+      boxm2_block_id id = vis_order[blk];
       int numTrees = sub_scene->num_trees_in_block(id);
-      refine_trees_per_block( id, ocl_cache, queues[i], numTrees,
-                             sizeMaps[i], copyMaps[i], 
+      refine_trees_per_block(id, ocl_cache, queues[i], numTrees,
+                             sizeMaps[i], copyMaps[i],
                              prob_mems[i], lookups[i], out_mems[i]);
     }
 
     //finish
-    for(int i=0; i<queues.size(); ++i) 
-      clFinish(queues[i]); 
+    for (int i=0; i<queues.size(); ++i)
+      clFinish(queues[i]);
   }
 
-  
   //------------------------------------------------------------------
   //STEP TWO: read out tree_sizes and do cumulative sum on it
   //------------------------------------------------------------------
-  for(int i=0; i<queues.size(); ++i) {
-    boxm2_opencl_cache* ocl_cache = ocl_caches[i]; 
-    boxm2_scene_sptr    sub_scene = ocl_cache->get_scene(); 
+  for (int i=0; i<queues.size(); ++i) {
+    boxm2_opencl_cache* ocl_cache = ocl_caches[i];
+    boxm2_scene_sptr    sub_scene = ocl_cache->get_scene();
 
     BlockMemMap& sizeMap = sizeMaps[i];
     BlockMemMap& copyMap = copyMaps[i];
@@ -145,23 +146,23 @@ float boxm2_multi_refine::refine(boxm2_multi_cache& cache, float thresh)
     BlockMemMap::iterator iter;
 
     // read tree sizes into memory, run cumulative sum
-    for(iter = sizeMap.begin(); iter != sizeMap.end(); ++iter) {
+    for (iter = sizeMap.begin(); iter != sizeMap.end(); ++iter) {
       bocl_mem_sptr tree_sizes = iter->second;
       tree_sizes->read_to_buffer(queues[i]);
 
       boxm2_block_id id = iter->first;
       boxm2_block_metadata& data = sub_scene->get_block_metadata(id);
-      int numTrees = data.sub_block_num_.x() * 
-                     data.sub_block_num_.y() * 
+      int numTrees = data.sub_block_num_.x() *
+                     data.sub_block_num_.y() *
                      data.sub_block_num_.z();
       //do cumsum
       int newDataSize = cumsum((int*)tree_sizes->cpu_buffer(), numTrees);
-      newSizeMap[id] = newDataSize; 
+      newSizeMap[id] = newDataSize;
       tree_sizes->write_to_buffer(queues[i]);
     }
 
     //read in the actual refined trees
-    for(iter = copyMap.begin(); iter != copyMap.end(); ++iter) {
+    for (iter = copyMap.begin(); iter != copyMap.end(); ++iter) {
       bocl_mem_sptr buff = iter->second;
       buff->read_to_buffer(queues[i]);
     }
@@ -171,52 +172,50 @@ float boxm2_multi_refine::refine(boxm2_multi_cache& cache, float thresh)
   //------------------------------------------------------------------
   //STEP THREE: swap data
   //------------------------------------------------------------------
-  for(int blk=0; blk<maxBlocks; ++blk) {
-    for(int i=0; i<ocl_caches.size(); ++i) {
+  for (int blk=0; blk<maxBlocks; ++blk) {
+    for (int i=0; i<ocl_caches.size(); ++i) {
       //grab sub scene and it's cache
-      boxm2_opencl_cache* ocl_cache = ocl_caches[i]; 
-      boxm2_scene_sptr    sub_scene = ocl_cache->get_scene(); 
-      bocl_device_sptr    device    = ocl_cache->get_device(); 
+      boxm2_opencl_cache* ocl_cache = ocl_caches[i];
+      boxm2_scene_sptr    sub_scene = ocl_cache->get_scene();
+      bocl_device_sptr    device    = ocl_cache->get_device();
 
       //Run block store aux
-      vcl_vector<boxm2_block_id>& vis_order = vis_orders[i]; 
-      if(blk >= vis_order.size()) 
+      vcl_vector<boxm2_block_id>& vis_order = vis_orders[i];
+      if (blk >= vis_order.size())
         continue;
-      boxm2_block_id id = vis_order[blk]; 
+      boxm2_block_id id = vis_order[blk];
       int numTrees = sub_scene->num_trees_in_block(id);
       swap_data_per_block(sub_scene,id,numTrees, ocl_cache, queues[i],
                           sizeMaps[i], copyMaps[i], newDataMaps[i], newDataSizes[i],
-                          out_mems[i], lookups[i], 
+                          out_mems[i], lookups[i],
                           data_type, apptypesize, prob_mems[i]);
     }
 
     //finish
-    for(int i=0; i<queues.size(); ++i) 
-      clFinish(queues[i]); 
+    for (int i=0; i<queues.size(); ++i)
+      clFinish(queues[i]);
   }
-
-
 
   //STEP FOUR: Clean up
   vcl_cout<<" Refine GPU Time: "<<gpu_time<<", transfer time: "<<transfer_time<<vcl_endl;
   vcl_cout<<" Total Num Refined: "<<num_refined<<vcl_endl;
-  for(int i=0; i<queues.size(); ++i) {
+  for (int i=0; i<queues.size(); ++i) {
     boxm2_opencl_cache* ocl_cache = ocl_caches[i];
     BlockMemMap& sizeMap = sizeMaps[i];
     BlockMemMap& copyMap = copyMaps[i];
     BlockMemMap::iterator iter;
-    for(iter=sizeMap.begin(); iter != sizeMap.end(); ++iter) {
+    for (iter=sizeMap.begin(); iter != sizeMap.end(); ++iter) {
       bocl_mem_sptr tree_sizes = iter->second;
       delete[] (cl_int*) tree_sizes->cpu_buffer();
       ocl_cache->unref_mem(tree_sizes.ptr());
     }
-    for(iter=copyMap.begin(); iter!=copyMap.end(); ++iter) { 
+    for (iter=copyMap.begin(); iter!=copyMap.end(); ++iter) {
       bocl_mem_sptr blk_copy = iter->second;
       delete[] (cl_uint16*) blk_copy->cpu_buffer();
       ocl_cache->unref_mem(blk_copy.ptr());
     }
   }
- 
+
   for (int i=0; i<queues.size(); ++i)
     clReleaseCommandQueue(queues[i]);
   return 0.0f;
@@ -225,28 +224,28 @@ float boxm2_multi_refine::refine(boxm2_multi_cache& cache, float thresh)
 
 //: Refines trees, keeps track of new sizes
 float boxm2_multi_refine::refine_trees_per_block(const boxm2_block_id& id,
-                                boxm2_opencl_cache* ocl_cache,
-                                cl_command_queue& queue, 
-                                int numTrees,
-                                BlockMemMap&  sizebuffs,
-                                BlockMemMap&  blockCopies,
-                                bocl_mem_sptr& prob_thresh,
-                                bocl_mem_sptr& lookup,
-                                bocl_mem_sptr& cl_output )
+                                                 boxm2_opencl_cache* ocl_cache,
+                                                 cl_command_queue& queue,
+                                                 int numTrees,
+                                                 BlockMemMap&  sizebuffs,
+                                                 BlockMemMap&  blockCopies,
+                                                 bocl_mem_sptr& prob_thresh,
+                                                 bocl_mem_sptr& lookup,
+                                                 bocl_mem_sptr& cl_output )
 {
     vcl_cout<<"Refining Block "<< id << vcl_endl;
 
     //set up tree copy and store for later use
     vcl_cout<<"  creating tree copy"<<vcl_endl;
     bocl_mem_sptr blk_copy = ocl_cache->alloc_mem(numTrees*sizeof(cl_uchar16), new cl_uchar16[numTrees], "refine trees block copy buffer");
-    blk_copy->create_buffer(CL_MEM_READ_WRITE| CL_MEM_COPY_HOST_PTR); 
+    blk_copy->create_buffer(CL_MEM_READ_WRITE| CL_MEM_COPY_HOST_PTR);
     blockCopies[id] = blk_copy;
 
     //set up tree size (first find num trees)
     vcl_cout<<"  creating tree sizes buff"<<vcl_endl;
     bocl_mem_sptr tree_sizes = ocl_cache->alloc_mem(sizeof(cl_int)*numTrees, new cl_int[numTrees], "refine tree sizes buffer");
     tree_sizes->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
-    sizebuffs[id] = tree_sizes; 
+    sizebuffs[id] = tree_sizes;
 
     //write the image values to the buffer
     vul_timer transfer;
@@ -287,23 +286,23 @@ float boxm2_multi_refine::refine_trees_per_block(const boxm2_block_id& id,
 //: Runs non-blocking refine on block
 //------------------------------------------
 float boxm2_multi_refine::swap_data_per_block( boxm2_scene_sptr scene,
-                                   const boxm2_block_id& id,
-                                   int numTrees,
-                                   boxm2_opencl_cache* ocl_cache,
-                                   cl_command_queue& queue,
-                                   BlockMemMap&  sizebuffs,
-                                   BlockMemMap&  blockCopies,
-                                   BlockMemMap&  newDatas,
-                                   BlockIntMap&  newDataSizes,
-                                   bocl_mem_sptr cl_output,
-                                   bocl_mem_sptr lookup,
-                                   vcl_string data_type,
-                                   int  apptypesize,
-                                   bocl_mem_sptr prob_thresh )
+                                               const boxm2_block_id& id,
+                                               int numTrees,
+                                               boxm2_opencl_cache* ocl_cache,
+                                               cl_command_queue& queue,
+                                               BlockMemMap&  sizebuffs,
+                                               BlockMemMap&  blockCopies,
+                                               BlockMemMap&  newDatas,
+                                               BlockIntMap&  newDataSizes,
+                                               bocl_mem_sptr cl_output,
+                                               bocl_mem_sptr lookup,
+                                               vcl_string data_type,
+                                               int  apptypesize,
+                                               bocl_mem_sptr prob_thresh )
 {
     bocl_device_sptr device = ocl_cache->get_device();
     int newDataSize = newDataSizes[id];
-    bocl_mem_sptr blk_copy = blockCopies[id]; 
+    bocl_mem_sptr blk_copy = blockCopies[id];
     bocl_mem_sptr tree_sizes = sizebuffs[id];
 
     //local/global sizes
@@ -391,14 +390,14 @@ bocl_kernel* boxm2_multi_refine::get_refine_tree_kernel(bocl_device_sptr device,
 {
   // check to see if this device has compiled kernels already
   vcl_string identifier = device->device_identifier() + options;
-  if (refine_tree_kernels_.find(identifier) != refine_tree_kernels_.end()) 
-    return refine_tree_kernels_[identifier]; 
-  
+  if (refine_tree_kernels_.find(identifier) != refine_tree_kernels_.end())
+    return refine_tree_kernels_[identifier];
+
   //gather all render sources... seems like a lot for rendering...
   vcl_vector<vcl_string> src_paths;
   vcl_string source_dir = boxm2_ocl_util::ocl_src_root();
   src_paths.push_back(source_dir + "scene_info.cl");
-  src_paths.push_back(source_dir + "basic/linked_list.cl"); 
+  src_paths.push_back(source_dir + "basic/linked_list.cl");
   src_paths.push_back(source_dir + "bit/bit_tree_library_functions.cl");
   src_paths.push_back(source_dir + "bit/refine_bit_scene.cl");
 
@@ -408,23 +407,24 @@ bocl_kernel* boxm2_multi_refine::get_refine_tree_kernel(bocl_device_sptr device,
   refine_tree_kernel->create_kernel( &device->context(), device->device_id(), src_paths,
                                      "refine_trees", " -D MOG_TYPE_8 ",
                                      "boxm2 opencl refine trees (pass one)"); //kernel identifier (for error checking)
-  
+
   //store/return
   refine_tree_kernels_[identifier] = refine_tree_kernel;
   return refine_tree_kernel;
 }
+
 bocl_kernel* boxm2_multi_refine::get_refine_data_kernel(bocl_device_sptr device, vcl_string option)
 {
   // check to see if this device has compiled kernels already
   vcl_string identifier = device->device_identifier() + option;
-  if (refine_data_kernels_.find(identifier) != refine_data_kernels_.end()) 
-    return refine_data_kernels_[identifier]; 
-  
+  if (refine_data_kernels_.find(identifier) != refine_data_kernels_.end())
+    return refine_data_kernels_[identifier];
+
   vcl_vector<vcl_string> src_paths;
   bocl_kernel* refine_data_kernel = new bocl_kernel();
   vcl_string source_dir = boxm2_ocl_util::ocl_src_root();
   src_paths.push_back(source_dir + "scene_info.cl");
-  src_paths.push_back(source_dir + "basic/linked_list.cl"); 
+  src_paths.push_back(source_dir + "basic/linked_list.cl");
   src_paths.push_back(source_dir + "bit/bit_tree_library_functions.cl");
   src_paths.push_back(source_dir + "bit/refine_bit_scene.cl");
   refine_data_kernel->create_kernel( &device->context(), device->device_id(),
@@ -437,23 +437,22 @@ bocl_kernel* boxm2_multi_refine::get_refine_data_kernel(bocl_device_sptr device,
 
 vcl_string boxm2_multi_refine::get_option_string(int datasize)
 {
-    vcl_string options="";
-    switch (datasize)
-    {
-      case 2:
-        options= "-D MOG_TYPE_2 ";break;
-      case 4:
-        options= "-D MOG_TYPE_4 ";break;
-      case 6:
-        options= "-D MOG_TYPE_6 ";break;
-      case 8:
-        options= "-D MOG_TYPE_8 ";break;
-      case 16:
-        options= "-D MOG_TYPE_16 ";break;
-      default:
-        break;
-    }
-    return options;
+  vcl_string options="";
+  switch (datasize)
+  {
+    case 2:
+      options= "-D MOG_TYPE_2 ";break;
+    case 4:
+      options= "-D MOG_TYPE_4 ";break;
+    case 6:
+      options= "-D MOG_TYPE_6 ";break;
+    case 8:
+      options= "-D MOG_TYPE_8 ";break;
+    case 16:
+      options= "-D MOG_TYPE_16 ";break;
+    default:
+      break;
+  }
+  return options;
 }
-
 
