@@ -13,6 +13,7 @@ boxm2_stream_block_cache::boxm2_stream_block_cache(boxm2_scene_sptr scene,
 
 bool boxm2_stream_block_cache::init(boxm2_block_id id)
 {
+    clear();
     current_block_id_ = id;
     // First go through each data-type and allocate a big buffer;
     for (unsigned i = 0; i < data_types_list_.size(); i++) {
@@ -47,9 +48,21 @@ bool boxm2_stream_block_cache::init(boxm2_block_id id)
     return true;
 }
 
+bool boxm2_stream_block_cache::clear()
+{
+   vcl_map<data_type, boxm2_data_base *>::iterator mit = data_types_.begin();
+   for (; mit != data_types_.end(); ++mit) {
+      boxm2_data_base* ptr = mit->second;
+      delete ptr;
+   }
+   data_types_.clear();
+   return true;
+}
+
 //: hidden destructor (private so it cannot be called -- forces the class to be singleton)
 boxm2_stream_block_cache::~boxm2_stream_block_cache()
 {
+   clear();
 }
 
 // in iterative mode, the files need to be closed and re-opened
