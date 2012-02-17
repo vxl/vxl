@@ -18,7 +18,7 @@ void boxm2_ocl_camera_converter::compute_ray_image( bocl_device_sptr & device,
                                                     bocl_mem_sptr & ray_directions)
 {
   if (cam->type_name() == "vpgl_perspective_camera") {
-    vcl_cout<<"Converting perspective cam to generic !!"<<vcl_endl;
+    //vcl_cout<<"Converting perspective cam to generic !!"<<vcl_endl;
     float convTime =
       boxm2_ocl_camera_converter::convert_persp_to_generic( device,
                                                             queue,
@@ -27,7 +27,7 @@ void boxm2_ocl_camera_converter::compute_ray_image( bocl_device_sptr & device,
                                                             ray_directions,
                                                             cl_ni,
                                                             cl_nj );
-    vcl_cout<<"Camera Convert Time: "<<convTime<<" ms"<<vcl_endl;
+    //vcl_cout<<"Camera Convert Time: "<<convTime<<" ms"<<vcl_endl;
     return;
   }
   else if (cam->type_name() == "vpgl_generic_camera") {
