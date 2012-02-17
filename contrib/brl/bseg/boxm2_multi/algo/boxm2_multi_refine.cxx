@@ -31,11 +31,6 @@ float boxm2_multi_refine::refine(boxm2_multi_cache& cache, float thresh)
   cache.clear();
 
   vcl_cout<<"------------ boxm2_multi_render -----------------------"<<vcl_endl;
-  float    transfer_time = 0.0f;
-  float    gpu_time      = 0.0f;
-  unsigned num_cells     = 0;     //number of cells in the scene after refine
-  unsigned num_refined   = 0;     //number of cells that split
-
   //verify appearance model
   vul_timer rtime; rtime.mark();
   vcl_size_t lthreads[2] = {64,1};
@@ -136,9 +131,11 @@ float boxm2_multi_refine::refine(boxm2_multi_cache& cache, float thresh)
   //------------------------------------------------------------------
   //STEP TWO: read out tree_sizes and do cumulative sum on it
   //------------------------------------------------------------------
-  for (int i=0; i<queues.size(); ++i) {
-    boxm2_opencl_cache* ocl_cache = ocl_caches[i];
-    boxm2_scene_sptr    sub_scene = ocl_cache->get_scene();
+  unsigned num_cells     = 0;     //number of cells in the scene after refine
+  unsigned num_refined   = 0;     //number of cells that split
+  for(int i=0; i<queues.size(); ++i) {
+    boxm2_opencl_cache* ocl_cache = ocl_caches[i]; 
+    boxm2_scene_sptr    sub_scene = ocl_cache->get_scene(); 
 
     BlockMemMap& sizeMap = sizeMaps[i];
     BlockMemMap& copyMap = copyMaps[i];
@@ -159,6 +156,13 @@ float boxm2_multi_refine::refine(boxm2_multi_cache& cache, float thresh)
       int newDataSize = cumsum((int*)tree_sizes->cpu_buffer(), numTrees);
       newSizeMap[id] = newDataSize;
       tree_sizes->write_to_buffer(queues[i]);
+
+      //calculate old size vs new size
+      bocl_mem* alpha = ocl_cache->get_data<BOXM2_ALPHA>(id);
+      vcl_size_t dataLen = (vcl_size_t) (alpha->num_bytes() / sizeof(float)); 
+      //vcl_cout<<"  New data size: "<<newDataSize<<", old data: "<<dataLen<<'\n'
+      //        <<"  num refined: "<<(newDataSize-dataLen)/8<<vcl_endl;
+      num_refined += (unsigned) ( (newDataSize-dataLen)/8 );
     }
 
     //read in the actual refined trees
@@ -197,7 +201,6 @@ float boxm2_multi_refine::refine(boxm2_multi_cache& cache, float thresh)
   }
 
   //STEP FOUR: Clean up
-  vcl_cout<<" Refine GPU Time: "<<gpu_time<<", transfer time: "<<transfer_time<<vcl_endl;
   vcl_cout<<" Total Num Refined: "<<num_refined<<vcl_endl;
   for (int i=0; i<queues.size(); ++i) {
     boxm2_opencl_cache* ocl_cache = ocl_caches[i];
@@ -233,16 +236,16 @@ float boxm2_multi_refine::refine_trees_per_block(const boxm2_block_id& id,
                                                  bocl_mem_sptr& lookup,
                                                  bocl_mem_sptr& cl_output )
 {
-    vcl_cout<<"Refining Block "<< id << vcl_endl;
+    //vcl_cout<<"Refining Block "<< id << vcl_endl;
 
     //set up tree copy and store for later use
-    vcl_cout<<"  creating tree copy"<<vcl_endl;
+    //vcl_cout<<"  creating tree copy"<<vcl_endl;
     bocl_mem_sptr blk_copy = ocl_cache->alloc_mem(numTrees*sizeof(cl_uchar16), new cl_uchar16[numTrees], "refine trees block copy buffer");
     blk_copy->create_buffer(CL_MEM_READ_WRITE| CL_MEM_COPY_HOST_PTR);
     blockCopies[id] = blk_copy;
 
     //set up tree size (first find num trees)
-    vcl_cout<<"  creating tree sizes buff"<<vcl_endl;
+    //vcl_cout<<"  creating tree sizes buff"<<vcl_endl;
     bocl_mem_sptr tree_sizes = ocl_cache->alloc_mem(sizeof(cl_int)*numTrees, new cl_int[numTrees], "refine tree sizes buffer");
     tree_sizes->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
     sizebuffs[id] = tree_sizes;
@@ -314,7 +317,7 @@ float boxm2_multi_refine::swap_data_per_block( boxm2_scene_sptr scene,
     data_types.push_back(boxm2_data_traits<BOXM2_ALPHA>::prefix());
     for (unsigned int i=0; i<data_types.size(); ++i)
     {
-        vcl_cout<<"  Swapping data of type: "<<data_types[i]<<vcl_endl;
+        //vcl_cout<<"  Swapping data of type: "<<data_types[i]<<vcl_endl;
         vcl_string options = get_option_string( boxm2_data_info::datasize(data_types[i]) );
         bocl_kernel* kern = get_refine_data_kernel(device, options);
 
@@ -322,7 +325,7 @@ float boxm2_multi_refine::swap_data_per_block( boxm2_scene_sptr scene,
         bocl_mem* dat = ocl_cache->get_data(id, data_types[i]);
 
         //get a new data pointer (with newSize), will create CPU buffer and GPU buffer
-        vcl_cout<<"  Data_type "<<data_types[i]<<" new size is: "<<newDataSize<<vcl_endl;
+        //vcl_cout<<"  Data_type "<<data_types[i]<<" new size is: "<<newDataSize<<vcl_endl;
         int dataBytes = boxm2_data_info::datasize(data_types[i]) * newDataSize;
         bocl_mem* new_dat = ocl_cache->alloc_mem(dataBytes, NULL, "new data buffer " + data_types[i]);
         new_dat->create_buffer(CL_MEM_READ_WRITE, queue);
@@ -375,7 +378,7 @@ float boxm2_multi_refine::swap_data_per_block( boxm2_scene_sptr scene,
         clFinish(queue);
         ocl_cache->deep_replace_data(id, data_types[i], new_dat);
         if (data_types[i] == boxm2_data_traits<BOXM2_ALPHA>::prefix()) {
-          vcl_cout<<"  Writing refined trees."<<vcl_endl;
+          //vcl_cout<<"  Writing refined trees."<<vcl_endl;
           blk->read_to_buffer(queue);
         }
         ocl_cache->unref_mem(new_dat);

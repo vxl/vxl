@@ -6,111 +6,141 @@
 #include <vcl_algorithm.h>
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/boxm2_util.h>
-#include <bocl/bocl_manager.h>
-#include <boxm2/ocl/boxm2_ocl_util.h>
-#include <boxm2/ocl/boxm2_opencl_cache.h>
 #include <boxm2/ocl/algo/boxm2_ocl_camera_converter.h>
 
 #include <bocl/bocl_mem.h>
 #include <bocl/bocl_device.h>
 #include <bocl/bocl_kernel.h>
-#include <brdb/brdb_value.h>
-#include <brdb/brdb_selection.h>
-#include <bprb/bprb_batch_process_manager.h>
-#include <bprb/bprb_parameters.h>
-#include <bprb/bprb_macros.h>
-#include <bprb/bprb_func_process.h>
 #include <vil/vil_image_view_base.h>
 #include <vil/vil_save.h>
 #include <vpgl/vpgl_perspective_camera.h>
 #include <vnl/vnl_random.h>
 #include <vul/vul_timer.h>
 
-vcl_map<vcl_string,vcl_vector<bocl_kernel*> > boxm2_multi_update::kernels_; 
-
-float boxm2_multi_update::update(       boxm2_multi_cache&              cache,
-                                  const vil_image_view<float>&          img,
-                                        vpgl_camera_double_sptr         cam)
+float boxm2_multi_update::update(boxm2_multi_cache& cache,
+                                 vil_image_view<float>& img,
+                                 vpgl_camera_double_sptr  cam)
 {
-  vcl_cout<<"------------ boxm2_multi_update -----------------------"<<vcl_endl;
+  vcl_cout<<"------------ boxm2_multi_update ----------------"<<vcl_endl;
+ 
+  //setup image size
+  int ni=img.ni(), 
+      nj=img.nj();
+  vcl_size_t lthreads[2] = {8,8};
+  unsigned cl_ni = RoundUp(ni,lthreads[0]);
+  unsigned cl_nj = RoundUp(nj,lthreads[1]);
+
+  //---------------------------------
+  //store vars for each ocl_cache 
+  //---------------------------------
+  vcl_vector<cl_command_queue> queues; //store queue for each device
+  vcl_vector<bocl_mem_sptr> img_dims, outputs, ray_ds, ray_os, lookups; //ray trace vars 
+  vcl_vector<vcl_vector<boxm2_block_id> > vis_orders; //visibility order for each dev
+  vcl_size_t maxBlocks = 0;
+  vcl_vector<boxm2_opencl_cache*> ocl_caches = cache.get_vis_sub_scenes(cam);
+  for(int i=0; i<ocl_caches.size(); ++i) {
+    //grab sub scene and it's cache
+    boxm2_opencl_cache* ocl_cache = ocl_caches[i]; 
+    boxm2_scene_sptr    sub_scene = ocl_cache->get_scene(); 
+    bocl_device_sptr    device    = ocl_cache->get_device(); 
+
+    // create a command queue.
+    int status=0;
+    cl_command_queue queue = clCreateCommandQueue( device->context(),
+                                                   *(device->device_id()),
+                                                   CL_QUEUE_PROFILING_ENABLE,
+                                                   &status );
+    queues.push_back(queue); 
+    if (status!=0) {
+      vcl_cout<<"boxm2_multi_store_aux::store_aux unable to create command queue"<<vcl_endl;
+      return 0.0f;
+    }
+    
+    //create image dim buff
+    int img_dim_buff[4] = {0,0,ni,nj}; 
+    bocl_mem_sptr img_dim = new bocl_mem(device->context(), img_dim_buff, sizeof(int)*4, "image dims");
+    img_dim->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
+    img_dims.push_back(img_dim);
+
+    // Output Array
+    float* output_arr = new float[cl_ni*cl_nj];
+    vcl_fill(output_arr, output_arr+cl_ni*cl_nj, 0.0f);
+    bocl_mem_sptr  cl_output=new bocl_mem(device->context(), output_arr, sizeof(float)*cl_ni*cl_nj, "output buffer");
+    cl_output->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
+    outputs.push_back(cl_output);
+
+    //set generic cam and get visible block order
+    cl_float* ray_origins    = new cl_float[4*cl_ni*cl_nj];
+    cl_float* ray_directions = new cl_float[4*cl_ni*cl_nj];
+    bocl_mem_sptr ray_o_buff = new bocl_mem(device->context(), ray_origins   ,  cl_ni*cl_nj * sizeof(cl_float4), "ray_origins buffer");
+    bocl_mem_sptr ray_d_buff = new bocl_mem(device->context(), ray_directions,  cl_ni*cl_nj * sizeof(cl_float4), "ray_directions buffer");
+    boxm2_ocl_camera_converter::compute_ray_image( device, queue, cam, cl_ni, cl_nj, ray_o_buff, ray_d_buff);
+    ray_os.push_back(ray_o_buff);
+    ray_ds.push_back(ray_d_buff);
+ 
+    // bit lookup buffer
+    cl_uchar lookup_arr[256];
+    boxm2_ocl_util::set_bit_lookup(lookup_arr);
+    bocl_mem_sptr lookup=new bocl_mem(device->context(), lookup_arr, sizeof(cl_uchar)*256, "bit lookup buffer");
+    lookup->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
+    lookups.push_back(lookup);
+
+    // set arguments
+    vcl_vector<boxm2_block_id> vis_order = sub_scene->get_vis_blocks(cam);
+    vis_orders.push_back(vis_order);
+    maxBlocks = vcl_max(vis_order.size(), maxBlocks);
+  }
+
+  //create boxm2_multi update helper object for factored out vars
+  boxm2_multi_update_helper helper(queues, ray_os, ray_ds, img_dims, lookups, 
+                                   outputs, vis_orders, ocl_caches, maxBlocks);
+
 
   //store aux data (cell vis, cell length) 
-  boxm2_multi_store_aux::store_aux(cache, img, cam); 
+  boxm2_multi_store_aux::store_aux(cache, img, cam, helper); 
 
   //calcl pre/vis inf, and store pre/vis images along the way
   float* norm_img = new float[img.ni() * img.nj()]; 
   vcl_map<bocl_device*, float*> pre_map, vis_map;
-  boxm2_multi_pre_vis_inf::pre_vis_inf(cache, img, cam, vis_map, pre_map, norm_img); 
+  boxm2_multi_pre_vis_inf::pre_vis_inf(cache, img, cam, vis_map, pre_map, norm_img, helper); 
  
   //calculate cell beta, cell vis, and finally reduce each cell to new alphas
-  boxm2_multi_update_cell::update_cells(cache, img, cam, vis_map, pre_map, norm_img); 
+  boxm2_multi_update_cell::update_cells(cache, img, cam, vis_map, pre_map, norm_img, helper); 
+
+
+  //-------------------------------------
+  //clean up
+  //-------------------------------------
+  for(int i=0; i<queues.size(); ++i) {
+    boxm2_opencl_cache* ocl_cache = ocl_caches[i]; 
+ 
+    //release generic cam
+    float* rayO = (float*) ray_os[i]->cpu_buffer();
+    float* rayD = (float*) ray_ds[i]->cpu_buffer();
+    delete[] rayO;
+    delete[] rayD;    
+    ocl_cache->unref_mem(ray_os[i].ptr());
+    ocl_cache->unref_mem(ray_ds[i].ptr());
+
+    //release output
+    float* output = (float*) outputs[i]->cpu_buffer();
+    delete[] output;
+    ocl_cache->unref_mem(outputs[i].ptr());
+
+    //free vis mem, pre mem
+    clReleaseCommandQueue(queues[i]); 
+  }
+  
+  //delete single norm image
+  delete[] norm_img;
+
+  //clean up pre/vis maps per device
+  vcl_map<bocl_device*, float*>::iterator iter;
+  for(iter = pre_map.begin(); iter != pre_map.end(); ++iter)
+    delete[] iter->second;
+  for(iter = vis_map.begin(); iter != vis_map.end(); ++iter)
+    delete[] iter->second; 
 }
 
-
-//-----------------------------------------------------------------
-// returns vector of bocl_kernels for this specific device
-//-----------------------------------------------------------------
-vcl_vector<bocl_kernel*>& boxm2_multi_update::get_kernels(bocl_device_sptr device, vcl_string opts)
-{
-  // check to see if this device has compiled kernels already
-  vcl_string identifier = device->device_identifier()+opts;
-  if (kernels_.find(identifier) != kernels_.end()) 
-    return kernels_[identifier]; 
-
-  //if not, compile and cache them
-  vcl_cout<<"===========Compiling multi update kernels===========\n"
-          <<"  for device: "<<device->device_identifier()<<vcl_endl;
-  vcl_vector<bocl_kernel*> kerns;
-
-  //gather all render sources... seems like a lot for rendering...
-  vcl_vector<vcl_string> src_paths;
-  vcl_string source_dir = boxm2_ocl_util::ocl_src_root();
-  src_paths.push_back(source_dir + "scene_info.cl");
-  src_paths.push_back(source_dir + "cell_utils.cl");
-  src_paths.push_back(source_dir + "bit/bit_tree_library_functions.cl");
-  src_paths.push_back(source_dir + "backproject.cl");
-  src_paths.push_back(source_dir + "statistics_library_functions.cl");
-  src_paths.push_back(source_dir + "ray_bundle_library_opt.cl");
-  src_paths.push_back(source_dir + "bit/update_kernels.cl");
-  
-  vcl_vector<vcl_string> non_ray_src = vcl_vector<vcl_string>(src_paths);
-  src_paths.push_back(source_dir + "update_functors.cl");
-  src_paths.push_back(source_dir + "bit/cast_ray_bit.cl");
-
-  //compilation options
-  vcl_string options = opts+" -D INTENSITY  ";
-  options += " -D DETERMINISTIC ";
-
-  //create all passes
-  bocl_kernel* seg_len = new bocl_kernel();
-  vcl_string seg_opts = options + " -D SEGLEN -D STEP_CELL=step_cell_seglen(aux_args,data_ptr,llid,d) ";
-  seg_len->create_kernel(&device->context(),device->device_id(), src_paths, "seg_len_main", seg_opts, "update::seg_len");
-  kerns.push_back(seg_len);
-
-  bocl_kernel* pre_inf = new bocl_kernel();
-  vcl_string pre_opts = options + " -D PREINF -D STEP_CELL=step_cell_preinf(aux_args,data_ptr,llid,d) ";
-  pre_inf->create_kernel(&device->context(),device->device_id(), src_paths, "pre_inf_main", pre_opts, "update::pre_inf");
-  kerns.push_back(pre_inf);
-
-  //may need DIFF LIST OF SOURCES FOR THIS GUY
-  bocl_kernel* proc_img = new bocl_kernel();
-  proc_img->create_kernel(&device->context(),device->device_id(), non_ray_src, "proc_norm_image", options, "update::proc_norm_image");
-  kerns.push_back(proc_img);
-
-  //push back cast_ray_bit
-  bocl_kernel* bayes_main = new bocl_kernel();
-  vcl_string bayes_opt = options + " -D BAYES -D STEP_CELL=step_cell_bayes(aux_args,data_ptr,llid,d) ";
-  bayes_main->create_kernel(&device->context(),device->device_id(), src_paths, "bayes_main", bayes_opt, "update::bayes_main");
-  kerns.push_back(bayes_main);
-
-  //may need DIFF LIST OF SOURCES FOR THSI GUY TOO
-  bocl_kernel* update = new bocl_kernel();
-  update->create_kernel(&device->context(),device->device_id(), non_ray_src, "update_bit_scene_main", options, "update::update_main");
-  kerns.push_back(update);
-  
-  //cache in map
-  kernels_[identifier] = kerns; 
-  return kernels_[identifier]; 
-}
 
 

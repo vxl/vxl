@@ -9,8 +9,9 @@
 #include <vpgl/vpgl_perspective_camera.h>
 #include <bocl/bocl_device.h>
 #include <bocl/bocl_kernel.h>
-#include <brdb/brdb_value.h>
-
+#include <bocl/bocl_manager.h>
+#include <boxm2/ocl/boxm2_ocl_util.h>
+#include <boxm2/ocl/boxm2_opencl_cache.h>
 
 //: boxm2_multi_cache - example realization of abstract cache class
 class boxm2_multi_update
@@ -19,18 +20,46 @@ class boxm2_multi_update
     typedef vnl_vector_fixed<unsigned char, 16> uchar16;
 
     //multi render header
-    static float update(boxm2_multi_cache& cache, const vil_image_view<float>& img, vpgl_camera_double_sptr cam );
+    static float update(boxm2_multi_cache& cache, vil_image_view<float>& img, vpgl_camera_double_sptr cam );
 
-  private:
+};
 
-    //-------------------------------------------------------------------
-    //static opencl kernel compilation functions
-    //-------------------------------------------------------------------
-    //map keeps track of all kernels compiled and cached
-    static vcl_map<vcl_string,vcl_vector<bocl_kernel*> > kernels_;
 
-    //compile kernels and cache
-    static vcl_vector<bocl_kernel*>& get_kernels(bocl_device_sptr device, vcl_string opts);
+
+//: Helper class that stores factored out update objects - rays, queues, bit lookup
+class boxm2_multi_update_helper
+{
+
+  public:
+    boxm2_multi_update_helper(vcl_vector<cl_command_queue>& queues,
+                              vcl_vector<bocl_mem_sptr>& ray_os,
+                              vcl_vector<bocl_mem_sptr>& ray_ds,
+                              vcl_vector<bocl_mem_sptr>& img_dims,
+                              vcl_vector<bocl_mem_sptr>& lookups,
+                              vcl_vector<bocl_mem_sptr>& outputs,
+                              vcl_vector<vcl_vector<boxm2_block_id> >& vis_orders,
+                              vcl_vector<boxm2_opencl_cache*>& vis_caches,
+                              vcl_size_t maxBlocks) : 
+        queues_(queues),
+        ray_os_(ray_os),
+        ray_ds_(ray_ds),
+        img_dims_(img_dims),
+        lookups_(lookups),
+        outputs_(outputs),
+        vis_orders_(vis_orders),
+        vis_caches_(vis_caches),
+        maxBlocks_(maxBlocks){} ;
+
+    //update command queues
+    vcl_vector<cl_command_queue>& queues_;
+    
+    //ray trace vars 
+    vcl_vector<bocl_mem_sptr>&  img_dims_, outputs_, ray_ds_, ray_os_, lookups_; 
+    
+    //visibility order for each dev
+    vcl_vector<vcl_vector<boxm2_block_id> >& vis_orders_; 
+    vcl_vector<boxm2_opencl_cache*>& vis_caches_;
+    vcl_size_t maxBlocks_;
 };
 
 #endif

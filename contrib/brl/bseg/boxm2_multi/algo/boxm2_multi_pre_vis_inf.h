@@ -11,7 +11,7 @@
 #include <vpgl/vpgl_perspective_camera.h>
 #include <bocl/bocl_device.h>
 #include <bocl/bocl_kernel.h>
-#include <brdb/brdb_value.h>
+#include <boxm2_multi/algo/boxm2_multi_update.h>
 
 //: boxm2_multi_cache - example realization of abstract cache class
 class boxm2_multi_pre_vis_inf
@@ -24,7 +24,8 @@ class boxm2_multi_pre_vis_inf
                               vpgl_camera_double_sptr         cam,
                               vcl_map<bocl_device*, float*>&  vis_map,
                               vcl_map<bocl_device*, float*>&  pre_map,
-                              float*                          norm_img );
+                              float*                          norm_img,
+                              boxm2_multi_update_helper&      helper);
 
   private:
 

@@ -101,8 +101,8 @@ int main(int argc,  char** argv)
     vcl_stringstream s; s<<"out_"<<i<<".tiff"; 
     vil_save(out, s.str().c_str()); 
 
-    if(i%10==9) 
-      boxm2_multi_refine::refine(mcache, .3f);
+    //if(i%10==9) 
+    //  boxm2_multi_refine::refine(mcache, .3f);
   }
   
   //write cache

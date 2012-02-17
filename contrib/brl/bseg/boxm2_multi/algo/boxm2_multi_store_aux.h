@@ -11,6 +11,8 @@
 #include <vpgl/vpgl_perspective_camera.h>
 #include <bocl/bocl_device.h>
 #include <bocl/bocl_kernel.h>
+#include <boxm2_multi/algo/boxm2_multi_update.h>
+
 
 //: boxm2_multi_cache - example realization of abstract cache class
 class boxm2_multi_store_aux
@@ -19,8 +21,9 @@ class boxm2_multi_store_aux
 
     //three separate sub procedures (three separate map reduce tasks)
     static float store_aux( boxm2_multi_cache& cache,
-                            const vil_image_view<float>& img,
-                            vpgl_camera_double_sptr cam );
+                            vil_image_view<float>& img,
+                            vpgl_camera_double_sptr cam, 
+                            boxm2_multi_update_helper& helper);
 
   private:
 
