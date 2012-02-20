@@ -451,7 +451,7 @@ vcl_vector<bocl_kernel*>& boxm2_ocl_update_color::get_kernels(bocl_device_sptr d
 
   //compilation options
   vcl_string options = " -D INTENSITY ";
-  options += " -D DETERMINISTIC -D MOG_TYPE_8 ";
+  options += " -D YUV -D DETERMINISTIC -D MOG_TYPE_8 ";
   options += opts;
 
   //populate vector of kernels
