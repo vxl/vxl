@@ -15,7 +15,10 @@
 //vgl includes
 #include <vgl/vgl_vector_3d.h>
 #include <vgl/vgl_distance.h>
+#include <vgl/vgl_intersection.h>
 
+//vsph include
+#include <vsph/vsph_camera_bounds.h>
 
 
 boxm2_scene::boxm2_scene(vcl_string data_path, vgl_point_3d<double> const& origin)
@@ -93,7 +96,6 @@ get_block_metadata_const(boxm2_block_id id) const
   return boxm2_block_metadata();
 }
 
-
 vcl_vector<boxm2_block_id> boxm2_scene::get_vis_blocks(vpgl_generic_camera<double>* cam)
 {
   vcl_vector<boxm2_block_id> vis_order;
@@ -101,40 +103,10 @@ vcl_vector<boxm2_block_id> boxm2_scene::get_vis_blocks(vpgl_generic_camera<doubl
     vcl_cout << "null camera in boxm2_scene::get_vis_blocks(.)\n";
     return vis_order;
   }
-  //get camera center and order blocks distance from the cam center
-  //for non-projective cameras there may not be a single center of projection
-  //so instead get the ray origin farthest from the scene origin.
+
+  //cam center, and getblock vis order from point
   vgl_point_3d<double> cam_center = cam->max_ray_origin();
-  //Map of distance, id
-  vcl_vector<boxm2_dist_id_pair> distances;
-
-  //iterate through each block
-  vcl_map<boxm2_block_id, boxm2_block_metadata>::iterator iter;
-  for (iter = blocks_.begin(); iter != blocks_.end(); ++iter) {
-    vgl_point_3d<double>    blk_o   = (iter->second).local_origin_;
-    vgl_vector_3d<double>   blk_dim = (iter->second).sub_block_dim_;
-    vgl_vector_3d<unsigned> blk_num = (iter->second).sub_block_num_;
-    vgl_vector_3d<double>   length(blk_dim.x()*blk_num.x(),
-                                   blk_dim.y()*blk_num.y(),
-                                   blk_dim.z()*blk_num.z());
-    vgl_point_3d<double> blk_center = blk_o + length/2.0;
-    double dist = vgl_distance( blk_center, cam_center);
-
-    distances.push_back( boxm2_dist_id_pair(dist, iter->first) );
-  }
-
-  //sort distances
-  vcl_sort(distances.begin(), distances.end());
-
-  //put blocks in "vis_order"
-  //vcl_cout<<"CAM ORDER----------------------------------------"<<vcl_endl;
-  vcl_vector<boxm2_dist_id_pair>::iterator di;
-  for (di = distances.begin(); di != distances.end(); ++di) {
-    vis_order.push_back(di->id_);
-    //vcl_cout<<di->id_<<'('<<di->dist_<<")    ";
-  }
-  //vcl_cout<<"\n-----------------------------------------------"<<vcl_endl;
-  return vis_order;
+  return get_vis_order_from_pt(cam_center);
 }
 
 vcl_vector<boxm2_block_id> boxm2_scene::get_vis_blocks(vpgl_perspective_camera<double>* cam)
@@ -144,76 +116,61 @@ vcl_vector<boxm2_block_id> boxm2_scene::get_vis_blocks(vpgl_perspective_camera<d
     vcl_cout << "null camera in boxm2_scene::get_vis_blocks(.)\n";
     return vis_order;
   }
-  //get camera center and order blocks distance from the cam center
-  //for non-projective cameras there may not be a single center of projection
-  //so instead get the ray origin farthest from the scene origin.
+
+  //---------------------------------------
+  //find intersection box
+  //---------------------------------------
+  vgl_box_3d<double> sceneBB = this->bounding_box();
+  vgl_box_2d<double> lowBox, highBox; 
+  vsph_camera_bounds::planar_bounding_box(*cam, lowBox, sceneBB.min_z()); 
+  vsph_camera_bounds::planar_bounding_box(*cam, highBox, sceneBB.max_z());
+  vgl_box_2d<double> camBox;
+  camBox.add(lowBox); 
+  camBox.add(highBox);
+
+  //grab visibility order from camera center
   vgl_point_3d<double> cam_center = cam->camera_center();
-  //Map of distance, id
-  return get_vis_order_from_pt(cam_center);
-#if 0
-  vcl_vector<boxm2_dist_id_pair> distances;
-
-  //iterate through each block
-  vcl_map<boxm2_block_id, boxm2_block_metadata>::iterator iter;
-  for (iter = blocks_.begin(); iter != blocks_.end(); ++iter) {
-    vgl_point_3d<double>    blk_o   = (iter->second).local_origin_;
-    vgl_vector_3d<double>   blk_dim = (iter->second).sub_block_dim_;
-    vgl_vector_3d<unsigned> blk_num = (iter->second).sub_block_num_;
-    vgl_vector_3d<double>   length(blk_dim.x()*blk_num.x(),
-                                   blk_dim.y()*blk_num.y(),
-                                   blk_dim.z()*blk_num.z());
-    vgl_point_3d<double> blk_center = blk_o + length/2.0;
-    double dist = vgl_distance( blk_center, cam_center);
-
-    distances.push_back( boxm2_dist_id_pair(dist, iter->first) );
-  }
-
-  //sort distances
-  vcl_sort(distances.begin(), distances.end());
-
-  //put blocks in "vis_order"
-  //vcl_cout<<"CAM ORDER----------------------------------------"<<vcl_endl;
-  vcl_vector<boxm2_dist_id_pair>::iterator di;
-  for (di = distances.begin(); di != distances.end(); ++di) {
-    vis_order.push_back(di->id_);
-    //vcl_cout<<di->id_<<'('<<di->dist_<<")    ";
-  }
-  //vcl_cout<<"\n-----------------------------------------------"<<vcl_endl;
-  return vis_order;
-#endif // 0
+  return get_vis_order_from_pt(cam_center, camBox);
 }
 
-vcl_vector<boxm2_block_id> boxm2_scene::get_vis_order_from_pt(vgl_point_3d<double> const& pt)
+vcl_vector<boxm2_block_id> 
+boxm2_scene::get_vis_order_from_pt(vgl_point_3d<double> const& pt, 
+                                   vgl_box_2d<double> camBox)
 {
-    //Map of distance, id
-    vcl_vector<boxm2_block_id> vis_order;
+  //Map of distance, id
+  vcl_vector<boxm2_block_id> vis_order;
+  vcl_vector<boxm2_dist_id_pair> distances;
 
-    vcl_vector<boxm2_dist_id_pair> distances;
-
-  //iterate through each block
+  //get camera center and order blocks distance from the cam center
+  //for non-projective cameras there may not be a single center of projection
+  //so instead get the ray origin farthest from the scene origin. 
   vcl_map<boxm2_block_id, boxm2_block_metadata>::iterator iter;
   for (iter = blocks_.begin(); iter != blocks_.end(); ++iter) {
-    vgl_point_3d<double>    blk_o   = (iter->second).local_origin_;
-    vgl_vector_3d<double>   blk_dim = (iter->second).sub_block_dim_;
-    vgl_vector_3d<unsigned> blk_num = (iter->second).sub_block_num_;
-    vgl_vector_3d<double>   length(blk_dim.x()*blk_num.x(),
-                                   blk_dim.y()*blk_num.y(),
-                                   blk_dim.z()*blk_num.z());
-    vgl_point_3d<double> blk_center = blk_o + length/2.0;
-    double dist = vgl_distance( blk_center, pt);
+    vgl_point_3d<double>&    blk_o   = (iter->second).local_origin_;
+    vgl_vector_3d<double>&   blk_dim = (iter->second).sub_block_dim_;
+    vgl_vector_3d<unsigned>& blk_num = (iter->second).sub_block_num_;
+    vgl_vector_3d<double>    length(blk_dim.x()*blk_num.x(),
+                                    blk_dim.y()*blk_num.y(),
+                                    blk_dim.z()*blk_num.z());
 
-    distances.push_back( boxm2_dist_id_pair(dist, iter->first) );
+    //make sure there is a non empty intersection here
+    vgl_box_2d<double> blkBox(blk_o.x(), blk_o.x()+length.x(), 
+                              blk_o.y(), blk_o.y()+length.y());
+    vgl_box_2d<double> intersect = vgl_intersection(camBox, blkBox); 
+    if(!intersect.is_empty() || camBox.is_empty()) {
+      vgl_point_3d<double> blk_center = blk_o + length/2.0;
+      double dist = vgl_distance( blk_center, pt);
+      distances.push_back( boxm2_dist_id_pair(dist, iter->first) );
+    }
   }
 
   //sort distances
   vcl_sort(distances.begin(), distances.end());
 
   //put blocks in "vis_order"
-  //vcl_cout<<"CAM ORDER----------------------------------------"<<vcl_endl;
   vcl_vector<boxm2_dist_id_pair>::iterator di;
-  for (di = distances.begin(); di != distances.end(); ++di) {
+  for (di = distances.begin(); di != distances.end(); ++di) 
     vis_order.push_back(di->id_);
-  }
   return vis_order;
 }
 

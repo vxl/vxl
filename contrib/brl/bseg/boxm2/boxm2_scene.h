@@ -11,6 +11,7 @@
 #include <vpgl/vpgl_lvcs.h>
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_box_3d.h>
+#include <vgl/vgl_box_2d.h>
 #include <vcl_iosfwd.h>
 #include <vul/vul_file.h>
 
@@ -71,7 +72,6 @@ class boxm2_scene : public vbl_ref_count
     //: return a vector of block ids in visibility order
     vcl_vector<boxm2_block_id> get_vis_blocks(vpgl_generic_camera<double>* cam);
     vcl_vector<boxm2_block_id> get_vis_blocks(vpgl_perspective_camera<double>* cam);
-    vcl_vector<boxm2_block_id> get_vis_order_from_pt(vgl_point_3d<double> const& pt);
     vcl_vector<boxm2_block_id> get_vis_blocks(vpgl_camera_double_sptr & cam) {
       if ( cam->type_name() == "vpgl_generic_camera" )
         return this->get_vis_blocks( (vpgl_generic_camera<double>*) cam.ptr() );
@@ -79,12 +79,15 @@ class boxm2_scene : public vbl_ref_count
         return this->get_vis_blocks( (vpgl_perspective_camera<double>*) cam.ptr() );
       else
         vcl_cout<<"boxm2_scene::get_vis_blocks doesn't support camera type "<<cam->type_name()<<vcl_endl;
-
       //else return empty
       vcl_vector<boxm2_block_id> empty;
       return empty;
     }
-
+    //: visibility order from point, blocks must intersect with cam box
+    vcl_vector<boxm2_block_id> 
+    get_vis_order_from_pt(vgl_point_3d<double> const& pt, 
+                          vgl_box_2d<double> camBox = vgl_box_2d<double>());
+ 
     //: return a heap pointer to a scene info
     boxm2_scene_info* get_blk_metadata(boxm2_block_id id);
     bool block_exists(boxm2_block_id id) const { return blocks_.find(id) != blocks_.end(); }
