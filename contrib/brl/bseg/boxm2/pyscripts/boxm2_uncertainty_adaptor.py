@@ -26,7 +26,9 @@ class UncertainScene(boxm2_scene_adaptor):
     self.create_all_aux_data()
     #update synoptic function (per voxel cubic)
     self.batch_synoptic_function();
+
     #update alphas
+    #TODO incorporate alpha update (for now separate call)
     #self.update_all_alphas_with_cubic();
 
   def compute_uncertainty(self):

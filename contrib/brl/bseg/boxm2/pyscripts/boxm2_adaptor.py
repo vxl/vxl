@@ -624,6 +624,8 @@ def save_multi_block_scene(params) :
     orig_x, orig_y, orig_z = params['origin']
   if 'num_vox' in params:
     num_vox_x, num_vox_y, num_vox_z = params['num_vox']
+  if 'num_blocks' in params:
+    n_x, n_y, n_z = params['num_blocks']
 
   #run create scene process
   boxm2_batch.init_process("boxm2CreateSceneProcess");
