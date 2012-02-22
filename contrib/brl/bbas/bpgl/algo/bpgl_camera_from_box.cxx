@@ -48,6 +48,6 @@ affine_camera_from_box(vgl_box_3d<double> const & box,
   vgl_point_3d<double> min_pt = box.min_point();
   vgl_point_3d<double> max_pt = box.max_point();
   double len = (max_pt-min_pt).length();
-  C.set_viewing_distance(1000.0*len);
+  C.set_viewing_distance(10.0*len);
   return C;
 }
