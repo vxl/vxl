@@ -23,12 +23,19 @@ class boxm2_compute_normal_albedo_cost_function : public vnl_cost_function
                                              vcl_vector<double> const& radiance_offsets,
                                              vcl_vector<double> const& radiance_var_scales,
                                              vcl_vector<double> const& radiance_var_offsets)
-   : vnl_cost_function(1), radiances_(radiances), visibilities_(visibilities), radiance_scales_(radiance_scales), radiance_offsets_(radiance_offsets), radiance_var_scales_(radiance_var_scales), radiance_var_offsets_(radiance_var_offsets), num_images_(radiances.size())
+   : vnl_cost_function(1),
+     num_images_(radiances.size()),
+     radiances_(radiances),
+     visibilities_(visibilities),
+     radiance_scales_(radiance_scales),
+     radiance_offsets_(radiance_offsets),
+     radiance_var_scales_(radiance_var_scales),
+     radiance_var_offsets_(radiance_var_offsets)
    { }
 
    virtual double f(vnl_vector<double> const& x);
    //virtual void gradf(vnl_vector<double> const& x, vnl_vector<double>& gradient);
-     
+
  private:
   unsigned int num_images_;
 
@@ -42,7 +49,6 @@ class boxm2_compute_normal_albedo_cost_function : public vnl_cost_function
   // radiance variance = scale*reflectance*reflectance + offset
   vcl_vector<double> const& radiance_var_scales_;
   vcl_vector<double> const& radiance_var_offsets_;
-
 };
 
 
@@ -87,7 +93,6 @@ class boxm2_compute_normal_albedo_functor_opt
   // radiance variance = scale*reflectance*reflectance + offset
   vcl_vector<vcl_vector<double> > radiance_var_scales_;
   vcl_vector<vcl_vector<double> > radiance_var_offsets_;
-
 };
 
 #endif // boxm2_compute_normal_albedo_functor_opt_h_
