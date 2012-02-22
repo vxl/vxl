@@ -18,15 +18,14 @@
 #include "boxm2_compute_normal_albedo_functor_opt.h"
 
 
-
 double boxm2_compute_normal_albedo_cost_function::f(vnl_vector<double> const& x)
 {
    const double rho = x[0];
    double log_prob = 0.0;
    for (unsigned int m=0; m<num_images_; ++m) {
-      double weight = visibilities_[m];
       double rad_var = radiance_var_scales_[m]*rho*rho + radiance_var_offsets_[m];
 #if 0
+      double weight = visibilities_[m];
       if (rad_var <= 0.0) {
          // indicates that surface with given normal is not visible from this view
          double background_density = 0.01; // TODO: compute actual uniform density value 
@@ -54,12 +53,11 @@ double boxm2_compute_normal_albedo_cost_function::f(vnl_vector<double> const& x)
 }
 
 
-
 bool boxm2_compute_normal_albedo_functor_opt::init_data(vcl_vector<brad_image_metadata> const& metadata,
-                                                    vcl_vector<brad_atmospheric_parameters> const& atm_params,
-                                                    boxm2_stream_cache_sptr str_cache,
-                                                    boxm2_data_base * alpha_data,
-                                                    boxm2_data_base * normal_albedo_model)
+                                                        vcl_vector<brad_atmospheric_parameters> const& atm_params,
+                                                        boxm2_stream_cache_sptr str_cache,
+                                                        boxm2_data_base * alpha_data,
+                                                        boxm2_data_base * normal_albedo_model)
 {
    // variances
    const double reflectance_var = boxm2_normal_albedo_array_constants::sigma_albedo * boxm2_normal_albedo_array_constants::sigma_albedo;
@@ -134,7 +132,6 @@ bool boxm2_compute_normal_albedo_functor_opt::process_cell(unsigned int index, b
       return false;
    }
    boxm2_data<BOXM2_NORMAL_ALBEDO_ARRAY>::datatype & naa_model = naa_model_data_->data()[index];
-   boxm2_data<BOXM2_ALPHA>::datatype & alpha = alpha_data_->data()[index];
    vcl_vector<aux0_datatype> aux0_raw = str_cache_->get_next<BOXM2_AUX0>(id_, index); // seg_len
    vcl_vector<aux1_datatype> aux1_raw = str_cache_->get_next<BOXM2_AUX1>(id_, index); // mean_obs
    vcl_vector<aux2_datatype> aux2_raw = str_cache_->get_next<BOXM2_AUX2>(id_, index); // vis
@@ -172,7 +169,8 @@ bool boxm2_compute_normal_albedo_functor_opt::process_cell(unsigned int index, b
       for (unsigned int n=0; n<num_normals_; ++n) {
          naa_model.set_probability(n,normal_probs[n]/prob_sum);
       }
-   } else {
+   }
+   else {
       for (unsigned int n=0; n<num_normals_; ++n) {
          naa_model.set_probability(n,1.0/num_normals_);
       }
