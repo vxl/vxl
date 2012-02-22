@@ -769,7 +769,16 @@ double brad_expected_radiance_chavez(double reflectance,
    double deg2rad = vnl_math::pi_over_180;
    double sun_az = md.sun_azimuth_ * deg2rad;
    double sun_el = md.sun_elevation_ * deg2rad;
+   double view_az = md.view_azimuth_ * deg2rad;
    double view_el = md.view_elevation_ * deg2rad;
+   vgl_vector_3d<double> view_dir(vcl_sin(view_az)*vcl_cos(view_el),
+                                  vcl_cos(view_az)*vcl_cos(view_el),
+                                  vcl_sin(view_el));
+   double view_dot_norm = dot_product(view_dir,normal);
+   if (view_dot_norm <= 0) {
+      // surface is not visible from this viewpoint
+      return 0.0;
+   }
    vgl_vector_3d<double> sun_dir(vcl_sin(sun_az)*vcl_cos(sun_el),
                                  vcl_cos(sun_az)*vcl_cos(sun_el),
                                  vcl_sin(sun_el));
@@ -863,11 +872,20 @@ double brad_radiance_variance_chavez(double reflectance,
    double deg2rad = vnl_math::pi_over_180;
    double sun_az = md.sun_azimuth_ * deg2rad;
    double sun_el = md.sun_elevation_ * deg2rad;
+   double view_az = md.view_azimuth_ * deg2rad;
    double view_el = md.view_elevation_ * deg2rad;
+   vgl_vector_3d<double> view_dir(vcl_sin(view_az)*vcl_cos(view_el),
+                                 vcl_cos(view_az)*vcl_cos(view_el),
+                                 vcl_sin(view_el));
+   double view_dot_norm = dot_product(view_dir, normal);
+   if (view_dot_norm <= 0) {
+      // surface is not visible from this viewpoint
+      return 0.0;
+   }
    vgl_vector_3d<double> sun_dir(vcl_sin(sun_az)*vcl_cos(sun_el),
                                  vcl_cos(sun_az)*vcl_cos(sun_el),
                                  vcl_sin(sun_el));
-   
+
    double T_sun = vcl_exp(-atm.optical_depth_ / sun_dir.z());
    double T_view = vcl_exp(-atm.optical_depth_ / vcl_sin(view_el));
 

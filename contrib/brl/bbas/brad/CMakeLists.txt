@@ -17,7 +17,8 @@
       brad_synoptic_function_1d.h     brad_synoptic_function_1d.cxx
       brad_image_metadata.h           brad_image_metadata.cxx
       brad_atmospheric_parameters.h   brad_atmospheric_parameters.cxx 
-      brad_image_atmospherics_est.h  brad_image_atmospherics_est.cxx
+      brad_image_atmospherics_est.h   brad_image_atmospherics_est.cxx
+      brad_estimate_shadows.h         brad_estimate_shadows.cxx
      )
   AUX_SOURCE_DIRECTORY(Templates brad_sources)
   ADD_LIBRARY(brad ${brad_sources} )
