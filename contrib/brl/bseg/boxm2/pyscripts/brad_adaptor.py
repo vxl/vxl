@@ -84,4 +84,39 @@ def load_atmospheric_parameters(filename):
   atm_params = dbvalue(id,type)
   return atm_params
  
+# extract sun azimuth and elevation angles from metadata
+def get_sun_angles(mdata):
+  boxm2_batch.init_process("bradGetSunAnglesProcess")
+  boxm2_batch.set_input_from_db(0,mdata)
+  boxm2_batch.run_process()
+  (id,type) = boxm2_batch.commit_output(0)
+  sun_az = boxm2_batch.get_output_float(id)
+  boxm2_batch.remove_data(id)
+  (id,type) = boxm2_batch.commit_output(1)
+  sun_el = boxm2_batch.get_output_float(id)
+  boxm2_batch.remove_data(id)
+  return sun_az, sun_el
+
+# create a new atmopsheric_parameters object
+def create_atmospheric_parameters(airlight=0.0, skylight=0.0, optical_depth=0.0):
+  boxm2_batch.init_process("bradCreateAtmosphericParametersProcess")
+  boxm2_batch.set_input_float(0,airlight)
+  boxm2_batch.set_input_float(1,skylight)
+  boxm2_batch.set_input_float(2,optical_depth)
+  boxm2_batch.run_process()
+  (id,type) = boxm2_batch.commit_output(0)
+  atm_params = dbvalue(id,type)
+  return atm_params
+
+def estimate_shadows(image, metadata, atmospheric_params):
+  boxm2_batch.init_process("bradEstimateShadowsProcess")
+  boxm2_batch.set_input_from_db(0,image)
+  boxm2_batch.set_input_from_db(1,metadata)
+  boxm2_batch.set_input_from_db(2,atmospheric_params)
+  boxm2_batch.run_process()
+  (id,type) = boxm2_batch.commit_output(0)
+  shadow_probs = dbvalue(id,type)
+  return shadow_probs
+
+
 

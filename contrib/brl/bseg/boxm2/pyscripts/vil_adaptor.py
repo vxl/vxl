@@ -197,3 +197,12 @@ def image_mean(img):
   boxm2_batch.remove_data(id)
   return mean_val
 
+def scale_and_offset_values(img,scale,offset):
+  boxm2_batch.init_process("vilScaleAndOffsetValuesProcess")
+  boxm2_batch.set_input_from_db(0,img)
+  boxm2_batch.set_input_float(1,scale)
+  boxm2_batch.set_input_float(2,offset)
+  boxm2_batch.run_process()
+  return
+
+

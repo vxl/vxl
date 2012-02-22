@@ -422,6 +422,16 @@ class boxm2_scene_adaptor(object):
     boxm2_batch.set_input_from_db(0,self.str_cache);
     boxm2_batch.run_process();
 
+  def ocl_batch_compute_normal_albedo(self, img_id_list, metadata_filename_list, atmospheric_params_filename_list):
+    boxm2_batch.init_process("boxm2OclBatchComputeNormalAlbedoArrayProcess")
+    boxm2_batch.set_input_from_db(0,self.device)
+    boxm2_batch.set_input_from_db(1,self.scene)
+    boxm2_batch.set_input_from_db(2,self.opencl_cache)
+    boxm2_batch.set_input_string(3,img_id_list)
+    boxm2_batch.set_input_string(4,metadata_filename_list)
+    boxm2_batch.set_input_string(5,atmospheric_params_filename_list)
+    boxm2_batch.run_process()
+    
   def render_expected_image_naa(self, camera, ni,nj, metadata, atmospheric_params):
     boxm2_batch.init_process("boxm2OclRenderExpectedImageNAAProcess");
     boxm2_batch.set_input_from_db(0,self.device)
