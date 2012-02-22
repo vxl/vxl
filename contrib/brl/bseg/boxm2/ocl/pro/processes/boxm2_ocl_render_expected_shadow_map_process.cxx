@@ -134,7 +134,7 @@ bool boxm2_ocl_render_expected_shadow_map_process(bprb_func_process& pro)
   float* buff = new float[cl_ni*cl_nj];
   for (unsigned i=0;i<cl_ni*cl_nj;i++) buff[i]=0.0f;
 
-  bocl_mem_sptr exp_image=new bocl_mem(device->context(),buff,cl_ni*cl_nj*sizeof(float),"exp image buffer");
+  bocl_mem_sptr exp_image = opencl_cache->alloc_mem(cl_ni*cl_nj*sizeof(float), buff,"exp image buffer");
   exp_image->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
   int img_dim_buff[4];
@@ -146,7 +146,7 @@ bool boxm2_ocl_render_expected_shadow_map_process(bprb_func_process& pro)
   // visibility image
   float* vis_buff = new float[cl_ni*cl_nj];
   vcl_fill(vis_buff, vis_buff + cl_ni*cl_nj, 1.0f);
-  bocl_mem_sptr vis_image = new bocl_mem(device->context(), vis_buff, cl_ni*cl_nj*sizeof(float), "exp image buffer");
+  bocl_mem_sptr vis_image = opencl_cache->alloc_mem(cl_ni*cl_nj*sizeof(float), vis_buff,"vis image buffer");
   vis_image->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
   // run expected image function
@@ -177,12 +177,15 @@ bool boxm2_ocl_render_expected_shadow_map_process(bprb_func_process& pro)
       (*exp_img_out)(r,c)=buff[c*cl_ni+r];
   }
 
+  opencl_cache->unref_mem(exp_image.ptr());
+  opencl_cache->unref_mem(vis_image.ptr());
+
   delete [] buff;
   delete [] vis_buff;
 
   clReleaseCommandQueue(queue);
-  i=0;
-  // store scene smaprt pointer
-  pro.set_output_val<vil_image_view_base_sptr>(i++, exp_img_out);
+
+  // store scene smart pointer
+  pro.set_output_val<vil_image_view_base_sptr>(0, exp_img_out);
   return true;
 }

@@ -26,28 +26,26 @@ void step_cell_seglen_vis(AuxArgs aux_args, int data_ptr, uchar llid, float d)
 {
     //slow beta calculation ----------------------------------------------------
 
-
-
     int seg_int = convert_int_rte(d * SEGLEN_FACTOR);
     atom_add(&aux_args.seg_len[data_ptr], seg_int);
     //calculate this ray's contribution to beta
-    float  alpha    = aux_args.alpha[data_ptr];
+    float alpha = aux_args.alpha[data_ptr];
     //float cell_vis = (* aux_args.ray_vis) * d;
-    float cell_vis = *(aux_args.last_vis) * d;
+    float cell_vis = *(aux_args.last_vis);
 
     //update ray_pre and ray_vis
-    float temp  = exp(-alpha * d);
+    float temp = exp(-alpha * d);
     // updated visibility probability
     (* aux_args.ray_vis) *= temp;
 
     // keep track of vis at last "empty" cell to prevent self-shadowing within uncertain regions
-    const float occlusion_thresh = 0.0; // 0.99
-    if (temp >= occlusion_thresh) {
+    const float passthrough_prob_thresh = 0.9; 
+    if (temp >= passthrough_prob_thresh) {
        *(aux_args.last_vis) = *(aux_args.ray_vis);
     }
     
     //discretize and store beta and vis contribution
-    int vis_int  = convert_int_rte(cell_vis * SEGLEN_FACTOR);
+    int vis_int  = convert_int_rte(d * cell_vis * SEGLEN_FACTOR);
     atom_add(&aux_args.vis_array[data_ptr], vis_int);
     //--------------------------------------------------------------------------
 }
@@ -94,9 +92,9 @@ seg_len_and_vis_main(__constant  RenderSceneInfo    * linfo,
   // cases #of threads will be more than the pixels.
   if (i>=(*imgdims).z || j>=(*imgdims).w || i<(*imgdims).x || j<(*imgdims).y)
     return;
-  float vis0 = 1.0f;
   float vis = vis_image[j*get_global_size(0) + i];
   float last_vis = last_vis_image[j*get_global_size(0) + i];
+  float vis0 = 1.0; // don't want to terminate raytrace early, even if visibility is 0
 
   barrier(CLK_LOCAL_MEM_FENCE);
 
@@ -151,9 +149,9 @@ update_visibilities_main(__constant  RenderSceneInfo    * linfo,
     int obs0= as_int(aux_array0[gid]);
     int obs1= as_int(aux_array1[gid]);
     if(obs0>0)
-        aux_output[gid]=((float)obs1)/((float)obs0);
+        aux_output[gid] = ((float)obs1)/((float)obs0);
     else
-        aux_output[gid]=0.0;
+        aux_output[gid] = 0.0;
   }
 
 }

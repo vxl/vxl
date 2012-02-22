@@ -54,5 +54,6 @@ DECLARE_FUNC_CONS(boxm2_ocl_paint_online_process);
 DECLARE_FUNC_CONS(boxm2_ocl_update_alpha_naa_process);
 DECLARE_FUNC_CONS(boxm2_ocl_render_expected_image_naa_process);
 DECLARE_FUNC_CONS(boxm2_ocl_render_expected_albedo_normal_process);
+DECLARE_FUNC_CONS(boxm2_ocl_batch_compute_normal_albedo_array_process);
 
 #endif

@@ -16,7 +16,6 @@
 #include <boxm2/boxm2_data_base.h>
 #include <boxm2/ocl/boxm2_ocl_util.h>
 #include <boxm2/ocl/algo/boxm2_ocl_camera_converter.h>
-#include <vil/vil_image_view.h>
 //brdb stuff
 #include <brdb/brdb_value.h>
 
@@ -55,7 +54,7 @@ namespace boxm2_ocl_update_sun_visibilities_process_globals
     vcl_string options ="" + opts;
     //seg len pass
     bocl_kernel* seg_len = new bocl_kernel();
-    vcl_string seg_opts = options + " -D SEGLENVIS -D STEP_CELL=step_cell_seglen_vis(aux_args,data_ptr,llid,d) ";
+    vcl_string seg_opts = options + " -D SEGLENVIS -D STEP_CELL=step_cell_seglen_vis(aux_args,data_ptr,llid,d*linfo->block_len) ";
     seg_len->create_kernel(&device->context(), device->device_id(), src_paths, "seg_len_and_vis_main", seg_opts, "update::seg_len_vis");
     vec_kernels.push_back(seg_len);
 
@@ -140,21 +139,21 @@ bool boxm2_ocl_update_sun_visibilities_process(bprb_func_process& pro)
   // create all buffers
   cl_float* ray_origins    = new cl_float[4*cl_ni*cl_nj];
   cl_float* ray_directions = new cl_float[4*cl_ni*cl_nj];
-  bocl_mem_sptr ray_o_buff = new bocl_mem(device->context(), ray_origins    ,  cl_ni*cl_nj * sizeof(cl_float4), "ray_origins buffer");
-  bocl_mem_sptr ray_d_buff = new bocl_mem(device->context(), ray_directions ,  cl_ni*cl_nj * sizeof(cl_float4), "ray_directions buffer");
+  bocl_mem_sptr ray_o_buff = opencl_cache->alloc_mem(cl_ni*cl_nj*sizeof(cl_float4), ray_origins,"ray_origins buffer");
+  bocl_mem_sptr ray_d_buff = opencl_cache->alloc_mem(cl_ni*cl_nj*sizeof(cl_float4), ray_directions,"ray_directions buffer");
   boxm2_ocl_camera_converter::compute_ray_image( device, queue, cam, cl_ni, cl_nj, ray_o_buff, ray_d_buff);
 
   //create vis, pre, norm and input image buffers
   float* vis_buff  = new float[cl_ni*cl_nj];
   vcl_fill(vis_buff, vis_buff+cl_ni*cl_nj, 1.0f);
 
-  bocl_mem_sptr vis_image=new bocl_mem(device->context(),vis_buff,cl_ni*cl_nj*sizeof(float),"vis image buffer");
+  bocl_mem_sptr vis_image = opencl_cache->alloc_mem(cl_ni*cl_nj*sizeof(float), vis_buff,"vis image buffer");
   vis_image->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
   float* last_vis_buff  = new float[cl_ni*cl_nj];
   vcl_fill(last_vis_buff, last_vis_buff+cl_ni*cl_nj, 1.0f);
 
-  bocl_mem_sptr last_vis_image=new bocl_mem(device->context(),last_vis_buff,cl_ni*cl_nj*sizeof(float),"last vis image buffer");
+  bocl_mem_sptr last_vis_image = opencl_cache->alloc_mem(cl_ni*cl_nj*sizeof(float), last_vis_buff, "last vis image buffer");
   last_vis_image->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
   // Image Dimensions
@@ -244,19 +243,21 @@ bool boxm2_ocl_update_sun_visibilities_process(bprb_func_process& pro)
       last_vis_image->read_to_buffer(queue);
       cl_output->read_to_buffer(queue);
       clFinish(queue);
-
-
   }
 
+  opencl_cache->unref_mem(ray_o_buff.ptr());
+  opencl_cache->unref_mem(ray_d_buff.ptr());
+  opencl_cache->unref_mem(vis_image.ptr());
+  opencl_cache->unref_mem(last_vis_image.ptr());
 
-   delete [] vis_buff;
-   delete [] last_vis_buff;
-   delete [] ray_origins;
-   delete [] ray_directions;
+  delete [] vis_buff;
+  delete [] last_vis_buff;
+  delete [] ray_origins;
+  delete [] ray_directions;
 
-   //reset local threads to 8/8 (default);
-   local_threads[0] = 64;
-   local_threads[1] = 1;
+  //reset local threads to 8/8 (default);
+  local_threads[0] = 64;
+  local_threads[1] = 1;
   for (id = vis_order.begin(); id != vis_order.end(); ++id)
   {
       vcl_cout << "update_sun_vis2 : id = " << id->to_string() << vcl_endl;

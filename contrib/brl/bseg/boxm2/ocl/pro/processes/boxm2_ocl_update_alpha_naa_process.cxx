@@ -313,7 +313,7 @@ bool boxm2_ocl_update_alpha_naa_process(bprb_func_process& pro)
         if ((i < img->ni()) && (j < img->nj())){
           vis_buff[count] = pix_weights(i,j);
           pre_buff[count] = 1.0f - pix_weights(i,j);
-          norm_buff[count] = 1.0f - pix_weights(i,j);
+          norm_buff[count] = 0.0f;
         } else {
           vis_buff[count] = 1.0f;
           pre_buff[count] = 0.0f;
@@ -458,32 +458,39 @@ bool boxm2_ocl_update_alpha_naa_process(bprb_func_process& pro)
       proc_kern->clear_args();
       norm_image->read_to_buffer(queue);
 
-     continue;
-    }
-    
-    //set masked values
-    vis_image->read_to_buffer(queue);
-#if 0
-    if (use_mask)
-    {
-      int count = 0;
-      for (unsigned int j=0;j<cl_nj;++j) {
-        for (unsigned int i=0;i<cl_ni;++i) {
-          if ( i<pix_weights->ni() && j<pix_weights->nj() ) {
-            if ( (*pix_weights)(i,j) <= 0.0f ) {
-              input_buff[count] = -1.0f;
-              vis_buff  [count] = -1.0f;
+      //set masked values
+      vis_image->read_to_buffer(queue);
+      pre_image->read_to_buffer(queue);
+#ifdef USE_PIX_WEIGHTS
+      { 
+          int count = 0;
+          for (unsigned int j=0; j<cl_nj; ++j) {
+            for (unsigned int i=0; i<cl_ni; ++i) {
+              if ((i < img->ni()) && (j < img->nj())){
+                vis_buff[count] = pix_weights(i,j);
+                pre_buff[count] = 1.0f - pix_weights(i,j);
+              } else {
+                vis_buff[count] = 1.0f;
+                pre_buff[count] = 0.0f;
+              }
+              ++count;
             }
           }
-          ++count;
-        }
       }
-      in_image->write_to_buffer(queue);
-      vis_image->write_to_buffer(queue);
-      clFinish(queue);
-    }
+#else
+      for (unsigned i=0; i<cl_ni*cl_nj; ++i)
+      {
+          vis_buff[i]=1.0f;
+          pre_buff[i]=0.0f;
+      }
 #endif
+      vis_image->write_to_buffer(queue);
+      pre_image->write_to_buffer(queue);
+      clFinish(queue);
 
+      continue;
+    }
+    
     for (id = vis_order.begin(); id != vis_order.end(); ++id)
     {
 
@@ -674,48 +681,41 @@ bool boxm2_ocl_update_alpha_naa_process(bprb_func_process& pro)
         //clear render kernel args so it can reset em on next execution
         kern->clear_args();
 
-        vcl_cout << "reading alpha" << vcl_endl;
         alpha->read_to_buffer(queue);
 
         clFinish(queue);
-
-        vcl_cout << "reading alpha, clFinish returned" << vcl_endl;
       }
-      //if (i != UPDATE_CELL ){
-        vcl_cout << "reading images to buffer, i = " << i << vcl_endl;
-        //vcl_cout << "bytes in cache = " << opencl_cache->bytes_in_cache() << vcl_endl;
-        //read image out to buffer (from gpu)
-
-        in_image->read_to_buffer(queue);
-        vis_image->read_to_buffer(queue);
-        pre_image->read_to_buffer(queue);
-        cl_output->read_to_buffer(queue);
-        clFinish(queue);
-
-        ///debugging save vis, pre, norm images
-        int idx = 0;
-        vil_image_view<float> vis_view(cl_ni,cl_nj);
-        vil_image_view<float> norm_view(cl_ni,cl_nj);
-        vil_image_view<float> pre_view(cl_ni,cl_nj);
-        for (unsigned c=0;c<cl_nj;++c) {
-          for (unsigned r=0;r<cl_ni;++r) {
-            vis_view(r,c) = vis_buff[idx];
-            norm_view(r,c) = norm_buff[idx];
-            pre_view(r,c) = pre_buff[idx];
-            idx++;
-          }
+      //vcl_cout << "bytes in cache = " << opencl_cache->bytes_in_cache() << vcl_endl;
+      //read image out to buffer (from gpu)
+ 
+      in_image->read_to_buffer(queue);
+      vis_image->read_to_buffer(queue);
+      pre_image->read_to_buffer(queue);
+      cl_output->read_to_buffer(queue);
+      clFinish(queue);
+//#define DEBUG
+#ifdef DEBUG
+      ///debugging save vis, pre, norm images
+      int idx = 0;
+      vil_image_view<float> vis_view(cl_ni,cl_nj);
+      vil_image_view<float> norm_view(cl_ni,cl_nj);
+      vil_image_view<float> pre_view(cl_ni,cl_nj);
+      for (unsigned c=0;c<cl_nj;++c) {
+        for (unsigned r=0;r<cl_ni;++r) {
+          vis_view(r,c) = vis_buff[idx];
+          norm_view(r,c) = norm_buff[idx];
+          pre_view(r,c) = pre_buff[idx];
+          idx++;
         }
-        vil_save( vis_view, "vis_debug.tiff");
-        vil_save( norm_view, "norm_debug.tiff");
-        vil_save( pre_view, "pre_debug.tiff");
-        vcl_cout << "done writing debug images" << vcl_endl;
-
-     // }
+      }
+      vil_save( vis_view, "vis_debug.tiff");
+      vil_save( norm_view, "norm_debug.tiff");
+      vil_save( pre_view, "pre_debug.tiff");
+#endif
     }
+    vcl_cout << "kernel " << i << " complete" << vcl_endl;
   }
 
-
-  vcl_cout << "deleting buffers " << vcl_endl;
   opencl_cache->unref_mem(ray_o_buff.ptr());
   opencl_cache->unref_mem(ray_d_buff.ptr());
   opencl_cache->unref_mem(in_image.ptr());

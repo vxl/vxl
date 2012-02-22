@@ -282,8 +282,8 @@ float render_expected_shadow_map(boxm2_scene_sptr & scene,
     //set generic cam and get visible block order
     cl_float* ray_origins    = new cl_float[4*cl_ni*cl_nj];
     cl_float* ray_directions = new cl_float[4*cl_ni*cl_nj];
-    bocl_mem_sptr ray_o_buff = new bocl_mem(device->context(), ray_origins   ,  cl_ni*cl_nj * sizeof(cl_float4), "ray_origins buffer");
-    bocl_mem_sptr ray_d_buff = new bocl_mem(device->context(), ray_directions,  cl_ni*cl_nj * sizeof(cl_float4), "ray_directions buffer");
+    bocl_mem_sptr ray_o_buff = opencl_cache->alloc_mem(cl_ni*cl_nj*sizeof(cl_float4), ray_origins,"ray_origins buffer");
+    bocl_mem_sptr ray_d_buff = opencl_cache->alloc_mem(cl_ni*cl_nj*sizeof(cl_float4), ray_directions,"ray_directions buffer");
     boxm2_ocl_camera_converter::compute_ray_image( device, queue, cam, cl_ni, cl_nj, ray_o_buff, ray_d_buff);
 
     // Output Array
@@ -347,6 +347,9 @@ float render_expected_shadow_map(boxm2_scene_sptr & scene,
         //clear render kernel args so it can reset em on next execution
         kern->clear_args();
     }
+
+    opencl_cache->unref_mem(ray_d_buff.ptr());
+    opencl_cache->unref_mem(ray_o_buff.ptr());
 
     //clean up cam
     delete[] ray_origins;

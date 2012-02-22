@@ -327,9 +327,11 @@ void step_cell_preinf_naa(AuxArgs aux_args, int data_ptr, uchar llid, float d)
         // compute mean and sigma of radiance value as linear function of albedo and albedo^2, respectively
         float16 radiance_predictions = *aux_args.radiance_reflectance_factors * (*albedos) + *aux_args.radiance_offsets;
         float16 radiance_variances = *aux_args.radiance_var_reflectance_sqrd_factors * (*albedos)*(*albedos) + *aux_args.radiance_var_offsets;
+        int16 invalid = islessequal(radiance_variances,(float16)0);
         float16 radiance_sigmas = sqrt(radiance_variances);
         float16 prediction_densities = gauss_prob_density_f16(&radiance_predictions, mean_obs, &radiance_sigmas);
-
+        // set prob. density to 0 for invalid normal directions
+        prediction_densities = select(prediction_densities,(float16)0,invalid);
         // take weighted average based on surface normal probabilities
         PI = dot(prediction_densities, *normal_weights);
     }
@@ -374,9 +376,11 @@ void step_cell_bayes_naa(AuxArgs aux_args, int data_ptr, uchar llid, float d)
         // compute mean and sigma of radiance value as linear function of albedo and albedo^2, respectively
         float16 radiance_predictions = *aux_args.radiance_reflectance_factors * (*albedos) + *aux_args.radiance_offsets;
         float16 radiance_variances = *aux_args.radiance_var_reflectance_sqrd_factors * (*albedos)*(*albedos) + *aux_args.radiance_var_offsets;
+        int16 invalid = islessequal(radiance_variances,(float16)0);
         float16 radiance_sigmas = sqrt(radiance_variances);
         float16 prediction_densities = gauss_prob_density_f16(&radiance_predictions, mean_obs, &radiance_sigmas);
-
+        // set prob. density to 0 for invalid normal directions
+        prediction_densities = select(prediction_densities,(float16)0,invalid);
         // take weighted average based on surface normal probabilities
         PI = dot(prediction_densities, *normal_weights);
     }
