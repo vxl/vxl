@@ -192,6 +192,7 @@ bool boxm2_compute_normal_albedo_functor::process_cell(unsigned int index, bool 
          double prediction_var = radiance_var_scales_[m][n]*albedo*albedo + radiance_var_offsets_[m][n];
          if (prediction_var < 1e-6) {
             prediction_var = 1e-6;
+            vcl_cerr << "ERROR: boxm2_compute_normal_albedo_functor: prediction variance = " << prediction_var << vcl_endl;
          }
          double weight = vis_vals[m];
          double radiance = radiances[m];
@@ -211,12 +212,12 @@ bool boxm2_compute_normal_albedo_functor::process_cell(unsigned int index, bool 
          else {
             // assume radiance is Gaussian distributed around airlight
             const double diff = radiance - airlight_mean;
-            const double sigma_sqrd = boxm2_normal_albedo_array_constants::sigma_airlight*boxm2_normal_albedo_array_constants::sigma_airlight;
-            marginal_density = vnl_math::one_over_sqrt2pi / boxm2_normal_albedo_array_constants::sigma_airlight * vcl_exp(-diff*diff/(2*sigma_sqrd));
+            const double sigma = boxm2_normal_albedo_array_constants::sigma_airlight;
+            marginal_density = vnl_math::one_over_sqrt2pi / sigma * vcl_exp(-diff*diff/(2*sigma*sigma));
          }
          double prob = weight * intensity_prob + (1.0 - weight)*marginal_density;
-         if (!(prob > 1e-8)) {
-            prob = 1e-8;
+         if (!(prob > 1e-4)) {
+            prob = 1e-4;
          }
          log_pred_prob += vcl_log(prob);
          if (!(log_pred_prob <= 0)){
@@ -227,7 +228,7 @@ bool boxm2_compute_normal_albedo_functor::process_cell(unsigned int index, bool 
       obs_probs[n] = pred_prob;
       prob_sum += pred_prob;
    }
-   if (prob_sum <= 1e-8) {
+   if (prob_sum <= 1e-40) {
       for (unsigned int n=0; n<num_normals_; ++n) {
          naa_model.set_probability(n,1.0/num_normals_);
       }

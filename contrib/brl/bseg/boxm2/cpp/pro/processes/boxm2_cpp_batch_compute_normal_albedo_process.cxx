@@ -24,7 +24,7 @@
 #include <boxm2/boxm2_util.h>
 
 //#include <boxm2/cpp/algo/boxm2_synoptic_function_functors.h>
-#include <boxm2/cpp/algo/boxm2_compute_normal_albedo_functor.h>
+#include <boxm2/cpp/algo/boxm2_compute_normal_albedo_functor_opt.h>
 #include <boxm2/cpp/algo/boxm2_data_serial_iterator.h>
 
 //: run batch update
@@ -144,16 +144,15 @@ bool boxm2_cpp_batch_compute_normal_albedo_process(bprb_func_process& pro)
     boxm2_data_base *  na_model_data  = cache->get_data_base(*id,boxm2_data_traits<BOXM2_NORMAL_ALBEDO_ARRAY>::prefix(), na_data_size, false);
 
     bool update_alpha = false;
-    boxm2_compute_normal_albedo_functor data_functor(update_alpha);
+    boxm2_compute_normal_albedo_functor_opt data_functor(update_alpha);
     data_functor.init_data(metadata, atm_params, str_cache, alpha, na_model_data);
 
     int na_model_TypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_NORMAL_ALBEDO_ARRAY>::prefix());
     int data_buff_length = (int) (na_model_data->buffer_length()/na_model_TypeSize);
 
-    boxm2_data_leaves_serial_iterator<boxm2_compute_normal_albedo_functor>(blk, data_buff_length,data_functor);
+    boxm2_data_leaves_serial_iterator<boxm2_compute_normal_albedo_functor_opt>(blk, data_buff_length,data_functor);
     cache->remove_data_base( *id, boxm2_data_traits<BOXM2_NORMAL_ALBEDO_ARRAY>::prefix() );
     cache->remove_data_base( *id, boxm2_data_traits<BOXM2_ALPHA>::prefix() );
-
 
   }
   return true;
