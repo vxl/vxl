@@ -42,5 +42,6 @@ DECLARE_FUNC_CONS(bil_create_raw_image_istream_process);
 DECLARE_FUNC_CONS(bil_read_frame_process);
 DECLARE_FUNC_CONS(bil_seek_frame_process);
 DECLARE_FUNC_CONS(vil_pixel_value_process);
+DECLARE_FUNC_CONS(vil_scale_and_offset_values_process);
 
 #endif
