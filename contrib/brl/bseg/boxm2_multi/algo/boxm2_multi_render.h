@@ -28,10 +28,10 @@ class boxm2_multi_render
   private:
 
     //: map keeps track of all kernels compiled and cached
-    vcl_map<vcl_string,vcl_vector<bocl_kernel*> > kernels;
+    vcl_map<vcl_string,vcl_vector<bocl_kernel*> > kernels_;
 
-    //: compile kernels and cache
-    void compile_kernel(bocl_device_sptr device,vcl_vector<bocl_kernel*> & vec_kernels, vcl_string opts);
+    //compile kernels and cache
+    vcl_vector<bocl_kernel*>& get_kernels(bocl_device_sptr device, vcl_string opts);
 
     //: pick out data type
     bool get_scene_appearances(boxm2_scene_sptr    scene,

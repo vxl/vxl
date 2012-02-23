@@ -31,7 +31,11 @@
 #include <bprb/bprb_func_process.h>
 
 
-void test_render_expected_images(boxm2_scene_sptr scene, bocl_device_sptr device, boxm2_opencl_cache* cache)
+void test_render_expected_images(boxm2_scene_sptr scene, 
+                                 bocl_device_sptr device, 
+                                 boxm2_opencl_cache* cache, 
+                                 vcl_vector<vpgl_camera_double_sptr>& cams,
+                                 unsigned ni, unsigned nj)
 {
   //register data types and process functions
   DECLARE_FUNC_CONS(boxm2_ocl_render_expected_color_process);
@@ -46,23 +50,14 @@ void test_render_expected_images(boxm2_scene_sptr scene, bocl_device_sptr device
   //////////////////////////////////////////////////////////////////////////////
   // Has to be done on each render
   //setup image size
-  int ni=1280, nj=720;
   int num_renders = 10; 
-  for(int i=0; i<num_renders; ++i) {
-    
-    //create initial cam (or pass in your own
-    double currInc    = 45.0;
-    double currRadius = scene->bounding_box().height(); 
-    double currAz     = i*30.0f; 
-    vpgl_perspective_camera<double>* pcam;
-    pcam = boxm2_util::construct_camera(currInc, currAz, currRadius, ni, nj, scene->bounding_box(), false);
-    vpgl_camera_double_sptr cam = new vpgl_perspective_camera<double>(*pcam);
+  for(int i=0; i<cams.size(); ++i) {
     
     //set up brdb_value_sptr arguments... (for generic passing)
     brdb_value_sptr brdb_device = new brdb_value_t<bocl_device_sptr>(device);
     brdb_value_sptr brdb_scene = new brdb_value_t<boxm2_scene_sptr>(scene);
     brdb_value_sptr brdb_opencl_cache = new brdb_value_t<boxm2_opencl_cache_sptr>(cache);
-    brdb_value_sptr brdb_cam = new brdb_value_t<vpgl_camera_double_sptr>(cam);
+    brdb_value_sptr brdb_cam = new brdb_value_t<vpgl_camera_double_sptr>(cams[i]);
     brdb_value_sptr brdb_ni = new brdb_value_t<unsigned>(ni);
     brdb_value_sptr brdb_nj = new brdb_value_t<unsigned>(nj);
 
@@ -127,35 +122,35 @@ int main(int argc,  char** argv)
   boxm2_multi_cache mcache(scene, mgr->gpus_); 
   vcl_cout<<"Multi Cache: \n"<<mcache.to_string()<<vcl_endl;
 
-  //make render object
-  float mean_time=0.0f; 
+  //generate cameras
   int num_renders = 10;  
-  boxm2_multi_render renderer; 
+  vcl_vector<vpgl_camera_double_sptr> cams; 
   for(int i=0; i<num_renders; ++i) {
-    
-    //create initial cam (or pass in your own
     double currInc    = 45.0;
     double currRadius = 2*scene->bounding_box().height(); 
     double currAz     = i*30.0f; 
     vpgl_perspective_camera<double>* pcam;
     pcam = boxm2_util::construct_camera(currInc, currAz, currRadius, ni(), nj(), scene->bounding_box(), false);
     vpgl_camera_double_sptr cam = new vpgl_perspective_camera<double>(*pcam);
-    
-    //outimg
+    cams.push_back(cam);
+  }
+
+  //render each cam
+  float mean_time=0.0f; 
+  boxm2_multi_render renderer; 
+  for(int i=0; i<cams.size(); ++i) {
     vil_image_view<float> out(ni(),nj()); 
-    float rtime = renderer.render(mcache, out, cam); 
+    float rtime = renderer.render(mcache, out, cams[i]); 
     vcl_cout<<"Render "<<i<<" time: "<<rtime<<vcl_endl;
     vcl_stringstream s; s<<"out_"<<i<<".tiff"; 
     vil_save(out, s.str().c_str()); 
-    
     mean_time += rtime; 
   }
   vcl_cout<<"Mean render time: "<<mean_time/num_renders<<vcl_endl;
-  
-  
+
   //test scene render on one gpu
-  //boxm2_opencl_cache* opencl_cache = new boxm2_opencl_cache(scene, mgr->gpus_[0]);
-  //test_render_expected_images(scene, mgr->gpus_[0], opencl_cache);
+  boxm2_opencl_cache* opencl_cache = new boxm2_opencl_cache(scene, mgr->gpus_[0]);
+  test_render_expected_images(scene, mgr->gpus_[0], opencl_cache, cams, ni(), nj());
 
   return 0;
 }
