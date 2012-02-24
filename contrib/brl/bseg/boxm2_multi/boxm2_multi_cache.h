@@ -23,8 +23,8 @@
 #include <vgl/vgl_intersection.h>
 #include <vgl/vgl_distance.h>
 
-//: boxm2_multi_cache_group - a helper class that groups together
-// contiguous blocks across devices.  Essentially this enforces that 
+//: a helper class that groups together contiguous blocks across devices.
+// Essentially this enforces that
 // a group contains just one block per device, in a contiguous manner (an odd number
 // of devices might cause a problem).  For instance if there are two devices, blocks
 // will be divided between devices a and b:
@@ -34,15 +34,15 @@
 // | [a  |  b] | [a  |  b] |
 // |_____|_____|_____|_____|
 //
-// Each group is represented by the brackets - these groupings ensure that contiguous 
-// chunks of the scene will be ray traced simultaneously 
+// Each group is represented by the brackets - these groupings ensure that contiguous
+// chunks of the scene will be ray traced simultaneously
 class boxm2_multi_cache_group
 {
-  public: 
+  public:
     boxm2_multi_cache_group() {}
     boxm2_multi_cache_group(vcl_vector<boxm2_block_id> ids):ids_(ids) {}
     void add_block(boxm2_block_id id) { ids_.push_back(id); }
-    void add_block(boxm2_block_metadata data) { 
+    void add_block(boxm2_block_metadata data) {
       ids_.push_back(data.id_);
       bboxes_.push_back(data.bbox());
       bbox_.add(data.bbox());
@@ -63,33 +63,34 @@ class boxm2_multi_cache_group
        vcl_cout<<"get group order doesn't support camera type "<<cam->type_name()<<vcl_endl;
       }
       vcl_vector<boxm2_dist_id_pair> distances;
-      for (int i=0; i<ids_.size(); ++i) 
+      for (int i=0; i<ids_.size(); ++i)
         distances.push_back(boxm2_dist_id_pair(vgl_distance(pt, bboxes_[i].centroid()),ids_[i]));
       vcl_sort(distances.begin(), distances.end());
 
       //write and return order
-      vcl_vector<boxm2_block_id> vis_order; 
+      vcl_vector<boxm2_block_id> vis_order;
       for (int i=0; i<distances.size(); ++i)
         vis_order.push_back(distances[i].id_);
       return vis_order;
     }
 
     //ids
-    vcl_vector<boxm2_block_id> ids_; 
+    vcl_vector<boxm2_block_id> ids_;
 
     //bboxes for each block
     vcl_vector<vgl_box_3d<double> > bboxes_;
 
     //group Bbox
-    vgl_box_3d<double> bbox_; 
+    vgl_box_3d<double> bbox_;
 };
+
 vcl_ostream& operator<<(vcl_ostream &s, boxm2_multi_cache_group& grp);
 
 //: utility class for sorting groups by distance
 class boxm2_dist_group_pair
 {
   public:
-    boxm2_dist_group_pair(double dist, boxm2_multi_cache_group grp) 
+    boxm2_dist_group_pair(double dist, boxm2_multi_cache_group grp)
       : dist_(dist), grp_(grp) {}
     double dist_;
     boxm2_multi_cache_group grp_;
@@ -99,7 +100,7 @@ class boxm2_dist_group_pair
 };
 
 
-//: boxm2_multi_cache - example realization of abstract cache class
+//: example realization of abstract cache class
 class boxm2_multi_cache: public vbl_ref_count
 {
   public:
@@ -115,13 +116,13 @@ class boxm2_multi_cache: public vbl_ref_count
     boxm2_scene_sptr                 get_scene()  { return scene_; }
     vcl_string to_string();
 
-    //clear all OCL caches 
+    //clear all OCL caches
     void clear();
 
     //get group order
     vcl_vector<boxm2_multi_cache_group> get_vis_groups(vpgl_camera_double_sptr cam);
     vcl_vector<boxm2_multi_cache_group> group_order_from_pt(vgl_point_3d<double> const& pt,
-                                                            vgl_box_2d<double> const& camBox); 
+                                                            vgl_box_2d<double> const& camBox);
 
     //: return a vector of sub scene pointers in visibility order from this camera
     vcl_vector<boxm2_opencl_cache*> get_vis_order_from_pt(vgl_point_3d<double> const& pt);
@@ -141,7 +142,6 @@ class boxm2_multi_cache: public vbl_ref_count
     //: list of block groups
     vcl_vector<boxm2_multi_cache_group> groups_;
 };
-
 
 
 //: utility class for sorting id's by their distance
