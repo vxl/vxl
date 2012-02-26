@@ -30,5 +30,28 @@ static void test_filter_bank()
   unsigned band = bnk.invalid_border();
   vcl_cout << " Interval:" << band << '\n';
   TEST("invalid_border", band, 259);
+  //======= temporary processing :: REMOVE =======//
+  vcl_string rgb_path = "e:/images/TextureTraining/eo_ir_images/eo_app/exp_000.png";
+  vcl_string ir_path = "e:/images/TextureTraining/eo_ir_images/ir_app/exp_000.png";
+  vcl_string out_path = "e:/images/TextureTraining/eo_ir_images/sdvi_byte.tiff";
+  vil_image_view<unsigned char> rgb = vil_load(rgb_path.c_str());
+  vil_image_view<unsigned char> ir_img = vil_load(ir_path.c_str());
+   ni = rgb.ni(); nj = rgb.nj();
+  vil_image_view<unsigned char> out(ni, nj, 3);
+  for(unsigned j = 0; j<nj; ++j)
+    for(unsigned i = 0; i<ni; ++i){
+      float r = static_cast<float>(rgb(i,j,0));
+      float g = static_cast<float>(rgb(i,j,1));
+      float b = static_cast<float>(rgb(i,j,2));
+      float ir = static_cast<float>(ir_img(i,j,0));
+      float NDVI = (ir-r)/(ir+r);
+      float theta = static_cast<float>(vnl_math::pi/2.0) + vcl_atan(NDVI);
+      float clr = 81.169f*theta;
+      clr = clr>255.0f ? 255.0f : clr;
+      out(i,j,0) =  static_cast<unsigned char>(clr);
+      out(i,j,1) =  static_cast<unsigned char>(g);
+      out(i,j,2) =  static_cast<unsigned char>(b); 
+    }
+  vil_save(out, out_path.c_str());
 }
 TESTMAIN(test_filter_bank);
