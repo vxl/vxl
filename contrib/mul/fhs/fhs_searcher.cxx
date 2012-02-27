@@ -16,6 +16,7 @@
 
 //: Default constructor
 fhs_searcher::fhs_searcher()
+  : geom_wt_(1.0)
 {
 }
 
@@ -36,6 +37,13 @@ void fhs_searcher::set_tree(const vcl_vector<fhs_arc>& arcs,
   for (unsigned i=0;i<arc_.size();++i)
     arc_to_j_[arc_[i].j()]=i;
 }
+
+//: Set scaling applied to shape cost (default 1.0)
+void fhs_searcher::set_geom_wt(double geom_wt)
+{
+  geom_wt_=geom_wt;
+}
+  
 
 //: Index of root node (set by last call to set_tree()
 unsigned fhs_searcher::root_node() const
@@ -172,8 +180,8 @@ void fhs_searcher::search(const vcl_vector<vimt_image_2d_of<float> >& feature_re
 
 
     vil_quad_distance_function(sum_im_[node_a].image(),
-                               1.0/(sx*sx*arc_[a].var_x()),
-                               1.0/(sy*sy*arc_[a].var_y()),
+                               geom_wt_/(sx*sx*arc_[a].var_x()),
+                               geom_wt_/(sy*sy*arc_[a].var_y()),
                                dist_im_[node_a].image(),
                                pos_im_[node_a].image());
     dist_im_[node_a].set_world2im(sum_im_[node_a].world2im());

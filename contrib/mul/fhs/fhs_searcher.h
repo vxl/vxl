@@ -31,6 +31,9 @@ class fhs_searcher
   //: Arcs defining neighbour relationships between features
   //  Ordered so that parents precede children
   vcl_vector<fhs_arc> arc_;
+  
+  //: Scaling applied to shape cost (default 1.0)
+  double geom_wt_;
 
   //: arc_to_j_[j] gives index of arc ending at given j
   vcl_vector<unsigned> arc_to_j_;
@@ -60,6 +63,10 @@ class fhs_searcher
   //  Input arcs define neighbour relationships in any order.
   //  root_node defines which feature to be used as the root
   void set_tree(const vcl_vector<fhs_arc>& arcs, unsigned root_node);
+  
+    //: Set scaling applied to shape cost (default 1.0)
+  void set_geom_wt(double geom_wt);
+
 
   //: Index of root node (set by last call to set_tree()
   unsigned root_node() const;
@@ -75,6 +82,7 @@ class fhs_searcher
   //
   //  After calling search(), results can be obtained using
   //  points() and best_points() etc
+  //  \param geom_wt is the weighting applied to the geometric component of the cost.
   void search(const vcl_vector<vimt_image_2d_of<float> >& feature_response);
 
   //: Compute optimal position of all points given position of root
