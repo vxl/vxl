@@ -13,6 +13,7 @@ bool sdet_texture_classifier_process_cons(bprb_func_process& pro)
 {
   // process takes 3 inputs:
   vcl_vector<vcl_string> input_types;
+  input_types.push_back("sdet_texture_classifier_sptr"); //classifier
   input_types.push_back("vcl_string"); //texton dictionary
   input_types.push_back("vil_image_view_base_sptr"); //input image path
   input_types.push_back("unsigned");   //texture block size
@@ -35,9 +36,13 @@ bool sdet_texture_classifier_process(bprb_func_process& pro)
     return false;
   }
   // get inputs
-  vcl_string texton_dict_path = pro.get_input<vcl_string>(0);
+  sdet_texture_classifier_sptr tc_ptr = 
+    pro.get_input<sdet_texture_classifier_sptr>(0);
+  sdet_texture_classifier_params* tcp = static_cast<sdet_texture_classifier_params*>(tc_ptr.ptr());
+  sdet_atmospheric_image_classifier tc(*tcp);
+  vcl_string texton_dict_path = pro.get_input<vcl_string>(1);
   vil_image_view_base_sptr view_ptr = 
-    pro.get_input<vil_image_view_base_sptr>(1);
+    pro.get_input<vil_image_view_base_sptr>(2);
   if(!view_ptr)
     {
       vcl_cout << "null image in sdet_texture_classifier_process\n";
@@ -46,12 +51,7 @@ bool sdet_texture_classifier_process(bprb_func_process& pro)
   //assumes a float image on the range [0, 1];
   vil_image_view<float> fview(view_ptr);
 
-  unsigned block_size = pro.get_input<unsigned>(2);
-  sdet_texture_classifier_params tcp;
-  tcp.signed_response_ = true;
-  tcp.mag_ = false;
-  tcp.block_size_ = block_size;
-  sdet_atmospheric_image_classifier tc(tcp);
+  unsigned block_size = pro.get_input<unsigned>(3);
   tc.load_dictionary(texton_dict_path);
   vcl_vector<vcl_string> cats;
   // hard code the names of the atomospheric categories - needs more
