@@ -80,3 +80,6 @@ ENDIF( BUILD_GEL )
 # Brown hadoop library
 SUBDIRS(bhdfs)
 
+# Brown subjective logic library
+SUBDIRS(bsl)
+
