@@ -131,16 +131,16 @@ float boxm2_multi_render::render(boxm2_multi_cache&      cache,
   //go through each scene's blocks in vis order
   float* expImg = new float[ni*nj];
   float* visImg = new float[ni*nj];
-  //for (int blk=0; blk<maxBlocks; ++blk)
-  //for (int i=0; i<ocl_caches.size(); ++i)
   for (int grpId=0; grpId<grp.size(); ++grpId) {
     boxm2_multi_cache_group& group = grp[grpId];
-    vcl_vector<boxm2_block_id> ids = group.order_from_cam(cam);
-    for (int i=0; i<group.ids_.size(); ++i){
+    vcl_vector<boxm2_block_id>& ids = group.ids_;
+    vcl_vector<int> indices = group.order_from_cam(cam);
+    for (int idx=0; idx<indices.size(); ++idx){
+      int i = indices[idx];
       boxm2_opencl_cache* ocl_cache = ocl_caches[i];
       boxm2_scene_sptr    sub_scene = ocl_cache->get_scene();
       bocl_device_sptr    device    = ocl_cache->get_device();
-      boxm2_block_id id = group.ids_[i];
+      boxm2_block_id id = ids[i];
 
       //keep track of mems allocated, so you can unref them later
       vcl_vector<bocl_kernel*>& kerns = get_kernels(device, options);
@@ -155,7 +155,8 @@ float boxm2_multi_render::render(boxm2_multi_cache&      cache,
     }
 
     //finish queues before moving on
-    for (int i=0; i<ocl_caches.size(); ++i) {
+    for (int idx=0; idx<indices.size(); ++idx){
+      int i = indices[idx];
       clFinish(queues[i]);
 
       //set the vis and exp images
@@ -169,16 +170,6 @@ float boxm2_multi_render::render(boxm2_multi_cache&      cache,
         (*visbuff) *= v[c];
       }
     }
-#if 0 // commented out
-    //clear images
-    vcl_map<boxm2_opencl_cache*, vcl_vector<bocl_mem_sptr> >::iterator mems;
-    for (mems=memLists.begin(); mems!=memLists.end(); ++mems) {
-      boxm2_opencl_cache* cache = mems->first;
-      vcl_vector<bocl_mem_sptr>& memList = mems->second;
-      for (int i=0; i<memList.size(); ++i)
-        cache->unref_mem(memList[i].ptr());
-    }
-#endif
   }
 
   //clean up all ocl buffers
@@ -218,38 +209,6 @@ float boxm2_multi_render::render(boxm2_multi_cache&      cache,
   //combine images
   //--------------------------------
   float pre_time = (float) rtime.all(); rtime.mark();
-#if 0 // commented out
-  vcl_vector<boxm2_block_id> allVisBlocks = cache.get_scene()->get_vis_blocks(cam);
-  for (int idx=0; idx<allVisBlocks.size(); ++idx) {
-    boxm2_block_id& id = allVisBlocks[idx];
-    vcl_map<boxm2_block_id, float*>::iterator eIter = expImgs.find(id);
-    if (eIter == expImgs.end()) {
-      vcl_cout<<"MULTI RENDER DID NOT render block id: "<<id<<vcl_endl;
-      continue;
-    }
-    vcl_map<boxm2_block_id, float*>::iterator vIter = visImgs.find(id);
-    if (vIter == visImgs.end()) {
-      vcl_cout<<"MULTI RENDER DID NOT vis render block id: "<<id<<vcl_endl;
-      continue;
-    }
-
-    //otherwise move onto combining image
-    float* v = vIter->second;
-    float* e = eIter->second;
-    float* imgBuff = img.top_left_ptr();
-    float* visBuff = vis_out.top_left_ptr();
-    int c=0;
-    for (int c=0; c<ni*nj; ++c, ++imgbuff, visbuff++) {
-      (*imgbuff) += e[c] * (*visbuff);
-      (*visbuff) *= v[c];
-    }
-
-    //delete image buffers
-    delete[] v;
-    delete[] e;
-  }
-#endif // 0
-  //combine time
   float combine_time = (float) rtime.all();
   vcl_cout<<"\nMulti Render Time: "<<combine_time + pre_time<<" ms"<<vcl_endl
           <<"  pre_time (gpu+overhead): "<<pre_time<<" ms"<<vcl_endl

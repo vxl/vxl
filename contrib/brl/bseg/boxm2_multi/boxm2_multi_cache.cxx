@@ -179,11 +179,12 @@ boxm2_multi_cache::get_vis_sub_scenes(vpgl_camera_double_sptr cam)
   return empty;
 }
 
-vcl_vector<boxm2_opencl_cache*> boxm2_multi_cache::get_vis_order_from_pt(vgl_point_3d<double> const& pt)
+vcl_vector<boxm2_opencl_cache*> 
+boxm2_multi_cache::get_vis_order_from_pt(vgl_point_3d<double> const& pt)
 {
   //Map of distance, id
-  vcl_vector<boxm2_opencl_cache*>   vis_order;
-  vcl_vector<boxm2_dist_cache_pair> distances;
+  typedef boxm2_dist_pair<boxm2_opencl_cache*> Pair;
+  vcl_vector<Pair> distances;
 
   //iterate through each block
   for (int idx=0; idx<ocl_caches_.size(); ++idx) {
@@ -192,17 +193,17 @@ vcl_vector<boxm2_opencl_cache*> boxm2_multi_cache::get_vis_order_from_pt(vgl_poi
     vgl_box_3d<double>      bbox    = sscene->bounding_box();
     vgl_point_3d<double>    center  = bbox.centroid();
     double                  dist    = vgl_distance( center, pt );
-    distances.push_back( boxm2_dist_cache_pair(dist, cache) );
+    distances.push_back(Pair(dist,cache));
   }
 
   //sort distances
   vcl_sort(distances.begin(), distances.end());
 
   //put blocks in "vis_order"
-  vcl_vector<boxm2_dist_cache_pair>::iterator di;
-  for (di = distances.begin(); di != distances.end(); ++di) {
-    vis_order.push_back(di->cache_);
-  }
+  vcl_vector<boxm2_opencl_cache*>   vis_order;
+  vcl_vector<Pair>::iterator di;
+  for (di = distances.begin(); di != distances.end(); ++di) 
+    vis_order.push_back(di->dat_);
   return vis_order;
 }
 
@@ -241,12 +242,12 @@ boxm2_multi_cache::group_order_from_pt(vgl_point_3d<double> const& pt,
                                        vgl_box_2d<double> const& camBox)
 {
   //Map of distance, id
-  vcl_vector<boxm2_dist_group_pair> distances;
+  typedef boxm2_dist_pair<boxm2_multi_cache_group> Pair; 
+  vcl_vector<Pair> distances;
 
   //iterate through each block
   for (int i=0; i<groups_.size(); ++i) {
     boxm2_multi_cache_group& grp = groups_[i];
-
     //check if cam bbox intersects
     vgl_box_2d<double> grp2d(grp.bbox_.min_x(), grp.bbox_.max_x(),
                              grp.bbox_.min_y(), grp.bbox_.max_y());
@@ -254,7 +255,7 @@ boxm2_multi_cache::group_order_from_pt(vgl_point_3d<double> const& pt,
     if(!intersect.is_empty() || camBox.is_empty()) {
       vgl_point_3d<double> center  = grp.bbox_.centroid();
       double dist = vgl_distance( center, pt );
-      distances.push_back( boxm2_dist_group_pair(dist, grp) );
+      distances.push_back( Pair(dist, grp) );
     }
   }
 
@@ -263,9 +264,9 @@ boxm2_multi_cache::group_order_from_pt(vgl_point_3d<double> const& pt,
 
   //put blocks in "vis_order"
   vcl_vector<boxm2_multi_cache_group>   vis_order;
-  vcl_vector<boxm2_dist_group_pair>::iterator di;
+  vcl_vector<Pair>::iterator di;
   for (di = distances.begin(); di != distances.end(); ++di)
-    vis_order.push_back(di->grp_);
+    vis_order.push_back(di->dat_);
   return vis_order;
 }
 

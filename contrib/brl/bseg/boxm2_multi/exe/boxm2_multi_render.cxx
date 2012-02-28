@@ -92,7 +92,8 @@ void test_render_expected_images(boxm2_scene_sptr scene,
                << " didn't get value\n";
     }
     vil_image_view_base_sptr out_img_sptr =value->val<vil_image_view_base_sptr>();
-    vil_save(*out_img_sptr.ptr(), "test_output.png");
+    vcl_stringstream s; s<<"out_single"<<i<<".png"; 
+    vil_save(*out_img_sptr.ptr(),s.str().c_str());
       
   }
   //vcl_cout<<"Mean render time: "<<mean_time/num_renders<<vcl_endl;
