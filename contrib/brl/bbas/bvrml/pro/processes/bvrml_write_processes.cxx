@@ -2,12 +2,8 @@
 #include <bprb/bprb_func_process.h>
 //:
 // \file
-//   Precompute normalization values for possible sample set sizes,
-//   made into a separate process for fast access and also to avoid optimization routines on GPU
-//   if later processes are run on GPU
 //
 #include <bprb/bprb_parameters.h>
-#include <bsta/algo/bsta_sigma_normalizer.h>
 
 #include <vcl_string.h>
 #ifdef DEBUG
@@ -78,9 +74,9 @@ bool bvrml_write_box_process(bprb_func_process& pro)
   double ymax = pro.get_input<double>(5);
   double zmax = pro.get_input<double>(6);
   bool wire = pro.get_input<bool>(7);
-  float r = pro.get_input<double>(8);
-  float g = pro.get_input<double>(9);
-  float b = pro.get_input<double>(10);
+  float r = pro.get_input<float>(8);
+  float g = pro.get_input<float>(9);
+  float b = pro.get_input<float>(10);
   float transparency = pro.get_input<float>(11);
 
   vcl_ofstream ofs(fname.c_str(), vcl_ios::app);
@@ -99,13 +95,14 @@ bool bvrml_write_box_process(bprb_func_process& pro)
 bool bvrml_write_perspective_cam_process_cons(bprb_func_process& pro)
 {
   //inputs
-  vcl_vector<vcl_string> input_types_(6);
+  vcl_vector<vcl_string> input_types_(7);
   input_types_[0] = "vcl_string";
   input_types_[1] = "vpgl_camera_double_sptr";
   input_types_[2] = "float";  // radius of the camera center sphere
-  input_types_[3] = "float";  // red in [0,1]
-  input_types_[4] = "float";  // green
-  input_types_[5] = "float";  // blue
+  input_types_[3] = "float";  // length of principle axis
+  input_types_[4] = "float";  // red in [0,1]
+  input_types_[5] = "float";  // green
+  input_types_[6] = "float";  // blue
 
   //output
   vcl_vector<vcl_string> output_types_(0);
@@ -127,9 +124,10 @@ bool bvrml_write_perspective_cam_process(bprb_func_process& pro)
   vcl_string fname = pro.get_input<vcl_string>(0);
   vpgl_camera_double_sptr camera = pro.get_input<vpgl_camera_double_sptr>(1);
   float rad = pro.get_input<float>(2);
-  float red = pro.get_input<float>(3);
-  float green = pro.get_input<float>(4);
-  float blue = pro.get_input<float>(5);
+  float axis_len = pro.get_input<float>(3);
+  float red = pro.get_input<float>(4);
+  float green = pro.get_input<float>(5);
+  float blue = pro.get_input<float>(6);
 
   vpgl_perspective_camera<double> *cam = dynamic_cast<vpgl_perspective_camera<double>*>(camera.as_pointer());
   if (!cam) {
@@ -141,10 +139,12 @@ bool bvrml_write_perspective_cam_process(bprb_func_process& pro)
 
   //: get cam center
   vgl_point_3d<double> cent = cam->get_camera_center();
+  vcl_cout << "cent: " << cent << vcl_endl;
   vgl_vector_3d<double> axis = cam->principal_axis();
+
   vgl_sphere_3d<float> sp((float)cent.x(), (float)cent.y(), (float)cent.z(), rad);
-  bvrml_write::write_vrml_sphere(ofs, sp, red, green, blue, 0.0f);
-  bvrml_write::write_vrml_line(ofs, cent, axis, rad*10, red, green, blue);
+  bvrml_write::write_vrml_sphere(ofs, sp, 1.0, 0.0, 0.0, 0.0f);
+  bvrml_write::write_vrml_line(ofs, cent, axis, axis_len, red, green, blue);
   ofs.close();
 
   return true;
