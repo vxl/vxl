@@ -57,6 +57,7 @@ SET(bsta_sources
   bsta_beta_f1.h
   bsta_kent.h      bsta_kent.txx
   bsta_spherical_histogram.h  bsta_spherical_histogram.txx 
+  bsta_random_wrapper.h  bsta_random_wrapper.cxx
 )
 
 AUX_SOURCE_DIRECTORY(Templates bsta_sources)
