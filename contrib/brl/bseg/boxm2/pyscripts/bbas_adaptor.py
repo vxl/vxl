@@ -103,6 +103,25 @@ def estimate_radiance_values(image, sun_el, sun_dist, sensor_el, solar_irrad=Non
   boxm2_batch.remove_data(id)
   return (airlight, ref_horizontal, ref_sun_facing)
 
+def prob_as_expected(image,atomicity):
+  boxm2_batch.init_process("bslExpectedImageProcess")
+  boxm2_batch.set_input_from_db(0,image)
+  boxm2_batch.set_input_float(1,atomicity)
+  boxm2_batch.run_process()
+  (id,type) = boxm2_batch.commit_output(0)
+  image_prob = dbvalue(id,type)
+  return image_prob
+  
+def fuse_beliefs(image1,image2,atomicity):
+  boxm2_batch.init_process("bslFusionProcess")
+  boxm2_batch.set_input_from_db(0,image1)
+  boxm2_batch.set_input_from_db(1,image2)
+  boxm2_batch.set_input_float(2,atomicity)
+  boxm2_batch.run_process()
+  (id,type) = boxm2_batch.commit_output(0)
+  fused_image = dbvalue(id,type)
+  return fused_image
+
 #Removes elements from brdb (list of elements, or just one)
 def remove_from_db(dbvals) :
   if not isinstance(dbvals, (list, tuple)) :
@@ -111,4 +130,50 @@ def remove_from_db(dbvals) :
     boxm2_batch.init_process("bbasRemoveFromDbProcess")
     boxm2_batch.set_input_unsigned(0, dbval.id);
     boxm2_batch.run_process();
+
+def vrml_initialize(vrml_filename):
+  boxm2_batch.init_process("bvrmlInitializeProcess");
+  boxm2_batch.set_input_string(0,vrml_filename);
+  boxm2_batch.run_process();
+
+def vrml_write_box(vrml_filename, bbox, is_wire, r, g, b):
+  boxm2_batch.init_process("bvrmlWriteBoxProcess");
+  boxm2_batch.set_input_string(0,vrml_filename);
+  boxm2_batch.set_input_double(1,bbox[0]);  # minx
+  boxm2_batch.set_input_double(2,bbox[1]);  # miny
+  boxm2_batch.set_input_double(3,bbox[2]);  # minz
+  boxm2_batch.set_input_double(4,bbox[3]);  # maxx
+  boxm2_batch.set_input_double(5,bbox[4]);  # maxy
+  boxm2_batch.set_input_double(6,bbox[5]);  # maxz
+  boxm2_batch.set_input_bool(7,is_wire);
+  boxm2_batch.set_input_float(8,r);
+  boxm2_batch.set_input_float(9,g);
+  boxm2_batch.set_input_float(10,b);
+  boxm2_batch.run_process();
+  
+def vrml_write_origin(vrml_filename, axis_len):
+  boxm2_batch.init_process("bvrmlWriteOriginAndAxesProcess");
+  boxm2_batch.set_input_string(0,vrml_filename);
+  boxm2_batch.set_input_float(1,axis_len);
+  boxm2_batch.run_process();
+
+def vrml_write_point(vrml_filename, coords, radius, r, g, b ):
+  boxm2_batch.init_process("bvrmlWritePointProcess");
+  boxm2_batch.set_input_string(0,vrml_filename);
+  boxm2_batch.set_input_float(1,coords[0]); # x
+  boxm2_batch.set_input_float(2,coords[1]); # y
+  boxm2_batch.set_input_float(3,coords[2]); # z
+  boxm2_batch.set_input_float(4, radius); # radius
+  boxm2_batch.set_input_float(5, r); # red
+  boxm2_batch.set_input_float(6, g); # green
+  boxm2_batch.set_input_float(7, b); # blue
+  boxm2_batch.run_process();
+  
+def initialize_rng(seed=0):
+  boxm2_batch.init_process("bstaInitializeRandomSeedProcess");
+  boxm2_batch.set_input_unsigned(0,seed);
+  boxm2_batch.run_process();
+  (id,type) = boxm2_batch.commit_output(0)
+  rng = dbvalue(id,type)
+  return rng
 
