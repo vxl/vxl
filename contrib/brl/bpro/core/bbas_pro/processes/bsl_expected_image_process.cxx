@@ -1,9 +1,9 @@
-//This is brl/bbas/bsl/pro/processes/bsl_expected_image_process.cxx
+//This is brl/bpro/core/bbas_pro/processes/bsl_expected_image_process.cxx
+#include <bprb/bprb_func_process.h>
 //:
 // \file
 //   input an opinion image = each pixel is a binomial opinion, b, d, u and generate prob image p = b + a.u
-//
-#include <bprb/bprb_func_process.h>
+
 #include <bprb/bprb_parameters.h>
 
 #include <vcl_string.h>
@@ -26,10 +26,9 @@ bool bsl_expected_image_process_cons(bprb_func_process& pro)
   //output
   vcl_vector<vcl_string> output_types_(1);
   output_types_[0] = "vil_image_view_base_sptr";
-  
-  bool good = pro.set_input_types(input_types_) &&
-              pro.set_output_types(output_types_);
-  return good;
+
+  return pro.set_input_types(input_types_) &&
+         pro.set_output_types(output_types_);
 }
 
 bool bsl_expected_image_process(bprb_func_process& pro)
@@ -55,7 +54,8 @@ bool bsl_expected_image_process(bprb_func_process& pro)
         bsl_opinion op(inp_img(i,j,1), inp_img(i,j,0), atomicity);
         (*out_img)(i,j) = op.expectation();
       }
-  } else if (inp_img.nplanes() == 3) {  // b, d, and u planes, plane 0: disbelief, plane 1: belief, plane 2: uncertainty
+  }
+  else if (inp_img.nplanes() == 3) {  // b, d, and u planes, plane 0: disbelief, plane 1: belief, plane 2: uncertainty
      for (unsigned i = 0; i < ni; i++)
       for (unsigned j = 0; j < nj; j++) {
         bsl_opinion op(inp_img(i,j,2), inp_img(i,j,1), atomicity);
