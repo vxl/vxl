@@ -1,10 +1,10 @@
-//This is brl/bbas/bsta/pro/processes/bsta_initialize_random_seed_process_process.cxx
+//This is brl/bbas/bsta/pro/processes/bsta_initialize_random_seed_process.cxx
+#include <bprb/bprb_func_process.h>
 //:
 // \file
 //   Initialize the random number generator, the same instance of vnl_random will be passed to subsequent process to ensure
 //   they all use the same rng initialized properly.
 //
-#include <bprb/bprb_func_process.h>
 #include <bprb/bprb_parameters.h>
 #include <bsta/bsta_random_wrapper.h>
 #include <vcl_ctime.h>
@@ -43,10 +43,10 @@ bool bsta_initialize_random_seed_process(bprb_func_process& pro)
   unsigned seed = pro.get_input<unsigned>(0);
   if (!seed) {
     pro.set_output_val<bsta_random_wrapper_sptr>(0, new bsta_random_wrapper(vcl_clock()));
-    return true;
-  } else {
-    pro.set_output_val<bsta_random_wrapper_sptr>(0, new bsta_random_wrapper(seed));
-    return true;
   }
+  else {
+    pro.set_output_val<bsta_random_wrapper_sptr>(0, new bsta_random_wrapper(seed));
+  }
+  return true;
 }
 
