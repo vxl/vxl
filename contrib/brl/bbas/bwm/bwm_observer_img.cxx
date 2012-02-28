@@ -888,6 +888,7 @@ void bwm_observer_img::set_change_type()
     this->change_choices_.push_back("van");
     this->change_choices_.push_back("suv");
     this->change_choices_.push_back("minivan");
+    this->change_choices_.push_back("high-quality");
     this->change_choices_.push_back("New Change Type");
   }
   type_dialog.choice("Change Type", this->change_choices_, type);
