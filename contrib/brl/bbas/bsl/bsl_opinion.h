@@ -2,10 +2,13 @@
 #define bsl_opinion_h_
 //:
 // \file
-// \brief  A binomial opinion, x = (b_,d,a_,u_). b_: belief, d_:disbelif, u_ = uncertainty about belief
-//                                    a: atomicity is the prior probability of the two outcomes, usually .5 
+// \brief  A binomial opinion, x = (b_,d_,a_,u_).
+// * b_: belief
+// * d_: disbelief
+// * u_: uncertainty about belief
+// * a_: atomicity is the prior probability of the two outcomes, usually 0.5
 //
-// \author Ozge C. Ozcanli 
+// \author Ozge C. Ozcanli
 // \date   Jan 26, 2012
 //
 // \verbatim
@@ -51,7 +54,7 @@ class bsl_opinion
   void set_b(float b) { b_=b; u_=1.0f-b; }
 
   void set_a(float a) { a_ = a; }
- 
+
   bool operator==(bsl_opinion const& o) const { return b_==o.b() && u_==o.u() && a_==o.a(); }
 
  private:
@@ -61,40 +64,37 @@ class bsl_opinion
 };
 
 
-inline bsl_opinion fuse(bsl_opinion const& lhs, bsl_opinion const& rhs) 
-{ 
+inline bsl_opinion fuse(bsl_opinion const& lhs, bsl_opinion const& rhs)
+{
   float bA = lhs.b();
   float bB = rhs.b();
   float uA = lhs.u();
   float uB = rhs.u();
-  float dA = 1.0f-bA-uA;
-  float dB = 1.0f-bB-uB;
-  float kappa = uA + uB - uA*uB;
-  
-  //: if one of the uncertainties is non-zero
+  // then, dA = 1.0f-bA-uA
+  // and   dB = 1.0f-bB-uB
+  float kappa = uA + uB - uA*uB; // = 1 - (1-uA)*(1-uB)
+
+  // if one of the uncertainties is non-zero
   if (vcl_abs(uA) > vcl_numeric_limits<float>::epsilon() || vcl_abs(uB) > vcl_numeric_limits<float>::epsilon()) {
     float b = (bA*uB + bB*uA)/kappa;
     float u = uA*uB/kappa;
     return bsl_opinion(u,b,lhs.a()); // atomicity should be the same for lhs & rhs
-  } else { 
+  }
+  else {
     bsl_opinion op((bA+bB)/2.0f); op.set_a(lhs.a());
     return op;
   }
-} 
+}
 
-inline bool operator>(bsl_opinion const& lhs, bsl_opinion const& rhs) { return lhs.b() > rhs.b(); }
+inline bool operator> (bsl_opinion const& lhs, bsl_opinion const& rhs) { return lhs.b() >  rhs.b(); }
 inline bool operator>=(bsl_opinion const& lhs, bsl_opinion const& rhs) { return lhs.b() >= rhs.b(); }
-
-inline bool operator<(bsl_opinion const& lhs, bsl_opinion const& rhs) { return lhs.b() < rhs.b(); }
+inline bool operator< (bsl_opinion const& lhs, bsl_opinion const& rhs) { return lhs.b() <  rhs.b(); }
 
 inline bsl_opinion operator+(bsl_opinion const& lhs, bsl_opinion const& rhs) { return bsl_opinion(lhs.b()+rhs.b()); }
-
 inline float operator+(bsl_opinion const& lhs, float rhs) { return lhs.b() + rhs; }
-
 inline float operator*(bsl_opinion const& lhs, bsl_opinion const& rhs) { return lhs.b() * rhs.b(); }
 
-inline bsl_opinion operator/(float const& o1, bsl_opinion const& o2) { return bsl_opinion(o1/o2.b()); }
-
+inline bsl_opinion operator/(float o1, bsl_opinion const& o2) { return bsl_opinion(o1/o2.b()); }
 inline bsl_opinion operator/(bsl_opinion const& o1, bsl_opinion const& o2) { return bsl_opinion(o1.b()/o2.b()); }
 
 inline vcl_ostream& operator<< (vcl_ostream& s, bsl_opinion const& o) { s << "bsl_opinion [b=" << o.b() << " u=" << o.u() << ']' << vcl_endl; return s; }
