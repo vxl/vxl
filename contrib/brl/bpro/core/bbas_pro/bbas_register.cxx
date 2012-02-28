@@ -24,6 +24,7 @@ void bbas_register::register_process()
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager,bsta_joint_hist_3d_vrml_process , "bstaJointHist3dVrmlProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager,bsta_clone_joint_hist_3d_process , "bstaCloneJointHist3dProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bbas_remove_from_db_process, "bbasRemoveFromDbProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bsl_expected_image_process, "bslExpectedImageProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bsl_fusion_process, "bslFusionProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, imesh_ply_bbox_process, "imeshPlyBboxProcess");
-  
 }
