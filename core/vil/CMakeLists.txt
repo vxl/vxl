@@ -271,6 +271,11 @@ set( vil_sources ${vil_sources}
   # Plugin for image loading
   vil_image_resource_plugin.cxx         vil_image_resource_plugin.h
 )
+IF ( ${VXL_HAS_SSE2_HARDWARE_SUPPORT} )
+  SET( vil_sources ${vil_sources}
+    vil_math_sse.cxx vil_math_sse.h
+  )
+ENDIF ( ${VXL_HAS_SSE2_HARDWARE_SUPPORT} )
 
 if(WIN32 AND VXL_USE_LFS AND NOT CMAKE_CL_64)
 #This is a hack since win32 doesn't have transparent Large File Support.

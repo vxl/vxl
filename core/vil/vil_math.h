@@ -16,6 +16,11 @@
 #include <vil/vil_plane.h>
 #include <vil/vil_transform.h>
 
+#include <vil/vil_config.h>
+#ifdef VXL_HAS_SSE2_HARDWARE_SUPPORT
+#include <vil/vil_math_sse.h>
+#include <vcl_typeinfo.h>
+#endif
 
 //: Compute minimum and maximum values over view
 template<class T>
@@ -837,6 +842,28 @@ inline void vil_math_image_abs_difference(const vil_image_view<aT>& imA,
   const aT* planeA = imA.top_left_ptr();
   const bT* planeB = imB.top_left_ptr();
   sumT* planeS     = im_sum.top_left_ptr();
+#if VXL_HAS_SSE2_HARDWARE_SUPPORT
+  if (typeid(aT) == typeid(bT) && typeid(bT) == typeid(sumT) &&
+      istepA == 1 && istepB == 1 && istepS == 1)
+  {
+    if (typeid(aT) == typeid(vxl_byte))
+    {
+      vil_math_image_abs_difference_sse<vxl_byte>(
+        planeA, planeB, planeS, ni, nj, np,
+        jstepA, jstepB, jstepS, pstepA, pstepB, pstepS);
+      return;
+    }
+    /* Add an elseif block for every new type that gets implemented
+    elseif (typeid(aT) == typeid(type_foo))
+    {
+      vil_math_image_abs_difference_sse<type_foo>(
+        planeA, planeB, planeS, ni, nj, np,
+        jstepA, jstepB, jstepS, pstepA, pstepB, pstepS);
+      return;
+    }
+    */
+  }
+#endif
   for (unsigned p=0;p<np;++p,planeA += pstepA,planeB += pstepB,planeS += pstepS)
   {
     const aT* rowA   = planeA;
