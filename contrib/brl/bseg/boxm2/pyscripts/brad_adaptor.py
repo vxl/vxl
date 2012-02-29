@@ -67,6 +67,14 @@ def save_atmospheric_parameters(atm_params, filename):
   return
 
 # save image_metadata
+def save_image_metadata(mdata, filename):
+  boxm2_batch.init_process("bradSaveImageMetadataProcess")
+  boxm2_batch.set_input_from_db(0, mdata)
+  boxm2_batch.set_input_string(1,filename)
+  boxm2_batch.run_process()
+  return 
+
+# load image_metadata
 def load_image_metadata(filename):
   boxm2_batch.init_process("bradLoadImageMetadataProcess")
   boxm2_batch.set_input_string(0,filename)
@@ -75,7 +83,7 @@ def load_image_metadata(filename):
   mdata = dbvalue(id,type)
   return mdata
 
-# save atmospheric parameters
+# load atmospheric parameters
 def load_atmospheric_parameters(filename):
   boxm2_batch.init_process("bradLoadAtmosphericParametersProcess")
   boxm2_batch.set_input_string(0,filename)
