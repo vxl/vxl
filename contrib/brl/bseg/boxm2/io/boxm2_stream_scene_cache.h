@@ -1,7 +1,8 @@
 #ifndef boxm2_stream_scene_cache_h_
 #define boxm2_stream_scene_cache_h_
-//: This class aggregates data of one type across all the blocks of the scene into an array.
+//:
 // \file
+// \brief This class aggregates data of one type across all the blocks of the scene into an array.
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/boxm2_block.h>
 #include <boxm2/boxm2_data.h>
@@ -14,17 +15,16 @@
 
 class boxm2_stream_scene_cache: public vbl_ref_count
 {
-
     typedef vcl_string data_type;
     typedef vcl_string identifier;
 
-	typedef vnl_vector_fixed<unsigned char, 16> uchar16;
+    typedef vnl_vector_fixed<unsigned char, 16> uchar16;
 
   public:
     //: hidden constructor (singleton class)
     boxm2_stream_scene_cache(boxm2_scene_sptr scene,
                              vcl_vector<data_type> data_types,
-							 vcl_vector<identifier> identifiers);
+                             vcl_vector<identifier> identifiers);
 
     bool clear();
 
@@ -34,17 +34,16 @@ class boxm2_stream_scene_cache: public vbl_ref_count
     vcl_map<data_type, char *> data_buffers_;
     vcl_map<data_type, vcl_vector<unsigned long> > offsets_;
 
-	uchar16 * blk_buffer_;
-	vcl_vector<unsigned long> blk_offsets_;
+    uchar16 * blk_buffer_;
+    vcl_vector<unsigned long> blk_offsets_;
 
-	unsigned long total_bytes_per_block_;
-	vcl_map<data_type,unsigned long> total_bytes_per_data_;
+    unsigned long total_bytes_per_block_;
+    vcl_map<data_type,unsigned long> total_bytes_per_data_;
+
   protected:
-
     boxm2_scene_sptr scene_;
     vcl_vector<data_type> data_types_;
     vcl_vector<identifier> identifiers_;
-
 };
 
 typedef vbl_smart_ptr<boxm2_stream_scene_cache> boxm2_stream_scene_cache_sptr;
