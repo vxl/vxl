@@ -108,7 +108,7 @@ inline void vil_math_image_abs_difference_1d_sse<float>(
   unsigned len)
 {
   const unsigned ni_d_4 = len >> 2;
-  const unsigned ni_m_4 = len & 0x03;
+  const unsigned ni_m_4_bytes = (len & 0x03) * sizeof(float);
 
   // Use these for the last set of pxs in each row
   float pxLastA[4];
@@ -128,9 +128,9 @@ inline void vil_math_image_abs_difference_1d_sse<float>(
     _mm_storeu_ps(pxD, xmmD);
   }
 
-  // Process the remainder < 16
-  vcl_memcpy(pxLastA, pxA, ni_m_4);
-  vcl_memcpy(pxLastB, pxB, ni_m_4);
+  // Process the remainder < 4
+  vcl_memcpy(pxLastA, pxA, ni_m_4_bytes);
+  vcl_memcpy(pxLastB, pxB, ni_m_4_bytes);
   __m128 xmmA = _mm_loadu_ps(pxLastA);
   __m128 xmmB = _mm_loadu_ps(pxLastB);
 
@@ -139,7 +139,8 @@ inline void vil_math_image_abs_difference_1d_sse<float>(
   __m128 xmmD = _mm_sub_ps(xmmMax, xmmMin);
 
   _mm_storeu_ps(pxLastD, xmmD);
-  vcl_memcpy(pxD, pxLastD, ni_m_4);
+
+  vcl_memcpy(pxD, pxLastD, ni_m_4_bytes);
 }
 
 VIL_MATH_IMAGE_ABS_DIFFERENCE_1D_SSE_SPECIALIZE(float)
