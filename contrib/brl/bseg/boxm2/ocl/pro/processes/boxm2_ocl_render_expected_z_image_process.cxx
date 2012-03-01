@@ -157,23 +157,23 @@ bool boxm2_ocl_render_expected_z_image_process(bprb_func_process& pro)
   float* prob_buff = new float[cl_ni*cl_nj];
   for (unsigned i=0;i<cl_ni*cl_nj;i++) prob_buff[i]=0.0f;
 
-  bocl_mem_sptr exp_image=new bocl_mem(device->context(),buff,cl_ni*cl_nj*sizeof(float),"exp z image buffer");
+  bocl_mem_sptr exp_image = opencl_cache->alloc_mem(cl_ni*cl_nj*sizeof(float), buff, "exp z image buffer");
   exp_image->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
-  bocl_mem_sptr var_image=new bocl_mem(device->context(),var_buff,cl_ni*cl_nj*sizeof(float),"z var image buffer");
+  bocl_mem_sptr var_image = opencl_cache->alloc_mem(cl_ni*cl_nj*sizeof(float), var_buff, "z var image buffer");
   var_image->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
-  bocl_mem_sptr vis_image=new bocl_mem(device->context(),vis_buff,cl_ni*cl_nj*sizeof(float),"vis image buffer");
+  bocl_mem_sptr vis_image = opencl_cache->alloc_mem(cl_ni*cl_nj*sizeof(float), vis_buff, "vis image buffer");
   vis_image->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
-  bocl_mem_sptr prob_image=new bocl_mem(device->context(),prob_buff,cl_ni*cl_nj*sizeof(float),"vis x omega image buffer");
+  bocl_mem_sptr prob_image = opencl_cache->alloc_mem(cl_ni*cl_nj*sizeof(float), prob_buff, "vis x omega image buffer");
   prob_image->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
   //set generic cam
   cl_float* ray_origins = new cl_float[4*cl_ni*cl_nj];
   cl_float* ray_directions = new cl_float[4*cl_ni*cl_nj];
-  bocl_mem_sptr ray_o_buff = new bocl_mem(device->context(), ray_origins, cl_ni*cl_nj * sizeof(cl_float4) , "ray_origins buffer");
-  bocl_mem_sptr ray_d_buff = new bocl_mem(device->context(), ray_directions,  cl_ni*cl_nj * sizeof(cl_float4), "ray_directions buffer");
+  bocl_mem_sptr ray_o_buff = opencl_cache->alloc_mem(cl_ni*cl_nj*sizeof(cl_float4), ray_origins, "ray_origins buffer");
+  bocl_mem_sptr ray_d_buff = opencl_cache->alloc_mem(cl_ni*cl_nj*sizeof(cl_float4), ray_directions, "ray_directions buffer");
   boxm2_ocl_camera_converter::compute_ray_image( device, queue, cam, cl_ni, cl_nj, ray_o_buff, ray_d_buff);
 
   // Image Dimensions
@@ -269,6 +269,14 @@ bool boxm2_ocl_render_expected_z_image_process(bprb_func_process& pro)
   var_image->read_to_buffer(queue);
   vis_image->read_to_buffer(queue);
 #endif
+
+  opencl_cache->unref_mem(ray_o_buff.ptr());
+  opencl_cache->unref_mem(ray_d_buff.ptr());
+  opencl_cache->unref_mem(exp_image.ptr());
+  opencl_cache->unref_mem(vis_image.ptr());
+  opencl_cache->unref_mem(var_image.ptr());
+  opencl_cache->unref_mem(prob_image.ptr());
+
 
   clReleaseCommandQueue(queue);
 

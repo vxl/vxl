@@ -277,22 +277,22 @@ bool boxm2_ocl_batch_compute_normal_albedo_array_process(bprb_func_process& pro)
       bocl_mem* naa_apm   = opencl_cache->get_data(*id,data_type,num_cells*appTypeSize, true);
 
       boxm2_data_base * data_type0 = str_blk_cache.data_types_["aux0"];
-      bocl_mem_sptr bocl_data_type0 = new bocl_mem(device->context(),data_type0->data_buffer(),data_type0->buffer_length(),"");
+      bocl_mem_sptr bocl_data_type0 = opencl_cache->alloc_mem(data_type0->buffer_length(), data_type0->data_buffer(),"bocl data type0");
       if (!bocl_data_type0->create_buffer(CL_MEM_USE_HOST_PTR,queue))
          vcl_cout<<"Aux0 buffer was not created"<<vcl_endl;
 
       boxm2_data_base * data_type1 = str_blk_cache.data_types_["aux1"];
-      bocl_mem_sptr bocl_data_type1 = new bocl_mem(device->context(),data_type1->data_buffer(),data_type1->buffer_length(),"");
+      bocl_mem_sptr bocl_data_type1 = opencl_cache->alloc_mem(data_type1->buffer_length(), data_type1->data_buffer(), "bocl data type1");
       if (!bocl_data_type1->create_buffer(CL_MEM_USE_HOST_PTR,queue))
          vcl_cout<<"Aux1 buffer was not created"<<vcl_endl;
 
       boxm2_data_base * data_type2 = str_blk_cache.data_types_["aux2"];
-      bocl_mem_sptr bocl_data_type2 = new bocl_mem(device->context(),data_type2->data_buffer(),data_type2->buffer_length(),"");
+      bocl_mem_sptr bocl_data_type2 = opencl_cache->alloc_mem(data_type2->buffer_length(), data_type2->data_buffer(), "bocl data type2");
       if (!bocl_data_type2->create_buffer(CL_MEM_USE_HOST_PTR,queue))
          vcl_cout<<"Aux2 buffer was not created"<<vcl_endl;
 
       boxm2_data_base * data_type3 = str_blk_cache.data_types_["aux3"];
-      bocl_mem_sptr bocl_data_type3 = new bocl_mem(device->context(),data_type3->data_buffer(),data_type3->buffer_length(),"");
+      bocl_mem_sptr bocl_data_type3 = opencl_cache->alloc_mem(data_type3->buffer_length(), data_type3->data_buffer(), "bocl data type3");
       if (!bocl_data_type3->create_buffer(CL_MEM_USE_HOST_PTR,queue))
          vcl_cout<<"Aux3 buffer was not created"<<vcl_endl;
 
@@ -328,6 +328,11 @@ bool boxm2_ocl_batch_compute_normal_albedo_array_process(bprb_func_process& pro)
       vcl_cout << "read appearance model to buffer" << vcl_endl;
       //cpu_cache->remove_data_base( *id, boxm2_data_traits<BOXM2_NORMAL_ALBEDO_ARRAY>::prefix() );
       str_blk_cache.clear();
+
+      opencl_cache->unref_mem(bocl_data_type0.ptr());
+      opencl_cache->unref_mem(bocl_data_type1.ptr());
+      opencl_cache->unref_mem(bocl_data_type2.ptr());
+      opencl_cache->unref_mem(bocl_data_type3.ptr());
   }
   clReleaseCommandQueue(queue);
 
