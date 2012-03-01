@@ -17,26 +17,30 @@ static void test_image_abs_diff(unsigned ni, unsigned nj, T min, T max, T tol)
   vil_image_view<vxl_byte> bdiff_D(ni, nj);
   T diff = vcl_abs(max-min);
 
-  for(unsigned j=0;j<nj;++j) for(unsigned i=0;i<ni;++i) bdiff_A(i,j)=min+i+j;
-  for(unsigned j=0;j<nj;++j) for(unsigned i=0;i<ni;++i) bdiff_B(i,j)=max+i+j;
+  for (unsigned j = 0; j < nj; ++j)
+    for (unsigned i = 0; i < ni; ++i)
+      bdiff_A(i,j) = min + i + j + i%3;
+  for (unsigned j = 0; j < nj; ++j)
+    for (unsigned i = 0; i < ni; ++i)
+      bdiff_B(i,j) = max + i + j;
 
   bdiff_D.fill(30);
   vil_math_image_abs_difference(bdiff_A, bdiff_A, bdiff_D);
-  for(unsigned j = 0; j < nj; ++j)
-    for(unsigned i = 0; i < ni; ++i)
+  for (unsigned j = 0; j < nj; ++j)
+    for (unsigned i = 0; i < ni; ++i)
       TEST_NEAR("|A-A|", bdiff_D(i,j), 0, tol);
 
   bdiff_D.fill(30);
   vil_math_image_abs_difference(bdiff_A, bdiff_B, bdiff_D);
-  for(unsigned j = 0; j < nj; ++j)
-    for(unsigned i = 0; i < ni; ++i)
-      TEST_NEAR("|A-B|(i,j)", bdiff_D(i,j), diff, tol);
+  for (unsigned j = 0; j < nj; ++j)
+    for (unsigned i = 0; i < ni; ++i)
+      TEST_NEAR("|A-B|(i,j)", bdiff_D(i,j), diff - i%3, tol);
 
   bdiff_D.fill(30);
   vil_math_image_abs_difference(bdiff_B, bdiff_A, bdiff_D);
-  for(unsigned j = 0; j < nj; ++j)
-    for(unsigned i = 0; i < ni; ++i)
-      TEST_NEAR("|B-A|(i,j)", bdiff_D(i,j), diff, tol);
+  for (unsigned j = 0; j < nj; ++j)
+    for (unsigned i = 0; i < ni; ++i)
+      TEST_NEAR("|B-A|(i,j)", bdiff_D(i,j), diff - i%3, tol);
 }
 
 static void test_image_view_maths_byte()
