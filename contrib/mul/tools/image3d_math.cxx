@@ -13,6 +13,7 @@
 
 #if VCL_HAS_EXCEPTIONS
 #include <vcl_exception.h>
+#include <vcl_iterator.h>
 #include <vcl_stdexcept.h>
 #include <vcl_sstream.h>
 #include <vcl_cstdio.h>
@@ -26,6 +27,7 @@
 #include <vsl/vsl_stream.h>
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_random.h>
+#include <vnl/vnl_na.h>
 #include <vul/vul_string.h>
 #include <mbl/mbl_log.h>
 #include <mbl/mbl_exception.h>
@@ -44,8 +46,10 @@
 #include <vimt3d/vimt3d_transform_3d.h>
 #include <vimt3d/vimt3d_add_all_loaders.h>
 #include <vimt3d/vimt3d_resample_trilinear.h>
+#include <vgl/vgl_intersection.h>
 #include <vgl/vgl_vector_3d.h>
 #include <vgl/vgl_point_3d.h>
+#include <vgl/vgl_box_3d.h>
 #include <vul/vul_reg_exp.h>
 
 //=========================================================================
@@ -514,7 +518,7 @@ void voxel_sum__image_3d_of_int(opstack_t& s)
   s.push_front(operand(result));
 }
 
-//: Add all voxel values together.
+//: Multiply all voxel values together.
 void voxel_product__image_3d_of_float(opstack_t& s)
 {
   assert(s.size() >= 1);
@@ -522,16 +526,23 @@ void voxel_product__image_3d_of_float(opstack_t& s)
   const vil3d_image_view<int>& o1_image = o1.image();
 
   double result = 0.0;
-  for (unsigned k=0,nk=o1_image.nk(); k<nk; ++k)
-    for (unsigned j=0,nj=o1_image.nj(); j<nj; ++j)
-      for (unsigned i=0,ni=o1_image.ni(); i<ni; ++i)
-        result *= o1_image(i,j,k);
+  
+  unsigned np=o1_image.nplanes();
+  unsigned nk=o1_image.nk();
+  unsigned nj=o1_image.nj();
+  unsigned ni=o1_image.ni();
+
+  for (unsigned p=0; p<np; ++p)
+    for (unsigned k=0; k<nk; ++k)
+      for (unsigned j=0; j<nj; ++j)
+        for (unsigned i=0; i<ni; ++i)
+          result *= o1_image(i, j, k, p);
 
   s.pop(1);
   s.push_front(operand(result));
 }
 
-//: Add all voxel values together.
+//: Multiply all voxel values together.
 void voxel_product__image_3d_of_int(opstack_t& s)
 {
   assert(s.size() >= 1);
@@ -539,10 +550,17 @@ void voxel_product__image_3d_of_int(opstack_t& s)
   const vil3d_image_view<int>& o1_image = o1.image();
 
   double result = 0;
-  for (unsigned k=0,nk=o1_image.nk(); k<nk; ++k)
-    for (unsigned j=0,nj=o1_image.nj(); j<nj; ++j)
-      for (unsigned i=0,ni=o1_image.ni(); i<ni; ++i)
-        result *= o1_image(i,j,k);
+
+  unsigned np=o1_image.nplanes();
+  unsigned nk=o1_image.nk();
+  unsigned nj=o1_image.nj();
+  unsigned ni=o1_image.ni();
+
+  for (unsigned p=0; p<np; ++p)
+    for (unsigned k=0; k<nk; ++k)
+      for (unsigned j=0; j<nj; ++j)
+        for (unsigned i=0; i<ni; ++i)
+          result *= o1_image(i,j,k);
 
   s.pop(1);
   s.push_front(operand(static_cast<double>(result)));
@@ -645,14 +663,21 @@ void and__image_3d_of_int__image_3d_of_int(opstack_t& s)
   const vil3d_image_view<int>& o2_image = o2.image();
 
   vimt3d_image_3d_of<int> result(o1_image.ni(), o1_image.nj(), o1_image.nk(),
-                                 1, o1.world2im());
+                                 o1_image.nplanes(), o1.world2im());
   vil3d_image_view<int> &result_image = result.image();
 
-  for (unsigned k=0,nk=o1_image.nk();k<nk;++k)
-    for (unsigned j=0,nj=o1_image.nj();j<nj;++j)
-      for (unsigned i=0,ni=o1_image.ni();i<ni;++i)
-        result_image(i,j,k) =
-          (o1_image(i,j,k) && o2_image(i,j,k)) ? 1 : 0;
+  
+  unsigned np=o1_image.nplanes();
+  unsigned nk=o1_image.nk();
+  unsigned nj=o1_image.nj();
+  unsigned ni=o1_image.ni();
+
+  for (unsigned p=0; p<np; ++p)
+    for (unsigned k=0; k<nk; ++k)
+      for (unsigned j=0; j<nj; ++j)
+        for (unsigned i=0; i<ni; ++i)
+          result_image(i,j,k) =
+            (o1_image(i,j,k) && o2_image(i,j,k)) ? 1 : 0;
 
   s.pop(2);
   s.push_front(operand(result));
@@ -669,14 +694,21 @@ void or__image_3d_of_int__image_3d_of_int(opstack_t& s)
   const vil3d_image_view<int>& o2_image = o2.image();
 
   vimt3d_image_3d_of<int> result(o1_image.ni(), o1_image.nj(), o1_image.nk(),
-                                 1, o1.world2im());
+                                 o1_image.nplanes(), o1.world2im());
   vil3d_image_view<int> &result_image = result.image();
 
-  for (unsigned k=0,nk=o1_image.nk();k<nk;++k)
-    for (unsigned j=0,nj=o1_image.nj();j<nj;++j)
-      for (unsigned i=0,ni=o1_image.ni();i<ni;++i)
-        result_image(i,j,k) =
-          (o1_image(i,j,k) || o2_image(i,j,k)) ? 1 : 0;
+
+  unsigned np=o1_image.nplanes();
+  unsigned nk=o1_image.nk();
+  unsigned nj=o1_image.nj();
+  unsigned ni=o1_image.ni();
+
+  for (unsigned p=0; p<np; ++p)
+    for (unsigned k=0; k<nk; ++k)
+      for (unsigned j=0; j<nj; ++j)
+        for (unsigned i=0; i<ni; ++i)
+          result_image(i,j,k) =
+            (o1_image(i,j,k) || o2_image(i,j,k)) ? 1 : 0;
 
   s.pop(2);
   s.push_front(operand(result));
@@ -693,13 +725,20 @@ void min__image_3d_of_int__image_3d_of_int(opstack_t& s)
   const vil3d_image_view<int>& o2_image = o2.image();
 
   vimt3d_image_3d_of<int> result(o1_image.ni(), o1_image.nj(), o1_image.nk(),
-                                 1, o1.world2im());
+                                 o1_image.nplanes(), o1.world2im());
   vil3d_image_view<int> &result_image = result.image();
 
-  for (unsigned k=0,nk=o1_image.nk();k<nk;++k)
-    for (unsigned j=0,nj=o1_image.nj();j<nj;++j)
-      for (unsigned i=0,ni=o1_image.ni();i<ni;++i)
-        result_image(i,j,k) = vcl_min(o1_image(i,j,k), o2_image(i,j,k));
+
+  unsigned np=o1_image.nplanes();
+  unsigned nk=o1_image.nk();
+  unsigned nj=o1_image.nj();
+  unsigned ni=o1_image.ni();
+
+  for (unsigned p=0; p<np; ++p)
+    for (unsigned k=0; k<nk; ++k)
+      for (unsigned j=0; j<nj; ++j)
+        for (unsigned i=0; i<ni; ++i)
+          result_image(i,j,k) = vcl_min(o1_image(i,j,k), o2_image(i,j,k));
 
   s.pop(2);
   s.push_front(operand(result));
@@ -716,13 +755,20 @@ void min__image_3d_of_float__image_3d_of_float(opstack_t& s)
   const vil3d_image_view<float>& o2_image = o2.image();
 
   vimt3d_image_3d_of<float> result(o1_image.ni(), o1_image.nj(), o1_image.nk(),
-                                   1, o1.world2im());
+                                   o1_image.nplanes(), o1.world2im());
   vil3d_image_view<float> &result_image = result.image();
 
-  for (unsigned k=0,nk=o1_image.nk();k<nk;++k)
-    for (unsigned j=0,nj=o1_image.nj();j<nj;++j)
-      for (unsigned i=0,ni=o1_image.ni();i<ni;++i)
-        result_image(i,j,k) = vcl_min(o1_image(i,j,k), o2_image(i,j,k));
+
+  unsigned np=o1_image.nplanes();
+  unsigned nk=o1_image.nk();
+  unsigned nj=o1_image.nj();
+  unsigned ni=o1_image.ni();
+
+  for (unsigned p=0; p<np; ++p)
+    for (unsigned k=0; k<nk; ++k)
+      for (unsigned j=0; j<nj; ++j)
+        for (unsigned i=0; i<ni; ++i)
+          result_image(i,j,k) = vcl_min(o1_image(i,j,k), o2_image(i,j,k));
 
   s.pop(2);
   s.push_front(operand(result));
@@ -738,13 +784,20 @@ void max__image_3d_of_int__image_3d_of_int(opstack_t& s)
   const vil3d_image_view<int>& o2_image = o2.image();
 
   vimt3d_image_3d_of<int> result(o1_image.ni(), o1_image.nj(), o1_image.nk(),
-                                 1, o1.world2im());
+                                 o1_image.nplanes(), o1.world2im());
   vil3d_image_view<int> &result_image = result.image();
 
-  for (unsigned k=0,nk=o1_image.nk();k<nk;++k)
-    for (unsigned j=0,nj=o1_image.nj();j<nj;++j)
-      for (unsigned i=0,ni=o1_image.ni();i<ni;++i)
-        result_image(i,j,k) = vcl_max(o1_image(i,j,k), o2_image(i,j,k));
+
+  unsigned np=o1_image.nplanes();
+  unsigned nk=o1_image.nk();
+  unsigned nj=o1_image.nj();
+  unsigned ni=o1_image.ni();
+
+  for (unsigned p=0; p<np; ++p)
+    for (unsigned k=0; k<nk; ++k)
+      for (unsigned j=0; j<nj; ++j)
+        for (unsigned i=0; i<ni; ++i)
+          result_image(i,j,k) = vcl_max(o1_image(i,j,k), o2_image(i,j,k));
 
   s.pop(2);
   s.push_front(operand(result));
@@ -761,13 +814,20 @@ void max__image_3d_of_float__image_3d_of_float(opstack_t& s)
   const vil3d_image_view<float>& o2_image = o2.image();
 
   vimt3d_image_3d_of<float> result(o1_image.ni(), o1_image.nj(), o1_image.nk(),
-                                   1, o1.world2im());
+                                   o1_image.nplanes(), o1.world2im());
   vil3d_image_view<float> &result_image = result.image();
 
-  for (unsigned k=0,nk=o1_image.nk();k<nk;++k)
-    for (unsigned j=0,nj=o1_image.nj();j<nj;++j)
-      for (unsigned i=0,ni=o1_image.ni();i<ni;++i)
-        result_image(i,j,k) = vcl_max(o1_image(i,j,k), o2_image(i,j,k));
+
+  unsigned np=o1_image.nplanes();
+  unsigned nk=o1_image.nk();
+  unsigned nj=o1_image.nj();
+  unsigned ni=o1_image.ni();
+
+  for (unsigned p=0; p<np; ++p)
+    for (unsigned k=0; k<nk; ++k)
+      for (unsigned j=0; j<nj; ++j)
+        for (unsigned i=0; i<ni; ++i)
+          result_image(i,j,k) = vcl_max(o1_image(i,j,k), o2_image(i,j,k));
 
   s.pop(2);
   s.push_front(operand(result));
@@ -1170,13 +1230,20 @@ void not__image_3d_of_int(opstack_t& s)
   const vil3d_image_view<int>& o1_image = o1.image();;
 
   vimt3d_image_3d_of<int> result(o1_image.ni(), o1_image.nj(), o1_image.nk(),
-                                 1, o1.world2im());
+                                 o1_image.nplanes(), o1.world2im());
   vil3d_image_view<int> &result_image = result.image();
 
-  for (unsigned k=0,nk=o1_image.nk();k<nk;++k)
-    for (unsigned j=0,nj=o1_image.nj();j<nj;++j)
-      for (unsigned i=0,ni=o1_image.ni();i<ni;++i)
-        result_image(i,j,k) = o1_image(i,j,k) ? 0 : 1;
+
+  unsigned np=o1_image.nplanes();
+  unsigned nk=o1_image.nk();
+  unsigned nj=o1_image.nj();
+  unsigned ni=o1_image.ni();
+
+  for (unsigned p=0; p<np; ++p)
+    for (unsigned k=0; k<nk; ++k)
+      for (unsigned j=0; j<nj; ++j)
+        for (unsigned i=0; i<ni; ++i)
+          result_image(i,j,k) = o1_image(i,j,k) ? 0 : 1;
 
   s.pop(1);
   s.push_front(operand(result));
@@ -1190,13 +1257,20 @@ void not__image_3d_of_float(opstack_t& s)
   const vil3d_image_view<float>& o1_image = o1.image();
 
   vimt3d_image_3d_of<int> result(o1_image.ni(), o1_image.nj(), o1_image.nk(),
-                                 1, o1.world2im());
+                                 o1_image.nplanes(), o1.world2im());
   vil3d_image_view<int> &result_image = result.image();
 
-  for (unsigned k=0,nk=o1_image.nk();k<nk;++k)
-    for (unsigned j=0,nj=o1_image.nj();j<nj;++j)
-      for (unsigned i=0,ni=o1_image.ni();i<ni;++i)
-        result_image(i,j,k) = o1_image(i,j,k) ? 0 : 1;
+
+  unsigned np=o1_image.nplanes();
+  unsigned nk=o1_image.nk();
+  unsigned nj=o1_image.nj();
+  unsigned ni=o1_image.ni();
+
+  for (unsigned p=0; p<np; ++p)
+    for (unsigned k=0; k<nk; ++k)
+      for (unsigned j=0; j<nj; ++j)
+        for (unsigned i=0; i<ni; ++i)
+          result_image(i,j,k) = o1_image(i,j,k) ? 0 : 1;
 
   s.pop(1);
   s.push_front(operand(result));
@@ -1287,6 +1361,56 @@ void convert_to_float__image_3d_of_double(opstack_t& s)
   s.pop(1);
   s.push_front(operand(result));
 }
+
+
+void na_from_mask__image_3d_of_int(opstack_t& s)
+{
+  assert(s.size() >= 1);
+  vimt3d_image_3d_of<int> o1=s[0].as_image_3d_of_int();
+  vimt3d_image_3d_of<float> result(o1.image().ni(), o1.image().nj(),
+    o1.image().nk(), o1.image().nplanes(), o1.world2im() );
+  const vil3d_image_view<int>& o1_image = o1.image();
+  vil3d_image_view<float>& result_image = result.image();
+
+
+  unsigned np=o1.image().nplanes();
+  unsigned nk=o1.image().nk();
+  unsigned nj=o1.image().nj();
+  unsigned ni=o1.image().ni();
+
+  for (unsigned p=0; p<np; ++p)
+    for (unsigned k=0; k<nk; ++k)
+      for (unsigned j=0; j<nj; ++j)
+        for (unsigned i=0; i<ni; ++i)
+          result_image(i,j,k,p) = o1_image(i,j,k,p) ? vnl_na(0.0f) : 0.0f;
+
+  s.pop(1);
+  s.push_front(operand(result));
+}
+
+void na_to_mask__image_3d_of_float(opstack_t& s)
+{
+  assert(s.size() >= 1);
+  vimt3d_image_3d_of<float> o1=s[0].as_image_3d_of_float();
+  vimt3d_image_3d_of<int> result(o1.image().ni(), o1.image().nj(),
+    o1.image().nk(), o1.image().nplanes(), o1.world2im() );
+  const vil3d_image_view<float>& o1_image = o1.image();
+  vil3d_image_view<int>& result_image = result.image();
+
+
+  unsigned np=o1.image().nplanes();
+  unsigned nk=o1.image().nk();
+  unsigned nj=o1.image().nj();
+  unsigned ni=o1.image().ni();
+
+  for (unsigned p=0; p<np; ++p)
+    for (unsigned k=0; k<nk; ++k)
+      for (unsigned j=0; j<nj; ++j)
+        for (unsigned i=0; i<ni; ++i)
+          result_image(i,j,k,p) = vnl_math_isnan(o1_image(i,j,k,p)) ? 1 : 0;
+
+  s.pop(1);
+  s.push_front(operand(result));}
 
 
 void product__image_3d_of_float__image_3d_of_float(opstack_t& s)
@@ -1644,6 +1768,19 @@ void print_stats__image_3d_of_int(opstack_t& s)
   s.pop(1);
 }
 
+
+
+void print_unique__image_3d_of_int(opstack_t& s)
+{
+  vimt3d_image_3d_of<int> o1(s[0].as_image_3d_of_int());
+
+  vcl_set<int> set(o1.image().begin(), o1.image().end());
+
+  vcl_ostream_iterator<int> output(vcl_cout, " ")
+  vcl_copy(set.begin(), set.end(), output);
+
+  s.pop(1);
+}
 void print__double(opstack_t& s)
 {
   assert(s.size() >= 1);
@@ -1776,6 +1913,87 @@ void fill__image_3d_of_int__double(opstack_t& s)
   s.pop(2);
   s.push_front(operand(o1));
 }
+
+
+void box__image_3d_of_float__double__double__double__double__double__double(opstack_t& s)
+{
+  assert(s.size() >= 7);
+  vimt3d_image_3d_of<float> o1(s[6].as_image_3d_of_float());
+  double min_x(s[5].as_double());
+  double min_y(s[4].as_double());
+  double min_z(s[3].as_double());
+  double max_x(s[2].as_double());
+  double max_y(s[1].as_double());
+  double max_z(s[0].as_double());
+
+  const vil3d_image_view<float>& o1_image = o1.image();
+
+  vimt3d_image_3d_of<float> image_out(o1_image.ni(), o1_image.nj(), o1_image.nk(), 1,
+    o1.world2im());
+
+  vgl_vector_3d<double> voxel_size=o1.world2im().inverse().delta(
+    vgl_point_3d<double>(0,0,0), vgl_vector_3d<double>(1.0,1.0,1.0) );
+
+  vgl_box_3d<double> box;
+  box.add(o1.world2im()(min_x, min_y, min_z));
+  box.add(o1.world2im()(max_x, max_y, max_z));
+
+  unsigned np=o1_image.nplanes();
+  unsigned nk=o1_image.nk();
+  unsigned nj=o1_image.nj();
+  unsigned ni=o1_image.ni();
+
+  for (unsigned p=0; p<np; ++p)
+    for (unsigned k=0; k<nk; ++k)
+      for (unsigned j=0; j<nj; ++j)
+        for (unsigned i=0; i<ni; ++i)
+        {
+          vgl_box_3d<double> voxel(i-0.5, j-0.5, k-0.5, i+0.5, j+0.5, k+0.5);
+          image_out.image()(i, j, k) = static_cast<float>(vgl_intersection(voxel, box).volume());
+        }
+
+  s.pop(7);
+  s.push_front(operand(image_out));
+}
+
+void box__image_3d_of_int__double__double__double__double__double__double(opstack_t& s)
+{
+  assert(s.size() >= 7);
+  vimt3d_image_3d_of<int> o1(s[6].as_image_3d_of_int());
+  double min_x(s[5].as_double());
+  double min_y(s[4].as_double());
+  double min_z(s[3].as_double());
+  double max_x(s[2].as_double());
+  double max_y(s[1].as_double());
+  double max_z(s[0].as_double());
+
+  const vil3d_image_view<int>& o1_image = o1.image();
+
+
+  vimt3d_image_3d_of<int> image_out(o1_image.ni(), o1_image.nj(), o1_image.nk(), 1,
+    o1.world2im());
+
+  vgl_box_3d<double> box;
+  box.add(o1.world2im()(min_x, min_y, min_z));
+  box.add(o1.world2im()(max_x, max_y, max_z));
+
+
+
+  unsigned nk=o1_image.nk();
+  unsigned nj=o1_image.nj();
+  unsigned ni=o1_image.ni();
+
+  for (unsigned k=0; k<nk; ++k)
+    for (unsigned j=0; j<nj; ++j)
+      for (unsigned i=0; i<ni; ++i)
+      {
+        image_out.image()(i, j, k) = box.contains(i,j,k) ? 1 : 0;
+      }
+
+  s.pop(7);
+  s.push_front(operand(image_out));
+}
+
 
 void local_z_normalise__image_3d_of_float__double(opstack_t& s)
 {
@@ -1927,6 +2145,14 @@ class operations
     add_operation("--and",  &and__image_3d_of_int__image_3d_of_int,
                   function_type_t() << operand::e_image_3d_of_int << operand::e_image_3d_of_int,
                   "im_A im_B", "image", "Logical AND over corresponding voxels in im_B and im_B");
+    add_operation("--box", &box__image_3d_of_float__double__double__double__double__double__double,
+                  function_type_t() << operand::e_image_3d_of_float << operand::e_double << operand::e_double
+                   << operand::e_double << operand::e_double << operand::e_double << operand::e_double,
+                  "image x_min y_min z_min x_max y_max z_max", "image", "Fill image with a partial-vol image of a box (in mm)");
+    add_operation("--box", &box__image_3d_of_int__double__double__double__double__double__double,
+                  function_type_t() << operand::e_image_3d_of_int << operand::e_double << operand::e_double
+                   << operand::e_double << operand::e_double << operand::e_double << operand::e_double,
+                  "image x_min y_min z_min x_max y_max z_max", "image", "Fill image with a binary image of a box (in mm)");
     add_operation("--clamp-above", &clamp_above__image_3d_of_float__double__double,
                   function_type_t() << operand::e_image_3d_of_float << operand::e_double << operand::e_double,
                   "image threshold value", "image", "Set all voxels in image at or above threshold to value");
@@ -2032,6 +2258,12 @@ class operations
     add_operation("--min",  &min__image_3d_of_float__image_3d_of_float,
                   function_type_t() << operand::e_image_3d_of_float << operand::e_image_3d_of_float,
                   "im_A im_B", "image", "min over corresponding voxels in im_B and im_B");
+    add_operation("--na-from-mask",  &na_from_mask__image_3d_of_int,
+                  function_type_t() << operand::e_image_3d_of_int,
+                  "mask_image", "image", "Convert non-zero values to NA");
+    add_operation("--na-to-mask",  &na_to_mask__image_3d_of_float,
+                  function_type_t() << operand::e_image_3d_of_float,
+                  "image", "mask_image", "Convert NA/NaN values to 1, all others to 0");
     add_operation("--not", &not__image_3d_of_int,
                   function_type_t() << operand::e_image_3d_of_int,
                   "image", "image", "Apply logical NOT to voxels");
@@ -2074,6 +2306,9 @@ class operations
     add_operation("--print-stats", &print_stats__image_3d_of_float,
                   function_type_t() << operand::e_image_3d_of_float,
                   "image", "", "Print basic statistics of image's voxel values");
+    add_operation("--print-unique", &print_unique__image_3d_of_int,
+                  function_type_t() << operand::e_image_3d_of_int,
+                  "image", "", "Print generalised overlap measures and volumes of two partial volume mask images.");
     add_operation("--product", &product__double__double,
                   function_type_t() << operand::e_double << operand::e_double,
                   "A B", "A*B", "Multiply values A plus B");
