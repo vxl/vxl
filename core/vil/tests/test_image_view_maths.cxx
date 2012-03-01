@@ -366,9 +366,53 @@ static void test_image_view_maths_byte()
   }
 }
 
+static void test_image_view_maths_float()
+{
+  // Testing absolute difference for vxl_byte
+  vil_image_view<float> bdiff_A(20,20);
+  vil_image_view<float> bdiff_B(20,20);
+  vil_image_view<float> bdiff_D(20,20);
+  bdiff_A.fill(100.0f);
+  bdiff_B.fill(200.0f);
+  bdiff_D.fill(30.0f);
+  vil_math_image_abs_difference(bdiff_A, bdiff_A, bdiff_D);
+  for(unsigned j = 0; j < 20; ++j)
+  {
+    for(unsigned i = 0; i < 20; ++i)
+    {
+      vcl_stringstream ss;
+      ss << "vil_math_image_abs_difference(" << i << "," << j << ") == 0.0f";
+      TEST_NEAR(ss.str().c_str(), bdiff_D(i,j), 0.0f, 1e-8);
+    }
+  }
+  bdiff_D.fill(30);
+  vil_math_image_abs_difference(bdiff_A, bdiff_B, bdiff_D);
+  for(unsigned j = 0; j < 20; ++j)
+  {
+    for(unsigned i = 0; i < 20; ++i)
+    {
+      vcl_stringstream ss;
+      ss << "vil_math_image_abs_difference(" << i << "," << j << ") == 100.0f";
+      TEST_NEAR(ss.str().c_str(), bdiff_D(i,j), 100.0f, 1e-8);
+    }
+  }
+  bdiff_D.fill(30);
+  vil_math_image_abs_difference(bdiff_B, bdiff_A, bdiff_D);
+  for(unsigned j = 0; j < 20; ++j)
+  {
+    for(unsigned i = 0; i < 20; ++i)
+    {
+      vcl_stringstream ss;
+      ss << "vil_math_image_abs_difference(" << i << "," << j << ") == 100.0f";
+      TEST_NEAR(ss.str().c_str(), bdiff_D(i,j), 100.0f, 1e-8);
+    }
+  }
+}
+
 static void test_image_view_maths()
 {
   test_image_view_maths_byte();
+  test_image_view_maths_float();
 }
 
 TESTMAIN(test_image_view_maths);

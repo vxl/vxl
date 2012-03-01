@@ -4,12 +4,9 @@
 #error "This header should not be included directly, only through vil_math.h"
 #endif
 
-#include <vcl_cstddef.h>
 #include <vcl_cstring.h>
 #include <vxl_config.h>
 #include <x86intrin.h>
-
-#include <vcl_iostream.h>
 
 //:
 // \file
@@ -18,12 +15,12 @@
 // \author Chuck Atkins
 
 //: Compute the 1D absolute difference of two images (im_sum = |imA-imB|)
-#define VIL_MATH_IMAGE_ABS_DIFFERENCE_1D_SPECIALIZE(T)                     \
+#define VIL_MATH_IMAGE_ABS_DIFFERENCE_1D_SSE_SPECIALIZE(T)                 \
 template<>                                                                 \
-inline void vil_math_image_abs_difference_1d<vxl_byte,vxl_byte,vxl_byte>(  \
-  const vxl_byte* pxA, vcl_ptrdiff_t isA,                                  \
-  const vxl_byte* pxB, vcl_ptrdiff_t isB,                                  \
-        vxl_byte* pxD, vcl_ptrdiff_t isD,                                  \
+inline void vil_math_image_abs_difference_1d<T, T, T>(                     \
+  const T* pxA, vcl_ptrdiff_t isA,                                         \
+  const T* pxB, vcl_ptrdiff_t isB,                                         \
+        T* pxD, vcl_ptrdiff_t isD,                                         \
   unsigned len)                                                            \
 {                                                                          \
   if (isA == 1 && isB == 1 && isD == 1)                                    \
@@ -51,12 +48,12 @@ inline void vil_math_image_abs_difference_1d_sse<vxl_byte>(
   unsigned len)
 {
   const unsigned ni_d_16 = len >> 4;
-  const unsigned ni_m_16 = len & 0xF;
+  const unsigned ni_m_16 = len & 0x0F;
 
   // Use these for the last set of pxs in each row
-  vxl_uint_8 pxLastA[16];
-  vxl_uint_8 pxLastB[16];
-  vxl_uint_8 pxLastD[16];
+  vxl_byte pxLastA[16];
+  vxl_byte pxLastB[16];
+  vxl_byte pxLastD[16];
   __m128i* pxLastAxmm = reinterpret_cast<__m128i*>(pxLastA);
   __m128i* pxLastBxmm = reinterpret_cast<__m128i*>(pxLastB);
   __m128i* pxLastDxmm = reinterpret_cast<__m128i*>(pxLastD);
@@ -102,4 +99,47 @@ inline void vil_math_image_abs_difference_1d_sse<vxl_byte>(
   vcl_memcpy(pxDxmm, pxLastD, ni_m_16);
 }
 
-VIL_MATH_IMAGE_ABS_DIFFERENCE_1D_SPECIALIZE(vxl_byte)
+VIL_MATH_IMAGE_ABS_DIFFERENCE_1D_SSE_SPECIALIZE(vxl_byte)
+
+//: Compute absolute difference of two images (im_sum = |imA-imB|)
+template<>
+inline void vil_math_image_abs_difference_1d_sse<float>(
+  const float* pxA, const float* pxB, float* pxD,
+  unsigned len)
+{
+  const unsigned ni_d_4 = len >> 2;
+  const unsigned ni_m_4 = len & 0x03;
+
+  // Use these for the last set of pxs in each row
+  float pxLastA[4];
+  float pxLastB[4];
+  float pxLastD[4];
+
+  // Loop through the first set of pxs in groups of 16
+  for (unsigned i = 0; i < ni_d_4; ++i, pxA += 4, pxB += 4, pxD += 4)
+  {
+    __m128 xmmA = _mm_loadu_ps(pxA);
+    __m128 xmmB = _mm_loadu_ps(pxB);
+
+    __m128 xmmMax = _mm_max_ps(xmmA, xmmB);
+    __m128 xmmMin = _mm_min_ps(xmmA, xmmB);
+    __m128 xmmD = _mm_sub_ps(xmmMax, xmmMin);
+
+    _mm_storeu_ps(pxD, xmmD);
+  }
+
+  // Process the remainder < 16
+  vcl_memcpy(pxLastA, pxA, ni_m_4);
+  vcl_memcpy(pxLastB, pxB, ni_m_4);
+  __m128 xmmA = _mm_loadu_ps(pxLastA);
+  __m128 xmmB = _mm_loadu_ps(pxLastB);
+
+  __m128 xmmMax = _mm_max_ps(xmmA, xmmB);
+  __m128 xmmMin = _mm_min_ps(xmmA, xmmB);
+  __m128 xmmD = _mm_sub_ps(xmmMax, xmmMin);
+
+  _mm_storeu_ps(pxLastD, xmmD);
+  vcl_memcpy(pxD, pxLastD, ni_m_4);
+}
+
+VIL_MATH_IMAGE_ABS_DIFFERENCE_1D_SSE_SPECIALIZE(float)
