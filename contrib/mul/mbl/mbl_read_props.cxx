@@ -248,6 +248,8 @@ mbl_read_props_type mbl_read_props_ws(vcl_istream &afs)
     else break;
   }
 
+  if (afs.eof()) return mbl_read_props_type();
+
   bool need_closing_brace = false;
 
   if (label[0] == '{')
