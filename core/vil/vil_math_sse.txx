@@ -54,8 +54,6 @@ inline void vil_math_image_abs_difference_1d_sse<vxl_byte,vxl_byte,vxl_byte>(
     _mm_storeu_si128(pxDxmm, xmmD);
   }
 
-  // Use this conditions instead of the inverse so the most common case
-  // being that there are leftover pixels will not result in a branch
   if (ni_m_16 != 0)
   {
     // Process the remainder < 16
@@ -110,8 +108,6 @@ inline void vil_math_image_abs_difference_1d_sse<float,float,float>(
     _mm_storeu_ps(pxD, xmmD);
   }
 
-  // Use this conditions instead of the inverse so the most common case
-  // being that there are leftover pixels will not result in a branch
   if (ni_m_4_bytes != 0)
   {
     // Process the remainder < 4
