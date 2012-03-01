@@ -326,16 +326,17 @@ static void test_image_view_maths_byte()
   TEST_NEAR("vil_math_image_min (f)",fim_min_out(2,3),-3.f,1e-6);
 
   // Testing absolute difference for vxl_byte
-  vil_image_view<vxl_byte> bdiff_A(21,21);
-  vil_image_view<vxl_byte> bdiff_B(21,21);
-  vil_image_view<vxl_byte> bdiff_D(21,21);
-  bdiff_A.fill(100);
-  bdiff_B.fill(200);
+  { // test dimensions > 2 x 16 to hit sse corner cases
+  vil_image_view<vxl_byte> bdiff_A(35,53);
+  vil_image_view<vxl_byte> bdiff_B(35,53);
+  vil_image_view<vxl_byte> bdiff_D(35,53);
+  for(unsigned j=0;j<53;++j) for(unsigned i=0;i<35;++i) bdiff_A(i,j)=100+i+j;
+  for(unsigned j=0;j<53;++j) for(unsigned i=0;i<35;++i) bdiff_B(i,j)=113+i+j;
   bdiff_D.fill(30);
   vil_math_image_abs_difference(bdiff_A, bdiff_A, bdiff_D);
-  for(unsigned j = 0; j < 21; ++j)
+  for(unsigned j = 0; j < 53; ++j)
   {
-    for(unsigned i = 0; i < 21; ++i)
+    for(unsigned i = 0; i < 35; ++i)
     {
       vcl_stringstream ss;
       ss << "vil_math_image_abs_difference(" << i << "," << j << ") == 0";
@@ -344,41 +345,84 @@ static void test_image_view_maths_byte()
   }
   bdiff_D.fill(30);
   vil_math_image_abs_difference(bdiff_A, bdiff_B, bdiff_D);
-  for(unsigned j = 0; j < 21; ++j)
+  for(unsigned j = 0; j < 53; ++j)
   {
-    for(unsigned i = 0; i < 21; ++i)
+    for(unsigned i = 0; i < 35; ++i)
     {
       vcl_stringstream ss;
-      ss << "vil_math_image_abs_difference(" << i << "," << j << ") == 100";
-      TEST_EQUAL(ss.str().c_str(), bdiff_D(i,j), 100);
+      ss << "vil_math_image_abs_difference(" << i << "," << j << ") == 13";
+      TEST_EQUAL(ss.str().c_str(), bdiff_D(i,j), 13);
     }
   }
   bdiff_D.fill(30);
   vil_math_image_abs_difference(bdiff_B, bdiff_A, bdiff_D);
-  for(unsigned j = 0; j < 21; ++j)
+  for(unsigned j = 0; j < 53; ++j)
   {
-    for(unsigned i = 0; i < 21; ++i)
+    for(unsigned i = 0; i < 35; ++i)
     {
       vcl_stringstream ss;
-      ss << "vil_math_image_abs_difference(" << i << "," << j << ") == 100";
-      TEST_EQUAL(ss.str().c_str(), bdiff_D(i,j), 100);
+      ss << "vil_math_image_abs_difference(" << i << "," << j << ") == 13";
+      TEST_EQUAL(ss.str().c_str(), bdiff_D(i,j), 13);
     }
+  }
+  }
+  // Testing absolute difference for vxl_byte
+  { // test dimensions = 2 x 16 to hit sse corner cases
+  vil_image_view<vxl_byte> bdiff_A(32,48);
+  vil_image_view<vxl_byte> bdiff_B(32,48);
+  vil_image_view<vxl_byte> bdiff_D(32,48);
+  for(unsigned j=0;j<48;++j) for(unsigned i=0;i<32;++i) bdiff_A(i,j)=100+i+j;
+  for(unsigned j=0;j<48;++j) for(unsigned i=0;i<32;++i) bdiff_B(i,j)=113+i+j;
+  bdiff_D.fill(30);
+  vil_math_image_abs_difference(bdiff_A, bdiff_A, bdiff_D);
+  for(unsigned j = 0; j < 48; ++j)
+  {
+    for(unsigned i = 0; i < 32; ++i)
+    {
+      vcl_stringstream ss;
+      ss << "vil_math_image_abs_difference(" << i << "," << j << ") == 0";
+      TEST_EQUAL(ss.str().c_str(), bdiff_D(i,j), 0);
+    }
+  }
+  bdiff_D.fill(30);
+  vil_math_image_abs_difference(bdiff_A, bdiff_B, bdiff_D);
+  for(unsigned j = 0; j < 48; ++j)
+  {
+    for(unsigned i = 0; i < 32; ++i)
+    {
+      vcl_stringstream ss;
+      ss << "vil_math_image_abs_difference(" << i << "," << j << ") == 13";
+      TEST_EQUAL(ss.str().c_str(), bdiff_D(i,j), 13);
+    }
+  }
+  bdiff_D.fill(30);
+  vil_math_image_abs_difference(bdiff_B, bdiff_A, bdiff_D);
+  for(unsigned j = 0; j < 48; ++j)
+  {
+    for(unsigned i = 0; i < 32; ++i)
+    {
+      vcl_stringstream ss;
+      ss << "vil_math_image_abs_difference(" << i << "," << j << ") == 13";
+      TEST_EQUAL(ss.str().c_str(), bdiff_D(i,j), 13);
+    }
+  }
   }
 }
 
 static void test_image_view_maths_float()
 {
-  // Testing absolute difference for vxl_byte
-  vil_image_view<float> bdiff_A(21,21);
-  vil_image_view<float> bdiff_B(21,21);
-  vil_image_view<float> bdiff_D(21,21);
-  bdiff_A.fill(100.0f);
-  bdiff_B.fill(200.0f);
+  // Testing absolute difference for float
+  { // Test dimensions > 2x4 for sse corner cases
+  vil_image_view<float> bdiff_A(11,13);
+  vil_image_view<float> bdiff_B(11,13);
+  vil_image_view<float> bdiff_D(11,13);
+  for(unsigned j=0;j<13;++j) for(unsigned i=0;i<11;++i) bdiff_A(i,j)=100.0f+i+j;
+  for(unsigned j=0;j<13;++j) for(unsigned i=0;i<11;++i) bdiff_B(i,j)=113.0f+i+j;
   bdiff_D.fill(30.0f);
   vil_math_image_abs_difference(bdiff_A, bdiff_A, bdiff_D);
-  for(unsigned j = 0; j < 21; ++j)
+  for(unsigned j = 0; j < 13; ++j)
   {
-    for(unsigned i = 0; i < 21; ++i)
+    for(unsigned i = 0; i < 11; ++i)
     {
       vcl_stringstream ss;
       ss << "vil_math_image_abs_difference(" << i << "," << j << ") == 0.0f";
@@ -387,25 +431,67 @@ static void test_image_view_maths_float()
   }
   bdiff_D.fill(30);
   vil_math_image_abs_difference(bdiff_A, bdiff_B, bdiff_D);
-  for(unsigned j = 0; j < 21; ++j)
+  for(unsigned j = 0; j < 13; ++j)
   {
-    for(unsigned i = 0; i < 21; ++i)
+    for(unsigned i = 0; i < 11; ++i)
     {
       vcl_stringstream ss;
-      ss << "vil_math_image_abs_difference(" << i << "," << j << ") == 100.0f";
-      TEST_NEAR(ss.str().c_str(), bdiff_D(i,j), 100.0f, 1e-8);
+      ss << "vil_math_image_abs_difference(" << i << "," << j << ") == 13.0f";
+      TEST_NEAR(ss.str().c_str(), bdiff_D(i,j), 13.0f, 1e-8);
     }
   }
   bdiff_D.fill(30);
   vil_math_image_abs_difference(bdiff_B, bdiff_A, bdiff_D);
-  for(unsigned j = 0; j < 21; ++j)
+  for(unsigned j = 0; j < 13; ++j)
   {
-    for(unsigned i = 0; i < 21; ++i)
+    for(unsigned i = 0; i < 11; ++i)
     {
       vcl_stringstream ss;
-      ss << "vil_math_image_abs_difference(" << i << "," << j << ") == 100.0f";
-      TEST_NEAR(ss.str().c_str(), bdiff_D(i,j), 100.0f, 1e-8);
+      ss << "vil_math_image_abs_difference(" << i << "," << j << ") == 13.0f";
+      TEST_NEAR(ss.str().c_str(), bdiff_D(i,j), 13.0f, 1e-8);
     }
+  }
+  }
+  // Testing absolute difference for float
+  { // Test dimensions = 2x4 for sse corner cases
+  vil_image_view<float> bdiff_A(8,12);
+  vil_image_view<float> bdiff_B(8,12);
+  vil_image_view<float> bdiff_D(8,12);
+  for(unsigned j=0;j<12;++j) for(unsigned i=0;i<8;++i) bdiff_A(i,j)=100.0f+i+j;
+  for(unsigned j=0;j<12;++j) for(unsigned i=0;i<8;++i) bdiff_B(i,j)=113.0f+i+j;
+  bdiff_D.fill(30.0f);
+  vil_math_image_abs_difference(bdiff_A, bdiff_A, bdiff_D);
+  for(unsigned j = 0; j < 12; ++j)
+  {
+    for(unsigned i = 0; i < 8; ++i)
+    {
+      vcl_stringstream ss;
+      ss << "vil_math_image_abs_difference(" << i << "," << j << ") == 0.0f";
+      TEST_NEAR(ss.str().c_str(), bdiff_D(i,j), 0.0f, 1e-8);
+    }
+  }
+  bdiff_D.fill(30);
+  vil_math_image_abs_difference(bdiff_A, bdiff_B, bdiff_D);
+  for(unsigned j = 0; j < 12; ++j)
+  {
+    for(unsigned i = 0; i < 8; ++i)
+    {
+      vcl_stringstream ss;
+      ss << "vil_math_image_abs_difference(" << i << "," << j << ") == 13.0f";
+      TEST_NEAR(ss.str().c_str(), bdiff_D(i,j), 13.0f, 1e-8);
+    }
+  }
+  bdiff_D.fill(30);
+  vil_math_image_abs_difference(bdiff_B, bdiff_A, bdiff_D);
+  for(unsigned j = 0; j < 12; ++j)
+  {
+    for(unsigned i = 0; i < 8; ++i)
+    {
+      vcl_stringstream ss;
+      ss << "vil_math_image_abs_difference(" << i << "," << j << ") == 13.0f";
+      TEST_NEAR(ss.str().c_str(), bdiff_D(i,j), 13.0f, 1e-8);
+    }
+  }
   }
 }
 
