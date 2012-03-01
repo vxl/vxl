@@ -14,7 +14,20 @@
 // intrinsic functions
 // \author Chuck Atkins
 
-//: Compute absolute difference of two 1D images (im_sum = |imA-imB|)
+// To add a new optimized implementation for a different set of types:
+//
+//  1.  Add a call to VIL_MATH_IMAGE_ABS_DIFF_1D_SSE_SPECIALIZE for the new
+//      combination of types the implementation is defined for
+//  2.  Add the implementation for vil_math_image_abs_difference_1d_sse
+//      specialized for the new type combination in vil_math_sse.txx
+//
+// Note:
+//  The types need not all three be the same so long as the specialization
+//  of vil_math_image_abs_difference_1d_sse in vil_math_sse.txx is implemented
+//  for the defined combination of types
+
+
+//: Compute absolute difference of two 1D images (imD = |imA-imB|)
 #define VIL_MATH_IMAGE_ABS_DIFF_1D_SSE_SPECIALIZE(aT,bT,dT)  \
 template<>                                                              \
 inline void vil_math_image_abs_difference_1d<aT,bT,dT>(                 \
