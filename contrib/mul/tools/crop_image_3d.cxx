@@ -5,6 +5,7 @@
 
 #include <vcl_exception.h>
 #include <vcl_iostream.h>
+#include <vcl_algorithm.h>
 #include <vul/vul_arg.h>
 #include <mbl/mbl_log.h>
 #include <vimt3d/vimt3d_add_all_loaders.h>
@@ -16,6 +17,7 @@
 #include <vul/vul_file.h>
 #include <vul/vul_string.h>
 #include <vgl/vgl_point_3d.h>
+#include <vgl/vgl_box_3d.h>
 
 
 //=========================================================================
@@ -52,8 +54,9 @@ int main2(int argc, char*argv[])
   vul_arg<vcl_vector<unsigned> > bbi("-bbi", "bounding box in image coords (i0,j0,k0,i1,j1,k1)");
   vul_arg<vcl_vector<double> > bbf("-bbf", "bounding box in image fraction e.g. 0.2,0.2,0.2,0.75,0.75,0.75");
   vul_arg<vcl_vector<double> > bbw("-bbw", "bounding box in world coords (x0,y0,z0,x1,y1,z1)");
+  vul_arg<vcl_vector<double> > cw("-cw", "crop width in world distances (xlo_d,ylo_d,zlo_d,xhi_d,yhi_d,zhi_d)");
   vul_arg<bool> use_mm("-mm", "World coords are in units of millimetres (default=metres)", false);
-  vul_arg<bool> ignore_bounds_errors("-ib", "adjust any bounding box values outside image to iamge edge", false);
+  vul_arg<bool> ignore_bounds_errors("-ib", "adjust any bounding box values outside image to image edge", false);
   vul_arg_parse(argc, argv);
 
   // Log the program arguments
@@ -67,15 +70,18 @@ int main2(int argc, char*argv[])
     MBL_LOG(INFO, logger(), "  bbf: " << bbf.print_value(logger().log(mbl_logger::INFO)));
   if (bbw.set())
     MBL_LOG(INFO, logger(), "  bbw: " << bbw.print_value(logger().log(mbl_logger::INFO)));
+  if (cw.set())
+    MBL_LOG(INFO, logger(), "  cw: " << cw.print_value(logger().log(mbl_logger::INFO)));
 
   // Count the number of bbox options specified - should be exactly 1.
   unsigned nbb=0;
   if (bbi.set()) nbb++;
   if (bbf.set()) nbb++;
   if (bbw.set()) nbb++;
+  if (cw.set()) nbb++;
   if (nbb!=1)
   {
-    vcl_cerr << "ERROR: specify exactly 1 of the -bbi, -bbf or -bbw options." << vcl_endl;
+    vcl_cerr << "ERROR: specify exactly 1 of the -bbi, -bbf, -bbw, or -cw options." << vcl_endl;
     return 1;
   }
 
@@ -136,6 +142,25 @@ int main2(int argc, char*argv[])
     x0 = bbw()[0]; y0 = bbw()[1]; z0 = bbw()[2];    
     x1 = bbw()[3]; y1 = bbw()[4]; z1 = bbw()[5];
   }
+  // Validate the cw argument - should be 6 doubles, specifying
+  // lower corner shift up (x0,y0,z0) and upper corner shift down (x1,y1,z1) in world distances
+  if (cw.set())
+  {
+    if (cw().size() != 6)
+    {
+      vcl_cerr << "ERROR: -cw argument should contain exactly 6 floats\n";
+      return 1;
+    }
+
+    if (cw()[0] < 0 || cw()[1] || cw()[2] < 0 || cw()[3]<0 || cw()[4]<0 || cw()[5]<0)
+    {
+      vcl_cerr << "ERROR: -cw argument should specify cropping widths on each face of the bounding box. Negative values are not allowed.\n";
+      return 1;
+    }
+
+    x0 = cw()[0]; y0 = cw()[1]; z0 = cw()[2];    
+    x1 = cw()[3]; y1 = cw()[4]; z1 = cw()[5];
+  }
 
   // Determine the output filetype
   vcl_string filetype = vul_file::extension(img_dst());
@@ -192,6 +217,7 @@ int main2(int argc, char*argv[])
     // Convert world coords values to voxel numbers 
     vgl_point_3d<double> imlo = w2i(vgl_point_3d<double>(x0,y0,z0));
     vgl_point_3d<double> imhi = w2i(vgl_point_3d<double>(x1,y1,z1));
+    imhi.set(imhi.x()*0.999999, imhi.y()*0.999999, imhi.z()*0.999999);
     if (ignore_bounds_errors())
     {
       imlo.set(vcl_max<double>(imlo.x(),0),
@@ -215,6 +241,45 @@ int main2(int argc, char*argv[])
     nj = j1 - j0 + 1;
     nk = k1 - k0 + 1;
   }
+  if (cw.set())
+  {
+
+    // Convert world coords values to voxel numbers 
+    vgl_box_3d<double> bb;
+    bb.add(w2i.inverse()(0,0,0));
+    bb.add(w2i.inverse()(ir->ni(),ir->nj(),ir->nk()));
+    bb.set_min_x(bb.min_x()+x0);
+    bb.set_min_y(bb.min_y()+y0);
+    bb.set_min_z(bb.min_z()+z0);
+    bb.set_max_x(bb.max_x()-x1);
+    bb.set_max_y(bb.max_y()-y1);
+    bb.set_max_z(bb.max_z()-z1);
+    
+    if (bb.is_empty())
+    {
+      vcl_cerr << "ERROR: -cw argument should specify cropping widths that do not overlap.\n";
+      return 1;
+    }
+
+
+    vgl_point_3d<double> imhi = w2i(bb.max_point());
+    imhi.set(imhi.x()*0.999999, imhi.y()*0.999999, imhi.z()*0.999999);
+    vgl_point_3d<double> imlo = w2i(bb.min_point());
+
+    // Round lower bounds down
+    i0 = static_cast<unsigned>(vcl_max(0.0,vcl_floor(imlo.x())));
+    j0 = static_cast<unsigned>(vcl_max(0.0,vcl_floor(imlo.y())));
+    k0 = static_cast<unsigned>(vcl_max(0.0,vcl_floor(imlo.z())));
+    // Round upper bounds up
+    unsigned i1 = static_cast<unsigned>(vcl_ceil(imhi.x()));
+    unsigned j1 = static_cast<unsigned>(vcl_ceil(imhi.y()));
+    unsigned k1 = static_cast<unsigned>(vcl_ceil(imhi.z()));
+
+
+    ni = i1 - i0;
+    nj = j1 - j0;
+    nk = k1 - k0;
+  }
   if (ignore_bounds_errors())
   {
     if (i0+ni > ir->ni()) ni=ir->ni() - i0;
@@ -231,25 +296,26 @@ int main2(int argc, char*argv[])
 
   if (i0 >= ir->ni() || j0 >= ir->nj() || k0 > ir->nk())
   {
-    vcl_cerr << "ERROR: Crop region bbox lower corner is outside input image.\n";
+    vcl_cerr << "ERROR: Crop region bbox lower corner is outside input image " <<
+      vul_file::strip_directory(img_src()) << "\n";
     return 2;
   }
   if (i0+ni > ir->ni())
   {
-    MBL_LOG(WARN, logger(), "Crop region bbox upper corner i was outside input image; truncating to fit.");
-    vcl_cerr << "WARNING: Crop region bbox upper corner i was outside input image; truncating to fit.\n";
+    vcl_cerr << "WARNING: Crop region bbox upper corner i was outside input image " <<
+      vul_file::strip_directory(img_src()) << "; truncating to fit.\n";
     ni = ir->ni()-i0;
   }
   if (j0+nj > ir->nj())
   {
-    MBL_LOG(WARN, logger(), "Crop region bbox upper corner j was outside input image; truncating to fit.");
-    vcl_cerr << "WARNING: Crop region bbox upper corner j was outside input image; truncating to fit.\n";
+    vcl_cerr << "WARNING: Crop region bbox upper corner j was outside input image " <<
+      vul_file::strip_directory(img_src()) << "; truncating to fit.\n";
     nj = ir->nj()-j0;
   }
   if (k0+nk > ir->nk())
   {
-    MBL_LOG(WARN, logger(), "Crop region bbox upper corner k was outside input image; truncating to fit.");
-    vcl_cerr << "WARNING: Crop region bbox upper corner k was outside input image; truncating to fit.\n";
+    vcl_cerr << "WARNING: Crop region bbox upper corner k was outside input image " <<
+      vul_file::strip_directory(img_src()) << "; truncating to fit.\n";
     nk = ir->nk()-k0;
   }
 
@@ -261,7 +327,6 @@ int main2(int argc, char*argv[])
     img_dst().c_str(), ni, nj, nk, ivbp->nplanes(), ivbp->pixel_format(), filetype.c_str());
   if (!ir2)
   {
-    MBL_LOG(ERR, logger(), "Failed to create output image resource");
     vcl_cerr << "ERROR: Failed to create output image resource\n";
     return 2;
   }
@@ -283,7 +348,6 @@ int main2(int argc, char*argv[])
   bool succ = ir2->put_view(*ivbp);
   if (!succ)
   {
-    MBL_LOG(ERR, logger(), "Failed to put_view into output image resource");
     vcl_cerr << "ERROR: Failed to put_view into output image resource\n";
     return 3;
   }
