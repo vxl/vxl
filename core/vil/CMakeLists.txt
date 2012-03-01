@@ -273,7 +273,7 @@ set( vil_sources ${vil_sources}
 )
 IF ( ${VXL_HAS_SSE2_HARDWARE_SUPPORT} )
   SET( vil_sources ${vil_sources}
-    vil_math_sse.cxx vil_math_sse.h
+    vil_math_sse.txx
   )
 ENDIF ( ${VXL_HAS_SSE2_HARDWARE_SUPPORT} )
 

@@ -2,6 +2,8 @@
 #include <iostream>
 #include <testlib/testlib_test.h>
 #include <vcl_compiler.h>
+#include <vcl_iostream.h>
+#include <vcl_sstream.h>
 #include <vxl_config.h> // for vxl_byte
 #include <vil/vil_copy.h>
 #include <vil/vil_math.h>
@@ -322,6 +324,46 @@ static void test_image_view_maths_byte()
   TEST_NEAR("vil_math_image_min (d)",fim_min_out(1,2),4.2f,1e-6);
   TEST_NEAR("vil_math_image_min (e)",fim_min_out(2,2),4.2f,1e-6);
   TEST_NEAR("vil_math_image_min (f)",fim_min_out(2,3),-3.f,1e-6);
+
+  // Testing absolute difference for vxl_byte
+  vil_image_view<vxl_byte> bdiff_A(20,20);
+  vil_image_view<vxl_byte> bdiff_B(20,20);
+  vil_image_view<vxl_byte> bdiff_D(20,20);
+  bdiff_A.fill(100);
+  bdiff_B.fill(200);
+  bdiff_D.fill(30);
+  vil_math_image_abs_difference(bdiff_A, bdiff_A, bdiff_D);
+  for(unsigned j = 0; j < 20; ++j)
+  {
+    for(unsigned i = 0; i < 20; ++i)
+    {
+      vcl_stringstream ss;
+      ss << "vil_math_image_abs_difference(" << i << "," << j << ") == 0";
+      TEST_EQUAL(ss.str().c_str(), bdiff_D(i,j), 0);
+    }
+  }
+  bdiff_D.fill(30);
+  vil_math_image_abs_difference(bdiff_A, bdiff_B, bdiff_D);
+  for(unsigned j = 0; j < 20; ++j)
+  {
+    for(unsigned i = 0; i < 20; ++i)
+    {
+      vcl_stringstream ss;
+      ss << "vil_math_image_abs_difference(" << i << "," << j << ") == 100";
+      TEST_EQUAL(ss.str().c_str(), bdiff_D(i,j), 100);
+    }
+  }
+  bdiff_D.fill(30);
+  vil_math_image_abs_difference(bdiff_B, bdiff_A, bdiff_D);
+  for(unsigned j = 0; j < 20; ++j)
+  {
+    for(unsigned i = 0; i < 20; ++i)
+    {
+      vcl_stringstream ss;
+      ss << "vil_math_image_abs_difference(" << i << "," << j << ") == 100";
+      TEST_EQUAL(ss.str().c_str(), bdiff_D(i,j), 100);
+    }
+  }
 }
 
 static void test_image_view_maths()

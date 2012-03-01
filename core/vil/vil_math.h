@@ -1,4 +1,3 @@
-// This is core/vil/vil_math.h
 #ifndef vil_math_h_
 #define vil_math_h_
 //:
@@ -15,12 +14,7 @@
 #include <vil/vil_view_as.h>
 #include <vil/vil_plane.h>
 #include <vil/vil_transform.h>
-
 #include <vil/vil_config.h>
-#ifdef VXL_HAS_SSE2_HARDWARE_SUPPORT
-#include <vil/vil_math_sse.h>
-#include <vcl_typeinfo.h>
-#endif
 
 //: Compute minimum and maximum values over view
 template<class T>
@@ -825,63 +819,69 @@ inline void vil_math_image_difference(const vil_image_view<aT>& imA,
   }
 }
 
+
+//: Compute absolute difference of two i1D images (im_sum = |imA-imB|)
+// \relatesalso vil_image_view
+template<class aT, class bT, class dT>
+inline void vil_math_image_abs_difference_1d_generic(
+  const aT* pxA, vcl_ptrdiff_t isA,
+  const bT* pxB, vcl_ptrdiff_t isB,
+        dT* pxD, vcl_ptrdiff_t isD,
+  unsigned len)
+{
+  for (unsigned i =0; i < len; ++i, pxA += isA, pxB += isB, pxD += isD)
+  {
+    // The following construction works for all types, including unsigned
+    *pxD = (*pxA > *pxB) ? (dT)(*pxA - *pxB) : (dT)(*pxB - *pxA);
+  }
+}
+
+
+//: Compute absolute difference of two 1D images (im_sum = |imA-imB|)
+// Specialize this function for an optimized implementation
+template<class aT, class bT, class dT>
+inline void vil_math_image_abs_difference_1d(
+  const aT* pxA, vcl_ptrdiff_t isA,
+  const bT* pxB, vcl_ptrdiff_t isB,
+        dT* pxD, vcl_ptrdiff_t isD,
+  unsigned len)
+{
+  vil_math_image_abs_difference_1d_generic<aT, bT, dT>(
+    pxA, isA, pxB, isB, pxD, isD, len);
+}
+
+
 //: Compute absolute difference of two images (im_sum = |imA-imB|)
 // \relatesalso vil_image_view
-template<class aT, class bT, class sumT>
+template<class aT, class bT, class dT>
 inline void vil_math_image_abs_difference(const vil_image_view<aT>& imA,
                                           const vil_image_view<bT>& imB,
-                                          vil_image_view<sumT>& im_sum)
+                                                vil_image_view<dT>& imD)
 {
-  unsigned ni = imA.ni(),nj = imA.nj(),np = imA.nplanes();
-  assert(imB.ni()==ni && imB.nj()==nj && imB.nplanes()==np);
-  im_sum.set_size(ni,nj,np);
+  unsigned ni = imA.ni(), nj = imA.nj(), np = imA.nplanes();
+  assert(imB.ni() == ni && imB.nj() == nj && imB.nplanes() == np);
+  imD.set_size(ni, nj, np);
 
-  std::ptrdiff_t istepA=imA.istep(),jstepA=imA.jstep(),pstepA = imA.planestep();
-  std::ptrdiff_t istepB=imB.istep(),jstepB=imB.jstep(),pstepB = imB.planestep();
-  std::ptrdiff_t istepS=im_sum.istep(),jstepS=im_sum.jstep(),pstepS = im_sum.planestep();
+  vcl_ptrdiff_t isA=imA.istep(), jsA=imA.jstep(), psA = imA.planestep();
+  vcl_ptrdiff_t isB=imB.istep(), jsB=imB.jstep(), psB = imB.planestep();
+  vcl_ptrdiff_t isD=imD.istep(), jsD=imD.jstep(), psD = imD.planestep();
   const aT* planeA = imA.top_left_ptr();
   const bT* planeB = imB.top_left_ptr();
-  sumT* planeS     = im_sum.top_left_ptr();
-#if VXL_HAS_SSE2_HARDWARE_SUPPORT
-  if (typeid(aT) == typeid(bT) && typeid(bT) == typeid(sumT) &&
-      istepA == 1 && istepB == 1 && istepS == 1)
+        dT* planeD = imD.top_left_ptr();
+
+  for (unsigned p = 0; p < np ;++p, planeA += psA, planeB += psB, planeD += psD)
   {
-    if (typeid(aT) == typeid(vxl_byte))
+    const aT* rowA = planeA;
+    const bT* rowB = planeB;
+          dT* rowD = planeD;
+    for (unsigned j = 0; j < nj; ++j, rowA += jsA, rowB += jsB, rowD += jsD)
     {
-      vil_math_image_abs_difference_sse<vxl_byte>(
-        planeA, planeB, planeS, ni, nj, np,
-        jstepA, jstepB, jstepS, pstepA, pstepB, pstepS);
-      return;
-    }
-    /* Add an elseif block for every new type that gets implemented
-    elseif (typeid(aT) == typeid(type_foo))
-    {
-      vil_math_image_abs_difference_sse<type_foo>(
-        planeA, planeB, planeS, ni, nj, np,
-        jstepA, jstepB, jstepS, pstepA, pstepB, pstepS);
-      return;
-    }
-    */
-  }
-#endif
-  for (unsigned p=0;p<np;++p,planeA += pstepA,planeB += pstepB,planeS += pstepS)
-  {
-    const aT* rowA   = planeA;
-    const bT* rowB   = planeB;
-    sumT* rowS = planeS;
-    for (unsigned j=0;j<nj;++j,rowA += jstepA,rowB += jstepB,rowS += jstepS)
-    {
-      const aT* pixelA = rowA;
-      const bT* pixelB = rowB;
-      sumT* pixelS = rowS;
-      for (unsigned i=0;i<ni;++i,pixelA+=istepA,pixelB+=istepB,pixelS+=istepS)
-      {
-        // The following construction works for all types, including unsigned
-        *pixelS = (*pixelA>*pixelB)?(sumT)(*pixelA-*pixelB):(sumT)(*pixelB-*pixelA);
-      }
+      vil_math_image_abs_difference_1d<aT,bT,dT>(
+        rowA, isA, rowB, isB, rowD, isB, ni);
     }
   }
 }
+
 
 //: Compute  sum of absolute difference between two images (|imA-imB|)
 // \relatesalso vil_image_view
@@ -1095,5 +1095,10 @@ inline void vil_math_integral_sqr_image(const vil_image_view<aT>& imA,
     }
   }
 }
+
+
+#ifdef VXL_HAS_SSE2_HARDWARE_SUPPORT
+#include "vil_math_sse.txx"
+#endif
 
 #endif // vil_math_h_
