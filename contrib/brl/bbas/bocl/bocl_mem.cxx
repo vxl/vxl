@@ -5,7 +5,7 @@
 #include <vcl_cstring.h>
 #include <vcl_cstdio.h>
 #include <vcl_cstdlib.h>
-
+#include <vcl_cassert.h>
 
 bocl_mem::bocl_mem(const cl_context& context, void* buffer, unsigned num_bytes, vcl_string id)
 : cpu_buf_(buffer),
@@ -98,21 +98,7 @@ bool bocl_mem::zero_gpu_buffer(const cl_command_queue& cmd_queue)
 {
   unsigned char* zeros = new unsigned char[this->num_bytes_]; // All values initialized to zero.
   vcl_memset(zeros, 0, this->num_bytes_);
-  ceEvent_ = 0;
-  cl_int status = MEM_FAILURE;
-  status = clEnqueueWriteBuffer(cmd_queue,
-                                this->buffer_,
-                                CL_TRUE,          //True=BLocking, False=NonBlocking
-                                0,
-                                this->num_bytes_,
-                                zeros,
-                                0,                //cl_uint num_events_in_wait_list
-                                0,
-                                &ceEvent_);
-  delete[] zeros;
-  if (!check_val(status,MEM_FAILURE,"clEnqueueWriteBuffer (ZERO BUFFER) failed: " + this->id_ + error_to_string(status)))
-    return MEM_FAILURE;
-  return MEM_SUCCESS;
+  return this->write_to_gpu_mem(cmd_queue, zeros, this->num_bytes_);
 }
 
 //: helper method to initialize gpu buffer with a constant value
@@ -155,45 +141,54 @@ bool bocl_mem::init_gpu_buffer(void const* init_val, vcl_size_t value_size, cl_c
 //: write to command queue
 bool bocl_mem::write_to_buffer(const cl_command_queue& cmd_queue)
 {
-  if (!is_gl_) {
-    ceEvent_ = 0;
-    cl_int status = MEM_FAILURE;
-    status = clEnqueueWriteBuffer(cmd_queue,
-                                  this->buffer_,
-                                  CL_TRUE,          //True=BLocking, False=NonBlocking
-                                  0,
-                                  this->num_bytes_,
-                                  this->cpu_buf_,
-                                  0,                //cl_uint num_events_in_wait_list
-                                  0,
-                                  &ceEvent_);
-    if (!check_val(status,MEM_FAILURE,"clEnqueueWriteBuffer failed: " + this->id_ + error_to_string(status)))
-      return MEM_FAILURE;
-    return MEM_SUCCESS;
-  }
+  if (!is_gl_) 
+    return this->write_to_gpu_mem(cmd_queue, this->cpu_buf_, this->num_bytes_);
   return true;
 }
 
 //: read from command queue buffer...
 bool bocl_mem::read_to_buffer(const cl_command_queue& cmd_queue)
 {
-  if (!is_gl_) {
-    int status = MEM_FAILURE;
-    // Enqueue readBuffers
-    status= clEnqueueReadBuffer(cmd_queue,
-                                this->buffer_,
-                                CL_TRUE,
-                                0,
-                                this->num_bytes_,
-                                this->cpu_buf_,
-                                0,
-                                NULL,
-                                &ceEvent_);
-    if (!check_val(status,MEM_FAILURE,"clEnqueueReadBuffer failed: " + this->id_ + error_to_string(status)))
-      return MEM_FAILURE;
-    return MEM_SUCCESS;
-  }
+  if (!is_gl_)
+    return this->read_from_gpu_mem(cmd_queue, this->cpu_buf_, this->num_bytes_);
   return true;
+}
+
+bool bocl_mem::write_to_gpu_mem(const cl_command_queue& cmd_queue, void* buff, vcl_size_t size)
+{
+  assert(size <= this->num_bytes_);
+  ceEvent_ = 0;
+  cl_int status = MEM_FAILURE;
+  status = clEnqueueWriteBuffer(cmd_queue,
+                                this->buffer_,
+                                CL_TRUE,          //True=BLocking, False=NonBlocking
+                                0,
+                                size,
+                                buff,
+                                0,                //cl_uint num_events_in_wait_list
+                                0,
+                                &ceEvent_);
+  if (!check_val(status,MEM_FAILURE,"clEnqueueWriteBuffer failed: " + this->id_ + error_to_string(status)))
+    return MEM_FAILURE;
+  return MEM_SUCCESS;
+}
+
+bool bocl_mem::read_from_gpu_mem(const cl_command_queue& cmd_queue, void* buff, vcl_size_t size)
+{
+  assert(size <= this->num_bytes_);
+  int status = MEM_FAILURE;
+  status= clEnqueueReadBuffer(cmd_queue,
+                              this->buffer_,
+                              CL_TRUE,
+                              0,
+                              size,
+                              buff,
+                              0,
+                              NULL,
+                              &ceEvent_);
+  if (!check_val(status,MEM_FAILURE,"clEnqueueReadBuffer failed: " + this->id_ + error_to_string(status)))
+    return MEM_FAILURE;
+  return MEM_SUCCESS;
 }
 
 //: write to command queue
