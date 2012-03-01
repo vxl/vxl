@@ -40,6 +40,7 @@ int main(int argc,  char** argv)
   vul_arg<vcl_string> img_dir("-imgdir", "update image directory", "nvm_out/imgs/"); 
   vul_arg<vcl_string> cam_dir("-camdir", "update camera directory", "nvm_out/cams_krt/"); 
   vul_arg<unsigned>   num_updates("-num", "Number of updates", 10); 
+  vul_arg<int>        inFrame("-frame", "Single frame to use", -1);
   vul_arg_parse(argc, argv);
   
   //create scene
@@ -79,8 +80,9 @@ int main(int argc,  char** argv)
   vnl_random random(9667566);
   for(int i=0; i<numUpdates; ++i) 
   {
-    //update with input image
-    int frame = random.lrand32(0, imgs.size()-1);
+    //update with input imagea
+    int frame = (inFrame() >= 0) ? inFrame() : random.lrand32(0, imgs.size()-1);
+    vcl_cout<<"Update with frame: "<<frame<<vcl_endl;
     vil_image_view_base_sptr inImg = boxm2_util::prepare_input_image(imgs[frame], true); 
     vpgl_camera_double_sptr  inCam = boxm2_util::camera_from_file( cams[frame] );
     vil_image_view<float>* inImgPtr = dynamic_cast<vil_image_view<float>* >(inImg.ptr()); 

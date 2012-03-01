@@ -25,7 +25,6 @@
 
 vcl_map<vcl_string, bocl_kernel*> boxm2_multi_store_aux::kernels_;
 
-
 //-------------------------------------------------------------
 // Stores seg len and observation in cell-level aux data
 //-------------------------------------------------------------
@@ -72,7 +71,6 @@ float boxm2_multi_store_aux::store_aux(boxm2_multi_cache&       cache,
                              ray_os = helper.ray_os_,
                              lookups = helper.lookups_; 
   vcl_size_t maxBlocks = helper.maxBlocks_;
-  vcl_vector<vcl_vector<boxm2_block_id> >& vis_orders = helper.vis_orders_;
   vcl_vector<boxm2_opencl_cache*>& ocl_caches = helper.vis_caches_;
   for (int i=0; i<ocl_caches.size(); ++i) {
     //grab sub scene and it's cache
@@ -90,8 +88,16 @@ float boxm2_multi_store_aux::store_aux(boxm2_multi_cache&       cache,
   //----------------------------------------------------------------
   // Call per block/per scene update (to ensure cpu-> gpu cache works
   //---------------------------------------------------------------
-  for (int blk=0; blk<maxBlocks; ++blk) {
-    for (int i=0; i<ocl_caches.size(); ++i) {
+  //visibility order
+  vcl_vector<boxm2_multi_cache_group*> grp = cache.get_vis_groups(cam);
+  vcl_cout<<"Group list size; "<<grp.size()<<vcl_endl;
+  
+  for(int grpId=0; grpId<grp.size(); ++grpId) {
+    boxm2_multi_cache_group& group = *grp[grpId];
+    vcl_vector<boxm2_block_id>& ids = group.ids();
+    vcl_vector<int> indices = group.order_from_cam(cam);
+    for(int idx=0; idx<indices.size(); ++idx) {
+      int i = indices[idx];
       //grab sub scene and it's cache
       boxm2_opencl_cache* ocl_cache = ocl_caches[i];
       boxm2_scene_sptr    sub_scene = ocl_cache->get_scene();
@@ -101,36 +107,32 @@ float boxm2_multi_store_aux::store_aux(boxm2_multi_cache&       cache,
       bocl_kernel* kern = get_kernels(device, options);
 
       //Run block store aux
-      vcl_vector<boxm2_block_id>& vis_order = vis_orders[i];
-      if (blk >= vis_order.size())
-        continue;
-      boxm2_block_id id = vis_order[blk];
+      boxm2_block_id id = ids[i];
       store_aux_per_block(id, sub_scene, ocl_cache, queues[i], kern,
                           in_imgs[i], img_dims[i], ray_os[i], ray_ds[i],
                           out_imgs[i], lookups[i], lthreads, gThreads);
     }
 
     //finish
-    for (int i=0; i<queues.size(); ++i)
+    for (int idx=0; idx<indices.size(); ++idx) {
+      int i = indices[idx];
       clFinish(queues[i]);
+      boxm2_block_id id = ids[i]; 
+      boxm2_opencl_cache* ocl_cache = ocl_caches[i];
+      read_aux(id, ocl_cache, queues[i]);
+    }
   }
 
   //read aux data into cpu cache
   for (int i=0; i<queues.size(); ++i) {
     clFinish(queues[i]);
     boxm2_opencl_cache* ocl_cache = ocl_caches[i];
-
-    vcl_vector<boxm2_block_id>& vis_order = vis_orders[i];
-    vcl_vector<boxm2_block_id>::iterator id;
-    for (id = vis_order.begin(); id != vis_order.end(); ++id)
-      read_aux(*id, ocl_cache, queues[i]);
-  
     //free input image
     ocl_cache->unref_mem(in_imgs[i].ptr());
   }
 
 //==== DEBUG ====
-#if 1
+#if 0
   //unsigned cl_ni=RoundUp(ni,lthreads[0]);
   //unsigned cl_nj=RoundUp(nj,lthreads[1]);
   vil_image_view<float> segLens(cl_ni,cl_nj);

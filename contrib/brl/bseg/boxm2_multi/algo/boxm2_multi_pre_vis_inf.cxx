@@ -3,6 +3,7 @@
 
 #include <vcl_algorithm.h>
 #include <vcl_sstream.h>
+#include <vcl_iomanip.h>
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/boxm2_util.h>
 #include <bocl/bocl_manager.h>
@@ -31,13 +32,11 @@ vcl_map<vcl_string, vcl_vector<bocl_kernel*> > boxm2_multi_pre_vis_inf::kernels_
 //-------------------------------------------------------------
 // pre_vis_inf
 //-------------------------------------------------------------
-float boxm2_multi_pre_vis_inf::pre_vis_inf(      boxm2_multi_cache&       cache, 
-                                           const vil_image_view<float>&   img, 
-                                                 vpgl_camera_double_sptr  cam,
-                                                 vcl_map<bocl_device*, float*>& vis_map, 
-                                                 vcl_map<bocl_device*, float*>& pre_map, 
-                                                 float*  norm_img,
-                                                 boxm2_multi_update_helper& helper)
+float boxm2_multi_pre_vis_inf::pre_vis_inf( boxm2_multi_cache&              cache,
+                                            const vil_image_view<float>&    img,
+                                            vpgl_camera_double_sptr         cam,
+                                            float*                          norm_img,
+                                            boxm2_multi_update_helper&      helper)
 {
   vcl_cout<<"  -- boxm2_pre_vis_inf map --"<<vcl_endl;
   //verify appearance model
@@ -64,7 +63,6 @@ float boxm2_multi_pre_vis_inf::pre_vis_inf(      boxm2_multi_cache&       cache,
                              ray_os = helper.ray_os_,
                              lookups = helper.lookups_; 
   vcl_size_t maxBlocks = helper.maxBlocks_;
-  vcl_vector<vcl_vector<boxm2_block_id> >& vis_orders = helper.vis_orders_;
   vcl_vector<boxm2_opencl_cache*>& ocl_caches = helper.vis_caches_;
   vcl_vector<bocl_mem_sptr> vis_mems, pre_mems; 
   for(int i=0; i<ocl_caches.size(); ++i) {
@@ -85,12 +83,22 @@ float boxm2_multi_pre_vis_inf::pre_vis_inf(      boxm2_multi_cache&       cache,
     pre_mems.push_back(pre_image);
   }
 
+  //initalize per group images (vis/pre
+  vcl_vector<boxm2_multi_cache_group*> grp = cache.get_vis_groups(cam);
 
   //----------------------------------------------------------------
   // Call per block/per scene update (to ensure cpu-> gpu cache works
   //---------------------------------------------------------------
-  for(int blk=0; blk<maxBlocks; ++blk) {
-    for(int i=0; i<ocl_caches.size(); ++i) {
+  float* visImg = new float[ni*nj]; 
+  float* preImg = new float[ni*nj]; 
+  vcl_fill(visImg, visImg+ni*nj, 1.0f);
+  vcl_fill(preImg, preImg+ni*nj, 0.0f);
+  for (int grpId=0; grpId<grp.size(); ++grpId) {
+    boxm2_multi_cache_group& group = *grp[grpId];
+    vcl_vector<boxm2_block_id>& ids = group.ids();
+    vcl_vector<int> indices = group.order_from_cam(cam);
+    for (int idx=0; idx<indices.size(); ++idx){
+      int i = indices[idx];
       //grab sub scene and it's cache
       boxm2_opencl_cache* ocl_cache = ocl_caches[i]; 
       boxm2_scene_sptr    sub_scene = ocl_cache->get_scene(); 
@@ -100,46 +108,110 @@ float boxm2_multi_pre_vis_inf::pre_vis_inf(      boxm2_multi_cache&       cache,
       vcl_vector<bocl_kernel*> kerns = get_kernels(device, options);
 
       //Run block store aux
-      vcl_vector<boxm2_block_id>& vis_order = vis_orders[i]; 
-      if(blk >= vis_order.size()) 
-        continue;
-      boxm2_block_id id = vis_order[blk]; 
+      boxm2_block_id id = ids[i]; //vis_order[blk]; 
+
+      //set visibility to one, set pre to zero
+      float* ones = new float[ni*nj]; 
+      vcl_fill(ones, ones+ni*nj, 1.0f);
+      vis_mems[i]->write_to_gpu_mem(queues[i], ones, ni*nj*sizeof(float));
+      pre_mems[i]->zero_gpu_buffer(queues[i]);
+      delete[] ones;
       pre_vis_per_block(id, sub_scene, ocl_cache, queues[i], data_type, kerns[0], 
                         vis_mems[i], pre_mems[i], img_dims[i], 
                         ray_os[i], ray_ds[i],
                         out_imgs[i], lookups[i], lthreads, gThreads);
+    
     }
 
-    //finish
-    for(int i=0; i<queues.size(); ++i) 
-      clFinish(queues[i]); 
-  }
+    //finish queues before moving on
+    for (int idx=0; idx<indices.size(); ++idx){
+      int i = indices[idx];
 
+      //first store vis/pre images for first member of group
+      vcl_memcpy(group.get_vis(i), visImg, ni*nj*sizeof(float));
+      vcl_memcpy(group.get_pre(i), preImg, ni*nj*sizeof(float));
+
+      //next update the vis and pre images
+      clFinish(queues[i]);
+      vis_mems[i]->read_to_buffer(queues[i]);
+      pre_mems[i]->read_to_buffer(queues[i]);
+      float* v = (float*) vis_mems[i]->cpu_buffer();
+      float* p = (float*) pre_mems[i]->cpu_buffer();
+      for (int c=0; c<ni*nj; ++c) {
+        visImg[c] *= v[c];
+        preImg[c]  = preImg[c]*v[c] + p[c]; 
+      }
+    }
+#if 0
+    vil_image_view<float> vimg(ni,nj), pimg(ni,nj);
+    int c=0;
+    for(int j=0; j<nj; ++j) 
+      for(int i=0; i<ni; ++i) {
+        vimg(i,j) = visImg[c];
+        pimg(i,j) = preImg[c];
+        c++;
+      }
+    vcl_stringstream vf; vf<<"vis_img_grp_"<<vcl_setfill('0')<<vcl_setw(3)<<grpId<<".tiff";
+    vil_save(vimg, vf.str().c_str());
+    //vcl_stringstream pf; pf<<"pre_img_grp_"<<grpId<<".tiff"; 
+    //vil_save(pimg, pf.str().c_str());
+#endif
+  }
+ 
+  //---- This instead of the reduce step ----
+  //Norm image create on CPU
+  for(int c=0; c<ni*nj; ++c)
+    norm_img[c] = visImg[c] + preImg[c];
+
+#if 0
+  vil_image_view<float> nimg(ni,nj), vimg(ni,nj), pimg(ni,nj);
+  int c=0;
+  for(int j=0; j<nj; ++j) 
+    for(int i=0; i<ni; ++i) {
+      nimg(i,j) = norm_img[c];
+      vimg(i,j) = visImg[c];
+      pimg(i,j) = preImg[c];
+      c++;
+    }
+  vil_save(nimg, "norm_image.tiff");
+  vil_save(vimg, "vis_image.tiff");
+  vil_save(pimg, "pre_image.tiff");
+#endif
+
+#if 0
   //------------------
   //read all images in
-  vcl_vector<float*> pre_imgs, vis_imgs; 
-  for(int i=0; i<vis_mems.size(); ++i) {
-    // read out expected image
-    pre_mems[i]->read_to_buffer(queues[i]);
-    vis_mems[i]->read_to_buffer(queues[i]);
+  //vcl_vector<float*> pre_imgs, vis_imgs; 
+  //for(int i=0; i<vis_mems.size(); ++i) {
+  //  // read out expected image
+  //  pre_mems[i]->read_to_buffer(queues[i]);
+  //  vis_mems[i]->read_to_buffer(queues[i]);
 
-    //populate vil_image_views for combination
-    pre_imgs.push_back( (float*) pre_mems[i]->cpu_buffer()); 
-    vis_imgs.push_back( (float*) vis_mems[i]->cpu_buffer()); 
-  }
+  //  //populate vil_image_views for combination
+  //  pre_imgs.push_back( (float*) pre_mems[i]->cpu_buffer()); 
+  //  vis_imgs.push_back( (float*) vis_mems[i]->cpu_buffer()); 
+  //}
 
   //-------------------------------------------------------------------
   // Reduce images into pre/vis image and make sure the interim 
   // pre/vis images are correct
   //-------------------------------------------------------------------
-  pre_vis_reduce(cache, pre_imgs, vis_imgs, ocl_caches, 
-                 pre_map, vis_map, ni, nj, norm_img); 
+  //pre_vis_reduce(cache, pre_imgs, vis_imgs, ocl_caches, 
+  //               pre_map, vis_map, ni, nj, norm_img); 
+#endif 
 
   //-------------------------------------
   //clean up
   //-------------------------------------
+  delete[] visImg;
+  delete[] preImg;
   for(int i=0; i<queues.size(); ++i) {
-    boxm2_opencl_cache* ocl_cache = ocl_caches[i]; 
+    boxm2_opencl_cache* ocl_cache = ocl_caches[i];
+    float* v = (float*) vis_mems[i]->cpu_buffer(); 
+    float* p = (float*) pre_mems[i]->cpu_buffer(); 
+    delete[] v;
+    delete[] p;
+
     //free vis mem, pre mem
     ocl_cache->unref_mem(vis_mems[i].ptr());
     ocl_cache->unref_mem(pre_mems[i].ptr());

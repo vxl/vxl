@@ -26,4 +26,16 @@ class boxm2_multi_util
                                        int&                apptypesize);
 };
 
+//: Pair class, to help sorting by distance
+template<class T>
+class boxm2_dist_pair {
+  public:
+    boxm2_dist_pair(double dist, T dat):dist_(dist), dat_(dat) {}
+    double dist_;
+    T dat_;
+    inline bool operator < (boxm2_dist_pair const& v) const {
+      return dist_ < v.dist_;
+    }
+};
+
 #endif // boxm2_multi_util_h

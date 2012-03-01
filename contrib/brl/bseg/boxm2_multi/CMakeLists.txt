@@ -13,6 +13,7 @@ INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bbas )
 
 SET(boxm2_multi_sources
     boxm2_multi_cache.h         boxm2_multi_cache.cxx
+    boxm2_multi_cache_group.h   boxm2_multi_cache_group.cxx
     boxm2_multi_util.h          boxm2_multi_util.cxx
    )
 

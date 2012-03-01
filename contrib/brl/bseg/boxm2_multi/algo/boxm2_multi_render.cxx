@@ -123,54 +123,63 @@ float boxm2_multi_render::render(boxm2_multi_cache&      cache,
   }
 
   //visibility order
-  vcl_vector<boxm2_multi_cache_group> grp = cache.get_vis_groups(cam);
+  vcl_vector<boxm2_multi_cache_group*> grp = cache.get_vis_groups(cam);
 
   //--------------------------------------------------
   //run block-wise ray trace for each block/device
   //--------------------------------------------------
   //go through each scene's blocks in vis order
-  float* expImg = new float[ni*nj];
-  float* visImg = new float[ni*nj];
   for (int grpId=0; grpId<grp.size(); ++grpId) {
-    boxm2_multi_cache_group& group = grp[grpId];
-    vcl_vector<boxm2_block_id>& ids = group.ids_;
+    boxm2_multi_cache_group& group = *grp[grpId];
+    vcl_vector<boxm2_block_id>& ids = group.ids();
     vcl_vector<int> indices = group.order_from_cam(cam);
+    //vcl_cout<<" blk order: ";
     for (int idx=0; idx<indices.size(); ++idx){
       int i = indices[idx];
       boxm2_opencl_cache* ocl_cache = ocl_caches[i];
       boxm2_scene_sptr    sub_scene = ocl_cache->get_scene();
       bocl_device_sptr    device    = ocl_cache->get_device();
       boxm2_block_id id = ids[i];
+      //vcl_cout<<i<<" : "<<id<<" ";
 
       //keep track of mems allocated, so you can unref them later
+      float* ones = new float[ni*nj]; 
+      vcl_fill(ones, ones+ni*nj, 1.0f);
+      vis_mems[i]->write_to_gpu_mem(queues[i], ones, ni*nj*sizeof(float));
+      exp_mems[i]->zero_gpu_buffer(queues[i]);
+      delete[] ones;
       vcl_vector<bocl_kernel*>& kerns = get_kernels(device, options);
       this->render_block(sub_scene, id, ocl_cache, queues[i],
                          ray_os[i], ray_ds[i], exp_mems[i], vis_mems[i], img_dims[i],
                          outputs[i], lookups[i], data_type, kerns[0],
                          lthreads, cl_ni, cl_nj, apptypesize);
-
-      //enqueue a read to buffer
-      exp_mems[i]->read_to_buffer(queues[i]);
-      vis_mems[i]->read_to_buffer(queues[i]);
     }
+    //vcl_cout<<vcl_endl;
 
     //finish queues before moving on
     for (int idx=0; idx<indices.size(); ++idx){
       int i = indices[idx];
       clFinish(queues[i]);
+      exp_mems[i]->read_to_buffer(queues[i]);
+      vis_mems[i]->read_to_buffer(queues[i]);
 
       //set the vis and exp images
       float* v = (float*) vis_mems[i]->cpu_buffer();
       float* e = (float*) exp_mems[i]->cpu_buffer();
       float* imgbuff = img.top_left_ptr();
       float* visbuff = vis_out.top_left_ptr();
-      int c=0;
       for (int c=0; c<ni*nj; ++c, ++imgbuff, visbuff++) {
         (*imgbuff) += e[c] * (*visbuff);
         (*visbuff) *= v[c];
       }
     }
   }
+
+  //normalize
+  float* imgbuff = img.top_left_ptr();
+  float* visbuff = vis_out.top_left_ptr();
+  for(int i=0; i<vis_out.size(); ++i)
+    imgbuff[i] += visbuff[i]*.5f;
 
   //clean up all ocl buffers
   for (int i=0; i<ocl_caches.size(); ++i)

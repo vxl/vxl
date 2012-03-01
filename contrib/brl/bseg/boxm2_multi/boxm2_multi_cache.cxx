@@ -54,7 +54,7 @@ boxm2_multi_cache::boxm2_multi_cache(boxm2_scene_sptr              scene,
     for(int group=0; group<max_ids.y()+1; group+=nDev) {
 
       //create a block group
-      boxm2_multi_cache_group grp;
+      boxm2_multi_cache_group* grp = new boxm2_multi_cache_group;
       //add the vertical row of blocks to scene with dev_id
       dev_id = 0;
       for(int j=group; j<group+nDev; ++j){
@@ -63,15 +63,14 @@ boxm2_multi_cache::boxm2_multi_cache(boxm2_scene_sptr              scene,
           vcl_cout<<"Attempting to add block id: "<<id<<vcl_endl;
           if(scene->block_exists(id)) {
             boxm2_block_metadata md = scene->get_block_metadata(id);
-            grp.add_block(md); 
+            grp->add_block(md, ocl_caches_[dev_id]); 
             sub_scenes_[dev_id]->add_block_metadata(md); 
             blocksAdded++;
           }
         }
-        dev_id++; 
+        dev_id = (dev_id+1) % ocl_caches_.size();
       }
       groups_.push_back(grp);
-      //dev_id = (dev_id+1) % sub_scenes_.size();
     }
   }
 
@@ -135,10 +134,12 @@ boxm2_multi_cache::boxm2_multi_cache(boxm2_scene_sptr              scene,
 
 boxm2_multi_cache::~boxm2_multi_cache()
 {
-#if 0
-  delete ocl caches
-  for (int i=0; i<ocl_caches_.size(); ++i)
-    if (ocl_caches_[i]) delete ocl_caches_[i];
+#if 1
+  //delete ocl caches
+  //for (int i=0; i<ocl_caches_.size(); ++i)
+  //  if (ocl_caches_[i]) delete ocl_caches_[i];
+  for (int i=0; i<groups_.size(); ++i)
+    if (groups_[i]) delete groups_[i];
 #endif
 }
 
@@ -210,7 +211,7 @@ boxm2_multi_cache::get_vis_order_from_pt(vgl_point_3d<double> const& pt)
 //----------------------------------------------
 // Cache block group visibility order functions
 //----------------------------------------------
-vcl_vector<boxm2_multi_cache_group> 
+vcl_vector<boxm2_multi_cache_group*> 
 boxm2_multi_cache::get_vis_groups(vpgl_camera_double_sptr cam)
 {
   vgl_point_3d<double> center;
@@ -232,28 +233,29 @@ boxm2_multi_cache::get_vis_groups(vpgl_camera_double_sptr cam)
   }
   else {
     vcl_cout<<"boxm2_scene::get_vis_blocks doesn't support camera type "<<cam->type_name()<<vcl_endl;
-    return vcl_vector<boxm2_multi_cache_group>();
+    return vcl_vector<boxm2_multi_cache_group*>();
   }
   return this->group_order_from_pt(center, camBox);
 }
 
-vcl_vector<boxm2_multi_cache_group> 
+vcl_vector<boxm2_multi_cache_group*> 
 boxm2_multi_cache::group_order_from_pt(vgl_point_3d<double> const& pt,
                                        vgl_box_2d<double> const& camBox)
 {
   //Map of distance, id
-  typedef boxm2_dist_pair<boxm2_multi_cache_group> Pair; 
+  typedef boxm2_dist_pair<boxm2_multi_cache_group*> Pair; 
   vcl_vector<Pair> distances;
 
-  //iterate through each block
+  //iterate through each group
   for (int i=0; i<groups_.size(); ++i) {
-    boxm2_multi_cache_group& grp = groups_[i];
-    //check if cam bbox intersects
-    vgl_box_2d<double> grp2d(grp.bbox_.min_x(), grp.bbox_.max_x(),
-                             grp.bbox_.min_y(), grp.bbox_.max_y());
+    boxm2_multi_cache_group* grp = groups_[i];
+    //check if cam bbox intersectsa
+    vgl_box_3d<double>& grpBox = grp->groupBox();
+    vgl_box_2d<double> grp2d(grpBox.min_x(), grpBox.max_x(),
+                             grpBox.min_y(), grpBox.max_y());
     vgl_box_2d<double> intersect = vgl_intersection(grp2d, camBox);
     if(!intersect.is_empty() || camBox.is_empty()) {
-      vgl_point_3d<double> center  = grp.bbox_.centroid();
+      vgl_point_3d<double> center  = grpBox.centroid();
       double dist = vgl_distance( center, pt );
       distances.push_back( Pair(dist, grp) );
     }
@@ -263,7 +265,7 @@ boxm2_multi_cache::group_order_from_pt(vgl_point_3d<double> const& pt,
   vcl_sort(distances.begin(), distances.end());
 
   //put blocks in "vis_order"
-  vcl_vector<boxm2_multi_cache_group>   vis_order;
+  vcl_vector<boxm2_multi_cache_group*>   vis_order;
   vcl_vector<Pair>::iterator di;
   for (di = distances.begin(); di != distances.end(); ++di)
     vis_order.push_back(di->dat_);
@@ -296,16 +298,5 @@ vcl_ostream& operator<<(vcl_ostream &s, boxm2_multi_cache& cache)
   s << cache.to_string();
   return s;
 }
-
-
-vcl_ostream& operator<<(vcl_ostream &s, boxm2_multi_cache_group& grp)
-{
-  s << "boxm2_multi_cache_group [" ;
-  for(int i=0; i<grp.ids_.size(); ++i) 
-    s << grp.ids_[i] << " "; 
-  s << "]";
-  return s; 
-}
-
 
 

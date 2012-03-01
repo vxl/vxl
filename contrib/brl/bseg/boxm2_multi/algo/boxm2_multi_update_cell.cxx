@@ -25,12 +25,10 @@ vcl_map<vcl_string, vcl_vector<bocl_kernel*> > boxm2_multi_update_cell::kernels_
 //-------------------------------------------------------------
 // Stores seg len and observation in cell-level aux data
 //-------------------------------------------------------------
-float boxm2_multi_update_cell::update_cells(       boxm2_multi_cache&         cache, 
+float boxm2_multi_update_cell::update_cells(     boxm2_multi_cache&         cache, 
                                            const vil_image_view<float>&   img, 
                                                  vpgl_camera_double_sptr  cam,
-                                                 vcl_map<bocl_device*, float*>& vis_map, 
-                                                 vcl_map<bocl_device*, float*>& pre_map, 
-                                                 float*                         norm_image,
+                                                 float*                   norm_image,
                                                  boxm2_multi_update_helper& helper)
 {
   vcl_cout<<"  -- boxm2_multi_update_cell update cells --"<<vcl_endl;
@@ -71,13 +69,11 @@ float boxm2_multi_update_cell::update_cells(       boxm2_multi_cache&         ca
     bocl_device_sptr    device    = ocl_cache->get_device(); 
 
     //grab vis and pre images that correspond
-    float* vis_img = vis_map[ device.ptr() ];
-    float* pre_img = pre_map[ device.ptr() ];
-    bocl_mem_sptr vis_mem  = ocl_cache->alloc_mem(sizeof(float)*ni*nj, vis_img, "vis image buff");
-    bocl_mem_sptr pre_mem  = ocl_cache->alloc_mem(sizeof(float)*ni*nj, pre_img, "pre image buff");
+    bocl_mem_sptr vis_mem  = ocl_cache->alloc_mem(sizeof(float)*ni*nj, NULL /*vis_img*/, "vis image buff");
+    bocl_mem_sptr pre_mem  = ocl_cache->alloc_mem(sizeof(float)*ni*nj, NULL /*pre_img*/, "pre image buff");
     bocl_mem_sptr norm_mem = ocl_cache->alloc_mem(sizeof(float)*ni*nj, norm_image, "norm image buff");
-    vis_mem->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
-    pre_mem->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
+    vis_mem->create_buffer(CL_MEM_READ_WRITE); // | CL_MEM_COPY_HOST_PTR);
+    pre_mem->create_buffer(CL_MEM_READ_WRITE); // | CL_MEM_COPY_HOST_PTR);
     norm_mem->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
     //pre/vis images
@@ -89,8 +85,13 @@ float boxm2_multi_update_cell::update_cells(       boxm2_multi_cache&         ca
   //----------------------------------------------------------------
   // Call per block/per scene update (to ensure cpu-> gpu cache works
   //---------------------------------------------------------------
-  for(int blk=0; blk<maxBlocks; ++blk) {
-    for(int i=0; i<ocl_caches.size(); ++i) {
+  vcl_vector<boxm2_multi_cache_group*> grp = cache.get_vis_groups(cam);
+  for (int grpId=0; grpId<grp.size(); ++grpId) {
+    boxm2_multi_cache_group& group = *grp[grpId];
+    vcl_vector<boxm2_block_id>& ids = group.ids();
+    vcl_vector<int> indices = group.order_from_cam(cam);
+    for (int idx=0; idx<indices.size(); ++idx){
+      int i = indices[idx];
       //grab sub scene and it's cache
       boxm2_opencl_cache* ocl_cache = ocl_caches[i]; 
       boxm2_scene_sptr    sub_scene = ocl_cache->get_scene(); 
@@ -98,21 +99,22 @@ float boxm2_multi_update_cell::update_cells(       boxm2_multi_cache&         ca
 
       // compile the kernel/retrieve cached kernel for this device
       vcl_vector<bocl_kernel*> kerns = get_kernels(device, options);
+      boxm2_block_id id = ids[i]; 
 
-      //Run block store aux
-      vcl_vector<boxm2_block_id>& vis_order = vis_orders[i]; 
-      if(blk >= vis_order.size()) 
-        continue;
-      boxm2_block_id id = vis_order[blk]; 
+      //make sure vis/pre are correct
+      vis_mems[i]->write_to_gpu_mem(queues[i], group.get_vis(i), ni*nj*sizeof(float));
+      pre_mems[i]->write_to_gpu_mem(queues[i], group.get_pre(i), ni*nj*sizeof(float));
       calc_beta_per_block(id, sub_scene, ocl_cache, queues[i], data_type, kerns[0], 
                           vis_mems[i], pre_mems[i], norm_mems[i], img_dims[i], 
                           ray_os[i], ray_ds[i], out_imgs[i], lookups[i], 
                           lthreads, gThreads);
     }
 
-    //finish
-    for(int i=0; i<queues.size(); ++i) 
-      clFinish(queues[i]); 
+    //finish queues before moving on
+    for (int idx=0; idx<indices.size(); ++idx){
+      int i = indices[idx];
+      clFinish(queues[i]);
+    }
   }
 
   //-------------------------------------------------------------------

@@ -37,7 +37,7 @@ float boxm2_multi_update::update(boxm2_multi_cache& cache,
   vcl_vector<bocl_mem_sptr> img_dims, outputs, ray_ds, ray_os, lookups; //ray trace vars 
   vcl_vector<vcl_vector<boxm2_block_id> > vis_orders; //visibility order for each dev
   vcl_size_t maxBlocks = 0;
-  vcl_vector<boxm2_opencl_cache*> ocl_caches = cache.get_vis_sub_scenes(cam);
+  vcl_vector<boxm2_opencl_cache*> ocl_caches = cache.ocl_caches();
   for(int i=0; i<ocl_caches.size(); ++i) {
     //grab sub scene and it's cache
     boxm2_opencl_cache* ocl_cache = ocl_caches[i]; 
@@ -95,6 +95,17 @@ float boxm2_multi_update::update(boxm2_multi_cache& cache,
   boxm2_multi_update_helper helper(queues, ray_os, ray_ds, img_dims, lookups, 
                                    outputs, vis_orders, ocl_caches, maxBlocks);
 
+  //initalize per group images (vis/pre
+  vcl_vector<boxm2_multi_cache_group*> grp = cache.get_vis_groups(cam);
+  for(int grpId=0; grpId<grp.size(); ++grpId) {
+    vcl_vector<boxm2_block_id> ids = grp[grpId]->ids(); 
+    for(int i=0; i<ids.size(); ++i) {
+      float* visImg = new float[ni*nj]; vcl_fill(visImg, visImg+ni*nj, 1.0f);
+      float* preImg = new float[ni*nj]; vcl_fill(preImg, preImg+ni*nj, 0.0f);  
+      grp[grpId]->set_vis(i, visImg); 
+      grp[grpId]->set_pre(i, preImg);
+    }
+  }
 
   //store aux data (cell vis, cell length) 
   boxm2_multi_store_aux::store_aux(cache, img, cam, helper); 
@@ -102,15 +113,24 @@ float boxm2_multi_update::update(boxm2_multi_cache& cache,
   //calcl pre/vis inf, and store pre/vis images along the way
   float* norm_img = new float[img.ni() * img.nj()]; 
   vcl_map<bocl_device*, float*> pre_map, vis_map;
-  boxm2_multi_pre_vis_inf::pre_vis_inf(cache, img, cam, vis_map, pre_map, norm_img, helper); 
- 
-  //calculate cell beta, cell vis, and finally reduce each cell to new alphas
-  boxm2_multi_update_cell::update_cells(cache, img, cam, vis_map, pre_map, norm_img, helper); 
+  //boxm2_multi_pre_vis_inf::pre_vis_inf(cache, img, cam, vis_map, pre_map, norm_img, helper); 
+  boxm2_multi_pre_vis_inf::pre_vis_inf(cache, img, cam, norm_img, helper);
 
+  //calculate cell beta, cell vis, and finally reduce each cell to new alphas
+  //boxm2_multi_update_cell::update_cells(cache, img, cam, vis_map, pre_map, norm_img, helper); 
+  boxm2_multi_update_cell::update_cells(cache, img, cam, norm_img, helper);
 
   //-------------------------------------
   //clean up
   //-------------------------------------
+  for(int grpId=0; grpId<grp.size(); ++grpId) {
+    vcl_vector<boxm2_block_id> ids = grp[grpId]->ids(); 
+    for(int i=0; i<ids.size(); ++i) {
+      delete[] grp[grpId]->get_vis(i); 
+      delete[] grp[grpId]->get_pre(i);
+    }
+  }
+
   for(int i=0; i<queues.size(); ++i) {
     boxm2_opencl_cache* ocl_cache = ocl_caches[i]; 
  

@@ -17,14 +17,18 @@
 class boxm2_multi_update_cell
 {
   public:
-
     //three separate sub procedures (three separate map reduce tasks)
-    static float update_cells(boxm2_multi_cache& cache,
+    //static float update_cells(boxm2_multi_cache& cache,
+    //                          const vil_image_view<float>& img,
+    //                          vpgl_camera_double_sptr cam,
+    //                          vcl_map<bocl_device*, float*>& vis_map,
+    //                          vcl_map<bocl_device*, float*>& pre_map,
+    //                          float*                         norm_image,
+    //                          boxm2_multi_update_helper& helper);
+    static float update_cells(boxm2_multi_cache& cache, 
                               const vil_image_view<float>& img,
                               vpgl_camera_double_sptr cam,
-                              vcl_map<bocl_device*, float*>& vis_map,
-                              vcl_map<bocl_device*, float*>& pre_map,
-                              float*                         norm_image,
+                              float* norm_image,
                               boxm2_multi_update_helper& helper);
 
   private:

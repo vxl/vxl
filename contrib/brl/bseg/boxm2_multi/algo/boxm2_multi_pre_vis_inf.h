@@ -19,11 +19,16 @@ class boxm2_multi_pre_vis_inf
   public:
 
     //three separate sub procedures (three separate map reduce tasks)
+    //static float pre_vis_inf( boxm2_multi_cache&              cache,
+    //                          const vil_image_view<float>&    img,
+    //                          vpgl_camera_double_sptr         cam,
+    //                          vcl_map<bocl_device*, float*>&  vis_map,
+    //                          vcl_map<bocl_device*, float*>&  pre_map,
+    //                          float*                          norm_img,
+    //                          boxm2_multi_update_helper&      helper);
     static float pre_vis_inf( boxm2_multi_cache&              cache,
                               const vil_image_view<float>&    img,
                               vpgl_camera_double_sptr         cam,
-                              vcl_map<bocl_device*, float*>&  vis_map,
-                              vcl_map<bocl_device*, float*>&  pre_map,
                               float*                          norm_img,
                               boxm2_multi_update_helper&      helper);
 
