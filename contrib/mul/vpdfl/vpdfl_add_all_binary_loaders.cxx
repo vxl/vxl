@@ -33,6 +33,8 @@ void vpdfl_add_all_binary_loaders()
   mbl_cloneables_factory<vpdfl_builder_base>::add(vpdfl_axis_gaussian_builder());
   mbl_cloneables_factory<vpdfl_builder_base>::add(vpdfl_axis_gaussian_builder(),
                                                   "axis_gaussian");
+  mbl_cloneables_factory<vpdfl_builder_base>::add(vpdfl_axis_gaussian_builder(),
+                                                  "axis_gaussian_builder");
   mbl_cloneables_factory<vpdfl_builder_base>::add(vpdfl_gaussian_builder());
   mbl_cloneables_factory<vpdfl_builder_base>::add(vpdfl_gaussian_builder(),
                                                   "gaussian");
