@@ -1,7 +1,7 @@
-// This is core/vil/vil_math_sse.cxx
+// This is core/vil/vil_math_sse.txx
 
-#ifndef vil_math_h_
-#error "This header should not be included directly, only through vil_math.h"
+#ifndef vil_math_sse_h_
+#error "This header cannot be included directly, only through vil_math_sse.h"
 #endif
 
 #include <vcl_cstring.h>
@@ -14,36 +14,16 @@
 // intrinsic functions
 // \author Chuck Atkins
 
-//: Compute the 1D absolute difference of two images (im_sum = |imA-imB|)
-#define VIL_MATH_IMAGE_ABS_DIFFERENCE_1D_SSE_SPECIALIZE(T)                 \
-template<>                                                                 \
-inline void vil_math_image_abs_difference_1d<T, T, T>(                     \
-  const T* pxA, vcl_ptrdiff_t isA,                                         \
-  const T* pxB, vcl_ptrdiff_t isB,                                         \
-        T* pxD, vcl_ptrdiff_t isD,                                         \
-  unsigned len)                                                            \
-{                                                                          \
-  if (isA == 1 && isB == 1 && isD == 1)                                    \
-  {                                                                        \
-    vil_math_image_abs_difference_1d_sse<T>(pxA, pxB, pxD, len);           \
-  }                                                                        \
-  else                                                                     \
-  {                                                                        \
-    vil_math_image_abs_difference_1d_generic<T, T, T>(                     \
-      pxA, isA, pxB, isB, pxD, isD, len);                                  \
-  }                                                                        \
-}
-
 //: Compute absolute difference of two 1D images (im_sum = |imA-imB|)
-template<class T>
-inline void vil_math_image_abs_difference_1d_sse(
-  const T* pxA, const T* pxB, T* pxD,
+template<class aT, class bT, class dT>
+void vil_math_image_abs_difference_1d_sse(
+  const aT* pxA, const bT* pxB, dT* pxD,
   unsigned len);
 
 
-//: Compute absolute difference of two images (im_sum = |imA-imB|)
+//: Compute absolute difference of two 1D images (im_sum = |imA-imB|)
 template<>
-inline void vil_math_image_abs_difference_1d_sse<vxl_byte>(
+inline void vil_math_image_abs_difference_1d_sse<vxl_byte,vxl_byte,vxl_byte>(
   const vxl_byte* pxA, const vxl_byte* pxB, vxl_byte* pxD,
   unsigned len)
 {
@@ -99,11 +79,10 @@ inline void vil_math_image_abs_difference_1d_sse<vxl_byte>(
   vcl_memcpy(pxDxmm, pxLastD, ni_m_16);
 }
 
-VIL_MATH_IMAGE_ABS_DIFFERENCE_1D_SSE_SPECIALIZE(vxl_byte)
 
 //: Compute absolute difference of two images (im_sum = |imA-imB|)
 template<>
-inline void vil_math_image_abs_difference_1d_sse<float>(
+inline void vil_math_image_abs_difference_1d_sse<float,float,float>(
   const float* pxA, const float* pxB, float* pxD,
   unsigned len)
 {
@@ -142,5 +121,3 @@ inline void vil_math_image_abs_difference_1d_sse<float>(
 
   vcl_memcpy(pxD, pxLastD, ni_m_4_bytes);
 }
-
-VIL_MATH_IMAGE_ABS_DIFFERENCE_1D_SSE_SPECIALIZE(float)

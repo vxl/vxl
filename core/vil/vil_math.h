@@ -1098,7 +1098,7 @@ inline void vil_math_integral_sqr_image(const vil_image_view<aT>& imA,
 
 
 #ifdef VXL_HAS_SSE2_HARDWARE_SUPPORT
-#include "vil_math_sse.txx"
+#include "vil_math_sse.h"
 #endif
 
 #endif // vil_math_h_
