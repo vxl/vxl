@@ -1776,7 +1776,7 @@ void print_unique__image_3d_of_int(opstack_t& s)
 
   vcl_set<int> set(o1.image().begin(), o1.image().end());
 
-  vcl_ostream_iterator<int> output(vcl_cout, " ")
+  vcl_ostream_iterator<int> output(vcl_cout, " ");
   vcl_copy(set.begin(), set.end(), output);
 
   s.pop(1);
