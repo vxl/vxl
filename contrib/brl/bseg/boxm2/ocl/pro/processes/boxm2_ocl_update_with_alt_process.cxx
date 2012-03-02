@@ -163,11 +163,29 @@ bool boxm2_ocl_update_with_alt_process(bprb_func_process& pro)
      vcl_cerr << "ERROR casting alt_prior image to floating point" << vcl_endl;
      return false;
   }
+  if ((alt_prior->ni() != img->ni()) || (alt_prior->nj() != img->nj())) {
+     vcl_cerr << "ERROR: alt_prior image size does not match input image" << vcl_endl;
+     return false;
+  }
   vil_image_view<float> *alt_density = dynamic_cast<vil_image_view<float>*>(alt_density_base.ptr());
   if (!alt_density) {
      vcl_cerr << "ERROR casting alt_density image to floating point" << vcl_endl;
      return false;
   }
+  if ((alt_density->ni() != img->ni()) || (alt_density->nj() != img->nj())) {
+     vcl_cerr << "ERROR: alt_density image size does not match input image" << vcl_endl;
+     return false;
+  }
+  vil_image_view<float> model_prob(img->ni(), img->nj());
+  const float uniform_density = 1.0f;
+  for (unsigned int j=0; j<img->nj(); ++j) {
+     for (unsigned int i=0; i<img->ni(); ++i) {
+        float model_lik = (1.0f - (*alt_prior)(i,j)) * uniform_density;
+        float alt_lik = (*alt_prior)(i,j) * (*alt_density)(i,j);
+        model_prob(i,j) = model_lik / (model_lik + alt_lik);
+     }
+  }
+
 
   //catch a "null" mask (not really null because that throws an error)
   bool use_mask = false;
@@ -271,8 +289,8 @@ bool boxm2_ocl_update_with_alt_process(bprb_func_process& pro)
   for (unsigned j=0; j<cl_nj; ++j) {
     for (unsigned i=0; i<cl_ni; ++i) {
       if ((i < img->ni()) && (j < img->nj())){
-        vis_buff[idx] = 1.0f - (*alt_prior)(i,j);
-        pre_buff[idx] = (*alt_prior)(i,j)*(*alt_density)(i,j);
+        vis_buff[idx] = model_prob(i,j);
+        pre_buff[idx] = (1.0f - model_prob(i,j))*(*alt_density)(i,j);
         norm_buff[idx] = 0.0f;
        }
        else {
@@ -397,8 +415,8 @@ bool boxm2_ocl_update_with_alt_process(bprb_func_process& pro)
       for (unsigned j=0; j<cl_nj; ++j) {
         for (unsigned i=0; i<cl_ni; ++i) {
           if ((i < img->ni()) && (j < img->nj())){
-            vis_buff[idx] = 1.0f - (*alt_prior)(i,j);
-            pre_buff[idx] = (*alt_prior)(i,j)*(*alt_density)(i,j);
+            vis_buff[idx] = model_prob(i,j);
+            pre_buff[idx] = (1.0f - model_prob(i,j))*(*alt_density)(i,j);
           }
           else {
             vis_buff[idx] = 0;
