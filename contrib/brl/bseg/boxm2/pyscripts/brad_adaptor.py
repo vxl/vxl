@@ -125,6 +125,28 @@ def estimate_shadows(image, metadata, atmospheric_params):
   (id,type) = boxm2_batch.commit_output(0)
   shadow_probs = dbvalue(id,type)
   return shadow_probs
-
+  
+def load_eigenspace(filename):
+  boxm2_batch.init_process("bradLoadEigenspaceProcess");
+  boxm2_batch.set_input_string(0, filename);
+  boxm2_batch.run_process();
+  (eig_id,eig_type)=boxm2_batch.commit_output(0);
+  eig = dbvalue(eig_id, eig_type);
+  return eig;
+  
+def classify_image(eig, h_no, h_atmos, input_image_filename, tile_ni, tile_nj):
+  boxm2_batch.init_process("bradClassifyImageProcess");
+  boxm2_batch.set_input_from_db(0, eig);
+  boxm2_batch.set_input_from_db(1, h_no);
+  boxm2_batch.set_input_from_db(2, h_atmos);
+  boxm2_batch.set_input_string(3, input_image_filename);
+  boxm2_batch.set_input_unsigned(4, tile_ni);
+  boxm2_batch.set_input_unsigned(5, tile_nj);
+  boxm2_batch.run_process();
+  (vid, vtype) = boxm2_batch.commit_output(0);
+  q_img = dbvalue(vid, vtype);
+  (vid, vtype) = boxm2_batch.commit_output(1);
+  q_img_orig_size = dbvalue(vid, vtype);
+  return q_img, q_img_orig_size
 
 
