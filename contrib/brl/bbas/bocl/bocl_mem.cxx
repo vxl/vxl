@@ -98,7 +98,9 @@ bool bocl_mem::zero_gpu_buffer(const cl_command_queue& cmd_queue)
 {
   unsigned char* zeros = new unsigned char[this->num_bytes_]; // All values initialized to zero.
   vcl_memset(zeros, 0, this->num_bytes_);
-  return this->write_to_gpu_mem(cmd_queue, zeros, this->num_bytes_);
+  bool good = this->write_to_gpu_mem(cmd_queue, zeros, this->num_bytes_);
+  delete[] zeros;
+  return good;
 }
 
 //: helper method to initialize gpu buffer with a constant value
