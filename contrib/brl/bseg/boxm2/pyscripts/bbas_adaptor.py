@@ -176,4 +176,29 @@ def initialize_rng(seed=0):
   (id,type) = boxm2_batch.commit_output(0)
   rng = dbvalue(id,type)
   return rng
-
+  
+def load_joint_hist3d(filename):
+  boxm2_batch.init_process("bstaLoadJointHist3dProcess");
+  boxm2_batch.set_input_string(0,filename);
+  boxm2_batch.run_process();
+  (h_id,h_type) = boxm2_batch.commit_output(0);
+  h = dbvalue(h_id, h_type);
+  return h
+  
+def texture_classifier_kernel_margin(dictionary):
+  boxm2_batch.init_process("sdetTextureClassifierKernelMarginProcess");
+  boxm2_batch.set_input_string(0,dictionary);
+  boxm2_batch.run_process();
+  (m_id, m_type) = boxm2_batch.commit_output(0);
+  margin = boxm2_batch.get_output_int(m_id);
+  return margin;
+  
+def texture_classifier(dictionary, img, block_size=64):
+  boxm2_batch.init_process("sdetTextureClassifierProcess");
+  boxm2_batch.set_input_string(0,dictionary);
+  boxm2_batch.set_input_from_db(1, img);
+  boxm2_batch.set_input_unsigned(2,block_size);    # size of blocks
+  boxm2_batch.run_process();
+  (img_id, img_type) = boxm2_batch.commit_output(0);
+  img_classified = dbvalue(img_id, img_type);
+  return img_classified
