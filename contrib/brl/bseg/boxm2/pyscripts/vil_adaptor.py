@@ -196,6 +196,18 @@ def image_mean(img):
   mean_val = boxm2_batch.get_output_float(id)
   boxm2_batch.remove_data(id)
   return mean_val
+  
+def crop_image(img,i0,j0,ni,nj):
+  boxm2_batch.init_process("vilCropImageProcess")
+  boxm2_batch.set_input_from_db(0,img)
+  boxm2_batch.set_input_unsigned(1,i0)
+  boxm2_batch.set_input_unsigned(2,j0)
+  boxm2_batch.set_input_unsigned(3,ni)
+  boxm2_batch.set_input_unsigned(4,nj)
+  boxm2_batch.run_process()
+  (id,type) = boxm2_batch.commit_output(0)
+  img_out = dbvalue(id,type)
+  return img_out
 
 def scale_and_offset_values(img,scale,offset):
   boxm2_batch.init_process("vilScaleAndOffsetValuesProcess")
@@ -204,5 +216,15 @@ def scale_and_offset_values(img,scale,offset):
   boxm2_batch.set_input_float(2,offset)
   boxm2_batch.run_process()
   return
+  
+def init_float_img(ni,nj,val):
+  boxm2_batch.init_process("vilInitFloatImageProcess")
+  boxm2_batch.set_input_unsigned(0,ni)
+  boxm2_batch.set_input_unsigned(1,nj)
+  boxm2_batch.set_input_float(2,val)
+  boxm2_batch.run_process()
+  (id,type) = boxm2_batch.commit_output(0)
+  img_out = dbvalue(id,type)
+  return img_out
 
 
