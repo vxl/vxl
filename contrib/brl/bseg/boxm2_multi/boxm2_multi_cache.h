@@ -25,9 +25,7 @@
 #include <vgl/vgl_distance.h>
 
 
-
-//: boxm2_multi_cache - example realization of abstract cache class
-//  multi cache holds an opencl cache for each device
+//: example realization of abstract cache class; holds an opencl cache for each device
 class boxm2_multi_cache: public vbl_ref_count
 {
   public:
@@ -43,21 +41,21 @@ class boxm2_multi_cache: public vbl_ref_count
     boxm2_scene_sptr                 get_scene()  { return scene_; }
     vcl_string to_string();
 
-    //clear all OCL caches 
+    //clear all OCL caches
     void clear();
 
     //get group order
     vcl_vector<boxm2_multi_cache_group*> get_vis_groups(vpgl_camera_double_sptr cam);
     vcl_vector<boxm2_multi_cache_group*> group_order_from_pt(vgl_point_3d<double> const& pt,
-                                                            vgl_box_2d<double> const& camBox); 
+                                                             vgl_box_2d<double> const& camBox);
 
     //: return a vector of sub scene pointers in visibility order from this camera
     vcl_vector<boxm2_opencl_cache*> get_vis_order_from_pt(vgl_point_3d<double> const& pt);
     vcl_vector<boxm2_opencl_cache*> get_vis_sub_scenes(vpgl_perspective_camera<double>* cam);
     vcl_vector<boxm2_opencl_cache*> get_vis_sub_scenes(vpgl_generic_camera<double>* cam);
     vcl_vector<boxm2_opencl_cache*> get_vis_sub_scenes(vpgl_camera_double_sptr cam);
-  private:
 
+  private:
     boxm2_scene_sptr                    scene_;
 
     //: scene this cache is operating on
