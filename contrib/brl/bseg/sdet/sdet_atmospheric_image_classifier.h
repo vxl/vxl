@@ -32,12 +32,23 @@ class sdet_atmospheric_image_classifier : public sdet_texture_classifier
   vil_image_view<float> classify_image_blocks_qual(vcl_string const& img_path);
   vil_image_view<float> classify_image_blocks_qual(vil_image_view<float> const& image);
 
+  //: classify image quality based on expected model image and incoming image
+  // Assumes that textons have been computed for the model generating the 
+  // expected image of a scene. The image is then classifed according to
+  // its similarity to the expected image, via the texton histogram for the 
+  // model. 
+  vil_image_view<float> 
+    classify_image_blocks_expected(vcl_string const& img_path,
+                                   vcl_string const& exp_path);
+  vil_image_view<float> 
+    classify_image_blocks_expected(vil_image_view<float> const& image,
+                                   vil_image_view<float> const& exp);
  protected:
   void  category_quality_color_mix(vcl_map<vcl_string, float>& probs,
                                    vnl_vector_fixed<float, 3> const& uncert,
                                    vnl_vector_fixed<float, 3>& color_mix);
   vcl_vector<vcl_string> atmos_categories_;
   bool atmos_cat(vcl_string const& cat);
-};
+  };
 
 #endif // sdet_atmospheric_image_classifier_h_

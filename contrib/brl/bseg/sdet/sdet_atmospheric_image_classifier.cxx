@@ -56,7 +56,7 @@ category_quality_color_mix(vcl_map<vcl_string, float>& probs,
   // potentially reduce uncertainty so that beliefs are not negative
   float p_min = p_bad;
   if (p_good<p_min) p_min = p_good;
-  if ((p_min-0.5f*u) < 0.0f) u = 2.0*p_min;
+  if ((p_min-0.5f*u) < 0.0f) u = 2.0f*p_min;
   // form the beliefs
   float b_bad = p_bad - 0.5f*u;
   float b_good = p_good - 0.5f*u;
@@ -88,7 +88,7 @@ classify_image_blocks_qual(vcl_string const& img_path)
 }
 
 vil_image_view<float> 
- sdet_atmospheric_image_classifier::classify_image_blocks_qual(vil_image_view<float> const& image)
+sdet_atmospheric_image_classifier::classify_image_blocks_qual(vil_image_view<float> const& image)
 {
   vcl_cout << "image size(" << image.ni()<< ' ' << image.nj() << ")pixels:[" 
            << texton_dictionary_.size() << "]categories \n" << vcl_flush;
@@ -174,4 +174,118 @@ vil_image_view<float>
   }
   vcl_cout << "\nBlock classification took " << t.real()/1000.0 << " seconds\n" << vcl_flush;
   return prob;
+}
+
+vil_image_view<float> sdet_atmospheric_image_classifier::
+classify_image_blocks_expected(vcl_string const& img_path,
+                               vcl_string const& exp_path){
+  vil_image_resource_sptr resc = vil_load_image_resource(img_path.c_str());
+  vil_image_view<float> img = scale_image(resc); // map to [0, 1]
+  vil_image_resource_sptr resce = vil_load_image_resource(exp_path.c_str());
+  vil_image_view<float> exp = scale_image(resce); // map to [0, 1]
+  vcl_cout << "Classifying quality on image " << img_path << " using expected image " << exp_path << '\n' << vcl_flush;
+  return classify_image_blocks_expected(img, exp);
+}
+ 
+vil_image_view<float> sdet_atmospheric_image_classifier::
+classify_image_blocks_expected(vil_image_view<float> const& image,
+                               vil_image_view<float> const& exp
+                               ){
+  int ni = static_cast<int>(image.ni());
+  int nj = static_cast<int>(image.nj());
+  int ni_exp = static_cast<int>(exp.ni());
+  int nj_exp = static_cast<int>(exp.nj());
+  if((ni != ni_exp) || (nj != nj_exp)){
+    vcl_cout << "Incoming image and expected image not of same size\n" 
+             << vcl_flush;
+    return vil_image_view<float>();
+  }
+  vcl_cout << "image size(" << ni << ' ' 
+           << nj << ")pixels \n" << vcl_flush;
+ 
+  vul_timer t;
+
+  if (!texton_index_valid_)
+    this->compute_texton_index();
+  this->compute_filter_bank(image);
+  unsigned dim = filter_responses_.n_levels();
+  vcl_cout << "texton dimension " << dim +2<< '\n';
+
+  int margin = static_cast<int>(this->max_filter_radius());
+  vcl_cout << "filter kernel margin " << margin << '\n';
+  if ((ni-margin)<=0 || (nj-margin)<=0) {
+    vcl_cout << "Image smaller than filter margin\n";
+    return vil_image_view<float>(0, 0);
+  }
+  //number of pixels in a block
+  unsigned block_area = block_size_*block_size_;
+  float weight = 1.0f/static_cast<float>(block_area);
+  //cached filter outputs for the input image
+  vcl_vector<vil_image_view<float> > image_resps = 
+    filter_responses_.responses();
+  vil_image_view<float> laplace = laplace_;
+  vil_image_view<float> gauss = gauss_;
+
+  //compute new filter outputs for the expected image
+  this->compute_filter_bank(exp);
+
+  vil_image_view<float> prob(ni, nj, 3);
+  // fill image with the uncertainty = 1 color
+  vnl_vector_fixed<float, 3> unct;
+  unct[0] = 0.0f;  unct[1] = 0.0f; unct[2] = 1.0f;
+  for(unsigned j = 0; j<image.nj(); ++j)
+    for(unsigned i = 0; i<image.ni(); ++i)
+      for(unsigned p = 0; p<3; ++p)
+        prob(i,j,p) = unct[p];
+
+  vcl_vector<float>& mod_hist = category_histograms_["mod"];
+  unsigned nh = mod_hist.size();
+  if(nh == 0){
+    vcl_cout << "No model category to evaluate image\n";
+    return prob;
+  }
+  double thr = dist_["mod"]["mod"];
+  vcl_vector<vnl_vector<double> >& textons = texton_dictionary_["mod"];
+  thr *= 0.25;//temporary hard coded threshold ratio
+  int bidxv = 0;
+  for (int j = margin; j<(nj-margin); j+=block_size_, ++bidxv) {
+    int bidxu = 0;
+    for (int i = margin; i<(ni-margin); i+=block_size_, ++bidxu) {
+	  float pr = 0.0f, total =0.0f;
+      for (unsigned r = 0; r<block_size_; ++r)
+        for (unsigned c = 0; c<block_size_; ++c) {
+          vnl_vector<double> temp_img(dim+2), temp_exp(dim+2);
+          for (unsigned f = 0; f<dim; ++f){
+            temp_exp[f]=filter_responses_.response(f)(i+c,j+r);
+            temp_img[f]=image_resps[f](i+c,j+r);
+          }
+          temp_exp[dim]=laplace_(i+c,j+r); temp_exp[dim+1]=gauss_(i+c,j+r);
+          temp_img[dim]=laplace(i+c,j+r); temp_img[dim+1]=gauss(i+c,j+r);
+          unsigned indx_exp = this->nearest_texton_index(temp_exp);
+          double di_exp_img = vnl_vector_ssd(temp_exp, temp_img);
+          di_exp_img = vcl_sqrt(di_exp_img/temp_exp.size());
+          total += mod_hist[indx_exp];
+          if(di_exp_img<thr)
+            pr += mod_hist[indx_exp];
+        }
+      pr /= total;
+      float u = pr/(1.0f - pr);
+      if(u>1.0f) u = 1/u;
+      float b_good = pr - 0.5f*u;
+      if(b_good< 0.0f) b_good = 0.0f;
+      float b_bad = 1.0f - u - b_good;
+      vnl_vector_fixed<float, 3> color;
+      //colorize output according to probabilities of each category
+      for (unsigned r = 0; r<block_size_; ++r)
+        for (unsigned c = 0; c<block_size_; ++c){
+          prob(i+c,j+r,0) = b_bad;
+          prob(i+c,j+r,1) = b_good;
+          prob(i+c,j+r,2) = u;
+        }
+    }
+      vcl_cout << '.' << vcl_flush;
+  }
+  vcl_cout << "\nBlock classification took " << t.real()/1000.0 << " seconds\n" << vcl_flush;
+  return prob;
+
 }
