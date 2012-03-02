@@ -60,6 +60,12 @@ class boxm2_scene_adaptor(object):
   def bounding_box(self) :
     return self.bbox
 
+  #update with alternate explaination prior and appearance density
+  def update_with_alt(self, cam, img, update_alpha=True, mask=None, var=-1.0, alt_prior=None, alt_density=None):
+    cache = self.opencl_cache
+    dev = self.device
+    update_grey_with_alt(self.scene, cache, cam, img, dev, "", mask, update_alpha, var, alt_prior, alt_density)
+
   #update wrapper, can pass in a Null device to use
   def update(self, cam, img, update_alpha=True, mask=None, device_string="", var=-1.0) :
     cache = self.active_cache;

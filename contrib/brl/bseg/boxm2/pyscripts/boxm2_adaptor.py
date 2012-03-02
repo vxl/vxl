@@ -129,6 +129,32 @@ def update_grey(scene, cache, cam, img, device=None, ident="", mask=None, update
     boxm2_batch.run_process();
   else : 
     print "ERROR: Cache type not recognized: ", cache.type; 
+
+# Update with alternate possible pixel explaination - uses GPU
+def update_grey_with_alt(scene, cache, cam, img, device=None, ident="", mask=None, update_alpha=True, var=-1.0, alt_prior=None, alt_density=None) :
+  #If no device is passed in, do cpu update
+  if cache.type == "boxm2_cache_sptr" :
+    print "ERROR: CPU update not implemented for update_with_alt";
+  elif cache.type == "boxm2_opencl_cache_sptr" and device : 
+    print("boxm2_batch GPU update with alt");
+    boxm2_batch.init_process("boxm2OclUpdateWithAltProcess");
+    boxm2_batch.set_input_from_db(0,device);
+    boxm2_batch.set_input_from_db(1,scene);
+    boxm2_batch.set_input_from_db(2,cache);
+    boxm2_batch.set_input_from_db(3,cam);
+    boxm2_batch.set_input_from_db(4,img);
+    boxm2_batch.set_input_string(5,ident);
+    if mask :
+      boxm2_batch.set_input_from_db(6,mask);
+    boxm2_batch.set_input_bool(7, update_alpha); 
+    boxm2_batch.set_input_float(8, var);
+    boxm2_batch.set_input_from_db(9, alt_prior)
+    boxm2_batch.set_input_from_db(10, alt_density)
+    boxm2_batch.run_process();
+  else : 
+    print "ERROR: Cache type not recognized: ", cache.type; 
+
+
 def update_app_grey(scene, cache, cam, img, device=None) :
   #If no device is passed in, do cpu update
   print("boxm2 GPU App online update");

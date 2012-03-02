@@ -14,6 +14,7 @@ DECLARE_FUNC_CONS(boxm2_ocl_render_expected_height_map_process); // 3-d to dem
 DECLARE_FUNC_CONS(boxm2_ocl_ingest_dem_process); // dem to 3-d.
 DECLARE_FUNC_CONS(boxm2_ocl_ingest_buckeye_dem_process);
 DECLARE_FUNC_CONS(boxm2_ocl_update_process);
+DECLARE_FUNC_CONS(boxm2_ocl_update_with_alt_process);
 DECLARE_FUNC_CONS(boxm2_ocl_refine_process);
 DECLARE_FUNC_CONS(boxm2_ocl_merge_process);
 DECLARE_FUNC_CONS(boxm2_ocl_update_histogram_process);
