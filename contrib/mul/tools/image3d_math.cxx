@@ -1773,9 +1773,31 @@ void print_stats__image_3d_of_int(opstack_t& s)
 void print_unique__image_3d_of_int(opstack_t& s)
 {
   vimt3d_image_3d_of<int> o1(s[0].as_image_3d_of_int());
+  const vil3d_image_view<int>& image = o1.image();
+  
+  vcl_set<int> set;
+    
+  if (o1.image().is_contiguous())
+    set.insert(image.begin(), image.end()); // faster version
+  else
+  {
+    unsigned ni=image.ni(), nj=image.nj(), nk=image.nk(), np=image.nplanes();
+    vcl_ptrdiff_t istep = image.istep();
+    for (unsigned p=0; p<np; ++p)
+      for (unsigned k=0; k<nk; ++k)
+        for (unsigned j=0; j<nj; ++j)
+        {
+          const int *ptr = &image(0, j, k, p);
+          for (unsigned i=ni; i>0; --i)
+          {
+            set.insert(*ptr);
+            ptr+=istep;
+          }
+        }
+  }
 
-  vcl_set<int> set(o1.image().begin(), o1.image().end());
 
+  
   vcl_ostream_iterator<int> output(vcl_cout, " ");
   vcl_copy(set.begin(), set.end(), output);
 
