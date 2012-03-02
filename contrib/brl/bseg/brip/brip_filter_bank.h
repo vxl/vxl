@@ -60,6 +60,9 @@ class brip_filter_bank
   //: filter response for scale level
   vil_image_view<float>& response(unsigned int scale_level){
     return filter_responses_[scale_level];}
+  //: full set of filter responses
+  vcl_vector<vil_image_view<float> > responses() const{
+    return filter_responses_;}
   //: save filter responses as individual images  
   bool save_filter_responses(vcl_string const& dir) const;
  protected:
