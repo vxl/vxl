@@ -39,6 +39,7 @@ DECLARE_FUNC_CONS(brad_save_atmospheric_parameters_process);
 DECLARE_FUNC_CONS(brad_load_image_metadata_process);
 DECLARE_FUNC_CONS(brad_load_atmospheric_parameters_process);
 DECLARE_FUNC_CONS(brad_get_sun_angles_process);
+DECLARE_FUNC_CONS(brad_create_image_metadata_process);
 DECLARE_FUNC_CONS(brad_create_atmospheric_parameters_process);
 DECLARE_FUNC_CONS(brad_estimate_shadows_process);
 

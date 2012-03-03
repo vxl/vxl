@@ -46,6 +46,7 @@ void brad_register::register_process()
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, brad_load_image_metadata_process, "bradLoadImageMetadataProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, brad_load_atmospheric_parameters_process, "bradLoadAtmosphericParametersProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, brad_get_sun_angles_process, "bradGetSunAnglesProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, brad_create_image_metadata_process, "bradCreateImageMetadataProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, brad_create_atmospheric_parameters_process, "bradCreateAtmosphericParametersProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, brad_estimate_shadows_process, "bradEstimateShadowsProcess");
 
