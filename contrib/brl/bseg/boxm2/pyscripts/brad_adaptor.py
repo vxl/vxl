@@ -105,6 +105,22 @@ def get_sun_angles(mdata):
   boxm2_batch.remove_data(id)
   return sun_az, sun_el
 
+#create a new image_metadata object
+def create_image_metadata(gain=1.0, offset=0.0, view_az = 0.0, view_el = 90.0, sun_az = 0.0, sun_el = 90.0, sun_irrad = None):
+  boxm2_batch.init_process("bradCreateImageMetadataProcess")
+  boxm2_batch.set_input_float(0,gain)
+  boxm2_batch.set_input_float(1,offset)
+  boxm2_batch.set_input_float(2,view_az)
+  boxm2_batch.set_input_float(3,view_el)
+  boxm2_batch.set_input_float(4,sun_az)
+  boxm2_batch.set_input_float(5,sun_el)
+  if sun_irrad != None:
+    boxm2_batch.set_input_float(6,sun_irrad)
+  boxm2_batch.run_process()
+  (id,type) = boxm2_batch.commit_output(0)
+  mdata = dbvalue(id,type)
+  return mdata
+
 # create a new atmopsheric_parameters object
 def create_atmospheric_parameters(airlight=0.0, skylight=0.0, optical_depth=0.0):
   boxm2_batch.init_process("bradCreateAtmosphericParametersProcess")
