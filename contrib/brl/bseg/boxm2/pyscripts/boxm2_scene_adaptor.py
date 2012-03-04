@@ -459,16 +459,17 @@ class boxm2_scene_adaptor(object):
     mask_image = dbvalue(id,type)
     return(exp_image, mask_image)
 
-  def update_alpha_naa(self, image, mask, camera, metadata, atmospheric_params):
+  def update_alpha_naa(self, image, camera, metadata, atmospheric_params, alt_prior, alt_density):
     boxm2_batch.init_process("boxm2OclUpdateAlphaNAAProcess")
     boxm2_batch.set_input_from_db(0, self.device)
     boxm2_batch.set_input_from_db(1, self.scene)
     boxm2_batch.set_input_from_db(2, self.opencl_cache)
     boxm2_batch.set_input_from_db(3, camera)
     boxm2_batch.set_input_from_db(4, image)
-    boxm2_batch.set_input_from_db(5, mask)
-    boxm2_batch.set_input_from_db(6, metadata)
-    boxm2_batch.set_input_from_db(7, atmospheric_params)
+    boxm2_batch.set_input_from_db(5, metadata)
+    boxm2_batch.set_input_from_db(6, atmospheric_params)
+    boxm2_batch.set_input_from_db(7, alt_prior)
+    boxm2_batch.set_input_from_db(8, alt_density)
     if not (boxm2_batch.run_process()):
       print("ERROR: run_process() returned False")
     return
