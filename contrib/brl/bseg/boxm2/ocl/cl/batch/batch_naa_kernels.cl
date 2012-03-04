@@ -1,3 +1,12 @@
+//THIS IS batch_naa_kernels.cl
+//Created March 3 2012
+//Implements batch-related algorithms for hte normal-albedo array appearance model
+#pragma OPENCL EXTENSION cl_khr_global_int32_base_atomics: enable
+#if NVIDIA
+ #pragma OPENCL EXTENSION cl_khr_gl_sharing : enable
+#endif
+
+
 #ifdef COMPUTE_NAA
 __kernel
 void batch_fit_normal_albedo_array(__global float * aux0,
