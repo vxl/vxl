@@ -13,7 +13,9 @@
 #include "brad_image_metadata.h"
 #include "brad_atmospheric_parameters.h"
 
-bool brad_estimate_shadows(vil_image_view<float> const& radiance_image, brad_image_metadata const& mdata, brad_atmospheric_parameters const& atm_params, vil_image_view<float> &shadow_prob);
+bool brad_estimate_shadow_prob_density(vil_image_view<float> const& radiance_image, brad_image_metadata const& mdata, brad_atmospheric_parameters const& atm_params, vil_image_view<float> &shadow_prob_density);
+
+bool brad_estimate_shadow_prob(vil_image_view<float> const& radiance_image, brad_image_metadata const& mdata, brad_atmospheric_parameters const& atm_params, vil_image_view<float> &shadow_prob);
 
 
 #endif
