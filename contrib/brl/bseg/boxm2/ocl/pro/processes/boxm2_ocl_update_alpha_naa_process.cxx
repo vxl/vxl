@@ -36,7 +36,7 @@
 
 namespace boxm2_ocl_update_alpha_naa_process_globals
 {
-  const unsigned n_inputs_  = 8;
+  const unsigned n_inputs_  = 9;
   const unsigned n_outputs_ = 0;
   enum {
       UPDATE_SEGLEN = 0,
@@ -119,26 +119,23 @@ bool boxm2_ocl_update_alpha_naa_process_cons(bprb_func_process& pro)
 {
   using namespace boxm2_ocl_update_alpha_naa_process_globals;
 
-  //process takes 8 inputs
+  //process takes 9 inputs
   vcl_vector<vcl_string> input_types_(n_inputs_);
   input_types_[0] = "bocl_device_sptr";
   input_types_[1] = "boxm2_scene_sptr";
   input_types_[2] = "boxm2_opencl_cache_sptr";
   input_types_[3] = "vpgl_camera_double_sptr";      //input camera
   input_types_[4] = "vil_image_view_base_sptr";     //input image
-  input_types_[5] = "vil_image_view_base_sptr";     //mask image view
-  input_types_[6] = "brad_image_metadata_sptr";     // image metadata
-  input_types_[7] = "brad_atmospheric_parameters_sptr";  // atmospheric parameters
+  input_types_[5] = "brad_image_metadata_sptr";     // image metadata
+  input_types_[6] = "brad_atmospheric_parameters_sptr";  // atmospheric parameters
+  input_types_[7] = "vil_image_view_base_sptr";     // alternate explaination prior
+  input_types_[8] = "vil_image_view_base_sptr";     // alternate explaination density
                                                     
   // process has 1 output:
   // output[0]: scene sptr
   vcl_vector<vcl_string>  output_types_(n_outputs_);
   bool good = pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
   
-  // default mask input
-  brdb_value_sptr empty_mask = new brdb_value_t<vil_image_view_base_sptr>(new vil_image_view<unsigned char>(1,1));
-  pro.set_input(5, empty_mask);
-
   return good;
 }
 
@@ -168,25 +165,29 @@ bool boxm2_ocl_update_alpha_naa_process(bprb_func_process& pro)
   boxm2_opencl_cache_sptr  opencl_cache = pro.get_input<boxm2_opencl_cache_sptr>(2);
   vpgl_camera_double_sptr  cam          = pro.get_input<vpgl_camera_double_sptr>(3);
   vil_image_view_base_sptr img          = pro.get_input<vil_image_view_base_sptr>(4);
-  vil_image_view_base_sptr mask_sptr    = pro.get_input<vil_image_view_base_sptr>(5);
-  brad_image_metadata_sptr metadata     = pro.get_input<brad_image_metadata_sptr>(6);
-  brad_atmospheric_parameters_sptr atm_params = pro.get_input<brad_atmospheric_parameters_sptr>(7);
+  brad_image_metadata_sptr metadata     = pro.get_input<brad_image_metadata_sptr>(5);
+  brad_atmospheric_parameters_sptr atm_params = pro.get_input<brad_atmospheric_parameters_sptr>(6);
+  vil_image_view_base_sptr alt_prior_base    = pro.get_input<vil_image_view_base_sptr>(7);
+  vil_image_view_base_sptr alt_density_base   = pro.get_input<vil_image_view_base_sptr>(8);
 
-  if( mask_sptr->ni() != img->ni() || mask_sptr->nj() != img->nj() ) {
-    vcl_cerr << "ERROR: mask and image sizes do not match! exiting without update."<< vcl_endl;
+
+  if( alt_prior_base->ni() != img->ni() || alt_prior_base->nj() != img->nj() ) {
+    vcl_cerr << "ERROR: alt_prior and image sizes do not match! exiting without update."<< vcl_endl;
     return false;
   }
-  
-  vil_image_view<float> pix_weights(img->ni(), img->nj());
-
-  if (vil_image_view<float>* pix_weights_float = dynamic_cast<vil_image_view<float> *>(mask_sptr.ptr())) {
-    pix_weights.deep_copy(*pix_weights_float);
-  } 
-  else if (vil_image_view<vxl_byte>* pix_weights_byte = dynamic_cast<vil_image_view<vxl_byte>*>(mask_sptr.ptr())) {
-    vil_convert_stretch_range_limited(*pix_weights_byte, pix_weights, (vxl_byte)0, (vxl_byte)255, 0.0f, 1.0f);
+  if( alt_density_base->ni() != img->ni() || alt_density_base->nj() != img->nj() ) {
+    vcl_cerr << "ERROR: alt_density and image sizes do not match! exiting without update."<< vcl_endl;
+    return false;
   }
-  else {
-    vcl_cerr << "ERROR: unknown mask pixel type" << vcl_endl;
+ 
+  vil_image_view<float> *alt_prior = dynamic_cast<vil_image_view<float>*>(alt_prior_base.ptr());
+  if (!alt_prior) {
+    vcl_cerr << "ERROR casting alt_prior to vil_image_view<float>" << vcl_endl;
+    return false;
+  }
+  vil_image_view<float> *alt_density = dynamic_cast<vil_image_view<float>*>(alt_density_base.ptr());
+  if (!alt_density) {
+    vcl_cerr << "ERROR casting alt_density to vil_image_view<float>" << vcl_endl;
     return false;
   }
   
@@ -304,15 +305,13 @@ bool boxm2_ocl_update_alpha_naa_process(bprb_func_process& pro)
   float* pre_buff = new float[cl_ni*cl_nj];
   float* norm_buff = new float[cl_ni*cl_nj];
   float* input_buff=new float[cl_ni*cl_nj];
-#define USE_PIX_WEIGHTS
-#ifdef USE_PIX_WEIGHTS
   { 
     int count = 0;
     for (unsigned int j=0; j<cl_nj; ++j) {
       for (unsigned int i=0; i<cl_ni; ++i) {
         if ((i < img->ni()) && (j < img->nj())){
-          vis_buff[count] = pix_weights(i,j);
-          pre_buff[count] = 1.0f - pix_weights(i,j);
+          vis_buff[count] = 1.0f - (*alt_prior)(i,j);
+          pre_buff[count] = (*alt_prior)(i,j) * (*alt_density)(i,j);
           norm_buff[count] = 0.0f;
         } else {
           vis_buff[count] = 1.0f;
@@ -323,34 +322,6 @@ bool boxm2_ocl_update_alpha_naa_process(bprb_func_process& pro)
       }
     }
   }
-#else
-  for (unsigned i=0; i<cl_ni*cl_nj; ++i)
-  {
-    vis_buff[i]=1.0f;
-    pre_buff[i]=0.0f;
-    norm_buff[i]=0.0f;
-  }
-#endif
-#if 0
-  //determine min/max i and j
-  unsigned int min_i=1000000000, max_i=0;
-  unsigned int min_j=1000000000, max_j=0;
-  if (use_mask)
-  {
-    for (unsigned int j=0; j<pix_weights->nj(); ++j) {
-      for (unsigned int i=0; i<pix_weights->ni(); ++i)
-      {
-        if ( (*pix_weights)(i,j) > 0.0 )
-        {
-          if (min_i > i) min_i = i;
-          if (min_j > j) min_j = j;
-          if (max_i < i) max_i = i;
-          if (max_j < j) max_j = j;
-        }
-      }
-    }
-  }
-#endif
   
   // copy input vals into image
   int count = 0;
@@ -461,14 +432,13 @@ bool boxm2_ocl_update_alpha_naa_process(bprb_func_process& pro)
       //set masked values
       vis_image->read_to_buffer(queue);
       pre_image->read_to_buffer(queue);
-#ifdef USE_PIX_WEIGHTS
       { 
           int count = 0;
           for (unsigned int j=0; j<cl_nj; ++j) {
             for (unsigned int i=0; i<cl_ni; ++i) {
               if ((i < img->ni()) && (j < img->nj())){
-                vis_buff[count] = pix_weights(i,j);
-                pre_buff[count] = 1.0f - pix_weights(i,j);
+                vis_buff[count] = 1.0f - (*alt_prior)(i,j);
+                pre_buff[count] = (*alt_prior)(i,j) * (*alt_density)(i,j);
               } else {
                 vis_buff[count] = 1.0f;
                 pre_buff[count] = 0.0f;
@@ -477,13 +447,6 @@ bool boxm2_ocl_update_alpha_naa_process(bprb_func_process& pro)
             }
           }
       }
-#else
-      for (unsigned i=0; i<cl_ni*cl_nj; ++i)
-      {
-          vis_buff[i]=1.0f;
-          pre_buff[i]=0.0f;
-      }
-#endif
       vis_image->write_to_buffer(queue);
       pre_image->write_to_buffer(queue);
       clFinish(queue);
