@@ -782,7 +782,7 @@ def update_aux_per_view(scene, cache, img, cam, imgString, device=None, mask=Non
     print "ERROR: Cache type not recognized: ", cache.type; 
    
 # Update Aux for normal-albedo-array appearance model
-def update_aux_per_view(scene, cache, img, cam, metadata, atm_params, imgString, alt_prior, alt_density, device=None) : 
+def update_aux_per_view_naa(scene, cache, img, cam, metadata, atm_params, imgString, alt_prior, alt_density, device=None) : 
   if cache.type == "boxm2_cache_sptr" :
     print "boxm2_batch CPU update aux per view_naa not yet implemented"
   elif cache.type == "boxm2_opencl_cache_sptr" and device : 

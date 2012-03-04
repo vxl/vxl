@@ -53,6 +53,7 @@ namespace boxm2_ocl_update_aux_per_view_naa_process_globals
     src_paths.push_back(source_dir + "backproject.cl");
     src_paths.push_back(source_dir + "statistics_library_functions.cl");
     src_paths.push_back(source_dir + "ray_bundle_library_opt.cl");
+    src_paths.push_back(source_dir + "bit/update_kernels.cl");
     src_paths.push_back(source_dir + "bit/batch_update_kernels.cl");
     src_paths.push_back(source_dir + "bit/update_naa_kernels.cl");
 
@@ -63,7 +64,8 @@ namespace boxm2_ocl_update_aux_per_view_naa_process_globals
       return false;
     }
 
-    src_paths.push_back(source_dir + "batch_update_functors.cl");
+    src_paths.push_back(source_dir + "update_functors.cl");
+    src_paths.push_back(source_dir + "update_naa_functors.cl");
     src_paths.push_back(source_dir + "bit/cast_ray_bit.cl");
 
     // push back seg_len kernel
@@ -399,8 +401,8 @@ bool boxm2_ocl_update_aux_per_view_naa_process(bprb_func_process& pro)
       }
       else if (i==UPDATE_AUX_PREVIS)
       {
-        aux0->zero_gpu_buffer(queue);
-        aux1->zero_gpu_buffer(queue);
+        //aux0->zero_gpu_buffer(queue);
+        //aux1->zero_gpu_buffer(queue);
         aux2->zero_gpu_buffer(queue);
         aux3->zero_gpu_buffer(queue);
 

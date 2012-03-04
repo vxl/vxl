@@ -137,7 +137,7 @@ def estimate_shadow_density(image, metadata, atmospheric_params):
   boxm2_batch.set_input_from_db(0,image)
   boxm2_batch.set_input_from_db(1,metadata)
   boxm2_batch.set_input_from_db(2,atmospheric_params)
-  boxm2_batch.set_input_from_db(3,True) # True returns prob. density value
+  boxm2_batch.set_input_bool(3,True) # True returns prob. density value
   boxm2_batch.run_process()
   (id,type) = boxm2_batch.commit_output(0)
   shadow_density = dbvalue(id,type)
@@ -148,7 +148,7 @@ def estimate_shadows(image, metadata, atmospheric_params):
   boxm2_batch.set_input_from_db(0,image)
   boxm2_batch.set_input_from_db(1,metadata)
   boxm2_batch.set_input_from_db(2,atmospheric_params)
-  boxm2_batch.set_input_from_db(3,False) # False returns probability value
+  boxm2_batch.set_input_bool(3,False) # False returns probability value
   boxm2_batch.run_process()
   (id,type) = boxm2_batch.commit_output(0)
   shadow_probs = dbvalue(id,type)

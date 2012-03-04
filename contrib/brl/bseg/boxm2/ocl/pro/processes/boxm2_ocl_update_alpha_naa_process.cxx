@@ -58,8 +58,10 @@ namespace boxm2_ocl_update_alpha_naa_process_globals
     src_paths.push_back(source_dir + "statistics_library_functions.cl");
     src_paths.push_back(source_dir + "ray_bundle_library_opt.cl");
     src_paths.push_back(source_dir + "bit/update_kernels.cl");
+    src_paths.push_back(source_dir + "bit/update_naa_kernels.cl");
     vcl_vector<vcl_string> non_ray_src = vcl_vector<vcl_string>(src_paths);
     src_paths.push_back(source_dir + "update_functors.cl");
+    src_paths.push_back(source_dir + "update_naa_functors.cl");
     src_paths.push_back(source_dir + "bit/cast_ray_bit.cl");
 
     //compilation options
