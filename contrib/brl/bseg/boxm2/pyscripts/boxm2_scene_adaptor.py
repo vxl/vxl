@@ -321,6 +321,10 @@ class boxm2_scene_adaptor(object):
     elif device_string=="cpp" :
       update_aux_per_view(self.scene, self.cpu_cache, img, cam, imgId, None, mask)
 
+  #create an imagewise aux buffer for batch update of normal-albedo-array appearance model
+  def update_aux_naa(self, img, cam, imgId, metadata, atm_params, alt_prior, alt_density) :
+    update_aux_per_view_naa(self.scene, self.opencl_cache, img, cam, metadata, atm_params, imgId, self.device, alt_prior, alt_density)
+
   #takes already created aux buffers (for each image) and fits a Mixture of 3
   #Gaussians to each cell, saves the appearance
   def batch_paint(self, imgs, cams, device_string="") :

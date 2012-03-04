@@ -781,6 +781,26 @@ def update_aux_per_view(scene, cache, img, cam, imgString, device=None, mask=Non
   else:
     print "ERROR: Cache type not recognized: ", cache.type; 
    
+# Update Aux for normal-albedo-array appearance model
+def update_aux_per_view(scene, cache, img, cam, metadata, atm_params, imgString, alt_prior, alt_density, device=None) : 
+  if cache.type == "boxm2_cache_sptr" :
+    print "boxm2_batch CPU update aux per view_naa not yet implemented"
+  elif cache.type == "boxm2_opencl_cache_sptr" and device : 
+    boxm2_batch.init_process("boxm2OclUpdateAuxPerViewNAAProcess")
+    boxm2_batch.set_input_from_db(0, device)
+    boxm2_batch.set_input_from_db(1, scene)
+    boxm2_batch.set_input_from_db(2, cache)
+    boxm2_batch.set_input_from_db(3, cam)
+    boxm2_batch.set_input_from_db(4, img)
+    boxm2_batch.set_input_from_db(5, metadata)
+    boxm2_batch.set_input_from_db(6, atm_params)
+    boxm2_batch.set_input_string(7, imgString)
+    boxm2_batch.set_input_from_db(8, alt_prior)
+    boxm2_batch.set_input_from_db(9, alt_density)
+    boxm2_batch.run_process();
+  else:
+    print "ERROR: Cache type not recognized: ", cache.type; 
+   
 ###########################################################
 # create sun camera
 # astro_coords=True indicates az,el in degrees north of east, degrees above horizon
