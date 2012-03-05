@@ -67,7 +67,7 @@ class boxm2_scene_adaptor(object):
     update_grey_with_alt(self.scene, cache, cam, img, dev, "", mask, update_alpha, var, alt_prior, alt_density)
 
   #update wrapper, can pass in a Null device to use
-  def update(self, cam, img, update_alpha=True, mask=None, device_string="", var=-1.0) :
+  def update(self, cam, img, update_alpha=True, mask=None, device_string="", var=-1.0, ident_string="") :
     cache = self.active_cache;
     dev = self.device;
 
@@ -82,7 +82,7 @@ class boxm2_scene_adaptor(object):
     if self.rgb :
       update_rgb(self.scene, cache, cam, img, dev);
     else :
-      update_grey(self.scene, cache, cam, img, dev, "", mask, update_alpha, var);
+      update_grey(self.scene, cache, cam, img, dev, ident_string, mask, update_alpha, var);
       
   #update wrapper, can pass in a Null device to use
   def update_app(self, cam, img, device_string="") :
@@ -515,5 +515,9 @@ class boxm2_scene_adaptor(object):
   def render_shadow_map(self, camera, ni, nj, prefix_name=''):
     shadow_map = render_shadow_map(self.scene, self.device, self.opencl_cache, camera, ni, nj, prefix_name)
     return shadow_map
+    
+  def render_scene_mask(self, camera, ni, nj, ground_plane_only=False):
+    mask = create_mask_image(self.scene, camera, ni, nj, ground_plane_only);
+    return mask;
 
 
