@@ -118,7 +118,7 @@ inline double vil3d_trilin_interp_safe_extend(double x, double y, double z, cons
 
 //: Compute trilinear interpolation at (x,y), with bounds checks.
 //  Image is nx * ny array of Ts. x,y element is data[nx*y+x]
-//  If (x,y,z) is outside safe interpolatable image region, nearest pixel value is returned.
+//  If (x,y,z) is outside safe interpolatable image region, NA is returned.
 template<class T>
 inline double vil3d_trilin_interp_safe_edgena(double x, double y, double z, const T* data,
                                               unsigned nx, unsigned ny, unsigned nz,
