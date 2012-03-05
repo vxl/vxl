@@ -102,6 +102,26 @@ def estimate_radiance_values(image, sun_el, sun_dist, sensor_el, solar_irrad=Non
   ref_sun_facing = boxm2_batch.get_output_float(id)
   boxm2_batch.remove_data(id)
   return (airlight, ref_horizontal, ref_sun_facing)
+  
+def save_sun_index(output_file_name, longitude, latitude, year, hour, minute, radius):
+  boxm2_batch.init_process("bradSaveSunIndexProcess");
+  boxm2_batch.set_input_string(0,output_file_name);
+  boxm2_batch.set_input_float(1, longitude);
+  boxm2_batch.set_input_float(2, latitude);
+  boxm2_batch.set_input_int(3,year);
+  boxm2_batch.set_input_int(4,hour);
+  boxm2_batch.set_input_int(5,minute);
+  boxm2_batch.set_input_int(6,radius);
+  boxm2_batch.run_process();
+  
+def sun_dir_bin(meta,illum_bin_filename):
+  boxm2_batch.init_process("bradSunDirBinProcess");
+  boxm2_batch.set_input_from_db(0,meta);
+  boxm2_batch.set_input_string(1,illum_bin_filename);
+  boxm2_batch.run_process();
+  (id,type)=boxm2_batch.commit_output(0);
+  bin = boxm2_batch.get_output_int(id);
+  return bin;
 
 def prob_as_expected(image,atomicity):
   boxm2_batch.init_process("bslExpectedImageProcess")
@@ -193,12 +213,33 @@ def texture_classifier_kernel_margin(dictionary):
   margin = boxm2_batch.get_output_int(m_id);
   return margin;
   
-def texture_classifier(dictionary, img, block_size=64):
+def texture_classifier(tcl, dictionary, img, block_size=64):
   boxm2_batch.init_process("sdetTextureClassifierProcess");
-  boxm2_batch.set_input_string(0,dictionary);
-  boxm2_batch.set_input_from_db(1, img);
-  boxm2_batch.set_input_unsigned(2,block_size);    # size of blocks
+  boxm2_batch.set_input_from_db(0, tcl);
+  boxm2_batch.set_input_string(1,dictionary);
+  boxm2_batch.set_input_from_db(2, img);
+  boxm2_batch.set_input_unsigned(3,block_size);    # size of blocks
   boxm2_batch.run_process();
   (img_id, img_type) = boxm2_batch.commit_output(0);
   img_classified = dbvalue(img_id, img_type);
   return img_classified
+  
+def create_texture_classifier(lambda0, lambda1,n_scales,scale_interval,angle_interval,laplace_radius,gauss_radius,k,n_samples):
+  boxm2_batch.init_process("sdetCreateTextureClassifierProcess");
+  boxm2_batch.set_input_float(0,lambda0);
+  boxm2_batch.set_input_float(1,lambda1);
+  boxm2_batch.set_input_unsigned(2,n_scales);
+  boxm2_batch.set_input_float(3, scale_interval);
+  boxm2_batch.set_input_float(4, angle_interval);
+  boxm2_batch.set_input_float(5, laplace_radius);
+  boxm2_batch.set_input_float(6, gauss_radius);
+  boxm2_batch.set_input_unsigned(7, k);
+  boxm2_batch.set_input_unsigned(8,n_samples);
+  boxm2_batch.run_process();
+  (tclsf_id, tclsf_type)=boxm2_batch.commit_output(0);
+  tclsf = dbvalue(tclsf_id, tclsf_type);
+  return tclsf;
+  
+  
+
+
