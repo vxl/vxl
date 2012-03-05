@@ -92,6 +92,33 @@ def load_atmospheric_parameters(filename):
   atm_params = dbvalue(id,type)
   return atm_params
  
+# compute sun angles given location and time
+def get_sun_angles_date_time(lat, lon, year, month, day, hour, minute):
+  boxm2_batch.init_process("bradGetSunAnglesDateTimeProcess")
+  boxm2_batch.set_input_float(0,lat)
+  boxm2_batch.set_input_float(1,lon)
+  boxm2_batch.set_input_int(2,year)
+  boxm2_batch.set_input_int(3,month)
+  boxm2_batch.set_input_int(4,day)
+  boxm2_batch.set_input_int(5,hour)
+  boxm2_batch.set_input_int(6,minute)
+  boxm2_batch.run_process()
+  (id,type) = boxm2_batch.commit_output(0)
+  sun_az = boxm2_batch.get_output_float(id)
+  boxm2_batch.remove_data(id)
+  (id,type) = boxm2_batch.commit_output(1)
+  sun_el = boxm2_batch.get_output_float(id)
+  boxm2_batch.remove_data(id)
+  return sun_az, sun_el
+
+# set sun angles in metadata
+def set_sun_angles(mdata, sun_az, sun_el):
+  boxm2_batch.init_process("bradSetSunAnglesProcess")
+  boxm2_batch.set_input_from_db(0,mdata)
+  boxm2_batch.set_input_float(1, sun_az)
+  boxm2_batch.set_input_float(2, sun_el)
+  boxm2_batch.run_process()
+
 # extract sun azimuth and elevation angles from metadata
 def get_sun_angles(mdata):
   boxm2_batch.init_process("bradGetSunAnglesProcess")
