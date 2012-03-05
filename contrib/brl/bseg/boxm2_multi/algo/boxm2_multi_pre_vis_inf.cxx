@@ -136,15 +136,14 @@ float boxm2_multi_pre_vis_inf::pre_vis_inf( boxm2_multi_cache&              cach
       pre_mems[i]->read_to_buffer(queues[i]);
       float* v = (float*) vis_mems[i]->cpu_buffer();
       float* p = (float*) pre_mems[i]->cpu_buffer();
-      //for (int c=0; c<ni*nj; ++c) {
-	  int c = 0;
-	  for(int j=0; j<nj; ++j) 
-		  for(int i=0; i<ni; ++i) {
-			  preImg[c]  = preImg[c] + p[c]*visImg[c]; 
-			  visImg[c] *= v[c];
-			  c++;
-		  }
-    }
+      int c = 0;
+      for(int j=0; j<nj; ++j) 
+        for(int i=0; i<ni; ++i) {
+          preImg[c]  = preImg[c] + p[c]*visImg[c]; 
+          visImg[c] *= v[c];
+          c++;
+        }
+      }
 #if 0
     vil_image_view<float> vimg(ni,nj), pimg(ni,nj);
     int c=0;
