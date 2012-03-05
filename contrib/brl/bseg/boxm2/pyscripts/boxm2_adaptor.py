@@ -197,6 +197,26 @@ def update_rgb(scene, cache, cam, img, device=None, mask="", updateAlpha=True) :
   else : 
     print "ERROR: Cache type not recognized: ", cache.type; 
 
+def update_with_quality(scene, cache, cam, img, q_img, identifier="") :
+  boxm2_batch.init_process("boxm2CppUpdateUsingQualityProcess");
+  boxm2_batch.set_input_from_db(0, scene);
+  boxm2_batch.set_input_from_db(1, cache);
+  boxm2_batch.set_input_from_db(2, cam);
+  boxm2_batch.set_input_from_db(3, img);
+  boxm2_batch.set_input_from_db(4, q_img);
+  boxm2_batch.set_input_string(5, identifier);
+  boxm2_batch.run_process();
+  
+# Generic update - will use GPU if device/openclcache are passed in
+def update_cpp(scene, cache, cam, img, ident="") :
+  boxm2_batch.init_process("boxm2CppUpdateImageProcess");
+  boxm2_batch.set_input_from_db(0,scene);
+  boxm2_batch.set_input_from_db(1,cache);
+  boxm2_batch.set_input_from_db(2,cam);
+  boxm2_batch.set_input_from_db(3,img);
+  boxm2_batch.set_input_string(4,ident);
+  boxm2_batch.run_process();
+
  # Generic render, returns a dbvalue expected image
 # Cache can be either an OPENCL cache or a CPU cache
 def render_height_map(scene, cache, device=None) :
@@ -653,6 +673,7 @@ def save_multi_block_scene(params) :
   max_data_mb = params['max_block_mb'] if 'max_block_mb' in params else 1000.0; 
   p_init = params['p_init'] if 'p_init' in params else .01; 
   max_level = params['max_tree_level'] if 'max_tree_level' in params else 4; 
+  init_level = params['init_tree_level'] if 'init_tree_level' in params else 1;
   vox_length = params['vox_length'] if 'vox_length' in params else 1.0; 
   sb_length = params['sub_block_length'] if 'sub_block_length' in params else .125; 
   fname = params['filename'] if 'filename' in params else "scene"; 
@@ -687,9 +708,9 @@ def save_multi_block_scene(params) :
   num_sb_x = num_vox_x / 8; 
   num_sb_y = num_vox_y / 8; 
   num_sb_z = num_vox_z / 8; 
-  num_x = num_sb_x / n_x; 
-  num_y = num_sb_y / n_y; 
-  num_z = num_sb_z / n_z; 
+  num_x = num_sb_x / n_x;
+  num_y = num_sb_y / n_y;
+  num_z = num_sb_z / n_z;
 
   for k in range(0,n_z):
    for i in range(0,n_x):
@@ -714,6 +735,7 @@ def save_multi_block_scene(params) :
      boxm2_batch.set_input_float(11,sb_length);
      boxm2_batch.set_input_float(12,max_data_mb);
      boxm2_batch.set_input_float(13,p_init);
+     boxm2_batch.set_input_unsigned(14,init_level);
      boxm2_batch.run_process();
        
   print("Write Scene");
@@ -744,6 +766,17 @@ def roi_init(NITF_path, camera, scene, convert_to_8bit, params_fname, margin=0) 
     uncertainty = 0
   return result, local_cam, cropped_image, uncertainty 
 
+def create_mask_image(scene, camera, ni, nj, ground_plane_only=False) :
+  boxm2_batch.init_process("boxm2CreateSceneMaskProcess")
+  boxm2_batch.set_input_from_db(0,scene)
+  boxm2_batch.set_input_from_db(1,camera)
+  boxm2_batch.set_input_unsigned(2,ni);
+  boxm2_batch.set_input_unsigned(3,nj);
+  boxm2_batch.set_input_bool(4,ground_plane_only)
+  boxm2_batch.run_process();
+  (id,type) = boxm2_batch.commit_output(0)
+  mask = dbvalue(id,type)
+  return mask
 
 
 ######################################################################
@@ -869,4 +902,16 @@ def render_shadow_map(scene,device, ocl_cache, camera, ni, nj, prefix_name=''):
     (id,type) = boxm2_batch.commit_output(0)
     shadow_map = dbvalue(id,type)
     return shadow_map
+    
+def scene_illumination_info(scene):
+    boxm2_batch.init_process("boxm2SceneIlluminationInfoProcess");
+    boxm2_batch.set_input_from_db(0, scene);
+    boxm2_batch.run_process();
+    (lon_id,lon_type)=boxm2_batch.commit_output(0);
+    longitude = boxm2_batch.get_output_float(lon_id)
+    (lat_id,lat_type)=boxm2_batch.commit_output(1);
+    latitude = boxm2_batch.get_output_float(lat_id)
+    (nb_id,nb_type)=boxm2_batch.commit_output(2);
+    nbins = boxm2_batch.get_output_int(nb_id);
+    return longitude, latitude, nbins
 
