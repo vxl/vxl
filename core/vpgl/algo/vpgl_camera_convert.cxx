@@ -887,10 +887,10 @@ convert( vpgl_local_rational_camera<double> const& rat_cam,
           prev_endpt = prev_org + (prev_dir * ray_len);
           //vcl_cout << "prev_org = " << prev_org << "  prev_endpt = " << prev_endpt << vcl_endl;
         }
-
-        if (!vpgl_backproject::bproj_plane(&rat_cam, ip, high, prev_org, org))
+        const double error_tol = 0.25; // allow projection error of 0.25 pixel
+        if (!vpgl_backproject::bproj_plane(&rat_cam, ip, high, prev_org, org, error_tol))
           return false;
-        if (!vpgl_backproject::bproj_plane(&rat_cam, ip, low, prev_endpt, endpt))
+        if (!vpgl_backproject::bproj_plane(&rat_cam, ip, low, prev_endpt, endpt, error_tol))
           return false;
         //vcl_cout << "     org = " << org << "       endpt = " << endpt << vcl_endl;
 #else
