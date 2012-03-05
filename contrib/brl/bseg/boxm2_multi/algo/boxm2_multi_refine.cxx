@@ -280,8 +280,10 @@ float boxm2_multi_refine::refine_trees_per_block(const boxm2_block_id& id,
     kern->set_local_arg( lThreads[0]*sizeof(cl_uchar16) );
 
     //execute kernel
-    kern->execute( queue, 2, lThreads, gThreads);
+    float gpu_time =  kern->execute( queue, 2, lThreads, gThreads);
     kern->clear_args();
+
+	return gpu_time;
 }
 
 
