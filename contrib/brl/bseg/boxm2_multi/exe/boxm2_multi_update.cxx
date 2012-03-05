@@ -88,6 +88,8 @@ int main(int argc,  char** argv)
     vil_image_view<float>* inImgPtr = dynamic_cast<vil_image_view<float>* >(inImg.ptr()); 
     boxm2_multi_update::update(mcache, *inImgPtr, inCam); 
     
+#if 0 
+
     //create cam
     double currInc    = 45.0;
     double currRadius = scene->bounding_box().height(); 
@@ -103,6 +105,7 @@ int main(int argc,  char** argv)
     vcl_stringstream s; s<<"out_"<<i<<".tiff"; 
     vil_save(out, s.str().c_str()); 
 
+#endif
     //if(i%10==9) 
     //  boxm2_multi_refine::refine(mcache, .3f);
   }

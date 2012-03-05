@@ -109,7 +109,6 @@ float boxm2_multi_pre_vis_inf::pre_vis_inf( boxm2_multi_cache&              cach
 
       //Run block store aux
       boxm2_block_id id = ids[i]; //vis_order[blk]; 
-
       //set visibility to one, set pre to zero
       float* ones = new float[ni*nj]; 
       vcl_fill(ones, ones+ni*nj, 1.0f);
@@ -137,24 +136,27 @@ float boxm2_multi_pre_vis_inf::pre_vis_inf( boxm2_multi_cache&              cach
       pre_mems[i]->read_to_buffer(queues[i]);
       float* v = (float*) vis_mems[i]->cpu_buffer();
       float* p = (float*) pre_mems[i]->cpu_buffer();
-      for (int c=0; c<ni*nj; ++c) {
-        visImg[c] *= v[c];
-        preImg[c]  = preImg[c]*v[c] + p[c]; 
-      }
+      //for (int c=0; c<ni*nj; ++c) {
+	  int c = 0;
+	  for(int j=0; j<nj; ++j) 
+		  for(int i=0; i<ni; ++i) {
+			  preImg[c]  = preImg[c] + p[c]*visImg[c]; 
+			  visImg[c] *= v[c];
+			  c++;
+		  }
     }
 #if 0
     vil_image_view<float> vimg(ni,nj), pimg(ni,nj);
     int c=0;
     for(int j=0; j<nj; ++j) 
       for(int i=0; i<ni; ++i) {
-        vimg(i,j) = visImg[c];
-        pimg(i,j) = preImg[c];
-        c++;
+		  vimg(i,j) = visImg[c];
+		  pimg(i,j) = preImg[c];
+		  c++;
       }
-    vcl_stringstream vf; vf<<"vis_img_grp_"<<vcl_setfill('0')<<vcl_setw(3)<<grpId<<".tiff";
-    vil_save(vimg, vf.str().c_str());
-    //vcl_stringstream pf; pf<<"pre_img_grp_"<<grpId<<".tiff"; 
-    //vil_save(pimg, pf.str().c_str());
+    vcl_stringstream vf; 
+	vf<<"./vis_img_grp_"<<vcl_setfill('0')<<vcl_setw(3)<<grpId<<".tiff";
+    vil_save(pimg, vf.str().c_str());
 #endif
   }
  

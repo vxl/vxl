@@ -51,7 +51,7 @@ boxm2_multi_cache::boxm2_multi_cache(boxm2_scene_sptr              scene,
   int dev_id=0; 
   for(int i=min_ids.x(); i<max_ids.x()+1; ++i) {
     //iterate over groups in Y
-    for(int group=0; group<max_ids.y()+1; group+=nDev) {
+    for(int group=min_ids.y(); group<max_ids.y()+1; group+=nDev) {
 
       //create a block group
       boxm2_multi_cache_group* grp = new boxm2_multi_cache_group;
