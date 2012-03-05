@@ -15,6 +15,7 @@
 #include <vcl_cassert.h>
 #include <vcl_cstddef.h>
 #include <vil/vil_image_view.h>
+#include <vil/vil_na.h>
 
 //: Compute bilinear interpolation at (x,y), no bound checks. Requires 0<x<ni-2, 0<y<nj-2
 //  Image is nx * ny array of Ts. x,y element is data[xstep*x+ystep*y]
@@ -105,6 +106,20 @@ inline double vil_bilin_interp_safe(double x, double y, const T* data,
   return vil_bilin_interp_raw(x,y,data,xstep,ystep);
 }
 
+
+//: Compute bilinear interpolation at (x,y), with bound checks
+//  Image is nx * ny array of Ts. x,y element is data[xstep*x+ystep*y]
+//  If (x,y) is outside interpolatable image region, NA is returned.
+//  The safe interpolatable region is [0,nx-1]*[0,ny-1].
+template<class T>
+inline double vil_bilin_interp_safe_edgena(double x, double y, const T* data,
+                                           int nx, int ny,
+                                           vcl_ptrdiff_t xstep, vcl_ptrdiff_t ystep)
+{
+  if (x<0 || y<0 || x>nx-1 || y>ny-1) return vil_na(double());
+  return vil_bilin_interp_raw(x,y,data,xstep,ystep);
+}
+
 //: Compute bilinear interpolation at (x,y), with bound checks
 //  If (x,y) is outside interpolatable image region, zero is returned.
 //  The safe interpolatable region is [0,view.ni()-1]*[0,view.nj()-1].
@@ -118,6 +133,19 @@ inline double vil_bilin_interp_safe(const vil_image_view<T> &view,
                                view.istep(), view.jstep());
 }
 
+
+//: Compute bilinear interpolation at (x,y), with bound checks
+//  If (x,y) is outside interpolatable image region, NA is returned.
+//  The safe interpolatable region is [0,view.ni()-1]*[0,view.nj()-1].
+// \relatesalso vil_image_view
+template<class T>
+inline double vil_bilin_interp_safe_edgena(const vil_image_view<T> &view,
+                                           double x, double y, unsigned p=0)
+{
+  return vil_bilin_interp_safe_edgena(x, y, &view(0,0,p),
+                                      view.ni(), view.nj(),
+                                      view.istep(), view.jstep());
+}
 
 //: Compute bilinear interpolation at (x,y), with minimal bound checks
 //  Image is nx * ny array of Ts. x,y element is data[ystep*y+xstep*x]
