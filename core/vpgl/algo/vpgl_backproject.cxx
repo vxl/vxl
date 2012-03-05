@@ -14,7 +14,8 @@ bool vpgl_backproject::bproj_plane(const vpgl_camera<double>* cam,
                                    vnl_double_2 const& image_point,
                                    vnl_double_4 const& plane,
                                    vnl_double_3 const& initial_guess,
-                                   vnl_double_3& world_point)
+                                   vnl_double_3& world_point,
+                                   double error_tol)
 {
   // special case of a generic camera
   if (cam->type_name()=="vpgl_generic_camera")
@@ -35,7 +36,7 @@ bool vpgl_backproject::bproj_plane(const vpgl_camera<double>* cam,
 
   cf.set_params(initial_guess, x1);
   vnl_amoeba amoeba(cf);
-  amoeba.set_max_iterations(10000);
+  amoeba.set_max_iterations(100000);
   amoeba.set_relative_diameter(1.0);
   vnl_vector<double> x(&x1[0], 2);
   amoeba.minimize(x); x1 = x;
@@ -46,8 +47,11 @@ bool vpgl_backproject::bproj_plane(const vpgl_camera<double>* cam,
    final_proj[0]=u; final_proj[1]=v;
   double err = (final_proj-image_point).magnitude();
   // was: double err = vcl_sqrt(cf.f(x));
-  if (err>.05) // greater than a 20th of a pixel
+  if (err > error_tol) // greater than a 20th of a pixel
+  {
+    vcl_cerr << "ERROR: backprojection error = " << err << vcl_endl;
     return false;
+  }
   return true;
 }
 
@@ -58,7 +62,8 @@ bool vpgl_backproject::bproj_plane(const vpgl_camera<double>*  cam,
                                    vgl_point_2d<double> const& image_point,
                                    vgl_plane_3d<double> const& plane,
                                    vgl_point_3d<double> const& initial_guess,
-                                   vgl_point_3d<double>& world_point)
+                                   vgl_point_3d<double>& world_point,
+                                   double error_tol)
 {
   //simply convert to vnl interface
   vnl_double_2 ipt;
@@ -67,7 +72,7 @@ bool vpgl_backproject::bproj_plane(const vpgl_camera<double>*  cam,
   ipt[0]=image_point.x(); ipt[1]=image_point.y();
   pl[0]=plane.a(); pl[1]=plane.b(); pl[2]=plane.c(); pl[3]=plane.d();
   ig[0]=initial_guess.x();  ig[1]=initial_guess.y();  ig[2]=initial_guess.z();
-  bool success = vpgl_backproject::bproj_plane(cam, ipt, pl, ig, wp);
+  bool success = vpgl_backproject::bproj_plane(cam, ipt, pl, ig, wp, error_tol);
   world_point.set(wp[0], wp[1], wp[2]);
   return success;
 }
@@ -78,10 +83,11 @@ bool vpgl_backproject::bproj_plane(vpgl_rational_camera<double> const& rcam,
                                    vnl_double_2 const& image_point,
                                    vnl_double_4 const& plane,
                                    vnl_double_3 const& initial_guess,
-                                   vnl_double_3& world_point)
+                                   vnl_double_3& world_point,
+                                   double error_tol)
 {
   const vpgl_camera<double>*  cam = static_cast<const vpgl_camera<double>* >(&rcam);
-  return bproj_plane(cam, image_point, plane, initial_guess, world_point);
+  return bproj_plane(cam, image_point, plane, initial_guess, world_point, error_tol);
 }
 
 //: Backproject an image point onto a world plane
@@ -89,10 +95,11 @@ bool vpgl_backproject::bproj_plane(vpgl_rational_camera<double> const& rcam,
                                    vgl_point_2d<double> const& image_point,
                                    vgl_plane_3d<double> const& plane,
                                    vgl_point_3d<double> const& initial_guess,
-                                   vgl_point_3d<double>& world_point)
+                                   vgl_point_3d<double>& world_point,
+                                   double error_tol)
 {
   const vpgl_camera<double>* const cam = static_cast<const vpgl_camera<double>* >(&rcam);
-  return bproj_plane(cam, image_point, plane, initial_guess, world_point);
+  return bproj_plane(cam, image_point, plane, initial_guess, world_point, error_tol);
 }
 
 //Only the direction of the vector is important so it can be
