@@ -572,6 +572,24 @@ def trajectory_next(trajectory) :
   cam = dbvalue(id,type);
   return cam; 
 
+def trajectory_size(trajectory):
+  boxm2_batch.init_process("boxm2ViewTrajectorySizeProcess")
+  boxm2_batch.set_input_from_db(0, trajectory)
+  boxm2_batch.run_process()
+  (id,type) = boxm2_batch.commit_output(0)
+  size = boxm2_batch.get_output_unsigned(id)
+  boxm2_batch.remove_data(id)
+  return size
+
+def trajectory_direct(trajectory, index):
+  boxm2_batch.init_process("boxm2ViewTrajectoryDirectProcess")
+  boxm2_batch.set_input_from_db(0,trajectory)
+  boxm2_batch.set_input_unsigned(1,index)
+  boxm2_batch.run_process()
+  (id,type) = boxm2_batch.commit_output(0)
+  cam = dbvalue(id,type)
+  return cam
+
 ######################################################################
 # camera/scene methods
 #####################################################################

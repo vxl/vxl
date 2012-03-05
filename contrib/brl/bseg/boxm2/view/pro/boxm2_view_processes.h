@@ -8,5 +8,7 @@
 DECLARE_FUNC_CONS(boxm2_view_expected_image_process);
 DECLARE_FUNC_CONS(boxm2_view_init_trajectory_process);
 DECLARE_FUNC_CONS(boxm2_view_trajectory_next_process);
+DECLARE_FUNC_CONS(boxm2_view_trajectory_direct_process);
+DECLARE_FUNC_CONS(boxm2_view_trajectory_size_process);
 
 #endif

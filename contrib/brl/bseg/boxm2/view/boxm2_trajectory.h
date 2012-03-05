@@ -45,6 +45,9 @@ class boxm2_trajectory : public vbl_ref_count
       return *iter_++;
     }
 
+    //: direct access to cameras
+    vpgl_camera_double_sptr camera(unsigned int i){i %= cams_.size(); return cams_[i];}
+
  protected:
 
     //list of cams

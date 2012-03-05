@@ -23,4 +23,6 @@ void boxm2_view_register::register_process()
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_view_expected_image_process,"boxm2ViewExpectedImageProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_view_init_trajectory_process,"boxm2ViewInitTrajectoryProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_view_trajectory_next_process,"boxm2ViewTrajectoryNextProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_view_trajectory_direct_process,"boxm2ViewTrajectoryDirectProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_view_trajectory_size_process,"boxm2ViewTrajectorySizeProcess");
 }
