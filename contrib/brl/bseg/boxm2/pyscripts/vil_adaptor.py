@@ -226,5 +226,21 @@ def init_float_img(ni,nj,val):
   (id,type) = boxm2_batch.commit_output(0)
   img_out = dbvalue(id,type)
   return img_out
+  
+def nitf_date_time(image_filename):
+  boxm2_batch.init_process("vilNITFDateTimeProcess");
+  boxm2_batch.set_input_string(0,image_filename);
+  boxm2_batch.run_process();
+  (id,type)=boxm2_batch.commit_output(0);
+  year =  boxm2_batch.get_output_int(id);
+  (id,type)=boxm2_batch.commit_output(1);
+  month =  boxm2_batch.get_output_int(id);
+  (id,type)=boxm2_batch.commit_output(2);
+  day =  boxm2_batch.get_output_int(id);
+  (id,type)=boxm2_batch.commit_output(3);
+  hour = boxm2_batch.get_output_int(id);
+  (id,type)=boxm2_batch.commit_output(4);
+  minute = boxm2_batch.get_output_int(id);
+  return year, month, day, hour, minute
 
 
