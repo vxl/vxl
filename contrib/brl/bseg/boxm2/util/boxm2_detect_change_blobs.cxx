@@ -63,7 +63,9 @@ void boxm2_util_detect_change_blobs(vil_image_view<float>& change,
     //Only add blobs smaller than 400 pixels
     blobs.push_back(blob);
   }
+#if 0 
   vcl_cout<<"Found "<<blobs.size()<<" blobs"<<vcl_endl;
+#endif
 }
 
 //: Detects blobs given a bool image

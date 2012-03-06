@@ -42,12 +42,12 @@ void boxm2_util_cams_and_box_to_scene (vcl_vector<CamType>& cams,
     vsph_camera_bounds::pixel_solid_angle(cam, pp.x()/4, pp.y()/4, cone_axis, cone_half_angle, solid_angle);
     vgl_point_3d<double> cc = cam.camera_center();
     vgl_point_3d<double> zc( b2box.centroid().x(), b2box.centroid().y(), zplane);
-    double res = 1.5*(cc-zc).length()*cone_half_angle;
+    double res = 2.0*(cc-zc).length()*cone_half_angle;
     vcl_cout<<"Resres :"<<res<<vcl_endl;
     
     //extend bbox a bit
-    double extSize = b2box.width() * .1;
-    b2box = vgl_box_2d<double>(b2box.min_x()-extSize, b2box.max_x()+extSize, b2box.min_y()-extSize, b2box.max_y()+extSize);
+    //double extSize = b2box.width() * .1;
+    //b2box = vgl_box_2d<double>(b2box.min_x()-extSize, b2box.max_x()+extSize, b2box.min_y()-extSize, b2box.max_y()+extSize);
     vgl_point_3d<double> scene_origin( b2box.min_x(), b2box.min_y(), bbox.min_z() );
 
     //number of voxels in this scene (x,y,z)

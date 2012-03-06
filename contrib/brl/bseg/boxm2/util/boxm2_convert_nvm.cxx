@@ -144,7 +144,8 @@ bool boxm2_convert_nvm::read_cameras(vcl_ifstream& in, vgl_point_2d<double> ppoi
   bool format_r9t = false;
   if (in.peek() == 'N')
   {
-    in >> token; //file header
+    vcl_getline(in, token); 
+    //in >> token; //file header
     if (vcl_strstr(token.c_str(), "R9T"))
     {
       rotation_parameter_num = 9;  //rotation as 3x3 matrix
@@ -156,7 +157,7 @@ bool boxm2_convert_nvm::read_cameras(vcl_ifstream& in, vgl_point_2d<double> ppoi
   int ncam = 0;
   in >> ncam;
   if (ncam <= 1) {
-    vcl_cout<<"Found fewer than 1 camera in NVM file"<<vcl_endl;
+    vcl_cout<<"Found fewer than 1 camera in NVM file (" << ncam<<")" <<vcl_endl;
     return false;
   }
   vcl_cout<<"Found "<<ncam<<" cameras in nvm file"<<vcl_endl;
