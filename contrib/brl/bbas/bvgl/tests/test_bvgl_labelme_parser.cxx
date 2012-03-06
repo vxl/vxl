@@ -1,67 +1,68 @@
-//this is test_bvgl_label_me_parser.cxx
-
-// \file
+//This is brl/bbas/bvgl/tests/test_bvgl_labelme_parser.cxx
 #include <testlib/testlib_test.h>
+//:
+// \file
+
 #include <bvgl/bvgl_labelme_parser.h>
 #include <vcl_iostream.h>
-#include <vnl/vnl_math.h>
 #include <vcl_fstream.h>
 #include <vul/vul_file.h>
 
 static vcl_string test_xml_file()
 {
-  return  "<annotation>"
-          "<filename>andy_eze.jpg</filename>"
-          "<folder>test</folder>"
-          "<source>"
-          "<sourceImage>The MIT-CSAIL database of objects and scenes</sourceImage>"
-          "<sourceAnnotation>LabelMe Webtool</sourceAnnotation>"
-          "</source>"
-          "<object>"
-          "<name>mouth</name>"
-          "<deleted>0</deleted>"
-          "<verified>0</verified>"
-          "<date>05-Mar-2012 22:14:49</date>"
-          "<id>0</id>"
-          "<polygon>"
-          "<username>Andy</username>"
-          "<pt>"
-          "<x>335</x>"
-          "<y>183</y>"
-          "</pt>"
-          "<pt>"
-          "<x>333</x>"
-          "<y>220</y>"
-          "</pt>"
-          "<pt>"
-          "<x>332</x>"
-          "<y>234</y>"
-          "</pt>"
-          "</polygon>"
-          "</object>"
-          "<object>"
-          "<name>Sunglasses</name>"
-          "<deleted>0</deleted>"
-          "<verified>0</verified>"
-          "<date>06-Mar-2012 02:48:58</date>"
-          "<id>1</id>"
-          "<polygon>"
-          "<username>anonymous</username>"
-          "<pt>"
-          "<x>544</x>"
-          "<y>200</y>"
-          "</pt>"
-          "<pt>"
-          "<x>501</x>"
-          "<y>211</y>"
-          "</pt>"
-          "<pt>"
-          "<x>497</x>"
-          "<y>224</y>"
-          "</pt>"
-          "</polygon>"
-          "</object>"
-          "</annotation>"; 
+  return  "\
+<annotation>\
+<filename>andy_eze.jpg</filename>\
+<folder>test</folder>\
+<source>\
+<sourceImage>The MIT-CSAIL database of objects and scenes</sourceImage>\
+<sourceAnnotation>LabelMe Webtool</sourceAnnotation>\
+</source>\
+<object>\
+<name>mouth</name>\
+<deleted>0</deleted>\
+<verified>0</verified>\
+<date>05-Mar-2012 22:14:49</date>\
+<id>0</id>\
+<polygon>\
+<username>Andy</username>\
+<pt>\
+<x>335</x>\
+<y>183</y>\
+</pt>\
+<pt>\
+<x>333</x>\
+<y>220</y>\
+</pt>\
+<pt>\
+<x>332</x>\
+<y>234</y>\
+</pt>\
+</polygon>\
+</object>\
+<object>\
+<name>Sunglasses</name>\
+<deleted>0</deleted>\
+<verified>0</verified>\
+<date>06-Mar-2012 02:48:58</date>\
+<id>1</id>\
+<polygon>\
+<username>anonymous</username>\
+<pt>\
+<x>544</x>\
+<y>200</y>\
+</pt>\
+<pt>\
+<x>501</x>\
+<y>211</y>\
+</pt>\
+<pt>\
+<x>497</x>\
+<y>224</y>\
+</pt>\
+</polygon>\
+</object>\
+</annotation>";
 }
 
 
@@ -71,33 +72,33 @@ static void test_bvgl_labelme_parser()
   vcl_string filename = "labelme_test.xml";
   vcl_cout<<"Testing label me parser on synthetic data"<<vcl_endl;
   vcl_ofstream file;
-  file.open (filename.c_str()); 
-  file << test_xml_file() << vcl_endl; 
+  file.open (filename.c_str());
+  file << test_xml_file() << vcl_endl;
   file.close();
 
   //Use parser
   bvgl_labelme_parser parser(filename);
   vcl_vector<vgl_polygon<double> > polys = parser.polygons();
   TEST("Number of polygons returned", 2, polys.size());
- 
+
   //ground truth
   vcl_vector<vgl_point_2d<double> > poly0;
   poly0.push_back(vgl_point_2d<double>(335, 183));
   poly0.push_back(vgl_point_2d<double>(333, 220));
   poly0.push_back(vgl_point_2d<double>(332, 234));
- 
+
   vcl_vector<vgl_point_2d<double> > poly1;
   poly1.push_back(vgl_point_2d<double>(544, 200));
   poly1.push_back(vgl_point_2d<double>(501, 211));
   poly1.push_back(vgl_point_2d<double>(497, 224));
 
-  for(int i=0; i<poly0.size(); ++i) {
+  for (unsigned int i=0; i<poly0.size(); ++i) {
     double tx = poly0[i].x();
     double ty = poly0[i].y();
     TEST_NEAR("Polygon point equal", tx, polys[0][0][i].x(), 1e-5);
     TEST_NEAR("Polygon point equal", ty, polys[0][0][i].y(), 1e-5);
   }
-  for(int i=0; i<poly1.size(); ++i) {
+  for (unsigned int i=0; i<poly1.size(); ++i) {
     double tx = poly1[i].x();
     double ty = poly1[i].y();
     TEST_NEAR("Polygon point equal", tx, polys[1][0][i].x(), 1e-5);
@@ -109,5 +110,3 @@ static void test_bvgl_labelme_parser()
 }
 
 TESTMAIN( test_bvgl_labelme_parser );
-
-
