@@ -133,9 +133,9 @@ float boxm2_multi_refine::refine(boxm2_multi_cache& cache, float thresh)
   //------------------------------------------------------------------
   unsigned num_cells     = 0;     //number of cells in the scene after refine
   unsigned num_refined   = 0;     //number of cells that split
-  for(int i=0; i<queues.size(); ++i) {
-    boxm2_opencl_cache* ocl_cache = ocl_caches[i]; 
-    boxm2_scene_sptr    sub_scene = ocl_cache->get_scene(); 
+  for (int i=0; i<queues.size(); ++i) {
+    boxm2_opencl_cache* ocl_cache = ocl_caches[i];
+    boxm2_scene_sptr    sub_scene = ocl_cache->get_scene();
 
     BlockMemMap& sizeMap = sizeMaps[i];
     BlockMemMap& copyMap = copyMaps[i];
@@ -159,7 +159,7 @@ float boxm2_multi_refine::refine(boxm2_multi_cache& cache, float thresh)
 
       //calculate old size vs new size
       bocl_mem* alpha = ocl_cache->get_data<BOXM2_ALPHA>(id);
-      vcl_size_t dataLen = (vcl_size_t) (alpha->num_bytes() / sizeof(float)); 
+      vcl_size_t dataLen = (vcl_size_t) (alpha->num_bytes() / sizeof(float));
       //vcl_cout<<"  New data size: "<<newDataSize<<", old data: "<<dataLen<<'\n'
       //        <<"  num refined: "<<(newDataSize-dataLen)/8<<vcl_endl;
       num_refined += (unsigned) ( (newDataSize-dataLen)/8 );
@@ -236,54 +236,55 @@ float boxm2_multi_refine::refine_trees_per_block(const boxm2_block_id& id,
                                                  bocl_mem_sptr& lookup,
                                                  bocl_mem_sptr& cl_output )
 {
-    //vcl_cout<<"Refining Block "<< id << vcl_endl;
+  //vcl_cout<<"Refining Block "<< id << vcl_endl;
 
-    //set up tree copy and store for later use
-    //vcl_cout<<"  creating tree copy"<<vcl_endl;
-    bocl_mem_sptr blk_copy = ocl_cache->alloc_mem(numTrees*sizeof(cl_uchar16), new cl_uchar16[numTrees], "refine trees block copy buffer");
-    blk_copy->create_buffer(CL_MEM_READ_WRITE| CL_MEM_COPY_HOST_PTR);
-    blockCopies[id] = blk_copy;
+  //set up tree copy and store for later use
+  //vcl_cout<<"  creating tree copy"<<vcl_endl;
+  bocl_mem_sptr blk_copy = ocl_cache->alloc_mem(numTrees*sizeof(cl_uchar16), new cl_uchar16[numTrees], "refine trees block copy buffer");
+  blk_copy->create_buffer(CL_MEM_READ_WRITE| CL_MEM_COPY_HOST_PTR);
+  blockCopies[id] = blk_copy;
 
-    //set up tree size (first find num trees)
-    //vcl_cout<<"  creating tree sizes buff"<<vcl_endl;
-    bocl_mem_sptr tree_sizes = ocl_cache->alloc_mem(sizeof(cl_int)*numTrees, new cl_int[numTrees], "refine tree sizes buffer");
-    tree_sizes->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
-    sizebuffs[id] = tree_sizes;
+  //set up tree size (first find num trees)
+  //vcl_cout<<"  creating tree sizes buff"<<vcl_endl;
+  bocl_mem_sptr tree_sizes = ocl_cache->alloc_mem(sizeof(cl_int)*numTrees, new cl_int[numTrees], "refine tree sizes buffer");
+  tree_sizes->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
+  sizebuffs[id] = tree_sizes;
 
-    //write the image values to the buffer
-    vul_timer transfer;
-    bocl_mem* blk       = ocl_cache->get_block(id);
-    bocl_mem* alpha     = ocl_cache->get_data<BOXM2_ALPHA>(id);
-    bocl_mem* blk_info  = ocl_cache->loaded_block_info();
-    vcl_size_t lThreads[] = {64, 1};
-    vcl_size_t gThreads[] = {RoundUp(numTrees,lThreads[0]), 1};
+  //write the image values to the buffer
+  vul_timer transfer;
+  bocl_mem* blk       = ocl_cache->get_block(id);
+  bocl_mem* alpha     = ocl_cache->get_data<BOXM2_ALPHA>(id);
+  bocl_mem* blk_info  = ocl_cache->loaded_block_info();
+  vcl_size_t lThreads[] = {64, 1};
+  vcl_size_t gThreads[] = {RoundUp(numTrees,lThreads[0]), 1};
 
-    ////TODO - add a STOP LIST to pass around
-    //float alphasize=(float)alpha->num_bytes()/1024/1024;
-    //if (alphasize >= (float)data.max_mb_/10.0) {
-    //    vcl_cout<<"  Refine STOP !!!"<<vcl_endl;
-    //    continue;
-    //}
-    //set first kernel args
-    bocl_device_sptr device = ocl_cache->get_device();
-    bocl_kernel* kern = get_refine_tree_kernel(device, "");
-    kern->set_arg( blk_info );
-    kern->set_arg( blk );
-    kern->set_arg( blk_copy.ptr() );
-    kern->set_arg( alpha );
-    kern->set_arg( tree_sizes.ptr() );
-    kern->set_arg( prob_thresh.ptr() );
-    kern->set_arg( lookup.ptr() );
-    kern->set_arg( cl_output.ptr() );
-    kern->set_local_arg( lThreads[0]*10*sizeof(cl_uchar) );
-    kern->set_local_arg( lThreads[0]*sizeof(cl_uchar16) );
-    kern->set_local_arg( lThreads[0]*sizeof(cl_uchar16) );
+#if 0 // TODO - add a STOP LIST to pass around
+  float alphasize=(float)alpha->num_bytes()/1024/1024;
+  if (alphasize >= (float)data.max_mb_/10.0) {
+      vcl_cout<<"  Refine STOP !!!"<<vcl_endl;
+      continue;
+  }
+#endif
+  //set first kernel args
+  bocl_device_sptr device = ocl_cache->get_device();
+  bocl_kernel* kern = get_refine_tree_kernel(device, "");
+  kern->set_arg( blk_info );
+  kern->set_arg( blk );
+  kern->set_arg( blk_copy.ptr() );
+  kern->set_arg( alpha );
+  kern->set_arg( tree_sizes.ptr() );
+  kern->set_arg( prob_thresh.ptr() );
+  kern->set_arg( lookup.ptr() );
+  kern->set_arg( cl_output.ptr() );
+  kern->set_local_arg( lThreads[0]*10*sizeof(cl_uchar) );
+  kern->set_local_arg( lThreads[0]*sizeof(cl_uchar16) );
+  kern->set_local_arg( lThreads[0]*sizeof(cl_uchar16) );
 
-    //execute kernel
-    float gpu_time =  kern->execute( queue, 2, lThreads, gThreads);
-    kern->clear_args();
+  //execute kernel
+  float gpu_time =  kern->execute( queue, 2, lThreads, gThreads);
+  kern->clear_args();
 
-	return gpu_time;
+  return gpu_time;
 }
 
 
@@ -305,86 +306,86 @@ float boxm2_multi_refine::swap_data_per_block( boxm2_scene_sptr scene,
                                                int  apptypesize,
                                                bocl_mem_sptr prob_thresh )
 {
-    bocl_device_sptr device = ocl_cache->get_device();
-    int newDataSize = newDataSizes[id];
-    bocl_mem_sptr blk_copy = blockCopies[id];
-    bocl_mem_sptr tree_sizes = sizebuffs[id];
+  bocl_device_sptr device = ocl_cache->get_device();
+  int newDataSize = newDataSizes[id];
+  bocl_mem_sptr blk_copy = blockCopies[id];
+  bocl_mem_sptr tree_sizes = sizebuffs[id];
 
-    //local/global sizes
+  //local/global sizes
+  vcl_size_t lThreads[] = {64, 1};
+  vcl_size_t gThreads[] = {RoundUp(numTrees,lThreads[0]), 1};
+
+  //swap data into place
+  vcl_vector<vcl_string> data_types = scene->appearances();
+  data_types.push_back(boxm2_data_traits<BOXM2_ALPHA>::prefix());
+  for (unsigned int i=0; i<data_types.size(); ++i)
+  {
+    //vcl_cout<<"  Swapping data of type: "<<data_types[i]<<vcl_endl;
+    vcl_string options = get_option_string( boxm2_data_info::datasize(data_types[i]) );
+    bocl_kernel* kern = get_refine_data_kernel(device, options);
+
+    //get bocl_mem data independent of CPU pointer
+    bocl_mem* dat = ocl_cache->get_data(id, data_types[i]);
+
+    //get a new data pointer (with newSize), will create CPU buffer and GPU buffer
+    //vcl_cout<<"  Data_type "<<data_types[i]<<" new size is: "<<newDataSize<<vcl_endl;
+    int dataBytes = boxm2_data_info::datasize(data_types[i]) * newDataSize;
+    bocl_mem* new_dat = ocl_cache->alloc_mem(dataBytes, NULL, "new data buffer " + data_types[i]);
+    new_dat->create_buffer(CL_MEM_READ_WRITE, queue);
+
+    //grab the block out of the cache as well
+    bocl_mem* blk = ocl_cache->get_block(id);
+    bocl_mem* blk_info = ocl_cache->loaded_block_info();
+
+    //is alpha buffer
+    bool is_alpha_buffer[1] = { (data_types[i] == boxm2_data_traits<BOXM2_ALPHA>::prefix()) };
+    bocl_mem is_alpha(device->context(), is_alpha_buffer, sizeof(cl_bool), "is_alpha buffer");
+    is_alpha.create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
+
+    //copy parent behavior.. if true, Data copies its parent
+    bool copy_parent_buffer[1];
+    if (data_types[i] == boxm2_data_traits<BOXM2_MOG3_GREY>::prefix() ||
+        data_types[i] == boxm2_data_traits<BOXM2_MOG3_GREY_16>::prefix() ||
+        data_types[i] == boxm2_data_traits<BOXM2_GAUSS_RGB>::prefix() )
+      (*copy_parent_buffer) = true;
+    else
+      (*copy_parent_buffer) = false;
+    bocl_mem copy_parent(device->context(), copy_parent_buffer, sizeof(cl_bool), "copy_parent buffer");
+    copy_parent.create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
+
+    //make it a reference so the destructor isn't called at the end...
+    kern->set_arg( blk_info );
+    kern->set_arg( blk );
+    kern->set_arg( blk_copy.ptr() );
+    kern->set_arg( tree_sizes.ptr() );
+    kern->set_arg( dat );
+    kern->set_arg( new_dat );
+    kern->set_arg( prob_thresh.ptr());
+    kern->set_arg( &is_alpha );
+    kern->set_arg( &copy_parent );
+    kern->set_arg( lookup.ptr() );
+    kern->set_arg( cl_output.ptr() );
+    kern->set_local_arg( lThreads[0]*sizeof(cl_uchar16) );
+    kern->set_local_arg( lThreads[0]*sizeof(cl_uchar16) );
+    kern->set_local_arg( lThreads[0]*73*sizeof(cl_uchar) );
+
+    //set workspace
     vcl_size_t lThreads[] = {64, 1};
     vcl_size_t gThreads[] = {RoundUp(numTrees,lThreads[0]), 1};
 
-    //swap data into place
-    vcl_vector<vcl_string> data_types = scene->appearances();
-    data_types.push_back(boxm2_data_traits<BOXM2_ALPHA>::prefix());
-    for (unsigned int i=0; i<data_types.size(); ++i)
-    {
-        //vcl_cout<<"  Swapping data of type: "<<data_types[i]<<vcl_endl;
-        vcl_string options = get_option_string( boxm2_data_info::datasize(data_types[i]) );
-        bocl_kernel* kern = get_refine_data_kernel(device, options);
+    //execute kernel
+    kern->execute( queue, 2, lThreads, gThreads);
+    kern->clear_args();
 
-        //get bocl_mem data independent of CPU pointer
-        bocl_mem* dat = ocl_cache->get_data(id, data_types[i]);
-
-        //get a new data pointer (with newSize), will create CPU buffer and GPU buffer
-        //vcl_cout<<"  Data_type "<<data_types[i]<<" new size is: "<<newDataSize<<vcl_endl;
-        int dataBytes = boxm2_data_info::datasize(data_types[i]) * newDataSize;
-        bocl_mem* new_dat = ocl_cache->alloc_mem(dataBytes, NULL, "new data buffer " + data_types[i]);
-        new_dat->create_buffer(CL_MEM_READ_WRITE, queue);
-
-        //grab the block out of the cache as well
-        bocl_mem* blk = ocl_cache->get_block(id);
-        bocl_mem* blk_info = ocl_cache->loaded_block_info();
-
-        //is alpha buffer
-        bool is_alpha_buffer[1] = { (data_types[i] == boxm2_data_traits<BOXM2_ALPHA>::prefix()) };
-        bocl_mem is_alpha(device->context(), is_alpha_buffer, sizeof(cl_bool), "is_alpha buffer");
-        is_alpha.create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
-
-        //copy parent behavior.. if true, Data copies its parent
-        bool copy_parent_buffer[1];
-        if (data_types[i] == boxm2_data_traits<BOXM2_MOG3_GREY>::prefix() ||
-            data_types[i] == boxm2_data_traits<BOXM2_MOG3_GREY_16>::prefix() ||
-            data_types[i] == boxm2_data_traits<BOXM2_GAUSS_RGB>::prefix() )
-            (*copy_parent_buffer) = true;
-        else
-            (*copy_parent_buffer) = false;
-        bocl_mem copy_parent(device->context(), copy_parent_buffer, sizeof(cl_bool), "copy_parent buffer");
-        copy_parent.create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
-
-        //make it a reference so the destructor isn't called at the end...
-        kern->set_arg( blk_info );
-        kern->set_arg( blk );
-        kern->set_arg( blk_copy.ptr() );
-        kern->set_arg( tree_sizes.ptr() );
-        kern->set_arg( dat );
-        kern->set_arg( new_dat );
-        kern->set_arg( prob_thresh.ptr());
-        kern->set_arg( &is_alpha );
-        kern->set_arg( &copy_parent );
-        kern->set_arg( lookup.ptr() );
-        kern->set_arg( cl_output.ptr() );
-        kern->set_local_arg( lThreads[0]*sizeof(cl_uchar16) );
-        kern->set_local_arg( lThreads[0]*sizeof(cl_uchar16) );
-        kern->set_local_arg( lThreads[0]*73*sizeof(cl_uchar) );
-
-        //set workspace
-        vcl_size_t lThreads[] = {64, 1};
-        vcl_size_t gThreads[] = {RoundUp(numTrees,lThreads[0]), 1};
-
-        //execute kernel
-        kern->execute( queue, 2, lThreads, gThreads);
-        kern->clear_args();
-
-        //debug stuff---------
-        clFinish(queue);
-        ocl_cache->deep_replace_data(id, data_types[i], new_dat);
-        if (data_types[i] == boxm2_data_traits<BOXM2_ALPHA>::prefix()) {
-          //vcl_cout<<"  Writing refined trees."<<vcl_endl;
-          blk->read_to_buffer(queue);
-        }
-        ocl_cache->unref_mem(new_dat);
+    //debug stuff---------
+    clFinish(queue);
+    ocl_cache->deep_replace_data(id, data_types[i], new_dat);
+    if (data_types[i] == boxm2_data_traits<BOXM2_ALPHA>::prefix()) {
+      //vcl_cout<<"  Writing refined trees."<<vcl_endl;
+      blk->read_to_buffer(queue);
     }
+    ocl_cache->unref_mem(new_dat);
+  }
 }
 
 
