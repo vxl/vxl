@@ -16,6 +16,7 @@
 
 class boxm2_mog3_grey_processor;
 class boxm2_gauss_grey_processor;
+class boxm2_gauss_rgb_processor;
 
 enum boxm2_data_type
 {
@@ -36,6 +37,7 @@ enum boxm2_data_type
   BOXM2_AUX2,
   BOXM2_AUX3,
   BOXM2_AUX4,
+  BOXM2_FLOAT,
   BOXM2_FLOAT8,
   BOXM2_FLOAT16,
   BOXM2_VIS_SPHERE,
@@ -97,6 +99,7 @@ template<>
 class boxm2_data_traits<BOXM2_GAUSS_RGB>
 {
  public:
+  typedef boxm2_gauss_rgb_processor processor;
   typedef vnl_vector_fixed<unsigned char, 8> datatype;
   static vcl_size_t datasize() { return sizeof(datatype); }
   static vcl_string prefix(const vcl_string& identifier = "")
@@ -203,6 +206,17 @@ class boxm2_data_traits<BOXM2_FLOAT8>
   static vcl_string prefix(const vcl_string& identifier = "")
   { if (!identifier.size()) return "float8"; else return "float8_"+identifier; }
 };
+
+template<>
+class boxm2_data_traits<BOXM2_FLOAT>
+{
+ public:
+  typedef float datatype;
+  static vcl_size_t datasize() { return sizeof(datatype); }
+  static vcl_string prefix(const vcl_string& identifier = "")
+  { if (!identifier.size()) return "float"; else return "float_"+identifier; }
+};
+
 
 template<>
 class boxm2_data_traits<BOXM2_FLOAT16>
@@ -353,6 +367,8 @@ class boxm2_data_info
       return boxm2_data_traits<BOXM2_AUX>::datasize();
     if (prefix.find(boxm2_data_traits<BOXM2_FLOAT8>::prefix()) != vcl_string::npos)
       return boxm2_data_traits<BOXM2_FLOAT8>::datasize();
+    if (prefix.find(boxm2_data_traits<BOXM2_FLOAT>::prefix()) != vcl_string::npos)
+      return boxm2_data_traits<BOXM2_FLOAT>::datasize();
     if (prefix.find(boxm2_data_traits<BOXM2_FLOAT16>::prefix()) != vcl_string::npos)
       return boxm2_data_traits<BOXM2_FLOAT16>::datasize();
     if (prefix == boxm2_data_traits<BOXM2_VIS_SPHERE>::prefix())
@@ -421,8 +437,11 @@ class boxm2_data_info
       return  BOXM2_AUX ;
     if (prefix == boxm2_data_traits<BOXM2_FLOAT8>::prefix())
       return  BOXM2_FLOAT8 ;
+
     if (prefix == boxm2_data_traits<BOXM2_FLOAT16>::prefix())
       return  BOXM2_FLOAT16 ;
+    if (prefix == boxm2_data_traits<BOXM2_FLOAT>::prefix())
+      return  BOXM2_FLOAT;
     if (prefix.find(boxm2_data_traits<BOXM2_INTENSITY>::prefix()) != vcl_string::npos)
       return  BOXM2_INTENSITY ;
     if (prefix.find(boxm2_data_traits<BOXM2_GAUSS_RGB>::prefix()) != vcl_string::npos)

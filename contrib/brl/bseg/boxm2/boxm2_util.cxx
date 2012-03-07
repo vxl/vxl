@@ -30,6 +30,9 @@
 #include <vul/vul_file.h>
 #include <vul/vul_file_iterator.h>
 
+
+#include <boxm2/cpp/algo/boxm2_gauss_rgb_processor.h>
+
 void boxm2_util::random_permutation(int* buffer, int size)
 {
   vnl_random random(9667566);
@@ -550,3 +553,45 @@ bool boxm2_util::query_point(boxm2_scene_sptr& scene,
   return true;
 }
 
+bool boxm2_util::query_point(boxm2_scene_sptr& scene,
+                                         boxm2_cache_sptr& cache,
+                                         const vgl_point_3d<double>& point,
+                                         float& prob, vnl_vector_fixed<float,3>& intensity)
+{
+
+  vgl_point_3d<double> local;
+  boxm2_block_id id;
+  if (!scene->contains(point, id, local))
+    return false;
+
+  int index_x=(int)vcl_floor(local.x());
+  int index_y=(int)vcl_floor(local.y());
+  int index_z=(int)vcl_floor(local.z());
+  boxm2_block * blk=cache->get_block(id);
+  boxm2_block_metadata mdata = scene->get_block_metadata_const(id);
+  vnl_vector_fixed<unsigned char,16> treebits=blk->trees()(index_x,index_y,index_z);
+  boct_bit_tree tree(treebits.data_block(),mdata.max_level_);
+  int bit_index=tree.traverse(local);
+
+  int depth=tree.depth_at(bit_index);
+
+  //int buff_index=(int)treebits[12]*256+(int)treebits[13];
+  //int data_offset=buff_index*65536+tree.get_data_index(bit_index);
+  int data_offset=tree.get_data_index(bit_index,false);
+  boxm2_data_base *  alpha_base  = cache->get_data_base(id,boxm2_data_traits<BOXM2_ALPHA>::prefix());
+  boxm2_data<BOXM2_ALPHA> *alpha_data=new boxm2_data<BOXM2_ALPHA>(alpha_base->data_buffer(),alpha_base->buffer_length(),alpha_base->block_id());
+
+  boxm2_array_1d<float> alpha_data_array=alpha_data->data();
+  float alpha=alpha_data_array[data_offset];
+
+  double side_len = 1.0 / (double) (1 << depth);
+
+  //store cell probability
+  prob = 1.0f - vcl_exp(-alpha * side_len * mdata.sub_block_dim_.x());
+
+  boxm2_data_base *  int_base  = cache->get_data_base(id,boxm2_data_traits<BOXM2_GAUSS_RGB>::prefix());
+  boxm2_data<BOXM2_GAUSS_RGB> *int_data=new boxm2_data<BOXM2_GAUSS_RGB>(int_base->data_buffer(),int_base->buffer_length(),int_base->block_id());
+  intensity = boxm2_gauss_rgb_processor::expected_color( (int_data->data())[data_offset]);
+
+  return true;
+}
