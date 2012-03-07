@@ -31,5 +31,6 @@ DECLARE_FUNC_CONS(boxm2_export_point_cloud_xyz_process);
 DECLARE_FUNC_CONS(boxm2_scene_bbox_process);
 DECLARE_FUNC_CONS(boxm2_transform_model_process);
 DECLARE_FUNC_CONS(boxm2_create_scene_mask_process);
+DECLARE_FUNC_CONS(boxm2_paint_mesh_process);
 
 #endif

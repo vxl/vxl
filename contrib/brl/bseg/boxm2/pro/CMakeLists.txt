@@ -10,6 +10,8 @@ IF(EXPAT_FOUND)
   INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bbas )
   INCLUDE_DIRECTORIES( ${GEL_INCLUDE_DIR}/mrc/vpgl )
   INCLUDE_DIRECTORIES( ${GEL_INCLUDE_DIR}/mrc )
+  INCLUDE_DIRECTORIES( ${VTHREEP_INCLUDE_DIR}/rply )
+  
  IF(lems_SOURCE_DIR)
   INCLUDE_DIRECTORIES( ${lems_SOURCE_DIR}/contrib/dec )
  ENDIF(lems_SOURCE_DIR)
@@ -28,7 +30,7 @@ IF(EXPAT_FOUND)
   INSTALL_TARGETS(/lib boxm2_pro)
   INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bseg/boxm2/pro ${boxm2_pro_sources})
 
-  TARGET_LINK_LIBRARIES(boxm2_pro boxm2 boxm2_io boxm2_util bbas_pro bvgl sdet bprb brdb brip imesh vsol bsta bsta_pro vpgl_pro vnl vil_algo vil_io vil vgl vbl_io vul bvrml)
+  TARGET_LINK_LIBRARIES(boxm2_pro boxm2 boxm2_io boxm2_util bbas_pro bvgl sdet bprb brdb brip imesh vsol bsta bsta_pro vpgl_pro vnl vil_algo vil_io vil vgl vbl_io vul bvrml bmsh3d rply)
 
   IF( BUILD_TESTING )
     SUBDIRS(tests)

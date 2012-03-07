@@ -48,5 +48,6 @@ void boxm2_register::register_process()
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_scene_bbox_process, "boxm2SceneBboxProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_transform_model_process, "boxm2TransformModelProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_create_scene_mask_process, "boxm2CreateSceneMaskProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_paint_mesh_process, "boxm2PaintMeshProcess");
 
 }
