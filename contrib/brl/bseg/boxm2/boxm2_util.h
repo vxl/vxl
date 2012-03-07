@@ -71,11 +71,6 @@ class boxm2_util
                             const vgl_point_3d<double>& point,
                             float& prob, float& intensity);
 
-    static bool query_point(boxm2_scene_sptr& scene,
-                             boxm2_cache_sptr& cache,
-                             const vgl_point_3d<double>& point,
-                             float& prob, vnl_vector_fixed<float,3>& intensity);
-
 };
 
 #endif // boxm2_util_h
