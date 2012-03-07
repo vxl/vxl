@@ -13,6 +13,7 @@ SET(boxm2_cpp_algo_sources
     boxm2_change_detection_functor.h
     boxm2_mog3_grey_processor.h       boxm2_mog3_grey_processor.cxx
     boxm2_gauss_grey_processor.h      boxm2_gauss_grey_processor.cxx
+    boxm2_gauss_rgb_processor.h       boxm2_gauss_rgb_processor.cxx
     boxm2_phongs_model_processor.h    boxm2_phongs_model_processor.cxx
 
     boxm2_data_serial_iterator.h
