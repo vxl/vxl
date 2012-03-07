@@ -13,6 +13,30 @@ typedef struct
   __constant RenderSceneInfo * linfo;
 } AuxArgs;
 
+//create 4 rays (u_i) around given ray d such that (u_i).d=cos(5)
+void create_aux_rays(float4 d, float4* u)
+{
+    d = normalize(d);
+    
+    float4 m1;
+    if(d.z != 0.0f)
+        m1 = (float4)(1, 1, -(d.x+d.y)/d.z, 0);
+    else if(d.y != 0.0f)
+        m1 = (float4)(1, -(d.x+d.z)/d.y, 1, 0);
+    else
+        m1 = (float4)(-(d.y+d.z)/d.x , 1, 1, 0);    
+    
+    m1 = normalize(m1);
+    float4 m2 = cross(d,m1);
+    
+    float c = tan(radians(5.0f));
+    u[0] = d + m1 * c;
+    u[1] = d - m1 * c;
+    u[2] = d + m2 * c;
+    u[3] = d - m2 * c;
+}
+
+
 //forward declare cast ray (so you can use it)
 void cast_ray(int,int,float,float,float,float,float,float,__constant RenderSceneInfo*,
               __global int4*,local uchar16*,constant uchar *,local uchar *,float*,AuxArgs);
@@ -55,7 +79,7 @@ compute_vis(__constant  uint               * datasize_points,
           aux_args.alpha   = alpha_array;
 
           //get visibilities from global mem to private mem
-          float private_vis[16];
+          float private_vis[12];
           private_vis[0] = vis_sphere[gid].s0;
           private_vis[1] = vis_sphere[gid].s1;
           private_vis[2] = vis_sphere[gid].s2;
@@ -69,12 +93,18 @@ compute_vis(__constant  uint               * datasize_points,
           private_vis[10] = vis_sphere[gid].sa;
           private_vis[11] = vis_sphere[gid].sb;
 
-          //loop thru directions
+          float4 aux_rays[4];
+          float vis_of_aux_rays[5];
+          
+          //loop thru directions          
           bool start;
           float vis;
-          for (unsigned int i = 0; i < 12; i++) {
+          for (unsigned int i = 0; i < 12; i++)
+          {
+            
             //setup ray
             start = !contain_point[0];
+            
             
             vis = private_vis[i];
             aux_args.visibility = &(private_vis[i]);
@@ -88,6 +118,32 @@ compute_vis(__constant  uint               * datasize_points,
                       ray_dx, ray_dy, ray_dz,
                       linfo, tree_array,                               //scene info
                       local_tree, bit_lookup, cumsum, &vis, aux_args);   //utility info
+                      
+            
+            //zip thru aux rays    
+            create_aux_rays(directions[i],aux_rays);
+            for(unsigned  j = 0; j < 4; j++) 
+            {
+                start = !contain_point[0];
+                
+                vis_of_aux_rays[j] = vis;
+                aux_args.visibility = &(vis_of_aux_rays[j]);
+                aux_args.start = &start;
+
+                calc_scene_ray_generic_cam(linfo, ray_o, aux_rays[j], &ray_ox, &ray_oy, &ray_oz, &ray_dx, &ray_dy, &ray_dz);
+
+                //shoot ray
+                cast_ray( 1, 1,
+                      ray_ox, ray_oy, ray_oz,
+                      ray_dx, ray_dy, ray_dz,
+                      linfo, tree_array,                                 //scene info
+                      local_tree, bit_lookup, cumsum, &vis, aux_args);   //utility info
+            }
+            //pick the median of sorted rays
+            vis_of_aux_rays[4] = private_vis[i];
+            sort_vector( vis_of_aux_rays, 5);
+            private_vis[i] = vis_of_aux_rays[2];
+            
           }
 
           //transfer from private mem to global mem
@@ -120,6 +176,10 @@ void step_cell_computevis(AuxArgs aux_args, int data_ptr, uchar llid, float d)
         (*aux_args.start) = true;
 }
 
+
+
+
+
 __kernel
 void
 decide_normal_dir(     __constant  RenderSceneInfo    * linfo,
@@ -145,7 +205,7 @@ decide_normal_dir(     __constant  RenderSceneInfo    * linfo,
 
             float max_vis = 0.0f;
             float max_vis_flipped = 0.0f;
-            float private_vis[16];
+            float private_vis[12];
             private_vis[0] = vis_sphere[gid].s0;
             private_vis[1] = vis_sphere[gid].s1;
             private_vis[2] = vis_sphere[gid].s2;
@@ -162,18 +222,24 @@ decide_normal_dir(     __constant  RenderSceneInfo    * linfo,
             //compute max visibility in normal and opposite hemisphere
             for (unsigned int i = 0; i < 12; i++) {
                 calc_scene_ray_generic_cam(linfo, dummy, directions[i], &ray_ox, &ray_oy, &ray_oz, &ray_dx, &ray_dy, &ray_dz);
-                if (dot((float4)(ray_dx,ray_dy,ray_dz,0), (float4)(normal_x,normal_y,normal_z,0)) > 0)
+                if (dot((float4)(ray_dx,ray_dy,ray_dz,0), (float4)(normal_x,normal_y,normal_z,0)) > 0.0)
                     max_vis = (max_vis < private_vis[i]) ? private_vis[i] : max_vis;
                 else
                     max_vis_flipped = (max_vis_flipped < private_vis[i]) ? private_vis[i] : max_vis_flipped;
             }
 
             //flip if necessary
-            normals[ gid ] = (max_vis_flipped > max_vis) ?  (float4)(-normal_x,-normal_y,-normal_z,normals[gid].w) : (float4)(normal_x,normal_y,normal_z,normals[gid].w);
+            if(max_vis_flipped > max_vis)
+                normals[ gid ] = (float4)(-normal_x,-normal_y,-normal_z,normals[gid].w);
+            else
+                normals[ gid ] = (float4)(normal_x,normal_y,normal_z,normals[gid].w);
+            
             //store max visibility
             vis[gid] = (max_vis_flipped > max_vis) ? max_vis_flipped : max_vis;
+
         }
     }
 }
 
 #endif //COMPVIS
+

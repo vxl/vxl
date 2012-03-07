@@ -54,6 +54,7 @@ void boxm2_ocl_register::register_process()
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_ocl_update_sun_visibilities_process, "boxm2OclUpdateSunVisibilitiesProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_ocl_render_expected_shadow_map_process, "boxm2OclRenderExpectedShadowMapProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_ocl_flip_normals_using_vis_process, "boxm2OclFlipNormalsUsingVisProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_ocl_aggregate_normal_from_filter_process, "boxm2OclAggregateNormalFromFilterProcess");
 
   // tools
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_ocl_query_hist_data_process, "boxm2OclQueryHistDataProcess");

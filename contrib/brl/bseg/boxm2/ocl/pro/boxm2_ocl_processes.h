@@ -48,6 +48,7 @@ DECLARE_FUNC_CONS(boxm2_ocl_render_expected_shadow_map_process);
 DECLARE_FUNC_CONS(boxm2_ocl_create_norm_intensities_process); 
 DECLARE_FUNC_CONS(boxm2_ocl_create_aux_process); 
 DECLARE_FUNC_CONS(boxm2_ocl_flip_normals_using_vis_process);
+DECLARE_FUNC_CONS(boxm2_ocl_aggregate_normal_from_filter_process);
 
 DECLARE_FUNC_CONS(boxm2_ocl_paint_batch_process); 
 DECLARE_FUNC_CONS(boxm2_ocl_paint_online_process);
