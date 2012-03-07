@@ -27,6 +27,10 @@ class boxm2_ocl_util
     //: fills in an array of directions with canonical dodecahedron directions
     static void set_dodecahedron_dir_lookup(cl_float4* dir);
 
+    //: fills in an array of directions with canonical dodecahedron orientations
+    static void set_dodecahedron_orientations_lookup(cl_float4* dir);
+
+
     static void load_perspective_camera(vcl_string filename, vpgl_perspective_camera<double> & pcam);
 
     //: this function obtains a cdf of the intensity distribution over a sequcne of image which can be used for rendering images.

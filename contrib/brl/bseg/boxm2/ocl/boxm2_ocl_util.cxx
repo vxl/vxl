@@ -25,50 +25,98 @@ void boxm2_ocl_util::set_dodecahedron_dir_lookup(cl_float4* dodecahedron_dir)
   dodecahedron_dir[0].s[0] = 0;
   dodecahedron_dir[0].s[1] = -golden;
   dodecahedron_dir[0].s[2] = -other;
+  dodecahedron_dir[0].s[3] = 0;
 
   dodecahedron_dir[1].s[0] = 0;
   dodecahedron_dir[1].s[1] = -golden;
   dodecahedron_dir[1].s[2] = other;
+  dodecahedron_dir[1].s[3] = 0;
 
   dodecahedron_dir[2].s[0] = 0;
   dodecahedron_dir[2].s[1] = golden;
   dodecahedron_dir[2].s[2] = -other;
+  dodecahedron_dir[2].s[3] = 0;
 
   dodecahedron_dir[3].s[0] = 0;
   dodecahedron_dir[3].s[1] = golden;
   dodecahedron_dir[3].s[2] = other;
+  dodecahedron_dir[3].s[3] = 0;
 
   dodecahedron_dir[4].s[0] = -other;
   dodecahedron_dir[4].s[1] = 0;
   dodecahedron_dir[4].s[2] = -golden;
+  dodecahedron_dir[4].s[3] = 0;
 
   dodecahedron_dir[5].s[0] = -other;
   dodecahedron_dir[5].s[1] = 0;
   dodecahedron_dir[5].s[2] = golden;
+  dodecahedron_dir[5].s[3] = 0;
 
   dodecahedron_dir[6].s[0] = other;
   dodecahedron_dir[6].s[1] = 0;
   dodecahedron_dir[6].s[2] = -golden;
+  dodecahedron_dir[6].s[3] = 0;
 
   dodecahedron_dir[7].s[0] = other;
   dodecahedron_dir[7].s[1] = 0;
   dodecahedron_dir[7].s[2] = golden;
+  dodecahedron_dir[7].s[3] = 0;
 
   dodecahedron_dir[8].s[0] = -golden;
   dodecahedron_dir[8].s[1] = -other;
   dodecahedron_dir[8].s[2] = 0;
+  dodecahedron_dir[8].s[3] = 0;
 
   dodecahedron_dir[9].s[0] = -golden;
   dodecahedron_dir[9].s[1] = other;
   dodecahedron_dir[9].s[2] = 0;
+  dodecahedron_dir[9].s[3] = 0;
 
   dodecahedron_dir[10].s[0] = golden;
   dodecahedron_dir[10].s[1] = -other;
   dodecahedron_dir[10].s[2] = 0;
+  dodecahedron_dir[10].s[3] = 0;
 
   dodecahedron_dir[11].s[0] = golden;
   dodecahedron_dir[11].s[1] = other;
   dodecahedron_dir[11].s[2] = 0;
+  dodecahedron_dir[11].s[3] = 0;
+}
+
+void boxm2_ocl_util::set_dodecahedron_orientations_lookup(cl_float4* dodecahedron_dir)
+{
+  float golden = 0.8507f; //the golden ratio
+  float other = 0.5257f;
+
+  dodecahedron_dir[0].s[0] = 0;
+  dodecahedron_dir[0].s[1] = golden;
+  dodecahedron_dir[0].s[2] = -other;
+  dodecahedron_dir[0].s[3] = 0;
+
+  dodecahedron_dir[1].s[0] = 0;
+  dodecahedron_dir[1].s[1] = golden;
+  dodecahedron_dir[1].s[2] = other;
+  dodecahedron_dir[1].s[3] = 0;
+
+  dodecahedron_dir[2].s[0] = other;
+  dodecahedron_dir[2].s[1] = 0;
+  dodecahedron_dir[2].s[2] = -golden;
+  dodecahedron_dir[2].s[3] = 0;
+
+  dodecahedron_dir[3].s[0] = other;
+  dodecahedron_dir[3].s[1] = 0;
+  dodecahedron_dir[3].s[2] = golden;
+  dodecahedron_dir[3].s[3] = 0;
+
+  dodecahedron_dir[4].s[0] = golden;
+  dodecahedron_dir[4].s[1] = -other;
+  dodecahedron_dir[4].s[2] = 0;
+  dodecahedron_dir[4].s[3] = 0;
+
+  dodecahedron_dir[5].s[0] = golden;
+  dodecahedron_dir[5].s[1] = other;
+  dodecahedron_dir[5].s[2] = 0;
+  dodecahedron_dir[5].s[3] = 0;
 }
 
 //returns path to opencl src (cl files)
