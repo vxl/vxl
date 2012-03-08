@@ -2,27 +2,27 @@
 #include <bprb/bprb_func_process.h>
 //:
 // \file
-// \brief  A process for assigning colors to the vertices of a given mesh. There is also a threshold prob_t on probability of points to output.
-//         Points with lower probability than prob_t are assigned a color of (0,0,0).
+// \brief  A process for assigning colors to the vertices of a given mesh.
+// There is also a threshold prob_t on probability of points to output.
+// Points with lower probability than prob_t are assigned a color of (0,0,0).
 //
 // \author Ali Osman Ulusoy
 // \date Mar 02, 2012
 
-#include <vcl_fstream.h>
-#include <vul/vul_file.h>
-#include <vul/vul_timer.h>
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/boxm2_util.h>
 #include <boxm2/io/boxm2_cache.h>
 
 #include <bvrml/bvrml_write.h>
-#include "boxm2/cpp/algo/boxm2_export_vis_wrl_function.h"
+#include <boxm2/cpp/algo/boxm2_export_vis_wrl_function.h>
+#include <boxm2/cpp/algo/boxm2_gauss_rgb_processor.h>
 
 #include <bmsh3d/algo/bmsh3d_fileio.h>
 
-#include <rply.h>
+#include <vcl_fstream.h>
+#include <vcl_cassert.h>
 
-#include <boxm2/cpp/algo/boxm2_gauss_rgb_processor.h>
+#include <rply.h>
 
 namespace boxm2_paint_mesh_process_globals
 {
@@ -34,7 +34,7 @@ bool boxm2_paint_mesh_process_cons(bprb_func_process& pro)
 {
   using namespace boxm2_paint_mesh_process_globals;
 
-  //process takes 4 inputs
+  //process takes 4 or 5 inputs and no outputs
   vcl_vector<vcl_string> input_types_(n_inputs_);
   input_types_[0] = "boxm2_scene_sptr";
   input_types_[1] = "boxm2_cache_sptr";
@@ -45,9 +45,9 @@ bool boxm2_paint_mesh_process_cons(bprb_func_process& pro)
   brdb_value_sptr prob_t = new brdb_value_t<float>(0.0);
   pro.set_input(4, prob_t);
 
-  // process has no outputs
   vcl_vector<vcl_string>  output_types_(n_outputs_);
-  return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
+  return pro.set_input_types(input_types_)
+      && pro.set_output_types(output_types_);
 }
 
 bool boxm2_paint_mesh_process(bprb_func_process& pro)
@@ -94,10 +94,8 @@ bool boxm2_paint_mesh_process(bprb_func_process& pro)
   //print input mesh summary
   input_mesh.print_summary(vcl_cout);
 
-
   //write outgoing mesh header
   p_ply oply = ply_create(output_mesh_filename.c_str(), PLY_ASCII, NULL, 0, NULL);
-
 
   // HEADER SECTION
   // vertex
@@ -113,10 +111,8 @@ bool boxm2_paint_mesh_process(bprb_func_process& pro)
   ply_add_element(oply, "face", input_mesh.facemap().size());
   ply_add_list_property(oply, "vertex_indices", PLY_UCHAR, PLY_INT);
 
-
   // end header
   ply_write_header(oply);
-
 
   vcl_cout << "Start iterating over pts..." << vcl_endl;
   //zip thru points
@@ -124,9 +120,8 @@ bool boxm2_paint_mesh_process(bprb_func_process& pro)
   vnl_vector_fixed<float,3> intensity;
   vgl_point_3d<double> local;
   boxm2_block_id id;
-  for(unsigned  i = 0; i < input_mesh.num_vertices(); i++) {
+  for (unsigned  i = 0; i < input_mesh.num_vertices(); i++) {
     const vgl_point_3d<double> pt = input_mesh.vertexmap(i)->pt();
-
 
     if (!scene->contains(pt, id, local)) {
       vcl_cout << "ERROR: point: " << pt << " isn't in scene. Exiting...." << vcl_endl;
@@ -157,12 +152,11 @@ bool boxm2_paint_mesh_process(bprb_func_process& pro)
     boxm2_data<BOXM2_GAUSS_RGB> *int_data = new boxm2_data<BOXM2_GAUSS_RGB>(int_base->data_buffer(),int_base->buffer_length(),int_base->block_id());
     intensity = boxm2_gauss_rgb_processor::expected_color( (int_data->data())[data_offset]);
 
-
     ply_write(oply, pt.x());
     ply_write(oply, pt.y());
     ply_write(oply, pt.z());
 
-    if(prob >= prob_t) {
+    if (prob >= prob_t) {
       ply_write(oply, (unsigned char)(intensity[0]*255.0f) );
       ply_write(oply, (unsigned char)(intensity[1]*255.0f) );
       ply_write(oply, (unsigned char)(intensity[2]*255.0f) );
@@ -172,7 +166,6 @@ bool boxm2_paint_mesh_process(bprb_func_process& pro)
       ply_write(oply, 0 );
       ply_write(oply, 0 );
     }
-
   }
   vcl_cout << "Done iterating over pts..." << vcl_endl;
 
@@ -194,10 +187,8 @@ bool boxm2_paint_mesh_process(bprb_func_process& pro)
     }
   }
 
-
   // CLOSE PLY FILE
   ply_close(oply);
-
 
   return true;
 }
