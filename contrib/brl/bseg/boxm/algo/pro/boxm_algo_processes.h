@@ -24,4 +24,5 @@ DECLARE_FUNC_CONS(boxm_linear_combination_process);
 DECLARE_FUNC_CONS(boxm_explore_cells_at_level_process);
 DECLARE_FUNC_CONS(boxm_fill_internal_cells_process);
 DECLARE_FUNC_CONS(boxm_remove_level0_process);
+DECLARE_FUNC_CONS(boxm_create_scene_from_ply_process);
 #endif

@@ -31,4 +31,5 @@ void boxm_algo_register::register_process()
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm_explore_cells_at_level_process, "boxmExploreCellsAtLevelProcess");
   REG_PROCESS_FUNC_CONS2(boxm_fill_internal_cells_process);
   REG_PROCESS_FUNC_CONS2(boxm_remove_level0_process);
+  REG_PROCESS_FUNC_CONS2(boxm_create_scene_from_ply_process);
 }
