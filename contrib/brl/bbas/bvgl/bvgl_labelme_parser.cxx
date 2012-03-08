@@ -39,22 +39,12 @@ bvgl_labelme_parser::bvgl_labelme_parser(vcl_string& filename)
 void
 bvgl_labelme_parser::startElement(const char* name, const char** atts)
 {
-  reset_bools(); 
+  //set active tag for charData
+  active_tag_ = vcl_string(name); 
 
-  //parse object, and polygon tags (within object)
-  if(vcl_strcmp(name, POLYGON_TAG)==0) {
+  //parse object/polygon, start with a fresh set of points
+  if(vcl_strcmp(name, POLYGON_TAG)==0) 
     pts_.clear();
-  }
-
-  if(vcl_strcmp(name, X_TAG)==0) {
-    vcl_cout<<"X TAG: "<<vcl_endl;
-    save_x_ = true; 
-  }
-  if(vcl_strcmp(name, Y_TAG)==0) {
-    vcl_cout<<"Y TAG: "<<vcl_endl;
-    save_y_ = true; 
-  }
-
 }
 
 //Creates and pushes polygon, creates/pushes point
@@ -63,8 +53,6 @@ void bvgl_labelme_parser::endElement(const XML_Char* name)
   //Finish up polygon
   if(vcl_strcmp(name, POLYGON_TAG)==0) {
     vgl_polygon<double> poly(pts_); 
-  
-    vcl_cout<<"Adding poly: "<<poly<<vcl_endl;
     polygons_.push_back(poly);
   }
 
@@ -79,16 +67,21 @@ void bvgl_labelme_parser::endElement(const XML_Char* name)
 //Grabs data from points
 void bvgl_labelme_parser::charData(const XML_Char* s, int len)
 {
-  int val; 
-  if(save_x_ || save_y_)
+  if(active_tag_ == X_TAG || active_tag_ == Y_TAG) {
+    int val; 
     convert(vcl_string(s,len), val);
-  else
-    return;
+    if(active_tag_ == X_TAG)
+      x_ = (double) val;
+    if(active_tag_ == Y_TAG) 
+      y_ = (double) val;
+  }
 
-  if(save_x_)
-    x_ = (double) val;
-  if(save_y_) 
-    y_ = (double) val;
+  if(active_tag_ == FILENAME_TAG)
+    image_name_ = vcl_string(s, len);
+
+  if(active_tag_ == NAME_TAG) {
+    vcl_string name = vcl_string(s,len);
+    obj_names_.push_back(name);
+  }
 }
- 
 

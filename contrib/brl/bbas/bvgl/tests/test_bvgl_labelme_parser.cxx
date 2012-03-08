@@ -105,6 +105,14 @@ static void test_bvgl_labelme_parser()
     TEST_NEAR("Polygon point equal", ty, polys[1][0][i].y(), 1e-5);
   }
 
+  //test filename
+  TEST("Testing filename tag", "andy_eze.jpg", parser.image_name());
+
+  //test each object name
+  vcl_vector<vcl_string> names = parser.obj_names();
+  TEST("Testing object name", names[0], "mouth");
+  TEST("Testing object name", names[1], "Sunglasses");
+
   //Remove file from directory
   vul_file::delete_file_glob("labelme_test.xml");
 }
