@@ -88,6 +88,9 @@ class bvpl_global_pca: public vbl_ref_count
   //: Computes 10-dimensional pca projection at each voxel on the block and saves it
   void project(int scene_id, int block_i, int block_j, int block_k);
 
+  void projection_error(int scene_id, int block_i, int block_j, int block_k);
+
+
   vcl_string path_out() const { return path_out_; }
 
   inline vcl_vector<vcl_string> scenes() const { return scenes_; }
@@ -140,6 +143,7 @@ class bvpl_global_pca: public vbl_ref_count
   boxm_scene_base_sptr load_train_scene (int scene_id);
   boxm_scene_base_sptr load_valid_scene (int scene_id);
   boxm_scene_base_sptr load_projection_scene (int scene_id);
+  boxm_scene_base_sptr load_error_scene (int scene_id);
 };
 
 typedef vbl_smart_ptr<bvpl_global_pca<125> > bvpl_global_pca_125_sptr;

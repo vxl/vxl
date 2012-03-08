@@ -440,8 +440,8 @@ bool bvpl_global_pca<feature_dim>::sample_statistics( int scene_id, int block_i,
 
             
             
- //: Update mean and scatter, given the mean and scatter of two sets.
- //  Calculation is done according to Chan et al. Updating Formulae and a Pairwise Algorithm for Computing Sample Variances
+//: Update mean and scatter, given the mean and scatter of two sets.
+//  Calculation is done according to Chan et al. Updating Formulae and a Pairwise Algorithm for Computing Sample Variances
 template <unsigned feature_dim>
 void bvpl_global_pca<feature_dim>::combine_pairwise_statistics( const vnl_vector_fixed<double,feature_dim> &mean1,
                                                                 const vnl_matrix_fixed<double,feature_dim,feature_dim> &scatter1,
@@ -623,11 +623,14 @@ void bvpl_global_pca<feature_dim>::project(int scene_id, int block_i, int block_
   
 }
 
-#if 0 //Not testsed
 //: Computes the projection error (as square magniture) given 10-dimensional pca projection at each voxel on the block 
 template <unsigned feature_dim>
 void bvpl_global_pca<feature_dim>::projection_error(int scene_id, int block_i, int block_j, int block_k)
 {
+  if(training_scenes_[scene_id]){
+    vcl_cout << "Skipping training scene: " <<scene_id << vcl_endl;
+    return;
+  }
   typedef boct_tree<short,float> float_tree_type;
   typedef boct_tree_cell<short,float> float_cell_type;
   
@@ -636,10 +639,11 @@ void bvpl_global_pca<feature_dim>::projection_error(int scene_id, int block_i, i
   
   boxm_scene_base_sptr proj_scene_base = load_projection_scene(scene_id);
   boxm_scene_base_sptr error_scene_base = load_error_scene(scene_id);
-
   boxm_scene_base_sptr data_scene_base =load_scene(scene_id);
+
+  boxm_scene<float_tree_type>* data_scene = dynamic_cast<boxm_scene<float_tree_type>*>(data_scene_base.as_pointer());
   boxm_scene<pca_tree_type>* proj_scene = dynamic_cast<boxm_scene<pca_tree_type>*>(proj_scene_base.as_pointer());
-  boxm_scene<boct_tree<short, float> >* error_scene = dynamic_cast<boxm_scene<boct_tree<short, float> >*>(error_scene_base.as_pointer());
+  boxm_scene<float_tree_type >* error_scene = dynamic_cast<boxm_scene<float_tree_type >*>(error_scene_base.as_pointer());
   
 
   if(!(data_scene && error_scene && proj_scene))
@@ -652,8 +656,6 @@ void bvpl_global_pca<feature_dim>::projection_error(int scene_id, int block_i, i
   data_scene->unload_active_blocks();
   proj_scene->unload_active_blocks();
   error_scene->unload_active_blocks();
-
-  
   
   //get the cells for this block
   if(!(data_scene->valid_index(block_i, block_j, block_k) && proj_scene->valid_index(block_i, block_j, block_k) && error_scene->valid_index(block_i, block_j, block_k))){
@@ -668,8 +670,8 @@ void bvpl_global_pca<feature_dim>::projection_error(int scene_id, int block_i, i
   //get the trees
   float_tree_type* data_tree = data_scene->get_block(block_i, block_j, block_k)->get_tree();
   pca_tree_type* proj_tree = proj_scene->get_block(block_i, block_j, block_k)->get_tree();
-  float_tree_type* error_tree = data_tree->template clone();
-  error_tree->init_cells(-1.0);
+  float_tree_type* error_tree = data_tree->clone();
+  error_tree->init_cells(-1.0f);
   
   //get leaf cells
   vcl_vector<float_cell_type *> data_leaves = data_tree->leaf_cells();
@@ -730,7 +732,7 @@ void bvpl_global_pca<feature_dim>::projection_error(int scene_id, int block_i, i
     this_feature-=training_mean_;
     
     //get the coefficients
-    vnl_vector_fixed<double, feature_dim> a = proj_leaves[i]->data().pca_projections_;
+    vnl_vector_fixed<double, 10> a = proj_leaves[i]->data();
     
     //project 
     vnl_vector_fixed<double, feature_dim> feature_approx  = pc_.extract(feature_dim, 10) * a;
@@ -741,14 +743,13 @@ void bvpl_global_pca<feature_dim>::projection_error(int scene_id, int block_i, i
   
   
   // write and release memory
-  errror_scene->get_block(block_i, block_j, block_k)->init_tree(error_tree);
-  errror_scene->write_active_block();
+  error_scene->get_block(block_i, block_j, block_k)->init_tree(error_tree);
+  error_scene->write_active_block();
+  error_scene->unload_active_blocks();
   data_scene->unload_active_blocks();
   proj_scene->unload_active_blocks();
-  
-  
 }
-#endif
+
 
 //: Load scene info
 template <unsigned feature_dim>
@@ -868,7 +869,7 @@ boxm_scene_base_sptr bvpl_global_pca<feature_dim>::load_projection_scene (int sc
  
 }                                         
 
-#if 0
+
 //: Load auxiliary scene info
 template <unsigned feature_dim>
 boxm_scene_base_sptr bvpl_global_pca<feature_dim>::load_error_scene (int scene_id)
@@ -878,6 +879,26 @@ boxm_scene_base_sptr bvpl_global_pca<feature_dim>::load_error_scene (int scene_i
     vcl_cerr << "Error in bvpl_global_pca::load_error_scene: Invalid scene id" << vcl_endl;
     return NULL;
   }
+
+  boxm_scene_base_sptr data_scene_base = load_scene(scene_id);
+  boxm_scene<boct_tree<short, float> >* data_scene = dynamic_cast<boxm_scene<boct_tree<short, float> >*> (data_scene_base.as_pointer());
+  if (!data_scene){
+    vcl_cerr << "Error in bvpl_global_pca<feature_dim>::init(): Could not cast data scene \n";
+    return NULL;
+  }
+
+  vcl_stringstream aux_scene_ss;
+  aux_scene_ss << "error_pca_scene_" << scene_id ;
+  vcl_string aux_scene_path = aux_dirs_[scene_id] + "/" + aux_scene_ss.str() + ".xml";
+  if(!vul_file::exists(aux_scene_path)){
+    vcl_cout<< "Scene: " << aux_scene_path << " does not exist, initializing" << vcl_endl;
+    boxm_scene<boct_tree<short, float> > *aux_scene =
+    new boxm_scene<boct_tree<short, float> >(data_scene->lvcs(), data_scene->origin(), data_scene->block_dim(), data_scene->world_dim(), data_scene->max_level(), data_scene->init_level());
+    aux_scene->set_appearance_model(BOXM_FLOAT);
+    aux_scene->set_paths(aux_dirs_[scene_id], aux_scene_ss.str());
+    aux_scene->write_scene("/" + aux_scene_ss.str() +  ".xml");
+  }
+
   //load scene
   boxm_scene_base_sptr error_scene_base = new boxm_scene_base();
   boxm_scene_parser error_parser;
@@ -886,9 +907,8 @@ boxm_scene_base_sptr bvpl_global_pca<feature_dim>::load_error_scene (int scene_i
   error_scene_base->load_scene(error_scene_ss.str(), error_parser);
   
   //cast scene
-  typedef boct_tree<short,vnl_vector_fixed<double,10> > pca_tree_type;
-  boxm_scene<pca_tree_type > *error_scene= new boxm_scene<pca_tree_type >();
-  if (error_scene_base->appearence_model() == BVPL_PCA_BASIS_SAMPLE_10){     
+  boxm_scene<boct_tree<short, float> > *error_scene= new boxm_scene<boct_tree<short, float> >();
+  if (error_scene_base->appearence_model() == BOXM_FLOAT){
     error_scene->load_scene(error_parser);
     error_scene_base = error_scene;
   }else {
@@ -899,7 +919,7 @@ boxm_scene_base_sptr bvpl_global_pca<feature_dim>::load_error_scene (int scene_i
   return error_scene_base;
   
 } 
-#endif                                        
+
 
 //: Write this class to xml file
 template <unsigned feature_dim>
