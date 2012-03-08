@@ -42,6 +42,9 @@ class bvpl_global_taylor : public vbl_ref_count
   //: Compute the DIM taylor kernels for this scene at current block. The output is saved to the projection scene as a DIM-d vector
   void compute_taylor_coefficients(int scene_id, int block_i, int block_j, int block_k);
 
+  //: Compute reconstruction error
+  bool compute_approximation_error(int scene_id, int block_i, int block_j, int block_k);
+
   //: Extract a particular coefficient scene
   void extract_coefficient_scene(int scene_id, int coefficient_id, boxm_scene<boct_tree<short, float > > *coeff_scene);
 
@@ -60,7 +63,7 @@ class bvpl_global_taylor : public vbl_ref_count
   //vcl_vector<bool> training_scenes() const { return training_scenes_; }
 
   boxm_scene_base_sptr load_scene (int scene_id);
-  //boxm_scene_base_sptr load_train_scene (int scene_id);
+  boxm_scene_base_sptr load_error_scene (int scene_id);
   boxm_scene_base_sptr load_valid_scene (int scene_id);
   boxm_scene_base_sptr load_projection_scene (int scene_id);
 

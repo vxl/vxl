@@ -22,6 +22,10 @@
 
 #include <vul/vul_file.h>
 
+#include <vnl/algo/vnl_matrix_inverse.h>
+#include <vnl/vnl_double_3.h>
+#include <vnl/vnl_double_3x3.h>
+
 //: Constructor  from xml file
 template<class T_data, unsigned DIM>
 bvpl_global_taylor<T_data, DIM>::bvpl_global_taylor(const vcl_string &path, const vcl_string kernel_names[])
@@ -140,6 +144,129 @@ void bvpl_global_taylor<T_data, DIM>::compute_taylor_coefficients(int scene_id, 
   proj_scene->unload_active_blocks();
   valid_scene->unload_active_blocks();
 }
+
+template<class T_data, unsigned DIM>
+bool bvpl_global_taylor<T_data, DIM>::compute_approximation_error(int scene_id, int block_i, int block_j, int block_k)
+{
+  typedef boct_tree<short,float> float_tree_type;
+  typedef boct_tree_cell<short,float> float_cell_type;
+  typedef boct_tree<short,vnl_vector_fixed<double,10> > taylor_tree_type;
+  typedef boct_tree_cell<short,vnl_vector_fixed<double,10> > taylor_cell_type;
+
+
+  boxm_scene_base_sptr proj_scene_base = load_projection_scene(scene_id);
+  boxm_scene_base_sptr error_scene_base = load_error_scene(scene_id);
+  boxm_scene_base_sptr data_scene_base =load_scene(scene_id);
+
+  //cast the scenes
+  boxm_scene<float_tree_type>* data_scene = dynamic_cast<boxm_scene<float_tree_type>* > (data_scene_base.as_pointer());
+  boxm_scene<taylor_tree_type>* basis_scene = dynamic_cast<boxm_scene<taylor_tree_type>* > (proj_scene_base.as_pointer());
+  boxm_scene<float_tree_type> * error_scene = dynamic_cast<boxm_scene<float_tree_type>* > (error_scene_base.as_pointer());
+
+  if(!(data_scene && basis_scene &&error_scene)){
+    vcl_cerr << "Error in compute_approximation_error: Faild to cast scene" << vcl_endl;
+    return false;
+  }
+
+  //load blocks of interest
+  data_scene->load_block_and_neighbors(block_i, block_j, block_k);
+  basis_scene->load_block(block_i, block_j, block_k);
+  error_scene->load_block(block_i, block_j, block_k);
+
+  //get the leaves
+  float_tree_type* data_tree = data_scene->get_block(block_i, block_j, block_k)->get_tree();
+  float_tree_type* error_tree = data_tree->clone();
+
+  //error is always positive, therefore cells with negative errors can be identified as uninitialized.
+  error_tree->init_cells(-1.0f);
+  taylor_tree_type* basis_tree = basis_scene->get_block(block_i, block_j, block_k)->get_tree();
+
+  vcl_vector<float_cell_type*> data_leaves = data_tree->leaf_cells();
+  vcl_vector<float_cell_type*> error_leaves = error_tree->leaf_cells();
+  vcl_vector<taylor_cell_type*> basis_leaves = basis_tree->leaf_cells();
+
+  vgl_point_3d<int> min_point = kernel_vector_->min();
+  vgl_point_3d<int> max_point = kernel_vector_->max();
+  double cell_length = this->finest_cell_length_[scene_id];
+  vcl_cout << "In computing taylor error, limits are: " <<min_point << " and " <<max_point <<vcl_endl;
+
+  for (unsigned i =0; i<data_leaves.size(); i++) {
+    //current cell is the center
+    float_cell_type* data_cell = data_leaves[i];
+    taylor_cell_type* basis_cell = basis_leaves[i];
+
+    boct_loc_code<short> data_code = data_cell->get_code();
+    boct_loc_code<short> basis_code = basis_cell->get_code();
+
+    //check cells are at the same location
+    if(! data_code.isequal(basis_code)){
+      vcl_cerr << "Error in compute_approximation_error: Cells don't have the same location in the tree" <<vcl_endl;
+      vcl_cerr<< "Data Code: " << data_code << vcl_endl;
+      vcl_cerr<< "Basis Code: " << basis_code << vcl_endl;
+
+      return false;
+    }
+
+    //create a region around the center cell
+    vgl_point_3d<double> centroid = data_tree->global_centroid(data_cell);
+
+    //change the coordinates of enpoints to be in global coordinates abd text if they are contained in the scene
+    vgl_point_3d<double> min_point_global(centroid.x() + (double)min_point.x()*cell_length, centroid.y() + (double)min_point.y()*cell_length, centroid.z() + (double)min_point.z()*cell_length);
+    vgl_point_3d<double> max_point_global(centroid.x() + (double)max_point.x()*cell_length, centroid.y() + (double)max_point.y()*cell_length, centroid.z() + (double)max_point.z()*cell_length);
+    if(!(data_scene->locate_point_in_memory(min_point_global) && data_scene->locate_point_in_memory(max_point_global)))
+      continue;
+
+    //assemble basis
+//    double I0 = basis_cell->data().I0;
+//    vnl_double_3 G= basis_cell->data().G;
+//    vnl_double_3x3 H = basis_cell->data().H;
+    vnl_vector_fixed<double,10> taylor_coeff = basis_cell->data();
+
+    //form basis
+    double I0 = taylor_coeff[0];
+    vnl_double_3 G(taylor_coeff[1], taylor_coeff[2], taylor_coeff[3]);
+    vnl_double_3x3 H;
+    H.put(0,0,taylor_coeff[4]);
+    H.put(0,1,taylor_coeff[7]);
+    H.put(0,2,taylor_coeff[8]);
+    H.put(1,0,taylor_coeff[7]);
+    H.put(1,1,taylor_coeff[5]);
+    H.put(1,2,taylor_coeff[9]);
+    H.put(2,0,taylor_coeff[8]);
+    H.put(2,1,taylor_coeff[9]);
+    H.put(2,2,taylor_coeff[6]);
+
+
+    double error = 0.0;
+    for (int x = min_point.x(); x<= max_point.x(); x++) {
+      for (int y = min_point.y(); y<=max_point.y(); y++) {
+        for (int z = min_point.z(); z<=max_point.z(); z++) {
+          vgl_point_3d<double> point2visit(centroid.x()+(double)x*cell_length, centroid.y()+ (double)y*cell_length, centroid.z() + (double)z*cell_length);
+          boct_tree_cell<short,float> *this_cell = data_scene->locate_point_in_memory(point2visit);
+          if (this_cell) {
+            vnl_double_3 X((double)x,(double)y, (double)z);
+            double approx = I0 + dot_product(X,G) + 0.5* (dot_product(X,(H*X)));
+            error = error + (this_cell->data() - approx)*(this_cell->data() - approx);
+            //vcl_cout << "Taylor Error :\n" << "This centroid: " << this_centroid << ", box_centroid: " <<box_centroid <<vcl_endl;
+            //vcl_cout << "Taylor Error :\n" << "X: " << X << "\nI0: " << I0 <<"\nG: " << G << "\nH: " << H <<"\nApprox: " <<approx << "\nError: " << error << vcl_endl;
+          }
+        }
+      }
+    }
+
+    error_leaves[i]->set_data((float)error);
+  }
+
+  // write and release memory
+  error_scene->get_block(block_i, block_j, block_k)->set_tree(error_tree);
+  error_scene->write_active_block();
+  data_scene->unload_active_blocks();
+  basis_scene->unload_active_blocks();
+
+  return true;
+
+}
+
 
 
 //: Threshold non-salient features according to Harris' measure
@@ -299,6 +426,60 @@ boxm_scene_base_sptr bvpl_global_taylor<T_data, DIM>::load_valid_scene (int scen
 
   return aux_scene_base;
 }
+
+
+
+//: Load auxiliary scene info
+template<class T_data, unsigned DIM>
+boxm_scene_base_sptr bvpl_global_taylor<T_data, DIM>::load_error_scene (int scene_id)
+{
+  if(scene_id<0 || scene_id>((int)scenes_.size() -1))
+  {
+    vcl_cerr << "Error in bvpl_global_taylor::load_error_scene: Invalid scene id" << vcl_endl;
+    return NULL;
+  }
+
+  boxm_scene_base_sptr data_scene_base = load_scene(scene_id);
+  boxm_scene<boct_tree<short, float> >* data_scene = dynamic_cast<boxm_scene<boct_tree<short, float> >*> (data_scene_base.as_pointer());
+  if (!data_scene){
+    vcl_cerr << "Error in bvpl_global_pca<feature_dim>::init(): Could not cast data scene \n";
+    return NULL;
+  }
+
+  vcl_stringstream aux_scene_ss;
+  aux_scene_ss << "error_taylor_scene_" << scene_id ;
+  vcl_string aux_scene_path = aux_dirs_[scene_id] + "/" + aux_scene_ss.str() + ".xml";
+  if(!vul_file::exists(aux_scene_path)){
+    vcl_cout<< "Scene: " << aux_scene_path << " does not exist, initializing" << vcl_endl;
+    boxm_scene<boct_tree<short, float> > *aux_scene =
+    new boxm_scene<boct_tree<short, float> >(data_scene->lvcs(), data_scene->origin(), data_scene->block_dim(), data_scene->world_dim(), data_scene->max_level(), data_scene->init_level());
+    aux_scene->set_appearance_model(BOXM_FLOAT);
+    aux_scene->set_paths(aux_dirs_[scene_id], aux_scene_ss.str());
+    aux_scene->write_scene("/" + aux_scene_ss.str() +  ".xml");
+  }
+
+  //load scene
+  boxm_scene_base_sptr error_scene_base = new boxm_scene_base();
+  boxm_scene_parser error_parser;
+  vcl_stringstream error_scene_ss;
+  error_scene_ss << aux_dirs_[scene_id] << "/error_taylor_scene_" << scene_id << ".xml";
+  error_scene_base->load_scene(error_scene_ss.str(), error_parser);
+
+  //cast scene
+  boxm_scene<boct_tree<short, float> > *error_scene= new boxm_scene<boct_tree<short, float> >();
+  if (error_scene_base->appearence_model() == BOXM_FLOAT){
+    error_scene->load_scene(error_parser);
+    error_scene_base = error_scene;
+  }else {
+    vcl_cerr << "Error in bvpl_global_taylor::load_error_scene: Invalid apperance model" << vcl_endl;
+    return NULL;
+  }
+
+  return error_scene_base;
+
+}
+
+
 
 #if 0
 //: Load auxiliary scene indicating if a cell is should be used for training
