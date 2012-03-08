@@ -204,6 +204,33 @@ pre_inf_main(__constant  RenderSceneInfo    * linfo,
 }
 #endif // PREINF
 
+#ifdef COMBINE_PRE_VIS
+__kernel
+void
+combine_pre_vis(__global float* preInf, __global float* visInf,
+                __global float* blkPre, __global float* blkVis, 
+                __global uint4* imgdims)
+{
+  //----------------------------------------------------------------------------
+  // get image coordinates and camera,
+  // check for validity before proceeding
+  //----------------------------------------------------------------------------
+  int i=get_global_id(0);
+  int j=get_global_id(1);
+  // check to see if the thread corresponds to an actual pixel as in some
+  // cases #of threads will be more than the pixels.
+  if (i>=(*imgdims).z || j>=(*imgdims).w || i<(*imgdims).x || j<(*imgdims).y)
+    return;
+  int index = j*get_global_size(0) + i;
+  
+  //update pre before vis
+  preInf[index] += blkPre[index]*visInf[index];
+
+  //update vis
+  visInf[index] *= blkVis[index]; 
+}
+#endif //COMBINE_PRE_VIS
+
 #ifdef BAYES
 typedef struct
 {
