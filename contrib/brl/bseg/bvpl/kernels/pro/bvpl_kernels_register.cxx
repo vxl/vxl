@@ -26,4 +26,5 @@ void bvpl_kernels_register::register_process()
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvpl_create_gauss3d_xx_kernel_vector_process, "bvplCreateGauss3dXXKernelVectorProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvpl_create_wc_kernel_vector_process, "bvplCreateWCKernelVectorProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvpl_load_taylor_kernel_process, "bvplLoadTaylorKernelProcess");
+  REG_PROCESS_FUNC_CONS2(bvpl_create_gauss3d_kernel_process);
 }
