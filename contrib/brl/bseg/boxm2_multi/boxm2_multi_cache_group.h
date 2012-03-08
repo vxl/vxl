@@ -11,17 +11,17 @@
 #include <vpgl/vpgl_camera_double_sptr.h>
 #include <vcl_iosfwd.h>
 
-//: boxm2_multi_cache_group - a helper class that groups together
-// contiguous blocks across devices.  Essentially this enforces that
-// a group contains just one block per device, in a contiguous manner (an odd number
-// of devices might cause a problem).  For instance if there are two devices, blocks
-// will be divided between devices a and b:
+//: a helper class that groups together contiguous blocks across devices.
+// Essentially this enforces that a group contains just one block per device,
+// in a contiguous manner (an odd number of devices might cause a problem).
+// For instance if there are two devices, blocks will be divided between devices a and b:
+// \verbatim
 //  _____ _____ _____ _____
 // | [a  |  b] | [a  |  b] |
 // |_____|_____|_____|_____|
 // | [a  |  b] | [a  |  b] |
 // |_____|_____|_____|_____|
-//
+// \endverbatim
 // Each group is represented by the brackets - these groupings ensure that contiguous
 // chunks of the scene will be ray traced simultaneously
 class boxm2_multi_cache_group
