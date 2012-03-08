@@ -54,6 +54,8 @@ void bvpl_octree_register::register_process()
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvpl_global_pca_process, "bvplGlobalPCAProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvpl_init_global_pca_process, "bvplInitGlobalPCAProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvpl_load_global_pca_125_process, "bvplLoadGlobalPCA125Process");
+  REG_PROCESS_FUNC_CONS2(bvpl_pca_global_proj_error_process);
+  REG_PROCESS_FUNC_CONS2(bvpl_pca_global_add_error_process);
   
   //Taylor related
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvpl_load_taylor_scenes_process, "bvplLoadTaylorScenesProcess");
@@ -62,7 +64,9 @@ void bvpl_octree_register::register_process()
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvpl_init_global_taylor_process, "bvplInitGlobalTaylorProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvpl_compute_taylor_coefficients_process, "bvplComputeTaylorCoefficients");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvpl_explore_coefficient_scene_process, "bvplExploreCoefficientSceneProcess");
-  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvpl_load_global_taylor_process, "bvplLoadGlobalTaylorProcess");  
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvpl_load_global_taylor_process, "bvplLoadGlobalTaylorProcess");
+  REG_PROCESS_FUNC_CONS2(bvpl_taylor_global_proj_error_process);
+  REG_PROCESS_FUNC_CONS2(bvpl_taylor_global_add_error_process);
   
   //Corner related
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvpl_threshold_corners_process, "bvplThresholdCornersProcess");

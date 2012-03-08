@@ -32,6 +32,8 @@ DECLARE_FUNC_CONS(bvpl_combine_pairwise_statistics_process);
 DECLARE_FUNC_CONS(bvpl_global_pca_process);
 DECLARE_FUNC_CONS(bvpl_init_global_pca_process);
 DECLARE_FUNC_CONS(bvpl_load_global_pca_125_process);
+DECLARE_FUNC_CONS(bvpl_pca_global_proj_error_process);
+DECLARE_FUNC_CONS(bvpl_pca_global_add_error_process);
 
 //Taylor related
 DECLARE_FUNC_CONS(bvpl_load_taylor_scenes_process);
@@ -41,6 +43,8 @@ DECLARE_FUNC_CONS(bvpl_init_global_taylor_process);
 DECLARE_FUNC_CONS(bvpl_compute_taylor_coefficients_process);
 DECLARE_FUNC_CONS(bvpl_explore_coefficient_scene_process);
 DECLARE_FUNC_CONS(bvpl_load_global_taylor_process);
+DECLARE_FUNC_CONS(bvpl_taylor_global_proj_error_process);
+DECLARE_FUNC_CONS(bvpl_taylor_global_add_error_process);
 
 //Corner related
 DECLARE_FUNC_CONS(bvpl_compute_harris_measure_process);
