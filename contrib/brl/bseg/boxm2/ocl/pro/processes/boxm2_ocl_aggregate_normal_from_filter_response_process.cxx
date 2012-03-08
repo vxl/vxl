@@ -2,10 +2,11 @@
 #include <bprb/bprb_func_process.h>
 //:
 // \file
-// \brief A process to take in filter responses (from boxm2CppFilterResponseProcess) and aggregate them to a gradient direction. Currently, the cl code
-//        takes in 6 filter responses and the process supplies filter orientations to the cl code via a look-up table. It is hardcoded to take in dodecahedron face
-//        orientations currently.
-//        TODO: make filter orientations an input.
+// \brief A process to take in filter responses (from boxm2CppFilterResponseProcess) and aggregate them to a gradient direction.
+// Currently, the cl code takes in 6 filter responses and the process supplies
+// filter orientations to the cl code via a look-up table. It is hardcoded to
+// take in dodecahedron face orientations currently.
+// TODO: make filter orientations an input.
 //
 // \author Ali Osman Ulusoy
 // \date Feb 13, 2011
@@ -53,27 +54,21 @@ namespace boxm2_ocl_aggregate_normal_from_filter_process_globals
   }
 
   static vcl_map<vcl_string,vcl_vector<bocl_kernel*> > kernels;
-
-
 }
 
 bool boxm2_ocl_aggregate_normal_from_filter_process_cons(bprb_func_process& pro)
 {
   using namespace boxm2_ocl_aggregate_normal_from_filter_process_globals;
 
-
+  // process has 4 inputs and no outputs:
   vcl_vector<vcl_string> input_types_(n_inputs_);
   input_types_[0] = "bocl_device_sptr";
   input_types_[1] = "boxm2_scene_sptr";
   input_types_[2] = "boxm2_opencl_cache_sptr";
   input_types_[3] = "unsigned";   //number of filters
-
-  // process has 0 output:
-  // output[0]: scene sptr
   vcl_vector<vcl_string>  output_types_(n_outputs_);
-  bool good =pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
-
-  return good;
+  return pro.set_input_types(input_types_)
+      && pro.set_output_types(output_types_);
 }
 
 bool boxm2_ocl_aggregate_normal_from_filter_process(bprb_func_process& pro)
@@ -136,18 +131,15 @@ bool boxm2_ocl_aggregate_normal_from_filter_process(bprb_func_process& pro)
   vcl_map<boxm2_block_id, boxm2_block_metadata> blocks = scene->blocks();
   vcl_cout << "Running boxm2_ocl_aggregate_normal_from_filter_process ..." << vcl_endl;
 
-
   //zip through each block
   vcl_map<boxm2_block_id, boxm2_block_metadata>::iterator blk_iter;
   for (blk_iter = blocks.begin(); blk_iter != blocks.end(); ++blk_iter)
   {
-
     boxm2_block_id id = blk_iter->first;
     vcl_cout << "Processing block: " << id << vcl_endl;
 
     //get kernel
     bocl_kernel* kern =  kernels[identifier][0];
-
 
     //load tree and alpha
     boxm2_block_metadata data = blk_iter->second;
@@ -177,7 +169,7 @@ bool boxm2_ocl_aggregate_normal_from_filter_process(bprb_func_process& pro)
     kern->set_arg( blk_info );
     kern->set_arg( dodecahedron_dir_lookup.ptr());
     kern->set_arg( normals );
-    for(unsigned i = 0; i < num_kernels; i++) {
+    for (unsigned i = 0; i < num_kernels; i++) {
       vcl_stringstream ss; ss << i;
       bocl_mem * response    = opencl_cache->get_data(id,RESPONSE_DATATYPE::prefix(ss.str()), 0, true);
       kern->set_arg( response );
@@ -196,7 +188,6 @@ bool boxm2_ocl_aggregate_normal_from_filter_process(bprb_func_process& pro)
     normals->read_to_buffer(queue);
     status = clFinish(queue);
     check_val(status, MEM_FAILURE, "READ NORMALS FAILED: " + error_to_string(status));
-
   }
   return true;
 }
