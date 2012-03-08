@@ -25,7 +25,7 @@
 
 namespace bvpl_block_kernel_operator_process_globals
 {
-  const unsigned n_inputs_ = 7;
+  const unsigned n_inputs_ = 8;
   const unsigned n_outputs_ = 0;
 }
 
@@ -50,6 +50,7 @@ bool bvpl_block_kernel_operator_process_cons(bprb_func_process& pro)
   input_types_[i++] = "int";
   input_types_[i++] = "vcl_string";
   input_types_[i++] = "vcl_string";
+  input_types_[i++] = "double";
 
   vcl_vector<vcl_string> output_types_(n_outputs_);
 
@@ -74,16 +75,17 @@ bool bvpl_block_kernel_operator_process(bprb_func_process& pro)
   int block_i = pro.get_input<int>(i++);
   int block_j = pro.get_input<int>(i++);
   int block_k = pro.get_input<int>(i++);
-
   vcl_string functor_name = pro.get_input<vcl_string>(i++);
   vcl_string output_path = pro.get_input<vcl_string>(i++);
+  double cell_length = pro.get_input<double>(i++);
   //short level = 0;
 
   //print inputs
   vcl_cout << "In bvpl_block_kernel_operator:\n"
            << "Index(i,j,k) : (" << block_i << ',' << block_j << ',' << block_k << ")\n"
            << "Functor Name: " << functor_name << '\n'
-           << "Output path: " << output_path << vcl_endl;
+           << "Output path: " << output_path  << '\n'
+           << "Cell length" << cell_length << vcl_endl;
 
   //check input's validity
   if (!scene_base.ptr()) {
@@ -104,8 +106,7 @@ bool bvpl_block_kernel_operator_process(bprb_func_process& pro)
       typedef bsta_num_obs<bsta_gauss_sf1> gauss_type;
       typedef boct_tree<short, gauss_type > tree_type;
       boxm_scene<tree_type> *scene_in = static_cast<boxm_scene<tree_type>* > (scene_base.as_pointer());
-      double finest_cell_length = scene_in->finest_cell_length();
-      kernel->set_voxel_length(finest_cell_length);
+
 
       //parameters of the output scene are the same as those of the input scene
       boxm_scene<tree_type> *scene_out =
@@ -115,11 +116,19 @@ bool bvpl_block_kernel_operator_process(bprb_func_process& pro)
       if (!vul_file::exists(output_path + "/gauss_response_scene.xml"))
         scene_out->write_scene("/gauss_response_scene.xml");
 
+      //parameters of the output scene are the same as those of the input scene
+      boxm_scene<boct_tree<short,bool> > *valid_scene =
+      new boxm_scene<boct_tree<short,bool > >(scene_in->lvcs(), scene_in->origin(), scene_in->block_dim(), scene_in->world_dim(), scene_in->max_level(), scene_in->init_level());
+      valid_scene->set_paths(output_path, "valid_scene");
+      valid_scene->set_appearance_model(BOXM_BOOL);
+      if (!vul_file::exists(output_path + "/valid_scene.xml"))
+        valid_scene->write_scene("/valid_scene.xml");
+
       if (functor_name == "gauss_convolution") {
         bvpl_gauss_convolution_functor functor;
         bvpl_block_kernel_operator block_oper;
         //operate on scene
-        block_oper.operate(*scene_in, functor, kernel, block_i, block_j, block_k, *scene_out);
+        block_oper.operate(*scene_in, functor, kernel, block_i, block_j, block_k, *scene_out, *valid_scene, cell_length);
         //clean memory
         scene_in->unload_active_blocks();
         scene_out->unload_active_blocks();
@@ -130,7 +139,7 @@ bool bvpl_block_kernel_operator_process(bprb_func_process& pro)
         bvpl_positive_gauss_conv_functor functor;
         bvpl_block_kernel_operator block_oper;
         //operate on scene
-        block_oper.operate(*scene_in, functor, kernel, block_i, block_j, block_k, *scene_out);
+        block_oper.operate(*scene_in, functor, kernel, block_i, block_j, block_k, *scene_out, *valid_scene, cell_length);
         //clean memory
         scene_in->unload_active_blocks();
         scene_out->unload_active_blocks();
@@ -146,8 +155,7 @@ bool bvpl_block_kernel_operator_process(bprb_func_process& pro)
     {
       typedef boct_tree<short, float > tree_type;
       boxm_scene<tree_type> *scene_in = static_cast<boxm_scene<tree_type>* > (scene_base.as_pointer());
-      double finest_cell_length = scene_in->finest_cell_length();
-      kernel->set_voxel_length(finest_cell_length);
+
       //parameters of the output scene are the same as those of the input scene
       boxm_scene<tree_type> *scene_out =
       new boxm_scene<tree_type>(scene_in->lvcs(), scene_in->origin(), scene_in->block_dim(), scene_in->world_dim(), scene_in->max_level(), scene_in->init_level());
@@ -156,12 +164,19 @@ bool bvpl_block_kernel_operator_process(bprb_func_process& pro)
       if (!vul_file::exists(output_path + "/float_response_scene.xml"))
         scene_out->write_scene("/float_response_scene.xml");
 
+      boxm_scene<boct_tree<short,bool> > *valid_scene =
+      new boxm_scene<boct_tree<short,bool> >(scene_in->lvcs(), scene_in->origin(), scene_in->block_dim(), scene_in->world_dim(), scene_in->max_level(), scene_in->init_level());
+      valid_scene->set_paths(output_path, "valid_scene");
+      valid_scene->set_appearance_model(BOXM_BOOL);
+      if (!vul_file::exists(output_path + "/valid_scene.xml"))
+        valid_scene->write_scene("/valid_scene.xml");
+
       if (functor_name == "edge_algebraic_mean")
       {
         bvpl_edge_algebraic_mean_functor<float> functor;
         bvpl_block_kernel_operator block_oper;
         //operate on scene
-        block_oper.operate(*scene_in, functor, kernel, block_i, block_j, block_k, *scene_out);
+        block_oper.operate(*scene_in, functor, kernel, block_i, block_j, block_k, *scene_out, *valid_scene, cell_length);
 
         //clean memory
         scene_in->unload_active_blocks();
@@ -173,7 +188,7 @@ bool bvpl_block_kernel_operator_process(bprb_func_process& pro)
         bvpl_algebraic_functor functor;
         bvpl_block_kernel_operator block_oper;
         //operate on scene
-        block_oper.operate(*scene_in, functor, kernel, block_i, block_j, block_k, *scene_out);
+        block_oper.operate(*scene_in, functor, kernel, block_i, block_j, block_k, *scene_out, *valid_scene, cell_length);
 
         //clean memory
         scene_in->unload_active_blocks();
