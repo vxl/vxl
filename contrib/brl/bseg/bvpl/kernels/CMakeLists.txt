@@ -17,6 +17,7 @@ SET(bvpl_kernels_sources
     bvpl_kernel_factory.h                 bvpl_kernel_factory.cxx
     bvpl_edge2d_kernel_factory.h          bvpl_edge2d_kernel_factory.cxx
     bvpl_edge3d_kernel_factory.h          bvpl_edge3d_kernel_factory.cxx
+    bvpl_gauss3d_kernel_factory.h         bvpl_gauss3d_kernel_factory.cxx
     bvpl_gauss3d_x_kernel_factory.h       bvpl_gauss3d_x_kernel_factory.cxx
     bvpl_gauss3d_xx_kernel_factory.h      bvpl_gauss3d_xx_kernel_factory.cxx
     bvpl_corner2d_kernel_factory.h        bvpl_corner2d_kernel_factory.cxx
