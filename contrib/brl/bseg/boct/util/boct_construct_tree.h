@@ -47,7 +47,7 @@ boct_tree_cell<T_loc,T_data>* boct_construct_tree(vcl_vector<boct_tree_cell<T_lo
     while (curr_level>level)
     {
       if (curr_cell->is_leaf()) {
-        curr_cell->split();
+        curr_cell->split(default_val);
       }
       short child_index=loccode.child_index(curr_level);
       if (child_index < 0)
