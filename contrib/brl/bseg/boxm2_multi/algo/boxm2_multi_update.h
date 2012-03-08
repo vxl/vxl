@@ -33,6 +33,7 @@ class boxm2_multi_update_helper
                               vcl_vector<bocl_mem_sptr>& img_dims,
                               vcl_vector<bocl_mem_sptr>& lookups,
                               vcl_vector<bocl_mem_sptr>& outputs,
+                              vcl_vector<boxm2_multi_cache_group*>& group_orders,
                               vcl_vector<vcl_vector<boxm2_block_id> >& vis_orders,
                               vcl_vector<boxm2_opencl_cache*>& vis_caches,
                               vcl_size_t maxBlocks) :
@@ -42,6 +43,7 @@ class boxm2_multi_update_helper
         img_dims_(img_dims),
         lookups_(lookups),
         outputs_(outputs),
+        group_orders_(group_orders),
         vis_orders_(vis_orders),
         vis_caches_(vis_caches),
         maxBlocks_(maxBlocks)
@@ -57,6 +59,7 @@ class boxm2_multi_update_helper
     vcl_vector<vcl_vector<boxm2_block_id> >& vis_orders_;
     vcl_vector<boxm2_opencl_cache*>& vis_caches_;
     vcl_size_t maxBlocks_;
+    vcl_vector<boxm2_multi_cache_group*>& group_orders_;
 };
 
 //: patch helper

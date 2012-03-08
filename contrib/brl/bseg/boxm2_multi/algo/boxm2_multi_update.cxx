@@ -91,10 +91,6 @@ float boxm2_multi_update::update(boxm2_multi_cache& cache,
     maxBlocks = vcl_max(vis_order.size(), maxBlocks);
   }
 
-  //create boxm2_multi update helper object for factored out vars
-  boxm2_multi_update_helper helper(queues, ray_os, ray_ds, img_dims, lookups, 
-                                   outputs, vis_orders, ocl_caches, maxBlocks);
-
   //initalize per group images (vis/pre
   vcl_vector<boxm2_multi_cache_group*> grp = cache.get_vis_groups(cam);
   for(int grpId=0; grpId<grp.size(); ++grpId) {
@@ -106,6 +102,11 @@ float boxm2_multi_update::update(boxm2_multi_cache& cache,
       grp[grpId]->set_pre(i, preImg);
     }
   }
+
+  //create boxm2_multi update helper object for factored out vars
+  boxm2_multi_update_helper helper(queues, ray_os, ray_ds, img_dims, lookups, 
+                                   outputs, grp, vis_orders, ocl_caches, maxBlocks);
+
 
   //store aux data (cell vis, cell length) 
   boxm2_multi_store_aux::store_aux(cache, img, cam, helper); 

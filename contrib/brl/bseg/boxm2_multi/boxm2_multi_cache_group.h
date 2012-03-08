@@ -57,6 +57,7 @@ class boxm2_multi_cache_group
 
     //get boxes
     vcl_vector<vgl_box_3d<double> >& bboxes() { return bboxes_; }
+    vgl_box_3d<double>& bbox(int i) { return bboxes_[i]; }
 
     //get full bbox
     vgl_box_3d<double>& groupBox() { return bbox_; }

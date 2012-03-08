@@ -51,7 +51,9 @@ class boxm2_multi_update_cell
                                     vcl_size_t*         gThreads);
 
     static float calc_beta_reduce( boxm2_multi_cache& mcache,
-                                   vcl_vector<boxm2_opencl_cache*>& ocl_caches );
+                                   vpgl_camera_double_sptr cam,
+                                   boxm2_multi_update_helper& helper);
+
 
 
     //map keeps track of all kernels compiled and cached

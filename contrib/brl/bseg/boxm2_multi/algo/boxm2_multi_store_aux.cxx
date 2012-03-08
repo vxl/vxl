@@ -89,7 +89,7 @@ float boxm2_multi_store_aux::store_aux(boxm2_multi_cache&       cache,
   // Call per block/per scene update (to ensure cpu-> gpu cache works
   //---------------------------------------------------------------
   //visibility order
-  vcl_vector<boxm2_multi_cache_group*> grp = cache.get_vis_groups(cam);
+  vcl_vector<boxm2_multi_cache_group*> grp = helper.group_orders_; //cache.get_vis_groups(cam);
   vcl_cout<<"Group list size; "<<grp.size()<<vcl_endl;
   
   for(int grpId=0; grpId<grp.size(); ++grpId) {

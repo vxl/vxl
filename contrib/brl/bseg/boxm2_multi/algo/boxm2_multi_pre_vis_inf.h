@@ -70,6 +70,9 @@ class boxm2_multi_pre_vis_inf
     
     //debug write imgs to disk method
     static void write_imgs_out(vcl_map<bocl_device*, float*>& img_map, int ni, int nj,vcl_string name);
+
+    template <class T>
+    static inline T clamp(T x, T a, T b) { return x < a ? a : (x > b ? b : x); }
 };
 
 #endif
