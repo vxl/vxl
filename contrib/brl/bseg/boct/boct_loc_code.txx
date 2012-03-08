@@ -54,14 +54,14 @@ boct_loc_code<T> boct_loc_code<T>::child_loc_code(unsigned int index, short chil
 
 
 template <class T>
-short boct_loc_code<T>::child_index(short level)
+short boct_loc_code<T>::child_index(short this_level)
 {
   // level 0 cannot have a child, that ought to be the last level
-  if (level == 0)
+  if (this_level == 0)
     return -1;
 
   // the bits are stored as [00...00ZYX]
-  T child_bit = 1 << (level-1);
+  T child_bit = 1 << (this_level-1);
   short index =0;
   if ((x_loc_ & child_bit))
     index+=1;
