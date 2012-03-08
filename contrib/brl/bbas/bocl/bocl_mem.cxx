@@ -141,29 +141,29 @@ bool bocl_mem::init_gpu_buffer(void const* init_val, vcl_size_t value_size, cl_c
 }
 
 //: write to command queue
-bool bocl_mem::write_to_buffer(const cl_command_queue& cmd_queue)
+bool bocl_mem::write_to_buffer(const cl_command_queue& cmd_queue, bool blocking)
 {
   if (!is_gl_) 
-    return this->write_to_gpu_mem(cmd_queue, this->cpu_buf_, this->num_bytes_);
+    return this->write_to_gpu_mem(cmd_queue, this->cpu_buf_, this->num_bytes_, blocking);
   return true;
 }
 
 //: read from command queue buffer...
-bool bocl_mem::read_to_buffer(const cl_command_queue& cmd_queue)
+bool bocl_mem::read_to_buffer(const cl_command_queue& cmd_queue, bool blocking)
 {
   if (!is_gl_)
-    return this->read_from_gpu_mem(cmd_queue, this->cpu_buf_, this->num_bytes_);
+    return this->read_from_gpu_mem(cmd_queue, this->cpu_buf_, this->num_bytes_, blocking);
   return true;
 }
 
-bool bocl_mem::write_to_gpu_mem(const cl_command_queue& cmd_queue, void* buff, vcl_size_t size)
+bool bocl_mem::write_to_gpu_mem(const cl_command_queue& cmd_queue, void* buff, vcl_size_t size, bool blocking)
 {
   assert(size <= this->num_bytes_);
   ceEvent_ = 0;
   cl_int status = MEM_FAILURE;
   status = clEnqueueWriteBuffer(cmd_queue,
                                 this->buffer_,
-                                CL_TRUE,          //True=BLocking, False=NonBlocking
+                                blocking,          //True=BLocking, False=NonBlocking
                                 0,
                                 size,
                                 buff,
@@ -175,13 +175,13 @@ bool bocl_mem::write_to_gpu_mem(const cl_command_queue& cmd_queue, void* buff, v
   return MEM_SUCCESS;
 }
 
-bool bocl_mem::read_from_gpu_mem(const cl_command_queue& cmd_queue, void* buff, vcl_size_t size)
+bool bocl_mem::read_from_gpu_mem(const cl_command_queue& cmd_queue, void* buff, vcl_size_t size, bool blocking)
 {
   assert(size <= this->num_bytes_);
   int status = MEM_FAILURE;
   status= clEnqueueReadBuffer(cmd_queue,
                               this->buffer_,
-                              CL_TRUE,
+                              blocking,
                               0,
                               size,
                               buff,
@@ -226,6 +226,25 @@ bool bocl_mem::finish_write_to_buffer(const cl_command_queue& cmd_queue)
   }
   return true;
 }
+
+void* bocl_mem::enqueue_map(const cl_command_queue& cmd_queue)
+{
+  int status = MEM_FAILURE;
+  void* ptr = clEnqueueMapBuffer(cmd_queue,this->buffer_,CL_TRUE,CL_MAP_READ,
+                            0,this->num_bytes_,0,NULL,&ceEvent_,&status); 
+  if (!check_val(status,MEM_FAILURE,"clEnqueueMapBuffer failed: " + this->id_ + error_to_string(status)))
+    return 0;
+  return ptr;
+}
+bool bocl_mem::enqueue_unmap(const cl_command_queue& cmd_queue, void* mapped_ptr)
+{
+  int status = MEM_FAILURE;
+  status = clEnqueueUnmapMemObject(cmd_queue,this->buffer_, mapped_ptr, 0, NULL, &ceEvent_);
+  if (!check_val(status,MEM_FAILURE,"clEnqueueUnmapMemObject failed: " + this->id_ + error_to_string(status)))
+    return false;
+  return true;
+}
+
 
 //: THIS REQUIRES the queue to be finished
 float bocl_mem::exec_time()

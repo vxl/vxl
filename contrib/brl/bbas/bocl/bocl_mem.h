@@ -48,16 +48,20 @@ class bocl_mem : public vbl_ref_count
   bool release_memory();
 
   //: read/write to buffer (copies memory from cpu_buf to gpu buf)
-  bool write_to_buffer(const cl_command_queue& cmd_queue);
-  bool read_to_buffer(const cl_command_queue& cmd_queue);
+  bool write_to_buffer(const cl_command_queue& cmd_queue, bool blocking=true);
+  bool read_to_buffer(const cl_command_queue& cmd_queue, bool blocking=true);
   
   //: read/write buffers of arbitrary size (smaller than existing gpu mem)
-  bool write_to_gpu_mem(const cl_command_queue& cmd_queue, void* buff, vcl_size_t size); 
-  bool read_from_gpu_mem(const cl_command_queue& cmd_queue, void* buff, vcl_size_t size);
+  bool write_to_gpu_mem(const cl_command_queue& cmd_queue, void* buff, vcl_size_t size, bool blocking=true); 
+  bool read_from_gpu_mem(const cl_command_queue& cmd_queue, void* buff, vcl_size_t size, bool blocking=true);
 
   //: write to buffer asynchronously
   bool write_to_buffer_async(const cl_command_queue& cmd_queue);
   bool finish_write_to_buffer(const cl_command_queue& cmd_queue);
+
+  //: map/unmap
+  void* enqueue_map(const cl_command_queue& cmd_queue);
+  bool enqueue_unmap(const cl_command_queue& cmd_queue, void* mapped_ptr);
 
   //: zeros out GPU buffer
   bool zero_gpu_buffer(const cl_command_queue& cmd_queue);
