@@ -8,6 +8,7 @@ IF(EXPAT_FOUND)
   INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bseg )
   INCLUDE_DIRECTORIES( ${GEL_INCLUDE_DIR}/mrc/vpgl )
   INCLUDE_DIRECTORIES( ${GEL_INCLUDE_DIR}/mrc )
+  INCLUDE_DIRECTORIES( ${VTHREEP_INCLUDE_DIR}/rply )
 
   SET(boxm_algo_pro_sources
       boxm_algo_processes.h
