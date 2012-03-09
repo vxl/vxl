@@ -49,6 +49,19 @@ def estimate_reflectance(image, metadata, atmospheric_params):
   reflectance_img = dbvalue(id,type)
   return reflectance_img
 
+# convert reflectance image back to digital count
+def convert_reflectance_to_digital_count(reflectance_image, metadata, atmospheric_params, normalize_0_1 = False, max_digital_count = 2047):
+  boxm2_batch.init_process("bradConvertReflectanceToDigitalCountProcess")
+  boxm2_batch.set_input_from_db(0,reflectance_image)
+  boxm2_batch.set_input_from_db(1,metadata)
+  boxm2_batch.set_input_from_db(2,atmospheric_params)
+  boxm2_batch.set_input_bool(3,normalize_0_1)
+  boxm2_batch.set_input_unsigned(4,max_digital_count)
+  boxm2_batch.run_process()
+  (id,type) = boxm2_batch.commit_output(0)
+  output_img = dbvalue(id,type)
+  return output_img
+
 def find_sun_dir_bin(metadata, output_file):
   boxm2_batch.init_process("bradSunDirBinProcess");
   boxm2_batch.set_input_from_db(0,metadata)

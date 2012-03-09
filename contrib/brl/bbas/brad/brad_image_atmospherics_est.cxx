@@ -73,6 +73,32 @@ bool brad_estimate_atmospheric_parameters(vil_image_view<float> const& radiance,
   return true;
 }
 
+bool brad_undo_reflectance_estimate(vil_image_view<float> const& reflectance, brad_image_metadata const& mdata, brad_atmospheric_parameters const& atm_params, vil_image_view<float> &radiance)
+{
+  // calculate atmosphere transmittance value
+  double sun_el_rads = mdata.sun_elevation_ * vnl_math::pi_over_180;
+  double sat_el_rads = mdata.view_elevation_ * vnl_math::pi_over_180;
+
+  double T_sun = vcl_exp(-atm_params.optical_depth_ / vcl_sin(sun_el_rads));
+  double T_view = vcl_exp(-atm_params.optical_depth_ / vcl_sin(sat_el_rads));
+
+  // ideal Lambertian reflector, surface normal = [0 0 1]
+  double sun_dot_norm = vcl_sin(sun_el_rads);
+  double Lsat_horizontal = T_view*(mdata.sun_irradiance_ * sun_dot_norm * T_sun + atm_params.skylight_)/vnl_math::pi + atm_params.airlight_;
+
+  // convert reflectance values to radiance 
+  unsigned int ni = reflectance.ni();
+  unsigned int nj = reflectance.nj();
+  radiance.set_size(ni,nj);
+  for (unsigned int j=0; j<nj; ++j) {
+     for (unsigned int i=0; i<ni; ++i) {
+        radiance(i,j) = reflectance(i,j) * Lsat_horizontal + atm_params.airlight_;
+     }
+  }
+
+  return true;
+}
+
 
 bool brad_estimate_reflectance_image(vil_image_view<float> const& radiance, brad_image_metadata const& mdata, brad_atmospheric_parameters const& atm_params, vil_image_view<float> &reflectance)
 {

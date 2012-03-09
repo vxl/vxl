@@ -33,6 +33,7 @@ DECLARE_FUNC_CONS(brad_nitf_abs_radiometric_calibration_process);
 DECLARE_FUNC_CONS(brad_nitf_read_metadata_process);
 DECLARE_FUNC_CONS(brad_estimate_atmospheric_parameters_process);
 DECLARE_FUNC_CONS(brad_estimate_reflectance_process);
+DECLARE_FUNC_CONS(brad_convert_reflectance_to_digital_count_process);
 
 DECLARE_FUNC_CONS(brad_save_image_metadata_process);
 DECLARE_FUNC_CONS(brad_save_atmospheric_parameters_process);
