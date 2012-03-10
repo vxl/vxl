@@ -13,20 +13,8 @@
 //                                   Some of the methods for reconstruction have been left out
 // \endverbatim
 
-
-#include <vcl_iostream.h>
-#include <vcl_vector.h>
-#include <vcl_cassert.h>
-#include <vcl_cmath.h>
-
-#include <vgl/vgl_box_3d.h>
-#include <vgl/vgl_point_2d.h>
-#include <vgl/vgl_point_3d.h>
-#include <vgl/vgl_vector_3d.h>
-
 #include <vpgl/vpgl_perspective_camera.h>
 #include <vpgl/vpgl_rational_camera.h>
-#include <vpgl/vpgl_calibration_matrix.h>
 
 #include <bvxm/bvxm_util.h>
 #include <bvxm/grid/bvxm_voxel_grid.h>
@@ -34,6 +22,14 @@
 #include <bvxm/bvxm_voxel_world.h>
 #include <bvxm/bvxm_world_params.h>
 #include <bvxm/bvxm_mog_grey_processor.h>
+
+#include <vgl/vgl_box_3d.h>
+#include <vgl/vgl_point_2d.h>
+#include <vgl/vgl_point_3d.h>
+#include <vgl/vgl_vector_3d.h>
+
+#include <vcl_string.h>
+#include <vcl_vector.h>
 
 class bvxm_synth_world_generator
 {

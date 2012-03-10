@@ -6,10 +6,9 @@
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/ocl/boxm2_opencl_cache.h>
 #include <vil/vil_image_view.h>
-#include <vpgl/vpgl_perspective_camera.h>
+#include <vpgl/vpgl_camera_double_sptr.h>
 #include <bocl/bocl_device.h>
 #include <bocl/bocl_kernel.h>
-#include <brdb/brdb_value.h>
 
 
 //: boxm2_multi_cache - example realization of abstract cache class
@@ -21,8 +20,8 @@ class boxm2_multi_render
   public:
 
     //: multi render header
-    float render(boxm2_multi_cache&       cache, 
-                 vil_image_view<float>&   img, 
+    float render(boxm2_multi_cache&       cache,
+                 vil_image_view<float>&   img,
                  vpgl_camera_double_sptr  cam );
 
   private:
@@ -54,11 +53,11 @@ class boxm2_multi_render
                         unsigned cl_ni,
                         unsigned cl_nj,
                         int apptypesize  );
-                     
+
     //:calls render block code
-    float render_block( boxm2_scene_sptr& scene, 
+    float render_block( boxm2_scene_sptr& scene,
                         boxm2_block_id id,
-                        boxm2_opencl_cache* opencl_cache, 
+                        boxm2_opencl_cache* opencl_cache,
                         cl_command_queue& queue,
                         bocl_mem_sptr & ray_o_buff,
                         bocl_mem_sptr & ray_d_buff,
@@ -73,8 +72,6 @@ class boxm2_multi_render
                         unsigned cl_ni,
                         unsigned cl_nj,
                         int apptypesize);
-    
-    
 };
 
 #endif

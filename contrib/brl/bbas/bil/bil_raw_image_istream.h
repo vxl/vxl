@@ -11,15 +11,15 @@
 // \author Andrew Miller
 // \date 19 Dec 2011
 
-#include <vidl/vidl_istream.h>
-#include <vcl_vector.h>
-#include <vcl_string.h>
-#include <vcl_fstream.h>
+#include <vidl/vidl_pixel_format.h>
 #include <vil/vil_image_view_base.h>
-#include <vcl_algorithm.h>
 #include <vbl/vbl_ref_count.h>
 #include <vbl/vbl_smart_ptr.h>
 #include <vsl/vsl_binary_io.h>
+#include <vcl_vector.h>
+#include <vcl_string.h>
+#include <vcl_fstream.h>
+#include <vcl_algorithm.h>
 
 //: A video input stream from a list of images on disk
 // This istream will try to open and validate (but not read image data from)
@@ -123,7 +123,7 @@ class bil_raw_image_istream : public vbl_ref_count
 
   //: The current frame (cached)
   vil_image_view_base_sptr current_frame_;
-  vxl_int_64  time_stamp_; 
+  vxl_int_64  time_stamp_;
 };
 
 //: Smart_Pointer typedef for boxm2_data_base

@@ -7,17 +7,13 @@
 #include <bundler/bundler_sfm.h>
 #include <bundler/bundler_inters.h>
 
-#include <vnl/vnl_double_3x3.h>
-
-//:
-// The default implementation of the function to create the initial
-// reconstruction. Takes in the track set, and returns the initial
-// reconstruction.
+//: The default implementation of the function to create the initial reconstruction.
+// Takes in the track set, and \returns the initial reconstruction.
 class bundler_sfm_impl_create_initial_recon
   : public bundler_sfm_create_initial_recon
 {
   bundler_settings_create_initial_recon settings;
-  bool can_be_initial_recon(const bundler_inters_match_set &a); 
+  bool can_be_initial_recon(const bundler_inters_match_set &a);
 
  public:
   bundler_sfm_impl_create_initial_recon()
@@ -30,9 +26,8 @@ class bundler_sfm_impl_create_initial_recon
 };
 
 
-//:
-// The default implementation of the select next image phase.
-// Selects the image that observes the larget number of tracks 
+//: The default implementation of the select next image phase.
+// Selects the image that observes the larget number of tracks
 // whose 3D locations have already been estimated.
 class bundler_sfm_impl_select_next_images
   : public bundler_sfm_select_next_images
@@ -47,8 +42,7 @@ class bundler_sfm_impl_select_next_images
       bundler_settings_select_next_images s) : settings(s) {}
 
   //: Takes in reconstruction and track_set, fills to_add as a return val
-  // Returns true if an image was found that observes the minimum number
-  // of points
+  // \returns true if an image was found that observes the minimum number of points
   bool operator() (
       bundler_inters_reconstruction &reconstruction,
 
@@ -56,8 +50,7 @@ class bundler_sfm_impl_select_next_images
 };
 
 
-//:
-// The default implementation of the add next image stage.
+//: The default implementation of the add next image stage.
 class bundler_sfm_impl_add_next_images
   : public bundler_sfm_add_next_images
 {
@@ -79,8 +72,7 @@ class bundler_sfm_impl_add_next_images
 };
 
 
-//:
-// The default implementation of the add new points stage.
+//: The default implementation of the add new points stage.
 class bundler_sfm_impl_add_new_points
   : public bundler_sfm_add_new_points
 {
@@ -99,8 +91,7 @@ class bundler_sfm_impl_add_new_points
 };
 
 
-//:
-// The default implementation of bundle adjustment.
+//: The default implementation of bundle adjustment.
 class bundler_sfm_impl_bundle_adjust
   : public bundler_sfm_bundle_adjust
 {

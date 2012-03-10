@@ -14,7 +14,7 @@
 // %% mencoder "mf://*.png" -mf type=png:fps=18 -ovc lavc -o output.avi
 //
 #include <vgl/vgl_box_3d.h>
-#include <vpgl/vpgl_perspective_camera.h>
+#include <vpgl/vpgl_camera_double_sptr.h>
 
 //smart ptr includes
 #include <vbl/vbl_ref_count.h>
@@ -25,39 +25,39 @@ class boxm2_trajectory : public vbl_ref_count
 {
  public:
 
-    //: construct camera vector from incline0, incline1, radius, bounding box and image size (ni,nj)
-    boxm2_trajectory(double incline0, double incline1, double radius, vgl_box_3d<double> bb, unsigned ni, unsigned nj) {
-      init_cameras(incline0, incline1, radius, bb, ni, nj);
-    }
-    virtual ~boxm2_trajectory() {}
+  //: construct camera vector from incline0, incline1, radius, bounding box and image size (ni,nj)
+  boxm2_trajectory(double incline0, double incline1, double radius, vgl_box_3d<double> bb, unsigned ni, unsigned nj) {
+    init_cameras(incline0, incline1, radius, bb, ni, nj);
+  }
+  virtual ~boxm2_trajectory() {}
 
-    //: number of cameras in the trajectory
-    unsigned size() const { return cams_.size(); }
+  //: number of cameras in the trajectory
+  unsigned size() const { return cams_.size(); }
 
-    //: Iterator
-    typedef vcl_vector<vpgl_camera_double_sptr>::iterator iterator;
-    iterator begin() { return cams_.begin(); }
-    iterator end()   { return cams_.end(); }
+  //: Iterator
+  typedef vcl_vector<vpgl_camera_double_sptr>::iterator iterator;
+  iterator begin() { return cams_.begin(); }
+  iterator end()   { return cams_.end(); }
 
-    //: next method
-    vpgl_camera_double_sptr next() {
-      if ( iter_ == cams_.end() ) iter_ = cams_.begin();
-      return *iter_++;
-    }
+  //: next method
+  vpgl_camera_double_sptr next() {
+    if ( iter_ == cams_.end() ) iter_ = cams_.begin();
+    return *iter_++;
+  }
 
-    //: direct access to cameras
-    vpgl_camera_double_sptr camera(unsigned int i){i %= cams_.size(); return cams_[i];}
+  //: direct access to cameras
+  vpgl_camera_double_sptr camera(unsigned int i) {i %= cams_.size(); return cams_[i];}
 
  protected:
 
-    //list of cams
-    vcl_vector<vpgl_camera_double_sptr> cams_;
+  //list of cams
+  vcl_vector<vpgl_camera_double_sptr> cams_;
 
-    //next cam
-     vcl_vector<vpgl_camera_double_sptr>::iterator iter_;
+  //next cam
+   vcl_vector<vpgl_camera_double_sptr>::iterator iter_;
 
-    //: initialize cameras
-    void init_cameras(double incline0, double incline1, double radius, vgl_box_3d<double> bb, unsigned ni, unsigned nj);
+  //: initialize cameras
+  void init_cameras(double incline0, double incline1, double radius, vgl_box_3d<double> bb, unsigned ni, unsigned nj);
 };
 
 //: Smart_Pointer typedef for boxm2_data_base

@@ -18,8 +18,6 @@
 
 //utilities
 #include <vpgl/vpgl_perspective_camera.h>
-#include <vil/vil_image_view.h>
-#include <vnl/vnl_random.h>
 
 //boxm2 includes
 #include <boxm2/boxm2_scene.h>
@@ -35,17 +33,17 @@ class boxm2_ocl_change_tableau : public boxm2_ocl_render_tableau
  public:
   boxm2_ocl_change_tableau();
   virtual ~boxm2_ocl_change_tableau() {}
-  
-  //: initialize tableau with scene_file, viewport size, initial cam,  
+
+  //: initialize tableau with scene_file, viewport size, initial cam,
   bool init_change (bocl_device_sptr device,
                     boxm2_opencl_cache_sptr opencl_cache,
                     boxm2_scene_sptr scene,
                     unsigned ni,
                     unsigned nj,
-                    vpgl_perspective_camera<double>* cam, 
+                    vpgl_perspective_camera<double>* cam,
                     vcl_vector<vcl_string>& change_imgs,
                     vcl_vector<vcl_string>& change_cams);
-          
+
   //: virtual function handles mouse and keyboard actions
   virtual bool handle( vgui_event const& e );
 
@@ -55,8 +53,8 @@ class boxm2_ocl_change_tableau : public boxm2_ocl_render_tableau
   float change_detect(int frame);
   vcl_vector<vcl_string>  cams_;
   vcl_vector<vcl_string>  imgs_;
-  int                     frame_; 
-  bool                    do_render_change_; 
+  int                     frame_;
+  bool                    do_render_change_;
   int                     n_;               //for nxn change detection
 };
 

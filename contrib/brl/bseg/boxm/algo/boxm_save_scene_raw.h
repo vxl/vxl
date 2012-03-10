@@ -20,7 +20,8 @@
 #include <boxm/basic/boxm_block_vis_graph_iterator.h>
 #include <boxm/basic/boxm_cell_vis_graph_iterator.h>
 #include <boxm/sample/algo/boxm_mog_grey_processor.h>
-#include <vpgl/vpgl_camera.h>
+
+#include <bsta/bsta_histogram.h>
 #include <vbl/vbl_array_3d.txx>
 #include <vsl/vsl_binary_io.h>
 #include <vpl/vpl.h>
@@ -30,8 +31,6 @@
 #include <vcl_iostream.h>
 #include <vcl_sstream.h>
 #include <vcl_cassert.h>
-
-#include <bsta/bsta_histogram.h>
 
 template <class T_loc, class T_data>
 void boxm_save_scene_raw(boxm_scene<boct_tree<T_loc, T_data > > &scene,
@@ -180,7 +179,7 @@ void boxm_save_scene_raw(boxm_scene<boct_tree<T_loc, T_data > > &scene,
     iter++;
   }
   scene.unload_active_blocks();
-  
+
   assert(ncells > 0);
 
   // combine the blocks

@@ -14,7 +14,6 @@
 #include <vpgl/vpgl_camera.h>
 #include <vpgl/vpgl_perspective_camera.h>
 #include <vpgl/vpgl_affine_camera.h>
-#include <vpgl/vpgl_rational_camera.h>
 #include <vpgl/algo/vpgl_backproject.h>
 #include <vpgl/algo/vpgl_ray.h>
 

@@ -11,7 +11,6 @@
 #include <boxm/basic/boxm_cell_vis_graph_iterator.h>
 #include <boxm/sample/algo/boxm_mog_grey_processor.h>
 #include <boxm/util/boxm_cell_data_traits.h>
-#include <vpgl/vpgl_camera.h>
 
 #include <bsta/bsta_attributes.h>
 

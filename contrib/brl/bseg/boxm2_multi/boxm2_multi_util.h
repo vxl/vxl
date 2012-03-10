@@ -11,8 +11,6 @@
 #include <bocl/bocl_cl.h>
 #include <bocl/bocl_mem.h>
 #include <bocl/bocl_device.h>
-#include <vbl/vbl_ref_count.h>
-#include <vbl/vbl_smart_ptr.h>
 
 //: boxm2_multi_util - example realization of abstract cache class
 class boxm2_multi_util
@@ -28,11 +26,12 @@ class boxm2_multi_util
 
 //: Pair class, to help sorting by distance
 template<class T>
-class boxm2_dist_pair {
+class boxm2_dist_pair
+{
   public:
-    boxm2_dist_pair(double dist, T dat):dist_(dist), dat_(dat) {}
     double dist_;
     T dat_;
+    boxm2_dist_pair(double dist, T dat) : dist_(dist), dat_(dat) {}
     inline bool operator < (boxm2_dist_pair const& v) const {
       return dist_ < v.dist_;
     }

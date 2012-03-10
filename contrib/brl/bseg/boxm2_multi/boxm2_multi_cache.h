@@ -13,17 +13,16 @@
 #include <bocl/bocl_cl.h>
 #include <bocl/bocl_mem.h>
 #include <bocl/bocl_device.h>
-#include <vbl/vbl_ref_count.h>
-#include <vbl/vbl_smart_ptr.h>
-#include <vcl_vector.h>
-#include <vcl_iosfwd.h>
-#include <vcl_algorithm.h>
 
 //vgl includes
 #include <vgl/vgl_box_2d.h>
-#include <vgl/vgl_intersection.h>
-#include <vgl/vgl_distance.h>
+#include <vgl/vgl_point_3d.h>
 
+// other includes
+#include <vbl/vbl_ref_count.h>
+#include <vcl_vector.h>
+#include <vcl_iosfwd.h>
+#include <vcl_algorithm.h>
 
 //: example realization of abstract cache class; holds an opencl cache for each device
 class boxm2_multi_cache: public vbl_ref_count
@@ -56,13 +55,13 @@ class boxm2_multi_cache: public vbl_ref_count
     vcl_vector<boxm2_opencl_cache*> get_vis_sub_scenes(vpgl_camera_double_sptr cam);
 
   private:
-    boxm2_scene_sptr                    scene_;
+    boxm2_scene_sptr                     scene_;
 
     //: scene this cache is operating on
-    vcl_vector<boxm2_scene_sptr>        sub_scenes_;
+    vcl_vector<boxm2_scene_sptr>         sub_scenes_;
 
     //: list of regular opencl caches
-    vcl_vector<boxm2_opencl_cache*>     ocl_caches_;
+    vcl_vector<boxm2_opencl_cache*>      ocl_caches_;
 
     //: list of block groups
     vcl_vector<boxm2_multi_cache_group*> groups_;

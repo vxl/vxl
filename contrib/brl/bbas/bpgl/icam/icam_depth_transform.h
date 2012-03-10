@@ -39,12 +39,10 @@
 //   None
 // \endverbatim
 
-#include <vcl_vector.h>
 #include <vsl/vsl_binary_io.h>
 #include <vgl/algo/vgl_rotation_3d.h>
 #include <vgl/vgl_vector_3d.h>
 #include <vgl/vgl_point_2d.h>
-#include <vpgl/vpgl_perspective_camera.h>
 #include <vnl/vnl_matrix_fixed.h>
 #include <vnl/vnl_vector.h>
 #include <vil/vil_image_view.h>

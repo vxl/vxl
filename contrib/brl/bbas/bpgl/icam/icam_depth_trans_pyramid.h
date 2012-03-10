@@ -11,16 +11,17 @@
 //  Modifications
 //   None
 // \endverbatim
-#include <vcl_vector.h>
-#include <vsl/vsl_binary_io.h>
+
+#include <icam/icam_depth_transform.h>
 #include <vgl/algo/vgl_rotation_3d.h>
 #include <vgl/vgl_vector_3d.h>
-#include <vpgl/vpgl_perspective_camera.h>
 #include <vnl/vnl_matrix_fixed.h>
 #include <vnl/vnl_vector.h>
 #include <vil/vil_image_view.h>
 #include <vil/vil_pyramid_image_view.h>
-#include <icam/icam_depth_transform.h>
+#include <vsl/vsl_binary_io.h>
+#include <vcl_vector.h>
+
 class icam_depth_trans_pyramid
 {
  public:

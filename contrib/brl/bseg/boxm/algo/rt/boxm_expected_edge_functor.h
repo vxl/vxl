@@ -6,13 +6,10 @@
 #include <boxm/algo/rt/boxm_render_expected_edge_tangent_image_functor.h>
 
 #include <vpgl/vpgl_camera_double_sptr.h>
-#include <vpgl/vpgl_perspective_camera.h>
 #include <vil/vil_image_view.h>
 #include <vil/vil_transform.h>
 
 #include <brip/brip_vil_float_ops.h>
-
-#include <vcl_vector.h>
 
 //: Functor class to compute (1-x)
 // assumes that max range value is "1"

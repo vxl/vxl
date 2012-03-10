@@ -11,7 +11,6 @@
 
 #include <bgui/bgui_picker_tableau.h>
 
-#include <vpgl/vpgl_rational_camera.h>
 #include <vul/vul_timer.h>
 
 class bwm_tableau_rat_cam : public bwm_tableau_cam
@@ -27,7 +26,7 @@ class bwm_tableau_rat_cam : public bwm_tableau_cam
 
   void set_observer(bwm_observer_rat_cam* observer) { my_observer_ = observer; }
 
-  virtual ~bwm_tableau_rat_cam(){}
+  virtual ~bwm_tableau_rat_cam() {}
 
   virtual vcl_string type_name() const { return "bwm_tableau_rat_cam"; }
 

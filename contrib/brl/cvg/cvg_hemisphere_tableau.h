@@ -15,7 +15,6 @@
 #include <vgui/vgui_image_tableau.h>
 
 //utilities
-#include <vpgl/vpgl_perspective_camera.h>
 #include <vil/vil_image_view_base.h>
 #include <vil/vil_image_view.h>
 #include <vil/vil_pyramid_image_view.h>

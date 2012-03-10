@@ -6,7 +6,7 @@
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/ocl/boxm2_opencl_cache.h>
 #include <boxm2/ocl/boxm2_ocl_util.h>
-#include <vpgl/vpgl_perspective_camera.h>
+#include <vpgl/vpgl_camera_double_sptr.h>
 #include <bocl/bocl_device.h>
 #include <bocl/bocl_kernel.h>
 #include <bocl/bocl_manager.h>
@@ -65,21 +65,20 @@ class boxm2_multi_update_helper
 //: patch helper
 class boxm2_multi_image_patch
 {
-  public: 
-    boxm2_multi_image_patch(boxm2_block_id id, 
-                            float* img, 
+  public:
+    boxm2_multi_image_patch(boxm2_block_id id,
+                            float* img,
                             vcl_size_t ni, vcl_size_t nj,
-                            vcl_size_t oi, vcl_size_t oj) 
-      : id_(id), img_(img), 
-        ni_(ni), nj_(nj), 
+                            vcl_size_t oi, vcl_size_t oj)
+      : id_(id), img_(img),
+        ni_(ni), nj_(nj),
         oi_(oi), oj_(oj) {}
 
   private:
     vcl_size_t ni_, nj_, oi_, oj_;
     float* img_;
-    boxm2_block_id id_; 
+    boxm2_block_id id_;
 };
-
 
 
 #endif

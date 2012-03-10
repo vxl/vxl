@@ -7,17 +7,15 @@
 #include "bwm_observer_cam.h"
 #include "bwm_tableau_img.h"
 
-#include <vcl_string.h>
-
 #include <vgui/vgui_menu.h>
 #include <vgui/vgui_event.h>
 #include <vgui/vgui_command.h>
 
 #include <bgui/bgui_picker_tableau.h>
 
-#include <vpgl/vpgl_camera.h>
-
 #include <vsol/vsol_point_3d_sptr.h>
+
+#include <vcl_string.h>
 
 class bwm_tableau_cam : public bwm_tableau_img
 {
@@ -26,7 +24,7 @@ class bwm_tableau_cam : public bwm_tableau_img
 
   //: destructor
   // Tableaux are responsible for deleting their observers
-  virtual ~bwm_tableau_cam(){ delete my_observer_; }
+  virtual ~bwm_tableau_cam() { delete my_observer_; }
 
   virtual vcl_string type_name() const { return "bwm_tableau_cam"; }
 

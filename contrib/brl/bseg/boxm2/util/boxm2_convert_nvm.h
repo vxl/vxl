@@ -2,7 +2,6 @@
 #define boxm2_convert_nvm_h
 //:
 // \file
-#include <vpgl/vpgl_proj_camera.h>
 #include <vpgl/vpgl_perspective_camera.h>
 
 #include <bwm/bwm_observer_cam.h>
@@ -11,6 +10,8 @@
 #include <bwm/video/bwm_video_corr.h>
 #include <bwm/video/bwm_video_site_io.h>
 #include <bwm/bwm_site_mgr.h>
+#include <vgl/vgl_point_2d.h>
+#include <vgl/vgl_box_3d.h>
 #include <vcl_vector.h>
 #include <vcl_set.h>
 #include <vcl_cassert.h>
@@ -18,14 +19,7 @@
 #include <vcl_fstream.h>
 #include <vcl_string.h>
 #include <vcl_algorithm.h>
-#include <vul/vul_file.h>
-#include <vgl/vgl_distance.h>
-#include <vgl/vgl_point_3d.h>
-#include <vgl/vgl_vector_3d.h>
-#include <vgl/vgl_box_3d.h>
-#include <vidl/vidl_image_list_istream.h>
-#include <vidl/vidl_convert.h>
-#include <vcl_cstdlib.h> // for rand()
+//#include <vcl_cstdlib.h>
 
 typedef vpgl_perspective_camera<double> CamType;
 
@@ -55,7 +49,7 @@ class boxm2_convert_nvm
     vcl_map<unsigned,double>                      view_error_map_;
     vcl_map<unsigned,unsigned>                    view_count_map_;
     vcl_vector<CamType>                           cams_;
-    vcl_vector<vcl_string>                        names_; 
+    vcl_vector<vcl_string>                        names_;
     vcl_set<int>                                  bad_cams_;
     vgl_box_3d<double>                            bbox_;
     vcl_string                                    img_dir_;

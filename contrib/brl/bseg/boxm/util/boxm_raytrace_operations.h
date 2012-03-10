@@ -3,18 +3,16 @@
 //:
 // \file
 
-#include <vnl/algo/vnl_determinant.h>
-
-#include <vgl/vgl_triangle_scan_iterator.h>
-
-#include <boct/boct_tree.h>
-#include <boxm/boxm_apm_traits.h>
-#include <vil/vil_image_view.h>
-#include <vpgl/vpgl_perspective_camera.h>
-
 #include "boxm_triangle_interpolation_iterator.h"
 #include "boxm_triangle_scan_iterator.h"
-#ifdef DEBUG
+#include <boxm/boxm_apm_traits.h>
+
+#include <vnl/algo/vnl_determinant.h>
+#include <vgl/vgl_triangle_scan_iterator.h>
+#include <boct/boct_tree.h>
+#include <vil/vil_image_view.h>
+
+#if 0
 #include <vcl_iostream.h>
 #endif
 
@@ -30,7 +28,7 @@ bool tri_interpolated_weighted_sum(tri_int_it_t &tri_it, vil_image_view<T> const
   tri_it.reset();
   while (tri_it.next()) {
     int y = tri_it.scany();
-    if (y < 0){
+    if (y < 0) {
       // not inside of image bounds yet. go to next scanline.
       continue;
     }
@@ -52,7 +50,8 @@ bool tri_interpolated_weighted_sum(tri_int_it_t &tri_it, vil_image_view<T> const
         val_sum -= values(x,yu) * point_dist;
         weight_sum -= point_dist;
       }
-    } else {
+    }
+    else {
       for (unsigned int x = startx; x < endx; ++x) {
         float point_dist = tri_it.value_at(x);
         val_sum += values(x,yu) * point_dist;
@@ -70,7 +69,7 @@ bool tri_interpolated_weighted_sum(tri_it_t &tri_it, vil_image_view<T1> const& w
   tri_it.reset();
   while (tri_it.next()) {
     int y = tri_it.scany();
-    if (y < 0){
+    if (y < 0) {
       // not inside of image bounds yet. go to next scanline.
       continue;
     }
@@ -92,7 +91,8 @@ bool tri_interpolated_weighted_sum(tri_it_t &tri_it, vil_image_view<T1> const& w
         val_sum -= weight * values(x,yu);
         weight_sum -= weight;
       }
-    }else {
+    }
+    else {
       for (unsigned int x = startx; x < endx; ++x) {
         T1 weight = tri_it.value_at(x)*weights(x,yu);
         val_sum += weight * values(x,yu);
@@ -110,7 +110,7 @@ void tri_interpolate_values(tri_it_t &tri_it, vil_image_view<T> &img, bool subtr
   tri_it.reset();
   while (tri_it.next()) {
     int y = tri_it.scany();
-    if (y < 0){
+    if (y < 0) {
       // not inside of image bounds yet. go to next scanline.
       continue;
     }
@@ -162,7 +162,7 @@ void tri_interpolate_values(tri_it_T &tri_it, double* xvals, double* yvals, T* v
   tri_it.reset();
   while (tri_it.next()) {
     int y = tri_it.scany();
-    if (y < 0){
+    if (y < 0) {
       // not inside of image bounds yet. go to next scanline.
       continue;
     }
@@ -180,7 +180,7 @@ void tri_interpolate_values(tri_it_T &tri_it, double* xvals, double* yvals, T* v
 
     for (unsigned int x = startx; x < endx; ++x) {
       T interp_val = (T)(s0*x + s1*y + s2);
-      if ( (min_img(x,yu) == 0) || (min_img(x,yu) > interp_val) ){
+      if ( (min_img(x,yu) == 0) || (min_img(x,yu) > interp_val) ) {
         min_img(x,yu) = interp_val;
       }
       if (max_img(x,yu) < interp_val) {
@@ -212,7 +212,7 @@ void tri_interpolate_min_max(tri_it_T &tri_it, double* xvals, double* yvals, T* 
   tri_it.reset();
   while (tri_it.next()) {
     int y = tri_it.scany();
-    if (y < 0){
+    if (y < 0) {
       // not inside of image bounds yet. go to next scanline.
       continue;
     }
@@ -230,7 +230,7 @@ void tri_interpolate_min_max(tri_it_T &tri_it, double* xvals, double* yvals, T* 
 
     for (unsigned int x = startx; x < endx; ++x) {
       T interp_val = (T)(s0*x + s1*y + s2);
-      if ( (min_img(x,yu) == 0) || (min_img(x,yu) > interp_val) ){
+      if ( (min_img(x,yu) == 0) || (min_img(x,yu) > interp_val) ) {
         min_img(x,yu) = interp_val;
       }
       if (max_img(x,yu) < interp_val) {
@@ -247,7 +247,7 @@ void tri_weighted_sum(vgl_triangle_scan_iterator<double> &tri_it, vil_image_view
   tri_it.reset();
   while (tri_it.next()) {
     int y = tri_it.scany();
-    if (y < 0){
+    if (y < 0) {
       // not inside of image bounds yet. go to next scanline.
       continue;
     }
@@ -277,7 +277,7 @@ void tri_fill_value(tri_it_T &tri_it, vil_image_view<T> &img, T val)
   tri_it.reset();
   while (tri_it.next()) {
     int y = tri_it.scany();
-    if (y < 0){
+    if (y < 0) {
       // not inside of image bounds yet. go to next scanline.
       continue;
     }
@@ -308,7 +308,7 @@ void tri_fill_value_aa(boxm_triangle_scan_iterator_aa &tri_it, vil_image_view<T>
   while (tri_it.next())
   {
     int y = tri_it.scany();
-    if (y < 0){
+    if (y < 0) {
       // not inside of image bounds yet. go to next scanline.
       continue;
     }

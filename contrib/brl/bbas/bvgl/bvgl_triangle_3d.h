@@ -7,8 +7,7 @@
 // \author Jan 30, 2012 Andrew Miller
 //
 
-#include <vgl/vgl_fwd.h> // forward declare various vgl classes
-#include <vgl/vgl_sphere_3d.h>
+#include <vgl/vgl_point_3d.h>
 #include <vcl_vector.h>
 #include <vcl_iosfwd.h>
 
@@ -27,6 +26,7 @@ class bvgl_triangle_3d
 
   //: access points
   vgl_point_3d<Type>        operator[](int index) { return points_[index]; }
+  //: access points
   vgl_point_3d<Type> const& operator[](int index) const { return points_[index]; }
 
   // ----- IO --------

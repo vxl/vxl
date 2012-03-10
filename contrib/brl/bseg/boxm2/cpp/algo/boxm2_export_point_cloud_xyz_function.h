@@ -4,16 +4,12 @@
 // \file
 
 #include <boxm2/boxm2_data_traits.h>
-#include <boct/boct_bit_tree.h>
-#include <vnl/vnl_vector_fixed.h>
-#include <vcl_iostream.h>
-#include <boxm2/io/boxm2_cache.h>
-#include <vgl/vgl_point_3d.h>
+#include <boxm2/boxm2_block.h>
+#include <boxm2/boxm2_data.h>
 
 class boxm2_export_point_cloud_xyz_function
 {
  public:
-  //: "default" constructor
   static void exportPointCloudXYZ(boxm2_block_metadata data, boxm2_block* blk,
                                   boxm2_data_base* alphas,
                                   boxm2_data_base* points, boxm2_data_base* normals, vcl_ofstream& file,

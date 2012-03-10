@@ -15,8 +15,6 @@
 // \endverbatim
 
 #include <bprb/bprb_func_process.h>
-#include <vpgl/vpgl_camera.h>
-#include <vpgl/file_formats/vpgl_geo_camera.h>
 #include <vcl_string.h>
 
 //: global variables

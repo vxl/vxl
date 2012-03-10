@@ -17,9 +17,8 @@
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_vector_3d.h>
 #include <vgl/vgl_triangle_scan_iterator.h>
-#include <vpgl/vpgl_perspective_camera.h>
+#include <vpgl/vpgl_proj_camera.h>
 #include <vcl_cassert.h>
-
 
 //: Render a triangle defined by its vertices.
 // For each 3d point, X and Y map to image coordinates and Z maps to depth.

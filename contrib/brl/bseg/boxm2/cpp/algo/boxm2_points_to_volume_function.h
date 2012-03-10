@@ -6,14 +6,14 @@
 #include <boxm2/boxm2_data_traits.h>
 #include <boxm2/cpp/algo/boxm2_cast_ray_function.h>
 #include <boxm2/cpp/algo/boxm2_mog3_grey_processor.h>
-#include <boct/boct_bit_tree.h>
-#include <vnl/vnl_vector_fixed.h>
 #include <boxm2/io/boxm2_cache.h>
-#include <vgl/vgl_point_3d.h>
+#include <boct/boct_bit_tree.h>
 #include <bbas/imesh/imesh_mesh.h>
 #include <imesh/algo/imesh_kd_tree.h>
 #include <bvgl/bvgl_triangle_3d.h>
-#include <vcl_iostream.h>
+#include <vnl/vnl_vector_fixed.h>
+#include <vgl/vgl_box_3d.h>
+#include <vcl_vector.h>
 #include <vcl_cmath.h>
 
 class boxm2_points_to_volume
@@ -75,12 +75,12 @@ class boxm2_points_to_volume
   //quick boolean intersection test
   inline bool bbox_intersect(vgl_box_3d<double> const& b1,
                              vgl_box_3d<double> const& b2) {
-    return !( b1.min_x() > b2.max_x() ||
-              b2.min_x() > b1.max_x() ||
-              b1.min_y() > b2.max_y() ||
-              b2.min_y() > b1.max_y() ||
-              b1.min_z() > b2.max_z() ||
-              b2.min_z() > b1.max_z() ) ;
+    return b1.min_x() <= b2.max_x() &&
+           b2.min_x() <= b1.max_x() &&
+           b1.min_y() <= b2.max_y() &&
+           b2.min_y() <= b1.max_y() &&
+           b1.min_z() <= b2.max_z() &&
+           b2.min_z() <= b1.max_z();
   }
 
   //inclusive clamp

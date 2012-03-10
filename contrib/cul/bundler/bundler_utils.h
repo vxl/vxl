@@ -3,12 +3,6 @@
 //:
 // \file
 
-#include <vcl_vector.h>
-
-#include <vgl/vgl_point_2d.h>
-#include <vnl/vnl_double_3x3.h>
-
-#include <vpgl/vpgl_perspective_camera.h>
 #include <bundler/bundler_inters.h>
 
 // Generally useful function used for RANSAC.
@@ -32,6 +26,5 @@ void bundler_utils_fill_persp_camera_ransac(
     const bundler_inters_image_sptr &image,
     int ransac_rounds,
     double inlier_threshold);
-
 
 #endif // BUNDLER_UTILS_H

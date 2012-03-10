@@ -2,18 +2,17 @@
 #define bwm_site_mgr_h_
 //:
 // \file
-#include "bwm_tableau_factory.h"
-#include "io/bwm_io_config_parser.h"
-#include "process/bwm_site_process.h"
+#include <bwm/bwm_tableau_factory.h>
+#include <bwm/io/bwm_io_config_parser.h>
+#include <bwm/process/bwm_site_process.h>
 
-#include <vcl_map.h>
-#include <vcl_string.h>
-#include <vcl_vector.h>
 #include <vgui/vgui_dialog.h>
 #include <vgui/vgui_dialog_extensions.h>
 
-#include <vpgl/vpgl_perspective_camera.h>
 #include <vul/vul_timer.h>
+#include <vcl_map.h>
+#include <vcl_string.h>
+#include <vcl_vector.h>
 
 class bwm_site_mgr
 {
@@ -41,8 +40,8 @@ class bwm_site_mgr
   //: compute 3-d parameters, site bounding box and GSD
   void compute_3d_world_params();
   //:site info
-  vcl_string site_name(){ return site_name_;}
-  vcl_string site_dir(){ return site_dir_;}
+  vcl_string site_name() { return site_name_;}
+  vcl_string site_dir() { return site_dir_;}
  private:
   bwm_site_mgr();
   static bwm_site_mgr* instance_;

@@ -8,7 +8,7 @@
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/ocl/boxm2_opencl_cache.h>
 #include <vil/vil_image_view.h>
-#include <vpgl/vpgl_perspective_camera.h>
+#include <vpgl/vpgl_camera_double_sptr.h>
 #include <bocl/bocl_device.h>
 #include <bocl/bocl_kernel.h>
 #include <boxm2_multi/algo/boxm2_multi_update.h>
@@ -39,7 +39,8 @@ class boxm2_multi_pre_vis_inf
                                         boxm2_scene_sptr    scene,
                                         boxm2_opencl_cache* opencl_cache,
                                         cl_command_queue&   queue,
-                                        vcl_string          data_type,                                 bocl_kernel*        kernel,
+                                        vcl_string          data_type,
+                                        bocl_kernel*        kernel,
                                         bocl_mem_sptr&      vis_image,
                                         bocl_mem_sptr&      pre_image,
                                         bocl_mem_sptr&      img_dim,
@@ -51,15 +52,15 @@ class boxm2_multi_pre_vis_inf
                                         vcl_size_t*         gThreads);
 
     //reduction step (proc norm image)
-    static float pre_vis_reduce(  boxm2_multi_cache&    cache,
-                                  vcl_vector<float*>&   pre_imgs,
-                                  vcl_vector<float*>&   vis_imgs,
-                                  vcl_vector<boxm2_opencl_cache*>& ocl_caches,
-                                  vcl_map<bocl_device*, float*>& pre_map,
-                                  vcl_map<bocl_device*, float*>& vis_map,
-                                  int ni,
-                                  int nj,
-                                  float* norm_img   );
+    static float pre_vis_reduce( boxm2_multi_cache&    cache,
+                                 vcl_vector<float*>&   pre_imgs,
+                                 vcl_vector<float*>&   vis_imgs,
+                                 vcl_vector<boxm2_opencl_cache*>& ocl_caches,
+                                 vcl_map<bocl_device*, float*>& pre_map,
+                                 vcl_map<bocl_device*, float*>& vis_map,
+                                 int ni,
+                                 int nj,
+                                 float* norm_img   );
 
 
     //map keeps track of all kernels compiled and cached
@@ -67,7 +68,7 @@ class boxm2_multi_pre_vis_inf
 
     //compile kernels and cache
     static vcl_vector<bocl_kernel*>& get_kernels(bocl_device_sptr device, vcl_string opts);
-    
+
     //debug write imgs to disk method
     static void write_imgs_out(vcl_map<bocl_device*, float*>& img_map, int ni, int nj,vcl_string name);
 

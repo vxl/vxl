@@ -22,8 +22,7 @@
 #include "bvxm_world_params.h"
 
 #include <vpgl/vpgl_camera_double_sptr.h>
-#include <vpgl/vpgl_rational_camera.h>
-#include <vpgl/vpgl_perspective_camera.h>
+#include <vpgl/vpgl_lvcs_sptr.h>
 #include <vgl/algo/vgl_h_matrix_2d.h>
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_box_3d.h>

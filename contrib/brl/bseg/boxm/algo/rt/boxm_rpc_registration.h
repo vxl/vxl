@@ -21,13 +21,13 @@
 
 #include <vpgl/vpgl_rational_camera.h>
 #include <vpgl/vpgl_local_rational_camera.h>
+#include <vpgl/algo/vpgl_backproject.h>
+#include <vpgl/vpgl_lvcs.h>
 
 #include <brip/brip_vil_float_ops.h>
 
 #include <boxm/boxm_scene.h>
 #include <boxm/util/boxm_utils.h>
-#include <vpgl/algo/vpgl_backproject.h>
-#include <vpgl/vpgl_lvcs_sptr.h>
 
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_point_3d.h>

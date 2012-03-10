@@ -3,29 +3,28 @@
 //:
 // \file
 
-#include "bwm_observer.h"
-#include "bwm_observer_img.h"
-#include "bwm_observable_sptr.h"
-#include "algo/bwm_soview2D_cross.h"
-#include "algo/bwm_soview2D_vertex.h"
-
-#include <vcl_vector.h>
-#include <vcl_utility.h>
+#include <bwm/bwm_observer.h>
+#include <bwm/bwm_observer_img.h>
+#include <bwm/bwm_observable_sptr.h>
+#include <bwm/algo/bwm_soview2D_cross.h>
+#include <bwm/algo/bwm_soview2D_vertex.h>
 
 #include <vgui/vgui_easy2D_tableau.h>
 #include <vgui/vgui_style.h>
 #include <bgui/bgui_image_tableau.h>
-
-#include <vgl/vgl_point_2d.h>
-#include <vgl/vgl_point_3d.h>
-#include <vgl/vgl_vector_3d.h>
 
 #include <vsol/vsol_point_3d_sptr.h>
 #include <vsol/vsol_point_3d.h>
 #include <vsol/vsol_polygon_2d_sptr.h>
 #include <vsol/vsol_polygon_3d_sptr.h>
 
-#include <vpgl/vpgl_camera.h>
+#include <vgl/vgl_point_2d.h>
+#include <vgl/vgl_point_3d.h>
+#include <vgl/vgl_vector_3d.h>
+
+#include <vcl_vector.h>
+#include <vcl_utility.h>
+#include <vcl_string.h>
 
 class bwm_observer_vgui : public bwm_observer_img, public bwm_observer
 {
@@ -83,7 +82,7 @@ class bwm_observer_vgui : public bwm_observer_img, public bwm_observer
   virtual void backproj_poly(vsol_polygon_2d_sptr poly2d,
                              vsol_polygon_3d_sptr& poly3d) = 0;
 
-  //: move the correspondence location and replace the cross soview. 
+  //: move the correspondence location and replace the cross soview.
   void set_corr(float x, float y);
 
   //: the current location of the correspondence point
@@ -103,6 +102,7 @@ class bwm_observer_vgui : public bwm_observer_img, public bwm_observer
 
   //: find the object corresponding to the soview id.
   bwm_observable_sptr find_object(unsigned soview2d_id, unsigned &face_id);
+
  protected:
   //allows children to take some action if a correspondence is set
   virtual void correspondence_action() {}

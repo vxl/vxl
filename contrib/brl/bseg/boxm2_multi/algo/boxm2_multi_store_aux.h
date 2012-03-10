@@ -7,11 +7,11 @@
 #include <boxm2_multi_cache.h>
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/ocl/boxm2_opencl_cache.h>
-#include <vil/vil_image_view.h>
-#include <vpgl/vpgl_perspective_camera.h>
+#include <boxm2_multi/algo/boxm2_multi_update.h>
+#include <vpgl/vpgl_camera_double_sptr.h>
 #include <bocl/bocl_device.h>
 #include <bocl/bocl_kernel.h>
-#include <boxm2_multi/algo/boxm2_multi_update.h>
+#include <vil/vil_image_view.h>
 
 
 //: boxm2_multi_cache - example realization of abstract cache class
@@ -22,15 +22,15 @@ class boxm2_multi_store_aux
     //three separate sub procedures (three separate map reduce tasks)
     static float store_aux( boxm2_multi_cache& cache,
                             vil_image_view<float>& img,
-                            vpgl_camera_double_sptr cam, 
+                            vpgl_camera_double_sptr cam,
                             boxm2_multi_update_helper& helper);
 
   private:
 
     // Reads aux memory from GPU to CPU ram
-    static void read_aux(const boxm2_block_id& id, 
-                        boxm2_opencl_cache* opencl_cache, 
-                        cl_command_queue&   queue);
+    static void read_aux(const boxm2_block_id& id,
+                         boxm2_opencl_cache* opencl_cache,
+                         cl_command_queue&   queue);
 
 
     static void store_aux_per_block(const boxm2_block_id& id,

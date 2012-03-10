@@ -1,8 +1,6 @@
 #ifndef bwm_algo_t_
 #define bwm_algo_t_
 
-#include <vcl_vector.h>
-
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_vector_3d.h>
 #include <vgl/vgl_homg_point_2d.h>
@@ -12,10 +10,12 @@
 #include <vsol/vsol_polygon_3d_sptr.h>
 #include <vsol/vsol_polyline_2d_sptr.h>
 
-#include <vpgl/vpgl_proj_camera.h>
 #include <vpgl/vpgl_rational_camera.h>
 
 #include <vil/vil_image_resource_sptr.h>
+
+#include <vcl_vector.h>
+#include <vcl_list.h>
 
 class bwm_algo
 {
@@ -50,7 +50,7 @@ class bwm_algo
   static vpgl_rational_camera<double>* extract_nitf_camera(vcl_string img_path);
 
   static bool fit_circle(const vcl_list<vgl_point_2d<double> > &points,
-    double &radius, vgl_point_2d<double> &center);
+                         double &radius, vgl_point_2d<double> &center);
 };
 
 #endif

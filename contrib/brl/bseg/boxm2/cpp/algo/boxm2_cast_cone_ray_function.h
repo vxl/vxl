@@ -11,8 +11,6 @@
 
 #include <bvgl/bvgl_volume_of_intersection.h>
 
-#include <vcl_cassert.h>
-#include <vcl_iostream.h>
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/boxm2_block.h>
 #include <boxm2/boxm2_data.h>
@@ -20,10 +18,11 @@
 #include <boct/boct_bit_tree.h>
 #include <vcl_algorithm.h>
 #include <vcl_list.h>
+#include <vcl_iostream.h>
 
 // camera includes
-#include <vpgl/vpgl_generic_camera.h>
-#include <bbas/vsph/vsph_camera_bounds.h>
+#include <vpgl/vpgl_perspective_camera.h>
+#include <vsph/vsph_camera_bounds.h>
 
 #define MIN_T         1.0
 #define UNIT_SPHERE_RADIUS 0.620350490899400016668006812 // = 1/vcl_cbrt(vnl_math::pi*4/3);

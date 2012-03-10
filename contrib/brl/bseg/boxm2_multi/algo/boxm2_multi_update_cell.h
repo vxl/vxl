@@ -7,11 +7,11 @@
 #include <boxm2_multi_cache.h>
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/ocl/boxm2_opencl_cache.h>
-#include <vil/vil_image_view.h>
-#include <vpgl/vpgl_perspective_camera.h>
+#include <boxm2_multi/algo/boxm2_multi_update.h>
+#include <vpgl/vpgl_camera_double_sptr.h>
 #include <bocl/bocl_device.h>
 #include <bocl/bocl_kernel.h>
-#include <boxm2_multi/algo/boxm2_multi_update.h>
+#include <vil/vil_image_view.h>
 
 //: boxm2_multi_cache - example realization of abstract cache class
 class boxm2_multi_update_cell
@@ -25,7 +25,7 @@ class boxm2_multi_update_cell
     //                          vcl_map<bocl_device*, float*>& pre_map,
     //                          float*                         norm_image,
     //                          boxm2_multi_update_helper& helper);
-    static float update_cells(boxm2_multi_cache& cache, 
+    static float update_cells(boxm2_multi_cache& cache,
                               const vil_image_view<float>& img,
                               vpgl_camera_double_sptr cam,
                               float* norm_image,
@@ -53,8 +53,6 @@ class boxm2_multi_update_cell
     static float calc_beta_reduce( boxm2_multi_cache& mcache,
                                    vpgl_camera_double_sptr cam,
                                    boxm2_multi_update_helper& helper);
-
-
 
     //map keeps track of all kernels compiled and cached
     static vcl_map<vcl_string, vcl_vector<bocl_kernel*> > kernels_;

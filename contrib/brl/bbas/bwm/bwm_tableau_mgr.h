@@ -9,21 +9,17 @@
 #endif // _MSC_VER > 1000
 #endif // _MSC_VER
 
-#include "bwm_tableau_sptr.h"
-#include "bwm_tableau_cam.h"
-#include "bwm_command_sptr.h"
-#include "bwm_corr_sptr.h"
-#include "io/bwm_io_config_parser.h"
-#include "process/bwm_site_process.h"
+#include <bwm/bwm_tableau_sptr.h>
+#include <bwm/bwm_tableau_cam.h>
+#include <bwm/bwm_command_sptr.h>
+#include <bwm/bwm_corr_sptr.h>
+#include <bwm/io/bwm_io_config_parser.h>
+#include <bwm/process/bwm_site_process.h>
 
 #include <vgui/vgui_grid_tableau.h>
 #include <vgui/vgui.h>
 #include <vgui/vgui_dialog.h>
 #include <vgui/vgui_dialog_extensions.h>
-
-#include <vpgl/vpgl_proj_camera.h>
-#include <vpgl/vpgl_rational_camera.h>
-class bwm_observer_video;
 
 class bwm_tableau_mgr
 {
@@ -51,7 +47,7 @@ class bwm_tableau_mgr
 
   void exit();
 
-  void display_image_path(bool display){display_image_path_=display;}
+  void display_image_path(bool display) {display_image_path_=display;}
 
   void add_corresp(vcl_string tab_name, bwm_corr_sptr corr, double X, double Y);
 

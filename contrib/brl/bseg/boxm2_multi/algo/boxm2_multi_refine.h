@@ -7,11 +7,8 @@
 #include <boxm2_multi_cache.h>
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/ocl/boxm2_opencl_cache.h>
-#include <vil/vil_image_view.h>
-#include <vpgl/vpgl_perspective_camera.h>
 #include <bocl/bocl_device.h>
 #include <bocl/bocl_kernel.h>
-#include <brdb/brdb_value.h>
 
 //: boxm2_multi_cache - example realization of abstract cache class
 class boxm2_multi_refine
@@ -25,33 +22,33 @@ class boxm2_multi_refine
 
   private:
     static float refine_trees_per_block(const boxm2_block_id& id,
-                                boxm2_opencl_cache* ocl_cache,
-                                cl_command_queue& queue, 
-                                int numTrees,
-                                BlockMemMap&  sizebuffs,
-                                BlockMemMap&  blockCopies,
-                                bocl_mem_sptr& prob_thresh,
-                                bocl_mem_sptr& lookup,
-                                bocl_mem_sptr& cl_output );
+                                        boxm2_opencl_cache* ocl_cache,
+                                        cl_command_queue& queue,
+                                        int numTrees,
+                                        BlockMemMap&  sizebuffs,
+                                        BlockMemMap&  blockCopies,
+                                        bocl_mem_sptr& prob_thresh,
+                                        bocl_mem_sptr& lookup,
+                                        bocl_mem_sptr& cl_output );
 
     //: refines trees in block
     static float swap_data_per_block(boxm2_scene_sptr scene,
-                                   const boxm2_block_id& id,
-                                   int numTrees,
-                                   boxm2_opencl_cache* ocl_cache,
-                                   cl_command_queue& queue,
-                                   BlockMemMap& sizebuffs,
-                                   BlockMemMap& blockCopies,
-                                   BlockMemMap& newDatas,
-                                   BlockIntMap& newDataSizes,
-                                   bocl_mem_sptr cl_output,
-                                   bocl_mem_sptr lookup,
-                                   vcl_string data_type,
-                                   int  apptypesize,
-                                   bocl_mem_sptr prob_thresh );
+                                     const boxm2_block_id& id,
+                                     int numTrees,
+                                     boxm2_opencl_cache* ocl_cache,
+                                     cl_command_queue& queue,
+                                     BlockMemMap& sizebuffs,
+                                     BlockMemMap& blockCopies,
+                                     BlockMemMap& newDatas,
+                                     BlockIntMap& newDataSizes,
+                                     bocl_mem_sptr cl_output,
+                                     bocl_mem_sptr lookup,
+                                     vcl_string data_type,
+                                     int  apptypesize,
+                                     bocl_mem_sptr prob_thresh );
 
 
-    //does in place, zero based cumulative sum on cpu, returns total size 
+    //does in place, zero based cumulative sum on cpu, returns total size
     static int cumsum(int* buff, vcl_size_t len) {
       //non zero based cumsum
       for (int i=1; i<len; ++i)
@@ -61,7 +58,7 @@ class boxm2_multi_refine
       for (int i=len-1; i>0; --i)
         buff[i] = buff[i-1];
       buff[0] = 0;
-      return newSize; 
+      return newSize;
     }
 
 
