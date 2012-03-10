@@ -3,6 +3,7 @@
 //:
 // \file
 #include <vsph/vsph_camera_bounds.h>
+#include <vidl/vidl_image_list_istream.h>
 #include <vgl/vgl_box_3d.h>
 #include <vgl/algo/vgl_rotation_3d.h>
 #include <vnl/vnl_double_3.h>
@@ -81,14 +82,13 @@ boxm2_convert_nvm::boxm2_convert_nvm(vcl_string nvm_file, vcl_string img_dir)
   //------------------------------------------------------------------------
   for (unsigned i = 0; i < cams_.size(); ++i) {
     if ( !bad_cams_.count(i) ) {
-      //imgstream.seek_frame(i);
-      //vcl_string path = imgstream.current_path();
-      vcl_string stripped_name = vul_file::strip_extension(names_[i]);
-      //vcl_string path = img_dir + "/" + stripped_name + ".png";
-      vcl_string path = img_dir + "/" + names_[i]; 
+      vcl_string path = img_dir + "/" + names_[i]; // was: +vul_file::strip_extension(names_[i])+".png";
+      // was: imgstream.seek_frame(i); vcl_string path = imgstream.current_path();
       CamType* cam = new CamType(cams_[i]);
       final_cams_[path] = cam;
-      //vcl_cout<<"Final cam: "<<path<<vcl_endl;
+#ifdef DEBUG
+      vcl_cout<<"Final cam: "<<path<<vcl_endl;
+#endif
     }
   }//end camera write
 
@@ -107,7 +107,7 @@ boxm2_convert_nvm::boxm2_convert_nvm(vcl_string nvm_file, vcl_string img_dir)
   vcl_cout<<"Full Point Bounding Box "<<bounding_box<<vcl_endl;
   vgl_point_3d<double> c = centre(pts_3d);
   vcl_cout<<"Center of Gravity "<< c <<vcl_endl;
-  vnl_vector_fixed<double,3> sigma = boxm2_point_util::stddev(pts_3d);
+  vnl_double_3 sigma = boxm2_point_util::stddev(pts_3d);
   vcl_cout<<"Point stddev "<< sigma <<vcl_endl;
 
   //--------------------------------------------------------------------------
@@ -124,14 +124,18 @@ boxm2_convert_nvm::boxm2_convert_nvm(vcl_string nvm_file, vcl_string img_dir)
   //--------------------------------------------------------------------------
   int good_cam = 0;
   while ( bad_cams_.count(good_cam) > 0 ) good_cam++;
-  //vcl_cout<<"Determining resolution of cells with cam: "<< good_cam << vcl_endl;
+#ifdef DEBUG
+  vcl_cout<<"Determining resolution of cells with cam: "<< good_cam << vcl_endl;
+#endif
 
   vgl_ray_3d<double> cone_axis;
   double cone_half_angle, solid_angle;
   vsph_camera_bounds::pixel_solid_angle(cams_[good_cam], ni/4, nj/4,cone_axis,cone_half_angle,solid_angle);
   vgl_point_3d<double> cc = cams_[good_cam].camera_center();
   resolution_ = 2*(cc-centre(pts_3d)).length()*cone_half_angle;
-  //vcl_cout<<"Resolution     "<<resolution_<<vcl_endl;
+#ifdef DEBUG
+  vcl_cout<<"Resolution     "<<resolution_<<vcl_endl;
+#endif
 }
 
 //------------------------------------------------------------------------
@@ -144,8 +148,7 @@ bool boxm2_convert_nvm::read_cameras(vcl_ifstream& in, vgl_point_2d<double> ppoi
   bool format_r9t = false;
   if (in.peek() == 'N')
   {
-    vcl_getline(in, token); 
-    //in >> token; //file header
+    vcl_getline(in, token); // was: in >> token; //file header
     if (vcl_strstr(token.c_str(), "R9T"))
     {
       rotation_parameter_num = 9;  //rotation as 3x3 matrix
@@ -157,7 +160,7 @@ bool boxm2_convert_nvm::read_cameras(vcl_ifstream& in, vgl_point_2d<double> ppoi
   int ncam = 0;
   in >> ncam;
   if (ncam <= 1) {
-    vcl_cout<<"Found fewer than 1 camera in NVM file (" << ncam<<")" <<vcl_endl;
+    vcl_cout<<"Found fewer than 1 camera in NVM file (" << ncam<<')' <<vcl_endl;
     return false;
   }
   vcl_cout<<"Found "<<ncam<<" cameras in nvm file"<<vcl_endl;
@@ -203,7 +206,9 @@ bool boxm2_convert_nvm::read_cameras(vcl_ifstream& in, vgl_point_2d<double> ppoi
     vcl_size_t found = 0;
     while ( (found=token.find("\\")) != vcl_string::npos )
       token.replace(found, 1, "/");
-    //vcl_cout<<"Scrubbed filename: "<<token<<vcl_endl;
+#ifdef DEBUG
+    vcl_cout<<"Scrubbed filename: "<<token<<vcl_endl;
+#endif
     names_[i] = vul_file::strip_directory(token);
   }
   return true;
