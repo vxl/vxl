@@ -19,3 +19,6 @@ INSTALL_TARGETS(/lib bsl)
 INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bbas/bsl ${bsl_sources})
 TARGET_LINK_LIBRARIES(bsl vnl vbl)
 
+IF( BUILD_TESTING )
+  SUBDIRS(tests)
+ENDIF( BUILD_TESTING )

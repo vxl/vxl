@@ -50,6 +50,7 @@
 #include <bsta/bsta_parzen_sf2.h>
 #include <bsta/bsta_parzen_sf3.h>
 #include <bsta/bsta_parzen_sphere.h>
+#include <bsta/bsta_random_wrapper.h>
 #include <bsta/bsta_sampler.h>
 #include <bsta/bsta_spherical_histogram.h>
 #include <bsta/bsta_von_mises.h>

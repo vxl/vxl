@@ -1,5 +1,6 @@
 #include <brip/brip_blobwise_mutual_info.h>
 #include <brip/brip_filter_bank.h>
+#include <brip/brip_gain_offset_solver.h>
 #include <brip/brip_gaussian_kernel.h>
 #include <brip/brip_histogram.h>
 #include <brip/brip_interp_kernel.h>
