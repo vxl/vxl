@@ -32,6 +32,8 @@ SOURCES += processes/pca/bvpl_global_pca_process.cxx
 SOURCES += processes/pca/bvpl_normalize_pca_training_error_process.cxx
 SOURCES += processes/pca/bvpl_combine_pairwise_statistics_process.cxx
 SOURCES += processes/pca/bvpl_load_global_pca_process.cxx
+SOURCES += processes/pca/bvpl_pca_global_add_error_process.cxx
+SOURCES += processes/pca/bvpl_pca_global_proj_error_process.cxx
 
 SOURCES += processes/taylor/bvpl_add_taylor_errors_process.cxx
 SOURCES += processes/taylor/bvpl_compute_taylor_error_process.cxx
@@ -40,6 +42,8 @@ SOURCES += processes/taylor/bvpl_init_global_taylor_process.cxx
 SOURCES += processes/taylor/bvpl_explore_coefficient_scene_process.cxx
 SOURCES += processes/taylor/bvpl_compute_taylor_coefficients_process.cxx
 SOURCES += processes/taylor/bvpl_load_global_taylor_process.cxx
+SOURCES += processes/taylor/bvpl_taylor_global_proj_error_process.cxx
+SOURCES += processes/taylor/bvpl_taylor_global_add_error_process.cxx
 
 SOURCES += processes/corners/bvpl_threshold_corners_process.cxx
 SOURCES += processes/corners/bvpl_compute_beaudet_measure_process.cxx

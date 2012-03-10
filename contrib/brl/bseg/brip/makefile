@@ -29,6 +29,7 @@ MANPAGE_SOURCES += brip_kernel.h
 MANPAGE_SOURCES += brip_subpix_convolution.h
 MANPAGE_SOURCES += brip_blobwise_mutual_info.txx
 SOURCES += brip_filter_bank.cxx
+SOURCES += brip_gain_offset_solver.cxx
 
 #######################################
 include ${VXLROOT}/config/top-params.mk

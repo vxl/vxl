@@ -13,6 +13,7 @@ SOURCES += bsta_k_medoid.cxx
 MANPAGE_SOURCES += bsta_otsu_threshold.txx
 SOURCES += bsta_int_histogram_1d.cxx
 SOURCES += bsta_int_histogram_2d.cxx
+SOURCES += bsta_random_wrapper.cxx
 
 MANPAGE_SOURCES += bsta_histogram_sptr.h
 MANPAGE_SOURCES += bsta_joint_histogram_sptr.h

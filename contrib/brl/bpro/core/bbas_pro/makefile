@@ -24,6 +24,8 @@ SOURCES += processes/bbas_camera_angles_process.cxx
 SOURCES += processes/bbas_remove_from_db_process.cxx
 SOURCES += processes/bbas_estimate_irradiance_process.cxx
 SOURCES += processes/imesh_ply_bbox_process.cxx
+SOURCES += processes/bsl_expected_image_process.cxx
+SOURCES += processes/bsl_fusion_process.cxx
 
 #######################################
 include ${VXLROOT}/config/top-params.mk

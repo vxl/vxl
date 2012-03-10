@@ -1,12 +1,9 @@
-USES += contrib/brl contrib/brl/bbas contrib/brl/bseg core
+USES += contrib/brl contrib/brl/bbas core
 
-LIBRARY := boxm2_multi
+LIBRARY := bsl
+VERSION := 1.0
 
-SOURCES += boxm2_multi_util.cxx
-SOURCES += boxm2_multi_cache.cxx
-SOURCES += boxm2_multi_cache_group.cxx
-
-SUBDIRS += algo exe
+MANPAGE_SOURCES += bsl_opinion.h
 
 #######################################
 include ${VXLROOT}/config/top-params.mk

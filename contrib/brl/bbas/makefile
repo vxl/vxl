@@ -73,6 +73,8 @@ SUBDIRS += bpgl
 
 SUBDIRS += bhdfs
 
+SUBDIRS += bsl
+
 ################################
 include ${VXLROOT}/config/top.mk
 ################################

@@ -19,6 +19,7 @@ SOURCES += brad_image_atmospherics_est.cxx
 SOURCES += brad_image_metadata.cxx
 MANPAGE_SOURCES += brad_atmospheric_parameters.h
 SOURCES += brad_atmospheric_parameters.cxx
+SOURCES += brad_estimate_shadows.cxx
 
 SUBDIRS += io
 

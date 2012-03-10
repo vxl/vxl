@@ -8,6 +8,8 @@ MANPAGE_SOURCES += boxm2_view_processes.h
 SOURCES += processes/boxm2_view_expected_image_process.cxx
 SOURCES += processes/boxm2_view_init_trajectory_process.cxx
 SOURCES += processes/boxm2_view_trajectory_next_process.cxx
+SOURCES += processes/boxm2_view_trajectory_direct_process.cxx
+SOURCES += processes/boxm2_view_trajectory_size_process.cxx
 
 #######################################
 include ${VXLROOT}/config/top-params.mk

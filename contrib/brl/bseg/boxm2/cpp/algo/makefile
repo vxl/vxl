@@ -40,6 +40,8 @@ MANPAGE_SOURCES += boxm2_apply_filter_function.txx
 MANPAGE_SOURCES += boxm2_compute_normal_albedo_functor.h
 SOURCES += boxm2_points_to_volume_function.cxx
 SOURCES += boxm2_compute_normal_albedo_functor.cxx
+SOURCES += boxm2_compute_normal_albedo_functor_opt.cxx
+SOURCES += boxm2_gauss_rgb_processor.cxx
 
 #######################################
 include ${VXLROOT}/config/top-params.mk

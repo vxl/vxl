@@ -32,6 +32,13 @@ SOURCES += processes/brad_save_atmospheric_parameters_process.cxx
 SOURCES += processes/brad_load_atmospheric_parameters_process.cxx
 SOURCES += processes/brad_save_image_metadata_process.cxx
 SOURCES += processes/brad_load_image_metadata_process.cxx
+SOURCES += processes/brad_estimate_shadows_process.cxx
+SOURCES += processes/brad_get_sun_angles_date_time_process.cxx
+SOURCES += processes/brad_get_sun_angles_process.cxx
+SOURCES += processes/brad_create_atmospheric_parameters_process.cxx
+SOURCES += processes/brad_convert_reflectance_to_digital_count_process.cxx
+SOURCES += processes/brad_set_sun_angles_process.cxx
+SOURCES += processes/brad_create_image_metadata_process.cxx
 
 #######################################
 include ${VXLROOT}/config/top-params.mk

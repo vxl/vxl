@@ -14,6 +14,7 @@ SOURCES += bvpl_taylor_basis_factory.cxx
 SOURCES += bvpl_edge2d_kernel_factory.cxx
 SOURCES += bvpl_gauss3d_x_kernel_factory.cxx
 MANPAGE_SOURCES += bvpl_kernel_iterator.h
+SOURCES += bvpl_gauss3d_kernel_factory.cxx
 
 SUBDIRS += pro io
 

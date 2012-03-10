@@ -11,6 +11,7 @@ SOURCES += boxm2_lru_cache.cxx
 SOURCES += boxm2_stream_cache.cxx
 SOURCES += boxm2_stream_block_cache.cxx
 MANPAGE_SOURCES += boxm2_stream_cache.txx
+SOURCES += boxm2_stream_scene_cache.cxx
 
 #######################################
 include ${VXLROOT}/config/top-params.mk

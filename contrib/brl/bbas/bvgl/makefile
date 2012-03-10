@@ -16,6 +16,7 @@ MANPAGE_SOURCES += bvgl_volume_of_intersection.txx
 SOURCES += bvgl_ray_pyramid.cxx
 MANPAGE_SOURCES += bvgl_intersection.txx
 MANPAGE_SOURCES += bvgl_triangle_3d.txx
+SOURCES += bvgl_labelme_parser.cxx
 
 #######################################
 include ${VXLROOT}/config/top-params.mk

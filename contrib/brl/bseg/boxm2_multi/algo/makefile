@@ -7,6 +7,7 @@ SOURCES += boxm2_multi_store_aux.cxx
 SOURCES += boxm2_multi_pre_vis_inf.cxx
 SOURCES += boxm2_multi_update_cell.cxx
 SOURCES += boxm2_multi_update.cxx
+SOURCES += boxm2_multi_refine.cxx
 
 #######################################
 include ${VXLROOT}/config/top-params.mk

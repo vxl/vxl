@@ -43,6 +43,7 @@ SOURCES += processes/vil_median_filter_process.cxx
 SOURCES += processes/vil_pixel_value_process.cxx
 SOURCES += processes/vil_init_float_image_process.cxx
 SOURCES += processes/vil_nitf_bits_per_pixel_process.cxx
+SOURCES += processes/vil_scale_and_offset_values_process.cxx
 
 #######################################
 include ${VXLROOT}/config/top-params.mk

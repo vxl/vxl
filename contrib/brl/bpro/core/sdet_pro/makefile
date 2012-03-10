@@ -14,6 +14,8 @@ SOURCES += processes/sdet_texture_classifier_process.cxx
 SOURCES += processes/sdet_texture_classifier_kernel_margin_process.cxx
 SOURCES += processes/sdet_create_texture_classifier_process.cxx
 SOURCES += processes/sdet_texture_training_process.cxx
+SOURCES += processes/sdet_exp_img_classifier_process.cxx
+SOURCES += processes/sdet_print_texton_dict_process.cxx
 
 #######################################
 include ${VXLROOT}/config/top-params.mk
