@@ -11,8 +11,6 @@
 
 #include <bvpl/bvpl_octree/bvpl_global_corners.h>
 
-#include <vul/vul_file.h>
-
 //:global variables
 namespace bvpl_compute_harris_measure_process_globals
 {

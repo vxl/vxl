@@ -8,9 +8,6 @@
 #include <vil/vil_convert.h>
 #include <bbas_pro/bbas_1d_array_float.h>
 #include <vcl_algorithm.h>
-#include <vul/vul_timer.h>
-
-#include <vil/vil_save.h>
 
 // do pixelwise sort on the image, and then
 struct Pair
@@ -163,9 +160,9 @@ bool vil_pixelwise_roc_process(bprb_func_process& pro)
   //unsigned totPix = detection_map->ni() * detection_map->nj();
   unsigned totPix = pairs.size();
   //vcl_sort(pairs, pairs + totPix, &pair_sorter);
-  if (use_pair_sorter) 
+  if (use_pair_sorter)
     vcl_sort(pairs.begin(), pairs.end(), &pair_sorter);
-  else 
+  else
     vcl_sort(pairs.begin(), pairs.end(), &pair_sorter2);
 
   // grab 100 points for the ROC curve
@@ -217,14 +214,15 @@ bool vil_pixelwise_roc_process(bprb_func_process& pro)
   vil_image_view<vxl_byte>* temp = new vil_image_view<vxl_byte>(detection_map->ni(), detection_map->nj(), 3);
   temp->fill(0);
 
-  for (unsigned k = 0; k < totPix; k++) {
-    unsigned i = pairs[k].i; 
-    unsigned j = pairs[k].j; 
+  for (unsigned k = 0; k < totPix; ++k) {
+    unsigned i = pairs[k].i;
+    unsigned j = pairs[k].j;
     if (pairs[k].change >= change) {
       (*temp)(i,j,1) = 0;
       (*temp)(i,j,2) = 0;
       (*temp)(i,j,0) = 255;
-    } else {
+    }
+    else {
       (*temp)(i,j,1) = 255*(*detection_map)(i,j) > 255 ? 255 : (vxl_byte)(255*(*detection_map)(i,j));
       (*temp)(i,j,2) = 255*(*detection_map)(i,j) > 255 ? 255 : (vxl_byte)(255*(*detection_map)(i,j));
       (*temp)(i,j,0) = 255*(*detection_map)(i,j) > 255 ? 255 : (vxl_byte)(255*(*detection_map)(i,j));

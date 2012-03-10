@@ -8,8 +8,6 @@
 // \date Oct 17, 2011
 
 #include <vcl_fstream.h>
-#include <vul/vul_file.h>
-#include <vul/vul_timer.h>
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/boxm2_util.h>
 #include <boxm2/io/boxm2_cache.h>

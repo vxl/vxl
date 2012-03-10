@@ -18,12 +18,7 @@
 #include <vxl_config.h> // for vxl_byte
 #include <vil/vil_config.h> // for HAS_JPEG
 
-#include <vul/vul_temp_filename.h>
-#include <vpl/vpl.h> // vpl_unlink()
-
 #include <vil/vil_new.h>
-#include <vil/vil_save.h>
-#include <vil/vil_load.h>
 #include <vil/vil_crop.h>
 #include <vil/vil_print.h>
 #include <vil/vil_plane.h>
