@@ -8,12 +8,14 @@
 #include <boxm/boxm_block.h>
 #include <boxm/basic/boxm_cell_vis_graph_iterator.h>
 #include <boxm/basic/boxm_block_vis_graph_iterator.h>
-#include <vil/vil_math.h>
-#include <vul/vul_timer.h>
-#include "boxm_render_image.h"
-#include <vcl_iostream.h>
+#include <boxm/algo/sp/boxm_render_image.h>
 #include <boxm/util/boxm_raytrace_operations.h>
 #include <boxm/util/boxm_rational_camera_utils.h>
+#include <vpgl/vpgl_rational_camera.h>
+#include <vpgl/vpgl_perspective_camera.h>
+#include <vil/vil_math.h>
+#include <vul/vul_timer.h>
+#include <vcl_iostream.h>
 
 //: functor used for normalizing cell_expected image
 template <class T_loc, class T_data>
