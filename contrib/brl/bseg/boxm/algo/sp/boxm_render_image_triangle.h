@@ -14,7 +14,7 @@
 #include <boxm/sample/algo/boxm_mog_grey_processor.h>
 #include <boxm/util/boxm_raytrace_operations.h>
 #include <boxm/util/boxm_rational_camera_utils.h>
-#include <vpgl/vpgl_camera.h>
+#include <vpgl/vpgl_perspective_camera.h>
 
 #include <vil/vil_image_view.h>
 #include <vil/vil_math.h>
