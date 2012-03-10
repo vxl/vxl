@@ -5,6 +5,7 @@
 #include "boxm_block_vis_graph_node.h"
 #include <boxm/boxm_block.h>
 #include <boxm/boxm_scene.h>
+#include <vpgl/vpgl_camera_double_sptr.h>
 #include <vcl_vector.h>
 #include <vcl_map.h>
 
