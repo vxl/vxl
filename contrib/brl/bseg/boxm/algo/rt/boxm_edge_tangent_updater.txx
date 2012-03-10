@@ -11,6 +11,7 @@
 #include <boxm/sample/boxm_inf_line_sample.h>
 #include <boxm/sample/boxm_plane_obs.h>
 #include <boxm/util/boxm_plane_ransac.h>
+#include <vpgl/vpgl_camera.h>
 
 #include <vgl/vgl_infinite_line_3d.h>
 #include <vgl/vgl_plane_3d.h>
@@ -190,10 +191,10 @@ bool boxm_edge_tangent_updater<T_loc,APM,AUX>::add_cells()
 
 template <class T_loc, class APM, class AUX>
 boxm_edge_tangent_refine_updates<T_loc,APM,AUX>::boxm_edge_tangent_refine_updates(boxm_scene<boct_tree<T_loc, boxm_inf_line_sample<APM> > > &scene,
-                                                                                  int concensus_cnt,
+                                                                                  int consensus_cnt,
                                                                                   vcl_vector<vil_image_view<float> > const& edge_images,
                                                                                   vcl_vector<vpgl_camera_double_sptr> const& cameras)
-: edge_images_(edge_images), cameras_(cameras), concensus_cnt_(concensus_cnt), scene_(scene)
+: edge_images_(edge_images), cameras_(cameras), concensus_cnt_(consensus_cnt), scene_(scene)
 {}
 
 template <class T_loc, class APM, class AUX>
