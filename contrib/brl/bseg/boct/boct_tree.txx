@@ -6,6 +6,7 @@
 #include <vcl_cmath.h>
 #include <vcl_iostream.h>
 #include <vgl/vgl_box_3d.h>
+#include <vgl/vgl_intersection.h>
 #include <vgl/io/vgl_io_box_3d.h>
 
 //: Construct an empty tree from maximum number of levels and levels, to initialize
@@ -164,7 +165,7 @@ boct_tree<T_loc,T_data>* boct_tree<T_loc,T_data>::clone()
   return tree;
 }
 
-//: Clones the entire internal data (not only leaves) 
+//: Clones the entire internal data (not only leaves)
 template <class T_loc,class T_data>
 boct_tree<T_loc,T_data>* boct_tree<T_loc,T_data>::clone_all()
 {
@@ -330,8 +331,8 @@ boct_tree_cell<T_loc,T_data>* boct_tree<T_loc,T_data>::locate_point_global(const
   vgl_point_3d<double> norm_p((p.x()-global_bbox_.min_x())/global_bbox_.width(),
                               (p.y()-global_bbox_.min_y())/global_bbox_.height(),
                               (p.z()-global_bbox_.min_z())/global_bbox_.depth());
-  
-  
+
+
   // convert point to location code.
   boct_loc_code<T_loc>* loccode_=new boct_loc_code<T_loc>(norm_p, root_level_, max_val_);
 #if 0
@@ -339,13 +340,12 @@ boct_tree_cell<T_loc,T_data>* boct_tree<T_loc,T_data>::locate_point_global(const
   if (!root_->code_.isequal(loccode_,curr_level))
     return 0;
 #endif
-  
+
   while (curr_cell->children()&& curr_level>0)
   {
     short index_child=loccode_->child_index(curr_level);
     if (index_child >7) {
-      vcl_cout << loccode_ << vcl_endl
-      << "ERROR 3: child_index is " << index_child << vcl_endl;
+      vcl_cout << loccode_ << "\nERROR 3: child_index is " << index_child << vcl_endl;
     }
     curr_cell=curr_cell->children()+index_child;
     --curr_level;
@@ -414,7 +414,7 @@ void boct_tree<T_loc,T_data>::locate_region_leaves_global(const vgl_box_3d<doubl
   boct_tree_cell<T_loc,T_data>* root = locate_region_global(r);
   vcl_vector<boct_tree_cell<T_loc,T_data>*> all_leaves;
   root->leaf_children(all_leaves);
-  
+
   // now check that the leaves are contained in the region
   typename vcl_vector<boct_tree_cell<T_loc,T_data>*>::iterator it = all_leaves.begin();
   for (; it!=all_leaves.end(); ++it)
@@ -422,18 +422,18 @@ void boct_tree<T_loc,T_data>::locate_region_leaves_global(const vgl_box_3d<doubl
     if (r.contains(cell_bounding_box(*it)))
       leaves.push_back(*it);
   }
-  
+
   return;
 }
 
-//: Returns all cells (at the specified level)  entirely contained in 3d region in global coordinates 
+//: Returns all cells (at the specified level)  entirely contained in 3d region in global coordinates
 template <class T_loc,class T_data>
 void boct_tree<T_loc,T_data>::locate_region_cells_global(const vgl_box_3d<double>& r, vcl_vector<boct_tree_cell<T_loc,T_data>*> &leaves, short level)
 {
   boct_tree_cell<T_loc,T_data>* root = locate_region_global(r);
   vcl_vector<boct_tree_cell<T_loc,T_data>*> cells_at_level;
   root->children_at_level(cells_at_level, level);
-  
+
   // now check that the leaves are contained in the region
   typename vcl_vector<boct_tree_cell<T_loc,T_data>*>::iterator it = cells_at_level.begin();
   for (; it!=cells_at_level.end(); ++it)
@@ -441,7 +441,7 @@ void boct_tree<T_loc,T_data>::locate_region_cells_global(const vgl_box_3d<double
     if (r.contains(cell_bounding_box(*it)))
       leaves.push_back(*it);
   }
-  
+
   return;
 }
 
@@ -469,7 +469,7 @@ void boct_tree<T_loc,T_data>::locate_leaves_in_hollow_region_global(const vgl_bo
   boct_tree_cell<T_loc,T_data>* root = locate_region_global(outer_r);
   vcl_vector<boct_tree_cell<T_loc,T_data>*> all_leaves;
   root->leaf_children(all_leaves);
-  
+
   // now check that the leaves are contained in the "in_between" region
   typename vcl_vector<boct_tree_cell<T_loc,T_data>*>::iterator it = all_leaves.begin();
   for (; it!=all_leaves.end(); ++it)
@@ -477,7 +477,7 @@ void boct_tree<T_loc,T_data>::locate_leaves_in_hollow_region_global(const vgl_bo
     if ((!vgl_intersection(cell_bounding_box(*it),outer_r).is_empty())&&(vgl_intersection(cell_bounding_box(*it),inner_r).is_empty()))
       leaves.push_back(*it);
   }
-  
+
   return;
 }
 
@@ -729,25 +729,24 @@ void boct_tree<T_loc,T_data>::b_read(vsl_b_istream & is)
       T_data cell_data;
       vsl_b_read(is, code);
       vsl_b_read(is, cell_data);
-      
+
       // temporary pointer to traverse
       boct_tree_cell<T_loc,T_data>* curr_cell=root;
       short curr_level=num_levels_-1;
       short level=code.level;
-      
+
       while (curr_level>level)
       {
         if (curr_cell->is_leaf()) {
           curr_cell->split();
         }
         short child_index=code.child_index(curr_level);
-        
+
         if (child_index < 0)
           vcl_cout << "ERROR 1: child_index is " << child_index << vcl_endl;
-        
+
         curr_cell=curr_cell->children()+child_index;
         --curr_level;
-        
       }
 
       // the place of the cell is found, put the data in
@@ -756,10 +755,10 @@ void boct_tree<T_loc,T_data>::b_read(vsl_b_istream & is)
       else
         vcl_cerr << "WRONG ERROR CODE OR CELL FOUND:"<<curr_cell->code_<<"!="<<code<<vcl_endl;
     }
-        
+
     //release old memory
-    if(this->root_)  delete root_;
-     
+    if (this->root_)  delete root_;
+
     this->root_=root;
     this->root_level_ = num_levels_ -1;
     this->max_val_ = (double)(1<<root_level_);
