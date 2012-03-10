@@ -33,7 +33,7 @@ bool sdet_exp_img_classifier_process(bprb_func_process& pro)
 {
   if (!pro.verify_inputs())
   {
-    vcl_cout << pro.name() << "texture classifier process inputs are not valid "<< vcl_endl;
+    vcl_cout << pro.name() << "texture classifier process inputs are not valid"<< vcl_endl;
     return false;
   }
   // get inputs
@@ -46,25 +46,25 @@ bool sdet_exp_img_classifier_process(bprb_func_process& pro)
   //extract input image
   vil_image_view_base_sptr view_ptr = 
     pro.get_input<vil_image_view_base_sptr>(2);
-  if(!view_ptr)
-    {
-      vcl_cout << "null image in sdet_exp_img_classifier_process\n";
-      return false;
-    }
+  if (!view_ptr)
+  {
+    vcl_cout << "null image in sdet_exp_img_classifier_process\n";
+    return false;
+  }
   //assumes a float image on the range [0, 1];
   vil_image_view<float> fview(view_ptr);
 
   //extract expected image
   vil_image_view_base_sptr exp_ptr = 
     pro.get_input<vil_image_view_base_sptr>(3);
-  if(!exp_ptr)
-    {
-      vcl_cout << "null expected image in sdet_exp_img_classifier_process\n";
-      return false;
-    }
+  if (!exp_ptr)
+  {
+    vcl_cout << "null expected image in sdet_exp_img_classifier_process\n";
+    return false;
+  }
   //assumes a float image on the range [0, 1];
   vil_image_view<float> fexp(exp_ptr);
-  unsigned block_size = pro.get_input<unsigned>(4);
+  unsigned block_size = pro.get_input<unsigned>(4); // unused!!!
   tc.load_dictionary(texton_dict_path);
 
   vil_image_view<float> class_img =
