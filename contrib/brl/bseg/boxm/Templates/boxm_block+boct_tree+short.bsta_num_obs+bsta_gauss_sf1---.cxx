@@ -1,5 +1,6 @@
 #include <bsta/bsta_attributes.h>
 #include <bsta/bsta_gauss_sf1.h>
+#include <boct/boct_tree.h>
 #include <boxm/boxm_block.txx>
 
 typedef bsta_num_obs<bsta_gauss_sf1> gauss_type;
