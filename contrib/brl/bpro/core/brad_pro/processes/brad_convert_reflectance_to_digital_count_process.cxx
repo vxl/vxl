@@ -84,10 +84,10 @@ bool brad_convert_reflectance_to_digital_count_process(bprb_func_process& pro)
 
   vil_image_view<float> toa_radiance_img(ni,nj);
 
-  bool result = brad_undo_reflectance_estimate(*reflectance_img, *mdata, *atm_params, toa_radiance_img); 
+  brad_undo_reflectance_estimate(*reflectance_img, *mdata, *atm_params, toa_radiance_img);
 
   vil_math_scale_and_offset_values(toa_radiance_img, (1.0/mdata->gain_), -(mdata->offset_/mdata->gain_) );
-  
+
   vil_image_view_base_sptr output_img = 0;
   if (do_normalization) {
     vil_image_view<float> *output_img_float = new vil_image_view<float>(ni,nj);
@@ -99,7 +99,7 @@ bool brad_convert_reflectance_to_digital_count_process(bprb_func_process& pro)
     vil_convert_stretch_range_limited(toa_radiance_img,*output_img_uint16, 0.0f, (float)max_digital_count,(vxl_uint_16)0, (vxl_uint_16)max_digital_count);
     output_img = output_img_uint16;
   }
- 
+
   pro.set_output_val<vil_image_view_base_sptr>(0, output_img);
 
   return true;
