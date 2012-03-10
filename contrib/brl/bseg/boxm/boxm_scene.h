@@ -177,13 +177,13 @@ class boxm_scene :public boxm_scene_base
 
   //: Return all leaf cells in a region
   void leaves_in_region(vgl_box_3d<double>, vcl_vector<boct_tree_cell<loc_type, datatype>* >& cells);
-  
+
   //: Return the level of the smallest cell entirely containing the 3d region
   short level_region(vgl_box_3d<double> box);
 
   //: Return all leaf_data in a region - data is copied to new memory location
   void leaves_data_in_region(vgl_box_3d<double> box, vcl_vector<boct_cell_data<loc_type, datatype> > &cell_data);
-  
+
   //: Returns the data of all cells at a given level, that are contained in the specified region
   void cell_data_in_region(vgl_box_3d<double> box, vcl_vector<boct_cell_data<loc_type, datatype> > &cell_data, unsigned level);
 
@@ -209,7 +209,7 @@ class boxm_scene :public boxm_scene_base
 
   //: Write scene xml file at the scenes' path
   void write_scene(vcl_string filename = "scene.xml");
-  
+
   //: Write scene xml file at the location indicated by path
   void write_scene(vcl_string path, vcl_string filename);
 
@@ -258,7 +258,7 @@ class boxm_scene :public boxm_scene_base
 
   float pinit() const { return pinit_; }
 
-  vgl_box_3d<double> get_block_bbox(vgl_point_3d<int>& idx) const { return get_block_bbox(idx.x(), idx.y(), idx.z()); }
+  vgl_box_3d<double> get_block_bbox(vgl_point_3d<int> const& idx) const { return get_block_bbox(idx.x(), idx.y(), idx.z()); }
 
   vgl_box_3d<double> get_block_bbox(int x, int y, int z) const;
 
@@ -294,8 +294,8 @@ class boxm_scene :public boxm_scene_base
       ++iter_out;
     }
   }
-  
-  //: Returns a scene of a vector type with the same structure and vector intialized to the the same data
+
+  //: Returns a scene of a vector type with the same structure and vector initialized to the the same data
   template <unsigned DIM>
   void clone_blocks_to_vector(boxm_scene<boct_tree<short, vnl_vector_fixed<datatype, DIM> > > &scene_out)
   {
@@ -328,7 +328,7 @@ class boxm_scene :public boxm_scene_base
 
   //: Return the length of finest-level cell in the scene
   double finest_cell_length();
-  
+
   //: Return the length of cells at a given level in the scene
   double cell_length(unsigned level);
 
