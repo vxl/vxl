@@ -1,8 +1,10 @@
 #include "boxm2_point_util.h"
 #include <vgl/algo/vgl_rotation_3d.h>
+#include <vgl/algo/vgl_fit_plane_3d.h>
 #include <vgl/vgl_distance.h>
 #include <vnl/vnl_double_3.h>
 #include <vnl/vnl_quaternion.h>
+#include <vcl_cstdlib.h> // for std::rand()
 #include <vcl_cassert.h>
 
 bool boxm2_point_util::fit_plane_ransac(vcl_vector<vgl_homg_point_3d<double> > & points, vgl_homg_plane_3d<double>  & plane)
@@ -54,7 +56,7 @@ bool boxm2_point_util::fit_plane_ransac(vcl_vector<vgl_homg_point_3d<double> > &
 }
 
 bool boxm2_point_util::axis_align_scene(vcl_vector<bwm_video_corr_sptr> & corrs,
-                                             vcl_vector<vpgl_perspective_camera<double> > & cams)
+                                        vcl_vector<vpgl_perspective_camera<double> > & cams)
 {
   vcl_vector<vgl_homg_point_3d<double> > points;
   for (unsigned i=0;i<corrs.size();++i)
@@ -62,18 +64,19 @@ bool boxm2_point_util::axis_align_scene(vcl_vector<bwm_video_corr_sptr> & corrs,
     vgl_homg_point_3d<double> homg_world_pt(corrs[i]->world_pt());
     points.push_back(homg_world_pt);
   }
-  
-  //double max_dist = 0.0f; 
-  //for(int i=0; i<points.size(); ++i) 
-    //for(int j=0; j<points.size(); ++j) 
-      //if( vgl_distance(points[i], points[j]) > max_dist)
-        //max_dist = vgl_distance(points[i], points[j]); 
-  
-//Either fit using ransac, or just minimum squared error
+
 #if 0
+  double max_dist = 0.0f;
+  for (int i=0; i<points.size(); ++i)
+    for (int j=0; j<points.size(); ++j)
+      if ( vgl_distance(points[i], points[j]) > max_dist)
+        max_dist = vgl_distance(points[i], points[j]);
+#endif
+
+#if 0//Either fit using ransac, or just minimum squared error
   //fit plane ransac
-  vgl_homg_plane_3d<double> plane; 
-  fit_plane_ransac(points, plane); 
+  vgl_homg_plane_3d<double> plane;
+  fit_plane_ransac(points, plane);
 #else
   // fit the plane
   vgl_fit_plane_3d<double> fit_plane(points);
@@ -81,7 +84,7 @@ bool boxm2_point_util::axis_align_scene(vcl_vector<bwm_video_corr_sptr> & corrs,
     return false;
   vgl_homg_plane_3d<double> plane=fit_plane.get_plane();
 #endif
-  
+
   //get plane rotation
   vgl_rotation_3d<double> rot_scene(plane.normal(),vgl_vector_3d<double>(0,0,1));
 
@@ -213,7 +216,7 @@ void boxm2_point_util::calc_projection_error(vcl_vector<vpgl_perspective_camera<
 
       //calc error for this point
       if (cams[view_number].is_behind_camera(wpt)) {
-        vcl_cout<<"Bad camera "<<view_number<<" is behind world point"<<vcl_endl; 
+        vcl_cout<<"Bad camera "<<view_number<<" is behind world point"<<vcl_endl;
         bad_cams.insert(view_number);
       }
       else
@@ -242,9 +245,9 @@ void boxm2_point_util::calc_projection_error(vcl_vector<vpgl_perspective_camera<
 }
 
 void boxm2_point_util::report_error(vcl_map<unsigned,double>&   view_error_map,
-                                         vcl_map<unsigned,unsigned>& view_count_map,
-                                         vcl_set<int>&               bad_cams,
-                                         float                       filter_thresh)
+                                    vcl_map<unsigned,unsigned>& view_count_map,
+                                    vcl_set<int>&               bad_cams,
+                                    float                       filter_thresh)
 {
   vcl_cout<<"Projection error per camera:"<<vcl_endl;
   float error  = 0.0;
@@ -258,9 +261,9 @@ void boxm2_point_util::report_error(vcl_map<unsigned,double>&   view_error_map,
     unsigned cnt=view_count_map[cam];
     vcl_cout<<"   error for camera_"<<cam<<": "<<err/cnt<<vcl_endl;
 #endif
-    double error = ve_itr->second/view_count_map[ve_itr->first]; 
+    double error = ve_itr->second/view_count_map[ve_itr->first];
     if (error > filter_thresh) {
-      vcl_cout<<"Bad camera "<<ve_itr->first<<" has error "<<error<<vcl_endl; 
+      vcl_cout<<"Bad camera "<<ve_itr->first<<" has error "<<error<<vcl_endl;
       bad_cams.insert(ve_itr->first);
     }
     else {
