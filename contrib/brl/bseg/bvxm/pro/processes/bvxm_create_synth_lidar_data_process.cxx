@@ -3,15 +3,15 @@
 // \file
 #include <bvxm/bvxm_util.h>
 
-
 #include <brdb/brdb_value.h>
 #include <bprb/bprb_parameters.h>
-#include <vcl_iostream.h>
 
+#include <vpgl/file_formats/vpgl_geo_camera.h>
 #include <vgl/vgl_point_3d.h>
 
 #include <vil/vil_image_view.h>
 
+#include <vcl_iostream.h>
 
 //:sets input and output types
 bool bvxm_create_synth_lidar_data_process_cons(bprb_func_process& pro)
