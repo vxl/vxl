@@ -3,6 +3,7 @@
 
 #include <vpgl/vpgl_camera.h>
 #include <vpgl/vpgl_local_rational_camera.h>
+#include <vpgl/vpgl_perspective_camera.h>
 #include <vdgl/vdgl_digital_curve.h>
 #include <vdgl/vdgl_edgel.h>
 #include <vdgl/vdgl_edgel_chain.h>
