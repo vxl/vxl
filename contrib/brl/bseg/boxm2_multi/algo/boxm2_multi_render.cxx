@@ -143,7 +143,7 @@ float boxm2_multi_render::render(boxm2_multi_cache&      cache,
       //vcl_cout<<i<<" : "<<id<<" ";
 
       //keep track of mems allocated, so you can unref them later
-      float* ones = new float[ni*nj]; 
+      float* ones = new float[ni*nj];
       vcl_fill(ones, ones+ni*nj, 1.0f);
       vis_mems[i]->write_to_gpu_mem(queues[i], ones, ni*nj*sizeof(float));
       exp_mems[i]->zero_gpu_buffer(queues[i]);

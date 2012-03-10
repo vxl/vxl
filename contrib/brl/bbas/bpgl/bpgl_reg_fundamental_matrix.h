@@ -16,7 +16,6 @@
 // | -a  b  0 |
 // \endverbatim
 
-#include <vnl/vnl_fwd.h>
 #include <vgl/vgl_fwd.h>
 #include <vpgl/vpgl_fundamental_matrix.h>
 

@@ -12,7 +12,6 @@
 #include <vil/vil_image_view_base.h>
 #include <vil/vil_load.h>
 
-#include <vnl/vnl_numeric_traits.h>
 #include <vpgl/vpgl_camera.h>
 #include <vpgl/vpgl_perspective_camera.h>
 #include <vsph/vsph_camera_bounds.h>

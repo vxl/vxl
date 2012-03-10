@@ -7,7 +7,6 @@
 
 #include <vcl_cassert.h>
 #include <vcl_string.h>
-//MAYBE NO LONGER NEEDED: #include <vnl/vnl_fwd.h> // Leave this hack here to avoid a MSVC internal compiler error.
 #include <pdf1d/pdf1d_epanech_kernel_pdf.h>
 
 //=======================================================================

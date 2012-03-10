@@ -20,8 +20,6 @@
 #include <vil/vil_image_view_base.h>
 #include <vil/vil_save.h>
 #include <vpgl/vpgl_perspective_camera.h>
-#include <vnl/vnl_random.h>
-#include <vul/vul_timer.h>
 
 vcl_map<vcl_string, bocl_kernel*> boxm2_multi_store_aux::kernels_;
 
@@ -54,10 +52,10 @@ float boxm2_multi_store_aux::store_aux(boxm2_multi_cache&       cache,
     inImg = img.top_left_ptr();
   }
   else {
-    inImg = new float[cl_ni*cl_nj]; 
+    inImg = new float[cl_ni*cl_nj];
     int c = 0;
     for (int j=0; j<nj; ++j)
-      for (int i=0; i<ni; ++i) 
+      for (int i=0; i<ni; ++i)
         inImg[c++] = img(i,j);
   }
   //-------------------------------------------------------
@@ -69,7 +67,7 @@ float boxm2_multi_store_aux::store_aux(boxm2_multi_cache&       cache,
                              img_dims = helper.img_dims_,
                              ray_ds = helper.ray_ds_,
                              ray_os = helper.ray_os_,
-                             lookups = helper.lookups_; 
+                             lookups = helper.lookups_;
   vcl_size_t maxBlocks = helper.maxBlocks_;
   vcl_vector<boxm2_opencl_cache*>& ocl_caches = helper.vis_caches_;
   for (int i=0; i<ocl_caches.size(); ++i) {
@@ -77,7 +75,7 @@ float boxm2_multi_store_aux::store_aux(boxm2_multi_cache&       cache,
     boxm2_opencl_cache* ocl_cache = ocl_caches[i];
     boxm2_scene_sptr    sub_scene = ocl_cache->get_scene();
     bocl_device_sptr    device    = ocl_cache->get_device();
-    
+
     //create image var
     bocl_mem_sptr in_mem = ocl_cache->alloc_mem(cl_ni*cl_nj*sizeof(float),inImg,"exp image buffer");
     in_mem->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
@@ -91,7 +89,7 @@ float boxm2_multi_store_aux::store_aux(boxm2_multi_cache&       cache,
   //visibility order
   vcl_vector<boxm2_multi_cache_group*> grp = helper.group_orders_; //cache.get_vis_groups(cam);
   vcl_cout<<"Group list size; "<<grp.size()<<vcl_endl;
-  
+
   for(int grpId=0; grpId<grp.size(); ++grpId) {
     boxm2_multi_cache_group& group = *grp[grpId];
     vcl_vector<boxm2_block_id>& ids = group.ids();
@@ -117,7 +115,7 @@ float boxm2_multi_store_aux::store_aux(boxm2_multi_cache&       cache,
     for (int idx=0; idx<indices.size(); ++idx) {
       int i = indices[idx];
       clFinish(queues[i]);
-      boxm2_block_id id = ids[i]; 
+      boxm2_block_id id = ids[i];
       boxm2_opencl_cache* ocl_cache = ocl_caches[i];
       read_aux(id, ocl_cache, queues[i]);
     }

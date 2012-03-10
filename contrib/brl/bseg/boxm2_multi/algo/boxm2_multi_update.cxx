@@ -14,35 +14,33 @@
 #include <vil/vil_image_view_base.h>
 #include <vil/vil_save.h>
 #include <vpgl/vpgl_perspective_camera.h>
-#include <vnl/vnl_random.h>
-#include <vul/vul_timer.h>
 
 float boxm2_multi_update::update(boxm2_multi_cache& cache,
                                  vil_image_view<float>& img,
                                  vpgl_camera_double_sptr  cam)
 {
   vcl_cout<<"------------ boxm2_multi_update ----------------"<<vcl_endl;
- 
+
   //setup image size
-  int ni=img.ni(), 
+  int ni=img.ni(),
       nj=img.nj();
   vcl_size_t lthreads[2] = {8,8};
   unsigned cl_ni = RoundUp(ni,lthreads[0]);
   unsigned cl_nj = RoundUp(nj,lthreads[1]);
 
   //---------------------------------
-  //store vars for each ocl_cache 
+  //store vars for each ocl_cache
   //---------------------------------
   vcl_vector<cl_command_queue> queues; //store queue for each device
-  vcl_vector<bocl_mem_sptr> img_dims, outputs, ray_ds, ray_os, lookups; //ray trace vars 
+  vcl_vector<bocl_mem_sptr> img_dims, outputs, ray_ds, ray_os, lookups; //ray trace vars
   vcl_vector<vcl_vector<boxm2_block_id> > vis_orders; //visibility order for each dev
   vcl_size_t maxBlocks = 0;
   vcl_vector<boxm2_opencl_cache*> ocl_caches = cache.ocl_caches();
   for(int i=0; i<ocl_caches.size(); ++i) {
     //grab sub scene and it's cache
-    boxm2_opencl_cache* ocl_cache = ocl_caches[i]; 
-    boxm2_scene_sptr    sub_scene = ocl_cache->get_scene(); 
-    bocl_device_sptr    device    = ocl_cache->get_device(); 
+    boxm2_opencl_cache* ocl_cache = ocl_caches[i];
+    boxm2_scene_sptr    sub_scene = ocl_cache->get_scene();
+    bocl_device_sptr    device    = ocl_cache->get_device();
 
     // create a command queue.
     int status=0;
@@ -50,14 +48,14 @@ float boxm2_multi_update::update(boxm2_multi_cache& cache,
                                                    *(device->device_id()),
                                                    CL_QUEUE_PROFILING_ENABLE,
                                                    &status );
-    queues.push_back(queue); 
+    queues.push_back(queue);
     if (status!=0) {
       vcl_cout<<"boxm2_multi_store_aux::store_aux unable to create command queue"<<vcl_endl;
       return 0.0f;
     }
-    
+
     //create image dim buff
-    int img_dim_buff[4] = {0,0,ni,nj}; 
+    int img_dim_buff[4] = {0,0,ni,nj};
     bocl_mem_sptr img_dim = new bocl_mem(device->context(), img_dim_buff, sizeof(int)*4, "image dims");
     img_dim->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
     img_dims.push_back(img_dim);
@@ -77,7 +75,7 @@ float boxm2_multi_update::update(boxm2_multi_cache& cache,
     boxm2_ocl_camera_converter::compute_ray_image( device, queue, cam, cl_ni, cl_nj, ray_o_buff, ray_d_buff);
     ray_os.push_back(ray_o_buff);
     ray_ds.push_back(ray_d_buff);
- 
+
     // bit lookup buffer
     cl_uchar lookup_arr[256];
     boxm2_ocl_util::set_bit_lookup(lookup_arr);
@@ -94,52 +92,52 @@ float boxm2_multi_update::update(boxm2_multi_cache& cache,
   //initalize per group images (vis/pre
   vcl_vector<boxm2_multi_cache_group*> grp = cache.get_vis_groups(cam);
   for(int grpId=0; grpId<grp.size(); ++grpId) {
-    vcl_vector<boxm2_block_id> ids = grp[grpId]->ids(); 
+    vcl_vector<boxm2_block_id> ids = grp[grpId]->ids();
     for(int i=0; i<ids.size(); ++i) {
       float* visImg = new float[ni*nj]; vcl_fill(visImg, visImg+ni*nj, 1.0f);
-      float* preImg = new float[ni*nj]; vcl_fill(preImg, preImg+ni*nj, 0.0f);  
-      grp[grpId]->set_vis(i, visImg); 
+      float* preImg = new float[ni*nj]; vcl_fill(preImg, preImg+ni*nj, 0.0f);
+      grp[grpId]->set_vis(i, visImg);
       grp[grpId]->set_pre(i, preImg);
     }
   }
 
   //create boxm2_multi update helper object for factored out vars
-  boxm2_multi_update_helper helper(queues, ray_os, ray_ds, img_dims, lookups, 
+  boxm2_multi_update_helper helper(queues, ray_os, ray_ds, img_dims, lookups,
                                    outputs, grp, vis_orders, ocl_caches, maxBlocks);
 
 
-  //store aux data (cell vis, cell length) 
-  boxm2_multi_store_aux::store_aux(cache, img, cam, helper); 
+  //store aux data (cell vis, cell length)
+  boxm2_multi_store_aux::store_aux(cache, img, cam, helper);
 
   //calcl pre/vis inf, and store pre/vis images along the way
-  float* norm_img = new float[img.ni() * img.nj()]; 
+  float* norm_img = new float[img.ni() * img.nj()];
   vcl_map<bocl_device*, float*> pre_map, vis_map;
-  //boxm2_multi_pre_vis_inf::pre_vis_inf(cache, img, cam, vis_map, pre_map, norm_img, helper); 
+  //boxm2_multi_pre_vis_inf::pre_vis_inf(cache, img, cam, vis_map, pre_map, norm_img, helper);
   boxm2_multi_pre_vis_inf::pre_vis_inf(cache, img, cam, norm_img, helper);
 
   //calculate cell beta, cell vis, and finally reduce each cell to new alphas
-  //boxm2_multi_update_cell::update_cells(cache, img, cam, vis_map, pre_map, norm_img, helper); 
+  //boxm2_multi_update_cell::update_cells(cache, img, cam, vis_map, pre_map, norm_img, helper);
   boxm2_multi_update_cell::update_cells(cache, img, cam, norm_img, helper);
 
   //-------------------------------------
   //clean up
   //-------------------------------------
   for(int grpId=0; grpId<grp.size(); ++grpId) {
-    vcl_vector<boxm2_block_id> ids = grp[grpId]->ids(); 
+    vcl_vector<boxm2_block_id> ids = grp[grpId]->ids();
     for(int i=0; i<ids.size(); ++i) {
-      delete[] grp[grpId]->get_vis(i); 
+      delete[] grp[grpId]->get_vis(i);
       delete[] grp[grpId]->get_pre(i);
     }
   }
 
   for(int i=0; i<queues.size(); ++i) {
-    boxm2_opencl_cache* ocl_cache = ocl_caches[i]; 
- 
+    boxm2_opencl_cache* ocl_cache = ocl_caches[i];
+
     //release generic cam
     float* rayO = (float*) ray_os[i]->cpu_buffer();
     float* rayD = (float*) ray_ds[i]->cpu_buffer();
     delete[] rayO;
-    delete[] rayD;    
+    delete[] rayD;
     ocl_cache->unref_mem(ray_os[i].ptr());
     ocl_cache->unref_mem(ray_ds[i].ptr());
 
@@ -149,9 +147,9 @@ float boxm2_multi_update::update(boxm2_multi_cache& cache,
     ocl_cache->unref_mem(outputs[i].ptr());
 
     //free vis mem, pre mem
-    clReleaseCommandQueue(queues[i]); 
+    clReleaseCommandQueue(queues[i]);
   }
-  
+
   //delete single norm image
   delete[] norm_img;
 
@@ -160,7 +158,7 @@ float boxm2_multi_update::update(boxm2_multi_cache& cache,
   for(iter = pre_map.begin(); iter != pre_map.end(); ++iter)
     delete[] iter->second;
   for(iter = vis_map.begin(); iter != vis_map.end(); ++iter)
-    delete[] iter->second; 
+    delete[] iter->second;
 }
 
 

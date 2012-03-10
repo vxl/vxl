@@ -15,8 +15,6 @@
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_point_3d.h>
 
-#include <vnl/algo/vnl_svd.h>
-
 //------------------------------------------------------------------------
 // Generic helper function to create a calibration matrix.
 // Assumes the camera center is the center of the image.

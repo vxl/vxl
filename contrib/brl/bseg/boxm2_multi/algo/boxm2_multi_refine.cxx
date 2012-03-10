@@ -18,7 +18,6 @@
 #include <vil/vil_image_view_base.h>
 #include <vil/vil_save.h>
 #include <vpgl/vpgl_perspective_camera.h>
-#include <vnl/vnl_random.h>
 #include <vul/vul_timer.h>
 
 vcl_map<vcl_string, bocl_kernel*> boxm2_multi_refine::refine_tree_kernels_;

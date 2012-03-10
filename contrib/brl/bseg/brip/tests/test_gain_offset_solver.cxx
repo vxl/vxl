@@ -8,8 +8,8 @@
 #include <vil/vil_load.h>
 #include <vil/vil_save.h>
 #include <vil/vil_math.h>
-#include <vnl/vnl_math.h>
 #include <vcl_cstdlib.h> // for std::rand()
+
 static void test_gain_offset_solver()
 {
   // it is assumed the input i
@@ -38,7 +38,7 @@ static void test_gain_offset_solver()
   vcl_string exp_path = "e:/mundy/Dropbox/deliveries/exp_imgs/view_00_exp.png";
   vil_image_view<unsigned char> exp = vil_load(exp_path.c_str());
    ni = exp.ni(); nj = exp.nj();
-  vil_image_view<float> test_image = 
+  vil_image_view<float> test_image =
     brip_vil_float_ops::convert_to_float(exp);
   vil_math_scale_values(test_image,1.0/255.0);
   vil_image_view<unsigned char> test_mask(ni, nj);
@@ -70,12 +70,10 @@ static void test_gain_offset_solver()
   vcl_string map_path = "e:/images/TextureTraining/mapped_images/map_00.tiff";
   vil_image_view<float> mapped_img = gos2.mapped_test_image();
   vil_save(mapped_img, map_path.c_str());
-  mod_path = 
-    "e:/images/TextureTraining/mapped_images/model_00.tiff";
+  mod_path = "e:/images/TextureTraining/mapped_images/model_00.tiff";
   vil_save(model_image, mod_path.c_str());
 
-  vcl_string mask_path = 
-    "e:/images/TextureTraining/mapped_images/test_mask_00.tiff";
+  vcl_string mask_path = "e:/images/TextureTraining/mapped_images/test_mask_00.tiff";
   vil_save(test_mask, mask_path.c_str());
 }
 TESTMAIN(test_gain_offset_solver);

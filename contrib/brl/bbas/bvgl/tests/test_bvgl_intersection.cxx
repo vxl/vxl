@@ -3,18 +3,17 @@
 #include <testlib/testlib_test.h>
 #include <bvgl/bvgl_intersection.h>
 #include <vcl_iostream.h>
-#include <vnl/vnl_math.h>
 
 //: Test changes
 static void test_bvgl_intersection()
 {
   //1 x 1 x 1 box at the origin
-  vgl_box_3d<double> box(0,0,0, 1,1,1); 
+  vgl_box_3d<double> box(0,0,0, 1,1,1);
 
   //INSIDE test
-  vgl_point_3d<double> ptA(.2, .2, .2), 
-                       ptB(.3, .3, .3), 
-                       ptC(.7, .7, .7); 
+  vgl_point_3d<double> ptA(.2, .2, .2),
+                       ptB(.3, .3, .3),
+                       ptC(.7, .7, .7);
   bvgl_triangle_3d<double> inside(ptA, ptB, ptC);
   TEST("Test triangle inside box: ", bvgl_intersection(box, inside), true);
 
@@ -49,7 +48,7 @@ static void test_bvgl_intersection()
   //test same plane
   ptA.set(.4, -.5, .5);
   ptB.set(-.5, .4, .5);
-  ptC.set(-.5, -.5, .5); 
+  ptC.set(-.5, -.5, .5);
   bvgl_triangle_3d<double> samePlane(ptA, ptB, ptC);
   TEST("Test triangle same plane miss X: ", bvgl_intersection(box, samePlane), false);
 

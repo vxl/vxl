@@ -5,8 +5,6 @@
 #include <bpro/core/bbas_pro/bbas_1d_array_float.h>
 #include <brad/brad_synoptic_function_1d.h>
 #include <vcl_algorithm.h>
-#include <vnl/algo/vnl_levenberg_marquardt.h>
-#include <vnl/vnl_math.h>
 
 namespace brad_estimate_synoptic_function_1d_process_globals
 {

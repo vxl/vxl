@@ -2,9 +2,6 @@
 //:
 // \file
 
-#include "vnl/vnl_random.h"
-#include "vcl_sstream.h"
-
 //: scene/device constructor
 boxm2_opencl_cache::boxm2_opencl_cache(boxm2_scene_sptr scene,
                                        bocl_device_sptr device,
