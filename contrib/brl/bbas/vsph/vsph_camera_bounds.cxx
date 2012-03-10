@@ -1,7 +1,6 @@
 #include "vsph_camera_bounds.h"
 #include <bpgl/algo/bpgl_project.h>
 #include <vpgl/algo/vpgl_ray.h>
-#include <vpgl/vpgl_calibration_matrix.h>
 #include <vgl/algo/vgl_rotation_3d.h>
 #include <vgl/vgl_closest_point.h>
 #include <vgl/vgl_plane_3d.h>
@@ -76,7 +75,7 @@ void principal_ray_scan::reset() { index_ = -1; }
 bool principal_ray_scan::next()
 {return ++index_<static_cast<int>(theta_.size());}
 
-vgl_point_3d<double> principal_ray_scan::pt_on_unit_sphere(unsigned i)
+vgl_point_3d<double> principal_ray_scan::pt_on_unit_sphere(unsigned i) const
 {
   double th = theta_[i], ph = phi_[i];
   double st = vcl_sin(th), ct = vcl_cos(th);
@@ -84,7 +83,7 @@ vgl_point_3d<double> principal_ray_scan::pt_on_unit_sphere(unsigned i)
   return vgl_point_3d<double>(x, y, z);
 }
 
-vgl_rotation_3d<double> principal_ray_scan::rot(unsigned i, double alpha)
+vgl_rotation_3d<double> principal_ray_scan::rot(unsigned i, double alpha) const
 {
   double th = theta_[i], ph = phi_[i];
   double st = vcl_sin(th), ct = vcl_cos(th);
@@ -134,7 +133,7 @@ pixel_solid_angle(vpgl_perspective_camera<double> const& cam,
                   double& cone_half_angle,
                   double& solid_angle)
 {
-  vgl_point_2d<double> pp = (cam.get_calibration()).principal_point();
+  vgl_point_2d<double> pp = cam.get_calibration().principal_point();
   unsigned u = static_cast<unsigned>(pp.x()),
            v = static_cast<unsigned>(pp.y());
   vgl_ray_3d<double> ray;
@@ -151,7 +150,7 @@ image_solid_angle(vpgl_perspective_camera<double> const& cam,
                   double& cone_half_angle,
                   double& solid_angle)
 {
-  vgl_point_2d<double> pp = (cam.get_calibration()).principal_point();
+  vgl_point_2d<double> pp = cam.get_calibration().principal_point();
   cone_axis = cam.backproject(pp);
   vgl_ray_3d<double> ul = cam.backproject(0.0, 0.0);
   cone_half_angle = angle(ul, cone_axis);
@@ -206,37 +205,6 @@ rotation_angle_interval(vpgl_perspective_camera<double> const& cam)
   return 2.0*half_angle;
 }
 
-#if 0 // moved to vpgl_ray
-double vsph_camera_bounds::angle_between_rays(vgl_rotation_3d<double> const& r0,
-                                              vgl_rotation_3d<double> const& r1)
-{
-  vnl_vector_fixed<double, 3> zaxis, a0, a1;
-  zaxis[0]=0.0;  zaxis[1]=0.0;  zaxis[2]=1.0;
-  vgl_rotation_3d<double> r0i = r0.inverse(), r1i = r1.inverse();
-  a0 = r0i*zaxis; a1 = r1i*zaxis;
-  double dp = dot_product(a0, a1);
-  return vcl_acos(dp);
-}
-
-double vsph_camera_bounds::
-rot_about_ray(vgl_rotation_3d<double> const& r0, vgl_rotation_3d<double> const& r1)
-{
-  // find axes for each rotation
-  vnl_vector_fixed<double, 3> zaxis, a0, a1;
-  zaxis[0]=0.0;  zaxis[1]=0.0;  zaxis[2]=1.0;
-  vgl_rotation_3d<double> r0i = r0.inverse(), r1i = r1.inverse();
-  a0 = r0i*zaxis; a1 = r1i*zaxis;
-  // find the transforms that map the z-axis to each axis
-  vgl_rotation_3d<double> r0b(zaxis, a0), r1b(zaxis,a1);
-  //  find rotations about z axis
-  vgl_rotation_3d<double> r0_alpha = r0*r0b, r1_alpha = r1*r1b;
-  vnl_vector_fixed<double, 3> r0_alpha_rod = r0_alpha.as_rodrigues(), r1_alpha_rod = r1_alpha.as_rodrigues();
-  // get angle difference
-  double ang0 = r0_alpha_rod.magnitude(), ang1 = r1_alpha_rod.magnitude();
-  return vcl_fabs(ang0-ang1);
-}
-#endif // 0
-
 void vsph_camera_bounds::
 relative_transf(vpgl_perspective_camera<double> const& c0,
                 vpgl_perspective_camera<double> const& c1,
@@ -283,7 +251,7 @@ bool vsph_camera_bounds::planar_bounding_box(vpgl_perspective_camera<double> con
                                              double z_plane)
 {
   //principal point for image size
-  vgl_point_2d<double> pp = (c.get_calibration()).principal_point();
+  vgl_point_2d<double> pp = c.get_calibration().principal_point();
 
   //backproject four corners of the iamge
   vgl_ray_3d<double> ul = c.backproject(0.0, 0.0);

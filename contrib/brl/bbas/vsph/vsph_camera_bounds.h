@@ -14,7 +14,6 @@
 #include <vgl/vgl_box_3d.h>
 #include <vgl/algo/vgl_rotation_3d.h>
 #include <vpgl/vpgl_generic_camera.h>
-#include <vpgl/vpgl_affine_camera.h>
 #include <vpgl/vpgl_perspective_camera.h>
 
 class vsph_camera_bounds
@@ -77,13 +76,7 @@ class vsph_camera_bounds
 
   //: conversion between solid angle and cone half angle
   static double cone_half_angle(double solid_angle);
-#if 0 // moved to vsph_ray
-  //: angle between principal ray of one rotation and the principal ray of a second rotation
-  // Rotations \p r0 and \p r1 are expressed as Rodrigues vectors
-  static double angle_between_rays(vgl_rotation_3d<double> const& r0, vgl_rotation_3d<double> const& r1);
-  //: the rotation about the principal ray required to go from \p r0 to \p r1
-  static double rot_about_ray(vgl_rotation_3d<double> const& r0, vgl_rotation_3d<double> const& r1);
-#endif
+
   //: The relative rotation and translation between camera \p c0 and \p c1
   //  In more detail, the relative transformation aligns c1 with the
   //  identity camera
@@ -128,28 +121,28 @@ class principal_ray_scan
   principal_ray_scan(double cone_half_angle, unsigned& n_samples);
   ~principal_ray_scan() {}
   //: number of scan states
-  unsigned n_states(){return theta_.size();}
+  unsigned n_states() const {return theta_.size();}
   //: reset the scan state
   void reset();
   //:the next scan state. Returns false if done
   bool next();
   //: the camera rotation corresponding to the current state of the principal ray.
   // \p alpha is an additional rotation about the principal ray, $-\pi<\alpha<=\pi$, default 0.
-  vgl_rotation_3d<double> rot(double alpha = 0.0) {return rot(index_, alpha);}
+  vgl_rotation_3d<double> rot(double alpha = 0.0) const {return rot(index_, alpha);}
   //: rotation for a given scan index
-  vgl_rotation_3d<double> rot(unsigned i, double alpha = 0.0);
+  vgl_rotation_3d<double> rot(unsigned i, double alpha = 0.0) const;
   //: spherical elevation angle for current state
-  double theta(){return theta_[index_];}
+  double theta() const {return theta_[index_];}
   //: spherical elevation angle for a given scan index
-  double theta(unsigned i){return theta_[i];}
+  double theta(unsigned i) const {return theta_[i];}
   //: spherical azimuth angle for current state
-  double phi(){return phi_[index_];}
+  double phi() const {return phi_[index_];}
   //: spherical azimuth angle for a given scan index
-  double phi(unsigned i){return phi_[i];}
+  double phi(unsigned i) const {return phi_[i];}
   //: point on the unit sphere for current scan state
-  vgl_point_3d<double> pt_on_unit_sphere(){return pt_on_unit_sphere(index_);}
+  vgl_point_3d<double> pt_on_unit_sphere() const {return pt_on_unit_sphere(index_);}
   //: point on the unit sphere for a given scan index
-  vgl_point_3d<double> pt_on_unit_sphere(unsigned i);
+  vgl_point_3d<double> pt_on_unit_sphere(unsigned i) const;
 
  private:
   principal_ray_scan() {}
