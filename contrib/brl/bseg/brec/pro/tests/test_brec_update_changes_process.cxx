@@ -11,9 +11,6 @@
 #include <bvxm/pro/bvxm_processes.h>
 #include <bvxm/pro/bvxm_register.h>
 
-#include <vcl_string.h>
-#include <vcl_iostream.h>
-
 #include <brdb/brdb_value.h>
 #include <brdb/brdb_selection.h>
 
@@ -22,6 +19,15 @@
 #include <bprb/bprb_macros.h>
 #include <bprb/bprb_parameters_sptr.h>
 #include <bprb/bprb_parameters.h>
+
+#include <brip/brip_vil_float_ops.h>
+#include <vpgl/vpgl_perspective_camera.h>
+#include <vpgl/vpgl_rational_camera.h>
+
+#include <brec/brec_bg_pair_density.h>
+#include <brec/pro/brec_processes.h>
+#include <brec/pro/brec_register.h>
+
 #include <vil/vil_image_view.h>
 #include <vnl/vnl_double_3x4.h>
 #include <vnl/vnl_math.h>
@@ -29,14 +35,10 @@
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_box_2d.h>
 #include <vgl/vgl_box_3d.h>
-
-#include <brip/brip_vil_float_ops.h>
 #include <vul/vul_file.h>
-#include <vpgl/vpgl_perspective_camera.h>
 
-#include <brec/brec_bg_pair_density.h>
-#include <brec/pro/brec_processes.h>
-#include <brec/pro/brec_register.h>
+#include <vcl_string.h>
+#include <vcl_iostream.h>
 
 //:
 vpgl_rational_camera<double>
