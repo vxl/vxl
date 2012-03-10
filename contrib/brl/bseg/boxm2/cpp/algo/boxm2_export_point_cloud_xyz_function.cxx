@@ -1,7 +1,6 @@
 #include "boxm2_export_point_cloud_xyz_function.h"
 //:
 // \file
-#include <vgl/vgl_sphere_3d.h>
 
 void boxm2_export_point_cloud_xyz_function::exportPointCloudXYZ(boxm2_block_metadata data, boxm2_block* blk, boxm2_data_base* vis,
                                                                 boxm2_data_base* points, boxm2_data_base* normals, vcl_ofstream& file,
@@ -18,9 +17,9 @@ void boxm2_export_point_cloud_xyz_function::exportPointCloudXYZ(boxm2_block_meta
              file <<  points_data[currIdx][0] << ' ' << points_data[currIdx][1] << ' ' << points_data[currIdx][2] << ' '
                   <<  normals_data[currIdx][0] << ' ' << normals_data[currIdx][1] << ' ' << normals_data[currIdx][2];
              if (output_aux) {
-                 file << ' ' <<  points_data[currIdx][3];
-                 file << ' ' <<  vis_data[currIdx];
-                 file << ' ' <<  normals_data[currIdx][3];
+                 file << ' ' <<  points_data[currIdx][3]
+                      << ' ' <<  vis_data[currIdx]
+                      << ' ' <<  normals_data[currIdx][3];
              }
              file << vcl_endl;
          }
@@ -44,9 +43,9 @@ void boxm2_export_point_cloud_xyz_function::exportPointCloudPLY(boxm2_block_meta
                   <<  normals_data[currIdx][0] << ' ' << normals_data[currIdx][1] << ' ' << normals_data[currIdx][2];
              num_vertices++;
              if (output_aux) {
-                 file << ' ' <<  points_data[currIdx][3];
-                 file << ' ' <<  vis_data[currIdx];
-                 file << ' ' <<  normals_data[currIdx][3];
+                 file << ' ' <<  points_data[currIdx][3]
+                      << ' ' <<  vis_data[currIdx]
+                      << ' ' <<  normals_data[currIdx][3];
              }
              file << vcl_endl;
          }
@@ -58,9 +57,8 @@ void boxm2_export_point_cloud_xyz_function::writePLYHeader(vcl_ofstream& file, u
 {
    file << "ply\nformat ascii 1.0\nelement vertex " << num_vertices
         << "\nproperty float x\nproperty float y\nproperty float z\nproperty float nx\nproperty float ny\nproperty float nz\n";
-   if(output_aux)
+   if (output_aux)
      file << "property float prob\nproperty float vis\nproperty float nmag\n";
-   file << "end_header\n";
-   file  << ss.str();
+   file << "end_header\n" << ss.str();
 }
 

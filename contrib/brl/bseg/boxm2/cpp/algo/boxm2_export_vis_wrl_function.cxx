@@ -1,7 +1,6 @@
 #include "boxm2_export_vis_wrl_function.h"
 //:
 // \file
-#include <vgl/vgl_sphere_3d.h>
 
 void boxm2_compute_export_vis_wrl_function::exportVisToWRL(boxm2_block_metadata data, boxm2_block* blk, boxm2_data_base* alphas,
                                                            boxm2_data_base* vis, boxm2_data_base* points, vcl_ofstream& file)

@@ -3,9 +3,6 @@
 #include <vcl_complex.h>
 #include <vcl_cmath.h>
 
-#include <vgl/io/vgl_io_point_3d.h>
-
-
 #define RADIUS_THRESH 0.0001
 
 void vsph_sph_point_3d::print(vcl_ostream& os) const

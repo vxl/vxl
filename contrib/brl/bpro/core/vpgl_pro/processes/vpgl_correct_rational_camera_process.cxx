@@ -3,17 +3,11 @@
 //:
 // \file
 #include <bprb/bprb_parameters.h>
-#include <vcl_iostream.h>
-#include <vcl_sstream.h>
-#include <vcl_fstream.h>
 #include <vpgl/vpgl_camera.h>
 #include <vpgl/vpgl_rational_camera.h>
 #include <vpgl/vpgl_local_rational_camera.h>
-#include <vul/vul_file.h>
-#include <vul/vul_awk.h>
-#include <vgl/vgl_point_2d.h>
-#include <vgl/vgl_point_3d.h>
 #include <vpgl/algo/vpgl_rational_adjust_onept.h>
+#include <vcl_iostream.h>
 
 //: initialization
 bool vpgl_correct_rational_camera_process_cons(bprb_func_process& pro)

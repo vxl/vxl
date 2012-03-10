@@ -6,8 +6,7 @@
 #include "boxm_edge_tangent_sample.h"
 #include "boxm_inf_line_sample.h"
 
-#include <vgl/io/vgl_io_homg_plane_3d.h>
-#include <vgl/io/vgl_io_infinite_line_3d.h>
+#include <vgl/io/vgl_io_homg_plane_3d.h> // for vsl_b_write(os, sample.plane_);
 
 template <class T>
 void vsl_b_write(vsl_b_ostream & os, boxm_plane_obs<T> const &sample)

@@ -18,7 +18,6 @@
 // \endverbatim
 //*****************************************************************************
 
-#include <vgl/vgl_fwd.h>
 #include <vsol/vsol_region_2d.h>
 #include <vsol/vsol_point_2d_sptr.h>
 #include <vsol/vsol_polygon_2d_sptr.h>
