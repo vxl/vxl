@@ -174,6 +174,27 @@ SOURCE=.\processes/brad_save_image_metadata_process.cxx
 SOURCE=.\processes/brad_load_image_metadata_process.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\processes/brad_estimate_shadows_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/brad_get_sun_angles_date_time_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/brad_get_sun_angles_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/brad_create_atmospheric_parameters_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/brad_convert_reflectance_to_digital_count_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/brad_set_sun_angles_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/brad_create_image_metadata_process.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/brdb_value_t+brad_eigenspace_sptr-.cxx
 # End Source File
 # Begin Source File

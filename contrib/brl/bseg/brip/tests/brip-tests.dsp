@@ -254,6 +254,9 @@ SOURCE=.\test_extrema.cxx
 SOURCE=.\test_filter_bank.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\test_gain_offset_solver.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\test_include.cxx
 # End Source File
 # Begin Source File

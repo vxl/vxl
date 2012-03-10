@@ -119,6 +119,9 @@ SOURCE=.\boxm2_stream_cache.cxx
 SOURCE=.\boxm2_stream_block_cache.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\boxm2_stream_scene_cache.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/brdb_value_t+boxm2_cache_sptr-.cxx
 # End Source File
 # Begin Source File
@@ -204,6 +207,9 @@ SOURCE=.\boxm2_stream_cache.txx
 # End Source File
 # Begin Source File
 SOURCE=.\boxm2_stream_block_cache.h
+# End Source File
+# Begin Source File
+SOURCE=.\boxm2_stream_scene_cache.h
 # End Source File
 # End Group
 # End Target

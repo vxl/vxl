@@ -3,7 +3,7 @@
 # ** DO NOT EDIT **
 
 # variables to REPLACE
-# 
+#
 # /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/core" /I "$(VXLROOT)/vcl/config.win32" /I "$(VXLROOT)/contrib/mul" == include path
 #   -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE == compiler defines
 #  == override in output directory
@@ -14,16 +14,16 @@
 CFG=brad - Win32 Debug
 !MESSAGE This is not a valid makefile. To build this project using NMAKE,
 !MESSAGE use the Export Makefile command and run
-!MESSAGE 
+!MESSAGE
 !MESSAGE NMAKE /f "brad.mak".
-!MESSAGE 
+!MESSAGE
 !MESSAGE You can specify a configuration when running NMAKE
 !MESSAGE by defining the macro CFG on the command line. For example:
-!MESSAGE 
+!MESSAGE
 !MESSAGE NMAKE /f "brad.mak" CFG="vil2 - Win32 Debug"
-!MESSAGE 
+!MESSAGE
 !MESSAGE Possible choices for configuration are:
-!MESSAGE 
+!MESSAGE
 !MESSAGE "brad - Win32 Debug" (based on "Win32 (x86) Static Library")
 !MESSAGE "brad - Win32 Release" (based on "Win32 (x86) Static Library")
 # Begin Project
@@ -83,7 +83,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo
-!ENDIF 
+!ENDIF
 
 # Begin Target
 
@@ -127,6 +127,9 @@ SOURCE=.\brad_image_metadata.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\brad_atmospheric_parameters.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\brad_estimate_shadows.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/brad_eigenspace+brad_hist_prob_feature_vector-.cxx
@@ -196,6 +199,9 @@ SOURCE=.\brad_atmospheric_parameters.h
 # End Source File
 # Begin Source File
 SOURCE=.\brad_image_atmospherics_est.h
+# End Source File
+# Begin Source File
+SOURCE=.\brad_estimate_shadows.h
 # End Source File
 # End Group
 # End Target

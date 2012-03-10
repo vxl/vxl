@@ -105,6 +105,9 @@ SOURCE=.\bvgl_changes.cxx
 SOURCE=.\bvgl_ray_pyramid.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\bvgl_labelme_parser.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/vbl_smart_ptr+bvgl_articulated_poly-.cxx
 # End Source File
 # Begin Source File
@@ -181,6 +184,9 @@ SOURCE=.\bvgl_triangle_3d.txx
 # End Source File
 # Begin Source File
 SOURCE=.\bvgl_triangle_3d.h
+# End Source File
+# Begin Source File
+SOURCE=.\bvgl_labelme_parser.h
 # End Source File
 # End Group
 # End Target

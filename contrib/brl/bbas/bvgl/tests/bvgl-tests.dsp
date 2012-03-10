@@ -255,6 +255,9 @@ SOURCE=.\test_bvgl_ray_pyramid.cxx
 SOURCE=.\test_bvgl_intersection.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\test_bvgl_labelme_parser.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\test_include.cxx
 # End Source File
 # Begin Source File

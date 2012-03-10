@@ -100,6 +100,9 @@ SOURCE=.\boxm2_multi_util.cxx
 # Begin Source File
 SOURCE=.\boxm2_multi_cache.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\boxm2_multi_cache_group.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
@@ -108,6 +111,9 @@ SOURCE=.\boxm2_multi_util.h
 # End Source File
 # Begin Source File
 SOURCE=.\boxm2_multi_cache.h
+# End Source File
+# Begin Source File
+SOURCE=.\boxm2_multi_cache_group.h
 # End Source File
 # End Group
 # End Target

@@ -126,6 +126,9 @@ SOURCE=.\bvpl_edge2d_kernel_factory.cxx
 SOURCE=.\bvpl_gauss3d_x_kernel_factory.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\bvpl_gauss3d_kernel_factory.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/vbl_smart_ptr+bvpl_subgrid_iterator_base-.cxx
 # End Source File
 # Begin Source File
@@ -169,6 +172,9 @@ SOURCE=.\bvpl_gauss3d_xx_kernel_factory.h
 # End Source File
 # Begin Source File
 SOURCE=.\bvpl_weighted_cube_kernel_factory.h
+# End Source File
+# Begin Source File
+SOURCE=.\bvpl_gauss3d_kernel_factory.h
 # End Source File
 # End Group
 # End Target

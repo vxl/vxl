@@ -120,6 +120,12 @@ SOURCE=.\processes/sdet_create_texture_classifier_process.cxx
 SOURCE=.\processes/sdet_texture_training_process.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\processes/sdet_exp_img_classifier_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/sdet_print_texton_dict_process.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/brdb_value_t+sdet_texture_classifier_sptr-.cxx
 # End Source File
 # End Group

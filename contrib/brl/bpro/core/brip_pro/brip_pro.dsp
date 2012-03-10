@@ -107,6 +107,9 @@ SOURCE=.\processes/brip_blobwise_kl_div_process.cxx
 # Begin Source File
 SOURCE=.\processes/brip_blob_intersection_process.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\processes/brip_solve_gain_offset_process.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"

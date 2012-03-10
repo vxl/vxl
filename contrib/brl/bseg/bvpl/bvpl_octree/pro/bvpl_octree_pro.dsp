@@ -213,6 +213,18 @@ SOURCE=.\processes/steerable_filters/bvpl_init_sf_response_scene_process.cxx
 SOURCE=.\processes/steerable_filters/bvpl_compute_sf_raw_response_process.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\processes/pca/bvpl_pca_global_add_error_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/pca/bvpl_pca_global_proj_error_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/taylor/bvpl_taylor_global_proj_error_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/taylor/bvpl_taylor_global_add_error_process.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/brdb_value_t+bvpl_pca_error_scenes_sptr-.cxx
 # End Source File
 # Begin Source File

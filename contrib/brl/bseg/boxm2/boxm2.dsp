@@ -166,6 +166,9 @@ SOURCE=.\Templates/boxm2_data+BOXM2_BATCH_HISTOGRAM-.cxx
 # Begin Source File
 SOURCE=.\Templates/boxm2_data+BOXM2_NORMAL_ALBEDO_ARRAY-.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\Templates/boxm2_data+BOXM2_GAUSS_RGB-.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"

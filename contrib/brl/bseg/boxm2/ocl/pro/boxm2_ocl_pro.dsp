@@ -221,6 +221,27 @@ SOURCE=.\processes/boxm2_ocl_render_expected_z_image_process.cxx
 # Begin Source File
 SOURCE=.\processes/boxm2_ocl_render_expected_image_naa_process.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\processes/boxm2_ocl_update_alpha_wcubic_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/boxm2_ocl_batch_uncertainty_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/boxm2_ocl_batch_compute_normal_albedo_array_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/boxm2_ocl_update_aux_per_view_naa_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/boxm2_ocl_update_with_alt_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/boxm2_ocl_uncertainty_per_image_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/boxm2_ocl_aggregate_normal_from_filter_response_process.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"

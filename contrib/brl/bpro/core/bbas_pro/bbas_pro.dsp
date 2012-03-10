@@ -141,6 +141,12 @@ SOURCE=.\processes/bbas_estimate_irradiance_process.cxx
 SOURCE=.\processes/imesh_ply_bbox_process.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\processes/bsl_expected_image_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/bsl_fusion_process.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/brdb_value_t+bbas_1d_array_uint_sptr-.cxx
 # End Source File
 # Begin Source File
