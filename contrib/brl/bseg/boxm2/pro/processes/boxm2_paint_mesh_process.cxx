@@ -18,6 +18,7 @@
 #include <boxm2/cpp/algo/boxm2_gauss_rgb_processor.h>
 
 #include <bmsh3d/algo/bmsh3d_fileio.h>
+#include <boct/boct_bit_tree.h>
 
 #include <vcl_fstream.h>
 #include <vcl_cassert.h>
