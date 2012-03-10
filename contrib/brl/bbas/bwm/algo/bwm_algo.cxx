@@ -16,6 +16,7 @@
 #include <vpgl/file_formats/vpgl_nitf_rational_camera.h>
 
 #include <vil/vil_load.h>
+#include <vnl/algo/vnl_svd.h>
 
 #include <vcl_iostream.h>
 #include <vcl_cstdlib.h> // for std::malloc()
