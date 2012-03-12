@@ -109,8 +109,8 @@ bool boxm2_ocl_update_with_alt_process_cons(bprb_func_process& pro)
   input_types_[6] = "vil_image_view_base_sptr";     //mask image view
   input_types_[7] = "bool";                         //do_update_alpha/don't update alpha
   input_types_[8] = "float";                        //variance value? if 0.0 or less, then use variable variance
-  input_types_[9] = "vil_image_view_base_sptr";     //alternate explaination prior (per pixel)
-  input_types_[10] = "vil_image_view_base_sptr";    //alternate explaination appearance density (per pixel)
+  input_types_[9] = "vil_image_view_base_sptr";     //alternate explanation prior (per pixel)
+  input_types_[10] = "vil_image_view_base_sptr";    //alternate explanation appearance density (per pixel)
 
   // process has 1 output:
   // output[0]: scene sptr
