@@ -12,7 +12,7 @@
 
 namespace boxm2_add_block_process_globals
 {
-  const unsigned n_inputs_  = 14;
+  const unsigned n_inputs_  = 15;
   const unsigned n_outputs_ = 0;
 }
 
@@ -36,6 +36,7 @@ bool boxm2_add_block_process_cons(bprb_func_process& pro)
   input_types_[11] = "float";    // block dims
   input_types_[12] = "float";    // max_mb
   input_types_[13] = "float";    // p_init
+  input_types_[14]  = "unsigned"; // init tree depth
 
   // process has 1 output
   vcl_vector<vcl_string> output_types_(n_outputs_);
@@ -71,6 +72,8 @@ bool boxm2_add_block_process(bprb_func_process& pro)
   float    max_data_size    =pro.get_input<float>           (i++);
   float    p_init           =pro.get_input<float>           (i++);
 
+  unsigned init_level     =pro.get_input<unsigned>        (i++);
+
   boxm2_block_id id(index_i,index_j,index_k);
   vcl_map<boxm2_block_id, boxm2_block_metadata> blks=scene->blocks();
 
@@ -84,7 +87,7 @@ bool boxm2_add_block_process(bprb_func_process& pro)
                              vgl_point_3d<double>(local_x,local_y,local_z),
                              vgl_vector_3d<double>(blk_dims,blk_dims,blk_dims),
                              vgl_vector_3d<unsigned>(num_x,num_y,num_z),
-                             1,max_num_lvls,max_data_size,p_init);
+                             init_level,max_num_lvls,max_data_size,p_init);
 
   blks[id]=mdata;
   scene->set_blocks(blks);
