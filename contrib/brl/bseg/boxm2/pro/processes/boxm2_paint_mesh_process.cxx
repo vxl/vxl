@@ -83,7 +83,7 @@ bool boxm2_paint_mesh_process(bprb_func_process& pro)
   }
 
   if (!foundDataType) {
-      vcl_cout<<"BOXM2_PAINT_MESH_PROCESS ERROR: scene doesn't have appearance..."<<vcl_endl;
+      vcl_cout<<"BOXM2_PAINT_MESH_PROCESS ERROR: scene doesn't have GAUSS_RGB appearance..."<<vcl_endl;
       return false;
   }
 
@@ -149,9 +149,11 @@ bool boxm2_paint_mesh_process(bprb_func_process& pro)
     //store cell probability
     prob = 1.0f - vcl_exp(-alpha * side_len * mdata.sub_block_dim_.x());
 
-    boxm2_data_base *  int_base  = cache->get_data_base(id,boxm2_data_traits<BOXM2_GAUSS_RGB>::prefix());
-    boxm2_data<BOXM2_GAUSS_RGB> *int_data = new boxm2_data<BOXM2_GAUSS_RGB>(int_base->data_buffer(),int_base->buffer_length(),int_base->block_id());
-    intensity = boxm2_gauss_rgb_processor::expected_color( (int_data->data())[data_offset]);
+    boxm2_data_base *  int_base  = cache->get_data_base(id, data_type);
+    if (data_type.find(boxm2_data_traits<BOXM2_GAUSS_RGB>::prefix()) != vcl_string::npos) {
+      boxm2_data<BOXM2_GAUSS_RGB> *int_data = new boxm2_data<BOXM2_GAUSS_RGB>(int_base->data_buffer(),int_base->buffer_length(),int_base->block_id());
+      intensity = boxm2_gauss_rgb_processor::expected_color( (int_data->data())[data_offset]);
+    }
 
     ply_write(oply, pt.x());
     ply_write(oply, pt.y());
