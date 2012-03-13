@@ -18,6 +18,8 @@
 #include <icam/icam_sample.h>
 #include <vpgl/algo/vpgl_ray.h>
 
+#include <vil/vil_save.h>
+
 static bool smallest_local_minima(vbl_array_3d<double> const& in,
                                   double min_thresh,
                                   int & ix_min, int & iy_min,
