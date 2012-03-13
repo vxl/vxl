@@ -566,12 +566,11 @@ double vpgl_persp_cam_distance( const vpgl_perspective_camera<T>& cam1, const vp
 {
   vgl_vector_3d<T> ray1 = cam1.principal_axis();
   vgl_vector_3d<T> ray2 = cam2.principal_axis();
-  
+
   vgl_rotation_3d<T> R(ray1, ray2);
   double trace = vnl_trace(R.as_matrix());
-  return acos((trace-1.0)/2.0);  // dist is theta
+  return vcl_acos((trace-1.0)/2.0);  // dist is theta
 }
-
 
 
 // Code for easy instantiation.
