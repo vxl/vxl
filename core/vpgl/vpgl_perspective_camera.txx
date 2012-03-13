@@ -27,6 +27,8 @@
 #include <vcl_fstream.h>
 #include <vcl_algorithm.h> // for std::sort()
 
+#include <vnl/vnl_trace.h>
+
 //-------------------------------------------
 template <class T>
 vpgl_perspective_camera<T>::vpgl_perspective_camera()
@@ -197,6 +199,7 @@ void vpgl_perspective_camera<T>::look_at(const vgl_homg_point_3d<T>& point,
   vgl_vector_3d<T> u = normalized(up);
   vgl_vector_3d<T> look = point - camera_center();
   normalize(look);
+  vcl_cout << "look at vector: " << look << vcl_endl;
 
 #if 0
   T dp = dot_product(look, up);
@@ -558,6 +561,18 @@ vcl_vector<vpgl_perspective_camera<T> > cameras_from_directory(vcl_string dir, T
   return camlist;
 }
 
+template <class T>
+double vpgl_persp_cam_distance( const vpgl_perspective_camera<T>& cam1, const vpgl_perspective_camera<T>& cam2)
+{
+  vgl_vector_3d<T> ray1 = cam1.principal_axis();
+  vgl_vector_3d<T> ray2 = cam2.principal_axis();
+  
+  vgl_rotation_3d<T> R(ray1, ray2);
+  double trace = vnl_trace(R.as_matrix());
+  return acos((trace-1.0)/2.0);  // dist is theta
+}
+
+
 
 // Code for easy instantiation.
 #undef vpgl_PERSPECTIVE_CAMERA_INSTANTIATE
@@ -571,6 +586,8 @@ template vpgl_perspective_camera<T > vpgl_align_up(const vpgl_perspective_camera
                                                    const vpgl_perspective_camera<T >& p1 ); \
 template vpgl_perspective_camera<T > postmultiply(const vpgl_perspective_camera<T >& in_cam, \
                                                   const vgl_h_matrix_3d<T >& euclid_trans); \
+template double vpgl_persp_cam_distance(const vpgl_perspective_camera<T >& cam1, \
+                                        const vpgl_perspective_camera<T >& cam2); \
 template void vrml_write(vcl_ostream &s, const vpgl_perspective_camera<T >&, double rad); \
 template vcl_vector<vpgl_perspective_camera<T > > cameras_from_directory(vcl_string dir, T); \
 template vcl_ostream& operator<<(vcl_ostream&, const vpgl_perspective_camera<T >&); \

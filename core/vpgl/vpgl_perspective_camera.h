@@ -200,6 +200,9 @@ vpgl_perspective_camera<T> vpgl_align_up( const vpgl_perspective_camera<T>& p0,
                                           const vpgl_perspective_camera<T>& p1 );
 
 template <class T>
+double vpgl_persp_cam_distance( const vpgl_perspective_camera<T>& cam1, const vpgl_perspective_camera<T>& cam2);
+
+template <class T>
 vpgl_perspective_camera<T>
 postmultiply( const vpgl_perspective_camera<T>& in_cam,
               const vgl_h_matrix_3d<T>& euclid_trans)
