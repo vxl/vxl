@@ -1,5 +1,5 @@
-//this is /contrib/brl/bseg/bvpl/util/io/bvpl_bundler_features_2d_io.h
-#include<bvpl/util/io/bvpl_bundler_features_2d_io.h>
+// This is brl/bseg/bvpl/util/io/bvpl_bundler_features_2d_io.cxx
+#include "bvpl_bundler_features_2d_io.h"
 
 void vsl_b_read(vsl_b_istream &is, bvpl_bundler_features_2d& bundler_features)
 {

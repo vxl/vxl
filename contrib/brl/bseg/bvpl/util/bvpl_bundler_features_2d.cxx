@@ -1,5 +1,6 @@
-//this is /contrib/dbrec3d/bof/bof_bundler_features_2d.h
-#include <bvpl/util/bvpl_bundler_features_2d.h>
+// This is brl/bseg/bvpl/util/bvpl_bundler_features_2d.cxx
+#include "bvpl_bundler_features_2d.h"
+//
 #include <vgl/io/vgl_io_point_3d.h>
 #include <vnl/io/vnl_io_vector.h>
 
@@ -31,11 +32,11 @@ void bvpl_bundler_features_2d::write_feature_txt( vcl_string const& filename ) c
             v_itr, v_end = p_itr->second.end();
 
         for ( v_itr = p_itr->second.begin();
-                v_itr != v_end; ++v_itr )
+              v_itr != v_end; ++v_itr )
         {
             of << v_itr->second << '\n';
-        }//end view iteration
-    }//end 3d point iteration
+        } //end view iteration
+    } //end 3d point iteration
 
 }//end bvpl_bundler_features_2d::write_mfile
 

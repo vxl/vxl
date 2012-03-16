@@ -1,7 +1,7 @@
-#include <vpgl/vpgl_lvcs.h>
-#include <vpgl/io/vpgl_io_lvcs.h>
+#include "vpgl_io_lvcs.h"
 //:
 // \file
+#include <vpgl/vpgl_lvcs.h>
 #include <vnl/io/vnl_io_matrix_fixed.h>
 
 void vsl_b_write(vsl_b_ostream & os, vpgl_lvcs const& lvcs)

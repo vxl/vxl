@@ -1,4 +1,4 @@
-#include <vpgl/io/vpgl_io_camera.h>
+#include "vpgl_io_camera.h"
 //:
 // \file
 

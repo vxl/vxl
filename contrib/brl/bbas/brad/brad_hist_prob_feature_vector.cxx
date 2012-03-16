@@ -1,4 +1,5 @@
-#include <brad/brad_hist_prob_feature_vector.h>
+#include "brad_hist_prob_feature_vector.h"
+//
 #include <bsta/bsta_histogram.h>
 #include <vil/vil_image_view.h>
 
@@ -8,11 +9,11 @@ operator()(vil_image_view<float> const& view) const
 {
   bsta_histogram<float> h(min_, max_, nbins_);
   unsigned ni = view.ni(), nj = view.nj();
-  for(unsigned j = 0; j<nj; ++j)
-    for(unsigned i = 0; i<ni; ++i)
+  for (unsigned j = 0; j<nj; ++j)
+    for (unsigned i = 0; i<ni; ++i)
       h.upcount(view(i,j), 1.0f);
   vnl_vector<double> ret(nbins_+1);
-  for(unsigned b = 0; b<nbins_; ++b)
+  for (unsigned b = 0; b<nbins_; ++b)
     ret[b]=h.p(b);
   ret[nbins_]= h.entropy();
   return ret;

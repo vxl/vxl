@@ -1,4 +1,5 @@
-#include <brad/brad_phongs_model_est.h>
+#include "brad_phongs_model_est.h"
+//
 #include <vnl/vnl_identity_3x3.h>
 #include <vnl/vnl_double_3x3.h>
 #include <vnl/vnl_vector.h>
@@ -41,7 +42,6 @@ float brad_phongs_model::val(float view_elev, float view_azim, float sun_elev, f
     vnl_double_3 reflected_light_vector =householder_xform * sun_dir;
     double diffuse_term  = kd_* vcl_fabs(dot_product<double>(normal_,sun_dir));
     double specular_term = ks_* vcl_pow(vcl_fabs(dot_product<double>(reflected_light_vector,view_dir)),(double)gamma_);
-
 
     return diffuse_term + specular_term;
 }

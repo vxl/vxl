@@ -1,10 +1,10 @@
 #ifndef vpgl_io_rational_camera_txx_
 #define vpgl_io_rational_camera_txx_
 
-#include <vpgl/vpgl_rational_camera.h>
-#include <vpgl/io/vpgl_io_rational_camera.h>
+#include "vpgl_io_rational_camera.h"
 //:
 // \file
+#include <vpgl/vpgl_rational_camera.h>
 #include <vnl/io/vnl_io_matrix_fixed.h>
 
 template <class T>
@@ -66,7 +66,6 @@ void vsl_print_summary(vcl_ostream& os,const vpgl_rational_camera<T> & c)
 {
   os << c << '\n';
 }
-
 
 
 #define VPGL_IO_RATIONAL_CAMERA_INSTANTIATE(T) \

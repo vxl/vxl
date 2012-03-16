@@ -1,4 +1,5 @@
-#include <bundler/bundler.h>
+#include "bundler.h"
+//
 #include <bundler/bundler_inters.h>
 #include <vcl_cassert.h>
 
@@ -216,10 +217,8 @@ bool bundler_sfm::run_sfm_stage(
         vcl_vector<vgl_point_3d<double> > &points,
         vnl_sparse_matrix<bool> visibility_matrix) const
 {
-
     assert(cameras.size() == 0);
     assert(points.size() == 0);
-
 
     //Create the initial reconstruction
     vcl_cout << "Creating the initial reconstruction..." << vcl_endl;
@@ -255,14 +254,14 @@ bool bundler_sfm::run_sfm_stage(
          cam != recon.feature_sets.end();
          ++cam)
     {
-        if( (*cam)->in_recon ){
+        if ( (*cam)->in_recon ){
             cameras.push_back((*cam)->camera);
         }
     }
 
     vcl_vector<bundler_inters_track_sptr>::const_iterator pt;
     for (pt = recon.tracks.begin(); pt != recon.tracks.end(); pt++) {
-        if( (*pt)->observed ) {
+        if ( (*pt)->observed ) {
             points.push_back((*pt)->world_point);
         }
     }

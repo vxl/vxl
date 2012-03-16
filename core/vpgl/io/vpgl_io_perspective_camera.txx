@@ -1,10 +1,10 @@
 #ifndef vpgl_io_perspective_camera_txx_
 #define vpgl_io_perspective_camera_txx_
 
-#include <vpgl/vpgl_perspective_camera.h>
-#include <vpgl/io/vpgl_io_perspective_camera.h>
+#include "vpgl_io_perspective_camera.h"
 //:
 // \file
+#include <vpgl/vpgl_perspective_camera.h>
 #include <vnl/io/vnl_io_matrix_fixed.h>
 #include <vnl/io/vnl_io_vector_fixed.h>
 #include <vgl/io/vgl_io_point_3d.h>
@@ -61,7 +61,6 @@ void vsl_print_summary(vcl_ostream& os,const vpgl_perspective_camera<T> & c)
 {
   os << c << '\n';
 }
-
 
 
 #define VPGL_IO_PERSPECTIVE_CAMERA_INSTANTIATE(T) \

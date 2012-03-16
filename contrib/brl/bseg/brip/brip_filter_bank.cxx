@@ -1,4 +1,5 @@
-#include <brip/brip_filter_bank.h>
+#include "brip_filter_bank.h"
+//
 #include <brip/brip_vil_float_ops.h>
 #include <brip/brip_vil_ops.h>
 #include <vil/vil_resample_bicub.h>

@@ -2,8 +2,9 @@
 #define vpgl_io_affine_camera_txx_
 //:
 // \file
+#include "vpgl_io_affine_camera.h"
+//
 #include <vpgl/vpgl_affine_camera.h>
-#include <vpgl/io/vpgl_io_affine_camera.h>
 #include <vnl/io/vnl_io_matrix_fixed.h>
 
 template <class T>
@@ -47,7 +48,6 @@ void vsl_print_summary(vcl_ostream& os,const vpgl_affine_camera<T> & c)
 {
   os << c << '\n';
 }
-
 
 
 #define VPGL_IO_AFFINE_CAMERA_INSTANTIATE(T) \

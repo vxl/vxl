@@ -1,4 +1,5 @@
-#include<brip/brip_gain_offset_solver.h>
+#include"brip_gain_offset_solver.h"
+//
 #include <vil/vil_image_view.h>
 #include <vnl/vnl_matrix.h>
 #include <vnl/algo/vnl_svd.h>

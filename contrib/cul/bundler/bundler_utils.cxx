@@ -1,5 +1,5 @@
-#include <bundler/bundler_utils.h>
-
+#include "bundler_utils.h"
+//
 #include <vpgl/algo/vpgl_triangulate_points.h>
 #include <vpgl/algo/vpgl_camera_compute.h>
 

@@ -1,4 +1,5 @@
-#include <brad/brad_grad_int_feature_vector.h>
+#include "brad_grad_int_feature_vector.h"
+//
 #include <bsta/bsta_histogram.h>
 #include <vil/vil_image_view.h>
 #include <vnl/vnl_math.h>
@@ -11,8 +12,8 @@ operator()(vil_image_view<float> const& view) const
   bsta_histogram<float> h_grad(min_grad_, max_grad_, nbins_);
   int ni = view.ni(), nj = view.nj();
   assert(ni>=5&&nj>=5);//must have at least one gradient window
-  for(int j = 1; j<nj-1; ++j)
-    for(int i = 1; i<ni-1; ++i){
+  for (int j = 1; j<nj-1; ++j)
+    for (int i = 1; i<ni-1; ++i){
       float dx = -(view(i-1, j-1) + 2.0f*view(i-1, j) + view(i-1, j+1));
       dx += view(i+1, j-1) + 2.0f*view(i+1, j) + view(i+1, j+1);
       float dy = -(view(i-1, j-1) + 2.0f*view(i, j-1) + view(i+1, j-1));
@@ -23,7 +24,7 @@ operator()(vil_image_view<float> const& view) const
       h_int.upcount(view(i,j), 1.0f);
     }
   vnl_vector<double> ret(2*nbins_+2);
-  for(unsigned b = 0; b<nbins_; ++b){
+  for (unsigned b = 0; b<nbins_; ++b){
     ret[b]=h_int.p(b);
     ret[b+nbins_+1] = h_grad.p(b);
   }

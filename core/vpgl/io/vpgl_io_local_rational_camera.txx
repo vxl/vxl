@@ -1,9 +1,10 @@
 #ifndef vpgl_io_local_rational_camera_txx_
 #define vpgl_io_local_rational_camera_txx_
+
+#include "vpgl_io_local_rational_camera.h"
 //:
 // \file
 #include <vpgl/vpgl_local_rational_camera.h>
-#include <vpgl/io/vpgl_io_local_rational_camera.h>
 #include <vpgl/io/vpgl_io_rational_camera.h>
 #include <vnl/io/vnl_io_matrix_fixed.h>
 #include <vpgl/io/vpgl_io_lvcs.h>
