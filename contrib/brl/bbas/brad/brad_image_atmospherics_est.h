@@ -13,6 +13,7 @@
 //----------------------------------------------------------------------------
 #include "brad_image_metadata.h"
 #include "brad_atmospheric_parameters.h"
+#include <vil/vil_image_view.h>
 
 bool brad_estimate_atmospheric_parameters(vil_image_view<float> const& radiance, brad_image_metadata const& mdata, brad_atmospheric_parameters &params);
 bool brad_estimate_atmospheric_parameters(vil_image_view<float> const& radiance, brad_image_metadata const& mdata, float mean_reflectance, brad_atmospheric_parameters &params);
