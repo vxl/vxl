@@ -1,7 +1,7 @@
 #include "bwm_observer_generic_cam.h"
+//
 #include "bwm_observer_mgr.h"
 #include "bwm_observer_proj_cam.h"
-#include "bwm_observer_generic_cam.h"
 #include "algo/bwm_utils.h"
 #include <vsl/vsl_binary_io.h>
 #include <vgl/vgl_point_2d.h>
