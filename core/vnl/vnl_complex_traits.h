@@ -45,6 +45,9 @@ makro(char);
 makro(short);
 makro(int);
 makro(long);
+#if VCL_HAS_LONG_LONG
+makro(long long);
+#endif
 #undef makro
 #undef macro
 
