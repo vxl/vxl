@@ -866,6 +866,24 @@ SOURCE=.\Templates/vnl_matrix_fixed+float.5.5-.cxx
 # Begin Source File
 SOURCE=.\Templates/vnl_vector_fixed+float.10-.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\Templates/vnl_matrix+ulonglong-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vnl_vector+ulonglong-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vnl_vector+longlong-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vnl_c_vector+ulonglong-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vnl_matrix+longlong-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vnl_c_vector+longlong-.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
