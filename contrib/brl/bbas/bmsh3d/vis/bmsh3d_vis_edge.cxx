@@ -2,6 +2,8 @@
 //  MingChing Chang
 //  May 03, 2005.
 
+#include "bmsh3d_vis_edge.h"
+
 #include <bmsh3d/bmsh3d_vertex.h>
 
 #include <bmsh3d/vis/bmsh3d_vis_face.h>

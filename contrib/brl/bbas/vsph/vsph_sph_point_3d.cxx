@@ -1,5 +1,6 @@
 // This is bbas/vsph/vsph_sph_point_3d.cxx
-#include "vsph_spherical_coord.h"
+#include "vsph_sph_point_3d.h"
+//
 #include <vcl_complex.h>
 #include <vcl_cmath.h>
 

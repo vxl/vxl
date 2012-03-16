@@ -1,3 +1,4 @@
+#include "boxm2_to_boxm.h"
 //:
 // \file
 #include <vcl_queue.h>

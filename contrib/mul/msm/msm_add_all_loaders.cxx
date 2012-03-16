@@ -1,4 +1,4 @@
-#include <mbl/mbl_cloneables_factory.h>
+#include "msm_add_all_loaders.h"
 //:
 // \file
 #include <msm/msm_translation_aligner.h>
@@ -8,6 +8,8 @@
 #include <msm/msm_no_limiter.h>
 #include <msm/msm_box_limiter.h>
 #include <msm/msm_ellipsoid_limiter.h>
+
+#include <mbl/mbl_cloneables_factory.h>
 
 //: Add all binary loaders and factory objects for msm library
 void msm_add_all_loaders()

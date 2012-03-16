@@ -1,6 +1,4 @@
-#include <vcl_cmath.h>
-#include <vnl/vnl_math.h>
-
+#include "vpgl_datum_conversion.h"
 //******************************************************************************
 //:
 // \file
@@ -26,6 +24,8 @@
 //         lon(NAD27) = lon(WGS84)-d_lon <- note "-" signs
 //         elev(NAD27) = elev(WGS84)-d_H
 //
+#include <vcl_cmath.h>
+#include <vnl/vnl_math.h>
 
 #define degree_to_rad   (vnl_math::pi_over_180)      // Degree to rad conv.
 #define dcos(x)         vcl_cos((x)*vnl_math::pi_over_180)

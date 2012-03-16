@@ -1,5 +1,5 @@
 // This is brl/bpro/core/sdet_pro/processes/sdet_detect_third_order_edges_process.cxx
-#include "sdet_detect_edges_process.h"
+#include "sdet_detect_third_order_edges_process.h"
 //:
 // \file
 

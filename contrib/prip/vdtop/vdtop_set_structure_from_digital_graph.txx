@@ -1,6 +1,8 @@
 #ifndef vdtop_set_structure_from_digital_graph_txx_
 #define vdtop_set_structure_from_digital_graph_txx_
 
+#include "vdtop_set_structure_from_digital_graph.h"
+//
 #include <vdtop/vdtop_8_neighborhood_mask.h>
 #include <vmap/vmap_types.h> // for vmap_2_map_tag
 #include <vil/vil_image_view.h>

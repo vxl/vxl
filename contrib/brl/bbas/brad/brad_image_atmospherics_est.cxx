@@ -1,10 +1,9 @@
+#include "brad_image_atmospherics_est.h"
+//
 #include <vil/vil_image_view.h>
 #include <vil/vil_math.h>
 #include <bsta/bsta_histogram.h>
 #include <vnl/vnl_math.h>
-
-#include "brad_image_metadata.h"
-#include "brad_atmospheric_parameters.h"
 
 bool brad_estimate_atmospheric_parameters(vil_image_view<float> const& radiance, brad_image_metadata const& mdata, brad_atmospheric_parameters &params)
 {
@@ -15,14 +14,14 @@ bool brad_estimate_atmospheric_parameters(vil_image_view<float> const& radiance,
   vil_math_value_range(radiance,minval,maxval);
   // compute histogram for image
   bsta_histogram<float> h(minval, maxval, 512);
-  for(unsigned j = 0; j<nj; ++j)
-    for(unsigned i = 0; i<ni; ++i)
+  for (unsigned j = 0; j<nj; ++j)
+    for (unsigned i = 0; i<ni; ++i)
       h.upcount(radiance(i, j), 1.0f);
 
-  // compute airlight 
+  // compute airlight
   float frac = 0.0001f;
   double airlight = h.value_with_area_below(frac);
- 
+
   vcl_cout << "min = " << minval << ", airlight = " << airlight << vcl_endl;
 
   // fix optical depth and skylight
@@ -45,14 +44,14 @@ bool brad_estimate_atmospheric_parameters(vil_image_view<float> const& radiance,
   vil_math_value_range(radiance,minval,maxval);
   // compute histogram for image
   bsta_histogram<float> h(minval, maxval, 512);
-  for(unsigned j = 0; j<nj; ++j)
-    for(unsigned i = 0; i<ni; ++i)
+  for (unsigned j = 0; j<nj; ++j)
+    for (unsigned i = 0; i<ni; ++i)
       h.upcount(radiance(i, j), 1.0f);
 
-  // compute airlight 
+  // compute airlight
   float frac = 0.0001f;
   double airlight = h.value_with_area_below(frac);
-   
+
   vcl_cout << "min = " << minval << ", airlight = " << airlight << vcl_endl;
 
   // find image mean
@@ -86,14 +85,14 @@ bool brad_undo_reflectance_estimate(vil_image_view<float> const& reflectance, br
   double sun_dot_norm = vcl_sin(sun_el_rads);
   double Lsat_horizontal = T_view*(mdata.sun_irradiance_ * sun_dot_norm * T_sun + atm_params.skylight_)/vnl_math::pi + atm_params.airlight_;
 
-  // convert reflectance values to radiance 
+  // convert reflectance values to radiance
   unsigned int ni = reflectance.ni();
   unsigned int nj = reflectance.nj();
   radiance.set_size(ni,nj);
   for (unsigned int j=0; j<nj; ++j) {
-     for (unsigned int i=0; i<ni; ++i) {
-        radiance(i,j) = reflectance(i,j) * Lsat_horizontal + atm_params.airlight_;
-     }
+    for (unsigned int i=0; i<ni; ++i) {
+      radiance(i,j) = reflectance(i,j) * Lsat_horizontal + atm_params.airlight_;
+    }
   }
 
   return true;
@@ -118,15 +117,14 @@ bool brad_estimate_reflectance_image(vil_image_view<float> const& radiance, brad
   unsigned int nj = radiance.nj();
   reflectance.set_size(ni,nj);
   for (unsigned int j=0; j<nj; ++j) {
-     for (unsigned int i=0; i<ni; ++i) {
-        float normalized = (radiance(i,j) - atm_params.airlight_) / Lsat_horizontal;
-        // don't let reflectance value fall below 0
-        // value above 1 is unlikely but possible (e.g. specular reflection)
-        reflectance(i,j) = vcl_max(0.0f, normalized);
-     }
+    for (unsigned int i=0; i<ni; ++i) {
+      float normalized = (radiance(i,j) - atm_params.airlight_) / Lsat_horizontal;
+      // don't let reflectance value fall below 0
+      // value above 1 is unlikely but possible (e.g. specular reflection)
+      reflectance(i,j) = vcl_max(0.0f, normalized);
+    }
   }
 
   return true;
 }
-
 

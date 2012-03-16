@@ -1,3 +1,4 @@
+#include "mbl_test.h"
 //:
 // \file
 // \brief A place for useful things associated with testing.
@@ -30,19 +31,18 @@ static unsigned replace(char from, char to, vcl_string &s)
 
 vcl_string timestamp()
 {
-    char tmpbuf[128];
-    vcl_time_t ltime;
-    struct vcl_tm *today;
+  char tmpbuf[128];
+  vcl_time_t ltime;
+  struct vcl_tm *today;
 
-    /* Get UNIX-style time and display as number and string. */
-    vcl_time( &ltime );
+  // Get UNIX-style time and display as number and string.
+  vcl_time( &ltime );
 
-    /* Convert to time structure and adjust for PM if necessary. */
-    today = vcl_localtime( &ltime );
+  // Convert to time structure and adjust for PM if necessary.
+  today = vcl_localtime( &ltime );
 
-    /* Use strftime to build a customized time string. */
-    vcl_strftime( tmpbuf, 128,
-      "%Y-%m-%d %H:%M:%S", today );
+  // Use strftime to build a customized time string.
+  vcl_strftime( tmpbuf, 128, "%Y-%m-%d %H:%M:%S", today );
   return vcl_string(tmpbuf);
 }
 
@@ -74,8 +74,8 @@ void mbl_test_save_measurement( const vcl_string &measurement_path, double value
   vcl_ofstream file(path.c_str(), vcl_ios_app | vcl_ios_out);
 
   if (!file)
-    vcl_cerr << "ERROR: mbl_test_save_measurement: Unable to open file " << path.c_str() <<
-      "ERRNO: " << errno << vcl_endl;
+    vcl_cerr << "ERROR: mbl_test_save_measurement: Unable to open file " << path.c_str()
+             << "ERRNO: " << errno << '\n';
   else
     file << timestamp() << ' ' << MBL_CONFIG_BUILD_NAME << ' ' << value << vcl_endl;
 }
