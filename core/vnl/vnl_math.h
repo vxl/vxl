@@ -133,6 +133,10 @@ inline bool vnl_math_isnan(unsigned char)      { return false; }
 inline bool vnl_math_isnan(unsigned short)     { return false; }
 inline bool vnl_math_isnan(unsigned int)       { return false; }
 inline bool vnl_math_isnan(unsigned long)      { return false; }
+#if VCL_HAS_LONG_LONG
+inline bool vnl_math_isnan(long long)          { return false; }
+inline bool vnl_math_isnan(unsigned long long) { return false; }
+#endif
 bool vnl_math_isnan(float);
 bool vnl_math_isnan(double);
 bool vnl_math_isnan(long double);
@@ -153,6 +157,10 @@ inline bool vnl_math_isinf(unsigned char)      { return false; }
 inline bool vnl_math_isinf(unsigned short)     { return false; }
 inline bool vnl_math_isinf(unsigned int)       { return false; }
 inline bool vnl_math_isinf(unsigned long)      { return false; }
+#if VCL_HAS_LONG_LONG
+inline bool vnl_math_isinf(long long)          { return false; }
+inline bool vnl_math_isinf(unsigned long long) { return false; }
+#endif
 bool vnl_math_isinf(float);
 bool vnl_math_isinf(double);
 bool vnl_math_isinf(long double);
@@ -170,6 +178,10 @@ inline bool vnl_math_isfinite(unsigned char)      { return true; }
 inline bool vnl_math_isfinite(unsigned short)     { return true; }
 inline bool vnl_math_isfinite(unsigned int)       { return true; }
 inline bool vnl_math_isfinite(unsigned long)      { return true; }
+#if VCL_HAS_LONG_LONG
+inline bool vnl_math_isfinite(long long)          { return true; }
+inline bool vnl_math_isfinite(unsigned long long) { return true; }
+#endif
 bool vnl_math_isfinite(float);
 bool vnl_math_isfinite(double);
 bool vnl_math_isfinite(long double);
@@ -529,6 +541,10 @@ inline unsigned int       vnl_math_abs(int x)                { return x < 0 ? -x
 inline unsigned int       vnl_math_abs(unsigned int x)       { return x; }
 inline unsigned long      vnl_math_abs(long x)               { return x < 0L ? -x : x; }
 inline unsigned long      vnl_math_abs(unsigned long x)      { return x; }
+#if VCL_HAS_LONG_LONG
+inline unsigned long long vnl_math_abs(long long x)          { return x < 0LL ? -x : x; }
+inline unsigned long long vnl_math_abs(unsigned long long x) { return x; }
+#endif
 inline float              vnl_math_abs(float x)              { return x < 0.0f ? -x : x; }
 inline double             vnl_math_abs(double x)             { return x < 0.0 ? -x : x; }
 inline long double        vnl_math_abs(long double x)        { return x < 0.0 ? -x : x; }
@@ -538,6 +554,10 @@ inline int                vnl_math_max(int x, int y)                            
 inline unsigned int       vnl_math_max(unsigned int x, unsigned int y)             { return (x > y) ? x : y; }
 inline long               vnl_math_max(long x, long y)                             { return (x > y) ? x : y; }
 inline unsigned long      vnl_math_max(unsigned long x, unsigned long y)           { return (x > y) ? x : y; }
+#if VCL_HAS_LONG_LONG
+inline long long          vnl_math_max(long long x, long long y)                   { return (x > y) ? x : y; }
+inline unsigned long long vnl_math_max(unsigned long long x, unsigned long long y) { return (x > y) ? x : y; }
+#endif
 inline float              vnl_math_max(float x, float y)                           { return (x < y) ? y : x; }
 inline double             vnl_math_max(double x, double y)                         { return (x < y) ? y : x; }
 
@@ -546,6 +566,10 @@ inline int                vnl_math_min(int x, int y)                            
 inline unsigned int       vnl_math_min(unsigned int x, unsigned int y)             { return (x < y) ? x : y; }
 inline long               vnl_math_min(long x, long y)                             { return (x < y) ? x : y; }
 inline unsigned long      vnl_math_min(unsigned long x, unsigned long y)           { return (x < y) ? x : y; }
+#if VCL_HAS_LONG_LONG
+inline long long          vnl_math_min(long long x, long long y)                   { return (x < y) ? x : y; }
+inline unsigned long long vnl_math_min(unsigned long long x, unsigned long long y) { return (x < y) ? x : y; }
+#endif
 inline float              vnl_math_min(float x, float y)                           { return (x > y) ? y : x; }
 inline double             vnl_math_min(double x, double y)                         { return (x > y) ? y : x; }
 
@@ -555,6 +579,10 @@ inline int                vnl_math_sqr(int x)                { return x*x; }
 inline unsigned int       vnl_math_sqr(unsigned int x)       { return x*x; }
 inline long               vnl_math_sqr(long x)               { return x*x; }
 inline unsigned long      vnl_math_sqr(unsigned long x)      { return x*x; }
+#if VCL_HAS_LONG_LONG
+inline long long          vnl_math_sqr(long long x)          { return x*x; }
+inline unsigned long long vnl_math_sqr(unsigned long long x) { return x*x; }
+#endif
 inline float              vnl_math_sqr(float x)              { return x*x; }
 inline double             vnl_math_sqr(double x)             { return x*x; }
 
@@ -564,18 +592,28 @@ inline int                vnl_math_cube(int x)                { return x*x*x; }
 inline unsigned int       vnl_math_cube(unsigned int x)       { return x*x*x; }
 inline long               vnl_math_cube(long x)               { return x*x*x; }
 inline unsigned long      vnl_math_cube(unsigned long x)      { return x*x*x; }
+#if VCL_HAS_LONG_LONG
+inline long long          vnl_math_cube(long long x)          { return x*x*x; }
+inline unsigned long long vnl_math_cube(unsigned long long x) { return x*x*x; }
+#endif
 inline float              vnl_math_cube(float x)              { return x*x*x; }
 inline double             vnl_math_cube(double x)             { return x*x*x; }
 
 // sgn (sign in -1, 0, +1)
 inline int vnl_math_sgn(int x)       { return x?((x>0)?1:-1):0; }
 inline int vnl_math_sgn(long x)      { return x?((x>0)?1:-1):0; }
+#if VCL_HAS_LONG_LONG
+inline int vnl_math_sgn(long long x) { return x?((x>0)?1:-1):0; }
+#endif
 inline int vnl_math_sgn(float x)     { return (x != 0)?((x>0)?1:-1):0; }
 inline int vnl_math_sgn(double x)    { return (x != 0)?((x>0)?1:-1):0; }
 
 // sgn0 (sign in -1, +1 only, useful for reals)
 inline int vnl_math_sgn0(int x)         { return (x>=0)?1:-1; }
 inline int vnl_math_sgn0(long x)        { return (x>=0)?1:-1; }
+#if VCL_HAS_LONG_LONG
+inline int vnl_math_sgn0(long long x)   { return (x>=0)?1:-1; }
+#endif
 inline int vnl_math_sgn0(float x)       { return (x>=0)?1:-1; }
 inline int vnl_math_sgn0(double x)      { return (x>=0)?1:-1; }
 
@@ -586,6 +624,10 @@ inline unsigned int       vnl_math_squared_magnitude(int                x) { ret
 inline unsigned int       vnl_math_squared_magnitude(unsigned int       x) { return x*x; }
 inline unsigned long      vnl_math_squared_magnitude(long               x) { return x*x; }
 inline unsigned long      vnl_math_squared_magnitude(unsigned long      x) { return x*x; }
+#if VCL_HAS_LONG_LONG
+inline unsigned long long vnl_math_squared_magnitude(long long          x) { return x*x; }
+inline unsigned long long vnl_math_squared_magnitude(unsigned long long x) { return x*x; }
+#endif
 inline float              vnl_math_squared_magnitude(float              x) { return x*x; }
 inline double             vnl_math_squared_magnitude(double             x) { return x*x; }
 inline long double        vnl_math_squared_magnitude(long double        x) { return x*x; }
