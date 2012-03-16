@@ -7,7 +7,8 @@
 #include <imesh/imesh_operations.h>
 #include <bvgl/bvgl_intersection.h>
 #include <bvgl/bvgl_triangle_3d.h>
-#include <vgl/vgl_intersection.h>
+#include <vgl/vgl_box_3d.h>
+#include <vgl/vgl_point_3d.h>
 #include <vcl_queue.h>
 #include <vcl_set.h>
 
@@ -157,7 +158,7 @@ void boxm2_points_to_volume::fillBlockByTri(boxm2_block_metadata& data, boxm2_bl
 
         //sanity checks
         if (alphas[c].size()==1) numOne++;
-        if (curr_tree.num_cells() != alphas[c].size())
+        if (curr_tree.num_cells() != (int)alphas[c].size())
           vcl_cout<<"Tree and alphas dont match in final copy!!! bad!!!!"<<vcl_endl;
 
         currDatPtr += alphas[c].size();
