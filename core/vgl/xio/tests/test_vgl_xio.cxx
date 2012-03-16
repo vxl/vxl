@@ -20,7 +20,7 @@ static void test_xio_point_2d()
 {
   vcl_stringstream s;
 
-  vgl_point_2d<double> p2;
+  vgl_point_2d<double> p2(0.0,0.0);
   x_write(s, p2);
   TEST("XML I/O for vgl_point_2d<double>", s.str(),
        "<vgl_point_2d x=\"0.000000\" y=\"0.000000\">\n</vgl_point_2d>\n");
@@ -30,7 +30,7 @@ static void test_xio_point_3d()
 {
   vcl_stringstream s;
 
-  vgl_point_3d<double> p3;
+  vgl_point_3d<double> p3(0.0,0.0,0.0);
   x_write(s, p3);
   TEST("XML I/O for vgl_point_3d<double>", s.str(),
        "<vgl_point_3d x=\"0.000000\" y=\"0.000000\" z=\"0.000000\">\n</vgl_point_3d>\n");
