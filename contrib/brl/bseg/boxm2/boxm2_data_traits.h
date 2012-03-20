@@ -43,6 +43,7 @@ enum boxm2_data_type
   BOXM2_VIS_SPHERE,
   BOXM2_NORMAL,
   BOXM2_POINT,
+  BOXM2_VIS_SCORE,
   BOXM2_GAUSS_GREY,
   BOXM2_NORMAL_ALBEDO_ARRAY,
   BOXM2_UNKNOWN
@@ -239,6 +240,16 @@ class boxm2_data_traits<BOXM2_VIS_SPHERE>
   { if (!identifier.size()) return "boxm2_vis_sphere"; else return "boxm2_vis_sphere_"+identifier; }
 };
 
+template<>
+class boxm2_data_traits<BOXM2_VIS_SCORE>
+{
+ public:
+  typedef float datatype;
+  static vcl_size_t datasize() { return sizeof(datatype); }
+  static vcl_string prefix(const vcl_string& identifier = "")
+  { if (!identifier.size()) return "boxm2_vis_score"; else return "boxm2_vis_score_"+identifier; }
+};
+
 
 template<>
 class boxm2_data_traits<BOXM2_AUX0>
@@ -373,6 +384,8 @@ class boxm2_data_info
       return boxm2_data_traits<BOXM2_FLOAT16>::datasize();
     if (prefix == boxm2_data_traits<BOXM2_VIS_SPHERE>::prefix())
       return boxm2_data_traits<BOXM2_VIS_SPHERE>::datasize();
+    if (prefix == boxm2_data_traits<BOXM2_VIS_SCORE>::prefix())
+      return boxm2_data_traits<BOXM2_VIS_SCORE>::datasize();
 
     if (prefix.find(boxm2_data_traits<BOXM2_INTENSITY>::prefix()) != vcl_string::npos)
       return boxm2_data_traits<BOXM2_INTENSITY>::datasize();
