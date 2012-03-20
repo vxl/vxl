@@ -123,9 +123,6 @@ SOURCE=.\boxm2_export_point_cloud_xyz_function.cxx
 SOURCE=.\boxm2_compute_derivative_function.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\boxm2_export_vis_wrl_function.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\boxm2_points_to_volume_function.cxx
 # End Source File
 # Begin Source File
@@ -241,9 +238,6 @@ SOURCE=.\boxm2_synoptic_function_functors.h
 # End Source File
 # Begin Source File
 SOURCE=.\boxm2_export_point_cloud_xyz_function.h
-# End Source File
-# Begin Source File
-SOURCE=.\boxm2_export_vis_wrl_function.h
 # End Source File
 # Begin Source File
 SOURCE=.\boxm2_compute_derivative_function.h
