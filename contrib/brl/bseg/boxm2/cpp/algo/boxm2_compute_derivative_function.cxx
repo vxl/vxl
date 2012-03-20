@@ -3,7 +3,7 @@
 // \file
 #include <vcl_cassert.h>
 
-#if 0
+#if 1
 # define PROB
 #endif
 
@@ -96,6 +96,7 @@ boxm2_compute_derivative_function::boxm2_compute_derivative_function(
           normals_data[currIdx][0] = derivative_x;
           normals_data[currIdx][1] = derivative_y;
           normals_data[currIdx][2] = derivative_z;
+          normals_data[currIdx][3] = norm;
 
           //save the points in data base
 #ifdef DEBUG
