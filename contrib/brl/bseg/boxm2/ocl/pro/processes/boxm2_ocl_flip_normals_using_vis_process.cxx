@@ -2,7 +2,7 @@
 #include <bprb/bprb_func_process.h>
 //:
 // \file
-// \brief  A process for solving the sign ambiguity in the normals computed using boxm2_cpp_compute_derivative_process.
+// \brief  A process for solving the sign ambiguity in the normals, typically computed using filtering.
 // This processes uses visibility to disambiguate the normal direction.
 // Given boxm2_point and boxm2_normal data, it computes maximum visibility on the hemisphere centered
 // at the normal and also on the hemisphere centered at the flipped normal. The direction with the higher
@@ -89,9 +89,6 @@ bool boxm2_ocl_flip_normals_using_vis_process_cons(bprb_func_process& pro)
   return good;
 }
 
-//#define DEBUG
-//#define WRITE_TO_FILE
-//#define DEBUG2
 
 bool boxm2_ocl_flip_normals_using_vis_process(bprb_func_process& pro)
 {
@@ -279,7 +276,7 @@ bool boxm2_ocl_flip_normals_using_vis_process(bprb_func_process& pro)
           bocl_mem* vis_sphere = opencl_cache->get_data<BOXM2_VIS_SPHERE>(blk_iter->first,0,false);
 
           //array to store final visibility of a point
-          bocl_mem* vis   = opencl_cache->get_data<BOXM2_AUX0>(blk_iter->first, (normals->num_bytes()/normalsTypeSize) *boxm2_data_info::datasize(boxm2_data_traits<BOXM2_AUX0>::prefix()),false);
+          bocl_mem* vis   = opencl_cache->get_data<BOXM2_VIS_SCORE>(blk_iter->first, (normals->num_bytes()/normalsTypeSize) *boxm2_data_info::datasize(boxm2_data_traits<BOXM2_VIS_SCORE>::prefix()),false);
 
           transfer_time += (float) transfer.all();
 
