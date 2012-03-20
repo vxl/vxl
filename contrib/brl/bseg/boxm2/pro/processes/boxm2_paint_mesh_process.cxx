@@ -14,7 +14,6 @@
 #include <boxm2/io/boxm2_cache.h>
 
 #include <bvrml/bvrml_write.h>
-#include <boxm2/cpp/algo/boxm2_export_vis_wrl_function.h>
 #include <boxm2/cpp/algo/boxm2_gauss_rgb_processor.h>
 
 #include <bmsh3d/algo/bmsh3d_fileio.h>
