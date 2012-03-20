@@ -35,7 +35,6 @@ MANPAGE_SOURCES += boxm2_update_using_quality_functor.h
 MANPAGE_SOURCES += boxm2_synoptic_function_functors.h
 SOURCES += boxm2_export_point_cloud_xyz_function.cxx
 SOURCES += boxm2_compute_derivative_function.cxx
-SOURCES += boxm2_export_vis_wrl_function.cxx
 MANPAGE_SOURCES += boxm2_apply_filter_function.txx
 MANPAGE_SOURCES += boxm2_compute_normal_albedo_functor.h
 SOURCES += boxm2_points_to_volume_function.cxx
