@@ -2,11 +2,17 @@
 #include <bprb/bprb_func_process.h>
 //:
 // \file
-// \brief This process runs a number of kernels specified in files. Kernels are specified in text files named filter_base_name_i.txt where i is the kernel number.
-//        The kernels should be formatted according to bvpl_kernel conventions. See bvpl_kernel.print_to_file(filename) function as an example.
-//        The outputs are saved in response data types which can be specified by the user based on how the kernel responses are to be used and also
-//        on the number of kernels. Note that boxm2_apply_filter_function which does the main work is templated over the responses type.
-//        If a block is specified, the process is run on that block alone. Otherwise it is run on the whole scene.
+// \brief This process evaluates a kernel over the scene and saves the responses to a specified datatype. Kernels are specified in text files named
+//        filterBaseName_id.txt where id is the kernel number. The basename and id are inputs to the process. The kernels should be
+//        formatted according to bvpl_kernel conventions. See bvpl_kernel.print_to_file(filename) function as an example. Kernels are currently
+//        evaluated only at the leaf cells with prob. higher than a probability threshold. To evaluate the kernel, a fixed size grid is
+//        overlaid centered at the current voxel. The size of each cell in the grid matches the size of a cell at octree_level, which is another input.
+//        The process is templated over the response type. Currently, BOXM2_FLOAT is available.
+//        The outputs are saved in response datatypes concatenated to the id of the kernel, e.g.,
+//        4th kernel response for block 0_0_0 is saved in float_4_id_0_0_0.bin
+//        The interface of this process makes it easy to run multiple kernels concurrently using the multi-threading capabilities of python.
+//        Finally, see process boxm2OclAggregateNormalFromFilterProcess as an example of aggregating filter responses to BOXM2_NORMAL.
+//
 //
 // \author Ali Osman Ulusoy
 // \date Dec 1, 2011
@@ -16,18 +22,17 @@
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/boxm2_block.h>
 #include <boxm2/boxm2_data_base.h>
-//brdb stuff
 #include <brdb/brdb_value.h>
 #include <boxm2/cpp/algo/boxm2_apply_filter_function.h>
 #include <bvpl/kernels/bvpl_kernel.h>
 
-//directory utility
-#include <vcl_where_root_dir.h>
 
 namespace boxm2_cpp_filter_response_process_globals
 {
-  const unsigned n_inputs_ =  8;
+  const unsigned n_inputs_ =  6;
   const unsigned n_outputs_ = 0;
+
+  typedef boxm2_data_traits<BOXM2_FLOAT> RESPONSE_DATATRAIT;
 }
 
 bool boxm2_cpp_filter_response_process_cons(bprb_func_process& pro)
@@ -40,10 +45,8 @@ bool boxm2_cpp_filter_response_process_cons(bprb_func_process& pro)
   input_types_[1] = "boxm2_cache_sptr";
   input_types_[2] = "float";      //probability threshold
   input_types_[3] = "vcl_string"; //filter base name
-  input_types_[4] = "unsigned";   //number of filters
-  input_types_[5] = "int"; //id_x
-  input_types_[6] = "int"; //id_y
-  input_types_[7] = "int"; //id_z
+  input_types_[4] = "unsigned";   //id of filter
+  input_types_[5] = "unsigned";   //octree level to eval kernel
 
   // process has 0 output:
   // output[0]: scene sptr
@@ -54,14 +57,8 @@ bool boxm2_cpp_filter_response_process_cons(bprb_func_process& pro)
   brdb_value_sptr prob_t = new brdb_value_t<float>(0.0);
   pro.set_input(2, prob_t);
 
-  brdb_value_sptr id_x = new brdb_value_t<int>(-1);
-  pro.set_input(5, id_x);
-
-  brdb_value_sptr id_y = new brdb_value_t<int>(-1);
-  pro.set_input(6, id_y);
-
-  brdb_value_sptr id_z = new brdb_value_t<int>(-1);
-  pro.set_input(7, id_z);
+  brdb_value_sptr octree_lvl = new brdb_value_t<unsigned>(4); //default octree level is the smallest cell size.
+  pro.set_input(5, octree_lvl);
 
   return good;
 }
@@ -80,30 +77,15 @@ bool boxm2_cpp_filter_response_process(bprb_func_process& pro)
   boxm2_cache_sptr cache= pro.get_input<boxm2_cache_sptr>(i++);
   float prob_threshold = pro.get_input<float>(i++);
   vcl_string kernel_base_file_name =  pro.get_input< vcl_string>(i++);
-  unsigned num_kernels = pro.get_input<unsigned>(i++);
-  int id_x = pro.get_input<int>(i++);
-  int id_y = pro.get_input<int>(i++);
-  int id_z = pro.get_input<int>(i++);
+  unsigned id_kernel = pro.get_input<unsigned>(i++);
+  unsigned octree_lvl = pro.get_input<unsigned>(i++);
 
 
-  //if id's aren't specified, use all blocks in the scene.
-  vcl_map<boxm2_block_id, boxm2_block_metadata> blocks;
-  if (id_x == -1 && id_y == -1 && id_z == -1)
-  {
-    vcl_cout << "Running boxm2_cpp_filter_response_process on all blocks..." << vcl_endl;
-    blocks = scene->blocks();
-  }
-  else
-  {
-    vcl_cout << "Running boxm2_cpp_filter_response_process on block: (" << id_x << ',' << id_y << ',' << id_z << ")..." << vcl_endl;
-    boxm2_block_id id(id_x,id_y,id_z);
-    blocks[id] = scene->get_block_metadata(id);
-  }
+  vcl_map<boxm2_block_id, boxm2_block_metadata> blocks = scene->blocks();
+  vcl_cout << "Running boxm2_cpp_filter_response_process ..." << vcl_endl;
 
   //construct boxm2_apply_filter_function
-  boxm2_apply_filter_function<BOXM2_FLOAT16> filter_function(kernel_base_file_name,num_kernels);
-  if(filter_function.num_kernels() != num_kernels)
-    return false;
+  boxm2_apply_filter_function<BOXM2_FLOAT> filter_function(kernel_base_file_name,id_kernel);
 
   //zip through each block
   vcl_map<boxm2_block_id, boxm2_block_metadata>::iterator blk_iter;
@@ -119,15 +101,12 @@ bool boxm2_cpp_filter_response_process(bprb_func_process& pro)
     int alphaTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
 
     //store responses
-    int responseTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_FLOAT16>::prefix());
-    boxm2_data_base * response    = cache->get_data_base(id,boxm2_data_traits<BOXM2_FLOAT16>::prefix(),alph->buffer_length()/alphaTypeSize*responseTypeSize,false);
+    int responseTypeSize = (int)boxm2_data_info::datasize(RESPONSE_DATATRAIT::prefix());
+    vcl_stringstream ss; ss << id_kernel;
+    vcl_cout << "Data type: " << RESPONSE_DATATRAIT::prefix(ss.str()) << vcl_endl;
+    boxm2_data_base * response    = cache->get_data_base(id,RESPONSE_DATATRAIT::prefix(ss.str()),alph->buffer_length()/alphaTypeSize*responseTypeSize,false);
 
-    //store point locations
-    int pointsTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_POINT>::prefix());
-    boxm2_data_base * points    = cache->get_data_base(id,boxm2_data_traits<BOXM2_POINT>::prefix(),alph->buffer_length()/alphaTypeSize*pointsTypeSize,false);
-
-    filter_function.apply_filter(data, blk, alph, response, points, prob_threshold);
-
+    filter_function.apply_filter(data, blk, alph, response, prob_threshold,  octree_lvl);
   }
 
   return true;
