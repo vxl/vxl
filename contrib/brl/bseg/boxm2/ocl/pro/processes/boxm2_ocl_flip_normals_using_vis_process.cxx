@@ -6,7 +6,7 @@
 // This processes uses visibility to disambiguate the normal direction.
 // Given boxm2_point and boxm2_normal data, it computes maximum visibility on the hemisphere centered
 // at the normal and also on the hemisphere centered at the flipped normal. The direction with the higher
-// visibility is saved in boxm2_normal.
+// visibility is saved in boxm2_normal. Also, the highest visibility is saved in boxm2_vis_score.
 //
 // TODO: implement a vis_sphere initializer kernel.
 // \author Ali Osman Ulusoy
@@ -275,8 +275,9 @@ bool boxm2_ocl_flip_normals_using_vis_process(bprb_func_process& pro)
           //load visibilities
           bocl_mem* vis_sphere = opencl_cache->get_data<BOXM2_VIS_SPHERE>(blk_iter->first,0,false);
 
-          //array to store final visibility of a point
-          bocl_mem* vis   = opencl_cache->get_data<BOXM2_VIS_SCORE>(blk_iter->first, (normals->num_bytes()/normalsTypeSize) *boxm2_data_info::datasize(boxm2_data_traits<BOXM2_VIS_SCORE>::prefix()),false);
+          //array to store final visibility score of a point
+          bocl_mem* vis   = opencl_cache->get_data<BOXM2_VIS_SCORE>(blk_iter->first, (normals->num_bytes()/normalsTypeSize)
+                                                  *boxm2_data_info::datasize(boxm2_data_traits<BOXM2_VIS_SCORE>::prefix()),false);
 
           transfer_time += (float) transfer.all();
 
@@ -309,31 +310,6 @@ bool boxm2_ocl_flip_normals_using_vis_process(bprb_func_process& pro)
 
       //shallow remove from ocl cache unnecessary items from ocl cache.
       opencl_cache->shallow_remove_data(id,boxm2_data_traits<BOXM2_VIS_SPHERE>::prefix());
-
-
-#ifdef DEBUG
-
-        vnl_vector_fixed<float, 4>  * aux_data=static_cast<vnl_vector_fixed<float, 4> *> (aux->cpu_buffer());
-        for (unsigned k=0; k < info_buffer->data_buffer_length; k++) {
-            if (aux_data[k][0]  != -1) {
-                for (unsigned i = 0; i < 12; i++)
-                    vcl_cout << aux_data[k][i] << ' ';
-                vcl_cout << vcl_endl;
-            }
-        }
-        vcl_cout << vcl_endl;
-#endif
-#ifdef DEBUG2
-        vnl_vector_fixed<float, 16> * vis_data=static_cast< vnl_vector_fixed<float, 16>*> (vis_sphere->cpu_buffer());
-        vnl_vector_fixed<float, 4> * normal_data=static_cast< vnl_vector_fixed<float, 4>*> (normals->cpu_buffer());
-        bocl_mem* points = opencl_cache->get_data<BOXM2_POINT>(blk_iter->first,0,false);
-        vnl_vector_fixed<float, 4> * point_data=static_cast< vnl_vector_fixed<float, 4>*> (points->cpu_buffer());
-        unsigned count = 0;
-        for (unsigned k=0; k < (normals->num_bytes()/normalsTypeSize); k++) {
-            if (vis_data[k][15] != -1.0f && normal_data[k][2] < -0.5 && point_data[k][2] < 0.0 )
-              vcl_cout << vis_data[k] << "  " << normal_data[k] << vcl_endl;
-          }
-#endif
     }
   }
 
