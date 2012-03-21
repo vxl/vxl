@@ -29,24 +29,21 @@ namespace boxm2_ocl_aggregate_normal_from_filter_process_globals
   const unsigned n_inputs_ =  4;
   const unsigned n_outputs_ = 0;
 
+  //declare the response data type used to store in boxm2CppFilterResponseProcess.
   typedef boxm2_data_traits<BOXM2_FLOAT> RESPONSE_DATATYPE;
 
   void compile_kernel(bocl_device_sptr device,vcl_vector<bocl_kernel*> & vec_kernels,vcl_string opts)
   {
-    //gather all render sources... seems like a lot for rendering...
     vcl_vector<vcl_string> src_paths;
     vcl_string source_dir = boxm2_ocl_util::ocl_src_root();
     src_paths.push_back(source_dir + "scene_info.cl");
-    src_paths.push_back(source_dir + "cell_utils.cl");
-    src_paths.push_back(source_dir + "bit/bit_tree_library_functions.cl");
-    src_paths.push_back(source_dir + "statistics_library_functions.cl");
-    src_paths.push_back(source_dir + "bit/filter_block.cl");
+    src_paths.push_back(source_dir + "aggregate_filter_response.cl");
 
     //compilation options
-    vcl_string options = opts+" -D INTENSITY ";
+    vcl_string options = opts;
 
     bocl_kernel* compute_vis = new bocl_kernel();
-    vcl_string seg_opts = options + " -D AGGREGATE";
+    vcl_string seg_opts = options + " -D DODECAHEDRON";
     compute_vis->create_kernel(&device->context(),device->device_id(), src_paths, "aggregate", seg_opts, "aggregate");
     vec_kernels.push_back(compute_vis);
 
