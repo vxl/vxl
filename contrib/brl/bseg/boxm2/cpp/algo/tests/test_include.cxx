@@ -13,7 +13,7 @@
 #include <boxm2/cpp/algo/boxm2_compute_phongs_model_functor.h>
 #include <boxm2/cpp/algo/boxm2_cone_update_image_functor.h>
 #include <boxm2/cpp/algo/boxm2_data_serial_iterator.h>
-#include <boxm2/cpp/algo/boxm2_export_point_cloud_xyz_function.h>
+#include <boxm2/cpp/algo/boxm2_export_oriented_point_cloud_function.h>
 #include <boxm2/cpp/algo/boxm2_filter_block_function.h>
 #include <boxm2/cpp/algo/boxm2_gauss_grey_processor.h>
 #include <boxm2/cpp/algo/boxm2_gauss_rgb_processor.h>
