@@ -1,5 +1,5 @@
-#ifndef boxm2_export_point_cloud_xyz_h
-#define boxm2_export_point_cloud_xyz_h
+#ifndef boxm2_export_oriented_point_cloud_function_h
+#define boxm2_export_oriented_point_cloud_function_h
 //:
 // \file
 
@@ -18,7 +18,7 @@
 
 #include "boxm2/boxm2_util.h"
 
-class boxm2_export_point_cloud_xyz_function
+class boxm2_export_oriented_point_cloud_function
 {
  public:
   static void exportPointCloudXYZ(const boxm2_scene_sptr& scene, boxm2_block_metadata data, boxm2_block* blk,

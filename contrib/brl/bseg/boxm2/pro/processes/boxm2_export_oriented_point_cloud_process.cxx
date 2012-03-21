@@ -1,4 +1,4 @@
-// This is brl/bseg/boxm2/pro/processes/boxm2_export_point_cloud_xyz_process.cxx
+// This is brl/bseg/boxm2/pro/processes/boxm2_export_oriented_point_cloud_process.cxx
 #include <bprb/bprb_func_process.h>
 //:
 // \file
@@ -15,19 +15,19 @@
 #include <boxm2/boxm2_util.h>
 #include <boxm2/io/boxm2_cache.h>
 #include <boxm2/boxm2_data_traits.h>
-#include "boxm2/cpp/algo/boxm2_export_point_cloud_xyz_function.h"
+#include "boxm2/cpp/algo/boxm2_export_oriented_point_cloud_function.h"
 
 
-namespace boxm2_export_point_cloud_xyz_process_globals
+namespace boxm2_export_oriented_point_cloud_process_globals
 {
   const unsigned n_inputs_ = 8;
   const unsigned n_outputs_ = 0;
 
 }
 
-bool boxm2_export_point_cloud_xyz_process_cons(bprb_func_process& pro)
+bool boxm2_export_oriented_point_cloud_process_cons(bprb_func_process& pro)
 {
-  using namespace boxm2_export_point_cloud_xyz_process_globals;
+  using namespace boxm2_export_oriented_point_cloud_process_globals;
 
   //process takes 6 inputs, no outputs
   vcl_vector<vcl_string>  output_types_(n_outputs_);
@@ -60,9 +60,9 @@ bool boxm2_export_point_cloud_xyz_process_cons(bprb_func_process& pro)
 }
 
 
-bool boxm2_export_point_cloud_xyz_process (bprb_func_process& pro)
+bool boxm2_export_oriented_point_cloud_process (bprb_func_process& pro)
 {
-  using namespace boxm2_export_point_cloud_xyz_process_globals;
+  using namespace boxm2_export_oriented_point_cloud_process_globals;
 
   if ( pro.n_inputs() < n_inputs_ ) {
     vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
@@ -88,7 +88,7 @@ bool boxm2_export_point_cloud_xyz_process (bprb_func_process& pro)
   //read bb from ply, if any
   vgl_box_3d<double> bb;
   if(!bb_filename.empty()) {
-    boxm2_export_point_cloud_xyz_function::readBBFromPLY(bb_filename, bb);
+    boxm2_export_oriented_point_cloud_function::readBBFromPLY(bb_filename, bb);
   }
 
   //zip through each block
@@ -117,9 +117,9 @@ bool boxm2_export_point_cloud_xyz_process (bprb_func_process& pro)
 
     boxm2_block_metadata data = blk_iter->second;
     if (output_filename.substr(output_filename.find_last_of(".") + 1) == "xyz")
-      boxm2_export_point_cloud_xyz_function::exportPointCloudXYZ(scene, data, blk, alpha, vis, points,normals, myfile, output_aux, vis_t, nmag_t, prob_t, bb);
+      boxm2_export_oriented_point_cloud_function::exportPointCloudXYZ(scene, data, blk, alpha, vis, points,normals, myfile, output_aux, vis_t, nmag_t, prob_t, bb);
     else if (output_filename.substr(output_filename.find_last_of(".") + 1) == "ply")
-      boxm2_export_point_cloud_xyz_function::exportPointCloudPLY(scene, data, blk, alpha, vis, points,normals, myfile, output_aux, vis_t, nmag_t, prob_t, bb, num_vertices);
+      boxm2_export_oriented_point_cloud_function::exportPointCloudPLY(scene, data, blk, alpha, vis, points,normals, myfile, output_aux, vis_t, nmag_t, prob_t, bb, num_vertices);
     else
       vcl_cout << "UNKNOWN FILE FORMAT..." << vcl_endl;
   }
@@ -134,7 +134,7 @@ bool boxm2_export_point_cloud_xyz_process (bprb_func_process& pro)
     ss << myfile_input.rdbuf();
     myfile_input.close();
     myfile.open(output_filename.c_str());
-    boxm2_export_point_cloud_xyz_function::writePLYHeader(myfile,num_vertices,ss,output_aux);
+    boxm2_export_oriented_point_cloud_function::writePLYHeader(myfile,num_vertices,ss,output_aux);
     myfile.flush();
     myfile.close();
   }

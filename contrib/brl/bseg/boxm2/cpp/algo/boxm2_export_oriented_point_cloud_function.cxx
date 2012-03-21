@@ -1,18 +1,11 @@
-#ifndef boxm2_export_point_cloud_xyz_function_txx
-#define boxm2_export_point_cloud_xyz_function_txx
 
-#include "boxm2_export_point_cloud_xyz_function.h"
+
+#include "boxm2_export_oriented_point_cloud_function.h"
 
 //:
 // \file
-#if 0
-query_point(boxm2_scene_sptr& scene,
-                             boxm2_cache_sptr& cache,
-                             const vgl_point_3d<double>& point,
-                             float& prob, float& intensity)
-#endif
 
-void boxm2_export_point_cloud_xyz_function::exportPointCloudXYZ(const boxm2_scene_sptr& scene, boxm2_block_metadata data, boxm2_block* blk,
+void boxm2_export_oriented_point_cloud_function::exportPointCloudXYZ(const boxm2_scene_sptr& scene, boxm2_block_metadata data, boxm2_block* blk,
                                                                 boxm2_data_base* alpha, boxm2_data_base* vis,
                                                                 boxm2_data_base* points, boxm2_data_base* normals,
                                                                 vcl_ofstream& file,
@@ -52,7 +45,7 @@ void boxm2_export_point_cloud_xyz_function::exportPointCloudXYZ(const boxm2_scen
     }
 }
 
-void boxm2_export_point_cloud_xyz_function::exportPointCloudPLY(const boxm2_scene_sptr& scene, boxm2_block_metadata data, boxm2_block* blk,
+void boxm2_export_oriented_point_cloud_function::exportPointCloudPLY(const boxm2_scene_sptr& scene, boxm2_block_metadata data, boxm2_block* blk,
                                                                 boxm2_data_base* alpha, boxm2_data_base* vis,
                                                                 boxm2_data_base* points, boxm2_data_base* normals,
                                                                 vcl_ofstream& file, bool output_aux, float vis_t, float nmag_t, float prob_t,
@@ -94,7 +87,7 @@ void boxm2_export_point_cloud_xyz_function::exportPointCloudPLY(const boxm2_scen
 }
 
 
-bool boxm2_export_point_cloud_xyz_function::calculateProbOfPoint(const boxm2_scene_sptr& scene, boxm2_block * blk,
+bool boxm2_export_oriented_point_cloud_function::calculateProbOfPoint(const boxm2_scene_sptr& scene, boxm2_block * blk,
                                                     const vnl_vector_fixed<float, 4>& point, const float& alpha, float& prob)
 {
   vgl_point_3d<double> local;
@@ -126,7 +119,7 @@ bool boxm2_export_point_cloud_xyz_function::calculateProbOfPoint(const boxm2_sce
 }
 
 
-void boxm2_export_point_cloud_xyz_function::writePLYHeader(vcl_ofstream& file, unsigned num_vertices,vcl_stringstream& ss, bool output_aux)
+void boxm2_export_oriented_point_cloud_function::writePLYHeader(vcl_ofstream& file, unsigned num_vertices,vcl_stringstream& ss, bool output_aux)
 {
    file << "ply\nformat ascii 1.0\nelement vertex " << num_vertices
         << "\nproperty float x\nproperty float y\nproperty float z\nproperty float nx\nproperty float ny\nproperty float nz\n";
@@ -180,7 +173,7 @@ int bof_plyio_vertex_cb_(p_ply_argument argument)
 
 
 
-void boxm2_export_point_cloud_xyz_function::readBBFromPLY(const vcl_string& filename, vgl_box_3d<double>& box) {
+void boxm2_export_oriented_point_cloud_function::readBBFromPLY(const vcl_string& filename, vgl_box_3d<double>& box) {
 
   ply_bb_reader parsed_ply;
   parsed_ply.bbox = box;
@@ -206,6 +199,3 @@ void boxm2_export_point_cloud_xyz_function::readBBFromPLY(const vcl_string& file
   box=parsed_ply.bbox;
 }
 
-
-
-#endif
