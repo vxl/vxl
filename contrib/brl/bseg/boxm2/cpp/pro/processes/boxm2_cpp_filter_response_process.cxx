@@ -2,17 +2,18 @@
 #include <bprb/bprb_func_process.h>
 //:
 // \file
-// \brief This process evaluates a kernel over the scene and saves the responses to a specified datatype. Kernels are specified in text files named
-//        filterBaseName_id.txt where id is the kernel number. The basename and id are inputs to the process. The kernels should be
-//        formatted according to bvpl_kernel conventions. See bvpl_kernel.print_to_file(filename) function as an example. Kernels are currently
-//        evaluated only at the leaf cells with prob. higher than a probability threshold. To evaluate the kernel, a fixed size grid is
-//        overlaid centered at the current voxel. The size of each cell in the grid matches the size of a cell at octree_level, which is another input.
-//        The process is templated over the response type. Currently, BOXM2_FLOAT is available.
-//        The outputs are saved in response datatypes concatenated to the id of the kernel, e.g.,
-//        4th kernel response for block 0_0_0 is saved in float_4_id_0_0_0.bin
-//        The interface of this process makes it easy to run multiple kernels concurrently using the multi-threading capabilities of python.
-//        Finally, see process boxm2OclAggregateNormalFromFilterProcess as an example of aggregating filter responses to BOXM2_NORMAL.
-//
+// \brief This process evaluates a kernel over the scene and saves the responses to a specified datatype.
+// Kernels are specified in text files named filterBaseName_id.txt where id is the kernel number.
+// The basename and id are inputs to the process. The kernels should be formatted according to bvpl_kernel conventions.
+// See bvpl_kernel.print_to_file(filename) function as an example. Kernels are currently
+// evaluated only at the leaf cells with prob. higher than a probability threshold.
+// To evaluate the kernel, a fixed size grid is overlaid centered at the current voxel.
+// The size of each cell in the grid matches the size of a cell at octree_level, which is another input.
+// The process is templated over the response type. Currently, BOXM2_FLOAT is available.
+// The outputs are saved in response datatypes concatenated to the id of the kernel, e.g.,
+// 4th kernel response for block 0_0_0 is saved in float_4_id_0_0_0.bin
+// The interface of this process makes it easy to run multiple kernels concurrently using the multi-threading capabilities of Python.
+// Finally, see process boxm2OclAggregateNormalFromFilterProcess as an example of aggregating filter responses to BOXM2_NORMAL.
 //
 // \author Ali Osman Ulusoy
 // \date Dec 1, 2011
@@ -79,7 +80,6 @@ bool boxm2_cpp_filter_response_process(bprb_func_process& pro)
   vcl_string kernel_base_file_name =  pro.get_input< vcl_string>(i++);
   unsigned id_kernel = pro.get_input<unsigned>(i++);
   unsigned octree_lvl = pro.get_input<unsigned>(i++);
-
 
   vcl_map<boxm2_block_id, boxm2_block_metadata> blocks = scene->blocks();
   vcl_cout << "Running boxm2_cpp_filter_response_process ..." << vcl_endl;
