@@ -1,55 +1,53 @@
-
-
 #include "boxm2_export_oriented_point_cloud_function.h"
-
 //:
 // \file
 
+#include <vcl_cassert.h>
+
 void boxm2_export_oriented_point_cloud_function::exportPointCloudXYZ(const boxm2_scene_sptr& scene, boxm2_block_metadata data, boxm2_block* blk,
-                                                                boxm2_data_base* alpha, boxm2_data_base* vis,
-                                                                boxm2_data_base* points, boxm2_data_base* normals,
-                                                                vcl_ofstream& file,
-                                                                bool output_aux, float vis_t, float nmag_t, float prob_t, vgl_box_3d<double> bb)
+                                                                     boxm2_data_base* alpha, boxm2_data_base* vis,
+                                                                     boxm2_data_base* points, boxm2_data_base* normals,
+                                                                     vcl_ofstream& file,
+                                                                     bool output_aux, float vis_t, float nmag_t, float prob_t, vgl_box_3d<double> bb)
 {
-    boxm2_data_traits<BOXM2_ALPHA>::datatype *   alpha_data = (boxm2_data_traits<BOXM2_ALPHA>::datatype*) alpha->data_buffer();
-    boxm2_data_traits<BOXM2_POINT>::datatype *   points_data = (boxm2_data_traits<BOXM2_POINT>::datatype*) points->data_buffer();
-    boxm2_data_traits<BOXM2_NORMAL>::datatype *  normals_data = (boxm2_data_traits<BOXM2_NORMAL>::datatype*) normals->data_buffer();
-    boxm2_data_traits<BOXM2_VIS_SCORE>::datatype *    vis_data = (boxm2_data_traits<BOXM2_VIS_SCORE>::datatype*) vis->data_buffer();
+  boxm2_data_traits<BOXM2_ALPHA>::datatype *     alpha_data = (boxm2_data_traits<BOXM2_ALPHA>::datatype*) alpha->data_buffer();
+  boxm2_data_traits<BOXM2_POINT>::datatype *     points_data = (boxm2_data_traits<BOXM2_POINT>::datatype*) points->data_buffer();
+  boxm2_data_traits<BOXM2_NORMAL>::datatype *    normals_data = (boxm2_data_traits<BOXM2_NORMAL>::datatype*) normals->data_buffer();
+  boxm2_data_traits<BOXM2_VIS_SCORE>::datatype * vis_data = (boxm2_data_traits<BOXM2_VIS_SCORE>::datatype*) vis->data_buffer();
 
-    file << vcl_fixed;
-    int pointTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_POINT>::prefix());
-    for (unsigned currIdx=0; currIdx < (points->buffer_length()/pointTypeSize) ; currIdx++) {
-      //check normal magnitude and vis score and that point data is valid
-      if (normals_data[currIdx][3] >= nmag_t && vis_data[currIdx] >= vis_t && points_data[currIdx][3] != -1)
+  file << vcl_fixed;
+  int pointTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_POINT>::prefix());
+  for (unsigned currIdx=0; currIdx < (points->buffer_length()/pointTypeSize) ; currIdx++) {
+    //check normal magnitude and vis score and that point data is valid
+    if (normals_data[currIdx][3] >= nmag_t && vis_data[currIdx] >= vis_t && points_data[currIdx][3] != -1)
+    {
+      float prob;
+      if (!calculateProbOfPoint(scene, blk, points_data[currIdx], alpha_data[currIdx], prob))
+        continue;
+
+      //check prob
+      if (prob >= prob_t)
       {
-        float prob;
-        if(!calculateProbOfPoint(scene, blk, points_data[currIdx], alpha_data[currIdx], prob))
-          continue;
-
-        //check prob
-        if(prob >= prob_t)
+        //check bounding box
+        if (bb.is_empty() || bb.contains(points_data[currIdx][0] ,points_data[currIdx][1] ,points_data[currIdx][2]) )
         {
-          //check bounding box
-          if(bb.is_empty() || bb.contains(points_data[currIdx][0] ,points_data[currIdx][1] ,points_data[currIdx][2]) )
-          {
-            file <<  points_data[currIdx][0] << ' ' << points_data[currIdx][1] << ' ' << points_data[currIdx][2] << ' ';
-            file <<  normals_data[currIdx][0] << ' ' << normals_data[currIdx][1] << ' ' << normals_data[currIdx][2] << ' ';
+          file <<  points_data[currIdx][0] << ' ' << points_data[currIdx][1] << ' ' << points_data[currIdx][2] << ' '
+               <<  normals_data[currIdx][0] << ' ' << normals_data[currIdx][1] << ' ' << normals_data[currIdx][2] << ' ';
 
-            if (output_aux)
-               file  <<  prob << ' ' <<  vis_data[currIdx] << ' ' <<  normals_data[currIdx][3];
-            file << vcl_endl;
-          }
+          if (output_aux)
+            file  <<  prob << ' ' <<  vis_data[currIdx] << ' ' <<  normals_data[currIdx][3];
+          file << vcl_endl;
         }
       }
-
     }
+  }
 }
 
 void boxm2_export_oriented_point_cloud_function::exportPointCloudPLY(const boxm2_scene_sptr& scene, boxm2_block_metadata data, boxm2_block* blk,
-                                                                boxm2_data_base* alpha, boxm2_data_base* vis,
-                                                                boxm2_data_base* points, boxm2_data_base* normals,
-                                                                vcl_ofstream& file, bool output_aux, float vis_t, float nmag_t, float prob_t,
-                                                                vgl_box_3d<double> bb, unsigned& num_vertices)
+                                                                     boxm2_data_base* alpha, boxm2_data_base* vis,
+                                                                     boxm2_data_base* points, boxm2_data_base* normals,
+                                                                     vcl_ofstream& file, bool output_aux, float vis_t, float nmag_t, float prob_t,
+                                                                     vgl_box_3d<double> bb, unsigned& num_vertices)
 {
   boxm2_data_traits<BOXM2_ALPHA>::datatype *   alpha_data = (boxm2_data_traits<BOXM2_ALPHA>::datatype*) alpha->data_buffer();
   boxm2_data_traits<BOXM2_POINT>::datatype *   points_data = (boxm2_data_traits<BOXM2_POINT>::datatype*) points->data_buffer();
@@ -63,32 +61,32 @@ void boxm2_export_oriented_point_cloud_function::exportPointCloudPLY(const boxm2
     if (normals_data[currIdx][3] >= nmag_t && vis_data[currIdx] >= vis_t && points_data[currIdx][3] != -1)
     {
       float prob;
-      if(!calculateProbOfPoint(scene, blk, points_data[currIdx], alpha_data[currIdx], prob))
+      if (!calculateProbOfPoint(scene, blk, points_data[currIdx], alpha_data[currIdx], prob))
         continue;
 
       //check prob
-      if(prob >= prob_t)
+      if (prob >= prob_t)
       {
         //check bounding box
-        if(bb.is_empty() || bb.contains(points_data[currIdx][0] ,points_data[currIdx][1] ,points_data[currIdx][2]) )
+        if (bb.is_empty() || bb.contains(points_data[currIdx][0] ,points_data[currIdx][1] ,points_data[currIdx][2]) )
         {
-          file <<  points_data[currIdx][0] << ' ' << points_data[currIdx][1] << ' ' << points_data[currIdx][2] << ' ';
-          file <<  normals_data[currIdx][0] << ' ' << normals_data[currIdx][1] << ' ' << normals_data[currIdx][2] << ' ';
+          file <<  points_data[currIdx][0] << ' ' << points_data[currIdx][1] << ' ' << points_data[currIdx][2] << ' '
+               <<  normals_data[currIdx][0] << ' ' << normals_data[currIdx][1] << ' ' << normals_data[currIdx][2] << ' ';
           num_vertices++;
 
           if (output_aux)
-             file  <<  prob << ' ' <<  vis_data[currIdx] << ' ' <<  normals_data[currIdx][3];
+            file  <<  prob << ' ' <<  vis_data[currIdx] << ' ' <<  normals_data[currIdx][3];
           file << vcl_endl;
         }
       }
     }
-
   }
 }
 
 
 bool boxm2_export_oriented_point_cloud_function::calculateProbOfPoint(const boxm2_scene_sptr& scene, boxm2_block * blk,
-                                                    const vnl_vector_fixed<float, 4>& point, const float& alpha, float& prob)
+                                                                      const vnl_vector_fixed<float, 4>& point,
+                                                                      const float& alpha, float& prob)
 {
   vgl_point_3d<double> local;
   boxm2_block_id id;
@@ -100,7 +98,7 @@ bool boxm2_export_oriented_point_cloud_function::calculateProbOfPoint(const boxm
   }
   //if the block passed isn't the block that contains the point, there is something wrong...
   //this happens when the point data is empty (0,0,0,0) for instance, or simply wrong.
-  if(blk->block_id() != id)
+  if (blk->block_id() != id)
     return false;
 
   int index_x=(int)vcl_floor(local.x());
@@ -123,23 +121,24 @@ void boxm2_export_oriented_point_cloud_function::writePLYHeader(vcl_ofstream& fi
 {
    file << "ply\nformat ascii 1.0\nelement vertex " << num_vertices
         << "\nproperty float x\nproperty float y\nproperty float z\nproperty float nx\nproperty float ny\nproperty float nz\n";
-   if(output_aux) {
+   if (output_aux) {
      file << "property float prob\nproperty float vis_score\nproperty float nmag\n";
    }
 
-   file << "end_header\n";
-   file  << ss.str();
+   file << "end_header\n"
+        << ss.str();
 }
 
 
 //helper class to read in bb from file
 class ply_bb_reader
 {
-public:
+ public:
   vgl_box_3d<double> bbox;
   double p[3];
   vcl_vector<int > vertex_indices;
 };
+
 
 //: Call-back function for a "vertex" element
 int bof_plyio_vertex_cb_(p_ply_argument argument)
@@ -160,21 +159,18 @@ int bof_plyio_vertex_cb_(p_ply_argument argument)
       break;
     case 2: // "z" coordinate
       parsed_ply->p[2] = ply_get_argument_value(argument);
-    { // INSERT VERTEX INTO THE MESH
+      // INSERT VERTEX INTO THE MESH
       parsed_ply->bbox.add(vgl_point_3d<double>(parsed_ply->p));
       break;
-    }
     default:
       assert(!"This should not happen: index out of range");
-  };
+  }
   return 1;
 }
 
 
-
-
-void boxm2_export_oriented_point_cloud_function::readBBFromPLY(const vcl_string& filename, vgl_box_3d<double>& box) {
-
+void boxm2_export_oriented_point_cloud_function::readBBFromPLY(const vcl_string& filename, vgl_box_3d<double>& box)
+{
   ply_bb_reader parsed_ply;
   parsed_ply.bbox = box;
 
