@@ -1,5 +1,5 @@
-#ifndef boxm2_reg_mutual_info_h
-#define boxm2_reg_mutual_info_h
+#ifndef boxm2_ocl_reg_mutual_info_h
+#define boxm2_ocl_reg_mutual_info_h
 //:
 // \file
 #include <boxm2/io/boxm2_cache.h>
@@ -18,4 +18,4 @@ bool boxm2_ocl_register_world(boxm2_opencl_cache_sptr& cacheA,
                               bocl_device_sptr device,
                               float & mi);
 
-#endif // boxm2_reg_mutual_info_h
+#endif // boxm2_ocl_reg_mutual_info_h
