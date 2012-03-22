@@ -472,6 +472,59 @@ void vimt3d_transform_3d::set_rigid_body(double r_x, double r_y, double r_z,
   inv_uptodate_=false;
 }
 
+//: Sets the transformation to be rotation, followed by translation.
+// The transformation is separable affine.
+// \param q  Unit quaternion defining rotation
+void vimt3d_transform_3d::set_rigid_body(const vnl_quaternion<double>& q,
+                                         double t_x, double t_y, double t_z)
+{
+  if (q.angle()==0.0)
+  {
+    set_translation(t_x,t_y,t_z);
+    return;
+  }
+  vnl_matrix_fixed<double,3,3> R = q.rotation_matrix_transpose();
+  form_=RigidBody;
+  
+  // Set rotation terms from R, which is transpose of Rot mat.
+  xx_=R[0][0];  xy_= R[1][0]; xz_ = R[2][0];
+  yx_=R[0][1];  yy_= R[1][1]; yz_ = R[2][1];
+  zx_=R[0][2];  zy_= R[1][2]; zz_ = R[2][2];
+  
+  // Set translation
+  xt_=t_x;
+  yt_=t_y;
+  zt_=t_z;
+
+  inv_uptodate_=false;
+}
+
+//: Sets the transformation to be similarity: scale, rotation, followed by translation.
+// The transformation is separable affine.
+// \param unit_q  Unit quaternion defining rotation
+void vimt3d_transform_3d::set_similarity(double s, const vnl_quaternion<double>& q,
+                      double t_x, double t_y, double t_z)
+{
+  if (q.angle()==0.0)
+  {
+    set_zoom_only(s,t_x,t_y,t_z);
+    return;
+  }
+  vnl_matrix_fixed<double,3,3> R = q.rotation_matrix_transpose();
+  form_=RigidBody;
+  
+  // Set scale/rotation terms from R, which is transpose of Rot mat.
+  xx_=s*R[0][0];  xy_= s*R[1][0]; xz_ = s*R[2][0];
+  yx_=s*R[0][1];  yy_= s*R[1][1]; yz_ = s*R[2][1];
+  zx_=s*R[0][2];  zy_= s*R[1][2]; zz_ = s*R[2][2];
+  
+  // Set translation
+  xt_=t_x;
+  yt_=t_y;
+  zt_=t_z;
+
+  inv_uptodate_=false;
+}
 //=======================================================================
 
 void vimt3d_transform_3d::set_similarity(double s,

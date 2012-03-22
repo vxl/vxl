@@ -10,6 +10,7 @@
 #include <vnl/io/vnl_io_matrix.h>
 #include <vsl/vsl_binary_io.h>
 #include <vcl_iosfwd.h>
+#include <vnl/vnl_quaternion.h>
 
 //=======================================================================
 
@@ -136,6 +137,12 @@ class vimt3d_transform_3d
   // \param t_z  Translation in z
   void set_rigid_body(double r_x, double r_y, double r_z,
                       double t_x, double t_y, double t_z);
+  
+  //: Sets the transformation to be rotation, followed by translation.
+  // The transformation is separable affine.
+  // \param unit_q  Unit quaternion defining rotation
+  void set_rigid_body(const vnl_quaternion<double>& unit_q,
+                      double t_x, double t_y, double t_z);
 
   //: Sets the transformation to be isotropic scaling, followed by rotation, then translation.
   // The transformation is separable affine.
@@ -148,6 +155,13 @@ class vimt3d_transform_3d
   // \param t_z  Translation in z
   void set_similarity(double s,
                       double r_x, double r_y, double r_z,
+                      double t_x, double t_y, double t_z);
+
+  
+  //: Sets the transformation to be similarity: scale, rotation, followed by translation.
+  // The transformation is separable affine.
+  // \param unit_q  Unit quaternion defining rotation
+  void set_similarity(double scale, const vnl_quaternion<double>& unit_q,
                       double t_x, double t_y, double t_z);
 
   //: Sets the transformation to be a special case of Affine: anisotropic scaling, followed by rotation, then translation.
