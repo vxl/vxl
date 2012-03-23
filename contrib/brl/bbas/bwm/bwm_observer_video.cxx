@@ -947,7 +947,8 @@ void bwm_observer_video::proj_point(vgl_point_3d<double> world_pt,
 }
 
 void bwm_observer_video::proj_line(vsol_line_3d_sptr line_3d,
-                                   vsol_line_2d_sptr &line_2d) {
+                                   vsol_line_2d_sptr &line_2d)
+{
   vpgl_perspective_camera<double>* cam = cam_istr_->current_camera();
   if (!cam) {
     vcl_cout << "ERROR: null camera in ::proj_line(..)\n";
@@ -1037,14 +1038,14 @@ void bwm_observer_video::display_polygons_frame()
 {
   unsigned frame = this->video_istr_->frame_number();
 
-  vcl_map<unsigned, vcl_vector<vsol_polygon_2d_sptr> >::iterator 
-	  f_itr = this->frame_polygon_map_.find(frame);
+  vcl_map<unsigned, vcl_vector<vsol_polygon_2d_sptr> >::iterator
+    f_itr = this->frame_polygon_map_.find(frame);
 
-  vcl_map<unsigned,vcl_vector<vcl_string> >::iterator 
-	  s_itr = this->frame_change_map_.find(frame);
+  vcl_map<unsigned,vcl_vector<vcl_string> >::iterator
+    s_itr = this->frame_change_map_.find(frame);
 
   vgui_text_tableau_sptr tt = img_tab_->text_tab();
-			  tt->clear();
+  tt->clear();
 
   //clear the objects
   this->id_pos_map_.clear();
@@ -1080,18 +1081,20 @@ void bwm_observer_video::display_polygons_frame()
 
       this->id_pos_map_[polygon->get_id()] = i;
 
-	  if( s_itr != this->frame_change_map_.end() )
-	  {
-		  if( s_itr->second.size() > i )
-		  {
-			  vcl_string change_type = s_itr->second[i];
-			  vsol_polygon_2d_sptr poly = f_itr->second[i];
-			  vsol_point_2d_sptr cent = poly->centroid();
-			  tt->add((poly->centroid())->x(),cent->y(),change_type);
-		  }//end check if we have correct number of change types
-	  }//check if we have change types
-      //return polygon->get_id();
-    }//end polygon iteration
+      if ( s_itr != this->frame_change_map_.end() )
+      {
+        if ( s_itr->second.size() > i )
+        {
+          vcl_string change_type = s_itr->second[i];
+          vsol_polygon_2d_sptr poly = f_itr->second[i];
+          vsol_point_2d_sptr cent = poly->centroid();
+          tt->add((poly->centroid())->x(),cent->y(),change_type);
+        } //end check if we have correct number of change types
+      } //check if we have change types
+#if 0
+      return polygon->get_id();
+#endif
+    } //end polygon iteration
   }
 }
 
