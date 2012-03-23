@@ -30,6 +30,8 @@
 #include <vidl/vidl_frame.h>
 #include <vidl/vidl_convert.h>
 #include <vsol/vsol_polygon_2d.h>
+#include <vsol/vsol_point_2d.h>
+#include <vsol/vsol_point_2d_sptr.h>
 
 bool bwm_observer_video::handle(const vgui_event &e)
 {
@@ -1035,8 +1037,14 @@ void bwm_observer_video::display_polygons_frame()
 {
   unsigned frame = this->video_istr_->frame_number();
 
-  vcl_map<unsigned, vcl_vector<vsol_polygon_2d_sptr> >::iterator f_itr = this->frame_polygon_map_.find(frame);
+  vcl_map<unsigned, vcl_vector<vsol_polygon_2d_sptr> >::iterator 
+	  f_itr = this->frame_polygon_map_.find(frame);
 
+  vcl_map<unsigned,vcl_vector<vcl_string> >::iterator 
+	  s_itr = this->frame_change_map_.find(frame);
+
+  vgui_text_tableau_sptr tt = img_tab_->text_tab();
+			  tt->clear();
 
   //clear the objects
   this->id_pos_map_.clear();
@@ -1071,6 +1079,17 @@ void bwm_observer_video::display_polygons_frame()
       f_itr->second[i]->set_id(polygon->get_id());
 
       this->id_pos_map_[polygon->get_id()] = i;
+
+	  if( s_itr != this->frame_change_map_.end() )
+	  {
+		  if( s_itr->second.size() > i )
+		  {
+			  vcl_string change_type = s_itr->second[i];
+			  vsol_polygon_2d_sptr poly = f_itr->second[i];
+			  vsol_point_2d_sptr cent = poly->centroid();
+			  tt->add((poly->centroid())->x(),cent->y(),change_type);
+		  }//end check if we have correct number of change types
+	  }//check if we have change types
       //return polygon->get_id();
     }//end polygon iteration
   }
