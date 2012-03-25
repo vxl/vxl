@@ -20,8 +20,9 @@ TARGET_LINK_LIBRARIES(boxm2_ocl_reg boxm2_io boxm2_reg boxm2_ocl bocl brip baio 
 INSTALL_TARGETS(/lib boxm2_ocl_reg)
 INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bseg/boxm2/reg/ocl/ ${boxm2_ocl_reg_sources})
 
-
 SUBDIRS(exe)
-
+IF( BUILD_TESTING )
+  SUBDIRS(tests)
+ENDIF( BUILD_TESTING )
 
 ENDIF(OPENCL_FOUND)
