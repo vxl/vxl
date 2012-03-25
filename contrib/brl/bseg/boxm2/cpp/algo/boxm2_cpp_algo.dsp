@@ -117,7 +117,7 @@ SOURCE=.\boxm2_merge_block_function.cxx
 SOURCE=.\boxm2_phongs_model_processor.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\boxm2_export_point_cloud_xyz_function.cxx
+SOURCE=.\boxm2_export_oriented_point_cloud_function.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\boxm2_compute_derivative_function.cxx
@@ -138,10 +138,7 @@ SOURCE=.\boxm2_gauss_rgb_processor.cxx
 SOURCE=.\Templates/boxm2_batch_functors+BOXM2_APMs-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/boxm2_apply_filter_function+FLOAT16-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/boxm2_apply_filter_function+BOXM2_NORMAL-.cxx
+SOURCE=.\Templates/boxm2_apply_filter_function+FLOAT-.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
@@ -237,7 +234,7 @@ SOURCE=.\boxm2_update_using_quality_functor.h
 SOURCE=.\boxm2_synoptic_function_functors.h
 # End Source File
 # Begin Source File
-SOURCE=.\boxm2_export_point_cloud_xyz_function.h
+SOURCE=.\boxm2_export_oriented_point_cloud_function.h
 # End Source File
 # Begin Source File
 SOURCE=.\boxm2_compute_derivative_function.h

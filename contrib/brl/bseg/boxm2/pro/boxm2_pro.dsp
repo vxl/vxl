@@ -156,7 +156,10 @@ SOURCE=.\processes/boxm2_clear_cache_process.cxx
 SOURCE=.\processes/boxm2_blob_precision_recall_process.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\processes/boxm2_export_point_cloud_xyz_process.cxx
+SOURCE=.\processes/boxm2_extract_point_cloud_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/boxm2_export_oriented_point_cloud_process.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\processes/boxm2_scene_bbox_process.cxx
