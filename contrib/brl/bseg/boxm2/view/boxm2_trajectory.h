@@ -14,7 +14,7 @@
 // %% mencoder "mf://*.png" -mf type=png:fps=18 -ovc lavc -o output.avi
 //
 #include <vgl/vgl_box_3d.h>
-#include <vpgl/vpgl_camera_double_sptr.h>
+#include <vpgl/vpgl_perspective_camera.h>
 
 //smart ptr includes
 #include <vbl/vbl_ref_count.h>
