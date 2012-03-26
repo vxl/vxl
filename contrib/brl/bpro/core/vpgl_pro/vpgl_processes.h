@@ -32,6 +32,7 @@ DECLARE_FUNC_CONS(vpgl_get_rpc_offsets_process);
 DECLARE_FUNC_CONS(vpgl_get_bounding_box_process);
 DECLARE_FUNC_CONS(vpgl_nitf_footprint_process);
 DECLARE_FUNC_CONS(vpgl_generate_3d_point_from_cams_process);
+DECLARE_FUNC_CONS(vpgl_convert_to_local_coordinates_process);
 #if 0 //deprecate scale perspective camera
 DECLARE_FUNC_CONS(vpgl_scale_perspective_camera_process);
 #endif
