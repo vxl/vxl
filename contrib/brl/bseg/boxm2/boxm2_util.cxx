@@ -56,7 +56,7 @@ vcl_vector<vpgl_perspective_camera<double>* > boxm2_util::cameras_from_directory
 {
   vcl_vector<vpgl_perspective_camera<double>* > toReturn;
   if (!vul_file::is_directory(dir.c_str()) ) {
-    vcl_cout<<"Cam dir is not a directory"<<vcl_endl;
+    vcl_cerr<<"Cam dir is not a directory\n";
     return toReturn;
   }
 
@@ -110,51 +110,55 @@ vpgl_camera_double_sptr boxm2_util::camera_from_file(vcl_string camfile)
 //: returns a list of image strings from directory
 vcl_vector<vcl_string> boxm2_util::images_from_directory(vcl_string dir)
 {
+#if 0
+  vcl_vector<vcl_string> img_files;
+  if (!vul_file::is_directory(dir.c_str())) {
+    vcl_cerr<<"img dir is not a directory\n";
+    return img_files;
+  }
+  vcl_string imgglob=dir+"/*.???";
+  vul_file_iterator img_file_it(imgglob.c_str());
+  while (img_file_it) {
+    vcl_string imgName(img_file_it());
+    img_files.push_back(imgName);
+    ++img_file_it;
+  }
+  vcl_sort(img_files.begin(), img_files.end());
+  return img_files;
+#endif
   return boxm2_util::files_from_dir(dir, "???");
-  //vcl_vector<vcl_string> img_files;
-  //if (!vul_file::is_directory(dir.c_str())) {
-  //  vcl_cout<<"img dir is not a directory"<<vcl_endl;
-  //  return img_files;
-  //}
-  //vcl_string imgglob=dir+"/*.???";
-  //vul_file_iterator img_file_it(imgglob.c_str());
-  //while (img_file_it) {
-  //  vcl_string imgName(img_file_it());
-  //  img_files.push_back(imgName);
-  //  ++img_file_it;
-  //}
-  //vcl_sort(img_files.begin(), img_files.end());
-  //return img_files;
 }
 
 //: returns a list of image strings from directory
 vcl_vector<vcl_string> boxm2_util::camfiles_from_directory(vcl_string dir)
 {
+#if 0
+  vcl_vector<vcl_string> cam_files;
+  if (!vul_file::is_directory(dir.c_str())) {
+    vcl_cerr<<"cam dir is not a directory\n";
+    return cam_files;
+  }
+  vcl_string camglob=dir+"/*.txt";
+  vul_file_iterator file_it(camglob.c_str());
+  while (file_it) {
+    vcl_string camName(file_it());
+    cam_files.push_back(camName);
+    ++file_it;
+  }
+  vcl_sort(cam_files.begin(), cam_files.end());
+  return cam_files;
+#endif
   return boxm2_util::files_from_dir(dir, "txt");
- // vcl_vector<vcl_string> cam_files;
- // if (!vul_file::is_directory(dir.c_str())) {
- //   vcl_cout<<"cam dir is not a directory"<<vcl_endl;
- //   return cam_files;
- // }
- // vcl_string camglob=dir+"/*.txt";
- // vul_file_iterator file_it(camglob.c_str());
- // while (file_it) {
- //   vcl_string camName(file_it());
- //   cam_files.push_back(camName);
- //   ++file_it;
- // }
- // vcl_sort(cam_files.begin(), cam_files.end());
- // return cam_files;
 }
 
 vcl_vector<vcl_string> boxm2_util::files_from_dir(vcl_string dir, vcl_string ext)
 {
   vcl_vector<vcl_string> files;
   if (!vul_file::is_directory(dir.c_str())) {
-    vcl_cout<<"dir does not exist: "<<dir<<vcl_endl;
+    vcl_cerr<<"dir does not exist: "<<dir<<vcl_endl;
     return files;
   }
-  vcl_string glob = dir + "/*." + ext; 
+  vcl_string glob = dir + "/*." + ext;
   vul_file_iterator file_it(glob.c_str());
   while (file_it) {
     vcl_string name(file_it());
@@ -248,9 +252,8 @@ int boxm2_util::find_nearest_cam(vgl_vector_3d<double>& normal,
   double minAngle = 10e20;
   unsigned minCam = -1;
   for (unsigned int i=0; i<cams.size(); ++i) {
-    //double ang = vcl_fabs(angle(normal, -1*cams[i]->principal_axis())); //vcl_fabs( vcl_acos(dp) );
     double dotProd = dot_product( normal, -1*cams[i]->principal_axis());
-    double ang = vcl_acos(dotProd);
+    double ang = vcl_acos(dotProd); // vcl_fabs(angle(normal, -1*cams[i]->principal_axis()));
 #ifdef DEBUG
     if ( vcl_fabs(normal.z()) > .8 ) {
       vcl_cout<<"Face normal: "<<normal<<"  principal axis: "<<cams[i]->principal_axis()<<'\n'
@@ -284,7 +287,7 @@ bool boxm2_util::copy_file(vcl_string file, vcl_string dest)
     outfile.close();
   }
   else {
-    vcl_cout<<"Couldn't open " << file << " or " << dest << vcl_endl;
+    vcl_cerr<<"Couldn't open " << file << " or " << dest << vcl_endl;
     return false;
   }
   return true;
@@ -366,7 +369,7 @@ bool boxm2_util::generate_html(int height, int width, int nrows, int ncols, vcl_
     return true;
   }
   else {
-    vcl_cout<<"Couldn't open " << dest << vcl_endl;
+    vcl_cerr<<"Couldn't open " << dest << vcl_endl;
     return false;
   }
 }
@@ -395,7 +398,7 @@ bool boxm2_util::generate_jsfunc(vbl_array_2d<vcl_string> img_files, vcl_string 
     return true;
   }
   else {
-    vcl_cout<<"Couldn't open " << dest << vcl_endl;
+    vcl_cerr<<"Couldn't open " << dest << vcl_endl;
     return false;
   }
 }
@@ -410,7 +413,9 @@ vil_image_view_base_sptr boxm2_util::prepare_input_image(vil_image_view_base_spt
     //if not forcing RGB image to be grey
     if (!force_grey)
     {
-      //vcl_cout<<"preparing rgb image"<<vcl_endl;
+#ifdef DEBUG
+      vcl_cout<<"preparing rgb image"<<vcl_endl;
+#endif
       //load image from file and format it into RGBA
       vil_image_view_base_sptr n_planes = vil_convert_to_n_planes(4, loaded_image);
       vil_image_view_base_sptr comp_image = vil_convert_to_component_order(n_planes);
@@ -426,7 +431,9 @@ vil_image_view_base_sptr boxm2_util::prepare_input_image(vil_image_view_base_spt
     }
     else
     {
-      //vcl_cout<<"preparing rgb as input to grey scale float image"<<vcl_endl;
+#ifdef DEBUG
+      vcl_cout<<"preparing rgb as input to grey scale float image"<<vcl_endl;
+#endif
       //load image from file and format it into grey
       vil_image_view<vxl_byte>* inimg    = dynamic_cast<vil_image_view<vxl_byte>* >(loaded_image.ptr());
       vil_image_view<float>     gimg(loaded_image->ni(), loaded_image->nj());
@@ -443,8 +450,10 @@ vil_image_view_base_sptr boxm2_util::prepare_input_image(vil_image_view_base_spt
   //else if loaded planes is just one...
   if (loaded_image->nplanes() == 1)
   {
-    //vcl_cout<<"Preparing grey scale image"<<vcl_endl;
-    //preapre floatimg for stretched img
+#ifdef DEBUG
+    vcl_cout<<"Preparing grey scale image"<<vcl_endl;
+#endif
+    //prepare floatimg for stretched img
     vil_image_view<float>* floatimg;
     if (vil_image_view<vxl_byte> *img_byte = dynamic_cast<vil_image_view<vxl_byte>*>(loaded_image.ptr()))
     {
@@ -525,10 +534,8 @@ bool boxm2_util::verify_appearance(boxm2_scene& scene, const vcl_vector<vcl_stri
 }
 
 
-
-
 bool boxm2_util::query_point(boxm2_scene_sptr& scene,
-                             boxm2_cache_sptr& cache, 
+                             boxm2_cache_sptr& cache,
                              const vgl_point_3d<double>& point,
                              float& prob, float& intensity)
 {
@@ -545,12 +552,11 @@ bool boxm2_util::query_point(boxm2_scene_sptr& scene,
   vnl_vector_fixed<unsigned char,16> treebits=blk->trees()(index_x,index_y,index_z);
   boct_bit_tree tree(treebits.data_block(),mdata.max_level_);
   int bit_index=tree.traverse(local);
-
   int depth=tree.depth_at(bit_index);
-
-  //int buff_index=(int)treebits[12]*256+(int)treebits[13];
-  //int data_offset=buff_index*65536+tree.get_data_index(bit_index);
   int data_offset=tree.get_data_index(bit_index,false);
+#if 0
+  data_offset += 0x10000*((int)treebits[12]*0x100+(int)treebits[13]);
+#endif
   boxm2_data_base *  alpha_base  = cache->get_data_base(id,boxm2_data_traits<BOXM2_ALPHA>::prefix());
   boxm2_data<BOXM2_ALPHA> *alpha_data=new boxm2_data<BOXM2_ALPHA>(alpha_base->data_buffer(),alpha_base->buffer_length(),alpha_base->block_id());
 
@@ -558,16 +564,18 @@ bool boxm2_util::query_point(boxm2_scene_sptr& scene,
   float alpha=alpha_data_array[data_offset];
 
   float side_len=static_cast<float>(mdata.sub_block_dim_.x()/((float)(1<<depth)));
-  //vcl_cout<<" DATA OFFSET "<<side_len<<vcl_endl;
-  
-  //store cell probabilty
+#ifdef DEBUG
+  vcl_cout<<" DATA OFFSET "<<side_len<<vcl_endl;
+#endif
+
+  //store cell probability
   prob=1.0f-vcl_exp(-alpha*side_len);
   boxm2_data_base *  int_base  = cache->get_data_base(id,boxm2_data_traits<BOXM2_MOG3_GREY>::prefix());
   boxm2_data<BOXM2_MOG3_GREY> *int_data=new boxm2_data<BOXM2_MOG3_GREY>(int_base->data_buffer(),int_base->buffer_length(),int_base->block_id());
 
   boxm2_array_1d<vnl_vector_fixed<unsigned char,8> > int_data_array=int_data->data();
   intensity=(float)int_data_array[data_offset][0]/255.0f;
-  
+
   return true;
 }
 
