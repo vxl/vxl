@@ -15,10 +15,15 @@ persp_to_generic( __global    float16            * persp_camera,         // came
   
   //make sure the index exists in the image, although this can be thrown away if 
   //it is guaranteed that the global_size is equal to the image size in each dim
-  if( i < cam_dims->x && j < cam_dims->y )
+  uint i_min = cam_dims->x;
+  uint j_min = cam_dims->y;
+  uint i_size = cam_dims->z;
+  uint j_size = cam_dims->w;
+  
+  if( i < i_size && j < i_size )
   {
     float4 ray_o = (float4) persp_camera[2].s4567; ray_o.w = 1.0f;
-    float4 ray_d = backproject(i, j, persp_camera[0], persp_camera[1], persp_camera[2], ray_o);
+    float4 ray_d = backproject(i+i_min, j+j_min, persp_camera[0], persp_camera[1], persp_camera[2], ray_o);
     ray_d.w = 0.0f; 
     
     //also make sure to write cone half angle
