@@ -232,3 +232,23 @@ def correct_rational_camera(cam_in, offset_x, offset_y):
     (id,type) = boxm2_batch.commit_output(0)
     corrected_cam = dbvalue(id,type)
     return corrected_cam
+
+# convert lat,lon,el to local coordinates
+def convert_to_local_coordinates(lvcs_filename,lat,lon,el):
+    boxm2_batch.init_process('vpglConvertToLocalCoordinatesProcess')
+    boxm2_batch.set_input_string(0,lvcs_filename)
+    boxm2_batch.set_input_float(1,lat)
+    boxm2_batch.set_input_float(2,lon)
+    boxm2_batch.set_input_float(3,el)
+    boxm2_batch.run_process()
+    (id,type) = boxm2_batch.commit_output(0)
+    x = boxm2_batch.get_output_float(id)
+    boxm2_batch.remove_data(id)
+    (id,type) = boxm2_batch.commit_output(1)
+    y = boxm2_batch.get_output_float(id)
+    boxm2_batch.remove_data(id)
+    (id,type) = boxm2_batch.commit_output(2)
+    z = boxm2_batch.get_output_float(id)
+    boxm2_batch.remove_data(id)
+    return (x,y,z)
+
