@@ -5,6 +5,9 @@ TARGET_LINK_LIBRARIES( boxm2_render_hemisphere boxm2 boxm2_basic boxm2_io boxm2_
 ADD_EXECUTABLE( boxm2_export_scene boxm2_export_scene.cxx )
 TARGET_LINK_LIBRARIES( boxm2_export_scene boxm2 boxm2_basic boxm2_io sdet boxm2_ocl_pro boxm2_ocl bocl vil_pro vpgl_pro vsph vil vbl vul)
 
+ADD_EXECUTABLE( boxm2_ocl_refine_scene boxm2_ocl_refine_scene.cxx )
+TARGET_LINK_LIBRARIES( boxm2_ocl_refine_scene boxm2 boxm2_basic boxm2_io boxm2_ocl boxm2_ocl_pro bocl vil_pro)
+
 INCLUDE( ${BRL_MODULE_PATH}/FindGLEW.cmake )
 
 IF(GLEW_FOUND)
