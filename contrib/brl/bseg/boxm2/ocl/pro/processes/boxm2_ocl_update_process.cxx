@@ -16,13 +16,7 @@
 #include <boxm2/ocl/boxm2_ocl_util.h>
 #include <boxm2/boxm2_util.h>
 #include <vil/vil_image_view.h>
-#include <vil/vil_save.h>
 #include <vil/vil_new.h>
-#include <vil/vil_load.h>
-#include <vil/vil_property.h>
-#include <vil/vil_blocked_image_resource.h>
-#include <vil/vil_block_cache.h>
-#include <vil/vil_crop.h>
 #include <vpl/vpl.h> // vpl_unlink()
 
 #include <boxm2/ocl/algo/boxm2_ocl_camera_converter.h>
@@ -32,7 +26,6 @@
 #include <brdb/brdb_value.h>
 
 //directory utility
-#include <vul/vul_timer.h>
 #include <vcl_where_root_dir.h>
 #include <bocl/bocl_device.h>
 #include <bocl/bocl_kernel.h>
@@ -140,16 +133,12 @@ bool boxm2_ocl_update_process_cons(bprb_func_process& pro)
 bool boxm2_ocl_update_process(bprb_func_process& pro)
 {
   using namespace boxm2_ocl_update_process_globals;
-  vcl_size_t local_threads[2]={8,8};
-  vcl_size_t global_threads[2]={8,8};
 
   //sanity check inputs
   if ( pro.n_inputs() < n_inputs_ ) {
     vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
     return false;
   }
-  float transfer_time=0.0f;
-  float gpu_time=0.0f;
 
   //get the inputs
   unsigned i = 0;
@@ -166,43 +155,42 @@ bool boxm2_ocl_update_process(bprb_func_process& pro)
   //TODO Factor this out to a utility function
   //make sure this image small enough (or else carve it into image pieces)
   const vcl_size_t MAX_PIXELS = 16777216;
-  if(img->ni()*img->nj() > MAX_PIXELS) {
-    int sni = RoundUp(img->ni(), 16);  
-    int snj = RoundUp(img->nj(), 16);
+  if (img->ni()*img->nj() > MAX_PIXELS) {
+    unsigned int sni = RoundUp(img->ni(), 16);
+    unsigned int snj = RoundUp(img->nj(), 16);
     int numSegI = 1;
     int numSegJ = 1;
-    while( sni*snj > MAX_PIXELS/4 ) {
-      sni /= 2; 
+    while ( sni*snj > MAX_PIXELS/4 ) {
+      sni /= 2;
       snj /= 2;
       numSegI++;
       numSegJ++;
     }
     sni = RoundUp(sni, 16);
     snj = RoundUp(snj, 16);
-    vil_image_resource_sptr ir = vil_new_image_resource_of_view(*img); 
+    vil_image_resource_sptr ir = vil_new_image_resource_of_view(*img);
 
     //run update for each image make sure to input i/j
-    for(int i=0; i<numSegI+1; ++i) {
-      for(int j=0; j<numSegJ+1; ++j) {
-        
+    for (int i=0; i<numSegI+1; ++i) {
+      for (int j=0; j<numSegJ+1; ++j) {
         //make sure the view doesn't extend past the original image
-        vcl_size_t startI = (vcl_size_t) i * (vcl_size_t) sni; 
+        vcl_size_t startI = (vcl_size_t) i * (vcl_size_t) sni;
         vcl_size_t startJ = (vcl_size_t) j * (vcl_size_t) snj;
         vcl_size_t endI = vcl_min(startI + sni, (vcl_size_t) img->ni());
         vcl_size_t endJ = vcl_min(startJ + snj, (vcl_size_t) img->nj());
-        if(endI <= startI || endJ <= startJ)
+        if (endI <= startI || endJ <= startJ)
           break;
-        vcl_cout<<"Gettin patch: ("<<startI<<','<<startJ<<") -> ("<<endI<<','<<endJ<<")"<<vcl_endl;
+        vcl_cout<<"Gettin patch: ("<<startI<<','<<startJ<<") -> ("<<endI<<','<<endJ<<')'<<vcl_endl;
         vil_image_view_base_sptr view = ir->get_copy_view(startI, endI-startI, startJ, endJ-startJ);
 #if 0
         //test saving
-        vcl_stringstream s; 
-        s<<"block_"<<startI<<"_"<<startJ<<".png";
-        vil_save(*view, s.str().c_str());        
+        vcl_stringstream s;
+        s<<"block_"<<startI<<'_'<<startJ<<".png";
+        vil_save(*view, s.str().c_str());
 #endif
         //run update
-        boxm2_ocl_update::update(scene, device, opencl_cache, cam, view, 
-                                 ident, mask_sptr, update_alpha, mog_var, 
+        boxm2_ocl_update::update(scene, device, opencl_cache, cam, view,
+                                 ident, mask_sptr, update_alpha, mog_var,
                                  startI, startJ);
       }
     }
@@ -210,7 +198,7 @@ bool boxm2_ocl_update_process(bprb_func_process& pro)
   }
 
   //otherwise just run a normal update with one image
-  boxm2_ocl_update::update(scene, device, opencl_cache, cam, img, 
+  boxm2_ocl_update::update(scene, device, opencl_cache, cam, img,
                            ident, mask_sptr, update_alpha, mog_var);
   return true;
 }
