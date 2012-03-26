@@ -128,7 +128,7 @@ bool boxm2_ocl_update::update(boxm2_scene_sptr         scene,
   unsigned int min_i=1000000000, max_i=0;
   unsigned int min_j=1000000000, max_j=0;
   if (use_mask)
-  {
+  {  
     for (unsigned int j=0;j<mask_map->nj();++j) {
       for (unsigned int i=0;i<mask_map->ni();++i)
       {
