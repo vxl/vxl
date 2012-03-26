@@ -110,39 +110,59 @@ vpgl_camera_double_sptr boxm2_util::camera_from_file(vcl_string camfile)
 //: returns a list of image strings from directory
 vcl_vector<vcl_string> boxm2_util::images_from_directory(vcl_string dir)
 {
-  vcl_vector<vcl_string> img_files;
-  if (!vul_file::is_directory(dir.c_str())) {
-    vcl_cout<<"img dir is not a directory"<<vcl_endl;
-    return img_files;
-  }
-  vcl_string imgglob=dir+"/*.???";
-  vul_file_iterator img_file_it(imgglob.c_str());
-  while (img_file_it) {
-    vcl_string imgName(img_file_it());
-    img_files.push_back(imgName);
-    ++img_file_it;
-  }
-  vcl_sort(img_files.begin(), img_files.end());
-  return img_files;
+  return boxm2_util::files_from_dir(dir, "???");
+  //vcl_vector<vcl_string> img_files;
+  //if (!vul_file::is_directory(dir.c_str())) {
+  //  vcl_cout<<"img dir is not a directory"<<vcl_endl;
+  //  return img_files;
+  //}
+  //vcl_string imgglob=dir+"/*.???";
+  //vul_file_iterator img_file_it(imgglob.c_str());
+  //while (img_file_it) {
+  //  vcl_string imgName(img_file_it());
+  //  img_files.push_back(imgName);
+  //  ++img_file_it;
+  //}
+  //vcl_sort(img_files.begin(), img_files.end());
+  //return img_files;
 }
 
 //: returns a list of image strings from directory
 vcl_vector<vcl_string> boxm2_util::camfiles_from_directory(vcl_string dir)
 {
-  vcl_vector<vcl_string> cam_files;
+  return boxm2_util::files_from_dir(dir, "txt");
+ // vcl_vector<vcl_string> cam_files;
+ // if (!vul_file::is_directory(dir.c_str())) {
+ //   vcl_cout<<"cam dir is not a directory"<<vcl_endl;
+ //   return cam_files;
+ // }
+ // vcl_string camglob=dir+"/*.txt";
+ // vul_file_iterator file_it(camglob.c_str());
+ // while (file_it) {
+ //   vcl_string camName(file_it());
+ //   cam_files.push_back(camName);
+ //   ++file_it;
+ // }
+ // vcl_sort(cam_files.begin(), cam_files.end());
+ // return cam_files;
+}
+
+vcl_vector<vcl_string> boxm2_util::files_from_dir(vcl_string dir, vcl_string ext)
+{
+  vcl_vector<vcl_string> files;
   if (!vul_file::is_directory(dir.c_str())) {
-    vcl_cout<<"cam dir is not a directory"<<vcl_endl;
-    return cam_files;
+    vcl_cout<<"dir does not exist: "<<dir<<vcl_endl;
+    return files;
   }
-  vcl_string camglob=dir+"/*.txt";
-  vul_file_iterator file_it(camglob.c_str());
+  vcl_string glob = dir + "/*." + ext; 
+  vul_file_iterator file_it(glob.c_str());
   while (file_it) {
-    vcl_string camName(file_it());
-    cam_files.push_back(camName);
+    vcl_string name(file_it());
+    files.push_back(name);
     ++file_it;
   }
-  vcl_sort(cam_files.begin(), cam_files.end());
-  return cam_files;
+  vcl_sort(files.begin(), files.end());
+  return files;
 }
 
 //Constructs a camera given elevation, azimuth (degrees), radius, and bounding box.

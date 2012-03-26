@@ -26,6 +26,8 @@ class boxm2_util
     static vcl_vector<vpgl_perspective_camera<double>* > cameras_from_directory(vcl_string dir);
     static vcl_vector<vcl_string> images_from_directory(vcl_string dir);
     static vcl_vector<vcl_string> camfiles_from_directory(vcl_string dir);
+    static vcl_vector<vcl_string> files_from_dir(vcl_string dir, vcl_string ext);
+
 
     static vbl_array_2d<vil_image_view<vxl_byte>* >  render_upper_hemisphere(int num_az,
                                                                              int num_incline,
