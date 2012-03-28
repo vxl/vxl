@@ -43,16 +43,17 @@ namespace boxm2_ocl_render_expected_image_process_globals
     src_paths.push_back(source_dir + "bit/bit_tree_library_functions.cl");
     src_paths.push_back(source_dir + "backproject.cl");
     src_paths.push_back(source_dir + "statistics_library_functions.cl");
-    src_paths.push_back(source_dir + "expected_functor.cl");
     src_paths.push_back(source_dir + "ray_bundle_library_opt.cl");
     src_paths.push_back(source_dir + "bit/render_bit_scene.cl");
+    src_paths.push_back(source_dir + "expected_functor.cl");
     src_paths.push_back(source_dir + "bit/cast_ray_bit.cl");
 
     //set kernel options
     //#define STEP_CELL step_cell_render(mixture_array, alpha_array, data_ptr, d, &vis, &expected_int);
-    vcl_string options = opts + " -D RENDER ";
-    options += " -D DETERMINISTIC ";
-    options += " -D STEP_CELL=step_cell_render(aux_args.mog,aux_args.alpha,data_ptr,d*linfo->block_len,vis,aux_args.expint)";
+    vcl_string options = opts;
+    options += "-D RENDER ";
+    options += "-D DETERMINISTIC ";
+    options += "-D STEP_CELL=step_cell_render(aux_args.mog,aux_args.alpha,data_ptr,d*linfo->block_len,vis,aux_args.expint)";
 
     //have kernel construct itself using the context and device
     bocl_kernel * ray_trace_kernel=new bocl_kernel();
@@ -138,21 +139,21 @@ bool boxm2_ocl_render_expected_image_process(bprb_func_process& pro)
     {
       data_type = apps[i];
       foundDataType = true;
-      options=" -D MOG_TYPE_8 ";
+      options="-D MOG_TYPE_8 ";
       apptypesize = boxm2_data_traits<BOXM2_MOG3_GREY>::datasize();
     }
     else if ( apps[i] == boxm2_data_traits<BOXM2_MOG3_GREY_16>::prefix() )
     {
       data_type = apps[i];
       foundDataType = true;
-      options=" -D MOG_TYPE_16 ";
+      options="-D MOG_TYPE_16 ";
       apptypesize = boxm2_data_traits<BOXM2_MOG3_GREY_16>::datasize();
     }
     else if ( apps[i] == boxm2_data_traits<BOXM2_FLOAT8>::prefix() )
     {
       data_type = apps[i];
       foundDataType = true;
-      options=" -D FLOAT8 ";
+      options="-D FLOAT8 ";
       apptypesize = boxm2_data_traits<BOXM2_FLOAT8>::datasize();
     }
   }
