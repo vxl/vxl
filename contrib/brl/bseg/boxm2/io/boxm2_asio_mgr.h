@@ -124,8 +124,8 @@ void boxm2_asio_mgr::save_block_data(vcl_string dir, boxm2_block_id block_id , b
     vcl_string filename = dir + boxm2_data_traits<data_type>::prefix() + "_" +  block_id.to_string() + ".bin";
 
     // create baio object
-    baio aio = new baio();
-    aio.write(filename, block_data->data_buffer(), block_data->buffer_length());
+    baio *aio = new baio();
+    aio->write(filename, block_data->data_buffer(), block_data->buffer_length());
     save_data_list_[boxm2_data_traits<data_type>::prefix()][block_id] = aio;
 }
 
