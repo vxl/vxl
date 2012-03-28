@@ -253,7 +253,7 @@ bocl_kernel* boxm2_ocl_refine::get_refine_tree_kernel(bocl_device_sptr device, v
   //refine trees kernel
   bocl_kernel* refine_tree_kernel=new bocl_kernel();
   refine_tree_kernel->create_kernel( &device->context(), device->device_id(), src_paths,
-                                     "refine_trees", " -D MOG_TYPE_8 ",
+                                     "refine_trees", " -D MOG_TYPE_8",
                                      "boxm2 opencl refine trees (pass one)"); //kernel identifier (for error checking)
   tree_kernels_[tree_identifier] = refine_tree_kernel;  
   return tree_kernels_[tree_identifier];
