@@ -491,21 +491,21 @@ vcl_vector<bocl_kernel*>& boxm2_ocl_update::get_kernels(bocl_device_sptr device,
   src_paths.push_back(source_dir + "bit/cast_ray_bit.cl");
 
   //compilation options
-  vcl_string options = " -D INTENSITY -D DETERMINISTIC " + opts;
+  vcl_string options = " -D INTENSITY -D DETERMINISTIC" + opts;
 
   //populate vector of kernels
   vcl_vector<bocl_kernel*> vec_kernels;
 
   //seg len pass
   bocl_kernel* seg_len = new bocl_kernel();
-  vcl_string seg_opts = options + " -D SEGLEN -D STEP_CELL=step_cell_seglen(aux_args,data_ptr,llid,d) ";
+  vcl_string seg_opts = options + " -D SEGLEN -D STEP_CELL=step_cell_seglen(aux_args,data_ptr,llid,d)";
   seg_len->create_kernel(&device->context(), device->device_id(), src_paths, "seg_len_main", seg_opts, "update::seg_len");
   vec_kernels.push_back(seg_len);
 
   //create  compress rgb pass
   if(isRGB) {
     bocl_kernel* comp = new bocl_kernel();
-    vcl_string comp_opts = options + " -D COMPRESS_RGB ";
+    vcl_string comp_opts = options + " -D COMPRESS_RGB";
     comp->create_kernel(&device->context(), device->device_id(), non_ray_src, "compress_rgb", comp_opts, "update::compress_rgb");
     vec_kernels.push_back(comp);
   }
@@ -514,7 +514,7 @@ vcl_vector<bocl_kernel*>& boxm2_ocl_update::get_kernels(bocl_device_sptr device,
   }
 
   bocl_kernel* pre_inf = new bocl_kernel();
-  vcl_string pre_opts = options + " -D PREINF -D STEP_CELL=step_cell_preinf(aux_args,data_ptr,llid,d) ";
+  vcl_string pre_opts = options + " -D PREINF -D STEP_CELL=step_cell_preinf(aux_args,data_ptr,llid,d)";
   pre_inf->create_kernel(&device->context(), device->device_id(), src_paths, "pre_inf_main", pre_opts, "update::pre_inf");
   vec_kernels.push_back(pre_inf);
 
@@ -526,7 +526,7 @@ vcl_vector<bocl_kernel*>& boxm2_ocl_update::get_kernels(bocl_device_sptr device,
 
   //push back cast_ray_bit
   bocl_kernel* bayes_main = new bocl_kernel();
-  vcl_string bayes_opt = options + " -D BAYES -D STEP_CELL=step_cell_bayes(aux_args,data_ptr,llid,d) ";
+  vcl_string bayes_opt = options + " -D BAYES -D STEP_CELL=step_cell_bayes(aux_args,data_ptr,llid,d)";
   bayes_main->create_kernel(&device->context(), device->device_id(), src_paths, "bayes_main", bayes_opt, "update::bayes_main");
   vec_kernels.push_back(bayes_main);
 
@@ -557,14 +557,14 @@ bool boxm2_ocl_update::validate_appearances(boxm2_scene_sptr scene,
     {
       data_type = apps[i];
       foundDataType = true;
-      options=" -D MOG_TYPE_8 ";
+      options=" -D MOG_TYPE_8";
       appTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_MOG3_GREY>::prefix());
     }
     else if ( apps[i] == boxm2_data_traits<BOXM2_MOG3_GREY_16>::prefix() )
     {
       data_type = apps[i];
       foundDataType = true;
-      options=" -D MOG_TYPE_16 ";
+      options=" -D MOG_TYPE_16";
       appTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_MOG3_GREY_16>::prefix());
     }
     else if ( apps[i] == boxm2_data_traits<BOXM2_NUM_OBS>::prefix() )
