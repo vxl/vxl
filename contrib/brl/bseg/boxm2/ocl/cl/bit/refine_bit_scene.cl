@@ -30,7 +30,7 @@ int refine_tree(__constant RenderSceneInfo * linfo,
   __local uchar* refined   = (__local uchar*) refined_tree; 
 
   //max alpha integrated
-  float max_alpha_int = (-1)*log(1.0 - prob_thresh);      
+  float max_alpha_int = -log(1.0f - prob_thresh);      
   
   //initialize cumsum buffer and cumIndex
   cumsum[0] = (*unrefined_tree).s0;
@@ -98,7 +98,7 @@ int move_data(__constant RenderSceneInfo * linfo,
                          bool              copy_parent)
 {
   //only used in alpha case
-  float max_alpha_int = (-1)*log(1.0 - prob_thresh);      
+  float max_alpha_int = -log(1.0f - prob_thresh);      
 
   //zip through each leaf cell and 
   int oldDataPtr = 0, newDataPtr = 0; 
