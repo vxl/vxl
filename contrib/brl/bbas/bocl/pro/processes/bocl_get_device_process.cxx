@@ -42,12 +42,12 @@ bool bocl_get_device_process(bprb_func_process& pro)
   vcl_string device_type = pro.get_input<vcl_string>(i++);
   bocl_manager_child_sptr mgr = pro.get_input<bocl_manager_child_sptr>(i++);
 
-  if (device_type=="gpu" || device_type=="gpu0")
+  if (device_type=="gpu" || device_type=="gpu0" )
   {
     if (mgr->gpus_.size()==0) return false;
     bocl_device_sptr device = mgr->gpus_[0];
     pro.set_output_val<bocl_device_sptr>(0,device);
-    vcl_cout<<*(device.ptr());
+    vcl_cout<<"Using the following gpu device: \n" << *(device.ptr());
     return true;
   }
   else if (device_type=="cpu" || device_type=="cpu0")
@@ -55,6 +55,7 @@ bool bocl_get_device_process(bprb_func_process& pro)
     if (mgr->cpus_.size()==0) return false;
     bocl_device_sptr device = mgr->cpus_[0];
     pro.set_output_val<bocl_device_sptr>(0,device);
+    vcl_cout<<"Using the following cpu device: \n"<<*(device.ptr());
     return true;
   }
 
@@ -64,9 +65,11 @@ bool bocl_get_device_process(bprb_func_process& pro)
     vcl_string str = device_type.substr(3, device_type.size());
     unsigned int gpuIdx;
     vcl_istringstream ( str ) >> gpuIdx;
+    vcl_cout<<"Setting GPU device #: " << gpuIdx <<vcl_endl;
     if (gpuIdx < mgr->gpus_.size()) {
       bocl_device_sptr device = mgr->gpus_[gpuIdx];
       pro.set_output_val<bocl_device_sptr>(0,device);
+      vcl_cout<<*(device.ptr());
       return true;
     }
   }
