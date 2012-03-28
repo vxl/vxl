@@ -24,7 +24,7 @@ boxm2_opencl_cache::boxm2_opencl_cache(boxm2_scene_sptr scene,
                             *device->device_id(),
                             CL_QUEUE_PROFILING_ENABLE,
                             &status);
-  if (!check_val(status,CL_SUCCESS,"boxm2_opencl_cache:: failed in command queue creation" + error_to_string(status)))
+  if (!check_val(status,CL_SUCCESS,"boxm2_opencl_cache:: failed in command queue creation " + error_to_string(status)))
     return;
   queue_ = &q_;
 }
@@ -35,14 +35,14 @@ void boxm2_opencl_cache::set_context(cl_context& context)
 {
   context_ = &context;
   int status = clReleaseCommandQueue(q_);
-  if (!check_val(status,CL_SUCCESS,"boxm2_opencl_cache::set_context failed to release old queue" + error_to_string(status)))
+  if (!check_val(status,CL_SUCCESS,"boxm2_opencl_cache::set_context failed to release old queue " + error_to_string(status)))
     return;
 
   q_ = clCreateCommandQueue(*context_,
                             *device_->device_id(),
                             CL_QUEUE_PROFILING_ENABLE,
                             &status);
-  if (!check_val(status,CL_SUCCESS,"boxm2_opencl_cache::set_context failed in command queue creation" + error_to_string(status)))
+  if (!check_val(status,CL_SUCCESS,"boxm2_opencl_cache::set_context failed in command queue creation " + error_to_string(status)))
     return;
   queue_ = &q_;
 }
